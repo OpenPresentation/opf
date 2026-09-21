@@ -1,0 +1,4 @@
+{
+  "mode": "In-memory compiler-host source replacement; no emit and no checkout edits",
+  "diagnostics": []
+}

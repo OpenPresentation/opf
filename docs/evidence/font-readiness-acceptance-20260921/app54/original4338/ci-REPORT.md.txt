@@ -1,0 +1,22 @@
+# App54 exact-head acceptance audit — gate held
+
+Head `4338e57b951c469d5c5f239b78a303fbad3c745e`, tree `1cf9f3890a16e9d2e6ab5a9a55a1f9f9f68b8130`. [Application run 35649707689](https://github.com/Data-Advantage/pptx-dev/actions/runs/35649707689), first attempt, failed on Windows. Both jobs checked out synthetic merge `d1c4ce4c7140a76cb528a1d548203379ec6df509`; GitHub's commit metadata confirms its tree equals the reviewed head tree. PR54 remained open and unmerged at final capture.
+
+| Gate | Linux | Windows |
+|---|---|---|
+| Node runtime | 24.20.0 | 24.20.0 |
+| Frozen install / package audit | pass / no known vulnerabilities | pass / no known vulnerabilities |
+| Unit tests | 692/692 | 692/692 |
+| Standalone controls | 13/13 | 13/13 |
+| Typecheck / SDK / CLI / app build | pass | pass |
+| Browser suite | 39/39 (4.8m reported) | 38/39 (6.8m reported) |
+
+There was no workflow rerun, browser retry, merge, deployment, source/test change, or timeout relaxation. The original platform logs, all 39 per-platform browser outcome lines, final job metadata, and artifacts are retained. The successful browser cases establish actual Windows server execution in this run; build success alone would not establish that boundary. The original startup EPERM's causal link type remains inferred, not observed.
+
+The sole Windows failure is `inspector-recovery.spec.ts:46`: the initial title canvas target for `retained-slide` was not found within the unchanged 5,000 ms assertion. It happened before double-click, draft entry, overflow replacement, correction, or the test's no-pageerror assertions. The error context has the expected one-slide `retained-slide` figure, schema clean, and `Loading slide fonts…`. No recovery-behavior or data-loss conclusion follows from this failure. The SVG security case, all eight new Inspector action cases, and both automatic hash/refresh cases passed on Windows. Further trace analysis belongs to a separate diagnostic report and must not relabel the failure as accepted.
+
+The 8,002,008-byte failure artifact (ID10661783948) and 6,894-byte readiness artifact (ID10662067535) match GitHub SHA-256 digests and pass ZIP CRC checks. The failure artifact contains 104 files and one failure trace. The readiness artifact contains the separate successful SVG-security test's record; it is not telemetry for the failed recovery case. See `artifact-download-checks.json` and `acceptance-facts.json`.
+
+The committed-state audit independently verified all 68 staged-file bindings, all 64 outer evidence-manifest entries against Git blobs, and all 701 locally tested source inputs against this commit. Existing local receipts remain separate: Node24.21.0 build `EXJe40o-SFYgGJpGUQiDD`, 39/39 local browser cases in 114.118492 seconds, 13 standalone controls, final assembled-tree typecheck and staged-diff checks. Local success does not override Windows failure.
+
+Vercel preview `dpl_6oxmcgYAc2B1ThHjpegYJi4RH7dP` is READY with the exact head SHA. This is deployment metadata only. Root's preserved unauthenticated `/inspector` check returned HTTP302 to Vercel `/sso-api`; no login, cookies, bypass, or preview browser acceptance was performed. Canonical production and native/font compatibility gates remain separate and unclaimed. Earlier failure audits remain unchanged.

@@ -72,6 +72,24 @@ geometry within 0.02pt and confirmed owned close/font cleanup. Native soft-line
 boundaries are 92/194 versus the estimated preview's 78/172, and native default
 tab spacing is 72pt. These finite content/style results do not pass table
 edit/save/reopen, browser/native raster agreement or physical glyph identity.
+The accepted [nine-pair offline tab analysis](evidence/windows-native-tab-analysis-20260921/REPORT.md)
+finds a 0.05pt-compatible pattern in the observed character starts, with finer saved
+tab coordinates. These inputs do not distinguish relative versus absolute placement
+or establish an internal engine cause. The 0.02pt native tab gate remains failed;
+the separate 0.1px renderer gate is unchanged. Accepted core108 `9b277e1` and
+core109 `b2711549` publish bounded evidence only. Windows-owned [core110](https://github.com/OpenPresentation/opf/pull/110)
+is merged as `4f7a4bd494f1a873319eff897423d301d1cfc9d6`, from reviewed fc3c36e
+with four required PR checks passing. [Renderer30](https://github.com/OpenPresentation/opf-render/pull/30) is now merged
+as `c8d7d5ca1f67a7b39f70c7c4bd14577a865b175b`, with exact-head CI 35661051100
+passing. The supervisor reports postmerge 35661504472 also passed. Its companion
+source preserves rich-tab advances/spans; the [accepted Windows wrap-up](handoff-windows-native-2026-09-21-wrap-up.md)
+records bounded source-linked rendering/browser checks and the original missing-test
+CI failure. These checks do not update the frozen registry consumer. Core111
+`3c5048522714365a41d9b5b9ba81620affae718b` publishes the font-inventory evidence
+above with both PR workflows green; its postmerge workflows were started at the
+final notice, not recorded as passed. Package/lock/release/site pins, schema,
+goldens and tolerances are unchanged. Native allowlist and physical-glyph/embedding
+acceptance remain open; no new package train or broad native pass is inferred.
 
 ## Supported in this set
 
@@ -98,7 +116,8 @@ edit/save/reopen, browser/native raster agreement or physical glyph identity.
 ## Public sites
 
 The current source, CI and canonical production results are recorded in the
-[current Inspector actions checkpoint](evidence/inspector-current-actions-20260921/README.md),
+[current font-readiness checkpoint](evidence/font-readiness-acceptance-20260921/README.md),
+[prior Inspector actions checkpoint](evidence/inspector-current-actions-20260921/README.md),
 [earlier publication checkpoint](evidence/inspector-share-acceptance-20260921/README.md),
 [source-preservation checkpoint](evidence/author-source-acceptance-20260921/README.md),
 [completion checkpoint](evidence/completion-acceptance-20260921/README.md),
@@ -110,7 +129,7 @@ acceptance are separate claims.
 | Surface | Deployed scope and acceptance | Source commit |
 | --- | --- | --- |
 | [openpresentation.org](https://www.openpresentation.org) | Current published guides, agent skills, JSON/preview workflow and downloads. Exact canonical deployment passes 321 checks across 11 pages and 18 raw resources, plus two browser flows for agent installation/navigation and JSON/SVG/PPTX downloads. Reviewed screenshots and output hashes match the accepted build. | `a85bcc77d899ce9ba1df659548be564142c16120` |
-| [pptx.dev](https://www.pptx.dev) `/inspector` and `/author` | App53 exact READY canonical deployment passes **29/29**, zero retries. Premerge application/artifact CI passed both platforms. Postmerge application CI remains failed: Linux **28/29**, Windows **29/29**; artifact CI passes both. Destructive preset Undo all and broader source writers remain unresolved. | `e40c287b64fcbcfb85fb4a8a50641aea8e3e54a8` |
+| [pptx.dev](https://www.pptx.dev) `/inspector` and `/author` | App54 merged/live on exact READY production. Premerge Linux/Windows pass 704 units, 13 standalone controls and 39/39 browsers. Full canonical acceptance **fails (34/39 passed)** at five no-POST assertions; the bounded audit does not establish an introduced upload regression. Postmerge Linux 39/39 passes, Windows 38/39 fails initial font readiness. Preset Undo all and broader source writers remain unresolved. | `8f54228a9e38a1dcc0bf8188bcdd519795b3799a` |
 | [pptx.gallery](https://www.pptx.gallery) `/docs`, `/editor` and gallery pages | Published ColorRef/bundle guidance, Playground and Editor actions, and the canonical docs-to-editor flow are verified. | `f17e9ae5869669d5fbac3720f285652d0c37551c` |
 
 The site uses documentation source `120a770`, whose tree matches accepted core
@@ -131,6 +150,12 @@ keep descendant acceptance separate from the canceled predecessor run.
 Accepted core106 `3847f712ccb2379952bcc8ab7c9fdbaedfd0a4ce` also passes both
 pre/postmerge workflows on their first attempts. Its [compact receipt](evidence/inspector-current-actions-20260921/core106/acceptance-receipt.json)
 binds the bounded native evidence above without completing general compatibility.
+Accepted core107 `5bc0d3f89414b382b2ce48452c7e56e5d66aaf74` has reviewed tree
+`ffdc678beadf0808bc717d67e7fc0a9ec4790127`. Both original postmerge push workflows
+**35652360502 / 35652360551** passed on attempt 1 under Node24.20.0.
+[Compact receipts](evidence/font-readiness-acceptance-20260921/README.md#core107-acceptance)
+retain earlier automatic premerge cancellations separately from the later automatic
+successful pair; no rerun or accepted checkpoint relabels them.
 
 [App47](https://github.com/Data-Advantage/pptx-dev/pull/47) corrects the pre-app47
 completion adapter's rejected layout choices while preserving unchanged source
@@ -162,7 +187,7 @@ does not explain or fix the old readiness delay. Phase4
 captured no post-fix stale-context overlap, so causal stress is inconclusive.
 The existing suggestion-details pane remains clipped; visibility is not legibility.
 The [postmerge trace diagnosis](evidence/author-source-acceptance-20260921/inspector-share-diagnosis/REPORT.md)
-proves wrong-document automatic share-hash publication during import. Unmerged
+proves wrong-document automatic share-hash publication during import.
 [App54](https://github.com/Data-Advantage/pptx-dev/pull/54) first corrected automatic
 publication at `60c91f6`: authoritative source/format is checked before and after
 encoding, load/navigation guards remain, and obsolete `import=hash:` is removed.
@@ -193,7 +218,7 @@ final visible-code preconditions change no product bytes or budgets. PDF/Deckcha
 are locally mocked. CRLF ingress normalized 279 to 274 LF bytes; subsequent exact
 actions preserve the accepted buffer, not that ingress boundary.
 
-**App54 release acceptance remains held.** First-attempt CI **35645493900** failed Linux and
+**The original 57e packaging gate failed.** First-attempt CI **35645493900** failed Linux and
 Windows typecheck on archived `.spec.ts` evidence copies after each platform
 passed 692 units and 7 standalone controls. The exact-head preview failed with
 `module_not_found`; precise Vercel compiler logs were unavailable. [The first-attempt receipt](evidence/inspector-current-actions-20260921/app54/first57-ci/REPORT.md)
@@ -207,14 +232,72 @@ passes 692 units, seven standalone controls, typechecks and build on both platfo
 Linux passes **39/39** browsers. Windows executes **zero browser tests** because
 standalone startup fails with `EPERM` while statting its packaged React dependency
 link. No timing or test-result artifacts were uploaded. The exact-head preview
-is READY, which is metadata only; at this checkpoint App54 remains unmerged and undeployed to production.
+is READY, which is metadata only; at that 6df checkpoint App54 was unmerged and undeployed to production.
 The [current ledger](evidence/inspector-current-actions-20260921/README.md)
-retains the separate 60c readiness, 57e packaging and 6df startup failures. Production remains App53 `e40c287`, with its original
+retains the separate 60c readiness, 57e packaging and 6df startup failures. Production then remained App53 `e40c287`, with its original
 failed Linux postmerge gate preserved separately from canonical **29/29**.
-The unreleased [startup-link correction at 4338e57](https://github.com/Data-Advantage/pptx-dev/blob/4338e57b951c469d5c5f239b78a303fbad3c745e/docs/evidence/standalone-windows-links-20260921/README.md)
-is undergoing fresh platform verification; the
-separate suggestion-details candidate remains local, uncommitted and unreleased.
-Neither supplies native or production acceptance.
+The [startup-link correction at 4338e57](https://github.com/Data-Advantage/pptx-dev/blob/4338e57b951c469d5c5f239b78a303fbad3c745e/docs/evidence/standalone-windows-links-20260921/README.md)
+then reached all browser cases: Linux **39/39**, Windows **38/39** in first-attempt
+CI **35649707689**, with 692 units and 13 standalone controls passing per platform.
+The sole Windows failure was initial canvas-title visibility at five seconds,
+before any edit/recovery operation; correct incoming source remained at loading
+fonts. Late font acquisition and eleven incomplete responses at teardown do not
+establish a permanent stall or a dominant cause. The [failed gate](evidence/font-readiness-acceptance-20260921/README.md#preserved-failed-windows-gate)
+is preserved.
+
+App54 font-preparation revision `a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb`, tree
+`031d893855a540fd2a4d2ec2162605817b8dde16`, overlaps font acquisition with converter
+warmup while readiness still waits for both. The offline converter barrier and all
+**33 faces / 9,317,044 bytes**, manifest, substitution/measurement policy and
+`document.fonts.ready` gate remain unchanged. Fresh local Node24.21.0 checks pass
+**704 units, 13 standalone controls and 39/39 browsers**, zero retries, including
+unchanged offline export/reimport. [Immutable app evidence](https://github.com/Data-Advantage/pptx-dev/tree/a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb/docs/evidence/font-preparation-concurrency-20260921)
+retains reviewed images, exact source/output bindings and the original failed run.
+
+**The original a4eb gate failed:** first-attempt application **35654753237** passes
+Linux **39/39** but fails Windows **38/39**; both pass 704 units, 13 standalone
+controls, typecheck and build. The Open in Author URL assertion exceeds its existing
+five-second deadline at `inspector-actions.spec.ts:176`; later source checks are
+not reached. Original4338 font readiness passes in this run. No navigation cause
+or data-loss finding is established. The [frozen final audit](evidence/font-readiness-acceptance-20260921/app54/final-a4eb-ci/release-audit.json)
+retains exact source/artifact bindings and the original failed trace; that failure remains preserved.
+The Python artifact workflow is not applicable under its full-PR path filters,
+not a fresh pass. Exact-head preview is READY metadata only; an
+unauthenticated request redirects to sign-in, with no preview-browser acceptance.
+At that a4eb capture App54 was unmerged and production remained App53
+`e40c287`. The separate suggestion-details candidate remains unreleased and supplies
+no acceptance here. No local/browser pass broadens native compatibility.
+The [bounded navigation diagnosis](evidence/font-readiness-acceptance-20260921/README.md#author-navigation-diagnosis-and-prospective-policy)
+records Loading Author and a delayed successful script response: 1490 bytes inferred
+from ETag, 766 compressed bytes recorded, actual body absent. Later DOM does not
+accept unreached assertions or identify a cause. App54 accepted merge
+`8f54228a9e38a1dcc0bf8188bcdd519795b3799a` retains reviewed 79ba tree
+`3639d3c14daec94d13711fa2b10f2b927df45eca`, preregisters `waitForURL(load)` before
+the real action, matching `page.goto` within the unchanged 45-second test and default
+five-second content budgets. It retains all oracles but deliberately removes the
+incidental five-second navigation deadline. Fresh local **39/39**, zero retries,
+passes in 112.780048s with reviewed source/images and prepared-tree build/typecheck.
+The [immutable app bundle](https://github.com/Data-Advantage/pptx-dev/tree/79ba0157984fce8405eeb786b8ede1a4e59ba138/docs/evidence/author-navigation-policy-20260921)
+retains original failures. Units/standalone controls were not repeated locally;
+fresh first-attempt application **35659187971 passes 704 units, 13 standalone
+controls and 39/39 browsers on both Linux and Windows**. Exact-head preview was
+READY/protected, not browser accepted. The identical reviewed tree is merged/live
+at 8f on READY deployment `dpl_H1FtXx1QSuGxn3MwzJwWJpGtRg8b`, but full canonical
+acceptance **fails (34/39 passed)** at five no-POST assertions observing Clerk environment
+POSTs. The [safe audit](evidence/font-readiness-acceptance-20260921/app54/canonical8f/write-audit/REPORT.md.txt)
+records ten such requests, nine with HTTP200/zero-length bodies and one incomplete.
+No fixture-content needle was detected in captured fields; uncaptured data remains
+unknown. Three final action page-error assertions were not reached; the two share
+cases passed theirs. The prior auth/config comparison is 28/29 identical, with only
+package scripts changed. Production is kept without a rollback, test change or
+rerun; the strict gate remains failed. Raw authentication-bearing diagnostics
+remain private. [Postmerge CI 35660464578](https://github.com/Data-Advantage/pptx-dev/actions/runs/35660464578)
+finishes failed: Linux 39/39 passes while Windows 38/39 fails, with 704 units/13 controls/typecheck/build
+passing on each. Windows fails initial gallery-rail title visibility after 5,000ms
+with correct source, clean schema and Loading slide fonts; later editing/export/
+reimport checks were not reached. The [final audit](evidence/font-readiness-acceptance-20260921/app54/merged8f/postmerge-ci/REPORT.md.txt)
+preserves this separate failed gate without cause inference or a retry. No canonical
+pass or general native/font acceptance is claimed. Work is paused until user resumption.
 
 Separate local negative controls confirm that preset Undo all discards New run
 and imported replacement documents; ordinary-edit Undo remains untested after a

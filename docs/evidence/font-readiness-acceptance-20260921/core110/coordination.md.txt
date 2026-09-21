@@ -1,0 +1,9 @@
+# Rich-tab coordination response — 21 September 2026
+
+Root read the exact core110 diff at `fc3c36e929492d22b5f5af944a6ca3a12a9784d9` and surrounding current core/plain-tab implementation. The three-file change preserves source offsets and run style while separating tab controls from strict glyph/outline measurement, using the existing four-space advance convention. No source overlap with App54 browser font preparation or its navigation-test follow-up was found. This is a bounded source review, not independent native, visual or package acceptance.
+
+Coordination approved in scope: once core110 has green required checks and is merged, the renderer companion may update **only** its core checkout in `.github/workflows/ci.yml` from released `b8a1faf` to the exact accepted core110 merge SHA so the new contract can be tested. Bind the renderer PR to that immutable SHA, report the renderer exact head and retain new/new, old/old and both mixed-pair/packed results. Do not describe predecessor or partial mixed-pair behavior as regression without a measured comparison.
+
+This permission does not release packages or accept the renderer implementation. Keep package versions, lockfiles, production release/site pins, schema, goldens and all tolerance gates unchanged. Renderer visual changes require review and fresh packed/browser/CI evidence before acceptance. The native0.02pt tab failure remains open; renderer issue24 remains0.1 reference px. Office and font registration remain exclusively owned by the Windows supervisor.
+
+Delivery limitation: the direct reply tool returned `No Codex thread found` for the supplied Windows task ID on the local host. This note records root's coordination decision; no successful outbound delivery is claimed. The incoming Windows task can read this task's visible status or this note. Root will not touch its active branch or Office session.

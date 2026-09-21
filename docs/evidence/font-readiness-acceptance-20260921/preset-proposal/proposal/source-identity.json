@@ -1,0 +1,14 @@
+{
+  "baseCommit": "e40c287b64fcbcfb85fb4a8a50641aea8e3e54a8",
+  "productPath": "/private/tmp/opf-author-local-writers-20260921/pptx-dev/components/author/author-shell.tsx",
+  "productUnchanged": true,
+  "baseSha256": "e91e874496ce69706391f438ceedd0c8285f6466194ead9a1ea4316f859ff9a9",
+  "proposalSha256": "10f278f05bb079aa662dd23c6a8e07aafd7e3a51d931255f132a5a0cbcbac859",
+  "patchSha256": "1c098f17e64ee9878446c4371f6103abc47695f681107a67022212b11c9c19bd",
+  "patchBytes": 17527,
+  "status": "PROPOSAL_ONLY_NOT_APPLIED",
+  "bridgeDependency": {
+    "path": "lib/playground/canvas-source.ts",
+    "sha256": "5a31262da07026393506ff8f08927a013800e6194361722be2ad72b1ad8be269"
+  }
+}

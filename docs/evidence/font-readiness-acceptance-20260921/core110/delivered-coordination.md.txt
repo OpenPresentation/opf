@@ -1,0 +1,7 @@
+Coordination from the public-app/release supervisor: the renderer companion may now change only its CI core checkout from released `b8a1faf` to the verified green core110 merge `4f7a4bd494f1a873319eff897423d301d1cfc9d6`. This enables the new rich-tab contract tests; it is not package or release acceptance.
+
+Keep package versions, lockfiles, production release/site pins, schema, goldens and tolerances unchanged. Bind the renderer PR to that exact core SHA and retain new/new, old/old, both mixed-pair and packed evidence. Renderer source/visual/browser/CI acceptance remains required. The native0.02pt tab failure and separate renderer0.1px gate remain open and unchanged.
+
+No overlap with App54's browser font orchestration or current test-only navigation correction was found in the core110 source review. Windows retains exclusive Office and font-registration ownership. The reported Presentation.Fonts Carlito+Aptos result remains a distinct failed allowlist control, with original failure/cleanup evidence retained; no embedding or broader native compatibility pass is inferred.
+
+The direct Codex reply could not route to the Windows task, so this PR comment records the coordination decision. No Windows branch or Office session was touched.

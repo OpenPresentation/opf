@@ -1,0 +1,14 @@
+{
+  "startedAt": "2026-09-21T22:03:38.266Z",
+  "exitCode": 1,
+  "target": "https://www.pptx.dev",
+  "merge": "8f54228a9e38a1dcc0bf8188bcdd519795b3799a",
+  "deployment": "dpl_H1FtXx1QSuGxn3MwzJwWJpGtRg8b",
+  "command": "OPF_APP_URL=https://www.pptx.dev PLAYWRIGHT_JSON_OUTPUT_NAME=results.json fnm exec --using=24 node node_modules/@playwright/test/cli.js test --workers=1 --retries=0 --trace=on --reporter=list,json --output=results",
+  "cwd": "/private/tmp/opf-author-navigation-acceptance-20260921/pptx-dev",
+  "workers": 1,
+  "retries": 0,
+  "assertionsOrBudgetsChanged": false,
+  "result": "34/39; five no-write assertions failed on recorded Clerk environment POSTs",
+  "originalArtifactsPrivate": true
+}

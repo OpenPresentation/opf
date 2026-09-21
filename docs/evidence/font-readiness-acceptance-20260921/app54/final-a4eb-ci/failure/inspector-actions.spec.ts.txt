@@ -1,0 +1,302 @@
+import { expect, test, type Download, type Locator, type Page } from "@playwright/test";
+import { readFile, writeFile } from "node:fs/promises";
+import { gzipSync, gunzipSync } from "node:zlib";
+import { observeClipboardWrites } from "./helpers/clipboard";
+
+const original = '{\n\t"name":"Action\\u0020snapshot", "filename":"current-actions",\n'
+  + '\t"design":{"fontScheme":"roboto"}, "extensions":{"human":{"x":1e2,"literal":"a\\/b"}},\n'
+  + '\t"slides":[{"id":"action-slide", "title":"A\\u0020title", "text":[{"text":"rich  text","bold":true}], "notes":"keep\\n\\t"}]\n}\n';
+const changedTitle = (title: string) => original.replace('"A\\u0020title"', JSON.stringify(title));
+const sourceInput = (page: Page) => page.getByRole("textbox", { name: "Editor content", exact: true });
+const titleInput = (page: Page) => page.getByRole("textbox", { name: "Edit title inline", exact: true });
+const canvas = (page: Page) => page.getByTestId("inspector-canvas-overlay");
+const titleTarget = (page: Page) => canvas(page).locator('[data-canvas-target][data-opf-path="slides.0.title"]');
+const copyButton = (page: Page) => page.getByTitle("Copy the current OPF buffer", { exact: true });
+const shareButton = (page: Page) => page.getByTitle("Copy a shareable URL", { exact: true });
+const sourceAtUrl = (url: string) => {
+  const hash = new URLSearchParams(new URL(url).hash.slice(1)).get("opf");
+  expect(hash).toBeTruthy();
+  return JSON.parse(gunzipSync(Buffer.from(hash!, "base64url")).toString("utf8"));
+};
+
+declare global {
+  interface Window { __opfActionPopups: Array<{ url: string; target?: string; features?: string }> }
+}
+
+test.beforeEach(async ({ page }) => {
+  await observeClipboardWrites(page);
+  // Exercise the real Deckchat handler without opening or contacting that service.
+  await page.addInitScript(() => {
+    window.__opfActionPopups = [];
+    window.open = (url, target, features) => {
+      window.__opfActionPopups.push({ url: String(url), target, features });
+      return null;
+    };
+  });
+});
+
+async function clickWithoutBlur(button: Locator) {
+  // Invoke the actual DOM button handler while the public canvas draft remains
+  // active. Ordinary pointer flows alone can conceal a missing explicit commit.
+  await button.evaluate(element => (element as HTMLButtonElement).click());
+}
+
+async function clipboardAction(page: Page, button: Locator, withoutBlur = false) {
+  const before = await page.evaluate(() => window.__opfClipboardWrites.length);
+  if (withoutBlur) await clickWithoutBlur(button); else await button.click();
+  await expect.poll(() => page.evaluate(index => window.__opfClipboardWrites[index]?.complete, before)).toBe(true);
+  const result = await page.evaluate(async index => ({
+    submitted: window.__opfClipboardWrites[index].text, transported: await navigator.clipboard.readText(),
+  }), before);
+  const transported = process.platform === "win32" ? result.submitted.replace(/\r?\n/g, "\r\n") : result.submitted;
+  expect(result.transported).toBe(transported);
+  return result.submitted;
+}
+
+async function paste(page: Page, text: string) {
+  await sourceInput(page).focus();
+  await sourceInput(page).press("ControlOrMeta+a");
+  await page.evaluate(value => navigator.clipboard.writeText(value), text);
+  await sourceInput(page).press("ControlOrMeta+v");
+}
+
+async function ready(page: Page) {
+  const hash = gzipSync(JSON.stringify(JSON.parse(original))).toString("base64url");
+  await page.goto(`/inspector?view=source#opf=${hash}`);
+  await expect(sourceInput(page)).toBeVisible();
+  await expect(canvas(page)).toHaveCount(1);
+  await expect(canvas(page)).toHaveAttribute("data-opf-slide-id", "action-slide");
+  await paste(page, original);
+  // This assertion invokes Copy immediately after the code input, with no
+  // deferred-preview readiness precondition. Held promises cover exact races.
+  expect(await clipboardAction(page, copyButton(page))).toBe(original);
+  await expect(titleTarget(page)).toBeVisible();
+  await expect(canvas(page)).toContainText("A title");
+}
+
+async function draft(page: Page, title: string) {
+  await titleTarget(page).dblclick();
+  await titleInput(page).fill(title);
+  await expect(titleInput(page)).toHaveValue(title);
+}
+
+async function jsonDownload(page: Page, expected: string, name: string, withoutBlur = false) {
+  const pending = page.waitForEvent("download");
+  const button = page.getByRole("button", { name: "json", exact: true });
+  if (withoutBlur) await clickWithoutBlur(button); else await button.click();
+  const download = await pending;
+  expect(await download.failure()).toBeNull();
+  expect(download.suggestedFilename()).toBe("current-actions.opf.json");
+  const bytes = await readFile((await download.path())!);
+  await writeFile(test.info().outputPath(`${name}.opf.json`), bytes);
+  expect(bytes).toEqual(Buffer.from(expected));
+}
+
+async function menuAction(page: Page, name: string, withoutBlur = false) {
+  const more = page.getByRole("button", { name: "More actions", exact: true });
+  if (withoutBlur) await clickWithoutBlur(more); else await more.click();
+  const item = page.getByRole("menuitem", { name, exact: true });
+  if (withoutBlur) await clickWithoutBlur(item); else await item.click();
+}
+
+test("Inspector Copy and JSON commit current drafts with exact source undo and unchanged-draft history", async ({ page }) => {
+  const errors: string[] = [], posts: string[] = [];
+  page.on("pageerror", error => errors.push(error.message));
+  page.on("request", request => { if (request.method() === "POST") posts.push(request.url()); });
+  await ready(page);
+  await draft(page, "Copy commits this draft");
+  expect(await clipboardAction(page, copyButton(page), true)).toBe(changedTitle("Copy commits this draft"));
+  await expect(titleInput(page)).toHaveCount(0);
+
+  await draft(page, "JSON commits this draft");
+  const json = changedTitle("JSON commits this draft");
+  await jsonDownload(page, json, "pending-json", true);
+  await titleTarget(page).click(); await page.keyboard.press("ControlOrMeta+z");
+  expect(await clipboardAction(page, copyButton(page))).toBe(changedTitle("Copy commits this draft"));
+  await titleTarget(page).click(); await page.keyboard.press("ControlOrMeta+Shift+z");
+  expect(await clipboardAction(page, copyButton(page))).toBe(json);
+  // An unchanged inline draft must leave the real edit as the next undo step.
+  await titleTarget(page).dblclick();
+  await jsonDownload(page, json, "unchanged-draft", true);
+  await titleTarget(page).click(); await page.keyboard.press("ControlOrMeta+z");
+  expect(await clipboardAction(page, copyButton(page))).toBe(changedTitle("Copy commits this draft"));
+
+  await page.screenshot({ path: test.info().outputPath("copy-json-current-source.png"), fullPage: true });
+  expect(posts).toEqual([]);
+  expect(errors).toEqual([]);
+});
+
+test("Inspector Share and PPTX commit current drafts with matching payloads and filenames", async ({ page }) => {
+  const errors: string[] = [], posts: string[] = [];
+  page.on("pageerror", error => errors.push(error.message));
+  page.on("request", request => { if (request.method() === "POST") posts.push(request.url()); });
+  await ready(page);
+  await draft(page, "Share commits this draft");
+  const oldHash = gzipSync(JSON.stringify(JSON.parse(original))).toString("base64url");
+  await page.evaluate(hash => {
+    const url = new URL(location.href); url.searchParams.set("import", `hash:${hash}`);
+    history.replaceState(null, "", url);
+  }, oldHash);
+  const share = await clipboardAction(page, shareButton(page), true);
+  const expectedShare = changedTitle("Share commits this draft");
+  expect(sourceAtUrl(share)).toEqual(JSON.parse(expectedShare));
+  expect(new URL(share).searchParams.has("import")).toBe(false);
+  expect(new URL(share).searchParams.get("view")).toBe("source");
+  expect(new URL(share).pathname).toBe("/inspector");
+  await writeFile(test.info().outputPath("explicit-share-url.txt"), share);
+
+  await draft(page, "PPTX commits this draft");
+  const pendingPptx = page.waitForEvent("download");
+  await clickWithoutBlur(page.getByRole("button", { name: "pptx", exact: true }));
+  const pptx = await pendingPptx;
+  expect(await pptx.failure()).toBeNull();
+  expect(pptx.suggestedFilename()).toBe("current-actions.pptx");
+  const bytes = await readFile((await pptx.path())!);
+  await writeFile(test.info().outputPath("pending.pptx"), bytes);
+  const { fromPptx } = await import("@openpresentation/opf-pptx");
+  const converted = await fromPptx(bytes);
+  expect(JSON.stringify(converted)).toContain("PPTX commits this draft");
+  expect(await clipboardAction(page, copyButton(page))).toBe(changedTitle("PPTX commits this draft"));
+  await titleTarget(page).click(); await page.keyboard.press("ControlOrMeta+z");
+  expect(await clipboardAction(page, copyButton(page))).toBe(expectedShare);
+
+  await page.screenshot({ path: test.info().outputPath("share-pptx-current-source.png"), fullPage: true });
+  expect(posts).toEqual([]);
+  expect(errors).toEqual([]);
+});
+
+test("Inspector Open in Author commits the current draft before handoff", async ({ page }) => {
+  const errors: string[] = [], posts: string[] = [];
+  page.on("pageerror", error => errors.push(error.message));
+  page.on("request", request => { if (request.method() === "POST") posts.push(request.url()); });
+  await ready(page);
+  await draft(page, "Author commits this draft");
+  await page.screenshot({ path: test.info().outputPath("inspector-pending-action.png"), fullPage: true });
+  await menuAction(page, "Open in Author", true);
+  await expect(page).toHaveURL(/\/author#opf=/);
+  expect(sourceAtUrl(page.url())).toEqual(JSON.parse(changedTitle("Author commits this draft")));
+  await expect(page.getByRole("button", { name: /^(copy|copied)$/i })).toBeVisible();
+  const authorSource = await clipboardAction(page, page.getByRole("button", { name: /^(copy|copied)$/i }));
+  expect(JSON.parse(authorSource)).toEqual(JSON.parse(changedTitle("Author commits this draft")));
+  await page.screenshot({ path: test.info().outputPath("author-current-handoff.png"), fullPage: true });
+  expect(posts).toEqual([]);
+  expect(errors).toEqual([]);
+});
+
+test("Inspector raw Copy allows malformed source and rejected drafts produce no JSON output", async ({ page }) => {
+  await ready(page);
+  await paste(page, '{ "unfinished":');
+  expect(await clipboardAction(page, copyButton(page))).toBe('{ "unfinished":');
+  const downloads: string[] = [];
+  const onDownload = (download: Download) => downloads.push(download.suggestedFilename());
+  page.on("download", onDownload);
+  await page.getByRole("button", { name: "json", exact: true }).click();
+  await expect(page.getByRole("status")).toContainText(/JSON|Unexpected|Expected/);
+  expect(downloads).toEqual([]);
+  const duplicate = original.replace('"name":"Action\\u0020snapshot",', '"name":"earlier","name":"Action\\u0020snapshot",');
+  await paste(page, duplicate);
+  expect(await clipboardAction(page, copyButton(page))).toBe(duplicate);
+  await expect(titleTarget(page)).toBeVisible();
+  await draft(page, "Rejected pointer-blur title");
+  await page.getByRole("button", { name: "json", exact: true }).click();
+  await expect(page.getByRole("status")).toContainText("Remove duplicate JSON keys before editing the preview; your source was kept.");
+  await expect(titleInput(page)).toHaveCount(0);
+  await expect(canvas(page)).toContainText("A title");
+  expect(downloads).toEqual([]);
+  // A subsequent explicit retry may use the preserved source after reporting
+  // the rejection; recovery alone must not authorize the original pointer click.
+  expect(await clipboardAction(page, copyButton(page))).toBe(duplicate);
+  await draft(page, "Rejected unsafe title");
+  await clickWithoutBlur(page.getByRole("button", { name: "json", exact: true }));
+  await expect(page.getByRole("status")).toContainText("Remove duplicate JSON keys before editing the preview; your source was kept.");
+  await expect(titleInput(page)).toHaveCount(0);
+  await expect(canvas(page)).toContainText("A title");
+  expect(downloads).toEqual([]);
+  page.off("download", onDownload);
+  await jsonDownload(page, duplicate, "accepted-after-rejection");
+  expect(await clipboardAction(page, copyButton(page))).toBe(duplicate);
+});
+
+test("Inspector actions preserve the accepted raw buffer after CRLF source ingress", async ({ page }) => {
+  await ready(page);
+  const incoming = original.replaceAll("\n", "\r\n");
+  await paste(page, incoming);
+  const accepted = await clipboardAction(page, copyButton(page));
+  // Monaco may retain the existing model's LF sequence on paste. Record that
+  // distinct ingress boundary, without claiming it was CRLF action preservation.
+  expect(accepted.replaceAll("\r\n", "\n")).toBe(original);
+  await writeFile(test.info().outputPath("crlf-input.json"), incoming);
+  await writeFile(test.info().outputPath("accepted-source.json"), accepted);
+  await writeFile(test.info().outputPath("crlf-ingress-boundary.json"), JSON.stringify({
+    inputBytes: Buffer.byteLength(incoming), acceptedBytes: Buffer.byteLength(accepted),
+    inputBytesPreserved: accepted === incoming,
+    acceptedEol: accepted.includes("\r\n") ? "CRLF" : "LF",
+    scope: "Exact toolbar action bytes use the actual accepted raw buffer. CRLF paste-to-model preservation is recorded separately.",
+  }, null, 2));
+  await expect(titleTarget(page)).toBeVisible();
+  await draft(page, "CRLF ingress action draft");
+  const edited = accepted.replace('"A\\u0020title"', '"CRLF ingress action draft"');
+  await jsonDownload(page, edited, "crlf-ingress-pending-json", true);
+  expect(await clipboardAction(page, copyButton(page))).toBe(edited);
+  await titleTarget(page).click(); await page.keyboard.press("ControlOrMeta+z");
+  await jsonDownload(page, accepted, "crlf-ingress-undo");
+  await titleTarget(page).click(); await page.keyboard.press("ControlOrMeta+Shift+z");
+  await jsonDownload(page, edited, "crlf-ingress-redo");
+});
+
+for (const status of [200, 401]) test(`Inspector suppresses stale PDF ${status} delivery or navigation after a new source`, async ({ page }) => {
+  await ready(page);
+  let release!: () => void;
+  const held = new Promise<void>(resolve => { release = resolve; });
+  let requestSeen!: (body: unknown) => void;
+  const request = new Promise<unknown>(resolve => { requestSeen = resolve; });
+  await page.route("**/api/v1/generate?format=pdf", async route => {
+    requestSeen(route.request().postDataJSON());
+    await held;
+    await route.fulfill({ status, contentType: status === 200 ? "application/pdf" : "application/json", body: status === 200 ? "%PDF-1.4\nlocal mock\n%%EOF" : '{"message":"local mock authentication"}' });
+  });
+  const downloads: string[] = [];
+  page.on("download", value => downloads.push(value.suggestedFilename()));
+  await draft(page, "PDF click-time draft");
+  await menuAction(page, "Export PDF", true);
+  expect(await request).toEqual(JSON.parse(changedTitle("PDF click-time draft")));
+  const newer = original.replace("current-actions", "newer-file").replace("A\\u0020title", "Newer source");
+  await paste(page, newer);
+  // Keyboard paste can return before Monaco consumes the clipboard. Establish
+  // the accepted code input without invoking another action or waiting for preview.
+  const code = page.getByTestId("playground-code-frame").locator(".view-lines");
+  await expect(code).toContainText("newer-file");
+  await expect(code).toContainText("Newer source");
+  const response = page.waitForResponse(value => value.url().includes("/api/v1/generate?format=pdf"));
+  release(); await response;
+  await expect(page.getByRole("status")).toContainText("The current source changed");
+  expect(downloads).toEqual([]);
+  expect(new URL(page.url()).pathname).toBe("/inspector");
+  expect(await clipboardAction(page, copyButton(page))).toBe(newer);
+  await writeFile(test.info().outputPath(`pdf-${status}-request.json`), JSON.stringify(await request, null, 2));
+});
+
+test("Inspector PDF payload/filename and Deckchat URL use committed current source with local mocks", async ({ page }) => {
+  await ready(page);
+  const requests: unknown[] = [];
+  await page.route("**/api/v1/generate?format=pdf", async route => {
+    requests.push(route.request().postDataJSON());
+    await route.fulfill({ status: 200, contentType: "application/pdf", body: "%PDF-1.4\nlocal action snapshot mock\n%%EOF" });
+  });
+  await draft(page, "PDF current title");
+  const pending = page.waitForEvent("download");
+  await menuAction(page, "Export PDF", true);
+  const pdf = await pending;
+  expect(pdf.suggestedFilename()).toBe("current-actions.pdf");
+  expect(requests).toEqual([JSON.parse(changedTitle("PDF current title"))]);
+  expect((await readFile((await pdf.path())!)).toString()).toBe("%PDF-1.4\nlocal action snapshot mock\n%%EOF");
+  await draft(page, "Deckchat current title");
+  await menuAction(page, "Open in deckchat.ai", true);
+  await expect.poll(() => page.evaluate(() => window.__opfActionPopups.length)).toBe(1);
+  const [popup] = await page.evaluate(() => window.__opfActionPopups);
+  const url = new URL(popup.url);
+  expect(url.origin + url.pathname).toBe("https://deckchat.ai/import");
+  expect(popup.target).toBe("_blank"); expect(popup.features).toBe("noopener,noreferrer");
+  expect(JSON.parse(gunzipSync(Buffer.from(url.searchParams.get("opf")!, "base64url")).toString())).toEqual(JSON.parse(changedTitle("Deckchat current title")));
+  await writeFile(test.info().outputPath("local-mocked-boundaries.json"), JSON.stringify({ pdfRequests: requests, popup }, null, 2));
+});

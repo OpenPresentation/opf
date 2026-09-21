@@ -1,0 +1,27 @@
+{
+  "currentHead": "79ba0157984fce8405eeb786b8ede1a4e59ba138",
+  "currentChecks": [
+    {
+      "id": 106530112746,
+      "name": "verify (ubuntu-latest)",
+      "conclusion": "success"
+    },
+    {
+      "id": 106530087106,
+      "name": "verify (windows-latest)",
+      "conclusion": "success"
+    }
+  ],
+  "currentHeadBugbotCheckObserved": false,
+  "githubPRReviews": [],
+  "priorHeadBoundary": {
+    "head": "a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb",
+    "id": 106515494525,
+    "conclusion": "neutral",
+    "performedReview": false,
+    "reason": "usage/spend limit",
+    "sourcePath": "/private/tmp/opf-font-readiness-concurrency-20260921/ci/check-runs-final.json",
+    "sourceSha256": "6e72ff07d225d1fe5e57cd1b5da39533fd1102dbbd0334974ac5dda34aa388f3"
+  },
+  "scope": "No current-head automated source review claimed; prior neutral check is not a review or fresh check for79ba. Independent local review is separate."
+}

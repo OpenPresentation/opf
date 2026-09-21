@@ -1,0 +1,9 @@
+{
+  "checkedAt": "2026-09-21T21:15:29.339857+00:00",
+  "pythonExecutable": "/Users/michael/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+  "pythonVersion": "Python 3.12.14",
+  "exitCode": 0,
+  "stdout": "{\"passed\":true,\"manifestFiles\":9,\"manifestBytes\":202468,\"analysisRows\":9,\"quantizationChecks\":8,\"rawInputs\":2,\"replayByteIdentical\":true,\"overwriteRefused\":true,\"forbiddenFiles\":0,\"officeCalls\":0,\"fontCalls\":0}\n",
+  "stderr": "",
+  "scope": "Offline retained-evidence verifier only; no Office/font calls, source/package/tolerance edits."
+}

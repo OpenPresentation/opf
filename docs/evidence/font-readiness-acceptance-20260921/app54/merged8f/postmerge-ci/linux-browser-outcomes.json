@@ -1,0 +1,321 @@
+{
+  "sourceLog": "linux-job.log",
+  "sourceLogSha256": "dfe17d4509ae02e29934bb957da8ec7d35b9d712fdd80e51672da880184c6d1f",
+  "outcomeCounts": {
+    "passed": 39
+  },
+  "outcomes": [
+    {
+      "ordinal": 1,
+      "outcome": "passed",
+      "location": "tests/e2e/author-json-options.spec.ts:72:5",
+      "title": "Author categorical choices include built-in, document and loaded catalogs with exact LF source undo/redo",
+      "duration_display": "7.0s",
+      "original_log_line": "2026-09-21T22:05:51.1991293Z   \u2713   1 tests/e2e/author-json-options.spec.ts:72:5 \u203a Author categorical choices include built-in, document and loaded catalogs with exact LF source undo/redo (7.0s)"
+    },
+    {
+      "ordinal": 2,
+      "outcome": "passed",
+      "location": "tests/e2e/author-json-options.spec.ts:72:5",
+      "title": "Author categorical choices include built-in, document and loaded catalogs with exact CRLF source undo/redo",
+      "duration_display": "6.7s",
+      "original_log_line": "2026-09-21T22:05:57.9259237Z   \u2713   2 tests/e2e/author-json-options.spec.ts:72:5 \u203a Author categorical choices include built-in, document and loaded catalogs with exact CRLF source undo/redo (6.7s)"
+    },
+    {
+      "ordinal": 3,
+      "outcome": "passed",
+      "location": "tests/e2e/author.spec.ts:26:80",
+      "title": "anonymous code editing preserves source and visible selection through offline export/reimport at 1280x720",
+      "duration_display": "7.9s",
+      "original_log_line": "2026-09-21T22:06:05.9274364Z   \u2713   3 tests/e2e/author.spec.ts:26:80 \u203a anonymous code editing preserves source and visible selection through offline export/reimport at 1280x720 (7.9s)"
+    },
+    {
+      "ordinal": 4,
+      "outcome": "passed",
+      "location": "tests/e2e/author.spec.ts:26:80",
+      "title": "anonymous code editing preserves source and visible selection through offline export/reimport at 540x960",
+      "duration_display": "7.1s",
+      "original_log_line": "2026-09-21T22:06:13.0450938Z   \u2713   4 tests/e2e/author.spec.ts:26:80 \u203a anonymous code editing preserves source and visible selection through offline export/reimport at 540x960 (7.1s)"
+    },
+    {
+      "ordinal": 5,
+      "outcome": "passed",
+      "location": "tests/e2e/author.spec.ts:55:5",
+      "title": "anonymous Author canvas edits survive tab changes, offline PowerPoint export and undoable reimport",
+      "duration_display": "8.6s",
+      "original_log_line": "2026-09-21T22:06:21.6488020Z   \u2713   5 tests/e2e/author.spec.ts:55:5 \u203a anonymous Author canvas edits survive tab changes, offline PowerPoint export and undoable reimport (8.6s)"
+    },
+    {
+      "ordinal": 6,
+      "outcome": "passed",
+      "location": "tests/e2e/completion-keyboard.spec.ts:64:5",
+      "title": "Author Ctrl+Space retains popup details, exact source history and editor remount behavior",
+      "duration_display": "5.9s",
+      "original_log_line": "2026-09-21T22:06:27.5268281Z   \u2713   6 tests/e2e/completion-keyboard.spec.ts:64:5 \u203a Author Ctrl+Space retains popup details, exact source history and editor remount behavior (5.9s)"
+    },
+    {
+      "ordinal": 7,
+      "outcome": "passed",
+      "location": "tests/e2e/completion-keyboard.spec.ts:126:5",
+      "title": "Author leaves Quick Input and modified Space keys with their original keyboard owners",
+      "duration_display": "4.1s",
+      "original_log_line": "2026-09-21T22:06:31.6823645Z   \u2713   7 tests/e2e/completion-keyboard.spec.ts:126:5 \u203a Author leaves Quick Input and modified Space keys with their original keyboard owners (4.1s)"
+    },
+    {
+      "ordinal": 8,
+      "outcome": "passed",
+      "location": "tests/e2e/completion-preservation.spec.ts:113:7",
+      "title": "Author Title Subtitle completion preserves LF compact source in one undo step",
+      "duration_display": "4.8s",
+      "original_log_line": "2026-09-21T22:06:36.5666447Z   \u2713   8 tests/e2e/completion-preservation.spec.ts:113:7 \u203a Author Title Subtitle completion preserves LF compact source in one undo step (4.8s)"
+    },
+    {
+      "ordinal": 9,
+      "outcome": "passed",
+      "location": "tests/e2e/completion-preservation.spec.ts:113:7",
+      "title": "Author Text 2x completion preserves CRLF compact source in one undo step",
+      "duration_display": "4.8s",
+      "original_log_line": "2026-09-21T22:06:41.3643557Z   \u2713   9 tests/e2e/completion-preservation.spec.ts:113:7 \u203a Author Text 2x completion preserves CRLF compact source in one undo step (4.8s)"
+    },
+    {
+      "ordinal": 10,
+      "outcome": "passed",
+      "location": "tests/e2e/completion-preservation.spec.ts:149:5",
+      "title": "Author escaped current value is not offered as an edit and leaves prior undo history intact",
+      "duration_display": "6.2s",
+      "original_log_line": "2026-09-21T22:06:47.5697765Z   \u2713  10 tests/e2e/completion-preservation.spec.ts:149:5 \u203a Author escaped current value is not offered as an edit and leaves prior undo history intact (6.2s)"
+    },
+    {
+      "ordinal": 11,
+      "outcome": "passed",
+      "location": "tests/e2e/completion-preservation.spec.ts:178:5",
+      "title": "Author newer and invalid source dismiss stale choices and refresh inline catalogs",
+      "duration_display": "6.3s",
+      "original_log_line": "2026-09-21T22:06:53.8756440Z   \u2713  11 tests/e2e/completion-preservation.spec.ts:178:5 \u203a Author newer and invalid source dismiss stale choices and refresh inline catalogs (6.3s)"
+    },
+    {
+      "ordinal": 12,
+      "outcome": "passed",
+      "location": "tests/e2e/completion-preservation.spec.ts:219:5",
+      "title": "Author format and document changes cancel the open completion without applying it",
+      "duration_display": "5.3s",
+      "original_log_line": "2026-09-21T22:06:59.1499553Z   \u2713  12 tests/e2e/completion-preservation.spec.ts:219:5 \u203a Author format and document changes cancel the open completion without applying it (5.3s)"
+    },
+    {
+      "ordinal": 13,
+      "outcome": "passed",
+      "location": "tests/e2e/inspector-actions.spec.ts:102:5",
+      "title": "Inspector Copy and JSON commit current drafts with exact source undo and unchanged-draft history",
+      "duration_display": "4.9s",
+      "original_log_line": "2026-09-21T22:07:04.0862793Z   \u2713  13 tests/e2e/inspector-actions.spec.ts:102:5 \u203a Inspector Copy and JSON commit current drafts with exact source undo and unchanged-draft history (4.9s)"
+    },
+    {
+      "ordinal": 14,
+      "outcome": "passed",
+      "location": "tests/e2e/inspector-actions.spec.ts:129:5",
+      "title": "Inspector Share and PPTX commit current drafts with matching payloads and filenames",
+      "duration_display": "4.7s",
+      "original_log_line": "2026-09-21T22:07:08.8288711Z   \u2713  14 tests/e2e/inspector-actions.spec.ts:129:5 \u203a Inspector Share and PPTX commit current drafts with matching payloads and filenames (4.7s)"
+    },
+    {
+      "ordinal": 15,
+      "outcome": "passed",
+      "location": "tests/e2e/inspector-actions.spec.ts:168:5",
+      "title": "Inspector Open in Author commits the current draft before handoff",
+      "duration_display": "6.2s",
+      "original_log_line": "2026-09-21T22:07:15.0218865Z   \u2713  15 tests/e2e/inspector-actions.spec.ts:168:5 \u203a Inspector Open in Author commits the current draft before handoff (6.2s)"
+    },
+    {
+      "ordinal": 16,
+      "outcome": "passed",
+      "location": "tests/e2e/inspector-actions.spec.ts:191:5",
+      "title": "Inspector raw Copy allows malformed source and rejected drafts produce no JSON output",
+      "duration_display": "5.2s",
+      "original_log_line": "2026-09-21T22:07:20.2692742Z   \u2713  16 tests/e2e/inspector-actions.spec.ts:191:5 \u203a Inspector raw Copy allows malformed source and rejected drafts produce no JSON output (5.2s)"
+    },
+    {
+      "ordinal": 17,
+      "outcome": "passed",
+      "location": "tests/e2e/inspector-actions.spec.ts:225:5",
+      "title": "Inspector actions preserve the accepted raw buffer after CRLF source ingress",
+      "duration_display": "4.5s",
+      "original_log_line": "2026-09-21T22:07:24.8012472Z   \u2713  17 tests/e2e/inspector-actions.spec.ts:225:5 \u203a Inspector actions preserve the accepted raw buffer after CRLF source ingress (4.5s)"
+    },
+    {
+      "ordinal": 18,
+      "outcome": "passed",
+      "location": "tests/e2e/inspector-actions.spec.ts:252:38",
+      "title": "Inspector suppresses stale PDF 200 delivery or navigation after a new source",
+      "duration_display": "4.3s",
+      "original_log_line": "2026-09-21T22:07:29.1169498Z   \u2713  18 tests/e2e/inspector-actions.spec.ts:252:38 \u203a Inspector suppresses stale PDF 200 delivery or navigation after a new source (4.3s)"
+    },
+    {
+      "ordinal": 19,
+      "outcome": "passed",
+      "location": "tests/e2e/inspector-actions.spec.ts:252:38",
+      "title": "Inspector suppresses stale PDF 401 delivery or navigation after a new source",
+      "duration_display": "4.3s",
+      "original_log_line": "2026-09-21T22:07:33.4209363Z   \u2713  19 tests/e2e/inspector-actions.spec.ts:252:38 \u203a Inspector suppresses stale PDF 401 delivery or navigation after a new source (4.3s)"
+    },
+    {
+      "ordinal": 20,
+      "outcome": "passed",
+      "location": "tests/e2e/inspector-actions.spec.ts:284:5",
+      "title": "Inspector PDF payload/filename and Deckchat URL use committed current source with local mocks",
+      "duration_display": "4.2s",
+      "original_log_line": "2026-09-21T22:07:37.6792923Z   \u2713  20 tests/e2e/inspector-actions.spec.ts:284:5 \u203a Inspector PDF payload/filename and Deckchat URL use committed current source with local mocks (4.2s)"
+    },
+    {
+      "ordinal": 21,
+      "outcome": "passed",
+      "location": "tests/e2e/inspector-editing.spec.ts:40:7",
+      "title": "all Inspector slides preserve exact JSON and shared furniture through offline undo/export at 1440px",
+      "duration_display": "8.1s",
+      "original_log_line": "2026-09-21T22:07:45.8207110Z   \u2713  21 tests/e2e/inspector-editing.spec.ts:40:7 \u203a all Inspector slides preserve exact JSON and shared furniture through offline undo/export at 1440px (8.1s)"
+    },
+    {
+      "ordinal": 22,
+      "outcome": "passed",
+      "location": "tests/e2e/inspector-editing.spec.ts:40:7",
+      "title": "all Inspector slides preserve exact JSON and shared furniture through offline undo/export at 540px",
+      "duration_display": "7.2s",
+      "original_log_line": "2026-09-21T22:07:52.9923571Z   \u2713  22 tests/e2e/inspector-editing.spec.ts:40:7 \u203a all Inspector slides preserve exact JSON and shared furniture through offline undo/export at 540px (7.2s)"
+    },
+    {
+      "ordinal": 23,
+      "outcome": "passed",
+      "location": "tests/e2e/inspector-editing.spec.ts:99:5",
+      "title": "invalid source keeps a renderer fallback and source recovery uses the current slide order",
+      "duration_display": "4.5s",
+      "original_log_line": "2026-09-21T22:07:57.5415661Z   \u2713  23 tests/e2e/inspector-editing.spec.ts:99:5 \u203a invalid source keeps a renderer fallback and source recovery uses the current slide order (4.5s)"
+    },
+    {
+      "ordinal": 24,
+      "outcome": "passed",
+      "location": "tests/e2e/inspector-editing.spec.ts:116:5",
+      "title": "shared navigation discards an ID-less draft even when the replacement title is identical",
+      "duration_display": "4.0s",
+      "original_log_line": "2026-09-21T22:08:01.5596029Z   \u2713  24 tests/e2e/inspector-editing.spec.ts:116:5 \u203a shared navigation discards an ID-less draft even when the replacement title is identical (4.0s)"
+    },
+    {
+      "ordinal": 25,
+      "outcome": "passed",
+      "location": "tests/e2e/inspector-recovery.spec.ts:18:5",
+      "title": "schema-valid strict overflow cancels an active draft and the same slide recovers after source correction",
+      "duration_display": "5.6s",
+      "original_log_line": "2026-09-21T22:08:07.1759568Z   \u2713  25 tests/e2e/inspector-recovery.spec.ts:18:5 \u203a schema-valid strict overflow cancels an active draft and the same slide recovers after source correction (5.6s)"
+    },
+    {
+      "ordinal": 26,
+      "outcome": "passed",
+      "location": "tests/e2e/inspector-recovery.spec.ts:85:5",
+      "title": "font substitution notes remain accessible and operable while the Inspector canvas is active",
+      "duration_display": "4.0s",
+      "original_log_line": "2026-09-21T22:08:11.1451205Z   \u2713  26 tests/e2e/inspector-recovery.spec.ts:85:5 \u203a font substitution notes remain accessible and operable while the Inspector canvas is active (4.0s)"
+    },
+    {
+      "ordinal": 27,
+      "outcome": "passed",
+      "location": "tests/e2e/inspector-share-publication.spec.ts:58:69",
+      "title": "Inspector hash publication and refresh retain the accepted document",
+      "duration_display": "8.8s",
+      "original_log_line": "2026-09-21T22:08:19.9435522Z   \u2713  27 tests/e2e/inspector-share-publication.spec.ts:58:69 \u203a Inspector hash publication and refresh retain the accepted document (8.8s)"
+    },
+    {
+      "ordinal": 28,
+      "outcome": "passed",
+      "location": "tests/e2e/inspector-share-publication.spec.ts:58:69",
+      "title": "Inspector legacy import query publication and refresh retain the accepted document",
+      "duration_display": "9.1s",
+      "original_log_line": "2026-09-21T22:08:29.0982464Z   \u2713  28 tests/e2e/inspector-share-publication.spec.ts:58:69 \u203a Inspector legacy import query publication and refresh retain the accepted document (9.1s)"
+    },
+    {
+      "ordinal": 29,
+      "outcome": "passed",
+      "location": "tests/e2e/inspector.spec.ts:20:5",
+      "title": "published long quotes retain their footer in actual wide/portrait previews and PowerPoint downloads",
+      "duration_display": "9.1s",
+      "original_log_line": "2026-09-21T22:08:38.2057166Z   \u2713  29 tests/e2e/inspector.spec.ts:20:5 \u203a published long quotes retain their footer in actual wide/portrait previews and PowerPoint downloads (9.1s)"
+    },
+    {
+      "ordinal": 30,
+      "outcome": "passed",
+      "location": "tests/e2e/inspector.spec.ts:76:5",
+      "title": "shared navigation clears format errors and proposals from the previous deck",
+      "duration_display": "3.7s",
+      "original_log_line": "2026-09-21T22:08:41.9739996Z   \u2713  30 tests/e2e/inspector.spec.ts:76:5 \u203a shared navigation clears format errors and proposals from the previous deck (3.7s)"
+    },
+    {
+      "ordinal": 31,
+      "outcome": "passed",
+      "location": "tests/e2e/inspector.spec.ts:118:5",
+      "title": "anonymous JSON authoring, preview, undo/redo, download and shared reimport",
+      "duration_display": "4.6s",
+      "original_log_line": "2026-09-21T22:08:46.5646361Z   \u2713  31 tests/e2e/inspector.spec.ts:118:5 \u203a anonymous JSON authoring, preview, undo/redo, download and shared reimport (4.6s)"
+    },
+    {
+      "ordinal": 32,
+      "outcome": "passed",
+      "location": "tests/e2e/json-paste-formatting.spec.ts:53:5",
+      "title": "warm JSON worker leaves pasted source untouched while explicit Format Document remains undoable",
+      "duration_display": "7.5s",
+      "original_log_line": "2026-09-21T22:08:54.0697075Z   \u2713  32 tests/e2e/json-paste-formatting.spec.ts:53:5 \u203a warm JSON worker leaves pasted source untouched while explicit Format Document remains undoable (7.5s)"
+    },
+    {
+      "ordinal": 33,
+      "outcome": "passed",
+      "location": "tests/e2e/monaco.spec.ts:3:5",
+      "title": "bundled JSON worker provides schema diagnostics, completion and recovery offline",
+      "duration_display": "5.5s",
+      "original_log_line": "2026-09-21T22:08:59.5593401Z   \u2713  33 tests/e2e/monaco.spec.ts:3:5 \u203a bundled JSON worker provides schema diagnostics, completion and recovery offline (5.5s)"
+    },
+    {
+      "ordinal": 34,
+      "outcome": "passed",
+      "location": "tests/e2e/source-download-preservation.spec.ts:90:7",
+      "title": "Author preserves exact LF source through preview copy, JSON download and canvas history",
+      "duration_display": "10.3s",
+      "original_log_line": "2026-09-21T22:09:09.8803423Z   \u2713  34 tests/e2e/source-download-preservation.spec.ts:90:7 \u203a Author preserves exact LF source through preview copy, JSON download and canvas history (10.3s)"
+    },
+    {
+      "ordinal": 35,
+      "outcome": "passed",
+      "location": "tests/e2e/source-download-preservation.spec.ts:90:7",
+      "title": "Author preserves exact CRLF source through preview copy, JSON download and canvas history",
+      "duration_display": "7.1s",
+      "original_log_line": "2026-09-21T22:09:17.0368222Z   \u2713  35 tests/e2e/source-download-preservation.spec.ts:90:7 \u203a Author preserves exact CRLF source through preview copy, JSON download and canvas history (7.1s)"
+    },
+    {
+      "ordinal": 36,
+      "outcome": "passed",
+      "location": "tests/e2e/source-download-preservation.spec.ts:218:5",
+      "title": "Inspector JSON files preserve exact authored LF bytes before edits and through canvas undo/redo",
+      "duration_display": "6.0s",
+      "original_log_line": "2026-09-21T22:09:23.0300428Z   \u2713  36 tests/e2e/source-download-preservation.spec.ts:218:5 \u203a Inspector JSON files preserve exact authored LF bytes before edits and through canvas undo/redo (6.0s)"
+    },
+    {
+      "ordinal": 37,
+      "outcome": "passed",
+      "location": "tests/e2e/svg-security.spec.ts:51:5",
+      "title": "published SVG renderer keeps hostile shared and imported document strings inert",
+      "duration_display": "5.6s",
+      "original_log_line": "2026-09-21T22:09:28.6926139Z   \u2713  37 tests/e2e/svg-security.spec.ts:51:5 \u203a published SVG renderer keeps hostile shared and imported document strings inert (5.6s)"
+    },
+    {
+      "ordinal": 38,
+      "outcome": "passed",
+      "location": "tests/e2e/toolkit.spec.ts:4:5",
+      "title": "public toolkit shows the deployed package set with working render, edit and export proofs",
+      "duration_display": "332ms",
+      "original_log_line": "2026-09-21T22:09:29.0354781Z   \u2713  38 tests/e2e/toolkit.spec.ts:4:5 \u203a public toolkit shows the deployed package set with working render, edit and export proofs (332ms)"
+    },
+    {
+      "ordinal": 39,
+      "outcome": "passed",
+      "location": "tests/e2e/yaml.spec.ts:4:5",
+      "title": "YAML and Markdown editing preserve OPF values and recover from malformed YAML offline",
+      "duration_display": "7.5s",
+      "original_log_line": "2026-09-21T22:09:36.5347567Z   \u2713  39 tests/e2e/yaml.spec.ts:4:5 \u203a YAML and Markdown editing preserve OPF values and recover from malformed YAML offline (7.5s)"
+    }
+  ]
+}

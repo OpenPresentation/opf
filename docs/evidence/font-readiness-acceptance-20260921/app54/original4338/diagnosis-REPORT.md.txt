@@ -1,0 +1,24 @@
+# Windows initial Inspector canvas readiness — original trace diagnosis
+
+This is a read-only diagnosis of the first App54 run 35649707689 at head 4338e57. The acceptance audit is frozen separately in `../ci-windows-links/`; its Windows 38/39 result remains failed. No browser rerun, product/test change, added wait, timeout increase, font substitution, or native action was performed.
+
+The failed assertion is the **initial** canvas title visibility at `tests/e2e/inspector-recovery.spec.ts:46`, before any draft or recovery scenario. The source is accepted correctly: the final saved frame and snapshot show the Roboto design, retained-slide ID, Initial valid slide title, Original body, and notes. The expected one-slide figure remains at **Loading slide fonts…**. The incoming URL hash decodes to the exact initial fixture and is unchanged in the captured frame snapshots. This is not evidence of starter-deck overwrite or an editing/recovery regression.
+
+| Recorded event | Trace monotonic ms | Interpretation |
+|---|---:|---|
+| Navigation starts / returns |246550.428 /247764.677|Page navigation completes before the editable canvas is ready.|
+| Initial target assertion starts |247767.947|Unchanged 5,000ms budget.|
+| Font manifest request starts |250942.900|About 3.175s into the assertion; HTTP 200 recorded.|
+|33 OPF TTF requests start |251017.473–251023.142|About 3.250s into the assertion.|
+| Last completed font response, HAR-derived end |251932.093|Manifest +22 TTF responses have HTTP 200; 11 TTFs have no completed response in the trace.|
+| Final DOM snapshot |252915.621|Correct source and loading-fonts preview; no canvas target.|
+| Assertion ends with failure |252921.959|5,154.012ms measured call duration.|
+| Context close starts / finishes |254999.080 /255158.144|Recording ends shortly after failure.|
+
+`resource-table.json` retains all 82 resource records as compact path/status/timing/header facts. All recorded HTTP statuses are 200 or -1; there is no recorded HTTP error. The 11 status-1 records are OPF fonts: two Gelasio faces, seven Roboto faces, and two Roboto Mono faces. Status-1/duration-1 means no completed response was captured before teardown, not an HTTP error, permanent stall, or proof those requests could never finish. HAR end times are calculated from recorded start+duration, not separately observed completion events. No pageError event appears in this trace; the test's explicit no-pageerror assertions were not reached and therefore did not pass.
+
+The source review at [/private/tmp/opf-inspector-font-readiness-source-20260921/REPORT.md](/private/tmp/opf-inspector-font-readiness-source-20260921/REPORT.md) identifies the unresolved public gate: canvas and fallback SVG both await the same font acquisition; that currently waits for an unused PPTX module import, then the manifest, all 33 faces, FontFace loads, and document.fonts.ready. The trace establishes late initiation and incomplete font delivery during the assertion, but it does not isolate the dominant cause among module loading, request scheduling, font bytes, parsing, or browser font readiness. It does not establish a deterministic source/session defect or justify relaxing the existing budget.
+
+A narrow source candidate for separate authorization is removing the unused serialized PPTX preload before font acquisition while retaining all 33 original files, their complete registry/measurement gate, shared lease behavior, and export's own lazy converter import. This removes a concrete unnecessary dependency; it is not yet proven to resolve the observed Windows case. A meaningful follow-up must bind that dependency change to deterministic controls and fresh unchanged platform/browser tests. Do not substitute a smaller font set or claim a retry erases this failure.
+
+The final viewport JPEG was extracted byte-for-byte from the original trace; `frame-receipt.json` binds its archive member and hash. Root and this reviewer visually inspected it. The separate successful SVG-security readiness attachment is unrelated telemetry and was not used to explain this failure. No comparison with a prior same-named failure is needed to establish these bounded facts.

@@ -1,0 +1,48 @@
+{
+  "cwd": "/private/tmp/opf-author-navigation-acceptance-20260921/pptx-dev",
+  "commands": [
+    {
+      "stage": "fresh frozen install",
+      "command": "fnm exec --using=24 node /Users/michael/.npm/_npx/e06aaa83a075c17a/node_modules/pnpm/bin/pnpm.cjs install --frozen-lockfile > ../acceptance/install.log 2>&1",
+      "exit": 0
+    },
+    {
+      "stage": "original pre-build typecheck",
+      "command": "fnm exec --using=24 node /Users/michael/.npm/_npx/e06aaa83a075c17a/node_modules/pnpm/bin/pnpm.cjs typecheck > ../acceptance/typecheck.log 2>&1",
+      "exit": 2,
+      "classification": "Fresh checkout missing generated .opf-spec/opf.schema.json; original failure retained; existing build prepares it."
+    },
+    {
+      "stage": "scoped test lint",
+      "command": "fnm exec --using=24 node node_modules/eslint/bin/eslint.js tests/e2e/inspector-actions.spec.ts > ../acceptance/scoped-eslint.log 2>&1",
+      "exit": 0
+    },
+    {
+      "stage": "fresh production build",
+      "command": "fnm exec --using=24 node /Users/michael/.npm/_npx/e06aaa83a075c17a/node_modules/pnpm/bin/pnpm.cjs build > ../acceptance/build.log 2>&1",
+      "exit": 0
+    },
+    {
+      "stage": "prepared-tree typecheck",
+      "command": "fnm exec --using=24 node /Users/michael/.npm/_npx/e06aaa83a075c17a/node_modules/pnpm/bin/pnpm.cjs typecheck > ../acceptance/typecheck-after-build.log 2>&1",
+      "exit": 0
+    },
+    {
+      "stage": "owned standalone server",
+      "command": "fnm exec --using=24 node /Users/michael/.npm/_npx/e06aaa83a075c17a/node_modules/pnpm/bin/pnpm.cjs start --hostname 127.0.0.1 --port 4337 > ../acceptance/server.log 2>&1",
+      "session": 4297,
+      "readiness": "HTTP200 /inspector after start",
+      "stopped": true,
+      "stopMethod": "SIGTERM to verified owned next-server PID8727; cwd matched candidate/.next/standalone; parent session4297 exited143 intentionally after test completion."
+    },
+    {
+      "stage": "single full browser run",
+      "commandReceipt": "browser-command.json",
+      "session": 95683,
+      "result": "passed39/39",
+      "exit": 0,
+      "durationMs": 112780.048
+    }
+  ],
+  "unitTests": "Not repeated locally: only one acceptance test navigation boundary changed; product/unit/config bytes unchanged. Fresh CI is a separate future gate."
+}

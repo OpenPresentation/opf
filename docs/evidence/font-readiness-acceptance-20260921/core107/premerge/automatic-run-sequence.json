@@ -1,0 +1,78 @@
+{
+  "observedAt": "2026-09-21T20:25:32.370719+00:00",
+  "head": "92c1009761a83b95601b93eb8455e9351980b8a7",
+  "runs": [
+    {
+      "id": 35650769719,
+      "workflow": "Coordinated public packages",
+      "event": "pull_request",
+      "headSha": "92c1009761a83b95601b93eb8455e9351980b8a7",
+      "headBranch": "codex/inspector-current-actions-handoff-20260921",
+      "runAttempt": 1,
+      "statusAtObservation": "in_progress",
+      "conclusionAtObservation": null,
+      "createdAt": "2026-09-21T20:23:36Z",
+      "updatedAt": "2026-09-21T20:23:40Z",
+      "actor": "michaeljgrimm",
+      "triggeringActor": "michaeljgrimm"
+    },
+    {
+      "id": 35650769661,
+      "workflow": "OPF CI",
+      "event": "pull_request",
+      "headSha": "92c1009761a83b95601b93eb8455e9351980b8a7",
+      "headBranch": "codex/inspector-current-actions-handoff-20260921",
+      "runAttempt": 1,
+      "statusAtObservation": "in_progress",
+      "conclusionAtObservation": null,
+      "createdAt": "2026-09-21T20:23:36Z",
+      "updatedAt": "2026-09-21T20:23:40Z",
+      "actor": "michaeljgrimm",
+      "triggeringActor": "michaeljgrimm"
+    },
+    {
+      "id": 35650767380,
+      "workflow": "Coordinated public packages",
+      "event": "pull_request",
+      "headSha": "92c1009761a83b95601b93eb8455e9351980b8a7",
+      "headBranch": "codex/inspector-current-actions-handoff-20260921",
+      "runAttempt": 1,
+      "statusAtObservation": "completed",
+      "conclusionAtObservation": "cancelled",
+      "createdAt": "2026-09-21T20:23:34Z",
+      "updatedAt": "2026-09-21T20:23:37Z",
+      "actor": "michaeljgrimm",
+      "triggeringActor": "michaeljgrimm"
+    },
+    {
+      "id": 35650767479,
+      "workflow": "OPF CI",
+      "event": "pull_request",
+      "headSha": "92c1009761a83b95601b93eb8455e9351980b8a7",
+      "headBranch": "codex/inspector-current-actions-handoff-20260921",
+      "runAttempt": 1,
+      "statusAtObservation": "completed",
+      "conclusionAtObservation": "cancelled",
+      "createdAt": "2026-09-21T20:23:34Z",
+      "updatedAt": "2026-09-21T20:23:37Z",
+      "actor": "michaeljgrimm",
+      "triggeringActor": "michaeljgrimm"
+    }
+  ],
+  "initialInterpretation": "Two separate automatic pull_request runs per workflow on the same head, each attempt1. The first pair is cancelled; later pair is separate, not a rerun. Same-ref cancel-in-progress and two-second creation spacing support supersession. API actor/triggering_actor fields identify workflow trigger actors, not a cancellation actor. The exact cancellation actor/reason is not established by these receipts.",
+  "laterAnnotationObservation": {
+    "observedAt": "2026-09-21T20:31:49.019142+00:00",
+    "cancellationReasonEstablished": true,
+    "reason": "A higher-priority waiting request exists in the same workflow/ref concurrency group.",
+    "messages": {
+      "opf": [
+        "Canceling since a higher priority waiting request for OPF CI-refs/pull/107/merge exists"
+      ],
+      "coordinated": [
+        "Canceling since a higher priority waiting request for ecosystem-refs/pull/107/merge exists"
+      ]
+    },
+    "cancellationActorEstablished": false,
+    "scope": "The annotations establish queue supersession reason, not a named cancellation actor. Canceled jobs had zero steps. Later same-head runs are separate automatic pull_request runs, each attempt1, not reruns."
+  }
+}

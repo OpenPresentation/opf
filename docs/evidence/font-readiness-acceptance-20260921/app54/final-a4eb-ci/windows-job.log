@@ -1,0 +1,1182 @@
+﻿2026-09-21T21:02:13.2898359Z Current runner version: '2.337.0'
+2026-09-21T21:02:13.2928510Z ##[group]Runner Image Provisioner
+2026-09-21T21:02:13.2929445Z Hosted Compute Agent
+2026-09-21T21:02:13.2930109Z Version: 20260828.587
+2026-09-21T21:02:13.2930890Z Commit: abac92662cab4cc7352de4f9f9d2e2419aad9c29
+2026-09-21T21:02:13.2931740Z Build Date: 2026-08-28T16:44:25Z
+2026-09-21T21:02:13.2932501Z Worker ID: {3952033a-a814-42ad-8570-c8f55a3f7833}
+2026-09-21T21:02:13.2933327Z Azure Region: eastus
+2026-09-21T21:02:13.2933982Z ##[endgroup]
+2026-09-21T21:02:13.2939215Z ##[group]Operating System
+2026-09-21T21:02:13.2940084Z Microsoft Windows Server 2025
+2026-09-21T21:02:13.2940777Z 10.0.26100
+2026-09-21T21:02:13.2941382Z Datacenter
+2026-09-21T21:02:13.2942015Z ##[endgroup]
+2026-09-21T21:02:13.2942706Z ##[group]Runner Image
+2026-09-21T21:02:13.2943416Z Image: windows-2025-vs2026
+2026-09-21T21:02:13.2944104Z Version: 20260907.229.1
+2026-09-21T21:02:13.2945976Z Included Software: https://github.com/actions/runner-images/blob/win25-vs2026/20260907.229/images/windows/Windows2025-VS2026-Readme.md
+2026-09-21T21:02:13.2948153Z Image Release: https://github.com/actions/runner-images/releases/tag/win25-vs2026%2F20260907.229
+2026-09-21T21:02:13.2949385Z ##[endgroup]
+2026-09-21T21:02:13.2950603Z ##[group]GITHUB_TOKEN Permissions
+2026-09-21T21:02:13.2952693Z Contents: read
+2026-09-21T21:02:13.2953685Z Metadata: read
+2026-09-21T21:02:13.2954361Z ##[endgroup]
+2026-09-21T21:02:13.2956918Z Secret source: Actions
+2026-09-21T21:02:13.2958100Z Cache mode: write
+2026-09-21T21:02:13.2958907Z Prepare workflow directory
+2026-09-21T21:02:13.3533719Z Prepare all required actions
+2026-09-21T21:02:13.3596413Z Getting action download info
+2026-09-21T21:02:13.5445606Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-09-21T21:02:13.7016268Z Download action repository 'actions/setup-node@820762786026740c76f36085b0efc47a31fe5020' (SHA:820762786026740c76f36085b0efc47a31fe5020)
+2026-09-21T21:02:13.8665937Z Download action repository 'pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413' (SHA:ea17c68df8912ef543352723c149a84f56e3d413)
+2026-09-21T21:02:14.0054089Z Download action repository 'actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a' (SHA:043fb46d1a93c77aae656e7c1c64a875d1fc6a0a)
+2026-09-21T21:02:14.2000650Z Complete job name: verify (windows-latest)
+2026-09-21T21:02:14.4476052Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-09-21T21:02:14.4477027Z with:
+2026-09-21T21:02:14.4477338Z   persist-credentials: false
+2026-09-21T21:02:14.4477742Z   repository: Data-Advantage/pptx-dev
+2026-09-21T21:02:14.4480997Z   token: ***
+2026-09-21T21:02:14.4481307Z   ssh-strict: true
+2026-09-21T21:02:14.4481617Z   ssh-user: git
+2026-09-21T21:02:14.4481969Z   clean: true
+2026-09-21T21:02:14.4482458Z   sparse-checkout-cone-mode: true
+2026-09-21T21:02:14.4482837Z   fetch-depth: 1
+2026-09-21T21:02:14.4483148Z   fetch-tags: false
+2026-09-21T21:02:14.4483525Z   show-progress: true
+2026-09-21T21:02:14.4484088Z   lfs: false
+2026-09-21T21:02:14.4484385Z   submodules: false
+2026-09-21T21:02:14.4484705Z   set-safe-directory: true
+2026-09-21T21:02:14.4485071Z   allow-unsafe-pr-checkout: false
+2026-09-21T21:02:14.4485663Z ##[endgroup]
+2026-09-21T21:02:15.0732522Z Syncing repository: Data-Advantage/pptx-dev
+2026-09-21T21:02:15.0734017Z ##[group]Getting Git version info
+2026-09-21T21:02:15.0734528Z Working directory is 'D:\a\pptx-dev\pptx-dev'
+2026-09-21T21:02:15.0735296Z [command]"C:\Program Files\Git\bin\git.exe" version
+2026-09-21T21:02:15.1099232Z git version 2.55.0.windows.5
+2026-09-21T21:02:15.1147743Z ##[endgroup]
+2026-09-21T21:02:15.1163761Z Temporarily overriding HOME='D:\a\_temp\630286cf-8c9c-47f5-8500-7c7cdb86d924' before making global git config changes
+2026-09-21T21:02:15.1165826Z Adding repository directory to the temporary git global config as a safe directory
+2026-09-21T21:02:15.1174418Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\pptx-dev\pptx-dev
+2026-09-21T21:02:15.1961717Z Deleting the contents of 'D:\a\pptx-dev\pptx-dev'
+2026-09-21T21:02:15.1965757Z ##[group]Determining repository object format
+2026-09-21T21:02:15.1967326Z ##[endgroup]
+2026-09-21T21:02:15.1968652Z ##[group]Initializing the repository
+2026-09-21T21:02:15.1980273Z [command]"C:\Program Files\Git\bin\git.exe" init D:\a\pptx-dev\pptx-dev
+2026-09-21T21:02:15.2858783Z Initialized empty Git repository in D:/a/pptx-dev/pptx-dev/.git/
+2026-09-21T21:02:15.2955858Z [command]"C:\Program Files\Git\bin\git.exe" remote add origin https://github.com/Data-Advantage/pptx-dev
+2026-09-21T21:02:15.3841352Z ##[endgroup]
+2026-09-21T21:02:15.3842927Z ##[group]Disabling automatic garbage collection
+2026-09-21T21:02:15.3851721Z [command]"C:\Program Files\Git\bin\git.exe" config --local gc.auto 0
+2026-09-21T21:02:15.4099065Z ##[endgroup]
+2026-09-21T21:02:15.4100616Z ##[group]Setting up auth
+2026-09-21T21:02:15.4101877Z Removing SSH command configuration
+2026-09-21T21:02:15.4108303Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2026-09-21T21:02:15.4351405Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2026-09-21T21:02:17.0173799Z Removing HTTP extra header
+2026-09-21T21:02:17.0187858Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-09-21T21:02:17.0428028Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2026-09-21T21:02:17.5385799Z Removing includeIf entries pointing to credentials config files
+2026-09-21T21:02:17.5394105Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-09-21T21:02:17.5710251Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-09-21T21:02:18.0549187Z [command]"C:\Program Files\Git\bin\git.exe" config --file D:\a\_temp\git-credentials-3d015b1d-3ba7-4960-8544-00359b889695.config http.https://github.com/.extraheader "AUTHORIZATION: basic ***"
+2026-09-21T21:02:18.0800965Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:D:/a/pptx-dev/pptx-dev/.git.path D:\a\_temp\git-credentials-3d015b1d-3ba7-4960-8544-00359b889695.config
+2026-09-21T21:02:18.1066689Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:D:/a/pptx-dev/pptx-dev/.git/worktrees/*.path D:\a\_temp\git-credentials-3d015b1d-3ba7-4960-8544-00359b889695.config
+2026-09-21T21:02:18.1391502Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-3d015b1d-3ba7-4960-8544-00359b889695.config
+2026-09-21T21:02:18.1645594Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-3d015b1d-3ba7-4960-8544-00359b889695.config
+2026-09-21T21:02:18.1879464Z ##[endgroup]
+2026-09-21T21:02:18.1880076Z ##[group]Fetching the repository
+2026-09-21T21:02:18.1890048Z [command]"C:\Program Files\Git\bin\git.exe" -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +8b65b701fb588bba18108a3d59e2c480efd7a657:refs/remotes/pull/54/merge
+2026-09-21T21:02:21.0873212Z From https://github.com/Data-Advantage/pptx-dev
+2026-09-21T21:02:21.0875404Z  * [new ref]         8b65b701fb588bba18108a3d59e2c480efd7a657 -> pull/54/merge
+2026-09-21T21:02:21.0936208Z ##[endgroup]
+2026-09-21T21:02:21.0943549Z ##[group]Determining the checkout info
+2026-09-21T21:02:21.0946279Z ##[endgroup]
+2026-09-21T21:02:21.0946858Z [command]"C:\Program Files\Git\bin\git.exe" sparse-checkout disable
+2026-09-21T21:02:21.1378733Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset-all extensions.worktreeConfig
+2026-09-21T21:02:21.1615504Z ##[group]Checking out the ref
+2026-09-21T21:02:21.1623221Z [command]"C:\Program Files\Git\bin\git.exe" checkout --progress --force refs/remotes/pull/54/merge
+2026-09-21T21:02:21.8150995Z Note: switching to 'refs/remotes/pull/54/merge'.
+2026-09-21T21:02:21.8155326Z 
+2026-09-21T21:02:21.8155828Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-09-21T21:02:21.8166895Z changes and commit them, and you can discard any commits you make in this
+2026-09-21T21:02:21.8167722Z state without impacting any branches by switching back to a branch.
+2026-09-21T21:02:21.8168218Z 
+2026-09-21T21:02:21.8168675Z If you want to create a new branch to retain commits you create, you may
+2026-09-21T21:02:21.8175736Z do so (now or later) by using -c with the switch command. Example:
+2026-09-21T21:02:21.8177437Z 
+2026-09-21T21:02:21.8177754Z   git switch -c <new-branch-name>
+2026-09-21T21:02:21.8178096Z 
+2026-09-21T21:02:21.8178328Z Or undo this operation with:
+2026-09-21T21:02:21.8178722Z 
+2026-09-21T21:02:21.8242434Z   git switch -
+2026-09-21T21:02:21.8252776Z 
+2026-09-21T21:02:21.8253795Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-09-21T21:02:21.8254526Z 
+2026-09-21T21:02:21.8261781Z HEAD is now at 8b65b70 Merge a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb into e40c287b64fcbcfb85fb4a8a50641aea8e3e54a8
+2026-09-21T21:02:21.8368832Z ##[endgroup]
+2026-09-21T21:02:21.8720218Z [command]"C:\Program Files\Git\bin\git.exe" log -1 --format=%H
+2026-09-21T21:02:21.8942672Z 8b65b701fb588bba18108a3d59e2c480efd7a657
+2026-09-21T21:02:21.8973349Z ##[group]Removing auth
+2026-09-21T21:02:21.8973798Z Removing SSH command configuration
+2026-09-21T21:02:21.8980868Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2026-09-21T21:02:21.9221493Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2026-09-21T21:02:22.4180446Z Removing HTTP extra header
+2026-09-21T21:02:22.4194915Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-09-21T21:02:22.4473173Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2026-09-21T21:02:22.9235179Z Removing includeIf entries pointing to credentials config files
+2026-09-21T21:02:22.9240718Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-09-21T21:02:22.9534696Z includeif.gitdir:D:/a/pptx-dev/pptx-dev/.git.path
+2026-09-21T21:02:22.9538419Z includeif.gitdir:D:/a/pptx-dev/pptx-dev/.git/worktrees/*.path
+2026-09-21T21:02:22.9552218Z includeif.gitdir:/github/workspace/.git.path
+2026-09-21T21:02:22.9560373Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-09-21T21:02:22.9604103Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:D:/a/pptx-dev/pptx-dev/.git.path
+2026-09-21T21:02:22.9816321Z D:\a\_temp\git-credentials-3d015b1d-3ba7-4960-8544-00359b889695.config
+2026-09-21T21:02:22.9876201Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:D:/a/pptx-dev/pptx-dev/.git.path D\:\\a\\_temp\\git\-credentials\-3d015b1d\-3ba7\-4960\-8544\-00359b889695\.config
+2026-09-21T21:02:23.0122048Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:D:/a/pptx-dev/pptx-dev/.git/worktrees/*.path
+2026-09-21T21:02:23.0354134Z D:\a\_temp\git-credentials-3d015b1d-3ba7-4960-8544-00359b889695.config
+2026-09-21T21:02:23.0395618Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:D:/a/pptx-dev/pptx-dev/.git/worktrees/*.path D\:\\a\\_temp\\git\-credentials\-3d015b1d\-3ba7\-4960\-8544\-00359b889695\.config
+2026-09-21T21:02:23.0660789Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-09-21T21:02:23.0898082Z /github/runner_temp/git-credentials-3d015b1d-3ba7-4960-8544-00359b889695.config
+2026-09-21T21:02:23.0955239Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-3d015b1d\-3ba7\-4960\-8544\-00359b889695\.config
+2026-09-21T21:02:23.1193481Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-09-21T21:02:23.1398511Z /github/runner_temp/git-credentials-3d015b1d-3ba7-4960-8544-00359b889695.config
+2026-09-21T21:02:23.1438323Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-3d015b1d\-3ba7\-4960\-8544\-00359b889695\.config
+2026-09-21T21:02:23.1682352Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-09-21T21:02:23.6259282Z Removing credentials config 'D:\a\_temp\git-credentials-3d015b1d-3ba7-4960-8544-00359b889695.config'
+2026-09-21T21:02:23.6271374Z ##[endgroup]
+2026-09-21T21:02:23.6634068Z ##[group]Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+2026-09-21T21:02:23.6634451Z with:
+2026-09-21T21:02:23.6634601Z   node-version: 24
+2026-09-21T21:02:23.6634763Z   check-latest: false
+2026-09-21T21:02:23.6636734Z   token: ***
+2026-09-21T21:02:23.6636895Z   package-manager-cache: true
+2026-09-21T21:02:23.6637085Z ##[endgroup]
+2026-09-21T21:02:23.8315099Z Found in cache @ C:\hostedtoolcache\windows\node\24.20.0\x64
+2026-09-21T21:02:23.8320323Z ##[group]Environment details
+2026-09-21T21:02:30.4659925Z node: v24.20.0
+2026-09-21T21:02:30.4660554Z npm: 11.19.0
+2026-09-21T21:02:30.4660935Z yarn: 1.22.22
+2026-09-21T21:02:30.4661615Z ##[endgroup]
+2026-09-21T21:02:30.4954786Z ##[group]Run pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413
+2026-09-21T21:02:30.4955149Z with:
+2026-09-21T21:02:30.4955308Z   dest: ~/setup-pnpm
+2026-09-21T21:02:30.4955474Z   run_install: null
+2026-09-21T21:02:30.4955627Z   cache: false
+2026-09-21T21:02:30.4955796Z   cache_dependency_path: pnpm-lock.yaml
+2026-09-21T21:02:30.4956024Z   package_json_file: package.json
+2026-09-21T21:02:30.4956221Z   standalone: false
+2026-09-21T21:02:30.4956370Z ##[endgroup]
+2026-09-21T21:02:30.6696672Z ##[group]Running self-installer...
+2026-09-21T21:02:30.6791864Z (node:3180) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+2026-09-21T21:02:30.6793392Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-09-21T21:02:40.1110812Z 
+2026-09-21T21:02:40.1112040Z added 1 package, and audited 2 packages in 9s
+2026-09-21T21:02:40.1112774Z 
+2026-09-21T21:02:40.1116898Z 1 package is looking for funding
+2026-09-21T21:02:40.1119541Z   run `npm fund` for details
+2026-09-21T21:02:40.1134567Z 
+2026-09-21T21:02:40.1134967Z found 0 vulnerabilities
+2026-09-21T21:02:42.8228688Z Checking for updates...
+2026-09-21T21:02:43.2494782Z Switching pnpm from v11.25.0 to v11.1.3...
+2026-09-21T21:02:43.9089230Z .../2354-1a0c5c73c08-886c3d142a11e7a5    | Progress: resolved 1, reused 0, downloaded 0, added 0
+2026-09-21T21:02:43.9114770Z .../2354-1a0c5c73c08-886c3d142a11e7a5    |   +1 +
+2026-09-21T21:02:44.9104016Z .../2354-1a0c5c73c08-886c3d142a11e7a5    | Progress: resolved 1, reused 0, downloaded 1, added 0
+2026-09-21T21:02:45.1422411Z .../2354-1a0c5c73c08-886c3d142a11e7a5    | Progress: resolved 1, reused 0, downloaded 1, added 1, done
+2026-09-21T21:02:46.2131945Z [WARN] Detected a pnpm v10 installation layout at PNPM_HOME. The pnpm shims at PNPM_HOME have been refreshed so the new version is active, but pnpm v11 expects bins in PNPM_HOME/bin. Run "pnpm setup" to migrate your PATH to the v11 layout.
+2026-09-21T21:02:46.2163492Z Successfully updated pnpm to v11.1.3
+2026-09-21T21:02:46.3033673Z ##[endgroup]
+2026-09-21T21:02:46.3034505Z Installation Completed!
+2026-09-21T21:02:46.3279083Z ##[group]Run pnpm install --frozen-lockfile
+2026-09-21T21:02:46.3279445Z [36;1mpnpm install --frozen-lockfile[0m
+2026-09-21T21:02:46.4098499Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-09-21T21:02:46.4098797Z env:
+2026-09-21T21:02:46.4099013Z   PNPM_HOME: C:\Users\runneradmin\setup-pnpm\node_modules\.bin
+2026-09-21T21:02:46.4099260Z ##[endgroup]
+2026-09-21T21:02:47.1691445Z Scope: all 3 workspace projects
+2026-09-21T21:02:47.4387935Z ? Verifying lockfile against supply-chain policies (1383 entries)...
+2026-09-21T21:03:03.9339658Z ✓ Lockfile passes supply-chain policies (1383 entries in 16.4s)
+2026-09-21T21:03:04.0196666Z Lockfile is up to date, resolution step is skipped
+2026-09-21T21:03:04.4170222Z Progress: resolved 1, reused 0, downloaded 0, added 0
+2026-09-21T21:03:04.5519896Z Packages: +1196
+2026-09-21T21:03:04.5524712Z ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+2026-09-21T21:03:05.4416318Z Progress: resolved 1196, reused 0, downloaded 1, added 0
+2026-09-21T21:03:06.4343764Z Progress: resolved 1196, reused 0, downloaded 17, added 2
+2026-09-21T21:03:07.4446632Z Progress: resolved 1196, reused 0, downloaded 27, added 4
+2026-09-21T21:03:08.4520149Z Progress: resolved 1196, reused 0, downloaded 38, added 8
+2026-09-21T21:03:09.4831190Z Progress: resolved 1196, reused 0, downloaded 47, added 9
+2026-09-21T21:03:13.6742074Z Progress: resolved 1196, reused 0, downloaded 48, added 9
+2026-09-21T21:03:14.7114604Z Progress: resolved 1196, reused 0, downloaded 79, added 18
+2026-09-21T21:03:15.7142098Z Progress: resolved 1196, reused 0, downloaded 94, added 22
+2026-09-21T21:03:16.8220033Z Progress: resolved 1196, reused 0, downloaded 95, added 22
+2026-09-21T21:03:17.8233960Z Progress: resolved 1196, reused 0, downloaded 110, added 27
+2026-09-21T21:03:18.8361590Z Progress: resolved 1196, reused 0, downloaded 145, added 39
+2026-09-21T21:03:19.8367786Z Progress: resolved 1196, reused 0, downloaded 171, added 47
+2026-09-21T21:03:20.8397808Z Progress: resolved 1196, reused 0, downloaded 190, added 53
+2026-09-21T21:03:21.8499440Z Progress: resolved 1196, reused 0, downloaded 199, added 56
+2026-09-21T21:03:22.8614782Z Progress: resolved 1196, reused 0, downloaded 213, added 60
+2026-09-21T21:03:23.8615634Z Progress: resolved 1196, reused 0, downloaded 275, added 85
+2026-09-21T21:03:24.8800321Z Progress: resolved 1196, reused 0, downloaded 321, added 105
+2026-09-21T21:03:25.8752348Z Progress: resolved 1196, reused 0, downloaded 353, added 114
+2026-09-21T21:03:26.8875466Z Progress: resolved 1196, reused 0, downloaded 403, added 138
+2026-09-21T21:03:27.8971412Z Progress: resolved 1196, reused 0, downloaded 427, added 146
+2026-09-21T21:03:28.8992101Z Progress: resolved 1196, reused 0, downloaded 445, added 152
+2026-09-21T21:03:29.9388508Z Progress: resolved 1196, reused 0, downloaded 449, added 154
+2026-09-21T21:03:30.9426645Z Progress: resolved 1196, reused 0, downloaded 467, added 158
+2026-09-21T21:03:32.7760916Z Progress: resolved 1196, reused 0, downloaded 468, added 158
+2026-09-21T21:03:33.8150694Z Progress: resolved 1196, reused 0, downloaded 547, added 186
+2026-09-21T21:03:34.7949168Z Progress: resolved 1196, reused 0, downloaded 567, added 192
+2026-09-21T21:03:35.7999672Z Progress: resolved 1196, reused 0, downloaded 633, added 220
+2026-09-21T21:03:36.8342451Z Progress: resolved 1196, reused 0, downloaded 673, added 232
+2026-09-21T21:03:37.8413579Z Progress: resolved 1196, reused 0, downloaded 703, added 242
+2026-09-21T21:03:38.8574844Z Progress: resolved 1196, reused 0, downloaded 704, added 242
+2026-09-21T21:03:39.8794469Z Progress: resolved 1196, reused 0, downloaded 721, added 248
+2026-09-21T21:03:40.8867559Z Progress: resolved 1196, reused 0, downloaded 752, added 256
+2026-09-21T21:03:41.9056086Z Progress: resolved 1196, reused 0, downloaded 786, added 266
+2026-09-21T21:03:42.9151520Z Progress: resolved 1196, reused 0, downloaded 803, added 272
+2026-09-21T21:03:43.9079790Z Progress: resolved 1196, reused 0, downloaded 845, added 284
+2026-09-21T21:03:44.9137029Z Progress: resolved 1196, reused 0, downloaded 944, added 325
+2026-09-21T21:03:45.9145601Z Progress: resolved 1196, reused 0, downloaded 1039, added 359
+2026-09-21T21:03:47.0109198Z Progress: resolved 1196, reused 0, downloaded 1092, added 378
+2026-09-21T21:03:47.9515629Z Progress: resolved 1196, reused 0, downloaded 1164, added 402
+2026-09-21T21:03:48.9571147Z Progress: resolved 1196, reused 0, downloaded 1194, added 447
+2026-09-21T21:03:49.9769847Z Progress: resolved 1196, reused 0, downloaded 1194, added 469
+2026-09-21T21:03:50.9691911Z Progress: resolved 1196, reused 0, downloaded 1194, added 680
+2026-09-21T21:03:51.9696093Z Progress: resolved 1196, reused 0, downloaded 1194, added 706
+2026-09-21T21:03:52.9842258Z Progress: resolved 1196, reused 0, downloaded 1194, added 722
+2026-09-21T21:03:54.0001819Z Progress: resolved 1196, reused 0, downloaded 1194, added 788
+2026-09-21T21:03:55.0146984Z Progress: resolved 1196, reused 0, downloaded 1194, added 993
+2026-09-21T21:03:56.0501907Z Progress: resolved 1196, reused 0, downloaded 1194, added 1145
+2026-09-21T21:03:56.2090647Z Progress: resolved 1196, reused 0, downloaded 1194, added 1196, done
+2026-09-21T21:03:57.6046333Z .../node_modules/unrs-resolver postinstall$ node postinstall.js
+2026-09-21T21:03:57.6060410Z .../node_modules/tree-sitter install$ node-gyp-build
+2026-09-21T21:03:57.6074635Z .../node_modules/tree-sitter install$ node-gyp-build
+2026-09-21T21:03:57.6277444Z .../esbuild@0.28.2/node_modules/esbuild postinstall$ node install.js
+2026-09-21T21:03:57.6278324Z .../esbuild@0.27.0/node_modules/esbuild postinstall$ node install.js
+2026-09-21T21:03:58.0622241Z .../node_modules/tree-sitter install: Done
+2026-09-21T21:03:58.0650216Z .../node_modules/tree-sitter install: Done
+2026-09-21T21:03:58.1083504Z .../node_modules/unrs-resolver postinstall: Done
+2026-09-21T21:03:58.1485150Z .../esbuild@0.27.0/node_modules/esbuild postinstall: Done
+2026-09-21T21:03:58.1540030Z .../esbuild@0.28.2/node_modules/esbuild postinstall: Done
+2026-09-21T21:03:58.1596780Z .../tree-sitter-yaml install$ node-gyp-build
+2026-09-21T21:03:58.1640234Z .../node_modules/tree-sitter-json install$ node-gyp-build
+2026-09-21T21:03:58.3405118Z .../tree-sitter-yaml install: Done
+2026-09-21T21:03:58.3726686Z .../node_modules/tree-sitter-json install: Done
+2026-09-21T21:03:58.5170637Z 
+2026-09-21T21:03:58.5171540Z dependencies:
+2026-09-21T21:03:58.5172151Z + @ai-sdk/react 4.0.102
+2026-09-21T21:03:58.5172662Z + @base-ui/react 1.8.0
+2026-09-21T21:03:58.5173081Z + @clerk/nextjs 7.9.2
+2026-09-21T21:03:58.5173478Z + @clerk/themes 2.4.57
+2026-09-21T21:03:58.5173939Z + @modelcontextprotocol/sdk 1.30.0
+2026-09-21T21:03:58.5174404Z + @monaco-editor/react 4.7.0
+2026-09-21T21:03:58.5174874Z + @openpresentation/opf 0.11.0
+2026-09-21T21:03:58.5175344Z + @openpresentation/opf-editor 0.8.0
+2026-09-21T21:03:58.5175874Z + @openpresentation/opf-pptx 0.9.1
+2026-09-21T21:03:58.5176727Z + @openpresentation/opf-render 0.9.0
+2026-09-21T21:03:58.5177255Z + @streamdown/cjk 1.0.3
+2026-09-21T21:03:58.5177627Z + @streamdown/code 1.1.1
+2026-09-21T21:03:58.5178056Z + @streamdown/math 1.0.2
+2026-09-21T21:03:58.5178449Z + @streamdown/mermaid 1.0.2
+2026-09-21T21:03:58.5178842Z + @vercel/analytics 2.0.1
+2026-09-21T21:03:58.5180839Z + ai 7.0.99
+2026-09-21T21:03:58.5181577Z + class-variance-authority 0.7.1
+2026-09-21T21:03:58.5182056Z + clsx 2.1.1
+2026-09-21T21:03:58.5182419Z + convex 1.45.0
+2026-09-21T21:03:58.5184285Z + embla-carousel-react 8.6.0
+2026-09-21T21:03:58.5185425Z + fast-xml-parser 5.11.1
+2026-09-21T21:03:58.5185733Z + js-yaml 5.4.1
+2026-09-21T21:03:58.5185979Z + jszip 3.10.2
+2026-09-21T21:03:58.5187039Z + lucide-react 1.45.0
+2026-09-21T21:03:58.5187291Z + monaco-editor 0.56.0
+2026-09-21T21:03:58.5187539Z + motion 12.43.0
+2026-09-21T21:03:58.5187738Z + nanoid 5.1.16
+2026-09-21T21:03:58.5187945Z + next 16.3.5
+2026-09-21T21:03:58.5188189Z + pptxgenjs 4.0.1
+2026-09-21T21:03:58.5190230Z + react 19.3.0
+2026-09-21T21:03:58.5190857Z + react-dom 19.3.0
+2026-09-21T21:03:58.5192030Z + shadcn 4.21.0
+2026-09-21T21:03:58.5192303Z + shiki 4.4.3
+2026-09-21T21:03:58.5192553Z + streamdown 2.6.0
+2026-09-21T21:03:58.5194657Z + swagger-ui-react 5.32.15
+2026-09-21T21:03:58.5195054Z + tailwind-merge 3.6.0
+2026-09-21T21:03:58.5195327Z + tokenlens 1.3.1
+2026-09-21T21:03:58.5195556Z + tw-animate-css 1.4.0
+2026-09-21T21:03:58.5195802Z + use-stick-to-bottom 1.1.6
+2026-09-21T21:03:58.5196035Z + zod 4.6.2
+2026-09-21T21:03:58.5196152Z 
+2026-09-21T21:03:58.5196259Z devDependencies:
+2026-09-21T21:03:58.5196762Z + @playwright/test 1.63.0
+2026-09-21T21:03:58.5197017Z + @tailwindcss/postcss 4.3.3
+2026-09-21T21:03:58.5197432Z + @types/node 24.13.4
+2026-09-21T21:03:58.5197692Z + @types/react 19.3.0
+2026-09-21T21:03:58.5197978Z + @types/react-dom 19.3.0
+2026-09-21T21:03:58.5198284Z + eslint 9.39.5
+2026-09-21T21:03:58.5198534Z + eslint-config-next 16.3.5
+2026-09-21T21:03:58.5198828Z + npm-run-all 4.1.5
+2026-09-21T21:03:58.5199074Z + postcss 8.5.28
+2026-09-21T21:03:58.5199330Z + tailwindcss 4.3.3
+2026-09-21T21:03:58.5199585Z + typescript 5.9.3
+2026-09-21T21:03:58.5199840Z + vitest 5.0.0
+2026-09-21T21:03:58.5199980Z 
+2026-09-21T21:03:58.5838940Z Done in 1m 11.8s using pnpm v11.1.3
+2026-09-21T21:03:58.9326157Z ##[group]Run pnpm audit
+2026-09-21T21:03:58.9326445Z [36;1mpnpm audit[0m
+2026-09-21T21:03:58.9384266Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-09-21T21:03:58.9384565Z env:
+2026-09-21T21:03:58.9384790Z   PNPM_HOME: C:\Users\runneradmin\setup-pnpm\node_modules\.bin
+2026-09-21T21:03:58.9385115Z ##[endgroup]
+2026-09-21T21:03:59.9074396Z No known vulnerabilities found
+2026-09-21T21:04:00.0658285Z ##[group]Run pnpm test
+2026-09-21T21:04:00.0658562Z [36;1mpnpm test[0m
+2026-09-21T21:04:00.0717343Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-09-21T21:04:00.0717640Z env:
+2026-09-21T21:04:00.0717865Z   PNPM_HOME: C:\Users\runneradmin\setup-pnpm\node_modules\.bin
+2026-09-21T21:04:00.0718133Z ##[endgroup]
+2026-09-21T21:04:00.7562611Z $ pnpm sync:opf-spec && vitest run && pnpm test:standalone
+2026-09-21T21:04:01.2005475Z $ node --experimental-strip-types scripts/sync-opf-spec.ts
+2026-09-21T21:04:01.7674757Z 
+2026-09-21T21:04:01.7679328Z [1m[30m[46m RUN [49m[39m[22m [36mv5.0.0 [39m[90mD:/a/pptx-dev/pptx-dev[39m
+2026-09-21T21:04:01.7679878Z 
+2026-09-21T21:04:03.5227572Z  [32m✓[39m lib/author/__tests__/conversation-persistence.test.ts [2m([22m[2m19 tests[22m[2m)[22m[33m 682[2mms[22m[39m
+2026-09-21T21:04:03.5229075Z    [32m✓[39m Author conversation Convex persistence [2m(19)[22m
+2026-09-21T21:04:03.5230409Z      [33m[2m✓[22m[39m loads create, refine, and rejected refine state from durable storage[33m 567[2mms[22m[39m
+2026-09-21T21:04:04.1585613Z  [32m✓[39m lib/author/__tests__/refine-opf.test.ts [2m([22m[2m116 tests[22m[2m)[22m[33m 356[2mms[22m[39m
+2026-09-21T21:04:05.0956817Z  [32m✓[39m lib/api/__tests__/author-route.test.ts [2m([22m[2m17 tests[22m[2m)[22m[33m 310[2mms[22m[39m
+2026-09-21T21:04:05.9662010Z  [32m✓[39m lib/api/__tests__/v1-contract.test.ts [2m([22m[2m10 tests[22m[2m)[22m[33m 368[2mms[22m[39m
+2026-09-21T21:04:06.4946012Z  [32m✓[39m test/playground.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 250[2mms[22m[39m
+2026-09-21T21:04:07.1597129Z  [32m✓[39m lib/author/__tests__/compile-to-opf.test.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 283[2mms[22m[39m
+2026-09-21T21:04:08.2196198Z  [32m✓[39m lib/api/__tests__/generate-route.test.ts [2m([22m[2m35 tests[22m[2m)[22m[33m 474[2mms[22m[39m
+2026-09-21T21:04:08.9569986Z  [32m✓[39m lib/generator/__tests__/opf-to-pptx.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 428[2mms[22m[39m
+2026-09-21T21:04:09.4796453Z  [32m✓[39m lib/playground/__tests__/schema-selection.test.ts [2m([22m[2m26 tests[22m[2m)[22m[32m 247[2mms[22m[39m
+2026-09-21T21:04:11.1267244Z  [32m✓[39m test/json-field-completion.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 1402[2mms[22m[39m
+2026-09-21T21:04:11.1269131Z    [33m[2m✓[22m[39m every contextual layout remains reachable with valid source-preserving edits at every LF token position[33m 641[2mms[22m[39m
+2026-09-21T21:04:11.6724727Z  [32m✓[39m lib/playground/__tests__/inspector-action-source.test.ts [2m([22m[2m33 tests[22m[2m)[22m[32m 264[2mms[22m[39m
+2026-09-21T21:04:12.7264227Z  [32m✓[39m lib/opf-toolkit/__tests__/browser-runtime.test.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 912[2mms[22m[39m
+2026-09-21T21:04:12.8996800Z  [32m✓[39m lib/author/__tests__/intent.test.ts [2m([22m[2m38 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+2026-09-21T21:04:13.0670880Z  [32m✓[39m lib/schema/__tests__/registry-validate.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+2026-09-21T21:04:13.2786076Z  [32m✓[39m lib/playground/__tests__/share-hash-sync.test.ts [2m([22m[2m32 tests[22m[2m)[22m[32m 61[2mms[22m[39m
+2026-09-21T21:04:13.7878678Z  [32m✓[39m lib/playground/__tests__/render-opf.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 274[2mms[22m[39m
+2026-09-21T21:04:14.2735790Z  [32m✓[39m lib/playground/__tests__/canvas-source.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 256[2mms[22m[39m
+2026-09-21T21:04:14.4816058Z  [32m✓[39m lib/playground/__tests__/json-insertion-resolver.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+2026-09-21T21:04:15.1394398Z  [32m✓[39m lib/author/__tests__/conversation-engine.integration.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 281[2mms[22m[39m
+2026-09-21T21:04:15.5820762Z  [32m✓[39m lib/schema/__tests__/filename.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 213[2mms[22m[39m
+2026-09-21T21:04:16.1640451Z  [32m✓[39m lib/generator/__tests__/manual-qa-layout-regression.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 270[2mms[22m[39m
+2026-09-21T21:04:16.3697189Z  [32m✓[39m lib/playground/__tests__/opf-codec.markdown.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 48[2mms[22m[39m
+2026-09-21T21:04:16.9513093Z  [32m✓[39m lib/author/__tests__/gallery-registry.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 347[2mms[22m[39m
+2026-09-21T21:04:16.9531431Z    [32m✓[39m author gallery registry [2m(7)[22m
+2026-09-21T21:04:16.9532625Z      [33m[2m✓[22m[39m uses current layout contracts and preserves gallery-only definitions when applied[33m 340[2mms[22m[39m
+2026-09-21T21:04:17.0974784Z  [32m✓[39m lib/playground/__tests__/json-cursor-resolver.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+2026-09-21T21:04:17.7194611Z  [32m✓[39m lib/playground/snippets/__tests__/apply-snippet.test.ts [2m([22m[2m25 tests[22m[2m)[22m[32m 237[2mms[22m[39m
+2026-09-21T21:04:18.2849235Z  [32m✓[39m lib/schema/__tests__/validate-route.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 246[2mms[22m[39m
+2026-09-21T21:04:18.8485054Z  [32m✓[39m lib/author/__tests__/tool-registry.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 236[2mms[22m[39m
+2026-09-21T21:04:19.0711208Z  [32m✓[39m lib/api/__tests__/idempotency.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+2026-09-21T21:04:19.4991269Z  [32m✓[39m lib/author/__tests__/author-agent-helpers.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+2026-09-21T21:04:19.6597942Z  [32m✓[39m lib/author/__tests__/pending-submit.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+2026-09-21T21:04:20.3703071Z  [32m✓[39m lib/manual-qa/__tests__/manual-qa-opf.regression.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 422[2mms[22m[39m
+2026-09-21T21:04:20.3704485Z    [32m✓[39m DAT-3782 manual QA regression (fixtures in manual-qa/tests) [2m(3)[22m
+2026-09-21T21:04:20.3705809Z      [33m[2m✓[22m[39m matches chart and long-deck OOXML expectations from manual QA[33m 400[2mms[22m[39m
+2026-09-21T21:04:20.5739824Z  [32m✓[39m lib/author/__tests__/preset-matcher.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+2026-09-21T21:04:20.7841748Z  [32m✓[39m lib/author/__tests__/apply-preset.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+2026-09-21T21:04:21.0514017Z  [32m✓[39m lib/author/__tests__/follow-ups.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+2026-09-21T21:04:21.5485298Z  [32m✓[39m lib/schema/__tests__/canonical-opf-examples.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 260[2mms[22m[39m
+2026-09-21T21:04:21.8069993Z  [32m✓[39m lib/author/__tests__/resolution-stack.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+2026-09-21T21:04:21.9549564Z  [32m✓[39m lib/author/__tests__/ui-message-adapter.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+2026-09-21T21:04:22.4376342Z  [32m✓[39m lib/schema/__tests__/validate-root-catalogs.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 225[2mms[22m[39m
+2026-09-21T21:04:22.5930266Z  [32m✓[39m lib/playground/__tests__/opf-codec.yaml.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+2026-09-21T21:04:22.7284973Z  [32m✓[39m lib/metering/__tests__/wallet-ledger.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+2026-09-21T21:04:22.8806147Z  [32m✓[39m lib/playground/__tests__/inspector-router.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+2026-09-21T21:04:23.3448593Z  [32m✓[39m lib/opf/__tests__/reference-layer.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 223[2mms[22m[39m
+2026-09-21T21:04:23.5040708Z  [32m✓[39m lib/inspector/__tests__/no-llm.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+2026-09-21T21:04:23.6815981Z  [32m✓[39m lib/author/__tests__/local-workspace.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+2026-09-21T21:04:24.1198291Z  [32m✓[39m lib/schema/__tests__/validate-playground-phase3.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 223[2mms[22m[39m
+2026-09-21T21:04:24.4932822Z  [32m✓[39m lib/mcp/__tests__/tools.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 52[2mms[22m[39m
+2026-09-21T21:04:24.9394598Z  [32m✓[39m lib/schema/__tests__/speaker.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 218[2mms[22m[39m
+2026-09-21T21:04:25.3828007Z  [32m✓[39m lib/schema/__tests__/design-assets.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 218[2mms[22m[39m
+2026-09-21T21:04:25.7150312Z  [32m✓[39m lib/schema/__tests__/canonical-catalog-data.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 107[2mms[22m[39m
+2026-09-21T21:04:26.3546185Z  [32m✓[39m lib/api/__tests__/author-export-route.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 250[2mms[22m[39m
+2026-09-21T21:04:26.7990192Z  [32m✓[39m lib/schema/__tests__/organization.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 231[2mms[22m[39m
+2026-09-21T21:04:27.0173674Z  [32m✓[39m lib/auth/__tests__/require-api-auth.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 6[2mms[22m[39m
+2026-09-21T21:04:27.1580911Z  [32m✓[39m lib/author/__tests__/author-phase5-surface.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+2026-09-21T21:04:27.7260534Z  [32m✓[39m lib/generator/__tests__/promoted-payload-render.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 255[2mms[22m[39m
+2026-09-21T21:04:27.8839213Z  [32m✓[39m lib/author/__tests__/agent-logging.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+2026-09-21T21:04:28.1116240Z [90mstdout[2m | lib/api/__tests__/public-workbench-proxy.test.ts[2m > [22m[2mmissing keys do not bypass auth handling on APIs, account pages or writes
+2026-09-21T21:04:28.1120628Z [22m[39mphase_c_rest_api_hit {"event":"rest_api_hit","path":"/api/v1/generate","ua_class":"other","method":"GET"}
+2026-09-21T21:04:28.1121601Z 
+2026-09-21T21:04:28.1127057Z  [32m✓[39m lib/api/__tests__/public-workbench-proxy.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+2026-09-21T21:04:28.5773836Z  [32m✓[39m lib/author/__tests__/opf-patch-security.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 241[2mms[22m[39m
+2026-09-21T21:04:28.7159098Z  [32m✓[39m lib/author/__tests__/metadata-intent.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+2026-09-21T21:04:30.2248897Z  [32m✓[39m lib/opf-toolkit/__tests__/published-samples.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 1110[2mms[22m[39m
+2026-09-21T21:04:30.2250667Z    [33m[2m✓[22m[39m every built-in sample resolves and exports with the installed public OPF toolchain[33m 1108[2mms[22m[39m
+2026-09-21T21:04:30.9285699Z  [32m✓[39m lib/generator/__tests__/technical-opf-smoke.test.ts [2m([22m[2m24 tests[22m[2m)[22m[33m 408[2mms[22m[39m
+2026-09-21T21:04:31.1604938Z  [32m✓[39m lib/opf-toolkit/__tests__/dependency-boundary.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 51[2mms[22m[39m
+2026-09-21T21:04:31.3519252Z  [32m✓[39m lib/playground/__tests__/opf-handoff.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 36[2mms[22m[39m
+2026-09-21T21:04:31.4872934Z  [32m✓[39m lib/mcp/__tests__/www-mcp-dispatch.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+2026-09-21T21:04:31.6230968Z  [32m✓[39m lib/author/__tests__/author-phase3-surface.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+2026-09-21T21:04:32.0764903Z  [32m✓[39m lib/manual-qa/__tests__/manual-qa-opf.validation.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 224[2mms[22m[39m
+2026-09-21T21:04:32.2110987Z  [32m✓[39m lib/decoder/__tests__/decoder-surface.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+2026-09-21T21:04:32.9135043Z  [32m✓[39m lib/opf-toolkit/__tests__/consumer-proof.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 277[2mms[22m[39m
+2026-09-21T21:04:33.0732585Z  [32m✓[39m lib/playground/__tests__/palette-recursion.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 4[2mms[22m[39m
+2026-09-21T21:04:33.6215815Z  [32m✓[39m lib/generator/__tests__/reference-layer-colors.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 239[2mms[22m[39m
+2026-09-21T21:04:33.6339693Z 
+2026-09-21T21:04:33.6340833Z [2m Test Files [22m [1m[32m69 passed[39m[22m[90m (69)[39m
+2026-09-21T21:04:33.6341755Z [2m      Tests [22m [1m[32m704 passed[39m[22m[90m (704)[39m
+2026-09-21T21:04:33.6342657Z [2m   Start at [22m 21:04:01
+2026-09-21T21:04:33.6343518Z [2m   Duration [22m 31.84s[2m (tests 59%, import 30%, transform 9%, worker 1%)[22m
+2026-09-21T21:04:33.6344020Z 
+2026-09-21T21:04:33.6344795Z [2m     Import [22m [33m243 modules were evaluated 318 times[39m[2m · 7.11s total, 30% of tracked time[22m
+2026-09-21T21:04:33.6346343Z [2m            [22m [2m~1.68s faster with [22m[33misolate: false[39m[2m — shared modules are evaluated once per worker instead of once per file[22m
+2026-09-21T21:04:33.6347651Z [2m            [22m [2mlearn more: https://vitest.dev/guide/improving-performance#test-isolation[22m
+2026-09-21T21:04:33.6348252Z 
+2026-09-21T21:04:34.0563720Z $ node --test scripts/standalone.test.mjs
+2026-09-21T21:04:34.2723034Z ✔ packages static assets, fonts and traced OPF bytes, replacing stale public files (100.7129ms)
+2026-09-21T21:04:34.3305029Z ✔ rejects incomplete packaged files and a mismatched build before startup (59.2612ms)
+2026-09-21T21:04:34.3638577Z ✔ rejects missing browser font input instead of creating a partial package (33.1294ms)
+2026-09-21T21:04:34.3913239Z ✔ rejects missing or changed traced OPF files instead of falling back to the source checkout (27.7727ms)
+2026-09-21T21:04:34.3933505Z ✔ Vercel adapter packaging does not require or create a standalone directory (1.7752ms)
+2026-09-21T21:04:34.4617687Z ✔ rebases absolute source junctions to relative traced targets and imports after relocation without the source (68.1715ms)
+2026-09-21T21:04:34.5374537Z ✔ recreates a directory link copied before its traced target exists with an explicit directory type (75.4304ms)
+2026-09-21T21:04:34.5959653Z ✔ normalizes file links and detects replaced absolute links before startup (58.6655ms)
+2026-09-21T21:04:34.6536666Z ✔ normalizes generated .next/node_modules aliases as well as root dependencies (57.3179ms)
+2026-09-21T21:04:34.6981802Z ✔ rejects missing traced dependency targets before altering any generated link (44.5608ms)
+2026-09-21T21:04:34.7285072Z ✔ rejects dependency links outside the traced project instead of copying a fallback (28.0647ms)
+2026-09-21T21:04:34.7286872Z ✔ start accepts current CI flags, PORT and short options without inheriting OS hostname (1.0454ms)
+2026-09-21T21:04:34.7292170Z ✔ start rejects malformed ports and unknown options rather than silently changing the listener (0.6307ms)
+2026-09-21T21:04:34.7413457Z ℹ tests 13
+2026-09-21T21:04:34.7414128Z ℹ suites 0
+2026-09-21T21:04:34.7414635Z ℹ pass 13
+2026-09-21T21:04:34.7415116Z ℹ fail 0
+2026-09-21T21:04:34.7415608Z ℹ cancelled 0
+2026-09-21T21:04:34.7416118Z ℹ skipped 0
+2026-09-21T21:04:34.7416569Z ℹ todo 0
+2026-09-21T21:04:34.7417051Z ℹ duration_ms 634.5801
+2026-09-21T21:04:34.8745250Z ##[group]Run pnpm typecheck
+2026-09-21T21:04:34.8745713Z [36;1mpnpm typecheck[0m
+2026-09-21T21:04:34.8804740Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-09-21T21:04:34.8805027Z env:
+2026-09-21T21:04:34.8805249Z   PNPM_HOME: C:\Users\runneradmin\setup-pnpm\node_modules\.bin
+2026-09-21T21:04:34.8805514Z ##[endgroup]
+2026-09-21T21:04:35.6361797Z $ tsc --noEmit
+2026-09-21T21:04:53.7593938Z ##[group]Run pnpm --filter @pptx/sdk typecheck
+2026-09-21T21:04:53.7594484Z [36;1mpnpm --filter @pptx/sdk typecheck[0m
+2026-09-21T21:04:53.7594913Z [36;1mpnpm --filter @pptx/sdk prepublishOnly[0m
+2026-09-21T21:04:53.7595324Z [36;1mpnpm --filter @pptx/cli typecheck[0m
+2026-09-21T21:04:53.7595766Z [36;1mpnpm --filter @pptx/cli prepublishOnly[0m
+2026-09-21T21:04:53.7596175Z [36;1mpnpm --filter @pptx/cli build:bundle[0m
+2026-09-21T21:04:53.7596812Z [36;1mnode sdk/cli/dist/cli.js --help[0m
+2026-09-21T21:04:53.7668335Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-09-21T21:04:53.7668624Z env:
+2026-09-21T21:04:53.7668856Z   PNPM_HOME: C:\Users\runneradmin\setup-pnpm\node_modules\.bin
+2026-09-21T21:04:53.7669132Z ##[endgroup]
+2026-09-21T21:04:54.4935953Z $ tsc --noEmit
+2026-09-21T21:04:56.2746753Z $ pnpm run clean && pnpm run build
+2026-09-21T21:04:56.6770242Z $ node -e "require('node:fs').rmSync('dist', { recursive: true, force: true })"
+2026-09-21T21:04:57.1234799Z $ tsup
+2026-09-21T21:04:57.5746517Z [34mCLI[39m Building entry: {"index":"src/index.ts","opf":"src/opf.ts"}
+2026-09-21T21:04:57.5753423Z [34mCLI[39m Using tsconfig: tsconfig.json
+2026-09-21T21:04:57.5765425Z [34mCLI[39m tsup v8.5.1
+2026-09-21T21:04:57.5769003Z [34mCLI[39m Using tsup config: D:\a\pptx-dev\pptx-dev\sdk\typescript\tsup.config.ts
+2026-09-21T21:04:57.5769946Z [34mCLI[39m Target: es2022
+2026-09-21T21:04:57.5773851Z [34mCLI[39m Cleaning output folder
+2026-09-21T21:04:57.5791834Z [34mESM[39m Build start
+2026-09-21T21:04:57.5801382Z [34mCJS[39m Build start
+2026-09-21T21:04:57.7259468Z Generated an empty chunk: "opf".
+2026-09-21T21:04:57.7260341Z Generated an empty chunk: "opf".
+2026-09-21T21:04:57.7973674Z [32mCJS[39m [1mdist\index.cjs     [22m[32m12.12 KB[39m
+2026-09-21T21:04:57.7974668Z [32mCJS[39m [1mdist\opf.cjs       [22m[32m80.00 B[39m
+2026-09-21T21:04:57.7975468Z [32mCJS[39m [1mdist\index.cjs.map [22m[32m32.36 KB[39m
+2026-09-21T21:04:57.7976229Z [32mCJS[39m [1mdist\opf.cjs.map   [22m[32m68.00 B[39m
+2026-09-21T21:04:57.7976946Z [32mCJS[39m ⚡️ Build success in 231ms
+2026-09-21T21:04:57.7978137Z [32mESM[39m [1mdist\opf.js       [22m[32m64.00 B[39m
+2026-09-21T21:04:57.7978809Z [32mESM[39m [1mdist\index.js     [22m[32m11.94 KB[39m
+2026-09-21T21:04:57.7979474Z [32mESM[39m [1mdist\opf.js.map   [22m[32m67.00 B[39m
+2026-09-21T21:04:57.7980137Z [32mESM[39m [1mdist\index.js.map [22m[32m32.36 KB[39m
+2026-09-21T21:04:57.7980757Z [32mESM[39m ⚡️ Build success in 232ms
+2026-09-21T21:04:58.0709365Z [34mDTS[39m Build start
+2026-09-21T21:05:00.2283042Z [32mDTS[39m ⚡️ Build success in 2156ms
+2026-09-21T21:05:00.2284172Z [32mDTS[39m [1mdist\index.d.ts  [22m[32m9.00 KB[39m
+2026-09-21T21:05:00.2284935Z [32mDTS[39m [1mdist\opf.d.ts    [22m[32m23.58 KB[39m
+2026-09-21T21:05:00.2286582Z [32mDTS[39m [1mdist\index.d.cts [22m[32m9.00 KB[39m
+2026-09-21T21:05:00.2287396Z [32mDTS[39m [1mdist\opf.d.cts   [22m[32m23.58 KB[39m
+2026-09-21T21:05:00.7562890Z $ tsc --noEmit
+2026-09-21T21:05:02.4722079Z $ pnpm run clean && pnpm run build
+2026-09-21T21:05:02.8568084Z $ node -e "for (const dir of ['dist', 'dist-bundle']) require('node:fs').rmSync(dir, { recursive: true, force: true })"
+2026-09-21T21:05:03.3108068Z $ tsup
+2026-09-21T21:05:03.7482855Z [34mCLI[39m Building entry: {"index":"src/index.ts","cli":"src/cli.ts"}
+2026-09-21T21:05:03.7485788Z [34mCLI[39m Using tsconfig: tsconfig.json
+2026-09-21T21:05:03.7486426Z [34mCLI[39m tsup v8.5.1
+2026-09-21T21:05:03.7487298Z [34mCLI[39m Using tsup config: D:\a\pptx-dev\pptx-dev\sdk\cli\tsup.config.ts
+2026-09-21T21:05:03.7603894Z [34mCLI[39m Target: node24
+2026-09-21T21:05:03.7622233Z [34mCLI[39m Cleaning output folder
+2026-09-21T21:05:03.7623836Z [34mESM[39m Build start
+2026-09-21T21:05:03.7665972Z [34mCJS[39m Build start
+2026-09-21T21:05:03.9247312Z "mkdirSync", "unlinkSync" and "writeFileSync" are imported from external module "fs" but never used in "dist/index.js".
+2026-09-21T21:05:04.0628371Z "mkdirSync", "unlinkSync" and "writeFileSync" are imported from external module "fs" but never used in "dist/index.cjs".
+2026-09-21T21:05:04.2109624Z [32mESM[39m [1mdist\cli.js       [22m[32m28.38 KB[39m
+2026-09-21T21:05:04.2110705Z [32mESM[39m [1mdist\index.js     [22m[32m13.82 KB[39m
+2026-09-21T21:05:04.2111474Z [32mESM[39m [1mdist\cli.js.map   [22m[32m77.05 KB[39m
+2026-09-21T21:05:04.2112321Z [32mESM[39m [1mdist\index.js.map [22m[32m38.24 KB[39m
+2026-09-21T21:05:04.2112930Z [32mESM[39m ⚡️ Build success in 451ms
+2026-09-21T21:05:04.2113549Z [32mCJS[39m [1mdist\index.cjs     [22m[32m14.20 KB[39m
+2026-09-21T21:05:04.2114196Z [32mCJS[39m [1mdist\cli.cjs       [22m[32m28.86 KB[39m
+2026-09-21T21:05:04.2114836Z [32mCJS[39m [1mdist\index.cjs.map [22m[32m38.27 KB[39m
+2026-09-21T21:05:04.2115448Z [32mCJS[39m [1mdist\cli.cjs.map   [22m[32m77.15 KB[39m
+2026-09-21T21:05:04.2116020Z [32mCJS[39m ⚡️ Build success in 451ms
+2026-09-21T21:05:04.4326872Z [34mDTS[39m Build start
+2026-09-21T21:05:05.5211323Z [32mDTS[39m ⚡️ Build success in 1089ms
+2026-09-21T21:05:05.5213189Z [32mDTS[39m [1mdist\index.d.ts  [22m[32m405.00 B[39m
+2026-09-21T21:05:05.5214767Z [32mDTS[39m [1mdist\index.d.cts [22m[32m405.00 B[39m
+2026-09-21T21:05:06.0350728Z $ tsup --config tsup.bundle.config.ts
+2026-09-21T21:05:06.4833969Z [34mCLI[39m Building entry: {"cli":"src/cli.ts"}
+2026-09-21T21:05:06.4836779Z [34mCLI[39m Using tsconfig: tsconfig.json
+2026-09-21T21:05:06.4837417Z [34mCLI[39m tsup v8.5.1
+2026-09-21T21:05:06.4838289Z [34mCLI[39m Using tsup config: D:\a\pptx-dev\pptx-dev\sdk\cli\tsup.bundle.config.ts
+2026-09-21T21:05:06.4856545Z [34mCLI[39m Target: node24
+2026-09-21T21:05:06.4880868Z [34mCLI[39m Cleaning output folder
+2026-09-21T21:05:06.4889578Z [34mCJS[39m Build start
+2026-09-21T21:05:06.7185936Z [32mCJS[39m [1mdist-bundle\cli.cjs [22m[32m137.18 KB[39m
+2026-09-21T21:05:06.7186956Z [32mCJS[39m ⚡️ Build success in 230ms
+2026-09-21T21:05:06.8154667Z Usage: pptx [options] [command]
+2026-09-21T21:05:06.8157189Z 
+2026-09-21T21:05:06.8157857Z Official CLI for pptx.dev — generate, parse, validate, and render OPF
+2026-09-21T21:05:06.8158349Z presentations.
+2026-09-21T21:05:06.8158500Z 
+2026-09-21T21:05:06.8158596Z Options:
+2026-09-21T21:05:06.8159263Z   -V, --version               output the version number
+2026-09-21T21:05:06.8159776Z   --api-key <key>             Override the API key for this call
+2026-09-21T21:05:06.8160254Z   --base-url <url>            Override the API base URL
+2026-09-21T21:05:06.8160696Z   -h, --help                  display help for command
+2026-09-21T21:05:06.8160968Z 
+2026-09-21T21:05:06.8161059Z Commands:
+2026-09-21T21:05:06.8161474Z   login [options]             Save a pptx.dev API key to ~/.pptx/config.json
+2026-09-21T21:05:06.8161952Z                               (0600)
+2026-09-21T21:05:06.8162379Z   logout                      Remove saved pptx.dev credentials
+2026-09-21T21:05:06.8162879Z   generate [options] <input>  Generate a presentation from an OPF JSON file or
+2026-09-21T21:05:06.8163352Z                               a prompt
+2026-09-21T21:05:06.8163811Z   validate [options] <file>   Validate an OPF JSON document against the
+2026-09-21T21:05:06.8164271Z                               canonical schema
+2026-09-21T21:05:06.8164986Z   parse [options] <file>      Parse a .pptx file into OPF JSON via the pptx.dev
+2026-09-21T21:05:06.8165440Z                               API
+2026-09-21T21:05:06.8165909Z   render [options] <file>     Render an OPF JSON document to a target format
+2026-09-21T21:05:06.8166565Z   fmt [options] <file>        Format/normalize an OPF JSON document (local, no
+2026-09-21T21:05:06.8167048Z                               API call)
+2026-09-21T21:05:06.8167537Z   add [options] <component>   Scaffold OPF component snippets (slide types,
+2026-09-21T21:05:06.8169087Z                               themes)
+2026-09-21T21:05:06.8169477Z   help [command]              display help for command
+2026-09-21T21:05:06.9345665Z ##[group]Run pnpm build
+2026-09-21T21:05:06.9345971Z [36;1mpnpm build[0m
+2026-09-21T21:05:06.9406836Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-09-21T21:05:06.9407121Z env:
+2026-09-21T21:05:06.9407342Z   PNPM_HOME: C:\Users\runneradmin\setup-pnpm\node_modules\.bin
+2026-09-21T21:05:06.9407616Z   NEXT_TELEMETRY_DISABLED: 1
+2026-09-21T21:05:06.9407797Z ##[endgroup]
+2026-09-21T21:05:07.6192948Z $ node --version && pnpm prepare:opf-browser && pnpm sync:opf-spec && next build && node scripts/prepare-standalone.mjs
+2026-09-21T21:05:07.6444940Z v24.20.0
+2026-09-21T21:05:08.0292251Z $ node scripts/prepare-opf-browser.mjs
+2026-09-21T21:05:08.6364786Z Prepared 33 licensed OPF font faces from installed packages.
+2026-09-21T21:05:09.0324073Z $ node --experimental-strip-types scripts/sync-opf-spec.ts
+2026-09-21T21:05:09.6192769Z ▲ Next.js 16.3.5 (Turbopack)
+2026-09-21T21:05:09.6569932Z ✓ Running next.config.ts took 36ms
+2026-09-21T21:05:09.6610472Z ⚠ No build cache found. Please configure build caching for faster rebuilds. Read more: https://nextjs.org/docs/messages/no-cache
+2026-09-21T21:05:09.6746016Z - Experiments (use with caution):
+2026-09-21T21:05:09.6747801Z   ✓ globalNotFound
+2026-09-21T21:05:09.6748895Z 
+2026-09-21T21:05:09.7435003Z   Creating an optimized production build ...
+2026-09-21T21:06:02.8519629Z ✓ Compiled successfully in 53s
+2026-09-21T21:06:02.8930727Z   Running TypeScript ...
+2026-09-21T21:06:25.6040736Z   Finished TypeScript in 22.7s ...
+2026-09-21T21:06:25.6066098Z   Collecting page data using 1 worker ...
+2026-09-21T21:06:27.1168539Z   Generating static pages using 1 worker (0/215) ...
+2026-09-21T21:06:28.3056652Z   Generating static pages using 1 worker (53/215) 
+2026-09-21T21:06:29.1838965Z   Generating static pages using 1 worker (107/215) 
+2026-09-21T21:06:30.1025430Z   Generating static pages using 1 worker (161/215) 
+2026-09-21T21:06:30.6989123Z ✓ Generating static pages using 1 worker (215/215) in 3.6s
+2026-09-21T21:06:30.7165266Z   Finalizing page optimization ...
+2026-09-21T21:06:32.4358251Z 
+2026-09-21T21:06:32.4390816Z Route (app)
+2026-09-21T21:06:32.4392312Z ┌ ○ /
+2026-09-21T21:06:32.4392959Z ├ ○ /_not-found
+2026-09-21T21:06:32.4393616Z ├ ○ /.well-known/mcp/server-card.json
+2026-09-21T21:06:32.4394284Z ├ ƒ /account/api-keys
+2026-09-21T21:06:32.4395508Z ├ ƒ /account/org-api-keys
+2026-09-21T21:06:32.4396860Z ├ ƒ /account/organization
+2026-09-21T21:06:32.4397817Z ├ ƒ /api/checkout
+2026-09-21T21:06:32.4398309Z ├ ƒ /api/mcp
+2026-09-21T21:06:32.4398743Z ├ ○ /api/openapi.json
+2026-09-21T21:06:32.4400299Z ├ ƒ /api/v1/author
+2026-09-21T21:06:32.4400830Z ├ ƒ /api/v1/author/export
+2026-09-21T21:06:32.4401380Z ├ ƒ /api/v1/author/follow-ups
+2026-09-21T21:06:32.4401980Z ├ ƒ /api/v1/author/gallery-sources
+2026-09-21T21:06:32.4404046Z ├ ƒ /api/v1/author/gallery-sources/[sourceId]
+2026-09-21T21:06:32.4404749Z ├ ƒ /api/v1/author/runs/[runId]
+2026-09-21T21:06:32.4405288Z ├ ƒ /api/v1/author/threads
+2026-09-21T21:06:32.4405915Z ├ ƒ /api/v1/author/threads/[threadId]
+2026-09-21T21:06:32.4406637Z ├ ƒ /api/v1/author/threads/[threadId]/messages
+2026-09-21T21:06:32.4407360Z ├ ƒ /api/v1/author/threads/[threadId]/tools
+2026-09-21T21:06:32.4407973Z ├ ƒ /api/v1/author/tools
+2026-09-21T21:06:32.4408471Z ├ ƒ /api/v1/convert
+2026-09-21T21:06:32.4409034Z ├ ƒ /api/v1/generate
+2026-09-21T21:06:32.4409491Z ├ ƒ /api/v1/health
+2026-09-21T21:06:32.4409959Z ├ ƒ /api/v1/parse
+2026-09-21T21:06:32.4410535Z ├ ƒ /api/v1/parse/[parseId]/metadata
+2026-09-21T21:06:32.4411121Z ├ ƒ /api/v1/parse/[parseId]/slides/[index]
+2026-09-21T21:06:32.4412045Z ├ ƒ /api/v1/parse/[parseId]/text
+2026-09-21T21:06:32.4412683Z ├ ƒ /api/v1/preview
+2026-09-21T21:06:32.4413212Z ├ ƒ /api/v1/render
+2026-09-21T21:06:32.4413770Z ├ ƒ /api/v1/validate
+2026-09-21T21:06:32.4414278Z ├ ƒ /api/v1/webhooks
+2026-09-21T21:06:32.4414865Z ├ ƒ /api/v1/webhooks/[id]
+2026-09-21T21:06:32.4415389Z ├ ƒ /api/webhook
+2026-09-21T21:06:32.4415848Z ├ ○ /author
+2026-09-21T21:06:32.4419479Z ├ ƒ /billing
+2026-09-21T21:06:32.4420022Z ├ ○ /cancel
+2026-09-21T21:06:32.4425159Z ├ ƒ /dashboard
+2026-09-21T21:06:32.4425911Z ├ ○ /decoder
+2026-09-21T21:06:32.4426371Z ├ ○ /docs
+2026-09-21T21:06:32.4426859Z ├ ○ /docs/api
+2026-09-21T21:06:32.4427367Z ├ ○ /docs/api/llms.txt
+2026-09-21T21:06:32.4427857Z ├ ○ /docs/cli
+2026-09-21T21:06:32.4428321Z ├ ○ /docs/mcp
+2026-09-21T21:06:32.4428828Z ├ ○ /docs/mcp/llms.txt
+2026-09-21T21:06:32.4429377Z ├ ○ /docs/opf
+2026-09-21T21:06:32.4429867Z ├ ○ /docs/opf-toolkit
+2026-09-21T21:06:32.4430438Z ├ ○ /docs/opf/reference-layer
+2026-09-21T21:06:32.4431014Z ├ ○ /docs/registry
+2026-09-21T21:06:32.4431552Z ├ ○ /docs/sdk/go
+2026-09-21T21:06:32.4432142Z ├ ○ /docs/sdk/python
+2026-09-21T21:06:32.4432715Z ├ ○ /docs/sdk/typescript
+2026-09-21T21:06:32.4433256Z ├ ○ /gallery
+2026-09-21T21:06:32.4433946Z ├ ○ /gallery/audiences
+2026-09-21T21:06:32.4434535Z ├   /gallery/audiences/[id]
+2026-09-21T21:06:32.4435153Z │ ├ ● /gallery/audiences/executives
+2026-09-21T21:06:32.4435854Z │ ├ ● /gallery/audiences/board
+2026-09-21T21:06:32.4436507Z │ ├ ● /gallery/audiences/engineering-team
+2026-09-21T21:06:32.4437143Z │ └ ● [+7 more paths]
+2026-09-21T21:06:32.4437699Z ├ ○ /gallery/charts
+2026-09-21T21:06:32.4438265Z ├ ○ /gallery/color-schemes
+2026-09-21T21:06:32.4438899Z ├   /gallery/color-schemes/[slug]
+2026-09-21T21:06:32.4439563Z │ ├ ● /gallery/color-schemes/corporate-blue
+2026-09-21T21:06:32.4440247Z │ ├ ● /gallery/color-schemes/deep-purple
+2026-09-21T21:06:32.4440956Z │ ├ ● /gallery/color-schemes/steel-blue
+2026-09-21T21:06:32.4441865Z │ └ ● [+11 more paths]
+2026-09-21T21:06:32.4443492Z ├ ○ /gallery/font-schemes
+2026-09-21T21:06:32.4444331Z ├   /gallery/font-schemes/[type]
+2026-09-21T21:06:32.4445051Z │ ├ ● /gallery/font-schemes/sans-serif
+2026-09-21T21:06:32.4445689Z │ ├ ● /gallery/font-schemes/serif
+2026-09-21T21:06:32.4446304Z │ ├ ● /gallery/font-schemes/monospace
+2026-09-21T21:06:32.4446868Z │ └ ● [+2 more paths]
+2026-09-21T21:06:32.4447430Z ├ ○ /gallery/languages
+2026-09-21T21:06:32.4448239Z ├   /gallery/languages/[id]
+2026-09-21T21:06:32.4448857Z │ ├ ● /gallery/languages/afrikaans
+2026-09-21T21:06:32.4449470Z │ ├ ● /gallery/languages/albanian
+2026-09-21T21:06:32.4450102Z │ ├ ● /gallery/languages/amharic
+2026-09-21T21:06:32.4450734Z │ └ ● [+90 more paths]
+2026-09-21T21:06:32.4451291Z ├ ○ /gallery/layouts
+2026-09-21T21:06:32.4451854Z ├ ○ /gallery/layouts/previews
+2026-09-21T21:06:32.4452425Z ├ ○ /gallery/narratives
+2026-09-21T21:06:32.4454440Z ├   /gallery/narratives/[slug]
+2026-09-21T21:06:32.4455306Z │ ├ ● /gallery/narratives/classic-story
+2026-09-21T21:06:32.4456684Z │ ├ ● /gallery/narratives/challenge-resolution
+2026-09-21T21:06:32.4462406Z │ ├ ● /gallery/narratives/persuasive-sales
+2026-09-21T21:06:32.4463071Z │ └ ● [+7 more paths]
+2026-09-21T21:06:32.4463564Z ├ ○ /gallery/socials
+2026-09-21T21:06:32.4464055Z ├   /gallery/socials/[id]
+2026-09-21T21:06:32.4464636Z │ ├ ● /gallery/socials/linkedin
+2026-09-21T21:06:32.4465191Z │ ├ ● /gallery/socials/x
+2026-09-21T21:06:32.4465729Z │ ├ ● /gallery/socials/github
+2026-09-21T21:06:32.4466315Z │ └ ● [+7 more paths]
+2026-09-21T21:06:32.4466792Z ├ ○ /gallery/themes
+2026-09-21T21:06:32.4467290Z ├   /gallery/themes/[slug]
+2026-09-21T21:06:32.4467843Z │ ├ ● /gallery/themes/minimal
+2026-09-21T21:06:32.4468404Z │ ├ ● /gallery/themes/classic
+2026-09-21T21:06:32.4468977Z │ ├ ● /gallery/themes/dark
+2026-09-21T21:06:32.4469475Z │ └ ● /gallery/themes/bold
+2026-09-21T21:06:32.4469967Z ├ ○ /gallery/tones
+2026-09-21T21:06:32.4470415Z ├   /gallery/tones/[id]
+2026-09-21T21:06:32.4470886Z │ ├ ● /gallery/tones/formal
+2026-09-21T21:06:32.4471388Z │ ├ ● /gallery/tones/casual
+2026-09-21T21:06:32.4471926Z │ ├ ● /gallery/tones/inspirational
+2026-09-21T21:06:32.4472506Z │ └ ● [+4 more paths]
+2026-09-21T21:06:32.4472953Z ├ ƒ /go
+2026-09-21T21:06:32.4473370Z ├ ○ /inspector
+2026-09-21T21:06:32.4473788Z ├ ○ /llms.txt
+2026-09-21T21:06:32.4474445Z ├ ○ /openapi.yaml
+2026-09-21T21:06:32.4475641Z ├ ○ /playground
+2026-09-21T21:06:32.4476298Z ├ ○ /privacy
+2026-09-21T21:06:32.4476754Z ├ ○ /robots.txt
+2026-09-21T21:06:32.4477190Z ├ ○ /schema/opf/v1
+2026-09-21T21:06:32.4477689Z ├ ○ /schema/registry.schema.json
+2026-09-21T21:06:32.4478203Z ├ ƒ /sign-in/[[...sign-in]]
+2026-09-21T21:06:32.4478717Z ├ ƒ /sign-up/[[...sign-up]]
+2026-09-21T21:06:32.4479158Z ├ ○ /sitemap.xml
+2026-09-21T21:06:32.4479568Z ├ ○ /studio
+2026-09-21T21:06:32.4479962Z ├ ○ /success
+2026-09-21T21:06:32.4480356Z ├ ○ /terms
+2026-09-21T21:06:32.4480822Z └ ○ /workspace
+2026-09-21T21:06:32.4481064Z 
+2026-09-21T21:06:32.4481138Z 
+2026-09-21T21:06:32.4481430Z ƒ Proxy (Middleware)
+2026-09-21T21:06:32.4481814Z 
+2026-09-21T21:06:32.4482179Z ○  (Static)   prerendered as static content
+2026-09-21T21:06:32.4482958Z ●  (SSG)      prerendered as static HTML (uses generateStaticParams)
+2026-09-21T21:06:32.4483700Z ƒ  (Dynamic)  server-rendered on demand
+2026-09-21T21:06:32.4484030Z 
+2026-09-21T21:06:33.9009630Z Prepared standalone server with 974 runtime files.
+2026-09-21T21:06:34.0284581Z ##[group]Run pnpm test:e2e
+2026-09-21T21:06:34.0284853Z [36;1mpnpm test:e2e[0m
+2026-09-21T21:06:34.0350995Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-09-21T21:06:34.0351285Z env:
+2026-09-21T21:06:34.0351501Z   PNPM_HOME: C:\Users\runneradmin\setup-pnpm\node_modules\.bin
+2026-09-21T21:06:34.0351759Z ##[endgroup]
+2026-09-21T21:06:34.7638322Z $ playwright test
+2026-09-21T21:06:37.5970600Z [WebServer] $ node scripts/start-standalone.mjs "--hostname" "127.0.0.1" "--port" "4325"
+2026-09-21T21:06:39.2803901Z 
+2026-09-21T21:06:39.2804865Z Running 39 tests using 1 worker
+2026-09-21T21:06:39.2805431Z 
+2026-09-21T21:07:01.3069614Z   ok  1 tests\e2e\author-json-options.spec.ts:72:5 › Author categorical choices include built-in, document and loaded catalogs with exact LF source undo/redo (18.4s)
+2026-09-21T21:07:07.2513569Z   ok  2 tests\e2e\author-json-options.spec.ts:72:5 › Author categorical choices include built-in, document and loaded catalogs with exact CRLF source undo/redo (8.7s)
+2026-09-21T21:07:15.9749884Z   ok  3 tests\e2e\author.spec.ts:26:80 › anonymous code editing preserves source and visible selection through offline export/reimport at 1280x720 (8.6s)
+2026-09-21T21:07:23.1646667Z   ok  4 tests\e2e\author.spec.ts:26:80 › anonymous code editing preserves source and visible selection through offline export/reimport at 540x960 (7.2s)
+2026-09-21T21:07:34.9728928Z   ok  5 tests\e2e\author.spec.ts:55:5 › anonymous Author canvas edits survive tab changes, offline PowerPoint export and undoable reimport (11.8s)
+2026-09-21T21:07:43.4133233Z   ok  6 tests\e2e\completion-keyboard.spec.ts:64:5 › Author Ctrl+Space retains popup details, exact source history and editor remount behavior (6.7s)
+2026-09-21T21:07:46.5259617Z   ok  7 tests\e2e\completion-keyboard.spec.ts:126:5 › Author leaves Quick Input and modified Space keys with their original keyboard owners (4.8s)
+2026-09-21T21:07:51.9291179Z   ok  8 tests\e2e\completion-preservation.spec.ts:113:7 › Author Title Subtitle completion preserves LF compact source in one undo step (5.4s)
+2026-09-21T21:07:58.0912004Z   ok  9 tests\e2e\completion-preservation.spec.ts:113:7 › Author Text 2x completion preserves CRLF compact source in one undo step (6.1s)
+2026-09-21T21:08:05.1017370Z   ok 10 tests\e2e\completion-preservation.spec.ts:149:5 › Author escaped current value is not offered as an edit and leaves prior undo history intact (7.0s)
+2026-09-21T21:08:12.5613678Z   ok 11 tests\e2e\completion-preservation.spec.ts:178:5 › Author newer and invalid source dismiss stale choices and refresh inline catalogs (7.4s)
+2026-09-21T21:08:19.7406103Z   ok 12 tests\e2e\completion-preservation.spec.ts:219:5 › Author format and document changes cancel the open completion without applying it (7.2s)
+2026-09-21T21:08:32.0651090Z   ok 13 tests\e2e\inspector-actions.spec.ts:102:5 › Inspector Copy and JSON commit current drafts with exact source undo and unchanged-draft history (12.2s)
+2026-09-21T21:08:44.4285390Z   ok 14 tests\e2e\inspector-actions.spec.ts:129:5 › Inspector Share and PPTX commit current drafts with matching payloads and filenames (12.4s)
+2026-09-21T21:08:54.8663068Z [WebServer] Error: @clerk/nextjs: Missing publishableKey. To set up Clerk for this project, in your terminal run:
+2026-09-21T21:08:54.8664218Z [WebServer] 
+2026-09-21T21:08:54.8664761Z [WebServer] npx clerk@latest init
+2026-09-21T21:08:54.8665285Z [WebServer] 
+2026-09-21T21:08:54.8666521Z [WebServer] `npx clerk@latest init` creates a Clerk application and writes keys to your .env file. No Clerk account or login required and the command is non-interactive.
+2026-09-21T21:08:54.8677776Z [WebServer] 
+2026-09-21T21:08:54.8679676Z [WebServer] If you have a Clerk application, run `npx clerk@latest env pull` to write the keys. Or copy them from https://dashboard.clerk.com/~/api-keys. Deploy a production instance by running `npx clerk@latest deploy`, or `npx clerk@latest env pull --instance prod` to use an existing one.
+2026-09-21T21:08:54.8701434Z [WebServer]     at Object.throwMissingPublishableKeyError (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:20:2800)
+2026-09-21T21:08:54.8703374Z [WebServer]     at i (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:15222)
+2026-09-21T21:08:54.8704799Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:15259)
+2026-09-21T21:08:54.8706204Z [WebServer]     at r (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:17434)
+2026-09-21T21:08:54.8707782Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:19670)
+2026-09-21T21:08:54.8709094Z [WebServer]     at handler (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:20414)
+2026-09-21T21:08:54.8715478Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:8:42438)
+2026-09-21T21:08:54.8717475Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:8:42404)
+2026-09-21T21:08:54.8726757Z [WebServer] Error: @clerk/nextjs: Missing publishableKey. To set up Clerk for this project, in your terminal run:
+2026-09-21T21:08:54.8727763Z [WebServer] 
+2026-09-21T21:08:54.8730132Z [WebServer] npx clerk@latest init
+2026-09-21T21:08:54.8733213Z [WebServer] 
+2026-09-21T21:08:54.8736507Z [WebServer] `npx clerk@latest init` creates a Clerk application and writes keys to your .env file. No Clerk account or login required and the command is non-interactive.
+2026-09-21T21:08:54.8737714Z [WebServer] 
+2026-09-21T21:08:54.8739363Z [WebServer] If you have a Clerk application, run `npx clerk@latest env pull` to write the keys. Or copy them from https://dashboard.clerk.com/~/api-keys. Deploy a production instance by running `npx clerk@latest deploy`, or `npx clerk@latest env pull --instance prod` to use an existing one.
+2026-09-21T21:08:54.8741772Z [WebServer]     at Object.throwMissingPublishableKeyError (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:20:2800)
+2026-09-21T21:08:54.8763227Z [WebServer]     at i (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:15222)
+2026-09-21T21:08:54.8814384Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:15259)
+2026-09-21T21:08:54.8815801Z [WebServer]     at r (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:17434)
+2026-09-21T21:08:54.8851010Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:19670)
+2026-09-21T21:08:54.8852730Z [WebServer]     at handler (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:20414)
+2026-09-21T21:08:54.8854338Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:8:42438)
+2026-09-21T21:08:54.8855910Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:8:42404)
+2026-09-21T21:08:54.8857405Z [WebServer] Error: @clerk/nextjs: Missing publishableKey. To set up Clerk for this project, in your terminal run:
+2026-09-21T21:08:54.8858313Z [WebServer] 
+2026-09-21T21:08:54.8858893Z [WebServer] npx clerk@latest init
+2026-09-21T21:08:54.8859421Z [WebServer] 
+2026-09-21T21:08:54.8860792Z [WebServer] `npx clerk@latest init` creates a Clerk application and writes keys to your .env file. No Clerk account or login required and the command is non-interactive.
+2026-09-21T21:08:54.8861992Z [WebServer] 
+2026-09-21T21:08:54.8864941Z [WebServer] If you have a Clerk application, run `npx clerk@latest env pull` to write the keys. Or copy them from https://dashboard.clerk.com/~/api-keys. Deploy a production instance by running `npx clerk@latest deploy`, or `npx clerk@latest env pull --instance prod` to use an existing one.
+2026-09-21T21:08:54.8867790Z [WebServer]     at Object.throwMissingPublishableKeyError (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:20:2800)
+2026-09-21T21:08:54.8869508Z [WebServer]     at i (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:15222)
+2026-09-21T21:08:54.8871226Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:15259)
+2026-09-21T21:08:54.8872783Z [WebServer]     at r (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:17434)
+2026-09-21T21:08:54.8874362Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:19670)
+2026-09-21T21:08:54.8876821Z [WebServer]     at handler (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:20414)
+2026-09-21T21:08:54.8878335Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:8:42438)
+2026-09-21T21:08:54.8879823Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:8:42404)
+2026-09-21T21:08:54.8881513Z [WebServer] Error: @clerk/nextjs: Missing publishableKey. To set up Clerk for this project, in your terminal run:
+2026-09-21T21:08:54.8882418Z [WebServer] 
+2026-09-21T21:08:54.8882922Z [WebServer] npx clerk@latest init
+2026-09-21T21:08:54.8897819Z [WebServer] 
+2026-09-21T21:08:54.8899205Z [WebServer] `npx clerk@latest init` creates a Clerk application and writes keys to your .env file. No Clerk account or login required and the command is non-interactive.
+2026-09-21T21:08:54.8900617Z [WebServer] 
+2026-09-21T21:08:54.8902749Z [WebServer] If you have a Clerk application, run `npx clerk@latest env pull` to write the keys. Or copy them from https://dashboard.clerk.com/~/api-keys. Deploy a production instance by running `npx clerk@latest deploy`, or `npx clerk@latest env pull --instance prod` to use an existing one.
+2026-09-21T21:08:54.8905315Z [WebServer]     at Object.throwMissingPublishableKeyError (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:20:2800)
+2026-09-21T21:08:54.8907066Z [WebServer]     at i (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:15222)
+2026-09-21T21:08:54.8908570Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:15259)
+2026-09-21T21:08:54.8910075Z [WebServer]     at r (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:17434)
+2026-09-21T21:08:54.8911740Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:19670)
+2026-09-21T21:08:54.8913312Z [WebServer]     at handler (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:20414)
+2026-09-21T21:08:54.8914808Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:8:42438)
+2026-09-21T21:08:54.8916316Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:8:42404)
+2026-09-21T21:09:11.1365645Z   x  15 tests\e2e\inspector-actions.spec.ts:168:5 › Inspector Open in Author commits the current draft before handoff (23.6s)
+2026-09-21T21:09:21.8862364Z   ok 16 tests\e2e\inspector-actions.spec.ts:186:5 › Inspector raw Copy allows malformed source and rejected drafts produce no JSON output (8.8s)
+2026-09-21T21:09:28.6763006Z   ok 17 tests\e2e\inspector-actions.spec.ts:220:5 › Inspector actions preserve the accepted raw buffer after CRLF source ingress (6.8s)
+2026-09-21T21:09:33.4134326Z [WebServer] Error: @clerk/nextjs: Missing publishableKey. To set up Clerk for this project, in your terminal run:
+2026-09-21T21:09:33.4301375Z [WebServer] 
+2026-09-21T21:09:33.9531700Z [WebServer] npx clerk@latest init
+2026-09-21T21:09:33.9567322Z [WebServer] 
+2026-09-21T21:09:33.9568971Z [WebServer] `npx clerk@latest init` creates a Clerk application and writes keys to your .env file. No Clerk account or login required and the command is non-interactive.
+2026-09-21T21:09:33.9570143Z [WebServer] 
+2026-09-21T21:09:33.9572256Z [WebServer] If you have a Clerk application, run `npx clerk@latest env pull` to write the keys. Or copy them from https://dashboard.clerk.com/~/api-keys. Deploy a production instance by running `npx clerk@latest deploy`, or `npx clerk@latest env pull --instance prod` to use an existing one.
+2026-09-21T21:09:33.9575078Z [WebServer]     at Object.throwMissingPublishableKeyError (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:20:2800)
+2026-09-21T21:09:33.9576880Z [WebServer]     at i (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:15222)
+2026-09-21T21:09:33.9578303Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:15259)
+2026-09-21T21:09:33.9580669Z [WebServer]     at r (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:17434)
+2026-09-21T21:09:33.9582312Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:19670)
+2026-09-21T21:09:33.9585046Z [WebServer]     at handler (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:20414)
+2026-09-21T21:09:33.9586711Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:8:42438)
+2026-09-21T21:09:33.9588219Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:8:42404)
+2026-09-21T21:09:33.9589578Z [WebServer] Error: @clerk/nextjs: Missing publishableKey. To set up Clerk for this project, in your terminal run:
+2026-09-21T21:09:33.9590439Z [WebServer] 
+2026-09-21T21:09:33.9590935Z [WebServer] npx clerk@latest init
+2026-09-21T21:09:33.9591469Z [WebServer] 
+2026-09-21T21:09:33.9592846Z [WebServer] `npx clerk@latest init` creates a Clerk application and writes keys to your .env file. No Clerk account or login required and the command is non-interactive.
+2026-09-21T21:09:33.9594028Z [WebServer] 
+2026-09-21T21:09:33.9596533Z [WebServer] If you have a Clerk application, run `npx clerk@latest env pull` to write the keys. Or copy them from https://dashboard.clerk.com/~/api-keys. Deploy a production instance by running `npx clerk@latest deploy`, or `npx clerk@latest env pull --instance prod` to use an existing one.
+2026-09-21T21:09:33.9599439Z [WebServer]     at Object.throwMissingPublishableKeyError (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:20:2800)
+2026-09-21T21:09:33.9606178Z [WebServer]     at i (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:15222)
+2026-09-21T21:09:33.9607981Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:15259)
+2026-09-21T21:09:33.9609443Z [WebServer]     at r (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:17434)
+2026-09-21T21:09:33.9610884Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:19670)
+2026-09-21T21:09:33.9613406Z [WebServer]     at handler (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:20414)
+2026-09-21T21:09:33.9615075Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:8:42438)
+2026-09-21T21:09:33.9616573Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:8:42404)
+2026-09-21T21:09:33.9644578Z [WebServer] Error: @clerk/nextjs: Missing publishableKey. To set up Clerk for this project, in your terminal run:
+2026-09-21T21:09:33.9645609Z [WebServer] 
+2026-09-21T21:09:33.9646153Z [WebServer] npx clerk@latest init
+2026-09-21T21:09:33.9646688Z [WebServer] 
+2026-09-21T21:09:33.9647941Z [WebServer] `npx clerk@latest init` creates a Clerk application and writes keys to your .env file. No Clerk account or login required and the command is non-interactive.
+2026-09-21T21:09:33.9649062Z [WebServer] 
+2026-09-21T21:09:33.9650993Z [WebServer] If you have a Clerk application, run `npx clerk@latest env pull` to write the keys. Or copy them from https://dashboard.clerk.com/~/api-keys. Deploy a production instance by running `npx clerk@latest deploy`, or `npx clerk@latest env pull --instance prod` to use an existing one.
+2026-09-21T21:09:33.9654541Z [WebServer]     at Object.throwMissingPublishableKeyError (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:20:2800)
+2026-09-21T21:09:33.9656242Z [WebServer]     at i (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:15222)
+2026-09-21T21:09:33.9657719Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:15259)
+2026-09-21T21:09:33.9659184Z [WebServer]     at r (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:17434)
+2026-09-21T21:09:33.9660725Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:19670)
+2026-09-21T21:09:33.9662195Z [WebServer]     at handler (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:20414)
+2026-09-21T21:09:33.9663712Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:8:42438)
+2026-09-21T21:09:33.9665249Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:8:42404)
+2026-09-21T21:09:33.9666675Z [WebServer] Error: @clerk/nextjs: Missing publishableKey. To set up Clerk for this project, in your terminal run:
+2026-09-21T21:09:33.9667568Z [WebServer] 
+2026-09-21T21:09:33.9668107Z [WebServer] npx clerk@latest init
+2026-09-21T21:09:33.9668627Z [WebServer] 
+2026-09-21T21:09:33.9669868Z [WebServer] `npx clerk@latest init` creates a Clerk application and writes keys to your .env file. No Clerk account or login required and the command is non-interactive.
+2026-09-21T21:09:33.9670972Z [WebServer] 
+2026-09-21T21:09:33.9673549Z [WebServer] If you have a Clerk application, run `npx clerk@latest env pull` to write the keys. Or copy them from https://dashboard.clerk.com/~/api-keys. Deploy a production instance by running `npx clerk@latest deploy`, or `npx clerk@latest env pull --instance prod` to use an existing one.
+2026-09-21T21:09:33.9676333Z [WebServer]     at Object.throwMissingPublishableKeyError (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:20:2800)
+2026-09-21T21:09:33.9681318Z [WebServer]     at i (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:15222)
+2026-09-21T21:09:33.9683455Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:15259)
+2026-09-21T21:09:33.9688456Z [WebServer]     at r (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:17434)
+2026-09-21T21:09:33.9691583Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:19670)
+2026-09-21T21:09:33.9693090Z [WebServer]     at handler (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:20414)
+2026-09-21T21:09:33.9694576Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:8:42438)
+2026-09-21T21:09:33.9696023Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:8:42404)
+2026-09-21T21:09:33.9699041Z [WebServer] Error: @clerk/nextjs: Missing publishableKey. To set up Clerk for this project, in your terminal run:
+2026-09-21T21:09:33.9699935Z [WebServer] 
+2026-09-21T21:09:33.9700466Z [WebServer] npx clerk@latest init
+2026-09-21T21:09:33.9701002Z [WebServer] 
+2026-09-21T21:09:33.9703283Z [WebServer] `npx clerk@latest init` creates a Clerk application and writes keys to your .env file. No Clerk account or login required and the command is non-interactive.
+2026-09-21T21:09:33.9706225Z [WebServer] 
+2026-09-21T21:09:33.9710704Z [WebServer] If you have a Clerk application, run `npx clerk@latest env pull` to write the keys. Or copy them from https://dashboard.clerk.com/~/api-keys. Deploy a production instance by running `npx clerk@latest deploy`, or `npx clerk@latest env pull --instance prod` to use an existing one.
+2026-09-21T21:09:33.9713344Z [WebServer]     at Object.throwMissingPublishableKeyError (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:20:2800)
+2026-09-21T21:09:33.9715129Z [WebServer]     at i (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:15222)
+2026-09-21T21:09:33.9716644Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:15259)
+2026-09-21T21:09:33.9718153Z [WebServer]     at r (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:17434)
+2026-09-21T21:09:33.9719620Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:19670)
+2026-09-21T21:09:33.9721068Z [WebServer]     at handler (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:20414)
+2026-09-21T21:09:33.9722581Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:8:42438)
+2026-09-21T21:09:33.9724263Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:8:42404)
+2026-09-21T21:09:33.9728241Z [WebServer] Error: @clerk/nextjs: Missing publishableKey. To set up Clerk for this project, in your terminal run:
+2026-09-21T21:09:33.9731725Z [WebServer] 
+2026-09-21T21:09:33.9732309Z [WebServer] npx clerk@latest init
+2026-09-21T21:09:33.9732838Z [WebServer] 
+2026-09-21T21:09:33.9734081Z [WebServer] `npx clerk@latest init` creates a Clerk application and writes keys to your .env file. No Clerk account or login required and the command is non-interactive.
+2026-09-21T21:09:33.9735201Z [WebServer] 
+2026-09-21T21:09:33.9744532Z [WebServer] If you have a Clerk application, run `npx clerk@latest env pull` to write the keys. Or copy them from https://dashboard.clerk.com/~/api-keys. Deploy a production instance by running `npx clerk@latest deploy`, or `npx clerk@latest env pull --instance prod` to use an existing one.
+2026-09-21T21:09:33.9747230Z [WebServer]     at Object.throwMissingPublishableKeyError (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:20:2800)
+2026-09-21T21:09:33.9749134Z [WebServer]     at i (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:15222)
+2026-09-21T21:09:33.9750620Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:15259)
+2026-09-21T21:09:33.9752100Z [WebServer]     at r (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:17434)
+2026-09-21T21:09:33.9753537Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:19670)
+2026-09-21T21:09:33.9755067Z [WebServer]     at handler (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:20414)
+2026-09-21T21:09:33.9756535Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:8:42438)
+2026-09-21T21:09:33.9758046Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:8:42404)
+2026-09-21T21:09:34.1624382Z   ok 18 tests\e2e\inspector-actions.spec.ts:247:38 › Inspector suppresses stale PDF 200 delivery or navigation after a new source (5.5s)
+2026-09-21T21:09:38.5189706Z [WebServer] Error: @clerk/nextjs: Missing publishableKey. To set up Clerk for this project, in your terminal run:
+2026-09-21T21:09:38.5202466Z [WebServer] 
+2026-09-21T21:09:38.5204214Z [WebServer] npx clerk@latest init
+2026-09-21T21:09:38.5205671Z [WebServer] 
+2026-09-21T21:09:38.5207779Z [WebServer] `npx clerk@latest init` creates a Clerk application and writes keys to your .env file. No Clerk account or login required and the command is non-interactive.
+2026-09-21T21:09:38.5210546Z [WebServer] 
+2026-09-21T21:09:38.5215269Z [WebServer] If you have a Clerk application, run `npx clerk@latest env pull` to write the keys. Or copy them from https://dashboard.clerk.com/~/api-keys. Deploy a production instance by running `npx clerk@latest deploy`, or `npx clerk@latest env pull --instance prod` to use an existing one.
+2026-09-21T21:09:38.5222796Z [WebServer]     at Object.throwMissingPublishableKeyError (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:20:2800)
+2026-09-21T21:09:38.5225478Z [WebServer]     at i (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:15222)
+2026-09-21T21:09:38.5237229Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:15259)
+2026-09-21T21:09:38.5243390Z [WebServer]     at r (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:17434)
+2026-09-21T21:09:38.5330429Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:19670)
+2026-09-21T21:09:38.5344849Z [WebServer]     at handler (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:20414)
+2026-09-21T21:09:38.5347126Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:8:42438)
+2026-09-21T21:09:38.5349811Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:8:42404)
+2026-09-21T21:09:38.5360410Z [WebServer] Error: @clerk/nextjs: Missing publishableKey. To set up Clerk for this project, in your terminal run:
+2026-09-21T21:09:38.5362325Z [WebServer] 
+2026-09-21T21:09:38.5363182Z [WebServer] npx clerk@latest init
+2026-09-21T21:09:38.5364023Z [WebServer] 
+2026-09-21T21:09:38.5371000Z [WebServer] `npx clerk@latest init` creates a Clerk application and writes keys to your .env file. No Clerk account or login required and the command is non-interactive.
+2026-09-21T21:09:38.5380644Z [WebServer] 
+2026-09-21T21:09:38.5384125Z [WebServer] If you have a Clerk application, run `npx clerk@latest env pull` to write the keys. Or copy them from https://dashboard.clerk.com/~/api-keys. Deploy a production instance by running `npx clerk@latest deploy`, or `npx clerk@latest env pull --instance prod` to use an existing one.
+2026-09-21T21:09:38.5413588Z [WebServer]     at Object.throwMissingPublishableKeyError (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:20:2800)
+2026-09-21T21:09:38.5415539Z [WebServer]     at i (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:15222)
+2026-09-21T21:09:38.5417228Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:15259)
+2026-09-21T21:09:38.5418938Z [WebServer]     at r (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:17434)
+2026-09-21T21:09:38.5420733Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:19670)
+2026-09-21T21:09:38.5438711Z [WebServer]     at handler (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:20414)
+2026-09-21T21:09:38.5441071Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:8:42438)
+2026-09-21T21:09:38.5442965Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:8:42404)
+2026-09-21T21:09:38.5444534Z [WebServer] Error: @clerk/nextjs: Missing publishableKey. To set up Clerk for this project, in your terminal run:
+2026-09-21T21:09:38.5445679Z [WebServer] 
+2026-09-21T21:09:38.5549503Z [WebServer] npx clerk@latest init
+2026-09-21T21:09:38.5784889Z [WebServer] 
+2026-09-21T21:09:38.5787156Z [WebServer] `npx clerk@latest init` creates a Clerk application and writes keys to your .env file. No Clerk account or login required and the command is non-interactive.
+2026-09-21T21:09:38.5789072Z [WebServer] 
+2026-09-21T21:09:38.5791286Z [WebServer] If you have a Clerk application, run `npx clerk@latest env pull` to write the keys. Or copy them from https://dashboard.clerk.com/~/api-keys. Deploy a production instance by running `npx clerk@latest deploy`, or `npx clerk@latest env pull --instance prod` to use an existing one.
+2026-09-21T21:09:38.5793968Z [WebServer]     at Object.throwMissingPublishableKeyError (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:20:2800)
+2026-09-21T21:09:38.5798578Z [WebServer]     at i (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:15222)
+2026-09-21T21:09:38.5825049Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:15259)
+2026-09-21T21:09:38.5877474Z [WebServer]     at r (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:17434)
+2026-09-21T21:09:38.5882976Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:19670)
+2026-09-21T21:09:38.5889648Z [WebServer]     at handler (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:20414)
+2026-09-21T21:09:38.5897479Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:8:42438)
+2026-09-21T21:09:38.5902737Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:8:42404)
+2026-09-21T21:09:38.5909282Z [WebServer] Error: @clerk/nextjs: Missing publishableKey. To set up Clerk for this project, in your terminal run:
+2026-09-21T21:09:38.5914670Z [WebServer] 
+2026-09-21T21:09:38.5917879Z [WebServer] npx clerk@latest init
+2026-09-21T21:09:38.5938874Z [WebServer] 
+2026-09-21T21:09:38.6028907Z [WebServer] `npx clerk@latest init` creates a Clerk application and writes keys to your .env file. No Clerk account or login required and the command is non-interactive.
+2026-09-21T21:09:38.6039263Z [WebServer] 
+2026-09-21T21:09:38.6046578Z [WebServer] If you have a Clerk application, run `npx clerk@latest env pull` to write the keys. Or copy them from https://dashboard.clerk.com/~/api-keys. Deploy a production instance by running `npx clerk@latest deploy`, or `npx clerk@latest env pull --instance prod` to use an existing one.
+2026-09-21T21:09:38.6050169Z [WebServer]     at Object.throwMissingPublishableKeyError (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:20:2800)
+2026-09-21T21:09:38.6055433Z [WebServer]     at i (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:15222)
+2026-09-21T21:09:38.6066988Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:15259)
+2026-09-21T21:09:39.2928602Z [WebServer]     at r (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:17434)
+2026-09-21T21:09:39.2930183Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:19670)
+2026-09-21T21:09:39.2931363Z [WebServer]     at handler (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:20414)
+2026-09-21T21:09:39.2932706Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:8:42438)
+2026-09-21T21:09:39.2933923Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:8:42404)
+2026-09-21T21:09:39.2935595Z   ok 19 tests\e2e\inspector-actions.spec.ts:247:38 › Inspector suppresses stale PDF 401 delivery or navigation after a new source (5.1s)
+2026-09-21T21:09:43.7278181Z [WebServer] Error: @clerk/nextjs: Missing publishableKey. To set up Clerk for this project, in your terminal run:
+2026-09-21T21:09:43.7292312Z [WebServer] 
+2026-09-21T21:09:43.7316569Z [WebServer] npx clerk@latest init
+2026-09-21T21:09:43.7334137Z [WebServer] 
+2026-09-21T21:09:43.7362213Z [WebServer] `npx clerk@latest init` creates a Clerk application and writes keys to your .env file. No Clerk account or login required and the command is non-interactive.
+2026-09-21T21:09:43.7396095Z [WebServer] 
+2026-09-21T21:09:43.7444321Z [WebServer] If you have a Clerk application, run `npx clerk@latest env pull` to write the keys. Or copy them from https://dashboard.clerk.com/~/api-keys. Deploy a production instance by running `npx clerk@latest deploy`, or `npx clerk@latest env pull --instance prod` to use an existing one.
+2026-09-21T21:09:43.7825529Z [WebServer]     at Object.throwMissingPublishableKeyError (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:20:2800)
+2026-09-21T21:09:43.9354988Z [WebServer]     at i (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:15222)
+2026-09-21T21:09:45.3293925Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:15259)
+2026-09-21T21:09:45.3295280Z [WebServer]     at r (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:17434)
+2026-09-21T21:09:45.3296593Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:19670)
+2026-09-21T21:09:45.3297898Z [WebServer]     at handler (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:20414)
+2026-09-21T21:09:45.3299197Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:8:42438)
+2026-09-21T21:09:45.3300535Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:8:42404)
+2026-09-21T21:09:45.3302726Z [WebServer] Error: @clerk/nextjs: Missing publishableKey. To set up Clerk for this project, in your terminal run:
+2026-09-21T21:09:45.3303519Z [WebServer] 
+2026-09-21T21:09:45.3303846Z [WebServer] npx clerk@latest init
+2026-09-21T21:09:45.3304202Z [WebServer] 
+2026-09-21T21:09:45.3305131Z [WebServer] `npx clerk@latest init` creates a Clerk application and writes keys to your .env file. No Clerk account or login required and the command is non-interactive.
+2026-09-21T21:09:45.3305970Z [WebServer] 
+2026-09-21T21:09:45.3307597Z [WebServer] If you have a Clerk application, run `npx clerk@latest env pull` to write the keys. Or copy them from https://dashboard.clerk.com/~/api-keys. Deploy a production instance by running `npx clerk@latest deploy`, or `npx clerk@latest env pull --instance prod` to use an existing one.
+2026-09-21T21:09:45.3309455Z [WebServer]     at Object.throwMissingPublishableKeyError (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:20:2800)
+2026-09-21T21:09:45.3310967Z [WebServer]     at i (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:15222)
+2026-09-21T21:09:45.3311755Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:15259)
+2026-09-21T21:09:45.3312525Z [WebServer]     at r (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:17434)
+2026-09-21T21:09:45.3313296Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:19670)
+2026-09-21T21:09:45.3314285Z [WebServer]     at handler (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:20414)
+2026-09-21T21:09:45.3315122Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:8:42438)
+2026-09-21T21:09:45.3315951Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:8:42404)
+2026-09-21T21:09:45.3316720Z [WebServer] Error: @clerk/nextjs: Missing publishableKey. To set up Clerk for this project, in your terminal run:
+2026-09-21T21:09:45.3317210Z [WebServer] 
+2026-09-21T21:09:45.3317471Z [WebServer] npx clerk@latest init
+2026-09-21T21:09:45.3317726Z [WebServer] 
+2026-09-21T21:09:45.3318373Z [WebServer] `npx clerk@latest init` creates a Clerk application and writes keys to your .env file. No Clerk account or login required and the command is non-interactive.
+2026-09-21T21:09:45.3318955Z [WebServer] 
+2026-09-21T21:09:45.3320494Z [WebServer] If you have a Clerk application, run `npx clerk@latest env pull` to write the keys. Or copy them from https://dashboard.clerk.com/~/api-keys. Deploy a production instance by running `npx clerk@latest deploy`, or `npx clerk@latest env pull --instance prod` to use an existing one.
+2026-09-21T21:09:45.3321900Z [WebServer]     at Object.throwMissingPublishableKeyError (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:20:2800)
+2026-09-21T21:09:45.3322806Z [WebServer]     at i (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:15222)
+2026-09-21T21:09:45.3323597Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:15259)
+2026-09-21T21:09:45.3324401Z [WebServer]     at r (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:17434)
+2026-09-21T21:09:45.3325174Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:19670)
+2026-09-21T21:09:45.3325986Z [WebServer]     at handler (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:20414)
+2026-09-21T21:09:45.3326926Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:8:42438)
+2026-09-21T21:09:45.3327753Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:8:42404)
+2026-09-21T21:09:45.3328565Z [WebServer] Error: @clerk/nextjs: Missing publishableKey. To set up Clerk for this project, in your terminal run:
+2026-09-21T21:09:45.3329025Z [WebServer] 
+2026-09-21T21:09:45.3329281Z [WebServer] npx clerk@latest init
+2026-09-21T21:09:45.3329541Z [WebServer] 
+2026-09-21T21:09:45.3330340Z [WebServer] `npx clerk@latest init` creates a Clerk application and writes keys to your .env file. No Clerk account or login required and the command is non-interactive.
+2026-09-21T21:09:45.3330963Z [WebServer] 
+2026-09-21T21:09:45.3332009Z [WebServer] If you have a Clerk application, run `npx clerk@latest env pull` to write the keys. Or copy them from https://dashboard.clerk.com/~/api-keys. Deploy a production instance by running `npx clerk@latest deploy`, or `npx clerk@latest env pull --instance prod` to use an existing one.
+2026-09-21T21:09:45.3333443Z [WebServer]     at Object.throwMissingPublishableKeyError (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:20:2800)
+2026-09-21T21:09:45.3334474Z [WebServer]     at i (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:15222)
+2026-09-21T21:09:45.3335294Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:15259)
+2026-09-21T21:09:45.3336083Z [WebServer]     at r (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:17434)
+2026-09-21T21:09:45.3336893Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:19670)
+2026-09-21T21:09:45.3337675Z [WebServer]     at handler (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:20414)
+2026-09-21T21:09:45.3338492Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:8:42438)
+2026-09-21T21:09:45.3339268Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:8:42404)
+2026-09-21T21:09:45.3340024Z [WebServer] Error: @clerk/nextjs: Missing publishableKey. To set up Clerk for this project, in your terminal run:
+2026-09-21T21:09:45.3340481Z [WebServer] 
+2026-09-21T21:09:45.3340816Z [WebServer] npx clerk@latest init
+2026-09-21T21:09:45.3341181Z [WebServer] 
+2026-09-21T21:09:45.3342058Z [WebServer] `npx clerk@latest init` creates a Clerk application and writes keys to your .env file. No Clerk account or login required and the command is non-interactive.
+2026-09-21T21:09:45.3342650Z [WebServer] 
+2026-09-21T21:09:45.3343701Z [WebServer] If you have a Clerk application, run `npx clerk@latest env pull` to write the keys. Or copy them from https://dashboard.clerk.com/~/api-keys. Deploy a production instance by running `npx clerk@latest deploy`, or `npx clerk@latest env pull --instance prod` to use an existing one.
+2026-09-21T21:09:45.3345038Z [WebServer]     at Object.throwMissingPublishableKeyError (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:20:2800)
+2026-09-21T21:09:45.3345918Z [WebServer]     at i (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:15222)
+2026-09-21T21:09:45.3346755Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:15259)
+2026-09-21T21:09:45.3347545Z [WebServer]     at r (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:17434)
+2026-09-21T21:09:45.3348490Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:19670)
+2026-09-21T21:09:45.3349309Z [WebServer]     at handler (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:20414)
+2026-09-21T21:09:45.3350126Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:8:42438)
+2026-09-21T21:09:45.3351127Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:8:42404)
+2026-09-21T21:09:45.3351903Z [WebServer] Error: @clerk/nextjs: Missing publishableKey. To set up Clerk for this project, in your terminal run:
+2026-09-21T21:09:45.3352405Z [WebServer] 
+2026-09-21T21:09:45.3352659Z [WebServer] npx clerk@latest init
+2026-09-21T21:09:45.3352933Z [WebServer] 
+2026-09-21T21:09:45.3353584Z [WebServer] `npx clerk@latest init` creates a Clerk application and writes keys to your .env file. No Clerk account or login required and the command is non-interactive.
+2026-09-21T21:09:45.3354404Z [WebServer] 
+2026-09-21T21:09:45.3355510Z [WebServer] If you have a Clerk application, run `npx clerk@latest env pull` to write the keys. Or copy them from https://dashboard.clerk.com/~/api-keys. Deploy a production instance by running `npx clerk@latest deploy`, or `npx clerk@latest env pull --instance prod` to use an existing one.
+2026-09-21T21:09:45.3356855Z [WebServer]     at Object.throwMissingPublishableKeyError (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:20:2800)
+2026-09-21T21:09:45.3357751Z [WebServer]     at i (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:15222)
+2026-09-21T21:09:45.3358549Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:15259)
+2026-09-21T21:09:45.3359345Z [WebServer]     at r (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:17434)
+2026-09-21T21:09:45.3360130Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:19670)
+2026-09-21T21:09:45.3360921Z [WebServer]     at handler (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:67:20414)
+2026-09-21T21:09:45.3361715Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:8:42438)
+2026-09-21T21:09:45.3362538Z [WebServer]     at <unknown> (D:\a\pptx-dev\pptx-dev\.next\standalone\.next\server\chunks\[root-of-the-server]__0_0ait9._.js:8:42404)
+2026-09-21T21:09:45.3363755Z   ok 20 tests\e2e\inspector-actions.spec.ts:279:5 › Inspector PDF payload/filename and Deckchat URL use committed current source with local mocks (5.3s)
+2026-09-21T21:09:57.1724466Z   ok 21 tests\e2e\inspector-editing.spec.ts:40:7 › all Inspector slides preserve exact JSON and shared furniture through offline undo/export at 1440px (11.7s)
+2026-09-21T21:10:04.7008894Z   ok 22 tests\e2e\inspector-editing.spec.ts:40:7 › all Inspector slides preserve exact JSON and shared furniture through offline undo/export at 540px (7.5s)
+2026-09-21T21:10:09.7897001Z   ok 23 tests\e2e\inspector-editing.spec.ts:99:5 › invalid source keeps a renderer fallback and source recovery uses the current slide order (5.0s)
+2026-09-21T21:10:14.3547294Z   ok 24 tests\e2e\inspector-editing.spec.ts:116:5 › shared navigation discards an ID-less draft even when the replacement title is identical (4.5s)
+2026-09-21T21:10:20.8614529Z   ok 25 tests\e2e\inspector-recovery.spec.ts:18:5 › schema-valid strict overflow cancels an active draft and the same slide recovers after source correction (6.5s)
+2026-09-21T21:10:24.9675292Z   ok 26 tests\e2e\inspector-recovery.spec.ts:85:5 › font substitution notes remain accessible and operable while the Inspector canvas is active (4.1s)
+2026-09-21T21:10:35.0956700Z   ok 27 tests\e2e\inspector-share-publication.spec.ts:58:69 › Inspector hash publication and refresh retain the accepted document (10.1s)
+2026-09-21T21:10:44.9360461Z   ok 28 tests\e2e\inspector-share-publication.spec.ts:58:69 › Inspector legacy import query publication and refresh retain the accepted document (9.8s)
+2026-09-21T21:10:51.7005667Z   ok 29 tests\e2e\inspector.spec.ts:20:5 › published long quotes retain their footer in actual wide/portrait previews and PowerPoint downloads (6.7s)
+2026-09-21T21:10:59.7495063Z   ok 30 tests\e2e\inspector.spec.ts:76:5 › shared navigation clears format errors and proposals from the previous deck (4.5s)
+2026-09-21T21:11:02.8270365Z   ok 31 tests\e2e\inspector.spec.ts:118:5 › anonymous JSON authoring, preview, undo/redo, download and shared reimport (6.6s)
+2026-09-21T21:11:11.0629182Z   ok 32 tests\e2e\json-paste-formatting.spec.ts:53:5 › warm JSON worker leaves pasted source untouched while explicit Format Document remains undoable (8.2s)
+2026-09-21T21:11:16.1661467Z   ok 33 tests\e2e\monaco.spec.ts:3:5 › bundled JSON worker provides schema diagnostics, completion and recovery offline (5.1s)
+2026-09-21T21:11:30.6326289Z   ok 34 tests\e2e\source-download-preservation.spec.ts:90:7 › Author preserves exact LF source through preview copy, JSON download and canvas history (14.4s)
+2026-09-21T21:11:40.6102810Z   ok 35 tests\e2e\source-download-preservation.spec.ts:90:7 › Author preserves exact CRLF source through preview copy, JSON download and canvas history (10.0s)
+2026-09-21T21:11:48.0006365Z   ok 36 tests\e2e\source-download-preservation.spec.ts:218:5 › Inspector JSON files preserve exact authored LF bytes before edits and through canvas undo/redo (7.3s)
+2026-09-21T21:11:55.6501994Z   ok 37 tests\e2e\svg-security.spec.ts:51:5 › published SVG renderer keeps hostile shared and imported document strings inert (7.6s)
+2026-09-21T21:11:56.2200351Z   ok 38 tests\e2e\toolkit.spec.ts:4:5 › public toolkit shows the deployed package set with working render, edit and export proofs (563ms)
+2026-09-21T21:12:05.9537663Z   ok 39 tests\e2e\yaml.spec.ts:4:5 › YAML and Markdown editing preserve OPF values and recover from malformed YAML offline (9.7s)
+2026-09-21T21:12:06.6755008Z 
+2026-09-21T21:12:06.6761128Z 
+2026-09-21T21:12:06.6770955Z   1) tests\e2e\inspector-actions.spec.ts:168:5 › Inspector Open in Author commits the current draft before handoff 
+2026-09-21T21:12:06.6771823Z 
+2026-09-21T21:12:06.6772367Z     Error: expect(page).toHaveURL(expected) failed
+2026-09-21T21:12:06.6775211Z 
+2026-09-21T21:12:06.6775878Z     Expected pattern: /\/author#opf=/
+2026-09-21T21:12:06.6776686Z     Received string:  ""
+2026-09-21T21:12:06.6777190Z     Timeout: 5000ms
+2026-09-21T21:12:06.6777547Z 
+2026-09-21T21:12:06.6777793Z     Call log:
+2026-09-21T21:12:06.6778911Z       - Expect "toHaveURL" with timeout 5000ms
+2026-09-21T21:12:06.6779575Z         - waiting for navigation to finish...
+2026-09-21T21:12:06.6779960Z 
+2026-09-21T21:12:06.6780328Z 
+2026-09-21T21:12:06.6781128Z       174 |   await page.screenshot({ path: test.info().outputPath("inspector-pending-action.png"), fullPage: true });
+2026-09-21T21:12:06.6782195Z       175 |   await menuAction(page, "Open in Author", true);
+2026-09-21T21:12:06.6782977Z     > 176 |   await expect(page).toHaveURL(/\/author#opf=/);
+2026-09-21T21:12:06.6783942Z           |                      ^
+2026-09-21T21:12:06.6785490Z       177 |   expect(sourceAtUrl(page.url())).toEqual(JSON.parse(changedTitle("Author commits this draft")));
+2026-09-21T21:12:06.6786757Z       178 |   await expect(page.getByRole("button", { name: /^(copy|copied)$/i })).toBeVisible();
+2026-09-21T21:12:06.6788069Z       179 |   const authorSource = await clipboardAction(page, page.getByRole("button", { name: /^(copy|copied)$/i }));
+2026-09-21T21:12:06.6789166Z         at D:\a\pptx-dev\pptx-dev\tests\e2e\inspector-actions.spec.ts:176:22
+2026-09-21T21:12:06.6789751Z 
+2026-09-21T21:12:06.6796424Z     Error Context: test-results\inspector-actions-Inspecto-ddffb-urrent-draft-before-handoff\error-context.md
+2026-09-21T21:12:06.6798226Z 
+2026-09-21T21:12:06.6799168Z     attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+2026-09-21T21:12:06.6800234Z     test-results\inspector-actions-Inspecto-ddffb-urrent-draft-before-handoff\trace.zip
+2026-09-21T21:12:06.6801024Z     Usage:
+2026-09-21T21:12:06.6801323Z 
+2026-09-21T21:12:06.6802055Z         pnpm exec playwright show-trace test-results\inspector-actions-Inspecto-ddffb-urrent-draft-before-handoff\trace.zip
+2026-09-21T21:12:06.6802871Z 
+2026-09-21T21:12:06.6803474Z     ────────────────────────────────────────────────────────────────────────────────────────────────
+2026-09-21T21:12:06.6803974Z 
+2026-09-21T21:12:06.6804315Z   1 failed
+2026-09-21T21:12:06.6805277Z     tests\e2e\inspector-actions.spec.ts:168:5 › Inspector Open in Author commits the current draft before handoff 
+2026-09-21T21:12:06.6806113Z   38 passed (5.5m)
+2026-09-21T21:12:06.7245017Z [ELIFECYCLE] Command failed with exit code 1.
+2026-09-21T21:12:06.8551055Z ##[error]Process completed with exit code 1.
+2026-09-21T21:12:06.8803018Z ##[group]Run actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+2026-09-21T21:12:06.8803552Z with:
+2026-09-21T21:12:06.8803842Z   name: browser-failures-windows-latest
+2026-09-21T21:12:06.8804139Z   path: test-results/
+2026-09-21T21:12:06.8804383Z   retention-days: 7
+2026-09-21T21:12:06.8804625Z   if-no-files-found: ignore
+2026-09-21T21:12:06.8804857Z   compression-level: 6
+2026-09-21T21:12:06.8805019Z   overwrite: false
+2026-09-21T21:12:06.8805207Z   include-hidden-files: false
+2026-09-21T21:12:06.8805450Z   archive: true
+2026-09-21T21:12:06.8805683Z env:
+2026-09-21T21:12:06.8805959Z   PNPM_HOME: C:\Users\runneradmin\setup-pnpm\node_modules\.bin
+2026-09-21T21:12:06.8806290Z ##[endgroup]
+2026-09-21T21:12:07.5172603Z With the provided path, there will be 105 files uploaded
+2026-09-21T21:12:07.5176407Z Artifact name is valid!
+2026-09-21T21:12:07.5177385Z Root directory input is valid!
+2026-09-21T21:12:07.7482619Z Uploading artifact: browser-failures-windows-latest.zip
+2026-09-21T21:12:07.7528774Z Beginning upload of artifact content to blob storage
+2026-09-21T21:12:08.4017705Z Uploaded bytes 8388608
+2026-09-21T21:12:08.4913588Z Uploaded bytes 11054020
+2026-09-21T21:12:08.5089505Z Finished uploading artifact content to blob storage!
+2026-09-21T21:12:08.5090393Z SHA256 digest of uploaded artifact is f490910d37179c4278441eb4d0f1d54cf2251ded72e719c4964ffafb468750ee
+2026-09-21T21:12:08.5091048Z Finalizing artifact upload
+2026-09-21T21:12:08.7874763Z Artifact browser-failures-windows-latest successfully finalized. Artifact ID 10665085104
+2026-09-21T21:12:08.7876066Z Artifact browser-failures-windows-latest has been successfully uploaded! Final size is 11054020 bytes. Artifact ID is 10665085104
+2026-09-21T21:12:08.7882990Z Artifact download URL: https://github.com/Data-Advantage/pptx-dev/actions/runs/35654753237/artifacts/10665085104
+2026-09-21T21:12:08.8192947Z ##[group]Run actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+2026-09-21T21:12:08.8193365Z with:
+2026-09-21T21:12:08.8193551Z   name: windows-readiness-windows-latest
+2026-09-21T21:12:08.8193830Z   path: test-results/**/windows-readiness-timings.json
+2026-09-21T21:12:08.8194071Z   retention-days: 7
+2026-09-21T21:12:08.8194288Z   if-no-files-found: ignore
+2026-09-21T21:12:08.8194491Z   compression-level: 6
+2026-09-21T21:12:08.8194662Z   overwrite: false
+2026-09-21T21:12:08.8194830Z   include-hidden-files: false
+2026-09-21T21:12:08.8195016Z   archive: true
+2026-09-21T21:12:08.8195181Z env:
+2026-09-21T21:12:08.8195393Z   PNPM_HOME: C:\Users\runneradmin\setup-pnpm\node_modules\.bin
+2026-09-21T21:12:08.8195645Z ##[endgroup]
+2026-09-21T21:12:08.9937737Z With the provided path, there will be 1 file uploaded
+2026-09-21T21:12:08.9943192Z Artifact name is valid!
+2026-09-21T21:12:08.9943728Z Root directory input is valid!
+2026-09-21T21:12:09.1872737Z Uploading artifact: windows-readiness-windows-latest.zip
+2026-09-21T21:12:09.1924153Z Beginning upload of artifact content to blob storage
+2026-09-21T21:12:09.2598723Z Uploaded bytes 6832
+2026-09-21T21:12:09.2749463Z Finished uploading artifact content to blob storage!
+2026-09-21T21:12:09.2750757Z SHA256 digest of uploaded artifact is 4d7804daf6e2a94a9ac74318fa8e970eb0cc903a96300b7fbfb61430f5ee3530
+2026-09-21T21:12:09.2751527Z Finalizing artifact upload
+2026-09-21T21:12:09.5031345Z Artifact windows-readiness-windows-latest successfully finalized. Artifact ID 10664905182
+2026-09-21T21:12:09.5032584Z Artifact windows-readiness-windows-latest has been successfully uploaded! Final size is 6832 bytes. Artifact ID is 10664905182
+2026-09-21T21:12:09.5038380Z Artifact download URL: https://github.com/Data-Advantage/pptx-dev/actions/runs/35654753237/artifacts/10664905182
+2026-09-21T21:12:09.5339129Z Post job cleanup.
+2026-09-21T21:12:09.7078269Z Pruning is unnecessary.
+2026-09-21T21:12:09.7375020Z Post job cleanup.
+2026-09-21T21:12:09.9305695Z [command]"C:\Program Files\Git\bin\git.exe" version
+2026-09-21T21:12:09.9558998Z git version 2.55.0.windows.5
+2026-09-21T21:12:09.9643321Z Temporarily overriding HOME='D:\a\_temp\eaf722e6-ef8a-4132-8b89-065cbb15b302' before making global git config changes
+2026-09-21T21:12:09.9775544Z Adding repository directory to the temporary git global config as a safe directory
+2026-09-21T21:12:09.9790849Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\pptx-dev\pptx-dev
+2026-09-21T21:12:10.0036977Z Removing SSH command configuration
+2026-09-21T21:12:10.0041871Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2026-09-21T21:12:10.0310059Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2026-09-21T21:12:10.5265274Z Removing HTTP extra header
+2026-09-21T21:12:10.5287872Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-09-21T21:12:10.5524225Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2026-09-21T21:12:11.0449079Z Removing includeIf entries pointing to credentials config files
+2026-09-21T21:12:11.0460726Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-09-21T21:12:11.0711536Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-09-21T21:12:11.5252504Z Cleaning up orphan processes

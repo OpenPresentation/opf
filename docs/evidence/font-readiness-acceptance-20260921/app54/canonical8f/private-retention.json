@@ -1,0 +1,10 @@
+{
+  "copiedAt": "2026-09-21T22:10:11.304008+00:00",
+  "source": "/private/tmp/opf-inspector-actions-canonical-20260921/navigation-policy",
+  "privateDurableDirectory": "/Users/michael/.codex/visualizations/2026/09/21/01a0c3f4-8cea-7f12-9033-8948f1a86619/week-wrap-private/app54-canonical-34-of-39",
+  "filesVerified": 154,
+  "bytes": 334264389,
+  "manifestSha256": "88dc021080f916cb1b333560f2065ed46b028e46dae020dd1fc68294cbd43924",
+  "privatePermissions": "directories0700/files0600",
+  "rawPublicationForbidden": "Auth query/token/cookie-bearing raw logs and traces must not be committed or published. Use sanitized findings and hash inventory."
+}

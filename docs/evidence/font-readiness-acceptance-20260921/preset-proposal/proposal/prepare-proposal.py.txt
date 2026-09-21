@@ -1,0 +1,268 @@
+from pathlib import Path
+import difflib,hashlib,json,subprocess
+repo=Path('/private/tmp/opf-author-local-writers-20260921/pptx-dev')
+out=Path('/private/tmp/opf-author-local-writers-20260921/proposal')
+relative='components/author/author-shell.tsx'
+original=(repo/relative).read_text()
+assert subprocess.check_output(['git','show','e40c287b64fcbcfb85fb4a8a50641aea8e3e54a8:'+relative],cwd=repo).decode()==original
+text=original
+def replace(a,b):
+ global text
+ assert text.count(a)==1,(text.count(a),a[:120])
+ text=text.replace(a,b)
+replace('import { createCanvasSourceBridge, sameJsonValue } from "@/lib/playground/canvas-source";', 'import { createCanvasSourceBridge, sameJsonValue, updateJsonSource, type CanvasSourceOverride } from "@/lib/playground/canvas-source";')
+replace("import type { EditorEvent } from '@openpresentation/opf-editor';", "import type { EditorEvent, EditorSession } from '@openpresentation/opf-editor';")
+replace('export function AuthorShell({ initialSignedIn }: { initialSignedIn: boolean }) {', '''type AuthorSource = { text: string; format: Format };
+type AuthorDraft = AuthorSource & { document: OPFDocument };
+type PresetGroup = {
+  editor: EditorSession;
+  original: AuthorSource;
+  expected: AuthorSource;
+  undoDepth: number;
+  redoDepth: number;
+};
+type PresetTransaction = {
+  token: object;
+  editor: EditorSession;
+  before: OPFDocument;
+  after: OPFDocument;
+  expected: AuthorSource;
+  result: AuthorSource;
+  undoDepth: number;
+  override?: CanvasSourceOverride;
+  accepted: boolean;
+};
+
+function matchesPresetGroup(group: PresetGroup, source: AuthorSource, editor: EditorSession | null): boolean {
+  if (!editor || group.editor !== editor || group.expected.text !== source.text || group.expected.format !== source.format) return false;
+  const snapshot = editor.snapshot();
+  return snapshot.undoDepth === group.undoDepth && snapshot.redoDepth === group.redoDepth;
+}
+
+export function AuthorShell({ initialSignedIn }: { initialSignedIn: boolean }) {''')
+replace('''  const rejectedCanvasChangeRef = useRef(0);
+  // Every source/format writer''','''  const rejectedCanvasChangeRef = useRef(0);
+  const [presetToasts, setPresetToasts] = useState<ReadonlyArray<PresetAppliedToastData>>([]);
+  const presetGroupRef = useRef<PresetGroup | null>(null);
+  const presetTransactionRef = useRef<PresetTransaction | null>(null);
+  const readySessionRef = useRef<EditorSession | null>(null);
+  const invalidatePresetGroup = useCallback(() => {
+    presetGroupRef.current = null;
+    setPresetToasts((current) => current.length ? [] : current);
+  }, []);
+  // Every source/format writer''')
+replace('''    const value = typeof next === "function" ? next(sourceRef.current.format) : next;
+    sourceRef.current = { ...sourceRef.current, format: value };
+    setFormatState(value);
+  }, []);''','''    const value = typeof next === "function" ? next(sourceRef.current.format) : next;
+    invalidatePresetGroup();
+    sourceRef.current = { ...sourceRef.current, format: value };
+    setFormatState(value);
+  }, [invalidatePresetGroup]);''')
+replace('''  const setOpfDraft = useCallback<Dispatch<SetStateAction<string>>>((next) => {
+    const text = typeof next === "function" ? next(sourceRef.current.text) : next;
+    sourceRef.current = { ...sourceRef.current, text };
+    setOpfDraftState(text);
+  }, []);''','''  const writeSourceText = useCallback((text: string) => {
+    sourceRef.current = { ...sourceRef.current, text };
+    setOpfDraftState(text);
+  }, []);
+  const setOpfDraft = useCallback<Dispatch<SetStateAction<string>>>((next) => {
+    const text = typeof next === "function" ? next(sourceRef.current.text) : next;
+    // Includes root-replacement intent even when its bytes happen to match.
+    invalidatePresetGroup();
+    writeSourceText(text);
+  }, [invalidatePresetGroup, writeSourceText]);''')
+replace('''  const onCanvasDocumentChange = useCallback((document: unknown, previous: unknown, event: EditorEvent) => {
+    try {
+      if (isSending) throw new Error("Wait for the current Author request before editing the preview.");
+      const text = canvasSource.apply(sourceRef.current, { before: previous, after: document, event });
+      if (text !== sourceRef.current.text) setOpfDraft(text);
+      return true;
+    } catch (error) {
+      rejectedCanvasChangeRef.current++;
+      canvasSource.clear();
+      setSurfaceError(error instanceof Error ? error.message : "The source changed. Reopen the preview field to edit the current slide.");
+      return false;
+    }
+  }, [canvasSource, isSending, setOpfDraft]);''','''  const onCanvasDocumentChange = useCallback((document: unknown, previous: unknown, event: EditorEvent) => {
+    const pending = presetTransactionRef.current;
+    const ownsTransaction = pending && event.type === "patch" && event.meta?.authorPresetTransaction === pending.token;
+    if (ownsTransaction) presetTransactionRef.current = null;
+    else invalidatePresetGroup();
+    try {
+      if (isSending) throw new Error("Wait for the current Author request before editing the preview.");
+      if (ownsTransaction && (readySessionRef.current !== pending.editor
+        || event.snapshot.undoDepth !== pending.undoDepth || event.snapshot.redoDepth !== 0
+        || sourceRef.current.text !== pending.expected.text || sourceRef.current.format !== pending.expected.format
+        || !sameJsonValue(previous, pending.before) || !sameJsonValue(document, pending.after))) {
+        throw new Error("The draft changed before this preset edit could be applied. Your source was kept.");
+      }
+      const text = canvasSource.apply(sourceRef.current, { before: previous, after: document, event }, ownsTransaction ? pending.override : undefined);
+      if (ownsTransaction && text !== pending.result.text) {
+        throw new Error("The preset edit no longer matches the current source. Your source was kept.");
+      }
+      if (text !== sourceRef.current.text) writeSourceText(text);
+      if (ownsTransaction) pending.accepted = true;
+      return true;
+    } catch (error) {
+      invalidatePresetGroup();
+      rejectedCanvasChangeRef.current++;
+      canvasSource.clear();
+      setSurfaceError(error instanceof Error ? error.message : "The source changed. Reopen the preview field to edit the current slide.");
+      return false;
+    }
+  }, [canvasSource, invalidatePresetGroup, isSending, writeSourceText]);''')
+replace('''    recoverCanvasSource,
+  );
+  const readCurrentDraft''','''    recoverCanvasSource,
+  );
+  useEffect(() => {
+    // The session hook installs its subscription before this readiness marker.
+    const editor = canvasSession.editor;
+    readySessionRef.current = editor;
+    return () => { if (readySessionRef.current === editor) readySessionRef.current = null; };
+  }, [canvasSession.editor]);
+  const readCurrentDraft''')
+replace('''  // Preset apply state. The AutoApplyCard treats the list of applied
+  // presets as a permanent log; the only undo affordance it surfaces is
+  // "undo all", which restores the *very first* pre-apply snapshot. So
+  // we keep a single snapshot — taken when the list goes from empty to
+  // one — and discard it when the list goes back to empty. Cloning per
+  // entry would accumulate N-1 unused deep clones of the entire OPF.
+  const [presetToasts, setPresetToasts] = useState<ReadonlyArray<PresetAppliedToastData>>([]);
+  const [presetUndoSnapshot, setPresetUndoSnapshot] = useState<OPFDocument | null>(null);
+
+''','')
+a=text.index('  // Deterministic preset apply:')
+b=text.index('  const handleGalleryApply = useCallback(',a)
+text=text[:a]+'''  // Preflight raw source before the semantic session consumes an undo step.
+  // The one-shot token acknowledges only this exact synchronous patch callback.
+  const commitPresetDocument = useCallback((draft: AuthorDraft, nextDocument: OPFDocument, rawResult?: AuthorSource) => {
+    let pending: PresetTransaction | null = null;
+    try {
+      const editor = canvasSession.editor;
+      if (isSending || !editor || readySessionRef.current !== editor || presetTransactionRef.current
+        || sourceRef.current.text !== draft.text || sourceRef.current.format !== draft.format
+        || !sameJsonValue(editor.document, draft.document)) {
+        throw new Error("The draft changed before this preset edit could be applied. Reopen the current draft and try again.");
+      }
+      for (const document of [draft.document, nextDocument]) {
+        const checked = validateOPF(document);
+        if (!checked.valid) throw new Error(checked.errors[0]?.message ?? "Preset edit requires valid OPF.");
+      }
+      if (sameJsonValue(draft.document, nextDocument)
+        && (!rawResult || (rawResult.text === draft.text && rawResult.format === draft.format))) {
+        return { changed: false, editor, source: { text: draft.text, format: draft.format }, snapshot: editor.snapshot() };
+      }
+      let result: AuthorSource;
+      if (rawResult) {
+        if (rawResult.format !== draft.format) throw new Error("The source format changed after these presets were applied.");
+        result = { ...rawResult };
+        if (draft.format === "json") {
+          updateJsonSource(draft.text, draft.document);
+          updateJsonSource(result.text, nextDocument);
+        }
+      } else if (draft.format === "json") {
+        result = { text: updateJsonSource(draft.text, nextDocument), format: draft.format };
+      } else {
+        const converted = convert(toJsonText(nextDocument), "json", draft.format);
+        if (!converted.ok) throw new Error(converted.error);
+        result = { text: converted.text, format: draft.format };
+      }
+      const parsed = parseText(result.text, result.format);
+      if (!parsed.ok || !sameJsonValue(parsed.doc, nextDocument)) {
+        throw new Error("This preset edit cannot be represented in the current source format. Your source was kept.");
+      }
+      const expected = { text: draft.text, format: draft.format };
+      pending = {
+        token: {}, editor, before: draft.document, after: nextDocument, expected, result,
+        undoDepth: editor.snapshot().undoDepth + 1,
+        override: rawResult ? { expected, result } : undefined,
+        accepted: false,
+      };
+      const rejectedBeforeCommit = rejectedCanvasChangeRef.current;
+      presetTransactionRef.current = pending;
+      editor.applyPatch([{ op: "replace", path: "", value: nextDocument }], {
+        source: "author-preset", authorPresetTransaction: pending.token, rejectInvalid: true,
+      });
+      if (!pending.accepted || rejectedCanvasChangeRef.current !== rejectedBeforeCommit
+        || readySessionRef.current !== editor
+        || sourceRef.current.text !== result.text || sourceRef.current.format !== result.format
+        || !sameJsonValue(editor.document, nextDocument)) {
+        throw new Error("The preset edit was not accepted by the current draft. Your source was kept.");
+      }
+      setSurfaceError(null);
+      return { changed: true, editor, source: result, snapshot: editor.snapshot() };
+    } catch (error) {
+      invalidatePresetGroup();
+      setSurfaceError(error instanceof Error ? error.message : "Could not apply the preset edit.");
+      return null;
+    } finally {
+      if (presetTransactionRef.current === pending) presetTransactionRef.current = null;
+    }
+  }, [canvasSession.editor, invalidatePresetGroup, isSending]);
+
+  const handlePresetApply = useCallback(
+    (suggestion: PresetSuggestion) => {
+      if (isSending) return;
+      // An inline draft is committed before taking the group's initial source.
+      const current = readCurrentDraft();
+      if (!current?.document) return;
+      const draft: AuthorDraft = { ...current, document: current.document };
+      const previousGroup = presetGroupRef.current;
+      const group = previousGroup && matchesPresetGroup(previousGroup, draft, canvasSession.editor) ? previousGroup : null;
+      if (previousGroup && !group) invalidatePresetGroup();
+      const applied = applyPresetToOpf(draft.document, suggestion);
+      if (!applied) {
+        setSurfaceError(`Could not apply ${suggestion.label} — field is not deck-wide.`);
+        return;
+      }
+      const committed = commitPresetDocument(draft, applied.nextOpf);
+      if (!committed?.changed) return;
+      presetGroupRef.current = {
+        editor: committed.editor,
+        original: group?.original ?? { text: draft.text, format: draft.format },
+        expected: committed.source,
+        undoDepth: committed.snapshot.undoDepth,
+        redoDepth: committed.snapshot.redoDepth,
+      };
+      const toastId = `preset-${suggestion.kind}-${suggestion.id}-${Date.now().toString(36)}`;
+      setPresetToasts((toasts) => [
+        ...toasts,
+        { id: toastId, fieldPath: applied.fieldPath, label: suggestion.label, before: applied.previousValue, after: applied.nextValue },
+      ]);
+      jumpToPath(applied.fieldPath);
+    },
+    [canvasSession.editor, commitPresetDocument, invalidatePresetGroup, isSending, jumpToPath, readCurrentDraft]
+  );
+
+  const handlePresetUndoAll = useCallback(() => {
+    if (isSending || !presetGroupRef.current) return;
+    const requestedGroup = presetGroupRef.current;
+    const current = readCurrentDraft();
+    if (!current?.document) return;
+    // Committing a newer inline edit can invalidate the group synchronously.
+    const group = presetGroupRef.current;
+    if (!group || group !== requestedGroup || !matchesPresetGroup(group, current, canvasSession.editor)) {
+      invalidatePresetGroup();
+      setSurfaceError("The draft changed after these presets were applied. Your newer edits were kept.");
+      return;
+    }
+    const original = parseDocument(group.original.text, group.original.format);
+    if (!original.document) {
+      invalidatePresetGroup();
+      setSurfaceError("The original preset source is no longer valid. Your current draft was kept.");
+      return;
+    }
+    const committed = commitPresetDocument({ ...current, document: current.document }, original.document, group.original);
+    if (committed) invalidatePresetGroup();
+  }, [canvasSession.editor, commitPresetDocument, invalidatePresetGroup, isSending, readCurrentDraft]);
+
+'''+text[b:]
+(out/'author-shell-proposed.tsx').write_text(text)
+patch=''.join(difflib.unified_diff(original.splitlines(keepends=True),text.splitlines(keepends=True),fromfile='a/'+relative,tofile='b/'+relative))
+(out/'author-shell-proposed.patch').write_text(patch)
+identity={'baseCommit':'e40c287b64fcbcfb85fb4a8a50641aea8e3e54a8','productPath':str(repo/relative),'productUnchanged':(repo/relative).read_text()==original,'baseSha256':hashlib.sha256(original.encode()).hexdigest(),'proposalSha256':hashlib.sha256(text.encode()).hexdigest(),'patchSha256':hashlib.sha256(patch.encode()).hexdigest(),'patchBytes':len(patch.encode()),'status':'PROPOSAL_ONLY_NOT_APPLIED','bridgeDependency':{'path':'lib/playground/canvas-source.ts','sha256':hashlib.sha256((repo/'lib/playground/canvas-source.ts').read_bytes()).hexdigest()}}
+(out/'source-identity.json').write_text(json.dumps(identity,indent=2)+'\n')
+print(json.dumps(identity,indent=2))

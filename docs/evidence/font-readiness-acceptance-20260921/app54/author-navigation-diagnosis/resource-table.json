@@ -1,0 +1,3057 @@
+[
+  {
+    "url": "http://127.0.0.1:4325/inspector?view=source",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:44.793Z",
+    "storedMonotonicTime": 130172.529,
+    "duration": 22.549999999999997,
+    "timings": {
+      "dns": 0,
+      "connect": 0.549,
+      "ssl": 1.549,
+      "send": 0,
+      "wait": 11.608,
+      "receive": 8.844
+    },
+    "status": 200,
+    "type": "document",
+    "bodyBytes": 4030,
+    "content": {
+      "size": 17807,
+      "mimeType": "text/html; charset=utf-8",
+      "compression": 13777,
+      "_file": "resources/2fad2bd2117bdacc98b92aeb83fb7ff9cee174d0.html"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:44.825Z",
+    "storedMonotonicTime": 130508.777,
+    "duration": 26.430999999999997,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 18.857,
+      "receive": 7.574
+    },
+    "status": 200,
+    "type": "font",
+    "bodyBytes": 23108,
+    "content": {
+      "size": 23108,
+      "mimeType": "font/woff2",
+      "compression": 0,
+      "_file": "resources/0e04bb6e7b54057d64c421b959c8c22774ae632d.woff2"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:44.826Z",
+    "storedMonotonicTime": 130509.037,
+    "duration": 43.113,
+    "timings": {
+      "dns": 0.016,
+      "connect": 5.694,
+      "ssl": 6.776,
+      "send": 0,
+      "wait": 23.154,
+      "receive": 7.473
+    },
+    "status": 200,
+    "type": "font",
+    "bodyBytes": 29288,
+    "content": {
+      "size": 29288,
+      "mimeType": "font/woff2",
+      "compression": 0,
+      "_file": "resources/9d846db84c501327431670fe23b1a8ea1d2a5349.woff2"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/media/f141b5b7abe57afc-s.p.380f-mwhk0aej.woff2",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:44.826Z",
+    "storedMonotonicTime": 130509.241,
+    "duration": 40.974000000000004,
+    "timings": {
+      "dns": 0.005,
+      "connect": 1.883,
+      "ssl": 8.885,
+      "send": 0,
+      "wait": 22.16,
+      "receive": 8.041
+    },
+    "status": 200,
+    "type": "font",
+    "bodyBytes": 30948,
+    "content": {
+      "size": 30948,
+      "mimeType": "font/woff2",
+      "compression": 0,
+      "_file": "resources/d802e467f76c8c3684050394f86f8c1297ed9f62.woff2"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/22gd3kxf3rpe7.css",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:44.826Z",
+    "storedMonotonicTime": 130509.492,
+    "duration": 65.29400000000001,
+    "timings": {
+      "dns": 0,
+      "connect": 0.571,
+      "ssl": 1.571,
+      "send": 0,
+      "wait": 45.999,
+      "receive": 17.153
+    },
+    "status": 200,
+    "type": "stylesheet",
+    "bodyBytes": 1226,
+    "content": {
+      "size": 5585,
+      "mimeType": "text/css; charset=UTF-8",
+      "compression": 4359,
+      "_file": "resources/dddbf531774ba2e13e293943c3720a8feb8f1d91.css"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/27eejhbbbbdu5.css",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:44.826Z",
+    "storedMonotonicTime": 130509.691,
+    "duration": 88.50200000000001,
+    "timings": {
+      "dns": 0,
+      "connect": 0.358,
+      "ssl": 1.358,
+      "send": 0,
+      "wait": 48.089,
+      "receive": 38.697
+    },
+    "status": 200,
+    "type": "stylesheet",
+    "bodyBytes": 25856,
+    "content": {
+      "size": 169406,
+      "mimeType": "text/css; charset=UTF-8",
+      "compression": 143550,
+      "_file": "resources/3fa2ce77dd826dd4ba446bbca10ba997656365c8.css"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/0t8wtkx14z1p4.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:44.826Z",
+    "storedMonotonicTime": 130509.886,
+    "duration": 69.586,
+    "timings": {
+      "dns": 0,
+      "connect": 1.972,
+      "ssl": 2.972,
+      "send": 0,
+      "wait": 47.016,
+      "receive": 17.626
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": 2658,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 0
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/2lg71p7r83uon.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:44.826Z",
+    "storedMonotonicTime": 130510.084,
+    "duration": 84.258,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 39.635,
+      "receive": 44.623
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": 8616,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 0
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/1_cof9lyb3u2k.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:44.826Z",
+    "storedMonotonicTime": 130510.27,
+    "duration": 85.618,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 36.411,
+      "receive": 49.207
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": 8479,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 0
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/1aazrg2odntpk.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:44.826Z",
+    "storedMonotonicTime": 130510.489,
+    "duration": 145.719,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 40.439,
+      "receive": 105.28
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": 64688,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 0
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/0vrm-742zrpsd.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:44.826Z",
+    "storedMonotonicTime": 130510.684,
+    "duration": 111.474,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 35.047,
+      "receive": 76.427
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": 12564,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 0
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/0orc0k8v1dio1.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:44.826Z",
+    "storedMonotonicTime": 130510.865,
+    "duration": 134.665,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 38.248,
+      "receive": 96.417
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": 30903,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 0
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/turbopack-0fpmb8jyfwm75.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:44.826Z",
+    "storedMonotonicTime": 130511.046,
+    "duration": 135.481,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 45.455,
+      "receive": 90.026
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": 4348,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 0
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/3vf5j-ulrthcd.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:44.826Z",
+    "storedMonotonicTime": 130511.228,
+    "duration": 137.073,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 46.917,
+      "receive": 90.156
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": 10573,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 0
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/3b56xumkml7vd.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:44.826Z",
+    "storedMonotonicTime": 130511.488,
+    "duration": 143.618,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 46.258,
+      "receive": 97.36
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": 652,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 0
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/4262qb24o99aq.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:44.826Z",
+    "storedMonotonicTime": 130511.679,
+    "duration": 135.97,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 24.335,
+      "receive": 111.635
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": 830,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 0
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/0et5nsadbgx-y.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:45.049Z",
+    "storedMonotonicTime": 130567.251,
+    "duration": 31.775,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 7.604,
+      "receive": 24.171
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": 6534,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 0
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/311-vuswqo2-a.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:45.049Z",
+    "storedMonotonicTime": 130567.498,
+    "duration": 34.816,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 8.007,
+      "receive": 26.809
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": 10634,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 0
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/3cpae2nm-old9.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:45.049Z",
+    "storedMonotonicTime": 130567.71,
+    "duration": 42.436,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 11.836,
+      "receive": 30.6
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": 19761,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 0
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/1234qwoq6f9kf.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:45.049Z",
+    "storedMonotonicTime": 130567.917,
+    "duration": 47.768,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 13.597,
+      "receive": 34.171
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": 24366,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 0
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/1mjvexydvmjd9.css",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:45.051Z",
+    "storedMonotonicTime": 130569.388,
+    "duration": 50.791,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 29.653,
+      "receive": 21.138
+    },
+    "status": 200,
+    "type": "stylesheet",
+    "bodyBytes": 7400,
+    "content": {
+      "size": 45252,
+      "mimeType": "text/css; charset=UTF-8",
+      "compression": 37852,
+      "_file": "resources/21b210e2e6a98208c1166fa75a4dc7ceb6790836.css"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/0wrvr411g1-ys.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:45.050Z",
+    "storedMonotonicTime": 130568.152,
+    "duration": 38.519,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 14.475,
+      "receive": 24.044
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": 8643,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 0
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/0z_0vp17ygh03.css",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:45.051Z",
+    "storedMonotonicTime": 130569.59,
+    "duration": 51.068,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 26.709,
+      "receive": 24.359
+    },
+    "status": 200,
+    "type": "stylesheet",
+    "bodyBytes": 976,
+    "content": {
+      "size": 4126,
+      "mimeType": "text/css; charset=UTF-8",
+      "compression": 3150,
+      "_file": "resources/3ccbc4ffc0494d506dc54e013f1ef80eec8a061e.css"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/21fu92xs48_eb.css",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:45.052Z",
+    "storedMonotonicTime": 130570.009,
+    "duration": 88.58500000000001,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 33.795,
+      "receive": 54.79
+    },
+    "status": 200,
+    "type": "stylesheet",
+    "bodyBytes": 5159,
+    "content": {
+      "size": 30179,
+      "mimeType": "text/css; charset=UTF-8",
+      "compression": 25020,
+      "_file": "resources/0ea10ee4499b94371b5402aa9b19740c3a260ba3.css"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/2bhvda6t7e018.css",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:45.051Z",
+    "storedMonotonicTime": 130569.795,
+    "duration": 97.474,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 26.182,
+      "receive": 71.292
+    },
+    "status": 200,
+    "type": "stylesheet",
+    "bodyBytes": 13145,
+    "content": {
+      "size": 82368,
+      "mimeType": "text/css; charset=UTF-8",
+      "compression": 69223,
+      "_file": "resources/c5ef7e053e554d72aad44517549164772e166edd.css"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/brand/mark-favicon.svg",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:45.204Z",
+    "storedMonotonicTime": 130602.742,
+    "duration": 290.765,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 289.96,
+      "receive": 0.805
+    },
+    "status": 200,
+    "type": "other",
+    "bodyBytes": 404,
+    "content": {
+      "size": 404,
+      "mimeType": "image/svg+xml",
+      "compression": 0,
+      "_file": "resources/6fcc4281d0d88a1286e27ccdaeb988e17f0c90cf.svg"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/2iq_21zaja8ub.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:45.050Z",
+    "storedMonotonicTime": 130568.565,
+    "duration": 497.91,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 75.855,
+      "receive": 422.055
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": 110608,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 0
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/437js-3agrqnr.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:45.051Z",
+    "storedMonotonicTime": 130569.186,
+    "duration": 608.273,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 41.606,
+      "receive": 566.667
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": 164824,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 0
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/3o74fxjotl7tq.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:45.050Z",
+    "storedMonotonicTime": 130568.983,
+    "duration": 790.262,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 71.959,
+      "receive": 718.303
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": 283217,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 0
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/3zz3nrvino7dx.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:45.050Z",
+    "storedMonotonicTime": 130568.776,
+    "duration": 891.8860000000001,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 75.282,
+      "receive": 816.604
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": 308794,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 0
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/1ohzbu50qhghv.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:45.050Z",
+    "storedMonotonicTime": 130568.361,
+    "duration": 1169.908,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 17.859,
+      "receive": 1152.049
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": 616643,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 0
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/0ve7wx2-oz5rx.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:46.792Z",
+    "storedMonotonicTime": 132730.673,
+    "duration": 924.899,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 860.212,
+      "receive": 64.687
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": 217,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 0
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/38mijikn5je_6.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:46.792Z",
+    "storedMonotonicTime": 132730.817,
+    "duration": 975.82,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 878.086,
+      "receive": 97.734
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": 7588,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 0
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/422ksq6gx46et.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:46.831Z",
+    "storedMonotonicTime": 132733.682,
+    "duration": 958.7289999999999,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 898.751,
+      "receive": 59.978
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": 6496,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 0
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/opf-fonts/manifest.json",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:46.791Z",
+    "storedMonotonicTime": 132727.683,
+    "duration": 1027.936,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 874.703,
+      "receive": 153.233
+    },
+    "status": 200,
+    "type": "fetch",
+    "bodyBytes": 5632,
+    "content": {
+      "size": 156810,
+      "mimeType": "application/json; charset=UTF-8",
+      "compression": 151178,
+      "_file": "resources/223ff79aa3cb8fd93dc06ab17bf4fe31a3edf811.json"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/26jkn2gdp_xr4.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:46.793Z",
+    "storedMonotonicTime": 132730.946,
+    "duration": 1047.1970000000001,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 895.368,
+      "receive": 151.829
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": 22937,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 0
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/0xy6-r0-x2ine.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:46.831Z",
+    "storedMonotonicTime": 132733.867,
+    "duration": 1241.095,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 215.59,
+      "receive": 1025.505
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": 8668,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 0
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/media/codicon.2b_iqd4rvjgu4.ttf",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:47.427Z",
+    "storedMonotonicTime": 132747.263,
+    "duration": 946.663,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 169.841,
+      "receive": 776.822
+    },
+    "status": 200,
+    "type": "font",
+    "bodyBytes": 69150,
+    "content": {
+      "size": 140956,
+      "mimeType": "font/ttf",
+      "compression": 71806,
+      "_file": "resources/2355904e60f98d3625c9c57bd65f1f132a4330d5.ttf"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/turbopack-121o4tz0z17cj.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:47.940Z",
+    "storedMonotonicTime": 133146.653,
+    "duration": 772.208,
+    "timings": {
+      "dns": 0.016,
+      "connect": 0.532,
+      "ssl": 1.704,
+      "send": 0,
+      "wait": 649.581,
+      "receive": 120.375
+    },
+    "status": 200,
+    "type": "other",
+    "bodyBytes": 4294,
+    "content": {
+      "size": 10881,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 6587,
+      "_file": "resources/6de59a98739576ecd108462abeb81d05ee5f6653.js"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/2iq_21zaja8ub.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:48.712Z",
+    "storedMonotonicTime": 133926.245,
+    "duration": 3.925,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 0.054,
+      "receive": 3.871
+    },
+    "status": 200,
+    "type": "other",
+    "bodyBytes": -305,
+    "content": {
+      "size": 358311,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 358616,
+      "_file": "resources/757827a9ddcbcab2489e9b1e7153713a11e5f9f1.js"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/1q_0xltm0i83a.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:48.722Z",
+    "storedMonotonicTime": 133926.456,
+    "duration": 543.7810000000001,
+    "timings": {
+      "dns": 0.269,
+      "connect": 0.528,
+      "ssl": 1.906,
+      "send": 0,
+      "wait": 510.33,
+      "receive": 30.748
+    },
+    "status": 200,
+    "type": "other",
+    "bodyBytes": 8309,
+    "content": {
+      "size": 25825,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 17516,
+      "_file": "resources/c85e973f74ca776bebae2ef59ac9d71c75bae222.js"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/turbopack-worker-2ru9m5gbh1na6.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:47.322Z",
+    "storedMonotonicTime": 132734.125,
+    "duration": 1973.333,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": -1,
+      "receive": 1973.333
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": 0,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 0
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/3bw4dnn868f48.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:46.793Z",
+    "storedMonotonicTime": 132731.073,
+    "duration": 2560.833,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 896.905,
+      "receive": 1663.928
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": 193146,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 0
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/opf-fonts/Caladea-400-normal-59faf27a90de.ttf",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:47.820Z",
+    "storedMonotonicTime": 133070.209,
+    "duration": 1073.4209999999998,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 625.276,
+      "receive": 448.145
+    },
+    "status": 200,
+    "type": "fetch",
+    "bodyBytes": 39955,
+    "content": {
+      "size": 77020,
+      "mimeType": "font/ttf",
+      "compression": 37065,
+      "_file": "resources/053e87121a917954714270dbff227d45943e3004.ttf"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/opf-fonts/Caladea-400-italic-669e65b265d4.ttf",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:47.820Z",
+    "storedMonotonicTime": 133070.247,
+    "duration": 969.1489999999999,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 523.232,
+      "receive": 445.917
+    },
+    "status": 200,
+    "type": "fetch",
+    "bodyBytes": 41300,
+    "content": {
+      "size": 77336,
+      "mimeType": "font/ttf",
+      "compression": 36036,
+      "_file": "resources/8da3f343cb7bf84660d9e4afe1ee36286596c7c0.ttf"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/turbopack-3rzg-u1a4gt0r.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:48.157Z",
+    "storedMonotonicTime": 133360.227,
+    "duration": 1007.949,
+    "timings": {
+      "dns": 0.021,
+      "connect": 0.514,
+      "ssl": 1.677,
+      "send": 0,
+      "wait": 599.069,
+      "receive": 406.668
+    },
+    "status": 200,
+    "type": "other",
+    "bodyBytes": 4323,
+    "content": {
+      "size": 10947,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 6624,
+      "_file": "resources/600d83e6c6215160bc16556bb2d833b680bae10f.js"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/2iq_21zaja8ub.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:49.165Z",
+    "storedMonotonicTime": 134378.087,
+    "duration": 3.633,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 0.056,
+      "receive": 3.577
+    },
+    "status": 200,
+    "type": "other",
+    "bodyBytes": -305,
+    "content": {
+      "size": 358311,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 358616,
+      "_file": "resources/757827a9ddcbcab2489e9b1e7153713a11e5f9f1.js"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/opf-fonts/Caladea-700-normal-11d1e1dc461d.ttf",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:47.820Z",
+    "storedMonotonicTime": 133070.326,
+    "duration": 580.982,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 172.358,
+      "receive": 408.624
+    },
+    "status": 200,
+    "type": "fetch",
+    "bodyBytes": 40207,
+    "content": {
+      "size": 79648,
+      "mimeType": "font/ttf",
+      "compression": 39441,
+      "_file": "resources/ad4a921d240d42e592779fbf33c853f32a115917.ttf"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/opf-fonts/Caladea-700-italic-93d7c2003fe3.ttf",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:47.821Z",
+    "storedMonotonicTime": 133070.381,
+    "duration": 548.203,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 480.567,
+      "receive": 67.636
+    },
+    "status": 200,
+    "type": "fetch",
+    "bodyBytes": 41618,
+    "content": {
+      "size": 78792,
+      "mimeType": "font/ttf",
+      "compression": 37174,
+      "_file": "resources/ed62adade719959afdb680e0387b04b6795760a2.ttf"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/0y2w099d5btyb.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:49.174Z",
+    "storedMonotonicTime": 134379.063,
+    "duration": 520.164,
+    "timings": {
+      "dns": 0.024,
+      "connect": 1.301,
+      "ssl": 2.429,
+      "send": 0,
+      "wait": 159.774,
+      "receive": 356.636
+    },
+    "status": 200,
+    "type": "other",
+    "bodyBytes": 22756,
+    "content": {
+      "size": 84520,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 61764,
+      "_file": "resources/c9418472e6d33237f473b19ee3354cd69e6299c6.js"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/opf-fonts/Carlito-400-normal-ca019755404c.ttf",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:47.820Z",
+    "storedMonotonicTime": 133069.997,
+    "duration": 2139.6009999999997,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 318.27,
+      "receive": 1821.331
+    },
+    "status": 200,
+    "type": "fetch",
+    "bodyBytes": 254240,
+    "content": {
+      "size": 593908,
+      "mimeType": "font/ttf",
+      "compression": 339668,
+      "_file": "resources/f093c96d46e0456704585ab7974e06afd42c0d19.ttf"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/opf-fonts/Carlito-400-italic-074cd1b89d53.ttf",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:47.820Z",
+    "storedMonotonicTime": 133070.077,
+    "duration": 2127.6929999999998,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 310.46,
+      "receive": 1817.233
+    },
+    "status": 200,
+    "type": "fetch",
+    "bodyBytes": 265941,
+    "content": {
+      "size": 580792,
+      "mimeType": "font/ttf",
+      "compression": 314851,
+      "_file": "resources/70d528b3510f4ef53974ba8f5d82392c850acfd5.ttf"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/2z-vsxbd2m96o.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:49.704Z",
+    "storedMonotonicTime": 134926.714,
+    "duration": 180.781,
+    "timings": {
+      "dns": 0.024,
+      "connect": 9.789,
+      "ssl": 10.954,
+      "send": 0,
+      "wait": 104.07,
+      "receive": 55.944
+    },
+    "status": 200,
+    "type": "other",
+    "bodyBytes": 13132,
+    "content": {
+      "size": 43313,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 30181,
+      "_file": "resources/a4c71b66573ba174f1a6eb49cf86400a94234d15.js"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/0uxx1pvsrmo_9.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:49.878Z",
+    "storedMonotonicTime": 135086.06,
+    "duration": 159.694,
+    "timings": {
+      "dns": 0.266,
+      "connect": 1.225,
+      "ssl": 2.625,
+      "send": 0,
+      "wait": 134.43,
+      "receive": 21.148
+    },
+    "status": 200,
+    "type": "other",
+    "bodyBytes": 10103,
+    "content": {
+      "size": 27719,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 17616,
+      "_file": "resources/8caccb9b5b76f34faaa67d204ce1cc2c6d23e557.js"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/turbopack-worker-2ru9m5gbh1na6.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:48.124Z",
+    "storedMonotonicTime": 133348.125,
+    "duration": 1939.036,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": -1,
+      "receive": 1939.036
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": -300,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 300
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/opf-fonts/Carlito-700-normal-51edbfa32d8a.ttf",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:47.820Z",
+    "storedMonotonicTime": 133070.126,
+    "duration": 2250.355,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 669.988,
+      "receive": 1580.367
+    },
+    "status": 200,
+    "type": "fetch",
+    "bodyBytes": 265434,
+    "content": {
+      "size": 648128,
+      "mimeType": "font/ttf",
+      "compression": 382694,
+      "_file": "resources/ab7b60e2097a90cc0e4fb539f5d1e4466d09fe64.ttf"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/opf-fonts/Arimo-400-normal-88cc899855d3.ttf",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:47.821Z",
+    "storedMonotonicTime": 133070.422,
+    "duration": 1108.312,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 414.508,
+      "receive": 693.804
+    },
+    "status": 200,
+    "type": "fetch",
+    "bodyBytes": 189704,
+    "content": {
+      "size": 318320,
+      "mimeType": "font/ttf",
+      "compression": 128616,
+      "_file": "resources/9f01d3b4ade3186f9a454dbd7aca44180107bd9d.ttf"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/opf-fonts/Carlito-700-italic-25f5672c1985.ttf",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:47.820Z",
+    "storedMonotonicTime": 133070.168,
+    "duration": 2401.494,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 662.997,
+      "receive": 1738.497
+    },
+    "status": 200,
+    "type": "fetch",
+    "bodyBytes": 293614,
+    "content": {
+      "size": 745192,
+      "mimeType": "font/ttf",
+      "compression": 451578,
+      "_file": "resources/1b529eefcf5ac6b08c63fcbff920ae7981016493.ttf"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/opf-fonts/Arimo-700-normal-ec96ac9fdd94.ttf",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:47.821Z",
+    "storedMonotonicTime": 133070.499,
+    "duration": 844.995,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 118.623,
+      "receive": 726.372
+    },
+    "status": 200,
+    "type": "fetch",
+    "bodyBytes": 189793,
+    "content": {
+      "size": 318844,
+      "mimeType": "font/ttf",
+      "compression": 129051,
+      "_file": "resources/4013af4c63ab0038cc79de79234a10e28becf2bf.ttf"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/opf-fonts/Arimo-400-italic-6bd2c6a6fa87.ttf",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:47.821Z",
+    "storedMonotonicTime": 133070.461,
+    "duration": 890.881,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 116.366,
+      "receive": 774.515
+    },
+    "status": 200,
+    "type": "fetch",
+    "bodyBytes": 204485,
+    "content": {
+      "size": 340984,
+      "mimeType": "font/ttf",
+      "compression": 136499,
+      "_file": "resources/7d280ea4501c8402ad1e7c3cf416e4160ccc6b4e.ttf"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/opf-fonts/Arimo-700-italic-b42b19c10bf5.ttf",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:47.821Z",
+    "storedMonotonicTime": 133070.535,
+    "duration": 895.111,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 127.057,
+      "receive": 768.054
+    },
+    "status": 200,
+    "type": "fetch",
+    "bodyBytes": 204716,
+    "content": {
+      "size": 342368,
+      "mimeType": "font/ttf",
+      "compression": 137652,
+      "_file": "resources/f8b80dc9feb01c0ad80fc682acfb660323a6c1d7.ttf"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/opf-fonts/Cousine-400-normal-ca2264d6750d.ttf",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:47.821Z",
+    "storedMonotonicTime": 133071.524,
+    "duration": 751.032,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 373.295,
+      "receive": 377.737
+    },
+    "status": 200,
+    "type": "fetch",
+    "bodyBytes": 161200,
+    "content": {
+      "size": 289556,
+      "mimeType": "font/ttf",
+      "compression": 128356,
+      "_file": "resources/d541492fee8181e488d148ff6aaf09af2778fb43.ttf"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/opf-fonts/Gelasio-400-normal-44aae47442ad.ttf",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:47.822Z",
+    "storedMonotonicTime": 133071.693,
+    "duration": 304.006,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 138.291,
+      "receive": 165.715
+    },
+    "status": 200,
+    "type": "fetch",
+    "bodyBytes": 55575,
+    "content": {
+      "size": 105512,
+      "mimeType": "font/ttf",
+      "compression": 49937,
+      "_file": "resources/1c72228318a02147dbb164de6233356f1980009a.ttf"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/opf-fonts/Tinos-400-normal-924ef269e73d.ttf",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:47.821Z",
+    "storedMonotonicTime": 133070.574,
+    "duration": 1062.346,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 150.105,
+      "receive": 912.241
+    },
+    "status": 200,
+    "type": "fetch",
+    "bodyBytes": 271993,
+    "content": {
+      "size": 508752,
+      "mimeType": "font/ttf",
+      "compression": 236759,
+      "_file": "resources/425c16d5270227521adafdb7193d0439785d239f.ttf"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/opf-fonts/Gelasio-400-italic-2b24b3d41c06.ttf",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:47.822Z",
+    "storedMonotonicTime": 133072.675,
+    "duration": 318.63300000000004,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 131.586,
+      "receive": 187.047
+    },
+    "status": 200,
+    "type": "fetch",
+    "bodyBytes": 60101,
+    "content": {
+      "size": 107376,
+      "mimeType": "font/ttf",
+      "compression": 47275,
+      "_file": "resources/015009adc36c54c0f95af9c03ed60d0ef0967c56.ttf"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/opf-fonts/Gelasio-700-normal-fade86eca522.ttf",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:47.822Z",
+    "storedMonotonicTime": 133072.757,
+    "duration": 294.112,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 105.163,
+      "receive": 188.949
+    },
+    "status": 200,
+    "type": "fetch",
+    "bodyBytes": 55946,
+    "content": {
+      "size": 105776,
+      "mimeType": "font/ttf",
+      "compression": 49830,
+      "_file": "resources/5d60d897c14ea957c87538480d879370cd75e553.ttf"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/opf-fonts/Cousine-400-italic-f1626b7287db.ttf",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:47.821Z",
+    "storedMonotonicTime": 133071.564,
+    "duration": 825.6020000000001,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 396.023,
+      "receive": 429.579
+    },
+    "status": 200,
+    "type": "fetch",
+    "bodyBytes": 171425,
+    "content": {
+      "size": 298680,
+      "mimeType": "font/ttf",
+      "compression": 127255,
+      "_file": "resources/3c219421af6a03f9d53be167fdcf2e6fde9d9160.ttf"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/opf-fonts/Gelasio-700-italic-24f1cb5cf5f7.ttf",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:47.822Z",
+    "storedMonotonicTime": 133072.808,
+    "duration": 295.12199999999996,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 100.112,
+      "receive": 195.01
+    },
+    "status": 200,
+    "type": "fetch",
+    "bodyBytes": 60579,
+    "content": {
+      "size": 107452,
+      "mimeType": "font/ttf",
+      "compression": 46873,
+      "_file": "resources/66af56fd30cbb6febb4f983d062592cadce200a0.ttf"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/opf-fonts/Cousine-700-normal-f03c46c4bc5c.ttf",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:47.822Z",
+    "storedMonotonicTime": 133071.602,
+    "duration": 726.9970000000001,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 322.333,
+      "receive": 404.664
+    },
+    "status": 200,
+    "type": "fetch",
+    "bodyBytes": 162665,
+    "content": {
+      "size": 290500,
+      "mimeType": "font/ttf",
+      "compression": 127835,
+      "_file": "resources/75564d4c6da1f0046718fe0f21bf72855351108e.ttf"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/opf-fonts/Tinos-400-italic-4a52de5bcf70.ttf",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:47.821Z",
+    "storedMonotonicTime": 133071.356,
+    "duration": 1149.86,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 147.605,
+      "receive": 1002.255
+    },
+    "status": 200,
+    "type": "fetch",
+    "bodyBytes": 300684,
+    "content": {
+      "size": 549824,
+      "mimeType": "font/ttf",
+      "compression": 249140,
+      "_file": "resources/6fba1ed0f330dea0f8107a05272e02a5dbc58a09.ttf"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/opf-fonts/Tinos-700-normal-576a19b5dc02.ttf",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:47.821Z",
+    "storedMonotonicTime": 133071.434,
+    "duration": 1167.292,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 140.702,
+      "receive": 1026.59
+    },
+    "status": 200,
+    "type": "fetch",
+    "bodyBytes": 296526,
+    "content": {
+      "size": 583484,
+      "mimeType": "font/ttf",
+      "compression": 286958,
+      "_file": "resources/cc6b62dd5c5e11d2dd770e971698bf19fccbc756.ttf"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/opf-fonts/Cousine-700-italic-acb798f3629c.ttf",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:47.822Z",
+    "storedMonotonicTime": 133071.648,
+    "duration": 620.667,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 162.336,
+      "receive": 458.331
+    },
+    "status": 200,
+    "type": "fetch",
+    "bodyBytes": 172500,
+    "content": {
+      "size": 300160,
+      "mimeType": "font/ttf",
+      "compression": 127660,
+      "_file": "resources/6ce54d6f22efe618cd902a8bcac26bda45fc20aa.ttf"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/opf-fonts/Tinos-700-italic-10c90ef7896d.ttf",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:47.821Z",
+    "storedMonotonicTime": 133071.481,
+    "duration": 1169.066,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 294.244,
+      "receive": 874.822
+    },
+    "status": 200,
+    "type": "fetch",
+    "bodyBytes": 302960,
+    "content": {
+      "size": 563688,
+      "mimeType": "font/ttf",
+      "compression": 260728,
+      "_file": "resources/49f1bfe0efecaf151d98a23b6e9a3c708676d5e1.ttf"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/opf-fonts/Roboto-400-normal-15256405ecb0.ttf",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:47.822Z",
+    "storedMonotonicTime": 133072.851,
+    "duration": 427.73,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 199.487,
+      "receive": 228.243
+    },
+    "status": 200,
+    "type": "fetch",
+    "bodyBytes": 94801,
+    "content": {
+      "size": 159108,
+      "mimeType": "font/ttf",
+      "compression": 64307,
+      "_file": "resources/cb6cc5710764b9f06b8d8c923f961e3c1ceb7a59.ttf"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/opf-fonts/Roboto-Medium-500-normal-79343dc641a2.ttf",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:47.822Z",
+    "storedMonotonicTime": 133072.888,
+    "duration": 353.664,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 128.558,
+      "receive": 225.106
+    },
+    "status": 200,
+    "type": "fetch",
+    "bodyBytes": 96690,
+    "content": {
+      "size": 159296,
+      "mimeType": "font/ttf",
+      "compression": 62606,
+      "_file": "resources/f81633398187756a347bc6d43aad7a8fc356171b.ttf"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/opf-fonts/Roboto-SemiBold-600-normal-32fe2086b0e5.ttf",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:47.822Z",
+    "storedMonotonicTime": 133072.925,
+    "duration": 344.18,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 121.695,
+      "receive": 222.485
+    },
+    "status": 200,
+    "type": "fetch",
+    "bodyBytes": 96902,
+    "content": {
+      "size": 159876,
+      "mimeType": "font/ttf",
+      "compression": 62974,
+      "_file": "resources/0e6b2ab8d1919b278a764ae7a884796c75fa9c49.ttf"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/opf-fonts/Roboto-700-normal-4aaf8c5b661a.ttf",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:47.822Z",
+    "storedMonotonicTime": 133072.969,
+    "duration": 362.02700000000004,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 103.85,
+      "receive": 258.177
+    },
+    "status": 200,
+    "type": "fetch",
+    "bodyBytes": 96975,
+    "content": {
+      "size": 159900,
+      "mimeType": "font/ttf",
+      "compression": 62925,
+      "_file": "resources/3e455f517354a45807648fbd3d71adbab2f4e905.ttf"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/opf-fonts/Roboto-Mono-400-normal-e4bf45837847.ttf",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:47.823Z",
+    "storedMonotonicTime": 133073.114,
+    "duration": 317.693,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 184.337,
+      "receive": 133.356
+    },
+    "status": 200,
+    "type": "fetch",
+    "bodyBytes": 54178,
+    "content": {
+      "size": 87540,
+      "mimeType": "font/ttf",
+      "compression": 33362,
+      "_file": "resources/8e9ef8e1d8d2f0796179f2e6197abf3b4b130e79.ttf"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/opf-fonts/Roboto-ExtraBold-800-normal-43d5ce98c583.ttf",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:47.822Z",
+    "storedMonotonicTime": 133073.007,
+    "duration": 363.16,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 101.579,
+      "receive": 261.581
+    },
+    "status": 200,
+    "type": "fetch",
+    "bodyBytes": 97037,
+    "content": {
+      "size": 160012,
+      "mimeType": "font/ttf",
+      "compression": 62975,
+      "_file": "resources/0bece58fb4b50d007a69fdcb5b117bda8706995e.ttf"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/opf-fonts/Roboto-400-italic-6a372c348dc2.ttf",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:47.823Z",
+    "storedMonotonicTime": 133073.042,
+    "duration": 364.62,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 172.097,
+      "receive": 192.523
+    },
+    "status": 200,
+    "type": "fetch",
+    "bodyBytes": 102350,
+    "content": {
+      "size": 165268,
+      "mimeType": "font/ttf",
+      "compression": 62918,
+      "_file": "resources/d1e390abd4e0a9b22ec0a48b543cb6d6c2d6360a.ttf"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/opf-fonts/Roboto-700-italic-c6a5e7c224d3.ttf",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:47.823Z",
+    "storedMonotonicTime": 133073.078,
+    "duration": 352.414,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 160.01,
+      "receive": 192.404
+    },
+    "status": 200,
+    "type": "fetch",
+    "bodyBytes": 104672,
+    "content": {
+      "size": 166256,
+      "mimeType": "font/ttf",
+      "compression": 61584,
+      "_file": "resources/8ab33235088894915a1160756fc3bdb72eadc3a1.ttf"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/opf-fonts/Roboto-Mono-700-normal-92649d819cc4.ttf",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:47.823Z",
+    "storedMonotonicTime": 133073.15,
+    "duration": 273.83299999999997,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 171.152,
+      "receive": 102.681
+    },
+    "status": 200,
+    "type": "fetch",
+    "bodyBytes": 54525,
+    "content": {
+      "size": 87696,
+      "mimeType": "font/ttf",
+      "compression": 33171,
+      "_file": "resources/00db4250d0c2598f636ca0e363c0aa0bc391311c.ttf"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:54.938Z",
+    "storedMonotonicTime": 148103.583,
+    "duration": 1.081,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": -1,
+      "receive": 1.081
+    },
+    "status": 200,
+    "type": "font",
+    "bodyBytes": -300,
+    "content": {
+      "size": -1,
+      "mimeType": "font/woff2",
+      "compression": 300
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:54.938Z",
+    "storedMonotonicTime": 148104.065,
+    "duration": 1.06,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": -1,
+      "receive": 1.06
+    },
+    "status": 200,
+    "type": "font",
+    "bodyBytes": -300,
+    "content": {
+      "size": -1,
+      "mimeType": "font/woff2",
+      "compression": 300
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/media/f141b5b7abe57afc-s.p.380f-mwhk0aej.woff2",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:54.938Z",
+    "storedMonotonicTime": 148104.321,
+    "duration": 1.045,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": -1,
+      "receive": 1.045
+    },
+    "status": 200,
+    "type": "font",
+    "bodyBytes": -300,
+    "content": {
+      "size": -1,
+      "mimeType": "font/woff2",
+      "compression": 300
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/22gd3kxf3rpe7.css",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:54.938Z",
+    "storedMonotonicTime": 148104.56,
+    "duration": 1.047,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": -1,
+      "receive": 1.047
+    },
+    "status": 200,
+    "type": "stylesheet",
+    "bodyBytes": -365,
+    "content": {
+      "size": 5585,
+      "mimeType": "text/css; charset=UTF-8",
+      "compression": 5950,
+      "_file": "resources/dddbf531774ba2e13e293943c3720a8feb8f1d91.css"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/27eejhbbbbdu5.css",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:54.939Z",
+    "storedMonotonicTime": 148104.796,
+    "duration": 1.055,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": -1,
+      "receive": 1.055
+    },
+    "status": 200,
+    "type": "stylesheet",
+    "bodyBytes": -366,
+    "content": {
+      "size": 169406,
+      "mimeType": "text/css; charset=UTF-8",
+      "compression": 169772,
+      "_file": "resources/3fa2ce77dd826dd4ba446bbca10ba997656365c8.css"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/0t8wtkx14z1p4.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:54.939Z",
+    "storedMonotonicTime": 148104.988,
+    "duration": 1.048,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": -1,
+      "receive": 1.048
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": -379,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 379
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/2lg71p7r83uon.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:54.939Z",
+    "storedMonotonicTime": 148105.233,
+    "duration": 1.052,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": -1,
+      "receive": 1.052
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": -379,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 379
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/1_cof9lyb3u2k.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:54.939Z",
+    "storedMonotonicTime": 148105.454,
+    "duration": 1.047,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": -1,
+      "receive": 1.047
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": -379,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 379
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/1aazrg2odntpk.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:54.939Z",
+    "storedMonotonicTime": 148105.666,
+    "duration": 1.044,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": -1,
+      "receive": 1.044
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": -380,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 380
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/0vrm-742zrpsd.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:54.939Z",
+    "storedMonotonicTime": 148105.879,
+    "duration": 1.045,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": -1,
+      "receive": 1.045
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": -379,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 379
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/0orc0k8v1dio1.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:54.939Z",
+    "storedMonotonicTime": 148106.094,
+    "duration": 1.049,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": -1,
+      "receive": 1.049
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": -380,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 380
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/turbopack-0fpmb8jyfwm75.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:54.939Z",
+    "storedMonotonicTime": 148106.281,
+    "duration": 1.047,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": -1,
+      "receive": 1.047
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": -379,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 379
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/3vf5j-ulrthcd.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:54.939Z",
+    "storedMonotonicTime": 148106.475,
+    "duration": 1.045,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": -1,
+      "receive": 1.045
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": -379,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 379
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/4262qb24o99aq.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:54.939Z",
+    "storedMonotonicTime": 148106.648,
+    "duration": 1.047,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": -1,
+      "receive": 1.047
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": -347,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 347
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/author",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:54.609Z",
+    "storedMonotonicTime": 139964.557,
+    "duration": 262.687,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 234.263,
+      "receive": 28.424
+    },
+    "status": 200,
+    "type": "document",
+    "bodyBytes": 3569,
+    "content": {
+      "size": 15481,
+      "mimeType": "text/html; charset=utf-8",
+      "compression": 11912,
+      "_file": "resources/f4902a6edd9f49225bdbc37ebceeeb2ed05457ad.html"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/26gjk35c76d3p.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:54.939Z",
+    "storedMonotonicTime": 148106.871,
+    "duration": 8061.943,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 8039.856,
+      "receive": 22.087
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": 766,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 0
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/311-vuswqo2-a.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:09:03.010Z",
+    "storedMonotonicTime": 148457.059,
+    "duration": 1.132,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": -1,
+      "receive": 1.132
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": -379,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 379
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/1234qwoq6f9kf.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:09:03.011Z",
+    "storedMonotonicTime": 148458.415,
+    "duration": 1.121,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": -1,
+      "receive": 1.121
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": -380,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 380
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/0wrvr411g1-ys.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:09:03.012Z",
+    "storedMonotonicTime": 148459.881,
+    "duration": 1.125,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": -1,
+      "receive": 1.125
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": -379,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 379
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/3zz3nrvino7dx.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:09:03.012Z",
+    "storedMonotonicTime": 148461.058,
+    "duration": 1.121,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": -1,
+      "receive": 1.121
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": -381,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 381
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/3o74fxjotl7tq.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:09:03.013Z",
+    "storedMonotonicTime": 148462.254,
+    "duration": 1.12,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": -1,
+      "receive": 1.12
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": -380,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 380
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/1ohzbu50qhghv.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:09:03.013Z",
+    "storedMonotonicTime": 148463.807,
+    "duration": 1.116,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": -1,
+      "receive": 1.116
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": -381,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 381
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/437js-3agrqnr.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:09:03.013Z",
+    "storedMonotonicTime": 148464.705,
+    "duration": 1.108,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": -1,
+      "receive": 1.108
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": -380,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 380
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/2iq_21zaja8ub.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:09:03.014Z",
+    "storedMonotonicTime": 148507.054,
+    "duration": 1.117,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": -1,
+      "receive": 1.117
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": -380,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 380
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/1mjvexydvmjd9.css",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:09:03.015Z",
+    "storedMonotonicTime": 148509.243,
+    "duration": 1.12,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": -1,
+      "receive": 1.12
+    },
+    "status": 200,
+    "type": "stylesheet",
+    "bodyBytes": -365,
+    "content": {
+      "size": 45252,
+      "mimeType": "text/css; charset=UTF-8",
+      "compression": 45617,
+      "_file": "resources/21b210e2e6a98208c1166fa75a4dc7ceb6790836.css"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/0z_0vp17ygh03.css",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:09:03.015Z",
+    "storedMonotonicTime": 148510.189,
+    "duration": 1.111,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": -1,
+      "receive": 1.111
+    },
+    "status": 200,
+    "type": "stylesheet",
+    "bodyBytes": -365,
+    "content": {
+      "size": 4126,
+      "mimeType": "text/css; charset=UTF-8",
+      "compression": 4491,
+      "_file": "resources/3ccbc4ffc0494d506dc54e013f1ef80eec8a061e.css"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/2bhvda6t7e018.css",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:09:03.015Z",
+    "storedMonotonicTime": 148511.11,
+    "duration": 1.11,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": -1,
+      "receive": 1.11
+    },
+    "status": 200,
+    "type": "stylesheet",
+    "bodyBytes": -366,
+    "content": {
+      "size": 82368,
+      "mimeType": "text/css; charset=UTF-8",
+      "compression": 82734,
+      "_file": "resources/c5ef7e053e554d72aad44517549164772e166edd.css"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/21fu92xs48_eb.css",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:09:03.015Z",
+    "storedMonotonicTime": 148511.938,
+    "duration": 1.119,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": -1,
+      "receive": 1.119
+    },
+    "status": 200,
+    "type": "stylesheet",
+    "bodyBytes": -365,
+    "content": {
+      "size": 30179,
+      "mimeType": "text/css; charset=UTF-8",
+      "compression": 30544,
+      "_file": "resources/0ea10ee4499b94371b5402aa9b19740c3a260ba3.css"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/media/codicon.2b_iqd4rvjgu4.ttf",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:09:03.035Z",
+    "storedMonotonicTime": 148527.139,
+    "duration": 1.1,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": -1,
+      "receive": 1.1
+    },
+    "status": 200,
+    "type": "font",
+    "bodyBytes": -351,
+    "content": {
+      "size": -1,
+      "mimeType": "font/ttf",
+      "compression": 351
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/23o-wnub_iyw_.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:09:03.010Z",
+    "storedMonotonicTime": 148455.604,
+    "duration": 83.106,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 2.684,
+      "receive": 80.422
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": 12877,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 0
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/0u_4hnhrpiq17.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:09:03.010Z",
+    "storedMonotonicTime": 148455.992,
+    "duration": 90.099,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 5.039,
+      "receive": 85.06
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": 9440,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 0
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/3a3z80dbstg4d.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:09:03.010Z",
+    "storedMonotonicTime": 148456.282,
+    "duration": 265.641,
+    "timings": {
+      "dns": 0.016,
+      "connect": 87.552,
+      "ssl": 88.634,
+      "send": 0,
+      "wait": 4.055,
+      "receive": 85.384
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": 16398,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 0
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/3br7bg9rhaxlo.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:09:03.010Z",
+    "storedMonotonicTime": 148456.751,
+    "duration": 199.017,
+    "timings": {
+      "dns": 0.019,
+      "connect": 17.511,
+      "ssl": 18.703,
+      "send": 0,
+      "wait": 2.832,
+      "receive": 159.952
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": 16783,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 0
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/brand/mark-favicon.svg",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:09:03.421Z",
+    "storedMonotonicTime": 149327.156,
+    "duration": 195.469,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 194.7,
+      "receive": 0.769
+    },
+    "status": 200,
+    "type": "other",
+    "bodyBytes": 0,
+    "content": {
+      "size": 404,
+      "mimeType": "image/svg+xml",
+      "compression": 404,
+      "_file": "resources/6fcc4281d0d88a1286e27ccdaeb988e17f0c90cf.svg"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/2x285yoq_9gff.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:09:03.011Z",
+    "storedMonotonicTime": 148458.13,
+    "duration": 175.844,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 2.999,
+      "receive": 172.845
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": 9271,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 0
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/3zk3bb69dmxey.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:09:03.011Z",
+    "storedMonotonicTime": 148459.319,
+    "duration": 196.202,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 17.832,
+      "receive": 178.37
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": 76956,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 0
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/34v0g70q-6mxx.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:09:03.011Z",
+    "storedMonotonicTime": 148459.608,
+    "duration": 187.01500000000001,
+    "timings": {
+      "dns": 0,
+      "connect": 2.688,
+      "ssl": 3.688,
+      "send": 0,
+      "wait": 3.155,
+      "receive": 177.484
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": 25420,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 0
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/3szeqjymve2uv.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:09:03.012Z",
+    "storedMonotonicTime": 148460.767,
+    "duration": 185.444,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 1.542,
+      "receive": 183.902
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": 9025,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 0
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/3rnfnzrn5y35e.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:09:03.013Z",
+    "storedMonotonicTime": 148461.951,
+    "duration": 241.692,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 9.36,
+      "receive": 232.332
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": 35526,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 0
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/0mzta_jumd26n.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:09:03.013Z",
+    "storedMonotonicTime": 148463.24,
+    "duration": 240.46800000000002,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 8.984,
+      "receive": 231.484
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": 33520,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 0
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/0wkztq364djhz.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:09:03.014Z",
+    "storedMonotonicTime": 148508.024,
+    "duration": 605.858,
+    "timings": {
+      "dns": 0.007,
+      "connect": 3.547,
+      "ssl": 4.649,
+      "send": 0,
+      "wait": 220.839,
+      "receive": 376.816
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": 15487,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 0
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/1smb3yzj6jb1u.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:09:03.014Z",
+    "storedMonotonicTime": 148508.312,
+    "duration": 632.788,
+    "timings": {
+      "dns": 0,
+      "connect": 4.024,
+      "ssl": 5.024,
+      "send": 0,
+      "wait": 217.829,
+      "receive": 405.911
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": 16668,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 0
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/0ynb5jy_qjuss.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:09:03.014Z",
+    "storedMonotonicTime": 148508.945,
+    "duration": 651.971,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 402.154,
+      "receive": 249.817
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": 11990,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 0
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/2f4s-j8g4bogt.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:09:03.014Z",
+    "storedMonotonicTime": 148508.665,
+    "duration": 1009.7660000000001,
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 218.528,
+      "receive": 791.238
+    },
+    "status": 200,
+    "type": "script",
+    "bodyBytes": 141272,
+    "content": {
+      "size": -1,
+      "mimeType": "application/javascript; charset=UTF-8",
+      "compression": 0
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/docs?_rsc=_XhkoWHqhrw7zgRp",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:54.186Z",
+    "storedMonotonicTime": 139558.541,
+    "duration": -1,
+    "timings": {
+      "send": -1,
+      "wait": -1,
+      "receive": -1
+    },
+    "status": -1,
+    "type": "fetch",
+    "bodyBytes": -1,
+    "content": {
+      "size": -1,
+      "mimeType": "x-unknown"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/docs/api?_rsc=_XhkoWHqhrw7zgRp",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:54.187Z",
+    "storedMonotonicTime": 139559.602,
+    "duration": -1,
+    "timings": {
+      "send": -1,
+      "wait": -1,
+      "receive": -1
+    },
+    "status": -1,
+    "type": "fetch",
+    "bodyBytes": -1,
+    "content": {
+      "size": -1,
+      "mimeType": "x-unknown"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/docs/opf?_rsc=_XhkoWHqhrw7zgRp",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:54.187Z",
+    "storedMonotonicTime": 139559.825,
+    "duration": -1,
+    "timings": {
+      "send": -1,
+      "wait": -1,
+      "receive": -1
+    },
+    "status": -1,
+    "type": "fetch",
+    "bodyBytes": -1,
+    "content": {
+      "size": -1,
+      "mimeType": "x-unknown"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/dashboard?tab=keys&_rsc=_XhkoWHqhrw7zgRp",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:08:54.187Z",
+    "storedMonotonicTime": 139560.114,
+    "duration": -1,
+    "timings": {
+      "send": -1,
+      "wait": -1,
+      "receive": -1
+    },
+    "status": -1,
+    "type": "fetch",
+    "bodyBytes": -1,
+    "content": {
+      "size": -1,
+      "mimeType": "x-unknown"
+    }
+  },
+  {
+    "url": "http://127.0.0.1:4325/_next/static/chunks/3l5r2rbf0qyo9.js",
+    "method": "GET",
+    "startedDateTime": "2026-09-21T21:09:03.013Z",
+    "storedMonotonicTime": 148463.529,
+    "duration": -1,
+    "timings": {
+      "send": -1,
+      "wait": -1,
+      "receive": -1
+    },
+    "status": -1,
+    "type": "script",
+    "bodyBytes": -1,
+    "content": {
+      "size": -1,
+      "mimeType": "x-unknown"
+    }
+  }
+]

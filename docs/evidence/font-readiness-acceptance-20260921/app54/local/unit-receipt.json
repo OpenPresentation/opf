@@ -1,0 +1,33 @@
+{
+  "node": "v24.21.0",
+  "vitestCommand": [
+    "fnm",
+    "exec",
+    "--using=24",
+    "node",
+    "node_modules/vitest/vitest.mjs",
+    "run",
+    "--reporter=json",
+    "--outputFile=/private/tmp/opf-font-readiness-concurrency-20260921/acceptance/full-unit.json"
+  ],
+  "vitestExitCode": 0,
+  "vitest": {
+    "numPassedTests": 704,
+    "numFailedTests": 0,
+    "numPendingTests": 0,
+    "success": true
+  },
+  "standaloneCommand": [
+    "fnm",
+    "exec",
+    "--using=24",
+    "node",
+    "--test",
+    "scripts/standalone.test.mjs"
+  ],
+  "standaloneExitCode": 0,
+  "standaloneTests": 13,
+  "standalonePassed": 13,
+  "standaloneFailed": 0,
+  "sourceCaptureNote": "First pre-unit attempt rejected a tracked directory symlink. Final source-before.json captures every regular tracked input plus new unit test and separately all tracked symlink targets before build/browser; frozen candidate receipt already binds changed source before units."
+}

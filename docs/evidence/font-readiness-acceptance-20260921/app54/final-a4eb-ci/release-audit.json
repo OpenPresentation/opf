@@ -1,0 +1,101 @@
+{
+  "frozenAt": "2026-09-21T21:21:45.025590+00:00",
+  "head": "a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb",
+  "tree": "031d893855a540fd2a4d2ec2162605817b8dde16",
+  "base": "e40c287b64fcbcfb85fb4a8a50641aea8e3e54a8",
+  "pr": {
+    "number": 54,
+    "state": "open",
+    "merged": false,
+    "url": "https://github.com/Data-Advantage/pptx-dev/pull/54"
+  },
+  "application": {
+    "runId": 35654753237,
+    "attempt": 1,
+    "event": "pull_request",
+    "createdAt": "2026-09-21T21:02:09Z",
+    "completedAt": "2026-09-21T21:12:18Z",
+    "conclusion": "failure",
+    "rerunsRequested": false,
+    "jobs": [
+      {
+        "id": 106515454509,
+        "head": "a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb",
+        "name": "verify (ubuntu-latest)",
+        "conclusion": "success",
+        "completedAt": "2026-09-21T21:10:14Z",
+        "node": "24.20.0",
+        "unitPassed": 704,
+        "standaloneControlsPassed": 13,
+        "browserPassed": 39,
+        "browserFailed": 0
+      },
+      {
+        "id": 106515455003,
+        "head": "a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb",
+        "name": "verify (windows-latest)",
+        "conclusion": "failure",
+        "completedAt": "2026-09-21T21:12:12Z",
+        "node": "24.20.0",
+        "unitPassed": 704,
+        "standaloneControlsPassed": 13,
+        "browserPassed": 38,
+        "browserFailed": 1
+      }
+    ]
+  },
+  "failure": {
+    "test": "Inspector Open in Author commits the current draft before handoff",
+    "declaration": "tests/e2e/inspector-actions.spec.ts:168:5",
+    "assertion": "tests/e2e/inspector-actions.spec.ts:176",
+    "timeoutMs": 5000,
+    "received": "",
+    "callLog": "waiting for navigation to finish...",
+    "laterSemanticAndCopyAssertionsReached": false,
+    "causeEstablished": false,
+    "dataLossEstablished": false,
+    "tracePath": "extracted/browser-failures-windows-latest/inspector-actions-Inspecto-ddffb-urrent-draft-before-handoff/trace.zip"
+  },
+  "artifacts": [
+    {
+      "artifact_id": 10665085104,
+      "name": "browser-failures-windows-latest",
+      "size": 11054020,
+      "sha256": "f490910d37179c4278441eb4d0f1d54cf2251ded72e719c4964ffafb468750ee",
+      "github_digest_matches": true,
+      "zip_crc": "pass",
+      "safe_member_paths": true,
+      "members": 105,
+      "extracted_to": "extracted/browser-failures-windows-latest"
+    },
+    {
+      "artifact_id": 10664905182,
+      "name": "windows-readiness-windows-latest",
+      "size": 6832,
+      "sha256": "4d7804daf6e2a94a9ac74318fa8e970eb0cc903a96300b7fbfb61430f5ee3530",
+      "github_digest_matches": true,
+      "zip_crc": "pass",
+      "safe_member_paths": true,
+      "members": 1,
+      "extracted_to": "extracted/windows-readiness-windows-latest"
+    }
+  ],
+  "artifactWorkflow": "not triggered / not applicable; no fresh pass",
+  "sourceAudit": "source-final-verification.json",
+  "preview": {
+    "receipt": "preview-final.json",
+    "state": "READY",
+    "exactHead": "a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb",
+    "browserAccepted": false,
+    "httpBoundary": "preview-http-boundary.json"
+  },
+  "automatedReview": {
+    "checkId": 106515494525,
+    "conclusion": "neutral",
+    "performedReview": false,
+    "reason": "usage/spend limit"
+  },
+  "timingScope": "Separate passing SVG-security case; Inspector snapshot missing; no timing record for failed handoff.",
+  "releaseHeld": true,
+  "overallGoalComplete": false
+}

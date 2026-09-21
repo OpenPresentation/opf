@@ -1,0 +1,99 @@
+{
+  "artifacts": [
+    {
+      "path": "/private/tmp/opf-inspector-actions-canonical-20260921/navigation-policy/results/inspector-actions-Inspecto-07c93-and-unchanged-draft-history/trace.zip",
+      "bytes": 9374411,
+      "sha256": "8cd4533c4c871cd66ea5e2c558116bcbc6f8a27fc84b663bc680c6cafcd98ded",
+      "retention": "private original only; not copied",
+      "zipMembers": 154,
+      "crcVerified": true
+    },
+    {
+      "path": "/private/tmp/opf-inspector-actions-canonical-20260921/navigation-policy/results/inspector-actions-Inspecto-07c93-and-unchanged-draft-history/error-context.md",
+      "bytes": 66063,
+      "sha256": "883b74ea9db647b0e26c9bac30d88ad1af7b55813aae2832067ef87d70577996",
+      "retention": "private original only; not copied"
+    },
+    {
+      "path": "/private/tmp/opf-inspector-actions-canonical-20260921/navigation-policy/results/inspector-actions-Inspecto-36d82-hing-payloads-and-filenames/trace.zip",
+      "bytes": 9190747,
+      "sha256": "0cd0eea50686b522fe5280059b5a13d98d563d58f1da543adac9407db82f1701",
+      "retention": "private original only; not copied",
+      "zipMembers": 149,
+      "crcVerified": true
+    },
+    {
+      "path": "/private/tmp/opf-inspector-actions-canonical-20260921/navigation-policy/results/inspector-actions-Inspecto-36d82-hing-payloads-and-filenames/error-context.md",
+      "bytes": 66776,
+      "sha256": "cc5a31843482485b2b0d18caa020726d980dc4776ddf9bc07bf5c5bb6cb2b085",
+      "retention": "private original only; not copied"
+    },
+    {
+      "path": "/private/tmp/opf-inspector-actions-canonical-20260921/navigation-policy/results/inspector-actions-Inspecto-ddffb-urrent-draft-before-handoff/trace.zip",
+      "bytes": 8606517,
+      "sha256": "d3759088cc8c5219ba6c5b893fe896398f7055772ba588957a124f3d16becf70",
+      "retention": "private original only; not copied",
+      "zipMembers": 151,
+      "crcVerified": true
+    },
+    {
+      "path": "/private/tmp/opf-inspector-actions-canonical-20260921/navigation-policy/results/inspector-actions-Inspecto-ddffb-urrent-draft-before-handoff/error-context.md",
+      "bytes": 24230,
+      "sha256": "d90393e40cd7c578644d14cc895d873069dc8fb26d561c60d1dd41180f9b1f79",
+      "retention": "private original only; not copied"
+    },
+    {
+      "path": "/private/tmp/opf-inspector-actions-canonical-20260921/navigation-policy/results/inspector-share-publicatio-33578-etain-the-accepted-document/trace.zip",
+      "bytes": 9575786,
+      "sha256": "7ded849f1599f60e95dc25a00151c4e8c34113c588dc9f0a80680d119ac2f774",
+      "retention": "private original only; not copied",
+      "zipMembers": 166,
+      "crcVerified": true
+    },
+    {
+      "path": "/private/tmp/opf-inspector-actions-canonical-20260921/navigation-policy/results/inspector-share-publicatio-33578-etain-the-accepted-document/error-context.md",
+      "bytes": 31133,
+      "sha256": "d26d07fa57e4106288c18943b3ec663cd46881be20bb2443298ce61339634e51",
+      "retention": "private original only; not copied"
+    },
+    {
+      "path": "/private/tmp/opf-inspector-actions-canonical-20260921/navigation-policy/results/inspector-share-publicatio-2236b-etain-the-accepted-document/trace.zip",
+      "bytes": 9722621,
+      "sha256": "6942538e5e0ad9a4a8f6939b63da93448cf44bf0f5bad3d4e86110c1ff2a44ce",
+      "retention": "private original only; not copied",
+      "zipMembers": 168,
+      "crcVerified": true
+    },
+    {
+      "path": "/private/tmp/opf-inspector-actions-canonical-20260921/navigation-policy/results/inspector-share-publicatio-2236b-etain-the-accepted-document/error-context.md",
+      "bytes": 31148,
+      "sha256": "3b5ef1c04149df4325d9c5bc2ece2e4c027da137c94b008a9881e2f6bde7b893",
+      "retention": "private original only; not copied"
+    },
+    {
+      "path": "/private/tmp/opf-inspector-actions-canonical-20260921/navigation-policy/browser.log",
+      "bytes": 18197,
+      "sha256": "24ddf2dd79ca8b9e6372dcb4992de6039142bd45c33c30801c47406d45e2ee8c",
+      "retention": "private original only; not copied"
+    },
+    {
+      "path": "/private/tmp/opf-inspector-actions-canonical-20260921/navigation-policy/results.json",
+      "bytes": 105601,
+      "sha256": "399bb1d8d5b73b830ea350de8d7cb00d1015d797ca61fc78f7aba01caff60469",
+      "retention": "private original only; not copied"
+    },
+    {
+      "path": "/private/tmp/opf-inspector-actions-canonical-20260921/navigation-policy/production-before.json",
+      "bytes": 751,
+      "sha256": "6d39ed985f4e6aadfb471260305db3f81cacfffbb6d8229760dd653bf7732cf2",
+      "retention": "private original only; not copied"
+    },
+    {
+      "path": "/private/tmp/opf-inspector-actions-canonical-20260921/navigation-policy/source-before.json",
+      "bytes": 80230,
+      "sha256": "fdd981bf8a31c3715e0530ebc319a59300e87d6f25776b8eb67777e85c4e1fe5",
+      "retention": "private original only; not copied"
+    }
+  ],
+  "rawUnchangedAfterAudit": true
+}

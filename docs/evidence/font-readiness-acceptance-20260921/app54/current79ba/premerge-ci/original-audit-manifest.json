@@ -1,0 +1,215 @@
+{
+  "scope": "Frozen exact79ba premerge audit, original logs and sole timing artifact; excludes only this manifest. Postmerge acceptance is separate.",
+  "files": [
+    {
+      "path": "REPORT.md",
+      "bytes": 3186,
+      "sha256": "72bec88a9a28ff43760771afa32d027e893f261b2f6cc75909ff9577aa5fbe03"
+    },
+    {
+      "path": "artifact-integrity.json",
+      "bytes": 555,
+      "sha256": "630495536ce344b478dbf4953c85f942b01d518367bb0d0f20a460cc1e2d0709"
+    },
+    {
+      "path": "artifact-workflow-scope.json",
+      "bytes": 554,
+      "sha256": "211030d1957246539043da01db9e4b17ef884d4e6098b7e913fe51dcd6a9c011"
+    },
+    {
+      "path": "artifact-workflow.yml.txt",
+      "bytes": 1665,
+      "sha256": "2736d7f87a5ae3fdb5b994d6a750d1c369f140e47b869a041c8671d62209b789"
+    },
+    {
+      "path": "artifacts-final.json",
+      "bytes": 768,
+      "sha256": "b229fe2563f3466b5f3e3e1a34c2e5bc56371ebaea7b998dca8f5c5f026ce753"
+    },
+    {
+      "path": "automated-review-boundary.json",
+      "bytes": 927,
+      "sha256": "62f80a53c4980bd6e9eb731edebf0b6ba768fc9c26f06dcbc0ccaeb2271638c1"
+    },
+    {
+      "path": "checks-final.json",
+      "bytes": 7167,
+      "sha256": "c48792318cbd6d37853106d18dcc8b2f99464b13ff52230a1fb7b7e677e13214"
+    },
+    {
+      "path": "checks-initial.json",
+      "bytes": 7125,
+      "sha256": "6e2ae7afb852377e3b175359d3183e7c7902d907c6db70577648d2e255fafd15"
+    },
+    {
+      "path": "checks-progress1-query-error.json",
+      "bytes": 192,
+      "sha256": "d9a4184918bde787e54ead981c3479ccb23737cfd3e923e166ae7e56a59effc5"
+    },
+    {
+      "path": "checks-progress1.json",
+      "bytes": 7125,
+      "sha256": "6e2ae7afb852377e3b175359d3183e7c7902d907c6db70577648d2e255fafd15"
+    },
+    {
+      "path": "committed-blobs.json",
+      "bytes": 51717,
+      "sha256": "b06feb1cad8cb9fda2f4ffa1a2667a36bd8941a3aed4d2b19c418b92985d415b"
+    },
+    {
+      "path": "extracted/windows-readiness-windows-latest/svg-security-published-SVG-25408-rted-document-strings-inert/windows-readiness-timings.json",
+      "bytes": 66308,
+      "sha256": "922c509d4bc8eedc4a970388e71d96c821f2273cff7a7b8b1362d8a582780e43"
+    },
+    {
+      "path": "jobs-final.json",
+      "bytes": 8686,
+      "sha256": "83176bf78ecd3597cfc42c1d635a43759dd9feed3868d6ff01fbf4888b7c3449"
+    },
+    {
+      "path": "jobs-initial.json",
+      "bytes": 7219,
+      "sha256": "86ad183d325666f38c498de6e94058ee6a3ab0ad77b59d5a76d2aec576209c7f"
+    },
+    {
+      "path": "jobs-progress1.json",
+      "bytes": 7606,
+      "sha256": "802db7920ddf98abd219fb5534c39741b7ba63eb0c0c8a9134b3fed8bc3529ad"
+    },
+    {
+      "path": "jobs-progress2.json",
+      "bytes": 7735,
+      "sha256": "be95a40d7e2d672f1d8d326e5bdb5573c5396d61435dfb10788ea508fe3a5725"
+    },
+    {
+      "path": "jobs-progress3.json",
+      "bytes": 7821,
+      "sha256": "cc4bcdc0b986ccd8531ccc50ea4f777a3feaf862ae39456f8b02c9150232b8e4"
+    },
+    {
+      "path": "jobs-progress4.json",
+      "bytes": 7821,
+      "sha256": "cc4bcdc0b986ccd8531ccc50ea4f777a3feaf862ae39456f8b02c9150232b8e4"
+    },
+    {
+      "path": "jobs-progress5.json",
+      "bytes": 8275,
+      "sha256": "e8778be58a97ffdf171a509c42edc9024b805c3f715523ecc900042111d77ca1"
+    },
+    {
+      "path": "jobs-progress6.json",
+      "bytes": 8275,
+      "sha256": "e8778be58a97ffdf171a509c42edc9024b805c3f715523ecc900042111d77ca1"
+    },
+    {
+      "path": "jobs-progress7.json",
+      "bytes": 8686,
+      "sha256": "83176bf78ecd3597cfc42c1d635a43759dd9feed3868d6ff01fbf4888b7c3449"
+    },
+    {
+      "path": "linux-acceptance-excerpt.log",
+      "bytes": 351,
+      "sha256": "d060efeb384e664d27f8072e27c11ce782594af5295929c61a22b1a52d144b68"
+    },
+    {
+      "path": "linux-browser-outcomes.json",
+      "bytes": 18865,
+      "sha256": "edc1dc1c0deb0dd223bf9b1b7daa6bda770324423e387c99e354a918130b64f8"
+    },
+    {
+      "path": "linux-job.log",
+      "bytes": 112724,
+      "sha256": "777dd45efc0dd1fddbb86701508d4ee779d01a0a5a184891edf8f64499ad304a"
+    },
+    {
+      "path": "metadata-query-error.json",
+      "bytes": 409,
+      "sha256": "225566b3ee28e1512e3d82d18289d5ea077106ef5e97ee291a06a2fce1fe31a3"
+    },
+    {
+      "path": "pr-final.json",
+      "bytes": 19737,
+      "sha256": "4b2bd29f40fffaf3eb2e28f1ca70bb0d94d806888395ba7844430b73dcd68c9e"
+    },
+    {
+      "path": "pr-initial.json",
+      "bytes": 19740,
+      "sha256": "856f7b84539065a4366acb1402784ce8785ec5ef4943b43d08bd4cf3f5f2d226"
+    },
+    {
+      "path": "pr-reviews.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "preview-boundary-provenance.json",
+      "bytes": 394,
+      "sha256": "a1412c49fe8713c712eefad34cbc7194ee2f8405553fa3f08b66834f69769270"
+    },
+    {
+      "path": "preview-final.json",
+      "bytes": 686,
+      "sha256": "29deafe8bee124b2dad6660cbf281798a1af62a964446e5d8ea5b62c3b0ef241"
+    },
+    {
+      "path": "preview-http-boundary.json",
+      "bytes": 565,
+      "sha256": "ff63ae7a9d4b15f65fe54cfb2903add51e90cc183913da3a109c7d9cb661095a"
+    },
+    {
+      "path": "preview-initial.json",
+      "bytes": 686,
+      "sha256": "160fccacbb9013349168b2a60686cae026e6fb71f6151de8f85151fdaf54eed7"
+    },
+    {
+      "path": "release-audit.json",
+      "bytes": 2093,
+      "sha256": "db7ce54d2b1429d73e3298b4e50033da515a925d9463809df6cac9252901eb67"
+    },
+    {
+      "path": "run-final.json",
+      "bytes": 13321,
+      "sha256": "f0dfee7512a572d7dea4b7c112b15c02fea696880b79b74e0c67ebb4f95e2e0d"
+    },
+    {
+      "path": "runs-initial.json",
+      "bytes": 13354,
+      "sha256": "a8de82033396bdbf8824725d149cadc4eabdd25b343e1633e743bf4a14270570"
+    },
+    {
+      "path": "source-audit.json",
+      "bytes": 1478,
+      "sha256": "a9d99bf80f3a9b62c49f5f47d5589b5529c5fd454d96ea8f5322ecf0406c987b"
+    },
+    {
+      "path": "status-initial.json",
+      "bytes": 5245,
+      "sha256": "09db129a6dd7ef5898952e86f2f3001233a20cc5737546857427043582eef792"
+    },
+    {
+      "path": "windows-acceptance-excerpt.log",
+      "bytes": 349,
+      "sha256": "9ddc7ab349731b273218f9905c0edade72aabb74b953db854666db6c83fcae86"
+    },
+    {
+      "path": "windows-browser-outcomes.json",
+      "bytes": 18844,
+      "sha256": "9c09d83930dde5eda02b68503c51fa543ed5df5f7e179f6469253caac066e0e4"
+    },
+    {
+      "path": "windows-job.log",
+      "bytes": 128818,
+      "sha256": "80719c3bda392a707480b79d4ff9fb4a170f7299e87b5b3a0aab700ab9459a06"
+    },
+    {
+      "path": "windows-readiness-windows-latest.zip",
+      "bytes": 6956,
+      "sha256": "fc01fdfe04bc843e501f5af8ca71aa85e38cd85ade0f4e6b3828d747505cbff0"
+    },
+    {
+      "path": "windows-timing-summary.json",
+      "bytes": 1523,
+      "sha256": "467d9285f68814f891f6e67aa555d4fd49a5734bcd9111aa2896f4afc539d05c"
+    }
+  ]
+}

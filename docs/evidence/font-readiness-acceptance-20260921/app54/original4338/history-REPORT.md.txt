@@ -1,0 +1,26 @@
+# Font readiness preload — history and initialization review
+
+Read-only, exact App54 `4338e57b951c469d5c5f239b78a303fbad3c745e`. No browser, unit test, source edit or timeout change was performed. This addendum supersedes the earlier simple-removal proposal in `../opf-inspector-font-readiness-source-20260921/REPORT.md`.
+
+## History and preserved contract
+
+Git blame and `git log --all -G` attribute the preload to the initial browser-toolkit integration, squash commit `fa94477f8fceb8bb1a0d62fa23d7e0d05423e94a` / [PR22](https://github.com/Data-Advantage/pptx-dev/pull/22). It has not subsequently changed. The original file, commit message, workflow guide and current PR22 metadata/comments/reviews are preserved here. They do **not** document a specific reason for the ignored import line, so its author's exact intent cannot be established from these records.
+
+They do explicitly document offline Author editing and PowerPoint export after preview readiness. The original test switches the browser offline after the canvas appears; current `author.spec.ts:38,83` and `inspector.spec.ts:149` retain offline workflows. Structurally, the preload finishes before the shared font lease can resolve and before the editable canvas mounts. Thus it ensures converter module initialization/chunks are ready before the workflow goes offline. Removing it outright would remove that guarantee even if font parsing needs none of its exports. This is a preservation constraint established by source ordering and the documented workflow, not proof of historical intent.
+
+## Installed initialization, beyond package metadata
+
+- `opf-pptx/dist/index.js` imports local conversion/provenance modules, core composition/catalogs, vendored PptxGenJS, fflate and fast-xml-parser. Its browser image fallback only invokes browser image/canvas APIs inside `webpToPng`. No font registry, `document.fonts`, FontFace registration, or global Buffer assignment was found in the package/vendor review. Vendor Buffer usages are Node-oriented conversion functions, not installation of a font prerequisite.
+- **A real transitive global side effect exists:** PptxGenJS imports JSZip. JSZip's browser mapping selects `dist/jszip.min.js`; the corresponding installed unminified bundle requires `setimmediate` at line 3045. Its module54 conditionally installs `setImmediate` and `clearImmediate` on the global object or its timer-bearing prototype (lines11555–11581), with a scheduling backend such as postMessage. Therefore `sideEffects:false` on OPF PPTX is not sufficient evidence that loading its graph is side-effect-free. This review does not claim otherwise.
+- Renderer fonts import fontkit directly. The installed browser fontkit module imports its own parsing/shaping dependencies and registers TTF, WOFF, WOFF2, collection and DFont handlers in its own module-local registry during its own evaluation. These registrations do not come from PPTX. Its `Buffer` import is `restructure.Buffer`, a binary-field type; that is not a global Node Buffer shim.
+- Bounded searches of fontkit and installed restructure/unicode-trie/unicode-properties/clone/brotli/dfa/tiny-inflate sources found no `setImmediate`/`clearImmediate` use or global Buffer/FontFace installation that would require the converter's scheduling polyfill before font preparation. Fast-xml-parser constructs parser instances; fflate's worker/global operations occur in exported worker helpers. These are static source observations, not a browser global-before/after experiment or an exhaustive proof about every future bundler/dependency.
+
+## Trace correlation and bounded candidate
+
+The separate original-trace report is `../opf-inspector-action-snapshots-20260921/windows-recovery-diagnosis/REPORT.md`. It records the correct imported title and loading-fonts state; manifest fetch starts 3.175s into the failed 5s assertion, all33 font requests begin about3.250s in,22 record HTTP200 and11 have no completed response by teardown (including Roboto). No HTTP error is recorded. Missing responses do not prove permanent failure, nor does this establish converter import as the dominant delay.
+
+A safer narrow candidate is **concurrent full font acquisition and converter warmup, while the shared lease still resolves only after BOTH succeed**. Preserve the same33 manifest faces, exact bytes, policy, fallback setting, FontFace loads, `document.fonts.ready`, and export's owned lease. Keep rejection handling for both tasks and dispose any separately successful font registry if converter initialization fails; otherwise parallelization would introduce an ownership leak. Current source/refcount behavior must remain.
+
+Meaningful controls must establish that manifest/font work begins while a converter promise is deliberately held; readiness still waits for both; multiple users share one preparation; final release disposes once; converter failure plus successful fonts and font failure plus converter success are handled without a leak or unhandled rejection. Preserve a baseline negative control. Node controls establish orchestration only; a later fresh browser build must verify real browser initialization and cold/offline export without fallback or test-budget changes.
+
+This report authorizes no release and claims no resolution of the failed Windows acceptance. Original failed evidence remains intact.

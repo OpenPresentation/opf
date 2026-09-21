@@ -1,0 +1,16 @@
+{
+  "recordedAt": "2026-09-21T21:53:39.787525+00:00",
+  "source": "Windows supervisor status relayed by root in this task; public coordination comment confirms failed allowlist scope.",
+  "publicationIndependentlyVerified": false,
+  "reportedObservations": [
+    "Read-only Presentation.Fonts lists Carlito and Aptos despite no Aptos in the XML.",
+    "Allowlist control FAIL; no embedding tested.",
+    "Exact owned close and four font removals confirmed by the supervisor.",
+    "Original PowerShell5 JSON-nesting cleanup-classification error retained, then corrected offline."
+  ],
+  "limits": [
+    "Not a new native compatibility pass, physical per-glyph identity proof, embedding test or cause finding.",
+    "No raw published control bundle or exact native evidence commit verified by this documentation task.",
+    "Windows supervisor remains the sole Office/font-registration owner."
+  ]
+}

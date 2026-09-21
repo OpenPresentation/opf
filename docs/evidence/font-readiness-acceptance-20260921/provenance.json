@@ -1,0 +1,1398 @@
+{
+  "createdAt": "2026-09-21T21:09:06.011730+00:00",
+  "baseCore": "5bc0d3f89414b382b2ce48452c7e56e5d66aaf74",
+  "appCommit": "a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb",
+  "copies": [
+    {
+      "path": "core107/postmerge/REPORT.md.txt",
+      "source": "/private/tmp/opf-inspector-current-actions-handoff-20260921/ci-postmerge107/REPORT.md",
+      "bytes": 3016,
+      "sha256": "8892cdb7523d9e2bf643ace4bafcf7e3183555a63471b3f86e6ab5ba3e5e87e9",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "core107/postmerge/release-audit.json",
+      "source": "/private/tmp/opf-inspector-current-actions-handoff-20260921/ci-postmerge107/release-audit.json",
+      "bytes": 3908,
+      "sha256": "a23a50b224ed61a472c57e0c2bc7829e83982ecc850b48f2719835660454c762",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "core107/postmerge/source-tree-equivalence.json",
+      "source": "/private/tmp/opf-inspector-current-actions-handoff-20260921/ci-postmerge107/source-tree-equivalence.json",
+      "bytes": 498,
+      "sha256": "32059795ef9bd495008a79320fd6f6a54c0f830d8c3bc4123ec3654cbdf2d6ec",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "core107/postmerge/accepted-merge107.json",
+      "source": "/private/tmp/opf-inspector-current-actions-handoff-20260921/ci-postmerge107/accepted-merge107.json",
+      "bytes": 318,
+      "sha256": "58962b5cbafbd816879a0663dee63f8c118b95eb9a10fe9b8e58b394012e690f",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "core107/postmerge/primary-before.json",
+      "source": "/private/tmp/opf-inspector-current-actions-handoff-20260921/ci-postmerge107/primary-before.json",
+      "bytes": 183,
+      "sha256": "1ef4c344b169f58ce4992ef31b6ed765d941ff06dfc5df1e3cc9a643d55fcf3a",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "core107/postmerge/primary-after.json",
+      "source": "/private/tmp/opf-inspector-current-actions-handoff-20260921/ci-postmerge107/primary-after.json",
+      "bytes": 396,
+      "sha256": "b5d0b5c1e9d0da9b75ea1bd8467837076467e79808fab113a8cfcf5a20e57ca6",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "core107/postmerge/opf-final.json",
+      "source": "/private/tmp/opf-inspector-current-actions-handoff-20260921/ci-postmerge107/opf-final.json",
+      "bytes": 12563,
+      "sha256": "f3a9485f3c4007dfdabf1190b9f27b9da47471ddf7751a05262976eca3490965",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "core107/postmerge/opf-jobs-final.json",
+      "source": "/private/tmp/opf-inspector-current-actions-handoff-20260921/ci-postmerge107/opf-jobs-final.json",
+      "bytes": 4099,
+      "sha256": "9f76a0c3e739f37b6872d812c5b857cdc7b914a3aa6faea86b9b5762e04f58a0",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "core107/postmerge/coordinated-final.json",
+      "source": "/private/tmp/opf-inspector-current-actions-handoff-20260921/ci-postmerge107/coordinated-final.json",
+      "bytes": 12590,
+      "sha256": "76a8704c31225a32e2f675b034a9e57d8be1371dd6bc40d6b7de7aefd7f71bf5",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "core107/postmerge/coordinated-jobs-final.json",
+      "source": "/private/tmp/opf-inspector-current-actions-handoff-20260921/ci-postmerge107/coordinated-jobs-final.json",
+      "bytes": 6321,
+      "sha256": "05811d8b4ee76bf5c4505a2f0b7827e07fedc6058f67e8d9c348e63a0d887439",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "core107/postmerge/opf-gate-excerpt.log",
+      "source": "/private/tmp/opf-inspector-current-actions-handoff-20260921/ci-postmerge107/opf-gate-excerpt.log",
+      "bytes": 1228,
+      "sha256": "939a79eb84412672113d29e14f7c23fe5c3a6d1b1a8a896c9063ceb48346fdce",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "core107/postmerge/coordinated-gate-excerpt.log",
+      "source": "/private/tmp/opf-inspector-current-actions-handoff-20260921/ci-postmerge107/coordinated-gate-excerpt.log",
+      "bytes": 2779,
+      "sha256": "a383a7a62d8534048c4aff2dccb81ba01f6f3bf59e27f9e0b5e7e13e6e1f1f02",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "core107/postmerge/coordinated-artifacts.json",
+      "source": "/private/tmp/opf-inspector-current-actions-handoff-20260921/ci-postmerge107/coordinated-artifacts.json",
+      "bytes": 725,
+      "sha256": "fc1a3118c04e504cd4d5fb5b6cd71059b7292f3a9bba13d53fe2b3a8b9939b89",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "core107/postmerge/artifact-integrity.json",
+      "source": "/private/tmp/opf-inspector-current-actions-handoff-20260921/ci-postmerge107/artifact-integrity.json",
+      "bytes": 88938,
+      "sha256": "1d03cbb6279aa166532f1de783b1f09a4b85d60607cd223a1cdc9314f5a8e3cb",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "core107/postmerge/original-audit-manifest.json",
+      "source": "/private/tmp/opf-inspector-current-actions-handoff-20260921/ci-postmerge107/SHA256SUMS.json",
+      "bytes": 5212,
+      "sha256": "73a3f7d7d834720b2f32af8d747c4fe87393426b1a32b51cc70f085923ba6422",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "core107/premerge/REPORT.md.txt",
+      "source": "/private/tmp/opf-inspector-current-actions-handoff-20260921/ci-resolved/REPORT.md",
+      "bytes": 3602,
+      "sha256": "7fbd872d4409b32687f0cae6d7b685510f293c2684fcaaf0d289a246a5eb5f97",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "core107/premerge/release-audit.json",
+      "source": "/private/tmp/opf-inspector-current-actions-handoff-20260921/ci-resolved/release-audit.json",
+      "bytes": 6016,
+      "sha256": "aa051cd64b0387411c47e1ff86a2d18022b24e13df92024576847d5df6592f35",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "core107/premerge/automatic-run-sequence.json",
+      "source": "/private/tmp/opf-inspector-current-actions-handoff-20260921/ci-resolved/automatic-run-sequence.json",
+      "bytes": 3370,
+      "sha256": "d3103f09de2292e4ac7316802533bc2943e14b51943264fb35640ff102d18b78",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "core107/premerge/committed-source-audit.json",
+      "source": "/private/tmp/opf-inspector-current-actions-handoff-20260921/ci-resolved/committed-source-audit.json",
+      "bytes": 24743,
+      "sha256": "301cac63e1963bec76d594286b2b1672d9c434efe6de3843493925fc0a279ae4",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "core107/premerge/superseded-opf-annotations.json",
+      "source": "/private/tmp/opf-inspector-current-actions-handoff-20260921/ci-resolved/superseded-opf-annotations.json",
+      "bytes": 774,
+      "sha256": "42e7d2e574c17c565d602e5d28cae46fee7f6cefc227d7e5c9b5e375fcee0944",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "core107/premerge/superseded-coordinated-annotations.json",
+      "source": "/private/tmp/opf-inspector-current-actions-handoff-20260921/ci-resolved/superseded-coordinated-annotations.json",
+      "bytes": 777,
+      "sha256": "1a74d0b1a8bda072c95f903aba6ac963d196bc46f5b54d0cec3c5cd21d96e3d1",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "core107/premerge/original-audit-manifest.json",
+      "source": "/private/tmp/opf-inspector-current-actions-handoff-20260921/ci-resolved/SHA256SUMS.json",
+      "bytes": 7356,
+      "sha256": "d690fca16dbc92f0324d4da053151759599754cb4fb021cbf5eb45079fcb0102",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/published-evidence-README.md.txt",
+      "source": "https://github.com/Data-Advantage/pptx-dev/blob/a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb/docs/evidence/font-preparation-concurrency-20260921/README.md",
+      "commit": "a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb",
+      "sourcePath": "docs/evidence/font-preparation-concurrency-20260921/README.md",
+      "bytes": 6515,
+      "sha256": "cd3f41e64f02eeab40cae5191586fe06e60dafc952814e6285e80029c399c23d",
+      "method": "exact committed Git blob"
+    },
+    {
+      "path": "app54/published-evidence-manifest.json",
+      "source": "https://github.com/Data-Advantage/pptx-dev/blob/a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb/docs/evidence/font-preparation-concurrency-20260921/SHA256SUMS.json",
+      "commit": "a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb",
+      "sourcePath": "docs/evidence/font-preparation-concurrency-20260921/SHA256SUMS.json",
+      "bytes": 53771,
+      "sha256": "0f439c1463330385d8a241b38998743892ff94101e6304c05a7e648f15041d13",
+      "method": "exact committed Git blob"
+    },
+    {
+      "path": "app54/local/REPORT.md.txt",
+      "source": "https://github.com/Data-Advantage/pptx-dev/blob/a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb/docs/evidence/font-preparation-concurrency-20260921/acceptance/REPORT.md",
+      "commit": "a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb",
+      "sourcePath": "docs/evidence/font-preparation-concurrency-20260921/acceptance/REPORT.md",
+      "bytes": 2892,
+      "sha256": "18845144914a7b33998f09a711dd9e645b688db5628d190d805e9ee81ac9257e",
+      "method": "exact committed Git blob"
+    },
+    {
+      "path": "app54/local/build-receipt.json",
+      "source": "https://github.com/Data-Advantage/pptx-dev/blob/a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb/docs/evidence/font-preparation-concurrency-20260921/acceptance/build-receipt.json",
+      "commit": "a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb",
+      "sourcePath": "docs/evidence/font-preparation-concurrency-20260921/acceptance/build-receipt.json",
+      "bytes": 322,
+      "sha256": "a871d0d2eb68341a11ac66e3c046d0319363ad6dd98fc8bbc1ccf944167c456b",
+      "method": "exact committed Git blob"
+    },
+    {
+      "path": "app54/local/unit-receipt.json",
+      "source": "https://github.com/Data-Advantage/pptx-dev/blob/a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb/docs/evidence/font-preparation-concurrency-20260921/acceptance/unit-receipt.json",
+      "commit": "a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb",
+      "sourcePath": "docs/evidence/font-preparation-concurrency-20260921/acceptance/unit-receipt.json",
+      "bytes": 949,
+      "sha256": "9b38040fa8337f64863f93a240c89f6b456fc25f85ae69d29862bba9c5ef6ed0",
+      "method": "exact committed Git blob"
+    },
+    {
+      "path": "app54/local/browser-receipt.json",
+      "source": "https://github.com/Data-Advantage/pptx-dev/blob/a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb/docs/evidence/font-preparation-concurrency-20260921/acceptance/browser-receipt.json",
+      "commit": "a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb",
+      "sourcePath": "docs/evidence/font-preparation-concurrency-20260921/acceptance/browser-receipt.json",
+      "bytes": 568,
+      "sha256": "f8ddc797c681a78e73f55e3ff4febb82faf939216d71b38f97705fa0a9b3f20e",
+      "method": "exact committed Git blob"
+    },
+    {
+      "path": "app54/local/browser-outcomes.json",
+      "source": "https://github.com/Data-Advantage/pptx-dev/blob/a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb/docs/evidence/font-preparation-concurrency-20260921/acceptance/browser-outcomes.json",
+      "commit": "a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb",
+      "sourcePath": "docs/evidence/font-preparation-concurrency-20260921/acceptance/browser-outcomes.json",
+      "bytes": 13432,
+      "sha256": "e8ba1e1cb735b2fa2b134862c052381a4b30e0bebd6c25aaf2cf581b69f5ce5d",
+      "method": "exact committed Git blob"
+    },
+    {
+      "path": "app54/local/build-output-identity.json",
+      "source": "https://github.com/Data-Advantage/pptx-dev/blob/a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb/docs/evidence/font-preparation-concurrency-20260921/acceptance/build-output-identity.json",
+      "commit": "a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb",
+      "sourcePath": "docs/evidence/font-preparation-concurrency-20260921/acceptance/build-output-identity.json",
+      "bytes": 6458,
+      "sha256": "4d1e00771785c34f416ceb2a7a67d240e97cb20e0983a91e7ffcb66617eb9c44",
+      "method": "exact committed Git blob"
+    },
+    {
+      "path": "app54/local/source-after.json",
+      "source": "https://github.com/Data-Advantage/pptx-dev/blob/a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb/docs/evidence/font-preparation-concurrency-20260921/acceptance/source-after.json",
+      "commit": "a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb",
+      "sourcePath": "docs/evidence/font-preparation-concurrency-20260921/acceptance/source-after.json",
+      "bytes": 414,
+      "sha256": "d25a01c174bc706e936fdc4961762b59cbe132a6dc39bc1ee30199d47c72828b",
+      "method": "exact committed Git blob"
+    },
+    {
+      "path": "app54/local/tested-source-binding.json",
+      "source": "https://github.com/Data-Advantage/pptx-dev/blob/a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb/docs/evidence/font-preparation-concurrency-20260921/root-review/root-tested-source-binding.json",
+      "commit": "a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb",
+      "sourcePath": "docs/evidence/font-preparation-concurrency-20260921/root-review/root-tested-source-binding.json",
+      "bytes": 525,
+      "sha256": "973b8d3f79c2766a64a05b2dae5aa3daaa89de14ccc3d10816c7e73e02472cfd",
+      "method": "exact committed Git blob"
+    },
+    {
+      "path": "app54/local/visual-review.json",
+      "source": "https://github.com/Data-Advantage/pptx-dev/blob/a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb/docs/evidence/font-preparation-concurrency-20260921/root-review/root-browser-visual-review.json",
+      "commit": "a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb",
+      "sourcePath": "docs/evidence/font-preparation-concurrency-20260921/root-review/root-browser-visual-review.json",
+      "bytes": 3230,
+      "sha256": "8aaff725d47585384b984f12242087fcc9d9aab33eaa315201f2826671ac4843",
+      "method": "exact committed Git blob"
+    },
+    {
+      "path": "app54/local/disposal-ownership-review.json",
+      "source": "https://github.com/Data-Advantage/pptx-dev/blob/a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb/docs/evidence/font-preparation-concurrency-20260921/root-review/root-disposal-ownership-review.json",
+      "commit": "a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb",
+      "sourcePath": "docs/evidence/font-preparation-concurrency-20260921/root-review/root-disposal-ownership-review.json",
+      "bytes": 883,
+      "sha256": "034180469236945b367079c5358cb6b1456d9bdddf5d9f8af139fadb73d7ebde",
+      "method": "exact committed Git blob"
+    },
+    {
+      "path": "app54/production-before-publication.json",
+      "source": "https://github.com/Data-Advantage/pptx-dev/blob/a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb/docs/evidence/font-preparation-concurrency-20260921/root-review/root-production-before-publication.json",
+      "commit": "a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb",
+      "sourcePath": "docs/evidence/font-preparation-concurrency-20260921/root-review/root-production-before-publication.json",
+      "bytes": 422,
+      "sha256": "b76f8850948d76e73fa5c41821503a37d40d91161372b3802cea237c19f84b0f",
+      "method": "exact committed Git blob"
+    },
+    {
+      "path": "app54/original4338/ci-REPORT.md.txt",
+      "source": "https://github.com/Data-Advantage/pptx-dev/blob/a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb/docs/evidence/font-preparation-concurrency-20260921/base/previous-failure/failed-ci/REPORT.md",
+      "commit": "a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb",
+      "sourcePath": "docs/evidence/font-preparation-concurrency-20260921/base/previous-failure/failed-ci/REPORT.md",
+      "bytes": 3299,
+      "sha256": "5450f62983bf8e60e658816fb4207ea8013f333f49cb7900c401649c3ac24193",
+      "method": "exact committed Git blob"
+    },
+    {
+      "path": "app54/original4338/diagnosis-REPORT.md.txt",
+      "source": "https://github.com/Data-Advantage/pptx-dev/blob/a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb/docs/evidence/font-preparation-concurrency-20260921/base/previous-failure/diagnosis/REPORT.md",
+      "commit": "a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb",
+      "sourcePath": "docs/evidence/font-preparation-concurrency-20260921/base/previous-failure/diagnosis/REPORT.md",
+      "bytes": 4185,
+      "sha256": "20bad03555d5cd17444f47a4e5895a079bb3b700b2265f5b254f6ee0c7749287",
+      "method": "exact committed Git blob"
+    },
+    {
+      "path": "app54/original4338/history-REPORT.md.txt",
+      "source": "https://github.com/Data-Advantage/pptx-dev/blob/a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb/docs/evidence/font-preparation-concurrency-20260921/base/previous-failure/history-review/REPORT.md",
+      "commit": "a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb",
+      "sourcePath": "docs/evidence/font-preparation-concurrency-20260921/base/previous-failure/history-review/REPORT.md",
+      "bytes": 5350,
+      "sha256": "aa494d653107b104e0a8af513f2f10e4d9c7a6afa64fa2cdc36465fd88d699fc",
+      "method": "exact committed Git blob"
+    },
+    {
+      "path": "app54/local/candidate-receipt.json",
+      "source": "https://github.com/Data-Advantage/pptx-dev/blob/a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb/docs/evidence/font-preparation-concurrency-20260921/base/candidate/candidate-receipt.json",
+      "commit": "a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb",
+      "sourcePath": "docs/evidence/font-preparation-concurrency-20260921/base/candidate/candidate-receipt.json",
+      "bytes": 934,
+      "sha256": "eaf5122d1e7893632e887f5111cbc59e0bde39852d6ba1d4b40b8e97d3720e71",
+      "method": "exact committed Git blob"
+    },
+    {
+      "path": "app54/commit-receipt.json",
+      "source": "/private/tmp/opf-font-readiness-concurrency-20260921/integration/commit-receipt.json",
+      "bytes": 536,
+      "sha256": "15b35cdadbfc55c860f51a05bdda228f4a23e46f4f7c8b202bfdce0fdbedf841",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/preview-metadata.json",
+      "source": "/private/tmp/opf-font-readiness-concurrency-20260921/ci/preview-initial.json",
+      "bytes": 755,
+      "sha256": "0f147e4a45b3076d5ab30d0255bafc5acb914c77fef4dc412e643c27e056fe78",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/preview-http-boundary.json",
+      "source": "/private/tmp/opf-font-readiness-concurrency-20260921/integration/preview-http-boundary.json",
+      "bytes": 461,
+      "sha256": "395b3677def031b544e5c3c725e86244c1a77b79053a6f114f638b2b8d0fe3b4",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/committed-source-audit.json",
+      "source": "/private/tmp/opf-font-readiness-concurrency-20260921/ci/source-audit.json",
+      "bytes": 1034,
+      "sha256": "b30ffa5260827b6d2542b0ffc96d054eb57569938c3474c1d15f78a112b62290",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/runs-initial.json",
+      "source": "/private/tmp/opf-font-readiness-concurrency-20260921/ci/runs-initial.json",
+      "bytes": 13348,
+      "sha256": "ab9c7d9216ac76fd094a42c73eba4190f6e97109f12e1dfbff9bdef39f94de6e",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/artifact-workflow-scope.json",
+      "source": "/private/tmp/opf-font-readiness-concurrency-20260921/ci/artifact-workflow-scope.json",
+      "bytes": 433,
+      "sha256": "a1bcddf9e4025c0ea3dd9b668732562f6e214b59328695d5c96d1db4555a0169",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "native108109/primary-sync.json",
+      "source": "/private/tmp/opf-native108109-coordination-20260921/primary-sync.json",
+      "bytes": 488,
+      "sha256": "058f58b86c7b89eb0e3320bc9b6e9f0874de81a3898e9a1a59165f025ff88b2c",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "native108109/core108-received.json",
+      "source": "/private/tmp/opf-font-readiness-concurrency-20260921/core108-received.json",
+      "bytes": 2298,
+      "sha256": "587f03c5e8592b03aa4e4de264f0029898f2350a070258bec4a48de0e0650cd2",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "native108109/core109-received.json",
+      "source": "/private/tmp/opf-font-readiness-concurrency-20260921/core109-received.json",
+      "bytes": 6760,
+      "sha256": "7a1457c390a7ad464f8805f59add64564c69cb752cf1c529993278aa25bc2589",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "native108109/mixed-table-verify.log",
+      "source": "/private/tmp/opf-native108109-coordination-20260921/mixed-table-verify.log",
+      "bytes": 430,
+      "sha256": "e5cc9e12674e3ae13dbe65d9ba6ae9c09d13e00660d9790c1046d3b815a3ad71",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "native108109/initial-python39-verifier-failure.json",
+      "source": "/private/tmp/opf-native108109-coordination-20260921/initial-python39-verifier-failure.json",
+      "bytes": 702,
+      "sha256": "f94ff4adbec1b4d58e23341be0660d4cc975dece978bbf5a8550f652db2e52c7",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "native108109/bundled-python-verifier.json",
+      "source": "/private/tmp/opf-native108109-coordination-20260921/bundled-python-verifier.json",
+      "bytes": 599,
+      "sha256": "2fdfbcd54b664004c3b424efaf7b0a87b61c1be3f5e4784def314562fd84ad38",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "native108109/tab-analysis-verify-bundled.log",
+      "source": "/private/tmp/opf-native108109-coordination-20260921/tab-analysis-verify-bundled.log",
+      "bytes": 211,
+      "sha256": "327bab81794a45dda1fb34643b15f939aac339b6afbf9c15b30ff6e9feaa6576",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/final-a4eb-ci/release-audit.json",
+      "source": "/private/tmp/opf-font-readiness-concurrency-20260921/ci/release-audit.json",
+      "bytes": 3397,
+      "sha256": "b104b37e7b72c86338dc1b216316d43aa8ce7ba3fabd97149c117cd6d5f03d8f",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/final-a4eb-ci/run-final.json",
+      "source": "/private/tmp/opf-font-readiness-concurrency-20260921/ci/run-final.json",
+      "bytes": 13315,
+      "sha256": "26ab33d33aac9f7a5c286764f18c0990b1c350646cd33ba840a50329c083bee2",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/final-a4eb-ci/jobs-final.json",
+      "source": "/private/tmp/opf-font-readiness-concurrency-20260921/ci/jobs-final.json",
+      "bytes": 8686,
+      "sha256": "9b1c8da16d7d1a29447bcb8d244e7c4625b5a2cb6ac22b77eae1d661452188c7",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/final-a4eb-ci/pr-final.json",
+      "source": "/private/tmp/opf-font-readiness-concurrency-20260921/ci/pr-final.json",
+      "bytes": 19453,
+      "sha256": "f871b429dc54502642900a97b55f5f2efdb664aa514937263e7be6d194069f9e",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/final-a4eb-ci/check-runs-final.json",
+      "source": "/private/tmp/opf-font-readiness-concurrency-20260921/ci/check-runs-final.json",
+      "bytes": 11063,
+      "sha256": "6e72ff07d225d1fe5e57cd1b5da39533fd1102dbbd0334974ac5dda34aa388f3",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/final-a4eb-ci/source-audit.json",
+      "source": "/private/tmp/opf-font-readiness-concurrency-20260921/ci/source-audit.json",
+      "bytes": 1034,
+      "sha256": "b30ffa5260827b6d2542b0ffc96d054eb57569938c3474c1d15f78a112b62290",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/final-a4eb-ci/source-final-verification.json",
+      "source": "/private/tmp/opf-font-readiness-concurrency-20260921/ci/source-final-verification.json",
+      "bytes": 516,
+      "sha256": "3be31f81468b818ac7e1c7650db434fd12b55760ef9a1fe8ecffdcc704177f77",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/final-a4eb-ci/linux-browser-outcomes.json",
+      "source": "/private/tmp/opf-font-readiness-concurrency-20260921/ci/linux-browser-outcomes.json",
+      "bytes": 18857,
+      "sha256": "cd2b4e75edd2b3fc2a1294272b03f1208ee906e0cf59f127ba10e1bdad21ce10",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/final-a4eb-ci/windows-browser-outcomes.json",
+      "source": "/private/tmp/opf-font-readiness-concurrency-20260921/ci/windows-browser-outcomes.json",
+      "bytes": 18853,
+      "sha256": "dc845defcb294ef2c8aca3d8ca03d4a769b365637035ec022c2b734d68fc4bca",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/final-a4eb-ci/windows-exact-failure.log",
+      "source": "/private/tmp/opf-font-readiness-concurrency-20260921/ci/windows-exact-failure.log",
+      "bytes": 3414,
+      "sha256": "015e47dbd170eb91a900b401034f32525cb3031e478e6526bc909702b7e4fcfc",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/final-a4eb-ci/windows-job.log",
+      "source": "/private/tmp/opf-font-readiness-concurrency-20260921/ci/windows-job.log",
+      "bytes": 121777,
+      "sha256": "8e6b498c17885813221cd9a5740a662cb8e46019a201253e62b8f6ccadcab361",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/final-a4eb-ci/linux-result-excerpt.log",
+      "source": "/private/tmp/opf-font-readiness-concurrency-20260921/ci/linux-result-excerpt.log",
+      "bytes": 274,
+      "sha256": "186368737bdb12b0be0183372a3d016484bf425d9087e92878f5dd7607063112",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/final-a4eb-ci/artifacts-final.json",
+      "source": "/private/tmp/opf-font-readiness-concurrency-20260921/ci/artifacts-final.json",
+      "bytes": 1508,
+      "sha256": "bf29e2cd9c002ae634bbb3e988eb791ee96258cc60f1815019155f6f756db62d",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/final-a4eb-ci/artifact-integrity.json",
+      "source": "/private/tmp/opf-font-readiness-concurrency-20260921/ci/artifact-integrity.json",
+      "bytes": 26458,
+      "sha256": "124b03ccb2dbdd5e8ae97c294c99c77586fcac6984bb406f80b365a0e86f6c8c",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/final-a4eb-ci/artifact-workflow-scope.json",
+      "source": "/private/tmp/opf-font-readiness-concurrency-20260921/ci/artifact-workflow-scope.json",
+      "bytes": 433,
+      "sha256": "a1bcddf9e4025c0ea3dd9b668732562f6e214b59328695d5c96d1db4555a0169",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/final-a4eb-ci/artifact-workflow.yml.txt",
+      "source": "/private/tmp/opf-font-readiness-concurrency-20260921/ci/artifact-workflow.yml.txt",
+      "bytes": 1665,
+      "sha256": "2736d7f87a5ae3fdb5b994d6a750d1c369f140e47b869a041c8671d62209b789",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/final-a4eb-ci/windows-timing-summary.json",
+      "source": "/private/tmp/opf-font-readiness-concurrency-20260921/ci/windows-timing-summary.json",
+      "bytes": 1560,
+      "sha256": "f1b27b6ea80d043e792e93aa609060a50fad724aaee0d0de8c8bdf2e91c09e31",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/final-a4eb-ci/preview-final.json",
+      "source": "/private/tmp/opf-font-readiness-concurrency-20260921/ci/preview-final.json",
+      "bytes": 680,
+      "sha256": "8c14fa2f374ec4682205450cb8fd3b469e877bcb7a1da04d5a4440e5c319f3d5",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/final-a4eb-ci/preview-http-boundary.json",
+      "source": "/private/tmp/opf-font-readiness-concurrency-20260921/ci/preview-http-boundary.json",
+      "bytes": 461,
+      "sha256": "395b3677def031b544e5c3c725e86244c1a77b79053a6f114f638b2b8d0fe3b4",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/final-a4eb-ci/preview-boundary-provenance.json",
+      "source": "/private/tmp/opf-font-readiness-concurrency-20260921/ci/preview-boundary-provenance.json",
+      "bytes": 358,
+      "sha256": "1069d72ed6ef6fcd097ea8e868b7be6554c8b615c7bd4b521b7f1460c0fdc3b2",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/final-a4eb-ci/REPORT.md.txt",
+      "source": "/private/tmp/opf-font-readiness-concurrency-20260921/ci/REPORT.md",
+      "bytes": 6095,
+      "sha256": "5a9b403ad73c8c0e013695cfedeb3d8cc2483013117de904c7e0d986f60de13f",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/final-a4eb-ci/original-audit-manifest.json",
+      "source": "/private/tmp/opf-font-readiness-concurrency-20260921/ci/SHA256SUMS.json",
+      "bytes": 34114,
+      "sha256": "4fba7308a7c1ad22b5fedaf84f680b0b68160ad48cb9be7a4797a098119e38d4",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/final-a4eb-ci/failure/error-context.md.txt",
+      "source": "/private/tmp/opf-font-readiness-concurrency-20260921/ci/extracted/browser-failures-windows-latest/inspector-actions-Inspecto-ddffb-urrent-draft-before-handoff/error-context.md",
+      "bytes": 24133,
+      "sha256": "a39783f64d0d1f37b3d7c898e2d147ecf89aa5ed01511be24f7e49470700fdc0",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/final-a4eb-ci/failure/inspector-pending-action.png",
+      "source": "/private/tmp/opf-font-readiness-concurrency-20260921/ci/extracted/browser-failures-windows-latest/inspector-actions-Inspecto-ddffb-urrent-draft-before-handoff/inspector-pending-action.png",
+      "bytes": 172647,
+      "sha256": "681319c95b0ca6a43701e82e3dd907cac96f5c5987bee4f741d23fb96cbf2693",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/final-a4eb-ci/failure/inspector-actions.spec.ts.txt",
+      "source": "https://github.com/Data-Advantage/pptx-dev/blob/a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb/tests/e2e/inspector-actions.spec.ts",
+      "commit": "a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb",
+      "sourcePath": "tests/e2e/inspector-actions.spec.ts",
+      "bytes": 17537,
+      "sha256": "c6096f4c62f642138dc127e55911647d00489d684f2794a978834aa54f4757fd",
+      "method": "exact committed Git blob"
+    },
+    {
+      "path": "app54/author-navigation-diagnosis/REPORT.md.txt",
+      "source": "/private/tmp/opf-font-readiness-concurrency-20260921/windows-author-handoff-diagnosis/REPORT.md",
+      "bytes": 3789,
+      "sha256": "37fa1bf83fe152d55aa4ad35f27a184492fcf54fb701912797822b6475dae7fc",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/author-navigation-diagnosis/document-and-delayed-chunk.json",
+      "source": "/private/tmp/opf-font-readiness-concurrency-20260921/windows-author-handoff-diagnosis/document-and-delayed-chunk.json",
+      "bytes": 6041,
+      "sha256": "9801a376846b573e2c0ea8960b6b5e73ad73281c2ba3e14c79e7bc5d3b789657",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/author-navigation-diagnosis/final-viewport.jpeg",
+      "source": "/private/tmp/opf-font-readiness-concurrency-20260921/windows-author-handoff-diagnosis/final-viewport.jpeg",
+      "bytes": 3286,
+      "sha256": "954991fe6d641287d49896357fac264788a22c6b1259850a382046afb5951d9f",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/author-navigation-diagnosis/frame-receipt.json",
+      "source": "/private/tmp/opf-font-readiness-concurrency-20260921/windows-author-handoff-diagnosis/frame-receipt.json",
+      "bytes": 661,
+      "sha256": "f65a77c19a81ed8f9af6612db9f11d104262f25073b7819cc275a13abeb1432c",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/author-navigation-diagnosis/later-author-snapshot.md.txt",
+      "source": "/private/tmp/opf-font-readiness-concurrency-20260921/windows-author-handoff-diagnosis/later-author-snapshot.md",
+      "bytes": 9735,
+      "sha256": "1687f3e2dbfc3179949573a1e965127314870e83c757bf43210920624fc18b71",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/author-navigation-diagnosis/manifest.json",
+      "source": "/private/tmp/opf-font-readiness-concurrency-20260921/windows-author-handoff-diagnosis/manifest.json",
+      "bytes": 1258,
+      "sha256": "62abf5a786c4ca4cb47f1cd4d1ce4470c48ede8b496f8f4547d393c086793520",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/author-navigation-diagnosis/resource-table.json",
+      "source": "/private/tmp/opf-font-readiness-concurrency-20260921/windows-author-handoff-diagnosis/resource-table.json",
+      "bytes": 75397,
+      "sha256": "6f7f80ab870a68be0c1b7758a2225f5e165386df8b8de4b84a1b959632a610a2",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/author-navigation-diagnosis/root-visual-review.json",
+      "source": "/private/tmp/opf-font-readiness-concurrency-20260921/windows-author-handoff-diagnosis/root-visual-review.json",
+      "bytes": 539,
+      "sha256": "4da215a76a32c361c4ee43b1e5e32fff78a30ecd01f271a6a34d2b1e076e559e",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/author-navigation-diagnosis/trace-facts.json",
+      "source": "/private/tmp/opf-font-readiness-concurrency-20260921/windows-author-handoff-diagnosis/trace-facts.json",
+      "bytes": 6207,
+      "sha256": "8d9388701e84dcf4e21db810a8da67c74ff26027eed533d2774aa2310457d9e7",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/navigation-policy-candidate/diff-review.json",
+      "source": "/private/tmp/opf-author-navigation-acceptance-20260921/source-review/diff-review.json",
+      "bytes": 650,
+      "sha256": "64362cc881f3be0bb1df3f155f6f65bf0af24a41972930eadd9985fd24197dd0",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/navigation-policy-candidate/inspector-actions.candidate.spec.ts.txt",
+      "source": "/private/tmp/opf-author-navigation-acceptance-20260921/source-review/inspector-actions.candidate.spec.ts.txt",
+      "bytes": 17783,
+      "sha256": "20f51040d00464344b56d260cb8c8f7f79f3c9a9102c7636f8b3a6b3d1504348",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/navigation-policy-candidate/navigation-policy.patch.txt",
+      "source": "/private/tmp/opf-author-navigation-acceptance-20260921/source-review/navigation-policy.patch",
+      "bytes": 1072,
+      "sha256": "f302ae24553bd8211ee767a4a213c431664678dc10bb8672a55527e9993819fb",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/navigation-policy-candidate/source-and-scope.json",
+      "source": "/private/tmp/opf-author-navigation-acceptance-20260921/review/source-and-scope.json",
+      "bytes": 7848,
+      "sha256": "b701b7c9118c1661fcf43d4d7746d6c2402364f250dbeb28e3518515bfc43fac",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "core110/received.json",
+      "source": "/private/tmp/opf-native108109-coordination-20260921/core110-received.json",
+      "bytes": 3943,
+      "sha256": "18644b4060c049c7c4c7f6457ec833c99e1b22151c8ca4e22ffbdbf5d0e29d9f",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "core110/received.patch.txt",
+      "source": "/private/tmp/opf-native108109-coordination-20260921/core110-received.patch",
+      "bytes": 9936,
+      "sha256": "d76a67e80469335b01a95632fd658ab22e15fdff9d9776f9105554fa024492d1",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "core110/coordination.md.txt",
+      "source": "/private/tmp/opf-native108109-coordination-20260921/core110-coordination.md",
+      "bytes": 1887,
+      "sha256": "17a5365662d6889c0105119089cb0b163a43a4148e0c70c66edbe3e73dbbec46",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/current79ba/README.md.txt",
+      "source": "https://github.com/Data-Advantage/pptx-dev/blob/79ba0157984fce8405eeb786b8ede1a4e59ba138/docs/evidence/author-navigation-policy-20260921/README.md",
+      "commit": "79ba0157984fce8405eeb786b8ede1a4e59ba138",
+      "sourcePath": "docs/evidence/author-navigation-policy-20260921/README.md",
+      "bytes": 3723,
+      "sha256": "91d45debcdfac1844451a33e88bca9a42aaad4f0e13077d737a65337ecf884a0",
+      "method": "exact committed Git blob"
+    },
+    {
+      "path": "app54/current79ba/published-evidence-manifest.json",
+      "source": "https://github.com/Data-Advantage/pptx-dev/blob/79ba0157984fce8405eeb786b8ede1a4e59ba138/docs/evidence/author-navigation-policy-20260921/FINAL-SHA256SUMS.json",
+      "commit": "79ba0157984fce8405eeb786b8ede1a4e59ba138",
+      "sourcePath": "docs/evidence/author-navigation-policy-20260921/FINAL-SHA256SUMS.json",
+      "bytes": 41795,
+      "sha256": "7900ec880f213c7e6c645c3ab179573421aaf4cc276e74c55d3f7627965c468c",
+      "method": "exact committed Git blob"
+    },
+    {
+      "path": "app54/current79ba/local/REPORT.md.txt",
+      "source": "https://github.com/Data-Advantage/pptx-dev/blob/79ba0157984fce8405eeb786b8ede1a4e59ba138/docs/evidence/author-navigation-policy-20260921/acceptance/REPORT.md",
+      "commit": "79ba0157984fce8405eeb786b8ede1a4e59ba138",
+      "sourcePath": "docs/evidence/author-navigation-policy-20260921/acceptance/REPORT.md",
+      "bytes": 3206,
+      "sha256": "7f472e0312bc36525ab5297ec45f599f5d05c98f09afc913cdb99f8dd278d7ac",
+      "method": "exact committed Git blob"
+    },
+    {
+      "path": "app54/current79ba/local/browser-outcomes.json",
+      "source": "https://github.com/Data-Advantage/pptx-dev/blob/79ba0157984fce8405eeb786b8ede1a4e59ba138/docs/evidence/author-navigation-policy-20260921/acceptance/browser-outcomes.json",
+      "commit": "79ba0157984fce8405eeb786b8ede1a4e59ba138",
+      "sourcePath": "docs/evidence/author-navigation-policy-20260921/acceptance/browser-outcomes.json",
+      "bytes": 51399,
+      "sha256": "2bddce7aad7fc4fc2611fcf45c14e00ab0626ace0f950c1c5be2f92bea5e41de",
+      "method": "exact committed Git blob"
+    },
+    {
+      "path": "app54/current79ba/local/browser-command.json",
+      "source": "https://github.com/Data-Advantage/pptx-dev/blob/79ba0157984fce8405eeb786b8ede1a4e59ba138/docs/evidence/author-navigation-policy-20260921/acceptance/browser-command.json",
+      "commit": "79ba0157984fce8405eeb786b8ede1a4e59ba138",
+      "sourcePath": "docs/evidence/author-navigation-policy-20260921/acceptance/browser-command.json",
+      "bytes": 1068,
+      "sha256": "f49a188328672da9569102868fb59ddb2e636e62fad24f2daae0187e52db5343",
+      "method": "exact committed Git blob"
+    },
+    {
+      "path": "app54/current79ba/local/commands.json",
+      "source": "https://github.com/Data-Advantage/pptx-dev/blob/79ba0157984fce8405eeb786b8ede1a4e59ba138/docs/evidence/author-navigation-policy-20260921/acceptance/commands.json",
+      "commit": "79ba0157984fce8405eeb786b8ede1a4e59ba138",
+      "sourcePath": "docs/evidence/author-navigation-policy-20260921/acceptance/commands.json",
+      "bytes": 2305,
+      "sha256": "fb1419f34259481c423d0d1b7e873ff6c9186d3fc979f34c4369ca82191c664e",
+      "method": "exact committed Git blob"
+    },
+    {
+      "path": "app54/current79ba/local/build-and-preparation.json",
+      "source": "https://github.com/Data-Advantage/pptx-dev/blob/79ba0157984fce8405eeb786b8ede1a4e59ba138/docs/evidence/author-navigation-policy-20260921/acceptance/build-and-preparation.json",
+      "commit": "79ba0157984fce8405eeb786b8ede1a4e59ba138",
+      "sourcePath": "docs/evidence/author-navigation-policy-20260921/acceptance/build-and-preparation.json",
+      "bytes": 6268,
+      "sha256": "87e5cbc39f80fa5983d28b1b9ec8f1c2dbec4fabea1211447d5647a389112b46",
+      "method": "exact committed Git blob"
+    },
+    {
+      "path": "app54/current79ba/local/generated-spec-binding.json",
+      "source": "https://github.com/Data-Advantage/pptx-dev/blob/79ba0157984fce8405eeb786b8ede1a4e59ba138/docs/evidence/author-navigation-policy-20260921/acceptance/generated-spec-binding.json",
+      "commit": "79ba0157984fce8405eeb786b8ede1a4e59ba138",
+      "sourcePath": "docs/evidence/author-navigation-policy-20260921/acceptance/generated-spec-binding.json",
+      "bytes": 1497,
+      "sha256": "c34cd7cdfacde4b66b7aed7327ea1de29896d3a577fc7a08940e869f38453059",
+      "method": "exact committed Git blob"
+    },
+    {
+      "path": "app54/current79ba/local/original-failure-retained.json",
+      "source": "https://github.com/Data-Advantage/pptx-dev/blob/79ba0157984fce8405eeb786b8ede1a4e59ba138/docs/evidence/author-navigation-policy-20260921/acceptance/original-failure-retained.json",
+      "commit": "79ba0157984fce8405eeb786b8ede1a4e59ba138",
+      "sourcePath": "docs/evidence/author-navigation-policy-20260921/acceptance/original-failure-retained.json",
+      "bytes": 557,
+      "sha256": "c9dd5359f03210c93d893f3be097e2ad192e42eaed061d2cca93797a471e2526",
+      "method": "exact committed Git blob"
+    },
+    {
+      "path": "app54/current79ba/local/runtime.json",
+      "source": "https://github.com/Data-Advantage/pptx-dev/blob/79ba0157984fce8405eeb786b8ede1a4e59ba138/docs/evidence/author-navigation-policy-20260921/acceptance/runtime.json",
+      "commit": "79ba0157984fce8405eeb786b8ede1a4e59ba138",
+      "sourcePath": "docs/evidence/author-navigation-policy-20260921/acceptance/runtime.json",
+      "bytes": 613,
+      "sha256": "510a2d20d416d214a244104fc975e72a9460e6dcf563a9f84b1e5e3c8ccf2726",
+      "method": "exact committed Git blob"
+    },
+    {
+      "path": "app54/current79ba/local/root-acceptance-verification.json",
+      "source": "https://github.com/Data-Advantage/pptx-dev/blob/79ba0157984fce8405eeb786b8ede1a4e59ba138/docs/evidence/author-navigation-policy-20260921/root-review/root-acceptance-verification.json",
+      "commit": "79ba0157984fce8405eeb786b8ede1a4e59ba138",
+      "sourcePath": "docs/evidence/author-navigation-policy-20260921/root-review/root-acceptance-verification.json",
+      "bytes": 485,
+      "sha256": "d3fa9365614345d53587870620628953ac8aee622c89bd229b2c219e7edd631c",
+      "method": "exact committed Git blob"
+    },
+    {
+      "path": "app54/current79ba/local/root-handoff-visual-review.json",
+      "source": "https://github.com/Data-Advantage/pptx-dev/blob/79ba0157984fce8405eeb786b8ede1a4e59ba138/docs/evidence/author-navigation-policy-20260921/root-review/root-handoff-visual-review.json",
+      "commit": "79ba0157984fce8405eeb786b8ede1a4e59ba138",
+      "sourcePath": "docs/evidence/author-navigation-policy-20260921/root-review/root-handoff-visual-review.json",
+      "bytes": 797,
+      "sha256": "5fbc5eba743dd7cf35bbc813625a732649a9b83bc084f01b1b98b8024502b5ab",
+      "method": "exact committed Git blob"
+    },
+    {
+      "path": "app54/current79ba/publication-integration.json",
+      "source": "https://github.com/Data-Advantage/pptx-dev/blob/79ba0157984fce8405eeb786b8ede1a4e59ba138/docs/evidence/author-navigation-policy-20260921/publication-integration.json",
+      "commit": "79ba0157984fce8405eeb786b8ede1a4e59ba138",
+      "sourcePath": "docs/evidence/author-navigation-policy-20260921/publication-integration.json",
+      "bytes": 3135,
+      "sha256": "76ee881705bd8da7462f8d66538ff8b1b234a178f4672843ad3e99f24f4456a1",
+      "method": "exact committed Git blob"
+    },
+    {
+      "path": "app54/current79ba/commit-receipt.json",
+      "source": "/private/tmp/opf-author-navigation-acceptance-20260921/integration/commit-receipt.json",
+      "bytes": 352,
+      "sha256": "ec0eb3a75d5ee2a1745390a8e898659d1b3285171e6bbff875e555e5ecb5dac4",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/current79ba/runs-initial.json",
+      "source": "/private/tmp/opf-author-navigation-acceptance-20260921/ci/runs-initial.json",
+      "bytes": 13354,
+      "sha256": "a8de82033396bdbf8824725d149cadc4eabdd25b343e1633e743bf4a14270570",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/current79ba/preview-metadata.json",
+      "source": "/private/tmp/opf-author-navigation-acceptance-20260921/ci/preview-initial.json",
+      "bytes": 686,
+      "sha256": "160fccacbb9013349168b2a60686cae026e6fb71f6151de8f85151fdaf54eed7",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "core110/merged.json",
+      "source": "/private/tmp/opf-native108109-coordination-20260921/core110-merged.json",
+      "bytes": 1621,
+      "sha256": "aef2ac021ad7ac658a0aaa75712a40cff47c28b02fc26c69194ed6c783b8ff1a",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "core110/delivered-coordination.md.txt",
+      "source": "/private/tmp/opf-native108109-coordination-20260921/core110-coordination-reply.md",
+      "bytes": 1251,
+      "sha256": "82f474f917eff727dbe5a066c2d5bd07d65ee9710288fe6015e2764325c60310",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "core110/delivered-comment-url.txt",
+      "source": "/private/tmp/opf-native108109-coordination-20260921/core110-coordination-reply-url.txt",
+      "bytes": 73,
+      "sha256": "f64c74c8309b9648760a3540ad6f4c693c0e64fff267983ad557d6d88e8bf395",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/current79ba/preview-http-boundary.json",
+      "source": "/private/tmp/opf-author-navigation-acceptance-20260921/integration/preview-http-boundary.json",
+      "bytes": 565,
+      "sha256": "ff63ae7a9d4b15f65fe54cfb2903add51e90cc183913da3a109c7d9cb661095a",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "week-wrap/open-prs.json",
+      "source": "/private/tmp/opf-author-navigation-acceptance-20260921/integration/week-pause-open-prs.json",
+      "bytes": 9170,
+      "sha256": "498b9fc68917351e4fc7e29fc5159849bb56abd01b1b9d878699d2a2831f0467",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "week-wrap/windows-coordination.md.txt",
+      "source": "/private/tmp/opf-native108109-coordination-20260921/week-pause-coordination.md",
+      "bytes": 1425,
+      "sha256": "77687f6155e69adcf9a0afe896e7fc2e5b6dccb4671509d6945c95e92238d65e",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "preset-proposal/proposal/README.md.txt",
+      "source": "/private/tmp/opf-author-local-writers-20260921/proposal/README.md",
+      "bytes": 1665,
+      "sha256": "775dcb5b37fa1df6f77d022adc4eb1df9f24e932f4570f95d62aa3336c476702",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "preset-proposal/proposal/REVIEW.md.txt",
+      "source": "/private/tmp/opf-author-local-writers-20260921/proposal/REVIEW.md",
+      "bytes": 4269,
+      "sha256": "8e950012fb269ac7ff24190d9fd3d7a3d86e41b83371974f661aaaac2b9b95ed",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "preset-proposal/proposal/original-SHA256SUMS",
+      "source": "/private/tmp/opf-author-local-writers-20260921/proposal/SHA256SUMS",
+      "bytes": 931,
+      "sha256": "96b8a26b521f3b112ce354e08b00b338485f01ee5dff06d44411926e3e2f37ea",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "preset-proposal/proposal/author-shell-proposed.patch.txt",
+      "source": "/private/tmp/opf-author-local-writers-20260921/proposal/author-shell-proposed.patch",
+      "bytes": 17527,
+      "sha256": "1c098f17e64ee9878446c4371f6103abc47695f681107a67022212b11c9c19bd",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "preset-proposal/proposal/author-shell-proposed.tsx.txt",
+      "source": "/private/tmp/opf-author-local-writers-20260921/proposal/author-shell-proposed.tsx",
+      "bytes": 286486,
+      "sha256": "10f278f05bb079aa662dd23c6a8e07aafd7e3a51d931255f132a5a0cbcbac859",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "preset-proposal/proposal/check-proposal.cjs.txt",
+      "source": "/private/tmp/opf-author-local-writers-20260921/proposal/check-proposal.cjs",
+      "bytes": 2090,
+      "sha256": "21df5ecfb3957616b4ff877276531abd07d359440fc3efbb8804088d52f46cfa",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "preset-proposal/proposal/lint-baseline.json",
+      "source": "/private/tmp/opf-author-local-writers-20260921/proposal/lint-baseline.json",
+      "bytes": 330806,
+      "sha256": "d7fcb5aa8ac3d243cacb6f9ea44db4d53e682c74cfaeb401457f176a96e5f4c7",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "preset-proposal/proposal/lint-proposed.json",
+      "source": "/private/tmp/opf-author-local-writers-20260921/proposal/lint-proposed.json",
+      "bytes": 343239,
+      "sha256": "1787d907189b902c3ed0ec108330593f3f43fbc833d3def772d717588822c30f",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "preset-proposal/proposal/prepare-proposal.py.txt",
+      "source": "/private/tmp/opf-author-local-writers-20260921/proposal/prepare-proposal.py",
+      "bytes": 15085,
+      "sha256": "bf86e0a64288d56e633e4c9a645fac7384a14d8345d864e1271c19c75aa2a0aa",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "preset-proposal/proposal/source-identity.json",
+      "source": "/private/tmp/opf-author-local-writers-20260921/proposal/source-identity.json",
+      "bytes": 680,
+      "sha256": "4e3bd206e04662aa489cd175a47f134a9cc5aa599353b39ba1e88b23cbf60aa9",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "preset-proposal/proposal/typecheck.json",
+      "source": "/private/tmp/opf-author-local-writers-20260921/proposal/typecheck.json",
+      "bytes": 111,
+      "sha256": "139c8b75e9ae134a4016c86d9cba383b892ac296e2e98155574711af60d02c6c",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "preset-proposal/proposal/verification.json",
+      "source": "/private/tmp/opf-author-local-writers-20260921/proposal/verification.json",
+      "bytes": 708,
+      "sha256": "cab1ba6d1211a5652eaa5b7c132b12ed4f6c6657796beb2917e93f3b084f71c2",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "preset-proposal/companions/lib/playground/canvas-source.ts.txt",
+      "source": "/private/tmp/opf-author-local-writers-20260921/pptx-dev/lib/playground/canvas-source.ts",
+      "bytes": 3471,
+      "sha256": "5a31262da07026393506ff8f08927a013800e6194361722be2ad72b1ad8be269",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "preset-proposal/companions/lib/playground/__tests__/canvas-source.test.ts.txt",
+      "source": "/private/tmp/opf-author-local-writers-20260921/pptx-dev/lib/playground/__tests__/canvas-source.test.ts",
+      "bytes": 11370,
+      "sha256": "73918cf6ac092ccfcc2163922e0759e9244d9896b1b92ba423f0743b4ee042f8",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "preset-proposal/companions/tests/e2e/author-preset-history.spec.ts.txt",
+      "source": "/private/tmp/opf-author-local-writers-20260921/pptx-dev/tests/e2e/author-preset-history.spec.ts",
+      "bytes": 12631,
+      "sha256": "3a45f6866d9d8c68ce3a43c6b3f0807208db7789963f435e8b84f0ac3bc56336",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/current79ba/premerge-ci/REPORT.md.txt",
+      "source": "/private/tmp/opf-author-navigation-acceptance-20260921/ci/REPORT.md",
+      "bytes": 3186,
+      "sha256": "72bec88a9a28ff43760771afa32d027e893f261b2f6cc75909ff9577aa5fbe03",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/current79ba/premerge-ci/release-audit.json",
+      "source": "/private/tmp/opf-author-navigation-acceptance-20260921/ci/release-audit.json",
+      "bytes": 2093,
+      "sha256": "db7ce54d2b1429d73e3298b4e50033da515a925d9463809df6cac9252901eb67",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/current79ba/premerge-ci/source-audit.json",
+      "source": "/private/tmp/opf-author-navigation-acceptance-20260921/ci/source-audit.json",
+      "bytes": 1478,
+      "sha256": "a9d99bf80f3a9b62c49f5f47d5589b5529c5fd454d96ea8f5322ecf0406c987b",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/current79ba/premerge-ci/linux-browser-outcomes.json",
+      "source": "/private/tmp/opf-author-navigation-acceptance-20260921/ci/linux-browser-outcomes.json",
+      "bytes": 18865,
+      "sha256": "edc1dc1c0deb0dd223bf9b1b7daa6bda770324423e387c99e354a918130b64f8",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/current79ba/premerge-ci/windows-browser-outcomes.json",
+      "source": "/private/tmp/opf-author-navigation-acceptance-20260921/ci/windows-browser-outcomes.json",
+      "bytes": 18844,
+      "sha256": "9c09d83930dde5eda02b68503c51fa543ed5df5f7e179f6469253caac066e0e4",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/current79ba/premerge-ci/run-final.json",
+      "source": "/private/tmp/opf-author-navigation-acceptance-20260921/ci/run-final.json",
+      "bytes": 13321,
+      "sha256": "f0dfee7512a572d7dea4b7c112b15c02fea696880b79b74e0c67ebb4f95e2e0d",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/current79ba/premerge-ci/jobs-final.json",
+      "source": "/private/tmp/opf-author-navigation-acceptance-20260921/ci/jobs-final.json",
+      "bytes": 8686,
+      "sha256": "83176bf78ecd3597cfc42c1d635a43759dd9feed3868d6ff01fbf4888b7c3449",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/current79ba/premerge-ci/artifact-integrity.json",
+      "source": "/private/tmp/opf-author-navigation-acceptance-20260921/ci/artifact-integrity.json",
+      "bytes": 555,
+      "sha256": "630495536ce344b478dbf4953c85f942b01d518367bb0d0f20a460cc1e2d0709",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/current79ba/premerge-ci/windows-timing-summary.json",
+      "source": "/private/tmp/opf-author-navigation-acceptance-20260921/ci/windows-timing-summary.json",
+      "bytes": 1523,
+      "sha256": "467d9285f68814f891f6e67aa555d4fd49a5734bcd9111aa2896f4afc539d05c",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/current79ba/premerge-ci/artifact-workflow-scope.json",
+      "source": "/private/tmp/opf-author-navigation-acceptance-20260921/ci/artifact-workflow-scope.json",
+      "bytes": 554,
+      "sha256": "211030d1957246539043da01db9e4b17ef884d4e6098b7e913fe51dcd6a9c011",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/current79ba/premerge-ci/automated-review-boundary.json",
+      "source": "/private/tmp/opf-author-navigation-acceptance-20260921/ci/automated-review-boundary.json",
+      "bytes": 927,
+      "sha256": "62f80a53c4980bd6e9eb731edebf0b6ba768fc9c26f06dcbc0ccaeb2271638c1",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/current79ba/premerge-ci/preview-final.json",
+      "source": "/private/tmp/opf-author-navigation-acceptance-20260921/ci/preview-final.json",
+      "bytes": 686,
+      "sha256": "29deafe8bee124b2dad6660cbf281798a1af62a964446e5d8ea5b62c3b0ef241",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/current79ba/premerge-ci/preview-http-boundary.json",
+      "source": "/private/tmp/opf-author-navigation-acceptance-20260921/ci/preview-http-boundary.json",
+      "bytes": 565,
+      "sha256": "ff63ae7a9d4b15f65fe54cfb2903add51e90cc183913da3a109c7d9cb661095a",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/current79ba/premerge-ci/original-audit-manifest.json",
+      "source": "/private/tmp/opf-author-navigation-acceptance-20260921/ci/SHA256SUMS.json",
+      "bytes": 6835,
+      "sha256": "05ea0e9645bcbf72d3530f1297777a4f8bcb0aaf7a506d9183d43c556ed39caf",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/merged8f/pr54-merged.json",
+      "source": "/private/tmp/opf-author-navigation-acceptance-20260921/integration/pr54-merged.json",
+      "bytes": 233,
+      "sha256": "a0604b354cc97e8b172c039965edbd5491d26e6e623ccc2d8507bef7aa55c251",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/merged8f/merged-tree-binding.json",
+      "source": "/private/tmp/opf-author-navigation-acceptance-20260921/integration/merged-tree-binding.json",
+      "bytes": 322,
+      "sha256": "6d2706c1d4e9e9888df56a551d27eada371b2d0b4de29fb88c58c4b70e94759f",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "week-wrap/ui55-draft.json",
+      "source": "/private/tmp/opf-suggestion-details-navigation-base-20260921/draft-handoff-receipt.json",
+      "bytes": 1357,
+      "sha256": "f723ed1a6856cf6c86d9b9858e1e90b3b78edc23d303df1b744b9e74a7d7cfce",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/canonical8f/production-before.json",
+      "source": "/private/tmp/opf-inspector-actions-canonical-20260921/navigation-policy/production-before.json",
+      "bytes": 751,
+      "sha256": "6d39ed985f4e6aadfb471260305db3f81cacfffbb6d8229760dd653bf7732cf2",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/canonical8f/production-after.json",
+      "source": "/private/tmp/opf-inspector-actions-canonical-20260921/navigation-policy/production-after.json",
+      "bytes": 751,
+      "sha256": "b231571295d9008f6d635d71d1e7dd85062caeabaa6407f984973bb086c169a3",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/canonical8f/source-before.json",
+      "source": "/private/tmp/opf-inspector-actions-canonical-20260921/navigation-policy/source-before.json",
+      "bytes": 80230,
+      "sha256": "fdd981bf8a31c3715e0530ebc319a59300e87d6f25776b8eb67777e85c4e1fe5",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/canonical8f/source-after.json",
+      "source": "/private/tmp/opf-inspector-actions-canonical-20260921/navigation-policy/source-after.json",
+      "bytes": 80230,
+      "sha256": "a56a6806e84789ff6b181502f74e56ba3dc4d96498327cbb0d7eae4bac1f3250",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/canonical8f/safe-outcomes.json",
+      "source": "/private/tmp/opf-inspector-actions-canonical-20260921/navigation-policy/safe-outcomes.json",
+      "bytes": 15400,
+      "sha256": "18679ceedc4099cf720dd4eef391f616ed310f0266b71ac086f61cd60e85c92a",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/canonical8f/private-artifact-inventory.json",
+      "source": "/private/tmp/opf-inspector-actions-canonical-20260921/navigation-policy/private-artifact-inventory.json",
+      "bytes": 34608,
+      "sha256": "8f9311681d60ce9152bcfc5910c06b933d9977b5f499ea5eb783329c55c12b64",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/canonical8f/command-receipt.json",
+      "source": "/private/tmp/opf-inspector-actions-canonical-20260921/navigation-policy/command-receipt.json",
+      "bytes": 709,
+      "sha256": "891d6b6b0d26093103f60dd34468eede427863379705bf410242038c415738bc",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/canonical8f/original-private-manifest.json",
+      "source": "/private/tmp/opf-inspector-actions-canonical-20260921/navigation-policy/SHA256SUMS.json",
+      "bytes": 34060,
+      "sha256": "88dc021080f916cb1b333560f2065ed46b028e46dae020dd1fc68294cbd43924",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/canonical8f/private-retention.json",
+      "source": "/private/tmp/opf-author-navigation-acceptance-20260921/integration/canonical-private-retention.json",
+      "bytes": 650,
+      "sha256": "adaa7a3ba36993815035846e8eed7706aef434e055ed2f9a5fb785d0af48b659",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/canonical8f/write-audit/REPORT.md.txt",
+      "source": "/private/tmp/opf-canonical-write-boundary-audit-20260921/REPORT.md",
+      "bytes": 4440,
+      "sha256": "2f22f6962dfd4288594919a0eac65c4a0fb88712361865890d83a0efdfc95326",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/canonical8f/write-audit/original-audit-manifest.json",
+      "source": "/private/tmp/opf-canonical-write-boundary-audit-20260921/SHA256SUMS.json",
+      "bytes": 949,
+      "sha256": "d01054f49481abd7099083c00ba5b9553ab7e0b54a8cf33054f08d3ac53c9411",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/canonical8f/write-audit/create-audit.py.txt",
+      "source": "/private/tmp/opf-canonical-write-boundary-audit-20260921/create-audit.py",
+      "bytes": 9412,
+      "sha256": "a1d3c2eda961e6cb49a2d59c5db2fd7805fc7d4297d65882d66adb338b357fe7",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/canonical8f/write-audit/failure-boundaries.json",
+      "source": "/private/tmp/opf-canonical-write-boundary-audit-20260921/failure-boundaries.json",
+      "bytes": 3818,
+      "sha256": "db93d72929731deb7f3f1d5644c59434040cb0f7d81c71406f6061c38620d9e2",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/canonical8f/write-audit/private-artifact-hashes.json",
+      "source": "/private/tmp/opf-canonical-write-boundary-audit-20260921/private-artifact-hashes.json",
+      "bytes": 4901,
+      "sha256": "5c739f5a84a21c99178547896730cca6d0cf9810d0aad679b958453135aa47cf",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/canonical8f/write-audit/request-metadata.json",
+      "source": "/private/tmp/opf-canonical-write-boundary-audit-20260921/request-metadata.json",
+      "bytes": 11329,
+      "sha256": "bd411f05337ac88b9244ed4bb9e1ff0b1cc46e2e4161aa9515346fab0fe17895",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/canonical8f/write-audit/source-comparison.json",
+      "source": "/private/tmp/opf-canonical-write-boundary-audit-20260921/source-comparison.json",
+      "bytes": 8046,
+      "sha256": "197be9dde523c77a832653ca41f115e46268d29cd0441dac3044197b549568f3",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/canonical8f/disposition.json",
+      "source": "/private/tmp/opf-author-navigation-acceptance-20260921/integration/canonical-disposition.json",
+      "bytes": 1749,
+      "sha256": "5f0e8e8f92f2311719328ad4e85d941a811536c5dd0b14f86c035bae3f1c79cc",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "week-wrap/core111-final-wrap-status.json",
+      "source": "/private/tmp/opf-native108109-coordination-20260921/core111-final-wrap-status.json",
+      "bytes": 703,
+      "sha256": "d424b85b2569b49e46abaa22742c7163a87b7d859b984c6ef4cf7b0878954a7a",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "week-wrap/render30-wrap-status.json",
+      "source": "/private/tmp/opf-native108109-coordination-20260921/render30-wrap-status.json",
+      "bytes": 455,
+      "sha256": "9a14ba8054200493170e0fc4e66a5c06dc47db68917e627b199f18f59ffbd2a0",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "week-wrap/render30-coordination-reply.md.txt",
+      "source": "/private/tmp/opf-native108109-coordination-20260921/render30-coordination-reply.md",
+      "bytes": 1417,
+      "sha256": "61478aea0f0fdeaf8c2282a425bacb67e4508e87c1660b2e4503469a323456a6",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "week-wrap/render30-coordination-reply-url.txt",
+      "source": "/private/tmp/opf-native108109-coordination-20260921/render30-coordination-reply-url.txt",
+      "bytes": 79,
+      "sha256": "676db6dca3ec7442f61b463ea52941b70ca288348632289e5c3bb3058b38d1bb",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/merged8f/postmerge-ci/REPORT.md.txt",
+      "source": "/private/tmp/opf-author-navigation-acceptance-20260921/ci-postmerge/REPORT.md",
+      "bytes": 3306,
+      "sha256": "ae6557bd2f1ff4c32d6ca77f20c246aa6b58a6ddacfdfd3b30faf47a610371d6",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/merged8f/postmerge-ci/release-audit.json",
+      "source": "/private/tmp/opf-author-navigation-acceptance-20260921/ci-postmerge/release-audit.json",
+      "bytes": 2485,
+      "sha256": "1b1312dcff3a003b7062f15be51567336c605011e546e99abb32153ed8b8a9aa",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/merged8f/postmerge-ci/source-equivalence.json",
+      "source": "/private/tmp/opf-author-navigation-acceptance-20260921/ci-postmerge/source-equivalence.json",
+      "bytes": 1216,
+      "sha256": "d0de7ba873622e0ded1021ed606073f36ec23fe59671254dcbc0d758e20a0827",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/merged8f/postmerge-ci/windows-failure-excerpt.log",
+      "source": "/private/tmp/opf-author-navigation-acceptance-20260921/ci-postmerge/windows-failure-excerpt.log",
+      "bytes": 7176,
+      "sha256": "975fadd7933a10d23bac8456f06725a8036739791c902ea0a366d3cd08020658",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/merged8f/postmerge-ci/artifact-integrity.json",
+      "source": "/private/tmp/opf-author-navigation-acceptance-20260921/ci-postmerge/artifact-integrity.json",
+      "bytes": 30822,
+      "sha256": "cec0b4db984776ee067326c4c7597a955f1525d8e24cb91a3ccc01ade2037a14",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/merged8f/postmerge-ci/windows-timing-summary.json",
+      "source": "/private/tmp/opf-author-navigation-acceptance-20260921/ci-postmerge/windows-timing-summary.json",
+      "bytes": 1521,
+      "sha256": "ab412316d5773beb3c29633a2925c9e28039a7498c7160852d86f5bfca86ab2d",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/merged8f/postmerge-ci/original-audit-manifest.json",
+      "source": "/private/tmp/opf-author-navigation-acceptance-20260921/ci-postmerge/SHA256SUMS.json",
+      "bytes": 32558,
+      "sha256": "c58de3d2b0cf99ecaed752fc86530e83c7d37497b6837b613ba43be1983a36cb",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/merged8f/postmerge-ci/linux-browser-outcomes.json",
+      "source": "/private/tmp/opf-author-navigation-acceptance-20260921/ci-postmerge/linux-browser-outcomes.json",
+      "bytes": 18857,
+      "sha256": "d529bd724ce431a71605e240d8dd57bcc6487c6bc3ede8efaa32987f42552a85",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/merged8f/postmerge-ci/windows-browser-outcomes.json",
+      "source": "/private/tmp/opf-author-navigation-acceptance-20260921/ci-postmerge/windows-browser-outcomes.json",
+      "bytes": 18863,
+      "sha256": "d566b4ca0ce7291a4a1b79d03cae52428437ebd89796378382252d0089eb1875",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/merged8f/postmerge-ci/run-final.json",
+      "source": "/private/tmp/opf-author-navigation-acceptance-20260921/ci-postmerge/run-final.json",
+      "bytes": 13439,
+      "sha256": "cdee16bc866dd3ec02e26f0a7862b5b80fc916b9e6f3ab03e813ef4738d0f138",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/merged8f/postmerge-ci/jobs-final.json",
+      "source": "/private/tmp/opf-author-navigation-acceptance-20260921/ci-postmerge/jobs-final.json",
+      "bytes": 8626,
+      "sha256": "65f1cf4270e5ca2c7e6257c5216ca120dacb3849ab194a4e410992ce213862ef",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/merged8f/postmerge-ci/artifacts-final.json",
+      "source": "/private/tmp/opf-author-navigation-acceptance-20260921/ci-postmerge/artifacts-final.json",
+      "bytes": 1448,
+      "sha256": "6e028ca8bdb93bff1274508a8f58e04d0e7e2e421be10bfcf98c3b763a3567db",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "week-wrap/core111-merged.json",
+      "source": "/private/tmp/opf-font-readiness-handoff-20260921/core111-final-merged.json",
+      "bytes": 847,
+      "sha256": "6126812bd016b377796ad0ce8c84f601cfca9369fd96d03ec317de2dfd3ba888",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "week-wrap/renderer30-merged.json",
+      "source": "/private/tmp/opf-font-readiness-handoff-20260921/renderer30-final-merged.json",
+      "bytes": 542,
+      "sha256": "9988ea0129657d7d9001172916915d9b5297add3a348f2ed2e2208f2c237c603",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "week-wrap/primary-week-wrap-sync.json",
+      "source": "/private/tmp/opf-author-navigation-acceptance-20260921/integration/primary-week-wrap-sync.json",
+      "bytes": 2276,
+      "sha256": "f38a34b5de0b14c00ffaf3848f9b29f442642ce97958df1f796200262bb41387",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "week-wrap/ui55-wrap-current.json",
+      "source": "/private/tmp/opf-author-navigation-acceptance-20260921/integration/ui55-wrap-current.json",
+      "bytes": 1027,
+      "sha256": "3916eb9203b68633ad9652de83089a2dd8423f9242fd229baedfd4b2f352f557",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "week-wrap/postmerge-private-retention.json",
+      "source": "/private/tmp/opf-author-navigation-acceptance-20260921/integration/postmerge-private-retention.json",
+      "bytes": 620,
+      "sha256": "989b9626020bc9922098004d250e23c0b71ca506d36afd93aca7819fd652a825",
+      "method": "exact byte copy"
+    },
+    {
+      "path": "app54/final-a4eb-ci/failure/private-retention.json",
+      "source": "/private/tmp/opf-author-navigation-acceptance-20260921/integration/a4eb-private-trace-retention.json",
+      "bytes": 843,
+      "sha256": "e86988d5d8ad8a936565ddc6257ffa4fcd6d4ff4e946809d83d01520788e87a8",
+      "method": "exact byte copy"
+    }
+  ],
+  "omissions": "Full historical logs, binary artifacts, source inventories and passing traces are linked through immutable app evidence or retained core audit manifests; not duplicated here. Successful79ba CI full logs and artifact ZIP are omitted with original audit/artifact inventories retained. Canonical8f raw logs/results/traces contain authentication material and must remain private; only separately reviewed sanitized receipts may be copied. Postmerge8f successful full logs and original ZIPs/traces are omitted with original hash/CRC inventory retained; raw postmerge artifacts were not screened for authentication content and remain private.",
+  "acceptedBaseAfterAdditiveMerge": "b2711549eba48a52f036afd02ee52b761fa0a5f9",
+  "localCheckpoint": "0a73301a22dc80b8081d72f9cbd721acc8c87b0a",
+  "acceptedBaseAfterCore110Merge": "4f7a4bd494f1a873319eff897423d301d1cfc9d6",
+  "currentAppHead": "79ba0157984fce8405eeb786b8ede1a4e59ba138",
+  "acceptedAppMerge": "8f54228a9e38a1dcc0bf8188bcdd519795b3799a",
+  "canonicalRawDataCopied": false,
+  "canonicalOriginalPrivateManifestSha256": "88dc021080f916cb1b333560f2065ed46b028e46dae020dd1fc68294cbd43924",
+  "postmergeAuditManifestSha256": "c58de3d2b0cf99ecaed752fc86530e83c7d37497b6837b613ba43be1983a36cb",
+  "acceptedBaseAfterCore111Merge": "3c5048522714365a41d9b5b9ba81620affae718b",
+  "historicalPrivateEncodingReceipts": [
+    {
+      "source": "/private/tmp/opf-font-readiness-concurrency-20260921/ci/extracted/browser-failures-windows-latest/inspector-actions-Inspecto-ddffb-urrent-draft-before-handoff/trace.zip",
+      "sourceBytes": 6944325,
+      "sourceSha256": "c7589c634e5177b393d3697a4d9c9bb48b4809d958644973267a453c1812883a",
+      "encodedPath": "app54/final-a4eb-ci/failure/trace.zip.base64.txt",
+      "encodedBytes": 9380931,
+      "encodedSha256": "9312b98b3e3c451cf6c366ca1a79f9761e92e21c97b9a3f9c8ac4370c474ce0e",
+      "encoding": "RFC4648 base64 with LF line wrapping; decode reproduces the original ZIP byte-for-byte.",
+      "members": 95,
+      "uncompressedBytes": 13275020,
+      "zipCrcPassed": true,
+      "decodeByteIdentical": true,
+      "reason": "Raw ZIP triggers202 false text-signature matches in the existing core text-integrity scanner. No scanner exemption or archived-byte mutation was introduced."
+    }
+  ],
+  "rawHistoricalTracePayloadPublished": false
+}

@@ -1,0 +1,51 @@
+{
+  "reviewedAt": "2026-09-21T20:53:37.046855+00:00",
+  "reviewer": "root",
+  "baselineRoot": "/private/tmp/opf-inspector-action-snapshots-20260921/windows-links-integration/full-results",
+  "newRoot": "/private/tmp/opf-font-readiness-concurrency-20260921/acceptance/results",
+  "pairedFrames": [
+    {
+      "path": "author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/author-json-options.png",
+      "newSha256": "3e602f80e811b7d232c9ca9073799b1990109c4387aee8aa4d5334fa1d23f52f",
+      "baselineSha256": "ef907f2ab9b3885d67dd4a3602753d626d21c8f44284696459f2ac940914919f",
+      "rootViewedBoth": true
+    },
+    {
+      "path": "completion-preservation-Au-b9e03-s-prior-undo-history-intact/escaped-current-alternatives.png",
+      "newSha256": "2dc874d6d89cc6b0a4e6e31a05be7eefe926f93992356929fb8613645d4f6e06",
+      "baselineSha256": "ce9126a5dd98885d66a3123d2039e3fdddc7a18e1cd1a57eb1a2e7592e48ee30",
+      "rootViewedBoth": true
+    },
+    {
+      "path": "inspector-anonymous-JSON-a-151ab-ownload-and-shared-reimport/inspector.png",
+      "newSha256": "9b72e89371b278624f66127cb8dee2ab94270d636c8e9bc48ea95c3b7a01b9fb",
+      "baselineSha256": "8fa8df4cb1dd646178bf6d68077a6bbdff9fb8e9b2979bd89695037514ba312d",
+      "rootViewedBoth": true
+    },
+    {
+      "path": "source-download-preservati-5105f-download-and-canvas-history/author-source-preserved.png",
+      "newSha256": "b35d3f14c9be9c59c484a5a6063cddebd6ef028a2e0437a26608f20d37249db6",
+      "baselineSha256": "6835b47bbda1b5382a83dd7ce976dcd94626f2cd68c6bf172a71f0489453378d",
+      "rootViewedBoth": true
+    }
+  ],
+  "additionalFrames": [
+    {
+      "path": "inspector-recovery-schema--76507-ers-after-source-correction/inspector-render-recovered.png",
+      "sha256": "1b7c4c8382517df43b26c87688315122e18e6ce7fdfb2aa6c90dd2049c38251d"
+    },
+    {
+      "path": "inspector-recovery-font-su-beb5b--Inspector-canvas-is-active/inspector-font-notes.png",
+      "sha256": "5d50975036517fa55b4c8daaf1ea6586c5d73db692608b307d5963db1447e89c"
+    }
+  ],
+  "conclusion": "No scoped new visual blocker found in reviewed frames. All4 different screenshot pairs reviewed; 23 other screenshot files byte-identical by recorded comparison.",
+  "observations": [
+    "The LF Author categorical frame retains its source, layout selection and gallery resolution; Copy/copied indicator differs.",
+    "The escaped completion frame retains authored escape text, current layout resolution and readable completion choices. No changed content layout was apparent; no exact cause assigned to its pixel/hash difference.",
+    "The basic Inspector frame retains the same authored slide and visible preview; no content/layout difference apparent. No exact cause assigned to its hash difference.",
+    "The duplicate-key Author guard retains source and warning; Copy/copied indicator differs.",
+    "Recovered Inspector has the editable recovered title and retained metadata. Font-notes frame exposes the Aptos-to-Carlito visual-substitute disclosure; this frame alone is not a rendered-font identity proof."
+  ],
+  "limits": "Static local browser frame review; not pixel-perfect equivalence, original Windows failure remediation, native fidelity or production acceptance."
+}

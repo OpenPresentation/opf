@@ -1,0 +1,13 @@
+{
+  "capturedAt": "2026-09-21T21:34:58.304619+00:00",
+  "cwd": "/private/tmp/opf-author-navigation-acceptance-20260921/pptx-dev",
+  "command": "OPF_APP_URL=http://127.0.0.1:4337 PLAYWRIGHT_JSON_OUTPUT_NAME=/private/tmp/opf-author-navigation-acceptance-20260921/acceptance/results.json fnm exec --using=24 node node_modules/@playwright/test/cli.js test --retries=0 --trace=on --reporter=list,json --output=/private/tmp/opf-author-navigation-acceptance-20260921/acceptance/results > /private/tmp/opf-author-navigation-acceptance-20260921/acceptance/browser.log 2>&1",
+  "baseURL": "http://127.0.0.1:4337",
+  "ownedServerSession": 4297,
+  "retries": 0,
+  "configuredTestTimeoutMs": 45000,
+  "expectedCaseCount": 39,
+  "sourceBeforeSha256": "10ac8bad516c0dc12dc90a9b7d9f3c2d770321fe0ea0682828269fdad42abaf9",
+  "buildReceiptSha256": "87e5cbc39f80fa5983d28b1b9ec8f1c2dbec4fabea1211447d5647a389112b46",
+  "readiness": "Escalated local HTTP GET /inspector returned200; initial sandbox-default request could not connect, retained as tool observation, not a browser result."
+}

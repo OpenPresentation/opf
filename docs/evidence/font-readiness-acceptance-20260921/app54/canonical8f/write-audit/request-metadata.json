@@ -1,0 +1,308 @@
+{
+  "redaction": "No token, cookie, authorization, query value, response body or raw URL retained. Host/path and query names only.",
+  "requests": [
+    {
+      "case": "copy-json",
+      "writes": [
+        {
+          "method": "POST",
+          "host": "trusted-weevil-84.clerk.accounts.dev",
+          "path": "/v1/environment",
+          "queryNames": [
+            "__clerk_api_version",
+            "__clerk_db_jwt",
+            "_clerk_js_version",
+            "_method"
+          ],
+          "httpStatus": 200,
+          "recordedCompleteResponse": true,
+          "requestContentLength": "0",
+          "requestContentType": "application/x-www-form-urlencoded",
+          "postDataRecorded": false,
+          "cookieHeaderPresent": true,
+          "authorizationHeaderPresent": false,
+          "refererOriginOnly": true,
+          "responseMimeType": "application/json",
+          "responseDeclaredSize": 8257,
+          "responseBodyResourceCaptured": true,
+          "fixtureNeedleMatches": [],
+          "decodedJwtPayloadsScanned": 0,
+          "scanScope": "captured request fields, URL-decoded text and decodable JWT payloads only; no request values retained"
+        }
+      ]
+    },
+    {
+      "case": "share-pptx",
+      "writes": [
+        {
+          "method": "POST",
+          "host": "trusted-weevil-84.clerk.accounts.dev",
+          "path": "/v1/environment",
+          "queryNames": [
+            "__clerk_api_version",
+            "__clerk_db_jwt",
+            "_clerk_js_version",
+            "_method"
+          ],
+          "httpStatus": 200,
+          "recordedCompleteResponse": true,
+          "requestContentLength": "0",
+          "requestContentType": "application/x-www-form-urlencoded",
+          "postDataRecorded": false,
+          "cookieHeaderPresent": true,
+          "authorizationHeaderPresent": false,
+          "refererOriginOnly": true,
+          "responseMimeType": "application/json",
+          "responseDeclaredSize": 8257,
+          "responseBodyResourceCaptured": true,
+          "fixtureNeedleMatches": [],
+          "decodedJwtPayloadsScanned": 0,
+          "scanScope": "captured request fields, URL-decoded text and decodable JWT payloads only; no request values retained"
+        }
+      ]
+    },
+    {
+      "case": "open-author",
+      "writes": [
+        {
+          "method": "POST",
+          "host": "trusted-weevil-84.clerk.accounts.dev",
+          "path": "/v1/environment",
+          "queryNames": [
+            "__clerk_api_version",
+            "__clerk_db_jwt",
+            "_clerk_js_version",
+            "_method"
+          ],
+          "httpStatus": 200,
+          "recordedCompleteResponse": true,
+          "requestContentLength": "0",
+          "requestContentType": "application/x-www-form-urlencoded",
+          "postDataRecorded": false,
+          "cookieHeaderPresent": true,
+          "authorizationHeaderPresent": false,
+          "refererOriginOnly": true,
+          "responseMimeType": "application/json",
+          "responseDeclaredSize": 8257,
+          "responseBodyResourceCaptured": true,
+          "fixtureNeedleMatches": [],
+          "decodedJwtPayloadsScanned": 0,
+          "scanScope": "captured request fields, URL-decoded text and decodable JWT payloads only; no request values retained"
+        },
+        {
+          "method": "POST",
+          "host": "trusted-weevil-84.clerk.accounts.dev",
+          "path": "/v1/environment",
+          "queryNames": [
+            "__clerk_api_version",
+            "__clerk_db_jwt",
+            "_clerk_js_version",
+            "_method"
+          ],
+          "httpStatus": -1,
+          "recordedCompleteResponse": false,
+          "requestContentLength": null,
+          "requestContentType": "application/x-www-form-urlencoded",
+          "postDataRecorded": false,
+          "cookieHeaderPresent": false,
+          "authorizationHeaderPresent": false,
+          "refererOriginOnly": true,
+          "responseMimeType": "x-unknown",
+          "responseDeclaredSize": -1,
+          "responseBodyResourceCaptured": false,
+          "fixtureNeedleMatches": [],
+          "decodedJwtPayloadsScanned": 0,
+          "scanScope": "captured request fields, URL-decoded text and decodable JWT payloads only; no request values retained"
+        }
+      ]
+    },
+    {
+      "case": "hash-share",
+      "writes": [
+        {
+          "method": "POST",
+          "host": "trusted-weevil-84.clerk.accounts.dev",
+          "path": "/v1/environment",
+          "queryNames": [
+            "__clerk_api_version",
+            "__clerk_db_jwt",
+            "_clerk_js_version",
+            "_method"
+          ],
+          "httpStatus": 200,
+          "recordedCompleteResponse": true,
+          "requestContentLength": "0",
+          "requestContentType": "application/x-www-form-urlencoded",
+          "postDataRecorded": false,
+          "cookieHeaderPresent": true,
+          "authorizationHeaderPresent": false,
+          "refererOriginOnly": true,
+          "responseMimeType": "application/json",
+          "responseDeclaredSize": 8257,
+          "responseBodyResourceCaptured": true,
+          "fixtureNeedleMatches": [],
+          "decodedJwtPayloadsScanned": 0,
+          "scanScope": "captured request fields, URL-decoded text and decodable JWT payloads only; no request values retained"
+        },
+        {
+          "method": "POST",
+          "host": "trusted-weevil-84.clerk.accounts.dev",
+          "path": "/v1/environment",
+          "queryNames": [
+            "__clerk_api_version",
+            "__clerk_db_jwt",
+            "_clerk_js_version",
+            "_method"
+          ],
+          "httpStatus": 200,
+          "recordedCompleteResponse": true,
+          "requestContentLength": "0",
+          "requestContentType": "application/x-www-form-urlencoded",
+          "postDataRecorded": false,
+          "cookieHeaderPresent": true,
+          "authorizationHeaderPresent": false,
+          "refererOriginOnly": true,
+          "responseMimeType": "application/json",
+          "responseDeclaredSize": 8257,
+          "responseBodyResourceCaptured": true,
+          "fixtureNeedleMatches": [],
+          "decodedJwtPayloadsScanned": 0,
+          "scanScope": "captured request fields, URL-decoded text and decodable JWT payloads only; no request values retained"
+        },
+        {
+          "method": "POST",
+          "host": "trusted-weevil-84.clerk.accounts.dev",
+          "path": "/v1/environment",
+          "queryNames": [
+            "__clerk_api_version",
+            "__clerk_db_jwt",
+            "_clerk_js_version",
+            "_method"
+          ],
+          "httpStatus": 200,
+          "recordedCompleteResponse": true,
+          "requestContentLength": "0",
+          "requestContentType": "application/x-www-form-urlencoded",
+          "postDataRecorded": false,
+          "cookieHeaderPresent": true,
+          "authorizationHeaderPresent": false,
+          "refererOriginOnly": true,
+          "responseMimeType": "application/json",
+          "responseDeclaredSize": 8257,
+          "responseBodyResourceCaptured": true,
+          "fixtureNeedleMatches": [],
+          "decodedJwtPayloadsScanned": 0,
+          "scanScope": "captured request fields, URL-decoded text and decodable JWT payloads only; no request values retained"
+        }
+      ]
+    },
+    {
+      "case": "legacy-import-share",
+      "writes": [
+        {
+          "method": "POST",
+          "host": "trusted-weevil-84.clerk.accounts.dev",
+          "path": "/v1/environment",
+          "queryNames": [
+            "__clerk_api_version",
+            "__clerk_db_jwt",
+            "_clerk_js_version",
+            "_method"
+          ],
+          "httpStatus": 200,
+          "recordedCompleteResponse": true,
+          "requestContentLength": "0",
+          "requestContentType": "application/x-www-form-urlencoded",
+          "postDataRecorded": false,
+          "cookieHeaderPresent": true,
+          "authorizationHeaderPresent": false,
+          "refererOriginOnly": true,
+          "responseMimeType": "application/json",
+          "responseDeclaredSize": 8257,
+          "responseBodyResourceCaptured": true,
+          "fixtureNeedleMatches": [],
+          "decodedJwtPayloadsScanned": 0,
+          "scanScope": "captured request fields, URL-decoded text and decodable JWT payloads only; no request values retained"
+        },
+        {
+          "method": "POST",
+          "host": "trusted-weevil-84.clerk.accounts.dev",
+          "path": "/v1/environment",
+          "queryNames": [
+            "__clerk_api_version",
+            "__clerk_db_jwt",
+            "_clerk_js_version",
+            "_method"
+          ],
+          "httpStatus": 200,
+          "recordedCompleteResponse": true,
+          "requestContentLength": "0",
+          "requestContentType": "application/x-www-form-urlencoded",
+          "postDataRecorded": false,
+          "cookieHeaderPresent": true,
+          "authorizationHeaderPresent": false,
+          "refererOriginOnly": true,
+          "responseMimeType": "application/json",
+          "responseDeclaredSize": 8257,
+          "responseBodyResourceCaptured": true,
+          "fixtureNeedleMatches": [],
+          "decodedJwtPayloadsScanned": 0,
+          "scanScope": "captured request fields, URL-decoded text and decodable JWT payloads only; no request values retained"
+        },
+        {
+          "method": "POST",
+          "host": "trusted-weevil-84.clerk.accounts.dev",
+          "path": "/v1/environment",
+          "queryNames": [
+            "__clerk_api_version",
+            "__clerk_db_jwt",
+            "_clerk_js_version",
+            "_method"
+          ],
+          "httpStatus": 200,
+          "recordedCompleteResponse": true,
+          "requestContentLength": "0",
+          "requestContentType": "application/x-www-form-urlencoded",
+          "postDataRecorded": false,
+          "cookieHeaderPresent": true,
+          "authorizationHeaderPresent": false,
+          "refererOriginOnly": true,
+          "responseMimeType": "application/json",
+          "responseDeclaredSize": 8257,
+          "responseBodyResourceCaptured": true,
+          "fixtureNeedleMatches": [],
+          "decodedJwtPayloadsScanned": 0,
+          "scanScope": "captured request fields, URL-decoded text and decodable JWT payloads only; no request values retained"
+        }
+      ]
+    }
+  ],
+  "totalWrites": 10,
+  "fixtureNeedleLabels": [
+    "action-name",
+    "action-filename",
+    "action-slide-id",
+    "action-original-title",
+    "action-rich-text",
+    "copy-edited-title",
+    "json-edited-title",
+    "share-edited-title",
+    "pptx-edited-title",
+    "author-edited-title",
+    "shared-name",
+    "shared-slide-id",
+    "shared-title",
+    "shared-content",
+    "shared-notes",
+    "shared-edited-title",
+    "replacement-name",
+    "replacement-id",
+    "replacement-title",
+    "replacement-content"
+  ],
+  "limitations": [
+    "Missing postData alone does not prove an empty wire body. Nine completed requests additionally have recorded Content-Length 0.",
+    "The incomplete request has no recorded content length or response body; absence of captured authored needles is bounded evidence only.",
+    "No inference about previous deployment runtime, Clerk configuration/backend behavior, or cause of the current failure."
+  ]
+}

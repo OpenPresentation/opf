@@ -1,0 +1,12 @@
+** -text
+# Preserve captured raw CRLF and trailing spaces in these three historical outputs.
+app54/final-a4eb-ci/windows-job.log whitespace=-blank-at-eol
+app54/final-a4eb-ci/windows-exact-failure.log whitespace=-blank-at-eol
+app54/final-a4eb-ci/failure/error-context.md.txt whitespace=-blank-at-eol
+app54/navigation-policy-candidate/navigation-policy.patch.txt whitespace=-blank-at-eol
+# Preserve a captured final blank line and the exact received unified diff.
+app54/author-navigation-diagnosis/later-author-snapshot.md.txt whitespace=-blank-at-eof
+core110/received.patch.txt whitespace=-blank-at-eol
+preset-proposal/proposal/author-shell-proposed.patch.txt whitespace=-blank-at-eol
+# Preserve exact original postmerge Windows failure excerpt.
+app54/merged8f/postmerge-ci/windows-failure-excerpt.log whitespace=-blank-at-eol

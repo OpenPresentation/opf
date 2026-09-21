@@ -1,0 +1,25 @@
+{
+  "capturedAt": "2026-09-21T21:39:32.691Z",
+  "installedOpfVersion": "0.11.0",
+  "bindings": [
+    {
+      "publicEntrypoint": "@openpresentation/opf/spec/openapi.yaml",
+      "resolvedPackagePath": "/private/tmp/opf-author-navigation-acceptance-20260921/pptx-dev/node_modules/.pnpm/@openpresentation+opf@0.11.0/node_modules/@openpresentation/opf/dist/spec/openapi.yaml",
+      "packageSourceSha256": "4c6a73cdba544868365a95df2cb233a92147516227c53800af615be528436c54",
+      "generatedPath": ".opf-spec/openapi.yaml",
+      "generatedSha256": "4c6a73cdba544868365a95df2cb233a92147516227c53800af615be528436c54",
+      "expectedOnlyTerminalNewlineNormalization": true,
+      "match": true
+    },
+    {
+      "publicEntrypoint": "@openpresentation/opf/spec/schemas/opf.schema.json",
+      "resolvedPackagePath": "/private/tmp/opf-author-navigation-acceptance-20260921/pptx-dev/node_modules/.pnpm/@openpresentation+opf@0.11.0/node_modules/@openpresentation/opf/dist/spec/schemas/opf.schema.json",
+      "packageSourceSha256": "dbb84e4e55a0d98bb14433d7df8682e1c7ef95af9b49e9d7a256b2b5ac334076",
+      "generatedPath": ".opf-spec/opf.schema.json",
+      "generatedSha256": "dbb84e4e55a0d98bb14433d7df8682e1c7ef95af9b49e9d7a256b2b5ac334076",
+      "expectedOnlyTerminalNewlineNormalization": true,
+      "match": true
+    }
+  ],
+  "examples": "24 technical example outputs are hashed in build-and-preparation.json; generator uses the public installed examples entrypoint. No additional browser run."
+}

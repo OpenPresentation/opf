@@ -1,0 +1,15 @@
+{
+  "head": "79ba0157984fce8405eeb786b8ede1a4e59ba138",
+  "base": "e40c287b64fcbcfb85fb4a8a50641aea8e3e54a8",
+  "fullPrDeltaFiles": 729,
+  "patterns": [
+    ".github/workflows/**",
+    "scripts/verify-artifact-roundtrip.py",
+    "sdk/python/**"
+  ],
+  "matches": [],
+  "applicable": false,
+  "workflowSha256": "2736d7f87a5ae3fdb5b994d6a750d1c369f140e47b869a041c8671d62209b789",
+  "scope": "Python wheel/sdist artifact roundtrip workflow; not triggered/not applicable when no paths match, not a fresh passing check.",
+  "workflowDispatchPresent": false
+}

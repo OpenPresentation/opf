@@ -1,0 +1,10 @@
+{
+  "capturedAt": "2026-09-21T20:54:48.965472+00:00",
+  "head": "4338e57b951c469d5c5f239b78a303fbad3c745e",
+  "status": " M lib/opf-toolkit/browser-runtime.ts\n?? lib/opf-toolkit/__tests__/browser-runtime.test.ts\n",
+  "regularFilesChecked": 702,
+  "trackedSymlinksChecked": 33,
+  "changed": [],
+  "changedSymlinks": [],
+  "sourceBeforeSha256": "ebad5aa08a2f1719f4c9dfc636c50d61f795b21b1f8f33ea26e5c8ea9b4f7b1c"
+}

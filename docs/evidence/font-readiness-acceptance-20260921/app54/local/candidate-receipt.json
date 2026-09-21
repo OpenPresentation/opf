@@ -1,0 +1,28 @@
+{
+  "capturedAt": "2026-09-21T20:45:24.199250+00:00",
+  "head": "4338e57b951c469d5c5f239b78a303fbad3c745e",
+  "branch": "codex/font-readiness-concurrency-20260921",
+  "node": "v24.21.0",
+  "status": " M lib/opf-toolkit/browser-runtime.ts\n?? lib/opf-toolkit/__tests__/browser-runtime.test.ts\n",
+  "files": [
+    {
+      "path": "lib/opf-toolkit/browser-runtime.ts",
+      "bytes": 2595,
+      "sha256": "ee43146ba7a2869d50e2d144095967d62a6b0e82bc6cfa13ad15e9e3ddd003c3"
+    },
+    {
+      "path": "lib/opf-toolkit/__tests__/browser-runtime.test.ts",
+      "bytes": 10513,
+      "sha256": "3179b1420f200b91b8f3b1eb48fb16e74227d167fef229e2d163cf8f70a9d903"
+    }
+  ],
+  "checks": {
+    "focusedPassed": 12,
+    "focusedFailed": 0,
+    "typecheckExit": 0,
+    "scopedLintExit": 0,
+    "scopedLintBytes": 0,
+    "diffCheckExit": 0
+  },
+  "limits": "Mocked orchestration only. No fresh browser/build/platform or production acceptance."
+}

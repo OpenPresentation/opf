@@ -1,0 +1,9 @@
+{
+  "recordedAt": "2026-09-21T21:15:29.080338+00:00",
+  "command": "python3 docs/evidence/windows-native-tab-analysis-20260921/verify.py",
+  "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+  "exitCode": 1,
+  "failure": "The independent analyzer replay raised TypeError: write_text() got an unexpected keyword argument newline.",
+  "scope": "Initial local default-Python compatibility failure. Original accepted source/evidence unchanged; original stderr remains in the root tool transcript. Mixed-table verifier separately passed on the same interpreter.",
+  "nextCheck": "Use the bundled newer Python interpreter; do not change evidence or relax verifier."
+}

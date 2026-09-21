@@ -1,0 +1,10 @@
+{
+  "reviewer": "root",
+  "verifiedAt": "2026-09-21T21:41:50.449264+00:00",
+  "acceptanceManifestSha256": "d021600307c21d1f66c72c54aa549e9ac4a0aca8567a1fb61b3f3b2af1c65b41",
+  "allManifestEntriesVerified": 167,
+  "bytesVerified": 332586291,
+  "testedSourceFilesStillExact": 702,
+  "testedSymlinkTargetsStillExact": 33,
+  "decision": "Source and local acceptance reviewed; approve publishing the test-only follow-up with curated evidence for fresh platform CI, not merge or release."
+}

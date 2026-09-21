@@ -1,0 +1,40 @@
+{
+  "kind": "passive-readiness-diagnostic",
+  "outcomeBeforeCollection": "passed",
+  "limits": {
+    "entriesPerDocument": 2000,
+    "documents": 8
+  },
+  "droppedDocuments": 0,
+  "errors": [],
+  "inspectorSnapshotRetained": false,
+  "inspectorPagehideFlushObserved": false,
+  "missingInspectorPagehideFlush": true,
+  "limitations": "Observers and hooks have overhead, and a hook timeout can affect the runner result. The assertion outcome before collection and diagnostic errors are recorded separately. Longtasks do not identify the responsible function; resource entries describe completed requests only. No private APIs or request/response bodies are recorded.",
+  "sourcePath": "extracted/windows-readiness-windows-latest/svg-security-published-SVG-25408-rted-document-strings-inert/windows-readiness-timings.json",
+  "sourceSha256": "43dfa14a4584dfc4aa8b26ab33071bbe4538938a5c8c3f8ed8ba0cf3e1d3b3dc",
+  "scope": "Separate passing SVG-security case only, not the failed anonymous Inspector case; no causal inference.",
+  "documents": [
+    {
+      "timeOrigin": 1790028788939.6,
+      "capturedAt": 4025.1999999999534,
+      "url": "http://127.0.0.1:4325/author",
+      "reason": "after-test",
+      "supported": [
+        "resource",
+        "longtask",
+        "navigation",
+        "paint"
+      ],
+      "observerFailures": [],
+      "droppedEntries": 0,
+      "entryCount": 99,
+      "entryTypes": {
+        "navigation": 2,
+        "resource": 89,
+        "longtask": 6,
+        "paint": 2
+      }
+    }
+  ]
+}

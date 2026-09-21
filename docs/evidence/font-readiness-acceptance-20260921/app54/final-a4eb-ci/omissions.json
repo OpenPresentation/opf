@@ -1,0 +1,635 @@
+{
+  "auditSource": "/private/tmp/opf-font-readiness-concurrency-20260921/ci",
+  "originalManifestSha256": "4fba7308a7c1ad22b5fedaf84f680b0b68160ad48cb9be7a4797a098119e38d4",
+  "allOriginalAuditFilesVerified": 144,
+  "included": {
+    "release-audit.json": "app54/final-a4eb-ci/release-audit.json",
+    "run-final.json": "app54/final-a4eb-ci/run-final.json",
+    "jobs-final.json": "app54/final-a4eb-ci/jobs-final.json",
+    "pr-final.json": "app54/final-a4eb-ci/pr-final.json",
+    "check-runs-final.json": "app54/final-a4eb-ci/check-runs-final.json",
+    "source-audit.json": "app54/final-a4eb-ci/source-audit.json",
+    "source-final-verification.json": "app54/final-a4eb-ci/source-final-verification.json",
+    "linux-browser-outcomes.json": "app54/final-a4eb-ci/linux-browser-outcomes.json",
+    "windows-browser-outcomes.json": "app54/final-a4eb-ci/windows-browser-outcomes.json",
+    "windows-exact-failure.log": "app54/final-a4eb-ci/windows-exact-failure.log",
+    "windows-job.log": "app54/final-a4eb-ci/windows-job.log",
+    "linux-result-excerpt.log": "app54/final-a4eb-ci/linux-result-excerpt.log",
+    "artifacts-final.json": "app54/final-a4eb-ci/artifacts-final.json",
+    "artifact-integrity.json": "app54/final-a4eb-ci/artifact-integrity.json",
+    "artifact-workflow-scope.json": "app54/final-a4eb-ci/artifact-workflow-scope.json",
+    "artifact-workflow.yml.txt": "app54/final-a4eb-ci/artifact-workflow.yml.txt",
+    "windows-timing-summary.json": "app54/final-a4eb-ci/windows-timing-summary.json",
+    "preview-final.json": "app54/final-a4eb-ci/preview-final.json",
+    "preview-http-boundary.json": "app54/final-a4eb-ci/preview-http-boundary.json",
+    "preview-boundary-provenance.json": "app54/final-a4eb-ci/preview-boundary-provenance.json",
+    "REPORT.md": "app54/final-a4eb-ci/REPORT.md.txt",
+    "SHA256SUMS.json": "app54/final-a4eb-ci/original-audit-manifest.json",
+    "extracted/browser-failures-windows-latest/inspector-actions-Inspecto-ddffb-urrent-draft-before-handoff/error-context.md": "app54/final-a4eb-ci/failure/error-context.md.txt",
+    "extracted/browser-failures-windows-latest/inspector-actions-Inspecto-ddffb-urrent-draft-before-handoff/inspector-pending-action.png": "app54/final-a4eb-ci/failure/inspector-pending-action.png",
+    "extracted/browser-failures-windows-latest/inspector-actions-Inspecto-ddffb-urrent-draft-before-handoff/trace.zip": "app54/final-a4eb-ci/failure/trace.zip.base64.txt"
+  },
+  "omitted": [
+    {
+      "path": "browser-failures-windows-latest.zip",
+      "bytes": 11054020,
+      "sha256": "f490910d37179c4278441eb4d0f1d54cf2251ded72e719c4964ffafb468750ee"
+    },
+    {
+      "path": "check-runs-initial.json",
+      "bytes": 11021,
+      "sha256": "6a0d41d46224559e29cb7c751a3875b23164fe7d2727d98d9bb347ea0bbedce8"
+    },
+    {
+      "path": "committed-blobs.json",
+      "bytes": 79657,
+      "sha256": "63feae47481c5a2441f7ca03201ede7466eac3747e4c3341b981defbd99b8d26"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/author-anonymous-Author-ca-d560b-xport-and-undoable-reimport/author-export.pptx",
+      "bytes": 16330,
+      "sha256": "070cddbcb5a3aa9d6916531f212fd067d9ebe8033f715e98ade5b78229530696"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/author-anonymous-Author-ca-d560b-xport-and-undoable-reimport/author.png",
+      "bytes": 103500,
+      "sha256": "2cf5a2358671396de8b18d7724376bbca04af0788b09c399de12030a877ef454"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/author-json-options.png",
+      "bytes": 166224,
+      "sha256": "a28fb240377c04502ac8d7a515400c59563214e5439b314f7702f39ef691abb2"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/author-layout-options.png",
+      "bytes": 180328,
+      "sha256": "8951d6f882eb7e2f14fae422db74e65925a5efaef791863ff6c914422cecf6ff"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/author-theme-options.png",
+      "bytes": 174791,
+      "sha256": "d41b44e083b3bfc93b59e106c86e8b215834d42f5b666e5e8ee3dd86be7b22d5"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/author-json-options-Author-cda0b-exact-CRLF-source-undo-redo/author-json-options.png",
+      "bytes": 166224,
+      "sha256": "a28fb240377c04502ac8d7a515400c59563214e5439b314f7702f39ef691abb2"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/author-json-options-Author-cda0b-exact-CRLF-source-undo-redo/author-layout-options.png",
+      "bytes": 180328,
+      "sha256": "8951d6f882eb7e2f14fae422db74e65925a5efaef791863ff6c914422cecf6ff"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/author-json-options-Author-cda0b-exact-CRLF-source-undo-redo/author-theme-options.png",
+      "bytes": 174791,
+      "sha256": "d41b44e083b3bfc93b59e106c86e8b215834d42f5b666e5e8ee3dd86be7b22d5"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/completion-keyboard-Author-66da5-and-editor-remount-behavior/edited-source.json",
+      "bytes": 202,
+      "sha256": "f09f49ed355f8a3503d13e4268153e970f9c06ee986065a89d6e8be6665f4671"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/completion-keyboard-Author-66da5-and-editor-remount-behavior/original-source.json",
+      "bytes": 205,
+      "sha256": "61d515fd443a657eb4f6c2fed93e3734182aab2f84b2fb250c1fd1aa3b8e1af6"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/completion-keyboard-Author-66da5-and-editor-remount-behavior/suggestion-details.png",
+      "bytes": 138238,
+      "sha256": "1309226e389718c4b3f431ca6dc17c07d49dfdee22dd83ecfc82d545c83db725"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/completion-keyboard-Author-93788-ir-original-keyboard-owners/keyboard-bubbles.json",
+      "bytes": 1652,
+      "sha256": "a1bdb25e35eda58a487c4ace86108da82c499940f90e45f754d93c9fd17484cb"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/completion-keyboard-Author-93788-ir-original-keyboard-owners/quick-input-keeps-focus.png",
+      "bytes": 87027,
+      "sha256": "9eb0a777181f3345fde6f4c013fdaaa57296821ab2d1fcf2e991122ddd2ca75d"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/completion-preservation-Au-807ee-act-source-in-one-undo-step/actual-source.json",
+      "bytes": 767,
+      "sha256": "3590b76552f6afaf7c9af8095eae05feb702333fc1a0fd10b2fad491bd285651"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/completion-preservation-Au-807ee-act-source-in-one-undo-step/desired-source.json",
+      "bytes": 767,
+      "sha256": "3590b76552f6afaf7c9af8095eae05feb702333fc1a0fd10b2fad491bd285651"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/completion-preservation-Au-807ee-act-source-in-one-undo-step/original-source.json",
+      "bytes": 738,
+      "sha256": "1525be094f6dab2c58d5cdd69fc5acb86423764305f05e9515110af8f67a2636"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/completion-preservation-Au-807ee-act-source-in-one-undo-step/structural-choice.png",
+      "bytes": 162585,
+      "sha256": "e67fa7d43e1d833708fb562fe3101ee42c2b05887201e4adc9c3c3717a6ff68f"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/completion-preservation-Au-96e4e-act-source-in-one-undo-step/actual-source.json",
+      "bytes": 804,
+      "sha256": "302a28aff91ab1669ecfad7cbd2e2a08fa65f451efbdb81e508dc7021e15100f"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/completion-preservation-Au-96e4e-act-source-in-one-undo-step/desired-source.json",
+      "bytes": 804,
+      "sha256": "302a28aff91ab1669ecfad7cbd2e2a08fa65f451efbdb81e508dc7021e15100f"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/completion-preservation-Au-96e4e-act-source-in-one-undo-step/original-source.json",
+      "bytes": 772,
+      "sha256": "a90c0c8927c1bd6d92c4732c94fda179f1b7ff151d61a91230f2097d55537de9"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/completion-preservation-Au-96e4e-act-source-in-one-undo-step/structural-choice.png",
+      "bytes": 158023,
+      "sha256": "8516380f46cfb283f786fd348d2c2ef5249c39331df8af6900bcf2e188f8c4ff"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/completion-preservation-Au-b9e03-s-prior-undo-history-intact/escaped-current-alternatives.png",
+      "bytes": 170177,
+      "sha256": "127cb18da3e02ed5a2cba0f2b94c6e47c9bacfc09a43631d235ccdc14219d3d3"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/inspector-actions-Inspecto-07c93-and-unchanged-draft-history/copy-json-current-source.png",
+      "bytes": 182994,
+      "sha256": "80291d8c30dbad71972ee3de5bf9bc7b776f4e1b95d29317d157c53190020912"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/inspector-actions-Inspecto-07c93-and-unchanged-draft-history/pending-json.opf.json",
+      "bytes": 285,
+      "sha256": "0eb0e8b4a5439b39ab87abcd2f3a38a6cbe5aa473150be42e16a79fd5def9e6e"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/inspector-actions-Inspecto-07c93-and-unchanged-draft-history/unchanged-draft.opf.json",
+      "bytes": 285,
+      "sha256": "0eb0e8b4a5439b39ab87abcd2f3a38a6cbe5aa473150be42e16a79fd5def9e6e"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/inspector-actions-Inspecto-13850-ent-source-with-local-mocks/local-mocked-boundaries.json",
+      "bytes": 929,
+      "sha256": "98c2ee79dfd2785ba6631d8cf2feb3fd59ec6a12cea8282297c31f476ddf6ab4"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/inspector-actions-Inspecto-36d82-hing-payloads-and-filenames/explicit-share-url.txt",
+      "bytes": 312,
+      "sha256": "1688581b3639effc63a200114b56b7b370bbf9e3ce7c355bde02847e1bd912d6"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/inspector-actions-Inspecto-36d82-hing-payloads-and-filenames/pending.pptx",
+      "bytes": 15258,
+      "sha256": "824d88f21331bc8cf343dcadf9b5a02ab81b1ed9c33209a4c484d006d521d1ff"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/inspector-actions-Inspecto-36d82-hing-payloads-and-filenames/share-pptx-current-source.png",
+      "bytes": 182989,
+      "sha256": "e0374a5ba9520459efe2e3eca2b4e51575a78a62795a33a0b9867b54dd223adf"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/inspector-actions-Inspecto-667f5-vigation-after-a-new-source/pdf-401-request.json",
+      "bytes": 417,
+      "sha256": "a1f35d23137bdba706ef37ae566b356ea0680a9fcfcf718c169de5ff1127b568"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/inspector-actions-Inspecto-93924-afts-produce-no-JSON-output/accepted-after-rejection.opf.json",
+      "bytes": 291,
+      "sha256": "a17c805b5b534577b18ef9ea4662b3aa2c3068cbc7b858f843f11ba364419a72"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/inspector-actions-Inspecto-c6cfc-r-after-CRLF-source-ingress/accepted-source.json",
+      "bytes": 274,
+      "sha256": "a84d616abbcddc8cefeb489a3eeea890e009cd60bff5eb4ead59b485b6433f19"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/inspector-actions-Inspecto-c6cfc-r-after-CRLF-source-ingress/crlf-ingress-boundary.json",
+      "bytes": 236,
+      "sha256": "1b0d02abe7e0f91baefb62f7fa46dffd2ee643bd26e42416501226aa4ccc23a5"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/inspector-actions-Inspecto-c6cfc-r-after-CRLF-source-ingress/crlf-ingress-pending-json.opf.json",
+      "bytes": 287,
+      "sha256": "8923843f15492cab7c3939d0bcc51e0c709da1ffe1cefd34ba3032c9b8449606"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/inspector-actions-Inspecto-c6cfc-r-after-CRLF-source-ingress/crlf-ingress-redo.opf.json",
+      "bytes": 287,
+      "sha256": "8923843f15492cab7c3939d0bcc51e0c709da1ffe1cefd34ba3032c9b8449606"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/inspector-actions-Inspecto-c6cfc-r-after-CRLF-source-ingress/crlf-ingress-undo.opf.json",
+      "bytes": 274,
+      "sha256": "a84d616abbcddc8cefeb489a3eeea890e009cd60bff5eb4ead59b485b6433f19"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/inspector-actions-Inspecto-c6cfc-r-after-CRLF-source-ingress/crlf-input.json",
+      "bytes": 279,
+      "sha256": "78610b22063e62678c798005717552658e9a6d88ff839435bd95ba98dc74119e"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/inspector-actions-Inspecto-fb8b1-vigation-after-a-new-source/pdf-200-request.json",
+      "bytes": 417,
+      "sha256": "a1f35d23137bdba706ef37ae566b356ea0680a9fcfcf718c169de5ff1127b568"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/inspector-anonymous-JSON-a-151ab-ownload-and-shared-reimport/inspector.png",
+      "bytes": 169331,
+      "sha256": "a8557bef0997ee57388704bedf3e79fcc1576db16b9bf9a3ac84aeeb0ee247fa"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/inspector-editing-all-Insp-15273-fline-undo-export-at-1440px/inspector-later-slide.png",
+      "bytes": 197066,
+      "sha256": "714c714c9efdbe2af4835525de74b0b9390324b3af22a5f108083dc742eadfaa"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/inspector-editing-all-Insp-a78d3-ffline-undo-export-at-540px/inspector-later-slide.png",
+      "bytes": 65262,
+      "sha256": "8a8a7e404114ae4054c7533a69a9f8f67eefe020ed6c23d60bf1271e4cc7af0b"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/inspector-recovery-font-su-beb5b--Inspector-canvas-is-active/inspector-font-notes.png",
+      "bytes": 172160,
+      "sha256": "9c79dbc986e09db8c00ee38a92bde5f40cfdf96bf1c86822fa1e4ecc56546043"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/inspector-recovery-schema--76507-ers-after-source-correction/inspector-render-recovered.png",
+      "bytes": 175887,
+      "sha256": "c6507f6f0b59da435b693fc14ac0c73143b85c18d3021df4befe9ef9a7e37909"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/inspector-recovery-schema--76507-ers-after-source-correction/inspector-strict-overflow.png",
+      "bytes": 285302,
+      "sha256": "3ea4d0b854cb423fd4c8c1e4f31ed6df804e73025577f9a35980bc108759bab2"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/inspector-share-publicatio-2236b-etain-the-accepted-document/accepted-url.txt",
+      "bytes": 247,
+      "sha256": "1112e3b357aa7747f32cb19c5047bb54ff5b40df9233e0f8420be87babff4dd7"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/inspector-share-publicatio-2236b-etain-the-accepted-document/edited-refreshed-publications.json",
+      "bytes": 944,
+      "sha256": "26bffa181c0fda25a268d4618d4c60f8324e5007a4a869383e33465e9adbf703"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/inspector-share-publicatio-2236b-etain-the-accepted-document/hash-navigation-publications.json",
+      "bytes": 540,
+      "sha256": "55a0dbb24c2b119c96a87a57faff2a736ce9f6d0352abea961dc99a426f69ad1"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/inspector-share-publicatio-2236b-etain-the-accepted-document/hydrated-publications.json",
+      "bytes": 630,
+      "sha256": "0e14365fe4a2a9252a3c672f631358361d09cd856cdada664d0dd44cb5679f9d"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/inspector-share-publicatio-2236b-etain-the-accepted-document/refreshed-publications.json",
+      "bytes": 809,
+      "sha256": "3b3486f391aa940cfe098fc456d3368a08d280a8bb1fe03611b172b0fe71c36d"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/inspector-share-publicatio-2236b-etain-the-accepted-document/share-refresh-preserved.png",
+      "bytes": 175441,
+      "sha256": "ccb73a348044e8bd42e027a766ed34503353053c883970c4ec2017d04ea20e19"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/inspector-share-publicatio-2236b-etain-the-accepted-document/source-edited-publications.json",
+      "bytes": 630,
+      "sha256": "bd05aba4eafceafe5c37cb49bd6c5afef3c3f92378f98c5bf026459e395bff9b"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/inspector-share-publicatio-33578-etain-the-accepted-document/accepted-url.txt",
+      "bytes": 247,
+      "sha256": "1112e3b357aa7747f32cb19c5047bb54ff5b40df9233e0f8420be87babff4dd7"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/inspector-share-publicatio-33578-etain-the-accepted-document/edited-refreshed-publications.json",
+      "bytes": 944,
+      "sha256": "26bffa181c0fda25a268d4618d4c60f8324e5007a4a869383e33465e9adbf703"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/inspector-share-publicatio-33578-etain-the-accepted-document/hash-navigation-publications.json",
+      "bytes": 540,
+      "sha256": "55a0dbb24c2b119c96a87a57faff2a736ce9f6d0352abea961dc99a426f69ad1"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/inspector-share-publicatio-33578-etain-the-accepted-document/hydrated-publications.json",
+      "bytes": 973,
+      "sha256": "b7c345ad4569a3a340b75dbb6639fb8571ab40d215bbc6f9e7bf55505d83c15e"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/inspector-share-publicatio-33578-etain-the-accepted-document/refreshed-publications.json",
+      "bytes": 809,
+      "sha256": "3b3486f391aa940cfe098fc456d3368a08d280a8bb1fe03611b172b0fe71c36d"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/inspector-share-publicatio-33578-etain-the-accepted-document/share-refresh-preserved.png",
+      "bytes": 175441,
+      "sha256": "ccb73a348044e8bd42e027a766ed34503353053c883970c4ec2017d04ea20e19"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/inspector-share-publicatio-33578-etain-the-accepted-document/source-edited-publications.json",
+      "bytes": 630,
+      "sha256": "bd05aba4eafceafe5c37cb49bd6c5afef3c3f92378f98c5bf026459e395bff9b"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/json-paste-formatting-warm-44312-t-Document-remains-undoable/attachments/authored-source-json-26755502c3a6586cfacd34a2e65936d8ca340069.json",
+      "bytes": 302,
+      "sha256": "f4177cbb0fc6a9ad471fc3ab52f39cb14c7dc62b497ded9d840c9e0dbea21e62"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/json-paste-formatting-warm-44312-t-Document-remains-undoable/attachments/copied-source-json-5a6f7ecab7f67288eb0bd4f322675f6fe4e0221a.json",
+      "bytes": 302,
+      "sha256": "f4177cbb0fc6a9ad471fc3ab52f39cb14c7dc62b497ded9d840c9e0dbea21e62"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/json-paste-formatting-warm-44312-t-Document-remains-undoable/attachments/paste-worker-requests-json-b77d34ad5be3212b8d8dfc37f956e28878d176ee.json",
+      "bytes": 83,
+      "sha256": "54051725e2e06fd8e83369628086d875dcd7b48b1e02b5e5435e00e6021bdfa4"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/json-paste-formatting-warm-44312-t-Document-remains-undoable/authored-source.json",
+      "bytes": 302,
+      "sha256": "f4177cbb0fc6a9ad471fc3ab52f39cb14c7dc62b497ded9d840c9e0dbea21e62"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/json-paste-formatting-warm-44312-t-Document-remains-undoable/copied-source.json",
+      "bytes": 302,
+      "sha256": "f4177cbb0fc6a9ad471fc3ab52f39cb14c7dc62b497ded9d840c9e0dbea21e62"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/json-paste-formatting-warm-44312-t-Document-remains-undoable/paste-worker-requests.json",
+      "bytes": 83,
+      "sha256": "54051725e2e06fd8e83369628086d875dcd7b48b1e02b5e5435e00e6021bdfa4"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/source-download-preservati-2c728-nd-through-canvas-undo-redo/edited.opf.json",
+      "bytes": 326,
+      "sha256": "277350fc50382bead15896aef5fa53a33cd099792df57153d0b9b1b12f1fd08d"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/source-download-preservati-2c728-nd-through-canvas-undo-redo/inspector-source-preserved.png",
+      "bytes": 178195,
+      "sha256": "580f6ee20904c722caf1030cf51c31f475eb6916998d462db2b1ecbc65b1eb47"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/source-download-preservati-2c728-nd-through-canvas-undo-redo/original-source.json",
+      "bytes": 325,
+      "sha256": "2e99a948a29cfb1d643f68d46e6afd913ec2f953d4d329e0faee8a7e3ca4a5ec"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/source-download-preservati-2c728-nd-through-canvas-undo-redo/redo.opf.json",
+      "bytes": 326,
+      "sha256": "277350fc50382bead15896aef5fa53a33cd099792df57153d0b9b1b12f1fd08d"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/source-download-preservati-2c728-nd-through-canvas-undo-redo/undo.opf.json",
+      "bytes": 325,
+      "sha256": "2e99a948a29cfb1d643f68d46e6afd913ec2f953d4d329e0faee8a7e3ca4a5ec"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/source-download-preservati-2c728-nd-through-canvas-undo-redo/untouched.opf.json",
+      "bytes": 325,
+      "sha256": "2e99a948a29cfb1d643f68d46e6afd913ec2f953d4d329e0faee8a7e3ca4a5ec"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/source-download-preservati-5105f-download-and-canvas-history/author-source-preserved.png",
+      "bytes": 121494,
+      "sha256": "28b59a7efb0b2103b10728d866f477bbfa478dbdcbf66257658829cf1ac8e162"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/source-download-preservati-5105f-download-and-canvas-history/canceled-and-unchanged.opf.json",
+      "bytes": 325,
+      "sha256": "2e99a948a29cfb1d643f68d46e6afd913ec2f953d4d329e0faee8a7e3ca4a5ec"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/source-download-preservati-5105f-download-and-canvas-history/code-after-edit.opf.json",
+      "bytes": 326,
+      "sha256": "277350fc50382bead15896aef5fa53a33cd099792df57153d0b9b1b12f1fd08d"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/source-download-preservati-5105f-download-and-canvas-history/code-untouched.opf.json",
+      "bytes": 325,
+      "sha256": "2e99a948a29cfb1d643f68d46e6afd913ec2f953d4d329e0faee8a7e3ca4a5ec"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/source-download-preservati-5105f-download-and-canvas-history/edited.opf.json",
+      "bytes": 326,
+      "sha256": "277350fc50382bead15896aef5fa53a33cd099792df57153d0b9b1b12f1fd08d"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/source-download-preservati-5105f-download-and-canvas-history/original-source.json",
+      "bytes": 325,
+      "sha256": "2e99a948a29cfb1d643f68d46e6afd913ec2f953d4d329e0faee8a7e3ca4a5ec"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/source-download-preservati-5105f-download-and-canvas-history/pending-export.opf.json",
+      "bytes": 333,
+      "sha256": "fef6e27eb0502229556af2721299c078060b2a552a41c4c76e014c98e0c07209"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/source-download-preservati-5105f-download-and-canvas-history/pending-redo.opf.json",
+      "bytes": 333,
+      "sha256": "fef6e27eb0502229556af2721299c078060b2a552a41c4c76e014c98e0c07209"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/source-download-preservati-5105f-download-and-canvas-history/pending-undo.opf.json",
+      "bytes": 326,
+      "sha256": "277350fc50382bead15896aef5fa53a33cd099792df57153d0b9b1b12f1fd08d"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/source-download-preservati-5105f-download-and-canvas-history/pending-without-blur.opf.json",
+      "bytes": 339,
+      "sha256": "10d30faeb9f230b1e9ebe0f8bf20a91e65bc428051de62b6063c56fcada1c0cd"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/source-download-preservati-5105f-download-and-canvas-history/preview-untouched.opf.json",
+      "bytes": 325,
+      "sha256": "2e99a948a29cfb1d643f68d46e6afd913ec2f953d4d329e0faee8a7e3ca4a5ec"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/source-download-preservati-5105f-download-and-canvas-history/redo.opf.json",
+      "bytes": 326,
+      "sha256": "277350fc50382bead15896aef5fa53a33cd099792df57153d0b9b1b12f1fd08d"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/source-download-preservati-5105f-download-and-canvas-history/rejected-code-source.opf.json",
+      "bytes": 362,
+      "sha256": "6998a9087f9827297ccedc02c7f065e94f1bb38925e8046f2ec3da146083e1ad"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/source-download-preservati-5105f-download-and-canvas-history/rejected-duplicate-key.opf.json",
+      "bytes": 362,
+      "sha256": "6998a9087f9827297ccedc02c7f065e94f1bb38925e8046f2ec3da146083e1ad"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/source-download-preservati-5105f-download-and-canvas-history/reordered-import-redo.opf.json",
+      "bytes": 147,
+      "sha256": "73adbc340500a894e4366bc080e49fe1bdeaacc6792cb0487e7442d6ecea652d"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/source-download-preservati-5105f-download-and-canvas-history/reordered-import-undo.opf.json",
+      "bytes": 339,
+      "sha256": "10d30faeb9f230b1e9ebe0f8bf20a91e65bc428051de62b6063c56fcada1c0cd"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/source-download-preservati-5105f-download-and-canvas-history/reordered-import.opf.json",
+      "bytes": 147,
+      "sha256": "73adbc340500a894e4366bc080e49fe1bdeaacc6792cb0487e7442d6ecea652d"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/source-download-preservati-5105f-download-and-canvas-history/undo.opf.json",
+      "bytes": 325,
+      "sha256": "2e99a948a29cfb1d643f68d46e6afd913ec2f953d4d329e0faee8a7e3ca4a5ec"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/source-download-preservati-f4120-download-and-canvas-history/author-source-preserved.png",
+      "bytes": 96303,
+      "sha256": "471e91a3123b0b563a4ecf4a663e8546c844ffceb94e56d8fc7db23a096c048a"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/source-download-preservati-f4120-download-and-canvas-history/canceled-and-unchanged.opf.json",
+      "bytes": 332,
+      "sha256": "c40c5080ca23fb28e12398e7a35d3dac7859e7cc659b32a24133559119722608"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/source-download-preservati-f4120-download-and-canvas-history/code-after-edit.opf.json",
+      "bytes": 333,
+      "sha256": "2a1735f628ea3b06436d3baadbf85ec648280994690033c35c28cbe0a5ddd9f0"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/source-download-preservati-f4120-download-and-canvas-history/code-untouched.opf.json",
+      "bytes": 332,
+      "sha256": "c40c5080ca23fb28e12398e7a35d3dac7859e7cc659b32a24133559119722608"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/source-download-preservati-f4120-download-and-canvas-history/edited.opf.json",
+      "bytes": 333,
+      "sha256": "2a1735f628ea3b06436d3baadbf85ec648280994690033c35c28cbe0a5ddd9f0"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/source-download-preservati-f4120-download-and-canvas-history/original-source.json",
+      "bytes": 332,
+      "sha256": "c40c5080ca23fb28e12398e7a35d3dac7859e7cc659b32a24133559119722608"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/source-download-preservati-f4120-download-and-canvas-history/pending-export.opf.json",
+      "bytes": 340,
+      "sha256": "539230d507f00c2818b0eeba38fd1cb05b4d72e05d6407d36f7657ef600a002d"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/source-download-preservati-f4120-download-and-canvas-history/pending-redo.opf.json",
+      "bytes": 340,
+      "sha256": "539230d507f00c2818b0eeba38fd1cb05b4d72e05d6407d36f7657ef600a002d"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/source-download-preservati-f4120-download-and-canvas-history/pending-undo.opf.json",
+      "bytes": 333,
+      "sha256": "2a1735f628ea3b06436d3baadbf85ec648280994690033c35c28cbe0a5ddd9f0"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/source-download-preservati-f4120-download-and-canvas-history/preview-untouched.opf.json",
+      "bytes": 332,
+      "sha256": "c40c5080ca23fb28e12398e7a35d3dac7859e7cc659b32a24133559119722608"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/source-download-preservati-f4120-download-and-canvas-history/redo.opf.json",
+      "bytes": 333,
+      "sha256": "2a1735f628ea3b06436d3baadbf85ec648280994690033c35c28cbe0a5ddd9f0"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/source-download-preservati-f4120-download-and-canvas-history/undo.opf.json",
+      "bytes": 332,
+      "sha256": "c40c5080ca23fb28e12398e7a35d3dac7859e7cc659b32a24133559119722608"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/svg-security-published-SVG-25408-rted-document-strings-inert/attachments/windows-readiness-timings-81c529492d1a66458d9e6b2deab07c8f1aa612d9.json",
+      "bytes": 66413,
+      "sha256": "8c0dfb7051dde5fa01ed7163f3359594fa75ecf72ae216a7b8c3f7e9b1051fcb"
+    },
+    {
+      "path": "extracted/browser-failures-windows-latest/svg-security-published-SVG-25408-rted-document-strings-inert/windows-readiness-timings.json",
+      "bytes": 66413,
+      "sha256": "8c0dfb7051dde5fa01ed7163f3359594fa75ecf72ae216a7b8c3f7e9b1051fcb"
+    },
+    {
+      "path": "extracted/windows-readiness-windows-latest/svg-security-published-SVG-25408-rted-document-strings-inert/windows-readiness-timings.json",
+      "bytes": 66413,
+      "sha256": "8c0dfb7051dde5fa01ed7163f3359594fa75ecf72ae216a7b8c3f7e9b1051fcb"
+    },
+    {
+      "path": "jobs-initial.json",
+      "bytes": 7520,
+      "sha256": "c162b1aadcf24f8b54e771ee6f0840446845d18b6d751742ea92c45b79997bf1"
+    },
+    {
+      "path": "jobs-progress1.json",
+      "bytes": 7735,
+      "sha256": "d399134b1de73dba49bc8738558c77c2b62ac0b161389c2e1fdafed3dd150399"
+    },
+    {
+      "path": "jobs-progress2.json",
+      "bytes": 7821,
+      "sha256": "f721fbead9a790287d6ff9114336720e5c7fb9b4cf28814d6947da7e2bd9f5d5"
+    },
+    {
+      "path": "jobs-progress3.json",
+      "bytes": 7821,
+      "sha256": "f721fbead9a790287d6ff9114336720e5c7fb9b4cf28814d6947da7e2bd9f5d5"
+    },
+    {
+      "path": "jobs-progress4.json",
+      "bytes": 8275,
+      "sha256": "7689369c1e5a915142b102e34357f602e56a4a394df0341ce5f3df072c3173a1"
+    },
+    {
+      "path": "jobs-progress5.json",
+      "bytes": 8686,
+      "sha256": "9b1c8da16d7d1a29447bcb8d244e7c4625b5a2cb6ac22b77eae1d661452188c7"
+    },
+    {
+      "path": "linux-job.log",
+      "bytes": 108200,
+      "sha256": "505cfd6334f5f15039b5fcdd57680bb9cf257d4d2518702e834190fae25fb79f"
+    },
+    {
+      "path": "pr-initial.json",
+      "bytes": 19453,
+      "sha256": "f871b429dc54502642900a97b55f5f2efdb664aa514937263e7be6d194069f9e"
+    },
+    {
+      "path": "preview-initial.json",
+      "bytes": 755,
+      "sha256": "0f147e4a45b3076d5ab30d0255bafc5acb914c77fef4dc412e643c27e056fe78"
+    },
+    {
+      "path": "run-progress1.json",
+      "bytes": 13312,
+      "sha256": "14057d88728ac8a895f851c248d77a75cea4f213a343e00af05a01e4b43897a4"
+    },
+    {
+      "path": "runs-initial.json",
+      "bytes": 13348,
+      "sha256": "ab9c7d9216ac76fd094a42c73eba4190f6e97109f12e1dfbff9bdef39f94de6e"
+    },
+    {
+      "path": "status-initial.json",
+      "bytes": 5249,
+      "sha256": "aaf6603fbb3f25b3ae44230ecfdea8ea10a4fb2a00f4956c48e8e22ce4e0e049"
+    },
+    {
+      "path": "windows-failure-excerpt.log",
+      "bytes": 6633,
+      "sha256": "d759b0ef7510502dcb42563aa9212b64df996259baafb7eb89ec4561af391287"
+    },
+    {
+      "path": "windows-readiness-windows-latest.zip",
+      "bytes": 6832,
+      "sha256": "4d7804daf6e2a94a9ac74318fa8e970eb0cc903a96300b7fbfb61430f5ee3530"
+    }
+  ],
+  "reason": "Omit unrelated passing screenshots/downloads, duplicate outer artifacts and intermediate/full successful logs. Complete original artifact digest/CRC/member inventory and final outcome/source records are copied. The sole failed trace is retained losslessly, with exact error context and captured pending-action PNG. Original private audit remains unchanged."
+}

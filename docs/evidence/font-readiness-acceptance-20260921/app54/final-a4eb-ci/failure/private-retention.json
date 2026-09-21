@@ -1,0 +1,12 @@
+{
+  "capturedAt": "2026-09-21T22:25:56.090174+00:00",
+  "originalEncodedSource": "/private/tmp/opf-font-readiness-handoff-20260921/opf/docs/evidence/font-readiness-acceptance-20260921/app54/final-a4eb-ci/failure/trace.zip.base64.txt",
+  "encodedSourceSHA256": "9312b98b3e3c451cf6c366ca1a79f9761e92e21c97b9a3f9c8ac4370c474ce0e",
+  "privateArchive": "/Users/michael/.codex/visualizations/2026/09/21/01a0c3f4-8cea-7f12-9033-8948f1a86619/week-wrap-private/app54-a4eb-windows-navigation-failure/trace.zip",
+  "bytes": 6944325,
+  "sha256": "c7589c634e5177b393d3697a4d9c9bb48b4809d958644973267a453c1812883a",
+  "zipMembers": 95,
+  "zipCRC": "pass",
+  "permissions": "directory0700/file0600",
+  "publication": "The raw CI trace and base64 payload are not published. Original failed outcome and hash binding are retained; no new diagnosis or rerun."
+}
