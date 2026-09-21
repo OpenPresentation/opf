@@ -10,7 +10,7 @@ Preserve document fields unrelated to the requested change, including assets, ca
 
 ## File edits with the CLI
 
-The installable CLI preview supports `opf edit deck.opf.json --patch changes.json --dry-run`, then `--output reviewed.opf.json` or `--in-place` to save. Patches use JSON Patch arrays with `add`, `remove`, `replace`, `move`, `copy`, and `test`. The complete result must validate before saving. With no output option the candidate goes to stdout. Use `--expect-sha256` with the digest from an earlier `opf validate` for a file revision guard. File edits have no persistent undo history; save a separate output or use version control when needed. Coordinate concurrent writers externally. Check `opf --version` and `opf --help`; an older installed CLI may not support these commands.
+Published CLI 0.9.0 (Node 24, bundled core 0.11.0) supports `opf edit deck.opf.json --patch changes.json --dry-run`, then `--output reviewed.opf.json` or `--in-place` to save. Patches use JSON Patch arrays with `add`, `remove`, `replace`, `move`, `copy`, and `test`. The complete result must validate before saving. With no output option the candidate goes to stdout. Use `--expect-sha256` with the digest from an earlier `opf validate` for a file revision guard. File edits have no persistent undo history; save a separate output or use version control when needed. Coordinate concurrent writers externally. Check `opf --version` and `opf --help`; an older installed CLI may not support these commands.
 
 ## Precise edits
 

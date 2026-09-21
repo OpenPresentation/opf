@@ -8,11 +8,11 @@ Public npm package: [`@openpresentation/opf`](https://www.npmjs.com/package/@ope
 
 Open Presentation Format is the portable, human-readable JSON document format for slide decks.
 
-This repository is the canonical home for the OPF **spec**, **JSON Schemas**, **catalog presets**, examples, generated developer types, local validation tooling, and planning docs for the future render/edit/convert toolkit. OpenPresentation publishes open-source code and documentation only; it does not provide hosted APIs, hosted rendering functions, queues, storage, authentication, jobs, previews, SLAs, telemetry, or managed infrastructure.
+This repository is the canonical home for the OPF **spec**, **JSON Schemas**, **catalog presets**, examples, generated developer types, local validation tooling, and integration docs for the render/edit/convert toolkit. OpenPresentation publishes open-source code and documentation only; it does not provide hosted APIs, hosted rendering functions, queues, storage, authentication, jobs, previews, SLAs, telemetry, or managed infrastructure.
 
 For AI agents, use the [OPF skill set](docs/agent-skills.md) for authoring, layout, presets, editing, export, and schema inspection.
 
-CLI 0.5.0 installs all six skills into your project with `npx @openpresentation/cli@latest skills install`. It uses local copies, preserves existing instructions and refuses to overwrite customized skills. See the [installation and update guide](docs/agent-skills.md) for personal or agent-specific targets and pre-release testing.
+Published CLI 0.9.0 installs all six skills into your project with `npx @openpresentation/cli@0.9.0 skills install`. It uses local copies, preserves existing instructions and refuses to overwrite customized skills. See the [installation and update guide](docs/agent-skills.md) for personal or agent-specific targets and source development.
 
 For a fresh Node 24 project that installs **published** packages (not this
 checkout), follow the [developer quickstart](docs/quickstart.md) and the
@@ -42,11 +42,11 @@ And they don't start from a blank canvas. [pptx.gallery](https://pptx.gallery) i
 
 ## Start in three steps
 
-1. **Install the coordinated published packages** on Node 24. See [the developer quickstart](docs/quickstart.md) for the current pin set (`@openpresentation/opf@0.10.1` plus renderer, editor, PPTX and CLI 0.8.1 / 0.7.1).
+1. **Install the coordinated published packages** on Node 24. See [the developer quickstart](docs/quickstart.md) for the current pin set: core 0.11.0, renderer 0.9.0, editor 0.8.0, PPTX 0.9.1 and CLI 0.9.0.
 2. **Author, lint, paginate, preview and export.** Copy [`docs/quickstart/developer-quickstart.opf.json`](./docs/quickstart/developer-quickstart.opf.json) and run the commands in that guide. `validatePresentation` / `opf validate` is local schema checking, not visual verification.
 3. **Know the limits.** The [compatibility matrix](docs/compatibility-matrix.md) lists shipped APIs versus renderer issue 24, native PowerPoint issue 87, and other deferred work. Browse presets at [pptx.gallery](https://pptx.gallery).
 
-Your deck lives in git from the first commit. Nothing in these steps calls a hosted service, and nothing ever will — that boundary is the point.
+Your deck can live in git from the first commit. After installing dependencies and supplying referenced assets, these commands run locally without a model provider, account or hosted OPF API.
 
 ## JavaScript and TypeScript
 
@@ -152,7 +152,7 @@ See [CSV and JSON data import](./docs/data-import.md) for editable tables and ch
 | [`docs/catalog-schema-reference.md`](./docs/catalog-schema-reference.md) | Author-facing reference for every companion catalog schema. |
 | [`docs/content-payloads.md`](./docs/content-payloads.md) | Author-facing notes for slide and region content payloads, including chart and table object shapes. |
 | [`docs/examples.md`](./docs/examples.md) | Guide to the expanded scenario-oriented examples under `examples/gallery/`. |
-| [`docs/live-editor.md`](./docs/live-editor.md) | Browser canvas, live OPF editing, font loading, installable preview packages, and current fidelity limits. |
+| [`docs/live-editor.md`](./docs/live-editor.md) | Browser canvas, live OPF editing, font loading, published packages, and current fidelity limits. |
 | [`docs/release-process.md`](./docs/release-process.md) | Maintainer runbook for tagging, trusted npm publishing, verification, and GitHub release notes. |
 | [`spec/schemas/*.schema.json`](./spec/schemas) | Companion schemas for catalog records and sub-objects. |
 | [`spec/catalogs/<catalog-kind>/`](./spec/catalogs) | Canonical bundled catalog records. |
