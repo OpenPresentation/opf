@@ -1,0 +1,223 @@
+[
+  {
+    "name": "@openpresentation/opf",
+    "plannedVersion": "0.11.0",
+    "latestVersion": "0.11.0",
+    "metadata": {
+      "version": "0.11.0",
+      "engines": {
+        "node": "24.x"
+      },
+      "dist": {
+        "shasum": "300d7fc700273e033a35984791ac5aca35367d67",
+        "tarball": "https://registry.npmjs.org/@openpresentation/opf/-/opf-0.11.0.tgz",
+        "fileCount": 525,
+        "integrity": "sha512-7Gm/FSyiGngHRkDG0SPL8V6FEC5nC8UpoffNWf8CqkyjXsqQ2BUIzVAEwHwKjEsEZ04FR2DT+Ohh8PJofNPFiw==",
+        "signatures": [
+          {
+            "sig": "MEQCIEyEY278Dzymx7fi2U5/W2ge1eZ2TqIzxSEDbdfEHl3HAiAUQXD2e3lpmCQJMAaYq27dDYRGpoITKCd8eCb9ieQHPg==",
+            "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+          },
+          {
+            "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U",
+            "sig": "MEQCICqpkop2pQNZEwFgq3TwOhSvl4mvNpcdPJN7TIp9p42gAiAJexg/LjMcesxOpYVHV0vvuDTZ2+5toKJZmGqJc6Jq4Q=="
+          }
+        ],
+        "attestations": {
+          "url": "https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf@0.11.0",
+          "provenance": {
+            "predicateType": "https://slsa.dev/provenance/v1"
+          }
+        },
+        "unpackedSize": 6515599
+      },
+      "dependencies": {
+        "ajv": "^8.17.1",
+        "ajv-formats": "^3.0.1",
+        "jsonc-parser": "3.3.1"
+      },
+      "gitHead": "b8a1faf24203635bd36b09ea19f44bcd53781f16"
+    }
+  },
+  {
+    "name": "@openpresentation/opf-render",
+    "plannedVersion": "0.9.0",
+    "latestVersion": "0.9.0",
+    "metadata": {
+      "version": "0.9.0",
+      "engines": {
+        "node": "24.x"
+      },
+      "dist": {
+        "shasum": "62ddfc6a76a77df9e3395eef1edf49c043540789",
+        "tarball": "https://registry.npmjs.org/@openpresentation/opf-render/-/opf-render-0.9.0.tgz",
+        "fileCount": 17,
+        "integrity": "sha512-uHWABof7cuLmTAglctvcjuV5dRyIa2qmeGdwONIuKCAnNQXjAOQKXido9OcyGtk6xFjzBFtLtvD3sZOwPEJIJA==",
+        "signatures": [
+          {
+            "sig": "MEUCIFcPrAiZRzqcVoywoLwDbs31OZp8fq40bdodAm49kMwSAiEAzodmMg76dMe2w85EaLNJX4HiuTCKJ2gJp076rOPgnYs=",
+            "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+          },
+          {
+            "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U",
+            "sig": "MEUCIQCUPcy2hB8HaVPKVXPw0R51jXjr5QI9arjgQTNVHNnfSQIgezKGo9utXo3VmB8LaFGuPRkFWHno1GVAAbIM3DEB3mc="
+          }
+        ],
+        "attestations": {
+          "url": "https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf-render@0.9.0",
+          "provenance": {
+            "predicateType": "https://slsa.dev/provenance/v1"
+          }
+        },
+        "unpackedSize": 150598
+      },
+      "dependencies": {
+        "sharp": "0.35.4",
+        "fontkit": "^2.0.4",
+        "pdf-lib": "^1.17.1",
+        "@resvg/resvg-js": "^2.6.2",
+        "@openpresentation/opf": "^0.11.0",
+        "@expo-google-fonts/arimo": "0.4.3",
+        "@expo-google-fonts/tinos": "0.4.2",
+        "@expo-google-fonts/roboto": "0.4.3",
+        "@expo-google-fonts/caladea": "0.4.2",
+        "@expo-google-fonts/carlito": "0.4.1",
+        "@expo-google-fonts/cousine": "0.4.3",
+        "@expo-google-fonts/gelasio": "0.4.1",
+        "@expo-google-fonts/roboto-mono": "0.4.2"
+      },
+      "gitHead": "114bf596e9034c0b80a8c92df6a956a04ef18bef"
+    }
+  },
+  {
+    "name": "@openpresentation/opf-editor",
+    "plannedVersion": "0.8.0",
+    "latestVersion": "0.8.0",
+    "metadata": {
+      "version": "0.8.0",
+      "engines": {
+        "node": "24.x"
+      },
+      "dist": {
+        "shasum": "6093cc2bfb438488886c23c20e141c377d3071fd",
+        "tarball": "https://registry.npmjs.org/@openpresentation/opf-editor/-/opf-editor-0.8.0.tgz",
+        "fileCount": 42,
+        "integrity": "sha512-cSx6DkfK4N95Zk3lvCBxhQePWIIgBDvON4hcKLvELulpbKiYnvmoAb07LJE4pbXGE0npUdmU/r25TShdtOcR4A==",
+        "signatures": [
+          {
+            "sig": "MEQCICP/2vYWmZhvUFAhQyd/SKXsZXcyOVd7e0JT2RIsrnYIAiBoZHK/cJLB7oQ6yBTUABLFuuKXkxTOyMEgiKvyqbl4Ww==",
+            "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+          },
+          {
+            "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U",
+            "sig": "MEUCIEaf0fB8A6da3VtJoQNVHBwwdIxeqt6eKmjxHeKQ5vurAiEAimxWpzST7HwCiyRRzlrbWp6G5fgE8a8gMQ5WAoKNFOc="
+          }
+        ],
+        "attestations": {
+          "url": "https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf-editor@0.8.0",
+          "provenance": {
+            "predicateType": "https://slsa.dev/provenance/v1"
+          }
+        },
+        "unpackedSize": 259836
+      },
+      "dependencies": {
+        "jsonc-parser": "3.3.1",
+        "@codemirror/lint": "6.9.7",
+        "@codemirror/view": "6.43.11",
+        "@lezer/highlight": "1.2.3",
+        "@codemirror/state": "6.7.4",
+        "@codemirror/search": "6.7.2",
+        "@codemirror/commands": "6.11.0",
+        "@codemirror/language": "6.12.4",
+        "@codemirror/lang-json": "6.0.2",
+        "@openpresentation/opf": "^0.11.0",
+        "@codemirror/autocomplete": "6.20.3"
+      },
+      "peerDependencies": {
+        "@openpresentation/opf-render": "^0.9.0"
+      },
+      "gitHead": "476191e28e6f5f5ec32146aeb416f5286b4d0570"
+    }
+  },
+  {
+    "name": "@openpresentation/opf-pptx",
+    "plannedVersion": "0.9.1",
+    "latestVersion": "0.9.1",
+    "metadata": {
+      "version": "0.9.1",
+      "engines": {
+        "node": "24.x"
+      },
+      "dist": {
+        "shasum": "32ec7602fe08dd094ed20fb753fed763d1221406",
+        "tarball": "https://registry.npmjs.org/@openpresentation/opf-pptx/-/opf-pptx-0.9.1.tgz",
+        "fileCount": 28,
+        "integrity": "sha512-krzDAKjDByP2zsoR4VeyyIwU7uhcVbxpeBYEIw7vlkoRWWiFq170rhQzQZx5lbMD7u2magYEkdUt3rUgByCKjw==",
+        "signatures": [
+          {
+            "sig": "MEYCIQDKiSZpJ62TDwp28OalXyzSP0Oo1SJxz0cSS75YLiNkmQIhAPev1zrVTPeVlfCsSGOke0LHXxttGlzb9p9QUFnB79aS",
+            "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+          },
+          {
+            "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U",
+            "sig": "MEUCIHj/GoiGPoVl8bocmpIS0e/PgM7fO4eSKaFoEXmGkyjIAiEAmyJrtGNQ7DqVpj154cXIWiXai9lD57AMiJ2E4tA969s="
+          }
+        ],
+        "attestations": {
+          "url": "https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf-pptx@0.9.1",
+          "provenance": {
+            "predicateType": "https://slsa.dev/provenance/v1"
+          }
+        },
+        "unpackedSize": 781305
+      },
+      "dependencies": {
+        "jszip": "3.10.2",
+        "sharp": "0.35.4",
+        "fflate": "^0.8.3",
+        "fast-xml-parser": "^5.8.0",
+        "@openpresentation/opf": "^0.11.0"
+      },
+      "peerDependencies": {
+        "@openpresentation/opf-render": "^0.9.0"
+      },
+      "gitHead": "fcc006a6887c549a96a3bc8bbdb957cc54fe67dd"
+    }
+  },
+  {
+    "name": "@openpresentation/cli",
+    "plannedVersion": "0.9.0",
+    "latestVersion": "0.9.0",
+    "metadata": {
+      "version": "0.9.0",
+      "engines": {
+        "node": "24.x"
+      },
+      "dist": {
+        "shasum": "41246fec0bd6d0785a9ce5c352e946c7df2f5f72",
+        "tarball": "https://registry.npmjs.org/@openpresentation/cli/-/cli-0.9.0.tgz",
+        "fileCount": 5,
+        "integrity": "sha512-YR0zhGe0fpcKp617Aqjz6ZIql0fsNrMVcSW84tEkMBc/9DLxLFAyxJLkExorOrfFYanhvWmhoRG94x3AuMTvpQ==",
+        "signatures": [
+          {
+            "sig": "MEQCIHkkmDqakIM3WMo0JFhqHxG2KDz2tGmy92BKuOXAujS8AiBuHZjHCEo5GWEyxPxb0VGRNlfDTvnD9dkxZPWOmyt4lg==",
+            "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+          },
+          {
+            "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U",
+            "sig": "MEUCICjnayv4pdCbkJZ2Lw3Sbn8dTY2ZPG47B0iRVu2RcebCAiEA8YmBjDsvCh5V6mkzYUVkj3PI5/J4PhOxhGmK8D6pShw="
+          }
+        ],
+        "attestations": {
+          "url": "https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fcli@0.9.0",
+          "provenance": {
+            "predicateType": "https://slsa.dev/provenance/v1"
+          }
+        },
+        "unpackedSize": 3550941
+      },
+      "gitHead": "b8a1faf24203635bd36b09ea19f44bcd53781f16"
+    }
+  }
+]

@@ -1,0 +1,9 @@
+{
+  "phase": "Registry fixture generation before any output directory or Office call",
+  "node": "24.21.0",
+  "errorCode": "ERR_PACKAGE_PATH_NOT_EXPORTED",
+  "message": "No exports main defined in @openpresentation/opf/package.json",
+  "cause": "Harness used CJS require.resolve for the core root, which is exported for ESM import conditions",
+  "outcome": "Harness error, not a product or native failure",
+  "next": "Use actual ESM public-export resolution in the consumer"
+}

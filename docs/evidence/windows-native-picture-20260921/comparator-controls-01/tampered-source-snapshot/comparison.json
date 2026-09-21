@@ -1,0 +1,165 @@
+{
+  "passed": false,
+  "mode": "supplied-presentation",
+  "scope": "Supplied registry presentation lifecycle, source snapshot identity, native geometry/alt text and current-image reimport. Runtime binding covers only the four recorded OpenPresentation package manifests, complete dist trees, the PPTX vendor tree, and consumer lockfile; it does not prove transitive dependency bytes.",
+  "node": "v24.21.0",
+  "verifierSha256": "1e2cd017ea16f8475fc3cf9fd8c0df46255dc8e01b1d37a80c3a07f26f4844e9",
+  "reportSha256": "316c23a27d638ca29e23c6362f529ca89538f25bac80741a1c3fcb99eb7f556d",
+  "checks": [
+    {
+      "name": "Node 24 supported",
+      "passed": true
+    },
+    {
+      "name": "native report readable",
+      "passed": true
+    },
+    {
+      "name": "worker report readable",
+      "passed": true
+    },
+    {
+      "name": "supplied-presentation mode requires generation argument",
+      "passed": true
+    },
+    {
+      "name": "registry generation report readable",
+      "passed": true
+    },
+    {
+      "name": "owned presentations closed",
+      "passed": true
+    },
+    {
+      "name": "native control reached completion",
+      "passed": true
+    },
+    {
+      "name": "worker completed within its deadline",
+      "passed": true
+    },
+    {
+      "name": "verifier source matches owned input snapshot",
+      "passed": true
+    },
+    {
+      "name": "processHelper source matches owned input snapshot",
+      "passed": true
+    },
+    {
+      "name": "presentation source matches owned input snapshot",
+      "passed": false
+    },
+    {
+      "name": "opened source matches owned input snapshot",
+      "passed": false
+    },
+    {
+      "name": "saved presentation file identity",
+      "passed": true
+    },
+    {
+      "name": "reopened presentation file identity",
+      "passed": true
+    },
+    {
+      "name": "original raster file identity",
+      "passed": true
+    },
+    {
+      "name": "reopened raster file identity",
+      "passed": true
+    },
+    {
+      "name": "saved and reopened presentation identities agree",
+      "passed": true
+    },
+    {
+      "name": "save/reopen raster is identical",
+      "passed": true
+    },
+    {
+      "name": "original contains one embedded native picture",
+      "passed": true
+    },
+    {
+      "name": "reopened contains one embedded native picture",
+      "passed": true
+    },
+    {
+      "name": "original left within unchanged 0.02pt gate",
+      "passed": true
+    },
+    {
+      "name": "original top within unchanged 0.02pt gate",
+      "passed": true
+    },
+    {
+      "name": "original width within unchanged 0.02pt gate",
+      "passed": true
+    },
+    {
+      "name": "original height within unchanged 0.02pt gate",
+      "passed": true
+    },
+    {
+      "name": "original native alt",
+      "passed": true
+    },
+    {
+      "name": "reopened left within unchanged 0.02pt gate",
+      "passed": true
+    },
+    {
+      "name": "reopened top within unchanged 0.02pt gate",
+      "passed": true
+    },
+    {
+      "name": "reopened width within unchanged 0.02pt gate",
+      "passed": true
+    },
+    {
+      "name": "reopened height within unchanged 0.02pt gate",
+      "passed": true
+    },
+    {
+      "name": "reopened native alt",
+      "passed": true
+    },
+    {
+      "name": "registry package and lock bindings unchanged",
+      "passed": true
+    },
+    {
+      "name": "opened supplied registry presentation",
+      "passed": false
+    },
+    {
+      "name": "current picture reimport",
+      "passed": true
+    },
+    {
+      "name": "write imported OPF evidence without overwriting",
+      "passed": true
+    },
+    {
+      "name": "comparator source hash available",
+      "passed": true
+    }
+  ],
+  "failures": [
+    {
+      "name": "presentation source matches owned input snapshot",
+      "message": "Owned input snapshot bytes changed.\n+ actual - expected\n\n+ '35c03a8e0b6d73b91c72ed89ce09b45d0b3a491def1681ee30c108825f90bbaa'\n- '9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937'\n"
+    },
+    {
+      "name": "opened source matches owned input snapshot",
+      "message": "Missing owned presentation snapshot."
+    },
+    {
+      "name": "opened supplied registry presentation",
+      "message": "Opened presentation bytes differ from the generated registry PPTX.\n+ actual - expected\n\n+ null\n- '9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937'\n"
+    }
+  ],
+  "outputPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\tampered-source-snapshot\\comparison.json"
+}

@@ -1,0 +1,20 @@
+{
+  "scope": "ZIP CRC and XML well-formedness through independent Python readers; no Open XML schema, native rendering or editability claim.",
+  "python": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
+  "verifierSha256": "eb7fc1b5475bd9ad1bf49f45c02f900d02240faa2820ece7e503a820bee9bd45",
+  "passed": true,
+  "files": [
+    {
+      "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-picture-01\\image-only.pptx",
+      "sha256": "9bc1779b13d77641bb4040abed99178b5bee146ba505b7ef49fed82ea6f5a937",
+      "xmlParts": 20,
+      "errors": [],
+      "media": [
+        {
+          "name": "ppt/media/image-1-1.png",
+          "sha256": "2608d745f3d1dddc963dafe9b517bc7af9e983e7318bf59bd520415589c36905"
+        }
+      ]
+    }
+  ]
+}

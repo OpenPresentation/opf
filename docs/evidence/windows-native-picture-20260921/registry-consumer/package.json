@@ -1,0 +1,20 @@
+{
+  "name": "registry-consumer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@openpresentation/cli": "0.9.0",
+    "@openpresentation/opf": "0.11.0",
+    "@openpresentation/opf-editor": "0.8.0",
+    "@openpresentation/opf-pptx": "0.9.1",
+    "@openpresentation/opf-render": "0.9.0"
+  }
+}

@@ -1,0 +1,34 @@
+[
+  {
+    "name": "opf",
+    "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\sources\\opf",
+    "head": "ef0444bff688b3d9c9d7b040603a5f0a98741a2f",
+    "status": [
+      "## codex/windows-native-resume-20260921...origin/main"
+    ]
+  },
+  {
+    "name": "opf-render",
+    "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\sources\\opf-render",
+    "head": "114bf596e9034c0b80a8c92df6a956a04ef18bef",
+    "status": [
+      "## codex/windows-native-resume-20260921...origin/main"
+    ]
+  },
+  {
+    "name": "opf-pptx",
+    "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\sources\\opf-pptx",
+    "head": "fcc006a6887c549a96a3bc8bbdb957cc54fe67dd",
+    "status": [
+      "## codex/windows-native-resume-20260921...origin/main"
+    ]
+  },
+  {
+    "name": "opf-editor",
+    "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\sources\\opf-editor",
+    "head": "476191e28e6f5f5ec32146aeb416f5286b4d0570",
+    "status": [
+      "## codex/windows-native-resume-20260921...origin/main"
+    ]
+  }
+]

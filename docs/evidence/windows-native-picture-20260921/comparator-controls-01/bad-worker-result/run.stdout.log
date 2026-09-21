@@ -1,0 +1,1 @@
+{"passed":false,"mode":"supplied-presentation","checks":35,"failures":[{"name":"worker completed within its deadline","message":"Expected values to be strictly equal:\n\n1 !== 0\n"}],"outputPath":"C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\comparator-controls-01\\bad-worker-result\\comparison.json"}
