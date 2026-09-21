@@ -91,6 +91,8 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'Native picture edit harness controls failed' }
           & "$env:WINDIR/System32/WindowsPowerShell/v1.0/powershell.exe" -NoProfile -NonInteractive -File test/native-furniture-harness-check.ps1 -ReportPath artifacts/native-picture-harness/furniture-check.json
           if ($LASTEXITCODE -ne 0) { throw 'Native furniture harness controls failed' }
+          & "$env:WINDIR/System32/WindowsPowerShell/v1.0/powershell.exe" -NoProfile -NonInteractive -File test/native-tab-control-v2.ps1 -PureRegression
+          if ($LASTEXITCODE -ne 0) { throw 'Native tab metrics regression failed' }
       - run: npm run validate
       - run: npm test
       - run: npm run test:font-variants
