@@ -1,0 +1,84 @@
+{
+  "kind": "passive-readiness-diagnostic",
+  "outcomeBeforeCollection": "timedOut",
+  "limits": {
+    "entriesPerDocument": 2000,
+    "documents": 8
+  },
+  "droppedDocuments": 0,
+  "errors": [],
+  "inspectorSnapshotRetained": false,
+  "inspectorPagehideFlushObserved": false,
+  "missingInspectorPagehideFlush": true,
+  "limitations": "Observers and hooks have overhead, and a hook timeout can affect the runner result. The assertion outcome before collection and diagnostic errors are recorded separately. Longtasks do not identify the responsible function; resource entries describe completed requests only. No private APIs or request/response bodies are recorded.",
+  "timingFile": "windows-readiness/svg-security-published-SVG-25408-rted-document-strings-inert/windows-readiness-timings.json",
+  "timingFileSha256": "12326969c50722e36d2000b297c6b17077459435298368c3b279749ecd6bde3b",
+  "artifactId": 10657168358,
+  "archiveSha256": "433b69cb0f55275202647225f733613641ef2c841a9566abddc3142e2e9d6065",
+  "documents": [
+    {
+      "timeOrigin": 1790015660058.6,
+      "capturedAt": 35349,
+      "url": "http://127.0.0.1:4325/author",
+      "reason": "after-test",
+      "supported": [
+        "resource",
+        "longtask",
+        "navigation",
+        "paint"
+      ],
+      "observerFailures": [],
+      "droppedEntries": 0,
+      "counts": {
+        "navigation": 2,
+        "resource": 89,
+        "paint": 2,
+        "longtask": 3
+      },
+      "completeNavigationSnapshots": 1,
+      "incompleteNavigationSnapshots": 1,
+      "lastCompleteNavigation": {
+        "entryType": "navigation",
+        "url": "http://127.0.0.1:4325/author",
+        "startTime": 0,
+        "duration": 30208.800000000047,
+        "fetchStart": 1.900000000023283,
+        "domainLookupStart": 1.900000000023283,
+        "domainLookupEnd": 1.900000000023283,
+        "connectStart": 1.900000000023283,
+        "secureConnectionStart": 0,
+        "connectEnd": 1.900000000023283,
+        "requestStart": 3.400000000023283,
+        "responseStart": 23.199999999953434,
+        "responseEnd": 9985.5,
+        "transferSize": 3850,
+        "encodedBodySize": 3550,
+        "decodedBodySize": 15481,
+        "domInteractive": 9991.400000000023,
+        "domContentLoadedEventStart": 9991.5,
+        "domContentLoadedEventEnd": 9991.699999999953,
+        "domComplete": 30208.800000000047,
+        "loadEventStart": 30208.800000000047,
+        "loadEventEnd": 30208.800000000047
+      },
+      "longtasks": [
+        {
+          "startTime": 32191,
+          "duration": 420
+        },
+        {
+          "startTime": 32611.300000000047,
+          "duration": 194
+        },
+        {
+          "startTime": 33748.80000000005,
+          "duration": 627
+        }
+      ],
+      "longtaskDurationSumMs": 1241,
+      "latestCompletedResourceResponseEndMs": 34429.30000000005
+    }
+  ],
+  "sanitizedUrlCountVerified": 92,
+  "scope": "Outcome was already timedOut before collection; only Author data was retained. No Inspector timing, complete cross-navigation capture or timeout cause is established."
+}

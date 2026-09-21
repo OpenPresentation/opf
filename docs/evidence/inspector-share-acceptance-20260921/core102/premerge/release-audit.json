@@ -1,0 +1,48 @@
+{
+  "checkedAt": "2026-09-21T18:13:39.802474+00:00",
+  "head": "e746dee147ec4d3d0eef69e22e7e1d3f48b6346a",
+  "tree": "2de778c56a9d4afcc686830a39b881d147a1f4ee",
+  "base": "c3e35b92e53d12764f9b1b7487ccfb7325d5c1aa",
+  "clean": true,
+  "remoteBaseUnchanged": true,
+  "prStateAtReceipt": "OPEN",
+  "mergeStateAtReceipt": "CLEAN",
+  "runs": [
+    {
+      "conclusion": "success",
+      "created_at": "2026-09-21T18:03:06Z",
+      "event": "pull_request",
+      "head_branch": "codex/author-source-handoff-20260921",
+      "head_sha": "e746dee147ec4d3d0eef69e22e7e1d3f48b6346a",
+      "html_url": "https://github.com/OpenPresentation/opf/actions/runs/35635885648",
+      "id": 35635885648,
+      "name": "OPF CI",
+      "run_attempt": 1,
+      "status": "completed",
+      "updated_at": "2026-09-21T18:06:11Z"
+    },
+    {
+      "conclusion": "success",
+      "created_at": "2026-09-21T18:03:06Z",
+      "event": "pull_request",
+      "head_branch": "codex/author-source-handoff-20260921",
+      "head_sha": "e746dee147ec4d3d0eef69e22e7e1d3f48b6346a",
+      "html_url": "https://github.com/OpenPresentation/opf/actions/runs/35635885561",
+      "id": 35635885561,
+      "name": "Coordinated public packages",
+      "run_attempt": 1,
+      "status": "completed",
+      "updated_at": "2026-09-21T18:11:28Z"
+    }
+  ],
+  "nodeFromJobLogs": {
+    "opf": "v24.20.0",
+    "coordinated": "v24.20.0"
+  },
+  "committedEvidenceReceipt": "committed-evidence-verification.json",
+  "evidenceManifestSha256": "187c0201f86ca5506266bdc9fa8b1d5cbb9e1aab04aec75546cef91759a1a66f",
+  "evidenceFilesCovered": 155,
+  "gitBlobsVerified": 158,
+  "review": "Independent local review performed; no GitHub review decision recorded. Cursor Bugbot neutral because it failed to run, not acceptance.",
+  "boundaries": "Docs/evidence checkpoint only. Original App53 postmerge Linux failure, missing Inspector timings, preset source risk and native/font work remain unresolved. No rerun, merge, push, product edit, publication or browser action by this audit."
+}

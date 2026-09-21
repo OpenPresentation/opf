@@ -1,0 +1,291 @@
+{
+  "algorithm": "sha256",
+  "scope": "Every file in this evidence directory except this outer manifest, including the preserved nested diagnosis manifest.",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "bytes": 194,
+      "sha256": "f3826fc9ef3b6b87406f6747f4ecbe1b4be84c70bfb72398fc99b0733a8297a4"
+    },
+    {
+      "path": "README.md",
+      "bytes": 13558,
+      "sha256": "fbee80bb860c61606b2f79d444aae02c9ecdadb0436781086e67c1584b2f5b4f"
+    },
+    {
+      "path": "app54/ci/application-final.json",
+      "bytes": 397,
+      "sha256": "54db45e289031b087e28c88a84b6bcd7bffec3080e69f3925570e750faad2844"
+    },
+    {
+      "path": "app54/ci/application-jobs-final.json",
+      "bytes": 6882,
+      "sha256": "3fd5f2e6325cd9ff7a54a876a00c382d62e355d5f50bc31475f2188055fb12ec"
+    },
+    {
+      "path": "app54/ci/artifact-download-checks.json",
+      "bytes": 9114,
+      "sha256": "bbfe09cd5e7605e7e0478a2370a9655c25c14ac8ab7f56080abbe1cae24818d1"
+    },
+    {
+      "path": "app54/ci/artifact-workflow.yml.txt",
+      "bytes": 1665,
+      "sha256": "2736d7f87a5ae3fdb5b994d6a750d1c369f140e47b869a041c8671d62209b789"
+    },
+    {
+      "path": "app54/ci/artifacts-final.json",
+      "bytes": 940,
+      "sha256": "71cf0ababcae81f2f542cd3aedfc8b756b956630167a7f1936bf70ef605f32b2"
+    },
+    {
+      "path": "app54/ci/automated-review.json",
+      "bytes": 395,
+      "sha256": "2c703bc0bba0f7b85cea7b546ae6ee64dbe321b7ab63cd45162b23856570c609"
+    },
+    {
+      "path": "app54/ci/browser-results.json",
+      "bytes": 14983,
+      "sha256": "70a8f9b87d6d790a2dc102ebe3328232b1ce12667b9f069a536df2c4e68275f8"
+    },
+    {
+      "path": "app54/ci/ci-excerpt.log",
+      "bytes": 11886,
+      "sha256": "dcf10e2fd5587ff0c481553989b9af250fffba25be9e2dffcc632a994d400685"
+    },
+    {
+      "path": "app54/ci/committed-source-audit.json",
+      "bytes": 11100,
+      "sha256": "78817c168a10c78693675e2d43ec4b11713c71a7e9fbba7bef2a1691e66be588"
+    },
+    {
+      "path": "app54/ci/pr-final.json",
+      "bytes": 1340,
+      "sha256": "cbf2d5c80ca7392d90c565a3f5a79949aa9a9eb4b99f358d8520d0c2f0a176d0"
+    },
+    {
+      "path": "app54/ci/release-audit.json",
+      "bytes": 1820,
+      "sha256": "fac69eedbd8d9dd522a14fb9f64d263931c268ee452eafa5997bfa81e2ffe567"
+    },
+    {
+      "path": "app54/ci/remote-head.json",
+      "bytes": 156,
+      "sha256": "cafd40487d018b8a2f1d2ac6328151ac4a56a8c76b6e2c98b0c0d17eda34867e"
+    },
+    {
+      "path": "app54/ci/runs-final.json",
+      "bytes": 380,
+      "sha256": "4acaeba76acaaa7779f564f677856efd569804729743f15a9da9afe5cac90b51"
+    },
+    {
+      "path": "app54/ci/windows-failure-facts.json",
+      "bytes": 892,
+      "sha256": "c4fd23adbf9782a22434165730901412430a26a821f7fd4899e74ebcf6ccd957"
+    },
+    {
+      "path": "app54/ci/windows-timing-summary.json",
+      "bytes": 3083,
+      "sha256": "a966d6c8c36a32dbe29a70a95e4c21fdd7892bae67d311025aa9313d019d1136"
+    },
+    {
+      "path": "app54/commit-receipt.json",
+      "bytes": 290,
+      "sha256": "28f3492be23b48eec0f2f5ad94101fac896ceeeb4d92e5fbcaa215ca533a6268"
+    },
+    {
+      "path": "app54/lint-comparison-reviewed.json",
+      "bytes": 643,
+      "sha256": "f90c01fef34ffcf13673fee0a7e7212105ca2cf628b3d9dd0129c8a14addd557"
+    },
+    {
+      "path": "app54/pr54.json",
+      "bytes": 1318,
+      "sha256": "22c7f52add2e2ea059fd2a2fc0fdf94cd9a51599d3c405602714d32cb1fdf8ad"
+    },
+    {
+      "path": "app54/preview.json",
+      "bytes": 410,
+      "sha256": "7cc6fada1ed280ee0e51149729888c4edaa80268e14084e88de123032d515764"
+    },
+    {
+      "path": "app54/status/issue88-app54-held-update.md",
+      "bytes": 9352,
+      "sha256": "a4bcb5182c026b6f45ee85f592da8199ad177bd031c7c0449a0a0e6b456df5c5"
+    },
+    {
+      "path": "app54/status/issue88-app54-held-updated.json",
+      "bytes": 9468,
+      "sha256": "ed36a627286792d220aeccd89774bb5dc7f91a901c91a77bdef65cf7568f1cc4"
+    },
+    {
+      "path": "app54/status/pr54-held-description.json",
+      "bytes": 4770,
+      "sha256": "cd92633ba0cb11a286ead03f314469691e1607f2eb090fc713eaf36b099703bb"
+    },
+    {
+      "path": "app54/status/pr54-held-description.md",
+      "bytes": 4587,
+      "sha256": "5941b71c6303906cf4696846d127656f9ab8162c09660ea02e1c15e862dea260"
+    },
+    {
+      "path": "app54/validation-summary.json",
+      "bytes": 494,
+      "sha256": "aa22d366d573680be438b7314101539f1c250e3ff33f06e94fc25913817e07f4"
+    },
+    {
+      "path": "app54/windows-timeout/REPORT.md",
+      "bytes": 8287,
+      "sha256": "196d1bb4c4f197e17d1554afea983a76938c96d412b7130a91c4d0b8015871a5"
+    },
+    {
+      "path": "app54/windows-timeout/SHA256SUMS.json",
+      "bytes": 1572,
+      "sha256": "a8b42d495db7f231bb1b6d6d8d27b7d44fa5c8767c97e40186b2bc5548172943"
+    },
+    {
+      "path": "app54/windows-timeout/error-context.md",
+      "bytes": 8538,
+      "sha256": "669c9d26e636e60ef5ce881afd924cf3df304ee0fc541c48c77a36126b15ba5e"
+    },
+    {
+      "path": "app54/windows-timeout/extract.py",
+      "bytes": 3727,
+      "sha256": "06f3a1292033924216498784b80a9365b2f26682fd2c9b4690b8a56f74448cd1"
+    },
+    {
+      "path": "app54/windows-timeout/identities.json",
+      "bytes": 3215,
+      "sha256": "d3beeae99a28ebe301a21bc4660eb3e7082fa0a54dd5c1216fc505fca423eaaa"
+    },
+    {
+      "path": "app54/windows-timeout/preview-click-and-hook-events.json",
+      "bytes": 290271,
+      "sha256": "d9358a3f9d24619b9dcb17a282b806ebceab0b283e7d744303d1d298681ce8e6"
+    },
+    {
+      "path": "app54/windows-timeout/selected-network-records.json",
+      "bytes": 8737,
+      "sha256": "71b4c2b1402b41877da61fe35c20c1df52a186fc2efde505163ce56445671295"
+    },
+    {
+      "path": "app54/windows-timeout/test-timeline.json",
+      "bytes": 32646,
+      "sha256": "866693d0fd15cf0274646cb42588285f6a0b398917b144aee80f683d4bf31e07"
+    },
+    {
+      "path": "app54/windows-timeout/timing-summary.json",
+      "bytes": 8278,
+      "sha256": "8f35565faed06368f78405f4b436d2a2faa7b0c4dacc337c681efa08a386939f"
+    },
+    {
+      "path": "app54/windows-timeout/windows-readiness-timings.json",
+      "bytes": 65248,
+      "sha256": "12326969c50722e36d2000b297c6b17077459435298368c3b279749ecd6bde3b"
+    },
+    {
+      "path": "checkpoint.json",
+      "bytes": 5347,
+      "sha256": "446db0c72c601911b82e4e5a4aebf36a57cc8d4248fc37087f36dab4348d1e6f"
+    },
+    {
+      "path": "copy-provenance.json",
+      "bytes": 20258,
+      "sha256": "39e1134528214d9dad3435aca1c0ffbc14a80409ac457be44c9711ee03f58abe"
+    },
+    {
+      "path": "core102/merge-receipt.json",
+      "bytes": 391,
+      "sha256": "e0128ff5696ae0508d086376a0cdfeb9a85fa8d7b7b9ba0dbfc5239993deef95"
+    },
+    {
+      "path": "core102/merged-pr102.json",
+      "bytes": 244,
+      "sha256": "1bb064d28c437f953b5bac46cce235ff3540e757cf1b682d9fb7004f87617f6d"
+    },
+    {
+      "path": "core102/postmerge/coordinated-final.json",
+      "bytes": 356,
+      "sha256": "9b7d55c449959fdc13a62177cde0793a5cfec3e4fc58174126a7b8a0f3df13b3"
+    },
+    {
+      "path": "core102/postmerge/coordinated-jobs-final.json",
+      "bytes": 5351,
+      "sha256": "844342e888bad55d56e72a126bc89f0405cc0575e70f06f8cf4b811ae8a41d36"
+    },
+    {
+      "path": "core102/postmerge/opf-final.json",
+      "bytes": 335,
+      "sha256": "4b5f5910b6ee255635262c804b9282fac21bd704626315032cb6f1b95eae6470"
+    },
+    {
+      "path": "core102/postmerge/opf-jobs-final.json",
+      "bytes": 3246,
+      "sha256": "72c32629a0c095f5b8a6203f5b4cbc190eafc1223ceef650ae924f6266f9071b"
+    },
+    {
+      "path": "core102/postmerge/release-audit.json",
+      "bytes": 1756,
+      "sha256": "50f04e7f27e72f567bf8de416c4e8a8bb3c85df537e0c1032ea564c03b2c2b3d"
+    },
+    {
+      "path": "core102/premerge/coordinated-final.json",
+      "bytes": 396,
+      "sha256": "ac38efce10f032715281cfb99ef4c353ed659aeab6c66c2cde901a90f4aa90b2"
+    },
+    {
+      "path": "core102/premerge/coordinated-jobs-final.json",
+      "bytes": 5351,
+      "sha256": "afee32dc5f16d3df9fa667af948bf5a00802913f6e5a740cf164192b6fc8fb0a"
+    },
+    {
+      "path": "core102/premerge/opf-final.json",
+      "bytes": 375,
+      "sha256": "da23fe6ffbb9ff78e23292691e2f05e496c73008be3ff71d3ab33ee747cb2076"
+    },
+    {
+      "path": "core102/premerge/opf-jobs-final.json",
+      "bytes": 3246,
+      "sha256": "94856cab59d7cbee605064b8440d8deecadee9386a8ff8bb148f74add304ab6c"
+    },
+    {
+      "path": "core102/premerge/release-audit.json",
+      "bytes": 2025,
+      "sha256": "a998771935157eb88b06286b07ba8b74e51c988fffcd2f499da9d60fb730f0c0"
+    },
+    {
+      "path": "native/accepted-prs.json",
+      "bytes": 2826,
+      "sha256": "15256aec06f1a7cd93dfcfe53bcb9212d7f2045143fbdf472a897a9a33f5cd9c"
+    },
+    {
+      "path": "native/core103-postmerge-runs.json",
+      "bytes": 465,
+      "sha256": "49e74cb0f68d47dcfb8acc87eebc3ef5ded8fd535f8a5195dfef52b02db595d9"
+    },
+    {
+      "path": "native/pptx46-postmerge-runs.json",
+      "bytes": 224,
+      "sha256": "f33ed79dc1a84477097aaaf8f62fc3d16a6876ed5c4ecf2ddee91e65c9a71626"
+    },
+    {
+      "path": "native/pptx47-status.json",
+      "bytes": 4735,
+      "sha256": "44cc09e0086be25c47d503b64a986d1cdad8f87cc1587bc463c25ba8e1018d5e"
+    },
+    {
+      "path": "native/repo-sync.json",
+      "bytes": 1699,
+      "sha256": "e3962b2b2efbff79ebeeb26f39761f1be0b78ccfe99d60c2980df2452a38a842"
+    },
+    {
+      "path": "native/supervisor-update.md",
+      "bytes": 2432,
+      "sha256": "e399624074b3aa98dc64d154f4549750d8b6682b350cd1599be6187b6e8ecc2a"
+    },
+    {
+      "path": "verification.json",
+      "bytes": 1934,
+      "sha256": "bde48510b541e1d41508632ca10456c149b141542b82c2caf8a2fe0a834986a9"
+    }
+  ]
+}

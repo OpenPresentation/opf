@@ -1,0 +1,79 @@
+{
+  "run": 35638158483,
+  "attempt": 1,
+  "head": "60c91f6b97c75636f533202f4112e09dc01144e4",
+  "traceCrcPass": true,
+  "originals": [
+    {
+      "path": "/private/tmp/opf-inspector-share-guard-20260921/ci/windows-failure/svg-security-published-SVG-25408-rted-document-strings-inert/trace.zip",
+      "bytes": 6346295,
+      "sha256": "cb6c6df103e390bb5c9511aba9b4a9cd9c3ff7b59872f6ff1646e12779b2134b"
+    },
+    {
+      "path": "/private/tmp/opf-inspector-share-guard-20260921/ci/windows-failure/svg-security-published-SVG-25408-rted-document-strings-inert/error-context.md",
+      "bytes": 8538,
+      "sha256": "669c9d26e636e60ef5ce881afd924cf3df304ee0fc541c48c77a36126b15ba5e"
+    },
+    {
+      "path": "/private/tmp/opf-inspector-share-guard-20260921/ci/windows-failure/svg-security-published-SVG-25408-rted-document-strings-inert/windows-readiness-timings.json",
+      "bytes": 65248,
+      "sha256": "12326969c50722e36d2000b297c6b17077459435298368c3b279749ecd6bde3b"
+    },
+    {
+      "path": "/private/tmp/opf-inspector-share-guard-20260921/ci/windows-failure-artifact.zip",
+      "bytes": 9913848,
+      "sha256": "b457280d3c6418a72ab11dec6e4c0c402f8fad4469a1e0d7721a28d2dfea56cb"
+    },
+    {
+      "path": "/private/tmp/opf-inspector-share-guard-20260921/ci/windows-readiness-artifact.zip",
+      "bytes": 7103,
+      "sha256": "433b69cb0f55275202647225f733613641ef2c841a9566abddc3142e2e9d6065"
+    },
+    {
+      "path": "/private/tmp/opf-inspector-share-guard-20260921/ci/windows-job.log",
+      "bytes": 78211,
+      "sha256": "9cde88a0ef29a4659902708411041117d043ae0e16bcab71ac1bdf307a6998f1"
+    }
+  ],
+  "sources": [
+    {
+      "path": "/private/tmp/opf-inspector-share-guard-20260921/pptx-dev/tests/e2e/svg-security.spec.ts",
+      "bytes": 4523,
+      "sha256": "fc778f7e81134c485508ec5a47facd5074c2e4252a69be969fa804bdcbb30a07",
+      "traceSourceMatches": []
+    },
+    {
+      "path": "/private/tmp/opf-inspector-share-guard-20260921/pptx-dev/tests/e2e/helpers/readiness-diagnostics.ts",
+      "bytes": 8601,
+      "sha256": "031351f2a03c64602b88364c99ac2783fe8d6134db346b72f9c7024108d12fb5",
+      "traceSourceMatches": []
+    },
+    {
+      "path": "/private/tmp/opf-inspector-share-guard-20260921/pptx-dev/playwright.config.ts",
+      "bytes": 747,
+      "sha256": "c95c11d3cfb6fcbcbfaa0b5c353276a965d188a31f50778175a8ed8c7b895da2",
+      "traceSourceMatches": []
+    }
+  ],
+  "duplicateTimingEqual": true,
+  "traceEmbeddedSourceComparison": [
+    {
+      "traceMember": "src/fe067539b74b95607d238fe298031eaf574ffbfc.ts",
+      "bytes": 4599,
+      "sha256": "fbb417ceadaba952bc46f0adef499ea2abc026872d0efad4eaa429a8d6add901",
+      "crlfCount": 76,
+      "equalAfterCRLFNormalizationOnly": [
+        "/private/tmp/opf-inspector-share-guard-20260921/pptx-dev/tests/e2e/svg-security.spec.ts"
+      ]
+    },
+    {
+      "traceMember": "src/84fae6e68cbd665082022bfec2bf9e25b6766005.ts",
+      "bytes": 8753,
+      "sha256": "e4e4163a3aa996e894bcd81c6cbe872fcb6c3a1e9ec948cdc0ab1965819c61fd",
+      "crlfCount": 152,
+      "equalAfterCRLFNormalizationOnly": [
+        "/private/tmp/opf-inspector-share-guard-20260921/pptx-dev/tests/e2e/helpers/readiness-diagnostics.ts"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,176 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: svg-security.spec.ts >> published SVG renderer keeps hostile shared and imported document strings inert
+- Location: tests\e2e\svg-security.spec.ts:51:5
+
+# Error details
+
+```
+Test timeout of 45000ms exceeded.
+```
+
+# Page snapshot
+
+```yaml
+- generic [ref=f1e1]:
+  - main [ref=f1e3]:
+    - generic [ref=f1e5]:
+      - generic [ref=f1e6]:
+        - link "pptx.dev home" [ref=f1e7] [cursor=pointer]:
+          - /url: /
+          - generic [ref=f1e8]: P
+          - generic [ref=f1e9]: pptx.dev
+        - generic [ref=f1e11]:
+          - button "untrusted_shared_document" [ref=f1e12]
+          - generic "This draft is stored in this browser." [ref=f1e19]: local browser
+        - generic "Schema valid, no warnings, 1 slide" [ref=f1e24]:
+          - generic [ref=f1e27]: valid
+          - generic [aria-hidden] [ref=f1e28]: ·
+          - generic [ref=f1e29]: 1 slide
+        - generic [ref=f1e30]:
+          - button "copy" [ref=f1e31]
+          - button "Export" [ref=f1e36]
+          - button "New run" [ref=f1e42]
+          - button "More actions" [ref=f1e46]
+      - main [ref=f1e48]:
+        - generic [ref=f1e49]:
+          - tablist "Activity" [ref=f1e50]:
+            - tab "agent" [selected] [ref=f1e51]
+            - tab "tools" [ref=f1e57]
+            - tab "schema" [ref=f1e61]
+          - log [ref=f1e66]:
+            - generic [ref=f1e70]:
+              - heading "Agent transcript" [level=3] [ref=f1e71]
+              - paragraph [ref=f1e72]: Plans, tool calls, diffs, and checkpoints will appear here as Author works.
+          - generic [ref=f1e75]:
+            - group "Author understands these inputs as" [ref=f1e76]:
+              - generic [ref=f1e77]: intent
+              - 'generic "topic: Untrusted shared document (high confidence from opf)" [ref=f1e78]':
+                - generic [ref=f1e80]: topic
+                - generic [ref=f1e81]: Untrusted shared document
+              - 'generic "slides: 1 (high confidence from opf)" [ref=f1e82]':
+                - generic [ref=f1e84]: slides
+                - generic [ref=f1e85]: ~1
+            - group "Who is this for?" [ref=f1e86]:
+              - generic [ref=f1e87]:
+                - generic [ref=f1e91]: Who is this for?
+                - generic [ref=f1e92]: missing · audience
+              - paragraph [ref=f1e93]: I can pick a tone, narrative arc, and theme once I know the audience.
+              - generic [ref=f1e94]:
+                - button "Investors" [ref=f1e95]
+                - button "Customers" [ref=f1e96]
+                - button "Executives" [ref=f1e97]
+                - button "Engineering team" [ref=f1e98]
+                - button "Board" [ref=f1e99]
+              - generic [ref=f1e100]:
+                - generic [ref=f1e101]: One question only. Skip — I'll guess and you can revert in diff.
+                - button "skip — just run" [ref=f1e102]
+            - generic [ref=f1e103]: slides[0] · <script>window.__opfInjected=true</script>
+            - form "Agent message composer" [ref=f1e106]:
+              - group [ref=f1e107]:
+                - button "Choose File" [ref=f1e108]
+                - textbox "Agent message" [ref=f1e110]:
+                  - /placeholder: Paste OPF JSON, or sign in for AI...
+                - group [ref=f1e111]:
+                  - button "Attach source files" [ref=f1e113]:
+                    - generic [ref=f1e114]: Attach
+                  - button "Submit" [ref=f1e115]:
+                    - generic [ref=f1e116]: Sign in
+            - generic [ref=f1e118]:
+              - button "try a sample" [ref=f1e119] [cursor=pointer]
+              - button "rewrite" [ref=f1e120] [cursor=pointer]
+              - button "swap layout" [ref=f1e121] [cursor=pointer]
+              - button "restyle" [ref=f1e122] [cursor=pointer]
+              - button "regenerate" [ref=f1e123] [cursor=pointer]
+        - separator "Resize Agent and Edit panes" [ref=f1e124]
+        - generic [ref=f1e127]:
+          - tablist "Document view" [ref=f1e128]:
+            - generic [ref=f1e129]:
+              - tab "code" [ref=f1e130]
+              - tab "preview 1" [selected] [ref=f1e136]:
+                - generic [ref=f1e139]: preview
+                - generic [ref=f1e140]: "1"
+            - tablist "Preview export format" [ref=f1e143]:
+              - tab "PPTX" [selected] [ref=f1e144]
+              - tab "PDF" [disabled] [ref=f1e145]
+              - tab "PNG" [disabled] [ref=f1e146]
+          - generic [ref=f1e148]:
+            - region "Editable OPF canvas" [ref=f1e151]:
+              - generic [ref=f1e152]:
+                - generic [ref=f1e153]:
+                  - text: Slide
+                  - combobox "Canvas slide" [ref=f1e154]:
+                    - 'option "1: <script>window.__opfInjected=true</script>" [selected]'
+                - button "Undo canvas" [ref=f1e155]
+                - button "Redo canvas" [disabled] [ref=f1e156]
+                - button "Add content" [ref=f1e157]
+                - button "Arrange" [ref=f1e158]
+                - button "Import file" [ref=f1e159]
+              - generic [ref=f1e160]:
+                - group "Editable slide" [ref=f1e164]:
+                  - 'button "Edit title: <script>window.__opfInjected=true</script>" [ref=f1e166]':
+                    - generic [ref=f1e168]: <script>window.__opfInjected=true</script>
+                  - 'button "Edit text: content properties" [active] [ref=f1e169]':
+                    - generic [ref=f1e171]: Unsafe script link
+                    - generic [ref=f1e172]: Unsafe data link
+                    - link "Safe web link" [ref=f1e173] [cursor=pointer]:
+                      - /url: https://example.invalid/opf-security
+                    - generic [ref=f1e175]: "\"><svg"
+                    - generic [ref=f1e176]: onload="window.__opfInjected=true">
+                  - 'button "Edit image: content properties" [ref=f1e177]':
+                    - generic [ref=f1e180]:
+                      - generic [ref=f1e181]: Image unavailable
+                      - generic [ref=f1e182]: "\"><img src=x onerror=\"window.__opfInjected=true\">"
+                - paragraph [ref=f1e183]: Double-click text to edit. Changes update your OPF source.
+            - status [ref=f1e184]:
+              - generic [ref=f1e185]: preview up to date
+        - separator "Resize Edit and right rail" [ref=f1e186]
+        - complementary [ref=f1e189]:
+          - generic [ref=f1e190]:
+            - tablist "Right rail" [ref=f1e191]:
+              - tab "inspector" [selected] [ref=f1e192]
+              - tab "gallery" [ref=f1e198]
+              - tab "trace" [ref=f1e205]
+            - generic [ref=f1e210]:
+              - generic [ref=f1e211]:
+                - generic [ref=f1e212]:
+                  - heading "slides" [level=2] [ref=f1e213]
+                  - generic [ref=f1e216]: "1"
+                - button "slide 1 <script>window.__opfInjected=true</script>" [ref=f1e218]:
+                  - generic [ref=f1e223]:
+                    - generic [ref=f1e224]: slide 1
+                    - paragraph [ref=f1e226]: <script>window.__opfInjected=true</script>
+              - generic [ref=f1e227]:
+                - heading "layout" [level=2] [ref=f1e229]
+                - generic [ref=f1e235]:
+                  - generic [ref=f1e236]:
+                    - paragraph [ref=f1e237]: default
+                    - paragraph [ref=f1e238]: standard content slide
+                  - button "Swap layout ->" [ref=f1e239]
+              - generic [ref=f1e240]:
+                - heading "theme" [level=2] [ref=f1e242]
+                - generic [ref=f1e250]:
+                  - generic [ref=f1e251]:
+                    - paragraph [ref=f1e252]: default theme
+                    - paragraph [ref=f1e253]: No custom swatches
+                  - button "Swap theme ->" [ref=f1e254]
+              - generic [ref=f1e255]:
+                - heading "type" [level=2] [ref=f1e257]
+                - paragraph [ref=f1e261]: standard content slide
+              - generic [ref=f1e262]:
+                - heading "aspect" [level=2] [ref=f1e264]
+                - generic [ref=f1e267]:
+                  - button "16:9" [ref=f1e268]
+                  - button "4:3" [disabled] [ref=f1e269]
+                  - button "square" [disabled] [ref=f1e270]
+  - alert [ref=f1e271]
+  - generic [ref=f1e272]:
+    - alert
+    - alert
+```
