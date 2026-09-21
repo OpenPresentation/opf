@@ -1,0 +1,575 @@
+﻿{
+    "schemaVersion":  1,
+    "scope":  "One read-only native PowerPoint Presentation.Fonts enumeration and a bounded current-content/rich-run observation; no edit, save, embedding, reopen, renderer, PDF, or application quit.",
+    "source":  {
+                   "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\embedding-fixture-candidate-01\\source.pptx",
+                   "sha256":  "79cee1342bf6815fffdb9b0f2b95b23d6dfb7ec5f232fd0584aaf1ef149af2eb",
+                   "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-inventory-01\\inputs\\source.pptx",
+                   "snapshotSha256":  "79cee1342bf6815fffdb9b0f2b95b23d6dfb7ec5f232fd0584aaf1ef149af2eb",
+                   "openedPathMatches":  true,
+                   "fullName":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-inventory-01\\inputs\\source.pptx",
+                   "readOnly":  true,
+                   "unchanged":  true
+               },
+    "candidate":  {
+                      "generationSha256":  "3838613523e4a55ec69db076cce62f13c483f6f571d6c7072e81c2edd877cccd",
+                      "generatorSha256":  "7e3400edbad7f980a074c5cbc5fd68453611c6b3f9fa7fae912660afc53fe36f",
+                      "sourceJsonSha256":  "702a80d1d2d4f04a19050a3463da32ac18e87a4e31266a22b5871ddc2e240a3c",
+                      "registryBindings":  {
+                                               "consumer":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer",
+                                               "packageJsonSha256":  "eeb0129d0b300ac7a73041888006a2e1ff31438064392964289b28108d9ff9ff",
+                                               "lockfilePath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\package-lock.json",
+                                               "lockfileSha256":  "4868f13254e3e681566164da8427d3716ceaa025435e4606e5e15fc8a87bc305",
+                                               "bindingScope":  "Five direct OPF registry packages plus two XML/ZIP helpers are bound by lock entry version/resolved URL/integrity, package manifest hash, and resolved public ESM entry hash. This does not bind every transitive installed byte.",
+                                               "packages":  [
+                                                                {
+                                                                    "name":  "@openpresentation/cli",
+                                                                    "version":  "0.9.0",
+                                                                    "lockKey":  "node_modules/@openpresentation/cli",
+                                                                    "manifestPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\cli\\package.json",
+                                                                    "entrypointRealpath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\cli\\dist\\index.js",
+                                                                    "manifestSha256":  "0c4e3a41ae1460ce28dcc14f57125961a6f3eb9418dbab6ba4de497ebe2b12b0",
+                                                                    "entrypointSha256":  "96c46b9b0d531042686b1f8e9c89d8c5038ed45a3cb0742c1b4869857c3b184a",
+                                                                    "installPathIsSymbolicLink":  false,
+                                                                    "lockLink":  false
+                                                                },
+                                                                {
+                                                                    "name":  "@openpresentation/opf",
+                                                                    "version":  "0.11.0",
+                                                                    "lockKey":  "node_modules/@openpresentation/opf",
+                                                                    "manifestPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf\\package.json",
+                                                                    "entrypointRealpath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf\\dist\\index.js",
+                                                                    "manifestSha256":  "86364f07f30f5106539a936b4eb84cf5a00c53524599b222f823b2460efb3a0f",
+                                                                    "entrypointSha256":  "568ca647007962a3046094bb3d8e6d2dcfed0c9f463c91e4a9839c86a81b381f",
+                                                                    "installPathIsSymbolicLink":  false,
+                                                                    "lockLink":  false
+                                                                },
+                                                                {
+                                                                    "name":  "@openpresentation/opf-editor",
+                                                                    "version":  "0.8.0",
+                                                                    "lockKey":  "node_modules/@openpresentation/opf-editor",
+                                                                    "manifestPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf-editor\\package.json",
+                                                                    "entrypointRealpath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf-editor\\dist\\index.js",
+                                                                    "manifestSha256":  "c91341504f64b9100dcd12bddee35cf8eadb0e14acee72d9798f93ca0a549818",
+                                                                    "entrypointSha256":  "ffa2dd3043ff87f6da3e7d6acd818b8041d99979aa6707a1828c558f03afb753",
+                                                                    "installPathIsSymbolicLink":  false,
+                                                                    "lockLink":  false
+                                                                },
+                                                                {
+                                                                    "name":  "@openpresentation/opf-pptx",
+                                                                    "version":  "0.9.1",
+                                                                    "lockKey":  "node_modules/@openpresentation/opf-pptx",
+                                                                    "manifestPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf-pptx\\package.json",
+                                                                    "entrypointRealpath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf-pptx\\dist\\index.js",
+                                                                    "manifestSha256":  "be4944ae7405ff4d92238118eafebb93af433c53519145785553eecc3a4ef8bd",
+                                                                    "entrypointSha256":  "ba8fa87cebb32db9675f71bec91cc257e8d02a9d0977ca133666c6257eb07716",
+                                                                    "installPathIsSymbolicLink":  false,
+                                                                    "lockLink":  false
+                                                                },
+                                                                {
+                                                                    "name":  "@openpresentation/opf-render",
+                                                                    "version":  "0.9.0",
+                                                                    "lockKey":  "node_modules/@openpresentation/opf-render",
+                                                                    "manifestPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf-render\\package.json",
+                                                                    "entrypointRealpath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf-render\\dist\\index.js",
+                                                                    "manifestSha256":  "ab5cac6fc9588b3ba694fd17a0d1bde952ebabb60977a13089626b2ec146d84f",
+                                                                    "entrypointSha256":  "1fdb45740a09bb6f48eb5dc79def3ffe692acdf0a5c319727edf4e19c0020d78",
+                                                                    "installPathIsSymbolicLink":  false,
+                                                                    "lockLink":  false
+                                                                },
+                                                                {
+                                                                    "name":  "fast-xml-parser",
+                                                                    "version":  "5.11.1",
+                                                                    "lockKey":  "node_modules/fast-xml-parser",
+                                                                    "manifestPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\fast-xml-parser\\package.json",
+                                                                    "entrypointRealpath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\fast-xml-parser\\src\\fxp.js",
+                                                                    "manifestSha256":  "41c5f7f2ed20d6ab2b54d3f42730246444685a838cf381d5bf3e1eb93e2fa4cb",
+                                                                    "entrypointSha256":  "587bee5d27b6dbc99d24f472ea93028659610c3496be7d667e72483483c3f3ba",
+                                                                    "installPathIsSymbolicLink":  false,
+                                                                    "lockLink":  false
+                                                                },
+                                                                {
+                                                                    "name":  "fflate",
+                                                                    "version":  "0.8.3",
+                                                                    "lockKey":  "node_modules/fflate",
+                                                                    "manifestPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\fflate\\package.json",
+                                                                    "entrypointRealpath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\fflate\\esm\\index.mjs",
+                                                                    "manifestSha256":  "5922d8150b307bc0e4e441491c779c45379e9913d348848fca8d5cf02db4d134",
+                                                                    "entrypointSha256":  "8d75534a30a0580608e1271c13d70943ed4cd3589fddff7b1197748036a5116e",
+                                                                    "installPathIsSymbolicLink":  false,
+                                                                    "lockLink":  false
+                                                                }
+                                                            ]
+                                           }
+                  },
+    "fontFixture":  {
+                        "package":  {
+                                        "name":  "@expo-google-fonts/carlito",
+                                        "version":  "0.4.1",
+                                        "manifestSha256":  "cada00d32e296a97db384203c837750567583d16dd3e66b6f7337bd8e6bb80d6"
+                                    },
+                        "license":  {
+                                        "file":  "LICENSE_FONT",
+                                        "spdx":  "OFL-1.1",
+                                        "sha256":  "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00"
+                                    },
+                        "registrationFlags":  0,
+                        "exactPermittedFaces":  [
+                                                    {
+                                                        "file":  "fonts/Carlito-400-normal.ttf",
+                                                        "sha256":  "ca019755404c45627a8566915df99068949dc32ee2bce48d6aeee7542d2a0a89"
+                                                    },
+                                                    {
+                                                        "file":  "fonts/Carlito-400-italic.ttf",
+                                                        "sha256":  "074cd1b89d53765d90d0ed3b4bfe49523efaaf4f3f430c006bc3233778b0ebb5"
+                                                    },
+                                                    {
+                                                        "file":  "fonts/Carlito-700-normal.ttf",
+                                                        "sha256":  "51edbfa32d8af939913ae1f4ad0a5173e32083499218c133384638090295f0b0"
+                                                    },
+                                                    {
+                                                        "file":  "fonts/Carlito-700-italic.ttf",
+                                                        "sha256":  "25f5672c1985d168d6bc2973864fc5a7e374bb95fe8d0f91cff47ae17fa67691"
+                                                    }
+                                                ]
+                    },
+    "openedDocument":  {
+                           "slideCount":  1,
+                           "shapeCount":  1,
+                           "shapeName":  "Text 0",
+                           "shapeType":  1,
+                           "hasTextFrame":  true,
+                           "text":  "Regular Bold Italic BoldItalic",
+                           "textLength":  30,
+                           "textStart":  1
+                       },
+    "authoredRuns":  [
+                         {
+                             "start":  1,
+                             "text":  "Regular ",
+                             "length":  8,
+                             "font":  {
+                                          "name":  "Carlito",
+                                          "size":  18,
+                                          "bold":  0,
+                                          "italic":  0
+                                      },
+                             "expectedStart":  1,
+                             "expectedLength":  8
+                         },
+                         {
+                             "start":  9,
+                             "text":  "Bold ",
+                             "length":  5,
+                             "font":  {
+                                          "name":  "Carlito",
+                                          "size":  20,
+                                          "bold":  -1,
+                                          "italic":  0
+                                      },
+                             "expectedStart":  9,
+                             "expectedLength":  5
+                         },
+                         {
+                             "start":  14,
+                             "text":  "Italic ",
+                             "length":  7,
+                             "font":  {
+                                          "name":  "Carlito",
+                                          "size":  22,
+                                          "bold":  0,
+                                          "italic":  -1
+                                      },
+                             "expectedStart":  14,
+                             "expectedLength":  7
+                         },
+                         {
+                             "start":  21,
+                             "text":  "BoldItalic",
+                             "length":  10,
+                             "font":  {
+                                          "name":  "Carlito",
+                                          "size":  24,
+                                          "bold":  -1,
+                                          "italic":  -1
+                                      },
+                             "expectedStart":  21,
+                             "expectedLength":  10
+                         }
+                     ],
+    "nativeFontsObservation":  {
+                                   "count":  2,
+                                   "entries":  [
+                                                   {
+                                                       "index":  1,
+                                                       "name":  "Carlito",
+                                                       "embedded":  0,
+                                                       "embeddable":  -1
+                                                   },
+                                                   {
+                                                       "index":  2,
+                                                       "name":  "Aptos",
+                                                       "embedded":  0,
+                                                       "embeddable":  -1
+                                                   }
+                                               ]
+                               },
+    "contentGate":  {
+                        "passed":  true,
+                        "failures":  [
+
+                                     ],
+                        "checks":  [
+                                       {
+                                           "check":  "opened path is exact owned snapshot",
+                                           "passed":  true,
+                                           "actual":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-inventory-01\\inputs\\source.pptx",
+                                           "expected":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-inventory-01\\inputs\\source.pptx"
+                                       },
+                                       {
+                                           "check":  "presentation reports read-only",
+                                           "passed":  true,
+                                           "actual":  true,
+                                           "expected":  true
+                                       },
+                                       {
+                                           "check":  "one slide",
+                                           "passed":  true,
+                                           "actual":  1,
+                                           "expected":  1
+                                       },
+                                       {
+                                           "check":  "one text shape",
+                                           "passed":  true,
+                                           "actual":  {
+                                                          "shapeCount":  1,
+                                                          "hasTextFrame":  true
+                                                      },
+                                           "expected":  {
+                                                            "shapeCount":  1,
+                                                            "hasTextFrame":  true
+                                                        }
+                                       },
+                                       {
+                                           "check":  "exact whole current text, length, and native Start",
+                                           "passed":  true,
+                                           "actual":  {
+                                                          "text":  "Regular Bold Italic BoldItalic",
+                                                          "length":  30,
+                                                          "start":  1
+                                                      },
+                                           "expected":  {
+                                                            "text":  "Regular Bold Italic BoldItalic",
+                                                            "length":  30,
+                                                            "start":  1
+                                                        }
+                                       },
+                                       {
+                                           "check":  "four exact authored current run ranges/styles",
+                                           "passed":  true,
+                                           "actual":  [
+                                                          {
+                                                              "index":  0,
+                                                              "passed":  true,
+                                                              "actual":  {
+                                                                             "start":  1,
+                                                                             "text":  "Regular ",
+                                                                             "length":  8,
+                                                                             "font":  {
+                                                                                          "name":  "Carlito",
+                                                                                          "size":  18,
+                                                                                          "bold":  0,
+                                                                                          "italic":  0
+                                                                                      },
+                                                                             "expectedStart":  1,
+                                                                             "expectedLength":  8
+                                                                         },
+                                                              "expected":  {
+                                                                               "index":  0,
+                                                                               "start":  1,
+                                                                               "length":  8,
+                                                                               "text":  "Regular ",
+                                                                               "size":  18,
+                                                                               "bold":  false,
+                                                                               "italic":  false
+                                                                           }
+                                                          },
+                                                          {
+                                                              "index":  1,
+                                                              "passed":  true,
+                                                              "actual":  {
+                                                                             "start":  9,
+                                                                             "text":  "Bold ",
+                                                                             "length":  5,
+                                                                             "font":  {
+                                                                                          "name":  "Carlito",
+                                                                                          "size":  20,
+                                                                                          "bold":  -1,
+                                                                                          "italic":  0
+                                                                                      },
+                                                                             "expectedStart":  9,
+                                                                             "expectedLength":  5
+                                                                         },
+                                                              "expected":  {
+                                                                               "index":  1,
+                                                                               "start":  9,
+                                                                               "length":  5,
+                                                                               "text":  "Bold ",
+                                                                               "size":  20,
+                                                                               "bold":  true,
+                                                                               "italic":  false
+                                                                           }
+                                                          },
+                                                          {
+                                                              "index":  2,
+                                                              "passed":  true,
+                                                              "actual":  {
+                                                                             "start":  14,
+                                                                             "text":  "Italic ",
+                                                                             "length":  7,
+                                                                             "font":  {
+                                                                                          "name":  "Carlito",
+                                                                                          "size":  22,
+                                                                                          "bold":  0,
+                                                                                          "italic":  -1
+                                                                                      },
+                                                                             "expectedStart":  14,
+                                                                             "expectedLength":  7
+                                                                         },
+                                                              "expected":  {
+                                                                               "index":  2,
+                                                                               "start":  14,
+                                                                               "length":  7,
+                                                                               "text":  "Italic ",
+                                                                               "size":  22,
+                                                                               "bold":  false,
+                                                                               "italic":  true
+                                                                           }
+                                                          },
+                                                          {
+                                                              "index":  3,
+                                                              "passed":  true,
+                                                              "actual":  {
+                                                                             "start":  21,
+                                                                             "text":  "BoldItalic",
+                                                                             "length":  10,
+                                                                             "font":  {
+                                                                                          "name":  "Carlito",
+                                                                                          "size":  24,
+                                                                                          "bold":  -1,
+                                                                                          "italic":  -1
+                                                                                      },
+                                                                             "expectedStart":  21,
+                                                                             "expectedLength":  10
+                                                                         },
+                                                              "expected":  {
+                                                                               "index":  3,
+                                                                               "start":  21,
+                                                                               "length":  10,
+                                                                               "text":  "BoldItalic",
+                                                                               "size":  24,
+                                                                               "bold":  true,
+                                                                               "italic":  true
+                                                                           }
+                                                          }
+                                                      ],
+                                           "expected":  [
+                                                            {
+                                                                "index":  0,
+                                                                "start":  1,
+                                                                "length":  8,
+                                                                "text":  "Regular ",
+                                                                "size":  18,
+                                                                "bold":  false,
+                                                                "italic":  false
+                                                            },
+                                                            {
+                                                                "index":  1,
+                                                                "start":  9,
+                                                                "length":  5,
+                                                                "text":  "Bold ",
+                                                                "size":  20,
+                                                                "bold":  true,
+                                                                "italic":  false
+                                                            },
+                                                            {
+                                                                "index":  2,
+                                                                "start":  14,
+                                                                "length":  7,
+                                                                "text":  "Italic ",
+                                                                "size":  22,
+                                                                "bold":  false,
+                                                                "italic":  true
+                                                            },
+                                                            {
+                                                                "index":  3,
+                                                                "start":  21,
+                                                                "length":  10,
+                                                                "text":  "BoldItalic",
+                                                                "size":  24,
+                                                                "bold":  true,
+                                                                "italic":  true
+                                                            }
+                                                        ]
+                                       }
+                                   ],
+                        "runChecks":  [
+                                          {
+                                              "index":  0,
+                                              "passed":  true,
+                                              "actual":  {
+                                                             "start":  1,
+                                                             "text":  "Regular ",
+                                                             "length":  8,
+                                                             "font":  {
+                                                                          "name":  "Carlito",
+                                                                          "size":  18,
+                                                                          "bold":  0,
+                                                                          "italic":  0
+                                                                      },
+                                                             "expectedStart":  1,
+                                                             "expectedLength":  8
+                                                         },
+                                              "expected":  {
+                                                               "index":  0,
+                                                               "start":  1,
+                                                               "length":  8,
+                                                               "text":  "Regular ",
+                                                               "size":  18,
+                                                               "bold":  false,
+                                                               "italic":  false
+                                                           }
+                                          },
+                                          {
+                                              "index":  1,
+                                              "passed":  true,
+                                              "actual":  {
+                                                             "start":  9,
+                                                             "text":  "Bold ",
+                                                             "length":  5,
+                                                             "font":  {
+                                                                          "name":  "Carlito",
+                                                                          "size":  20,
+                                                                          "bold":  -1,
+                                                                          "italic":  0
+                                                                      },
+                                                             "expectedStart":  9,
+                                                             "expectedLength":  5
+                                                         },
+                                              "expected":  {
+                                                               "index":  1,
+                                                               "start":  9,
+                                                               "length":  5,
+                                                               "text":  "Bold ",
+                                                               "size":  20,
+                                                               "bold":  true,
+                                                               "italic":  false
+                                                           }
+                                          },
+                                          {
+                                              "index":  2,
+                                              "passed":  true,
+                                              "actual":  {
+                                                             "start":  14,
+                                                             "text":  "Italic ",
+                                                             "length":  7,
+                                                             "font":  {
+                                                                          "name":  "Carlito",
+                                                                          "size":  22,
+                                                                          "bold":  0,
+                                                                          "italic":  -1
+                                                                      },
+                                                             "expectedStart":  14,
+                                                             "expectedLength":  7
+                                                         },
+                                              "expected":  {
+                                                               "index":  2,
+                                                               "start":  14,
+                                                               "length":  7,
+                                                               "text":  "Italic ",
+                                                               "size":  22,
+                                                               "bold":  false,
+                                                               "italic":  true
+                                                           }
+                                          },
+                                          {
+                                              "index":  3,
+                                              "passed":  true,
+                                              "actual":  {
+                                                             "start":  21,
+                                                             "text":  "BoldItalic",
+                                                             "length":  10,
+                                                             "font":  {
+                                                                          "name":  "Carlito",
+                                                                          "size":  24,
+                                                                          "bold":  -1,
+                                                                          "italic":  -1
+                                                                      },
+                                                             "expectedStart":  21,
+                                                             "expectedLength":  10
+                                                         },
+                                              "expected":  {
+                                                               "index":  3,
+                                                               "start":  21,
+                                                               "length":  10,
+                                                               "text":  "BoldItalic",
+                                                               "size":  24,
+                                                               "bold":  true,
+                                                               "italic":  true
+                                                           }
+                                          }
+                                      ],
+                        "scope":  "Current read-only text/range/style observation; not an edit, save/reopen, physical-font, or rendering-fidelity test."
+                    },
+    "nativeFontsGate":  {
+                            "passed":  false,
+                            "reportedCount":  2,
+                            "entryCount":  2,
+                            "countValid":  true,
+                            "allowedReportedNames":  [
+                                                         "Carlito",
+                                                         "Carlito Bold",
+                                                         "Carlito Italic",
+                                                         "Carlito Bold Italic"
+                                                     ],
+                            "unexpectedNames":  [
+                                                    "Aptos"
+                                                ],
+                            "entries":  [
+                                            {
+                                                "index":  1,
+                                                "name":  "Carlito",
+                                                "embedded":  0,
+                                                "embeddable":  -1
+                                            },
+                                            {
+                                                "index":  2,
+                                                "name":  "Aptos",
+                                                "embedded":  0,
+                                                "embeddable":  -1
+                                            }
+                                        ],
+                            "scope":  "Only exact reported Presentation.Fonts Name values are compared with the permitted family/style names; Embeddable/Embedded are recorded but do not prove physical face identity."
+                        },
+    "ownedCloseCount":  1,
+    "environment":  {
+                        "hostVersion":  "5.1.26100.9444",
+                        "windowsProductName":  "Windows 10 Home",
+                        "windowsDisplayVersion":  "25H2",
+                        "windowsBuild":  "26200.9457",
+                        "powerPointVersion":  "16.0",
+                        "powerPointExecutable":  "C:\\Program Files\\Microsoft Office\\root\\Office16\\POWERPNT.EXE",
+                        "powerPointBuild":  "16.0.20326.20158",
+                        "powerPointExecutableSha256":  "07cbe68cde7596058a6890c471389a7a70a090ee42f01975d72ea6d643f82021"
+                    },
+    "cleanupConfirmed":  true,
+    "officeOperationsStopped":  false,
+    "lastStage":  "worker.complete",
+    "lastStatus":  "success",
+    "error":  null,
+    "limitations":  [
+                        "Presentation.Fonts Name/Embeddable/Embedded values are reported native attributes, not proof of physical face or per-glyph identity.",
+                        "Theme/XML supplemental fallback declarations in the source may exceed Carlito; this gate observes the native collection and accepts only the documented Carlito family/style names.",
+                        "This does not test font embedding, persistence, reopen, or renderer/native visual equivalence."
+                    ]
+}

@@ -38,6 +38,14 @@ absolute snapping remain indistinguishable; no engine cause or compensation is
 established. The 0.02pt native gate still fails, and the separate 0.1px browser
 gate is unchanged and unevaluated by this analysis.
 
+The later [read-only font inventory](../evidence/windows-native-font-inventory-20260921/README.md)
+observes both Carlito and unexpected Aptos in `Presentation.Fonts`, even though
+the four authored text styles remain Carlito. The native allowlist fails;
+embedding has not been attempted. Its original parent cleanup failure is
+preserved alongside the offline JSON-array parser correction and raw evidence
+of one owned close and four temporary font removals. The corrected future
+worker has passed offline controls only and has never run Office.
+
 The broader [font roadmap](font-roadmap.md) and
 [ecosystem objective](ecosystem-objective-2026-09-09.md) remain open. This split
 does not change the default shaping backend or claim general Office parity.
