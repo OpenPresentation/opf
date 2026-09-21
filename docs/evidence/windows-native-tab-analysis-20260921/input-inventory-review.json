@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "kind": "opf-native-tab-portable-input-inventory-review",
+  "reviewedInputs": [
+    {
+      "path": "inputs/native-tab-v2-04-report.json",
+      "purpose": "Exact-byte native observations and retained metrics.",
+      "hostSpecificData": {
+        "userProfilePathOccurrences": 7,
+        "userProfileIdentifier": "micha",
+        "systemExecutableOrFontPaths": [
+          "C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe",
+          "C:\\\\windows\\\\Fonts\\\\calibri.ttf",
+          "C:\\\\Program Files\\\\Microsoft Office\\\\root\\\\Office16\\\\POWERPNT.EXE"
+        ],
+        "note": "Absolute paths, executable/font hashes, and raster paths are not needed for the arithmetic, but remain because this is the sole exact-byte raw observation input. They were already published in merged core evidence."
+      },
+      "secretPatternReview": {
+        "patterns": [
+          "password",
+          "api key",
+          "authorization",
+          "bearer",
+          "secret",
+          "token",
+          "email address"
+        ],
+        "matches": 0
+      }
+    },
+    {
+      "path": "inputs/native-tab-v2-04-slide1.xml",
+      "purpose": "Exact saved DrawingML integers for the nine tab stops and literal shape positions.",
+      "textNodes": [
+        "\tBefore",
+        "Before"
+      ],
+      "externalRelationshipNodes": 0,
+      "hostPaths": 0,
+      "secretPatternMatches": 0
+    }
+  ],
+  "excludedAsUnneeded": [
+    "full PPTX container",
+    "original and reopened PNGs",
+    "worker logs and stage logs",
+    "verifier/process snapshots",
+    "font programs",
+    "PDFs",
+    "screenshots",
+    "recent-file data"
+  ],
+  "conclusion": "The only host identifier is the already-published user-profile segment in the exact raw report. No credential, communication content, external relationship, font program, raster, or private document content is bundled."
+}

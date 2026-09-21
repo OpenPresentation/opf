@@ -1,0 +1,1474 @@
+{
+  "schema": "opf-pptx-native-tab-quantization-analysis-v1",
+  "scope": "Offline analysis of the retained native-tab-v2-04 JSON observations and saved DrawingML only.",
+  "inputs": {
+    "report": {
+      "path": "inputs/native-tab-v2-04-report.json",
+      "sha256": "dd2dc51ec6714c864479b93791eefe9807ab9f8c649f7a3c7bcabaca61b5a71c"
+    },
+    "slideXml": {
+      "path": "inputs/native-tab-v2-04-slide1.xml",
+      "sourceZipMember": "ppt/slides/slide1.xml",
+      "sha256": "b7bf2146362d7147d3b840d381dc339a3cf37f0cb51ea141909a9819dfe40117"
+    }
+  },
+  "coordinateConvention": {
+    "drawingMlIntegerUnitsPerPoint": 12700,
+    "tabTextObservedStepTestedPoints": {
+      "numerator": 1,
+      "denominator": 20,
+      "decimal": "0.05"
+    },
+    "tabShapeDrawingMlX": 411480,
+    "tabShapeExactPoints": {
+      "numerator": 162,
+      "denominator": 5,
+      "decimal": "32.4"
+    },
+    "tabShapeObservedBinary32": {
+      "value": 32.400001525878906,
+      "hex": "0x1.0333340000000p+5",
+      "exact": {
+        "numerator": 4246733,
+        "denominator": 131072,
+        "decimal": "32.40000152587890625"
+      }
+    }
+  },
+  "checks": {
+    "originalReopenedRelevantObservationsExactAllNine": true,
+    "originalReopenedPhaseMetricsExact": true,
+    "savedTabStopIsNearestDrawingMlIntegerAllNine": true,
+    "observedTabStopIsBinary32OfSavedCoordinateAllNine": true,
+    "savedLiteralXEqualsTabShapeXPlusSavedTabStopAllNine": true,
+    "observedLiteralShapeIsBinary32OfSavedCoordinateAllNine": true,
+    "literalCharacterBoundLeftEqualsLiteralShapeLeftAllNine": true,
+    "tabTextBoundLeftMatches005PointCompatiblePatternAllNine": true
+  },
+  "distinctObservedTabTextOffsets": [
+    16.25,
+    16.299999237060547,
+    77.29999542236328
+  ],
+  "retainedMetricOutcome": {
+    "tolerancePoints": 0.02,
+    "tabGatePassed": false,
+    "literalGatePassed": true,
+    "pairAgreementGatePassed": false,
+    "maximumTabErrorPoints": 0.022655487060546875,
+    "maximumLiteralErrorPoints": 2.288818359375e-05,
+    "maximumPairDeltaPoints": 0.022678375244140625
+  },
+  "rows": [
+    {
+      "index": 0,
+      "target": {
+        "jsonDecimal": "16.25",
+        "exactDecimalFraction": {
+          "numerator": 65,
+          "denominator": 4,
+          "decimal": "16.25"
+        },
+        "binary64": {
+          "value": 16.25,
+          "hex": "0x1.0400000000000p+4",
+          "exact": {
+            "numerator": 65,
+            "denominator": 4,
+            "decimal": "16.25"
+          }
+        },
+        "binary32Input": {
+          "value": 16.25,
+          "hex": "0x1.0400000000000p+4",
+          "exact": {
+            "numerator": 65,
+            "denominator": 4,
+            "decimal": "16.25"
+          },
+          "bits": "0x41820000"
+        }
+      },
+      "savedTabStop": {
+        "drawingMlInteger": 206375,
+        "exactPoints": {
+          "numerator": 65,
+          "denominator": 4,
+          "decimal": "16.25"
+        },
+        "nearestIntegerFromExactDecimalTarget": 206375,
+        "nearestIntegerFromBinary32Target": 206375,
+        "matchesBothNearestIntegerPredictions": true
+      },
+      "observedTabStop": {
+        "value": 16.25,
+        "hex": "0x1.0400000000000p+4",
+        "exact": {
+          "numerator": 65,
+          "denominator": 4,
+          "decimal": "16.25"
+        },
+        "expectedBinary32FromDrawingMl": 16.25,
+        "matchesExpected": true
+      },
+      "savedLiteral": {
+        "drawingMlX": 617855,
+        "exactPoints": {
+          "numerator": 973,
+          "denominator": 20,
+          "decimal": "48.65"
+        },
+        "tabShapeXPlusTabStop": 617855,
+        "matchesAdditiveCoordinate": true
+      },
+      "observedLiteral": {
+        "shapeLeft": {
+          "value": 48.650001525878906,
+          "hex": "0x1.8533340000000p+5",
+          "exact": {
+            "numerator": 6376653,
+            "denominator": 131072,
+            "decimal": "48.65000152587890625"
+          }
+        },
+        "characterBoundLeft": {
+          "value": 48.650001525878906,
+          "hex": "0x1.8533340000000p+5",
+          "exact": {
+            "numerator": 6376653,
+            "denominator": 131072,
+            "decimal": "48.65000152587890625"
+          }
+        },
+        "expectedBinary32FromDrawingMl": 48.650001525878906,
+        "shapeMatchesExpected": true,
+        "characterMatchesShape": true,
+        "offsetFromTabShape": {
+          "value": 16.25,
+          "hex": "0x1.0400000000000p+4",
+          "exact": {
+            "numerator": 65,
+            "denominator": 4,
+            "decimal": "16.25"
+          }
+        }
+      },
+      "observedTabText": {
+        "leadingCharacterBoundLeft": {
+          "value": 32.400001525878906,
+          "hex": "0x1.0333340000000p+5",
+          "exact": {
+            "numerator": 4246733,
+            "denominator": 131072,
+            "decimal": "32.40000152587890625"
+          }
+        },
+        "leadingCharacterBoundWidth": {
+          "value": 16.25503921508789,
+          "hex": "0x1.0414a40000000p+4",
+          "exact": {
+            "numerator": 4261161,
+            "denominator": 262144,
+            "decimal": "16.255039215087890625"
+          }
+        },
+        "textCharacterBoundLeft": {
+          "value": 48.650001525878906,
+          "hex": "0x1.8533340000000p+5",
+          "exact": {
+            "numerator": 6376653,
+            "denominator": 131072,
+            "decimal": "48.65000152587890625"
+          }
+        },
+        "offsetFromLeadingBoundLeft": {
+          "value": 16.25,
+          "hex": "0x1.0400000000000p+4",
+          "exact": {
+            "numerator": 65,
+            "denominator": 4,
+            "decimal": "16.25"
+          }
+        },
+        "nearestFiveHundredthTarget": {
+          "numerator": 65,
+          "denominator": 4,
+          "decimal": "16.25"
+        },
+        "nearestFiveHundredthAbsolute": {
+          "numerator": 973,
+          "denominator": 20,
+          "decimal": "48.65"
+        },
+        "expectedAbsoluteBinary32": 48.650001525878906,
+        "expectedOffsetAfterSeparateBinary32Coordinates": 16.25,
+        "matchesCompatibleNinePairPattern": true,
+        "relativeAndAbsolute005PredictionsCoincideBecauseBaseIsOnGrid": true,
+        "leadingBoundWidthMinusStartOffset": {
+          "value": 0.005039215087890625,
+          "hex": "0x1.4a40000000000p-8",
+          "exact": {
+            "numerator": 1321,
+            "denominator": 262144,
+            "decimal": "0.005039215087890625"
+          }
+        }
+      },
+      "originalAndReopenedRelevantFieldsExact": true
+    },
+    {
+      "index": 1,
+      "target": {
+        "jsonDecimal": "16.26",
+        "exactDecimalFraction": {
+          "numerator": 813,
+          "denominator": 50,
+          "decimal": "16.26"
+        },
+        "binary64": {
+          "value": 16.26,
+          "hex": "0x1.0428f5c28f5c3p+4",
+          "exact": {
+            "numerator": 4576783121315267,
+            "denominator": 281474976710656,
+            "decimal": "16.26000000000000156319401867"
+          }
+        },
+        "binary32Input": {
+          "value": 16.260000228881836,
+          "hex": "0x1.0428f60000000p+4",
+          "exact": {
+            "numerator": 8524923,
+            "denominator": 524288,
+            "decimal": "16.2600002288818359375"
+          },
+          "bits": "0x4182147b"
+        }
+      },
+      "savedTabStop": {
+        "drawingMlInteger": 206502,
+        "exactPoints": {
+          "numerator": 813,
+          "denominator": 50,
+          "decimal": "16.26"
+        },
+        "nearestIntegerFromExactDecimalTarget": 206502,
+        "nearestIntegerFromBinary32Target": 206502,
+        "matchesBothNearestIntegerPredictions": true
+      },
+      "observedTabStop": {
+        "value": 16.260000228881836,
+        "hex": "0x1.0428f60000000p+4",
+        "exact": {
+          "numerator": 8524923,
+          "denominator": 524288,
+          "decimal": "16.2600002288818359375"
+        },
+        "expectedBinary32FromDrawingMl": 16.260000228881836,
+        "matchesExpected": true
+      },
+      "savedLiteral": {
+        "drawingMlX": 617982,
+        "exactPoints": {
+          "numerator": 2433,
+          "denominator": 50,
+          "decimal": "48.66"
+        },
+        "tabShapeXPlusTabStop": 617982,
+        "matchesAdditiveCoordinate": true
+      },
+      "observedLiteral": {
+        "shapeLeft": {
+          "value": 48.65999984741211,
+          "hex": "0x1.8547ae0000000p+5",
+          "exact": {
+            "numerator": 12755927,
+            "denominator": 262144,
+            "decimal": "48.659999847412109375"
+          }
+        },
+        "characterBoundLeft": {
+          "value": 48.65999984741211,
+          "hex": "0x1.8547ae0000000p+5",
+          "exact": {
+            "numerator": 12755927,
+            "denominator": 262144,
+            "decimal": "48.659999847412109375"
+          }
+        },
+        "expectedBinary32FromDrawingMl": 48.65999984741211,
+        "shapeMatchesExpected": true,
+        "characterMatchesShape": true,
+        "offsetFromTabShape": {
+          "value": 16.259998321533203,
+          "hex": "0x1.0428f40000000p+4",
+          "exact": {
+            "numerator": 4262461,
+            "denominator": 262144,
+            "decimal": "16.259998321533203125"
+          }
+        }
+      },
+      "observedTabText": {
+        "leadingCharacterBoundLeft": {
+          "value": 32.400001525878906,
+          "hex": "0x1.0333340000000p+5",
+          "exact": {
+            "numerator": 4246733,
+            "denominator": 131072,
+            "decimal": "32.40000152587890625"
+          }
+        },
+        "leadingCharacterBoundWidth": {
+          "value": 16.25503921508789,
+          "hex": "0x1.0414a40000000p+4",
+          "exact": {
+            "numerator": 4261161,
+            "denominator": 262144,
+            "decimal": "16.255039215087890625"
+          }
+        },
+        "textCharacterBoundLeft": {
+          "value": 48.650001525878906,
+          "hex": "0x1.8533340000000p+5",
+          "exact": {
+            "numerator": 6376653,
+            "denominator": 131072,
+            "decimal": "48.65000152587890625"
+          }
+        },
+        "offsetFromLeadingBoundLeft": {
+          "value": 16.25,
+          "hex": "0x1.0400000000000p+4",
+          "exact": {
+            "numerator": 65,
+            "denominator": 4,
+            "decimal": "16.25"
+          }
+        },
+        "nearestFiveHundredthTarget": {
+          "numerator": 65,
+          "denominator": 4,
+          "decimal": "16.25"
+        },
+        "nearestFiveHundredthAbsolute": {
+          "numerator": 973,
+          "denominator": 20,
+          "decimal": "48.65"
+        },
+        "expectedAbsoluteBinary32": 48.650001525878906,
+        "expectedOffsetAfterSeparateBinary32Coordinates": 16.25,
+        "matchesCompatibleNinePairPattern": true,
+        "relativeAndAbsolute005PredictionsCoincideBecauseBaseIsOnGrid": true,
+        "leadingBoundWidthMinusStartOffset": {
+          "value": 0.005039215087890625,
+          "hex": "0x1.4a40000000000p-8",
+          "exact": {
+            "numerator": 1321,
+            "denominator": 262144,
+            "decimal": "0.005039215087890625"
+          }
+        }
+      },
+      "originalAndReopenedRelevantFieldsExact": true
+    },
+    {
+      "index": 2,
+      "target": {
+        "jsonDecimal": "16.27",
+        "exactDecimalFraction": {
+          "numerator": 1627,
+          "denominator": 100,
+          "decimal": "16.27"
+        },
+        "binary64": {
+          "value": 16.27,
+          "hex": "0x1.0451eb851eb85p+4",
+          "exact": {
+            "numerator": 4579597871082373,
+            "denominator": 281474976710656,
+            "decimal": "16.26999999999999957367435854"
+          }
+        },
+        "binary32Input": {
+          "value": 16.270000457763672,
+          "hex": "0x1.0451ec0000000p+4",
+          "exact": {
+            "numerator": 4265083,
+            "denominator": 262144,
+            "decimal": "16.270000457763671875"
+          },
+          "bits": "0x418228f6"
+        }
+      },
+      "savedTabStop": {
+        "drawingMlInteger": 206629,
+        "exactPoints": {
+          "numerator": 1627,
+          "denominator": 100,
+          "decimal": "16.27"
+        },
+        "nearestIntegerFromExactDecimalTarget": 206629,
+        "nearestIntegerFromBinary32Target": 206629,
+        "matchesBothNearestIntegerPredictions": true
+      },
+      "observedTabStop": {
+        "value": 16.270000457763672,
+        "hex": "0x1.0451ec0000000p+4",
+        "exact": {
+          "numerator": 4265083,
+          "denominator": 262144,
+          "decimal": "16.270000457763671875"
+        },
+        "expectedBinary32FromDrawingMl": 16.270000457763672,
+        "matchesExpected": true
+      },
+      "savedLiteral": {
+        "drawingMlX": 618109,
+        "exactPoints": {
+          "numerator": 4867,
+          "denominator": 100,
+          "decimal": "48.67"
+        },
+        "tabShapeXPlusTabStop": 618109,
+        "matchesAdditiveCoordinate": true
+      },
+      "observedLiteral": {
+        "shapeLeft": {
+          "value": 48.66999816894531,
+          "hex": "0x1.855c280000000p+5",
+          "exact": {
+            "numerator": 3189637,
+            "denominator": 65536,
+            "decimal": "48.6699981689453125"
+          }
+        },
+        "characterBoundLeft": {
+          "value": 48.66999816894531,
+          "hex": "0x1.855c280000000p+5",
+          "exact": {
+            "numerator": 3189637,
+            "denominator": 65536,
+            "decimal": "48.6699981689453125"
+          }
+        },
+        "expectedBinary32FromDrawingMl": 48.66999816894531,
+        "shapeMatchesExpected": true,
+        "characterMatchesShape": true,
+        "offsetFromTabShape": {
+          "value": 16.269996643066406,
+          "hex": "0x1.0451e80000000p+4",
+          "exact": {
+            "numerator": 2132541,
+            "denominator": 131072,
+            "decimal": "16.26999664306640625"
+          }
+        }
+      },
+      "observedTabText": {
+        "leadingCharacterBoundLeft": {
+          "value": 32.400001525878906,
+          "hex": "0x1.0333340000000p+5",
+          "exact": {
+            "numerator": 4246733,
+            "denominator": 131072,
+            "decimal": "32.40000152587890625"
+          }
+        },
+        "leadingCharacterBoundWidth": {
+          "value": 16.25503921508789,
+          "hex": "0x1.0414a40000000p+4",
+          "exact": {
+            "numerator": 4261161,
+            "denominator": 262144,
+            "decimal": "16.255039215087890625"
+          }
+        },
+        "textCharacterBoundLeft": {
+          "value": 48.650001525878906,
+          "hex": "0x1.8533340000000p+5",
+          "exact": {
+            "numerator": 6376653,
+            "denominator": 131072,
+            "decimal": "48.65000152587890625"
+          }
+        },
+        "offsetFromLeadingBoundLeft": {
+          "value": 16.25,
+          "hex": "0x1.0400000000000p+4",
+          "exact": {
+            "numerator": 65,
+            "denominator": 4,
+            "decimal": "16.25"
+          }
+        },
+        "nearestFiveHundredthTarget": {
+          "numerator": 65,
+          "denominator": 4,
+          "decimal": "16.25"
+        },
+        "nearestFiveHundredthAbsolute": {
+          "numerator": 973,
+          "denominator": 20,
+          "decimal": "48.65"
+        },
+        "expectedAbsoluteBinary32": 48.650001525878906,
+        "expectedOffsetAfterSeparateBinary32Coordinates": 16.25,
+        "matchesCompatibleNinePairPattern": true,
+        "relativeAndAbsolute005PredictionsCoincideBecauseBaseIsOnGrid": true,
+        "leadingBoundWidthMinusStartOffset": {
+          "value": 0.005039215087890625,
+          "hex": "0x1.4a40000000000p-8",
+          "exact": {
+            "numerator": 1321,
+            "denominator": 262144,
+            "decimal": "0.005039215087890625"
+          }
+        }
+      },
+      "originalAndReopenedRelevantFieldsExact": true
+    },
+    {
+      "index": 3,
+      "target": {
+        "jsonDecimal": "16.27734375",
+        "exactDecimalFraction": {
+          "numerator": 4167,
+          "denominator": 256,
+          "decimal": "16.27734375"
+        },
+        "binary64": {
+          "value": 16.27734375,
+          "hex": "0x1.0470000000000p+4",
+          "exact": {
+            "numerator": 4167,
+            "denominator": 256,
+            "decimal": "16.27734375"
+          }
+        },
+        "binary32Input": {
+          "value": 16.27734375,
+          "hex": "0x1.0470000000000p+4",
+          "exact": {
+            "numerator": 4167,
+            "denominator": 256,
+            "decimal": "16.27734375"
+          },
+          "bits": "0x41823800"
+        }
+      },
+      "savedTabStop": {
+        "drawingMlInteger": 206722,
+        "exactPoints": {
+          "numerator": 103361,
+          "denominator": 6350,
+          "decimal": "16.27732283464566929133858268"
+        },
+        "nearestIntegerFromExactDecimalTarget": 206722,
+        "nearestIntegerFromBinary32Target": 206722,
+        "matchesBothNearestIntegerPredictions": true
+      },
+      "observedTabStop": {
+        "value": 16.27732276916504,
+        "hex": "0x1.046fea0000000p+4",
+        "exact": {
+          "numerator": 8534005,
+          "denominator": 524288,
+          "decimal": "16.2773227691650390625"
+        },
+        "expectedBinary32FromDrawingMl": 16.27732276916504,
+        "matchesExpected": true
+      },
+      "savedLiteral": {
+        "drawingMlX": 618202,
+        "exactPoints": {
+          "numerator": 309101,
+          "denominator": 6350,
+          "decimal": "48.67732283464566929133858268"
+        },
+        "tabShapeXPlusTabStop": 618202,
+        "matchesAdditiveCoordinate": true
+      },
+      "observedLiteral": {
+        "shapeLeft": {
+          "value": 48.67732238769531,
+          "hex": "0x1.856b280000000p+5",
+          "exact": {
+            "numerator": 3190117,
+            "denominator": 65536,
+            "decimal": "48.6773223876953125"
+          }
+        },
+        "characterBoundLeft": {
+          "value": 48.67732238769531,
+          "hex": "0x1.856b280000000p+5",
+          "exact": {
+            "numerator": 3190117,
+            "denominator": 65536,
+            "decimal": "48.6773223876953125"
+          }
+        },
+        "expectedBinary32FromDrawingMl": 48.67732238769531,
+        "shapeMatchesExpected": true,
+        "characterMatchesShape": true,
+        "offsetFromTabShape": {
+          "value": 16.277320861816406,
+          "hex": "0x1.046fe80000000p+4",
+          "exact": {
+            "numerator": 2133501,
+            "denominator": 131072,
+            "decimal": "16.27732086181640625"
+          }
+        }
+      },
+      "observedTabText": {
+        "leadingCharacterBoundLeft": {
+          "value": 32.400001525878906,
+          "hex": "0x1.0333340000000p+5",
+          "exact": {
+            "numerator": 4246733,
+            "denominator": 131072,
+            "decimal": "32.40000152587890625"
+          }
+        },
+        "leadingCharacterBoundWidth": {
+          "value": 16.305038452148438,
+          "hex": "0x1.04e1700000000p+4",
+          "exact": {
+            "numerator": 1068567,
+            "denominator": 65536,
+            "decimal": "16.3050384521484375"
+          }
+        },
+        "textCharacterBoundLeft": {
+          "value": 48.70000076293945,
+          "hex": "0x1.85999a0000000p+5",
+          "exact": {
+            "numerator": 12766413,
+            "denominator": 262144,
+            "decimal": "48.700000762939453125"
+          }
+        },
+        "offsetFromLeadingBoundLeft": {
+          "value": 16.299999237060547,
+          "hex": "0x1.04cccc0000000p+4",
+          "exact": {
+            "numerator": 4272947,
+            "denominator": 262144,
+            "decimal": "16.299999237060546875"
+          }
+        },
+        "nearestFiveHundredthTarget": {
+          "numerator": 163,
+          "denominator": 10,
+          "decimal": "16.3"
+        },
+        "nearestFiveHundredthAbsolute": {
+          "numerator": 487,
+          "denominator": 10,
+          "decimal": "48.7"
+        },
+        "expectedAbsoluteBinary32": 48.70000076293945,
+        "expectedOffsetAfterSeparateBinary32Coordinates": 16.299999237060547,
+        "matchesCompatibleNinePairPattern": true,
+        "relativeAndAbsolute005PredictionsCoincideBecauseBaseIsOnGrid": true,
+        "leadingBoundWidthMinusStartOffset": {
+          "value": 0.005039215087890625,
+          "hex": "0x1.4a40000000000p-8",
+          "exact": {
+            "numerator": 1321,
+            "denominator": 262144,
+            "decimal": "0.005039215087890625"
+          }
+        }
+      },
+      "originalAndReopenedRelevantFieldsExact": true
+    },
+    {
+      "index": 4,
+      "target": {
+        "jsonDecimal": "16.28",
+        "exactDecimalFraction": {
+          "numerator": 407,
+          "denominator": 25,
+          "decimal": "16.28"
+        },
+        "binary64": {
+          "value": 16.28,
+          "hex": "0x1.047ae147ae148p+4",
+          "exact": {
+            "numerator": 572801577606185,
+            "denominator": 35184372088832,
+            "decimal": "16.28000000000000113686837722"
+          }
+        },
+        "binary32Input": {
+          "value": 16.280000686645508,
+          "hex": "0x1.047ae20000000p+4",
+          "exact": {
+            "numerator": 8535409,
+            "denominator": 524288,
+            "decimal": "16.2800006866455078125"
+          },
+          "bits": "0x41823d71"
+        }
+      },
+      "savedTabStop": {
+        "drawingMlInteger": 206756,
+        "exactPoints": {
+          "numerator": 407,
+          "denominator": 25,
+          "decimal": "16.28"
+        },
+        "nearestIntegerFromExactDecimalTarget": 206756,
+        "nearestIntegerFromBinary32Target": 206756,
+        "matchesBothNearestIntegerPredictions": true
+      },
+      "observedTabStop": {
+        "value": 16.280000686645508,
+        "hex": "0x1.047ae20000000p+4",
+        "exact": {
+          "numerator": 8535409,
+          "denominator": 524288,
+          "decimal": "16.2800006866455078125"
+        },
+        "expectedBinary32FromDrawingMl": 16.280000686645508,
+        "matchesExpected": true
+      },
+      "savedLiteral": {
+        "drawingMlX": 618236,
+        "exactPoints": {
+          "numerator": 1217,
+          "denominator": 25,
+          "decimal": "48.68"
+        },
+        "tabShapeXPlusTabStop": 618236,
+        "matchesAdditiveCoordinate": true
+      },
+      "observedLiteral": {
+        "shapeLeft": {
+          "value": 48.68000030517578,
+          "hex": "0x1.8570a40000000p+5",
+          "exact": {
+            "numerator": 6380585,
+            "denominator": 131072,
+            "decimal": "48.68000030517578125"
+          }
+        },
+        "characterBoundLeft": {
+          "value": 48.68000030517578,
+          "hex": "0x1.8570a40000000p+5",
+          "exact": {
+            "numerator": 6380585,
+            "denominator": 131072,
+            "decimal": "48.68000030517578125"
+          }
+        },
+        "expectedBinary32FromDrawingMl": 48.68000030517578,
+        "shapeMatchesExpected": true,
+        "characterMatchesShape": true,
+        "offsetFromTabShape": {
+          "value": 16.279998779296875,
+          "hex": "0x1.047ae00000000p+4",
+          "exact": {
+            "numerator": 533463,
+            "denominator": 32768,
+            "decimal": "16.279998779296875"
+          }
+        }
+      },
+      "observedTabText": {
+        "leadingCharacterBoundLeft": {
+          "value": 32.400001525878906,
+          "hex": "0x1.0333340000000p+5",
+          "exact": {
+            "numerator": 4246733,
+            "denominator": 131072,
+            "decimal": "32.40000152587890625"
+          }
+        },
+        "leadingCharacterBoundWidth": {
+          "value": 16.305038452148438,
+          "hex": "0x1.04e1700000000p+4",
+          "exact": {
+            "numerator": 1068567,
+            "denominator": 65536,
+            "decimal": "16.3050384521484375"
+          }
+        },
+        "textCharacterBoundLeft": {
+          "value": 48.70000076293945,
+          "hex": "0x1.85999a0000000p+5",
+          "exact": {
+            "numerator": 12766413,
+            "denominator": 262144,
+            "decimal": "48.700000762939453125"
+          }
+        },
+        "offsetFromLeadingBoundLeft": {
+          "value": 16.299999237060547,
+          "hex": "0x1.04cccc0000000p+4",
+          "exact": {
+            "numerator": 4272947,
+            "denominator": 262144,
+            "decimal": "16.299999237060546875"
+          }
+        },
+        "nearestFiveHundredthTarget": {
+          "numerator": 163,
+          "denominator": 10,
+          "decimal": "16.3"
+        },
+        "nearestFiveHundredthAbsolute": {
+          "numerator": 487,
+          "denominator": 10,
+          "decimal": "48.7"
+        },
+        "expectedAbsoluteBinary32": 48.70000076293945,
+        "expectedOffsetAfterSeparateBinary32Coordinates": 16.299999237060547,
+        "matchesCompatibleNinePairPattern": true,
+        "relativeAndAbsolute005PredictionsCoincideBecauseBaseIsOnGrid": true,
+        "leadingBoundWidthMinusStartOffset": {
+          "value": 0.005039215087890625,
+          "hex": "0x1.4a40000000000p-8",
+          "exact": {
+            "numerator": 1321,
+            "denominator": 262144,
+            "decimal": "0.005039215087890625"
+          }
+        }
+      },
+      "originalAndReopenedRelevantFieldsExact": true
+    },
+    {
+      "index": 5,
+      "target": {
+        "jsonDecimal": "16.29",
+        "exactDecimalFraction": {
+          "numerator": 1629,
+          "denominator": 100,
+          "decimal": "16.29"
+        },
+        "binary64": {
+          "value": 16.29,
+          "hex": "0x1.04a3d70a3d70ap+4",
+          "exact": {
+            "numerator": 2292613685308293,
+            "denominator": 140737488355328,
+            "decimal": "16.28999999999999914734871709"
+          }
+        },
+        "binary32Input": {
+          "value": 16.290000915527344,
+          "hex": "0x1.04a3d80000000p+4",
+          "exact": {
+            "numerator": 2135163,
+            "denominator": 131072,
+            "decimal": "16.29000091552734375"
+          },
+          "bits": "0x418251ec"
+        }
+      },
+      "savedTabStop": {
+        "drawingMlInteger": 206883,
+        "exactPoints": {
+          "numerator": 1629,
+          "denominator": 100,
+          "decimal": "16.29"
+        },
+        "nearestIntegerFromExactDecimalTarget": 206883,
+        "nearestIntegerFromBinary32Target": 206883,
+        "matchesBothNearestIntegerPredictions": true
+      },
+      "observedTabStop": {
+        "value": 16.290000915527344,
+        "hex": "0x1.04a3d80000000p+4",
+        "exact": {
+          "numerator": 2135163,
+          "denominator": 131072,
+          "decimal": "16.29000091552734375"
+        },
+        "expectedBinary32FromDrawingMl": 16.290000915527344,
+        "matchesExpected": true
+      },
+      "savedLiteral": {
+        "drawingMlX": 618363,
+        "exactPoints": {
+          "numerator": 4869,
+          "denominator": 100,
+          "decimal": "48.69"
+        },
+        "tabShapeXPlusTabStop": 618363,
+        "matchesAdditiveCoordinate": true
+      },
+      "observedLiteral": {
+        "shapeLeft": {
+          "value": 48.689998626708984,
+          "hex": "0x1.85851e0000000p+5",
+          "exact": {
+            "numerator": 12763791,
+            "denominator": 262144,
+            "decimal": "48.689998626708984375"
+          }
+        },
+        "characterBoundLeft": {
+          "value": 48.689998626708984,
+          "hex": "0x1.85851e0000000p+5",
+          "exact": {
+            "numerator": 12763791,
+            "denominator": 262144,
+            "decimal": "48.689998626708984375"
+          }
+        },
+        "expectedBinary32FromDrawingMl": 48.689998626708984,
+        "shapeMatchesExpected": true,
+        "characterMatchesShape": true,
+        "offsetFromTabShape": {
+          "value": 16.289997100830078,
+          "hex": "0x1.04a3d40000000p+4",
+          "exact": {
+            "numerator": 4270325,
+            "denominator": 262144,
+            "decimal": "16.289997100830078125"
+          }
+        }
+      },
+      "observedTabText": {
+        "leadingCharacterBoundLeft": {
+          "value": 32.400001525878906,
+          "hex": "0x1.0333340000000p+5",
+          "exact": {
+            "numerator": 4246733,
+            "denominator": 131072,
+            "decimal": "32.40000152587890625"
+          }
+        },
+        "leadingCharacterBoundWidth": {
+          "value": 16.305038452148438,
+          "hex": "0x1.04e1700000000p+4",
+          "exact": {
+            "numerator": 1068567,
+            "denominator": 65536,
+            "decimal": "16.3050384521484375"
+          }
+        },
+        "textCharacterBoundLeft": {
+          "value": 48.70000076293945,
+          "hex": "0x1.85999a0000000p+5",
+          "exact": {
+            "numerator": 12766413,
+            "denominator": 262144,
+            "decimal": "48.700000762939453125"
+          }
+        },
+        "offsetFromLeadingBoundLeft": {
+          "value": 16.299999237060547,
+          "hex": "0x1.04cccc0000000p+4",
+          "exact": {
+            "numerator": 4272947,
+            "denominator": 262144,
+            "decimal": "16.299999237060546875"
+          }
+        },
+        "nearestFiveHundredthTarget": {
+          "numerator": 163,
+          "denominator": 10,
+          "decimal": "16.3"
+        },
+        "nearestFiveHundredthAbsolute": {
+          "numerator": 487,
+          "denominator": 10,
+          "decimal": "48.7"
+        },
+        "expectedAbsoluteBinary32": 48.70000076293945,
+        "expectedOffsetAfterSeparateBinary32Coordinates": 16.299999237060547,
+        "matchesCompatibleNinePairPattern": true,
+        "relativeAndAbsolute005PredictionsCoincideBecauseBaseIsOnGrid": true,
+        "leadingBoundWidthMinusStartOffset": {
+          "value": 0.005039215087890625,
+          "hex": "0x1.4a40000000000p-8",
+          "exact": {
+            "numerator": 1321,
+            "denominator": 262144,
+            "decimal": "0.005039215087890625"
+          }
+        }
+      },
+      "originalAndReopenedRelevantFieldsExact": true
+    },
+    {
+      "index": 6,
+      "target": {
+        "jsonDecimal": "16.3",
+        "exactDecimalFraction": {
+          "numerator": 163,
+          "denominator": 10,
+          "decimal": "16.3"
+        },
+        "binary64": {
+          "value": 16.3,
+          "hex": "0x1.04ccccccccccdp+4",
+          "exact": {
+            "numerator": 4588042120383693,
+            "denominator": 281474976710656,
+            "decimal": "16.30000000000000071054273576"
+          }
+        },
+        "binary32Input": {
+          "value": 16.299999237060547,
+          "hex": "0x1.04cccc0000000p+4",
+          "exact": {
+            "numerator": 4272947,
+            "denominator": 262144,
+            "decimal": "16.299999237060546875"
+          },
+          "bits": "0x41826666"
+        }
+      },
+      "savedTabStop": {
+        "drawingMlInteger": 207010,
+        "exactPoints": {
+          "numerator": 163,
+          "denominator": 10,
+          "decimal": "16.3"
+        },
+        "nearestIntegerFromExactDecimalTarget": 207010,
+        "nearestIntegerFromBinary32Target": 207010,
+        "matchesBothNearestIntegerPredictions": true
+      },
+      "observedTabStop": {
+        "value": 16.299999237060547,
+        "hex": "0x1.04cccc0000000p+4",
+        "exact": {
+          "numerator": 4272947,
+          "denominator": 262144,
+          "decimal": "16.299999237060546875"
+        },
+        "expectedBinary32FromDrawingMl": 16.299999237060547,
+        "matchesExpected": true
+      },
+      "savedLiteral": {
+        "drawingMlX": 618490,
+        "exactPoints": {
+          "numerator": 487,
+          "denominator": 10,
+          "decimal": "48.7"
+        },
+        "tabShapeXPlusTabStop": 618490,
+        "matchesAdditiveCoordinate": true
+      },
+      "observedLiteral": {
+        "shapeLeft": {
+          "value": 48.70000076293945,
+          "hex": "0x1.85999a0000000p+5",
+          "exact": {
+            "numerator": 12766413,
+            "denominator": 262144,
+            "decimal": "48.700000762939453125"
+          }
+        },
+        "characterBoundLeft": {
+          "value": 48.70000076293945,
+          "hex": "0x1.85999a0000000p+5",
+          "exact": {
+            "numerator": 12766413,
+            "denominator": 262144,
+            "decimal": "48.700000762939453125"
+          }
+        },
+        "expectedBinary32FromDrawingMl": 48.70000076293945,
+        "shapeMatchesExpected": true,
+        "characterMatchesShape": true,
+        "offsetFromTabShape": {
+          "value": 16.299999237060547,
+          "hex": "0x1.04cccc0000000p+4",
+          "exact": {
+            "numerator": 4272947,
+            "denominator": 262144,
+            "decimal": "16.299999237060546875"
+          }
+        }
+      },
+      "observedTabText": {
+        "leadingCharacterBoundLeft": {
+          "value": 32.400001525878906,
+          "hex": "0x1.0333340000000p+5",
+          "exact": {
+            "numerator": 4246733,
+            "denominator": 131072,
+            "decimal": "32.40000152587890625"
+          }
+        },
+        "leadingCharacterBoundWidth": {
+          "value": 16.305038452148438,
+          "hex": "0x1.04e1700000000p+4",
+          "exact": {
+            "numerator": 1068567,
+            "denominator": 65536,
+            "decimal": "16.3050384521484375"
+          }
+        },
+        "textCharacterBoundLeft": {
+          "value": 48.70000076293945,
+          "hex": "0x1.85999a0000000p+5",
+          "exact": {
+            "numerator": 12766413,
+            "denominator": 262144,
+            "decimal": "48.700000762939453125"
+          }
+        },
+        "offsetFromLeadingBoundLeft": {
+          "value": 16.299999237060547,
+          "hex": "0x1.04cccc0000000p+4",
+          "exact": {
+            "numerator": 4272947,
+            "denominator": 262144,
+            "decimal": "16.299999237060546875"
+          }
+        },
+        "nearestFiveHundredthTarget": {
+          "numerator": 163,
+          "denominator": 10,
+          "decimal": "16.3"
+        },
+        "nearestFiveHundredthAbsolute": {
+          "numerator": 487,
+          "denominator": 10,
+          "decimal": "48.7"
+        },
+        "expectedAbsoluteBinary32": 48.70000076293945,
+        "expectedOffsetAfterSeparateBinary32Coordinates": 16.299999237060547,
+        "matchesCompatibleNinePairPattern": true,
+        "relativeAndAbsolute005PredictionsCoincideBecauseBaseIsOnGrid": true,
+        "leadingBoundWidthMinusStartOffset": {
+          "value": 0.005039215087890625,
+          "hex": "0x1.4a40000000000p-8",
+          "exact": {
+            "numerator": 1321,
+            "denominator": 262144,
+            "decimal": "0.005039215087890625"
+          }
+        }
+      },
+      "originalAndReopenedRelevantFieldsExact": true
+    },
+    {
+      "index": 7,
+      "target": {
+        "jsonDecimal": "16.31",
+        "exactDecimalFraction": {
+          "numerator": 1631,
+          "denominator": 100,
+          "decimal": "16.31"
+        },
+        "binary64": {
+          "value": 16.31,
+          "hex": "0x1.04f5c28f5c28fp+4",
+          "exact": {
+            "numerator": 4590856870150799,
+            "denominator": 281474976710656,
+            "decimal": "16.30999999999999872102307563"
+          }
+        },
+        "binary32Input": {
+          "value": 16.309999465942383,
+          "hex": "0x1.04f5c20000000p+4",
+          "exact": {
+            "numerator": 8551137,
+            "denominator": 524288,
+            "decimal": "16.3099994659423828125"
+          },
+          "bits": "0x41827ae1"
+        }
+      },
+      "savedTabStop": {
+        "drawingMlInteger": 207137,
+        "exactPoints": {
+          "numerator": 1631,
+          "denominator": 100,
+          "decimal": "16.31"
+        },
+        "nearestIntegerFromExactDecimalTarget": 207137,
+        "nearestIntegerFromBinary32Target": 207137,
+        "matchesBothNearestIntegerPredictions": true
+      },
+      "observedTabStop": {
+        "value": 16.309999465942383,
+        "hex": "0x1.04f5c20000000p+4",
+        "exact": {
+          "numerator": 8551137,
+          "denominator": 524288,
+          "decimal": "16.3099994659423828125"
+        },
+        "expectedBinary32FromDrawingMl": 16.309999465942383,
+        "matchesExpected": true
+      },
+      "savedLiteral": {
+        "drawingMlX": 618617,
+        "exactPoints": {
+          "numerator": 4871,
+          "denominator": 100,
+          "decimal": "48.71"
+        },
+        "tabShapeXPlusTabStop": 618617,
+        "matchesAdditiveCoordinate": true
+      },
+      "observedLiteral": {
+        "shapeLeft": {
+          "value": 48.709999084472656,
+          "hex": "0x1.85ae140000000p+5",
+          "exact": {
+            "numerator": 6384517,
+            "denominator": 131072,
+            "decimal": "48.70999908447265625"
+          }
+        },
+        "characterBoundLeft": {
+          "value": 48.709999084472656,
+          "hex": "0x1.85ae140000000p+5",
+          "exact": {
+            "numerator": 6384517,
+            "denominator": 131072,
+            "decimal": "48.70999908447265625"
+          }
+        },
+        "expectedBinary32FromDrawingMl": 48.709999084472656,
+        "shapeMatchesExpected": true,
+        "characterMatchesShape": true,
+        "offsetFromTabShape": {
+          "value": 16.30999755859375,
+          "hex": "0x1.04f5c00000000p+4",
+          "exact": {
+            "numerator": 267223,
+            "denominator": 16384,
+            "decimal": "16.30999755859375"
+          }
+        }
+      },
+      "observedTabText": {
+        "leadingCharacterBoundLeft": {
+          "value": 32.400001525878906,
+          "hex": "0x1.0333340000000p+5",
+          "exact": {
+            "numerator": 4246733,
+            "denominator": 131072,
+            "decimal": "32.40000152587890625"
+          }
+        },
+        "leadingCharacterBoundWidth": {
+          "value": 16.305038452148438,
+          "hex": "0x1.04e1700000000p+4",
+          "exact": {
+            "numerator": 1068567,
+            "denominator": 65536,
+            "decimal": "16.3050384521484375"
+          }
+        },
+        "textCharacterBoundLeft": {
+          "value": 48.70000076293945,
+          "hex": "0x1.85999a0000000p+5",
+          "exact": {
+            "numerator": 12766413,
+            "denominator": 262144,
+            "decimal": "48.700000762939453125"
+          }
+        },
+        "offsetFromLeadingBoundLeft": {
+          "value": 16.299999237060547,
+          "hex": "0x1.04cccc0000000p+4",
+          "exact": {
+            "numerator": 4272947,
+            "denominator": 262144,
+            "decimal": "16.299999237060546875"
+          }
+        },
+        "nearestFiveHundredthTarget": {
+          "numerator": 163,
+          "denominator": 10,
+          "decimal": "16.3"
+        },
+        "nearestFiveHundredthAbsolute": {
+          "numerator": 487,
+          "denominator": 10,
+          "decimal": "48.7"
+        },
+        "expectedAbsoluteBinary32": 48.70000076293945,
+        "expectedOffsetAfterSeparateBinary32Coordinates": 16.299999237060547,
+        "matchesCompatibleNinePairPattern": true,
+        "relativeAndAbsolute005PredictionsCoincideBecauseBaseIsOnGrid": true,
+        "leadingBoundWidthMinusStartOffset": {
+          "value": 0.005039215087890625,
+          "hex": "0x1.4a40000000000p-8",
+          "exact": {
+            "numerator": 1321,
+            "denominator": 262144,
+            "decimal": "0.005039215087890625"
+          }
+        }
+      },
+      "originalAndReopenedRelevantFieldsExact": true
+    },
+    {
+      "index": 8,
+      "target": {
+        "jsonDecimal": "77.3173828125",
+        "exactDecimalFraction": {
+          "numerator": 79173,
+          "denominator": 1024,
+          "decimal": "77.3173828125"
+        },
+        "binary64": {
+          "value": 77.3173828125,
+          "hex": "0x1.3545000000000p+6",
+          "exact": {
+            "numerator": 79173,
+            "denominator": 1024,
+            "decimal": "77.3173828125"
+          }
+        },
+        "binary32Input": {
+          "value": 77.3173828125,
+          "hex": "0x1.3545000000000p+6",
+          "exact": {
+            "numerator": 79173,
+            "denominator": 1024,
+            "decimal": "77.3173828125"
+          },
+          "bits": "0x429aa280"
+        }
+      },
+      "savedTabStop": {
+        "drawingMlInteger": 981931,
+        "exactPoints": {
+          "numerator": 981931,
+          "denominator": 12700,
+          "decimal": "77.31740157480314960629921260"
+        },
+        "nearestIntegerFromExactDecimalTarget": 981931,
+        "nearestIntegerFromBinary32Target": 981931,
+        "matchesBothNearestIntegerPredictions": true
+      },
+      "observedTabStop": {
+        "value": 77.31739807128906,
+        "hex": "0x1.3545040000000p+6",
+        "exact": {
+          "numerator": 5067073,
+          "denominator": 65536,
+          "decimal": "77.3173980712890625"
+        },
+        "expectedBinary32FromDrawingMl": 77.31739807128906,
+        "matchesExpected": true
+      },
+      "savedLiteral": {
+        "drawingMlX": 1393411,
+        "exactPoints": {
+          "numerator": 1393411,
+          "denominator": 12700,
+          "decimal": "109.7174015748031496062992126"
+        },
+        "tabShapeXPlusTabStop": 1393411,
+        "matchesAdditiveCoordinate": true
+      },
+      "observedLiteral": {
+        "shapeLeft": {
+          "value": 109.71739959716797,
+          "hex": "0x1.b6de9e0000000p+6",
+          "exact": {
+            "numerator": 14380879,
+            "denominator": 131072,
+            "decimal": "109.71739959716796875"
+          }
+        },
+        "characterBoundLeft": {
+          "value": 109.71739959716797,
+          "hex": "0x1.b6de9e0000000p+6",
+          "exact": {
+            "numerator": 14380879,
+            "denominator": 131072,
+            "decimal": "109.71739959716796875"
+          }
+        },
+        "expectedBinary32FromDrawingMl": 109.71739959716797,
+        "shapeMatchesExpected": true,
+        "characterMatchesShape": true,
+        "offsetFromTabShape": {
+          "value": 77.31739807128906,
+          "hex": "0x1.3545040000000p+6",
+          "exact": {
+            "numerator": 5067073,
+            "denominator": 65536,
+            "decimal": "77.3173980712890625"
+          }
+        }
+      },
+      "observedTabText": {
+        "leadingCharacterBoundLeft": {
+          "value": 32.400001525878906,
+          "hex": "0x1.0333340000000p+5",
+          "exact": {
+            "numerator": 4246733,
+            "denominator": 131072,
+            "decimal": "32.40000152587890625"
+          }
+        },
+        "leadingCharacterBoundWidth": {
+          "value": 77.30503845214844,
+          "hex": "0x1.35385c0000000p+6",
+          "exact": {
+            "numerator": 5066263,
+            "denominator": 65536,
+            "decimal": "77.3050384521484375"
+          }
+        },
+        "textCharacterBoundLeft": {
+          "value": 109.69999694824219,
+          "hex": "0x1.b6cccc0000000p+6",
+          "exact": {
+            "numerator": 7189299,
+            "denominator": 65536,
+            "decimal": "109.6999969482421875"
+          }
+        },
+        "offsetFromLeadingBoundLeft": {
+          "value": 77.29999542236328,
+          "hex": "0x1.3533320000000p+6",
+          "exact": {
+            "numerator": 10131865,
+            "denominator": 131072,
+            "decimal": "77.29999542236328125"
+          }
+        },
+        "nearestFiveHundredthTarget": {
+          "numerator": 773,
+          "denominator": 10,
+          "decimal": "77.3"
+        },
+        "nearestFiveHundredthAbsolute": {
+          "numerator": 1097,
+          "denominator": 10,
+          "decimal": "109.7"
+        },
+        "expectedAbsoluteBinary32": 109.69999694824219,
+        "expectedOffsetAfterSeparateBinary32Coordinates": 77.29999542236328,
+        "matchesCompatibleNinePairPattern": true,
+        "relativeAndAbsolute005PredictionsCoincideBecauseBaseIsOnGrid": true,
+        "leadingBoundWidthMinusStartOffset": {
+          "value": 0.00504302978515625,
+          "hex": "0x1.4a80000000000p-8",
+          "exact": {
+            "numerator": 661,
+            "denominator": 131072,
+            "decimal": "0.00504302978515625"
+          }
+        }
+      },
+      "originalAndReopenedRelevantFieldsExact": true
+    }
+  ],
+  "limits": [
+    "The nine pairs establish these equalities for this retained run only.",
+    "The data do not identify the undocumented implementation step that produces the observed tab-text character positions.",
+    "Because the 32.4 point tab-shape base is itself on the 0.05 point grid, the rows cannot distinguish a relative-distance pattern from an absolute-position pattern.",
+    "No compensation, changed tolerance, or broader mixed-size/table behavior is evaluated."
+  ]
+}
