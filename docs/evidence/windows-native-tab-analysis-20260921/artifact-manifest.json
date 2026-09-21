@@ -8,7 +8,7 @@
     "rendererIssue24": "0.1 reference pixel; unchanged and not evaluated here"
   },
   "files": 9,
-  "bytes": 203928,
+  "bytes": 202468,
   "artifacts": [
     {
       "path": ".gitattributes",
@@ -24,8 +24,8 @@
     },
     {
       "path": "analyze.py",
-      "bytes": 15939,
-      "sha256": "87f6c78b3211c575fd2f7b7d16e1dcb27fed19c6a483d1c6f0f39cc8a8190f52",
+      "bytes": 15953,
+      "sha256": "9eb665581da2e0c4cc8c2615f19ff7c0cf58726121d45e291fb93ffdc7c5b817",
       "role": "stdlib exact-arithmetic replay"
     },
     {
@@ -54,8 +54,8 @@
     },
     {
       "path": "supporting-data.json",
-      "bytes": 46533,
-      "sha256": "549ccdcafd2a8dd3ee0ded2a00cd09e5fe3f9b64361b6366abfcd9a2bc1551d0",
+      "bytes": 45059,
+      "sha256": "35a383cc50cd0e291b173befdd101f866d6b78564bd4a317d8e05282b6f00a16",
       "role": "reproducible exact arithmetic and per-row results"
     },
     {
