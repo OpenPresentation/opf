@@ -1,6 +1,6 @@
 # Local ecosystem development
 
-Keep `opf`, `opf-render`, `opf-pptx`, `opf-editor`, and `pptx-gallery` in the same parent directory. Install each repository's dependencies normally, then run these commands from `opf`:
+Use Node 24 for the current source and published packages. Keep `opf`, `opf-render`, `opf-pptx`, `opf-editor`, and `pptx-gallery` in the same parent directory. Install each repository's dependencies normally, then run these commands from `opf`:
 
 ```sh
 pnpm build
@@ -13,13 +13,13 @@ The link command replaces the installed `@openpresentation/opf` package in sibli
 
 On Windows, directory junctions work without granting file-symlink privileges. The linker refuses a package parent that resolves outside the sibling checkout's `node_modules`, and replaces existing links without following them into source. npm/pnpm orchestration invokes the package manager's JavaScript entrypoint with the selected Node runtime instead of running a batch shim through a shell. Paths with spaces and shell metacharacters remain literal arguments. The supported npm-installed and npm-exec package-manager layouts are discovered from `PATH` or the matching `npm_execpath`; a missing manager returns an explicit installation error.
 
-The core packed-install smoke check also uses this Windows invocation. Node 20/24 local evidence on the `codex/windows-test-harness-20260909` branch: all 414 core tests plus composition/pagination/data/rich-text/list suites pass, and actual local tarballs install into fresh temporary projects and pass 519 packed-entry checks. New isolated tests execute real npm builds, replace existing junctions, retain literal arguments, and reject an external `node_modules` parent without modifying its package. Windows/macOS CI repeats the core packed installation on both supported runtimes. These are local unpublished tarballs, not republished core 0.7.0 or proof of native rendering fidelity.
+The core packed-install smoke check also uses this Windows invocation. The following portability results record the historical September 9 integration, before the current Node 24 requirement; current acceptance is linked from the [compatibility matrix](compatibility-matrix.md). Node 20/24 local evidence on the `codex/windows-test-harness-20260909` branch: all 414 core tests plus composition/pagination/data/rich-text/list suites pass, and actual local tarballs install into fresh temporary projects and pass 519 packed-entry checks. New isolated tests execute real npm builds, replace existing junctions, retain literal arguments, and reject an external `node_modules` parent without modifying its package. The then-current Windows/macOS CI repeated the core packed installation on both runtimes. These are local unpublished tarballs, not republished core 0.7.0 or proof of native rendering fidelity.
 
 After integrating reviewed layout PR #43, the combined source passes all 420 core tests on local Windows Node 24. Exact combined-source CI and review are recorded on PR #44.
 
-Coordinated CI `34384776504` and `34385059710` caught an older isolated-link fixture copying the linker without its new helper, causing `ERR_MODULE_NOT_FOUND` before package tests ran. The fixture now copies both files, passes directly on Windows Node 20/24, and runs in the Windows/macOS matrix as well as coordinated CI. This failure was fixed rather than waived; renewed combined-source CI remains required.
+Coordinated CI `34384776504` and `34385059710` caught an older isolated-link fixture copying the linker without its new helper, causing `ERR_MODULE_NOT_FOUND` before package tests ran. The fixture now copies both files, passes directly on Windows Node 20/24, and runs in the Windows/macOS matrix as well as coordinated CI. This failure was fixed rather than waived; renewed combined-source CI was required at that checkpoint.
 
-The published compatible set is core 0.7.0, CLI 0.5.0, renderer 0.5.1, PPTX 0.5.2 and editor 0.4.0. Clean registry installs include shared composition and styled table rows without sibling links. `release-plan.json` records exact versions and immutable verification sources; `pnpm test:registry-ecosystem` and `pnpm test:registry-fidelity` exercise those installed packages. Source links are for coordinated development.
+The current published compatible set is core 0.11.0, CLI 0.9.0, renderer 0.9.0, PPTX 0.9.1 and editor 0.8.0 on Node 24. Clean registry installs include shared composition and styled table rows without sibling links. `release-plan.json` records exact versions and immutable verification sources; `pnpm test:registry-ecosystem` and `pnpm test:registry-fidelity` exercise those installed packages. Source links are for coordinated development.
 
 Execute the installed-package browser harnesses after their corresponding build:
 
