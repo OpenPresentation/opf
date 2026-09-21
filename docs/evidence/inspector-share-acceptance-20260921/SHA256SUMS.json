@@ -9,8 +9,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 11982,
-      "sha256": "eb7ad148f4ff6b28890f93eb45bb927fb673b7dd780d9b586257eff8adfe5d93"
+      "bytes": 13558,
+      "sha256": "fbee80bb860c61606b2f79d444aae02c9ecdadb0436781086e67c1584b2f5b4f"
     },
     {
       "path": "app54/ci/application-final.json",
@@ -184,13 +184,13 @@
     },
     {
       "path": "checkpoint.json",
-      "bytes": 4715,
-      "sha256": "267fcd55c391d9ba66c002c814fa4f50106a0c7de0e46979e64fee3bd9f6f75c"
+      "bytes": 5347,
+      "sha256": "446db0c72c601911b82e4e5a4aebf36a57cc8d4248fc37087f36dab4348d1e6f"
     },
     {
       "path": "copy-provenance.json",
-      "bytes": 18045,
-      "sha256": "acf59a6bc872637582980f854ca755f78677bb455b7393c559e7d0c61c2b2703"
+      "bytes": 20258,
+      "sha256": "39e1134528214d9dad3435aca1c0ffbc14a80409ac457be44c9711ee03f58abe"
     },
     {
       "path": "core102/merge-receipt.json",
@@ -253,9 +253,39 @@
       "sha256": "a998771935157eb88b06286b07ba8b74e51c988fffcd2f499da9d60fb730f0c0"
     },
     {
+      "path": "native/accepted-prs.json",
+      "bytes": 2826,
+      "sha256": "15256aec06f1a7cd93dfcfe53bcb9212d7f2045143fbdf472a897a9a33f5cd9c"
+    },
+    {
+      "path": "native/core103-postmerge-runs.json",
+      "bytes": 465,
+      "sha256": "49e74cb0f68d47dcfb8acc87eebc3ef5ded8fd535f8a5195dfef52b02db595d9"
+    },
+    {
+      "path": "native/pptx46-postmerge-runs.json",
+      "bytes": 224,
+      "sha256": "f33ed79dc1a84477097aaaf8f62fc3d16a6876ed5c4ecf2ddee91e65c9a71626"
+    },
+    {
+      "path": "native/pptx47-status.json",
+      "bytes": 4735,
+      "sha256": "44cc09e0086be25c47d503b64a986d1cdad8f87cc1587bc463c25ba8e1018d5e"
+    },
+    {
+      "path": "native/repo-sync.json",
+      "bytes": 1699,
+      "sha256": "e3962b2b2efbff79ebeeb26f39761f1be0b78ccfe99d60c2980df2452a38a842"
+    },
+    {
+      "path": "native/supervisor-update.md",
+      "bytes": 2432,
+      "sha256": "e399624074b3aa98dc64d154f4549750d8b6682b350cd1599be6187b6e8ecc2a"
+    },
+    {
       "path": "verification.json",
-      "bytes": 1652,
-      "sha256": "83504e841ff0db88c5d669287812e0b2ca9ca933abb8fd1e8c89cad0fbe2a43a"
+      "bytes": 1934,
+      "sha256": "bde48510b541e1d41508632ca10456c149b141542b82c2caf8a2fe0a834986a9"
     }
   ]
 }

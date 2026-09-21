@@ -323,6 +323,48 @@
       "bytes": 9468,
       "sha256": "ed36a627286792d220aeccd89774bb5dc7f91a901c91a77bdef65cf7568f1cc4",
       "method": "byte-for-byte copy"
+    },
+    {
+      "source": "/private/tmp/opf-inspector-share-handoff-20260921/native-accepted-prs.json",
+      "destination": "native/accepted-prs.json",
+      "bytes": 2826,
+      "sha256": "15256aec06f1a7cd93dfcfe53bcb9212d7f2045143fbdf472a897a9a33f5cd9c",
+      "method": "byte-for-byte copy; source report/receipts identify external observations separately"
+    },
+    {
+      "source": "/private/tmp/opf-inspector-share-handoff-20260921/core103-postmerge-runs.json",
+      "destination": "native/core103-postmerge-runs.json",
+      "bytes": 465,
+      "sha256": "49e74cb0f68d47dcfb8acc87eebc3ef5ded8fd535f8a5195dfef52b02db595d9",
+      "method": "byte-for-byte copy; source report/receipts identify external observations separately"
+    },
+    {
+      "source": "/private/tmp/opf-inspector-share-handoff-20260921/pptx46-postmerge-runs.json",
+      "destination": "native/pptx46-postmerge-runs.json",
+      "bytes": 224,
+      "sha256": "f33ed79dc1a84477097aaaf8f62fc3d16a6876ed5c4ecf2ddee91e65c9a71626",
+      "method": "byte-for-byte copy; source report/receipts identify external observations separately"
+    },
+    {
+      "source": "/private/tmp/opf-inspector-share-handoff-20260921/repo-sync-native-checkpoint.json",
+      "destination": "native/repo-sync.json",
+      "bytes": 1699,
+      "sha256": "e3962b2b2efbff79ebeeb26f39761f1be0b78ccfe99d60c2980df2452a38a842",
+      "method": "byte-for-byte copy; source report/receipts identify external observations separately"
+    },
+    {
+      "source": "/private/tmp/opf-inspector-share-handoff-20260921/pptx47-current.json",
+      "destination": "native/pptx47-status.json",
+      "bytes": 4735,
+      "sha256": "44cc09e0086be25c47d503b64a986d1cdad8f87cc1587bc463c25ba8e1018d5e",
+      "method": "byte-for-byte copy; source report/receipts identify external observations separately"
+    },
+    {
+      "source": "/private/tmp/opf-inspector-share-handoff-20260921/native-supervisor-update.md",
+      "destination": "native/supervisor-update.md",
+      "bytes": 2432,
+      "sha256": "e399624074b3aa98dc64d154f4549750d8b6682b350cd1599be6187b6e8ecc2a",
+      "method": "byte-for-byte copy; source report/receipts identify external observations separately"
     }
   ],
   "referencedWithoutCopy": [

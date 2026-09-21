@@ -1,0 +1,61 @@
+{
+  "checkedAt": "2026-09-21T18:53:19.877629+00:00",
+  "repositories": [
+    {
+      "repo": "opf",
+      "branch": "main",
+      "before": "578bcc6e0894129b00059258bd4ad1994a414baa",
+      "after": "009ba028e74c512a80eadd9b4c623d01cd43402c",
+      "clean": true,
+      "remoteEqual": true
+    },
+    {
+      "repo": "opf-render",
+      "branch": "main",
+      "before": "114bf596e9034c0b80a8c92df6a956a04ef18bef",
+      "after": "114bf596e9034c0b80a8c92df6a956a04ef18bef",
+      "clean": true,
+      "remoteEqual": true
+    },
+    {
+      "repo": "opf-pptx",
+      "branch": "main",
+      "before": "fcc006a6887c549a96a3bc8bbdb957cc54fe67dd",
+      "after": "647159ac886a3e472c4d5f028aa19aaea3257b60",
+      "clean": true,
+      "remoteEqual": true
+    },
+    {
+      "repo": "opf-editor",
+      "branch": "main",
+      "before": "476191e28e6f5f5ec32146aeb416f5286b4d0570",
+      "after": "476191e28e6f5f5ec32146aeb416f5286b4d0570",
+      "clean": true,
+      "remoteEqual": true
+    },
+    {
+      "repo": "openpresentation-site",
+      "branch": "main",
+      "before": "a85bcc77d899ce9ba1df659548be564142c16120",
+      "after": "a85bcc77d899ce9ba1df659548be564142c16120",
+      "clean": true,
+      "remoteEqual": true
+    },
+    {
+      "repo": "pptx-dev",
+      "branch": "master",
+      "before": "e40c287b64fcbcfb85fb4a8a50641aea8e3e54a8",
+      "after": "e40c287b64fcbcfb85fb4a8a50641aea8e3e54a8",
+      "clean": true,
+      "remoteEqual": true
+    },
+    {
+      "repo": "pptx-gallery",
+      "branch": "main",
+      "before": "f17e9ae5869669d5fbac3720f285652d0c37551c",
+      "after": "f17e9ae5869669d5fbac3720f285652d0c37551c",
+      "clean": true,
+      "remoteEqual": true
+    }
+  ]
+}

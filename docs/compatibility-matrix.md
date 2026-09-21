@@ -38,6 +38,15 @@ editable slide shapes tagged `OPF_FURNITURE_V1` with provenance for controlled
 reimport. These are not native Office Header/Footer objects (`p:hf` / notes
 master). Native Header/Footer work remains [issue 87](https://github.com/OpenPresentation/opf/issues/87).
 
+The separate [Windows native-picture checkpoint](evidence/windows-native-picture-20260921/README.md)
+passes two minimal picture open/save/close/reopen controls on an owner-confirmed
+recovered host, including current image/alt-text reimport, expected geometry and
+reviewed byte-identical original/reopened native PNGs. Harness PR46 and evidence
+PR103 are merged; the published train is unchanged. The [later supervisor report](evidence/inspector-share-acceptance-20260921/native/supervisor-update.md)
+describes additional picture/furniture edits whose evidence publication is in
+progress. Native tabs still fail the unchanged 0.02pt gate, and physical-font
+acceptance remains open. The Windows supervisor retains sole Office control.
+
 ## Supported in this set
 
 | Capability | How | Notes |
@@ -78,7 +87,7 @@ acceptance are separate claims.
 | [pptx.gallery](https://www.pptx.gallery) `/docs`, `/editor` and gallery pages | Published ColorRef/bundle guidance, Playground and Editor actions, and the canonical docs-to-editor flow are verified. | `f17e9ae5869669d5fbac3720f285652d0c37551c` |
 
 The site uses documentation source `120a770`, whose tree matches accepted core
-PR98 commit `b1ff81db6f8714b0db1a98bde482ed8a64d0ccc9`. Core PR93/97/98/99/100/102 passed
+PR98 commit `b1ff81db6f8714b0db1a98bde482ed8a64d0ccc9`. Core PR93/97/98/99/100/102/103 passed
 pre-merge and post-merge CI. Accepted core102 is
 `578bcc6e0894129b00059258bd4ad1994a414baa`; its reviewed and accepted trees match,
 and all four required pre/post-merge runs passed on their first attempts. The

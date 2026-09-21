@@ -103,5 +103,18 @@
     "prReceipt": "app54/status/pr54-held-description.json",
     "issueReceipt": "app54/status/issue88-app54-held-updated.json",
     "mutatedByThisDocumentationTask": false
+  },
+  "parallelNative": {
+    "acceptedCore": "009ba028e74c512a80eadd9b4c623d01cd43402c",
+    "acceptedPptxHarness": "647159ac886a3e472c4d5f028aa19aaea3257b60",
+    "lifecycleEvidence": "../windows-native-picture-20260921/README.md",
+    "laterSupervisorReport": "native/supervisor-update.md",
+    "activePptxPr": 47,
+    "activePptxHead": "08850fc372e32cb41ea63e50d418cd3a17b497a8",
+    "nativeTabGatePt": 0.02,
+    "reportedTabMaximumPt": 0.02265625,
+    "nativeTabAccepted": false,
+    "overallNativeAccepted": false,
+    "officeOwner": "Windows supervisor; coordinate before testing Office or modifying active native branches"
   }
 }

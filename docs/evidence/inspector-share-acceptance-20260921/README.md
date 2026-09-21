@@ -4,7 +4,7 @@ Core102 is accepted with green pre/post-merge CI. App54 has reviewed local
 acceptance and a READY preview, but its first-attempt Windows CI gate failed.
 App54 is held and unmerged; production acceptance remains pending. The [machine-readable state](checkpoint.json) keeps these
 boundaries explicit. Published package versions, runtime defaults, examples,
-goldens and native/font gates are unchanged. Issue88 and the overall goal remain
+goldens and native/font acceptance criteria are unchanged. Issue88 and the overall goal remain
 open.
 
 ## Accepted core102
@@ -39,6 +39,31 @@ These portable package, CLI, browser and serialized-output checks establish
 this core documentation checkpoint. They do not clear App53's original failed
 Linux job or the separate native Office/physical-font gates. Bugbot's neutral
 failure was not a completed review.
+
+## Parallel native checkpoint and ownership
+
+Accepted [core103](../windows-native-picture-20260921/README.md) and PPTX46 add
+the recovered-host minimal picture lifecycle evidence and bounded harness.
+Two picture controls passed 30/35 comparator checks; they do not certify all
+native edits, furniture or fonts. The [merged PR receipts](native/accepted-prs.json),
+[core103 postmerge runs](native/core103-postmerge-runs.json),
+[PPTX46 postmerge run](native/pptx46-postmerge-runs.json) and
+[seven-repository sync](native/repo-sync.json) record the newer accepted baselines.
+
+The user's [subsequent Windows supervisor report](native/supervisor-update.md)
+describes three picture edit cases and ten furniture lifecycles, nine passing
+furniture semantic cases, production notes-order success with controlled
+reordered-copy failures, and a native tab residual of approximately 0.02265625pt
+against the unchanged 0.02pt gate. These are supervisor-reported findings while
+further evidence publication and permitted-font tests continue. The captured
+[PPTX47 status](native/pptx47-status.json) identifies the active candidate; it is
+not an accepted merge or a complete native compatibility claim. Picture geometry
+changes and clipping of longer edited text remain reported limitations.
+
+The Windows supervisor retains sole desktop Office control. This public-app
+task will coordinate before touching active native branches or testing Office;
+it has performed no such action. Public-app issue88, shared runtime fixes,
+geometry drafts and p:hf roadmap work remain separate.
 
 ## App54 candidate
 
@@ -174,7 +199,7 @@ while assembling this checkpoint.
 ## Evidence integrity
 
 [Copy provenance](copy-provenance.json) records source paths, byte counts and
-SHA-256 values for 46 exact copies, plus hashes and immutable links for reports
+SHA-256 values for 52 exact copies, plus hashes and immutable links for reports
 retained elsewhere. Later state is recorded separately from earlier snapshots.
 The new outer [manifest](SHA256SUMS.json) covers every new evidence file except
 itself, including the original nested Windows diagnosis manifest. Scoped Git
