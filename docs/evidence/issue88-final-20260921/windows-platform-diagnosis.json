@@ -1,0 +1,37 @@
+{
+  "run": 35607744175,
+  "passed": 16,
+  "failed": 2,
+  "sourceCommit": "de3c3c06185055b3c6b6812e590ec15fe4001307",
+  "monacoVersion": "0.56.0",
+  "monacoRoleSource": "esm/vs/editor/contrib/suggest/browser/suggestWidget.js:180",
+  "monacoSourceSha256": "710e4d9bf8cb8621d134eaba750fb2ef0609e94eff0ce84a33f99f2863b79b5a",
+  "tests": [
+    {
+      "test": "author-json-options-Author-cda0b-exact-CRLF-source-undo-redo",
+      "buffer": {
+        "submitted": "{\r\n  \"name\"  :   \"Categorical choices preserve source\",\r\n  \"author\": \"Browser reviewer\",\r\n  \"design\": {\r\n    \"theme\": \"minimal\",\r\n    \"fontScheme\": \"roboto\"\r\n  },\r\n  \"slides\": [\r\n    {\r\n      \"title\": \"A local decision\",\r\n      \"layout\": \"text-1x\",\r\n      \"text\": [\r\n        {\r\n          \"text\": \"Two  spaces stay.\",\r\n          \"bold\": true\r\n        },\r\n        {\r\n          \"text\": \"\\nAnd a second line.\",\r\n          \"italic\": true\r\n        }\r\n      ],\r\n      \"notes\": \"Keep these notes\\n\\tand their whitespace.\"\r\n    }\r\n  ],\r\n  \"catalogs\": {\r\n    \"layouts\": {\r\n      \"records\": [\r\n        {\r\n          \"id\": \"document-layout\",\r\n          \"name\": \"AAA Document Layout\",\r\n          \"placeholders\": [\r\n            {\r\n              \"type\": \"title\"\r\n            },\r\n            {\r\n              \"type\": \"text\"\r\n            }\r\n          ]\r\n        }\r\n      ]\r\n    }\r\n  }\r\n}\r\n",
+        "clipboard": "{\r\n  \"name\"  :   \"Categorical choices preserve source\",\r\n  \"author\": \"Browser reviewer\",\r\n  \"design\": {\r\n    \"theme\": \"minimal\",\r\n    \"fontScheme\": \"roboto\"\r\n  },\r\n  \"slides\": [\r\n    {\r\n      \"title\": \"A local decision\",\r\n      \"layout\": \"text-1x\",\r\n      \"text\": [\r\n        {\r\n          \"text\": \"Two  spaces stay.\",\r\n          \"bold\": true\r\n        },\r\n        {\r\n          \"text\": \"\\nAnd a second line.\",\r\n          \"italic\": true\r\n        }\r\n      ],\r\n      \"notes\": \"Keep these notes\\n\\tand their whitespace.\"\r\n    }\r\n  ],\r\n  \"catalogs\": {\r\n    \"layouts\": {\r\n      \"records\": [\r\n        {\r\n          \"id\": \"document-layout\",\r\n          \"name\": \"AAA Document Layout\",\r\n          \"placeholders\": [\r\n            {\r\n              \"type\": \"title\"\r\n            },\r\n            {\r\n              \"type\": \"text\"\r\n            }\r\n          ]\r\n        }\r\n      ]\r\n    }\r\n  }\r\n}\r\n"
+      },
+      "submittedCRLF": 43,
+      "submittedBareLF": 0,
+      "clipboardCRLF": 43,
+      "clipboardBareLF": 0,
+      "expectedSuggestionPresent": true,
+      "cursor5_15": true
+    },
+    {
+      "test": "author-json-options-Author-6cab9-h-exact-LF-source-undo-redo",
+      "buffer": {
+        "submitted": "{\n  \"name\"  :   \"Categorical choices preserve source\",\n  \"author\": \"Browser reviewer\",\n  \"design\": {\n    \"theme\": \"minimal\",\n    \"fontScheme\": \"roboto\"\n  },\n  \"slides\": [\n    {\n      \"title\": \"A local decision\",\n      \"layout\": \"text-1x\",\n      \"text\": [\n        {\n          \"text\": \"Two  spaces stay.\",\n          \"bold\": true\n        },\n        {\n          \"text\": \"\\nAnd a second line.\",\n          \"italic\": true\n        }\n      ],\n      \"notes\": \"Keep these notes\\n\\tand their whitespace.\"\n    }\n  ],\n  \"catalogs\": {\n    \"layouts\": {\n      \"records\": [\n        {\n          \"id\": \"document-layout\",\n          \"name\": \"AAA Document Layout\",\n          \"placeholders\": [\n            {\n              \"type\": \"title\"\n            },\n            {\n              \"type\": \"text\"\n            }\n          ]\n        }\n      ]\n    }\n  }\n}\n",
+        "clipboard": "{\r\n  \"name\"  :   \"Categorical choices preserve source\",\r\n  \"author\": \"Browser reviewer\",\r\n  \"design\": {\r\n    \"theme\": \"minimal\",\r\n    \"fontScheme\": \"roboto\"\r\n  },\r\n  \"slides\": [\r\n    {\r\n      \"title\": \"A local decision\",\r\n      \"layout\": \"text-1x\",\r\n      \"text\": [\r\n        {\r\n          \"text\": \"Two  spaces stay.\",\r\n          \"bold\": true\r\n        },\r\n        {\r\n          \"text\": \"\\nAnd a second line.\",\r\n          \"italic\": true\r\n        }\r\n      ],\r\n      \"notes\": \"Keep these notes\\n\\tand their whitespace.\"\r\n    }\r\n  ],\r\n  \"catalogs\": {\r\n    \"layouts\": {\r\n      \"records\": [\r\n        {\r\n          \"id\": \"document-layout\",\r\n          \"name\": \"AAA Document Layout\",\r\n          \"placeholders\": [\r\n            {\r\n              \"type\": \"title\"\r\n            },\r\n            {\r\n              \"type\": \"text\"\r\n            }\r\n          ]\r\n        }\r\n      ]\r\n    }\r\n  }\r\n}\r\n"
+      },
+      "submittedCRLF": 0,
+      "submittedBareLF": 43,
+      "clipboardCRLF": 43,
+      "clipboardBareLF": 0,
+      "expectedSuggestionPresent": true,
+      "cursor5_15": true
+    }
+  ]
+}

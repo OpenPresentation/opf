@@ -1,0 +1,30 @@
+{
+  "opf": {
+    "head": "b1ff81db6f8714b0db1a98bde482ed8a64d0ccc9",
+    "clean": true
+  },
+  "opf-editor": {
+    "head": "476191e28e6f5f5ec32146aeb416f5286b4d0570",
+    "clean": true
+  },
+  "opf-render": {
+    "head": "114bf596e9034c0b80a8c92df6a956a04ef18bef",
+    "clean": true
+  },
+  "opf-pptx": {
+    "head": "fcc006a6887c549a96a3bc8bbdb957cc54fe67dd",
+    "clean": true
+  },
+  "openpresentation-site": {
+    "head": "a85bcc77d899ce9ba1df659548be564142c16120",
+    "clean": true
+  },
+  "pptx-dev": {
+    "head": "c558dcc3a2e362bc238eb433a2db97fa682dfcc8",
+    "clean": true
+  },
+  "pptx-gallery": {
+    "head": "f17e9ae5869669d5fbac3720f285652d0c37551c",
+    "clean": true
+  }
+}

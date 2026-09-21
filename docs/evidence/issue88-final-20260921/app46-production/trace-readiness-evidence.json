@@ -1,0 +1,1416 @@
+[
+  {
+    "testDirectory": "author-anonymous-Author-ca-d560b-xport-and-undoable-reimport",
+    "tracePath": "results/author-anonymous-Author-ca-d560b-xport-and-undoable-reimport/trace.zip",
+    "traceSha256": "19412fc5a048829fe1aceaf7c37079b2d965b2483930e7f149b189ce5b54a3ff",
+    "requestCount": 114,
+    "httpErrorResponses": [],
+    "failedAssertions": [
+      {
+        "start": 55654.646,
+        "end": 60658.384,
+        "params": {
+          "selector": ".monaco-editor .squiggly-error, .monaco-editor .squiggly-warning",
+          "expression": "to.have.count",
+          "expectedNumber": 0,
+          "expectedValue": {
+            "value": {
+              "v": "undefined"
+            },
+            "handles": []
+          },
+          "isNot": true,
+          "timeout": 5000
+        },
+        "error": {
+          "message": "Expect failed",
+          "stack": "ExpectError: Expect failed\n    at _Frame.expect (/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/node_modules/.pnpm/playwright-core@1.63.0/node_modules/playwright-core/lib/coreBundle.js:24312:17)\n    at _FrameDispatcher.expect (/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/node_modules/.pnpm/playwright-core@1.63.0/node_modules/playwright-core/lib/coreBundle.js:54886:11)\n    at _ProgressController.run (/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/node_modules/.pnpm/playwright-core@1.63.0/node_modules/playwright-core/lib/coreBundle.js:12374:27)\n    at DispatcherConnection.dispatch (/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/node_modules/.pnpm/playwright-core@1.63.0/node_modules/playwright-core/lib/coreBundle.js:19135:27)",
+          "name": "ExpectError"
+        }
+      }
+    ],
+    "pendingOrSlowRequests": [
+      {
+        "path": "/",
+        "status": -1,
+        "durationMs": -1,
+        "started": "2026-09-21T14:53:39.144Z",
+        "monotonicStart": 55831.472,
+        "resourceType": "fetch",
+        "responseBodyBytes": -1,
+        "contentBytes": -1,
+        "cacheHeaders": {},
+        "referer": "/author"
+      },
+      {
+        "path": "/opf-fonts/Caladea-700-normal-11d1e1dc461d.ttf",
+        "status": -1,
+        "durationMs": -1,
+        "started": "2026-09-21T14:53:39.255Z",
+        "monotonicStart": 55944.328,
+        "resourceType": "fetch",
+        "responseBodyBytes": -1,
+        "contentBytes": -1,
+        "cacheHeaders": {},
+        "referer": "/author"
+      },
+      {
+        "path": "/opf-fonts/Gelasio-400-normal-44aae47442ad.ttf",
+        "status": -1,
+        "durationMs": -1,
+        "started": "2026-09-21T14:53:39.255Z",
+        "monotonicStart": 55944.732,
+        "resourceType": "fetch",
+        "responseBodyBytes": -1,
+        "contentBytes": -1,
+        "cacheHeaders": {},
+        "referer": "/author"
+      },
+      {
+        "path": "/opf-fonts/Gelasio-700-italic-24f1cb5cf5f7.ttf",
+        "status": -1,
+        "durationMs": -1,
+        "started": "2026-09-21T14:53:39.255Z",
+        "monotonicStart": 55944.761,
+        "resourceType": "fetch",
+        "responseBodyBytes": -1,
+        "contentBytes": -1,
+        "cacheHeaders": {},
+        "referer": "/author"
+      },
+      {
+        "path": "/opf-fonts/Roboto-400-italic-6a372c348dc2.ttf",
+        "status": -1,
+        "durationMs": -1,
+        "started": "2026-09-21T14:53:39.255Z",
+        "monotonicStart": 55944.866,
+        "resourceType": "fetch",
+        "responseBodyBytes": -1,
+        "contentBytes": -1,
+        "cacheHeaders": {},
+        "referer": "/author"
+      },
+      {
+        "path": "/opf-fonts/Roboto-700-italic-c6a5e7c224d3.ttf",
+        "status": -1,
+        "durationMs": -1,
+        "started": "2026-09-21T14:53:39.255Z",
+        "monotonicStart": 55944.876,
+        "resourceType": "fetch",
+        "responseBodyBytes": -1,
+        "contentBytes": -1,
+        "cacheHeaders": {},
+        "referer": "/author"
+      },
+      {
+        "path": "/opf-fonts/Roboto-Mono-400-normal-e4bf45837847.ttf",
+        "status": -1,
+        "durationMs": -1,
+        "started": "2026-09-21T14:53:39.255Z",
+        "monotonicStart": 55944.885,
+        "resourceType": "fetch",
+        "responseBodyBytes": -1,
+        "contentBytes": -1,
+        "cacheHeaders": {},
+        "referer": "/author"
+      },
+      {
+        "path": "/_next/static/immutable/chunks/3i1dij4r-3pfl.js",
+        "status": -1,
+        "durationMs": -1,
+        "started": "2026-09-21T14:53:39.271Z",
+        "monotonicStart": 55958.636,
+        "resourceType": "other",
+        "responseBodyBytes": -1,
+        "contentBytes": -1,
+        "cacheHeaders": {},
+        "referer": "/_next/static/immutable/chunks/turbopack-worker-2g80pj3ycf14_.js"
+      }
+    ],
+    "lastSnapshotTime": 60690.537,
+    "finalState": [
+      {
+        "tag": "DIV",
+        "attrs": {
+          "class": "monaco-editor no-user-select mac  showUnused showDeprecated vs-dark focused",
+          "role": "code",
+          "data-uri": "file:///deck.opf.json",
+          "style": "width: 724px; height: 848px;"
+        },
+        "text": "1{\"name\":42,\"slides\":[]}"
+      }
+    ],
+    "finalScreenshot": "review-images/author-anonymous-Author-ca-d560b-xport-and-undoable-reimport.jpeg",
+    "consoleErrors": []
+  },
+  {
+    "testDirectory": "author-anonymous-code-edit-3e561--export-reimport-at-540x960",
+    "tracePath": "results/author-anonymous-code-edit-3e561--export-reimport-at-540x960/trace.zip",
+    "traceSha256": "b934da71105c945a58401623c976327a48e31ceaf7989f72f5cc31d136856eb2",
+    "requestCount": 112,
+    "httpErrorResponses": [],
+    "failedAssertions": [
+      {
+        "start": 43923.271,
+        "end": 48926.036,
+        "params": {
+          "selector": ".monaco-editor .squiggly-error, .monaco-editor .squiggly-warning",
+          "expression": "to.have.count",
+          "expectedNumber": 0,
+          "expectedValue": {
+            "value": {
+              "v": "undefined"
+            },
+            "handles": []
+          },
+          "isNot": true,
+          "timeout": 5000
+        },
+        "error": {
+          "message": "Expect failed",
+          "stack": "ExpectError: Expect failed\n    at _Frame.expect (/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/node_modules/.pnpm/playwright-core@1.63.0/node_modules/playwright-core/lib/coreBundle.js:24312:17)\n    at _FrameDispatcher.expect (/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/node_modules/.pnpm/playwright-core@1.63.0/node_modules/playwright-core/lib/coreBundle.js:54886:11)\n    at _ProgressController.run (/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/node_modules/.pnpm/playwright-core@1.63.0/node_modules/playwright-core/lib/coreBundle.js:12374:27)\n    at DispatcherConnection.dispatch (/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/node_modules/.pnpm/playwright-core@1.63.0/node_modules/playwright-core/lib/coreBundle.js:19135:27)",
+          "name": "ExpectError"
+        }
+      }
+    ],
+    "pendingOrSlowRequests": [
+      {
+        "path": "/opf-fonts/Tinos-700-italic-10c90ef7896d.ttf",
+        "status": 200,
+        "durationMs": 4094.241,
+        "started": "2026-09-21T14:53:28.067Z",
+        "monotonicStart": 44758.783,
+        "resourceType": "fetch",
+        "responseBodyBytes": 288912,
+        "contentBytes": 563688,
+        "cacheHeaders": {
+          "age": "35",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-encoding": "br",
+          "x-vercel-cache": "HIT"
+        },
+        "referer": "/author"
+      },
+      {
+        "path": "/opf-fonts/Tinos-700-normal-576a19b5dc02.ttf",
+        "status": 200,
+        "durationMs": 4095.198,
+        "started": "2026-09-21T14:53:28.067Z",
+        "monotonicStart": 44758.551,
+        "resourceType": "fetch",
+        "responseBodyBytes": 283266,
+        "contentBytes": 583484,
+        "cacheHeaders": {
+          "age": "35",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-encoding": "br",
+          "x-vercel-cache": "HIT"
+        },
+        "referer": "/author"
+      },
+      {
+        "path": "/opf-fonts/Arimo-400-normal-88cc899855d3.ttf",
+        "status": 200,
+        "durationMs": 4098.071,
+        "started": "2026-09-21T14:53:28.066Z",
+        "monotonicStart": 44758.064,
+        "resourceType": "fetch",
+        "responseBodyBytes": 184288,
+        "contentBytes": 318320,
+        "cacheHeaders": {
+          "age": "35",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-encoding": "br",
+          "x-vercel-cache": "HIT"
+        },
+        "referer": "/author"
+      },
+      {
+        "path": "/opf-fonts/Tinos-400-italic-4a52de5bcf70.ttf",
+        "status": 200,
+        "durationMs": 4100.869,
+        "started": "2026-09-21T14:53:28.067Z",
+        "monotonicStart": 44758.479,
+        "resourceType": "fetch",
+        "responseBodyBytes": 288577,
+        "contentBytes": 549824,
+        "cacheHeaders": {
+          "age": "35",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-encoding": "br",
+          "x-vercel-cache": "HIT"
+        },
+        "referer": "/author"
+      },
+      {
+        "path": "/opf-fonts/Cousine-700-italic-acb798f3629c.ttf",
+        "status": -1,
+        "durationMs": -1,
+        "started": "2026-09-21T14:53:28.067Z",
+        "monotonicStart": 44759.076,
+        "resourceType": "fetch",
+        "responseBodyBytes": -1,
+        "contentBytes": -1,
+        "cacheHeaders": {},
+        "referer": "/author"
+      },
+      {
+        "path": "/_next/static/immutable/chunks/14xtrtee8fs0x.js",
+        "status": -1,
+        "durationMs": -1,
+        "started": "2026-09-21T14:53:28.079Z",
+        "monotonicStart": 44767.521,
+        "resourceType": "other",
+        "responseBodyBytes": -1,
+        "contentBytes": -1,
+        "cacheHeaders": {},
+        "referer": "/_next/static/immutable/chunks/turbopack-worker-2g80pj3ycf14_.js"
+      }
+    ],
+    "lastSnapshotTime": 48929.331,
+    "finalState": [
+      {
+        "tag": "DIV",
+        "attrs": {
+          "class": "monaco-editor no-user-select mac  showUnused showDeprecated vs-dark focused",
+          "role": "code",
+          "data-uri": "file:///deck.opf.json",
+          "style": "width: 540px; height: 441px;"
+        },
+        "text": "1{\"name\":42,\"slides\":[]}"
+      }
+    ],
+    "finalScreenshot": "review-images/author-anonymous-code-edit-3e561--export-reimport-at-540x960.jpeg",
+    "consoleErrors": []
+  },
+  {
+    "testDirectory": "author-json-options-Author-6cab9-h-exact-LF-source-undo-redo",
+    "tracePath": "results/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/trace.zip",
+    "traceSha256": "66fa48d1672ee574597d73999e346776390610355bbda7126176942fdb6e93f6",
+    "requestCount": 115,
+    "httpErrorResponses": [],
+    "failedAssertions": [
+      {
+        "start": 10015.703,
+        "end": 15017.838,
+        "params": {
+          "selector": ".suggest-widget.visible >> internal:role=option[name=\"AAA Document Layout, Enum Member\"s]",
+          "expression": "to.be.visible",
+          "expectedValue": {
+            "value": {
+              "v": "undefined"
+            },
+            "handles": []
+          },
+          "isNot": false,
+          "timeout": 5000
+        },
+        "error": {
+          "message": "Expect failed",
+          "stack": "ExpectError: Expect failed\n    at _Frame.expect (/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/node_modules/.pnpm/playwright-core@1.63.0/node_modules/playwright-core/lib/coreBundle.js:24312:17)\n    at _FrameDispatcher.expect (/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/node_modules/.pnpm/playwright-core@1.63.0/node_modules/playwright-core/lib/coreBundle.js:54886:11)\n    at _ProgressController.run (/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/node_modules/.pnpm/playwright-core@1.63.0/node_modules/playwright-core/lib/coreBundle.js:12374:27)\n    at DispatcherConnection.dispatch (/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/node_modules/.pnpm/playwright-core@1.63.0/node_modules/playwright-core/lib/coreBundle.js:19135:27)",
+          "name": "ExpectError"
+        }
+      }
+    ],
+    "pendingOrSlowRequests": [
+      {
+        "path": "/opf-fonts/Cousine-400-normal-ca2264d6750d.ttf",
+        "status": 200,
+        "durationMs": 4045.139,
+        "started": "2026-09-21T14:52:52.727Z",
+        "monotonicStart": 9416.358,
+        "resourceType": "fetch",
+        "responseBodyBytes": 154427,
+        "contentBytes": 289556,
+        "cacheHeaders": {
+          "age": "0",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-encoding": "br",
+          "x-vercel-cache": "MISS"
+        },
+        "referer": "/author"
+      },
+      {
+        "path": "/opf-fonts/Arimo-700-italic-b42b19c10bf5.ttf",
+        "status": 200,
+        "durationMs": 4363.481,
+        "started": "2026-09-21T14:52:52.727Z",
+        "monotonicStart": 9416.286,
+        "resourceType": "fetch",
+        "responseBodyBytes": 204526,
+        "contentBytes": 342368,
+        "cacheHeaders": {
+          "age": "0",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-encoding": "br",
+          "x-vercel-cache": "MISS"
+        },
+        "referer": "/author"
+      },
+      {
+        "path": "/opf-fonts/Carlito-700-italic-25f5672c1985.ttf",
+        "status": 200,
+        "durationMs": 5049.62,
+        "started": "2026-09-21T14:52:52.727Z",
+        "monotonicStart": 9415.958,
+        "resourceType": "fetch",
+        "responseBodyBytes": 271100,
+        "contentBytes": 745192,
+        "cacheHeaders": {
+          "age": "0",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-encoding": "br",
+          "x-vercel-cache": "MISS"
+        },
+        "referer": "/author"
+      },
+      {
+        "path": "/opf-fonts/Tinos-700-normal-576a19b5dc02.ttf",
+        "status": 200,
+        "durationMs": 5123.835000000001,
+        "started": "2026-09-21T14:52:52.727Z",
+        "monotonicStart": 9416.328,
+        "resourceType": "fetch",
+        "responseBodyBytes": 283301,
+        "contentBytes": 583484,
+        "cacheHeaders": {
+          "age": "0",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-encoding": "br",
+          "x-vercel-cache": "MISS"
+        },
+        "referer": "/author"
+      },
+      {
+        "path": "/opf-fonts/Caladea-700-italic-93d7c2003fe3.ttf",
+        "status": 200,
+        "durationMs": 5138.403,
+        "started": "2026-09-21T14:52:52.727Z",
+        "monotonicStart": 9416.154,
+        "resourceType": "fetch",
+        "responseBodyBytes": 42393,
+        "contentBytes": 78792,
+        "cacheHeaders": {
+          "age": "0",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-encoding": "br",
+          "x-vercel-cache": "MISS"
+        },
+        "referer": "/author"
+      },
+      {
+        "path": "/opf-fonts/Carlito-400-normal-ca019755404c.ttf",
+        "status": 200,
+        "durationMs": 5332.443,
+        "started": "2026-09-21T14:52:52.727Z",
+        "monotonicStart": 9415.879,
+        "resourceType": "fetch",
+        "responseBodyBytes": 244183,
+        "contentBytes": 593908,
+        "cacheHeaders": {
+          "age": "0",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-encoding": "br",
+          "x-vercel-cache": "MISS"
+        },
+        "referer": "/author"
+      },
+      {
+        "path": "/opf-fonts/Carlito-400-italic-074cd1b89d53.ttf",
+        "status": 200,
+        "durationMs": 5331.136,
+        "started": "2026-09-21T14:52:52.727Z",
+        "monotonicStart": 9415.921,
+        "resourceType": "fetch",
+        "responseBodyBytes": -1,
+        "contentBytes": -1,
+        "cacheHeaders": {
+          "age": "0",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-encoding": "br",
+          "x-vercel-cache": "MISS"
+        },
+        "referer": "/author"
+      },
+      {
+        "path": "/opf-fonts/Carlito-700-normal-51edbfa32d8a.ttf",
+        "status": 200,
+        "durationMs": 5524.732,
+        "started": "2026-09-21T14:52:52.727Z",
+        "monotonicStart": 9415.942,
+        "resourceType": "fetch",
+        "responseBodyBytes": -1,
+        "contentBytes": -1,
+        "cacheHeaders": {
+          "age": "0",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-encoding": "br",
+          "x-vercel-cache": "MISS"
+        },
+        "referer": "/author"
+      },
+      {
+        "path": "/_next/static/immutable/chunks/1__7ul3n2ffhd.js",
+        "status": 200,
+        "durationMs": 4814.933,
+        "started": "2026-09-21T14:52:53.038Z",
+        "monotonicStart": 9733.333,
+        "resourceType": "other",
+        "responseBodyBytes": 14033,
+        "contentBytes": -1,
+        "cacheHeaders": {
+          "age": "7983",
+          "cache-control": "public,max-age=31536000,immutable",
+          "content-encoding": "br",
+          "x-vercel-cache": "HIT"
+        },
+        "referer": "/_next/static/immutable/chunks/turbopack-worker-2g80pj3ycf14_.js"
+      },
+      {
+        "path": "/_next/static/immutable/chunks/3i1dij4r-3pfl.js",
+        "status": -1,
+        "durationMs": -1,
+        "started": "2026-09-21T14:52:57.854Z",
+        "monotonicStart": 14542.032,
+        "resourceType": "other",
+        "responseBodyBytes": -1,
+        "contentBytes": -1,
+        "cacheHeaders": {},
+        "referer": "/_next/static/immutable/chunks/turbopack-worker-2g80pj3ycf14_.js"
+      }
+    ],
+    "lastSnapshotTime": 15020.417,
+    "finalState": [
+      {
+        "tag": "DIV",
+        "attrs": {
+          "class": "monaco-editor no-user-select mac  showUnused showDeprecated vs-dark focused",
+          "role": "code",
+          "data-uri": "file:///deck.opf.json",
+          "style": "width: 724px; height: 848px;"
+        },
+        "text": "12345678910111213141516171819202122232425262728293031323334353637383940414243{\u00a0\u00a0\"name\"\u00a0\u00a0:\u00a0\u00a0\u00a0\"Categorical\u00a0choices\u00a0preserve\u00a0source\",\u00a0\u00a0\"author\":\u00a0\"Browser\u00a0reviewer\",\u00a0\u00a0\"design\":\u00a0{\u00a0\u00a0\u00a0\u00a0\"theme\":\u00a0\"dark\",\u00a0\u00a0\u00a0\u00a0\"fontScheme\":\u00a0\"roboto\"\u00a0\u00a0},\u00a0\u00a0\"slides\":\u00a0[\u00a0\u00a0\u00a0\u00a0{\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"title\":\u00a0\"A\u00a0local\u00a0decision\",\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"layout\":\u00a0\"text-1x\",\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"text\":\u00a0[\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0{\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"text\":\u00a0\"Two\u00a0\u00a0spaces\u00a0stay.\",\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"bold\":\u00a0true\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0},\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0{\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"text\":\u00a0\"\\nAnd\u00a0a\u00a0second\u00a0line.\",\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"italic\":\u00a0true\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0}\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0],\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"notes\""
+      },
+      {
+        "tag": "DIV",
+        "attrs": {
+          "class": "quick-input-widget show-file-icons",
+          "tabindex": "-1",
+          "style": "background-color: var(--vscode-quickInput-background); color: var(--vscode-quickInput-foreground); border: 1px solid var(--vscode-widget-border); width: 448.88px; top: 0px; left: 138px; display: none;"
+        },
+        "text": "\u00a01 Results0 SelectedOKPress 'Enter' to go to line 11 at column 18."
+      },
+      {
+        "tag": "DIV",
+        "attrs": {
+          "class": "editor-widget suggest-widget message visible",
+          "widgetid": "editor.widget.suggestWidget",
+          "style": "position: absolute; display: block; visibility: inherit; max-width: 1440px; height: 22px; width: 215px; top: 220px; left: 198px;",
+          "monaco-visible-content-widget": "true"
+        },
+        "text": "Loading...Select (\u2193)Show More (\u2303Space)"
+      }
+    ],
+    "finalScreenshot": "review-images/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo.jpeg",
+    "consoleErrors": []
+  },
+  {
+    "testDirectory": "inspector-editing-all-Insp-a78d3-ffline-undo-export-at-540px",
+    "tracePath": "results/inspector-editing-all-Insp-a78d3-ffline-undo-export-at-540px/trace.zip",
+    "traceSha256": "120515cf0cc8c6a1c2c79f9ba0a62b95be5370e8ab1aeab806bc6de627cd506f",
+    "requestCount": 103,
+    "httpErrorResponses": [],
+    "failedAssertions": [
+      {
+        "start": 76602.469,
+        "end": 81611.899,
+        "params": {
+          "selector": ".monaco-editor .squiggly-error, .monaco-editor .squiggly-warning",
+          "expression": "to.have.count",
+          "expectedNumber": 0,
+          "expectedValue": {
+            "value": {
+              "v": "undefined"
+            },
+            "handles": []
+          },
+          "isNot": true,
+          "timeout": 5000
+        },
+        "error": {
+          "message": "Expect failed",
+          "stack": "ExpectError: Expect failed\n    at _Frame.expect (/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/node_modules/.pnpm/playwright-core@1.63.0/node_modules/playwright-core/lib/coreBundle.js:24312:17)\n    at _FrameDispatcher.expect (/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/node_modules/.pnpm/playwright-core@1.63.0/node_modules/playwright-core/lib/coreBundle.js:54886:11)\n    at _ProgressController.run (/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/node_modules/.pnpm/playwright-core@1.63.0/node_modules/playwright-core/lib/coreBundle.js:12374:27)\n    at DispatcherConnection.dispatch (/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/node_modules/.pnpm/playwright-core@1.63.0/node_modules/playwright-core/lib/coreBundle.js:19135:27)",
+          "name": "ExpectError"
+        }
+      }
+    ],
+    "pendingOrSlowRequests": [
+      {
+        "path": "/opf-fonts/Cousine-400-normal-ca2264d6750d.ttf",
+        "status": 200,
+        "durationMs": 4654.075,
+        "started": "2026-09-21T14:53:59.808Z",
+        "monotonicStart": 76497.219,
+        "resourceType": "fetch",
+        "responseBodyBytes": 154453,
+        "contentBytes": 289556,
+        "cacheHeaders": {
+          "age": "66",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-encoding": "br",
+          "x-vercel-cache": "HIT"
+        },
+        "referer": "/inspector"
+      },
+      {
+        "path": "/opf-fonts/Arimo-700-normal-ec96ac9fdd94.ttf",
+        "status": 200,
+        "durationMs": 4654.562,
+        "started": "2026-09-21T14:53:59.808Z",
+        "monotonicStart": 76497.053,
+        "resourceType": "fetch",
+        "responseBodyBytes": 183994,
+        "contentBytes": 318844,
+        "cacheHeaders": {
+          "age": "66",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-encoding": "br",
+          "x-vercel-cache": "HIT"
+        },
+        "referer": "/inspector"
+      },
+      {
+        "path": "/opf-fonts/Roboto-700-italic-c6a5e7c224d3.ttf",
+        "status": 200,
+        "durationMs": 4655.967000000001,
+        "started": "2026-09-21T14:53:59.808Z",
+        "monotonicStart": 76497.656,
+        "resourceType": "fetch",
+        "responseBodyBytes": 104986,
+        "contentBytes": 166256,
+        "cacheHeaders": {
+          "age": "66",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-encoding": "br",
+          "x-vercel-cache": "HIT"
+        },
+        "referer": "/inspector"
+      },
+      {
+        "path": "/opf-fonts/Roboto-SemiBold-600-normal-32fe2086b0e5.ttf",
+        "status": 200,
+        "durationMs": 4657.397999999999,
+        "started": "2026-09-21T14:53:59.808Z",
+        "monotonicStart": 76497.557,
+        "resourceType": "fetch",
+        "responseBodyBytes": 96517,
+        "contentBytes": 159876,
+        "cacheHeaders": {
+          "age": "66",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-encoding": "br",
+          "x-vercel-cache": "HIT"
+        },
+        "referer": "/inspector"
+      },
+      {
+        "path": "/opf-fonts/Roboto-400-normal-15256405ecb0.ttf",
+        "status": 200,
+        "durationMs": 4658.011,
+        "started": "2026-09-21T14:53:59.808Z",
+        "monotonicStart": 76497.487,
+        "resourceType": "fetch",
+        "responseBodyBytes": 94196,
+        "contentBytes": 159108,
+        "cacheHeaders": {
+          "age": "66",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-encoding": "br",
+          "x-vercel-cache": "HIT"
+        },
+        "referer": "/inspector"
+      },
+      {
+        "path": "/opf-fonts/Carlito-400-normal-ca019755404c.ttf",
+        "status": 200,
+        "durationMs": 4659.451999999999,
+        "started": "2026-09-21T14:53:59.808Z",
+        "monotonicStart": 76496.662,
+        "resourceType": "fetch",
+        "responseBodyBytes": 244175,
+        "contentBytes": 593908,
+        "cacheHeaders": {
+          "age": "66",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-encoding": "br",
+          "x-vercel-cache": "HIT"
+        },
+        "referer": "/inspector"
+      },
+      {
+        "path": "/opf-fonts/Gelasio-400-italic-2b24b3d41c06.ttf",
+        "status": 200,
+        "durationMs": 4672.169,
+        "started": "2026-09-21T14:53:59.808Z",
+        "monotonicStart": 76497.413,
+        "resourceType": "fetch",
+        "responseBodyBytes": 60008,
+        "contentBytes": 107376,
+        "cacheHeaders": {
+          "age": "66",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-encoding": "br",
+          "x-vercel-cache": "HIT"
+        },
+        "referer": "/inspector"
+      },
+      {
+        "path": "/opf-fonts/Arimo-700-italic-b42b19c10bf5.ttf",
+        "status": 200,
+        "durationMs": 4751.568,
+        "started": "2026-09-21T14:53:59.808Z",
+        "monotonicStart": 76497.078,
+        "resourceType": "fetch",
+        "responseBodyBytes": 204557,
+        "contentBytes": 342368,
+        "cacheHeaders": {
+          "age": "66",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-encoding": "br",
+          "x-vercel-cache": "HIT"
+        },
+        "referer": "/inspector"
+      },
+      {
+        "path": "/_next/static/immutable/chunks/14xtrtee8fs0x.js",
+        "status": 200,
+        "durationMs": 4925.219999999999,
+        "started": "2026-09-21T14:53:59.856Z",
+        "monotonicStart": 76544.595,
+        "resourceType": "other",
+        "responseBodyBytes": 24155,
+        "contentBytes": 84520,
+        "cacheHeaders": {
+          "age": "381399",
+          "cache-control": "public,max-age=31536000,immutable",
+          "content-encoding": "br",
+          "x-vercel-cache": "HIT"
+        },
+        "referer": "/_next/static/immutable/chunks/turbopack-worker-2g80pj3ycf14_.js"
+      },
+      {
+        "path": "/opf-fonts/Roboto-700-normal-4aaf8c5b661a.ttf",
+        "status": 200,
+        "durationMs": 4994.624,
+        "started": "2026-09-21T14:53:59.808Z",
+        "monotonicStart": 76497.585,
+        "resourceType": "fetch",
+        "responseBodyBytes": 96964,
+        "contentBytes": 159900,
+        "cacheHeaders": {
+          "age": "66",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-encoding": "br",
+          "x-vercel-cache": "HIT"
+        },
+        "referer": "/inspector"
+      },
+      {
+        "path": "/_next/static/immutable/chunks/42p0shxuoyiya.js",
+        "status": -1,
+        "durationMs": -1,
+        "started": "2026-09-21T14:53:59.857Z",
+        "monotonicStart": 76545.267,
+        "resourceType": "other",
+        "responseBodyBytes": -1,
+        "contentBytes": -1,
+        "cacheHeaders": {},
+        "referer": "/_next/static/immutable/chunks/turbopack-worker-2g80pj3ycf14_.js"
+      },
+      {
+        "path": "/_next/static/immutable/chunks/1__7ul3n2ffhd.js",
+        "status": -1,
+        "durationMs": -1,
+        "started": "2026-09-21T14:54:04.795Z",
+        "monotonicStart": 81494.231,
+        "resourceType": "other",
+        "responseBodyBytes": -1,
+        "contentBytes": -1,
+        "cacheHeaders": {},
+        "referer": "/_next/static/immutable/chunks/turbopack-worker-2g80pj3ycf14_.js"
+      }
+    ],
+    "lastSnapshotTime": 81617.867,
+    "finalState": [
+      {
+        "tag": "DIV",
+        "attrs": {
+          "class": "monaco-editor no-user-select mac  showUnused showDeprecated vs-dark focused",
+          "role": "code",
+          "data-uri": "file:///deck.opf.json",
+          "style": "width: 540px; height: 279px;"
+        },
+        "text": "1{\"name\":42,\"slides\":[]}"
+      }
+    ],
+    "finalScreenshot": "review-images/inspector-editing-all-Insp-a78d3-ffline-undo-export-at-540px.jpeg",
+    "consoleErrors": []
+  },
+  {
+    "testDirectory": "inspector-recovery-font-su-beb5b--Inspector-canvas-is-active",
+    "tracePath": "results/inspector-recovery-font-su-beb5b--Inspector-canvas-is-active/trace.zip",
+    "traceSha256": "621a46f4e35b8ea1ab0f0c11dbdd04fe46b26007c1608554854172353835633c",
+    "requestCount": 122,
+    "httpErrorResponses": [],
+    "failedAssertions": [
+      {
+        "start": 109218.483,
+        "end": 114221.711,
+        "params": {
+          "selector": "[data-testid=\"inspector-canvas-overlay\"][data-opf-slide-id=\"retained-slide\"]",
+          "expression": "to.be.visible",
+          "expectedValue": {
+            "value": {
+              "v": "undefined"
+            },
+            "handles": []
+          },
+          "isNot": false,
+          "timeout": 5000
+        },
+        "error": {
+          "message": "Expect failed",
+          "stack": "ExpectError: Expect failed\n    at _Frame.expect (/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/node_modules/.pnpm/playwright-core@1.63.0/node_modules/playwright-core/lib/coreBundle.js:24312:17)\n    at _FrameDispatcher.expect (/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/node_modules/.pnpm/playwright-core@1.63.0/node_modules/playwright-core/lib/coreBundle.js:54886:11)\n    at _ProgressController.run (/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/node_modules/.pnpm/playwright-core@1.63.0/node_modules/playwright-core/lib/coreBundle.js:12374:27)\n    at DispatcherConnection.dispatch (/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/node_modules/.pnpm/playwright-core@1.63.0/node_modules/playwright-core/lib/coreBundle.js:19135:27)",
+          "name": "ExpectError"
+        }
+      }
+    ],
+    "pendingOrSlowRequests": [
+      {
+        "path": "/_next/static/immutable/chunks/3i1dij4r-3pfl.js",
+        "status": -1,
+        "durationMs": -1,
+        "started": "2026-09-21T14:54:37.569Z",
+        "monotonicStart": 114257.742,
+        "resourceType": "other",
+        "responseBodyBytes": -1,
+        "contentBytes": -1,
+        "cacheHeaders": {},
+        "referer": "/_next/static/immutable/chunks/turbopack-worker-2g80pj3ycf14_.js"
+      },
+      {
+        "path": "/_next/static/immutable/chunks/1ehoc4p33uawz.js",
+        "status": -1,
+        "durationMs": -1,
+        "started": "2026-09-21T14:54:37.573Z",
+        "monotonicStart": 114272.934,
+        "resourceType": "script",
+        "responseBodyBytes": -1,
+        "contentBytes": -1,
+        "cacheHeaders": {},
+        "referer": "/inspector"
+      }
+    ],
+    "lastSnapshotTime": 114268.549,
+    "finalState": [
+      {
+        "tag": "DIV",
+        "attrs": {
+          "class": "monaco-editor no-user-select mac  showUnused showDeprecated vs-dark",
+          "role": "code",
+          "data-uri": "file:///deck.opf.json",
+          "style": "width: 702px; height: 651px;"
+        },
+        "text": "12345678910111213141516{\u00a0\u00a0\"design\":\u00a0{\u00a0\u00a0\u00a0\u00a0\"fontScheme\":\u00a0{\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"major\":\u00a0\"Aptos\",\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"minor\":\u00a0\"Aptos\"\u00a0\u00a0\u00a0\u00a0}\u00a0\u00a0},\u00a0\u00a0\"slides\":\u00a0[\u00a0\u00a0\u00a0\u00a0{\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"id\":\u00a0\"retained-slide\",\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"title\":\u00a0\"Disclose\u00a0the\u00a0font\u00a0choice\",\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"text\":\u00a0\"The\u00a0requested\u00a0font\u00a0remains\u00a0authored.\"\u00a0\u00a0\u00a0\u00a0}\u00a0\u00a0]}"
+      },
+      {
+        "tag": "DIV",
+        "attrs": {
+          "__playwright_target__": "",
+          "role": "group",
+          "data-testid": "inspector-canvas-overlay",
+          "data-opf-slide-index": "0",
+          "data-opf-slide-id": "retained-slide",
+          "aria-label": "Slide 1: Disclose the font choice",
+          "class": "[&>svg]:block [&>svg]:h-auto [&>svg]:w-full"
+        },
+        "text": ""
+      }
+    ],
+    "finalScreenshot": "review-images/inspector-recovery-font-su-beb5b--Inspector-canvas-is-active.jpeg",
+    "consoleErrors": []
+  },
+  {
+    "testDirectory": "inspector-recovery-schema--76507-ers-after-source-correction",
+    "tracePath": "results/inspector-recovery-schema--76507-ers-after-source-correction/trace.zip",
+    "traceSha256": "2612721b1c474ba7e55afa313760fddd7d998322e1467cdfcd9e07d22351cc7d",
+    "requestCount": 58,
+    "httpErrorResponses": [],
+    "failedAssertions": [
+      {
+        "start": 101695.106,
+        "end": 106698.542,
+        "params": {
+          "selector": "[data-testid=\"inspector-canvas-overlay\"][data-opf-slide-id=\"retained-slide\"] >> [data-canvas-target][data-opf-path=\"slides.0.title\"]",
+          "expression": "to.be.visible",
+          "expectedValue": {
+            "value": {
+              "v": "undefined"
+            },
+            "handles": []
+          },
+          "isNot": false,
+          "timeout": 5000
+        },
+        "error": {
+          "message": "Expect failed",
+          "stack": "ExpectError: Expect failed\n    at _Frame.expect (/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/node_modules/.pnpm/playwright-core@1.63.0/node_modules/playwright-core/lib/coreBundle.js:24312:17)\n    at _FrameDispatcher.expect (/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/node_modules/.pnpm/playwright-core@1.63.0/node_modules/playwright-core/lib/coreBundle.js:54886:11)\n    at _ProgressController.run (/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/node_modules/.pnpm/playwright-core@1.63.0/node_modules/playwright-core/lib/coreBundle.js:12374:27)\n    at DispatcherConnection.dispatch (/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/node_modules/.pnpm/playwright-core@1.63.0/node_modules/playwright-core/lib/coreBundle.js:19135:27)",
+          "name": "ExpectError"
+        }
+      }
+    ],
+    "pendingOrSlowRequests": [
+      {
+        "path": "/author",
+        "status": 200,
+        "durationMs": 4886.843,
+        "started": "2026-09-21T14:54:25.081Z",
+        "monotonicStart": 101769.039,
+        "resourceType": "fetch",
+        "responseBodyBytes": 457,
+        "contentBytes": 238,
+        "cacheHeaders": {
+          "age": "0",
+          "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+          "content-encoding": "br",
+          "x-vercel-cache": "MISS"
+        },
+        "referer": "/inspector"
+      },
+      {
+        "path": "/decoder",
+        "status": 200,
+        "durationMs": 4887.498,
+        "started": "2026-09-21T14:54:25.081Z",
+        "monotonicStart": 101769.064,
+        "resourceType": "fetch",
+        "responseBodyBytes": 235,
+        "contentBytes": 239,
+        "cacheHeaders": {
+          "age": "0",
+          "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+          "content-encoding": "br",
+          "x-vercel-cache": "MISS"
+        },
+        "referer": "/inspector"
+      },
+      {
+        "path": "/_next/static/immutable/chunks/3g5yp2sxazehx.js",
+        "status": 200,
+        "durationMs": 4902.213,
+        "started": "2026-09-21T14:54:25.067Z",
+        "monotonicStart": 101755.897,
+        "resourceType": "script",
+        "responseBodyBytes": 628911,
+        "contentBytes": -1,
+        "cacheHeaders": {
+          "age": "8077",
+          "cache-control": "public,max-age=31536000,immutable",
+          "content-encoding": "br",
+          "x-vercel-cache": "HIT"
+        },
+        "referer": "/inspector"
+      },
+      {
+        "path": "/docs",
+        "status": 200,
+        "durationMs": 4888.055,
+        "started": "2026-09-21T14:54:25.081Z",
+        "monotonicStart": 101769.102,
+        "resourceType": "fetch",
+        "responseBodyBytes": 221,
+        "contentBytes": 236,
+        "cacheHeaders": {
+          "age": "0",
+          "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+          "content-encoding": "br",
+          "x-vercel-cache": "MISS"
+        },
+        "referer": "/inspector"
+      },
+      {
+        "path": "/",
+        "status": 200,
+        "durationMs": 4888.420999999999,
+        "started": "2026-09-21T14:54:25.081Z",
+        "monotonicStart": 101768.986,
+        "resourceType": "fetch",
+        "responseBodyBytes": 228,
+        "contentBytes": 183,
+        "cacheHeaders": {
+          "age": "0",
+          "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+          "content-encoding": "br",
+          "x-vercel-cache": "MISS"
+        },
+        "referer": "/inspector"
+      }
+    ],
+    "lastSnapshotTime": 106878.18,
+    "finalState": [],
+    "finalScreenshot": "review-images/inspector-recovery-schema--76507-ers-after-source-correction.jpeg",
+    "consoleErrors": []
+  },
+  {
+    "testDirectory": "json-paste-formatting-warm-44312-t-Document-remains-undoable",
+    "tracePath": "results/json-paste-formatting-warm-44312-t-Document-remains-undoable/trace.zip",
+    "traceSha256": "b8a8222c3c2ff888ad8db59ff39b0d0cc3a086b7c73d17a6e2a1a5702c9052ab",
+    "requestCount": 121,
+    "httpErrorResponses": [],
+    "failedAssertions": [],
+    "pendingOrSlowRequests": [
+      {
+        "path": "/opf-fonts/Carlito-400-italic-074cd1b89d53.ttf",
+        "status": 200,
+        "durationMs": 4059.7529999999997,
+        "started": "2026-09-21T14:55:12.839Z",
+        "monotonicStart": 149527.118,
+        "resourceType": "fetch",
+        "responseBodyBytes": 258683,
+        "contentBytes": 580792,
+        "cacheHeaders": {
+          "age": "139",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-encoding": "br",
+          "x-vercel-cache": "HIT"
+        },
+        "referer": "/inspector"
+      },
+      {
+        "path": "/opf-fonts/Roboto-400-italic-6a372c348dc2.ttf",
+        "status": 200,
+        "durationMs": 4060.809,
+        "started": "2026-09-21T14:55:12.839Z",
+        "monotonicStart": 149528.041,
+        "resourceType": "fetch",
+        "responseBodyBytes": 101970,
+        "contentBytes": 165268,
+        "cacheHeaders": {
+          "age": "140",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-encoding": "br",
+          "x-vercel-cache": "HIT"
+        },
+        "referer": "/inspector"
+      },
+      {
+        "path": "/opf-fonts/Carlito-400-normal-ca019755404c.ttf",
+        "status": -1,
+        "durationMs": -1,
+        "started": "2026-09-21T14:55:12.839Z",
+        "monotonicStart": 149527.081,
+        "resourceType": "fetch",
+        "responseBodyBytes": -1,
+        "contentBytes": -1,
+        "cacheHeaders": {},
+        "referer": "/inspector"
+      },
+      {
+        "path": "/opf-fonts/Arimo-400-normal-88cc899855d3.ttf",
+        "status": -1,
+        "durationMs": -1,
+        "started": "2026-09-21T14:55:12.839Z",
+        "monotonicStart": 149527.352,
+        "resourceType": "fetch",
+        "responseBodyBytes": -1,
+        "contentBytes": -1,
+        "cacheHeaders": {},
+        "referer": "/inspector"
+      },
+      {
+        "path": "/_next/static/immutable/chunks/1__7ul3n2ffhd.js",
+        "status": -1,
+        "durationMs": -1,
+        "started": "2026-09-21T14:55:13.756Z",
+        "monotonicStart": 150451.942,
+        "resourceType": "other",
+        "responseBodyBytes": -1,
+        "contentBytes": -1,
+        "cacheHeaders": {},
+        "referer": "/_next/static/immutable/chunks/turbopack-worker-2g80pj3ycf14_.js"
+      }
+    ],
+    "lastSnapshotTime": 153646.01,
+    "finalState": [
+      {
+        "tag": "DIV",
+        "attrs": {
+          "class": "monaco-editor no-user-select mac  showUnused showDeprecated vs-dark focused",
+          "role": "code",
+          "data-uri": "file:///deck.opf.json",
+          "style": "width: 702px; height: 651px;"
+        },
+        "text": "12345678910111213141516171819202122232425262728293031{\u00a0\u00a0\"$schema\":\u00a0\"https://openpresentation.org/schema/opf/v1\",\u00a0\u00a0\"name\"\u00a0\u00a0:\u00a0\"Northstar\u00a0Seed\u00a0Pitch\",\u00a0\u00a0\"description\":\u00a0\"A\u00a0founder\u00a0pitch\u00a0for\u00a0making\u00a0presentations\u00a0programmable\u00a0\u00a0\u00a0through\u00a0OPF\u00a0and\u00a0the\u00a0hosted\u00a0PPTX.dev\u00a0engine.\",\u00a0\u00a0\"filename\":\u00a0\"northstar-seed-pitch\",\u00a0\u00a0\"organization\":\u00a0{\u00a0\u00a0\u00a0\u00a0\"id\":\u00a0\"northstar\",\u00a0\u00a0\u00a0\u00a0\"name\":\u00a0\"Northstar\u00a0Foundry\",\u00a0\u00a0\u00a0\u00a0\"tagline\":\u00a0\"Deck\u00a0infrastructure\u00a0for\u00a0AI-native\u00a0teams\",\u00a0\u00a0\u00a0\u00a0\"role\":\u00a0\"primary\"\u00a0\u00a0},\u00a0\u00a0\"speaker\":\u00a0{\u00a0\u00a0\u00a0\u00a0\"id\":\u00a0\"maya-chen\",\u00a0\u00a0\u00a0\u00a0\"n"
+      },
+      {
+        "tag": "DIV",
+        "attrs": {
+          "class": "quick-input-widget show-file-icons",
+          "tabindex": "-1",
+          "style": "background-color: var(--vscode-quickInput-background); color: var(--vscode-quickInput-foreground); border: 1px solid var(--vscode-widget-border); width: 435.24px; top: 0px; left: 133px; display: none;"
+        },
+        "text": "\u00a01 Results0 SelectedOKFormat Document\u21e7\u2325F"
+      },
+      {
+        "tag": "DIV",
+        "attrs": {
+          "role": "group",
+          "data-testid": "inspector-canvas-overlay",
+          "data-opf-slide-index": "0",
+          "data-opf-slide-id": "cover",
+          "aria-label": "Slide 1: Presentations should be programmable, not handcrafted bottlenecks.",
+          "class": "[&>svg]:block [&>svg]:h-auto [&>svg]:w-full"
+        },
+        "text": ""
+      },
+      {
+        "tag": "DIV",
+        "attrs": {
+          "role": "group",
+          "data-testid": "inspector-canvas-overlay",
+          "data-opf-slide-index": "1",
+          "data-opf-slide-id": "problem",
+          "aria-label": "Slide 2: Deck production still breaks at the exact moment teams need speed.",
+          "class": "[&>svg]:block [&>svg]:h-auto [&>svg]:w-full"
+        },
+        "text": ""
+      },
+      {
+        "tag": "DIV",
+        "attrs": {
+          "role": "group",
+          "data-testid": "inspector-canvas-overlay",
+          "data-opf-slide-index": "2",
+          "data-opf-slide-id": "solution",
+          "aria-label": "Slide 3: OPF makes every deck step speak the same contract.",
+          "class": "[&>svg]:block [&>svg]:h-auto [&>svg]:w-full"
+        },
+        "text": ""
+      },
+      {
+        "tag": "DIV",
+        "attrs": {
+          "role": "group",
+          "data-testid": "inspector-canvas-overlay",
+          "data-opf-slide-index": "3",
+          "data-opf-slide-id": "traction",
+          "aria-label": "Slide 4: Developer demand is moving from exports to full deck systems.",
+          "class": "[&>svg]:block [&>svg]:h-auto [&>svg]:w-full"
+        },
+        "text": ""
+      },
+      {
+        "tag": "DIV",
+        "attrs": {
+          "role": "group",
+          "data-testid": "inspector-canvas-overlay",
+          "data-opf-slide-index": "4",
+          "data-opf-slide-id": "ask",
+          "aria-label": "Slide 5: We are raising to make OPF the default contract for AI-generated presentations.",
+          "class": "[&>svg]:block [&>svg]:h-auto [&>svg]:w-full"
+        },
+        "text": ""
+      }
+    ],
+    "finalScreenshot": "review-images/json-paste-formatting-warm-44312-t-Document-remains-undoable.jpeg",
+    "consoleErrors": []
+  },
+  {
+    "testDirectory": "yaml-YAML-and-Markdown-edi-18ed4-from-malformed-YAML-offline",
+    "tracePath": "results/yaml-YAML-and-Markdown-edi-18ed4-from-malformed-YAML-offline/trace.zip",
+    "traceSha256": "225634bc81ba737a5fa440f6a8045eafb2ee987d7910eb16266f451cee3c359e",
+    "requestCount": 121,
+    "httpErrorResponses": [],
+    "failedAssertions": [
+      {
+        "start": 178340.983,
+        "end": 183343.222,
+        "params": {
+          "selector": ".monaco-editor >> nth=0 >> .squiggly-error, .squiggly-warning",
+          "expression": "to.have.count",
+          "expectedNumber": 0,
+          "expectedValue": {
+            "value": {
+              "v": "undefined"
+            },
+            "handles": []
+          },
+          "isNot": true,
+          "timeout": 5000
+        },
+        "error": {
+          "message": "Expect failed",
+          "stack": "ExpectError: Expect failed\n    at _Frame.expect (/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/node_modules/.pnpm/playwright-core@1.63.0/node_modules/playwright-core/lib/coreBundle.js:24312:17)\n    at _FrameDispatcher.expect (/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/node_modules/.pnpm/playwright-core@1.63.0/node_modules/playwright-core/lib/coreBundle.js:54886:11)\n    at _ProgressController.run (/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/node_modules/.pnpm/playwright-core@1.63.0/node_modules/playwright-core/lib/coreBundle.js:12374:27)\n    at DispatcherConnection.dispatch (/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/node_modules/.pnpm/playwright-core@1.63.0/node_modules/playwright-core/lib/coreBundle.js:19135:27)",
+          "name": "ExpectError"
+        }
+      }
+    ],
+    "pendingOrSlowRequests": [
+      {
+        "path": "/opf-fonts/Cousine-700-normal-f03c46c4bc5c.ttf",
+        "status": 200,
+        "durationMs": 4000.2599999999998,
+        "started": "2026-09-21T14:55:41.588Z",
+        "monotonicStart": 178284.717,
+        "resourceType": "fetch",
+        "responseBodyBytes": 155652,
+        "contentBytes": 290500,
+        "cacheHeaders": {
+          "age": "168",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-encoding": "br",
+          "x-vercel-cache": "HIT"
+        },
+        "referer": "/inspector"
+      },
+      {
+        "path": "/opf-fonts/Roboto-ExtraBold-800-normal-43d5ce98c583.ttf",
+        "status": 200,
+        "durationMs": 4514.65,
+        "started": "2026-09-21T14:55:41.588Z",
+        "monotonicStart": 178284.812,
+        "resourceType": "fetch",
+        "responseBodyBytes": 96614,
+        "contentBytes": 160012,
+        "cacheHeaders": {
+          "age": "168",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-encoding": "br",
+          "x-vercel-cache": "HIT"
+        },
+        "referer": "/inspector"
+      },
+      {
+        "path": "/opf-fonts/Cousine-400-italic-f1626b7287db.ttf",
+        "status": 200,
+        "durationMs": 4516.280000000001,
+        "started": "2026-09-21T14:55:41.588Z",
+        "monotonicStart": 178284.707,
+        "resourceType": "fetch",
+        "responseBodyBytes": 165729,
+        "contentBytes": 298680,
+        "cacheHeaders": {
+          "age": "168",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-encoding": "br",
+          "x-vercel-cache": "HIT"
+        },
+        "referer": "/inspector"
+      },
+      {
+        "path": "/opf-fonts/Roboto-700-normal-4aaf8c5b661a.ttf",
+        "status": 200,
+        "durationMs": 4521.049,
+        "started": "2026-09-21T14:55:41.588Z",
+        "monotonicStart": 178284.803,
+        "resourceType": "fetch",
+        "responseBodyBytes": 96921,
+        "contentBytes": 159900,
+        "cacheHeaders": {
+          "age": "168",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-encoding": "br",
+          "x-vercel-cache": "HIT"
+        },
+        "referer": "/inspector"
+      },
+      {
+        "path": "/opf-fonts/Carlito-400-normal-ca019755404c.ttf",
+        "status": 200,
+        "durationMs": 4523.2,
+        "started": "2026-09-21T14:55:41.587Z",
+        "monotonicStart": 178284.507,
+        "resourceType": "fetch",
+        "responseBodyBytes": 244175,
+        "contentBytes": 593908,
+        "cacheHeaders": {
+          "age": "168",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-encoding": "br",
+          "x-vercel-cache": "HIT"
+        },
+        "referer": "/inspector"
+      },
+      {
+        "path": "/opf-fonts/Gelasio-400-italic-2b24b3d41c06.ttf",
+        "status": 200,
+        "durationMs": 4522.622,
+        "started": "2026-09-21T14:55:41.588Z",
+        "monotonicStart": 178284.746,
+        "resourceType": "fetch",
+        "responseBodyBytes": 59994,
+        "contentBytes": 107376,
+        "cacheHeaders": {
+          "age": "168",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-encoding": "br",
+          "x-vercel-cache": "HIT"
+        },
+        "referer": "/inspector"
+      },
+      {
+        "path": "/opf-fonts/Arimo-400-normal-88cc899855d3.ttf",
+        "status": 200,
+        "durationMs": 4527.608,
+        "started": "2026-09-21T14:55:41.588Z",
+        "monotonicStart": 178284.618,
+        "resourceType": "fetch",
+        "responseBodyBytes": 184316,
+        "contentBytes": 318320,
+        "cacheHeaders": {
+          "age": "168",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-encoding": "br",
+          "x-vercel-cache": "HIT"
+        },
+        "referer": "/inspector"
+      },
+      {
+        "path": "/opf-fonts/Caladea-700-normal-11d1e1dc461d.ttf",
+        "status": 200,
+        "durationMs": 4702.3240000000005,
+        "started": "2026-09-21T14:55:41.588Z",
+        "monotonicStart": 178284.598,
+        "resourceType": "fetch",
+        "responseBodyBytes": 40977,
+        "contentBytes": 79648,
+        "cacheHeaders": {
+          "age": "168",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-encoding": "br",
+          "x-vercel-cache": "HIT"
+        },
+        "referer": "/inspector"
+      },
+      {
+        "path": "/opf-fonts/Carlito-700-italic-25f5672c1985.ttf",
+        "status": 200,
+        "durationMs": 4839.088,
+        "started": "2026-09-21T14:55:41.588Z",
+        "monotonicStart": 178284.554,
+        "resourceType": "fetch",
+        "responseBodyBytes": 271100,
+        "contentBytes": 745192,
+        "cacheHeaders": {
+          "age": "168",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-encoding": "br",
+          "x-vercel-cache": "HIT"
+        },
+        "referer": "/inspector"
+      },
+      {
+        "path": "/opf-fonts/Tinos-400-normal-924ef269e73d.ttf",
+        "status": 200,
+        "durationMs": 4839.307,
+        "started": "2026-09-21T14:55:41.588Z",
+        "monotonicStart": 178284.657,
+        "resourceType": "fetch",
+        "responseBodyBytes": 257376,
+        "contentBytes": 508752,
+        "cacheHeaders": {
+          "age": "168",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-encoding": "br",
+          "x-vercel-cache": "HIT"
+        },
+        "referer": "/inspector"
+      },
+      {
+        "path": "/opf-fonts/Arimo-700-italic-b42b19c10bf5.ttf",
+        "status": 200,
+        "durationMs": 4839.611,
+        "started": "2026-09-21T14:55:41.588Z",
+        "monotonicStart": 178284.648,
+        "resourceType": "fetch",
+        "responseBodyBytes": 204516,
+        "contentBytes": 342368,
+        "cacheHeaders": {
+          "age": "168",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-encoding": "br",
+          "x-vercel-cache": "HIT"
+        },
+        "referer": "/inspector"
+      },
+      {
+        "path": "/opf-fonts/Carlito-700-normal-51edbfa32d8a.ttf",
+        "status": -1,
+        "durationMs": -1,
+        "started": "2026-09-21T14:55:41.587Z",
+        "monotonicStart": 178284.541,
+        "resourceType": "fetch",
+        "responseBodyBytes": -1,
+        "contentBytes": -1,
+        "cacheHeaders": {},
+        "referer": "/inspector"
+      },
+      {
+        "path": "/opf-fonts/Cousine-700-italic-acb798f3629c.ttf",
+        "status": 200,
+        "durationMs": 4004.398,
+        "started": "2026-09-21T14:55:41.588Z",
+        "monotonicStart": 178284.727,
+        "resourceType": "fetch",
+        "responseBodyBytes": -1,
+        "contentBytes": -1,
+        "cacheHeaders": {
+          "age": "168",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "content-encoding": "br",
+          "x-vercel-cache": "HIT"
+        },
+        "referer": "/inspector"
+      },
+      {
+        "path": "/_next/static/immutable/chunks/1ehoc4p33uawz.js",
+        "status": -1,
+        "durationMs": -1,
+        "started": "2026-09-21T14:55:41.591Z",
+        "monotonicStart": 178285.74,
+        "resourceType": "script",
+        "responseBodyBytes": -1,
+        "contentBytes": -1,
+        "cacheHeaders": {},
+        "referer": "/inspector"
+      },
+      {
+        "path": "/_next/static/immutable/chunks/1__7ul3n2ffhd.js",
+        "status": -1,
+        "durationMs": -1,
+        "started": "2026-09-21T14:55:41.633Z",
+        "monotonicStart": 178321.836,
+        "resourceType": "other",
+        "responseBodyBytes": -1,
+        "contentBytes": -1,
+        "cacheHeaders": {},
+        "referer": "/_next/static/immutable/chunks/turbopack-worker-2g80pj3ycf14_.js"
+      }
+    ],
+    "lastSnapshotTime": 183351.85,
+    "finalState": [
+      {
+        "tag": "DIV",
+        "attrs": {
+          "class": "monaco-editor no-user-select mac  showUnused showDeprecated vs-dark focused",
+          "role": "code",
+          "data-uri": "file:///deck.opf.json",
+          "style": "width: 702px; height: 651px;"
+        },
+        "text": "1{\"name\":42,\"slides\":[]}"
+      }
+    ],
+    "finalScreenshot": "review-images/yaml-YAML-and-Markdown-edi-18ed4-from-malformed-YAML-offline.jpeg",
+    "consoleErrors": []
+  }
+]

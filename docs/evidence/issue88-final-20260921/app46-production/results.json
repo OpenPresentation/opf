@@ -1,0 +1,1081 @@
+{
+  "config": {
+    "argv": [
+      "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+      "/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/node_modules/@playwright/test/cli.js",
+      "test",
+      "--reporter=list,json",
+      "--output=/private/tmp/opf-issue88-app46-production-20260921/results"
+    ],
+    "configFile": "/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/playwright.config.ts",
+    "rootDir": "/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/private/tmp/opf-issue88-app46-production-20260921/results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 45000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list"
+      ],
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.63.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "author-json-options.spec.ts",
+      "file": "author-json-options.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Author categorical choices include built-in, document and loaded catalogs with exact LF source undo/redo",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 14831,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.suggest-widget.visible').getByRole('option', { name: 'AAA Document Layout, Enum Member', exact: true })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" locator('.suggest-widget.visible').getByRole('option', { name: 'AAA Document Layout, Enum Member', exact: true }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.suggest-widget.visible').getByRole('option', { name: 'AAA Document Layout, Enum Member', exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.suggest-widget.visible').getByRole('option', { name: 'AAA Document Layout, Enum Member', exact: true })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" locator('.suggest-widget.visible').getByRole('option', { name: 'AAA Document Layout, Enum Member', exact: true }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.suggest-widget.visible').getByRole('option', { name: 'AAA Document Layout, Enum Member', exact: true })\u001b[22m\n\n    at /private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/author-json-options.spec.ts:111:23",
+                    "location": {
+                      "file": "/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/author-json-options.spec.ts",
+                      "column": 23,
+                      "line": 111
+                    },
+                    "snippet": "  109 |   const layouts = await openChoices(page, themed, 'layout', 'text-1x');\n  110 |   const local = categoricalChoice(layouts, 'AAA Document Layout');\n> 111 |   await expect(local).toBeVisible();\n      |                       ^\n  112 |   await expect(categoricalChoice(layouts, 'AAB Loaded Layout')).toBeVisible();\n  113 |   await page.screenshot({ path: test.info().outputPath('author-layout-options.png'), fullPage: true });\n  114 |   await local.click();"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/author-json-options.spec.ts",
+                        "column": 23,
+                        "line": 111
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.suggest-widget.visible').getByRole('option', { name: 'AAA Document Layout, Enum Member', exact: true })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" locator('.suggest-widget.visible').getByRole('option', { name: 'AAA Document Layout, Enum Member', exact: true }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.suggest-widget.visible').getByRole('option', { name: 'AAA Document Layout, Enum Member', exact: true })\u001b[22m\n\n\n  109 |   const layouts = await openChoices(page, themed, 'layout', 'text-1x');\n  110 |   const local = categoricalChoice(layouts, 'AAA Document Layout');\n> 111 |   await expect(local).toBeVisible();\n      |                       ^\n  112 |   await expect(categoricalChoice(layouts, 'AAB Loaded Layout')).toBeVisible();\n  113 |   await page.screenshot({ path: test.info().outputPath('author-layout-options.png'), fullPage: true });\n  114 |   await local.click();\n    at /private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/author-json-options.spec.ts:111:23"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T14:52:43.673Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/private/tmp/opf-issue88-app46-production-20260921/results/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/private/tmp/opf-issue88-app46-production-20260921/results/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/author-json-options.spec.ts",
+                    "column": 23,
+                    "line": 111
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "12125bd9844baa6a9967-e9da70d39191c7abaa52",
+          "file": "author-json-options.spec.ts",
+          "line": 72,
+          "column": 5
+        },
+        {
+          "title": "Author categorical choices include built-in, document and loaded catalogs with exact CRLF source undo/redo",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 13081,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T14:52:58.990Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "12125bd9844baa6a9967-fc3df520267524b4c84e",
+          "file": "author-json-options.spec.ts",
+          "line": 72,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "author.spec.ts",
+      "file": "author.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "anonymous code editing preserves source and visible selection through offline export/reimport at 1280x720",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 8758,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T14:53:12.165Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "27a0d846e5fe7596e61c-7492249324072ddca8f6",
+          "file": "author.spec.ts",
+          "line": 26,
+          "column": 80
+        },
+        {
+          "title": "anonymous code editing preserves source and visible selection through offline export/reimport at 540x960",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 11641,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).not.\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning')\nExpected: not \u001b[32m0\u001b[39m\nReceived: \u001b[31m0\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"not toHaveCount\" locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning')\u001b[22m\n\u001b[2m    14 × locator resolved to 0 elements\u001b[22m\n\u001b[2m       - unexpected value \"0\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).not.\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning')\nExpected: not \u001b[32m0\u001b[39m\nReceived: \u001b[31m0\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"not toHaveCount\" locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning')\u001b[22m\n\u001b[2m    14 × locator resolved to 0 elements\u001b[22m\n\u001b[2m       - unexpected value \"0\"\u001b[22m\n\n    at /private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/author.spec.ts:34:102",
+                    "location": {
+                      "file": "/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/author.spec.ts",
+                      "column": 102,
+                      "line": 34
+                    },
+                    "snippet": "  32 |   const input=page.getByRole('textbox',{name:'Editor content'});await expect(input).toBeVisible();\n  33 |   await input.focus();await page.keyboard.press('ControlOrMeta+a');await page.evaluate(text=>navigator.clipboard.writeText(text),'{\"name\":42,\"slides\":[]}');await page.keyboard.press('ControlOrMeta+v');\n> 34 |   await expect(page.locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning')).not.toHaveCount(0);\n     |                                                                                                      ^\n  35 |   await input.focus();await page.keyboard.press('ControlOrMeta+a');await page.evaluate(text=>navigator.clipboard.writeText(text),JSON.stringify(original,null,2));await page.keyboard.press('ControlOrMeta+v');await expect.poll(()=>source(page)).toEqual(original);\n  36 |   await page.getByRole('tablist',{name:'Document view'}).getByRole('tab',{name:/^preview/}).click();\n  37 |   const canvas=page.locator(`[data-opf-editor=\"${manifest.dependencies['@openpresentation/opf-editor']}\"]`);await expect(canvas.getByRole('button',{name:'Import file',exact:true})).toBeEnabled();await expect(canvas).toContainText('src/Example.ts');"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/author.spec.ts",
+                        "column": 102,
+                        "line": 34
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).not.\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning')\nExpected: not \u001b[32m0\u001b[39m\nReceived: \u001b[31m0\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"not toHaveCount\" locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning')\u001b[22m\n\u001b[2m    14 × locator resolved to 0 elements\u001b[22m\n\u001b[2m       - unexpected value \"0\"\u001b[22m\n\n\n  32 |   const input=page.getByRole('textbox',{name:'Editor content'});await expect(input).toBeVisible();\n  33 |   await input.focus();await page.keyboard.press('ControlOrMeta+a');await page.evaluate(text=>navigator.clipboard.writeText(text),'{\"name\":42,\"slides\":[]}');await page.keyboard.press('ControlOrMeta+v');\n> 34 |   await expect(page.locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning')).not.toHaveCount(0);\n     |                                                                                                      ^\n  35 |   await input.focus();await page.keyboard.press('ControlOrMeta+a');await page.evaluate(text=>navigator.clipboard.writeText(text),JSON.stringify(original,null,2));await page.keyboard.press('ControlOrMeta+v');await expect.poll(()=>source(page)).toEqual(original);\n  36 |   await page.getByRole('tablist',{name:'Document view'}).getByRole('tab',{name:/^preview/}).click();\n  37 |   const canvas=page.locator(`[data-opf-editor=\"${manifest.dependencies['@openpresentation/opf-editor']}\"]`);await expect(canvas.getByRole('button',{name:'Import file',exact:true})).toBeEnabled();await expect(canvas).toContainText('src/Example.ts');\n    at /private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/author.spec.ts:34:102"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T14:53:20.929Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/private/tmp/opf-issue88-app46-production-20260921/results/author-anonymous-code-edit-3e561--export-reimport-at-540x960/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/private/tmp/opf-issue88-app46-production-20260921/results/author-anonymous-code-edit-3e561--export-reimport-at-540x960/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/author.spec.ts",
+                    "column": 102,
+                    "line": 34
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "27a0d846e5fe7596e61c-195a044a4c00a5d32e7b",
+          "file": "author.spec.ts",
+          "line": 26,
+          "column": 80
+        },
+        {
+          "title": "anonymous Author canvas edits survive tab changes, offline PowerPoint export and undoable reimport",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 11099,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).not.\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning')\nExpected: not \u001b[32m0\u001b[39m\nReceived: \u001b[31m0\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"not toHaveCount\" locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning')\u001b[22m\n\u001b[2m    14 × locator resolved to 0 elements\u001b[22m\n\u001b[2m       - unexpected value \"0\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).not.\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning')\nExpected: not \u001b[32m0\u001b[39m\nReceived: \u001b[31m0\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"not toHaveCount\" locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning')\u001b[22m\n\u001b[2m    14 × locator resolved to 0 elements\u001b[22m\n\u001b[2m       - unexpected value \"0\"\u001b[22m\n\n    at /private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/author.spec.ts:70:102",
+                    "location": {
+                      "file": "/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/author.spec.ts",
+                      "column": 102,
+                      "line": 70
+                    },
+                    "snippet": "  68 |   await page.evaluate(text => navigator.clipboard.writeText(text), '{\"name\":42,\"slides\":[]}');\n  69 |   await page.keyboard.press('ControlOrMeta+v');\n> 70 |   await expect(page.locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning')).not.toHaveCount(0);\n     |                                                                                                      ^\n  71 |   await input.focus();\n  72 |   await page.keyboard.press('ControlOrMeta+a');\n  73 |   await page.evaluate(text => navigator.clipboard.writeText(text), JSON.stringify(deck, null, 2));"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/author.spec.ts",
+                        "column": 102,
+                        "line": 70
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).not.\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning')\nExpected: not \u001b[32m0\u001b[39m\nReceived: \u001b[31m0\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"not toHaveCount\" locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning')\u001b[22m\n\u001b[2m    14 × locator resolved to 0 elements\u001b[22m\n\u001b[2m       - unexpected value \"0\"\u001b[22m\n\n\n  68 |   await page.evaluate(text => navigator.clipboard.writeText(text), '{\"name\":42,\"slides\":[]}');\n  69 |   await page.keyboard.press('ControlOrMeta+v');\n> 70 |   await expect(page.locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning')).not.toHaveCount(0);\n     |                                                                                                      ^\n  71 |   await input.focus();\n  72 |   await page.keyboard.press('ControlOrMeta+a');\n  73 |   await page.evaluate(text => navigator.clipboard.writeText(text), JSON.stringify(deck, null, 2));\n    at /private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/author.spec.ts:70:102"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T14:53:32.951Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/private/tmp/opf-issue88-app46-production-20260921/results/author-anonymous-Author-ca-d560b-xport-and-undoable-reimport/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/private/tmp/opf-issue88-app46-production-20260921/results/author-anonymous-Author-ca-d560b-xport-and-undoable-reimport/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/author.spec.ts",
+                    "column": 102,
+                    "line": 70
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "27a0d846e5fe7596e61c-2585a4e642430677e20a",
+          "file": "author.spec.ts",
+          "line": 55,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "inspector-editing.spec.ts",
+      "file": "inspector-editing.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "all Inspector slides preserve exact JSON and shared furniture through offline undo/export at 1440px",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 8704,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T14:53:44.385Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d5f9f3acaafb6f7f32f2-089552d815e800af83eb",
+          "file": "inspector-editing.spec.ts",
+          "line": 40,
+          "column": 7
+        },
+        {
+          "title": "all Inspector slides preserve exact JSON and shared furniture through offline undo/export at 540px",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 11944,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).not.\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning')\nExpected: not \u001b[32m0\u001b[39m\nReceived: \u001b[31m0\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"not toHaveCount\" locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning')\u001b[22m\n\u001b[2m    14 × locator resolved to 0 elements\u001b[22m\n\u001b[2m       - unexpected value \"0\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).not.\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning')\nExpected: not \u001b[32m0\u001b[39m\nReceived: \u001b[31m0\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"not toHaveCount\" locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning')\u001b[22m\n\u001b[2m    14 × locator resolved to 0 elements\u001b[22m\n\u001b[2m       - unexpected value \"0\"\u001b[22m\n\n    at /private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/inspector-editing.spec.ts:51:104",
+                    "location": {
+                      "file": "/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/inspector-editing.spec.ts",
+                      "column": 104,
+                      "line": 51
+                    },
+                    "snippet": "  49 |     // Let Monaco's schema worker finish loading before the offline workflow.\n  50 |     await replaceSource(page, '{\"name\":42,\"slides\":[]}');\n> 51 |     await expect(page.locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning')).not.toHaveCount(0);\n     |                                                                                                        ^\n  52 |     await replaceSource(page, original);\n  53 |     await expect(page.getByTestId('inspector-canvas-overlay')).toHaveCount(3);\n  54 |     for (let index = 0; index < 3; index++) await expect(canvas(page, index)).toBeVisible();"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/inspector-editing.spec.ts",
+                        "column": 104,
+                        "line": 51
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).not.\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning')\nExpected: not \u001b[32m0\u001b[39m\nReceived: \u001b[31m0\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"not toHaveCount\" locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning')\u001b[22m\n\u001b[2m    14 × locator resolved to 0 elements\u001b[22m\n\u001b[2m       - unexpected value \"0\"\u001b[22m\n\n\n  49 |     // Let Monaco's schema worker finish loading before the offline workflow.\n  50 |     await replaceSource(page, '{\"name\":42,\"slides\":[]}');\n> 51 |     await expect(page.locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning')).not.toHaveCount(0);\n     |                                                                                                        ^\n  52 |     await replaceSource(page, original);\n  53 |     await expect(page.getByTestId('inspector-canvas-overlay')).toHaveCount(3);\n  54 |     for (let index = 0; index < 3; index++) await expect(canvas(page, index)).toBeVisible();\n    at /private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/inspector-editing.spec.ts:51:104"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T14:53:53.162Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/private/tmp/opf-issue88-app46-production-20260921/results/inspector-editing-all-Insp-a78d3-ffline-undo-export-at-540px/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/private/tmp/opf-issue88-app46-production-20260921/results/inspector-editing-all-Insp-a78d3-ffline-undo-export-at-540px/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/inspector-editing.spec.ts",
+                    "column": 104,
+                    "line": 51
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "d5f9f3acaafb6f7f32f2-4beb997e5763ba95d851",
+          "file": "inspector-editing.spec.ts",
+          "line": 40,
+          "column": 7
+        },
+        {
+          "title": "invalid source keeps a renderer fallback and source recovery uses the current slide order",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5086,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T14:54:05.419Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d5f9f3acaafb6f7f32f2-28f3d29d3ad1b84446f3",
+          "file": "inspector-editing.spec.ts",
+          "line": 99,
+          "column": 5
+        },
+        {
+          "title": "shared navigation discards an ID-less draft even when the replacement title is identical",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9628,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T14:54:10.581Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d5f9f3acaafb6f7f32f2-a1eae6d5581174e6cf2d",
+          "file": "inspector-editing.spec.ts",
+          "line": 116,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "inspector-recovery.spec.ts",
+      "file": "inspector-recovery.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "schema-valid strict overflow cancels an active draft and the same slide recovers after source correction",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 9997,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('[data-testid=\"inspector-canvas-overlay\"][data-opf-slide-id=\"retained-slide\"]').locator('[data-canvas-target][data-opf-path=\"slides.0.title\"]')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" locator('[data-testid=\"inspector-canvas-overlay\"][data-opf-slide-id=\"retained-slide\"]').locator('[data-canvas-target][data-opf-path=\"slides.0.title\"]') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"inspector-canvas-overlay\"][data-opf-slide-id=\"retained-slide\"]').locator('[data-canvas-target][data-opf-path=\"slides.0.title\"]')\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('[data-testid=\"inspector-canvas-overlay\"][data-opf-slide-id=\"retained-slide\"]').locator('[data-canvas-target][data-opf-path=\"slides.0.title\"]')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" locator('[data-testid=\"inspector-canvas-overlay\"][data-opf-slide-id=\"retained-slide\"]').locator('[data-canvas-target][data-opf-path=\"slides.0.title\"]') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"inspector-canvas-overlay\"][data-opf-slide-id=\"retained-slide\"]').locator('[data-canvas-target][data-opf-path=\"slides.0.title\"]')\u001b[22m\n\n    at /private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/inspector-recovery.spec.ts:46:24",
+                    "location": {
+                      "file": "/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/inspector-recovery.spec.ts",
+                      "column": 24,
+                      "line": 46
+                    },
+                    "snippet": "  44 |   await page.goto('/inspector#' + hashFor(initial));\n  45 |   const target = canvas(page).locator('[data-canvas-target][data-opf-path=\"slides.0.title\"]');\n> 46 |   await expect(target).toBeVisible();\n     |                        ^\n  47 |   await target.dblclick();\n  48 |   const input = page.getByRole('textbox', { name: 'Edit title inline', exact: true });\n  49 |   await input.fill('Stale draft must not reach the replacement');"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/inspector-recovery.spec.ts",
+                        "column": 24,
+                        "line": 46
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('[data-testid=\"inspector-canvas-overlay\"][data-opf-slide-id=\"retained-slide\"]').locator('[data-canvas-target][data-opf-path=\"slides.0.title\"]')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" locator('[data-testid=\"inspector-canvas-overlay\"][data-opf-slide-id=\"retained-slide\"]').locator('[data-canvas-target][data-opf-path=\"slides.0.title\"]') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"inspector-canvas-overlay\"][data-opf-slide-id=\"retained-slide\"]').locator('[data-canvas-target][data-opf-path=\"slides.0.title\"]')\u001b[22m\n\n\n  44 |   await page.goto('/inspector#' + hashFor(initial));\n  45 |   const target = canvas(page).locator('[data-canvas-target][data-opf-path=\"slides.0.title\"]');\n> 46 |   await expect(target).toBeVisible();\n     |                        ^\n  47 |   await target.dblclick();\n  48 |   const input = page.getByRole('textbox', { name: 'Edit title inline', exact: true });\n  49 |   await input.fill('Stale draft must not reach the replacement');\n    at /private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/inspector-recovery.spec.ts:46:24"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T14:54:20.217Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/private/tmp/opf-issue88-app46-production-20260921/results/inspector-recovery-schema--76507-ers-after-source-correction/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/private/tmp/opf-issue88-app46-production-20260921/results/inspector-recovery-schema--76507-ers-after-source-correction/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/inspector-recovery.spec.ts",
+                    "column": 24,
+                    "line": 46
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "196ae7c35c7d592d8bab-af88711b49014ee2e9fa",
+          "file": "inspector-recovery.spec.ts",
+          "line": 18,
+          "column": 5
+        },
+        {
+          "title": "font substitution notes remain accessible and operable while the Inspector canvas is active",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 7324,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('[data-testid=\"inspector-canvas-overlay\"][data-opf-slide-id=\"retained-slide\"]')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" locator('[data-testid=\"inspector-canvas-overlay\"][data-opf-slide-id=\"retained-slide\"]') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"inspector-canvas-overlay\"][data-opf-slide-id=\"retained-slide\"]')\u001b[22m\n\u001b[2m    6 × locator resolved to <div role=\"group\" data-opf-slide-index=\"0\" data-opf-slide-id=\"retained-slide\" data-testid=\"inspector-canvas-overlay\" aria-label=\"Slide 1: Disclose the font choice\" class=\"[&>svg]:block [&>svg]:h-auto [&>svg]:w-full\"></div>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('[data-testid=\"inspector-canvas-overlay\"][data-opf-slide-id=\"retained-slide\"]')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" locator('[data-testid=\"inspector-canvas-overlay\"][data-opf-slide-id=\"retained-slide\"]') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"inspector-canvas-overlay\"][data-opf-slide-id=\"retained-slide\"]')\u001b[22m\n\u001b[2m    6 × locator resolved to <div role=\"group\" data-opf-slide-index=\"0\" data-opf-slide-id=\"retained-slide\" data-testid=\"inspector-canvas-overlay\" aria-label=\"Slide 1: Disclose the font choice\" class=\"[&>svg]:block [&>svg]:h-auto [&>svg]:w-full\"></div>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n\n    at /private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/inspector-recovery.spec.ts:97:30",
+                    "location": {
+                      "file": "/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/inspector-recovery.spec.ts",
+                      "column": 30,
+                      "line": 97
+                    },
+                    "snippet": "   95 |   page.on('pageerror', error => errors.push(error.message));\n   96 |   await page.goto('/inspector#' + hashFor(document));\n>  97 |   await expect(canvas(page)).toBeVisible();\n      |                              ^\n   98 |   const notes = page.locator('[data-opf-renderer] details');\n   99 |   const summary = notes.locator('summary');\n  100 |   await expect(summary).toHaveText(/^Preview notes \\([1-9]\\d*\\)$/);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/inspector-recovery.spec.ts",
+                        "column": 30,
+                        "line": 97
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('[data-testid=\"inspector-canvas-overlay\"][data-opf-slide-id=\"retained-slide\"]')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" locator('[data-testid=\"inspector-canvas-overlay\"][data-opf-slide-id=\"retained-slide\"]') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"inspector-canvas-overlay\"][data-opf-slide-id=\"retained-slide\"]')\u001b[22m\n\u001b[2m    6 × locator resolved to <div role=\"group\" data-opf-slide-index=\"0\" data-opf-slide-id=\"retained-slide\" data-testid=\"inspector-canvas-overlay\" aria-label=\"Slide 1: Disclose the font choice\" class=\"[&>svg]:block [&>svg]:h-auto [&>svg]:w-full\"></div>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n\n\n   95 |   page.on('pageerror', error => errors.push(error.message));\n   96 |   await page.goto('/inspector#' + hashFor(document));\n>  97 |   await expect(canvas(page)).toBeVisible();\n      |                              ^\n   98 |   const notes = page.locator('[data-opf-renderer] details');\n   99 |   const summary = notes.locator('summary');\n  100 |   await expect(summary).toHaveText(/^Preview notes \\([1-9]\\d*\\)$/);\n    at /private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/inspector-recovery.spec.ts:97:30"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T14:54:30.402Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/private/tmp/opf-issue88-app46-production-20260921/results/inspector-recovery-font-su-beb5b--Inspector-canvas-is-active/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/private/tmp/opf-issue88-app46-production-20260921/results/inspector-recovery-font-su-beb5b--Inspector-canvas-is-active/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/inspector-recovery.spec.ts",
+                    "column": 30,
+                    "line": 97
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "196ae7c35c7d592d8bab-adb49ffd47c57d462739",
+          "file": "inspector-recovery.spec.ts",
+          "line": 85,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "inspector.spec.ts",
+      "file": "inspector.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "published long quotes retain their footer in actual wide/portrait previews and PowerPoint downloads",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 12093,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T14:54:38.169Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a233f56b9daa8e69892b-0108f2846017464a1f8b",
+          "file": "inspector.spec.ts",
+          "line": 20,
+          "column": 5
+        },
+        {
+          "title": "shared navigation clears format errors and proposals from the previous deck",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9573,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T14:54:50.335Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a233f56b9daa8e69892b-e61b3a226a7eb8c78f7f",
+          "file": "inspector.spec.ts",
+          "line": 76,
+          "column": 5
+        },
+        {
+          "title": "anonymous JSON authoring, preview, undo/redo, download and shared reimport",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 8494,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T14:54:59.914Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a233f56b9daa8e69892b-2527bd8b12468de0410f",
+          "file": "inspector.spec.ts",
+          "line": 118,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "json-paste-formatting.spec.ts",
+      "file": "json-paste-formatting.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "warm JSON worker leaves pasted source untouched while explicit Format Document remains undoable",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 8726,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate\n    at /private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/json-paste-formatting.spec.ts:97:101",
+                    "location": {
+                      "file": "/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/json-paste-formatting.spec.ts",
+                      "column": 101,
+                      "line": 97
+                    },
+                    "snippet": "   95 |   await expect(lines).toContainText('\"name\":');\n   96 |   await expect.poll(() => page.evaluate(() => window.__opfFormatWorkerRequests\n>  97 |     .filter(request => request.method === 'format' && request.complete && !request.failed).length)).toBeGreaterThan(0);\n      |                                                                                                     ^\n   98 |   const formatted = await copySource(page);\n   99 |   expect(formatted).not.toBe(unformatted);\n  100 |   expect(JSON.parse(formatted)).toEqual(JSON.parse(unformatted));"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/json-paste-formatting.spec.ts",
+                        "column": 101,
+                        "line": 97
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate\n\n   95 |   await expect(lines).toContainText('\"name\":');\n   96 |   await expect.poll(() => page.evaluate(() => window.__opfFormatWorkerRequests\n>  97 |     .filter(request => request.method === 'format' && request.complete && !request.failed).length)).toBeGreaterThan(0);\n      |                                                                                                     ^\n   98 |   const formatted = await copySource(page);\n   99 |   expect(formatted).not.toBe(unformatted);\n  100 |   expect(JSON.parse(formatted)).toEqual(JSON.parse(unformatted));\n    at /private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/json-paste-formatting.spec.ts:97:101"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T14:55:08.416Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/private/tmp/opf-issue88-app46-production-20260921/results/json-paste-formatting-warm-44312-t-Document-remains-undoable/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/private/tmp/opf-issue88-app46-production-20260921/results/json-paste-formatting-warm-44312-t-Document-remains-undoable/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/json-paste-formatting.spec.ts",
+                    "column": 101,
+                    "line": 97
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "bf168811f0cca24e8c98-9b7f4bf7a81bffc06464",
+          "file": "json-paste-formatting.spec.ts",
+          "line": 53,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "monaco.spec.ts",
+      "file": "monaco.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "bundled JSON worker provides schema diagnostics, completion and recovery offline",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 7,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7971,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T14:55:17.461Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1d25d9be78718e2fbc41-8bcd5ba2357acc50ec16",
+          "file": "monaco.spec.ts",
+          "line": 3,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "svg-security.spec.ts",
+      "file": "svg-security.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "published SVG renderer keeps hostile shared and imported document strings inert",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 7,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9315,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T14:55:25.509Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "58c599413df08fef558b-67ced50aee23685038d6",
+          "file": "svg-security.spec.ts",
+          "line": 41,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "toolkit.spec.ts",
+      "file": "toolkit.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "public toolkit shows the deployed package set with working render, edit and export proofs",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 7,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2143,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T14:55:34.834Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e6b45ca4e5a744645a00-4507db711c745f43d7c0",
+          "file": "toolkit.spec.ts",
+          "line": 4,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "yaml.spec.ts",
+      "file": "yaml.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "YAML and Markdown editing preserve OPF values and recover from malformed YAML offline",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 7,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 9879,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).not.\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.monaco-editor').first().locator('.squiggly-error, .squiggly-warning')\nExpected: not \u001b[32m0\u001b[39m\nReceived: \u001b[31m0\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"not toHaveCount\" locator('.monaco-editor').first().locator('.squiggly-error, .squiggly-warning') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.monaco-editor').first().locator('.squiggly-error, .squiggly-warning')\u001b[22m\n\u001b[2m    14 × locator resolved to 0 elements\u001b[22m\n\u001b[2m       - unexpected value \"0\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).not.\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.monaco-editor').first().locator('.squiggly-error, .squiggly-warning')\nExpected: not \u001b[32m0\u001b[39m\nReceived: \u001b[31m0\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"not toHaveCount\" locator('.monaco-editor').first().locator('.squiggly-error, .squiggly-warning') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.monaco-editor').first().locator('.squiggly-error, .squiggly-warning')\u001b[22m\n\u001b[2m    14 × locator resolved to 0 elements\u001b[22m\n\u001b[2m       - unexpected value \"0\"\u001b[22m\n\n    at /private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/yaml.spec.ts:17:32",
+                    "location": {
+                      "file": "/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/yaml.spec.ts",
+                      "column": 32,
+                      "line": 17
+                    },
+                    "snippet": "  15 |  const diagnostics=page.locator('.monaco-editor').first().locator('.squiggly-error, .squiggly-warning');\n  16 |  await replace('{\"name\":42,\"slides\":[]}');\n> 17 |  await expect(diagnostics).not.toHaveCount(0);\n     |                                ^\n  18 |  await replace(JSON.stringify(doc));\n  19 |  await expect(diagnostics).toHaveCount(0);\n  20 |  // Serialization must preserve scripts that the selected default font cannot"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/yaml.spec.ts",
+                        "column": 32,
+                        "line": 17
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).not.\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.monaco-editor').first().locator('.squiggly-error, .squiggly-warning')\nExpected: not \u001b[32m0\u001b[39m\nReceived: \u001b[31m0\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"not toHaveCount\" locator('.monaco-editor').first().locator('.squiggly-error, .squiggly-warning') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.monaco-editor').first().locator('.squiggly-error, .squiggly-warning')\u001b[22m\n\u001b[2m    14 × locator resolved to 0 elements\u001b[22m\n\u001b[2m       - unexpected value \"0\"\u001b[22m\n\n\n  15 |  const diagnostics=page.locator('.monaco-editor').first().locator('.squiggly-error, .squiggly-warning');\n  16 |  await replace('{\"name\":42,\"slides\":[]}');\n> 17 |  await expect(diagnostics).not.toHaveCount(0);\n     |                                ^\n  18 |  await replace(JSON.stringify(doc));\n  19 |  await expect(diagnostics).toHaveCount(0);\n  20 |  // Serialization must preserve scripts that the selected default font cannot\n    at /private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/yaml.spec.ts:17:32"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-21T14:55:36.982Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/private/tmp/opf-issue88-app46-production-20260921/results/yaml-YAML-and-Markdown-edi-18ed4-from-malformed-YAML-offline/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/private/tmp/opf-issue88-app46-production-20260921/results/yaml-YAML-and-Markdown-edi-18ed4-from-malformed-YAML-offline/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/yaml.spec.ts",
+                    "column": 32,
+                    "line": 17
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "885fa28ec3207d77e67b-3cbaabb7f19f66ae500b",
+          "file": "yaml.spec.ts",
+          "line": 4,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-09-21T14:52:43.494Z",
+    "duration": 183556.19700000001,
+    "expected": 11,
+    "skipped": 0,
+    "unexpected": 8,
+    "flaky": 0
+  }
+}

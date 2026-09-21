@@ -1,0 +1,23 @@
+{
+  "capturedAt": "2026-09-21T14:31:54.751Z",
+  "id": "dpl_5nqS4CDckXoBzBf2Zsti6whMyxEY",
+  "url": "openpresentation-site-ky0l39gwr-dataadvantage.vercel.app",
+  "state": "READY",
+  "readyState": "READY",
+  "target": "production",
+  "alias": [
+    "openpresentation.org",
+    "www.openpresentation.org",
+    "openpresentation-site.vercel.app",
+    "openpresentation-site-dataadvantage.vercel.app",
+    "openpresentation-site-git-main-dataadvantage.vercel.app"
+  ],
+  "meta": {
+    "githubCommitRef": "main",
+    "githubCommitSha": "a85bcc77d899ce9ba1df659548be564142c16120",
+    "githubCommitMessage": "fix(docs): serve current guides without binary evidence (#44)\n\n* fix(docs): serve current guides without binary evidence\n\n* fix(build): exclude static evidence from function traces\n\n* fix(docs): adopt current published entrypoints and verify their integrity\n\n* test: check the published skills gui...",
+    "githubRepo": "openpresentation-site",
+    "githubOrg": "Data-Advantage"
+  },
+  "ready": 1790000962803
+}

@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "mode": "acceptance",
+  "checks": 321,
+  "failed": [],
+  "pages": 11,
+  "resources": 18,
+  "sourceRef": "120a770041b3f7d3c04ced1ac87675ed0d18292b"
+}

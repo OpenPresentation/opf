@@ -1,0 +1,200 @@
+{
+  "controlSpace": [
+    {
+      "time": 4124,
+      "type": "keydown",
+      "details": {
+        "key": " ",
+        "code": "Space",
+        "ctrl": true,
+        "meta": false,
+        "shift": false,
+        "target": {
+          "tag": "DIV",
+          "role": "textbox",
+          "label": "Editor content",
+          "class": "native-edit-context"
+        },
+        "state": {
+          "active": {
+            "tag": "DIV",
+            "role": "textbox",
+            "label": "Editor content",
+            "class": "native-edit-context"
+          },
+          "editor": "monaco-editor no-user-select mac  showUnused showDeprecated vs-dark focused",
+          "quick": [
+            {
+              "display": "none",
+              "value": ":5:15"
+            }
+          ],
+          "suggest": []
+        }
+      }
+    },
+    {
+      "time": 4124,
+      "type": "keydown-handled",
+      "details": {
+        "key": " ",
+        "prevented": false,
+        "state": {
+          "active": {
+            "tag": "DIV",
+            "role": "textbox",
+            "label": "Editor content",
+            "class": "native-edit-context"
+          },
+          "editor": "monaco-editor no-user-select mac  showUnused showDeprecated vs-dark focused",
+          "quick": [
+            {
+              "display": "none",
+              "value": ":5:15"
+            }
+          ],
+          "suggest": []
+        }
+      }
+    },
+    {
+      "time": 6339.400000095367,
+      "type": "keydown",
+      "details": {
+        "key": " ",
+        "code": "Space",
+        "ctrl": true,
+        "meta": false,
+        "shift": false,
+        "target": {
+          "tag": "DIV",
+          "role": "textbox",
+          "label": "Editor content",
+          "class": "native-edit-context"
+        },
+        "state": {
+          "active": {
+            "tag": "DIV",
+            "role": "textbox",
+            "label": "Editor content",
+            "class": "native-edit-context"
+          },
+          "editor": "monaco-editor no-user-select mac  showUnused showDeprecated vs-dark focused",
+          "quick": [
+            {
+              "display": "none",
+              "value": ":11:18"
+            }
+          ],
+          "suggest": [
+            {
+              "class": "editor-widget suggest-widget",
+              "display": "none",
+              "labels": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "time": 6339.400000095367,
+      "type": "keydown-handled",
+      "details": {
+        "key": " ",
+        "prevented": false,
+        "state": {
+          "active": {
+            "tag": "DIV",
+            "role": "textbox",
+            "label": "Editor content",
+            "class": "native-edit-context"
+          },
+          "editor": "monaco-editor no-user-select mac  showUnused showDeprecated vs-dark focused",
+          "quick": [
+            {
+              "display": "none",
+              "value": ":11:18"
+            }
+          ],
+          "suggest": [
+            {
+              "class": "editor-widget suggest-widget",
+              "display": "none",
+              "labels": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "time": 7231.600000143051,
+      "type": "keydown",
+      "details": {
+        "key": " ",
+        "code": "Space",
+        "ctrl": true,
+        "meta": false,
+        "shift": false,
+        "target": {
+          "tag": "DIV",
+          "role": "textbox",
+          "label": "Editor content",
+          "class": "native-edit-context"
+        },
+        "state": {
+          "active": {
+            "tag": "DIV",
+            "role": "textbox",
+            "label": "Editor content",
+            "class": "native-edit-context"
+          },
+          "editor": "monaco-editor no-user-select mac  showUnused showDeprecated vs-dark focused",
+          "quick": [
+            {
+              "display": "none",
+              "value": ":11:18"
+            }
+          ],
+          "suggest": [
+            {
+              "class": "editor-widget suggest-widget",
+              "display": "none",
+              "labels": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "time": 7231.600000143051,
+      "type": "keydown-handled",
+      "details": {
+        "key": " ",
+        "prevented": false,
+        "state": {
+          "active": {
+            "tag": "DIV",
+            "role": "textbox",
+            "label": "Editor content",
+            "class": "native-edit-context"
+          },
+          "editor": "monaco-editor no-user-select mac  showUnused showDeprecated vs-dark focused",
+          "quick": [
+            {
+              "display": "none",
+              "value": ":11:18"
+            }
+          ],
+          "suggest": [
+            {
+              "class": "editor-widget suggest-widget",
+              "display": "none",
+              "labels": []
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "workerCount": 145
+}

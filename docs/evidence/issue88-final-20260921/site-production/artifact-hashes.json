@@ -1,0 +1,54 @@
+{
+  "files": [
+    {
+      "file": "README.md",
+      "bytes": 1743,
+      "sha256": "613b481ae88fc7504526c5c6d050f2edae6c9eec8c3a124a48278356c3bf2548"
+    },
+    {
+      "file": "acceptance-summary.json",
+      "bytes": 2904,
+      "sha256": "3e1805396477cfe3d51090274183ddc6218f7148867678f8075e5a8da5d01b0b"
+    },
+    {
+      "file": "browser-downloads.log",
+      "bytes": 688,
+      "sha256": "9356f3a14565825593d29a5b50f22b97dd86c2ddc86c03a86d98ed38b4e06c21"
+    },
+    {
+      "file": "current-guides-report.json",
+      "bytes": 55539,
+      "sha256": "d7bfa9380c93a83e62c107f0aeb4992e28709b1b5f4ae2fc6562e9af602911c8"
+    },
+    {
+      "file": "deployment.json",
+      "bytes": 1022,
+      "sha256": "9f3eed3b279ee63dd860746d7e1a0f61174ba251d609f5ec47b250e4e16450de"
+    },
+    {
+      "file": "docs-agent-skills.png",
+      "bytes": 216659,
+      "sha256": "96bd4ec5cf82ee8c752ff423819212ff07ebc23bbab64d46b8bce190d9218f41"
+    },
+    {
+      "file": "docs-live-editor.png",
+      "bytes": 220175,
+      "sha256": "6e4b7c4d381b0cce570f2c70b6f7b585a67fa47cbce91d5d26b6bac310246298"
+    },
+    {
+      "file": "docs-reference-quickstart.png",
+      "bytes": 228328,
+      "sha256": "963caf736f9aada005f23c632a460362968bd718dfc40f72fa1416db8372c186"
+    },
+    {
+      "file": "verification.log",
+      "bytes": 171,
+      "sha256": "b24a151d10507a088ab8e675a7c476d8bc58bcbea3c42dcfdef4e4b49ba2844c"
+    },
+    {
+      "file": "verify-current-guides.mjs",
+      "bytes": 16853,
+      "sha256": "156cbf48f8ba352c38171841386a0e1722df83deae3ccd509584a238ddbda25e"
+    }
+  ]
+}

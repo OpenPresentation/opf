@@ -1,0 +1,170 @@
+[
+  {
+    "callId": "call@380",
+    "phase": "after",
+    "timestamp": 18003.93,
+    "nodes": [
+      {
+        "tag": "DIV",
+        "attrs": {
+          "class": "monaco-editor no-user-select mac  showUnused showDeprecated vs-dark",
+          "role": "code",
+          "data-uri": "file:///deck.opf.json",
+          "style": "width: 724px; height: 848px;"
+        }
+      },
+      {
+        "tag": "DIV",
+        "attrs": {
+          "class": "quick-input-widget show-file-icons",
+          "tabindex": "-1",
+          "style": "background-color: var(--vscode-quickInput-background); color: var(--vscode-quickInput-foreground); border: 1px solid var(--vscode-widget-border); width: 448.88px; top: 0px; left: 138px;"
+        }
+      }
+    ]
+  },
+  {
+    "callId": "call@382",
+    "phase": "before",
+    "timestamp": 18005.248,
+    "nodes": [
+      {
+        "tag": "DIV",
+        "attrs": {
+          "class": "monaco-editor no-user-select mac  showUnused showDeprecated vs-dark",
+          "role": "code",
+          "data-uri": "file:///deck.opf.json",
+          "style": "width: 724px; height: 848px;"
+        }
+      },
+      {
+        "tag": "DIV",
+        "attrs": {
+          "class": "quick-input-widget show-file-icons",
+          "tabindex": "-1",
+          "style": "background-color: var(--vscode-quickInput-background); color: var(--vscode-quickInput-foreground); border: 1px solid var(--vscode-widget-border); width: 448.88px; top: 0px; left: 138px;"
+        }
+      }
+    ]
+  },
+  {
+    "callId": "call@382",
+    "phase": "action",
+    "timestamp": 18009.025,
+    "nodes": [
+      {
+        "tag": "DIV",
+        "attrs": {
+          "class": "monaco-editor no-user-select mac  showUnused showDeprecated vs-dark",
+          "role": "code",
+          "data-uri": "file:///deck.opf.json",
+          "style": "width: 724px; height: 848px;"
+        }
+      },
+      {
+        "tag": "DIV",
+        "attrs": {
+          "class": "quick-input-widget show-file-icons",
+          "tabindex": "-1",
+          "style": "background-color: var(--vscode-quickInput-background); color: var(--vscode-quickInput-foreground); border: 1px solid var(--vscode-widget-border); width: 448.88px; top: 0px; left: 138px;"
+        }
+      }
+    ]
+  },
+  {
+    "callId": "call@382",
+    "phase": "after",
+    "timestamp": 18014.632,
+    "nodes": [
+      {
+        "tag": "DIV",
+        "attrs": {
+          "class": "monaco-editor no-user-select mac  showUnused showDeprecated vs-dark focused",
+          "role": "code",
+          "data-uri": "file:///deck.opf.json",
+          "style": "width: 724px; height: 848px;"
+        }
+      },
+      {
+        "tag": "DIV",
+        "attrs": {
+          "class": "quick-input-widget show-file-icons",
+          "tabindex": "-1",
+          "style": "background-color: var(--vscode-quickInput-background); color: var(--vscode-quickInput-foreground); border: 1px solid var(--vscode-widget-border); width: 448.88px; top: 0px; left: 138px; display: none;"
+        }
+      }
+    ]
+  },
+  {
+    "callId": "call@384",
+    "phase": "before",
+    "timestamp": 18016.025,
+    "nodes": [
+      {
+        "tag": "DIV",
+        "attrs": {
+          "class": "monaco-editor no-user-select mac  showUnused showDeprecated vs-dark focused",
+          "role": "code",
+          "data-uri": "file:///deck.opf.json",
+          "style": "width: 724px; height: 848px;"
+        }
+      },
+      {
+        "tag": "DIV",
+        "attrs": {
+          "class": "quick-input-widget show-file-icons",
+          "tabindex": "-1",
+          "style": "background-color: var(--vscode-quickInput-background); color: var(--vscode-quickInput-foreground); border: 1px solid var(--vscode-widget-border); width: 448.88px; top: 0px; left: 138px; display: none;"
+        }
+      }
+    ]
+  },
+  {
+    "callId": "call@386",
+    "phase": "action",
+    "timestamp": 18020.927,
+    "nodes": [
+      {
+        "tag": "DIV",
+        "attrs": {
+          "class": "monaco-editor no-user-select mac  showUnused showDeprecated vs-dark focused",
+          "role": "code",
+          "data-uri": "file:///deck.opf.json",
+          "style": "width: 724px; height: 848px;"
+        }
+      }
+    ]
+  },
+  {
+    "callId": "call@388",
+    "phase": "before",
+    "timestamp": 18025.486,
+    "nodes": [
+      {
+        "tag": "DIV",
+        "attrs": {
+          "class": "monaco-editor no-user-select mac  showUnused showDeprecated vs-dark focused",
+          "role": "code",
+          "data-uri": "file:///deck.opf.json",
+          "style": "width: 724px; height: 848px;"
+        }
+      }
+    ]
+  },
+  {
+    "callId": "call@388",
+    "phase": "after",
+    "timestamp": 23033.044,
+    "nodes": [
+      {
+        "tag": "DIV",
+        "attrs": {
+          "class": "monaco-editor no-user-select mac  showUnused showDeprecated vs-dark focused",
+          "role": "code",
+          "data-uri": "file:///deck.opf.json",
+          "style": "width: 724px; height: 848px;"
+        }
+      }
+    ]
+  }
+]

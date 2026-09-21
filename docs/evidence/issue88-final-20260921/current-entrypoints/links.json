@@ -1,0 +1,15 @@
+{
+  "status": "passed",
+  "files": [
+    "README.md",
+    "docs/agent-skills.md",
+    "docs/content-payloads.md",
+    "docs/ecosystem-development.md",
+    "docs/live-editor.md",
+    "docs/table-text-colors.md",
+    "skills/opf-author/SKILL.md",
+    "skills/opf-edit/SKILL.md",
+    "skills/opf-edit/references/editor.md"
+  ],
+  "relativeLinks": 58
+}

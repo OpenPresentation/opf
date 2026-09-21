@@ -1,0 +1,320 @@
+
+Running 19 tests using 1 worker
+
+(node:30269) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   1 tests/e2e/author-json-options.spec.ts:72:5 › Author categorical choices include built-in, document and loaded catalogs with exact LF source undo/redo (14.8s)
+(node:30459) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   2 tests/e2e/author-json-options.spec.ts:72:5 › Author categorical choices include built-in, document and loaded catalogs with exact CRLF source undo/redo (13.1s)
+  ✓   3 tests/e2e/author.spec.ts:26:80 › anonymous code editing preserves source and visible selection through offline export/reimport at 1280x720 (8.8s)
+  ✘   4 tests/e2e/author.spec.ts:26:80 › anonymous code editing preserves source and visible selection through offline export/reimport at 540x960 (11.6s)
+(node:30514) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   5 tests/e2e/author.spec.ts:55:5 › anonymous Author canvas edits survive tab changes, offline PowerPoint export and undoable reimport (11.1s)
+(node:30525) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   6 tests/e2e/inspector-editing.spec.ts:40:7 › all Inspector slides preserve exact JSON and shared furniture through offline undo/export at 1440px (8.7s)
+  ✘   7 tests/e2e/inspector-editing.spec.ts:40:7 › all Inspector slides preserve exact JSON and shared furniture through offline undo/export at 540px (11.9s)
+(node:30554) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   8 tests/e2e/inspector-editing.spec.ts:99:5 › invalid source keeps a renderer fallback and source recovery uses the current slide order (5.1s)
+  ✓   9 tests/e2e/inspector-editing.spec.ts:116:5 › shared navigation discards an ID-less draft even when the replacement title is identical (9.6s)
+  ✘  10 tests/e2e/inspector-recovery.spec.ts:18:5 › schema-valid strict overflow cancels an active draft and the same slide recovers after source correction (10.0s)
+(node:30569) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  11 tests/e2e/inspector-recovery.spec.ts:85:5 › font substitution notes remain accessible and operable while the Inspector canvas is active (7.3s)
+(node:30596) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  12 tests/e2e/inspector.spec.ts:20:5 › published long quotes retain their footer in actual wide/portrait previews and PowerPoint downloads (12.1s)
+  ✓  13 tests/e2e/inspector.spec.ts:76:5 › shared navigation clears format errors and proposals from the previous deck (9.6s)
+  ✓  14 tests/e2e/inspector.spec.ts:118:5 › anonymous JSON authoring, preview, undo/redo, download and shared reimport (8.5s)
+  ✘  15 tests/e2e/json-paste-formatting.spec.ts:53:5 › warm JSON worker leaves pasted source untouched while explicit Format Document remains undoable (8.7s)
+(node:30619) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  16 tests/e2e/monaco.spec.ts:3:5 › bundled JSON worker provides schema diagnostics, completion and recovery offline (8.0s)
+  ✓  17 tests/e2e/svg-security.spec.ts:41:5 › published SVG renderer keeps hostile shared and imported document strings inert (9.3s)
+  ✓  18 tests/e2e/toolkit.spec.ts:4:5 › public toolkit shows the deployed package set with working render, edit and export proofs (2.1s)
+  ✘  19 tests/e2e/yaml.spec.ts:4:5 › YAML and Markdown editing preserve OPF values and recover from malformed YAML offline (9.9s)
+
+
+  1) tests/e2e/author-json-options.spec.ts:72:5 › Author categorical choices include built-in, document and loaded catalogs with exact LF source undo/redo 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('.suggest-widget.visible').getByRole('option', { name: 'AAA Document Layout, Enum Member', exact: true })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" locator('.suggest-widget.visible').getByRole('option', { name: 'AAA Document Layout, Enum Member', exact: true }) with timeout 5000ms
+      - waiting for locator('.suggest-widget.visible').getByRole('option', { name: 'AAA Document Layout, Enum Member', exact: true })
+
+
+      109 |   const layouts = await openChoices(page, themed, 'layout', 'text-1x');
+      110 |   const local = categoricalChoice(layouts, 'AAA Document Layout');
+    > 111 |   await expect(local).toBeVisible();
+          |                       ^
+      112 |   await expect(categoricalChoice(layouts, 'AAB Loaded Layout')).toBeVisible();
+      113 |   await page.screenshot({ path: test.info().outputPath('author-layout-options.png'), fullPage: true });
+      114 |   await local.click();
+        at /private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/author-json-options.spec.ts:111:23
+
+    Error Context: ../../opf-issue88-app46-production-20260921/results/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../opf-issue88-app46-production-20260921/results/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../opf-issue88-app46-production-20260921/results/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) tests/e2e/author.spec.ts:26:80 › anonymous code editing preserves source and visible selection through offline export/reimport at 540x960 
+
+    Error: expect(locator).not.toHaveCount(expected) failed
+
+    Locator:  locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning')
+    Expected: not 0
+    Received: 0
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "not toHaveCount" locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning') with timeout 5000ms
+      - waiting for locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning')
+        14 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      32 |   const input=page.getByRole('textbox',{name:'Editor content'});await expect(input).toBeVisible();
+      33 |   await input.focus();await page.keyboard.press('ControlOrMeta+a');await page.evaluate(text=>navigator.clipboard.writeText(text),'{"name":42,"slides":[]}');await page.keyboard.press('ControlOrMeta+v');
+    > 34 |   await expect(page.locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning')).not.toHaveCount(0);
+         |                                                                                                      ^
+      35 |   await input.focus();await page.keyboard.press('ControlOrMeta+a');await page.evaluate(text=>navigator.clipboard.writeText(text),JSON.stringify(original,null,2));await page.keyboard.press('ControlOrMeta+v');await expect.poll(()=>source(page)).toEqual(original);
+      36 |   await page.getByRole('tablist',{name:'Document view'}).getByRole('tab',{name:/^preview/}).click();
+      37 |   const canvas=page.locator(`[data-opf-editor="${manifest.dependencies['@openpresentation/opf-editor']}"]`);await expect(canvas.getByRole('button',{name:'Import file',exact:true})).toBeEnabled();await expect(canvas).toContainText('src/Example.ts');
+        at /private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/author.spec.ts:34:102
+
+    Error Context: ../../opf-issue88-app46-production-20260921/results/author-anonymous-code-edit-3e561--export-reimport-at-540x960/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../opf-issue88-app46-production-20260921/results/author-anonymous-code-edit-3e561--export-reimport-at-540x960/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../opf-issue88-app46-production-20260921/results/author-anonymous-code-edit-3e561--export-reimport-at-540x960/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) tests/e2e/author.spec.ts:55:5 › anonymous Author canvas edits survive tab changes, offline PowerPoint export and undoable reimport 
+
+    Error: expect(locator).not.toHaveCount(expected) failed
+
+    Locator:  locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning')
+    Expected: not 0
+    Received: 0
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "not toHaveCount" locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning') with timeout 5000ms
+      - waiting for locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning')
+        14 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      68 |   await page.evaluate(text => navigator.clipboard.writeText(text), '{"name":42,"slides":[]}');
+      69 |   await page.keyboard.press('ControlOrMeta+v');
+    > 70 |   await expect(page.locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning')).not.toHaveCount(0);
+         |                                                                                                      ^
+      71 |   await input.focus();
+      72 |   await page.keyboard.press('ControlOrMeta+a');
+      73 |   await page.evaluate(text => navigator.clipboard.writeText(text), JSON.stringify(deck, null, 2));
+        at /private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/author.spec.ts:70:102
+
+    Error Context: ../../opf-issue88-app46-production-20260921/results/author-anonymous-Author-ca-d560b-xport-and-undoable-reimport/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../opf-issue88-app46-production-20260921/results/author-anonymous-Author-ca-d560b-xport-and-undoable-reimport/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../opf-issue88-app46-production-20260921/results/author-anonymous-Author-ca-d560b-xport-and-undoable-reimport/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) tests/e2e/inspector-editing.spec.ts:40:7 › all Inspector slides preserve exact JSON and shared furniture through offline undo/export at 540px 
+
+    Error: expect(locator).not.toHaveCount(expected) failed
+
+    Locator:  locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning')
+    Expected: not 0
+    Received: 0
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "not toHaveCount" locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning') with timeout 5000ms
+      - waiting for locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning')
+        14 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      49 |     // Let Monaco's schema worker finish loading before the offline workflow.
+      50 |     await replaceSource(page, '{"name":42,"slides":[]}');
+    > 51 |     await expect(page.locator('.monaco-editor .squiggly-error, .monaco-editor .squiggly-warning')).not.toHaveCount(0);
+         |                                                                                                        ^
+      52 |     await replaceSource(page, original);
+      53 |     await expect(page.getByTestId('inspector-canvas-overlay')).toHaveCount(3);
+      54 |     for (let index = 0; index < 3; index++) await expect(canvas(page, index)).toBeVisible();
+        at /private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/inspector-editing.spec.ts:51:104
+
+    Error Context: ../../opf-issue88-app46-production-20260921/results/inspector-editing-all-Insp-a78d3-ffline-undo-export-at-540px/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../opf-issue88-app46-production-20260921/results/inspector-editing-all-Insp-a78d3-ffline-undo-export-at-540px/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../opf-issue88-app46-production-20260921/results/inspector-editing-all-Insp-a78d3-ffline-undo-export-at-540px/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5) tests/e2e/inspector-recovery.spec.ts:18:5 › schema-valid strict overflow cancels an active draft and the same slide recovers after source correction 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('[data-testid="inspector-canvas-overlay"][data-opf-slide-id="retained-slide"]').locator('[data-canvas-target][data-opf-path="slides.0.title"]')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" locator('[data-testid="inspector-canvas-overlay"][data-opf-slide-id="retained-slide"]').locator('[data-canvas-target][data-opf-path="slides.0.title"]') with timeout 5000ms
+      - waiting for locator('[data-testid="inspector-canvas-overlay"][data-opf-slide-id="retained-slide"]').locator('[data-canvas-target][data-opf-path="slides.0.title"]')
+
+
+      44 |   await page.goto('/inspector#' + hashFor(initial));
+      45 |   const target = canvas(page).locator('[data-canvas-target][data-opf-path="slides.0.title"]');
+    > 46 |   await expect(target).toBeVisible();
+         |                        ^
+      47 |   await target.dblclick();
+      48 |   const input = page.getByRole('textbox', { name: 'Edit title inline', exact: true });
+      49 |   await input.fill('Stale draft must not reach the replacement');
+        at /private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/inspector-recovery.spec.ts:46:24
+
+    Error Context: ../../opf-issue88-app46-production-20260921/results/inspector-recovery-schema--76507-ers-after-source-correction/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../opf-issue88-app46-production-20260921/results/inspector-recovery-schema--76507-ers-after-source-correction/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../opf-issue88-app46-production-20260921/results/inspector-recovery-schema--76507-ers-after-source-correction/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6) tests/e2e/inspector-recovery.spec.ts:85:5 › font substitution notes remain accessible and operable while the Inspector canvas is active 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator:  locator('[data-testid="inspector-canvas-overlay"][data-opf-slide-id="retained-slide"]')
+    Expected: visible
+    Received: hidden
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeVisible" locator('[data-testid="inspector-canvas-overlay"][data-opf-slide-id="retained-slide"]') with timeout 5000ms
+      - waiting for locator('[data-testid="inspector-canvas-overlay"][data-opf-slide-id="retained-slide"]')
+        6 × locator resolved to <div role="group" data-opf-slide-index="0" data-opf-slide-id="retained-slide" data-testid="inspector-canvas-overlay" aria-label="Slide 1: Disclose the font choice" class="[&>svg]:block [&>svg]:h-auto [&>svg]:w-full"></div>
+          - unexpected value "hidden"
+
+
+       95 |   page.on('pageerror', error => errors.push(error.message));
+       96 |   await page.goto('/inspector#' + hashFor(document));
+    >  97 |   await expect(canvas(page)).toBeVisible();
+          |                              ^
+       98 |   const notes = page.locator('[data-opf-renderer] details');
+       99 |   const summary = notes.locator('summary');
+      100 |   await expect(summary).toHaveText(/^Preview notes \([1-9]\d*\)$/);
+        at /private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/inspector-recovery.spec.ts:97:30
+
+    Error Context: ../../opf-issue88-app46-production-20260921/results/inspector-recovery-font-su-beb5b--Inspector-canvas-is-active/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../opf-issue88-app46-production-20260921/results/inspector-recovery-font-su-beb5b--Inspector-canvas-is-active/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../opf-issue88-app46-production-20260921/results/inspector-recovery-font-su-beb5b--Inspector-canvas-is-active/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  7) tests/e2e/json-paste-formatting.spec.ts:53:5 › warm JSON worker leaves pasted source untouched while explicit Format Document remains undoable 
+
+    Error: expect(received).toBeGreaterThan(expected)
+
+    Expected: > 0
+    Received:   0
+
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+
+       95 |   await expect(lines).toContainText('"name":');
+       96 |   await expect.poll(() => page.evaluate(() => window.__opfFormatWorkerRequests
+    >  97 |     .filter(request => request.method === 'format' && request.complete && !request.failed).length)).toBeGreaterThan(0);
+          |                                                                                                     ^
+       98 |   const formatted = await copySource(page);
+       99 |   expect(formatted).not.toBe(unformatted);
+      100 |   expect(JSON.parse(formatted)).toEqual(JSON.parse(unformatted));
+        at /private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/json-paste-formatting.spec.ts:97:101
+
+    Error Context: ../../opf-issue88-app46-production-20260921/results/json-paste-formatting-warm-44312-t-Document-remains-undoable/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../opf-issue88-app46-production-20260921/results/json-paste-formatting-warm-44312-t-Document-remains-undoable/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../opf-issue88-app46-production-20260921/results/json-paste-formatting-warm-44312-t-Document-remains-undoable/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  8) tests/e2e/yaml.spec.ts:4:5 › YAML and Markdown editing preserve OPF values and recover from malformed YAML offline 
+
+    Error: expect(locator).not.toHaveCount(expected) failed
+
+    Locator:  locator('.monaco-editor').first().locator('.squiggly-error, .squiggly-warning')
+    Expected: not 0
+    Received: 0
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "not toHaveCount" locator('.monaco-editor').first().locator('.squiggly-error, .squiggly-warning') with timeout 5000ms
+      - waiting for locator('.monaco-editor').first().locator('.squiggly-error, .squiggly-warning')
+        14 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      15 |  const diagnostics=page.locator('.monaco-editor').first().locator('.squiggly-error, .squiggly-warning');
+      16 |  await replace('{"name":42,"slides":[]}');
+    > 17 |  await expect(diagnostics).not.toHaveCount(0);
+         |                                ^
+      18 |  await replace(JSON.stringify(doc));
+      19 |  await expect(diagnostics).toHaveCount(0);
+      20 |  // Serialization must preserve scripts that the selected default font cannot
+        at /private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev/tests/e2e/yaml.spec.ts:17:32
+
+    Error Context: ../../opf-issue88-app46-production-20260921/results/yaml-YAML-and-Markdown-edi-18ed4-from-malformed-YAML-offline/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../opf-issue88-app46-production-20260921/results/yaml-YAML-and-Markdown-edi-18ed4-from-malformed-YAML-offline/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../opf-issue88-app46-production-20260921/results/yaml-YAML-and-Markdown-edi-18ed4-from-malformed-YAML-offline/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  8 failed
+    tests/e2e/author-json-options.spec.ts:72:5 › Author categorical choices include built-in, document and loaded catalogs with exact LF source undo/redo 
+    tests/e2e/author.spec.ts:26:80 › anonymous code editing preserves source and visible selection through offline export/reimport at 540x960 
+    tests/e2e/author.spec.ts:55:5 › anonymous Author canvas edits survive tab changes, offline PowerPoint export and undoable reimport 
+    tests/e2e/inspector-editing.spec.ts:40:7 › all Inspector slides preserve exact JSON and shared furniture through offline undo/export at 540px 
+    tests/e2e/inspector-recovery.spec.ts:18:5 › schema-valid strict overflow cancels an active draft and the same slide recovers after source correction 
+    tests/e2e/inspector-recovery.spec.ts:85:5 › font substitution notes remain accessible and operable while the Inspector canvas is active 
+    tests/e2e/json-paste-formatting.spec.ts:53:5 › warm JSON worker leaves pasted source untouched while explicit Format Document remains undoable 
+    tests/e2e/yaml.spec.ts:4:5 › YAML and Markdown editing preserve OPF values and recover from malformed YAML offline 
+  11 passed (3.1m)

@@ -1,0 +1,861 @@
+[
+  {
+    "type": "console",
+    "messageType": "warning",
+    "text": "Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview",
+    "args": [
+      {
+        "preview": "Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview",
+        "value": "Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview"
+      }
+    ],
+    "location": {
+      "url": "https://trusted-weevil-84.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js",
+      "lineNumber": 11,
+      "columnNumber": 7854
+    },
+    "time": 13483.946,
+    "pageId": "page@c9d75442f1e4382f74bea861590133fd"
+  },
+  {
+    "type": "console",
+    "messageType": "warning",
+    "text": "%c WARN color: #993 [suggest] did IGNORE invalid completion item from undefined {label: Minimal, kind: 16, detail: Standard OPF, documentation: A clean, minimalistic theme with a focus on simpli\u2026 for professional, straightforward presentations., filterText: Minimal minimal}",
+    "args": [
+      {
+        "preview": "%c WARN",
+        "value": "%c WARN"
+      },
+      {
+        "preview": "color: #993",
+        "value": "color: #993"
+      },
+      {
+        "preview": "[suggest] did IGNORE invalid completion item from undefined",
+        "value": "[suggest] did IGNORE invalid completion item from undefined"
+      },
+      {
+        "preview": "{label: Minimal, kind: 16, detail: Standard OPF, documentation: A clean, minimalistic theme with a focus on simpli\u2026 for professional, straightforward presentations., filterText: Minimal minimal}"
+      }
+    ],
+    "location": {
+      "url": "https://www.pptx.dev/_next/static/immutable/chunks/3g5yp2sxazehx.js",
+      "lineNumber": 103,
+      "columnNumber": 44237
+    },
+    "time": 16240.589,
+    "pageId": "page@c9d75442f1e4382f74bea861590133fd"
+  },
+  {
+    "type": "console",
+    "messageType": "warning",
+    "text": "%c WARN color: #993 [suggest] did IGNORE invalid completion item from undefined {label: Chart 1x, kind: 16, detail: Standard OPF, documentation: Title + Text + Chart, filterText: Chart 1x chart-1x}",
+    "args": [
+      {
+        "preview": "%c WARN",
+        "value": "%c WARN"
+      },
+      {
+        "preview": "color: #993",
+        "value": "color: #993"
+      },
+      {
+        "preview": "[suggest] did IGNORE invalid completion item from undefined",
+        "value": "[suggest] did IGNORE invalid completion item from undefined"
+      },
+      {
+        "preview": "{label: Chart 1x, kind: 16, detail: Standard OPF, documentation: Title + Text + Chart, filterText: Chart 1x chart-1x}"
+      }
+    ],
+    "location": {
+      "url": "https://www.pptx.dev/_next/static/immutable/chunks/3g5yp2sxazehx.js",
+      "lineNumber": 103,
+      "columnNumber": 44237
+    },
+    "time": 17164.62,
+    "pageId": "page@c9d75442f1e4382f74bea861590133fd"
+  },
+  {
+    "type": "console",
+    "messageType": "warning",
+    "text": "%c WARN color: #993 [suggest] did IGNORE invalid completion item from undefined {label: Chart 2x, kind: 16, detail: Standard OPF, documentation: Title + Text \u00d7 2 + Chart \u00d7 2, filterText: Chart 2x chart-2x}",
+    "args": [
+      {
+        "preview": "%c WARN",
+        "value": "%c WARN"
+      },
+      {
+        "preview": "color: #993",
+        "value": "color: #993"
+      },
+      {
+        "preview": "[suggest] did IGNORE invalid completion item from undefined",
+        "value": "[suggest] did IGNORE invalid completion item from undefined"
+      },
+      {
+        "preview": "{label: Chart 2x, kind: 16, detail: Standard OPF, documentation: Title + Text \u00d7 2 + Chart \u00d7 2, filterText: Chart 2x chart-2x}"
+      }
+    ],
+    "location": {
+      "url": "https://www.pptx.dev/_next/static/immutable/chunks/3g5yp2sxazehx.js",
+      "lineNumber": 103,
+      "columnNumber": 44237
+    },
+    "time": 17164.731,
+    "pageId": "page@c9d75442f1e4382f74bea861590133fd"
+  },
+  {
+    "type": "console",
+    "messageType": "warning",
+    "text": "%c WARN color: #993 [suggest] did IGNORE invalid completion item from undefined {label: Chart 3x, kind: 16, detail: Standard OPF, documentation: Title + Text \u00d7 3 + Chart \u00d7 3, filterText: Chart 3x chart-3x}",
+    "args": [
+      {
+        "preview": "%c WARN",
+        "value": "%c WARN"
+      },
+      {
+        "preview": "color: #993",
+        "value": "color: #993"
+      },
+      {
+        "preview": "[suggest] did IGNORE invalid completion item from undefined",
+        "value": "[suggest] did IGNORE invalid completion item from undefined"
+      },
+      {
+        "preview": "{label: Chart 3x, kind: 16, detail: Standard OPF, documentation: Title + Text \u00d7 3 + Chart \u00d7 3, filterText: Chart 3x chart-3x}"
+      }
+    ],
+    "location": {
+      "url": "https://www.pptx.dev/_next/static/immutable/chunks/3g5yp2sxazehx.js",
+      "lineNumber": 103,
+      "columnNumber": 44237
+    },
+    "time": 17164.753,
+    "pageId": "page@c9d75442f1e4382f74bea861590133fd"
+  },
+  {
+    "type": "console",
+    "messageType": "warning",
+    "text": "%c WARN color: #993 [suggest] did IGNORE invalid completion item from undefined {label: Code 1x, kind: 16, detail: Standard OPF, documentation: Title + Text + Code, filterText: Code 1x code-1x}",
+    "args": [
+      {
+        "preview": "%c WARN",
+        "value": "%c WARN"
+      },
+      {
+        "preview": "color: #993",
+        "value": "color: #993"
+      },
+      {
+        "preview": "[suggest] did IGNORE invalid completion item from undefined",
+        "value": "[suggest] did IGNORE invalid completion item from undefined"
+      },
+      {
+        "preview": "{label: Code 1x, kind: 16, detail: Standard OPF, documentation: Title + Text + Code, filterText: Code 1x code-1x}"
+      }
+    ],
+    "location": {
+      "url": "https://www.pptx.dev/_next/static/immutable/chunks/3g5yp2sxazehx.js",
+      "lineNumber": 103,
+      "columnNumber": 44237
+    },
+    "time": 17164.77,
+    "pageId": "page@c9d75442f1e4382f74bea861590133fd"
+  },
+  {
+    "type": "console",
+    "messageType": "warning",
+    "text": "%c WARN color: #993 [suggest] did IGNORE invalid completion item from undefined {label: Image 1x, kind: 16, detail: Standard OPF, documentation: Title + Text + Image, filterText: Image 1x image-1x}",
+    "args": [
+      {
+        "preview": "%c WARN",
+        "value": "%c WARN"
+      },
+      {
+        "preview": "color: #993",
+        "value": "color: #993"
+      },
+      {
+        "preview": "[suggest] did IGNORE invalid completion item from undefined",
+        "value": "[suggest] did IGNORE invalid completion item from undefined"
+      },
+      {
+        "preview": "{label: Image 1x, kind: 16, detail: Standard OPF, documentation: Title + Text + Image, filterText: Image 1x image-1x}"
+      }
+    ],
+    "location": {
+      "url": "https://www.pptx.dev/_next/static/immutable/chunks/3g5yp2sxazehx.js",
+      "lineNumber": 103,
+      "columnNumber": 44237
+    },
+    "time": 17164.784,
+    "pageId": "page@c9d75442f1e4382f74bea861590133fd"
+  },
+  {
+    "type": "console",
+    "messageType": "warning",
+    "text": "%c WARN color: #993 [suggest] did IGNORE invalid completion item from undefined {label: Image 2x, kind: 16, detail: Standard OPF, documentation: Title + Text \u00d7 2 + Image \u00d7 2, filterText: Image 2x image-2x}",
+    "args": [
+      {
+        "preview": "%c WARN",
+        "value": "%c WARN"
+      },
+      {
+        "preview": "color: #993",
+        "value": "color: #993"
+      },
+      {
+        "preview": "[suggest] did IGNORE invalid completion item from undefined",
+        "value": "[suggest] did IGNORE invalid completion item from undefined"
+      },
+      {
+        "preview": "{label: Image 2x, kind: 16, detail: Standard OPF, documentation: Title + Text \u00d7 2 + Image \u00d7 2, filterText: Image 2x image-2x}"
+      }
+    ],
+    "location": {
+      "url": "https://www.pptx.dev/_next/static/immutable/chunks/3g5yp2sxazehx.js",
+      "lineNumber": 103,
+      "columnNumber": 44237
+    },
+    "time": 17164.8,
+    "pageId": "page@c9d75442f1e4382f74bea861590133fd"
+  },
+  {
+    "type": "console",
+    "messageType": "warning",
+    "text": "%c WARN color: #993 [suggest] did IGNORE invalid completion item from undefined {label: Image 3x, kind: 16, detail: Standard OPF, documentation: Title + Text \u00d7 3 + Image \u00d7 3, filterText: Image 3x image-3x}",
+    "args": [
+      {
+        "preview": "%c WARN",
+        "value": "%c WARN"
+      },
+      {
+        "preview": "color: #993",
+        "value": "color: #993"
+      },
+      {
+        "preview": "[suggest] did IGNORE invalid completion item from undefined",
+        "value": "[suggest] did IGNORE invalid completion item from undefined"
+      },
+      {
+        "preview": "{label: Image 3x, kind: 16, detail: Standard OPF, documentation: Title + Text \u00d7 3 + Image \u00d7 3, filterText: Image 3x image-3x}"
+      }
+    ],
+    "location": {
+      "url": "https://www.pptx.dev/_next/static/immutable/chunks/3g5yp2sxazehx.js",
+      "lineNumber": 103,
+      "columnNumber": 44237
+    },
+    "time": 17164.815,
+    "pageId": "page@c9d75442f1e4382f74bea861590133fd"
+  },
+  {
+    "type": "console",
+    "messageType": "warning",
+    "text": "%c WARN color: #993 [suggest] did IGNORE invalid completion item from undefined {label: Image Bleed, kind: 16, detail: Standard OPF, documentation: Image, filterText: Image Bleed image-bleed}",
+    "args": [
+      {
+        "preview": "%c WARN",
+        "value": "%c WARN"
+      },
+      {
+        "preview": "color: #993",
+        "value": "color: #993"
+      },
+      {
+        "preview": "[suggest] did IGNORE invalid completion item from undefined",
+        "value": "[suggest] did IGNORE invalid completion item from undefined"
+      },
+      {
+        "preview": "{label: Image Bleed, kind: 16, detail: Standard OPF, documentation: Image, filterText: Image Bleed image-bleed}"
+      }
+    ],
+    "location": {
+      "url": "https://www.pptx.dev/_next/static/immutable/chunks/3g5yp2sxazehx.js",
+      "lineNumber": 103,
+      "columnNumber": 44237
+    },
+    "time": 17164.83,
+    "pageId": "page@c9d75442f1e4382f74bea861590133fd"
+  },
+  {
+    "type": "console",
+    "messageType": "warning",
+    "text": "%c WARN color: #993 [suggest] did IGNORE invalid completion item from undefined {label: List 1x, kind: 16, detail: Standard OPF, documentation: Title + List, filterText: List 1x list-1x}",
+    "args": [
+      {
+        "preview": "%c WARN",
+        "value": "%c WARN"
+      },
+      {
+        "preview": "color: #993",
+        "value": "color: #993"
+      },
+      {
+        "preview": "[suggest] did IGNORE invalid completion item from undefined",
+        "value": "[suggest] did IGNORE invalid completion item from undefined"
+      },
+      {
+        "preview": "{label: List 1x, kind: 16, detail: Standard OPF, documentation: Title + List, filterText: List 1x list-1x}"
+      }
+    ],
+    "location": {
+      "url": "https://www.pptx.dev/_next/static/immutable/chunks/3g5yp2sxazehx.js",
+      "lineNumber": 103,
+      "columnNumber": 44237
+    },
+    "time": 17164.843,
+    "pageId": "page@c9d75442f1e4382f74bea861590133fd"
+  },
+  {
+    "type": "console",
+    "messageType": "warning",
+    "text": "%c WARN color: #993 [suggest] did IGNORE invalid completion item from undefined {label: List 2x, kind: 16, detail: Standard OPF, documentation: Title + List \u00d7 2, filterText: List 2x list-2x}",
+    "args": [
+      {
+        "preview": "%c WARN",
+        "value": "%c WARN"
+      },
+      {
+        "preview": "color: #993",
+        "value": "color: #993"
+      },
+      {
+        "preview": "[suggest] did IGNORE invalid completion item from undefined",
+        "value": "[suggest] did IGNORE invalid completion item from undefined"
+      },
+      {
+        "preview": "{label: List 2x, kind: 16, detail: Standard OPF, documentation: Title + List \u00d7 2, filterText: List 2x list-2x}"
+      }
+    ],
+    "location": {
+      "url": "https://www.pptx.dev/_next/static/immutable/chunks/3g5yp2sxazehx.js",
+      "lineNumber": 103,
+      "columnNumber": 44237
+    },
+    "time": 17164.857,
+    "pageId": "page@c9d75442f1e4382f74bea861590133fd"
+  },
+  {
+    "type": "console",
+    "messageType": "warning",
+    "text": "%c WARN color: #993 [suggest] did IGNORE invalid completion item from undefined {label: List 3x, kind: 16, detail: Standard OPF, documentation: Title + List \u00d7 3, filterText: List 3x list-3x}",
+    "args": [
+      {
+        "preview": "%c WARN",
+        "value": "%c WARN"
+      },
+      {
+        "preview": "color: #993",
+        "value": "color: #993"
+      },
+      {
+        "preview": "[suggest] did IGNORE invalid completion item from undefined",
+        "value": "[suggest] did IGNORE invalid completion item from undefined"
+      },
+      {
+        "preview": "{label: List 3x, kind: 16, detail: Standard OPF, documentation: Title + List \u00d7 3, filterText: List 3x list-3x}"
+      }
+    ],
+    "location": {
+      "url": "https://www.pptx.dev/_next/static/immutable/chunks/3g5yp2sxazehx.js",
+      "lineNumber": 103,
+      "columnNumber": 44237
+    },
+    "time": 17164.872,
+    "pageId": "page@c9d75442f1e4382f74bea861590133fd"
+  },
+  {
+    "type": "console",
+    "messageType": "warning",
+    "text": "%c WARN color: #993 [suggest] did IGNORE invalid completion item from undefined {label: List 4x, kind: 16, detail: Standard OPF, documentation: Title + List \u00d7 4, filterText: List 4x list-4x}",
+    "args": [
+      {
+        "preview": "%c WARN",
+        "value": "%c WARN"
+      },
+      {
+        "preview": "color: #993",
+        "value": "color: #993"
+      },
+      {
+        "preview": "[suggest] did IGNORE invalid completion item from undefined",
+        "value": "[suggest] did IGNORE invalid completion item from undefined"
+      },
+      {
+        "preview": "{label: List 4x, kind: 16, detail: Standard OPF, documentation: Title + List \u00d7 4, filterText: List 4x list-4x}"
+      }
+    ],
+    "location": {
+      "url": "https://www.pptx.dev/_next/static/immutable/chunks/3g5yp2sxazehx.js",
+      "lineNumber": 103,
+      "columnNumber": 44237
+    },
+    "time": 17164.886,
+    "pageId": "page@c9d75442f1e4382f74bea861590133fd"
+  },
+  {
+    "type": "console",
+    "messageType": "warning",
+    "text": "%c WARN color: #993 [suggest] did IGNORE invalid completion item from undefined {label: List 5x, kind: 16, detail: Standard OPF, documentation: Title + List \u00d7 5, filterText: List 5x list-5x}",
+    "args": [
+      {
+        "preview": "%c WARN",
+        "value": "%c WARN"
+      },
+      {
+        "preview": "color: #993",
+        "value": "color: #993"
+      },
+      {
+        "preview": "[suggest] did IGNORE invalid completion item from undefined",
+        "value": "[suggest] did IGNORE invalid completion item from undefined"
+      },
+      {
+        "preview": "{label: List 5x, kind: 16, detail: Standard OPF, documentation: Title + List \u00d7 5, filterText: List 5x list-5x}"
+      }
+    ],
+    "location": {
+      "url": "https://www.pptx.dev/_next/static/immutable/chunks/3g5yp2sxazehx.js",
+      "lineNumber": 103,
+      "columnNumber": 44237
+    },
+    "time": 17164.898,
+    "pageId": "page@c9d75442f1e4382f74bea861590133fd"
+  },
+  {
+    "type": "console",
+    "messageType": "warning",
+    "text": "%c WARN color: #993 [suggest] did IGNORE invalid completion item from undefined {label: List 6x, kind: 16, detail: Standard OPF, documentation: Title + List \u00d7 6, filterText: List 6x list-6x}",
+    "args": [
+      {
+        "preview": "%c WARN",
+        "value": "%c WARN"
+      },
+      {
+        "preview": "color: #993",
+        "value": "color: #993"
+      },
+      {
+        "preview": "[suggest] did IGNORE invalid completion item from undefined",
+        "value": "[suggest] did IGNORE invalid completion item from undefined"
+      },
+      {
+        "preview": "{label: List 6x, kind: 16, detail: Standard OPF, documentation: Title + List \u00d7 6, filterText: List 6x list-6x}"
+      }
+    ],
+    "location": {
+      "url": "https://www.pptx.dev/_next/static/immutable/chunks/3g5yp2sxazehx.js",
+      "lineNumber": 103,
+      "columnNumber": 44237
+    },
+    "time": 17164.918,
+    "pageId": "page@c9d75442f1e4382f74bea861590133fd"
+  },
+  {
+    "type": "console",
+    "messageType": "warning",
+    "text": "%c WARN color: #993 [suggest] did IGNORE invalid completion item from undefined {label: Media 1x, kind: 16, detail: Standard OPF, documentation: Title + Text + Video, filterText: Media 1x media-1x}",
+    "args": [
+      {
+        "preview": "%c WARN",
+        "value": "%c WARN"
+      },
+      {
+        "preview": "color: #993",
+        "value": "color: #993"
+      },
+      {
+        "preview": "[suggest] did IGNORE invalid completion item from undefined",
+        "value": "[suggest] did IGNORE invalid completion item from undefined"
+      },
+      {
+        "preview": "{label: Media 1x, kind: 16, detail: Standard OPF, documentation: Title + Text + Video, filterText: Media 1x media-1x}"
+      }
+    ],
+    "location": {
+      "url": "https://www.pptx.dev/_next/static/immutable/chunks/3g5yp2sxazehx.js",
+      "lineNumber": 103,
+      "columnNumber": 44237
+    },
+    "time": 17164.99,
+    "pageId": "page@c9d75442f1e4382f74bea861590133fd"
+  },
+  {
+    "type": "console",
+    "messageType": "warning",
+    "text": "%c WARN color: #993 [suggest] did IGNORE invalid completion item from undefined {label: Number 1x, kind: 16, detail: Standard OPF, documentation: Title + Metric, filterText: Number 1x number-1x}",
+    "args": [
+      {
+        "preview": "%c WARN",
+        "value": "%c WARN"
+      },
+      {
+        "preview": "color: #993",
+        "value": "color: #993"
+      },
+      {
+        "preview": "[suggest] did IGNORE invalid completion item from undefined",
+        "value": "[suggest] did IGNORE invalid completion item from undefined"
+      },
+      {
+        "preview": "{label: Number 1x, kind: 16, detail: Standard OPF, documentation: Title + Metric, filterText: Number 1x number-1x}"
+      }
+    ],
+    "location": {
+      "url": "https://www.pptx.dev/_next/static/immutable/chunks/3g5yp2sxazehx.js",
+      "lineNumber": 103,
+      "columnNumber": 44237
+    },
+    "time": 17165.012,
+    "pageId": "page@c9d75442f1e4382f74bea861590133fd"
+  },
+  {
+    "type": "console",
+    "messageType": "warning",
+    "text": "%c WARN color: #993 [suggest] did IGNORE invalid completion item from undefined {label: Number 2x, kind: 16, detail: Standard OPF, documentation: Title + Metric \u00d7 2, filterText: Number 2x number-2x}",
+    "args": [
+      {
+        "preview": "%c WARN",
+        "value": "%c WARN"
+      },
+      {
+        "preview": "color: #993",
+        "value": "color: #993"
+      },
+      {
+        "preview": "[suggest] did IGNORE invalid completion item from undefined",
+        "value": "[suggest] did IGNORE invalid completion item from undefined"
+      },
+      {
+        "preview": "{label: Number 2x, kind: 16, detail: Standard OPF, documentation: Title + Metric \u00d7 2, filterText: Number 2x number-2x}"
+      }
+    ],
+    "location": {
+      "url": "https://www.pptx.dev/_next/static/immutable/chunks/3g5yp2sxazehx.js",
+      "lineNumber": 103,
+      "columnNumber": 44237
+    },
+    "time": 17165.024,
+    "pageId": "page@c9d75442f1e4382f74bea861590133fd"
+  },
+  {
+    "type": "console",
+    "messageType": "warning",
+    "text": "%c WARN color: #993 [suggest] did IGNORE invalid completion item from undefined {label: Number 3x, kind: 16, detail: Standard OPF, documentation: Title + Metric \u00d7 3, filterText: Number 3x number-3x}",
+    "args": [
+      {
+        "preview": "%c WARN",
+        "value": "%c WARN"
+      },
+      {
+        "preview": "color: #993",
+        "value": "color: #993"
+      },
+      {
+        "preview": "[suggest] did IGNORE invalid completion item from undefined",
+        "value": "[suggest] did IGNORE invalid completion item from undefined"
+      },
+      {
+        "preview": "{label: Number 3x, kind: 16, detail: Standard OPF, documentation: Title + Metric \u00d7 3, filterText: Number 3x number-3x}"
+      }
+    ],
+    "location": {
+      "url": "https://www.pptx.dev/_next/static/immutable/chunks/3g5yp2sxazehx.js",
+      "lineNumber": 103,
+      "columnNumber": 44237
+    },
+    "time": 17165.036,
+    "pageId": "page@c9d75442f1e4382f74bea861590133fd"
+  },
+  {
+    "type": "console",
+    "messageType": "warning",
+    "text": "%c WARN color: #993 [suggest] did IGNORE invalid completion item from undefined {label: Number 4x, kind: 16, detail: Standard OPF, documentation: Title + Metric \u00d7 4, filterText: Number 4x number-4x}",
+    "args": [
+      {
+        "preview": "%c WARN",
+        "value": "%c WARN"
+      },
+      {
+        "preview": "color: #993",
+        "value": "color: #993"
+      },
+      {
+        "preview": "[suggest] did IGNORE invalid completion item from undefined",
+        "value": "[suggest] did IGNORE invalid completion item from undefined"
+      },
+      {
+        "preview": "{label: Number 4x, kind: 16, detail: Standard OPF, documentation: Title + Metric \u00d7 4, filterText: Number 4x number-4x}"
+      }
+    ],
+    "location": {
+      "url": "https://www.pptx.dev/_next/static/immutable/chunks/3g5yp2sxazehx.js",
+      "lineNumber": 103,
+      "columnNumber": 44237
+    },
+    "time": 17165.048,
+    "pageId": "page@c9d75442f1e4382f74bea861590133fd"
+  },
+  {
+    "type": "console",
+    "messageType": "warning",
+    "text": "%c WARN color: #993 [suggest] did IGNORE invalid completion item from undefined {label: Number 5x, kind: 16, detail: Standard OPF, documentation: Title + Metric \u00d7 5, filterText: Number 5x number-5x}",
+    "args": [
+      {
+        "preview": "%c WARN",
+        "value": "%c WARN"
+      },
+      {
+        "preview": "color: #993",
+        "value": "color: #993"
+      },
+      {
+        "preview": "[suggest] did IGNORE invalid completion item from undefined",
+        "value": "[suggest] did IGNORE invalid completion item from undefined"
+      },
+      {
+        "preview": "{label: Number 5x, kind: 16, detail: Standard OPF, documentation: Title + Metric \u00d7 5, filterText: Number 5x number-5x}"
+      }
+    ],
+    "location": {
+      "url": "https://www.pptx.dev/_next/static/immutable/chunks/3g5yp2sxazehx.js",
+      "lineNumber": 103,
+      "columnNumber": 44237
+    },
+    "time": 17165.061,
+    "pageId": "page@c9d75442f1e4382f74bea861590133fd"
+  },
+  {
+    "type": "console",
+    "messageType": "warning",
+    "text": "%c WARN color: #993 [suggest] did IGNORE invalid completion item from undefined {label: Number 6x, kind: 16, detail: Standard OPF, documentation: Title + Metric \u00d7 6, filterText: Number 6x number-6x}",
+    "args": [
+      {
+        "preview": "%c WARN",
+        "value": "%c WARN"
+      },
+      {
+        "preview": "color: #993",
+        "value": "color: #993"
+      },
+      {
+        "preview": "[suggest] did IGNORE invalid completion item from undefined",
+        "value": "[suggest] did IGNORE invalid completion item from undefined"
+      },
+      {
+        "preview": "{label: Number 6x, kind: 16, detail: Standard OPF, documentation: Title + Metric \u00d7 6, filterText: Number 6x number-6x}"
+      }
+    ],
+    "location": {
+      "url": "https://www.pptx.dev/_next/static/immutable/chunks/3g5yp2sxazehx.js",
+      "lineNumber": 103,
+      "columnNumber": 44237
+    },
+    "time": 17165.073,
+    "pageId": "page@c9d75442f1e4382f74bea861590133fd"
+  },
+  {
+    "type": "console",
+    "messageType": "warning",
+    "text": "%c WARN color: #993 [suggest] did IGNORE invalid completion item from undefined {label: Quote 1x, kind: 16, detail: Standard OPF, documentation: Title + Quote, filterText: Quote 1x quote-1x}",
+    "args": [
+      {
+        "preview": "%c WARN",
+        "value": "%c WARN"
+      },
+      {
+        "preview": "color: #993",
+        "value": "color: #993"
+      },
+      {
+        "preview": "[suggest] did IGNORE invalid completion item from undefined",
+        "value": "[suggest] did IGNORE invalid completion item from undefined"
+      },
+      {
+        "preview": "{label: Quote 1x, kind: 16, detail: Standard OPF, documentation: Title + Quote, filterText: Quote 1x quote-1x}"
+      }
+    ],
+    "location": {
+      "url": "https://www.pptx.dev/_next/static/immutable/chunks/3g5yp2sxazehx.js",
+      "lineNumber": 103,
+      "columnNumber": 44237
+    },
+    "time": 17165.084,
+    "pageId": "page@c9d75442f1e4382f74bea861590133fd"
+  },
+  {
+    "type": "console",
+    "messageType": "warning",
+    "text": "%c WARN color: #993 [suggest] did IGNORE invalid completion item from undefined {label: Table 1x, kind: 16, detail: Standard OPF, documentation: Title + Text + Table, filterText: Table 1x table-1x}",
+    "args": [
+      {
+        "preview": "%c WARN",
+        "value": "%c WARN"
+      },
+      {
+        "preview": "color: #993",
+        "value": "color: #993"
+      },
+      {
+        "preview": "[suggest] did IGNORE invalid completion item from undefined",
+        "value": "[suggest] did IGNORE invalid completion item from undefined"
+      },
+      {
+        "preview": "{label: Table 1x, kind: 16, detail: Standard OPF, documentation: Title + Text + Table, filterText: Table 1x table-1x}"
+      }
+    ],
+    "location": {
+      "url": "https://www.pptx.dev/_next/static/immutable/chunks/3g5yp2sxazehx.js",
+      "lineNumber": 103,
+      "columnNumber": 44237
+    },
+    "time": 17165.094,
+    "pageId": "page@c9d75442f1e4382f74bea861590133fd"
+  },
+  {
+    "type": "console",
+    "messageType": "warning",
+    "text": "%c WARN color: #993 [suggest] did IGNORE invalid completion item from undefined {label: Text 1x, kind: 16, detail: Standard OPF, documentation: Title + Text, filterText: Text 1x text-1x}",
+    "args": [
+      {
+        "preview": "%c WARN",
+        "value": "%c WARN"
+      },
+      {
+        "preview": "color: #993",
+        "value": "color: #993"
+      },
+      {
+        "preview": "[suggest] did IGNORE invalid completion item from undefined",
+        "value": "[suggest] did IGNORE invalid completion item from undefined"
+      },
+      {
+        "preview": "{label: Text 1x, kind: 16, detail: Standard OPF, documentation: Title + Text, filterText: Text 1x text-1x}"
+      }
+    ],
+    "location": {
+      "url": "https://www.pptx.dev/_next/static/immutable/chunks/3g5yp2sxazehx.js",
+      "lineNumber": 103,
+      "columnNumber": 44237
+    },
+    "time": 17165.105,
+    "pageId": "page@c9d75442f1e4382f74bea861590133fd"
+  },
+  {
+    "type": "console",
+    "messageType": "warning",
+    "text": "%c WARN color: #993 [suggest] did IGNORE invalid completion item from undefined {label: Text 2x, kind: 16, detail: Standard OPF, documentation: Title + Text \u00d7 2, filterText: Text 2x text-2x}",
+    "args": [
+      {
+        "preview": "%c WARN",
+        "value": "%c WARN"
+      },
+      {
+        "preview": "color: #993",
+        "value": "color: #993"
+      },
+      {
+        "preview": "[suggest] did IGNORE invalid completion item from undefined",
+        "value": "[suggest] did IGNORE invalid completion item from undefined"
+      },
+      {
+        "preview": "{label: Text 2x, kind: 16, detail: Standard OPF, documentation: Title + Text \u00d7 2, filterText: Text 2x text-2x}"
+      }
+    ],
+    "location": {
+      "url": "https://www.pptx.dev/_next/static/immutable/chunks/3g5yp2sxazehx.js",
+      "lineNumber": 103,
+      "columnNumber": 44237
+    },
+    "time": 17165.117,
+    "pageId": "page@c9d75442f1e4382f74bea861590133fd"
+  },
+  {
+    "type": "console",
+    "messageType": "warning",
+    "text": "%c WARN color: #993 [suggest] did IGNORE invalid completion item from undefined {label: Text 3x, kind: 16, detail: Standard OPF, documentation: Title + Text \u00d7 3, filterText: Text 3x text-3x}",
+    "args": [
+      {
+        "preview": "%c WARN",
+        "value": "%c WARN"
+      },
+      {
+        "preview": "color: #993",
+        "value": "color: #993"
+      },
+      {
+        "preview": "[suggest] did IGNORE invalid completion item from undefined",
+        "value": "[suggest] did IGNORE invalid completion item from undefined"
+      },
+      {
+        "preview": "{label: Text 3x, kind: 16, detail: Standard OPF, documentation: Title + Text \u00d7 3, filterText: Text 3x text-3x}"
+      }
+    ],
+    "location": {
+      "url": "https://www.pptx.dev/_next/static/immutable/chunks/3g5yp2sxazehx.js",
+      "lineNumber": 103,
+      "columnNumber": 44237
+    },
+    "time": 17165.128,
+    "pageId": "page@c9d75442f1e4382f74bea861590133fd"
+  },
+  {
+    "type": "console",
+    "messageType": "warning",
+    "text": "%c WARN color: #993 [suggest] did IGNORE invalid completion item from undefined {label: Timeline 1x, kind: 16, detail: Standard OPF, documentation: Title + Timeline, filterText: Timeline 1x timeline-1x}",
+    "args": [
+      {
+        "preview": "%c WARN",
+        "value": "%c WARN"
+      },
+      {
+        "preview": "color: #993",
+        "value": "color: #993"
+      },
+      {
+        "preview": "[suggest] did IGNORE invalid completion item from undefined",
+        "value": "[suggest] did IGNORE invalid completion item from undefined"
+      },
+      {
+        "preview": "{label: Timeline 1x, kind: 16, detail: Standard OPF, documentation: Title + Timeline, filterText: Timeline 1x timeline-1x}"
+      }
+    ],
+    "location": {
+      "url": "https://www.pptx.dev/_next/static/immutable/chunks/3g5yp2sxazehx.js",
+      "lineNumber": 103,
+      "columnNumber": 44237
+    },
+    "time": 17165.139,
+    "pageId": "page@c9d75442f1e4382f74bea861590133fd"
+  },
+  {
+    "type": "console",
+    "messageType": "warning",
+    "text": "%c WARN color: #993 [suggest] did IGNORE invalid completion item from undefined {label: Title Subtitle, kind: 16, detail: Standard OPF, documentation: Title + Subtitle, filterText: Title Subtitle title-subtitle}",
+    "args": [
+      {
+        "preview": "%c WARN",
+        "value": "%c WARN"
+      },
+      {
+        "preview": "color: #993",
+        "value": "color: #993"
+      },
+      {
+        "preview": "[suggest] did IGNORE invalid completion item from undefined",
+        "value": "[suggest] did IGNORE invalid completion item from undefined"
+      },
+      {
+        "preview": "{label: Title Subtitle, kind: 16, detail: Standard OPF, documentation: Title + Subtitle, filterText: Title Subtitle title-subtitle}"
+      }
+    ],
+    "location": {
+      "url": "https://www.pptx.dev/_next/static/immutable/chunks/3g5yp2sxazehx.js",
+      "lineNumber": 103,
+      "columnNumber": 44237
+    },
+    "time": 17165.15,
+    "pageId": "page@c9d75442f1e4382f74bea861590133fd"
+  }
+]

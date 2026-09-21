@@ -1,0 +1,89 @@
+{
+  "valid": true,
+  "checked": [
+    {
+      "from": "docs/handoff-2026-09-21.md",
+      "target": "quickstart.md"
+    },
+    {
+      "from": "docs/handoff-2026-09-21.md",
+      "target": "compatibility-matrix.md"
+    },
+    {
+      "from": "docs/handoff-2026-09-21.md",
+      "target": "evidence/issue88-final-20260921/README.md"
+    },
+    {
+      "from": "docs/handoff-2026-09-21.md",
+      "target": "evidence/shipped-train-20260921/repository-sync.json"
+    },
+    {
+      "from": "docs/handoff-2026-09-21.md",
+      "target": "evidence/issue88-final-20260921/README.md"
+    },
+    {
+      "from": "docs/handoff-2026-09-21.md",
+      "target": "plans/developer-adoption-20260915.md"
+    },
+    {
+      "from": "docs/compatibility-matrix.md",
+      "target": "quickstart.md"
+    },
+    {
+      "from": "docs/compatibility-matrix.md",
+      "target": "evidence/shipped-train-20260921/README.md"
+    },
+    {
+      "from": "docs/compatibility-matrix.md",
+      "target": "evidence/issue88-final-20260921/README.md"
+    },
+    {
+      "from": "docs/compatibility-matrix.md",
+      "target": "handoff-2026-09-21.md"
+    },
+    {
+      "from": "docs/compatibility-matrix.md",
+      "target": "plans/pdf-export.md"
+    },
+    {
+      "from": "docs/compatibility-matrix.md",
+      "target": "plans/diagrams-svg.md"
+    },
+    {
+      "from": "docs/compatibility-matrix.md",
+      "target": "plans/developer-adoption-20260915.md"
+    },
+    {
+      "from": "docs/evidence/issue88-final-20260921/README.md",
+      "target": "site-production/README.md"
+    },
+    {
+      "from": "docs/evidence/issue88-final-20260921/README.md",
+      "target": "current-entrypoints/README.md"
+    },
+    {
+      "from": "docs/evidence/issue88-final-20260921/README.md",
+      "target": "current-entrypoints/audit-scope.md"
+    },
+    {
+      "from": "docs/evidence/issue88-final-20260921/README.md",
+      "target": "app45-production/REPORT.md"
+    },
+    {
+      "from": "docs/evidence/issue88-final-20260921/README.md",
+      "target": "author-completion-review/review.md"
+    },
+    {
+      "from": "docs/evidence/issue88-final-20260921/README.md",
+      "target": "app46-production/REPORT.md"
+    },
+    {
+      "from": "docs/evidence/issue88-final-20260921/README.md",
+      "target": "windows-platform-REPORT.md"
+    },
+    {
+      "from": "docs/evidence/issue88-final-20260921/README.md",
+      "target": "preview-readiness-REPORT.md"
+    }
+  ]
+}

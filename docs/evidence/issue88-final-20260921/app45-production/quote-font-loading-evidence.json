@@ -1,0 +1,245 @@
+{
+  "requests": 117,
+  "fonts": [
+    {
+      "url": "https://www.pptx.dev/_next/static/immutable/media/797e433ab948586e-s.p.1v5bejj26fx9h.woff2",
+      "status": 200,
+      "time": 38.225,
+      "startedDateTime": "2026-09-21T14:23:37.654Z"
+    },
+    {
+      "url": "https://www.pptx.dev/_next/static/immutable/media/caa3a2e1cccd8315-s.p.0zr6hhvz-h9nw.woff2",
+      "status": 200,
+      "time": 163.467,
+      "startedDateTime": "2026-09-21T14:23:37.654Z"
+    },
+    {
+      "url": "https://www.pptx.dev/_next/static/immutable/media/f141b5b7abe57afc-s.p.3bm7l-ln3bnu5.woff2",
+      "status": 200,
+      "time": 164.33300000000003,
+      "startedDateTime": "2026-09-21T14:23:37.654Z"
+    },
+    {
+      "url": "https://www.pptx.dev/opf-fonts/Caladea-400-normal-59faf27a90de.ttf",
+      "status": 200,
+      "time": 93.388,
+      "startedDateTime": "2026-09-21T14:23:39.787Z"
+    },
+    {
+      "url": "https://www.pptx.dev/opf-fonts/Carlito-400-italic-074cd1b89d53.ttf",
+      "status": 200,
+      "time": 584.297,
+      "startedDateTime": "2026-09-21T14:23:39.787Z"
+    },
+    {
+      "url": "https://www.pptx.dev/opf-fonts/Carlito-700-normal-51edbfa32d8a.ttf",
+      "status": 200,
+      "time": 587.091,
+      "startedDateTime": "2026-09-21T14:23:39.787Z"
+    },
+    {
+      "url": "https://www.pptx.dev/opf-fonts/Caladea-400-italic-669e65b265d4.ttf",
+      "status": 200,
+      "time": 1054.706,
+      "startedDateTime": "2026-09-21T14:23:39.787Z"
+    },
+    {
+      "url": "https://www.pptx.dev/opf-fonts/Caladea-700-normal-11d1e1dc461d.ttf",
+      "status": 200,
+      "time": 1065.5330000000001,
+      "startedDateTime": "2026-09-21T14:23:39.787Z"
+    },
+    {
+      "url": "https://www.pptx.dev/opf-fonts/Caladea-700-italic-93d7c2003fe3.ttf",
+      "status": 200,
+      "time": 1095.619,
+      "startedDateTime": "2026-09-21T14:23:39.787Z"
+    },
+    {
+      "url": "https://www.pptx.dev/opf-fonts/Roboto-SemiBold-600-normal-32fe2086b0e5.ttf",
+      "status": 200,
+      "time": 1160.507,
+      "startedDateTime": "2026-09-21T14:23:39.787Z"
+    },
+    {
+      "url": "https://www.pptx.dev/opf-fonts/Arimo-400-italic-6bd2c6a6fa87.ttf",
+      "status": 200,
+      "time": 1546.432,
+      "startedDateTime": "2026-09-21T14:23:39.787Z"
+    },
+    {
+      "url": "https://www.pptx.dev/opf-fonts/Cousine-400-normal-ca2264d6750d.ttf",
+      "status": 200,
+      "time": 1639.042,
+      "startedDateTime": "2026-09-21T14:23:39.787Z"
+    },
+    {
+      "url": "https://www.pptx.dev/opf-fonts/Arimo-400-normal-88cc899855d3.ttf",
+      "status": 200,
+      "time": 1938.4650000000001,
+      "startedDateTime": "2026-09-21T14:23:39.787Z"
+    },
+    {
+      "url": "https://www.pptx.dev/opf-fonts/Roboto-700-italic-c6a5e7c224d3.ttf",
+      "status": 200,
+      "time": 1939.6150000000002,
+      "startedDateTime": "2026-09-21T14:23:39.787Z"
+    },
+    {
+      "url": "https://www.pptx.dev/opf-fonts/Carlito-400-normal-ca019755404c.ttf",
+      "status": 200,
+      "time": 1941.2179999999998,
+      "startedDateTime": "2026-09-21T14:23:39.787Z"
+    },
+    {
+      "url": "https://www.pptx.dev/opf-fonts/Roboto-ExtraBold-800-normal-43d5ce98c583.ttf",
+      "status": 200,
+      "time": 2092.571,
+      "startedDateTime": "2026-09-21T14:23:39.787Z"
+    },
+    {
+      "url": "https://www.pptx.dev/opf-fonts/Roboto-Mono-700-normal-92649d819cc4.ttf",
+      "status": 200,
+      "time": 2175.814,
+      "startedDateTime": "2026-09-21T14:23:39.787Z"
+    },
+    {
+      "url": "https://www.pptx.dev/opf-fonts/Roboto-Mono-400-normal-e4bf45837847.ttf",
+      "status": 200,
+      "time": 2176.53,
+      "startedDateTime": "2026-09-21T14:23:39.787Z"
+    },
+    {
+      "url": "https://www.pptx.dev/opf-fonts/Gelasio-400-normal-44aae47442ad.ttf",
+      "status": 200,
+      "time": 2230.158,
+      "startedDateTime": "2026-09-21T14:23:39.787Z"
+    },
+    {
+      "url": "https://www.pptx.dev/opf-fonts/Tinos-400-normal-924ef269e73d.ttf",
+      "status": 200,
+      "time": 2232.333,
+      "startedDateTime": "2026-09-21T14:23:39.787Z"
+    },
+    {
+      "url": "https://www.pptx.dev/opf-fonts/Roboto-400-normal-15256405ecb0.ttf",
+      "status": 200,
+      "time": 2828.223,
+      "startedDateTime": "2026-09-21T14:23:39.787Z"
+    },
+    {
+      "url": "https://www.pptx.dev/opf-fonts/Tinos-700-italic-10c90ef7896d.ttf",
+      "status": 200,
+      "time": 2830.928,
+      "startedDateTime": "2026-09-21T14:23:39.787Z"
+    },
+    {
+      "url": "https://www.pptx.dev/opf-fonts/Carlito-700-italic-25f5672c1985.ttf",
+      "status": 200,
+      "time": 2831.284,
+      "startedDateTime": "2026-09-21T14:23:39.787Z"
+    },
+    {
+      "url": "https://www.pptx.dev/opf-fonts/Roboto-400-italic-6a372c348dc2.ttf",
+      "status": 200,
+      "time": 2945.2529999999997,
+      "startedDateTime": "2026-09-21T14:23:39.787Z"
+    },
+    {
+      "url": "https://www.pptx.dev/opf-fonts/Gelasio-400-italic-2b24b3d41c06.ttf",
+      "status": 200,
+      "time": 2945.658,
+      "startedDateTime": "2026-09-21T14:23:39.787Z"
+    },
+    {
+      "url": "https://www.pptx.dev/opf-fonts/Tinos-700-normal-576a19b5dc02.ttf",
+      "status": 200,
+      "time": 2948.1189999999997,
+      "startedDateTime": "2026-09-21T14:23:39.787Z"
+    },
+    {
+      "url": "https://www.pptx.dev/opf-fonts/Cousine-400-italic-f1626b7287db.ttf",
+      "status": 200,
+      "time": 2948.88,
+      "startedDateTime": "2026-09-21T14:23:39.787Z"
+    },
+    {
+      "url": "https://www.pptx.dev/opf-fonts/Roboto-Medium-500-normal-79343dc641a2.ttf",
+      "status": 200,
+      "time": 2950.104,
+      "startedDateTime": "2026-09-21T14:23:39.787Z"
+    },
+    {
+      "url": "https://www.pptx.dev/opf-fonts/Gelasio-700-normal-fade86eca522.ttf",
+      "status": 200,
+      "time": 2952.312,
+      "startedDateTime": "2026-09-21T14:23:39.787Z"
+    },
+    {
+      "url": "https://www.pptx.dev/opf-fonts/Arimo-700-italic-b42b19c10bf5.ttf",
+      "status": 200,
+      "time": 2952.949,
+      "startedDateTime": "2026-09-21T14:23:39.787Z"
+    },
+    {
+      "url": "https://www.pptx.dev/opf-fonts/Cousine-700-normal-f03c46c4bc5c.ttf",
+      "status": 200,
+      "time": 2958.184,
+      "startedDateTime": "2026-09-21T14:23:39.787Z"
+    },
+    {
+      "url": "https://www.pptx.dev/opf-fonts/Arimo-700-normal-ec96ac9fdd94.ttf",
+      "status": 200,
+      "time": 2958.697,
+      "startedDateTime": "2026-09-21T14:23:39.787Z"
+    },
+    {
+      "url": "https://www.pptx.dev/opf-fonts/Gelasio-700-italic-24f1cb5cf5f7.ttf",
+      "status": 200,
+      "time": 3086.549,
+      "startedDateTime": "2026-09-21T14:23:39.787Z"
+    },
+    {
+      "url": "https://www.pptx.dev/opf-fonts/Tinos-400-italic-4a52de5bcf70.ttf",
+      "status": 200,
+      "time": 3097.86,
+      "startedDateTime": "2026-09-21T14:23:39.787Z"
+    },
+    {
+      "url": "https://www.pptx.dev/opf-fonts/Cousine-700-italic-acb798f3629c.ttf",
+      "status": 200,
+      "time": 3094.966,
+      "startedDateTime": "2026-09-21T14:23:39.787Z"
+    },
+    {
+      "url": "https://www.pptx.dev/opf-fonts/Roboto-700-normal-4aaf8c5b661a.ttf",
+      "status": -1,
+      "time": -1,
+      "startedDateTime": "2026-09-21T14:23:39.787Z"
+    }
+  ],
+  "countAssertions": [
+    {
+      "type": "before",
+      "callId": "call@198",
+      "startTime": 87276.903,
+      "title": "Expect \"toHaveCount\"",
+      "class": "Frame",
+      "method": "expect",
+      "params": {
+        "selector": "[data-opf-renderer=\"0.9.0\"] div[role=\"img\"] svg",
+        "expression": "to.have.count",
+        "expectedNumber": 1,
+        "expectedValue": {
+          "value": {
+            "v": "undefined"
+          },
+          "handles": []
+        },
+        "isNot": false,
+        "timeout": 5000
+      },
+      "stepId": "expect@33"
+    }
+  ]
+}

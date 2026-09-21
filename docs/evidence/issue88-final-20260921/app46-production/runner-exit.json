@@ -1,0 +1,13 @@
+{
+  "exitCode": 1,
+  "retries": 0,
+  "testCount": 19,
+  "stats": {
+    "startTime": "2026-09-21T14:52:43.494Z",
+    "duration": 183556.19700000001,
+    "expected": 11,
+    "skipped": 0,
+    "unexpected": 8,
+    "flaky": 0
+  }
+}

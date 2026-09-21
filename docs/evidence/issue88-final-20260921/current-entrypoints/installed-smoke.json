@@ -1,0 +1,90 @@
+{
+  "status": "passed",
+  "checkedAt": "2026-09-21T14:04:10.398Z",
+  "node": "v24.21.0",
+  "versions": {
+    "opf": "0.11.0",
+    "opf-render": "0.9.0",
+    "opf-editor": "0.8.0",
+    "opf-pptx": "0.9.1",
+    "cli": "0.9.0"
+  },
+  "consumer": "/private/tmp/opf-registry-20260921/consumer",
+  "verifierSha256": "c0597212c6528edc4fe73fcbc05e068b0bf6cb449e395014df9d89f7a5c51322",
+  "resolver": {
+    "method": "Node ESM import.meta.resolve in installed consumer cwd",
+    "source": "const entries=JSON.parse(process.argv[1]); console.log(JSON.stringify(Object.fromEntries(entries.map(spec=>[spec,import.meta.resolve(spec)]))));",
+    "sha256": "68b87e32238f772d2ba85bb2c0dba90c57830bb1c370953e75bfc63fb75aa470"
+  },
+  "lockSha256": "eca567d00057fc3bc605802d2616565a9debf22d8862799e9ea50c4ce10c66b1",
+  "packageManifests": {
+    "opf": {
+      "file": "/private/tmp/opf-registry-20260921/consumer/node_modules/@openpresentation/opf/package.json",
+      "sha256": "86364f07f30f5106539a936b4eb84cf5a00c53524599b222f823b2460efb3a0f"
+    },
+    "opf-render": {
+      "file": "/private/tmp/opf-registry-20260921/consumer/node_modules/@openpresentation/opf-render/package.json",
+      "sha256": "ab5cac6fc9588b3ba694fd17a0d1bde952ebabb60977a13089626b2ec146d84f"
+    },
+    "opf-editor": {
+      "file": "/private/tmp/opf-registry-20260921/consumer/node_modules/@openpresentation/opf-editor/package.json",
+      "sha256": "c91341504f64b9100dcd12bddee35cf8eadb0e14acee72d9798f93ca0a549818"
+    },
+    "opf-pptx": {
+      "file": "/private/tmp/opf-registry-20260921/consumer/node_modules/@openpresentation/opf-pptx/package.json",
+      "sha256": "be4944ae7405ff4d92238118eafebb93af433c53519145785553eecc3a4ef8bd"
+    },
+    "cli": {
+      "file": "/private/tmp/opf-registry-20260921/consumer/node_modules/@openpresentation/cli/package.json",
+      "sha256": "0c4e3a41ae1460ce28dcc14f57125961a6f3eb9418dbab6ba4de497ebe2b12b0"
+    }
+  },
+  "resolution": {
+    "@openpresentation/opf-editor": {
+      "url": "file:///private/tmp/opf-registry-20260921/consumer/node_modules/@openpresentation/opf-editor/dist/index.js",
+      "file": "/private/tmp/opf-registry-20260921/consumer/node_modules/@openpresentation/opf-editor/dist/index.js",
+      "sha256": "ffa2dd3043ff87f6da3e7d6acd818b8041d99979aa6707a1828c558f03afb753"
+    },
+    "@openpresentation/opf-editor/layout": {
+      "url": "file:///private/tmp/opf-registry-20260921/consumer/node_modules/@openpresentation/opf-editor/dist/layout.js",
+      "file": "/private/tmp/opf-registry-20260921/consumer/node_modules/@openpresentation/opf-editor/dist/layout.js",
+      "sha256": "2dc0796ec514dcd03c240782587bb62e9779ea5e3992bf503a41d2a1df6695f2"
+    },
+    "@openpresentation/opf/composition": {
+      "url": "file:///private/tmp/opf-registry-20260921/consumer/node_modules/@openpresentation/opf/dist/composition.js",
+      "file": "/private/tmp/opf-registry-20260921/consumer/node_modules/@openpresentation/opf/dist/composition.js",
+      "sha256": "419b63c4cddf3d3fdc855c7b17ada960eef2a7be4c0e5f9d81e81398a8753df1"
+    },
+    "@openpresentation/opf-editor/canvas": {
+      "url": "file:///private/tmp/opf-registry-20260921/consumer/node_modules/@openpresentation/opf-editor/dist/canvas.js",
+      "file": "/private/tmp/opf-registry-20260921/consumer/node_modules/@openpresentation/opf-editor/dist/canvas.js",
+      "sha256": "957d2c92808cf5d65027d8283be4fba6b2dcbb8026109e4adcab1fda10d7a3cd"
+    },
+    "@openpresentation/opf-editor/schema-inspector": {
+      "url": "file:///private/tmp/opf-registry-20260921/consumer/node_modules/@openpresentation/opf-editor/dist/schema-inspector.js",
+      "file": "/private/tmp/opf-registry-20260921/consumer/node_modules/@openpresentation/opf-editor/dist/schema-inspector.js",
+      "sha256": "f0b3bac43dac51f702f575570ac69590e2de8bf7a68b64f43fc27377faff4bae"
+    }
+  },
+  "cliBin": {
+    "manifest": "/private/tmp/opf-registry-20260921/consumer/node_modules/@openpresentation/cli/package.json",
+    "declaredPath": "./dist/index.js",
+    "file": "/private/tmp/opf-registry-20260921/consumer/node_modules/@openpresentation/cli/dist/index.js",
+    "sha256": "96c46b9b0d531042686b1f8e9c89d8c5038ed45a3cb0742c1b4869857c3b184a"
+  },
+  "skillsDirectory": "/private/tmp/opf-current-skills-qodl28",
+  "checks": [
+    "published canvas/schema exports",
+    "block insert/duplicate/remove guards",
+    "rich content and metadata preservation",
+    "undo/redo",
+    "stale patch rejection",
+    "opaque contrast/translucent fallback",
+    "CLI version/create/validate",
+    "six installed skills/status/idempotent reinstall"
+  ],
+  "version": "{\n  \"cli\": \"0.9.0\",\n  \"opf\": \"0.11.0\"\n}\n",
+  "install": "{\n  \"version\": \"0.9.0\",\n  \"directory\": \"/private/tmp/opf-current-skills-qodl28/.agents/skills\",\n  \"changed\": [\n    \"opf-author\",\n    \"opf-edit\",\n    \"opf-export\",\n    \"opf-inspect\",\n    \"opf-layout\",\n    \"opf-presets\"\n  ],\n  \"unchanged\": [],\n  \"backups\": []\n}\n",
+  "statusOutput": "{\n  \"version\": \"0.9.0\",\n  \"directory\": \"/private/tmp/opf-current-skills-qodl28/.agents/skills\",\n  \"skills\": [\n    {\n      \"name\": \"opf-author\",\n      \"status\": \"managed\",\n      \"installedVersion\": \"0.9.0\",\n      \"updateAvailable\": false\n    },\n    {\n      \"name\": \"opf-edit\",\n      \"status\": \"managed\",\n      \"installedVersion\": \"0.9.0\",\n      \"updateAvailable\": false\n    },\n    {\n      \"name\": \"opf-export\",\n      \"status\": \"managed\",\n      \"installedVersion\": \"0.9.0\",\n      \"updateAvailable\": false\n    },\n    {\n      \"name\": \"opf-inspect\",\n      \"status\": \"managed\",\n      \"installedVersion\": \"0.9.0\",\n      \"updateAvailable\": false\n    },\n    {\n      \"name\": \"opf-layout\",\n      \"status\": \"managed\",\n      \"installedVersion\": \"0.9.0\",\n      \"updateAvailable\": false\n    },\n    {\n      \"name\": \"opf-presets\",\n      \"status\": \"managed\",\n      \"installedVersion\": \"0.9.0\",\n      \"updateAvailable\": false\n    }\n  ]\n}\n",
+  "repeat": "{\n  \"version\": \"0.9.0\",\n  \"directory\": \"/private/tmp/opf-current-skills-qodl28/.agents/skills\",\n  \"changed\": [],\n  \"unchanged\": [\n    \"opf-author\",\n    \"opf-edit\",\n    \"opf-export\",\n    \"opf-inspect\",\n    \"opf-layout\",\n    \"opf-presets\"\n  ]\n}\n"
+}

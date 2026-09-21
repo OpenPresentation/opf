@@ -1,0 +1,25 @@
+{
+  "capturedAt": "2026-09-21T14:52:07.447Z",
+  "id": "dpl_AGzL3mmPqZ5giiQWzh9EqyDPF8SX",
+  "url": "pptx-pp15v3fjw-dataadvantage.vercel.app",
+  "state": "READY",
+  "readyState": "READY",
+  "target": "production",
+  "alias": [
+    "api.pptx.dev",
+    "mcp.pptx.dev",
+    "www.pptx.dev",
+    "pptx-dev.vercel.app",
+    "pptx.dev",
+    "pptx-dev-dataadvantage.vercel.app",
+    "pptx-dev-git-master-dataadvantage.vercel.app"
+  ],
+  "meta": {
+    "githubCommitRef": "master",
+    "githubCommitSha": "c558dcc3a2e362bc238eb433a2db97fa682dfcc8",
+    "githubCommitMessage": "fix(editor): keep pasted JSON formatting explicit (#46)",
+    "githubRepo": "pptx-dev",
+    "githubOrg": "Data-Advantage"
+  },
+  "ready": 1790002295122
+}

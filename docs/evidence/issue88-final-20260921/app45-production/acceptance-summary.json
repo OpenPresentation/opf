@@ -1,0 +1,264 @@
+{
+  "stats": {
+    "startTime": "2026-09-21T14:22:10.813Z",
+    "duration": 127201.006,
+    "expected": 14,
+    "skipped": 0,
+    "unexpected": 4,
+    "flaky": 0
+  },
+  "tests": [
+    {
+      "file": "author-json-options.spec.ts",
+      "title": "Author categorical choices include built-in, document and loaded catalogs with exact LF source undo/redo",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 11382,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "author-json-options.spec.ts",
+      "title": "Author categorical choices include built-in, document and loaded catalogs with exact CRLF source undo/redo",
+      "status": "unexpected",
+      "results": [
+        {
+          "status": "failed",
+          "duration": 11504,
+          "errors": [
+            {
+              "location": {
+                "file": "/private/tmp/opf-issue88-fixes-20260921/pptx-dev/tests/e2e/author-json-options.spec.ts",
+                "column": 25,
+                "line": 56
+              },
+              "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.suggest-widget.visible')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" locator('.suggest-widget.visible') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.suggest-widget.visible')\u001b[22m\n\n\n  54 |   await input.press('Control+Space');\n  55 |   const choices = page.locator('.suggest-widget.visible');\n> 56 |   await expect(choices).toBeVisible();\n     |                         ^\n  57 |   return choices;\n  58 | }\n  59 |\n    at openChoices (/private/tmp/opf-issue88-fixes-20260921/pptx-dev/tests/e2e/author-json-options.spec.ts:56:25)\n    at /private/tmp/opf-issue88-fixes-20260921/pptx-dev/tests/e2e/author-json-options.spec.ts:118:25"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "author.spec.ts",
+      "title": "anonymous code editing preserves source and visible selection through offline export/reimport at 1280x720",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 8999,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "author.spec.ts",
+      "title": "anonymous code editing preserves source and visible selection through offline export/reimport at 540x960",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 5856,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "author.spec.ts",
+      "title": "anonymous Author canvas edits survive tab changes, offline PowerPoint export and undoable reimport",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 7030,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "inspector-editing.spec.ts",
+      "title": "all Inspector slides preserve exact JSON and shared furniture through offline undo/export at 1440px",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 6217,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "inspector-editing.spec.ts",
+      "title": "all Inspector slides preserve exact JSON and shared furniture through offline undo/export at 540px",
+      "status": "unexpected",
+      "results": [
+        {
+          "status": "failed",
+          "duration": 9576,
+          "errors": [
+            {
+              "location": {
+                "file": "/private/tmp/opf-issue88-fixes-20260921/pptx-dev/tests/e2e/inspector-editing.spec.ts",
+                "column": 47,
+                "line": 55
+              },
+              "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\n\u001b[32m- Expected  -  8\u001b[39m\n\u001b[31m+ Received  + 37\u001b[39m\n\n\u001b[2m  {\u001b[22m\n\u001b[32m-   \"name\"\u001b[7m \u001b[27m: \"Keep\\u0020authored\",\u001b[39m\n\u001b[31m+   \"name\": \"Keep\\u0020authored\",\u001b[39m\n\u001b[32m-   \"extensions\": {\"review\": {\"amount\": 1e2, \"path\":\"a\\/b\"\u001b[7m}\u001b[27m},\u001b[39m\n\u001b[31m+   \"extensions\": {\u001b[39m\n\u001b[31m+ \u001b[7m    \u001b[27m\"review\": {\u001b[39m\n\u001b[31m+ \u001b[7m      \u001b[27m\"amount\": 1e2,\u001b[39m\n\u001b[31m+ \u001b[7m     \u001b[27m \"path\":\u001b[7m \u001b[27m\"a\\/b\"\u001b[39m\n\u001b[31m+     }\u001b[39m\n\u001b[31m+ \u001b[7m  \u001b[27m},\u001b[39m\n\u001b[32m-   \"design\": {\"fontScheme\":\"roboto\", \"header\":\u001b[7m{\"left\":{\u001b[27m\"text\":\"Shared header\"\u001b[7m}}\u001b[27m},\u001b[39m\n\u001b[31m+   \"design\": {\u001b[39m\n\u001b[31m+ \u001b[7m    \u001b[27m\"fontScheme\":\u001b[7m \u001b[27m\"roboto\",\u001b[39m\n\u001b[31m+ \u001b[7m   \u001b[27m \"header\":\u001b[7m {\u001b[27m\u001b[39m\n\u001b[31m+       \"left\": {\u001b[39m\n\u001b[31m+ \u001b[7m        \u001b[27m\"text\":\u001b[7m \u001b[27m\"Shared header\"\u001b[39m\n\u001b[31m+       }\u001b[39m\n\u001b[31m+     }\u001b[39m\n\u001b[31m+ \u001b[7m  \u001b[27m},\u001b[39m\n\u001b[32m-   \"slides\"\u001b[7m \u001b[27m: [\u001b[39m\n\u001b[31m+   \"slides\": [\u001b[39m\n\u001b[32m-     {\"id\":\"first\", \"title\":\"First slide\",\u001b[7m \"text\":[{\u001b[27m\"text\":\"Rich  text\", \"bold\":true\u001b[7m}],\u001b[27m \"notes\":\"Keep notes\"},\u001b[39m\n\u001b[31m+     {\u001b[39m\n\u001b[31m+ \u001b[7m      \u001b[27m\"id\":\u001b[7m \u001b[27m\"first\",\u001b[39m\n\u001b[31m+ \u001b[7m     \u001b[27m \"title\":\u001b[7m \u001b[27m\"First slide\",\u001b[39m\n\u001b[31m+       \"text\": [\u001b[39m\n\u001b[31m+         {\u001b[39m\n\u001b[31m+ \u001b[7m          \u001b[27m\"text\":\u001b[7m \u001b[27m\"Rich  text\",\u001b[39m\n\u001b[31m+ \u001b[7m         \u001b[27m \"bold\":\u001b[7m \u001b[27mtrue\u001b[39m\n\u001b[31m+         }\u001b[39m\n\u001b[31m+       ],\u001b[39m\n\u001b[31m+ \u001b[7m     \u001b[27m \"notes\":\u001b[7m \u001b[27m\"Keep notes\"\u001b[39m\n\u001b[31m+ \u001b[7m    \u001b[27m},\u001b[39m\n\u001b[32m-     {\"id\":\"second\", \"title\"\u001b[7m \u001b[27m: \"Second\\u0020slide\", \"text\":\"Second body\"},\u001b[39m\n\u001b[31m+     {\u001b[39m\n\u001b[31m+ \u001b[7m      \u001b[27m\"id\":\u001b[7m \u001b[27m\"second\",\u001b[39m\n\u001b[31m+ \u001b[7m     \u001b[27m \"title\": \"Second\\u0020slide\",\u001b[39m\n\u001b[31m+ \u001b[7m     \u001b[27m \"text\":\u001b[7m \u001b[27m\"Second body\"\u001b[39m\n\u001b[31m+ \u001b[7m    \u001b[27m},\u001b[39m\n\u001b[32m-     {\"id\":\"third\", \"title\":\"Third slide\", \"text\":\"Third body\"}\u001b[39m\n\u001b[31m+     {\u001b[39m\n\u001b[31m+ \u001b[7m      \u001b[27m\"id\":\u001b[7m \u001b[27m\"third\",\u001b[39m\n\u001b[31m+ \u001b[7m     \u001b[27m \"title\":\u001b[7m \u001b[27m\"Third slide\",\u001b[39m\n\u001b[31m+ \u001b[7m     \u001b[27m \"text\":\u001b[7m \u001b[27m\"Third body\"\u001b[39m\n\u001b[31m+ \u001b[7m    \u001b[27m}\u001b[39m\n\u001b[2m    ]\u001b[22m\n\u001b[2m  }\u001b[22m\n\u001b[32m-\u001b[39m\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate\n\n  53 |     await expect(page.getByTestId('inspector-canvas-overlay')).toHaveCount(3);\n  54 |     for (let index = 0; index < 3; index++) await expect(canvas(page, index)).toBeVisible();\n> 55 |     await expect.poll(() => copySource(page)).toBe(original);\n     |                                               ^\n  56 |     page.on('request', request => { if (request.method() === 'POST') writes.push(request.url()); });\n  57 |     await page.context().setOffline(true);\n  58 |\n    at /private/tmp/opf-issue88-fixes-20260921/pptx-dev/tests/e2e/inspector-editing.spec.ts:55:47"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "inspector-editing.spec.ts",
+      "title": "invalid source keeps a renderer fallback and source recovery uses the current slide order",
+      "status": "unexpected",
+      "results": [
+        {
+          "status": "failed",
+          "duration": 9608,
+          "errors": [
+            {
+              "location": {
+                "file": "/private/tmp/opf-issue88-fixes-20260921/pptx-dev/tests/e2e/inspector-editing.spec.ts",
+                "column": 45,
+                "line": 113
+              },
+              "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\n\u001b[32m- Expected  - 39\u001b[39m\n\u001b[31m+ Received  + 38\u001b[39m\n\n\u001b[2m  {\u001b[22m\n\u001b[32m-   \u001b[7m \u001b[27m\"name\": \"Keep authored\",\u001b[39m\n\u001b[31m+   \"name\": \"Keep authored\",\u001b[39m\n\u001b[32m-   \u001b[7m \u001b[27m\"extensions\": {\u001b[39m\n\u001b[31m+   \"extensions\": {\u001b[39m\n\u001b[32m- \u001b[7m  \u001b[27m    \"review\": {\u001b[39m\n\u001b[31m+     \"review\": {\u001b[39m\n\u001b[32m- \u001b[7m   \u001b[27m      \"amount\": 100,\u001b[39m\n\u001b[31m+       \"amount\": 100,\u001b[39m\n\u001b[32m-       \u001b[7m   \u001b[27m\"path\": \"a/b\"\u001b[39m\n\u001b[31m+       \"path\": \"a/b\"\u001b[39m\n\u001b[32m- \u001b[7m  \u001b[27m    }\u001b[39m\n\u001b[31m+     }\u001b[39m\n\u001b[32m- \u001b[7m \u001b[27m  },\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[32m-   \u001b[7m \u001b[27m\"design\": {\u001b[39m\n\u001b[31m+   \"design\": {\u001b[39m\n\u001b[32m-     \u001b[7m \u001b[27m\u001b[7m \u001b[27m\"fontScheme\": \"roboto\",\u001b[39m\n\u001b[31m+     \"fontScheme\": \"roboto\",\u001b[39m\n\u001b[32m- \u001b[7m  \u001b[27m    \"header\": {\u001b[39m\n\u001b[31m+     \"header\": {\u001b[39m\n\u001b[32m-       \u001b[7m   \u001b[27m\"left\": {\u001b[39m\n\u001b[31m+       \"left\": {\u001b[39m\n\u001b[32m- \u001b[7m    \u001b[27m        \"text\": \"Shared header\"\u001b[39m\n\u001b[31m+         \"text\": \"Shared header\"\u001b[39m\n\u001b[32m-       \u001b[7m   }\u001b[27m\u001b[39m\n\u001b[32m- \u001b[7m  \u001b[27m    }\u001b[39m\n\u001b[31m+       \u001b[7m}\u001b[27m\u001b[39m\n\u001b[31m+     }\u001b[39m\n\u001b[32m-   \u001b[7m \u001b[27m},\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[32m-   \u001b[7m \u001b[27m\"slides\": [\u001b[39m\n\u001b[31m+   \"slides\": [\u001b[39m\n\u001b[32m-     \u001b[7m \u001b[27m\u001b[7m \u001b[27m{\u001b[39m\n\u001b[31m+     {\u001b[39m\n\u001b[32m-       \u001b[7m  \u001b[27m\u001b[7m \u001b[27m\"id\": \"third\",\u001b[39m\n\u001b[31m+       \"id\": \"third\",\u001b[39m\n\u001b[32m-       \u001b[7m   \u001b[27m\"title\": \"Third slide\",\u001b[39m\n\u001b[31m+       \"title\": \"Third slide\",\u001b[39m\n\u001b[32m-       \u001b[7m  \u001b[27m\u001b[7m \u001b[27m\"text\": \"Third body\"\u001b[39m\n\u001b[31m+       \"text\": \"Third body\"\u001b[39m\n\u001b[32m-     \u001b[7m  \u001b[27m},\u001b[39m\n\u001b[31m+     },\u001b[39m\n\u001b[32m-     \u001b[7m  \u001b[27m{\u001b[39m\n\u001b[31m+     {\u001b[39m\n\u001b[32m-       \u001b[7m \u001b[27m\u001b[7m  \u001b[27m\"id\": \"second\",\u001b[39m\n\u001b[31m+       \"id\": \"second\",\u001b[39m\n\u001b[32m- \u001b[7m   \u001b[27m      \"title\": \"Second slide\",\u001b[39m\n\u001b[31m+       \"title\": \"Second slide\",\u001b[39m\n\u001b[32m- \u001b[7m   \u001b[27m      \"text\": \"Second body\"\u001b[39m\n\u001b[31m+       \"text\": \"Second body\"\u001b[39m\n\u001b[32m-     \u001b[7m  \u001b[27m},\u001b[39m\n\u001b[31m+     },\u001b[39m\n\u001b[32m-     \u001b[7m  {\u001b[27m\u001b[39m\n\u001b[32m- \u001b[7m  \u001b[27m      \u001b[7m \u001b[27m\"id\": \"first\",\u001b[39m\n\u001b[31m+     \u001b[7m{\u001b[27m\u001b[39m\n\u001b[31m+       \"id\": \"first\",\u001b[39m\n\u001b[32m-       \u001b[7m \u001b[27m\u001b[7m  \u001b[27m\"title\": \"First slide at its new index\",\u001b[39m\n\u001b[31m+       \"title\": \"First slide at its new index\",\u001b[39m\n\u001b[32m-       \u001b[7m \u001b[27m\u001b[7m  \u001b[27m\"text\": [\u001b[39m\n\u001b[31m+       \"text\": [\u001b[39m\n\u001b[32m- \u001b[7m    \u001b[27m        {\u001b[39m\n\u001b[31m+         {\u001b[39m\n\u001b[32m-           \u001b[7m \u001b[27m\u001b[7m    \u001b[27m\"text\": \"Rich  text\",\u001b[39m\n\u001b[31m+           \"text\": \"Rich  text\",\u001b[39m\n\u001b[32m-           \u001b[7m \u001b[27m\u001b[7m    \u001b[27m\"bold\": true\u001b[39m\n\u001b[31m+           \"bold\": true\u001b[39m\n\u001b[32m-         \u001b[7m  \u001b[27m\u001b[7m  \u001b[27m}\u001b[39m\n\u001b[31m+         }\u001b[39m\n\u001b[32m-       \u001b[7m \u001b[27m\u001b[7m  \u001b[27m],\u001b[39m\n\u001b[31m+       ],\u001b[39m\n\u001b[32m-       \u001b[7m \u001b[27m\u001b[7m  \u001b[27m\"notes\": \"Keep notes\"\u001b[39m\n\u001b[31m+       \"notes\": \"Keep notes\"\u001b[39m\n\u001b[32m-     \u001b[7m \u001b[27m\u001b[7m \u001b[27m}\u001b[39m\n\u001b[31m+     }\u001b[39m\n\u001b[32m-   \u001b[7m \u001b[27m]\u001b[39m\n\u001b[31m+   ]\u001b[39m\n\u001b[2m  }\u001b[22m\n\u001b[32m-\u001b[39m\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate\n\n  111 |   await expect(canvas(page, 2)).toHaveAttribute('data-opf-slide-id', 'first');\n  112 |   await editTitle(page, 2, 'First slide at its new index');\n> 113 |   await expect.poll(() => copySource(page)).toBe(source.replace('\"First slide\"', '\"First slide at its new index\"'));\n      |                                             ^\n  114 | });\n  115 |\n  116 | test('shared navigation discards an ID-less draft even when the replacement title is identical', async ({ page }) => {\n    at /private/tmp/opf-issue88-fixes-20260921/pptx-dev/tests/e2e/inspector-editing.spec.ts:113:45"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "inspector-editing.spec.ts",
+      "title": "shared navigation discards an ID-less draft even when the replacement title is identical",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 4251,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "inspector-recovery.spec.ts",
+      "title": "schema-valid strict overflow cancels an active draft and the same slide recovers after source correction",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 5077,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "inspector-recovery.spec.ts",
+      "title": "font substitution notes remain accessible and operable while the Inspector canvas is active",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 4563,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "inspector.spec.ts",
+      "title": "published long quotes retain their footer in actual wide/portrait previews and PowerPoint downloads",
+      "status": "unexpected",
+      "results": [
+        {
+          "status": "failed",
+          "duration": 7055,
+          "errors": [
+            {
+              "location": {
+                "file": "/private/tmp/opf-issue88-fixes-20260921/pptx-dev/tests/e2e/inspector.spec.ts",
+                "column": 21,
+                "line": 15
+              },
+              "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('[data-opf-renderer=\"0.9.0\"] div[role=\"img\"] svg')\nExpected: \u001b[32m1\u001b[39m\nReceived: \u001b[31m0\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" locator('[data-opf-renderer=\"0.9.0\"] div[role=\"img\"] svg') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-opf-renderer=\"0.9.0\"] div[role=\"img\"] svg')\u001b[22m\n\u001b[2m    14 \u00d7 locator resolved to 0 elements\u001b[22m\n\u001b[2m       - unexpected value \"0\"\u001b[22m\n\n\n  13 |   // Preview updates follow source/gallery updates. Wait for this document,\n  14 |   // rather than applying a strict single-element assertion to the starter deck.\n> 15 |   await expect(svg).toHaveCount(1);\n     |                     ^\n  16 |   await expect(svg).toHaveAttribute('aria-label', title);\n  17 |   return svg;\n  18 | }\n    at singleSlidePreview (/private/tmp/opf-issue88-fixes-20260921/pptx-dev/tests/e2e/inspector.spec.ts:15:21)\n    at /private/tmp/opf-issue88-fixes-20260921/pptx-dev/tests/e2e/inspector.spec.ts:31:23"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "inspector.spec.ts",
+      "title": "shared navigation clears format errors and proposals from the previous deck",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 4336,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "inspector.spec.ts",
+      "title": "anonymous JSON authoring, preview, undo/redo, download and shared reimport",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 5458,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "monaco.spec.ts",
+      "title": "bundled JSON worker provides schema diagnostics, completion and recovery offline",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 7949,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "svg-security.spec.ts",
+      "title": "published SVG renderer keeps hostile shared and imported document strings inert",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 6913,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "toolkit.spec.ts",
+      "title": "public toolkit shows the deployed package set with working render, edit and export proofs",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 1671,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "yaml.spec.ts",
+      "title": "YAML and Markdown editing preserve OPF values and recover from malformed YAML offline",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 7423,
+          "errors": []
+        }
+      ]
+    }
+  ]
+}

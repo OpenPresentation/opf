@@ -1,0 +1,1664 @@
+{
+  "capturedAt": "2026-09-21T14:36:02.464Z",
+  "node": "v24.21.0",
+  "mode": "acceptance",
+  "scope": "Explicit current entrypoints only; dated evidence is not evaluated as current claims. Completeness includes the configured full guide set without reinterpreting historical prose.",
+  "checks": [
+    {
+      "label": "Installed runtime/dependency/lock/release/catalog/example hashes unchanged",
+      "passed": true
+    },
+    {
+      "label": "/skills.json: HTTP 200",
+      "passed": true,
+      "details": {
+        "status": 200
+      }
+    },
+    {
+      "label": "Complete raw manifest matches accepted local snapshot",
+      "passed": true
+    },
+    {
+      "label": "Manifest source package is 0.11.0",
+      "passed": true
+    },
+    {
+      "label": "/agent-docs/README.md: HTTP 200",
+      "passed": true,
+      "details": {
+        "status": 200
+      }
+    },
+    {
+      "label": "README.md: raw bytes match manifest",
+      "passed": true
+    },
+    {
+      "label": "README.md: requires /Published CLI 0\\.9\\.0/",
+      "passed": true
+    },
+    {
+      "label": "README.md: requires /@openpresentation\\/cli@0\\.9\\.0 skills install/",
+      "passed": true
+    },
+    {
+      "label": "README.md: requires /current pin set: core 0\\.11\\.0, renderer 0\\.9\\.0, editor 0\\.8\\.0, PPTX 0\\.9\\.1 and CLI 0\\.9\\.0/",
+      "passed": true
+    },
+    {
+      "label": "README.md: rejects /current pin set[^\\n]*0\\.10\\.1/",
+      "passed": true
+    },
+    {
+      "label": "/agent-docs/docs/agent-skills.md: HTTP 200",
+      "passed": true,
+      "details": {
+        "status": 200
+      }
+    },
+    {
+      "label": "docs/agent-skills.md: raw bytes match manifest",
+      "passed": true
+    },
+    {
+      "label": "docs/agent-skills.md: requires /Published CLI 0\\.9\\.0/",
+      "passed": true
+    },
+    {
+      "label": "docs/agent-skills.md: requires /@openpresentation\\/cli@0\\.9\\.0 skills install/",
+      "passed": true
+    },
+    {
+      "label": "docs/agent-skills.md: requires /Repository skill prose can be newer/",
+      "passed": true
+    },
+    {
+      "label": "docs/agent-skills.md: requires /do not change the CLI 0\\.9\\.0 tarball/",
+      "passed": true
+    },
+    {
+      "label": "docs/agent-skills.md: rejects /CLI 0\\.5\\.0/",
+      "passed": true
+    },
+    {
+      "label": "docs/agent-skills.md: rejects /CLI 0\\.9\\.0[^\\n]*release candidate/",
+      "passed": true
+    },
+    {
+      "label": "/agent-docs/docs/live-editor.md: HTTP 200",
+      "passed": true,
+      "details": {
+        "status": 200
+      }
+    },
+    {
+      "label": "docs/live-editor.md: raw bytes match manifest",
+      "passed": true
+    },
+    {
+      "label": "docs/live-editor.md: requires /Published editor 0\\.8\\.0/",
+      "passed": true
+    },
+    {
+      "label": "docs/live-editor.md: requires /@openpresentation\\/opf@0\\.11\\.0/",
+      "passed": true
+    },
+    {
+      "label": "docs/live-editor.md: requires /@openpresentation\\/opf-render@0\\.9\\.0/",
+      "passed": true
+    },
+    {
+      "label": "docs/live-editor.md: requires /@openpresentation\\/opf-editor@0\\.8\\.0/",
+      "passed": true
+    },
+    {
+      "label": "docs/live-editor.md: requires /@openpresentation\\/opf-pptx@0\\.9\\.1/",
+      "passed": true
+    },
+    {
+      "label": "docs/live-editor.md: requires /These helpers are published in editor 0\\.8\\.0/",
+      "passed": true
+    },
+    {
+      "label": "docs/live-editor.md: rejects /The verified public set is core 0\\.7\\.0/",
+      "passed": true
+    },
+    {
+      "label": "docs/live-editor.md: rejects /Current APIs are in coordinated local previews/",
+      "passed": true
+    },
+    {
+      "label": "docs/live-editor.md: rejects /Public package release with coordinated versions/",
+      "passed": true
+    },
+    {
+      "label": "docs/live-editor.md: rejects /golden baseline remains skipped/",
+      "passed": true
+    },
+    {
+      "label": "/agent-docs/docs/content-payloads.md: HTTP 200",
+      "passed": true,
+      "details": {
+        "status": 200
+      }
+    },
+    {
+      "label": "docs/content-payloads.md: raw bytes match manifest",
+      "passed": true
+    },
+    {
+      "label": "docs/content-payloads.md: requires /current coordinated Node 24 train: core 0\\.11\\.0, renderer 0\\.9\\.0, editor 0\\.8\\.0 and PPTX 0\\.9\\.1/",
+      "passed": true
+    },
+    {
+      "label": "docs/content-payloads.md: rejects /Use core 0\\.6\\.0, renderer 0\\.4\\.0, editor 0\\.3\\.0 and PPTX 0\\.4\\.0 together/",
+      "passed": true
+    },
+    {
+      "label": "/agent-docs/docs/ecosystem-development.md: HTTP 200",
+      "passed": true,
+      "details": {
+        "status": 200
+      }
+    },
+    {
+      "label": "docs/ecosystem-development.md: raw bytes match manifest",
+      "passed": true
+    },
+    {
+      "label": "docs/ecosystem-development.md: requires /Use Node 24 for the current source and published packages/",
+      "passed": true
+    },
+    {
+      "label": "docs/ecosystem-development.md: requires /current published compatible set is core 0\\.11\\.0, CLI 0\\.9\\.0, renderer 0\\.9\\.0, PPTX 0\\.9\\.1 and editor 0\\.8\\.0 on Node 24/",
+      "passed": true
+    },
+    {
+      "label": "docs/ecosystem-development.md: requires /historical September 9 integration/",
+      "passed": true
+    },
+    {
+      "label": "docs/ecosystem-development.md: rejects /The published compatible set is core 0\\.7\\.0/",
+      "passed": true
+    },
+    {
+      "label": "/agent-docs/docs/table-text-colors.md: HTTP 200",
+      "passed": true,
+      "details": {
+        "status": 200
+      }
+    },
+    {
+      "label": "docs/table-text-colors.md: raw bytes match manifest",
+      "passed": true
+    },
+    {
+      "label": "docs/table-text-colors.md: requires /published core 0\\.11\\.0, renderer 0\\.9\\.0 and PPTX 0\\.9\\.1 train/",
+      "passed": true
+    },
+    {
+      "label": "docs/table-text-colors.md: requires /historical native rasters remain distinct/",
+      "passed": true
+    },
+    {
+      "label": "docs/table-text-colors.md: rejects /The unpublished shared-metric integration branches/",
+      "passed": true
+    },
+    {
+      "label": "/agent-docs/docs/quickstart.md: HTTP 200",
+      "passed": true,
+      "details": {
+        "status": 200
+      }
+    },
+    {
+      "label": "docs/quickstart.md: raw bytes match manifest",
+      "passed": true
+    },
+    {
+      "label": "docs/quickstart.md: requires /@openpresentation\\/opf@0\\.11\\.0/",
+      "passed": true
+    },
+    {
+      "label": "docs/quickstart.md: requires /@openpresentation\\/cli@0\\.9\\.0/",
+      "passed": true
+    },
+    {
+      "label": "docs/quickstart.md: requires /@openpresentation\\/opf-render@0\\.9\\.0/",
+      "passed": true
+    },
+    {
+      "label": "docs/quickstart.md: requires /@openpresentation\\/opf-editor@0\\.8\\.0/",
+      "passed": true
+    },
+    {
+      "label": "docs/quickstart.md: requires /@openpresentation\\/opf-pptx@0\\.9\\.1/",
+      "passed": true
+    },
+    {
+      "label": "docs/quickstart.md: rejects /@openpresentation\\/(?:opf-render|opf-pptx)@0\\.8\\.1/",
+      "passed": true
+    },
+    {
+      "label": "docs/quickstart.md: rejects /@openpresentation\\/opf-editor@0\\.7\\.1/",
+      "passed": true
+    },
+    {
+      "label": "/agent-docs/docs/compatibility-matrix.md: HTTP 200",
+      "passed": true,
+      "details": {
+        "status": 200
+      }
+    },
+    {
+      "label": "docs/compatibility-matrix.md: raw bytes match manifest",
+      "passed": true
+    },
+    {
+      "label": "docs/compatibility-matrix.md: requires /furniture-flow-v2/",
+      "passed": true
+    },
+    {
+      "label": "docs/compatibility-matrix.md: requires /OPF_FURNITURE_V1/",
+      "passed": true
+    },
+    {
+      "label": "docs/compatibility-matrix.md: requires /p:hf/",
+      "passed": true
+    },
+    {
+      "label": "docs/compatibility-matrix.md: requires /0\\.9\\.1/",
+      "passed": true
+    },
+    {
+      "label": "docs/compatibility-matrix.md: requires /0\\.1px/",
+      "passed": true
+    },
+    {
+      "label": "docs/compatibility-matrix.md: rejects /ColorRef paint needs a renderer release/",
+      "passed": true
+    },
+    {
+      "label": "/agent-docs/docs/data-import.md: HTTP 200",
+      "passed": true,
+      "details": {
+        "status": 200
+      }
+    },
+    {
+      "label": "docs/data-import.md: raw bytes match manifest",
+      "passed": true
+    },
+    {
+      "label": "docs/data-import.md: requires /These APIs are published in core 0\\.11\\.0/",
+      "passed": true
+    },
+    {
+      "label": "docs/data-import.md: requires /CLI 0\\.9\\.0 includes/",
+      "passed": true
+    },
+    {
+      "label": "docs/data-import.md: rejects /local coordinated preview packages/",
+      "passed": true
+    },
+    {
+      "label": "/agent-docs/docs/rich-text.md: HTTP 200",
+      "passed": true,
+      "details": {
+        "status": 200
+      }
+    },
+    {
+      "label": "docs/rich-text.md: raw bytes match manifest",
+      "passed": true
+    },
+    {
+      "label": "docs/rich-text.md: requires /These helpers are published through/",
+      "passed": true
+    },
+    {
+      "label": "docs/rich-text.md: requires /in editor 0\\.8\\.0/",
+      "passed": true
+    },
+    {
+      "label": "docs/rich-text.md: rejects /coordinated local preview packages/",
+      "passed": true
+    },
+    {
+      "label": "/agent-docs/docs/dynamic-composition.md: HTTP 200",
+      "passed": true,
+      "details": {
+        "status": 200
+      }
+    },
+    {
+      "label": "docs/dynamic-composition.md: raw bytes match manifest",
+      "passed": true
+    },
+    {
+      "label": "docs/dynamic-composition.md: requires /Metric internals \\(published coordinated packages\\)/",
+      "passed": true
+    },
+    {
+      "label": "docs/dynamic-composition.md: requires /Published core 0\\.11\\.0 exposes/",
+      "passed": true
+    },
+    {
+      "label": "docs/dynamic-composition.md: requires /furniture-flow-v2/",
+      "passed": true
+    },
+    {
+      "label": "docs/dynamic-composition.md: requires /remain open work/",
+      "passed": true
+    },
+    {
+      "label": "docs/dynamic-composition.md: requires /explicit human adjustments/",
+      "passed": true
+    },
+    {
+      "label": "docs/dynamic-composition.md: rejects /Unpublished shared headers and footers/",
+      "passed": true
+    },
+    {
+      "label": "docs/dynamic-composition.md: rejects /Metric internals \\(unreleased integration\\)/",
+      "passed": true
+    },
+    {
+      "label": "docs/dynamic-composition.md: rejects /The candidate SVG renderer/",
+      "passed": true
+    },
+    {
+      "label": "/llms-full.txt: HTTP 200",
+      "passed": true,
+      "details": {
+        "status": 200
+      }
+    },
+    {
+      "label": "/llms.txt: HTTP 200",
+      "passed": true,
+      "details": {
+        "status": 200
+      }
+    },
+    {
+      "label": "Complete guide output matches accepted build hash",
+      "passed": true
+    },
+    {
+      "label": "Guide discovery output matches accepted build hash",
+      "passed": true
+    },
+    {
+      "label": "Guide prose has no binary NUL/replacement characters",
+      "passed": true
+    },
+    {
+      "label": "docs/agent-skills.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/BACKLOG.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/catalog-schema-reference.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/cli.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/compatibility-matrix.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/content-item-design-overrides.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/content-payloads.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/continuation/mac-project.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/continuation/windows-powerpoint.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/data-import.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/demos/partner-2026-09-14/START-HERE.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/design-resolution.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/dynamic-composition.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/ecosystem-development.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence-2026-09-08-windows.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/examples.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/font-fidelity.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/format-card.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/handoff-2026-09-08.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/handoff-2026-09-10-wrap-up.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/handoff-2026-09-15.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/handoff-2026-09-16.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/handoff-2026-09-21.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/handoff-mac-owner-2026-09-10.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/handoff-windows-native-2026-09-10.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/handoff.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/how-opf-works.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/lint.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/live-editor.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/llm-authoring.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/migrations/0.2.0.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/migrations/node24.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/native-content-release-2026-09-09.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/native-feature-matrix-2026-09-09.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/next-agent-prompt-2026-09-15.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/open-ecosystem.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/plans/deferred-shaping-20260915.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/plans/developer-adoption-20260915.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/plans/diagrams-svg.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/plans/ecosystem-objective-2026-09-09.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/plans/ecosystem-quality.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/plans/example-suite-expansion.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/plans/font-roadmap.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/plans/font-shaping.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/plans/layout-placeholders.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/plans/layout-repair.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/plans/layout-taxonomy.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/plans/opf-toolkit.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/plans/pdf-export.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/plans/pen-format-analysis.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/plans/plain-text-whitespace.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/plans/powerpoint-acceptance.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/plans/readability-floor.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/plans/rich-table-cells.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/plans/shared-code-integration.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/plans/shared-code-release.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/plans/shared-furniture-layout.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/plans/shared-metric-integration.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/plans/shared-metric-layout.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/plans/shared-quote-integration.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/plans/shared-quote-release.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/plans/shared-timeline-layout.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/plans/spec-editor-coverage.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/plans/styled-table-cells.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/plans/text-placement.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/plans/work-checkpoint-2026-09-14.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/pr-backlog-2026-09-09.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/quickstart.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/release-process.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/rich-text.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/schema-reference.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/security-2026-09-09.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/status-2026-09-15.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/status-2026-09-16.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "docs/table-text-colors.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "skills/opf-author/SKILL.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "skills/opf-edit/SKILL.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "skills/opf-export/SKILL.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "skills/opf-inspect/SKILL.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "skills/opf-layout/SKILL.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "skills/opf-presets/SKILL.md: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "examples/technical/full-feature-tour.opf.json: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "spec/schemas/opf.schema.json: complete accepted content with its source mapping inline",
+      "passed": true
+    },
+    {
+      "label": "Only selected guides/skills/schema/example are inline source sections",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/accepted-text-layout/README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/agent-lint-20260915/README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/agent-lint-20260915/review/README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/akasia-assessment/README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/akasia-shaping-20260914/README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/catalog-example-correction-20260915/README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/chart-colors-workbook/README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/content-card-layout/README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/final-handoff-20260915/README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/furniture-catalog-integration-20260915/README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/furniture-json-integration-20260915/README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/gallery-artwork-images/README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/issue88-followup-20260921/docs-guide-smoke-README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/issue88-followup-20260921/exporter-REPORT.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/issue88-followup-20260921/public/README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/issue88-followup-20260921/README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/mac-branch-audit/README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/mac-font-preparation/README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/mac-font-variants/README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/mac-furniture-clearance-20260914/README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/mac-furniture-svg-paint-20260914/README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/mac-furniture-windows-ci-20260914/README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/mac-node24-runtime/README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/mac-readability-floor/README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/mac-rich-flow/README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/mac-shared-furniture-draft/README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/mac-shared-furniture-predecessor/README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/mac-shared-furniture-resume-20260914/README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/mac-shared-furniture-visual-20260914/README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/mac-shared-timeline/README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/mac-source-whitespace/README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/metric-outline-placement/README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/native-powerpoint-2026-09-08/README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/native-resume/README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/pr-consolidation-20260915/README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/prepared-caret-checkpoint-20260915/README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/registry-release-20260915/partner-demo.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/registry-release-20260915/README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/rich-input-and-platform-ci-20260915/README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/shared-code-public-adoption/README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/shared-metric-integration/README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/shared-text-regression-review.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/shipped-train-20260921/changelog-cleanup/opf-editor-CHANGELOG.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/shipped-train-20260921/changelog-cleanup/opf-editor-README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/shipped-train-20260921/changelog-cleanup/opf-pptx-CHANGELOG.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/shipped-train-20260921/changelog-cleanup/opf-pptx-README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/shipped-train-20260921/changelog-cleanup/opf-render-CHANGELOG.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/shipped-train-20260921/changelog-cleanup/opf-render-README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/shipped-train-20260921/changelog-cleanup/README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/shipped-train-20260921/installed/README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/shipped-train-20260921/production/REPORT.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/shipped-train-20260921/README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/shipping-checkpoint-20260915/README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/table-colors-gallery-contrast/README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/text-placement/README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/timeline-review-follow-up/README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/variable-rounding-probe-20260914/README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/windows-native-2026-09-10/README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/windows-native-candidate-2026-09-10/README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/windows-native-font-image-2026-09-10/README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "docs/evidence/windows-native-quote-tab-2026-09-10/README.md: evidence report stays linked",
+      "passed": true
+    },
+    {
+      "label": "/agent-docs/docs/evidence/accepted-text-layout/browser/node20/accepted-text/portrait-card-center-rich-slides.0.subtitle.mask.png: HTTP 200",
+      "passed": true,
+      "details": {
+        "status": 200
+      }
+    },
+    {
+      "label": "docs/evidence/accepted-text-layout/browser/node20/accepted-text/portrait-card-center-rich-slides.0.subtitle.mask.png: raw bytes match manifest",
+      "passed": true
+    },
+    {
+      "label": "/agent-docs/docs/evidence/akasia-assessment/browser-node20/specimen.pptx: HTTP 200",
+      "passed": true,
+      "details": {
+        "status": 200
+      }
+    },
+    {
+      "label": "docs/evidence/akasia-assessment/browser-node20/specimen.pptx: raw bytes match manifest",
+      "passed": true
+    },
+    {
+      "label": "/agent-docs/docs/evidence/accepted-text-layout/browser/node20/accepted-text/report.json: HTTP 200",
+      "passed": true,
+      "details": {
+        "status": 200
+      }
+    },
+    {
+      "label": "docs/evidence/accepted-text-layout/browser/node20/accepted-text/report.json: raw bytes match manifest",
+      "passed": true
+    },
+    {
+      "label": "/agent-docs/docs/evidence/accepted-text-layout/README.md: HTTP 200",
+      "passed": true,
+      "details": {
+        "status": 200
+      }
+    },
+    {
+      "label": "docs/evidence/accepted-text-layout/README.md: raw bytes match manifest",
+      "passed": true
+    },
+    {
+      "label": "/agent-docs/spec/schemas/opf.schema.json: HTTP 200",
+      "passed": true,
+      "details": {
+        "status": 200
+      }
+    },
+    {
+      "label": "spec/schemas/opf.schema.json: raw bytes match manifest",
+      "passed": true
+    },
+    {
+      "label": "/agent-docs/examples/technical/full-feature-tour.opf.json: HTTP 200",
+      "passed": true,
+      "details": {
+        "status": 200
+      }
+    },
+    {
+      "label": "examples/technical/full-feature-tour.opf.json: raw bytes match manifest",
+      "passed": true
+    },
+    {
+      "label": "/agent-docs/docs/quickstart/developer-quickstart.opf.json: HTTP 200",
+      "passed": true,
+      "details": {
+        "status": 200
+      }
+    },
+    {
+      "label": "docs/quickstart/developer-quickstart.opf.json: raw bytes match manifest",
+      "passed": true
+    },
+    {
+      "label": "/agents: browser HTTP 200",
+      "passed": true
+    },
+    {
+      "label": "/agents: no page errors",
+      "passed": true
+    },
+    {
+      "label": "/agents: current repeatable CLI pin",
+      "passed": true
+    },
+    {
+      "label": "/docs/agent-skills: browser HTTP 200",
+      "passed": true
+    },
+    {
+      "label": "/docs/agent-skills: no page errors",
+      "passed": true
+    },
+    {
+      "label": "rendered /docs/agent-skills: requires /Published CLI 0\\.9\\.0/",
+      "passed": true
+    },
+    {
+      "label": "rendered /docs/agent-skills: requires /@openpresentation\\/cli@0\\.9\\.0 skills install/",
+      "passed": true
+    },
+    {
+      "label": "rendered /docs/agent-skills: requires /Repository skill prose can be newer/",
+      "passed": true
+    },
+    {
+      "label": "rendered /docs/agent-skills: requires /do not change the CLI 0\\.9\\.0 tarball/",
+      "passed": true
+    },
+    {
+      "label": "rendered /docs/agent-skills: rejects /CLI 0\\.5\\.0/",
+      "passed": true
+    },
+    {
+      "label": "rendered /docs/agent-skills: rejects /CLI 0\\.9\\.0[^\\n]*release candidate/",
+      "passed": true
+    },
+    {
+      "label": "/docs/live-editor: browser HTTP 200",
+      "passed": true
+    },
+    {
+      "label": "/docs/live-editor: no page errors",
+      "passed": true
+    },
+    {
+      "label": "rendered /docs/live-editor: requires /Published editor 0\\.8\\.0/",
+      "passed": true
+    },
+    {
+      "label": "rendered /docs/live-editor: requires /@openpresentation\\/opf@0\\.11\\.0/",
+      "passed": true
+    },
+    {
+      "label": "rendered /docs/live-editor: requires /@openpresentation\\/opf-render@0\\.9\\.0/",
+      "passed": true
+    },
+    {
+      "label": "rendered /docs/live-editor: requires /@openpresentation\\/opf-editor@0\\.8\\.0/",
+      "passed": true
+    },
+    {
+      "label": "rendered /docs/live-editor: requires /@openpresentation\\/opf-pptx@0\\.9\\.1/",
+      "passed": true
+    },
+    {
+      "label": "rendered /docs/live-editor: requires /These helpers are published in editor 0\\.8\\.0/",
+      "passed": true
+    },
+    {
+      "label": "rendered /docs/live-editor: rejects /The verified public set is core 0\\.7\\.0/",
+      "passed": true
+    },
+    {
+      "label": "rendered /docs/live-editor: rejects /Current APIs are in coordinated local previews/",
+      "passed": true
+    },
+    {
+      "label": "rendered /docs/live-editor: rejects /Public package release with coordinated versions/",
+      "passed": true
+    },
+    {
+      "label": "rendered /docs/live-editor: rejects /golden baseline remains skipped/",
+      "passed": true
+    },
+    {
+      "label": "/docs/content-payloads: browser HTTP 200",
+      "passed": true
+    },
+    {
+      "label": "/docs/content-payloads: no page errors",
+      "passed": true
+    },
+    {
+      "label": "rendered /docs/content-payloads: requires /current coordinated Node 24 train: core 0\\.11\\.0, renderer 0\\.9\\.0, editor 0\\.8\\.0 and PPTX 0\\.9\\.1/",
+      "passed": true
+    },
+    {
+      "label": "rendered /docs/content-payloads: rejects /Use core 0\\.6\\.0, renderer 0\\.4\\.0, editor 0\\.3\\.0 and PPTX 0\\.4\\.0 together/",
+      "passed": true
+    },
+    {
+      "label": "/docs/reference/ecosystem-development: browser HTTP 200",
+      "passed": true
+    },
+    {
+      "label": "/docs/reference/ecosystem-development: no page errors",
+      "passed": true
+    },
+    {
+      "label": "rendered /docs/reference/ecosystem-development: requires /Use Node 24 for the current source and published packages/",
+      "passed": true
+    },
+    {
+      "label": "rendered /docs/reference/ecosystem-development: requires /current published compatible set is core 0\\.11\\.0, CLI 0\\.9\\.0, renderer 0\\.9\\.0, PPTX 0\\.9\\.1 and editor 0\\.8\\.0 on Node 24/",
+      "passed": true
+    },
+    {
+      "label": "rendered /docs/reference/ecosystem-development: requires /historical September 9 integration/",
+      "passed": true
+    },
+    {
+      "label": "rendered /docs/reference/ecosystem-development: rejects /The published compatible set is core 0\\.7\\.0/",
+      "passed": true
+    },
+    {
+      "label": "/docs/reference/table-text-colors: browser HTTP 200",
+      "passed": true
+    },
+    {
+      "label": "/docs/reference/table-text-colors: no page errors",
+      "passed": true
+    },
+    {
+      "label": "rendered /docs/reference/table-text-colors: requires /published core 0\\.11\\.0, renderer 0\\.9\\.0 and PPTX 0\\.9\\.1 train/",
+      "passed": true
+    },
+    {
+      "label": "rendered /docs/reference/table-text-colors: requires /historical native rasters remain distinct/",
+      "passed": true
+    },
+    {
+      "label": "rendered /docs/reference/table-text-colors: rejects /The unpublished shared-metric integration branches/",
+      "passed": true
+    },
+    {
+      "label": "/docs/reference/quickstart: browser HTTP 200",
+      "passed": true
+    },
+    {
+      "label": "/docs/reference/quickstart: no page errors",
+      "passed": true
+    },
+    {
+      "label": "rendered /docs/reference/quickstart: requires /@openpresentation\\/opf@0\\.11\\.0/",
+      "passed": true
+    },
+    {
+      "label": "rendered /docs/reference/quickstart: requires /@openpresentation\\/cli@0\\.9\\.0/",
+      "passed": true
+    },
+    {
+      "label": "rendered /docs/reference/quickstart: requires /@openpresentation\\/opf-render@0\\.9\\.0/",
+      "passed": true
+    },
+    {
+      "label": "rendered /docs/reference/quickstart: requires /@openpresentation\\/opf-editor@0\\.8\\.0/",
+      "passed": true
+    },
+    {
+      "label": "rendered /docs/reference/quickstart: requires /@openpresentation\\/opf-pptx@0\\.9\\.1/",
+      "passed": true
+    },
+    {
+      "label": "rendered /docs/reference/quickstart: rejects /@openpresentation\\/(?:opf-render|opf-pptx)@0\\.8\\.1/",
+      "passed": true
+    },
+    {
+      "label": "rendered /docs/reference/quickstart: rejects /@openpresentation\\/opf-editor@0\\.7\\.1/",
+      "passed": true
+    },
+    {
+      "label": "/docs/reference/compatibility-matrix: browser HTTP 200",
+      "passed": true
+    },
+    {
+      "label": "/docs/reference/compatibility-matrix: no page errors",
+      "passed": true
+    },
+    {
+      "label": "rendered /docs/reference/compatibility-matrix: requires /furniture-flow-v2/",
+      "passed": true
+    },
+    {
+      "label": "rendered /docs/reference/compatibility-matrix: requires /OPF_FURNITURE_V1/",
+      "passed": true
+    },
+    {
+      "label": "rendered /docs/reference/compatibility-matrix: requires /p:hf/",
+      "passed": true
+    },
+    {
+      "label": "rendered /docs/reference/compatibility-matrix: requires /0\\.9\\.1/",
+      "passed": true
+    },
+    {
+      "label": "rendered /docs/reference/compatibility-matrix: requires /0\\.1px/",
+      "passed": true
+    },
+    {
+      "label": "rendered /docs/reference/compatibility-matrix: rejects /ColorRef paint needs a renderer release/",
+      "passed": true
+    },
+    {
+      "label": "/docs/data-import: browser HTTP 200",
+      "passed": true
+    },
+    {
+      "label": "/docs/data-import: no page errors",
+      "passed": true
+    },
+    {
+      "label": "rendered /docs/data-import: requires /These APIs are published in core 0\\.11\\.0/",
+      "passed": true
+    },
+    {
+      "label": "rendered /docs/data-import: requires /CLI 0\\.9\\.0 includes/",
+      "passed": true
+    },
+    {
+      "label": "rendered /docs/data-import: rejects /local coordinated preview packages/",
+      "passed": true
+    },
+    {
+      "label": "/docs/rich-text: browser HTTP 200",
+      "passed": true
+    },
+    {
+      "label": "/docs/rich-text: no page errors",
+      "passed": true
+    },
+    {
+      "label": "rendered /docs/rich-text: requires /These helpers are published through/",
+      "passed": true
+    },
+    {
+      "label": "rendered /docs/rich-text: requires /in editor 0\\.8\\.0/",
+      "passed": true
+    },
+    {
+      "label": "rendered /docs/rich-text: rejects /coordinated local preview packages/",
+      "passed": true
+    },
+    {
+      "label": "/docs/dynamic-composition: browser HTTP 200",
+      "passed": true
+    },
+    {
+      "label": "/docs/dynamic-composition: no page errors",
+      "passed": true
+    },
+    {
+      "label": "rendered /docs/dynamic-composition: requires /Metric internals \\(published coordinated packages\\)/",
+      "passed": true
+    },
+    {
+      "label": "rendered /docs/dynamic-composition: requires /Published core 0\\.11\\.0 exposes/",
+      "passed": true
+    },
+    {
+      "label": "rendered /docs/dynamic-composition: requires /furniture-flow-v2/",
+      "passed": true
+    },
+    {
+      "label": "rendered /docs/dynamic-composition: requires /remain open work/",
+      "passed": true
+    },
+    {
+      "label": "rendered /docs/dynamic-composition: requires /explicit human adjustments/",
+      "passed": true
+    },
+    {
+      "label": "rendered /docs/dynamic-composition: rejects /Unpublished shared headers and footers/",
+      "passed": true
+    },
+    {
+      "label": "rendered /docs/dynamic-composition: rejects /Metric internals \\(unreleased integration\\)/",
+      "passed": true
+    },
+    {
+      "label": "rendered /docs/dynamic-composition: rejects /The candidate SVG renderer/",
+      "passed": true
+    }
+  ],
+  "pages": [
+    {
+      "route": "/agents",
+      "status": 200,
+      "finalUrl": "https://www.openpresentation.org/agents",
+      "title": "For agents and developers — OPF · OpenPresentation",
+      "bodySha256": "d09b693c1e862b9f9758b41ca84db6583331d5e1ff418bd4589debdbef4d0c7c",
+      "pageErrors": []
+    },
+    {
+      "route": "/docs/agent-skills",
+      "status": 200,
+      "finalUrl": "https://www.openpresentation.org/docs/agent-skills",
+      "title": "Agent skills — OPF · OpenPresentation",
+      "bodySha256": "d6e5ff2d78624ebf4e102fde8d19c4c491777f0599a368e8c2b4af5f8891ca37",
+      "pageErrors": []
+    },
+    {
+      "route": "/docs/live-editor",
+      "status": 200,
+      "finalUrl": "https://www.openpresentation.org/docs/live-editor",
+      "title": "Live editor and previews — OPF · OpenPresentation",
+      "bodySha256": "da0e5d4cd428f7389823d1843366db10ca6f4778d06cb3be31ccfa662926a033",
+      "pageErrors": []
+    },
+    {
+      "route": "/docs/content-payloads",
+      "status": 200,
+      "finalUrl": "https://www.openpresentation.org/docs/content-payloads",
+      "title": "Content payloads and tables — OPF · OpenPresentation",
+      "bodySha256": "c7b7f3a012e71246239f626f5b8ec0231835c1e83b4f64184d0450210e08abb2",
+      "pageErrors": []
+    },
+    {
+      "route": "/docs/reference/ecosystem-development",
+      "status": 200,
+      "finalUrl": "https://www.openpresentation.org/docs/reference/ecosystem-development",
+      "title": "Local ecosystem development — OPF · OpenPresentation",
+      "bodySha256": "9c410971093ce1b469ea1d621c296b93b76b1ad82502df730604406440f7e36f",
+      "pageErrors": []
+    },
+    {
+      "route": "/docs/reference/table-text-colors",
+      "status": 200,
+      "finalUrl": "https://www.openpresentation.org/docs/reference/table-text-colors",
+      "title": "Inherited table text colors — OPF · OpenPresentation",
+      "bodySha256": "08d211be2a687b548ec64232034df13ff9830c78518c984ae2193780334708ad",
+      "pageErrors": []
+    },
+    {
+      "route": "/docs/reference/quickstart",
+      "status": 200,
+      "finalUrl": "https://www.openpresentation.org/docs/reference/quickstart",
+      "title": "Developer quickstart — OPF · OpenPresentation",
+      "bodySha256": "981134047fda256a56247d018d180e1675fee91a4c239ce2bac99fed0d0b3754",
+      "pageErrors": []
+    },
+    {
+      "route": "/docs/reference/compatibility-matrix",
+      "status": 200,
+      "finalUrl": "https://www.openpresentation.org/docs/reference/compatibility-matrix",
+      "title": "Compatibility matrix — OPF · OpenPresentation",
+      "bodySha256": "5b59b12802bbb8409ed68216aa2628807c7448495351ccb0015aa7bb78eca70a",
+      "pageErrors": []
+    },
+    {
+      "route": "/docs/data-import",
+      "status": 200,
+      "finalUrl": "https://www.openpresentation.org/docs/data-import",
+      "title": "CSV and JSON data — OPF · OpenPresentation",
+      "bodySha256": "1d2b71a72b2df0a122cd61ec3adda78432ce35bf1305ab8d94b6846573024456",
+      "pageErrors": []
+    },
+    {
+      "route": "/docs/rich-text",
+      "status": 200,
+      "finalUrl": "https://www.openpresentation.org/docs/rich-text",
+      "title": "Rich text measurement — OPF · OpenPresentation",
+      "bodySha256": "777881261bd51da6fea3d779cae4ed0ce1ffcedc8b9e70ef948752a7e8da98fa",
+      "pageErrors": []
+    },
+    {
+      "route": "/docs/dynamic-composition",
+      "status": 200,
+      "finalUrl": "https://www.openpresentation.org/docs/dynamic-composition",
+      "title": "Dynamic layouts — OPF · OpenPresentation",
+      "bodySha256": "d97182b68cce4c5e91d3d93537fbf74a25f5ef27a0e3f302eac07714d5093907",
+      "pageErrors": []
+    }
+  ],
+  "resources": [
+    {
+      "path": "README.md",
+      "url": "/agent-docs/README.md",
+      "bytes": 11822,
+      "sha256": "85de60e99af78a8f45c20cf7140274c7c7ac8f7754ee39dbe701e4542e875e10",
+      "expectedSha256": "85de60e99af78a8f45c20cf7140274c7c7ac8f7754ee39dbe701e4542e875e10"
+    },
+    {
+      "path": "docs/agent-skills.md",
+      "url": "/agent-docs/docs/agent-skills.md",
+      "bytes": 6918,
+      "sha256": "7567abedea935d191d15d94423a6bf7d3eaf8d5698535811ef85c029d8ab42e5",
+      "expectedSha256": "7567abedea935d191d15d94423a6bf7d3eaf8d5698535811ef85c029d8ab42e5"
+    },
+    {
+      "path": "docs/live-editor.md",
+      "url": "/agent-docs/docs/live-editor.md",
+      "bytes": 19235,
+      "sha256": "02fa7648fc7fe5ef0fae0b8d703555f6c967d6433befba2d218912ba74618db5",
+      "expectedSha256": "02fa7648fc7fe5ef0fae0b8d703555f6c967d6433befba2d218912ba74618db5"
+    },
+    {
+      "path": "docs/content-payloads.md",
+      "url": "/agent-docs/docs/content-payloads.md",
+      "bytes": 12538,
+      "sha256": "b6856dd5af54565920b5e5413b0f7b02c53f969ea1d6bf5a07560ce7a4e45fe7",
+      "expectedSha256": "b6856dd5af54565920b5e5413b0f7b02c53f969ea1d6bf5a07560ce7a4e45fe7"
+    },
+    {
+      "path": "docs/ecosystem-development.md",
+      "url": "/agent-docs/docs/ecosystem-development.md",
+      "bytes": 7182,
+      "sha256": "93c10c3216ab3b03ab6f563c8aea825ca33e94c8d2579c47d98ec127bdc59a4c",
+      "expectedSha256": "93c10c3216ab3b03ab6f563c8aea825ca33e94c8d2579c47d98ec127bdc59a4c"
+    },
+    {
+      "path": "docs/table-text-colors.md",
+      "url": "/agent-docs/docs/table-text-colors.md",
+      "bytes": 1869,
+      "sha256": "f61928498912054a66d73c4b5b83045fd1bc8a3b3bc1a35b3daa1dd52264c745",
+      "expectedSha256": "f61928498912054a66d73c4b5b83045fd1bc8a3b3bc1a35b3daa1dd52264c745"
+    },
+    {
+      "path": "docs/quickstart.md",
+      "url": "/agent-docs/docs/quickstart.md",
+      "bytes": 6426,
+      "sha256": "ec7d7392e829ab1d62f1ffa0226da5927ba73706c72de94d896ea29187992b74",
+      "expectedSha256": "ec7d7392e829ab1d62f1ffa0226da5927ba73706c72de94d896ea29187992b74"
+    },
+    {
+      "path": "docs/compatibility-matrix.md",
+      "url": "/agent-docs/docs/compatibility-matrix.md",
+      "bytes": 7637,
+      "sha256": "4655b2a490ec08bae60f6e5385e401e957bce36f0ea3ac2b90de7d9df2ed8b08",
+      "expectedSha256": "4655b2a490ec08bae60f6e5385e401e957bce36f0ea3ac2b90de7d9df2ed8b08"
+    },
+    {
+      "path": "docs/data-import.md",
+      "url": "/agent-docs/docs/data-import.md",
+      "bytes": 4890,
+      "sha256": "f1a619876a79050628b410f3934fbe35feff59e8c493877fabaa602bd2457c59",
+      "expectedSha256": "f1a619876a79050628b410f3934fbe35feff59e8c493877fabaa602bd2457c59"
+    },
+    {
+      "path": "docs/rich-text.md",
+      "url": "/agent-docs/docs/rich-text.md",
+      "bytes": 7049,
+      "sha256": "eb24e71dfbc108bed650835b73bce0f200c804b8ae6175acbcd40356d423e98d",
+      "expectedSha256": "eb24e71dfbc108bed650835b73bce0f200c804b8ae6175acbcd40356d423e98d"
+    },
+    {
+      "path": "docs/dynamic-composition.md",
+      "url": "/agent-docs/docs/dynamic-composition.md",
+      "bytes": 36817,
+      "sha256": "f3f34968a66ac0b635939a216ad299dbdcc7aa6ecaed9bfbc90086095000b2df",
+      "expectedSha256": "f3f34968a66ac0b635939a216ad299dbdcc7aa6ecaed9bfbc90086095000b2df"
+    },
+    {
+      "path": "docs/evidence/accepted-text-layout/browser/node20/accepted-text/portrait-card-center-rich-slides.0.subtitle.mask.png",
+      "url": "/agent-docs/docs/evidence/accepted-text-layout/browser/node20/accepted-text/portrait-card-center-rich-slides.0.subtitle.mask.png",
+      "bytes": 5880,
+      "sha256": "028ca63fad08615272061fa2e375f127164ae8187b513dd8c61725e079ae5600",
+      "expectedSha256": "028ca63fad08615272061fa2e375f127164ae8187b513dd8c61725e079ae5600"
+    },
+    {
+      "path": "docs/evidence/akasia-assessment/browser-node20/specimen.pptx",
+      "url": "/agent-docs/docs/evidence/akasia-assessment/browser-node20/specimen.pptx",
+      "bytes": 24462,
+      "sha256": "ea8b1689185e95b8f83418447cfffa9a4937db3eeaf6eeb3cbeefadad04a6d03",
+      "expectedSha256": "ea8b1689185e95b8f83418447cfffa9a4937db3eeaf6eeb3cbeefadad04a6d03"
+    },
+    {
+      "path": "docs/evidence/accepted-text-layout/browser/node20/accepted-text/report.json",
+      "url": "/agent-docs/docs/evidence/accepted-text-layout/browser/node20/accepted-text/report.json",
+      "bytes": 168942,
+      "sha256": "00f8e91b767a0d5b748531938d4217f9488477d9ad10644df817bf869dd69da0",
+      "expectedSha256": "00f8e91b767a0d5b748531938d4217f9488477d9ad10644df817bf869dd69da0"
+    },
+    {
+      "path": "docs/evidence/accepted-text-layout/README.md",
+      "url": "/agent-docs/docs/evidence/accepted-text-layout/README.md",
+      "bytes": 7160,
+      "sha256": "5c3aa6b71dcd050ea367592837074ddfe8832230ce871cb26f8a4e48a92691e9",
+      "expectedSha256": "5c3aa6b71dcd050ea367592837074ddfe8832230ce871cb26f8a4e48a92691e9"
+    },
+    {
+      "path": "spec/schemas/opf.schema.json",
+      "url": "/agent-docs/spec/schemas/opf.schema.json",
+      "bytes": 134486,
+      "sha256": "dbb84e4e55a0d98bb14433d7df8682e1c7ef95af9b49e9d7a256b2b5ac334076",
+      "expectedSha256": "dbb84e4e55a0d98bb14433d7df8682e1c7ef95af9b49e9d7a256b2b5ac334076"
+    },
+    {
+      "path": "examples/technical/full-feature-tour.opf.json",
+      "url": "/agent-docs/examples/technical/full-feature-tour.opf.json",
+      "bytes": 7600,
+      "sha256": "2e3cad5bfea178614505f6841a772af01769fdd334bc813e57e01506943a0bae",
+      "expectedSha256": "2e3cad5bfea178614505f6841a772af01769fdd334bc813e57e01506943a0bae"
+    },
+    {
+      "path": "docs/quickstart/developer-quickstart.opf.json",
+      "url": "/agent-docs/docs/quickstart/developer-quickstart.opf.json",
+      "bytes": 3202,
+      "sha256": "0a4a3af6d50bd9ca5fc99483272634a58a738ffc3ccbc2d10d7140323abf811f",
+      "expectedSha256": "0a4a3af6d50bd9ca5fc99483272634a58a738ffc3ccbc2d10d7140323abf811f"
+    }
+  ],
+  "sourceRef": "120a770041b3f7d3c04ced1ac87675ed0d18292b",
+  "origin": "https://www.openpresentation.org",
+  "deployment": {
+    "id": "dpl_5nqS4CDckXoBzBf2Zsti6whMyxEY",
+    "siteSha": "a85bcc77d899ce9ba1df659548be564142c16120",
+    "documentationSource": "120a770041b3f7d3c04ced1ac87675ed0d18292b"
+  },
+  "integrity": {
+    "dependencies": {
+      "@base-ui/react": "^1.3.0",
+      "@codemirror/autocomplete": "^6.20.3",
+      "@codemirror/commands": "^6.11.0",
+      "@codemirror/lang-json": "^6.0.2",
+      "@codemirror/language": "^6.12.4",
+      "@codemirror/lint": "^6.9.7",
+      "@codemirror/search": "^6.7.2",
+      "@codemirror/state": "^6.7.4",
+      "@codemirror/view": "^6.43.11",
+      "@lezer/highlight": "^1.2.3",
+      "@next/third-parties": "16.3.4",
+      "@openpresentation/opf": "0.11.0",
+      "@openpresentation/opf-editor": "0.8.0",
+      "@openpresentation/opf-render": "0.9.0",
+      "@vercel/analytics": "^2.0.1",
+      "class-variance-authority": "^0.7.1",
+      "clsx": "^2.1.1",
+      "jsonc-parser": "3.3.1",
+      "lucide-react": "^1.0.1",
+      "next": "16.3.4",
+      "next-themes": "^0.4.6",
+      "react": "^19.2.6",
+      "react-dom": "^19.2.6",
+      "react-markdown": "^10.1.0",
+      "rehype-autolink-headings": "^7.1.0",
+      "rehype-slug": "^6.0.0",
+      "remark-gfm": "^4.0.1",
+      "shiki": "^3.15.0",
+      "tailwind-merge": "^2.5.5"
+    },
+    "devDependencies": {
+      "@playwright/test": "1.63.0",
+      "@tailwindcss/postcss": "^4.2.2",
+      "@types/node": "^24.13.4",
+      "@types/react": "^19.2.14",
+      "@types/react-dom": "^19.2.3",
+      "postcss": "^8.5.23",
+      "tailwindcss": "^4.2.2",
+      "typescript": "^5"
+    },
+    "engines": {
+      "node": "24.x"
+    },
+    "packageManager": "pnpm@10.33.2",
+    "lockSha256": "9a49a8504c708989b536d71a3d8c53980ca42085f105891f583ca585bf24952d",
+    "releaseDataSha256": "98a454c325c3bc20c12626e08ceec5bbe97ea63632b92f5d0511be46c56360e7",
+    "installedRuntimes": {
+      "@openpresentation/opf": {
+        "files": 525,
+        "sha256": "4b1aaf7d68c1b732869dc2dd583bdab0e78eaa86804a3b00356ca53440bda50a"
+      },
+      "@openpresentation/opf-render": {
+        "files": 17,
+        "sha256": "08dab2c261509b2393f403f5da777e1d8076d54d024dc064a153f7cb57b8bd55"
+      },
+      "@openpresentation/opf-editor": {
+        "files": 42,
+        "sha256": "3c1f280a4d2dde4c9ba3174d99e0f3f5ad7a6de8ae0d291629542e734d99a30e"
+      }
+    },
+    "catalogAndExamples": {
+      "files": 535,
+      "sha256": "838cce4a254ce3301caf885cc259bb0d172b928a82b78e9b27e33f01bba7421c"
+    }
+  },
+  "browser": "153.0.8010.12",
+  "manifest": {
+    "files": 10827,
+    "sourceDigest": "e22c0da15587a73ff42a183d476196896c7383f575683e726cbcc4a5606bad55",
+    "sha256": "5231535eeb00ea8078c58d95786d76f060774b5d86436f16b62e870d9699eaad"
+  },
+  "guides": {
+    "inlineMarkdown": 75,
+    "inlineSkills": 6,
+    "evidenceLinks": 61,
+    "indexBytes": 24904,
+    "indexSha256": "d2ceef4249ef0d0006cdbfb16b40782c3e6e7995b09566a177dd7549f110a7ae",
+    "fullBytes": 1214339,
+    "fullSha256": "b4dc34b6fc6863690c08721b5cf52f3bd86cb94f5ecf0910960adbfb30401e18"
+  },
+  "finishedAt": "2026-09-21T14:36:19.735Z",
+  "passed": true
+}
