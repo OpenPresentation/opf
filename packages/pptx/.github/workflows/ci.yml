@@ -79,6 +79,7 @@ jobs:
           node scripts/link-ecosystem.mjs --packages-only
       - run: npm audit
       - run: npm run typecheck
+      - run: npm run test:native-picture-edit-controls
       - name: Verify bounded native harness without Office
         if: runner.os == 'Windows'
         shell: powershell

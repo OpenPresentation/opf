@@ -32,7 +32,16 @@ For the one-picture registry fixture from `native-picture.mjs`, compare the reta
 node test/compare-native-picture-edit.mjs artifacts/native-picture-alter-01 artifacts/registry-picture-01
 ```
 
-The comparator binds the registry package files, verifies the native edit and save/reopen observations, and imports the saved current image. It reports the crop-import limitation separately. Run `test/native-picture-edit-harness-check.ps1 -ReportPath NEW_REPORT.json` without Office to check collection identity and the failure latch first.
+The comparator binds the registry package files, verifies the native edit and save/reopen observations, and imports the saved current image. It reports the crop-import limitation separately.
+
+Before any Office run, exercise the portable controls that do not construct an Office object:
+
+```powershell
+node test/compare-native-picture-edit-controls.mjs
+& "$env:WINDIR/System32/WindowsPowerShell/v1.0/powershell.exe" -NoProfile -NonInteractive -File test/native-picture-edit-harness-check.ps1 -ReportPath artifacts/picture-edit-harness-check-01.json
+```
+
+The Node suite writes `artifacts/native-picture-edit-comparator-controls.json` and verifies that `compare-native-picture-edit.mjs` keeps the unchanged **0.02pt** geometry gate while failing closed on missing evidence, failed workers, missing edit stages, and unchanged edited rasters. The PowerShell checker validates collection identity and the COM failure latch on the worker script itself.
 
 The parent copies the verifier, `test/native-process.ps1`, input presentation, and replacement PNG when applicable into `inputs/` before Office starts. It launches one hidden owned worker with a 45-second deadline by default; `-TimeoutSeconds` accepts 5 through 60 seconds. There is no retry.
 

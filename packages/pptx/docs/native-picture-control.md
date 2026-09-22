@@ -49,7 +49,7 @@ For a native-created run, omit the generation argument:
 node test/compare-native-picture.mjs artifacts/native-picture-control-01
 ```
 
-The comparator writes `comparison.json`, including failures, and preserves an existing report under a new timestamped comparison filename. Missing evidence is a failed check. Retain the exact generator and comparator source alongside each run. Inspect the full native slide image before accepting visual output; equal hashes alone do not establish correctness. These controls do not test actual picture editing, shared furniture, crop/reflow round-trip fidelity, font identity or the broader native matrix.
+The comparator writes `comparison.json`, including failures, and preserves an existing report under a new timestamped comparison filename. Missing evidence is a failed check. Retain the exact generator and comparator source alongside each run. Inspect the full native slide image before accepting visual output; equal hashes alone do not establish correctness. These controls do not test actual picture editing, shared furniture, crop/reflow round-trip fidelity, font identity or the broader native matrix. For bounded native picture edits, see [native-picture-edit.md](./native-picture-edit.md).
 
 ## Evidence and failure handling
 
