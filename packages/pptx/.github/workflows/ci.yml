@@ -81,6 +81,7 @@ jobs:
       - run: npm run typecheck
       - run: npm run test:native-picture-edit-controls
       - run: npm run test:native-font-embed-controls
+      - run: npm run test:native-mixed-edit-controls
       - name: Verify bounded native harness without Office
         if: runner.os == 'Windows'
         shell: powershell
@@ -99,6 +100,8 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'Native font edit controls failed' }
           & "$env:WINDIR/System32/WindowsPowerShell/v1.0/powershell.exe" -NoProfile -NonInteractive -File test/native-font-embed.ps1 -PureRegression
           if ($LASTEXITCODE -ne 0) { throw 'Native font embed controls failed' }
+          & "$env:WINDIR/System32/WindowsPowerShell/v1.0/powershell.exe" -NoProfile -NonInteractive -File test/native-mixed-edit.ps1 -PureRegression
+          if ($LASTEXITCODE -ne 0) { throw 'Native mixed-size edit controls failed' }
       - run: npm run validate
       - run: npm test
       - run: npm run test:font-variants
