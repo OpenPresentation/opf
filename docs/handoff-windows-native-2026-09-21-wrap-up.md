@@ -1,9 +1,61 @@
 # Windows native compatibility weekly handoff
 
-Checkpoint: September 21, 2026. This records the reviewed Windows native work
-for the owner-requested weekly pause. New verification used Node **24.21.0**
-and core's declared pnpm **10.33.2**. Historical Node20 instructions are
-superseded. Raw local attempts remain preserved; public evidence is linked below.
+Original checkpoint: September 21, 2026. The September 22 continuation below
+records harness hardening without replacing the reviewed September 21 native
+evidence. Verification uses Node **24.21.0** and core's declared pnpm
+**10.33.2**. Historical Node20 instructions are superseded. Raw local attempts
+remain preserved; public evidence is linked below.
+
+## September 22 checkpoint
+
+The continuation hardened native harnesses and their offline controls. No Office call or font API ran,
+and the real mixed-table edit/save/reopen and font-embedding proofs remain
+pending. PPTX51 merged as `842214346f49caf61b94eb842c19f6d78fc6d4d7`,
+PPTX52 as `09baff8df42db5dfed7cf8a9450b8ee9f24dab1f`, and PPTX53 as
+`2782479a913a272950db6addb7af5ea69ceb4051`. They add the portable picture
+comparator, bounded font-embedding harness, and offline mixed-size
+edit/save/reopen harness respectively.
+
+[PPTX54](https://github.com/OpenPresentation/opf-pptx/pull/54) hardens the two
+new native audits. Its branch is
+`codex/windows-native-harness-hardening-20260922`; reviewed head
+`d84ac917d13db56941e299537848ac861c26adfa` contains implementation commit
+`ce074879` and documentation commit `d84ac917`. Independent review approved
+the change. Local validation passes 26 mixed controls, 15 font controls, 27
+independent rejection cases, both Windows PowerShell 5.1 pure regressions,
+typecheck, validation, the ordinary suite and the packed suite. CI run
+[35757268642](https://github.com/OpenPresentation/opf-pptx/actions/runs/35757268642)
+passed on both Linux and Windows. The PR merged as
+`86afe6c51f8238c3db0450c90443e91378531dc8`. Its post-merge run
+[35758319118](https://github.com/OpenPresentation/opf-pptx/actions/runs/35758319118)
+was still running when this checkpoint was written. See the merged
+[mixed-edit instructions](https://github.com/OpenPresentation/opf-pptx/blob/86afe6c51f8238c3db0450c90443e91378531dc8/docs/native-mixed-edit.md)
+and [font-embed instructions](https://github.com/OpenPresentation/opf-pptx/blob/86afe6c51f8238c3db0450c90443e91378531dc8/docs/native-font-embed.md)
+for commands, audit boundaries and immutable output requirements.
+
+Core111 merged as `3c5048522714365a41d9b5b9ba81620affae718b`; post-merge runs
+35662159658 and 35662159864 passed. Renderer30 merged as
+`c8d7d5ca1f67a7b39f70c7c4bd14577a865b175b`; post-merge run 35661504472 passed.
+Repository mains before this documentation update are core `d96c791004a4ec71a7f2af6e06f65c4f13571b9a`,
+PPTX `86afe6c51f8238c3db0450c90443e91378531dc8`, renderer
+`c8d7d5ca1f67a7b39f70c7c4bd14577a865b175b`, and editor
+`5620230086437165bcf2242cbfe2d781bb38ac87`.
+
+| Work | Repository / branch | State at checkpoint |
+| --- | --- | --- |
+| [PPTX54](https://github.com/OpenPresentation/opf-pptx/pull/54) | `opf-pptx` / `codex/windows-native-harness-hardening-20260922` | Merged as `86afe6c51f8238c3db0450c90443e91378531dc8`; reviewed head passed Linux and Windows CI |
+| This handoff | `opf` / `codex/windows-native-handoff-20260922` | Publication branch for this documentation-only update, based on main `d96c791004a4ec71a7f2af6e06f65c4f13571b9a` |
+| [core94](https://github.com/OpenPresentation/opf/pull/94) | `opf` / `cursor/placeholder-geometry-9f55` | Draft, conflicting, deferred geometry work |
+| [PPTX42](https://github.com/OpenPresentation/opf-pptx/pull/42) | `opf-pptx` / `cursor/placeholder-geometry-9f55` | Draft, conflicting, deferred geometry work |
+| [renderer27](https://github.com/OpenPresentation/opf-render/pull/27) | `opf-render` / `cursor/placeholder-geometry-9f55` | Draft, conflicting, deferred geometry work |
+| [editor25](https://github.com/OpenPresentation/opf-editor/pull/25) | `opf-editor` / `cursor/placeholder-geometry-9f55` | Draft, conflicting, deferred geometry work |
+| Native HF | No current open PR | Deferred scope item; no active implementation assigned here |
+
+At the September 22 inventory, there are no other open PRs across the four repositories. Old `codex/windows-*`
+evidence branches are merged and must not be used as restart bases; squash
+merges mean their source tips may differ from main. The old editor branch has
+zero unique commits. Two untracked `font-gate-preflight` files in the old local
+resume workspace are historical scratch only.
 
 ## Merged resumed work
 
@@ -24,8 +76,8 @@ All ten PRs below are merged and passed their required CI at the recorded heads.
 
 ## Final wrapup deliveries
 
-[Renderer30](https://github.com/OpenPresentation/opf-render/pull/30), head
-`a73d739c6902f3c28d9e879749321b583fe9767d`, preserves core tab advances and exact
+[Renderer30](https://github.com/OpenPresentation/opf-render/pull/30), merged as
+`c8d7d5ca1f67a7b39f70c7c4bd14577a865b175b`, preserves core tab advances and exact
 source spans while keeping ordinary unmeasured rich runs in naturally shaped
 chunks. Root and independent review, typecheck, validation, the full renderer
 suite (805 golden slides / 126 decks), and focused measured/estimated browser
@@ -36,21 +88,23 @@ lacked `test/color-ref-export.mjs`. The final CI-only commit aligns PPTX/editor
 with core110's passing coordinated checkpoints, respectively
 `fcc006a6887c549a96a3bc8bbdb957cc54fe67dd` and
 `476191e28e6f5f5ec32146aeb416f5286b4d0570`, without skipping checks or changing
-rendering code. The release owner received the exact coordination changes.
-Fresh CI on this corrected head and the PR merge receipt are authoritative
-for final acceptance; the initial failed run remains preserved.
+rendering code. The release owner received the exact coordination changes, and
+post-merge run 35661504472 passed. The initial failed run remains preserved.
 
 The [native font inventory bundle](evidence/windows-native-font-inventory-20260921/README.md)
-and this handoff are published through [core111](https://github.com/OpenPresentation/opf/pull/111).
+and this handoff are published through [core111](https://github.com/OpenPresentation/opf/pull/111),
+merged as `3c5048522714365a41d9b5b9ba81620affae718b`; both post-merge
+runs passed.
 They preserve the last observation and remaining work. Its 37 files
 pass the offline verifier; manifest SHA-256 is
 `18ca9125a22bb65c79bc1c7a788a3bf5a2ab2ff41248c81d158b1833a1f8085d`.
 The native font allowlist remains failed. The original parent failure is intact,
 and the corrected lifecycle interpretation is labeled as an offline audit.
 
-These conclude this native task's weekly scope. The owner requested a pause
-after delivery; no new Office run or investigation is scheduled. Merging source
-changes does not publish an npm train or deploy a site.
+These concluded the September 21 native work for the owner-requested weekly
+pause. The September 22 continuation above records subsequent harness work;
+the next Office proofs remain pending. Merging source changes does not publish
+an npm train or deploy a site.
 
 The renderer's first full-suite invocation could not spawn a child process
 under the sandbox (`EPERM` at 0ms). The same suite passed with process creation
@@ -115,21 +169,41 @@ overall compatibility goal remains incomplete.
 
 ## Next-week restart prompt
 
-Resume Windows native compatibility from this handoff and linked evidence.
-Refresh repository/PR status and release metadata before using historical
-commands. Use Node24 and the declared package manager. Preserve dirty work,
-original failures and the separate registry consumer. Confirm the wrapup PR
-receipts and coordinate any later release work with its owner.
+Resume Windows native compatibility from fresh `origin/main` worktrees. Do not
+resume an old evidence branch, and do not treat squash-source differences or
+the two historical `font-gate-preflight` scratch files as pending work. Refresh
+repository and PR state first. Confirm PPTX54's final CI and merge receipt, then
+run its offline controls from the reviewed merged source before any native use.
+Use Node24, Windows PowerShell 5.1 and each repository's declared package
+manager. Preserve dirty work, original failures and the separate registry
+consumer.
 
-Choose one bounded follow-up from the remaining native tab tolerance,
-mixed-table representation or font-identity/allowlist gaps. Preserve the 0.02pt
-native tab and 0.1px browser gates. Unexpected Aptos remains unresolved and
-embedding stays blocked. Any plain-shape rich-text importer repair needs its
-own scoped review.
+The next native proof is the bounded mixed-table edit/save/reopen harness. Only
+after that result is preserved and reviewed should the bounded font-embedding
+gate run. Use fresh output directories and the reviewed mixed source SHA-256
+`f92c5d5565afa1d03fc6df0cdc8d482771d5ebd5a5403f7a888f75e2ad020a51`.
+Both harnesses require the four canonical Carlito face hashes and numeric
+registration flags `0`. Mixed-edit uses `SaveAs(..., 24, 0)` and requires content,
+style, outer geometry within 0.02pt, and matching edited/reopened native line
+intervals. The known preview mismatch is not a failure. Font-embed requests
+`SaveAs(..., 24, -1)` on its owned presentation only.
+
+The embedding worker must check its permitted-font inventory before
+`SaveAs`; unexpected Aptos blocks `SaveAs` and must be reported as the failed
+gate. This is a runtime harness rule, not a new preflight approval requirement.
+Do not infer preview/native parity, general export below 0.02pt, embedded-font
+success, or physical/per-glyph font identity from preparation or font-family
+properties.
 
 Inspect the current host before any Office call. Root alone owns Office and
-temporary font registrations, one reviewed bounded worker at a time. Never
-kill Office, quit the application, close unrelated presentations or retry a
-blocked operation automatically. Future worker02 is preparation, not native
-evidence. Coordinate shared CI/release changes; npm publication, sites and
-public-app acceptance remain separate from this native task.
+temporary font registrations, one reviewed bounded worker at a time, with a
+45-second default and 60-second maximum. A timeout may terminate only the owned
+helper. Never kill Office, call `Application.Quit`, close unrelated
+presentations, change Office security, or retry automatically. Keep the 0.02pt
+native and 0.1px browser gates unchanged. Leave `p:hf`, the deferred geometry
+drafts and Native HF untouched.
+
+The published train remains core0.11.0, CLI/renderer0.9.0, PPTX0.9.1 and
+editor0.8.0. Do not publish packages or deploy sites from this continuation.
+Coordinate any later release work with its owner; public-app acceptance remains
+separate from the Windows native task.
