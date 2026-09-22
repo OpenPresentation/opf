@@ -1,0 +1,157 @@
+
+Running 24 tests using 1 worker
+
+(node:38869) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  pw:browser <launching> /Users/michael/Library/Caches/ms-playwright/chromium_headless_shell-1243/chrome-headless-shell-mac-arm64/chrome-headless-shell --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,Translate,AutoDeElevate,OptimizationHints,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=/var/folders/zj/5tv5dvds3793_qhx2jyxs0000000gn/T/playwright_chromiumdev_profile-YuMxPo --remote-debugging-pipe --no-startup-window +0ms
+  pw:browser <launched> pid=38872 +2ms
+  pw:browser [pid=38872][err] [0921/085242.019431:ERROR:ui/display/mac/cv_display_link_mac.mm:195] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670 +86ms
+  pw:browser [pid=38872][err] [0921/085244.099650:ERROR:ui/display/mac/cv_display_link_mac.mm:195] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670 +2s
+  pw:browser [pid=38872][err] [0921/085245.247274:INFO:CONSOLE:12] "Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview", source: https://trusted-weevil-84.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js (12) +1s
+  pw:browser [pid=38872] <gracefully close start> +7s
+  pw:browser [pid=38872] <process did exit: exitCode=0, signal=null> +10ms
+  pw:browser [pid=38872] starting temporary directories cleanup +1ms
+  pw:browser [pid=38872] finished temporary directories cleanup +2ms
+  pw:browser [pid=38872] <gracefully close end> +0ms
+  ✘   1 tests/e2e/author-json-options.spec.ts:72:5 › Author categorical choices include built-in, document and loaded catalogs with exact LF source undo/redo (10.7s)
+(node:38949) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  pw:browser <launching> /Users/michael/Library/Caches/ms-playwright/chromium_headless_shell-1243/chrome-headless-shell-mac-arm64/chrome-headless-shell --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,Translate,AutoDeElevate,OptimizationHints,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=/var/folders/zj/5tv5dvds3793_qhx2jyxs0000000gn/T/playwright_chromiumdev_profile-1HrX7E --remote-debugging-pipe --no-startup-window +0ms
+  pw:browser <launched> pid=38951 +2ms
+  pw:browser [pid=38951][err] [0921/085253.285016:ERROR:ui/display/mac/cv_display_link_mac.mm:195] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670 +84ms
+  pw:browser [pid=38951][err] [0921/085254.609519:ERROR:ui/display/mac/cv_display_link_mac.mm:195] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670 +1s
+  pw:browser [pid=38951][err] [0921/085255.272290:INFO:CONSOLE:12] "Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview", source: https://trusted-weevil-84.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js (12) +663ms
+  ✓   2 tests/e2e/author-json-options.spec.ts:72:5 › Author categorical choices include built-in, document and loaded catalogs with exact CRLF source undo/redo (5.4s)
+  pw:browser [pid=38951][err] [0921/085258.684210:ERROR:ui/display/mac/cv_display_link_mac.mm:195] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670 +3s
+  pw:browser [pid=38951][err] [0921/085259.250378:ERROR:ui/display/mac/cv_display_link_mac.mm:195] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670 +566ms
+  pw:browser [pid=38951][err] [0921/085259.958081:INFO:CONSOLE:12] "Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview", source: https://trusted-weevil-84.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js (12) +709ms
+  ✓   3 tests/e2e/author.spec.ts:26:80 › anonymous code editing preserves source and visible selection through offline export/reimport at 1280x720 (2.8s)
+  pw:browser [pid=38951][err] [0921/085301.519699:ERROR:ui/display/mac/cv_display_link_mac.mm:195] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670 +2s
+  pw:browser [pid=38951][err] [0921/085302.054395:ERROR:ui/display/mac/cv_display_link_mac.mm:195] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670 +535ms
+  pw:browser [pid=38951][err] [0921/085302.869771:INFO:CONSOLE:12] "Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview", source: https://trusted-weevil-84.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js (12) +815ms
+  ✓   4 tests/e2e/author.spec.ts:26:80 › anonymous code editing preserves source and visible selection through offline export/reimport at 540x960 (3.3s)
+  pw:browser [pid=38951][err] [0921/085304.788127:ERROR:ui/display/mac/cv_display_link_mac.mm:195] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670 +2s
+  pw:browser [pid=38951][err] [0921/085305.245657:ERROR:ui/display/mac/cv_display_link_mac.mm:195] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670 +457ms
+  pw:browser [pid=38951][err] [0921/085305.982850:INFO:CONSOLE:12] "Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview", source: https://trusted-weevil-84.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js (12) +737ms
+  ✓   5 tests/e2e/author.spec.ts:55:5 › anonymous Author canvas edits survive tab changes, offline PowerPoint export and undoable reimport (4.6s)
+  pw:browser [pid=38951][err] [0921/085309.369535:ERROR:ui/display/mac/cv_display_link_mac.mm:195] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670 +3s
+  pw:browser [pid=38951][err] [0921/085309.815611:ERROR:ui/display/mac/cv_display_link_mac.mm:195] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670 +446ms
+  pw:browser [pid=38951][err] [0921/085310.621485:INFO:CONSOLE:12] "Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview", source: https://trusted-weevil-84.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js (12) +806ms
+  ✓   6 tests/e2e/completion-preservation.spec.ts:113:7 › Author Title Subtitle completion preserves LF compact source in one undo step (2.5s)
+  pw:browser [pid=38951][err] [0921/085311.905316:ERROR:ui/display/mac/cv_display_link_mac.mm:195] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670 +1s
+  pw:browser [pid=38951][err] [0921/085312.349152:ERROR:ui/display/mac/cv_display_link_mac.mm:195] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670 +444ms
+  pw:browser [pid=38951][err] [0921/085313.186371:INFO:CONSOLE:12] "Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview", source: https://trusted-weevil-84.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js (12) +839ms
+  ✓   7 tests/e2e/completion-preservation.spec.ts:113:7 › Author Text 2x completion preserves CRLF compact source in one undo step (3.1s)
+  pw:browser [pid=38951][err] [0921/085315.030253:ERROR:ui/display/mac/cv_display_link_mac.mm:195] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670 +2s
+  pw:browser [pid=38951][err] [0921/085315.516799:ERROR:ui/display/mac/cv_display_link_mac.mm:195] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670 +486ms
+  pw:browser [pid=38951][err] [0921/085316.337728:INFO:CONSOLE:12] "Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview", source: https://trusted-weevil-84.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js (12) +821ms
+  ✓   8 tests/e2e/completion-preservation.spec.ts:149:5 › Author escaped current value is not offered as an edit and leaves prior undo history intact (3.5s)
+  pw:browser [pid=38951][err] [0921/085318.584034:ERROR:ui/display/mac/cv_display_link_mac.mm:195] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670 +2s
+  pw:browser [pid=38951][err] [0921/085319.153656:ERROR:ui/display/mac/cv_display_link_mac.mm:195] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670 +569ms
+  pw:browser [pid=38951][err] [0921/085319.971625:INFO:CONSOLE:12] "Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview", source: https://trusted-weevil-84.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js (12) +818ms
+  ✓   9 tests/e2e/completion-preservation.spec.ts:178:5 › Author newer and invalid source dismiss stale choices and refresh inline catalogs (4.1s)
+  pw:browser [pid=38951][err] [0921/085322.682911:ERROR:ui/display/mac/cv_display_link_mac.mm:195] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670 +3s
+  pw:browser [pid=38951][err] [0921/085323.188095:ERROR:ui/display/mac/cv_display_link_mac.mm:195] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670 +505ms
+  pw:browser [pid=38951][err] [0921/085324.022236:INFO:CONSOLE:12] "Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview", source: https://trusted-weevil-84.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js (12) +834ms
+  ✓  10 tests/e2e/completion-preservation.spec.ts:219:5 › Author format and document changes cancel the open completion without applying it (3.3s)
+  pw:browser [pid=38951][err] [0921/085325.983152:ERROR:ui/display/mac/cv_display_link_mac.mm:195] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670 +2s
+  pw:browser [pid=38951][err] [0921/085326.561590:ERROR:ui/display/mac/cv_display_link_mac.mm:195] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670 +578ms
+  pw:browser [pid=38951][err] [0921/085327.319574:INFO:CONSOLE:12] "Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview", source: https://trusted-weevil-84.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js (12) +758ms
+  ✓  11 tests/e2e/inspector-editing.spec.ts:40:7 › all Inspector slides preserve exact JSON and shared furniture through offline undo/export at 1440px (3.9s)
+  pw:browser [pid=38951][err] [0921/085329.871723:ERROR:ui/display/mac/cv_display_link_mac.mm:195] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670 +3s
+  pw:browser [pid=38951][err] [0921/085330.467851:ERROR:ui/display/mac/cv_display_link_mac.mm:195] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670 +596ms
+  pw:browser [pid=38951][err] [0921/085331.220209:INFO:CONSOLE:12] "Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview", source: https://trusted-weevil-84.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js (12) +752ms
+  ✓  12 tests/e2e/inspector-editing.spec.ts:40:7 › all Inspector slides preserve exact JSON and shared furniture through offline undo/export at 540px (4.0s)
+  pw:browser [pid=38951][err] [0921/085333.848004:ERROR:ui/display/mac/cv_display_link_mac.mm:195] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670 +3s
+  pw:browser [pid=38951][err] [0921/085334.614346:ERROR:ui/display/mac/cv_display_link_mac.mm:195] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670 +766ms
+  pw:browser [pid=38951][err] [0921/085335.368889:INFO:CONSOLE:12] "Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview", source: https://trusted-weevil-84.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js (12) +755ms
+  ✓  13 tests/e2e/inspector-editing.spec.ts:99:5 › invalid source keeps a renderer fallback and source recovery uses the current slide order (2.4s)
+  pw:browser [pid=38951][err] [0921/085336.217233:ERROR:ui/display/mac/cv_display_link_mac.mm:195] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670 +848ms
+  pw:browser [pid=38951][err] [0921/085336.721178:ERROR:ui/display/mac/cv_display_link_mac.mm:195] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670 +504ms
+  pw:browser [pid=38951][err] [0921/085337.447665:INFO:CONSOLE:12] "Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview", source: https://trusted-weevil-84.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js (12) +726ms
+  ✓  14 tests/e2e/inspector-editing.spec.ts:116:5 › shared navigation discards an ID-less draft even when the replacement title is identical (2.2s)
+  pw:browser [pid=38951][err] [0921/085338.409468:ERROR:ui/display/mac/cv_display_link_mac.mm:195] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670 +962ms
+  pw:browser [pid=38951][err] [0921/085339.043871:ERROR:ui/display/mac/cv_display_link_mac.mm:195] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670 +634ms
+  pw:browser [pid=38951][err] [0921/085339.742292:INFO:CONSOLE:12] "Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview", source: https://trusted-weevil-84.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js (12) +699ms
+  ✓  15 tests/e2e/inspector-recovery.spec.ts:18:5 › schema-valid strict overflow cancels an active draft and the same slide recovers after source correction (2.5s)
+  pw:browser [pid=38951][err] [0921/085340.944901:ERROR:ui/display/mac/cv_display_link_mac.mm:195] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670 +1s
+  pw:browser [pid=38951][err] [0921/085341.657688:ERROR:ui/display/mac/cv_display_link_mac.mm:195] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670 +712ms
+  pw:browser [pid=38951][err] [0921/085342.319202:INFO:CONSOLE:12] "Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview", source: https://trusted-weevil-84.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js (12) +662ms
+  ✓  16 tests/e2e/inspector-recovery.spec.ts:85:5 › font substitution notes remain accessible and operable while the Inspector canvas is active (2.7s)
+  pw:browser [pid=38951][err] [0921/085343.659533:ERROR:ui/display/mac/cv_display_link_mac.mm:195] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670 +1s
+  pw:browser [pid=38951][err] [0921/085344.405769:ERROR:ui/display/mac/cv_display_link_mac.mm:195] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670 +746ms
+  pw:browser [pid=38951][err] [0921/085345.130210:INFO:CONSOLE:12] "Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview", source: https://trusted-weevil-84.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js (12) +725ms
+  ✓  17 tests/e2e/inspector.spec.ts:20:5 › published long quotes retain their footer in actual wide/portrait previews and PowerPoint downloads (3.3s)
+  pw:browser [pid=38951][err] [0921/085346.927190:ERROR:ui/display/mac/cv_display_link_mac.mm:195] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670 +2s
+  pw:browser [pid=38951][err] [0921/085347.717661:ERROR:ui/display/mac/cv_display_link_mac.mm:195] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670 +790ms
+  pw:browser [pid=38951][err] [0921/085348.180565:INFO:CONSOLE:12] "Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview", source: https://trusted-weevil-84.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js (12) +463ms
+  ✓  18 tests/e2e/inspector.spec.ts:76:5 › shared navigation clears format errors and proposals from the previous deck (1.9s)
+  pw:browser [pid=38951][err] [0921/085348.870065:ERROR:ui/display/mac/cv_display_link_mac.mm:195] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670 +690ms
+  pw:browser [pid=38951][err] [0921/085349.501639:ERROR:ui/display/mac/cv_display_link_mac.mm:195] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670 +631ms
+  pw:browser [pid=38951][err] [0921/085350.239069:INFO:CONSOLE:12] "Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview", source: https://trusted-weevil-84.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js (12) +739ms
+  ✓  19 tests/e2e/inspector.spec.ts:118:5 › anonymous JSON authoring, preview, undo/redo, download and shared reimport (2.1s)
+  pw:browser [pid=38951][err] [0921/085351.014831:ERROR:ui/display/mac/cv_display_link_mac.mm:195] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670 +775ms
+  pw:browser [pid=38951][err] [0921/085351.613277:ERROR:ui/display/mac/cv_display_link_mac.mm:195] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670 +598ms
+  pw:browser [pid=38951][err] [0921/085352.062547:INFO:CONSOLE:12] "Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview", source: https://trusted-weevil-84.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js (12) +449ms
+  ✓  20 tests/e2e/json-paste-formatting.spec.ts:53:5 › warm JSON worker leaves pasted source untouched while explicit Format Document remains undoable (4.5s)
+  pw:browser [pid=38951][err] [0921/085355.536291:ERROR:ui/display/mac/cv_display_link_mac.mm:195] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670 +3s
+  pw:browser [pid=38951][err] [0921/085355.983768:ERROR:ui/display/mac/cv_display_link_mac.mm:195] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670 +447ms
+  pw:browser [pid=38951][err] [0921/085356.867485:INFO:CONSOLE:12] "Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview", source: https://trusted-weevil-84.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js (12) +884ms
+  ✓  21 tests/e2e/monaco.spec.ts:3:5 › bundled JSON worker provides schema diagnostics, completion and recovery offline (2.4s)
+  pw:browser [pid=38951][err] [0921/085357.978923:ERROR:ui/display/mac/cv_display_link_mac.mm:195] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670 +1s
+  pw:browser [pid=38951][err] [0921/085358.490389:ERROR:ui/display/mac/cv_display_link_mac.mm:195] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670 +511ms
+  pw:browser [pid=38951][err] [0921/085359.144292:INFO:CONSOLE:12] "Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview", source: https://trusted-weevil-84.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js (12) +654ms
+  pw:browser [pid=38951][err] [0921/085400.150260:ERROR:ui/display/mac/cv_display_link_mac.mm:195] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670 +1s
+  pw:browser [pid=38951][err] [0921/085400.630949:INFO:CONSOLE:12] "Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview", source: https://trusted-weevil-84.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js (12) +481ms
+  ✓  22 tests/e2e/svg-security.spec.ts:41:5 › published SVG renderer keeps hostile shared and imported document strings inert (3.2s)
+  pw:browser [pid=38951][err] [0921/085401.151128:ERROR:ui/display/mac/cv_display_link_mac.mm:195] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670 +520ms
+  pw:browser [pid=38951][err] [0921/085402.366699:ERROR:ui/display/mac/cv_display_link_mac.mm:195] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670 +1s
+  ✓  23 tests/e2e/toolkit.spec.ts:4:5 › public toolkit shows the deployed package set with working render, edit and export proofs (1.4s)
+  pw:browser [pid=38951][err] [0921/085402.525149:ERROR:ui/display/mac/cv_display_link_mac.mm:195] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670 +159ms
+  pw:browser [pid=38951][err] [0921/085403.154912:ERROR:ui/display/mac/cv_display_link_mac.mm:195] CVDisplayLinkCreateWithCGDisplay failed. CVReturn: -6670 +630ms
+  pw:browser [pid=38951][err] [0921/085403.798748:INFO:CONSOLE:12] "Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview", source: https://trusted-weevil-84.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js (12) +645ms
+  ✓  24 tests/e2e/yaml.spec.ts:4:5 › YAML and Markdown editing preserve OPF values and recover from malformed YAML offline (4.3s)
+  pw:browser [pid=38951] <gracefully close start> +3s
+  pw:browser [pid=38951] <process did exit: exitCode=0, signal=null> +11ms
+  pw:browser [pid=38951] starting temporary directories cleanup +1ms
+  pw:browser [pid=38951] finished temporary directories cleanup +2ms
+  pw:browser [pid=38951] <gracefully close end> +0ms
+
+
+  1) tests/e2e/author-json-options.spec.ts:72:5 › Author categorical choices include built-in, document and loaded catalogs with exact LF source undo/redo 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('.suggest-widget.visible')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" locator('.suggest-widget.visible') with timeout 5000ms
+      - waiting for locator('.suggest-widget.visible')
+
+
+      54 |   await input.press('Control+Space');
+      55 |   const choices = page.locator('.suggest-widget.visible');
+    > 56 |   await expect(choices).toBeVisible();
+         |                         ^
+      57 |   return choices;
+      58 | }
+      59 |
+        at openChoices (/private/tmp/opf-completion-fix-20260921/pptx-dev/tests/e2e/author-json-options.spec.ts:56:25)
+        at /private/tmp/opf-completion-fix-20260921/pptx-dev/tests/e2e/author-json-options.spec.ts:118:25
+
+    Error Context: ../../opf-completion-production-20260921/results/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../opf-completion-production-20260921/results/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../opf-completion-production-20260921/results/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    tests/e2e/author-json-options.spec.ts:72:5 › Author categorical choices include built-in, document and loaded catalogs with exact LF source undo/redo 
+  23 passed (1.4m)

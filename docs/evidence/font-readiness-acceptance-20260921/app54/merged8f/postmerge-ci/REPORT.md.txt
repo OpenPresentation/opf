@@ -1,0 +1,21 @@
+# App54 accepted-merge post-CI audit — failed gate retained
+
+Original automatic push [run35660464578](https://github.com/Data-Advantage/pptx-dev/actions/runs/35660464578), attempt1, on accepted`8f54228a9e38a1dcc0bf8188bcdd519795b3799a` completed **failure**. [Source equivalence](source-equivalence.json) verifies its full tree`3639d3c14daec94d13711fa2b10f2b927df45eca` and203reviewed changed blobs exactly match premerge`79ba015`; the42-file premerge audit remains frozen unchanged.
+
+| Platform/job | Recorded outcome |
+| --- | --- |
+| Linux106534215085 | Node24.20.0;704units,13standalone controls,typechecks,SDK/CLI+production build passed;39/39 browsers passed (3.9m) |
+| Windows106534214744 | Same preceding checks passed;38/39 browsers passed,1failed (6.5m) |
+
+All39individual case outcomes per platform are retained in [Linux](linux-browser-outcomes.json) and [Windows](windows-browser-outcomes.json), bound to complete original logs. [Release receipt](release-audit.json) records exact head/jobs/attempt. No rerun occurred.
+
+The Windows failure is `inspector.spec.ts:118:5`, “anonymous JSON authoring, preview, undo/redo, download and shared reimport.” At line125, the gallery-rail assertion expected `An editable presentation` within the unchanged5,000ms. Its received text showed the expected document name `Browser adoption check`, zero schema errors/warnings and one slide, with **Loading slide fonts…**. The case took13.4s and stopped before subsequent preview/download/undo/redo/shared-reimport assertions. See the [original failure excerpt](windows-failure-excerpt.log). The revised Open in Author case passed on both platforms, including9.2s whole-case time on Windows. That does not clear this separate failed gate. Cause, acceptable latency and data loss are not established; no new investigation or tests were started.
+
+Both original GitHub artifacts match advertised size/SHA256 and pass ZIP CRC/safe-member checks ([integrity](artifact-integrity.json)):
+
+- Failure artifact10667157593,10,844,078bytes, SHA256`7aba0343fc72376ebc73f183f78bbeb58c9b964f12e6f658aeca17524cbf2fb8`.
+- Timing artifact10666712548,7,218bytes, SHA256`cb3e82200c82278fd6e916fd6f9612a8622812491924d5cca87f9fad7d490634`.
+
+Original ZIPs and the extracted failed trace/error context remain at private paths recorded in the inventory; they were not investigated, visually reviewed or screened for authentication-bearing content, so do not copy raw traces/ZIPs into a compact public checkpoint. No raw deployment headers/query were collected here. The [timing summary](windows-timing-summary.json) is the separate passing SVG-security test: only Author retained,99entries (89resource,6longtask,2navigation,2paint), no reported drops/observer errors; Inspector snapshot/pagehide flush missing. It provides no timing record for this failed case; usual observer/longtask/completed-resource limitations remain.
+
+The Python artifact workflow has no matching path across the729-file accepted merge delta and is not applicable, not a fresh passing check. Premerge success, accepted source delivery, canonical production behavior and this failed postmerge gate remain distinct. No source changes, CI reruns, commits, pushes, deployments or Office actions occurred in this audit. Overall goal completion is not claimed.

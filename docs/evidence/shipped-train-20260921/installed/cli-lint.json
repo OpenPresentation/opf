@@ -1,0 +1,22 @@
+{
+  "valid": true,
+  "schemaValid": true,
+  "diagnostics": [],
+  "counts": {
+    "error": 0,
+    "warning": 0,
+    "info": 0
+  },
+  "checks": {
+    "syntax": "checked",
+    "schema": "checked",
+    "catalogReferences": "local-context",
+    "assetReferences": "registry-only",
+    "contracts": "checked",
+    "layout": "not-checked",
+    "fonts": "not-checked",
+    "nativeExport": "not-checked"
+  },
+  "sha256": "0a4a3af6d50bd9ca5fc99483272634a58a738ffc3ccbc2d10d7140323abf811f",
+  "opfVersion": "0.11.0"
+}

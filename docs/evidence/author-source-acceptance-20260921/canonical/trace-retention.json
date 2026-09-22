@@ -1,0 +1,263 @@
+[
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/author-anonymous-Author-ca-d560b-xport-and-undoable-reimport/trace.zip",
+    "originalRelativePath": "author-anonymous-Author-ca-d560b-xport-and-undoable-reimport/trace.zip",
+    "case": "05",
+    "bytes": 9871525,
+    "sha256": "9b3ed2b33d99ce72a1ebb8f2a3e59f20bf119688078316236bc9b29dd466b668",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/author-anonymous-code-edit-12484-export-reimport-at-1280x720/trace.zip",
+    "originalRelativePath": "author-anonymous-code-edit-12484-export-reimport-at-1280x720/trace.zip",
+    "case": "03",
+    "bytes": 7952593,
+    "sha256": "f1e7e06920e3091d3b9686be37b02e1ead5d0ad082497b619b411771a4568a2c",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/author-anonymous-code-edit-3e561--export-reimport-at-540x960/trace.zip",
+    "originalRelativePath": "author-anonymous-code-edit-3e561--export-reimport-at-540x960/trace.zip",
+    "case": "04",
+    "bytes": 6618411,
+    "sha256": "4afaba0d5754ad24984dff06520a5313d5839ffe8c02f360b0c416014399d052",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/trace.zip",
+    "originalRelativePath": "author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/trace.zip",
+    "case": "01",
+    "bytes": 10356211,
+    "sha256": "18842201c0ecbafe97489286ba6abc758c3b990a0163e2071c4fa02acef49566",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/author-json-options-Author-cda0b-exact-CRLF-source-undo-redo/trace.zip",
+    "originalRelativePath": "author-json-options-Author-cda0b-exact-CRLF-source-undo-redo/trace.zip",
+    "case": "02",
+    "bytes": 10405499,
+    "sha256": "ea32bedaec72c8a266146cda8bfe404d696bf7255b758995cc6ebc0f50cbd0ef",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/completion-keyboard-Author-66da5-and-editor-remount-behavior/trace.zip",
+    "originalRelativePath": "completion-keyboard-Author-66da5-and-editor-remount-behavior/trace.zip",
+    "case": "06",
+    "bytes": 8075666,
+    "sha256": "afd2805ba4c5d6435fbf03eb42f6c7f99ae4374e504a8b44ef28dde3c4dfd8db",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/completion-keyboard-Author-93788-ir-original-keyboard-owners/trace.zip",
+    "originalRelativePath": "completion-keyboard-Author-93788-ir-original-keyboard-owners/trace.zip",
+    "case": "07",
+    "bytes": 6347301,
+    "sha256": "9c98eb28493e9b124feeecf908b1461c0ebe6e93763735a802c856cb1d25f7e5",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/completion-preservation-Au-807ee-act-source-in-one-undo-step/trace.zip",
+    "originalRelativePath": "completion-preservation-Au-807ee-act-source-in-one-undo-step/trace.zip",
+    "case": "08",
+    "bytes": 7670097,
+    "sha256": "acbde57d79e8f26fd1b68386cdf9f918d45b18c467276a6247b95227770040b8",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/completion-preservation-Au-96e4e-act-source-in-one-undo-step/trace.zip",
+    "originalRelativePath": "completion-preservation-Au-96e4e-act-source-in-one-undo-step/trace.zip",
+    "case": "09",
+    "bytes": 7863645,
+    "sha256": "cd6931ef168192d2c8ac2513cd73ca6990120f1a345c6cfd9c0718cca0d54266",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/completion-preservation-Au-aab6b-and-refresh-inline-catalogs/trace.zip",
+    "originalRelativePath": "completion-preservation-Au-aab6b-and-refresh-inline-catalogs/trace.zip",
+    "case": "11",
+    "bytes": 8522629,
+    "sha256": "ecb35cb34bf3c71cd478c896c6124a5d0153bc0e70327bdb95cbe20df59f4528",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/completion-preservation-Au-b9e03-s-prior-undo-history-intact/trace.zip",
+    "originalRelativePath": "completion-preservation-Au-b9e03-s-prior-undo-history-intact/trace.zip",
+    "case": "10",
+    "bytes": 8558714,
+    "sha256": "cc6a63632372a2371aedd0516e48fe90062e9caf00a32fa1ae8fdd3878702949",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/completion-preservation-Au-e6715-pletion-without-applying-it/trace.zip",
+    "originalRelativePath": "completion-preservation-Au-e6715-pletion-without-applying-it/trace.zip",
+    "case": "12",
+    "bytes": 8604230,
+    "sha256": "d21e88b2026592ab319764424c85686d9eeac1052706e4117c95887f7c11911d",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/inspector-anonymous-JSON-a-151ab-ownload-and-shared-reimport/trace.zip",
+    "originalRelativePath": "inspector-anonymous-JSON-a-151ab-ownload-and-shared-reimport/trace.zip",
+    "case": "21",
+    "bytes": 7550701,
+    "sha256": "d21ee5008284860ab3a967d6e1c2220674f1fe9259d8b66fe8bb7a8fad8792a2",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/inspector-editing-all-Insp-15273-fline-undo-export-at-1440px/trace.zip",
+    "originalRelativePath": "inspector-editing-all-Insp-15273-fline-undo-export-at-1440px/trace.zip",
+    "case": "13",
+    "bytes": 13158815,
+    "sha256": "4b4e4ebdcaf3d811aaf96d1b133c8d51bb9ac12034a1a7ca5755a1da4c58de59",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/inspector-editing-all-Insp-a78d3-ffline-undo-export-at-540px/trace.zip",
+    "originalRelativePath": "inspector-editing-all-Insp-a78d3-ffline-undo-export-at-540px/trace.zip",
+    "case": "14",
+    "bytes": 8411698,
+    "sha256": "a9a2d61d3a968442dbfd5ab5271c615c2dcbf4bb06b5e1e8f51ce3c1c3bd827f",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/inspector-editing-invalid--4da31-ses-the-current-slide-order/trace.zip",
+    "originalRelativePath": "inspector-editing-invalid--4da31-ses-the-current-slide-order/trace.zip",
+    "case": "15",
+    "bytes": 7753498,
+    "sha256": "c842af0853f90a9900fff636bcc6e92d67b73b546f7264936297b8ed633cbc91",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/inspector-editing-shared-n-98a03-lacement-title-is-identical/trace.zip",
+    "originalRelativePath": "inspector-editing-shared-n-98a03-lacement-title-is-identical/trace.zip",
+    "case": "16",
+    "bytes": 7237647,
+    "sha256": "5735746a8aae927bd41b83ff4a5ac5ffd974762d6a4856f5383c10f21a6af0ac",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/inspector-published-long-q-fcc06-ws-and-PowerPoint-downloads/trace.zip",
+    "originalRelativePath": "inspector-published-long-q-fcc06-ws-and-PowerPoint-downloads/trace.zip",
+    "case": "19",
+    "bytes": 6685680,
+    "sha256": "711dc655b47117ae7b4f3ea02c428d052f2ad4ab702a8bd4742e2ba85dd5b028",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/inspector-recovery-font-su-beb5b--Inspector-canvas-is-active/trace.zip",
+    "originalRelativePath": "inspector-recovery-font-su-beb5b--Inspector-canvas-is-active/trace.zip",
+    "case": "18",
+    "bytes": 6309358,
+    "sha256": "77420705874be2dbfbb42859c186226a52a2675218152dfe9fecb4672a1b36db",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/inspector-recovery-schema--76507-ers-after-source-correction/trace.zip",
+    "originalRelativePath": "inspector-recovery-schema--76507-ers-after-source-correction/trace.zip",
+    "case": "17",
+    "bytes": 7862860,
+    "sha256": "803611471c6e862694d3e31562b8000bc869e3d351a88751557a2cbce7147b72",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/inspector-shared-navigatio-46dd3-sals-from-the-previous-deck/trace.zip",
+    "originalRelativePath": "inspector-shared-navigatio-46dd3-sals-from-the-previous-deck/trace.zip",
+    "case": "20",
+    "bytes": 6884249,
+    "sha256": "11a50e26b4f22fe88dc108a913ab6c141c10f4e37baf935ada1464042c466452",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/json-paste-formatting-warm-44312-t-Document-remains-undoable/trace.zip",
+    "originalRelativePath": "json-paste-formatting-warm-44312-t-Document-remains-undoable/trace.zip",
+    "case": "22",
+    "bytes": 10851811,
+    "sha256": "a58a4cad1417c7a4b72d03aca7fd08ae4ecf137c6f2af8b40f5adc0950e8ee59",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/monaco-bundled-JSON-worker-5b20e-letion-and-recovery-offline/trace.zip",
+    "originalRelativePath": "monaco-bundled-JSON-worker-5b20e-letion-and-recovery-offline/trace.zip",
+    "case": "23",
+    "bytes": 7672826,
+    "sha256": "c8512e43288e50efe48730c6ceb2ff53b47c0e1c06779616f46c0380f171d698",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-2c728-nd-through-canvas-undo-redo/trace.zip",
+    "originalRelativePath": "source-download-preservati-2c728-nd-through-canvas-undo-redo/trace.zip",
+    "case": "26",
+    "bytes": 10003428,
+    "sha256": "aff3564e4e041d41c39a3a3a487e9eb89d2356d3e6f9a155756f2c232badcab5",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-5105f-download-and-canvas-history/trace.zip",
+    "originalRelativePath": "source-download-preservati-5105f-download-and-canvas-history/trace.zip",
+    "case": "24",
+    "bytes": 12980921,
+    "sha256": "9e351eb3848c433966950ff6ddb08a5c691d405ce3f59edebb8e522b0d226f7d",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-f4120-download-and-canvas-history/trace.zip",
+    "originalRelativePath": "source-download-preservati-f4120-download-and-canvas-history/trace.zip",
+    "case": "25",
+    "bytes": 9686972,
+    "sha256": "30907c1bf640494c50f3a62822091a627818d08b88b28b4e5fac135f1952396a",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/svg-security-published-SVG-25408-rted-document-strings-inert/trace.zip",
+    "originalRelativePath": "svg-security-published-SVG-25408-rted-document-strings-inert/trace.zip",
+    "case": "27",
+    "bytes": 7731603,
+    "sha256": "e51ae35b04752e3f291c4306e26ca1f184ea692bfe017eac48764fb326bc8650",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/toolkit-public-toolkit-sho-6cd46-nder-edit-and-export-proofs/trace.zip",
+    "originalRelativePath": "toolkit-public-toolkit-sho-6cd46-nder-edit-and-export-proofs/trace.zip",
+    "case": "28",
+    "bytes": 139471,
+    "sha256": "dcee918899e601975b14ab15c9bfa4b4dde283d0e7594be39fd903782f87a9ca",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/yaml-YAML-and-Markdown-edi-18ed4-from-malformed-YAML-offline/trace.zip",
+    "originalRelativePath": "yaml-YAML-and-Markdown-edi-18ed4-from-malformed-YAML-offline/trace.zip",
+    "case": "29",
+    "bytes": 8994486,
+    "sha256": "f77e65b92dbe65c652f6211b62bb31cb8740de9361dbad6a7edf3ffc5257f878",
+    "copiedTo": null,
+    "retention": "local original only; hash retained"
+  }
+]

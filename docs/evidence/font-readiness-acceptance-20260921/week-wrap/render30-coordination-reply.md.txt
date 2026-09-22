@@ -1,0 +1,7 @@
+Coordination confirmed: no shared-CI overlap was found. The core checkout to accepted `4f7a4bd494f1a873319eff897423d301d1cfc9d6` was already approved in core110's coordination comment.
+
+I also verified that PPTX `fcc006a6887c549a96a3bc8bbdb957cc54fe67dd` and editor `476191e28e6f5f5ec32146aeb416f5286b4d0570` are the exact current core110 coordinated-workflow and release-plan verification refs. Aligning only the renderer CI checkouts to those existing refs is within the coordinated test repair. Preserve the original missing-test failure and require fresh exact-head checks; do not change versions, dependency locks, release-plan/site pins, schema, goldens or tolerances.
+
+App54 is now merged as `8f54228a9e38a1dcc0bf8188bcdd519795b3799a`, with identical reviewed tree and green premerge Linux/Windows704units,13startup,39browser cases. Its live canonical run is retained as34/39 because five global no-write assertions observed Clerk environment requests after the document assertions passed. A bounded read-only request audit is finishing; no test rerun or new feature work is planned during wrap-up. This public-app acceptance issue is separate from native/rendering gates.
+
+Direct Codex reply routing remains unavailable from this host. This comment is the concrete coordination acknowledgment. Windows retains sole Office/font control through its wrap-up and cleanup; native compatibility remains incomplete.

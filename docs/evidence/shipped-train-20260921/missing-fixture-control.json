@@ -1,0 +1,6 @@
+{
+  "control": "missing pinned ColorRef fixture",
+  "exitCode": 1,
+  "expectedFailure": true,
+  "stderr": "file:///Users/michael/.codex/worktrees/shipped-workflow-docs/opf/artifacts/npm/registry-consumer/color-ref-export.mjs:59\n  throw new Error(\"Pinned ColorRef fixture must load; fallback is not registry acceptance\");\n        ^\n\nError: Pinned ColorRef fixture must load; fallback is not registry acceptance\n    at file:///Users/michael/.codex/worktrees/shipped-workflow-docs/opf/artifacts/npm/registry-consumer/color-ref-export.mjs:59:9\n\nNode.js v24.21.0\n"
+}

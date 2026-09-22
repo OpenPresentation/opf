@@ -1,0 +1,599 @@
+{
+  "stats": {
+    "startTime": "2026-09-21T22:03:38.266Z",
+    "duration": 148112.604,
+    "expected": 34,
+    "skipped": 0,
+    "unexpected": 5,
+    "flaky": 0
+  },
+  "exitCode": 1,
+  "cases": [
+    {
+      "file": "author-json-options.spec.ts",
+      "line": 72,
+      "title": "Author categorical choices include built-in, document and loaded catalogs with exact LF source undo/redo",
+      "status": "expected",
+      "timeout": 45000,
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 6414,
+          "errorCount": 0
+        }
+      ]
+    },
+    {
+      "file": "author-json-options.spec.ts",
+      "line": 72,
+      "title": "Author categorical choices include built-in, document and loaded catalogs with exact CRLF source undo/redo",
+      "status": "expected",
+      "timeout": 45000,
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 4522,
+          "errorCount": 0
+        }
+      ]
+    },
+    {
+      "file": "author.spec.ts",
+      "line": 26,
+      "title": "anonymous code editing preserves source and visible selection through offline export/reimport at 1280x720",
+      "status": "expected",
+      "timeout": 45000,
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 3689,
+          "errorCount": 0
+        }
+      ]
+    },
+    {
+      "file": "author.spec.ts",
+      "line": 26,
+      "title": "anonymous code editing preserves source and visible selection through offline export/reimport at 540x960",
+      "status": "expected",
+      "timeout": 45000,
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 2936,
+          "errorCount": 0
+        }
+      ]
+    },
+    {
+      "file": "author.spec.ts",
+      "line": 55,
+      "title": "anonymous Author canvas edits survive tab changes, offline PowerPoint export and undoable reimport",
+      "status": "expected",
+      "timeout": 45000,
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 3768,
+          "errorCount": 0
+        }
+      ]
+    },
+    {
+      "file": "completion-keyboard.spec.ts",
+      "line": 64,
+      "title": "Author Ctrl+Space retains popup details, exact source history and editor remount behavior",
+      "status": "expected",
+      "timeout": 45000,
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 3559,
+          "errorCount": 0
+        }
+      ]
+    },
+    {
+      "file": "completion-keyboard.spec.ts",
+      "line": 126,
+      "title": "Author leaves Quick Input and modified Space keys with their original keyboard owners",
+      "status": "expected",
+      "timeout": 45000,
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 2522,
+          "errorCount": 0
+        }
+      ]
+    },
+    {
+      "file": "completion-preservation.spec.ts",
+      "line": 113,
+      "title": "Author Title Subtitle completion preserves LF compact source in one undo step",
+      "status": "expected",
+      "timeout": 45000,
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 3130,
+          "errorCount": 0
+        }
+      ]
+    },
+    {
+      "file": "completion-preservation.spec.ts",
+      "line": 113,
+      "title": "Author Text 2x completion preserves CRLF compact source in one undo step",
+      "status": "expected",
+      "timeout": 45000,
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 3292,
+          "errorCount": 0
+        }
+      ]
+    },
+    {
+      "file": "completion-preservation.spec.ts",
+      "line": 149,
+      "title": "Author escaped current value is not offered as an edit and leaves prior undo history intact",
+      "status": "expected",
+      "timeout": 45000,
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 3463,
+          "errorCount": 0
+        }
+      ]
+    },
+    {
+      "file": "completion-preservation.spec.ts",
+      "line": 178,
+      "title": "Author newer and invalid source dismiss stale choices and refresh inline catalogs",
+      "status": "expected",
+      "timeout": 45000,
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 4669,
+          "errorCount": 0
+        }
+      ]
+    },
+    {
+      "file": "completion-preservation.spec.ts",
+      "line": 219,
+      "title": "Author format and document changes cancel the open completion without applying it",
+      "status": "expected",
+      "timeout": 45000,
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 3272,
+          "errorCount": 0
+        }
+      ]
+    },
+    {
+      "file": "inspector-actions.spec.ts",
+      "line": 102,
+      "title": "Inspector Copy and JSON commit current drafts with exact source undo and unchanged-draft history",
+      "status": "unexpected",
+      "timeout": 45000,
+      "results": [
+        {
+          "status": "failed",
+          "retry": 0,
+          "duration": 2720,
+          "errorCount": 1
+        }
+      ]
+    },
+    {
+      "file": "inspector-actions.spec.ts",
+      "line": 129,
+      "title": "Inspector Share and PPTX commit current drafts with matching payloads and filenames",
+      "status": "unexpected",
+      "timeout": 45000,
+      "results": [
+        {
+          "status": "failed",
+          "retry": 0,
+          "duration": 3157,
+          "errorCount": 1
+        }
+      ]
+    },
+    {
+      "file": "inspector-actions.spec.ts",
+      "line": 168,
+      "title": "Inspector Open in Author commits the current draft before handoff",
+      "status": "unexpected",
+      "timeout": 45000,
+      "results": [
+        {
+          "status": "failed",
+          "retry": 0,
+          "duration": 3303,
+          "errorCount": 1
+        }
+      ]
+    },
+    {
+      "file": "inspector-actions.spec.ts",
+      "line": 191,
+      "title": "Inspector raw Copy allows malformed source and rejected drafts produce no JSON output",
+      "status": "expected",
+      "timeout": 45000,
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 2712,
+          "errorCount": 0
+        }
+      ]
+    },
+    {
+      "file": "inspector-actions.spec.ts",
+      "line": 225,
+      "title": "Inspector actions preserve the accepted raw buffer after CRLF source ingress",
+      "status": "expected",
+      "timeout": 45000,
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 2601,
+          "errorCount": 0
+        }
+      ]
+    },
+    {
+      "file": "inspector-actions.spec.ts",
+      "line": 252,
+      "title": "Inspector suppresses stale PDF 200 delivery or navigation after a new source",
+      "status": "expected",
+      "timeout": 45000,
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 2036,
+          "errorCount": 0
+        }
+      ]
+    },
+    {
+      "file": "inspector-actions.spec.ts",
+      "line": 252,
+      "title": "Inspector suppresses stale PDF 401 delivery or navigation after a new source",
+      "status": "expected",
+      "timeout": 45000,
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 2488,
+          "errorCount": 0
+        }
+      ]
+    },
+    {
+      "file": "inspector-actions.spec.ts",
+      "line": 284,
+      "title": "Inspector PDF payload/filename and Deckchat URL use committed current source with local mocks",
+      "status": "expected",
+      "timeout": 45000,
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 2201,
+          "errorCount": 0
+        }
+      ]
+    },
+    {
+      "file": "inspector-editing.spec.ts",
+      "line": 40,
+      "title": "all Inspector slides preserve exact JSON and shared furniture through offline undo/export at 1440px",
+      "status": "expected",
+      "timeout": 45000,
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 4667,
+          "errorCount": 0
+        }
+      ]
+    },
+    {
+      "file": "inspector-editing.spec.ts",
+      "line": 40,
+      "title": "all Inspector slides preserve exact JSON and shared furniture through offline undo/export at 540px",
+      "status": "expected",
+      "timeout": 45000,
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 3901,
+          "errorCount": 0
+        }
+      ]
+    },
+    {
+      "file": "inspector-editing.spec.ts",
+      "line": 99,
+      "title": "invalid source keeps a renderer fallback and source recovery uses the current slide order",
+      "status": "expected",
+      "timeout": 45000,
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 4411,
+          "errorCount": 0
+        }
+      ]
+    },
+    {
+      "file": "inspector-editing.spec.ts",
+      "line": 116,
+      "title": "shared navigation discards an ID-less draft even when the replacement title is identical",
+      "status": "expected",
+      "timeout": 45000,
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 2196,
+          "errorCount": 0
+        }
+      ]
+    },
+    {
+      "file": "inspector-recovery.spec.ts",
+      "line": 18,
+      "title": "schema-valid strict overflow cancels an active draft and the same slide recovers after source correction",
+      "status": "expected",
+      "timeout": 45000,
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 2682,
+          "errorCount": 0
+        }
+      ]
+    },
+    {
+      "file": "inspector-recovery.spec.ts",
+      "line": 85,
+      "title": "font substitution notes remain accessible and operable while the Inspector canvas is active",
+      "status": "expected",
+      "timeout": 45000,
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 2650,
+          "errorCount": 0
+        }
+      ]
+    },
+    {
+      "file": "inspector-share-publication.spec.ts",
+      "line": 58,
+      "title": "Inspector hash publication and refresh retain the accepted document",
+      "status": "unexpected",
+      "timeout": 45000,
+      "results": [
+        {
+          "status": "failed",
+          "retry": 0,
+          "duration": 5462,
+          "errorCount": 1
+        }
+      ]
+    },
+    {
+      "file": "inspector-share-publication.spec.ts",
+      "line": 58,
+      "title": "Inspector legacy import query publication and refresh retain the accepted document",
+      "status": "unexpected",
+      "timeout": 45000,
+      "results": [
+        {
+          "status": "failed",
+          "retry": 0,
+          "duration": 5429,
+          "errorCount": 1
+        }
+      ]
+    },
+    {
+      "file": "inspector.spec.ts",
+      "line": 20,
+      "title": "published long quotes retain their footer in actual wide/portrait previews and PowerPoint downloads",
+      "status": "expected",
+      "timeout": 45000,
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 3499,
+          "errorCount": 0
+        }
+      ]
+    },
+    {
+      "file": "inspector.spec.ts",
+      "line": 76,
+      "title": "shared navigation clears format errors and proposals from the previous deck",
+      "status": "expected",
+      "timeout": 45000,
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 2152,
+          "errorCount": 0
+        }
+      ]
+    },
+    {
+      "file": "inspector.spec.ts",
+      "line": 118,
+      "title": "anonymous JSON authoring, preview, undo/redo, download and shared reimport",
+      "status": "expected",
+      "timeout": 45000,
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 2568,
+          "errorCount": 0
+        }
+      ]
+    },
+    {
+      "file": "json-paste-formatting.spec.ts",
+      "line": 53,
+      "title": "warm JSON worker leaves pasted source untouched while explicit Format Document remains undoable",
+      "status": "expected",
+      "timeout": 45000,
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 5066,
+          "errorCount": 0
+        }
+      ]
+    },
+    {
+      "file": "monaco.spec.ts",
+      "line": 3,
+      "title": "bundled JSON worker provides schema diagnostics, completion and recovery offline",
+      "status": "expected",
+      "timeout": 45000,
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 2109,
+          "errorCount": 0
+        }
+      ]
+    },
+    {
+      "file": "source-download-preservation.spec.ts",
+      "line": 90,
+      "title": "Author preserves exact LF source through preview copy, JSON download and canvas history",
+      "status": "expected",
+      "timeout": 45000,
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 6417,
+          "errorCount": 0
+        }
+      ]
+    },
+    {
+      "file": "source-download-preservation.spec.ts",
+      "line": 90,
+      "title": "Author preserves exact CRLF source through preview copy, JSON download and canvas history",
+      "status": "expected",
+      "timeout": 45000,
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 5005,
+          "errorCount": 0
+        }
+      ]
+    },
+    {
+      "file": "source-download-preservation.spec.ts",
+      "line": 218,
+      "title": "Inspector JSON files preserve exact authored LF bytes before edits and through canvas undo/redo",
+      "status": "expected",
+      "timeout": 45000,
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 4099,
+          "errorCount": 0
+        }
+      ]
+    },
+    {
+      "file": "svg-security.spec.ts",
+      "line": 51,
+      "title": "published SVG renderer keeps hostile shared and imported document strings inert",
+      "status": "expected",
+      "timeout": 45000,
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 3016,
+          "errorCount": 0
+        }
+      ]
+    },
+    {
+      "file": "toolkit.spec.ts",
+      "line": 4,
+      "title": "public toolkit shows the deployed package set with working render, edit and export proofs",
+      "status": "expected",
+      "timeout": 45000,
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 1345,
+          "errorCount": 0
+        }
+      ]
+    },
+    {
+      "file": "yaml.spec.ts",
+      "line": 4,
+      "title": "YAML and Markdown editing preserve OPF values and recover from malformed YAML offline",
+      "status": "expected",
+      "timeout": 45000,
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "duration": 3382,
+          "errorCount": 0
+        }
+      ]
+    }
+  ],
+  "errorDetails": "Private originals retained; public-safe bounded diagnosis supplied separately. No raw token-bearing messages copied here."
+}

@@ -1,0 +1,8 @@
+
+Running 1 test using 1 worker
+
+(node:16229) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/e2e/author-json-options.spec.ts:66:5 › Author categorical choices include built-in, document and loaded catalogs with exact source undo/redo (8.9s)
+
+  1 passed (9.3s)

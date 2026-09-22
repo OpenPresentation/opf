@@ -1,0 +1,146 @@
+{
+  "scope": "Frozen first-attempt corrected App54 head6df audit. All files except this manifest; later fixes/checks must remain separate.",
+  "algorithm": "sha256",
+  "files": [
+    {
+      "path": "REPORT.md",
+      "bytes": 4211,
+      "sha256": "99bbf9dadd72c09202888cff5beb3c135709779675d68c1de901827a34dc8486"
+    },
+    {
+      "path": "application-final.json",
+      "bytes": 13322,
+      "sha256": "0c8271e39ceb5790a1a8acd671e307bd2813975800a2dbe5440ec25d6a2ec3be"
+    },
+    {
+      "path": "application-initial.json",
+      "bytes": 381,
+      "sha256": "a6f23523a6141bc1039ae43e5a076a77af734c861d7bb813adf8e71b2277ae0a"
+    },
+    {
+      "path": "application-jobs-final.json",
+      "bytes": 8686,
+      "sha256": "7461fb8eb98679d08e1f2a5b42146d0f8c93bbecb83fbc4064d73141ca2559b2"
+    },
+    {
+      "path": "application-jobs-initial.json",
+      "bytes": 6047,
+      "sha256": "359ce613a0e0384e90b8a15f0f17f88a82e682a1f13f7ceb13d3a19978a90f86"
+    },
+    {
+      "path": "application-jobs-progress1.json",
+      "bytes": 6391,
+      "sha256": "b26b48c560e33b5d12e1a0dbab1e01555b95b5f107a9ceed06e7302a92a09036"
+    },
+    {
+      "path": "application-jobs-progress2.json",
+      "bytes": 6974,
+      "sha256": "12c948ab45007b308019b1ebffbbbbc1e51f8f433a7ee153faf183749c9d91f3"
+    },
+    {
+      "path": "application-progress1.json",
+      "bytes": 381,
+      "sha256": "a6f23523a6141bc1039ae43e5a076a77af734c861d7bb813adf8e71b2277ae0a"
+    },
+    {
+      "path": "application-progress2.json",
+      "bytes": 381,
+      "sha256": "a6f23523a6141bc1039ae43e5a076a77af734c861d7bb813adf8e71b2277ae0a"
+    },
+    {
+      "path": "artifact-workflow.yml.txt",
+      "bytes": 1665,
+      "sha256": "2736d7f87a5ae3fdb5b994d6a750d1c369f140e47b869a041c8671d62209b789"
+    },
+    {
+      "path": "artifacts-final.json",
+      "bytes": 32,
+      "sha256": "244563f989470892c537c9a4622920af0d228ee4528f7d00c64a06d6cd95856c"
+    },
+    {
+      "path": "artifacts-progress.json",
+      "bytes": 33,
+      "sha256": "bf6638afd0bdbf03a3236bb78ff0fe1a70b76eb9f5ba9b8102624fde8ac48cef"
+    },
+    {
+      "path": "check-runs-final.json",
+      "bytes": 7167,
+      "sha256": "2f7458a6982077c19f001b7fcdbf61f949dc488ff67f36b7c4341480635aebb7"
+    },
+    {
+      "path": "check-runs-initial.json",
+      "bytes": 636,
+      "sha256": "7d3f331fe34a58a6e5331cb73ddd0bea7afc9c5807cf4d998f98f08bbbf6e313"
+    },
+    {
+      "path": "commit-status-final.json",
+      "bytes": 5245,
+      "sha256": "ed6853dba2a100fc790ed8fc6c33e8dd927ca3cf94a98d6aec7ef8429a40c1dd"
+    },
+    {
+      "path": "commit-status-initial.json",
+      "bytes": 341,
+      "sha256": "f3efc33cb95fd3d79afb7b0ca9ab5b4e7ff558d8886c7a6524e60ee86d0db3db"
+    },
+    {
+      "path": "committed-blobs.json",
+      "bytes": 28567,
+      "sha256": "6180a6b469991b4f32d7dca973dcce2e77ff171c2e4f1b5e97bc704d4a8f63ed"
+    },
+    {
+      "path": "committed-source-audit.json",
+      "bytes": 1431,
+      "sha256": "28b6795c71fd1678c055e9d2f0998b24aec10b22d2a79df0ce6da3fe91fa29ef"
+    },
+    {
+      "path": "linux-acceptance-excerpt.log",
+      "bytes": 7818,
+      "sha256": "d367cb9be2037c080fb3a7ed406f0b123988f6cb7a1bc935c42e726fa803f790"
+    },
+    {
+      "path": "linux-job.log",
+      "bytes": 113045,
+      "sha256": "1f8ef21c81e77a0359e88938e6cd4244bfb36b371bc4515df62ac5585cb3a1e9"
+    },
+    {
+      "path": "pr-final.json",
+      "bytes": 19389,
+      "sha256": "8b6a0dec6efdc6367ce03592ff3854ad48dd79524286a46c3ec0956fcae1d35b"
+    },
+    {
+      "path": "pr-initial.json",
+      "bytes": 1177,
+      "sha256": "da4457bd67a6c902754b666e0a0554f790457ffc3571680fa812a0aff92d9ba1"
+    },
+    {
+      "path": "preview-initial.json",
+      "bytes": 719,
+      "sha256": "266aa94e874f1af91656f4e5011af09fbae7bd736f6d8bd957e030799555a9a5"
+    },
+    {
+      "path": "release-audit.json",
+      "bytes": 5883,
+      "sha256": "7ca66d2e71275f7c6662fcfab76e3d1cc932c77a19e0df22725c1b4b2e939dbd"
+    },
+    {
+      "path": "reviews-final.json",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "path": "runs-initial.json",
+      "bytes": 333,
+      "sha256": "c6e64d46474203173f45c1cdc6961592c5b6f4e072ae29dcd24ca79e4a8f7d5f"
+    },
+    {
+      "path": "windows-browser-excerpt.log",
+      "bytes": 4993,
+      "sha256": "e872c6312c9772039c6116d14242baa9f25a150d15e0e5adf9830e3e1d54b94b"
+    },
+    {
+      "path": "windows-job.log",
+      "bytes": 71689,
+      "sha256": "6b35cb9aa731dd056879eb2ed2df3170004c6b59eef518ef206523dc2f987a01"
+    }
+  ]
+}

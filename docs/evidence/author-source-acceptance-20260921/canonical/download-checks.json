@@ -1,0 +1,247 @@
+{
+  "savedJsonDownloadCount": 30,
+  "literalAuthoredByteChecks": 28,
+  "semanticImportChecks": 1,
+  "capturedImportByteRedoChecks": 1,
+  "scope": "Post-run checks of actual saved downloads, not another browser execution. Additional exports whose tests did not save files cannot be reconstructed.",
+  "checks": [
+    {
+      "file": "downloads/24/code-untouched.opf.json",
+      "oracle": "literal authored fixture hash plus only explicit title/duplicate-key transformation",
+      "bytes": 325,
+      "sha256": "2e99a948a29cfb1d643f68d46e6afd913ec2f953d4d329e0faee8a7e3ca4a5ec",
+      "pass": true,
+      "eol": "LF"
+    },
+    {
+      "file": "downloads/24/preview-untouched.opf.json",
+      "oracle": "literal authored fixture hash plus only explicit title/duplicate-key transformation",
+      "bytes": 325,
+      "sha256": "2e99a948a29cfb1d643f68d46e6afd913ec2f953d4d329e0faee8a7e3ca4a5ec",
+      "pass": true,
+      "eol": "LF"
+    },
+    {
+      "file": "downloads/24/canceled-and-unchanged.opf.json",
+      "oracle": "literal authored fixture hash plus only explicit title/duplicate-key transformation",
+      "bytes": 325,
+      "sha256": "2e99a948a29cfb1d643f68d46e6afd913ec2f953d4d329e0faee8a7e3ca4a5ec",
+      "pass": true,
+      "eol": "LF"
+    },
+    {
+      "file": "downloads/24/undo.opf.json",
+      "oracle": "literal authored fixture hash plus only explicit title/duplicate-key transformation",
+      "bytes": 325,
+      "sha256": "2e99a948a29cfb1d643f68d46e6afd913ec2f953d4d329e0faee8a7e3ca4a5ec",
+      "pass": true,
+      "eol": "LF"
+    },
+    {
+      "file": "downloads/24/edited.opf.json",
+      "oracle": "literal authored fixture hash plus only explicit title/duplicate-key transformation",
+      "bytes": 326,
+      "sha256": "277350fc50382bead15896aef5fa53a33cd099792df57153d0b9b1b12f1fd08d",
+      "pass": true,
+      "eol": "LF"
+    },
+    {
+      "file": "downloads/24/redo.opf.json",
+      "oracle": "literal authored fixture hash plus only explicit title/duplicate-key transformation",
+      "bytes": 326,
+      "sha256": "277350fc50382bead15896aef5fa53a33cd099792df57153d0b9b1b12f1fd08d",
+      "pass": true,
+      "eol": "LF"
+    },
+    {
+      "file": "downloads/24/code-after-edit.opf.json",
+      "oracle": "literal authored fixture hash plus only explicit title/duplicate-key transformation",
+      "bytes": 326,
+      "sha256": "277350fc50382bead15896aef5fa53a33cd099792df57153d0b9b1b12f1fd08d",
+      "pass": true,
+      "eol": "LF"
+    },
+    {
+      "file": "downloads/24/pending-undo.opf.json",
+      "oracle": "literal authored fixture hash plus only explicit title/duplicate-key transformation",
+      "bytes": 326,
+      "sha256": "277350fc50382bead15896aef5fa53a33cd099792df57153d0b9b1b12f1fd08d",
+      "pass": true,
+      "eol": "LF"
+    },
+    {
+      "file": "downloads/24/pending-export.opf.json",
+      "oracle": "literal authored fixture hash plus only explicit title/duplicate-key transformation",
+      "bytes": 333,
+      "sha256": "fef6e27eb0502229556af2721299c078060b2a552a41c4c76e014c98e0c07209",
+      "pass": true,
+      "eol": "LF"
+    },
+    {
+      "file": "downloads/24/pending-redo.opf.json",
+      "oracle": "literal authored fixture hash plus only explicit title/duplicate-key transformation",
+      "bytes": 333,
+      "sha256": "fef6e27eb0502229556af2721299c078060b2a552a41c4c76e014c98e0c07209",
+      "pass": true,
+      "eol": "LF"
+    },
+    {
+      "file": "downloads/24/pending-without-blur.opf.json",
+      "oracle": "literal authored fixture hash plus only explicit title/duplicate-key transformation",
+      "bytes": 339,
+      "sha256": "10d30faeb9f230b1e9ebe0f8bf20a91e65bc428051de62b6063c56fcada1c0cd",
+      "pass": true,
+      "eol": "LF"
+    },
+    {
+      "file": "downloads/24/reordered-import-undo.opf.json",
+      "oracle": "literal authored fixture hash plus only explicit title/duplicate-key transformation",
+      "bytes": 339,
+      "sha256": "10d30faeb9f230b1e9ebe0f8bf20a91e65bc428051de62b6063c56fcada1c0cd",
+      "pass": true,
+      "eol": "LF"
+    },
+    {
+      "file": "downloads/24/rejected-duplicate-key.opf.json",
+      "oracle": "literal authored fixture hash plus only explicit title/duplicate-key transformation",
+      "bytes": 362,
+      "sha256": "6998a9087f9827297ccedc02c7f065e94f1bb38925e8046f2ec3da146083e1ad",
+      "pass": true,
+      "eol": "LF"
+    },
+    {
+      "file": "downloads/24/rejected-code-source.opf.json",
+      "oracle": "literal authored fixture hash plus only explicit title/duplicate-key transformation",
+      "bytes": 362,
+      "sha256": "6998a9087f9827297ccedc02c7f065e94f1bb38925e8046f2ec3da146083e1ad",
+      "pass": true,
+      "eol": "LF"
+    },
+    {
+      "file": "downloads/25/code-untouched.opf.json",
+      "oracle": "literal authored fixture hash plus only explicit title/duplicate-key transformation",
+      "bytes": 332,
+      "sha256": "c40c5080ca23fb28e12398e7a35d3dac7859e7cc659b32a24133559119722608",
+      "pass": true,
+      "eol": "CRLF"
+    },
+    {
+      "file": "downloads/25/preview-untouched.opf.json",
+      "oracle": "literal authored fixture hash plus only explicit title/duplicate-key transformation",
+      "bytes": 332,
+      "sha256": "c40c5080ca23fb28e12398e7a35d3dac7859e7cc659b32a24133559119722608",
+      "pass": true,
+      "eol": "CRLF"
+    },
+    {
+      "file": "downloads/25/canceled-and-unchanged.opf.json",
+      "oracle": "literal authored fixture hash plus only explicit title/duplicate-key transformation",
+      "bytes": 332,
+      "sha256": "c40c5080ca23fb28e12398e7a35d3dac7859e7cc659b32a24133559119722608",
+      "pass": true,
+      "eol": "CRLF"
+    },
+    {
+      "file": "downloads/25/undo.opf.json",
+      "oracle": "literal authored fixture hash plus only explicit title/duplicate-key transformation",
+      "bytes": 332,
+      "sha256": "c40c5080ca23fb28e12398e7a35d3dac7859e7cc659b32a24133559119722608",
+      "pass": true,
+      "eol": "CRLF"
+    },
+    {
+      "file": "downloads/25/edited.opf.json",
+      "oracle": "literal authored fixture hash plus only explicit title/duplicate-key transformation",
+      "bytes": 333,
+      "sha256": "2a1735f628ea3b06436d3baadbf85ec648280994690033c35c28cbe0a5ddd9f0",
+      "pass": true,
+      "eol": "CRLF"
+    },
+    {
+      "file": "downloads/25/redo.opf.json",
+      "oracle": "literal authored fixture hash plus only explicit title/duplicate-key transformation",
+      "bytes": 333,
+      "sha256": "2a1735f628ea3b06436d3baadbf85ec648280994690033c35c28cbe0a5ddd9f0",
+      "pass": true,
+      "eol": "CRLF"
+    },
+    {
+      "file": "downloads/25/code-after-edit.opf.json",
+      "oracle": "literal authored fixture hash plus only explicit title/duplicate-key transformation",
+      "bytes": 333,
+      "sha256": "2a1735f628ea3b06436d3baadbf85ec648280994690033c35c28cbe0a5ddd9f0",
+      "pass": true,
+      "eol": "CRLF"
+    },
+    {
+      "file": "downloads/25/pending-undo.opf.json",
+      "oracle": "literal authored fixture hash plus only explicit title/duplicate-key transformation",
+      "bytes": 333,
+      "sha256": "2a1735f628ea3b06436d3baadbf85ec648280994690033c35c28cbe0a5ddd9f0",
+      "pass": true,
+      "eol": "CRLF"
+    },
+    {
+      "file": "downloads/25/pending-export.opf.json",
+      "oracle": "literal authored fixture hash plus only explicit title/duplicate-key transformation",
+      "bytes": 340,
+      "sha256": "539230d507f00c2818b0eeba38fd1cb05b4d72e05d6407d36f7657ef600a002d",
+      "pass": true,
+      "eol": "CRLF"
+    },
+    {
+      "file": "downloads/25/pending-redo.opf.json",
+      "oracle": "literal authored fixture hash plus only explicit title/duplicate-key transformation",
+      "bytes": 340,
+      "sha256": "539230d507f00c2818b0eeba38fd1cb05b4d72e05d6407d36f7657ef600a002d",
+      "pass": true,
+      "eol": "CRLF"
+    },
+    {
+      "file": "downloads/26/untouched.opf.json",
+      "oracle": "literal authored fixture hash",
+      "bytes": 325,
+      "sha256": "2e99a948a29cfb1d643f68d46e6afd913ec2f953d4d329e0faee8a7e3ca4a5ec",
+      "pass": true,
+      "eol": "LF"
+    },
+    {
+      "file": "downloads/26/undo.opf.json",
+      "oracle": "literal authored fixture hash",
+      "bytes": 325,
+      "sha256": "2e99a948a29cfb1d643f68d46e6afd913ec2f953d4d329e0faee8a7e3ca4a5ec",
+      "pass": true,
+      "eol": "LF"
+    },
+    {
+      "file": "downloads/26/edited.opf.json",
+      "oracle": "literal authored fixture hash plus explicit title transformation",
+      "bytes": 326,
+      "sha256": "277350fc50382bead15896aef5fa53a33cd099792df57153d0b9b1b12f1fd08d",
+      "pass": true,
+      "eol": "LF"
+    },
+    {
+      "file": "downloads/26/redo.opf.json",
+      "oracle": "literal authored fixture hash plus explicit title transformation",
+      "bytes": 326,
+      "sha256": "277350fc50382bead15896aef5fa53a33cd099792df57153d0b9b1b12f1fd08d",
+      "pass": true,
+      "eol": "LF"
+    },
+    {
+      "file": "downloads/24/reordered-import.opf.json",
+      "oracle": "semantic equality to explicit imported document; accepted bytes become redo oracle, not incoming-file byte identity",
+      "bytes": 147,
+      "sha256": "73adbc340500a894e4366bc080e49fe1bdeaacc6792cb0487e7442d6ecea652d",
+      "pass": true
+    },
+    {
+      "file": "downloads/24/reordered-import-redo.opf.json",
+      "oracle": "exact equality to captured accepted imported bytes",
+      "bytes": 147,
+      "sha256": "73adbc340500a894e4366bc080e49fe1bdeaacc6792cb0487e7442d6ecea652d",
+      "pass": true
+    }
+  ]
+}

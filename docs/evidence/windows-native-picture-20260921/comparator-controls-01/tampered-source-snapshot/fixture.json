@@ -1,0 +1,8 @@
+{
+  "syntheticControl": true,
+  "sourceRun": "registry-native-01",
+  "sourceGeneration": "registry-picture-01/generation.json",
+  "officeExecution": false,
+  "inputFilesRemappedIntoControlDirectory": true,
+  "control": "tampered-source-snapshot"
+}

@@ -1,0 +1,41 @@
+{
+  "capturedAt": "2026-09-21T13:39:41.327Z",
+  "id": "dpl_AWEZrwBDa7sSQWbkd8j44CzuzCtZ",
+  "name": "pptx-gallery",
+  "url": "pptx-gallery-9chuih4v4-dataadvantage.vercel.app",
+  "type": "LAMBDAS",
+  "state": "READY",
+  "createdAt": 1789997893730,
+  "creator": {
+    "uid": "ZQU4suDtrsvvtRutONCd3J0H",
+    "username": "grimmmichaelj"
+  },
+  "project": {
+    "id": "prj_jaAjOxlbGlBOfbKs6h4usu3mRR5G",
+    "name": "pptx-gallery",
+    "framework": "nextjs"
+  },
+  "meta": {
+    "githubCommitRef": "main",
+    "githubCommitSha": "f17e9ae5869669d5fbac3720f285652d0c37551c",
+    "githubCommitMessage": "fix(docs): describe the gallery's local editor (#36)\n\nDocument the existing browser editor and link to its local preview, undo, OPF save and editable PowerPoint workflow. Related to OpenPresentation/opf#88.\n\nCo-authored-by: Paperclip <noreply@paperclip.ing>",
+    "githubRepo": "pptx-gallery",
+    "githubOrg": "Data-Advantage"
+  },
+  "alias": [
+    "www.pptx.gallery",
+    "pptxgallery.vercel.app",
+    "pptx.gallery",
+    "pptx-gallery-dataadvantage.vercel.app",
+    "pptx-gallery-git-main-dataadvantage.vercel.app"
+  ],
+  "target": "production",
+  "regions": [
+    "iad1"
+  ],
+  "buildingAt": 1789997895117,
+  "ready": 1789997950892,
+  "readyState": "READY",
+  "source": "git",
+  "aliasError": null
+}

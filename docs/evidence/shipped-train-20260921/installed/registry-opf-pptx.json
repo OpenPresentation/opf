@@ -1,0 +1,152 @@
+{
+  "_id": "@openpresentation/opf-pptx@0.9.1",
+  "_rev": "15-8ba450b90036775879e9d88ec3a7952f",
+  "name": "@openpresentation/opf-pptx",
+  "dist-tags": {
+    "latest": "0.9.1"
+  },
+  "versions": [
+    "0.0.1",
+    "0.1.0",
+    "0.2.0",
+    "0.2.1",
+    "0.3.0",
+    "0.4.0",
+    "0.5.0",
+    "0.5.1",
+    "0.5.2",
+    "0.6.0",
+    "0.7.0",
+    "0.8.0",
+    "0.8.1",
+    "0.9.0",
+    "0.9.1"
+  ],
+  "time": {
+    "created": "2026-05-27T02:47:31.284Z",
+    "modified": "2026-09-17T20:02:47.392Z",
+    "0.0.1": "2026-05-27T02:47:31.606Z",
+    "0.1.0": "2026-09-08T03:33:19.880Z",
+    "0.2.0": "2026-09-08T08:39:51.422Z",
+    "0.2.1": "2026-09-08T10:10:34.338Z",
+    "0.3.0": "2026-09-08T11:32:49.342Z",
+    "0.4.0": "2026-09-08T13:20:00.328Z",
+    "0.5.0": "2026-09-08T17:09:09.070Z",
+    "0.5.1": "2026-09-09T03:37:39.613Z",
+    "0.5.2": "2026-09-09T15:31:43.997Z",
+    "0.6.0": "2026-09-10T00:47:11.629Z",
+    "0.7.0": "2026-09-10T07:13:23.982Z",
+    "0.8.0": "2026-09-15T18:16:25.324Z",
+    "0.8.1": "2026-09-16T00:00:10.978Z",
+    "0.9.0": "2026-09-17T19:35:56.082Z",
+    "0.9.1": "2026-09-17T20:02:47.053Z"
+  },
+  "bugs": {
+    "url": "https://github.com/OpenPresentation/opf-pptx/issues"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/OpenPresentation/opf-pptx#readme",
+  "repository": {
+    "url": "git+https://github.com/OpenPresentation/opf-pptx.git",
+    "type": "git"
+  },
+  "description": "Pure local OPF to PPTX export and PPTX to OPF import tooling.",
+  "maintainers": [
+    "grimmmichaelj <developer@buildadataadvantage.com>"
+  ],
+  "readmeFilename": "README.md",
+  "dist": {
+    "shasum": "32ec7602fe08dd094ed20fb753fed763d1221406",
+    "tarball": "https://registry.npmjs.org/@openpresentation/opf-pptx/-/opf-pptx-0.9.1.tgz",
+    "fileCount": 28,
+    "integrity": "sha512-krzDAKjDByP2zsoR4VeyyIwU7uhcVbxpeBYEIw7vlkoRWWiFq170rhQzQZx5lbMD7u2magYEkdUt3rUgByCKjw==",
+    "signatures": [
+      {
+        "sig": "MEYCIQDKiSZpJ62TDwp28OalXyzSP0Oo1SJxz0cSS75YLiNkmQIhAPev1zrVTPeVlfCsSGOke0LHXxttGlzb9p9QUFnB79aS",
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+      },
+      {
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U",
+        "sig": "MEUCIHj/GoiGPoVl8bocmpIS0e/PgM7fO4eSKaFoEXmGkyjIAiEAmyJrtGNQ7DqVpj154cXIWiXai9lD57AMiJ2E4tA969s="
+      }
+    ],
+    "attestations": {
+      "url": "https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf-pptx@0.9.1",
+      "provenance": {
+        "predicateType": "https://slsa.dev/provenance/v1"
+      }
+    },
+    "unpackedSize": 781305
+  },
+  "type": "module",
+  "types": "./dist/index.d.ts",
+  "engines": {
+    "node": "24.x"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "gitHead": "fcc006a6887c549a96a3bc8bbdb957cc54fe67dd",
+  "imports": {
+    "#image-fallback": {
+      "browser": "./dist/image-fallback-browser.js",
+      "default": "./dist/image-fallback-node.js"
+    }
+  },
+  "private": false,
+  "scripts": {
+    "test": "npm run build && npm run test:furniture && node test/color-ref-export.mjs && node test/plain-whitespace.mjs && node test/accepted-text.mjs && node test/heading-provenance.mjs && node test/chart-colors.mjs && node test/content-cards.mjs && node test/chart-workbook.mjs && node test/dependency-boundary.mjs && npm run build:browser-check && npm run test:styled-table && node test/content-layout.mjs && node test/shared-quote.mjs && npm run test:timeline",
+    "build": "node scripts/build.mjs",
+    "prepack": "npm run build",
+    "validate": "node scripts/validate-package.mjs",
+    "test:code": "node test/shared-code.mjs && node test/code-provenance.mjs",
+    "typecheck": "node --check src/index.js && node --check src/color-ref.js && node --check scripts/build.mjs && node --check scripts/validate-package.mjs && node --check test/smoke.mjs && node --check src/image-geometry.js && node --check test/image-fit.mjs && node --check test/image-orientation.mjs && node --check test/table-layout.mjs && node --check test/table-import.mjs && node --check test/object-ids.mjs && node --check test/export-corpus.mjs && node --check test/image-media-type.mjs && node --check src/image-fallback-node.js && node --check src/image-fallback-browser.js && node --check test/webp-fallback.mjs && node --check scripts/build-browser-check.mjs && node --check test/webp-fallback-browser.js && node --check test/image-fallback-boundary.mjs && node --check src/background.js && node --check test/background.mjs && node --check src/image-import.js && node --check test/image-import.mjs && node --check test/native-background.mjs && node --check src/background-import.js && node --check test/background-inheritance.mjs && node --check test/rich-table.mjs && node --check src/table-import.js && node --check test/rich-table-import.mjs && node --check test/rich-table-import-browser.js && node --check test/table-row-sizing.mjs && node --check test/table-styles.mjs && node --check test/table-styles-browser.js && node --check test/styled-table.mjs && node --check src/table-cell-import.js && node --check test/styled-table-import.mjs && node --check test/styled-table-import-browser.js && node --check src/table-border-import.js && node --check test/table-border-styles.mjs && node --check src/card-provenance.js && node --check test/content-cards.mjs && node --check src/chart-workbook.js && node --check test/chart-colors.mjs && node --check test/chart-workbook.mjs && node --check test/native-chart-colors.mjs && node --check src/heading-provenance.js && node --check test/accepted-text.mjs && node --check test/heading-provenance.mjs && node --check src/text-provenance.js && node --check test/plain-whitespace.mjs && node --check src/timeline-provenance.js && node --check test/shared-timeline.mjs && node --check test/shared-furniture.mjs && node --check src/furniture-provenance.js && node --check test/furniture-provenance.mjs",
+    "test:metric": "node test/shared-metric.mjs && node test/metric-provenance.mjs",
+    "test:packed": "node test/packed-install.mjs",
+    "test:browser": "npm run build:browser-check && node test/browser-check.mjs",
+    "test:timeline": "node test/shared-timeline.mjs",
+    "test:furniture": "node test/shared-furniture.mjs && node test/furniture-provenance.mjs",
+    "test:styled-table": "node test/styled-table.mjs && node test/styled-table-import.mjs",
+    "test:font-variants": "node test/font-variants.mjs",
+    "build:browser-check": "node scripts/build-browser-check.mjs",
+    "test:compare-published": "node test/compare-published.mjs"
+  },
+  "version": "0.9.1",
+  "_npmUser": "GitHub Actions <npm-oidc-no-reply@github.com>",
+  "_npmVersion": "11.16.0",
+  "directories": {},
+  "sideEffects": false,
+  "_nodeVersion": "24.20.0",
+  "dependencies": {
+    "jszip": "3.10.2",
+    "sharp": "0.35.4",
+    "fflate": "^0.8.3",
+    "fast-xml-parser": "^5.8.0",
+    "@openpresentation/opf": "^0.11.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "_hasShrinkwrap": false,
+  "devDependencies": {
+    "esbuild": "0.28.2",
+    "playwright": "1.63.0",
+    "@openpresentation/opf-render": "0.9.0"
+  },
+  "peerDependencies": {
+    "@openpresentation/opf-render": "^0.9.0"
+  },
+  "peerDependenciesMeta": {
+    "@openpresentation/opf-render": {
+      "optional": true
+    }
+  },
+  "_npmOperationalInternal": {
+    "host": "s3://npm-registry-packages-npm-production",
+    "tmp": "tmp/opf-pptx_0.9.1_1789675366909_0.20680010365281998"
+  }
+}

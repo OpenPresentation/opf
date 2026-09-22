@@ -1,0 +1,355 @@
+[
+  {
+    "pageref": "page@ab8bff70bbe7a683bbf96915a955e375",
+    "startedDateTime": "2026-09-21T18:34:20.060Z",
+    "time": 9983.202000000001,
+    "request": {
+      "method": "GET",
+      "url": "http://127.0.0.1:4325/author",
+      "httpVersion": "HTTP/1.1",
+      "cookies": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7"
+        },
+        {
+          "name": "Accept-Encoding",
+          "value": "gzip, deflate, br, zstd"
+        },
+        {
+          "name": "Accept-Language",
+          "value": "en-US"
+        },
+        {
+          "name": "Connection",
+          "value": "keep-alive"
+        },
+        {
+          "name": "Host",
+          "value": "127.0.0.1:4325"
+        },
+        {
+          "name": "Sec-Fetch-Dest",
+          "value": "document"
+        },
+        {
+          "name": "Sec-Fetch-Mode",
+          "value": "navigate"
+        },
+        {
+          "name": "Sec-Fetch-Site",
+          "value": "none"
+        },
+        {
+          "name": "Sec-Fetch-User",
+          "value": "?1"
+        },
+        {
+          "name": "Upgrade-Insecure-Requests",
+          "value": "1"
+        },
+        {
+          "name": "User-Agent",
+          "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36 Edg/152.0.0.0"
+        },
+        {
+          "name": "sec-ch-ua",
+          "value": "\"Chromium\";v=\"152\", \"Not?A_Brand\";v=\"24\", \"Microsoft Edge\";v=\"152\""
+        },
+        {
+          "name": "sec-ch-ua-mobile",
+          "value": "?0"
+        },
+        {
+          "name": "sec-ch-ua-platform",
+          "value": "\"Windows\""
+        }
+      ],
+      "queryString": [],
+      "headersSize": 682,
+      "bodySize": 0
+    },
+    "response": {
+      "status": 200,
+      "statusText": "OK",
+      "httpVersion": "HTTP/1.1",
+      "cookies": [],
+      "headers": [
+        {
+          "name": "Cache-Control",
+          "value": "s-maxage=31536000"
+        },
+        {
+          "name": "Connection",
+          "value": "keep-alive"
+        },
+        {
+          "name": "Content-Encoding",
+          "value": "gzip"
+        },
+        {
+          "name": "Content-Type",
+          "value": "text/html; charset=utf-8"
+        },
+        {
+          "name": "Date",
+          "value": "Mon, 21 Sep 2026 18:34:20 GMT"
+        },
+        {
+          "name": "ETag",
+          "value": "\"sjbn7wx480by1\""
+        },
+        {
+          "name": "Keep-Alive",
+          "value": "timeout=5"
+        },
+        {
+          "name": "Transfer-Encoding",
+          "value": "chunked"
+        },
+        {
+          "name": "Vary",
+          "value": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch, Accept-Encoding"
+        },
+        {
+          "name": "X-Powered-By",
+          "value": "Next.js"
+        },
+        {
+          "name": "x-nextjs-cache",
+          "value": "HIT"
+        },
+        {
+          "name": "x-nextjs-prerender",
+          "value": "1"
+        },
+        {
+          "name": "x-nextjs-prerender",
+          "value": "1"
+        },
+        {
+          "name": "x-nextjs-stale-time",
+          "value": "300"
+        }
+      ],
+      "content": {
+        "size": 15481,
+        "mimeType": "text/html; charset=utf-8",
+        "compression": 11914,
+        "_file": "resources/ecb4c289d9709fc3baaabd63f60265149d53fbfa.html"
+      },
+      "headersSize": 472,
+      "bodySize": 3567,
+      "redirectURL": "",
+      "_transferSize": 4039
+    },
+    "cache": {},
+    "timings": {
+      "dns": -1,
+      "connect": -1,
+      "ssl": -1,
+      "send": 0,
+      "wait": 19.968,
+      "receive": 9963.234
+    },
+    "_frameref": "frame@376a7c14846bb9cd52d4a797aa00997c",
+    "_monotonicTime": 295496.681,
+    "_resourceType": "document",
+    "serverIPAddress": "127.0.0.1",
+    "_serverPort": 4325,
+    "_securityDetails": {}
+  },
+  {
+    "pageref": "page@ab8bff70bbe7a683bbf96915a955e375",
+    "startedDateTime": "2026-09-21T18:34:20.236Z",
+    "time": 30027.95,
+    "request": {
+      "method": "GET",
+      "url": "http://127.0.0.1:4325/_next/static/chunks/1n-j6a4lqrto8.js",
+      "httpVersion": "HTTP/1.1",
+      "cookies": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "*/*"
+        },
+        {
+          "name": "Accept-Encoding",
+          "value": "gzip, deflate, br, zstd"
+        },
+        {
+          "name": "Accept-Language",
+          "value": "en-US"
+        },
+        {
+          "name": "Connection",
+          "value": "keep-alive"
+        },
+        {
+          "name": "Host",
+          "value": "127.0.0.1:4325"
+        },
+        {
+          "name": "Referer",
+          "value": "http://127.0.0.1:4325/author"
+        },
+        {
+          "name": "Sec-Fetch-Dest",
+          "value": "script"
+        },
+        {
+          "name": "Sec-Fetch-Mode",
+          "value": "no-cors"
+        },
+        {
+          "name": "Sec-Fetch-Site",
+          "value": "same-origin"
+        },
+        {
+          "name": "User-Agent",
+          "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36 Edg/152.0.0.0"
+        },
+        {
+          "name": "sec-ch-ua",
+          "value": "\"Chromium\";v=\"152\", \"Not?A_Brand\";v=\"24\", \"Microsoft Edge\";v=\"152\""
+        },
+        {
+          "name": "sec-ch-ua-mobile",
+          "value": "?0"
+        },
+        {
+          "name": "sec-ch-ua-platform",
+          "value": "\"Windows\""
+        }
+      ],
+      "queryString": [],
+      "headersSize": 573,
+      "bodySize": 0
+    },
+    "response": {
+      "status": 200,
+      "statusText": "OK",
+      "httpVersion": "HTTP/1.1",
+      "cookies": [],
+      "headers": [
+        {
+          "name": "Accept-Ranges",
+          "value": "bytes"
+        },
+        {
+          "name": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        },
+        {
+          "name": "Connection",
+          "value": "keep-alive"
+        },
+        {
+          "name": "Content-Encoding",
+          "value": "gzip"
+        },
+        {
+          "name": "Content-Type",
+          "value": "application/javascript; charset=UTF-8"
+        },
+        {
+          "name": "Date",
+          "value": "Mon, 21 Sep 2026 18:34:50 GMT"
+        },
+        {
+          "name": "ETag",
+          "value": "W/\"5d2-1a0c53a61a0\""
+        },
+        {
+          "name": "Keep-Alive",
+          "value": "timeout=5"
+        },
+        {
+          "name": "Last-Modified",
+          "value": "Mon, 21 Sep 2026 18:28:52 GMT"
+        },
+        {
+          "name": "Transfer-Encoding",
+          "value": "chunked"
+        },
+        {
+          "name": "Vary",
+          "value": "Accept-Encoding"
+        }
+      ],
+      "content": {
+        "size": -1,
+        "mimeType": "application/javascript; charset=UTF-8",
+        "compression": 0
+      },
+      "headersSize": 378,
+      "bodySize": 767,
+      "redirectURL": "",
+      "_transferSize": 1145
+    },
+    "cache": {},
+    "timings": {
+      "dns": 0.307,
+      "connect": 0.788,
+      "ssl": 14527.965,
+      "send": 0,
+      "wait": 15436.622,
+      "receive": 62.268
+    },
+    "_frameref": "frame@376a7c14846bb9cd52d4a797aa00997c",
+    "_monotonicTime": 295502.449,
+    "_resourceType": "script",
+    "serverIPAddress": "127.0.0.1",
+    "_serverPort": 4325,
+    "_securityDetails": {}
+  },
+  {
+    "pageref": "page@ab8bff70bbe7a683bbf96915a955e375",
+    "startedDateTime": "2026-09-21T18:34:53.307Z",
+    "time": -1,
+    "request": {
+      "method": "GET",
+      "url": "http://127.0.0.1:4325/_next/static/chunks/turbopack-worker-2ru9m5gbh1na6.js",
+      "httpVersion": "HTTP/1.1",
+      "cookies": [],
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "*/*"
+        },
+        {
+          "name": "Accept-Language",
+          "value": "en-US"
+        }
+      ],
+      "queryString": [],
+      "headersSize": -1,
+      "bodySize": 0
+    },
+    "response": {
+      "status": -1,
+      "statusText": "",
+      "httpVersion": "HTTP/1.1",
+      "cookies": [],
+      "headers": [],
+      "content": {
+        "size": -1,
+        "mimeType": "x-unknown"
+      },
+      "headersSize": -1,
+      "bodySize": -1,
+      "redirectURL": "",
+      "_transferSize": -1
+    },
+    "cache": {},
+    "timings": {
+      "send": -1,
+      "wait": -1,
+      "receive": -1
+    },
+    "_frameref": "frame@376a7c14846bb9cd52d4a797aa00997c",
+    "_monotonicTime": 322773.379,
+    "_resourceType": "script"
+  }
+]

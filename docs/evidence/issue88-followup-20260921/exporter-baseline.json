@@ -1,0 +1,137 @@
+{
+  "fullBytes": 321605007,
+  "indexBytes": 2214188,
+  "sourceDigest": "d4ecd9c0c0b30bb3b1f584dffa561fe2a562d4ae36c7ee99c43744d3134d4816",
+  "sourcePackageVersion": "0.11.0",
+  "totalFiles": 10797,
+  "docsFiles": 10240,
+  "docsBytes": 223970600,
+  "docExtensions": {
+    ".md": {
+      "count": 132,
+      "bytes": 1352695
+    },
+    ".json": {
+      "count": 1363,
+      "bytes": 64148677
+    },
+    ".pptx": {
+      "count": 514,
+      "bytes": 19001819
+    },
+    ".html": {
+      "count": 2,
+      "bytes": 340638
+    },
+    ".png": {
+      "count": 6664,
+      "bytes": 103369407
+    },
+    "(none)": {
+      "count": 16,
+      "bytes": 5095
+    },
+    ".log": {
+      "count": 944,
+      "bytes": 7464572
+    },
+    ".svg": {
+      "count": 115,
+      "bytes": 553803
+    },
+    ".js": {
+      "count": 154,
+      "bytes": 11523630
+    },
+    ".txt": {
+      "count": 48,
+      "bytes": 176090
+    },
+    ".mjs": {
+      "count": 75,
+      "bytes": 415149
+    },
+    ".gz": {
+      "count": 82,
+      "bytes": 1104465
+    },
+    ".ps1": {
+      "count": 81,
+      "bytes": 308347
+    },
+    ".ttf": {
+      "count": 43,
+      "bytes": 14186936
+    },
+    ".diff": {
+      "count": 3,
+      "bytes": 6728
+    },
+    ".py": {
+      "count": 4,
+      "bytes": 12549
+    }
+  },
+  "largest": [
+    {
+      "path": "docs/evidence/shipped-train-20260921/production/gallery-_layouts.png",
+      "bytes": 7120066,
+      "sha256": "1a8d1f49fd61d828d20c5e8a13570cc33b8ecbf5f4489c6f29be2ad80bee8b10",
+      "url": "/agent-docs/docs/evidence/shipped-train-20260921/production/gallery-_layouts.png"
+    },
+    {
+      "path": "docs/evidence/akasia-shaping-20260914/fontkit-matrix.json",
+      "bytes": 2429292,
+      "sha256": "df4efa46ab202ae5c1a14c62b1819d6b89a1162c3637a33d51fdcef92ef609c2",
+      "url": "/agent-docs/docs/evidence/akasia-shaping-20260914/fontkit-matrix.json"
+    },
+    {
+      "path": "docs/evidence/akasia-shaping-20260914/javascript-matrix.json",
+      "bytes": 2166245,
+      "sha256": "6834ebdfeffd9e8bab75396d789533b760a8dacb6e378041e5940872500aa8ed",
+      "url": "/agent-docs/docs/evidence/akasia-shaping-20260914/javascript-matrix.json"
+    },
+    {
+      "path": "docs/evidence/akasia-shaping-20260914/browser-whitespace-harness-failure.json",
+      "bytes": 1870192,
+      "sha256": "9b786e495146114dd5b70a55271e8d5cca6f009cb8bf0ad3650f57176863cc57",
+      "url": "/agent-docs/docs/evidence/akasia-shaping-20260914/browser-whitespace-harness-failure.json"
+    },
+    {
+      "path": "docs/evidence/akasia-shaping-20260914/harfbuzz-matrix.json",
+      "bytes": 1844805,
+      "sha256": "7a3760837f771091de7fb473b11781d28f12edd65123a3778f971d2970187b51",
+      "url": "/agent-docs/docs/evidence/akasia-shaping-20260914/harfbuzz-matrix.json"
+    },
+    {
+      "path": "docs/evidence/akasia-shaping-20260914/browser-matrix.json",
+      "bytes": 1698610,
+      "sha256": "ae6b20012cd9db23b420a31637bb27722c0034500c4193f1434d3ead581bc5a8",
+      "url": "/agent-docs/docs/evidence/akasia-shaping-20260914/browser-matrix.json"
+    },
+    {
+      "path": "docs/evidence/table-colors-gallery-contrast/contrast-exploratory-baseline.json",
+      "bytes": 1238637,
+      "sha256": "adcfcd9da300ad09e3e59eb2e2ef660dd71825b9d22ac9b7e8a417bd0290ae1d",
+      "url": "/agent-docs/docs/evidence/table-colors-gallery-contrast/contrast-exploratory-baseline.json"
+    },
+    {
+      "path": "docs/evidence/text-placement/rich-editor-node20/bundle.js",
+      "bytes": 1188867,
+      "sha256": "f29e9100f81ad49a57543a856c33f46e48c9e674873912ec671bd13bd4d22c36",
+      "url": "/agent-docs/docs/evidence/text-placement/rich-editor-node20/bundle.js"
+    },
+    {
+      "path": "docs/evidence/text-placement/rich-editor-node24/bundle.js",
+      "bytes": 1188867,
+      "sha256": "f29e9100f81ad49a57543a856c33f46e48c9e674873912ec671bd13bd4d22c36",
+      "url": "/agent-docs/docs/evidence/text-placement/rich-editor-node24/bundle.js"
+    },
+    {
+      "path": "docs/evidence/accepted-text-layout/rich-editor/node20/bundle.js",
+      "bytes": 1184498,
+      "sha256": "911673e1007037b4798277d25c3a5a35e7e5c39e70d62d910d846a4ba9d75b8e",
+      "url": "/agent-docs/docs/evidence/accepted-text-layout/rich-editor/node20/bundle.js"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "kind": "opf-pptx-native-font-source-context",
+  "pullRequest": {
+    "repository": "OpenPresentation/opf-pptx",
+    "number": 49,
+    "url": "https://github.com/OpenPresentation/opf-pptx/pull/49",
+    "status": "open",
+    "headCommit": "7538e4b",
+    "workerPath": "test/native-font-edit.ps1",
+    "workerSha256": "b18f9e2ab822a42b9204a15314ed5ef6e74b1d933ba3e5e7e4efc3a542368960"
+  },
+  "nativeWorkerSnapshot": {
+    "path": "native-font-edit-01/inputs/native-font-edit.ps1",
+    "sha256": "b18f9e2ab822a42b9204a15314ed5ef6e74b1d933ba3e5e7e4efc3a542368960"
+  },
+  "nativeWorkerSnapshotMatchesPr49": true,
+  "runtime": {
+    "powerPointVersion": "16.0",
+    "powerPointBuild": "16.0.20326.20158",
+    "windowsBuild": "26200.9457"
+  },
+  "authority": "Native result is bound to the retained run-local input snapshots and report hashes."
+}

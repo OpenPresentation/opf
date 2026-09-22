@@ -1,0 +1,18 @@
+{
+  "node": "v24.21.0",
+  "fullBytes": 1209184,
+  "indexBytes": 24242,
+  "fullSha256": "81c874600b4ccf8fe9ca59afbdcf26d6441d2e3cfe603510a25d078c47373193",
+  "sourceDigest": "d4ecd9c0c0b30bb3b1f584dffa561fe2a562d4ae36c7ee99c43744d3134d4816",
+  "sourcePackageVersion": "0.11.0",
+  "rawFiles": 10797,
+  "fullBytesRemoved": 320395823,
+  "completeGuideCount": 75,
+  "completeSkillCount": 6,
+  "completeExampleAndSchemaCount": 2,
+  "linkedEvidenceReports": 57,
+  "allRawManifestEntriesUnchanged": true,
+  "noInlineEvidenceSections": true,
+  "noNulOrReplacementCharacters": true,
+  "importDataAndAuthorSkillPreserved": true
+}

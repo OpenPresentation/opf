@@ -1,0 +1,296 @@
+
+Running 18 tests using 1 worker
+
+(node:25512) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/e2e/author-json-options.spec.ts:72:5 › Author categorical choices include built-in, document and loaded catalogs with exact LF source undo/redo (11.4s)
+  ✘   2 tests/e2e/author-json-options.spec.ts:72:5 › Author categorical choices include built-in, document and loaded catalogs with exact CRLF source undo/redo (11.5s)
+(node:25556) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   3 tests/e2e/author.spec.ts:26:80 › anonymous code editing preserves source and visible selection through offline export/reimport at 1280x720 (9.0s)
+  ✓   4 tests/e2e/author.spec.ts:26:80 › anonymous code editing preserves source and visible selection through offline export/reimport at 540x960 (5.9s)
+  ✓   5 tests/e2e/author.spec.ts:55:5 › anonymous Author canvas edits survive tab changes, offline PowerPoint export and undoable reimport (7.0s)
+  ✓   6 tests/e2e/inspector-editing.spec.ts:40:7 › all Inspector slides preserve exact JSON and shared furniture through offline undo/export at 1440px (6.2s)
+  ✘   7 tests/e2e/inspector-editing.spec.ts:40:7 › all Inspector slides preserve exact JSON and shared furniture through offline undo/export at 540px (9.6s)
+(node:25677) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   8 tests/e2e/inspector-editing.spec.ts:99:5 › invalid source keeps a renderer fallback and source recovery uses the current slide order (9.6s)
+(node:25714) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   9 tests/e2e/inspector-editing.spec.ts:116:5 › shared navigation discards an ID-less draft even when the replacement title is identical (4.3s)
+  ✓  10 tests/e2e/inspector-recovery.spec.ts:18:5 › schema-valid strict overflow cancels an active draft and the same slide recovers after source correction (5.1s)
+  ✓  11 tests/e2e/inspector-recovery.spec.ts:85:5 › font substitution notes remain accessible and operable while the Inspector canvas is active (4.6s)
+  ✘  12 tests/e2e/inspector.spec.ts:20:5 › published long quotes retain their footer in actual wide/portrait previews and PowerPoint downloads (7.1s)
+(node:25756) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  13 tests/e2e/inspector.spec.ts:74:5 › shared navigation clears format errors and proposals from the previous deck (4.3s)
+  ✓  14 tests/e2e/inspector.spec.ts:116:5 › anonymous JSON authoring, preview, undo/redo, download and shared reimport (5.5s)
+  ✓  15 tests/e2e/monaco.spec.ts:3:5 › bundled JSON worker provides schema diagnostics, completion and recovery offline (7.9s)
+  ✓  16 tests/e2e/svg-security.spec.ts:41:5 › published SVG renderer keeps hostile shared and imported document strings inert (6.9s)
+  ✓  17 tests/e2e/toolkit.spec.ts:4:5 › public toolkit shows the deployed package set with working render, edit and export proofs (1.7s)
+  ✓  18 tests/e2e/yaml.spec.ts:4:5 › YAML and Markdown editing preserve OPF values and recover from malformed YAML offline (7.4s)
+
+
+  1) tests/e2e/author-json-options.spec.ts:72:5 › Author categorical choices include built-in, document and loaded catalogs with exact CRLF source undo/redo 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('.suggest-widget.visible')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" locator('.suggest-widget.visible') with timeout 5000ms
+      - waiting for locator('.suggest-widget.visible')
+
+
+      54 |   await input.press('Control+Space');
+      55 |   const choices = page.locator('.suggest-widget.visible');
+    > 56 |   await expect(choices).toBeVisible();
+         |                         ^
+      57 |   return choices;
+      58 | }
+      59 |
+        at openChoices (/private/tmp/opf-issue88-fixes-20260921/pptx-dev/tests/e2e/author-json-options.spec.ts:56:25)
+        at /private/tmp/opf-issue88-fixes-20260921/pptx-dev/tests/e2e/author-json-options.spec.ts:118:25
+
+    Error Context: ../../opf-issue88-final-production-20260921/results/author-json-options-Author-cda0b-exact-CRLF-source-undo-redo/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../opf-issue88-final-production-20260921/results/author-json-options-Author-cda0b-exact-CRLF-source-undo-redo/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../opf-issue88-final-production-20260921/results/author-json-options-Author-cda0b-exact-CRLF-source-undo-redo/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) tests/e2e/inspector-editing.spec.ts:40:7 › all Inspector slides preserve exact JSON and shared furniture through offline undo/export at 540px 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    - Expected  -  8
+    + Received  + 37
+
+      {
+    -   "name" : "Keep\u0020authored",
+    +   "name": "Keep\u0020authored",
+    -   "extensions": {"review": {"amount": 1e2, "path":"a\/b"}},
+    +   "extensions": {
+    +     "review": {
+    +       "amount": 1e2,
+    +       "path": "a\/b"
+    +     }
+    +   },
+    -   "design": {"fontScheme":"roboto", "header":{"left":{"text":"Shared header"}}},
+    +   "design": {
+    +     "fontScheme": "roboto",
+    +     "header": {
+    +       "left": {
+    +         "text": "Shared header"
+    +       }
+    +     }
+    +   },
+    -   "slides" : [
+    +   "slides": [
+    -     {"id":"first", "title":"First slide", "text":[{"text":"Rich  text", "bold":true}], "notes":"Keep notes"},
+    +     {
+    +       "id": "first",
+    +       "title": "First slide",
+    +       "text": [
+    +         {
+    +           "text": "Rich  text",
+    +           "bold": true
+    +         }
+    +       ],
+    +       "notes": "Keep notes"
+    +     },
+    -     {"id":"second", "title" : "Second\u0020slide", "text":"Second body"},
+    +     {
+    +       "id": "second",
+    +       "title": "Second\u0020slide",
+    +       "text": "Second body"
+    +     },
+    -     {"id":"third", "title":"Third slide", "text":"Third body"}
+    +     {
+    +       "id": "third",
+    +       "title": "Third slide",
+    +       "text": "Third body"
+    +     }
+        ]
+      }
+    -
+
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+
+      53 |     await expect(page.getByTestId('inspector-canvas-overlay')).toHaveCount(3);
+      54 |     for (let index = 0; index < 3; index++) await expect(canvas(page, index)).toBeVisible();
+    > 55 |     await expect.poll(() => copySource(page)).toBe(original);
+         |                                               ^
+      56 |     page.on('request', request => { if (request.method() === 'POST') writes.push(request.url()); });
+      57 |     await page.context().setOffline(true);
+      58 |
+        at /private/tmp/opf-issue88-fixes-20260921/pptx-dev/tests/e2e/inspector-editing.spec.ts:55:47
+
+    Error Context: ../../opf-issue88-final-production-20260921/results/inspector-editing-all-Insp-a78d3-ffline-undo-export-at-540px/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../opf-issue88-final-production-20260921/results/inspector-editing-all-Insp-a78d3-ffline-undo-export-at-540px/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../opf-issue88-final-production-20260921/results/inspector-editing-all-Insp-a78d3-ffline-undo-export-at-540px/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) tests/e2e/inspector-editing.spec.ts:99:5 › invalid source keeps a renderer fallback and source recovery uses the current slide order 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    - Expected  - 39
+    + Received  + 38
+
+      {
+    -    "name": "Keep authored",
+    +   "name": "Keep authored",
+    -    "extensions": {
+    +   "extensions": {
+    -       "review": {
+    +     "review": {
+    -          "amount": 100,
+    +       "amount": 100,
+    -          "path": "a/b"
+    +       "path": "a/b"
+    -       }
+    +     }
+    -    },
+    +   },
+    -    "design": {
+    +   "design": {
+    -       "fontScheme": "roboto",
+    +     "fontScheme": "roboto",
+    -       "header": {
+    +     "header": {
+    -          "left": {
+    +       "left": {
+    -             "text": "Shared header"
+    +         "text": "Shared header"
+    -          }
+    -       }
+    +       }
+    +     }
+    -    },
+    +   },
+    -    "slides": [
+    +   "slides": [
+    -       {
+    +     {
+    -          "id": "third",
+    +       "id": "third",
+    -          "title": "Third slide",
+    +       "title": "Third slide",
+    -          "text": "Third body"
+    +       "text": "Third body"
+    -       },
+    +     },
+    -       {
+    +     {
+    -          "id": "second",
+    +       "id": "second",
+    -          "title": "Second slide",
+    +       "title": "Second slide",
+    -          "text": "Second body"
+    +       "text": "Second body"
+    -       },
+    +     },
+    -       {
+    -          "id": "first",
+    +     {
+    +       "id": "first",
+    -          "title": "First slide at its new index",
+    +       "title": "First slide at its new index",
+    -          "text": [
+    +       "text": [
+    -             {
+    +         {
+    -                "text": "Rich  text",
+    +           "text": "Rich  text",
+    -                "bold": true
+    +           "bold": true
+    -             }
+    +         }
+    -          ],
+    +       ],
+    -          "notes": "Keep notes"
+    +       "notes": "Keep notes"
+    -       }
+    +     }
+    -    ]
+    +   ]
+      }
+    -
+
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+
+      111 |   await expect(canvas(page, 2)).toHaveAttribute('data-opf-slide-id', 'first');
+      112 |   await editTitle(page, 2, 'First slide at its new index');
+    > 113 |   await expect.poll(() => copySource(page)).toBe(source.replace('"First slide"', '"First slide at its new index"'));
+          |                                             ^
+      114 | });
+      115 |
+      116 | test('shared navigation discards an ID-less draft even when the replacement title is identical', async ({ page }) => {
+        at /private/tmp/opf-issue88-fixes-20260921/pptx-dev/tests/e2e/inspector-editing.spec.ts:113:45
+
+    Error Context: ../../opf-issue88-final-production-20260921/results/inspector-editing-invalid--4da31-ses-the-current-slide-order/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../opf-issue88-final-production-20260921/results/inspector-editing-invalid--4da31-ses-the-current-slide-order/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../opf-issue88-final-production-20260921/results/inspector-editing-invalid--4da31-ses-the-current-slide-order/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) tests/e2e/inspector.spec.ts:20:5 › published long quotes retain their footer in actual wide/portrait previews and PowerPoint downloads 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('[data-opf-renderer="0.9.0"] div[role="img"] svg')
+    Expected: 1
+    Received: 0
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" locator('[data-opf-renderer="0.9.0"] div[role="img"] svg') with timeout 5000ms
+      - waiting for locator('[data-opf-renderer="0.9.0"] div[role="img"] svg')
+        14 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      13 |   // Preview updates follow source/gallery updates. Wait for this document,
+      14 |   // rather than applying a strict single-element assertion to the starter deck.
+    > 15 |   await expect(svg).toHaveCount(1);
+         |                     ^
+      16 |   await expect(svg).toHaveAttribute('aria-label', title);
+      17 |   return svg;
+      18 | }
+        at singleSlidePreview (/private/tmp/opf-issue88-fixes-20260921/pptx-dev/tests/e2e/inspector.spec.ts:15:21)
+        at /private/tmp/opf-issue88-fixes-20260921/pptx-dev/tests/e2e/inspector.spec.ts:31:23
+
+    Error Context: ../../opf-issue88-final-production-20260921/results/inspector-published-long-q-fcc06-ws-and-PowerPoint-downloads/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../opf-issue88-final-production-20260921/results/inspector-published-long-q-fcc06-ws-and-PowerPoint-downloads/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../opf-issue88-final-production-20260921/results/inspector-published-long-q-fcc06-ws-and-PowerPoint-downloads/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4 failed
+    tests/e2e/author-json-options.spec.ts:72:5 › Author categorical choices include built-in, document and loaded catalogs with exact CRLF source undo/redo 
+    tests/e2e/inspector-editing.spec.ts:40:7 › all Inspector slides preserve exact JSON and shared furniture through offline undo/export at 540px 
+    tests/e2e/inspector-editing.spec.ts:99:5 › invalid source keeps a renderer fallback and source recovery uses the current slide order 
+    tests/e2e/inspector.spec.ts:20:5 › published long quotes retain their footer in actual wide/portrait previews and PowerPoint downloads 
+  14 passed (2.1m)

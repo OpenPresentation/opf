@@ -1,0 +1,4 @@
+# Preserve literal evidence bytes across checkouts.
+* -text
+# Exact external PR body retains generated blockquote trailing spaces.
+app54/status/pr54-held-description.md whitespace=-blank-at-eol

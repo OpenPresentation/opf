@@ -1,0 +1,1543 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-09-21T19:30:39.435314+00:00",
+  "scope": "Read-only stdlib audit of native-font-edit-01. This script hashes but never copies font programs; it does not invoke Office/COM or register/install fonts.",
+  "root": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921",
+  "auditScript": {
+    "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\font-independent-audit-01\\audit-v2.py",
+    "sha256": "86b1cd2c86bee2f7765e1e83655e31c834d3c63268762df9b68b85f18ba2c5ca"
+  },
+  "summary": {
+    "passed": true,
+    "checkCount": 16,
+    "passedChecks": 16,
+    "failedChecks": []
+  },
+  "checks": [
+    {
+      "name": "supervised_native_lifecycle_passed",
+      "passed": true,
+      "evidence": {
+        "exitCode": 0,
+        "timedOut": false,
+        "officeLifecycleComplete": true,
+        "metricsGatePassed": true,
+        "officeCleanupConfirmed": true,
+        "fontCleanupConfirmed": true,
+        "inputsUnchanged": true,
+        "lastDurableStage": "worker.complete",
+        "lastDurableStatus": "success",
+        "parentError": null
+      }
+    },
+    {
+      "name": "worker_timeout_bound_recorded",
+      "passed": true,
+      "evidence": {
+        "timeoutSeconds": 45,
+        "startedAt": "2026-09-21T19:23:01.3784800Z",
+        "finishedAt": "2026-09-21T19:23:04.1062925Z"
+      }
+    },
+    {
+      "name": "generation_and_snapshot_match",
+      "passed": true,
+      "evidence": "8ac9743832e6c63bab58a999802979dcdcb91139599f502e90bc697141cf5422"
+    },
+    {
+      "name": "four_exact_unique_carlito_face_hashes_and_names_match",
+      "passed": true,
+      "evidence": [
+        {
+          "file": "fonts/Carlito-400-normal.ttf",
+          "sha256": "ca019755404c45627a8566915df99068949dc32ee2bce48d6aeee7542d2a0a89",
+          "generationSha256": "ca019755404c45627a8566915df99068949dc32ee2bce48d6aeee7542d2a0a89",
+          "snapshotSha256": "ca019755404c45627a8566915df99068949dc32ee2bce48d6aeee7542d2a0a89",
+          "identity": {
+            "sfntSignature": "00010000",
+            "bytes": 593908,
+            "nameTableFormat": 0,
+            "nameRecords": {
+              "1": [
+                "Carlito"
+              ],
+              "2": [
+                "Regular"
+              ],
+              "4": [
+                "Carlito Regular"
+              ],
+              "6": [
+                "Carlito-Regular"
+              ]
+            },
+            "familyNames": [
+              "Carlito"
+            ],
+            "subfamilyNames": [
+              "Regular"
+            ],
+            "fullNames": [
+              "Carlito Regular"
+            ],
+            "postScriptNames": [
+              "Carlito-Regular"
+            ],
+            "os2FsType": 0
+          },
+          "identityMatchesExpected": true
+        },
+        {
+          "file": "fonts/Carlito-400-italic.ttf",
+          "sha256": "074cd1b89d53765d90d0ed3b4bfe49523efaaf4f3f430c006bc3233778b0ebb5",
+          "generationSha256": "074cd1b89d53765d90d0ed3b4bfe49523efaaf4f3f430c006bc3233778b0ebb5",
+          "snapshotSha256": "074cd1b89d53765d90d0ed3b4bfe49523efaaf4f3f430c006bc3233778b0ebb5",
+          "identity": {
+            "sfntSignature": "00010000",
+            "bytes": 580792,
+            "nameTableFormat": 0,
+            "nameRecords": {
+              "1": [
+                "Carlito"
+              ],
+              "2": [
+                "Italic"
+              ],
+              "4": [
+                "Carlito Italic"
+              ],
+              "6": [
+                "Carlito-Italic"
+              ]
+            },
+            "familyNames": [
+              "Carlito"
+            ],
+            "subfamilyNames": [
+              "Italic"
+            ],
+            "fullNames": [
+              "Carlito Italic"
+            ],
+            "postScriptNames": [
+              "Carlito-Italic"
+            ],
+            "os2FsType": 0
+          },
+          "identityMatchesExpected": true
+        },
+        {
+          "file": "fonts/Carlito-700-normal.ttf",
+          "sha256": "51edbfa32d8af939913ae1f4ad0a5173e32083499218c133384638090295f0b0",
+          "generationSha256": "51edbfa32d8af939913ae1f4ad0a5173e32083499218c133384638090295f0b0",
+          "snapshotSha256": "51edbfa32d8af939913ae1f4ad0a5173e32083499218c133384638090295f0b0",
+          "identity": {
+            "sfntSignature": "00010000",
+            "bytes": 648128,
+            "nameTableFormat": 0,
+            "nameRecords": {
+              "1": [
+                "Carlito"
+              ],
+              "2": [
+                "Bold"
+              ],
+              "4": [
+                "Carlito Bold"
+              ],
+              "6": [
+                "Carlito-Bold"
+              ]
+            },
+            "familyNames": [
+              "Carlito"
+            ],
+            "subfamilyNames": [
+              "Bold"
+            ],
+            "fullNames": [
+              "Carlito Bold"
+            ],
+            "postScriptNames": [
+              "Carlito-Bold"
+            ],
+            "os2FsType": 0
+          },
+          "identityMatchesExpected": true
+        },
+        {
+          "file": "fonts/Carlito-700-italic.ttf",
+          "sha256": "25f5672c1985d168d6bc2973864fc5a7e374bb95fe8d0f91cff47ae17fa67691",
+          "generationSha256": "25f5672c1985d168d6bc2973864fc5a7e374bb95fe8d0f91cff47ae17fa67691",
+          "snapshotSha256": "25f5672c1985d168d6bc2973864fc5a7e374bb95fe8d0f91cff47ae17fa67691",
+          "identity": {
+            "sfntSignature": "00010000",
+            "bytes": 745192,
+            "nameTableFormat": 0,
+            "nameRecords": {
+              "1": [
+                "Carlito"
+              ],
+              "2": [
+                "Bold Italic"
+              ],
+              "4": [
+                "Carlito Bold Italic"
+              ],
+              "6": [
+                "Carlito-BoldItalic"
+              ]
+            },
+            "familyNames": [
+              "Carlito"
+            ],
+            "subfamilyNames": [
+              "Bold Italic"
+            ],
+            "fullNames": [
+              "Carlito Bold Italic"
+            ],
+            "postScriptNames": [
+              "Carlito-BoldItalic"
+            ],
+            "os2FsType": 0
+          },
+          "identityMatchesExpected": true
+        }
+      ]
+    },
+    {
+      "name": "license_hash_and_snapshot_match_ofl_1_1",
+      "passed": true,
+      "evidence": {
+        "file": "LICENSE_FONT",
+        "spdx": "OFL-1.1",
+        "sha256": "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00",
+        "snapshotSha256": "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00",
+        "bytes": 4424,
+        "hasOflText": true
+      }
+    },
+    {
+      "name": "font_package_manifest_pin_matches_installed_bytes",
+      "passed": true,
+      "evidence": {
+        "name": "@expo-google-fonts/carlito",
+        "version": "0.4.1",
+        "sha256": "cada00d32e296a97db384203c837750567583d16dd3e66b6f7337bd8e6bb80d6"
+      }
+    },
+    {
+      "name": "registry_lock_and_render_font_manifest_pins_match",
+      "passed": true,
+      "evidence": {
+        "registryLockSha256": "4868f13254e3e681566164da8427d3716ceaa025435e4606e5e15fc8a87bc305",
+        "fontManifestSha256": "f8bccf58acaf49e1aa87c5bedf981fce55001045f4b1f0a2d03056c0ac071521",
+        "lockedFontPackageVersion": "0.4.1",
+        "lockedRenderVersion": "0.9.0"
+      }
+    },
+    {
+      "name": "raw_font_registration_ledger_has_four_owned_add_remove_pairs",
+      "passed": true,
+      "evidence": [
+        {
+          "sha256": "ca019755404c45627a8566915df99068949dc32ee2bce48d6aeee7542d2a0a89",
+          "added": 1,
+          "file": "fonts/Carlito-400-normal.ttf",
+          "removed": true
+        },
+        {
+          "sha256": "074cd1b89d53765d90d0ed3b4bfe49523efaaf4f3f430c006bc3233778b0ebb5",
+          "added": 1,
+          "file": "fonts/Carlito-400-italic.ttf",
+          "removed": true
+        },
+        {
+          "sha256": "51edbfa32d8af939913ae1f4ad0a5173e32083499218c133384638090295f0b0",
+          "added": 1,
+          "file": "fonts/Carlito-700-normal.ttf",
+          "removed": true
+        },
+        {
+          "sha256": "25f5672c1985d168d6bc2973864fc5a7e374bb95fe8d0f91cff47ae17fa67691",
+          "added": 1,
+          "file": "fonts/Carlito-700-italic.ttf",
+          "removed": true
+        }
+      ]
+    },
+    {
+      "name": "hash_pinned_parent_helper_uses_flags_zero_and_removes_owned_additions",
+      "passed": true,
+      "evidence": {
+        "helperSha256": "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6",
+        "helperSnapshotSha256": "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6",
+        "generationFlags": 0
+      }
+    },
+    {
+      "name": "all_20_post_run_input_hashes_independently_match",
+      "passed": true,
+      "evidence": {
+        "count": 20,
+        "mismatches": []
+      }
+    },
+    {
+      "name": "original_edited_reopened_content_styles_and_four_exact_span_lengths_match",
+      "passed": true,
+      "evidence": {
+        "original": true,
+        "edited": true,
+        "reopened": true
+      }
+    },
+    {
+      "name": "all_reported_double_geometry_and_range_bounds_reopen_within_tolerance",
+      "passed": true,
+      "evidence": {
+        "maximumDeltaPoints": "0",
+        "tolerancePoints": "0.02",
+        "comparisonCount": 32
+      }
+    },
+    {
+      "name": "png_hashes_dimensions_and_reopened_raster_stability_match",
+      "passed": true,
+      "evidence": {
+        "original": {
+          "sha256": "5a0b493e06f3c622ccc7044b6713f240c71b68501571814b7e8a35397e4469bf",
+          "reportedSha256": "5a0b493e06f3c622ccc7044b6713f240c71b68501571814b7e8a35397e4469bf",
+          "width": 1280,
+          "height": 720,
+          "passed": true
+        },
+        "edited": {
+          "sha256": "477ce16d5e425dfbc4f190c7a7813910613367b7c7e9b4403e303022d56ed59f",
+          "reportedSha256": "477ce16d5e425dfbc4f190c7a7813910613367b7c7e9b4403e303022d56ed59f",
+          "width": 1280,
+          "height": 720,
+          "passed": true
+        },
+        "reopened": {
+          "sha256": "477ce16d5e425dfbc4f190c7a7813910613367b7c7e9b4403e303022d56ed59f",
+          "reportedSha256": "477ce16d5e425dfbc4f190c7a7813910613367b7c7e9b4403e303022d56ed59f",
+          "width": 1280,
+          "height": 720,
+          "passed": true
+        }
+      }
+    },
+    {
+      "name": "stage_log_is_contiguous_successful_and_contains_both_owned_closes",
+      "passed": true,
+      "evidence": {
+        "rowCount": 654,
+        "sequenceContinuous": true,
+        "statusCounts": {
+          "success": 329,
+          "begin": 325
+        },
+        "allWrappedCallsBeginAndSucceed": true,
+        "errorRows": [],
+        "orderedEvents": {
+          "input.presentation.open": 17,
+          "edited.presentation.saveAs-owned-copy-no-font-embedding": 425,
+          "edited.presentation.close": 429,
+          "reopen.presentation.open-readonly": 438,
+          "reopened.presentation.close": 650,
+          "worker.complete": 653
+        },
+        "presentationCloseRows": [
+          {
+            "sequence": 430,
+            "timestamp": "2026-09-21T19:23:03.4277572Z",
+            "stage": "edited.presentation.close",
+            "status": "begin",
+            "error": "",
+            "cleanupConfirmed": false,
+            "officeOperationsStopped": false,
+            "ownedPresentationPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-edit-01\\native-font-edit.pptx",
+            "_line": 430
+          },
+          {
+            "sequence": 651,
+            "timestamp": "2026-09-21T19:23:04.0027705Z",
+            "stage": "reopened.presentation.close",
+            "status": "begin",
+            "error": "",
+            "cleanupConfirmed": false,
+            "officeOperationsStopped": false,
+            "ownedPresentationPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-edit-01\\native-font-edit.pptx",
+            "_line": 651
+          }
+        ],
+        "allClosesTargetExactOwnedSavedPath": true,
+        "lastStage": {
+          "sequence": 654,
+          "timestamp": "2026-09-21T19:23:04.0746142Z",
+          "stage": "worker.complete",
+          "status": "success",
+          "error": "",
+          "cleanupConfirmed": true,
+          "officeOperationsStopped": false,
+          "ownedPresentationPath": null,
+          "_line": 654
+        },
+        "noQuitDiscardOrCloseAllStage": true
+      }
+    },
+    {
+      "name": "worker_source_contains_no_quit_discard_or_closeall_calls",
+      "passed": true,
+      "evidence": {
+        "snapshotSha256": "b18f9e2ab822a42b9204a15314ed5ef6e74b1d933ba3e5e7e4efc3a542368960",
+        "forbiddenTokensFound": []
+      }
+    },
+    {
+      "name": "saved_pptx_crc_xml_and_no_embedded_font_programs",
+      "passed": true,
+      "evidence": {
+        "sha256": "b3cbc884c15501b8481dc165d58909750c16fc6f41253119baa0985373951901",
+        "bytes": 17089,
+        "memberCount": 23,
+        "xmlAndRelsCount": 23,
+        "badCrcMember": null,
+        "xmlErrors": [],
+        "fontProgramMembers": [],
+        "embeddedFontTags": []
+      }
+    }
+  ],
+  "details": {
+    "rawRun": {
+      "requestSha256": "6c9ce857cee33b54cd9a3e6202f3327731f2b1aa7c4fa8a2e32a250cf5069f8f",
+      "workerReportSha256": "9a038b8009d87a23045996d905eaa08d09a6d16fe4cc582afa8006e688bd701f",
+      "supervisorSha256": "a6af4fd0bb6bcd8185d9538cb4e923d81e45f34b7dc793ac0989e28a572c1fed",
+      "workerSummarySha256": "c417d0fc7fd228478ba8f26b29bc1e67e09c9c344414a1b12258c4341e9703ab",
+      "stagesSha256": "4a1684b5fcbedd21eeb554d3832ab13ba2ee1c33ac9e103b02d2144605dea9f4",
+      "savedPresentation": {
+        "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-edit-01\\native-font-edit.pptx",
+        "sha256": "b3cbc884c15501b8481dc165d58909750c16fc6f41253119baa0985373951901"
+      },
+      "worker": {
+        "exitCode": 0,
+        "scope": "Owned verifier process only. A timeout does not prove cleanup completed; Office processes are never terminated.",
+        "timedOut": false,
+        "processId": 41172,
+        "timeoutSeconds": 45,
+        "startedAt": "2026-09-21T19:23:01.3784800Z",
+        "finishedAt": "2026-09-21T19:23:04.1062925Z"
+      },
+      "supervisor": {
+        "exitCode": 0,
+        "timedOut": false,
+        "officeLifecycleComplete": true,
+        "metricsGatePassed": true,
+        "officeCleanupConfirmed": true,
+        "fontCleanupConfirmed": true,
+        "inputsUnchanged": true,
+        "lastDurableStage": "worker.complete",
+        "lastDurableStatus": "success",
+        "parentError": null
+      }
+    },
+    "fontProvenance": {
+      "generationSha256": "8ac9743832e6c63bab58a999802979dcdcb91139599f502e90bc697141cf5422",
+      "generationSnapshotSha256": "8ac9743832e6c63bab58a999802979dcdcb91139599f502e90bc697141cf5422",
+      "registrationFlags": 0,
+      "registrationScope": "temporary Windows session, surviving parent ownership",
+      "package": {
+        "name": "@expo-google-fonts/carlito",
+        "version": "0.4.1",
+        "manifestSha256": "cada00d32e296a97db384203c837750567583d16dd3e66b6f7337bd8e6bb80d6"
+      },
+      "installedPackageJsonSha256": "cada00d32e296a97db384203c837750567583d16dd3e66b6f7337bd8e6bb80d6",
+      "registryLockSha256": "4868f13254e3e681566164da8427d3716ceaa025435e4606e5e15fc8a87bc305",
+      "fontManifest": {
+        "sha256": "f8bccf58acaf49e1aa87c5bedf981fce55001045f4b1f0a2d03056c0ac071521",
+        "package": "@openpresentation/opf-render",
+        "version": "0.9.0"
+      },
+      "installedFontManifestSha256": "f8bccf58acaf49e1aa87c5bedf981fce55001045f4b1f0a2d03056c0ac071521",
+      "license": {
+        "file": "LICENSE_FONT",
+        "spdx": "OFL-1.1",
+        "sha256": "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00",
+        "snapshotSha256": "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00",
+        "bytes": 4424,
+        "hasOflText": true
+      },
+      "faces": [
+        {
+          "file": "fonts/Carlito-400-normal.ttf",
+          "sha256": "ca019755404c45627a8566915df99068949dc32ee2bce48d6aeee7542d2a0a89",
+          "generationSha256": "ca019755404c45627a8566915df99068949dc32ee2bce48d6aeee7542d2a0a89",
+          "snapshotSha256": "ca019755404c45627a8566915df99068949dc32ee2bce48d6aeee7542d2a0a89",
+          "identity": {
+            "sfntSignature": "00010000",
+            "bytes": 593908,
+            "nameTableFormat": 0,
+            "nameRecords": {
+              "1": [
+                "Carlito"
+              ],
+              "2": [
+                "Regular"
+              ],
+              "4": [
+                "Carlito Regular"
+              ],
+              "6": [
+                "Carlito-Regular"
+              ]
+            },
+            "familyNames": [
+              "Carlito"
+            ],
+            "subfamilyNames": [
+              "Regular"
+            ],
+            "fullNames": [
+              "Carlito Regular"
+            ],
+            "postScriptNames": [
+              "Carlito-Regular"
+            ],
+            "os2FsType": 0
+          },
+          "identityMatchesExpected": true
+        },
+        {
+          "file": "fonts/Carlito-400-italic.ttf",
+          "sha256": "074cd1b89d53765d90d0ed3b4bfe49523efaaf4f3f430c006bc3233778b0ebb5",
+          "generationSha256": "074cd1b89d53765d90d0ed3b4bfe49523efaaf4f3f430c006bc3233778b0ebb5",
+          "snapshotSha256": "074cd1b89d53765d90d0ed3b4bfe49523efaaf4f3f430c006bc3233778b0ebb5",
+          "identity": {
+            "sfntSignature": "00010000",
+            "bytes": 580792,
+            "nameTableFormat": 0,
+            "nameRecords": {
+              "1": [
+                "Carlito"
+              ],
+              "2": [
+                "Italic"
+              ],
+              "4": [
+                "Carlito Italic"
+              ],
+              "6": [
+                "Carlito-Italic"
+              ]
+            },
+            "familyNames": [
+              "Carlito"
+            ],
+            "subfamilyNames": [
+              "Italic"
+            ],
+            "fullNames": [
+              "Carlito Italic"
+            ],
+            "postScriptNames": [
+              "Carlito-Italic"
+            ],
+            "os2FsType": 0
+          },
+          "identityMatchesExpected": true
+        },
+        {
+          "file": "fonts/Carlito-700-normal.ttf",
+          "sha256": "51edbfa32d8af939913ae1f4ad0a5173e32083499218c133384638090295f0b0",
+          "generationSha256": "51edbfa32d8af939913ae1f4ad0a5173e32083499218c133384638090295f0b0",
+          "snapshotSha256": "51edbfa32d8af939913ae1f4ad0a5173e32083499218c133384638090295f0b0",
+          "identity": {
+            "sfntSignature": "00010000",
+            "bytes": 648128,
+            "nameTableFormat": 0,
+            "nameRecords": {
+              "1": [
+                "Carlito"
+              ],
+              "2": [
+                "Bold"
+              ],
+              "4": [
+                "Carlito Bold"
+              ],
+              "6": [
+                "Carlito-Bold"
+              ]
+            },
+            "familyNames": [
+              "Carlito"
+            ],
+            "subfamilyNames": [
+              "Bold"
+            ],
+            "fullNames": [
+              "Carlito Bold"
+            ],
+            "postScriptNames": [
+              "Carlito-Bold"
+            ],
+            "os2FsType": 0
+          },
+          "identityMatchesExpected": true
+        },
+        {
+          "file": "fonts/Carlito-700-italic.ttf",
+          "sha256": "25f5672c1985d168d6bc2973864fc5a7e374bb95fe8d0f91cff47ae17fa67691",
+          "generationSha256": "25f5672c1985d168d6bc2973864fc5a7e374bb95fe8d0f91cff47ae17fa67691",
+          "snapshotSha256": "25f5672c1985d168d6bc2973864fc5a7e374bb95fe8d0f91cff47ae17fa67691",
+          "identity": {
+            "sfntSignature": "00010000",
+            "bytes": 745192,
+            "nameTableFormat": 0,
+            "nameRecords": {
+              "1": [
+                "Carlito"
+              ],
+              "2": [
+                "Bold Italic"
+              ],
+              "4": [
+                "Carlito Bold Italic"
+              ],
+              "6": [
+                "Carlito-BoldItalic"
+              ]
+            },
+            "familyNames": [
+              "Carlito"
+            ],
+            "subfamilyNames": [
+              "Bold Italic"
+            ],
+            "fullNames": [
+              "Carlito Bold Italic"
+            ],
+            "postScriptNames": [
+              "Carlito-BoldItalic"
+            ],
+            "os2FsType": 0
+          },
+          "identityMatchesExpected": true
+        }
+      ],
+      "registrationLedger": [
+        {
+          "sha256": "ca019755404c45627a8566915df99068949dc32ee2bce48d6aeee7542d2a0a89",
+          "added": 1,
+          "file": "fonts/Carlito-400-normal.ttf",
+          "removed": true
+        },
+        {
+          "sha256": "074cd1b89d53765d90d0ed3b4bfe49523efaaf4f3f430c006bc3233778b0ebb5",
+          "added": 1,
+          "file": "fonts/Carlito-400-italic.ttf",
+          "removed": true
+        },
+        {
+          "sha256": "51edbfa32d8af939913ae1f4ad0a5173e32083499218c133384638090295f0b0",
+          "added": 1,
+          "file": "fonts/Carlito-700-normal.ttf",
+          "removed": true
+        },
+        {
+          "sha256": "25f5672c1985d168d6bc2973864fc5a7e374bb95fe8d0f91cff47ae17fa67691",
+          "added": 1,
+          "file": "fonts/Carlito-700-italic.ttf",
+          "removed": true
+        }
+      ]
+    },
+    "postRunInputHashes": [
+      {
+        "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\font-edit-fixture-01\\source.pptx",
+        "expected": "4dd235c923eb346ee19ac7ee89a93cce9a355eec7355692259d81c541bb3556d",
+        "supervisorActual": "4dd235c923eb346ee19ac7ee89a93cce9a355eec7355692259d81c541bb3556d",
+        "recomputedActual": "4dd235c923eb346ee19ac7ee89a93cce9a355eec7355692259d81c541bb3556d",
+        "matched": true,
+        "error": null
+      },
+      {
+        "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-edit-01\\inputs\\source.pptx",
+        "expected": "4dd235c923eb346ee19ac7ee89a93cce9a355eec7355692259d81c541bb3556d",
+        "supervisorActual": "4dd235c923eb346ee19ac7ee89a93cce9a355eec7355692259d81c541bb3556d",
+        "recomputedActual": "4dd235c923eb346ee19ac7ee89a93cce9a355eec7355692259d81c541bb3556d",
+        "matched": true,
+        "error": null
+      },
+      {
+        "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\font-edit-fixture-01\\generation.json",
+        "expected": "8ac9743832e6c63bab58a999802979dcdcb91139599f502e90bc697141cf5422",
+        "supervisorActual": "8ac9743832e6c63bab58a999802979dcdcb91139599f502e90bc697141cf5422",
+        "recomputedActual": "8ac9743832e6c63bab58a999802979dcdcb91139599f502e90bc697141cf5422",
+        "matched": true,
+        "error": null
+      },
+      {
+        "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-edit-01\\inputs\\generation.json",
+        "expected": "8ac9743832e6c63bab58a999802979dcdcb91139599f502e90bc697141cf5422",
+        "supervisorActual": "8ac9743832e6c63bab58a999802979dcdcb91139599f502e90bc697141cf5422",
+        "recomputedActual": "8ac9743832e6c63bab58a999802979dcdcb91139599f502e90bc697141cf5422",
+        "matched": true,
+        "error": null
+      },
+      {
+        "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\font-edit-fixture-01\\LICENSE_FONT",
+        "expected": "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00",
+        "supervisorActual": "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00",
+        "recomputedActual": "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00",
+        "matched": true,
+        "error": null
+      },
+      {
+        "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-edit-01\\inputs\\LICENSE_FONT",
+        "expected": "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00",
+        "supervisorActual": "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00",
+        "recomputedActual": "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00",
+        "matched": true,
+        "error": null
+      },
+      {
+        "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\font-edit-fixture-01\\fonts\\Carlito-400-normal.ttf",
+        "expected": "ca019755404c45627a8566915df99068949dc32ee2bce48d6aeee7542d2a0a89",
+        "supervisorActual": "ca019755404c45627a8566915df99068949dc32ee2bce48d6aeee7542d2a0a89",
+        "recomputedActual": "ca019755404c45627a8566915df99068949dc32ee2bce48d6aeee7542d2a0a89",
+        "matched": true,
+        "error": null
+      },
+      {
+        "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-edit-01\\inputs\\fonts\\Carlito-400-normal.ttf",
+        "expected": "ca019755404c45627a8566915df99068949dc32ee2bce48d6aeee7542d2a0a89",
+        "supervisorActual": "ca019755404c45627a8566915df99068949dc32ee2bce48d6aeee7542d2a0a89",
+        "recomputedActual": "ca019755404c45627a8566915df99068949dc32ee2bce48d6aeee7542d2a0a89",
+        "matched": true,
+        "error": null
+      },
+      {
+        "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\font-edit-fixture-01\\fonts\\Carlito-400-italic.ttf",
+        "expected": "074cd1b89d53765d90d0ed3b4bfe49523efaaf4f3f430c006bc3233778b0ebb5",
+        "supervisorActual": "074cd1b89d53765d90d0ed3b4bfe49523efaaf4f3f430c006bc3233778b0ebb5",
+        "recomputedActual": "074cd1b89d53765d90d0ed3b4bfe49523efaaf4f3f430c006bc3233778b0ebb5",
+        "matched": true,
+        "error": null
+      },
+      {
+        "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-edit-01\\inputs\\fonts\\Carlito-400-italic.ttf",
+        "expected": "074cd1b89d53765d90d0ed3b4bfe49523efaaf4f3f430c006bc3233778b0ebb5",
+        "supervisorActual": "074cd1b89d53765d90d0ed3b4bfe49523efaaf4f3f430c006bc3233778b0ebb5",
+        "recomputedActual": "074cd1b89d53765d90d0ed3b4bfe49523efaaf4f3f430c006bc3233778b0ebb5",
+        "matched": true,
+        "error": null
+      },
+      {
+        "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\font-edit-fixture-01\\fonts\\Carlito-700-normal.ttf",
+        "expected": "51edbfa32d8af939913ae1f4ad0a5173e32083499218c133384638090295f0b0",
+        "supervisorActual": "51edbfa32d8af939913ae1f4ad0a5173e32083499218c133384638090295f0b0",
+        "recomputedActual": "51edbfa32d8af939913ae1f4ad0a5173e32083499218c133384638090295f0b0",
+        "matched": true,
+        "error": null
+      },
+      {
+        "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-edit-01\\inputs\\fonts\\Carlito-700-normal.ttf",
+        "expected": "51edbfa32d8af939913ae1f4ad0a5173e32083499218c133384638090295f0b0",
+        "supervisorActual": "51edbfa32d8af939913ae1f4ad0a5173e32083499218c133384638090295f0b0",
+        "recomputedActual": "51edbfa32d8af939913ae1f4ad0a5173e32083499218c133384638090295f0b0",
+        "matched": true,
+        "error": null
+      },
+      {
+        "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\font-edit-fixture-01\\fonts\\Carlito-700-italic.ttf",
+        "expected": "25f5672c1985d168d6bc2973864fc5a7e374bb95fe8d0f91cff47ae17fa67691",
+        "supervisorActual": "25f5672c1985d168d6bc2973864fc5a7e374bb95fe8d0f91cff47ae17fa67691",
+        "recomputedActual": "25f5672c1985d168d6bc2973864fc5a7e374bb95fe8d0f91cff47ae17fa67691",
+        "matched": true,
+        "error": null
+      },
+      {
+        "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-edit-01\\inputs\\fonts\\Carlito-700-italic.ttf",
+        "expected": "25f5672c1985d168d6bc2973864fc5a7e374bb95fe8d0f91cff47ae17fa67691",
+        "supervisorActual": "25f5672c1985d168d6bc2973864fc5a7e374bb95fe8d0f91cff47ae17fa67691",
+        "recomputedActual": "25f5672c1985d168d6bc2973864fc5a7e374bb95fe8d0f91cff47ae17fa67691",
+        "matched": true,
+        "error": null
+      },
+      {
+        "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\sources\\opf-pptx\\test\\native-font-edit.ps1",
+        "expected": "b18f9e2ab822a42b9204a15314ed5ef6e74b1d933ba3e5e7e4efc3a542368960",
+        "supervisorActual": "b18f9e2ab822a42b9204a15314ed5ef6e74b1d933ba3e5e7e4efc3a542368960",
+        "recomputedActual": "b18f9e2ab822a42b9204a15314ed5ef6e74b1d933ba3e5e7e4efc3a542368960",
+        "matched": true,
+        "error": null
+      },
+      {
+        "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-edit-01\\inputs\\native-font-edit.ps1",
+        "expected": "b18f9e2ab822a42b9204a15314ed5ef6e74b1d933ba3e5e7e4efc3a542368960",
+        "supervisorActual": "b18f9e2ab822a42b9204a15314ed5ef6e74b1d933ba3e5e7e4efc3a542368960",
+        "recomputedActual": "b18f9e2ab822a42b9204a15314ed5ef6e74b1d933ba3e5e7e4efc3a542368960",
+        "matched": true,
+        "error": null
+      },
+      {
+        "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\sources\\opf-pptx\\test\\native-process.ps1",
+        "expected": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+        "supervisorActual": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+        "recomputedActual": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+        "matched": true,
+        "error": null
+      },
+      {
+        "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-edit-01\\inputs\\native-process.ps1",
+        "expected": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+        "supervisorActual": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+        "recomputedActual": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+        "matched": true,
+        "error": null
+      },
+      {
+        "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\sources\\opf-pptx\\test\\native-text-fonts.ps1",
+        "expected": "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6",
+        "supervisorActual": "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6",
+        "recomputedActual": "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6",
+        "matched": true,
+        "error": null
+      },
+      {
+        "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-edit-01\\inputs\\native-text-fonts.ps1",
+        "expected": "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6",
+        "supervisorActual": "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6",
+        "recomputedActual": "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6",
+        "matched": true,
+        "error": null
+      }
+    ],
+    "observations": {
+      "original": {
+        "slideCount": 1,
+        "shapeCount": 2,
+        "slideSizePoints": [
+          960,
+          540
+        ],
+        "shapes": [
+          {
+            "role": "title",
+            "name": "OPF heading slides.0.title line 0",
+            "type": 1,
+            "geometry": {
+              "left": "43.200000762939453",
+              "top": "43.200000762939453",
+              "width": "873.5999755859375",
+              "height": "49.409999847412109"
+            },
+            "whole": {
+              "text": "Plain control",
+              "length": 13,
+              "bounds": {
+                "left": "43.200000762939453",
+                "top": "43.200000762939453",
+                "width": "226.43504333496094",
+                "height": "48.599998474121094"
+              },
+              "font": {
+                "name": "Aptos Display",
+                "size": "40.5",
+                "bold": -1,
+                "italic": 0
+              }
+            },
+            "runs": []
+          },
+          {
+            "role": "body",
+            "name": "OPF text slides.0.text line 0",
+            "type": 1,
+            "geometry": {
+              "left": "43.200000762939453",
+              "top": "110.61000061035156",
+              "width": "873.5999755859375",
+              "height": "22.875040054321289"
+            },
+            "whole": {
+              "text": "Current content",
+              "length": 15,
+              "bounds": {
+                "left": "43.200000762939453",
+                "top": "110.61000061035156",
+                "width": "132.27999877929688",
+                "height": "22.5"
+              },
+              "font": {
+                "name": "Aptos",
+                "size": "18.75",
+                "bold": 0,
+                "italic": 0
+              }
+            },
+            "runs": []
+          }
+        ],
+        "passed": true
+      },
+      "edited": {
+        "slideCount": 1,
+        "shapeCount": 2,
+        "slideSizePoints": [
+          960,
+          540
+        ],
+        "shapes": [
+          {
+            "role": "title",
+            "name": "OPF heading slides.0.title line 0",
+            "type": 1,
+            "geometry": {
+              "left": "43.200000762939453",
+              "top": "43.200000762939453",
+              "width": "873.5999755859375",
+              "height": "49.409999847412109"
+            },
+            "whole": {
+              "text": "Gate E - Carlito",
+              "length": 16,
+              "bounds": {
+                "left": "43.200000762939453",
+                "top": "43.200000762939453",
+                "width": "192.62504577636719",
+                "height": 36
+              },
+              "font": {
+                "name": "Carlito",
+                "size": 30,
+                "bold": -1,
+                "italic": 0
+              }
+            },
+            "runs": []
+          },
+          {
+            "role": "body",
+            "name": "OPF text slides.0.text line 0",
+            "type": 1,
+            "geometry": {
+              "left": "43.200000762939453",
+              "top": "110.61000061035156",
+              "width": "873.5999755859375",
+              "height": "22.875040054321289"
+            },
+            "whole": {
+              "text": "Regular 18 | Bold 20 | Italic 22 | BoldItalic 24",
+              "length": 48,
+              "bounds": {
+                "left": "43.200000762939453",
+                "top": "110.61000061035156",
+                "width": "389.12503051757813",
+                "height": "28.799999237060547"
+              },
+              "font": {
+                "name": "Carlito",
+                "size": 18,
+                "bold": -2,
+                "italic": -2
+              }
+            },
+            "runs": [
+              {
+                "text": "Regular 18",
+                "length": 10,
+                "bounds": {
+                  "left": "43.200000762939453",
+                  "top": "110.61000061035156",
+                  "width": "78.129997253417969",
+                  "height": "28.799999237060547"
+                },
+                "font": {
+                  "name": "Carlito",
+                  "size": 18,
+                  "bold": 0,
+                  "italic": 0
+                }
+              },
+              {
+                "text": "Bold 20",
+                "length": 7,
+                "bounds": {
+                  "left": "137.82504272460938",
+                  "top": "110.61000061035156",
+                  "width": "62.380001068115234",
+                  "height": "28.799999237060547"
+                },
+                "font": {
+                  "name": "Carlito",
+                  "size": 20,
+                  "bold": -1,
+                  "italic": 0
+                }
+              },
+              {
+                "text": "Italic 22",
+                "length": 9,
+                "bounds": {
+                  "left": "216.69999694824219",
+                  "top": "110.61000061035156",
+                  "width": "70.505043029785156",
+                  "height": "28.799999237060547"
+                },
+                "font": {
+                  "name": "Carlito",
+                  "size": 22,
+                  "bold": 0,
+                  "italic": -1
+                }
+              },
+              {
+                "text": "BoldItalic 24",
+                "length": 13,
+                "bounds": {
+                  "left": "303.70001220703125",
+                  "top": "110.61000061035156",
+                  "width": "123.25504302978516",
+                  "height": "28.799999237060547"
+                },
+                "font": {
+                  "name": "Carlito",
+                  "size": 24,
+                  "bold": -1,
+                  "italic": -1
+                }
+              }
+            ]
+          }
+        ],
+        "passed": true
+      },
+      "reopened": {
+        "slideCount": 1,
+        "shapeCount": 2,
+        "slideSizePoints": [
+          960,
+          540
+        ],
+        "shapes": [
+          {
+            "role": "title",
+            "name": "OPF heading slides.0.title line 0",
+            "type": 1,
+            "geometry": {
+              "left": "43.200000762939453",
+              "top": "43.200000762939453",
+              "width": "873.5999755859375",
+              "height": "49.409999847412109"
+            },
+            "whole": {
+              "text": "Gate E - Carlito",
+              "length": 16,
+              "bounds": {
+                "left": "43.200000762939453",
+                "top": "43.200000762939453",
+                "width": "192.62504577636719",
+                "height": 36
+              },
+              "font": {
+                "name": "Carlito",
+                "size": 30,
+                "bold": -1,
+                "italic": 0
+              }
+            },
+            "runs": []
+          },
+          {
+            "role": "body",
+            "name": "OPF text slides.0.text line 0",
+            "type": 1,
+            "geometry": {
+              "left": "43.200000762939453",
+              "top": "110.61000061035156",
+              "width": "873.5999755859375",
+              "height": "22.875040054321289"
+            },
+            "whole": {
+              "text": "Regular 18 | Bold 20 | Italic 22 | BoldItalic 24",
+              "length": 48,
+              "bounds": {
+                "left": "43.200000762939453",
+                "top": "110.61000061035156",
+                "width": "389.12503051757813",
+                "height": "28.799999237060547"
+              },
+              "font": {
+                "name": "Carlito",
+                "size": 18,
+                "bold": -2,
+                "italic": -2
+              }
+            },
+            "runs": [
+              {
+                "text": "Regular 18",
+                "length": 10,
+                "bounds": {
+                  "left": "43.200000762939453",
+                  "top": "110.61000061035156",
+                  "width": "78.129997253417969",
+                  "height": "28.799999237060547"
+                },
+                "font": {
+                  "name": "Carlito",
+                  "size": 18,
+                  "bold": 0,
+                  "italic": 0
+                }
+              },
+              {
+                "text": "Bold 20",
+                "length": 7,
+                "bounds": {
+                  "left": "137.82504272460938",
+                  "top": "110.61000061035156",
+                  "width": "62.380001068115234",
+                  "height": "28.799999237060547"
+                },
+                "font": {
+                  "name": "Carlito",
+                  "size": 20,
+                  "bold": -1,
+                  "italic": 0
+                }
+              },
+              {
+                "text": "Italic 22",
+                "length": 9,
+                "bounds": {
+                  "left": "216.69999694824219",
+                  "top": "110.61000061035156",
+                  "width": "70.505043029785156",
+                  "height": "28.799999237060547"
+                },
+                "font": {
+                  "name": "Carlito",
+                  "size": 22,
+                  "bold": 0,
+                  "italic": -1
+                }
+              },
+              {
+                "text": "BoldItalic 24",
+                "length": 13,
+                "bounds": {
+                  "left": "303.70001220703125",
+                  "top": "110.61000061035156",
+                  "width": "123.25504302978516",
+                  "height": "28.799999237060547"
+                },
+                "font": {
+                  "name": "Carlito",
+                  "size": 24,
+                  "bold": -1,
+                  "italic": -1
+                }
+              }
+            ]
+          }
+        ],
+        "passed": true
+      }
+    },
+    "geometryPersistence": {
+      "tolerancePoints": "0.02",
+      "independentlyComputedMaximumDeltaPoints": "0",
+      "workerReportedMaximumDeltaPoints": "0",
+      "comparisons": [
+        {
+          "role": "title",
+          "range": "geometry",
+          "coordinate": "left",
+          "edited": "43.200000762939453",
+          "reopened": "43.200000762939453",
+          "absoluteDelta": "0E-15"
+        },
+        {
+          "role": "title",
+          "range": "geometry",
+          "coordinate": "top",
+          "edited": "43.200000762939453",
+          "reopened": "43.200000762939453",
+          "absoluteDelta": "0E-15"
+        },
+        {
+          "role": "title",
+          "range": "geometry",
+          "coordinate": "width",
+          "edited": "873.5999755859375",
+          "reopened": "873.5999755859375",
+          "absoluteDelta": "0E-13"
+        },
+        {
+          "role": "title",
+          "range": "geometry",
+          "coordinate": "height",
+          "edited": "49.409999847412109",
+          "reopened": "49.409999847412109",
+          "absoluteDelta": "0E-15"
+        },
+        {
+          "role": "title",
+          "range": "whole.bounds",
+          "coordinate": "left",
+          "edited": "43.200000762939453",
+          "reopened": "43.200000762939453",
+          "absoluteDelta": "0E-15"
+        },
+        {
+          "role": "title",
+          "range": "whole.bounds",
+          "coordinate": "top",
+          "edited": "43.200000762939453",
+          "reopened": "43.200000762939453",
+          "absoluteDelta": "0E-15"
+        },
+        {
+          "role": "title",
+          "range": "whole.bounds",
+          "coordinate": "width",
+          "edited": "192.62504577636719",
+          "reopened": "192.62504577636719",
+          "absoluteDelta": "0E-14"
+        },
+        {
+          "role": "title",
+          "range": "whole.bounds",
+          "coordinate": "height",
+          "edited": "36",
+          "reopened": "36",
+          "absoluteDelta": "0"
+        },
+        {
+          "role": "body",
+          "range": "geometry",
+          "coordinate": "left",
+          "edited": "43.200000762939453",
+          "reopened": "43.200000762939453",
+          "absoluteDelta": "0E-15"
+        },
+        {
+          "role": "body",
+          "range": "geometry",
+          "coordinate": "top",
+          "edited": "110.61000061035156",
+          "reopened": "110.61000061035156",
+          "absoluteDelta": "0E-14"
+        },
+        {
+          "role": "body",
+          "range": "geometry",
+          "coordinate": "width",
+          "edited": "873.5999755859375",
+          "reopened": "873.5999755859375",
+          "absoluteDelta": "0E-13"
+        },
+        {
+          "role": "body",
+          "range": "geometry",
+          "coordinate": "height",
+          "edited": "22.875040054321289",
+          "reopened": "22.875040054321289",
+          "absoluteDelta": "0E-15"
+        },
+        {
+          "role": "body",
+          "range": "whole.bounds",
+          "coordinate": "left",
+          "edited": "43.200000762939453",
+          "reopened": "43.200000762939453",
+          "absoluteDelta": "0E-15"
+        },
+        {
+          "role": "body",
+          "range": "whole.bounds",
+          "coordinate": "top",
+          "edited": "110.61000061035156",
+          "reopened": "110.61000061035156",
+          "absoluteDelta": "0E-14"
+        },
+        {
+          "role": "body",
+          "range": "whole.bounds",
+          "coordinate": "width",
+          "edited": "389.12503051757813",
+          "reopened": "389.12503051757813",
+          "absoluteDelta": "0E-14"
+        },
+        {
+          "role": "body",
+          "range": "whole.bounds",
+          "coordinate": "height",
+          "edited": "28.799999237060547",
+          "reopened": "28.799999237060547",
+          "absoluteDelta": "0E-15"
+        },
+        {
+          "role": "body",
+          "range": "runs[0].bounds",
+          "coordinate": "left",
+          "edited": "43.200000762939453",
+          "reopened": "43.200000762939453",
+          "absoluteDelta": "0E-15"
+        },
+        {
+          "role": "body",
+          "range": "runs[0].bounds",
+          "coordinate": "top",
+          "edited": "110.61000061035156",
+          "reopened": "110.61000061035156",
+          "absoluteDelta": "0E-14"
+        },
+        {
+          "role": "body",
+          "range": "runs[0].bounds",
+          "coordinate": "width",
+          "edited": "78.129997253417969",
+          "reopened": "78.129997253417969",
+          "absoluteDelta": "0E-15"
+        },
+        {
+          "role": "body",
+          "range": "runs[0].bounds",
+          "coordinate": "height",
+          "edited": "28.799999237060547",
+          "reopened": "28.799999237060547",
+          "absoluteDelta": "0E-15"
+        },
+        {
+          "role": "body",
+          "range": "runs[1].bounds",
+          "coordinate": "left",
+          "edited": "137.82504272460938",
+          "reopened": "137.82504272460938",
+          "absoluteDelta": "0E-14"
+        },
+        {
+          "role": "body",
+          "range": "runs[1].bounds",
+          "coordinate": "top",
+          "edited": "110.61000061035156",
+          "reopened": "110.61000061035156",
+          "absoluteDelta": "0E-14"
+        },
+        {
+          "role": "body",
+          "range": "runs[1].bounds",
+          "coordinate": "width",
+          "edited": "62.380001068115234",
+          "reopened": "62.380001068115234",
+          "absoluteDelta": "0E-15"
+        },
+        {
+          "role": "body",
+          "range": "runs[1].bounds",
+          "coordinate": "height",
+          "edited": "28.799999237060547",
+          "reopened": "28.799999237060547",
+          "absoluteDelta": "0E-15"
+        },
+        {
+          "role": "body",
+          "range": "runs[2].bounds",
+          "coordinate": "left",
+          "edited": "216.69999694824219",
+          "reopened": "216.69999694824219",
+          "absoluteDelta": "0E-14"
+        },
+        {
+          "role": "body",
+          "range": "runs[2].bounds",
+          "coordinate": "top",
+          "edited": "110.61000061035156",
+          "reopened": "110.61000061035156",
+          "absoluteDelta": "0E-14"
+        },
+        {
+          "role": "body",
+          "range": "runs[2].bounds",
+          "coordinate": "width",
+          "edited": "70.505043029785156",
+          "reopened": "70.505043029785156",
+          "absoluteDelta": "0E-15"
+        },
+        {
+          "role": "body",
+          "range": "runs[2].bounds",
+          "coordinate": "height",
+          "edited": "28.799999237060547",
+          "reopened": "28.799999237060547",
+          "absoluteDelta": "0E-15"
+        },
+        {
+          "role": "body",
+          "range": "runs[3].bounds",
+          "coordinate": "left",
+          "edited": "303.70001220703125",
+          "reopened": "303.70001220703125",
+          "absoluteDelta": "0E-14"
+        },
+        {
+          "role": "body",
+          "range": "runs[3].bounds",
+          "coordinate": "top",
+          "edited": "110.61000061035156",
+          "reopened": "110.61000061035156",
+          "absoluteDelta": "0E-14"
+        },
+        {
+          "role": "body",
+          "range": "runs[3].bounds",
+          "coordinate": "width",
+          "edited": "123.25504302978516",
+          "reopened": "123.25504302978516",
+          "absoluteDelta": "0E-14"
+        },
+        {
+          "role": "body",
+          "range": "runs[3].bounds",
+          "coordinate": "height",
+          "edited": "28.799999237060547",
+          "reopened": "28.799999237060547",
+          "absoluteDelta": "0E-15"
+        }
+      ]
+    },
+    "rasters": {
+      "original": {
+        "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-edit-01\\original.png",
+        "sha256": "5a0b493e06f3c622ccc7044b6713f240c71b68501571814b7e8a35397e4469bf",
+        "reportedSha256": "5a0b493e06f3c622ccc7044b6713f240c71b68501571814b7e8a35397e4469bf",
+        "width": 1280,
+        "height": 720,
+        "passed": true
+      },
+      "edited": {
+        "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-edit-01\\edited.png",
+        "sha256": "477ce16d5e425dfbc4f190c7a7813910613367b7c7e9b4403e303022d56ed59f",
+        "reportedSha256": "477ce16d5e425dfbc4f190c7a7813910613367b7c7e9b4403e303022d56ed59f",
+        "width": 1280,
+        "height": 720,
+        "passed": true
+      },
+      "reopened": {
+        "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-edit-01\\reopened.png",
+        "sha256": "477ce16d5e425dfbc4f190c7a7813910613367b7c7e9b4403e303022d56ed59f",
+        "reportedSha256": "477ce16d5e425dfbc4f190c7a7813910613367b7c7e9b4403e303022d56ed59f",
+        "width": 1280,
+        "height": 720,
+        "passed": true
+      }
+    },
+    "lifecycleStages": {
+      "rowCount": 654,
+      "sequenceContinuous": true,
+      "statusCounts": {
+        "success": 329,
+        "begin": 325
+      },
+      "allWrappedCallsBeginAndSucceed": true,
+      "errorRows": [],
+      "orderedEvents": {
+        "input.presentation.open": 17,
+        "edited.presentation.saveAs-owned-copy-no-font-embedding": 425,
+        "edited.presentation.close": 429,
+        "reopen.presentation.open-readonly": 438,
+        "reopened.presentation.close": 650,
+        "worker.complete": 653
+      },
+      "presentationCloseRows": [
+        {
+          "sequence": 430,
+          "timestamp": "2026-09-21T19:23:03.4277572Z",
+          "stage": "edited.presentation.close",
+          "status": "begin",
+          "error": "",
+          "cleanupConfirmed": false,
+          "officeOperationsStopped": false,
+          "ownedPresentationPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-edit-01\\native-font-edit.pptx",
+          "_line": 430
+        },
+        {
+          "sequence": 651,
+          "timestamp": "2026-09-21T19:23:04.0027705Z",
+          "stage": "reopened.presentation.close",
+          "status": "begin",
+          "error": "",
+          "cleanupConfirmed": false,
+          "officeOperationsStopped": false,
+          "ownedPresentationPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-edit-01\\native-font-edit.pptx",
+          "_line": 651
+        }
+      ],
+      "allClosesTargetExactOwnedSavedPath": true,
+      "lastStage": {
+        "sequence": 654,
+        "timestamp": "2026-09-21T19:23:04.0746142Z",
+        "stage": "worker.complete",
+        "status": "success",
+        "error": "",
+        "cleanupConfirmed": true,
+        "officeOperationsStopped": false,
+        "ownedPresentationPath": null,
+        "_line": 654
+      },
+      "noQuitDiscardOrCloseAllStage": true
+    },
+    "pptxArchive": {
+      "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-font-edit-01\\native-font-edit.pptx",
+      "sha256": "b3cbc884c15501b8481dc165d58909750c16fc6f41253119baa0985373951901",
+      "bytes": 17089,
+      "memberCount": 23,
+      "xmlAndRelsCount": 23,
+      "badCrcMember": null,
+      "xmlErrors": [],
+      "fontProgramMembers": [],
+      "embeddedFontTags": [],
+      "members": [
+        "[Content_Types].xml",
+        "_rels/.rels",
+        "ppt/presentation.xml",
+        "ppt/slides/slide1.xml",
+        "ppt/_rels/presentation.xml.rels",
+        "ppt/slides/_rels/slide1.xml.rels",
+        "ppt/slideMasters/slideMaster1.xml",
+        "ppt/slideLayouts/slideLayout1.xml",
+        "ppt/notesSlides/notesSlide1.xml",
+        "ppt/slideMasters/_rels/slideMaster1.xml.rels",
+        "ppt/slideLayouts/_rels/slideLayout1.xml.rels",
+        "ppt/notesSlides/_rels/notesSlide1.xml.rels",
+        "ppt/notesMasters/notesMaster1.xml",
+        "ppt/theme/theme1.xml",
+        "ppt/theme/theme2.xml",
+        "ppt/notesMasters/_rels/notesMaster1.xml.rels",
+        "ppt/presProps.xml",
+        "ppt/viewProps.xml",
+        "ppt/tableStyles.xml",
+        "ppt/tags/tag1.xml",
+        "ppt/tags/tag2.xml",
+        "docProps/core.xml",
+        "docProps/app.xml"
+      ]
+    },
+    "currentRegistryReimport": {
+      "performed": false,
+      "reason": "Parent owns current-registry semantic reimport; this audit deliberately uses stdlib-only raw evidence."
+    }
+  },
+  "limitations": [
+    "No native PowerPoint, COM, font registration, font installation, or user-interface operation was performed by this audit.",
+    "Reported font-family/style values plus TTF identities do not prove which physical font supplied every glyph or exclude fallback/synthetic styling.",
+    "Current-registry fromPptx semantic reimport is intentionally left to the parent audit."
+  ]
+}

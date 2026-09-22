@@ -1,0 +1,807 @@
+﻿2026-09-21T13:59:04.5060437Z Current runner version: '2.337.0'
+2026-09-21T13:59:04.5103773Z ##[group]Runner Image Provisioner
+2026-09-21T13:59:04.5105146Z Hosted Compute Agent
+2026-09-21T13:59:04.5106156Z Version: 20260828.587
+2026-09-21T13:59:04.5107191Z Commit: abac92662cab4cc7352de4f9f9d2e2419aad9c29
+2026-09-21T13:59:04.5108415Z Build Date: 2026-08-28T16:44:25Z
+2026-09-21T13:59:04.5109633Z Worker ID: {fd54256b-f2f4-45ab-a81d-6418ff49d914}
+2026-09-21T13:59:04.5111203Z Azure Region: northcentralus
+2026-09-21T13:59:04.5112275Z ##[endgroup]
+2026-09-21T13:59:04.5114741Z ##[group]Operating System
+2026-09-21T13:59:04.5115812Z Microsoft Windows Server 2025
+2026-09-21T13:59:04.5116874Z 10.0.26100
+2026-09-21T13:59:04.5117714Z Datacenter
+2026-09-21T13:59:04.5118532Z ##[endgroup]
+2026-09-21T13:59:04.5119369Z ##[group]Runner Image
+2026-09-21T13:59:04.5120285Z Image: windows-2025-vs2026
+2026-09-21T13:59:04.5121246Z Version: 20260907.229.1
+2026-09-21T13:59:04.5123675Z Included Software: https://github.com/actions/runner-images/blob/win25-vs2026/20260907.229/images/windows/Windows2025-VS2026-Readme.md
+2026-09-21T13:59:04.5126724Z Image Release: https://github.com/actions/runner-images/releases/tag/win25-vs2026%2F20260907.229
+2026-09-21T13:59:04.5128556Z ##[endgroup]
+2026-09-21T13:59:04.5130874Z ##[group]GITHUB_TOKEN Permissions
+2026-09-21T13:59:04.5134244Z Contents: read
+2026-09-21T13:59:04.5135260Z Metadata: read
+2026-09-21T13:59:04.5136138Z ##[endgroup]
+2026-09-21T13:59:04.5139281Z Secret source: Actions
+2026-09-21T13:59:04.5140793Z Cache mode: write
+2026-09-21T13:59:04.5142402Z Prepare workflow directory
+2026-09-21T13:59:04.5992844Z Prepare all required actions
+2026-09-21T13:59:04.6073773Z Getting action download info
+2026-09-21T13:59:04.8904812Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-09-21T13:59:05.0476646Z Download action repository 'actions/setup-node@820762786026740c76f36085b0efc47a31fe5020' (SHA:820762786026740c76f36085b0efc47a31fe5020)
+2026-09-21T13:59:05.2282623Z Download action repository 'pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413' (SHA:ea17c68df8912ef543352723c149a84f56e3d413)
+2026-09-21T13:59:05.4635164Z Download action repository 'actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a' (SHA:043fb46d1a93c77aae656e7c1c64a875d1fc6a0a)
+2026-09-21T13:59:05.6848701Z Complete job name: verify (windows-latest)
+2026-09-21T13:59:05.8376490Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-09-21T13:59:05.8377997Z with:
+2026-09-21T13:59:05.8378458Z   persist-credentials: false
+2026-09-21T13:59:05.8379042Z   repository: Data-Advantage/pptx-dev
+2026-09-21T13:59:05.8384324Z   token: ***
+2026-09-21T13:59:05.8384794Z   ssh-strict: true
+2026-09-21T13:59:05.8385247Z   ssh-user: git
+2026-09-21T13:59:05.8385686Z   clean: true
+2026-09-21T13:59:05.8386135Z   sparse-checkout-cone-mode: true
+2026-09-21T13:59:05.8386693Z   fetch-depth: 1
+2026-09-21T13:59:05.8387149Z   fetch-tags: false
+2026-09-21T13:59:05.8387651Z   show-progress: true
+2026-09-21T13:59:05.8388126Z   lfs: false
+2026-09-21T13:59:05.8388541Z   submodules: false
+2026-09-21T13:59:05.8389012Z   set-safe-directory: true
+2026-09-21T13:59:05.8389533Z   allow-unsafe-pr-checkout: false
+2026-09-21T13:59:05.8390386Z ##[endgroup]
+2026-09-21T13:59:07.2063184Z Syncing repository: Data-Advantage/pptx-dev
+2026-09-21T13:59:07.2064675Z ##[group]Getting Git version info
+2026-09-21T13:59:07.2065089Z Working directory is 'D:\a\pptx-dev\pptx-dev'
+2026-09-21T13:59:07.2066861Z [command]"C:\Program Files\Git\bin\git.exe" version
+2026-09-21T13:59:07.2067641Z git version 2.55.0.windows.5
+2026-09-21T13:59:07.2071292Z ##[endgroup]
+2026-09-21T13:59:07.2076563Z Temporarily overriding HOME='D:\a\_temp\e4029274-3a7b-4fbb-94b6-79d1342dbf9a' before making global git config changes
+2026-09-21T13:59:07.2077888Z Adding repository directory to the temporary git global config as a safe directory
+2026-09-21T13:59:07.2079080Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\pptx-dev\pptx-dev
+2026-09-21T13:59:07.2084108Z Deleting the contents of 'D:\a\pptx-dev\pptx-dev'
+2026-09-21T13:59:07.2085332Z ##[group]Determining repository object format
+2026-09-21T13:59:07.2086385Z ##[endgroup]
+2026-09-21T13:59:07.2087299Z ##[group]Initializing the repository
+2026-09-21T13:59:07.2088259Z [command]"C:\Program Files\Git\bin\git.exe" init D:\a\pptx-dev\pptx-dev
+2026-09-21T13:59:07.2089294Z Initialized empty Git repository in D:/a/pptx-dev/pptx-dev/.git/
+2026-09-21T13:59:07.2091507Z [command]"C:\Program Files\Git\bin\git.exe" remote add origin https://github.com/Data-Advantage/pptx-dev
+2026-09-21T13:59:07.2094015Z ##[endgroup]
+2026-09-21T13:59:07.2094977Z ##[group]Disabling automatic garbage collection
+2026-09-21T13:59:07.2095940Z [command]"C:\Program Files\Git\bin\git.exe" config --local gc.auto 0
+2026-09-21T13:59:07.2098381Z ##[endgroup]
+2026-09-21T13:59:07.2099302Z ##[group]Setting up auth
+2026-09-21T13:59:07.2100059Z Removing SSH command configuration
+2026-09-21T13:59:07.2101078Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2026-09-21T13:59:07.2103818Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2026-09-21T13:59:08.7040987Z Removing HTTP extra header
+2026-09-21T13:59:08.7052947Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-09-21T13:59:08.7399170Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2026-09-21T13:59:09.3850915Z Removing includeIf entries pointing to credentials config files
+2026-09-21T13:59:09.3854451Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-09-21T13:59:09.4223237Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-09-21T13:59:10.0910413Z [command]"C:\Program Files\Git\bin\git.exe" config --file D:\a\_temp\git-credentials-8fff1941-a87d-4832-bb5d-56a6f6f9e5e8.config http.https://github.com/.extraheader "AUTHORIZATION: basic ***"
+2026-09-21T13:59:10.1249170Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:D:/a/pptx-dev/pptx-dev/.git.path D:\a\_temp\git-credentials-8fff1941-a87d-4832-bb5d-56a6f6f9e5e8.config
+2026-09-21T13:59:10.1595116Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:D:/a/pptx-dev/pptx-dev/.git/worktrees/*.path D:\a\_temp\git-credentials-8fff1941-a87d-4832-bb5d-56a6f6f9e5e8.config
+2026-09-21T13:59:10.2005449Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-8fff1941-a87d-4832-bb5d-56a6f6f9e5e8.config
+2026-09-21T13:59:10.2359755Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-8fff1941-a87d-4832-bb5d-56a6f6f9e5e8.config
+2026-09-21T13:59:10.2912025Z ##[endgroup]
+2026-09-21T13:59:10.2930484Z ##[group]Fetching the repository
+2026-09-21T13:59:10.3104505Z [command]"C:\Program Files\Git\bin\git.exe" -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +687eb2525a2de9cd74b3f331ebe96684838c4daf:refs/remotes/pull/45/merge
+2026-09-21T13:59:11.9728817Z From https://github.com/Data-Advantage/pptx-dev
+2026-09-21T13:59:11.9731472Z  * [new ref]         687eb2525a2de9cd74b3f331ebe96684838c4daf -> pull/45/merge
+2026-09-21T13:59:11.9779901Z ##[endgroup]
+2026-09-21T13:59:11.9780730Z ##[group]Determining the checkout info
+2026-09-21T13:59:11.9783093Z ##[endgroup]
+2026-09-21T13:59:11.9792310Z [command]"C:\Program Files\Git\bin\git.exe" sparse-checkout disable
+2026-09-21T13:59:12.0426620Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset-all extensions.worktreeConfig
+2026-09-21T13:59:12.0763137Z ##[group]Checking out the ref
+2026-09-21T13:59:12.0773437Z [command]"C:\Program Files\Git\bin\git.exe" checkout --progress --force refs/remotes/pull/45/merge
+2026-09-21T13:59:12.4919861Z Note: switching to 'refs/remotes/pull/45/merge'.
+2026-09-21T13:59:12.4928498Z 
+2026-09-21T13:59:12.4929265Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-09-21T13:59:12.4930305Z changes and commit them, and you can discard any commits you make in this
+2026-09-21T13:59:12.4931285Z state without impacting any branches by switching back to a branch.
+2026-09-21T13:59:12.4931905Z 
+2026-09-21T13:59:12.4932381Z If you want to create a new branch to retain commits you create, you may
+2026-09-21T13:59:12.4933297Z do so (now or later) by using -c with the switch command. Example:
+2026-09-21T13:59:12.4933916Z 
+2026-09-21T13:59:12.4934244Z   git switch -c <new-branch-name>
+2026-09-21T13:59:12.4934713Z 
+2026-09-21T13:59:12.4935008Z Or undo this operation with:
+2026-09-21T13:59:12.4935466Z 
+2026-09-21T13:59:12.4935739Z   git switch -
+2026-09-21T13:59:12.4936068Z 
+2026-09-21T13:59:12.4936590Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-09-21T13:59:12.4937270Z 
+2026-09-21T13:59:12.4938075Z HEAD is now at 687eb25 Merge 9ea7ece4e3ecc88e33157970f475d32423e9edf6 into 761885b98092657fbbd05ffa529316d8b635539a
+2026-09-21T13:59:12.5079134Z ##[endgroup]
+2026-09-21T13:59:12.5506732Z [command]"C:\Program Files\Git\bin\git.exe" log -1 --format=%H
+2026-09-21T13:59:12.5807942Z 687eb2525a2de9cd74b3f331ebe96684838c4daf
+2026-09-21T13:59:12.5854673Z ##[group]Removing auth
+2026-09-21T13:59:12.5855724Z Removing SSH command configuration
+2026-09-21T13:59:12.5865390Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2026-09-21T13:59:12.6213505Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2026-09-21T13:59:13.2879700Z Removing HTTP extra header
+2026-09-21T13:59:13.2891438Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-09-21T13:59:13.3227696Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2026-09-21T13:59:13.9532723Z Removing includeIf entries pointing to credentials config files
+2026-09-21T13:59:13.9542625Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-09-21T13:59:13.9842739Z includeif.gitdir:D:/a/pptx-dev/pptx-dev/.git.path
+2026-09-21T13:59:13.9843756Z includeif.gitdir:D:/a/pptx-dev/pptx-dev/.git/worktrees/*.path
+2026-09-21T13:59:13.9844602Z includeif.gitdir:/github/workspace/.git.path
+2026-09-21T13:59:13.9845422Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-09-21T13:59:13.9897365Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:D:/a/pptx-dev/pptx-dev/.git.path
+2026-09-21T13:59:14.0191839Z D:\a\_temp\git-credentials-8fff1941-a87d-4832-bb5d-56a6f6f9e5e8.config
+2026-09-21T13:59:14.0243470Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:D:/a/pptx-dev/pptx-dev/.git.path D\:\\a\\_temp\\git\-credentials\-8fff1941\-a87d\-4832\-bb5d\-56a6f6f9e5e8\.config
+2026-09-21T13:59:14.0608724Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:D:/a/pptx-dev/pptx-dev/.git/worktrees/*.path
+2026-09-21T13:59:14.0901675Z D:\a\_temp\git-credentials-8fff1941-a87d-4832-bb5d-56a6f6f9e5e8.config
+2026-09-21T13:59:14.0961706Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:D:/a/pptx-dev/pptx-dev/.git/worktrees/*.path D\:\\a\\_temp\\git\-credentials\-8fff1941\-a87d\-4832\-bb5d\-56a6f6f9e5e8\.config
+2026-09-21T13:59:14.1526593Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-09-21T13:59:14.1749014Z /github/runner_temp/git-credentials-8fff1941-a87d-4832-bb5d-56a6f6f9e5e8.config
+2026-09-21T13:59:14.1810771Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-8fff1941\-a87d\-4832\-bb5d\-56a6f6f9e5e8\.config
+2026-09-21T13:59:14.2378813Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-09-21T13:59:14.2684832Z /github/runner_temp/git-credentials-8fff1941-a87d-4832-bb5d-56a6f6f9e5e8.config
+2026-09-21T13:59:14.2750776Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-8fff1941\-a87d\-4832\-bb5d\-56a6f6f9e5e8\.config
+2026-09-21T13:59:14.3124474Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-09-21T13:59:14.9512472Z Removing credentials config 'D:\a\_temp\git-credentials-8fff1941-a87d-4832-bb5d-56a6f6f9e5e8.config'
+2026-09-21T13:59:14.9526408Z ##[endgroup]
+2026-09-21T13:59:14.9992772Z ##[group]Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+2026-09-21T13:59:14.9993225Z with:
+2026-09-21T13:59:14.9993417Z   node-version: 24
+2026-09-21T13:59:14.9993626Z   check-latest: false
+2026-09-21T13:59:14.9996226Z   token: ***
+2026-09-21T13:59:14.9996446Z   package-manager-cache: true
+2026-09-21T13:59:14.9996691Z ##[endgroup]
+2026-09-21T13:59:15.1938790Z Found in cache @ C:\hostedtoolcache\windows\node\24.20.0\x64
+2026-09-21T13:59:15.1941358Z ##[group]Environment details
+2026-09-21T13:59:21.4033280Z node: v24.20.0
+2026-09-21T13:59:21.4034095Z npm: 11.19.0
+2026-09-21T13:59:21.4034633Z yarn: 1.22.22
+2026-09-21T13:59:21.4035647Z ##[endgroup]
+2026-09-21T13:59:21.4392863Z ##[group]Run pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413
+2026-09-21T13:59:21.4393322Z with:
+2026-09-21T13:59:21.4393512Z   dest: ~/setup-pnpm
+2026-09-21T13:59:21.4393722Z   run_install: null
+2026-09-21T13:59:21.4393923Z   cache: false
+2026-09-21T13:59:21.4394133Z   cache_dependency_path: pnpm-lock.yaml
+2026-09-21T13:59:21.4394438Z   package_json_file: package.json
+2026-09-21T13:59:21.4394688Z   standalone: false
+2026-09-21T13:59:21.4394885Z ##[endgroup]
+2026-09-21T13:59:21.7025921Z (node:1596) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+2026-09-21T13:59:21.7027885Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-09-21T13:59:21.7028944Z ##[group]Running self-installer...
+2026-09-21T13:59:31.5016570Z 
+2026-09-21T13:59:31.5017561Z added 1 package, and audited 2 packages in 9s
+2026-09-21T13:59:31.5040428Z 
+2026-09-21T13:59:31.5041303Z 1 package is looking for funding
+2026-09-21T13:59:31.5045581Z   run `npm fund` for details
+2026-09-21T13:59:31.5046111Z 
+2026-09-21T13:59:31.5046503Z found 0 vulnerabilities
+2026-09-21T13:59:34.5013695Z Checking for updates...
+2026-09-21T13:59:34.9434818Z Switching pnpm from v11.25.0 to v11.1.3...
+2026-09-21T13:59:36.5802751Z .../v11/6d8-1a0c443d81e-8a08a3fea6d42545 | Progress: resolved 1, reused 0, downloaded 0, added 0
+2026-09-21T13:59:36.5803736Z .../v11/6d8-1a0c443d81e-8a08a3fea6d42545 |   +1 +
+2026-09-21T13:59:36.9490516Z .../v11/6d8-1a0c443d81e-8a08a3fea6d42545 | Progress: resolved 1, reused 0, downloaded 1, added 0
+2026-09-21T13:59:37.2600033Z .../v11/6d8-1a0c443d81e-8a08a3fea6d42545 | Progress: resolved 1, reused 0, downloaded 1, added 1, done
+2026-09-21T13:59:39.3451021Z [WARN] Detected a pnpm v10 installation layout at PNPM_HOME. The pnpm shims at PNPM_HOME have been refreshed so the new version is active, but pnpm v11 expects bins in PNPM_HOME/bin. Run "pnpm setup" to migrate your PATH to the v11 layout.
+2026-09-21T13:59:39.3465481Z Successfully updated pnpm to v11.1.3
+2026-09-21T13:59:39.3467900Z ##[endgroup]
+2026-09-21T13:59:39.3470007Z Installation Completed!
+2026-09-21T13:59:39.3700623Z ##[group]Run pnpm install --frozen-lockfile
+2026-09-21T13:59:39.3701083Z [36;1mpnpm install --frozen-lockfile[0m
+2026-09-21T13:59:39.4544864Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-09-21T13:59:39.4545509Z env:
+2026-09-21T13:59:39.4545971Z   PNPM_HOME: C:\Users\runneradmin\setup-pnpm\node_modules\.bin
+2026-09-21T13:59:39.4546564Z ##[endgroup]
+2026-09-21T13:59:40.6600241Z Scope: all 3 workspace projects
+2026-09-21T13:59:40.8134617Z ? Verifying lockfile against supply-chain policies (1383 entries)...
+2026-09-21T13:59:54.8187079Z ✓ Lockfile passes supply-chain policies (1383 entries in 13.9s)
+2026-09-21T13:59:54.9228148Z Lockfile is up to date, resolution step is skipped
+2026-09-21T13:59:55.2010552Z Progress: resolved 1, reused 0, downloaded 0, added 0
+2026-09-21T13:59:55.3201250Z Packages: +1196
+2026-09-21T13:59:55.3204175Z ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+2026-09-21T13:59:56.2046632Z Progress: resolved 1196, reused 0, downloaded 0, added 0
+2026-09-21T13:59:57.2109075Z Progress: resolved 1196, reused 0, downloaded 16, added 0
+2026-09-21T13:59:58.2357173Z Progress: resolved 1196, reused 0, downloaded 25, added 4
+2026-09-21T13:59:59.2720721Z Progress: resolved 1196, reused 0, downloaded 26, added 4
+2026-09-21T14:00:00.2734386Z Progress: resolved 1196, reused 0, downloaded 36, added 8
+2026-09-21T14:00:01.2927424Z Progress: resolved 1196, reused 0, downloaded 49, added 12
+2026-09-21T14:00:06.2175792Z Progress: resolved 1196, reused 0, downloaded 50, added 12
+2026-09-21T14:00:07.2150607Z Progress: resolved 1196, reused 0, downloaded 81, added 20
+2026-09-21T14:00:08.2193130Z Progress: resolved 1196, reused 0, downloaded 95, added 25
+2026-09-21T14:00:09.2197194Z Progress: resolved 1196, reused 0, downloaded 106, added 26
+2026-09-21T14:00:10.2211295Z Progress: resolved 1196, reused 0, downloaded 110, added 29
+2026-09-21T14:00:11.2311680Z Progress: resolved 1196, reused 0, downloaded 151, added 40
+2026-09-21T14:00:12.2457984Z Progress: resolved 1196, reused 0, downloaded 176, added 49
+2026-09-21T14:00:13.2473560Z Progress: resolved 1196, reused 0, downloaded 181, added 51
+2026-09-21T14:00:14.2481363Z Progress: resolved 1196, reused 0, downloaded 189, added 52
+2026-09-21T14:00:15.2554472Z Progress: resolved 1196, reused 0, downloaded 214, added 60
+2026-09-21T14:00:16.2711551Z Progress: resolved 1196, reused 0, downloaded 229, added 64
+2026-09-21T14:00:17.2899713Z Progress: resolved 1196, reused 0, downloaded 298, added 92
+2026-09-21T14:00:18.2929975Z Progress: resolved 1196, reused 0, downloaded 333, added 105
+2026-09-21T14:00:19.3002197Z Progress: resolved 1196, reused 0, downloaded 358, added 112
+2026-09-21T14:00:20.3244593Z Progress: resolved 1196, reused 0, downloaded 377, added 117
+2026-09-21T14:00:21.3303842Z Progress: resolved 1196, reused 0, downloaded 441, added 143
+2026-09-21T14:00:22.3444136Z Progress: resolved 1196, reused 0, downloaded 443, added 143
+2026-09-21T14:00:23.3585268Z Progress: resolved 1196, reused 0, downloaded 457, added 147
+2026-09-21T14:00:24.3736530Z Progress: resolved 1196, reused 0, downloaded 469, added 151
+2026-09-21T14:00:25.3878903Z Progress: resolved 1196, reused 0, downloaded 470, added 151
+2026-09-21T14:00:26.4484984Z Progress: resolved 1196, reused 0, downloaded 473, added 154
+2026-09-21T14:00:27.4371527Z Progress: resolved 1196, reused 0, downloaded 556, added 184
+2026-09-21T14:00:28.4435351Z Progress: resolved 1196, reused 0, downloaded 621, added 209
+2026-09-21T14:00:29.4476719Z Progress: resolved 1196, reused 0, downloaded 686, added 231
+2026-09-21T14:00:30.4620741Z Progress: resolved 1196, reused 0, downloaded 693, added 234
+2026-09-21T14:00:31.4767228Z Progress: resolved 1196, reused 0, downloaded 721, added 246
+2026-09-21T14:00:32.4760065Z Progress: resolved 1196, reused 0, downloaded 727, added 246
+2026-09-21T14:00:33.4976970Z Progress: resolved 1196, reused 0, downloaded 754, added 258
+2026-09-21T14:00:34.5027169Z Progress: resolved 1196, reused 0, downloaded 771, added 264
+2026-09-21T14:00:35.5054470Z Progress: resolved 1196, reused 0, downloaded 794, added 272
+2026-09-21T14:00:36.5039584Z Progress: resolved 1196, reused 0, downloaded 834, added 284
+2026-09-21T14:00:37.5110053Z Progress: resolved 1196, reused 0, downloaded 905, added 309
+2026-09-21T14:00:38.5181862Z Progress: resolved 1196, reused 0, downloaded 994, added 346
+2026-09-21T14:00:39.5332148Z Progress: resolved 1196, reused 0, downloaded 1046, added 360
+2026-09-21T14:00:40.5339086Z Progress: resolved 1196, reused 0, downloaded 1124, added 388
+2026-09-21T14:00:41.5344024Z Progress: resolved 1196, reused 0, downloaded 1169, added 406
+2026-09-21T14:00:42.5483996Z Progress: resolved 1196, reused 0, downloaded 1194, added 445
+2026-09-21T14:00:43.5632212Z Progress: resolved 1196, reused 0, downloaded 1194, added 459
+2026-09-21T14:00:44.5634997Z Progress: resolved 1196, reused 0, downloaded 1194, added 529
+2026-09-21T14:00:45.5679433Z Progress: resolved 1196, reused 0, downloaded 1194, added 687
+2026-09-21T14:00:46.5764372Z Progress: resolved 1196, reused 0, downloaded 1194, added 695
+2026-09-21T14:00:47.5922237Z Progress: resolved 1196, reused 0, downloaded 1194, added 723
+2026-09-21T14:00:48.5925330Z Progress: resolved 1196, reused 0, downloaded 1194, added 763
+2026-09-21T14:00:49.6388035Z Progress: resolved 1196, reused 0, downloaded 1194, added 792
+2026-09-21T14:00:50.5941450Z Progress: resolved 1196, reused 0, downloaded 1194, added 920
+2026-09-21T14:00:51.5954816Z Progress: resolved 1196, reused 0, downloaded 1194, added 1092
+2026-09-21T14:00:52.3523555Z Progress: resolved 1196, reused 0, downloaded 1194, added 1196, done
+2026-09-21T14:00:54.0649572Z .../node_modules/unrs-resolver postinstall$ node postinstall.js
+2026-09-21T14:00:54.0673899Z .../node_modules/tree-sitter install$ node-gyp-build
+2026-09-21T14:00:54.0688100Z .../node_modules/tree-sitter install$ node-gyp-build
+2026-09-21T14:00:54.1038271Z .../esbuild@0.27.0/node_modules/esbuild postinstall$ node install.js
+2026-09-21T14:00:54.1039443Z .../esbuild@0.28.2/node_modules/esbuild postinstall$ node install.js
+2026-09-21T14:00:55.8225681Z .../node_modules/tree-sitter install: Done
+2026-09-21T14:00:56.0745078Z .../node_modules/tree-sitter install: Done
+2026-09-21T14:00:56.2036330Z .../esbuild@0.28.2/node_modules/esbuild postinstall: Done
+2026-09-21T14:00:56.2108199Z .../esbuild@0.27.0/node_modules/esbuild postinstall: Done
+2026-09-21T14:00:57.0587880Z .../node_modules/unrs-resolver postinstall: Done
+2026-09-21T14:00:57.0651921Z .../node_modules/tree-sitter-json install$ node-gyp-build
+2026-09-21T14:00:57.0660129Z .../tree-sitter-yaml install$ node-gyp-build
+2026-09-21T14:00:57.3457656Z .../node_modules/tree-sitter-json install: Done
+2026-09-21T14:00:57.3592944Z .../tree-sitter-yaml install: Done
+2026-09-21T14:00:57.6575555Z 
+2026-09-21T14:00:57.6576443Z dependencies:
+2026-09-21T14:00:57.6577156Z + @ai-sdk/react 4.0.102
+2026-09-21T14:00:57.6577791Z + @base-ui/react 1.8.0
+2026-09-21T14:00:57.6578448Z + @clerk/nextjs 7.9.2
+2026-09-21T14:00:57.6579017Z + @clerk/themes 2.4.57
+2026-09-21T14:00:57.6579687Z + @modelcontextprotocol/sdk 1.30.0
+2026-09-21T14:00:57.6580353Z + @monaco-editor/react 4.7.0
+2026-09-21T14:00:57.6581017Z + @openpresentation/opf 0.11.0
+2026-09-21T14:00:57.6581714Z + @openpresentation/opf-editor 0.8.0
+2026-09-21T14:00:57.6582444Z + @openpresentation/opf-pptx 0.9.1
+2026-09-21T14:00:57.6583213Z + @openpresentation/opf-render 0.9.0
+2026-09-21T14:00:57.6584605Z + @streamdown/cjk 1.0.3
+2026-09-21T14:00:57.6585223Z + @streamdown/code 1.1.1
+2026-09-21T14:00:57.6585872Z + @streamdown/math 1.0.2
+2026-09-21T14:00:57.6586462Z + @streamdown/mermaid 1.0.2
+2026-09-21T14:00:57.6587066Z + @vercel/analytics 2.0.1
+2026-09-21T14:00:57.6587563Z + ai 7.0.99
+2026-09-21T14:00:57.6590582Z + class-variance-authority 0.7.1
+2026-09-21T14:00:57.6595949Z + clsx 2.1.1
+2026-09-21T14:00:57.6596532Z + convex 1.45.0
+2026-09-21T14:00:57.6596961Z + embla-carousel-react 8.6.0
+2026-09-21T14:00:57.6601641Z + fast-xml-parser 5.11.1
+2026-09-21T14:00:57.6602163Z + js-yaml 5.4.1
+2026-09-21T14:00:57.6602523Z + jszip 3.10.2
+2026-09-21T14:00:57.6602888Z + lucide-react 1.45.0
+2026-09-21T14:00:57.6603307Z + monaco-editor 0.56.0
+2026-09-21T14:00:57.6604870Z + motion 12.43.0
+2026-09-21T14:00:57.6605229Z + nanoid 5.1.16
+2026-09-21T14:00:57.6605561Z + next 16.3.5
+2026-09-21T14:00:57.6605921Z + pptxgenjs 4.0.1
+2026-09-21T14:00:57.6607405Z + react 19.3.0
+2026-09-21T14:00:57.6608021Z + react-dom 19.3.0
+2026-09-21T14:00:57.6608454Z + shadcn 4.21.0
+2026-09-21T14:00:57.6612319Z + shiki 4.4.3
+2026-09-21T14:00:57.6614207Z + streamdown 2.6.0
+2026-09-21T14:00:57.6614605Z + swagger-ui-react 5.32.15
+2026-09-21T14:00:57.6615030Z + tailwind-merge 3.6.0
+2026-09-21T14:00:57.6615413Z + tokenlens 1.3.1
+2026-09-21T14:00:57.6615784Z + tw-animate-css 1.4.0
+2026-09-21T14:00:57.6616295Z + use-stick-to-bottom 1.1.6
+2026-09-21T14:00:57.6616684Z + zod 4.6.2
+2026-09-21T14:00:57.6616859Z 
+2026-09-21T14:00:57.6617017Z devDependencies:
+2026-09-21T14:00:57.6617406Z + @playwright/test 1.63.0
+2026-09-21T14:00:57.6617829Z + @tailwindcss/postcss 4.3.3
+2026-09-21T14:00:57.6618244Z + @types/node 24.13.4
+2026-09-21T14:00:57.6618624Z + @types/react 19.3.0
+2026-09-21T14:00:57.6619057Z + @types/react-dom 19.3.0
+2026-09-21T14:00:57.6620724Z + eslint 9.39.5
+2026-09-21T14:00:57.6621176Z + eslint-config-next 16.3.5
+2026-09-21T14:00:57.6622636Z + npm-run-all 4.1.5
+2026-09-21T14:00:57.6623003Z + postcss 8.5.28
+2026-09-21T14:00:57.6624442Z + tailwindcss 4.3.3
+2026-09-21T14:00:57.6625871Z + typescript 5.9.3
+2026-09-21T14:00:57.6626324Z + vitest 5.0.0
+2026-09-21T14:00:57.6626527Z 
+2026-09-21T14:00:57.7777560Z Done in 1m 17.8s using pnpm v11.1.3
+2026-09-21T14:00:58.1752820Z ##[group]Run pnpm audit
+2026-09-21T14:00:58.1753267Z [36;1mpnpm audit[0m
+2026-09-21T14:00:58.2008215Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-09-21T14:00:58.2008820Z env:
+2026-09-21T14:00:58.2009258Z   PNPM_HOME: C:\Users\runneradmin\setup-pnpm\node_modules\.bin
+2026-09-21T14:00:58.2010061Z ##[endgroup]
+2026-09-21T14:00:59.7452709Z No known vulnerabilities found
+2026-09-21T14:00:59.9425355Z ##[group]Run pnpm test
+2026-09-21T14:00:59.9425863Z [36;1mpnpm test[0m
+2026-09-21T14:00:59.9545087Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-09-21T14:00:59.9545478Z env:
+2026-09-21T14:00:59.9545765Z   PNPM_HOME: C:\Users\runneradmin\setup-pnpm\node_modules\.bin
+2026-09-21T14:00:59.9546141Z ##[endgroup]
+2026-09-21T14:01:00.9564879Z $ pnpm sync:opf-spec && vitest run
+2026-09-21T14:01:01.5476688Z $ node --experimental-strip-types scripts/sync-opf-spec.ts
+2026-09-21T14:01:02.3159305Z 
+2026-09-21T14:01:02.3165190Z [1m[30m[46m RUN [49m[39m[22m [36mv5.0.0 [39m[90mD:/a/pptx-dev/pptx-dev[39m
+2026-09-21T14:01:02.3166001Z 
+2026-09-21T14:01:05.0806162Z  [32m✓[39m lib/author/__tests__/conversation-persistence.test.ts [2m([22m[2m19 tests[22m[2m)[22m[33m 1082[2mms[22m[39m
+2026-09-21T14:01:05.0807983Z    [32m✓[39m Author conversation Convex persistence [2m(19)[22m
+2026-09-21T14:01:05.0809896Z      [33m[2m✓[22m[39m loads create, refine, and rejected refine state from durable storage[33m 908[2mms[22m[39m
+2026-09-21T14:01:06.1809441Z  [32m✓[39m lib/author/__tests__/refine-opf.test.ts [2m([22m[2m116 tests[22m[2m)[22m[33m 703[2mms[22m[39m
+2026-09-21T14:01:06.1811100Z    [32m✓[39m refineOpf slide count refinements [2m(16)[22m
+2026-09-21T14:01:06.1813533Z      [33m[2m✓[22m[39m applies deterministic trim request: shorten to 5 slides[33m 426[2mms[22m[39m
+2026-09-21T14:01:07.7600063Z  [32m✓[39m lib/api/__tests__/author-route.test.ts [2m([22m[2m17 tests[22m[2m)[22m[33m 470[2mms[22m[39m
+2026-09-21T14:01:07.7602100Z    [32m✓[39m POST /api/v1/author [2m(4)[22m
+2026-09-21T14:01:07.7604062Z      [33m[2m✓[22m[39m returns an OPF document and validation result for prompt input[33m 365[2mms[22m[39m
+2026-09-21T14:01:09.1862362Z  [32m✓[39m lib/api/__tests__/v1-contract.test.ts [2m([22m[2m10 tests[22m[2m)[22m[33m 677[2mms[22m[39m
+2026-09-21T14:01:09.1864022Z    [32m✓[39m /v1 contract [2m(10)[22m
+2026-09-21T14:01:09.1866024Z      [33m[2m✓[22m[39m locks the DeckChat create, refine, rejected refine, and latest OPF shape[33m 422[2mms[22m[39m
+2026-09-21T14:01:09.9933168Z  [32m✓[39m test/playground.test.ts [2m([22m[2m10 tests[22m[2m)[22m[33m 380[2mms[22m[39m
+2026-09-21T14:01:09.9934847Z    [33m[2m✓[22m[39m sample OPF decks validate and expose the expected slide counts[33m 355[2mms[22m[39m
+2026-09-21T14:01:10.9825843Z  [32m✓[39m lib/author/__tests__/compile-to-opf.test.ts [2m([22m[2m18 tests[22m[2m)[22m[33m 465[2mms[22m[39m
+2026-09-21T14:01:10.9827795Z    [32m✓[39m compileAuthorInput [2m(14)[22m
+2026-09-21T14:01:10.9829397Z      [33m[2m✓[22m[39m turns a prompt into valid canonical OPF[33m 351[2mms[22m[39m
+2026-09-21T14:01:12.6352406Z  [32m✓[39m lib/api/__tests__/generate-route.test.ts [2m([22m[2m35 tests[22m[2m)[22m[33m 841[2mms[22m[39m
+2026-09-21T14:01:12.6355888Z    [32m✓[39m POST /api/v1/generate [2m(35)[22m
+2026-09-21T14:01:12.6358469Z      [33m[2m✓[22m[39m returns real PPTX bytes for a valid OPF document[33m 482[2mms[22m[39m
+2026-09-21T14:01:13.8107366Z  [32m✓[39m lib/generator/__tests__/opf-to-pptx.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 729[2mms[22m[39m
+2026-09-21T14:01:13.8109316Z    [32m✓[39m generatePptxFromOpf [2m(7)[22m
+2026-09-21T14:01:13.8111159Z      [33m[2m✓[22m[39m generates a non-empty valid PPTX ZIP for a minimal title/subtitle fixture[33m 436[2mms[22m[39m
+2026-09-21T14:01:14.6500286Z  [32m✓[39m lib/playground/__tests__/schema-selection.test.ts [2m([22m[2m26 tests[22m[2m)[22m[33m 394[2mms[22m[39m
+2026-09-21T14:01:14.6502534Z    [32m✓[39m unset path proposals [2m(5)[22m
+2026-09-21T14:01:14.6530239Z      [33m[2m✓[22m[39m produces a schema-valid required slides minimum[33m 374[2mms[22m[39m
+2026-09-21T14:01:14.9311354Z  [32m✓[39m lib/author/__tests__/intent.test.ts [2m([22m[2m38 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+2026-09-21T14:01:15.1516423Z  [32m✓[39m lib/schema/__tests__/registry-validate.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+2026-09-21T14:01:16.2161504Z  [32m✓[39m lib/playground/__tests__/render-opf.test.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 461[2mms[22m[39m
+2026-09-21T14:01:16.2163637Z    [32m✓[39m renderOpfSlide — playground samples [2m(4)[22m
+2026-09-21T14:01:16.2165286Z      [33m[2m✓[22m[39m pitch: every slide normalizes to positioned elements[33m 435[2mms[22m[39m
+2026-09-21T14:01:17.2289624Z  [32m✓[39m lib/playground/__tests__/canvas-source.test.ts [2m([22m[2m10 tests[22m[2m)[22m[33m 505[2mms[22m[39m
+2026-09-21T14:01:17.2292397Z    [32m✓[39m canvas source preservation [2m(10)[22m
+2026-09-21T14:01:17.2294349Z      [33m[2m✓[22m[39m changes only the authored token and restores exact escaping/newlines through undo/redo[33m 472[2mms[22m[39m
+2026-09-21T14:01:17.7589954Z  [32m✓[39m lib/playground/__tests__/json-insertion-resolver.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+2026-09-21T14:01:20.2635471Z  [32m✓[39m lib/author/__tests__/conversation-engine.integration.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 1010[2mms[22m[39m
+2026-09-21T14:01:20.2636833Z    [32m✓[39m Author conversation slide-count expansion [2m(5)[22m
+2026-09-21T14:01:20.2638497Z      [33m[2m✓[22m[39m expands slide count through the conversation engine and preserves metadata[33m 971[2mms[22m[39m
+2026-09-21T14:01:22.8306922Z  [32m✓[39m lib/schema/__tests__/filename.test.ts [2m([22m[2m15 tests[22m[2m)[22m[33m 1615[2mms[22m[39m
+2026-09-21T14:01:22.8308293Z    [32m✓[39m resolveOpfFilename (DAT-2101) [2m(12)[22m
+2026-09-21T14:01:22.8309588Z      [33m[2m✓[22m[39m rejects disallowed filenames at validation[33m 1574[2mms[22m[39m
+2026-09-21T14:01:24.3461335Z  [32m✓[39m lib/generator/__tests__/manual-qa-layout-regression.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 486[2mms[22m[39m
+2026-09-21T14:01:24.3464164Z    [32m✓[39m manual QA layout readability regressions [2m(4)[22m
+2026-09-21T14:01:24.3473915Z      [33m[2m✓[22m[39m keeps QA-M03 mixed blocks ordered and gives timeline/code readable height[33m 436[2mms[22m[39m
+2026-09-21T14:01:24.6532288Z  [32m✓[39m lib/playground/__tests__/opf-codec.markdown.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 63[2mms[22m[39m
+2026-09-21T14:01:25.7699475Z  [32m✓[39m lib/author/__tests__/gallery-registry.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 568[2mms[22m[39m
+2026-09-21T14:01:25.7732116Z    [32m✓[39m author gallery registry [2m(7)[22m
+2026-09-21T14:01:25.7976068Z      [33m[2m✓[22m[39m uses current layout contracts and preserves gallery-only definitions when applied[33m 557[2mms[22m[39m
+2026-09-21T14:01:26.0396968Z  [32m✓[39m lib/playground/__tests__/json-cursor-resolver.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+2026-09-21T14:01:27.2670446Z  [32m✓[39m lib/playground/snippets/__tests__/apply-snippet.test.ts [2m([22m[2m25 tests[22m[2m)[22m[33m 572[2mms[22m[39m
+2026-09-21T14:01:27.2786521Z    [32m✓[39m applySnippet — slide snippets [2m(6)[22m
+2026-09-21T14:01:27.2831497Z      [33m[2m✓[22m[39m slide.title appends a schema-valid slide to STARTER_OPF[33m 472[2mms[22m[39m
+2026-09-21T14:01:28.2391718Z  [32m✓[39m lib/schema/__tests__/validate-route.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 466[2mms[22m[39m
+2026-09-21T14:01:28.2393256Z    [32m✓[39m POST /api/v1/validate document body [2m(1)[22m
+2026-09-21T14:01:28.2394535Z      [33m[2m✓[22m[39m accepts ColorRef and var: on the color-references fixture[33m 439[2mms[22m[39m
+2026-09-21T14:01:29.2045178Z  [32m✓[39m lib/author/__tests__/tool-registry.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 467[2mms[22m[39m
+2026-09-21T14:01:29.2046691Z    [32m✓[39m author tool registry [2m(7)[22m
+2026-09-21T14:01:29.2050028Z      [33m[2m✓[22m[39m executes public read, search, and validate tools[33m 442[2mms[22m[39m
+2026-09-21T14:01:29.5434136Z  [32m✓[39m lib/api/__tests__/idempotency.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+2026-09-21T14:01:30.2443107Z  [32m✓[39m lib/author/__tests__/author-agent-helpers.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+2026-09-21T14:01:30.4655748Z  [32m✓[39m lib/author/__tests__/pending-submit.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+2026-09-21T14:01:31.5555297Z  [32m✓[39m lib/manual-qa/__tests__/manual-qa-opf.regression.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 608[2mms[22m[39m
+2026-09-21T14:01:31.5561019Z    [32m✓[39m DAT-3782 manual QA regression (fixtures in manual-qa/tests) [2m(3)[22m
+2026-09-21T14:01:31.5563155Z      [33m[2m✓[22m[39m matches chart and long-deck OOXML expectations from manual QA[33m 579[2mms[22m[39m
+2026-09-21T14:01:31.9075356Z  [32m✓[39m lib/author/__tests__/preset-matcher.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 31[2mms[22m[39m
+2026-09-21T14:01:32.2659133Z  [32m✓[39m lib/author/__tests__/apply-preset.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 37[2mms[22m[39m
+2026-09-21T14:01:32.7374226Z  [32m✓[39m lib/author/__tests__/follow-ups.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+2026-09-21T14:01:33.5474127Z  [32m✓[39m lib/schema/__tests__/canonical-opf-examples.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 427[2mms[22m[39m
+2026-09-21T14:01:33.5521249Z    [32m✓[39m canonical OPF schema @ @openpresentation/opf 0.11.0 [2m(6)[22m
+2026-09-21T14:01:33.5692239Z      [33m[2m✓[22m[39m keeps the issue-body minimal OPF valid without $schema[33m 360[2mms[22m[39m
+2026-09-21T14:01:33.9496476Z  [32m✓[39m lib/author/__tests__/resolution-stack.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+2026-09-21T14:01:34.1855657Z  [32m✓[39m lib/author/__tests__/ui-message-adapter.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+2026-09-21T14:01:34.8011275Z  [32m✓[39m lib/schema/__tests__/validate-root-catalogs.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 317[2mms[22m[39m
+2026-09-21T14:01:34.8038074Z    [32m✓[39m validateOPF catalog-aware root metadata [2m(7)[22m
+2026-09-21T14:01:34.8143432Z      [33m[2m✓[22m[39m rejects legacy meta fields through the canonical schema[33m 307[2mms[22m[39m
+2026-09-21T14:01:35.0127145Z  [32m✓[39m lib/playground/__tests__/opf-codec.yaml.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+2026-09-21T14:01:35.2190068Z  [32m✓[39m lib/metering/__tests__/wallet-ledger.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+2026-09-21T14:01:35.4208502Z  [32m✓[39m lib/playground/__tests__/inspector-router.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+2026-09-21T14:01:36.0439050Z  [32m✓[39m lib/opf/__tests__/reference-layer.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 305[2mms[22m[39m
+2026-09-21T14:01:36.2491598Z  [32m✓[39m lib/inspector/__tests__/no-llm.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+2026-09-21T14:01:36.4929491Z  [32m✓[39m lib/author/__tests__/local-workspace.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+2026-09-21T14:01:37.0957413Z  [32m✓[39m lib/schema/__tests__/validate-playground-phase3.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 285[2mms[22m[39m
+2026-09-21T14:01:37.6206945Z  [32m✓[39m lib/mcp/__tests__/tools.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 76[2mms[22m[39m
+2026-09-21T14:01:38.2835195Z  [32m✓[39m lib/schema/__tests__/speaker.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 349[2mms[22m[39m
+2026-09-21T14:01:38.2836626Z    [32m✓[39m OPF speakers [2m(3)[22m
+2026-09-21T14:01:38.2838359Z      [33m[2m✓[22m[39m accepts the canonical OPFSpeaker shape with an organization reference[33m 335[2mms[22m[39m
+2026-09-21T14:01:38.9111218Z  [32m✓[39m lib/schema/__tests__/design-assets.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 316[2mms[22m[39m
+2026-09-21T14:01:39.3549240Z  [32m✓[39m lib/schema/__tests__/canonical-catalog-data.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 122[2mms[22m[39m
+2026-09-21T14:01:40.2328991Z  [32m✓[39m lib/api/__tests__/author-export-route.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 351[2mms[22m[39m
+2026-09-21T14:01:40.2330831Z    [32m✓[39m POST /api/v1/author/export [2m(2)[22m
+2026-09-21T14:01:40.2332404Z      [33m[2m✓[22m[39m returns PPTX bytes for a valid OPF document without API auth[33m 339[2mms[22m[39m
+2026-09-21T14:01:40.8725092Z  [32m✓[39m lib/schema/__tests__/organization.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 345[2mms[22m[39m
+2026-09-21T14:01:40.8726725Z    [32m✓[39m OPF organizations [2m(3)[22m
+2026-09-21T14:01:40.8728963Z      [33m[2m✓[22m[39m accepts the canonical OPFOrganization shape[33m 330[2mms[22m[39m
+2026-09-21T14:01:41.1835080Z  [32m✓[39m lib/auth/__tests__/require-api-auth.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 11[2mms[22m[39m
+2026-09-21T14:01:41.3697480Z  [32m✓[39m lib/author/__tests__/author-phase5-surface.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+2026-09-21T14:01:41.5573785Z  [32m✓[39m test/json-field-completion.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+2026-09-21T14:01:42.3780128Z  [32m✓[39m lib/generator/__tests__/promoted-payload-render.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 379[2mms[22m[39m
+2026-09-21T14:01:42.3782551Z    [32m✓[39m promoted payloads render readable prose in produced PPTX [2m(1)[22m
+2026-09-21T14:01:42.3784787Z      [33m[2m✓[22m[39m handles scalar metric, promoted-region-grid quote span, and array timeline events[33m 376[2mms[22m[39m
+2026-09-21T14:01:42.5798110Z  [32m✓[39m lib/author/__tests__/agent-logging.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+2026-09-21T14:01:42.9059008Z [90mstdout[2m | lib/api/__tests__/public-workbench-proxy.test.ts[2m > [22m[2mmissing keys do not bypass auth handling on APIs, account pages or writes
+2026-09-21T14:01:42.9063436Z [22m[39mphase_c_rest_api_hit {"event":"rest_api_hit","path":"/api/v1/generate","ua_class":"other","method":"GET"}
+2026-09-21T14:01:42.9064711Z 
+2026-09-21T14:01:42.9074815Z  [32m✓[39m lib/api/__tests__/public-workbench-proxy.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+2026-09-21T14:01:43.5518732Z  [32m✓[39m lib/author/__tests__/opf-patch-security.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 346[2mms[22m[39m
+2026-09-21T14:01:43.5520600Z    [32m✓[39m applyAuthorPatches prototype-pollution guard [2m(3)[22m
+2026-09-21T14:01:43.5522730Z      [33m[2m✓[22m[39m still applies a benign path[33m 340[2mms[22m[39m
+2026-09-21T14:01:43.7417436Z  [32m✓[39m lib/author/__tests__/metadata-intent.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+2026-09-21T14:01:45.8888338Z  [32m✓[39m lib/opf-toolkit/__tests__/published-samples.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 1601[2mms[22m[39m
+2026-09-21T14:01:45.8890765Z    [33m[2m✓[22m[39m every built-in sample resolves and exports with the installed public OPF toolchain[33m 1599[2mms[22m[39m
+2026-09-21T14:01:46.9027320Z  [32m✓[39m lib/generator/__tests__/technical-opf-smoke.test.ts [2m([22m[2m24 tests[22m[2m)[22m[33m 590[2mms[22m[39m
+2026-09-21T14:01:46.9029234Z    [32m✓[39m canonical technical OPF examples → PPTX smoke [2m(24)[22m
+2026-09-21T14:01:46.9031253Z      [33m[2m✓[22m[39m asset-source-forms.opf.json produces a valid non-empty presentation with matching slide count[33m 364[2mms[22m[39m
+2026-09-21T14:01:47.1945213Z  [32m✓[39m lib/opf-toolkit/__tests__/dependency-boundary.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 57[2mms[22m[39m
+2026-09-21T14:01:47.4612066Z  [32m✓[39m lib/playground/__tests__/opf-handoff.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 55[2mms[22m[39m
+2026-09-21T14:01:47.6646987Z  [32m✓[39m lib/mcp/__tests__/www-mcp-dispatch.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+2026-09-21T14:01:47.8708229Z  [32m✓[39m lib/author/__tests__/author-phase3-surface.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+2026-09-21T14:01:48.5199571Z  [32m✓[39m lib/manual-qa/__tests__/manual-qa-opf.validation.test.ts [2m([22m[2m10 tests[22m[2m)[22m[33m 351[2mms[22m[39m
+2026-09-21T14:01:48.5201332Z    [32m✓[39m manual-qa/tests *.opf.json [2m(10)[22m
+2026-09-21T14:01:48.5202603Z      [33m[2m✓[22m[39m qa-01-explicit-elements-mosaic.opf.json passes validateOPF[33m 332[2mms[22m[39m
+2026-09-21T14:01:48.7110692Z  [32m✓[39m lib/decoder/__tests__/decoder-surface.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+2026-09-21T14:01:49.6129752Z  [32m✓[39m lib/opf-toolkit/__tests__/consumer-proof.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 402[2mms[22m[39m
+2026-09-21T14:01:49.6131669Z    [32m✓[39m published OPF toolkit consumer [2m(1)[22m
+2026-09-21T14:01:49.6133484Z      [33m[2m✓[22m[39m renders, edits with undo/redo and exports the sample using the installed packages[33m 400[2mms[22m[39m
+2026-09-21T14:01:49.8325936Z  [32m✓[39m lib/playground/__tests__/palette-recursion.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 5[2mms[22m[39m
+2026-09-21T14:01:50.6200685Z  [32m✓[39m lib/generator/__tests__/reference-layer-colors.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 367[2mms[22m[39m
+2026-09-21T14:01:50.6203195Z    [32m✓[39m reference layer colors in hosted generator [2m(1)[22m
+2026-09-21T14:01:50.6204860Z      [33m[2m✓[22m[39m emits resolved hex for var: run colors[33m 365[2mms[22m[39m
+2026-09-21T14:01:50.6377641Z 
+2026-09-21T14:01:50.6379246Z [2m Test Files [22m [1m[32m66 passed[39m[22m[90m (66)[39m
+2026-09-21T14:01:50.6380488Z [2m      Tests [22m [1m[32m622 passed[39m[22m[90m (622)[39m
+2026-09-21T14:01:50.6381482Z [2m   Start at [22m 14:01:02
+2026-09-21T14:01:50.6382602Z [2m   Duration [22m 48.29s[2m (tests 56%, import 31%, transform 11%, worker 1%)[22m
+2026-09-21T14:01:50.6383311Z 
+2026-09-21T14:01:50.6384382Z [2m     Import [22m [33m234 modules were evaluated 307 times[39m[2m · 11.20s total, 31% of tracked time[22m
+2026-09-21T14:01:50.6386757Z [2m            [22m [2m~2.66s faster with [22m[33misolate: false[39m[2m — shared modules are evaluated once per worker instead of once per file[22m
+2026-09-21T14:01:50.6388735Z [2m            [22m [2mlearn more: https://vitest.dev/guide/improving-performance#test-isolation[22m
+2026-09-21T14:01:50.6389569Z 
+2026-09-21T14:01:50.8211895Z ##[group]Run pnpm typecheck
+2026-09-21T14:01:50.8212461Z [36;1mpnpm typecheck[0m
+2026-09-21T14:01:50.8291599Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-09-21T14:01:50.8291984Z env:
+2026-09-21T14:01:50.8292276Z   PNPM_HOME: C:\Users\runneradmin\setup-pnpm\node_modules\.bin
+2026-09-21T14:01:50.8292639Z ##[endgroup]
+2026-09-21T14:01:51.9206315Z $ tsc --noEmit
+2026-09-21T14:02:15.9647873Z ##[group]Run pnpm --filter @pptx/sdk typecheck
+2026-09-21T14:02:15.9648357Z [36;1mpnpm --filter @pptx/sdk typecheck[0m
+2026-09-21T14:02:15.9648698Z [36;1mpnpm --filter @pptx/sdk prepublishOnly[0m
+2026-09-21T14:02:15.9649044Z [36;1mpnpm --filter @pptx/cli typecheck[0m
+2026-09-21T14:02:15.9649372Z [36;1mpnpm --filter @pptx/cli prepublishOnly[0m
+2026-09-21T14:02:15.9649718Z [36;1mpnpm --filter @pptx/cli build:bundle[0m
+2026-09-21T14:02:15.9650029Z [36;1mnode sdk/cli/dist/cli.js --help[0m
+2026-09-21T14:02:15.9729225Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-09-21T14:02:15.9729806Z env:
+2026-09-21T14:02:15.9730254Z   PNPM_HOME: C:\Users\runneradmin\setup-pnpm\node_modules\.bin
+2026-09-21T14:02:15.9730807Z ##[endgroup]
+2026-09-21T14:02:16.9946370Z $ tsc --noEmit
+2026-09-21T14:02:19.4498939Z $ pnpm run clean && pnpm run build
+2026-09-21T14:02:20.0014862Z $ node -e "require('node:fs').rmSync('dist', { recursive: true, force: true })"
+2026-09-21T14:02:20.6359615Z $ tsup
+2026-09-21T14:02:21.2322170Z [34mCLI[39m Building entry: {"index":"src/index.ts","opf":"src/opf.ts"}
+2026-09-21T14:02:21.2325034Z [34mCLI[39m Using tsconfig: tsconfig.json
+2026-09-21T14:02:21.2326761Z [34mCLI[39m tsup v8.5.1
+2026-09-21T14:02:21.2334751Z [34mCLI[39m Using tsup config: D:\a\pptx-dev\pptx-dev\sdk\typescript\tsup.config.ts
+2026-09-21T14:02:21.2455570Z [34mCLI[39m Target: es2022
+2026-09-21T14:02:21.2516813Z [34mCLI[39m Cleaning output folder
+2026-09-21T14:02:21.2519198Z [34mESM[39m Build start
+2026-09-21T14:02:21.2586936Z [34mCJS[39m Build start
+2026-09-21T14:02:21.5113009Z Generated an empty chunk: "opf".
+2026-09-21T14:02:21.5535754Z Generated an empty chunk: "opf".
+2026-09-21T14:02:21.5976650Z [32mCJS[39m [1mdist\index.cjs     [22m[32m12.12 KB[39m
+2026-09-21T14:02:21.6025642Z [32mCJS[39m [1mdist\opf.cjs       [22m[32m80.00 B[39m
+2026-09-21T14:02:21.6033738Z [32mCJS[39m [1mdist\index.cjs.map [22m[32m32.36 KB[39m
+2026-09-21T14:02:21.6034868Z [32mCJS[39m [1mdist\opf.cjs.map   [22m[32m68.00 B[39m
+2026-09-21T14:02:21.6035904Z [32mCJS[39m ⚡️ Build success in 348ms
+2026-09-21T14:02:21.6042386Z [32mESM[39m [1mdist\opf.js       [22m[32m64.00 B[39m
+2026-09-21T14:02:21.6043452Z [32mESM[39m [1mdist\index.js     [22m[32m11.94 KB[39m
+2026-09-21T14:02:21.6045094Z [32mESM[39m [1mdist\opf.js.map   [22m[32m67.00 B[39m
+2026-09-21T14:02:21.6046105Z [32mESM[39m [1mdist\index.js.map [22m[32m32.36 KB[39m
+2026-09-21T14:02:21.6046995Z [32mESM[39m ⚡️ Build success in 348ms
+2026-09-21T14:02:21.9697495Z [34mDTS[39m Build start
+2026-09-21T14:02:24.8956606Z [32mDTS[39m ⚡️ Build success in 2924ms
+2026-09-21T14:02:24.8957905Z [32mDTS[39m [1mdist\index.d.ts  [22m[32m9.00 KB[39m
+2026-09-21T14:02:24.8958945Z [32mDTS[39m [1mdist\opf.d.ts    [22m[32m23.58 KB[39m
+2026-09-21T14:02:24.8959946Z [32mDTS[39m [1mdist\index.d.cts [22m[32m9.00 KB[39m
+2026-09-21T14:02:24.8960976Z [32mDTS[39m [1mdist\opf.d.cts   [22m[32m23.58 KB[39m
+2026-09-21T14:02:25.6017501Z $ tsc --noEmit
+2026-09-21T14:02:27.9793750Z $ pnpm run clean && pnpm run build
+2026-09-21T14:02:28.5528048Z $ node -e "for (const dir of ['dist', 'dist-bundle']) require('node:fs').rmSync(dir, { recursive: true, force: true })"
+2026-09-21T14:02:29.1799030Z $ tsup
+2026-09-21T14:02:29.7787989Z [34mCLI[39m Building entry: {"index":"src/index.ts","cli":"src/cli.ts"}
+2026-09-21T14:02:29.7791651Z [34mCLI[39m Using tsconfig: tsconfig.json
+2026-09-21T14:02:29.7794598Z [34mCLI[39m tsup v8.5.1
+2026-09-21T14:02:29.7795846Z [34mCLI[39m Using tsup config: D:\a\pptx-dev\pptx-dev\sdk\cli\tsup.config.ts
+2026-09-21T14:02:29.7927379Z [34mCLI[39m Target: node24
+2026-09-21T14:02:29.7963681Z [34mCLI[39m Cleaning output folder
+2026-09-21T14:02:29.7991854Z [34mESM[39m Build start
+2026-09-21T14:02:29.7994506Z [34mCJS[39m Build start
+2026-09-21T14:02:30.0548709Z "mkdirSync", "unlinkSync" and "writeFileSync" are imported from external module "fs" but never used in "dist/index.js".
+2026-09-21T14:02:30.3082399Z "mkdirSync", "unlinkSync" and "writeFileSync" are imported from external module "fs" but never used in "dist/index.cjs".
+2026-09-21T14:02:30.5119233Z [32mESM[39m [1mdist\index.js     [22m[32m13.82 KB[39m
+2026-09-21T14:02:30.5122758Z [32mESM[39m [1mdist\cli.js       [22m[32m28.38 KB[39m
+2026-09-21T14:02:30.5129033Z [32mESM[39m [1mdist\index.js.map [22m[32m38.24 KB[39m
+2026-09-21T14:02:30.5130628Z [32mESM[39m [1mdist\cli.js.map   [22m[32m77.05 KB[39m
+2026-09-21T14:02:30.5131686Z [32mESM[39m ⚡️ Build success in 715ms
+2026-09-21T14:02:30.5132729Z [32mCJS[39m [1mdist\index.cjs     [22m[32m14.20 KB[39m
+2026-09-21T14:02:30.5133882Z [32mCJS[39m [1mdist\cli.cjs       [22m[32m28.86 KB[39m
+2026-09-21T14:02:30.5135005Z [32mCJS[39m [1mdist\cli.cjs.map   [22m[32m77.15 KB[39m
+2026-09-21T14:02:30.5136146Z [32mCJS[39m [1mdist\index.cjs.map [22m[32m38.27 KB[39m
+2026-09-21T14:02:30.5137022Z [32mCJS[39m ⚡️ Build success in 716ms
+2026-09-21T14:02:30.7576425Z [34mDTS[39m Build start
+2026-09-21T14:02:32.3009200Z [32mDTS[39m ⚡️ Build success in 1543ms
+2026-09-21T14:02:32.3015936Z [32mDTS[39m [1mdist\index.d.ts  [22m[32m405.00 B[39m
+2026-09-21T14:02:32.3020791Z [32mDTS[39m [1mdist\index.d.cts [22m[32m405.00 B[39m
+2026-09-21T14:02:33.0044183Z $ tsup --config tsup.bundle.config.ts
+2026-09-21T14:02:33.6028440Z [34mCLI[39m Building entry: {"cli":"src/cli.ts"}
+2026-09-21T14:02:33.6029808Z [34mCLI[39m Using tsconfig: tsconfig.json
+2026-09-21T14:02:33.6033153Z [34mCLI[39m tsup v8.5.1
+2026-09-21T14:02:33.6034394Z [34mCLI[39m Using tsup config: D:\a\pptx-dev\pptx-dev\sdk\cli\tsup.bundle.config.ts
+2026-09-21T14:02:33.6061507Z [34mCLI[39m Target: node24
+2026-09-21T14:02:33.6095615Z [34mCLI[39m Cleaning output folder
+2026-09-21T14:02:34.1916630Z [34mCJS[39m Build start
+2026-09-21T14:02:34.1920365Z [32mCJS[39m [1mdist-bundle\cli.cjs [22m[32m137.18 KB[39m
+2026-09-21T14:02:34.1921349Z [32mCJS[39m ⚡️ Build success in 346ms
+2026-09-21T14:02:34.1921977Z Usage: pptx [options] [command]
+2026-09-21T14:02:34.1922345Z 
+2026-09-21T14:02:34.1922983Z Official CLI for pptx.dev — generate, parse, validate, and render OPF
+2026-09-21T14:02:34.1923741Z presentations.
+2026-09-21T14:02:34.1924032Z 
+2026-09-21T14:02:34.1924568Z Options:
+2026-09-21T14:02:34.1925405Z   -V, --version               output the version number
+2026-09-21T14:02:34.1926157Z   --api-key <key>             Override the API key for this call
+2026-09-21T14:02:34.1926935Z   --base-url <url>            Override the API base URL
+2026-09-21T14:02:34.1927628Z   -h, --help                  display help for command
+2026-09-21T14:02:34.1928055Z 
+2026-09-21T14:02:34.1928276Z Commands:
+2026-09-21T14:02:34.1928881Z   login [options]             Save a pptx.dev API key to ~/.pptx/config.json
+2026-09-21T14:02:34.1929584Z                               (0600)
+2026-09-21T14:02:34.1930258Z   logout                      Remove saved pptx.dev credentials
+2026-09-21T14:02:34.1931093Z   generate [options] <input>  Generate a presentation from an OPF JSON file or
+2026-09-21T14:02:34.1931811Z                               a prompt
+2026-09-21T14:02:34.1932470Z   validate [options] <file>   Validate an OPF JSON document against the
+2026-09-21T14:02:34.1933175Z                               canonical schema
+2026-09-21T14:02:34.1933916Z   parse [options] <file>      Parse a .pptx file into OPF JSON via the pptx.dev
+2026-09-21T14:02:34.1934581Z                               API
+2026-09-21T14:02:34.1935238Z   render [options] <file>     Render an OPF JSON document to a target format
+2026-09-21T14:02:34.1936144Z   fmt [options] <file>        Format/normalize an OPF JSON document (local, no
+2026-09-21T14:02:34.1936833Z                               API call)
+2026-09-21T14:02:34.1937495Z   add [options] <component>   Scaffold OPF component snippets (slide types,
+2026-09-21T14:02:34.1939436Z                               themes)
+2026-09-21T14:02:34.1940139Z   help [command]              display help for command
+2026-09-21T14:02:34.2240264Z ##[group]Run pnpm build
+2026-09-21T14:02:34.2240614Z [36;1mpnpm build[0m
+2026-09-21T14:02:34.2317619Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-09-21T14:02:34.2318005Z env:
+2026-09-21T14:02:34.2318306Z   PNPM_HOME: C:\Users\runneradmin\setup-pnpm\node_modules\.bin
+2026-09-21T14:02:34.2318687Z   NEXT_TELEMETRY_DISABLED: 1
+2026-09-21T14:02:34.2318933Z ##[endgroup]
+2026-09-21T14:02:35.1756889Z $ node --version && pnpm prepare:opf-browser && pnpm sync:opf-spec && next build
+2026-09-21T14:02:35.2114871Z v24.20.0
+2026-09-21T14:02:35.7787028Z $ node scripts/prepare-opf-browser.mjs
+2026-09-21T14:02:36.5520534Z Prepared 33 licensed OPF font faces from installed packages.
+2026-09-21T14:02:37.1244829Z $ node --experimental-strip-types scripts/sync-opf-spec.ts
+2026-09-21T14:02:37.9423406Z ▲ Next.js 16.3.5 (Turbopack)
+2026-09-21T14:02:37.9894921Z ✓ Running next.config.ts took 46ms
+2026-09-21T14:02:37.9899735Z ⚠ No build cache found. Please configure build caching for faster rebuilds. Read more: https://nextjs.org/docs/messages/no-cache
+2026-09-21T14:02:38.0085736Z - Experiments (use with caution):
+2026-09-21T14:02:38.0087334Z   ✓ globalNotFound
+2026-09-21T14:02:38.0087835Z 
+2026-09-21T14:02:38.0817446Z   Creating an optimized production build ...
+2026-09-21T14:03:49.3060454Z ✓ Compiled successfully in 71s
+2026-09-21T14:03:49.3211674Z   Running TypeScript ...
+2026-09-21T14:04:18.6245255Z   Finished TypeScript in 29.3s ...
+2026-09-21T14:04:18.6278248Z   Collecting page data using 1 worker ...
+2026-09-21T14:04:20.7191863Z   Generating static pages using 1 worker (0/215) ...
+2026-09-21T14:04:22.3877161Z   Generating static pages using 1 worker (53/215) 
+2026-09-21T14:04:23.5351646Z   Generating static pages using 1 worker (107/215) 
+2026-09-21T14:04:24.7025854Z   Generating static pages using 1 worker (161/215) 
+2026-09-21T14:04:25.4716643Z ✓ Generating static pages using 1 worker (215/215) in 4.8s
+2026-09-21T14:04:25.4882664Z   Finalizing page optimization ...
+2026-09-21T14:04:27.7781340Z 
+2026-09-21T14:04:27.7824888Z Route (app)
+2026-09-21T14:04:27.7826233Z ┌ ○ /
+2026-09-21T14:04:27.7827068Z ├ ○ /_not-found
+2026-09-21T14:04:27.7828008Z ├ ○ /.well-known/mcp/server-card.json
+2026-09-21T14:04:27.7829668Z ├ ƒ /account/api-keys
+2026-09-21T14:04:27.7830460Z ├ ƒ /account/org-api-keys
+2026-09-21T14:04:27.7831261Z ├ ƒ /account/organization
+2026-09-21T14:04:27.7834436Z ├ ƒ /api/checkout
+2026-09-21T14:04:27.7834929Z ├ ƒ /api/mcp
+2026-09-21T14:04:27.7835503Z ├ ○ /api/openapi.json
+2026-09-21T14:04:27.7837054Z ├ ƒ /api/v1/author
+2026-09-21T14:04:27.7837598Z ├ ƒ /api/v1/author/export
+2026-09-21T14:04:27.7838265Z ├ ƒ /api/v1/author/follow-ups
+2026-09-21T14:04:27.7839414Z ├ ƒ /api/v1/author/gallery-sources
+2026-09-21T14:04:27.7840283Z ├ ƒ /api/v1/author/gallery-sources/[sourceId]
+2026-09-21T14:04:27.7841101Z ├ ƒ /api/v1/author/runs/[runId]
+2026-09-21T14:04:27.7841732Z ├ ƒ /api/v1/author/threads
+2026-09-21T14:04:27.7844044Z ├ ƒ /api/v1/author/threads/[threadId]
+2026-09-21T14:04:27.7845331Z ├ ƒ /api/v1/author/threads/[threadId]/messages
+2026-09-21T14:04:27.7846124Z ├ ƒ /api/v1/author/threads/[threadId]/tools
+2026-09-21T14:04:27.7846778Z ├ ƒ /api/v1/author/tools
+2026-09-21T14:04:27.7847394Z ├ ƒ /api/v1/convert
+2026-09-21T14:04:27.7850783Z ├ ƒ /api/v1/generate
+2026-09-21T14:04:27.7851361Z ├ ƒ /api/v1/health
+2026-09-21T14:04:27.7851910Z ├ ƒ /api/v1/parse
+2026-09-21T14:04:27.7852523Z ├ ƒ /api/v1/parse/[parseId]/metadata
+2026-09-21T14:04:27.7853719Z ├ ƒ /api/v1/parse/[parseId]/slides/[index]
+2026-09-21T14:04:27.7854538Z ├ ƒ /api/v1/parse/[parseId]/text
+2026-09-21T14:04:27.7855258Z ├ ƒ /api/v1/preview
+2026-09-21T14:04:27.7855780Z ├ ƒ /api/v1/render
+2026-09-21T14:04:27.7856288Z ├ ƒ /api/v1/validate
+2026-09-21T14:04:27.7856789Z ├ ƒ /api/v1/webhooks
+2026-09-21T14:04:27.7857301Z ├ ƒ /api/v1/webhooks/[id]
+2026-09-21T14:04:27.7857780Z ├ ƒ /api/webhook
+2026-09-21T14:04:27.7858296Z ├ ○ /author
+2026-09-21T14:04:27.7858746Z ├ ƒ /billing
+2026-09-21T14:04:27.7862927Z ├ ○ /cancel
+2026-09-21T14:04:27.7863670Z ├ ƒ /dashboard
+2026-09-21T14:04:27.7864197Z ├ ○ /decoder
+2026-09-21T14:04:27.7864737Z ├ ○ /docs
+2026-09-21T14:04:27.7865211Z ├ ○ /docs/api
+2026-09-21T14:04:27.7865759Z ├ ○ /docs/api/llms.txt
+2026-09-21T14:04:27.7866348Z ├ ○ /docs/cli
+2026-09-21T14:04:27.7866832Z ├ ○ /docs/mcp
+2026-09-21T14:04:27.7867338Z ├ ○ /docs/mcp/llms.txt
+2026-09-21T14:04:27.7867873Z ├ ○ /docs/opf
+2026-09-21T14:04:27.7868469Z ├ ○ /docs/opf-toolkit
+2026-09-21T14:04:27.7869110Z ├ ○ /docs/opf/reference-layer
+2026-09-21T14:04:27.7869746Z ├ ○ /docs/registry
+2026-09-21T14:04:27.7870289Z ├ ○ /docs/sdk/go
+2026-09-21T14:04:27.7870875Z ├ ○ /docs/sdk/python
+2026-09-21T14:04:27.7871426Z ├ ○ /docs/sdk/typescript
+2026-09-21T14:04:27.7871931Z ├ ○ /gallery
+2026-09-21T14:04:27.7872483Z ├ ○ /gallery/audiences
+2026-09-21T14:04:27.7873080Z ├   /gallery/audiences/[id]
+2026-09-21T14:04:27.7873803Z │ ├ ● /gallery/audiences/executives
+2026-09-21T14:04:27.7876515Z │ ├ ● /gallery/audiences/board
+2026-09-21T14:04:27.7877180Z │ ├ ● /gallery/audiences/engineering-team
+2026-09-21T14:04:27.7877833Z │ └ ● [+7 more paths]
+2026-09-21T14:04:27.7878358Z ├ ○ /gallery/charts
+2026-09-21T14:04:27.7878846Z ├ ○ /gallery/color-schemes
+2026-09-21T14:04:27.7879463Z ├   /gallery/color-schemes/[slug]
+2026-09-21T14:04:27.7880183Z │ ├ ● /gallery/color-schemes/corporate-blue
+2026-09-21T14:04:27.7881051Z │ ├ ● /gallery/color-schemes/deep-purple
+2026-09-21T14:04:27.7881870Z │ ├ ● /gallery/color-schemes/steel-blue
+2026-09-21T14:04:27.7882647Z │ └ ● [+11 more paths]
+2026-09-21T14:04:27.7883214Z ├ ○ /gallery/font-schemes
+2026-09-21T14:04:27.7883906Z ├   /gallery/font-schemes/[type]
+2026-09-21T14:04:27.7884649Z │ ├ ● /gallery/font-schemes/sans-serif
+2026-09-21T14:04:27.7885403Z │ ├ ● /gallery/font-schemes/serif
+2026-09-21T14:04:27.7886211Z │ ├ ● /gallery/font-schemes/monospace
+2026-09-21T14:04:27.7886913Z │ └ ● [+2 more paths]
+2026-09-21T14:04:27.7887459Z ├ ○ /gallery/languages
+2026-09-21T14:04:27.7888053Z ├   /gallery/languages/[id]
+2026-09-21T14:04:27.7888692Z │ ├ ● /gallery/languages/afrikaans
+2026-09-21T14:04:27.7889361Z │ ├ ● /gallery/languages/albanian
+2026-09-21T14:04:27.7890106Z │ ├ ● /gallery/languages/amharic
+2026-09-21T14:04:27.7890703Z │ └ ● [+90 more paths]
+2026-09-21T14:04:27.7891717Z ├ ○ /gallery/layouts
+2026-09-21T14:04:27.7892322Z ├ ○ /gallery/layouts/previews
+2026-09-21T14:04:27.7892952Z ├ ○ /gallery/narratives
+2026-09-21T14:04:27.7893567Z ├   /gallery/narratives/[slug]
+2026-09-21T14:04:27.7894736Z │ ├ ● /gallery/narratives/classic-story
+2026-09-21T14:04:27.7895638Z │ ├ ● /gallery/narratives/challenge-resolution
+2026-09-21T14:04:27.7896522Z │ ├ ● /gallery/narratives/persuasive-sales
+2026-09-21T14:04:27.7897246Z │ └ ● [+7 more paths]
+2026-09-21T14:04:27.7897795Z ├ ○ /gallery/socials
+2026-09-21T14:04:27.7898326Z ├   /gallery/socials/[id]
+2026-09-21T14:04:27.7898930Z │ ├ ● /gallery/socials/linkedin
+2026-09-21T14:04:27.7899570Z │ ├ ● /gallery/socials/x
+2026-09-21T14:04:27.7900211Z │ ├ ● /gallery/socials/github
+2026-09-21T14:04:27.7900786Z │ └ ● [+7 more paths]
+2026-09-21T14:04:27.7901348Z ├ ○ /gallery/themes
+2026-09-21T14:04:27.7901884Z ├   /gallery/themes/[slug]
+2026-09-21T14:04:27.7902508Z │ ├ ● /gallery/themes/minimal
+2026-09-21T14:04:27.7903256Z │ ├ ● /gallery/themes/classic
+2026-09-21T14:04:27.7903912Z │ ├ ● /gallery/themes/dark
+2026-09-21T14:04:27.7904547Z │ └ ● /gallery/themes/bold
+2026-09-21T14:04:27.7905180Z ├ ○ /gallery/tones
+2026-09-21T14:04:27.7905711Z ├   /gallery/tones/[id]
+2026-09-21T14:04:27.7906261Z │ ├ ● /gallery/tones/formal
+2026-09-21T14:04:27.7906823Z │ ├ ● /gallery/tones/casual
+2026-09-21T14:04:27.7907492Z │ ├ ● /gallery/tones/inspirational
+2026-09-21T14:04:27.7908130Z │ └ ● [+4 more paths]
+2026-09-21T14:04:27.7908623Z ├ ƒ /go
+2026-09-21T14:04:27.7909075Z ├ ○ /inspector
+2026-09-21T14:04:27.7909565Z ├ ○ /llms.txt
+2026-09-21T14:04:27.7910049Z ├ ○ /openapi.yaml
+2026-09-21T14:04:27.7913473Z ├ ○ /playground
+2026-09-21T14:04:27.7915773Z ├ ○ /privacy
+2026-09-21T14:04:27.7916400Z ├ ○ /robots.txt
+2026-09-21T14:04:27.7916917Z ├ ○ /schema/opf/v1
+2026-09-21T14:04:27.7917523Z ├ ○ /schema/registry.schema.json
+2026-09-21T14:04:27.7918176Z ├ ƒ /sign-in/[[...sign-in]]
+2026-09-21T14:04:27.7918778Z ├ ƒ /sign-up/[[...sign-up]]
+2026-09-21T14:04:27.7919408Z ├ ○ /sitemap.xml
+2026-09-21T14:04:27.7919931Z ├ ○ /studio
+2026-09-21T14:04:27.7920402Z ├ ○ /success
+2026-09-21T14:04:27.7920864Z ├ ○ /terms
+2026-09-21T14:04:27.7921373Z └ ○ /workspace
+2026-09-21T14:04:27.7921661Z 
+2026-09-21T14:04:27.7921671Z 
+2026-09-21T14:04:27.7921962Z ƒ Proxy (Middleware)
+2026-09-21T14:04:27.7922283Z 
+2026-09-21T14:04:27.7922734Z ○  (Static)   prerendered as static content
+2026-09-21T14:04:27.7923780Z ●  (SSG)      prerendered as static HTML (uses generateStaticParams)
+2026-09-21T14:04:27.7924722Z ƒ  (Dynamic)  server-rendered on demand
+2026-09-21T14:04:27.7925123Z 
+2026-09-21T14:04:28.0314932Z ##[group]Run pnpm test:e2e
+2026-09-21T14:04:28.0315915Z [36;1mpnpm test:e2e[0m
+2026-09-21T14:04:28.0445152Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-09-21T14:04:28.0446026Z env:
+2026-09-21T14:04:28.0446474Z   PNPM_HOME: C:\Users\runneradmin\setup-pnpm\node_modules\.bin
+2026-09-21T14:04:28.0446872Z ##[endgroup]
+2026-09-21T14:04:29.3589500Z $ playwright test
+2026-09-21T14:04:36.9856478Z GitCommitInfo: timeout of 3000ms exceeded while running "git fetch origin 761885b98092657fbbd05ffa529316d8b635539a --no-auto-maintenance --no-auto-gc --no-tags --no-recurse-submodules --depth=1"
+2026-09-21T14:04:37.6088312Z [WebServer] $ next start "--hostname" "127.0.0.1" "--port" "4325"
+2026-09-21T14:04:38.1077290Z [WebServer] ⚠ "next start" does not work with "output: standalone" configuration. Use "node .next/standalone/server.js" instead.
+2026-09-21T14:04:39.6637735Z 
+2026-09-21T14:04:39.6638806Z Running 18 tests using 1 worker
+2026-09-21T14:04:39.6639744Z 
+2026-09-21T14:05:02.5949646Z   ok  1 tests\e2e\author-json-options.spec.ts:72:5 › Author categorical choices include built-in, document and loaded catalogs with exact LF source undo/redo (21.8s)
+2026-09-21T14:05:13.6089622Z   ok  2 tests\e2e\author-json-options.spec.ts:72:5 › Author categorical choices include built-in, document and loaded catalogs with exact CRLF source undo/redo (11.0s)
+2026-09-21T14:05:24.3085319Z   ok  3 tests\e2e\author.spec.ts:26:80 › anonymous code editing preserves source and visible selection through offline export/reimport at 1280x720 (10.6s)
+2026-09-21T14:05:36.3288246Z   ok  4 tests\e2e\author.spec.ts:26:80 › anonymous code editing preserves source and visible selection through offline export/reimport at 540x960 (9.4s)
+2026-09-21T14:05:49.5116119Z   ok  5 tests\e2e\author.spec.ts:55:5 › anonymous Author canvas edits survive tab changes, offline PowerPoint export and undoable reimport (15.5s)
+2026-09-21T14:06:02.0459869Z   ok  6 tests\e2e\inspector-editing.spec.ts:40:7 › all Inspector slides preserve exact JSON and shared furniture through offline undo/export at 1440px (12.8s)
+2026-09-21T14:06:12.5854957Z   ok  7 tests\e2e\inspector-editing.spec.ts:40:7 › all Inspector slides preserve exact JSON and shared furniture through offline undo/export at 540px (10.5s)
+2026-09-21T14:06:20.0615744Z   ok  8 tests\e2e\inspector-editing.spec.ts:99:5 › invalid source keeps a renderer fallback and source recovery uses the current slide order (7.5s)
+2026-09-21T14:06:25.9794158Z   ok  9 tests\e2e\inspector-editing.spec.ts:116:5 › shared navigation discards an ID-less draft even when the replacement title is identical (5.9s)
+2026-09-21T14:06:34.8509727Z   ok 10 tests\e2e\inspector-recovery.spec.ts:18:5 › schema-valid strict overflow cancels an active draft and the same slide recovers after source correction (8.8s)
+2026-09-21T14:06:41.0393139Z   ok 11 tests\e2e\inspector-recovery.spec.ts:85:5 › font substitution notes remain accessible and operable while the Inspector canvas is active (6.2s)
+2026-09-21T14:06:49.6515664Z   ok 12 tests\e2e\inspector.spec.ts:11:5 › published long quotes retain their footer in actual wide/portrait previews and PowerPoint downloads (8.6s)
+2026-09-21T14:06:55.9496544Z   ok 13 tests\e2e\inspector.spec.ts:65:5 › shared navigation clears format errors and proposals from the previous deck (6.3s)
+2026-09-21T14:07:04.1929731Z   ok 14 tests\e2e\inspector.spec.ts:107:5 › anonymous JSON authoring, preview, undo/redo, download and shared reimport (8.2s)
+2026-09-21T14:07:10.8973009Z   ok 15 tests\e2e\monaco.spec.ts:3:5 › bundled JSON worker provides schema diagnostics, completion and recovery offline (6.7s)
+2026-09-21T14:07:19.8354459Z   ok 16 tests\e2e\svg-security.spec.ts:41:5 › published SVG renderer keeps hostile shared and imported document strings inert (8.9s)
+2026-09-21T14:07:20.6418280Z   ok 17 tests\e2e\toolkit.spec.ts:4:5 › public toolkit shows the deployed package set with working render, edit and export proofs (787ms)
+2026-09-21T14:07:32.8187524Z   ok 18 tests\e2e\yaml.spec.ts:4:5 › YAML and Markdown editing preserve OPF values and recover from malformed YAML offline (12.1s)
+2026-09-21T14:07:33.8481272Z 
+2026-09-21T14:07:33.8485015Z   18 passed (3.1m)
+2026-09-21T14:07:34.1224458Z Post job cleanup.
+2026-09-21T14:07:35.0871473Z Pruning is unnecessary.
+2026-09-21T14:07:35.1583206Z Post job cleanup.
+2026-09-21T14:07:35.3993658Z Post job cleanup.
+2026-09-21T14:07:35.6675621Z [command]"C:\Program Files\Git\bin\git.exe" version
+2026-09-21T14:07:35.7051117Z git version 2.55.0.windows.5
+2026-09-21T14:07:35.7141617Z Temporarily overriding HOME='D:\a\_temp\65964afc-0186-431d-b4b6-a6475fea4289' before making global git config changes
+2026-09-21T14:07:35.7143252Z Adding repository directory to the temporary git global config as a safe directory
+2026-09-21T14:07:35.7157816Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\pptx-dev\pptx-dev
+2026-09-21T14:07:35.7491500Z Removing SSH command configuration
+2026-09-21T14:07:35.7504662Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2026-09-21T14:07:35.7864582Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2026-09-21T14:07:36.4828017Z Removing HTTP extra header
+2026-09-21T14:07:36.4839026Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-09-21T14:07:36.5169389Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2026-09-21T14:07:37.1014061Z Removing includeIf entries pointing to credentials config files
+2026-09-21T14:07:37.1027395Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-09-21T14:07:37.1352105Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-09-21T14:07:37.7466113Z Cleaning up orphan processes

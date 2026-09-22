@@ -1,0 +1,36 @@
+{
+  "capturedAt": "2026-09-21T14:53:58.048813+00:00",
+  "workerPid": 30525,
+  "basis": "Observed descendant process executable names of the active worker PID printed by this acceptance runner; no process argument/environment capture. First worker30269 already exited after LF test failure.",
+  "processes": [
+    {
+      "pid": 30525,
+      "ppid": 30258,
+      "executable": "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node"
+    },
+    {
+      "pid": 30526,
+      "ppid": 30525,
+      "executable": "/Users/michael/Library/Caches/ms-playwright/chromium_headless_shell-1243/chrome-headless-shell-mac-arm64/chrome-headless-shell",
+      "executableSha256": "a0bfe7b4da4787b66058477d696cd1d09065d25f06a548947722b9af77ee8282"
+    },
+    {
+      "pid": 30527,
+      "ppid": 30526,
+      "executable": "/Users/michael/Library/Caches/ms-playwright/chromium_headless_shell-1243/chrome-headless-shell-mac-arm64/chrome-headless-shell",
+      "executableSha256": "a0bfe7b4da4787b66058477d696cd1d09065d25f06a548947722b9af77ee8282"
+    },
+    {
+      "pid": 30528,
+      "ppid": 30526,
+      "executable": "/Users/michael/Library/Caches/ms-playwright/chromium_headless_shell-1243/chrome-headless-shell-mac-arm64/chrome-headless-shell",
+      "executableSha256": "a0bfe7b4da4787b66058477d696cd1d09065d25f06a548947722b9af77ee8282"
+    },
+    {
+      "pid": 30542,
+      "ppid": 30526,
+      "executable": "/Users/michael/Library/Caches/ms-playwright/chromium_headless_shell-1243/chrome-headless-shell-mac-arm64/chrome-headless-shell",
+      "executableSha256": "a0bfe7b4da4787b66058477d696cd1d09065d25f06a548947722b9af77ee8282"
+    }
+  ]
+}

@@ -1,0 +1,524 @@
+{
+  "report": {
+    "position": {
+      "lineNumber": 11,
+      "column": 18
+    },
+    "total": 32,
+    "valid": 4,
+    "important": [
+      {
+        "label": "AAA Document Layout",
+        "kind": 16,
+        "detail": "In this document",
+        "documentation": "Title + Text",
+        "filterText": "AAA Document Layout document-layout",
+        "insertText": "",
+        "range": {
+          "startLineNumber": 44,
+          "startColumn": 1,
+          "endLineNumber": 44,
+          "endColumn": 1
+        },
+        "monacoRangeValid": false
+      },
+      {
+        "label": "AAB Loaded Layout",
+        "kind": 16,
+        "detail": "Provided by app",
+        "documentation": "Title + Text",
+        "filterText": "AAB Loaded Layout loaded-layout",
+        "insertText": "loaded",
+        "range": {
+          "startLineNumber": 11,
+          "startColumn": 18,
+          "endLineNumber": 11,
+          "endColumn": 26
+        },
+        "monacoRangeValid": true
+      }
+    ]
+  },
+  "suggestions": [
+    {
+      "label": "AAA Document Layout",
+      "kind": 16,
+      "detail": "In this document",
+      "documentation": "Title + Text",
+      "filterText": "AAA Document Layout document-layout",
+      "insertText": "",
+      "range": {
+        "startLineNumber": 44,
+        "startColumn": 1,
+        "endLineNumber": 44,
+        "endColumn": 1
+      },
+      "monacoRangeValid": false
+    },
+    {
+      "label": "AAB Loaded Layout",
+      "kind": 16,
+      "detail": "Provided by app",
+      "documentation": "Title + Text",
+      "filterText": "AAB Loaded Layout loaded-layout",
+      "insertText": "loaded",
+      "range": {
+        "startLineNumber": 11,
+        "startColumn": 18,
+        "endLineNumber": 11,
+        "endColumn": 26
+      },
+      "monacoRangeValid": true
+    },
+    {
+      "label": "Text 1x",
+      "kind": 16,
+      "detail": "Standard OPF",
+      "documentation": "Title + Text",
+      "filterText": "Text 1x text-1x",
+      "insertText": "text-1x",
+      "range": {
+        "startLineNumber": 11,
+        "startColumn": 18,
+        "endLineNumber": 11,
+        "endColumn": 33
+      },
+      "monacoRangeValid": true
+    },
+    {
+      "label": "Title Subtitle",
+      "kind": 16,
+      "detail": "Standard OPF",
+      "documentation": "Title + Subtitle",
+      "filterText": "Title Subtitle title-subtitle",
+      "insertText": "title-subtitle\",\r\n      \"text\": [\r\n        {\r\n          \"text\": \"Two  spaces stay.\",\r\n          \"bold\": true\r\n        },\r\n        {\r\n          \"text\": \"\\nAnd a second line.\",\r\n          \"italic\": true\r\n        }\r\n      ],\r\n      \"notes\": \"Keep these notes\\n\\tand their whitespace.\",\r\n      \"subtitle\": \"",
+      "range": {
+        "startLineNumber": 11,
+        "startColumn": 18,
+        "endLineNumber": 22,
+        "endColumn": 58
+      },
+      "monacoRangeValid": false
+    },
+    {
+      "label": "Text 2x",
+      "kind": 16,
+      "detail": "Standard OPF",
+      "documentation": "Title + Text × 2",
+      "filterText": "Text 2x text-2x",
+      "insertText": "text-2x\",\r\n      \"notes\": \"Keep these notes\\n\\tand their whitespace.\",\r\n      \"blocks\": [\r\n        {\r\n          \"text\": [\r\n            {\r\n              \"text\": \"Two  spaces stay.\",\r\n              \"bold\": true\r\n            },\r\n            {\r\n              \"text\": \"\\nAnd a second line.\",\r\n              \"italic\": true\r\n            }\r\n          ]\r\n        },\r\n        {\r\n          \"text\": \"\"\r\n        }\r\n      ]",
+      "range": {
+        "startLineNumber": 11,
+        "startColumn": 18,
+        "endLineNumber": 22,
+        "endColumn": 59
+      },
+      "monacoRangeValid": false
+    },
+    {
+      "label": "Text 3x",
+      "kind": 16,
+      "detail": "Standard OPF",
+      "documentation": "Title + Text × 3",
+      "filterText": "Text 3x text-3x",
+      "insertText": "text-3x\",\r\n      \"notes\": \"Keep these notes\\n\\tand their whitespace.\",\r\n      \"blocks\": [\r\n        {\r\n          \"text\": [\r\n            {\r\n              \"text\": \"Two  spaces stay.\",\r\n              \"bold\": true\r\n            },\r\n            {\r\n              \"text\": \"\\nAnd a second line.\",\r\n              \"italic\": true\r\n            }\r\n          ]\r\n        },\r\n        {\r\n          \"text\": \"\"\r\n        },\r\n        {\r\n          \"text\": \"\"\r\n        }\r\n      ]",
+      "range": {
+        "startLineNumber": 11,
+        "startColumn": 18,
+        "endLineNumber": 22,
+        "endColumn": 59
+      },
+      "monacoRangeValid": false
+    },
+    {
+      "label": "Blank",
+      "kind": 16,
+      "detail": "Standard OPF",
+      "documentation": "No placeholders",
+      "filterText": "Blank blank",
+      "insertText": "blank",
+      "range": {
+        "startLineNumber": 11,
+        "startColumn": 18,
+        "endLineNumber": 11,
+        "endColumn": 33
+      },
+      "monacoRangeValid": true
+    },
+    {
+      "label": "Chart 1x",
+      "kind": 16,
+      "detail": "Standard OPF",
+      "documentation": "Title + Text + Chart",
+      "filterText": "Chart 1x chart-1x",
+      "insertText": "chart-1x\",\r\n      \"text\": [\r\n        {\r\n          \"text\": \"Two  spaces stay.\",\r\n          \"bold\": true\r\n        },\r\n        {\r\n          \"text\": \"\\nAnd a second line.\",\r\n          \"italic\": true\r\n        }\r\n      ],\r\n      \"notes\": \"Keep these notes\\n\\tand their whitespace.\",\r\n      \"chart\": {\r\n        \"type\": \"bar\",\r\n        \"data\": {\r\n          \"columns\": [\r\n            \"\",\r\n            \"\"\r\n          ],\r\n          \"rows\": [\r\n            [\r\n              \"\",\r\n              null\r\n            ]\r\n          ]\r\n        }\r\n      }",
+      "range": {
+        "startLineNumber": 11,
+        "startColumn": 18,
+        "endLineNumber": 22,
+        "endColumn": 59
+      },
+      "monacoRangeValid": false
+    },
+    {
+      "label": "Chart 2x",
+      "kind": 16,
+      "detail": "Standard OPF",
+      "documentation": "Title + Text × 2 + Chart × 2",
+      "filterText": "Chart 2x chart-2x",
+      "insertText": "chart-2x\",\r\n      \"notes\": \"Keep these notes\\n\\tand their whitespace.\",\r\n      \"blocks\": [\r\n        {\r\n          \"text\": [\r\n            {\r\n              \"text\": \"Two  spaces stay.\",\r\n              \"bold\": true\r\n            },\r\n            {\r\n              \"text\": \"\\nAnd a second line.\",\r\n              \"italic\": true\r\n            }\r\n          ]\r\n        },\r\n        {\r\n          \"chart\": {\r\n            \"type\": \"bar\",\r\n            \"data\": {\r\n              \"columns\": [\r\n                \"\",\r\n                \"\"\r\n              ],\r\n              \"rows\": [\r\n                [\r\n                  \"\",\r\n                  null\r\n                ]\r\n              ]\r\n            }\r\n          }\r\n        },\r\n        {\r\n          \"chart\": {\r\n            \"type\": \"bar\",\r\n            \"data\": {\r\n              \"columns\": [\r\n                \"\",\r\n                \"\"\r\n              ],\r\n              \"rows\": [\r\n                [\r\n                  \"\",\r\n                  null\r\n                ]\r\n              ]\r\n            }\r\n          }\r\n        },\r\n        {\r\n          \"text\": \"\"\r\n        }\r\n      ]",
+      "range": {
+        "startLineNumber": 11,
+        "startColumn": 18,
+        "endLineNumber": 22,
+        "endColumn": 59
+      },
+      "monacoRangeValid": false
+    },
+    {
+      "label": "Chart 3x",
+      "kind": 16,
+      "detail": "Standard OPF",
+      "documentation": "Title + Text × 3 + Chart × 3",
+      "filterText": "Chart 3x chart-3x",
+      "insertText": "chart-3x\",\r\n      \"notes\": \"Keep these notes\\n\\tand their whitespace.\",\r\n      \"blocks\": [\r\n        {\r\n          \"text\": [\r\n            {\r\n              \"text\": \"Two  spaces stay.\",\r\n              \"bold\": true\r\n            },\r\n            {\r\n              \"text\": \"\\nAnd a second line.\",\r\n              \"italic\": true\r\n            }\r\n          ]\r\n        },\r\n        {\r\n          \"chart\": {\r\n            \"type\": \"bar\",\r\n            \"data\": {\r\n              \"columns\": [\r\n                \"\",\r\n                \"\"\r\n              ],\r\n              \"rows\": [\r\n                [\r\n                  \"\",\r\n                  null\r\n                ]\r\n              ]\r\n            }\r\n          }\r\n        },\r\n        {\r\n          \"chart\": {\r\n            \"type\": \"bar\",\r\n            \"data\": {\r\n              \"columns\": [\r\n                \"\",\r\n                \"\"\r\n              ],\r\n              \"rows\": [\r\n                [\r\n                  \"\",\r\n                  null\r\n                ]\r\n              ]\r\n            }\r\n          }\r\n        },\r\n        {\r\n          \"text\": \"\"\r\n        },\r\n        {\r\n          \"chart\": {\r\n            \"type\": \"bar\",\r\n            \"data\": {\r\n              \"columns\": [\r\n                \"\",\r\n                \"\"\r\n              ],\r\n              \"rows\": [\r\n                [\r\n                  \"\",\r\n                  null\r\n                ]\r\n              ]\r\n            }\r\n          }\r\n        },\r\n        {\r\n          \"text\": \"\"\r\n        }\r\n      ]",
+      "range": {
+        "startLineNumber": 11,
+        "startColumn": 18,
+        "endLineNumber": 22,
+        "endColumn": 59
+      },
+      "monacoRangeValid": false
+    },
+    {
+      "label": "Code 1x",
+      "kind": 16,
+      "detail": "Standard OPF",
+      "documentation": "Title + Text + Code",
+      "filterText": "Code 1x code-1x",
+      "insertText": "code-1x\",\r\n      \"text\": [\r\n        {\r\n          \"text\": \"Two  spaces stay.\",\r\n          \"bold\": true\r\n        },\r\n        {\r\n          \"text\": \"\\nAnd a second line.\",\r\n          \"italic\": true\r\n        }\r\n      ],\r\n      \"notes\": \"Keep these notes\\n\\tand their whitespace.\",\r\n      \"code\": \"",
+      "range": {
+        "startLineNumber": 11,
+        "startColumn": 18,
+        "endLineNumber": 22,
+        "endColumn": 58
+      },
+      "monacoRangeValid": false
+    },
+    {
+      "label": "Image 1x",
+      "kind": 16,
+      "detail": "Standard OPF",
+      "documentation": "Title + Text + Image",
+      "filterText": "Image 1x image-1x",
+      "insertText": "image-1x\",\r\n      \"text\": [\r\n        {\r\n          \"text\": \"Two  spaces stay.\",\r\n          \"bold\": true\r\n        },\r\n        {\r\n          \"text\": \"\\nAnd a second line.\",\r\n          \"italic\": true\r\n        }\r\n      ],\r\n      \"notes\": \"Keep these notes\\n\\tand their whitespace.\",\r\n      \"image\": \"",
+      "range": {
+        "startLineNumber": 11,
+        "startColumn": 18,
+        "endLineNumber": 22,
+        "endColumn": 58
+      },
+      "monacoRangeValid": false
+    },
+    {
+      "label": "Image 2x",
+      "kind": 16,
+      "detail": "Standard OPF",
+      "documentation": "Title + Text × 2 + Image × 2",
+      "filterText": "Image 2x image-2x",
+      "insertText": "image-2x\",\r\n      \"notes\": \"Keep these notes\\n\\tand their whitespace.\",\r\n      \"blocks\": [\r\n        {\r\n          \"text\": [\r\n            {\r\n              \"text\": \"Two  spaces stay.\",\r\n              \"bold\": true\r\n            },\r\n            {\r\n              \"text\": \"\\nAnd a second line.\",\r\n              \"italic\": true\r\n            }\r\n          ]\r\n        },\r\n        {\r\n          \"image\": \"\"\r\n        },\r\n        {\r\n          \"image\": \"\"\r\n        },\r\n        {\r\n          \"text\": \"\"\r\n        }\r\n      ]",
+      "range": {
+        "startLineNumber": 11,
+        "startColumn": 18,
+        "endLineNumber": 22,
+        "endColumn": 59
+      },
+      "monacoRangeValid": false
+    },
+    {
+      "label": "Image 3x",
+      "kind": 16,
+      "detail": "Standard OPF",
+      "documentation": "Title + Text × 3 + Image × 3",
+      "filterText": "Image 3x image-3x",
+      "insertText": "image-3x\",\r\n      \"notes\": \"Keep these notes\\n\\tand their whitespace.\",\r\n      \"blocks\": [\r\n        {\r\n          \"text\": [\r\n            {\r\n              \"text\": \"Two  spaces stay.\",\r\n              \"bold\": true\r\n            },\r\n            {\r\n              \"text\": \"\\nAnd a second line.\",\r\n              \"italic\": true\r\n            }\r\n          ]\r\n        },\r\n        {\r\n          \"image\": \"\"\r\n        },\r\n        {\r\n          \"image\": \"\"\r\n        },\r\n        {\r\n          \"text\": \"\"\r\n        },\r\n        {\r\n          \"image\": \"\"\r\n        },\r\n        {\r\n          \"text\": \"\"\r\n        }\r\n      ]",
+      "range": {
+        "startLineNumber": 11,
+        "startColumn": 18,
+        "endLineNumber": 22,
+        "endColumn": 59
+      },
+      "monacoRangeValid": false
+    },
+    {
+      "label": "Image Bleed",
+      "kind": 16,
+      "detail": "Standard OPF",
+      "documentation": "Image",
+      "filterText": "Image Bleed image-bleed",
+      "insertText": "image-bleed\",\r\n      \"text\": [\r\n        {\r\n          \"text\": \"Two  spaces stay.\",\r\n          \"bold\": true\r\n        },\r\n        {\r\n          \"text\": \"\\nAnd a second line.\",\r\n          \"italic\": true\r\n        }\r\n      ],\r\n      \"notes\": \"Keep these notes\\n\\tand their whitespace.\",\r\n      \"image\": \"",
+      "range": {
+        "startLineNumber": 11,
+        "startColumn": 18,
+        "endLineNumber": 22,
+        "endColumn": 58
+      },
+      "monacoRangeValid": false
+    },
+    {
+      "label": "List 1x",
+      "kind": 16,
+      "detail": "Standard OPF",
+      "documentation": "Title + List",
+      "filterText": "List 1x list-1x",
+      "insertText": "list-1x\",\r\n      \"text\": [\r\n        {\r\n          \"text\": \"Two  spaces stay.\",\r\n          \"bold\": true\r\n        },\r\n        {\r\n          \"text\": \"\\nAnd a second line.\",\r\n          \"italic\": true\r\n        }\r\n      ],\r\n      \"notes\": \"Keep these notes\\n\\tand their whitespace.\",\r\n      \"items\": []",
+      "range": {
+        "startLineNumber": 11,
+        "startColumn": 18,
+        "endLineNumber": 22,
+        "endColumn": 59
+      },
+      "monacoRangeValid": false
+    },
+    {
+      "label": "List 2x",
+      "kind": 16,
+      "detail": "Standard OPF",
+      "documentation": "Title + List × 2",
+      "filterText": "List 2x list-2x",
+      "insertText": "list-2x\",\r\n      \"notes\": \"Keep these notes\\n\\tand their whitespace.\",\r\n      \"blocks\": [\r\n        {\r\n          \"text\": [\r\n            {\r\n              \"text\": \"Two  spaces stay.\",\r\n              \"bold\": true\r\n            },\r\n            {\r\n              \"text\": \"\\nAnd a second line.\",\r\n              \"italic\": true\r\n            }\r\n          ]\r\n        },\r\n        {\r\n          \"items\": []\r\n        },\r\n        {\r\n          \"items\": []\r\n        }\r\n      ]",
+      "range": {
+        "startLineNumber": 11,
+        "startColumn": 18,
+        "endLineNumber": 22,
+        "endColumn": 59
+      },
+      "monacoRangeValid": false
+    },
+    {
+      "label": "List 3x",
+      "kind": 16,
+      "detail": "Standard OPF",
+      "documentation": "Title + List × 3",
+      "filterText": "List 3x list-3x",
+      "insertText": "list-3x\",\r\n      \"notes\": \"Keep these notes\\n\\tand their whitespace.\",\r\n      \"blocks\": [\r\n        {\r\n          \"text\": [\r\n            {\r\n              \"text\": \"Two  spaces stay.\",\r\n              \"bold\": true\r\n            },\r\n            {\r\n              \"text\": \"\\nAnd a second line.\",\r\n              \"italic\": true\r\n            }\r\n          ]\r\n        },\r\n        {\r\n          \"items\": []\r\n        },\r\n        {\r\n          \"items\": []\r\n        },\r\n        {\r\n          \"items\": []\r\n        }\r\n      ]",
+      "range": {
+        "startLineNumber": 11,
+        "startColumn": 18,
+        "endLineNumber": 22,
+        "endColumn": 59
+      },
+      "monacoRangeValid": false
+    },
+    {
+      "label": "List 4x",
+      "kind": 16,
+      "detail": "Standard OPF",
+      "documentation": "Title + List × 4",
+      "filterText": "List 4x list-4x",
+      "insertText": "list-4x\",\r\n      \"notes\": \"Keep these notes\\n\\tand their whitespace.\",\r\n      \"blocks\": [\r\n        {\r\n          \"text\": [\r\n            {\r\n              \"text\": \"Two  spaces stay.\",\r\n              \"bold\": true\r\n            },\r\n            {\r\n              \"text\": \"\\nAnd a second line.\",\r\n              \"italic\": true\r\n            }\r\n          ]\r\n        },\r\n        {\r\n          \"items\": []\r\n        },\r\n        {\r\n          \"items\": []\r\n        },\r\n        {\r\n          \"items\": []\r\n        },\r\n        {\r\n          \"items\": []\r\n        }\r\n      ]",
+      "range": {
+        "startLineNumber": 11,
+        "startColumn": 18,
+        "endLineNumber": 22,
+        "endColumn": 59
+      },
+      "monacoRangeValid": false
+    },
+    {
+      "label": "List 5x",
+      "kind": 16,
+      "detail": "Standard OPF",
+      "documentation": "Title + List × 5",
+      "filterText": "List 5x list-5x",
+      "insertText": "list-5x\",\r\n      \"notes\": \"Keep these notes\\n\\tand their whitespace.\",\r\n      \"blocks\": [\r\n        {\r\n          \"text\": [\r\n            {\r\n              \"text\": \"Two  spaces stay.\",\r\n              \"bold\": true\r\n            },\r\n            {\r\n              \"text\": \"\\nAnd a second line.\",\r\n              \"italic\": true\r\n            }\r\n          ]\r\n        },\r\n        {\r\n          \"items\": []\r\n        },\r\n        {\r\n          \"items\": []\r\n        },\r\n        {\r\n          \"items\": []\r\n        },\r\n        {\r\n          \"items\": []\r\n        },\r\n        {\r\n          \"items\": []\r\n        }\r\n      ]",
+      "range": {
+        "startLineNumber": 11,
+        "startColumn": 18,
+        "endLineNumber": 22,
+        "endColumn": 59
+      },
+      "monacoRangeValid": false
+    },
+    {
+      "label": "List 6x",
+      "kind": 16,
+      "detail": "Standard OPF",
+      "documentation": "Title + List × 6",
+      "filterText": "List 6x list-6x",
+      "insertText": "list-6x\",\r\n      \"notes\": \"Keep these notes\\n\\tand their whitespace.\",\r\n      \"blocks\": [\r\n        {\r\n          \"text\": [\r\n            {\r\n              \"text\": \"Two  spaces stay.\",\r\n              \"bold\": true\r\n            },\r\n            {\r\n              \"text\": \"\\nAnd a second line.\",\r\n              \"italic\": true\r\n            }\r\n          ]\r\n        },\r\n        {\r\n          \"items\": []\r\n        },\r\n        {\r\n          \"items\": []\r\n        },\r\n        {\r\n          \"items\": []\r\n        },\r\n        {\r\n          \"items\": []\r\n        },\r\n        {\r\n          \"items\": []\r\n        },\r\n        {\r\n          \"items\": []\r\n        }\r\n      ]",
+      "range": {
+        "startLineNumber": 11,
+        "startColumn": 18,
+        "endLineNumber": 22,
+        "endColumn": 59
+      },
+      "monacoRangeValid": false
+    },
+    {
+      "label": "Media 1x",
+      "kind": 16,
+      "detail": "Standard OPF",
+      "documentation": "Title + Text + Video",
+      "filterText": "Media 1x media-1x",
+      "insertText": "media-1x\",\r\n      \"text\": [\r\n        {\r\n          \"text\": \"Two  spaces stay.\",\r\n          \"bold\": true\r\n        },\r\n        {\r\n          \"text\": \"\\nAnd a second line.\",\r\n          \"italic\": true\r\n        }\r\n      ],\r\n      \"notes\": \"Keep these notes\\n\\tand their whitespace.\",\r\n      \"video\": \"",
+      "range": {
+        "startLineNumber": 11,
+        "startColumn": 18,
+        "endLineNumber": 22,
+        "endColumn": 58
+      },
+      "monacoRangeValid": false
+    },
+    {
+      "label": "Number 1x",
+      "kind": 16,
+      "detail": "Standard OPF",
+      "documentation": "Title + Metric",
+      "filterText": "Number 1x number-1x",
+      "insertText": "number-1x\",\r\n      \"text\": [\r\n        {\r\n          \"text\": \"Two  spaces stay.\",\r\n          \"bold\": true\r\n        },\r\n        {\r\n          \"text\": \"\\nAnd a second line.\",\r\n          \"italic\": true\r\n        }\r\n      ],\r\n      \"notes\": \"Keep these notes\\n\\tand their whitespace.\",\r\n      \"metric\": {\r\n        \"value\": \"\",\r\n        \"label\": \"\"\r\n      }",
+      "range": {
+        "startLineNumber": 11,
+        "startColumn": 18,
+        "endLineNumber": 22,
+        "endColumn": 59
+      },
+      "monacoRangeValid": false
+    },
+    {
+      "label": "Number 2x",
+      "kind": 16,
+      "detail": "Standard OPF",
+      "documentation": "Title + Metric × 2",
+      "filterText": "Number 2x number-2x",
+      "insertText": "number-2x\",\r\n      \"notes\": \"Keep these notes\\n\\tand their whitespace.\",\r\n      \"blocks\": [\r\n        {\r\n          \"text\": [\r\n            {\r\n              \"text\": \"Two  spaces stay.\",\r\n              \"bold\": true\r\n            },\r\n            {\r\n              \"text\": \"\\nAnd a second line.\",\r\n              \"italic\": true\r\n            }\r\n          ]\r\n        },\r\n        {\r\n          \"metric\": {\r\n            \"value\": \"\",\r\n            \"label\": \"\"\r\n          }\r\n        },\r\n        {\r\n          \"metric\": {\r\n            \"value\": \"\",\r\n            \"label\": \"\"\r\n          }\r\n        }\r\n      ]",
+      "range": {
+        "startLineNumber": 11,
+        "startColumn": 18,
+        "endLineNumber": 22,
+        "endColumn": 59
+      },
+      "monacoRangeValid": false
+    },
+    {
+      "label": "Number 3x",
+      "kind": 16,
+      "detail": "Standard OPF",
+      "documentation": "Title + Metric × 3",
+      "filterText": "Number 3x number-3x",
+      "insertText": "number-3x\",\r\n      \"notes\": \"Keep these notes\\n\\tand their whitespace.\",\r\n      \"blocks\": [\r\n        {\r\n          \"text\": [\r\n            {\r\n              \"text\": \"Two  spaces stay.\",\r\n              \"bold\": true\r\n            },\r\n            {\r\n              \"text\": \"\\nAnd a second line.\",\r\n              \"italic\": true\r\n            }\r\n          ]\r\n        },\r\n        {\r\n          \"metric\": {\r\n            \"value\": \"\",\r\n            \"label\": \"\"\r\n          }\r\n        },\r\n        {\r\n          \"metric\": {\r\n            \"value\": \"\",\r\n            \"label\": \"\"\r\n          }\r\n        },\r\n        {\r\n          \"metric\": {\r\n            \"value\": \"\",\r\n            \"label\": \"\"\r\n          }\r\n        }\r\n      ]",
+      "range": {
+        "startLineNumber": 11,
+        "startColumn": 18,
+        "endLineNumber": 22,
+        "endColumn": 59
+      },
+      "monacoRangeValid": false
+    },
+    {
+      "label": "Number 4x",
+      "kind": 16,
+      "detail": "Standard OPF",
+      "documentation": "Title + Metric × 4",
+      "filterText": "Number 4x number-4x",
+      "insertText": "number-4x\",\r\n      \"notes\": \"Keep these notes\\n\\tand their whitespace.\",\r\n      \"blocks\": [\r\n        {\r\n          \"text\": [\r\n            {\r\n              \"text\": \"Two  spaces stay.\",\r\n              \"bold\": true\r\n            },\r\n            {\r\n              \"text\": \"\\nAnd a second line.\",\r\n              \"italic\": true\r\n            }\r\n          ]\r\n        },\r\n        {\r\n          \"metric\": {\r\n            \"value\": \"\",\r\n            \"label\": \"\"\r\n          }\r\n        },\r\n        {\r\n          \"metric\": {\r\n            \"value\": \"\",\r\n            \"label\": \"\"\r\n          }\r\n        },\r\n        {\r\n          \"metric\": {\r\n            \"value\": \"\",\r\n            \"label\": \"\"\r\n          }\r\n        },\r\n        {\r\n          \"metric\": {\r\n            \"value\": \"\",\r\n            \"label\": \"\"\r\n          }\r\n        }\r\n      ]",
+      "range": {
+        "startLineNumber": 11,
+        "startColumn": 18,
+        "endLineNumber": 22,
+        "endColumn": 59
+      },
+      "monacoRangeValid": false
+    },
+    {
+      "label": "Number 5x",
+      "kind": 16,
+      "detail": "Standard OPF",
+      "documentation": "Title + Metric × 5",
+      "filterText": "Number 5x number-5x",
+      "insertText": "number-5x\",\r\n      \"notes\": \"Keep these notes\\n\\tand their whitespace.\",\r\n      \"blocks\": [\r\n        {\r\n          \"text\": [\r\n            {\r\n              \"text\": \"Two  spaces stay.\",\r\n              \"bold\": true\r\n            },\r\n            {\r\n              \"text\": \"\\nAnd a second line.\",\r\n              \"italic\": true\r\n            }\r\n          ]\r\n        },\r\n        {\r\n          \"metric\": {\r\n            \"value\": \"\",\r\n            \"label\": \"\"\r\n          }\r\n        },\r\n        {\r\n          \"metric\": {\r\n            \"value\": \"\",\r\n            \"label\": \"\"\r\n          }\r\n        },\r\n        {\r\n          \"metric\": {\r\n            \"value\": \"\",\r\n            \"label\": \"\"\r\n          }\r\n        },\r\n        {\r\n          \"metric\": {\r\n            \"value\": \"\",\r\n            \"label\": \"\"\r\n          }\r\n        },\r\n        {\r\n          \"metric\": {\r\n            \"value\": \"\",\r\n            \"label\": \"\"\r\n          }\r\n        }\r\n      ]",
+      "range": {
+        "startLineNumber": 11,
+        "startColumn": 18,
+        "endLineNumber": 22,
+        "endColumn": 59
+      },
+      "monacoRangeValid": false
+    },
+    {
+      "label": "Number 6x",
+      "kind": 16,
+      "detail": "Standard OPF",
+      "documentation": "Title + Metric × 6",
+      "filterText": "Number 6x number-6x",
+      "insertText": "number-6x\",\r\n      \"notes\": \"Keep these notes\\n\\tand their whitespace.\",\r\n      \"blocks\": [\r\n        {\r\n          \"text\": [\r\n            {\r\n              \"text\": \"Two  spaces stay.\",\r\n              \"bold\": true\r\n            },\r\n            {\r\n              \"text\": \"\\nAnd a second line.\",\r\n              \"italic\": true\r\n            }\r\n          ]\r\n        },\r\n        {\r\n          \"metric\": {\r\n            \"value\": \"\",\r\n            \"label\": \"\"\r\n          }\r\n        },\r\n        {\r\n          \"metric\": {\r\n            \"value\": \"\",\r\n            \"label\": \"\"\r\n          }\r\n        },\r\n        {\r\n          \"metric\": {\r\n            \"value\": \"\",\r\n            \"label\": \"\"\r\n          }\r\n        },\r\n        {\r\n          \"metric\": {\r\n            \"value\": \"\",\r\n            \"label\": \"\"\r\n          }\r\n        },\r\n        {\r\n          \"metric\": {\r\n            \"value\": \"\",\r\n            \"label\": \"\"\r\n          }\r\n        },\r\n        {\r\n          \"metric\": {\r\n            \"value\": \"\",\r\n            \"label\": \"\"\r\n          }\r\n        }\r\n      ]",
+      "range": {
+        "startLineNumber": 11,
+        "startColumn": 18,
+        "endLineNumber": 22,
+        "endColumn": 59
+      },
+      "monacoRangeValid": false
+    },
+    {
+      "label": "Quote 1x",
+      "kind": 16,
+      "detail": "Standard OPF",
+      "documentation": "Title + Quote",
+      "filterText": "Quote 1x quote-1x",
+      "insertText": "quote-1x\",\r\n      \"text\": [\r\n        {\r\n          \"text\": \"Two  spaces stay.\",\r\n          \"bold\": true\r\n        },\r\n        {\r\n          \"text\": \"\\nAnd a second line.\",\r\n          \"italic\": true\r\n        }\r\n      ],\r\n      \"notes\": \"Keep these notes\\n\\tand their whitespace.\",\r\n      \"quote\": {\r\n        \"text\": \"\",\r\n        \"attribution\": \"\"\r\n      }",
+      "range": {
+        "startLineNumber": 11,
+        "startColumn": 18,
+        "endLineNumber": 22,
+        "endColumn": 59
+      },
+      "monacoRangeValid": false
+    },
+    {
+      "label": "Table 1x",
+      "kind": 16,
+      "detail": "Standard OPF",
+      "documentation": "Title + Text + Table",
+      "filterText": "Table 1x table-1x",
+      "insertText": "table-1x\",\r\n      \"text\": [\r\n        {\r\n          \"text\": \"Two  spaces stay.\",\r\n          \"bold\": true\r\n        },\r\n        {\r\n          \"text\": \"\\nAnd a second line.\",\r\n          \"italic\": true\r\n        }\r\n      ],\r\n      \"notes\": \"Keep these notes\\n\\tand their whitespace.\",\r\n      \"table\": {\r\n        \"rows\": []\r\n      }",
+      "range": {
+        "startLineNumber": 11,
+        "startColumn": 18,
+        "endLineNumber": 22,
+        "endColumn": 59
+      },
+      "monacoRangeValid": false
+    },
+    {
+      "label": "Timeline 1x",
+      "kind": 16,
+      "detail": "Standard OPF",
+      "documentation": "Title + Timeline",
+      "filterText": "Timeline 1x timeline-1x",
+      "insertText": "timeline-1x\",\r\n      \"text\": [\r\n        {\r\n          \"text\": \"Two  spaces stay.\",\r\n          \"bold\": true\r\n        },\r\n        {\r\n          \"text\": \"\\nAnd a second line.\",\r\n          \"italic\": true\r\n        }\r\n      ],\r\n      \"notes\": \"Keep these notes\\n\\tand their whitespace.\",\r\n      \"timeline\": {\r\n        \"events\": [\r\n          {\r\n            \"when\": \"\",\r\n            \"what\": \"\"\r\n          }\r\n        ]\r\n      }",
+      "range": {
+        "startLineNumber": 11,
+        "startColumn": 18,
+        "endLineNumber": 22,
+        "endColumn": 59
+      },
+      "monacoRangeValid": false
+    },
+    {
+      "label": "Title",
+      "kind": 16,
+      "detail": "Standard OPF",
+      "documentation": "Title",
+      "filterText": "Title title",
+      "insertText": "title",
+      "range": {
+        "startLineNumber": 11,
+        "startColumn": 18,
+        "endLineNumber": 11,
+        "endColumn": 33
+      },
+      "monacoRangeValid": true
+    }
+  ]
+}

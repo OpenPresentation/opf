@@ -1,0 +1,249 @@
+{
+  "recordedAt": "2026-09-21T22:25:24.372721+00:00",
+  "acceptedCore111": "3c5048522714365a41d9b5b9ba81620affae718b",
+  "checkpointBeforeMerge": "60cb47b5b3d97115abc9295b8c2c207d2f4a225e",
+  "localAdditiveMerge": "92c92d3b58bf907e263dd4c80b5bcb8dc9d6f86a",
+  "mergeParents": [
+    "60cb47b5b3d97115abc9295b8c2c207d2f4a225e",
+    "3c5048522714365a41d9b5b9ba81620affae718b"
+  ],
+  "native111MatrixAdditionExact": true,
+  "native111MatrixParagraphSha256": "2807d1a25e3b82c90648192de476e446b5129878b34e91080285e9a14b4c2f74",
+  "allOtherIncomingNative111FilesExact": [
+    {
+      "path": "docs/evidence/windows-native-font-inventory-20260921/.gitattributes",
+      "bytes": 9,
+      "sha256": "48747480eddba024928d03be9bf83dc579e5515768647507a767e8187a85c9ab",
+      "gitBlob": "b746772b6cda0edb9a3995c3f95e0dde764ed2ae"
+    },
+    {
+      "path": "docs/evidence/windows-native-font-inventory-20260921/MANIFEST.sha256.json",
+      "bytes": 5983,
+      "sha256": "18ca9125a22bb65c79bc1c7a788a3bf5a2ab2ff41248c81d158b1833a1f8085d",
+      "gitBlob": "ee60dcc1cd828c16224050f14c8aef7718c86445"
+    },
+    {
+      "path": "docs/evidence/windows-native-font-inventory-20260921/OMITTED.json",
+      "bytes": 1155,
+      "sha256": "e241f6f4194809f268aa21836283a0bbe2f3a6ddf11d57c03bfd4e97531120c0",
+      "gitBlob": "21944d9d49548e9467f98be21c3968b406b3d0a1"
+    },
+    {
+      "path": "docs/evidence/windows-native-font-inventory-20260921/README.md",
+      "bytes": 3332,
+      "sha256": "b473ae251aee12a438079b2377e5142f6be31a5cf89a5c5fc63d787e7b7011a9",
+      "gitBlob": "c00442484d86b2aab769d644b414d3b755f42416"
+    },
+    {
+      "path": "docs/evidence/windows-native-font-inventory-20260921/attempt/font-registration.json",
+      "bytes": 812,
+      "sha256": "d3c8a31ef44b436ffc6ebf82f5738f01cd849312534a4945382f48137795348a",
+      "gitBlob": "876f667c9a44e124ffaa0be4bfbfc5c7972f7222"
+    },
+    {
+      "path": "docs/evidence/windows-native-font-inventory-20260921/attempt/inputs/font-fixture/LICENSE_FONT",
+      "bytes": 4424,
+      "sha256": "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00",
+      "gitBlob": "8d6b170e4d9a5580a34471dc4ac3e8fc5fbbd712"
+    },
+    {
+      "path": "docs/evidence/windows-native-font-inventory-20260921/attempt/inputs/font-fixture/generation.json",
+      "bytes": 2616,
+      "sha256": "8ac9743832e6c63bab58a999802979dcdcb91139599f502e90bc697141cf5422",
+      "gitBlob": "b7aec347d5714855b409549ddafb96938c665953"
+    },
+    {
+      "path": "docs/evidence/windows-native-font-inventory-20260921/attempt/inputs/generate.mjs",
+      "bytes": 25429,
+      "sha256": "7e3400edbad7f980a074c5cbc5fd68453611c6b3f9fa7fae912660afc53fe36f",
+      "gitBlob": "e27682db5476668c7ec43d72b3350d85e6500e99"
+    },
+    {
+      "path": "docs/evidence/windows-native-font-inventory-20260921/attempt/inputs/generation-corrected.json",
+      "bytes": 99362,
+      "sha256": "3838613523e4a55ec69db076cce62f13c483f6f571d6c7072e81c2edd877cccd",
+      "gitBlob": "06dadf1bc6d51292bff908a31230a46f3c2e0998"
+    },
+    {
+      "path": "docs/evidence/windows-native-font-inventory-20260921/attempt/inputs/native-font-inventory.ps1",
+      "bytes": 57588,
+      "sha256": "eaab68ca458b28f6d2cf61fc7fda6ce4e6f22d55c9c5be3eca5ee7ff8bb3450e",
+      "gitBlob": "5bee134ae31b627328575ea0dfed977f8fa79427"
+    },
+    {
+      "path": "docs/evidence/windows-native-font-inventory-20260921/attempt/inputs/native-process.ps1",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+      "gitBlob": "c92dcbf69fe657ecec5acc6dd7c10fe61808c829"
+    },
+    {
+      "path": "docs/evidence/windows-native-font-inventory-20260921/attempt/inputs/native-text-fonts.ps1",
+      "bytes": 2446,
+      "sha256": "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6",
+      "gitBlob": "42b6374d1e867e695c44291bcee4639f3670e0e3"
+    },
+    {
+      "path": "docs/evidence/windows-native-font-inventory-20260921/attempt/inputs/registry-package-lock.json",
+      "bytes": 57378,
+      "sha256": "4868f13254e3e681566164da8427d3716ceaa025435e4606e5e15fc8a87bc305",
+      "gitBlob": "88cae75e5efd4699e6c7fb6c552a67c105e88501"
+    },
+    {
+      "path": "docs/evidence/windows-native-font-inventory-20260921/attempt/inputs/source.opf.json",
+      "bytes": 1011,
+      "sha256": "702a80d1d2d4f04a19050a3463da32ac18e87a4e31266a22b5871ddc2e240a3c",
+      "gitBlob": "b720356b5248cc0da6f6baab810259d3029eeaa1"
+    },
+    {
+      "path": "docs/evidence/windows-native-font-inventory-20260921/attempt/inputs/source.pptx",
+      "bytes": 14737,
+      "sha256": "79cee1342bf6815fffdb9b0f2b95b23d6dfb7ec5f232fd0584aaf1ef149af2eb",
+      "gitBlob": "6905742a830b58ebcbdd0c71e85b8c3979d7eb86"
+    },
+    {
+      "path": "docs/evidence/windows-native-font-inventory-20260921/attempt/progress.json",
+      "bytes": 271,
+      "sha256": "8e9e9c606155725666ad2470406b1acc99045813eb1b922b68ed9451010ffeb0",
+      "gitBlob": "055d94075f6eb33d4946bcd239f5089c8bb1902b"
+    },
+    {
+      "path": "docs/evidence/windows-native-font-inventory-20260921/attempt/report.json",
+      "bytes": 45995,
+      "sha256": "16141f9b390ca3142177e9cc288e17ed8635bf3ca80105afcfc1fa546c42e9f2",
+      "gitBlob": "0bf8a558ab76c9437b9ce8a4af6b385badc4e78f"
+    },
+    {
+      "path": "docs/evidence/windows-native-font-inventory-20260921/attempt/request.json",
+      "bytes": 29856,
+      "sha256": "7cc71c069498fbe1ab93d78c291c151c9898f25101d3ee0f979cafb6c3ebe8f9",
+      "gitBlob": "4ac96929236065502e65b0bea808cf553a7c6e58"
+    },
+    {
+      "path": "docs/evidence/windows-native-font-inventory-20260921/attempt/stages.jsonl",
+      "bytes": 46916,
+      "sha256": "c0369c5e92267769ebe0b5f28dc5c12bebd730521c502356575d658360952ffe",
+      "gitBlob": "c4fbed88da48f020a71b5776f852f137ea8ddce4"
+    },
+    {
+      "path": "docs/evidence/windows-native-font-inventory-20260921/attempt/supervisor.json",
+      "bytes": 25671,
+      "sha256": "4942c8acce616db0dea418e1ef0014332dad12d76ef310c406475443cd8d1a02",
+      "gitBlob": "c6090499fdc35d9aa34750b36eafe1149327c804"
+    },
+    {
+      "path": "docs/evidence/windows-native-font-inventory-20260921/attempt/worker.json",
+      "bytes": 341,
+      "sha256": "48cbeb28060400db43bf93e64c793c90891daabeb053779dd462c17e60979cc2",
+      "gitBlob": "8fd321d16d0b6dee7c8e5c93c9460b0875f5fbc0"
+    },
+    {
+      "path": "docs/evidence/windows-native-font-inventory-20260921/attempt/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gitBlob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "docs/evidence/windows-native-font-inventory-20260921/attempt/worker.stdout.log",
+      "bytes": 101,
+      "sha256": "913923783fc8b9770104bf2299783e7e6849ba65bacd9e010028b28914b38d53",
+      "gitBlob": "84977452a2972add4dc13e74659ca8d3edab9f97"
+    },
+    {
+      "path": "docs/evidence/windows-native-font-inventory-20260921/audit/audit.py",
+      "bytes": 9654,
+      "sha256": "26ab15bbcade93b0c34870f2a7296413c2555c69345007565486fbebaf04a81e",
+      "gitBlob": "aaf2dac2bf30d0cdfeff50d8da9680ab925787bd"
+    },
+    {
+      "path": "docs/evidence/windows-native-font-inventory-20260921/audit/diagnose-inventory-registration-array.ps1",
+      "bytes": 1346,
+      "sha256": "9459de9987f7ba8c0324ab6b74122fdb08f70abb597bcd41ed414562d3c422dd",
+      "gitBlob": "6f0e909fc4a59f24a58340540207d1a0b0d70296"
+    },
+    {
+      "path": "docs/evidence/windows-native-font-inventory-20260921/audit/inventory-registration-array-diagnosis.json",
+      "bytes": 2193,
+      "sha256": "931f8e11efb96f30065db8c496c349e48e16c71d20bc8a48ce696df475b76eb7",
+      "gitBlob": "6dec785eb6e77a5ba8ec4fb5f00ad97fecc3a707"
+    },
+    {
+      "path": "docs/evidence/windows-native-font-inventory-20260921/audit/parser-repro.json",
+      "bytes": 385,
+      "sha256": "f41a2614b1fde65675ec075b5fbede1560a9a0921514de657dc37e09d814ea37",
+      "gitBlob": "307105f5e65d2c8528490925e32ca53b091512d9"
+    },
+    {
+      "path": "docs/evidence/windows-native-font-inventory-20260921/audit/ps5-parser-repro.ps1",
+      "bytes": 1409,
+      "sha256": "8dddd8537e927e76ec92cc208f6f8f801818f3f176a347ffe270e205ee374210",
+      "gitBlob": "c99b235d4078174894e7ccddd48422fe7a68d302"
+    },
+    {
+      "path": "docs/evidence/windows-native-font-inventory-20260921/audit/report-v2.json",
+      "bytes": 23402,
+      "sha256": "eaa72f6c3af3c449bb97a0cd077eebcd3432b0340503c44b42aad5c706a698d3",
+      "gitBlob": "27340ac1e232a597623fb2395fb4046bf7d7ae1f"
+    },
+    {
+      "path": "docs/evidence/windows-native-font-inventory-20260921/future-worker02/PLAN.md",
+      "bytes": 1504,
+      "sha256": "bc9060b1e1426ffff723262bd6675ca3747218e24a68021c04b4c96d72a8f7c4",
+      "gitBlob": "ee397d84739326fce7e0d377e5c83f084d339e2f"
+    },
+    {
+      "path": "docs/evidence/windows-native-font-inventory-20260921/future-worker02/native-font-inventory.ps1",
+      "bytes": 59065,
+      "sha256": "fd279c971ba9447770931c8972cc5a4d2b21df9d77c40d90135e571db7ce85ed",
+      "gitBlob": "c174c0c00b61ebe5cecba472995976218bab8f7c"
+    },
+    {
+      "path": "docs/evidence/windows-native-font-inventory-20260921/future-worker02/root-pure.json",
+      "bytes": 470,
+      "sha256": "8d905eb9136f33397c9a47c623241db3d581f07a40382be4679a013b55386951",
+      "gitBlob": "9ba30c442771d1cae68f465a852fe16bf8e500d3"
+    },
+    {
+      "path": "docs/evidence/windows-native-font-inventory-20260921/future-worker02/worker02-parser-check.json",
+      "bytes": 424,
+      "sha256": "7071ebe6f2df789add3dbf88f3f6918464a9491b5d44be99929f3148672d3466",
+      "gitBlob": "933eead50f1536b8f03e0e898d8c53dedc618ee7"
+    },
+    {
+      "path": "docs/evidence/windows-native-font-inventory-20260921/future-worker02/worker02-parser-check.ps1",
+      "bytes": 2337,
+      "sha256": "81fa24af8c134e67aa6a3dde56c18e9c3df51d9dd157bd7d338459cbb4dda578",
+      "gitBlob": "e70d7a64f23a13b526dcfb946182f6d083a585a6"
+    },
+    {
+      "path": "docs/evidence/windows-native-font-inventory-20260921/host/native-font-inventory-host-postflight-01.json",
+      "bytes": 368,
+      "sha256": "4c50ac909af3d6a041cc2c16f0ad7268f7c219a19b09636ad4755579ea7bbd0e",
+      "gitBlob": "9d25a9755ba8a4e5249a8db9d95f810d8d92126c"
+    },
+    {
+      "path": "docs/evidence/windows-native-font-inventory-20260921/host/native-font-inventory-host-preflight-01.json",
+      "bytes": 643,
+      "sha256": "8252130f2cb0d2f7ef54315fad6f1d0b0025b92d28b270c681ec9b4cb091d3d0",
+      "gitBlob": "8b62b4d1949d5e742847789f56cf60e13be10673"
+    },
+    {
+      "path": "docs/evidence/windows-native-font-inventory-20260921/verify.py",
+      "bytes": 10348,
+      "sha256": "f019cb698992f09dfe6d3b797c5d670749660e51eb4c08ae4f30a8e69dbb0015",
+      "gitBlob": "9d446f5a7f081aec5f374201f0ad2e17264090e1"
+    },
+    {
+      "path": "docs/handoff-windows-native-2026-09-21-wrap-up.md",
+      "bytes": 8859,
+      "sha256": "7084989952cc2b79da44e54ec38ff8f2afb28dee320915908065360df83921b7",
+      "gitBlob": "78e2baef21d358a79d2fe829316f48bf2eaa518b"
+    },
+    {
+      "path": "docs/plans/powerpoint-acceptance.md",
+      "bytes": 6064,
+      "sha256": "4f5762cae6ec4a9dbccf2e75b48d53fceb6966e60b85666b8d1979f860ae4e54",
+      "gitBlob": "6b07fc2db781bbbebfe21aef3db474db83871c81"
+    }
+  ],
+  "noRuntimeOrNativeExperiment": true
+}

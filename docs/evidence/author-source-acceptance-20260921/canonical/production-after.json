@@ -1,0 +1,23 @@
+{
+  "id": "dpl_hAEEDrxu746MBtDCHUh7z4bYaaLk",
+  "url": "pptx-3htkfb6n6-dataadvantage.vercel.app",
+  "readyState": "READY",
+  "target": "production",
+  "sha": "e40c287b64fcbcfb85fb4a8a50641aea8e3e54a8",
+  "alias": [
+    "api.pptx.dev",
+    "mcp.pptx.dev",
+    "www.pptx.dev",
+    "pptx-dev.vercel.app",
+    "pptx.dev",
+    "pptx-dev-dataadvantage.vercel.app",
+    "pptx-dev-git-master-dataadvantage.vercel.app"
+  ],
+  "checkedAt": "2026-09-21 17:45:25 UTC",
+  "canonicalResult": {
+    "passed": 29,
+    "total": 29,
+    "retries": 0
+  },
+  "scope": "Fresh canonical browser acceptance for this bounded source/keyboard change; native/font and separate preset undo work remain unresolved."
+}

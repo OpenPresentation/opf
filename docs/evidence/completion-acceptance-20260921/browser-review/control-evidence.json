@@ -1,0 +1,291 @@
+{
+  "status": "Final local suite passed; CI/deployment and overall goal compatibility gates are owned separately by parent.",
+  "runtime": {
+    "node": "v24.21.0",
+    "platform": "darwin",
+    "arch": "arm64",
+    "playwright": "1.63.0",
+    "chromium": {
+      "name": "chromium-headless-shell",
+      "revision": "1243",
+      "installByDefault": true,
+      "browserVersion": "153.0.8010.12",
+      "title": "Chrome Headless Shell"
+    }
+  },
+  "fixed": {
+    "url": "http://127.0.0.1:4327",
+    "worktree": "/private/tmp/opf-completion-fix-20260921/pptx-dev",
+    "baseCommit": "c558dcc3a2e362bc238eb433a2db97fa682dfcc8",
+    "buildId": "x7f5cZgYzndzg77jtikNr",
+    "result": {
+      "passed": 24,
+      "failed": 0,
+      "retries": 0,
+      "seconds": 59
+    },
+    "command": "OPF_APP_URL=http://127.0.0.1:4327 fnm exec --using=24 node node_modules/@playwright/test/cli.js test --retries=0 --output=/private/tmp/opf-completion-full-browser-20260921 > /private/tmp/opf-completion-full-browser-20260921.log 2>&1",
+    "testedFiles": [
+      {
+        "path": "components/playground/opf-editor.tsx",
+        "sha256": "51bc8e7624000320b14027b39b67c8b1cc7f912dda4a6aceccbd5ed14968b41c"
+      },
+      {
+        "path": "lib/playground/register-json-field-completion.ts",
+        "sha256": "cc26b59c31ad2ac449b876caffa27d89d444f33f2e3fb3f150f7395648a91b80"
+      },
+      {
+        "path": "lib/playground/json-source-edit.ts",
+        "sha256": "981f2f1d0482a5cdc809601ed8af28217fc92059c4a5dcff2b97d64162f5e20b"
+      },
+      {
+        "path": "lib/playground/canvas-source.ts",
+        "sha256": "46e5757c619c2c12742b3773b31a55012e3bf2d5e593ff39b1c42409ca2cfbc8"
+      },
+      {
+        "path": "tests/e2e/completion-preservation.spec.ts",
+        "sha256": "4a43174702bcfec4f7abb1937ad744c6d40a3eac250c097aa2f6e04a8e06b908"
+      },
+      {
+        "path": "pnpm-lock.yaml",
+        "sha256": "f362abf89c57fe9e93197a54520fa5fc712e85bf78b2e011285456f37283b76f"
+      }
+    ]
+  },
+  "negativeControl": {
+    "url": "http://127.0.0.1:4326",
+    "worktree": "/private/tmp/opf-issue88-explicit-formatting-20260921/pptx-dev",
+    "buildId": "dvfqcX0K3BCsxqAhlJVBN",
+    "command": "OPF_APP_URL=http://127.0.0.1:4326 fnm exec --using=24 node node_modules/@playwright/test/cli.js test tests/e2e/completion-preservation.spec.ts --grep 'Author Title Subtitle' --retries=0 --output=/private/tmp/opf-completion-negative-control-20260921 > /private/tmp/opf-completion-negative-control-20260921.log 2>&1",
+    "result": "Expected failure: visible popup lacks Title Subtitle Enum Member",
+    "ownedServerStopped": true
+  },
+  "rejectedPrototype": {
+    "firstFocusedSuite": "4 pass; escaped current choice initially below virtual viewport",
+    "realKeyboardTraversal": "Choice reachable; selecting empty no-op preserved bytes but consumed an Undo entry",
+    "finalDecision": "Omit unchanged current value from actionable completion options. No private UndoService manipulation or automatic undo.",
+    "failedTrace": "/private/tmp/opf-completion-noop-browser-20260921/completion-preservation-Au-39f45-ng-and-adds-no-undo-history/trace.zip"
+  },
+  "visualReview": {
+    "reviewer": "independent subagent /root/registry_acceptance",
+    "files": [
+      "/private/tmp/opf-completion-full-browser-20260921/completion-preservation-Au-807ee-act-source-in-one-undo-step/structural-choice.png",
+      "/private/tmp/opf-completion-full-browser-20260921/completion-preservation-Au-96e4e-act-source-in-one-undo-step/structural-choice.png",
+      "/private/tmp/opf-completion-full-browser-20260921/completion-preservation-Au-b9e03-s-prior-undo-history-intact/escaped-current-alternatives.png"
+    ],
+    "finding": "Title Subtitle and Text 2x are visible in completion popup; compact and escaped source remains readable; current-value alternatives list navigates normally; no new clipping/overlap seen."
+  },
+  "scope": [
+    "Exact LF/CRLF hand-authored structural source and semantic comparison with public replaceFieldOption",
+    "Rich text, notes, metadata, unchanged whitespace/escaping",
+    "One-step structural undo/redo and prior-history preservation when current value is omitted",
+    "Invalid/newer source, inline catalog replacement, format switch and new document cancellation",
+    "Original 19 acceptance cases also passed"
+  ],
+  "limitations": [
+    "New browser cases cover inline catalog changes; loaded-catalog provider isolation is covered by parent unit tests, not a new asynchronous browser catalog-prop race.",
+    "This local Chromium run does not establish fresh Linux/Windows CI, production deployment, native PowerPoint/font compatibility, or overall goal completion."
+  ],
+  "artifacts": [
+    {
+      "path": "/private/tmp/opf-completion-full-browser-20260921/.last-run.json",
+      "bytes": 45,
+      "sha256": "91d1c43004802cd49950d78eb11c8fa7d05da8ffffe219a8b13b2f561bc00903"
+    },
+    {
+      "path": "/private/tmp/opf-completion-full-browser-20260921/author-anonymous-Author-ca-d560b-xport-and-undoable-reimport/author-export.pptx",
+      "bytes": 16330,
+      "sha256": "070cddbcb5a3aa9d6916531f212fd067d9ebe8033f715e98ade5b78229530696"
+    },
+    {
+      "path": "/private/tmp/opf-completion-full-browser-20260921/author-anonymous-Author-ca-d560b-xport-and-undoable-reimport/author.png",
+      "bytes": 110640,
+      "sha256": "46a4a60877b492c030f6579f4f2022d04b6571a111dd976f47706ad5750054ea"
+    },
+    {
+      "path": "/private/tmp/opf-completion-full-browser-20260921/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/author-json-options.png",
+      "bytes": 175776,
+      "sha256": "3e602f80e811b7d232c9ca9073799b1990109c4387aee8aa4d5334fa1d23f52f"
+    },
+    {
+      "path": "/private/tmp/opf-completion-full-browser-20260921/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/author-layout-options.png",
+      "bytes": 188683,
+      "sha256": "1f3530a77ad5bd91191a0c3a5cc7c0c26cbd4c23d86be3eed2b9577a16665b0f"
+    },
+    {
+      "path": "/private/tmp/opf-completion-full-browser-20260921/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/author-theme-options.png",
+      "bytes": 184121,
+      "sha256": "1b5b6207eb90f811577ebf4a308b1a73c7182d3c1ae14704c7af40bcd2ded297"
+    },
+    {
+      "path": "/private/tmp/opf-completion-full-browser-20260921/author-json-options-Author-cda0b-exact-CRLF-source-undo-redo/author-json-options.png",
+      "bytes": 175776,
+      "sha256": "3e602f80e811b7d232c9ca9073799b1990109c4387aee8aa4d5334fa1d23f52f"
+    },
+    {
+      "path": "/private/tmp/opf-completion-full-browser-20260921/author-json-options-Author-cda0b-exact-CRLF-source-undo-redo/author-layout-options.png",
+      "bytes": 188683,
+      "sha256": "1f3530a77ad5bd91191a0c3a5cc7c0c26cbd4c23d86be3eed2b9577a16665b0f"
+    },
+    {
+      "path": "/private/tmp/opf-completion-full-browser-20260921/author-json-options-Author-cda0b-exact-CRLF-source-undo-redo/author-theme-options.png",
+      "bytes": 184121,
+      "sha256": "1b5b6207eb90f811577ebf4a308b1a73c7182d3c1ae14704c7af40bcd2ded297"
+    },
+    {
+      "path": "/private/tmp/opf-completion-full-browser-20260921/completion-preservation-Au-807ee-act-source-in-one-undo-step/actual-source.json",
+      "bytes": 767,
+      "sha256": "3590b76552f6afaf7c9af8095eae05feb702333fc1a0fd10b2fad491bd285651"
+    },
+    {
+      "path": "/private/tmp/opf-completion-full-browser-20260921/completion-preservation-Au-807ee-act-source-in-one-undo-step/desired-source.json",
+      "bytes": 767,
+      "sha256": "3590b76552f6afaf7c9af8095eae05feb702333fc1a0fd10b2fad491bd285651"
+    },
+    {
+      "path": "/private/tmp/opf-completion-full-browser-20260921/completion-preservation-Au-807ee-act-source-in-one-undo-step/original-source.json",
+      "bytes": 738,
+      "sha256": "1525be094f6dab2c58d5cdd69fc5acb86423764305f05e9515110af8f67a2636"
+    },
+    {
+      "path": "/private/tmp/opf-completion-full-browser-20260921/completion-preservation-Au-807ee-act-source-in-one-undo-step/structural-choice.png",
+      "bytes": 171590,
+      "sha256": "a6becbf6c8ce044f494d96cf95ad6426317905a830b83f6013cacf1368890915"
+    },
+    {
+      "path": "/private/tmp/opf-completion-full-browser-20260921/completion-preservation-Au-96e4e-act-source-in-one-undo-step/actual-source.json",
+      "bytes": 804,
+      "sha256": "302a28aff91ab1669ecfad7cbd2e2a08fa65f451efbdb81e508dc7021e15100f"
+    },
+    {
+      "path": "/private/tmp/opf-completion-full-browser-20260921/completion-preservation-Au-96e4e-act-source-in-one-undo-step/desired-source.json",
+      "bytes": 804,
+      "sha256": "302a28aff91ab1669ecfad7cbd2e2a08fa65f451efbdb81e508dc7021e15100f"
+    },
+    {
+      "path": "/private/tmp/opf-completion-full-browser-20260921/completion-preservation-Au-96e4e-act-source-in-one-undo-step/original-source.json",
+      "bytes": 772,
+      "sha256": "a90c0c8927c1bd6d92c4732c94fda179f1b7ff151d61a91230f2097d55537de9"
+    },
+    {
+      "path": "/private/tmp/opf-completion-full-browser-20260921/completion-preservation-Au-96e4e-act-source-in-one-undo-step/structural-choice.png",
+      "bytes": 167074,
+      "sha256": "bd8cceb3d4d7e888d5ebbd26106400e6c3a8cee310b46a9c789d49ed1cb78159"
+    },
+    {
+      "path": "/private/tmp/opf-completion-full-browser-20260921/completion-preservation-Au-b9e03-s-prior-undo-history-intact/escaped-current-alternatives.png",
+      "bytes": 178510,
+      "sha256": "2dc874d6d89cc6b0a4e6e31a05be7eefe926f93992356929fb8613645d4f6e06"
+    },
+    {
+      "path": "/private/tmp/opf-completion-full-browser-20260921/inspector-anonymous-JSON-a-151ab-ownload-and-shared-reimport/inspector.png",
+      "bytes": 178110,
+      "sha256": "8fa8df4cb1dd646178bf6d68077a6bbdff9fb8e9b2979bd89695037514ba312d"
+    },
+    {
+      "path": "/private/tmp/opf-completion-full-browser-20260921/inspector-editing-all-Insp-15273-fline-undo-export-at-1440px/inspector-later-slide.png",
+      "bytes": 208255,
+      "sha256": "dc1f1b1826528aa93c205c9e83627b65f6fc60c18cc80d15b0b2367c8e224499"
+    },
+    {
+      "path": "/private/tmp/opf-completion-full-browser-20260921/inspector-editing-all-Insp-a78d3-ffline-undo-export-at-540px/inspector-later-slide.png",
+      "bytes": 64077,
+      "sha256": "29c7937741b56ac461151a0bd81765e068294f2361a73b07895f562a55f970af"
+    },
+    {
+      "path": "/private/tmp/opf-completion-full-browser-20260921/inspector-recovery-font-su-beb5b--Inspector-canvas-is-active/inspector-font-notes.png",
+      "bytes": 179405,
+      "sha256": "5d50975036517fa55b4c8daaf1ea6586c5d73db692608b307d5963db1447e89c"
+    },
+    {
+      "path": "/private/tmp/opf-completion-full-browser-20260921/inspector-recovery-schema--76507-ers-after-source-correction/inspector-render-recovered.png",
+      "bytes": 185180,
+      "sha256": "aad232e391181b8133993abc1b3cc9cf1855dd7afa105a61ad5f2eac36f70bf4"
+    },
+    {
+      "path": "/private/tmp/opf-completion-full-browser-20260921/inspector-recovery-schema--76507-ers-after-source-correction/inspector-strict-overflow.png",
+      "bytes": 293738,
+      "sha256": "c5488fc5da3c29ab3d9507addb36c033de8b3f9330dc0c7d5dc3c856e82cf62f"
+    },
+    {
+      "path": "/private/tmp/opf-completion-full-browser-20260921/json-paste-formatting-warm-44312-t-Document-remains-undoable/attachments/authored-source-json-1016c5ce2df290f6ba60686371d62fc67f960061.json",
+      "bytes": 302,
+      "sha256": "f4177cbb0fc6a9ad471fc3ab52f39cb14c7dc62b497ded9d840c9e0dbea21e62"
+    },
+    {
+      "path": "/private/tmp/opf-completion-full-browser-20260921/json-paste-formatting-warm-44312-t-Document-remains-undoable/attachments/copied-source-json-8e71a2856998f26d0780273f14729a25f062b4f1.json",
+      "bytes": 302,
+      "sha256": "f4177cbb0fc6a9ad471fc3ab52f39cb14c7dc62b497ded9d840c9e0dbea21e62"
+    },
+    {
+      "path": "/private/tmp/opf-completion-full-browser-20260921/json-paste-formatting-warm-44312-t-Document-remains-undoable/attachments/paste-worker-requests-json-ed560f2d7aff73cdf478a9ae53ae6dbe6f8ef223.json",
+      "bytes": 83,
+      "sha256": "54051725e2e06fd8e83369628086d875dcd7b48b1e02b5e5435e00e6021bdfa4"
+    },
+    {
+      "path": "/private/tmp/opf-completion-full-browser-20260921/json-paste-formatting-warm-44312-t-Document-remains-undoable/authored-source.json",
+      "bytes": 302,
+      "sha256": "f4177cbb0fc6a9ad471fc3ab52f39cb14c7dc62b497ded9d840c9e0dbea21e62"
+    },
+    {
+      "path": "/private/tmp/opf-completion-full-browser-20260921/json-paste-formatting-warm-44312-t-Document-remains-undoable/copied-source.json",
+      "bytes": 302,
+      "sha256": "f4177cbb0fc6a9ad471fc3ab52f39cb14c7dc62b497ded9d840c9e0dbea21e62"
+    },
+    {
+      "path": "/private/tmp/opf-completion-full-browser-20260921/json-paste-formatting-warm-44312-t-Document-remains-undoable/paste-worker-requests.json",
+      "bytes": 83,
+      "sha256": "54051725e2e06fd8e83369628086d875dcd7b48b1e02b5e5435e00e6021bdfa4"
+    },
+    {
+      "path": "/private/tmp/opf-completion-negative-control-20260921/.last-run.json",
+      "bytes": 96,
+      "sha256": "76c15c5333acde26fa9a3de882cb1de4c424dbd475e74994afb28ce65092f2a2"
+    },
+    {
+      "path": "/private/tmp/opf-completion-negative-control-20260921/completion-preservation-Au-807ee-act-source-in-one-undo-step/error-context.md",
+      "bytes": 18111,
+      "sha256": "01995890f1a13cda1f9911e53ea247712be94837a8b613544d0a901ee3bd59d2"
+    },
+    {
+      "path": "/private/tmp/opf-completion-negative-control-20260921/completion-preservation-Au-807ee-act-source-in-one-undo-step/trace.zip",
+      "bytes": 6650699,
+      "sha256": "739a05de4655cdb7c087b027b2ab2f33d323c0cdbdcc3349018df219c7442f21"
+    },
+    {
+      "path": "/private/tmp/opf-completion-noop-browser-20260921/.last-run.json",
+      "bytes": 96,
+      "sha256": "6f6b777841f391b36a760021644d2b1ef980a540b428900d224e5e67aa0af5de"
+    },
+    {
+      "path": "/private/tmp/opf-completion-noop-browser-20260921/completion-preservation-Au-39f45-ng-and-adds-no-undo-history/error-context.md",
+      "bytes": 26036,
+      "sha256": "ea18c8f8f7e515d54ed1cbcddfcab3de5e3e51945f7c1a16db53d976c4a46774"
+    },
+    {
+      "path": "/private/tmp/opf-completion-noop-browser-20260921/completion-preservation-Au-39f45-ng-and-adds-no-undo-history/escaped-current-choice.png",
+      "bytes": 177170,
+      "sha256": "116651bfeda0e2af303dd5e0f267debc51ed8a2fb059016f0b0c93f3f7d0e665"
+    },
+    {
+      "path": "/private/tmp/opf-completion-noop-browser-20260921/completion-preservation-Au-39f45-ng-and-adds-no-undo-history/trace.zip",
+      "bytes": 8828211,
+      "sha256": "bc0f076028978ca053deddd548daa4260986891de8157087bae5368d14136465"
+    },
+    {
+      "path": "/private/tmp/opf-completion-full-browser-20260921.log",
+      "bytes": 3846,
+      "sha256": "033f89d4bd55f677f0ecacb497b21c9dfdf88dcc319aacfe2523008d86098952"
+    },
+    {
+      "path": "/private/tmp/opf-completion-negative-control-20260921.log",
+      "bytes": 2727,
+      "sha256": "841a3dfe9bdc5fbc69c28284f9ff382079f75c8edaf1a175bfad244e10bae5fa"
+    },
+    {
+      "path": "/private/tmp/opf-completion-noop-browser-20260921.log",
+      "bytes": 2685,
+      "sha256": "1f2130e7ea1a7d42ea7fcf2421ead7f217c741ec006b79d5f9a18cca1a1f3700"
+    }
+  ]
+}

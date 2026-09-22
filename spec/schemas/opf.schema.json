@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://openpresentation.org/schema/opf/v1",
   "title": "Presentation",
-  "description": "Open-source JSON format for describing PowerPoint presentations. Agents describe narratives, content, audience, reusable assets, and design — the engine handles OOXML complexity.\n\nFields that reference catalog records (narrative, language, tone, audience, purpose, design.theme / design.theme.id, design.colorScheme / design.colorScheme.id, design.fontScheme / design.fontScheme.id, Slide.layout, Chart.type, Organization.socials / Speaker.socials) resolve through the catalog system: inline 'catalogs.<kind>.records[]' on the document → 'catalogs.<kind>.source' on the document → engine defaults → the default catalog at https://www.pptx.gallery/<kind>. Every reference resolves to the catalog record's 'id' field. When an OPF document omits a reference entirely, the engine falls back to engine defaults (see /spec/reference/engine-defaults.json for a reference example). The defaults file is engine configuration; it is not part of the OPF document contract and has no JSON Schema.\n\nMost catalog references accept the bare 'id' as a string for the common case (e.g. narrative = 'classic-story', design.colorScheme = 'cool-horizon'). Audience, purpose, tone, design, and language object forms use 'id' as a base catalog reference plus inline overrides. Asset references use 'asset:<id>' strings that point into the top-level assets registry.",
+  "description": "Open-source JSON format for describing PowerPoint presentations. Agents describe narratives, content, audience, reusable assets, and design — the engine handles OOXML complexity.\n\nFields that reference catalog records (narrative, language, tone, audience, purpose, design.theme / design.theme.id, design.colorScheme / design.colorScheme.id, design.fontScheme / design.fontScheme.id, Slide.layout, Chart.type, Organization.socials / Speaker.socials) resolve through the catalog system: inline 'catalogs.<kind>.records[]' on the document → 'catalogs.<kind>.source' on the document → engine defaults → the default catalog at https://www.pptx.gallery/<kind>. Every reference resolves to the catalog record's 'id' field. When an OPF document omits a reference entirely, the engine falls back to engine defaults (see /spec/reference/engine-defaults.json for a reference example). The defaults file is engine configuration; it is not part of the OPF document contract and has no JSON Schema.\n\nMost catalog references accept the bare 'id' as a string for the common case (e.g. narrative = 'classic-story', design.colorScheme = 'cool-horizon'). Audience, purpose, tone, design, and language object forms use 'id' as a base catalog reference plus inline overrides. Asset references use 'asset:<id>' strings that point into the top-level assets registry, and content color fields (rich-text runs, styled table cells) accept hex values, color-scheme slot/role names, or 'var:<id>' references into the top-level variables map.",
   "type": "object",
   "required": ["slides"],
   "additionalProperties": false,
@@ -175,6 +175,10 @@
     "design": {
       "$ref": "#/$defs/Design",
       "description": "Optional design system covering theme, color scheme, font scheme, dimensions, background, logo, watermark, header, and footer applied to the deck. When omitted, engines use their default design configuration."
+    },
+    "variables": {
+      "$ref": "#/$defs/Variables",
+      "description": "Optional named color variables for values the deck uses in more than one place or wants to name for intent (e.g. a risk red, a brand highlight). Content color fields reference entries as 'var:<id>' strings. Variables complement the color scheme: scheme slots and roles stay the primary vocabulary; variables cover deck-specific named colors that have no scheme slot."
     },
     "narrative": {
       "oneOf": [
@@ -1223,6 +1227,63 @@
       "description": "Hex color shorthand accepted by selected string fields.",
       "examples": ["#fff", "#ffff00", "#0F172AFF"]
     },
+    "ColorRef": {
+      "anyOf": [
+        { "$ref": "#/$defs/HexColor" },
+        {
+          "type": "string",
+          "enum": [
+            "accent1", "accent2", "accent3", "accent4", "accent5", "accent6",
+            "dark1", "dark2", "light1", "light2", "hyperlink", "followedHyperlink",
+            "primary", "secondary", "accent", "background", "surface", "text", "textSecondary"
+          ]
+        },
+        {
+          "type": "string",
+          "pattern": "^var:[a-z][a-z0-9-]*$"
+        }
+      ],
+      "description": "A color value or reference, enforced on styled table cell fill and text colors and on cell border colors. Three forms:\n- Literal hex: '#RGB', '#RRGGBB', or '#RRGGBBAA'.\n- Color-scheme name, resolved through the effective color scheme after design resolution: an OOXML slot ('accent1'-'accent6', 'dark1', 'dark2', 'light1', 'light2', 'hyperlink', 'followedHyperlink') or an abstract role ('primary', 'secondary', 'accent', 'background', 'surface', 'text', 'textSecondary'). Roles resolve through the same role-to-slot mapping engines already apply to color schemes.\n- Variable reference: 'var:<id>' into the top-level variables map.\n\nNames keep content theme-portable: re-theming the deck updates every named reference, where a literal hex stays frozen. Unknown 'var:' ids produce a validation warning, never an error, and engines fall back to their default text color. TextRun.color documents the same three forms but remains an open string so imported decks with unrecognized run colors stay valid; validators warn there instead of erroring.",
+      "examples": ["#0F4C81", "accent2", "text", "var:risk"]
+    },
+    "Variables": {
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^[a-z][a-z0-9-]*$"
+      },
+      "additionalProperties": { "$ref": "#/$defs/Variable" },
+      "description": "Named color variables, keyed by stable kebab-case id. Content color fields reference entries as 'var:<id>' strings. Each value is a hex string shorthand or a Variable object.",
+      "examples": [
+        { "risk": "#B42318", "highlight": { "type": "color", "value": "#0F4C81", "description": "Brand highlight for emphasized runs." } }
+      ]
+    },
+    "Variable": {
+      "oneOf": [
+        { "$ref": "#/$defs/HexColor" },
+        {
+          "type": "object",
+          "required": ["type", "value"],
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["color"],
+              "description": "Variable kind. Only 'color' is defined today; other kinds may be added when content surfaces exist to consume them."
+            },
+            "value": {
+              "$ref": "#/$defs/HexColor",
+              "description": "Hex color this variable resolves to."
+            },
+            "description": {
+              "type": "string",
+              "description": "Optional prose describing what the variable is for, surfaced by pickers and agents."
+            }
+          }
+        }
+      ],
+      "description": "A single named variable. A hex string is shorthand for { \"type\": \"color\", \"value\": value }.",
+      "examples": ["#B42318", { "type": "color", "value": "#B42318", "description": "Risk emphasis." }]
+    },
     "BackgroundShortcut": {
       "oneOf": [
         { "$ref": "#/$defs/ThemeBackgroundSlot" },
@@ -1811,6 +1872,10 @@
         },
         "composition": {
           "$ref": "#/$defs/Composition"
+        },
+        "extensions": {
+          "type": "object",
+          "description": "Custom data passthrough for agent workflows at slide scope; ignored by the engine but preserved across read/write round-trips. Use for review state, generation provenance, or authoring conventions such as { \"authoring\": { \"locked\": true } }."
         }
       }
     },
@@ -1819,6 +1884,15 @@
       "description": "A content leaf or recursively composed group. A group contains blocks and optional composition; it cannot mix blocks with leaf payload fields. Groups may nest up to 32 levels.",
       "additionalProperties": false,
       "properties": {
+        "id": {
+          "type": "string",
+          "description": "Optional stable identifier for this payload, unique among slide and payload ids in the document. Use when another system needs to address the payload across edits — patch-style agent edits, comments, review state, or generation provenance. Identity survives reordering where array indexes do not.",
+          "examples": ["kpi-adoption", "churn-quote"]
+        },
+        "extensions": {
+          "type": "object",
+          "description": "Custom data passthrough for agent workflows at payload scope; ignored by the engine but preserved across read/write round-trips."
+        },
         "type": {
           "type": "string",
           "enum": ["text", "list", "image", "chart", "table", "video", "code", "metric", "quote", "timeline",
@@ -2427,8 +2501,8 @@
             },
             "color": {
               "type": "string",
-              "description": "Run text color as a hex string.",
-              "examples": ["#0F172A", "#1E40AF"]
+              "description": "Run text color. Documented forms: a hex string ('#RGB', '#RRGGBB', '#RRGGBBAA'), a color-scheme slot or role name resolved through the effective color scheme ('accent2', 'text'), or a 'var:<id>' reference into the top-level variables map. Prefer names over hex so runs survive re-theming. Any other string stays schema-valid so imported decks keep validating: validators warn and renderers fall back to the theme text color.",
+              "examples": ["#0F172A", "accent2", "var:risk"]
             },
             "fontSize": {
               "type": "number",
@@ -2676,14 +2750,12 @@
       "additionalProperties": false,
       "properties": {
         "fill": {
-          "type": "string",
-          "pattern": "^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$",
-          "description": "Explicit RGB or RGBA color. Eight-digit colors include alpha; #00000000 is transparent."
+          "$ref": "#/$defs/ColorRef",
+          "description": "Cell background: a hex color, a color-scheme slot or role name, or a 'var:<id>' variable reference. Eight-digit hex colors include alpha; #00000000 is transparent."
         },
         "color": {
-          "type": "string",
-          "pattern": "^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$",
-          "description": "Default text color, overridden by individual rich run colors."
+          "$ref": "#/$defs/ColorRef",
+          "description": "Default text color, overridden by individual rich run colors. Accepts a hex color, a color-scheme slot or role name, or a 'var:<id>' variable reference."
         },
         "align": {
           "type": "string",
@@ -2764,9 +2836,8 @@
       ],
       "properties": {
         "color": {
-          "type": "string",
-          "pattern": "^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$",
-          "description": "Explicit RGB or RGBA color. Eight-digit colors include alpha; #00000000 is transparent."
+          "$ref": "#/$defs/ColorRef",
+          "description": "Border color: a hex color, a color-scheme slot or role name, or a 'var:<id>' variable reference. Eight-digit hex colors include alpha; #00000000 is transparent."
         },
         "width": {
           "type": "number",

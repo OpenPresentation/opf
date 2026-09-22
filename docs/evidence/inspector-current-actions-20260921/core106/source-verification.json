@@ -1,0 +1,987 @@
+{
+  "checkedAt": "2026-09-21T20:12:09.889778+00:00",
+  "accepted": "3847f712ccb2379952bcc8ab7c9fdbaedfd0a4ce",
+  "tree": "500a320038c2c6c9be8eedc3174e0fc79bac2ee5",
+  "acceptedNativeEvidenceFilesUnchanged": 163,
+  "acceptedRoadmapUnchanged": true,
+  "files": [
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/.gitattributes",
+      "blob": "165c758581197c6c6e807124ec841eb08db8fd2b",
+      "bytes": 10,
+      "sha256": "4ce4b6e6b8435f8c3a8387387732964a2ebf0183e8d77b8247ae8061b033e462"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/README.md",
+      "blob": "bcaa2dd6665ea34497963968671d88829d290ccd",
+      "bytes": 3674,
+      "sha256": "ad45c9d9a8dc2e965fd58b31d29540413162fd3478be28179978fef2aaf79ed6"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/artifact-manifest.json",
+      "blob": "b325615629bb023b85b653caa5439f250855543c",
+      "bytes": 30884,
+      "sha256": "2f262ddf99ef83a12644181fc249639faebe3dc6520fe6470fd6ab8d2a607638"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/.gitattributes",
+      "blob": "b746772b6cda0edb9a3995c3f95e0dde764ed2ae",
+      "bytes": 9,
+      "sha256": "48747480eddba024928d03be9bf83dc579e5515768647507a767e8187a85c9ab"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/fixture-01/LICENSE_FONT",
+      "blob": "8d6b170e4d9a5580a34471dc4ac3e8fc5fbbd712",
+      "bytes": 4424,
+      "sha256": "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/fixture-01/generation.json",
+      "blob": "b7aec347d5714855b409549ddafb96938c665953",
+      "bytes": 2616,
+      "sha256": "8ac9743832e6c63bab58a999802979dcdcb91139599f502e90bc697141cf5422"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/fixture-01/source.pptx",
+      "blob": "75b9b878538fe05e20167289548badeee4b3fbdc",
+      "bytes": 15644,
+      "sha256": "4dd235c923eb346ee19ac7ee89a93cce9a355eec7355692259d81c541bb3556d"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/fixture-generator-02/LICENSE_FONT",
+      "blob": "8d6b170e4d9a5580a34471dc4ac3e8fc5fbbd712",
+      "bytes": 4424,
+      "sha256": "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/fixture-generator-02/comparison-to-native-inputs.json",
+      "blob": "1251902ac59c99a5d8d15353ccbb92df9be3add2",
+      "bytes": 1267,
+      "sha256": "714d3704c5554bb66e3daa372a9af632e455795ceeacb535f6eb55c682efd2c4"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/fixture-generator-02/generation.json",
+      "blob": "1736836590cae715beb7700ef196819cf771508b",
+      "bytes": 4884,
+      "sha256": "31fe033cc8da7f4a09acf2b2ead9d26ea8ccaac4e3016b77bfff571c796f99e3"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/fixture-generator-02/source.opf.json",
+      "blob": "39be09563f4384976db537166fce1cb7cc42a37f",
+      "bytes": 98,
+      "sha256": "d3df0376485c60deee1ea25d6ac7bd4ab2458cde666ebc1dab699fd824331c81"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/fixture-generator-02/source.pptx",
+      "blob": "75b9b878538fe05e20167289548badeee4b3fbdc",
+      "bytes": 15644,
+      "sha256": "4dd235c923eb346ee19ac7ee89a93cce9a355eec7355692259d81c541bb3556d"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/fixture-generator-03/LICENSE_FONT",
+      "blob": "8d6b170e4d9a5580a34471dc4ac3e8fc5fbbd712",
+      "bytes": 4424,
+      "sha256": "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/fixture-generator-03/comparison-to-native-inputs.json",
+      "blob": "5d2c8a652e90d22df39d7eca959c7f31fc077046",
+      "bytes": 1287,
+      "sha256": "e3aaa373a7b0d9025ffb9275437773cfc248f0266afac317d6ff415453ac9348"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/fixture-generator-03/generation.json",
+      "blob": "d687b579565c57856a154944c5c9c48bc9adebb8",
+      "bytes": 5112,
+      "sha256": "77b66268771e28850236bf04bdc6de59d405980560424eedd5323090c58a6426"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/fixture-generator-03/generator-after-run.mjs",
+      "blob": "82e943691c2d7d07ad78e90277f6ec708c318c81",
+      "bytes": 7178,
+      "sha256": "a1e07d194f321418946322df2dde219a6fd2c6d75f0b647ecc27bd49c00d2f50"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/fixture-generator-03/generator-snapshot-timing.json",
+      "blob": "917cfc205bdc19d2e7922dcb7c6b3d44b6a185c2",
+      "bytes": 223,
+      "sha256": "3d93b88b1ef414856255a4080a85c60e68ff2afd60d92856477e9075027a98fc"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/fixture-generator-03/initial-sandbox-failure.json",
+      "blob": "8e6daca0938ff8607538ecbfb753c58936b02794",
+      "bytes": 323,
+      "sha256": "63976abb7ecaaf189494b1362088e141d32ce1a36bd8e42ab6f459929af65f66"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/fixture-generator-03/source.opf.json",
+      "blob": "39be09563f4384976db537166fce1cb7cc42a37f",
+      "bytes": 98,
+      "sha256": "d3df0376485c60deee1ea25d6ac7bd4ab2458cde666ebc1dab699fd824331c81"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/fixture-generator-03/source.pptx",
+      "blob": "75b9b878538fe05e20167289548badeee4b3fbdc",
+      "bytes": 15644,
+      "sha256": "4dd235c923eb346ee19ac7ee89a93cce9a355eec7355692259d81c541bb3556d"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/fixture-generator-failed-01/failure.json",
+      "blob": "e19c91dc4b2fc252e78f416e3f9c08f8fc23f952",
+      "bytes": 216,
+      "sha256": "bf1172aed06780ed6520d727ca3fe72901a1c8477644b02e458f8f49f6f91f12"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/fixture-generator-failed-01/generator.mjs",
+      "blob": "116be8974639950e0810fcdfc6fcb68377e6dda1",
+      "bytes": 5544,
+      "sha256": "d47fbb649515d94ba02860fa3f29abf0dace20107eb56e7aa81531ba0f829c47"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/independent-audit-01/README.md",
+      "blob": "1a96135c8d2e39687c4cc1f4a862607479210bea",
+      "bytes": 1120,
+      "sha256": "883d8d02c6096c8952cb986d2e268b7a5c09049b5ddb10f876f98c5309793186"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/independent-audit-01/audit-v2.py",
+      "blob": "3a1fc15e32282e0fd9e198d2e9e59b3d35c6f752",
+      "bytes": 30158,
+      "sha256": "86b1cd2c86bee2f7765e1e83655e31c834d3c63268762df9b68b85f18ba2c5ca"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/independent-audit-01/audit.py",
+      "blob": "f588f6294a1eee205a13b616fa2e00ba34044822",
+      "bytes": 29983,
+      "sha256": "512f34aea56e29f6540d3f124884a290a0e08553fc5b1232d088009814f475c2"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/independent-audit-01/report-v2.json",
+      "blob": "ebe224cb17faad9502415014ca26ac67b58d73ea",
+      "bytes": 56146,
+      "sha256": "e60d808ffd51bb01f47b99e772877af0ca80634092ee4fb790b628a46794ea97"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/independent-audit-01/report.json",
+      "blob": "c005478aaf11510f690e256db8f3ffa758398a3d",
+      "bytes": 56230,
+      "sha256": "0288ac4be75aa2dfd5c47ff6696ac9c2e4d20978ad9243904648b379daee94f9"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/independent-audit-01/xml-style-review.json",
+      "blob": "9f45029eb87e737f0e0fd9663bc8cb85eac64eb1",
+      "bytes": 7689,
+      "sha256": "dc8ed25d8f3620e6c7feb94ba977805f4b3e30c6ef90212e78464807d44acfb8"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/independent-audit-01/xml-style-review.py",
+      "blob": "c63c479852ae8aac1be039a2aacc7fd987c916ae",
+      "bytes": 7842,
+      "sha256": "d51a6cf3ab39437aa110f1dc95ce2437317639be91ce9abdee2600437ba863bb"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/native-font-edit-01/edited.png",
+      "blob": "85e717b8901d3cde2acc7afe5e32649f9d8f75db",
+      "bytes": 6209,
+      "sha256": "477ce16d5e425dfbc4f190c7a7813910613367b7c7e9b4403e303022d56ed59f"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/native-font-edit-01/font-registration.json",
+      "blob": "876f667c9a44e124ffaa0be4bfbfc5c7972f7222",
+      "bytes": 812,
+      "sha256": "d3c8a31ef44b436ffc6ebf82f5738f01cd849312534a4945382f48137795348a"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/native-font-edit-01/inputs/LICENSE_FONT",
+      "blob": "8d6b170e4d9a5580a34471dc4ac3e8fc5fbbd712",
+      "bytes": 4424,
+      "sha256": "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/native-font-edit-01/inputs/generation.json",
+      "blob": "b7aec347d5714855b409549ddafb96938c665953",
+      "bytes": 2616,
+      "sha256": "8ac9743832e6c63bab58a999802979dcdcb91139599f502e90bc697141cf5422"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/native-font-edit-01/inputs/native-font-edit.ps1",
+      "blob": "23960c959c099a141f5852a72d084cbf45fdab46",
+      "bytes": 46128,
+      "sha256": "b18f9e2ab822a42b9204a15314ed5ef6e74b1d933ba3e5e7e4efc3a542368960"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/native-font-edit-01/inputs/native-process.ps1",
+      "blob": "c92dcbf69fe657ecec5acc6dd7c10fe61808c829",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/native-font-edit-01/inputs/native-text-fonts.ps1",
+      "blob": "42b6374d1e867e695c44291bcee4639f3670e0e3",
+      "bytes": 2446,
+      "sha256": "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/native-font-edit-01/inputs/source.pptx",
+      "blob": "75b9b878538fe05e20167289548badeee4b3fbdc",
+      "bytes": 15644,
+      "sha256": "4dd235c923eb346ee19ac7ee89a93cce9a355eec7355692259d81c541bb3556d"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/native-font-edit-01/native-font-edit.pptx",
+      "blob": "bf9c86e08ad5a6d15583a07056c43f93ee6f4854",
+      "bytes": 17089,
+      "sha256": "b3cbc884c15501b8481dc165d58909750c16fc6f41253119baa0985373951901"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/native-font-edit-01/original.png",
+      "blob": "08e3a350b0c72866a6fdfe1add3a10bb18069217",
+      "bytes": 3581,
+      "sha256": "5a0b493e06f3c622ccc7044b6713f240c71b68501571814b7e8a35397e4469bf"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/native-font-edit-01/progress.json",
+      "blob": "92beda6ecc93f660c4e36000d9ff5e82581dfd96",
+      "bytes": 271,
+      "sha256": "2abc518a4d1f668529b7ae7378bd2e56d61d098bb16cc5dc9c577d087ab12125"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/native-font-edit-01/reopened.png",
+      "blob": "85e717b8901d3cde2acc7afe5e32649f9d8f75db",
+      "bytes": 6209,
+      "sha256": "477ce16d5e425dfbc4f190c7a7813910613367b7c7e9b4403e303022d56ed59f"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/native-font-edit-01/report.json",
+      "blob": "553dac2490320eba2f35765169b92bdf19103f42",
+      "bytes": 45472,
+      "sha256": "9a038b8009d87a23045996d905eaa08d09a6d16fe4cc582afa8006e688bd701f"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/native-font-edit-01/request.json",
+      "blob": "fa7ccbc3adddea5ca4a308edbf20b12cb3d82102",
+      "bytes": 10601,
+      "sha256": "6c9ce857cee33b54cd9a3e6202f3327731f2b1aa7c4fa8a2e32a250cf5069f8f"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/native-font-edit-01/stages.jsonl",
+      "blob": "0c99bfcb38913f90d9a34bafe19dc75d0c3fac76",
+      "bytes": 218589,
+      "sha256": "4a1684b5fcbedd21eeb554d3832ab13ba2ee1c33ac9e103b02d2144605dea9f4"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/native-font-edit-01/supervisor.json",
+      "blob": "3c4014dcee3f88fa58d0b11b87171b68f68873e4",
+      "bytes": 11183,
+      "sha256": "a6af4fd0bb6bcd8185d9538cb4e923d81e45f34b7dc793ac0989e28a572c1fed"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/native-font-edit-01/worker.json",
+      "blob": "9aac973f0b4add69ea6ce432876e84635d3b0a60",
+      "bytes": 341,
+      "sha256": "c417d0fc7fd228478ba8f26b29bc1e67e09c9c344414a1b12258c4341e9703ab"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/native-font-edit-01/worker.stderr.log",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/native-font-edit-01/worker.stdout.log",
+      "blob": "419ba35a4cfa45dd644ef0d6d1446cd613bb9055",
+      "bytes": 75,
+      "sha256": "4e78f41b0c91b58d3a97c48d60e1e36a2d6b58a6549290f501293b33681b16a5"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/owner-controls-01/failure/font-registration.json",
+      "blob": "876f667c9a44e124ffaa0be4bfbfc5c7972f7222",
+      "bytes": 812,
+      "sha256": "d3c8a31ef44b436ffc6ebf82f5738f01cd849312534a4945382f48137795348a"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/owner-controls-01/failure/owned-font-control.ps1",
+      "blob": "2dd9d269d0de61d52ff5a3e5954d7da4020ca7ca",
+      "bytes": 12,
+      "sha256": "f059becbcba7311d95148219fad0946dcf802529d2960e976090989dd889f710"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/owner-controls-01/failure/worker.json",
+      "blob": "2510e1d8a1424f805a866a25c388ef171de9619a",
+      "bytes": 342,
+      "sha256": "b22abcaa10cdefe34b1a04ff91aaf7bfe7abff4b991bbb2f4d741947cf5f0e22"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/owner-controls-01/failure/worker.stderr.log",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/owner-controls-01/failure/worker.stdout.log",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/owner-controls-01/independent-cleanup-audit.json",
+      "blob": "6f6287b8c64cdf0a238ac62bd4da272b27084019",
+      "bytes": 2303,
+      "sha256": "3321e794cdde7df1b96d361beb23c50d588d617a3aa03f4d54192c4724bcc6d2"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/owner-controls-01/report.json",
+      "blob": "74bb92ec89f0cba4e4ff1bf18f3e0297786398dd",
+      "bytes": 6152,
+      "sha256": "ae257cc146d7c87d49acfc62e3d8ea6eeb13da5acf8d04d776bca895982a8a46"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/owner-controls-01/timeout/font-registration.json",
+      "blob": "876f667c9a44e124ffaa0be4bfbfc5c7972f7222",
+      "bytes": 812,
+      "sha256": "d3c8a31ef44b436ffc6ebf82f5738f01cd849312534a4945382f48137795348a"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/owner-controls-01/timeout/owned-font-control.ps1",
+      "blob": "773d665c6919136666baf2ba08c79ee35a1edb93",
+      "bytes": 73,
+      "sha256": "5ed3d30bbcccd12451383a0fd6ffe22453f93a9ec4ee6d914d4d383e4bf45a7a"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/owner-controls-01/timeout/worker.json",
+      "blob": "b626af75915ea36d81f101d9fe55bc4a735fddab",
+      "bytes": 340,
+      "sha256": "c954cc2eb6857f208d8a628e38bef84f493b1925a9920dbfafc7c8a4a7dedf3b"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/owner-controls-01/timeout/worker.stderr.log",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/owner-controls-01/timeout/worker.stdout.log",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/owner-controls-01/verifier-snapshots-after-run.json",
+      "blob": "7e62c412f6ffba7900b9686a4e42f81477c9d2a0",
+      "bytes": 625,
+      "sha256": "736edbb3cfffc76ce46af1e8dc786023dbf1545e60a0b6656c58a6a7443dbf15"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/owner-controls-01/verifier-snapshots-after-run/native-process.ps1",
+      "blob": "c92dcbf69fe657ecec5acc6dd7c10fe61808c829",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/owner-controls-01/verifier-snapshots-after-run/native-text-fonts-check.ps1",
+      "blob": "00e6bbd739fe470451ee47b45c19ad752e00d5a8",
+      "bytes": 2712,
+      "sha256": "ef477158cf36d1ce8434967c3ca6e6d59e8dbfc74d26bd89e87a0fc48228dc34"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/owner-controls-01/verifier-snapshots-after-run/native-text-fonts.ps1",
+      "blob": "42b6374d1e867e695c44291bcee4639f3670e0e3",
+      "bytes": 2446,
+      "sha256": "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/preflight/font-gate-preflight-corrected.json",
+      "blob": "65c7abf20385ac3a51634c8a6d9419bbdf82fb6f",
+      "bytes": 24836,
+      "sha256": "4858f2c22fec2d052a90b5f1b47bc9136881f1757e88ee1db642d3d5a10157c5"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/preflight/font-gate-preflight-corrected.md",
+      "blob": "10275993a2eb1bebb83e577455ec8667f0ab1c2c",
+      "bytes": 955,
+      "sha256": "55b7b68a2215b4d4f5c6a09e768c29b376c59eaccd878be69dd817b688315fc4"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/preflight/font-gate-preflight.json",
+      "blob": "cb8cf2c3019f109c0409dcbfe0e1b501b91775d6",
+      "bytes": 19825,
+      "sha256": "f6389b456e452d0365f98a34311e7922d592d847f6fc01c6b18c4dda0ed17e5b"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/preflight/font-gate-preflight.md",
+      "blob": "3f22410c159f04c9111dd5c08f9450b8ecd87d28",
+      "bytes": 5521,
+      "sha256": "537e28f50d8153e7610dc7f4431cb7f216fc2250f5235880e49b4af167f54e46"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/pure-controls/check-font-fixture-contract-03.ps1",
+      "blob": "15b6ccff3fc4fdf9a553f5df569c236f1b3c12ac",
+      "bytes": 1433,
+      "sha256": "2d42406666efbc1d1e9e3e8c585bd638155d884df49c47f952d68c36c048d189"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/pure-controls/check-font-fixture-contract.ps1",
+      "blob": "9c3c284ad8694b0384a8e6bfc60f1560a959fa52",
+      "bytes": 1431,
+      "sha256": "a05c1b1786c27ca590fa7b6226f05c5f094aa84c33333b5524d4d153f0297257"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/pure-controls/font-edit-root-pure-01.json",
+      "blob": "f7e7896003e07635aac4804865337425694075cb",
+      "bytes": 294,
+      "sha256": "0dce79ca4dcb504054cfe5ae202fe899be65315c1a3bd6e83a64c62152189361"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/pure-controls/font-edit-root-pure-02.json",
+      "blob": "f7e7896003e07635aac4804865337425694075cb",
+      "bytes": 294,
+      "sha256": "0dce79ca4dcb504054cfe5ae202fe899be65315c1a3bd6e83a64c62152189361"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/pure-controls/font-fixture-contract-check-03.json",
+      "blob": "06afc470a54a842c9cc803711831a9a810ec773d",
+      "bytes": 219,
+      "sha256": "0db41f197ac8b7bc0b6b448fc4140e4eadd400d0311decda70ddba1c050c79c4"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/pure-controls/font-fixture-contract-check.json",
+      "blob": "06afc470a54a842c9cc803711831a9a810ec773d",
+      "bytes": 219,
+      "sha256": "0db41f197ac8b7bc0b6b448fc4140e4eadd400d0311decda70ddba1c050c79c4"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/semantic-reimport-01/comparison.json",
+      "blob": "db248d5486ac1a8b407bd3e5999435f64a3ded94",
+      "bytes": 1805,
+      "sha256": "8d498c82a5cb6091b60c2e02549b4256db41ff234baeea083cd296cffe6c5eb9"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/semantic-reimport-01/failed-checker.mjs",
+      "blob": "b5c16af84e00d4214388ca7ff8c1615b700a6843",
+      "bytes": 2258,
+      "sha256": "3052f5434207d96f77123e45411c4c3c2e42976e76d72702a17422f241b96d4a"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/semantic-reimport-01/reimport.opf.json",
+      "blob": "0d8890eddca46a8538437e1147a357f6e8ffdb3d",
+      "bytes": 560,
+      "sha256": "dd228e6987b1fd407a161b8044d2fcf06d60560ab1535af2229dcf1cea340978"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/semantic-reimport-02/comparison.json",
+      "blob": "7a464503b5f1d55e67d0335f79c5b8d4133b1618",
+      "bytes": 1804,
+      "sha256": "b0e3057aa5f40c3d41f92f60d321e2916a93764121fba5bc523120c2a4598b3a"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/semantic-reimport-02/reimport.opf.json",
+      "blob": "0d8890eddca46a8538437e1147a357f6e8ffdb3d",
+      "bytes": 560,
+      "sha256": "dd228e6987b1fd407a161b8044d2fcf06d60560ab1535af2229dcf1cea340978"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/semantic/audit-font-reimport.mjs",
+      "blob": "d1b30d09b1b2c41d21d8bd68220a4e8e859d0a29",
+      "bytes": 2317,
+      "sha256": "a5aefaa0b8e0c5622227d4a3b2011489022ca2a656f9b7fccb295dcacd203a0f"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/E/font/worker-review-01/review.json",
+      "blob": "3324eda5912f02f3febf474ccda20b02a7731ee9",
+      "bytes": 2075,
+      "sha256": "c37b5966c14cc299147ffa507ceb373ad27e74409734a8c9c9ab9932346b29be"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/README.md",
+      "blob": "92d93f195acf5cf5142d98a11ef8e5adf6ccbe30",
+      "bytes": 6565,
+      "sha256": "680a03ababf6a95b4b04aad04ddefdfc1e63bf63973851f7f171616659339316"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/artifact-manifest.json",
+      "blob": "b2b911ca405e501405d5a37293649ab3513c1fe1",
+      "bytes": 20489,
+      "sha256": "ac1082e6f70ca5cc1cd0030458dca216eb764127f45dd87aa6db905dfcb14547"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/omitted-font-programs.json",
+      "blob": "f1311264dbca53a468e1363641ac33b5955e99d2",
+      "bytes": 4844,
+      "sha256": "5a68e27a5e11c71008339ac3981b82a5f4ff58e69bca70c78784cb962ceea295"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/portable-verify.py",
+      "blob": "3587f85fe64003f5dc3ebb351640bd1d13972fdd",
+      "bytes": 10486,
+      "sha256": "4a79ace60d489760d544d2b7571ea528eb6c0ca317f509529f1fd515f117a890"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/source-context.json",
+      "blob": "094faa56841d5ae2fedbfaf6dfee183052fa324a",
+      "bytes": 866,
+      "sha256": "a00355dce089b00ce2dd9b5e753a3bc85c488303f57ded0b7c48abfb532ab360"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/fonts/visual-review.json",
+      "blob": "c4d7b4948e4702a0f6b68fa05820f76ff63fcf98",
+      "bytes": 1164,
+      "sha256": "a673a92db1b967c2150c3d1a47392aa545951c674e030dde59044e23bf5682c6"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/.gitattributes",
+      "blob": "b746772b6cda0edb9a3995c3f95e0dde764ed2ae",
+      "bytes": 9,
+      "sha256": "48747480eddba024928d03be9bf83dc579e5515768647507a767e8187a85c9ab"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/audits/tab-independent-audit-01/audit-report-v2.json",
+      "blob": "3cc7df643a361875c76b741ff8bd2b0961ce077e",
+      "bytes": 41266,
+      "sha256": "263f0f0144faf29bb1cd08358b5f779f663c69e6407c62aafaf174f63b7f517d"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/audits/tab-independent-audit-01/audit-report.json",
+      "blob": "30157a1c0ccd9b7d421bbad67a683203492e62ca",
+      "bytes": 36494,
+      "sha256": "2a27c79f363aa0af07bcb80740bdd7535b9d40e1295ff00453499a501e36d71d"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/audits/tab-independent-audit-01/audit-tab-v2.py",
+      "blob": "b3172f3206c76a2ae990cdc4204af0f1a0eb39c7",
+      "bytes": 24005,
+      "sha256": "f5e00b7d529d78709a72063ffea4b23242c468b72021c648e6eeb490be3d68b6"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/audits/tab-independent-audit-01/audit-tab.py",
+      "blob": "2cd2fa571a8aa0a2919a0f592b66d99ee6dbbebf",
+      "bytes": 21543,
+      "sha256": "7d72892460a7ba6fc6a3ba48bbb2b8166ee9bd05391e10b113c76eac1cb39ec6"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/audits/tab-independent-audit-04/D-EVIDENCE-README-OUTLINE.md",
+      "blob": "dc7dea8b0301a809efa621a572b7941c147ee8da",
+      "bytes": 3944,
+      "sha256": "4b49d145cb96a32e3a1f8ba6f986c19d744461b1b0c03e54201bd68f8c8e46d9"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/audits/tab-independent-audit-04/audit-report-v2.json",
+      "blob": "bedb18c5a045b98f9854e31d39301a0b503951b7",
+      "bytes": 42802,
+      "sha256": "fb2068164970247ebb657db2683edd13c0bbb4b7a2cd5fc120d7e0029f6a843e"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/audits/tab-independent-audit-04/audit-report.json",
+      "blob": "030b06a20918c9294c1b6a7892de028652b19991",
+      "bytes": 77501,
+      "sha256": "448f0aeab98763f487d280610a43088357e5f27746f9fdfee7c7fae56b1f85fa"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/audits/tab-independent-audit-04/audit-tab-v2.py",
+      "blob": "017eedc840b78f5a95bb7c8fa5fb96be4ee92431",
+      "bytes": 33220,
+      "sha256": "581cd08a5cfcd3349add5b8587dc495f3050dba4eee9b7405fa78b38d4f29ace"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-01/inputs/native-process.ps1",
+      "blob": "c92dcbf69fe657ecec5acc6dd7c10fe61808c829",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-01/inputs/native-tab-control-v2.ps1",
+      "blob": "31fec837c926408458a2832fa484b402bb73a535",
+      "bytes": 32273,
+      "sha256": "f57fcdf931a48f3f927310c294fabb13c0c0790351560fb7635c2237fe039a24"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-01/native-tab-before-ui-close.pptx",
+      "blob": "7d2734d5727b3bcef06fda32336f54daea56c45c",
+      "bytes": 34266,
+      "sha256": "ec554b0e5cc07b89292d242b9269c64d721450585220b493625edad7297a95eb"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-01/native-tab-control-v2.pptx",
+      "blob": "7d2734d5727b3bcef06fda32336f54daea56c45c",
+      "bytes": 34266,
+      "sha256": "ec554b0e5cc07b89292d242b9269c64d721450585220b493625edad7297a95eb"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-01/progress.json",
+      "blob": "a479228377e8c9065fd945438e78d5f4bf04b8bf",
+      "bytes": 441,
+      "sha256": "4434d3d21ed66d6744d08808ee8f10f7ce14c12c98d4ce2fc571c63a11e71af4"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-01/report.json",
+      "blob": "186c96bdc0aab4db87930dfe461bd16d86307f91",
+      "bytes": 5639,
+      "sha256": "760c8d4bd70e11a449843d075ec680b6b05f4a5c5f345e353af1d48b59cc61a4"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-01/request.json",
+      "blob": "ba13b4451a34daad8a12dc22738865dc54102f3a",
+      "bytes": 2215,
+      "sha256": "eb65f6b4349b790c6313cc4b1a85145495bd4dace227c6f766b90bf969deb01e"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-01/stages.jsonl",
+      "blob": "5fd2ecfb38af709cf14c1f7b330940fe7e1718d7",
+      "bytes": 387040,
+      "sha256": "4c62cf565c77610bbf4ef7a49988eca4e05983198ddc10a5f6b977f2ad98531a"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-01/supervisor-ui-close.json",
+      "blob": "2e0cae7d7a31c7f6acff40f5e76c07930666a7ba",
+      "bytes": 385,
+      "sha256": "78afda036b8297b005d2597988efe36bfc339c5cba24b3dc80c0c3cc1109a04c"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-01/supervisor.json",
+      "blob": "22afc7c42f80d9be222b4515848901496f52ec74",
+      "bytes": 218,
+      "sha256": "7c4806304e68889de5ffd2dc11acb6860275971b370519a3daa4863437e740ff"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-01/worker.json",
+      "blob": "1289e007acc46bb3ebedc68efa0a77dfb8a7776b",
+      "bytes": 341,
+      "sha256": "2a4661ca235f011916bf6229874900c95fdc135ba08668aeec1b5b75739f844f"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-01/worker.stderr.log",
+      "blob": "47eebd47f3f5fa485a85de58f332814a1aa9d0b4",
+      "bytes": 489,
+      "sha256": "5cd5d4c5b0ec8989a8e9d95a34003d8babb7d6a0aaee0193e9f17d02322dbfab"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-01/worker.stdout.log",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-02/inputs/native-process.ps1",
+      "blob": "c92dcbf69fe657ecec5acc6dd7c10fe61808c829",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-02/inputs/native-tab-control-v2.ps1",
+      "blob": "40eb0bdcfd24e8c4f37c06ee295b3e55390812dd",
+      "bytes": 35789,
+      "sha256": "3f40452fcd7d01779fea797264a57ada7fc9f1eb4f6eb9696cb32c64e2e0515c"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-02/metrics.recovered.json",
+      "blob": "3689bcbf45c76904cacf5c50671b885dd27a4009",
+      "bytes": 46398,
+      "sha256": "8ee5fe145959077e6801c2d861ad88769227d978235f253ed8d1025967121b8f"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-02/metrics.root-recovered.json",
+      "blob": "3689bcbf45c76904cacf5c50671b885dd27a4009",
+      "bytes": 46398,
+      "sha256": "8ee5fe145959077e6801c2d861ad88769227d978235f253ed8d1025967121b8f"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-02/native-tab-control-v2.pptx",
+      "blob": "b22e7adaaf99a1ab755c04a42b997960e4f1ca6b",
+      "bytes": 34276,
+      "sha256": "5b042c0968a484d295cc0c76be50208ff60937afd2e483ca05b3c915d8e24e69"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-02/original.png",
+      "blob": "8eae8485a3abdab4095dcda8720cd2f274c591b6",
+      "bytes": 4801,
+      "sha256": "1a1dc6038e12f782cd1da8696fcf0f8a43612167649edf9d6f3bab3993c9a2fd"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-02/progress.json",
+      "blob": "04f3a4064f90589a6e7659ce9cef46cb074bf740",
+      "bytes": 424,
+      "sha256": "578aa4cb7dcc5f0eeacbb49cc26ea627c92caf4ae55e3c36e82e1e4906aa6bf3"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-02/reopened.png",
+      "blob": "8eae8485a3abdab4095dcda8720cd2f274c591b6",
+      "bytes": 4801,
+      "sha256": "1a1dc6038e12f782cd1da8696fcf0f8a43612167649edf9d6f3bab3993c9a2fd"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-02/report.json",
+      "blob": "a5981df4979a284e269d6efadaf921bd65ae186a",
+      "bytes": 57890,
+      "sha256": "4f9e17d7290eb4500ab81b48860418b511d73e419e0a02d8a09c7503fb9245a5"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-02/request.json",
+      "blob": "9b6b03c8086972512858ee1aa028364bfeefb66c",
+      "bytes": 2215,
+      "sha256": "99512cf3f7c0bb8188fc1e465a5bf664e005db155106c5f56a29254b47956d96"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-02/stages.jsonl",
+      "blob": "0c95b7bcce773b9e25b043dda81ae73672130e9d",
+      "bytes": 960322,
+      "sha256": "13c9c30dd6ac030043bd069c92af541e53fe5c32c91540b9aaed55a5d5a3a509"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-02/supervisor.json",
+      "blob": "8ee4bb24138cb6303ac3878c2bd08c5ada943e72",
+      "bytes": 217,
+      "sha256": "38f14a3e5aa5c2b541021290e3591477ef4ff4353ff1db6334c40eca55714197"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-02/worker.json",
+      "blob": "39045d0ce9f8d50a5624cc316f1bc23e4c0deea6",
+      "bytes": 341,
+      "sha256": "683ae1e5ebb0a39da4eea449ca3c5e23f6875be4458232f1089d77cb803eeef5"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-02/worker.stderr.log",
+      "blob": "cf8cd44032610329f9f134ba45161b9e74fbe725",
+      "bytes": 588,
+      "sha256": "e290529d631b094f3f3eaff3cb4da796e126cb14a6963b43cd16058030b7032d"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-02/worker.stdout.log",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-03/inputs/native-process.ps1",
+      "blob": "c92dcbf69fe657ecec5acc6dd7c10fe61808c829",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-03/inputs/native-tab-control-v2.ps1",
+      "blob": "280b857ad4d90fcaeec02148052ebfa5c277339b",
+      "bytes": 49939,
+      "sha256": "29403aeb94ba5338dcb0a9227172706adc096733e09571d992c99ab97e6e0689"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-03/native-tab-control-v2.pptx",
+      "blob": "388a9b02edfcd3d39af2fb016a08c963e91a6377",
+      "bytes": 34270,
+      "sha256": "230ed8ca4a1d093965baf930401fc14b9fab8acd168584fa39faa43f7df293b5"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-03/original.png",
+      "blob": "8eae8485a3abdab4095dcda8720cd2f274c591b6",
+      "bytes": 4801,
+      "sha256": "1a1dc6038e12f782cd1da8696fcf0f8a43612167649edf9d6f3bab3993c9a2fd"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-03/progress.json",
+      "blob": "f82624df0550739d24440d148ee634064c08bf7f",
+      "bytes": 272,
+      "sha256": "93a9cf6de6ea876dc19cf3e4b3721724fb0618b7cbf45a7817c83220343bfd82"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-03/reopened.png",
+      "blob": "8eae8485a3abdab4095dcda8720cd2f274c591b6",
+      "bytes": 4801,
+      "sha256": "1a1dc6038e12f782cd1da8696fcf0f8a43612167649edf9d6f3bab3993c9a2fd"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-03/report.json",
+      "blob": "9e7328656fe2d85237af50437ed82f37370e1785",
+      "bytes": 100701,
+      "sha256": "65b6c3bbc2ff099c22b6cb68b34cc8873767c11eaf8643a4b2a02418d641e4ff"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-03/request.json",
+      "blob": "ed19afd3b86efc55a8a35847d85a76550e9db535",
+      "bytes": 2215,
+      "sha256": "2eac099c097214753bf22ddcb673cec946ec860f9048d7cb4275400a94039dae"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-03/stages.jsonl",
+      "blob": "ae2335dd02c438212bbbfabeec8f95ab62a9fcc4",
+      "bytes": 960170,
+      "sha256": "53af8455d71adc753f26a5c5da9de1b3895076df8ad3ee68c4e828d035daba45"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-03/supervisor.json",
+      "blob": "f0dd7ef6c8dc2d978f098f7075fc9b9aef54c3f1",
+      "bytes": 220,
+      "sha256": "914bd2a3d1131b99c6aad6e2081f259d87dbeaa6855b9e3f9df376d65d0b1e32"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-03/worker.json",
+      "blob": "21d228a8e06b8b6685a5a3fa1df69a7cdffa17bb",
+      "bytes": 341,
+      "sha256": "d004075250f8bf8fcab42b4167975a60bc9fc0d949060aa94e7a243ca287bab3"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-03/worker.stderr.log",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-03/worker.stdout.log",
+      "blob": "d1d42bf30302bce70669a5feef6a1e9a24cbc706",
+      "bytes": 76,
+      "sha256": "17e4dfce69f98d9cfdc759386e05b7d2463310cf61fd3b2b3e69ee5d66cbba07"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-04/inputs/native-process.ps1",
+      "blob": "c92dcbf69fe657ecec5acc6dd7c10fe61808c829",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-04/inputs/native-tab-control-v2.ps1",
+      "blob": "c47531014adac6bb5256d1b85b3342ddc445836c",
+      "bytes": 51511,
+      "sha256": "6a0f8f33e1072cf373e7b6c744d248ae89ec66901e7b8a3be6c89a32cce660dd"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-04/metrics.root-replay.json",
+      "blob": "73cac53f06b29652de68457cc4ceb62d732f6195",
+      "bytes": 46357,
+      "sha256": "c81593acc91325444153d37c59990cda934a211942b281ee3faf03c96a42ba58"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-04/native-tab-control-v2.pptx",
+      "blob": "a61b1fd7b2aa5caf19fc4f3e5c98ad5011318d7f",
+      "bytes": 34264,
+      "sha256": "73f271c2e360ba47b00894ca577a3c12fc5ebb006aca4d8dacd907a1b2d0d6f1"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-04/original.png",
+      "blob": "8eae8485a3abdab4095dcda8720cd2f274c591b6",
+      "bytes": 4801,
+      "sha256": "1a1dc6038e12f782cd1da8696fcf0f8a43612167649edf9d6f3bab3993c9a2fd"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-04/progress.json",
+      "blob": "538d6366b692a51b4f16d3000de22a0175b4ed3e",
+      "bytes": 272,
+      "sha256": "29336d8ece61692f5eaa743878e3561d58a38086dc3ab7474d0c1bce1b813862"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-04/reopened.png",
+      "blob": "8eae8485a3abdab4095dcda8720cd2f274c591b6",
+      "bytes": 4801,
+      "sha256": "1a1dc6038e12f782cd1da8696fcf0f8a43612167649edf9d6f3bab3993c9a2fd"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-04/report.json",
+      "blob": "c972380bf4689b81f3b06cd4dfa7f33c35a0250a",
+      "bytes": 103361,
+      "sha256": "dd2dc51ec6714c864479b93791eefe9807ab9f8c649f7a3c7bcabaca61b5a71c"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-04/request.json",
+      "blob": "266cb214ce5ab63029d5a1d4f1c2432a62d6e1d9",
+      "bytes": 2215,
+      "sha256": "d0ff2521fa1be0319caffd969aad4cb6eb852d2ebd727d954d0f9ad3a70e8ca1"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-04/root-precision-check.json",
+      "blob": "1baf673924bc4b57762f78783efdc618063861df",
+      "bytes": 307,
+      "sha256": "c8da7de41672aef4d6aa7f4763b30ad9abee625d6c8868289892393f0c6c3a57"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-04/stages.jsonl",
+      "blob": "07fa09ffbf2fb63bfb1508fcf433203896f902c0",
+      "bytes": 960170,
+      "sha256": "b28bc2f5afc4d33dcb72e0ab7335799555ac73cb95dc4459138b84214d7a9a47"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-04/supervisor.json",
+      "blob": "b93cfabf705a847faea242c3ebe0274ef9fb339a",
+      "bytes": 220,
+      "sha256": "049ed96259ec37c0dbe092a4b5bfaeb9c09249cacd567e23ef58ee20348a8720"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-04/worker.json",
+      "blob": "2089281e1110a4df83d3f4ac27459dd77392428f",
+      "bytes": 340,
+      "sha256": "519fc3e957b9f18ae4deecdfa0929801e6908168e48d0a283a062cfdad7fbe56"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-04/worker.stderr.log",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-04/worker.stdout.log",
+      "blob": "d1d42bf30302bce70669a5feef6a1e9a24cbc706",
+      "bytes": 76,
+      "sha256": "17e4dfce69f98d9cfdc759386e05b7d2463310cf61fd3b2b3e69ee5d66cbba07"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/pure-controls/tab-v2-root-controls-01.json",
+      "blob": "b1d40c846ca6a4dca802b88609a136c3b4c0e1d3",
+      "bytes": 652,
+      "sha256": "c23d3a81c4c09eb4fdb30f78d310fae427b7713e3ec146e15092de5947be85a5"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/pure-controls/tab-v2-root-controls-02.json",
+      "blob": "c169eddae13405bd2e7690c22c35e28571f71995",
+      "bytes": 652,
+      "sha256": "ce18aad0a52bdb06a07dba51547741c46228f8473982380ac94613637b9c1620"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/pure-controls/tab-v2-root-regression-02.json",
+      "blob": "1d5f6fa6b6b0da7b9b9cb9ef6b43b615f3f0bcd2",
+      "bytes": 887,
+      "sha256": "19fe921bee5ff67d36c835dcceb176d663c61c2d6c08e585f83b0b47adbfee59"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/pure-controls/tab-v2-root-regression-03.json",
+      "blob": "d8e1c1554612e2014c2b9e00254f21802a4791f8",
+      "bytes": 2277,
+      "sha256": "f25bc9b0cc9c3175c7cf20633f9517ef96e4e8a08d78209d535d39169002d8c4"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/pure-controls/tab-v2-root-regression-04.json",
+      "blob": "292d40ad6257424af77ca60ecf35a7b61c2ef790",
+      "bytes": 2455,
+      "sha256": "08864867cf590d8e7e82fcd109f681d2da3e9713eb5fd6e89e68a48bd0facd1b"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/README.md",
+      "blob": "fd04546adbb15c41a438809b2d09800c71273813",
+      "bytes": 5739,
+      "sha256": "a5050beb21d3a29732ef4bfe22aec01e9153acc55ab72aed853aa46df7c85838"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/artifact-manifest.json",
+      "blob": "b16db6e4772987e4b699bd9a0c1fed30fac50d4f",
+      "bytes": 18002,
+      "sha256": "fc11960cb08d7076ba6e7dbcb797fa4e93287f3f7ddd6fe43f26e084be533b5d"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/portable-verify.py",
+      "blob": "10dbde315ebbd42aa31b70f61a8413374b27f550",
+      "bytes": 7307,
+      "sha256": "570303c014090cd868541459db27b6949b0a11f2a208d2a958c72a5c7b2b391c"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/source-context.json",
+      "blob": "5baa175d8473558c18732fb382c2a583d5c2bdd8",
+      "bytes": 1926,
+      "sha256": "9a42c6a0107285d90faa296b054d4f73b0ad7293ce050d50ee6302c1ae6ab54e"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/visual-review.json",
+      "blob": "0499761329823d42ca1acfac27e8f586fff9626c",
+      "bytes": 2039,
+      "sha256": "776077a4603fc2dcf40cc8c67488685e9acf1be295b80e5564fd2f05d6f7695d"
+    },
+    {
+      "path": "docs/evidence/windows-native-tabs-fonts-20260921/verify.py",
+      "blob": "0f8e835afe9c1e065ce2d18ad51a8ca61d724e35",
+      "bytes": 1595,
+      "sha256": "b7969382989cbe796e05338466c1bf462232aab040933fddd1b1c3edb657f13d"
+    }
+  ]
+}

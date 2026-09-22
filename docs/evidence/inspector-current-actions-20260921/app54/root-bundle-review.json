@@ -1,0 +1,18 @@
+{
+  "time": "2026-09-21T19:30:48.371193+00:00",
+  "priorManifestSha256": "a412ca64b0edfbd1a99e0f91c1a62fd9ed781098b26c9f0666e48fa5081c54f4",
+  "manifestSha256": "d7ebcd170ee558c7934ebd99fc38c54a7d4bfdc1f12f13f1bbe12850542d3e07",
+  "filesIncludingManifest": 93,
+  "bytesIncludingManifest": 15728587,
+  "rootAdjustments": [
+    "Scoped ** -text preserves original evidence bytes on all Git platforms.",
+    "Clarified coordinated geometry drafts remain deferred, not a new app release requirement.",
+    "Scoped whitespace attributes retain intentional CRLF inputs, original logs and original error-context trailing spaces without changing their bytes."
+  ],
+  "exactCopies": 87,
+  "finalSourceInputs": 305,
+  "unchangedLegacyEvidenceFiles": 484,
+  "durableZipCrcPass": 2,
+  "productSourceChanged": false,
+  "verifierNote": "Initial root audit stopped at a zip member provenance URI; corrected verifier explicitly reads ZIP entries. Product/evidence originals unchanged."
+}

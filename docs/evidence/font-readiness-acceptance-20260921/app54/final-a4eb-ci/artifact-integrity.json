@@ -1,0 +1,561 @@
+{
+  "observed_at": "2026-09-21T21:17:29.010010+00:00",
+  "artifacts": [
+    {
+      "artifact_id": 10665085104,
+      "name": "browser-failures-windows-latest",
+      "size": 11054020,
+      "sha256": "f490910d37179c4278441eb4d0f1d54cf2251ded72e719c4964ffafb468750ee",
+      "github_digest_matches": true,
+      "zip_crc": "pass",
+      "safe_member_paths": true,
+      "members": 105,
+      "extracted_to": "extracted/browser-failures-windows-latest",
+      "files": [
+        {
+          "path": "author-anonymous-Author-ca-d560b-xport-and-undoable-reimport/author-export.pptx",
+          "sha256": "070cddbcb5a3aa9d6916531f212fd067d9ebe8033f715e98ade5b78229530696",
+          "bytes": 16330
+        },
+        {
+          "path": "author-anonymous-Author-ca-d560b-xport-and-undoable-reimport/author.png",
+          "sha256": "2cf5a2358671396de8b18d7724376bbca04af0788b09c399de12030a877ef454",
+          "bytes": 103500
+        },
+        {
+          "path": "author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/author-json-options.png",
+          "sha256": "a28fb240377c04502ac8d7a515400c59563214e5439b314f7702f39ef691abb2",
+          "bytes": 166224
+        },
+        {
+          "path": "author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/author-layout-options.png",
+          "sha256": "8951d6f882eb7e2f14fae422db74e65925a5efaef791863ff6c914422cecf6ff",
+          "bytes": 180328
+        },
+        {
+          "path": "author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/author-theme-options.png",
+          "sha256": "d41b44e083b3bfc93b59e106c86e8b215834d42f5b666e5e8ee3dd86be7b22d5",
+          "bytes": 174791
+        },
+        {
+          "path": "author-json-options-Author-cda0b-exact-CRLF-source-undo-redo/author-json-options.png",
+          "sha256": "a28fb240377c04502ac8d7a515400c59563214e5439b314f7702f39ef691abb2",
+          "bytes": 166224
+        },
+        {
+          "path": "author-json-options-Author-cda0b-exact-CRLF-source-undo-redo/author-layout-options.png",
+          "sha256": "8951d6f882eb7e2f14fae422db74e65925a5efaef791863ff6c914422cecf6ff",
+          "bytes": 180328
+        },
+        {
+          "path": "author-json-options-Author-cda0b-exact-CRLF-source-undo-redo/author-theme-options.png",
+          "sha256": "d41b44e083b3bfc93b59e106c86e8b215834d42f5b666e5e8ee3dd86be7b22d5",
+          "bytes": 174791
+        },
+        {
+          "path": "completion-keyboard-Author-66da5-and-editor-remount-behavior/edited-source.json",
+          "sha256": "f09f49ed355f8a3503d13e4268153e970f9c06ee986065a89d6e8be6665f4671",
+          "bytes": 202
+        },
+        {
+          "path": "completion-keyboard-Author-66da5-and-editor-remount-behavior/original-source.json",
+          "sha256": "61d515fd443a657eb4f6c2fed93e3734182aab2f84b2fb250c1fd1aa3b8e1af6",
+          "bytes": 205
+        },
+        {
+          "path": "completion-keyboard-Author-66da5-and-editor-remount-behavior/suggestion-details.png",
+          "sha256": "1309226e389718c4b3f431ca6dc17c07d49dfdee22dd83ecfc82d545c83db725",
+          "bytes": 138238
+        },
+        {
+          "path": "completion-keyboard-Author-93788-ir-original-keyboard-owners/keyboard-bubbles.json",
+          "sha256": "a1bdb25e35eda58a487c4ace86108da82c499940f90e45f754d93c9fd17484cb",
+          "bytes": 1652
+        },
+        {
+          "path": "completion-keyboard-Author-93788-ir-original-keyboard-owners/quick-input-keeps-focus.png",
+          "sha256": "9eb0a777181f3345fde6f4c013fdaaa57296821ab2d1fcf2e991122ddd2ca75d",
+          "bytes": 87027
+        },
+        {
+          "path": "completion-preservation-Au-807ee-act-source-in-one-undo-step/actual-source.json",
+          "sha256": "3590b76552f6afaf7c9af8095eae05feb702333fc1a0fd10b2fad491bd285651",
+          "bytes": 767
+        },
+        {
+          "path": "completion-preservation-Au-807ee-act-source-in-one-undo-step/desired-source.json",
+          "sha256": "3590b76552f6afaf7c9af8095eae05feb702333fc1a0fd10b2fad491bd285651",
+          "bytes": 767
+        },
+        {
+          "path": "completion-preservation-Au-807ee-act-source-in-one-undo-step/original-source.json",
+          "sha256": "1525be094f6dab2c58d5cdd69fc5acb86423764305f05e9515110af8f67a2636",
+          "bytes": 738
+        },
+        {
+          "path": "completion-preservation-Au-807ee-act-source-in-one-undo-step/structural-choice.png",
+          "sha256": "e67fa7d43e1d833708fb562fe3101ee42c2b05887201e4adc9c3c3717a6ff68f",
+          "bytes": 162585
+        },
+        {
+          "path": "completion-preservation-Au-96e4e-act-source-in-one-undo-step/actual-source.json",
+          "sha256": "302a28aff91ab1669ecfad7cbd2e2a08fa65f451efbdb81e508dc7021e15100f",
+          "bytes": 804
+        },
+        {
+          "path": "completion-preservation-Au-96e4e-act-source-in-one-undo-step/desired-source.json",
+          "sha256": "302a28aff91ab1669ecfad7cbd2e2a08fa65f451efbdb81e508dc7021e15100f",
+          "bytes": 804
+        },
+        {
+          "path": "completion-preservation-Au-96e4e-act-source-in-one-undo-step/original-source.json",
+          "sha256": "a90c0c8927c1bd6d92c4732c94fda179f1b7ff151d61a91230f2097d55537de9",
+          "bytes": 772
+        },
+        {
+          "path": "completion-preservation-Au-96e4e-act-source-in-one-undo-step/structural-choice.png",
+          "sha256": "8516380f46cfb283f786fd348d2c2ef5249c39331df8af6900bcf2e188f8c4ff",
+          "bytes": 158023
+        },
+        {
+          "path": "completion-preservation-Au-b9e03-s-prior-undo-history-intact/escaped-current-alternatives.png",
+          "sha256": "127cb18da3e02ed5a2cba0f2b94c6e47c9bacfc09a43631d235ccdc14219d3d3",
+          "bytes": 170177
+        },
+        {
+          "path": "inspector-actions-Inspecto-07c93-and-unchanged-draft-history/copy-json-current-source.png",
+          "sha256": "80291d8c30dbad71972ee3de5bf9bc7b776f4e1b95d29317d157c53190020912",
+          "bytes": 182994
+        },
+        {
+          "path": "inspector-actions-Inspecto-07c93-and-unchanged-draft-history/pending-json.opf.json",
+          "sha256": "0eb0e8b4a5439b39ab87abcd2f3a38a6cbe5aa473150be42e16a79fd5def9e6e",
+          "bytes": 285
+        },
+        {
+          "path": "inspector-actions-Inspecto-07c93-and-unchanged-draft-history/unchanged-draft.opf.json",
+          "sha256": "0eb0e8b4a5439b39ab87abcd2f3a38a6cbe5aa473150be42e16a79fd5def9e6e",
+          "bytes": 285
+        },
+        {
+          "path": "inspector-actions-Inspecto-13850-ent-source-with-local-mocks/local-mocked-boundaries.json",
+          "sha256": "98c2ee79dfd2785ba6631d8cf2feb3fd59ec6a12cea8282297c31f476ddf6ab4",
+          "bytes": 929
+        },
+        {
+          "path": "inspector-actions-Inspecto-36d82-hing-payloads-and-filenames/explicit-share-url.txt",
+          "sha256": "1688581b3639effc63a200114b56b7b370bbf9e3ce7c355bde02847e1bd912d6",
+          "bytes": 312
+        },
+        {
+          "path": "inspector-actions-Inspecto-36d82-hing-payloads-and-filenames/pending.pptx",
+          "sha256": "824d88f21331bc8cf343dcadf9b5a02ab81b1ed9c33209a4c484d006d521d1ff",
+          "bytes": 15258
+        },
+        {
+          "path": "inspector-actions-Inspecto-36d82-hing-payloads-and-filenames/share-pptx-current-source.png",
+          "sha256": "e0374a5ba9520459efe2e3eca2b4e51575a78a62795a33a0b9867b54dd223adf",
+          "bytes": 182989
+        },
+        {
+          "path": "inspector-actions-Inspecto-667f5-vigation-after-a-new-source/pdf-401-request.json",
+          "sha256": "a1f35d23137bdba706ef37ae566b356ea0680a9fcfcf718c169de5ff1127b568",
+          "bytes": 417
+        },
+        {
+          "path": "inspector-actions-Inspecto-93924-afts-produce-no-JSON-output/accepted-after-rejection.opf.json",
+          "sha256": "a17c805b5b534577b18ef9ea4662b3aa2c3068cbc7b858f843f11ba364419a72",
+          "bytes": 291
+        },
+        {
+          "path": "inspector-actions-Inspecto-c6cfc-r-after-CRLF-source-ingress/accepted-source.json",
+          "sha256": "a84d616abbcddc8cefeb489a3eeea890e009cd60bff5eb4ead59b485b6433f19",
+          "bytes": 274
+        },
+        {
+          "path": "inspector-actions-Inspecto-c6cfc-r-after-CRLF-source-ingress/crlf-ingress-boundary.json",
+          "sha256": "1b0d02abe7e0f91baefb62f7fa46dffd2ee643bd26e42416501226aa4ccc23a5",
+          "bytes": 236
+        },
+        {
+          "path": "inspector-actions-Inspecto-c6cfc-r-after-CRLF-source-ingress/crlf-ingress-pending-json.opf.json",
+          "sha256": "8923843f15492cab7c3939d0bcc51e0c709da1ffe1cefd34ba3032c9b8449606",
+          "bytes": 287
+        },
+        {
+          "path": "inspector-actions-Inspecto-c6cfc-r-after-CRLF-source-ingress/crlf-ingress-redo.opf.json",
+          "sha256": "8923843f15492cab7c3939d0bcc51e0c709da1ffe1cefd34ba3032c9b8449606",
+          "bytes": 287
+        },
+        {
+          "path": "inspector-actions-Inspecto-c6cfc-r-after-CRLF-source-ingress/crlf-ingress-undo.opf.json",
+          "sha256": "a84d616abbcddc8cefeb489a3eeea890e009cd60bff5eb4ead59b485b6433f19",
+          "bytes": 274
+        },
+        {
+          "path": "inspector-actions-Inspecto-c6cfc-r-after-CRLF-source-ingress/crlf-input.json",
+          "sha256": "78610b22063e62678c798005717552658e9a6d88ff839435bd95ba98dc74119e",
+          "bytes": 279
+        },
+        {
+          "path": "inspector-actions-Inspecto-ddffb-urrent-draft-before-handoff/error-context.md",
+          "sha256": "a39783f64d0d1f37b3d7c898e2d147ecf89aa5ed01511be24f7e49470700fdc0",
+          "bytes": 24133
+        },
+        {
+          "path": "inspector-actions-Inspecto-ddffb-urrent-draft-before-handoff/inspector-pending-action.png",
+          "sha256": "681319c95b0ca6a43701e82e3dd907cac96f5c5987bee4f741d23fb96cbf2693",
+          "bytes": 172647
+        },
+        {
+          "path": "inspector-actions-Inspecto-ddffb-urrent-draft-before-handoff/trace.zip",
+          "sha256": "c7589c634e5177b393d3697a4d9c9bb48b4809d958644973267a453c1812883a",
+          "bytes": 6944325
+        },
+        {
+          "path": "inspector-actions-Inspecto-fb8b1-vigation-after-a-new-source/pdf-200-request.json",
+          "sha256": "a1f35d23137bdba706ef37ae566b356ea0680a9fcfcf718c169de5ff1127b568",
+          "bytes": 417
+        },
+        {
+          "path": "inspector-anonymous-JSON-a-151ab-ownload-and-shared-reimport/inspector.png",
+          "sha256": "a8557bef0997ee57388704bedf3e79fcc1576db16b9bf9a3ac84aeeb0ee247fa",
+          "bytes": 169331
+        },
+        {
+          "path": "inspector-editing-all-Insp-15273-fline-undo-export-at-1440px/inspector-later-slide.png",
+          "sha256": "714c714c9efdbe2af4835525de74b0b9390324b3af22a5f108083dc742eadfaa",
+          "bytes": 197066
+        },
+        {
+          "path": "inspector-editing-all-Insp-a78d3-ffline-undo-export-at-540px/inspector-later-slide.png",
+          "sha256": "8a8a7e404114ae4054c7533a69a9f8f67eefe020ed6c23d60bf1271e4cc7af0b",
+          "bytes": 65262
+        },
+        {
+          "path": "inspector-recovery-font-su-beb5b--Inspector-canvas-is-active/inspector-font-notes.png",
+          "sha256": "9c79dbc986e09db8c00ee38a92bde5f40cfdf96bf1c86822fa1e4ecc56546043",
+          "bytes": 172160
+        },
+        {
+          "path": "inspector-recovery-schema--76507-ers-after-source-correction/inspector-render-recovered.png",
+          "sha256": "c6507f6f0b59da435b693fc14ac0c73143b85c18d3021df4befe9ef9a7e37909",
+          "bytes": 175887
+        },
+        {
+          "path": "inspector-recovery-schema--76507-ers-after-source-correction/inspector-strict-overflow.png",
+          "sha256": "3ea4d0b854cb423fd4c8c1e4f31ed6df804e73025577f9a35980bc108759bab2",
+          "bytes": 285302
+        },
+        {
+          "path": "inspector-share-publicatio-2236b-etain-the-accepted-document/accepted-url.txt",
+          "sha256": "1112e3b357aa7747f32cb19c5047bb54ff5b40df9233e0f8420be87babff4dd7",
+          "bytes": 247
+        },
+        {
+          "path": "inspector-share-publicatio-2236b-etain-the-accepted-document/edited-refreshed-publications.json",
+          "sha256": "26bffa181c0fda25a268d4618d4c60f8324e5007a4a869383e33465e9adbf703",
+          "bytes": 944
+        },
+        {
+          "path": "inspector-share-publicatio-2236b-etain-the-accepted-document/hash-navigation-publications.json",
+          "sha256": "55a0dbb24c2b119c96a87a57faff2a736ce9f6d0352abea961dc99a426f69ad1",
+          "bytes": 540
+        },
+        {
+          "path": "inspector-share-publicatio-2236b-etain-the-accepted-document/hydrated-publications.json",
+          "sha256": "0e14365fe4a2a9252a3c672f631358361d09cd856cdada664d0dd44cb5679f9d",
+          "bytes": 630
+        },
+        {
+          "path": "inspector-share-publicatio-2236b-etain-the-accepted-document/refreshed-publications.json",
+          "sha256": "3b3486f391aa940cfe098fc456d3368a08d280a8bb1fe03611b172b0fe71c36d",
+          "bytes": 809
+        },
+        {
+          "path": "inspector-share-publicatio-2236b-etain-the-accepted-document/share-refresh-preserved.png",
+          "sha256": "ccb73a348044e8bd42e027a766ed34503353053c883970c4ec2017d04ea20e19",
+          "bytes": 175441
+        },
+        {
+          "path": "inspector-share-publicatio-2236b-etain-the-accepted-document/source-edited-publications.json",
+          "sha256": "bd05aba4eafceafe5c37cb49bd6c5afef3c3f92378f98c5bf026459e395bff9b",
+          "bytes": 630
+        },
+        {
+          "path": "inspector-share-publicatio-33578-etain-the-accepted-document/accepted-url.txt",
+          "sha256": "1112e3b357aa7747f32cb19c5047bb54ff5b40df9233e0f8420be87babff4dd7",
+          "bytes": 247
+        },
+        {
+          "path": "inspector-share-publicatio-33578-etain-the-accepted-document/edited-refreshed-publications.json",
+          "sha256": "26bffa181c0fda25a268d4618d4c60f8324e5007a4a869383e33465e9adbf703",
+          "bytes": 944
+        },
+        {
+          "path": "inspector-share-publicatio-33578-etain-the-accepted-document/hash-navigation-publications.json",
+          "sha256": "55a0dbb24c2b119c96a87a57faff2a736ce9f6d0352abea961dc99a426f69ad1",
+          "bytes": 540
+        },
+        {
+          "path": "inspector-share-publicatio-33578-etain-the-accepted-document/hydrated-publications.json",
+          "sha256": "b7c345ad4569a3a340b75dbb6639fb8571ab40d215bbc6f9e7bf55505d83c15e",
+          "bytes": 973
+        },
+        {
+          "path": "inspector-share-publicatio-33578-etain-the-accepted-document/refreshed-publications.json",
+          "sha256": "3b3486f391aa940cfe098fc456d3368a08d280a8bb1fe03611b172b0fe71c36d",
+          "bytes": 809
+        },
+        {
+          "path": "inspector-share-publicatio-33578-etain-the-accepted-document/share-refresh-preserved.png",
+          "sha256": "ccb73a348044e8bd42e027a766ed34503353053c883970c4ec2017d04ea20e19",
+          "bytes": 175441
+        },
+        {
+          "path": "inspector-share-publicatio-33578-etain-the-accepted-document/source-edited-publications.json",
+          "sha256": "bd05aba4eafceafe5c37cb49bd6c5afef3c3f92378f98c5bf026459e395bff9b",
+          "bytes": 630
+        },
+        {
+          "path": "json-paste-formatting-warm-44312-t-Document-remains-undoable/attachments/authored-source-json-26755502c3a6586cfacd34a2e65936d8ca340069.json",
+          "sha256": "f4177cbb0fc6a9ad471fc3ab52f39cb14c7dc62b497ded9d840c9e0dbea21e62",
+          "bytes": 302
+        },
+        {
+          "path": "json-paste-formatting-warm-44312-t-Document-remains-undoable/attachments/copied-source-json-5a6f7ecab7f67288eb0bd4f322675f6fe4e0221a.json",
+          "sha256": "f4177cbb0fc6a9ad471fc3ab52f39cb14c7dc62b497ded9d840c9e0dbea21e62",
+          "bytes": 302
+        },
+        {
+          "path": "json-paste-formatting-warm-44312-t-Document-remains-undoable/attachments/paste-worker-requests-json-b77d34ad5be3212b8d8dfc37f956e28878d176ee.json",
+          "sha256": "54051725e2e06fd8e83369628086d875dcd7b48b1e02b5e5435e00e6021bdfa4",
+          "bytes": 83
+        },
+        {
+          "path": "json-paste-formatting-warm-44312-t-Document-remains-undoable/authored-source.json",
+          "sha256": "f4177cbb0fc6a9ad471fc3ab52f39cb14c7dc62b497ded9d840c9e0dbea21e62",
+          "bytes": 302
+        },
+        {
+          "path": "json-paste-formatting-warm-44312-t-Document-remains-undoable/copied-source.json",
+          "sha256": "f4177cbb0fc6a9ad471fc3ab52f39cb14c7dc62b497ded9d840c9e0dbea21e62",
+          "bytes": 302
+        },
+        {
+          "path": "json-paste-formatting-warm-44312-t-Document-remains-undoable/paste-worker-requests.json",
+          "sha256": "54051725e2e06fd8e83369628086d875dcd7b48b1e02b5e5435e00e6021bdfa4",
+          "bytes": 83
+        },
+        {
+          "path": "source-download-preservati-2c728-nd-through-canvas-undo-redo/edited.opf.json",
+          "sha256": "277350fc50382bead15896aef5fa53a33cd099792df57153d0b9b1b12f1fd08d",
+          "bytes": 326
+        },
+        {
+          "path": "source-download-preservati-2c728-nd-through-canvas-undo-redo/inspector-source-preserved.png",
+          "sha256": "580f6ee20904c722caf1030cf51c31f475eb6916998d462db2b1ecbc65b1eb47",
+          "bytes": 178195
+        },
+        {
+          "path": "source-download-preservati-2c728-nd-through-canvas-undo-redo/original-source.json",
+          "sha256": "2e99a948a29cfb1d643f68d46e6afd913ec2f953d4d329e0faee8a7e3ca4a5ec",
+          "bytes": 325
+        },
+        {
+          "path": "source-download-preservati-2c728-nd-through-canvas-undo-redo/redo.opf.json",
+          "sha256": "277350fc50382bead15896aef5fa53a33cd099792df57153d0b9b1b12f1fd08d",
+          "bytes": 326
+        },
+        {
+          "path": "source-download-preservati-2c728-nd-through-canvas-undo-redo/undo.opf.json",
+          "sha256": "2e99a948a29cfb1d643f68d46e6afd913ec2f953d4d329e0faee8a7e3ca4a5ec",
+          "bytes": 325
+        },
+        {
+          "path": "source-download-preservati-2c728-nd-through-canvas-undo-redo/untouched.opf.json",
+          "sha256": "2e99a948a29cfb1d643f68d46e6afd913ec2f953d4d329e0faee8a7e3ca4a5ec",
+          "bytes": 325
+        },
+        {
+          "path": "source-download-preservati-5105f-download-and-canvas-history/author-source-preserved.png",
+          "sha256": "28b59a7efb0b2103b10728d866f477bbfa478dbdcbf66257658829cf1ac8e162",
+          "bytes": 121494
+        },
+        {
+          "path": "source-download-preservati-5105f-download-and-canvas-history/canceled-and-unchanged.opf.json",
+          "sha256": "2e99a948a29cfb1d643f68d46e6afd913ec2f953d4d329e0faee8a7e3ca4a5ec",
+          "bytes": 325
+        },
+        {
+          "path": "source-download-preservati-5105f-download-and-canvas-history/code-after-edit.opf.json",
+          "sha256": "277350fc50382bead15896aef5fa53a33cd099792df57153d0b9b1b12f1fd08d",
+          "bytes": 326
+        },
+        {
+          "path": "source-download-preservati-5105f-download-and-canvas-history/code-untouched.opf.json",
+          "sha256": "2e99a948a29cfb1d643f68d46e6afd913ec2f953d4d329e0faee8a7e3ca4a5ec",
+          "bytes": 325
+        },
+        {
+          "path": "source-download-preservati-5105f-download-and-canvas-history/edited.opf.json",
+          "sha256": "277350fc50382bead15896aef5fa53a33cd099792df57153d0b9b1b12f1fd08d",
+          "bytes": 326
+        },
+        {
+          "path": "source-download-preservati-5105f-download-and-canvas-history/original-source.json",
+          "sha256": "2e99a948a29cfb1d643f68d46e6afd913ec2f953d4d329e0faee8a7e3ca4a5ec",
+          "bytes": 325
+        },
+        {
+          "path": "source-download-preservati-5105f-download-and-canvas-history/pending-export.opf.json",
+          "sha256": "fef6e27eb0502229556af2721299c078060b2a552a41c4c76e014c98e0c07209",
+          "bytes": 333
+        },
+        {
+          "path": "source-download-preservati-5105f-download-and-canvas-history/pending-redo.opf.json",
+          "sha256": "fef6e27eb0502229556af2721299c078060b2a552a41c4c76e014c98e0c07209",
+          "bytes": 333
+        },
+        {
+          "path": "source-download-preservati-5105f-download-and-canvas-history/pending-undo.opf.json",
+          "sha256": "277350fc50382bead15896aef5fa53a33cd099792df57153d0b9b1b12f1fd08d",
+          "bytes": 326
+        },
+        {
+          "path": "source-download-preservati-5105f-download-and-canvas-history/pending-without-blur.opf.json",
+          "sha256": "10d30faeb9f230b1e9ebe0f8bf20a91e65bc428051de62b6063c56fcada1c0cd",
+          "bytes": 339
+        },
+        {
+          "path": "source-download-preservati-5105f-download-and-canvas-history/preview-untouched.opf.json",
+          "sha256": "2e99a948a29cfb1d643f68d46e6afd913ec2f953d4d329e0faee8a7e3ca4a5ec",
+          "bytes": 325
+        },
+        {
+          "path": "source-download-preservati-5105f-download-and-canvas-history/redo.opf.json",
+          "sha256": "277350fc50382bead15896aef5fa53a33cd099792df57153d0b9b1b12f1fd08d",
+          "bytes": 326
+        },
+        {
+          "path": "source-download-preservati-5105f-download-and-canvas-history/rejected-code-source.opf.json",
+          "sha256": "6998a9087f9827297ccedc02c7f065e94f1bb38925e8046f2ec3da146083e1ad",
+          "bytes": 362
+        },
+        {
+          "path": "source-download-preservati-5105f-download-and-canvas-history/rejected-duplicate-key.opf.json",
+          "sha256": "6998a9087f9827297ccedc02c7f065e94f1bb38925e8046f2ec3da146083e1ad",
+          "bytes": 362
+        },
+        {
+          "path": "source-download-preservati-5105f-download-and-canvas-history/reordered-import-redo.opf.json",
+          "sha256": "73adbc340500a894e4366bc080e49fe1bdeaacc6792cb0487e7442d6ecea652d",
+          "bytes": 147
+        },
+        {
+          "path": "source-download-preservati-5105f-download-and-canvas-history/reordered-import-undo.opf.json",
+          "sha256": "10d30faeb9f230b1e9ebe0f8bf20a91e65bc428051de62b6063c56fcada1c0cd",
+          "bytes": 339
+        },
+        {
+          "path": "source-download-preservati-5105f-download-and-canvas-history/reordered-import.opf.json",
+          "sha256": "73adbc340500a894e4366bc080e49fe1bdeaacc6792cb0487e7442d6ecea652d",
+          "bytes": 147
+        },
+        {
+          "path": "source-download-preservati-5105f-download-and-canvas-history/undo.opf.json",
+          "sha256": "2e99a948a29cfb1d643f68d46e6afd913ec2f953d4d329e0faee8a7e3ca4a5ec",
+          "bytes": 325
+        },
+        {
+          "path": "source-download-preservati-f4120-download-and-canvas-history/author-source-preserved.png",
+          "sha256": "471e91a3123b0b563a4ecf4a663e8546c844ffceb94e56d8fc7db23a096c048a",
+          "bytes": 96303
+        },
+        {
+          "path": "source-download-preservati-f4120-download-and-canvas-history/canceled-and-unchanged.opf.json",
+          "sha256": "c40c5080ca23fb28e12398e7a35d3dac7859e7cc659b32a24133559119722608",
+          "bytes": 332
+        },
+        {
+          "path": "source-download-preservati-f4120-download-and-canvas-history/code-after-edit.opf.json",
+          "sha256": "2a1735f628ea3b06436d3baadbf85ec648280994690033c35c28cbe0a5ddd9f0",
+          "bytes": 333
+        },
+        {
+          "path": "source-download-preservati-f4120-download-and-canvas-history/code-untouched.opf.json",
+          "sha256": "c40c5080ca23fb28e12398e7a35d3dac7859e7cc659b32a24133559119722608",
+          "bytes": 332
+        },
+        {
+          "path": "source-download-preservati-f4120-download-and-canvas-history/edited.opf.json",
+          "sha256": "2a1735f628ea3b06436d3baadbf85ec648280994690033c35c28cbe0a5ddd9f0",
+          "bytes": 333
+        },
+        {
+          "path": "source-download-preservati-f4120-download-and-canvas-history/original-source.json",
+          "sha256": "c40c5080ca23fb28e12398e7a35d3dac7859e7cc659b32a24133559119722608",
+          "bytes": 332
+        },
+        {
+          "path": "source-download-preservati-f4120-download-and-canvas-history/pending-export.opf.json",
+          "sha256": "539230d507f00c2818b0eeba38fd1cb05b4d72e05d6407d36f7657ef600a002d",
+          "bytes": 340
+        },
+        {
+          "path": "source-download-preservati-f4120-download-and-canvas-history/pending-redo.opf.json",
+          "sha256": "539230d507f00c2818b0eeba38fd1cb05b4d72e05d6407d36f7657ef600a002d",
+          "bytes": 340
+        },
+        {
+          "path": "source-download-preservati-f4120-download-and-canvas-history/pending-undo.opf.json",
+          "sha256": "2a1735f628ea3b06436d3baadbf85ec648280994690033c35c28cbe0a5ddd9f0",
+          "bytes": 333
+        },
+        {
+          "path": "source-download-preservati-f4120-download-and-canvas-history/preview-untouched.opf.json",
+          "sha256": "c40c5080ca23fb28e12398e7a35d3dac7859e7cc659b32a24133559119722608",
+          "bytes": 332
+        },
+        {
+          "path": "source-download-preservati-f4120-download-and-canvas-history/redo.opf.json",
+          "sha256": "2a1735f628ea3b06436d3baadbf85ec648280994690033c35c28cbe0a5ddd9f0",
+          "bytes": 333
+        },
+        {
+          "path": "source-download-preservati-f4120-download-and-canvas-history/undo.opf.json",
+          "sha256": "c40c5080ca23fb28e12398e7a35d3dac7859e7cc659b32a24133559119722608",
+          "bytes": 332
+        },
+        {
+          "path": "svg-security-published-SVG-25408-rted-document-strings-inert/attachments/windows-readiness-timings-81c529492d1a66458d9e6b2deab07c8f1aa612d9.json",
+          "sha256": "8c0dfb7051dde5fa01ed7163f3359594fa75ecf72ae216a7b8c3f7e9b1051fcb",
+          "bytes": 66413
+        },
+        {
+          "path": "svg-security-published-SVG-25408-rted-document-strings-inert/windows-readiness-timings.json",
+          "sha256": "8c0dfb7051dde5fa01ed7163f3359594fa75ecf72ae216a7b8c3f7e9b1051fcb",
+          "bytes": 66413
+        }
+      ]
+    },
+    {
+      "artifact_id": 10664905182,
+      "name": "windows-readiness-windows-latest",
+      "size": 6832,
+      "sha256": "4d7804daf6e2a94a9ac74318fa8e970eb0cc903a96300b7fbfb61430f5ee3530",
+      "github_digest_matches": true,
+      "zip_crc": "pass",
+      "safe_member_paths": true,
+      "members": 1,
+      "extracted_to": "extracted/windows-readiness-windows-latest",
+      "files": [
+        {
+          "path": "svg-security-published-SVG-25408-rted-document-strings-inert/windows-readiness-timings.json",
+          "sha256": "8c0dfb7051dde5fa01ed7163f3359594fa75ecf72ae216a7b8c3f7e9b1051fcb",
+          "bytes": 66413
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "observedAt": "2026-09-21T19:39:26.271980+00:00",
+  "head": "57e5e59fddbc94346f142dc12d86a916228bf2ae",
+  "tree": "d9c3aab543c6a886a85c6ec07dd55e5ab22590cd",
+  "sourceVerifiedAgainstGit": 106,
+  "manifestEntries": 92,
+  "bundleFiles": 93,
+  "manifestSha256": "d7ebcd170ee558c7934ebd99fc38c54a7d4bfdc1f12f13f1bbe12850542d3e07",
+  "run": {
+    "conclusion": "failure",
+    "created_at": "2026-09-21T19:32:53Z",
+    "event": "pull_request",
+    "head_sha": "57e5e59fddbc94346f142dc12d86a916228bf2ae",
+    "html_url": "https://github.com/Data-Advantage/pptx-dev/actions/runs/35645493900",
+    "id": 35645493900,
+    "name": "Application compatibility",
+    "run_attempt": 1,
+    "run_started_at": "2026-09-21T19:32:53Z",
+    "status": "completed",
+    "updated_at": "2026-09-21T19:35:17Z"
+  },
+  "jobs": [
+    {
+      "id": 106484826913,
+      "name": "verify (windows-latest)",
+      "conclusion": "failure",
+      "failedSteps": [
+        "Run pnpm typecheck"
+      ],
+      "skippedSteps": [
+        "Build SDK and CLI from the audited workspace",
+        "Run pnpm build",
+        "Verify Playwright image version",
+        "Run pnpm test:e2e",
+        "Post Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020"
+      ]
+    },
+    {
+      "id": 106484827822,
+      "name": "verify (ubuntu-latest)",
+      "conclusion": "failure",
+      "failedSteps": [
+        "Run pnpm typecheck"
+      ],
+      "skippedSteps": [
+        "Build SDK and CLI from the audited workspace",
+        "Run pnpm build",
+        "Verify Playwright image version",
+        "Run pnpm test:e2e",
+        "Preserve Windows readiness timings",
+        "Post Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020"
+      ]
+    }
+  ],
+  "unitTestsPerOS": 692,
+  "standaloneControlsPerOS": 7,
+  "browserTestsExecuted": 0,
+  "artifactCount": 0,
+  "preview": {
+    "id": "dpl_Edr9JQjLjtzXXHTeuvuVjkqaLrPG",
+    "url": "pptx-d91i6mv36-dataadvantage.vercel.app",
+    "state": "ERROR",
+    "readyState": "ERROR",
+    "createdAt": 1790019170264,
+    "buildingAt": 1790019171382,
+    "ready": 1790019217755,
+    "target": null,
+    "meta": {
+      "githubCommitRef": "codex/inspector-share-guard-20260921",
+      "githubCommitSha": "57e5e59fddbc94346f142dc12d86a916228bf2ae",
+      "githubCommitMessage": "Use current Inspector drafts for output and package standalone startup",
+      "githubRepo": "pptx-dev",
+      "githubOrg": "Data-Advantage"
+    },
+    "alias": [
+      "pptx-dev-git-codex-inspector-share-guard-20260921-dataadvantage.vercel.app"
+    ],
+    "errorCode": "module_not_found",
+    "errorMessage": "Command \"pnpm exec convex deploy --cmd 'pnpm run build'\" exited with 1",
+    "errorStep": "buildStep",
+    "scope": "Preview metadata only; no browser acceptance, redeployment or production change."
+  },
+  "automatedReview": "Bugbot neutral, failed to run due to usage/spend limit; no review approval",
+  "artifactWorkflow": "Not triggered/not applicable to changed paths; not a fresh pass",
+  "workspaceBoundary": "Clean exact57 tree/106 staged hashes were verified initially. The supervisor then began archive-name/provenance correction; final verification uses immutable57 Git blobs, not the intentionally modified working files.",
+  "scope": "No reruns, deploy, merge, publication, Office or browser actions. First60c Windows failure remains separate preserved evidence."
+}

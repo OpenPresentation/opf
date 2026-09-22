@@ -55,7 +55,7 @@
       "id": "ask",
       "name": "Call to Action",
       "description": "Close with the single decision you want the audience to make. Frame it as the obvious next move given the shift, the stakes, and the new game. Make it small enough to say yes to today and large enough to start a real engagement.",
-      "layoutHint": "title-left"
+      "layoutHint": "title"
     }
   ]
 }

@@ -1,0 +1,1020 @@
+{
+  "scope": "Current README, non-dated root docs, package READMEs, six skill entrypoints and their Markdown references; lexical audit plus contextual human review, not whole-repository certification.",
+  "repository": "/private/tmp/opf-current-entrypoint-docs-20260921/opf",
+  "commit": "120a770041b3f7d3c04ced1ac87675ed0d18292b",
+  "tree": "f51732b4210e47da0aa54c1374e05709bb11cccb",
+  "workingTreeClean": true,
+  "scriptSha256": "2a7eaa8c0997a1133a80498b97e6df2dabbed9087fe9f53fde8a05314c42c51f",
+  "matching": "Python re.search, case-sensitive; all-version-context is the final broad version cross-check.",
+  "patterns": {
+    "obsolete-version-candidates": "0\\.(10\\.1|8\\.1|7\\.1|7\\.0|5\\.0|4\\.0|5\\.1)",
+    "availability-candidates": "unreleased|local preview|release target|pre-release|future (render|edit)|not yet|Still needed",
+    "published-context": "published|public set|Use core|CLI preview|preview packages|candidate packages|pending release|release will|not published",
+    "all-version-context": "0\\.[0-9]+\\.[0-9]+"
+  },
+  "excludedRootDocs": [
+    "docs/evidence-2026-09-08-windows.md",
+    "docs/handoff-2026-09-08.md",
+    "docs/handoff-2026-09-10-wrap-up.md",
+    "docs/handoff-2026-09-15.md",
+    "docs/handoff-2026-09-16.md",
+    "docs/handoff-2026-09-21.md",
+    "docs/handoff-mac-owner-2026-09-10.md",
+    "docs/handoff-windows-native-2026-09-10.md",
+    "docs/handoff.md",
+    "docs/native-content-release-2026-09-09.md",
+    "docs/native-feature-matrix-2026-09-09.md",
+    "docs/next-agent-prompt-2026-09-15.md",
+    "docs/pr-backlog-2026-09-09.md",
+    "docs/security-2026-09-09.md",
+    "docs/status-2026-09-15.md",
+    "docs/status-2026-09-16.md"
+  ],
+  "excludedTrees": [
+    "docs/evidence/**",
+    "docs/plans/**",
+    "docs/releases/**",
+    "docs/migrations/**",
+    "docs/continuation/**"
+  ],
+  "filesSearched": 37,
+  "matchedLines": 121,
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "85de60e99af78a8f45c20cf7140274c7c7ac8f7754ee39dbe701e4542e875e10",
+      "hits": [
+        {
+          "line": 15,
+          "patterns": [
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 17,
+          "patterns": [
+            "published-context"
+          ]
+        },
+        {
+          "line": 45,
+          "patterns": [
+            "published-context",
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 53,
+          "patterns": [
+            "published-context"
+          ]
+        },
+        {
+          "line": 155,
+          "patterns": [
+            "published-context"
+          ]
+        },
+        {
+          "line": 172,
+          "patterns": [
+            "published-context"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "docs/BACKLOG.md",
+      "sha256": "e6ed1b81e0b3259d94cf37805de8ab3169eb52bfc5a123e27895c6c52b929675",
+      "hits": []
+    },
+    {
+      "path": "docs/agent-skills.md",
+      "sha256": "7567abedea935d191d15d94423a6bf7d3eaf8d5698535811ef85c029d8ab42e5",
+      "hits": [
+        {
+          "line": 22,
+          "patterns": [
+            "availability-candidates"
+          ]
+        },
+        {
+          "line": 26,
+          "patterns": [
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 29,
+          "patterns": [
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 32,
+          "patterns": [
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 41,
+          "patterns": [
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 46,
+          "patterns": [
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 47,
+          "patterns": [
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 73,
+          "patterns": [
+            "published-context",
+            "all-version-context"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "docs/catalog-schema-reference.md",
+      "sha256": "f390276fc13df5c0eaf916901194e71d8deeb4736ce5893d8a73ac19efdd0357",
+      "hits": []
+    },
+    {
+      "path": "docs/compatibility-matrix.md",
+      "sha256": "4655b2a490ec08bae60f6e5385e401e957bce36f0ea3ac2b90de7d9df2ed8b08",
+      "hits": [
+        {
+          "line": 18,
+          "patterns": [
+            "published-context",
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 22,
+          "patterns": [
+            "published-context"
+          ]
+        },
+        {
+          "line": 26,
+          "patterns": [
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 27,
+          "patterns": [
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 28,
+          "patterns": [
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 29,
+          "patterns": [
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 30,
+          "patterns": [
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 32,
+          "patterns": [
+            "obsolete-version-candidates",
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 33,
+          "patterns": [
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 34,
+          "patterns": [
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 36,
+          "patterns": [
+            "published-context"
+          ]
+        },
+        {
+          "line": 101,
+          "patterns": [
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 108,
+          "patterns": [
+            "obsolete-version-candidates",
+            "all-version-context"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "docs/content-item-design-overrides.md",
+      "sha256": "e54200155ddcce10faddf2c386b5e4a6bf4a36e0d7675950cc0f55b052cbe85e",
+      "hits": []
+    },
+    {
+      "path": "docs/content-payloads.md",
+      "sha256": "b6856dd5af54565920b5e5413b0f7b02c53f969ea1d6bf5a07560ce7a4e45fe7",
+      "hits": [
+        {
+          "line": 163,
+          "patterns": [
+            "obsolete-version-candidates",
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 176,
+          "patterns": [
+            "obsolete-version-candidates",
+            "availability-candidates",
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 178,
+          "patterns": [
+            "all-version-context"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "docs/data-import.md",
+      "sha256": "f1a619876a79050628b410f3934fbe35feff59e8c493877fabaa602bd2457c59",
+      "hits": [
+        {
+          "line": 23,
+          "patterns": [
+            "published-context",
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 55,
+          "patterns": [
+            "published-context",
+            "all-version-context"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "docs/design-resolution.md",
+      "sha256": "2f09a2e7e984b0257e57385126af404cdced62dbbe3dc964b06f01679aba829e",
+      "hits": []
+    },
+    {
+      "path": "docs/dynamic-composition.md",
+      "sha256": "f3f34968a66ac0b635939a216ad299dbdcc7aa6ecaed9bfbc90086095000b2df",
+      "hits": [
+        {
+          "line": 5,
+          "patterns": [
+            "published-context",
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 29,
+          "patterns": [
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 37,
+          "patterns": [
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 43,
+          "patterns": [
+            "published-context",
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 45,
+          "patterns": [
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 79,
+          "patterns": [
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 81,
+          "patterns": [
+            "obsolete-version-candidates",
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 93,
+          "patterns": [
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 108,
+          "patterns": [
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 110,
+          "patterns": [
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 127,
+          "patterns": [
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 131,
+          "patterns": [
+            "obsolete-version-candidates",
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 146,
+          "patterns": [
+            "published-context"
+          ]
+        },
+        {
+          "line": 148,
+          "patterns": [
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 160,
+          "patterns": [
+            "published-context"
+          ]
+        },
+        {
+          "line": 162,
+          "patterns": [
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 164,
+          "patterns": [
+            "obsolete-version-candidates",
+            "published-context",
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 174,
+          "patterns": [
+            "published-context"
+          ]
+        },
+        {
+          "line": 182,
+          "patterns": [
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 184,
+          "patterns": [
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 192,
+          "patterns": [
+            "obsolete-version-candidates",
+            "published-context",
+            "all-version-context"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "docs/ecosystem-development.md",
+      "sha256": "93c10c3216ab3b03ab6f563c8aea825ca33e94c8d2579c47d98ec127bdc59a4c",
+      "hits": [
+        {
+          "line": 3,
+          "patterns": [
+            "published-context"
+          ]
+        },
+        {
+          "line": 16,
+          "patterns": [
+            "obsolete-version-candidates",
+            "published-context",
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 22,
+          "patterns": [
+            "published-context",
+            "all-version-context"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "docs/examples.md",
+      "sha256": "0f7e8af305b55033850e1a5089e57778cf3f612d5c06da80269ada955aa4403f",
+      "hits": [
+        {
+          "line": 7,
+          "patterns": [
+            "published-context"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "docs/font-fidelity.md",
+      "sha256": "f2685b95fa556da23d67e87c0504d5901fd077f81373dcb0e7efd5d523e8360c",
+      "hits": [
+        {
+          "line": 9,
+          "patterns": [
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 11,
+          "patterns": [
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 13,
+          "patterns": [
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 15,
+          "patterns": [
+            "published-context",
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 89,
+          "patterns": [
+            "availability-candidates"
+          ]
+        },
+        {
+          "line": 95,
+          "patterns": [
+            "all-version-context"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "docs/format-card.md",
+      "sha256": "8f581ebb29bab2e7340e169c88e5b1a0688d97716af0439e4aed6701337df326",
+      "hits": []
+    },
+    {
+      "path": "docs/how-opf-works.md",
+      "sha256": "320ec8ac7c8082f882bafdf9b5f771dade43db5a53102b1e8f775ba9fe2c5b20",
+      "hits": []
+    },
+    {
+      "path": "docs/lint.md",
+      "sha256": "4d37c17415818f9500bd804258c0182abc0d2d8f23d2f961faaa15026a9bb422",
+      "hits": [
+        {
+          "line": 3,
+          "patterns": [
+            "published-context",
+            "all-version-context"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "docs/live-editor.md",
+      "sha256": "02fa7648fc7fe5ef0fae0b8d703555f6c967d6433befba2d218912ba74618db5",
+      "hits": [
+        {
+          "line": 3,
+          "patterns": [
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 5,
+          "patterns": [
+            "published-context"
+          ]
+        },
+        {
+          "line": 7,
+          "patterns": [
+            "published-context"
+          ]
+        },
+        {
+          "line": 9,
+          "patterns": [
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 12,
+          "patterns": [
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 15,
+          "patterns": [
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 17,
+          "patterns": [
+            "availability-candidates",
+            "published-context"
+          ]
+        },
+        {
+          "line": 30,
+          "patterns": [
+            "published-context"
+          ]
+        },
+        {
+          "line": 109,
+          "patterns": [
+            "availability-candidates"
+          ]
+        },
+        {
+          "line": 203,
+          "patterns": [
+            "published-context",
+            "all-version-context"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "docs/llm-authoring.md",
+      "sha256": "6dea8d2953f6a596cc722d41e93795a372ae5490454358e98fbe4a0de7f9435d",
+      "hits": []
+    },
+    {
+      "path": "docs/open-ecosystem.md",
+      "sha256": "171829055862f76307c4af717e399ab8261464c5b26525a7acb35d1eabfd5854",
+      "hits": [
+        {
+          "line": 14,
+          "patterns": [
+            "published-context"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "docs/quickstart.md",
+      "sha256": "ec7d7392e829ab1d62f1ffa0226da5927ba73706c72de94d896ea29187992b74",
+      "hits": [
+        {
+          "line": 3,
+          "patterns": [
+            "published-context"
+          ]
+        },
+        {
+          "line": 14,
+          "patterns": [
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 15,
+          "patterns": [
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 20,
+          "patterns": [
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 21,
+          "patterns": [
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 22,
+          "patterns": [
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 23,
+          "patterns": [
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 24,
+          "patterns": [
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 120,
+          "patterns": [
+            "availability-candidates"
+          ]
+        },
+        {
+          "line": 143,
+          "patterns": [
+            "published-context"
+          ]
+        },
+        {
+          "line": 158,
+          "patterns": [
+            "published-context"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "docs/release-process.md",
+      "sha256": "6310d736a4ad72f5fcfd84d51b26ba2e0d2bc2c28208a8eefd4786de65bd4b52",
+      "hits": [
+        {
+          "line": 40,
+          "patterns": [
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 43,
+          "patterns": [
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 44,
+          "patterns": [
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 57,
+          "patterns": [
+            "published-context"
+          ]
+        },
+        {
+          "line": 143,
+          "patterns": [
+            "published-context"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "docs/rich-text.md",
+      "sha256": "eb24e71dfbc108bed650835b73bce0f200c804b8ae6175acbcd40356d423e98d",
+      "hits": [
+        {
+          "line": 41,
+          "patterns": [
+            "published-context",
+            "all-version-context"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "docs/schema-reference.md",
+      "sha256": "b93c76917d678606ee880ce098a77b958af8f5a75b6be07d62032959208cfa0b",
+      "hits": []
+    },
+    {
+      "path": "docs/table-text-colors.md",
+      "sha256": "f61928498912054a66d73c4b5b83045fd1bc8a3b3bc1a35b3daa1dd52264c745",
+      "hits": [
+        {
+          "line": 3,
+          "patterns": [
+            "published-context",
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 9,
+          "patterns": [
+            "all-version-context"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "packages/cli/README.md",
+      "sha256": "816f04fddea7c14f7ad0dd9640ffb136258cb2cd46ab0adf35d416a87542a58d",
+      "hits": [
+        {
+          "line": 9,
+          "patterns": [
+            "published-context"
+          ]
+        },
+        {
+          "line": 16,
+          "patterns": [
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 18,
+          "patterns": [
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 28,
+          "patterns": [
+            "obsolete-version-candidates",
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 136,
+          "patterns": [
+            "all-version-context"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "packages/javascript/README.md",
+      "sha256": "a4bbd391f85fa48d4b78c6b3b29db876ddb7d392ea94a91e42d2031785b181d0",
+      "hits": [
+        {
+          "line": 7,
+          "patterns": [
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 25,
+          "patterns": [
+            "published-context",
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 72,
+          "patterns": [
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 74,
+          "patterns": [
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 186,
+          "patterns": [
+            "published-context"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "skills/opf-author/SKILL.md",
+      "sha256": "7abfcf9123c5e1daee085051438033b01326a9ce121882f3b3d7b3913e355e82",
+      "hits": [
+        {
+          "line": 13,
+          "patterns": [
+            "published-context"
+          ]
+        },
+        {
+          "line": 19,
+          "patterns": [
+            "published-context",
+            "all-version-context"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "skills/opf-author/references/content.md",
+      "sha256": "672e86e9335f02b5d89170e69aa9fde7e4d1c0d0ba6386823d8dc2405160d5cb",
+      "hits": []
+    },
+    {
+      "path": "skills/opf-edit/SKILL.md",
+      "sha256": "1cc3df58ebf7653e5f5635a2218cfa0be5ac9177503b15e1396901b774716ebe",
+      "hits": [
+        {
+          "line": 13,
+          "patterns": [
+            "all-version-context"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "skills/opf-edit/references/editor.md",
+      "sha256": "86e9aa418b5d46399cb2dff4d520894faad51b8ed1f7745a0c628e715d8cc5f5",
+      "hits": [
+        {
+          "line": 3,
+          "patterns": [
+            "published-context",
+            "all-version-context"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "skills/opf-export/SKILL.md",
+      "sha256": "cc03aed7f4bee0915469e8159abf0b7016f9f444b9bf67f6e246f63a8cd4adfc",
+      "hits": [
+        {
+          "line": 13,
+          "patterns": [
+            "published-context"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "skills/opf-export/references/rendering.md",
+      "sha256": "8c0c10ca6196f2c9b72fded2cf11feaf1c769d70cf88ae16fd996119bce0a848",
+      "hits": [
+        {
+          "line": 5,
+          "patterns": [
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 6,
+          "patterns": [
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 19,
+          "patterns": [
+            "obsolete-version-candidates",
+            "all-version-context"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "skills/opf-inspect/SKILL.md",
+      "sha256": "a132b44929c2438564246984ff23e4ee184aaa83bce92cccab2a484e69ee1660",
+      "hits": [
+        {
+          "line": 27,
+          "patterns": [
+            "published-context"
+          ]
+        },
+        {
+          "line": 31,
+          "patterns": [
+            "obsolete-version-candidates",
+            "all-version-context"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "skills/opf-layout/SKILL.md",
+      "sha256": "a7742b47150b7f2d6e61d2481239ee2cfd76f5ddf430480e871ddb33a42bd72f",
+      "hits": []
+    },
+    {
+      "path": "skills/opf-layout/references/geometry.md",
+      "sha256": "578583f50cee92e1f3add6b77272ff7dd824b7a677612ea3f4a03ada5657b72f",
+      "hits": [
+        {
+          "line": 42,
+          "patterns": [
+            "obsolete-version-candidates",
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 57,
+          "patterns": [
+            "obsolete-version-candidates",
+            "published-context",
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 61,
+          "patterns": [
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 63,
+          "patterns": [
+            "obsolete-version-candidates",
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 68,
+          "patterns": [
+            "all-version-context"
+          ]
+        },
+        {
+          "line": 70,
+          "patterns": [
+            "published-context",
+            "all-version-context"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "skills/opf-presets/SKILL.md",
+      "sha256": "d789397b3e3dca8f2e355622d450eec5a4a6f09e3f691fc7ccafc4875dba96c8",
+      "hits": [
+        {
+          "line": 21,
+          "patterns": [
+            "published-context"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "skills/opf-presets/references/design.md",
+      "sha256": "f7d800fcae3f7d8a0ab2a87114fb0192d085655ad8a57752d2de6b356da55853",
+      "hits": []
+    }
+  ],
+  "humanDisposition": "See audit-scope.md for historical-introduction/checkpoint, present-day boundary, and actual-limitation decisions. Search matches are candidates, not automatic stale-copy findings."
+}

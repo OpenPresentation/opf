@@ -1,0 +1,8 @@
+{
+  "reviewer": "root",
+  "reviewedAt": "2026-09-21T21:24:01.797025+00:00",
+  "path": "final-viewport.jpeg",
+  "sha256": "954991fe6d641287d49896357fac264788a22c6b1259850a382046afb5951d9f",
+  "observation": "The final retained screencast shows the Loading Author screen, not a completed editor. The later error-context DOM snapshot separately includes Author and its current authored title/metadata.",
+  "limits": "No source-equality/clipboard/no-post acceptance is inferred from either artifact; later test assertions were not reached."
+}

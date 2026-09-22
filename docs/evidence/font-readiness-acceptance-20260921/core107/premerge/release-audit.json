@@ -1,0 +1,147 @@
+{
+  "recordedAt": "2026-09-21T20:37:44.665006+00:00",
+  "head": "92c1009761a83b95601b93eb8455e9351980b8a7",
+  "tree": "ffdc678beadf0808bc717d67e7fc0a9ec4790127",
+  "base": "3847f712ccb2379952bcc8ab7c9fdbaedfd0a4ce",
+  "pr": "https://github.com/OpenPresentation/opf/pull/107",
+  "gate": "latest exact-head OPF and coordinated workflows succeeded; earlier automatic cancellations retained",
+  "latestSuccessfulRuns": [
+    {
+      "role": "later automatic run, not a rerun",
+      "workflow": "OPF CI",
+      "id": 35650769661,
+      "attempt": 1,
+      "event": "pull_request",
+      "head": "92c1009761a83b95601b93eb8455e9351980b8a7",
+      "status": "completed",
+      "conclusion": "success",
+      "createdAt": "2026-09-21T20:23:36Z",
+      "completedAt": "2026-09-21T20:26:47Z",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/35650769661",
+      "node": "24.20.0",
+      "jobs": [
+        {
+          "id": 106502352546,
+          "name": "Verify OPF packages",
+          "conclusion": "success",
+          "url": "https://github.com/OpenPresentation/opf/actions/runs/35650769661/job/106502352546",
+          "startedAt": "2026-09-21T20:23:39Z",
+          "completedAt": "2026-09-21T20:26:47Z"
+        }
+      ]
+    },
+    {
+      "role": "later automatic run, not a rerun",
+      "workflow": "Coordinated public packages",
+      "id": 35650769719,
+      "attempt": 1,
+      "event": "pull_request",
+      "head": "92c1009761a83b95601b93eb8455e9351980b8a7",
+      "status": "completed",
+      "conclusion": "success",
+      "createdAt": "2026-09-21T20:23:36Z",
+      "completedAt": "2026-09-21T20:34:20Z",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/35650769719",
+      "node": "24.20.0",
+      "jobs": [
+        {
+          "id": 106502352789,
+          "name": "packages",
+          "conclusion": "success",
+          "url": "https://github.com/OpenPresentation/opf/actions/runs/35650769719/job/106502352789",
+          "startedAt": "2026-09-21T20:23:40Z",
+          "completedAt": "2026-09-21T20:34:19Z"
+        }
+      ]
+    }
+  ],
+  "earlierAutomaticRuns": [
+    {
+      "id": 35650767380,
+      "workflow": "Coordinated public packages",
+      "event": "pull_request",
+      "headSha": "92c1009761a83b95601b93eb8455e9351980b8a7",
+      "headBranch": "codex/inspector-current-actions-handoff-20260921",
+      "runAttempt": 1,
+      "statusAtObservation": "completed",
+      "conclusionAtObservation": "cancelled",
+      "createdAt": "2026-09-21T20:23:34Z",
+      "updatedAt": "2026-09-21T20:23:37Z",
+      "actor": "michaeljgrimm",
+      "triggeringActor": "michaeljgrimm"
+    },
+    {
+      "id": 35650767479,
+      "workflow": "OPF CI",
+      "event": "pull_request",
+      "headSha": "92c1009761a83b95601b93eb8455e9351980b8a7",
+      "headBranch": "codex/inspector-current-actions-handoff-20260921",
+      "runAttempt": 1,
+      "statusAtObservation": "completed",
+      "conclusionAtObservation": "cancelled",
+      "createdAt": "2026-09-21T20:23:34Z",
+      "updatedAt": "2026-09-21T20:23:37Z",
+      "actor": "michaeljgrimm",
+      "triggeringActor": "michaeljgrimm"
+    }
+  ],
+  "cancellationReason": {
+    "observedAt": "2026-09-21T20:31:49.019142+00:00",
+    "cancellationReasonEstablished": true,
+    "reason": "A higher-priority waiting request exists in the same workflow/ref concurrency group.",
+    "messages": {
+      "opf": [
+        "Canceling since a higher priority waiting request for OPF CI-refs/pull/107/merge exists"
+      ],
+      "coordinated": [
+        "Canceling since a higher priority waiting request for ecosystem-refs/pull/107/merge exists"
+      ]
+    },
+    "cancellationActorEstablished": false,
+    "scope": "The annotations establish queue supersession reason, not a named cancellation actor. Canceled jobs had zero steps. Later same-head runs are separate automatic pull_request runs, each attempt1, not reruns."
+  },
+  "sourceAudit": {
+    "checkedAt": "2026-09-21T20:24:41.032093+00:00",
+    "head": "92c1009761a83b95601b93eb8455e9351980b8a7",
+    "tree": "ffdc678beadf0808bc717d67e7fc0a9ec4790127",
+    "base": "3847f712ccb2379952bcc8ab7c9fdbaedfd0a4ce",
+    "parents": [
+      "e565c063476f906bf87105c07f078ed775a151f8",
+      "3847f712ccb2379952bcc8ab7c9fdbaedfd0a4ce"
+    ],
+    "clean": true,
+    "committedPrDeltaBlobsVerified": 87,
+    "manifestEntries": 84,
+    "manifestSha256": "af6d9f8a0daddbf268f91b6a679bee42e314f5571ba3d112b12141e42f87d118",
+    "exactProvenanceCopies": 80,
+    "acceptedNativeEvidenceFilesUnchanged": 163,
+    "acceptedRoadmapUnchanged": true,
+    "originalE565NoWorkflowObservation": {
+      "path": "../ci/runs-initial.json",
+      "sha256": "a2790a384d7d281e7395679000c35d27768d89dbd7052f725b8f4688beb59915",
+      "totalCount": 0
+    }
+  },
+  "artifact": {
+    "artifactId": 10661999026,
+    "name": "installed-browser-node24",
+    "runId": 35650769719,
+    "head": "92c1009761a83b95601b93eb8455e9351980b8a7",
+    "archive": "installed-browser-node24.zip",
+    "bytes": 1466810,
+    "sha256": "f239c95690207709954dcfe9c1c6724ac3958a4882a1294a81f19bb683185d03",
+    "matchesGitHubDigest": true,
+    "zipCrcPassed": true,
+    "safeRelativeMemberNames": true,
+    "members": 378,
+    "jsonMembersParsed": 33,
+    "scope": "Archive and JSON integrity only. Existing CI assertions establish their own bounded results; no new visual, native Office or canonical-site review is implied. Archive remains intact and was not extracted."
+  },
+  "boundaries": [
+    "87-file documentation/evidence delta only; accepted native163 files and roadmap byte-identical.",
+    "Both successful jobs are attempt1 of separate later automatic runs, not the first run per workflow and not manual reruns.",
+    "Installed-package/browser CI is distinct from native Office/font fidelity and public-site acceptance.",
+    "App54 release acceptance is not established by this core checkpoint.",
+    "No source changes, workflow reruns, merges, pushes, deployments or Office actions occurred during this audit."
+  ]
+}

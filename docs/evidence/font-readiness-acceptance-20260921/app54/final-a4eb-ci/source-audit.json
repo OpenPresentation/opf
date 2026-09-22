@@ -1,0 +1,19 @@
+{
+  "checkedAt": "2026-09-21T21:04:44.420755+00:00",
+  "head": "a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb",
+  "tree": "031d893855a540fd2a4d2ec2162605817b8dde16",
+  "parent": "4338e57b951c469d5c5f239b78a303fbad3c745e",
+  "clean": true,
+  "baseMaster": "e40c287b64fcbcfb85fb4a8a50641aea8e3e54a8",
+  "changedGitBlobsVerified": 262,
+  "evidenceFiles": 260,
+  "manifestEntries": 259,
+  "manifestSha256": "0f439c1463330385d8a241b38998743892ff94101e6304c05a7e648f15041d13",
+  "testedRegularGitAndDiskInputsVerified": 702,
+  "testedSymlinkGitAndDiskTargetsVerified": 33,
+  "commitReceiptSha256": "15b35cdadbfc55c860f51a05bdda228f4a23e46f4f7c8b202bfdce0fdbedf841",
+  "stagedReceiptSha256": "f52b37c315b524b2c41eb2d002146fe4f805264a2a278a2b8140c25abd4450ad",
+  "testedSourceReceiptSha256": "ebad5aa08a2f1719f4c9dfc636c50d61f795b21b1f8f33ea26e5c8ea9b4f7b1c",
+  "archiveExecutableTypeScript": [],
+  "scope": "Source/evidence identity audit only; no test execution or acceptance substitution. Original4338 Windows38/39 failure remains separate."
+}

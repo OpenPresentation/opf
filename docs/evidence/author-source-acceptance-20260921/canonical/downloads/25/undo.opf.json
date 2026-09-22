@@ -1,0 +1,7 @@
+{
+	"name" : "Keep\u0020escapes",
+	"extensions": {"human": {"x": 1e2, "literal": "a\/b"}},
+	"design": {"fontScheme":"roboto"},
+	"slides" : [ { "id":"first", "title" : "A\u0020title", "text" : [{"text":"rich  text", "bold":true, "color":"accent2"}], "notes":"keep\n\t" },
+	  {"id":"second","title":"Second", "text":"body"} ]
+}

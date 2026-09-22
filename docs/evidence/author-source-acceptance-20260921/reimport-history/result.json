@@ -1,0 +1,81 @@
+{
+  "stringify": {
+    "afterImport": {
+      "rawKeys": [
+        "design",
+        "slides",
+        "$schema",
+        "name",
+        "author"
+      ],
+      "editorKeys": [
+        "$schema",
+        "name",
+        "author",
+        "design",
+        "slides"
+      ],
+      "semanticEqual": true,
+      "serializedEqual": false,
+      "undoDepth": 1
+    },
+    "afterSyncDepth": 2,
+    "events": [
+      {
+        "type": "patch",
+        "source": "file-import",
+        "undoDepth": 1
+      },
+      {
+        "type": "patch",
+        "source": "source-buffer",
+        "undoDepth": 2
+      },
+      {
+        "type": "undo",
+        "source": null,
+        "undoDepth": 1
+      }
+    ],
+    "oneUndoRestoresOriginal": false,
+    "oneUndoRestoresExactSource": false,
+    "oneUndoStillImported": true
+  },
+  "semantic": {
+    "afterImport": {
+      "rawKeys": [
+        "design",
+        "slides",
+        "$schema",
+        "name",
+        "author"
+      ],
+      "editorKeys": [
+        "$schema",
+        "name",
+        "author",
+        "design",
+        "slides"
+      ],
+      "semanticEqual": true,
+      "serializedEqual": false,
+      "undoDepth": 1
+    },
+    "afterSyncDepth": 1,
+    "events": [
+      {
+        "type": "patch",
+        "source": "file-import",
+        "undoDepth": 1
+      },
+      {
+        "type": "undo",
+        "source": null,
+        "undoDepth": 0
+      }
+    ],
+    "oneUndoRestoresOriginal": true,
+    "oneUndoRestoresExactSource": true,
+    "oneUndoStillImported": false
+  }
+}

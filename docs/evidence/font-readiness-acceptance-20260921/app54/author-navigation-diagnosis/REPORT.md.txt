@@ -1,0 +1,25 @@
+# Original Windows Open in Author failure: bounded trace observations
+
+App54 head `a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb` remains failed in run35654753237 attempt1: Linux39/39, Windows38/39. This diagnosis inspects the original failed Windows artifact only. No rerun, product change or acceptance is implied.
+
+The source trace is `ci/extracted/browser-failures-windows-latest/inspector-actions-Inspecto-ddffb-urrent-draft-before-handoff/trace.zip` in the parent evidence directory: 6,944,325bytes, SHA256 `c7589c634e5177b393d3697a4d9c9bb48b4809d958644973267a453c1812883a`, 95ZIP members, CRC check passed. The parent CI audit retains the original downloadable artifact, digest verification and extracted files.
+
+## Recorded observations
+
+- The sole failed test was `Inspector Open in Author commits the current draft before handoff`. The URL expectation requested5000ms, logged `waiting for navigation to finish...`, and its recorded call interval was139962.071–148098.288ms (8136.217ms). The URL payload, current-source equality, clipboard, no-POST and page-error assertions that follow were not reached.
+- The Author document returned HTTP200 in262.687ms: wait234.263ms plus receive28.424ms. Its HAR start was2026-09-21T21:08:54.609Z.
+- The script `/_next/static/chunks/26gjk35c76d3p.js` returned HTTP200 with HAR total8061.943ms: wait8039.856ms plus receive22.087ms. HAR start was21:08:54.939Z; response Date was21:09:02GMT. Its ETag size token `5d2` corresponds to1490bytes; the recorded compressed body size is766bytes. The script body itself is not captured, and the same chunk filename is absent from the local macOS build. No inspected-body identity claim is made.
+- Among131 retained resources there are no recorded HTTP error statuses. Five resources are incomplete: four RSC prefetches and one script. Incompletion does not establish permanent failure.
+- Root visually reviewed the final retained screencast: it shows **Loading Author…**, not a completed editor. The later error-context DOM snapshot separately contains the Author UI, current draft title `Author commits this draft`, and authored metadata/rich text. That later snapshot does not substitute for the unexecuted assertions.
+
+## Limits and disposition
+
+Some resource `_monotonicTime` values disagree materially with HAR wall-time ordering. Both are preserved in the JSON extracts; they must not be combined into a single proven wire timeline. The empty string in the failed expectation does not prove that the actual page URL was empty: installed Playwright source shows pending-document navigation prechecks before this RegExp URL comparison.
+
+These observations establish delayed readiness in this run. They do not identify a server, runner or network root cause, demonstrate permanent data loss, or establish acceptable navigation latency. The existing full-document product navigation is unchanged.
+
+A separate prospective harness-policy review proposes registering `page.waitForURL(..., { waitUntil: "load" })` before the real action, matching ordinary `page.goto` navigation handling within the unchanged45-second total test budget. Every original assertion remains, with its existing content assertion budget. This deliberately changes the incidental five-second navigation deadline; it does not turn the original failed head into a pass. Fresh source-bound local and Linux/Windows acceptance is required before release.
+
+## Evidence
+
+The accompanying files preserve the extracted event/resource facts, document and delayed-script response metadata, later DOM excerpt, final viewport and root visual-review receipt. `manifest.json` hashes these derived files and this report. The original trace remains in the parent CI audit; this directory is a bounded diagnostic extract, not a replacement for it.

@@ -1,0 +1,14 @@
+{
+  "case": "tests/e2e/svg-security.spec.ts:51",
+  "failure": "Test timeout of 45000ms exceeded",
+  "assertionSubstepInJobLog": null,
+  "browserPassed": 30,
+  "browserTotal": 31,
+  "tracePath": "/private/tmp/opf-inspector-share-guard-20260921/ci/windows-failure/svg-security-published-SVG-25408-rted-document-strings-inert/trace.zip",
+  "traceSha256": "cb6c6df103e390bb5c9511aba9b4a9cd9c3ff7b59872f6ff1646e12779b2134b",
+  "traceCrcPass": true,
+  "errorContextPath": "/private/tmp/opf-inspector-share-guard-20260921/ci/windows-failure/svg-security-published-SVG-25408-rted-document-strings-inert/error-context.md",
+  "errorContextSha256": "669c9d26e636e60ef5ce881afd924cf3df304ee0fc541c48c77a36126b15ba5e",
+  "diagnosticOutcomeBeforeCollection": "timedOut",
+  "diagnosis": "Pending independent read-only trace/source review; late trace assertion events do not overwrite the runner timeout."
+}

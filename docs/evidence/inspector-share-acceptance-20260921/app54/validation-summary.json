@@ -1,0 +1,24 @@
+{
+  "sourceFilesUnchanged": 22,
+  "buildId": "MF1HO5LFdi8Y1hNVDCGF2",
+  "fullBrowser": {
+    "startTime": "2026-09-21T18:12:15.784Z",
+    "duration": 97035.74399999999,
+    "expected": 31,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "unit": {
+    "passed": 659,
+    "files": 67
+  },
+  "focusedBrowser": {
+    "passed": 3,
+    "total": 3,
+    "retries": 0
+  },
+  "sourceCommit": "e40c287b64fcbcfb85fb4a8a50641aea8e3e54a8",
+  "uncommittedCandidate": true,
+  "node": "v24.21.0"
+}

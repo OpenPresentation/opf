@@ -1,0 +1,26 @@
+{
+  "capturedAt": "2026-09-21T17:45:28.856873+00:00",
+  "head": "b33dc18e8c35803386feb80e7822f240a9671243",
+  "tree": "64a0dbd702f43c87206c8a9fe16d06fe3ac68800",
+  "clean": true,
+  "sourceMatchesBefore": {
+    "package.json": true,
+    "pnpm-lock.yaml": true,
+    "playwright.config.ts": true,
+    "tests/e2e/json-paste-formatting.spec.ts": true,
+    "tests/e2e/inspector-recovery.spec.ts": true,
+    "tests/e2e/toolkit.spec.ts": true,
+    "tests/e2e/monaco.spec.ts": true,
+    "tests/e2e/author-json-options.spec.ts": true,
+    "tests/e2e/author.spec.ts": true,
+    "tests/e2e/yaml.spec.ts": true,
+    "tests/e2e/completion-keyboard.spec.ts": true,
+    "tests/e2e/source-download-preservation.spec.ts": true,
+    "tests/e2e/completion-preservation.spec.ts": true,
+    "tests/e2e/svg-security.spec.ts": true,
+    "tests/e2e/inspector.spec.ts": true,
+    "tests/e2e/inspector-editing.spec.ts": true,
+    "tests/e2e/helpers/clipboard.ts": true,
+    "tests/e2e/helpers/readiness-diagnostics.ts": true
+  }
+}

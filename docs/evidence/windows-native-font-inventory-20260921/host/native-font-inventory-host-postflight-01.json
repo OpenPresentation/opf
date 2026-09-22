@@ -1,0 +1,9 @@
+{
+  "observedAtUtc": "2026-09-21T21:43:11.8688378Z",
+  "method": "Supported @oai/sky list_windows/get_window_state; no UI input or COM",
+  "windowId": 135208,
+  "observation": "Post-attempt empty gray PowerPoint workspace; no modal or recovery prompt visible.",
+  "workspaceScreenshotPersisted": false,
+  "nativeRetry": false,
+  "embeddingAttempted": false
+}

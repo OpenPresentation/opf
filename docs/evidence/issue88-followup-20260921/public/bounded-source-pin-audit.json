@@ -1,0 +1,52 @@
+{
+  "capturedAt": "2026-09-21T13:31:28.866008+00:00",
+  "scope": "Tracked app/components/lib textual source. Historical docs/evidence and lockfiles excluded; unrelated component/library versions are not OPF train findings. Current linked source guides examined separately.",
+  "repos": [
+    {
+      "site": "site",
+      "commit": "ffe3fca43b0baf1476a0dce61d0d5d545a8c00bc",
+      "trackedCurrentSourcePathsExamined": 77,
+      "matches": [
+        {
+          "path": "app/docs/page.tsx",
+          "line": 120,
+          "text": "            Once <code>{source.packageName}</code> is published, install the canonical TypeScript types, schemas, and"
+        }
+      ]
+    },
+    {
+      "site": "gallery",
+      "commit": "78d2ac10d1795cc273c10cacc712f60dfcf61d37",
+      "trackedCurrentSourcePathsExamined": 112,
+      "matches": [
+        {
+          "path": "lib/opf-core-version.ts",
+          "line": 9,
+          "text": " * validate on 0.10.1 but the full reference-layer snippet shape waits for this gate."
+        }
+      ]
+    },
+    {
+      "site": "pptx-dev",
+      "commit": "761885b98092657fbbd05ffa529316d8b635539a",
+      "trackedCurrentSourcePathsExamined": 352,
+      "matches": [
+        {
+          "path": "app/docs/cli/page.tsx",
+          "line": 7,
+          "text": "    \"Pre-release pptx CLI docs for pptx.dev. Validate and format OPF locally, parse decks, and generate PPTX files against api.pptx.dev once distribution is published.\","
+        },
+        {
+          "path": "app/docs/cli/page.tsx",
+          "line": 117,
+          "text": "          the intended install commands once packages are published. Requires"
+        },
+        {
+          "path": "lib/opf/reference-layer.ts",
+          "line": 8,
+          "text": "/** Coordinated npm train once published \u2014 see `opf-reference-layer-pins.json`. */"
+        }
+      ]
+    }
+  ]
+}

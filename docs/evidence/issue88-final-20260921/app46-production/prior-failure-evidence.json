@@ -1,0 +1,21 @@
+{
+  "note": "The original 14/18 canonical run and unresolved Author CRLF third-popup failure remain reliability history regardless of this new acceptance outcome.",
+  "files": [
+    {
+      "path": "/private/tmp/opf-issue88-final-production-20260921/REPORT.md",
+      "sha256": "b79a357df88d8952d3183553aec119faff0a5f59586a057d413047a65d6a27bb"
+    },
+    {
+      "path": "/private/tmp/opf-issue88-final-production-20260921/results.json",
+      "sha256": "f1a1fb57926509e44bc6b5de919126c0a0ff8f094ff3997eb9b1b595eaac191c"
+    },
+    {
+      "path": "/private/tmp/opf-issue88-final-production-20260921/browser.log",
+      "sha256": "e74bb9f43947cc91304dd9d98c6dbc10b8343242e9b4e733606633924f3a0048"
+    },
+    {
+      "path": "/private/tmp/opf-issue88-final-production-20260921/SHA256SUMS",
+      "sha256": "6cc5bbfd541ea0ae85f3d8c58f7d2c05a25e5206d9df9e61e414add287794d19"
+    }
+  ]
+}

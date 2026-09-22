@@ -1,0 +1,99 @@
+{
+  "sourceHead": "8c0dae19b339ef3fe6a06c1d2df9f96b31d4f575",
+  "repo": "/private/tmp/opf-author-source-fix-20260921/pptx-dev",
+  "gitStatusPorcelain": "",
+  "method": "Read-only source inspection and file hashing; no product execution, tests, browser visits or account writes. Product files unchanged.",
+  "acceptanceBoundary": "Existing final local acceptance remains 26/27, with one unresolved LF categorical third-popup failure. This source audit supplies no new acceptance.",
+  "files": [
+    {
+      "path": "components/author/author-shell.tsx",
+      "bytes": 279699,
+      "sha256": "e91e874496ce69706391f438ceedd0c8285f6466194ead9a1ea4316f859ff9a9"
+    },
+    {
+      "path": "components/author/auto-apply-card.tsx",
+      "bytes": 4004,
+      "sha256": "a74406b61c73d237d6ce629c1c96fbd25132335adf8015c4c193bb5c683a57be"
+    },
+    {
+      "path": "components/author/preset-applied-toast.tsx",
+      "bytes": 425,
+      "sha256": "3ca62d3ab37c13fcafb0ecb6871f58e308ad7ca785ed7e813c8e538df25a6636"
+    },
+    {
+      "path": "components/author/workbench/opf-canvas-workbench.tsx",
+      "bytes": 8080,
+      "sha256": "218d30153cfc0762db08d07bcf8d2c9483f41f5588fd7dada139b1067428c85b"
+    },
+    {
+      "path": "components/playground/opf-editor.tsx",
+      "bytes": 18242,
+      "sha256": "51bc8e7624000320b14027b39b67c8b1cc7f912dda4a6aceccbd5ed14968b41c"
+    },
+    {
+      "path": "lib/author/metadata-intent.ts",
+      "bytes": 2227,
+      "sha256": "d96cfe3611abce7e67f19619a64b7ea716978a701e2f014bb0eb6e7a326430a7"
+    },
+    {
+      "path": "lib/author/apply-preset.ts",
+      "bytes": 4336,
+      "sha256": "7baba829a308753f768987dac8facc7d7c8fb41e811cdafadd7402bb6a3fbca5"
+    },
+    {
+      "path": "lib/author/gallery-registry.ts",
+      "bytes": 33361,
+      "sha256": "b4e3f93cc1d40ca3b94f85231881b04d9e25310e91a2acbd1fe2362046edb926"
+    },
+    {
+      "path": "lib/author/local-workspace.ts",
+      "bytes": 7527,
+      "sha256": "34aefa12de492bd0a0067e9466b20f6bd16824706d3d515a45e60713d9204d9c"
+    },
+    {
+      "path": "lib/playground/opf-codec.ts",
+      "bytes": 25164,
+      "sha256": "4955e0a4a5f74883c2ef585c7c29c04ba5fa3e84a9c0c0ba847ae3c0290bc0f3"
+    },
+    {
+      "path": "lib/playground/canvas-source.ts",
+      "bytes": 2587,
+      "sha256": "46e5757c619c2c12742b3773b31a55012e3bf2d5e593ff39b1c42409ca2cfbc8"
+    },
+    {
+      "path": "lib/playground/json-source-edit.ts",
+      "bytes": 5407,
+      "sha256": "981f2f1d0482a5cdc809601ed8af28217fc92059c4a5dcff2b97d64162f5e20b"
+    },
+    {
+      "path": "lib/playground/json-cursor-resolver.ts",
+      "bytes": 17152,
+      "sha256": "ebf4842f0747e85c688a73ade2ccd952dabbc6b4a6fe2408b6a5d37c4061681b"
+    },
+    {
+      "path": "lib/opf-toolkit/use-editor-session.ts",
+      "bytes": 2309,
+      "sha256": "8771039fb1f844442198e47547773faa30c91c2e9428d1ebd4c689d32069dfcc"
+    },
+    {
+      "path": "package.json",
+      "bytes": 2682,
+      "sha256": "e9ac58846cd1f59a2bdee422b0fc4e9d63e51e62e7e86205fc419bd7b0ec5540"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "bytes": 427824,
+      "sha256": "f362abf89c57fe9e93197a54520fa5fc712e85bf78b2e011285456f37283b76f"
+    },
+    {
+      "path": "node_modules/@openpresentation/opf-editor/package.json",
+      "bytes": 5253,
+      "sha256": "c91341504f64b9100dcd12bddee35cf8eadb0e14acee72d9798f93ca0a549818"
+    },
+    {
+      "path": "node_modules/@openpresentation/opf-editor/dist/index.d.ts",
+      "bytes": 6663,
+      "sha256": "9cf9acaf279fdd23527fa692cd3a06e648b6ebd8df966b63af5baddf9651cad5"
+    }
+  ]
+}

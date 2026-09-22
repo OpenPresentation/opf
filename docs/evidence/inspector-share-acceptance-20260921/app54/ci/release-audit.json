@@ -1,0 +1,40 @@
+{
+  "checkedAt": "2026-09-21T18:39:02.322947+00:00",
+  "head": "60c91f6b97c75636f533202f4112e09dc01144e4",
+  "tree": "b317179a899e97740003b4195b7172f7d3d6d8b2",
+  "run": {
+    "conclusion": "failure",
+    "created_at": "2026-09-21T18:24:17Z",
+    "event": "pull_request",
+    "head_branch": "codex/inspector-share-guard-20260921",
+    "head_sha": "60c91f6b97c75636f533202f4112e09dc01144e4",
+    "html_url": "https://github.com/Data-Advantage/pptx-dev/actions/runs/35638158483",
+    "id": 35638158483,
+    "name": "Application compatibility",
+    "run_attempt": 1,
+    "status": "completed",
+    "updated_at": "2026-09-21T18:35:22Z"
+  },
+  "prStateAtReceipt": "OPEN",
+  "mergeStateAtReceipt": "UNSTABLE",
+  "mergeGate": "FAILED",
+  "results": {
+    "linux": {
+      "unitPassed": 659,
+      "browserPassed": 31,
+      "browserFailed": 0,
+      "node": "v24.20.0"
+    },
+    "windows": {
+      "unitPassed": 659,
+      "browserPassed": 30,
+      "browserFailed": 1,
+      "node": "v24.20.0"
+    }
+  },
+  "artifactCompatibility": "Not triggered / not applicable. Unchanged Python wheel/distribution upload/download workflow path filters match no changed file; no workflow_dispatch. No fresh pass is claimed.",
+  "separateCore102PackageGates": "Fresh pre/postmerge installed-registry/package/browser CI passed for unchanged OPF train; separate receipts in /private/tmp/opf-author-source-handoff-20260921/ci-postmerge.",
+  "preview": "Vercel status success is not production/browser acceptance; App53 remains canonical.",
+  "review": "Bugbot neutral because it failed to run; no GitHub review decision recorded.",
+  "boundaries": "No retry, merge, push, product edit or browser action. Windows timeout remains unresolved; preserve original result, missing Inspector timing and overall native/font/preset/goal limitations."
+}

@@ -1,0 +1,70 @@
+2026-09-21T22:13:26.3004475Z   1) tests\e2e\inspector.spec.ts:118:5 › anonymous JSON authoring, preview, undo/redo, download and shared reimport 
+2026-09-21T22:13:26.3006115Z 
+2026-09-21T22:13:26.3006719Z     Error: expect(locator).toContainText(expected) failed
+2026-09-21T22:13:26.3007420Z 
+2026-09-21T22:13:26.3007850Z     Locator: getByTestId('playground-gallery-rail')
+2026-09-21T22:13:26.3010418Z     Expected substring: "An editable presentation"
+2026-09-21T22:13:26.3018317Z     Received string:    "Contextual gallerynameDeck identity used by exports and share previews.PinSuggestionsResolution hints for the selected OPF path2 cardsSourcesauthoredcatalogdefaultinheritedIdentityDeck name resolves into exportsCurrent authored value is \"Browser adoption check\". This field names the OPF document without becoming slide copy.nameFilenameDownload fallbackPPTX export uses filename when authored, then falls back to the deck name.Browser adoption checkSelected pathRootnameDocument-level context for the active OPF buffer.$Schema validation passed0 errors, 0 warningsDoes not render on slides; controls deck identity and filename.#/properties/nameSlide preview1 slideLoading slide fonts…Slide 1"
+2026-09-21T22:13:26.3025075Z     Timeout: 5000ms
+2026-09-21T22:13:26.3025570Z 
+2026-09-21T22:13:26.3025927Z     Call log:
+2026-09-21T22:13:26.3026947Z       - Expect "toContainText" getByTestId('playground-gallery-rail') with timeout 5000ms
+2026-09-21T22:13:26.3028303Z       - waiting for getByTestId('playground-gallery-rail')
+2026-09-21T22:13:26.3030257Z         11 × locator resolved to <aside data-testid="playground-gallery-rail" class="playground-gallery-rail flex min-w-0 flex-col bg-muted/10">…</aside>
+2026-09-21T22:13:26.3048196Z            - unexpected value "Contextual gallerynameDeck identity used by exports and share previews.PinSuggestionsResolution hints for the selected OPF path2 cardsSourcesauthoredcatalogdefaultinheritedIdentityDeck name resolves into exportsCurrent authored value is "Browser adoption check". This field names the OPF document without becoming slide copy.nameFilenameDownload fallbackPPTX export uses filename when authored, then falls back to the deck name.Browser adoption checkSelected pathRootnameDocument-level context for the active OPF buffer.$Schema validation passed0 errors, 0 warningsDoes not render on slides; controls deck identity and filename.#/properties/nameSlide preview1 slideLoading slide fonts…Slide 1"
+2026-09-21T22:13:26.3052936Z 
+2026-09-21T22:13:26.3053119Z 
+2026-09-21T22:13:26.3053668Z       123 |   await expect(page.locator(".monaco-editor").first()).toBeVisible();
+2026-09-21T22:13:26.3054590Z       124 |   await replaceBuffer(page, fixture);
+2026-09-21T22:13:26.3055760Z     > 125 |   await expect(page.getByTestId("playground-gallery-rail")).toContainText(fixture.slides[0].title);
+2026-09-21T22:13:26.3056876Z           |                                                             ^
+2026-09-21T22:13:26.3057899Z       126 |   await expect(await singleSlidePreview(page, fixture.slides[0].title)).toBeVisible();
+2026-09-21T22:13:26.3059292Z       127 |   await expect(page.getByTestId("playground-status-bar")).toContainText("0 errors / 0 warnings");
+2026-09-21T22:13:26.3060481Z       128 |   expect(await downloadOpf(page)).toEqual(fixture);
+2026-09-21T22:13:26.3061367Z         at D:\a\pptx-dev\pptx-dev\tests\e2e\inspector.spec.ts:125:61
+2026-09-21T22:13:26.3061927Z 
+2026-09-21T22:13:26.3062673Z     Error Context: test-results\inspector-anonymous-JSON-a-151ab-ownload-and-shared-reimport\error-context.md
+2026-09-21T22:13:26.3063562Z 
+2026-09-21T22:13:26.3064474Z     attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+2026-09-21T22:13:26.3066025Z     test-results\inspector-anonymous-JSON-a-151ab-ownload-and-shared-reimport\trace.zip
+2026-09-21T22:13:26.3070190Z     Usage:
+2026-09-21T22:13:26.3070739Z 
+2026-09-21T22:13:26.3071674Z         pnpm exec playwright show-trace test-results\inspector-anonymous-JSON-a-151ab-ownload-and-shared-reimport\trace.zip
+2026-09-21T22:13:26.3072731Z 
+2026-09-21T22:13:26.3073590Z     ────────────────────────────────────────────────────────────────────────────────────────────────
+2026-09-21T22:13:26.3074198Z 
+2026-09-21T22:13:26.3074616Z   1 failed
+2026-09-21T22:13:26.3075819Z     tests\e2e\inspector.spec.ts:118:5 › anonymous JSON authoring, preview, undo/redo, download and shared reimport 
+2026-09-21T22:13:26.3076961Z   38 passed (6.5m)
+2026-09-21T22:13:26.3566296Z [ELIFECYCLE] Command failed with exit code 1.
+2026-09-21T22:13:26.5207026Z ##[error]Process completed with exit code 1.
+2026-09-21T22:13:26.5475827Z ##[group]Run actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+2026-09-21T22:13:26.5476437Z with:
+2026-09-21T22:13:26.5476723Z   name: browser-failures-windows-latest
+2026-09-21T22:13:26.5477076Z   path: test-results/
+2026-09-21T22:13:26.5477387Z   retention-days: 7
+2026-09-21T22:13:26.5477906Z   if-no-files-found: ignore
+2026-09-21T22:13:26.5478215Z   compression-level: 6
+2026-09-21T22:13:26.5478491Z   overwrite: false
+2026-09-21T22:13:26.5478807Z   include-hidden-files: false
+2026-09-21T22:13:26.5479103Z   archive: true
+2026-09-21T22:13:26.5479349Z env:
+2026-09-21T22:13:26.5479674Z   PNPM_HOME: C:\Users\runneradmin\setup-pnpm\node_modules\.bin
+2026-09-21T22:13:26.5480296Z ##[endgroup]
+2026-09-21T22:13:27.5241572Z With the provided path, there will be 105 files uploaded
+2026-09-21T22:13:27.5243950Z Artifact name is valid!
+2026-09-21T22:13:27.5244651Z Root directory input is valid!
+2026-09-21T22:13:27.9724769Z Uploading artifact: browser-failures-windows-latest.zip
+2026-09-21T22:13:27.9787986Z Beginning upload of artifact content to blob storage
+2026-09-21T22:13:29.7653945Z Uploaded bytes 8388608
+2026-09-21T22:13:29.9466251Z Uploaded bytes 10844078
+2026-09-21T22:13:30.0318196Z Finished uploading artifact content to blob storage!
+2026-09-21T22:13:30.0320440Z SHA256 digest of uploaded artifact is 7aba0343fc72376ebc73f183f78bbeb58c9b964f12e6f658aeca17524cbf2fb8
+2026-09-21T22:13:30.0321756Z Finalizing artifact upload
+2026-09-21T22:13:30.4399051Z Artifact browser-failures-windows-latest successfully finalized. Artifact ID 10667157593
+2026-09-21T22:13:30.4401277Z Artifact browser-failures-windows-latest has been successfully uploaded! Final size is 10844078 bytes. Artifact ID is 10667157593
+2026-09-21T22:13:30.4409260Z Artifact download URL: https://github.com/Data-Advantage/pptx-dev/actions/runs/35660464578/artifacts/10667157593
+2026-09-21T22:13:30.4785953Z ##[group]Run actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+2026-09-21T22:13:30.4786443Z with:
+2026-09-21T22:13:30.4786672Z   name: windows-readiness-windows-latest
+2026-09-21T22:13:30.4787017Z   path: test-results/**/windows-readiness-timings.json

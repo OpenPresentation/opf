@@ -1,0 +1,23 @@
+{
+  "capturedAt": "2026-09-21T14:44:44.801Z",
+  "node": "v24.21.0",
+  "nodeExecutable": "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+  "nodeExecutableSha256": "e4b5a3af0e05c75de2eae013904145f40fe7fc2a6e6f17510128bf45cca4e79b",
+  "platform": "darwin",
+  "arch": "arm64",
+  "osRelease": "25.6.0",
+  "playwright": "1.63.0",
+  "configuredBrowser": "chromium",
+  "channel": null,
+  "headless": true,
+  "installedDescriptor": {
+    "name": "chromium-headless-shell",
+    "revision": "1243",
+    "installByDefault": true,
+    "browserVersion": "153.0.8010.12",
+    "title": "Chrome Headless Shell"
+  },
+  "configuredExecutable": "/Users/michael/Library/Caches/ms-playwright/chromium_headless_shell-1243/chrome-headless-shell-mac-arm64/chrome-headless-shell",
+  "configuredExecutableSha256": "a0bfe7b4da4787b66058477d696cd1d09065d25f06a548947722b9af77ee8282",
+  "basis": "Static runtime inventory only. Installed Playwright selects chromium-headless-shell for default headless Chromium with no channel. No production navigation or test execution has occurred."
+}

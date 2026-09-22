@@ -1,0 +1,14 @@
+{
+  "source": "/private/tmp/opf-font-readiness-concurrency-20260921/ci/extracted/browser-failures-windows-latest/inspector-actions-Inspecto-ddffb-urrent-draft-before-handoff/trace.zip",
+  "sourceBytes": 6944325,
+  "sourceSha256": "c7589c634e5177b393d3697a4d9c9bb48b4809d958644973267a453c1812883a",
+  "encodedPath": "app54/final-a4eb-ci/failure/trace.zip.base64.txt",
+  "encodedBytes": 9380931,
+  "encodedSha256": "9312b98b3e3c451cf6c366ca1a79f9761e92e21c97b9a3f9c8ac4370c474ce0e",
+  "encoding": "RFC4648 base64 with LF line wrapping; decode reproduces the original ZIP byte-for-byte.",
+  "members": 95,
+  "uncompressedBytes": 13275020,
+  "zipCrcPassed": true,
+  "decodeByteIdentical": true,
+  "reason": "Raw ZIP triggers202 false text-signature matches in the existing core text-integrity scanner. No scanner exemption or archived-byte mutation was introduced."
+}

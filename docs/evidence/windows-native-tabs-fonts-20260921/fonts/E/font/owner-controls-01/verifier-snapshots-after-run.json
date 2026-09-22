@@ -1,0 +1,18 @@
+{
+  "snapshotTiming": "Captured after these controlled runs; source had been reviewed before execution and no agent was assigned to edit these shared helpers.",
+  "officeCalls": 0,
+  "files": [
+    {
+      "file": "native-text-fonts-check.ps1",
+      "sha256": "ef477158cf36d1ce8434967c3ca6e6d59e8dbfc74d26bd89e87a0fc48228dc34"
+    },
+    {
+      "file": "native-text-fonts.ps1",
+      "sha256": "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6"
+    },
+    {
+      "file": "native-process.ps1",
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+    }
+  ]
+}

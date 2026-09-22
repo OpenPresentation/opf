@@ -1,0 +1,187 @@
+{
+  "node": "v24.21.0",
+  "sourceOnly": true,
+  "root": "/private/tmp/opf-completion-fix-20260921/pptx-dev",
+  "cases": [
+    {
+      "eol": "LF",
+      "schemaValid": true,
+      "original": {
+        "bytes": 325,
+        "sha256": "2e99a948a29cfb1d643f68d46e6afd913ec2f953d4d329e0faee8a7e3ca4a5ec",
+        "crlf": 0,
+        "tabs": 5
+      },
+      "values": {
+        "original": {
+          "bytes": 325,
+          "sha256": "2e99a948a29cfb1d643f68d46e6afd913ec2f953d4d329e0faee8a7e3ca4a5ec",
+          "crlf": 0,
+          "tabs": 5
+        },
+        "expectedEdited": {
+          "bytes": 325,
+          "sha256": "c79bbe65d366ba2cfc87a712a7216ea7cc1914452b79ece4b140b884e5588159",
+          "crlf": 0,
+          "tabs": 5
+        },
+        "noEditCanvasRead": {
+          "bytes": 473,
+          "sha256": "c2b6b67a09773f5139b13777793e6461ba1e6fbf27d9270b1eab8a2f62324961",
+          "crlf": 0,
+          "tabs": 0
+        },
+        "codeTabDownload": {
+          "bytes": 325,
+          "sha256": "2e99a948a29cfb1d643f68d46e6afd913ec2f953d4d329e0faee8a7e3ca4a5ec",
+          "crlf": 0,
+          "tabs": 5
+        },
+        "inspectorDownload": {
+          "bytes": 473,
+          "sha256": "c2b6b67a09773f5139b13777793e6461ba1e6fbf27d9270b1eab8a2f62324961",
+          "crlf": 0,
+          "tabs": 0
+        },
+        "afterEdit": {
+          "bytes": 478,
+          "sha256": "b663c1fecfb72919f1192233aa91b7381425c4ac985e46d8481469c3eff2c7ce",
+          "crlf": 0,
+          "tabs": 0
+        },
+        "afterUndo": {
+          "bytes": 473,
+          "sha256": "c2b6b67a09773f5139b13777793e6461ba1e6fbf27d9270b1eab8a2f62324961",
+          "crlf": 0,
+          "tabs": 0
+        },
+        "afterRedo": {
+          "bytes": 478,
+          "sha256": "b663c1fecfb72919f1192233aa91b7381425c4ac985e46d8481469c3eff2c7ce",
+          "crlf": 0,
+          "tabs": 0
+        },
+        "bridgeAfterEdit": {
+          "bytes": 325,
+          "sha256": "c79bbe65d366ba2cfc87a712a7216ea7cc1914452b79ece4b140b884e5588159",
+          "crlf": 0,
+          "tabs": 5
+        },
+        "bridgeAfterUndo": {
+          "bytes": 325,
+          "sha256": "2e99a948a29cfb1d643f68d46e6afd913ec2f953d4d329e0faee8a7e3ca4a5ec",
+          "crlf": 0,
+          "tabs": 5
+        },
+        "bridgeAfterRedo": {
+          "bytes": 325,
+          "sha256": "c79bbe65d366ba2cfc87a712a7216ea7cc1914452b79ece4b140b884e5588159",
+          "crlf": 0,
+          "tabs": 5
+        }
+      },
+      "assertions": {
+        "codeTabJsonDownloadExact": true,
+        "untouchedCanvasReadExact": false,
+        "inspectorJsonDownloadExact": false,
+        "authorCanvasEditMinimal": false,
+        "authorCanvasUndoExact": false,
+        "authorCanvasRedoExact": false,
+        "authorCanvasUndoSemantic": true,
+        "bridgeEditMinimal": true,
+        "bridgeUndoExact": true,
+        "bridgeRedoExact": true
+      }
+    },
+    {
+      "eol": "CRLF",
+      "schemaValid": true,
+      "original": {
+        "bytes": 332,
+        "sha256": "c40c5080ca23fb28e12398e7a35d3dac7859e7cc659b32a24133559119722608",
+        "crlf": 7,
+        "tabs": 5
+      },
+      "values": {
+        "original": {
+          "bytes": 332,
+          "sha256": "c40c5080ca23fb28e12398e7a35d3dac7859e7cc659b32a24133559119722608",
+          "crlf": 7,
+          "tabs": 5
+        },
+        "expectedEdited": {
+          "bytes": 332,
+          "sha256": "09189382ec917e3f09851a008e4c4c187a900e9bd5312013f9d00140314a056d",
+          "crlf": 7,
+          "tabs": 5
+        },
+        "noEditCanvasRead": {
+          "bytes": 473,
+          "sha256": "c2b6b67a09773f5139b13777793e6461ba1e6fbf27d9270b1eab8a2f62324961",
+          "crlf": 0,
+          "tabs": 0
+        },
+        "codeTabDownload": {
+          "bytes": 332,
+          "sha256": "c40c5080ca23fb28e12398e7a35d3dac7859e7cc659b32a24133559119722608",
+          "crlf": 7,
+          "tabs": 5
+        },
+        "inspectorDownload": {
+          "bytes": 473,
+          "sha256": "c2b6b67a09773f5139b13777793e6461ba1e6fbf27d9270b1eab8a2f62324961",
+          "crlf": 0,
+          "tabs": 0
+        },
+        "afterEdit": {
+          "bytes": 478,
+          "sha256": "b663c1fecfb72919f1192233aa91b7381425c4ac985e46d8481469c3eff2c7ce",
+          "crlf": 0,
+          "tabs": 0
+        },
+        "afterUndo": {
+          "bytes": 473,
+          "sha256": "c2b6b67a09773f5139b13777793e6461ba1e6fbf27d9270b1eab8a2f62324961",
+          "crlf": 0,
+          "tabs": 0
+        },
+        "afterRedo": {
+          "bytes": 478,
+          "sha256": "b663c1fecfb72919f1192233aa91b7381425c4ac985e46d8481469c3eff2c7ce",
+          "crlf": 0,
+          "tabs": 0
+        },
+        "bridgeAfterEdit": {
+          "bytes": 332,
+          "sha256": "09189382ec917e3f09851a008e4c4c187a900e9bd5312013f9d00140314a056d",
+          "crlf": 7,
+          "tabs": 5
+        },
+        "bridgeAfterUndo": {
+          "bytes": 332,
+          "sha256": "c40c5080ca23fb28e12398e7a35d3dac7859e7cc659b32a24133559119722608",
+          "crlf": 7,
+          "tabs": 5
+        },
+        "bridgeAfterRedo": {
+          "bytes": 332,
+          "sha256": "09189382ec917e3f09851a008e4c4c187a900e9bd5312013f9d00140314a056d",
+          "crlf": 7,
+          "tabs": 5
+        }
+      },
+      "assertions": {
+        "codeTabJsonDownloadExact": true,
+        "untouchedCanvasReadExact": false,
+        "inspectorJsonDownloadExact": false,
+        "authorCanvasEditMinimal": false,
+        "authorCanvasUndoExact": false,
+        "authorCanvasRedoExact": false,
+        "authorCanvasUndoSemantic": true,
+        "bridgeEditMinimal": true,
+        "bridgeUndoExact": true,
+        "bridgeRedoExact": true
+      }
+    }
+  ]
+}

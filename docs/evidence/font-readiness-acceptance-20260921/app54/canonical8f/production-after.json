@@ -1,0 +1,15 @@
+{
+  "checkedAt": "2026-09-21T22:09:15.891Z",
+  "id": "dpl_H1FtXx1QSuGxn3MwzJwWJpGtRg8b",
+  "url": "pptx-j0ok1aef8-dataadvantage.vercel.app",
+  "readyState": "READY",
+  "target": "production",
+  "meta": {
+    "githubCommitRef": "master",
+    "githubCommitSha": "8f54228a9e38a1dcc0bf8188bcdd519795b3799a",
+    "githubCommitMessage": "Keep Inspector outputs current and package standalone startup\n\nGuard automatic Inspector publication and explicit actions with the current authored snapshot; package portable standalone startup and overlap font preparation with converter warmup while retaining both-ready semantics.\n\nThe Open in A...",
+    "githubRepo": "pptx-dev",
+    "githubOrg": "Data-Advantage"
+  },
+  "canonicalUrl": "https://www.pptx.dev"
+}

@@ -1,0 +1,192 @@
+{
+  "oldCommit": "e40c287b64fcbcfb85fb4a8a50641aea8e3e54a8",
+  "currentCommit": "8f54228a9e38a1dcc0bf8188bcdd519795b3799a",
+  "files": [
+    {
+      "path": "app/account/api-keys/page.tsx",
+      "oldSha256": "d629a28e5f42454d0cfa8326b4cff60d407bc6aaa41210957fe93cfa848e0c92",
+      "newSha256": "d629a28e5f42454d0cfa8326b4cff60d407bc6aaa41210957fe93cfa848e0c92",
+      "byteIdentical": true
+    },
+    {
+      "path": "app/account/org-api-keys/page.tsx",
+      "oldSha256": "1be9277fa3f070f91314787085adaa5c07a9c9539d0623f4cbcb03093f2ca9e8",
+      "newSha256": "1be9277fa3f070f91314787085adaa5c07a9c9539d0623f4cbcb03093f2ca9e8",
+      "byteIdentical": true
+    },
+    {
+      "path": "app/account/organization/page.tsx",
+      "oldSha256": "c1f1acdaf90db7a2f3fb35dc942c455ee65b801f2362c8ed390aa8d3e5a11f3b",
+      "newSha256": "c1f1acdaf90db7a2f3fb35dc942c455ee65b801f2362c8ed390aa8d3e5a11f3b",
+      "byteIdentical": true
+    },
+    {
+      "path": "app/api/checkout/route.ts",
+      "oldSha256": "f5b0feb9a088695fc5e729343bbbdf179ca510a05f8d289e8bbf1c2ce542b21d",
+      "newSha256": "f5b0feb9a088695fc5e729343bbbdf179ca510a05f8d289e8bbf1c2ce542b21d",
+      "byteIdentical": true
+    },
+    {
+      "path": "app/api/webhook/route.ts",
+      "oldSha256": "08c9a766129fb434c8d96e542c9960e31d884ce9628923d8b3502723e54dcb32",
+      "newSha256": "08c9a766129fb434c8d96e542c9960e31d884ce9628923d8b3502723e54dcb32",
+      "byteIdentical": true
+    },
+    {
+      "path": "app/author/page.tsx",
+      "oldSha256": "33aaff934a610398b9c4abb6e8bcba28230a511c718970bc5f81608e5ac155ff",
+      "newSha256": "33aaff934a610398b9c4abb6e8bcba28230a511c718970bc5f81608e5ac155ff",
+      "byteIdentical": true
+    },
+    {
+      "path": "app/billing/page.tsx",
+      "oldSha256": "81f42d379b07679a0dcbb6d9665ac67b72fcb73ee6c5f45d964118b829b538ed",
+      "newSha256": "81f42d379b07679a0dcbb6d9665ac67b72fcb73ee6c5f45d964118b829b538ed",
+      "byteIdentical": true
+    },
+    {
+      "path": "app/dashboard/page.tsx",
+      "oldSha256": "d29c2bedc86081cbb316bb9a1cb42a972bcc4866c93ac1f6764b42c0f81efe2d",
+      "newSha256": "d29c2bedc86081cbb316bb9a1cb42a972bcc4866c93ac1f6764b42c0f81efe2d",
+      "byteIdentical": true
+    },
+    {
+      "path": "app/globals.css",
+      "oldSha256": "b651638cd76f887f33892ca4a810ab14f5ecf1e221731999337d5f20e2323162",
+      "newSha256": "b651638cd76f887f33892ca4a810ab14f5ecf1e221731999337d5f20e2323162",
+      "byteIdentical": true
+    },
+    {
+      "path": "app/layout.tsx",
+      "oldSha256": "547fab71a1c6ecfff01d0e9b88c73b19a2a24df0ba600478a164830cb34db162",
+      "newSha256": "547fab71a1c6ecfff01d0e9b88c73b19a2a24df0ba600478a164830cb34db162",
+      "byteIdentical": true
+    },
+    {
+      "path": "app/sign-in/[[...sign-in]]/page.tsx",
+      "oldSha256": "d5f6dcf24cd8bbc21d64b10aeb25265fa90e24e684504fc36c90a2d8c35d6008",
+      "newSha256": "d5f6dcf24cd8bbc21d64b10aeb25265fa90e24e684504fc36c90a2d8c35d6008",
+      "byteIdentical": true
+    },
+    {
+      "path": "app/sign-up/[[...sign-up]]/page.tsx",
+      "oldSha256": "b57897432c3dc62d671ec8a94614c283ba724edcfe663d92ce92bb6161e6d9b2",
+      "newSha256": "b57897432c3dc62d671ec8a94614c283ba724edcfe663d92ce92bb6161e6d9b2",
+      "byteIdentical": true
+    },
+    {
+      "path": "components/account-nav.tsx",
+      "oldSha256": "9a7c47776b02befab12bb13ce6df48ac637a53c670bbfc1353289ca283c1805d",
+      "newSha256": "9a7c47776b02befab12bb13ce6df48ac637a53c670bbfc1353289ca283c1805d",
+      "byteIdentical": true
+    },
+    {
+      "path": "components/app-providers.tsx",
+      "oldSha256": "ae32186450c13e2ba4c9c5a8ffd8344d5426aa3138ba025840211ce2a0b58fe3",
+      "newSha256": "ae32186450c13e2ba4c9c5a8ffd8344d5426aa3138ba025840211ce2a0b58fe3",
+      "byteIdentical": true
+    },
+    {
+      "path": "components/author/author-shell.tsx",
+      "oldSha256": "e91e874496ce69706391f438ceedd0c8285f6466194ead9a1ea4316f859ff9a9",
+      "newSha256": "e91e874496ce69706391f438ceedd0c8285f6466194ead9a1ea4316f859ff9a9",
+      "byteIdentical": true
+    },
+    {
+      "path": "components/clerk-app-providers.tsx",
+      "oldSha256": "40c4862e6309b3ee589cabd9b63772cdd15258622068132e3a25e71eb0484d66",
+      "newSha256": "40c4862e6309b3ee589cabd9b63772cdd15258622068132e3a25e71eb0484d66",
+      "byteIdentical": true
+    },
+    {
+      "path": "components/decoder/decoder-shell.tsx",
+      "oldSha256": "8a7a79a5b67f5865aca22978b73c5d2ffb64610f4fb4d7afdfe633ed060324d4",
+      "newSha256": "8a7a79a5b67f5865aca22978b73c5d2ffb64610f4fb4d7afdfe633ed060324d4",
+      "byteIdentical": true
+    },
+    {
+      "path": "components/header-auth-wrapper.tsx",
+      "oldSha256": "11d3b2f685dcc6c0c67fc926e0069db79631003377f727798cdf26fdc7509a40",
+      "newSha256": "11d3b2f685dcc6c0c67fc926e0069db79631003377f727798cdf26fdc7509a40",
+      "byteIdentical": true
+    },
+    {
+      "path": "components/header-auth.tsx",
+      "oldSha256": "271e31e3dbaf9b189c5f575f8b12b1641808e23daadf2295b555b3a2b2feb6e9",
+      "newSha256": "271e31e3dbaf9b189c5f575f8b12b1641808e23daadf2295b555b3a2b2feb6e9",
+      "byteIdentical": true
+    },
+    {
+      "path": "components/site-header.tsx",
+      "oldSha256": "add5866ed62bc361b0648c20ca60919d78157d8b7ab24096d05f0de6880105c3",
+      "newSha256": "add5866ed62bc361b0648c20ca60919d78157d8b7ab24096d05f0de6880105c3",
+      "byteIdentical": true
+    },
+    {
+      "path": "lib/api/__tests__/public-workbench-proxy.test.ts",
+      "oldSha256": "a75a21d21b09b50a658ea0d5decfda24d7d6e73240e978b552ad617fc189cd3e",
+      "newSha256": "a75a21d21b09b50a658ea0d5decfda24d7d6e73240e978b552ad617fc189cd3e",
+      "byteIdentical": true
+    },
+    {
+      "path": "lib/auth/__tests__/require-api-auth.test.ts",
+      "oldSha256": "39558647eb34b6467ed3fdf19580ca63b74d610e7c629b38ae3003f13185d069",
+      "newSha256": "39558647eb34b6467ed3fdf19580ca63b74d610e7c629b38ae3003f13185d069",
+      "byteIdentical": true
+    },
+    {
+      "path": "lib/auth/require-api-auth.ts",
+      "oldSha256": "0f14ec7c1e41682ae6c49d48385f8308b4ec2d24b50424d631505bc06e82468a",
+      "newSha256": "0f14ec7c1e41682ae6c49d48385f8308b4ec2d24b50424d631505bc06e82468a",
+      "byteIdentical": true
+    },
+    {
+      "path": "lib/clerk-appearance.ts",
+      "oldSha256": "35f5239a5be4be23d398749e3ab19215e1300eac2098409bd2fa75272e3e409a",
+      "newSha256": "35f5239a5be4be23d398749e3ab19215e1300eac2098409bd2fa75272e3e409a",
+      "byteIdentical": true
+    },
+    {
+      "path": "lib/convex/server-caller.ts",
+      "oldSha256": "68674e03939fa26284829ce547ef33ac6c28ed2ce221857d652133a8553c7146",
+      "newSha256": "68674e03939fa26284829ce547ef33ac6c28ed2ce221857d652133a8553c7146",
+      "byteIdentical": true
+    },
+    {
+      "path": "next.config.ts",
+      "oldSha256": "41eaf714ee88e1c3b74e6d069a56dcf457c34f4f8ee46648fc59b9389472f6bd",
+      "newSha256": "41eaf714ee88e1c3b74e6d069a56dcf457c34f4f8ee46648fc59b9389472f6bd",
+      "byteIdentical": true
+    },
+    {
+      "path": "package.json",
+      "oldSha256": "e9ac58846cd1f59a2bdee422b0fc4e9d63e51e62e7e86205fc419bd7b0ec5540",
+      "newSha256": "f6601540e0245bbd0cb5aeb6a5c42b4ab9cb30a5b80e1aac6c9098e29d46321d",
+      "byteIdentical": false
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "oldSha256": "f362abf89c57fe9e93197a54520fa5fc712e85bf78b2e011285456f37283b76f",
+      "newSha256": "f362abf89c57fe9e93197a54520fa5fc712e85bf78b2e011285456f37283b76f",
+      "byteIdentical": true
+    },
+    {
+      "path": "proxy.ts",
+      "oldSha256": "961a2eb431002c341f5dbcb1c5973d69e46b541e11beb488cf5efcb805a0a5d9",
+      "newSha256": "961a2eb431002c341f5dbcb1c5973d69e46b541e11beb488cf5efcb805a0a5d9",
+      "byteIdentical": true
+    }
+  ],
+  "packageDependenciesIdentical": true,
+  "packageDevDependenciesIdentical": true,
+  "packageChangedTopLevelKeys": [
+    "scripts"
+  ],
+  "changedScripts": [
+    "build",
+    "start",
+    "test",
+    "test:standalone"
+  ],
+  "scope": "Auth reference paths in app/components/lib/proxy plus provider/layout/config/lock files. Source equality is not historical runtime equivalence."
+}

@@ -1,0 +1,10 @@
+{
+  "acceptedCommit": "578bcc6e0894129b00059258bd4ad1994a414baa",
+  "reviewedCommit": "e746dee147ec4d3d0eef69e22e7e1d3f48b6346a",
+  "acceptedTree": "2de778c56a9d4afcc686830a39b881d147a1f4ee",
+  "reviewedTree": "2de778c56a9d4afcc686830a39b881d147a1f4ee",
+  "treeEqual": true,
+  "primaryClean": true,
+  "primaryPath": "/Users/michael/Source/opf",
+  "postmergeCI": "pending separate receipt"
+}

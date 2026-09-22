@@ -1,0 +1,55 @@
+{
+  "time": "2026-09-21T19:16:36.149327+00:00",
+  "review": "root source review; browser and final exact-head CI still required",
+  "base": "60c91f6b97c75636f533202f4112e09dc01144e4",
+  "files": [
+    {
+      "path": "components/playground/playground-shell.tsx",
+      "sha256": "15538547fd627c36fc0e704ef1870b813ac837d7a56a09e471135dcb70f88edc"
+    },
+    {
+      "path": "components/playground/preview-canvas-slide.tsx",
+      "sha256": "61060435e0025d6fd9ec86f8c571e2e3941ba1982dfde34d7cbdcf96ab6915be"
+    },
+    {
+      "path": "components/playground/preview-pane.tsx",
+      "sha256": "548fdb48658a7ba5f51befa8f41949fca6b2c2a76ed2aaa9811e9a39b2db07cb"
+    },
+    {
+      "path": "lib/playground/inspector-action-source.ts",
+      "sha256": "34f2f0472e506ceb340384cab151f100fbc972837ac02fb9ee2e6d48397a482c"
+    },
+    {
+      "path": "lib/playground/opf-handoff.ts",
+      "sha256": "5de23dbe26c10a8a58339a8d623ed5aaaade98dc0f621c5dfe2e6769fc45a253"
+    },
+    {
+      "path": "lib/playground/share-hash-sync.ts",
+      "sha256": "e4541976a5842fc45eee8a3bc1a9a91391a66eee65eb1524acc6bb1f9c9b7b09"
+    },
+    {
+      "path": "tests/e2e/inspector-actions.spec.ts",
+      "sha256": "b664b65d4eb52e1f6e17f3081d19f5762ae2172f696ee2734540dbc864a4ff38"
+    },
+    {
+      "path": "scripts/prepare-standalone.mjs",
+      "sha256": "61034cc505dd5b1b178c77cf2a4bc4ed51cba34a0c2b5aaa872d9fd2aa00f15f"
+    },
+    {
+      "path": "scripts/start-standalone.mjs",
+      "sha256": "ff9654fc6b9c1b6eb5cf7017abf9a45c45405a35cf5ee1b0bb73503870634b6f"
+    },
+    {
+      "path": "scripts/standalone.test.mjs",
+      "sha256": "0896693a29c1a8e1742a96182fbbc91e8d4fc5fbc51ce6b2b669e9905a11b24e"
+    },
+    {
+      "path": "package.json",
+      "sha256": "f6601540e0245bbd0cb5aeb6a5c42b4ab9cb30a5b80e1aac6c9098e29d46321d"
+    },
+    {
+      "path": "README.md",
+      "sha256": "aaef07d40404aebf6fafee42d5c8c5fb036da08663845e2161d5e4e9e3ba2725"
+    }
+  ]
+}

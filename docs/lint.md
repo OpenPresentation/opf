@@ -1,6 +1,6 @@
 # OPF lint for humans and agents
 
-Core **0.10.0** added the browser-safe `@openpresentation/opf/lint` entrypoint, and CLI **0.8.0** added `opf lint`. Current published packages are core **0.10.1** and CLI **0.8.1**; they still include lint. Earlier versions than 0.10.0 / 0.8.0 do not; check `opf --help` before asking an installed CLI to lint.
+Core **0.10.0** added the browser-safe `@openpresentation/opf/lint` entrypoint, and CLI **0.8.0** added `opf lint`. Current published packages are core **0.11.0** and CLI **0.9.0**; they still include lint. Earlier versions than 0.10.0 / 0.8.0 do not; check `opf --help` before asking an installed CLI to lint.
 
 ```sh
 node packages/cli/dist/index.js lint deck.opf.json

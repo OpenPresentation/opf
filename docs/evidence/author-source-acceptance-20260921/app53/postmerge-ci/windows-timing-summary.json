@@ -1,0 +1,105 @@
+{
+  "kind": "passive-readiness-diagnostic",
+  "outcomeBeforeCollection": "passed",
+  "limits": {
+    "entriesPerDocument": 2000,
+    "documents": 8
+  },
+  "droppedDocuments": 0,
+  "errors": [],
+  "inspectorSnapshotRetained": false,
+  "inspectorPagehideFlushObserved": false,
+  "missingInspectorPagehideFlush": true,
+  "limitations": "Observers and hooks have overhead, and a hook timeout can affect the runner result. The assertion outcome before collection and diagnostic errors are recorded separately. Longtasks do not identify the responsible function; resource entries describe completed requests only. No private APIs or request/response bodies are recorded.",
+  "artifactId": 10655457941,
+  "artifactName": "windows-readiness-windows-latest",
+  "archiveSha256": "55872852dafe72c3207eb18c8c21738624d3e34f71d94d35978e16524a4cf36d",
+  "timingFile": "windows-readiness/svg-security-published-SVG-25408-rted-document-strings-inert/windows-readiness-timings.json",
+  "timingFileSha256": "2b86d3e14e58ea9c2b07df1e1dbe88040ec23b2ec15bef5b4cc0ae6e2776ab91",
+  "documents": [
+    {
+      "timeOrigin": 1790012900947.5,
+      "capturedAt": 5105.5,
+      "url": "http://127.0.0.1:4325/author",
+      "reason": "after-test",
+      "supported": [
+        "resource",
+        "longtask",
+        "navigation",
+        "paint"
+      ],
+      "observerFailures": [],
+      "droppedEntries": 0,
+      "counts": {
+        "resource": 89,
+        "navigation": 2,
+        "paint": 2,
+        "longtask": 8
+      },
+      "completeNavigationSnapshots": 1,
+      "incompleteNavigationSnapshots": 1,
+      "lastCompleteNavigation": {
+        "entryType": "navigation",
+        "url": "http://127.0.0.1:4325/author",
+        "startTime": 0,
+        "duration": 160.5,
+        "fetchStart": 1.6999999999534339,
+        "domainLookupStart": 1.6999999999534339,
+        "domainLookupEnd": 1.6999999999534339,
+        "connectStart": 1.6999999999534339,
+        "secureConnectionStart": 0,
+        "connectEnd": 1.6999999999534339,
+        "requestStart": 6,
+        "responseStart": 14.599999999976717,
+        "responseEnd": 19,
+        "transferSize": 3847,
+        "encodedBodySize": 3547,
+        "decodedBodySize": 15481,
+        "domInteractive": 111.59999999997672,
+        "domContentLoadedEventStart": 111.69999999995343,
+        "domContentLoadedEventEnd": 111.80000000004657,
+        "domComplete": 160.5,
+        "loadEventStart": 160.5,
+        "loadEventEnd": 160.5
+      },
+      "longtasks": [
+        {
+          "startTime": 430.0999999999767,
+          "duration": 352
+        },
+        {
+          "startTime": 1151.4000000000233,
+          "duration": 214
+        },
+        {
+          "startTime": 1415.5999999999767,
+          "duration": 76
+        },
+        {
+          "startTime": 1492.0999999999767,
+          "duration": 54
+        },
+        {
+          "startTime": 1575.0999999999767,
+          "duration": 74
+        },
+        {
+          "startTime": 2238.0999999999767,
+          "duration": 634
+        },
+        {
+          "startTime": 3671.3000000000466,
+          "duration": 211
+        },
+        {
+          "startTime": 4489.5,
+          "duration": 66
+        }
+      ],
+      "longtaskDurationSumMs": 1681,
+      "latestCompletedResourceResponseEndMs": 2284.0999999999767
+    }
+  ],
+  "sanitizedUrlsVerified": 92,
+  "scope": "Only Author timing snapshot was delivered; Inspector snapshot and pagehide missing. Completed-resource/longtask records do not explain prior Inspector readiness failures."
+}

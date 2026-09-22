@@ -1,0 +1,23 @@
+[
+  {
+    "source": "/private/tmp/pptx-dev-issue88-linux-35609087103-artifacts/inspector-anonymous-JSON-a-151ab-ownload-and-shared-reimport/trace.zip",
+    "bytes": 6673888,
+    "sha256": "30f3a5e9efe045db43e34a9d09fc04e9aff3797a4d5b0296198df420409c85d1",
+    "durableExtract": "linux-preview-0-error-context.md",
+    "scope": "Complete accessibility error context and relevant structured trace records are retained; the original browser asset archive remains in the local diagnostic directory and GitHub failure artifact."
+  },
+  {
+    "source": "/private/tmp/pptx-dev-issue88-windows-rerun-artifacts/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/trace.zip",
+    "bytes": 7049640,
+    "sha256": "1cce0ad4c2fd63813ffd5b39b49d5a3f53bfcda2158c40bdad7fb6bdeba9a678",
+    "durableExtract": "windows-author-0-error-context.md",
+    "scope": "Complete accessibility error context and relevant structured trace records are retained; the original browser asset archive remains in the local diagnostic directory and GitHub failure artifact."
+  },
+  {
+    "source": "/private/tmp/pptx-dev-issue88-windows-rerun-artifacts/author-json-options-Author-cda0b-exact-CRLF-source-undo-redo/trace.zip",
+    "bytes": 7155538,
+    "sha256": "90b4e720818e7407093840b32fe2f3a2d9ca23e84157ecfb3ca2b7ffcc4a5580",
+    "durableExtract": "windows-author-1-error-context.md",
+    "scope": "Complete accessibility error context and relevant structured trace records are retained; the original browser asset archive remains in the local diagnostic directory and GitHub failure artifact."
+  }
+]

@@ -1,0 +1,25 @@
+{
+    "passed":  true,
+    "officeOrComCalls":  0,
+    "requestedName":  "selftest-shape-name",
+    "observedName":  "selftest-shape-name",
+    "requestedTextCodePoints":  [
+                                    9,
+                                    66,
+                                    101,
+                                    102,
+                                    111,
+                                    114,
+                                    101
+                                ],
+    "observedTextCodePoints":  [
+                                   9,
+                                   66,
+                                   101,
+                                   102,
+                                   111,
+                                   114,
+                                   101
+                               ],
+    "wrapperStages":  54
+}

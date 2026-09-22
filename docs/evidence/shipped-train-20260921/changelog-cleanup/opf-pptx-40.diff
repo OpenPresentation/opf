@@ -1,0 +1,29 @@
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index 46d1dde..83bf184 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -2,6 +2,11 @@
+ 
+ ## Unreleased
+ 
++## 0.8.1
++
++- Require core 0.10.1 and renderer 0.8.1 for the corrected layout and content contracts. PowerPoint export APIs are unchanged.
++- Include shared header/footer furniture provenance on export/import. Native PowerPoint visual fidelity remains a separate gate.
++
+ ## 0.8.0
+ 
+ - Remove content-type declarations for nonexistent generated slide masters, retaining every actual part and relationship. Add the audited package-integrity regression; notes-master ordering is unchanged.
+diff --git a/README.md b/README.md
+index decc8b5..36351e3 100644
+--- a/README.md
++++ b/README.md
+@@ -4,7 +4,7 @@ Version 0.8.1 requires core 0.10.1, including metric, quote and timeline layout
+ 
+ Unfinished prepared shaping work is preserved in the [September 15 roadmap](docs/roadmap-shaping-20260915.md); it is not part of the published runtime.
+ 
+-Version 0.8.0 and this checkout require Node 24 (`24.x`). Use `.nvmrc` for local development. Earlier published versions retain their original engine declarations. Browser entrypoints remain browser-safe; native application compatibility is verified separately.
++Version 0.8.1 and this checkout require Node 24 (`24.x`). Use `.nvmrc` for local development. Earlier published versions retain their original engine declarations. Browser entrypoints remain browser-safe; native application compatibility is verified separately.
+ 
+ Version 0.8.0 consumes shared heading/scalar/rich line placement, including `textRasterPadding`, through editable native line boxes without autofit. Complete heading tags retain title/subtitle/tag roles, line ordering and current edited text during import. Source boundary metadata also records hard-line separators, so complete scalar/heading groups recover current native text with spaces, tabs and exact authored line endings. Incomplete, duplicate, ambiguous or bulleted groups fall back to ordinary import with diagnostics. Legacy heading tags retain their prior native-line behavior; arbitrary formatting, nesting and geometry are not reconstructed. See the [source contract and limits](https://github.com/OpenPresentation/opf/blob/f94125a1ff95bf0974a055fe1c081d348dad54f2/docs/plans/text-placement.md). Native raster certification remains separate.
+ 

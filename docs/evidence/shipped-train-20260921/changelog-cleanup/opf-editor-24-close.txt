@@ -1,0 +1,1 @@
+✓ Closed pull request OpenPresentation/opf-editor#24 (docs: record published editor 0.7.1 in changelog and README)

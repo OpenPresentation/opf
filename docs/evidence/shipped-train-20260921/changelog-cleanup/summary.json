@@ -1,0 +1,94 @@
+{
+  "observedAt": "2026-09-21T12:41:56.135954+00:00",
+  "scope": "Close three user-identified obsolete changelog drafts after reviewing their diffs and current main release docs; no comments, branch deletion, code edits, package publication, deployment or native compatibility acceptance.",
+  "pullRequests": [
+    {
+      "repository": "OpenPresentation/opf-editor",
+      "number": 24,
+      "url": "https://github.com/OpenPresentation/opf-editor/pull/24",
+      "state": "CLOSED",
+      "closedAt": "2026-09-21T12:40:46Z",
+      "obsoleteRelease": "0.7.1",
+      "currentRelease": "0.8.0",
+      "reviewedMain": "476191e28e6f5f5ec32146aeb416f5286b4d0570",
+      "branch": "cursor/editor-changelog-071-9f55",
+      "headRefOid": "e202e0d3a9ae6b8becf0509bb5e80e279b62461d",
+      "branchRetained": true,
+      "reviewedFiles": {
+        "README.md": {
+          "sha256": "b28fd0da10e790f08f31f32eb2694007d7bf001eecd7c83cc5cc4169d1b5827a",
+          "savedAs": "opf-editor-README.md"
+        },
+        "CHANGELOG.md": {
+          "sha256": "e83534266774fd05979361353c7a5b691535ccc1b8798de1239c6df73d4e6758",
+          "savedAs": "opf-editor-CHANGELOG.md"
+        },
+        "package.json": {
+          "sha256": "c91341504f64b9100dcd12bddee35cf8eadb0e14acee72d9798f93ca0a549818",
+          "savedAs": "opf-editor-package.json"
+        }
+      }
+    },
+    {
+      "repository": "OpenPresentation/opf-render",
+      "number": 26,
+      "url": "https://github.com/OpenPresentation/opf-render/pull/26",
+      "state": "CLOSED",
+      "closedAt": "2026-09-21T12:40:50Z",
+      "obsoleteRelease": "0.8.1",
+      "currentRelease": "0.9.0",
+      "reviewedMain": "114bf596e9034c0b80a8c92df6a956a04ef18bef",
+      "branch": "cursor/render-changelog-081-9f55",
+      "headRefOid": "a57274c28257962c4589018b01b5bb9fecd2b221",
+      "branchRetained": true,
+      "reviewedFiles": {
+        "README.md": {
+          "sha256": "1b34dd408a4e89be5415a0cac13628a42982d5fbef15d0e99cbb4f5be58dfb72",
+          "savedAs": "opf-render-README.md"
+        },
+        "CHANGELOG.md": {
+          "sha256": "5eb363be5d7105d3d7d54ca3f83b9674547f3eeccdc31d90532e458128e60254",
+          "savedAs": "opf-render-CHANGELOG.md"
+        },
+        "package.json": {
+          "sha256": "ab5cac6fc9588b3ba694fd17a0d1bde952ebabb60977a13089626b2ec146d84f",
+          "savedAs": "opf-render-package.json"
+        }
+      }
+    },
+    {
+      "repository": "OpenPresentation/opf-pptx",
+      "number": 40,
+      "url": "https://github.com/OpenPresentation/opf-pptx/pull/40",
+      "state": "CLOSED",
+      "closedAt": "2026-09-21T12:40:55Z",
+      "obsoleteRelease": "0.8.1",
+      "currentRelease": "0.9.1",
+      "reviewedMain": "fcc006a6887c549a96a3bc8bbdb957cc54fe67dd",
+      "branch": "cursor/pptx-changelog-081-9f55",
+      "headRefOid": "4f0cf72206303c54accd9142907884e5ce75efff",
+      "branchRetained": true,
+      "reviewedFiles": {
+        "README.md": {
+          "sha256": "91231fc3f76993ae9cf33eb2a286c4305956ac9a850e16ec27495f6becac086b",
+          "savedAs": "opf-pptx-README.md"
+        },
+        "CHANGELOG.md": {
+          "sha256": "ed84b93a05a41d489ea3a65be92b2f93d2374b85eb2eea9619cea4ded80a2de5",
+          "savedAs": "opf-pptx-CHANGELOG.md"
+        },
+        "package.json": {
+          "sha256": "be4944ae7405ff4d92238118eafebb93af433c53519145785553eecc3a4ef8bd",
+          "savedAs": "opf-pptx-package.json"
+        }
+      }
+    }
+  ],
+  "historicalNotesPreserved": [
+    "Editor 0.7.1 populates missing layout placeholders while retaining existing content (including zero values and subtitles) as one undoable edit. Existing main README documents this behavior.",
+    "Renderer 0.8.1 introduced accepted header/footer furniture geometry (furniture-flow-v2); current source and tests retain it. Historical 0.8.1 changelog section is absent from main.",
+    "PPTX 0.8.1 introduced shared header/footer export/import provenance; current src/index.js and src/furniture-provenance.js retain it. Historical 0.8.1 changelog section is absent from main."
+  ],
+  "handoff": "Parent confirmed before closure that OPF PR #93 now explicitly documents published furniture-flow-v2 and OPF_FURNITURE_V1 provenance in its compatibility matrix. Unique historical wording is preserved in the exact PR diffs in this directory.",
+  "validation": "Read-only live GitHub main SHAs match clean local main checkouts; current package versions and CHANGELOG sections verified. Every closed PR re-read, and retained branch refs match original head SHAs. No runtime tests required for GitHub lifecycle-only cleanup."
+}

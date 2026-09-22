@@ -1,0 +1,254 @@
+{
+  "valid": true,
+  "output": "/private/tmp/opf-registry-20260921/consumer/paginated.opf.json",
+  "sha256": "de46f68f3c3eacbd3095b2db16c6ecc65bc837caa89c7d614a253257d1f7e749",
+  "warnings": [],
+  "pages": [
+    {
+      "sourceSlideIndex": 0,
+      "slideIndex": 0,
+      "mappings": [
+        {
+          "sourcePath": "slides.0.title",
+          "outputPath": "slides.0.title"
+        },
+        {
+          "sourcePath": "slides.0.subtitle",
+          "outputPath": "slides.0.subtitle"
+        }
+      ],
+      "repeatedMappings": [
+        {
+          "sourcePath": "slides.0.title",
+          "outputPath": "slides.0.title"
+        },
+        {
+          "sourcePath": "slides.0.subtitle",
+          "outputPath": "slides.0.subtitle"
+        },
+        {
+          "sourcePath": "design.header.left.text",
+          "outputPath": "design.header.left.text"
+        },
+        {
+          "sourcePath": "design.header.center.organization",
+          "outputPath": "design.header.center.organization"
+        },
+        {
+          "sourcePath": "organization.name",
+          "outputPath": "organization.name"
+        },
+        {
+          "sourcePath": "design.header.right.section",
+          "outputPath": "design.header.right.section"
+        },
+        {
+          "sourcePath": "slides.0.section",
+          "outputPath": "slides.0.section"
+        },
+        {
+          "sourcePath": "design.footer.left.text",
+          "outputPath": "design.footer.left.text"
+        },
+        {
+          "sourcePath": "design.footer.right.slideNumber",
+          "outputPath": "design.footer.right.slideNumber"
+        }
+      ]
+    },
+    {
+      "sourceSlideIndex": 1,
+      "slideIndex": 1,
+      "mappings": [
+        {
+          "sourcePath": "slides.1.title",
+          "outputPath": "slides.1.title"
+        },
+        {
+          "sourcePath": "slides.1.items",
+          "outputPath": "slides.1.items"
+        }
+      ],
+      "repeatedMappings": [
+        {
+          "sourcePath": "slides.1.title",
+          "outputPath": "slides.1.title"
+        },
+        {
+          "sourcePath": "design.header.left.text",
+          "outputPath": "design.header.left.text"
+        },
+        {
+          "sourcePath": "design.header.center.organization",
+          "outputPath": "design.header.center.organization"
+        },
+        {
+          "sourcePath": "organization.name",
+          "outputPath": "organization.name"
+        },
+        {
+          "sourcePath": "design.header.right.section",
+          "outputPath": "design.header.right.section"
+        },
+        {
+          "sourcePath": "slides.1.section",
+          "outputPath": "slides.1.section"
+        },
+        {
+          "sourcePath": "design.footer.left.text",
+          "outputPath": "design.footer.left.text"
+        },
+        {
+          "sourcePath": "design.footer.right.slideNumber",
+          "outputPath": "design.footer.right.slideNumber"
+        }
+      ]
+    },
+    {
+      "sourceSlideIndex": 2,
+      "slideIndex": 2,
+      "mappings": [
+        {
+          "sourcePath": "slides.2.items",
+          "outputPath": "slides.2.items",
+          "range": {
+            "unit": "items",
+            "start": 0,
+            "end": 14
+          }
+        }
+      ],
+      "repeatedMappings": [
+        {
+          "sourcePath": "slides.2.title",
+          "outputPath": "slides.2.title"
+        },
+        {
+          "sourcePath": "design.header.left.text",
+          "outputPath": "design.header.left.text"
+        },
+        {
+          "sourcePath": "design.header.center.organization",
+          "outputPath": "design.header.center.organization"
+        },
+        {
+          "sourcePath": "organization.name",
+          "outputPath": "organization.name"
+        },
+        {
+          "sourcePath": "design.header.right.section",
+          "outputPath": "design.header.right.section"
+        },
+        {
+          "sourcePath": "slides.2.section",
+          "outputPath": "slides.2.section"
+        },
+        {
+          "sourcePath": "design.footer.left.text",
+          "outputPath": "design.footer.left.text"
+        },
+        {
+          "sourcePath": "design.footer.right.slideNumber",
+          "outputPath": "design.footer.right.slideNumber"
+        }
+      ]
+    },
+    {
+      "sourceSlideIndex": 2,
+      "slideIndex": 3,
+      "mappings": [
+        {
+          "sourcePath": "slides.2.items",
+          "outputPath": "slides.3.items",
+          "range": {
+            "unit": "items",
+            "start": 14,
+            "end": 18
+          }
+        }
+      ],
+      "repeatedMappings": [
+        {
+          "sourcePath": "slides.2.title",
+          "outputPath": "slides.3.title"
+        },
+        {
+          "sourcePath": "design.header.left.text",
+          "outputPath": "design.header.left.text"
+        },
+        {
+          "sourcePath": "design.header.center.organization",
+          "outputPath": "design.header.center.organization"
+        },
+        {
+          "sourcePath": "organization.name",
+          "outputPath": "organization.name"
+        },
+        {
+          "sourcePath": "design.header.right.section",
+          "outputPath": "design.header.right.section"
+        },
+        {
+          "sourcePath": "slides.2.section",
+          "outputPath": "slides.3.section"
+        },
+        {
+          "sourcePath": "design.footer.left.text",
+          "outputPath": "design.footer.left.text"
+        },
+        {
+          "sourcePath": "design.footer.right.slideNumber",
+          "outputPath": "design.footer.right.slideNumber"
+        }
+      ]
+    },
+    {
+      "sourceSlideIndex": 3,
+      "slideIndex": 4,
+      "mappings": [
+        {
+          "sourcePath": "slides.3.title",
+          "outputPath": "slides.4.title"
+        },
+        {
+          "sourcePath": "slides.3.text",
+          "outputPath": "slides.4.text"
+        }
+      ],
+      "repeatedMappings": [
+        {
+          "sourcePath": "slides.3.title",
+          "outputPath": "slides.4.title"
+        },
+        {
+          "sourcePath": "design.header.left.text",
+          "outputPath": "design.header.left.text"
+        },
+        {
+          "sourcePath": "design.header.center.organization",
+          "outputPath": "design.header.center.organization"
+        },
+        {
+          "sourcePath": "organization.name",
+          "outputPath": "organization.name"
+        },
+        {
+          "sourcePath": "design.header.right.section",
+          "outputPath": "design.header.right.section"
+        },
+        {
+          "sourcePath": "slides.3.section",
+          "outputPath": "slides.4.section"
+        },
+        {
+          "sourcePath": "design.footer.left.text",
+          "outputPath": "design.footer.left.text"
+        },
+        {
+          "sourcePath": "design.footer.right.slideNumber",
+          "outputPath": "design.footer.right.slideNumber"
+        }
+      ]
+    }
+  ]
+}

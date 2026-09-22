@@ -1,0 +1,28 @@
+{
+  "passed": true,
+  "node": "v24.21.0",
+  "sourcePptxSha256": "b3cbc884c15501b8481dc165d58909750c16fc6f41253119baa0985373951901",
+  "registryLockSha256": "4868f13254e3e681566164da8427d3716ceaa025435e4606e5e15fc8a87bc305",
+  "binding": {
+    "version": "0.9.1",
+    "manifestPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf-pptx\\package.json",
+    "manifestSha256": "be4944ae7405ff4d92238118eafebb93af433c53519145785553eecc3a4ef8bd",
+    "entry": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf-pptx\\dist\\index.js",
+    "entrySha256": "ba8fa87cebb32db9675f71bec91cc257e8d02a9d0977ca133666c6257eb07716",
+    "resolved": "https://registry.npmjs.org/@openpresentation/opf-pptx/-/opf-pptx-0.9.1.tgz",
+    "integrity": "sha512-krzDAKjDByP2zsoR4VeyyIwU7uhcVbxpeBYEIw7vlkoRWWiFq170rhQzQZx5lbMD7u2magYEkdUt3rUgByCKjw=="
+  },
+  "diagnostics": [
+    {
+      "code": "heading-import-reflow",
+      "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Formatting and geometry are not reconstructed.",
+      "path": "slides.0"
+    },
+    {
+      "code": "text-import-reflow",
+      "message": "Complete tagged lines retain current native text, whitespace and authored line boundaries. Native formatting, geometry and OPF nesting are not reconstructed; review the reflowed text.",
+      "path": "slides.0"
+    }
+  ],
+  "scope": "Current title/body text from registry fromPptx. No physical-font identity, rich-style reconstruction, embedding or layout-fidelity acceptance."
+}

@@ -1,0 +1,23 @@
+{
+  "command": [
+    "fnm",
+    "exec",
+    "--using=24",
+    "node",
+    "node_modules/@playwright/test/cli.js",
+    "test",
+    "--workers=1",
+    "--retries=0",
+    "--trace=on",
+    "--reporter=list,json",
+    "--output=/private/tmp/opf-font-readiness-concurrency-20260921/acceptance/results"
+  ],
+  "startedAt": "2026-09-21T20:49:42.219799+00:00",
+  "finishedAt": "2026-09-21T20:51:34.351591+00:00",
+  "durationSeconds": 112.130358958,
+  "exitCode": 0,
+  "retries": 0,
+  "trace": "on",
+  "baseUrl": "http://127.0.0.1:4337",
+  "buildId": "eDrCpu0YEZtjYRCFXNVvI"
+}

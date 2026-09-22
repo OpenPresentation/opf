@@ -1,0 +1,31 @@
+{
+  "baseHead": "8c0dae19b339ef3fe6a06c1d2df9f96b31d4f575",
+  "node": "v24.21.0",
+  "buildId": "k9YqAs5Gmj1tmWE4Y70tG",
+  "sha256": {
+    "components/playground/opf-editor.tsx": "ec0ace671d63570558de5ff5a729122fa89510b56979c173da60c1771aa25f39",
+    "components/author/author-shell.tsx": "e91e874496ce69706391f438ceedd0c8285f6466194ead9a1ea4316f859ff9a9",
+    "components/playground/playground-shell.tsx": "f0625e149945fbab390bf94026cf4000f9cb21b2d51db0eacbca975eb61971d8",
+    "lib/opf-toolkit/use-editor-session.ts": "8771039fb1f844442198e47547773faa30c91c2e9428d1ebd4c689d32069dfcc",
+    "package.json": "e9ac58846cd1f59a2bdee422b0fc4e9d63e51e62e7e86205fc419bd7b0ec5540",
+    "pnpm-lock.yaml": "f362abf89c57fe9e93197a54520fa5fc712e85bf78b2e011285456f37283b76f",
+    ".next/BUILD_ID": "8a7ce7c6e76288a6adcffa22c93bf73d4ca63a460ce3adc47c5b67bf3de9b447",
+    "tests/e2e/completion-keyboard.spec.ts": "13c9d8d04bf08cae6eed71794e347966b6544e1cc112cd182a2863265aa96687",
+    "tests/e2e/svg-security.spec.ts": "00b80195d1df3707396dc3c1e83985268b30cd038b0bde1497bf483bed20acb4",
+    "tests/e2e/helpers/readiness-diagnostics.ts": "a1d92f5de8192a09f4741c204c9caca58a0d82df0b2669bb2d325595448ae07c"
+  },
+  "results": {
+    "build": 0,
+    "typecheck": 0,
+    "unitTests": 627,
+    "newFilesScopedLintErrors": 0,
+    "newFilesScopedLintWarnings": 0
+  },
+  "commands": {
+    "build": "PATH=<cached-pnpm-bin>:$PATH NEXT_TELEMETRY_DISABLED=1 fnm exec --using=24 node <cached-pnpm>/pnpm.cjs build",
+    "typecheck": "fnm exec --using=24 node node_modules/typescript/bin/tsc --noEmit --incremental false",
+    "unit": "fnm exec --using=24 node node_modules/vitest/vitest.mjs run",
+    "lint": "fnm exec --using=24 node node_modules/eslint/bin/eslint.js components/playground/opf-editor.tsx tests/e2e/completion-keyboard.spec.ts tests/e2e/svg-security.spec.ts tests/e2e/helpers/readiness-diagnostics.ts --format json"
+  },
+  "scope": "Fresh guard build; prior three product files unchanged from source-preservation evidence. Their existing scoped lint32errors/13warnings remain; this is not repository-wide lint acceptance."
+}

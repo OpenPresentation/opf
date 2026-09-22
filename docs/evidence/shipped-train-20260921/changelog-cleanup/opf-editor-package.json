@@ -1,0 +1,126 @@
+{
+  "name": "@openpresentation/opf-editor",
+  "version": "0.8.0",
+  "description": "Embeddable local OPF editor primitives built on the deterministic renderer.",
+  "license": "MIT",
+  "type": "module",
+  "private": false,
+  "engines": {
+    "node": "24.x"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OpenPresentation/opf-editor.git"
+  },
+  "bugs": {
+    "url": "https://github.com/OpenPresentation/opf-editor/issues"
+  },
+  "homepage": "https://github.com/OpenPresentation/opf-editor#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./react": {
+      "types": "./dist/react.d.ts",
+      "default": "./dist/react.js"
+    },
+    "./svelte": {
+      "types": "./dist/svelte.d.ts",
+      "default": "./dist/svelte.js"
+    },
+    "./package.json": "./package.json",
+    "./canvas": {
+      "types": "./dist/canvas.d.ts",
+      "default": "./dist/canvas.js"
+    },
+    "./transfer": {
+      "types": "./dist/transfer.d.ts",
+      "default": "./dist/transfer.js"
+    },
+    "./galleries": {
+      "types": "./dist/galleries.d.ts",
+      "default": "./dist/galleries.js"
+    },
+    "./schema": {
+      "types": "./dist/schema.d.ts",
+      "default": "./dist/schema.js"
+    },
+    "./schema-inspector": {
+      "types": "./dist/schema-inspector.d.ts",
+      "default": "./dist/schema-inspector.js"
+    },
+    "./data": {
+      "types": "./dist/data.d.ts",
+      "default": "./dist/data.js"
+    },
+    "./rich-text": {
+      "types": "./dist/rich-text.d.ts",
+      "default": "./dist/rich-text.js"
+    },
+    "./layout": {
+      "types": "./dist/layout.d.ts",
+      "default": "./dist/layout.js"
+    },
+    "./json-editor": {
+      "types": "./dist/json-editor.d.ts",
+      "default": "./dist/json-editor.js"
+    },
+    "./json-options": {
+      "types": "./dist/json-options.d.ts",
+      "default": "./dist/json-options.js"
+    }
+  },
+  "types": "./dist/index.d.ts",
+  "sideEffects": false,
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "typecheck": "node --check src/index.js && node --check src/react.js && node --check src/svelte.js && node --check scripts/build.mjs && node --check scripts/validate-package.mjs && node --check test/smoke.mjs && node --check test/component-smoke.mjs && node --check src/canvas.js && node --check src/canvas-fields.js && node --check test/canvas-fields.mjs && node --check test/browser-canvas.mjs && node --check src/transfer.js && node --check src/presentation-ids.js && node --check src/color-authoring.js && node --check test/presentation-ids.mjs && node --check src/galleries.js && node --check examples/transfer-controls.js && node --check src/schema.js && node --check src/schema-inspector.js && node --check test/rich-table-browser.mjs && node --check test/styled-table.mjs && node --check test/styled-table-browser.mjs && node --check examples/pptx-controls.js && node --check scripts/build-playground.mjs && node --check test/playground-pptx.mjs && node --check src/text-input.js && node --check src/rich-text.js && node --check src/rich-text-input.js && node --check src/rich-text-toolbar.js && node --check test/rich-text.mjs && node --check test/rich-input-browser.mjs && node --check src/json-editor.js && node --check src/json-menu.js && node --check src/json-options.js && node --check src/json-source.js",
+    "test": "npm run build && node test/accepted-text.mjs && node test/smoke.mjs && node test/component-smoke.mjs && node test/canvas-fields.mjs && node test/transfer.mjs && node test/presentation-ids.mjs && node test/schema.mjs && node test/rich-text.mjs && node test/layout.mjs && node test/blocks.mjs && node test/styled-table.mjs && node test/json-source.mjs && node test/json-options.mjs",
+    "validate": "node scripts/validate-package.mjs",
+    "test:packed": "node test/packed-install.mjs",
+    "prepack": "npm run build",
+    "build:playground": "node scripts/build-playground.mjs",
+    "test:playground": "npm run build:playground && node test/playground-pptx.mjs",
+    "test:code-browser": "node test/code-browser.mjs",
+    "test:metric-browser": "node test/metric-browser.mjs",
+    "test:rich-input-browser": "node test/rich-input-browser.mjs",
+    "test:json": "npm run build && node test/json-source.mjs && node test/json-options.mjs",
+    "test:json-browser": "node test/json-editor-browser.mjs"
+  },
+  "dependencies": {
+    "@codemirror/autocomplete": "6.20.3",
+    "@codemirror/commands": "6.11.0",
+    "@codemirror/lang-json": "6.0.2",
+    "@codemirror/language": "6.12.4",
+    "@codemirror/lint": "6.9.7",
+    "@codemirror/search": "6.7.2",
+    "@codemirror/state": "6.7.4",
+    "@codemirror/view": "6.43.11",
+    "@lezer/highlight": "1.2.3",
+    "@openpresentation/opf": "^0.11.0",
+    "jsonc-parser": "3.3.1"
+  },
+  "peerDependencies": {
+    "@openpresentation/opf-render": "^0.9.0"
+  },
+  "peerDependenciesMeta": {
+    "@openpresentation/opf-render": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@openpresentation/opf-pptx": "^0.9.0",
+    "@openpresentation/opf-render": "^0.9.0",
+    "esbuild": "0.28.2",
+    "playwright": "1.63.0"
+  }
+}

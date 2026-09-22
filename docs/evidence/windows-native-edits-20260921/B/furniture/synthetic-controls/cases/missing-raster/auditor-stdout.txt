@@ -1,0 +1,1 @@
+{"passed": false, "checks": 25, "failures": [{"name": "edited slide 2 raster", "passed": false, "error": "[Errno 2] No such file or directory: 'C:\\\\Users\\\\micha\\\\.codex\\\\worktrees\\\\fd3f\\\\opf\\\\artifacts\\\\windows-resume-20260921\\\\furniture-audit-controls-01\\\\cases\\\\missing-raster\\\\edited-slide-02.png'"}]}

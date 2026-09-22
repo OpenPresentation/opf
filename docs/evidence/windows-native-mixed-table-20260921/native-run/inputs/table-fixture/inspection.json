@@ -1,0 +1,301 @@
+{
+  "contract": {
+    "slideCount": 1,
+    "tableCount": 1,
+    "rowCount": 1,
+    "cellCount": 1,
+    "authoredTabCount": 1,
+    "authoredHardBreakCount": 0,
+    "authoredRunSizesPoints": [
+      18,
+      30,
+      18,
+      30,
+      18
+    ]
+  },
+  "validation": {
+    "valid": true,
+    "errors": [],
+    "warnings": [],
+    "schemaName": "presentation"
+  },
+  "registeredMeasurement": {
+    "usableForLiteralTab": false,
+    "error": {
+      "name": "OPFFontError",
+      "code": "missing-glyph",
+      "message": "Font 'Carlito' cannot display U+9.",
+      "details": {
+        "path": "slides.0.table.rows.0.0.0",
+        "fontFamily": "Carlito",
+        "character": "\t"
+      }
+    }
+  },
+  "acceptedLayoutTrace": {
+    "measurement": "estimated because the current registered font measurement rejects U+0009",
+    "richLineCount": 3,
+    "boxWidth": 1144.8,
+    "lines": [
+      {
+        "start": 0,
+        "end": 78,
+        "x": 67.6,
+        "y": 65.6,
+        "height": 48.8,
+        "text": "Lead\tLarge evidence phrase continues in smaller text across the same editable "
+      },
+      {
+        "start": 78,
+        "end": 172,
+        "x": 67.6,
+        "y": 114.39999999999999,
+        "height": 48.8,
+        "text": "table cell so natural layout must wrap this sentence without authored line breaks or inserted "
+      },
+      {
+        "start": 172,
+        "end": 245,
+        "x": 67.6,
+        "y": 163.2,
+        "height": 48.8,
+        "text": "offsets. Second large phrase finishes the control with exact source runs."
+      }
+    ],
+    "diagnostics": []
+  },
+  "pptx": {
+    "zipEntryCount": 39,
+    "xmlPartCount": 20,
+    "xmlAllValid": true,
+    "xmlFailures": [],
+    "slideXmlSha256": "9ece1b627f6e217753cb84fb2151c65993df88b5d62a5b06805e2ba623d4a3ab",
+    "paragraphCount": 1,
+    "hardBreakCount": 0,
+    "nativeRuns": [
+      {
+        "text": "Lead\t",
+        "fontSizeHundredthsPoint": 1800,
+        "fontSizePoints": 18,
+        "typeface": "Carlito",
+        "bold": false,
+        "italic": false
+      },
+      {
+        "text": "Large evidence phrase ",
+        "fontSizeHundredthsPoint": 3000,
+        "fontSizePoints": 30,
+        "typeface": "Carlito",
+        "bold": true,
+        "italic": false
+      },
+      {
+        "text": "continues in smaller text across the same editable table cell so natural layout must wrap this sentence without authored line breaks or inserted offsets. ",
+        "fontSizeHundredthsPoint": 1800,
+        "fontSizePoints": 18,
+        "typeface": "Carlito",
+        "bold": false,
+        "italic": false
+      },
+      {
+        "text": "Second large phrase ",
+        "fontSizeHundredthsPoint": 3000,
+        "fontSizePoints": 30,
+        "typeface": "Carlito",
+        "bold": false,
+        "italic": false
+      },
+      {
+        "text": "finishes the control with exact source runs.",
+        "fontSizeHundredthsPoint": 1800,
+        "fontSizePoints": 18,
+        "typeface": "Carlito",
+        "bold": false,
+        "italic": false
+      }
+    ],
+    "nativeText": "Lead\tLarge evidence phrase continues in smaller text across the same editable table cell so natural layout must wrap this sentence without authored line breaks or inserted offsets. Second large phrase finishes the control with exact source runs.",
+    "nativeTextEqualsAuthored": true,
+    "literalTabCount": 1,
+    "rawTabReferences": [],
+    "tabStopCount": 0,
+    "tabStops": [],
+    "lineSpacing": [
+      {
+        "rawHundredthsPoint": 3660,
+        "points": 36.6
+      }
+    ],
+    "row": {
+      "heightEmu": 1508760,
+      "heightPoints": 118.8,
+      "heightReferencePixels": 158.4
+    },
+    "frame": {
+      "widthEmu": 11094720,
+      "heightEmu": 1508760,
+      "widthPoints": 873.6,
+      "heightPoints": 118.8
+    },
+    "gridWidths": [
+      {
+        "emu": 11094720,
+        "points": 873.6
+      }
+    ],
+    "exportDiagnostics": []
+  },
+  "reimport": {
+    "diagnostics": [],
+    "validation": {
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "schemaName": "presentation"
+    },
+    "location": "slides.0.blocks.0.table",
+    "cell": {
+      "value": [
+        {
+          "text": "Lead\t",
+          "fontSize": 18,
+          "fontFamily": "Carlito",
+          "color": "#000000"
+        },
+        {
+          "text": "Large evidence phrase ",
+          "bold": true,
+          "fontSize": 30,
+          "fontFamily": "Carlito",
+          "color": "#000000"
+        },
+        {
+          "text": "continues in smaller text across the same editable table cell so natural layout must wrap this sentence without authored line breaks or inserted offsets. ",
+          "fontSize": 18,
+          "fontFamily": "Carlito",
+          "color": "#000000"
+        },
+        {
+          "text": "Second large phrase ",
+          "fontSize": 30,
+          "fontFamily": "Carlito",
+          "color": "#000000"
+        },
+        {
+          "text": "finishes the control with exact source runs.",
+          "fontSize": 18,
+          "fontFamily": "Carlito",
+          "color": "#000000"
+        }
+      ],
+      "style": {
+        "fill": "#F0F0F0",
+        "align": "left",
+        "verticalAlign": "top",
+        "padding": {
+          "top": 8,
+          "right": 10,
+          "bottom": 4,
+          "left": 10
+        },
+        "borders": {
+          "left": {
+            "color": "#3AC67A",
+            "width": 1
+          },
+          "right": {
+            "color": "#3AC67A",
+            "width": 1
+          },
+          "top": {
+            "color": "#3AC67A",
+            "width": 1
+          },
+          "bottom": {
+            "color": "#3AC67A",
+            "width": 1
+          }
+        }
+      }
+    },
+    "text": "Lead\tLarge evidence phrase continues in smaller text across the same editable table cell so natural layout must wrap this sentence without authored line breaks or inserted offsets. Second large phrase finishes the control with exact source runs.",
+    "textEqualsAuthored": true,
+    "authoredRunCore": [
+      {
+        "text": "Lead\t",
+        "fontFamily": "Carlito",
+        "fontSize": 18,
+        "bold": false,
+        "italic": false
+      },
+      {
+        "text": "Large evidence phrase ",
+        "fontFamily": "Carlito",
+        "fontSize": 30,
+        "bold": true,
+        "italic": false
+      },
+      {
+        "text": "continues in smaller text across the same editable table cell so natural layout must wrap this sentence without authored line breaks or inserted offsets. ",
+        "fontFamily": "Carlito",
+        "fontSize": 18,
+        "bold": false,
+        "italic": false
+      },
+      {
+        "text": "Second large phrase ",
+        "fontFamily": "Carlito",
+        "fontSize": 30,
+        "bold": false,
+        "italic": false
+      },
+      {
+        "text": "finishes the control with exact source runs.",
+        "fontFamily": "Carlito",
+        "fontSize": 18,
+        "bold": false,
+        "italic": false
+      }
+    ],
+    "importedRunCore": [
+      {
+        "text": "Lead\t",
+        "fontFamily": "Carlito",
+        "fontSize": 18,
+        "bold": false,
+        "italic": false
+      },
+      {
+        "text": "Large evidence phrase ",
+        "fontFamily": "Carlito",
+        "fontSize": 30,
+        "bold": true,
+        "italic": false
+      },
+      {
+        "text": "continues in smaller text across the same editable table cell so natural layout must wrap this sentence without authored line breaks or inserted offsets. ",
+        "fontFamily": "Carlito",
+        "fontSize": 18,
+        "bold": false,
+        "italic": false
+      },
+      {
+        "text": "Second large phrase ",
+        "fontFamily": "Carlito",
+        "fontSize": 30,
+        "bold": false,
+        "italic": false
+      },
+      {
+        "text": "finishes the control with exact source runs.",
+        "fontFamily": "Carlito",
+        "fontSize": 18,
+        "bold": false,
+        "italic": false
+      }
+    ],
+    "runCoreEqualsAuthored": true,
+    "structuralCellJsonEqualsAuthored": false
+  }
+}

@@ -1,0 +1,1 @@
+✓ Closed pull request OpenPresentation/opf-render#26 (docs: record published renderer 0.8.1 in changelog and README)

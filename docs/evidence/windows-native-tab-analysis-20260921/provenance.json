@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "kind": "opf-native-tab-quantization-portable-provenance",
+  "mergedCoreEvidence": {
+    "repository": "OpenPresentation/opf",
+    "mergePullRequest": 106,
+    "commit": "3847f712ccb2379952bcc8ab7c9fdbaedfd0a4ce",
+    "bundlePath": "docs/evidence/windows-native-tabs-fonts-20260921",
+    "manifestSha256": "2f262ddf99ef83a12644181fc249639faebe3dc6520fe6470fd6ab8d2a607638",
+    "sourceContextPath": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/source-context.json",
+    "sourceContextSha256": "9a42c6a0107285d90faa296b054d4f73b0ad7293ce050d50ee6302c1ae6ab54e"
+  },
+  "nativeControlSource": {
+    "repository": "OpenPresentation/opf-pptx",
+    "pullRequest": 48,
+    "headCommit": "4b5d756",
+    "verifierSha256": "6a0f8f33e1072cf373e7b6c744d248ae89ec66901e7b8a3be6c89a32cce660dd"
+  },
+  "inputs": [
+    {
+      "bundlePath": "inputs/native-tab-v2-04-report.json",
+      "originPath": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-04/report.json",
+      "copyMode": "exact bytes",
+      "bytes": 103361,
+      "sha256": "dd2dc51ec6714c864479b93791eefe9807ab9f8c649f7a3c7bcabaca61b5a71c"
+    },
+    {
+      "bundlePath": "inputs/native-tab-v2-04-slide1.xml",
+      "originContainerPath": "docs/evidence/windows-native-tabs-fonts-20260921/tabs/D/tab/native/native-tab-v2-04/native-tab-control-v2.pptx",
+      "originContainerBytes": 34264,
+      "originContainerSha256": "73f271c2e360ba47b00894ca577a3c12fc5ebb006aca4d8dacd907a1b2d0d6f1",
+      "originZipMember": "ppt/slides/slide1.xml",
+      "copyMode": "exact ZIP member bytes",
+      "bytes": 16259,
+      "sha256": "b7bf2146362d7147d3b840d381dc339a3cf37f0cb51ea141909a9819dfe40117",
+      "zipCrc32": "5dc67820"
+    }
+  ],
+  "omissions": [
+    {
+      "kind": "PPTX container",
+      "reason": "The exact slide XML member and its container provenance are sufficient for the saved-coordinate analysis."
+    },
+    {
+      "kind": "PNG raster",
+      "reason": "The quantization replay uses numeric observations and DrawingML coordinates, not pixels."
+    },
+    {
+      "kind": "font programs and font output",
+      "reason": "No physical font identity or glyph-shaping claim is made."
+    },
+    {
+      "kind": "worker logs, stages, and script snapshots",
+      "reason": "Lifecycle provenance remains in merged core evidence; it is not needed to recompute these numeric equalities."
+    }
+  ]
+}

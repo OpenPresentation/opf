@@ -1,0 +1,213 @@
+{
+  "node": "v24.21.0",
+  "createdAt": "2026-09-21T12:42:42.923Z",
+  "sourceUnchanged": true,
+  "sourceSha256": "0a4a3af6d50bd9ca5fc99483272634a58a738ffc3ccbc2d10d7140323abf811f",
+  "lockUnchanged": true,
+  "results": [
+    {
+      "name": "workflow.mjs",
+      "args": [
+        "workflow.mjs"
+      ],
+      "startedAt": "2026-09-21T12:42:36.271Z",
+      "exitCode": 0,
+      "stdout": "{\n  \"slidesIn\": 4,\n  \"slidesOut\": 6,\n  \"pages\": 6,\n  \"fonts\": 9,\n  \"svgChars\": 1752054,\n  \"pngBytes\": 37447,\n  \"pdfBytes\": 262123,\n  \"pptxBytes\": 49862\n}\n",
+      "stderr": ""
+    },
+    {
+      "name": "core-furniture-composition.test.mjs",
+      "args": [
+        "--test",
+        "core-furniture-composition.test.mjs"
+      ],
+      "startedAt": "2026-09-21T12:42:37.454Z",
+      "exitCode": 0,
+      "stdout": "✔ furniture preserves inherited/local sources, whitespace and generated metadata at both floors (5.072875ms)\n✔ furniture clearance scales with the canvas and respects explicit host padding (0.329375ms)\n✔ whole local overrides and explicit false preserve furniture-free body geometry (0.17525ms)\n✔ images and every authored/generated field coexist without deleting text (0.086375ms)\n✔ missing generated values diagnose controlling paths and strict composition/pagination reject them (71.82275ms)\n✔ irreducible furniture and provided ink cannot be hidden by body pagination (1.272292ms)\n✔ pagination repeats furniture and retains exact body source and mappings (39.413542ms)\n✔ a continuation whose wider number cannot fit fails atomically (13.825291ms)\nℹ tests 8\nℹ suites 0\nℹ pass 8\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 194.2115\n",
+      "stderr": ""
+    },
+    {
+      "name": "core-code-layout.test.mjs",
+      "args": [
+        "--test",
+        "core-code-layout.test.mjs"
+      ],
+      "startedAt": "2026-09-21T12:42:37.675Z",
+      "exitCode": 0,
+      "stdout": "✔ complete code parts preserve exact filename, language, body, whitespace and hard line boundaries (1.516459ms)\n✔ shorthand, empty source and absent metadata retain their source and generated-label distinction (0.206833ms)\n✔ long language labels and filenames are measured within their cell before allocating the body (2.343167ms)\n✔ wrapped whitespace and graphemes retain contiguous source offsets, including CRLF and blank final lines (0.477583ms)\n✔ tabs use measured space stops and never send control tabs to the font-width provider (0.495625ms)\n✔ readability floors scale once and body shrinking preserves all code content (0.2025ms)\n✔ irreducible body and metadata failures remain explicit; strict mode does not return partial output (3.139291ms)\n✔ invalid inner boxes never become invented one-pixel fits; malformed options reject (0.169708ms)\n✔ font trials stay bounded independently of canvas scale (3.95ms)\nℹ tests 9\nℹ suites 0\nℹ pass 9\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 73.405833\n",
+      "stderr": ""
+    },
+    {
+      "name": "core-code-composition.test.mjs",
+      "args": [
+        "--test",
+        "core-code-composition.test.mjs"
+      ],
+      "startedAt": "2026-09-21T12:42:37.771Z",
+      "exitCode": 0,
+      "stdout": "✔ accepted code uses rounded cells and preserves body compatibility without repeated explanation measurements (2.985375ms)\n✔ candidate penalties include complete code metadata and charge overflowing leaves once (5.81575ms)\n✔ strict ancestors reject code metadata paths and cannot be weakened by descendants (95.729916ms)\n✔ explicit code placement and weights remain authoritative even when metadata overflows (5.553625ms)\n✔ pagination preserves exact code bytes, metadata, ranges and floors across wide and portrait slides (111.706709ms)\n✔ irreducible code metadata rejects pagination even after earlier content or with an empty body (89.000625ms)\nℹ tests 6\nℹ suites 0\nℹ pass 6\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 382.420334\n",
+      "stderr": ""
+    },
+    {
+      "name": "pptx-shared-furniture.mjs",
+      "args": [
+        "pptx-shared-furniture.mjs",
+        "/private/tmp/opf-registry-20260921/evidence/pptx-furniture.json"
+      ],
+      "startedAt": "2026-09-21T12:42:38.179Z",
+      "exitCode": 0,
+      "stdout": "16 furniture exports match accepted editable text boxes, fonts, source lines and images; explicit disabling and strict overflow controls pass.\n",
+      "stderr": ""
+    },
+    {
+      "name": "pptx-furniture-provenance.mjs",
+      "args": [
+        "pptx-furniture-provenance.mjs"
+      ],
+      "startedAt": "2026-09-21T12:42:38.718Z",
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "node:internal/fs/promises:1345\n  return new FileHandle(await PromisePrototypeThen(\n                        ^\n\nError: ENOENT: no such file or directory, open '/private/tmp/opf-registry-20260921/consumer/fixtures/images/tall.png'\n    at async open (node:internal/fs/promises:1345:25)\n    at async readFile (node:internal/fs/promises:1996:14)\n    at async file:///private/tmp/opf-registry-20260921/consumer/pptx-furniture-provenance.mjs:149:65 {\n  errno: -2,\n  code: 'ENOENT',\n  syscall: 'open',\n  path: '/private/tmp/opf-registry-20260921/consumer/fixtures/images/tall.png'\n}\n\nNode.js v24.21.0\n"
+    },
+    {
+      "name": "pptx-shared-code.mjs",
+      "args": [
+        "pptx-shared-code.mjs"
+      ],
+      "startedAt": "2026-09-21T12:42:39.432Z",
+      "exitCode": 0,
+      "stdout": "Shared code PPTX: 8 decks, 37 accepted native lines, 8 tab stops, six whitespace imports, strict failures, 132 XML-boundary rejections and valid character boundaries verified.\n",
+      "stderr": ""
+    },
+    {
+      "name": "pptx-code-provenance.mjs",
+      "args": [
+        "pptx-code-provenance.mjs"
+      ],
+      "startedAt": "2026-09-21T12:42:39.855Z",
+      "exitCode": 0,
+      "stdout": "Code provenance: exact source/metadata, native edits, ordering, empty/Unicode values, five damaged groups and edited generated label verified.\n",
+      "stderr": ""
+    },
+    {
+      "name": "pptx-heading-provenance.mjs",
+      "args": [
+        "pptx-heading-provenance.mjs"
+      ],
+      "startedAt": "2026-09-21T12:42:40.265Z",
+      "exitCode": 0,
+      "stdout": "Heading provenance: native edits, shape renaming/reordering and 8 damaged/ambiguous group fallbacks preserve visible words.\nHeading role isolation: 16 wide/portrait quote imports, explicit native placeholders and ordinary untagged title/subtitle inference pass.\n",
+      "stderr": ""
+    },
+    {
+      "name": "pptx-metric-provenance.mjs",
+      "args": [
+        "pptx-metric-provenance.mjs"
+      ],
+      "startedAt": "2026-09-21T12:42:40.905Z",
+      "exitCode": 0,
+      "stdout": "Metric provenance: numeric/literal edits, CRLF, role edits, renamed/reordered shapes, eight damaged or ambiguous groups and cross-code identity guards pass.\n",
+      "stderr": ""
+    },
+    {
+      "name": "pptx-color-ref-export.mjs",
+      "args": [
+        "pptx-color-ref-export.mjs"
+      ],
+      "startedAt": "2026-09-21T12:42:41.262Z",
+      "exitCode": 0,
+      "stdout": "ColorRef export passed: scheme slots, roles, variables, styled cells, and invalid run soft-degrade.\n",
+      "stderr": ""
+    },
+    {
+      "name": "renderer-color-references.mjs",
+      "args": [
+        "renderer-color-references.mjs"
+      ],
+      "startedAt": "2026-09-21T12:42:41.484Z",
+      "exitCode": 0,
+      "stdout": "Color reference renderer passed: scheme slots, roles, variables, hex, and invalid run fallback.\n",
+      "stderr": ""
+    },
+    {
+      "name": "renderer-furniture.mjs",
+      "args": [
+        "renderer-furniture.mjs"
+      ],
+      "startedAt": "2026-09-21T12:42:41.627Z",
+      "exitCode": 0,
+      "stdout": "Furniture renderer passed: shared readable fields, combined image/text, generated metadata, fit images, local disabling and unresolved-content rejection.\n",
+      "stderr": ""
+    },
+    {
+      "name": "renderer-shared-code.mjs",
+      "args": [
+        "renderer-shared-code.mjs"
+      ],
+      "startedAt": "2026-09-21T12:42:41.872Z",
+      "exitCode": 0,
+      "stdout": "Shared code SVG: 10 accepted layouts, source/whitespace/trace preservation, no extra measurement, strict/tiny-cell rejection, 132 XML-boundary rejections and valid character boundaries.\n",
+      "stderr": ""
+    },
+    {
+      "name": "probe-furniture-reimport.mjs",
+      "args": [
+        "probe-furniture-reimport.mjs",
+        "/private/tmp/opf-registry-20260921/evidence/furniture-reimport"
+      ],
+      "startedAt": "2026-09-21T12:42:42.102Z",
+      "exitCode": 0,
+      "stdout": "{\n  \"cases\": 5,\n  \"failedChecks\": []\n}\n",
+      "stderr": ""
+    },
+    {
+      "name": "cli-version",
+      "args": [
+        "node_modules/@openpresentation/cli/dist/index.js",
+        "--version"
+      ],
+      "startedAt": "2026-09-21T12:42:42.437Z",
+      "exitCode": 0,
+      "stdout": "{\n  \"cli\": \"0.9.0\",\n  \"opf\": \"0.11.0\"\n}\n",
+      "stderr": ""
+    },
+    {
+      "name": "cli-validate",
+      "args": [
+        "node_modules/@openpresentation/cli/dist/index.js",
+        "validate",
+        "deck.opf.json"
+      ],
+      "startedAt": "2026-09-21T12:42:42.482Z",
+      "exitCode": 0,
+      "stdout": "{\n  \"valid\": true,\n  \"errors\": [],\n  \"warnings\": [],\n  \"schemaName\": \"presentation\",\n  \"sha256\": \"0a4a3af6d50bd9ca5fc99483272634a58a738ffc3ccbc2d10d7140323abf811f\"\n}\n",
+      "stderr": ""
+    },
+    {
+      "name": "cli-lint",
+      "args": [
+        "node_modules/@openpresentation/cli/dist/index.js",
+        "lint",
+        "deck.opf.json"
+      ],
+      "startedAt": "2026-09-21T12:42:42.616Z",
+      "exitCode": 0,
+      "stdout": "{\n  \"valid\": true,\n  \"schemaValid\": true,\n  \"diagnostics\": [],\n  \"counts\": {\n    \"error\": 0,\n    \"warning\": 0,\n    \"info\": 0\n  },\n  \"checks\": {\n    \"syntax\": \"checked\",\n    \"schema\": \"checked\",\n    \"catalogReferences\": \"local-context\",\n    \"assetReferences\": \"registry-only\",\n    \"contracts\": \"checked\",\n    \"layout\": \"not-checked\",\n    \"fonts\": \"not-checked\",\n    \"nativeExport\": \"not-checked\"\n  },\n  \"sha256\": \"0a4a3af6d50bd9ca5fc99483272634a58a738ffc3ccbc2d10d7140323abf811f\",\n  \"opfVersion\": \"0.11.0\"\n}\n",
+      "stderr": ""
+    },
+    {
+      "name": "cli-paginate",
+      "args": [
+        "node_modules/@openpresentation/cli/dist/index.js",
+        "paginate",
+        "deck.opf.json",
+        "paginated.opf.json"
+      ],
+      "startedAt": "2026-09-21T12:42:42.755Z",
+      "exitCode": 0,
+      "stdout": "{\n  \"valid\": true,\n  \"output\": \"/private/tmp/opf-registry-20260921/consumer/paginated.opf.json\",\n  \"sha256\": \"de46f68f3c3eacbd3095b2db16c6ecc65bc837caa89c7d614a253257d1f7e749\",\n  \"warnings\": [],\n  \"pages\": [\n    {\n      \"sourceSlideIndex\": 0,\n      \"slideIndex\": 0,\n      \"mappings\": [\n        {\n          \"sourcePath\": \"slides.0.title\",\n          \"outputPath\": \"slides.0.title\"\n        },\n        {\n          \"sourcePath\": \"slides.0.subtitle\",\n          \"outputPath\": \"slides.0.subtitle\"\n        }\n      ],\n      \"repeatedMappings\": [\n        {\n          \"sourcePath\": \"slides.0.title\",\n          \"outputPath\": \"slides.0.title\"\n        },\n        {\n          \"sourcePath\": \"slides.0.subtitle\",\n          \"outputPath\": \"slides.0.subtitle\"\n        },\n        {\n          \"sourcePath\": \"design.header.left.text\",\n          \"outputPath\": \"design.header.left.text\"\n        },\n        {\n          \"sourcePath\": \"design.header.center.organization\",\n          \"outputPath\": \"design.header.center.organization\"\n        },\n        {\n          \"sourcePath\": \"organization.name\",\n          \"outputPath\": \"organization.name\"\n        },\n        {\n          \"sourcePath\": \"design.header.right.section\",\n          \"outputPath\": \"design.header.right.section\"\n        },\n        {\n          \"sourcePath\": \"slides.0.section\",\n          \"outputPath\": \"slides.0.section\"\n        },\n        {\n          \"sourcePath\": \"design.footer.left.text\",\n          \"outputPath\": \"design.footer.left.text\"\n        },\n        {\n          \"sourcePath\": \"design.footer.right.slideNumber\",\n          \"outputPath\": \"design.footer.right.slideNumber\"\n        }\n      ]\n    },\n    {\n      \"sourceSlideIndex\": 1,\n      \"slideIndex\": 1,\n      \"mappings\": [\n        {\n          \"sourcePath\": \"slides.1.title\",\n          \"outputPath\": \"slides.1.title\"\n        },\n        {\n          \"sourcePath\": \"slides.1.items\",\n          \"outputPath\": \"slides.1.items\"\n        }\n      ],\n      \"repeatedMappings\": [\n        {\n          \"sourcePath\": \"slides.1.title\",\n          \"outputPath\": \"slides.1.title\"\n        },\n        {\n          \"sourcePath\": \"design.header.left.text\",\n          \"outputPath\": \"design.header.left.text\"\n        },\n        {\n          \"sourcePath\": \"design.header.center.organization\",\n          \"outputPath\": \"design.header.center.organization\"\n        },\n        {\n          \"sourcePath\": \"organization.name\",\n          \"outputPath\": \"organization.name\"\n        },\n        {\n          \"sourcePath\": \"design.header.right.section\",\n          \"outputPath\": \"design.header.right.section\"\n        },\n        {\n          \"sourcePath\": \"slides.1.section\",\n          \"outputPath\": \"slides.1.section\"\n        },\n        {\n          \"sourcePath\": \"design.footer.left.text\",\n          \"outputPath\": \"design.footer.left.text\"\n        },\n        {\n          \"sourcePath\": \"design.footer.right.slideNumber\",\n          \"outputPath\": \"design.footer.right.slideNumber\"\n        }\n      ]\n    },\n    {\n      \"sourceSlideIndex\": 2,\n      \"slideIndex\": 2,\n      \"mappings\": [\n        {\n          \"sourcePath\": \"slides.2.items\",\n          \"outputPath\": \"slides.2.items\",\n          \"range\": {\n            \"unit\": \"items\",\n            \"start\": 0,\n            \"end\": 14\n          }\n        }\n      ],\n      \"repeatedMappings\": [\n        {\n          \"sourcePath\": \"slides.2.title\",\n          \"outputPath\": \"slides.2.title\"\n        },\n        {\n          \"sourcePath\": \"design.header.left.text\",\n          \"outputPath\": \"design.header.left.text\"\n        },\n        {\n          \"sourcePath\": \"design.header.center.organization\",\n          \"outputPath\": \"design.header.center.organization\"\n        },\n        {\n          \"sourcePath\": \"organization.name\",\n          \"outputPath\": \"organization.name\"\n        },\n        {\n          \"sourcePath\": \"design.header.right.section\",\n          \"outputPath\": \"design.header.right.section\"\n        },\n        {\n          \"sourcePath\": \"slides.2.section\",\n          \"outputPath\": \"slides.2.section\"\n        },\n        {\n          \"sourcePath\": \"design.footer.left.text\",\n          \"outputPath\": \"design.footer.left.text\"\n        },\n        {\n          \"sourcePath\": \"design.footer.right.slideNumber\",\n          \"outputPath\": \"design.footer.right.slideNumber\"\n        }\n      ]\n    },\n    {\n      \"sourceSlideIndex\": 2,\n      \"slideIndex\": 3,\n      \"mappings\": [\n        {\n          \"sourcePath\": \"slides.2.items\",\n          \"outputPath\": \"slides.3.items\",\n          \"range\": {\n            \"unit\": \"items\",\n            \"start\": 14,\n            \"end\": 18\n          }\n        }\n      ],\n      \"repeatedMappings\": [\n        {\n          \"sourcePath\": \"slides.2.title\",\n          \"outputPath\": \"slides.3.title\"\n        },\n        {\n          \"sourcePath\": \"design.header.left.text\",\n          \"outputPath\": \"design.header.left.text\"\n        },\n        {\n          \"sourcePath\": \"design.header.center.organization\",\n          \"outputPath\": \"design.header.center.organization\"\n        },\n        {\n          \"sourcePath\": \"organization.name\",\n          \"outputPath\": \"organization.name\"\n        },\n        {\n          \"sourcePath\": \"design.header.right.section\",\n          \"outputPath\": \"design.header.right.section\"\n        },\n        {\n          \"sourcePath\": \"slides.2.section\",\n          \"outputPath\": \"slides.3.section\"\n        },\n        {\n          \"sourcePath\": \"design.footer.left.text\",\n          \"outputPath\": \"design.footer.left.text\"\n        },\n        {\n          \"sourcePath\": \"design.footer.right.slideNumber\",\n          \"outputPath\": \"design.footer.right.slideNumber\"\n        }\n      ]\n    },\n    {\n      \"sourceSlideIndex\": 3,\n      \"slideIndex\": 4,\n      \"mappings\": [\n        {\n          \"sourcePath\": \"slides.3.title\",\n          \"outputPath\": \"slides.4.title\"\n        },\n        {\n          \"sourcePath\": \"slides.3.text\",\n          \"outputPath\": \"slides.4.text\"\n        }\n      ],\n      \"repeatedMappings\": [\n        {\n          \"sourcePath\": \"slides.3.title\",\n          \"outputPath\": \"slides.4.title\"\n        },\n        {\n          \"sourcePath\": \"design.header.left.text\",\n          \"outputPath\": \"design.header.left.text\"\n        },\n        {\n          \"sourcePath\": \"design.header.center.organization\",\n          \"outputPath\": \"design.header.center.organization\"\n        },\n        {\n          \"sourcePath\": \"organization.name\",\n          \"outputPath\": \"organization.name\"\n        },\n        {\n          \"sourcePath\": \"design.header.right.section\",\n          \"outputPath\": \"design.header.right.section\"\n        },\n        {\n          \"sourcePath\": \"slides.3.section\",\n          \"outputPath\": \"slides.4.section\"\n        },\n        {\n          \"sourcePath\": \"design.footer.left.text\",\n          \"outputPath\": \"design.footer.left.text\"\n        },\n        {\n          \"sourcePath\": \"design.footer.right.slideNumber\",\n          \"outputPath\": \"design.footer.right.slideNumber\"\n        }\n      ]\n    }\n  ]\n}\n",
+      "stderr": ""
+    }
+  ],
+  "scope": "Installed npm package quickstart, CLI, deterministic layout and native editable OOXML serialization/provenance controls. XML edits simulate current native content; no PowerPoint execution, native font or pixel parity claim."
+}

@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "scope": "Offline reimport of a PowerPoint UI-edited deck after the native open/save/close/reopen lifecycle. This uses the current public registry @openpresentation/opf-pptx ESM entry and independently resolves the current saved slide-2 picture, tag payload, media bytes, and alt from OOXML. No Office/UI call is made by this script.",
+  "createdAt": "2026-09-21T18:40:26.886Z",
+  "scriptPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-ui-reopen-native-01\\registry-reimport-01.mjs",
+  "scriptSha256": "6aa64d5a4f3f682d646d2001a0aa7c5b4b0770466a57c506f620356409e0d86f",
+  "runtime": {
+    "node": "v24.21.0",
+    "executable": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\toolchain\\node_modules\\node\\bin\\node.exe"
+  },
+  "registryBinding": null,
+  "evidence": {},
+  "checks": [],
+  "failures": [
+    {
+      "name": "analysis execution",
+      "message": "ENOENT: no such file or directory, open 'C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-ui-reopen-native-01\\input.pptx'",
+      "stack": "Error: ENOENT: no such file or directory, open 'C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-ui-reopen-native-01\\input.pptx'\n    at async open (node:internal/fs/promises:1345:25)\n    at async readFile (node:internal/fs/promises:1996:14)\n    at async main (file:///C:/Users/micha/.codex/worktrees/fd3f/opf/artifacts/windows-resume-20260921/furniture-ui-reopen-native-01/registry-reimport-01.mjs:126:24)\n    at async file:///C:/Users/micha/.codex/worktrees/fd3f/opf/artifacts/windows-resume-20260921/furniture-ui-reopen-native-01/registry-reimport-01.mjs:274:1"
+    }
+  ],
+  "error": {
+    "message": "ENOENT: no such file or directory, open 'C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-ui-reopen-native-01\\input.pptx'",
+    "stack": "Error: ENOENT: no such file or directory, open 'C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-ui-reopen-native-01\\input.pptx'\n    at async open (node:internal/fs/promises:1345:25)\n    at async readFile (node:internal/fs/promises:1996:14)\n    at async main (file:///C:/Users/micha/.codex/worktrees/fd3f/opf/artifacts/windows-resume-20260921/furniture-ui-reopen-native-01/registry-reimport-01.mjs:126:24)\n    at async file:///C:/Users/micha/.codex/worktrees/fd3f/opf/artifacts/windows-resume-20260921/furniture-ui-reopen-native-01/registry-reimport-01.mjs:274:1"
+  },
+  "passed": false,
+  "limitations": [
+    "This analysis did not perform the Office UI lifecycle; it consumes and hashes the retained native worker outputs.",
+    "Package-level preservation is established by resolved current relationships, exact media bytes and exact tag payload; relationship identifiers and part filenames may legitimately be rewritten.",
+    "The lock, package manifest and package entrypoint are bound to the retained registry manifest; this does not prove every transitive dependency byte or renderer fidelity."
+  ]
+}

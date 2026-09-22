@@ -1,0 +1,212 @@
+[
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/author-anonymous-Author-ca-d560b-xport-and-undoable-reimport/author-export.pptx",
+    "sha256": "070cddbcb5a3aa9d6916531f212fd067d9ebe8033f715e98ade5b78229530696",
+    "entries": 41,
+    "crcPass": true,
+    "retainedAt": "downloads/05/author-export.pptx"
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/author-anonymous-Author-ca-d560b-xport-and-undoable-reimport/trace.zip",
+    "sha256": "9b3ed2b33d99ce72a1ebb8f2a3e59f20bf119688078316236bc9b29dd466b668",
+    "entries": 190,
+    "crcPass": true,
+    "retainedAt": null
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/author-anonymous-code-edit-12484-export-reimport-at-1280x720/trace.zip",
+    "sha256": "f1e7e06920e3091d3b9686be37b02e1ead5d0ad082497b619b411771a4568a2c",
+    "entries": 140,
+    "crcPass": true,
+    "retainedAt": null
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/author-anonymous-code-edit-3e561--export-reimport-at-540x960/trace.zip",
+    "sha256": "4afaba0d5754ad24984dff06520a5313d5839ffe8c02f360b0c416014399d052",
+    "entries": 144,
+    "crcPass": true,
+    "retainedAt": null
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/trace.zip",
+    "sha256": "18842201c0ecbafe97489286ba6abc758c3b990a0163e2071c4fa02acef49566",
+    "entries": 168,
+    "crcPass": true,
+    "retainedAt": null
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/author-json-options-Author-cda0b-exact-CRLF-source-undo-redo/trace.zip",
+    "sha256": "ea32bedaec72c8a266146cda8bfe404d696bf7255b758995cc6ebc0f50cbd0ef",
+    "entries": 169,
+    "crcPass": true,
+    "retainedAt": null
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/completion-keyboard-Author-66da5-and-editor-remount-behavior/trace.zip",
+    "sha256": "afd2805ba4c5d6435fbf03eb42f6c7f99ae4374e504a8b44ef28dde3c4dfd8db",
+    "entries": 143,
+    "crcPass": true,
+    "retainedAt": null
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/completion-keyboard-Author-93788-ir-original-keyboard-owners/trace.zip",
+    "sha256": "9c98eb28493e9b124feeecf908b1461c0ebe6e93763735a802c856cb1d25f7e5",
+    "entries": 99,
+    "crcPass": true,
+    "retainedAt": null
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/completion-preservation-Au-807ee-act-source-in-one-undo-step/trace.zip",
+    "sha256": "acbde57d79e8f26fd1b68386cdf9f918d45b18c467276a6247b95227770040b8",
+    "entries": 120,
+    "crcPass": true,
+    "retainedAt": null
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/completion-preservation-Au-96e4e-act-source-in-one-undo-step/trace.zip",
+    "sha256": "cd6931ef168192d2c8ac2513cd73ca6990120f1a345c6cfd9c0718cca0d54266",
+    "entries": 125,
+    "crcPass": true,
+    "retainedAt": null
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/completion-preservation-Au-aab6b-and-refresh-inline-catalogs/trace.zip",
+    "sha256": "ecb35cb34bf3c71cd478c896c6124a5d0153bc0e70327bdb95cbe20df59f4528",
+    "entries": 148,
+    "crcPass": true,
+    "retainedAt": null
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/completion-preservation-Au-b9e03-s-prior-undo-history-intact/trace.zip",
+    "sha256": "cc6a63632372a2371aedd0516e48fe90062e9caf00a32fa1ae8fdd3878702949",
+    "entries": 135,
+    "crcPass": true,
+    "retainedAt": null
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/completion-preservation-Au-e6715-pletion-without-applying-it/trace.zip",
+    "sha256": "d21e88b2026592ab319764424c85686d9eeac1052706e4117c95887f7c11911d",
+    "entries": 140,
+    "crcPass": true,
+    "retainedAt": null
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/inspector-anonymous-JSON-a-151ab-ownload-and-shared-reimport/trace.zip",
+    "sha256": "d21ee5008284860ab3a967d6e1c2220674f1fe9259d8b66fe8bb7a8fad8792a2",
+    "entries": 125,
+    "crcPass": true,
+    "retainedAt": null
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/inspector-editing-all-Insp-15273-fline-undo-export-at-1440px/trace.zip",
+    "sha256": "4b4e4ebdcaf3d811aaf96d1b133c8d51bb9ac12034a1a7ca5755a1da4c58de59",
+    "entries": 211,
+    "crcPass": true,
+    "retainedAt": null
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/inspector-editing-all-Insp-a78d3-ffline-undo-export-at-540px/trace.zip",
+    "sha256": "a9a2d61d3a968442dbfd5ab5271c615c2dcbf4bb06b5e1e8f51ce3c1c3bd827f",
+    "entries": 199,
+    "crcPass": true,
+    "retainedAt": null
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/inspector-editing-invalid--4da31-ses-the-current-slide-order/trace.zip",
+    "sha256": "c842af0853f90a9900fff636bcc6e92d67b73b546f7264936297b8ed633cbc91",
+    "entries": 122,
+    "crcPass": true,
+    "retainedAt": null
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/inspector-editing-shared-n-98a03-lacement-title-is-identical/trace.zip",
+    "sha256": "5735746a8aae927bd41b83ff4a5ac5ffd974762d6a4856f5383c10f21a6af0ac",
+    "entries": 121,
+    "crcPass": true,
+    "retainedAt": null
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/inspector-published-long-q-fcc06-ws-and-PowerPoint-downloads/trace.zip",
+    "sha256": "711dc655b47117ae7b4f3ea02c428d052f2ad4ab702a8bd4742e2ba85dd5b028",
+    "entries": 99,
+    "crcPass": true,
+    "retainedAt": null
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/inspector-recovery-font-su-beb5b--Inspector-canvas-is-active/trace.zip",
+    "sha256": "77420705874be2dbfbb42859c186226a52a2675218152dfe9fecb4672a1b36db",
+    "entries": 99,
+    "crcPass": true,
+    "retainedAt": null
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/inspector-recovery-schema--76507-ers-after-source-correction/trace.zip",
+    "sha256": "803611471c6e862694d3e31562b8000bc869e3d351a88751557a2cbce7147b72",
+    "entries": 118,
+    "crcPass": true,
+    "retainedAt": null
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/inspector-shared-navigatio-46dd3-sals-from-the-previous-deck/trace.zip",
+    "sha256": "11a50e26b4f22fe88dc108a913ab6c141c10f4e37baf935ada1464042c466452",
+    "entries": 111,
+    "crcPass": true,
+    "retainedAt": null
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/json-paste-formatting-warm-44312-t-Document-remains-undoable/trace.zip",
+    "sha256": "a58a4cad1417c7a4b72d03aca7fd08ae4ecf137c6f2af8b40f5adc0950e8ee59",
+    "entries": 160,
+    "crcPass": true,
+    "retainedAt": null
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/monaco-bundled-JSON-worker-5b20e-letion-and-recovery-offline/trace.zip",
+    "sha256": "c8512e43288e50efe48730c6ceb2ff53b47c0e1c06779616f46c0380f171d698",
+    "entries": 122,
+    "crcPass": true,
+    "retainedAt": null
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-2c728-nd-through-canvas-undo-redo/trace.zip",
+    "sha256": "aff3564e4e041d41c39a3a3a487e9eb89d2356d3e6f9a155756f2c232badcab5",
+    "entries": 164,
+    "crcPass": true,
+    "retainedAt": null
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-5105f-download-and-canvas-history/trace.zip",
+    "sha256": "9e351eb3848c433966950ff6ddb08a5c691d405ce3f59edebb8e522b0d226f7d",
+    "entries": 295,
+    "crcPass": true,
+    "retainedAt": null
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/source-download-preservati-f4120-download-and-canvas-history/trace.zip",
+    "sha256": "30907c1bf640494c50f3a62822091a627818d08b88b28b4e5fac135f1952396a",
+    "entries": 204,
+    "crcPass": true,
+    "retainedAt": null
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/svg-security-published-SVG-25408-rted-document-strings-inert/trace.zip",
+    "sha256": "e51ae35b04752e3f291c4306e26ca1f184ea692bfe017eac48764fb326bc8650",
+    "entries": 128,
+    "crcPass": true,
+    "retainedAt": null
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/toolkit-public-toolkit-sho-6cd46-nder-edit-and-export-proofs/trace.zip",
+    "sha256": "dcee918899e601975b14ab15c9bfa4b4dde283d0e7594be39fd903782f87a9ca",
+    "entries": 17,
+    "crcPass": true,
+    "retainedAt": null
+  },
+  {
+    "originalPath": "/private/tmp/opf-author-source-canonical-20260921/results/yaml-YAML-and-Markdown-edi-18ed4-from-malformed-YAML-offline/trace.zip",
+    "sha256": "f77e65b92dbe65c652f6211b62bb31cb8740de9361dbad6a7edf3ffc5257f878",
+    "entries": 152,
+    "crcPass": true,
+    "retainedAt": null
+  }
+]

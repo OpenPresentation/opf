@@ -1,0 +1,56 @@
+import type { EditorEvent } from "@openpresentation/opf-editor";
+import { convert, parseText, toJsonText, type Format } from "./opf-codec";
+import { sameJsonValue, updateJsonSource } from "./json-source-edit";
+export { sameJsonValue, updateJsonSource } from "./json-source-edit";
+type Source = { text: string; format: Format };
+export type CanvasSourceOverride = { expected: Source; result: Source };
+type Change = { before: unknown; after: unknown; event: Pick<EditorEvent, "type" | "snapshot"> };
+type HistoryEntry = { before: unknown; after: unknown; source: Source; result: Source };
+
+/** Keep raw source history beside the session's semantic undo history. */
+export function createCanvasSourceBridge() {
+  const history = new Map<number, HistoryEntry>();
+  return {
+    clear: () => history.clear(),
+    apply(source: Source, { before, after, event }: Change, override?: CanvasSourceOverride): string {
+      if (override && (event.type !== "patch"
+        || source.text !== override.expected.text || source.format !== override.expected.format
+        || source.format !== override.result.format)) {
+        throw new Error("The source changed before this edit could be restored. Your source was kept.");
+      }
+      const current = parseText(source.text, source.format);
+      if (!current.ok) throw new Error("Fix the source before editing the preview; your source was kept.");
+      if (!sameJsonValue(current.doc, before)) {
+        throw new Error("The source changed while the preview was being edited. Your source was kept; reopen the field to edit the current slide.");
+      }
+      const depth = event.snapshot.undoDepth;
+      const entry = history.get(event.type === "undo" ? depth + 1 : depth);
+      if (entry && (event.type === "undo" || event.type === "redo")) {
+        const undo = event.type === "undo";
+        const from = undo ? entry.result : entry.source, to = undo ? entry.source : entry.result;
+        if (source.format === from.format && source.text === from.text
+          && sameJsonValue(before, undo ? entry.after : entry.before)
+          && sameJsonValue(after, undo ? entry.before : entry.after)) return to.text;
+      }
+      if (!override && sameJsonValue(before, after)) return source.text;
+      // A guarded revert can restore lexical changes even when its semantic
+      // values match. Validate both JSON buffers without normalizing either.
+      const rawJsonChange = override && source.format === "json" && override.result.text !== source.text;
+      if (rawJsonChange) updateJsonSource(source.text, before);
+      const converted = override ? { ok: true as const, text: override.result.text } : source.format === "json"
+        ? { ok: true as const, text: updateJsonSource(source.text, after) }
+        : convert(toJsonText(after), "json", source.format);
+      if (!converted.ok) throw new Error(converted.error);
+      const parsed = parseText(converted.text, source.format);
+      if (!parsed.ok || !sameJsonValue(parsed.doc, after)) {
+        throw new Error("This preview edit cannot be represented in the current source format. Your source was kept.");
+      }
+      if (rawJsonChange) updateJsonSource(converted.text, after);
+      if (event.type === "patch") {
+        for (const key of history.keys()) if (key >= depth) history.delete(key);
+        history.set(depth, { before, after, source: { ...source }, result: { ...source, text: converted.text } });
+      }
+      return converted.text;
+    },
+  };
+}

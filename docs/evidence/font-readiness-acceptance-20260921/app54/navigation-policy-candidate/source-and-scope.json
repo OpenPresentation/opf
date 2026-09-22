@@ -1,0 +1,200 @@
+{
+  "capturedAt": "2026-09-21T21:26:58.368285+00:00",
+  "head": "a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb",
+  "tree": "031d893855a540fd2a4d2ec2162605817b8dde16",
+  "installedPlaywright": "1.63.0",
+  "files": [
+    {
+      "source_path": "/private/tmp/opf-font-readiness-concurrency-20260921/pptx-dev/playwright.config.ts",
+      "relative_source_path": "playwright.config.ts",
+      "source_sha256": "c95c11d3cfb6fcbcbfaa0b5c353276a965d188a31f50778175a8ed8c7b895da2",
+      "source_bytes": 747,
+      "line_ranges": [
+        [
+          1,
+          24
+        ]
+      ],
+      "excerpt": "01-playwright.config.ts.excerpt.txt",
+      "excerpt_sha256": "fe1e6424d3de241469374a763ad8842dd854111fe0c04551ba43354e884f28e7",
+      "scope": "Numbered read-only excerpt; no source or runtime modification."
+    },
+    {
+      "source_path": "/private/tmp/opf-font-readiness-concurrency-20260921/pptx-dev/tests/e2e/inspector-actions.spec.ts",
+      "relative_source_path": "tests/e2e/inspector-actions.spec.ts",
+      "source_sha256": "c6096f4c62f642138dc127e55911647d00489d684f2794a978834aa54f4757fd",
+      "source_bytes": 17537,
+      "line_ranges": [
+        [
+          39,
+          44
+        ],
+        [
+          61,
+          75
+        ],
+        [
+          95,
+          100
+        ],
+        [
+          168,
+          184
+        ]
+      ],
+      "excerpt": "02-inspector-actions.spec.ts.excerpt.txt",
+      "excerpt_sha256": "06c5a72f55800af289e8948678dd2e8efce873e804cd5634102242e8cd793ce6",
+      "scope": "Numbered read-only excerpt; no source or runtime modification."
+    },
+    {
+      "source_path": "/private/tmp/opf-font-readiness-concurrency-20260921/pptx-dev/components/playground/playground-shell.tsx",
+      "relative_source_path": "components/playground/playground-shell.tsx",
+      "source_sha256": "15538547fd627c36fc0e704ef1870b813ac837d7a56a09e471135dcb70f88edc",
+      "source_bytes": 68683,
+      "line_ranges": [
+        [
+          617,
+          630
+        ]
+      ],
+      "excerpt": "03-playground-shell.tsx.excerpt.txt",
+      "excerpt_sha256": "fb70523f759d905e2892f67374329f70a427aabe6b6fb42dfd212f58a932fe0c",
+      "scope": "Numbered read-only excerpt; no source or runtime modification."
+    },
+    {
+      "source_path": "/private/tmp/opf-font-readiness-concurrency-20260921/pptx-dev/node_modules/.pnpm/playwright@1.63.0/node_modules/playwright/lib/matchers/expect.js",
+      "relative_source_path": "node_modules/.pnpm/playwright@1.63.0/node_modules/playwright/lib/matchers/expect.js",
+      "source_sha256": "5ef2a695e787386367f4b1e03c79b05100b5526121462b24d7730a731689d941",
+      "source_bytes": 546839,
+      "line_ranges": [
+        [
+          12940,
+          12952
+        ],
+        [
+          13172,
+          13172
+        ],
+        [
+          13349,
+          13355
+        ]
+      ],
+      "excerpt": "04-expect.js.excerpt.txt",
+      "excerpt_sha256": "f94e8aae005cf9283153c475e4755fd0ecf0d768fac2fc507ffcd23a8de76534",
+      "scope": "Numbered read-only excerpt; no source or runtime modification."
+    },
+    {
+      "source_path": "/private/tmp/opf-font-readiness-concurrency-20260921/pptx-dev/node_modules/.pnpm/playwright-core@1.63.0/node_modules/playwright-core/lib/coreBundle.js",
+      "relative_source_path": "node_modules/.pnpm/playwright-core@1.63.0/node_modules/playwright-core/lib/coreBundle.js",
+      "source_sha256": "549070af3acabb3efcc4f55bfe6210f9f7c2fcf633cf7eaa59bfe60719969171",
+      "source_bytes": 3477183,
+      "line_ranges": [
+        [
+          22591,
+          22611
+        ],
+        [
+          24270,
+          24315
+        ],
+        [
+          60323,
+          60399
+        ]
+      ],
+      "excerpt": "05-coreBundle.js.excerpt.txt",
+      "excerpt_sha256": "4c3ef80bbb8481fac51b97decdc4056b6ce43719979d6f1d325f3823fbda0cab",
+      "scope": "Numbered read-only excerpt; no source or runtime modification."
+    },
+    {
+      "source_path": "/private/tmp/opf-font-readiness-concurrency-20260921/pptx-dev/node_modules/.pnpm/playwright@1.63.0/node_modules/playwright/lib/index.js",
+      "relative_source_path": "node_modules/.pnpm/playwright@1.63.0/node_modules/playwright/lib/index.js",
+      "source_sha256": "54bf5935cf339938408c656bde958047a1217bf77434acdf75a0c717cddaaeae",
+      "source_bytes": 36487,
+      "line_ranges": [
+        [
+          254,
+          260
+        ],
+        [
+          348,
+          361
+        ]
+      ],
+      "excerpt": "06-index.js.excerpt.txt",
+      "excerpt_sha256": "115db73537e93203c50fe2168bb0f9810927ad1304cbab85eed7baadf417f0a5",
+      "scope": "Numbered read-only excerpt; no source or runtime modification."
+    },
+    {
+      "source_path": "/private/tmp/opf-font-readiness-concurrency-20260921/pptx-dev/tests/e2e/svg-security.spec.ts",
+      "relative_source_path": "tests/e2e/svg-security.spec.ts",
+      "source_sha256": "fc778f7e81134c485508ec5a47facd5074c2e4252a69be969fa804bdcbb30a07",
+      "source_bytes": 4523,
+      "line_ranges": [
+        [
+          51,
+          75
+        ]
+      ],
+      "excerpt": "07-svg-security.spec.ts.excerpt.txt",
+      "excerpt_sha256": "23e232e5044327ef014f92b89adda46d74dadd8962f0ef760f494aecc358db46",
+      "scope": "Numbered read-only excerpt; no source or runtime modification."
+    },
+    {
+      "source_path": "/private/tmp/opf-font-readiness-concurrency-20260921/pptx-dev/tests/e2e/source-download-preservation.spec.ts",
+      "relative_source_path": "tests/e2e/source-download-preservation.spec.ts",
+      "source_sha256": "c0b1a976a420bfd4efce6d5ded35fb3234126f75e186cb77bd696617729b1c7c",
+      "source_bytes": 14776,
+      "line_ranges": [
+        [
+          63,
+          75
+        ]
+      ],
+      "excerpt": "08-source-download-preservation.spec.ts.excerpt.txt",
+      "excerpt_sha256": "f31c1385c855db271718b718208d5645eb20ab255c72ec00922e0eb8370ed050",
+      "scope": "Numbered read-only excerpt; no source or runtime modification."
+    }
+  ],
+  "documentation": [
+    {
+      "url": "https://playwright.dev/docs/test-timeouts",
+      "checkedAt": "2026-09-21",
+      "finding": "Expect defaults to5s; action/navigation defaults have no separate timeout under Playwright Test; overall test timeout bounds the test function."
+    },
+    {
+      "url": "https://playwright.dev/docs/api/class-page#page-wait-for-url",
+      "checkedAt": "2026-09-21",
+      "finding": "Public main-frame URL navigation wait; default waitUntil load; networkidle discouraged."
+    },
+    {
+      "url": "https://playwright.dev/docs/api/class-pageassertions#page-assertions-to-have-url",
+      "checkedAt": "2026-09-21",
+      "finding": "URL assertion uses configured expect timeout."
+    }
+  ],
+  "contractSearch": {
+    "paths": [
+      "README.md",
+      "PRODUCT.md",
+      "VC-PITCH.md",
+      "docs/**/*.md excluding docs/evidence/** and docs/archive/**",
+      "tests/**",
+      "playwright.config.ts",
+      "https://github.com/OpenPresentation/opf/issues/88 body read-only"
+    ],
+    "patterns": [
+      "navigationTimeout|setDefaultNavigationTimeout|setDefaultTimeout|test.setTimeout|test.slow|waitForURL|waitForNavigation|toHaveURL",
+      "navigation near5/five; five seconds/5000ms near navigation/author/inspector; performance or latency near budget/SLO"
+    ],
+    "result": "Only toHaveURL navigation assertion is inspector-actions line176. No explicit5s Open in Author performance contract found in searched current docs/issue body. This is bounded search evidence, not proof about all possible external requirements."
+  },
+  "originalAudit": {
+    "path": "/private/tmp/opf-font-readiness-concurrency-20260921/ci",
+    "manifestSha256": "4fba7308a7c1ad22b5fedaf84f680b0b68160ad48cb9be7a4797a098119e38d4",
+    "outcome": "Original attempt1 Linux39/39; Windows38/39. Remains failed."
+  },
+  "readOnlyReview": true,
+  "testsExecuted": false
+}

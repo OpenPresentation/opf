@@ -1,0 +1,56 @@
+{
+  "node": "v24.21.0",
+  "sourceOnly": true,
+  "checks": {
+    "objectKeyOrderDoesNotEmit": true,
+    "orderOnlySyncKeepsRedo": true,
+    "changedScalarSynchronizes": true,
+    "changedArrayOrderSynchronizes": true,
+    "oneUndoRestoresArrayOrder": true,
+    "missingPropertySynchronizes": true
+  },
+  "events": [
+    {
+      "type": "patch",
+      "source": null,
+      "undoDepth": 1,
+      "redoDepth": 0
+    },
+    {
+      "type": "undo",
+      "source": null,
+      "undoDepth": 0,
+      "redoDepth": 1
+    },
+    {
+      "type": "redo",
+      "source": null,
+      "undoDepth": 1,
+      "redoDepth": 0
+    },
+    {
+      "type": "patch",
+      "source": "source-buffer",
+      "undoDepth": 2,
+      "redoDepth": 0
+    },
+    {
+      "type": "patch",
+      "source": "source-buffer",
+      "undoDepth": 3,
+      "redoDepth": 0
+    },
+    {
+      "type": "undo",
+      "source": null,
+      "undoDepth": 2,
+      "redoDepth": 1
+    },
+    {
+      "type": "patch",
+      "source": "source-buffer",
+      "undoDepth": 3,
+      "redoDepth": 0
+    }
+  ]
+}

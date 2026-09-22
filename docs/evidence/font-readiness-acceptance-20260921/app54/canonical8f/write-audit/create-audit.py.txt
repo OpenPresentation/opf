@@ -1,0 +1,72 @@
+from pathlib import Path
+from urllib.parse import urlsplit, parse_qsl, unquote
+from datetime import datetime, timezone
+import json, hashlib, zipfile, subprocess, re, base64
+ROOT=Path('/private/tmp/opf-inspector-actions-canonical-20260921/navigation-policy')
+OUT=Path('/private/tmp/opf-canonical-write-boundary-audit-20260921')
+REPO=Path('/Users/michael/Source/pptx-dev')
+OLD='e40c287b64fcbcfb85fb4a8a50641aea8e3e54a8'; NEW='8f54228a9e38a1dcc0bf8188bcdd519795b3799a'
+def sha(b):return hashlib.sha256(b).hexdigest()
+def write(name,obj): (OUT/name).write_text(json.dumps(obj,indent=2)+'\n')
+def git(*a):return subprocess.check_output(['git',*a],cwd=REPO)
+cases=[
+ {'id':'copy-json','directory':'inspector-actions-Inspecto-07c93-and-unchanged-draft-history','file':'tests/e2e/inspector-actions.spec.ts','failureLine':125,'passed':['current-draft Copy exact source','current-draft JSON filename and exact source','source Undo/Redo','unchanged-draft history','screenshot'], 'unreached':['final page-error equality assertion at line 126']},
+ {'id':'share-pptx','directory':'inspector-actions-Inspecto-36d82-hing-payloads-and-filenames','file':'tests/e2e/inspector-actions.spec.ts','failureLine':164,'passed':['Share current payload','legacy import removal and unrelated query retention','PPTX current filename and reimported edited title','Copy exact source','Undo exact source','screenshot'],'unreached':['final page-error equality assertion at line 165']},
+ {'id':'open-author','directory':'inspector-actions-Inspecto-ddffb-urrent-draft-before-handoff','file':'tests/e2e/inspector-actions.spec.ts','failureLine':187,'passed':['current-draft navigation','Author URL payload','Author Copy visibility','Author copied document semantic equality','screenshot'],'unreached':['final page-error equality assertion at line 188']},
+ {'id':'hash-share','directory':'inspector-share-publicatio-33578-etain-the-accepted-document','file':'tests/e2e/inspector-share-publication.spec.ts','failureLine':115,'passed':['accepted initial document and publication','edited document publication','first refresh semantic equality','replacement hash document and publication','second refresh semantic equality','final accepted URL semantic equality','page-error equality at line 114'],'unreached':['final screenshot at line 116']},
+ {'id':'legacy-import-share','directory':'inspector-share-publicatio-2236b-etain-the-accepted-document','file':'tests/e2e/inspector-share-publication.spec.ts','failureLine':115,'passed':['legacy import query removal and unrelated query retention','accepted initial document and publication','edited document publication','first refresh semantic equality','replacement hash document and publication','second refresh semantic equality','final accepted URL semantic equality','page-error equality at line 114'],'unreached':['final screenshot at line 116']},
+]
+needles={
+ 'action-name':['Action snapshot','Action\\u0020snapshot'], 'action-filename':['current-actions'], 'action-slide-id':['action-slide'], 'action-original-title':['A title','A\\u0020title'], 'action-rich-text':['rich  text'],
+ 'copy-edited-title':['Copy commits this draft'], 'json-edited-title':['JSON commits this draft'], 'share-edited-title':['Share commits this draft'], 'pptx-edited-title':['PPTX commits this draft'], 'author-edited-title':['Author commits this draft'],
+ 'shared-name':['Hydrated share stays authoritative'], 'shared-slide-id':['shared-identity'], 'shared-title':['Loaded from the requested URL'], 'shared-content':['Keep this content.'], 'shared-notes':['Metadata survives refresh.'], 'shared-edited-title':['Edited source is the shared document'],
+ 'replacement-name':['A new hash is a new document'], 'replacement-id':['replacement-identity'], 'replacement-title':['Hash navigation replacement'], 'replacement-content':['Keep this replacement.']}
+records=[]; private=[]
+def private_entry(p):
+ b=p.read_bytes(); d={'path':str(p),'bytes':len(b),'sha256':sha(b),'retention':'private original only; not copied'}
+ if p.suffix=='.zip':
+  with zipfile.ZipFile(p) as z:d.update({'zipMembers':len(z.infolist()),'crcVerified':z.testzip() is None})
+ private.append(d)
+for c in cases:
+ p=ROOT/'results'/c['directory']/'trace.zip';private_entry(p)
+ ec=p.with_name('error-context.md')
+ if ec.exists():private_entry(ec)
+ with zipfile.ZipFile(p) as z:
+  writes=[]
+  for member in z.namelist():
+   if not member.endswith('.network'):continue
+   for raw in z.read(member).splitlines():
+    ev=json.loads(raw); snap=ev.get('snapshot',{});q=snap.get('request',{});r=snap.get('response',{})
+    if q.get('method') not in ('POST','PUT','PATCH','DELETE'):continue
+    u=urlsplit(q.get('url','')); hs={h['name'].lower():h['value'] for h in q.get('headers',[])}
+    visible=json.dumps(q,ensure_ascii=False); decoded=unquote(visible)
+    jwt_decoded=[]
+    # Scan captured JWT-shaped payloads in memory only; never retain payloads/tokens/cookies.
+    for m in re.finditer(r'\beyJ[A-Za-z0-9_-]+\.([A-Za-z0-9_-]+)\.[A-Za-z0-9_-]+',decoded):
+     try:jwt_decoded.append(base64.urlsafe_b64decode(m.group(1)+'='*(-len(m.group(1))%4)).decode('utf-8'))
+     except Exception:pass
+    haystack='\n'.join([visible,decoded,*jwt_decoded])
+    matches=[label for label,vs in needles.items() if any(v in haystack for v in vs)]
+    content=r.get('content',{})
+    body=q.get('postData')
+    writes.append({'method':q['method'],'host':u.hostname,'path':u.path,'queryNames':sorted(set(k for k,v in parse_qsl(u.query,keep_blank_values=True))), 'httpStatus':r.get('status'),'recordedCompleteResponse':r.get('status',-1)>=0,'requestContentLength':hs.get('content-length'),'requestContentType':hs.get('content-type'),'postDataRecorded':bool(body),'cookieHeaderPresent':'cookie' in hs,'authorizationHeaderPresent':'authorization' in hs,'refererOriginOnly':hs.get('referer')=='https://www.pptx.dev/','responseMimeType':content.get('mimeType'),'responseDeclaredSize':content.get('size'),'responseBodyResourceCaptured':bool(content.get('_file') and content.get('_file') in z.namelist()),'fixtureNeedleMatches':matches,'decodedJwtPayloadsScanned':len(jwt_decoded),'scanScope':'captured request fields, URL-decoded text and decodable JWT payloads only; no request values retained'})
+  records.append({'case':c['id'],'writes':writes})
+for name in ['browser.log','results.json','production-before.json','source-before.json']:
+ p=ROOT/name
+ if p.exists():private_entry(p)
+results=json.loads((ROOT/'results.json').read_text())
+for c in cases:c['failedAssertion']='all observed write-method requests equal [] (POST only in Inspector action cases)'
+write('failure-boundaries.json',{'sourceCommit':NEW,'stats':results['stats'],'cases':cases,'caution':'Assertions inside expect.poll may fail transiently; only final reporter failures and subsequent source order define these boundaries.'})
+write('request-metadata.json',{'redaction':'No token, cookie, authorization, query value, response body or raw URL retained. Host/path and query names only.','requests':records,'totalWrites':sum(len(x['writes']) for x in records),'fixtureNeedleLabels':list(needles),'limitations':['Missing postData alone does not prove an empty wire body. Nine completed requests additionally have recorded Content-Length 0.','The incomplete request has no recorded content length or response body; absence of captured authored needles is bounded evidence only.','No inference about previous deployment runtime, Clerk configuration/backend behavior, or cause of the current failure.']})
+paths=[line.split(':',1)[1] for line in git('grep','-l','-E','@clerk|CLERK_|clerkMiddleware|ClerkProvider',NEW,'--','app','components','lib','proxy.ts','package.json','pnpm-lock.yaml').decode().splitlines()]
+paths=sorted(set(paths+['app/layout.tsx','components/header-auth-wrapper.tsx','next.config.ts']))
+source=[]
+for path in paths:
+ try:a=git('show',f'{OLD}:{path}');b=git('show',f'{NEW}:{path}')
+ except subprocess.CalledProcessError:continue
+ source.append({'path':path,'oldSha256':sha(a),'newSha256':sha(b),'byteIdentical':a==b})
+a=json.loads(git('show',f'{OLD}:package.json'));b=json.loads(git('show',f'{NEW}:package.json'))
+write('source-comparison.json',{'oldCommit':OLD,'currentCommit':NEW,'files':source,'packageDependenciesIdentical':a.get('dependencies')==b.get('dependencies'),'packageDevDependenciesIdentical':a.get('devDependencies')==b.get('devDependencies'),'packageChangedTopLevelKeys':[k for k in sorted(set(a)|set(b)) if a.get(k)!=b.get(k)],'changedScripts':[k for k in sorted(set(a['scripts'])|set(b['scripts'])) if a['scripts'].get(k)!=b['scripts'].get(k)],'scope':'Auth reference paths in app/components/lib/proxy plus provider/layout/config/lock files. Source equality is not historical runtime equivalence.'})
+write('private-artifact-hashes.json',{'artifacts':private,'rawUnchangedAfterAudit':all(sha(Path(e['path']).read_bytes())==e['sha256'] for e in private)})
+summary={'totalWrites':sum(len(x['writes']) for x in records),'completed200':sum(w['httpStatus']==200 for x in records for w in x['writes']),'incomplete':sum(w['httpStatus']==-1 for x in records for w in x['writes']),'zeroLength':sum(w['requestContentLength']=='0' for x in records for w in x['writes']),'fixtureMatches':sum(bool(w['fixtureNeedleMatches']) for x in records for w in x['writes']),'authComparisonFiles':len(source),'changedFiles':[s['path'] for s in source if not s['byteIdentical']]}
+print(json.dumps(summary))

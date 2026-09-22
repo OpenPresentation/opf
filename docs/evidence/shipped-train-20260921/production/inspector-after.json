@@ -1,0 +1,22 @@
+{
+  "name": "Issue88 audit",
+  "design": {
+    "fontScheme": "roboto"
+  },
+  "slides": [
+    {
+      "title": "Edited through preview",
+      "text": [
+        {
+          "text": "Readable link",
+          "link": "https://example.com/"
+        }
+      ],
+      "notes": "Two  spaces\n\tmetadata intact."
+    },
+    {
+      "title": "Second audit slide",
+      "text": "Later slide"
+    }
+  ]
+}

@@ -1,0 +1,130 @@
+{
+  "sourceHead": "e40c287b64fcbcfb85fb4a8a50641aea8e3e54a8",
+  "tracePath": "/private/tmp/opf-author-source-release-20260921/keyboard-postmerge-ci/linux-failure/svg-security-published-SVG-25408-rted-document-strings-inert/trace.zip",
+  "traceSha256": "723ab2961fb86a75bbc323dbf392e7477861987060bc9bcbf4904a6c3e940bb4",
+  "errorContextSha256": "d1f651ce07ec80744d59a9ec79313bf7928df88dcb56d84e5b9bcdf559bb4032",
+  "snapshots": [
+    {
+      "callId": "call@4035",
+      "phase": "before",
+      "timestamp": 189584.695
+    },
+    {
+      "callId": "call@4035",
+      "phase": "after",
+      "timestamp": 189762.971,
+      "url": "http://127.0.0.1:4325/inspector#opf=H4sIAAAAAAAAA5WPb2viQBDGv0qYt5drvKYeJDXC9QpqqcVWipAqZbM7xrX7J93dxFjJdy-pWqRQjns1w8wzv3meHSgiEWJ4VM6U1iHz7IoYZB7TtJSoHPhgBWdoIX7ageNOtPKepYYXrr_hiunN2fOzLpYjtUbqkCXOlNgLDgrwIROavhzusXYnDTwqS5bo7bWe4OoFfPgoMaxJRfaL-Ns30PifLO8AY8SRL6h2FLeyYOWk8P_D_Sl_2tI3mH2Br5wrbBwEWBNZCDzjqiKCs0AXy58WaWm4255y5tDv2Sr3tBKasGQO39qYQx-aRXvKJckR4h1YQ495PmaBrfIftRSXGbH4-8KfDO_O0-3VRTarS_rW4WT40KHXuroNWci23XC87VZU0mq8_rMZ_43emKR8NIjKbBCt0usOZ-eiTAdReCuiZRZeyems-5rO7jrp7D5iw5tf6XRUTfIkAR-IOKbhMvesoUntaYXGaPPPUM2iWTTvDIAKIH0CAAA",
+      "decodedSha256": "cefa347790bf2d3fcbbc6c6702a1ddf3845c8e967df8e1952e74956fcfe206f3",
+      "documentName": "Untrusted shared document",
+      "slideCount": 1,
+      "firstTitle": "<script>window.__opfInjected=true</script>"
+    },
+    {
+      "callId": "call@4037",
+      "phase": "before",
+      "timestamp": 189768.387,
+      "url": "http://127.0.0.1:4325/inspector#opf=H4sIAAAAAAAAA5WPb2viQBDGv0qYt5drvKYeJDXC9QpqqcVWipAqZbM7xrX7J93dxFjJdy-pWqRQjns1w8wzv3meHSgiEWJ4VM6U1iHz7IoYZB7TtJSoHPhgBWdoIX7ageNOtPKepYYXrr_hiunN2fOzLpYjtUbqkCXOlNgLDgrwIROavhzusXYnDTwqS5bo7bWe4OoFfPgoMaxJRfaL-Ns30PifLO8AY8SRL6h2FLeyYOWk8P_D_Sl_2tI3mH2Br5wrbBwEWBNZCDzjqiKCs0AXy58WaWm4255y5tDv2Sr3tBKasGQO39qYQx-aRXvKJckR4h1YQ495PmaBrfIftRSXGbH4-8KfDO_O0-3VRTarS_rW4WT40KHXuroNWci23XC87VZU0mq8_rMZ_43emKR8NIjKbBCt0usOZ-eiTAdReCuiZRZeyems-5rO7jrp7D5iw5tf6XRUTfIkAR-IOKbhMvesoUntaYXGaPPPUM2iWTTvDIAKIH0CAAA",
+      "decodedSha256": "cefa347790bf2d3fcbbc6c6702a1ddf3845c8e967df8e1952e74956fcfe206f3",
+      "documentName": "Untrusted shared document",
+      "slideCount": 1,
+      "firstTitle": "<script>window.__opfInjected=true</script>"
+    },
+    {
+      "callId": "call@4037",
+      "phase": "after",
+      "timestamp": 191840.07,
+      "url": "http://127.0.0.1:4325/inspector#opf=H4sIAAAAAAAAA3VXUW_juBH-KwNmH1pAduLs4i71Wzap270im_SSogUWeRiRI4kwRaokZccX-L8fhpRsOcm-JDbNIWe--eab4av4FGRDLYqlaGLswvL83HVkO0-BbMSonZ07X5_nXeeuq843C1EIiy2JpfjufGxCRA-PRAoedJSNKISiIL3u2FosxTVUrreKPHT8O1TOQ4trbWuY3hOg86722LZYGoLYeNfXDdw_rACtgtgQNC5Evubh6X9zRRsgW2tLc1GIShsafLKjT7NApGbd4JPzNVr9B2anXoVW070fhbRir_1OFCJibbTlX29JrkHbymOIvpex95Tiuf42sxj1hiAStkEUwjvDBp3XLfqd2BcidIRr8ofLW9zhTDZkj5ff4Q7hJi9FHdMJN2424sc43Pz9_k00304j2RcC-9g4_5NgsFearCSx_CESQtpuKETng3guRNf7zgW-93fUgQDh05c74H3g-QiIDhr0imzKiCd2jFOZc5FcpJeO_z3e_guUDtHrsk9EEoUwaOseaz6f7Ow_jxynS8h25EOPQW8oAb4m3OKOfXw44Qh6gpKka_lOPKWM62PXR85Hi3FIC2BNNga-m5lU6w2FnCNwliDEZCmdjR5lNsroaVsXzM-Npm0xhuV8nDNKqvcDkRaXiR6BPR2pVjHUqIO2Naeqq9jEoveJIYf8n9BzIMBJGYW-TdxZigfvSkNtAcGZhCW75lyVHcOwzo7bt9Tk1Me-4-hLwsheDpc3zq2P1_4zfwtGK3radbwU6SWKfTFs77IDR4uHw8LUyOgwMRqdnYR3XPm5WcrEidnTcWVqJhv0EzsMk4iuw8cBPe-TPOk6iUBsKO1W6Hm7dMb5R5kXh1Olc2bGfPgj3V-iXNepEsRSnF1cLRaLVUqVr5BrSpxdrBZfL2-ZxHzhUpytrlbXq5th4ZGksypn9ezrLzefb1lOR5VYirPPV19vV1dcp1KSTQdc_7r6fHvBhV05G9_4h110rDcNoWLCLV9Fha02fNg1_wa3OnQGufS3pOsmiuWvFxf7QpRO7d5vn2z7cnGxZ7h0SzZw9fHuJNns1uKX5d_YpykiryJmsIMzWo2ITpDi81JSJlSUbkN-YOiRmQZ3rufvSQdnoS-zIBYikBw6yzcbvcv6PNZOduSonqfqERrXGwUlnQhHAdZFaNAq6bHiDlO6GA1ZkuukHIfLp4oae28DHMo6VWJmFmgbyUb-51L_ig1GkGhhg0YrjPQTZSmEdZGhEfcdWdjq2CSVlS5EcBX8v0cfyZsdKO5DnspeGxUO_TE0uooQ3Ra9ysI3q8mSxxRTH7SlwBIadYWSRfGD-h6ycFw4JIKrdLZ4OcnAUQZGgFKH7LxTfdoDIWpjoPSE6wAYk5_0wlrbupZRymJsOXmhI1IMg47UZoYMRfSUNg0B51ixZX3j2GotEyABKu9aCNIjzxm0Ib8bMZu_G0u-j5krwPZtST7kZJSe__reUADlGVCU3oUAG_KpCjJsg2P_OOCbaQ3SGYNdINg2ZMeWZAhT32loOD7sQqT2vVN3nOlOd8TzRoAQXcegBemJbGhcDKBtiISK-UBK5_6lMlMnfl2ntgcG5RpwbHPTcevQ89478dTQbkjI2EnUwOlcKp1-ITMrd7P0IXnkc7rZieePGsBAq8nKscDpJc4uT3k1aRQjsbiQWlxTGBKbSiBE6iANVkdSTAMzVMUkSxmV2xRnSWnzCRrOSgIMwIU31Qz47fH-e8H7LXjqA4E-EiJXc2rHpXfbwCPuWNc8pA6FXfAoNLAL--jaPFezePqstK8HxovfnYvQUkSFEUFix_AHGKe2AoYJrQAenPKh4zjCEd9mCfJUkWeDADUaw4ClZhcKSJoMaaLnr9xTBueOSs8nPWZCc8wSrbNaooEOd8ahCmD0mofdl1gACwOfy-04FJC4FgoOwms5HB11mzk9F8_7j1r9QJDJyoEg6eAPlMdVJ7qzIeM68qCo5Rt1gNZteExMqpBTEXh-rXpjBvqkMnyr8f_u0ehKkzpUItSetkyPLFaR0jvk_mE169yWuDy2zq8r47bprDyYHLthejwUgjPKq9KZvrUp23fORh71PrjyL5_u_sqDIxNLLH_8EL-hFcXF_Oq5-CFWVIpiMf_Cn-_4-XI5X_Dn686L4vP88vl5v38zGA0A5y-nxfcG2jT5T6D9L6WxexhpGUGuw6GzsfhU2Jt4OkRff5u0npNn3vw4Gj1xyR6fFjw3BxjMnIdKKzI67pjzpdHy3YuiePsyHB4hnozGUrNt0jFSeT5mTQQ1EiVxITcUZw-PyiRgfwKt-N28GA8AAA",
+      "decodedSha256": "2f9d1e42de8e492afaa5e5f06c4dc5fab005378273deb415eea780e889646a5f",
+      "documentName": "Northstar Seed Pitch",
+      "slideCount": 5,
+      "firstTitle": "Presentations should be programmable, not handcrafted bottlenecks."
+    },
+    {
+      "callId": "call@4039",
+      "phase": "before",
+      "timestamp": 191972.718,
+      "url": "http://127.0.0.1:4325/inspector#opf=H4sIAAAAAAAAA3VXUW_juBH-KwNmH1pAduLs4i71Wzap270im_SSogUWeRiRI4kwRaokZccX-L8fhpRsOcm-JDbNIWe--eab4av4FGRDLYqlaGLswvL83HVkO0-BbMSonZ07X5_nXeeuq843C1EIiy2JpfjufGxCRA-PRAoedJSNKISiIL3u2FosxTVUrreKPHT8O1TOQ4trbWuY3hOg86722LZYGoLYeNfXDdw_rACtgtgQNC5Evubh6X9zRRsgW2tLc1GIShsafLKjT7NApGbd4JPzNVr9B2anXoVW070fhbRir_1OFCJibbTlX29JrkHbymOIvpex95Tiuf42sxj1hiAStkEUwjvDBp3XLfqd2BcidIRr8ofLW9zhTDZkj5ff4Q7hJi9FHdMJN2424sc43Pz9_k00304j2RcC-9g4_5NgsFearCSx_CESQtpuKETng3guRNf7zgW-93fUgQDh05c74H3g-QiIDhr0imzKiCd2jFOZc5FcpJeO_z3e_guUDtHrsk9EEoUwaOseaz6f7Ow_jxynS8h25EOPQW8oAb4m3OKOfXw44Qh6gpKka_lOPKWM62PXR85Hi3FIC2BNNga-m5lU6w2FnCNwliDEZCmdjR5lNsroaVsXzM-Npm0xhuV8nDNKqvcDkRaXiR6BPR2pVjHUqIO2Naeqq9jEoveJIYf8n9BzIMBJGYW-TdxZigfvSkNtAcGZhCW75lyVHcOwzo7bt9Tk1Me-4-hLwsheDpc3zq2P1_4zfwtGK3radbwU6SWKfTFs77IDR4uHw8LUyOgwMRqdnYR3XPm5WcrEidnTcWVqJhv0EzsMk4iuw8cBPe-TPOk6iUBsKO1W6Hm7dMb5R5kXh1Olc2bGfPgj3V-iXNepEsRSnF1cLRaLVUqVr5BrSpxdrBZfL2-ZxHzhUpytrlbXq5th4ZGksypn9ezrLzefb1lOR5VYirPPV19vV1dcp1KSTQdc_7r6fHvBhV05G9_4h110rDcNoWLCLV9Fha02fNg1_wa3OnQGufS3pOsmiuWvFxf7QpRO7d5vn2z7cnGxZ7h0SzZw9fHuJNns1uKX5d_YpykiryJmsIMzWo2ITpDi81JSJlSUbkN-YOiRmQZ3rufvSQdnoS-zIBYikBw6yzcbvcv6PNZOduSonqfqERrXGwUlnQhHAdZFaNAq6bHiDlO6GA1ZkuukHIfLp4oae28DHMo6VWJmFmgbyUb-51L_ig1GkGhhg0YrjPQTZSmEdZGhEfcdWdjq2CSVlS5EcBX8v0cfyZsdKO5DnspeGxUO_TE0uooQ3Ra9ysI3q8mSxxRTH7SlwBIadYWSRfGD-h6ycFw4JIKrdLZ4OcnAUQZGgFKH7LxTfdoDIWpjoPSE6wAYk5_0wlrbupZRymJsOXmhI1IMg47UZoYMRfSUNg0B51ixZX3j2GotEyABKu9aCNIjzxm0Ib8bMZu_G0u-j5krwPZtST7kZJSe__reUADlGVCU3oUAG_KpCjJsg2P_OOCbaQ3SGYNdINg2ZMeWZAhT32loOD7sQqT2vVN3nOlOd8TzRoAQXcegBemJbGhcDKBtiISK-UBK5_6lMlMnfl2ntgcG5RpwbHPTcevQ89478dTQbkjI2EnUwOlcKp1-ITMrd7P0IXnkc7rZieePGsBAq8nKscDpJc4uT3k1aRQjsbiQWlxTGBKbSiBE6iANVkdSTAMzVMUkSxmV2xRnSWnzCRrOSgIMwIU31Qz47fH-e8H7LXjqA4E-EiJXc2rHpXfbwCPuWNc8pA6FXfAoNLAL--jaPFezePqstK8HxovfnYvQUkSFEUFix_AHGKe2AoYJrQAenPKh4zjCEd9mCfJUkWeDADUaw4ClZhcKSJoMaaLnr9xTBueOSs8nPWZCc8wSrbNaooEOd8ahCmD0mofdl1gACwOfy-04FJC4FgoOwms5HB11mzk9F8_7j1r9QJDJyoEg6eAPlMdVJ7qzIeM68qCo5Rt1gNZteExMqpBTEXh-rXpjBvqkMnyr8f_u0ehKkzpUItSetkyPLFaR0jvk_mE169yWuDy2zq8r47bprDyYHLthejwUgjPKq9KZvrUp23fORh71PrjyL5_u_sqDIxNLLH_8EL-hFcXF_Oq5-CFWVIpiMf_Cn-_4-XI5X_Dn686L4vP88vl5v38zGA0A5y-nxfcG2jT5T6D9L6WxexhpGUGuw6GzsfhU2Jt4OkRff5u0npNn3vw4Gj1xyR6fFjw3BxjMnIdKKzI67pjzpdHy3YuiePsyHB4hnozGUrNt0jFSeT5mTQQ1EiVxITcUZw-PyiRgfwKt-N28GA8AAA",
+      "decodedSha256": "2f9d1e42de8e492afaa5e5f06c4dc5fab005378273deb415eea780e889646a5f",
+      "documentName": "Northstar Seed Pitch",
+      "slideCount": 5,
+      "firstTitle": "Presentations should be programmable, not handcrafted bottlenecks."
+    },
+    {
+      "callId": "call@4039",
+      "phase": "after",
+      "timestamp": 192351.306,
+      "url": "http://127.0.0.1:4325/inspector#opf=H4sIAAAAAAAAA3VXUW_juBH-KwNmH1pAduLs4i71Wzap270im_SSogUWeRiRI4kwRaokZccX-L8fhpRsOcm-JDbNIWe--eab4av4FGRDLYqlaGLswvL83HVkO0-BbMSonZ07X5_nXeeuq843C1EIiy2JpfjufGxCRA-PRAoedJSNKISiIL3u2FosxTVUrreKPHT8O1TOQ4trbWuY3hOg86722LZYGoLYeNfXDdw_rACtgtgQNC5Evubh6X9zRRsgW2tLc1GIShsafLKjT7NApGbd4JPzNVr9B2anXoVW070fhbRir_1OFCJibbTlX29JrkHbymOIvpex95Tiuf42sxj1hiAStkEUwjvDBp3XLfqd2BcidIRr8ofLW9zhTDZkj5ff4Q7hJi9FHdMJN2424sc43Pz9_k00304j2RcC-9g4_5NgsFearCSx_CESQtpuKETng3guRNf7zgW-93fUgQDh05c74H3g-QiIDhr0imzKiCd2jFOZc5FcpJeO_z3e_guUDtHrsk9EEoUwaOseaz6f7Ow_jxynS8h25EOPQW8oAb4m3OKOfXw44Qh6gpKka_lOPKWM62PXR85Hi3FIC2BNNga-m5lU6w2FnCNwliDEZCmdjR5lNsroaVsXzM-Npm0xhuV8nDNKqvcDkRaXiR6BPR2pVjHUqIO2Naeqq9jEoveJIYf8n9BzIMBJGYW-TdxZigfvSkNtAcGZhCW75lyVHcOwzo7bt9Tk1Me-4-hLwsheDpc3zq2P1_4zfwtGK3radbwU6SWKfTFs77IDR4uHw8LUyOgwMRqdnYR3XPm5WcrEidnTcWVqJhv0EzsMk4iuw8cBPe-TPOk6iUBsKO1W6Hm7dMb5R5kXh1Olc2bGfPgj3V-iXNepEsRSnF1cLRaLVUqVr5BrSpxdrBZfL2-ZxHzhUpytrlbXq5th4ZGksypn9ezrLzefb1lOR5VYirPPV19vV1dcp1KSTQdc_7r6fHvBhV05G9_4h110rDcNoWLCLV9Fha02fNg1_wa3OnQGufS3pOsmiuWvFxf7QpRO7d5vn2z7cnGxZ7h0SzZw9fHuJNns1uKX5d_YpykiryJmsIMzWo2ITpDi81JSJlSUbkN-YOiRmQZ3rufvSQdnoS-zIBYikBw6yzcbvcv6PNZOduSonqfqERrXGwUlnQhHAdZFaNAq6bHiDlO6GA1ZkuukHIfLp4oae28DHMo6VWJmFmgbyUb-51L_ig1GkGhhg0YrjPQTZSmEdZGhEfcdWdjq2CSVlS5EcBX8v0cfyZsdKO5DnspeGxUO_TE0uooQ3Ra9ysI3q8mSxxRTH7SlwBIadYWSRfGD-h6ycFw4JIKrdLZ4OcnAUQZGgFKH7LxTfdoDIWpjoPSE6wAYk5_0wlrbupZRymJsOXmhI1IMg47UZoYMRfSUNg0B51ixZX3j2GotEyABKu9aCNIjzxm0Ib8bMZu_G0u-j5krwPZtST7kZJSe__reUADlGVCU3oUAG_KpCjJsg2P_OOCbaQ3SGYNdINg2ZMeWZAhT32loOD7sQqT2vVN3nOlOd8TzRoAQXcegBemJbGhcDKBtiISK-UBK5_6lMlMnfl2ntgcG5RpwbHPTcevQ89478dTQbkjI2EnUwOlcKp1-ITMrd7P0IXnkc7rZieePGsBAq8nKscDpJc4uT3k1aRQjsbiQWlxTGBKbSiBE6iANVkdSTAMzVMUkSxmV2xRnSWnzCRrOSgIMwIU31Qz47fH-e8H7LXjqA4E-EiJXc2rHpXfbwCPuWNc8pA6FXfAoNLAL--jaPFezePqstK8HxovfnYvQUkSFEUFix_AHGKe2AoYJrQAenPKh4zjCEd9mCfJUkWeDADUaw4ClZhcKSJoMaaLnr9xTBueOSs8nPWZCc8wSrbNaooEOd8ahCmD0mofdl1gACwOfy-04FJC4FgoOwms5HB11mzk9F8_7j1r9QJDJyoEg6eAPlMdVJ7qzIeM68qCo5Rt1gNZteExMqpBTEXh-rXpjBvqkMnyr8f_u0ehKkzpUItSetkyPLFaR0jvk_mE169yWuDy2zq8r47bprDyYHLthejwUgjPKq9KZvrUp23fORh71PrjyL5_u_sqDIxNLLH_8EL-hFcXF_Oq5-CFWVIpiMf_Cn-_4-XI5X_Dn686L4vP88vl5v38zGA0A5y-nxfcG2jT5T6D9L6WxexhpGUGuw6GzsfhU2Jt4OkRff5u0npNn3vw4Gj1xyR6fFjw3BxjMnIdKKzI67pjzpdHy3YuiePsyHB4hnozGUrNt0jFSeT5mTQQ1EiVxITcUZw-PyiRgfwKt-N28GA8AAA",
+      "decodedSha256": "2f9d1e42de8e492afaa5e5f06c4dc5fab005378273deb415eea780e889646a5f",
+      "documentName": "Northstar Seed Pitch",
+      "slideCount": 5,
+      "firstTitle": "Presentations should be programmable, not handcrafted bottlenecks."
+    }
+  ],
+  "actions": [
+    {
+      "callId": "pw:api@34",
+      "title": "Navigate",
+      "startTime": 189579.03,
+      "endTime": 189763.237,
+      "durationMs": 184.207,
+      "success": true,
+      "stack": [
+        {
+          "file": "/__w/pptx-dev/pptx-dev/tests/e2e/svg-security.spec.ts",
+          "line": 57,
+          "column": 14
+        }
+      ]
+    },
+    {
+      "callId": "expect@35",
+      "title": "Expect \"toBeVisible\"",
+      "startTime": 189763.748,
+      "endTime": 191862.21,
+      "durationMs": 2098.462,
+      "success": true,
+      "stack": [
+        {
+          "file": "/__w/pptx-dev/pptx-dev/tests/e2e/svg-security.spec.ts",
+          "line": 58,
+          "column": 81
+        }
+      ]
+    },
+    {
+      "callId": "expect@36",
+      "title": "Expect \"toBeVisible\"",
+      "startTime": 191864.331,
+      "endTime": 192360.46,
+      "durationMs": 496.129,
+      "success": false,
+      "stack": [
+        {
+          "file": "/__w/pptx-dev/pptx-dev/tests/e2e/svg-security.spec.ts",
+          "line": 60,
+          "column": 24
+        }
+      ]
+    }
+  ],
+  "network": {
+    "retainedRequests": 77,
+    "statuses": {
+      "200": 77
+    },
+    "maxRetainedDurationMs": 298.725,
+    "limitation": "Retained completed requests only; no new probes."
+  },
+  "sourceHashes": {
+    "tests/e2e/svg-security.spec.ts": "00b80195d1df3707396dc3c1e83985268b30cd038b0bde1497bf483bed20acb4",
+    "components/playground/playground-shell.tsx": "f0625e149945fbab390bf94026cf4000f9cb21b2d51db0eacbca975eb61971d8",
+    "components/playground/preview-pane.tsx": "f303c9644a3d495ba66745d6d12d7391d1b6d1c55ccb77a160716cbcb12e22d7",
+    "components/playground/preview-canvas-slide.tsx": "e94682d5cc7d3f1689fbfacd8decdee01213814a579855a58e29b1c1940f618c",
+    "components/playground/slide-canvas.tsx": "6140411d866e409a2a004d8a2457356f1ad638a841759aa4cf4f015f7bf5c0e9",
+    "lib/playground/opf-handoff.ts": "e7e8a0e249829eb444f64fcd5051f32f0b07432af80c6b26f882636d4ec1a850",
+    "lib/playground/opf-codec.ts": "4955e0a4a5f74883c2ef585c7c29c04ba5fa3e84a9c0c0ba847ae3c0290bc0f3",
+    "lib/playground/__tests__/opf-handoff.test.ts": "c03072ab58c7ee0dcc314aaa069b7235afc3eace3b865317668041c1dce471f2"
+  },
+  "wrongUrlExactlyMatchesStarterSemantics": true,
+  "observedWrongUrlSpanMs": 511.2360000000044
+}

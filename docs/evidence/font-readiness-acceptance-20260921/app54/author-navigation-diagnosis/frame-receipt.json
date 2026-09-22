@@ -1,0 +1,14 @@
+{
+  "sourceTrace": "/private/tmp/opf-font-readiness-concurrency-20260921/ci/extracted/browser-failures-windows-latest/inspector-actions-Inspecto-ddffb-urrent-draft-before-handoff/trace.zip",
+  "traceSha256": "c7589c634e5177b393d3697a4d9c9bb48b4809d958644973267a453c1812883a",
+  "frame": {
+    "type": "screencast-frame",
+    "pageId": "page@c935c9e5b1202195b10a5b5da7fa4640",
+    "file": "screencast/page@c935c9e5b1202195b10a5b5da7fa4640-1790024944418.jpeg",
+    "width": 1440,
+    "height": 1000,
+    "timestamp": 149617.164,
+    "frameSwapWallTime": 1790024943968.19
+  },
+  "outputSha256": "954991fe6d641287d49896357fac264788a22c6b1259850a382046afb5951d9f"
+}

@@ -1,0 +1,230 @@
+{
+  "capturedAt": "2026-09-21",
+  "scope": "Seven repositories; read-only queue snapshot before final wrap-up PRs. Dependency updates are not part of this wrap-up and remain unreviewed.",
+  "repositories": [
+    {
+      "repo": "OpenPresentation/opf",
+      "pullRequests": [
+        {
+          "baseRefName": "main",
+          "headRefName": "dependabot/npm_and_yarn/npm-minor-patch-64cac641b9",
+          "headRefOid": "a75a5501002136ff5c2191ed0a855ea4a5e0f117",
+          "isDraft": false,
+          "number": 101,
+          "title": "build(deps-dev): bump the npm-minor-patch group across 1 directory with 2 updates",
+          "url": "https://github.com/OpenPresentation/opf/pull/101"
+        },
+        {
+          "baseRefName": "main",
+          "headRefName": "cursor/placeholder-geometry-9f55",
+          "headRefOid": "11779455297798fb23ef43973bf29608e94f4b48",
+          "isDraft": true,
+          "number": 94,
+          "title": "feat(composition): center covers and reserve a content title band",
+          "url": "https://github.com/OpenPresentation/opf/pull/94"
+        },
+        {
+          "baseRefName": "main",
+          "headRefName": "cursor/native-hf-roadmap-225d",
+          "headRefOid": "bf76f207eb1698c02d4aee84ae2a94667627415d",
+          "isDraft": true,
+          "number": 92,
+          "title": "docs: require native Office Header/Footer objects for furniture",
+          "url": "https://github.com/OpenPresentation/opf/pull/92"
+        }
+      ]
+    },
+    {
+      "repo": "OpenPresentation/opf-render",
+      "pullRequests": [
+        {
+          "baseRefName": "main",
+          "headRefName": "cursor/placeholder-geometry-9f55",
+          "headRefOid": "9c59770c873c61abad2d3cef3714164c9f3b2b86",
+          "isDraft": true,
+          "number": 27,
+          "title": "test: consume composeSlide heading boxes without a second layout pass",
+          "url": "https://github.com/OpenPresentation/opf-render/pull/27"
+        }
+      ]
+    },
+    {
+      "repo": "OpenPresentation/opf-pptx",
+      "pullRequests": [
+        {
+          "baseRefName": "main",
+          "headRefName": "cursor/placeholder-geometry-9f55",
+          "headRefOid": "dc76ba92fd246556aac38d569294e1c26e62a9e5",
+          "isDraft": true,
+          "number": 42,
+          "title": "test: consume composeSlide heading origins in native export",
+          "url": "https://github.com/OpenPresentation/opf-pptx/pull/42"
+        },
+        {
+          "baseRefName": "main",
+          "headRefName": "cursor/native-hf-roadmap-225d",
+          "headRefOid": "6635c5fdef306b1b80be7ade1943099ae97e2d72",
+          "isDraft": true,
+          "number": 41,
+          "title": "docs: record tagged furniture is not native Header/Footer objects",
+          "url": "https://github.com/OpenPresentation/opf-pptx/pull/41"
+        }
+      ]
+    },
+    {
+      "repo": "OpenPresentation/opf-editor",
+      "pullRequests": [
+        {
+          "baseRefName": "main",
+          "headRefName": "dependabot/npm_and_yarn/npm-minor-patch-2053dbc85e",
+          "headRefOid": "7daf35f7325f8d304de5b5fe1f38d8a29685beb0",
+          "isDraft": false,
+          "number": 28,
+          "title": "build(deps): bump the npm-minor-patch group with 3 updates",
+          "url": "https://github.com/OpenPresentation/opf-editor/pull/28"
+        },
+        {
+          "baseRefName": "main",
+          "headRefName": "cursor/placeholder-geometry-9f55",
+          "headRefOid": "a82a5ba9dd2c538b2355f7a32eb6d828cbabc2f9",
+          "isDraft": true,
+          "number": 25,
+          "title": "feat(canvas): select allocated placeholder bounds",
+          "url": "https://github.com/OpenPresentation/opf-editor/pull/25"
+        }
+      ]
+    },
+    {
+      "repo": "Data-Advantage/openpresentation-site",
+      "pullRequests": [
+        {
+          "baseRefName": "main",
+          "headRefName": "dependabot/npm_and_yarn/types/node-26.6.1",
+          "headRefOid": "021e944f0a2d20c4417dd09f207a0dc52b4e1002",
+          "isDraft": false,
+          "number": 47,
+          "title": "build(deps-dev): bump @types/node from 24.13.4 to 26.6.1",
+          "url": "https://github.com/Data-Advantage/openpresentation-site/pull/47"
+        },
+        {
+          "baseRefName": "main",
+          "headRefName": "dependabot/npm_and_yarn/typescript-7.0.2",
+          "headRefOid": "d1c90fe29f7a02610256ed24b901660956d0a92a",
+          "isDraft": false,
+          "number": 46,
+          "title": "build(deps-dev): bump typescript from 5.9.3 to 7.0.2",
+          "url": "https://github.com/Data-Advantage/openpresentation-site/pull/46"
+        },
+        {
+          "baseRefName": "main",
+          "headRefName": "dependabot/npm_and_yarn/compatible-version-updates-8565fe2da0",
+          "headRefOid": "ea4c08a89c9b1bc6d1a63805d9a1d474b284b503",
+          "isDraft": false,
+          "number": 45,
+          "title": "build(deps): bump the compatible-version-updates group with 13 updates",
+          "url": "https://github.com/Data-Advantage/openpresentation-site/pull/45"
+        },
+        {
+          "baseRefName": "main",
+          "headRefName": "cursor/homepage-renderer-9f55",
+          "headRefOid": "99623b13a326b5270d652e0144002ca72e1adfec",
+          "isDraft": true,
+          "number": 40,
+          "title": "feat(homepage): always preview with the shared OPF canvas",
+          "url": "https://github.com/Data-Advantage/openpresentation-site/pull/40"
+        }
+      ]
+    },
+    {
+      "repo": "Data-Advantage/pptx-dev",
+      "pullRequests": [
+        {
+          "baseRefName": "master",
+          "headRefName": "codex/inspector-share-guard-20260921",
+          "headRefOid": "79ba0157984fce8405eeb786b8ede1a4e59ba138",
+          "isDraft": false,
+          "number": 54,
+          "title": "Keep Inspector outputs current and package standalone startup",
+          "url": "https://github.com/Data-Advantage/pptx-dev/pull/54"
+        },
+        {
+          "baseRefName": "master",
+          "headRefName": "dependabot/npm_and_yarn/nanoid-6.0.1",
+          "headRefOid": "e8cd795dd0abf388194ae20d73996385632ee61f",
+          "isDraft": false,
+          "number": 52,
+          "title": "build: bump nanoid from 5.1.16 to 6.0.1",
+          "url": "https://github.com/Data-Advantage/pptx-dev/pull/52"
+        },
+        {
+          "baseRefName": "master",
+          "headRefName": "dependabot/npm_and_yarn/typescript-6.0.3",
+          "headRefOid": "931ddef5ac36d869d1134efb1a304a7cc8a3d7a4",
+          "isDraft": false,
+          "number": 51,
+          "title": "build: bump typescript from 5.9.3 to 6.0.3",
+          "url": "https://github.com/Data-Advantage/pptx-dev/pull/51"
+        },
+        {
+          "baseRefName": "master",
+          "headRefName": "dependabot/npm_and_yarn/compatible-dependencies-abc7ba9ce5",
+          "headRefOid": "b8c79accde699d3fdb6a06e0bd04924fc7a368b2",
+          "isDraft": false,
+          "number": 50,
+          "title": "build: bump the compatible-dependencies group with 10 updates",
+          "url": "https://github.com/Data-Advantage/pptx-dev/pull/50"
+        },
+        {
+          "baseRefName": "master",
+          "headRefName": "dependabot/github_actions/actions/setup-go-7",
+          "headRefOid": "0d8221f1d98a1c3cb82f9b9c5739625012c425be",
+          "isDraft": false,
+          "number": 49,
+          "title": "build: bump actions/setup-go from 5 to 7",
+          "url": "https://github.com/Data-Advantage/pptx-dev/pull/49"
+        },
+        {
+          "baseRefName": "master",
+          "headRefName": "dependabot/github_actions/actions/checkout-7",
+          "headRefOid": "fc2b955ac8f9a671ee469f050a7333b4906fa4f9",
+          "isDraft": false,
+          "number": 48,
+          "title": "build: bump actions/checkout from 4 to 7",
+          "url": "https://github.com/Data-Advantage/pptx-dev/pull/48"
+        }
+      ]
+    },
+    {
+      "repo": "Data-Advantage/pptx-gallery",
+      "pullRequests": [
+        {
+          "baseRefName": "main",
+          "headRefName": "dependabot/npm_and_yarn/types/node-26.6.1",
+          "headRefOid": "f45c9ab566d375f1c7a4601937faf59990dd837f",
+          "isDraft": false,
+          "number": 39,
+          "title": "build(deps-dev): bump @types/node from 24.13.4 to 26.6.1",
+          "url": "https://github.com/Data-Advantage/pptx-gallery/pull/39"
+        },
+        {
+          "baseRefName": "main",
+          "headRefName": "dependabot/npm_and_yarn/tailwind-merge-3.7.0",
+          "headRefOid": "7535d1ba2a78c8b5cf0fb105e4fa1403164caaeb",
+          "isDraft": false,
+          "number": 38,
+          "title": "build(deps): bump tailwind-merge from 2.6.1 to 3.7.0",
+          "url": "https://github.com/Data-Advantage/pptx-gallery/pull/38"
+        },
+        {
+          "baseRefName": "main",
+          "headRefName": "dependabot/npm_and_yarn/npm-minor-patch-afffbd1fe0",
+          "headRefOid": "f243a478e558cffc8cfd300712386fcea538949a",
+          "isDraft": false,
+          "number": 37,
+          "title": "build(deps): bump the npm-minor-patch group with 10 updates",
+          "url": "https://github.com/Data-Advantage/pptx-gallery/pull/37"
+        }
+      ]
+    }
+  ]
+}

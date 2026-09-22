@@ -1,0 +1,354 @@
+{
+  "sourceTrace": "results/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/trace.zip",
+  "sourceTraceSha256": "c512467d3b71c98f19b86efb69b573eb7f478c4bf220130e4c00db5ccb85d135",
+  "terminalFailure": "LF third popup, reopening layout choices at document-layout after theme and document layout exact apply/undo/redo passed. Intended next choice AAB Loaded Layout was not reached.",
+  "location": {
+    "test": "tests/e2e/author-json-options.spec.ts",
+    "line": 118,
+    "helperFailureLine": 56
+  },
+  "calls": [
+    {
+      "callId": "call@151",
+      "startMs": 5896.095,
+      "endMs": 5898.938,
+      "method": "focus",
+      "parameters": {
+        "selector": "internal:role=textbox[name=\"Editor content\"s]",
+        "strict": true
+      },
+      "error": null
+    },
+    {
+      "callId": "call@153",
+      "startMs": 5900.306,
+      "endMs": 5907.605,
+      "method": "press",
+      "parameters": {
+        "selector": "internal:role=textbox[name=\"Editor content\"s]",
+        "strict": true,
+        "key": "Control+g"
+      },
+      "error": null
+    },
+    {
+      "callId": "call@155",
+      "startMs": 5909.442,
+      "endMs": 5910.921,
+      "method": "expect",
+      "parameters": {
+        "selector": ".quick-input-widget input",
+        "expression": "to.be.visible",
+        "expectedValue": {
+          "value": {
+            "v": "undefined"
+          },
+          "handles": []
+        },
+        "isNot": false,
+        "timeout": 5000
+      },
+      "error": null
+    },
+    {
+      "callId": "call@157",
+      "startMs": 5912.071,
+      "endMs": 5916.951,
+      "method": "fill",
+      "parameters": {
+        "selector": ".quick-input-widget input",
+        "strict": true,
+        "value": ":11:18"
+      },
+      "error": null
+    },
+    {
+      "callId": "call@159",
+      "startMs": 5918.752,
+      "endMs": 5924.439,
+      "method": "press",
+      "parameters": {
+        "selector": ".quick-input-widget input",
+        "strict": true,
+        "key": "Enter"
+      },
+      "error": null
+    },
+    {
+      "callId": "call@161",
+      "startMs": 5925.836,
+      "endMs": 5927.928,
+      "method": "expect",
+      "parameters": {
+        "selector": "internal:text=\"cursor 11:18\"s",
+        "expression": "to.be.visible",
+        "expectedValue": {
+          "value": {
+            "v": "undefined"
+          },
+          "handles": []
+        },
+        "isNot": false,
+        "timeout": 5000
+      },
+      "error": null
+    },
+    {
+      "callId": "call@163",
+      "startMs": 5928.861,
+      "endMs": 5932.169,
+      "method": "press",
+      "parameters": {
+        "selector": "internal:role=textbox[name=\"Editor content\"s]",
+        "strict": true,
+        "key": "Control+Space"
+      },
+      "error": null
+    },
+    {
+      "callId": "call@165",
+      "startMs": 5933.224,
+      "endMs": 10934.577,
+      "method": "expect",
+      "parameters": {
+        "selector": ".suggest-widget.visible",
+        "expression": "to.be.visible",
+        "expectedValue": {
+          "value": {
+            "v": "undefined"
+          },
+          "handles": []
+        },
+        "isNot": false,
+        "timeout": 5000
+      },
+      "error": {
+        "message": "Expect failed",
+        "stack": "ExpectError: Expect failed\n    at _Frame.expect (/private/tmp/opf-completion-fix-20260921/pptx-dev/node_modules/.pnpm/playwright-core@1.63.0/node_modules/playwright-core/lib/coreBundle.js:24312:17)\n    at _FrameDispatcher.expect (/private/tmp/opf-completion-fix-20260921/pptx-dev/node_modules/.pnpm/playwright-core@1.63.0/node_modules/playwright-core/lib/coreBundle.js:54886:11)\n    at _ProgressController.run (/private/tmp/opf-completion-fix-20260921/pptx-dev/node_modules/.pnpm/playwright-core@1.63.0/node_modules/playwright-core/lib/coreBundle.js:12374:27)\n    at DispatcherConnection.dispatch (/private/tmp/opf-completion-fix-20260921/pptx-dev/node_modules/.pnpm/playwright-core@1.63.0/node_modules/playwright-core/lib/coreBundle.js:19135:27)",
+        "name": "ExpectError"
+      }
+    }
+  ],
+  "network": {
+    "count": 115,
+    "lastRecordedRequestStartMs": 4025.796,
+    "lastRecordedRequestEndMs": 4225.487,
+    "recordedRequestFailures": 0,
+    "http400OrGreater": 0,
+    "limitation": "All recorded requests completed before the third popup trigger. No network cause is established; provider internals and keybinding dispatch are not directly instrumented by this trace."
+  },
+  "console": [
+    {
+      "type": "warning",
+      "text": "Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview"
+    }
+  ],
+  "tracePageErrorEvents": [],
+  "extractedFrames": [
+    {
+      "output": "lf-final-popup-missing.jpeg",
+      "tracePath": "screencast/page@0fbcaf76ffa2aad59de6b4f6b8a280a9-1790005972477.jpeg",
+      "timestampMs": 10941.759
+    },
+    {
+      "output": "lf-popup-trigger.jpeg",
+      "tracePath": "screencast/page@0fbcaf76ffa2aad59de6b4f6b8a280a9-1790005967476.jpeg",
+      "timestampMs": 5941.336
+    }
+  ],
+  "focusEvidence": {
+    "note": "Snapshot deltas explicitly show Monaco root class focused after Go to Line and at the Control+Space input snapshot; Playwright target is native-edit-context textbox Editor content. document.activeElement is not separately recorded, and references in compressed snapshot DOM are not expanded. These observations do not establish keybinding delivery or provider invocation/cancellation.",
+    "snapshots": [
+      {
+        "callId": "call@159",
+        "phase": "before",
+        "timestampMs": 5919.626,
+        "inlineSnapshotNodes": [
+          {
+            "tag": "DIV",
+            "class": "monaco-editor no-user-select mac  showUnused showDeprecated vs-dark",
+            "role": "code",
+            "style": "width: 724px; height: 848px;"
+          },
+          {
+            "tag": "DIV",
+            "class": "quick-input-widget show-file-icons",
+            "tabindex": "-1",
+            "style": "background-color: var(--vscode-quickInput-background); color: var(--vscode-quickInput-foreground); border: 1px solid var(--vscode-widget-border); width: 448.88px; top: 0px; left: 138px;"
+          },
+          {
+            "tag": "INPUT",
+            "__playwright_value_": ":11:18",
+            "class": "input",
+            "aria-label": "Go to line. Type a line number, optionally followed by colon and column number.",
+            "style": "background-color: inherit; color: var(--vscode-input-foreground); width: calc(100% + 0px);"
+          }
+        ]
+      },
+      {
+        "callId": "call@159",
+        "phase": "action",
+        "timestampMs": 5921.775,
+        "inlineSnapshotNodes": [
+          {
+            "tag": "DIV",
+            "class": "monaco-editor no-user-select mac  showUnused showDeprecated vs-dark",
+            "role": "code",
+            "style": "width: 724px; height: 848px;"
+          },
+          {
+            "tag": "DIV",
+            "class": "quick-input-widget show-file-icons",
+            "tabindex": "-1",
+            "style": "background-color: var(--vscode-quickInput-background); color: var(--vscode-quickInput-foreground); border: 1px solid var(--vscode-widget-border); width: 448.88px; top: 0px; left: 138px;"
+          },
+          {
+            "tag": "INPUT",
+            "__playwright_value_": ":11:18",
+            "__playwright_target__": "",
+            "class": "input",
+            "aria-label": "Go to line. Type a line number, optionally followed by colon and column number.",
+            "style": "background-color: inherit; color: var(--vscode-input-foreground); width: calc(100% + 0px);"
+          }
+        ]
+      },
+      {
+        "callId": "call@159",
+        "phase": "after",
+        "timestampMs": 5925.308,
+        "inlineSnapshotNodes": [
+          {
+            "tag": "DIV",
+            "class": "monaco-editor no-user-select mac  showUnused showDeprecated vs-dark focused",
+            "role": "code",
+            "style": "width: 724px; height: 848px;"
+          },
+          {
+            "tag": "DIV",
+            "class": "quick-input-widget show-file-icons",
+            "tabindex": "-1",
+            "style": "background-color: var(--vscode-quickInput-background); color: var(--vscode-quickInput-foreground); border: 1px solid var(--vscode-widget-border); width: 448.88px; top: 0px; left: 138px; display: none;"
+          },
+          {
+            "tag": "INPUT",
+            "__playwright_value_": ":11:18",
+            "__playwright_target__": "",
+            "class": "input",
+            "aria-label": "Go to line. Type a line number, optionally followed by colon and column number.",
+            "style": "background-color: inherit; color: var(--vscode-input-foreground); width: calc(100% + 0px);"
+          }
+        ]
+      },
+      {
+        "callId": "call@161",
+        "phase": "before",
+        "timestampMs": 5926.603,
+        "inlineSnapshotNodes": [
+          {
+            "tag": "DIV",
+            "class": "monaco-editor no-user-select mac  showUnused showDeprecated vs-dark focused",
+            "role": "code",
+            "style": "width: 724px; height: 848px;"
+          },
+          {
+            "tag": "DIV",
+            "class": "quick-input-widget show-file-icons",
+            "tabindex": "-1",
+            "style": "background-color: var(--vscode-quickInput-background); color: var(--vscode-quickInput-foreground); border: 1px solid var(--vscode-widget-border); width: 448.88px; top: 0px; left: 138px; display: none;"
+          },
+          {
+            "tag": "INPUT",
+            "__playwright_value_": ":11:18",
+            "class": "input",
+            "aria-label": "Go to line. Type a line number, optionally followed by colon and column number.",
+            "style": "background-color: inherit; color: var(--vscode-input-foreground); width: calc(100% + 0px);"
+          }
+        ]
+      },
+      {
+        "callId": "call@161",
+        "phase": "after",
+        "timestampMs": 5928.594,
+        "inlineSnapshotNodes": []
+      },
+      {
+        "callId": "call@163",
+        "phase": "before",
+        "timestampMs": 5929.557,
+        "inlineSnapshotNodes": []
+      },
+      {
+        "callId": "call@163",
+        "phase": "action",
+        "timestampMs": 5931.426,
+        "inlineSnapshotNodes": [
+          {
+            "tag": "DIV",
+            "class": "monaco-editor no-user-select mac  showUnused showDeprecated vs-dark focused",
+            "role": "code",
+            "style": "width: 724px; height: 848px;"
+          },
+          {
+            "tag": "DIV",
+            "__playwright_target__": "",
+            "class": "native-edit-context",
+            "tabindex": "0",
+            "role": "textbox",
+            "aria-label": "Editor content",
+            "style": "tab-size: 15.6016px; text-wrap: wrap; font-family: var(--font-geist-mono), 'Fira Code', 'Cascadia Code', Consolas, monospace, Menlo, Monaco, 'Courier New', monospace; font-weight: normal; font-size: 13px; font-feature-settings: \"liga\" 0, \"calt\" 0; font-variation-settings: normal; line-height: 20px; letter-spacing: 0px; top: 200px; left: 65px; height: 20px; width: 640px;"
+          }
+        ]
+      },
+      {
+        "callId": "call@163",
+        "phase": "after",
+        "timestampMs": 5932.803,
+        "inlineSnapshotNodes": []
+      },
+      {
+        "callId": "call@165",
+        "phase": "before",
+        "timestampMs": 5935.351,
+        "inlineSnapshotNodes": [
+          {
+            "tag": "DIV",
+            "class": "monaco-editor no-user-select mac  showUnused showDeprecated vs-dark focused",
+            "role": "code",
+            "style": "width: 724px; height: 848px;"
+          },
+          {
+            "tag": "DIV",
+            "class": "native-edit-context",
+            "tabindex": "0",
+            "role": "textbox",
+            "aria-label": "Editor content",
+            "style": "tab-size: 15.6016px; text-wrap: wrap; font-family: var(--font-geist-mono), 'Fira Code', 'Cascadia Code', Consolas, monospace, Menlo, Monaco, 'Courier New', monospace; font-weight: normal; font-size: 13px; font-feature-settings: \"liga\" 0, \"calt\" 0; font-variation-settings: normal; line-height: 20px; letter-spacing: 0px; top: 200px; left: 65px; height: 20px; width: 640px;"
+          }
+        ]
+      },
+      {
+        "callId": "call@165",
+        "phase": "after",
+        "timestampMs": 10936.41,
+        "inlineSnapshotNodes": [
+          {
+            "tag": "DIV",
+            "class": "monaco-editor no-user-select mac  showUnused showDeprecated vs-dark focused",
+            "role": "code",
+            "style": "width: 724px; height: 848px;"
+          }
+        ]
+      }
+    ],
+    "inputEvent": {
+      "type": "input",
+      "callId": "call@163",
+      "box": {
+        "x": 391,
+        "y": 320,
+        "width": 640,
+        "height": 20
+      }
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "capturedAt": "2026-09-21T16:45:58.429Z",
+  "id": "dpl_SzQEqavWHkZHCa5LBGxztwKaV2SJ",
+  "state": "READY",
+  "target": null,
+  "url": "pptx-ozy0qo0ne-dataadvantage.vercel.app",
+  "alias": [
+    "pptx-dev-git-codex-author-source-preservat-0802a6-dataadvantage.vercel.app"
+  ],
+  "createdAt": 1790009018629,
+  "meta": {
+    "githubCommitSha": "8c0dae19b339ef3fe6a06c1d2df9f96b31d4f575",
+    "githubCommitRef": "codex/author-source-preservation-20260921"
+  },
+  "browserAccepted": false,
+  "note": "Exact draft preview is READY; no preview browser visit or production release."
+}

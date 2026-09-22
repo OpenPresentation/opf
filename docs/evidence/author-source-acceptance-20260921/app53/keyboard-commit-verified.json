@@ -1,0 +1,17 @@
+{
+  "head": "b33dc18e8c35803386feb80e7822f240a9671243",
+  "tree": "64a0dbd702f43c87206c8a9fe16d06fe3ac68800",
+  "clean": true,
+  "evidenceManifestSHA256": "b33a760d395baad65fd948468184c207e1bd4d1e300171f850ecc5d7057bea13",
+  "issue88State": "OPEN",
+  "issue88BodySHA256": "74b4831394641e876d4f2f07a35186498c01ba3296b376a3109055a604a2b985",
+  "localBrowser": {
+    "passed": 29,
+    "total": 29,
+    "retries": 0
+  },
+  "nativeAccepted": false,
+  "productionChanged": false,
+  "committedEvidenceFilesChecked": 207,
+  "committedEvidenceBytesExact": true
+}

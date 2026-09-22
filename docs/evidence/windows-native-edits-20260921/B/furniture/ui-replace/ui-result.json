@@ -1,0 +1,11 @@
+{
+  "scope": "Actual supported PowerPoint UI Change Picture > This Device, selected recorded replacement.png on slide2, Ctrl+S, Ctrl+W; observed empty PowerPoint window after close. Native lifecycle/reimport checks pending.",
+  "savedPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-ui-replace-01\\native-ui-edited.pptx",
+  "savedSha256": "a10ccca75d692de67ae12f321bfd93849b199f2a9f7e70d43d751f4540a2bc38",
+  "sourceUnchanged": true,
+  "inputUnchanged": true,
+  "cleanupConfirmed": true,
+  "finishedAt": "2026-09-21T18:15:52.9700881Z",
+  "uiObservation": "Wide picture changed to tall picture; former alt label no longer exposed. No repair, recovery or save prompts occurred. Original shape provenance must be checked in saved package; UI alone does not establish it.",
+  "toolLimitation": "One indexed File name set_value was rejected as unavailable; fresh UI inspection and observed filename focus were used before typing. Accessibility focused_element text remained stale while screenshots and actual field value reflected input. No failed file open was retried."
+}

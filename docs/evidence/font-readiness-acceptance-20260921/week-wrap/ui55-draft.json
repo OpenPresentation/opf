@@ -1,0 +1,42 @@
+{
+  "recordedAt": "2026-09-21T22:06:01.443572+00:00",
+  "url": "https://github.com/Data-Advantage/pptx-dev/pull/55",
+  "draft": true,
+  "base": "master",
+  "head": "9b441aafe66a8849d3e212df04348e762d9866da",
+  "tree": "59b41460ef83798743429e9bf2a35e1bc796d8c8",
+  "parent": "8f54228a9e38a1dcc0bf8188bcdd519795b3799a",
+  "originalDraftHead": "37769a543c30eee4337571a86b4991bdf5b024c5",
+  "exactLeasePushSucceeded": true,
+  "all208ReviewedGitBlobsUnchanged": true,
+  "sourceInputs": 703,
+  "sourceSymlinkTargets": 33,
+  "originalEvidenceFiles": 143,
+  "newEvidenceFiles": 63,
+  "freshLocalBrowserPassed": 43,
+  "retries": 0,
+  "finalAssembledTypecheckExit": 0,
+  "stagedWhitespaceCheckExit": 0,
+  "cleanWorktree": true,
+  "attachedToCodexTask": true,
+  "oldHeadRunsAfterRetarget": [
+    {
+      "id": 35660559606,
+      "head": "37769a543c30eee4337571a86b4991bdf5b024c5",
+      "status": "in_progress",
+      "conclusion": null,
+      "url": "https://github.com/Data-Advantage/pptx-dev/actions/runs/35660559606"
+    }
+  ],
+  "newHeadInitialRuns": [
+    {
+      "id": 35660801988,
+      "head": "9b441aafe66a8849d3e212df04348e762d9866da",
+      "status": "pending",
+      "conclusion": null,
+      "url": "https://github.com/Data-Advantage/pptx-dev/actions/runs/35660801988"
+    }
+  ],
+  "noMergeReleaseDeployOrCIRerun": true,
+  "noFurtherWorkPlanned": true
+}

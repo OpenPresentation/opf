@@ -1,0 +1,96 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "OPF Presentation",
+  "slides": [
+    {
+      "design": {
+        "background": {
+          "type": "solid",
+          "color": "#FFFFFF"
+        }
+      },
+      "blocks": [
+        {
+          "type": "table",
+          "table": {
+            "rows": [
+              [
+                {
+                  "value": [
+                    {
+                      "text": "Lead\t",
+                      "fontSize": 18,
+                      "fontFamily": "Carlito",
+                      "color": "#000000"
+                    },
+                    {
+                      "text": "Large evidence phrase ",
+                      "bold": true,
+                      "fontSize": 30,
+                      "fontFamily": "Carlito",
+                      "color": "#000000"
+                    },
+                    {
+                      "text": "continues in smaller text across the same editable table cell so natural layout must wrap this sentence without authored line breaks or inserted offsets. ",
+                      "fontSize": 18,
+                      "fontFamily": "Carlito",
+                      "color": "#000000"
+                    },
+                    {
+                      "text": "Second large phrase ",
+                      "fontSize": 30,
+                      "fontFamily": "Carlito",
+                      "color": "#000000"
+                    },
+                    {
+                      "text": "finishes the control with exact source runs.",
+                      "fontSize": 18,
+                      "fontFamily": "Carlito",
+                      "color": "#000000"
+                    }
+                  ],
+                  "style": {
+                    "fill": "#F0F0F0",
+                    "align": "left",
+                    "verticalAlign": "top",
+                    "padding": {
+                      "top": 8,
+                      "right": 10,
+                      "bottom": 4,
+                      "left": 10
+                    },
+                    "borders": {
+                      "left": {
+                        "color": "#3AC67A",
+                        "width": 1
+                      },
+                      "right": {
+                        "color": "#3AC67A",
+                        "width": 1
+                      },
+                      "top": {
+                        "color": "#3AC67A",
+                        "width": 1
+                      },
+                      "bottom": {
+                        "color": "#3AC67A",
+                        "width": 1
+                      }
+                    }
+                  }
+                }
+              ]
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "author": "OpenPresentation",
+  "design": {
+    "dimensions": {
+      "widthInches": 13.333333333333334,
+      "heightInches": 7.5
+    }
+  }
+}

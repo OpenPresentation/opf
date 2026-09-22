@@ -1,0 +1,44 @@
+name: Artifact compatibility
+on:
+  pull_request:
+    paths: ['.github/workflows/**', 'scripts/verify-artifact-roundtrip.py', 'sdk/python/**']
+  push:
+    branches: [master]
+    paths: ['.github/workflows/**', 'scripts/verify-artifact-roundtrip.py', 'sdk/python/**']
+permissions:
+  contents: read
+concurrency:
+  group: artifact-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  roundtrip:
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+      - run: python -m pip install build twine
+      - run: python -m build sdk/python --outdir wheelhouse
+      - name: Upload real wheel and source distribution
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: package-dist-${{ matrix.os }}
+          path: wheelhouse/*
+          if-no-files-found: error
+          retention-days: 1
+      - name: Download into the publisher's directory layout
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: package-dist-${{ matrix.os }}
+          path: dist
+      - run: python scripts/verify-artifact-roundtrip.py wheelhouse dist
+      - name: Check downloaded distributions without publishing
+        run: python -m twine check dist/*

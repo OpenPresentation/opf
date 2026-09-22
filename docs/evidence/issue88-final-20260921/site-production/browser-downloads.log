@@ -1,0 +1,13 @@
+
+> openpresentation-site@0.1.0 test:e2e /private/tmp/opf-issue88-public-docs-20260921/openpresentation-site
+> playwright test tests/e2e/published-site.spec.ts --grep 'agent quickstart|home-page downloads'
+
+
+Running 2 tests using 1 worker
+
+(node:28042) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/e2e/published-site.spec.ts:7:5 › agent quickstart copies the published installation command and serves all six complete skills (4.9s)
+  ✓  2 tests/e2e/published-site.spec.ts:57:5 › home-page downloads match the verified registry showcase (1.4s)
+
+  2 passed (6.6s)

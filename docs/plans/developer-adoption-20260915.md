@@ -1,17 +1,26 @@
 # Developer adoption and full-tooling roadmap
 
-The published baseline is core **0.10.1**, renderer/PPTX/CLI **0.8.1** and
-editor **0.7.1** on Node 24. Shared header/footer geometry is in that set.
-Read the [handoff](../handoff-2026-09-15.md) as a dated checkpoint, then
-[the compatibility matrix](../compatibility-matrix.md) for current pins.
+The published baseline is core **0.11.0**, CLI/renderer **0.9.0**, PPTX **0.9.1**
+and editor **0.8.0** on Node 24. ColorRef and shared furniture (`furniture-flow-v2`)
+are shipped. PPTX furniture is editable tagged slide shapes (`OPF_FURNITURE_V1`),
+not native Office Header/Footer (`p:hf` / notes master). Read the
+[current handoff](../handoff-2026-09-21.md) and
+[compatibility matrix](../compatibility-matrix.md) for verified scope.
+
+The independent registry quickstart is on main. Production sites carry the
+shipped train and issue88 features, with remaining acceptance tracked separately.
+The developer-ready milestone is not complete. Renderer issue24 retains the
+0.1px gate; native Office issue87 and native HF stay roadmap work. No p:hf
+implementation, geometry draft merge or ColorRef corpus expansion is part of
+this documentation checkpoint.
 
 | Order | Deliverable | Definition of done |
 | --- | --- | --- |
-| 1 | Release the validated header/footer increment | **Published** in core 0.10.1 with renderer 0.8.1, editor 0.7.1 and PPTX 0.8.1. Native Office limitations stay explicit. |
-| 2 | One clear developer starting path | Follow [the quickstart](../quickstart.md): a small independently installable example demonstrates JSON authoring, lint/validation, resolved offline fonts, measured composition/pagination, live editing with undo, SVG/PNG/PDF and editable PPTX export through documented APIs. Keep CLI commands accurate; the [compatibility matrix](../compatibility-matrix.md) is the supported/unsupported feature list. Audit skills and docs that still call released APIs unreleased. Verify TS/module/browser/Node boundaries and clean installation. |
-| 3 | Consistent public-site feature adoption | Complete [issue88](https://github.com/OpenPresentation/opf/issues/88): keep home/playground JSON↔preview behavior, contextual choices and code editing; integrate loaded-context choices into pptx.dev Monaco and preview edits into inspector; improve gallery/docs interactive examples. Preserve each site's appearance and actual routes; verify production behavior, not just dependency manifests. |
+| 1 | Release the validated header/footer increment | **Published** in the predecessor train and retained in the current set above. Native Office limitations stay explicit; no new release is needed for these APIs. |
+| 2 | One clear developer starting path | **On main via [PR 91](https://github.com/OpenPresentation/opf/pull/91).** Follow [the quickstart](../quickstart.md): a small independently installable example demonstrates JSON authoring, lint/validation, resolved offline fonts, measured composition/pagination, live editing with undo, SVG/PNG/PDF and editable PPTX export through documented APIs. Keep CLI commands accurate; the [compatibility matrix](../compatibility-matrix.md) is the supported/unsupported feature list. Bundled tarball copy can still call furniture unpublished — that is stale docs, not a missing API. Browser/production verification of this example is still separate from the Node registry install. |
+| 3 | Consistent public-site feature adoption | Inspector overlay and Author json-options, gallery Playground/Editor links, and the main-site Header & footer example are live. Complete remaining [issue88](https://github.com/OpenPresentation/opf/issues/88) route/interaction and documentation acceptance using fresh production evidence. Package pins alone do not close this gate. Geometry drafts and site40 remain separate. |
 | 4 | Font and text reliability | Resolve or narrowly split [the archived shaping stack](deferred-shaping-20260915.md) and [renderer24](https://github.com/OpenPresentation/opf-render/issues/24); fix the archived editor coverage-count assertion; define supported scripts/axes/fallback/bidi, caret/selection/IME, face identity and licenses. Keep unchanged native tolerances visible; do not advertise substitute fonts as universally pixel-identical. |
-| 5 | Native PowerPoint portability | Finish [issue87](https://github.com/OpenPresentation/opf/issues/87) after host recovery is confirmed: open/edit/save/reopen pictures and furniture, current-content provenance, tabs, notes-master ordering and font identification/installation/embedding where permitted. Add macOS PowerPoint/Keynote evidence when available. Serialization and self-import do not certify Office. |
+| 5 | Native PowerPoint portability | Finish [issue87](https://github.com/OpenPresentation/opf/issues/87) after host recovery is confirmed: open/edit/save/reopen pictures and furniture, compile furniture into real Office Header/Footer objects (`p:hf` / notes master) rather than tagged slide shapes, current-content provenance, tabs, notes-master ordering and font identification/installation/embedding where permitted. Add macOS PowerPoint/Keynote evidence when available. Serialization, self-import and `OPF_FURNITURE_V1` tags do not certify Office. |
 | 6 | Broad deterministic layout and repair | Extend existing shared geometry, candidate scoring, readability floors and pagination into a documented repair loop across nested groups and dense charts/tables. Cover collisions, unseen content, multiple dimensions and bounded failure. Expose the accepted operations consistently through API/CLI/canvas preview+undo, respecting human adjustments. Preserve all content and reading order; regression hashes alone do not establish visual quality. |
 | 7 | Full editor interaction coverage | Maintain [the feature matrix](spec-editor-coverage.md) for visual and nonvisual fields separately: table/chart manipulation, contextual catalogs, assets/crop/effects, language/IME/keyboard/accessibility and lifetime cleanup, slide navigation/presenter behavior and media. Schema-property access does not establish full WYSIWYG support. |
 | 8 | Selectable vector PDF | Implement [the PDF plan](pdf-export.md) after font reliability: legal embedding/subsetting, real selectable/searchable text, Unicode mapping, exact accepted pages, independent extraction and raster checks. Current PDF is raster-backed. Accessibility/tagged conformance needs separate evidence. |

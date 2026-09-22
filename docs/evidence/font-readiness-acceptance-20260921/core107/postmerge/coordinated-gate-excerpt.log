@@ -1,0 +1,20 @@
+2026-09-21T20:39:14.0623218Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-09-21T20:39:19.6963469Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-09-21T20:39:22.2069561Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-09-21T20:39:23.4024808Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-09-21T20:39:24.8207093Z ##[group]Run pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413
+2026-09-21T20:39:28.2841529Z ##[group]Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+2026-09-21T20:39:28.9059824Z node: v24.20.0
+2026-09-21T20:39:32.4159069Z ##[group]Run pnpm --dir opf install --frozen-lockfile
+2026-09-21T20:39:41.7297252Z ##[group]Run pnpm build
+2026-09-21T20:40:03.2038523Z ##[group]Run pnpm test:packages
+2026-09-21T20:43:04.1372098Z ##[group]Run node -e "if (require('../opf-render/node_modules/playwright/package.json').version !== '1.63.0') throw new Error('Update the pinned Playwright image with the renderer test package.');"
+2026-09-21T20:44:02.3253360Z ##[group]Run node test/plain-whitespace-browser.mjs artifacts/plain-whitespace-browser
+2026-09-21T20:44:03.9697636Z ##[group]Run npm run test:font-variants-browser
+2026-09-21T20:44:05.0384328Z ##[group]Run node scripts/test-metric-outline-browser.mjs artifacts/metric-outline-browser
+2026-09-21T20:46:50.4712217Z ##[group]Run pnpm test:registry-ecosystem
+2026-09-21T20:48:59.0050756Z ##[group]Run node scripts/test-code-layout-geometry.mjs artifacts/npm/registry-consumer artifacts/code-layout-geometry.json
+2026-09-21T20:49:09.8437264Z ##[group]Run node scripts/test-metric-registry-guards.mjs artifacts/npm/registry-consumer
+2026-09-21T20:49:14.1321982Z ##[group]Run actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+2026-09-21T20:49:16.4405471Z ##[group]Run echo 'This job tests coordinated source, local tarballs, and exact published registry installs against pinned fixtures. It executes installed-package browser harnesses, trusted pointer/keyboard editing and undo, controlled code export/reimport, and renderer raster regression checks. Native PowerPoint fidelity, arbitrary document round-tripping and private/public site interactions require separate evidence.' >> "$GITHUB_STEP_SUMMARY"
+2026-09-21T20:49:16.4411348Z echo 'This job tests coordinated source, local tarballs, and exact published registry installs against pinned fixtures. It executes installed-package browser harnesses, trusted pointer/keyboard editing and undo, controlled code export/reimport, and renderer raster regression checks. Native PowerPoint fidelity, arbitrary document round-tripping and private/public site interactions require separate evidence.' >> "$GITHUB_STEP_SUMMARY"

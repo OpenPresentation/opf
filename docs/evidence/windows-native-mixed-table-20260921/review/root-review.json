@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-09-21T20:24:00Z",
+  "reviewer": "root supervisor",
+  "nativeWorkerSha256": "ad21e9037ed5d091a2c11e4041155067030e0d8705d27321d3148748e0744ffa",
+  "images": [
+    {"path": "native-mixed-table-01/native-observation.png", "sha256": "ceed1e7089510f9acaa0413674fb36ee76cb343a39638bb13fba53380c64602d", "width": 1280, "height": 720, "fullSlideReviewed": true, "visibleClipping": false},
+    {"path": "R/mixed-table-registry-01/preview.png", "sha256": "ed6c82fe9f77ee1d69d8a547a9b52ece9c36fddaee6b2deb57dd0dd6c5eb6418", "width": 1280, "height": 720, "fullSlideReviewed": true, "visibleClipping": false}
+  ],
+  "findings": [
+    "Both images retain all authored text, the mixed font sizes, and three visible soft lines. Their line endings and tab spacing visibly differ.",
+    "Native line source intervals are [0,92), [92,194), [194,245); estimated preview intervals are [0,78), [78,172), [172,245).",
+    "Native table cell TextRange2 bounds are observed in a cell-local coordinate frame: first line left=7.5/top=6, unlike the cell shape left/top=43.20000076293945. Raw coordinates are retained without silently comparing different frames.",
+    "The native default tab spacing is72pt and the following character starts72pt after the cell text origin. The one source tab remains literal; no explicit tab stop was exported.",
+    "Native line tops are6,43,80pt, while the reported point-based SpaceWithin is36.599998474121094pt. This records observations without inferring an internal rounding cause.",
+    "The read-only content/style, outer geometry, soft-wrap and cleanup gates pass. This is not browser/native raster agreement, edit/save/reopen persistence, or physical glyph-font identity."
+  ]
+}

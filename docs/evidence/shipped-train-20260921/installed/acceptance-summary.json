@@ -1,0 +1,248 @@
+{
+  "createdAt": "2026-09-21T12:46:00.896Z",
+  "node": "v24.21.0",
+  "platform": "darwin",
+  "status": "passed",
+  "consumer": "/private/tmp/opf-registry-20260921/consumer",
+  "lockSha256": "eca567d00057fc3bc605802d2616565a9debf22d8862799e9ea50c4ce10c66b1",
+  "verifiedRegistryFiles": 617,
+  "packages": [
+    {
+      "name": "@openpresentation/opf",
+      "version": "0.11.0",
+      "gitHead": "b8a1faf24203635bd36b09ea19f44bcd53781f16",
+      "tag": "opf-v0.11.0",
+      "integrity": "sha512-7Gm/FSyiGngHRkDG0SPL8V6FEC5nC8UpoffNWf8CqkyjXsqQ2BUIzVAEwHwKjEsEZ04FR2DT+Ohh8PJofNPFiw==",
+      "engines": {
+        "node": "24.x"
+      }
+    },
+    {
+      "name": "@openpresentation/cli",
+      "version": "0.9.0",
+      "gitHead": "b8a1faf24203635bd36b09ea19f44bcd53781f16",
+      "tag": "cli-v0.9.0",
+      "integrity": "sha512-YR0zhGe0fpcKp617Aqjz6ZIql0fsNrMVcSW84tEkMBc/9DLxLFAyxJLkExorOrfFYanhvWmhoRG94x3AuMTvpQ==",
+      "engines": {
+        "node": "24.x"
+      }
+    },
+    {
+      "name": "@openpresentation/opf-render",
+      "version": "0.9.0",
+      "gitHead": "114bf596e9034c0b80a8c92df6a956a04ef18bef",
+      "tag": "opf-render-v0.9.0",
+      "integrity": "sha512-uHWABof7cuLmTAglctvcjuV5dRyIa2qmeGdwONIuKCAnNQXjAOQKXido9OcyGtk6xFjzBFtLtvD3sZOwPEJIJA==",
+      "engines": {
+        "node": "24.x"
+      }
+    },
+    {
+      "name": "@openpresentation/opf-pptx",
+      "version": "0.9.1",
+      "gitHead": "fcc006a6887c549a96a3bc8bbdb957cc54fe67dd",
+      "tag": "opf-pptx-v0.9.1",
+      "integrity": "sha512-krzDAKjDByP2zsoR4VeyyIwU7uhcVbxpeBYEIw7vlkoRWWiFq170rhQzQZx5lbMD7u2magYEkdUt3rUgByCKjw==",
+      "engines": {
+        "node": "24.x"
+      }
+    },
+    {
+      "name": "@openpresentation/opf-editor",
+      "version": "0.8.0",
+      "gitHead": "476191e28e6f5f5ec32146aeb416f5286b4d0570",
+      "tag": "opf-editor-v0.8.0",
+      "integrity": "sha512-cSx6DkfK4N95Zk3lvCBxhQePWIIgBDvON4hcKLvELulpbKiYnvmoAb07LJE4pbXGE0npUdmU/r25TShdtOcR4A==",
+      "engines": {
+        "node": "24.x"
+      }
+    }
+  ],
+  "checks": [
+    {
+      "name": "workflow.mjs",
+      "exitCode": 0,
+      "log": "workflow.mjs.log"
+    },
+    {
+      "name": "core-furniture-composition.test.mjs",
+      "exitCode": 0,
+      "log": "core-furniture-composition.test.mjs.log"
+    },
+    {
+      "name": "core-code-layout.test.mjs",
+      "exitCode": 0,
+      "log": "core-code-layout.test.mjs.log"
+    },
+    {
+      "name": "core-code-composition.test.mjs",
+      "exitCode": 0,
+      "log": "core-code-composition.test.mjs.log"
+    },
+    {
+      "name": "pptx-shared-furniture.mjs",
+      "exitCode": 0,
+      "log": "pptx-shared-furniture.mjs.log"
+    },
+    {
+      "name": "pptx-furniture-provenance.mjs",
+      "exitCode": 0,
+      "log": "pptx-furniture-provenance-rerun.log",
+      "setupCorrection": "First attempt lacked tall.png verifier fixture; copied immutable release fixture and reran only this harness."
+    },
+    {
+      "name": "pptx-shared-code.mjs",
+      "exitCode": 0,
+      "log": "pptx-shared-code.mjs.log"
+    },
+    {
+      "name": "pptx-code-provenance.mjs",
+      "exitCode": 0,
+      "log": "pptx-code-provenance.mjs.log"
+    },
+    {
+      "name": "pptx-heading-provenance.mjs",
+      "exitCode": 0,
+      "log": "pptx-heading-provenance.mjs.log"
+    },
+    {
+      "name": "pptx-metric-provenance.mjs",
+      "exitCode": 0,
+      "log": "pptx-metric-provenance.mjs.log"
+    },
+    {
+      "name": "pptx-color-ref-export.mjs",
+      "exitCode": 0,
+      "log": "pptx-color-ref-export.mjs.log"
+    },
+    {
+      "name": "renderer-color-references.mjs",
+      "exitCode": 0,
+      "log": "renderer-color-references.mjs.log"
+    },
+    {
+      "name": "renderer-furniture.mjs",
+      "exitCode": 0,
+      "log": "renderer-furniture.mjs.log"
+    },
+    {
+      "name": "renderer-shared-code.mjs",
+      "exitCode": 0,
+      "log": "renderer-shared-code.mjs.log"
+    },
+    {
+      "name": "probe-furniture-reimport.mjs",
+      "exitCode": 0,
+      "log": "probe-furniture-reimport.mjs.log"
+    },
+    {
+      "name": "cli-version",
+      "exitCode": 0,
+      "log": "cli-version.json"
+    },
+    {
+      "name": "cli-validate",
+      "exitCode": 0,
+      "log": "cli-validate.json"
+    },
+    {
+      "name": "cli-lint",
+      "exitCode": 0,
+      "log": "cli-lint.json"
+    },
+    {
+      "name": "cli-paginate",
+      "exitCode": 0,
+      "log": "cli-paginate.json"
+    }
+  ],
+  "browserReports": [
+    {
+      "file": "furniture-browser/report.json",
+      "sha256": "4ad1d545373f0918112df33cd0a60804e68d6447a5b7a09c0127614134064bfa",
+      "browser": "153.0.8010.12",
+      "cases": 16,
+      "externalRequests": 0,
+      "errors": 0,
+      "bundleInputs": 231,
+      "scope": "16 offline browser workflows verify readable shared furniture, actual source selection, no-op/edit/undo/redo, empty fields, literal dates and current-content PPTX reimport. Measured fields require every nonzero SVG mask pixel center inside its box plus 0.05 reference pixels at 1:1 scale; a displaced-text control must fail that same check. Canvas bounds remain advisory observations, not pixel coverage. Generated values remain bound to metadata. Native Office, full corpus visual review and release acceptance remain separate."
+    },
+    {
+      "file": "renderer-code-browser.json",
+      "sha256": "537d82107c14484c9ecf32df2ee7b90c1c7032315a8461dd0e39b4ec5e51117f",
+      "browser": "153.0.8010.12",
+      "cases": 12,
+      "externalRequests": 0,
+      "errors": 0,
+      "scope": "Twelve actual SVG outputs with exact Cousine regular/bold bytes: source/offset preservation, accepted complete edit-target boxes including blank multiline source, accepted segment starts within 0.1 reference pixel, glyph cell containment and separate metadata/body glyphs. Natural browser advance differences are recorded. This is not native export, shaping/bidi conformance or raster equivalence."
+    },
+    {
+      "file": "editor-code-browser.json",
+      "sha256": "e90d1b341c10298cbb654e5f29c7cec865ca11c5486a83c8c7b0bd5cc07203e1",
+      "browser": "153.0.8010.12",
+      "cases": 2,
+      "blankTargets": 2,
+      "externalRequests": 0,
+      "errors": 0,
+      "bundleInputs": 231,
+      "scope": "Offline installed registry canvas: real pointer/keyboard code and filename edits, CRLF no-op/preservation, tab insertion/cancel, undo/redo, one-page pagination/readability undo, browser native export and undoable exact code/metadata/source-boundary reimport. Native formatting, positioning and font scheme are not reconstructed; font fallback uses the existing playground policy and is recorded. No native PowerPoint or raster equivalence claim."
+    }
+  ],
+  "quickstart": {
+    "slidesIn": 4,
+    "slidesOut": 6,
+    "pages": 6,
+    "fonts": 9,
+    "svgChars": 1752054,
+    "pngBytes": 37447,
+    "pdfBytes": 262123,
+    "pptxBytes": 49862
+  },
+  "artifacts": {
+    "deck.opf.json": {
+      "bytes": 3202,
+      "sha256": "0a4a3af6d50bd9ca5fc99483272634a58a738ffc3ccbc2d10d7140323abf811f"
+    },
+    "paginated.opf.json": {
+      "bytes": 3637,
+      "sha256": "de46f68f3c3eacbd3095b2db16c6ecc65bc837caa89c7d614a253257d1f7e749"
+    },
+    "preview.svg": {
+      "bytes": 1752054,
+      "sha256": "d2622d787c3ed6edafe006c89f0e68ac81ddc6fac17f675e9fc9e85ae3d5e430"
+    },
+    "preview.png": {
+      "bytes": 37447,
+      "sha256": "223cdf70fefa49315c8bf5d50abb19225cbda97120adb9bd869a2a77bd3a8450"
+    },
+    "preview.pdf": {
+      "bytes": 262123,
+      "sha256": "4f0bc461691dc59a9861bba3184f6261a02f709857bc10a0c55fea9c173b3ae4"
+    },
+    "deck.pptx": {
+      "bytes": 49862,
+      "sha256": "37d134ed8151e1b8622361e14ee7b42dade8fc28f07ea4397c927597ba52c163"
+    }
+  },
+  "visualReview": {
+    "reviewer": "Codex assistant",
+    "reviewed": [
+      "consumer/preview.png",
+      "evidence/furniture-browser/furniture-1280-inherited.png",
+      "evidence/furniture-browser/furniture-720-local.png"
+    ],
+    "observations": "No visible overlap or clipping in these three snapshots. Portrait organization text wraps across two lines at the required font floor. These are targeted checks, not full corpus or human visual signoff."
+  },
+  "setupCorrections": [
+    "Furniture provenance harness initially omitted tall.png. Exact release fixture added; targeted rerun passed.",
+    "Renderer browser verifier initially resolved its hash input as a package name URL. Fixed verifier adaptation only; targeted rerun passed. Original logs retained."
+  ],
+  "boundaries": [
+    "All application runtime imports and browser bundle inputs resolve inside fresh registry consumer node_modules. Test harnesses/fixtures are copied from immutable release commits with hashes.",
+    "Node24.21.0 on macOS and Chromium 153.0.8010.12 only; this local acceptance is not fresh Linux/Windows CI.",
+    "Native editable OOXML, export/reimport and simulated native XML edits are verified; no native PowerPoint/LibreOffice execution or native font compatibility claim.",
+    "Renderer issue24 tolerance remains 0.1px in code browser harness; furniture paint check uses its existing 0.05 reference-pixel tolerance.",
+    "No geometry draft merge, native p:hf implementation, golden corpus update, release or deployment occurred.",
+    "Current named-color editor canvas fidelity, PPTX theme schemeClr writing and arbitrary lossless PPTX import remain outside this acceptance."
+  ]
+}

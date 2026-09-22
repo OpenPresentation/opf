@@ -1,0 +1,9 @@
+{
+  "before": "app47-deployment.json",
+  "after": "app47-deployment-post-run.json",
+  "deploymentId": "dpl_5zdunyqiun7MgJNRJZ33CMHTrmmN",
+  "acceptedCommit": "0f35352a1445f56ad4bb7c9f4c5609e01f2dd9ae",
+  "unchanged": true,
+  "ready": true,
+  "canonicalAlias": "www.pptx.dev"
+}

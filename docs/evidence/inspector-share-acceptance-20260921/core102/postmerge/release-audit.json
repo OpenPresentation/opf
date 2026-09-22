@@ -1,0 +1,45 @@
+{
+  "checkedAt": "2026-09-21T18:25:25.760302+00:00",
+  "acceptedHead": "578bcc6e0894129b00059258bd4ad1994a414baa",
+  "reviewedHead": "e746dee147ec4d3d0eef69e22e7e1d3f48b6346a",
+  "tree": "2de778c56a9d4afcc686830a39b881d147a1f4ee",
+  "sameReviewedTree": true,
+  "remoteMainAtReceipt": "578bcc6e0894129b00059258bd4ad1994a414baa",
+  "primaryCleanAtFinalReceipt": true,
+  "runs": [
+    {
+      "conclusion": "success",
+      "created_at": "2026-09-21T18:12:48Z",
+      "event": "push",
+      "head_branch": "main",
+      "head_sha": "578bcc6e0894129b00059258bd4ad1994a414baa",
+      "html_url": "https://github.com/OpenPresentation/opf/actions/runs/35636929112",
+      "id": 35636929112,
+      "name": "OPF CI",
+      "run_attempt": 1,
+      "status": "completed",
+      "updated_at": "2026-09-21T18:16:06Z"
+    },
+    {
+      "conclusion": "success",
+      "created_at": "2026-09-21T18:12:48Z",
+      "event": "push",
+      "head_branch": "main",
+      "head_sha": "578bcc6e0894129b00059258bd4ad1994a414baa",
+      "html_url": "https://github.com/OpenPresentation/opf/actions/runs/35636929090",
+      "id": 35636929090,
+      "name": "Coordinated public packages",
+      "run_attempt": 1,
+      "status": "completed",
+      "updated_at": "2026-09-21T18:23:34Z"
+    }
+  ],
+  "nodeFromLogs": {
+    "opf": "v24.20.0",
+    "coordinated": "v24.20.0"
+  },
+  "allRequiredPostmergeRunsPassedFirstAttempt": true,
+  "evidenceGitBlobsVerified": 158,
+  "premergeAuditFrozenUnchanged": true,
+  "boundaries": "Evidence-only core checkpoint passes; App53 postmerge Linux failure, observed wrong-document share publication, preset history and native/font/other goal work remain unresolved. No goal completion, rerun, merge, push or product/browser mutation by this audit."
+}

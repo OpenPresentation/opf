@@ -1,0 +1,17 @@
+{
+  "artifactId": 10667061681,
+  "name": "windows-readiness-windows-latest",
+  "size": 6956,
+  "sha256": "fc01fdfe04bc843e501f5af8ca71aa85e38cd85ade0f4e6b3828d747505cbff0",
+  "githubDigestMatches": true,
+  "zipCRC": "pass",
+  "safeMemberPaths": true,
+  "members": 1,
+  "files": [
+    {
+      "path": "extracted/windows-readiness-windows-latest/svg-security-published-SVG-25408-rted-document-strings-inert/windows-readiness-timings.json",
+      "bytes": 66308,
+      "sha256": "922c509d4bc8eedc4a970388e71d96c821f2273cff7a7b8b1362d8a582780e43"
+    }
+  ]
+}

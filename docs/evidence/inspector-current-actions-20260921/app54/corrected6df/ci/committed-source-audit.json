@@ -1,0 +1,36 @@
+{
+  "observedAt": "2026-09-21T19:43:34.758781+00:00",
+  "head": "6dfc2584698c1306505929a2bc3e427996d66563",
+  "tree": "f3279495f7685945b7541c90d24f7239407639a0",
+  "clean": true,
+  "changesSince60cVerified": 119,
+  "sourceInputsUnchangedFrom57AndLocalAcceptance": 305,
+  "archiveRenamesByteExact": [
+    {
+      "old": "final-inspector-actions.spec.ts",
+      "new": "final-inspector-actions.spec.ts.txt",
+      "bytes": 17537,
+      "sha256": "c6096f4c62f642138dc127e55911647d00489d684f2794a978834aa54f4757fd"
+    },
+    {
+      "old": "initial-focused/inspector-actions.spec.ts",
+      "new": "initial-focused/inspector-actions.spec.ts.txt",
+      "bytes": 17190,
+      "sha256": "b664b65d4eb52e1f6e17f3081d19f5762ae2172f696ee2734540dbc864a4ff38"
+    }
+  ],
+  "executableArchivedTypeScriptRemaining": [],
+  "bundleManifestEntries": 105,
+  "bundleFilesIncludingManifest": 106,
+  "bundleManifestSha256": "e4399e2d0344f38d01b93ebcda6a2cda46bcb722c0eed810776255a9334da6c2",
+  "exactPrivateCopiesVerified": 100,
+  "sourceCopiesReadFromTraceZipEntries": 1,
+  "frozenFailed57AuditFiles": 21,
+  "frozenFailed57ManifestSha256": "2521b5fb9f1bfd56f8356a02a3641d261064eacb3cd9d2c68ff1d935fbf7b87c",
+  "artifactWorkflow": {
+    "matchingChangedPaths": [],
+    "applicable": false,
+    "workflowDispatchPresent": false,
+    "scope": "Python wheel/source-distribution artifact round-trip; not triggered/not applicable, not a fresh pass."
+  }
+}

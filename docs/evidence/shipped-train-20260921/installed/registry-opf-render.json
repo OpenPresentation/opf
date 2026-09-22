@@ -1,0 +1,172 @@
+{
+  "_id": "@openpresentation/opf-render@0.9.0",
+  "_rev": "14-ea8aaebc587e769b3fe0128e3258b4ae",
+  "name": "@openpresentation/opf-render",
+  "dist-tags": {
+    "latest": "0.9.0"
+  },
+  "versions": [
+    "0.0.1",
+    "0.0.2",
+    "0.1.0",
+    "0.1.1",
+    "0.2.0",
+    "0.3.0",
+    "0.4.0",
+    "0.5.0",
+    "0.5.1",
+    "0.6.0",
+    "0.7.0",
+    "0.8.0",
+    "0.8.1",
+    "0.9.0"
+  ],
+  "time": {
+    "created": "2026-05-26T07:21:40.705Z",
+    "modified": "2026-09-17T19:26:53.985Z",
+    "0.0.1": "2026-05-26T07:21:40.986Z",
+    "0.0.2": "2026-05-27T04:59:30.473Z",
+    "0.1.0": "2026-09-08T03:11:09.284Z",
+    "0.1.1": "2026-09-08T03:48:58.348Z",
+    "0.2.0": "2026-09-08T08:31:04.459Z",
+    "0.3.0": "2026-09-08T11:15:20.031Z",
+    "0.4.0": "2026-09-08T13:02:41.356Z",
+    "0.5.0": "2026-09-08T16:19:20.592Z",
+    "0.5.1": "2026-09-09T07:14:52.658Z",
+    "0.6.0": "2026-09-10T00:26:19.032Z",
+    "0.7.0": "2026-09-10T06:47:00.761Z",
+    "0.8.0": "2026-09-15T17:47:47.008Z",
+    "0.8.1": "2026-09-15T23:30:40.710Z",
+    "0.9.0": "2026-09-17T19:26:53.606Z"
+  },
+  "bugs": {
+    "url": "https://github.com/OpenPresentation/opf-render/issues"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/OpenPresentation/opf-render#readme",
+  "repository": {
+    "url": "git+https://github.com/OpenPresentation/opf-render.git",
+    "type": "git"
+  },
+  "description": "Deterministic local OPF renderer for SVG, PNG, and PDF output.",
+  "maintainers": [
+    "grimmmichaelj <developer@buildadataadvantage.com>"
+  ],
+  "readmeFilename": "README.md",
+  "dist": {
+    "shasum": "62ddfc6a76a77df9e3395eef1edf49c043540789",
+    "tarball": "https://registry.npmjs.org/@openpresentation/opf-render/-/opf-render-0.9.0.tgz",
+    "fileCount": 17,
+    "integrity": "sha512-uHWABof7cuLmTAglctvcjuV5dRyIa2qmeGdwONIuKCAnNQXjAOQKXido9OcyGtk6xFjzBFtLtvD3sZOwPEJIJA==",
+    "signatures": [
+      {
+        "sig": "MEUCIFcPrAiZRzqcVoywoLwDbs31OZp8fq40bdodAm49kMwSAiEAzodmMg76dMe2w85EaLNJX4HiuTCKJ2gJp076rOPgnYs=",
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+      },
+      {
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U",
+        "sig": "MEUCIQCUPcy2hB8HaVPKVXPw0R51jXjr5QI9arjgQTNVHNnfSQIgezKGo9utXo3VmB8LaFGuPRkFWHno1GVAAbIM3DEB3mc="
+      }
+    ],
+    "attestations": {
+      "url": "https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf-render@0.9.0",
+      "provenance": {
+        "predicateType": "https://slsa.dev/provenance/v1"
+      }
+    },
+    "unpackedSize": 150598
+  },
+  "type": "module",
+  "types": "./dist/index.d.ts",
+  "engines": {
+    "node": "24.x"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "browser": {
+        "types": "./dist/svg.d.ts",
+        "default": "./dist/svg.js"
+      },
+      "default": "./dist/index.js"
+    },
+    "./svg": {
+      "types": "./dist/svg.d.ts",
+      "default": "./dist/svg.js"
+    },
+    "./fonts": {
+      "types": "./dist/fonts.d.ts",
+      "default": "./dist/fonts.js"
+    },
+    "./fonts-node": {
+      "types": "./dist/fonts-node.d.ts",
+      "default": "./dist/fonts-node.js"
+    },
+    "./package.json": "./package.json",
+    "./fonts-browser": {
+      "types": "./dist/fonts-browser.d.ts",
+      "default": "./dist/fonts-browser.js"
+    }
+  },
+  "gitHead": "114bf596e9034c0b80a8c92df6a956a04ef18bef",
+  "private": false,
+  "scripts": {
+    "test": "npm run build && node test/furniture.mjs && node test/font-outlines.mjs && node test/accepted-text.mjs && node test/image-placeholders.mjs && node test/chart-colors.mjs && node test/smoke.mjs && node test/webp.mjs && node test/jpeg-orientation.mjs && node test/fonts.mjs && node test/office-fonts.mjs && node test/timeline.mjs && node test/quote-footer.mjs && node test/shared-quote.mjs && node test/rich-trace.mjs && node test/rich-table.mjs && node test/color-references.mjs && node test/golden-gate.mjs && node test/golden.mjs && node test/fonts-browser.mjs && node test/design-preview.mjs && npm run build:browser-check && npm run test:styled-table",
+    "build": "node scripts/build.mjs",
+    "prepack": "npm run build",
+    "validate": "node scripts/validate-package.mjs",
+    "test:code": "node test/shared-code.mjs",
+    "test:text": "node test/font-outlines.mjs && node test/accepted-text.mjs",
+    "typecheck": "node --check src/index.js && node --check scripts/build.mjs && node --check scripts/validate-package.mjs && node --check test/smoke.mjs && node --check test/golden.mjs && node --check src/fonts.js && node --check src/fonts-node.js && node --check src/font-compatibility.js && node --check test/office-fonts.mjs && node --check src/fonts-browser.js && node --check test/fonts-browser.mjs && node --check src/svg.js && node --check src/raster.js && node --check src/raster-images.js && node --check test/webp.mjs && node --check test/jpeg-orientation.mjs && node --check scripts/build-browser-check.mjs && node --check test/jpeg-browser.js && node --check test/rich-table.mjs && node --check test/styled-table.mjs && node --check test/color-references.mjs && node --check test/chart-colors.mjs && node --check test/image-placeholders.mjs && node --check test/image-placeholders-browser.mjs && node --check test/accepted-text.mjs && node --check test/accepted-text-fixtures.mjs && node --check test/accepted-text-browser.mjs && node --check test/rich-spacing-browser.mjs && node --check test/rich-flow-browser.mjs && node --check test/rich-flow-review-sheets.mjs && node --check test/furniture.mjs",
+    "test:golden": "npm run build && node test/golden.mjs",
+    "test:metric": "node test/shared-metric.mjs",
+    "test:packed": "node test/packed-install.mjs",
+    "test:browser": "npm run build:browser-check && node test/browser-check.mjs",
+    "golden:update": "npm run build && node test/golden.mjs --update",
+    "test:code-browser": "node test/shared-code-browser.mjs",
+    "test:styled-table": "node test/styled-table.mjs",
+    "test:text-browser": "node test/accepted-text-browser.mjs",
+    "test:font-variants": "node test/font-variants.mjs",
+    "build:browser-check": "node scripts/build-browser-check.mjs",
+    "test:images-browser": "node test/image-placeholders-browser.mjs",
+    "test:font-preparation": "node test/font-preparation.mjs artifacts/font-preparation.json",
+    "test:rich-flow-browser": "node test/rich-flow-browser.mjs",
+    "test:rich-spacing-browser": "node test/rich-spacing-browser.mjs",
+    "test:font-variants-browser": "node test/font-variants-browser.mjs",
+    "test:font-preparation-browser": "node test/font-preparation-browser.mjs artifacts/font-preparation-browser.json",
+    "test:plain-whitespace-browser": "node test/plain-whitespace-browser.mjs"
+  },
+  "version": "0.9.0",
+  "_npmUser": "GitHub Actions <npm-oidc-no-reply@github.com>",
+  "_npmVersion": "11.16.0",
+  "directories": {},
+  "sideEffects": false,
+  "_nodeVersion": "24.20.0",
+  "dependencies": {
+    "sharp": "0.35.4",
+    "fontkit": "^2.0.4",
+    "pdf-lib": "^1.17.1",
+    "@resvg/resvg-js": "^2.6.2",
+    "@openpresentation/opf": "^0.11.0",
+    "@expo-google-fonts/arimo": "0.4.3",
+    "@expo-google-fonts/tinos": "0.4.2",
+    "@expo-google-fonts/roboto": "0.4.3",
+    "@expo-google-fonts/caladea": "0.4.2",
+    "@expo-google-fonts/carlito": "0.4.1",
+    "@expo-google-fonts/cousine": "0.4.3",
+    "@expo-google-fonts/gelasio": "0.4.1",
+    "@expo-google-fonts/roboto-mono": "0.4.2"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "_hasShrinkwrap": false,
+  "devDependencies": {
+    "esbuild": "0.28.2",
+    "playwright": "1.63.0"
+  },
+  "_npmOperationalInternal": {
+    "host": "s3://npm-registry-packages-npm-production",
+    "tmp": "tmp/opf-render_0.9.0_1789673213517_0.9008492666161467"
+  }
+}

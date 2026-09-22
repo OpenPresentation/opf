@@ -1,0 +1,105 @@
+{
+  "sourceCommit": "8f54228a9e38a1dcc0bf8188bcdd519795b3799a",
+  "stats": {
+    "startTime": "2026-09-21T22:03:38.266Z",
+    "duration": 148112.604,
+    "expected": 34,
+    "skipped": 0,
+    "unexpected": 5,
+    "flaky": 0
+  },
+  "cases": [
+    {
+      "id": "copy-json",
+      "directory": "inspector-actions-Inspecto-07c93-and-unchanged-draft-history",
+      "file": "tests/e2e/inspector-actions.spec.ts",
+      "failureLine": 125,
+      "passed": [
+        "current-draft Copy exact source",
+        "current-draft JSON filename and exact source",
+        "source Undo/Redo",
+        "unchanged-draft history",
+        "screenshot"
+      ],
+      "unreached": [
+        "final page-error equality assertion at line 126"
+      ],
+      "failedAssertion": "all observed write-method requests equal [] (POST only in Inspector action cases)"
+    },
+    {
+      "id": "share-pptx",
+      "directory": "inspector-actions-Inspecto-36d82-hing-payloads-and-filenames",
+      "file": "tests/e2e/inspector-actions.spec.ts",
+      "failureLine": 164,
+      "passed": [
+        "Share current payload",
+        "legacy import removal and unrelated query retention",
+        "PPTX current filename and reimported edited title",
+        "Copy exact source",
+        "Undo exact source",
+        "screenshot"
+      ],
+      "unreached": [
+        "final page-error equality assertion at line 165"
+      ],
+      "failedAssertion": "all observed write-method requests equal [] (POST only in Inspector action cases)"
+    },
+    {
+      "id": "open-author",
+      "directory": "inspector-actions-Inspecto-ddffb-urrent-draft-before-handoff",
+      "file": "tests/e2e/inspector-actions.spec.ts",
+      "failureLine": 187,
+      "passed": [
+        "current-draft navigation",
+        "Author URL payload",
+        "Author Copy visibility",
+        "Author copied document semantic equality",
+        "screenshot"
+      ],
+      "unreached": [
+        "final page-error equality assertion at line 188"
+      ],
+      "failedAssertion": "all observed write-method requests equal [] (POST only in Inspector action cases)"
+    },
+    {
+      "id": "hash-share",
+      "directory": "inspector-share-publicatio-33578-etain-the-accepted-document",
+      "file": "tests/e2e/inspector-share-publication.spec.ts",
+      "failureLine": 115,
+      "passed": [
+        "accepted initial document and publication",
+        "edited document publication",
+        "first refresh semantic equality",
+        "replacement hash document and publication",
+        "second refresh semantic equality",
+        "final accepted URL semantic equality",
+        "page-error equality at line 114"
+      ],
+      "unreached": [
+        "final screenshot at line 116"
+      ],
+      "failedAssertion": "all observed write-method requests equal [] (POST only in Inspector action cases)"
+    },
+    {
+      "id": "legacy-import-share",
+      "directory": "inspector-share-publicatio-2236b-etain-the-accepted-document",
+      "file": "tests/e2e/inspector-share-publication.spec.ts",
+      "failureLine": 115,
+      "passed": [
+        "legacy import query removal and unrelated query retention",
+        "accepted initial document and publication",
+        "edited document publication",
+        "first refresh semantic equality",
+        "replacement hash document and publication",
+        "second refresh semantic equality",
+        "final accepted URL semantic equality",
+        "page-error equality at line 114"
+      ],
+      "unreached": [
+        "final screenshot at line 116"
+      ],
+      "failedAssertion": "all observed write-method requests equal [] (POST only in Inspector action cases)"
+    }
+  ],
+  "caution": "Assertions inside expect.poll may fail transiently; only final reporter failures and subsequent source order define these boundaries."
+}

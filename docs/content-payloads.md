@@ -18,6 +18,31 @@ The optional payload `type` can make intent explicit, but OPF should usually inf
 | `quote` | `quote` | String shorthand or `Quote` object with `text`, `attribution`, and `source`. |
 | `timeline` | `timeline` | Array shorthand or `Timeline` object with `name`, `description`, and `events`. |
 
+## Color references
+
+Every content color field — `TextRun.color`, styled table cell `style.fill` and `style.color`, and table cell border `color` — accepts three forms:
+
+- A literal hex color: `"#0F172A"`, `"#B42318CC"`.
+- A color-scheme slot or role name, resolved through the effective color scheme after design resolution: slots `accent1`–`accent6`, `dark1`, `dark2`, `light1`, `light2`, `hyperlink`, `followedHyperlink`; roles `primary`, `secondary`, `accent`, `background`, `surface`, `text`, `textSecondary`.
+- A variable reference `var:<id>` into the top-level `variables` map.
+
+```json
+{
+  "variables": { "risk": "#B42318" },
+  "slides": [
+    {
+      "title": "What Could Go Wrong",
+      "items": [
+        ["Two regions at ", { "text": "85% utilization", "color": "var:risk", "bold": true }],
+        ["Mitigations ship in ", { "text": "November", "color": "accent2" }]
+      ]
+    }
+  ]
+}
+```
+
+Prefer names and variables over literal hex: re-theming the deck updates every named reference, while a hex value stays frozen at authoring time. An unknown `var:` id is a validation warning, never an error; engines fall back to their default text color. The styled table cell and border color fields enforce the three forms at the schema level; run colors additionally accept any string so imported decks keep validating — unrecognized values warn, and renderers fall back to the theme color. See [`design-resolution.md`](./design-resolution.md) for the resolution rules.
+
 ## Blocks
 
 Use slide-level `blocks` when a slide contains multiple content payloads, but exact placement should be inferred by the renderer. Blocks may contain a concrete content payload or a nested group with its own `blocks` and optional `composition`. Groups cannot mix child blocks with leaf payload fields. See [dynamic composition](dynamic-composition.md) for nesting and inheritance rules.
@@ -148,7 +173,7 @@ Table body cells accept strings, numbers, booleans, or `null`. Since core 0.5.0,
 }
 ```
 
-Use core 0.6.0, renderer 0.4.0, editor 0.3.0 and PPTX 0.4.0 together. Core measures run styles when checking overflow and keeps each row intact when paginating. The renderer traces rich cells for the editor's existing formatting, typing and undo controls; the exporter emits editable native text runs. PPTX 0.4.0 imports supported native character styles, paragraph defaults, theme fonts/colors, external links and significant whitespace as rich runs. Unstyled body cells remain strings, and cached display text cannot recover original scalar types or live fields. Conditional table styles, merged geometry and cell fills/borders/alignment remain limited; native PowerPoint visual parity is not yet verified.
+Use the current coordinated Node 24 train: core 0.11.0, renderer 0.9.0, editor 0.8.0 and PPTX 0.9.1. See the [compatibility matrix](compatibility-matrix.md) for exact pins and evidence. Core measures run styles when checking overflow and keeps each row intact when paginating. The renderer traces rich cells for the editor's existing formatting, typing and undo controls; the exporter emits editable native text runs. PPTX 0.4.0 introduced import of supported native character styles, paragraph defaults, theme fonts/colors, external links and significant whitespace as rich runs. Unstyled body cells remain strings, and cached display text cannot recover original scalar types or live fields. Conditional table styles, merged geometry and cell fills/borders/alignment remain limited; native PowerPoint visual parity is not yet verified.
 
 Core 0.6.0 adds `layoutTable` from `@openpresentation/opf/composition`. It measures scalar and rich cells, keeps short rows compact, and gives wrapped or multiline rows the height they need. When space is constrained it reduces spare row height before shrinking text, and reports overflow when the minimum fitting size cannot fit. Pass the same `scale`, font family, measurement provider and effective `minFontSize` to each consumer. The returned row boxes, cell text boxes and fits are shared by the coordinated SVG and PPTX implementations; rich table cells use uniform line advances to match native cell paragraph spacing. Native viewer fidelity remains a separate verification boundary.
 

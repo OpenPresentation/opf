@@ -1,0 +1,88 @@
+[
+  {
+    "scenario": "later-human-edit",
+    "attempt": 1,
+    "stage": "later-human-edit",
+    "pageErrors": [],
+    "nonGetRequests": [],
+    "networkFailures": [],
+    "workflowCompleted": false,
+    "presetLabel": "Apply Classic. reads as formal, quarterly-review friendly",
+    "presetChangedOnlyThemeSemantically": true,
+    "presetChangedRawFormatting": true,
+    "error": "Error: expect(received).toBe(expected) // Object.is equality\n\n- Expected  - 25\n+ Received  + 25\n\n- {\n+ {\r\n-   \"name\": \"Preset undo boundary\",\n+   \"name\": \"Preset undo boundary\",\r\n-   \"author\": \"Original author\",\n+   \"author\": \"Original author\",\r\n-   \"design\": {\n+   \"design\": {\r\n-     \"theme\": \"classic\",\n+     \"theme\": \"classic\",\r\n-     \"fontScheme\": \"roboto\"\n+     \"fontScheme\": \"roboto\"\r\n-   },\n+   },\r\n-   \"slides\": [\n+   \"slides\": [\r\n-     {\n+     {\r\n-       \"id\": \"stable-preset\",\n+       \"id\": \"stable-preset\",\r\n-       \"title\": \"Later human title must survive\",\n+       \"title\": \"Later human title must survive\",\r\n-       \"text\": [\n+       \"text\": [\r\n-         {\n+         {\r\n-           \"text\": \"Keep two  spaces.\",\n+           \"text\": \"Keep two  spaces.\",\r\n-           \"bold\": true\n+           \"bold\": true\r\n-         },\n+         },\r\n-         {\n+         {\r\n-           \"text\": \"\\nSecond rich line.\",\n+           \"text\": \"\\nSecond rich line.\",\r\n-           \"italic\": true\n+           \"italic\": true\r\n-         }\n+         }\r\n-       ],\n+       ],\r\n-       \"notes\": \"Preserve these notes\\n\\tand spacing.\"\n+       \"notes\": \"Preserve these notes\\n\\tand spacing.\"\r\n-     }\n+     }\r\n-   ]\n+   ]\r\n- }\n+ }\r\n  ↵\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate\n    at captureRawStack (/private/tmp/opf-author-source-fix-20260921/pptx-dev/node_modules/.pnpm/playwright-core@1.63.0/node_modules/playwright-core/lib/coreBundle.js:8588:17)\n    at callMatcherAsStep (/private/tmp/opf-author-source-fix-20260921/pptx-dev/node_modules/.pnpm/playwright@1.63.0/node_modules/playwright/lib/matchers/expect.js:13310:57)\n    at Object.toBe (/private/tmp/opf-author-source-fix-20260921/pptx-dev/node_modules/.pnpm/playwright@1.63.0/node_modules/playwright/lib/matchers/expect.js:13302:23)\n    at /private/tmp/opf-author-local-writers-20260921/negative-control.cjs:67:51",
+    "finalUrl": "http://127.0.0.1:4328/author"
+  },
+  {
+    "scenario": "new-run",
+    "attempt": 1,
+    "stage": "completed",
+    "pageErrors": [],
+    "nonGetRequests": [],
+    "networkFailures": [],
+    "workflowCompleted": true,
+    "presetLabel": "Apply Classic. reads as formal, quarterly-review friendly",
+    "presetChangedOnlyThemeSemantically": true,
+    "presetChangedRawFormatting": true,
+    "undoStillVisible": true,
+    "beforeUndo": {
+      "name": "Northstar Seed Pitch",
+      "author": "Northstar Foundry",
+      "title": "Presentations should be programmable, not handcrafted bottlenecks.",
+      "slideIds": [
+        "cover",
+        "problem",
+        "solution",
+        "traction",
+        "ask"
+      ],
+      "sourceSha256": "3ef3b89f7fd02572f17d2446ddd7f6f69cc3b9d0712f05acc3b360ef633a9204"
+    },
+    "afterUndo": {
+      "name": "Preset undo boundary",
+      "author": "Original author",
+      "title": "Original authored title",
+      "slideIds": [
+        "stable-preset"
+      ],
+      "sourceSha256": "7afbb24745570edf438539ed398dddde13466ace30fbe90e2e7013b85157a14e"
+    },
+    "restoredEntireOriginalSemantics": true,
+    "preservesLaterDocumentContent": false,
+    "finalUrl": "http://127.0.0.1:4328/author"
+  },
+  {
+    "scenario": "file-import",
+    "attempt": 1,
+    "stage": "completed",
+    "pageErrors": [],
+    "nonGetRequests": [],
+    "networkFailures": [],
+    "workflowCompleted": true,
+    "presetLabel": "Apply Classic. reads as formal, quarterly-review friendly",
+    "presetChangedOnlyThemeSemantically": true,
+    "presetChangedRawFormatting": true,
+    "undoStillVisible": true,
+    "beforeUndo": {
+      "name": "Explicit replacement deck",
+      "author": "Replacement author",
+      "title": "Replacement title must survive",
+      "slideIds": [
+        "replacement-only"
+      ],
+      "sourceSha256": "4606b935ec0a4a5cf1c1e446651c53f3aedc81fb7c22aa1dc04dcd5d235759f7"
+    },
+    "afterUndo": {
+      "name": "Preset undo boundary",
+      "author": "Original author",
+      "title": "Original authored title",
+      "slideIds": [
+        "stable-preset"
+      ],
+      "sourceSha256": "7afbb24745570edf438539ed398dddde13466ace30fbe90e2e7013b85157a14e"
+    },
+    "restoredEntireOriginalSemantics": true,
+    "preservesLaterDocumentContent": false,
+    "finalUrl": "http://127.0.0.1:4328/author"
+  }
+]

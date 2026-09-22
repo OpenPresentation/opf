@@ -1,0 +1,18 @@
+# Core PR107 exact-merge post-CI audit
+
+**Both fresh postmerge gates passed** for accepted [PR107](https://github.com/OpenPresentation/opf/pull/107) commit `5bc0d3f89414b382b2ce48452c7e56e5d66aaf74`. Its tree `ffdc678beadf0808bc717d67e7fc0a9ec4790127` equals reviewed `92c1009761a83b95601b93eb8455e9351980b8a7`; all **87** reviewed PR-delta blobs match. The accepted parent is core106 `3847f712`.
+
+| Workflow | Exact-merge run / job | Result |
+| --- | --- | --- |
+| OPF CI | [35652360502](https://github.com/OpenPresentation/opf/actions/runs/35652360502) / 106507561573 | Success, attempt 1, Node 24.20.0 |
+| Coordinated public packages | [35652360551](https://github.com/OpenPresentation/opf/actions/runs/35652360551) / 106507561261 | Success, attempt 1, Node 24.20.0 |
+
+The final exact-head listing contains one automatic `push` pair and no canceled postmerge duplicate. No rerun was requested. OPF's published-registry quickstart passed; coordinated installed-package, browser, source-whitespace, physical-font-selection, outline/SVG-ink, published-registry fidelity and internal-measurement steps passed. Original logs and final job step receipts are retained. These checks remain separate from native Office/font fidelity and canonical application acceptance.
+
+The [source receipt](source-tree-equivalence.json) confirms tree and file equivalence. The primary checkout `/Users/michael/Source/opf` was clean on `main` at `3847f712` before an authorized fetch and **fast-forward-only** update to accepted `5bc0d3f`; [after receipt](primary-after.json) binds clean primary, remote main and accepted tree. The checkout was rechecked clean at finalization. No source-content edits, branch rewrites, package publication, deployment or Office actions occurred.
+
+The original coordinated artifact `installed-browser-node24` (ID **10663037765**) is retained: **1,466,810 bytes**, SHA-256 `3791d8cb4b4422759c7592f15749bf56721807cfde6ba3c692e12dbff0eef911`, matching GitHub's digest. [Integrity checks](artifact-integrity.json) pass ZIP CRC and safe relative member names for **378 files**, including **33 parsed JSON members**. It was not extracted, executed or newly visually reviewed. OPF uploaded no artifact.
+
+All **45** files in the frozen resolved-premerge audit remain unchanged, with manifest `d690fca16dbc92f0324d4da053151759599754cb4fb021cbf5eb45079fcb0102`. That audit separately retains the two earlier automatic canceled runs, GitHub's explicit higher-priority concurrency annotations and the later successful automatic runs. This postmerge pass does not relabel their history. The earlier e565 no-workflow/conflict observation and accepted native receipts also remain separate.
+
+[release-audit.json](release-audit.json) binds exact run/job outcomes, source, synchronization and artifact identities. The local `SHA256SUMS.json` covers all receipts and the original artifact except itself. **App54 remains outside this acceptance; overall native/font, release and workflow goal work is not marked complete.**

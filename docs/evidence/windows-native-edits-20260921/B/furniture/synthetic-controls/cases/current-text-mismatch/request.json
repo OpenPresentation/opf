@@ -1,0 +1,27 @@
+{
+  "source": {
+    "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-registry-03\\decks\\baseline-inherited-local.pptx",
+    "sha256": "a655d692ba900027d6504458921f462dbec54de515ddec37c0f628d29c379e5f",
+    "snapshotPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-audit-controls-01\\cases\\current-text-mismatch\\inputs\\input.pptx",
+    "snapshotSha256": "a655d692ba900027d6504458921f462dbec54de515ddec37c0f628d29c379e5f"
+  },
+  "actionPlan": {
+    "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-plans-01\\text-clear.json",
+    "sha256": "16c5a40505a01b2c5eb80736de7687cd448abc0de41495fb221bc056a3209263",
+    "snapshotPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-audit-controls-01\\cases\\current-text-mismatch\\inputs\\action-plan.json",
+    "snapshotSha256": "16c5a40505a01b2c5eb80736de7687cd448abc0de41495fb221bc056a3209263",
+    "count": 7
+  },
+  "verifier": {
+    "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\sources\\opf-pptx\\test\\native-furniture-control.ps1",
+    "sha256": "c85fe9f79b9c8e01feb6f0c4cfc8b84c90d7d93498f88b4cde2750630c9b2e9e",
+    "snapshotPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-audit-controls-01\\cases\\current-text-mismatch\\inputs\\native-furniture-control.ps1",
+    "snapshotSha256": "c85fe9f79b9c8e01feb6f0c4cfc8b84c90d7d93498f88b4cde2750630c9b2e9e"
+  },
+  "processHelper": {
+    "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\sources\\opf-pptx\\test\\native-process.ps1",
+    "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+    "snapshotPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\furniture-audit-controls-01\\cases\\current-text-mismatch\\inputs\\native-process.ps1",
+    "snapshotSha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+  }
+}

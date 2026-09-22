@@ -1,0 +1,12 @@
+{
+  "checkedAt": "2026-09-21T20:40:23.504412+00:00",
+  "reviewed": "92c1009761a83b95601b93eb8455e9351980b8a7",
+  "accepted": "5bc0d3f89414b382b2ce48452c7e56e5d66aaf74",
+  "tree": "ffdc678beadf0808bc717d67e7fc0a9ec4790127",
+  "treeEqual": true,
+  "acceptedParent": "3847f712ccb2379952bcc8ab7c9fdbaedfd0a4ce",
+  "prDeltaBlobsEqual": 87,
+  "primaryClean": true,
+  "premergeAuditFilesUnchanged": 45,
+  "premergeAuditManifestSha256": "d690fca16dbc92f0324d4da053151759599754cb4fb021cbf5eb45079fcb0102"
+}

@@ -1,0 +1,33 @@
+{
+  "baselineShell": {
+    "errors": 3,
+    "warnings": 1
+  },
+  "currentShell": {
+    "errors": 3,
+    "warnings": 1
+  },
+  "sameAfterDiagnosticLineNumberNormalization": true,
+  "otherChangedFiles": [
+    {
+      "file": "lib/playground/__tests__/share-hash-sync.test.ts",
+      "errors": 0,
+      "warnings": 0
+    },
+    {
+      "file": "lib/playground/share-hash-sync.ts",
+      "errors": 0,
+      "warnings": 0
+    },
+    {
+      "file": "tests/e2e/inspector-share-publication.spec.ts",
+      "errors": 0,
+      "warnings": 0
+    },
+    {
+      "file": "tests/e2e/svg-security.spec.ts",
+      "errors": 0,
+      "warnings": 0
+    }
+  ]
+}

@@ -16,7 +16,7 @@ Use the [content guide](references/content.md) for payload shapes. [The starter]
 
 ## CLI workflow
 
-When the project's CLI is installed, use `opf create deck.opf.json --title "Decision brief"` for a minimal starter, or `opf create deck.opf.json --from authored.json` for a complete authored document. Run `opf validate deck.opf.json` and inspect both errors and warnings. `opf schema presentation '/$defs/Slide'` exposes current options. `opf --version` reports the bundled format version; match it to the target project. These commands are available in the repository's installable CLI preview, which may not yet be published to the registry.
+When the project's CLI is installed, use `opf create deck.opf.json --title "Decision brief"` for a minimal starter, or `opf create deck.opf.json --from authored.json` for a complete authored document. Run `opf validate deck.opf.json` and inspect both errors and warnings. `opf schema presentation '/$defs/Slide'` exposes current options. `opf --version` reports the bundled format version; match it to the target project. These commands are published in CLI 0.9.0, which bundles core 0.11.0 and requires Node 24. Check `opf --help` before using an older installation.
 
 ## Tabular data
 

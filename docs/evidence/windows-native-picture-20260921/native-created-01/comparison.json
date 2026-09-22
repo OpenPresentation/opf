@@ -1,0 +1,132 @@
+{
+  "passed": true,
+  "mode": "native-created",
+  "scope": "Native-created PNG picture lifecycle, owned input snapshot integrity, native geometry and alt text, and exact save/reopen raster equality. No registry generation binding.",
+  "node": "v24.21.0",
+  "verifierSha256": "1e2cd017ea16f8475fc3cf9fd8c0df46255dc8e01b1d37a80c3a07f26f4844e9",
+  "reportSha256": "c694a9138328d53fcc5bdbc7a3a3e0715e80c790c510386a98eaa56bed346b89",
+  "checks": [
+    {
+      "name": "Node 24 supported",
+      "passed": true
+    },
+    {
+      "name": "native report readable",
+      "passed": true
+    },
+    {
+      "name": "worker report readable",
+      "passed": true
+    },
+    {
+      "name": "native-created mode has no generation argument",
+      "passed": true
+    },
+    {
+      "name": "owned presentations closed",
+      "passed": true
+    },
+    {
+      "name": "native control reached completion",
+      "passed": true
+    },
+    {
+      "name": "worker completed within its deadline",
+      "passed": true
+    },
+    {
+      "name": "verifier source matches owned input snapshot",
+      "passed": true
+    },
+    {
+      "name": "processHelper source matches owned input snapshot",
+      "passed": true
+    },
+    {
+      "name": "image source matches owned input snapshot",
+      "passed": true
+    },
+    {
+      "name": "opened source matches owned input snapshot",
+      "passed": true
+    },
+    {
+      "name": "saved presentation file identity",
+      "passed": true
+    },
+    {
+      "name": "reopened presentation file identity",
+      "passed": true
+    },
+    {
+      "name": "original raster file identity",
+      "passed": true
+    },
+    {
+      "name": "reopened raster file identity",
+      "passed": true
+    },
+    {
+      "name": "saved and reopened presentation identities agree",
+      "passed": true
+    },
+    {
+      "name": "save/reopen raster is identical",
+      "passed": true
+    },
+    {
+      "name": "original contains one embedded native picture",
+      "passed": true
+    },
+    {
+      "name": "reopened contains one embedded native picture",
+      "passed": true
+    },
+    {
+      "name": "original left within unchanged 0.02pt gate",
+      "passed": true
+    },
+    {
+      "name": "original top within unchanged 0.02pt gate",
+      "passed": true
+    },
+    {
+      "name": "original width within unchanged 0.02pt gate",
+      "passed": true
+    },
+    {
+      "name": "original height within unchanged 0.02pt gate",
+      "passed": true
+    },
+    {
+      "name": "original native alt",
+      "passed": true
+    },
+    {
+      "name": "reopened left within unchanged 0.02pt gate",
+      "passed": true
+    },
+    {
+      "name": "reopened top within unchanged 0.02pt gate",
+      "passed": true
+    },
+    {
+      "name": "reopened width within unchanged 0.02pt gate",
+      "passed": true
+    },
+    {
+      "name": "reopened height within unchanged 0.02pt gate",
+      "passed": true
+    },
+    {
+      "name": "reopened native alt",
+      "passed": true
+    },
+    {
+      "name": "comparator source hash available",
+      "passed": true
+    }
+  ],
+  "failures": [],
+  "outputPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\native-created-01\\comparison.json"
+}

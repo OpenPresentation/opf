@@ -1,0 +1,18 @@
+{
+  "stage": "Final candidate after the Windows-only artifact-retention correction",
+  "buildId": "k9YqAs5Gmj1tmWE4Y70tG",
+  "files": {
+    "components/playground/opf-editor.tsx": "ec0ace671d63570558de5ff5a729122fa89510b56979c173da60c1771aa25f39",
+    "components/author/author-shell.tsx": "e91e874496ce69706391f438ceedd0c8285f6466194ead9a1ea4316f859ff9a9",
+    "components/playground/playground-shell.tsx": "f0625e149945fbab390bf94026cf4000f9cb21b2d51db0eacbca975eb61971d8",
+    "lib/opf-toolkit/use-editor-session.ts": "8771039fb1f844442198e47547773faa30c91c2e9428d1ebd4c689d32069dfcc",
+    "tests/e2e/completion-keyboard.spec.ts": "13c9d8d04bf08cae6eed71794e347966b6544e1cc112cd182a2863265aa96687",
+    "tests/e2e/svg-security.spec.ts": "00b80195d1df3707396dc3c1e83985268b30cd038b0bde1497bf483bed20acb4",
+    "tests/e2e/helpers/readiness-diagnostics.ts": "031351f2a03c64602b88364c99ac2783fe8d6134db346b72f9c7024108d12fb5",
+    ".github/workflows/application-ci.yml": "dd3612aa94d36b776e06966134904660ed20d082fa2185e1c679d99976a0804d",
+    "playwright.config.ts": "c95c11d3cfb6fcbcbfaa0b5c353276a965d188a31f50778175a8ed8c7b895da2",
+    "package.json": "e9ac58846cd1f59a2bdee422b0fc4e9d63e51e62e7e86205fc419bd7b0ec5540",
+    "pnpm-lock.yaml": "f362abf89c57fe9e93197a54520fa5fc712e85bf78b2e011285456f37283b76f"
+  },
+  "scope": "Product files and all active macOS assertions unchanged after full29/29; Windows-only helper now writes a sanitized timing file and CI retains it. Final Node24 typecheck/scoped lint and six Node-only persistence controls pass. Exact-head Windows CI still required."
+}

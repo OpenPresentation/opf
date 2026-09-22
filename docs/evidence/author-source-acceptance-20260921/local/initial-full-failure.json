@@ -1,0 +1,57 @@
+{
+  "stats": {
+    "startTime": "2026-09-21T16:23:29.839Z",
+    "duration": 85136.161,
+    "expected": 24,
+    "skipped": 0,
+    "unexpected": 3,
+    "flaky": 0
+  },
+  "specSHA256": "e187fd19038c20a709c25aa82286cb99e7a511495d82db4beda61fdafefd6ae8",
+  "browserRetries": 0,
+  "failures": [
+    {
+      "title": "anonymous code editing preserves source and visible selection through offline export/reimport at 1280x720",
+      "file": "author.spec.ts",
+      "line": 26,
+      "status": "unexpected",
+      "errorLocations": [
+        {
+          "file": "/private/tmp/opf-author-source-fix-20260921/pptx-dev/tests/e2e/author.spec.ts",
+          "column": 243,
+          "line": 51
+        }
+      ],
+      "finding": "PPTX reimport succeeds, first canvas Undo leaves the imported semantic document in place rather than restoring edited pre-import source"
+    },
+    {
+      "title": "anonymous code editing preserves source and visible selection through offline export/reimport at 540x960",
+      "file": "author.spec.ts",
+      "line": 26,
+      "status": "unexpected",
+      "errorLocations": [
+        {
+          "file": "/private/tmp/opf-author-source-fix-20260921/pptx-dev/tests/e2e/author.spec.ts",
+          "column": 243,
+          "line": 51
+        }
+      ],
+      "finding": "PPTX reimport succeeds, first canvas Undo leaves the imported semantic document in place rather than restoring edited pre-import source"
+    },
+    {
+      "title": "anonymous Author canvas edits survive tab changes, offline PowerPoint export and undoable reimport",
+      "file": "author.spec.ts",
+      "line": 55,
+      "status": "unexpected",
+      "errorLocations": [
+        {
+          "file": "/private/tmp/opf-author-source-fix-20260921/pptx-dev/tests/e2e/author.spec.ts",
+          "column": 41,
+          "line": 143
+        }
+      ],
+      "finding": "PPTX reimport succeeds, first canvas Undo leaves the imported semantic document in place rather than restoring edited pre-import source"
+    }
+  ],
+  "diagnosis": "Source-key ordering makes the JSON.stringify session sync guard treat semantically equal documents as changed, adding a redundant source-buffer root patch and undo entry. Source-only proof and product correction are being prepared separately; initial full result remains failed."
+}

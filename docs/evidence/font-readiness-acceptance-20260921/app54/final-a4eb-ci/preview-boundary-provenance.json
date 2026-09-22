@@ -1,0 +1,7 @@
+{
+  "source": "/private/tmp/opf-font-readiness-concurrency-20260921/integration/preview-http-boundary.json",
+  "path": "preview-http-boundary.json",
+  "bytes": 461,
+  "sha256": "395b3677def031b544e5c3c725e86244c1a77b79053a6f114f638b2b8d0fe3b4",
+  "scope": "Copied unchanged root read-only HTTP observation; no login, bypass or preview browser acceptance."
+}

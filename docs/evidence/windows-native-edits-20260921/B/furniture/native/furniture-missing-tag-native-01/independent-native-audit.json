@@ -1,0 +1,112 @@
+{
+  "passed": true,
+  "scope": "Independent offline native observation/current-action persistence/ZIP XML checks. Semantic importer, physical font identity and cross-renderer pixel fidelity are separate. Duplicate id/placement are native choices.",
+  "verifierSha256": "fcfd67ac80fa67996f43bb54cef26064f04c6575e270fb795575764c693ac27b",
+  "reportSha256": "c0dae5d23252ccf697bc055332dd5a296d9ad358ec412d55031b06a395acb9fa",
+  "checks": [
+    {
+      "name": "worker and parent cleanup",
+      "passed": true
+    },
+    {
+      "name": "source external and snapshot hashes",
+      "passed": true
+    },
+    {
+      "name": "verifier external and snapshot hashes",
+      "passed": true
+    },
+    {
+      "name": "processHelper external and snapshot hashes",
+      "passed": true
+    },
+    {
+      "name": "plan snapshot",
+      "passed": true
+    },
+    {
+      "name": "external action plan and snapshot agree",
+      "passed": true
+    },
+    {
+      "name": "saved presentation hash",
+      "passed": true
+    },
+    {
+      "name": "reopened presentation hash",
+      "passed": true
+    },
+    {
+      "name": "saved presentation unchanged on readonly reopen",
+      "passed": true
+    },
+    {
+      "name": "complete ordered per-call stage log",
+      "passed": true
+    },
+    {
+      "name": "original complete slide and raster inventory",
+      "passed": true
+    },
+    {
+      "name": "original slide 1 raster",
+      "passed": true
+    },
+    {
+      "name": "original slide 2 raster",
+      "passed": true
+    },
+    {
+      "name": "original slide 3 raster",
+      "passed": true
+    },
+    {
+      "name": "edited complete slide and raster inventory",
+      "passed": true
+    },
+    {
+      "name": "edited slide 1 raster",
+      "passed": true
+    },
+    {
+      "name": "edited slide 2 raster",
+      "passed": true
+    },
+    {
+      "name": "edited slide 3 raster",
+      "passed": true
+    },
+    {
+      "name": "reopened complete slide and raster inventory",
+      "passed": true
+    },
+    {
+      "name": "reopened slide 1 raster",
+      "passed": true
+    },
+    {
+      "name": "reopened slide 2 raster",
+      "passed": true
+    },
+    {
+      "name": "reopened slide 3 raster",
+      "passed": true
+    },
+    {
+      "name": "edited and reopened rasters identical",
+      "passed": true
+    },
+    {
+      "name": "native state survives save/reopen at 0.02pt",
+      "passed": true
+    },
+    {
+      "name": "only planned native content edits occurred",
+      "passed": true
+    },
+    {
+      "name": "saved ZIP CRC and XML, no font program",
+      "passed": true
+    }
+  ]
+}

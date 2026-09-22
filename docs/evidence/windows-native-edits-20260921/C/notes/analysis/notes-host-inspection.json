@@ -1,0 +1,12 @@
+{
+  "scope": "Supervisor inspection after one controlled input-file refusal; no failed operation was retried.",
+  "failureRun": "notes-reordered-native-01",
+  "failedCall": "Presentations.Open of the owned input snapshot",
+  "hresult": "0x80070570",
+  "timedOut": false,
+  "workerExited": true,
+  "workerCleanupConfirmed": false,
+  "uiInspection": "One returned PowerPoint window, title PowerPoint; fresh screenshot and accessibility show an empty workspace with disabled document controls. No document, repair/recovery dialog, save prompt, or modal is visible.",
+  "decision": "Preserve the refusal and its unconfirmed worker cleanup. Do not retry or repair this controlled variant. Production ordering stays unchanged. After the explicit supervisor inspection, allow the separate bounded native-created tab control; this is not a retry or a retrospective cleanup assertion.",
+  "nextGate": "D: native-tab-control-v2, default 45 seconds, exact owned presentation only"
+}

@@ -1,0 +1,79 @@
+{
+  "source": "Read-only GitHub PR receipts; accepted source is separate from native scope evidence.",
+  "prs": [
+    {
+      "number": 103,
+      "title": "docs: record recovered Windows native picture lifecycle",
+      "state": "MERGED",
+      "headRefOid": "3792a8eac5424b95bfe20a62a91cec0de0fb07f1",
+      "mergeCommit": {
+        "oid": "009ba028e74c512a80eadd9b4c623d01cd43402c"
+      },
+      "mergedAt": "2026-09-21T18:39:15Z",
+      "statusCheckRollup": [
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-09-21T18:33:14Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/35637974788/job/106460021078",
+          "name": "packages",
+          "startedAt": "2026-09-21T18:22:39Z",
+          "status": "COMPLETED",
+          "workflowName": "Coordinated public packages"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-09-21T18:25:23Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/35637974743/job/106460020957",
+          "name": "Verify OPF packages",
+          "startedAt": "2026-09-21T18:22:39Z",
+          "status": "COMPLETED",
+          "workflowName": "OPF CI"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-09-21T18:22:43Z",
+          "conclusion": "NEUTRAL",
+          "detailsUrl": "https://cursor.com/docs/bugbot",
+          "name": "Cursor Bugbot",
+          "startedAt": "2026-09-21T18:22:41Z",
+          "status": "COMPLETED",
+          "workflowName": ""
+        }
+      ]
+    },
+    {
+      "number": 46,
+      "title": "Add bounded native picture lifecycle controls",
+      "state": "MERGED",
+      "headRefOid": "5124661454616e274df7ecc31cdf25e3480c0c68",
+      "mergeCommit": {
+        "oid": "647159ac886a3e472c4d5f028aa19aaea3257b60"
+      },
+      "mergedAt": "2026-09-21T18:21:25Z",
+      "statusCheckRollup": [
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-09-21T18:05:55Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/OpenPresentation/opf-pptx/actions/runs/35635737016/job/106452679885",
+          "name": "package (ubuntu-latest)",
+          "startedAt": "2026-09-21T18:02:04Z",
+          "status": "COMPLETED",
+          "workflowName": "CI"
+        },
+        {
+          "__typename": "CheckRun",
+          "completedAt": "2026-09-21T18:08:26Z",
+          "conclusion": "SUCCESS",
+          "detailsUrl": "https://github.com/OpenPresentation/opf-pptx/actions/runs/35635737016/job/106452679919",
+          "name": "package (windows-latest)",
+          "startedAt": "2026-09-21T18:02:06Z",
+          "status": "COMPLETED",
+          "workflowName": "CI"
+        }
+      ]
+    }
+  ]
+}

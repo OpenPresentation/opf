@@ -1,0 +1,112 @@
+[
+  {
+    "path": "results/author-anonymous-Author-ca-d560b-xport-and-undoable-reimport/trace.zip",
+    "bytes": 2609528,
+    "sha256": "19412fc5a048829fe1aceaf7c37079b2d965b2483930e7f149b189ce5b54a3ff"
+  },
+  {
+    "path": "results/author-anonymous-code-edit-3e561--export-reimport-at-540x960/trace.zip",
+    "bytes": 5400507,
+    "sha256": "b934da71105c945a58401623c976327a48e31ceaf7989f72f5cc31d136856eb2"
+  },
+  {
+    "path": "results/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/author-theme-options.png",
+    "bytes": 168758,
+    "sha256": "5d01b0c97a38d99da083884adac5ffa7632dd0764f93eb46c37b90df211b2814"
+  },
+  {
+    "path": "results/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo/trace.zip",
+    "bytes": 7660091,
+    "sha256": "66fa48d1672ee574597d73999e346776390610355bbda7126176942fdb6e93f6"
+  },
+  {
+    "path": "results/author-json-options-Author-cda0b-exact-CRLF-source-undo-redo/author-json-options.png",
+    "bytes": 175770,
+    "sha256": "8765d1dda6668ca56668379ba24c23d6ae0a2823c60de61edec33185bdb25ee4"
+  },
+  {
+    "path": "results/author-json-options-Author-cda0b-exact-CRLF-source-undo-redo/author-layout-options.png",
+    "bytes": 187504,
+    "sha256": "2d0a44178e862e0ed1ebdc432b43eb8daf96199cb6cd7a5e7bbbcb479fa09a0e"
+  },
+  {
+    "path": "results/author-json-options-Author-cda0b-exact-CRLF-source-undo-redo/author-theme-options.png",
+    "bytes": 184090,
+    "sha256": "fc1cd9c47f74e289cf206d39eeab2074b69d9d77f2eca223d4d5030cb01c8742"
+  },
+  {
+    "path": "results/inspector-anonymous-JSON-a-151ab-ownload-and-shared-reimport/inspector.png",
+    "bytes": 178107,
+    "sha256": "ea0b19fcec97c59d83c5a7991205a98370203e2fc9021269623e1b7ac594e1bc"
+  },
+  {
+    "path": "results/inspector-editing-all-Insp-15273-fline-undo-export-at-1440px/inspector-later-slide.png",
+    "bytes": 208255,
+    "sha256": "dc1f1b1826528aa93c205c9e83627b65f6fc60c18cc80d15b0b2367c8e224499"
+  },
+  {
+    "path": "results/inspector-editing-all-Insp-a78d3-ffline-undo-export-at-540px/trace.zip",
+    "bytes": 3803547,
+    "sha256": "120515cf0cc8c6a1c2c79f9ba0a62b95be5370e8ab1aeab806bc6de627cd506f"
+  },
+  {
+    "path": "results/inspector-recovery-font-su-beb5b--Inspector-canvas-is-active/trace.zip",
+    "bytes": 5457678,
+    "sha256": "621a46f4e35b8ea1ab0f0c11dbdd04fe46b26007c1608554854172353835633c"
+  },
+  {
+    "path": "results/inspector-recovery-schema--76507-ers-after-source-correction/trace.zip",
+    "bytes": 247589,
+    "sha256": "2612721b1c474ba7e55afa313760fddd7d998322e1467cdfcd9e07d22351cc7d"
+  },
+  {
+    "path": "results/json-paste-formatting-warm-44312-t-Document-remains-undoable/trace.zip",
+    "bytes": 4828453,
+    "sha256": "b8a8222c3c2ff888ad8db59ff39b0d0cc3a086b7c73d17a6e2a1a5702c9052ab"
+  },
+  {
+    "path": "results/yaml-YAML-and-Markdown-edi-18ed4-from-malformed-YAML-offline/trace.zip",
+    "bytes": 5015180,
+    "sha256": "225634bc81ba737a5fa440f6a8045eafb2ee987d7910eb16266f451cee3c359e"
+  },
+  {
+    "path": "review-images/author-anonymous-Author-ca-d560b-xport-and-undoable-reimport.jpeg",
+    "bytes": 28945,
+    "sha256": "c8f337cb584be112233e7413b249049ad132abed15ae717899700017c1d98ac4"
+  },
+  {
+    "path": "review-images/author-anonymous-code-edit-3e561--export-reimport-at-540x960.jpeg",
+    "bytes": 9992,
+    "sha256": "96c5239aac976ecd9eb66d472189a1046f3d428d2e6fecec03972db9305e54e4"
+  },
+  {
+    "path": "review-images/author-json-options-Author-6cab9-h-exact-LF-source-undo-redo.jpeg",
+    "bytes": 58884,
+    "sha256": "7df043328d2daf3597bc951d45fe765fe2ba7c7ff6cd51aedc3ebf1d89fd8596"
+  },
+  {
+    "path": "review-images/inspector-editing-all-Insp-a78d3-ffline-undo-export-at-540px.jpeg",
+    "bytes": 20856,
+    "sha256": "68f8ffd2935d8cc3f2d77d76292491bea6df932ad902c2037f8442015c8c2233"
+  },
+  {
+    "path": "review-images/inspector-recovery-font-su-beb5b--Inspector-canvas-is-active.jpeg",
+    "bytes": 59987,
+    "sha256": "ad55f6354c6ec536db696d527cbac4b616d915205a6a1d294ea7d1659371a908"
+  },
+  {
+    "path": "review-images/inspector-recovery-schema--76507-ers-after-source-correction.jpeg",
+    "bytes": 7642,
+    "sha256": "9ccf34eff4647cf99fc3dab26e6619fc20c6880aae05dd1fdfebf7cb0061ca37"
+  },
+  {
+    "path": "review-images/json-paste-formatting-warm-44312-t-Document-remains-undoable.jpeg",
+    "bytes": 83230,
+    "sha256": "1ed64333e3e2fc88b4ee3e5fec210b21d7f51de8bc1e5aa5be966486f8a153a4"
+  },
+  {
+    "path": "review-images/yaml-YAML-and-Markdown-edi-18ed4-from-malformed-YAML-offline.jpeg",
+    "bytes": 55548,
+    "sha256": "a0219f6d3ea8ad59a270792303366c181661891fe70deb81e986180342f7cff1"
+  }
+]

@@ -1,0 +1,40 @@
+{
+  "scope": "Only three exact raw CI copies retain source CRLF/trailing spaces; no byte normalization or product whitespace-rule change.",
+  "files": [
+    {
+      "path": "app54/final-a4eb-ci/windows-job.log",
+      "sha256": "8e6b498c17885813221cd9a5740a662cb8e46019a201253e62b8f6ccadcab361",
+      "crlf": 1182,
+      "linesWithTrailingSpaceOrTab": 107
+    },
+    {
+      "path": "app54/final-a4eb-ci/windows-exact-failure.log",
+      "sha256": "015e47dbd170eb91a900b401034f32525cb3031e478e6526bc909702b7e4fcfc",
+      "crlf": 0,
+      "linesWithTrailingSpaceOrTab": 12
+    },
+    {
+      "path": "app54/final-a4eb-ci/failure/error-context.md.txt",
+      "sha256": "a39783f64d0d1f37b3d7c898e2d147ecf89aa5ed01511be24f7e49470700fdc0",
+      "crlf": 201,
+      "linesWithTrailingSpaceOrTab": 13
+    }
+  ],
+  "additionalArchiveScopes": [
+    {
+      "path": "app54/navigation-policy-candidate/navigation-policy.patch.txt",
+      "attribute": "whitespace=-blank-at-eol",
+      "reason": "Exact unified-diff context blanks."
+    },
+    {
+      "path": "app54/author-navigation-diagnosis/later-author-snapshot.md.txt",
+      "attribute": "whitespace=-blank-at-eof",
+      "reason": "Exact captured DOM snapshot ends with a blank line."
+    },
+    {
+      "path": "core110/received.patch.txt",
+      "attribute": "whitespace=-blank-at-eol",
+      "reason": "Exact received unified-diff context blanks."
+    }
+  ]
+}

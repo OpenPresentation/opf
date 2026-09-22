@@ -1,0 +1,97 @@
+{
+  "recordedAt": "2026-09-21T20:51:41.548381+00:00",
+  "accepted": "5bc0d3f89414b382b2ce48452c7e56e5d66aaf74",
+  "tree": "ffdc678beadf0808bc717d67e7fc0a9ec4790127",
+  "reviewed": "92c1009761a83b95601b93eb8455e9351980b8a7",
+  "pr": "https://github.com/OpenPresentation/opf/pull/107",
+  "postmergeGate": "Both exact-merge push workflows succeeded on attempt1; one pair observed, no canceled postmerge pair.",
+  "runs": [
+    {
+      "workflow": "OPF CI",
+      "id": 35652360502,
+      "head": "5bc0d3f89414b382b2ce48452c7e56e5d66aaf74",
+      "event": "push",
+      "attempt": 1,
+      "conclusion": "success",
+      "createdAt": "2026-09-21T20:38:41Z",
+      "completedAt": "2026-09-21T20:42:00Z",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/35652360502",
+      "node": "24.20.0",
+      "jobs": [
+        {
+          "id": 106507561573,
+          "name": "Verify OPF packages",
+          "conclusion": "success",
+          "startedAt": "2026-09-21T20:38:44Z",
+          "completedAt": "2026-09-21T20:41:59Z",
+          "url": "https://github.com/OpenPresentation/opf/actions/runs/35652360502/job/106507561573"
+        }
+      ]
+    },
+    {
+      "workflow": "Coordinated public packages",
+      "id": 35652360551,
+      "head": "5bc0d3f89414b382b2ce48452c7e56e5d66aaf74",
+      "event": "push",
+      "attempt": 1,
+      "conclusion": "success",
+      "createdAt": "2026-09-21T20:38:41Z",
+      "completedAt": "2026-09-21T20:49:22Z",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/35652360551",
+      "node": "24.20.0",
+      "jobs": [
+        {
+          "id": 106507561261,
+          "name": "packages",
+          "conclusion": "success",
+          "startedAt": "2026-09-21T20:38:45Z",
+          "completedAt": "2026-09-21T20:49:21Z",
+          "url": "https://github.com/OpenPresentation/opf/actions/runs/35652360551/job/106507561261"
+        }
+      ]
+    }
+  ],
+  "source": {
+    "checkedAt": "2026-09-21T20:40:23.504412+00:00",
+    "reviewed": "92c1009761a83b95601b93eb8455e9351980b8a7",
+    "accepted": "5bc0d3f89414b382b2ce48452c7e56e5d66aaf74",
+    "tree": "ffdc678beadf0808bc717d67e7fc0a9ec4790127",
+    "treeEqual": true,
+    "acceptedParent": "3847f712ccb2379952bcc8ab7c9fdbaedfd0a4ce",
+    "prDeltaBlobsEqual": 87,
+    "primaryClean": true,
+    "premergeAuditFilesUnchanged": 45,
+    "premergeAuditManifestSha256": "d690fca16dbc92f0324d4da053151759599754cb4fb021cbf5eb45079fcb0102"
+  },
+  "primary": {
+    "observedAt": "2026-09-21T20:39:51.597216+00:00",
+    "cwd": "/Users/michael/Source/opf",
+    "branch": "main",
+    "head": "5bc0d3f89414b382b2ce48452c7e56e5d66aaf74",
+    "originMain": "5bc0d3f89414b382b2ce48452c7e56e5d66aaf74",
+    "tree": "ffdc678beadf0808bc717d67e7fc0a9ec4790127",
+    "status": "",
+    "method": "git fetch origin main; git merge --ff-only 5bc0d3f89414b382b2ce48452c7e56e5d66aaf74"
+  },
+  "artifact": {
+    "id": 10663037765,
+    "name": "installed-browser-node24",
+    "run": 35652360551,
+    "head": "5bc0d3f89414b382b2ce48452c7e56e5d66aaf74",
+    "archive": "installed-browser-node24.zip",
+    "bytes": 1466810,
+    "sha256": "3791d8cb4b4422759c7592f15749bf56721807cfde6ba3c692e12dbff0eef911",
+    "matchesGitHubDigest": true,
+    "zipCrcPassed": true,
+    "safeRelativeMemberNames": true,
+    "members": 378,
+    "jsonMembersParsed": 33,
+    "scope": "Original archive retained without extraction. Integrity validation only; no independent visual/native/canonical acceptance is claimed."
+  },
+  "premergeAuditUnchanged": {
+    "files": 45,
+    "manifestSha256": "d690fca16dbc92f0324d4da053151759599754cb4fb021cbf5eb45079fcb0102",
+    "scope": "Earlier automatic premerge cancellations and later automatic successful runs remain separate; not rewritten by this postmerge pass."
+  },
+  "actions": "Authorized clean primary fetch/fast-forward only; no workflow rerun, source-content edit, deployment or Office action."
+}

@@ -1,0 +1,10 @@
+{
+  "excludedPublicPath": "app54/final-a4eb-ci/failure/trace.zip.base64.txt",
+  "reason": "Base64 is reversible raw data, not sanitization. Original raw CI trace is private-only; no new diagnosis or sensitive-value publication.",
+  "retainedOriginalSha256": "c7589c634e5177b393d3697a4d9c9bb48b4809d958644973267a453c1812883a",
+  "privateRetentionReceipt": "app54/final-a4eb-ci/failure/private-retention.json",
+  "historicalStorageReceipt": "app54/final-a4eb-ci/failure/trace-storage.json",
+  "historicalStorageReceiptPreservedUnchanged": true,
+  "publicMappingSupersedesOriginalInclusion": true,
+  "publicationHistoryRequirement": "Publish a clean single final-tree commit with sole parent accepted3c504852; private local checkpoint ancestors contain the encoded payload and must not be pushed."
+}

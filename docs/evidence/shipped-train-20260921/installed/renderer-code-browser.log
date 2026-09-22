@@ -1,0 +1,15 @@
+node:internal/fs/promises:1345
+  return new FileHandle(await PromisePrototypeThen(
+                        ^
+
+Error: ENOENT: no such file or directory, open '/private/tmp/opf-registry-20260921/consumer/@openpresentation/opf-render/svg'
+    at async open (node:internal/fs/promises:1345:25)
+    at async readFile (node:internal/fs/promises:1996:14)
+    at async file:///private/tmp/opf-registry-20260921/consumer/renderer-code-browser.mjs:72:151 {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/private/tmp/opf-registry-20260921/consumer/@openpresentation/opf-render/svg'
+}
+
+Node.js v24.21.0

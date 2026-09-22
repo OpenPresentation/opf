@@ -1,0 +1,68 @@
+{
+  "capturedAt": "2026-09-21T22:22:45.011425+00:00",
+  "repositories": [
+    {
+      "repo": "opf",
+      "path": "/Users/michael/Source/opf",
+      "before": "4f7a4bd494f1a873319eff897423d301d1cfc9d6",
+      "branch": "main",
+      "target": "3c5048522714365a41d9b5b9ba81620affae718b",
+      "after": "3c5048522714365a41d9b5b9ba81620affae718b",
+      "status": ""
+    },
+    {
+      "repo": "opf-render",
+      "path": "/Users/michael/Source/opf-render",
+      "before": "114bf596e9034c0b80a8c92df6a956a04ef18bef",
+      "branch": "main",
+      "target": "c8d7d5ca1f67a7b39f70c7c4bd14577a865b175b",
+      "after": "c8d7d5ca1f67a7b39f70c7c4bd14577a865b175b",
+      "status": ""
+    },
+    {
+      "repo": "opf-pptx",
+      "path": "/Users/michael/Source/opf-pptx",
+      "before": "9e8a38198519b4d4a18d163928833f2509550687",
+      "branch": "main",
+      "target": "9e8a38198519b4d4a18d163928833f2509550687",
+      "after": "9e8a38198519b4d4a18d163928833f2509550687",
+      "status": ""
+    },
+    {
+      "repo": "opf-editor",
+      "path": "/Users/michael/Source/opf-editor",
+      "before": "476191e28e6f5f5ec32146aeb416f5286b4d0570",
+      "branch": "main",
+      "target": "476191e28e6f5f5ec32146aeb416f5286b4d0570",
+      "after": "476191e28e6f5f5ec32146aeb416f5286b4d0570",
+      "status": ""
+    },
+    {
+      "repo": "openpresentation-site",
+      "path": "/Users/michael/Source/openpresentation-site",
+      "before": "a85bcc77d899ce9ba1df659548be564142c16120",
+      "branch": "main",
+      "target": "a85bcc77d899ce9ba1df659548be564142c16120",
+      "after": "a85bcc77d899ce9ba1df659548be564142c16120",
+      "status": ""
+    },
+    {
+      "repo": "pptx-dev",
+      "path": "/Users/michael/Source/pptx-dev",
+      "before": "8f54228a9e38a1dcc0bf8188bcdd519795b3799a",
+      "branch": "master",
+      "target": "8f54228a9e38a1dcc0bf8188bcdd519795b3799a",
+      "after": "8f54228a9e38a1dcc0bf8188bcdd519795b3799a",
+      "status": ""
+    },
+    {
+      "repo": "pptx-gallery",
+      "path": "/Users/michael/Source/pptx-gallery",
+      "before": "f17e9ae5869669d5fbac3720f285652d0c37551c",
+      "branch": "main",
+      "target": "f17e9ae5869669d5fbac3720f285652d0c37551c",
+      "after": "f17e9ae5869669d5fbac3720f285652d0c37551c",
+      "status": ""
+    }
+  ]
+}

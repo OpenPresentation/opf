@@ -11,17 +11,17 @@ shipped versus deferred.
 
 ## Versions
 
-Pin the coordinated set from `release-plan.json` (currently core **0.10.1**,
-renderer/PPTX/CLI **0.8.1**, editor **0.7.1**). All of these packages declare
+Pin the coordinated set from `release-plan.json` (currently core **0.11.0**,
+CLI **0.9.0**, renderer **0.9.0**, PPTX **0.9.1**, editor **0.8.0**). All of these packages declare
 `engines.node: 24.x`.
 
 ```sh
 node -v   # must be 24.x
-npm install @openpresentation/opf@0.10.1 \
-  @openpresentation/opf-render@0.8.1 \
-  @openpresentation/opf-editor@0.7.1 \
-  @openpresentation/opf-pptx@0.8.1 \
-  @openpresentation/cli@0.8.1
+npm install @openpresentation/opf@0.11.0 \
+  @openpresentation/opf-render@0.9.0 \
+  @openpresentation/opf-editor@0.8.0 \
+  @openpresentation/opf-pptx@0.9.1 \
+  @openpresentation/cli@0.9.0
 ```
 
 Copy [`docs/quickstart/developer-quickstart.opf.json`](quickstart/developer-quickstart.opf.json)
@@ -29,6 +29,11 @@ into that project as `deck.opf.json`. That file is a docs fixture, not one of
 the 126 decks in `@openpresentation/opf/examples`. Verify the install came from the registry
 (`package-lock.json` `resolved` URLs start with `https://registry.npmjs.org/`)
 and that you did not add `file:` dependencies on this repository.
+
+The [format card](format-card.md) describes ColorRef, named variables and the
+current source contract. `opf bundle` can inline resolved catalog records for
+portable offline authoring; it does not download remote assets. Keep the
+ColorRef docs fixture outside the 126-deck example/golden corpus in this update.
 
 ## Author, validate and lint
 
@@ -114,8 +119,11 @@ const pptx = await toPptx(presentation, options);
 
 `renderSvg` / `renderSvgDeck` are the local preview. PNG and PDF rasterize that
 SVG; **PDF is raster-backed** in this release (not selectable vector text).
-`toPptx` is the supported editable PowerPoint export from OPF. Opening the file
-in Microsoft PowerPoint and round-tripping native fidelity is
+`toPptx` is the supported editable PowerPoint export from OPF. Shared
+headers/footers in that file are tagged slide shapes (`OPF_FURNITURE_V1`), not
+native Office Header/Footer objects (`p:hf` / notes master). Opening the file
+in Microsoft PowerPoint, compiling furniture into real Header/Footer objects,
+and round-tripping native fidelity is
 [issue 87](https://github.com/OpenPresentation/opf/issues/87), not this
 quickstart.
 
@@ -141,9 +149,11 @@ It fails if any package is a `file:` or workspace link.
 
 - Renderer native-width residuals:
   [opf-render#24](https://github.com/OpenPresentation/opf-render/issues/24)
-- Native PowerPoint open/edit/save/reopen:
+- Native PowerPoint open/edit/save/reopen and real Office Header/Footer (`p:hf`):
   [opf#87](https://github.com/OpenPresentation/opf/issues/87)
-- Public-site adoption:
-  [opf#88](https://github.com/OpenPresentation/opf/issues/88)
+- Remaining GitHub [issue 88](https://github.com/OpenPresentation/opf/issues/88)
+  checklist (the Inspector overlay/json-options, gallery Playground+Editor
+  links, and Header & footer playground example are already live on
+  production; the issue stays open)
 - Archived font-shaping prototypes (not in the published runtime)
 - Selectable vector PDF, general SVG diagrams, and Mermaid

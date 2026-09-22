@@ -1,0 +1,54 @@
+{
+  "candidate": "8c0dae19b339ef3fe6a06c1d2df9f96b31d4f575",
+  "tree": "ea1554f81afc162506e57ec88fe03f3d61d8c100",
+  "files": [
+    {
+      "path": "app/inspector/page.tsx",
+      "sha256": "cb25037fd8f59a74ca8d43a5046bbabb3a65965f8e61cba9a226d2afcdad1bb3",
+      "bytes": 532,
+      "workingTreeMatchesCandidate": true
+    },
+    {
+      "path": "components/playground/playground-shell.tsx",
+      "sha256": "f0625e149945fbab390bf94026cf4000f9cb21b2d51db0eacbca975eb61971d8",
+      "bytes": 64560,
+      "workingTreeMatchesCandidate": true
+    },
+    {
+      "path": "lib/opf-toolkit/use-editor-session.ts",
+      "sha256": "8771039fb1f844442198e47547773faa30c91c2e9428d1ebd4c689d32069dfcc",
+      "bytes": 2309,
+      "workingTreeMatchesCandidate": true
+    },
+    {
+      "path": "lib/playground/opf-handoff.ts",
+      "sha256": "e7e8a0e249829eb444f64fcd5051f32f0b07432af80c6b26f882636d4ec1a850",
+      "bytes": 1153,
+      "workingTreeMatchesCandidate": true
+    },
+    {
+      "path": "lib/playground/opf-codec.ts",
+      "sha256": "4955e0a4a5f74883c2ef585c7c29c04ba5fa3e84a9c0c0ba847ae3c0290bc0f3",
+      "bytes": 25164,
+      "workingTreeMatchesCandidate": true
+    },
+    {
+      "path": "lib/opf-toolkit/browser-runtime.ts",
+      "sha256": "61aaa8bb02823f201afaea43e6795940743ccdde9b945fef6bab7273aa8a6046",
+      "bytes": 2083,
+      "workingTreeMatchesCandidate": true
+    },
+    {
+      "path": "tests/e2e/svg-security.spec.ts",
+      "sha256": "5a1455ecebfdcc26997e5f82d2707634a2dd3127b6dab9b81d9e8023dc8612f4",
+      "bytes": 3765,
+      "workingTreeMatchesCandidate": true
+    },
+    {
+      "path": "playwright.config.ts",
+      "sha256": "c95c11d3cfb6fcbcbfaa0b5c353276a965d188a31f50778175a8ed8c7b895da2",
+      "bytes": 747,
+      "workingTreeMatchesCandidate": true
+    }
+  ]
+}

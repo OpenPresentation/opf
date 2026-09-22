@@ -1,0 +1,290 @@
+{
+  "scope": [
+    "docs/handoff-2026-09-21.md",
+    "docs/compatibility-matrix.md",
+    "docs/evidence/completion-acceptance-20260921/README.md"
+  ],
+  "checks": [
+    {
+      "file": "docs/handoff-2026-09-21.md",
+      "href": "quickstart.md",
+      "exists": true
+    },
+    {
+      "file": "docs/handoff-2026-09-21.md",
+      "href": "compatibility-matrix.md",
+      "exists": true
+    },
+    {
+      "file": "docs/handoff-2026-09-21.md",
+      "href": "evidence/completion-acceptance-20260921/README.md",
+      "exists": true
+    },
+    {
+      "file": "docs/handoff-2026-09-21.md",
+      "href": "evidence/issue88-final-20260921/README.md",
+      "exists": true
+    },
+    {
+      "file": "docs/handoff-2026-09-21.md",
+      "href": "evidence/shipped-train-20260921/repository-sync.json",
+      "exists": true
+    },
+    {
+      "file": "docs/handoff-2026-09-21.md",
+      "href": "evidence/completion-acceptance-20260921/app47-deployment.json",
+      "exists": true
+    },
+    {
+      "file": "docs/handoff-2026-09-21.md",
+      "href": "evidence/completion-acceptance-20260921/canonical/REPORT.md",
+      "exists": true
+    },
+    {
+      "file": "docs/handoff-2026-09-21.md",
+      "href": "evidence/completion-acceptance-20260921/app47-deployment-post-run.json",
+      "exists": true
+    },
+    {
+      "file": "docs/handoff-2026-09-21.md",
+      "href": "evidence/completion-acceptance-20260921/source-preservation-audit/REPORT.md",
+      "exists": true
+    },
+    {
+      "file": "docs/handoff-2026-09-21.md",
+      "href": "evidence/completion-acceptance-20260921/readiness/REPORT.md",
+      "exists": true
+    },
+    {
+      "file": "docs/handoff-2026-09-21.md",
+      "href": "evidence/completion-acceptance-20260921/worker-candidate/WORKER-AUDIT.md",
+      "exists": true
+    },
+    {
+      "file": "docs/handoff-2026-09-21.md",
+      "href": "evidence/completion-acceptance-20260921/issue88/issue88-reopened.json",
+      "exists": true
+    },
+    {
+      "file": "docs/handoff-2026-09-21.md",
+      "href": "evidence/issue88-final-20260921/README.md",
+      "exists": true
+    },
+    {
+      "file": "docs/handoff-2026-09-21.md",
+      "href": "plans/developer-adoption-20260915.md",
+      "exists": true
+    },
+    {
+      "file": "docs/compatibility-matrix.md",
+      "href": "quickstart.md",
+      "exists": true
+    },
+    {
+      "file": "docs/compatibility-matrix.md",
+      "href": "evidence/shipped-train-20260921/README.md",
+      "exists": true
+    },
+    {
+      "file": "docs/compatibility-matrix.md",
+      "href": "evidence/completion-acceptance-20260921/README.md",
+      "exists": true
+    },
+    {
+      "file": "docs/compatibility-matrix.md",
+      "href": "evidence/issue88-final-20260921/README.md",
+      "exists": true
+    },
+    {
+      "file": "docs/compatibility-matrix.md",
+      "href": "handoff-2026-09-21.md",
+      "exists": true
+    },
+    {
+      "file": "docs/compatibility-matrix.md",
+      "href": "evidence/completion-acceptance-20260921/canonical/REPORT.md",
+      "exists": true
+    },
+    {
+      "file": "docs/compatibility-matrix.md",
+      "href": "evidence/issue88-final-20260921/README.md",
+      "exists": true
+    },
+    {
+      "file": "docs/compatibility-matrix.md",
+      "href": "evidence/completion-acceptance-20260921/source-preservation-audit/REPORT.md",
+      "exists": true
+    },
+    {
+      "file": "docs/compatibility-matrix.md",
+      "href": "handoff-2026-09-21.md",
+      "exists": true
+    },
+    {
+      "file": "docs/compatibility-matrix.md",
+      "href": "plans/pdf-export.md",
+      "exists": true
+    },
+    {
+      "file": "docs/compatibility-matrix.md",
+      "href": "plans/diagrams-svg.md",
+      "exists": true
+    },
+    {
+      "file": "docs/compatibility-matrix.md",
+      "href": "plans/developer-adoption-20260915.md",
+      "exists": true
+    },
+    {
+      "file": "docs/evidence/completion-acceptance-20260921/README.md",
+      "href": "../issue88-final-20260921/README.md",
+      "exists": true
+    },
+    {
+      "file": "docs/evidence/completion-acceptance-20260921/README.md",
+      "href": "browser-review/README.md",
+      "exists": true
+    },
+    {
+      "file": "docs/evidence/completion-acceptance-20260921/README.md",
+      "href": "browser-review/control-evidence.json",
+      "exists": true
+    },
+    {
+      "file": "docs/evidence/completion-acceptance-20260921/README.md",
+      "href": "app47-premerge-ci.json",
+      "exists": true
+    },
+    {
+      "file": "docs/evidence/completion-acceptance-20260921/README.md",
+      "href": "app47-accepted-pr.json",
+      "exists": true
+    },
+    {
+      "file": "docs/evidence/completion-acceptance-20260921/README.md",
+      "href": "app47-tree-equality.json",
+      "exists": true
+    },
+    {
+      "file": "docs/evidence/completion-acceptance-20260921/README.md",
+      "href": "app47-postmerge-ci.json",
+      "exists": true
+    },
+    {
+      "file": "docs/evidence/completion-acceptance-20260921/README.md",
+      "href": "app47-deployment.json",
+      "exists": true
+    },
+    {
+      "file": "docs/evidence/completion-acceptance-20260921/README.md",
+      "href": "canonical/REPORT.md",
+      "exists": true
+    },
+    {
+      "file": "docs/evidence/completion-acceptance-20260921/README.md",
+      "href": "app47-deployment-post-run.json",
+      "exists": true
+    },
+    {
+      "file": "docs/evidence/completion-acceptance-20260921/README.md",
+      "href": "canonical-deployment-binding.json",
+      "exists": true
+    },
+    {
+      "file": "docs/evidence/completion-acceptance-20260921/README.md",
+      "href": "app47-preview.json",
+      "exists": true
+    },
+    {
+      "file": "docs/evidence/completion-acceptance-20260921/README.md",
+      "href": "canonical/acceptance-summary.compact.json",
+      "exists": true
+    },
+    {
+      "file": "docs/evidence/completion-acceptance-20260921/README.md",
+      "href": "canonical/review/lf-trace-facts.json",
+      "exists": true
+    },
+    {
+      "file": "docs/evidence/completion-acceptance-20260921/README.md",
+      "href": "canonical/review/lf-network.json",
+      "exists": true
+    },
+    {
+      "file": "docs/evidence/completion-acceptance-20260921/README.md",
+      "href": "canonical/screenshot-review.json",
+      "exists": true
+    },
+    {
+      "file": "docs/evidence/completion-acceptance-20260921/README.md",
+      "href": "copy-provenance.json",
+      "exists": true
+    },
+    {
+      "file": "docs/evidence/completion-acceptance-20260921/README.md",
+      "href": "canonical/SHA256SUMS.json",
+      "exists": true
+    },
+    {
+      "file": "docs/evidence/completion-acceptance-20260921/README.md",
+      "href": "readiness/REPORT.md",
+      "exists": true
+    },
+    {
+      "file": "docs/evidence/completion-acceptance-20260921/README.md",
+      "href": "readiness/SHA256SUMS.original",
+      "exists": true
+    },
+    {
+      "file": "docs/evidence/completion-acceptance-20260921/README.md",
+      "href": "copy-provenance.json",
+      "exists": true
+    },
+    {
+      "file": "docs/evidence/completion-acceptance-20260921/README.md",
+      "href": "worker-candidate/WORKER-AUDIT.md",
+      "exists": true
+    },
+    {
+      "file": "docs/evidence/completion-acceptance-20260921/README.md",
+      "href": "worker-candidate/worker-inventory.json",
+      "exists": true
+    },
+    {
+      "file": "docs/evidence/completion-acceptance-20260921/README.md",
+      "href": "worker-candidate/worker-audit.mjs",
+      "exists": true
+    },
+    {
+      "file": "docs/evidence/completion-acceptance-20260921/README.md",
+      "href": "source-preservation-audit/REPORT.md",
+      "exists": true
+    },
+    {
+      "file": "docs/evidence/completion-acceptance-20260921/README.md",
+      "href": "source-preservation-audit/source-hashes.json",
+      "exists": true
+    },
+    {
+      "file": "docs/evidence/completion-acceptance-20260921/README.md",
+      "href": "source-preservation-audit/results.json",
+      "exists": true
+    },
+    {
+      "file": "docs/evidence/completion-acceptance-20260921/README.md",
+      "href": "issue88/issue88-auto-close-before.json",
+      "exists": true
+    },
+    {
+      "file": "docs/evidence/completion-acceptance-20260921/README.md",
+      "href": "issue88/issue88-reopened.json",
+      "exists": true
+    },
+    {
+      "file": "docs/evidence/completion-acceptance-20260921/README.md",
+      "href": "issue88/app46-corrected-body.md",
+      "exists": true
+    }
+  ],
+  "failures": []
+}

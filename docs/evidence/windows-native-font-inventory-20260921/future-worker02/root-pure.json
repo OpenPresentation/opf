@@ -1,0 +1,14 @@
+{
+    "passed":  true,
+    "officeOrComCalls":  0,
+    "stopLatchPassed":  true,
+    "contentStylesPassed":  true,
+    "runTextStartAndStyleMutationsRejected":  true,
+    "wholeRangeStartMutationRejected":  true,
+    "wrongOwnedPathRejected":  true,
+    "inputHashMutationRejected":  true,
+    "fontAllowlistNegativeRejected":  true,
+    "invalidFontCountRejected":  true,
+    "incompleteCloseRejected":  true,
+    "incompleteFontRemovalRejected":  true
+}

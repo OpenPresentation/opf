@@ -1,0 +1,9 @@
+{
+  "scope": "Second notes diagnostic controls the ZIP-entry-order confound; no production change or repeat of the same failed input.",
+  "fixture": "notes-packaging-controls-02/reordered-ascii.pptx",
+  "precondition": "The native-created tab failure's saved deck was closed through supported UI without prompts or changed saved bytes. PowerPoint had an empty workspace.",
+  "result": "Immediate Presentations.Open refusal, HRESULT 0x80070570; helper exited 1 without timeout and performed no further Office operation.",
+  "workerCleanupConfirmed": false,
+  "postFailureUiInspection": "One PowerPoint window with empty workspace; no document, modal, repair, recovery or save prompt visible.",
+  "decision": "No further notes variants. Preserve both refused attempts and successful production control. Unmodified ASCII repack is byte-identical to production; changed ASCII variant differs only in presentation.xml payload. Production notes-master ordering remains unchanged. Separate tab harness correction and non-Office work may continue after review."
+}

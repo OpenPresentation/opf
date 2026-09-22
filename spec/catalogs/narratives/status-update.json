@@ -24,7 +24,7 @@
       "id": "headline",
       "name": "Headline",
       "description": "Open with the single most important sentence the audience needs to know — on track, off track, or shifted. The headline replaces 'how's it going' with a clear answer.",
-      "layoutHint": "title-left",
+      "layoutHint": "title",
       "instructions": "Title & date",
       "slideType": "text"
     },
@@ -34,7 +34,7 @@
       "description": "State the objective for the period and what was promised. One slide, three lines. Frames the rest of the update so progress is read against a clear bar.",
       "instructions": "Summary/objectives",
       "slideType": "text",
-      "layoutHint": "text-1x-left"
+      "layoutHint": "text-1x"
     },
     {
       "id": "progress",
@@ -42,7 +42,7 @@
       "description": "Walk through the actions taken since the last update. Specific, attributable, dated. Avoid effort theater — list outcomes and material moves, not activity for its own sake.",
       "instructions": "Explain actions taken",
       "slideType": "text",
-      "layoutHint": "text-1x-left"
+      "layoutHint": "text-1x"
     },
     {
       "id": "results",
@@ -50,7 +50,7 @@
       "description": "Show the outcomes those actions produced. Metrics, customer signals, decisions made. Keep the comparison crisp — versus plan, versus last period, versus benchmark.",
       "instructions": "Show outcomes",
       "slideType": "text",
-      "layoutHint": "text-1x-left"
+      "layoutHint": "text-1x"
     },
     {
       "id": "action-plan",
@@ -58,13 +58,13 @@
       "description": "Outline the next steps and who owns them. Be specific about the next decision point and what would have to happen to slip the schedule.",
       "instructions": "Outline next steps",
       "slideType": "text",
-      "layoutHint": "text-1x-left"
+      "layoutHint": "text-1x"
     },
     {
       "id": "feedback",
       "name": "Feedback",
       "description": "Invite the audience to weigh in: where you'd like input, where you need a decision, where help would unblock you. End the update with an open hand, not a closed file.",
-      "layoutHint": "title-left",
+      "layoutHint": "title",
       "instructions": "Ask for response",
       "slideType": "text"
     }

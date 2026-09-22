@@ -1,12 +1,18 @@
 # Browser preview and live editing
 
-The current local preview provides an embeddable SVG canvas in `@openpresentation/opf-editor/canvas`. OPF JSON remains the document; the canvas writes validated JSON Patch operations through an `EditorSession`. Draft edits render with the same SVG engine used for standalone previews. Completed edits produce one undoable change.
+Published editor 0.8.0 provides an embeddable SVG canvas in `@openpresentation/opf-editor/canvas`. OPF JSON remains the document; the canvas writes validated JSON Patch operations through an `EditorSession`. Draft edits render with the same SVG engine used for standalone previews. Completed edits produce one undoable change.
 
-This is a working preview release, not complete PowerPoint feature coverage. “Pixel perfect” is a fidelity target with specific prerequisites and remaining gaps described below.
+The published canvas covers the interactions below; complete PowerPoint feature coverage remains separate work. “Pixel perfect” is a fidelity target with specific prerequisites and remaining gaps described below.
 
 ## Install the published packages
 
-The verified public set is core 0.7.0, renderer 0.5.0, editor 0.4.0 and PPTX 0.5.1. Install with `npm install @openpresentation/opf@0.7.0 @openpresentation/opf-render@0.5.0 @openpresentation/opf-editor@0.4.0 @openpresentation/opf-pptx@0.5.1`. No paid service or provider account is required. The six agent skills install with `npx @openpresentation/cli@latest skills install`.
+Use Node 24 with core 0.11.0, renderer 0.9.0, editor 0.8.0 and PPTX 0.9.1:
+
+```sh
+npm install --save-exact @openpresentation/opf@0.11.0 @openpresentation/opf-render@0.9.0 @openpresentation/opf-editor@0.8.0 @openpresentation/opf-pptx@0.9.1
+```
+
+No paid service or provider account is required. The six agent skills install with `npx @openpresentation/cli@0.9.0 skills install`. See the [quickstart](quickstart.md) for an installed-package workflow and the [compatibility matrix](compatibility-matrix.md) for separately scoped browser and native evidence.
 
 For library development, separately regenerate unpublished local preview tarballs from sibling checkouts:
 
@@ -103,10 +109,10 @@ That is not a promise of identical raster pixels across browser engines, operati
 Still needed for the requested complete editor:
 
 1. Continuous mixed-style typing and calibrated caret positioning, bidi/IME/vertical-script coverage. Rich text selection, formatting, links, and selected-text replacement are available through the [SVG formatting toolbar and range API](rich-text.md).
-2. Object insertion/deletion and more placement constraints. **Arrange** supports track resizing, sibling block dragging, and moving complete blocks between existing groups or slides. Fixed promoted regions and individual object geometry still need specialized interactions.
+2. More placement constraints and specialized interactions for fixed promoted regions and individual object geometry. **Add content** and **Arrange** already support the insertion, duplication and deletion described below, track resizing, sibling block dragging, and moving complete blocks between existing groups or slides.
 3. Full visual implementations for specialized charts, media playback, image crops/effects, theme chrome, and every catalog preset. Generic property editing does not imply complete renderer support.
 4. Approved screenshot baselines across representative fonts/layouts/browsers, vertical metric tests, and native PPTX comparison/embedding work.
-5. Public package release with coordinated versions, smaller optional font packs, documentation examples, and browser regression automation in CI.
+5. Broader font-family/script coverage and independently loadable font packs; the current base and Office substitute packs do not cover every requested font. Published packages, documentation examples and installed-package browser CI already exist.
 
 Google Fonts supports browser loading through its CSS API, and its repository permits self-hosting subject to each font's license. The OPF fidelity path uses pinned files for reproducibility instead of depending on whichever variant a hosted stylesheet returns. Keep the font's accompanying license. Sources: [Google Fonts CSS API](https://developers.google.com/fonts/docs/css2), [Google Fonts files and licenses](https://github.com/google/fonts/blob/main/README.md).
 
@@ -114,7 +120,7 @@ The [font roadmap](plans/font-roadmap.md) covers the starter Office substitutes 
 
 ## Verification
 
-`pnpm demo:editor` builds the playground and `/canvas-tests.html`. The browser harness exercises real font registration, live drafts, text-position parity, one-step undo, cancellation, external edit conflicts, number validation, table cells, structured payloads, collection changes, and cleanup. Node tests cover escaped field paths, typed values, immutable drafts, font loader failures and aborts. The renderer's 126-deck smoke corpus still passes; its historical PNG golden baseline remains skipped because it targets another OPF commit.
+`pnpm demo:editor` builds the playground and `/canvas-tests.html`. The browser harness exercises real font registration, live drafts, text-position parity, one-step undo, cancellation, external edit conflicts, number validation, table cells, structured payloads, collection changes, and cleanup. Node tests cover escaped field paths, typed values, immutable drafts, font loader failures and aborts. The renderer's 126-deck corpus and the coordinated CI's pinned furniture PNG baseline are separate checks. Current installed-package and browser results are recorded in the [compatibility matrix](compatibility-matrix.md); neither those checks nor historical rasters establish general native Office parity.
 
 ## Copy, paste, files, and galleries
 
@@ -194,4 +200,4 @@ editor.applyPatch(prepared.patches, {rejectInvalid: true});
 // canvas.openInsertMenu(containerPath?, index?) opens the browser palette.
 ```
 
-The headless helpers return `{document, patches, path, changed}` and include expected-value guards. Preserve those guards when applying patches. They need no browser, AI provider, account or hosted service. Current APIs are in coordinated local previews; check installed exports before assuming public registry availability. `/create-tests.html` and its installed-package equivalent exercise creation, image bytes, regions, duplication, deletion, strict-fit rejection, keyboard focus and undo.
+The headless helpers return `{document, patches, path, changed}` and include expected-value guards. Preserve those guards when applying patches. They need no browser, AI provider, account or hosted service. These helpers are published in editor 0.8.0; use the coordinated versions above and check installed exports when working with older packages. `/create-tests.html` and its installed-package equivalent exercise creation, image bytes, regions, duplication, deletion, strict-fit rejection, keyboard focus and undo.

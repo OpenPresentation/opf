@@ -16,18 +16,35 @@ work here does not turn those failures into passing checks.
 
 | Work | Current evidence and limitation | Acceptance required |
 | --- | --- | --- |
-| Recover the Windows Office test host | The [latest native handoff](https://github.com/OpenPresentation/opf/pull/71#issuecomment-5673073461) requires user-reviewed recovery. Cleanup after the minimal picture control was not confirmed. | The Windows owner confirms recovery before further COM automation. No process killing or retries based on historical state. |
-| Open, save and reopen exported pictures and furniture | Nine exported files refused to open; valid ZIP/XML and portable browser tests did not establish Office acceptance. The missing slide-master declaration fix is already published in PPTX 0.8.0. | Re-run minimal and complete picture/header/footer controls after recovery, save/reopen in Office and inspect visible content and package changes. |
-| Preserve furniture provenance through native edits | Controlled XML tests cover current text/images, cleared fields, missing/duplicate/changed tags, slide reordering and metadata disagreement. Actual Office handling of `p:cSld/p:custDataLst` and `OPF_FURNITURE_V1` is unverified. | Native edit/save/reimport controls retain current content and generated intent without resurrecting old words. Review inheritance, empty/false definitions and damaged-tag fallback. Record formatting/geometry/crop reflow limits. |
-| Native tab positions and mixed-size table paragraphs | Historical maximum tab drift is 0.0226745605469pt against a 0.02pt gate. Soft-wrapped mixed-size table runs can require conflicting 64px and 48px tab stops within one native paragraph. | Resolve the shared/native representation, preserve literal source whitespace and editable rich runs, and pass the unchanged native tolerance. No offsets, silent hard breaks or relaxed gates. |
-| Native font and glyph identity | Family/style names do not prove which physical font supplied each glyph. Browser shaping and paint evidence is recorded separately. | Record permitted font bytes, actual substitutions, per-glyph physical identity where available, editable text and full-slide native comparisons on supported platforms. Restricted Aptos 4.40 remains excluded without compatible explicit permission. |
-| Notes-master element order | The independent Open XML SDK rejects production ordering; diagnostic reordered copies pass, but upstream warns about PowerPoint behavior. | Compare both controlled outputs in recovered Office before changing production order. Preserve the existing output until native evidence supports a correction. |
+| Recover the Windows Office test host | The owner confirmed recovery on September 21. Fresh [minimal native picture controls](../evidence/windows-native-picture-20260921/README.md) completed with exact owned closes on PowerPoint 16.0.20326.20158. Historical September 10 cleanup remains unconfirmed. | Continue one bounded worker at a time; after any block preserve evidence and inspect the host. No process killing or automatic Office retries. |
+| Open, save and reopen exported pictures and furniture | Minimal pictures and [native picture/furniture edits](../evidence/windows-native-edits-20260921/README.md) now pass their finite lifecycles with reviewed slides. Crop import reports its limitation; Change Picture changes geometry and longer edited furniture text can clip. | Broader image/crop/reflow acceptance requires its own reviewed native controls. These results do not retrospectively pass the historical nine-image failures. |
+| Preserve furniture provenance through native edits | [Nine semantic cases and the UI replacement control](../evidence/windows-native-edits-20260921/README.md) retain current text/images, explicit empty/false values and safe fallback for duplicate/missing/changed tags or metadata disagreement after actual Office edits/save/reopen. Deleted content is not resurrected. | This bounded current-content/provenance gate passes on the recorded host; general formatting, geometry and arbitrary round-trip fidelity remain separate. Native `p:hf` remains roadmap work. |
+| Native tab positions and mixed-size table paragraphs | The [fresh plain native tab control](../evidence/windows-native-tabs-fonts-20260921/README.md) reproduces 0.022655487060546875pt target error and 0.022678375244140625pt tab/literal difference against 0.02pt. Save/reopen drift is zero. One [read-only mixed-table observation](../evidence/windows-native-mixed-table-20260921/README.md) preserves all 245 characters, the literal tab and five rich runs, but native soft-line boundaries differ from the estimated preview. | Resolve the shared/native representation, preserve literal source whitespace and editable rich runs, and pass the unchanged native tolerance. The table observation does not establish edit/save/reopen or browser/native fidelity. No offsets, silent hard breaks or relaxed gates. |
+| Native font and glyph identity | One [four-face Carlito native edit control](../evidence/windows-native-tabs-fonts-20260921/README.md) passes exact text/style persistence, zero bounds drift and stable rasters; all owned registrations were removed. Family/style names and licensed input hashes do not identify every physical glyph font. Embedding was explicitly disabled. | Record actual substitutions and per-glyph physical identity where available; establish embedding separately. Browser shaping/paint remain separate. Restricted Aptos 4.40 remains excluded without compatible explicit permission. |
+| Notes-master element order | [Production ordering opens/saves/reopens](../evidence/windows-native-edits-20260921/README.md). Both the original reordered diagnostic and an isolated XML reorder retaining production ZIP order are refused by PowerPoint with 0x80070570. Original failures and separate empty-host inspections are preserved. | Preserve production ordering. SDK validity does not justify switching to the refused order; any proposed correction needs new native evidence. |
 
 For each completed item, retain the exact source/package identities, application
 and OS versions, font hashes/licenses, original failures, native files and
 reviewed images. Distinguish XML validity, semantic reimport, native editability
 and pixel agreement in the result. Native findings do not invalidate separately
 passing portable workflows, and portable results do not close native findings.
+
+The [offline tab-coordinate analysis](../evidence/windows-native-tab-analysis-20260921/REPORT.md)
+recomputes the nine retained plain-tab pairs from their exact JSON and saved
+DrawingML. Saved coordinates and their COM projections retain finer positions
+than the observed tabbed-character starts, which match a 0.05pt-compatible
+pattern for these inputs. The tested base lies on that grid, so relative and
+absolute snapping remain indistinguishable; no engine cause or compensation is
+established. The 0.02pt native gate still fails, and the separate 0.1px browser
+gate is unchanged and unevaluated by this analysis.
+
+The later [read-only font inventory](../evidence/windows-native-font-inventory-20260921/README.md)
+observes both Carlito and unexpected Aptos in `Presentation.Fonts`, even though
+the four authored text styles remain Carlito. The native allowlist fails;
+embedding has not been attempted. Its original parent cleanup failure is
+preserved alongside the offline JSON-array parser correction and raw evidence
+of one owned close and four temporary font removals. The corrected future
+worker has passed offline controls only and has never run Office.
 
 The broader [font roadmap](font-roadmap.md) and
 [ecosystem objective](ecosystem-objective-2026-09-09.md) remain open. This split

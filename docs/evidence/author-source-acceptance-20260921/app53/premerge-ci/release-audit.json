@@ -1,0 +1,48 @@
+{
+  "head": "b33dc18e8c35803386feb80e7822f240a9671243",
+  "tree": "64a0dbd702f43c87206c8a9fe16d06fe3ac68800",
+  "pr": "https://github.com/Data-Advantage/pptx-dev/pull/53",
+  "prStateAtReceipt": "OPEN",
+  "prDraftAtReceipt": true,
+  "mergeStateAtReceipt": "CLEAN",
+  "runs": [
+    {
+      "conclusion": "success",
+      "created_at": "2026-09-21T17:25:13Z",
+      "event": "pull_request",
+      "head_branch": "codex/author-source-preservation-20260921",
+      "head_sha": "b33dc18e8c35803386feb80e7822f240a9671243",
+      "html_url": "https://github.com/Data-Advantage/pptx-dev/actions/runs/35631886222",
+      "id": 35631886222,
+      "run_attempt": 1,
+      "status": "completed",
+      "updated_at": "2026-09-21T17:35:04Z"
+    },
+    {
+      "conclusion": "success",
+      "created_at": "2026-09-21T17:25:13Z",
+      "event": "pull_request",
+      "head_branch": "codex/author-source-preservation-20260921",
+      "head_sha": "b33dc18e8c35803386feb80e7822f240a9671243",
+      "html_url": "https://github.com/Data-Advantage/pptx-dev/actions/runs/35631886213",
+      "id": 35631886213,
+      "run_attempt": 1,
+      "status": "completed",
+      "updated_at": "2026-09-21T17:26:01Z"
+    }
+  ],
+  "allFourRequiredJobsSucceeded": true,
+  "ciNodeVersion": "v24.20.0",
+  "browserCounts": {
+    "linux": 29,
+    "windows": 29
+  },
+  "unitCounts": {
+    "linux": 627,
+    "windows": 627
+  },
+  "runAttempts": 1,
+  "timingArtifactRetained": true,
+  "inspectorTimingMissing": true,
+  "boundaries": "Read-only audit; no rerun, merge, push or browser action. CI success and preview status do not establish production or native/font acceptance."
+}

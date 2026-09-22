@@ -1,0 +1,41 @@
+{
+  "adoptedAt": "2026-09-21T21:45:35.872941+00:00",
+  "initialCuratedManifestSHA256": "5e9df0ba36c8635a7b283c05ce4f32aaf7f1da22cf7ab88a28ad1777a51d9dcc",
+  "source": "/private/tmp/opf-author-navigation-publication-20260921/final",
+  "all200OriginalManifestEntriesVerifiedBeforeCopy": true,
+  "originalSourceStagingUnchanged": true,
+  "originalOuterAttributesSHA256": "2a0c9a3ba5eb8741d015629d6deb16609c3f2f94639909e9790e2dcdca17b472",
+  "attributesPurpose": "Preserve exact captured CRLF/source/DOM whitespace; no product or test assertions/config changed. Initial staged diagnostics retained outside bundle.",
+  "exactWhitespacePaths": [
+    "acceptance/results/completion-preservation-Au-96e4e-act-source-in-one-undo-step/actual-source.json",
+    "acceptance/results/completion-preservation-Au-96e4e-act-source-in-one-undo-step/desired-source.json",
+    "acceptance/results/completion-preservation-Au-96e4e-act-source-in-one-undo-step/original-source.json",
+    "acceptance/results/inspector-actions-Inspecto-c6cfc-r-after-CRLF-source-ingress/crlf-input.json",
+    "acceptance/results/source-download-preservati-5105f-download-and-canvas-history/reordered-import-redo.opf.json",
+    "acceptance/results/source-download-preservati-5105f-download-and-canvas-history/reordered-import.opf.json",
+    "acceptance/results/source-download-preservati-f4120-download-and-canvas-history/canceled-and-unchanged.opf.json",
+    "acceptance/results/source-download-preservati-f4120-download-and-canvas-history/code-after-edit.opf.json",
+    "acceptance/results/source-download-preservati-f4120-download-and-canvas-history/code-untouched.opf.json",
+    "acceptance/results/source-download-preservati-f4120-download-and-canvas-history/edited.opf.json",
+    "acceptance/results/source-download-preservati-f4120-download-and-canvas-history/original-source.json",
+    "acceptance/results/source-download-preservati-f4120-download-and-canvas-history/pending-export.opf.json",
+    "acceptance/results/source-download-preservati-f4120-download-and-canvas-history/pending-redo.opf.json",
+    "acceptance/results/source-download-preservati-f4120-download-and-canvas-history/pending-undo.opf.json",
+    "acceptance/results/source-download-preservati-f4120-download-and-canvas-history/preview-untouched.opf.json",
+    "acceptance/results/source-download-preservati-f4120-download-and-canvas-history/redo.opf.json",
+    "acceptance/results/source-download-preservati-f4120-download-and-canvas-history/undo.opf.json",
+    "base/ci/extracted/browser-failures-windows-latest/inspector-actions-Inspecto-ddffb-urrent-draft-before-handoff/error-context.md",
+    "base/navigation-source-audit/source-excerpts.txt",
+    "base/review/01-playwright.config.ts.excerpt.txt",
+    "base/review/02-inspector-actions.spec.ts.excerpt.txt",
+    "base/windows-author-handoff-diagnosis/later-author-snapshot.md"
+  ],
+  "authoredMetadataUpdates": [
+    ".gitattributes",
+    "README.md",
+    "publication-integration.json",
+    "FINAL-SHA256SUMS.json"
+  ],
+  "finalTreeTypecheck": "passed after adoption; remaining edits only evidence metadata",
+  "freshPlatformCI": "required"
+}

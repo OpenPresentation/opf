@@ -1,0 +1,28 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "OPF Presentation",
+  "slides": [
+    {
+      "design": {
+        "background": {
+          "type": "solid",
+          "color": "#011842"
+        }
+      },
+      "title": "Gate E - Carlito",
+      "blocks": [
+        {
+          "type": "text",
+          "text": "Regular 18 | Bold 20 | Italic 22 | BoldItalic 24"
+        }
+      ]
+    }
+  ],
+  "author": "OpenPresentation",
+  "design": {
+    "dimensions": {
+      "widthInches": 13.333333333333334,
+      "heightInches": 7.5
+    }
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "artifactId": 10654847066,
+  "artifactName": "windows-readiness-windows-latest",
+  "archiveSha256": "98ab5951e26657d81aa265dc93ec5e3c11bb0a1885531de9da9426e678f5bec4",
+  "timingFile": "windows-readiness/svg-security-published-SVG-25408-rted-document-strings-inert/windows-readiness-timings.json",
+  "timingFileSha256": "a8f03790f286a7422c80236b9cb52174f0eae3d0dedde5382ad79c71e70d65f9",
+  "outcomeBeforeCollection": "passed",
+  "droppedDocuments": 0,
+  "errors": [],
+  "inspectorSnapshotRetained": false,
+  "inspectorPagehideFlushObserved": false,
+  "missingInspectorPagehideFlush": true,
+  "documents": [
+    {
+      "url": "http://127.0.0.1:4325/author",
+      "reason": "after-test",
+      "capturedAtMs": 3790.4000000000233,
+      "supported": [
+        "resource",
+        "longtask",
+        "navigation",
+        "paint"
+      ],
+      "observerFailures": [],
+      "droppedEntries": 0,
+      "counts": {
+        "resource": 89,
+        "navigation": 2,
+        "paint": 2,
+        "longtask": 6
+      },
+      "completedNavigationSnapshots": 1,
+      "incompleteNavigationSnapshots": 1,
+      "lastCompleteNavigation": {
+        "entryType": "navigation",
+        "url": "http://127.0.0.1:4325/author",
+        "startTime": 0,
+        "duration": 152.10000000009313,
+        "fetchStart": 1.5,
+        "domainLookupStart": 1.5,
+        "domainLookupEnd": 1.5,
+        "connectStart": 1.5,
+        "secureConnectionStart": 0,
+        "connectEnd": 1.5,
+        "requestStart": 3.1000000000931323,
+        "responseStart": 10.400000000023283,
+        "responseEnd": 19.300000000046566,
+        "transferSize": 3852,
+        "encodedBodySize": 3552,
+        "decodedBodySize": 15481,
+        "domInteractive": 103.70000000006985,
+        "domContentLoadedEventStart": 103.70000000006985,
+        "domContentLoadedEventEnd": 103.80000000004657,
+        "domComplete": 152,
+        "loadEventStart": 152.10000000009313,
+        "loadEventEnd": 152.10000000009313
+      },
+      "completedResourceEntries": 89,
+      "latestResourceResponseEndMs": 2087.3000000000466,
+      "longtasks": [
+        {
+          "startTime": 424.70000000006985,
+          "duration": 341
+        },
+        {
+          "startTime": 1124.8000000000466,
+          "duration": 197
+        },
+        {
+          "startTime": 1438.3000000000466,
+          "duration": 51
+        },
+        {
+          "startTime": 1523.6000000000931,
+          "duration": 90
+        },
+        {
+          "startTime": 2080.100000000093,
+          "duration": 525
+        },
+        {
+          "startTime": 3060.9000000000233,
+          "duration": 190
+        }
+      ],
+      "longtaskDurationSumMs": 1394
+    }
+  ],
+  "sanitizedUrlCountVerified": 92,
+  "limitations": "Only Author after-test timings were retained; Inspector pagehide delivery is missing. Earlier Inspector readiness cause remains unresolved. Completed-resource and generic longtask records do not identify pending requests or the responsible function. The observer and hooks can affect scheduling."
+}

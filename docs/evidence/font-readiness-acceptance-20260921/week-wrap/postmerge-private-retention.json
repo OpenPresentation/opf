@@ -1,0 +1,11 @@
+{
+  "capturedAt": "2026-09-21T22:23:30.867813+00:00",
+  "source": "/private/tmp/opf-author-navigation-acceptance-20260921/ci-postmerge",
+  "privateArchive": "/Users/michael/.codex/visualizations/2026/09/21/01a0c3f4-8cea-7f12-9033-8948f1a86619/week-wrap-private/app54-postmerge-windows-38-of-39",
+  "files": 134,
+  "bytes": 22518887,
+  "manifestSHA256": "c58de3d2b0cf99ecaed752fc86530e83c7d37497b6837b613ba43be1983a36cb",
+  "allOriginalHashesVerified": true,
+  "permissions": "directories0700/files0600",
+  "publication": "Only sanitized report, safe check metadata and hash inventories; raw artifacts remain private."
+}

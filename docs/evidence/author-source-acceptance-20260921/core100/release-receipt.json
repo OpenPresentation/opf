@@ -1,0 +1,60 @@
+{
+  "capturedAt": "2026-09-21T16:30:24.248132+00:00",
+  "repository": "OpenPresentation/opf",
+  "pr": "https://github.com/OpenPresentation/opf/pull/100",
+  "merge": "c3e35b92e53d12764f9b1b7487ccfb7325d5c1aa",
+  "reviewedHead": "4d8dffa0326545b34de63143a4b1666bb68fa96e",
+  "acceptedTree": "ee8c08988383ab19669555fe2d9962beeb56a691",
+  "reviewedTree": "ee8c08988383ab19669555fe2d9962beeb56a691",
+  "treeEqual": true,
+  "primaryHead": "c3e35b92e53d12764f9b1b7487ccfb7325d5c1aa",
+  "primaryStatus": "",
+  "preMergeChecks": [
+    {
+      "name": "packages",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/35623545210/job/106412198223",
+      "completedAt": "2026-09-21T16:18:09Z"
+    },
+    {
+      "name": "Verify OPF packages",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/OpenPresentation/opf/actions/runs/35623545300/job/106412197933",
+      "completedAt": "2026-09-21T16:10:44Z"
+    },
+    {
+      "name": "Cursor Bugbot",
+      "conclusion": "NEUTRAL",
+      "detailsUrl": "https://cursor.com/docs/bugbot",
+      "completedAt": "2026-09-21T16:07:26Z"
+    }
+  ],
+  "postMergeChecks": [
+    {
+      "databaseId": 35624778901,
+      "name": "OPF CI",
+      "headSha": "c3e35b92e53d12764f9b1b7487ccfb7325d5c1aa",
+      "conclusion": "success",
+      "status": "completed",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/35624778901",
+      "updatedAt": "2026-09-21T16:21:14Z"
+    },
+    {
+      "databaseId": 35624778863,
+      "name": "Coordinated public packages",
+      "headSha": "c3e35b92e53d12764f9b1b7487ccfb7325d5c1aa",
+      "conclusion": "success",
+      "status": "completed",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/35624778863",
+      "updatedAt": "2026-09-21T16:28:40Z"
+    }
+  ],
+  "issue88": {
+    "number": 88,
+    "state": "OPEN",
+    "title": "Roadmap: complete JSON and preview feature adoption across public surfaces",
+    "updatedAt": "2026-09-21T15:18:18Z",
+    "url": "https://github.com/OpenPresentation/opf/issues/88"
+  },
+  "scope": "Accepted documentation/evidence checkpoint. No package publication, deploy, issue mutation or browser execution by this reviewer. App canonical23/24, native/font/repair/geometry and source-preservation follow-up acceptance remain separate."
+}

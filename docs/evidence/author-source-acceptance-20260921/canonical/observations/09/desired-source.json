@@ -1,0 +1,35 @@
+{
+  "name"  :   "\u0043ompletion source preservation",
+  "author": "Browser reviewer",
+  "design": {
+    "theme": "minimal",
+    "fontScheme": "roboto"
+  },
+  "slides": [
+    {
+      "title": "A local decision",
+      "layout": "text-2x",
+      
+      "notes": "Keep these notes\n\tand their whitespace.",
+      "blocks": [{"text":[{"text":"Two  spaces stay.","bold":true},{"text":"\nAnd a second line.","italic":true}]},{"text":""}]
+    }
+  ],
+  "catalogs": {
+    "layouts": {
+      "records": [
+        {
+          "id": "document-layout",
+          "name": "AAA Document Layout",
+          "placeholders": [
+            {
+              "type": "title"
+            },
+            {
+              "type": "text"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

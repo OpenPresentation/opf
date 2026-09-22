@@ -1,0 +1,1349 @@
+{
+  "capturedAt": "2026-09-21T13:27:23.249Z",
+  "browser": "153.0.8010.12",
+  "pages": [
+    {
+      "name": "site-agents",
+      "requestedUrl": "https://www.openpresentation.org/agents",
+      "finalUrl": "https://www.openpresentation.org/agents",
+      "status": 200,
+      "title": "For agents and developers — OPF · OpenPresentation",
+      "sha256": "65c8791ab1b755e19796a02f6917faf4124fa773bac275ae226e8b8fa64e96ce",
+      "expectedText": "@openpresentation/cli@0.9.0",
+      "expectedTextPresent": true,
+      "pageErrors": [],
+      "headers": {
+        "access-control-allow-origin": "*",
+        "age": "0",
+        "cache-control": "public, max-age=0, must-revalidate",
+        "content-disposition": "inline",
+        "content-encoding": "br",
+        "content-type": "text/html; charset=utf-8",
+        "date": "Mon, 21 Sep 2026 13:27:11 GMT",
+        "etag": "W/\"bc9a4fe44280b073bdf163fa50ac40b1\"",
+        "server": "Vercel",
+        "strict-transport-security": "max-age=63072000",
+        "vary": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+        "x-matched-path": "/agents",
+        "x-nextjs-prerender": "1",
+        "x-nextjs-stale-time": "300",
+        "x-vercel-cache": "PRERENDER",
+        "x-vercel-id": "pdx1::xzdkj-1789997230525-fd583795e1cf"
+      },
+      "links": [
+        {
+          "text": "Developer docs",
+          "href": "https://www.openpresentation.org/docs"
+        },
+        {
+          "text": "Agent quickstart",
+          "href": "https://www.openpresentation.org/agents"
+        },
+        {
+          "text": "CLI",
+          "href": "https://www.openpresentation.org/docs/cli"
+        },
+        {
+          "text": "Agent skills",
+          "href": "https://www.openpresentation.org/docs/agent-skills"
+        },
+        {
+          "text": "FAQ",
+          "href": "https://www.openpresentation.org/docs/faq"
+        },
+        {
+          "text": "OPF vs other formats",
+          "href": "https://www.openpresentation.org/docs/comparison"
+        },
+        {
+          "text": "Google AI Studio",
+          "href": "https://www.openpresentation.org/docs/google-ai-studio"
+        },
+        {
+          "text": "OpenAI API",
+          "href": "https://www.openpresentation.org/docs/openai-structured-outputs"
+        },
+        {
+          "text": "Claude API",
+          "href": "https://www.openpresentation.org/docs/claude-structured-output"
+        },
+        {
+          "text": "Vercel AI SDK",
+          "href": "https://www.openpresentation.org/docs/vercel-ai-sdk"
+        },
+        {
+          "text": "Validate OPF",
+          "href": "https://www.openpresentation.org/docs/validate"
+        },
+        {
+          "text": "Playground",
+          "href": "https://www.openpresentation.org/playground"
+        },
+        {
+          "text": "Implicit blocks",
+          "href": "https://www.openpresentation.org/docs/implicit-blocks"
+        },
+        {
+          "text": "Regions",
+          "href": "https://www.openpresentation.org/docs/regions"
+        },
+        {
+          "text": "LLM authoring",
+          "href": "https://www.openpresentation.org/docs/llm-authoring"
+        },
+        {
+          "text": "Dynamic composition",
+          "href": "https://www.openpresentation.org/docs/dynamic-composition"
+        },
+        {
+          "text": "Live editor",
+          "href": "https://www.openpresentation.org/docs/live-editor"
+        },
+        {
+          "text": "Rich text",
+          "href": "https://www.openpresentation.org/docs/rich-text"
+        },
+        {
+          "text": "Content and tables",
+          "href": "https://www.openpresentation.org/docs/content-payloads"
+        },
+        {
+          "text": "Fonts",
+          "href": "https://www.openpresentation.org/docs/font-fidelity"
+        },
+        {
+          "text": "CSV and JSON data",
+          "href": "https://www.openpresentation.org/docs/data-import"
+        },
+        {
+          "text": "Open ecosystem",
+          "href": "https://www.openpresentation.org/docs/open-ecosystem"
+        },
+        {
+          "text": "How OPF works",
+          "href": "https://www.openpresentation.org/docs/reference/how-opf-works"
+        },
+        {
+          "text": "Format card",
+          "href": "https://www.openpresentation.org/docs/reference/format-card"
+        },
+        {
+          "text": "Content payloads",
+          "href": "https://www.openpresentation.org/docs/reference/content-payloads"
+        },
+        {
+          "text": "Design resolution",
+          "href": "https://www.openpresentation.org/docs/reference/design-resolution"
+        },
+        {
+          "text": "Content item overrides",
+          "href": "https://www.openpresentation.org/docs/reference/content-item-design-overrides"
+        },
+        {
+          "text": "Schema reference",
+          "href": "https://www.openpresentation.org/docs/reference/schema-reference"
+        },
+        {
+          "text": "Catalog schemas",
+          "href": "https://www.openpresentation.org/docs/reference/catalog-schema-reference"
+        },
+        {
+          "text": "Examples guide",
+          "href": "https://www.openpresentation.org/docs/reference/examples"
+        },
+        {
+          "text": "Spec overview",
+          "href": "https://www.openpresentation.org/spec"
+        },
+        {
+          "text": "OPF schema",
+          "href": "https://www.openpresentation.org/spec/schemas/opf"
+        },
+        {
+          "text": "OPF objects",
+          "href": "https://www.openpresentation.org/spec/objects"
+        },
+        {
+          "text": "Examples",
+          "href": "https://www.openpresentation.org/examples"
+        },
+        {
+          "text": "Catalogs",
+          "href": "https://www.openpresentation.org/catalogs"
+        },
+        {
+          "text": "Changelog",
+          "href": "https://www.openpresentation.org/changelog"
+        },
+        {
+          "text": "Docs",
+          "href": "https://www.openpresentation.org/docs"
+        },
+        {
+          "text": "CLI installation and command guide",
+          "href": "https://www.openpresentation.org/docs/cli"
+        },
+        {
+          "text": "verified package versions and release history",
+          "href": "https://www.openpresentation.org/changelog"
+        },
+        {
+          "text": "Installation targets, updates and manual migration",
+          "href": "https://www.openpresentation.org/docs/agent-skills"
+        },
+        {
+          "text": "download all skills and their references",
+          "href": "https://www.openpresentation.org/opf-agent-skills.tar.gz"
+        },
+        {
+          "text": "file manifest and SHA-256 checksums",
+          "href": "https://www.openpresentation.org/skills.json"
+        },
+        {
+          "text": "opf-authorCreate or revise OPF presentation documents from a brief, notes, or source material. Use for slide content and narrative authoring in Open Presentation Format, rather than generic PPTX manipulation.",
+          "href": "https://www.openpresentation.org/agent-docs/skills/opf-author/SKILL.md"
+        },
+        {
+          "text": "opf-editModify existing OPF documents or integrate OPF canvas, schema-inspector, transfer, and gallery APIs. Use for precise edits, undoable imports, live preview controls, and preserving document structure.",
+          "href": "https://www.openpresentation.org/agent-docs/skills/opf-edit/SKILL.md"
+        },
+        {
+          "text": "opf-exportRender OPF in a browser or export OPF to SVG, PNG, PDF, and PPTX; inspect PPTX imports. Use for font/asset fidelity, reproducible output, and distinguishing schema validity from visual/export parity.",
+          "href": "https://www.openpresentation.org/agent-docs/skills/opf-export/SKILL.md"
+        },
+        {
+          "text": "opf-inspectInspect OPF schema fields and catalog records or diagnose invalid OPF documents. Use for exact allowed options, schema-versus-reference warnings, and local format validation rather than visual-fidelity certification.",
+          "href": "https://www.openpresentation.org/agent-docs/skills/opf-inspect/SKILL.md"
+        },
+        {
+          "text": "opf-layoutArrange OPF blocks, nested groups, promoted regions, and pagination. Use for slide overflow, layout constraints, composition geometry, or preserving content while splitting slides.",
+          "href": "https://www.openpresentation.org/agent-docs/skills/opf-layout/SKILL.md"
+        },
+        {
+          "text": "opf-presetsDiscover and apply OPF themes, layouts, color and font schemes, narrative and audience presets, or gallery examples. Use for catalog IDs, inline overrides, design inheritance, and font choices.",
+          "href": "https://www.openpresentation.org/agent-docs/skills/opf-presets/SKILL.md"
+        },
+        {
+          "text": "llms.txt",
+          "href": "https://www.openpresentation.org/llms.txt"
+        },
+        {
+          "text": "full Markdown bundle",
+          "href": "https://www.openpresentation.org/llms-full.txt"
+        },
+        {
+          "text": "the CLI",
+          "href": "https://www.openpresentation.org/docs/cli"
+        },
+        {
+          "text": "Read the browser/editor guide",
+          "href": "https://www.openpresentation.org/docs/live-editor"
+        },
+        {
+          "text": "JSON Schema",
+          "href": "https://www.openpresentation.org/schema/opf/v1"
+        },
+        {
+          "text": "raw catalogs and reference files",
+          "href": "https://www.openpresentation.org/skills.json"
+        },
+        {
+          "text": "MIT-licensed foundation",
+          "href": "https://github.com/OpenPresentation/opf"
+        },
+        {
+          "text": "Architecture and licensing boundary",
+          "href": "https://www.openpresentation.org/docs/open-ecosystem"
+        },
+        {
+          "text": "CSV and JSON data",
+          "href": "https://www.openpresentation.org/docs/data-import"
+        },
+        {
+          "text": "Dynamic layouts",
+          "href": "https://www.openpresentation.org/docs/dynamic-composition"
+        },
+        {
+          "text": "Preset gallery",
+          "href": "https://pptx.gallery/"
+        },
+        {
+          "text": "NextCLI for agents",
+          "href": "https://www.openpresentation.org/docs/cli"
+        },
+        {
+          "text": "Start locally",
+          "href": "https://www.openpresentation.org/agents#start"
+        },
+        {
+          "text": "Agent skills",
+          "href": "https://www.openpresentation.org/agents#skills"
+        },
+        {
+          "text": "Choose an interface",
+          "href": "https://www.openpresentation.org/agents#interfaces"
+        },
+        {
+          "text": "Build on the open ecosystem",
+          "href": "https://www.openpresentation.org/agents#ecosystem"
+        }
+      ]
+    },
+    {
+      "name": "gallery-color",
+      "requestedUrl": "https://www.pptx.gallery/colors/cool-horizon",
+      "finalUrl": "https://www.pptx.gallery/colors/cool-horizon",
+      "status": 200,
+      "title": "Cool Horizon Color Scheme | OPF Color Schemes",
+      "sha256": "c2211c96075379cc51fee75a7ada7763005e8a8cac0b1995ebbb5382098748f0",
+      "expectedText": "@openpresentation/opf 0.11.0",
+      "expectedTextPresent": true,
+      "pageErrors": [],
+      "headers": {
+        "access-control-allow-origin": "*",
+        "age": "0",
+        "cache-control": "public, max-age=0, must-revalidate",
+        "content-disposition": "inline",
+        "content-encoding": "br",
+        "content-type": "text/html; charset=utf-8",
+        "date": "Mon, 21 Sep 2026 13:27:12 GMT",
+        "etag": "W/\"8e2fed0bd908e417871b18804f1f46fb\"",
+        "server": "Vercel",
+        "strict-transport-security": "max-age=63072000",
+        "vary": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+        "x-matched-path": "/colors/cool-horizon",
+        "x-nextjs-prerender": "1",
+        "x-nextjs-stale-time": "300",
+        "x-vercel-cache": "PRERENDER",
+        "x-vercel-id": "pdx1::wmmmf-1789997232039-21065e378883"
+      },
+      "links": [
+        {
+          "text": "Color Schemes",
+          "href": "https://www.pptx.gallery/colors"
+        },
+        {
+          "text": "Format card",
+          "href": "https://www.openpresentation.org/docs/reference/format-card"
+        },
+        {
+          "text": "Build a deck with Cool Horizon →",
+          "href": "https://storydapp.com/sign-up?utm_source=pptx-gallery&utm_medium=cta&utm_campaign=storyd-v2&utm_content=colors-detail-primary&utm_term=A"
+        },
+        {
+          "text": "Open in OPF Playground",
+          "href": "https://pptx.dev/playground?config=colors:cool-horizon"
+        },
+        {
+          "text": "Open in visual editor",
+          "href": "https://www.pptx.gallery/editor?config=color-schemes%3Acool-horizon"
+        },
+        {
+          "text": "Send to a teammate →",
+          "href": "https://storydapp.com/sign-up?utm_source=pptx-gallery&utm_medium=cta&utm_campaign=storyd-v2&utm_content=opf-developer-sibling&utm_term=A"
+        },
+        {
+          "text": "View registry.json→",
+          "href": "https://www.pptx.gallery/registry/color-schemes/cool-horizon.json"
+        }
+      ]
+    },
+    {
+      "name": "site-compatibility",
+      "requestedUrl": "https://www.openpresentation.org/docs/reference/compatibility-matrix",
+      "finalUrl": "https://www.openpresentation.org/docs/reference/compatibility-matrix",
+      "status": 200,
+      "title": "Compatibility matrix — OPF · OpenPresentation",
+      "sha256": "ec2180ec4f79dec3c9d31eda7e9e98c0b38fc7e416d94ab30af999d9408b6a9e",
+      "expectedText": "ColorRef paint needs a renderer release",
+      "expectedTextPresent": true,
+      "pageErrors": [],
+      "headers": {
+        "access-control-allow-origin": "*",
+        "age": "0",
+        "cache-control": "public, max-age=0, must-revalidate",
+        "content-disposition": "inline",
+        "content-encoding": "br",
+        "content-type": "text/html; charset=utf-8",
+        "date": "Mon, 21 Sep 2026 13:27:13 GMT",
+        "etag": "W/\"070c7ef9e00ef1f5be4824b2bb508c19\"",
+        "server": "Vercel",
+        "strict-transport-security": "max-age=63072000",
+        "vary": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+        "x-matched-path": "/docs/reference/compatibility-matrix",
+        "x-nextjs-prerender": "1",
+        "x-nextjs-stale-time": "300",
+        "x-vercel-cache": "PRERENDER",
+        "x-vercel-id": "pdx1::684hm-1789997233260-734d0cb27378"
+      },
+      "links": [
+        {
+          "text": "Developer docs",
+          "href": "https://www.openpresentation.org/docs"
+        },
+        {
+          "text": "Agent quickstart",
+          "href": "https://www.openpresentation.org/agents"
+        },
+        {
+          "text": "CLI",
+          "href": "https://www.openpresentation.org/docs/cli"
+        },
+        {
+          "text": "Agent skills",
+          "href": "https://www.openpresentation.org/docs/agent-skills"
+        },
+        {
+          "text": "FAQ",
+          "href": "https://www.openpresentation.org/docs/faq"
+        },
+        {
+          "text": "OPF vs other formats",
+          "href": "https://www.openpresentation.org/docs/comparison"
+        },
+        {
+          "text": "Google AI Studio",
+          "href": "https://www.openpresentation.org/docs/google-ai-studio"
+        },
+        {
+          "text": "OpenAI API",
+          "href": "https://www.openpresentation.org/docs/openai-structured-outputs"
+        },
+        {
+          "text": "Claude API",
+          "href": "https://www.openpresentation.org/docs/claude-structured-output"
+        },
+        {
+          "text": "Vercel AI SDK",
+          "href": "https://www.openpresentation.org/docs/vercel-ai-sdk"
+        },
+        {
+          "text": "Validate OPF",
+          "href": "https://www.openpresentation.org/docs/validate"
+        },
+        {
+          "text": "Playground",
+          "href": "https://www.openpresentation.org/playground"
+        },
+        {
+          "text": "Implicit blocks",
+          "href": "https://www.openpresentation.org/docs/implicit-blocks"
+        },
+        {
+          "text": "Regions",
+          "href": "https://www.openpresentation.org/docs/regions"
+        },
+        {
+          "text": "LLM authoring",
+          "href": "https://www.openpresentation.org/docs/llm-authoring"
+        },
+        {
+          "text": "Dynamic composition",
+          "href": "https://www.openpresentation.org/docs/dynamic-composition"
+        },
+        {
+          "text": "Live editor",
+          "href": "https://www.openpresentation.org/docs/live-editor"
+        },
+        {
+          "text": "Rich text",
+          "href": "https://www.openpresentation.org/docs/rich-text"
+        },
+        {
+          "text": "Content and tables",
+          "href": "https://www.openpresentation.org/docs/content-payloads"
+        },
+        {
+          "text": "Fonts",
+          "href": "https://www.openpresentation.org/docs/font-fidelity"
+        },
+        {
+          "text": "CSV and JSON data",
+          "href": "https://www.openpresentation.org/docs/data-import"
+        },
+        {
+          "text": "Open ecosystem",
+          "href": "https://www.openpresentation.org/docs/open-ecosystem"
+        },
+        {
+          "text": "How OPF works",
+          "href": "https://www.openpresentation.org/docs/reference/how-opf-works"
+        },
+        {
+          "text": "Format card",
+          "href": "https://www.openpresentation.org/docs/reference/format-card"
+        },
+        {
+          "text": "Content payloads",
+          "href": "https://www.openpresentation.org/docs/reference/content-payloads"
+        },
+        {
+          "text": "Design resolution",
+          "href": "https://www.openpresentation.org/docs/reference/design-resolution"
+        },
+        {
+          "text": "Content item overrides",
+          "href": "https://www.openpresentation.org/docs/reference/content-item-design-overrides"
+        },
+        {
+          "text": "Schema reference",
+          "href": "https://www.openpresentation.org/docs/reference/schema-reference"
+        },
+        {
+          "text": "Catalog schemas",
+          "href": "https://www.openpresentation.org/docs/reference/catalog-schema-reference"
+        },
+        {
+          "text": "Examples guide",
+          "href": "https://www.openpresentation.org/docs/reference/examples"
+        },
+        {
+          "text": "Spec overview",
+          "href": "https://www.openpresentation.org/spec"
+        },
+        {
+          "text": "OPF schema",
+          "href": "https://www.openpresentation.org/spec/schemas/opf"
+        },
+        {
+          "text": "OPF objects",
+          "href": "https://www.openpresentation.org/spec/objects"
+        },
+        {
+          "text": "Examples",
+          "href": "https://www.openpresentation.org/examples"
+        },
+        {
+          "text": "Catalogs",
+          "href": "https://www.openpresentation.org/catalogs"
+        },
+        {
+          "text": "Changelog",
+          "href": "https://www.openpresentation.org/changelog"
+        },
+        {
+          "text": "Docs",
+          "href": "https://www.openpresentation.org/docs"
+        },
+        {
+          "text": "View source ",
+          "href": "https://www.openpresentation.org/agent-docs/docs/compatibility-matrix.md"
+        },
+        {
+          "text": "the developer quickstart",
+          "href": "https://www.openpresentation.org/docs/reference/quickstart"
+        },
+        {
+          "text": "#",
+          "href": "https://www.openpresentation.org/docs/reference/compatibility-matrix#runtime"
+        },
+        {
+          "text": "#",
+          "href": "https://www.openpresentation.org/docs/reference/compatibility-matrix#coordinated-published-packages"
+        },
+        {
+          "text": "#",
+          "href": "https://www.openpresentation.org/docs/reference/compatibility-matrix#supported-in-this-set"
+        },
+        {
+          "text": "#",
+          "href": "https://www.openpresentation.org/docs/reference/compatibility-matrix#explicitly-not-shipped"
+        },
+        {
+          "text": "opf-render#24",
+          "href": "https://github.com/OpenPresentation/opf-render/issues/24"
+        },
+        {
+          "text": "opf#87",
+          "href": "https://github.com/OpenPresentation/opf/issues/87"
+        },
+        {
+          "text": "opf#88",
+          "href": "https://github.com/OpenPresentation/opf/issues/88"
+        },
+        {
+          "text": "pdf plan",
+          "href": "https://www.openpresentation.org/agent-docs/docs/plans/pdf-export.md"
+        },
+        {
+          "text": "diagrams plan",
+          "href": "https://www.openpresentation.org/agent-docs/docs/plans/diagrams-svg.md"
+        },
+        {
+          "text": "developer adoption",
+          "href": "https://www.openpresentation.org/agent-docs/docs/plans/developer-adoption-20260915.md"
+        },
+        {
+          "text": "#",
+          "href": "https://www.openpresentation.org/docs/reference/compatibility-matrix#predecessor-notes"
+        },
+        {
+          "text": "PreviousAI agent skills for OPF",
+          "href": "https://www.openpresentation.org/docs/reference/agent-skills"
+        },
+        {
+          "text": "NextCSV and JSON data in OPF",
+          "href": "https://www.openpresentation.org/docs/reference/data-import"
+        },
+        {
+          "text": "Runtime",
+          "href": "https://www.openpresentation.org/docs/reference/compatibility-matrix#runtime"
+        },
+        {
+          "text": "Coordinated published packages",
+          "href": "https://www.openpresentation.org/docs/reference/compatibility-matrix#coordinated-published-packages"
+        },
+        {
+          "text": "Supported in this set",
+          "href": "https://www.openpresentation.org/docs/reference/compatibility-matrix#supported-in-this-set"
+        },
+        {
+          "text": "Explicitly not shipped",
+          "href": "https://www.openpresentation.org/docs/reference/compatibility-matrix#explicitly-not-shipped"
+        },
+        {
+          "text": "Predecessor notes",
+          "href": "https://www.openpresentation.org/docs/reference/compatibility-matrix#predecessor-notes"
+        }
+      ]
+    },
+    {
+      "name": "site-quickstart",
+      "requestedUrl": "https://www.openpresentation.org/docs/reference/quickstart",
+      "finalUrl": "https://www.openpresentation.org/docs/reference/quickstart",
+      "status": 200,
+      "title": "Developer quickstart — OPF · OpenPresentation",
+      "sha256": "b6c271ff4cd1ea0c43a36f4d5bca8c0f41e7d453d28dee75ebaa260100951762",
+      "expectedText": "@openpresentation/opf-render@0.8.1",
+      "expectedTextPresent": true,
+      "pageErrors": [],
+      "headers": {
+        "access-control-allow-origin": "*",
+        "age": "0",
+        "cache-control": "public, max-age=0, must-revalidate",
+        "content-disposition": "inline",
+        "content-encoding": "br",
+        "content-type": "text/html; charset=utf-8",
+        "date": "Mon, 21 Sep 2026 13:27:14 GMT",
+        "etag": "W/\"8da36b7d57311953fee84164f594ea26\"",
+        "server": "Vercel",
+        "strict-transport-security": "max-age=63072000",
+        "vary": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+        "x-matched-path": "/docs/reference/quickstart",
+        "x-nextjs-prerender": "1",
+        "x-nextjs-stale-time": "300",
+        "x-vercel-cache": "PRERENDER",
+        "x-vercel-id": "pdx1::tbl2d-1789997234019-00d03332a843"
+      },
+      "links": [
+        {
+          "text": "Developer docs",
+          "href": "https://www.openpresentation.org/docs"
+        },
+        {
+          "text": "Agent quickstart",
+          "href": "https://www.openpresentation.org/agents"
+        },
+        {
+          "text": "CLI",
+          "href": "https://www.openpresentation.org/docs/cli"
+        },
+        {
+          "text": "Agent skills",
+          "href": "https://www.openpresentation.org/docs/agent-skills"
+        },
+        {
+          "text": "FAQ",
+          "href": "https://www.openpresentation.org/docs/faq"
+        },
+        {
+          "text": "OPF vs other formats",
+          "href": "https://www.openpresentation.org/docs/comparison"
+        },
+        {
+          "text": "Google AI Studio",
+          "href": "https://www.openpresentation.org/docs/google-ai-studio"
+        },
+        {
+          "text": "OpenAI API",
+          "href": "https://www.openpresentation.org/docs/openai-structured-outputs"
+        },
+        {
+          "text": "Claude API",
+          "href": "https://www.openpresentation.org/docs/claude-structured-output"
+        },
+        {
+          "text": "Vercel AI SDK",
+          "href": "https://www.openpresentation.org/docs/vercel-ai-sdk"
+        },
+        {
+          "text": "Validate OPF",
+          "href": "https://www.openpresentation.org/docs/validate"
+        },
+        {
+          "text": "Playground",
+          "href": "https://www.openpresentation.org/playground"
+        },
+        {
+          "text": "Implicit blocks",
+          "href": "https://www.openpresentation.org/docs/implicit-blocks"
+        },
+        {
+          "text": "Regions",
+          "href": "https://www.openpresentation.org/docs/regions"
+        },
+        {
+          "text": "LLM authoring",
+          "href": "https://www.openpresentation.org/docs/llm-authoring"
+        },
+        {
+          "text": "Dynamic composition",
+          "href": "https://www.openpresentation.org/docs/dynamic-composition"
+        },
+        {
+          "text": "Live editor",
+          "href": "https://www.openpresentation.org/docs/live-editor"
+        },
+        {
+          "text": "Rich text",
+          "href": "https://www.openpresentation.org/docs/rich-text"
+        },
+        {
+          "text": "Content and tables",
+          "href": "https://www.openpresentation.org/docs/content-payloads"
+        },
+        {
+          "text": "Fonts",
+          "href": "https://www.openpresentation.org/docs/font-fidelity"
+        },
+        {
+          "text": "CSV and JSON data",
+          "href": "https://www.openpresentation.org/docs/data-import"
+        },
+        {
+          "text": "Open ecosystem",
+          "href": "https://www.openpresentation.org/docs/open-ecosystem"
+        },
+        {
+          "text": "How OPF works",
+          "href": "https://www.openpresentation.org/docs/reference/how-opf-works"
+        },
+        {
+          "text": "Format card",
+          "href": "https://www.openpresentation.org/docs/reference/format-card"
+        },
+        {
+          "text": "Content payloads",
+          "href": "https://www.openpresentation.org/docs/reference/content-payloads"
+        },
+        {
+          "text": "Design resolution",
+          "href": "https://www.openpresentation.org/docs/reference/design-resolution"
+        },
+        {
+          "text": "Content item overrides",
+          "href": "https://www.openpresentation.org/docs/reference/content-item-design-overrides"
+        },
+        {
+          "text": "Schema reference",
+          "href": "https://www.openpresentation.org/docs/reference/schema-reference"
+        },
+        {
+          "text": "Catalog schemas",
+          "href": "https://www.openpresentation.org/docs/reference/catalog-schema-reference"
+        },
+        {
+          "text": "Examples guide",
+          "href": "https://www.openpresentation.org/docs/reference/examples"
+        },
+        {
+          "text": "Spec overview",
+          "href": "https://www.openpresentation.org/spec"
+        },
+        {
+          "text": "OPF schema",
+          "href": "https://www.openpresentation.org/spec/schemas/opf"
+        },
+        {
+          "text": "OPF objects",
+          "href": "https://www.openpresentation.org/spec/objects"
+        },
+        {
+          "text": "Examples",
+          "href": "https://www.openpresentation.org/examples"
+        },
+        {
+          "text": "Catalogs",
+          "href": "https://www.openpresentation.org/catalogs"
+        },
+        {
+          "text": "Changelog",
+          "href": "https://www.openpresentation.org/changelog"
+        },
+        {
+          "text": "Docs",
+          "href": "https://www.openpresentation.org/docs"
+        },
+        {
+          "text": "View source ",
+          "href": "https://www.openpresentation.org/agent-docs/docs/quickstart.md"
+        },
+        {
+          "text": "compatibility matrix",
+          "href": "https://www.openpresentation.org/docs/reference/compatibility-matrix"
+        },
+        {
+          "text": "#",
+          "href": "https://www.openpresentation.org/docs/reference/quickstart#versions"
+        },
+        {
+          "text": "docs/quickstart/developer-quickstart.opf.json",
+          "href": "https://www.openpresentation.org/agent-docs/docs/quickstart/developer-quickstart.opf.json"
+        },
+        {
+          "text": "#",
+          "href": "https://www.openpresentation.org/docs/reference/quickstart#author-validate-and-lint"
+        },
+        {
+          "text": "#",
+          "href": "https://www.openpresentation.org/docs/reference/quickstart#offline-fonts-composition-pagination"
+        },
+        {
+          "text": "#",
+          "href": "https://www.openpresentation.org/docs/reference/quickstart#edit-with-undo"
+        },
+        {
+          "text": "#",
+          "href": "https://www.openpresentation.org/docs/reference/quickstart#preview-and-export"
+        },
+        {
+          "text": "issue 87",
+          "href": "https://github.com/OpenPresentation/opf/issues/87"
+        },
+        {
+          "text": "#",
+          "href": "https://www.openpresentation.org/docs/reference/quickstart#prove-it"
+        },
+        {
+          "text": "#",
+          "href": "https://www.openpresentation.org/docs/reference/quickstart#what-this-does-not-cover"
+        },
+        {
+          "text": "opf-render#24",
+          "href": "https://github.com/OpenPresentation/opf-render/issues/24"
+        },
+        {
+          "text": "opf#87",
+          "href": "https://github.com/OpenPresentation/opf/issues/87"
+        },
+        {
+          "text": "opf#88",
+          "href": "https://github.com/OpenPresentation/opf/issues/88"
+        },
+        {
+          "text": "PreviousPR backlog and public adoption checkpoint — 2026-09-09",
+          "href": "https://www.openpresentation.org/docs/reference/pr-backlog-2026-09-09"
+        },
+        {
+          "text": "NextRich text measurement and output",
+          "href": "https://www.openpresentation.org/docs/reference/rich-text"
+        },
+        {
+          "text": "Versions",
+          "href": "https://www.openpresentation.org/docs/reference/quickstart#versions"
+        },
+        {
+          "text": "Author, validate and lint",
+          "href": "https://www.openpresentation.org/docs/reference/quickstart#author-validate-and-lint"
+        },
+        {
+          "text": "Offline fonts, composition, pagination",
+          "href": "https://www.openpresentation.org/docs/reference/quickstart#offline-fonts-composition-pagination"
+        },
+        {
+          "text": "Edit with undo",
+          "href": "https://www.openpresentation.org/docs/reference/quickstart#edit-with-undo"
+        },
+        {
+          "text": "Preview and export",
+          "href": "https://www.openpresentation.org/docs/reference/quickstart#preview-and-export"
+        },
+        {
+          "text": "Prove it",
+          "href": "https://www.openpresentation.org/docs/reference/quickstart#prove-it"
+        },
+        {
+          "text": "What this does not cover",
+          "href": "https://www.openpresentation.org/docs/reference/quickstart#what-this-does-not-cover"
+        }
+      ]
+    },
+    {
+      "name": "gallery-api",
+      "requestedUrl": "https://www.pptx.gallery/docs/api",
+      "finalUrl": "https://www.pptx.gallery/docs/api",
+      "status": 200,
+      "title": "API & Registry Reference | PPTX.gallery",
+      "sha256": "2727cd1f45d5bf29c69f3c01166bf83e2822ea97081a636713b0662ee3f59206",
+      "expectedText": "API",
+      "expectedTextPresent": true,
+      "pageErrors": [],
+      "headers": {
+        "access-control-allow-origin": "*",
+        "age": "0",
+        "cache-control": "public, max-age=0, must-revalidate",
+        "content-disposition": "inline",
+        "content-encoding": "br",
+        "content-type": "text/html; charset=utf-8",
+        "date": "Mon, 21 Sep 2026 13:27:15 GMT",
+        "etag": "W/\"03c249fce1fac482464793a0c174cd90\"",
+        "server": "Vercel",
+        "strict-transport-security": "max-age=63072000",
+        "vary": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+        "x-matched-path": "/docs/api",
+        "x-nextjs-prerender": "1",
+        "x-nextjs-stale-time": "300",
+        "x-vercel-cache": "PRERENDER",
+        "x-vercel-id": "pdx1::xclfk-1789997234932-970235fb5995"
+      },
+      "links": [
+        {
+          "text": "Layouts",
+          "href": "https://www.pptx.gallery/layouts"
+        },
+        {
+          "text": "GET /api/layouts.json",
+          "href": "https://www.pptx.gallery/api/layouts.json"
+        },
+        {
+          "text": "Color Schemes",
+          "href": "https://www.pptx.gallery/colors"
+        },
+        {
+          "text": "GET /api/color-schemes.json",
+          "href": "https://www.pptx.gallery/api/color-schemes.json"
+        },
+        {
+          "text": "Font Schemes",
+          "href": "https://www.pptx.gallery/font-schemes"
+        },
+        {
+          "text": "GET /api/font-schemes.json",
+          "href": "https://www.pptx.gallery/api/font-schemes.json"
+        },
+        {
+          "text": "Backgrounds",
+          "href": "https://www.pptx.gallery/backgrounds"
+        },
+        {
+          "text": "GET /api/backgrounds.json",
+          "href": "https://www.pptx.gallery/api/backgrounds.json"
+        },
+        {
+          "text": "Narratives",
+          "href": "https://www.pptx.gallery/narratives"
+        },
+        {
+          "text": "GET /api/narratives.json",
+          "href": "https://www.pptx.gallery/api/narratives.json"
+        },
+        {
+          "text": "Charts",
+          "href": "https://www.pptx.gallery/charts"
+        },
+        {
+          "text": "GET /api/charts.json",
+          "href": "https://www.pptx.gallery/api/charts.json"
+        },
+        {
+          "text": "Themes",
+          "href": "https://www.pptx.gallery/themes"
+        },
+        {
+          "text": "GET /api/themes.json",
+          "href": "https://www.pptx.gallery/api/themes.json"
+        },
+        {
+          "text": "Audiences",
+          "href": "https://www.pptx.gallery/audiences"
+        },
+        {
+          "text": "GET /api/audiences.json",
+          "href": "https://www.pptx.gallery/api/audiences.json"
+        },
+        {
+          "text": "Tones",
+          "href": "https://www.pptx.gallery/tones"
+        },
+        {
+          "text": "GET /api/tones.json",
+          "href": "https://www.pptx.gallery/api/tones.json"
+        },
+        {
+          "text": "Languages",
+          "href": "https://www.pptx.gallery/languages"
+        },
+        {
+          "text": "GET /api/languages.json",
+          "href": "https://www.pptx.gallery/api/languages.json"
+        },
+        {
+          "text": "Socials",
+          "href": "https://www.pptx.gallery/socials"
+        },
+        {
+          "text": "GET /api/socials.json",
+          "href": "https://www.pptx.gallery/api/socials.json"
+        },
+        {
+          "text": "Headers & Footers",
+          "href": "https://www.pptx.gallery/headers-footers"
+        },
+        {
+          "text": "GET /api/headers-footers.json",
+          "href": "https://www.pptx.gallery/api/headers-footers.json"
+        },
+        {
+          "text": "Content Blocks",
+          "href": "https://www.pptx.gallery/blocks"
+        },
+        {
+          "text": "GET /api/blocks.json",
+          "href": "https://www.pptx.gallery/api/blocks.json"
+        },
+        {
+          "text": "Image Treatments",
+          "href": "https://www.pptx.gallery/image-treatments"
+        },
+        {
+          "text": "GET /api/image-treatments.json",
+          "href": "https://www.pptx.gallery/api/image-treatments.json"
+        },
+        {
+          "text": "/registry.json",
+          "href": "https://www.pptx.gallery/registry.json"
+        },
+        {
+          "text": "/llms.txt",
+          "href": "https://www.pptx.gallery/llms.txt"
+        },
+        {
+          "text": "/sitemap.xml",
+          "href": "https://www.pptx.gallery/sitemap.xml"
+        },
+        {
+          "text": "/api/search-index.json",
+          "href": "https://www.pptx.gallery/api/search-index.json"
+        },
+        {
+          "text": "How PPTX.gallery works",
+          "href": "https://www.pptx.gallery/docs"
+        },
+        {
+          "text": "PPTX.dev engine & API",
+          "href": "https://pptx.dev/"
+        }
+      ]
+    },
+    {
+      "name": "pptx-reference-layer",
+      "requestedUrl": "https://www.pptx.dev/docs/opf/reference-layer",
+      "finalUrl": "https://www.pptx.dev/docs/opf/reference-layer",
+      "status": 200,
+      "title": "OPF Reference Layer – pptx.dev",
+      "sha256": "568ae13718e6faa5502a5c29bbf59bfa98fe6dcb84ee4e75efdba73c149ffe84",
+      "expectedText": "0.9.1",
+      "expectedTextPresent": true,
+      "pageErrors": [],
+      "headers": {
+        "age": "0",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "content-encoding": "br",
+        "content-type": "text/html; charset=utf-8",
+        "date": "Mon, 21 Sep 2026 13:27:17 GMT",
+        "link": "</_next/static/immutable/media/797e433ab948586e-s.p.1v5bejj26fx9h.woff2>; rel=preload; as=\"font\"; crossorigin=\"\"; type=\"font/woff2\", </_next/static/immutable/media/caa3a2e1cccd8315-s.p.0zr6hhvz-h9nw.woff2>; rel=preload; as=\"font\"; crossorigin=\"\"; type=\"font/woff2\", </_next/static/immutable/media/f141b5b7abe57afc-s.p.3bm7l-ln3bnu5.woff2>; rel=preload; as=\"font\"; crossorigin=\"\"; type=\"font/woff2\"",
+        "server": "Vercel",
+        "strict-transport-security": "max-age=63072000",
+        "vary": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+        "x-clerk-auth-reason": "session-token-and-uat-missing",
+        "x-clerk-auth-status": "signed-out",
+        "x-matched-path": "/docs/opf/reference-layer",
+        "x-powered-by": "Next.js",
+        "x-vercel-cache": "MISS",
+        "x-vercel-id": "pdx1::iad1::hkhpm-1789997237690-56dc98a6787c"
+      },
+      "links": [
+        {
+          "text": "OPF Spec",
+          "href": "https://www.pptx.dev/docs/opf"
+        },
+        {
+          "text": "4761091",
+          "href": "https://github.com/OpenPresentation/opf/commit/4761091e9e8c801fcc8fd8d8475402b4b79ff0b2"
+        },
+        {
+          "text": "format-card.md",
+          "href": "https://github.com/OpenPresentation/opf/blob/main/docs/format-card.md"
+        },
+        {
+          "text": "Open Inspector →",
+          "href": "https://www.pptx.dev/inspector"
+        }
+      ]
+    },
+    {
+      "name": "pptx-api",
+      "requestedUrl": "https://www.pptx.dev/docs/api",
+      "finalUrl": "https://www.pptx.dev/docs/api",
+      "status": 200,
+      "title": "OpenAPI (Swagger) – pptx.dev",
+      "sha256": "7c205a546dc2828009b74175f08032bca2db93b8f4111c06dd4d6918008e18a0",
+      "expectedText": "API",
+      "expectedTextPresent": true,
+      "pageErrors": [],
+      "headers": {
+        "age": "0",
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "content-encoding": "br",
+        "content-type": "text/html; charset=utf-8",
+        "date": "Mon, 21 Sep 2026 13:27:18 GMT",
+        "link": "</_next/static/immutable/media/797e433ab948586e-s.p.1v5bejj26fx9h.woff2>; rel=preload; as=\"font\"; crossorigin=\"\"; type=\"font/woff2\", </_next/static/immutable/media/caa3a2e1cccd8315-s.p.0zr6hhvz-h9nw.woff2>; rel=preload; as=\"font\"; crossorigin=\"\"; type=\"font/woff2\", </_next/static/immutable/media/f141b5b7abe57afc-s.p.3bm7l-ln3bnu5.woff2>; rel=preload; as=\"font\"; crossorigin=\"\"; type=\"font/woff2\"",
+        "server": "Vercel",
+        "strict-transport-security": "max-age=63072000",
+        "vary": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+        "x-clerk-auth-reason": "session-token-and-uat-missing",
+        "x-clerk-auth-status": "signed-out",
+        "x-matched-path": "/docs/api",
+        "x-powered-by": "Next.js",
+        "x-vercel-cache": "MISS",
+        "x-vercel-id": "pdx1::iad1::gq4gb-1789997238277-0940b009cf84"
+      },
+      "links": [
+        {
+          "text": "API documentation",
+          "href": "https://www.pptx.dev/docs"
+        },
+        {
+          "text": "CLI",
+          "href": "https://www.pptx.dev/docs/cli"
+        },
+        {
+          "text": "Download openapi.yaml",
+          "href": "https://www.pptx.dev/openapi.yaml"
+        }
+      ]
+    }
+  ],
+  "resources": [
+    {
+      "name": "site-compatibility-raw",
+      "url": "https://www.openpresentation.org/agent-docs/docs/compatibility-matrix.md",
+      "status": 200,
+      "headers": {
+        "access-control-allow-origin": "*",
+        "age": "0",
+        "cache-control": "public, max-age=0, must-revalidate",
+        "content-disposition": "inline; filename=\"compatibility-matrix.md\"",
+        "content-encoding": "br",
+        "content-type": "text/markdown; charset=utf-8",
+        "date": "Mon, 21 Sep 2026 13:27:19 GMT",
+        "etag": "W/\"f0c964023ab26cd7cab48b42a2bf3e4e\"",
+        "last-modified": "Mon, 21 Sep 2026 13:27:19 GMT",
+        "server": "Vercel",
+        "strict-transport-security": "max-age=63072000",
+        "x-content-type-options": "nosniff",
+        "x-matched-path": "/agent-docs/docs/compatibility-matrix.md",
+        "x-vercel-cache": "MISS",
+        "x-vercel-id": "pdx1::vg2zd-1789997239626-69f7c9916375",
+        "transfer-encoding": "chunked"
+      },
+      "sha256": "7348b244b708a7d038a91b7c8394962abe50352cc5b2b44be227fa66c1a06eb2",
+      "byteLength": 4819,
+      "savedLines": "all"
+    },
+    {
+      "name": "site-quickstart-raw",
+      "url": "https://www.openpresentation.org/agent-docs/docs/quickstart.md",
+      "status": 200,
+      "headers": {
+        "access-control-allow-origin": "*",
+        "age": "0",
+        "cache-control": "public, max-age=0, must-revalidate",
+        "content-disposition": "inline; filename=\"quickstart.md\"",
+        "content-encoding": "br",
+        "content-type": "text/markdown; charset=utf-8",
+        "date": "Mon, 21 Sep 2026 13:27:20 GMT",
+        "etag": "W/\"ccb6b36feeafb5593f3593178653be76\"",
+        "last-modified": "Mon, 21 Sep 2026 13:27:20 GMT",
+        "server": "Vercel",
+        "strict-transport-security": "max-age=63072000",
+        "x-content-type-options": "nosniff",
+        "x-matched-path": "/agent-docs/docs/quickstart.md",
+        "x-vercel-cache": "MISS",
+        "x-vercel-id": "pdx1::xclfk-1789997239831-f674778f4354",
+        "transfer-encoding": "chunked"
+      },
+      "sha256": "4e5ad1db8828d9a6fecf908b7d94fb98309d323cb40dede5efa4a7129753f52c",
+      "byteLength": 5690,
+      "savedLines": "all"
+    },
+    {
+      "name": "site-readme-raw",
+      "url": "https://www.openpresentation.org/agent-docs/README.md",
+      "status": 200,
+      "headers": {
+        "access-control-allow-origin": "*",
+        "age": "0",
+        "cache-control": "public, max-age=0, must-revalidate",
+        "content-disposition": "inline; filename=\"README.md\"",
+        "content-encoding": "br",
+        "content-type": "text/markdown; charset=utf-8",
+        "date": "Mon, 21 Sep 2026 13:27:20 GMT",
+        "etag": "W/\"d30ae4dae7597ecaf1a7828a8e6dfb65\"",
+        "last-modified": "Mon, 21 Sep 2026 13:27:20 GMT",
+        "server": "Vercel",
+        "strict-transport-security": "max-age=63072000",
+        "x-content-type-options": "nosniff",
+        "x-matched-path": "/agent-docs/README.md",
+        "x-vercel-cache": "MISS",
+        "x-vercel-id": "pdx1::pdlwr-1789997240214-45cfc0b9472b",
+        "transfer-encoding": "chunked"
+      },
+      "sha256": "fcf10935b2a70eee08d00e9214319dafd908fce61c6cd4308dbd607495c3c8d4",
+      "byteLength": 11797,
+      "savedLines": "all"
+    },
+    {
+      "name": "site-data-import-raw",
+      "url": "https://www.openpresentation.org/agent-docs/docs/data-import.md",
+      "status": 200,
+      "headers": {
+        "access-control-allow-origin": "*",
+        "age": "0",
+        "cache-control": "public, max-age=0, must-revalidate",
+        "content-disposition": "inline; filename=\"data-import.md\"",
+        "content-encoding": "br",
+        "content-type": "text/markdown; charset=utf-8",
+        "date": "Mon, 21 Sep 2026 13:27:20 GMT",
+        "etag": "W/\"16b01746b7e59c2d270a467052d2e90a\"",
+        "last-modified": "Mon, 21 Sep 2026 13:27:20 GMT",
+        "server": "Vercel",
+        "strict-transport-security": "max-age=63072000",
+        "x-content-type-options": "nosniff",
+        "x-matched-path": "/agent-docs/docs/data-import.md",
+        "x-vercel-cache": "MISS",
+        "x-vercel-id": "pdx1::775f7-1789997240352-557fb43d8d71",
+        "transfer-encoding": "chunked"
+      },
+      "sha256": "cb0becd976ab0885eed8e0c71b1351e56d2f989f8766a303aa22852eab169065",
+      "byteLength": 4671,
+      "savedLines": "all"
+    },
+    {
+      "name": "site-dynamic-composition-raw",
+      "url": "https://www.openpresentation.org/agent-docs/docs/dynamic-composition.md",
+      "status": 200,
+      "headers": {
+        "access-control-allow-origin": "*",
+        "age": "0",
+        "cache-control": "public, max-age=0, must-revalidate",
+        "content-disposition": "inline; filename=\"dynamic-composition.md\"",
+        "content-encoding": "br",
+        "content-type": "text/markdown; charset=utf-8",
+        "date": "Mon, 21 Sep 2026 13:27:21 GMT",
+        "etag": "W/\"f536ab3accf8b5fd57879915859cf521\"",
+        "last-modified": "Mon, 21 Sep 2026 13:27:21 GMT",
+        "server": "Vercel",
+        "strict-transport-security": "max-age=63072000",
+        "x-content-type-options": "nosniff",
+        "x-matched-path": "/agent-docs/docs/dynamic-composition.md",
+        "x-vercel-cache": "MISS",
+        "x-vercel-id": "pdx1::775f7-1789997240672-52f4457b3f0e",
+        "transfer-encoding": "chunked"
+      },
+      "sha256": "aa6a5a7d07312cd4ea5495c6acfd1fb10e28147de595c644616a54e75bc1efe5",
+      "byteLength": 35601,
+      "savedLines": "all"
+    },
+    {
+      "name": "gallery-llms",
+      "url": "https://www.pptx.gallery/llms.txt",
+      "status": 200,
+      "headers": {
+        "access-control-allow-origin": "*",
+        "age": "0",
+        "cache-control": "public, max-age=120, s-maxage=120, stale-while-revalidate=86400",
+        "content-disposition": "inline",
+        "content-encoding": "br",
+        "content-type": "text/plain; charset=utf-8",
+        "date": "Mon, 21 Sep 2026 13:27:21 GMT",
+        "etag": "W/\"ead431adc757fe4ad8361ff13ae42684\"",
+        "server": "Vercel",
+        "strict-transport-security": "max-age=63072000",
+        "vary": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+        "x-content-type-options": "nosniff",
+        "x-matched-path": "/llms.txt",
+        "x-vercel-cache": "PRERENDER",
+        "x-vercel-id": "pdx1::nrzwh-1789997241467-3b79bc1b8550",
+        "transfer-encoding": "chunked"
+      },
+      "sha256": "a97c6756f9962073b8ac4aa93df2dc34316c0eac21b9b3311a785f5dd7ceec03",
+      "byteLength": 168297,
+      "savedLines": 100
+    },
+    {
+      "name": "pptx-api-llms",
+      "url": "https://www.pptx.dev/docs/api/llms.txt",
+      "status": 200,
+      "headers": {
+        "access-control-allow-origin": "*",
+        "age": "0",
+        "cache-control": "public, max-age=3600, s-maxage=86400",
+        "content-disposition": "inline",
+        "content-encoding": "br",
+        "content-type": "text/plain; charset=utf-8",
+        "date": "Mon, 21 Sep 2026 13:27:22 GMT",
+        "etag": "W/\"2bbe5989425206e836dd598ba1906d39\"",
+        "server": "Vercel",
+        "strict-transport-security": "max-age=63072000",
+        "vary": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+        "x-clerk-auth-reason": "session-token-and-uat-missing",
+        "x-clerk-auth-status": "signed-out",
+        "x-content-type-options": "nosniff",
+        "x-matched-path": "/docs/api/llms.txt",
+        "x-vercel-cache": "PRERENDER",
+        "x-vercel-id": "pdx1::65z2d-1789997242220-e35042505aa7",
+        "transfer-encoding": "chunked"
+      },
+      "sha256": "7470edd18bb5434180992dd91c1852b53b07bd829690fa47a6dede8d3bf6fff5",
+      "byteLength": 3194,
+      "savedLines": "all"
+    },
+    {
+      "name": "site-skills",
+      "url": "https://www.openpresentation.org/skills.json",
+      "status": 200,
+      "headers": {
+        "access-control-allow-origin": "*",
+        "age": "0",
+        "cache-control": "public, max-age=0, must-revalidate",
+        "content-disposition": "inline; filename=\"skills.json\"",
+        "content-encoding": "br",
+        "content-type": "application/json; charset=utf-8",
+        "date": "Mon, 21 Sep 2026 13:27:23 GMT",
+        "etag": "W/\"63d9d6236dd6a0f916bd434bdbb639d5\"",
+        "last-modified": "Mon, 21 Sep 2026 13:27:22 GMT",
+        "server": "Vercel",
+        "strict-transport-security": "max-age=63072000",
+        "x-content-type-options": "nosniff",
+        "x-matched-path": "/skills.json",
+        "x-vercel-cache": "MISS",
+        "x-vercel-id": "pdx1::nrzwh-1789997242494-991da110cdca",
+        "transfer-encoding": "chunked"
+      },
+      "sha256": "f89ed03a26cf0b2a35e34669057c71c183fa232a46ac248406855cd302ccbe14",
+      "byteLength": 3458541,
+      "savedLines": "all"
+    }
+  ]
+}

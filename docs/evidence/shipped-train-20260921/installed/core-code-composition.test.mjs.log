@@ -1,0 +1,14 @@
+✔ accepted code uses rounded cells and preserves body compatibility without repeated explanation measurements (2.985375ms)
+✔ candidate penalties include complete code metadata and charge overflowing leaves once (5.81575ms)
+✔ strict ancestors reject code metadata paths and cannot be weakened by descendants (95.729916ms)
+✔ explicit code placement and weights remain authoritative even when metadata overflows (5.553625ms)
+✔ pagination preserves exact code bytes, metadata, ranges and floors across wide and portrait slides (111.706709ms)
+✔ irreducible code metadata rejects pagination even after earlier content or with an empty body (89.000625ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 382.420334
