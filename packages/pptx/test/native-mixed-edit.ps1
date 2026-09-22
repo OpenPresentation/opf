@@ -1,6 +1,6 @@
 # Owned presentation only. This script never calls Application.Quit.
 # A timeout may terminate only the owned helper inside native-process.ps1.
-# EmbedFonts is out of scope: SaveAs is SaveAs($savedPath,24) with no third argument.
+# EmbedFonts is explicitly disabled: SaveAs is SaveAs($savedPath,24,0).
 param(
     [string]$OutputDirectory,
     [string]$InputPresentation,
@@ -69,11 +69,10 @@ function Assert-MixedEditVerifierAst([string]$Path) {
         if($member -is [System.Management.Automation.Language.StringConstantExpressionAst] -and $member.Value -ceq 'Kill') { throw 'Mixed-size edit harness must not kill Office or any other process' }
         $save=Get-MixedEditOwnedSaveAs $invoke
         if($null -eq $save) { continue }
-        if($save.embed -eq (-1)) { throw 'EmbedFonts is out of scope; do not call SaveAs with a third argument of (-1)' }
-        if($save.argumentCount -ne 2) { throw 'SaveAs on $savedPath must be exactly SaveAs($savedPath,24)' }
+        if($save.argumentCount -ne 3 -or $save.embed -ne 0) { throw 'SaveAs on $savedPath must be exactly SaveAs($savedPath,24,0)' }
         $ownedSaves+=$save
     }
-    if($ownedSaves.Count -ne 1) { throw 'Mixed-size edit harness must call SaveAs($savedPath,24) exactly once' }
+    if($ownedSaves.Count -ne 1) { throw 'Mixed-size edit harness must call SaveAs($savedPath,24,0) exactly once' }
     return $ast
 }
 function Invoke-MixedEditPureRegression {
@@ -99,9 +98,14 @@ function Invoke-MixedEditPureRegression {
         $script:unexpectedCall=$false
         try { Invoke-MixedEditCom 'pure.forbidden-followup' { $script:unexpectedCall=$true } } catch { }
         if($script:unexpectedCall) { throw 'Operation ran after the failure latch' }
-        [ordered]@{passed=$true;officeOrComCalls=0;embedFontsArgument=$null;tolerancePoints=0.02;saveAsArgumentCount=2} | ConvertTo-Json -Depth 4
+        [ordered]@{passed=$true;officeOrComCalls=0;embedFontsArgument=0;tolerancePoints=0.02;saveAsArgumentCount=3} | ConvertTo-Json -Depth 4
     } finally {
-        if(Test-Path -LiteralPath $pureRoot) { Remove-Item -LiteralPath $pureRoot -Recurse -Force -ErrorAction SilentlyContinue }
+        if(Test-Path -LiteralPath $pureRoot) {
+            $resolvedPureRoot=(Resolve-Path -LiteralPath $pureRoot).Path
+            $resolvedTempRoot=[IO.Path]::GetFullPath([IO.Path]::GetTempPath()).TrimEnd([IO.Path]::DirectorySeparatorChar,[IO.Path]::AltDirectorySeparatorChar)
+            if(-not $resolvedPureRoot.StartsWith($resolvedTempRoot + [IO.Path]::DirectorySeparatorChar,[StringComparison]::OrdinalIgnoreCase) -or -not ([IO.Path]::GetFileName($resolvedPureRoot)).StartsWith('opf-mixed-edit-pure-',[StringComparison]::Ordinal)) { throw 'Refusing to remove an unexpected pure-regression path' }
+            Remove-Item -LiteralPath $resolvedPureRoot -Recurse -Force
+        }
     }
 }
 
@@ -147,7 +151,7 @@ function Get-MixedEditExpectations {
 function Read-MixedEditFontFixture([string]$FixtureRoot) {
     $generationPath=(Resolve-Path -LiteralPath (Join-Path $FixtureRoot 'generation.json')).Path
     $generation=Get-Content -LiteralPath $generationPath -Raw -Encoding UTF8 | ConvertFrom-Json
-    if($generation.registration.flags -ne 0) { throw 'generation.registration.flags must be 0' }
+    if(-not ($generation.registration.flags -is [int]) -or $generation.registration.flags -ne 0) { throw 'generation.registration.flags must be the JSON integer 0' }
     $licensePath=(Resolve-Path -LiteralPath (Join-Path $FixtureRoot 'LICENSE_FONT')).Path
     if((Get-MixedEditSha256 $licensePath) -cne $script:MixedEditLicenseSha256) { throw 'Font fixture LICENSE_FONT is not the reviewed Carlito license' }
     $fonts=@($generation.fonts)
@@ -284,11 +288,11 @@ $report=[ordered]@{
     lastStage=$script:lastStage
     lastStatus=$script:lastStatus
     error=$null
-    scope='Open one owned mixed-size table snapshot, replace the final run exact->saved at the same length, save without an EmbedFonts argument, reopen that exact path read-only, and record content, style, outer geometry, and native line intervals.'
+    scope='Open one owned mixed-size table snapshot, replace the final run exact->saved at the same length, save with EmbedFonts explicitly false, reopen that exact path read-only, and record content, style, outer geometry, and native line intervals.'
     limitations=@(
         'The known read-only preview intervals [0,78), [78,172), [172,245) are a recorded limit. They are not a content or 0.02pt geometry failure.',
         'Native font properties do not identify which physical TTF drew each glyph.',
-        'EmbedFonts is out of scope. This harness does not request font embedding.'
+        'Embedded-font fidelity is out of scope. SaveAs passes msoFalse explicitly and does not request font embedding.'
     )
 }
 function Write-MixedEditReport {
@@ -501,7 +505,7 @@ try {
     Invoke-MixedEditCom 'edited.export.png' { $slide.Export($editedPng,'PNG',1280,720) }
     $report.edited.raster.sha256=Get-MixedEditSha256 $editedPng
     Write-MixedEditReport
-    Invoke-MixedEditCom 'edited.presentation.saveAs-owned-copy' { $script:presentation.SaveAs($savedPath,24) }
+    Invoke-MixedEditCom 'edited.presentation.saveAs-owned-copy' { $script:presentation.SaveAs($savedPath,24,0) }
     $script:ownedPresentationPath=$savedPath
     Write-MixedEditReport
     Close-OwnedMixedEdit 'edited.presentation' $savedPath
