@@ -12,8 +12,8 @@ Every item's criteria must all hold before it is `done`. Dates are UTC.
 
 | Status | Count |
 | --- | --- |
-| done | 21 |
-| review / in-progress | 13 |
+| done | 18 |
+| review / in-progress | 16 |
 | todo | 10 |
 
 **Headline progress: 4 of 900 gallery values perfect by parity** (FF-38 on
@@ -39,8 +39,8 @@ first. See the
 | FF-04 | Native inventory of the unedited fixture, with and without temporary fonts | opf-pptx / opf | FF-03 | todo |  |
 | FF-05 | Aptos root cause determined | opf | FF-02, FF-04 | todo | [brief](aptos-origin-brief.md) |
 | FF-06 | Font-flow map across all 14 dimensions and environments | opf | none | done | [font-flow-map.md](font-flow-map.md), [opf#116](https://github.com/OpenPresentation/opf/pull/116) |
-| FF-07 | Exporter writes chosen fonts into theme and run East Asian/complex-script slots, with `lang`/RTL | opf-pptx | FF-05, FF-06, FF-18 | done | [opf-pptx#70](https://github.com/OpenPresentation/opf-pptx/pull/70) `0e886f30`, [opf#134](https://github.com/OpenPresentation/opf/pull/134) `9695bf37`, [opf#135](https://github.com/OpenPresentation/opf/pull/135) `3512af0b` |
-| FF-08 | Exporter leaks no hard-coded or default font in any part | opf-pptx | FF-05, FF-06, FF-17 | done | [opf-pptx#69](https://github.com/OpenPresentation/opf-pptx/pull/69) `405963ce` |
+| FF-07 | Exporter writes chosen fonts into theme and run East Asian/complex-script slots, with `lang`/RTL | opf-pptx | FF-05, FF-06, FF-18 | review | merged: [opf-pptx#70](https://github.com/OpenPresentation/opf-pptx/pull/70) `0e886f30`, [opf#134](https://github.com/OpenPresentation/opf/pull/134) `9695bf37`, [opf#135](https://github.com/OpenPresentation/opf/pull/135) `3512af0b`; pending FF-05 native root-cause evidence (criteria are subject to FF-05) |
+| FF-08 | Exporter leaks no hard-coded or default font in any part | opf-pptx | FF-05, FF-06, FF-17 | review | merged: [opf-pptx#69](https://github.com/OpenPresentation/opf-pptx/pull/69) `405963ce`; pending FF-05 native root-cause evidence (empty values must be allowed by FF-05) |
 | FF-09 | Offline pairwise matrix across the 14 gallery dimensions | opf (ecosystem) | FF-07, FF-08, FF-19, FF-20 | todo |  |
 | FF-10 | Matrix in CI on ubuntu, windows, macos via a packed TypeScript consumer | opf | FF-09 | todo |  |
 | FF-11 | Export determinism independent of host fonts, OS, locale and timezone | opf-pptx / opf | FF-06 | todo |  |
@@ -74,7 +74,7 @@ first. See the
 | FF-36 | pptx.gallery items show their measured support status | pptx-gallery, opf | FF-23 | review | [pptx-gallery#41](https://github.com/Data-Advantage/pptx-gallery/pull/41) |
 | FF-37 | pptx.gallery as a first-class OPF catalog: spec URLs serve schema-valid records; core bundles a pinned, drift-checked snapshot | opf, pptx-gallery | none | review | [opf#128](https://github.com/OpenPresentation/opf/pull/128), [pptx-gallery#46](https://github.com/Data-Advantage/pptx-gallery/pull/46) |
 | FF-38 | Parity audit harness and progress scoreboard (defines "perfect") | opf | FF-23 | done | [opf#122](https://github.com/OpenPresentation/opf/pull/122) `e18df26b`, [PARITY.md](gallery-support/parity/PARITY.md) |
-| FF-39 | Alignment parity: preview and PPTX text alignment and anchors agree | opf-pptx, opf-render | FF-38 | done | [opf-render#37](https://github.com/OpenPresentation/opf-render/pull/37) `3f34448e`, [opf-pptx#72](https://github.com/OpenPresentation/opf-pptx/pull/72) `0330e6d0`; 39 values still left-aligned in preview but centered in PPTX (FF-29, [opf#132](https://github.com/OpenPresentation/opf/pull/132)) |
+| FF-39 | Alignment parity: preview and PPTX text alignment and anchors agree | opf-pptx, opf-render | FF-38 | review | merged: [opf-render#37](https://github.com/OpenPresentation/opf-render/pull/37) `3f34448e`, [opf-pptx#72](https://github.com/OpenPresentation/opf-pptx/pull/72) `0330e6d0`; 39 values still report "alignment l (preview) vs ctr (pptx)" (reverse mismatches; see FF-29, [opf#132](https://github.com/OpenPresentation/opf/pull/132)) |
 | FF-R0 | Prior: mixed-size table edit/save/reopen and first embed attempt | opf, opf-pptx | none | done | [opf#114](https://github.com/OpenPresentation/opf/pull/114), [opf#115](https://github.com/OpenPresentation/opf/pull/115) |
 
 ## Acceptance criteria
@@ -561,15 +561,18 @@ Append one dated line per state change. Newest last.
   merges, with the parity and presence audits re-run on current mains (opf
   `a74f3f6`, opf-render `bc436f3`, opf-pptx `9092954`, pptx-gallery
   `f17e9ae`).
-  - Done: FF-02, FF-07, FF-08, FF-19, FF-20, FF-23, FF-32, FF-35b, FF-38 and
-    FF-39.
+  - Done: FF-02, FF-19, FF-20, FF-23, FF-32, FF-35b and FF-38.
+  - All PRs merged but kept in review: FF-07 and FF-08 (pending FF-05 native
+    root-cause evidence) and FF-39 (39 values still report "alignment l
+    (preview) vs ctr (pptx)").
   - Engine PRs merged, gallery half open: FF-25, FF-26, FF-27 and FF-34. FF-22b,
     FF-24b, FF-29 and FF-31 are in review.
   - Parity: 4 of 900 perfect (`calibri`, `courier-new`,
     `times-new-roman`, `roboto`). Checks passed: geometry 774 (was 390),
     text 759 (326), fills 674 (734), zOrder 784 (880), slideSize 900,
     typefaces 900 (0), re-import 899 (0), font resolution 5, theme 900,
-    mapping 672 (890).
+    mapping 672 (890). Alignment is reduced but not cleared: 39 values
+    still report "alignment l (preview) vs ctr (pptx)".
   - Fills 842 to 734 at opf#122 was the chart-colour comparison starting to
     run (108 values fail only on it), not a regression. The new mapping,
     z-order and fills failures follow the FF-26 slide image; the harness does
@@ -579,4 +582,4 @@ Append one dated line per state change. Newest last.
     15/15 `partial`, headers/footers 1/10 `works`, backgrounds 2/6
     (`photography` with its asset `works`). Audit B marks all colour schemes
     and themes `broken` because its probes predate FF-24.
-  - Counts: done 21, review 13, todo 10 (44 rows).
+  - Counts: done 18, review 16, todo 10 (44 rows).

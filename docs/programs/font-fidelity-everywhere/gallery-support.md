@@ -174,11 +174,15 @@ substitute).
 
 ### Universal blockers
 
-One failure still blocks nearly every value. Four earlier universal blockers
-are cleared on current mains: the theme `clrScheme` (FF-24), re-import
-(FF-32; 899 pass, and the one other value loses its background with a
-specific diagnostic), package typefaces (FF-08; 900 pass) and centered
-versus left-aligned text (FF-39).
+One failure still blocks nearly every value. Three earlier universal blockers
+no longer fail on current mains: the theme `clrScheme` (FF-24; theme 900
+pass), re-import (FF-32; 899 pass, and the one other value loses its
+background with a specific diagnostic) and package typefaces (FF-08; 900
+pass). FF-07 and FF-08 stay in review pending FF-05. The fourth, centered
+preview text against left-aligned PPTX text (FF-39), is much reduced but not
+cleared: text passes for 759 and geometry for 774. 39 values still show the
+reverse mismatch, "alignment l (preview) vs ctr (pptx)", so FF-39 stays in
+review.
 
 | Blocker | Check (passed) | Values hit | Fix |
 | --- | --- | --- | --- |
@@ -194,7 +198,7 @@ Other recurring parity failures:
   values), and preview labels are missing from the chart cache (46 values;
   FF-22, FF-22b).
 - Text: 45 values have a preview line missing in the PPTX, and 39 are still
-  left-aligned in the preview but centered in the PPTX (FF-29, opf#132).
+  left-aligned in the preview but centered in the PPTX (FF-39, FF-29 opf#132).
 
 The per-item parity status is in `support-status.json` (`parity`, plus
 `parityOnly` for charts). The full report, with a before/after table against
@@ -246,7 +250,7 @@ works" column keeps the first measurement's wording unless marked "Now".
 | [Layouts](#layouts) | 485 | 289 | 126 | 0 | 0 | 70 | 0 | 0/485 | Snippets validate, preview and export. Only 30 layouts are in the core catalog. Now: re-import keeps design and emits specific diagnostics (FF-32), so 289 are `works`. |
 | [Color schemes](#color-schemes) | 14 | 0 | 0 | 0 | 0 | 0 | 14 | 0/14 | Now: theme `clrScheme` and `schemeClr` references (FF-24). The 14 `broken` are an audit B probe artifact; see the measurement notes. |
 | [Font schemes](#font-schemes) | 93 | 0 | 93 | 0 | 0 | 0 | 0 | 4/93 | Export without a font registry writes the chosen heading/body families for all 93. Now: `calibri`, `courier-new`, `times-new-roman` and `roboto` are perfect by parity. |
-| [Languages](#languages) | 93 | 0 | 0 | 93 | 0 | 0 | 0 | 0/93 | Audit B still classes the field as read by no engine. Parity fails only font resolution. |
+| [Languages](#languages) | 93 | 0 | 0 | 93 | 0 | 0 | 0 | 0/93 | Now: runs carry the language tag, RTL languages export `rtl`, and re-import keeps the language (93/93). The `schema-only` class is a stale classifier; see [Languages](#languages). Parity fails only font resolution. |
 | [Backgrounds](#backgrounds) | 6 | 2 | 4 | 0 | 0 | 0 | 0 | 0/6 | Solid and gradient work end to end. Now: `photography` with its asset is `works`; the three pattern slugs still collapse in the gallery snippet (pptx-gallery#43). |
 | [Narratives](#narratives) | 10 | 10 | 0 | 0 | 0 | 0 | 0 | 0/10 | Now: every id resolves in core (FF-28). `works` only because the exporter-written `ppt/tags/opfDocument.xml` part changes; the preview is identical when the field is removed. |
 | [Charts](#charts) | 76 | | | | | | | 0/76 | Core catalog reduced to the 25 Aspose.Slides-supported types (FF-22, opf#121); the gallery half is pending. No presence status yet. Parity: geometry passes; chart text passes for 26, colours for 9. |
@@ -381,33 +385,58 @@ gallery inlines, not in the core catalog), all `partial`.
 
 ## Languages
 
-93 values, all `schema-only`. Every id resolves in core.
+93 values, all classed `schema-only` by audit B. That class and three of its
+reason strings are stale: `summarize.mjs` always adds "no engine reads
+`language`" and "re-import drops language", and it adds "RTL language but no
+rtl attribute emitted" by language id, whatever was measured. The measured
+fields in `audit-b/results.json` on current mains (opf `a74f3f6`, opf-pptx
+`9092954`, opf-render `bc436f3`) show the following. Every id resolves in core.
 
-- **Works.** Nothing reads `language`. Removing it leaves preview and export
-  byte-identical; the visible font change comes only from the gallery snippet
-  injecting the language record's `design.fontScheme`.
-- **Doesn't.**
-  - Runs are exported as `lang="en-US"` for all 93 (wrong for 91; the two
-    English entries match by coincidence). The 5 right-to-left languages
-    (Arabic, Hebrew, Pashto, Persian, Urdu) get no `rtl`.
-  - The language's font scheme is not bundled for any of the 93 (strict
-    preview `font-unavailable`). The 66 Latin, Cyrillic and Greek languages
-    that use `aptos` preview through the office pack (Aptos to Carlito); 26 non-Latin languages fail
-    both packs and hit `missing-glyph` on bundled Roboto; 1 fails both packs
-    but its sample text is covered by Roboto.
-  - Theme and run `ea`/`cs` slots are empty.
-- **Re-import.** `language` is dropped silently.
+- **Works (FF-07, FF-19, FF-32).**
+  - Removing `language` changes both the preview and the export for all 93
+    (`previewIdentical` false). The export parts that change include the
+    slide, masters, theme and `ppt/tags/opfDocument.xml`.
+  - Runs carry the language tag, not a fixed `en-US`. 84 languages export
+    exactly their region form, for example Arabic `ar-SA`, Hebrew `he-IL` and
+    Japanese `ja-JP`. Only the two English entries export `en-US`.
+  - The 9 remaining languages export a normalised tag. Their catalog
+    `bcp47` differs, which trips the audit's literal comparison:
+    - `zh-Hans` to `zh-CN` and `zh-Hant` to `zh-TW`;
+    - `pa-Guru` to `pa-IN` and `vi-Latn` to `vi-VN`;
+    - `no` to `nb-NO`, `tl` to `fil-PH` and `zsm` to `ms-MY`;
+    - `ctg` to `bn-BD` and `ber-Latn` to `tzm-Latn-DZ`.
+  - Right-to-left languages export `rtl` on 39 paragraphs: Arabic, Hebrew,
+    Pashto, Persian, Urdu and Punjabi (Shahmukhi).
+  - For the 24 languages whose scheme is not `aptos`, theme major/minor `ea`
+    and `cs` carry the language's font, for example Arabic Typesetting, Shonar
+    Bangla and Microsoft YaHei. No foreign typeface appears in any export.
+  - Re-import returns the language id for 93 of 93, and the font scheme with
+    it.
+- **Remaining gaps.**
+  - The language's font scheme is not bundled for any of the 93, so the strict
+    preview reports `font-unavailable`. The 66 languages on `aptos` preview
+    through the office pack (Aptos to Carlito). The other 27 fail both packs;
+    26 of them also hit `missing-glyph` on bundled Roboto (Amharic, Arabic,
+    Armenian, the Indic scripts, CJK, Georgian, Hebrew, Khmer, Persian, Pashto,
+    Thai, Urdu and others). This is FF-31 and FF-19.
+  - Theme `ea`/`cs` stay empty for 69 languages: the 66 on `aptos`, plus
+    Amharic (Nyala), Armenian and Georgian (Sylfaen). Whether those empty
+    values are allowed depends on FF-05.
+  - The engines do not yet derive the font scheme from `language` alone
+    (`engineAppliesLanguageFontScheme` false for all 93). The visible font
+    comes from the `design.fontScheme` that the gallery snippet injects.
+  - The audit B classifier needs the follow-up noted in the
+    [measurement notes](#measurement-notes-2026-09-23-re-run).
 - **Native finding (FF-04, not yet a merged evidence bundle).** PowerPoint's
   `Presentation.Fonts` for an unedited exporter deck lists a nameless font and
   `Aptos` at open. Filling theme major/minor `ea`/`cs` (Carlito) did not change
   that list, so the empty script slots are not the source of the at-open
-  `Aptos` (FF-05 continues). Filling the slots is still required for script
-  fidelity.
-- **Parity (FF-38).** 0 of 93 perfect. Beyond the universal blockers,
-  re-import drops `language` in all 93 values without a diagnostic.
-- **Fixes.** FF-18 (language/script model), FF-07 (theme and run `ea`/`cs`,
-  `lang`, `rtl`), FF-19 (renderer script fonts), FF-31 (font availability),
-  FF-32 (re-import).
+  `Aptos` (FF-05 continues).
+- **Parity (FF-38).** 0 of 93 perfect. Geometry, text, fills, z-order,
+  typefaces, re-import, theme and mapping pass for all 93; only font
+  resolution fails.
+- **Fixes.** FF-31 (font availability), FF-19 (script fonts), FF-05 (empty
+  `ea`/`cs` policy), and an audit B classifier follow-up.
 
 ## Backgrounds
 
