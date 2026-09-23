@@ -183,8 +183,7 @@ image letterboxed in its frame) compares as the image the preview shows. A
 slide-image picture on a slide whose preview has no slide image fails
 mapping, and so does a preview slide image with no picture.
 
-Every picture whose preview `<image>` has a known intrinsic size (all 408
-pictures in the current run) also gets a crop-position check. A positive crop
+Every picture also gets a crop-position check. A positive crop
 always leaves the visible rect equal to the frame, so the frame check alone
 cannot tell `l=25000 r=25000` from `l=50000 r=0`. The harness takes the full
 image rect (the frame widened by `a:srcRect`) and the preview's placed image
@@ -195,6 +194,16 @@ It is measured at the visible edges rather than at the clipped-away image
 edges, where `a:srcRect`'s 1/100000 quantization is magnified by the crop
 ratio. Any NaN or infinite coordinate or delta, including a crop with
 `l+r` or `t+b` of 100000 or more, fails geometry, harness-wide.
+
+The check needs the preview image's intrinsic size, read from its data URI:
+PNG, GIF, JPEG (after EXIF orientation), WebP, or SVG (`width`/`height`, else
+`viewBox`). `preserveAspectRatio="none"` needs no size. When the size is
+unknown (an external `href` or an unreadable image) the check is not skipped:
+the picture gets a near `picture crop unmeasured (preview image size
+unknown)`, and `meta.cropCheck` in `parity-results.json` counts pictures,
+measured and unmeasured (408, 408 and 0 in the current run). The picture frame
+check uses the same placed image, clipped to the `<image>` viewport, so a
+`meet` image is compared at its `preserveAspectRatio` alignment.
 
 ## `support-status.json`
 

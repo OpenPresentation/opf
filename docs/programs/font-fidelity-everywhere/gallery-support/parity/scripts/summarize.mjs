@@ -31,6 +31,7 @@ const pct = (rs, c) => { const p = rs.filter(r => r.checks?.[c] === 'pass').leng
 for (const d of dims) { const rs = results.filter(r => dimKey(r) === d); L.push(`| ${d} | ${rs.length} | ${count(rs, 'perfect')} | ${count(rs, 'near')} | ${count(rs, 'mismatch')} | ${CHECKS.map(c => pct(rs, c)).join(' | ')} |`); }
 L.push(`| **all** | ${results.length} | ${count(results, 'perfect')} | ${count(results, 'near')} | ${count(results, 'mismatch')} | ${CHECKS.map(c => pct(results, c)).join(' | ')} |`, '');
 L.push('The check columns count values that pass that check. A value is perfect only when every check passes.', '');
+if (meta.cropCheck) L.push(`Picture crop-position check: ${meta.cropCheck.measured} of ${meta.cropCheck.pictures} pictures measured; ${meta.cropCheck.unmeasured} unmeasured (preview image size unknown, reported as near).`, '');
 if (base) {
   const bk = r => `${r.dimension}|${r.id}|${r.variant}`; const bm = new Map(base.results.map(r => [bk(r), r]));
   L.push('## Before / after', '', `Baseline heads: ${Object.entries(base.meta.heads).map(([k, v]) => `${k} \`${(v ?? '?').slice(0, 7)}\``).join(', ')}.`, '', '| dimension | perfect before | perfect after | near before | near after | improved | regressed |', '|---|---|---|---|---|---|---|');

@@ -27,7 +27,7 @@ Two measurements are recorded here:
 
 | Repository | Presence audits A and B | Parity scoreboard (FF-38) | Previous parity run (opf#122) | Parity baseline (history) |
 | --- | --- | --- | --- | --- |
-| opf (core) | `a74f3f6` | `b1753ef` | `c278532` | `53be042` |
+| opf (core) | `a74f3f6` | `6263985` | `c278532` | `53be042` |
 | opf-render | `bc436f3` | `bc436f3` | `47d19b2` | `e500ed9` |
 | opf-pptx | `9092954` | `9092954` | `5b657c9` | `cf0bc0c` |
 | opf-editor | `214ae69` (audit B) | not used | not used | not used |
@@ -39,7 +39,7 @@ merged mains. They include FF-07, FF-08, FF-17, FF-18, FF-19, FF-24, FF-28,
 FF-32, FF-35, FF-35b and FF-39, the merged engine halves of FF-25, FF-26,
 FF-27 and FF-34 (opf-pptx#65 included), FF-31's exporter half
 (opf-pptx#63) and FF-22's core half. The parity scoreboard was re-run at opf
-`b1753ef` (opf#138; documentation and harness only since `a74f3f6`) after
+`6263985` (opf#139; documentation and harness only since `a74f3f6`) after
 the harness learned to map the FF-26 slide-image picture and, since, to fail
 non-finite geometry and check crop position; the run before the mapping is
 kept at

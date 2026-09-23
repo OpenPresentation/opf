@@ -599,3 +599,10 @@ Append one dated line per state change. Newest last.
   `f17e9ae`: no check or class changed (4 of 900 perfect, geometry 880);
   19 cropped-image values now record a maximum delta of 0.001 to 0.004 pt
   (srcRect quantization).
+- 2026-09-23: Parity harness never skips the crop-position check silently.
+  Preview image sizes are read for PNG, GIF, JPEG (with EXIF orientation),
+  WebP and SVG; a picture whose size is still unknown gets a near
+  `picture crop unmeasured`, counted in `meta.cropCheck` (408 of 408 measured
+  at opf `6263985`, opf-render `bc436f3`, opf-pptx `9092954`, pptx-gallery
+  `f17e9ae`). The frame check honours `meet` alignment. No check, class or
+  reported difference changed.
