@@ -4,6 +4,7 @@
   "name": "Norwegian",
   "code": "NOR",
   "bcp47": "no",
+  "ooxmlLang": "nb-NO",
   "script": "Latn",
   "direction": "ltr",
   "fontScheme": "aptos",

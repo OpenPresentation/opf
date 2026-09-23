@@ -4,6 +4,7 @@
   "name": "Chittagonian",
   "code": "CTG",
   "bcp47": "ctg",
+  "ooxmlLang": "bn-BD",
   "script": "Beng",
   "direction": "ltr",
   "fontScheme": "vrinda",

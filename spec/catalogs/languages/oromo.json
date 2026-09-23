@@ -4,6 +4,7 @@
   "name": "Oromo",
   "code": "ORM",
   "bcp47": "om",
+  "ooxmlLang": "om-ET",
   "script": "Latn",
   "direction": "ltr",
   "fontScheme": "aptos",

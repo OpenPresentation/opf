@@ -4,6 +4,7 @@
   "name": "Persian",
   "code": "FAS",
   "bcp47": "fa",
+  "ooxmlLang": "fa-IR",
   "script": "Arab",
   "direction": "rtl",
   "fontScheme": "arabic-typesetting",

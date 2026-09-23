@@ -4,6 +4,7 @@
   "name": "Armenian",
   "code": "HYE",
   "bcp47": "hy",
+  "ooxmlLang": "hy-AM",
   "script": "Armn",
   "direction": "ltr",
   "fontScheme": "sylfaen",

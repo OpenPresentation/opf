@@ -4,6 +4,7 @@
   "name": "Marathi",
   "code": "MAR",
   "bcp47": "mr",
+  "ooxmlLang": "mr-IN",
   "script": "Deva",
   "direction": "ltr",
   "fontScheme": "mangal",

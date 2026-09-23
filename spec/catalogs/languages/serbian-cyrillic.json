@@ -4,6 +4,7 @@
   "name": "Serbian (Cyrillic)",
   "code": "SRP",
   "bcp47": "sr-Cyrl",
+  "ooxmlLang": "sr-Cyrl-RS",
   "script": "Cyrl",
   "direction": "ltr",
   "fontScheme": "aptos",

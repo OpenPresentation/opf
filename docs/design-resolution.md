@@ -174,7 +174,8 @@ OOXML gives each theme font (major and minor) three script slots: `latin`, East 
 ```
   latin          design font scheme heading/body (the chain above)
   eastAsian      1. design.fontScheme.eastAsian      explicit slot
-  complexScript  2. the scheme's own major/minor     when languageFamily is ea / cs
+  complexScript  2. the scheme's own major/minor     when languageFamily is ea / cs and its
+                                                     languages list is empty or names the language
                  3. the language's font scheme       when the language's script uses the slot
                  4. the latin family                 otherwise
 ```
@@ -183,7 +184,7 @@ OOXML gives each theme font (major and minor) three script slots: `latin`, East 
 - The language's `fontScheme` applies to PowerPoint output and `googleFontScheme` to Google Slides output. For Latin-script languages, the design font scheme always supplies the latin slot.
 - A Latin deck therefore repeats its heading/body family in `ea`/`cs`. A Japanese deck with `design.fontScheme: { "major": "Carlito", "minor": "Carlito" }` keeps the Latin family in `latin` and uses Meiryo (PowerPoint) or Noto Sans JP (Google Slides) in `ea`. `design.fontScheme.eastAsian` / `.complexScript` (`{ "major": ..., "minor": ... }`) name a script font explicitly, for example for CJK text inside a Latin deck.
 
-`@openpresentation/opf` exports `resolveScriptFonts(document, { app, slideIndex })`, which returns the heading and body slots, the BCP-47 `lang`, `script`, `direction`/`rtl`, and the per-script supplemental theme font. Renderers and exporters should use it rather than re-deriving slots. The model, the OOXML mapping and the open questions are in [`programs/font-fidelity-everywhere/script-font-model.md`](./programs/font-fidelity-everywhere/script-font-model.md). The renderer and exporter adopt it in separate changes, so their output is unchanged by this model alone.
+`@openpresentation/opf` exports `resolveScriptFonts(document, { app, slideIndex })`, which returns the heading and body slots, the OOXML `lang` (a curated `ooxmlLang` culture tag such as `ja-JP` or `ms-MY`, or an authored region tag), the canonical `bcp47` tag, `script`, `direction`/`rtl`, and the per-script supplemental theme font. Renderers and exporters should use it rather than re-deriving slots. The model, the OOXML mapping and the open questions are in [`programs/font-fidelity-everywhere/script-font-model.md`](./programs/font-fidelity-everywhere/script-font-model.md). The renderer and exporter adopt it in separate changes, so their output is unchanged by this model alone.
 
 ## What is *not* part of this chain
 

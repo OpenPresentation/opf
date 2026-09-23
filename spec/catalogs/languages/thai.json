@@ -4,6 +4,7 @@
   "name": "Thai",
   "code": "THA",
   "bcp47": "th",
+  "ooxmlLang": "th-TH",
   "script": "Thai",
   "direction": "ltr",
   "fontScheme": "angsana-new",

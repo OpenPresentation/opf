@@ -4,6 +4,7 @@
   "name": "Uzbek (Latin)",
   "code": "UZB",
   "bcp47": "uz-Latn",
+  "ooxmlLang": "uz-Latn-UZ",
   "script": "Latn",
   "direction": "ltr",
   "fontScheme": "aptos",

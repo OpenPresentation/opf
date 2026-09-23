@@ -4,6 +4,7 @@
   "name": "Tajik",
   "code": "TGK",
   "bcp47": "tg",
+  "ooxmlLang": "tg-Cyrl-TJ",
   "script": "Cyrl",
   "direction": "ltr",
   "fontScheme": "aptos",

@@ -4,6 +4,7 @@
   "name": "Cebuano",
   "code": "CEB",
   "bcp47": "ceb",
+  "ooxmlLang": "ceb-PH",
   "script": "Latn",
   "direction": "ltr",
   "fontScheme": "aptos",

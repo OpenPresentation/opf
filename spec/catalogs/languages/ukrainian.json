@@ -4,6 +4,7 @@
   "name": "Ukrainian",
   "code": "UKR",
   "bcp47": "uk",
+  "ooxmlLang": "uk-UA",
   "script": "Cyrl",
   "direction": "ltr",
   "fontScheme": "aptos",

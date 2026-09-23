@@ -4,6 +4,7 @@
   "name": "Danish",
   "code": "DAN",
   "bcp47": "da",
+  "ooxmlLang": "da-DK",
   "script": "Latn",
   "direction": "ltr",
   "fontScheme": "aptos",

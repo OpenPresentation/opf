@@ -4,6 +4,7 @@
   "name": "Igbo",
   "code": "IBO",
   "bcp47": "ig",
+  "ooxmlLang": "ig-NG",
   "script": "Latn",
   "direction": "ltr",
   "fontScheme": "aptos",

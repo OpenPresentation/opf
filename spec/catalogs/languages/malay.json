@@ -4,6 +4,7 @@
   "name": "Malay",
   "code": "ZSM",
   "bcp47": "zsm",
+  "ooxmlLang": "ms-MY",
   "script": "Latn",
   "direction": "ltr",
   "fontScheme": "aptos",

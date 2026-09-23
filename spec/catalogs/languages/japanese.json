@@ -4,6 +4,7 @@
   "name": "Japanese",
   "code": "JPN",
   "bcp47": "ja",
+  "ooxmlLang": "ja-JP",
   "script": "Jpan",
   "direction": "ltr",
   "fontScheme": "meiryo",

@@ -4,6 +4,7 @@
   "name": "Māori",
   "code": "MRI",
   "bcp47": "mi",
+  "ooxmlLang": "mi-NZ",
   "script": "Latn",
   "direction": "ltr",
   "fontScheme": "aptos",

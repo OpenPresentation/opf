@@ -4,6 +4,7 @@
   "name": "English (United Kingdom)",
   "code": "ENG",
   "bcp47": "en-GB",
+  "ooxmlLang": "en-GB",
   "script": "Latn",
   "direction": "ltr",
   "fontScheme": "aptos",

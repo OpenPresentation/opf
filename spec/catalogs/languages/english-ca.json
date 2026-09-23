@@ -4,6 +4,7 @@
   "name": "English (Canada)",
   "code": "ENG",
   "bcp47": "en-CA",
+  "ooxmlLang": "en-CA",
   "script": "Latn",
   "direction": "ltr",
   "fontScheme": "aptos",

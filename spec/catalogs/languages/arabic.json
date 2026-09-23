@@ -4,6 +4,7 @@
   "name": "Arabic",
   "code": "ARA",
   "bcp47": "ar",
+  "ooxmlLang": "ar-SA",
   "script": "Arab",
   "direction": "rtl",
   "fontScheme": "arabic-typesetting",

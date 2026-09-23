@@ -4,6 +4,7 @@
   "name": "Greek",
   "code": "ELL",
   "bcp47": "el",
+  "ooxmlLang": "el-GR",
   "script": "Grek",
   "direction": "ltr",
   "fontScheme": "aptos",

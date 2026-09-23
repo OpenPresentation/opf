@@ -4,6 +4,7 @@
   "name": "Georgian",
   "code": "KAT",
   "bcp47": "ka",
+  "ooxmlLang": "ka-GE",
   "script": "Geor",
   "direction": "ltr",
   "fontScheme": "sylfaen",

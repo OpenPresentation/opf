@@ -4,6 +4,7 @@
   "name": "Croatian",
   "code": "HRV",
   "bcp47": "hr",
+  "ooxmlLang": "hr-HR",
   "script": "Latn",
   "direction": "ltr",
   "fontScheme": "aptos",

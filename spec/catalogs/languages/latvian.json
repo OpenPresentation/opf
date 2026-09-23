@@ -4,6 +4,7 @@
   "name": "Latvian",
   "code": "LAV",
   "bcp47": "lv",
+  "ooxmlLang": "lv-LV",
   "script": "Latn",
   "direction": "ltr",
   "fontScheme": "aptos",

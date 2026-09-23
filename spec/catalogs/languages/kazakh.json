@@ -4,6 +4,7 @@
   "name": "Kazakh",
   "code": "KAZ",
   "bcp47": "kk",
+  "ooxmlLang": "kk-KZ",
   "script": "Cyrl",
   "direction": "ltr",
   "fontScheme": "aptos",

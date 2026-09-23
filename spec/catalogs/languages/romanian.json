@@ -4,6 +4,7 @@
   "name": "Romanian",
   "code": "RON",
   "bcp47": "ro",
+  "ooxmlLang": "ro-RO",
   "script": "Latn",
   "direction": "ltr",
   "fontScheme": "aptos",

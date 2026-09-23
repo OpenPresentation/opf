@@ -30,9 +30,33 @@ bundled record sets them, so catalog behavior does not change.
 
 ## Model
 
-**Script.** Every language record now states `script` (ISO 15924) and
-`direction`. For a BCP-47 tag that no record matches, the resolver infers the
-script from the tag's CLDR likely subtags (`Intl.Locale#maximize`).
+**Script.** Every language record now states `script` (ISO 15924),
+`direction` and a curated OOXML culture tag, `ooxmlLang` (see Language
+tags). Catalog ids and catalog tags resolve without the runtime's locale data:
+
+- Tags are parsed and cased by the resolver itself, not by `Intl`.
+- A vendored alias table treats `iw`/`he`, `in`/`id`, `ji`/`yi`,
+  `no`/`nb` and `zsm`/`ms` as equal when matching.
+- A vendored likely-script table (from CLDR likely subtags) covers the catalog
+  languages written in more than one script:
+
+  | Language | Default script | By region |
+  | --- | --- | --- |
+  | `zh` | Hans | TW, HK, MO: Hant |
+  | `sr` | Cyrl | ME: Latn |
+  | `pa` | Guru | PK: Arab |
+  | `az` | Latn | IR: Arab |
+  | `uz` | Latn | AF: Arab |
+  | `mn` | Cyrl | CN: Mong |
+  | `bs`, `ms` | Latn | |
+
+- An inline record without `script` takes the script of the bundled record its
+  tag matches.
+
+Only a tag that matches no catalog record, has no script subtag and is not in
+the vendored table falls through to the runtime's ICU likely subtags
+(`Intl.Locale#maximize`). Its result can differ between ICU versions (FF-11).
+A tag whose script cannot be found (including `und`) is unresolvable.
 
 **Script role.** The script picks the OOXML slot (`scriptFontRole`):
 
@@ -57,7 +81,12 @@ this order:
       either the record or the inline override. A missing `major` or `minor`
       falls back to the other.
    2. **`schemeFamily`**: the design scheme's own families, when its
-      `languageFamily` is that slot (`ea` or `cs`).
+      `languageFamily` is that slot (`ea` or `cs`) and its `languages` list
+      is empty or names the presentation language. Names match
+      case-insensitively, and a base name matches a qualified one, so
+      `Punjabi` admits `Punjabi (Gurmukhi)`. A `meiryo` design scheme
+      (`["Japanese"]`) therefore does not put Meiryo in `ea` for Korean text;
+      Korean gets its own language scheme.
    3. **`language`**: the language's font scheme, when the language's role is
       that slot. PowerPoint output uses `fontScheme`; Google Slides output
       uses `googleFontScheme`. Each falls back to the other.
@@ -67,14 +96,40 @@ this order:
 
 - **A catalog id.** The id is looked up in inline `catalogs.languages.records`
   first, then in the bundled catalog.
-- **A BCP-47 tag.** It matches an exact tag first. Otherwise it matches a
-  record with the same language and script, preferring the same region and
-  then a record with no region. The authored tag is kept as `lang`.
+- **A BCP-47 tag.** It matches an exact tag first (case-insensitive, with
+  deprecated subtags replaced). Otherwise it matches a record with the same
+  language and script, preferring the same region and then a record with no
+  region.
 - **A Language object.** Its `id` (or its `bcp47`, matched as above) resolves
   a base record. The object's own fields override that record.
 
-URLs, `pkg:` references and unknown ids resolve to `defaultLanguage`, which is
-`en-US`. The result then carries `languageSource: "default"`.
+URLs, `pkg:` references, unknown ids, empty tags and `und` resolve to
+`defaultLanguage`, which is `en-US`. The result then carries
+`languageSource: "default"`.
+
+**Language tags.** The result carries two tags. Both are canonically cased
+(`en-us` becomes `en-US`, `zh-hant-tw` becomes `zh-Hant-TW`), and
+deprecated language subtags are replaced (`iw` becomes `he`).
+
+- `bcp47` is the authored tag, else the record's `bcp47`. Renderers use it
+  for HTML/SVG `lang`.
+- `lang` is the OOXML tag, taken from the first of these:
+  1. an `ooxmlLang` written on the document's Language object;
+  2. an authored tag that carries a region (`en-NZ`, `ar-SA`);
+  3. the record's curated `ooxmlLang`, for example `zsm` to `ms-MY`,
+     `no` to `nb-NO`, `tl` to `fil-PH`, `ber-Latn` to `tzm-Latn-DZ`,
+     `vi-Latn` to `vi-VN`, `ja` to `ja-JP`, `ar` to `ar-SA`;
+  4. the canonical `bcp47`.
+
+Regions are curated in the catalog, never inferred at runtime.
+
+The curated values are Windows culture names, with these noted choices:
+
+- `en` is `en-US` and `pt` is `pt-BR` (the CLDR likely region).
+- `ctg` (Chittagonian) is `bn-BD`, because it is written in standard Bengali
+  orthography.
+- `ay-BO`, `ceb-PH`, `kmr-TR`, `mg-MG` and `sn-Latn-ZW` have no known
+  legacy Office LCID. FF-12 should check how PowerPoint treats them.
 
 ## API
 
@@ -89,10 +144,13 @@ The options are `app` (`"PowerPoint"` or `"Google Slides"`), `slideIndex`,
 
 - `heading` and `body` slots (`{ latin, eastAsian, complexScript }`). The top
   level repeats `body`.
-- `lang`, `languageId`, `languageSource`, `script`, `scriptRole`, `direction`
-  and `rtl`.
-- `supplement`: the language's font for its own script. It is absent for
-  Latn, Cyrl and Grek, which the latin slot covers.
+- `lang` (OOXML), `bcp47`, `languageId`, `languageSource`, `script`,
+  `scriptRole`, `direction` and `rtl`.
+- `supplement`: the font for the language's own script. It is present only
+  when an explicit slot, the design scheme's own script family, or the
+  language's font scheme supplies one. It is never the latin family repeated:
+  a `bo-Tibt` deck with no Tibetan font gets no `supplement`. It is absent
+  for Latn, Cyrl and Grek, which the latin slot covers.
 - `sources`: where each of `eastAsian` and `complexScript` came from.
 
 ## OOXML mapping (for FF-07)
@@ -103,15 +161,17 @@ The options are `app` (`"PowerPoint"` or `"Google Slides"`), `slideIndex`,
 | `body.*` | theme `a:minorFont` `a:latin` / `a:ea` / `a:cs` |
 | `supplement` | the only `a:font script="…"` entry in each of major and minor. It replaces the vendored Office 2013 list (G2), which is FF-08's call. `Kore` is written as `Hang`, as Office does. |
 | `heading.*` / `body.*` | explicit run `a:rPr` `a:latin` / `a:ea` / `a:cs` for title and body text |
-| `lang` | run `a:rPr@lang` and `a:endParaRPr@lang`, instead of a fixed `en-US` |
+| `lang` | run `a:rPr@lang` and `a:endParaRPr@lang`, instead of a fixed `en-US`. It is always the curated OOXML tag or an authored region tag, never a bare `zsm` or `no`. |
 | `altLang` | omitted. It names the editing-UI language, which OPF does not model. Readers use `lang` when it is absent. |
 | `rtl` | paragraph `a:pPr@rtl="1"` for every paragraph, and a run-level RTL flag where the writer supports one (`rtlMode`). Default alignment for RTL text is an FF-07 decision. |
 
 **Latin-only decks.** `ea` and `cs` repeat the chosen heading/body family
-instead of staying empty. Then `+mn-ea`/`+mn-cs` references in masters, notes
-and `endParaRPr` resolve to a chosen font rather than to `""`, which is the
-leading hypothesis (H1) for the Aptos appearance. FF-07 states this rule,
-subject to FF-05.
+instead of staying empty, so `+mn-ea`/`+mn-cs` references in masters, notes
+and `endParaRPr` resolve to a chosen font rather than to `""`. This keeps
+every slot on a chosen font, but it is not by itself the Aptos fix. Native
+evidence shows that PowerPoint's `Presentation.Fonts` reports a nameless font
+plus Aptos at open for the Carlito deck, and filling theme `ea`/`cs` with
+Carlito did not change that. FF-07 therefore keeps the fill gated on FF-05.
 
 **CJK inside a Latin deck.** The author sets
 `design.fontScheme.eastAsian` (for example Noto Sans JP), which fills the slot
@@ -168,7 +228,8 @@ native Office checks on a licensed machine (FF-12) only.
 All changes are additive:
 
 - **Language records:** they gain the already-defined optional `script` and
-  `direction` fields.
+  `direction` fields, plus a new optional `ooxmlLang` field (in both the
+  companion schema and `$defs/Language`).
 - **`FontScheme`:** it gains optional `eastAsian`/`complexScript` in both the
   companion schema and `opf.schema.json`.
 - **Resolver:** it is new. Composition, pagination, validation and existing
@@ -176,25 +237,30 @@ All changes are additive:
 - **Renderer and exporter:** their output does not change until FF-07 and
   FF-19 adopt the resolver.
 
-## Open questions
+## Decisions on the open questions (review of opf#118)
 
-1. **Region in `lang`.** Does PowerPoint need a region (`ja-JP`) for proofing
-   and font linking, or does it accept a neutral `ja`? The resolver returns
-   the authored or catalog tag. If regions are needed, add them to catalog
-   records rather than infer them at runtime (FF-11 determinism). FF-12
-   decides.
-2. **Slot for Armenian, Georgian and Ethiopic.** These are classified
-   `latin` + `supplement`, which needs native confirmation (FF-12).
-3. **Default language.** It is `en-US`, matching today's exporter bytes.
-   `engine-defaults.json` names `english` (`en`). This should align with
-   FF-17's shared default font scheme (`roboto` here, `aptos` in the exporter).
-4. **Empty versus filled `ea`/`cs` in Latin decks.** This depends on FF-05's
-   Aptos root cause.
-5. **Per-run or per-slide language.** Needed for mixed-script decks beyond an
-   explicit `eastAsian` slot. It would be a schema addition, and is not
-   proposed here.
-6. **Curated slots on records.** Should any bundled schemes gain curated
-   `eastAsian`/`complexScript` slots (for example Office-theme-like pairs), and
-   should imported PPTX themes populate them?
-7. **ICU dependence.** Tags without a catalog record depend on the runtime's
-   ICU likely subtags. Catalog ids and catalog tags do not.
+1. **Region in `lang`.** Catalog records carry a curated `ooxmlLang`
+   (Windows culture form). Regions are not inferred at runtime. FF-12 still
+   checks the records without a legacy LCID (`ay-BO`, `ceb-PH`, `kmr-TR`,
+   `mg-MG`, `sn-Latn-ZW`).
+2. **Armenian, Georgian and Ethiopic.** Keep `latin` + `supplement`. Add
+   Mongolian (Mong) and Tibetan (Tibt) to the FF-12 native sample, next to
+   Armenian, Georgian and Amharic, to confirm how PowerPoint assigns their
+   slots.
+3. **Default language.** Keep `en-US`. Reconcile
+   `spec/reference/engine-defaults.json` (`english`) under FF-17, together
+   with the shared default font scheme.
+4. **Filled `ea`/`cs` in Latin decks.** The resolver reports the chosen
+   heading/body family for these slots. FF-07 keeps writing them gated on
+   FF-05. Native evidence shows that filling theme `ea`/`cs` with Carlito did
+   not remove the nameless font or Aptos that `Presentation.Fonts` lists at
+   open, so the fill is not by itself the Aptos fix.
+5. **Per-run language.** Deferred. The explicit `eastAsian`/`complexScript`
+   slots cover CJK or Arabic text inside a Latin deck until then.
+6. **Curated slots.** Bundled schemes stay uncurated. Imported PPTX themes
+   should populate explicit `eastAsian`/`complexScript` slots from their
+   `a:ea`/`a:cs` typefaces so they round-trip. This is an FF-07/import
+   follow-up.
+7. **ICU dependence.** Catalog ids and catalog tags are deterministic
+   (vendored alias and likely-script tables, as above). Only uncatalogued tags
+   without a script subtag use `Intl.Locale`.

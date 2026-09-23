@@ -4,6 +4,7 @@
   "name": "Xhosa",
   "code": "XHO",
   "bcp47": "xh",
+  "ooxmlLang": "xh-ZA",
   "script": "Latn",
   "direction": "ltr",
   "fontScheme": "aptos",

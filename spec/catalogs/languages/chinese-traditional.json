@@ -4,6 +4,7 @@
   "name": "Chinese (Traditional)",
   "code": "ZHO",
   "bcp47": "zh-Hant",
+  "ooxmlLang": "zh-TW",
   "script": "Hant",
   "direction": "ltr",
   "fontScheme": "microsoft-jhenghei",

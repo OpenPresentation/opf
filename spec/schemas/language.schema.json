@@ -60,6 +60,11 @@
         "zh-Hans"
       ]
     },
+    "ooxmlLang": {
+      "type": "string",
+      "description": "Curated culture tag for OOXML text-run language attributes (a:rPr/@lang, a:endParaRPr/@lang), in the language-[Script-]REGION form Office recognizes (e.g. 'ja-JP', 'ar-SA', 'ms-MY', 'nb-NO', 'fil-PH', 'zh-CN'). Engines emit it instead of 'bcp47' when the document names the language by catalog id or by a tag without a region; a region-bearing tag written by the author is emitted as written. Curated rather than inferred so output does not depend on the runtime's locale data.",
+      "examples": ["en-US", "ja-JP", "ar-SA", "ms-MY", "nb-NO", "zh-CN"]
+    },
     "direction": {
       "type": "string",
       "enum": ["ltr", "rtl"],

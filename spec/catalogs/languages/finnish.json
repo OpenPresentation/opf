@@ -4,6 +4,7 @@
   "name": "Finnish",
   "code": "FIN",
   "bcp47": "fi",
+  "ooxmlLang": "fi-FI",
   "script": "Latn",
   "direction": "ltr",
   "fontScheme": "aptos",

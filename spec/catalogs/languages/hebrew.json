@@ -4,6 +4,7 @@
   "name": "Hebrew",
   "code": "HEB",
   "bcp47": "he",
+  "ooxmlLang": "he-IL",
   "script": "Hebr",
   "direction": "rtl",
   "fontScheme": "david",

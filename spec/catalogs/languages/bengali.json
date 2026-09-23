@@ -4,6 +4,7 @@
   "name": "Bengali",
   "code": "BEN",
   "bcp47": "bn",
+  "ooxmlLang": "bn-BD",
   "script": "Beng",
   "direction": "ltr",
   "fontScheme": "shonar-bangla",

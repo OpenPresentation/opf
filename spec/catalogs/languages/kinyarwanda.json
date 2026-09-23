@@ -4,6 +4,7 @@
   "name": "Kinyarwanda",
   "code": "KIN",
   "bcp47": "rw",
+  "ooxmlLang": "rw-RW",
   "script": "Latn",
   "direction": "ltr",
   "fontScheme": "aptos",

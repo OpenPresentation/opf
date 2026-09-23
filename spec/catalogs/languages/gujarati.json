@@ -4,6 +4,7 @@
   "name": "Gujarati",
   "code": "GUJ",
   "bcp47": "gu",
+  "ooxmlLang": "gu-IN",
   "script": "Gujr",
   "direction": "ltr",
   "fontScheme": "shruti",

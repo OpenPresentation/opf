@@ -4,6 +4,7 @@
   "name": "Italian",
   "code": "ITA",
   "bcp47": "it",
+  "ooxmlLang": "it-IT",
   "script": "Latn",
   "direction": "ltr",
   "fontScheme": "aptos",

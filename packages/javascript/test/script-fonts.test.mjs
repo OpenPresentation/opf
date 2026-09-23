@@ -15,10 +15,26 @@ const deck = (language, fontScheme = carlito, extra = {}) => ({
 });
 const same = (family) => ({latin: family, eastAsian: family, complexScript: family});
 
+/** Run `fn` with the runtime's Intl.Locale unavailable, to prove catalog resolution needs no ICU data. */
+function withoutIntlLocale(fn) {
+  const original = Intl.Locale;
+  Intl.Locale = class {
+    constructor() {
+      throw new Error('Intl.Locale must not be consulted for catalog tags');
+    }
+  };
+  try {
+    return fn();
+  } finally {
+    Intl.Locale = original;
+  }
+}
+
 describe('script classes', () => {
   test('Latin deck fills every slot with the chosen heading/body family', () => {
     const resolved = resolveScriptFonts(deck('english-gb'));
     assert.equal(resolved.lang, 'en-GB');
+    assert.equal(resolved.bcp47, 'en-GB');
     assert.equal(resolved.languageId, 'english-gb');
     assert.equal(resolved.script, 'Latn');
     assert.equal(resolved.scriptRole, 'latin');
@@ -38,13 +54,17 @@ describe('script classes', () => {
     assert.equal(resolved.languageSource, 'default');
     assert.deepEqual(resolved.heading, same('Aptos Display'));
     assert.deepEqual(resolved.body, same('Aptos'));
-    assert.equal(resolveScriptFonts({slides: []}, {defaultLanguage: 'fr'}).languageId, 'french');
+    const french = resolveScriptFonts({slides: []}, {defaultLanguage: 'fr'});
+    assert.equal(french.languageId, 'french');
+    assert.equal(french.lang, 'fr-FR');
+    assert.equal(resolveScriptFonts({slides: []}, {defaultLanguage: 'und'}).lang, 'en-US');
   });
 
-  for (const [language, id, script] of [['ru', 'russian', 'Cyrl'], ['uk-UA', 'ukrainian', 'Cyrl'], ['sr-Cyrl', 'serbian-cyrillic', 'Cyrl'], ['greek', 'greek', 'Grek'], ['el-GR', 'greek', 'Grek']]) {
+  for (const [language, id, script, lang] of [['ru', 'russian', 'Cyrl', 'ru-RU'], ['uk-UA', 'ukrainian', 'Cyrl', 'uk-UA'], ['sr-Cyrl', 'serbian-cyrillic', 'Cyrl', 'sr-Cyrl-RS'], ['greek', 'greek', 'Grek', 'el-GR'], ['el-GR', 'greek', 'Grek', 'el-GR']]) {
     test(`${language} uses the latin slot (${script})`, () => {
       const resolved = resolveScriptFonts(deck(language));
       assert.equal(resolved.languageId, id);
+      assert.equal(resolved.lang, lang);
       assert.equal(resolved.script, script);
       assert.equal(resolved.scriptRole, 'latin');
       assert.equal(resolved.rtl, false);
@@ -54,17 +74,18 @@ describe('script classes', () => {
   }
 
   const cjk = [
-    ['japanese', 'ja', 'japanese', 'Jpan', 'Meiryo', 'Noto Sans JP', 'Jpan'],
-    ['ja-JP', 'ja-JP', 'japanese', 'Jpan', 'Meiryo', 'Noto Sans JP', 'Jpan'],
-    ['zh-Hans', 'zh-Hans', 'chinese-simplified', 'Hans', 'Microsoft YaHei', 'Noto Sans SC', 'Hans'],
-    ['zh-CN', 'zh-CN', 'chinese-simplified', 'Hans', 'Microsoft YaHei', 'Noto Sans SC', 'Hans'],
-    ['zh-TW', 'zh-TW', 'chinese-traditional', 'Hant', 'Microsoft JhengHei', 'Noto Sans TC', 'Hant'],
-    ['korean', 'ko', 'korean', 'Kore', 'Malgun Gothic', 'Noto Sans KR', 'Hang'],
+    ['japanese', 'ja-JP', 'ja', 'japanese', 'Jpan', 'Meiryo', 'Noto Sans JP', 'Jpan'],
+    ['ja-JP', 'ja-JP', 'ja-JP', 'japanese', 'Jpan', 'Meiryo', 'Noto Sans JP', 'Jpan'],
+    ['zh-Hans', 'zh-CN', 'zh-Hans', 'chinese-simplified', 'Hans', 'Microsoft YaHei', 'Noto Sans SC', 'Hans'],
+    ['zh-CN', 'zh-CN', 'zh-CN', 'chinese-simplified', 'Hans', 'Microsoft YaHei', 'Noto Sans SC', 'Hans'],
+    ['zh-TW', 'zh-TW', 'zh-TW', 'chinese-traditional', 'Hant', 'Microsoft JhengHei', 'Noto Sans TC', 'Hant'],
+    ['korean', 'ko-KR', 'ko', 'korean', 'Kore', 'Malgun Gothic', 'Noto Sans KR', 'Hang'],
   ];
-  for (const [language, lang, id, script, powerPoint, google, supplementScript] of cjk) {
+  for (const [language, lang, bcp47, id, script, powerPoint, google, supplementScript] of cjk) {
     test(`${language} fills eastAsian from the language font scheme`, () => {
       const resolved = resolveScriptFonts(deck(language));
       assert.equal(resolved.lang, lang);
+      assert.equal(resolved.bcp47, bcp47);
       assert.equal(resolved.languageId, id);
       assert.equal(resolved.script, script);
       assert.equal(resolved.scriptRole, 'eastAsian');
@@ -80,14 +101,14 @@ describe('script classes', () => {
   }
 
   const complex = [
-    ['arabic', 'ar', 'Arab', true, 'Arabic Typesetting', 'Noto Naskh Arabic'],
+    ['arabic', 'ar-SA', 'Arab', true, 'Arabic Typesetting', 'Noto Naskh Arabic'],
     ['fa-IR', 'fa-IR', 'Arab', true, 'Arabic Typesetting', 'Noto Naskh Arabic'],
-    ['urdu', 'ur', 'Arab', true, 'Arabic Typesetting', 'Noto Nastaliq Urdu'],
+    ['urdu', 'ur-PK', 'Arab', true, 'Arabic Typesetting', 'Noto Nastaliq Urdu'],
     ['he-IL', 'he-IL', 'Hebr', true, 'David', 'Noto Sans Hebrew'],
-    ['hindi', 'hi', 'Deva', false, 'Mangal', 'Noto Sans Devanagari'],
-    ['bn', 'bn', 'Beng', false, 'Shonar Bangla', 'Noto Sans Bengali'],
-    ['ta', 'ta', 'Taml', false, 'Latha', 'Noto Sans Tamil'],
-    ['thai', 'th', 'Thai', false, 'Angsana New', 'Noto Sans Thai'],
+    ['hindi', 'hi-IN', 'Deva', false, 'Mangal', 'Noto Sans Devanagari'],
+    ['bn', 'bn-BD', 'Beng', false, 'Shonar Bangla', 'Noto Sans Bengali'],
+    ['ta', 'ta-IN', 'Taml', false, 'Latha', 'Noto Sans Tamil'],
+    ['thai', 'th-TH', 'Thai', false, 'Angsana New', 'Noto Sans Thai'],
   ];
   for (const [language, lang, script, rtl, powerPoint, google] of complex) {
     test(`${language} fills complexScript${rtl ? ' and is right-to-left' : ''}`, () => {
@@ -113,10 +134,85 @@ describe('script classes', () => {
     assert.deepEqual(resolveScriptFonts(deck('ka'), {app: 'Google Slides'}).supplement, {script: 'Geor', heading: 'Noto Sans Georgian', body: 'Noto Sans Georgian'});
   });
 
+  test('no supplement is invented when nothing supplies a script font', () => {
+    const tibetan = resolveScriptFonts(deck('bo-Tibt-CN'));
+    assert.equal(tibetan.script, 'Tibt');
+    assert.equal(tibetan.scriptRole, 'complexScript');
+    assert.equal(tibetan.lang, 'bo-Tibt-CN');
+    assert.deepEqual(tibetan.sources, {eastAsian: 'latin', complexScript: 'latin'});
+    assert.equal(tibetan.supplement, undefined);
+    const explicit = resolveScriptFonts(deck('bo-Tibt-CN', {...carlito, complexScript: {major: 'Noto Serif Tibetan'}}));
+    assert.deepEqual(explicit.supplement, {script: 'Tibt', heading: 'Noto Serif Tibetan', body: 'Noto Serif Tibetan'});
+  });
+
   test('scriptFontRole classifies ISO 15924 codes case-insensitively', () => {
     for (const script of ['Latn', 'Cyrl', 'Grek', 'Armn', 'Geor', 'Ethi', 'Zzzz', 'nonsense']) assert.equal(scriptFontRole(script), 'latin');
     for (const script of ['Jpan', 'Hans', 'Hant', 'Kore', 'Hang', 'hira', 'KANA', 'Bopo']) assert.equal(scriptFontRole(script), 'eastAsian');
-    for (const script of ['Arab', 'Hebr', 'Deva', 'Beng', 'Taml', 'Thai', 'Khmr', 'syrc']) assert.equal(scriptFontRole(script), 'complexScript');
+    for (const script of ['Arab', 'Hebr', 'Deva', 'Beng', 'Taml', 'Thai', 'Khmr', 'syrc', 'Tibt', 'Mong']) assert.equal(scriptFontRole(script), 'complexScript');
+  });
+});
+
+describe('language tags', () => {
+  test('catalog tags emit curated OOXML culture tags', () => {
+    for (const [language, lang, bcp47] of [['zsm', 'ms-MY', 'zsm'], ['no', 'nb-NO', 'no'], ['kmr', 'kmr-TR', 'kmr'], ['tl', 'fil-PH', 'tl'], ['ber-Latn', 'tzm-Latn-DZ', 'ber-Latn'], ['vi-Latn', 'vi-VN', 'vi-Latn'], ['ctg', 'bn-BD', 'ctg'], ['english', 'en-US', 'en'], ['pa-Arab', 'pa-Arab-PK', 'pa-Arab']]) {
+      const resolved = resolveScriptFonts(deck(language));
+      assert.equal(resolved.lang, lang, language);
+      assert.equal(resolved.bcp47, bcp47, language);
+    }
+  });
+
+  test('returned tags use canonical casing and replace deprecated subtags', () => {
+    for (const [language, lang, bcp47, id] of [
+      ['en-us', 'en-US', 'en-US', 'english-us'],
+      ['ZH-hant-tw', 'zh-Hant-TW', 'zh-Hant-TW', 'chinese-traditional'],
+      ['iw', 'he-IL', 'he', 'hebrew'],
+      ['iw-IL', 'he-IL', 'he-IL', 'hebrew'],
+      ['in', 'id-ID', 'id', 'indonesian'],
+      ['nb-NO', 'nb-NO', 'nb-NO', 'norwegian'],
+      ['ms-MY', 'ms-MY', 'ms-MY', 'malay'],
+      ['sr-latn', 'sr-Latn-RS', 'sr-Latn', 'serbian-latin'],
+    ]) {
+      const resolved = resolveScriptFonts(deck(language));
+      assert.equal(resolved.lang, lang, language);
+      assert.equal(resolved.bcp47, bcp47, language);
+      assert.equal(resolved.languageId, id, language);
+    }
+  });
+
+  test('ambiguous catalog languages resolve from the vendored likely-script table', () => {
+    const cases = [
+      ['zh', 'chinese-simplified'], ['zh-SG', 'chinese-simplified'], ['zh-HK', 'chinese-traditional'], ['zh-MO', 'chinese-traditional'],
+      ['sr', 'serbian-cyrillic'], ['sr-RS', 'serbian-cyrillic'], ['sr-ME', 'serbian-latin'],
+      ['pa', 'punjabi-gurmukhi'], ['pa-IN', 'punjabi-gurmukhi'], ['pa-PK', 'punjabi-shahmukhi'],
+      ['az-AZ', 'azerbaijani'], ['uz', 'uzbek-latin'], ['uz-UZ', 'uzbek-latin'], ['bs', 'bosnian-latin'], ['bs-BA', 'bosnian-latin'],
+      ['mn', 'mongolian'], ['mn-MN', 'mongolian'], ['ms', 'malay'],
+    ];
+    withoutIntlLocale(() => {
+      for (const [language, id] of cases) assert.equal(resolveScriptFonts(deck(language)).languageId, id, language);
+    });
+    assert.equal(resolveScriptFonts(deck('zh-HK')).lang, 'zh-HK');
+    assert.equal(resolveScriptFonts(deck('sr')).lang, 'sr-Cyrl-RS');
+  });
+
+  test('catalog ids and catalog tags never consult Intl.Locale', () => {
+    withoutIntlLocale(() => {
+      for (const record of languages) {
+        for (const reference of [record.id, record.bcp47, {id: record.id}, {bcp47: record.bcp47}]) {
+          const resolved = resolveScriptFonts(deck(reference));
+          assert.equal(resolved.languageId, record.id, JSON.stringify(reference));
+          assert.equal(resolved.script, record.script, JSON.stringify(reference));
+        }
+      }
+    });
+  });
+
+  test('only uncatalogued tags use the runtime likely subtags', () => {
+    const hawaiian = resolveScriptFonts(deck('haw'));
+    assert.equal(hawaiian.lang, 'haw');
+    assert.equal(hawaiian.languageId, undefined);
+    assert.equal(hawaiian.script, 'Latn');
+    // Without ICU data, an uncatalogued tag with no explicit script is unresolvable.
+    withoutIntlLocale(() => assert.equal(resolveScriptFonts(deck('haw')).languageSource, 'default'));
   });
 });
 
@@ -132,10 +228,21 @@ describe('precedence', () => {
     assert.deepEqual(japanese.supplement, {script: 'Jpan', heading: 'Noto Sans JP', body: 'Noto Sans JP'});
   });
 
-  test('an East Asian design scheme fills its own slot before the language scheme', () => {
-    const resolved = resolveScriptFonts(deck('zh-Hans', 'meiryo'));
-    assert.deepEqual(resolved.body, same('Meiryo'));
-    assert.deepEqual(resolved.sources, {eastAsian: 'schemeFamily', complexScript: 'latin'});
+  test('a script design scheme fills its own slot only for the languages it lists', () => {
+    const japanese = resolveScriptFonts(deck('japanese', 'meiryo'));
+    assert.deepEqual(japanese.body, same('Meiryo'));
+    assert.deepEqual(japanese.sources, {eastAsian: 'schemeFamily', complexScript: 'latin'});
+    const korean = resolveScriptFonts(deck('korean', 'meiryo'));
+    assert.deepEqual(korean.body, {latin: 'Meiryo', eastAsian: 'Malgun Gothic', complexScript: 'Meiryo'});
+    assert.equal(korean.sources.eastAsian, 'language');
+    assert.equal(resolveScriptFonts(deck('zh-Hans', 'meiryo')).eastAsian, 'Microsoft YaHei');
+    const traditional = resolveScriptFonts(deck('zh-Hant', 'microsoft-yahei'));
+    assert.equal(traditional.eastAsian, 'Microsoft YaHei', 'scheme language names match case-insensitively');
+    assert.equal(traditional.sources.eastAsian, 'schemeFamily');
+    assert.equal(resolveScriptFonts(deck('pa-Guru', 'raavi')).sources.complexScript, 'schemeFamily', 'a base name admits qualified names');
+    const unlisted = resolveScriptFonts(deck('korean', {major: 'Noto Sans JP', minor: 'Noto Sans JP', languageFamily: 'ea'}));
+    assert.equal(unlisted.eastAsian, 'Noto Sans JP', 'an empty languages list admits every language');
+    assert.equal(unlisted.sources.eastAsian, 'schemeFamily');
     const arabicInMeiryo = resolveScriptFonts(deck('arabic', 'meiryo'));
     assert.deepEqual(arabicInMeiryo.body, {latin: 'Meiryo', eastAsian: 'Meiryo', complexScript: 'Arabic Typesetting'});
   });
@@ -159,9 +266,11 @@ describe('precedence', () => {
     assert.equal(object.complexScript, 'Arabic Typesetting');
     assert.equal(object.rtl, true);
     const override = resolveScriptFonts(deck({id: 'hebrew', fontScheme: 'noto-sans-hebrew'}));
-    assert.equal(override.lang, 'he');
+    assert.equal(override.lang, 'he-IL');
+    assert.equal(override.bcp47, 'he');
     assert.equal(override.complexScript, 'Noto Sans Hebrew');
     assert.equal(override.rtl, true);
+    assert.equal(resolveScriptFonts(deck({id: 'english', ooxmlLang: 'en-gb'})).lang, 'en-GB');
   });
 
   test('slide design overrides the deck font scheme per field', () => {
@@ -181,15 +290,11 @@ describe('precedence', () => {
   });
 
   test('unresolvable language references fall back to the default tag', () => {
-    for (const language of ['klingon-dialect', 'https://acme.com/languages/x.json', 'pkg:@acme/decks/languages/x', {name: 'No tag'}]) {
+    for (const language of ['klingon-dialect', 'und', 'UND-Latn', '', '   ', 'https://acme.com/languages/x.json', 'pkg:@acme/decks/languages/x', {name: 'No tag'}, {bcp47: 'und'}, {bcp47: ''}]) {
       const resolved = resolveScriptFonts(deck(language));
       assert.equal(resolved.languageSource, 'default', JSON.stringify(language));
       assert.equal(resolved.lang, 'en-US');
     }
-    const uncatalogued = resolveScriptFonts(deck('haw'));
-    assert.equal(uncatalogued.lang, 'haw');
-    assert.equal(uncatalogued.languageId, undefined);
-    assert.equal(uncatalogued.script, 'Latn');
   });
 
   test('resolution is pure and does not mutate the document', () => {
@@ -204,11 +309,12 @@ describe('bundled catalogs', () => {
   const rtlScripts = new Set(['Arab', 'Hebr']);
   const schemeById = new Map(fontSchemes.map((record) => [record.id, record]));
 
-  test('every language record declares script and direction', () => {
+  test('every language record declares script, direction and an OOXML culture tag', () => {
     assert.ok(languages.length >= 93);
     for (const record of languages) {
       assert.match(record.script ?? '', /^[A-Z][a-z]{3}$/, record.id);
       assert.equal(record.direction, rtlScripts.has(record.script) ? 'rtl' : 'ltr', record.id);
+      assert.match(record.ooxmlLang ?? '', /^[a-z]{2,3}(-[A-Z][a-z]{3})?-[A-Z]{2}$/, record.id);
     }
   });
 
@@ -222,10 +328,13 @@ describe('bundled catalogs', () => {
       for (const record of languages) {
         const resolved = resolveScriptFonts(deck(record.id), {app});
         assert.equal(resolved.languageId, record.id);
-        assert.equal(resolved.lang, record.bcp47);
+        assert.equal(resolved.lang, record.ooxmlLang);
+        assert.equal(resolved.bcp47, record.bcp47);
         assert.equal(resolved.script, record.script);
         assert.equal(resolved.rtl, record.direction === 'rtl');
-        assert.equal(resolveScriptFonts(deck(record.bcp47), {app}).languageId, record.id, record.bcp47);
+        const byTag = resolveScriptFonts(deck(record.bcp47), {app});
+        assert.equal(byTag.languageId, record.id, record.bcp47);
+        assert.equal(byTag.lang, /-[A-Z]{2}$/.test(record.bcp47) ? record.bcp47 : record.ooxmlLang, record.bcp47);
         const scheme = schemeById.get(app === 'Google Slides' ? record.googleFontScheme : record.fontScheme);
         assert.ok(scheme, `${record.id} names a bundled font scheme`);
         if (resolved.scriptRole !== 'latin') {
@@ -251,5 +360,6 @@ describe('schema', () => {
   test('documents without script slots or language scripts stay valid', () => {
     assert.equal(validatePresentation(deck('japanese', 'meiryo')).valid, true);
     assert.equal(validatePresentation(deck({id: 'english', bcp47: 'en-US', fontScheme: 'aptos', googleFontScheme: 'roboto'})).valid, true);
+    assert.equal(validatePresentation(deck({id: 'malay', ooxmlLang: 'ms-MY'})).valid, true);
   });
 });

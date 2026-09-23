@@ -4,6 +4,7 @@
   "name": "Malayalam",
   "code": "MAL",
   "bcp47": "ml",
+  "ooxmlLang": "ml-IN",
   "script": "Mlym",
   "direction": "ltr",
   "fontScheme": "kartika",

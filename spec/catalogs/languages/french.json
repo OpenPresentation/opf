@@ -4,6 +4,7 @@
   "name": "French",
   "code": "FRA",
   "bcp47": "fr",
+  "ooxmlLang": "fr-FR",
   "script": "Latn",
   "direction": "ltr",
   "fontScheme": "aptos",

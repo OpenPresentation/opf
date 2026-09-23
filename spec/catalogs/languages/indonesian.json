@@ -4,6 +4,7 @@
   "name": "Indonesian",
   "code": "IND",
   "bcp47": "id",
+  "ooxmlLang": "id-ID",
   "script": "Latn",
   "direction": "ltr",
   "fontScheme": "aptos",

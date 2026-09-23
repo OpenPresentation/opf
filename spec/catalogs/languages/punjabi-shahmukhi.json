@@ -4,6 +4,7 @@
   "name": "Punjabi (Shahmukhi)",
   "code": "PAN",
   "bcp47": "pa-Arab",
+  "ooxmlLang": "pa-Arab-PK",
   "script": "Arab",
   "direction": "rtl",
   "fontScheme": "arial",

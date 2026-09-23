@@ -4,6 +4,7 @@
   "name": "Dutch",
   "code": "NLD",
   "bcp47": "nl",
+  "ooxmlLang": "nl-NL",
   "script": "Latn",
   "direction": "ltr",
   "fontScheme": "aptos",

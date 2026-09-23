@@ -4,6 +4,7 @@
   "name": "Zulu",
   "code": "ZUL",
   "bcp47": "zu",
+  "ooxmlLang": "zu-ZA",
   "script": "Latn",
   "direction": "ltr",
   "fontScheme": "aptos",

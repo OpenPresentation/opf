@@ -4,6 +4,7 @@
   "name": "Odia",
   "code": "ORI",
   "bcp47": "or",
+  "ooxmlLang": "or-IN",
   "script": "Orya",
   "direction": "ltr",
   "fontScheme": "kalinga",
