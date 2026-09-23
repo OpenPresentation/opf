@@ -1,0 +1,48 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-narrative/v1",
+  "id": "pyramid-principle",
+  "name": "Pyramid Principle",
+  "summary": "Lead with your conclusion, then provide supporting logic. Respects audience time and attention.",
+  "description": "Lead with the conclusion, then provide the supporting logic. State the main recommendation up front, follow with three or four arguments that support it, then back each argument with data and examples. The tone is deductive: conclusion first, reasoning second, so the audience never waits for the point. Best for executive presentations, recommendations, and time-constrained settings; typical decks run 3-8 slides (consulting recommendation, investment thesis, strategic options analysis).",
+  "audienceFit": [
+    "executive",
+    "board",
+    "time-pressed-decision-makers"
+  ],
+  "durationRange": {
+    "minMinutes": 5,
+    "maxMinutes": 20
+  },
+  "tags": [
+    "executive",
+    "strategy",
+    "deductive",
+    "recommendation"
+  ],
+  "beats": [
+    {
+      "id": "answer-first",
+      "name": "Answer First",
+      "description": "Lead with your main point or recommendation. Don't make executives wait for it.",
+      "instructions": "Lead with the conclusion or recommendation.",
+      "slideType": "text",
+      "layoutHint": "title"
+    },
+    {
+      "id": "key-arguments",
+      "name": "Key Arguments",
+      "description": "Provide 3-4 supporting reasons that logically support your answer.",
+      "instructions": "Group the main reasons supporting the answer.",
+      "slideType": "text",
+      "layoutHint": "text-3x"
+    },
+    {
+      "id": "supporting-evidence",
+      "name": "Supporting Evidence",
+      "description": "Back each argument with data, examples, or proof points.",
+      "instructions": "Back each argument with verifiable proof.",
+      "slideType": "chart",
+      "layoutHint": "chart-1x"
+    }
+  ]
+}

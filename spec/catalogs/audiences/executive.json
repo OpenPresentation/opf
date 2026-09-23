@@ -1,0 +1,24 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-audience/v1",
+  "id": "executive",
+  "name": "Executive",
+  "summary": "C-suite and senior leadership focused on strategic decisions, ROI, and big-picture outcomes. Highly time-constrained.",
+  "description": "C-suite and senior leaders deciding on strategy, ROI, and big-picture outcomes with very little time. Lead with the conclusion and keep to one insight per slide; set the key numbers in bold type and use as few bullet points as possible. Keep chart density low and the deck to 10-15 slides at most.",
+  "seniority": "c-suite",
+  "technicalFluency": "medium",
+  "decisionPower": "decision-maker",
+  "attentionBudgetMinutes": 30,
+  "recommendedNarratives": [
+    "pyramid-principle",
+    "situation-complication-resolution"
+  ],
+  "recommendedTones": [
+    "formal",
+    "authoritative",
+    "persuasive"
+  ],
+  "tags": [
+    "leadership",
+    "decision-making"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-audience/v1",
+  "id": "sales",
+  "name": "Sales",
+  "summary": "Sales team or prospective customers focused on product benefits, competitive differentiation, and ROI justification.",
+  "description": "Sales teams and prospective customers weighing product benefits, competitive differentiation, and ROI. Put customer success stories first, back claims with visual proof points, state the value proposition plainly, and close on a strong call to action. Moderate chart density; 15-25 slides.",
+  "seniority": "mixed",
+  "technicalFluency": "medium",
+  "decisionPower": "decision-maker",
+  "attentionBudgetMinutes": 30,
+  "recommendedNarratives": [
+    "problem-solution",
+    "heros-journey"
+  ],
+  "recommendedTones": [
+    "persuasive",
+    "conversational",
+    "casual"
+  ],
+  "tags": [
+    "sales",
+    "customer",
+    "go-to-market"
+  ]
+}

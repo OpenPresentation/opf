@@ -1,0 +1,48 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-narrative/v1",
+  "id": "what-so-what-now-what",
+  "name": "What-So What-Now What",
+  "summary": "Concise framework that connects information to meaning to action. Perfect for executive audiences.",
+  "description": "A concise framework that connects information to meaning to action. Present the facts or findings objectively, explain why they matter to this audience, then state the decisions or next steps they require. The tone is analytical: data-forward and respectful of executive time, with no scene-setting beyond what the facts need. Best for executive briefings, status updates, and research findings; typical decks run 3-6 slides (analytics report, team performance review, strategy update).",
+  "audienceFit": [
+    "executive",
+    "senior-managers",
+    "board"
+  ],
+  "durationRange": {
+    "minMinutes": 5,
+    "maxMinutes": 15
+  },
+  "tags": [
+    "executive",
+    "briefing",
+    "analytical",
+    "action"
+  ],
+  "beats": [
+    {
+      "id": "what",
+      "name": "What",
+      "description": "Present the facts, data, or findings objectively and clearly.",
+      "instructions": "Present the facts, data, or findings objectively and clearly.",
+      "slideType": "chart",
+      "layoutHint": "chart-1x"
+    },
+    {
+      "id": "so-what",
+      "name": "So What",
+      "description": "Explain the significance. Why should your audience care about this information?",
+      "instructions": "Explain the significance. Why should your audience care about this information?",
+      "slideType": "metric",
+      "layoutHint": "number-2x"
+    },
+    {
+      "id": "now-what",
+      "name": "Now What",
+      "description": "Define the action required. What decisions or next steps follow from this?",
+      "instructions": "Define the action required. What decisions or next steps follow from this?",
+      "slideType": "text",
+      "layoutHint": "title"
+    }
+  ]
+}

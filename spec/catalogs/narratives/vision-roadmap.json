@@ -1,0 +1,65 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-narrative/v1",
+  "id": "vision-roadmap",
+  "name": "Vision to Roadmap",
+  "summary": "Connects a compelling long-term vision to near-term executable plans, bridging aspiration and action.",
+  "description": "Connects a compelling long-term vision to near-term executable plans, bridging aspiration and action. Open with a specific three-to-five-year North Star, honestly diagnose the gap between today and that vision, organize the strategy into two to four named pillars, show the phased roadmap with milestones and dependencies, and end with concrete, assigned first steps for the next 30-90 days. The tone is inspirational and strategic: it creates shared direction and commitment to a plan. Best for strategic planning, annual kickoffs, product strategy, and OKR launches; typical decks run 8-20 slides.",
+  "audienceFit": [
+    "leadership-teams",
+    "board",
+    "product-and-strategy-teams",
+    "all-hands"
+  ],
+  "durationRange": {
+    "minMinutes": 15,
+    "maxMinutes": 45
+  },
+  "tags": [
+    "strategy",
+    "roadmap",
+    "planning",
+    "vision"
+  ],
+  "beats": [
+    {
+      "id": "vision",
+      "name": "Vision",
+      "description": "State the 3-5 year North Star. It should be specific, memorable, and directional rather than generic.",
+      "instructions": "Paint the future state clearly.",
+      "slideType": "text",
+      "layoutHint": "title-subtitle"
+    },
+    {
+      "id": "current-state-gap",
+      "name": "Current State Gap",
+      "description": "Honestly assess where you are today versus the vision. The gap justifies the plan.",
+      "instructions": "Define the gap between today and the vision.",
+      "slideType": "text",
+      "layoutHint": "text-2x"
+    },
+    {
+      "id": "strategic-pillars",
+      "name": "Strategic Pillars",
+      "description": "Organize the strategy into 2-4 named priority themes. Each pillar should be independently compelling.",
+      "instructions": "Name the strategic pillars that close the gap.",
+      "slideType": "text",
+      "layoutHint": "text-3x"
+    },
+    {
+      "id": "roadmap",
+      "name": "Roadmap",
+      "description": "Show the phased execution plan with timeframes, milestones, and dependencies. Gantt or swim lane formats work well.",
+      "instructions": "Sequence the initiatives over time.",
+      "slideType": "timeline",
+      "layoutHint": "timeline-1x"
+    },
+    {
+      "id": "first-steps",
+      "name": "First Steps",
+      "description": "Close with concrete, assigned actions for the next 30-90 days. Remove the gap between inspiration and execution.",
+      "instructions": "Identify the immediate moves that start execution.",
+      "slideType": "text",
+      "layoutHint": "title"
+    }
+  ]
+}

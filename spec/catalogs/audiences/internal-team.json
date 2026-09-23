@@ -1,0 +1,25 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-audience/v1",
+  "id": "internal-team",
+  "name": "Internal Team",
+  "summary": "Company employees across functions receiving operational updates, project status, or training content.",
+  "description": "Employees across functions receiving operational updates, project status, or training. Make next steps, owners, and progress visible, and state action items explicitly. Moderate chart density; 10-20 slides.",
+  "seniority": "mixed",
+  "technicalFluency": "medium",
+  "decisionPower": "informational",
+  "attentionBudgetMinutes": 30,
+  "recommendedNarratives": [
+    "what-so-what-now-what",
+    "situation-complication-resolution"
+  ],
+  "recommendedTones": [
+    "casual",
+    "conversational",
+    "authoritative"
+  ],
+  "tags": [
+    "internal",
+    "operations",
+    "team"
+  ]
+}

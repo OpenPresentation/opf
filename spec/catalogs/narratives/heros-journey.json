@@ -1,0 +1,64 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-narrative/v1",
+  "id": "heros-journey",
+  "name": "Hero's Journey",
+  "summary": "Storytelling framework that takes the audience on an emotional journey of change and growth.",
+  "description": "A storytelling framework that takes the audience on an emotional journey of change and growth. Show where things started, the obstacle that forced a change, the path taken and the obstacles overcome, the turning point, and the improved reality with the lessons it taught. The tone is narrative: it builds an emotional arc and invites the audience to identify with the protagonist, whether that is a customer, a team, or the company itself. Best for case studies, brand stories, and change management; typical decks run 5-10 slides (brand story, startup pitch, culture deck, change story).",
+  "audienceFit": [
+    "general-public",
+    "employees",
+    "community"
+  ],
+  "durationRange": {
+    "minMinutes": 5,
+    "maxMinutes": 20
+  },
+  "tags": [
+    "storytelling",
+    "brand",
+    "change",
+    "emotional"
+  ],
+  "beats": [
+    {
+      "id": "status-quo",
+      "name": "Status Quo",
+      "description": "Establish the starting point. What was normal life like before the challenge?",
+      "instructions": "Establish the starting world before change.",
+      "slideType": "image",
+      "layoutHint": "image-bleed"
+    },
+    {
+      "id": "challenge",
+      "name": "Challenge",
+      "description": "Introduce the disruption or opportunity that demanded change.",
+      "instructions": "Introduce the disruption that makes change necessary.",
+      "slideType": "text",
+      "layoutHint": "text-1x"
+    },
+    {
+      "id": "journey",
+      "name": "Journey",
+      "description": "Walk through the process of transformation. Include obstacles overcome.",
+      "instructions": "Walk through the path, obstacles, and choices.",
+      "slideType": "timeline",
+      "layoutHint": "timeline-1x"
+    },
+    {
+      "id": "transformation",
+      "name": "Transformation",
+      "description": "Show the pivotal moment or insight that changed everything.",
+      "instructions": "Show the turning point that changes the outcome.",
+      "slideType": "text",
+      "layoutHint": "text-2x"
+    },
+    {
+      "id": "new-reality",
+      "name": "New Reality",
+      "description": "Reveal the improved state and the lessons that will benefit your audience.",
+      "instructions": "Reveal the improved state and lesson learned.",
+      "slideType": "text",
+      "layoutHint": "text-2x"
+    }
+  ]
+}

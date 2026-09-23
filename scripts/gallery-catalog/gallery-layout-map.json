@@ -1,0 +1,466 @@
+{
+  "description": "FF-28 mapping from pptx.gallery narrative beat layout slugs to bundled core layout ids. check:spec rule (e) requires every narrative layoutHint to be a bundled layout id, so the gallery slugs were mapped when the records were imported. 'layoutHint' may contain {n}, the gallery beat's options.multiple count (1x -> 1). 'withSubtitle' replaces layoutHint when the gallery beat shows a subtitle placeholder. 'beats' is the resolved per-beat record that sync-gallery-catalogs.mjs writes and --check verifies; use it to restore gallery layout ids mechanically (FF-37).",
+  "source": {
+    "repository": "pptx-gallery",
+    "commit": "f17e9ae",
+    "files": [
+      "data/narratives.json",
+      "data/audiences.json"
+    ]
+  },
+  "layouts": {
+    "title-center": {
+      "layoutHint": "title",
+      "withSubtitle": "title-subtitle",
+      "slideType": "text"
+    },
+    "title-left": {
+      "layoutHint": "title",
+      "withSubtitle": "title-subtitle",
+      "slideType": "text"
+    },
+    "thank-you-cta": {
+      "layoutHint": "title",
+      "withSubtitle": "title-subtitle",
+      "slideType": "text"
+    },
+    "text-1x-left": {
+      "layoutHint": "text-{n}x",
+      "slideType": "text"
+    },
+    "product-feature": {
+      "layoutHint": "text-{n}x",
+      "slideType": "text"
+    },
+    "comparison": {
+      "layoutHint": "text-{n}x",
+      "slideType": "text"
+    },
+    "before-after": {
+      "layoutHint": "text-{n}x",
+      "slideType": "text"
+    },
+    "matrix-quadrant": {
+      "layoutHint": "text-{n}x",
+      "slideType": "text"
+    },
+    "testimonial-grid": {
+      "layoutHint": "text-{n}x",
+      "slideType": "text"
+    },
+    "three-column": {
+      "layoutHint": "text-3x",
+      "slideType": "text"
+    },
+    "stats-metrics": {
+      "layoutHint": "number-{n}x",
+      "slideType": "metric"
+    },
+    "data-visualization": {
+      "layoutHint": "chart-{n}x",
+      "slideType": "chart"
+    },
+    "image-focus": {
+      "layoutHint": "image-bleed",
+      "slideType": "image"
+    },
+    "timeline": {
+      "layoutHint": "timeline-1x",
+      "slideType": "timeline"
+    },
+    "roadmap": {
+      "layoutHint": "timeline-1x",
+      "slideType": "timeline"
+    },
+    "agenda": {
+      "layoutHint": "list-1x",
+      "slideType": "list"
+    },
+    "list-2x-title-center": {
+      "layoutHint": "list-2x",
+      "slideType": "list"
+    }
+  },
+  "beats": [
+    {
+      "narrative": "heros-journey",
+      "beat": "status-quo",
+      "galleryLayout": "image-focus",
+      "galleryMultiple": "1x",
+      "gallerySubtitle": true,
+      "gallerySlideType": "text",
+      "slideType": "image",
+      "layoutHint": "image-bleed"
+    },
+    {
+      "narrative": "heros-journey",
+      "beat": "challenge",
+      "galleryLayout": "text-1x-left",
+      "galleryMultiple": "1x",
+      "gallerySubtitle": false,
+      "gallerySlideType": "text",
+      "slideType": "text",
+      "layoutHint": "text-1x"
+    },
+    {
+      "narrative": "heros-journey",
+      "beat": "journey",
+      "galleryLayout": "timeline",
+      "galleryMultiple": "3x",
+      "gallerySubtitle": false,
+      "gallerySlideType": "text",
+      "slideType": "timeline",
+      "layoutHint": "timeline-1x"
+    },
+    {
+      "narrative": "heros-journey",
+      "beat": "transformation",
+      "galleryLayout": "before-after",
+      "galleryMultiple": "2x",
+      "gallerySubtitle": false,
+      "gallerySlideType": "text",
+      "slideType": "text",
+      "layoutHint": "text-2x"
+    },
+    {
+      "narrative": "heros-journey",
+      "beat": "new-reality",
+      "galleryLayout": "testimonial-grid",
+      "galleryMultiple": "2x",
+      "gallerySubtitle": false,
+      "gallerySlideType": "text",
+      "slideType": "text",
+      "layoutHint": "text-2x"
+    },
+    {
+      "narrative": "what-so-what-now-what",
+      "beat": "what",
+      "galleryLayout": "data-visualization",
+      "galleryMultiple": "1x",
+      "gallerySubtitle": false,
+      "gallerySlideType": "chart",
+      "slideType": "chart",
+      "layoutHint": "chart-1x"
+    },
+    {
+      "narrative": "what-so-what-now-what",
+      "beat": "so-what",
+      "galleryLayout": "stats-metrics",
+      "galleryMultiple": "2x",
+      "gallerySubtitle": false,
+      "gallerySlideType": "chart",
+      "slideType": "metric",
+      "layoutHint": "number-2x"
+    },
+    {
+      "narrative": "what-so-what-now-what",
+      "beat": "now-what",
+      "galleryLayout": "thank-you-cta",
+      "galleryMultiple": "1x",
+      "gallerySubtitle": false,
+      "gallerySlideType": "text",
+      "slideType": "text",
+      "layoutHint": "title"
+    },
+    {
+      "narrative": "situation-complication-resolution",
+      "beat": "situation",
+      "galleryLayout": "agenda",
+      "galleryMultiple": "1x",
+      "gallerySubtitle": false,
+      "gallerySlideType": "text",
+      "slideType": "list",
+      "layoutHint": "list-1x"
+    },
+    {
+      "narrative": "situation-complication-resolution",
+      "beat": "complication",
+      "galleryLayout": "matrix-quadrant",
+      "galleryMultiple": "2x",
+      "gallerySubtitle": false,
+      "gallerySlideType": "text",
+      "slideType": "text",
+      "layoutHint": "text-2x"
+    },
+    {
+      "narrative": "situation-complication-resolution",
+      "beat": "question",
+      "galleryLayout": "title-left",
+      "galleryMultiple": "1x",
+      "gallerySubtitle": false,
+      "gallerySlideType": "text",
+      "slideType": "text",
+      "layoutHint": "title"
+    },
+    {
+      "narrative": "situation-complication-resolution",
+      "beat": "answer",
+      "galleryLayout": "roadmap",
+      "galleryMultiple": "1x",
+      "gallerySubtitle": false,
+      "gallerySlideType": "text",
+      "slideType": "timeline",
+      "layoutHint": "timeline-1x"
+    },
+    {
+      "narrative": "star-method",
+      "beat": "situation",
+      "galleryLayout": "text-1x-left",
+      "galleryMultiple": "1x",
+      "gallerySubtitle": false,
+      "gallerySlideType": "text",
+      "slideType": "text",
+      "layoutHint": "text-1x"
+    },
+    {
+      "narrative": "star-method",
+      "beat": "task",
+      "galleryLayout": "list-2x-title-center",
+      "galleryMultiple": "2x",
+      "gallerySubtitle": false,
+      "gallerySlideType": "text",
+      "slideType": "list",
+      "layoutHint": "list-2x"
+    },
+    {
+      "narrative": "star-method",
+      "beat": "action",
+      "galleryLayout": "timeline",
+      "galleryMultiple": "3x",
+      "gallerySubtitle": false,
+      "gallerySlideType": "text",
+      "slideType": "timeline",
+      "layoutHint": "timeline-1x"
+    },
+    {
+      "narrative": "star-method",
+      "beat": "result",
+      "galleryLayout": "stats-metrics",
+      "galleryMultiple": "1x",
+      "gallerySubtitle": false,
+      "gallerySlideType": "chart",
+      "slideType": "metric",
+      "layoutHint": "number-1x"
+    },
+    {
+      "narrative": "pyramid-principle",
+      "beat": "answer-first",
+      "galleryLayout": "title-left",
+      "galleryMultiple": "1x",
+      "gallerySubtitle": false,
+      "gallerySlideType": "text",
+      "slideType": "text",
+      "layoutHint": "title"
+    },
+    {
+      "narrative": "pyramid-principle",
+      "beat": "key-arguments",
+      "galleryLayout": "three-column",
+      "galleryMultiple": "3x",
+      "gallerySubtitle": false,
+      "gallerySlideType": "text",
+      "slideType": "text",
+      "layoutHint": "text-3x"
+    },
+    {
+      "narrative": "pyramid-principle",
+      "beat": "supporting-evidence",
+      "galleryLayout": "data-visualization",
+      "galleryMultiple": "1x",
+      "gallerySubtitle": false,
+      "gallerySlideType": "chart",
+      "slideType": "chart",
+      "layoutHint": "chart-1x"
+    },
+    {
+      "narrative": "sparkline",
+      "beat": "before-state",
+      "galleryLayout": "before-after",
+      "galleryMultiple": "2x",
+      "gallerySubtitle": false,
+      "gallerySlideType": "text",
+      "slideType": "text",
+      "layoutHint": "text-2x"
+    },
+    {
+      "narrative": "sparkline",
+      "beat": "contrast-moment",
+      "galleryLayout": "title-left",
+      "galleryMultiple": "1x",
+      "gallerySubtitle": false,
+      "gallerySlideType": "text",
+      "slideType": "text",
+      "layoutHint": "title"
+    },
+    {
+      "narrative": "sparkline",
+      "beat": "after-state",
+      "galleryLayout": "product-feature",
+      "galleryMultiple": "1x",
+      "gallerySubtitle": false,
+      "gallerySlideType": "text",
+      "slideType": "text",
+      "layoutHint": "text-1x"
+    },
+    {
+      "narrative": "sparkline",
+      "beat": "proof",
+      "galleryLayout": "stats-metrics",
+      "galleryMultiple": "1x",
+      "gallerySubtitle": false,
+      "gallerySlideType": "chart",
+      "slideType": "metric",
+      "layoutHint": "number-1x"
+    },
+    {
+      "narrative": "data-story",
+      "beat": "context",
+      "galleryLayout": "agenda",
+      "galleryMultiple": "1x",
+      "gallerySubtitle": false,
+      "gallerySlideType": "text",
+      "slideType": "list",
+      "layoutHint": "list-1x"
+    },
+    {
+      "narrative": "data-story",
+      "beat": "key-finding",
+      "galleryLayout": "stats-metrics",
+      "galleryMultiple": "1x",
+      "gallerySubtitle": false,
+      "gallerySlideType": "chart",
+      "slideType": "metric",
+      "layoutHint": "number-1x"
+    },
+    {
+      "narrative": "data-story",
+      "beat": "analysis",
+      "galleryLayout": "data-visualization",
+      "galleryMultiple": "1x",
+      "gallerySubtitle": false,
+      "gallerySlideType": "chart",
+      "slideType": "chart",
+      "layoutHint": "chart-1x"
+    },
+    {
+      "narrative": "data-story",
+      "beat": "implications",
+      "galleryLayout": "comparison",
+      "galleryMultiple": "2x",
+      "gallerySubtitle": false,
+      "gallerySlideType": "text",
+      "slideType": "text",
+      "layoutHint": "text-2x"
+    },
+    {
+      "narrative": "data-story",
+      "beat": "recommendation",
+      "galleryLayout": "thank-you-cta",
+      "galleryMultiple": "1x",
+      "gallerySubtitle": false,
+      "gallerySlideType": "text",
+      "slideType": "text",
+      "layoutHint": "title"
+    },
+    {
+      "narrative": "change-story",
+      "beat": "why-change",
+      "galleryLayout": "before-after",
+      "galleryMultiple": "2x",
+      "gallerySubtitle": false,
+      "gallerySlideType": "text",
+      "slideType": "text",
+      "layoutHint": "text-2x"
+    },
+    {
+      "narrative": "change-story",
+      "beat": "why-now",
+      "galleryLayout": "stats-metrics",
+      "galleryMultiple": "1x",
+      "gallerySubtitle": false,
+      "gallerySlideType": "chart",
+      "slideType": "metric",
+      "layoutHint": "number-1x"
+    },
+    {
+      "narrative": "change-story",
+      "beat": "why-this-way",
+      "galleryLayout": "roadmap",
+      "galleryMultiple": "1x",
+      "gallerySubtitle": false,
+      "gallerySlideType": "text",
+      "slideType": "timeline",
+      "layoutHint": "timeline-1x"
+    },
+    {
+      "narrative": "change-story",
+      "beat": "whats-at-stake",
+      "galleryLayout": "comparison",
+      "galleryMultiple": "2x",
+      "gallerySubtitle": false,
+      "gallerySlideType": "text",
+      "slideType": "text",
+      "layoutHint": "text-2x"
+    },
+    {
+      "narrative": "change-story",
+      "beat": "how-we-win-together",
+      "galleryLayout": "thank-you-cta",
+      "galleryMultiple": "1x",
+      "gallerySubtitle": false,
+      "gallerySlideType": "text",
+      "slideType": "text",
+      "layoutHint": "title"
+    },
+    {
+      "narrative": "vision-roadmap",
+      "beat": "vision",
+      "galleryLayout": "title-center",
+      "galleryMultiple": "1x",
+      "gallerySubtitle": true,
+      "gallerySlideType": "text",
+      "slideType": "text",
+      "layoutHint": "title-subtitle"
+    },
+    {
+      "narrative": "vision-roadmap",
+      "beat": "current-state-gap",
+      "galleryLayout": "before-after",
+      "galleryMultiple": "2x",
+      "gallerySubtitle": false,
+      "gallerySlideType": "text",
+      "slideType": "text",
+      "layoutHint": "text-2x"
+    },
+    {
+      "narrative": "vision-roadmap",
+      "beat": "strategic-pillars",
+      "galleryLayout": "three-column",
+      "galleryMultiple": "3x",
+      "gallerySubtitle": false,
+      "gallerySlideType": "text",
+      "slideType": "text",
+      "layoutHint": "text-3x"
+    },
+    {
+      "narrative": "vision-roadmap",
+      "beat": "roadmap",
+      "galleryLayout": "roadmap",
+      "galleryMultiple": "1x",
+      "gallerySubtitle": false,
+      "gallerySlideType": "text",
+      "slideType": "timeline",
+      "layoutHint": "timeline-1x"
+    },
+    {
+      "narrative": "vision-roadmap",
+      "beat": "first-steps",
+      "galleryLayout": "thank-you-cta",
+      "galleryMultiple": "1x",
+      "gallerySubtitle": false,
+      "gallerySlideType": "text",
+      "slideType": "text",
+      "layoutHint": "title"
+    }
+  ]
+}

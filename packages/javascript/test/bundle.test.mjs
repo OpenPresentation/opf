@@ -180,7 +180,7 @@ describe("bundlePresentation", () => {
       language: "fr",
       tone: "upbeat",
       purpose: "celebrate",
-      audience: ["partners"],
+      audience: ["Channel partners"],
       slides: [{ layout: "custom-grid", title: "x" }],
     });
     assert.deepEqual(report.unresolved, {});
@@ -202,6 +202,16 @@ describe("bundlePresentation", () => {
     assert.deepEqual(report.unresolved.colorSchemes, ["no-such-scheme", "no-such-slide-scheme"]);
     assert.deepEqual(report.unresolved.fontSchemes, ["no-such-font"]);
     assert.deepEqual(report.unresolved.chartTypes, ["no-such-chart"]);
+  });
+
+  test("reports bare-id audiences the validator would warn about and inlines known ones", () => {
+    const { report } = bundlePresentation({
+      name: "Audiences",
+      audience: ["executive", "no-such-audience", { id: "no-such-override", attentionBudgetMinutes: 20 }, "Channel partners"],
+      slides: [{ title: "x" }],
+    });
+    assert.deepEqual(report.unresolved.audiences, ["no-such-audience", "no-such-override"]);
+    assert.deepEqual(report.added.audiences, ["executive"]);
   });
 
   test("reports a chart type nested in blocks and promoted regions", () => {
@@ -250,6 +260,12 @@ describe("bundlePresentation", () => {
         slides: [{ title: "x" }],
       },
       shorthands: { name: "D", language: "fr", tone: "upbeat", slides: [{ layout: "custom-grid", title: "x" }] },
+      audiences: {
+        name: "D",
+        audience: ["executive", "no-such-audience", { id: "no-such-override" }, "Series B investors"],
+        slides: [{ title: "x" }],
+      },
+      "single audience id": { name: "D", audience: "no-such-audience", slides: [{ title: "x" }] },
       "unknown design and chart": {
         name: "D",
         narrative: "no-such-arc",

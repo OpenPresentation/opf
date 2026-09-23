@@ -1,0 +1,56 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-narrative/v1",
+  "id": "star-method",
+  "name": "STAR Method",
+  "summary": "Results-focused framework that demonstrates impact through concrete examples.",
+  "description": "A results-focused framework that demonstrates impact through a concrete example: the Situation, the Task you were responsible for, the Actions you took, and the measurable Result. The tone is evidential: every claim is grounded in a specific, verifiable outcome. Best for project reviews, portfolio presentations, and achievement showcases; typical decks run 4-8 slides (case study, customer success story, project retrospective).",
+  "audienceFit": [
+    "hr-and-talent",
+    "performance-reviewers",
+    "award-committees"
+  ],
+  "durationRange": {
+    "minMinutes": 5,
+    "maxMinutes": 15
+  },
+  "tags": [
+    "case-study",
+    "proof",
+    "results",
+    "retrospective"
+  ],
+  "beats": [
+    {
+      "id": "situation",
+      "name": "Situation",
+      "description": "Describe the context and background of the scenario.",
+      "instructions": "Describe the relevant context and constraints.",
+      "slideType": "text",
+      "layoutHint": "text-1x"
+    },
+    {
+      "id": "task",
+      "name": "Task",
+      "description": "Explain your specific role and responsibilities in this situation.",
+      "instructions": "Explain the responsibility or target outcome.",
+      "slideType": "list",
+      "layoutHint": "list-2x"
+    },
+    {
+      "id": "action",
+      "name": "Action",
+      "description": "Detail the specific steps you took to address the challenge.",
+      "instructions": "Detail the actions taken and choices made.",
+      "slideType": "timeline",
+      "layoutHint": "timeline-1x"
+    },
+    {
+      "id": "result",
+      "name": "Result",
+      "description": "Share the measurable outcomes and impact of your actions.",
+      "instructions": "Show measurable impact and proof.",
+      "slideType": "metric",
+      "layoutHint": "number-1x"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-audience/v1",
+  "id": "customer",
+  "name": "Customer",
+  "summary": "End customers receiving product demos, onboarding presentations, or business reviews.",
+  "description": "Customers receiving product demos, onboarding, or business reviews. Speak in their language, focus on the value they realize, keep visuals simple, and use strong product screenshots. Keep chart density low; 10-20 slides.",
+  "seniority": "mixed",
+  "technicalFluency": "mixed",
+  "decisionPower": "decision-maker",
+  "attentionBudgetMinutes": 30,
+  "recommendedNarratives": [
+    "heros-journey",
+    "problem-solution"
+  ],
+  "recommendedTones": [
+    "casual",
+    "persuasive",
+    "conversational"
+  ],
+  "tags": [
+    "external",
+    "customer",
+    "product"
+  ]
+}
