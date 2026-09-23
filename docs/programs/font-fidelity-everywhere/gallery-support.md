@@ -27,7 +27,7 @@ Two measurements are recorded here:
 
 | Repository | Presence audits A and B | Parity scoreboard (FF-38) | Previous parity run (opf#122) | Parity baseline (history) |
 | --- | --- | --- | --- | --- |
-| opf (core) | `a74f3f6` | `7f88749` | `c278532` | `53be042` |
+| opf (core) | `a74f3f6` | `b1753ef` | `c278532` | `53be042` |
 | opf-render | `bc436f3` | `bc436f3` | `47d19b2` | `e500ed9` |
 | opf-pptx | `9092954` | `9092954` | `5b657c9` | `cf0bc0c` |
 | opf-editor | `214ae69` (audit B) | not used | not used | not used |
@@ -39,8 +39,9 @@ merged mains. They include FF-07, FF-08, FF-17, FF-18, FF-19, FF-24, FF-28,
 FF-32, FF-35, FF-35b and FF-39, the merged engine halves of FF-25, FF-26,
 FF-27 and FF-34 (opf-pptx#65 included), FF-31's exporter half
 (opf-pptx#63) and FF-22's core half. The parity scoreboard was re-run at opf
-`7f88749` (opf#137, documentation only since `a74f3f6`) after the harness
-learned to map the FF-26 slide-image picture; the run before that change is
+`b1753ef` (opf#138; documentation and harness only since `a74f3f6`) after
+the harness learned to map the FF-26 slide-image picture and, since, to fail
+non-finite geometry and check crop position; the run before the mapping is
 kept at
 [parity/history/2026-09-23-opf137/PARITY.md](gallery-support/parity/history/2026-09-23-opf137/PARITY.md). pptx-gallery is still `f17e9ae`: none
 of its program PRs (#40 to #46) has merged, so every snippet is the
@@ -83,7 +84,7 @@ checks are:
 
 | Check | Passes when |
 | --- | --- |
-| geometry | Text-line anchors and baselines are within 0.02 pt; chart, table, picture and card frames equal the composed box within 0.02 pt. Deltas up to 0.5 pt are near. |
+| geometry | Text-line anchors and baselines are within 0.02 pt; chart, table, picture and card frames equal the composed box within 0.02 pt; a picture's crop places the image content where the preview does, within 0.02 pt at the visible edges. Deltas up to 0.5 pt are near; a non-finite delta fails. |
 | text | Same line text and run segmentation. Per run: the same family in the script slot the text uses (`latin`/`ea`/`cs`), size within 0.005 pt, bold, italic and resolved colour. Also the same paragraph alignment and list markers. Native charts: preview labels are in the chart caches, and the chart XML names the preview font. |
 | fills | Same background kind and colour; per element group, the same solid fill colours and the same images (sha256); chart series colours appear in the preview. |
 | zOrder | The order of mapped element groups in `spTree` matches the SVG paint order, and the slide count matches. |

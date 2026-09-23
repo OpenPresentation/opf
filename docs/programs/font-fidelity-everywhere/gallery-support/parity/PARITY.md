@@ -1,8 +1,8 @@
 # Preview vs PPTX parity: pptx.gallery values
 
-Generated 2026-09-23T12:09:28.231Z by `dimension-audit/parity/scripts/parity.mjs` (Node v24.21.0, worktree prefix `parity`). No Office was used.
+Generated 2026-09-23T12:35:35.658Z by `dimension-audit/parity/scripts/parity.mjs` (Node v24.21.0, worktree prefix `parity`). No Office was used.
 
-Heads: opf `7f88749`, opf-render `bc436f3`, opf-pptx `9092954`, pptx-gallery `f17e9ae`.
+Heads: opf `b1753ef`, opf-render `bc436f3`, opf-pptx `9092954`, pptx-gallery `f17e9ae`.
 
 ## What "perfect" means
 
@@ -10,7 +10,7 @@ For each value, the harness builds the gallery's own OPF Config document. It ren
 
 | check | pass means |
 |---|---|
-| geometry | the rendered text line extent (left edge from the anchor and the line width by core measureText; PPTX: box x + marL, centered or right-aligned in the box) and baseline (box y + size) are within 0.02 pt. Chart, table, picture and card frames equal the composed box within 0.02 pt. Deltas up to 0.5 pt count as near. |
+| geometry | the rendered text line extent (left edge from the anchor and the line width by core measureText; PPTX: box x + marL, centered or right-aligned in the box) and baseline (box y + size) are within 0.02 pt. Chart, table, picture and card frames equal the composed box within 0.02 pt. The crop (`a:srcRect`) of a picture places the image content where the preview `preserveAspectRatio` does, within 0.02 pt at the visible edges. Deltas up to 0.5 pt count as near; a non-finite delta (NaN or infinite geometry, or a crop that leaves no image) fails. |
 | text | Same line text; same run segmentation; per run, the same family in the script slot used by the text (latin/ea/cs), size within 0.005 pt, bold, italic and resolved RGB colour (srgb, or schemeClr resolved through theme1); same paragraph alignment; same list markers. Native charts: preview labels exist in the chart caches, and the chart XML names the preview font. |
 | fills | Same background kind and colour. Per element group, the same set of solid fill colours (table cell fills included) and the same image count and bytes (sha256). Chart series colours appear in the preview. |
 | zOrder | The order of mapped element groups in spTree matches SVG paint order, and the slide count matches. |
@@ -51,7 +51,7 @@ The check columns count values that pass that check. A value is perfect only whe
 
 ## Before / after
 
-Baseline heads: opf `a74f3f6`, opf-render `bc436f3`, opf-pptx `9092954`, pptx-gallery `f17e9ae`.
+Baseline heads: opf `7f88749`, opf-render `bc436f3`, opf-pptx `9092954`, pptx-gallery `f17e9ae`.
 
 | dimension | perfect before | perfect after | near before | near after | improved | regressed |
 |---|---|---|---|---|---|---|

@@ -183,6 +183,19 @@ image letterboxed in its frame) compares as the image the preview shows. A
 slide-image picture on a slide whose preview has no slide image fails
 mapping, and so does a preview slide image with no picture.
 
+Every picture whose preview `<image>` has a known intrinsic size (all 408
+pictures in the current run) also gets a crop-position check. A positive crop
+always leaves the visible rect equal to the frame, so the frame check alone
+cannot tell `l=25000 r=25000` from `l=50000 r=0`. The harness takes the full
+image rect (the frame widened by `a:srcRect`) and the preview's placed image
+(the `<image>` viewport with `preserveAspectRatio` applied to the intrinsic
+size), and measures how far the image content shown at the visible edges is
+displaced between them. That displacement must be within the same 0.02 pt.
+It is measured at the visible edges rather than at the clipped-away image
+edges, where `a:srcRect`'s 1/100000 quantization is magnified by the crop
+ratio. Any NaN or infinite coordinate or delta, including a crop with
+`l+r` or `t+b` of 100000 or more, fails geometry, harness-wide.
+
 ## `support-status.json`
 
 Schema version 1. Top level:

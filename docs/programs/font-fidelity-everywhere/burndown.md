@@ -591,3 +591,11 @@ Append one dated line per state change. Newest last.
   zOrder 880 (784), no value regressed. The 225 affected values matched the
   preview exactly (0 pt, identical bytes); the drop at opf#137 was a harness
   gap, not an export difference.
+- 2026-09-23: Parity harness review follow-up. Geometry now fails any
+  non-finite delta or box (for example a crop with `l+r` of 100000 or more),
+  and every picture gets a crop-position check against the preview's
+  `preserveAspectRatio` placement at the same 0.02 pt. Re-run at opf
+  `b1753ef`, opf-render `bc436f3`, opf-pptx `9092954`, pptx-gallery
+  `f17e9ae`: no check or class changed (4 of 900 perfect, geometry 880);
+  19 cropped-image values now record a maximum delta of 0.001 to 0.004 pt
+  (srcRect quantization).

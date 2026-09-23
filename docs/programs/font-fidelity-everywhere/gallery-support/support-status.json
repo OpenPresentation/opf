@@ -77,13 +77,13 @@
   "parity": {
    "item": "FF-38",
    "heads": {
-    "opf": "7f88749",
+    "opf": "b1753ef",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
     "node": "24.21.0"
    },
-   "generated": "2026-09-23T12:09:28.231Z",
+   "generated": "2026-09-23T12:35:35.658Z",
    "tolerances": {
     "geomPt": 0.02,
     "geomNearPt": 0.5,
