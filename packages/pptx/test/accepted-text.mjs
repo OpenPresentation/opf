@@ -7,7 +7,9 @@ import JSZip from 'jszip';
 import {toPptx,fromPptx} from '../dist/index.js';
 import {resolvePresentation} from '@openpresentation/opf-render';
 import {loadOfficeFontRegistry} from '@openpresentation/opf-render/fonts-node';
-const fonts=await loadOfficeFontRegistry({substitutionPolicy:'visual'});
+// FF-31: the deck chooses Carlito itself, so preview, package and the native text gate name one exact open face.
+// Substituted previews (Aptos measured with Carlito) name the chosen family instead: test/export-chosen-fonts.mjs.
+const fonts=await loadOfficeFontRegistry({substitutionPolicy:'none'});
 const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseTagValue:false,trimValues:false});
 const array=value=>value===undefined?[]:Array.isArray(value)?value:[value];
 const nativeText=shape=>array(shape['p:txBody']?.['a:p']).map(p=>array(p['a:r']).map(r=>r['a:t']??'').join('')).join('\n');
@@ -18,7 +20,7 @@ if(out)await mkdir(out,{recursive:true});
 for(const dimensions of [{widthInches:40/3,heightInches:7.5},{widthInches:5.625,heightInches:10}])
 for(const contentBox of [false,true])for(const alignment of ['left','center','right'])
 for(const text of ['Full source\nSecond paragraph.', ['Exact spacing ',{text:'with bold words',bold:true},' and ',{text:'italics.',italic:true},'\n',{text:'Raised ',superscript:true},{text:'note',fontSize:20,underline:true},' stays editable.']]) {
-  const deck={design:{contentBox,dimensions,titleAlignment:alignment,contentAlignment:alignment,fontScheme:{id:'roboto',heading:{family:'Aptos Display'},body:{family:'Aptos'}}},slides:[{tag:'Source',title:'A measured title that wraps when space is narrow',subtitle:'Supporting text',composition:{mode:'column',minFontSize:24},text}]};
+  const deck={design:{contentBox,dimensions,titleAlignment:alignment,contentAlignment:alignment,fontScheme:{id:'carlito',heading:{family:'Carlito'},body:{family:'Carlito'}}},slides:[{tag:'Source',title:'A measured title that wraps when space is narrow',subtitle:'Supporting text',composition:{mode:'column',minFontSize:24},text}]};
   const original=structuredClone(deck),options={textMeasurement:fonts.textMeasurement};
   const bound=resolvePresentation(deck,options).slides[0],expected=bound.geometry.items.flatMap(item=>item.text.placement.lines.map((placed,index)=>({item,placed,index})));
   const bytes=await toPptx(deck,options),zip=await JSZip.loadAsync(bytes),xml=await zip.file('ppt/slides/slide1.xml').async('string');

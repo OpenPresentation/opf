@@ -45,7 +45,7 @@ if(mode==='generate') {
     const {source,geometry,...rest}=record,dimensions=source.design.dimensions;
     return {...rest,width:Math.round(dimensions.widthInches*96),height:Math.round(dimensions.heightInches*96),alignment:source.design.contentAlignment,
       items:geometry.items.map(item=>({path:item.path,field:item.field,box:item.box,text:item.text,textStyle:item.textStyle}))};
-  }),scope:'Four exact openly licensed Carlito faces for session-only native testing. Requested Aptos is an explicit visual substitute. Accepted text still normalizes plain whitespace; no arbitrary round-trip or native font-file identity claim.'});
+  }),scope:'Four exact openly licensed Carlito faces for session-only native testing. The source deck chooses Carlito, so no substitute is involved (FF-31). Accepted text still normalizes plain whitespace; no arbitrary round-trip or native font-file identity claim.'});
   console.log(`Generated ${report.cases} native text fixtures with ${fonts.length} exact open font files.`);
 } else {
   const generation=await json('generation.json'),generationSha256=hash(await readFile(path.join(output,'generation.json')));

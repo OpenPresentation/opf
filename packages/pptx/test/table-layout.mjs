@@ -16,7 +16,7 @@ function find(value, key) {
 }
 let checked = 0, shrunk = 0, grown = 0;
 for (const scale of [1, 0.5]) {
-for (const [fontScheme, family] of [['roboto', 'Roboto'], [{major:'Calibri',minor:'Calibri'}, 'Carlito']]) {
+for (const [fontScheme, family, chosen] of [['roboto', 'Roboto', 'Roboto'], [{major:'Calibri',minor:'Calibri'}, 'Carlito', 'Calibri']]) {
 for (const align of ['left', 'center', 'right']) {
   for (const withHeaders of [true, false]) {
     const table = {
@@ -72,7 +72,8 @@ for (const align of ['left', 'center', 'right']) {
         const props = find(cell, 'a:rPr');
         for (const prop of props) {
           assert.equal(Number(prop['@_sz']), Math.round(expectedSize * 75), `${path} uses the preview font size`);
-          assert.equal(find(prop, 'a:latin')[0]['@_typeface'], family);
+          // FF-31: Carlito measures Calibri for the preview; the package names Calibri.
+          assert.equal(find(prop, 'a:latin')[0]['@_typeface'], chosen);
         }
         const pPr = find(cell, 'a:pPr')[0];
         assert.equal(pPr['@_algn'] ?? 'l', {left:'l',center:'ctr',right:'r'}[align], 'Native alignment matches the SVG anchor');

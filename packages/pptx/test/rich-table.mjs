@@ -34,7 +34,8 @@ assert.equal(runs(cells[0][0])[0]['a:rPr'].b,undefined,'Explicit normal run over
 assert.equal(runs(cells[0][0])[1]['a:rPr'].b,'1');
 const body=runs(cells[1][0]);assert.equal(body.map(r=>r['a:t']).join(''),'A Bold tail');
 assert.equal(body[1]['a:rPr'].b,'1');assert.equal(body[1]['a:rPr']['a:solidFill']['a:srgbClr'].val,'A00000');
-const link=runs(cells[2][0])[0]['a:rPr'];assert.equal(link['a:latin'].typeface,'Resolved');assert.equal(link.i,'1');assert.equal(link.u,'sng');assert.equal(link.strike,'sngStrike');assert.ok(link['a:hlinkClick']['r:id']);
+const link=runs(cells[2][0])[0]['a:rPr'];// FF-31: the preview draws the provider's alias target; the package names the chosen family.
+assert.equal(link['a:latin'].typeface,'Alias');assert.equal(link.i,'1');assert.equal(link.u,'sng');assert.equal(link.strike,'sngStrike');assert.ok(link['a:hlinkClick']['r:id']);
 assert.ok(Number(runs(cells[1][1])[1]['a:rPr'].baseline)<0,'Subscript baseline');
 assert.ok(Number(runs(cells[4][1])[1]['a:rPr'].baseline)>0,'Superscript baseline');
 assert.equal(runs(cells[4][0])[0]['a:rPr'].sz,'1800','Explicit point size is retained');

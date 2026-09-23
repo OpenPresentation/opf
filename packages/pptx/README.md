@@ -142,7 +142,9 @@ Version 0.4.0 requires published `@openpresentation/opf@^0.6.0`. The optional re
 
 For crowded drafts, run `paginatePresentation` from `@openpresentation/opf/pagination` first, then pass its returned presentation to both preview and `toPptx`. Native table row sizing now follows shared reference geometry; the exporter does not add hidden table continuation slides.
 
-Pass the same `textMeasurement` provider used by preview and pagination to `toPptx`. Plain text and headings retain the measured line breaks and resolved font family in editable PowerPoint shapes. Font binaries are not yet embedded in PPTX; native viewers still need the resolved font installed.
+Pass the same `textMeasurement` provider used by preview and pagination to `toPptx`. Plain text and headings retain the measured line breaks in editable PowerPoint shapes.
+
+The PPTX always names the font family the document chose. A provider may preview that family with another face: a metric-compatible substitute (Carlito for Calibri), a visual one (Carlito for Aptos), a caller alias or a generic fallback. That face changes measurement and drawing only. It never reaches the theme, runs, bullets or chart parts. Faces of the chosen family itself, such as Roboto Medium for Roboto at weight 500, keep their native style-link names. `test/export-chosen-fonts.mjs` checks this for every renderer Office-pack substitute. The exporter does not embed font binaries. Viewers resolve the named family themselves. When the preview used a non-metric substitute, PowerPoint can break lines differently from the preview.
 
 Since 0.5.1, the exact PptxGenJS 4.0.1 ESM distribution is shipped with its MIT license and verified upstream hashes. Its unused `image-size` dependency is not installed; JSZip is declared directly. See [dependency provenance and regression coverage](DEPENDENCY-NOTES.md). The published 0.5.0 package retains the older dependency graph.
 
@@ -152,7 +154,7 @@ Version 0.4.0 imports and exports supported rich table cells and headers as edit
 
 The exporter measures every cell with the same `textMeasurement` provider, font roles and effective nested `minFontSize` used by the SVG preview. Native table cells retain the original strings and values as text, with matching fitted sizes, line spacing, alignment, margins and row/column geometry. Uneven rows receive empty cells for missing columns. Theme border colors now use the same slot as the preview.
 
-`npm test` compares exported OOXML against the published SVG renderer across 168 cells, including 24 cases that require taller rows, Roboto and Calibri-to-Carlito substitution, two canvas sizes, headers and all three alignments. PowerPoint still performs its own natural wrapping and needs the resolved fonts installed. These document-property checks do not establish native raster parity or lossless typed-cell import.
+`npm test` compares exported OOXML against the published SVG renderer across 168 cells, including 24 cases that require taller rows, Roboto, and Calibri measured with its metric-compatible Carlito substitute (the cells still name Calibri), two canvas sizes, headers and all three alignments. PowerPoint still performs its own natural wrapping and needs the named fonts installed. These document-property checks do not establish native raster parity or lossless typed-cell import.
 
 A local macOS Quick Look check opened both Roboto and system-Arial specimens. Quick Look substituted a serif font for uninstalled Roboto; the Arial specimen used a sans-serif face but still differed in table wrapping and row proportions. This is evidence of remaining viewer differences, not a passing PowerPoint raster comparison.
 

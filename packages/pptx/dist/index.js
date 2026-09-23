@@ -177,6 +177,7 @@ export async function toPptx(input, options = {}) {
   }
   const presentation = parseInput(input);
   assertValidBoundary(presentation);
+  options = {...options, textMeasurement: chosenFamilyMeasurement(options.textMeasurement)};
 
   const context = resolvePresentationContext(presentation, {...options,textMeasurement:undefined});
   context.listMarkers = new Map();
@@ -1571,6 +1572,47 @@ function addPlaceholderPayload(slide, label, value, region, context) {
     valign: "mid",
     align: "center"
   });
+}
+
+// FF-31: a measurement provider may preview a chosen family with another face
+// (Carlito for Aptos or Calibri, Gelasio for Georgia, a caller alias, a generic
+// fallback). That substitute changes measurement and drawing only. The package
+// always names the developer's chosen family. Measurement still uses the
+// substitute, because the provider resolves the chosen family again on every
+// measure/outline call, so layout is unchanged.
+const FACE_STYLE_WORDS = /^(?:(?:thin|hairline|extra ?light|ultra ?light|light|semi ?light|demi ?light|book|regular|normal|medium|semi ?bold|demi ?bold|bold|extra ?bold|ultra ?bold|black|heavy|extra ?black|ultra ?black|italic|oblique)\s*)+$/i;
+function sameTypeface(requested, resolved) {
+  if (typeof resolved !== 'string') return false;
+  const want = requested.trim().toLowerCase(), got = resolved.trim().toLowerCase();
+  // A legacy four-style family such as "Roboto Medium" is the chosen typeface.
+  return got === want || got.startsWith(`${want} `) && FACE_STYLE_WORDS.test(got.slice(want.length + 1));
+}
+function chosenFamilyMeasurement(measurement) {
+  if (!measurement || typeof measurement.resolveStyle !== 'function') return measurement;
+  const resolveFont = typeof measurement.resolveFont === 'function' ? style => measurement.resolveFont(style) : undefined;
+  const wrapped = {
+    measure: (text, size, style) => measurement.measure(text, size, style),
+    resolveStyle: style => {
+      const resolved = measurement.resolveStyle(style);
+      const requested = style?.fontFamily;
+      // Theme tokens are provider business; the exporter always passes concrete families.
+      if (typeof requested !== 'string' || requested.startsWith('+')) return resolved;
+      // opf-render reports whether a face came from the chosen family or a substitute;
+      // other providers are judged by family name.
+      const resolution = resolveFont?.(style);
+      const faceFamily = resolved?.fontFace?.family;
+      const substituted = typeof resolution?.substitute === 'boolean'
+        ? resolution.substitute
+        : !sameTypeface(requested, resolved?.fontFamily) || typeof faceFamily === 'string' && !sameTypeface(requested, faceFamily);
+      if (!substituted) return resolved;
+      const chosen = {...style};
+      delete chosen.fontFace;
+      return chosen;
+    },
+  };
+  if (typeof measurement.outlineBounds === 'function') wrapped.outlineBounds = (text, size, style) => measurement.outlineBounds(text, size, style);
+  if (resolveFont) wrapped.resolveFont = resolveFont;
+  return wrapped;
 }
 
 function nativeFontOptions(style) {
