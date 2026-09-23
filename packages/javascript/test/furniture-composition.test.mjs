@@ -177,3 +177,64 @@ test('a {total} retry reports each unknown font scheme once',()=>{
   assert.ok(result.presentation.slides.length>2,'The retry path runs: the page count differs from the source count.');
   assert.deepEqual(issues.map(issue=>[issue.code,issue.path]),[['unresolved-font-scheme','design.fontScheme']]);
 });
+test('generated socials format the primary organization profiles through platform records',async()=>{
+  const {socialPlatforms}=await import('../dist/catalogs.js');
+  const {resolveSocialProfile}=await import('../dist/index.js');
+  const organization={id:'acme',name:'Acme',socials:{linkedin:'acme',x:'@acme',github:'acme',mastodon:'@acme@hachyderm.io',bluesky:'https://bsky.app/profile/acme.bsky.social',custom:' Visit  us ',blank:'  '}};
+  const presentation={organization:[{id:'other',name:'Other',socials:{x:'other'}},{...organization,role:'primary'}],design:{footer:{right:{organization:true,socials:true}}}};
+  const before=structuredClone(presentation);
+  const layout=layoutFurniture({text:'Body'},{presentation,socialPlatforms});
+  assert.deepEqual(presentation,before);assert.deepEqual(layout.diagnostics,[]);
+  const part=layout.parts.find(item=>item.field==='socials');
+  assert.equal(part.generated,true);assert.equal(part.path,'design.footer.right.socials');assert.equal(part.sourcePath,'organization.1.socials');
+  assert.deepEqual(layout.parts.map(item=>item.field),['organization','socials']);
+  assert.equal(part.text,['linkedin.com/company/acme','x.com/acme','github.com/acme','mastodon.social/@acme@hachyderm.io','bsky.app/profile/acme.bsky.social','Visit us'].join('\n'));
+  assert.deepEqual(part.links.map(link=>[link.platform,link.href,link.resolved,link.sourcePath]),[
+    ['linkedin','https://linkedin.com/company/acme',true,'organization.1.socials.linkedin'],
+    ['x','https://x.com/acme',true,'organization.1.socials.x'],
+    ['github','https://github.com/acme',true,'organization.1.socials.github'],
+    ['mastodon','https://mastodon.social/@acme@hachyderm.io',true,'organization.1.socials.mastodon'],
+    ['bluesky','https://bsky.app/profile/acme.bsky.social',false,'organization.1.socials.bluesky'],
+    ['custom',undefined,false,'organization.1.socials.custom'],
+  ]);
+  assert.equal(part.fit.sourceLines.filter(line=>line.boundary!=='soft').length,part.links.length);
+  // Speakers use member profile patterns; inline records win over host records.
+  assert.equal(resolveSocialProfile('linkedin','alice-chen',socialPlatforms,'speaker').text,'linkedin.com/in/alice-chen');
+  const inline=layoutFurniture({},{presentation:{...presentation,catalogs:{socialPlatforms:{records:[{id:'x',profileUrlPattern:'https://example.test/u/{handle}',handlePrefix:'@'}]}}},socialPlatforms});
+  assert.equal(inline.parts[1].links[1].text,'example.test/u/acme');
+  // Without any record a handle stays the raw authored value (Socials engine fallback).
+  const bare=layoutFurniture({},{presentation});
+  assert.deepEqual(bare.parts[1].links.slice(0,2).map(link=>[link.text,link.href]),[['acme',undefined],['@acme',undefined]]);
+  // Every catalog platform formats its own example handle.
+  for(const platformRecord of socialPlatforms){
+    const profile=resolveSocialProfile(platformRecord.id,platformRecord.handleExample,socialPlatforms);
+    assert.equal(profile.resolved,true,platformRecord.id);assert.match(profile.href,/^https:\/\//);assert.equal(`https://${profile.text}`,decodeURI(profile.href));
+  }
+});
+test('generated socials without organization socials diagnose their controlling path',()=>{
+  for(const organization of [undefined,{id:'acme',name:'Acme'},{id:'acme',name:'Acme',socials:{x:' '}}]){
+    const layout=layoutFurniture({},{presentation:{organization,design:{header:{left:{socials:true}}}}});
+    assert.deepEqual(layout.parts,[]);assert.deepEqual(layout.diagnostics.map(d=>[d.code,d.path]),[['unresolved-content','design.header.left.socials']]);
+  }
+  assert.deepEqual(layoutFurniture({},{presentation:{organization:{id:'a',name:'A',socials:{x:'a'}},design:{header:{left:{socials:false}}}}}).parts,[]);
+});
+test('whole-deck pagination accepts generated socials and rejects missing ones atomically',()=>{
+  const input={$schema:'https://openpresentation.org/schema/opf/v1',organization:{id:'acme',name:'Acme',socials:{x:'@acme'}},design:{footer:{right:{socials:true}}},slides:[{text:'Body'}]};
+  const {pages}=paginatePresentation(input);
+  assert.equal(pages.length,1);
+  assert.throws(()=>paginatePresentation({...input,organization:{id:'acme',name:'Acme'}}),OPFPaginationError);
+});
+test('one footer carries FF-27 live slide-number fields and FF-34 social links without mixing them',async()=>{
+  const {socialPlatforms}=await import('../dist/catalogs.js');
+  const presentation={organization:{id:'acme',name:'Acme',socials:{x:'@acme',custom:'Visit us'}},slides:[{},{},{}],
+    design:{footer:{left:{slideNumber:true,slideNumberFormat:'Slide {current} of {total}'},right:{slideNumber:true,socials:true}}}};
+  const layout=layoutFurniture({},{presentation,socialPlatforms,slideIndex:1});
+  assert.deepEqual(layout.diagnostics,[]);
+  assert.deepEqual(layout.parts.map(part=>[part.zone,part.field]),[['left','slideNumber'],['right','socials'],['right','slideNumber']]);
+  const [numbered,socials,bare]=layout.parts;
+  assert.equal(numbered.text,'Slide 2 of 3');assert.deepEqual(numbered.fields,[{type:'slideNumber',start:6,end:7}]);assert.equal(numbered.links,undefined);
+  assert.equal(socials.text,'x.com/acme\nVisit us');assert.equal(socials.fields,undefined);
+  assert.deepEqual(socials.links.map(link=>[link.platform,link.href]),[['x','https://x.com/acme'],['custom',undefined]]);
+  assert.equal(bare.text,'2');assert.deepEqual(bare.fields,[{type:'slideNumber',start:0,end:1}]);assert.equal(bare.links,undefined);
+  assert.ok(bare.box.y>=socials.box.y+socials.box.height);
+});

@@ -268,8 +268,15 @@ export interface SlideComposition {
   explanation?: CompositionExplanation;
 }
 export interface ComposeSlideOptions {
-  /** Context for inherited furniture and generated organization names. */
-  presentation?: { design?: { header?: unknown; footer?: unknown; slideImage?: unknown; imageFill?: unknown }; organization?: unknown; slides?: unknown };
+  /** Context for inherited furniture, generated organization names and social profiles. */
+  presentation?: { design?: { header?: unknown; footer?: unknown; slideImage?: unknown; imageFill?: unknown }; organization?: unknown; slides?: unknown; catalogs?: unknown };
+  /**
+   * Host-resolved social-platform records for generated `socials` furniture.
+   * Inline `presentation.catalogs.socialPlatforms.records` take precedence. Hosts
+   * normally pass the bundled catalog; without a matching record a handle renders
+   * as its raw value, as the Socials contract specifies.
+   */
+  socialPlatforms?: readonly SocialPlatformRecord[];
   /** One-based displayed number; source paths still use slideIndex. */
   slideNumber?: number;
   /** Displayed slide count for `{total}` in slideNumberFormat. Defaults to `presentation.slides.length`. */
@@ -409,7 +416,7 @@ function resolveSlideImage(slide: Record<string, any>, layout: Record<string, an
 export interface FurniturePartBase {
   kind: 'header' | 'footer';
   zone: 'left' | 'center' | 'right';
-  field: 'text' | 'image' | 'organization' | 'section' | 'slideNumber' | 'date';
+  field: 'text' | 'image' | 'organization' | 'socials' | 'section' | 'slideNumber' | 'date';
   /** Literal field or controlling flag, with the actual inherited/local path. */
   path: string;
   /** String/asset source, when different from a generated field's flag. */
@@ -427,6 +434,58 @@ export interface FurnitureTextPart extends FurniturePartBase {
    * text, including `{total}` and formatted fixed dates, is fixed.
    */
   fields?: FurnitureField[];
+  /**
+   * Generated `socials` only: one entry per explicit source line of `text`, in
+   * order. A part may carry both `fields` and `links`; hosts apply each link to
+   * its whole source line and each field range within it.
+   */
+  links?: FurnitureSocialLink[];
+}
+/** Optional generated metadata for one furniture text part (live fields and/or social links). */
+export interface FurnitureTextExtras { fields?: FurnitureField[]; links?: FurnitureSocialLink[] }
+/** Social-platform catalog fields used to format a profile. */
+export interface SocialPlatformRecord {
+  id: string;
+  name?: string;
+  baseUrl?: string;
+  profileUrlPattern?: string;
+  companyUrlPattern?: string;
+  handlePrefix?: string;
+}
+export interface SocialProfile {
+  /** Single-line display text: the profile URL without an `https://` scheme, or the raw value. */
+  text: string;
+  /** Full http(s) URL when the value is one or its platform record formats one. */
+  href?: string;
+  /** Whether a socialPlatforms record formatted a handle. */
+  resolved: boolean;
+}
+export interface FurnitureSocialLink extends SocialProfile {
+  /** Socials key (platform id). */
+  platform: string;
+  /** Authored value path, such as `organization.socials.x`. */
+  sourcePath: string;
+}
+
+const webUrl = /^https?:\/\/\S+$/i;
+/**
+ * Format one Socials value through its platform record, deterministically and
+ * without network access. `owner` selects companyUrlPattern for organizations.
+ * URLs pass through; unknown platforms and unformattable values stay raw.
+ */
+export function resolveSocialProfile(platform: string, value: string, records: readonly SocialPlatformRecord[] = [], owner: 'organization' | 'speaker' = 'organization'): SocialProfile {
+  const raw = String(value).trim().replace(/\s+/gu, ' ');
+  const display = (url: string) => url.replace(/^https:\/\//i, '');
+  if (webUrl.test(raw)) return {text: display(raw), href: raw, resolved: false};
+  const platformRecord = records.find(item => item?.id === platform);
+  const base = typeof platformRecord?.baseUrl === 'string' && webUrl.test(platformRecord.baseUrl) ? `${platformRecord.baseUrl.replace(/\/+$/u, '')}/{handle}` : undefined;
+  const pattern = (owner === 'organization' ? platformRecord?.companyUrlPattern : undefined) ?? platformRecord?.profileUrlPattern ?? base;
+  const prefix = platformRecord?.handlePrefix ?? '';
+  const handle = prefix && raw.startsWith(prefix) ? raw.slice(prefix.length) : raw;
+  if (!handle || typeof pattern !== 'string' || !pattern.includes('{handle}')) return {text: raw, resolved: false};
+  const url = pattern.split('{handle}').join(handle);
+  if (!webUrl.test(url)) return {text: raw, resolved: false};
+  return {text: display(url), href: encodeURI(url), resolved: true};
 }
 export interface FurnitureImagePart extends FurniturePartBase { type: 'image'; image: unknown }
 export type FurniturePart = FurnitureTextPart | FurnitureImagePart;
@@ -461,7 +520,8 @@ export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {
   const outlines=options.textMeasurement?.outlineBounds!==undefined,parts:FurniturePart[]=[],diagnostics:LayoutDiagnostic[]=[];
   const sourceRoot=`slides.${options.slideIndex??0}`,organizations=Array.isArray(options.presentation?.organization)?options.presentation.organization:[options.presentation?.organization];
   const primaryIndex=organizations.findIndex(item=>record(item).role==='primary'),organizationIndex=primaryIndex>=0?primaryIndex:organizations.findIndex(Boolean);
-  const organization=record(organizations[organizationIndex]),organizationPath=Array.isArray(options.presentation?.organization)?`organization.${organizationIndex}.name`:'organization.name';
+  const organization=record(organizations[organizationIndex]),organizationRoot=Array.isArray(options.presentation?.organization)?`organization.${organizationIndex}`:'organization',organizationPath=`${organizationRoot}.name`;
+  const inlinePlatforms=record(record(options.presentation?.catalogs).socialPlatforms).records,platformRecords=[...(Array.isArray(inlinePlatforms)?inlinePlatforms:[]),...(options.socialPlatforms??[])];
   const fontFamily=options.fonts?.body??'sans-serif';let headerBottom=0,footerTop=height,configured=false;
   const error=(path:string,message:string,code:LayoutDiagnostic['code']='text-overflow')=>diagnostics.push({code,path,message});
   for(const kind of ['header','footer'] as const){
@@ -473,7 +533,7 @@ export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {
     const zones:FurniturePart[][]=[];
     for(const [index,zone]of (['left','center','right'] as const).entries()){
       const content=record(record(value)[zone]),path=`${root}.${zone}`,x=width*(.07+index*.3),zoneWidth=width*.26,zoneParts:FurniturePart[]=[];let y=0;
-      const add=(field:FurniturePartBase['field'],text:unknown,generated=false,sourcePath?:string,liveFields?:FurnitureField[])=>{
+      const add=(field:FurniturePartBase['field'],text:unknown,generated=false,sourcePath?:string,extras:FurnitureTextExtras={})=>{
         if(text===undefined)return;
         if(typeof text!=='string')throw new TypeError(`Furniture field ${path}.${field} requires string content.`);
         const partPath=`${path}.${field}`,style=resolveTextStyle({fontFamily,fontWeight:400,italic:false,path:partPath},options.textMeasurement);
@@ -491,7 +551,7 @@ export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {
         if(!Number.isFinite(partHeight))throw new RangeError('Furniture exceeds finite layout coordinates.');
         const box={x,y,width:zoneWidth,height:Math.max(scale,partHeight)},placement=outlines?placeTextLines(ink,box,zone,padding):undefined;
         const accepted={...fit,...(placement?{placement}:{}),overflow:fit.overflow||!!placement?.overflow};
-        zoneParts.push({type:'text',kind,zone,field,path:partPath,sourcePath:sourcePath??(!generated?partPath:undefined),generated,text,style,requestedFontSize:13*scale,minFontSize:minimum,box,alignment:zone,fit:accepted,...(liveFields?.length?{fields:liveFields}:{})});
+        zoneParts.push({type:'text',kind,zone,field,path:partPath,sourcePath:sourcePath??(!generated?partPath:undefined),generated,text,style,requestedFontSize:13*scale,minFontSize:minimum,box,alignment:zone,fit:accepted,...(extras.fields?.length?{fields:extras.fields}:{}),...(extras.links?.length?{links:extras.links}:{})});
         if(accepted.overflow)error(partPath,'Repeated text exceeds its zone at the selected readability floor; change the furniture or slide design.');
         y+=box.height;
       };
@@ -501,18 +561,22 @@ export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {
       }
       add('text',content.text);
       if(content.organization===true){if(typeof organization.name==='string')add('organization',organization.name,true,organizationPath);else error(`${path}.organization`,'Generated organization name needs a named organization in the presentation.','unresolved-content');}
+      if(content.socials===true){
+        const links:FurnitureSocialLink[]=Object.entries(record(organization.socials)).filter(([,value])=>typeof value==='string'&&value.trim()).map(([platform,value])=>({platform,sourcePath:`${organizationRoot}.socials.${platform}`,...resolveSocialProfile(platform,value as string,platformRecords,'organization')}));
+        if(links.length)add('socials',links.map(link=>link.text).join('\n'),true,`${organizationRoot}.socials`,{links});else error(`${path}.socials`,'Generated social profiles need a primary organization with socials.','unresolved-content');
+      }
       if(content.section===true){if(typeof slide.section==='string')add('section',slide.section,true,`${sourceRoot}.section`);else error(`${path}.section`,'Generated section needs a literal slide section.','unresolved-content');}
       for(const setting of ['slideNumberFormat','dateFormat'])if(content[setting]!==undefined&&typeof content[setting]!=='string')throw new TypeError(`Furniture setting ${path}.${setting} requires a string.`);
       if(content.slideNumber===true){
         const resolved=formatSlideNumber(content.slideNumberFormat??DEFAULT_SLIDE_NUMBER_FORMAT,number,slideCount);
         if('error' in resolved)error(`${path}.slideNumberFormat`,resolved.error,'unresolved-content');
-        else add('slideNumber',resolved.text,true,undefined,resolved.fields);
+        else add('slideNumber',resolved.text,true,undefined,{fields:resolved.fields});
       }
       if(content.date===true){
         // A current date is a live field: the host supplies today's calendar date.
         const format=content.dateFormat??DEFAULT_FURNITURE_DATE_FORMAT;
         if(options.date===undefined)error(`${path}.date`,'A current date needs a host-supplied ISO date option. For fixed content use a literal date, or an ISO date with dateFormat.','unresolved-content');
-        else{const resolved=formatFurnitureDate(options.date,format);if('error' in resolved)error(`${path}.dateFormat`,resolved.error,'unresolved-content');else add('date',resolved.text,true,undefined,[{type:'date',start:0,end:resolved.text.length,format}]);}
+        else{const resolved=formatFurnitureDate(options.date,format);if('error' in resolved)error(`${path}.dateFormat`,resolved.error,'unresolved-content');else add('date',resolved.text,true,undefined,{fields:[{type:'date',start:0,end:resolved.text.length,format}]});}
       }
       else if(typeof content.date==='string'){
         // Without dateFormat a date string stays literal, editable source text.

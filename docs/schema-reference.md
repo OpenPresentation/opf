@@ -156,7 +156,7 @@ _No named properties._
 | `phone` | no | `string` | Main contact phone number for the organization. E.164 format is recommended. |
 | `tagline` | no | `string` | Short tagline rendered alongside the organization name on cover slides. |
 | `role` | no | `enum:primary \| partner \| client \| sponsor \| host` | Role of the organization relative to the presentation. When omitted, the single organization or first organization in array form is treated as primary. |
-| `socials` | no | `ref:Socials` | Optional social media handles or URLs for the organization. |
+| `socials` | no | `ref:Socials` | Optional social media handles or URLs for the organization. The primary organization's socials render in header/footer zones that set socials: true; otherwise they are authoring metadata. |
 
 
 ### Speaker
@@ -175,7 +175,7 @@ _No named properties._
 | `phone` | no | `string` | Contact phone number for the speaker. E.164 format is recommended. |
 | `bio` | no | `string` | Short biographical paragraph for bio or 'about the speaker' slides. |
 | `organizationId` | no | `string` | Reference to an Organization.id in organization. Lets a speaker be attributed to their org in panel or multi-org decks without repeating organization details. |
-| `socials` | no | `ref:Socials` | Optional social media handles or URLs for the speaker. |
+| `socials` | no | `ref:Socials` | Optional social media handles or URLs for the speaker. Authoring metadata: no header/footer field renders speaker socials yet. |
 
 
 ### Socials
@@ -549,6 +549,7 @@ _No named properties._
 | `dateFormat` | no | `string` | Date pattern for date. Tokens: yyyy (2026), yy (26), MMMM (April), MMM (Apr), MM (04), M (4), dd (09), d (9), EEEE (Thursday), EEE (Thu). Text in single quotes and other non-letter characters are literal. Month and we... |
 | `organization` | no | `boolean` | Whether to render the primary organization name from organization. |
 | `section` | no | `boolean` | Whether to render the current slide section label. |
+| `socials` | no | `boolean` | Whether to render the primary organization's social profiles from organization.socials, one line per platform in key order. A handle is formatted through the platform's socialPlatforms record (companyUrlPattern, else... |
 
 
 ### Slide

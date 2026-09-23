@@ -286,7 +286,7 @@ export function paginatePresentation(input: unknown, options: PresentationPagina
       const {scheme:fontScheme,diagnostic} = resolveFontSchemeReference(fontReference,id=>resolve('fontSchemes',id),fontPath);
       if (diagnostic && !reported.has(diagnostic.path)) { reported.add(diagnostic.path); options.onDiagnostic?.(diagnostic); }
       const fonts = resolveFontFamilies(fontScheme);
-      const result = paginateSlide(slide,{...resolveCanvasDimensions(design.dimensions ?? theme.dimensions),layout,fonts,contentAlignment:design.contentAlignment,titleAlignment:design.titleAlignment,contentBox:design.contentBox,textMeasurement:options.textMeasurement,textRasterPadding:options.textRasterPadding,...overrides,presentation,slideIndex:index,slideNumber:output.length+1,slideCount,date:options.date,maxSlides:maxSlides-output.length,minFontSize:options.minFontSize,reservedIds});
+      const result = paginateSlide(slide,{...resolveCanvasDimensions(design.dimensions ?? theme.dimensions),layout,fonts,contentAlignment:design.contentAlignment,titleAlignment:design.titleAlignment,contentBox:design.contentBox,textMeasurement:options.textMeasurement,textRasterPadding:options.textRasterPadding,socialPlatforms:catalogs.socialPlatforms,...overrides,presentation,slideIndex:index,slideNumber:output.length+1,slideCount,date:options.date,maxSlides:maxSlides-output.length,minFontSize:options.minFontSize,reservedIds});
       const outputStart = output.length;
       result.pages.forEach((page,pageIndex)=>{
         const remap=(mapping:PaginationMapping)=>({...mapping,outputPath:mapping.outputPath.replace(/^slides\.\d+/,`slides.${outputStart+pageIndex}`)});
