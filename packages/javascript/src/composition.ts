@@ -160,6 +160,12 @@ export interface ComposedItem {
   timelineLayout?: TimelineLayout;
   /** Effective container settings, including inherited readability constraints. */
   composition: Composition;
+  /**
+   * Resolved horizontal text alignment for this item: titleAlignment for the
+   * title, contentAlignment for every other item (slide design, then host
+   * option, then left). Engines anchor native and preview text to this value.
+   */
+  alignment: 'left' | 'center' | 'right';
 }
 /**
  * Slide-level image resolved from design.slideImage. It is active when the slide sets its own
@@ -1649,6 +1655,9 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   const minSize = (composition.minFontSize ?? 16) * scale;
   const rasterPadding=(options.textRasterPadding??1)*scale;
   if(!Number.isFinite(rasterPadding)||rasterPadding<0)throw new RangeError('Text raster padding must be finite and nonnegative.');
+  // One alignment resolution for placement, internal payload layouts and consumers.
+  const alignmentFor = (field: string): 'left' | 'center' | 'right' =>
+    (field === 'title' ? record(slide.design).titleAlignment ?? options.titleAlignment : record(slide.design).contentAlignment ?? options.contentAlignment) ?? 'left';
   const styleFor = (field: string, path: string): TextStyle => resolveTextStyle({
     fontFamily: (field === "title" ? options.fonts?.heading : field === "code" ? options.fonts?.code : options.fonts?.body) ?? (field === "code" ? "monospace" : "sans-serif"),
     fontWeight: field === "title" ? 700 : 400, path,
@@ -1657,7 +1666,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   const fitPlacedText = (field:string,value:unknown,text:string,box:LayoutBox,size:number,minimum:number,path:string):TextFit|RichTextFit => {
     const style=styleFor(field,path),rich=field==='text'&&Array.isArray(value);
     if(!options.textMeasurement?.outlineBounds)return rich?fitRichText(value,box,size,minimum,{style,textMeasurement:options.textMeasurement}):fitText(text,box,size,minimum,textWidthMeasurer(style,options.textMeasurement));
-    const alignment=(field==='title'?record(slide.design).titleAlignment??options.titleAlignment:record(slide.design).contentAlignment??options.contentAlignment)??'left';
+    const alignment=alignmentFor(field);
     const richLayout=rich?richTextLayouter(value,box,size,{style,textMeasurement:options.textMeasurement}):undefined;
     const measure=textWidthMeasurer(style,options.textMeasurement),floor=rich?richMinimum(value,size,minimum):minimum,start=Math.max(size,floor);
     // The nominal heading/body range fits within 64 reference-pixel steps; the
@@ -1719,7 +1728,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     const text = fitPlacedText(field,slide[field],String(slide[field]),box,requested,minSize,`${path}.${field}`);
     box.height = Math.min(maxHeight, Math.max(text.lines.length * text.lineHeight,text.placement?.height??0));
     if(furniture&&box.y+box.height>bodyBottom+.01)diagnostics.push({code:'text-overflow',path:`${path}.${field}`,message:'Repeated furniture leaves too little room for this heading. Change the header/footer or slide design.'});
-    items.push({ path: `${path}.${field}`, field, type: "text", value: slide[field], payload: { text: slide[field] }, box, text, textStyle: styleFor(field,`${path}.${field}`), composition });
+    items.push({ path: `${path}.${field}`, field, type: "text", value: slide[field], payload: { text: slide[field] }, box, text, textStyle: styleFor(field,`${path}.${field}`), composition, alignment: alignmentFor(field) });
     y += box.height + gap * 0.5;
   }
   if (items.length) y += gap * 0.5;
@@ -1769,7 +1778,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   const measureMetric = (node: Pending, box: LayoutBox, settings: Composition) => layoutMetric(node.value as string | number | MetricContent, acceptedBox(box), {
     fonts:options.fonts,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,
     textRasterPadding:options.textRasterPadding,
-    align:record(slide.design).contentAlignment??options.contentAlignment,
+    align:alignmentFor('metric'),
   });
   const measureTimeline = (node: Pending, box: LayoutBox, settings: Composition) => layoutTimeline(node.value as TimelineContent, acceptedBox(box), {
     fonts:options.fonts,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,textRasterPadding:options.textRasterPadding,
@@ -1859,7 +1868,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
         const text = internal ? body?.fit : textValue !== undefined ? fitContent(node.field,node.value,textValue,box,25*scale,(settings.minFontSize??16)*scale,node.path) : undefined;
         items.push({ path: node.path, field: node.field, type: node.type, value: node.value, payload: node.payload, box:internal?acceptedBox(box):box,
           ...(frameBox ? {frameBox} : {}),
-          text, textStyle: body?.style ?? styleFor(node.field,node.path), composition: settings, ...(quoteLayout?{quoteLayout}:{}), ...(codeLayout?{codeLayout}:{}), ...(metricLayout?{metricLayout}:{}), ...(timelineLayout?{timelineLayout}:{}) });
+          text, textStyle: body?.style ?? styleFor(node.field,node.path), composition: settings, alignment: alignmentFor(node.field), ...(quoteLayout?{quoteLayout}:{}), ...(codeLayout?{codeLayout}:{}), ...(metricLayout?{metricLayout}:{}), ...(timelineLayout?{timelineLayout}:{}) });
         if (box.width < 100 * scale || box.height < 60 * scale) diagnostics.push({ code: "small-cell", path: node.path, message: "Content cell is too small for comfortable reading; use fewer blocks or a different composition." });
       }
     });
