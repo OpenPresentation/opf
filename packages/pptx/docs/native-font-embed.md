@@ -12,15 +12,19 @@ The parent matches Gate E safety: indexed COM stages, a 45-second owned worker w
 
 ## Generate fixture
 
-Use the existing Gate E generator:
+The plain Gate E fixture uses the default `aptos` font scheme (theme major/minor and slide runs), so this gate is expected to reject it. Use the Gate E generator in Carlito-only mode instead:
 
 ```powershell
-node test/native-font-edit-fixture.mjs artifacts/font-embed-fixture-new PATH_TO_REGISTRY_CONSUMER
+node test/native-font-edit-fixture.mjs artifacts/font-embed-fixture-new PATH_TO_REGISTRY_CONSUMER --carlito-only --harness-master-bullet-font
 ```
+
+`--carlito-only` changes only the public OPF input: `design.fontScheme = {major: "Carlito", minor: "Carlito"}`. The published exporter then writes Carlito to the theme `majorFont`/`minorFont` latin slots and to every explicit slide run. Masters, layouts, notes and `endParaRPr` use theme references (`+mj-*`/`+mn-*`) or empty `ea`/`cs` slots. Shape names and edit spans are unchanged, so the harness constants still apply. The generator inventories every `typeface=` attribute in `generation.json` (`carlitoOnly.typefaceInventory`) and fails if any latin, ea, cs or sym slot names something other than Carlito, an empty value or a theme reference.
+
+OPF input cannot remove one exporter-owned residual: the vendored PptxGenJS slide master sets `<a:buFont typeface="Arial">` on all nine `bodyStyle` levels, and PowerPoint may report that bullet font in `Presentation.Fonts`. `--harness-master-bullet-font` is a harness-owned transform. It is not exporter output. It replaces exactly those nine elements with Carlito, keeps the untouched exporter bytes as `exporter-output.pptx`, and records the transform plus input and output hashes under `carlitoOnly.harnessTransforms`. The fix on the exporter side is a master bullet font that follows the minor theme font. That requires a new exporter release. The theme's per-script `a:font` supplements and the static `docProps/app.xml` "Fonts Used" list (Arial, Calibri) remain as recorded residuals. Static inspection cannot prove what PowerPoint will report.
 
 ## Supervised embed attempt (Windows)
 
-Do not use this command to override a failed native font allowlist. The current Carlito+Aptos observation predicts a recorded semantic failure with no saved copy. Preserve that attempt for review rather than retrying it.
+Do not use this command to override a failed native font allowlist. A plain Gate E (Aptos) fixture predicts a recorded semantic failure with no saved copy. Preserve any failed attempt for review rather than retrying it.
 
 ```powershell
 & "$env:WINDIR/System32/WindowsPowerShell/v1.0/powershell.exe" -NoProfile -NonInteractive -File test/native-font-embed.ps1 `

@@ -19,6 +19,7 @@ import {
   PERMITTED_CARLITO_LICENSE_SHA256,
   PERMITTED_NATIVE_FONT_NAMES,
 } from './native-font-embed-audit.mjs';
+import {applyMasterBulletFontTransform, carlitoOnlySource, carlitoOnlyTypefaceFailures, declaredFontsUsed, MASTER_BULLET_FONT_TRANSFORM, themeFontSlots, typefaceInventory} from './native-font-embed-fixture-source.mjs';
 
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 const root = path.dirname(fileURLToPath(import.meta.url));
@@ -69,6 +70,29 @@ assert.ok(auditCanonicalFixtureManifest(wrongGeneration).some(item => item.code 
 const stringFlags = structuredClone(generation); stringFlags.registration.flags = '0';
 assert.ok(auditCanonicalFixtureManifest(stringFlags).some(item => item.code === 'generation-registration-flags'));
 record('canonical-manifest-negatives');
+
+{
+  const {toPptx} = await import('../src/index.js');
+  const inspect = bytes => requireCarlitoBullets => carlitoOnlyTypefaceFailures(typefaceInventory(bytes), themeFontSlots(bytes), {requireCarlitoBullets});
+  const carlitoBytes = await toPptx(carlitoOnlySource(), {strictAssets: true});
+  const pure = inspect(carlitoBytes)(false);
+  assert.deepEqual(pure.failures, [], JSON.stringify(pure.failures));
+  assert.ok(pure.residual.some(item => item.code === 'non-carlito-bullet-font' && item.row.typeface === 'Arial'), 'Expected the documented Arial master bullet residual');
+  assert.ok(pure.residual.every(item => ['non-carlito-bullet-font', 'theme-script-supplement'].includes(item.code)));
+  assert.ok(inspect(carlitoBytes)(true).failures.some(item => item.code === 'non-carlito-bullet-font'));
+  const transformed = applyMasterBulletFontTransform(carlitoBytes);
+  assert.equal(transformed.replacements, MASTER_BULLET_FONT_TRANSFORM.expectedCount);
+  const strict = inspect(transformed.bytes)(true);
+  assert.deepEqual(strict.failures, [], JSON.stringify(strict.failures));
+  assert.ok(strict.residual.every(item => item.code === 'theme-script-supplement'));
+  assert.ok(typefaceInventory(transformed.bytes).every(row => row.element === 'a:font' || ['Carlito', ''].includes(row.typeface) || /^\+m[jn]-/.test(row.typeface)));
+  const aptos = inspect(await toPptx({slides: [{title: 'Plain control', text: 'Current content'}]}, {strictAssets: true}))(false);
+  assert.ok(aptos.failures.some(item => item.code === 'non-carlito-text-typeface' && /Aptos/.test(item.row.typeface)));
+  assert.ok(aptos.failures.some(item => item.code === 'theme-latin-not-carlito'));
+  assert.throws(() => applyMasterBulletFontTransform(transformed.bytes), /Expected 9 Arial master bullet fonts/);
+  assert.deepEqual(declaredFontsUsed(transformed.bytes), ['Arial', 'Calibri'], 'Review the documented static docProps Fonts Used residual');
+  record('carlito-only-fixture-typefaces');
+}
 
 const relXml = ({extra = '', target = null, duplicateId = false, external = false} = {}) => `<?xml version="1.0" encoding="UTF-8"?>
 <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
