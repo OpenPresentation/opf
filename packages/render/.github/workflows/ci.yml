@@ -28,10 +28,11 @@ jobs:
       # FF-19 uses core resolveScriptFonts (FF-18) and paragraphDirection (#134); sibling pins
       # match core main's ecosystem-ci. Verify the released graph before using source links.
       # FF-29 pins merged core (opf#132) that adds composed item.alignment.
+      # FF-31 pins merged core (opf#133): src/font-policy.js snapshots its spec/reference/font-policy.json.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf
-          ref: 4b991553f8d9706de1003f8f8f547e46d902da74
+          ref: d3397502035639892e03665f8761493a30817621
           path: opf
           fetch-depth: 0
           persist-credentials: false
@@ -72,6 +73,8 @@ jobs:
         run: |
           pnpm build
           node scripts/link-ecosystem.mjs --packages-only
+      - name: Font policy snapshot matches the pinned core table
+        run: node scripts/update-font-policy.mjs --check ../opf/spec/reference/font-policy.json
       - run: npm audit
       - run: npm run typecheck
       - run: npm run validate

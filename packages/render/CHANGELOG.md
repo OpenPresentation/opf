@@ -2,6 +2,25 @@
 
 ## Unreleased
 
+- FF-31: the renderer now chooses preview replacements from a snapshot of the core OPF font policy table. The snapshot is `src/font-policy.js`, generated from opf `spec/reference/font-policy.json` by `scripts/update-font-policy.mjs`, with a `--check` option for drift. It exports `FONT_POLICY`, `FONT_POLICY_DECISIONS`, `FONT_POLICY_SOURCE` and `fontPolicyFor`, and `FONT_COMPATIBILITY` is derived from it. Legacy rules stay only for families that the table does not list, and the FF-19 script replacements are unchanged.
+  - **Provisional owner decisions (owner may revise):**
+    - Aptos → Roboto, measured at a 2.15% mean width difference (signed +0.1%). Before, Aptos previewed with Carlito, which is 7.1% narrower. Aptos Display keeps Carlito.
+    - Segoe UI → Red Hat Display.
+    - Cambria → Caladea reclassified as visual: advances differ from Cambria 6.99 by a mean of 2.7%. Before FF-31, metric mode, including the default `loadOfficeFontRegistry()`, resolved Cambria to Caladea as metric at weights 400 and 700, upright and italic, and threw `font-unavailable` at any other weight. The decision's `metricModeFallback` keeps exactly that coverage in metric mode, now reported as visual: weights 400 and 700, upright and italic, with exact Caladea faces. Every other weight still throws `font-unavailable`, as Calibri 500 does. Visual mode previews every Cambria weight.
+  - **Georgia → Gelasio stays visual.** Basic-Latin advances are identical, but runs where Gelasio applies optional ligatures differ by up to 1.02%, which is how the renderer shapes them. Metric mode still does not use it.
+  - **Consolas and Aptos Mono keep Cousine**, which has all four styles, so bold italic code stays italic. Roboto Mono is an alternate.
+  - **Alternates are always visual.** Only a row's declared replacement can carry its metric claim. Metric mode never uses an alternate, for example Liberation Sans for Arial; visual mode uses it and reports it as visual.
+  - **Bundled fallback, no new downloads:** no new font packages are added. When a declared replacement's pack is not installed, the renderer uses the row's alternates, which end with the best measured face already in the base or office pack. For example, Segoe UI previews with Arimo. `registry.substitutions` records the face used and its tier.
+  - **Caller faces:** `prepareNodeFonts`, `loadBundledFontRegistry` and `loadOfficeFontRegistry` accept caller-supplied `faces` (`data` or `path`), such as a licensed Aptos. These resolve as exact faces.
+  - **Resolution details:**
+    - `FontResolution.substitute` says whether the face is the chosen family itself. `textMeasurement.resolveFont` exposes it, so exporters keep the chosen family.
+    - Resolutions also carry `decision`, `measured` (for the declared replacement), `licenseClass` and `availability`.
+    - A family whose name encodes a weight selects that weight in the replacement.
+    - A visual replacement that has no italic draws upright and reports `styleFallback`.
+  - **Strict mode** never falls back silently. `font-unavailable` names the license class, the declared replacement and tier, the candidate packs and the `faces` hook.
+  - **Tests:** new `test/font-policy.mjs`. Updated for the policy change: `office-fonts`, `font-outlines`, `font-preparation` and `default-font-scheme`. The accepted-text browser fixtures now choose Carlito explicitly.
+  - **Golden:** 805 slides, unchanged.
+
 - FF-29: heading and body text anchor to core's per-item `alignment` (`composeSlide` resolves it once for every engine; the PPTX exporter reads the same value). Cores without `item.alignment` keep the FF-39 design fallback, so output is unchanged for them. No golden raster changes from this part.
 - FF-29: metric lines without tabs now anchor at their accepted alignment edge (`text-anchor` middle/end at the aligned point), the same way native PPTX metric paragraphs do. Before, centered and right-aligned metrics were drawn start-anchored at an origin derived from the estimated width, so the drawn value drifted off its edge by half (center) or all (right) of the estimation error, and the preview reported left-anchored lines where PPTX has `algn="ctr"`/`"r"`. Tabbed lines keep their accepted segment origins. Script-font runs and right-to-left isolation are unchanged. Across the 126-deck corpus, 54 of 805 golden rasters change, all of them centered or right-aligned metrics (266 lines; median shift 6.6 px, p90 33.8 px, max 69.0 px at 1280×720). The same 54 entries change in `opf-examples-png.furniture.sha256.json` and `opf-examples-png.ff25-wdupdiag.sha256.json`; the previous furniture manifest is kept as `test/golden/pre-metric-anchor-opf-examples-png.furniture.sha256.json`. `test/shared-metric.mjs` now checks the edge anchor.
 - FF-29: traced previews attribute a content card's surface `rect` to its item path, so parity tools can match it to the PPTX `OPF card` frame. Untraced output is unchanged, and the editor still selects the item's group.

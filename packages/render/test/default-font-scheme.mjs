@@ -28,13 +28,14 @@ assert.deepEqual(families(renderSvg({ ...custom, design: { theme: 'bare', fontSc
 // unavailable family with its bundled sans-serif fallback.
 assert.ok((await svgToPng(renderSvg(custom), { scale: 0.25 })).byteLength > 0);
 
-// Measured layout takes the existing Aptos path: the office pack's visual substitute (Carlito).
+// Measured layout takes the FF-31 font policy path (provisional, owner may revise): Aptos previews
+// with Roboto and Aptos Display with Carlito, both visual.
 const visual = await prepareNodeFonts({ pack: 'office', substitutionPolicy: 'visual' });
 const measured = renderSvg(custom, visual.options);
-assert.deepEqual(families(measured), ['Carlito, sans-serif']);
+assert.deepEqual(families(measured), ['Carlito, sans-serif', 'Roboto, sans-serif']);
 assert.deepEqual(
   visual.registry.substitutions.map(entry => `${entry.requestedFamily}->${entry.resolvedFamily}:${entry.compatibility}`).sort(),
-  ['Aptos Display->Carlito:visual', 'Aptos->Carlito:visual'],
+  ['Aptos Display->Carlito:visual', 'Aptos->Roboto:visual'],
 );
 visual.registry.clearSubstitutions();
 assert.deepEqual(families(renderSvg(noDesign, visual.options)), families(measured));

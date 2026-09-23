@@ -1,7 +1,10 @@
 import { create } from "fontkit";
 import { FONT_COMPATIBILITY } from "./font-compatibility.js";
 import { openTypeLanguage, scriptFontAliases } from "./script-fonts.js";
+import { fontPolicyFor } from "./font-policy.js";
+import { BUNDLED_FONT_MANIFEST } from "./font-manifest.js";
 export { FONT_COMPATIBILITY, EXPERIMENTAL_FONT_CANDIDATES } from "./font-compatibility.js";
+export { FONT_POLICY, FONT_POLICY_DECISIONS, FONT_POLICY_SOURCE, fontPolicyFor } from "./font-policy.js";
 export { SCRIPT_FONT_FAMILIES, SCRIPT_FONT_REPLACEMENTS, createScriptFonts, createScriptTextMeasurement, designatedFamilies, detectScripts, itemizeScripts, openTypeLanguage, scriptFontAliases, scriptFontRole, scriptOfCharacter, textRole } from "./script-fonts.js";
 
 export class OPFFontError extends Error {
@@ -16,6 +19,29 @@ function base64(data) {
 function validFamily(family) {
   if (typeof family !== "string" || !family.trim() || /[\u0000-\u001f"'\\<>;]/.test(family)) throw new OPFFontError("invalid-font-family", "Font family must be a nonempty plain name.");
   return family;
+}
+const packFor = family => BUNDLED_FONT_MANIFEST.packages.find(pkg=>pkg.faces.some(face=>face.family.toLowerCase()===family.toLowerCase()))?.pack;
+const percent = value => `${(value*100).toFixed(1)}%`;
+/** FF-31: say why a family has no face and what the caller can do, from the OPF font policy. */
+function unavailableFontError(family, style, policy) {
+  const row = fontPolicyFor(family), details = {path:style.path, fontFamily:family, substitutionPolicy:policy};
+  const hook = `supply licensed '${family}' font files (prepareNodeFonts({faces}) or createFontRegistry entries)`;
+  if (!row) return new OPFFontError("font-unavailable", `No local font face for '${family}'. '${family}' is not in the OPF font policy table, so there is no declared replacement: ${hook}, add an alias, or set fallbackFamily.`, {...details, licenseClass:"unknown"});
+  Object.assign(details, {licenseClass:row.licenseClass});
+  if (!row.replacement) {
+    const pack = packFor(family);
+    return new OPFFontError("font-unavailable", `No local font face for '${family}'. '${family}' is ${row.licenseClass === "open" ? `openly licensed (${row.license})` : row.license}${pack ? `; load the '${pack}' font pack` : `; no pinned renderer pack ships it yet, so supply its font files (for example from @expo-google-fonts/${family.toLowerCase().replace(/ +/g,"-")})`}.`, {...details, ...(pack?{pack}:{})});
+  }
+  const {family:replacement, compatibility, measured} = row.replacement;
+  const candidates = [replacement, ...(row.alternates ?? [])], packs = [...new Set(candidates.map(packFor).filter(Boolean))];
+  Object.assign(details, {replacement, replacementCompatibility:compatibility, candidates, ...(packs.length?{packs}:{}), ...(measured?{measured}:{}), ...(row.replacement.decision?{decision:row.replacement.decision}:{})});
+  const delta = measured ? ` (measured mean width difference ${percent(measured.meanAbsWidthDelta)}, max ${percent(measured.maxAbsWidthDelta)})` : " (not measured against the real font)";
+  const owner = `'${family}' is ${row.license} and OPF never bundles or embeds it.`;
+  if (compatibility === "visual" && policy !== "visual")
+    return new OPFFontError("font-unavailable", `No local font face for '${family}'. ${owner} Its declared replacement ${replacement} is visual only${delta}, which substitutionPolicy '${policy}' does not allow. Pass substitutionPolicy: 'visual' to preview with ${candidates.join(" or ")}, or ${hook}. The PPTX names '${family}' either way.`, details);
+  if (policy === "none")
+    return new OPFFontError("font-unavailable", `No local font face for '${family}'. ${owner} Its declared ${compatibility} replacement is ${replacement}${delta}; substitutionPolicy 'none' does not allow it. Pass substitutionPolicy: '${compatibility}', or ${hook}.`, details);
+  return new OPFFontError("font-unavailable", `No local font face for '${family}'. ${owner} None of its replacements (${candidates.join(", ")}) is loaded${packs.length ? `; load the ${packs.map(pack=>"'"+pack+"'").join(" or ")} font pack` : ""}, or ${hook}.`, details);
 }
 /** Local font files only. The caller explicitly chooses aliases and fallback. */
 export function createFontRegistry(entries, options = {}) {
@@ -75,35 +101,55 @@ export function createFontRegistry(entries, options = {}) {
     const family = themeKey ? options.themeFonts?.[themeKey] : requested;
     if (!family || family.startsWith("+")) throw new OPFFontError("unresolved-theme-font", `Supply a concrete theme family for '${requested}'.`, {path:style.path});
     validFamily(family);
-    let matching = findFamily(family), compatibility = "exact", rule;
+    let matching = findFamily(family), compatibility = "exact", rule, targetWeight = weight, styleFallback = false, via = "family";
     const encodedSymbol = /^(wingdings(?: [23])?|webdings|symbol)$/i.test(family);
     if (!matching.length && encodedSymbol) throw new OPFFontError("font-encoding-required", `Font '${family}' requires character mapping before substitution.`, {path:style.path,fontFamily:family});
     if (!matching.length && aliases.has(family.toLowerCase())) {
-      matching = findFamily(aliases.get(family.toLowerCase())); compatibility = "visual";
+      matching = findFamily(aliases.get(family.toLowerCase())); compatibility = "visual"; via = "alias";
     }
     if (!matching.length && policy!=="none") {
       const candidate = FONT_COMPATIBILITY.find(entry=>entry.requestedFamily.toLowerCase()===family.toLowerCase());
       const tier = candidate?.compatibility==="metric" && !candidate.weights.includes(weight) ? "visual" : candidate?.compatibility;
-      if (candidate && (policy==="visual" || tier==="metric")) {
-        for (const substitute of candidate.substitutes) {
-          const available = findFamily(substitute).filter(face=>face.italic===!!style.italic && (tier!=="metric" || face.weight===weight));
-          if (available.length) { matching=available; compatibility=tier; rule=candidate; break; }
+      // A declared visual replacement is used in visual mode, and in metric mode only when the
+      // policy keeps it as a metric-mode fallback (Cambria -> Caladea); it is still reported visual.
+      // In metric mode the fallback applies only where the pre-FF-31 metric rule did: the declared
+      // replacement at weights 400 and 700, normal or italic, with an exact face weight.
+      const metricFallback = policy!=="visual" && candidate?.metricModeFallback===true && [400,700].includes(weight);
+      const allowVisual = policy==="visual" || metricFallback;
+      if (candidate && (allowVisual || tier==="metric")) {
+        // A family that names its weight (Segoe UI Semibold, Arial Black) selects that weight in
+        // the replacement; its bold style link still selects bold (FF-31).
+        const wanted = candidate.weight ? (weight>=600 ? Math.max(candidate.weight,700) : candidate.weight) : weight;
+        for (const [index, substitute] of candidate.substitutes.entries()) {
+          // Only the declared replacement can carry the row's metric claim; an alternate is visual.
+          const substituteTier = index===0 ? tier : "visual";
+          if (substituteTier==="visual" && !(policy==="visual" || metricFallback && index===0)) continue;
+          const exactWeight = substituteTier==="metric" || policy!=="visual";
+          const faces = findFamily(substitute).filter(face=>!exactWeight || face.weight===weight);
+          let available = faces.filter(face=>face.italic===!!style.italic);
+          // Visual replacements without the requested style draw the other one and say so.
+          if (!available.length && substituteTier==="visual" && policy==="visual" && faces.length) { available = faces.filter(face=>!face.italic); styleFallback = available.length>0; }
+          if (available.length) { matching=available; compatibility=substituteTier; rule={...candidate, substituteIndex:index}; targetWeight=wanted; via="replacement"; break; }
         }
       }
     }
     // Equations require an explicit math-aware choice; never fall through to body text.
     if (!matching.length && /^(cambria math|stix two math|noto sans math)$/i.test(family)) throw new OPFFontError("math-font-required", `Supply '${family}' or an explicit math-font alias.`, {path:style.path});
-    if (!matching.length && options.fallbackFamily) { matching=findFamily(options.fallbackFamily); compatibility="generic"; }
-    if (!matching.length) throw new OPFFontError("font-unavailable", `No local font face for '${family}'.`, {path:style.path,fontFamily:family});
-    const styled = matching.filter(face=>face.italic===!!style.italic);
+    if (!matching.length && options.fallbackFamily) { matching=findFamily(options.fallbackFamily); compatibility="generic"; via="fallback"; }
+    if (!matching.length) throw unavailableFontError(family, style, policy);
+    const styled = styleFallback ? matching : matching.filter(face=>face.italic===!!style.italic);
     // Script replacement faces have no italics; use upright glyphs and advances.
     if (!styled.length && style.italic && matching.length && matching.every(face=>face.scripts)) { if (compatibility!=="generic") compatibility="visual"; }
     else matching = styled;
     if (!matching.length) throw new OPFFontError("font-style-unavailable", `No ${style.italic ? "italic" : "upright"} face for '${family}'.`, {path:style.path});
-    matching.sort((a,b)=>Math.abs(a.weight-weight)-Math.abs(b.weight-weight) || a.weight-b.weight);
+    matching.sort((a,b)=>Math.abs(a.weight-targetWeight)-Math.abs(b.weight-targetWeight) || a.weight-b.weight);
     const face = matching[0];
-    if (face.weight!==weight && compatibility!=="generic") compatibility="visual";
-    const resolution={requestedFamily:requested,sourceFamily:family,resolvedFamily:face.family,requestedWeight:weight,resolvedWeight:face.weight,italic:face.italic,compatibility,...(face.fontFace?{fontFace:{...face.fontFace}}:{}),...(style.path?{path:style.path}:{}),...(rule?{source:rule.source,note:rule.note}:{})};
+    if ((face.weight!==targetWeight || styleFallback) && compatibility!=="generic") compatibility="visual";
+    // FF-31: `substitute` is true whenever the face is not the chosen family itself (policy
+    // replacement, alias, script replacement or fallback). Exporters keep writing sourceFamily.
+    const substitute = via!=="family", policyRow = substitute ? fontPolicyFor(family) : undefined;
+    const measured = rule?.measured && rule.substituteIndex===0 ? rule.measured : undefined;
+    const resolution={requestedFamily:requested,sourceFamily:family,resolvedFamily:face.family,requestedWeight:weight,resolvedWeight:face.weight,italic:face.italic,compatibility,substitute,...(styleFallback?{styleFallback:true}:{}),...(face.fontFace?{fontFace:{...face.fontFace}}:{}),...(style.path?{path:style.path}:{}),...(rule?{source:rule.source,note:rule.note,...(rule.decision?{decision:rule.decision}:{})}:{}),...(measured?{measured:{...measured}}:{}),...(policyRow?{licenseClass:policyRow.licenseClass,availability:[...policyRow.availability]}:{})};
     if (face.family.toLowerCase()!==family.toLowerCase() || face.weight!==weight || face.italic!==!!style.italic) substitutions.set(JSON.stringify([requested,weight,!!style.italic,style.path]),resolution);
     return {face,resolution};
   };
@@ -158,7 +204,8 @@ export function createFontRegistry(entries, options = {}) {
     return bounds===null?null:{x:bounds.x*size,y:bounds.y*size,width:bounds.width*size,height:bounds.height*size};
   };
   return {
-    textMeasurement: {measure,resolveStyle,outlineBounds},
+    // resolveFont lets exporters tell a substitute from the chosen family (FF-31).
+    textMeasurement: {measure,resolveStyle,outlineBounds,resolveFont:style=>resolve(style).resolution},
     resolveFont(style) { return resolve(style).resolution; },
     clearSubstitutions() { substitutions.clear(); },
     get substitutions() { return [...substitutions.values()]; },

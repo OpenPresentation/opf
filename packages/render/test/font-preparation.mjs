@@ -44,7 +44,8 @@ const aptosDeck={slides:[{title:'Explicit Office substitute',text:'The source fo
 const aptosSource=JSON.stringify(aptosDeck);
 renderSvg(aptosDeck,office.options);
 assert.equal(JSON.stringify(aptosDeck),aptosSource);
-assert.ok(office.registry.substitutions.some(item=>item.requestedFamily==='Aptos'&&item.resolvedFamily==='Carlito'&&item.compatibility==='visual'));
+// FF-31 (provisional, owner may revise): the font policy previews Aptos with Roboto.
+assert.ok(office.registry.substitutions.some(item=>item.requestedFamily==='Aptos'&&item.resolvedFamily==='Roboto'&&item.compatibility==='visual'&&item.substitute));
 const metric=await prepareNodeFonts({pack:'office'});
 assert.throws(()=>renderSvg(aptosDeck,metric.options),{code:'font-unavailable'});
 await assert.rejects(prepareNodeFonts({pack:'unknown'}),{code:'invalid-font-pack'});

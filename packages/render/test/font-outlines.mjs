@@ -24,6 +24,7 @@ for(const method of [measure.measure,measure.outlineBounds]) {
   assert.throws(()=>method('你好',25,bold),{code:'missing-glyph'});
   assert.throws(()=>method('text',25,{...bold,fontFamily:'Unavailable family'}),{code:'font-unavailable'});
 }
-fonts.clearSubstitutions();assert.deepEqual(measure.outlineBounds('narrow',40.5,{fontFamily:'Aptos',fontWeight:700}),measure.outlineBounds('narrow',40.5,bold));
-assert.ok(fonts.substitutions.some(item=>item.requestedFamily==='Aptos'&&item.resolvedFamily==='Carlito'&&item.compatibility==='visual'));
+// FF-31: the font policy previews Aptos with Roboto (closest measured open face in the base pack).
+fonts.clearSubstitutions();assert.deepEqual(measure.outlineBounds('narrow',40.5,{fontFamily:'Aptos',fontWeight:700}),measure.outlineBounds('narrow',40.5,{fontFamily:'Roboto',fontWeight:700}));
+assert.ok(fonts.substitutions.some(item=>item.requestedFamily==='Aptos'&&item.resolvedFamily==='Roboto'&&item.compatibility==='visual'&&item.substitute===true));
 console.log(`Font outlines: ${cases} pinned face/text combinations preserve advances, scaling and cache isolation; empty ink, negative bearings, substitution and strict errors pass.`);

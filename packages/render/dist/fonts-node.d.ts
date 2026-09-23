@@ -1,7 +1,11 @@
-import type {FontRegistry,FontRegistryOptions,EmbeddedFont} from "./fonts.js";
+import type {FontRegistry,FontRegistryOptions,EmbeddedFont,FontFaceInput} from "./fonts.js";
+/** A caller-supplied face (FF-31), for example a licensed copy of the real font. Node callers may pass a file path. */
+export type CallerFontFace = FontFaceInput | (Omit<FontFaceInput, "data"> & {path: string});
 /** "all" or ISO 15924 codes (`Jpan`, `Hans`, `Hant`, `Kore`, `Arab`, `Hebr`, `Deva`, `Thai`, ...). */
 export type ScriptSelection = "all" | string[];
 export interface ScriptPackOptions {
+  /** Caller-supplied faces, loaded first so a licensed real font resolves as an exact face (FF-31). */
+  faces?: readonly CallerFontFace[];
   /** Also load the optional, hash-pinned OFL Noto script pack for these scripts (FF-19). */
   scripts?: ScriptSelection;
 }

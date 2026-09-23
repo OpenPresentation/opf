@@ -9,7 +9,8 @@ import {renderSvg,resolvePresentation} from '../dist/svg.js';
 import {loadOfficeFontRegistry} from '../dist/fonts-node.js';
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex'),out=process.argv[2]??'artifacts/rich-spacing-browser';
 if(out)await mkdir(out,{recursive:true});
-const fonts=await loadOfficeFontRegistry({substitutionPolicy:'visual'}),faces=fonts.embeddedFonts.filter(face=>face.family==='Carlito');
+// FF-31: the policy now previews Aptos with Roboto; this controlled comparison keeps Carlito explicitly.
+const fonts=await loadOfficeFontRegistry({substitutionPolicy:'visual',aliases:{Aptos:'Carlito','Aptos Display':'Carlito'}}),faces=fonts.embeddedFonts.filter(face=>face.family==='Carlito');
 assert.equal(faces.length,4);
 const browser=await chromium.launch({channel:process.platform==='win32'?'msedge':undefined}),errors=[],requests=[],results=[];
 try {
