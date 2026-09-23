@@ -45,6 +45,95 @@ export function auditEmbedVerifierSource(sourceText, {label = 'native-font-embed
   for (const required of ['nativeFontsGate', 'blockedByNativeFontsGate', 'edited.presentation.native-fonts-gate']) {
     if (!sourceText.includes(required)) failures.push({code: 'missing-native-font-gate', message: `${label} lacks ${required}`});
   }
+  const gateInputs = [...stripPowerShellLiteralsForScan(sourceText).matchAll(/Get-FontEmbedNativeFontsGate\s+(\$[\w:.]+)/g)].map(match => match[1]);
+  if (JSON.stringify(gateInputs) !== JSON.stringify(['$report.nativeFontsObservation'])) failures.push({code: 'native-font-gate-input', message: `${label} must gate SaveAs on exactly one post-edit $report.nativeFontsObservation; found ${gateInputs.join(', ') || 'none'}`});
+  for (const required of ['preEditFontsObservation', 'postTextFontsObservations', 'postFormatFontsObservations', 'fontSlotObservations', 'Get-FontEmbedFontsInventory', 'Get-FontEmbedRangeSnapshot', 'Get-FontEmbedFontSlotObservations']) {
+    if (!sourceText.includes(required)) failures.push({code: 'missing-diagnostic-observation', message: `${label} lacks ${required}`});
+  }
+  return failures;
+}
+
+export const FONT_SLOT_KEYS = Object.freeze(['name', 'nameAscii', 'nameOther', 'nameFarEast', 'nameComplexScript']);
+export const FONT_SLOT_PROPERTIES = Object.freeze(['Name', 'NameAscii', 'NameOther', 'NameFarEast', 'NameComplexScript']);
+export const DIAGNOSTIC_PHASES = Object.freeze({preEdit: 'pre-edit', postText: 'post-text', postFormat: 'post-format', postEdit: 'post-edit'});
+export const POST_TEXT_RANGES = Object.freeze(['title', 'body']);
+export const POST_FORMAT_RANGES = Object.freeze(['title']);
+const FONT_SLOT_STAGE_SUFFIXES = Object.freeze(['font.get', ...FONT_SLOT_KEYS.map(key => `font.${key}.get`)]);
+const WHOLE_RANGES = new Set(['title', 'body']);
+
+// Stage names emitted by Get-FontEmbedFontsInventory for one phase; entries are enumerated only for a 1..64 count.
+export function expectedFontsInventoryStageNames(phase, count) {
+  const names = [`${phase}.presentation.fonts.get`, `${phase}.presentation.fonts.count.get`];
+  if (isPlainInteger(count) && count >= 1 && count <= 64) for (let index = 1; index <= count; index++) for (const suffix of ['get', 'name.get', 'embedded.get', 'embeddable.get']) names.push(`${phase}.presentation.fonts.item-${index}.${suffix}`);
+  return names;
+}
+
+// Stage names emitted by Get-FontEmbedFontSlotObservations for one phase; unobserved spans are never read.
+export function expectedFontSlotStageNames(phase, records) {
+  const names = [];
+  for (const record of Array.isArray(records) ? records : []) {
+    const range = record?.range;
+    if (typeof range !== 'string') continue;
+    if (WHOLE_RANGES.has(range)) names.push(`${phase}.${range}.textRange2.get`, `${phase}.${range}.length.get`);
+    else if (record?.observed === true) names.push(`${phase}.${range}.get`);
+    else continue;
+    names.push(...FONT_SLOT_STAGE_SUFFIXES.map(suffix => `${phase}.${range}.${suffix}`));
+  }
+  return names;
+}
+
+// Stage names emitted by Get-FontEmbedRangeSnapshot for one mid-edit snapshot: Fonts inventory, then that whole range's slots.
+// post-text: right after a range's .Text set. post-format: after the title's Font2 sets, before the body .Text set.
+export function expectedRangeSnapshotStageNames(phase, range, count) {
+  return [...expectedFontsInventoryStageNames(`${phase}.${range}`, count), ...expectedFontSlotStageNames(phase, [{range, observed: true}])];
+}
+
+const isRecord = value => value !== null && typeof value === 'object' && !Array.isArray(value);
+const nonNegativeInteger = value => isPlainInteger(value) && value >= 0;
+const validInventory = observation => {
+  const expectedEntries = isPlainInteger(observation?.count) && observation.count >= 1 && observation.count <= 64 ? observation.count : 0;
+  return isRecord(observation) && nonNegativeInteger(observation.count) && Array.isArray(observation.entries) && observation.entries.length === expectedEntries && observation.entries.every((entry, index) => isRecord(entry) && entry.index === index + 1 && typeof entry.name === 'string' && isPlainInteger(entry.embedded) && isPlainInteger(entry.embeddable));
+};
+
+function validSlotRecord(record, expected, records, phaseKey) {
+  if (!isRecord(record) || record.range !== expected.range || typeof record.observed !== 'boolean') return false;
+  if (![record.start, record.length, record.textLength].every(nonNegativeInteger)) return false;
+  if (expected.whole) {
+    if (record.start !== 1 || record.length !== record.textLength || record.observed !== true) return false;
+  } else {
+    if (record.start !== expected.start || record.length !== expected.length || record.textLength !== records[1]?.textLength) return false;
+    const inside = record.start >= 1 && record.length >= 1 && record.start + record.length - 1 <= record.textLength;
+    if (record.observed !== inside || (phaseKey === 'postEdit' && !inside)) return false;
+  }
+  if (!record.observed) return record.slots === null;
+  return isRecord(record.slots) && FONT_SLOT_KEYS.every(key => Object.hasOwn(record.slots, key) && (record.slots[key] === null || typeof record.slots[key] === 'string'));
+}
+
+// Diagnostic observations are bound for presence and type only. Their font names are never allowlisted: only nativeFontsObservation is a gate.
+export function auditDiagnosticObservations(report) {
+  const failures = [];
+  const need = (condition, code, message) => { if (!condition) failures.push({code, message}); };
+  need(validInventory(report?.preEditFontsObservation), 'report-pre-edit-fonts', 'preEditFontsObservation must record a non-negative integer count and, for 1..64, exactly that many indexed string/integer entries');
+  const postText = report?.postTextFontsObservations;
+  need(isRecord(postText) && POST_TEXT_RANGES.every(range => validInventory(postText[range])), 'report-post-text-fonts', 'postTextFontsObservations.title and .body must each record a bounded, typed Fonts inventory');
+  const postFormat = report?.postFormatFontsObservations;
+  need(isRecord(postFormat) && POST_FORMAT_RANGES.every(range => validInventory(postFormat[range])), 'report-post-format-fonts', 'postFormatFontsObservations.title must record a bounded, typed Fonts inventory');
+  const observations = report?.fontSlotObservations;
+  const wholeSnapshot = (key, ranges, message) => {
+    const records = observations?.[key];
+    need(Array.isArray(records) && records.length === ranges.length && records.every((record, index) => validSlotRecord(record, {range: ranges[index], whole: true}, records, key)), 'report-font-slots', message);
+  };
+  wholeSnapshot('postText', POST_TEXT_RANGES, 'fontSlotObservations.postText must record the title then body whole-range slots read right after each .Text set');
+  wholeSnapshot('postFormat', POST_FORMAT_RANGES, 'fontSlotObservations.postFormat must record the title whole-range slots read after its Font2 sets');
+  const runs = report?.requested?.body?.runs;
+  const runsValid = Array.isArray(runs) && runs.every(run => isPlainInteger(run?.start) && isPlainInteger(run?.length) && run.start >= 1 && run.length >= 1);
+  need(runsValid, 'report-font-slots', 'report.requested.body.runs must be positive integer spans to bind font-slot observations');
+  need(isRecord(observations) && JSON.stringify(observations.properties) === JSON.stringify(FONT_SLOT_PROPERTIES), 'report-font-slots', 'fontSlotObservations.properties must list the five TextRange2.Font slot properties');
+  const expected = [{range: 'title', whole: true}, {range: 'body', whole: true}, ...(runsValid ? runs.map(run => ({range: `body.run-${run.start}-${run.length}`, start: run.start, length: run.length, whole: false})) : [])];
+  for (const phaseKey of ['preEdit', 'postEdit']) {
+    const records = observations?.[phaseKey];
+    need(runsValid && Array.isArray(records) && records.length === expected.length && records.every((record, index) => validSlotRecord(record, expected[index], records, phaseKey)), 'report-font-slots', `fontSlotObservations.${phaseKey} must record title, body and each requested span with integer bounds and string/null slot names`);
+  }
   return failures;
 }
 
@@ -199,40 +288,83 @@ const nativeSamePath = (left, right) => {
   return process.platform === 'win32' ? a.toLowerCase() === b.toLowerCase() : a === b;
 };
 
-function auditLifecycle({report, supervisor, worker, progress, stages, registrations}) {
+// Mirrors Get-FontEmbedNativeFontsGate in native-font-embed.ps1, so a recorded gate can be checked against its own observation.
+export function computeNativeFontsGate(observation) {
+  const entries = Array.isArray(observation?.entries) ? observation.entries : [];
+  const countIsInteger = isPlainInteger(observation?.count);
+  const count = countIsInteger ? observation.count : -1;
+  const entryTypesValid = entries.every(entry => typeof entry?.name === 'string' && entry.name.length > 0 && isPlainInteger(entry?.embedded) && isPlainInteger(entry?.embeddable));
+  const countValid = countIsInteger && entryTypesValid && count >= 1 && count <= 64 && count === entries.length;
+  const unexpectedNames = entries.filter(entry => typeof entry?.name !== 'string' || !PERMITTED_NATIVE_FONT_NAMES.includes(entry.name)).map(entry => String(entry?.name ?? ''));
+  const unembeddableNames = entries.filter(entry => !isPlainInteger(entry?.embeddable) || entry.embeddable !== -1).map(entry => String(entry?.name ?? ''));
+  const baseFamilyPresent = entries.some(entry => entry?.name === 'Carlito');
+  return {passed: countValid && baseFamilyPresent && unexpectedNames.length === 0 && unembeddableNames.length === 0, reportedCount: count, entryCount: entries.length, countValid, baseFamilyPresent, allowedReportedNames: [...PERMITTED_NATIVE_FONT_NAMES], unexpectedNames, unembeddableNames, entries};
+}
+
+export const LIFECYCLE_MODES = Object.freeze({completed: 'completed', blocked: 'blocked'});
+const GATE_STAGE = 'edited.presentation.native-fonts-gate';
+const SAVE_STAGE = 'edited.presentation.saveAs-owned-copy-embed-fonts';
+
+// mode "completed": the gate passed and one embed SaveAs completed (the only mode that can pass the embed audit).
+// mode "blocked": the gate blocked SaveAs; this validates lifecycle and diagnostic evidence only and never passes the embed audit.
+function auditLifecycle({report, supervisor, worker, progress, stages, registrations}, mode = LIFECYCLE_MODES.completed) {
   const failures = [];
   const need = (condition, code, message) => { if (!condition) failures.push({code, message}); };
+  const blocked = mode === LIFECYCLE_MODES.blocked;
+  const terminalStage = blocked ? 'worker.failure' : 'worker.complete', terminalStatus = blocked ? 'error' : 'success';
+  const reportError = report?.error;
   need(report?.kind === 'native-font-embed', 'report-kind', 'report.json must be native-font-embed');
-  need(nativeHash(report?.source?.sha256) && report?.source?.snapshotSha256 === report?.source?.sha256 && typeof report?.source?.path === 'string' && report.source.path.length > 0 && typeof report?.source?.snapshotPath === 'string' && report.source.snapshotPath.length > 0 && nativeHash(report?.saved?.sha256) && typeof report?.saved?.path === 'string' && report.saved.path.length > 0, 'report-file-binding', 'Worker must identify the source and owned saved presentation paths and hashes');
-  need(report?.error === null && report?.cleanupConfirmed === true && report?.officeOperationsStopped === false && report?.ownedCloseCount === 1 && report?.lastStage === 'worker.complete' && report?.lastStatus === 'success', 'report-lifecycle', 'Worker report must end successfully with no error, confirmed cleanup, and exactly one owned close');
-  need(report?.embedFonts?.saveFormat === 24 && report?.embedFonts?.saveArgument === -1 && report?.embedFonts?.attempted === true && report?.embedFonts?.completed === true && report?.embedFonts?.blockedByNativeFontsGate === false && report?.embedFonts?.stage === 'edited.presentation.saveAs-owned-copy-embed-fonts', 'report-embed', 'Worker report must record one allowed completed format 24, EmbedFonts -1 save');
+  const sourceBound = nativeHash(report?.source?.sha256) && report?.source?.snapshotSha256 === report?.source?.sha256 && typeof report?.source?.path === 'string' && report.source.path.length > 0 && typeof report?.source?.snapshotPath === 'string' && report.source.snapshotPath.length > 0 && typeof report?.saved?.path === 'string' && report.saved.path.length > 0;
+  need(sourceBound && (blocked ? report?.saved?.sha256 === null : nativeHash(report?.saved?.sha256)), 'report-file-binding', blocked ? 'Blocked worker must identify the source and record no saved presentation hash' : 'Worker must identify the source and owned saved presentation paths and hashes');
+  need((blocked ? typeof reportError === 'string' && reportError.length > 0 : reportError === null) && report?.cleanupConfirmed === true && report?.officeOperationsStopped === false && report?.ownedCloseCount === 1 && report?.lastStage === terminalStage && report?.lastStatus === terminalStatus, 'report-lifecycle', blocked ? 'Blocked worker report must end at worker.failure with its error, confirmed cleanup, and exactly one owned close' : 'Worker report must end successfully with no error, confirmed cleanup, and exactly one owned close');
+  const embed = report?.embedFonts;
+  need(embed?.saveFormat === 24 && embed?.saveArgument === -1 && embed?.stage === SAVE_STAGE && (blocked ? embed?.attempted === false && embed?.completed === false && embed?.blockedByNativeFontsGate === true : embed?.attempted === true && embed?.completed === true && embed?.blockedByNativeFontsGate === false), 'report-embed', blocked ? 'Blocked worker report must record no attempted or completed save and blockedByNativeFontsGate true' : 'Worker report must record one allowed completed format 24, EmbedFonts -1 save');
   const observation = report?.nativeFontsObservation, gate = report?.nativeFontsGate;
   const entries = observation?.entries;
-  const inventoryValid = isPlainInteger(observation?.count) && observation.count >= 1 && observation.count <= 64 && Array.isArray(entries) && entries.length === observation.count && entries.every((entry, index) => entry?.index === index + 1 && PERMITTED_NATIVE_FONT_NAMES.includes(entry?.name) && [0, -1].includes(entry?.embedded) && entry?.embeddable === -1) && entries.some(entry => entry.name === 'Carlito');
-  need(inventoryValid, 'native-font-inventory', 'Complete bounded native Fonts inventory must contain only permitted Carlito names with native embeddability confirmed');
-  need(gate?.passed === true && gate?.reportedCount === observation?.count && gate?.entryCount === observation?.count && gate?.countValid === true && gate?.baseFamilyPresent === true && Array.isArray(gate?.unexpectedNames) && gate.unexpectedNames.length === 0 && Array.isArray(gate?.unembeddableNames) && gate.unembeddableNames.length === 0 && JSON.stringify(gate?.allowedReportedNames) === JSON.stringify(PERMITTED_NATIVE_FONT_NAMES) && JSON.stringify(gate?.entries) === JSON.stringify(entries), 'report-native-font-gate', 'Native Fonts gate must agree with its independently validated observation');
-  need(worker?.timedOut === false && worker?.exitCode === 0 && isPlainInteger(worker?.timeoutSeconds) && worker.timeoutSeconds >= 5 && worker.timeoutSeconds <= 60 && isPlainInteger(worker?.processId) && worker.processId > 0 && nativeDate(worker?.startedAt) && nativeDate(worker?.finishedAt) && Date.parse(worker.finishedAt) >= Date.parse(worker.startedAt), 'worker-outcome', 'Owned worker must exit 0 without timeout within the configured 5-60 second helper bound');
-  need(supervisor?.timedOut === false && supervisor?.exitCode === 0 && supervisor?.officeLifecycleComplete === true && supervisor?.nativeFontsGatePassed === true && supervisor?.embedSaveRecorded === true && supervisor?.fontCleanupConfirmed === true && supervisor?.inputsUnchanged === true && supervisor?.ownedCloseCount === 1 && supervisor?.parentError === null && supervisor?.lastDurableStage === 'worker.complete' && supervisor?.lastDurableStatus === 'success', 'supervisor-outcome', 'Supervisor must confirm lifecycle, gate, save, inputs, removals, and one close');
-  need(progress?.stage === 'worker.complete' && progress?.status === 'success' && progress?.cleanupConfirmed === true && progress?.officeOperationsStopped === false && progress?.ownedPresentationPath === null, 'progress-outcome', 'Durable progress must end at successful worker.complete with owned cleanup confirmed');
+  if (blocked) {
+    const expectedEntries = isPlainInteger(observation?.count) && observation.count >= 1 && observation.count <= 64 ? observation.count : 0;
+    need(isRecord(observation) && isPlainInteger(observation.count) && observation.count >= 0 && Array.isArray(entries) && entries.length === expectedEntries && entries.every((entry, index) => isRecord(entry) && entry.index === index + 1 && typeof entry.name === 'string' && isPlainInteger(entry.embedded) && isPlainInteger(entry.embeddable)), 'native-font-inventory', 'Blocked post-edit native Fonts inventory must be bounded and well-typed');
+    const recomputed = computeNativeFontsGate(observation);
+    const fields = ['reportedCount', 'entryCount', 'countValid', 'baseFamilyPresent', 'allowedReportedNames', 'unexpectedNames', 'unembeddableNames', 'entries'];
+    need(recomputed.passed === false && gate?.passed === false && fields.every(field => JSON.stringify(gate?.[field]) === JSON.stringify(recomputed[field])), 'report-native-font-gate', 'Blocked native Fonts gate must be a failed gate that agrees field by field with a recomputation from the post-edit inventory');
+  } else {
+    const inventoryValid = isPlainInteger(observation?.count) && observation.count >= 1 && observation.count <= 64 && Array.isArray(entries) && entries.length === observation.count && entries.every((entry, index) => entry?.index === index + 1 && PERMITTED_NATIVE_FONT_NAMES.includes(entry?.name) && [0, -1].includes(entry?.embedded) && entry?.embeddable === -1) && entries.some(entry => entry.name === 'Carlito');
+    need(inventoryValid, 'native-font-inventory', 'Complete bounded native Fonts inventory must contain only permitted Carlito names with native embeddability confirmed');
+    need(gate?.passed === true && gate?.reportedCount === observation?.count && gate?.entryCount === observation?.count && gate?.countValid === true && gate?.baseFamilyPresent === true && Array.isArray(gate?.unexpectedNames) && gate.unexpectedNames.length === 0 && Array.isArray(gate?.unembeddableNames) && gate.unembeddableNames.length === 0 && JSON.stringify(gate?.allowedReportedNames) === JSON.stringify(PERMITTED_NATIVE_FONT_NAMES) && JSON.stringify(gate?.entries) === JSON.stringify(entries), 'report-native-font-gate', 'Native Fonts gate must agree with its independently validated observation');
+  }
+  const workerExitValid = blocked ? isPlainInteger(worker?.exitCode) && worker.exitCode !== 0 : worker?.exitCode === 0;
+  need(worker?.timedOut === false && workerExitValid && isPlainInteger(worker?.timeoutSeconds) && worker.timeoutSeconds >= 5 && worker.timeoutSeconds <= 60 && isPlainInteger(worker?.processId) && worker.processId > 0 && nativeDate(worker?.startedAt) && nativeDate(worker?.finishedAt) && Date.parse(worker.finishedAt) >= Date.parse(worker.startedAt), 'worker-outcome', blocked ? 'Blocked worker must exit nonzero without timeout within the configured 5-60 second helper bound' : 'Owned worker must exit 0 without timeout within the configured 5-60 second helper bound');
+  const supervisorOutcome = blocked
+    ? supervisor?.exitCode === worker?.exitCode && supervisor?.officeLifecycleComplete === false && supervisor?.nativeFontsGatePassed === false && supervisor?.embedSaveRecorded === false
+    : supervisor?.exitCode === 0 && supervisor?.officeLifecycleComplete === true && supervisor?.nativeFontsGatePassed === true && supervisor?.embedSaveRecorded === true;
+  need(supervisor?.timedOut === false && supervisorOutcome && supervisor?.fontCleanupConfirmed === true && supervisor?.inputsUnchanged === true && supervisor?.ownedCloseCount === 1 && supervisor?.parentError === null && supervisor?.lastDurableStage === terminalStage && supervisor?.lastDurableStatus === terminalStatus, 'supervisor-outcome', blocked ? 'Supervisor must record the blocked gate, no save, unchanged inputs, font removals, and one close' : 'Supervisor must confirm lifecycle, gate, save, inputs, removals, and one close');
+  need(progress?.stage === terminalStage && progress?.status === terminalStatus && (blocked ? progress?.error === reportError : true) && progress?.cleanupConfirmed === true && progress?.officeOperationsStopped === false && progress?.ownedPresentationPath === null, 'progress-outcome', `Durable progress must end at ${terminalStage}/${terminalStatus} with owned cleanup confirmed`);
   const fontNames = Array.isArray(registrations) ? registrations.map(row => row?.file).sort() : [];
   need(Array.isArray(registrations) && registrations.length === 4 && JSON.stringify(fontNames) === JSON.stringify([...PERMITTED_CARLITO_FIXTURE_FILES].sort()) && registrations.every(row => Object.hasOwn(PERMITTED_CARLITO_FIXTURE, row?.file) && row.sha256 === PERMITTED_CARLITO_FIXTURE[row.file] && isPlainInteger(row?.added) && row.added >= 1 && row?.removed === true), 'font-cleanup', 'Exactly the four unique canonical font registrations must record successful additions and removals');
   need(Array.isArray(stages) && stages.length > 0, 'stage-sequence', 'A complete durable stage sequence is required');
   if (!Array.isArray(stages) || stages.length === 0) return failures;
   const sourcePath = report?.source?.snapshotPath, savedPath = report?.saved?.path;
-  const singletons = new Set(['worker.initialize', 'edited.presentation.native-fonts-gate', 'edited.presentation.cleanup', 'worker.complete']);
+  const gateError = `${Array.isArray(gate?.unexpectedNames) ? gate.unexpectedNames.join(',') : ''}|${Array.isArray(gate?.unembeddableNames) ? gate.unembeddableNames.join(',') : ''}`;
+  // Singleton stages and the one status each may carry. In blocked mode the gate and terminal rows are the only non-null errors.
+  const singletons = new Map(blocked
+    ? [['worker.initialize', 'success'], [GATE_STAGE, 'blocked'], ['blocked.presentation.cleanup', 'success'], ['worker.failure', 'error']]
+    : [['worker.initialize', 'success'], [GATE_STAGE, 'success'], ['edited.presentation.cleanup', 'success'], ['worker.complete', 'success']]);
+  const expectedError = stage => blocked && stage === GATE_STAGE ? gateError : blocked && stage === 'worker.failure' ? reportError : null;
   const grouped = new Map();
   for (let index = 0; index < stages.length; index++) {
     const row = stages[index];
-    need(row?.sequence === index + 1 && typeof row?.stage === 'string' && ['begin', 'success'].includes(row?.status) && row?.error === null && row?.officeOperationsStopped === false && typeof row?.cleanupConfirmed === 'boolean' && nativeDate(row?.timestamp), 'stage-sequence', `Stage ${index + 1} is incomplete, noncontiguous, or records an error`);
-    need(row?.ownedPresentationPath === null || nativeSamePath(row?.ownedPresentationPath, sourcePath) || nativeSamePath(row?.ownedPresentationPath, savedPath), 'stage-ownership', `Stage ${index + 1} records an unrelated owned presentation`);
+    const singletonStatus = singletons.get(row?.stage);
+    const statusValid = singletonStatus ? row?.status === singletonStatus : ['begin', 'success'].includes(row?.status);
+    need(row?.sequence === index + 1 && typeof row?.stage === 'string' && statusValid && row?.error === expectedError(row?.stage) && row?.officeOperationsStopped === false && typeof row?.cleanupConfirmed === 'boolean' && nativeDate(row?.timestamp), 'stage-sequence', `Stage ${index + 1} is incomplete, noncontiguous, or records an unexpected status or error`);
+    need(row?.ownedPresentationPath === null || nativeSamePath(row?.ownedPresentationPath, sourcePath) || (!blocked && nativeSamePath(row?.ownedPresentationPath, savedPath)), 'stage-ownership', `Stage ${index + 1} records an unrelated owned presentation`);
     if (!grouped.has(row?.stage)) grouped.set(row?.stage, []);
     grouped.get(row?.stage).push(row);
-    if (!singletons.has(row?.stage)) {
+    if (!singletonStatus) {
       const partner = row?.status === 'begin' ? stages[index + 1] : stages[index - 1];
       need(partner?.stage === row?.stage && partner?.status === (row?.status === 'begin' ? 'success' : 'begin'), 'stage-pair', `Unpaired COM stage at sequence ${index + 1}`);
     }
   }
-  for (const [stage, rows] of grouped) need(singletons.has(stage) ? rows.length === 1 && rows[0]?.status === 'success' : rows.length === 2 && rows[0]?.status === 'begin' && rows[1]?.status === 'success', 'stage-duplicate', `Unexpected repeated or incomplete stage ${stage}`);
+  for (const [stage, rows] of grouped) need(singletons.has(stage) ? rows.length === 1 && rows[0]?.status === singletons.get(stage) : rows.length === 2 && rows[0]?.status === 'begin' && rows[1]?.status === 'success', 'stage-duplicate', `Unexpected repeated or incomplete stage ${stage}`);
   const paired = (name, ownedPath) => {
     const rows = grouped.get(name) ?? [];
     need(rows.length === 2 && rows[0]?.status === 'begin' && rows[1]?.status === 'success', 'stage-required', `Missing paired ${name}`);
@@ -241,36 +373,76 @@ function auditLifecycle({report, supervisor, worker, progress, stages, registrat
   };
   const singleton = (name, ownedPath) => {
     const rows = grouped.get(name) ?? [];
-    need(rows.length === 1 && rows[0]?.status === 'success', 'stage-required', `Missing successful ${name}`);
+    need(rows.length === 1 && rows[0]?.status === singletons.get(name), 'stage-required', `Missing ${singletons.get(name)} ${name}`);
     if (ownedPath === null) need(rows[0]?.ownedPresentationPath === null, 'stage-ownership', `${name} must confirm no owned presentation remains`);
     else if (ownedPath !== undefined) need(nativeSamePath(rows[0]?.ownedPresentationPath, ownedPath), 'stage-ownership', `${name} has the wrong owned presentation`);
     return rows[0]?.sequence;
   };
   const initialized = singleton('worker.initialize', null);
   const opened = paired('input.presentation.open', sourcePath);
+  // Diagnostic observation stages: pre-edit Fonts inventory and font slots before any edit set, post-text/post-format snapshots between edits,
+  // post-edit slots after the gated inventory. Only the post-edit edited.presentation.fonts.* inventory feeds the gate.
+  const preEditRecords = report?.fontSlotObservations?.preEdit, postEditRecords = report?.fontSlotObservations?.postEdit;
+  const diagnosticNames = [
+    ...expectedFontsInventoryStageNames(DIAGNOSTIC_PHASES.preEdit, report?.preEditFontsObservation?.count),
+    ...expectedFontSlotStageNames(DIAGNOSTIC_PHASES.preEdit, preEditRecords),
+  ];
+  const postEditNames = expectedFontSlotStageNames(DIAGNOSTIC_PHASES.postEdit, postEditRecords);
+  const postTextNames = Object.fromEntries(POST_TEXT_RANGES.map(range => [range, expectedRangeSnapshotStageNames(DIAGNOSTIC_PHASES.postText, range, report?.postTextFontsObservations?.[range]?.count)]));
+  const postFormatTitleNames = expectedRangeSnapshotStageNames(DIAGNOSTIC_PHASES.postFormat, 'title', report?.postFormatFontsObservations?.title?.count);
+  const expectedDiagnostic = new Set([...diagnosticNames, ...Object.values(postTextNames).flat(), ...postFormatTitleNames, ...postEditNames]);
+  const unexpectedDiagnostic = stages.filter(row => typeof row?.stage === 'string' && /^(?:pre-edit|post-text|post-format|post-edit)\./.test(row.stage) && !expectedDiagnostic.has(row.stage)).map(row => row.stage);
+  need(unexpectedDiagnostic.length === 0, 'stage-diagnostic-bound', `Diagnostic stages outside the bounded observation set: ${[...new Set(unexpectedDiagnostic)].join(', ')}`);
+  const preEditObserved = diagnosticNames.map(name => paired(name, sourcePath));
+  const editSets = stages.filter(row => typeof row?.stage === 'string' && /^edit\..+\.set$/.test(row.stage));
+  // Each range: .Text set, then its post-text snapshot, then every other set on that range (its Font2 property sets).
+  const editRange = range => {
+    const textSet = paired(`edit.${range}.text.set`, sourcePath);
+    const snapshot = postTextNames[range].map(name => paired(name, sourcePath));
+    const laterSets = editSets.filter(row => row.stage.startsWith(`edit.${range}.`) && row.stage !== `edit.${range}.text.set`);
+    need(laterSets.length > 0 && isPlainInteger(snapshot.at(-1)) && laterSets.every(row => row.sequence > snapshot.at(-1)), 'stage-diagnostic-order', `Every edit.${range} Font2 set must follow its post-text snapshot`);
+    return [textSet, ...snapshot, paired(`edit.${range}.font.name.set`, sourcePath)];
+  };
+  const [editTitleText, ...titleAfterText] = editRange('title');
+  // post-format.title: after every title set, before the body .Text set (the milestone order below enforces the latter).
+  const postFormatObserved = postFormatTitleNames.map(name => paired(name, sourcePath));
+  const titleSets = editSets.filter(row => row.stage.startsWith('edit.title.'));
+  need(isPlainInteger(postFormatObserved[0]) && titleSets.every(row => row.sequence < postFormatObserved[0] - 1), 'stage-diagnostic-order', 'Every edit.title set must precede the post-format.title snapshot');
+  const [editBodyText, ...bodyAfterText] = editRange('body');
   const fontsRead = [paired('edited.presentation.fonts.get', sourcePath), paired('edited.presentation.fonts.count.get', sourcePath)];
   if (Array.isArray(entries)) for (let index = 1; index <= entries.length; index++) for (const suffix of ['get', 'name.get', 'embedded.get', 'embeddable.get']) fontsRead.push(paired(`edited.presentation.fonts.item-${index}.${suffix}`, sourcePath));
-  const gateSequence = singleton('edited.presentation.native-fonts-gate', sourcePath);
-  const saved = paired('edited.presentation.saveAs-owned-copy-embed-fonts', sourcePath);
-  const confirmed = paired('edited.presentation.fullName.get', savedPath);
-  const closed = paired('edited.presentation.close', savedPath);
-  const cleaned = singleton('edited.presentation.cleanup', null);
-  const complete = singleton('worker.complete', null);
-  const milestones = [initialized, opened, ...fontsRead, gateSequence, saved, confirmed, closed, cleaned, complete];
-  need(initialized === 1 && milestones.every(isPlainInteger) && milestones.every((value, index) => index === 0 || value > milestones[index - 1]), 'stage-order', 'Required initialization, open, font inventory, gate, save, close, cleanup, and completion are missing or out of order');
+  const lastPreEdit = preEditObserved.length ? preEditObserved.at(-1) : undefined;
+  need(editSets.length > 0 && isPlainInteger(lastPreEdit) && isPlainInteger(fontsRead[0]) && editSets.every(row => row.sequence > lastPreEdit && row.sequence < fontsRead[0] - 1), 'stage-diagnostic-order', 'Every edit set must follow all pre-edit observations and precede the post-edit Fonts inventory');
+  const postEditObserved = postEditNames.map(name => paired(name, sourcePath));
+  const gateSequence = singleton(GATE_STAGE, sourcePath);
+  const tail = blocked
+    ? [paired('blocked.presentation.fullName.get', sourcePath), paired('blocked.presentation.saved.set', sourcePath), paired('blocked.presentation.close', sourcePath), singleton('blocked.presentation.cleanup', null), singleton('worker.failure', null)]
+    : [paired(SAVE_STAGE, sourcePath), paired('edited.presentation.fullName.get', savedPath), paired('edited.presentation.close', savedPath), singleton('edited.presentation.cleanup', null), singleton('worker.complete', null)];
+  const milestones = [initialized, opened, ...preEditObserved, editTitleText, ...titleAfterText, ...postFormatObserved, editBodyText, ...bodyAfterText, ...fontsRead, ...postEditObserved, gateSequence, ...tail];
+  need(initialized === 1 && milestones.every(isPlainInteger) && milestones.every((value, index) => index === 0 || value > milestones[index - 1]), 'stage-order', `Required initialization, open, pre-edit observations, per-range .Text set and post-text snapshot, post-format title snapshot, edits, font inventory, post-edit observations, gate, ${blocked ? 'discarding close and failure' : 'save, close, cleanup, and completion'} are missing or out of order`);
+  if (blocked) need(!stages.some(row => typeof row?.stage === 'string' && /saveas/i.test(row.stage)), 'stage-no-save', 'A blocked attempt must record no SaveAs stage');
   need(stages.filter(row => typeof row?.stage === 'string' && row.stage.endsWith('.close') && row?.status === 'success').length === 1, 'stage-close', 'Exactly one owned close is permitted');
   const final = stages.at(-1);
-  need(complete === stages.length && final?.cleanupConfirmed === true && final?.ownedPresentationPath === null && JSON.stringify(progress) === JSON.stringify(final), 'stage-terminal', 'worker.complete must be the final durable stage and match progress.json exactly');
+  need(tail.at(-1) === stages.length && final?.cleanupConfirmed === true && final?.ownedPresentationPath === null && JSON.stringify(progress) === JSON.stringify(final), 'stage-terminal', `${terminalStage} must be the final durable stage and match progress.json exactly`);
   need(nativeDate(supervisor?.timestamp) && nativeDate(final?.timestamp) && Date.parse(supervisor.timestamp) >= Date.parse(final.timestamp), 'supervisor-time', 'Supervisor completion must follow the final durable worker stage');
   return failures;
 }
 
 export function auditSavedEmbedPresentation(evidence) {
-  const failures = [...auditCanonicalFixtureManifest(evidence.generation), ...auditLifecycle(evidence), ...(evidence.inputBindingFailures ?? [])];
+  const failures = [...auditCanonicalFixtureManifest(evidence.generation), ...auditLifecycle(evidence), ...auditDiagnosticObservations(evidence.report), ...(evidence.inputBindingFailures ?? [])];
   const opc = inspectFontEmbeddingPackage(evidence.pptxBytes);
   failures.push(...opc.failures);
   if (evidence.report?.saved?.sha256 !== opc.packageSha256) failures.push({code: 'saved-hash', message: 'report.saved.sha256 does not match native-font-embed.pptx'});
   return {failures, opc, passed: failures.length === 0, scope: 'Lifecycle-bound OPC font relationship/content-type audit. Raw obfuscated part hashes are structural evidence only; physical face and per-glyph identity remain unproven.'};
+}
+
+const BLOCKED_SCOPE = 'Blocked-evidence diagnostic audit. It checks that an attempt whose native Fonts gate blocked SaveAs kept a clean lifecycle (one discarding owned close, no SaveAs, fonts removed, inputs unchanged) and well-typed, correctly staged diagnostic observations. It never passes the embed audit: embedGatePassed is always false and no embedded font or saved package is claimed.';
+
+// Blocked-evidence mode: validates the lifecycle and diagnostic observations of a gate-blocked attempt. It has no "passed" field on purpose.
+export function auditBlockedEmbedEvidence(evidence) {
+  const failures = [...auditCanonicalFixtureManifest(evidence.generation), ...auditLifecycle(evidence, LIFECYCLE_MODES.blocked), ...auditDiagnosticObservations(evidence.report), ...(evidence.inputBindingFailures ?? [])];
+  if (evidence.pptxBytes) failures.push({code: 'blocked-saved-package-present', message: 'A blocked attempt must not leave native-font-embed.pptx'});
+  return {failures, embedGatePassed: false, diagnosticEvidenceValid: failures.length === 0, scope: BLOCKED_SCOPE};
 }
 
 async function readBoundFile(root, relative, expected, role, failures, rawHashes) {
@@ -335,8 +507,9 @@ async function readRequired(root, relative, failures, rawHashes, parser = parse)
   catch { failures.push({code: 'missing-evidence', message: `${relative} is required`}); return null; }
 }
 
-export async function auditEvidenceDirectory(evidenceDirectory) {
-  const root = path.resolve(evidenceDirectory), failures = [], rawHashes = {};
+// Shared evidence loading and input binding for both audit modes.
+async function loadAndBindEvidence(root, {requirePptx}) {
+  const failures = [], rawHashes = {};
   const need = (condition, code, message) => { if (!condition) failures.push({code, message}); };
   const request = await readRequired(root, 'request.json', failures, rawHashes);
   const report = await readRequired(root, 'report.json', failures, rawHashes);
@@ -346,14 +519,19 @@ export async function auditEvidenceDirectory(evidenceDirectory) {
   const registrations = await readRequired(root, 'font-registration.json', failures, rawHashes);
   const generation = await readRequired(root, 'inputs/generation.json', failures, rawHashes);
   const stages = await readRequired(root, 'stages.jsonl', failures, rawHashes, bytes => {
-    const text = Buffer.from(bytes).toString('utf8').replace(/^\uFEFF/, '').trim();
+    const text = Buffer.from(bytes).toString('utf8').replace(/^﻿/, '').trim();
     return text ? text.split(/\r?\n/).map(line => JSON.parse(line)) : [];
   });
   for (const [name, value] of Object.entries({request, report, supervisor, worker, progress, generation})) need(value !== null && typeof value === 'object' && !Array.isArray(value), 'evidence-object', `${name}.json must contain a JSON object`);
   need(Array.isArray(registrations) && registrations.length === 4, 'evidence-array', 'font-registration.json must contain four records');
   need(Array.isArray(stages) && stages.length > 0, 'evidence-array', 'stages.jsonl must contain a nonempty sequence');
   const verifierBytes = await readRequired(root, 'inputs/native-font-embed.ps1', failures, rawHashes, bytes => bytes);
-  const pptxBytes = await readRequired(root, 'native-font-embed.pptx', failures, rawHashes, bytes => bytes);
+  let pptxBytes = null;
+  if (requirePptx) pptxBytes = await readRequired(root, 'native-font-embed.pptx', failures, rawHashes, bytes => bytes);
+  else {
+    try { pptxBytes = await readFile(path.join(root, 'native-font-embed.pptx')); rawHashes['native-font-embed.pptx'] = sha(pptxBytes); }
+    catch (error) { if (error?.code !== 'ENOENT') failures.push({code: 'evidence-read', message: `native-font-embed.pptx cannot be checked: ${error.message}`}); }
+  }
   if (verifierBytes) failures.push(...auditEmbedVerifierSource(verifierBytes.toString('utf8')));
   if (request) {
     const binding = await auditInputBindings(root, request, verifierBytes);
@@ -373,29 +551,64 @@ export async function auditEvidenceDirectory(evidenceDirectory) {
     need(JSON.stringify(native?.allowedNames) === JSON.stringify(PERMITTED_NATIVE_FONT_NAMES) && native?.maxEntries === 64 && native?.unexpectedNamesBlockSave === true && native?.requireEmbeddable === true, 'request-native-gate', 'Request must preserve the bounded native font allowlist and embeddability gate');
     need(request?.expectations?.embedFonts?.saveFormat === 24 && request?.expectations?.embedFonts?.saveArgument === -1, 'request-embed-save', 'Request must preserve SaveAs format 24 and EmbedFonts -1');
   }
+  const evidenceComplete = Boolean(report && supervisor && worker && progress && stages && registrations && generation);
+  return {failures, rawHashes, evidence: {report, supervisor, worker, progress, stages, registrations, generation, pptxBytes}, evidenceComplete};
+}
+
+export async function auditEvidenceDirectory(evidenceDirectory) {
+  const root = path.resolve(evidenceDirectory);
+  const {failures, rawHashes, evidence, evidenceComplete} = await loadAndBindEvidence(root, {requirePptx: true});
   let opc = null;
-  if (report && supervisor && worker && progress && stages && registrations && generation && pptxBytes) {
-    const result = auditSavedEmbedPresentation({report, supervisor, worker, progress, stages, registrations, generation, pptxBytes});
+  if (evidenceComplete && evidence.pptxBytes) {
+    const result = auditSavedEmbedPresentation(evidence);
     failures.push(...result.failures); opc = result.opc;
   }
   return {schemaVersion:2, kind:'native-font-embed-opc-audit', evidenceDirectory:root, passed:failures.length === 0, failures, rawHashes, opc, scope:'Offline lifecycle/input binding and font-related OPC structural audit. No Office or font API is started. Obfuscated font-part bytes are not physical face or per-glyph identity proof.'};
 }
 
+// Names reported by each Fonts snapshot, in the order they were taken; a reading aid only, not a gate.
+function fontsTimeline(report) {
+  const names = observation => Array.isArray(observation?.entries) ? observation.entries.map(entry => entry?.name) : null;
+  return [
+    {snapshot: 'pre-edit', names: names(report?.preEditFontsObservation)},
+    {snapshot: 'post-text.title', names: names(report?.postTextFontsObservations?.title)},
+    {snapshot: 'post-format.title', names: names(report?.postFormatFontsObservations?.title)},
+    {snapshot: 'post-text.body', names: names(report?.postTextFontsObservations?.body)},
+    {snapshot: 'edited (gated)', names: names(report?.nativeFontsObservation)},
+  ];
+}
+
+export async function auditBlockedEvidenceDirectory(evidenceDirectory) {
+  const root = path.resolve(evidenceDirectory);
+  const {failures, rawHashes, evidence, evidenceComplete} = await loadAndBindEvidence(root, {requirePptx: false});
+  if (evidenceComplete) failures.push(...auditBlockedEmbedEvidence(evidence).failures);
+  else if (evidence.pptxBytes) failures.push({code: 'blocked-saved-package-present', message: 'A blocked attempt must not leave native-font-embed.pptx'});
+  return {schemaVersion: 1, kind: 'native-font-embed-blocked-diagnostic-audit', evidenceDirectory: root, embedGatePassed: false, diagnosticEvidenceValid: failures.length === 0, failures, fontsTimeline: fontsTimeline(evidence.report), rawHashes, scope: BLOCKED_SCOPE};
+}
+
+const CLI_MODES = Object.freeze({
+  completed: {file: 'embed-opc-audit.json', run: auditEvidenceDirectory, ok: out => out.passed === true, summary: out => ({passed: out.passed, failures: out.failures.length}), error: (root, message) => ({schemaVersion: 2, kind: 'native-font-embed-opc-audit', evidenceDirectory: root, passed: false, failures: [{code: 'audit-error', message}], scope: 'Offline audit failed before completion.'})},
+  blocked: {file: 'blocked-diagnostic-audit.json', run: auditBlockedEvidenceDirectory, ok: out => out.diagnosticEvidenceValid === true, summary: out => ({embedGatePassed: false, diagnosticEvidenceValid: out.diagnosticEvidenceValid, failures: out.failures.length}), error: (root, message) => ({schemaVersion: 1, kind: 'native-font-embed-blocked-diagnostic-audit', evidenceDirectory: root, embedGatePassed: false, diagnosticEvidenceValid: false, failures: [{code: 'audit-error', message}], scope: BLOCKED_SCOPE})},
+});
+
 async function runCli() {
-  const evidenceRoot = process.argv[2];
-  if (!evidenceRoot) { console.error(JSON.stringify({passed: false, error: 'Usage: node test/native-font-embed-audit.mjs EVIDENCE_DIRECTORY'})); process.exitCode = 1; return; }
-  const root = path.resolve(evidenceRoot);
+  const args = process.argv.slice(2);
+  const flags = args.filter(arg => arg.startsWith('--')), positional = args.filter(arg => !arg.startsWith('--'));
+  const usage = 'Usage: node test/native-font-embed-audit.mjs EVIDENCE_DIRECTORY [--blocked]';
+  if (positional.length !== 1 || flags.some(flag => flag !== '--blocked')) { console.error(JSON.stringify({passed: false, error: usage})); process.exitCode = 1; return; }
+  const mode = CLI_MODES[flags.includes('--blocked') ? 'blocked' : 'completed'];
+  const root = path.resolve(positional[0]);
   try { if (!(await stat(root)).isDirectory()) throw new Error('not a directory'); }
   catch { console.error(JSON.stringify({passed: false, error: `Evidence directory does not exist: ${root}`})); process.exitCode = 1; return; }
-  const outPath = path.join(root, 'embed-opc-audit.json');
+  const outPath = path.join(root, mode.file);
   try { await stat(outPath); console.error(JSON.stringify({passed: false, error: `Refusing to overwrite existing audit: ${outPath}`})); process.exitCode = 1; return; }
   catch (error) { if (error?.code !== 'ENOENT') { console.error(JSON.stringify({passed: false, error: error.message})); process.exitCode = 1; return; } }
   let out;
-  try { out = await auditEvidenceDirectory(root); }
-  catch (error) { out = {schemaVersion: 2, kind: 'native-font-embed-opc-audit', evidenceDirectory: root, passed: false, failures: [{code: 'audit-error', message: error.message}], scope: 'Offline audit failed before completion.'}; }
+  try { out = await mode.run(root); }
+  catch (error) { out = mode.error(root, error.message); }
   await writeFile(outPath, JSON.stringify(out, null, 2) + '\n', {flag: 'wx'});
-  console.log(JSON.stringify({passed: out.passed, failures: out.failures.length, outPath}));
-  process.exitCode = out.passed ? 0 : 1;
+  console.log(JSON.stringify({...mode.summary(out), outPath}));
+  process.exitCode = mode.ok(out) ? 0 : 1;
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === __filename) await runCli();

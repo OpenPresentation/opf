@@ -41,6 +41,54 @@ For an attempt that passed the native gate, completed the owned close and parent
 node test/native-font-embed-audit.mjs artifacts/windows-native-font-embed-01
 ```
 
+For an attempt whose native gate blocked `SaveAs`, run the blocked-evidence mode instead. It writes `blocked-diagnostic-audit.json` with exclusive create, so it too refuses to overwrite an existing file. See [Blocked-evidence audit](#blocked-evidence-audit).
+
+```powershell
+node test/native-font-embed-audit.mjs artifacts/windows-native-font-embed-01 --blocked
+```
+
+## Diagnostic observations (not gates)
+
+The first supervised attempt (September 22, 2026) opened a Carlito-only fixture with no `Aptos` anywhere in the package, applied the Gate E edits, and then saw `Presentation.Fonts` report `Carlito` and `Aptos`. It enumerated the fonts only after all the edits, so it cannot tell whether Aptos was already listed for the unedited file or appeared because of an edit. Two hypotheses are open. In the first, text inserted by `.Text` takes Office's default East Asian or complex-script font, because the theme leaves the `ea` and `cs` slots empty. In the second, PowerPoint lists an application default whatever the edits do. The worker now records bounded, read-only observations that separate these cases. It does not change the edits, their order or their values:
+
+| When | Report field | Stage prefix |
+| --- | --- | --- |
+| Right after open, before any edit | `preEditFontsObservation` (`count`, `entries[]` of `index`/`name`/`embedded`/`embeddable`) | `pre-edit.presentation.fonts.*` |
+| Before any edit | `fontSlotObservations.preEdit` | `pre-edit.title.*`, `pre-edit.body.*`, `pre-edit.body.run-S-L.*` |
+| Right after each range's `.Text` set, before its first `Font2` property set | `postTextFontsObservations.title` / `.body` and `fontSlotObservations.postText` (title, then body) | `post-text.title.*`, `post-text.body.*` |
+| After every title `Font2` property set, before the body `.Text` set | `postFormatFontsObservations.title` and `fontSlotObservations.postFormat` (title only) | `post-format.title.*` |
+| After all edits and after the gated `edited.presentation.fonts.*` inventory, before the gate decision | `fontSlotObservations.postEdit` | `post-edit.title.*`, `post-edit.body.*`, `post-edit.body.run-S-L.*` |
+
+- **Fonts inventories** enumerate names only for a count from 1 to 64; any other count is recorded with no entries.
+- **Font slots.** Each slot record reads `TextRange2.Font` `Name`, `NameAscii`, `NameOther`, `NameFarEast` and `NameComplexScript` for the title, the body and the four requested body spans. Only the ranges that the harness edits are read: before the edits they still hold the unedited fixture text, and afterwards they hold the edited text. No other shape or range is read. A value is a string, or JSON `null` if COM returns nothing. Each record also stores `start`, `length` and the container `textLength`.
+- **Unedited spans.** Before the edit, the fixture body text (`Current content`, 15 characters) does not contain every requested span. A span that lies outside the current text is recorded as `observed: false` with `slots: null` and is never read. After the edits, all four spans must be observed.
+- **COM staging.** Every observation is a staged `Invoke-FontEmbedCom` call with its own `begin`/`success` pair. The calls are read-only property gets (`Fonts`, `Count`, `Name`, `Embedded`, `Embeddable`, `TextFrame2.TextRange`, `Length`, `Font` and the five slot names) and object-returning accessor calls (`Fonts.Item(i)` and `TextRange2.Characters(start, length)`). No setters are called. A COM error latches like any other stage.
+- **Blocked attempts.** The worker writes each observation to `report.json` as soon as it is taken, so a blocked attempt keeps all of them.
+
+How to read the result: if Aptos is already in `preEditFontsObservation`, the edits did not introduce it. If Aptos first appears in `postTextFontsObservations.title`, the title `.Text` set did. In that case, `NameFarEast` or `NameComplexScript` in the matching `fontSlotObservations.postText` record shows which slot changed. If it first appears in `postFormatFontsObservations.title`, the title `Font2` property sets did. If it first appears in `postTextFontsObservations.body`, the body `.Text` set did, because the post-format snapshot separates it from the title formatting. If Aptos appears only in the gated post-edit inventory, a body `Font2` property set is implicated.
+
+These observations are diagnostics, not gates. The only input to `nativeFontsGate`, and so to `SaveAs`, is still the post-edit `nativeFontsObservation`, with the unchanged Carlito allowlist and embeddability rule. Aptos in any observation neither passes nor fails an attempt; Aptos in the post-edit inventory still blocks `SaveAs`. The `-PureRegression` AST check requires exactly one worker gate call, `Get-FontEmbedNativeFontsGate $report.nativeFontsObservation`, and the offline source policy checks the same thing.
+
+`Font2` slot names and `Presentation.Fonts` names are what PowerPoint reports through COM. They do not prove which physical font file drew any glyph, and a reported slot name does not show that the font is installed, embedded or used for rendering.
+
+The offline audit requires these fields to be present, finite and well-typed:
+
+- integer counts, with entry counts that match them
+- string or `null` slot values
+- whole-range records with `start: 1` and `length == textLength`, and span labels that match `report.requested.body.runs`
+
+It also requires every observation stage to be paired and to appear only where expected: pre-edit observations before any `edit.*.set`; each post-text snapshot after its `.Text` set and before that range's `Font2` sets; the post-format title snapshot after every title set and before the body `.Text` set; post-edit slots after the gated inventory and before the gate. It does not allowlist the names observed. Evidence from the attempt-01 harness has none of these fields, so it does not pass this audit.
+
+### Blocked-evidence audit
+
+The default audit accepts only a completed embed save, so on its own it never checks the diagnostics of an attempt whose gate blocked `SaveAs`. The `--blocked` mode checks such an attempt without Office. It writes `blocked-diagnostic-audit.json` with exclusive create. It requires:
+
+- **Lifecycle.** One discarding owned close (`blocked.presentation.fullName.get`, `saved.set` and `close`, then `blocked.presentation.cleanup`) and a final `worker.failure` whose error matches `report.error` and `progress.json`. No `SaveAs` stage and no `native-font-embed.pptx`. `embedFonts.attempted` and `completed` are `false` and `blockedByNativeFontsGate` is `true`. The worker exited nonzero without a timeout, all four font registrations were removed, and all 20 input checks are unchanged.
+- **Gate consistency.** The post-edit inventory is bounded and well-typed. The recorded `nativeFontsGate` must fail and must match, field by field, a recomputation from that inventory (`unexpectedNames`, `unembeddableNames`, counts, `baseFamilyPresent`, `entries`). The `blocked` gate stage error must be `unexpected|unembeddable`.
+- **Stages and diagnostics.** The same pairing, bounds and order rules as above, and the same field checks.
+
+The output never passes the embed audit. It has no `passed` field, and `embedGatePassed` is always `false`. `diagnosticEvidenceValid` states whether the blocked evidence is trustworthy. `fontsTimeline` lists the names each Fonts snapshot reported, in the order they were taken, as a reading aid. The exit code is 0 only when `diagnosticEvidenceValid` is `true`. The default mode still rejects blocked evidence, and `--blocked` rejects evidence from a completed save.
+
 ## Stage records
 
 Successful stage records must serialize `error` as JSON `null`. `Write-FontEmbedStage` keeps its error parameter untyped because a PowerShell `[string]` parameter coerces `$null` to an empty string, which the audit rejects for every stage. The mixed-size harness hit exactly this defect in its first native attempt on 2026-09-22. `-PureRegression` writes one successful and one failed stage and checks their serialized form.

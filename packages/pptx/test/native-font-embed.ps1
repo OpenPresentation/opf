@@ -76,6 +76,67 @@ function Get-FontEmbedNativeFontsGate($Observation) {
     })
 }
 
+# Diagnostic observations only. Nothing below feeds Get-FontEmbedNativeFontsGate or decides SaveAs.
+# Helper locals avoid the StageName/Operation/value names that Invoke-FontEmbedCom binds, because the staged scriptblocks resolve variables dynamically.
+function Get-FontEmbedFontsInventory($InventoryPresentation,[string]$Phase) {
+    $inventory=[ordered]@{count=$null;entries=@()}
+    $inventoryCollection=Invoke-FontEmbedCom "$Phase.presentation.fonts.get" {return ,$InventoryPresentation.Fonts}
+    $inventoryCount=[int](Invoke-FontEmbedCom "$Phase.presentation.fonts.count.get" {$inventoryCollection.Count}); $inventory.count=$inventoryCount
+    if($inventoryCount -ge 1 -and $inventoryCount -le 64) {
+        for($itemIndex=1;$itemIndex -le $inventoryCount;$itemIndex++) {
+            $inventoryFont=Invoke-FontEmbedCom "$Phase.presentation.fonts.item-$itemIndex.get" {return ,$inventoryCollection.Item($itemIndex)}
+            $inventoryName=Invoke-FontEmbedCom "$Phase.presentation.fonts.item-$itemIndex.name.get" {$inventoryFont.Name}
+            $inventoryEmbedded=[int](Invoke-FontEmbedCom "$Phase.presentation.fonts.item-$itemIndex.embedded.get" {$inventoryFont.Embedded})
+            $inventoryEmbeddable=[int](Invoke-FontEmbedCom "$Phase.presentation.fonts.item-$itemIndex.embeddable.get" {$inventoryFont.Embeddable})
+            $inventory.entries+=@([ordered]@{index=$itemIndex;name=[string]$inventoryName;embedded=$inventoryEmbedded;embeddable=$inventoryEmbeddable})
+        }
+    }
+    return ,$inventory
+}
+function ConvertTo-FontEmbedSlotValue($SlotValue) { if($null -eq $SlotValue) { return $null }; return [string]$SlotValue }
+function Read-FontEmbedFontSlots($SlotRange,[string]$Prefix) {
+    $slotFont=Invoke-FontEmbedCom "$Prefix.font.get" {return ,$SlotRange.Font}
+    $slotName=Invoke-FontEmbedCom "$Prefix.font.name.get" {$slotFont.Name}
+    $slotAscii=Invoke-FontEmbedCom "$Prefix.font.nameAscii.get" {$slotFont.NameAscii}
+    $slotOther=Invoke-FontEmbedCom "$Prefix.font.nameOther.get" {$slotFont.NameOther}
+    $slotFarEast=Invoke-FontEmbedCom "$Prefix.font.nameFarEast.get" {$slotFont.NameFarEast}
+    $slotComplex=Invoke-FontEmbedCom "$Prefix.font.nameComplexScript.get" {$slotFont.NameComplexScript}
+    return ,([ordered]@{name=(ConvertTo-FontEmbedSlotValue $slotName);nameAscii=(ConvertTo-FontEmbedSlotValue $slotAscii);nameOther=(ConvertTo-FontEmbedSlotValue $slotOther);nameFarEast=(ConvertTo-FontEmbedSlotValue $slotFarEast);nameComplexScript=(ConvertTo-FontEmbedSlotValue $slotComplex)})
+}
+# Returns @(record, TextRange2) so span reads can reuse the whole range; only the record is ever serialized.
+function Get-FontEmbedWholeSlotRecord($SlotShape,[string]$SlotLabel,[string]$Phase) {
+    $wholeRange=Invoke-FontEmbedCom "$Phase.$SlotLabel.textRange2.get" {return ,$SlotShape.TextFrame2.TextRange}
+    $wholeLength=[int](Invoke-FontEmbedCom "$Phase.$SlotLabel.length.get" {$wholeRange.Length})
+    $wholeSlots=Read-FontEmbedFontSlots $wholeRange "$Phase.$SlotLabel"
+    return ,@(([ordered]@{range=$SlotLabel;start=1;length=$wholeLength;textLength=$wholeLength;observed=$true;slots=$wholeSlots}),$wholeRange)
+}
+# One mid-edit snapshot: Fonts inventory ("$Phase.$RangeLabel.presentation.fonts.*"), then the slots of that whole range ("$Phase.$RangeLabel.*").
+# Phases: post-text (right after the .Text set of a range, before its Font2 sets) and post-format (after the title Font2 sets, before the body .Text set).
+function Get-FontEmbedRangeSnapshot($InventoryPresentation,$ObservedShape,[string]$RangeLabel,[string]$Phase) {
+    $snapshotFonts=Get-FontEmbedFontsInventory $InventoryPresentation "$Phase.$RangeLabel"
+    $snapshotWhole=Get-FontEmbedWholeSlotRecord $ObservedShape $RangeLabel $Phase
+    return ,([ordered]@{fonts=$snapshotFonts;slots=$snapshotWhole[0]})
+}
+function Get-FontEmbedFontSlotObservations($TitleShape,$BodyShape,$SlotRuns,[string]$Phase) {
+    $slotRecords=@()
+    $slotTitle=Get-FontEmbedWholeSlotRecord $TitleShape 'title' $Phase
+    $slotRecords+=@($slotTitle[0])
+    $slotBody=Get-FontEmbedWholeSlotRecord $BodyShape 'body' $Phase
+    $slotRecords+=@($slotBody[0]); $slotBodyRange=$slotBody[1]; $slotBodyLength=[int]$slotBody[0].textLength
+    foreach($slotRun in @($SlotRuns)) {
+        $slotStart=[int]$slotRun.start; $slotLength=[int]$slotRun.length; $slotLabel="body.run-$slotStart-$slotLength"
+        # A span outside the current body text (for example the unedited fixture text) is recorded as unobserved, not read.
+        $slotInside=($slotStart -ge 1 -and $slotLength -ge 1 -and ($slotStart+$slotLength-1) -le $slotBodyLength)
+        $slotRunSlots=$null
+        if($slotInside) {
+            $slotRunRange=Invoke-FontEmbedCom "$Phase.$slotLabel.get" {return ,$slotBodyRange.Characters($slotStart,$slotLength)}
+            $slotRunSlots=Read-FontEmbedFontSlots $slotRunRange "$Phase.$slotLabel"
+        }
+        $slotRecords+=@([ordered]@{range=$slotLabel;start=$slotStart;length=$slotLength;textLength=$slotBodyLength;observed=$slotInside;slots=$slotRunSlots})
+    }
+    return ,$slotRecords
+}
+
 function Test-FontEmbedSaveAsPathArgument($Argument) {
     return ($Argument -is [System.Management.Automation.Language.VariableExpressionAst]) -and ($Argument.VariablePath.UserPath -ceq 'savedPath')
 }
@@ -114,7 +175,16 @@ function Assert-FontEmbedVerifierAst([string]$Path) {
     foreach($invoke in $ast.FindAll({param($node) $node -is [System.Management.Automation.Language.InvokeMemberExpressionAst]},$true)) {
         $member=$invoke.Member
         if($member -is [System.Management.Automation.Language.StringConstantExpressionAst] -and $member.Value -ceq 'Quit') { throw 'Embed harness must not invoke .Quit() on an Office application' }
+        if($member -is [System.Management.Automation.Language.StringConstantExpressionAst] -and $member.Value -ceq 'Kill') { throw 'Embed harness must not invoke .Kill(); only native-process.ps1 may stop its owned worker' }
     }
+    foreach($command in $ast.FindAll({param($node) $node -is [System.Management.Automation.Language.CommandAst]},$true)) {
+        if($command.GetCommandName() -in @('Stop-Process','taskkill','taskkill.exe')) { throw 'Embed harness must not stop processes directly' }
+    }
+    $pureDefinitions=@($ast.FindAll({param($node) $node -is [System.Management.Automation.Language.FunctionDefinitionAst] -and $node.Name -ceq 'Invoke-FontEmbedPureRegression'},$true))
+    if($pureDefinitions.Count -ne 1) { throw 'Expected exactly one Invoke-FontEmbedPureRegression definition' }
+    $pureStart=$pureDefinitions[0].Extent.StartOffset; $pureEnd=$pureDefinitions[0].Extent.EndOffset
+    $gateCalls=@($ast.FindAll({param($node) $node -is [System.Management.Automation.Language.CommandAst] -and $node.GetCommandName() -ceq 'Get-FontEmbedNativeFontsGate'},$true) | Where-Object {$_.Extent.StartOffset -lt $pureStart -or $_.Extent.EndOffset -gt $pureEnd})
+    if($gateCalls.Count -ne 1 -or $gateCalls[0].Extent.Text -cne 'Get-FontEmbedNativeFontsGate $report.nativeFontsObservation') { throw 'The only worker native Fonts gate must evaluate the post-edit $report.nativeFontsObservation' }
     $embedOn=0; $embedOff=0
     foreach($invoke in $ast.FindAll({param($node) $node -is [System.Management.Automation.Language.InvokeMemberExpressionAst]},$true)) {
         $embedArgument=Get-FontEmbedOwnedSaveAsEmbedArgument $invoke
@@ -174,7 +244,46 @@ function Invoke-FontEmbedPureRegression {
         $stringCountGate=Get-FontEmbedNativeFontsGate ([pscustomobject]@{count='1';entries=@([pscustomobject]@{name='Carlito';embedded=0;embeddable=-1})})
         $stringFlagGate=Get-FontEmbedNativeFontsGate ([pscustomobject]@{count=1;entries=@([pscustomobject]@{name='Carlito';embedded='0';embeddable='-1'})})
         if(-not $wrongHashRejected -or -not $missingFlagsRejected -or -not $stringFlagsRejected -or -not $wrongLicenseRejected -or -not $goodGate.passed -or $badGate.passed -or $badGate.unexpectedNames -cnotcontains 'Aptos' -or -not $orderedGoodGate.passed -or $orderedBadGate.passed -or $orderedBadGate.unexpectedNames -cnotcontains 'Aptos' -or $stringCountGate.passed -or $stringFlagGate.passed) { throw 'Canonical provenance or native Fonts negative controls failed' }
-        [ordered]@{passed=$true;officeOrComCalls=0;embedSaveArgument=(-1);noEmbedFontsZero=$true;canonicalHashRejected=$wrongHashRejected;wrongLicenseRejected=$wrongLicenseRejected;strictRegistrationFlagsRejected=($missingFlagsRejected -and $stringFlagsRejected);carlitoGatePassed=($goodGate.passed -and $orderedGoodGate.passed);carlitoAptosGateRejected=(-not $badGate.passed -and -not $orderedBadGate.passed);strictNativeTypesRejected=(-not $stringCountGate.passed -and -not $stringFlagGate.passed);stopLatchPassed=$true;nonErrorStageErrorIsNull=$true} | ConvertTo-Json -Depth 6
+        # Diagnostic observation helpers against plain PowerShell stand-ins (no COM): stage names, pairing, bounds and typing.
+        $script:stageFile=Join-Path $pureRoot 'observation-stages.jsonl'; $script:sequence=0; $script:officeOperationsStopped=$false; $script:cleanupConfirmed=$true
+        function New-FontEmbedFakeFont($FakeName,$FakeFarEast,$FakeComplex) { return [pscustomobject]@{Name=$FakeName;NameAscii=$FakeName;NameOther=$FakeName;NameFarEast=$FakeFarEast;NameComplexScript=$FakeComplex} }
+        function New-FontEmbedFakeShape([int]$FakeLength,$FakeFont) {
+            $fakeRange=[pscustomobject]@{Length=$FakeLength;Font=$FakeFont}
+            Add-Member -InputObject $fakeRange -MemberType ScriptMethod -Name Characters -Value { param($CharStart,$CharLength) [pscustomobject]@{Length=$CharLength;Font=$this.Font} }
+            return [pscustomobject]@{TextFrame2=[pscustomobject]@{TextRange=$fakeRange}}
+        }
+        $fakeCollection=[pscustomobject]@{Count=2;Entries=@([pscustomobject]@{Name='Carlito';Embedded=0;Embeddable=-1},[pscustomobject]@{Name='Aptos';Embedded=0;Embeddable=-1})}
+        Add-Member -InputObject $fakeCollection -MemberType ScriptMethod -Name Item -Value { param($ItemIndex) $this.Entries[$ItemIndex-1] }
+        $fakeRuns=@([pscustomobject]@{start=1;length=10},[pscustomobject]@{start=14;length=7},[pscustomobject]@{start=24;length=9},[pscustomobject]@{start=36;length=13})
+        $preInventory=Get-FontEmbedFontsInventory ([pscustomobject]@{Fonts=$fakeCollection}) 'pre-edit'
+        $preSlots=Get-FontEmbedFontSlotObservations (New-FontEmbedFakeShape 13 (New-FontEmbedFakeFont 'Carlito' '' '')) (New-FontEmbedFakeShape 15 (New-FontEmbedFakeFont 'Carlito' '' '')) $fakeRuns 'pre-edit'
+        $postTextTitle=Get-FontEmbedRangeSnapshot ([pscustomobject]@{Fonts=$fakeCollection}) (New-FontEmbedFakeShape 16 (New-FontEmbedFakeFont 'Carlito' 'Aptos' '')) 'title' 'post-text'
+        $singleCollection=[pscustomobject]@{Count=1;Entries=@([pscustomobject]@{Name='Carlito';Embedded=0;Embeddable=-1})}
+        Add-Member -InputObject $singleCollection -MemberType ScriptMethod -Name Item -Value { param($ItemIndex) $this.Entries[$ItemIndex-1] }
+        $postFormatTitle=Get-FontEmbedRangeSnapshot ([pscustomobject]@{Fonts=$singleCollection}) (New-FontEmbedFakeShape 16 (New-FontEmbedFakeFont 'Carlito' 'Carlito' 'Carlito')) 'title' 'post-format'
+        $postTextBody=Get-FontEmbedRangeSnapshot ([pscustomobject]@{Fonts=[pscustomobject]@{Count=0}}) (New-FontEmbedFakeShape 48 (New-FontEmbedFakeFont 'Carlito' 'Aptos' '')) 'body' 'post-text'
+        $postSlots=Get-FontEmbedFontSlotObservations (New-FontEmbedFakeShape 16 (New-FontEmbedFakeFont 'Carlito' 'Aptos' $null)) (New-FontEmbedFakeShape 48 (New-FontEmbedFakeFont 'Carlito' 'Aptos' $null)) $fakeRuns 'post-edit'
+        $observationRecords=@(Get-Content -LiteralPath $script:stageFile -Encoding UTF8 | ForEach-Object { $_ | ConvertFrom-Json })
+        $observationPaired=($observationRecords.Count -gt 0 -and $observationRecords.Count % 2 -eq 0)
+        for($pairIndex=0;$pairIndex -lt $observationRecords.Count;$pairIndex+=2) {
+            $beginRecord=$observationRecords[$pairIndex]; $successRecord=$observationRecords[$pairIndex+1]
+            if($beginRecord.status -cne 'begin' -or $successRecord.status -cne 'success' -or $beginRecord.stage -cne $successRecord.stage -or $null -ne $beginRecord.error -or $null -ne $successRecord.error -or $beginRecord.sequence -ne ($pairIndex+1)) { $observationPaired=$false }
+        }
+        $observationStageNames=@($observationRecords | Where-Object {$_.status -ceq 'begin'} | ForEach-Object {[string]$_.stage})
+        $emptyInventory=Get-FontEmbedFontsInventory ([pscustomobject]@{Fonts=[pscustomobject]@{Count=0}}) 'pure.empty'
+        $oversizeInventory=Get-FontEmbedFontsInventory ([pscustomobject]@{Fonts=[pscustomobject]@{Count=65}}) 'pure.oversize'
+        $observedFlags=(@($preSlots | ForEach-Object {[string]$_.observed}) -join ',') + '/' + (@($postSlots | ForEach-Object {[string]$_.observed}) -join ',')
+        $serializedPre=($preSlots | ConvertTo-Json -Depth 6 -Compress); $serializedPost=($postSlots | ConvertTo-Json -Depth 6 -Compress)
+        $observationHelpersPassed=($observationPaired -and $preInventory.count -eq 2 -and @($preInventory.entries).Count -eq 2 -and $preInventory.entries[1].name -ceq 'Aptos' -and $preInventory.entries[1].embeddable -eq (-1) -and
+            $preSlots.Count -eq 6 -and $postSlots.Count -eq 6 -and $observedFlags -ceq 'True,True,True,False,False,False/True,True,True,True,True,True' -and
+            $preSlots[0].textLength -eq 13 -and $preSlots[1].textLength -eq 15 -and $postSlots[5].textLength -eq 48 -and $null -eq $preSlots[3].slots -and $preSlots[2].slots.nameFarEast -ceq '' -and
+            $postSlots[0].slots.nameFarEast -ceq 'Aptos' -and $null -eq $postSlots[5].slots.nameComplexScript -and $serializedPre -match '"slots":null' -and $serializedPost -match '"nameComplexScript":null' -and
+            $emptyInventory.count -eq 0 -and @($emptyInventory.entries).Count -eq 0 -and $oversizeInventory.count -eq 65 -and @($oversizeInventory.entries).Count -eq 0 -and
+            $postTextTitle.fonts.count -eq 2 -and $postTextTitle.fonts.entries[1].name -ceq 'Aptos' -and $postTextTitle.slots.range -ceq 'title' -and $postTextTitle.slots.textLength -eq 16 -and $postTextTitle.slots.slots.nameFarEast -ceq 'Aptos' -and
+            $postTextBody.fonts.count -eq 0 -and @($postTextBody.fonts.entries).Count -eq 0 -and $postTextBody.slots.range -ceq 'body' -and $postTextBody.slots.length -eq 48 -and -not (Test-FontEmbedMember $postTextBody.slots 'textRange') -and
+            $postFormatTitle.fonts.count -eq 1 -and @($postFormatTitle.fonts.entries).Count -eq 1 -and $postFormatTitle.fonts.entries[0].name -ceq 'Carlito' -and $postFormatTitle.slots.range -ceq 'title' -and $postFormatTitle.slots.slots.nameFarEast -ceq 'Carlito')
+        if(-not $observationHelpersPassed) { throw "Diagnostic observation helper controls failed: $observedFlags" }
+        [ordered]@{passed=$true;officeOrComCalls=0;embedSaveArgument=(-1);noEmbedFontsZero=$true;canonicalHashRejected=$wrongHashRejected;wrongLicenseRejected=$wrongLicenseRejected;strictRegistrationFlagsRejected=($missingFlagsRejected -and $stringFlagsRejected);carlitoGatePassed=($goodGate.passed -and $orderedGoodGate.passed);carlitoAptosGateRejected=(-not $badGate.passed -and -not $orderedBadGate.passed);strictNativeTypesRejected=(-not $stringCountGate.passed -and -not $stringFlagGate.passed);stopLatchPassed=$true;nonErrorStageErrorIsNull=$true;observationHelpersPassed=$observationHelpersPassed;observationStageNames=$observationStageNames} | ConvertTo-Json -Depth 6
     } finally {
         if(Test-Path -LiteralPath $pureRoot) {
             $deleteRoot=(Resolve-Path -LiteralPath $pureRoot).Path
@@ -205,8 +314,10 @@ function Read-FontEmbedGeneration([string]$FixtureRoot,[string]$ExpectedSource) 
     return ,([ordered]@{generation=$generation;generationPath=$generationPath;sourcePath=$source;fontFiles=$fonts;licensePath=$licensePath})
 }
 
-function Set-FontEmbedRange($Range,[string]$RequestedText,[string]$RequestedFamily,[double]$RequestedSize,[bool]$RequestedBold,[bool]$RequestedItalic,$RequestedRuns,[string]$Prefix) {
+function Set-FontEmbedRange($Range,[string]$RequestedText,[string]$RequestedFamily,[double]$RequestedSize,[bool]$RequestedBold,[bool]$RequestedItalic,$RequestedRuns,[string]$Prefix,$PostTextShape,[string]$PostTextLabel) {
     Invoke-FontEmbedCom "$Prefix.text.set" {$Range.Text=$RequestedText}
+    # Read-only diagnostic between the .Text set and the first Font2 set; the edit sequence itself is unchanged.
+    Add-FontEmbedPostTextObservation $PostTextShape $PostTextLabel
     $wholeFont=Invoke-FontEmbedCom "$Prefix.font.get" {return ,$Range.Font}
     Invoke-FontEmbedCom "$Prefix.font.name.set" {$wholeFont.Name=$RequestedFamily}; Invoke-FontEmbedCom "$Prefix.font.size.set" {$wholeFont.Size=$RequestedSize}
     Invoke-FontEmbedCom "$Prefix.font.bold.set" {$wholeFont.Bold=$(if($RequestedBold){-1}else{0})}; Invoke-FontEmbedCom "$Prefix.font.italic.set" {$wholeFont.Italic=$(if($RequestedItalic){-1}else{0})}
@@ -348,6 +459,11 @@ $report=[ordered]@{
     embedFonts=[ordered]@{saveFormat=24;saveArgument=-1;stage='edited.presentation.saveAs-owned-copy-embed-fonts';attempted=$false;completed=$false;blockedByNativeFontsGate=$false}
     opcFontParts=$null
     requested=$request.expectations
+    preEditFontsObservation=[ordered]@{count=$null;entries=@()}
+    postTextFontsObservations=[ordered]@{title=$null;body=$null}
+    postFormatFontsObservations=[ordered]@{title=$null}
+    fontSlotObservations=[ordered]@{properties=@('Name','NameAscii','NameOther','NameFarEast','NameComplexScript');preEdit=@();postText=@();postFormat=@();postEdit=@()}
+    diagnosticObservationScope='preEditFontsObservation, postTextFontsObservations, postFormatFontsObservations and fontSlotObservations are read-only diagnostics that locate where an unexpected Presentation.Fonts name first appears (after open, after each .Text set before its Font2 sets, after the title Font2 sets before the body .Text set, or after all edits). They are not gates: only the post-edit nativeFontsObservation feeds nativeFontsGate and SaveAs. TextRange2.Font2 slot names do not prove which physical font file drew any glyph.'
     nativeFontsObservation=[ordered]@{count=$null;entries=@()};nativeFontsGate=$null;ownedCloseCount=0
     environment=[ordered]@{hostVersion=$PSVersionTable.PSVersion.ToString();windowsProductName=$os.ProductName;windowsDisplayVersion=$os.DisplayVersion;windowsBuild="$($os.CurrentBuild).$($os.UBR)";powerPointVersion=$null}
     cleanupConfirmed=$script:cleanupConfirmed;officeOperationsStopped=$script:officeOperationsStopped;lastStage=$script:lastStage;lastStatus=$script:lastStatus;error=$null
@@ -355,6 +471,14 @@ $report=[ordered]@{
     limitations=@('Native font properties do not identify the physical file used for every glyph.','This control does not replace Gate E geometry persistence or browser/native pixel checks.','Offline audit hashes ppt/fonts package parts; obfuscated bytes may not match fixture TTF SHA-256.')
 }
 function Write-FontEmbedReport { $report.cleanupConfirmed=$script:cleanupConfirmed; $report.officeOperationsStopped=$script:officeOperationsStopped; $report.lastStage=$script:lastStage; $report.lastStatus=$script:lastStatus; $report | ConvertTo-Json -Depth 20 | Set-Content -LiteralPath $reportFile -Encoding UTF8 }
+function Add-FontEmbedPostTextObservation($ObservedShape,[string]$RangeLabel) {
+    $postTextObservation=Get-FontEmbedRangeSnapshot $script:presentation $ObservedShape $RangeLabel 'post-text'
+    $report.postTextFontsObservations[$RangeLabel]=$postTextObservation.fonts; $report.fontSlotObservations.postText+=@($postTextObservation.slots); Write-FontEmbedReport
+}
+function Add-FontEmbedPostFormatObservation($ObservedShape,[string]$RangeLabel) {
+    $postFormatObservation=Get-FontEmbedRangeSnapshot $script:presentation $ObservedShape $RangeLabel 'post-format'
+    $report.postFormatFontsObservations[$RangeLabel]=$postFormatObservation.fonts; $report.fontSlotObservations.postFormat+=@($postFormatObservation.slots); Write-FontEmbedReport
+}
 # [string] parameters coerce `$null to ''; keep the parameter untyped so a successful stage records JSON null.
 function Write-FontEmbedStage([string]$StageName,[string]$Status,$ErrorMessage=$null) {
     $script:sequence++; $script:lastStage=$StageName; $script:lastStatus=$Status
@@ -387,11 +511,16 @@ try {
     $script:cleanupConfirmed=$false; $script:ownedPresentationPath=$sourceSnapshot; Write-FontEmbedReport
     $presentations=Invoke-FontEmbedCom 'input.presentations.get' {return ,$app.Presentations}
     $script:presentation=Invoke-FontEmbedCom 'input.presentation.open' {return ,$presentations.Open($sourceSnapshot,0,0,(-1))}
+    # Diagnostic only: the Fonts inventory of the unedited presentation, before any .Text or Font2 set. It is never gated.
+    $report.preEditFontsObservation=Get-FontEmbedFontsInventory $script:presentation 'pre-edit'; Write-FontEmbedReport
     $slides=Invoke-FontEmbedCom 'edit.slides.get' {return ,$script:presentation.Slides}; $slide=Invoke-FontEmbedCom 'edit.slide-1.get' {return ,$slides.Item(1)}; $shapes=Invoke-FontEmbedCom 'edit.shapes.get' {return ,$slide.Shapes}
     $titleShape=Invoke-FontEmbedCom 'edit.title.get' {return ,$shapes.Item('OPF heading slides.0.title line 0')}; $titleRange=Invoke-FontEmbedCom 'edit.title.textRange2.get' {return ,$titleShape.TextFrame2.TextRange}
-    Set-FontEmbedRange $titleRange $request.expectations.title.text $request.expectations.title.family ([double]$request.expectations.title.size) ([bool]$request.expectations.title.bold) ([bool]$request.expectations.title.italic) @() 'edit.title'
     $bodyShape=Invoke-FontEmbedCom 'edit.body.get' {return ,$shapes.Item('OPF text slides.0.text line 0')}; $bodyRange=Invoke-FontEmbedCom 'edit.body.textRange2.get' {return ,$bodyShape.TextFrame2.TextRange}
-    Set-FontEmbedRange $bodyRange $request.expectations.body.text $request.expectations.body.family ([double]$request.expectations.body.defaultSize) $false $false $request.expectations.body.runs 'edit.body'
+    $report.fontSlotObservations.preEdit=Get-FontEmbedFontSlotObservations $titleShape $bodyShape $request.expectations.body.runs 'pre-edit'; Write-FontEmbedReport
+    Set-FontEmbedRange $titleRange $request.expectations.title.text $request.expectations.title.family ([double]$request.expectations.title.size) ([bool]$request.expectations.title.bold) ([bool]$request.expectations.title.italic) @() 'edit.title' $titleShape 'title'
+    # Diagnostic only: after every title Font2 set and before the body .Text set, so a name first seen at post-text.body can be attributed.
+    Add-FontEmbedPostFormatObservation $titleShape 'title'
+    Set-FontEmbedRange $bodyRange $request.expectations.body.text $request.expectations.body.family ([double]$request.expectations.body.defaultSize) $false $false $request.expectations.body.runs 'edit.body' $bodyShape 'body'
     $fontCollection=Invoke-FontEmbedCom 'edited.presentation.fonts.get' {return ,$script:presentation.Fonts}
     $fontCount=[int](Invoke-FontEmbedCom 'edited.presentation.fonts.count.get' {$fontCollection.Count}); $report.nativeFontsObservation.count=$fontCount
     if($fontCount -ge 1 -and $fontCount -le 64) {
@@ -403,6 +532,8 @@ try {
             $report.nativeFontsObservation.entries+=@([ordered]@{index=$index;name=[string]$name;embedded=$embedded;embeddable=$embeddable})
         }
     }
+    # Diagnostic only, read after the gated inventory so that inventory still directly follows the edits; recorded before the gate so a blocked attempt keeps it.
+    $report.fontSlotObservations.postEdit=Get-FontEmbedFontSlotObservations $titleShape $bodyShape $request.expectations.body.runs 'post-edit'; Write-FontEmbedReport
     $report.nativeFontsGate=Get-FontEmbedNativeFontsGate $report.nativeFontsObservation
     if(-not $report.nativeFontsGate.passed) {
         $report.embedFonts.blockedByNativeFontsGate=$true; Write-FontEmbedStage 'edited.presentation.native-fonts-gate' 'blocked' (($report.nativeFontsGate.unexpectedNames -join ',') + '|' + ($report.nativeFontsGate.unembeddableNames -join ',')); Write-FontEmbedReport
