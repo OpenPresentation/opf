@@ -1488,8 +1488,8 @@
           "properties": {
             "preset": {
               "type": "string",
-              "description": "Pattern preset or engine-defined pattern id.",
-              "examples": ["pct5", "ltHorz", "diagStripe"]
+              "description": "Pattern preset or engine-defined pattern id. DrawingML preset names (ECMA-376 ST_PresetPatternVal, for example pct5, ltHorz, wdUpDiag) are portable: PPTX export writes them as native pattern fills and import returns the same name. Engine-defined ids are renderer-specific; the legacy preview id diagStripe remains accepted and exports as wdUpDiag.",
+              "examples": ["pct5", "ltHorz", "wdUpDiag"]
             },
             "foregroundColor": {
               "type": "string",
