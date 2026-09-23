@@ -43,7 +43,7 @@ Every item's criteria must all hold before it is `done`. Dates are UTC.
 | FF-20 | Bump ecosystem-ci sibling pins after each opf-pptx font fix | opf | FF-07, FF-08 | in-progress | first bump [opf#117](https://github.com/OpenPresentation/opf/pull/117) `7b4589b6`; sibling CI pins pending |
 | FF-21 | Non-blocking macOS browser job tracking opf-render#24 | opf-render | none | done | [opf-render#32](https://github.com/OpenPresentation/opf-render/pull/32) `df27685c` |
 | FF-22 | Charts reduced to Aspose.Slides-supported chart types (core catalog and pptx.gallery; deprecate if breaking) | opf, pptx-gallery | none | in-progress | branch `codex/ff-22-*` |
-| FF-23 | Measured pptx.gallery support table by dimension and reproducible audit | opf | none | review | [gallery-support.md](gallery-support.md), branch `codex/ff-23-gallery-support` |
+| FF-23 | Measured pptx.gallery support table by dimension and reproducible audit | opf | none | review | [opf#122](https://github.com/OpenPresentation/opf/pull/122), [gallery-support.md](gallery-support.md) |
 | FF-24 | Color schemes export as theme colors and re-import | opf-pptx | FF-23 | todo |  |
 | FF-25 | Pattern and photo backgrounds export natively and stay distinct | opf, opf-pptx, pptx-gallery | FF-23 | todo |  |
 | FF-26 | Image treatments export as native pictures with distinct values | opf, opf-render, opf-pptx, pptx-gallery | FF-23 | todo |  |
