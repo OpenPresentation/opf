@@ -39,7 +39,11 @@ Core renamed that slug to `united-kingdom`, and `check-text-integrity` rejects
 the old spelling, so the committed files record that chart under
 `united-kingdom`. This is the only byte change to `parity/parity-results.json`.
 In `support-status.json` the `parityOnly` record carries
-`galleryIdNormalized`, and consumers map it back to the gallery slug. The
+`galleryIdNormalized`: `{fromParts, joiner, to, reason}`. The original slug is
+`fromParts.join(joiner)`. It is stored in parts because
+`check-text-integrity` rejects the joined literal in core text; the check
+script itself spells the slug the same way. Consumers join the parts and map
+them back to the gallery slug. The
 drift is removed by FF-22 and FF-37.
 
 ## Re-running against new heads
@@ -123,11 +127,21 @@ worktree at the fix branch instead of `origin/main`, and record that head.
 The parity harness uses the same workspace convention. Copy `parity/` to
 `<workspace>/dimension-audit/parity/`. It expects worktrees
 `<workspace>/sources/<prefix>-{opf,opf-render,opf-pptx,pptx-gallery}`, with
-prefix `parity` by default; `GALLERY_DIR` overrides the gallery path. It runs
-from PowerShell on Windows, or with `pwsh` elsewhere, and needs Node 24 and
-pnpm on `PATH` or under `NODE_TOOLCHAIN`:
+prefix `parity` by default; `GALLERY_DIR` overrides the gallery path.
+`run.ps1` and `build.ps1` are Windows-only: they call `node.exe`, `pnpm.cmd`
+and the Windows npm path, and use backslash paths. They need Node 24 and pnpm
+on `PATH` or under `NODE_TOOLCHAIN`.
+
+On other operating systems, run the steps directly:
+- build the worktrees as in the presence section;
+- run `node scripts/gen-snippets.mjs`;
+- run `node --import <sources>/parity-opf/scripts/register-local-opf.mjs scripts/parity.mjs`;
+- run `node scripts/summarize.mjs <out.json> <out.md> [baseline.json]`.
+
+`PARITY_PREFIX`, `ONLY`, `LIMIT` and `OUT` work as in `run.ps1`.
 
 ```powershell
+# Windows
 $W = "<workspace>"
 foreach ($r in 'opf','opf-render','opf-pptx','pptx-gallery') {
   git -C "<clones>\$r" fetch origin
@@ -148,7 +162,9 @@ repository you changed and `origin/main` elsewhere. Then run:
 & "$W\dimension-audit\parity\run.ps1" -Prefix fix123 -Baseline "$W\dimension-audit\parity\parity-results.json" -Out "$W\dimension-audit\parity\out\fix123.json"
 ```
 
-The report then includes a before/after table; quote it in the PR. After a
+The report then includes a before/after table; quote it in the PR. The first
+baseline report is kept in `parity/history/2026-09-23-baseline/`; it predates
+the OPC relationship and text-extent fixes to `parity.mjs`. After a
 merged fix, copy `parity-results.json` and `PARITY.md` back into `parity/`,
 regenerate `support-status.json`, and update the headline in
 [gallery-support.md](../gallery-support.md) and [burndown.md](../burndown.md).
@@ -171,7 +187,7 @@ Schema version 1. Top level:
 | `counts` | Presence: `{dimension: {status: n}}`. |
 | `parityCounts` | Parity: `{total, perfect, near, mismatch, checksPassed: {check: n}}` over all 900 parity records. |
 | `items` | One record per presence-audited gallery value (793), below. |
-| `parityOnly` | Values measured only by parity: the 76 charts, as `{dimension, galleryId, galleryIdNormalized?, parity}`. |
+| `parityOnly` | Values measured only by parity: the 76 charts, as `{dimension, galleryId, galleryIdNormalized?, parity}`; `galleryIdNormalized` is `{fromParts, joiner, to, reason}`. |
 
 The parity audit has 107 records that are not presence items. The 76 charts
 are in `parityOnly`. The 31 `withAssets` variants (backgrounds 6, image

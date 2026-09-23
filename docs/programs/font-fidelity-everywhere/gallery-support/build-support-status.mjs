@@ -131,8 +131,15 @@ for (const item of items) {
 
 // Ids recorded under the core slug because the gallery id is a misspelling that
 // core's text-integrity check rejects (see README.md, "Normalized ids").
+// The original slug is stored as parts (joined with `joiner`), as
+// scripts/check-text-integrity.mjs spells it, because the joined literal is rejected.
 const NORMALIZED_IDS = {
-  'charts:united-kingdom': 'pptx-gallery uses a misspelled slug for this chart; recorded under the core chart-type id',
+  'charts:united-kingdom': {
+    fromParts: ['united', 'kindom'],
+    joiner: '-',
+    to: 'united-kingdom',
+    reason: 'pptx-gallery uses a misspelled slug for this chart that core check-text-integrity rejects; recorded under the core chart-type id',
+  },
 };
 
 // Values measured only by the parity audit (charts until FF-22 lands).

@@ -9,8 +9,8 @@ pptx.gallery value's "OPF Config" snippet and run it through the OpenPresentatio
 packages. It measures the engines, not the schema: a value that validates but
 changes nothing in the preview or the PPTX is not reported as working.
 
-**Headline: 0 of 900 gallery values are perfect by parity** (FF-38). This is
-the program's progress metric. The 900 values are the 793 presence-audited
+**Headline: 0 of 900 gallery values are perfect by parity** (FF-38, current
+mains on 2026-09-23). This is the program's progress metric. The 900 values are the 793 presence-audited
 values plus 107 parity-only records: 76 charts and 31 `withAssets` variants.
 The presence audits below find 7 of 793 values `works`.
 
@@ -21,19 +21,20 @@ Two measurements are recorded here:
 - **Parity (FF-38).** Do the preview and the exported PPTX agree element by
   element?
 
-| Repository | Presence audits A and B | Parity scoreboard (FF-38) |
-| --- | --- | --- |
-| opf (core) | `2634350` | `53be042` |
-| opf-render | `e500ed9` | `e500ed9` |
-| opf-pptx | `ef8a158` | `cf0bc0c` |
-| opf-editor | `23bc65b` (audit B) | not used |
-| pptx-gallery | `f17e9ae` | `f17e9ae` |
+| Repository | Presence audits A and B | Parity scoreboard (FF-38) | Parity baseline (history) |
+| --- | --- | --- | --- |
+| opf (core) | `2634350` | `c278532` | `53be042` |
+| opf-render | `e500ed9` | `47d19b2` | `e500ed9` |
+| opf-pptx | `ef8a158` | `5b657c9` | `cf0bc0c` |
+| opf-editor | `23bc65b` (audit B) | not used | not used |
+| pptx-gallery | `f17e9ae` | `f17e9ae` | `f17e9ae` |
 
 Node 24.21.0. No Office or COM was used; native PowerPoint behaviour is
 recorded separately (FF-04, FF-12). The presence audits predate FF-17
-([opf#120](https://github.com/OpenPresentation/opf/pull/120), `53be042`); the
-parity run includes it. Each number is for its measured heads until that audit
-is re-run.
+([opf#120](https://github.com/OpenPresentation/opf/pull/120), `53be042`).
+The current parity run includes FF-17, FF-18, FF-35, FF-24 (opf-pptx#67),
+FF-22's core half (opf#121) and FF-28 (opf#123). Each number is for its
+measured heads until that audit is re-run.
 
 ## Method
 
@@ -82,56 +83,87 @@ checks are:
 | theme | Theme major/minor `latin` equal the preview heading/body fonts, and the theme `clrScheme` equals the document color scheme. |
 | mapping | Every preview element group has PPTX shapes and the reverse; an unmapped PPTX shape is near. |
 
-Checks passed, all 900 values:
+Checks passed, all 900 values (current mains):
 
 | geometry | text | fills | zOrder | slideSize | typefaces | reimport | fontResolution | theme | mapping |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 378 | 273 | 842 | 880 | 900 | 0 | 0 | 5 | 0 | 890 |
+| 390 | 326 | 734 | 880 | 900 | 0 | 0 | 5 | 900 | 890 |
 
-Per dimension (perfect is 0 everywhere, and slideSize passes everywhere):
+Per dimension (perfect is 0 everywhere; slideSize and theme pass everywhere):
 
 | Dimension | Values | geometry | text | fills | zOrder | fontResolution | mapping |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| layouts | 485 | 269 | 240 | 442 | 485 | 0 | 475 |
+| layouts | 485 | 281 | 266 | 403 | 485 | 0 | 475 |
 | color-schemes | 14 | 0 | 0 | 14 | 14 | 0 | 14 |
 | font-schemes | 89 + 4 legacy | 0 | 0 | 93 | 93 | 4 | 93 |
 | languages | 93 | 0 | 0 | 93 | 93 | 0 | 93 |
 | backgrounds | 6 (+6 withAssets) | 0 (0) | 0 (0) | 2 (2) | 6 (6) | 0 (0) | 6 (6) |
 | narratives | 10 | 0 | 0 | 10 | 10 | 0 | 10 |
-| charts | 76 | 76 | 0 | 76 | 76 | 0 | 76 |
+| charts | 76 | 76 | 26 | 9 | 76 | 0 | 76 |
 | themes | 4 | 3 | 3 | 4 | 4 | 0 | 4 |
 | audiences | 14 | 10 | 10 | 14 | 14 | 0 | 14 |
 | tones | 7 | 0 | 0 | 7 | 7 | 0 | 7 |
 | socials | 10 | 0 | 0 | 10 | 10 | 0 | 10 |
 | headers-footers | 10 (+10 withAssets) | 0 (0) | 0 (0) | 10 (10) | 0 (0) | 0 (0) | 10 (10) |
-| blocks | 32 | 20 | 20 | 25 | 32 | 1 | 32 |
+| blocks | 32 | 20 | 21 | 23 | 32 | 1 | 32 |
 | image-treatments | 15 (+15 withAssets) | 0 (0) | 0 (0) | 15 (15) | 15 (15) | 0 (0) | 15 (15) |
 
-Typefaces, re-import and theme pass for no value.
+Typefaces and re-import pass for no value.
+
+**Harness fixes in this run.** Both fixes change counts relative to the
+baseline:
+- Relationship targets are resolved per OPC rules: absolute targets from the
+  package root, relative targets from the source part's folder. The baseline
+  never found chart parts. Chart text and colours are now actually compared,
+  so chart text passes for 26 charts, and chart series colours missing from
+  the preview now fail fills (108 values).
+- Single text lines are compared by rendered extent, not raw anchor. Metric
+  lines anchored at their left edge in the preview but centered in their PPTX
+  box land at the same place and no longer fail geometry.
+
+FF-24 (opf-pptx#67) makes the theme check pass for all 900 values. The
+open FF-39 PRs (opf-pptx#72, opf-render#37) measure geometry 378 to 841 and
+text 273 to 713 against the baseline.
 
 ### Universal blockers
 
-Five failures block nearly every value. No value can be perfect until they are
-fixed:
+Four failures still block nearly every value, and no value can be perfect
+until they are fixed. A fifth, the theme `clrScheme`, was fixed by FF-24.
 
 | Blocker | Check (passed) | Values hit | Fix |
 | --- | --- | --- | --- |
-| Re-import drops the slide layout id with no diagnostic (900). Design fields are also dropped silently: font scheme 222, language 93, color scheme 64, narrative 56, tone 53. | reimport (0) | 900 | FF-32 (layout ids with FF-29) |
+| Re-import drops the slide layout id with no diagnostic (900). Other fields are also dropped silently: font scheme 222, language 93, narrative 56, tone 53, background 48, audience 14. The color scheme is now recovered (FF-24). | reimport (0) | 900 | FF-32 (layout ids with FF-29) |
 | `app.xml` lists Calibri (899) and Arial (897). Native charts and their embedded workbooks add Arial, Geneva, Calibri and Calibri Light (117). | typefaces (0) | 899 | FF-08 |
-| The theme `clrScheme` differs from the document color scheme in 10 slots. | theme (0) | 899 | FF-24 |
 | The preview renders Aptos and Aptos Display with the visual substitute Carlito (754). 93 families have no face at all (133 values). | fontResolution (5) | 754+ | FF-31 |
-| Preview text is centered but PPTX text is left-aligned, with anchor-x deltas over 50 pt. | text (273), geometry (378) | 504 | FF-39 |
+| Preview text is centered but PPTX text is left-aligned, so line positions differ by more than 50 pt. | text (326), geometry (390) | 504 | FF-39 |
 
 Other recurring parity failures:
 
-- Native charts carry no explicit typeface and their text is not in the chart
-  cache (117 and 111 values; FF-08, FF-22).
+- Charts and chart blocks:
+  - chart XML and embedded workbooks name Arial, Geneva and Calibri (117
+    values; FF-08);
+  - series colours are missing from the preview (108 values);
+  - preview labels are missing from the chart cache (46 values; FF-22,
+    FF-22b).
 - Headers/footers fail z-order in 10 of 10 values (FF-27).
 - Pattern and photo backgrounds fail fills (FF-25).
 
 The per-item parity status is in `support-status.json` (`parity`, plus
-`parityOnly` for charts). The full report is
-[PARITY.md](gallery-support/parity/PARITY.md).
+`parityOnly` for charts). The full report, with a before/after table against
+the baseline, is [PARITY.md](gallery-support/parity/PARITY.md).
+
+### Baseline (history)
+
+First run, 2026-09-23, at opf `53be042`, opf-render `e500ed9`, opf-pptx
+`cf0bc0c` and pptx-gallery `f17e9ae`, before both harness fixes. 0 of 900
+were perfect. Checks passed:
+
+| geometry | text | fills | zOrder | slideSize | typefaces | reimport | fontResolution | theme | mapping |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 378 | 273 | 842 | 880 | 900 | 0 | 0 | 5 | 0 | 890 |
+
+The report is kept at
+[parity/history/2026-09-23-baseline/PARITY.md](gallery-support/parity/history/2026-09-23-baseline/PARITY.md).
 
 ## Status legend
 
@@ -164,7 +196,7 @@ status until FF-22. Seven values are `works`. Parity: 0 of 900 perfect.
 | [Languages](#languages) | 93 | 0 | 0 | 93 | 0 | 0 | 0 | 0/93 | Nothing from `language` itself; only the font scheme the gallery injects changes. Runs are `lang="en-US"`, no `rtl`. |
 | [Backgrounds](#backgrounds) | 6 | 2 | 4 | 0 | 0 | 0 | 0 | 0/6 | Solid and gradient work end to end. Patterns and photos preview but export as solid white. |
 | [Narratives](#narratives) | 10 | 0 | 0 | 0 | 1 | 9 | 0 | 0/10 | Authoring metadata only; 9 of 10 gallery ids are not in core. |
-| [Charts](#charts) | 76 | | | | | | | 0/76 | Reduction to Aspose.Slides-supported types in progress (FF-22). No presence status yet. Parity measured: geometry and fills pass, chart text and fonts do not. |
+| [Charts](#charts) | 76 | | | | | | | 0/76 | Core catalog reduced to the 25 Aspose.Slides-supported types (FF-22, opf#121); the gallery half is pending. No presence status yet. Parity: geometry passes; chart text passes for 26, colours for 9, fonts for none. |
 | [Themes](#themes) | 4 | 0 | 4 | 0 | 0 | 0 | 0 | 0/4 | Background and fonts apply in preview and export; the theme `clrScheme` stays Office default. |
 | [Audiences](#audiences) | 14 | 0 | 0 | 0 | 2 | 12 | 0 | 0/14 | Authoring metadata only, by design; 12 of 14 gallery ids are not in core. |
 | [Tones](#tones) | 7 | 0 | 0 | 0 | 7 | 0 | 0 | 0/7 | Authoring metadata only, by design. |
@@ -210,8 +242,10 @@ status until FF-22. Seven values are `works`. Parity: 0 of 900 perfect.
   not openly licensed; they cannot be bundled. Today they must come from the
   host or be supplied by the caller through `createFontRegistry`
   ([font fidelity](../../font-fidelity.md)). FF-31 implements the owner font
-  policy: open families are bundled; licensed families render through shipped
-  open replacements; and the PPTX keeps the real name and never embeds it.
+  policy. Licensed (proprietary) families are never bundled or embedded: they
+  render through shipped open replacements, and the PPTX keeps the real name.
+  Open families are bundled, and they may be embedded only through the
+  explicit FF-13 embed path.
   FF-35 records the owner decision to keep `aptos` as the one shared default.
 
 ## Layouts
@@ -236,10 +270,10 @@ slugs with no OPF canonical id (`gallery-only`; all 70 measured `partial`).
   shape placement.
 - **Fonts.** Layout snippets use the default scheme; see the registry probe
   above.
-- **Parity (FF-38).** 0 of 485 perfect. Geometry passes for 269, text for 240,
-  fills for 442 and mapping for 475. Most geometry and text failures are
-  alignment: 200 layouts center text in the preview but left-align it in the
-  PPTX, and 36 do the reverse (FF-39). 39 layouts with charts fail chart text.
+- **Parity (FF-38).** 0 of 485 perfect. Geometry passes for 281, text for
+  266, fills for 403 and mapping for 475. Most geometry and text failures are
+  alignment: the preview centers text that the PPTX left-aligns (FF-39).
+  Layouts with charts fail fills on series colours and fail chart fonts.
 - **Fixes.** FF-29 (catalog parity, export placement, re-import id or specific
   diagnostic); FF-31 (fonts).
 
@@ -254,9 +288,9 @@ slugs with no OPF canonical id (`gallery-only`; all 70 measured `partial`).
   12 for `corporate-blue`). Recolouring the deck in PowerPoint therefore does
   not follow the chosen scheme.
 - **Re-import.** The colour scheme id is dropped silently (14/14).
-- **Parity (FF-38).** 0 of 14 perfect. Fills, z-order and mapping pass, so the
-  colours agree; the theme check fails because the theme `clrScheme` is not
-  the scheme. Text and geometry fail on the centered-text blocker.
+- **Parity (FF-38).** 0 of 14 perfect. Fills, z-order, mapping and, since
+  FF-24, the theme check pass. Text and geometry fail on the centered-text
+  blocker.
 - **Fixes.** FF-24 (theme colours and scheme references), FF-32 (re-import).
 
 ## Font schemes
@@ -360,16 +394,25 @@ gallery inlines, not in the core catalog), all `partial`.
 
 ## Charts
 
-76 gallery chart objects. The chart dimension is being reduced to the chart
-types Aspose.Slides documents as supported, in both the core catalog and
-pptx.gallery (deprecating where the removal is breaking). This is in progress
-under FF-22. The presence audits did not measure charts.
+76 gallery chart objects, reduced under FF-22 to the chart types Aspose.Slides
+supports:
+- **Core half, merged.** [opf#121](https://github.com/OpenPresentation/opf/pull/121) (`13ab00b`) keeps 25 chart-type records, one
+  per supported Aspose.Slides `ChartType`. It deprecates the other 51 with a
+  named replacement rather than deleting them. See
+  [aspose-chart-types.md](aspose-chart-types.md).
+- **Gallery half, pending.** [pptx-gallery#40](https://github.com/Data-Advantage/pptx-gallery/pull/40).
+- **Follow-up.** FF-22b covers native `chartex` export and full renderer
+  coverage for the kept types.
 
-Parity (FF-38) measured all 76: 0 perfect. Geometry, fills, z-order and
-mapping pass for all 76. Text fails for every chart, because the native chart
-has no explicit typeface; 70 also lack preview labels in the chart cache. Typefaces also
-fail: the chart XML uses Arial, and the embedded workbook uses Geneva, Arial
-and Calibri (FF-08). Per-chart parity is in `support-status.json`
+The presence audits did not measure charts, and the parity numbers below
+predate the reduction.
+
+Parity (FF-38) measured all 76 on current mains: 0 perfect. Geometry,
+z-order and mapping pass for all 76; text passes for 26 and fills for 9. The
+rest miss preview labels in the chart cache or preview series colours.
+Typefaces fail for all 76: the chart XML uses Arial, and the embedded workbook
+uses Geneva, Arial and Calibri (FF-08). These numbers predate the gallery half
+of FF-22. Per-chart parity is in `support-status.json`
 `parityOnly`.
 
 ## Themes
@@ -474,8 +517,8 @@ PowerPoint `p:hf` objects stay out of scope.
   only).
 - **Editor.** `/editor?config=blocks:<slug>` emits the same design for every
   slug.
-- **Parity (FF-38).** 0 of 32 perfect. Geometry and text pass for 20, fills
-  for 25, font resolution for 1.
+- **Parity (FF-38).** 0 of 32 perfect. Geometry passes for 20, text for 21,
+  fills for 23 and font resolution for 1.
 - **Fixes.** FF-28, FF-30, FF-33.
 
 ## Image treatments

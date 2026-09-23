@@ -12,13 +12,14 @@ Every item's criteria must all hold before it is `done`. Dates are UTC.
 
 | Status | Count |
 | --- | --- |
-| done | 8 |
-| review / in-progress | 16 |
-| todo | 18 |
+| done | 11 |
+| review / in-progress | 21 |
+| todo | 12 |
 
-**Headline progress: 0 of 900 gallery values perfect by parity** (FF-38
-baseline, 2026-09-23; opf `53be042`, opf-render `e500ed9`, opf-pptx
-`cf0bc0c`, pptx-gallery `f17e9ae`). The 900 values are the 793 presence items
+**Headline progress: 0 of 900 gallery values perfect by parity** (FF-38 on
+current mains, 2026-09-23: opf `c278532`, opf-render `47d19b2`, opf-pptx
+`5b657c9`, pptx-gallery `f17e9ae`; the first baseline at `53be042` /
+`cf0bc0c` was also 0 of 900). The 900 values are the 793 presence items
 plus 76 charts and 31 `withAssets` variants. The FF-23 presence audit
 baseline is 7 of 793 `works`. See the
 [scoreboard](gallery-support.md#parity-scoreboard) and its
@@ -30,13 +31,13 @@ baseline is 7 of 793 `works`. See the
 | --- | --- | --- | --- | --- | --- |
 | FF-00 | Program tracker and agent entrypoints | all | none | done | [opf#116](https://github.com/OpenPresentation/opf/pull/116) `642f37af`; [opf-pptx#60](https://github.com/OpenPresentation/opf-pptx/pull/60), [opf-render#31](https://github.com/OpenPresentation/opf-render/pull/31), [opf-editor#29](https://github.com/OpenPresentation/opf-editor/pull/29) |
 | FF-01 | Exporter master bullets follow the theme body font | opf-pptx | none | done | [opf-pptx#57](https://github.com/OpenPresentation/opf-pptx/pull/57), `7b34f557` |
-| FF-02 | Embed harness records pre-edit, post-text and post-edit font observations | opf-pptx | none | review | [opf-pptx#58](https://github.com/OpenPresentation/opf-pptx/pull/58) |
-| FF-03 | Read-only native font inventory worker | opf-pptx | none | review | [opf-pptx#59](https://github.com/OpenPresentation/opf-pptx/pull/59) |
+| FF-02 | Embed harness records pre-edit, post-text and post-edit font observations | opf-pptx | none | review | [opf-pptx#58](https://github.com/OpenPresentation/opf-pptx/pull/58) `b6eb3bfd` merged; hardening [opf-pptx#62](https://github.com/OpenPresentation/opf-pptx/pull/62) open |
+| FF-03 | Read-only native font inventory worker | opf-pptx | none | done | [opf-pptx#59](https://github.com/OpenPresentation/opf-pptx/pull/59) `ef8a1583` |
 | FF-04 | Native inventory of the unedited fixture, with and without temporary fonts | opf-pptx / opf | FF-03 | todo |  |
 | FF-05 | Aptos root cause determined | opf | FF-02, FF-04 | todo | [brief](aptos-origin-brief.md) |
 | FF-06 | Font-flow map across all 14 dimensions and environments | opf | none | done | [font-flow-map.md](font-flow-map.md), [opf#116](https://github.com/OpenPresentation/opf/pull/116) |
-| FF-07 | Exporter writes chosen fonts into theme and run East Asian/complex-script slots, with `lang`/RTL | opf-pptx | FF-05, FF-06, FF-18 | todo |  |
-| FF-08 | Exporter leaks no hard-coded or default font in any part | opf-pptx | FF-05, FF-06, FF-17 | todo |  |
+| FF-07 | Exporter writes chosen fonts into theme and run East Asian/complex-script slots, with `lang`/RTL | opf-pptx | FF-05, FF-06, FF-18 | review | [opf-pptx#70](https://github.com/OpenPresentation/opf-pptx/pull/70) |
+| FF-08 | Exporter leaks no hard-coded or default font in any part | opf-pptx | FF-05, FF-06, FF-17 | review | [opf-pptx#69](https://github.com/OpenPresentation/opf-pptx/pull/69) |
 | FF-09 | Offline pairwise matrix across the 14 gallery dimensions | opf (ecosystem) | FF-07, FF-08, FF-19, FF-20 | todo |  |
 | FF-10 | Matrix in CI on ubuntu, windows, macos via a packed TypeScript consumer | opf | FF-09 | todo |  |
 | FF-11 | Export determinism independent of host fonts, OS, locale and timezone | opf-pptx / opf | FF-06 | todo |  |
@@ -45,30 +46,32 @@ baseline is 7 of 793 `works`. See the
 | FF-14 | Evidence bundles, compatibility matrix and handoff merged | opf | FF-10, FF-11, FF-12, FF-13, FF-16, FF-19 | todo |  |
 | FF-15 | Release-readiness note for the release owner (no publishing) | opf | FF-14 | todo |  |
 | FF-16 | Editor switch operations for every dimension patch, undo and refresh the preview | opf-editor | FF-06, FF-17 | todo |  |
-| FF-17 | Code-font default follows the scheme; gallery apply keeps roles (shared default delivered by FF-35) | opf, opf-editor, opf-pptx | FF-06 | in-progress | core [opf#120](https://github.com/OpenPresentation/opf/pull/120) `53be0427`; editor role fix pending |
+| FF-17 | Code-font default follows the scheme; gallery apply keeps roles (shared default delivered by FF-35) | opf, opf-editor, opf-pptx | FF-06 | done | [opf#120](https://github.com/OpenPresentation/opf/pull/120) `53be0427`, [opf-pptx#61](https://github.com/OpenPresentation/opf-pptx/pull/61) `cf0bc0cc`, [opf-editor#30](https://github.com/OpenPresentation/opf-editor/pull/30) `f75372f2` |
 | FF-18 | Language/script model: per-script fonts resolvable from language and font scheme | opf | FF-06 | done | [opf#118](https://github.com/OpenPresentation/opf/pull/118) `d03a583c` |
 | FF-19 | Renderer script fonts (CJK, Arabic, Indic), `lang` and RTL in previews | opf-render | FF-18 | todo |  |
 | FF-20 | Bump ecosystem-ci sibling pins after each opf-pptx font fix | opf | FF-07, FF-08 | in-progress | first bump [opf#117](https://github.com/OpenPresentation/opf/pull/117) `7b4589b6`; sibling CI pins pending |
 | FF-21 | Non-blocking macOS browser job tracking opf-render#24 | opf-render | none | done | [opf-render#32](https://github.com/OpenPresentation/opf-render/pull/32) `df27685c` |
-| FF-22 | Charts reduced to Aspose.Slides-supported chart types (core catalog and pptx.gallery; deprecate if breaking) | opf, pptx-gallery | none | in-progress | branch `codex/ff-22-*` |
+| FF-22 | Charts reduced to Aspose.Slides-supported chart types (core catalog and pptx.gallery; deprecate if breaking) | opf, pptx-gallery | none | review | core merged: [opf#121](https://github.com/OpenPresentation/opf/pull/121) `13ab00bb`, [aspose-chart-types.md](aspose-chart-types.md); gallery half [pptx-gallery#40](https://github.com/Data-Advantage/pptx-gallery/pull/40) open |
+| FF-22b | Native `chartex` export and full renderer coverage for the kept chart types | opf-pptx, opf-render | FF-22 | in-progress |  |
 | FF-23 | Measured pptx.gallery support table by dimension and reproducible audit | opf | none | review | [opf#122](https://github.com/OpenPresentation/opf/pull/122), [gallery-support.md](gallery-support.md) |
-| FF-24 | Color schemes export as theme colors and re-import | opf-pptx | FF-23 | todo |  |
-| FF-25 | Pattern and photo backgrounds export natively and stay distinct | opf, opf-pptx, pptx-gallery | FF-23 | todo |  |
-| FF-26 | Image treatments export as native pictures with distinct values | opf, opf-render, opf-pptx, pptx-gallery | FF-23 | in-progress | engine side in progress |
-| FF-27 | Headers/footers as OPF furniture with PowerPoint slide-number and date fields | opf-pptx, pptx-gallery | FF-23 | todo |  |
-| FF-28 | Narrative and audience catalog parity | opf, pptx-gallery | FF-23 | review | [opf#123](https://github.com/OpenPresentation/opf/pull/123) (content blocks 5 to 29 `works` by audit A) |
-| FF-29 | Layout catalog parity and export fidelity | opf, opf-pptx, pptx-gallery | FF-23 | in-progress |  |
-| FF-30 | Content blocks keep metric text in preview and export | opf, opf-render, opf-pptx, pptx-gallery | FF-23 | review | [pptx-gallery#44](https://github.com/Data-Advantage/pptx-gallery/pull/44) (with #45 and a modified harness: blocks 31/32, image treatments 6/15; gallery CI blocked by Actions billing) |
-| FF-31 | Font provisioning per the owner font policy: licensed fonts render with shipped open replacements, PPTX keeps the real name and never embeds; open fonts bundled; policy table in core | opf, opf-render, opf-pptx | FF-23, FF-35 | in-progress |  |
-| FF-32 | Re-import retains design or emits specific diagnostics | opf-pptx | FF-07, FF-24 | todo |  |
+| FF-24 | Color schemes export as theme colors and re-import | opf-pptx | none | done | [opf-pptx#67](https://github.com/OpenPresentation/opf-pptx/pull/67) `5b657c9b` |
+| FF-24b | Follow-up to FF-24 (remaining theme-colour items from the opf-pptx#67 review) | opf-pptx | FF-24 | in-progress |  |
+| FF-25 | Pattern and photo backgrounds export natively and stay distinct | opf, opf-pptx, opf-render, pptx-gallery | none | review | [opf-pptx#66](https://github.com/OpenPresentation/opf-pptx/pull/66), [opf-render#35](https://github.com/OpenPresentation/opf-render/pull/35), [opf#127](https://github.com/OpenPresentation/opf/pull/127), [pptx-gallery#43](https://github.com/Data-Advantage/pptx-gallery/pull/43) (blocked on release) |
+| FF-26 | Image treatments export as native pictures with distinct values | opf, opf-render, opf-pptx, pptx-gallery | none | review | [opf#126](https://github.com/OpenPresentation/opf/pull/126), [opf-pptx#68](https://github.com/OpenPresentation/opf-pptx/pull/68), [opf-render#36](https://github.com/OpenPresentation/opf-render/pull/36) |
+| FF-27 | Headers/footers as OPF furniture with PowerPoint slide-number and date fields | opf-pptx, pptx-gallery | none | todo |  |
+| FF-28 | Narrative and audience catalog parity | opf, pptx-gallery | none | done | [opf#123](https://github.com/OpenPresentation/opf/pull/123) `c2785324` (content blocks 5 to 29 `works` by audit A) |
+| FF-29 | Layout catalog parity and export fidelity | opf, opf-pptx, pptx-gallery | none | in-progress |  |
+| FF-30 | Content blocks keep metric text in preview and export | opf, opf-render, opf-pptx, pptx-gallery | none | review | [pptx-gallery#44](https://github.com/Data-Advantage/pptx-gallery/pull/44) (with #45 and a modified harness: blocks 31/32, image treatments 6/15; gallery CI blocked by Actions billing) |
+| FF-31 | Font provisioning per the owner font policy: licensed fonts never bundled or embedded (shipped open replacements render, PPTX keeps the real name); open fonts bundled, embeddable only via FF-13; policy table in core | opf, opf-render, opf-pptx | FF-35 | review | [opf-pptx#63](https://github.com/OpenPresentation/opf-pptx/pull/63) |
+| FF-32 | Re-import retains design or emits specific diagnostics | opf-pptx | FF-07, FF-24 | review | [opf-pptx#71](https://github.com/OpenPresentation/opf-pptx/pull/71) |
 | FF-33 | Gallery snippet and "open in editor" emit every dimension's selected value | pptx-gallery | FF-26, FF-27 | review | [pptx-gallery#45](https://github.com/Data-Advantage/pptx-gallery/pull/45) (gallery CI blocked by Actions billing) |
-| FF-34 | Socials produce the platform size/aspect ratio or are documented as authoring-only | opf, pptx-gallery | FF-23 | todo |  |
+| FF-34 | Socials produce the platform size/aspect ratio or are documented as authoring-only | opf, opf-pptx, opf-render, pptx-gallery | none | review | [opf#125](https://github.com/OpenPresentation/opf/pull/125), [opf-pptx#65](https://github.com/OpenPresentation/opf-pptx/pull/65), [opf-render#34](https://github.com/OpenPresentation/opf-render/pull/34), [pptx-gallery#42](https://github.com/Data-Advantage/pptx-gallery/pull/42) |
 | FF-35 | Shared default font scheme `aptos` across every engine | opf, opf-render, opf-editor, opf-pptx | FF-17 | done | [opf#124](https://github.com/OpenPresentation/opf/pull/124) `3ba21ff4`, [opf-render#33](https://github.com/OpenPresentation/opf-render/pull/33) `47d19b25`, [opf-editor#31](https://github.com/OpenPresentation/opf-editor/pull/31) `4e47bf95`, [opf-pptx#64](https://github.com/OpenPresentation/opf-pptx/pull/64) `e1627898` |
 | FF-35b | Follow-up: unknown font-scheme ids fall back to `aptos`, not a Roboto literal | engines with the literal | FF-35 | in-progress |  |
-| FF-36 | pptx.gallery items show their measured support status | pptx-gallery, opf | FF-23 | in-progress |  |
-| FF-37 | pptx.gallery as a first-class OPF catalog: spec URLs serve schema-valid records; core bundles a pinned, drift-checked snapshot | opf, pptx-gallery | FF-23 | in-progress |  |
-| FF-38 | Parity audit harness and progress scoreboard (defines "perfect") | opf | FF-23 | done | [opf#122](https://github.com/OpenPresentation/opf/pull/122), [PARITY.md](gallery-support/parity/PARITY.md) (0/900 baseline) |
-| FF-39 | Alignment parity: preview and PPTX text alignment and anchors agree | opf-pptx, opf-render | FF-38 | in-progress |  |
+| FF-36 | pptx.gallery items show their measured support status | pptx-gallery, opf | FF-23 | review | [pptx-gallery#41](https://github.com/Data-Advantage/pptx-gallery/pull/41) |
+| FF-37 | pptx.gallery as a first-class OPF catalog: spec URLs serve schema-valid records; core bundles a pinned, drift-checked snapshot | opf, pptx-gallery | none | review | [opf#128](https://github.com/OpenPresentation/opf/pull/128), [pptx-gallery#46](https://github.com/Data-Advantage/pptx-gallery/pull/46) |
+| FF-38 | Parity audit harness and progress scoreboard (defines "perfect") | opf | FF-23 | review | [opf#122](https://github.com/OpenPresentation/opf/pull/122), [PARITY.md](gallery-support/parity/PARITY.md) (0/900 baseline) |
+| FF-39 | Alignment parity: preview and PPTX text alignment and anchors agree | opf-pptx, opf-render | FF-38 | review | [opf-pptx#72](https://github.com/OpenPresentation/opf-pptx/pull/72), [opf-render#37](https://github.com/OpenPresentation/opf-render/pull/37) (parity geometry 378 to 841, text 273 to 713 against the baseline) |
 | FF-R0 | Prior: mixed-size table edit/save/reopen and first embed attempt | opf, opf-pptx | none | done | [opf#114](https://github.com/OpenPresentation/opf/pull/114), [opf#115](https://github.com/OpenPresentation/opf/pull/115) |
 
 ## Acceptance criteria
@@ -201,9 +204,15 @@ the chosen fonts embedded.
 **FF-14 Published.** Evidence bundles pass their verifiers. The compatibility
 matrix and handoff state exactly what is and is not guaranteed.
 
-**FF-15 Release note.** A merged note lists which merged changes a release
-would ship and which consumer repos must follow. It is handed to the release
-owner, with nothing published.
+**FF-15 Release-readiness notes.** At each checkpoint, a merged note lists:
+- which merged changes a release would ship;
+- which consumer repos must follow;
+- the parity-audit perfect count on the merged heads;
+- what a live pptx.gallery would show once packages are published.
+
+It is handed to the release owner, with nothing published. A perfect,
+badge-accurate live pptx.gallery depends on that release. Inside this program,
+the proof is the FF-38 parity audit on merged heads.
 
 **FF-16 Editor switches.** In opf-editor, switching each of the 14 dimensions
 produces the expected document patch with working undo/redo, and the preview
@@ -261,7 +270,9 @@ logs. `support-status.json` has one record per measured value (793) and is
 regenerated by `build-support-status.mjs`. The README re-run commands work from
 a fresh workspace. Text and spec integrity checks pass.
 
-Every fix item (FF-24 to FF-37, FF-39) proves its result on the fix heads, or
+Fix items do not block on FF-23: the audits are their evidence tool, not a
+prerequisite. Every fix item (FF-24 to FF-37, FF-39) proves its result on the
+fix heads, or
 the merged heads, in the same or a follow-up PR. It re-runs the FF-23 presence
 audits, reports the FF-38 parity before/after table, and updates
 `gallery-support/support-status.json` and the affected rows of
@@ -349,8 +360,10 @@ row reports missing expected strings or lost payload kinds.
   replacement, with no host fonts. Strict mode throws only for a family
   outside the table. Today 92 of 93 font schemes throw under the strict pack.
   Script coverage is shared with FF-19.
-- The PPTX always references the real font name, never the replacement, and
-  never embeds font programs. With any registry and substitution policy,
+- The PPTX always references the real font name, never the replacement.
+  Licensed (proprietary) fonts are never bundled or embedded. Open fonts are
+  bundled, and they may be embedded only through the explicit FF-13 embed
+  path. With any registry and substitution policy,
   `toPptx` writes the chosen families and only reports substitutions. Tests
   cover the 7 schemes that substitute today (`aptos`, `calibri`, `consolas`,
   `courier-new`, `georgia`, `tahoma`, `times-new-roman`) and the `minimal`
@@ -401,6 +414,15 @@ Google exporter. `docs/design-resolution.md` is updated. Tests pin
 preview/export parity for a custom theme without a font scheme. Font
 availability and licensing for Aptos are handled by FF-31.
 
+**FF-22b Chart follow-up.** The kept Aspose.Slides chart types export
+natively, including `chartex` types such as treemap, sunburst, histogram,
+box-and-whisker, funnel and waterfall, and the renderer covers every kept type.
+Parity rows for charts pass their text and typeface checks.
+
+**FF-24b Theme-colour follow-up.** The items the opf-pptx#67 review deferred
+are fixed, and the audit color-scheme and theme rows show no remaining
+theme-colour reason.
+
 **FF-35b Unknown-scheme fallback.** A font scheme id that no catalog resolves
 falls back to the shared default `aptos` (or emits a diagnostic) in every
 engine; no Roboto literal remains. Tests pin it per engine.
@@ -414,7 +436,10 @@ documented (`authoring-metadata` shows as authoring-only; `previewOnly` shows
 as preview-only; `broken`, if ever measured, has a badge too). Badge text and
 definitions link to [gallery-support.md](gallery-support.md). The file is
 regenerated by re-running the FF-23 audit. Nothing is deployed in this
-program.
+program. The badges shown on the live site become accurate only after a
+release owner publishes the packages they describe (FF-15). Until then, the
+in-program proof is the badge data together with the FF-38 parity audit on
+merged heads.
 
 **FF-37 First-class catalog.** pptx.gallery is an OPF catalog like the core
 ones:
@@ -491,7 +516,7 @@ Append one dated line per state change. Newest last.
   scoreboard) added, both in progress. FF-26 (engine side), FF-29 and FF-31
   (owner font policy) are in progress. Headline metric: parity-passing items
   over all items; presence baseline 7/793, parity baseline to be set by FF-38.
-- 2026-09-23: FF-38 done with opf#122: the parity harness and baseline are
+- 2026-09-23: FF-38 in review with opf#122: the parity harness and baseline are
   committed under `gallery-support/parity/`. 0 of 900 values are perfect.
   Checks passed: slideSize 900, mapping 890, zOrder 880, fills 842, geometry
   378, text 273, fontResolution 5, typefaces 0, theme 0, re-import 0. Five
@@ -505,3 +530,25 @@ Append one dated line per state change. Newest last.
   `works`). FF-30 and FF-33 in review (pptx-gallery#44 and #45; combined with
   a modified harness, content blocks 31/32 and image treatments 6/15); gallery
   CI is blocked by Actions billing.
+- 2026-09-23: Tracker reconciled with open and merged PRs.
+  - Done: FF-03 (opf-pptx#59), FF-17 (opf#120, opf-pptx#61, opf-editor#30),
+    FF-24 (opf-pptx#67) and FF-28 (opf#123).
+  - FF-22: core half merged (opf#121); gallery half open (pptx-gallery#40).
+  - In review with linked PRs: FF-07, FF-08, FF-25, FF-26, FF-31, FF-32,
+    FF-34, FF-36, FF-37, FF-38 and FF-39. FF-02 hardening is in opf-pptx#62.
+  - FF-22b and FF-24b added as follow-ups.
+  - Font-policy wording corrected: licensed fonts are never bundled or
+    embedded, and open fonts may be embedded only through FF-13.
+  - Release dependency recorded: a live, badge-accurate gallery needs a
+    release. In-program proof is the parity audit on merged heads.
+  - Counts: done 11, review 16, in progress
+    5, todo 12 (44 rows).
+- 2026-09-23: FF-38 harness fixes, recorded in opf#122:
+  - Relationship targets resolve per OPC rules, so chart parts are found.
+  - Single text lines are compared by rendered extent, so metric lines no
+    longer fail geometry.
+  - Re-run on current mains (opf `c278532`, opf-render `47d19b2`, opf-pptx
+    `5b657c9`, pptx-gallery `f17e9ae`): still 0 of 900 perfect.
+  - Checks passed: geometry 390, text 326, fills 734 (chart colours are now
+    compared), theme 900 (FF-24), typefaces 0, re-import 0, font resolution 5.
+  - The baseline report is kept under `gallery-support/parity/history/`.

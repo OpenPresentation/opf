@@ -19,6 +19,8 @@ const imp = p => import(pathToFileURL(p).href);
 const render = await imp(path.join(RENDER, 'dist/index.js'));
 const {prepareNodeFonts} = await imp(path.join(RENDER, 'dist/fonts-node.js'));
 const {toPptx, fromPptx} = await imp(path.join(PPTX, 'dist/index.js'));
+// Core's default text measurement: the same estimate both engines use here (no host registry).
+const {measureText} = await imp(path.join(CORE, 'packages/javascript/dist/index.js'));
 const {unzipSync} = createRequire(path.join(PPTX, 'package.json'))('fflate');
 const head = d => { try { return execFileSync('git', ['-C', d, 'rev-parse', 'HEAD'], {encoding: 'utf8'}).trim(); } catch { return null; } };
 
@@ -98,7 +100,15 @@ function parseParagraphs(txXml, theme, defaults = {}) {
     return {algn, marL: +(pa.marL ?? 0) / 9525, indent: +(pa.indent ?? 0) / 9525, bullet: bu, runs, text: runs.map(r => r.text).join('')};
   }).filter(p => p.runs.length);
 }
-function parseSlide(xml, rels, files, theme) {
+// OPC part-name resolution: an absolute Target ("/ppt/charts/chart1.xml") is
+// relative to the package root; a relative Target is relative to the folder of
+// the source part.
+function resolveTarget(sourcePart, target) {
+  if (!target) return null;
+  if (target.startsWith('/')) return path.posix.normalize(target.slice(1));
+  return path.posix.normalize(path.posix.join(path.posix.dirname(sourcePart), target));
+}
+function parseSlide(xml, rels, files, theme, slidePart) {
   const bg = xml.match(/<p:bg>(.*?)<\/p:bg>/s)?.[1]; const shapes = [];
   const tree = xml.match(/<p:spTree>(.*)<\/p:spTree>/s)?.[1] ?? '';
   let order = 0;
@@ -111,9 +121,9 @@ function parseSlide(xml, rels, files, theme) {
     const tx = body.match(/<p:txBody>(.*?)<\/p:txBody>/s)?.[1] ?? (body.includes('<a:tbl>') ? body : null);
     if (tx) s.paragraphs = parseParagraphs(tx, theme);
     if (body.includes('<a:tbl>')) { s.table = true; s.cellFills = uniq([...body.matchAll(/<a:tcPr\b[^>]*>(.*?)<\/a:tcPr>/gs)].map(t => fillOf(t[1].replace(/<a:ln\w\b.*?<\/a:ln\w>/gs, ''), theme)?.rgb).filter(Boolean)); }
-    const blip = body.match(/<a:blip r:embed="([^"]+)"/)?.[1]; if (blip) { const target = rels[blip]; const part = target && path.posix.normalize('ppt/slides/' + target); s.image = {part, hash: files[part] ? sha(files[part]) : null}; }
+    const blip = body.match(/<a:blip r:embed="([^"]+)"/)?.[1]; if (blip) { const target = rels[blip]; const part = resolveTarget(slidePart, target); s.image = {part, hash: files[part] ? sha(files[part]) : null}; }
     const chartRid = body.match(/<c:chart\b[^>]*r:id="([^"]+)"/)?.[1];
-    if (chartRid) { const part = path.posix.normalize('ppt/slides/' + rels[chartRid]); const cx = files[part] ? dec.decode(files[part]) : ''; s.chart = {part, colors: uniq([...cx.matchAll(/<c:ser>.*?<c:spPr>.*?<a:srgbClr val="([0-9A-Fa-f]{6})"/gs)].map(x => x[1].toUpperCase())), typefaces: uniq([...cx.matchAll(/<a:latin typeface="([^"]*)"/g)].map(x => x[1])), sizes: uniq([...cx.matchAll(/<a:defRPr\b[^>]*\bsz="(\d+)"/g)].map(x => +x[1] / 100)), strings: [...cx.matchAll(/<c:v>([^<]*)<\/c:v>/g)].map(x => unesc(x[1]))}; }
+    if (chartRid) { const part = resolveTarget(slidePart, rels[chartRid]); const cx = files[part] ? dec.decode(files[part]) : ''; s.chart = {part, colors: uniq([...cx.matchAll(/<c:ser>.*?<c:spPr>.*?<a:srgbClr val="([0-9A-Fa-f]{6})"/gs)].map(x => x[1].toUpperCase())), typefaces: uniq([...cx.matchAll(/<a:latin typeface="([^"]*)"/g)].map(x => x[1])), sizes: uniq([...cx.matchAll(/<a:defRPr\b[^>]*\bsz="(\d+)"/g)].map(x => +x[1] / 100)), strings: [...cx.matchAll(/<c:v>([^<]*)<\/c:v>/g)].map(x => unesc(x[1]))}; }
     shapes.push(s);
   }
   return {bg: bg ? fillOf(bg, theme) ?? {kind: 'ref'} : null, shapes};
@@ -185,7 +195,7 @@ async function parity(doc) {
   if (slideParts.length !== svgs.length) add('zOrder', 'fail', `slide count ${svgs.length} preview vs ${slideParts.length} pptx`);
   const chosenFamilies = new Set(); const fontRes = {};
   for (let si = 0; si < Math.min(svgs.length, slideParts.length); si++) {
-    const P = parseSvg(svgs[si]); const X = parseSlide(dec.decode(files[slideParts[si]]), relsOf(files, slideParts[si]), files, theme);
+    const P = parseSvg(svgs[si]); const X = parseSlide(dec.decode(files[slideParts[si]]), relsOf(files, slideParts[si]), files, theme, slideParts[si]);
     const bound = resolved.slides[si];
     for (const f of Object.values(bound.design.fonts ?? {})) if (f) chosenFamilies.add(firstFamily(f));
     // Items: resolved geometry items + SVG boxes not under an item.
@@ -257,9 +267,13 @@ async function parity(doc) {
           const pvAlign = {start: 'l', middle: 'ctr', end: 'r'}[l.anchor];
           if (pvAlign !== p.algn) add('text', 'fail', `alignment ${pvAlign} (preview) vs ${p.algn} (pptx)`, key, l.text);
           if (p.single && p.shape.box && !isTable) {
-            const b = p.shape.box; const ax = p.algn === 'ctr' ? b.x + b.w / 2 : p.algn === 'r' ? b.x + b.w : b.x + p.marL;
+            // Compare the rendered line extent, not the raw anchor: a line anchored at its left edge in the
+            // preview and centered in its PPTX box lands at the same place when the gap is half the line width.
+            const b = p.shape.box; const w = pvRuns.reduce((sum, r) => sum + measureText(r.text, r.sizePt / PX_PT), 0);
+            const pvLeft = l.anchor === 'middle' ? l.x - w / 2 : l.anchor === 'end' ? l.x - w : l.x;
+            const pxLeft = p.algn === 'ctr' ? b.x + b.w / 2 - w / 2 : p.algn === 'r' ? b.x + b.w - w : b.x + p.marL;
             const size = (xr[0]?.sizePt ?? 0) / PX_PT; const baseline = b.y + size;
-            const dx = r3(Math.abs(ax - l.x) * PX_PT), dy = r3(Math.abs(baseline - l.y) * PX_PT); const d = Math.max(dx, dy);
+            const dx = r3(Math.abs(pxLeft - pvLeft) * PX_PT), dy = r3(Math.abs(baseline - l.y) * PX_PT); const d = Math.max(dx, dy);
             stats.geomMaxDeltaPt = Math.max(stats.geomMaxDeltaPt, d);
             if (d > TOL.geomPt) add('geometry', sev(d), `text line ${dx > TOL.geomPt ? 'anchor-x' : ''}${dx > TOL.geomPt && dy > TOL.geomPt ? '+' : ''}${dy > TOL.geomPt ? 'baseline-y' : ''} delta ${bucket(d)}pt`, key, `dx ${dx} dy ${dy} ${JSON.stringify(l.text.slice(0, 30))}`);
           }

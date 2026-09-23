@@ -33,9 +33,11 @@ Restated:
   system fonts, and in the browser. Export output never depends on
   host-installed fonts, OS, locale or timezone (FF-10, FF-11).
 - **Fonts.**
-  - Licensed fonts render with shipped open replacements.
-  - The PPTX references the real font name and never embeds it.
-  - Open fonts are bundled.
+  - Licensed (proprietary) fonts are never bundled or embedded. They render
+    with shipped open replacements, and the PPTX references the real font
+    name.
+  - Open fonts are bundled. They may be embedded only through the explicit
+    FF-13 embed path.
   - One shared default font scheme, `aptos` (FF-31, FF-35).
 - **Catalog.** pptx.gallery is a first-class OPF catalog: spec URLs serve
   schema-valid records, and core bundles a pinned, drift-checked snapshot
@@ -73,10 +75,12 @@ linked, and specifically:
    and parity (FF-12). The origin of the unexpected `Aptos` is determined by
    reviewed native evidence and fixed at the exporter/theme layer (FF-04,
    FF-05). The FF-13 embed attempt is audited, pass or fail.
-4. **Font policy.** A policy table in core covers every scheme font. Licensed
-   fonts render through shipped open replacements, the PPTX keeps the real
-   names and never embeds them, open fonts are bundled, and `aptos` is the
-   default everywhere (FF-31, FF-35).
+4. **Font policy.** A policy table in core covers every scheme font:
+   - Licensed (proprietary) fonts are never bundled or embedded. They render
+     through shipped open replacements, and the PPTX keeps the real names.
+   - Open fonts are bundled. They may be embedded only through the explicit
+     FF-13 embed path.
+   - `aptos` is the default everywhere (FF-31, FF-35).
 5. **Catalog and badges.** pptx.gallery is a first-class OPF catalog (FF-37),
    and its items show measured support badges (FF-36). Nothing is deployed in
    this program.
@@ -91,9 +95,10 @@ linked, and specifically:
   (FF-38).
 - 2026-09-23 (owner): one shared default font scheme, `aptos`, for every
   engine, so preview equals export (option A). Tracked as FF-35.
-- 2026-09-23 (owner): font policy. Licensed fonts render with shipped open
-  replacements, the PPTX references the real font name and never embeds it,
-  and open fonts are bundled. Tracked as FF-31.
+- 2026-09-23 (owner): font policy. Licensed (proprietary) fonts are never
+  bundled or embedded; they render with shipped open replacements, and the
+  PPTX references the real font name. Open fonts are bundled, and they may be
+  embedded only through the explicit FF-13 embed path. Tracked as FF-31.
 - 2026-09-23 (owner): pptx.gallery is a first-class OPF catalog. Tracked as
   FF-37.
 - 2026-09-23 (owner): each pptx.gallery item shows its measured support status
@@ -115,6 +120,13 @@ linked, and specifically:
 pptx.gallery otherwise consumes released packages. pptx-dev and
 openpresentation-site only consume released packages; they change after a
 release that includes this work.
+
+**Release dependency.** A perfect, badge-accurate *live* pptx.gallery needs
+published packages, and publishing belongs to a release owner. Nothing is
+published in this program. The in-program proof is therefore the FF-38 parity
+audit on merged heads, together with the FF-36 badge data derived from it.
+FF-15 delivers release-readiness notes for each checkpoint, listing what a
+release would ship and what the live gallery would then show.
 
 ## Invariants
 

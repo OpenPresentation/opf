@@ -1,8 +1,8 @@
 # Preview vs PPTX parity: pptx.gallery values
 
-Generated 2026-09-23T04:38:53.955Z by `dimension-audit/parity/scripts/parity.mjs` (Node v24.21.0, worktree prefix `parity`). No Office was used.
+Generated 2026-09-23T05:27:01.278Z by `dimension-audit/parity/scripts/parity.mjs` (Node v24.21.0, worktree prefix `ff23main`). No Office was used.
 
-Heads: opf `53be042`, opf-render `e500ed9`, opf-pptx `cf0bc0c`, pptx-gallery `f17e9ae`.
+Heads: opf `c278532`, opf-render `47d19b2`, opf-pptx `5b657c9`, pptx-gallery `f17e9ae`.
 
 ## What "perfect" means
 
@@ -10,7 +10,7 @@ For each value, the harness builds the gallery's own OPF Config document. It ren
 
 | check | pass means |
 |---|---|
-| geometry | text line anchor x (left: box x + marL; center; right) and baseline (box y + size) are within 0.02 pt. Chart, table, picture and card frames equal the composed box within 0.02 pt. Deltas up to 0.5 pt count as near. |
+| geometry | the rendered text line extent (left edge from the anchor and the line width by core measureText; PPTX: box x + marL, centered or right-aligned in the box) and baseline (box y + size) are within 0.02 pt. Chart, table, picture and card frames equal the composed box within 0.02 pt. Deltas up to 0.5 pt count as near. |
 | text | Same line text; same run segmentation; per run, the same family in the script slot used by the text (latin/ea/cs), size within 0.005 pt, bold, italic and resolved RGB colour (srgb, or schemeClr resolved through theme1); same paragraph alignment; same list markers. Native charts: preview labels exist in the chart caches, and the chart XML names the preview font. |
 | fills | Same background kind and colour. Per element group, the same set of solid fill colours (table cell fills included) and the same image count and bytes (sha256). Chart series colours appear in the preview. |
 | zOrder | The order of mapped element groups in spTree matches SVG paint order, and the slide count matches. |
@@ -27,37 +27,63 @@ Classification: **perfect** means every check passes; **near** means only near d
 
 | dimension | n | perfect | near | mismatch | geometry | text | fills | zOrder | slideSize | typefaces | reimport | fontResolution | theme | mapping |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| color-schemes | 14 | 0 | 0 | 14 | 0/14 | 0/14 | 14/14 | 14/14 | 14/14 | 0/14 | 0/14 | 0/14 | 0/14 | 14/14 |
-| font-schemes | 89 | 0 | 0 | 89 | 0/89 | 0/89 | 89/89 | 89/89 | 89/89 | 0/89 | 0/89 | 4/89 | 0/89 | 89/89 |
-| font-schemes-legacy | 4 | 0 | 0 | 4 | 0/4 | 0/4 | 4/4 | 4/4 | 4/4 | 0/4 | 0/4 | 0/4 | 0/4 | 4/4 |
-| languages | 93 | 0 | 0 | 93 | 0/93 | 0/93 | 93/93 | 93/93 | 93/93 | 0/93 | 0/93 | 0/93 | 0/93 | 93/93 |
-| themes | 4 | 0 | 0 | 4 | 3/4 | 3/4 | 4/4 | 4/4 | 4/4 | 0/4 | 0/4 | 0/4 | 0/4 | 4/4 |
-| narratives | 10 | 0 | 0 | 10 | 0/10 | 0/10 | 10/10 | 10/10 | 10/10 | 0/10 | 0/10 | 0/10 | 0/10 | 10/10 |
-| audiences | 14 | 0 | 0 | 14 | 10/14 | 10/14 | 14/14 | 14/14 | 14/14 | 0/14 | 0/14 | 0/14 | 0/14 | 14/14 |
-| tones | 7 | 0 | 0 | 7 | 0/7 | 0/7 | 7/7 | 7/7 | 7/7 | 0/7 | 0/7 | 0/7 | 0/7 | 7/7 |
-| socials | 10 | 0 | 0 | 10 | 0/10 | 0/10 | 10/10 | 10/10 | 10/10 | 0/10 | 0/10 | 0/10 | 0/10 | 10/10 |
-| backgrounds | 6 | 0 | 0 | 6 | 0/6 | 0/6 | 2/6 | 6/6 | 6/6 | 0/6 | 0/6 | 0/6 | 0/6 | 6/6 |
-| backgrounds (withAssets) | 6 | 0 | 0 | 6 | 0/6 | 0/6 | 2/6 | 6/6 | 6/6 | 0/6 | 0/6 | 0/6 | 0/6 | 6/6 |
-| image-treatments | 15 | 0 | 0 | 15 | 0/15 | 0/15 | 15/15 | 15/15 | 15/15 | 0/15 | 0/15 | 0/15 | 0/15 | 15/15 |
-| image-treatments (withAssets) | 15 | 0 | 0 | 15 | 0/15 | 0/15 | 15/15 | 15/15 | 15/15 | 0/15 | 0/15 | 0/15 | 0/15 | 15/15 |
-| headers-footers | 10 | 0 | 0 | 10 | 0/10 | 0/10 | 10/10 | 0/10 | 10/10 | 0/10 | 0/10 | 0/10 | 0/10 | 10/10 |
-| headers-footers (withAssets) | 10 | 0 | 0 | 10 | 0/10 | 0/10 | 10/10 | 0/10 | 10/10 | 0/10 | 0/10 | 0/10 | 0/10 | 10/10 |
-| blocks | 32 | 0 | 0 | 32 | 20/32 | 20/32 | 25/32 | 32/32 | 32/32 | 0/32 | 0/32 | 1/32 | 0/32 | 32/32 |
-| layouts | 485 | 0 | 0 | 485 | 269/485 | 240/485 | 442/485 | 485/485 | 485/485 | 0/485 | 0/485 | 0/485 | 0/485 | 475/485 |
-| charts | 76 | 0 | 0 | 76 | 76/76 | 0/76 | 76/76 | 76/76 | 76/76 | 0/76 | 0/76 | 0/76 | 0/76 | 76/76 |
-| **all** | 900 | 0 | 0 | 900 | 378/900 | 273/900 | 842/900 | 880/900 | 900/900 | 0/900 | 0/900 | 5/900 | 0/900 | 890/900 |
+| color-schemes | 14 | 0 | 0 | 14 | 0/14 | 0/14 | 14/14 | 14/14 | 14/14 | 0/14 | 0/14 | 0/14 | 14/14 | 14/14 |
+| font-schemes | 89 | 0 | 0 | 89 | 0/89 | 0/89 | 89/89 | 89/89 | 89/89 | 0/89 | 0/89 | 4/89 | 89/89 | 89/89 |
+| font-schemes-legacy | 4 | 0 | 0 | 4 | 0/4 | 0/4 | 4/4 | 4/4 | 4/4 | 0/4 | 0/4 | 0/4 | 4/4 | 4/4 |
+| languages | 93 | 0 | 0 | 93 | 0/93 | 0/93 | 93/93 | 93/93 | 93/93 | 0/93 | 0/93 | 0/93 | 93/93 | 93/93 |
+| themes | 4 | 0 | 0 | 4 | 3/4 | 3/4 | 4/4 | 4/4 | 4/4 | 0/4 | 0/4 | 0/4 | 4/4 | 4/4 |
+| narratives | 10 | 0 | 0 | 10 | 0/10 | 0/10 | 10/10 | 10/10 | 10/10 | 0/10 | 0/10 | 0/10 | 10/10 | 10/10 |
+| audiences | 14 | 0 | 0 | 14 | 10/14 | 10/14 | 14/14 | 14/14 | 14/14 | 0/14 | 0/14 | 0/14 | 14/14 | 14/14 |
+| tones | 7 | 0 | 0 | 7 | 0/7 | 0/7 | 7/7 | 7/7 | 7/7 | 0/7 | 0/7 | 0/7 | 7/7 | 7/7 |
+| socials | 10 | 0 | 0 | 10 | 0/10 | 0/10 | 10/10 | 10/10 | 10/10 | 0/10 | 0/10 | 0/10 | 10/10 | 10/10 |
+| backgrounds | 6 | 0 | 0 | 6 | 0/6 | 0/6 | 2/6 | 6/6 | 6/6 | 0/6 | 0/6 | 0/6 | 6/6 | 6/6 |
+| backgrounds (withAssets) | 6 | 0 | 0 | 6 | 0/6 | 0/6 | 2/6 | 6/6 | 6/6 | 0/6 | 0/6 | 0/6 | 6/6 | 6/6 |
+| image-treatments | 15 | 0 | 0 | 15 | 0/15 | 0/15 | 15/15 | 15/15 | 15/15 | 0/15 | 0/15 | 0/15 | 15/15 | 15/15 |
+| image-treatments (withAssets) | 15 | 0 | 0 | 15 | 0/15 | 0/15 | 15/15 | 15/15 | 15/15 | 0/15 | 0/15 | 0/15 | 15/15 | 15/15 |
+| headers-footers | 10 | 0 | 0 | 10 | 0/10 | 0/10 | 10/10 | 0/10 | 10/10 | 0/10 | 0/10 | 0/10 | 10/10 | 10/10 |
+| headers-footers (withAssets) | 10 | 0 | 0 | 10 | 0/10 | 0/10 | 10/10 | 0/10 | 10/10 | 0/10 | 0/10 | 0/10 | 10/10 | 10/10 |
+| blocks | 32 | 0 | 0 | 32 | 20/32 | 21/32 | 23/32 | 32/32 | 32/32 | 0/32 | 0/32 | 1/32 | 32/32 | 32/32 |
+| layouts | 485 | 0 | 0 | 485 | 281/485 | 266/485 | 403/485 | 485/485 | 485/485 | 0/485 | 0/485 | 0/485 | 485/485 | 475/485 |
+| charts | 76 | 0 | 0 | 76 | 76/76 | 26/76 | 9/76 | 76/76 | 76/76 | 0/76 | 0/76 | 0/76 | 76/76 | 76/76 |
+| **all** | 900 | 0 | 0 | 900 | 390/900 | 326/900 | 734/900 | 880/900 | 900/900 | 0/900 | 0/900 | 5/900 | 900/900 | 890/900 |
 
 The check columns count values that pass that check. A value is perfect only when every check passes.
+
+## Before / after
+
+Baseline heads: opf `53be042`, opf-render `e500ed9`, opf-pptx `cf0bc0c`, pptx-gallery `f17e9ae`.
+
+| dimension | perfect before | perfect after | near before | near after | improved | regressed |
+|---|---|---|---|---|---|---|
+| color-schemes | 0 | 0 | 0 | 0 | 0 | 0 |
+| font-schemes | 0 | 0 | 0 | 0 | 0 | 0 |
+| font-schemes-legacy | 0 | 0 | 0 | 0 | 0 | 0 |
+| languages | 0 | 0 | 0 | 0 | 0 | 0 |
+| themes | 0 | 0 | 0 | 0 | 0 | 0 |
+| narratives | 0 | 0 | 0 | 0 | 0 | 0 |
+| audiences | 0 | 0 | 0 | 0 | 0 | 0 |
+| tones | 0 | 0 | 0 | 0 | 0 | 0 |
+| socials | 0 | 0 | 0 | 0 | 0 | 0 |
+| backgrounds | 0 | 0 | 0 | 0 | 0 | 0 |
+| backgrounds (withAssets) | 0 | 0 | 0 | 0 | 0 | 0 |
+| image-treatments | 0 | 0 | 0 | 0 | 0 | 0 |
+| image-treatments (withAssets) | 0 | 0 | 0 | 0 | 0 | 0 |
+| headers-footers | 0 | 0 | 0 | 0 | 0 | 0 |
+| headers-footers (withAssets) | 0 | 0 | 0 | 0 | 0 | 0 |
+| blocks | 0 | 0 | 0 | 0 | 0 | 0 |
+| layouts | 0 | 0 | 0 | 0 | 0 | 0 |
+| charts | 0 | 0 | 0 | 0 | 0 | 0 |
+| **all** | 0 | 0 | 0 | 0 | 0 | 0 |
 
 ## Top mismatch reasons per dimension
 
 - **color-schemes** (14): text | alignment ctr (preview) vs l (pptx) (14); geometry | text line anchor-x delta >50pt (14); reimport | slide layout id not preserved (no diagnostic) (14); geometry | table frame delta >50pt (14); fontResolution | preview font visual-substitute: Aptos Display -> Carlito (14)
-- **font-schemes** (89): text | alignment ctr (preview) vs l (pptx) (89); geometry | text line anchor-x delta >50pt (89); theme | theme clrScheme differs from document color scheme (10 slots) (89); reimport | design.fontScheme not preserved (no diagnostic) (89); reimport | slide layout id not preserved (no diagnostic) (89)
-- **font-schemes-legacy** (4): text | alignment ctr (preview) vs l (pptx) (4); geometry | text line anchor-x delta >50pt (4); typefaces | foreign font in app.xml: Arial (4); typefaces | foreign font in app.xml: Calibri (4); theme | theme clrScheme differs from document color scheme (10 slots) (4)
-- **languages** (93): text | alignment ctr (preview) vs l (pptx) (93); geometry | text line anchor-x delta >50pt (93); typefaces | foreign font in app.xml: Calibri (93); theme | theme clrScheme differs from document color scheme (10 slots) (93); reimport | design.fontScheme not preserved (no diagnostic) (93)
-- **themes** (4): typefaces | foreign font in app.xml: Arial (4); typefaces | foreign font in app.xml: Calibri (4); theme | theme clrScheme differs from document color scheme (10 slots) (4); reimport | design.colorScheme not preserved (no diagnostic) (4); reimport | design.fontScheme not preserved (no diagnostic) (4)
+- **font-schemes** (89): text | alignment ctr (preview) vs l (pptx) (89); geometry | text line anchor-x delta >50pt (89); reimport | design.fontScheme not preserved (no diagnostic) (89); reimport | slide layout id not preserved (no diagnostic) (89); typefaces | foreign font in app.xml: Arial (88)
+- **font-schemes-legacy** (4): text | alignment ctr (preview) vs l (pptx) (4); geometry | text line anchor-x delta >50pt (4); typefaces | foreign font in app.xml: Arial (4); typefaces | foreign font in app.xml: Calibri (4); reimport | design.fontScheme not preserved (no diagnostic) (4)
+- **languages** (93): text | alignment ctr (preview) vs l (pptx) (93); geometry | text line anchor-x delta >50pt (93); typefaces | foreign font in app.xml: Calibri (93); reimport | design.fontScheme not preserved (no diagnostic) (93); reimport | language not preserved (no diagnostic) (93)
+- **themes** (4): typefaces | foreign font in app.xml: Arial (4); typefaces | foreign font in app.xml: Calibri (4); reimport | design.fontScheme not preserved (no diagnostic) (4); reimport | design.background not preserved (no diagnostic) (4); reimport | design.dimensions not preserved (no diagnostic) (4)
 - **narratives** (10): text | alignment ctr (preview) vs l (pptx) (10); geometry | text line anchor-x delta >50pt (10); fontResolution | preview font visual-substitute: Aptos Display -> Carlito (10); fontResolution | preview font visual-substitute: Aptos -> Carlito (10); typefaces | foreign font in app.xml: Arial (10)
-- **audiences** (14): fontResolution | preview font visual-substitute: Aptos Display -> Carlito (14); fontResolution | preview font visual-substitute: Aptos -> Carlito (14); typefaces | foreign font in app.xml: Arial (14); typefaces | foreign font in app.xml: Calibri (14); theme | theme clrScheme differs from document color scheme (10 slots) (14)
+- **audiences** (14): fontResolution | preview font visual-substitute: Aptos Display -> Carlito (14); fontResolution | preview font visual-substitute: Aptos -> Carlito (14); typefaces | foreign font in app.xml: Arial (14); typefaces | foreign font in app.xml: Calibri (14); reimport | narrative not preserved (no diagnostic) (14)
 - **tones** (7): text | alignment ctr (preview) vs l (pptx) (7); geometry | text line anchor-x delta >50pt (7); fontResolution | preview font visual-substitute: Aptos Display -> Carlito (7); fontResolution | preview font visual-substitute: Aptos -> Carlito (7); typefaces | foreign font in app.xml: Arial (7)
 - **socials** (10): text | alignment ctr (preview) vs l (pptx) (10); geometry | text line anchor-x delta >50pt (10); fontResolution | preview font visual-substitute: Aptos Display -> Carlito (10); fontResolution | preview font visual-substitute: Aptos -> Carlito (10); typefaces | foreign font in app.xml: Arial (10)
 - **backgrounds** (6): text | alignment ctr (preview) vs l (pptx) (6); geometry | text line anchor-x delta >50pt (6); fontResolution | preview font visual-substitute: Aptos Display -> Carlito (6); fontResolution | preview font visual-substitute: Aptos -> Carlito (6); typefaces | foreign font in app.xml: Arial (6)
@@ -66,9 +92,9 @@ The check columns count values that pass that check. A value is perfect only whe
 - **image-treatments (withAssets)** (15): text | alignment ctr (preview) vs l (pptx) (15); geometry | text line anchor-x delta >50pt (15); fontResolution | preview font visual-substitute: Aptos Display -> Carlito (15); fontResolution | preview font visual-substitute: Aptos -> Carlito (15); typefaces | foreign font in app.xml: Arial (15)
 - **headers-footers** (10): text | alignment ctr (preview) vs l (pptx) (10); geometry | text line anchor-x delta >50pt (10); fontResolution | preview font visual-substitute: Aptos Display -> Carlito (10); fontResolution | preview font visual-substitute: Aptos -> Carlito (10); typefaces | foreign font in app.xml: Arial (10)
 - **headers-footers (withAssets)** (10): text | alignment ctr (preview) vs l (pptx) (10); geometry | text line anchor-x delta >50pt (10); fontResolution | preview font visual-substitute: Aptos Display -> Carlito (10); fontResolution | preview font visual-substitute: Aptos -> Carlito (10); typefaces | foreign font in app.xml: Arial (10)
-- **blocks** (32): typefaces | foreign font in app.xml: Arial (32); typefaces | foreign font in app.xml: Calibri (32); theme | theme clrScheme differs from document color scheme (10 slots) (32); reimport | design.colorScheme not preserved (no diagnostic) (32); reimport | design.fontScheme not preserved (no diagnostic) (32)
-- **layouts** (485): fontResolution | preview font visual-substitute: Aptos Display -> Carlito (485); fontResolution | preview font visual-substitute: Aptos -> Carlito (485); typefaces | foreign font in app.xml: Arial (485); typefaces | foreign font in app.xml: Calibri (485); theme | theme clrScheme differs from document color scheme (10 slots) (485)
-- **charts** (76): text | native chart has no explicit typeface (inherits theme/Office default) (76); fontResolution | preview font visual-substitute: Aptos Display -> Carlito (76); fontResolution | preview font visual-substitute: Aptos -> Carlito (76); typefaces | foreign typeface Arial in ppt/charts/chartN.xml:latin (76); typefaces | foreign typeface Geneva in ppt/embeddings/Microsoft_Excel_WorksheetN.xlsx!/xl/styles.xml:xlsx-font (76)
+- **blocks** (32): typefaces | foreign font in app.xml: Arial (32); typefaces | foreign font in app.xml: Calibri (32); reimport | design.fontScheme not preserved (no diagnostic) (32); reimport | design.background not preserved (no diagnostic) (32); reimport | narrative not preserved (no diagnostic) (32)
+- **layouts** (485): fontResolution | preview font visual-substitute: Aptos Display -> Carlito (485); fontResolution | preview font visual-substitute: Aptos -> Carlito (485); typefaces | foreign font in app.xml: Arial (485); typefaces | foreign font in app.xml: Calibri (485); reimport | slide layout id not preserved (no diagnostic) (485)
+- **charts** (76): fontResolution | preview font visual-substitute: Aptos Display -> Carlito (76); fontResolution | preview font visual-substitute: Aptos -> Carlito (76); typefaces | foreign typeface Arial in ppt/charts/chartN.xml:latin (76); typefaces | foreign typeface Geneva in ppt/embeddings/Microsoft_Excel_WorksheetN.xlsx!/xl/styles.xml:xlsx-font (76); typefaces | foreign typeface Arial in ppt/embeddings/Microsoft_Excel_WorksheetN.xlsx!/xl/styles.xml:xlsx-font (76)
 
 ## 20 most common mismatch patterns
 
@@ -76,24 +102,24 @@ The check columns count values that pass that check. A value is perfect only whe
 |---|---|---|---|---|---|---|
 | 1 | reimport \| slide layout id not preserved (no diagnostic) | fail | 900 | 942 | color-schemes/black-and-white [slides.0]<br>color-schemes/bold-red [slides.0]<br>color-schemes/boost [slides.0] |  |
 | 2 | typefaces \| foreign font in app.xml: Calibri | fail | 899 | 899 | color-schemes/black-and-white<br>color-schemes/bold-red<br>color-schemes/boost |  |
-| 3 | theme \| theme clrScheme differs from document color scheme (10 slots) | fail | 899 | 899 | color-schemes/black-and-white<br>color-schemes/bold-red<br>color-schemes/boost |  |
-| 4 | typefaces \| foreign font in app.xml: Arial | fail | 897 | 897 | color-schemes/black-and-white<br>color-schemes/bold-red<br>color-schemes/boost |  |
-| 5 | fontResolution \| preview font visual-substitute: Aptos Display -> Carlito | fail | 754 | 754 | color-schemes/black-and-white [Aptos Display]<br>color-schemes/bold-red [Aptos Display]<br>color-schemes/boost [Aptos Display] |  |
-| 6 | fontResolution \| preview font visual-substitute: Aptos -> Carlito | fail | 754 | 754 | color-schemes/black-and-white [Aptos]<br>color-schemes/bold-red [Aptos]<br>color-schemes/boost [Aptos] |  |
-| 7 | text \| alignment ctr (preview) vs l (pptx) | fail | 504 | 931 | color-schemes/black-and-white [slides.0.title]<br>color-schemes/bold-red [slides.0.title]<br>color-schemes/boost [slides.0.title] | Color scheme preview |
-| 8 | geometry \| text line anchor-x delta >50pt | fail | 504 | 943 | color-schemes/black-and-white [slides.0.title]<br>color-schemes/bold-red [slides.0.title]<br>color-schemes/boost [slides.0.title] | dx 436.8 dy 0 "Color scheme preview" |
-| 9 | reimport \| design.fontScheme not preserved (no diagnostic) | fail | 222 | 222 | font-schemes/consolas<br>font-schemes/courier-new<br>font-schemes/arial |  |
-| 10 | text \| native chart has no explicit typeface (inherits theme/Office default) | fail | 117 | 158 | blocks/financial-snapshot [slides.0.blocks.4.chart]<br>blocks/data-story-insight [slides.0.blocks.1.chart]<br>layouts/data-visualization [slides.0.blocks.0.chart] |  |
-| 11 | typefaces \| foreign typeface Arial in ppt/charts/chartN.xml:latin | fail | 117 | 117 | blocks/financial-snapshot<br>blocks/data-story-insight<br>layouts/data-visualization |  |
-| 12 | typefaces \| foreign typeface Geneva in ppt/embeddings/Microsoft_Excel_WorksheetN.xlsx!/xl/styles.xml:xlsx-font | fail | 117 | 117 | blocks/financial-snapshot<br>blocks/data-story-insight<br>layouts/data-visualization |  |
-| 13 | typefaces \| foreign typeface Arial in ppt/embeddings/Microsoft_Excel_WorksheetN.xlsx!/xl/styles.xml:xlsx-font | fail | 117 | 117 | blocks/financial-snapshot<br>blocks/data-story-insight<br>layouts/data-visualization |  |
-| 14 | typefaces \| foreign typeface Calibri Light in ppt/embeddings/Microsoft_Excel_WorksheetN.xlsx!/xl/theme/themeN.xml:latin | fail | 117 | 117 | blocks/financial-snapshot<br>blocks/data-story-insight<br>layouts/data-visualization |  |
-| 15 | typefaces \| foreign typeface Calibri in ppt/embeddings/Microsoft_Excel_WorksheetN.xlsx!/xl/theme/themeN.xml:latin | fail | 117 | 117 | blocks/financial-snapshot<br>blocks/data-story-insight<br>layouts/data-visualization |  |
-| 16 | text \| chart preview text not in native chart cache | fail | 111 | 152 | blocks/financial-snapshot [slides.0.blocks.4.chart]<br>blocks/data-story-insight [slides.0.blocks.1.chart]<br>layouts/data-visualization [slides.0.blocks.0.chart] | Curr \| ent \| Next \| Targ |
-| 17 | reimport \| language not preserved (no diagnostic) | fail | 93 | 93 | languages/afrikaans<br>languages/albanian<br>languages/amharic |  |
-| 18 | reimport \| design.colorScheme not preserved (no diagnostic) | fail | 64 | 64 | color-schemes/black-and-white<br>color-schemes/bold-red<br>color-schemes/boost |  |
-| 19 | reimport \| narrative not preserved (no diagnostic) | fail | 56 | 56 | narratives/problem-solution<br>narratives/heros-journey<br>narratives/what-so-what-now-what |  |
-| 20 | reimport \| tone not preserved (no diagnostic) | fail | 53 | 53 | audiences/executive<br>audiences/investor<br>audiences/board |  |
+| 3 | typefaces \| foreign font in app.xml: Arial | fail | 897 | 897 | color-schemes/black-and-white<br>color-schemes/bold-red<br>color-schemes/boost |  |
+| 4 | fontResolution \| preview font visual-substitute: Aptos Display -> Carlito | fail | 754 | 754 | color-schemes/black-and-white [Aptos Display]<br>color-schemes/bold-red [Aptos Display]<br>color-schemes/boost [Aptos Display] |  |
+| 5 | fontResolution \| preview font visual-substitute: Aptos -> Carlito | fail | 754 | 754 | color-schemes/black-and-white [Aptos]<br>color-schemes/bold-red [Aptos]<br>color-schemes/boost [Aptos] |  |
+| 6 | text \| alignment ctr (preview) vs l (pptx) | fail | 504 | 931 | color-schemes/black-and-white [slides.0.title]<br>color-schemes/bold-red [slides.0.title]<br>color-schemes/boost [slides.0.title] | Color scheme preview |
+| 7 | geometry \| text line anchor-x delta >50pt | fail | 473 | 855 | color-schemes/black-and-white [slides.0.title]<br>color-schemes/bold-red [slides.0.title]<br>color-schemes/boost [slides.0.title] | dx 225.39 dy 0 "Color scheme preview" |
+| 8 | reimport \| design.fontScheme not preserved (no diagnostic) | fail | 222 | 222 | font-schemes/consolas<br>font-schemes/courier-new<br>font-schemes/arial |  |
+| 9 | typefaces \| foreign typeface Arial in ppt/charts/chartN.xml:latin | fail | 117 | 117 | blocks/financial-snapshot<br>blocks/data-story-insight<br>layouts/data-visualization |  |
+| 10 | typefaces \| foreign typeface Geneva in ppt/embeddings/Microsoft_Excel_WorksheetN.xlsx!/xl/styles.xml:xlsx-font | fail | 117 | 117 | blocks/financial-snapshot<br>blocks/data-story-insight<br>layouts/data-visualization |  |
+| 11 | typefaces \| foreign typeface Arial in ppt/embeddings/Microsoft_Excel_WorksheetN.xlsx!/xl/styles.xml:xlsx-font | fail | 117 | 117 | blocks/financial-snapshot<br>blocks/data-story-insight<br>layouts/data-visualization |  |
+| 12 | typefaces \| foreign typeface Calibri Light in ppt/embeddings/Microsoft_Excel_WorksheetN.xlsx!/xl/theme/themeN.xml:latin | fail | 117 | 117 | blocks/financial-snapshot<br>blocks/data-story-insight<br>layouts/data-visualization |  |
+| 13 | typefaces \| foreign typeface Calibri in ppt/embeddings/Microsoft_Excel_WorksheetN.xlsx!/xl/theme/themeN.xml:latin | fail | 117 | 117 | blocks/financial-snapshot<br>blocks/data-story-insight<br>layouts/data-visualization |  |
+| 14 | reimport \| language not preserved (no diagnostic) | fail | 93 | 93 | languages/afrikaans<br>languages/albanian<br>languages/amharic |  |
+| 15 | reimport \| narrative not preserved (no diagnostic) | fail | 56 | 56 | narratives/problem-solution<br>narratives/heros-journey<br>narratives/what-so-what-now-what |  |
+| 16 | geometry \| text line anchor-x delta >5pt | fail | 56 | 71 | audiences/media [slides.0.subtitle]<br>audiences/partner [slides.0.subtitle]<br>audiences/all-hands [slides.0.subtitle] | dx 11.175 dy 0 "Journalists, analysts, and med" |
+| 17 | reimport \| tone not preserved (no diagnostic) | fail | 53 | 53 | audiences/executive<br>audiences/investor<br>audiences/board |  |
+| 18 | reimport \| design.background not preserved (no diagnostic) | fail | 48 | 48 | themes/minimal<br>themes/classic<br>themes/dark |  |
+| 19 | fills \| chart series colors not in preview (1) | fail | 46 | 87 | layouts/data-visualization [slides.0.blocks.0.chart]<br>layouts/dashboard [slides.0.blocks.0.chart]<br>layouts/waterfall-bridge [slides.0.blocks.0.chart] |  |
+| 20 | text \| chart preview text not in native chart cache | fail | 46 | 46 | charts/clustered-column [slides.0.chart]<br>charts/stacked-column-2x [slides.0.chart]<br>charts/stacked-column-3x [slides.0.chart] | Value 1  Value 2 |
 
 ## Near-only patterns (tolerable deltas)
 
@@ -101,7 +127,9 @@ The check columns count values that pass that check. A value is perfect only whe
 |---|---|---|
 | text \| line segmentation differs (preview line is part of a PPTX paragraph) | 16 | image-treatments/full-bleed [slides.0.image] |
 | mapping \| pptx shape unmapped (sp:OPF list paragraph #) | 10 | layouts/list-5x-box-vertical-title-center-slideimage [unmapped] |
+| text \| chart label wrapped/split in preview (native chart lays out its own labels) | 5 | blocks/financial-snapshot [slides.0.blocks.4.chart] |
 | text \| font size 14.145pt vs 14.15pt | 2 | layouts/list-6x-heading-title-center [slides.0.blocks.0.items] |
+| text \| chart text sizes preview [13.5] vs chart [12,18] | 2 | charts/pie [slides.0.chart] |
 
 ## Preview font resolution
 
