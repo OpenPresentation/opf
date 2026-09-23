@@ -42,6 +42,49 @@ const attrs = s => Object.fromEntries([...String(s).matchAll(/([\w:-]+)="([^"]*)
 const sha = b => createHash('sha256').update(b).digest('hex').slice(0, 16);
 const scriptOf = t => /[\u3000-\u9FFF\uAC00-\uD7AF\uF900-\uFAFF\uFF00-\uFFEF\u3040-\u30FF]/u.test(t) ? 'ea' : /[\u0590-\u08FF\u0900-\u0DFF\u0E00-\u0EFF\u1000-\u109F\u10A0-\u10FF\u1200-\u137F\u1780-\u17FF]/u.test(t) ? 'cs' : 'latin';
 
+// ---------- preview image intrinsic size ----------
+// The size the browser uses for preserveAspectRatio: raster dimensions (JPEG after EXIF orientation), or an SVG's
+// width/height or viewBox. null when unknown (external href, unsupported or unreadable data).
+function rasterSize(b) {
+  const ok = (w, h) => w > 0 && h > 0 ? {w, h} : null;
+  if (b.length >= 24 && b.toString('latin1', 1, 4) === 'PNG') return ok(b.readUInt32BE(16), b.readUInt32BE(20));
+  if (b.length >= 10 && /^GIF8[79]a$/.test(b.toString('latin1', 0, 6))) return ok(b.readUInt16LE(6), b.readUInt16LE(8));
+  if (b.length >= 30 && b.toString('latin1', 0, 4) === 'RIFF' && b.toString('latin1', 8, 12) === 'WEBP') {
+    const kind = b.toString('latin1', 12, 16);
+    if (kind === 'VP8X') return ok(1 + b.readUIntLE(24, 3), 1 + b.readUIntLE(27, 3));
+    if (kind === 'VP8L') { const v = b.readUInt32LE(21); return ok(1 + (v & 0x3fff), 1 + ((v >>> 14) & 0x3fff)); }
+    if (kind === 'VP8 ') return ok(b.readUInt16LE(26) & 0x3fff, b.readUInt16LE(28) & 0x3fff);
+    return null;
+  }
+  if (b.length >= 4 && b[0] === 0xff && b[1] === 0xd8) {
+    let size = null, orientation = 1;
+    for (let at = 2; at + 4 <= b.length;) {
+      if (b[at] !== 0xff) return null; const marker = b[at + 1]; at += 2;
+      if (marker === 0xd8 || marker === 0x01 || (marker >= 0xd0 && marker <= 0xd7)) continue;
+      if (marker === 0xda || marker === 0xd9) break;
+      const len = b.readUInt16BE(at); if (len < 2 || at + len > b.length) return null;
+      if ([0xc0, 0xc1, 0xc2, 0xc3, 0xc5, 0xc6, 0xc7, 0xc9, 0xca, 0xcb, 0xcd, 0xce, 0xcf].includes(marker) && len >= 7) size = ok(b.readUInt16BE(at + 5), b.readUInt16BE(at + 3));
+      if (marker === 0xe1 && b.toString('latin1', at + 2, at + 8) === 'Exif\0\0') {
+        const t = at + 8, le = b.toString('latin1', t, t + 2) === 'II', u16 = o => le ? b.readUInt16LE(o) : b.readUInt16BE(o), u32 = o => le ? b.readUInt32LE(o) : b.readUInt32BE(o);
+        const ifd = t + u32(t + 4); for (let i = 0, n = u16(ifd); i < n; i++) { const e = ifd + 2 + i * 12; if (u16(e) === 0x0112) orientation = u16(e + 8); }
+      }
+      at += len;
+    }
+    return size && orientation >= 5 && orientation <= 8 ? {w: size.h, h: size.w} : size;
+  }
+  return null;
+}
+function svgSize(text) {
+  const root = text.match(/<svg\b[^>]*>/)?.[0]; if (!root) return null; const a = attrs(root); const num = v => /^\s*[\d.]+\s*(px)?\s*$/.test(v ?? '') ? parseFloat(v) : NaN;
+  const w = num(a.width), h = num(a.height); if (w > 0 && h > 0) return {w, h};
+  const vb = a.viewBox?.trim().split(/[\s,]+/).map(Number); return vb?.length === 4 && vb[2] > 0 && vb[3] > 0 ? {w: vb[2], h: vb[3]} : null;
+}
+function imageSize(href) {
+  const m = String(href).match(/^data:([^;,]+)((?:;[^;,]*)*),(.*)$/s); if (!m) return null;
+  try { const bytes = /;base64/.test(m[2]) ? Buffer.from(m[3], 'base64') : Buffer.from(decodeURIComponent(m[3]), 'utf8');
+    return m[1] === 'image/svg+xml' ? svgSize(bytes.toString('utf8')) : rasterSize(bytes); } catch { return null; }
+}
+
 // ---------- preview model (traced SVG) ----------
 function parseSvg(svg) {
   const out = {viewBox: null, elements: [], boxes: []};
@@ -60,7 +103,7 @@ function parseSvg(svg) {
     else if (['rect', 'circle', 'ellipse', 'path', 'polygon', 'line', 'image', 'polyline'].includes(tag)) {
       const el = {kind: tag === 'image' ? 'image' : 'shape', tag, path: p, fill: a.fill ?? null, stroke: a.stroke ?? null};
       if (tag === 'rect' || tag === 'image') Object.assign(el, {x: +(a.x ?? 0), y: +(a.y ?? 0), w: +a.width, h: +a.height});
-      if (tag === 'image') { const href = a.href ?? a['xlink:href'] ?? ''; const b64 = href.match(/^data:[^;]+;base64,(.*)$/); el.hash = b64 ? sha(Buffer.from(b64[1], 'base64')) : href.slice(0, 40); el.mime = href.match(/^data:([^;]+)/)?.[1] ?? null; el.par = a.preserveAspectRatio ?? 'xMidYMid meet'; if (b64) { const buf = Buffer.from(b64[1].slice(0, 64), 'base64'); if (buf.slice(1, 4).toString() === 'PNG') el.intrinsic = {w: buf.readUInt32BE(16), h: buf.readUInt32BE(20)}; } }
+      if (tag === 'image') { const href = a.href ?? a['xlink:href'] ?? ''; const b64 = href.match(/^data:[^;]+;base64,(.*)$/); el.hash = b64 ? sha(Buffer.from(b64[1], 'base64')) : href.slice(0, 40); el.mime = href.match(/^data:([^;]+)/)?.[1] ?? null; el.par = a.preserveAspectRatio ?? 'xMidYMid meet'; el.intrinsic = imageSize(href); }
       out.elements.push(el);
     }
     if (!self && tag !== 'text' || (tag === 'text' && !self)) stack.push(node);
@@ -169,7 +212,7 @@ function imageRect(b, c = {}) { const [l, t, r, bt] = ['l', 't', 'r', 'b'].map(k
 // Visible image rect: the full image rect clipped to the frame.
 function visibleImage(b, c = {}) { const i = imageRect(b, c); const x = Math.max(b.x, i.x), y = Math.max(b.y, i.y); return {x, y, w: Math.min(b.x + b.w, i.x + i.w) - x, h: Math.min(b.y + b.h, i.y + i.h) - y}; }
 // Preview full image rect: the SVG <image> viewport with preserveAspectRatio applied to the intrinsic size.
-function placedImage(e) { if (!e.intrinsic || /^none/.test(e.par)) return e; const m = e.par.match(/x(Min|Mid|Max)Y(Min|Mid|Max)/) ?? [null, 'Mid', 'Mid'];
+function placedImage(e) { if (/^none\b/.test(e.par)) return e; if (!e.intrinsic) return NAN_BOX; const m = e.par.match(/x(Min|Mid|Max)Y(Min|Mid|Max)/) ?? [null, 'Mid', 'Mid'];
   const k = (/slice/.test(e.par) ? Math.max : Math.min)(e.w / e.intrinsic.w, e.h / e.intrinsic.h), w = e.intrinsic.w * k, h = e.intrinsic.h * k, f = {Min: 0, Mid: 0.5, Max: 1};
   return {x: e.x + f[m[1]] * (e.w - w), y: e.y + f[m[2]] * (e.h - h), w, h}; }
 // Any non-finite coordinate makes the delta NaN; callers treat a NaN or infinite delta as a failure.
@@ -183,7 +226,7 @@ function cropDelta(v, a, p) { if (![v, a, p].every(finiteBox)) return NaN;
   const at = (q, a0, aw, p0, pw) => Math.abs(p0 + (q - a0) / aw * pw - q);
   return r3(Math.max(at(v.x, a.x, a.w, p.x, p.w), at(v.x + v.w, a.x, a.w, p.x, p.w), at(v.y, a.y, a.h, p.y, p.h), at(v.y + v.h, a.y, a.h, p.y, p.h)) * PX_PT); }
 const overTol = d => !(d <= TOL.geomPt);
-const bucket = d => !Number.isFinite(d) ? 'non-finite ' : d > 50 ? '>50' : d > 5 ? '>5' : d > TOL.geomNearPt ? '>0.5' : '<=0.5';
+const bucket = d => !Number.isFinite(d) ? 'non-finite' : d > 50 ? '>50pt' : d > 5 ? '>5pt' : d > TOL.geomNearPt ? '>0.5pt' : '<=0.5pt';
 function sev(dPt) { return dPt <= TOL.geomPt ? 'pass' : dPt <= TOL.geomNearPt ? 'near' : 'fail'; } // NaN and Infinity fail
 
 function compareValue(doc) {
@@ -254,7 +297,7 @@ async function parity(doc) {
       stats.textLines += pvLines.length;
       if (pvMarkers.length) { const xb = pxParas.filter(p => p.bullet); const pm = pvMarkers.map(m => normText(m.text)).sort().join(''), xm = xb.map(p => p.bullet === '#auto' ? '#' : p.bullet).sort().join('');
         if (pm !== xm) add('text', 'fail', `list markers differ`, key, `${pvMarkers.length} preview [${pm.slice(0, 8)}] vs ${xb.length} pptx [${xm.slice(0, 8)}]`);
-        for (const m of pvMarkers) { const para = xb.find(p => p.single && p.shape.box && Math.abs(p.shape.box.y + ((p.runs[0]?.sizePt ?? 0) / PX_PT) - m.y) < 1); if (!para) continue; const bx = para.shape.box.x + para.marL + para.indent; const d = r3(Math.abs(bx - m.x) * PX_PT); maxDelta(d); if (overTol(d)) add('geometry', sev(d), `list marker x delta ${bucket(d)}pt`, key, d); } }
+        for (const m of pvMarkers) { const para = xb.find(p => p.single && p.shape.box && Math.abs(p.shape.box.y + ((p.runs[0]?.sizePt ?? 0) / PX_PT) - m.y) < 1); if (!para) continue; const bx = para.shape.box.x + para.marL + para.indent; const d = r3(Math.abs(bx - m.x) * PX_PT); maxDelta(d); if (overTol(d)) add('geometry', sev(d), `list marker x delta ${bucket(d)}`, key, d); } }
       if (isChart) {
         const ch = G.px.find(s => s.chart).chart; const strs = new Set(ch.strings.map(normText));
         const allStr = [...strs].join(''); const wrapped = pvLines.filter(l => !strs.has(normText(l.text)) && allStr.includes(normText(l.text))); if (wrapped.length) add('text', 'near', 'chart label wrapped/split in preview (native chart lays out its own labels)', key, wrapped.map(m => m.text).slice(0, 4).join(' | '));
@@ -301,7 +344,7 @@ async function parity(doc) {
             const size = (xr[0]?.sizePt ?? 0) / PX_PT; const baseline = b.y + size;
             const dx = r3(Math.abs(pxLeft - pvLeft) * PX_PT), dy = r3(Math.abs(baseline - l.y) * PX_PT); const d = Number.isFinite(dx) && Number.isFinite(dy) ? Math.max(dx, dy) : NaN;
             maxDelta(d);
-            if (overTol(d)) add('geometry', sev(d), `text line ${overTol(dx) ? 'anchor-x' : ''}${overTol(dx) && overTol(dy) ? '+' : ''}${overTol(dy) ? 'baseline-y' : ''} delta ${bucket(d)}pt`, key, `dx ${dx} dy ${dy} ${JSON.stringify(l.text.slice(0, 30))}`);
+            if (overTol(d)) add('geometry', sev(d), `text line ${overTol(dx) ? 'anchor-x' : ''}${overTol(dx) && overTol(dy) ? '+' : ''}${overTol(dy) ? 'baseline-y' : ''} delta ${bucket(d)}`, key, `dx ${dx} dy ${dy} ${JSON.stringify(l.text.slice(0, 30))}`);
           }
         }
         const extra = pxParas.filter((p, i) => !used.has(i) && !pvLines.some(l => normText(p.text).includes(normText(l.text))));
@@ -312,14 +355,18 @@ async function parity(doc) {
         const it = items.find(i => i.path === key) ?? (key === siKey && s.image ? {box: null} : null); if (!it) continue;
         const pvImage = s.image ? G.pv.find(e => e.kind === 'image') : null;
         let ref = s.name.startsWith('OPF card') ? it.frame : s.image ? (pvImage ?? it.box) : it.box; if (!ref) continue;
-        if (s.image && ref.intrinsic && /meet/.test(ref.par)) { const k = Math.min(ref.w / ref.intrinsic.w, ref.h / ref.intrinsic.h), w = ref.intrinsic.w * k, h = ref.intrinsic.h * k; ref = {x: ref.x + (ref.w - w) / 2, y: ref.y + (ref.h - h) / 2, w, h}; }
+        if (s.image && ref === pvImage && (pvImage.intrinsic || /^none/.test(pvImage.par))) { const p = placedImage(pvImage), x = Math.max(ref.x, p.x), y = Math.max(ref.y, p.y); ref = {x, y, w: Math.min(ref.x + ref.w, p.x + p.w) - x, h: Math.min(ref.y + ref.h, p.y + p.h) - y}; }
         const sbox = s.image ? visibleImage(s.box, s.image.srcRect) : s.box; const d = geomDelta(sbox, ref); maxDelta(d);
-        if (overTol(d)) add('geometry', sev(d), `${s.chart ? 'chart' : s.table ? 'table' : s.image ? 'picture' : 'card'} frame delta ${bucket(d)}pt`, key, `${JSON.stringify(Object.fromEntries(Object.entries(sbox).map(([k, v]) => [k, r3(v)])))} vs ${JSON.stringify(Object.fromEntries(Object.entries(ref).filter(([k]) => 'xywh'.includes(k)).map(([k, v]) => [k, r3(v)])))}`);
+        if (overTol(d)) add('geometry', sev(d), `${s.chart ? 'chart' : s.table ? 'table' : s.image ? 'picture' : 'card'} frame delta ${bucket(d)}`, key, `${JSON.stringify(Object.fromEntries(Object.entries(sbox).map(([k, v]) => [k, r3(v)])))} vs ${JSON.stringify(Object.fromEntries(Object.entries(ref).filter(([k]) => 'xywh'.includes(k)).map(([k, v]) => [k, r3(v)])))}`);
         // Crop position: the picture's full image rect (frame widened by a:srcRect) must place the image content as
         // the preview's placed image does (the <image> viewport with preserveAspectRatio applied), so a crop taken
         // from the wrong side fails even though its visible rect still equals the frame. Needs the intrinsic size.
-        if (pvImage?.intrinsic) { const full = imageRect(s.box, s.image.srcRect), placed = placedImage(pvImage); const dc = cropDelta(sbox, full, placed); maxDelta(dc);
-          if (overTol(dc)) add('geometry', sev(dc), `picture crop delta ${bucket(dc)}pt`, key, `${JSON.stringify(Object.fromEntries(Object.entries(full).map(([k, v]) => [k, r3(v)])))} vs ${JSON.stringify(Object.fromEntries(Object.entries(placed).filter(([k]) => 'xywh'.includes(k)).map(([k, v]) => [k, r3(v)])))}`); }
+        // Without the preview image's intrinsic size (or preserveAspectRatio="none") the crop cannot be measured: that
+        // is reported as a near "crop unmeasured" and counted in meta.cropCheck, never skipped silently.
+        if (s.image) { CROP.pictures++;
+        if (!pvImage || !(pvImage.intrinsic || /^none/.test(pvImage.par))) { CROP.unmeasured++; add('geometry', 'near', 'picture crop unmeasured (preview image size unknown)', key, pvImage ? `${pvImage.mime ?? 'external href'} ${pvImage.par}` : 'no preview image'); }
+        else { CROP.measured++; const full = imageRect(s.box, s.image.srcRect), placed = placedImage(pvImage); const dc = cropDelta(sbox, full, placed); maxDelta(dc);
+          if (overTol(dc)) add('geometry', sev(dc), `picture crop delta ${bucket(dc)}`, key, `${JSON.stringify(Object.fromEntries(Object.entries(full).map(([k, v]) => [k, r3(v)])))} vs ${JSON.stringify(Object.fromEntries(Object.entries(placed).filter(([k]) => 'xywh'.includes(k)).map(([k, v]) => [k, r3(v)])))}`); } }
       }
       // (3) fills & images
       if (!isChart) {
@@ -375,6 +422,7 @@ async function parity(doc) {
   return {class: cls, checks, stats: {...stats, geomMaxDeltaPt: r3(stats.geomMaxDeltaPt)}, fontResolution: fontRes, typefaces: {distinct: uniq(invt.typefaces.map(t => t.typeface)), foreign, scriptSupplements: uniq(invt.scriptSupplements).length, scriptSupplementFaces: uniq(invt.scriptSupplements.map(s => s.split('=')[1])), emptySlots, appFonts: invt.appFonts}, previewDiagnostics: uniq(pv.pdiag), exportDiagnostics: uniq(ediag), reimportDiagnostics: uniq(idiag.map(d => d.code)), diffs: top.slice(0, 25)};
 }
 
+const CROP = {pictures: 0, measured: 0, unmeasured: 0};
 const results = []; const t0 = Date.now(); let n = 0;
 const perDim = {};
 for (const s of snippets) {
@@ -388,7 +436,7 @@ for (const s of snippets) {
 const meta = {generatedBy: 'dimension-audit/parity/scripts/parity.mjs', generatedAt: new Date().toISOString(), node: process.version, prefix: PFX,
   heads: {opf: head(CORE), 'opf-render': head(RENDER), 'opf-pptx': head(PPTX), 'pptx-gallery': head(GALLERY)},
   tolerances: TOL, previewMode: 'engine default measurement (no host registry) for geometry/text; office pack + visual substitution registry for font resolution',
-  exportMode: 'toPptx default options (no registry)'};
+  exportMode: 'toPptx default options (no registry)', cropCheck: CROP};
 const OUT = process.env.OUT ?? path.join(ROOT, 'parity-results.json');
 await writeFile(OUT, JSON.stringify({meta, results}, null, 1));
 console.error(`wrote ${results.length} results to ${OUT} in ${((Date.now() - t0) / 1000).toFixed(0)}s`);

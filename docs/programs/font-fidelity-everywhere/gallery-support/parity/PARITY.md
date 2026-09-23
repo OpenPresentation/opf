@@ -1,8 +1,8 @@
 # Preview vs PPTX parity: pptx.gallery values
 
-Generated 2026-09-23T12:35:35.658Z by `dimension-audit/parity/scripts/parity.mjs` (Node v24.21.0, worktree prefix `parity`). No Office was used.
+Generated 2026-09-23T13:03:28.289Z by `dimension-audit/parity/scripts/parity.mjs` (Node v24.21.0, worktree prefix `parity`). No Office was used.
 
-Heads: opf `b1753ef`, opf-render `bc436f3`, opf-pptx `9092954`, pptx-gallery `f17e9ae`.
+Heads: opf `6263985`, opf-render `bc436f3`, opf-pptx `9092954`, pptx-gallery `f17e9ae`.
 
 ## What "perfect" means
 
@@ -49,9 +49,11 @@ Classification: **perfect** means every check passes; **near** means only near d
 
 The check columns count values that pass that check. A value is perfect only when every check passes.
 
+Picture crop-position check: 408 of 408 pictures measured; 0 unmeasured (preview image size unknown, reported as near).
+
 ## Before / after
 
-Baseline heads: opf `7f88749`, opf-render `bc436f3`, opf-pptx `9092954`, pptx-gallery `f17e9ae`.
+Baseline heads: opf `b1753ef`, opf-render `bc436f3`, opf-pptx `9092954`, pptx-gallery `f17e9ae`.
 
 | dimension | perfect before | perfect after | near before | near after | improved | regressed |
 |---|---|---|---|---|---|---|

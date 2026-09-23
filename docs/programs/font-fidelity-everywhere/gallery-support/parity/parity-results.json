@@ -1,11 +1,11 @@
 {
  "meta": {
   "generatedBy": "dimension-audit/parity/scripts/parity.mjs",
-  "generatedAt": "2026-09-23T12:35:35.658Z",
+  "generatedAt": "2026-09-23T13:03:28.289Z",
   "node": "v24.21.0",
   "prefix": "parity",
   "heads": {
-   "opf": "b1753ef013901a91cb72f2e2b53db849f049c6b6",
+   "opf": "6263985ba343d558df47e1be165cd83002271494",
    "opf-render": "bc436f3bf324bcec0c180d18ef773a117dbe29ee",
    "opf-pptx": "9092954664917fd8c49aa29203425c0dcdaaf8e7",
    "pptx-gallery": "f17e9ae5869669d5fbac3720f285652d0c37551c"
@@ -17,7 +17,12 @@
    "sizeNearPt": 0.5
   },
   "previewMode": "engine default measurement (no host registry) for geometry/text; office pack + visual substitution registry for font resolution",
-  "exportMode": "toPptx default options (no registry)"
+  "exportMode": "toPptx default options (no registry)",
+  "cropCheck": {
+   "pictures": 408,
+   "measured": 408,
+   "unmeasured": 0
+  }
  },
  "results": [
   {
