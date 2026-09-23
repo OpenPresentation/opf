@@ -394,11 +394,23 @@ describe('paragraphDirection (FF-07 RTL paragraph rule)', () => {
   test('digits, punctuation, marks and empty text take the deck direction', () => {
     for (const text of ['', '   ', '42%', '١٢٣', '٬ ،', 'ً']) assert.equal(paragraphDirection(text, 'rtl'), 'rtl');
   });
+  const mark = (...codes) => String.fromCodePoint(...codes);
+  const [LRM, RLM, ALM, LRI, RLI, PDI] = [0x200e, 0x200f, 0x061c, 0x2066, 0x2067, 0x2069].map(code => mark(code));
   test('directional marks are strong and isolates are skipped', () => {
-    assert.equal(paragraphDirection('‎١٢٣', 'rtl'), 'ltr');
-    assert.equal(paragraphDirection('‏123 abc', 'rtl'), 'rtl');
-    assert.equal(paragraphDirection('⁦English⁩ مرحبا', 'rtl'), 'rtl');
-    assert.equal(paragraphDirection('⁧مرحبا⁩ Hello', 'rtl'), 'ltr');
+    assert.equal(paragraphDirection(`${LRM}١٢٣`, 'rtl'), 'ltr');
+    assert.equal(paragraphDirection(`${RLM}123 abc`, 'rtl'), 'rtl');
+    assert.equal(paragraphDirection(`${ALM}123 abc`, 'rtl'), 'rtl');
+    assert.equal(paragraphDirection(`${LRI}English${PDI} مرحبا`, 'rtl'), 'rtl');
+    assert.equal(paragraphDirection(`${RLI}مرحبا${PDI} Hello`, 'rtl'), 'ltr');
+  });
+  test('Old Uyghur and Garay letters are right-to-left; their digits are not strong', () => {
+    assert.equal(paragraphDirection(`${mark(0x10f70, 0x10f71)} abc`, 'rtl'), 'rtl');
+    assert.equal(paragraphDirection(`${mark(0x10d4a, 0x10d4b)} abc`, 'rtl'), 'rtl');
+    assert.equal(paragraphDirection(`${mark(0x10d40, 0x10d41)} abc`, 'rtl'), 'ltr');
+  });
+  test('letter numbers such as Roman numerals are left-to-right strong', () => {
+    assert.equal(paragraphDirection(`${mark(0x2162)} مرحبا`, 'rtl'), 'ltr');
+    assert.equal(paragraphDirection(`${mark(0x216b)}`, 'rtl'), 'ltr');
   });
   test('it pairs with the resolver direction', () => {
     const {direction} = resolveScriptFonts(deck('arabic'));
