@@ -71,7 +71,7 @@ baseline is 7 of 793 `works`. See the
 | FF-36 | pptx.gallery items show their measured support status | pptx-gallery, opf | FF-23 | review | [pptx-gallery#41](https://github.com/Data-Advantage/pptx-gallery/pull/41) |
 | FF-37 | pptx.gallery as a first-class OPF catalog: spec URLs serve schema-valid records; core bundles a pinned, drift-checked snapshot | opf, pptx-gallery | none | review | [opf#128](https://github.com/OpenPresentation/opf/pull/128), [pptx-gallery#46](https://github.com/Data-Advantage/pptx-gallery/pull/46) |
 | FF-38 | Parity audit harness and progress scoreboard (defines "perfect") | opf | FF-23 | review | [opf#122](https://github.com/OpenPresentation/opf/pull/122), [PARITY.md](gallery-support/parity/PARITY.md) (0/900 baseline) |
-| FF-39 | Alignment parity: preview and PPTX text alignment and anchors agree | opf-pptx, opf-render | FF-38 | review | [opf-pptx#72](https://github.com/OpenPresentation/opf-pptx/pull/72), [opf-render#37](https://github.com/OpenPresentation/opf-render/pull/37) (parity geometry 378 to 841, text 273 to 713 against the baseline) |
+| FF-39 | Alignment parity: preview and PPTX text alignment and anchors agree | opf-pptx, opf-render | FF-38 | review | renderer half merged: [opf-render#37](https://github.com/OpenPresentation/opf-render/pull/37) `3f34448e`; exporter half [opf-pptx#72](https://github.com/OpenPresentation/opf-pptx/pull/72) open (combined parity geometry 378 to 841, text 273 to 713 against the baseline) |
 | FF-R0 | Prior: mixed-size table edit/save/reopen and first embed attempt | opf, opf-pptx | none | done | [opf#114](https://github.com/OpenPresentation/opf/pull/114), [opf#115](https://github.com/OpenPresentation/opf/pull/115) |
 
 ## Acceptance criteria
@@ -552,3 +552,5 @@ Append one dated line per state change. Newest last.
   - Checks passed: geometry 390, text 326, fills 734 (chart colours are now
     compared), theme 900 (FF-24), typefaces 0, re-import 0, font resolution 5.
   - The baseline report is kept under `gallery-support/parity/history/`.
+- 2026-09-23: FF-39 renderer half merged (opf-render#37); the exporter half
+  (opf-pptx#72) is still in review.
