@@ -11,36 +11,36 @@ Every item's criteria must all hold before it is `done`. Dates are UTC.
 
 | Status | Count |
 | --- | --- |
-| done | 2 |
-| review / in-progress | 8 |
+| done | 5 |
+| review / in-progress | 5 |
 | todo | 13 |
 
 ## Items
 
 | ID | Item | Repo | Depends on | Status | Evidence / PR |
 | --- | --- | --- | --- | --- | --- |
-| FF-00 | Program tracker and agent entrypoints | all | none | review | this PR; sibling `AGENTS.md` PRs |
+| FF-00 | Program tracker and agent entrypoints | all | none | done | [opf#116](https://github.com/OpenPresentation/opf/pull/116) `642f37af`; [opf-pptx#60](https://github.com/OpenPresentation/opf-pptx/pull/60), [opf-render#31](https://github.com/OpenPresentation/opf-render/pull/31), [opf-editor#29](https://github.com/OpenPresentation/opf-editor/pull/29) |
 | FF-01 | Exporter master bullets follow the theme body font | opf-pptx | none | done | [opf-pptx#57](https://github.com/OpenPresentation/opf-pptx/pull/57), `7b34f557` |
-| FF-02 | Embed harness records pre-edit, post-text and post-edit font observations | opf-pptx | none | in-progress | branch `codex/native-font-embed-baseline-20260923` |
-| FF-03 | Read-only native font inventory worker | opf-pptx | none | in-progress | branch `codex/native-font-inventory-readonly-20260923` |
-| FF-04 | Native inventory of the unedited fixture, with and without temporary fonts | opf-pptx / opf | FF-03 | todo | |
+| FF-02 | Embed harness records pre-edit, post-text and post-edit font observations | opf-pptx | none | review | [opf-pptx#58](https://github.com/OpenPresentation/opf-pptx/pull/58) |
+| FF-03 | Read-only native font inventory worker | opf-pptx | none | review | [opf-pptx#59](https://github.com/OpenPresentation/opf-pptx/pull/59) |
+| FF-04 | Native inventory of the unedited fixture, with and without temporary fonts | opf-pptx / opf | FF-03 | todo |  |
 | FF-05 | Aptos root cause determined | opf | FF-02, FF-04 | todo | [brief](aptos-origin-brief.md) |
-| FF-06 | Font-flow map across all 14 dimensions and environments | opf | none | review | [font-flow-map.md](font-flow-map.md), this PR |
-| FF-07 | Exporter writes chosen fonts into theme and run East Asian/complex-script slots, with `lang`/RTL | opf-pptx | FF-05, FF-06, FF-18 | todo | |
-| FF-08 | Exporter leaks no hard-coded or default font in any part | opf-pptx | FF-05, FF-06, FF-17 | todo | |
-| FF-09 | Offline pairwise matrix across the 14 gallery dimensions | opf (ecosystem) | FF-07, FF-08, FF-19, FF-20 | todo | |
-| FF-10 | Matrix in CI on ubuntu, windows, macos via a packed TypeScript consumer | opf | FF-09 | todo | |
-| FF-11 | Export determinism independent of host fonts, OS, locale and timezone | opf-pptx / opf | FF-06 | todo | |
-| FF-12 | Native PowerPoint sample of the matrix, including CJK and RTL | opf-pptx / opf | FF-03, FF-07, FF-09, FF-18 | todo | |
-| FF-13 | Font-embed attempt from merged main, audited | opf-pptx / opf | FF-02, FF-07, FF-08 | todo | |
-| FF-14 | Evidence bundles, compatibility matrix and handoff merged | opf | FF-10, FF-11, FF-12, FF-13, FF-16, FF-19 | todo | |
-| FF-15 | Release-readiness note for the release owner (no publishing) | opf | FF-14 | todo | |
-| FF-16 | Editor switch operations for every dimension patch, undo and refresh the preview | opf-editor | FF-06, FF-17 | todo | |
+| FF-06 | Font-flow map across all 14 dimensions and environments | opf | none | done | [font-flow-map.md](font-flow-map.md), [opf#116](https://github.com/OpenPresentation/opf/pull/116) |
+| FF-07 | Exporter writes chosen fonts into theme and run East Asian/complex-script slots, with `lang`/RTL | opf-pptx | FF-05, FF-06, FF-18 | todo |  |
+| FF-08 | Exporter leaks no hard-coded or default font in any part | opf-pptx | FF-05, FF-06, FF-17 | todo |  |
+| FF-09 | Offline pairwise matrix across the 14 gallery dimensions | opf (ecosystem) | FF-07, FF-08, FF-19, FF-20 | todo |  |
+| FF-10 | Matrix in CI on ubuntu, windows, macos via a packed TypeScript consumer | opf | FF-09 | todo |  |
+| FF-11 | Export determinism independent of host fonts, OS, locale and timezone | opf-pptx / opf | FF-06 | todo |  |
+| FF-12 | Native PowerPoint sample of the matrix, including CJK and RTL | opf-pptx / opf | FF-03, FF-07, FF-09, FF-18 | todo |  |
+| FF-13 | Font-embed attempt from merged main, audited | opf-pptx / opf | FF-02, FF-07, FF-08 | todo |  |
+| FF-14 | Evidence bundles, compatibility matrix and handoff merged | opf | FF-10, FF-11, FF-12, FF-13, FF-16, FF-19 | todo |  |
+| FF-15 | Release-readiness note for the release owner (no publishing) | opf | FF-14 | todo |  |
+| FF-16 | Editor switch operations for every dimension patch, undo and refresh the preview | opf-editor | FF-06, FF-17 | todo |  |
 | FF-17 | Code-font default follows the scheme; gallery apply keeps roles; one shared default scheme | opf, opf-editor, opf-pptx | FF-06 | in-progress | branch `codex/ff-17-*` |
-| FF-18 | Language/script model: per-script fonts resolvable from language and font scheme | opf | FF-06 | in-progress | branch `codex/ff-18-script-font-model` |
-| FF-19 | Renderer script fonts (CJK, Arabic, Indic), `lang` and RTL in previews | opf-render | FF-18 | todo | |
-| FF-20 | Bump ecosystem-ci sibling pins after each opf-pptx font fix | opf | FF-07, FF-08 | in-progress | first bump to FF-01 by agent |
-| FF-21 | Non-blocking macOS browser job tracking opf-render#24 | opf-render | none | in-progress | branch `codex/ff-21-macos-render-job` |
+| FF-18 | Language/script model: per-script fonts resolvable from language and font scheme | opf | FF-06 | review | [opf#118](https://github.com/OpenPresentation/opf/pull/118) |
+| FF-19 | Renderer script fonts (CJK, Arabic, Indic), `lang` and RTL in previews | opf-render | FF-18 | todo |  |
+| FF-20 | Bump ecosystem-ci sibling pins after each opf-pptx font fix | opf | FF-07, FF-08 | in-progress | first bump [opf#117](https://github.com/OpenPresentation/opf/pull/117) `7b4589b6`; sibling CI pins pending |
+| FF-21 | Non-blocking macOS browser job tracking opf-render#24 | opf-render | none | done | [opf-render#32](https://github.com/OpenPresentation/opf-render/pull/32) `df27685c` |
 | FF-R0 | Prior: mixed-size table edit/save/reopen and first embed attempt | opf, opf-pptx | none | done | [opf#114](https://github.com/OpenPresentation/opf/pull/114), [opf#115](https://github.com/OpenPresentation/opf/pull/115) |
 
 ## Acceptance criteria
@@ -227,3 +227,7 @@ Append one dated line per state change. Newest last.
 - 2026-09-23: FF-17, FF-18, FF-20 and FF-21 started by parallel agents.
 - 2026-09-23: FF-06 brief and Aptos research brief committed. FF-17 to FF-21
   added and FF-07 to FF-12 criteria sharpened from the FF-06 findings.
+- 2026-09-23: FF-00 done (core tracker plus sibling AGENTS.md merged). FF-06 done
+  with the tracker. FF-21 done (macOS job confirms opf-render#24: Linux misses
+  0.1 px on 5 of 5 rows, macOS on 0 of 5). FF-20 first bump merged; the sibling
+  repos' own CI pins still lag. FF-02, FF-03 and FF-18 in review.
