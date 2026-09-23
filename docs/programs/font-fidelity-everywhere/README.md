@@ -6,44 +6,106 @@ people resuming work start here, not from chat history or local scratch files.
 
 ## Goal
 
-Every [pptx.gallery](https://pptx.gallery) dimension stays faithful end to end,
-for developers everywhere. Whatever a developer switches among layouts, color
-schemes, font schemes, languages, backgrounds, narratives, charts, themes,
-audiences, tones, socials, headers/footers, content blocks and image
-treatments:
+The owner's goal (2026-09-23), verbatim:
 
-1. the browser preview updates to match;
-2. the exported PPTX opens and saves in PowerPoint; and
-3. the exported PPTX contains **only the fonts the developer chose**, including
-   theme, master, bullet, chart and notes parts and the East Asian and
-   complex-script slots used by non-Latin languages, so PowerPoint can embed
-   exactly those fonts.
+> "Every pptx.gallery configuration is PERFECTLY supported in rendering and PPTX output: for all 14 dimensions (charts limited to Aspose.Slides-supported chart types), the preview and the exported PPTX agree element by element (geometry within existing tolerances, text/runs, fonts in every script slot, colors, fills, backgrounds, images, z-order), the PPTX uses native PowerPoint constructs and re-imports cleanly, and a bounded native PowerPoint sample confirms it — identically for TypeScript developers on Windows/macOS/Linux, local, cloud/serverless without system fonts, and browser. Licensed fonts render with shipped open replacements while the PPTX references the real font name without embedding; one shared default font scheme (aptos). pptx.gallery is a first-class OPF catalog (spec URLs serve schema-valid records; core bundles a pinned, drift-checked snapshot) and shows measured support badges. Progress = count of gallery items passing the parity audit; tracked in docs/programs/font-fidelity-everywhere. Invariants: no gate relaxation, no in-place native retries, root alone owns Office, no publish/deploy, native p:hf deferred."
 
-This holds identically for TypeScript consumers on Windows, macOS and Linux,
-locally, in cloud or serverless containers without system fonts, and in the
-browser. Export output never depends on host-installed fonts, OS, locale or
-timezone.
+Restated:
+
+- **Scope.** Every configuration of the 14 [pptx.gallery](https://pptx.gallery)
+  dimensions: layouts, color schemes, font schemes, languages, backgrounds,
+  narratives, charts, themes, audiences, tones, socials, headers/footers,
+  content blocks and image treatments. Charts are limited to the chart types
+  Aspose.Slides supports (FF-22).
+- **Parity.** The preview and the exported PPTX agree element by element:
+  - geometry within the existing tolerances (native 0.02 pt, renderer 0.1
+    reference px);
+  - text and runs;
+  - fonts in every script slot (Latin, East Asian, complex script);
+  - colours, fills, backgrounds, images and z-order.
+- **Native PPTX.** The export uses native PowerPoint constructs (for example
+  theme colours, fields, pictures, pattern and picture fills) and re-imports
+  cleanly: values are retained or a specific diagnostic is emitted.
+- **Native confirmation.** A bounded native PowerPoint sample confirms parity
+  and fonts (FF-12).
+- **Everywhere.** The result is identical for TypeScript developers on
+  Windows, macOS and Linux, locally, in cloud or serverless containers without
+  system fonts, and in the browser. Export output never depends on
+  host-installed fonts, OS, locale or timezone (FF-10, FF-11).
+- **Fonts.**
+  - Licensed (proprietary) fonts are never bundled or embedded. They render
+    with shipped open replacements, and the PPTX references the real font
+    name.
+  - Open fonts are bundled. They may be embedded only through the explicit
+    FF-13 embed path.
+  - One shared default font scheme, `aptos` (FF-31, FF-35).
+- **Catalog.** pptx.gallery is a first-class OPF catalog: spec URLs serve
+  schema-valid records, and core bundles a pinned, drift-checked snapshot
+  (FF-37). Each gallery item shows its measured support badge (FF-36).
+- **Progress.** The headline metric is the number of gallery items that pass
+  the parity audit (FF-38), divided by the total. It is tracked in
+  [burndown.md](burndown.md). The parity baseline is 0 of 900 perfect
+  (2026-09-23). The FF-23 presence audit baseline is 7 of 793 `works`.
 
 Carlito is only the openly licensed test stand-in for Calibri-class fonts. It
 is not the goal; any chosen font must behave the same way.
+
+The [gallery support table](gallery-support.md) (FF-23) records what the
+preview, the export and re-import do today for every gallery value. It is the
+per-dimension view of the gaps. Its
+[parity scoreboard](gallery-support.md#parity-scoreboard) (FF-38) is the
+progress metric.
 
 ## Definition of done
 
 The program is done when every burndown item is `done` with its evidence
 linked, and specifically:
 
-1. **Root cause.** The origin of the unexpected `Aptos` reported by PowerPoint
-   for a Carlito-only deck is determined by reviewed native evidence, and fixed
-   at the exporter/theme layer rather than per document.
-2. **Offline matrix.** A pairwise matrix sampling all 14 gallery dimensions
-   proves exported typefaces equal the chosen fonts and previews re-render. It
-   runs in CI on ubuntu, windows and macos through a packed TypeScript
-   consumer.
-3. **Native sample.** A bounded PowerPoint sample of that matrix, including CJK
-   and right-to-left languages, opens read-only and reports only the chosen
-   fonts. One font-embed attempt from merged main is audited, pass or fail.
-4. **Published.** Evidence bundles, [compatibility matrix](../../compatibility-matrix.md)
-   and handoff are merged.
+1. **Parity scoreboard.** On the final merged heads, the FF-38 parity audit
+   passes for every gallery item (perfect items equal the total). Charts are
+   counted over the Aspose.Slides-supported set. FF-38 defines "perfect" and
+   applies it to every value, including the authoring-only dimensions (tones,
+   audiences, and narratives in their authoring role). Every gap in the [support table](gallery-support.md)
+   is fixed or carries a recorded owner decision.
+2. **Every environment.** The parity audit, or its FF-09 pairwise subset, runs
+   in CI on ubuntu, windows and macos through a packed TypeScript consumer. It
+   includes runs with no system fonts and in the browser (FF-09, FF-10, FF-11).
+3. **Native confirmation.** A bounded PowerPoint sample, including CJK and
+   right-to-left languages, opens read-only and confirms the chosen font names
+   and parity (FF-12). The origin of the unexpected `Aptos` is determined by
+   reviewed native evidence and fixed at the exporter/theme layer (FF-04,
+   FF-05). The FF-13 embed attempt is audited, pass or fail.
+4. **Font policy.** A policy table in core covers every scheme font:
+   - Licensed (proprietary) fonts are never bundled or embedded. They render
+     through shipped open replacements, and the PPTX keeps the real names.
+   - Open fonts are bundled. They may be embedded only through the explicit
+     FF-13 embed path.
+   - `aptos` is the default everywhere (FF-31, FF-35).
+5. **Catalog and badges.** pptx.gallery is a first-class OPF catalog (FF-37),
+   and its items show measured support badges (FF-36). Nothing is deployed in
+   this program.
+6. **Published.** Evidence bundles, the
+   [compatibility matrix](../../compatibility-matrix.md) and the handoff are
+   merged (FF-14).
+
+## Decisions
+
+- 2026-09-23 (owner): the goal above replaces the earlier font-only goal. The
+  program measures progress as gallery items that pass the parity audit
+  (FF-38).
+- 2026-09-23 (owner): one shared default font scheme, `aptos`, for every
+  engine, so preview equals export (option A). Tracked as FF-35.
+- 2026-09-23 (owner): font policy. Licensed (proprietary) fonts are never
+  bundled or embedded; they render with shipped open replacements, and the
+  PPTX references the real font name. Open fonts are bundled, and they may be
+  embedded only through the explicit FF-13 embed path. Tracked as FF-31.
+- 2026-09-23 (owner): pptx.gallery is a first-class OPF catalog. Tracked as
+  FF-37.
+- 2026-09-23 (owner): each pptx.gallery item shows its measured support status
+  from the audit results. Tracked as FF-36; nothing is deployed in this
+  program.
+- 2026-09-23 (owner): charts are reduced to the chart types Aspose.Slides
+  documents as supported. Tracked as FF-22.
 
 ## Scope
 
@@ -53,9 +115,18 @@ linked, and specifically:
 | opf-pptx export, importer compatibility, native harnesses | Native PowerPoint header/footer objects (`p:hf`); OPF furniture export is in scope |
 | opf-render preview font resolution and re-render checks | Deferred geometry drafts (core94, PPTX42, renderer27, editor25) |
 | opf-editor switch operations and preview refresh | Archived shaping work |
+| pptx.gallery data, snippet builders, catalog records and support badges (FF-22, FF-28, FF-33, FF-36, FF-37) | Deploying pptx.gallery |
 
-pptx.gallery, pptx-dev and openpresentation-site only consume released
-packages; they change after a release that includes this work.
+pptx.gallery otherwise consumes released packages. pptx-dev and
+openpresentation-site only consume released packages; they change after a
+release that includes this work.
+
+**Release dependency.** A perfect, badge-accurate *live* pptx.gallery needs
+published packages, and publishing belongs to a release owner. Nothing is
+published in this program. The in-program proof is therefore the FF-38 parity
+audit on merged heads, together with the FF-36 badge data derived from it.
+FF-15 delivers release-readiness notes for each checkpoint, listing what a
+release would ship and what the live gallery would then show.
 
 ## Invariants
 
@@ -68,6 +139,10 @@ packages; they change after a release that includes this work.
   `Application.Quit`, close unrelated presentations, change Office security, or
   retry a native attempt in place; a new attempt uses a fresh directory.
 - Preserve failures as evidence. Font programs are never committed.
+- No package publication or deploy (packages, pptx.gallery, site) from this
+  program.
+- Native PowerPoint `p:hf` stays deferred; headers and footers are OPF
+  furniture.
 - Keep source, packed and registry claims separate, and schema support separate
   from renderer/editor/export fidelity.
 
@@ -113,5 +188,7 @@ PRs. A separate reviewer agent reviews each PR.
 
 - [Windows native handoff](../../handoff-windows-native-2026-09-21-wrap-up.md)
 - [Font fidelity](../../font-fidelity.md)
+- [pptx.gallery support by dimension](gallery-support.md) and its
+  [reproducible audit](gallery-support/README.md)
 - Evidence: [mixed-size edit](../../evidence/windows-native-mixed-edit-20260922/README.md),
   [first font-embed attempt](../../evidence/windows-native-font-embed-20260922/README.md)
