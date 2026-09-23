@@ -1,6 +1,6 @@
 import {tableRowBoundaries} from './table.js';
 import { catalogs } from "./catalogs.js";
-import { DEFAULT_FONT_SCHEME, resolveFontFamilies, resolveCanvasDimensions, composeSlide, type ComposeSlideOptions, type LayoutDiagnostic, type TextMeasurement } from './composition.js';
+import { DEFAULT_FONT_SCHEME, resolveFontFamilies, resolveFontSchemeReference, type FontSchemeDiagnostic, resolveCanvasDimensions, composeSlide, type ComposeSlideOptions, type LayoutDiagnostic, type TextMeasurement } from './composition.js';
 import { visitContentPayloads } from './content-walk.js';
 import { assertValidPresentation } from './validator.js';
 
@@ -242,6 +242,8 @@ export interface PresentationPaginationOptions {
   maxSlides?: number;
   /** Optional host-resolved layout/canvas overrides for each source slide. */
   slideOptions?: (slide: Record<string, any>, index: number) => ComposeSlideOptions;
+  /** Receives `unresolved-font-scheme` once per reference path when a font-scheme id matches no record. */
+  onDiagnostic?: (diagnostic: FontSchemeDiagnostic) => void;
 }
 export interface PresentationPaginationResult {
   presentation: Record<string, any>;
@@ -259,6 +261,7 @@ export function paginatePresentation(input: unknown, options: PresentationPagina
   // generated continuation id can never collide with one an author chose.
   const reservedIds: string[] = presentation.slides.flatMap((slide: Record<string,unknown>)=>slideIds(slide));
   const resolve = (kind: 'layouts' | 'themes' | 'fontSchemes', id: string) => presentation.catalogs?.[kind]?.records?.find((record: any)=>record.id===id) ?? catalogs[kind].find(record=>record.id===id);
+  const reported = new Set<string>();
   presentation.slides.forEach((slide: Record<string,any>, index: number) => {
     const overrides = options.slideOptions?.(slide,index) ?? {};
     const layout = overrides.layout ?? (slide.layout ? resolve('layouts',slide.layout) : undefined);
@@ -269,7 +272,9 @@ export function paginatePresentation(input: unknown, options: PresentationPagina
     if (!theme) throw new OPFPaginationError(`Theme '${reference}' must be supplied inline before pagination.`);
     if (output.length>=maxSlides) throw new OPFPaginationError(`Pagination needs more than ${maxSlides} slides. No partial result was returned.`);
     const fontReference = design.fontScheme ?? theme.fontScheme ?? DEFAULT_FONT_SCHEME;
-    const fontScheme = typeof fontReference === "string" ? resolve("fontSchemes",fontReference) : {...resolve("fontSchemes",fontReference.id),...fontReference};
+    const fontPath = slide.design?.fontScheme !== undefined ? `slides.${index}.design.fontScheme` : presentation.design?.fontScheme !== undefined ? 'design.fontScheme' : slide.design?.theme !== undefined ? `slides.${index}.design.theme` : 'design.theme';
+    const {scheme:fontScheme,diagnostic} = resolveFontSchemeReference(fontReference,id=>resolve('fontSchemes',id),fontPath);
+    if (diagnostic && !reported.has(diagnostic.path)) { reported.add(diagnostic.path); options.onDiagnostic?.(diagnostic); }
     const fonts = resolveFontFamilies(fontScheme);
     const result = paginateSlide(slide,{...resolveCanvasDimensions(design.dimensions ?? theme.dimensions),layout,fonts,contentAlignment:design.contentAlignment,titleAlignment:design.titleAlignment,contentBox:design.contentBox,textMeasurement:options.textMeasurement,textRasterPadding:options.textRasterPadding,...overrides,presentation,slideIndex:index,slideNumber:output.length+1,maxSlides:maxSlides-output.length,minFontSize:options.minFontSize,reservedIds});
     const outputStart = output.length;

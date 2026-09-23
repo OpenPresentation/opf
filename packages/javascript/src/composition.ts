@@ -27,15 +27,47 @@ const FALLBACK_CODE_FAMILY = "Roboto Mono";
 /** Shared last-resort font-scheme id when neither the slide, the deck nor the resolved theme names one.
  * One default for every engine, so preview matches export (font-fidelity-everywhere owner decision). */
 export const DEFAULT_FONT_SCHEME = "aptos";
+/** Heading and body families of the DEFAULT_FONT_SCHEME catalog record. They are inlined so this module
+ * does not load the catalogs; a core test checks them against the record. */
+const DEFAULT_FONT_FAMILIES = { heading: "Aptos Display", body: "Aptos" } as const;
+/** Reported when a font-scheme id matches no inline or bundled record. Every engine then uses the
+ * DEFAULT_FONT_SCHEME record as the base, with any sibling overrides on top. */
+export interface FontSchemeDiagnostic {
+  code: "unresolved-font-scheme";
+  /** Where the unresolved id is written: `slides.N.design.fontScheme`, `design.fontScheme`, or the
+   * `design.theme` reference whose record names it. */
+  path: string;
+  message: string;
+  /** The unresolved font-scheme id. */
+  id: string;
+  /** The font scheme used instead (DEFAULT_FONT_SCHEME). */
+  fallback: string;
+}
+export interface ResolvedFontScheme { scheme: Record<string, unknown>; diagnostic?: FontSchemeDiagnostic }
+/** Resolve a font-scheme reference the same way in every engine. A string id, or the `id` of an object
+ * reference, resolves through `lookup` (inline records, then bundled or host catalogs). An unresolved id
+ * returns a diagnostic, and the DEFAULT_FONT_SCHEME record becomes the base, so preview and export use
+ * the same families. An object without `id` is an inline scheme on the same base. Sibling fields on an
+ * object reference override the base per key. */
+export function resolveFontSchemeReference(reference: unknown, lookup: (id: string) => unknown, path = "design.fontScheme"): ResolvedFontScheme {
+  const overrides = typeof reference === "object" && reference !== null && !Array.isArray(reference) ? reference as Record<string, unknown> : undefined;
+  const id = typeof reference === "string" ? reference : typeof overrides?.id === "string" ? overrides.id : undefined;
+  const found = id === undefined ? undefined : lookup(id);
+  const base = record(found ?? lookup(DEFAULT_FONT_SCHEME));
+  const scheme = overrides ? { ...base, ...overrides } : { ...base };
+  if (id === undefined || found !== undefined) return { scheme };
+  return { scheme, diagnostic: { code: "unresolved-font-scheme", path, id, fallback: DEFAULT_FONT_SCHEME, message: `Font scheme '${id}' is not in the inline or bundled catalogs; using the default font scheme '${DEFAULT_FONT_SCHEME}'.` } };
+}
 /** Resolve role families from an already-merged font scheme (catalog record plus design overrides).
+ * A scheme that names no heading or body family gets the DEFAULT_FONT_SCHEME families (Aptos Display, Aptos).
  * `code` comes from the scheme's `code` role, which catalog records such as consolas and courier-new
  * carry; otherwise it is Roboto Mono. Heading and body families are never reused for code. */
 export function resolveFontFamilies(input: unknown): FontFamilies {
   const scheme = record(input);
   const family = (value: unknown) => typeof value === "string" ? value : record(value).family;
   return {
-    heading: family(scheme.heading) ?? scheme.major ?? scheme.minor ?? "Roboto",
-    body: family(scheme.body) ?? scheme.minor ?? scheme.major ?? "Roboto",
+    heading: family(scheme.heading) ?? scheme.major ?? scheme.minor ?? DEFAULT_FONT_FAMILIES.heading,
+    body: family(scheme.body) ?? scheme.minor ?? scheme.major ?? DEFAULT_FONT_FAMILIES.body,
     code: family(scheme.code) ?? FALLBACK_CODE_FAMILY,
   };
 }
