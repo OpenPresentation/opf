@@ -6,7 +6,7 @@ import {createRequire} from 'node:module';
 import os from 'node:os';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {strToU8, zipSync} from 'fflate';
+import {strFromU8, strToU8, unzipSync, zipSync} from 'fflate';
 import {
   auditCanonicalFixtureManifest,
   auditEmbedVerifierSource,
@@ -75,12 +75,25 @@ record('canonical-manifest-negatives');
   const {toPptx} = await import('../src/index.js');
   const inspect = bytes => requireCarlitoBullets => carlitoOnlyTypefaceFailures(typefaceInventory(bytes), themeFontSlots(bytes), {requireCarlitoBullets});
   const carlitoBytes = await toPptx(carlitoOnlySource(), {strictAssets: true});
-  const pure = inspect(carlitoBytes)(false);
+  // Current exporter source: master bullets follow the theme minor font (+mn-lt),
+  // so the Carlito-only fixture passes strictly with no harness transform.
+  const current = inspect(carlitoBytes)(true);
+  assert.deepEqual(current.failures, [], JSON.stringify(current.failures));
+  assert.ok(current.residual.every(item => item.code === 'theme-script-supplement'));
+  assert.ok(typefaceInventory(carlitoBytes).some(row => row.element === 'a:buFont' && row.typeface === '+mn-lt' && row.occurrences === 9));
+  assert.throws(() => applyMasterBulletFontTransform(carlitoBytes), /Expected 9 Arial master bullet fonts, found 0/);
+  // Published exporters up to 0.9.1 (the registry consumer used by the fixture generator)
+  // still write the vendored Arial master bullets. Rebuild those bytes to keep the harness
+  // transform covered until the pinned consumer includes the exporter fix.
+  const legacyEntries = unzipSync(new Uint8Array(carlitoBytes)), masterPart = MASTER_BULLET_FONT_TRANSFORM.part;
+  legacyEntries[masterPart] = strToU8(strFromU8(legacyEntries[masterPart]).split('<a:buFont typeface="+mn-lt"/>').join(MASTER_BULLET_FONT_TRANSFORM.from));
+  const legacyBytes = zipSync(legacyEntries);
+  const pure = inspect(legacyBytes)(false);
   assert.deepEqual(pure.failures, [], JSON.stringify(pure.failures));
   assert.ok(pure.residual.some(item => item.code === 'non-carlito-bullet-font' && item.row.typeface === 'Arial'), 'Expected the documented Arial master bullet residual');
   assert.ok(pure.residual.every(item => ['non-carlito-bullet-font', 'theme-script-supplement'].includes(item.code)));
-  assert.ok(inspect(carlitoBytes)(true).failures.some(item => item.code === 'non-carlito-bullet-font'));
-  const transformed = applyMasterBulletFontTransform(carlitoBytes);
+  assert.ok(inspect(legacyBytes)(true).failures.some(item => item.code === 'non-carlito-bullet-font'));
+  const transformed = applyMasterBulletFontTransform(legacyBytes);
   assert.equal(transformed.replacements, MASTER_BULLET_FONT_TRANSFORM.expectedCount);
   const strict = inspect(transformed.bytes)(true);
   assert.deepEqual(strict.failures, [], JSON.stringify(strict.failures));

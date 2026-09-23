@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Make the slide master's nine `bodyStyle` bullet fonts follow the theme minor (body) font (`<a:buFont typeface="+mn-lt"/>`). Previously they used the Arial hard-coded in the vendored PptxGenJS master, so a Carlito-only `design.fontScheme` still shipped Arial bullets. The rewrite happens during package normalization, and the vendored bytes are unchanged. Every exported deck's `ppt/slideMasters/slideMaster1.xml` changes in those nine elements. Explicit slide list-marker fonts are unchanged.
+
 ## 0.9.1
 
 - Raise the optional `@openpresentation/opf-render` peer to `^0.9.0` so a packed install of editor 0.8.0 + render 0.9.0 + pptx 0.9.1 resolves. Keep `@openpresentation/opf` at `^0.11.0`. No conversion-behavior change.

@@ -1851,6 +1851,7 @@ function normalizePartBytes(path, bytes, context, renameMaps, entries, imageMeta
         `<Override PartName="/${part}" ContentType="${metadata.mediaType}"/>`).join('');
       xml = xml.replace('</Types>', `${overrides}</Types>`);
     }
+    if (/^ppt\/slideMasters\/slideMaster\d+\.xml$/.test(path)) xml = themeMasterBulletFonts(xml);
     if (/^ppt\/slides\/slide\d+\.xml$/.test(path)) {
       const fill = context.backgroundFills.get(path);
       if (fill) xml = xml.replace(/<p:bg>[\s\S]*?<\/p:bg>/, `<p:bg><p:bgPr>${fill}<a:effectLst/></p:bgPr></p:bg>`);
@@ -1962,6 +1963,19 @@ function normalizePartBytes(path, bytes, context, renameMaps, entries, imageMeta
     return encodeText(normalizePartReferences(xml, renameMaps));
   }
   return bytes;
+}
+
+// The vendored PptxGenJS 4.0.1 master hard-codes Arial as the bullet font on
+// all nine bodyStyle levels, while each level's text already uses +mn-lt.
+// Point those bullets at the same theme minor (body) font so a document's
+// fontScheme also governs master bullets. a:buFont is CT_TextFont, like
+// a:latin, so the theme reference is schema-valid. Slide list markers keep
+// their explicit per-shape buFont; only the master bodyStyle is touched.
+const VENDOR_MASTER_BULLET_FONT = '<a:buFont typeface="Arial" pitchFamily="34" charset="0"/>';
+const THEME_MINOR_BULLET_FONT = '<a:buFont typeface="+mn-lt"/>';
+function themeMasterBulletFonts(xml) {
+  return xml.replace(/<p:bodyStyle>[\s\S]*?<\/p:bodyStyle>/, bodyStyle =>
+    bodyStyle.split(VENDOR_MASTER_BULLET_FONT).join(THEME_MINOR_BULLET_FONT));
 }
 
 function isXmlPart(path) {
