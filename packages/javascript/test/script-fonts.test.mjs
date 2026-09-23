@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {describe, test} from 'node:test';
-import {fontSchemes, languages, resolveScriptFonts, scriptFontRole, validatePresentation} from '../dist/index.js';
+import {DEFAULT_FONT_SCHEME, fontSchemes, languages, resolveScriptFonts, scriptFontRole, validatePresentation} from '../dist/index.js';
 
 // Fixtures choose openly licensed families (Carlito for the Calibri class,
 // Noto for CJK, Arabic, Hebrew, Devanagari and Thai). The resolver only
@@ -284,9 +284,11 @@ describe('precedence', () => {
 
   test('defaultFontScheme applies only when no slide, deck or theme scheme is named', () => {
     const customTheme = {slides: [{title: 'Custom theme'}], design: {theme: {name: 'Custom'}}};
-    assert.equal(resolveScriptFonts(customTheme).body.latin, 'Roboto');
-    assert.equal(resolveScriptFonts(customTheme, {defaultFontScheme: 'aptos'}).body.latin, 'Aptos');
-    assert.equal(resolveScriptFonts(deck('english'), {defaultFontScheme: 'aptos'}).body.latin, 'Carlito');
+    assert.equal(DEFAULT_FONT_SCHEME, 'aptos');
+    assert.deepEqual(resolveScriptFonts(customTheme).heading, same('Aptos Display'), 'the shared default applies');
+    assert.equal(resolveScriptFonts(customTheme).body.latin, 'Aptos');
+    assert.equal(resolveScriptFonts(customTheme, {defaultFontScheme: 'roboto'}).body.latin, 'Roboto');
+    assert.equal(resolveScriptFonts(deck('english'), {defaultFontScheme: 'roboto'}).body.latin, 'Carlito');
   });
 
   test('options.language replaces the document language', () => {

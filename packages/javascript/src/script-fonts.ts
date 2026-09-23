@@ -1,4 +1,4 @@
-import { resolveFontFamilies } from "./composition.js";
+import { DEFAULT_FONT_SCHEME, resolveFontFamilies } from "./composition.js";
 import { isRecord } from "./content-walk.js";
 import { catalogs } from "./generated/catalogs.js";
 
@@ -59,7 +59,7 @@ export interface ResolveScriptFontsOptions {
   language?: unknown;
   /**
    * Last-resort font scheme id when neither the slide, the deck nor the resolved theme names one. Defaults to
-   * `roboto` (core pagination, preview and editor); the PPTX exporter passes `aptos` (see design-resolution.md).
+   * the shared `DEFAULT_FONT_SCHEME` (`aptos`).
    */
   defaultFontScheme?: string;
   /** Language tag used when neither the document nor `options.language` names a resolvable language. Defaults to `en-US`. */
@@ -355,7 +355,7 @@ export function resolveScriptFonts(input: unknown, options: ResolveScriptFontsOp
   }
 
   const theme = resolveReference(lookup, "themes", design.theme ?? "minimal") ?? {};
-  const scheme = resolveReference(lookup, "fontSchemes", design.fontScheme ?? theme.fontScheme ?? text(options.defaultFontScheme) ?? "roboto") ?? {};
+  const scheme = resolveReference(lookup, "fontSchemes", design.fontScheme ?? theme.fontScheme ?? text(options.defaultFontScheme) ?? DEFAULT_FONT_SCHEME) ?? {};
   const latin = resolveFontFamilies(scheme);
 
   const fromOption = options.language !== undefined ? resolveLanguage(document, lookup, options.language) : undefined;

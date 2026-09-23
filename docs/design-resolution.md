@@ -148,6 +148,8 @@ The last-resort font scheme applies only when neither the slide, the deck nor th
 
 This only affects a custom theme without `fontScheme`. That deck is measured and previewed in Roboto but exported with Aptos, so give such themes a `fontScheme` (or set `design.fontScheme`) when preview and export must match. None of the 126 bundled examples reaches the last resort. Exporting all of them with the exporter default switched to `roboto` produced byte-identical PPTX files (FF-17, font-fidelity-everywhere). A core test pins the core side of this table; opf-pptx pins its `aptos` default.
 
+By owner decision, every engine will share one default, `aptos`. Core exports it as `DEFAULT_FONT_SCHEME`, and `resolveScriptFonts()` already uses it. A separate FF-35 change moves pagination, preview and the editor from `roboto` to it; until then the table above describes the current behavior.
+
 ## Color references in content
 
 Content color fields (`TextRun.color`, styled table cell `style.fill` / `style.color`, table cell border `color`) accept references as well as literal hex, and those references resolve through the same chain above:

@@ -76,9 +76,11 @@ this order:
 1. `latin` is the design font scheme's heading/body, exactly as
    `resolveFontFamilies` computes it. The design scheme comes from slide
    design, then deck design, then theme, then `options.defaultFontScheme`. That
-   last resort is `roboto` by default, as in core pagination, preview and the
-   editor. The PPTX exporter passes `aptos`, per FF-17's per-target defaults
-   in `design-resolution.md`.
+   last resort defaults to the shared `DEFAULT_FONT_SCHEME` (`aptos`), which
+   core now exports. By owner decision, one default applies across core
+   pagination, opf-render, opf-editor and opf-pptx, so preview matches export.
+   The resolver uses it already. A separate FF-35 PR wires the other engines,
+   which still use `roboto` for preview and pagination today.
 2. `eastAsian` and `complexScript` each use the first of these that applies:
    1. **`fontScheme`**: an explicit slot on the effective design scheme,
       either the record or the inline override. A missing `major` or `minor`
@@ -250,10 +252,10 @@ All changes are additive:
    Mongolian (Mong) and Tibetan (Tibt) to the FF-12 native sample, next to
    Armenian, Georgian and Amharic, to confirm how PowerPoint assigns their
    slots.
-3. **Default language.** Keep `en-US`. FF-17 (opf#120) documented the
-   per-target last-resort font schemes (`aptos` for export, `roboto` for
-   pagination, preview and the editor). The resolver follows them through
-   `defaultFontScheme`. Reconciling `engine-defaults.json` (`english`, `en`)
+3. **Default language and font scheme.** Keep `en-US`. The owner chose one
+   shared default font scheme, `aptos` (`DEFAULT_FONT_SCHEME`), for every
+   engine. The resolver defaults to it, and FF-35 wires pagination, the
+   renderer and the editor to it. Reconciling `engine-defaults.json` (`english`, `en`)
    with `en-US` remains an FF-17 follow-up.
 4. **Filled `ea`/`cs` in Latin decks.** The resolver reports the chosen
    heading/body family for these slots. FF-07 keeps writing them gated on

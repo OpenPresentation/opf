@@ -79,7 +79,7 @@ export type {
   SpecFileKind,
 } from "./spec-files.js";
 
-export { composeSlide, resolveCanvasDimensions, fitText, wrapText, measureText, resolveFontFamilies, resolveTextStyle, textWidthMeasurer, layoutQuote, OPFCompositionError, MAX_COMPOSITION_DEPTH } from "./composition.js";
+export { composeSlide, resolveCanvasDimensions, fitText, wrapText, measureText, resolveFontFamilies, DEFAULT_FONT_SCHEME, resolveTextStyle, textWidthMeasurer, layoutQuote, OPFCompositionError, MAX_COMPOSITION_DEPTH } from "./composition.js";
 export {layoutFurniture,type FurnitureLayout,type FurniturePart,type FurnitureTextPart,type FurnitureImagePart,type FurniturePartBase} from './composition.js';
 export type { QuoteContent, QuoteTextSource, QuoteTextPart, QuoteLayoutDiagnostic, QuoteLayout, QuoteLayoutOptions } from './composition.js';
 export {layoutCode} from './composition.js';
