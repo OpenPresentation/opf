@@ -1,0 +1,163 @@
+# Non-blocking platform residual report (font-fidelity-everywhere FF-21, tracking #24).
+# This workflow measures and reports only. Every job is continue-on-error, it is separate
+# from ci.yml, and it changes no gate, tolerance or golden. Residuals are expected until #24
+# defines a supported geometry contract.
+name: Platform residual (non-blocking)
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: platform-residual-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+env:
+  # Archived renderer checkpoint named in #24; only its hashed Source Serif 4 fixtures are read.
+  ARCHIVE_RENDERER_SHA: 343fb84223f4383ffe546157c6989ccc505c0acb
+jobs:
+  measure:
+    name: measure (${{ matrix.platform }})
+    continue-on-error: true
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: linux
+            os: ubuntu-latest
+            # Same pinned image as ci.yml so the Linux leg matches the blocking browser checks.
+            container: mcr.microsoft.com/playwright:v1.63.0-noble@sha256:eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27
+          - platform: macos
+            os: macos-latest
+            container: ''
+    runs-on: ${{ matrix.os }}
+    container: ${{ matrix.container }}
+    timeout-minutes: 25
+    defaults:
+      run:
+        working-directory: opf-render
+    env:
+      REPORT_DIR: artifacts/platform-residual/${{ matrix.platform }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          path: opf-render
+      - name: Check out archived #24 font fixtures
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ env.ARCHIVE_RENDERER_SHA }}
+          path: archive
+          persist-credentials: false
+          sparse-checkout: test/fixtures/font-formats/source-serif
+          sparse-checkout-cone-mode: true
+      # Reuse the exact core commit ci.yml pins so test:browser (rich tabs) sees the same core.
+      - name: Read pinned core SHA from ci.yml
+        id: core
+        run: |
+          sha=$(awk '/repository: OpenPresentation\/opf$/{getline; sub(/.*ref: */,""); print; exit}' .github/workflows/ci.yml)
+          echo "$sha" | grep -Eq '^[0-9a-f]{40}$' || { echo "::error::Could not read pinned core SHA from ci.yml"; exit 1; }
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: OpenPresentation/opf
+          ref: ${{ steps.core.outputs.sha }}
+          path: opf
+          persist-credentials: false
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+        with:
+          version: 10.33.2
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: opf-render/package-lock.json
+      - run: npm ci
+      # Link only the renderer to the pinned core source (ci.yml links all siblings via
+      # link-ecosystem; the pptx/editor checkouts are not needed for renderer checks).
+      - name: Build and link pinned core
+        id: link
+        continue-on-error: true
+        run: |
+          pnpm --dir ../opf install --frozen-lockfile
+          pnpm --dir ../opf build
+          rm -rf node_modules/@openpresentation/opf
+          ln -s "$(cd ../opf/packages/javascript && pwd)" node_modules/@openpresentation/opf
+          node -e "import('@openpresentation/opf').then(()=>console.log('linked pinned core source'))"
+      - run: npm run build
+      - name: Verify Playwright version
+        run: node -e "if (require('playwright/package.json').version !== '1.63.0') throw new Error('Update the pinned Playwright version with the test package.');"
+      - name: Install Chromium (macOS)
+        if: runner.os == 'macOS'
+        run: npx playwright install chromium
+      - id: variants
+        continue-on-error: true
+        run: node test/font-variants-browser.mjs "$REPORT_DIR/font-variants-browser.json"
+      - id: preparation
+        continue-on-error: true
+        run: node test/font-preparation-browser.mjs "$REPORT_DIR/font-preparation-browser.json"
+      - id: browser
+        continue-on-error: true
+        run: npm run test:browser
+      - id: probe
+        continue-on-error: true
+        run: node test/platform-residual-probe.mjs ../archive/test/fixtures/font-formats "$REPORT_DIR/issue24-probe.json"
+      - name: Record suite outcomes and summarize
+        if: always()
+        env:
+          PLATFORM: ${{ matrix.platform }}
+          VARIANTS: ${{ steps.variants.outcome }}
+          PREPARATION: ${{ steps.preparation.outcome }}
+          BROWSER: ${{ steps.browser.outcome }}
+          PROBE: ${{ steps.probe.outcome }}
+          LINK: ${{ steps.link.outcome }}
+        run: |
+          mkdir -p "$REPORT_DIR"
+          node -e "require('fs').writeFileSync(process.argv[1],JSON.stringify({platform:process.env.PLATFORM,'core-link':process.env.LINK,'font-variants-browser':process.env.VARIANTS,'font-preparation-browser':process.env.PREPARATION,'test:browser':process.env.BROWSER,'issue24-probe':process.env.PROBE},null,2)+'\n')" "$REPORT_DIR/outcomes.json"
+          node scripts/platform-residual-summary.mjs "$REPORT_DIR/summary.md" "$REPORT_DIR/summary.json" "$REPORT_DIR" >/dev/null
+          cat "$REPORT_DIR/summary.md" >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload residual report
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: platform-residual-${{ matrix.platform }}
+          path: opf-render/artifacts/platform-residual/${{ matrix.platform }}/**
+          retention-days: 30
+          if-no-files-found: warn
+  compare:
+    name: compare (linux vs macos)
+    needs: measure
+    if: always()
+    continue-on-error: true
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          sparse-checkout: scripts
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          pattern: platform-residual-*
+          path: reports
+      - name: Summarize Linux vs macOS residual
+        run: |
+          dirs=""
+          for platform in linux macos; do
+            if [ -d "reports/platform-residual-$platform" ]; then dirs="$dirs reports/platform-residual-$platform"; else echo "::warning::No $platform residual report"; fi
+          done
+          if [ -z "$dirs" ]; then echo "No residual reports to compare" >> "$GITHUB_STEP_SUMMARY"; exit 0; fi
+          node scripts/platform-residual-summary.mjs comparison/summary.md comparison/summary.json $dirs >/dev/null
+          cat comparison/summary.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload comparison
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: platform-residual-comparison
+          path: comparison/**
+          retention-days: 30
+          if-no-files-found: warn
