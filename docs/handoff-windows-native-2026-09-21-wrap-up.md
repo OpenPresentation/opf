@@ -6,6 +6,48 @@ evidence. Verification uses Node **24.21.0** and core's declared pnpm
 **10.33.2**. Historical Node20 instructions are superseded. Raw local attempts
 remain preserved; public evidence is linked below.
 
+## September 22 native mixed-edit checkpoint
+
+The bounded mixed-size table edit/save/reopen proof now has an accepted native
+result. Evidence is in
+[windows-native-mixed-edit-20260922](evidence/windows-native-mixed-edit-20260922/README.md).
+Both attempts used fresh output directories, Node 24.21.0, Windows PowerShell 5.1,
+PowerPoint 16.0.20326.20158, source SHA-256
+`f92c5d5565afa1d03fc6df0cdc8d482771d5ebd5a5403f7a888f75e2ad020a51`, the four
+canonical Carlito faces and registration flags `0`. Each ran once, completed its
+owned Office and font lifecycle, and left PowerPoint with no open presentation or
+dialog. Neither attempt was retried in place.
+
+- **Attempt 01 failed its audit and is preserved as a failure** (harness from
+  PPTX54 merge `86afe6c`). PowerShell coerced the `[string]` stage error parameter
+  `$null` to `''`, so all 1,496 stages recorded `"error":""`. The harness's
+  post-edit reassignment of `Font.Name/Size/Bold/Italic` also wrote explicit
+  `i="0"`/`b="0"`, which made the whole-cell `Font.Italic` tri-state read `-2` in
+  both the edited and reopened phases. Every run, every probe and the saved XML
+  were non-italic.
+- [PPTX55](https://github.com/OpenPresentation/opf-pptx/pull/55) (head
+  `0f3a3da6402261610b49774cff5da37716575ece`) makes both stage writers emit JSON
+  `null`, adds pure-regression assertions for that, and changes the edit to
+  replace text only. Audit gates are unchanged. Linux and Windows CI passed and an
+  independent review approved it. Merge receipt: pending at this checkpoint; this session's auto-mode classifier refused agent merges, so the owner merges it or grants `gh pr merge`.
+- **Attempt 02 passed** (worker 4.4 s, 5.9 s preflight to supervisor) the independent audit with 0 failures. Content, five-run
+  and seven-probe styles, and whole-cell Carlito/18/bold `-2`/italic `0` all held
+  in the original, edited and reopened phases. Outer geometry was
+  43.2/43.2/873.6/118.8 within float precision. Native lines were
+  `[0,92) [92,194) [194,245)` in all three phases. The saved and reopened package
+  hashes match, and the source was unchanged. The root reviewed the reopened
+  full-slide PNG and found no clipping.
+
+This accepts one finite native edit/save/reopen of this table. The estimated
+preview's `[0,78) [78,172) [172,245)` still differs from native. Preview/native
+parity, general mixed-table layout, font embedding and per-glyph font identity
+remain unaccepted.
+
+Font embedding is next. The Gate E fixture's slide runs and theme major/minor
+fonts are `Aptos Display`/`Aptos`, so the pre-SaveAs allowlist would reject it
+before any save. A Carlito-only fixture is being prepared offline. The embed
+attempt runs only after that fixture's PR is reviewed and its CI passes.
+
 ## September 22 checkpoint
 
 The continuation hardened native harnesses and their offline controls. No Office call or font API ran,
@@ -178,9 +220,11 @@ Use Node24, Windows PowerShell 5.1 and each repository's declared package
 manager. Preserve dirty work, original failures and the separate registry
 consumer.
 
-The next native proof is the bounded mixed-table edit/save/reopen harness. Only
-after that result is preserved and reviewed should the bounded font-embedding
-gate run. Use fresh output directories and the reviewed mixed source SHA-256
+The bounded mixed-table edit/save/reopen proof passed on September 22 (see the
+native mixed-edit checkpoint above). The next native proof is the bounded
+font-embedding gate, and only with a reviewed Carlito-only fixture: the Gate E
+fixture uses Aptos in its slide runs and theme fonts and would be rejected
+before `SaveAs`. Use fresh output directories and the reviewed mixed source SHA-256
 `f92c5d5565afa1d03fc6df0cdc8d482771d5ebd5a5403f7a888f75e2ad020a51`.
 Both harnesses require the four canonical Carlito face hashes and numeric
 registration flags `0`. Mixed-edit uses `SaveAs(..., 24, 0)` and requires content,

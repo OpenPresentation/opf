@@ -1,0 +1,237 @@
+﻿{
+    "source":  {
+                   "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-mixed-edit-20260922\\sources\\opf\\docs\\evidence\\windows-native-mixed-table-20260921\\native-run\\inputs\\table-fixture\\source.pptx",
+                   "sha256":  "f92c5d5565afa1d03fc6df0cdc8d482771d5ebd5a5403f7a888f75e2ad020a51",
+                   "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-mixed-edit-20260922\\native-mixed-edit-02\\inputs\\source.pptx",
+                   "snapshotSha256":  "f92c5d5565afa1d03fc6df0cdc8d482771d5ebd5a5403f7a888f75e2ad020a51"
+               },
+    "verifier":  {
+                     "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-mixed-edit-20260922\\sources\\opf-pptx\\test\\native-mixed-edit.ps1",
+                     "sha256":  "70196174b4b2b7135f07c95b66399089eed7dea78d485c1de1b78dde2642485c",
+                     "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-mixed-edit-20260922\\native-mixed-edit-02\\inputs\\native-mixed-edit.ps1",
+                     "snapshotSha256":  "70196174b4b2b7135f07c95b66399089eed7dea78d485c1de1b78dde2642485c"
+                 },
+    "processHelper":  {
+                          "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-mixed-edit-20260922\\sources\\opf-pptx\\test\\native-process.ps1",
+                          "sha256":  "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+                          "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-mixed-edit-20260922\\native-mixed-edit-02\\inputs\\native-process.ps1",
+                          "snapshotSha256":  "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+                      },
+    "fontHelper":  {
+                       "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-mixed-edit-20260922\\sources\\opf-pptx\\test\\native-text-fonts.ps1",
+                       "sha256":  "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6",
+                       "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-mixed-edit-20260922\\native-mixed-edit-02\\inputs\\native-text-fonts.ps1",
+                       "snapshotSha256":  "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6",
+                       "registrationFlags":  0
+                   },
+    "expectations":  {
+                         "tolerancePoints":  0.02,
+                         "outerGeometryPt":  {
+                                                 "slideWidth":  960,
+                                                 "slideHeight":  540,
+                                                 "left":  43.2,
+                                                 "top":  43.2,
+                                                 "width":  873.6,
+                                                 "height":  118.8,
+                                                 "rowHeight":  118.8,
+                                                 "columnWidth":  873.6
+                                             },
+                         "previewLineBreakLimit":  {
+                                                       "failsHarness":  false,
+                                                       "knownReadOnlyNativeIntervals":  [
+                                                                                            [
+                                                                                                0,
+                                                                                                92
+                                                                                            ],
+                                                                                            [
+                                                                                                92,
+                                                                                                194
+                                                                                            ],
+                                                                                            [
+                                                                                                194,
+                                                                                                245
+                                                                                            ]
+                                                                                        ],
+                                                       "estimatedPreviewIntervals":  [
+                                                                                         [
+                                                                                             0,
+                                                                                             78
+                                                                                         ],
+                                                                                         [
+                                                                                             78,
+                                                                                             172
+                                                                                         ],
+                                                                                         [
+                                                                                             172,
+                                                                                             245
+                                                                                         ]
+                                                                                     ]
+                                                   },
+                         "original":  {
+                                          "text":  "Lead\tLarge evidence phrase continues in smaller text across the same editable table cell so natural layout must wrap this sentence without authored line breaks or inserted offsets. Second large phrase finishes the control with exact source runs.",
+                                          "length":  245,
+                                          "runs":  [
+                                                       {
+                                                           "start":  1,
+                                                           "length":  5,
+                                                           "text":  "Lead\t",
+                                                           "size":  18,
+                                                           "bold":  false,
+                                                           "italic":  false
+                                                       },
+                                                       {
+                                                           "start":  6,
+                                                           "length":  22,
+                                                           "text":  "Large evidence phrase ",
+                                                           "size":  30,
+                                                           "bold":  true,
+                                                           "italic":  false
+                                                       },
+                                                       {
+                                                           "start":  28,
+                                                           "length":  154,
+                                                           "text":  "continues in smaller text across the same editable table cell so natural layout must wrap this sentence without authored line breaks or inserted offsets. ",
+                                                           "size":  18,
+                                                           "bold":  false,
+                                                           "italic":  false
+                                                       },
+                                                       {
+                                                           "start":  182,
+                                                           "length":  20,
+                                                           "text":  "Second large phrase ",
+                                                           "size":  30,
+                                                           "bold":  false,
+                                                           "italic":  false
+                                                       },
+                                                       {
+                                                           "start":  202,
+                                                           "length":  44,
+                                                           "text":  "finishes the control with exact source runs.",
+                                                           "size":  18,
+                                                           "bold":  false,
+                                                           "italic":  false
+                                                       }
+                                                   ],
+                                          "characterProbes":  [
+                                                                  {
+                                                                      "position":  4,
+                                                                      "text":  "d",
+                                                                      "purpose":  "before-tab"
+                                                                  },
+                                                                  {
+                                                                      "position":  5,
+                                                                      "text":  "\t",
+                                                                      "purpose":  "tab"
+                                                                  },
+                                                                  {
+                                                                      "position":  6,
+                                                                      "text":  "L",
+                                                                      "purpose":  "after-tab"
+                                                                  },
+                                                                  {
+                                                                      "position":  78,
+                                                                      "text":  " ",
+                                                                      "purpose":  "estimated-line-1-end-probe-only"
+                                                                  },
+                                                                  {
+                                                                      "position":  79,
+                                                                      "text":  "t",
+                                                                      "purpose":  "estimated-line-2-start-probe-only"
+                                                                  },
+                                                                  {
+                                                                      "position":  172,
+                                                                      "text":  " ",
+                                                                      "purpose":  "estimated-line-2-end-probe-only"
+                                                                  },
+                                                                  {
+                                                                      "position":  173,
+                                                                      "text":  "o",
+                                                                      "purpose":  "estimated-line-3-start-probe-only"
+                                                                  }
+                                                              ]
+                                      },
+                         "edited":  {
+                                        "text":  "Lead\tLarge evidence phrase continues in smaller text across the same editable table cell so natural layout must wrap this sentence without authored line breaks or inserted offsets. Second large phrase finishes the control with saved source runs.",
+                                        "length":  245,
+                                        "runs":  [
+                                                     {
+                                                         "start":  1,
+                                                         "length":  5,
+                                                         "text":  "Lead\t",
+                                                         "size":  18,
+                                                         "bold":  false,
+                                                         "italic":  false
+                                                     },
+                                                     {
+                                                         "start":  6,
+                                                         "length":  22,
+                                                         "text":  "Large evidence phrase ",
+                                                         "size":  30,
+                                                         "bold":  true,
+                                                         "italic":  false
+                                                     },
+                                                     {
+                                                         "start":  28,
+                                                         "length":  154,
+                                                         "text":  "continues in smaller text across the same editable table cell so natural layout must wrap this sentence without authored line breaks or inserted offsets. ",
+                                                         "size":  18,
+                                                         "bold":  false,
+                                                         "italic":  false
+                                                     },
+                                                     {
+                                                         "start":  182,
+                                                         "length":  20,
+                                                         "text":  "Second large phrase ",
+                                                         "size":  30,
+                                                         "bold":  false,
+                                                         "italic":  false
+                                                     },
+                                                     {
+                                                         "start":  202,
+                                                         "length":  44,
+                                                         "text":  "finishes the control with saved source runs.",
+                                                         "size":  18,
+                                                         "bold":  false,
+                                                         "italic":  false
+                                                     }
+                                                 ],
+                                        "characterProbes":  [
+                                                                {
+                                                                    "position":  4,
+                                                                    "text":  "d",
+                                                                    "purpose":  "before-tab"
+                                                                },
+                                                                {
+                                                                    "position":  5,
+                                                                    "text":  "\t",
+                                                                    "purpose":  "tab"
+                                                                },
+                                                                {
+                                                                    "position":  6,
+                                                                    "text":  "L",
+                                                                    "purpose":  "after-tab"
+                                                                },
+                                                                {
+                                                                    "position":  78,
+                                                                    "text":  " ",
+                                                                    "purpose":  "estimated-line-1-end-probe-only"
+                                                                },
+                                                                {
+                                                                    "position":  79,
+                                                                    "text":  "t",
+                                                                    "purpose":  "estimated-line-2-start-probe-only"
+                                                                },
+                                                                {
+                                                                    "position":  172,
+                                                                    "text":  " ",
+                                                                    "purpose":  "estimated-line-2-end-probe-only"
+                                                                },
+                                                                {
+                                                                    "position":  173,
+                                                                    "text":  "o",
+                                                                    "purpose":  "estimated-line-3-start-probe-only"
+                                                                }
+                                                            ]
+                                    }
+                     }
+}
