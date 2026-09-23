@@ -1,6 +1,6 @@
 # Socials: 10 values
 
-Classification: **authoring-metadata** 10
+Classification: **works** 10
 
 Schema-valid 10/10. Catalog id resolves in core 10/10.
 
@@ -12,13 +12,13 @@ Schema-valid 10/10. Catalog id resolves in core 10/10.
 
 | id | valid | catalog | engine effect | reasons | class |
 |---|---|---|---|---|---|
-| linkedin | true | true | organization/speaker socials have no effect on preview or export; handle not rendered | no size/aspect or rendered handle; re-import drops organization/speaker | authoring-metadata |
-| x | true | true | organization/speaker socials have no effect on preview or export; handle not rendered | no size/aspect or rendered handle; re-import drops organization/speaker | authoring-metadata |
-| github | true | true | organization/speaker socials have no effect on preview or export; handle not rendered | no size/aspect or rendered handle; re-import drops organization/speaker | authoring-metadata |
-| youtube | true | true | organization/speaker socials have no effect on preview or export; handle not rendered | no size/aspect or rendered handle; re-import drops organization/speaker | authoring-metadata |
-| instagram | true | true | organization/speaker socials have no effect on preview or export; handle not rendered | no size/aspect or rendered handle; re-import drops organization/speaker | authoring-metadata |
-| facebook | true | true | organization/speaker socials have no effect on preview or export; handle not rendered | no size/aspect or rendered handle; re-import drops organization/speaker | authoring-metadata |
-| tiktok | true | true | organization/speaker socials have no effect on preview or export; handle not rendered | no size/aspect or rendered handle; re-import drops organization/speaker | authoring-metadata |
-| threads | true | true | organization/speaker socials have no effect on preview or export; handle not rendered | no size/aspect or rendered handle; re-import drops organization/speaker | authoring-metadata |
-| mastodon | true | true | organization/speaker socials have no effect on preview or export; handle not rendered | no size/aspect or rendered handle; re-import drops organization/speaker | authoring-metadata |
-| bluesky | true | true | organization/speaker socials have no effect on preview or export; handle not rendered | no size/aspect or rendered handle; re-import drops organization/speaker | authoring-metadata |
+| linkedin | true | true | engine output changes | no size/aspect or rendered handle; re-import drops organization/speaker | works |
+| x | true | true | engine output changes | no size/aspect or rendered handle; re-import drops organization/speaker | works |
+| github | true | true | engine output changes | no size/aspect or rendered handle; re-import drops organization/speaker | works |
+| youtube | true | true | engine output changes | no size/aspect or rendered handle; re-import drops organization/speaker | works |
+| instagram | true | true | engine output changes | no size/aspect or rendered handle; re-import drops organization/speaker | works |
+| facebook | true | true | engine output changes | no size/aspect or rendered handle; re-import drops organization/speaker | works |
+| tiktok | true | true | engine output changes | no size/aspect or rendered handle; re-import drops organization/speaker | works |
+| threads | true | true | engine output changes | no size/aspect or rendered handle; re-import drops organization/speaker | works |
+| mastodon | true | true | engine output changes | no size/aspect or rendered handle; re-import drops organization/speaker | works |
+| bluesky | true | true | engine output changes | no size/aspect or rendered handle; re-import drops organization/speaker | works |

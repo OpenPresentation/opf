@@ -9,10 +9,14 @@ pptx.gallery value's "OPF Config" snippet and run it through the OpenPresentatio
 packages. It measures the engines, not the schema: a value that validates but
 changes nothing in the preview or the PPTX is not reported as working.
 
-**Headline: 0 of 900 gallery values are perfect by parity** (FF-38, current
-mains on 2026-09-23). This is the program's progress metric. The 900 values are the 793 presence-audited
-values plus 107 parity-only records: 76 charts and 31 `withAssets` variants.
-The presence audits below find 7 of 793 values `works`.
+**Headline: 4 of 900 gallery values are perfect by parity** (FF-38, current
+mains on 2026-09-23, after the FF-20, FF-25, FF-26, FF-27 and FF-34 merges).
+This is the program's progress metric. The 900 values are the 793
+presence-audited values plus 107 parity-only records: 76 charts and 31
+`withAssets` variants. The presence audits below find 362 of 793 values
+`works` (7 at the first measurement); see the
+[measurement notes](#measurement-notes-2026-09-23-re-run) before reading the
+audit B classes.
 
 Two measurements are recorded here:
 
@@ -21,20 +25,23 @@ Two measurements are recorded here:
 - **Parity (FF-38).** Do the preview and the exported PPTX agree element by
   element?
 
-| Repository | Presence audits A and B | Parity scoreboard (FF-38) | Parity baseline (history) |
-| --- | --- | --- | --- |
-| opf (core) | `2634350` | `c278532` | `53be042` |
-| opf-render | `e500ed9` | `47d19b2` | `e500ed9` |
-| opf-pptx | `ef8a158` | `5b657c9` | `cf0bc0c` |
-| opf-editor | `23bc65b` (audit B) | not used | not used |
-| pptx-gallery | `f17e9ae` | `f17e9ae` | `f17e9ae` |
+| Repository | Presence audits A and B | Parity scoreboard (FF-38) | Previous parity run (opf#122) | Parity baseline (history) |
+| --- | --- | --- | --- | --- |
+| opf (core) | `a74f3f6` | `a74f3f6` | `c278532` | `53be042` |
+| opf-render | `bc436f3` | `bc436f3` | `47d19b2` | `e500ed9` |
+| opf-pptx | `9092954` | `9092954` | `5b657c9` | `cf0bc0c` |
+| opf-editor | `214ae69` (audit B) | not used | not used | not used |
+| pptx-gallery | `f17e9ae` | `f17e9ae` | `f17e9ae` | `f17e9ae` |
 
 Node 24.21.0. No Office or COM was used; native PowerPoint behaviour is
-recorded separately (FF-04, FF-12). The presence audits predate FF-17
-([opf#120](https://github.com/OpenPresentation/opf/pull/120), `53be042`).
-The current parity run includes FF-17, FF-18, FF-35, FF-24 (opf-pptx#67),
-FF-22's core half (opf#121) and FF-28 (opf#123). Each number is for its
-measured heads until that audit is re-run.
+recorded separately (FF-04, FF-12). All three measurements now run on the same
+merged mains. They include FF-07, FF-08, FF-17, FF-18, FF-19, FF-24, FF-28,
+FF-32, FF-35, FF-35b and FF-39, the merged engine halves of FF-25, FF-26,
+FF-27 and FF-34 (opf-pptx#65 included), FF-31's exporter half
+(opf-pptx#63) and FF-22's core half. pptx-gallery is still `f17e9ae`: none
+of its program PRs (#40 to #46) has merged, so every snippet is the
+pre-program snippet. The per-dimension prose below the summary
+table describes the first measurement unless a paragraph says otherwise.
 
 ## Method
 
@@ -83,80 +90,122 @@ checks are:
 | theme | Theme major/minor `latin` equal the preview heading/body fonts, and the theme `clrScheme` equals the document color scheme. |
 | mapping | Every preview element group has PPTX shapes and the reverse; an unmapped PPTX shape is near. |
 
-Checks passed, all 900 values (current mains):
+Checks passed, all 900 values (current mains, 2026-09-23 re-run), with the
+previous run (opf#122) for comparison:
 
-| geometry | text | fills | zOrder | slideSize | typefaces | reimport | fontResolution | theme | mapping |
+| Run | perfect | geometry | text | fills | zOrder | slideSize | typefaces | reimport | fontResolution | theme | mapping |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Current mains | 4 | 774 | 759 | 674 | 784 | 900 | 900 | 899 | 5 | 900 | 672 |
+| Previous (opf#122) | 0 | 390 | 326 | 734 | 880 | 900 | 0 | 0 | 5 | 900 | 890 |
+
+The four perfect values are the font schemes `calibri`, `courier-new`,
+`times-new-roman` and `roboto`. slideSize, typefaces and theme pass
+everywhere. Re-import passes for 899; the `photography` snippet, which has no
+asset, loses its background with a specific diagnostic (near).
+
+Per dimension (current mains; slideSize, typefaces and theme pass everywhere):
+
+| Dimension | Values | perfect | geometry | text | fills | zOrder | reimport | fontResolution | mapping |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 390 | 326 | 734 | 880 | 900 | 0 | 0 | 5 | 900 | 890 |
+| layouts | 485 | 0 | 378 | 436 | 332 | 392 | 485 | 0 | 280 |
+| color-schemes | 14 | 0 | 0 | 14 | 14 | 14 | 14 | 0 | 14 |
+| font-schemes | 89 + 4 legacy | 4 | 93 | 93 | 93 | 93 | 93 | 4 | 93 |
+| languages | 93 | 0 | 93 | 93 | 93 | 93 | 93 | 0 | 93 |
+| backgrounds | 6 (+6 withAssets) | 0 (0) | 6 (6) | 6 (6) | 5 (6) | 6 (6) | 5 (6) | 0 (0) | 6 (6) |
+| narratives | 10 | 0 | 10 | 10 | 10 | 10 | 10 | 0 | 10 |
+| charts | 76 | 0 | 76 | 26 | 9 | 76 | 76 | 0 | 76 |
+| themes | 4 | 0 | 4 | 4 | 4 | 4 | 4 | 0 | 3 |
+| audiences | 14 | 0 | 14 | 14 | 14 | 14 | 14 | 0 | 11 |
+| tones | 7 | 0 | 7 | 7 | 7 | 7 | 7 | 0 | 7 |
+| socials | 10 | 0 | 10 | 10 | 10 | 10 | 10 | 0 | 10 |
+| headers-footers | 10 (+10 withAssets) | 0 (0) | 10 (10) | 0 (0) | 10 (10) | 0 (0) | 10 (10) | 0 (0) | 10 (10) |
+| blocks | 32 | 0 | 27 | 25 | 27 | 29 | 32 | 1 | 28 |
+| image-treatments | 15 (+15 withAssets) | 0 (0) | 15 (15) | 0 (15) | 15 (15) | 15 (15) | 15 (15) | 0 (0) | 15 (0) |
 
-Per dimension (perfect is 0 everywhere; slideSize and theme pass everywhere):
+Socials, tones, narratives, languages and the other non-layout metadata
+dimensions now fail only font resolution (the Aptos to Carlito visual
+substitute).
 
-| Dimension | Values | geometry | text | fills | zOrder | fontResolution | mapping |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| layouts | 485 | 281 | 266 | 403 | 485 | 0 | 475 |
-| color-schemes | 14 | 0 | 0 | 14 | 14 | 0 | 14 |
-| font-schemes | 89 + 4 legacy | 0 | 0 | 93 | 93 | 4 | 93 |
-| languages | 93 | 0 | 0 | 93 | 93 | 0 | 93 |
-| backgrounds | 6 (+6 withAssets) | 0 (0) | 0 (0) | 2 (2) | 6 (6) | 0 (0) | 6 (6) |
-| narratives | 10 | 0 | 0 | 10 | 10 | 0 | 10 |
-| charts | 76 | 76 | 26 | 9 | 76 | 0 | 76 |
-| themes | 4 | 3 | 3 | 4 | 4 | 0 | 4 |
-| audiences | 14 | 10 | 10 | 14 | 14 | 0 | 14 |
-| tones | 7 | 0 | 0 | 7 | 7 | 0 | 7 |
-| socials | 10 | 0 | 0 | 10 | 10 | 0 | 10 |
-| headers-footers | 10 (+10 withAssets) | 0 (0) | 0 (0) | 10 (10) | 0 (0) | 0 (0) | 10 (10) |
-| blocks | 32 | 20 | 21 | 23 | 32 | 1 | 32 |
-| image-treatments | 15 (+15 withAssets) | 0 (0) | 0 (0) | 15 (15) | 15 (15) | 0 (0) | 15 (15) |
+### Measurement notes (2026-09-23 re-run)
 
-Typefaces and re-import pass for no value.
-
-**Harness fixes in this run.** Both fixes change counts relative to the
-baseline:
-- Relationship targets are resolved per OPC rules: absolute targets from the
-  package root, relative targets from the source part's folder. The baseline
-  never found chart parts. Chart text and colours are now actually compared,
-  so chart text passes for 26 charts, and chart series colours missing from
-  the preview now fail fills (108 values).
-- Single text lines are compared by rendered extent, not raw anchor. Metric
-  lines anchored at their left edge in the preview but centered in their PPTX
-  box land at the same place and no longer fail geometry.
-
-FF-24 (opf-pptx#67) makes the theme check pass for all 900 values. The
-open FF-39 PRs (opf-pptx#72, opf-render#37) measure geometry 378 to 841 and
-text 273 to 713 against the baseline.
+- **Fills 842 to 734 at opf#122 is a stricter check, not a regression.** The
+  chart series-colour comparison was already in the baseline harness, but the
+  baseline built chart part names as `ppt/slides/` plus the relationship
+  target. The exporter writes absolute targets (`/ppt/charts/chartN.xml`), so
+  no chart part was found and the comparison passed vacuously. opf#122 resolves
+  targets per OPC, so the comparison now runs. In the committed opf#122
+  results, 166 values fail fills; exactly 108 of them fail only on
+  `chart series colors not in preview` (charts 67, layouts 39, blocks 2), and
+  those are exactly the per-dimension drops from the baseline (charts 76 to 9,
+  layouts 442 to 403, blocks 25 to 23). 842 minus 108 is 734. The other 58
+  failures are the same as the baseline's.
+- **Fills 734 to 674, mapping 890 to 672 and zOrder 880 to 784 in this
+  re-run.** These follow the FF-26 slide-image composition. 225 values fail
+  mapping with `preview element group has no PPTX shape (image)`: the exporter
+  now names the picture `OPF slide image slides.N`. The harness recognises
+  names `OPF heading|text|card|table|image|chart|code|metric|quote|list <path>`,
+  so it does not map that name, and the containment fallback finds no item.
+  The same values add `image count` fills failures (106) and `picture frame`
+  geometry failures (106). The z-order failures (116) are inversions between
+  element groups. This PR does not change the harness. Whether these are
+  measurement gaps or real export differences is an open question for the
+  harness owner.
+- **Audit B classes predate FF-24, FF-32 and FF-34.** Its probes read slide
+  colours and the `p:bg` fill only from `srgbClr`. Since FF-24 the export uses
+  `schemeClr`, so all 14 colour schemes and all 4 themes are classed `broken`
+  ("colour mismatch", "export non-solid"). The parity theme and fills checks
+  pass for the same values. Several reason strings are fixed text in
+  `summarize.mjs`, for example "re-import loses colorScheme id silently", and
+  are printed whatever was measured. Narratives, audiences, tones and socials
+  are `works` only because removing the field changes one exporter-written
+  part, `ppt/tags/opfDocument.xml`. The preview is identical for all 41, and
+  no social handle appears in preview or export (`handleInPreview` and
+  `handleInExport` are false), because the pre-program snippet shows no
+  footer. Re-import does return the socials for 10 of 10. The results are
+  committed as measured; the classifier needs a follow-up before badges
+  (FF-36) use audit B.
+- **Audit A image treatments.** All 15 are `partial` and still report "export
+  adds no native picture for design.slideImage". With the asset supplied, the
+  value and its baseline document both export one `p:pic`, so the probe's
+  "more pictures than the baseline" rule does not fire. The gallery snippets
+  still collapse 13 treatments to two OPF documents and reference `asset:hero`
+  without an `assets` entry. Those gallery fixes are pptx-gallery#44 and #45,
+  which are still open.
 
 ### Universal blockers
 
-Four failures still block nearly every value, and no value can be perfect
-until they are fixed. A fifth, the theme `clrScheme`, was fixed by FF-24.
+One failure still blocks nearly every value. Four earlier universal blockers
+are cleared on current mains: the theme `clrScheme` (FF-24), re-import
+(FF-32; 899 pass, and the one other value loses its background with a
+specific diagnostic), package typefaces (FF-08; 900 pass) and centered
+versus left-aligned text (FF-39).
 
 | Blocker | Check (passed) | Values hit | Fix |
 | --- | --- | --- | --- |
-| Re-import drops the slide layout id with no diagnostic (900). Other fields are also dropped silently: font scheme 222, language 93, narrative 56, tone 53, background 48, audience 14. The color scheme is now recovered (FF-24). | reimport (0) | 900 | FF-32 (layout ids with FF-29) |
-| `app.xml` lists Calibri (899) and Arial (897). Native charts and their embedded workbooks add Arial, Geneva, Calibri and Calibri Light (117). | typefaces (0) | 899 | FF-08 |
-| The preview renders Aptos and Aptos Display with the visual substitute Carlito (754). 93 families have no face at all (133 values). | fontResolution (5) | 754+ | FF-31 |
-| Preview text is centered but PPTX text is left-aligned, so line positions differ by more than 50 pt. | text (326), geometry (390) | 504 | FF-39 |
+| The preview renders Aptos and Aptos Display with the visual substitute Carlito (754). 93 families have no face at all (133 values). | fontResolution (5) | 754+ | FF-31 (core and renderer halves open: opf#133, opf-render#44) |
 
 Other recurring parity failures:
 
-- Charts and chart blocks:
-  - chart XML and embedded workbooks name Arial, Geneva and Calibri (117
-    values; FF-08);
-  - series colours are missing from the preview (108 values);
-  - preview labels are missing from the chart cache (46 values; FF-22,
-    FF-22b).
-- Headers/footers fail z-order in 10 of 10 values (FF-27).
-- Pattern and photo backgrounds fail fills (FF-25).
+- Slide images: 225 values fail mapping, 106 fail image count and picture
+  frame geometry (see the [measurement notes](#measurement-notes-2026-09-23-re-run)).
+- Z-order inversions between element groups: 116 values, including all 10
+  headers/footers.
+- Charts and chart blocks: series colours are missing from the preview (108
+  values), and preview labels are missing from the chart cache (46 values;
+  FF-22, FF-22b).
+- Text: 45 values have a preview line missing in the PPTX, and 39 are still
+  left-aligned in the preview but centered in the PPTX (FF-29, opf#132).
 
 The per-item parity status is in `support-status.json` (`parity`, plus
 `parityOnly` for charts). The full report, with a before/after table against
-the baseline, is [PARITY.md](gallery-support/parity/PARITY.md).
+the previous run, is [PARITY.md](gallery-support/parity/PARITY.md).
 
 ### Baseline (history)
 
 First run, 2026-09-23, at opf `53be042`, opf-render `e500ed9`, opf-pptx
-`cf0bc0c` and pptx-gallery `f17e9ae`, before both harness fixes. 0 of 900
-were perfect. Checks passed:
+`cf0bc0c` and pptx-gallery `f17e9ae`, before both opf#122 harness fixes
+(relationship targets resolved per OPC; single text lines compared by rendered
+extent). 0 of 900 were perfect. Checks passed:
 
 | geometry | text | fills | zOrder | slideSize | typefaces | reimport | fontResolution | theme | mapping |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -164,6 +213,8 @@ were perfect. Checks passed:
 
 The report is kept at
 [parity/history/2026-09-23-baseline/PARITY.md](gallery-support/parity/history/2026-09-23-baseline/PARITY.md).
+The previous run (opf#122, after both fixes) is kept at
+[parity/history/2026-09-23-opf122/PARITY.md](gallery-support/parity/history/2026-09-23-opf122/PARITY.md).
 
 ## Status legend
 
@@ -177,7 +228,7 @@ The definitions are the audits' own classifiers
 | `partial` | Schema-valid, preview and export succeed and the value has an effect in at least one of them, but at least one fidelity check fails (no native XML, preview/export disagreement, re-import loss, unresolved reference, gallery option dropped by the snippet). Audit B: color schemes whose preview and export colours agree; font schemes whose export writes the chosen major/minor families with no foreign typeface; themes whose background and fonts match in both. |
 | `schema-only` | Validates and renders/exports without error, but the preview is identical to the baseline and the export has no native equivalent (audit A); or, for languages, no engine reads the field (audit B). |
 | `authoring-metadata` | The catalog id resolves in core, and removing the field leaves the SVG and every PPTX part byte-identical. It is consumed only by validator/lint/bundle catalog checks, opf-editor transfer mapping and authoring skills. |
-| `broken` | Schema-invalid, or preview or export throws (audit A); or the export contradicts the value, for example typefaces that differ from the scheme (audit B). No measured value was `broken`. |
+| `broken` | Schema-invalid, or preview or export throws (audit A); or the export contradicts the value, for example typefaces that differ from the scheme (audit B). At the first measurement no value was `broken`; see the measurement notes for the current audit B `broken` rows. |
 | `gallery-only` | The gallery id has no core equivalent: a legacy gallery layout slug with no OPF canonical id, portable only through inline `catalogs.layouts.records` (audit A; its measured class is kept as `measuredStatus`); or a narrative/audience id missing from the core catalog (audit B). |
 
 `support-status.json` also flags `previewOnly` for audit A values whose
@@ -186,26 +237,32 @@ preview shows the value while the export has no native equivalent.
 ## Summary
 
 Presence: 793 values measured across 13 dimensions; charts have no presence
-status until FF-22. Seven values are `works`. Parity: 0 of 900 perfect.
+status until FF-22. 362 values are `works` (7 at the first measurement).
+Parity: 4 of 900 perfect. Counts are for current mains; the "What actually
+works" column keeps the first measurement's wording unless marked "Now".
 
 | Dimension | Values | works | partial | schema-only | authoring-metadata | gallery-only | broken | Parity perfect | What actually works for a developer |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [Layouts](#layouts) | 485 | 0 | 415 | 0 | 0 | 70 | 0 | 0/485 | Snippets validate, preview and export. Only 30 layouts are in the core catalog; 110 change the preview but not PPTX placement; re-import never keeps the layout id. |
-| [Color schemes](#color-schemes) | 14 | 0 | 14 | 0 | 0 | 0 | 0 | 0/14 | Preview and PPTX show the scheme colours and agree, but as fixed RGB over an Office-default theme `clrScheme`. |
-| [Font schemes](#font-schemes) | 93 | 0 | 93 | 0 | 0 | 0 | 0 | 0/93 | Export without a font registry writes the chosen heading/body families for all 93. A measured preview needs the font: 1 bundled, 7 via substitutes, 85 host-only. |
-| [Languages](#languages) | 93 | 0 | 0 | 93 | 0 | 0 | 0 | 0/93 | Nothing from `language` itself; only the font scheme the gallery injects changes. Runs are `lang="en-US"`, no `rtl`. |
-| [Backgrounds](#backgrounds) | 6 | 2 | 4 | 0 | 0 | 0 | 0 | 0/6 | Solid and gradient work end to end. Patterns and photos preview but export as solid white. |
-| [Narratives](#narratives) | 10 | 0 | 0 | 0 | 1 | 9 | 0 | 0/10 | Authoring metadata only; 9 of 10 gallery ids are not in core. |
-| [Charts](#charts) | 76 | | | | | | | 0/76 | Core catalog reduced to the 25 Aspose.Slides-supported types (FF-22, opf#121); the gallery half is pending. No presence status yet. Parity: geometry passes; chart text passes for 26, colours for 9, fonts for none. |
-| [Themes](#themes) | 4 | 0 | 4 | 0 | 0 | 0 | 0 | 0/4 | Background and fonts apply in preview and export; the theme `clrScheme` stays Office default. |
-| [Audiences](#audiences) | 14 | 0 | 0 | 0 | 2 | 12 | 0 | 0/14 | Authoring metadata only, by design; 12 of 14 gallery ids are not in core. |
-| [Tones](#tones) | 7 | 0 | 0 | 0 | 7 | 0 | 0 | 0/7 | Authoring metadata only, by design. |
-| [Socials](#socials) | 10 | 0 | 0 | 0 | 10 | 0 | 0 | 0/10 | Handles are stored; nothing is rendered or exported. |
-| [Headers & footers](#headers-and-footers) | 10 | 0 | 10 | 0 | 0 | 0 | 0 | 0/10 | Furniture text appears, but slide numbers and dates are static text, not PowerPoint fields. |
-| [Content blocks](#content-blocks) | 32 | 5 | 27 | 0 | 0 | 0 | 0 | 0/32 | Blocks render and export; 24 are held back only by gallery narrative ids missing from core. |
-| [Image treatments](#image-treatments) | 15 | 0 | 0 | 15 | 0 | 0 | 0 | 0/15 | No visible effect: the snippet's image asset is missing, and even with one the PPTX has no picture for the treatment. |
+| [Layouts](#layouts) | 485 | 289 | 126 | 0 | 0 | 70 | 0 | 0/485 | Snippets validate, preview and export. Only 30 layouts are in the core catalog. Now: re-import keeps design and emits specific diagnostics (FF-32), so 289 are `works`. |
+| [Color schemes](#color-schemes) | 14 | 0 | 0 | 0 | 0 | 0 | 14 | 0/14 | Now: theme `clrScheme` and `schemeClr` references (FF-24). The 14 `broken` are an audit B probe artifact; see the measurement notes. |
+| [Font schemes](#font-schemes) | 93 | 0 | 93 | 0 | 0 | 0 | 0 | 4/93 | Export without a font registry writes the chosen heading/body families for all 93. Now: `calibri`, `courier-new`, `times-new-roman` and `roboto` are perfect by parity. |
+| [Languages](#languages) | 93 | 0 | 0 | 93 | 0 | 0 | 0 | 0/93 | Audit B still classes the field as read by no engine. Parity fails only font resolution. |
+| [Backgrounds](#backgrounds) | 6 | 2 | 4 | 0 | 0 | 0 | 0 | 0/6 | Solid and gradient work end to end. Now: `photography` with its asset is `works`; the three pattern slugs still collapse in the gallery snippet (pptx-gallery#43). |
+| [Narratives](#narratives) | 10 | 10 | 0 | 0 | 0 | 0 | 0 | 0/10 | Now: every id resolves in core (FF-28). `works` only because the exporter-written `ppt/tags/opfDocument.xml` part changes; the preview is identical when the field is removed. |
+| [Charts](#charts) | 76 | | | | | | | 0/76 | Core catalog reduced to the 25 Aspose.Slides-supported types (FF-22, opf#121); the gallery half is pending. No presence status yet. Parity: geometry passes; chart text passes for 26, colours for 9. |
+| [Themes](#themes) | 4 | 0 | 0 | 0 | 0 | 0 | 4 | 0/4 | Background and fonts apply in preview and export. The 4 `broken` are an audit B probe artifact; see the measurement notes. |
+| [Audiences](#audiences) | 14 | 14 | 0 | 0 | 0 | 0 | 0 | 0/14 | Now: every id resolves in core (FF-28). `works` only because `ppt/tags/opfDocument.xml` changes; the preview is identical. |
+| [Tones](#tones) | 7 | 7 | 0 | 0 | 0 | 0 | 0 | 0/7 | `works` only because `ppt/tags/opfDocument.xml` changes; the preview is identical. |
+| [Socials](#socials) | 10 | 10 | 0 | 0 | 0 | 0 | 0 | 0/10 | Now: re-import returns the organization and speaker socials for 10/10 (FF-34). The pre-program gallery snippet shows no footer, so no handle is rendered in preview or export; `works` comes from the `ppt/tags/opfDocument.xml` diff. The rendering snippet is pptx-gallery#42. Parity fails only font resolution. |
+| [Headers & footers](#headers-and-footers) | 10 | 1 | 9 | 0 | 0 | 0 | 0 | 0/10 | Now: native slide-number and date fields (FF-27). The snippet still drops gallery options (pptx-gallery#45), and 3 dated values report `unresolved-content`. |
+| [Content blocks](#content-blocks) | 32 | 29 | 3 | 0 | 0 | 0 | 0 | 0/32 | Blocks render and export. `market-opportunity` and `financial-snapshot` still lose metric text (FF-30, pptx-gallery#44). |
+| [Image treatments](#image-treatments) | 15 | 0 | 15 | 0 | 0 | 0 | 0 | 0/15 | Now: `design.slideImage` renders and exports as a picture (FF-26). The snippets still omit the asset and collapse 13 treatments to two documents (pptx-gallery#44, #45). |
 
 ### Shared export gaps (every exported value, audit B)
+
+At the first measurement. On current mains FF-24, FF-07, FF-08 and FF-32 have
+merged, and the parity theme, typefaces and re-import checks pass for 900,
+900 and 899 values.
 
 - The theme `clrScheme` is the Office default (`accent1` `4472C4`); only
   `dk1`/`lt1` match a chosen scheme, and only by coincidence (FF-24).

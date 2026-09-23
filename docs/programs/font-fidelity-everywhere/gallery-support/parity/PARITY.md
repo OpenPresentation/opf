@@ -1,8 +1,8 @@
 # Preview vs PPTX parity: pptx.gallery values
 
-Generated 2026-09-23T05:27:01.278Z by `dimension-audit/parity/scripts/parity.mjs` (Node v24.21.0, worktree prefix `ff23main`). No Office was used.
+Generated 2026-09-23T11:30:50.032Z by `dimension-audit/parity/scripts/parity.mjs` (Node v24.21.0, worktree prefix `parity`). No Office was used.
 
-Heads: opf `c278532`, opf-render `47d19b2`, opf-pptx `5b657c9`, pptx-gallery `f17e9ae`.
+Heads: opf `a74f3f6`, opf-render `bc436f3`, opf-pptx `9092954`, pptx-gallery `f17e9ae`.
 
 ## What "perfect" means
 
@@ -27,36 +27,36 @@ Classification: **perfect** means every check passes; **near** means only near d
 
 | dimension | n | perfect | near | mismatch | geometry | text | fills | zOrder | slideSize | typefaces | reimport | fontResolution | theme | mapping |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| color-schemes | 14 | 0 | 0 | 14 | 0/14 | 0/14 | 14/14 | 14/14 | 14/14 | 0/14 | 0/14 | 0/14 | 14/14 | 14/14 |
-| font-schemes | 89 | 0 | 0 | 89 | 0/89 | 0/89 | 89/89 | 89/89 | 89/89 | 0/89 | 0/89 | 4/89 | 89/89 | 89/89 |
-| font-schemes-legacy | 4 | 0 | 0 | 4 | 0/4 | 0/4 | 4/4 | 4/4 | 4/4 | 0/4 | 0/4 | 0/4 | 4/4 | 4/4 |
-| languages | 93 | 0 | 0 | 93 | 0/93 | 0/93 | 93/93 | 93/93 | 93/93 | 0/93 | 0/93 | 0/93 | 93/93 | 93/93 |
-| themes | 4 | 0 | 0 | 4 | 3/4 | 3/4 | 4/4 | 4/4 | 4/4 | 0/4 | 0/4 | 0/4 | 4/4 | 4/4 |
-| narratives | 10 | 0 | 0 | 10 | 0/10 | 0/10 | 10/10 | 10/10 | 10/10 | 0/10 | 0/10 | 0/10 | 10/10 | 10/10 |
-| audiences | 14 | 0 | 0 | 14 | 10/14 | 10/14 | 14/14 | 14/14 | 14/14 | 0/14 | 0/14 | 0/14 | 14/14 | 14/14 |
-| tones | 7 | 0 | 0 | 7 | 0/7 | 0/7 | 7/7 | 7/7 | 7/7 | 0/7 | 0/7 | 0/7 | 7/7 | 7/7 |
-| socials | 10 | 0 | 0 | 10 | 0/10 | 0/10 | 10/10 | 10/10 | 10/10 | 0/10 | 0/10 | 0/10 | 10/10 | 10/10 |
-| backgrounds | 6 | 0 | 0 | 6 | 0/6 | 0/6 | 2/6 | 6/6 | 6/6 | 0/6 | 0/6 | 0/6 | 6/6 | 6/6 |
-| backgrounds (withAssets) | 6 | 0 | 0 | 6 | 0/6 | 0/6 | 2/6 | 6/6 | 6/6 | 0/6 | 0/6 | 0/6 | 6/6 | 6/6 |
-| image-treatments | 15 | 0 | 0 | 15 | 0/15 | 0/15 | 15/15 | 15/15 | 15/15 | 0/15 | 0/15 | 0/15 | 15/15 | 15/15 |
-| image-treatments (withAssets) | 15 | 0 | 0 | 15 | 0/15 | 0/15 | 15/15 | 15/15 | 15/15 | 0/15 | 0/15 | 0/15 | 15/15 | 15/15 |
-| headers-footers | 10 | 0 | 0 | 10 | 0/10 | 0/10 | 10/10 | 0/10 | 10/10 | 0/10 | 0/10 | 0/10 | 10/10 | 10/10 |
-| headers-footers (withAssets) | 10 | 0 | 0 | 10 | 0/10 | 0/10 | 10/10 | 0/10 | 10/10 | 0/10 | 0/10 | 0/10 | 10/10 | 10/10 |
-| blocks | 32 | 0 | 0 | 32 | 20/32 | 21/32 | 23/32 | 32/32 | 32/32 | 0/32 | 0/32 | 1/32 | 32/32 | 32/32 |
-| layouts | 485 | 0 | 0 | 485 | 281/485 | 266/485 | 403/485 | 485/485 | 485/485 | 0/485 | 0/485 | 0/485 | 485/485 | 475/485 |
-| charts | 76 | 0 | 0 | 76 | 76/76 | 26/76 | 9/76 | 76/76 | 76/76 | 0/76 | 0/76 | 0/76 | 76/76 | 76/76 |
-| **all** | 900 | 0 | 0 | 900 | 390/900 | 326/900 | 734/900 | 880/900 | 900/900 | 0/900 | 0/900 | 5/900 | 900/900 | 890/900 |
+| color-schemes | 14 | 0 | 0 | 14 | 0/14 | 14/14 | 14/14 | 14/14 | 14/14 | 14/14 | 14/14 | 0/14 | 14/14 | 14/14 |
+| font-schemes | 89 | 4 | 0 | 85 | 89/89 | 89/89 | 89/89 | 89/89 | 89/89 | 89/89 | 89/89 | 4/89 | 89/89 | 89/89 |
+| font-schemes-legacy | 4 | 0 | 0 | 4 | 4/4 | 4/4 | 4/4 | 4/4 | 4/4 | 4/4 | 4/4 | 0/4 | 4/4 | 4/4 |
+| languages | 93 | 0 | 0 | 93 | 93/93 | 93/93 | 93/93 | 93/93 | 93/93 | 93/93 | 93/93 | 0/93 | 93/93 | 93/93 |
+| themes | 4 | 0 | 0 | 4 | 4/4 | 4/4 | 4/4 | 4/4 | 4/4 | 4/4 | 4/4 | 0/4 | 4/4 | 3/4 |
+| narratives | 10 | 0 | 0 | 10 | 10/10 | 10/10 | 10/10 | 10/10 | 10/10 | 10/10 | 10/10 | 0/10 | 10/10 | 10/10 |
+| audiences | 14 | 0 | 0 | 14 | 14/14 | 14/14 | 14/14 | 14/14 | 14/14 | 14/14 | 14/14 | 0/14 | 14/14 | 11/14 |
+| tones | 7 | 0 | 0 | 7 | 7/7 | 7/7 | 7/7 | 7/7 | 7/7 | 7/7 | 7/7 | 0/7 | 7/7 | 7/7 |
+| socials | 10 | 0 | 0 | 10 | 10/10 | 10/10 | 10/10 | 10/10 | 10/10 | 10/10 | 10/10 | 0/10 | 10/10 | 10/10 |
+| backgrounds | 6 | 0 | 0 | 6 | 6/6 | 6/6 | 5/6 | 6/6 | 6/6 | 6/6 | 5/6 | 0/6 | 6/6 | 6/6 |
+| backgrounds (withAssets) | 6 | 0 | 0 | 6 | 6/6 | 6/6 | 6/6 | 6/6 | 6/6 | 6/6 | 6/6 | 0/6 | 6/6 | 6/6 |
+| image-treatments | 15 | 0 | 0 | 15 | 15/15 | 0/15 | 15/15 | 15/15 | 15/15 | 15/15 | 15/15 | 0/15 | 15/15 | 15/15 |
+| image-treatments (withAssets) | 15 | 0 | 0 | 15 | 15/15 | 15/15 | 15/15 | 15/15 | 15/15 | 15/15 | 15/15 | 0/15 | 15/15 | 0/15 |
+| headers-footers | 10 | 0 | 0 | 10 | 10/10 | 0/10 | 10/10 | 0/10 | 10/10 | 10/10 | 10/10 | 0/10 | 10/10 | 10/10 |
+| headers-footers (withAssets) | 10 | 0 | 0 | 10 | 10/10 | 0/10 | 10/10 | 0/10 | 10/10 | 10/10 | 10/10 | 0/10 | 10/10 | 10/10 |
+| blocks | 32 | 0 | 0 | 32 | 27/32 | 25/32 | 27/32 | 29/32 | 32/32 | 32/32 | 32/32 | 1/32 | 32/32 | 28/32 |
+| layouts | 485 | 0 | 0 | 485 | 378/485 | 436/485 | 332/485 | 392/485 | 485/485 | 485/485 | 485/485 | 0/485 | 485/485 | 280/485 |
+| charts | 76 | 0 | 0 | 76 | 76/76 | 26/76 | 9/76 | 76/76 | 76/76 | 76/76 | 76/76 | 0/76 | 76/76 | 76/76 |
+| **all** | 900 | 4 | 0 | 896 | 774/900 | 759/900 | 674/900 | 784/900 | 900/900 | 900/900 | 899/900 | 5/900 | 900/900 | 672/900 |
 
 The check columns count values that pass that check. A value is perfect only when every check passes.
 
 ## Before / after
 
-Baseline heads: opf `53be042`, opf-render `e500ed9`, opf-pptx `cf0bc0c`, pptx-gallery `f17e9ae`.
+Baseline heads: opf `c278532`, opf-render `47d19b2`, opf-pptx `5b657c9`, pptx-gallery `f17e9ae`.
 
 | dimension | perfect before | perfect after | near before | near after | improved | regressed |
 |---|---|---|---|---|---|---|
 | color-schemes | 0 | 0 | 0 | 0 | 0 | 0 |
-| font-schemes | 0 | 0 | 0 | 0 | 0 | 0 |
+| font-schemes | 0 | 4 | 0 | 0 | 4 | 0 |
 | font-schemes-legacy | 0 | 0 | 0 | 0 | 0 | 0 |
 | languages | 0 | 0 | 0 | 0 | 0 | 0 |
 | themes | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -73,63 +73,65 @@ Baseline heads: opf `53be042`, opf-render `e500ed9`, opf-pptx `cf0bc0c`, pptx-ga
 | blocks | 0 | 0 | 0 | 0 | 0 | 0 |
 | layouts | 0 | 0 | 0 | 0 | 0 | 0 |
 | charts | 0 | 0 | 0 | 0 | 0 | 0 |
-| **all** | 0 | 0 | 0 | 0 | 0 | 0 |
+| **all** | 0 | 4 | 0 | 0 | 4 | 0 |
 
 ## Top mismatch reasons per dimension
 
-- **color-schemes** (14): text | alignment ctr (preview) vs l (pptx) (14); geometry | text line anchor-x delta >50pt (14); reimport | slide layout id not preserved (no diagnostic) (14); geometry | table frame delta >50pt (14); fontResolution | preview font visual-substitute: Aptos Display -> Carlito (14)
-- **font-schemes** (89): text | alignment ctr (preview) vs l (pptx) (89); geometry | text line anchor-x delta >50pt (89); reimport | design.fontScheme not preserved (no diagnostic) (89); reimport | slide layout id not preserved (no diagnostic) (89); typefaces | foreign font in app.xml: Arial (88)
-- **font-schemes-legacy** (4): text | alignment ctr (preview) vs l (pptx) (4); geometry | text line anchor-x delta >50pt (4); typefaces | foreign font in app.xml: Arial (4); typefaces | foreign font in app.xml: Calibri (4); reimport | design.fontScheme not preserved (no diagnostic) (4)
-- **languages** (93): text | alignment ctr (preview) vs l (pptx) (93); geometry | text line anchor-x delta >50pt (93); typefaces | foreign font in app.xml: Calibri (93); reimport | design.fontScheme not preserved (no diagnostic) (93); reimport | language not preserved (no diagnostic) (93)
-- **themes** (4): typefaces | foreign font in app.xml: Arial (4); typefaces | foreign font in app.xml: Calibri (4); reimport | design.fontScheme not preserved (no diagnostic) (4); reimport | design.background not preserved (no diagnostic) (4); reimport | design.dimensions not preserved (no diagnostic) (4)
-- **narratives** (10): text | alignment ctr (preview) vs l (pptx) (10); geometry | text line anchor-x delta >50pt (10); fontResolution | preview font visual-substitute: Aptos Display -> Carlito (10); fontResolution | preview font visual-substitute: Aptos -> Carlito (10); typefaces | foreign font in app.xml: Arial (10)
-- **audiences** (14): fontResolution | preview font visual-substitute: Aptos Display -> Carlito (14); fontResolution | preview font visual-substitute: Aptos -> Carlito (14); typefaces | foreign font in app.xml: Arial (14); typefaces | foreign font in app.xml: Calibri (14); reimport | narrative not preserved (no diagnostic) (14)
-- **tones** (7): text | alignment ctr (preview) vs l (pptx) (7); geometry | text line anchor-x delta >50pt (7); fontResolution | preview font visual-substitute: Aptos Display -> Carlito (7); fontResolution | preview font visual-substitute: Aptos -> Carlito (7); typefaces | foreign font in app.xml: Arial (7)
-- **socials** (10): text | alignment ctr (preview) vs l (pptx) (10); geometry | text line anchor-x delta >50pt (10); fontResolution | preview font visual-substitute: Aptos Display -> Carlito (10); fontResolution | preview font visual-substitute: Aptos -> Carlito (10); typefaces | foreign font in app.xml: Arial (10)
-- **backgrounds** (6): text | alignment ctr (preview) vs l (pptx) (6); geometry | text line anchor-x delta >50pt (6); fontResolution | preview font visual-substitute: Aptos Display -> Carlito (6); fontResolution | preview font visual-substitute: Aptos -> Carlito (6); typefaces | foreign font in app.xml: Arial (6)
-- **backgrounds (withAssets)** (6): text | alignment ctr (preview) vs l (pptx) (6); geometry | text line anchor-x delta >50pt (6); fontResolution | preview font visual-substitute: Aptos Display -> Carlito (6); fontResolution | preview font visual-substitute: Aptos -> Carlito (6); typefaces | foreign font in app.xml: Arial (6)
-- **image-treatments** (15): text | alignment ctr (preview) vs l (pptx) (15); geometry | text line anchor-x delta >50pt (15); text | preview text line missing in PPTX (15); text | PPTX text not in preview (15); fontResolution | preview font visual-substitute: Aptos Display -> Carlito (15)
-- **image-treatments (withAssets)** (15): text | alignment ctr (preview) vs l (pptx) (15); geometry | text line anchor-x delta >50pt (15); fontResolution | preview font visual-substitute: Aptos Display -> Carlito (15); fontResolution | preview font visual-substitute: Aptos -> Carlito (15); typefaces | foreign font in app.xml: Arial (15)
-- **headers-footers** (10): text | alignment ctr (preview) vs l (pptx) (10); geometry | text line anchor-x delta >50pt (10); fontResolution | preview font visual-substitute: Aptos Display -> Carlito (10); fontResolution | preview font visual-substitute: Aptos -> Carlito (10); typefaces | foreign font in app.xml: Arial (10)
-- **headers-footers (withAssets)** (10): text | alignment ctr (preview) vs l (pptx) (10); geometry | text line anchor-x delta >50pt (10); fontResolution | preview font visual-substitute: Aptos Display -> Carlito (10); fontResolution | preview font visual-substitute: Aptos -> Carlito (10); typefaces | foreign font in app.xml: Arial (10)
-- **blocks** (32): typefaces | foreign font in app.xml: Arial (32); typefaces | foreign font in app.xml: Calibri (32); reimport | design.fontScheme not preserved (no diagnostic) (32); reimport | design.background not preserved (no diagnostic) (32); reimport | narrative not preserved (no diagnostic) (32)
-- **layouts** (485): fontResolution | preview font visual-substitute: Aptos Display -> Carlito (485); fontResolution | preview font visual-substitute: Aptos -> Carlito (485); typefaces | foreign font in app.xml: Arial (485); typefaces | foreign font in app.xml: Calibri (485); reimport | slide layout id not preserved (no diagnostic) (485)
-- **charts** (76): fontResolution | preview font visual-substitute: Aptos Display -> Carlito (76); fontResolution | preview font visual-substitute: Aptos -> Carlito (76); typefaces | foreign typeface Arial in ppt/charts/chartN.xml:latin (76); typefaces | foreign typeface Geneva in ppt/embeddings/Microsoft_Excel_WorksheetN.xlsx!/xl/styles.xml:xlsx-font (76); typefaces | foreign typeface Arial in ppt/embeddings/Microsoft_Excel_WorksheetN.xlsx!/xl/styles.xml:xlsx-font (76)
+- **color-schemes** (14): geometry | table frame delta >50pt (14); fontResolution | preview font visual-substitute: Aptos Display -> Carlito (14); fontResolution | preview font visual-substitute: Aptos -> Carlito (14)
+- **font-schemes** (89): fontResolution | preview font missing: Grandview (2); fontResolution | preview font missing: Noto Naskh Arabic (2); fontResolution | preview font visual-substitute: Consolas -> Cousine (1); fontResolution | preview font missing: Arial Black (1); fontResolution | preview font missing: Impact (1)
+- **font-schemes-legacy** (4): fontResolution | preview font missing: Playfair Display (1); fontResolution | preview font missing: Source Sans Pro (1); fontResolution | preview font missing: Montserrat (1); fontResolution | preview font missing: Open Sans (1); fontResolution | preview font missing: Bebas Neue (1)
+- **languages** (93): fontResolution | preview font visual-substitute: Aptos Display -> Carlito (66); fontResolution | preview font visual-substitute: Aptos -> Carlito (66); fontResolution | preview font missing: Arabic Typesetting (3); fontResolution | preview font missing: Mangal (3); fontResolution | preview font missing: Sylfaen (2)
+- **themes** (4): fontResolution | preview font visual-substitute: Aptos Display -> Carlito (1); fontResolution | preview font visual-substitute: Aptos -> Carlito (1); fontResolution | preview font missing: Tenorite Display (1); fontResolution | preview font missing: Tenorite (1); mapping | preview element group has no PPTX shape (image) (1)
+- **narratives** (10): fontResolution | preview font visual-substitute: Aptos Display -> Carlito (10); fontResolution | preview font visual-substitute: Aptos -> Carlito (10)
+- **audiences** (14): fontResolution | preview font visual-substitute: Aptos Display -> Carlito (14); fontResolution | preview font visual-substitute: Aptos -> Carlito (14); mapping | preview element group has no PPTX shape (image) (3)
+- **tones** (7): fontResolution | preview font visual-substitute: Aptos Display -> Carlito (7); fontResolution | preview font visual-substitute: Aptos -> Carlito (7)
+- **socials** (10): fontResolution | preview font visual-substitute: Aptos Display -> Carlito (10); fontResolution | preview font visual-substitute: Aptos -> Carlito (10)
+- **backgrounds** (6): fontResolution | preview font visual-substitute: Aptos Display -> Carlito (6); fontResolution | preview font visual-substitute: Aptos -> Carlito (6); fills | background color F0F0F0 vs FFFFFF (1)
+- **backgrounds (withAssets)** (6): fontResolution | preview font visual-substitute: Aptos Display -> Carlito (6); fontResolution | preview font visual-substitute: Aptos -> Carlito (6)
+- **image-treatments** (15): text | preview text line missing in PPTX (15); text | PPTX text not in preview (15); fontResolution | preview font visual-substitute: Aptos Display -> Carlito (15); fontResolution | preview font visual-substitute: Aptos -> Carlito (15)
+- **image-treatments (withAssets)** (15): mapping | preview element group has no PPTX shape (image) (15); fontResolution | preview font visual-substitute: Aptos Display -> Carlito (15); fontResolution | preview font visual-substitute: Aptos -> Carlito (15)
+- **headers-footers** (10): text | preview text line missing in PPTX (10); fontResolution | preview font visual-substitute: Aptos Display -> Carlito (10); fontResolution | preview font visual-substitute: Aptos -> Carlito (10); zOrder | z-order inversions between element groups (4) (6); zOrder | z-order inversions between element groups (2) (2)
+- **headers-footers (withAssets)** (10): text | preview text line missing in PPTX (10); fontResolution | preview font visual-substitute: Aptos Display -> Carlito (10); fontResolution | preview font visual-substitute: Aptos -> Carlito (10); zOrder | z-order inversions between element groups (4) (6); zOrder | z-order inversions between element groups (2) (2)
+- **blocks** (32): fontResolution | preview font visual-substitute: Aptos Display -> Carlito (8); fontResolution | preview font visual-substitute: Aptos -> Carlito (8); fontResolution | preview font missing: Segoe UI Semibold (6); fontResolution | preview font missing: Segoe UI (6); fontResolution | preview font visual-substitute: Georgia -> Gelasio (5)
+- **layouts** (485): fontResolution | preview font visual-substitute: Aptos Display -> Carlito (485); fontResolution | preview font visual-substitute: Aptos -> Carlito (485); mapping | preview element group has no PPTX shape (image) (202); geometry | picture frame delta >50pt (103); fills | image count 0 preview vs 1 pptx (87)
+- **charts** (76): fontResolution | preview font visual-substitute: Aptos Display -> Carlito (76); fontResolution | preview font visual-substitute: Aptos -> Carlito (76); text | chart preview text not in native chart cache (46); fills | chart series colors not in preview (11) (26); fills | chart series colors not in preview (6) (12)
 
 ## 20 most common mismatch patterns
 
 | # | pattern (check \| reason) | severity | values | occurrences | example ids | sample |
 |---|---|---|---|---|---|---|
-| 1 | reimport \| slide layout id not preserved (no diagnostic) | fail | 900 | 942 | color-schemes/black-and-white [slides.0]<br>color-schemes/bold-red [slides.0]<br>color-schemes/boost [slides.0] |  |
-| 2 | typefaces \| foreign font in app.xml: Calibri | fail | 899 | 899 | color-schemes/black-and-white<br>color-schemes/bold-red<br>color-schemes/boost |  |
-| 3 | typefaces \| foreign font in app.xml: Arial | fail | 897 | 897 | color-schemes/black-and-white<br>color-schemes/bold-red<br>color-schemes/boost |  |
-| 4 | fontResolution \| preview font visual-substitute: Aptos Display -> Carlito | fail | 754 | 754 | color-schemes/black-and-white [Aptos Display]<br>color-schemes/bold-red [Aptos Display]<br>color-schemes/boost [Aptos Display] |  |
-| 5 | fontResolution \| preview font visual-substitute: Aptos -> Carlito | fail | 754 | 754 | color-schemes/black-and-white [Aptos]<br>color-schemes/bold-red [Aptos]<br>color-schemes/boost [Aptos] |  |
-| 6 | text \| alignment ctr (preview) vs l (pptx) | fail | 504 | 931 | color-schemes/black-and-white [slides.0.title]<br>color-schemes/bold-red [slides.0.title]<br>color-schemes/boost [slides.0.title] | Color scheme preview |
-| 7 | geometry \| text line anchor-x delta >50pt | fail | 473 | 855 | color-schemes/black-and-white [slides.0.title]<br>color-schemes/bold-red [slides.0.title]<br>color-schemes/boost [slides.0.title] | dx 225.39 dy 0 "Color scheme preview" |
-| 8 | reimport \| design.fontScheme not preserved (no diagnostic) | fail | 222 | 222 | font-schemes/consolas<br>font-schemes/courier-new<br>font-schemes/arial |  |
-| 9 | typefaces \| foreign typeface Arial in ppt/charts/chartN.xml:latin | fail | 117 | 117 | blocks/financial-snapshot<br>blocks/data-story-insight<br>layouts/data-visualization |  |
-| 10 | typefaces \| foreign typeface Geneva in ppt/embeddings/Microsoft_Excel_WorksheetN.xlsx!/xl/styles.xml:xlsx-font | fail | 117 | 117 | blocks/financial-snapshot<br>blocks/data-story-insight<br>layouts/data-visualization |  |
-| 11 | typefaces \| foreign typeface Arial in ppt/embeddings/Microsoft_Excel_WorksheetN.xlsx!/xl/styles.xml:xlsx-font | fail | 117 | 117 | blocks/financial-snapshot<br>blocks/data-story-insight<br>layouts/data-visualization |  |
-| 12 | typefaces \| foreign typeface Calibri Light in ppt/embeddings/Microsoft_Excel_WorksheetN.xlsx!/xl/theme/themeN.xml:latin | fail | 117 | 117 | blocks/financial-snapshot<br>blocks/data-story-insight<br>layouts/data-visualization |  |
-| 13 | typefaces \| foreign typeface Calibri in ppt/embeddings/Microsoft_Excel_WorksheetN.xlsx!/xl/theme/themeN.xml:latin | fail | 117 | 117 | blocks/financial-snapshot<br>blocks/data-story-insight<br>layouts/data-visualization |  |
-| 14 | reimport \| language not preserved (no diagnostic) | fail | 93 | 93 | languages/afrikaans<br>languages/albanian<br>languages/amharic |  |
-| 15 | reimport \| narrative not preserved (no diagnostic) | fail | 56 | 56 | narratives/problem-solution<br>narratives/heros-journey<br>narratives/what-so-what-now-what |  |
-| 16 | geometry \| text line anchor-x delta >5pt | fail | 56 | 71 | audiences/media [slides.0.subtitle]<br>audiences/partner [slides.0.subtitle]<br>audiences/all-hands [slides.0.subtitle] | dx 11.175 dy 0 "Journalists, analysts, and med" |
-| 17 | reimport \| tone not preserved (no diagnostic) | fail | 53 | 53 | audiences/executive<br>audiences/investor<br>audiences/board |  |
-| 18 | reimport \| design.background not preserved (no diagnostic) | fail | 48 | 48 | themes/minimal<br>themes/classic<br>themes/dark |  |
-| 19 | fills \| chart series colors not in preview (1) | fail | 46 | 87 | layouts/data-visualization [slides.0.blocks.0.chart]<br>layouts/dashboard [slides.0.blocks.0.chart]<br>layouts/waterfall-bridge [slides.0.blocks.0.chart] |  |
-| 20 | text \| chart preview text not in native chart cache | fail | 46 | 46 | charts/clustered-column [slides.0.chart]<br>charts/stacked-column-2x [slides.0.chart]<br>charts/stacked-column-3x [slides.0.chart] | Value 1  Value 2 |
+| 1 | fontResolution \| preview font visual-substitute: Aptos Display -> Carlito | fail | 754 | 754 | color-schemes/black-and-white [Aptos Display]<br>color-schemes/bold-red [Aptos Display]<br>color-schemes/boost [Aptos Display] |  |
+| 2 | fontResolution \| preview font visual-substitute: Aptos -> Carlito | fail | 754 | 754 | color-schemes/black-and-white [Aptos]<br>color-schemes/bold-red [Aptos]<br>color-schemes/boost [Aptos] |  |
+| 3 | mapping \| preview element group has no PPTX shape (image) | fail | 225 | 225 | themes/dark [slides.0.design.slideImage]<br>audiences/sales [slides.0.design.slideImage]<br>audiences/customer [slides.0.design.slideImage] |  |
+| 4 | geometry \| picture frame delta >50pt | fail | 106 | 106 | blocks/solution-overview [slides.0.items]<br>blocks/value-proposition [slides.0.items]<br>blocks/team-grid [slides.0.items] | {"x":0,"y":0,"w":1280,"h":720} vs {"x":57.6,"y":189.98,"w":1164.8,"h":472.42} |
+| 5 | fills \| image count 0 preview vs 1 pptx | fail | 90 | 90 | blocks/solution-overview [slides.0.items]<br>blocks/value-proposition [slides.0.items]<br>blocks/team-grid [slides.0.items] |  |
+| 6 | zOrder \| z-order inversions between element groups (1) | fail | 52 | 52 | layouts/network-dependency-map [slide 0]<br>layouts/geographic-map [slide 0]<br>layouts/chart-1x-title-center-slideimage [slide 0] |  |
+| 7 | zOrder \| z-order inversions between element groups (2) | fail | 46 | 46 | headers-footers/slide-number-only [slide 0]<br>headers-footers/slide-number-only@withAssets [slide 0]<br>headers-footers/slide-number-progress [slide 0] |  |
+| 8 | fills \| chart series colors not in preview (1) | fail | 46 | 87 | layouts/data-visualization [slides.0.blocks.0.chart]<br>layouts/dashboard [slides.0.blocks.0.chart]<br>layouts/waterfall-bridge [slides.0.blocks.0.chart] |  |
+| 9 | text \| chart preview text not in native chart cache | fail | 46 | 46 | charts/clustered-column [slides.0.chart]<br>charts/stacked-column-2x [slides.0.chart]<br>charts/stacked-column-3x [slides.0.chart] | Value 1  Value 2 |
+| 10 | text \| preview text line missing in PPTX | fail | 45 | 105 | image-treatments/full-bleed [slides.0.image]<br>image-treatments/text-overlay [slides.0.image]<br>image-treatments/side-by-side [slides.0.image] | Image unavailable |
+| 11 | text \| alignment l (preview) vs ctr (pptx) | fail | 39 | 264 | blocks/market-opportunity [slides.0.blocks.0.metric]<br>blocks/kpi-dashboard [slides.0.blocks.0.metric]<br>blocks/traction-metrics [slides.0.blocks.0.metric] | $48B TAM |
+| 12 | fills \| chart series colors not in preview (11) | fail | 26 | 26 | charts/line-with-high-low [slides.0.chart]<br>charts/line-with-high-low-and-markers [slides.0.chart]<br>charts/line-with-markers [slides.0.chart] |  |
+| 13 | fills \| PPTX fill color(s) absent in preview | fail | 24 | 24 | layouts/list-1x-box [slides.0.items]<br>layouts/list-1x-box-vertical [slides.0.items]<br>layouts/list-2x-box [slides.0.blocks.0.items] | 011842 not in [] |
+| 14 | geometry \| table frame delta >50pt | fail | 20 | 20 | color-schemes/black-and-white [slides.3.table]<br>color-schemes/bold-red [slides.3.table]<br>color-schemes/boost [slides.3.table] | {"x":57.6,"y":147.48,"w":1164.8,"h":162} vs {"x":57.6,"y":147.48,"w":1164.8,"h": |
+| 15 | text \| PPTX text not in preview | fail | 16 | 16 | image-treatments/full-bleed [slides.0.image]<br>image-treatments/text-overlay [slides.0.image]<br>image-treatments/side-by-side [slides.0.image] | Image |
+| 16 | fills \| image count 1 preview vs 2 pptx | fail | 16 | 16 | layouts/image-2x-crop-vertical-title-left-slideimage [slides.0.blocks.0.image]<br>layouts/image-2x-fit-vertical-title-left-slideimage [slides.0.blocks.0.image]<br>layouts/image-3x-crop-slideimage [slides.0.blocks.1.image] |  |
+| 17 | zOrder \| z-order inversions between element groups (4) | fail | 12 | 12 | headers-footers/section-marker-header [slide 0]<br>headers-footers/section-marker-header@withAssets [slide 0]<br>headers-footers/dated-footer [slide 0] |  |
+| 18 | fills \| chart series colors not in preview (6) | fail | 12 | 12 | charts/column [slides.0.chart]<br>charts/clustered-column [slides.0.chart]<br>charts/stacked-column-2x [slides.0.chart] |  |
+| 19 | text \| list markers differ | fail | 10 | 58 | layouts/list-5x-box-vertical-title-center-slideimage [slides.0.blocks.0.items]<br>layouts/list-5x-box-vertical-title-left-slideimage [slides.0.blocks.0.items]<br>layouts/list-6x-box-vertical [slides.0.blocks.0.items] | 3 preview [•••] vs 2 pptx [••] |
+| 20 | fills \| chart series colors not in preview (4) | fail | 9 | 9 | charts/bar [slides.0.chart]<br>charts/clustered-bar-2x [slides.0.chart]<br>charts/stacked-bar-2x [slides.0.chart] |  |
 
 ## Near-only patterns (tolerable deltas)
 
 | pattern | values | example |
 |---|---|---|
+| mapping \| pptx shape unmapped (pic:OPF slide image slides.#) | 119 | themes/dark [unmapped] |
 | text \| line segmentation differs (preview line is part of a PPTX paragraph) | 16 | image-treatments/full-bleed [slides.0.image] |
 | mapping \| pptx shape unmapped (sp:OPF list paragraph #) | 10 | layouts/list-5x-box-vertical-title-center-slideimage [unmapped] |
 | text \| chart label wrapped/split in preview (native chart lays out its own labels) | 5 | blocks/financial-snapshot [slides.0.blocks.4.chart] |
 | text \| font size 14.145pt vs 14.15pt | 2 | layouts/list-6x-heading-title-center [slides.0.blocks.0.items] |
 | text \| chart text sizes preview [13.5] vs chart [12,18] | 2 | charts/pie [slides.0.chart] |
+| reimport \| design.background not preserved (diagnostic unresolved-asset-reference) | 1 | backgrounds/photography |
 
 ## Preview font resolution
 
@@ -148,13 +150,8 @@ Families the traced preview uses plus the resolved design heading/body/code font
 
 Foreign `typeface=` values are those not used by the preview; they are listed by part, with the number of values affected:
 
-- `Arial@ppt/charts/chartN.xml:latin` — 117
-- `Geneva@ppt/embeddings/Microsoft_Excel_WorksheetN.xlsx!/xl/styles.xml:xlsx-font` — 117
-- `Arial@ppt/embeddings/Microsoft_Excel_WorksheetN.xlsx!/xl/styles.xml:xlsx-font` — 117
-- `Calibri Light@ppt/embeddings/Microsoft_Excel_WorksheetN.xlsx!/xl/theme/themeN.xml:latin` — 117
-- `Calibri@ppt/embeddings/Microsoft_Excel_WorksheetN.xlsx!/xl/theme/themeN.xml:latin` — 117
 
-Theme per-script supplements (`<a:font script=…>`) are listed separately and not gated: 48 distinct faces (游ゴシック Light, 맑은 고딕, 等线 Light, 新細明體, Times New Roman, Angsana New, Nyala, Vrinda, Shruti, MoolBoran, Tunga, Raavi, …).
+Theme per-script supplements (`<a:font script=…>`) are listed separately and not gated: 50 distinct faces (游ゴシック Light, 맑은 고딕, 等线 Light, 新細明體, Times New Roman, Angsana New, Nyala, Vrinda, Shruti, MoolBoran, Tunga, Raavi, …).
 
 ## Re-running
 
