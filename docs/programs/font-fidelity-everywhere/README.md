@@ -62,7 +62,9 @@ packages; they change after a release that includes this work.
 - Never relax a gate or tolerance: native 0.02 pt, renderer 0.1 reference px,
   the Carlito/chosen-font allowlists.
 - Root alone owns PowerPoint and temporary font registrations. One bounded
-  worker at a time (45 s default, 60 s max). Never kill Office, call
+  worker at a time (45 s default, 60 s max, per the
+  [Windows native handoff](../../handoff-windows-native-2026-09-21-wrap-up.md)
+  restart prompt). Never kill Office, call
   `Application.Quit`, close unrelated presentations, change Office security, or
   retry a native attempt in place; a new attempt uses a fresh directory.
 - Preserve failures as evidence. Font programs are never committed.
@@ -78,11 +80,13 @@ Any session (root or subagent) resuming this program:
 2. `git fetch` core, opf-pptx, opf-render and opf-editor. Work only from fresh
    `origin/main` worktrees; never resume a squash-merged branch.
 3. List open program PRs:
-   `gh pr list -R OpenPresentation/<repo> --search "FF-"` for each repo. Reconcile
-   any status drift into the burndown.
+   `gh pr list -R OpenPresentation/<repo> --state all --search "FF- in:title"`
+   for each repo, so merged items show up too. Reconcile any status drift into
+   the burndown.
 4. Pick the lowest-numbered `todo` item whose dependencies are `done`, or an
-   item assigned to you. Branch as `codex/ff-<id>-<slug>` and put the ID in
-   the PR title.
+   item assigned to you. Branch as `codex/ff-<nn>-<slug>` (for example
+   `codex/ff-07-script-slots`) and start the PR title with the ID (`FF-07: `).
+   Branches opened before this tracker are grandfathered.
 5. Each item has explicit acceptance criteria. An item is `done` only when its
    PR is merged after independent review and green CI on the exact head, and
    its evidence link is recorded.
