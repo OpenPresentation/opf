@@ -161,13 +161,30 @@ const center = b => ({x: b.x + b.w / 2, y: b.y + b.h / 2});
 const inside = (pt, b) => pt.x >= b.x - 0.5 && pt.x <= b.x + b.w + 0.5 && pt.y >= b.y - 0.5 && pt.y <= b.y + b.h + 0.5;
 const pathFromName = n => n.match(/^OPF (?:heading|text|card|table|image|chart|code|metric|quote|list) (slides\.\d+\.\S+?)(?: line \d+| part \d+)?$/)?.[1] ?? null;
 const pxToPt = v => r3(v * PX_PT);
-// Visible image rect of a picture: the image spans the frame widened by the a:srcRect insets (a negative inset
-// letterboxes a fit image inside the frame); what shows is that span clipped to the frame.
-function visibleImage(b, c = {}) { const [l, t, r, bt] = ['l', 't', 'r', 'b'].map(k => +(c[k] ?? 0) / 100000); const W = b.w / (1 - l - r), H = b.h / (1 - t - bt), x0 = b.x - l * W, y0 = b.y - t * H;
-  const x = Math.max(b.x, x0), y = Math.max(b.y, y0); return {x, y, w: Math.min(b.x + b.w, x0 + W) - x, h: Math.min(b.y + b.h, y0 + H) - y}; }
-function geomDelta(a, b) { return r3(Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y), Math.abs(a.w - b.w), Math.abs(a.h - b.h)) * PX_PT); }
-const bucket = d => d > 50 ? '>50' : d > 5 ? '>5' : d > TOL.geomNearPt ? '>0.5' : '<=0.5';
-function sev(dPt) { return dPt <= TOL.geomPt ? 'pass' : dPt <= TOL.geomNearPt ? 'near' : 'fail'; }
+// Full image rect of a picture: the frame widened by the a:srcRect insets (a negative inset letterboxes a fit
+// image inside the frame). A crop that leaves no image (l+r or t+b >= 100%) or a non-numeric inset is NaN.
+const NAN_BOX = {x: NaN, y: NaN, w: NaN, h: NaN};
+function imageRect(b, c = {}) { const [l, t, r, bt] = ['l', 't', 'r', 'b'].map(k => +(c[k] ?? 0) / 100000); if (!(l + r < 1 && t + bt < 1)) return NAN_BOX;
+  const w = b.w / (1 - l - r), h = b.h / (1 - t - bt); return {x: b.x - l * w, y: b.y - t * h, w, h}; }
+// Visible image rect: the full image rect clipped to the frame.
+function visibleImage(b, c = {}) { const i = imageRect(b, c); const x = Math.max(b.x, i.x), y = Math.max(b.y, i.y); return {x, y, w: Math.min(b.x + b.w, i.x + i.w) - x, h: Math.min(b.y + b.h, i.y + i.h) - y}; }
+// Preview full image rect: the SVG <image> viewport with preserveAspectRatio applied to the intrinsic size.
+function placedImage(e) { if (!e.intrinsic || /^none/.test(e.par)) return e; const m = e.par.match(/x(Min|Mid|Max)Y(Min|Mid|Max)/) ?? [null, 'Mid', 'Mid'];
+  const k = (/slice/.test(e.par) ? Math.max : Math.min)(e.w / e.intrinsic.w, e.h / e.intrinsic.h), w = e.intrinsic.w * k, h = e.intrinsic.h * k, f = {Min: 0, Mid: 0.5, Max: 1};
+  return {x: e.x + f[m[1]] * (e.w - w), y: e.y + f[m[2]] * (e.h - h), w, h}; }
+// Any non-finite coordinate makes the delta NaN; callers treat a NaN or infinite delta as a failure.
+const finiteBox = b => ['x', 'y', 'w', 'h'].every(k => Number.isFinite(b?.[k]));
+function geomDelta(a, b) { if (!finiteBox(a) || !finiteBox(b)) return NaN; return r3(Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y), Math.abs(a.w - b.w), Math.abs(a.h - b.h)) * PX_PT); }
+// Crop position as the largest displacement of visible image content: a point q of the visible rect v shows image
+// coordinate (q - a.x) / a.w in the PPTX; the preview draws that coordinate at p.x + (q - a.x) / a.w * p.w. Measured
+// at the visible edges (the displacement is linear in q), so the far, clipped-away image edges do not amplify
+// a:srcRect's 1/100000 quantization.
+function cropDelta(v, a, p) { if (![v, a, p].every(finiteBox)) return NaN;
+  const at = (q, a0, aw, p0, pw) => Math.abs(p0 + (q - a0) / aw * pw - q);
+  return r3(Math.max(at(v.x, a.x, a.w, p.x, p.w), at(v.x + v.w, a.x, a.w, p.x, p.w), at(v.y, a.y, a.h, p.y, p.h), at(v.y + v.h, a.y, a.h, p.y, p.h)) * PX_PT); }
+const overTol = d => !(d <= TOL.geomPt);
+const bucket = d => !Number.isFinite(d) ? 'non-finite ' : d > 50 ? '>50' : d > 5 ? '>5' : d > TOL.geomNearPt ? '>0.5' : '<=0.5';
+function sev(dPt) { return dPt <= TOL.geomPt ? 'pass' : dPt <= TOL.geomNearPt ? 'near' : 'fail'; } // NaN and Infinity fail
 
 function compareValue(doc) {
   const diffs = []; const checks = {};
@@ -187,13 +204,14 @@ async function parity(doc) {
   catch (e) { return {class: 'mismatch', fatal: `export threw ${e.code ?? e.name}`, message: String(e.message).slice(0, 200), checks: {}, diffs: [{check: 'export', status: 'fail', reason: `export threw ${e.code ?? e.name}`}]}; }
   const files = unzipSync(bytes); const theme = themeInfo(dec.decode(files['ppt/theme/theme1.xml'] ?? new Uint8Array()));
   const diffs = []; const add = (check, status, reason, where, sample) => diffs.push({check, status, reason, ...(where ? {where} : {}), ...(sample !== undefined ? {sample: String(sample).slice(0, 80)} : {})});
+  const maxDelta = d => { if (Number.isFinite(d)) stats.geomMaxDeltaPt = Math.max(stats.geomMaxDeltaPt, d); };
   const stats = {textLines: 0, textLinesMatched: 0, runs: 0, shapesMapped: 0, shapesUnmapped: 0, srgbLiteral: 0, schemeClr: 0, geomMaxDeltaPt: 0};
 
   // (5) slide size
   const pres = dec.decode(files['ppt/presentation.xml']); const sz = pres.match(/<p:sldSz cx="(\d+)" cy="(\d+)"/);
   const pvb = parseSvg(svgs[0]).viewBox; const pptSize = [+sz[1] / EMU_PT, +sz[2] / EMU_PT], pvSize = [pvb[2] * PX_PT, pvb[3] * PX_PT];
   const sizeDelta = r3(Math.max(Math.abs(pptSize[0] - pvSize[0]), Math.abs(pptSize[1] - pvSize[1])));
-  if (sizeDelta > TOL.geomPt) add('slideSize', 'fail', `slide size differs by ${sizeDelta}pt`, `${pvSize.map(r3)} vs ${pptSize.map(r3)}`);
+  if (overTol(sizeDelta)) add('slideSize', 'fail', `slide size differs by ${sizeDelta}pt`, `${pvSize.map(r3)} vs ${pptSize.map(r3)}`);
 
   const slideParts = Object.keys(files).filter(n => /^ppt\/slides\/slide\d+\.xml$/.test(n)).sort((a, b) => parseInt(a.match(/\d+/)) - parseInt(b.match(/\d+/)));
   if (slideParts.length !== svgs.length) add('zOrder', 'fail', `slide count ${svgs.length} preview vs ${slideParts.length} pptx`);
@@ -236,7 +254,7 @@ async function parity(doc) {
       stats.textLines += pvLines.length;
       if (pvMarkers.length) { const xb = pxParas.filter(p => p.bullet); const pm = pvMarkers.map(m => normText(m.text)).sort().join(''), xm = xb.map(p => p.bullet === '#auto' ? '#' : p.bullet).sort().join('');
         if (pm !== xm) add('text', 'fail', `list markers differ`, key, `${pvMarkers.length} preview [${pm.slice(0, 8)}] vs ${xb.length} pptx [${xm.slice(0, 8)}]`);
-        for (const m of pvMarkers) { const para = xb.find(p => p.single && p.shape.box && Math.abs(p.shape.box.y + ((p.runs[0]?.sizePt ?? 0) / PX_PT) - m.y) < 1); if (!para) continue; const bx = para.shape.box.x + para.marL + para.indent; const d = r3(Math.abs(bx - m.x) * PX_PT); stats.geomMaxDeltaPt = Math.max(stats.geomMaxDeltaPt, d); if (d > TOL.geomPt) add('geometry', sev(d), `list marker x delta ${bucket(d)}pt`, key, d); } }
+        for (const m of pvMarkers) { const para = xb.find(p => p.single && p.shape.box && Math.abs(p.shape.box.y + ((p.runs[0]?.sizePt ?? 0) / PX_PT) - m.y) < 1); if (!para) continue; const bx = para.shape.box.x + para.marL + para.indent; const d = r3(Math.abs(bx - m.x) * PX_PT); maxDelta(d); if (overTol(d)) add('geometry', sev(d), `list marker x delta ${bucket(d)}pt`, key, d); } }
       if (isChart) {
         const ch = G.px.find(s => s.chart).chart; const strs = new Set(ch.strings.map(normText));
         const allStr = [...strs].join(''); const wrapped = pvLines.filter(l => !strs.has(normText(l.text)) && allStr.includes(normText(l.text))); if (wrapped.length) add('text', 'near', 'chart label wrapped/split in preview (native chart lays out its own labels)', key, wrapped.map(m => m.text).slice(0, 4).join(' | '));
@@ -281,9 +299,9 @@ async function parity(doc) {
             const pvLeft = l.anchor === 'middle' ? l.x - w / 2 : l.anchor === 'end' ? l.x - w : l.x;
             const pxLeft = p.algn === 'ctr' ? b.x + b.w / 2 - w / 2 : p.algn === 'r' ? b.x + b.w - w : b.x + p.marL;
             const size = (xr[0]?.sizePt ?? 0) / PX_PT; const baseline = b.y + size;
-            const dx = r3(Math.abs(pxLeft - pvLeft) * PX_PT), dy = r3(Math.abs(baseline - l.y) * PX_PT); const d = Math.max(dx, dy);
-            stats.geomMaxDeltaPt = Math.max(stats.geomMaxDeltaPt, d);
-            if (d > TOL.geomPt) add('geometry', sev(d), `text line ${dx > TOL.geomPt ? 'anchor-x' : ''}${dx > TOL.geomPt && dy > TOL.geomPt ? '+' : ''}${dy > TOL.geomPt ? 'baseline-y' : ''} delta ${bucket(d)}pt`, key, `dx ${dx} dy ${dy} ${JSON.stringify(l.text.slice(0, 30))}`);
+            const dx = r3(Math.abs(pxLeft - pvLeft) * PX_PT), dy = r3(Math.abs(baseline - l.y) * PX_PT); const d = Number.isFinite(dx) && Number.isFinite(dy) ? Math.max(dx, dy) : NaN;
+            maxDelta(d);
+            if (overTol(d)) add('geometry', sev(d), `text line ${overTol(dx) ? 'anchor-x' : ''}${overTol(dx) && overTol(dy) ? '+' : ''}${overTol(dy) ? 'baseline-y' : ''} delta ${bucket(d)}pt`, key, `dx ${dx} dy ${dy} ${JSON.stringify(l.text.slice(0, 30))}`);
           }
         }
         const extra = pxParas.filter((p, i) => !used.has(i) && !pvLines.some(l => normText(p.text).includes(normText(l.text))));
@@ -292,10 +310,16 @@ async function parity(doc) {
       // (1) geometry of non-text frames (charts, tables, pictures, cards)
       for (const s of G.px.filter(s => s.box && (s.chart || s.table || s.image || s.name.startsWith('OPF card')))) {
         const it = items.find(i => i.path === key) ?? (key === siKey && s.image ? {box: null} : null); if (!it) continue;
-        let ref = s.name.startsWith('OPF card') ? it.frame : s.image ? (G.pv.find(e => e.kind === 'image') ?? it.box) : it.box; if (!ref) continue;
+        const pvImage = s.image ? G.pv.find(e => e.kind === 'image') : null;
+        let ref = s.name.startsWith('OPF card') ? it.frame : s.image ? (pvImage ?? it.box) : it.box; if (!ref) continue;
         if (s.image && ref.intrinsic && /meet/.test(ref.par)) { const k = Math.min(ref.w / ref.intrinsic.w, ref.h / ref.intrinsic.h), w = ref.intrinsic.w * k, h = ref.intrinsic.h * k; ref = {x: ref.x + (ref.w - w) / 2, y: ref.y + (ref.h - h) / 2, w, h}; }
-        const sbox = s.image ? visibleImage(s.box, s.image.srcRect) : s.box; const d = geomDelta(sbox, ref); stats.geomMaxDeltaPt = Math.max(stats.geomMaxDeltaPt, d);
-        if (d > TOL.geomPt) add('geometry', sev(d), `${s.chart ? 'chart' : s.table ? 'table' : s.image ? 'picture' : 'card'} frame delta ${bucket(d)}pt`, key, `${JSON.stringify(Object.fromEntries(Object.entries(sbox).map(([k, v]) => [k, r3(v)])))} vs ${JSON.stringify(Object.fromEntries(Object.entries(ref).filter(([k]) => 'xywh'.includes(k)).map(([k, v]) => [k, r3(v)])))}`);
+        const sbox = s.image ? visibleImage(s.box, s.image.srcRect) : s.box; const d = geomDelta(sbox, ref); maxDelta(d);
+        if (overTol(d)) add('geometry', sev(d), `${s.chart ? 'chart' : s.table ? 'table' : s.image ? 'picture' : 'card'} frame delta ${bucket(d)}pt`, key, `${JSON.stringify(Object.fromEntries(Object.entries(sbox).map(([k, v]) => [k, r3(v)])))} vs ${JSON.stringify(Object.fromEntries(Object.entries(ref).filter(([k]) => 'xywh'.includes(k)).map(([k, v]) => [k, r3(v)])))}`);
+        // Crop position: the picture's full image rect (frame widened by a:srcRect) must place the image content as
+        // the preview's placed image does (the <image> viewport with preserveAspectRatio applied), so a crop taken
+        // from the wrong side fails even though its visible rect still equals the frame. Needs the intrinsic size.
+        if (pvImage?.intrinsic) { const full = imageRect(s.box, s.image.srcRect), placed = placedImage(pvImage); const dc = cropDelta(sbox, full, placed); maxDelta(dc);
+          if (overTol(dc)) add('geometry', sev(dc), `picture crop delta ${bucket(dc)}pt`, key, `${JSON.stringify(Object.fromEntries(Object.entries(full).map(([k, v]) => [k, r3(v)])))} vs ${JSON.stringify(Object.fromEntries(Object.entries(placed).filter(([k]) => 'xywh'.includes(k)).map(([k, v]) => [k, r3(v)])))}`); }
       }
       // (3) fills & images
       if (!isChart) {

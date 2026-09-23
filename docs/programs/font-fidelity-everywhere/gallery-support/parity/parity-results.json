@@ -1,11 +1,11 @@
 {
  "meta": {
   "generatedBy": "dimension-audit/parity/scripts/parity.mjs",
-  "generatedAt": "2026-09-23T12:09:28.231Z",
+  "generatedAt": "2026-09-23T12:35:35.658Z",
   "node": "v24.21.0",
   "prefix": "parity",
   "heads": {
-   "opf": "7f88749a4fbb73d80cb200c56a3c9c1b9c1dae77",
+   "opf": "b1753ef013901a91cb72f2e2b53db849f049c6b6",
    "opf-render": "bc436f3bf324bcec0c180d18ef773a117dbe29ee",
    "opf-pptx": "9092954664917fd8c49aa29203425c0dcdaaf8e7",
    "pptx-gallery": "f17e9ae5869669d5fbac3720f285652d0c37551c"
@@ -49394,7 +49394,7 @@
     "shapesUnmapped": 0,
     "srgbLiteral": 1,
     "schemeClr": 0,
-    "geomMaxDeltaPt": 0
+    "geomMaxDeltaPt": 0.001
    },
    "fontResolution": {
     "Aptos Display": {
@@ -60857,7 +60857,7 @@
     "shapesUnmapped": 0,
     "srgbLiteral": 0,
     "schemeClr": 0,
-    "geomMaxDeltaPt": 0
+    "geomMaxDeltaPt": 0.001
    },
    "fontResolution": {
     "Aptos Display": {
@@ -61133,7 +61133,7 @@
     "shapesUnmapped": 0,
     "srgbLiteral": 1,
     "schemeClr": 0,
-    "geomMaxDeltaPt": 0
+    "geomMaxDeltaPt": 0.001
    },
    "fontResolution": {
     "Aptos Display": {
@@ -61412,7 +61412,7 @@
     "shapesUnmapped": 0,
     "srgbLiteral": 1,
     "schemeClr": 0,
-    "geomMaxDeltaPt": 0
+    "geomMaxDeltaPt": 0.001
    },
    "fontResolution": {
     "Aptos Display": {
@@ -62521,7 +62521,7 @@
     "shapesUnmapped": 0,
     "srgbLiteral": 0,
     "schemeClr": 0,
-    "geomMaxDeltaPt": 0
+    "geomMaxDeltaPt": 0.002
    },
    "fontResolution": {
     "Aptos Display": {
@@ -62660,7 +62660,7 @@
     "shapesUnmapped": 0,
     "srgbLiteral": 0,
     "schemeClr": 0,
-    "geomMaxDeltaPt": 0
+    "geomMaxDeltaPt": 0.002
    },
    "fontResolution": {
     "Aptos Display": {
@@ -62799,7 +62799,7 @@
     "shapesUnmapped": 0,
     "srgbLiteral": 1,
     "schemeClr": 0,
-    "geomMaxDeltaPt": 0
+    "geomMaxDeltaPt": 0.002
    },
    "fontResolution": {
     "Aptos Display": {
@@ -62939,7 +62939,7 @@
     "shapesUnmapped": 0,
     "srgbLiteral": 1,
     "schemeClr": 0,
-    "geomMaxDeltaPt": 0
+    "geomMaxDeltaPt": 0.002
    },
    "fontResolution": {
     "Aptos Display": {
@@ -63079,7 +63079,7 @@
     "shapesUnmapped": 0,
     "srgbLiteral": 0,
     "schemeClr": 0,
-    "geomMaxDeltaPt": 0
+    "geomMaxDeltaPt": 0.001
    },
    "fontResolution": {
     "Aptos Display": {
@@ -63218,7 +63218,7 @@
     "shapesUnmapped": 0,
     "srgbLiteral": 0,
     "schemeClr": 0,
-    "geomMaxDeltaPt": 0
+    "geomMaxDeltaPt": 0.001
    },
    "fontResolution": {
     "Aptos Display": {
@@ -63357,7 +63357,7 @@
     "shapesUnmapped": 0,
     "srgbLiteral": 1,
     "schemeClr": 0,
-    "geomMaxDeltaPt": 0
+    "geomMaxDeltaPt": 0.002
    },
    "fontResolution": {
     "Aptos Display": {
@@ -64741,7 +64741,7 @@
     "shapesUnmapped": 0,
     "srgbLiteral": 0,
     "schemeClr": 0,
-    "geomMaxDeltaPt": 0
+    "geomMaxDeltaPt": 0.004
    },
    "fontResolution": {
     "Aptos Display": {
@@ -64880,7 +64880,7 @@
     "shapesUnmapped": 0,
     "srgbLiteral": 0,
     "schemeClr": 0,
-    "geomMaxDeltaPt": 0
+    "geomMaxDeltaPt": 0.004
    },
    "fontResolution": {
     "Aptos Display": {
@@ -65019,7 +65019,7 @@
     "shapesUnmapped": 0,
     "srgbLiteral": 1,
     "schemeClr": 0,
-    "geomMaxDeltaPt": 0
+    "geomMaxDeltaPt": 0.002
    },
    "fontResolution": {
     "Aptos Display": {
@@ -65159,7 +65159,7 @@
     "shapesUnmapped": 0,
     "srgbLiteral": 1,
     "schemeClr": 0,
-    "geomMaxDeltaPt": 0
+    "geomMaxDeltaPt": 0.002
    },
    "fontResolution": {
     "Aptos Display": {
@@ -65299,7 +65299,7 @@
     "shapesUnmapped": 0,
     "srgbLiteral": 0,
     "schemeClr": 0,
-    "geomMaxDeltaPt": 0
+    "geomMaxDeltaPt": 0.002
    },
    "fontResolution": {
     "Aptos Display": {
@@ -65438,7 +65438,7 @@
     "shapesUnmapped": 0,
     "srgbLiteral": 0,
     "schemeClr": 0,
-    "geomMaxDeltaPt": 0
+    "geomMaxDeltaPt": 0.002
    },
    "fontResolution": {
     "Aptos Display": {
@@ -65577,7 +65577,7 @@
     "shapesUnmapped": 0,
     "srgbLiteral": 1,
     "schemeClr": 0,
-    "geomMaxDeltaPt": 0
+    "geomMaxDeltaPt": 0.001
    },
    "fontResolution": {
     "Aptos Display": {
@@ -65717,7 +65717,7 @@
     "shapesUnmapped": 0,
     "srgbLiteral": 2,
     "schemeClr": 0,
-    "geomMaxDeltaPt": 0
+    "geomMaxDeltaPt": 0.002
    },
    "fontResolution": {
     "Aptos Display": {
