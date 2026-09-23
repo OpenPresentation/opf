@@ -151,7 +151,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "bar",
+        "type": "100pct-bullet-column-2x",
         "data": {
           "columns": [
             "Quarter",

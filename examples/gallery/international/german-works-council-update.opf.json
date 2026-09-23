@@ -158,7 +158,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "stacked-bar-3x",
+        "type": "box-and-whisker-2x",
         "data": {
           "columns": [
             "Quarter",

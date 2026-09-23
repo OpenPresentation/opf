@@ -40,10 +40,17 @@ describe("every bundled example validates cleanly", () => {
         true,
         `Example ${example.slug} failed validation: ${JSON.stringify(result.errors, null, 2)}`,
       );
+      // The published example corpus is pinned by the renderer golden baseline,
+      // so examples still referencing FF-22 deprecated chart types migrate with
+      // the coordinated 0.12.0 removal (docs/migrations/0.12.0.md). Until then
+      // only deprecation warnings that name a replacement are tolerated.
+      const unexpected = result.warnings.filter(
+        (warning) => !(warning.params?.kind === "chartTypes" && typeof warning.params?.replacedBy === "string"),
+      );
       assert.equal(
-        result.warnings.length,
+        unexpected.length,
         0,
-        `Example ${example.slug} references unknown catalog ids: ${JSON.stringify(result.warnings, null, 2)}`,
+        `Example ${example.slug} references unknown catalog ids: ${JSON.stringify(unexpected, null, 2)}`,
       );
     });
   }

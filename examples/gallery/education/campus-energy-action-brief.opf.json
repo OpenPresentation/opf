@@ -151,7 +151,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "100pct-stacked-column-3x",
+        "type": "scatter",
         "data": {
           "columns": [
             "Quarter",

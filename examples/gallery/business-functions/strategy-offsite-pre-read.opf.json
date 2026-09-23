@@ -181,7 +181,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "line-with-markers",
+        "type": "filled-radar",
         "data": {
           "columns": [
             "Quarter",
@@ -351,7 +351,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "stacked-line-with-markers-3x",
+            "type": "line-with-markers-2x",
             "data": {
               "columns": [
                 "Quarter",

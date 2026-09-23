@@ -173,7 +173,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "radar",
+        "type": "histogram",
         "data": {
           "columns": [
             "Quarter",
@@ -343,7 +343,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "waterfall",
+            "type": "pareto",
             "data": {
               "columns": [
                 "Quarter",

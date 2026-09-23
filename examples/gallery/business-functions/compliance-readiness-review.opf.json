@@ -167,7 +167,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "waterfall",
+        "type": "pareto",
         "data": {
           "src": "asset:metric-data",
           "sheet": "Summary",
@@ -318,7 +318,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "doughnut",
+            "type": "sparkline-5x",
             "data": {
               "columns": [
                 "Quarter",

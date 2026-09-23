@@ -142,7 +142,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "filled-radar",
+        "type": "dot-plot-5x",
         "data": {
           "columns": [
             "Quarter",

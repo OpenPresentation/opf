@@ -217,7 +217,10 @@ The effects of deprecation:
 
 - The validator warns `deprecated chartTypes catalog id '<id>'; use '<replacement>'`.
 - `opf catalog chartTypes` leaves deprecated records out unless you pass `--all`.
-- The example generator never picks a deprecated record.
+- The example generator never picks a deprecated record. The committed
+  examples are pinned by the opf-render golden corpus hash, so they keep their
+  current ids until the coordinated 0.12.0 removal regenerates them together
+  with the renderer baseline.
 - The gallery no longer lists them.
 
 Deleting the files is a breaking change under `pnpm check:breaking`, which

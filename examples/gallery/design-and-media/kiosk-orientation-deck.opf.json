@@ -181,7 +181,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "world",
+        "type": "bullet-column-2x",
         "data": {
           "columns": [
             "Quarter",
@@ -351,7 +351,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "filled-radar",
+            "type": "dot-plot-4x",
             "data": {
               "columns": [
                 "Quarter",

@@ -135,7 +135,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "radar-with-markers",
+        "type": "stacked-line-2x",
         "data": {
           "columns": [
             "Quarter",

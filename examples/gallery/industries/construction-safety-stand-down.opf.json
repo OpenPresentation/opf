@@ -165,7 +165,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "stacked-area-3x",
+        "type": "box-and-whisker-2x",
         "data": {
           "columns": [
             "Quarter",
@@ -335,7 +335,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "100pct-stacked-bar-3x",
+            "type": "clustered-bar-2x",
             "data": {
               "columns": [
                 "Quarter",

@@ -149,7 +149,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "radar",
+        "type": "australia",
         "data": {
           "columns": [
             "Quarter",

@@ -150,7 +150,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "waterfall",
+        "type": "bullet-column-2x",
         "data": {
           "columns": [
             "Quarter",

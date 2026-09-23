@@ -53,7 +53,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "line",
+        "type": "stacked-bar-2x",
         "data": {
           "columns": [
             "Quarter",

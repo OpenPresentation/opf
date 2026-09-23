@@ -57,7 +57,7 @@
       },
       "right": {
         "chart": {
-          "type": "scatter",
+          "type": "dumbbell",
           "data": {
             "columns": [
               "Metric",
