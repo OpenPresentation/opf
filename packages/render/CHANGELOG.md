@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- FF-35: fall back to the shared engine default font scheme, `aptos` (`engineDefaults.fontScheme.pptx.latin`, core `DEFAULT_FONT_SCHEME`), instead of `roboto` when the slide, deck and resolved theme name no font scheme. Previews of a custom theme without a font scheme now use the fonts that core pagination, opf-editor and opf-pptx use. Aptos is not bundled: estimated SVG names `Aptos`/`Aptos Display` and the default raster draws Roboto, as for any `aptos` deck; measured previews need the office pack with `substitutionPolicy: "visual"` (Carlito, approximate), licensed Aptos faces, or a `fallbackFamily`, and otherwise fail with `font-unavailable`. `engineDefaults.fontScheme.google` stays for a future Google Slides target. All 805 golden rasters and all 805 example SVGs are unchanged; `test/default-font-scheme.mjs` checks parity with core. No package version change.
+
 ## 0.9.0
 
 - Require `@openpresentation/opf` ^0.11.0. Resolve content ColorRef values (hex, color-scheme slots and roles, and `var:<id>` document variables) for styled table fills, text colors, and border strokes through core `resolveColorRef()` before SVG paint. Authored `#RRGGBB` / `#RRGGBBAA` keep their written casing so packed-browser editor selection colors match. Rich text runs keep warn-and-fallback semantics for unrecognized colors such as `invalid`. Vendored `test/fixtures/color-references.opf.json` covers the OPF reference-layer fixture without expanding the 126-deck examples golden.

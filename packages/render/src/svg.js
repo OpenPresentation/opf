@@ -51,6 +51,12 @@ export const engineDefaults = Object.freeze({
   ])
 });
 
+// Last-resort font scheme shared by every engine (core pagination, opf-editor and
+// opf-pptx): DEFAULT_FONT_SCHEME in @openpresentation/opf. It applies only when the
+// slide, deck and resolved theme name no font scheme. fontScheme.google is kept for a
+// future Google Slides target and is not used by this renderer.
+const DEFAULT_FONT_SCHEME = engineDefaults.fontScheme.pptx.latin;
+
 export class OPFRenderError extends Error {
   constructor(code, message, details = {}) {
     super(message);
@@ -227,7 +233,7 @@ function sourceRecordsFor(kind, source, options) {
 }
 
 function engineDefaultId(kind) {
-  if (kind === "fontSchemes") return engineDefaults.fontScheme.google.latin;
+  if (kind === "fontSchemes") return DEFAULT_FONT_SCHEME;
   if (kind === "chartTypes") return engineDefaults.chartTypes[0];
   const key = kind.endsWith("s") ? kind.slice(0, -1) : kind;
   return engineDefaults[key];
@@ -356,7 +362,7 @@ function resolveDesign(presentation, slide, context) {
   );
   const fontScheme = resolveCatalogRecord(
     "fontSchemes",
-    slideDesign.fontScheme ?? deckDesign.fontScheme ?? theme.fontScheme ?? engineDefaults.fontScheme.google.latin,
+    slideDesign.fontScheme ?? deckDesign.fontScheme ?? theme.fontScheme ?? DEFAULT_FONT_SCHEME,
     context,
     "design.fontScheme"
   );
