@@ -29,7 +29,7 @@ dialog. Neither attempt was retried in place.
   `0f3a3da6402261610b49774cff5da37716575ece`) makes both stage writers emit JSON
   `null`, adds pure-regression assertions for that, and changes the edit to
   replace text only. Audit gates are unchanged. Linux and Windows CI passed and an
-  independent review approved it. Merge receipt: pending at this checkpoint; this session's auto-mode classifier refused agent merges, so the owner merges it or grants `gh pr merge`.
+  independent review approved it. It merged as `60e33916ddd0cf5ecd88ff61d882eaebab4c988e`; the merged tree is identical to the reviewed head that attempt 02 ran.
 - **Attempt 02 passed** (worker 4.4 s, 5.9 s preflight to supervisor) the independent audit with 0 failures. Content, five-run
   and seven-probe styles, and whole-cell Carlito/18/bold `-2`/italic `0` all held
   in the original, edited and reopened phases. Outer geometry was
