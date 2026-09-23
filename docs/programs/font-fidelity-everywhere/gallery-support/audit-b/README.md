@@ -45,3 +45,26 @@ Per-dimension tables are in `color-schemes.md`, `font-schemes.md`, `font-schemes
 - **Languages.** Preview with no registry "succeeds" for CJK, Arabic and Indic text only because it does no glyph check. The strict pack fails:
   - `font-unavailable` for the language scheme;
   - `missing-glyph` on bundled Roboto for 26 scripts.
+
+## Probe and classifier update (FF-36)
+
+The heads, table and gap list above describe the original run. Since the
+FF-36 audit update (heads in `results.json`):
+
+- Slide colours resolve `a:schemeClr` through the slide's colour map (master
+  `p:clrMap` unless overridden) to the exported theme `clrScheme`; the `p:bg`
+  fill resolves the same way. A colour with child transforms (`lumMod`,
+  `lumOff`, `tint`, `shade`, `alpha`) is reported as unresolved and never
+  counts as agreeing.
+- Colour schemes and themes compare preview and export scheme slots
+  deck-wide and slide by slide, plus any resolved export colour the preview
+  slide does not paint and the slide background. A literal `srgbClr` whose
+  value is a scheme slot colour the document never writes literally is a
+  reason.
+- Languages are checked against the catalog `ooxmlLang`, `direction` and the
+  font slot of the gallery's native name (the parity harness's script test):
+  slide-run `lang`, `rtl` paragraphs against the preview's right-to-left
+  lines, run and theme `ea`/`cs` faces, and re-import.
+- Every reason is conditional on a measured field. `works` needs an empty
+  reason list in every dimension. `sharedExportGaps` lists only the gaps that
+  every export in the run shares.

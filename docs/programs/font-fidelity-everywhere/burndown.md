@@ -21,8 +21,8 @@ current mains, 2026-09-23: opf `a74f3f6`, opf-render `bc436f3`, opf-pptx
 `9092954`, pptx-gallery `f17e9ae`; the previous run at opf `c278532` /
 opf-pptx `5b657c9` and the first baseline at `53be042` / `cf0bc0c` were
 0 of 900). The 900 values are the 793 presence items plus 76 charts and 31
-`withAssets` variants. The FF-23 presence audits on the same heads find 362
-of 793 `works` (baseline 7); read the
+`withAssets` variants. The FF-23 presence audits (re-run at opf `33d636d`
+with the FF-36 audit probes) find 352 of 793 `works` (baseline 7); read the
 [measurement notes](gallery-support.md#measurement-notes-2026-09-23-re-run)
 first. See the
 [scoreboard](gallery-support.md#parity-scoreboard) and its
@@ -606,3 +606,12 @@ Append one dated line per state change. Newest last.
   at opf `6263985`, opf-render `bc436f3`, opf-pptx `9092954`, pptx-gallery
   `f17e9ae`). The frame check honours `meet` alignment. No check, class or
   reported difference changed.
+- 2026-09-23: FF-36 audit probes. Audit B resolves `a:schemeClr` through the
+  exported theme and compares colours with the preview slide by slide; languages and every
+  other audit B reason are derived from measured fields; audit A finds the
+  `OPF slide image slides.N` picture and checks its frame and crop against
+  the preview. Re-run at opf `33d636d`, opf-render `bc436f3`, opf-pptx
+  `9092954`, pptx-gallery `f17e9ae`: colour schemes 14 and themes 4 move
+  from `broken` to `partial`, languages 93 from `schema-only` to `partial`,
+  socials 10 from `works` to `partial` (no handle rendered), image
+  treatments with assets 2 `works` (was 0). Presence 352 of 793 `works`.

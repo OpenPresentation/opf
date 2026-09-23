@@ -205,6 +205,12 @@ measured and unmeasured (408, 408 and 0 in the current run). The picture frame
 check uses the same placed image, clipped to the `<image>` viewport, so a
 `meet` image is compared at its `preserveAspectRatio` alignment.
 
+The presence audit A image-treatment probe (`audit-a/scripts/slide-image.mjs`)
+uses the same geometry, copied from `parity.mjs`: it finds the picture by
+name, requires its `r:embed` to resolve to an image part, and fails the
+visible frame or crop beyond 0.02 pt against the traced preview. Keep the two
+copies in sync.
+
 ## `support-status.json`
 
 Schema version 1. Top level:

@@ -8,8 +8,8 @@ Schema-valid 4/4. Catalog id resolves in core 4/4.
 
 | count | reason |
 |---|---|
-| 4 | no bundled or substitute face: strict preview throws font-unavailable (..); host-font preview is unmeasured fallback |
-| 4 | theme ea/cs empty; re-import drops fontScheme |
+| 4 | no bundled or substitute face: .. |
+| 4 | theme major/minor ea or cs typeface is empty |
 
 Preview tier: host-only 4. Openly licensed (gallery license/scope) 4/4; bundled for preview 0/4.
 

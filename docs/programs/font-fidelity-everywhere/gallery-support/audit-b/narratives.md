@@ -8,17 +8,17 @@ Schema-valid 10/10. Catalog id resolves in core 10/10.
 
 | count | reason |
 |---|---|
-| 10 | consumed only by validator/lint/bundle catalog checks, opf-editor transfer mapping and authoring skills; re-import drops it |
+
 
 | id | valid | catalog | engine effect | reasons | class |
 |---|---|---|---|---|---|
-| problem-solution | true | true | engine output changes | consumed only by validator/lint/bundle catalog checks, opf-editor transfer mapping and authoring skills; re-import drops it | works |
-| heros-journey | true | true | engine output changes | consumed only by validator/lint/bundle catalog checks, opf-editor transfer mapping and authoring skills; re-import drops it | works |
-| what-so-what-now-what | true | true | engine output changes | consumed only by validator/lint/bundle catalog checks, opf-editor transfer mapping and authoring skills; re-import drops it | works |
-| situation-complication-resolution | true | true | engine output changes | consumed only by validator/lint/bundle catalog checks, opf-editor transfer mapping and authoring skills; re-import drops it | works |
-| star-method | true | true | engine output changes | consumed only by validator/lint/bundle catalog checks, opf-editor transfer mapping and authoring skills; re-import drops it | works |
-| pyramid-principle | true | true | engine output changes | consumed only by validator/lint/bundle catalog checks, opf-editor transfer mapping and authoring skills; re-import drops it | works |
-| sparkline | true | true | engine output changes | consumed only by validator/lint/bundle catalog checks, opf-editor transfer mapping and authoring skills; re-import drops it | works |
-| data-story | true | true | engine output changes | consumed only by validator/lint/bundle catalog checks, opf-editor transfer mapping and authoring skills; re-import drops it | works |
-| change-story | true | true | engine output changes | consumed only by validator/lint/bundle catalog checks, opf-editor transfer mapping and authoring skills; re-import drops it | works |
-| vision-roadmap | true | true | engine output changes | consumed only by validator/lint/bundle catalog checks, opf-editor transfer mapping and authoring skills; re-import drops it | works |
+| problem-solution | true | true | removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml |  | works |
+| heros-journey | true | true | removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml |  | works |
+| what-so-what-now-what | true | true | removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml |  | works |
+| situation-complication-resolution | true | true | removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml |  | works |
+| star-method | true | true | removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml |  | works |
+| pyramid-principle | true | true | removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml |  | works |
+| sparkline | true | true | removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml |  | works |
+| data-story | true | true | removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml |  | works |
+| change-story | true | true | removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml |  | works |
+| vision-roadmap | true | true | removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml |  | works |
