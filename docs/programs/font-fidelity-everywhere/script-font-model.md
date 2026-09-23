@@ -82,8 +82,8 @@ this order:
    (`aptos`), which core now exports. There is no per-call option, so the
    last resort cannot drift between engines. By owner decision, one default applies across core
    pagination, opf-render, opf-editor and opf-pptx, so preview matches export.
-   The resolver uses it already. A separate FF-35 PR wires the other engines,
-   which still use `roboto` for preview and pagination today.
+   The resolver uses it, and FF-35 wires core pagination, opf-render and
+   opf-editor to it (they used `roboto` before).
 2. `eastAsian` and `complexScript` each use the first of these that applies:
    1. **`fontScheme`**: an explicit slot on the effective design scheme,
       either the record or the inline override. A missing `major` or `minor`
@@ -258,7 +258,7 @@ All changes are additive:
 3. **Default language and font scheme.** Keep `en-US`. The owner chose one
    shared default font scheme, `aptos` (`DEFAULT_FONT_SCHEME`), for every
    engine. The resolver falls back to it, with no per-call override, and FF-35 wires pagination, the
-   renderer and the editor to it. Reconciling `engine-defaults.json` (`english`, `en`)
+   renderer and the editor to it (done). Reconciling `engine-defaults.json` (`english`, `en`)
    with `en-US` remains an FF-17 follow-up.
 4. **Filled `ea`/`cs` in Latin decks.** The resolver reports the chosen
    heading/body family for these slots. FF-07 keeps writing them gated on

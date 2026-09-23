@@ -137,18 +137,28 @@ The heading and body families are never reused as the code fallback, so choosing
 
 ### Engine default font scheme
 
-The last-resort font scheme applies only when neither the slide, the deck nor the resolved theme names one. Every bundled theme names a font scheme (`minimal` uses `aptos`), and engines default the theme to `minimal`, so a document with no `design` gets `aptos` in every engine. The last resort differs by target and is intentional in [`engine-defaults.json`](../spec/reference/engine-defaults.json) (`fontScheme.pptx.latin` is `aptos`, `fontScheme.google.latin` is `roboto`):
+The last-resort font scheme applies only when neither the slide, the deck nor the resolved theme names one. Every bundled theme names a font scheme (`minimal` uses `aptos`), and engines default the theme to `minimal`, so a document with no `design` gets `aptos` in every engine.
+
+Every engine shares one last resort, `aptos`, so a custom theme without `fontScheme` is measured, paginated, previewed and exported in the same fonts. `@openpresentation/opf` exports it as `DEFAULT_FONT_SCHEME` (`resolveScriptFonts()` uses it too), and [`engine-defaults.json`](../spec/reference/engine-defaults.json) records it as `fontScheme.pptx.latin`:
 
 | Engine | Last resort | Where |
 | --- | --- | --- |
-| Core pagination | `roboto` | `packages/javascript/src/pagination.ts` |
-| opf-render preview | `roboto` (`engineDefaults.fontScheme.google.latin`) | `src/svg.js` |
-| opf-editor composition and slide transfer | `roboto` | `src/index.js`, `src/transfer.js` |
+| Core pagination | `DEFAULT_FONT_SCHEME` (`aptos`) | `packages/javascript/src/pagination.ts` |
+| opf-render preview | `aptos` (`engineDefaults.fontScheme.pptx.latin`) | `src/svg.js` |
+| opf-editor composition and slide transfer | `aptos` | `src/font-defaults.js` |
 | opf-pptx export | `aptos` (`DEFAULTS.fontScheme`) | `src/index.js` |
 
-This only affects a custom theme without `fontScheme`. That deck is measured and previewed in Roboto but exported with Aptos, so give such themes a `fontScheme` (or set `design.fontScheme`) when preview and export must match. None of the 126 bundled examples reaches the last resort. Exporting all of them with the exporter default switched to `roboto` produced byte-identical PPTX files (FF-17, font-fidelity-everywhere). A core test pins the core side of this table; opf-pptx pins its `aptos` default.
+Until a published core carries `DEFAULT_FONT_SCHEME`, the sibling packages keep a local `aptos` and their tests assert it equals core's constant whenever the installed core exports it.
 
-By owner decision, every engine will share one default, `aptos`. Core exports it as `DEFAULT_FONT_SCHEME`, and `resolveScriptFonts()` already uses it. A separate FF-35 change moves pagination, preview and the editor from `roboto` to it; until then the table above describes the current behavior.
+`fontScheme.google` (`roboto`, `noto-sans-sc`, `noto-sans`) is not read by any current engine. It is kept as the intended default for a future Google Slides exporter, whose output renders in Google-hosted fonts.
+
+Aptos is not openly licensed, so no OPF package bundles it. Previews take the same path for the last resort as for any `aptos` deck:
+
+- **Estimated layout** (no `textMeasurement`): the SVG names `Aptos` and `Aptos Display`, and the default raster engine draws them with its bundled sans-serif fallback (Roboto).
+- **Measured layout** with the opf-render office font pack and `substitutionPolicy: "visual"`: `Aptos` and `Aptos Display` resolve to the visual substitute Carlito, and the substitution report lists both. This is an approximation, not a metric match. No metric Aptos substitute is bundled; the Akasia candidate is experimental and not selected automatically.
+- **Measured layout under the default metric policy**, or with only the base pack: `font-unavailable` for Aptos, as for a document with no `design`. Supply licensed Aptos faces, allow visual substitution, or set a `fallbackFamily`.
+
+Until FF-35 (font-fidelity-everywhere), core pagination, opf-render and opf-editor fell back to `roboto` while opf-pptx used `aptos`, so such a deck was measured in Roboto but exported with Aptos. None of the 126 bundled examples reaches the last resort: all 805 renderer golden rasters and all 126 exported PPTX files are byte-identical before and after the change. `packages/javascript/test/font-scheme-defaults.test.mjs` checks the shared default in core pagination, and each sibling repository has a parity test.
 
 ## Color references in content
 

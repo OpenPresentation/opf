@@ -66,7 +66,7 @@ a verified variable metric/paint contract, wider axis-mapping coverage, paragrap
 shared editing/export and native acceptance are still required. The study above
 remains the historical probe checkpoint.
 
-Default new presentations to Roboto, with Roboto Mono for code unless the chosen font scheme defines `code` (the consolas and courier-new schemes do; see [design resolution](../design-resolution.md#code-font)). Use the same supplied font bytes for measurement, browser previews, and raster exports. Native PowerPoint exports name the resolved open font; recipients currently need that font installed.
+Default new presentations to Roboto (by naming the `roboto` font scheme; the engine last resort for a theme without a font scheme is `aptos`, see [design resolution](../design-resolution.md#engine-default-font-scheme)), with Roboto Mono for code unless the chosen font scheme defines `code` (the consolas and courier-new schemes do; see [design resolution](../design-resolution.md#code-font)). Use the same supplied font bytes for measurement, browser previews, and raster exports. Native PowerPoint exports name the resolved open font; recipients currently need that font installed.
 
 | Presentation requests | Starter face | Handling |
 | --- | --- | --- |
