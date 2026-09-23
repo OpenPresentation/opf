@@ -11,12 +11,13 @@ remain preserved; public evidence is linked below.
 The bounded mixed-size table edit/save/reopen proof now has an accepted native
 result. Evidence is in
 [windows-native-mixed-edit-20260922](evidence/windows-native-mixed-edit-20260922/README.md).
-Both attempts used fresh output directories, Node 24.21.0, Windows PowerShell 5.1,
+Both attempts used fresh output directories, Windows PowerShell 5.1,
 PowerPoint 16.0.20326.20158, source SHA-256
 `f92c5d5565afa1d03fc6df0cdc8d482771d5ebd5a5403f7a888f75e2ad020a51`, the four
 canonical Carlito faces and registration flags `0`. Each ran once, completed its
 owned Office and font lifecycle, and left PowerPoint with no open presentation or
-dialog. Neither attempt was retried in place.
+dialog. Neither attempt was retried in place. Offline controls and both audits
+ran under Node 24.21.0.
 
 - **Attempt 01 failed its audit and is preserved as a failure** (harness from
   PPTX54 merge `86afe6c`). PowerShell coerced the `[string]` stage error parameter
@@ -29,9 +30,11 @@ dialog. Neither attempt was retried in place.
   `0f3a3da6402261610b49774cff5da37716575ece`) makes both stage writers emit JSON
   `null`, adds pure-regression assertions for that, and changes the edit to
   replace text only. Audit gates are unchanged. Linux and Windows CI passed and an
-  independent review approved it. It merged as `60e33916ddd0cf5ecd88ff61d882eaebab4c988e`; the merged tree is identical to the reviewed head that attempt 02 ran.
-- **Attempt 02 passed** (worker 4.4 s, 5.9 s preflight to supervisor) the independent audit with 0 failures. Content, five-run
-  and seven-probe styles, and whole-cell Carlito/18/bold `-2`/italic `0` all held
+  independent review approved it. It merged as
+  `60e33916ddd0cf5ecd88ff61d882eaebab4c988e`; the merged tree is identical to
+  the reviewed head that attempt 02 ran.
+- **Attempt 02 passed** the independent audit with 0 failures (worker 4.4 s,
+  5.9 s preflight to supervisor). Content, five-run and seven-probe styles, and whole-cell Carlito/18/bold `-2`/italic `0` all held
   in the original, edited and reopened phases. Outer geometry was
   43.2/43.2/873.6/118.8 within float precision. Native lines were
   `[0,92) [92,194) [194,245)` in all three phases. The saved and reopened package
