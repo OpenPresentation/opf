@@ -1,6 +1,6 @@
 import {tableRowBoundaries} from './table.js';
 import { catalogs } from "./catalogs.js";
-import { resolveFontFamilies, resolveCanvasDimensions, composeSlide, type ComposeSlideOptions, type LayoutDiagnostic, type TextMeasurement } from './composition.js';
+import { DEFAULT_FONT_SCHEME, resolveFontFamilies, resolveCanvasDimensions, composeSlide, type ComposeSlideOptions, type LayoutDiagnostic, type TextMeasurement } from './composition.js';
 import { visitContentPayloads } from './content-walk.js';
 import { assertValidPresentation } from './validator.js';
 
@@ -268,7 +268,7 @@ export function paginatePresentation(input: unknown, options: PresentationPagina
     const theme = typeof reference==='string' ? resolve('themes',reference) : {...resolve('themes',reference.id),...reference};
     if (!theme) throw new OPFPaginationError(`Theme '${reference}' must be supplied inline before pagination.`);
     if (output.length>=maxSlides) throw new OPFPaginationError(`Pagination needs more than ${maxSlides} slides. No partial result was returned.`);
-    const fontReference = design.fontScheme ?? theme.fontScheme ?? "roboto";
+    const fontReference = design.fontScheme ?? theme.fontScheme ?? DEFAULT_FONT_SCHEME;
     const fontScheme = typeof fontReference === "string" ? resolve("fontSchemes",fontReference) : {...resolve("fontSchemes",fontReference.id),...fontReference};
     const fonts = resolveFontFamilies(fontScheme);
     const result = paginateSlide(slide,{...resolveCanvasDimensions(design.dimensions ?? theme.dimensions),layout,fonts,contentAlignment:design.contentAlignment,titleAlignment:design.titleAlignment,contentBox:design.contentBox,textMeasurement:options.textMeasurement,textRasterPadding:options.textRasterPadding,...overrides,presentation,slideIndex:index,slideNumber:output.length+1,maxSlides:maxSlides-output.length,minFontSize:options.minFontSize,reservedIds});

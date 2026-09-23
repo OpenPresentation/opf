@@ -1,13 +1,14 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {test} from 'node:test';
-import {fontSchemes,themes,validatePresentation} from '../dist/index.js';
+import {DEFAULT_FONT_SCHEME,fontSchemes,themes,validatePresentation} from '../dist/index.js';
 import {resolveFontFamilies} from '../dist/composition.js';
 import {paginatePresentation} from '../dist/pagination.js';
 
 // FF-17 (font-fidelity-everywhere): the code role follows the chosen scheme,
-// with Roboto Mono as the documented fallback, and the engine default font
-// scheme difference between targets stays explicit.
+// with Roboto Mono as the documented fallback.
+// FF-35: every engine shares one last-resort font scheme, DEFAULT_FONT_SCHEME
+// ('aptos'), so pagination, preview and PPTX export agree.
 
 const record=id=>fontSchemes.find(scheme=>scheme.id===id);
 const codeSlide={id:'code',layout:'code-1x',title:'Rule',code:{source:'const score = urgency * confidence;',language:'ts'}};
@@ -54,19 +55,32 @@ test('inline catalog records may carry the code role and still validate',()=>{
   assert.ok(families.has('JetBrains Mono')&&!families.has('Roboto Mono'));
 });
 
-test('engine default font schemes are pinned per target (difference documented in docs/design-resolution.md)',()=>{
+test('one shared engine default font scheme: aptos (FF-35, docs/design-resolution.md)',()=>{
+  assert.equal(DEFAULT_FONT_SCHEME,'aptos');
+  assert.ok(record(DEFAULT_FONT_SCHEME),'the shared default is a bundled font scheme');
   const defaults=JSON.parse(readFileSync(new URL('../../../spec/reference/engine-defaults.json',import.meta.url),'utf8'));
   assert.equal(defaults.theme,'minimal');
-  assert.equal(defaults.fontScheme.pptx.latin,'aptos');
+  assert.equal(defaults.fontScheme.pptx.latin,DEFAULT_FONT_SCHEME);
+  // Kept only as the target default for a future Google Slides exporter; no current engine reads it.
   assert.equal(defaults.fontScheme.google.latin,'roboto');
   // Every bundled theme names a font scheme, so the last-resort default only
   // applies to custom themes without one.
   for(const theme of themes)assert.ok(record(theme.fontScheme),`${theme.id} names a bundled font scheme`);
-  assert.equal(themes.find(theme=>theme.id==='minimal').fontScheme,'aptos');
-  // Core pagination's last resort is roboto (the renderer and editor match; opf-pptx uses aptos).
+  assert.equal(themes.find(theme=>theme.id==='minimal').fontScheme,DEFAULT_FONT_SCHEME);
+});
+
+test('pagination measures a custom theme without a font scheme in the shared default (Aptos, as exported)',()=>{
   const bare={$schema:'https://openpresentation.org/schema/opf-theme/v1',id:'bare',name:'Bare'};
-  const families=measuredFamilies({name:'No font scheme',design:{theme:'bare'},catalogs:{themes:{records:[bare]}},slides:[{id:'t',title:'Title',text:'Body'}]});
-  assert.deepEqual([...families].sort(),['Roboto']);
-  // With no design at all, the default theme supplies aptos.
-  assert.deepEqual([...measuredFamilies({name:'Defaults',slides:[{id:'t',title:'Title',text:'Body'}]})].sort(),['Aptos','Aptos Display']);
+  const slides=[{id:'t',title:'Title',text:'Body'}];
+  const aptos=[resolveFontFamilies(record(DEFAULT_FONT_SCHEME)).heading,resolveFontFamilies(record(DEFAULT_FONT_SCHEME)).body].sort();
+  assert.deepEqual(aptos,['Aptos','Aptos Display']);
+  const custom=measuredFamilies({name:'No font scheme',design:{theme:'bare'},catalogs:{themes:{records:[bare]}},slides});
+  assert.deepEqual([...custom].sort(),aptos);
+  assert.ok(!custom.has('Roboto'),'the former roboto last resort is gone');
+  // Same result as a document with no design (default theme minimal, which names aptos)
+  // and as naming the default explicitly.
+  assert.deepEqual([...measuredFamilies({name:'Defaults',slides})].sort(),aptos);
+  assert.deepEqual([...measuredFamilies({name:'Explicit',design:{fontScheme:DEFAULT_FONT_SCHEME},slides})].sort(),aptos);
+  // Deck and slide choices still win over the last resort.
+  assert.deepEqual([...measuredFamilies({name:'Deck',design:{theme:'bare',fontScheme:'roboto'},catalogs:{themes:{records:[bare]}},slides})].sort(),['Roboto']);
 });
