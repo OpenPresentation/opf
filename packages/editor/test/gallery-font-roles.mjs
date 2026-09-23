@@ -1,6 +1,5 @@
 // FF-17 (font-fidelity-everywhere): gallery apply keeps every font-scheme
-// role the record schema defines (major/minor and code), and the editor's last-resort
-// font scheme stays pinned (see opf docs/design-resolution.md).
+// role the record schema defines (major/minor and code).
 import assert from "node:assert/strict";
 import { validatePresentation } from "@openpresentation/opf";
 import { loadOpfGalleryItem } from "../dist/galleries.js";
@@ -129,29 +128,6 @@ assert.deepEqual(attached(legacy), {
   minor: "Arial",
 });
 
-// Pinned last resort: a theme without a font scheme composes in Roboto (the
-// exporter uses aptos; the difference is documented in opf design-resolution).
-const bareTheme = {
-  name: "Theme without font scheme",
-  design: { theme: "bare" },
-  catalogs: {
-    themes: {
-      records: [
-        {
-          $schema: "https://openpresentation.org/schema/opf-theme/v1",
-          id: "bare",
-          name: "Bare",
-        },
-      ],
-    },
-  },
-  slides: [textSlide],
-};
-assert.deepEqual([...measured(bareTheme)].sort(), ["Roboto"]);
-// With no design, the default minimal theme supplies aptos.
-assert.deepEqual(
-  [...measured({ name: "Defaults", slides: [textSlide] })].sort(),
-  ["Aptos", "Aptos Display"],
-);
+// The shared last-resort font scheme is covered by test/default-font-scheme.mjs (FF-35).
 
-console.log("gallery font-scheme roles and default scheme pin passed");
+console.log("gallery font-scheme roles passed");

@@ -6,6 +6,7 @@ import {
 } from "./index.js";
 import { catalogs } from "@openpresentation/opf";
 import { collectReservedPresentationIds, remapSlideTreeIds } from "./presentation-ids.js";
+import { DEFAULT_FONT_SCHEME } from "./font-defaults.js";
 export const MAX_OPF_BYTES = 20 * 1024 * 1024;
 const clone = (value) => structuredClone(value);
 export function assertOpf(document) {
@@ -136,7 +137,7 @@ export function prepareOpfImport(
         ...design,
         theme: design.theme ?? "minimal",
         colorScheme: design.colorScheme ?? theme.colorScheme ?? "cool-horizon",
-        fontScheme: design.fontScheme ?? theme.fontScheme ?? "roboto",
+        fontScheme: design.fontScheme ?? theme.fontScheme ?? DEFAULT_FONT_SCHEME,
         dimensions: design.dimensions ?? theme.dimensions ?? "widescreen",
         background: design.background ?? theme.background ?? "#FFFFFF",
         header: design.header ?? false,

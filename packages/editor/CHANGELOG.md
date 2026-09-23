@@ -2,7 +2,9 @@
 
 ## Unreleased
 
-- FF-17: gallery apply keeps every font-scheme role that the record schema defines. A font scheme attached from a gallery descriptor now keeps its `code` role (string or Font object) and valid `type`, `app` and `languageFamily` values, instead of only `major`/`minor`. Gallery `heading`/`body` (strings or Font objects) map onto `major`/`minor` only, so a later inline `design.fontScheme` major/minor override still wins. `accent` is not part of the record schema and is not attached. Invalid values are dropped, and legacy descriptors attach unchanged. Bundled catalog ids are still not re-attached. A new test also pins the editor's last-resort font scheme (`roboto`, used only when a theme has no font scheme).
+- FF-35: composition and slide transfer fall back to the shared engine default font scheme, `aptos` (core `DEFAULT_FONT_SCHEME`, kept locally in `src/font-defaults.js` until a published core exports it), instead of `roboto`. A custom theme without a font scheme is now composed in Aptos, and slides inserted from such a deck freeze `fontScheme: "aptos"`, matching preview and PPTX export. `test/default-font-scheme.mjs` replaces the FF-17 `roboto` pin with parity checks. No package version change.
+
+- FF-17: gallery apply keeps every font-scheme role that the record schema defines. A font scheme attached from a gallery descriptor now keeps its `code` role (string or Font object) and valid `type`, `app` and `languageFamily` values, instead of only `major`/`minor`. Gallery `heading`/`body` (strings or Font objects) map onto `major`/`minor` only, so a later inline `design.fontScheme` major/minor override still wins. `accent` is not part of the record schema and is not attached. Invalid values are dropped, and legacy descriptors attach unchanged. Bundled catalog ids are still not re-attached. A new test also pinned the editor's last-resort font scheme, now the shared `aptos` (FF-35).
 
 ## 0.8.0
 
