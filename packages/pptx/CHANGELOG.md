@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- FF-17: pin the exporter's last-resort font scheme (`aptos`, matching `engine-defaults.json` `fontScheme.pptx.latin`) with `test/default-font-scheme.mjs`. It applies only when the resolved theme names no font scheme. Core pagination, the renderer and the editor use `roboto` there; opf `docs/design-resolution.md` documents the difference. The test also checks that code runs use the shared `resolveFontFamilies()` code role (the scheme's `code`, else Roboto Mono). No export behaviour or bytes change: across the 126 bundled examples, switching this default to `roboto` produced byte-identical PPTX.
+
 - Make the slide master's nine `bodyStyle` bullet fonts follow the theme minor (body) font (`<a:buFont typeface="+mn-lt"/>`). Previously they used the Arial hard-coded in the vendored PptxGenJS master, so a Carlito-only `design.fontScheme` still shipped Arial bullets. The rewrite happens during package normalization, and the vendored bytes are unchanged. Every exported deck's `ppt/slideMasters/slideMaster1.xml` changes in those nine elements. Explicit slide list-marker fonts are unchanged.
 
 ## 0.9.1
