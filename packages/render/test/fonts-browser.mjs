@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
-import { loadBrowserFontRegistry } from "../dist/fonts-browser.js";
+import { createHash } from "node:crypto";
+import { loadBrowserFontRegistry, scriptFontEntries } from "../dist/fonts-browser.js";
 import { loadBundledFontRegistry } from "../dist/fonts-node.js";
 const bundled = await loadBundledFontRegistry();
 const source = bundled.embeddedFonts[0];
@@ -66,6 +67,21 @@ await assert.rejects(
   }),
   { name: "AbortError" },
 );
+// FF-19: script-pack entries carry reviewed hashes; the loader verifies them.
+const digest = createHash("sha256").update(data).digest("hex");
+const verified = await loadBrowserFontRegistry([{ data, sha256: digest }], { document });
+verified.dispose();
+await assert.rejects(
+  loadBrowserFontRegistry([{ data, sha256: "0".repeat(64) }], { document }),
+  { code: "font-integrity-mismatch" },
+);
+const entries = scriptFontEntries(["Jpan"], { baseUrl: "/fonts" });
+assert.deepEqual(entries.map((entry) => [entry.url, entry.family, entry.weight]), [
+  ["/fonts/noto-sans-jp/400Regular/NotoSansJP_400Regular.ttf", "Noto Sans JP", 400],
+  ["/fonts/noto-sans-jp/700Bold/NotoSansJP_700Bold.ttf", "Noto Sans JP", 700],
+]);
+assert.ok(entries.every((entry) => /^[0-9a-f]{64}$/.test(entry.sha256) && entry.scripts.includes("Jpan")));
+assert.throws(() => scriptFontEntries(["Jpan"], {}), { code: "invalid-font-source" });
 console.log(
-  "Browser fonts: identical bytes, measurement, owned cleanup, network failure and abort passed.",
+  "Browser fonts: identical bytes, measurement, owned cleanup, network failure, abort and script-pack hash verification passed.",
 );

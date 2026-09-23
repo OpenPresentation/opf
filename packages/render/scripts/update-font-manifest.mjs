@@ -11,7 +11,15 @@ const manifest=structuredClone(BUNDLED_FONT_MANIFEST);
 for(const pkg of manifest.packages){
   const directory=path.dirname(require.resolve(`${pkg.name}/package.json`));
   const installed=JSON.parse(await readFile(path.join(directory,'package.json'),'utf8'));
-  assert.equal(root.dependencies[pkg.name],installed.version,`Pin ${pkg.name} exactly before reviewing an updated font manifest.`);
+  // Base and office packs are runtime dependencies. The script pack (FF-19) is an
+  // optional peer that development pins exactly as a devDependency.
+  const pinned=pkg.pack==='scripts'?root.devDependencies?.[pkg.name]:root.dependencies[pkg.name];
+  assert.equal(pinned,installed.version,`Pin ${pkg.name} exactly before reviewing an updated font manifest.`);
+  if(pkg.pack==='scripts'){
+    assert.equal(root.peerDependencies?.[pkg.name],installed.version,`Declare ${pkg.name} as an exact optional peer.`);
+    assert.equal(root.peerDependenciesMeta?.[pkg.name]?.optional,true,`Declare ${pkg.name} as an optional peer.`);
+  }
+  assert.match(await readFile(path.join(directory,pkg.licenseFile),'utf8'),/SIL Open Font License, Version 1\.1/,`${pkg.name} must carry the SIL Open Font License 1.1.`);
   pkg.version=installed.version;
   pkg.source=`https://www.npmjs.com/package/${pkg.name}/v/${pkg.version}`;
   pkg.licenseSha256=hash(await readFile(path.join(directory,pkg.licenseFile)));

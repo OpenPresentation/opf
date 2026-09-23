@@ -1,6 +1,8 @@
 import { create } from "fontkit";
 import { FONT_COMPATIBILITY } from "./font-compatibility.js";
+import { openTypeLanguage, scriptFontAliases } from "./script-fonts.js";
 export { FONT_COMPATIBILITY, EXPERIMENTAL_FONT_CANDIDATES } from "./font-compatibility.js";
+export { SCRIPT_FONT_FAMILIES, SCRIPT_FONT_REPLACEMENTS, createScriptFonts, createScriptTextMeasurement, designatedFamilies, detectScripts, itemizeScripts, openTypeLanguage, scriptFontAliases, scriptFontRole, scriptOfCharacter, textRole } from "./script-fonts.js";
 
 export class OPFFontError extends Error {
   constructor(code, message, details = {}) { super(message); this.name = "OPFFontError"; this.code = code; this.details = details; }
@@ -38,7 +40,9 @@ export function createFontRegistry(entries, options = {}) {
     if (!Number.isInteger(weight) || weight < 1 || weight > 1000) throw new OPFFontError("invalid-font-weight", "Font weight must be between 1 and 1000.");
     const signature = String.fromCharCode(...data.subarray(0,4));
     const format = signature === "OTTO" ? "otf" : signature === "wOFF" ? "woff" : signature === "wOF2" ? "woff2" : "ttf";
-    return {family,familyGroup,fontFace,weight,italic,font,data,format,license:entry.license,cache:new Map()};
+    // Script replacement faces (FF-19) declare the ISO 15924 scripts they serve.
+    const scripts = Array.isArray(entry.scripts) && entry.scripts.length ? Object.freeze(entry.scripts.map(String)) : undefined;
+    return {family,familyGroup,fontFace,weight,italic,font,data,format,license:entry.license,scripts,cache:new Map()};
   });
   const duplicates = new Set();
   for (const face of faces) {
@@ -53,7 +57,10 @@ export function createFontRegistry(entries, options = {}) {
     familySlots.set(id,face);
   }
   const substitutions = new Map();
-  const aliases = new Map(Object.entries(options.aliases ?? {}).map(([from,to])=>[validFamily(from).toLowerCase(),validFamily(to)]));
+  // Loaded script replacement faces stand in for the proprietary script fonts
+  // they replace (Meiryo -> Noto Sans JP). Caller aliases take precedence.
+  const scriptAliases = scriptFontAliases(new Set(faces.filter(face=>face.scripts).map(face=>face.family)));
+  const aliases = new Map(Object.entries({...scriptAliases,...options.aliases}).map(([from,to])=>[validFamily(from).toLowerCase(),validFamily(to)]));
   const policy = options.substitutionPolicy ?? "none";
   if (!["none","metric","visual"].includes(policy)) throw new OPFFontError("invalid-font-policy", "substitutionPolicy must be none, metric, or visual.");
   if (options.fallbackFamily) validFamily(options.fallbackFamily);
@@ -88,13 +95,16 @@ export function createFontRegistry(entries, options = {}) {
     if (!matching.length && /^(cambria math|stix two math|noto sans math)$/i.test(family)) throw new OPFFontError("math-font-required", `Supply '${family}' or an explicit math-font alias.`, {path:style.path});
     if (!matching.length && options.fallbackFamily) { matching=findFamily(options.fallbackFamily); compatibility="generic"; }
     if (!matching.length) throw new OPFFontError("font-unavailable", `No local font face for '${family}'.`, {path:style.path,fontFamily:family});
-    matching = matching.filter(face=>face.italic===!!style.italic);
+    const styled = matching.filter(face=>face.italic===!!style.italic);
+    // Script replacement faces have no italics; use upright glyphs and advances.
+    if (!styled.length && style.italic && matching.length && matching.every(face=>face.scripts)) { if (compatibility!=="generic") compatibility="visual"; }
+    else matching = styled;
     if (!matching.length) throw new OPFFontError("font-style-unavailable", `No ${style.italic ? "italic" : "upright"} face for '${family}'.`, {path:style.path});
     matching.sort((a,b)=>Math.abs(a.weight-weight)-Math.abs(b.weight-weight) || a.weight-b.weight);
     const face = matching[0];
     if (face.weight!==weight && compatibility!=="generic") compatibility="visual";
     const resolution={requestedFamily:requested,sourceFamily:family,resolvedFamily:face.family,requestedWeight:weight,resolvedWeight:face.weight,italic:face.italic,compatibility,...(face.fontFace?{fontFace:{...face.fontFace}}:{}),...(style.path?{path:style.path}:{}),...(rule?{source:rule.source,note:rule.note}:{})};
-    if (face.family.toLowerCase()!==family.toLowerCase() || face.weight!==weight) substitutions.set(JSON.stringify([requested,weight,!!style.italic,style.path]),resolution);
+    if (face.family.toLowerCase()!==family.toLowerCase() || face.weight!==weight || face.italic!==!!style.italic) substitutions.set(JSON.stringify([requested,weight,!!style.italic,style.path]),resolution);
     return {face,resolution};
   };
   const resolveFace = style => resolve(style).face;
@@ -108,7 +118,10 @@ export function createFontRegistry(entries, options = {}) {
   const metrics = (text,size,style,includeOutline=false) => {
     if (typeof text!=='string'||!Number.isFinite(size)||size<=0) throw new OPFFontError('invalid-text-measurement','Text measurement requires a string and a positive finite font size.');
     const face=resolveFace(style);
-    let value=face.cache.get(text);
+    // A BCP-47 `lang` selects the font's OpenType language system, as a browser
+    // does for an element's lang (FF-19). Without it, shaping is unchanged.
+    const language=openTypeLanguage(style.lang),key=language?`${language}\u0000${text}`:text;
+    let value=face.cache.get(key);
     if (value===undefined) {
       if (options.strictGlyphs!==false) for(const character of text) {
         if (/\p{Default_Ignorable_Code_Point}/u.test(character)) continue;
@@ -116,7 +129,16 @@ export function createFontRegistry(entries, options = {}) {
       }
     }
     if(value===undefined||includeOutline&&!Object.hasOwn(value,'outline')) {
-      const run=face.font.layout(text);
+      const shape=features=>language?face.font.layout(text,features,undefined,language):features?face.font.layout(text,features):face.font.layout(text);
+      let run;
+      try { run=shape(); }
+      catch (error) {
+        // fontkit rejects some mark-attachment lookups (null anchors, for example
+        // Gurmukhi tippi in Noto Sans Gurmukhi). Mark positioning moves marks
+        // without changing advances, so measure again without it (FF-19).
+        try { run=shape({abvm:false,blwm:false,mark:false,mkmk:false}); }
+        catch { throw new OPFFontError("font-shaping-failed", `Font '${face.family}' cannot shape this text.`, {path:style.path,fontFamily:face.family,cause:error?.message}); }
+      }
       value={width:run.positions.reduce((total,position)=>total+position.xAdvance,0)/face.font.unitsPerEm,...value};
       if(includeOutline) {
         const bounds=run.bbox,unit=face.font.unitsPerEm;
@@ -124,8 +146,8 @@ export function createFontRegistry(entries, options = {}) {
           ?{x:bounds.minX/unit,y:-bounds.maxY/unit,width:bounds.width/unit,height:bounds.height/unit}:null;
       }
       if (text.length<=2048) {
-        if (face.cache.size>=512&&!face.cache.has(text)) face.cache.delete(face.cache.keys().next().value);
-        face.cache.set(text,value);
+        if (face.cache.size>=512&&!face.cache.has(key)) face.cache.delete(face.cache.keys().next().value);
+        face.cache.set(key,value);
       }
     }
     return value;
@@ -140,6 +162,11 @@ export function createFontRegistry(entries, options = {}) {
     resolveFont(style) { return resolve(style).resolution; },
     clearSubstitutions() { substitutions.clear(); },
     get substitutions() { return [...substitutions.values()]; },
-    get embeddedFonts() { return faces.map(face=>({family:face.family,weight:face.weight,italic:face.italic,...(face.license ? {license:face.license} : {}),dataUrl:`data:font/${face.format};base64,${base64(face.data)}`})); },
+    get embeddedFonts() { return embedded(()=>true); },
+    /** Parsed face metadata in entry order, without encoding font bytes. */
+    describeFaces: ()=>faces.map(face=>({family:face.family,weight:face.weight,italic:face.italic,...(face.scripts?{scripts:[...face.scripts]}:{})})),
+    /** Embedded faces for which `predicate({family,weight,italic,scripts})` holds; large script faces can be left to raster fontFiles. */
+    selectEmbeddedFonts: predicate=>embedded(predicate),
   };
+  function embedded(predicate) { return faces.filter(face=>predicate({family:face.family,weight:face.weight,italic:face.italic,scripts:face.scripts})).map(face=>({family:face.family,weight:face.weight,italic:face.italic,...(face.license ? {license:face.license} : {}),dataUrl:`data:font/${face.format};base64,${base64(face.data)}`})); }
 }

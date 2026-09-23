@@ -5,6 +5,8 @@ import { createHash } from "node:crypto";
 import { createFontRegistry, OPFFontError } from "./fonts.js";
 import { BUNDLED_FONT_MANIFEST } from "./font-manifest.js";
 export { BUNDLED_FONT_MANIFEST } from "./font-manifest.js";
+import { scriptFontPackages } from "./script-font-pack.js";
+export { scriptFontPackages } from "./script-font-pack.js";
 const require = createRequire(import.meta.url);
 
 async function verifiedFile(file, expected, details) {
@@ -16,9 +18,9 @@ async function verifiedFile(file, expected, details) {
   return bytes;
 }
 
-async function loadPack(pack) {
+async function loadPackages(packages) {
   const entries = [], fontFiles = [];
-  for (const pkg of BUNDLED_FONT_MANIFEST.packages.filter(item => item.pack === pack)) {
+  for (const pkg of packages) {
     let manifestPath, installed;
     try {
       manifestPath = require.resolve(`${pkg.name}/package.json`);
@@ -33,39 +35,51 @@ async function loadPack(pack) {
       const file = path.join(directory, face.file);
       const data = await verifiedFile(file, face.sha256, {package:pkg.name, file:face.file});
       fontFiles.push(file);
-      entries.push({data:new Uint8Array(data), family:face.family, weight:face.weight, italic:face.italic, license});
+      entries.push({data:new Uint8Array(data), family:face.family, weight:face.weight, italic:face.italic, license, ...(pkg.scripts ? {scripts:[...pkg.scripts]} : {})});
     }
   }
   return {entries, fontFiles};
 }
 
+const loadPack = pack => loadPackages(BUNDLED_FONT_MANIFEST.packages.filter(item => item.pack === pack));
+
+async function withScripts(loaded, scripts) {
+  if (scripts === undefined || (Array.isArray(scripts) && !scripts.length)) return loaded;
+  const extra = await loadPackages(scriptFontPackages(scripts));
+  return {entries:[...loaded.entries, ...extra.entries], fontFiles:[...loaded.fontFiles, ...extra.fontFiles]};
+}
+
 /** Bundled, openly licensed faces. No system font discovery or network requests. */
-export async function loadBundledFontRegistry(options = {}) {
-  const {entries, fontFiles} = await loadPack("base");
+export async function loadBundledFontRegistry({scripts, ...options} = {}) {
+  const {entries, fontFiles} = await withScripts(await loadPack("base"), scripts);
   return Object.assign(createFontRegistry(entries,options),{fontFiles});
 }
 
 /** Six pinned open-source Office substitutes, optionally alongside the base Roboto pack. */
-export async function loadOfficeFontRegistry(options = {}) {
+export async function loadOfficeFontRegistry({scripts, ...options} = {}) {
   const {entries, fontFiles} = await loadPack("office");
   if (options.includeBaseFonts !== false) {
     const base = await loadPack("base");
     fontFiles.push(...base.fontFiles);
     entries.push(...base.entries);
   }
-  return Object.assign(createFontRegistry(entries,{substitutionPolicy:"metric",...options}),{fontFiles});
+  const loaded = await withScripts({entries, fontFiles}, scripts);
+  return Object.assign(createFontRegistry(loaded.entries,{substitutionPolicy:"metric",...options}),{fontFiles:loaded.fontFiles});
 }
 
 /** One set of verified font inputs for layout, SVG, editor, PPTX, and Node raster export. */
-export async function prepareNodeFonts({pack = "base", ...options} = {}) {
+export async function prepareNodeFonts({pack = "base", embedScriptFonts = false, ...options} = {}) {
   if (pack !== "base" && pack !== "office") throw new OPFFontError("invalid-font-pack", "Choose the base or office font pack.", {pack});
   const registry = await (pack === "base" ? loadBundledFontRegistry(options) : loadOfficeFontRegistry(options));
+  // Script faces are large (CJK faces are 5-10 MB each). Raster output reads them
+  // from fontFiles; embed them in standalone SVG only on request.
+  const embeddedFonts = registry.selectEmbeddedFonts(face => embedScriptFonts || !face.scripts);
   return {
     registry,
     manifest:BUNDLED_FONT_MANIFEST,
     options:{
       textMeasurement:registry.textMeasurement,
-      embeddedFonts:registry.embeddedFonts,
+      embeddedFonts,
       fontFiles:[...registry.fontFiles],
       useBundledFonts:false,
       loadSystemFonts:false,

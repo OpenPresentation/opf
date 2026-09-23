@@ -12,8 +12,12 @@ import {paginatePresentation} from '@openpresentation/opf/pagination';
 const require=createRequire(import.meta.url),hash=b=>createHash('sha256').update(b).digest('hex');
 const root=fileURLToPath(new URL('../',import.meta.url)),report={node:process.version,faces:[],guards:[]};
 const {registry,options}=await prepareNodeFonts();
-assert.equal(BUNDLED_FONT_MANIFEST.packages.length,8);
-assert.equal(BUNDLED_FONT_MANIFEST.packages.reduce((n,p)=>n+p.faces.length,0),33);
+// Base and office packs are runtime dependencies; the FF-19 script pack is an optional peer.
+const runtimePacks=BUNDLED_FONT_MANIFEST.packages.filter(p=>p.pack!=='scripts'),scriptPack=BUNDLED_FONT_MANIFEST.packages.filter(p=>p.pack==='scripts');
+assert.equal(runtimePacks.length,8);
+assert.equal(runtimePacks.reduce((n,p)=>n+p.faces.length,0),33);
+assert.equal(scriptPack.length,31);
+assert.equal(scriptPack.reduce((n,p)=>n+p.faces.length,0),63);
 assert.throws(()=>{BUNDLED_FONT_MANIFEST.packages[0].faces[0].sha256='changed';},TypeError);
 assert.equal(registry.embeddedFonts.length,9);
 assert.equal(options.useBundledFonts,false);

@@ -1,11 +1,13 @@
 import assert from 'node:assert/strict';
-import {mkdir,writeFile} from 'node:fs/promises';
+import {mkdir,readFile,writeFile} from 'node:fs/promises';
 import {build} from 'esbuild';
 import {fileURLToPath} from 'node:url';
 const output=new URL('../artifacts/jpeg/browser/',import.meta.url);
 await mkdir(output,{recursive:true});
 const result=await build({entryPoints:[fileURLToPath(new URL('../test/jpeg-browser.js',import.meta.url))],bundle:true,platform:'browser',format:'esm',outfile:fileURLToPath(new URL('bundle.js',output)),metafile:true});
 assert.ok(!Object.keys(result.metafile.inputs).some(path=>path.includes('sharp')||path.includes('raster-images.js')||path.endsWith('/raster.js')),'Native raster code must not enter the browser bundle');
+// FF-19: the browser preview must call core's paragraphDirection (the export's RTL rule), not compile it away.
+if(typeof (await import('@openpresentation/opf')).paragraphDirection==='function')assert.ok((await readFile(new URL('bundle.js',output),'utf8')).includes('function paragraphDirection('),'The browser bundle must include core paragraphDirection');
 await writeFile(new URL('index.html',output),'<!doctype html><meta charset="utf-8"><title>JPEG browser orientation</title><h1>JPEG browser orientation</h1><pre>Running…</pre><script type="module" src="bundle.js"></script>');
 console.log('Browser bundle passed: no native raster modules. Serve /artifacts/jpeg/browser/index.html to run the JPEG orientation comparisons.');
 
