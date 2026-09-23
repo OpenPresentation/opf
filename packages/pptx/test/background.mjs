@@ -4,9 +4,16 @@ import {unzipSync,zipSync} from 'fflate';
 import {XMLParser,XMLValidator} from 'fast-xml-parser';
 import {renderSvg} from '@openpresentation/opf-render';
 import {validatePresentation} from '@openpresentation/opf';
-const {toPptx,fromPptx}=await import(process.env.OPF_TEST_PPTX_MODULE ?? '../dist/index.js');
+const {toPptx,fromPptx:importTagged}=await import(process.env.OPF_TEST_PPTX_MODULE ?? '../dist/index.js');
 const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:''});
 const utf8=new TextDecoder(),encode=new TextEncoder();
+// These checks read native fills. Without the OPF_DOCUMENT_V1 record, import
+// cannot restore authored background references (test/document-provenance.mjs).
+const fromPptx=async (bytes,options)=>{
+ const entries=unzipSync(bytes),presentation=utf8.decode(entries['ppt/presentation.xml']);
+ if(presentation.includes('<p:custDataLst>'))entries['ppt/presentation.xml']=encode.encode(presentation.replace(/<p:custDataLst>[\s\S]*?<\/p:custDataLst>/,''));
+ return importTagged(zipSync(entries),options);
+};
 const native=bytes=>parser.parse(utf8.decode(unzipSync(bytes)['ppt/slides/slide1.xml']))['p:sld']['p:cSld']['p:bg']['p:bgPr'];
 const close=(a,b,tolerance=2e-5)=>assert.ok(Math.abs(a-b)<=tolerance,`${a} != ${b}`);
 let cases=0,samples=0;
@@ -56,7 +63,9 @@ for(const opacity of [0,.25,1]) {
  assert.equal(fill.val,'336699');close(Number(fill['a:alpha']?.val??100000)/100000,opacity);
  const imported=await fromPptx(bytes);close(imported.slides[0].design.background.opacity??1,opacity);cases++;
 }
-const shorthand=await fromPptx(await toPptx({slides:[{design:{background:'#12345680'}}]}));
+const shorthandBytes=await toPptx({slides:[{design:{background:'#12345680'}}]});
+assert.equal((await importTagged(shorthandBytes)).slides[0].design.background,'#12345680','Unchanged tagged import keeps the authored shorthand.');
+const shorthand=await fromPptx(shorthandBytes);
 close(shorthand.slides[0].design.background.opacity,128/255);
 const themeFill={type:'gradient',gradient:{angle:90,stops:[{position:0,color:'#000000'},{position:1,color:'#FFFFFF'}]}};
 const themed=await fromPptx(await toPptx({design:{theme:{id:'minimal',background:themeFill}},slides:[{}, {design:{background:'#FF0000'}}]}));

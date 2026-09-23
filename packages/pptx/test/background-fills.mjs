@@ -17,13 +17,26 @@ const edit = (bytes, part, change) => {
   parts[part] = encode.encode(after);
   return zipSync(parts);
 };
+// These checks read native fills, so they export without the FF-32 document
+// tags (which would restore the authored background on an unchanged import).
+// The tagged export must restore the authored background exactly.
 async function roundTrip(document) {
   const exported = [], imported = [];
-  const bytes = await toPptx(document, {onDiagnostic: d => exported.push(d)});
+  const bytes = await toPptx(document, {provenance: false, onDiagnostic: d => exported.push(d)});
   for (const [path, part] of Object.entries(unzipSync(bytes))) if (path.endsWith('.xml') || path.endsWith('.rels')) assert.equal(XMLValidator.validate(utf8.decode(part)), true, path);
-  assert.deepEqual(bytes, await toPptx(document), 'Deterministic native background');
+  assert.deepEqual(bytes, await toPptx(document, {provenance: false}), 'Deterministic native background');
   const back = await fromPptx(bytes, {onDiagnostic: d => imported.push(d)});
   assert.equal(validatePresentation(back).valid, true);
+  const taggedExport = [], taggedReports = [];
+  const tagged = await fromPptx(await toPptx(document, {onDiagnostic: d => taggedExport.push(d)}), {onDiagnostic: d => taggedReports.push(d)});
+  const authored = document.slides[0].design?.background ?? document.design?.background;
+  const effective = tagged.slides[0].design?.background ?? tagged.design?.background;
+  const dangling = JSON.stringify(authored ?? null).match(/"asset:([^"]+)"/)?.[1];
+  if (dangling && !document.assets?.[dangling]) assert.ok(taggedReports.some(d => d.code === 'unresolved-asset-reference'), 'A background whose asset is missing is not restored');
+  else if (taggedExport.some(d => d.code === 'document-provenance-omitted' && d.path.endsWith('design.background'))) {
+    // An embedded source that is not an exported media part (WebP converted to PNG) is not stored; the observed picture stays.
+    assert.deepEqual(effective, back.slides[0].design?.background ?? back.design?.background, 'Unstored background keeps the observed native picture');
+  } else if (authored !== undefined) assert.deepEqual(effective, authored, 'Tagged import restores the authored background');
   return {bytes, exported, imported, background: back.slides[0].design?.background, back};
 }
 // A valid RGB PNG of the given pixel size (one flat color), optionally with a pHYs resolution.
@@ -214,8 +227,13 @@ const wide = png(480, 270), square = png(100, 100), tall = png(90, 160);
   // Slide overrides, deck inheritance and a host imageResolver.
   const document = {design: {background: {type: 'image', image: {src: 'https://example.invalid/bg.png'}}}, slides: [{}, {design: {background: '#112233'}}]};
   const reports = [];
-  const bytes = await toPptx(document, {imageResolver: src => src.endsWith('bg.png') ? wide : null, onDiagnostic: d => reports.push(d)});
+  const resolver = src => src.endsWith('bg.png') ? wide : null;
+  const bytes = await toPptx(document, {provenance: false, imageResolver: resolver, onDiagnostic: d => reports.push(d)});
   assert.deepEqual(reports, []);
+  // With FF-32 tags an unchanged import restores the authored (URL) deck background.
+  const tagged = await fromPptx(await toPptx(document, {imageResolver: resolver}));
+  assert.deepEqual(tagged.design.background, document.design.background);
+  assert.equal(tagged.slides[0].design, undefined);
   const back = await fromPptx(bytes);
   assert.deepEqual(back.slides[0].design.background, {type: 'image', image: {src: wide, fit: 'cover'}});
   assert.equal(back.slides[1].design.background.color, '#112233');

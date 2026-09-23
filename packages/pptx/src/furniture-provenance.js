@@ -3,6 +3,8 @@ import {attachTextTags, decodeTextTag, encodeTextTag} from './code-provenance.js
 import {sourceLineParagraphs} from './text-provenance.js';
 
 const TAG = 'OPF_FURNITURE_V1';
+// A slide has one tag list; it also carries the document's OPF_SLIDE_V1 record.
+const SLIDE_TAG = 'OPF_SLIDE_V1';
 const REL = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/tags';
 const NS = 'http://schemas.openxmlformats.org/presentationml/2006/main';
 const enc = new TextEncoder(), dec = new TextDecoder('utf-8', {fatal: true});
@@ -76,7 +78,7 @@ function readTags(container, relationships, entries) {
     } catch { unreadable = true; }
   }
   return {tags: tags.filter(tag => tag.name?.toUpperCase() === TAG),
-    ambiguous: unreadable || tags.filter(tag => /^OPF_/i.test(tag.name)).length !== 1};
+    ambiguous: unreadable || tags.filter(tag => /^OPF_/i.test(tag.name) && tag.name.toUpperCase() !== SLIDE_TAG).length !== 1};
 }
 
 function validateManifest(manifest) {
@@ -183,7 +185,8 @@ export function importFurniture(contexts, entries, onDiagnostic) {
   const taggedText = contexts.map(() => new Set());
   const candidates = contexts.map((context, index) => readSlide(context, entries, index, report, taggedText[index]));
   const organizations = candidates.flatMap(slide => Object.values(slide).flatMap(candidate => candidate.organizations));
-  if (organizations.some(item => !same(item, organizations[0]))) {
+  const organizationConflict = organizations.some(item => !same(item, organizations[0]));
+  if (organizationConflict) {
     for (const [index, slide] of candidates.entries()) for (const kind of kinds) if (slide[kind]?.organizations.length) {
       delete slide[kind]; report(index, `${kind}: Current organization metadata disagrees across repeated fields.`);
     }
@@ -202,6 +205,8 @@ export function importFurniture(contexts, entries, onDiagnostic) {
   })};
   const validOrganizations = candidates.flatMap(slide => Object.values(slide).flatMap(candidate => candidate.organizations));
   if (validOrganizations.length) result.organization = validOrganizations[0];
+  // Stored document metadata (FF-32) must not override disagreeing visible names.
+  if (organizationConflict) result.organizationConflict = true;
   for (const kind of kinds) {
     const inherited = candidates.map(slide => slide[kind]).filter(candidate => candidate?.scope === 'global');
     if (inherited.length && candidates.every(slide => slide[kind]) && inherited.every(candidate => same(candidate.value, inherited[0].value))) {

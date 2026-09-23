@@ -8,6 +8,7 @@ import {attachHeadingTags,importHeadingGroups} from './heading-provenance.js';
 import {attachPlainTextTags,importPlainTextGroups} from './text-provenance.js';
 import {attachTimelineTags,timelineManifest,importTimelineGroups} from './timeline-provenance.js';
 import {attachFurnitureTags, furnitureManifest, importFurniture} from './furniture-provenance.js';
+import {applyDocumentProvenance, attachDocumentProvenance, documentProvenance, restoreDocumentProvenance} from './document-provenance.js';
 import {importImageOrientation} from './image-import.js';
 import {nativeBackgroundFill, nativeImageBackgroundFill, nativePatternPreset} from './background.js';
 import {importBackground} from './background-import.js';
@@ -175,6 +176,9 @@ export async function toPptx(input, options = {}) {
   if (options.imageFormat !== undefined && !['compatible', 'preserve'].includes(options.imageFormat)) {
     throw new OPFPptxError('invalid-image-format', 'imageFormat must be compatible or preserve.', {path: 'options.imageFormat'});
   }
+  if (options.provenance !== undefined && !['full', 'references-only', false].includes(options.provenance)) {
+    throw new OPFPptxError('invalid-provenance-option', "provenance must be 'full', 'references-only' or false.", {path: 'options.provenance'});
+  }
   const presentation = parseInput(input);
   assertValidBoundary(presentation);
   options = {...options, textMeasurement: chosenFamilyMeasurement(options.textMeasurement)};
@@ -198,6 +202,12 @@ export async function toPptx(input, options = {}) {
   context.imageFormat = options.imageFormat ?? "compatible";
   Object.assign(context, exportTheme(presentation, context));
   context.reportedFontSchemes = new Set();
+  // Document references and metadata tags (FF-32, docs/document-roundtrip.md).
+  context.documentProvenance = options.provenance === false ? null : documentProvenance(presentation, {
+    mode: options.provenance ?? "full",
+    isCatalogId: (kind, id) => !!(findById(normalizeRecords(presentation.catalogs?.[kind]), id) ?? findById(defaultCatalog(kind), id)),
+    report: diagnostic => options.onDiagnostic?.(diagnostic)
+  });
   const pptx = new PptxGenJS();
   configurePresentation(pptx, presentation, {...context,fonts:resolveSlideContext(presentation,presentation.slides[0],context,options).fonts});
 
@@ -240,7 +250,7 @@ export async function fromPptx(input, options = {}) {
 
   const core = readCoreProperties(entries);
   const dimensions = dimensionsFromPresentation(presentationRoot);
-  const imported = {
+  let imported = {
     $schema: options.schema ?? CANONICAL_SCHEMA,
     name: core.title || options.fallbackName || "Imported PPTX",
     slides: []
@@ -269,7 +279,29 @@ export async function fromPptx(input, options = {}) {
     imported.slides.push(importSlide(entries, slidePaths[index], index, dimensions, options, furniture.slides[index], furnitureContexts[index]));
   }
   // Report after the slides so slide diagnostics keep their established order.
-  for (const diagnostic of themeDesign.diagnostics) options.onDiagnostic?.(diagnostic);
+  // A theme name FF-24 could not verify is not reported when the stored reference restores the theme.
+  for (const diagnostic of themeDesign.diagnostics) if (diagnostic.code !== "theme-unverified") options.onDiagnostic?.(diagnostic);
+
+  // Catalog references, layout ids and authoring metadata recorded at export
+  // (FF-32). Stored references win while the package still matches them;
+  // otherwise the observed values (including FF-24's theme recovery) stay and
+  // a diagnostic names the reference. A restored field that does not validate
+  // is dropped on its own.
+  const report = diagnostic => options.onDiagnostic?.(diagnostic);
+  // Per slide: {layout, structure: 'match' | 'changed' | 'untagged', record, catalogRecord}.
+  // Layout-structure recovery (FF-29) reads the stored OPF_SLIDE_V1 record from
+  // here instead of writing a second slide tag.
+  let slideProvenance = slidePaths.map(() => ({structure: "untagged"}));
+  try {
+    const restored = restoreDocumentProvenance(imported, {entries, presentationRoot, presentationRels, organizationConflict: furniture.organizationConflict === true,
+      slides: slidePaths.map((path, index) => ({path, root: furnitureContexts[index].root, relationships: furnitureContexts[index].relationships}))}, report);
+    imported = applyDocumentProvenance(imported, restored, validatePresentation, report);
+    slideProvenance = restored.slides;
+  } catch (error) {
+    report({code: "invalid-document-provenance", path: "", message: `${errorMessage(error)} Ordinary import keeps the values observed in the PPTX.`});
+  }
+  if (slideProvenance.length !== imported.slides.length) throw new OPFPptxError("invalid-import-opf", "Slide provenance does not match the imported slides.");
+  if (imported.design?.theme === undefined) for (const diagnostic of themeDesign.diagnostics) if (diagnostic.code === "theme-unverified") report(diagnostic);
 
   const result = validatePresentation(imported);
   if (!result.valid) {
@@ -1976,6 +2008,17 @@ async function normalizePptxZip(raw, context) {
   }
 
   finalizeFontsUsed(output);
+  // Document references record evidence from the final normalized parts.
+  if (context.documentProvenance) {
+    const parts = Object.fromEntries(Object.entries(output).map(([path, [bytes]]) => [path, bytes]));
+    try {
+      attachDocumentProvenance(parts, context.documentProvenance);
+    } catch (error) {
+      throw new OPFPptxError("packaging-failed", "Document provenance tags could not be attached.", {cause: errorMessage(error)});
+    }
+    for (const [path, bytes] of Object.entries(parts)) output[path] = [bytes, {level: context.compressionLevel, mtime: context.zipDate}];
+  }
+
   // Sort after chart/worksheet renaming; source counters can cross digit widths.
   const sortedOutput = Object.fromEntries(Object.keys(output).sort().map(path => [path, output[path]]));
   return zipSync(sortedOutput, {
