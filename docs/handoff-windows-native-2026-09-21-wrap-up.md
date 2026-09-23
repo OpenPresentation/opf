@@ -51,6 +51,29 @@ fonts are `Aptos Display`/`Aptos`, so the pre-SaveAs allowlist would reject it
 before any save. A Carlito-only fixture is being prepared offline. The embed
 attempt runs only after that fixture's PR is reviewed and its CI passes.
 
+## September 22 native font-embed attempt
+
+The first supervised Carlito-only embed attempt **failed closed before
+`SaveAs`**. It ran once, with harness opf-pptx `main` `310f873` (PPTX56 merged;
+tree identical to reviewed head `6e67741`), and fixture `fixture-carlito-02`
+(source SHA-256
+`f505236ecef4fad838a198449adede1f4afa39d7bac74613626eee2f2a419aeb`). Evidence
+is in
+[windows-native-font-embed-20260922](evidence/windows-native-font-embed-20260922/README.md).
+
+After the Gate E edits (`.Text` plus `Font2.Name/Size/Bold/Italic` on the title,
+the body and four body spans), `Presentation.Fonts` reported `Carlito` and
+`Aptos`, both embeddable `-1`. The allowlist gate blocked on `Aptos`. The owned
+presentation was closed once without saving. No saved copy exists, and the
+attempt was not retried. Font cleanup and input integrity were confirmed. The
+offline OPC audit failed only on the missing saved package.
+
+The fixture package contains no `Aptos` in any part. Its theme `ea`/`cs` slots
+are empty. Fonts were enumerated only after the edits, and there was no pre-edit
+baseline, so the origin of Aptos is undetermined. Edit-inserted text taking
+Office's `ea`/`cs` default and a PowerPoint application default are hypotheses
+only. Embedding success and per-glyph identity are not claimed.
+
 ## September 22 checkpoint
 
 The continuation hardened native harnesses and their offline controls. No Office call or font API ran,
@@ -224,10 +247,14 @@ manager. Preserve dirty work, original failures and the separate registry
 consumer.
 
 The bounded mixed-table edit/save/reopen proof passed on September 22 (see the
-native mixed-edit checkpoint above). The next native proof is the bounded
-font-embedding gate, and only with a reviewed Carlito-only fixture: the Gate E
-fixture uses Aptos in its slide runs and theme fonts and would be rejected
-before `SaveAs`. Use fresh output directories and the reviewed mixed source SHA-256
+native mixed-edit checkpoint above). The first Carlito-only font-embed attempt
+failed closed on `Aptos` before `SaveAs` (see the font-embed attempt above).
+The next step is a Fonts diagnostic, before any second embed attempt:
+
+- a read-only `Presentation.Fonts` inventory of the unedited fixture;
+- a pre-edit baseline enumeration in the harness.
+
+Use fresh output directories and the reviewed mixed source SHA-256
 `f92c5d5565afa1d03fc6df0cdc8d482771d5ebd5a5403f7a888f75e2ad020a51`.
 Both harnesses require the four canonical Carlito face hashes and numeric
 registration flags `0`. Mixed-edit uses `SaveAs(..., 24, 0)` and requires content,

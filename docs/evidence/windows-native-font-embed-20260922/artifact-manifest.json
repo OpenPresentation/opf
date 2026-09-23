@@ -1,0 +1,172 @@
+{
+  "schemaVersion": 1,
+  "kind": "opf-native-font-embed-portable-evidence",
+  "scope": "Exact-byte portable evidence for the first supervised native PowerPoint font-embed attempt and its Carlito-only fixture. Font programs are excluded. The verifier performs no Office, PowerShell, font, Git, or network operation.",
+  "attempts": [
+    {
+      "id": "attempt-01",
+      "runDirectory": "attempt-01/native-font-embed-01",
+      "sidecars": [
+        "host-postflight-embed-01.json",
+        "host-preflight-embed-01.json",
+        "native-font-embed-01.audit.log",
+        "native-font-embed-01.parent.log"
+      ]
+    }
+  ],
+  "fixtureDirectory": "fixture/fixture-carlito-02",
+  "files": 30,
+  "bytes": 289208,
+  "artifacts": [
+    {
+      "path": ".gitattributes",
+      "bytes": 9,
+      "sha256": "48747480eddba024928d03be9bf83dc579e5515768647507a767e8187a85c9ab"
+    },
+    {
+      "path": "README.md",
+      "bytes": 6275,
+      "sha256": "bc7b3386cbaa357828313c72cfdced36fd6116ec954e8c4650a9b75c27f9662c"
+    },
+    {
+      "path": "attempt-01/host-postflight-embed-01.json",
+      "bytes": 803,
+      "sha256": "b86134afa3d8876e8863435c5d0f686313940490b7475316b619eeed3efd89cf"
+    },
+    {
+      "path": "attempt-01/host-preflight-embed-01.json",
+      "bytes": 534,
+      "sha256": "737a13fa36d25c19665aa0aa06a2d9564a2275edb5616094080597d971f175d9"
+    },
+    {
+      "path": "attempt-01/native-font-embed-01.audit.log",
+      "bytes": 173,
+      "sha256": "89d7bbf36695fa43f16b0b255571e1e59cb0461cac7bfe3c995b1ca055ffabe9"
+    },
+    {
+      "path": "attempt-01/native-font-embed-01.parent.log",
+      "bytes": 1262,
+      "sha256": "1ff94eb6092e41571de7a2067adca8add54541b211e2cafdf0f5f3e40fdef22d"
+    },
+    {
+      "path": "attempt-01/native-font-embed-01/embed-opc-audit.json",
+      "bytes": 3595,
+      "sha256": "a988d9af084ff8e55fb21b0f4443922de925ecd28011f041b8830494bbe317f1"
+    },
+    {
+      "path": "attempt-01/native-font-embed-01/font-registration.json",
+      "bytes": 812,
+      "sha256": "d3c8a31ef44b436ffc6ebf82f5738f01cd849312534a4945382f48137795348a"
+    },
+    {
+      "path": "attempt-01/native-font-embed-01/inputs/LICENSE_FONT",
+      "bytes": 4424,
+      "sha256": "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00"
+    },
+    {
+      "path": "attempt-01/native-font-embed-01/inputs/generation.json",
+      "bytes": 31660,
+      "sha256": "78904db1a1556b80dc8abc8270460cac95ac4868b32219f1ecd06371d0d578db"
+    },
+    {
+      "path": "attempt-01/native-font-embed-01/inputs/native-font-embed.ps1",
+      "bytes": 41865,
+      "sha256": "963cc033830fb73916ef5ab70ee91ce2bfb208dc798a83d14f3379fff70c3453"
+    },
+    {
+      "path": "attempt-01/native-font-embed-01/inputs/native-process.ps1",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+    },
+    {
+      "path": "attempt-01/native-font-embed-01/inputs/native-text-fonts.ps1",
+      "bytes": 2446,
+      "sha256": "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6"
+    },
+    {
+      "path": "attempt-01/native-font-embed-01/inputs/source.pptx",
+      "bytes": 15624,
+      "sha256": "f505236ecef4fad838a198449adede1f4afa39d7bac74613626eee2f2a419aeb"
+    },
+    {
+      "path": "attempt-01/native-font-embed-01/progress.json",
+      "bytes": 419,
+      "sha256": "c480b8279c57c622e1b63a30e4171d03bb6ef25cbdf7646aac449c07ed0e9b64"
+    },
+    {
+      "path": "attempt-01/native-font-embed-01/report.json",
+      "bytes": 9523,
+      "sha256": "3a17d67baa5720ec3a91cdff3495e4fa0fe6e88168bfb517d111af7009ad5673"
+    },
+    {
+      "path": "attempt-01/native-font-embed-01/request.json",
+      "bytes": 11423,
+      "sha256": "aebbf94d9ce2908527f05ed525edfc682f31b87f4a1ecdb162ec8574caa13fba"
+    },
+    {
+      "path": "attempt-01/native-font-embed-01/stages.jsonl",
+      "bytes": 43606,
+      "sha256": "7d17e8a0800da9dd626dc2da1136272e6e185d1399d227116e61688164af9048"
+    },
+    {
+      "path": "attempt-01/native-font-embed-01/supervisor.json",
+      "bytes": 12622,
+      "sha256": "b44ff892fe79f6c18267fea68cb6e1978f8e86ba27005c649828ad586cfe7698"
+    },
+    {
+      "path": "attempt-01/native-font-embed-01/worker.json",
+      "bytes": 339,
+      "sha256": "3843b294697b02e6b433a20584cddab78c85d6cbab74b8e30d5d205fbbff0356"
+    },
+    {
+      "path": "attempt-01/native-font-embed-01/worker.stderr.log",
+      "bytes": 756,
+      "sha256": "f0909193ec4a7304657f77f787265b7810155a5e982fad23a98f7fa1b47cf50c"
+    },
+    {
+      "path": "attempt-01/native-font-embed-01/worker.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "fixture/fixture-carlito-02/LICENSE_FONT",
+      "bytes": 4424,
+      "sha256": "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00"
+    },
+    {
+      "path": "fixture/fixture-carlito-02/exporter-output.pptx",
+      "bytes": 15623,
+      "sha256": "14229e8ce663511fadf7c1aa035bd18e33a513d97a1825174c6171c7c605c0d2"
+    },
+    {
+      "path": "fixture/fixture-carlito-02/generation.json",
+      "bytes": 31660,
+      "sha256": "78904db1a1556b80dc8abc8270460cac95ac4868b32219f1ecd06371d0d578db"
+    },
+    {
+      "path": "fixture/fixture-carlito-02/source.opf.json",
+      "bytes": 194,
+      "sha256": "44363cdb3d1ba747c108a9d1741d0b99ba740fd65917f25f9196ab2f26ec1041"
+    },
+    {
+      "path": "fixture/fixture-carlito-02/source.pptx",
+      "bytes": 15624,
+      "sha256": "f505236ecef4fad838a198449adede1f4afa39d7bac74613626eee2f2a419aeb"
+    },
+    {
+      "path": "omissions.json",
+      "bytes": 5062,
+      "sha256": "d052ad973e02da6757815120106f7b2ac2995c394fd6d323a756a73583defb23"
+    },
+    {
+      "path": "source-copy-ledger.json",
+      "bytes": 7190,
+      "sha256": "14cccdf7c317ff3b2970dea3288a125cd6a10a76044dc2b72d9adacb7b79a500"
+    },
+    {
+      "path": "verify.mjs",
+      "bytes": 18889,
+      "sha256": "d225658a791d99cae9f544c041cde77ef9f40b2d77d99be8e4be834aeb0fbc25"
+    }
+  ]
+}

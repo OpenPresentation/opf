@@ -1,0 +1,182 @@
+{
+  "schemaVersion": 1,
+  "kind": "opf-native-font-embed-evidence-source-copy-ledger",
+  "root": "artifacts/windows-mixed-edit-20260922",
+  "entries": [
+    {
+      "bundlePath": "attempt-01/host-postflight-embed-01.json",
+      "sourcePath": "host-postflight-embed-01.json",
+      "sha256": "b86134afa3d8876e8863435c5d0f686313940490b7475316b619eeed3efd89cf",
+      "bytes": 803,
+      "copyMode": "exact bytes"
+    },
+    {
+      "bundlePath": "attempt-01/host-preflight-embed-01.json",
+      "sourcePath": "host-preflight-embed-01.json",
+      "sha256": "737a13fa36d25c19665aa0aa06a2d9564a2275edb5616094080597d971f175d9",
+      "bytes": 534,
+      "copyMode": "exact bytes"
+    },
+    {
+      "bundlePath": "attempt-01/native-font-embed-01.audit.log",
+      "sourcePath": "native-font-embed-01.audit.log",
+      "sha256": "89d7bbf36695fa43f16b0b255571e1e59cb0461cac7bfe3c995b1ca055ffabe9",
+      "bytes": 173,
+      "copyMode": "exact bytes"
+    },
+    {
+      "bundlePath": "attempt-01/native-font-embed-01.parent.log",
+      "sourcePath": "native-font-embed-01.parent.log",
+      "sha256": "1ff94eb6092e41571de7a2067adca8add54541b211e2cafdf0f5f3e40fdef22d",
+      "bytes": 1262,
+      "copyMode": "exact bytes"
+    },
+    {
+      "bundlePath": "attempt-01/native-font-embed-01/embed-opc-audit.json",
+      "sourcePath": "native-font-embed-01/embed-opc-audit.json",
+      "sha256": "a988d9af084ff8e55fb21b0f4443922de925ecd28011f041b8830494bbe317f1",
+      "bytes": 3595,
+      "copyMode": "exact bytes"
+    },
+    {
+      "bundlePath": "attempt-01/native-font-embed-01/font-registration.json",
+      "sourcePath": "native-font-embed-01/font-registration.json",
+      "sha256": "d3c8a31ef44b436ffc6ebf82f5738f01cd849312534a4945382f48137795348a",
+      "bytes": 812,
+      "copyMode": "exact bytes"
+    },
+    {
+      "bundlePath": "attempt-01/native-font-embed-01/inputs/LICENSE_FONT",
+      "sourcePath": "native-font-embed-01/inputs/LICENSE_FONT",
+      "sha256": "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00",
+      "bytes": 4424,
+      "copyMode": "exact bytes"
+    },
+    {
+      "bundlePath": "attempt-01/native-font-embed-01/inputs/generation.json",
+      "sourcePath": "native-font-embed-01/inputs/generation.json",
+      "sha256": "78904db1a1556b80dc8abc8270460cac95ac4868b32219f1ecd06371d0d578db",
+      "bytes": 31660,
+      "copyMode": "exact bytes"
+    },
+    {
+      "bundlePath": "attempt-01/native-font-embed-01/inputs/native-font-embed.ps1",
+      "sourcePath": "native-font-embed-01/inputs/native-font-embed.ps1",
+      "sha256": "963cc033830fb73916ef5ab70ee91ce2bfb208dc798a83d14f3379fff70c3453",
+      "bytes": 41865,
+      "copyMode": "exact bytes"
+    },
+    {
+      "bundlePath": "attempt-01/native-font-embed-01/inputs/native-process.ps1",
+      "sourcePath": "native-font-embed-01/inputs/native-process.ps1",
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+      "bytes": 2372,
+      "copyMode": "exact bytes"
+    },
+    {
+      "bundlePath": "attempt-01/native-font-embed-01/inputs/native-text-fonts.ps1",
+      "sourcePath": "native-font-embed-01/inputs/native-text-fonts.ps1",
+      "sha256": "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6",
+      "bytes": 2446,
+      "copyMode": "exact bytes"
+    },
+    {
+      "bundlePath": "attempt-01/native-font-embed-01/inputs/source.pptx",
+      "sourcePath": "native-font-embed-01/inputs/source.pptx",
+      "sha256": "f505236ecef4fad838a198449adede1f4afa39d7bac74613626eee2f2a419aeb",
+      "bytes": 15624,
+      "copyMode": "exact bytes"
+    },
+    {
+      "bundlePath": "attempt-01/native-font-embed-01/progress.json",
+      "sourcePath": "native-font-embed-01/progress.json",
+      "sha256": "c480b8279c57c622e1b63a30e4171d03bb6ef25cbdf7646aac449c07ed0e9b64",
+      "bytes": 419,
+      "copyMode": "exact bytes"
+    },
+    {
+      "bundlePath": "attempt-01/native-font-embed-01/report.json",
+      "sourcePath": "native-font-embed-01/report.json",
+      "sha256": "3a17d67baa5720ec3a91cdff3495e4fa0fe6e88168bfb517d111af7009ad5673",
+      "bytes": 9523,
+      "copyMode": "exact bytes"
+    },
+    {
+      "bundlePath": "attempt-01/native-font-embed-01/request.json",
+      "sourcePath": "native-font-embed-01/request.json",
+      "sha256": "aebbf94d9ce2908527f05ed525edfc682f31b87f4a1ecdb162ec8574caa13fba",
+      "bytes": 11423,
+      "copyMode": "exact bytes"
+    },
+    {
+      "bundlePath": "attempt-01/native-font-embed-01/stages.jsonl",
+      "sourcePath": "native-font-embed-01/stages.jsonl",
+      "sha256": "7d17e8a0800da9dd626dc2da1136272e6e185d1399d227116e61688164af9048",
+      "bytes": 43606,
+      "copyMode": "exact bytes"
+    },
+    {
+      "bundlePath": "attempt-01/native-font-embed-01/supervisor.json",
+      "sourcePath": "native-font-embed-01/supervisor.json",
+      "sha256": "b44ff892fe79f6c18267fea68cb6e1978f8e86ba27005c649828ad586cfe7698",
+      "bytes": 12622,
+      "copyMode": "exact bytes"
+    },
+    {
+      "bundlePath": "attempt-01/native-font-embed-01/worker.json",
+      "sourcePath": "native-font-embed-01/worker.json",
+      "sha256": "3843b294697b02e6b433a20584cddab78c85d6cbab74b8e30d5d205fbbff0356",
+      "bytes": 339,
+      "copyMode": "exact bytes"
+    },
+    {
+      "bundlePath": "attempt-01/native-font-embed-01/worker.stderr.log",
+      "sourcePath": "native-font-embed-01/worker.stderr.log",
+      "sha256": "f0909193ec4a7304657f77f787265b7810155a5e982fad23a98f7fa1b47cf50c",
+      "bytes": 756,
+      "copyMode": "exact bytes"
+    },
+    {
+      "bundlePath": "attempt-01/native-font-embed-01/worker.stdout.log",
+      "sourcePath": "native-font-embed-01/worker.stdout.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "copyMode": "exact bytes"
+    },
+    {
+      "bundlePath": "fixture/fixture-carlito-02/LICENSE_FONT",
+      "sourcePath": "fixture-carlito-02/LICENSE_FONT",
+      "sha256": "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00",
+      "bytes": 4424,
+      "copyMode": "exact bytes"
+    },
+    {
+      "bundlePath": "fixture/fixture-carlito-02/exporter-output.pptx",
+      "sourcePath": "fixture-carlito-02/exporter-output.pptx",
+      "sha256": "14229e8ce663511fadf7c1aa035bd18e33a513d97a1825174c6171c7c605c0d2",
+      "bytes": 15623,
+      "copyMode": "exact bytes"
+    },
+    {
+      "bundlePath": "fixture/fixture-carlito-02/generation.json",
+      "sourcePath": "fixture-carlito-02/generation.json",
+      "sha256": "78904db1a1556b80dc8abc8270460cac95ac4868b32219f1ecd06371d0d578db",
+      "bytes": 31660,
+      "copyMode": "exact bytes"
+    },
+    {
+      "bundlePath": "fixture/fixture-carlito-02/source.opf.json",
+      "sourcePath": "fixture-carlito-02/source.opf.json",
+      "sha256": "44363cdb3d1ba747c108a9d1741d0b99ba740fd65917f25f9196ab2f26ec1041",
+      "bytes": 194,
+      "copyMode": "exact bytes"
+    },
+    {
+      "bundlePath": "fixture/fixture-carlito-02/source.pptx",
+      "sourcePath": "fixture-carlito-02/source.pptx",
+      "sha256": "f505236ecef4fad838a198449adede1f4afa39d7bac74613626eee2f2a419aeb",
+      "bytes": 15624,
+      "copyMode": "exact bytes"
+    }
+  ]
+}

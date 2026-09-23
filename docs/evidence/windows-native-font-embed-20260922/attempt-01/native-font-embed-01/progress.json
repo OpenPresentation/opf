@@ -1,0 +1,10 @@
+﻿{
+    "sequence":  132,
+    "timestamp":  "2026-09-23T02:27:46.0348996Z",
+    "stage":  "worker.failure",
+    "status":  "error",
+    "error":  "Native Presentation.Fonts allowlist/embeddability gate failed before SaveAs; the owned presentation was closed without saving and no retry was started.",
+    "cleanupConfirmed":  true,
+    "officeOperationsStopped":  false,
+    "ownedPresentationPath":  null
+}

@@ -1,0 +1,18 @@
+﻿powershell.exe : Native font embed failed, timed out, failed the native Fonts gate, or did not confirm the owned 
+Office/font/input 
+At line:1 char:1087
++ ... StartNew(); & "$env:WINDIR/System32/WindowsPowerShell/v1.0/powershell ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Native font emb...ice/font/input :String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+lifecycle and embed save argument; preserve the attempt and inspect supervisor.json. No retry was started.
+At C:\Users\micha\.codex\worktrees\fd3f\opf\artifacts\windows-mixed-edit-20260922\sources\opf-pptx-embed\test\native-fo
+nt-embed.ps1:324 char:9
++         throw 'Native font embed failed, timed out, failed the native ...
++         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (Native font emb...ry was started.:String) [], RuntimeException
+    + FullyQualifiedErrorId : Native font embed failed, timed out, failed the native Fonts gate, or did not confirm th 
+   e owned Office/font/input lifecycle and embed save argument; preserve the attempt and inspect supervisor.json. No   
+  retry was started.
+ 
