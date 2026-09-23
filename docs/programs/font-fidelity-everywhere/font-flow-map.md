@@ -188,16 +188,16 @@ All four repos test on Node 24 only, and every package declares `engines: node 2
 | Burndown item | Gaps it covers |
 |---|---|
 | FF-07 | G1, G7 (lang, rtl, ea/cs) |
-| FF-08 | G2, G4, G5, G6, G8, G9, plus the code default |
+| FF-08 | G2, G4, G5, G6, G8, G9 |
 | FF-09 | §5 |
 | FF-10 | §6 |
 | FF-11 | §6 caveats |
 | FF-12 | §5 native sample |
 
-The following items have no current owner. They are proposed as FF-16+ in the report:
-- core code default and editor role loss (G3)
-- default unification (G10)
-- the language/script schema (per-script slots)
-- renderer script faces and RTL
-- the sibling pin bump (G11)
-- editor switch tests
+The remaining gaps are now burndown items:
+- core code default and editor role loss (G3): FF-17
+- default unification (G10): FF-17
+- the language/script schema (per-script slots): FF-18
+- renderer script faces and RTL: FF-19
+- the sibling pin bump (G11): FF-20
+- editor switch tests: FF-16

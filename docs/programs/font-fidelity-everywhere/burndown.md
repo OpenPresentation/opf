@@ -12,8 +12,8 @@ Every item's criteria must all hold before it is `done`. Dates are UTC.
 | Status | Count |
 | --- | --- |
 | done | 2 |
-| review / in-progress | 4 |
-| todo | 17 |
+| review / in-progress | 8 |
+| todo | 13 |
 
 ## Items
 
@@ -28,7 +28,7 @@ Every item's criteria must all hold before it is `done`. Dates are UTC.
 | FF-06 | Font-flow map across all 14 dimensions and environments | opf | none | review | [font-flow-map.md](font-flow-map.md), this PR |
 | FF-07 | Exporter writes chosen fonts into theme and run East Asian/complex-script slots, with `lang`/RTL | opf-pptx | FF-05, FF-06, FF-18 | todo | |
 | FF-08 | Exporter leaks no hard-coded or default font in any part | opf-pptx | FF-05, FF-06, FF-17 | todo | |
-| FF-09 | Offline pairwise matrix across the 14 gallery dimensions | opf (ecosystem) | FF-07, FF-08, FF-20 | todo | |
+| FF-09 | Offline pairwise matrix across the 14 gallery dimensions | opf (ecosystem) | FF-07, FF-08, FF-19, FF-20 | todo | |
 | FF-10 | Matrix in CI on ubuntu, windows, macos via a packed TypeScript consumer | opf | FF-09 | todo | |
 | FF-11 | Export determinism independent of host fonts, OS, locale and timezone | opf-pptx / opf | FF-06 | todo | |
 | FF-12 | Native PowerPoint sample of the matrix, including CJK and RTL | opf-pptx / opf | FF-03, FF-07, FF-09, FF-18 | todo | |
@@ -36,11 +36,11 @@ Every item's criteria must all hold before it is `done`. Dates are UTC.
 | FF-14 | Evidence bundles, compatibility matrix and handoff merged | opf | FF-10, FF-11, FF-12, FF-13, FF-16, FF-19 | todo | |
 | FF-15 | Release-readiness note for the release owner (no publishing) | opf | FF-14 | todo | |
 | FF-16 | Editor switch operations for every dimension patch, undo and refresh the preview | opf-editor | FF-06, FF-17 | todo | |
-| FF-17 | Code-font default follows the scheme; gallery apply keeps roles; one shared default scheme | opf, opf-editor, opf-pptx | FF-06 | todo | |
-| FF-18 | Language/script model: per-script fonts resolvable from language and font scheme | opf | FF-06 | todo | |
+| FF-17 | Code-font default follows the scheme; gallery apply keeps roles; one shared default scheme | opf, opf-editor, opf-pptx | FF-06 | in-progress | branch `codex/ff-17-*` |
+| FF-18 | Language/script model: per-script fonts resolvable from language and font scheme | opf | FF-06 | in-progress | branch `codex/ff-18-script-font-model` |
 | FF-19 | Renderer script fonts (CJK, Arabic, Indic), `lang` and RTL in previews | opf-render | FF-18 | todo | |
-| FF-20 | Bump ecosystem-ci sibling pins after each opf-pptx font fix | opf | FF-01 | todo | |
-| FF-21 | Non-blocking macOS browser job tracking opf-render#24 | opf-render | none | todo | |
+| FF-20 | Bump ecosystem-ci sibling pins after each opf-pptx font fix | opf | FF-07, FF-08 | in-progress | first bump to FF-01 by agent |
+| FF-21 | Non-blocking macOS browser job tracking opf-render#24 | opf-render | none | in-progress | branch `codex/ff-21-macos-render-job` |
 | FF-R0 | Prior: mixed-size table edit/save/reopen and first embed attempt | opf, opf-pptx | none | done | [opf#114](https://github.com/OpenPresentation/opf/pull/114), [opf#115](https://github.com/OpenPresentation/opf/pull/115) |
 
 ## Acceptance criteria
@@ -139,6 +139,8 @@ packed install consumed from a TypeScript project with a pinned TypeScript
 version, running `tsc --noEmit` against the published types. Non-Linux jobs
 run outside the ecosystem-ci container. On each OS it includes a
 headless-browser preview re-render and a run with no system fonts available.
+On macOS the required check asserts font families and that re-rendering
+happened, not pixel parity; pixel residuals stay in the non-blocking FF-21 job.
 It is required on core PRs that touch the matrix or sibling pins.
 
 **FF-11 Determinism.** Exporting the same deck under different `TZ`, `LANG`
@@ -204,8 +206,10 @@ caller as documented, honoring `lang` and RTL without `missing-glyph` failures.
 It is covered by renderer tests. The 0.1 px gate is unchanged.
 
 **FF-20 Ecosystem pins.** After each merged opf-pptx font fix, core
-ecosystem-ci sibling pins advance to that merge and CI passes. This starts
-with FF-01 (`7b34f557`); the pin was `fcc006a`.
+ecosystem-ci sibling pins advance to that merge and CI passes. The first bump
+covers FF-01 (`7b34f557`); the pin was `fcc006a`. The item is `done` once the
+pins include the FF-07 and FF-08 merges with CI green; intermediate bumps are
+progress-log entries.
 
 **FF-21 macOS render job.** A non-blocking macOS browser job in opf-render
 reports the Linux-versus-macOS preview residual, tracking opf-render#24,
@@ -220,5 +224,6 @@ Append one dated line per state change. Newest last.
 - 2026-09-23: Program opened. FF-01 merged (opf-pptx#57). FF-02, FF-03 and
   FF-06 started by parallel agents. FF-00 in review. FF-16 added after the
   tracker review; FF-08/FF-09 cycle removed.
+- 2026-09-23: FF-17, FF-18, FF-20 and FF-21 started by parallel agents.
 - 2026-09-23: FF-06 brief and Aptos research brief committed. FF-17 to FF-21
   added and FF-07 to FF-12 criteria sharpened from the FF-06 findings.
