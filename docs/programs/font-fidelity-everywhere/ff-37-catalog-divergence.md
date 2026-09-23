@@ -5,13 +5,16 @@ catalog. The contract is in [`docs/default-catalog.md`](../../default-catalog.md
 This page records how far the gallery data and the bundled core catalogs had
 drifted, what FF-37 reconciled, and what remains.
 
-Baseline: OPF core `53be042` with FF-18 language fields from `3ba21ff`, and
-pptx-gallery `f17e9ae`. The gallery side was compared after projecting each
-gallery item onto its OPF record schema, meaning OPF fields only, with gallery
-presentation fields set aside. "Both, different" counts overlapping ids whose
-OPF fields differ. In that column, `+gallery` means only the gallery sets the
-field, `+core` means only core sets it, and `≠` means both set it with
-different values.
+Baseline: OPF core `53be042`, plus the FF-18 language fields from `3ba21ff`,
+and pptx-gallery `f17e9ae`. FF-22 (#121) and FF-28 (#123) landed on core while
+FF-37 was in review; the snapshot in this PR includes them. The counts below
+are from before those two PRs.
+
+The gallery side was compared after projecting each gallery item onto its OPF
+record schema, meaning OPF fields only, with gallery presentation fields set
+aside. "Both, different" counts overlapping ids whose OPF fields differ. In
+that column, `+gallery` means only the gallery sets the field, `+core` means
+only core sets it, and `≠` means both set it with different values.
 
 ## Summary
 
@@ -24,10 +27,10 @@ different values.
 | color-schemes | 14 | 14 | 14 | 0 | 0 | 14 (+gallery `summary`, `description`, `tags`) | core gains gallery text | mirror |
 | font-schemes | 89 | 89 (+4 legacy) | 89 | 0 | 4 legacy pairings | 89 (+gallery `description`); 2 (+core `code`) | core gains descriptions; gallery gains FF-17 `code` | mirror |
 | purposes | 9 | 0 | 0 | 9 | 0 | – | 9 records moved into gallery `data/purposes.json` | mirror |
-| audiences | 10 | 14 | 2 | 8 | 12 | 2 (`board`, `all-hands`: ≠ summary, description, recommendedNarratives; `all-hands` ≠ name) | pending (FF-28) | subset (10 of 22) |
-| narratives | 39 | 10 | 1 | 38 | 9 | 1 (`problem-solution`: ≠ name, summary, audienceFit, tags, beats) | pending (FF-28) | subset (39 of 48) |
-| chart-types | 76 | 76 | 75 | 1 (`united-kingdom`) | 1 (misspelled `united-kingdom` duplicate) | 75 (+core `mappings`; +gallery `description`, `preview`) | pending (FF-22) | subset (76 of 76) |
-| layouts | 30 | 485 | 30 | 0 | 455 | 30 (+gallery structural fields and preview; 15 ≠ `name`) | pending (follow-up) | subset (30 of 485) |
+| audiences | 10 | 14 | 2 | 8 | 12 | 2 (`board`, `all-hands`: ≠ summary, description, recommendedNarratives; `all-hands` ≠ name) | FF-28 bundled the 12 gallery ids; the gallery publishes all 22 core records | subset (22 of 22) |
+| narratives | 39 | 10 | 1 | 38 | 9 | 1 (`problem-solution`: ≠ name, summary, audienceFit, tags, beats) | FF-28 bundled the 9 gallery ids; the gallery publishes all 48 core records | subset (48 of 48) |
+| chart-types | 76 | 76 | 75 | 1 (`united-kingdom`) | 1 (misspelled `united-kingdom` duplicate) | 75 (+core `mappings`; +gallery `description`, `preview`) | FF-22 records (26 current, 50 deprecated) published verbatim | subset (76 of 76) |
+| layouts | 30 | 485 | 30 | 0 | 455 | 30 (+gallery structural fields and preview; 15 ≠ `name`) | follow-up | subset (30 of 485) |
 
 Snapshot changes in this PR are additive and change no OPF semantics:
 
@@ -35,18 +38,26 @@ Snapshot changes in this PR are additive and change no OPF semantics:
 - 89 font schemes gain `description`.
 - The `font-schemes` and `themes` indexes take the gallery's canonical order.
 - Every index gains `kind` and `contentSha256`.
+- The serializer reformats the narratives index.
 
 No record id was added or removed, and `check:breaking` reports 0 against
 `opf-v0.11.0`.
 
 ## How pending kinds are published
 
-For a pending kind the gallery publishes the core records verbatim from
-`data/opf-pending/<kind>.json`, then its gallery-only records. It does not
-publish its own conflicting projection. That keeps every bundled id resolving
-to the same content online and offline. Gallery-only records appear only in the
-published catalog, not in the snapshot, until the kind is reconciled and
-switched to `mirror`. Their counts are recorded in the manifest.
+For a pending kind, the gallery publishes the core records verbatim from
+`data/opf-pending/<kind>.json`, including the core index description and
+entries, and then its gallery-only records. It does not publish its own
+conflicting projection. That keeps every bundled id resolving to the same
+content online and offline.
+
+- Gallery-only records appear only in the published catalog, not in the
+  snapshot, until the kind is reconciled and switched to `mirror`.
+- Their counts are recorded in the manifest.
+- After FF-22 and FF-28, only `layouts` still has gallery-only records (455).
+- Audiences, narratives and chart types stay pending because the gallery pages
+  still render their own conflicting presentation data. The bundled and
+  published records already agree.
 
 Not published at all:
 
@@ -57,20 +68,22 @@ Not published at all:
 
 ## Plan per pending kind
 
-### audiences (FF-28, then FF-37 alias data)
+### audiences
 
-- **FF-28 (#123)** adds the 12 gallery audiences to core. After it merges:
-  1. Run `node scripts/build-opf-catalog.mjs --refresh-pending <opf>` in the
-     gallery, so all 22 records publish verbatim.
-  2. Run `sync-gallery-catalog.mjs --gallery` here. Nothing is gallery-only
-     after that.
-  3. Switch `audiences` to `mirror`.
-- **Deprecated aliases (review item 1).** FF-37 ships the mechanism:
-  `deprecatedBy` on every record schema and index entry, a validator warning, a
-  `opf/deprecated-catalog-id` lint rule and `check:spec` rule (g). With the
-  gallery ids canonical, the data change after FF-28 is six records:
+- **Reconcile the gallery data.** FF-28 folded gallery-only fields into core
+  descriptions.
+  1. Make `data/audiences.json` carry the 22 core records, with gallery
+     presentation fields beside them.
+  2. Drop `data/opf-pending/audiences.json`.
+  3. Switch the kind to `mirror`.
+- **Deprecated aliases (review item 1).** FF-37 generalises FF-22's chart-type
+  `deprecation` object (`replacedBy`, `reason`, `removal`) to every record
+  schema. It adds the `deprecated`/`replacedBy` index flags, `check:spec`
+  rule (h), a validator warning (including for inline records) and the
+  `opf/deprecated-catalog-id` lint rule. The data change keeps the gallery ids
+  canonical:
 
-  | Deprecated core id | `deprecatedBy` |
+  | Deprecated core id | `deprecation.replacedBy` |
   | --- | --- |
   | `executives` | `executive` |
   | `investors` | `investor` |
@@ -80,33 +93,33 @@ Not published at all:
   | `regulators` | `regulatory` |
 
   `candidates`, `engineering-team`, `board` and `all-hands` stay canonical.
-  - Add the field in the gallery's audience data once audiences are
-    reconciled, or in the core records followed by `--refresh-pending` while
-    the kind is still pending.
-  - It cannot land before FF-28, because rule (g) requires the targets to be
-    bundled.
+  - **Not applied in this PR.** 81 bundled examples (111 references) and
+    `spec/reference/engine-defaults.json` (`audience: "executives"`) use the
+    plural ids. Deprecating them would add validator warnings to the example
+    corpus, which the example tests reject.
+  - The follow-up changes three things together:
+    1. Move the examples and the engine default to the singular ids.
+    2. Add the six `deprecation` objects, through the gallery data and a sync.
+    3. Regenerate the example suite.
 - **`board` and `all-hands` conflicts.** Take the gallery wording for
   `summary` and `description`. Keep the union of `recommendedNarratives`. Keep
   the core `name` for `all-hands`, since pickers show names and nothing
   resolves by name.
 
-### narratives (FF-28, then layout hints)
+### narratives
 
-- **FF-28** adds the 9 gallery narratives with beat `layoutHint` values mapped
-  to bundled layouts. The refresh-and-sync steps are the same as for
-  audiences. The 38 core-only narratives move into the gallery at the same time.
-  They are already published verbatim; the gallery pages still need records for
-  them.
+- **Reconcile the gallery data.** Same steps as audiences. The gallery pages
+  need records for the 38 core-only narratives.
 - **Layout hints (review item 2).** The schema says hints resolve against the
   pptx.gallery layouts catalog, but `check:spec` rule (e) only accepts bundled
   layout ids. Once `layouts` is `mirror`, rule (e) accepts gallery layout ids.
-  At that point, restore the gallery hints by reversing FF-28's mapping table
-  (`title-center`, `stats-metrics`, `data-visualization`, `thank-you-cta` and so
-  on).
-- **`audienceFit` ids (review item 3).** Core narratives use 49 distinct
-  `audienceFit` values, and only 6 are audience ids (`board`, `executives`,
-  `investors`, `customers`, `candidates`, `all-hands`). The gallery uses 31
-  human labels, none of them ids. Plan:
+  At that point, restore the gallery hints using FF-28's per-beat table
+  (`scripts/gallery-catalog/gallery-layout-map.json`).
+- **`audienceFit` ids (review item 3).** Before FF-28, core narratives used 49
+  distinct `audienceFit` values, and only 6 were audience ids (`board`,
+  `executives`, `investors`, `customers`, `candidates`, `all-hands`). The
+  gallery used 31 human labels, none of them ids. FF-28 turned its 9 imported
+  narratives' labels into kebab slugs, but slugs are not audience ids. Plan:
   1. Map every value to a canonical audience id. `stakeholders` becomes
      `executive`, `prospects` and `buyers` become `customer`, `press` becomes
      `media`, `students` becomes `academic`, and so on.
@@ -124,18 +137,15 @@ Not published at all:
     beats.
   - This is an owner decision because it changes a gallery page.
 
-### chart-types (FF-22)
+### chart-types
 
-FF-22 (#121 core, gallery #40) reduces the catalog to Aspose.Slides-supported
-types in both repos.
-
-- When it lands, the gallery chart data needs the core `mappings`, so the kind
-  can publish projections instead of vendored records.
-- The misspelled gallery slug redirects to `united-kingdom` (FF-22's
-  `chart-redirects.json`).
-- After that, switch to `mirror`.
-- Until then, FF-22 must refresh `data/opf-pending/chart-types.json` in the
-  gallery and re-sync here, or `check:spec` rejects the hand-edited snapshot.
+- FF-22 is in core. The gallery half (pptx-gallery #40) is open, and the
+  gallery pages still list the pre-FF-22 set.
+- When #40 lands, the gallery chart data needs the core `mappings` and
+  `deprecation` objects, so the kind can publish projections instead of
+  vendored records. Then switch to `mirror`.
+- The misspelled gallery slug redirects to `united-kingdom` through #40's
+  `chart-redirects.json`.
 
 ### layouts (follow-up, largest)
 
@@ -164,9 +174,15 @@ types in both repos.
 
 - **FF-18.** The language record fields are now also gallery data; the
   languages kind mirrors them.
-- **FF-22, FF-28 and any change to `spec/catalogs/`.** After FF-37 merges,
-  catalog content changes go to the gallery first. Then run
-  `sync-gallery-catalog.mjs`. A hand edit fails `check:spec` rule (f).
+- **Any change to `spec/catalogs/`.** After FF-37 merges, catalog content
+  changes go to the gallery first:
+  - edit the gallery data, or for a pending kind, edit core and run
+    `--refresh-pending`;
+  - then run `sync-gallery-catalog.mjs`.
+
+  A hand edit fails `check:spec` rule (g). FF-28's
+  `scripts/gallery-catalog/sync-gallery-catalogs.mjs` stays as the record of
+  how it derived its records.
 - **Merge order.**
   1. Merge the gallery PR first.
   2. Re-pin the core manifest to the gallery merge commit with a re-sync.

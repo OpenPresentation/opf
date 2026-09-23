@@ -3,7 +3,7 @@
   "kind": "narratives",
   "version": "1",
   "description": "Catalog of narrative templates available in the openpresentation.org catalog. Each entry is a lightweight summary; full beat definitions live in the per-template JSON files alongside this index. Entries are grouped by usage: foundational arcs first, then pitches, sales and GTM, strategy and consulting, storytelling, keynotes and inspiration, rhythm-of-business reviews, data-driven analyses, and workforce reviews.",
-  "contentSha256": "ec00013ffe48a13290864ae97c3e5c698ee1e1dd6ce359c380b1868b59a9f533",
+  "contentSha256": "52f00dfdee8f0323d02171770520d7224de5582f2c73c0fb7ceba434fbea4029",
   "records": [
     {
       "id": "problem-solution",
@@ -53,27 +53,63 @@
       "id": "pyramid-principle",
       "name": "Pyramid Principle",
       "summary": "Lead with your conclusion, then provide supporting logic. Respects audience time and attention.",
-      "audienceFit": ["executive", "board", "time-pressed-decision-makers"],
-      "durationRange": { "minMinutes": 5, "maxMinutes": 20 },
-      "tags": ["executive", "strategy", "deductive", "recommendation"],
+      "audienceFit": [
+        "executive",
+        "board",
+        "time-pressed-decision-makers"
+      ],
+      "durationRange": {
+        "minMinutes": 5,
+        "maxMinutes": 20
+      },
+      "tags": [
+        "executive",
+        "strategy",
+        "deductive",
+        "recommendation"
+      ],
       "file": "pyramid-principle.json"
     },
     {
       "id": "situation-complication-resolution",
       "name": "Situation-Complication-Resolution",
       "summary": "McKinsey-style structure that builds tension before delivering insights.",
-      "audienceFit": ["senior-leadership", "consultants", "strategy-teams"],
-      "durationRange": { "minMinutes": 5, "maxMinutes": 20 },
-      "tags": ["strategy", "consulting", "minto", "recommendation"],
+      "audienceFit": [
+        "senior-leadership",
+        "consultants",
+        "strategy-teams"
+      ],
+      "durationRange": {
+        "minMinutes": 5,
+        "maxMinutes": 20
+      },
+      "tags": [
+        "strategy",
+        "consulting",
+        "minto",
+        "recommendation"
+      ],
       "file": "situation-complication-resolution.json"
     },
     {
       "id": "what-so-what-now-what",
       "name": "What-So What-Now What",
       "summary": "Concise framework that connects information to meaning to action. Perfect for executive audiences.",
-      "audienceFit": ["executive", "senior-managers", "board"],
-      "durationRange": { "minMinutes": 5, "maxMinutes": 15 },
-      "tags": ["executive", "briefing", "analytical", "action"],
+      "audienceFit": [
+        "executive",
+        "senior-managers",
+        "board"
+      ],
+      "durationRange": {
+        "minMinutes": 5,
+        "maxMinutes": 15
+      },
+      "tags": [
+        "executive",
+        "briefing",
+        "analytical",
+        "action"
+      ],
       "file": "what-so-what-now-what.json"
     },
     {
@@ -255,9 +291,21 @@
       "id": "sparkline",
       "name": "Sparkline",
       "summary": "A tight comparison arc showing the transformation from an inferior state to a superior one, anchored by contrast.",
-      "audienceFit": ["prospective-buyers", "skeptical-stakeholders", "evaluation-committees"],
-      "durationRange": { "minMinutes": 3, "maxMinutes": 15 },
-      "tags": ["contrast", "transformation", "product", "roi"],
+      "audienceFit": [
+        "prospective-buyers",
+        "skeptical-stakeholders",
+        "evaluation-committees"
+      ],
+      "durationRange": {
+        "minMinutes": 3,
+        "maxMinutes": 15
+      },
+      "tags": [
+        "contrast",
+        "transformation",
+        "product",
+        "roi"
+      ],
       "file": "sparkline.json"
     },
     {
@@ -395,9 +443,22 @@
       "id": "vision-roadmap",
       "name": "Vision to Roadmap",
       "summary": "Connects a compelling long-term vision to near-term executable plans, bridging aspiration and action.",
-      "audienceFit": ["leadership-teams", "board", "product-and-strategy-teams", "all-hands"],
-      "durationRange": { "minMinutes": 15, "maxMinutes": 45 },
-      "tags": ["strategy", "roadmap", "planning", "vision"],
+      "audienceFit": [
+        "leadership-teams",
+        "board",
+        "product-and-strategy-teams",
+        "all-hands"
+      ],
+      "durationRange": {
+        "minMinutes": 15,
+        "maxMinutes": 45
+      },
+      "tags": [
+        "strategy",
+        "roadmap",
+        "planning",
+        "vision"
+      ],
       "file": "vision-roadmap.json"
     },
     {
@@ -426,9 +487,21 @@
       "id": "star-method",
       "name": "STAR Method",
       "summary": "Results-focused framework that demonstrates impact through concrete examples.",
-      "audienceFit": ["hr-and-talent", "performance-reviewers", "award-committees"],
-      "durationRange": { "minMinutes": 5, "maxMinutes": 15 },
-      "tags": ["case-study", "proof", "results", "retrospective"],
+      "audienceFit": [
+        "hr-and-talent",
+        "performance-reviewers",
+        "award-committees"
+      ],
+      "durationRange": {
+        "minMinutes": 5,
+        "maxMinutes": 15
+      },
+      "tags": [
+        "case-study",
+        "proof",
+        "results",
+        "retrospective"
+      ],
       "file": "star-method.json"
     },
     {
@@ -455,9 +528,21 @@
       "id": "heros-journey",
       "name": "Hero's Journey",
       "summary": "Storytelling framework that takes the audience on an emotional journey of change and growth.",
-      "audienceFit": ["general-public", "employees", "community"],
-      "durationRange": { "minMinutes": 5, "maxMinutes": 20 },
-      "tags": ["storytelling", "brand", "change", "emotional"],
+      "audienceFit": [
+        "general-public",
+        "employees",
+        "community"
+      ],
+      "durationRange": {
+        "minMinutes": 5,
+        "maxMinutes": 20
+      },
+      "tags": [
+        "storytelling",
+        "brand",
+        "change",
+        "emotional"
+      ],
       "file": "heros-journey.json"
     },
     {
@@ -485,9 +570,21 @@
       "id": "change-story",
       "name": "Change Story",
       "summary": "A change management narrative that addresses the emotional and rational objections employees face when asked to change.",
-      "audienceFit": ["employees", "team-leads", "cross-functional-teams"],
-      "durationRange": { "minMinutes": 15, "maxMinutes": 45 },
-      "tags": ["change-management", "transformation", "internal", "alignment"],
+      "audienceFit": [
+        "employees",
+        "team-leads",
+        "cross-functional-teams"
+      ],
+      "durationRange": {
+        "minMinutes": 15,
+        "maxMinutes": 45
+      },
+      "tags": [
+        "change-management",
+        "transformation",
+        "internal",
+        "alignment"
+      ],
       "file": "change-story.json"
     },
     {
@@ -858,9 +955,22 @@
       "id": "data-story",
       "name": "Data Story",
       "summary": "A data-first narrative that builds from evidence to insight to action, ideal for analysts and data-driven teams.",
-      "audienceFit": ["data-teams", "operations-and-finance", "product-managers", "analytics-stakeholders"],
-      "durationRange": { "minMinutes": 10, "maxMinutes": 30 },
-      "tags": ["analytics", "data", "insight", "recommendation"],
+      "audienceFit": [
+        "data-teams",
+        "operations-and-finance",
+        "product-managers",
+        "analytics-stakeholders"
+      ],
+      "durationRange": {
+        "minMinutes": 10,
+        "maxMinutes": 30
+      },
+      "tags": [
+        "analytics",
+        "data",
+        "insight",
+        "recommendation"
+      ],
       "file": "data-story.json"
     },
     {
