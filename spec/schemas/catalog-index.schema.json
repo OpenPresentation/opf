@@ -2,14 +2,36 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://openpresentation.org/schema/opf-catalog-index/v1",
   "title": "Catalog Index",
-  "description": "Generic shape shared by every `spec/catalogs/<kind>/index.json` file in the OPF repo. An index is a lightweight, ordered summary of the full-record JSON files that live alongside it: each entry names the record's stable id, a human-readable name, and the record's filename, plus whatever extra summary fields are useful for picker UIs (e.g. `summary`, `tags`, `bcp47`, `durationRange`). This schema describes the repo-internal catalog index files themselves, not OPF documents or individual catalog records — it is not part of the OPF document contract and is intentionally excluded from the package's published/typed schema surface.",
+  "description": "Generic shape shared by every `spec/catalogs/<kind>/index.json` file in the OPF repo and by the default-catalog index that pptx.gallery publishes at `https://www.pptx.gallery/<kind>/index.json` (spec/catalogs is a pinned snapshot of that catalog; see docs/default-catalog.md). An index is a lightweight, ordered summary of the full-record JSON files that live alongside it: each entry names the record's stable id, a human-readable name, and the record's filename, plus whatever extra summary fields are useful for picker UIs (e.g. `summary`, `tags`, `bcp47`, `durationRange`). This schema describes catalog index files themselves, not OPF documents or individual catalog records — it is not part of the OPF document contract and is intentionally excluded from the package's published/typed schema surface.",
   "type": "object",
   "required": ["$schema", "version", "description", "records"],
   "additionalProperties": false,
+  "patternProperties": {
+    "^x-": {
+      "description": "Publisher extension member, such as pptx.gallery's `x-gallery` reconciliation status. Consumers ignore top-level `x-*` members, and the pinned snapshot in spec/catalogs never carries them."
+    }
+  },
   "properties": {
     "$schema": {
       "type": "string",
       "const": "https://openpresentation.org/schema/opf-catalog-index/v1"
+    },
+    "kind": {
+      "type": "string",
+      "description": "Catalog kind, as the URL segment of the default catalog (`https://www.pptx.gallery/<kind>`) and the `spec/catalogs/<kind>` directory name.",
+      "enum": [
+        "audiences",
+        "chart-types",
+        "color-schemes",
+        "font-schemes",
+        "languages",
+        "layouts",
+        "narratives",
+        "purposes",
+        "social-platforms",
+        "themes",
+        "tones"
+      ]
     },
     "version": {
       "type": "string",
@@ -19,6 +41,11 @@
     "description": {
       "type": "string",
       "description": "Human-readable description of what this catalog kind holds and how entries are ordered."
+    },
+    "contentSha256": {
+      "type": "string",
+      "description": "SHA-256 (lowercase hex) of the canonical JSON of the full records this index lists, in index order, with every top-level `x-*` member removed. Canonical JSON sorts object keys and has no insignificant whitespace. Lets a consumer prove it holds exactly the published content.",
+      "pattern": "^[0-9a-f]{64}$"
     },
     "records": {
       "type": "array",
@@ -35,8 +62,8 @@
       "properties": {
         "id": {
           "type": "string",
-          "description": "Stable identifier, matching the `id` field inside the record file named by `file`.",
-          "pattern": "^[a-z][a-z0-9-]*$"
+          "description": "Stable identifier, matching the `id` field inside the record file named by `file`. Lowercase kebab-case; chart-type ids may start with a digit (e.g. '100pct-stacked-bar').",
+          "pattern": "^[a-z0-9][a-z0-9-]*$"
         },
         "name": {
           "type": "string",
@@ -46,6 +73,16 @@
           "type": "string",
           "description": "Filename of the full record, relative to this index file's directory.",
           "pattern": "^[^/]+\\.json$"
+        },
+        "deprecated": {
+          "type": "boolean",
+          "const": true,
+          "description": "Present on the entry of a record that carries `deprecation`. Pickers and default listings hide deprecated entries; the id keeps resolving."
+        },
+        "replacedBy": {
+          "type": "string",
+          "description": "The deprecated record's `deprecation.replacedBy`, repeated so a picker can offer the replacement without loading the record.",
+          "pattern": "^[a-z0-9][a-z0-9-]*$"
         }
       }
     }

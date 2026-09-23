@@ -13,5 +13,14 @@
   "followedHyperlink": "#E6B89C",
   "hyperlink": "#FE938C",
   "light1": "#FFFFFF",
-  "light2": "#FFEFEE"
+  "light2": "#FFEFEE",
+  "summary": "Soft red and blue accents for approachable consumer stories.",
+  "description": "A pastel red scheme with warm neutrals and blue support, suited to friendly, human-centered decks.",
+  "tags": [
+    "warm",
+    "friendly",
+    "soft",
+    "approachable",
+    "human"
+  ]
 }

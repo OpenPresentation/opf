@@ -1,0 +1,111 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-catalog-manifest/v1",
+  "description": "Pinned snapshot of the default OPF catalog published by pptx.gallery. Written by scripts/sync-gallery-catalog.mjs; change a kind's `mode` by hand, everything else by re-running the sync.",
+  "publisher": "https://www.pptx.gallery",
+  "source": {
+    "repository": "https://github.com/Data-Advantage/pptx-gallery",
+    "commit": "58aa122690489a9206e1b583e5d9eea5e8cfd84e",
+    "path": "public"
+  },
+  "kinds": {
+    "audiences": {
+      "mode": "subset",
+      "records": 22,
+      "contentSha256": "90ab1b5a3c55ff36ec8c05595a2b0f90a18c108af82c959b33f204f077ee4e51",
+      "gallery": {
+        "records": 22,
+        "contentSha256": "90ab1b5a3c55ff36ec8c05595a2b0f90a18c108af82c959b33f204f077ee4e51"
+      }
+    },
+    "chart-types": {
+      "mode": "subset",
+      "records": 76,
+      "contentSha256": "6fe4f65e3bd45e2833e45521c093cbed05aca960f1e693021df514acc17af235",
+      "gallery": {
+        "records": 76,
+        "contentSha256": "6fe4f65e3bd45e2833e45521c093cbed05aca960f1e693021df514acc17af235"
+      }
+    },
+    "color-schemes": {
+      "mode": "mirror",
+      "records": 14,
+      "contentSha256": "ee641dfe0091c15a443d5b75e0d8f2573aed93003a18ba0cc51aab115b38a826",
+      "gallery": {
+        "records": 14,
+        "contentSha256": "ee641dfe0091c15a443d5b75e0d8f2573aed93003a18ba0cc51aab115b38a826"
+      }
+    },
+    "font-schemes": {
+      "mode": "mirror",
+      "records": 89,
+      "contentSha256": "7c05145c1d3150c642277ce370d673bc58b99cbfdd2df943781a7e49be14bf8c",
+      "gallery": {
+        "records": 89,
+        "contentSha256": "7c05145c1d3150c642277ce370d673bc58b99cbfdd2df943781a7e49be14bf8c"
+      }
+    },
+    "languages": {
+      "mode": "mirror",
+      "records": 93,
+      "contentSha256": "cede71a78095d5abc4272bb294d4ea3013785bb9689c7b9a48bb4538f34929da",
+      "gallery": {
+        "records": 93,
+        "contentSha256": "cede71a78095d5abc4272bb294d4ea3013785bb9689c7b9a48bb4538f34929da"
+      }
+    },
+    "layouts": {
+      "mode": "subset",
+      "records": 30,
+      "contentSha256": "cb28c113f7949c486d5f897036324118a3d52df5ffc75d485e1fb65c9fbf4663",
+      "gallery": {
+        "records": 485,
+        "contentSha256": "9b3f03877f2b67b3adfb6116c67d44f94cea86e5d945ac412309690191fb13e2"
+      }
+    },
+    "narratives": {
+      "mode": "subset",
+      "records": 48,
+      "contentSha256": "52f00dfdee8f0323d02171770520d7224de5582f2c73c0fb7ceba434fbea4029",
+      "gallery": {
+        "records": 48,
+        "contentSha256": "52f00dfdee8f0323d02171770520d7224de5582f2c73c0fb7ceba434fbea4029"
+      }
+    },
+    "purposes": {
+      "mode": "mirror",
+      "records": 9,
+      "contentSha256": "43d9ba617491fe1d98b527d24032d5da9bc6763a01b0ea41da421c5ec27e649c",
+      "gallery": {
+        "records": 9,
+        "contentSha256": "43d9ba617491fe1d98b527d24032d5da9bc6763a01b0ea41da421c5ec27e649c"
+      }
+    },
+    "social-platforms": {
+      "mode": "mirror",
+      "records": 10,
+      "contentSha256": "22292ed144ac3caf37a86c9e644f9b648cda51ed670cbc3c0ed64915d251b375",
+      "gallery": {
+        "records": 10,
+        "contentSha256": "22292ed144ac3caf37a86c9e644f9b648cda51ed670cbc3c0ed64915d251b375"
+      }
+    },
+    "themes": {
+      "mode": "mirror",
+      "records": 4,
+      "contentSha256": "5af95e3e353857bb49a2c303e66b99d74d884210070baac0b68291aad90fa8d5",
+      "gallery": {
+        "records": 4,
+        "contentSha256": "5af95e3e353857bb49a2c303e66b99d74d884210070baac0b68291aad90fa8d5"
+      }
+    },
+    "tones": {
+      "mode": "mirror",
+      "records": 7,
+      "contentSha256": "b5a8d0933f494d09cd3b9a399c8de2032c43d253fcf432974135e841fcc9e703",
+      "gallery": {
+        "records": 7,
+        "contentSha256": "b5a8d0933f494d09cd3b9a399c8de2032c43d253fcf432974135e841fcc9e703"
+      }
+    }
+  }
+}

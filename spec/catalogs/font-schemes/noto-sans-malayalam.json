@@ -10,5 +10,6 @@
   "major": "Noto Sans Malayalam",
   "minor": "Noto Sans Malayalam",
   "textSample": "ഇത് മനോഹരമാണ്",
-  "type": "sans-serif"
+  "type": "sans-serif",
+  "description": "Noto Sans Malayalam is a sans serif OPF font scheme for complex script presentations, using Noto Sans Malayalam for both headings and body text."
 }

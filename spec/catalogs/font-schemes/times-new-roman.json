@@ -8,5 +8,6 @@
   "major": "Times New Roman",
   "minor": "Times New Roman",
   "textSample": "Classic newspaper look",
-  "type": "serif"
+  "type": "serif",
+  "description": "Times New Roman is a serif OPF font scheme for Latin presentations, using Times New Roman for both headings and body text."
 }

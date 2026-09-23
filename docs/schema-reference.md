@@ -887,7 +887,7 @@ _No named properties._
 
 - Type: `object`
 - Required fields: none
-- Purpose: Catalog overrides for the in-document references. Every property is optional. The default catalog for a kind lives at https://www.pptx.gallery/<kind> (e.g. https://www.pptx.gallery/narratives, https://www.pptx.gallery/themes). For each kind, declaring a 'source' replaces the default registry and/or 'records' adds inline records that take precedence over anything fetched from a source. Resolution order for any reference (e.g. narrative, design.theme): inline catalogs.<kind>.records[] catalogs....
+- Purpose: Catalog overrides for the in-document references. Every property is optional. The default catalog for a kind lives at https://www.pptx.gallery/<kind> (e.g. https://www.pptx.gallery/narratives, https://www.pptx.gallery/themes). pptx.gallery is its canonical publisher: GET https://www.pptx.gallery/<kind>/index.json (or https://www.pptx.gallery/<kind> with Accept: application/json) returns a catalog index (https://openpresentation.org/schema/opf-catalog-index/v1) and https://www.pptx.gallery/<ki...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -912,7 +912,7 @@ _No named properties._
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `source` | no | `oneOf:ref:CatalogSource / array<ref:CatalogSource>` | Single source or an ordered search path of sources. When omitted, the engine falls back to https://www.pptx.gallery/<kind>. |
+| `source` | no | `oneOf:ref:CatalogSource / array<ref:CatalogSource>` | Single source or an ordered search path of sources. When omitted, the engine falls back to the default catalog at https://www.pptx.gallery/<kind>, resolved from its bundled snapshot. Fetching a declared source is an e... |
 | `records` | no | `array<object>` | Inline catalog records embedded in this OPF document. Each record validates against the kind's companion schema (e.g. https://openpresentation.org/schema/opf-narrative/v1 for narratives). Inline records win over anyth... |
 
 
@@ -920,7 +920,7 @@ _No named properties._
 
 - Type: `string`
 - Required fields: none
-- Purpose: Catalog source location. Accepts: - A bare URL pointing at a catalog directory (e.g. 'https://acme.com/decks/narratives'); record ids resolve to '<base>/<id>.json'. - A URL pointing at an index file (e.g. 'https://acme.com/decks/narratives/index.json'); records are resolved relative to the index file's directory and the index entries describe what's available. - A package reference of the form 'pkg:<package>[/<subpath>]'; resolved through a locally-installed package on the engine's package path.
+- Purpose: Catalog source location. Accepts: - A bare URL pointing at a catalog directory (e.g. 'https://acme.com/decks/narratives'); record ids resolve to '<base>/<id>.json'. - A URL pointing at an index file (e.g. 'https://acme.com/decks/narratives/index.json'); records are resolved relative to the index file's directory and the index entries describe what's available. Index files follow https://openpresentation.org/schema/opf-catalog-index/v1; the default catalog's index is https://www.pptx.gallery/<...
 
 _No named properties._
 

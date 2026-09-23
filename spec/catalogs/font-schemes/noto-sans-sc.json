@@ -13,5 +13,6 @@
   "major": "Noto Sans SC",
   "minor": "Noto Sans SC",
   "textSample": "这是美丽的",
-  "type": "sans-serif"
+  "type": "sans-serif",
+  "description": "Noto Sans SC is a sans serif OPF font scheme for East Asian presentations, using Noto Sans SC for both headings and body text."
 }

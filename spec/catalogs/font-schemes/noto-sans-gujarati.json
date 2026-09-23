@@ -10,5 +10,6 @@
   "major": "Noto Sans Gujarati",
   "minor": "Noto Sans Gujarati",
   "textSample": "આ સારી સ્થિતિ છે",
-  "type": "sans-serif"
+  "type": "sans-serif",
+  "description": "Noto Sans Gujarati is a sans serif OPF font scheme for complex script presentations, using Noto Sans Gujarati for both headings and body text."
 }

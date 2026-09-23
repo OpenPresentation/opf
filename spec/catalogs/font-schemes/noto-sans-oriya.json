@@ -10,5 +10,6 @@
   "major": "Noto Sans Oriya",
   "minor": "Noto Sans Oriya",
   "textSample": "ଏହା ବହୁତ ସୁନ୍ଦର",
-  "type": "sans-serif"
+  "type": "sans-serif",
+  "description": "Noto Sans Oriya is a sans serif OPF font scheme for complex script presentations, using Noto Sans Oriya for both headings and body text."
 }

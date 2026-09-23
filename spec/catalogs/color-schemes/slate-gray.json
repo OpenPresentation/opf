@@ -13,5 +13,14 @@
   "followedHyperlink": "#424242",
   "hyperlink": "#212121",
   "light1": "#FFFFFF",
-  "light2": "#F8F8F8"
+  "light2": "#F8F8F8",
+  "summary": "Neutral gray palette for understated executive communication.",
+  "description": "A disciplined gray scale with strong neutral contrast. Use it when the content should feel calm, mature, and analytical.",
+  "tags": [
+    "neutral",
+    "minimal",
+    "mature",
+    "analytical",
+    "restrained"
+  ]
 }

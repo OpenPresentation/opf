@@ -8,5 +8,6 @@
   "major": "Bookman Old Style",
   "minor": "Bookman Old Style",
   "textSample": "Classic serif style",
-  "type": "serif"
+  "type": "serif",
+  "description": "Bookman is a serif OPF font scheme for Latin presentations, using Bookman Old Style for both headings and body text."
 }

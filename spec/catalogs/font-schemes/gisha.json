@@ -11,5 +11,6 @@
   "major": "Gisha",
   "minor": "Gisha",
   "textSample": "זה נכתב בגופן גישה",
-  "type": "sans-serif"
+  "type": "sans-serif",
+  "description": "Gisha is a sans serif OPF font scheme for complex script presentations, using Gisha for both headings and body text."
 }

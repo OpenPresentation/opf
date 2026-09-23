@@ -1,8 +1,10 @@
 // Verifies internal consistency of spec/** that no single schema validator can
 // check on its own: catalog index <-> on-disk record parity, catalog record
 // schema <-> embedded opf.schema.json $def parity, preview index <-> on-disk
-// HTML parity, index-file $schema URIs, and the Aspose.Slides chart-type
-// reduction (one non-deprecated record per Aspose.Slides ChartType).
+// HTML parity, index-file $schema URIs, the Aspose.Slides chart-type
+// reduction (one non-deprecated record per Aspose.Slides ChartType), the
+// default-catalog snapshot's manifest hashes (spec/catalogs/manifest.json), and
+// deprecation links in every other kind.
 //
 // Zero external dependencies by design. Run via `pnpm check:spec` (root) or
 // `node scripts/check-spec-integrity.mjs` directly. Exits non-zero with a
@@ -11,6 +13,7 @@
 import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { verifySnapshot } from "./catalog-snapshot.mjs";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const catalogsRoot = path.join(repoRoot, "spec", "catalogs");
@@ -67,26 +70,29 @@ const CATALOG_KINDS = [
 //     counterpart in the catalog record schema (see each $def's own
 //     description in opf.schema.json). The font `code` role is shared: catalog
 //     records may carry it too (FF-17), so it is not listed here.
+//   - `deprecation` marks a catalog record as deprecated in favour of another
+//     record of the same catalog. It describes the catalog itself, so inline
+//     OPF objects never carry it.
 //   - Narrative's companion schema requires `beats`; the embedded $def does
 //     not, since an inline narrative may reference a catalog id and override
 //     only some fields without repeating all beats.
 const KNOWN_DEF_DIFFERENCES = {
-  Audience: { schemaOnlyProps: ["preview"], schemaOnlyRequired: ["id", "name"] },
-  Purpose: { schemaOnlyProps: ["preview"], schemaOnlyRequired: ["id", "name"] },
-  Tone: { schemaOnlyProps: ["preview"], schemaOnlyRequired: ["id", "name"] },
-  Theme: { schemaOnlyProps: ["preview"], schemaOnlyRequired: ["id", "name"] },
-  Narrative: { schemaOnlyProps: [], schemaOnlyRequired: ["id", "name", "beats"] },
+  Audience: { schemaOnlyProps: ["preview", "deprecation"], schemaOnlyRequired: ["id", "name"] },
+  Purpose: { schemaOnlyProps: ["preview", "deprecation"], schemaOnlyRequired: ["id", "name"] },
+  Tone: { schemaOnlyProps: ["preview", "deprecation"], schemaOnlyRequired: ["id", "name"] },
+  Theme: { schemaOnlyProps: ["preview", "deprecation"], schemaOnlyRequired: ["id", "name"] },
+  Narrative: { schemaOnlyProps: ["deprecation"], schemaOnlyRequired: ["id", "name", "beats"] },
   ColorScheme: {
-    schemaOnlyProps: ["name", "summary", "description", "tags", "preview"],
+    schemaOnlyProps: ["name", "summary", "description", "tags", "preview", "deprecation"],
     defOnlyProps: ["primary", "secondary", "accent", "background", "surface", "text", "textSecondary", "custom"],
     schemaOnlyRequired: ["id", "name"],
   },
   FontScheme: {
-    schemaOnlyProps: ["name", "summary", "description", "tags", "preview", "languages", "textSample"],
+    schemaOnlyProps: ["name", "summary", "description", "tags", "preview", "languages", "textSample", "deprecation"],
     defOnlyProps: ["heading", "body", "accent"],
     schemaOnlyRequired: ["id", "name", "major", "minor"],
   },
-  Language: { schemaOnlyProps: ["preview"], schemaOnlyRequired: ["id", "name", "bcp47"] },
+  Language: { schemaOnlyProps: ["preview", "deprecation"], schemaOnlyRequired: ["id", "name", "bcp47"] },
 };
 
 const failures = [];
@@ -385,6 +391,47 @@ async function checkChartTypesAsposeSupported() {
   notes.push(`chart-types: ${owners.size} Aspose.Slides-supported chart types, ${records.size - owners.size} deprecated`);
 }
 
+// (g) spec/catalogs is a pinned snapshot of the default catalog published by
+// pptx.gallery: each kind's records must still hash to the value recorded in
+// its index and in spec/catalogs/manifest.json. A mismatch means the snapshot
+// was edited by hand instead of through scripts/sync-gallery-catalog.mjs.
+async function checkSnapshotManifest() {
+  for (const problem of await verifySnapshot(catalogsRoot)) {
+    fail(`[g] ${problem}`);
+  }
+}
+
+// (h) Deprecation links outside chart-types (which rule (f) covers with its
+// Aspose.Slides rules): `deprecation.replacedBy` names a bundled record of the
+// same kind that is not itself deprecated, and the index entry repeats the
+// flag and the replacement so pickers can hide the old id.
+async function checkDeprecationLinks() {
+  for (const { dir } of CATALOG_KINDS) {
+    if (dir === "chart-types") continue;
+    const catalogDir = path.join(catalogsRoot, dir);
+    const index = await readJson(path.join(catalogDir, "index.json"));
+    const records = new Map();
+    for (const file of await listJsonRecordFiles(catalogDir)) {
+      const record = await readJson(path.join(catalogDir, file));
+      records.set(record.id, record);
+    }
+    for (const entry of index.records ?? []) {
+      const record = records.get(entry.id);
+      if (!record) continue;
+      const where = `[h] ${dir}/${entry.file}`;
+      const deprecation = record.deprecation;
+      if (Boolean(entry.deprecated) !== Boolean(deprecation) || entry.replacedBy !== deprecation?.replacedBy) {
+        fail(`${where}: index.json 'deprecated'/'replacedBy' do not match the record's deprecation`);
+      }
+      if (!deprecation) continue;
+      const replacement = records.get(deprecation.replacedBy);
+      if (!replacement || replacement.deprecation || replacement.id === record.id) {
+        fail(`${where}: deprecation.replacedBy '${deprecation.replacedBy}' must name a non-deprecated ${dir} record`);
+      }
+    }
+  }
+}
+
 async function main() {
   const opfSchema = await readJson(path.join(schemasRoot, "opf.schema.json"));
 
@@ -394,6 +441,8 @@ async function main() {
   await checkPreviewIndex();
   await checkIndexSchemaUris();
   await checkChartTypesAsposeSupported();
+  await checkSnapshotManifest();
+  await checkDeprecationLinks();
 
   if (failures.length > 0) {
     process.stderr.write(`spec integrity check failed: ${failures.length} problem(s) found\n\n`);

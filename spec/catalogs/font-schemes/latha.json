@@ -10,5 +10,6 @@
   "major": "Latha",
   "minor": "Latha",
   "textSample": "இது லதா எழுத்துருவில் எழுதப்பட்டுள்ளது",
-  "type": "sans-serif"
+  "type": "sans-serif",
+  "description": "Latha is a sans serif OPF font scheme for complex script presentations, using Latha for both headings and body text."
 }

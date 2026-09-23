@@ -10,5 +10,6 @@
   "major": "Noto Sans Georgian",
   "minor": "Noto Sans Georgian",
   "textSample": "ეს ულამაზესი სახლში",
-  "type": "sans-serif"
+  "type": "sans-serif",
+  "description": "Noto Sans Georgian is a sans serif OPF font scheme for complex script presentations, using Noto Sans Georgian for both headings and body text."
 }

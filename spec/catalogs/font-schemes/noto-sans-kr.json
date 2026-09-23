@@ -10,5 +10,6 @@
   "major": "Noto Sans KR",
   "minor": "Noto Sans KR",
   "textSample": "이것은 아름답다",
-  "type": "sans-serif"
+  "type": "sans-serif",
+  "description": "Noto Sans KR is a sans serif OPF font scheme for East Asian presentations, using Noto Sans KR for both headings and body text."
 }

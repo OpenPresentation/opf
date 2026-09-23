@@ -10,5 +10,6 @@
   "major": "Noto Sans JP",
   "minor": "Noto Sans JP",
   "textSample": "これは美しいです",
-  "type": "sans-serif"
+  "type": "sans-serif",
+  "description": "Noto Sans JP is a sans serif OPF font scheme for East Asian presentations, using Noto Sans JP for both headings and body text."
 }

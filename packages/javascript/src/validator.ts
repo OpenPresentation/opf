@@ -513,9 +513,13 @@ function unknownIdWarning(
   if (context) {
     const entry = inlineCatalogEntry(context, kind);
     if (entry) {
-      if (Array.isArray(entry.records)
-        && entry.records.some((record) => isRecord(record) && record.id === value)) {
-        return undefined;
+      const inline = Array.isArray(entry.records)
+        ? entry.records.find((record) => isRecord(record) && record.id === value)
+        : undefined;
+      if (isRecord(inline)) {
+        // Inline records may deprecate an id the same way bundled ones do.
+        const replacedBy = isRecord(inline.deprecation) ? inline.deprecation.replacedBy : undefined;
+        return typeof replacedBy === "string" ? deprecatedIdWarning(kind, value, replacedBy, path) : undefined;
       }
       // A custom catalog source may define ids the bundled catalogs don't know
       // about. 'source' is a single source or an ordered search path of them.
@@ -527,12 +531,16 @@ function unknownIdWarning(
 
   if ((catalogIds[kind] as readonly string[]).includes(value)) {
     const replacedBy = deprecatedCatalogIds[`${kind}/${value}`];
-    return replacedBy === undefined
-      ? undefined
-      : semanticIssue(path, `deprecated ${kind} catalog id '${value}'; use '${replacedBy}'`, { kind, id: value, replacedBy });
+    return replacedBy === undefined ? undefined : deprecatedIdWarning(kind, value, replacedBy, path);
   }
 
   return semanticIssue(path, `unknown ${kind} catalog id '${value}'`, { kind, id: value });
+}
+
+// A record with `deprecation` stays resolvable: the id keeps resolving to that
+// record, and authors are pointed at `deprecation.replacedBy`.
+function deprecatedIdWarning(kind: CatalogKind, id: string, replacedBy: string, path: string): ValidationIssue {
+  return semanticIssue(path, `deprecated ${kind} catalog id '${id}'; use '${replacedBy}'`, { kind, id, replacedBy });
 }
 
 function referenceObjectWarning(

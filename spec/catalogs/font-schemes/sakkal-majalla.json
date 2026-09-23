@@ -12,5 +12,6 @@
   "major": "Sakkal Majalla",
   "minor": "Sakkal Majalla",
   "textSample": "هذا كتاب رائع",
-  "type": "sans-serif"
+  "type": "sans-serif",
+  "description": "Sakkal Majalla is a sans serif OPF font scheme for complex script presentations, using Sakkal Majalla for both headings and body text."
 }

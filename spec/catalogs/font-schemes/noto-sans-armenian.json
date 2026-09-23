@@ -10,5 +10,6 @@
   "major": "Noto Sans Armenian",
   "minor": "Noto Sans Armenian",
   "textSample": "Սա հիանալի է",
-  "type": "sans-serif"
+  "type": "sans-serif",
+  "description": "Noto Sans Armenian is a sans serif OPF font scheme for complex script presentations, using Noto Sans Armenian for both headings and body text."
 }

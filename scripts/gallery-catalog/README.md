@@ -8,3 +8,5 @@ node scripts/gallery-catalog/sync-gallery-catalogs.mjs --gallery ../pptx-gallery
 ```
 
 Starting from the pre-FF-28 catalogs, a run reproduces the committed records byte for byte. The one exception is the audiences `index.json` description sentence about singular gallery ids, which was edited by hand. The gallery checkout is not available in CI, so this is a maintenance tool, not a gate.
+
+Since FF-37, `spec/catalogs/` is a pinned snapshot of the default catalog that pptx.gallery publishes. New catalog content goes into the gallery first; then `scripts/sync-gallery-catalog.mjs --gallery ../pptx-gallery` updates the snapshot and `spec/catalogs/manifest.json` (see `docs/default-catalog.md`). This converter stays as the record of how FF-28 derived its narrative and audience records. `gallery-layout-map.json` stays as the table for restoring gallery layout hints.

@@ -10,5 +10,6 @@
   "major": "Microsoft JhengHei",
   "minor": "Microsoft JhengHei",
   "textSample": "這是用微軟正黑體寫的",
-  "type": "sans-serif"
+  "type": "sans-serif",
+  "description": "Microsoft JhengHei is a sans serif OPF font scheme for East Asian presentations, using Microsoft JhengHei for both headings and body text."
 }

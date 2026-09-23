@@ -8,5 +8,6 @@
   "major": "Trebuchet MS",
   "minor": "Trebuchet MS",
   "textSample": "Casual web style",
-  "type": "sans-serif"
+  "type": "sans-serif",
+  "description": "Trebuchet MS is a sans serif OPF font scheme for Latin presentations, using Trebuchet MS for both headings and body text."
 }

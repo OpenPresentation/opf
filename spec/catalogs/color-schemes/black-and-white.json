@@ -13,5 +13,14 @@
   "followedHyperlink": "#424242",
   "hyperlink": "#212121",
   "light1": "#FFFFFF",
-  "light2": "#FFFFFF"
+  "light2": "#FFFFFF",
+  "summary": "Strict monochrome contrast for formal, document-style decks.",
+  "description": "A pure black-and-white scheme for decks that need maximum restraint, print compatibility, and crisp information hierarchy.",
+  "tags": [
+    "minimal",
+    "formal",
+    "neutral",
+    "high-contrast",
+    "restrained"
+  ]
 }

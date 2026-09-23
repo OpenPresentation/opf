@@ -8,5 +8,6 @@
   "major": "Grandview Display",
   "minor": "Grandview",
   "textSample": "Bold road sign",
-  "type": "sans-serif"
+  "type": "sans-serif",
+  "description": "Grandview is a sans serif OPF font scheme for Latin presentations, using Grandview Display for headings with Grandview for body text."
 }

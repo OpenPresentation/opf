@@ -10,5 +10,6 @@
   "major": "DilleniaUPC",
   "minor": "DilleniaUPC",
   "textSample": "ราตรีสวัสดิ์นะ",
-  "type": "sans-serif"
+  "type": "sans-serif",
+  "description": "DilleniaUPC is a sans serif OPF font scheme for complex script presentations, using DilleniaUPC for both headings and body text."
 }

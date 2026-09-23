@@ -8,5 +8,6 @@
   "major": "Lucida Sans",
   "minor": "Lucida Sans",
   "textSample": "Friendly clear text",
-  "type": "sans-serif"
+  "type": "sans-serif",
+  "description": "Lucida Sans is a sans serif OPF font scheme for Latin presentations, using Lucida Sans for both headings and body text."
 }

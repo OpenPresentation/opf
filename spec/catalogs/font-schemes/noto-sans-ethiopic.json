@@ -10,5 +10,6 @@
   "major": "Noto Sans Ethiopic",
   "minor": "Noto Sans Ethiopic",
   "textSample": "አማርኛ ቋንቋ እጅግ ጥሩ ነው።",
-  "type": "sans-serif"
+  "type": "sans-serif",
+  "description": "Noto Sans Ethiopic is a sans serif OPF font scheme for complex script presentations, using Noto Sans Ethiopic for both headings and body text."
 }

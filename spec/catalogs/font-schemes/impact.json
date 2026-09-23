@@ -8,5 +8,6 @@
   "major": "Impact",
   "minor": "Grandview",
   "textSample": "Strong bold headline",
-  "type": "sans-serif"
+  "type": "sans-serif",
+  "description": "Impact is a sans serif OPF font scheme for Latin presentations, using Impact for headings with Grandview for body text."
 }

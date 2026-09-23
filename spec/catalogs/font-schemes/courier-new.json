@@ -11,5 +11,6 @@
     "family": "Courier New"
   },
   "textSample": "Typed letter look",
-  "type": "monospace"
+  "type": "monospace",
+  "description": "Courier New is a monospace OPF font scheme for Latin presentations, using Courier New for both headings and body text."
 }

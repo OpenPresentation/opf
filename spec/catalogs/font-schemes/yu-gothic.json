@@ -10,5 +10,6 @@
   "major": "Yu Gothic",
   "minor": "Yu Gothic",
   "textSample": "これは游ゴシックフォントで書かれています",
-  "type": "sans-serif"
+  "type": "sans-serif",
+  "description": "Yu Gothic is a sans serif OPF font scheme for East Asian presentations, using Yu Gothic for both headings and body text."
 }

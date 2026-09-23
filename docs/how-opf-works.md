@@ -196,10 +196,12 @@ Every reference resolves through the same chain, first match wins:
                           | miss
                           v
    3. default catalog                    https://www.pptx.gallery/color-schemes
-                          | miss         (bundled in spec/catalogs/ and in
-                          v               the @openpresentation/opf package)
+                          | miss         (engines read the pinned snapshot in
+                          v               spec/catalogs/ and never fetch it)
    validation warning — never an error — and an engine fallback
 ```
+
+pptx.gallery publishes the default catalog; the copy bundled in `spec/catalogs/` and the `@openpresentation/opf` package is a pinned snapshot of it, so resolution is deterministic offline. See [the default catalog](default-catalog.md) for the endpoints and the snapshot.
 
 When a reference is omitted entirely, engines fall back to their own defaults (see [`spec/reference/engine-defaults.json`](../spec/reference/engine-defaults.json) for a reference example — that file is engine configuration, not part of the document contract).
 
