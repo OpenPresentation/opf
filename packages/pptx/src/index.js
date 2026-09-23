@@ -148,6 +148,7 @@ const DIMENSION_PRESETS = Object.freeze({
 const DEFAULTS = Object.freeze({
   theme: "minimal",
   colorScheme: "cool-horizon",
+  // Shared last-resort font scheme (core DEFAULT_FONT_SCHEME): every engine uses aptos.
   fontScheme: "aptos"
 });
 

@@ -1,15 +1,19 @@
 import assert from 'node:assert/strict';
 import {strFromU8, unzipSync} from 'fflate';
-import {fontSchemes} from '@openpresentation/opf';
+import * as core from '@openpresentation/opf';
 import {resolveFontFamilies} from '@openpresentation/opf/composition';
+import {paginatePresentation} from '@openpresentation/opf/pagination';
 import {toPptx} from '../src/index.js';
 
-// FF-17 (font-fidelity-everywhere). The exporter's last-resort font scheme is
-// `aptos` (engine-defaults.json fontScheme.pptx.latin). Core pagination, the
-// renderer and the editor use `roboto`. The difference only applies when the
-// resolved theme names no font scheme, and is documented in opf
-// docs/design-resolution.md ("Engine default font scheme"). Code runs use the
-// shared resolveFontFamilies() code role: the scheme's `code`, else Roboto Mono.
+// FF-35 (font-fidelity-everywhere). Every engine shares one last-resort font
+// scheme, `aptos` (core DEFAULT_FONT_SCHEME, engine-defaults.json
+// fontScheme.pptx.latin), so core pagination, the renderer, the editor and this
+// exporter agree. It only applies when the resolved theme names no font scheme
+// (opf docs/design-resolution.md, "Engine default font scheme").
+// FF-17: code runs use the shared resolveFontFamilies() code role: the scheme's
+// `code`, else Roboto Mono.
+
+const {fontSchemes} = core;
 
 const theme = 'ppt/theme/theme1.xml';
 const parts = async (presentation) => unzipSync(new Uint8Array(await toPptx(presentation, {strictAssets: true})));
@@ -32,6 +36,20 @@ const bareTheme = {$schema: 'https://openpresentation.org/schema/opf-theme/v1', 
 const bare = await parts({name: 'No font scheme', design: {theme: 'bare'}, catalogs: {themes: {records: [bareTheme]}}, slides: [textSlide]});
 assert.deepEqual(themePair(bare), {major: 'Aptos Display', minor: 'Aptos'});
 assert.deepEqual([...slideFaces(bare)].sort(), ['Aptos', 'Aptos Display']);
+
+// Parity with core. Once the installed core exports DEFAULT_FONT_SCHEME (FF-35),
+// core pagination measures the same deck in exactly the families exported here.
+// Published cores without the constant fall back to roboto in pagination, so the
+// check waits for them.
+if ('DEFAULT_FONT_SCHEME' in core) {
+  assert.equal(core.DEFAULT_FONT_SCHEME, 'aptos');
+  const measured = new Set();
+  paginatePresentation(
+    {name: 'No font scheme', design: {theme: 'bare'}, catalogs: {themes: {records: [bareTheme]}}, slides: [textSlide]},
+    {textMeasurement: {measure: (text, size, style) => { measured.add(style.fontFamily); return text.length * size * 0.5; }}},
+  );
+  assert.deepEqual([...measured].sort(), [...slideFaces(bare)].sort());
+}
 
 // No design at all: the default `minimal` theme supplies aptos too.
 assert.deepEqual(themePair(await parts({name: 'Defaults', slides: [textSlide]})), {major: 'Aptos Display', minor: 'Aptos'});
