@@ -27,6 +27,10 @@ timezone.
 Carlito is only the openly licensed test stand-in for Calibri-class fonts. It
 is not the goal; any chosen font must behave the same way.
 
+What "works" means for each dimension is measured, not assumed: the
+[gallery support table](gallery-support.md) (FF-23) records, per gallery value,
+what the preview, the export and re-import actually do.
+
 ## Definition of done
 
 The program is done when every burndown item is `done` with its evidence
@@ -44,6 +48,21 @@ linked, and specifically:
    fonts. One font-embed attempt from merged main is audited, pass or fail.
 4. **Published.** Evidence bundles, [compatibility matrix](../../compatibility-matrix.md)
    and handoff are merged.
+5. **Every dimension measured.** The [support table](gallery-support.md)
+   (FF-23) is the dimension-level definition of "works". The program is done
+   only when, re-measured on the final heads, every dimension that is not
+   authoring-only is `works` or is explicitly marked `out of scope` there with
+   a reason.
+
+## Decisions
+
+- 2026-09-23 (owner): one shared default font scheme, `aptos`, for every
+  engine, so preview equals export (option A). Tracked as FF-35.
+- 2026-09-23 (owner): each pptx.gallery item shows its measured support status
+  from the FF-23 audit results. Tracked as FF-36; nothing is deployed in this
+  program.
+- 2026-09-23 (owner): charts are reduced to the chart types Aspose.Slides
+  documents as supported. Tracked as FF-22.
 
 ## Scope
 
@@ -113,5 +132,7 @@ PRs. A separate reviewer agent reviews each PR.
 
 - [Windows native handoff](../../handoff-windows-native-2026-09-21-wrap-up.md)
 - [Font fidelity](../../font-fidelity.md)
+- [pptx.gallery support by dimension](gallery-support.md) and its
+  [reproducible audit](gallery-support/README.md)
 - Evidence: [mixed-size edit](../../evidence/windows-native-mixed-edit-20260922/README.md),
   [first font-embed attempt](../../evidence/windows-native-font-embed-20260922/README.md)
