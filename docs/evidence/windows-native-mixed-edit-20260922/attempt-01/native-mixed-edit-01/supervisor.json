@@ -1,0 +1,13 @@
+﻿{
+    "timestamp":  "2026-09-23T01:21:38.5484022Z",
+    "timedOut":  false,
+    "exitCode":  0,
+    "officeLifecycleComplete":  true,
+    "officeCleanupConfirmed":  true,
+    "fontCleanupConfirmed":  true,
+    "metricsGatePassed":  null,
+    "metricsOwnedBy":  "test/native-mixed-edit-audit.mjs",
+    "tolerancePoints":  0.02,
+    "lastDurableStage":  "worker.complete",
+    "parentError":  null
+}

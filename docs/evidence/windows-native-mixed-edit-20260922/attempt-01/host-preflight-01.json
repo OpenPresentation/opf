@@ -1,0 +1,21 @@
+﻿{
+    "timestamp":  "2026-09-23T01:21:32.0150565Z",
+    "officeProcesses":  [
+
+                        ],
+    "permanentCarlitoOrAptosRegistrations":  [
+
+                                             ],
+    "aptosCloudFontCache":  true,
+    "pptxMain":  "86afe6c51f8238c3db0450c90443e91378531dc8",
+    "coreMain":  "c38d0b42765853cc110d26b76eff007cf48df65a",
+    "node":  "24.21.0",
+    "offlineControls":  {
+                            "mixed":  26,
+                            "fontEmbed":  15,
+                            "mixedPure":  true,
+                            "fontEmbedPure":  true
+                        },
+    "fontFixture":  "windows-resume-20260921/font-edit-fixture-01",
+    "fontFixtureGenerationSha256":  "8ac9743832e6c63bab58a999802979dcdcb91139599f502e90bc697141cf5422"
+}

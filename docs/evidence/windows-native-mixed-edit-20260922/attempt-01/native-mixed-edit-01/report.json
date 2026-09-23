@@ -1,0 +1,1235 @@
+﻿{
+    "schemaVersion":  1,
+    "kind":  "native-mixed-edit",
+    "source":  {
+                   "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-mixed-edit-20260922\\sources\\opf\\docs\\evidence\\windows-native-mixed-table-20260921\\native-run\\inputs\\table-fixture\\source.pptx",
+                   "sha256":  "f92c5d5565afa1d03fc6df0cdc8d482771d5ebd5a5403f7a888f75e2ad020a51",
+                   "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-mixed-edit-20260922\\native-mixed-edit-01\\inputs\\source.pptx",
+                   "snapshotSha256":  "f92c5d5565afa1d03fc6df0cdc8d482771d5ebd5a5403f7a888f75e2ad020a51",
+                   "unchanged":  true,
+                   "snapshotUnchanged":  true
+               },
+    "saved":  {
+                  "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-mixed-edit-20260922\\native-mixed-edit-01\\native-mixed-edit.pptx",
+                  "sha256":  "1225b753f071d7e4cc244ca03d1283f318cda03b896cff56259d16331f3766e2"
+              },
+    "original":  {
+                     "observation":  {
+                                         "phase":  "original",
+                                         "readOnly":  0,
+                                         "slideCount":  1,
+                                         "shapeCount":  1,
+                                         "slideWidth":  960,
+                                         "slideHeight":  540,
+                                         "shape":  {
+                                                       "name":  "OPF table 1",
+                                                       "type":  19,
+                                                       "hasTable":  -1,
+                                                       "geometry":  {
+                                                                        "left":  43.200000762939453,
+                                                                        "top":  43.200000762939453,
+                                                                        "width":  873.5999755859375,
+                                                                        "height":  118.80000305175781
+                                                                    }
+                                                   },
+                                         "table":  {
+                                                       "rowCount":  1,
+                                                       "columnCount":  1,
+                                                       "rowHeight":  118.80000305175781,
+                                                       "columnWidth":  873.5999755859375
+                                                   },
+                                         "cell":  {
+                                                      "geometry":  {
+                                                                       "left":  43.200000762939453,
+                                                                       "top":  43.200000762939453,
+                                                                       "width":  873.5999755859375,
+                                                                       "height":  118.80000305175781
+                                                                   },
+                                                      "whole":  {
+                                                                    "text":  "Lead\tLarge evidence phrase continues in smaller text across the same editable table cell so natural layout must wrap this sentence without authored line breaks or inserted offsets. Second large phrase finishes the control with exact source runs.",
+                                                                    "start":  1,
+                                                                    "length":  245,
+                                                                    "bounds":  {
+                                                                                   "left":  7.5,
+                                                                                   "top":  6,
+                                                                                   "width":  817.12506103515625,
+                                                                                   "height":  109.66999816894531
+                                                                               },
+                                                                    "font":  {
+                                                                                 "name":  "Carlito",
+                                                                                 "size":  18,
+                                                                                 "bold":  -2,
+                                                                                 "italic":  0
+                                                                             }
+                                                                },
+                                                      "runs":  [
+                                                                   {
+                                                                       "text":  "Lead\t",
+                                                                       "start":  1,
+                                                                       "length":  5,
+                                                                       "bounds":  {
+                                                                                      "left":  7.5,
+                                                                                      "top":  6,
+                                                                                      "width":  72.005043029785156,
+                                                                                      "height":  37
+                                                                                  },
+                                                                       "font":  {
+                                                                                    "name":  "Carlito",
+                                                                                    "size":  18,
+                                                                                    "bold":  0,
+                                                                                    "italic":  0
+                                                                                }
+                                                                   },
+                                                                   {
+                                                                       "text":  "Large evidence phrase ",
+                                                                       "start":  6,
+                                                                       "length":  22,
+                                                                       "bounds":  {
+                                                                                      "left":  79.5,
+                                                                                      "top":  6,
+                                                                                      "width":  284.1300048828125,
+                                                                                      "height":  37
+                                                                                  },
+                                                                       "font":  {
+                                                                                    "name":  "Carlito",
+                                                                                    "size":  30,
+                                                                                    "bold":  -1,
+                                                                                    "italic":  0
+                                                                                }
+                                                                   },
+                                                                   {
+                                                                       "text":  "continues in smaller text across the same editable table cell so natural layout must wrap this sentence without authored line breaks or inserted offsets. ",
+                                                                       "start":  28,
+                                                                       "length":  154,
+                                                                       "bounds":  {
+                                                                                      "left":  7.5,
+                                                                                      "top":  6,
+                                                                                      "width":  817.1300048828125,
+                                                                                      "height":  74
+                                                                                  },
+                                                                       "font":  {
+                                                                                    "name":  "Carlito",
+                                                                                    "size":  18,
+                                                                                    "bold":  0,
+                                                                                    "italic":  0
+                                                                                }
+                                                                   },
+                                                                   {
+                                                                       "text":  "Second large phrase ",
+                                                                       "start":  182,
+                                                                       "length":  20,
+                                                                       "bounds":  {
+                                                                                      "left":  7.5,
+                                                                                      "top":  43,
+                                                                                      "width":  813.1300048828125,
+                                                                                      "height":  72.669998168945313
+                                                                                  },
+                                                                       "font":  {
+                                                                                    "name":  "Carlito",
+                                                                                    "size":  30,
+                                                                                    "bold":  0,
+                                                                                    "italic":  0
+                                                                                }
+                                                                   },
+                                                                   {
+                                                                       "text":  "finishes the control with exact source runs.",
+                                                                       "start":  202,
+                                                                       "length":  44,
+                                                                       "bounds":  {
+                                                                                      "left":  97.25,
+                                                                                      "top":  80,
+                                                                                      "width":  314.6300048828125,
+                                                                                      "height":  35.669998168945313
+                                                                                  },
+                                                                       "font":  {
+                                                                                    "name":  "Carlito",
+                                                                                    "size":  18,
+                                                                                    "bold":  0,
+                                                                                    "italic":  0
+                                                                                }
+                                                                   }
+                                                               ],
+                                                      "characters":  [
+                                                                         {
+                                                                             "text":  "d",
+                                                                             "start":  4,
+                                                                             "length":  1,
+                                                                             "bounds":  {
+                                                                                            "left":  32.75,
+                                                                                            "top":  6,
+                                                                                            "width":  9.50503921508789,
+                                                                                            "height":  37
+                                                                                        },
+                                                                             "font":  {
+                                                                                          "name":  "Carlito",
+                                                                                          "size":  18,
+                                                                                          "bold":  0,
+                                                                                          "italic":  0
+                                                                                      },
+                                                                             "position":  4,
+                                                                             "purpose":  "before-tab"
+                                                                         },
+                                                                         {
+                                                                             "text":  "\t",
+                                                                             "start":  5,
+                                                                             "length":  1,
+                                                                             "bounds":  {
+                                                                                            "left":  42.25,
+                                                                                            "top":  6,
+                                                                                            "width":  37.255039215087891,
+                                                                                            "height":  37
+                                                                                        },
+                                                                             "font":  {
+                                                                                          "name":  "Carlito",
+                                                                                          "size":  18,
+                                                                                          "bold":  0,
+                                                                                          "italic":  0
+                                                                                      },
+                                                                             "position":  5,
+                                                                             "purpose":  "tab"
+                                                                         },
+                                                                         {
+                                                                             "text":  "L",
+                                                                             "start":  6,
+                                                                             "length":  1,
+                                                                             "bounds":  {
+                                                                                            "left":  79.5,
+                                                                                            "top":  6,
+                                                                                            "width":  12.630000114440918,
+                                                                                            "height":  37
+                                                                                        },
+                                                                             "font":  {
+                                                                                          "name":  "Carlito",
+                                                                                          "size":  30,
+                                                                                          "bold":  -1,
+                                                                                          "italic":  0
+                                                                                      },
+                                                                             "position":  6,
+                                                                             "purpose":  "after-tab"
+                                                                         },
+                                                                         {
+                                                                             "text":  " ",
+                                                                             "start":  78,
+                                                                             "length":  1,
+                                                                             "bounds":  {
+                                                                                            "left":  729.5,
+                                                                                            "top":  6,
+                                                                                            "width":  4.130000114440918,
+                                                                                            "height":  37
+                                                                                        },
+                                                                             "font":  {
+                                                                                          "name":  "Carlito",
+                                                                                          "size":  18,
+                                                                                          "bold":  0,
+                                                                                          "italic":  0
+                                                                                      },
+                                                                             "position":  78,
+                                                                             "purpose":  "estimated-line-1-end-probe-only"
+                                                                         },
+                                                                         {
+                                                                             "text":  "t",
+                                                                             "start":  79,
+                                                                             "length":  1,
+                                                                             "bounds":  {
+                                                                                            "left":  733.62506103515625,
+                                                                                            "top":  6,
+                                                                                            "width":  6.0049605369567871,
+                                                                                            "height":  37
+                                                                                        },
+                                                                             "font":  {
+                                                                                          "name":  "Carlito",
+                                                                                          "size":  18,
+                                                                                          "bold":  0,
+                                                                                          "italic":  0
+                                                                                      },
+                                                                             "position":  79,
+                                                                             "purpose":  "estimated-line-2-start-probe-only"
+                                                                         },
+                                                                         {
+                                                                             "text":  " ",
+                                                                             "start":  172,
+                                                                             "length":  1,
+                                                                             "bounds":  {
+                                                                                            "left":  595.5,
+                                                                                            "top":  43,
+                                                                                            "width":  4.130000114440918,
+                                                                                            "height":  37
+                                                                                        },
+                                                                             "font":  {
+                                                                                          "name":  "Carlito",
+                                                                                          "size":  18,
+                                                                                          "bold":  0,
+                                                                                          "italic":  0
+                                                                                      },
+                                                                             "position":  172,
+                                                                             "purpose":  "estimated-line-2-end-probe-only"
+                                                                         },
+                                                                         {
+                                                                             "text":  "o",
+                                                                             "start":  173,
+                                                                             "length":  1,
+                                                                             "bounds":  {
+                                                                                            "left":  599.62506103515625,
+                                                                                            "top":  43,
+                                                                                            "width":  9.5049610137939453,
+                                                                                            "height":  37
+                                                                                        },
+                                                                             "font":  {
+                                                                                          "name":  "Carlito",
+                                                                                          "size":  18,
+                                                                                          "bold":  0,
+                                                                                          "italic":  0
+                                                                                      },
+                                                                             "position":  173,
+                                                                             "purpose":  "estimated-line-3-start-probe-only"
+                                                                         }
+                                                                     ],
+                                                      "paragraph":  {
+                                                                        "count":  1,
+                                                                        "explicitTabStopCount":  0
+                                                                    },
+                                                      "lines":  {
+                                                                    "count":  3,
+                                                                    "capturedCount":  3,
+                                                                    "records":  [
+                                                                                    {
+                                                                                        "text":  "Lead\tLarge evidence phrase continues in smaller text across the same editable table cell so ",
+                                                                                        "start":  1,
+                                                                                        "length":  92,
+                                                                                        "bounds":  {
+                                                                                                       "left":  7.5,
+                                                                                                       "top":  6,
+                                                                                                       "width":  817.12506103515625,
+                                                                                                       "height":  37
+                                                                                                   },
+                                                                                        "font":  null,
+                                                                                        "index":  1
+                                                                                    },
+                                                                                    {
+                                                                                        "text":  "natural layout must wrap this sentence without authored line breaks or inserted offsets. Second large ",
+                                                                                        "start":  93,
+                                                                                        "length":  102,
+                                                                                        "bounds":  {
+                                                                                                       "left":  7.5,
+                                                                                                       "top":  43,
+                                                                                                       "width":  813.12506103515625,
+                                                                                                       "height":  37
+                                                                                                   },
+                                                                                        "font":  null,
+                                                                                        "index":  2
+                                                                                    },
+                                                                                    {
+                                                                                        "text":  "phrase finishes the control with exact source runs.",
+                                                                                        "start":  195,
+                                                                                        "length":  51,
+                                                                                        "bounds":  {
+                                                                                                       "left":  7.5,
+                                                                                                       "top":  80,
+                                                                                                       "width":  404.3800048828125,
+                                                                                                       "height":  35.669998168945313
+                                                                                                   },
+                                                                                        "font":  null,
+                                                                                        "index":  3
+                                                                                    }
+                                                                                ]
+                                                                }
+                                                  }
+                                     },
+                     "raster":  {
+                                    "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-mixed-edit-20260922\\native-mixed-edit-01\\original.png",
+                                    "sha256":  "ceed1e7089510f9acaa0413674fb36ee76cb343a39638bb13fba53380c64602d"
+                                }
+                 },
+    "edited":  {
+                   "observation":  {
+                                       "phase":  "edited",
+                                       "readOnly":  0,
+                                       "slideCount":  1,
+                                       "shapeCount":  1,
+                                       "slideWidth":  960,
+                                       "slideHeight":  540,
+                                       "shape":  {
+                                                     "name":  "OPF table 1",
+                                                     "type":  19,
+                                                     "hasTable":  -1,
+                                                     "geometry":  {
+                                                                      "left":  43.200000762939453,
+                                                                      "top":  43.200000762939453,
+                                                                      "width":  873.5999755859375,
+                                                                      "height":  118.80000305175781
+                                                                  }
+                                                 },
+                                       "table":  {
+                                                     "rowCount":  1,
+                                                     "columnCount":  1,
+                                                     "rowHeight":  118.80000305175781,
+                                                     "columnWidth":  873.5999755859375
+                                                 },
+                                       "cell":  {
+                                                    "geometry":  {
+                                                                     "left":  43.200000762939453,
+                                                                     "top":  43.200000762939453,
+                                                                     "width":  873.5999755859375,
+                                                                     "height":  118.80000305175781
+                                                                 },
+                                                    "whole":  {
+                                                                  "text":  "Lead\tLarge evidence phrase continues in smaller text across the same editable table cell so natural layout must wrap this sentence without authored line breaks or inserted offsets. Second large phrase finishes the control with saved source runs.",
+                                                                  "start":  1,
+                                                                  "length":  245,
+                                                                  "bounds":  {
+                                                                                 "left":  7.5,
+                                                                                 "top":  6,
+                                                                                 "width":  817.12506103515625,
+                                                                                 "height":  109.66999816894531
+                                                                             },
+                                                                  "font":  {
+                                                                               "name":  "Carlito",
+                                                                               "size":  18,
+                                                                               "bold":  -2,
+                                                                               "italic":  -2
+                                                                           }
+                                                              },
+                                                    "runs":  [
+                                                                 {
+                                                                     "text":  "Lead\t",
+                                                                     "start":  1,
+                                                                     "length":  5,
+                                                                     "bounds":  {
+                                                                                    "left":  7.5,
+                                                                                    "top":  6,
+                                                                                    "width":  72.005043029785156,
+                                                                                    "height":  37
+                                                                                },
+                                                                     "font":  {
+                                                                                  "name":  "Carlito",
+                                                                                  "size":  18,
+                                                                                  "bold":  0,
+                                                                                  "italic":  0
+                                                                              }
+                                                                 },
+                                                                 {
+                                                                     "text":  "Large evidence phrase ",
+                                                                     "start":  6,
+                                                                     "length":  22,
+                                                                     "bounds":  {
+                                                                                    "left":  79.5,
+                                                                                    "top":  6,
+                                                                                    "width":  284.1300048828125,
+                                                                                    "height":  37
+                                                                                },
+                                                                     "font":  {
+                                                                                  "name":  "Carlito",
+                                                                                  "size":  30,
+                                                                                  "bold":  -1,
+                                                                                  "italic":  0
+                                                                              }
+                                                                 },
+                                                                 {
+                                                                     "text":  "continues in smaller text across the same editable table cell so natural layout must wrap this sentence without authored line breaks or inserted offsets. ",
+                                                                     "start":  28,
+                                                                     "length":  154,
+                                                                     "bounds":  {
+                                                                                    "left":  7.5,
+                                                                                    "top":  6,
+                                                                                    "width":  817.1300048828125,
+                                                                                    "height":  74
+                                                                                },
+                                                                     "font":  {
+                                                                                  "name":  "Carlito",
+                                                                                  "size":  18,
+                                                                                  "bold":  0,
+                                                                                  "italic":  0
+                                                                              }
+                                                                 },
+                                                                 {
+                                                                     "text":  "Second large phrase ",
+                                                                     "start":  182,
+                                                                     "length":  20,
+                                                                     "bounds":  {
+                                                                                    "left":  7.5,
+                                                                                    "top":  43,
+                                                                                    "width":  813.1300048828125,
+                                                                                    "height":  72.669998168945313
+                                                                                },
+                                                                     "font":  {
+                                                                                  "name":  "Carlito",
+                                                                                  "size":  30,
+                                                                                  "bold":  0,
+                                                                                  "italic":  0
+                                                                              }
+                                                                 },
+                                                                 {
+                                                                     "text":  "finishes the control with saved source runs.",
+                                                                     "start":  202,
+                                                                     "length":  44,
+                                                                     "bounds":  {
+                                                                                    "left":  97.25,
+                                                                                    "top":  80,
+                                                                                    "width":  317.8800048828125,
+                                                                                    "height":  35.669998168945313
+                                                                                },
+                                                                     "font":  {
+                                                                                  "name":  "Carlito",
+                                                                                  "size":  18,
+                                                                                  "bold":  0,
+                                                                                  "italic":  0
+                                                                              }
+                                                                 }
+                                                             ],
+                                                    "characters":  [
+                                                                       {
+                                                                           "text":  "d",
+                                                                           "start":  4,
+                                                                           "length":  1,
+                                                                           "bounds":  {
+                                                                                          "left":  32.75,
+                                                                                          "top":  6,
+                                                                                          "width":  9.50503921508789,
+                                                                                          "height":  37
+                                                                                      },
+                                                                           "font":  {
+                                                                                        "name":  "Carlito",
+                                                                                        "size":  18,
+                                                                                        "bold":  0,
+                                                                                        "italic":  0
+                                                                                    },
+                                                                           "position":  4,
+                                                                           "purpose":  "before-tab"
+                                                                       },
+                                                                       {
+                                                                           "text":  "\t",
+                                                                           "start":  5,
+                                                                           "length":  1,
+                                                                           "bounds":  {
+                                                                                          "left":  42.25,
+                                                                                          "top":  6,
+                                                                                          "width":  37.255039215087891,
+                                                                                          "height":  37
+                                                                                      },
+                                                                           "font":  {
+                                                                                        "name":  "Carlito",
+                                                                                        "size":  18,
+                                                                                        "bold":  0,
+                                                                                        "italic":  0
+                                                                                    },
+                                                                           "position":  5,
+                                                                           "purpose":  "tab"
+                                                                       },
+                                                                       {
+                                                                           "text":  "L",
+                                                                           "start":  6,
+                                                                           "length":  1,
+                                                                           "bounds":  {
+                                                                                          "left":  79.5,
+                                                                                          "top":  6,
+                                                                                          "width":  12.630000114440918,
+                                                                                          "height":  37
+                                                                                      },
+                                                                           "font":  {
+                                                                                        "name":  "Carlito",
+                                                                                        "size":  30,
+                                                                                        "bold":  -1,
+                                                                                        "italic":  0
+                                                                                    },
+                                                                           "position":  6,
+                                                                           "purpose":  "after-tab"
+                                                                       },
+                                                                       {
+                                                                           "text":  " ",
+                                                                           "start":  78,
+                                                                           "length":  1,
+                                                                           "bounds":  {
+                                                                                          "left":  729.5,
+                                                                                          "top":  6,
+                                                                                          "width":  4.130000114440918,
+                                                                                          "height":  37
+                                                                                      },
+                                                                           "font":  {
+                                                                                        "name":  "Carlito",
+                                                                                        "size":  18,
+                                                                                        "bold":  0,
+                                                                                        "italic":  0
+                                                                                    },
+                                                                           "position":  78,
+                                                                           "purpose":  "estimated-line-1-end-probe-only"
+                                                                       },
+                                                                       {
+                                                                           "text":  "t",
+                                                                           "start":  79,
+                                                                           "length":  1,
+                                                                           "bounds":  {
+                                                                                          "left":  733.62506103515625,
+                                                                                          "top":  6,
+                                                                                          "width":  6.0049605369567871,
+                                                                                          "height":  37
+                                                                                      },
+                                                                           "font":  {
+                                                                                        "name":  "Carlito",
+                                                                                        "size":  18,
+                                                                                        "bold":  0,
+                                                                                        "italic":  0
+                                                                                    },
+                                                                           "position":  79,
+                                                                           "purpose":  "estimated-line-2-start-probe-only"
+                                                                       },
+                                                                       {
+                                                                           "text":  " ",
+                                                                           "start":  172,
+                                                                           "length":  1,
+                                                                           "bounds":  {
+                                                                                          "left":  595.5,
+                                                                                          "top":  43,
+                                                                                          "width":  4.130000114440918,
+                                                                                          "height":  37
+                                                                                      },
+                                                                           "font":  {
+                                                                                        "name":  "Carlito",
+                                                                                        "size":  18,
+                                                                                        "bold":  0,
+                                                                                        "italic":  0
+                                                                                    },
+                                                                           "position":  172,
+                                                                           "purpose":  "estimated-line-2-end-probe-only"
+                                                                       },
+                                                                       {
+                                                                           "text":  "o",
+                                                                           "start":  173,
+                                                                           "length":  1,
+                                                                           "bounds":  {
+                                                                                          "left":  599.62506103515625,
+                                                                                          "top":  43,
+                                                                                          "width":  9.5049610137939453,
+                                                                                          "height":  37
+                                                                                      },
+                                                                           "font":  {
+                                                                                        "name":  "Carlito",
+                                                                                        "size":  18,
+                                                                                        "bold":  0,
+                                                                                        "italic":  0
+                                                                                    },
+                                                                           "position":  173,
+                                                                           "purpose":  "estimated-line-3-start-probe-only"
+                                                                       }
+                                                                   ],
+                                                    "paragraph":  {
+                                                                      "count":  1,
+                                                                      "explicitTabStopCount":  0
+                                                                  },
+                                                    "lines":  {
+                                                                  "count":  3,
+                                                                  "capturedCount":  3,
+                                                                  "records":  [
+                                                                                  {
+                                                                                      "text":  "Lead\tLarge evidence phrase continues in smaller text across the same editable table cell so ",
+                                                                                      "start":  1,
+                                                                                      "length":  92,
+                                                                                      "bounds":  {
+                                                                                                     "left":  7.5,
+                                                                                                     "top":  6,
+                                                                                                     "width":  817.12506103515625,
+                                                                                                     "height":  37
+                                                                                                 },
+                                                                                      "font":  null,
+                                                                                      "index":  1
+                                                                                  },
+                                                                                  {
+                                                                                      "text":  "natural layout must wrap this sentence without authored line breaks or inserted offsets. Second large ",
+                                                                                      "start":  93,
+                                                                                      "length":  102,
+                                                                                      "bounds":  {
+                                                                                                     "left":  7.5,
+                                                                                                     "top":  43,
+                                                                                                     "width":  813.12506103515625,
+                                                                                                     "height":  37
+                                                                                                 },
+                                                                                      "font":  null,
+                                                                                      "index":  2
+                                                                                  },
+                                                                                  {
+                                                                                      "text":  "phrase finishes the control with saved source runs.",
+                                                                                      "start":  195,
+                                                                                      "length":  51,
+                                                                                      "bounds":  {
+                                                                                                     "left":  7.5,
+                                                                                                     "top":  80,
+                                                                                                     "width":  407.6300048828125,
+                                                                                                     "height":  35.669998168945313
+                                                                                                 },
+                                                                                      "font":  null,
+                                                                                      "index":  3
+                                                                                  }
+                                                                              ]
+                                                              }
+                                                }
+                                   },
+                   "raster":  {
+                                  "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-mixed-edit-20260922\\native-mixed-edit-01\\edited.png",
+                                  "sha256":  "df715af1c3603353fe9aa577a4c9c82995c10d9c09dc1cb78b3bf00f5b2e5416"
+                              }
+               },
+    "reopened":  {
+                     "sha256":  "1225b753f071d7e4cc244ca03d1283f318cda03b896cff56259d16331f3766e2",
+                     "observation":  {
+                                         "phase":  "reopened",
+                                         "readOnly":  -1,
+                                         "slideCount":  1,
+                                         "shapeCount":  1,
+                                         "slideWidth":  960,
+                                         "slideHeight":  540,
+                                         "shape":  {
+                                                       "name":  "OPF table 1",
+                                                       "type":  19,
+                                                       "hasTable":  -1,
+                                                       "geometry":  {
+                                                                        "left":  43.200000762939453,
+                                                                        "top":  43.200000762939453,
+                                                                        "width":  873.5999755859375,
+                                                                        "height":  118.80000305175781
+                                                                    }
+                                                   },
+                                         "table":  {
+                                                       "rowCount":  1,
+                                                       "columnCount":  1,
+                                                       "rowHeight":  118.80000305175781,
+                                                       "columnWidth":  873.5999755859375
+                                                   },
+                                         "cell":  {
+                                                      "geometry":  {
+                                                                       "left":  43.200000762939453,
+                                                                       "top":  43.200000762939453,
+                                                                       "width":  873.5999755859375,
+                                                                       "height":  118.80000305175781
+                                                                   },
+                                                      "whole":  {
+                                                                    "text":  "Lead\tLarge evidence phrase continues in smaller text across the same editable table cell so natural layout must wrap this sentence without authored line breaks or inserted offsets. Second large phrase finishes the control with saved source runs.",
+                                                                    "start":  1,
+                                                                    "length":  245,
+                                                                    "bounds":  {
+                                                                                   "left":  7.5,
+                                                                                   "top":  6,
+                                                                                   "width":  817.12506103515625,
+                                                                                   "height":  109.66999816894531
+                                                                               },
+                                                                    "font":  {
+                                                                                 "name":  "Carlito",
+                                                                                 "size":  18,
+                                                                                 "bold":  -2,
+                                                                                 "italic":  -2
+                                                                             }
+                                                                },
+                                                      "runs":  [
+                                                                   {
+                                                                       "text":  "Lead\t",
+                                                                       "start":  1,
+                                                                       "length":  5,
+                                                                       "bounds":  {
+                                                                                      "left":  7.5,
+                                                                                      "top":  6,
+                                                                                      "width":  72.005043029785156,
+                                                                                      "height":  37
+                                                                                  },
+                                                                       "font":  {
+                                                                                    "name":  "Carlito",
+                                                                                    "size":  18,
+                                                                                    "bold":  0,
+                                                                                    "italic":  0
+                                                                                }
+                                                                   },
+                                                                   {
+                                                                       "text":  "Large evidence phrase ",
+                                                                       "start":  6,
+                                                                       "length":  22,
+                                                                       "bounds":  {
+                                                                                      "left":  79.5,
+                                                                                      "top":  6,
+                                                                                      "width":  284.1300048828125,
+                                                                                      "height":  37
+                                                                                  },
+                                                                       "font":  {
+                                                                                    "name":  "Carlito",
+                                                                                    "size":  30,
+                                                                                    "bold":  -1,
+                                                                                    "italic":  0
+                                                                                }
+                                                                   },
+                                                                   {
+                                                                       "text":  "continues in smaller text across the same editable table cell so natural layout must wrap this sentence without authored line breaks or inserted offsets. ",
+                                                                       "start":  28,
+                                                                       "length":  154,
+                                                                       "bounds":  {
+                                                                                      "left":  7.5,
+                                                                                      "top":  6,
+                                                                                      "width":  817.1300048828125,
+                                                                                      "height":  74
+                                                                                  },
+                                                                       "font":  {
+                                                                                    "name":  "Carlito",
+                                                                                    "size":  18,
+                                                                                    "bold":  0,
+                                                                                    "italic":  0
+                                                                                }
+                                                                   },
+                                                                   {
+                                                                       "text":  "Second large phrase ",
+                                                                       "start":  182,
+                                                                       "length":  20,
+                                                                       "bounds":  {
+                                                                                      "left":  7.5,
+                                                                                      "top":  43,
+                                                                                      "width":  813.1300048828125,
+                                                                                      "height":  72.669998168945313
+                                                                                  },
+                                                                       "font":  {
+                                                                                    "name":  "Carlito",
+                                                                                    "size":  30,
+                                                                                    "bold":  0,
+                                                                                    "italic":  0
+                                                                                }
+                                                                   },
+                                                                   {
+                                                                       "text":  "finishes the control with saved source runs.",
+                                                                       "start":  202,
+                                                                       "length":  44,
+                                                                       "bounds":  {
+                                                                                      "left":  97.25,
+                                                                                      "top":  80,
+                                                                                      "width":  317.8800048828125,
+                                                                                      "height":  35.669998168945313
+                                                                                  },
+                                                                       "font":  {
+                                                                                    "name":  "Carlito",
+                                                                                    "size":  18,
+                                                                                    "bold":  0,
+                                                                                    "italic":  0
+                                                                                }
+                                                                   }
+                                                               ],
+                                                      "characters":  [
+                                                                         {
+                                                                             "text":  "d",
+                                                                             "start":  4,
+                                                                             "length":  1,
+                                                                             "bounds":  {
+                                                                                            "left":  32.75,
+                                                                                            "top":  6,
+                                                                                            "width":  9.50503921508789,
+                                                                                            "height":  37
+                                                                                        },
+                                                                             "font":  {
+                                                                                          "name":  "Carlito",
+                                                                                          "size":  18,
+                                                                                          "bold":  0,
+                                                                                          "italic":  0
+                                                                                      },
+                                                                             "position":  4,
+                                                                             "purpose":  "before-tab"
+                                                                         },
+                                                                         {
+                                                                             "text":  "\t",
+                                                                             "start":  5,
+                                                                             "length":  1,
+                                                                             "bounds":  {
+                                                                                            "left":  42.25,
+                                                                                            "top":  6,
+                                                                                            "width":  37.255039215087891,
+                                                                                            "height":  37
+                                                                                        },
+                                                                             "font":  {
+                                                                                          "name":  "Carlito",
+                                                                                          "size":  18,
+                                                                                          "bold":  0,
+                                                                                          "italic":  0
+                                                                                      },
+                                                                             "position":  5,
+                                                                             "purpose":  "tab"
+                                                                         },
+                                                                         {
+                                                                             "text":  "L",
+                                                                             "start":  6,
+                                                                             "length":  1,
+                                                                             "bounds":  {
+                                                                                            "left":  79.5,
+                                                                                            "top":  6,
+                                                                                            "width":  12.630000114440918,
+                                                                                            "height":  37
+                                                                                        },
+                                                                             "font":  {
+                                                                                          "name":  "Carlito",
+                                                                                          "size":  30,
+                                                                                          "bold":  -1,
+                                                                                          "italic":  0
+                                                                                      },
+                                                                             "position":  6,
+                                                                             "purpose":  "after-tab"
+                                                                         },
+                                                                         {
+                                                                             "text":  " ",
+                                                                             "start":  78,
+                                                                             "length":  1,
+                                                                             "bounds":  {
+                                                                                            "left":  729.5,
+                                                                                            "top":  6,
+                                                                                            "width":  4.130000114440918,
+                                                                                            "height":  37
+                                                                                        },
+                                                                             "font":  {
+                                                                                          "name":  "Carlito",
+                                                                                          "size":  18,
+                                                                                          "bold":  0,
+                                                                                          "italic":  0
+                                                                                      },
+                                                                             "position":  78,
+                                                                             "purpose":  "estimated-line-1-end-probe-only"
+                                                                         },
+                                                                         {
+                                                                             "text":  "t",
+                                                                             "start":  79,
+                                                                             "length":  1,
+                                                                             "bounds":  {
+                                                                                            "left":  733.62506103515625,
+                                                                                            "top":  6,
+                                                                                            "width":  6.0049605369567871,
+                                                                                            "height":  37
+                                                                                        },
+                                                                             "font":  {
+                                                                                          "name":  "Carlito",
+                                                                                          "size":  18,
+                                                                                          "bold":  0,
+                                                                                          "italic":  0
+                                                                                      },
+                                                                             "position":  79,
+                                                                             "purpose":  "estimated-line-2-start-probe-only"
+                                                                         },
+                                                                         {
+                                                                             "text":  " ",
+                                                                             "start":  172,
+                                                                             "length":  1,
+                                                                             "bounds":  {
+                                                                                            "left":  595.5,
+                                                                                            "top":  43,
+                                                                                            "width":  4.130000114440918,
+                                                                                            "height":  37
+                                                                                        },
+                                                                             "font":  {
+                                                                                          "name":  "Carlito",
+                                                                                          "size":  18,
+                                                                                          "bold":  0,
+                                                                                          "italic":  0
+                                                                                      },
+                                                                             "position":  172,
+                                                                             "purpose":  "estimated-line-2-end-probe-only"
+                                                                         },
+                                                                         {
+                                                                             "text":  "o",
+                                                                             "start":  173,
+                                                                             "length":  1,
+                                                                             "bounds":  {
+                                                                                            "left":  599.62506103515625,
+                                                                                            "top":  43,
+                                                                                            "width":  9.5049610137939453,
+                                                                                            "height":  37
+                                                                                        },
+                                                                             "font":  {
+                                                                                          "name":  "Carlito",
+                                                                                          "size":  18,
+                                                                                          "bold":  0,
+                                                                                          "italic":  0
+                                                                                      },
+                                                                             "position":  173,
+                                                                             "purpose":  "estimated-line-3-start-probe-only"
+                                                                         }
+                                                                     ],
+                                                      "paragraph":  {
+                                                                        "count":  1,
+                                                                        "explicitTabStopCount":  0
+                                                                    },
+                                                      "lines":  {
+                                                                    "count":  3,
+                                                                    "capturedCount":  3,
+                                                                    "records":  [
+                                                                                    {
+                                                                                        "text":  "Lead\tLarge evidence phrase continues in smaller text across the same editable table cell so ",
+                                                                                        "start":  1,
+                                                                                        "length":  92,
+                                                                                        "bounds":  {
+                                                                                                       "left":  7.5,
+                                                                                                       "top":  6,
+                                                                                                       "width":  817.12506103515625,
+                                                                                                       "height":  37
+                                                                                                   },
+                                                                                        "font":  null,
+                                                                                        "index":  1
+                                                                                    },
+                                                                                    {
+                                                                                        "text":  "natural layout must wrap this sentence without authored line breaks or inserted offsets. Second large ",
+                                                                                        "start":  93,
+                                                                                        "length":  102,
+                                                                                        "bounds":  {
+                                                                                                       "left":  7.5,
+                                                                                                       "top":  43,
+                                                                                                       "width":  813.12506103515625,
+                                                                                                       "height":  37
+                                                                                                   },
+                                                                                        "font":  null,
+                                                                                        "index":  2
+                                                                                    },
+                                                                                    {
+                                                                                        "text":  "phrase finishes the control with saved source runs.",
+                                                                                        "start":  195,
+                                                                                        "length":  51,
+                                                                                        "bounds":  {
+                                                                                                       "left":  7.5,
+                                                                                                       "top":  80,
+                                                                                                       "width":  407.6300048828125,
+                                                                                                       "height":  35.669998168945313
+                                                                                                   },
+                                                                                        "font":  null,
+                                                                                        "index":  3
+                                                                                    }
+                                                                                ]
+                                                                }
+                                                  }
+                                     },
+                     "raster":  {
+                                    "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-mixed-edit-20260922\\native-mixed-edit-01\\reopened.png",
+                                    "sha256":  "df715af1c3603353fe9aa577a4c9c82995c10d9c09dc1cb78b3bf00f5b2e5416"
+                                }
+                 },
+    "requested":  {
+                      "tolerancePoints":  0.02,
+                      "outerGeometryPt":  {
+                                              "slideWidth":  960,
+                                              "slideHeight":  540,
+                                              "left":  43.2,
+                                              "top":  43.2,
+                                              "width":  873.6,
+                                              "height":  118.8,
+                                              "rowHeight":  118.8,
+                                              "columnWidth":  873.6
+                                          },
+                      "previewLineBreakLimit":  {
+                                                    "failsHarness":  false,
+                                                    "knownReadOnlyNativeIntervals":  [
+                                                                                         [
+                                                                                             0,
+                                                                                             92
+                                                                                         ],
+                                                                                         [
+                                                                                             92,
+                                                                                             194
+                                                                                         ],
+                                                                                         [
+                                                                                             194,
+                                                                                             245
+                                                                                         ]
+                                                                                     ],
+                                                    "estimatedPreviewIntervals":  [
+                                                                                      [
+                                                                                          0,
+                                                                                          78
+                                                                                      ],
+                                                                                      [
+                                                                                          78,
+                                                                                          172
+                                                                                      ],
+                                                                                      [
+                                                                                          172,
+                                                                                          245
+                                                                                      ]
+                                                                                  ]
+                                                },
+                      "original":  {
+                                       "text":  "Lead\tLarge evidence phrase continues in smaller text across the same editable table cell so natural layout must wrap this sentence without authored line breaks or inserted offsets. Second large phrase finishes the control with exact source runs.",
+                                       "length":  245,
+                                       "runs":  [
+                                                    {
+                                                        "start":  1,
+                                                        "length":  5,
+                                                        "text":  "Lead\t",
+                                                        "size":  18,
+                                                        "bold":  false,
+                                                        "italic":  false
+                                                    },
+                                                    {
+                                                        "start":  6,
+                                                        "length":  22,
+                                                        "text":  "Large evidence phrase ",
+                                                        "size":  30,
+                                                        "bold":  true,
+                                                        "italic":  false
+                                                    },
+                                                    {
+                                                        "start":  28,
+                                                        "length":  154,
+                                                        "text":  "continues in smaller text across the same editable table cell so natural layout must wrap this sentence without authored line breaks or inserted offsets. ",
+                                                        "size":  18,
+                                                        "bold":  false,
+                                                        "italic":  false
+                                                    },
+                                                    {
+                                                        "start":  182,
+                                                        "length":  20,
+                                                        "text":  "Second large phrase ",
+                                                        "size":  30,
+                                                        "bold":  false,
+                                                        "italic":  false
+                                                    },
+                                                    {
+                                                        "start":  202,
+                                                        "length":  44,
+                                                        "text":  "finishes the control with exact source runs.",
+                                                        "size":  18,
+                                                        "bold":  false,
+                                                        "italic":  false
+                                                    }
+                                                ],
+                                       "characterProbes":  [
+                                                               {
+                                                                   "position":  4,
+                                                                   "text":  "d",
+                                                                   "purpose":  "before-tab"
+                                                               },
+                                                               {
+                                                                   "position":  5,
+                                                                   "text":  "\t",
+                                                                   "purpose":  "tab"
+                                                               },
+                                                               {
+                                                                   "position":  6,
+                                                                   "text":  "L",
+                                                                   "purpose":  "after-tab"
+                                                               },
+                                                               {
+                                                                   "position":  78,
+                                                                   "text":  " ",
+                                                                   "purpose":  "estimated-line-1-end-probe-only"
+                                                               },
+                                                               {
+                                                                   "position":  79,
+                                                                   "text":  "t",
+                                                                   "purpose":  "estimated-line-2-start-probe-only"
+                                                               },
+                                                               {
+                                                                   "position":  172,
+                                                                   "text":  " ",
+                                                                   "purpose":  "estimated-line-2-end-probe-only"
+                                                               },
+                                                               {
+                                                                   "position":  173,
+                                                                   "text":  "o",
+                                                                   "purpose":  "estimated-line-3-start-probe-only"
+                                                               }
+                                                           ]
+                                   },
+                      "edited":  {
+                                     "text":  "Lead\tLarge evidence phrase continues in smaller text across the same editable table cell so natural layout must wrap this sentence without authored line breaks or inserted offsets. Second large phrase finishes the control with saved source runs.",
+                                     "length":  245,
+                                     "runs":  [
+                                                  {
+                                                      "start":  1,
+                                                      "length":  5,
+                                                      "text":  "Lead\t",
+                                                      "size":  18,
+                                                      "bold":  false,
+                                                      "italic":  false
+                                                  },
+                                                  {
+                                                      "start":  6,
+                                                      "length":  22,
+                                                      "text":  "Large evidence phrase ",
+                                                      "size":  30,
+                                                      "bold":  true,
+                                                      "italic":  false
+                                                  },
+                                                  {
+                                                      "start":  28,
+                                                      "length":  154,
+                                                      "text":  "continues in smaller text across the same editable table cell so natural layout must wrap this sentence without authored line breaks or inserted offsets. ",
+                                                      "size":  18,
+                                                      "bold":  false,
+                                                      "italic":  false
+                                                  },
+                                                  {
+                                                      "start":  182,
+                                                      "length":  20,
+                                                      "text":  "Second large phrase ",
+                                                      "size":  30,
+                                                      "bold":  false,
+                                                      "italic":  false
+                                                  },
+                                                  {
+                                                      "start":  202,
+                                                      "length":  44,
+                                                      "text":  "finishes the control with saved source runs.",
+                                                      "size":  18,
+                                                      "bold":  false,
+                                                      "italic":  false
+                                                  }
+                                              ],
+                                     "characterProbes":  [
+                                                             {
+                                                                 "position":  4,
+                                                                 "text":  "d",
+                                                                 "purpose":  "before-tab"
+                                                             },
+                                                             {
+                                                                 "position":  5,
+                                                                 "text":  "\t",
+                                                                 "purpose":  "tab"
+                                                             },
+                                                             {
+                                                                 "position":  6,
+                                                                 "text":  "L",
+                                                                 "purpose":  "after-tab"
+                                                             },
+                                                             {
+                                                                 "position":  78,
+                                                                 "text":  " ",
+                                                                 "purpose":  "estimated-line-1-end-probe-only"
+                                                             },
+                                                             {
+                                                                 "position":  79,
+                                                                 "text":  "t",
+                                                                 "purpose":  "estimated-line-2-start-probe-only"
+                                                             },
+                                                             {
+                                                                 "position":  172,
+                                                                 "text":  " ",
+                                                                 "purpose":  "estimated-line-2-end-probe-only"
+                                                             },
+                                                             {
+                                                                 "position":  173,
+                                                                 "text":  "o",
+                                                                 "purpose":  "estimated-line-3-start-probe-only"
+                                                             }
+                                                         ]
+                                 }
+                  },
+    "metrics":  {
+                    "evaluatedBy":  "test/native-mixed-edit-audit.mjs",
+                    "gatePassed":  null,
+                    "tolerancePoints":  0.02,
+                    "previewLineBreakLimitFailsHarness":  false
+                },
+    "environment":  {
+                        "hostVersion":  "5.1.26100.9444",
+                        "windowsProductName":  "Windows 10 Home",
+                        "windowsDisplayVersion":  "25H2",
+                        "windowsBuild":  "26200.9457",
+                        "powerPointVersion":  "16.0",
+                        "powerPointExecutable":  "C:\\Program Files\\Microsoft Office\\Root\\Office16\\POWERPNT.EXE",
+                        "powerPointBuild":  "16.0.20326.20158",
+                        "powerPointExecutableSha256":  "07cbe68cde7596058a6890c471389a7a70a090ee42f01975d72ea6d643f82021"
+                    },
+    "cleanupConfirmed":  true,
+    "officeOperationsStopped":  false,
+    "lastStage":  "worker.complete",
+    "lastStatus":  "success",
+    "error":  null,
+    "scope":  "Open one owned mixed-size table snapshot, replace the final run exact-\u003esaved at the same length, save with EmbedFonts explicitly false, reopen that exact path read-only, and record content, style, outer geometry, and native line intervals.",
+    "limitations":  [
+                        "The known read-only preview intervals [0,78), [78,172), [172,245) are a recorded limit. They are not a content or 0.02pt geometry failure.",
+                        "Native font properties do not identify which physical TTF drew each glyph.",
+                        "Embedded-font fidelity is out of scope. SaveAs passes msoFalse explicitly and does not request font embedding."
+                    ]
+}
