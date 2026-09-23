@@ -17,6 +17,7 @@ OPF documents usually reference these records with string ids such as `design.th
 | `$schema` | yes | `const:"https://openpresentation.org/schema/opf-audience/v1"` | Identifies this record as an audience in the openpresentation.org catalog. |
 | `id` | yes | `string` | Stable slug used by OPF documents to reference this audience via audience. Lowercase kebab-case. |
 | `name` | yes | `string` | Human-readable audience name shown in pickers. |
+| `deprecatedBy` | no | `string` | Marks this record as a deprecated alias, kept for backward compatibility, and names the canonical record id in the same catalog. Engines keep resolving this id to this record unchanged; validators and lint warn and su... |
 | `summary` | no | `string` | One-sentence positioning of the audience who they are and what they care about. |
 | `description` | no | `string` | Longer prose describing the audience archetype and how to address them. |
 | `seniority` | no | `enum:ic \| manager \| director \| vp \| c-suite \| mixed` | Typical seniority level of the audience. Engines use this as a hint for default depth and pacing. |
@@ -34,13 +35,15 @@ OPF documents usually reference these records with string ids such as `design.th
 - Schema id: `https://openpresentation.org/schema/opf-catalog-index/v1`
 - Type: `object`
 - Required fields: `$schema`, `version`, `description`, `records`
-- Purpose: Generic shape shared by every `spec/catalogs/<kind>/index.json` file in the OPF repo. An index is a lightweight, ordered summary of the full-record JSON files that live alongside it: each entry names the record's stable id, a human-readable name, and the record's filename, plus whatever extra summary fields are useful for picker UIs (e.g. `summary`, `tags`, `bcp47`, `durationRange`). This schema describes the repo-internal catalog index files themselves, not OPF documents or individual catalo...
+- Purpose: Generic shape shared by every `spec/catalogs/<kind>/index.json` file in the OPF repo and by the default-catalog index that pptx.gallery publishes at `https://www.pptx.gallery/<kind>/index.json` (spec/catalogs is a pinned snapshot of that catalog; see docs/default-catalog.md). An index is a lightweight, ordered summary of the full-record JSON files that live alongside it: each entry names the record's stable id, a human-readable name, and the record's filename, plus whatever extra summary fiel...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `$schema` | yes | `const:"https://openpresentation.org/schema/opf-catalog-index/v1"` |  |
+| `kind` | no | `enum:audiences \| chart-types \| color-schemes \| font-schemes \| languages \| layouts \| narratives \| purposes \| social-platforms \| themes \| tones` | Catalog kind, as the URL segment of the default catalog (`https://www.pptx.gallery/<kind>`) and the `spec/catalogs/<kind>` directory name. |
 | `version` | yes | `string` | Index format version, as a string. |
 | `description` | yes | `string` | Human-readable description of what this catalog kind holds and how entries are ordered. |
+| `contentSha256` | no | `string` | SHA-256 (lowercase hex) of the canonical JSON of the full records this index lists, in index order, with every top-level `x-*` member removed. Canonical JSON sorts object keys and has no insignificant whitespace. Lets... |
 | `records` | yes | `array<ref:IndexRecord>` | Ordered list of lightweight record summaries. Order defines the catalog's canonical/display order; full record data lives in the sibling JSON file named by `file`. |
 
 ### Nested Types
@@ -53,9 +56,40 @@ OPF documents usually reference these records with string ids such as `design.th
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `id` | yes | `string` | Stable identifier, matching the `id` field inside the record file named by `file`. |
+| `id` | yes | `string` | Stable identifier, matching the `id` field inside the record file named by `file`. Lowercase kebab-case; chart-type ids may start with a digit (e.g. '100pct-stacked-bar'). |
 | `name` | yes | `string` | Human-readable name shown in pickers. |
 | `file` | yes | `string` | Filename of the full record, relative to this index file's directory. |
+| `deprecatedBy` | no | `string` | Present when the record is a deprecated alias: the canonical record id in the same catalog, copied from the record's own `deprecatedBy`. Pickers hide deprecated entries; the id keeps resolving. |
+
+## Catalog Snapshot Manifest
+
+- File: `spec/schemas/catalog-manifest.schema.json`
+- Schema id: `https://openpresentation.org/schema/opf-catalog-manifest/v1`
+- Type: `object`
+- Required fields: `$schema`, `description`, `publisher`, `source`, `kinds`
+- Purpose: Shape of `spec/catalogs/manifest.json`, which pins the bundled catalogs to the default OPF catalog published by pptx.gallery. It records the gallery commit the snapshot came from and, per kind, how the snapshot relates to the published catalog plus a content hash of the bundled records. Written by scripts/sync-gallery-catalog.mjs and checked by scripts/check-spec-integrity.mjs; see docs/default-catalog.md. This schema describes a repo-internal file, not an OPF document or a catalog record; it...
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `$schema` | yes | `const:"https://openpresentation.org/schema/opf-catalog-manifest/v1"` |  |
+| `description` | yes | `string` |  |
+| `publisher` | yes | `string` | Base URL of the default-catalog publisher. Each kind is published at `<publisher>/<kind>/index.json`. |
+| `source` | yes | `object` | The published catalog files the snapshot was taken from. |
+| `kinds` | yes | `object` | One entry per catalog kind, keyed by the kind's URL segment. |
+
+### Nested Types
+
+#### KindEntry
+
+- Type: `object`
+- Required fields: `mode`, `records`, `contentSha256`, `gallery`
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `mode` | yes | `enum:mirror \| subset` | 'mirror': the snapshot holds every published record. 'subset': the snapshot keeps its existing ids (their content comes from the publisher) while the publisher also serves records that are not reconciled for bundling... |
+| `records` | yes | `integer` | Number of records bundled for this kind. |
+| `contentSha256` | yes | `string` | contentSha256 of the bundled records, as defined by the catalog index schema. |
+| `gallery` | yes | `object` | The published catalog for this kind at the pinned commit. |
 
 ## Chart Type
 
@@ -70,6 +104,7 @@ OPF documents usually reference these records with string ids such as `design.th
 | `$schema` | yes | `const:"https://openpresentation.org/schema/opf-chart-type/v1"` | Identifies this record as a chart type in the open presentation catalog. |
 | `id` | yes | `string` | Stable slug used by OPF documents to reference this chart type. Lowercase kebab-case. Chart type ids may start with a digit (e.g., '100pct-stacked-column', '3d-column') to mirror conventional chart naming. |
 | `name` | yes | `string` | Stable display/programmatic name for this chart type. |
+| `deprecatedBy` | no | `string` | Marks this record as a deprecated alias, kept for backward compatibility, and names the canonical record id in the same catalog. Engines keep resolving this id to this record unchanged; validators and lint warn and su... |
 | `label` | no | `string` | Human-readable label shown in chart pickers. |
 | `summary` | no | `string` | One-sentence positioning: when to reach for this chart variant. |
 | `description` | no | `string` | Longer prose describing the chart and ideal use cases. |
@@ -169,6 +204,7 @@ OPF documents usually reference these records with string ids such as `design.th
 | `$schema` | yes | `const:"https://openpresentation.org/schema/opf-color-scheme/v1"` | Identifies this record as a color scheme in the openpresentation.org catalog. |
 | `id` | yes | `string` | Stable slug used by OPF documents to reference this color scheme. Lowercase kebab-case. |
 | `name` | yes | `string` | Human-readable scheme name shown in pickers. |
+| `deprecatedBy` | no | `string` | Marks this record as a deprecated alias, kept for backward compatibility, and names the canonical record id in the same catalog. Engines keep resolving this id to this record unchanged; validators and lint warn and su... |
 | `summary` | no | `string` | One-sentence positioning of the palette what mood it evokes and where to use it. |
 | `description` | no | `string` | Longer prose describing the palette and its intended use. |
 | `accent1` | no | `string` | Accent 1 color (hex). Mirrors the OOXML accent1 slot. |
@@ -199,6 +235,7 @@ OPF documents usually reference these records with string ids such as `design.th
 | `$schema` | yes | `const:"https://openpresentation.org/schema/opf-font-scheme/v1"` | Identifies this record as a font scheme in the openpresentation.org catalog. |
 | `id` | yes | `string` | Stable slug used by OPF documents to reference this font scheme. Lowercase kebab-case. |
 | `name` | yes | `string` | Human-readable scheme name shown in pickers. |
+| `deprecatedBy` | no | `string` | Marks this record as a deprecated alias, kept for backward compatibility, and names the canonical record id in the same catalog. Engines keep resolving this id to this record unchanged; validators and lint warn and su... |
 | `major` | yes | `string` | Heading (major) font family mirrors the OOXML majorFont entry. |
 | `minor` | yes | `string` | Body (minor) font family mirrors the OOXML minorFont entry. |
 | `code` | no | `object` | Optional monospaced font for code blocks and inline code. It has the same shape as the OPF FontScheme 'code' role, so a record and an inline design.fontScheme override are interchangeable. OOXML has no code slot, so e... |
@@ -227,6 +264,7 @@ OPF documents usually reference these records with string ids such as `design.th
 | `$schema` | yes | `const:"https://openpresentation.org/schema/opf-language/v1"` | Identifies this record as a language in the openpresentation.org catalog. |
 | `id` | yes | `string` | Stable slug used by OPF documents to reference this language via language. Lowercase kebab-case. |
 | `name` | yes | `string` | Human-readable language name. |
+| `deprecatedBy` | no | `string` | Marks this record as a deprecated alias, kept for backward compatibility, and names the canonical record id in the same catalog. Engines keep resolving this id to this record unchanged; validators and lint warn and su... |
 | `code` | no | `string` | ISO 639-3 (or 639-2) three-letter language code. Carried for engines that prefer ISO codes. |
 | `bcp47` | yes | `string` | BCP-47 language tag for this record. Use 'en-GB' for UK English; 'en-UK' is not a valid BCP-47 region form. |
 | `ooxmlLang` | no | `string` | Curated culture tag for OOXML text-run language attributes (a:rPr/@lang, a:endParaRPr/@lang), in the language-[Script-]REGION form Office recognizes (e.g. 'ja-JP', 'ar-SA', 'ms-MY', 'nb-NO', 'fil-PH', 'zh-CN'). Engine... |
@@ -281,6 +319,7 @@ OPF documents usually reference these records with string ids such as `design.th
 | `$schema` | yes | `const:"https://openpresentation.org/schema/opf-layout/v1"` | Identifies this record as a slide layout in the openpresentation.org catalog. |
 | `id` | yes | `string` | Stable slug used by OPF documents to reference this layout via Slide.layout. Lowercase kebab-case. |
 | `name` | yes | `string` | Human-readable layout name shown in layout pickers. |
+| `deprecatedBy` | no | `string` | Marks this record as a deprecated alias, kept for backward compatibility, and names the canonical record id in the same catalog. Engines keep resolving this id to this record unchanged; validators and lint warn and su... |
 | `summary` | no | `string` | One-sentence positioning of the layout when to reach for it. |
 | `description` | no | `string` | Longer prose describing the layout structure and ideal use cases. |
 | `contentType` | no | `enum:Title \| Text \| List \| Image \| Number \| Metric \| Chart \| Table \| Code \| Video \| Quote \| Timeline` | Primary kind of content the layout holds. Drives pickers and AI placement decisions. Metric is the canonical numeric/KPI category; Number remains an accepted legacy label. |
@@ -344,6 +383,7 @@ OPF documents usually reference these records with string ids such as `design.th
 | `$schema` | yes | `const:"https://openpresentation.org/schema/opf-narrative/v1"` |  |
 | `id` | yes | `string` | Stable slug used by OPF documents to reference this template, e.g. 'problem-solution'. Lowercase kebab-case. |
 | `name` | yes | `string` | Human-readable template name, e.g. 'Problem Solution'. |
+| `deprecatedBy` | no | `string` | Marks this record as a deprecated alias, kept for backward compatibility, and names the canonical record id in the same catalog. Engines keep resolving this id to this record unchanged; validators and lint warn and su... |
 | `summary` | no | `string` | One-sentence description of when and why to use this narrative. |
 | `description` | no | `string` | Longer prose describing the narrative arc and ideal use cases. Used by AI-driven generation to seed deck-level direction. |
 | `audienceFit` | no | `array<string>` | Audiences this narrative works well for, e.g. ['executives', 'investors', 'customers']. |
@@ -384,6 +424,7 @@ OPF documents usually reference these records with string ids such as `design.th
 | `$schema` | yes | `const:"https://openpresentation.org/schema/opf-purpose/v1"` | Identifies this record as a purpose in the openpresentation.org catalog. |
 | `id` | yes | `string` | Stable slug used by OPF documents to reference this purpose via purpose. Lowercase kebab-case. |
 | `name` | yes | `string` | Human-readable purpose name shown in pickers. |
+| `deprecatedBy` | no | `string` | Marks this record as a deprecated alias, kept for backward compatibility, and names the canonical record id in the same catalog. Engines keep resolving this id to this record unchanged; validators and lint warn and su... |
 | `summary` | no | `string` | One-sentence positioning of the purpose what this deck is trying to accomplish. |
 | `description` | no | `string` | Longer prose describing when to use this purpose and how it should shape a deck. |
 | `outcome` | no | `string` | Desired audience outcome after the presentation. |
@@ -406,6 +447,7 @@ OPF documents usually reference these records with string ids such as `design.th
 | `$schema` | yes | `const:"https://openpresentation.org/schema/opf-social-platform/v1"` | Identifies this record as a social-platform entry in the openpresentation.org catalog. |
 | `id` | yes | `string` | Stable slug used by OPF documents to reference this platform appears as a property key on Socials objects. Lowercase kebab-case. |
 | `name` | yes | `string` | Human-readable platform name shown in pickers and footers. |
+| `deprecatedBy` | no | `string` | Marks this record as a deprecated alias, kept for backward compatibility, and names the canonical record id in the same catalog. Engines keep resolving this id to this record unchanged; validators and lint warn and su... |
 | `summary` | no | `string` | One-sentence positioning of the platform what it's used for and who's on it. |
 | `description` | no | `string` | Longer prose describing the platform and any rendering conventions (e.g., handle prefixes, distributed instances). |
 | `baseUrl` | no | `string` | Canonical base URL of the platform used as the prefix when normalizing handles to full URLs. |
@@ -433,6 +475,7 @@ OPF documents usually reference these records with string ids such as `design.th
 | `$schema` | yes | `const:"https://openpresentation.org/schema/opf-theme/v1"` | Identifies this record as a theme in the openpresentation.org catalog. |
 | `id` | yes | `string` | Stable slug used by OPF documents to reference this theme via design.theme. Lowercase kebab-case. |
 | `name` | yes | `string` | Human-readable theme name shown in pickers. |
+| `deprecatedBy` | no | `string` | Marks this record as a deprecated alias, kept for backward compatibility, and names the canonical record id in the same catalog. Engines keep resolving this id to this record unchanged; validators and lint warn and su... |
 | `summary` | no | `string` | One-sentence positioning of the theme when to reach for it. |
 | `description` | no | `string` | Longer prose describing what the theme looks and feels like and the kinds of decks it suits. |
 | `colorScheme` | no | `string` | Catalog reference to the theme's default color scheme resolved against catalogs.colorSchemes the same way design.colorScheme or design.colorScheme.id is. Accepts a bare id, HTTPS URL, or 'pkg:' reference. |
@@ -476,6 +519,7 @@ _No named properties._
 | `$schema` | yes | `const:"https://openpresentation.org/schema/opf-tone/v1"` | Identifies this record as a tone in the openpresentation.org catalog. |
 | `id` | yes | `string` | Stable slug used by OPF documents to reference this tone via tone. Lowercase kebab-case. |
 | `name` | yes | `string` | Human-readable tone name shown in pickers. |
+| `deprecatedBy` | no | `string` | Marks this record as a deprecated alias, kept for backward compatibility, and names the canonical record id in the same catalog. Engines keep resolving this id to this record unchanged; validators and lint warn and su... |
 | `summary` | no | `string` | One-sentence positioning of the tone when to reach for it. |
 | `description` | no | `string` | Longer prose describing the tone and the kinds of decks it suits. |
 | `voiceCues` | no | `array<string>` | Short directives that shape AI generation toward this tone. Phrased as imperatives, e.g. 'use second-person', 'favor short sentences', 'lead with the recommendation'. |

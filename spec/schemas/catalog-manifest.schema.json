@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openpresentation.org/schema/opf-catalog-manifest/v1",
+  "title": "Catalog Snapshot Manifest",
+  "description": "Shape of `spec/catalogs/manifest.json`, which pins the bundled catalogs to the default OPF catalog published by pptx.gallery. It records the gallery commit the snapshot came from and, per kind, how the snapshot relates to the published catalog plus a content hash of the bundled records. Written by scripts/sync-gallery-catalog.mjs and checked by scripts/check-spec-integrity.mjs; see docs/default-catalog.md. This schema describes a repo-internal file, not an OPF document or a catalog record; it is intentionally excluded from the package's published/typed schema surface.",
+  "type": "object",
+  "required": ["$schema", "description", "publisher", "source", "kinds"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "const": "https://openpresentation.org/schema/opf-catalog-manifest/v1"
+    },
+    "description": {
+      "type": "string"
+    },
+    "publisher": {
+      "type": "string",
+      "description": "Base URL of the default-catalog publisher. Each kind is published at `<publisher>/<kind>/index.json`.",
+      "format": "uri"
+    },
+    "source": {
+      "type": "object",
+      "description": "The published catalog files the snapshot was taken from.",
+      "required": ["repository", "commit", "path"],
+      "additionalProperties": false,
+      "properties": {
+        "repository": {
+          "type": "string",
+          "description": "Git repository of the publisher.",
+          "format": "uri"
+        },
+        "commit": {
+          "type": "string",
+          "description": "Full commit SHA of the publisher checkout whose published files the snapshot matches."
+        },
+        "path": {
+          "type": "string",
+          "description": "Directory in that repository holding `<kind>/index.json` and `<kind>/<id>.json`."
+        }
+      }
+    },
+    "kinds": {
+      "type": "object",
+      "description": "One entry per catalog kind, keyed by the kind's URL segment.",
+      "additionalProperties": { "$ref": "#/$defs/KindEntry" }
+    }
+  },
+  "$defs": {
+    "KindEntry": {
+      "type": "object",
+      "required": ["mode", "records", "contentSha256", "gallery"],
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "type": "string",
+          "description": "'mirror': the snapshot holds every published record. 'subset': the snapshot keeps its existing ids (their content comes from the publisher) while the publisher also serves records that are not reconciled for bundling yet.",
+          "enum": ["mirror", "subset"]
+        },
+        "records": {
+          "type": "integer",
+          "description": "Number of records bundled for this kind.",
+          "minimum": 0
+        },
+        "contentSha256": {
+          "type": "string",
+          "description": "contentSha256 of the bundled records, as defined by the catalog index schema.",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "gallery": {
+          "type": "object",
+          "description": "The published catalog for this kind at the pinned commit.",
+          "required": ["records", "contentSha256"],
+          "additionalProperties": false,
+          "properties": {
+            "records": { "type": "integer", "minimum": 0 },
+            "contentSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+          }
+        }
+      }
+    }
+  }
+}

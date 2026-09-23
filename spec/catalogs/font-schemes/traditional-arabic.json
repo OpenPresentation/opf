@@ -12,5 +12,6 @@
   "major": "Traditional Arabic",
   "minor": "Traditional Arabic",
   "textSample": "هذه مدرسة جميلة",
-  "type": "sans-serif"
+  "type": "sans-serif",
+  "description": "Traditional Arabic is a sans serif OPF font scheme for complex script presentations, using Traditional Arabic for both headings and body text."
 }

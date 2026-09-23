@@ -5,6 +5,11 @@
   "description": "Schema for chart-type records in the pptx.gallery catalog. The bundled catalog holds one record per chart type that Aspose.Slides officially supports (see mappings.renderers[\"aspose-slides\"].chartType). Each record describes a named chart variant, its Open XML mapping, its series/category cardinality, the column structure of the underlying workbook, and a small sample dataset suitable for previews. Chart types are referenced from OPF chart content payloads; the engine resolves the reference against catalogs.chartTypes (inline) -> catalogs.chartTypes.source -> the default catalog at https://www.pptx.gallery/chart-types.",
   "type": "object",
   "additionalProperties": false,
+  "patternProperties": {
+    "^x-": {
+      "description": "Publisher extension member, such as the `x-gallery` presentation metadata that pptx.gallery adds to the records it publishes. Engines and validators ignore top-level `x-*` members, and the pinned snapshot in spec/catalogs never carries them."
+    }
+  },
   "required": [
     "$schema",
     "id",

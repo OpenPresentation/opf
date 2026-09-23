@@ -8,5 +8,6 @@
   "major": "Century Schoolbook",
   "minor": "Century Schoolbook",
   "textSample": "Traditional learning style",
-  "type": "serif"
+  "type": "serif",
+  "description": "Century Schoolbook is a serif OPF font scheme for Latin presentations, using Century Schoolbook for both headings and body text."
 }

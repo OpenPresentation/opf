@@ -11,5 +11,6 @@
   "major": "Noto Nastaliq Urdu",
   "minor": "Noto Nastaliq Urdu",
   "textSample": "یہ خوبصورت ہے",
-  "type": "sans-serif"
+  "type": "sans-serif",
+  "description": "Noto Nastaliq Urdu is a sans serif OPF font scheme for complex script presentations, using Noto Nastaliq Urdu for both headings and body text."
 }

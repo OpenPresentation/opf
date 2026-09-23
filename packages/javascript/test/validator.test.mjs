@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 
 import { validatePresentation } from "../dist/index.js";
-import { assertValid, validate } from "../dist/validator.js";
+import { assertValid, validate, validateCatalogRecord } from "../dist/validator.js";
 
 const doc = {
   name: "Smoke Test",
@@ -817,6 +817,36 @@ describe("presentation shapes that must be rejected", () => {
 });
 
 describe("catalog-id warning behavior", () => {
+  test("a deprecated alias keeps resolving and warns with the canonical id", () => {
+    const record = (id, extra = {}) => ({ $schema: "https://openpresentation.org/schema/opf-theme/v1", id, name: id, ...extra });
+    const doc = {
+      name: "Deprecated Theme Alias",
+      design: { theme: "legacy-look" },
+      catalogs: { themes: { records: [record("legacy-look", { deprecation: { replacedBy: "minimal" } })] } },
+      slides: [{ title: "Slide Title" }],
+    };
+    const result = validatePresentation(doc);
+    assert.equal(result.valid, true, "deprecated ids must warn, never error");
+    assert.deepEqual(
+      result.warnings.map(({ path, message, params }) => ({ path, message, params })),
+      [
+        {
+          path: "/design/theme",
+          message: "deprecated themes catalog id 'legacy-look'; use 'minimal'",
+          params: { kind: "themes", id: "legacy-look", replacedBy: "minimal" },
+        },
+      ],
+    );
+    assert.equal(
+      validatePresentation({ ...doc, design: { theme: "minimal" } }).warnings.length,
+      0,
+      "the canonical id is quiet",
+    );
+    assert.equal(validateCatalogRecord("themes", record("legacy-look", { deprecation: { replacedBy: "minimal" } })).valid, true);
+    assert.equal(validateCatalogRecord("themes", record("legacy-look", { deprecation: { replacedBy: "Not An Id" } })).valid, false);
+    assert.equal(validateCatalogRecord("themes", record("legacy-look", { deprecation: {} })).valid, false);
+  });
+
   test("unknown narrative id warns but does not invalidate", () => {
     const unknownNarrativeDoc = {
       name: "Unknown Narrative",

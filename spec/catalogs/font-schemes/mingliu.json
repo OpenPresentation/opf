@@ -10,5 +10,6 @@
   "major": "MingLiU",
   "minor": "MingLiU",
   "textSample": "這是以明體字型撰寫的",
-  "type": "serif"
+  "type": "serif",
+  "description": "MingLiU is a serif OPF font scheme for East Asian presentations, using MingLiU for both headings and body text."
 }

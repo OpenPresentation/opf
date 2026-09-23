@@ -77,6 +77,9 @@ function specFileKind(file) {
   if (file.startsWith("catalogs/") && file.endsWith("/index.json")) {
     return "catalogIndex";
   }
+  if (file === "catalogs/manifest.json") {
+    return "catalogManifest";
+  }
   if (file.startsWith("catalogs/")) {
     return "catalogRecord";
   }
@@ -209,8 +212,12 @@ async function generateCatalogs() {
   lines.push("/** Parsed shape of a catalog's `index.json`. */");
   lines.push("export interface CatalogIndex {");
   lines.push("  readonly $schema: string;");
+  lines.push("  /** Catalog kind as its default-catalog URL segment, e.g. `chart-types`. */");
+  lines.push("  readonly kind?: string;");
   lines.push("  readonly version: string;");
   lines.push("  readonly description: string;");
+  lines.push("  /** SHA-256 of the canonical JSON of the index-ordered records (see docs/default-catalog.md). */");
+  lines.push("  readonly contentSha256?: string;");
   lines.push("  readonly records: readonly CatalogIndexRecord[];");
   lines.push("  readonly [key: string]: unknown;");
   lines.push("}", "");

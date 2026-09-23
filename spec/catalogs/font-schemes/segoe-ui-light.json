@@ -8,5 +8,6 @@
   "major": "Segoe UI Semilight",
   "minor": "Segoe UI Light",
   "textSample": "Clean airy look",
-  "type": "sans-serif"
+  "type": "sans-serif",
+  "description": "Segoe UI Light is a sans serif OPF font scheme for Latin presentations, using Segoe UI Semilight for headings with Segoe UI Light for body text."
 }

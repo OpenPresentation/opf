@@ -10,5 +10,6 @@
   "major": "Vrinda",
   "minor": "Vrinda",
   "textSample": "এটি ভ্রিন্দা ফন্টে লেখা হয়েছে।",
-  "type": "sans-serif"
+  "type": "sans-serif",
+  "description": "Vrinda is a sans serif OPF font scheme for complex script presentations, using Vrinda for both headings and body text."
 }

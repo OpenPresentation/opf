@@ -10,5 +10,6 @@
   "major": "Noto Sans Mongolian",
   "minor": "Noto Sans Mongolian",
   "textSample": "Энэ маш сайхан",
-  "type": "sans-serif"
+  "type": "sans-serif",
+  "description": "Noto Sans Mongolian is a sans serif OPF font scheme for complex script presentations, using Noto Sans Mongolian for both headings and body text."
 }

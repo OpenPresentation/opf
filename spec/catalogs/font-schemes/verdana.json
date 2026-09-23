@@ -8,5 +8,6 @@
   "major": "Verdana",
   "minor": "Verdana",
   "textSample": "Wide readable font",
-  "type": "sans-serif"
+  "type": "sans-serif",
+  "description": "Verdana is a sans serif OPF font scheme for Latin presentations, using Verdana for both headings and body text."
 }

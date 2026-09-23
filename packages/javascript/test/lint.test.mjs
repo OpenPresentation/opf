@@ -428,3 +428,30 @@ test('language tags preserve regional, extended, private and grandfathered forms
 		'https://openpresentation.org/schema/opf/v1#/$defs/Language/properties/fontScheme',
 	);
 });
+
+test('lint flags deprecated catalog aliases with the canonical id as the suggestion', () => {
+	const result = lintPresentation({
+		name: 'Deprecated alias',
+		design: { theme: 'legacy-look' },
+		catalogs: {
+			themes: {
+				records: [
+					{
+						$schema: 'https://openpresentation.org/schema/opf-theme/v1',
+						id: 'legacy-look',
+						name: 'Legacy look',
+						deprecation: { replacedBy: 'minimal' },
+					},
+				],
+			},
+		},
+		slides: [{ title: 'Deck' }],
+	});
+	const issue = result.diagnostics.find((entry) => entry.ruleId === 'opf/deprecated-catalog-id');
+	assert.ok(issue, JSON.stringify(result.diagnostics, null, 2));
+	assert.equal(issue.severity, 'warning');
+	assert.equal(issue.path, '/design/theme');
+	assert.equal(issue.suggestions?.[0]?.value, 'minimal');
+	assert.equal(result.diagnostics.filter((entry) => entry.ruleId === 'opf/catalog-reference').length, 0);
+	assert.equal(result.valid, true);
+});

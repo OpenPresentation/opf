@@ -8,5 +8,6 @@
   "major": "Tahoma",
   "minor": "Tahoma",
   "textSample": "Clear screen text",
-  "type": "sans-serif"
+  "type": "sans-serif",
+  "description": "Tahoma is a sans serif OPF font scheme for Latin presentations, using Tahoma for both headings and body text."
 }
