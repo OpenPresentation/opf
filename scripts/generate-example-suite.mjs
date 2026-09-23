@@ -280,7 +280,7 @@ function backgroundFor(index) {
     {
       type: "pattern",
       pattern: {
-        preset: "diagStripe",
+        preset: "wdUpDiag",
         foregroundColor: "#CBD5E1",
         backgroundColor: "#FFFFFF",
       },
