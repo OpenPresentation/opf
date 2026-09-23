@@ -64,6 +64,7 @@ function classify(r) {
   // Anything that failed before a measurement could be taken is broken, whatever the dimension.
   const hardFail = !r.schemaValid ? 'schema invalid' : !r.preview.none.ok ? `preview threw ${r.preview.none.error}` : !r.export.defaultOk ? `export threw ${r.export.defaultError?.error}` : !r.reimport?.ok ? `re-import threw ${r.reimport?.error}` : null;
   if (hardFail) reasons.push(hardFail);
+  for (const issue of r.export.inventory?.chainIssues ?? []) reasons.push(`export colour chain unresolved: ${issue}`);
   let cls, engine;
   if (d === 'color-schemes') {
     const agree = colorsAgree(m);
@@ -154,7 +155,7 @@ function classify(r) {
     engine = inert ? 'organization/speaker socials have no effect on preview or export' : `removing the socials changes preview=${c.previewIdentical === false}, export parts: ${list(c.exportIdentical?.diffParts)}`;
     if (!r.catalogResolves) reasons.push('social platform id not in core catalog');
     if (m.handleInPreview !== true) reasons.push('the social handle is not rendered in the preview');
-    if (m.handleInExport !== true) reasons.push('the social handle is not in the exported slides');
+    if (m.handleInExport !== true) reasons.push('the social handle is not in the exported slide, layout or master XML');
     const soc = r.snippet?.speaker?.socials?.[r.id], got = m.reimportSocials ?? {};
     if (got.speaker?.[r.id] !== soc || (r.snippet?.organization?.socials && got.organization?.[r.id] !== r.snippet.organization.socials[r.id])) reasons.push(reimportReason(r, 'socials', got, {organization: r.snippet?.organization?.socials ?? null, speaker: r.snippet?.speaker?.socials ?? null}));
     cls = hardFail ? 'broken' : !r.catalogResolves ? 'gallery-only' : inert ? 'authoring-metadata' : reasons.length ? 'partial' : 'works';

@@ -615,3 +615,11 @@ Append one dated line per state change. Newest last.
   from `broken` to `partial`, languages 93 from `schema-only` to `partial`,
   socials 10 from `works` to `partial` (no handle rendered), image
   treatments with assets 2 `works` (was 0). Presence 352 of 793 `works`.
+- 2026-09-23: FF-36 audit hardening. Audit B resolves slide colours per
+  slide through slide, layout, master and theme relationships (layout
+  `clrMapOvr` applied; unresolved links are reasons), socials look for the
+  handle only in slide, layout and master XML, and audit A reports
+  "slide-image probe not run" instead of passing a null probe. Re-run at opf
+  `1ad25df`, opf-render `bc436f3`, opf-pptx `9092954`, pptx-gallery
+  `f17e9ae`: no class changed (352 of 793 `works`); only the socials reason
+  text changed.

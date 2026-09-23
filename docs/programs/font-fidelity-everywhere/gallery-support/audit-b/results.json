@@ -1,8 +1,8 @@
 {
- "generated": "2026-09-23T13:42:16.940Z",
+ "generated": "2026-09-23T14:08:56.178Z",
  "heads": {
   "pptx-gallery": "f17e9ae",
-  "opf": "33d636d",
+  "opf": "1ad25df",
   "opf-render": "bc436f3",
   "opf-pptx": "9092954",
   "opf-editor": "214ae69",
@@ -71,9 +71,15 @@
      "officeDefaultAccent1": false
     },
     "exportClrMap": {
-     "masterMatchesDefault": true,
      "masters": 1,
-     "slideOverrides": 0
+     "layoutOverrides": 0,
+     "slideOverrides": 0,
+     "themeParts": [
+      "ppt/theme/theme1.xml"
+     ],
+     "masterParts": [
+      "ppt/slideMasters/slideMaster1.xml"
+     ]
     },
     "previewVsExportColorDiff": {
      "previewOnly": [],
@@ -155,9 +161,15 @@
      "officeDefaultAccent1": false
     },
     "exportClrMap": {
-     "masterMatchesDefault": true,
      "masters": 1,
-     "slideOverrides": 0
+     "layoutOverrides": 0,
+     "slideOverrides": 0,
+     "themeParts": [
+      "ppt/theme/theme1.xml"
+     ],
+     "masterParts": [
+      "ppt/slideMasters/slideMaster1.xml"
+     ]
     },
     "previewVsExportColorDiff": {
      "previewOnly": [],
@@ -240,9 +252,15 @@
      "officeDefaultAccent1": false
     },
     "exportClrMap": {
-     "masterMatchesDefault": true,
      "masters": 1,
-     "slideOverrides": 0
+     "layoutOverrides": 0,
+     "slideOverrides": 0,
+     "themeParts": [
+      "ppt/theme/theme1.xml"
+     ],
+     "masterParts": [
+      "ppt/slideMasters/slideMaster1.xml"
+     ]
     },
     "previewVsExportColorDiff": {
      "previewOnly": [],
@@ -328,9 +346,15 @@
      "officeDefaultAccent1": false
     },
     "exportClrMap": {
-     "masterMatchesDefault": true,
      "masters": 1,
-     "slideOverrides": 0
+     "layoutOverrides": 0,
+     "slideOverrides": 0,
+     "themeParts": [
+      "ppt/theme/theme1.xml"
+     ],
+     "masterParts": [
+      "ppt/slideMasters/slideMaster1.xml"
+     ]
     },
     "previewVsExportColorDiff": {
      "previewOnly": [],
@@ -412,9 +436,15 @@
      "officeDefaultAccent1": false
     },
     "exportClrMap": {
-     "masterMatchesDefault": true,
      "masters": 1,
-     "slideOverrides": 0
+     "layoutOverrides": 0,
+     "slideOverrides": 0,
+     "themeParts": [
+      "ppt/theme/theme1.xml"
+     ],
+     "masterParts": [
+      "ppt/slideMasters/slideMaster1.xml"
+     ]
     },
     "previewVsExportColorDiff": {
      "previewOnly": [],
@@ -495,9 +525,15 @@
      "officeDefaultAccent1": false
     },
     "exportClrMap": {
-     "masterMatchesDefault": true,
      "masters": 1,
-     "slideOverrides": 0
+     "layoutOverrides": 0,
+     "slideOverrides": 0,
+     "themeParts": [
+      "ppt/theme/theme1.xml"
+     ],
+     "masterParts": [
+      "ppt/slideMasters/slideMaster1.xml"
+     ]
     },
     "previewVsExportColorDiff": {
      "previewOnly": [],
@@ -580,9 +616,15 @@
      "officeDefaultAccent1": false
     },
     "exportClrMap": {
-     "masterMatchesDefault": true,
      "masters": 1,
-     "slideOverrides": 0
+     "layoutOverrides": 0,
+     "slideOverrides": 0,
+     "themeParts": [
+      "ppt/theme/theme1.xml"
+     ],
+     "masterParts": [
+      "ppt/slideMasters/slideMaster1.xml"
+     ]
     },
     "previewVsExportColorDiff": {
      "previewOnly": [],
@@ -665,9 +707,15 @@
      "officeDefaultAccent1": false
     },
     "exportClrMap": {
-     "masterMatchesDefault": true,
      "masters": 1,
-     "slideOverrides": 0
+     "layoutOverrides": 0,
+     "slideOverrides": 0,
+     "themeParts": [
+      "ppt/theme/theme1.xml"
+     ],
+     "masterParts": [
+      "ppt/slideMasters/slideMaster1.xml"
+     ]
     },
     "previewVsExportColorDiff": {
      "previewOnly": [],
@@ -750,9 +798,15 @@
      "officeDefaultAccent1": false
     },
     "exportClrMap": {
-     "masterMatchesDefault": true,
      "masters": 1,
-     "slideOverrides": 0
+     "layoutOverrides": 0,
+     "slideOverrides": 0,
+     "themeParts": [
+      "ppt/theme/theme1.xml"
+     ],
+     "masterParts": [
+      "ppt/slideMasters/slideMaster1.xml"
+     ]
     },
     "previewVsExportColorDiff": {
      "previewOnly": [],
@@ -836,9 +890,15 @@
      "officeDefaultAccent1": false
     },
     "exportClrMap": {
-     "masterMatchesDefault": true,
      "masters": 1,
-     "slideOverrides": 0
+     "layoutOverrides": 0,
+     "slideOverrides": 0,
+     "themeParts": [
+      "ppt/theme/theme1.xml"
+     ],
+     "masterParts": [
+      "ppt/slideMasters/slideMaster1.xml"
+     ]
     },
     "previewVsExportColorDiff": {
      "previewOnly": [],
@@ -924,9 +984,15 @@
      "officeDefaultAccent1": false
     },
     "exportClrMap": {
-     "masterMatchesDefault": true,
      "masters": 1,
-     "slideOverrides": 0
+     "layoutOverrides": 0,
+     "slideOverrides": 0,
+     "themeParts": [
+      "ppt/theme/theme1.xml"
+     ],
+     "masterParts": [
+      "ppt/slideMasters/slideMaster1.xml"
+     ]
     },
     "previewVsExportColorDiff": {
      "previewOnly": [],
@@ -1010,9 +1076,15 @@
      "officeDefaultAccent1": false
     },
     "exportClrMap": {
-     "masterMatchesDefault": true,
      "masters": 1,
-     "slideOverrides": 0
+     "layoutOverrides": 0,
+     "slideOverrides": 0,
+     "themeParts": [
+      "ppt/theme/theme1.xml"
+     ],
+     "masterParts": [
+      "ppt/slideMasters/slideMaster1.xml"
+     ]
     },
     "previewVsExportColorDiff": {
      "previewOnly": [],
@@ -1093,9 +1165,15 @@
      "officeDefaultAccent1": false
     },
     "exportClrMap": {
-     "masterMatchesDefault": true,
      "masters": 1,
-     "slideOverrides": 0
+     "layoutOverrides": 0,
+     "slideOverrides": 0,
+     "themeParts": [
+      "ppt/theme/theme1.xml"
+     ],
+     "masterParts": [
+      "ppt/slideMasters/slideMaster1.xml"
+     ]
     },
     "previewVsExportColorDiff": {
      "previewOnly": [],
@@ -1176,9 +1254,15 @@
      "officeDefaultAccent1": false
     },
     "exportClrMap": {
-     "masterMatchesDefault": true,
      "masters": 1,
-     "slideOverrides": 0
+     "layoutOverrides": 0,
+     "slideOverrides": 0,
+     "themeParts": [
+      "ppt/theme/theme1.xml"
+     ],
+     "masterParts": [
+      "ppt/slideMasters/slideMaster1.xml"
+     ]
     },
     "previewVsExportColorDiff": {
      "previewOnly": [],
@@ -30800,9 +30884,15 @@
      "officeDefaultAccent1": false
     },
     "exportClrMap": {
-     "masterMatchesDefault": true,
      "masters": 1,
-     "slideOverrides": 0
+     "layoutOverrides": 0,
+     "slideOverrides": 0,
+     "themeParts": [
+      "ppt/theme/theme1.xml"
+     ],
+     "masterParts": [
+      "ppt/slideMasters/slideMaster1.xml"
+     ]
     },
     "previewVsExportColorDiff": {
      "previewOnly": [],
@@ -31005,9 +31095,15 @@
      "officeDefaultAccent1": false
     },
     "exportClrMap": {
-     "masterMatchesDefault": true,
      "masters": 1,
-     "slideOverrides": 0
+     "layoutOverrides": 0,
+     "slideOverrides": 0,
+     "themeParts": [
+      "ppt/theme/theme1.xml"
+     ],
+     "masterParts": [
+      "ppt/slideMasters/slideMaster1.xml"
+     ]
     },
     "previewVsExportColorDiff": {
      "previewOnly": [],
@@ -31198,9 +31294,15 @@
      "officeDefaultAccent1": false
     },
     "exportClrMap": {
-     "masterMatchesDefault": true,
      "masters": 1,
-     "slideOverrides": 0
+     "layoutOverrides": 0,
+     "slideOverrides": 0,
+     "themeParts": [
+      "ppt/theme/theme1.xml"
+     ],
+     "masterParts": [
+      "ppt/slideMasters/slideMaster1.xml"
+     ]
     },
     "previewVsExportColorDiff": {
      "previewOnly": [],
@@ -31391,9 +31493,15 @@
      "officeDefaultAccent1": false
     },
     "exportClrMap": {
-     "masterMatchesDefault": true,
      "masters": 1,
-     "slideOverrides": 0
+     "layoutOverrides": 0,
+     "slideOverrides": 0,
+     "themeParts": [
+      "ppt/theme/theme1.xml"
+     ],
+     "masterParts": [
+      "ppt/slideMasters/slideMaster1.xml"
+     ]
     },
     "previewVsExportColorDiff": {
      "previewOnly": [],
@@ -32031,9 +32139,15 @@
      "officeDefaultAccent1": false
     },
     "exportClrMap": {
-     "masterMatchesDefault": true,
      "masters": 1,
-     "slideOverrides": 0
+     "layoutOverrides": 0,
+     "slideOverrides": 0,
+     "themeParts": [
+      "ppt/theme/theme1.xml"
+     ],
+     "masterParts": [
+      "ppt/slideMasters/slideMaster1.xml"
+     ]
     },
     "previewVsExportColorDiff": {
      "previewOnly": [],
@@ -32116,9 +32230,15 @@
      "officeDefaultAccent1": false
     },
     "exportClrMap": {
-     "masterMatchesDefault": true,
      "masters": 1,
-     "slideOverrides": 0
+     "layoutOverrides": 0,
+     "slideOverrides": 0,
+     "themeParts": [
+      "ppt/theme/theme1.xml"
+     ],
+     "masterParts": [
+      "ppt/slideMasters/slideMaster1.xml"
+     ]
     },
     "previewVsExportColorDiff": {
      "previewOnly": [],
@@ -32201,9 +32321,15 @@
      "officeDefaultAccent1": false
     },
     "exportClrMap": {
-     "masterMatchesDefault": true,
      "masters": 1,
-     "slideOverrides": 0
+     "layoutOverrides": 0,
+     "slideOverrides": 0,
+     "themeParts": [
+      "ppt/theme/theme1.xml"
+     ],
+     "masterParts": [
+      "ppt/slideMasters/slideMaster1.xml"
+     ]
     },
     "previewVsExportColorDiff": {
      "previewOnly": [],
@@ -32286,9 +32412,15 @@
      "officeDefaultAccent1": false
     },
     "exportClrMap": {
-     "masterMatchesDefault": true,
      "masters": 1,
-     "slideOverrides": 0
+     "layoutOverrides": 0,
+     "slideOverrides": 0,
+     "themeParts": [
+      "ppt/theme/theme1.xml"
+     ],
+     "masterParts": [
+      "ppt/slideMasters/slideMaster1.xml"
+     ]
     },
     "previewVsExportColorDiff": {
      "previewOnly": [],
@@ -32371,9 +32503,15 @@
      "officeDefaultAccent1": false
     },
     "exportClrMap": {
-     "masterMatchesDefault": true,
      "masters": 1,
-     "slideOverrides": 0
+     "layoutOverrides": 0,
+     "slideOverrides": 0,
+     "themeParts": [
+      "ppt/theme/theme1.xml"
+     ],
+     "masterParts": [
+      "ppt/slideMasters/slideMaster1.xml"
+     ]
     },
     "previewVsExportColorDiff": {
      "previewOnly": [],
@@ -32456,9 +32594,15 @@
      "officeDefaultAccent1": false
     },
     "exportClrMap": {
-     "masterMatchesDefault": true,
      "masters": 1,
-     "slideOverrides": 0
+     "layoutOverrides": 0,
+     "slideOverrides": 0,
+     "themeParts": [
+      "ppt/theme/theme1.xml"
+     ],
+     "masterParts": [
+      "ppt/slideMasters/slideMaster1.xml"
+     ]
     },
     "previewVsExportColorDiff": {
      "previewOnly": [],
@@ -32541,9 +32685,15 @@
      "officeDefaultAccent1": false
     },
     "exportClrMap": {
-     "masterMatchesDefault": true,
      "masters": 1,
-     "slideOverrides": 0
+     "layoutOverrides": 0,
+     "slideOverrides": 0,
+     "themeParts": [
+      "ppt/theme/theme1.xml"
+     ],
+     "masterParts": [
+      "ppt/slideMasters/slideMaster1.xml"
+     ]
     },
     "previewVsExportColorDiff": {
      "previewOnly": [],
@@ -32626,9 +32776,15 @@
      "officeDefaultAccent1": false
     },
     "exportClrMap": {
-     "masterMatchesDefault": true,
      "masters": 1,
-     "slideOverrides": 0
+     "layoutOverrides": 0,
+     "slideOverrides": 0,
+     "themeParts": [
+      "ppt/theme/theme1.xml"
+     ],
+     "masterParts": [
+      "ppt/slideMasters/slideMaster1.xml"
+     ]
     },
     "previewVsExportColorDiff": {
      "previewOnly": [],
@@ -32711,9 +32867,15 @@
      "officeDefaultAccent1": false
     },
     "exportClrMap": {
-     "masterMatchesDefault": true,
      "masters": 1,
-     "slideOverrides": 0
+     "layoutOverrides": 0,
+     "slideOverrides": 0,
+     "themeParts": [
+      "ppt/theme/theme1.xml"
+     ],
+     "masterParts": [
+      "ppt/slideMasters/slideMaster1.xml"
+     ]
     },
     "previewVsExportColorDiff": {
      "previewOnly": [],
@@ -32796,9 +32958,15 @@
      "officeDefaultAccent1": false
     },
     "exportClrMap": {
-     "masterMatchesDefault": true,
      "masters": 1,
-     "slideOverrides": 0
+     "layoutOverrides": 0,
+     "slideOverrides": 0,
+     "themeParts": [
+      "ppt/theme/theme1.xml"
+     ],
+     "masterParts": [
+      "ppt/slideMasters/slideMaster1.xml"
+     ]
     },
     "previewVsExportColorDiff": {
      "previewOnly": [],
@@ -32881,9 +33049,15 @@
      "officeDefaultAccent1": false
     },
     "exportClrMap": {
-     "masterMatchesDefault": true,
      "masters": 1,
-     "slideOverrides": 0
+     "layoutOverrides": 0,
+     "slideOverrides": 0,
+     "themeParts": [
+      "ppt/theme/theme1.xml"
+     ],
+     "masterParts": [
+      "ppt/slideMasters/slideMaster1.xml"
+     ]
     },
     "previewVsExportColorDiff": {
      "previewOnly": [],
@@ -32966,9 +33140,15 @@
      "officeDefaultAccent1": false
     },
     "exportClrMap": {
-     "masterMatchesDefault": true,
      "masters": 1,
-     "slideOverrides": 0
+     "layoutOverrides": 0,
+     "slideOverrides": 0,
+     "themeParts": [
+      "ppt/theme/theme1.xml"
+     ],
+     "masterParts": [
+      "ppt/slideMasters/slideMaster1.xml"
+     ]
     },
     "previewVsExportColorDiff": {
      "previewOnly": [],
@@ -33051,9 +33231,15 @@
      "officeDefaultAccent1": false
     },
     "exportClrMap": {
-     "masterMatchesDefault": true,
      "masters": 1,
-     "slideOverrides": 0
+     "layoutOverrides": 0,
+     "slideOverrides": 0,
+     "themeParts": [
+      "ppt/theme/theme1.xml"
+     ],
+     "masterParts": [
+      "ppt/slideMasters/slideMaster1.xml"
+     ]
     },
     "previewVsExportColorDiff": {
      "previewOnly": [],
@@ -33136,9 +33322,15 @@
      "officeDefaultAccent1": false
     },
     "exportClrMap": {
-     "masterMatchesDefault": true,
      "masters": 1,
-     "slideOverrides": 0
+     "layoutOverrides": 0,
+     "slideOverrides": 0,
+     "themeParts": [
+      "ppt/theme/theme1.xml"
+     ],
+     "masterParts": [
+      "ppt/slideMasters/slideMaster1.xml"
+     ]
     },
     "previewVsExportColorDiff": {
      "previewOnly": [],
@@ -33543,7 +33735,7 @@
    "engineSummary": "removing the socials changes preview=false, export parts: ppt/tags/opfDocument.xml",
    "reasons": [
     "the social handle is not rendered in the preview",
-    "the social handle is not in the exported slides"
+    "the social handle is not in the exported slide, layout or master XML"
    ]
   },
   {
@@ -33602,7 +33794,7 @@
    "engineSummary": "removing the socials changes preview=false, export parts: ppt/tags/opfDocument.xml",
    "reasons": [
     "the social handle is not rendered in the preview",
-    "the social handle is not in the exported slides"
+    "the social handle is not in the exported slide, layout or master XML"
    ]
   },
   {
@@ -33661,7 +33853,7 @@
    "engineSummary": "removing the socials changes preview=false, export parts: ppt/tags/opfDocument.xml",
    "reasons": [
     "the social handle is not rendered in the preview",
-    "the social handle is not in the exported slides"
+    "the social handle is not in the exported slide, layout or master XML"
    ]
   },
   {
@@ -33720,7 +33912,7 @@
    "engineSummary": "removing the socials changes preview=false, export parts: ppt/tags/opfDocument.xml",
    "reasons": [
     "the social handle is not rendered in the preview",
-    "the social handle is not in the exported slides"
+    "the social handle is not in the exported slide, layout or master XML"
    ]
   },
   {
@@ -33779,7 +33971,7 @@
    "engineSummary": "removing the socials changes preview=false, export parts: ppt/tags/opfDocument.xml",
    "reasons": [
     "the social handle is not rendered in the preview",
-    "the social handle is not in the exported slides"
+    "the social handle is not in the exported slide, layout or master XML"
    ]
   },
   {
@@ -33838,7 +34030,7 @@
    "engineSummary": "removing the socials changes preview=false, export parts: ppt/tags/opfDocument.xml",
    "reasons": [
     "the social handle is not rendered in the preview",
-    "the social handle is not in the exported slides"
+    "the social handle is not in the exported slide, layout or master XML"
    ]
   },
   {
@@ -33897,7 +34089,7 @@
    "engineSummary": "removing the socials changes preview=false, export parts: ppt/tags/opfDocument.xml",
    "reasons": [
     "the social handle is not rendered in the preview",
-    "the social handle is not in the exported slides"
+    "the social handle is not in the exported slide, layout or master XML"
    ]
   },
   {
@@ -33956,7 +34148,7 @@
    "engineSummary": "removing the socials changes preview=false, export parts: ppt/tags/opfDocument.xml",
    "reasons": [
     "the social handle is not rendered in the preview",
-    "the social handle is not in the exported slides"
+    "the social handle is not in the exported slide, layout or master XML"
    ]
   },
   {
@@ -34015,7 +34207,7 @@
    "engineSummary": "removing the socials changes preview=false, export parts: ppt/tags/opfDocument.xml",
    "reasons": [
     "the social handle is not rendered in the preview",
-    "the social handle is not in the exported slides"
+    "the social handle is not in the exported slide, layout or master XML"
    ]
   },
   {
@@ -34074,7 +34266,7 @@
    "engineSummary": "removing the socials changes preview=false, export parts: ppt/tags/opfDocument.xml",
    "reasons": [
     "the social handle is not rendered in the preview",
-    "the social handle is not in the exported slides"
+    "the social handle is not in the exported slide, layout or master XML"
    ]
   }
  ]

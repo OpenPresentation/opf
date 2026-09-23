@@ -51,9 +51,14 @@ Per-dimension tables are in `color-schemes.md`, `font-schemes.md`, `font-schemes
 The heads, table and gap list above describe the original run. Since the
 FF-36 audit update (heads in `results.json`):
 
-- Slide colours resolve `a:schemeClr` through the slide's colour map (master
-  `p:clrMap` unless overridden) to the exported theme `clrScheme`; the `p:bg`
-  fill resolves the same way. A colour with child transforms (`lumMod`,
+- Slide colours resolve `a:schemeClr` through each slide's relationship chain
+  (slide to layout to master to theme). The colour map is the slide
+  `clrMapOvr`, else the layout `clrMapOvr`, else the master `p:clrMap`. The
+  `p:bg` fill resolves the same way. An unresolved link is a reason
+  ("export colour chain unresolved") in every dimension; nothing defaults to
+  master 1 or theme 1.
+- Socials: `handleInExport` searches slide, layout and master XML only, not
+  the embedded `ppt/tags/opfDocument.xml`. A colour with child transforms (`lumMod`,
   `lumOff`, `tint`, `shade`, `alpha`) is reported as unresolved and never
   counts as agreeing.
 - Colour schemes and themes compare preview and export scheme slots

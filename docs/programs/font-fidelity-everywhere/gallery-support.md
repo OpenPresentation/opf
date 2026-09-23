@@ -28,7 +28,7 @@ Two measurements are recorded here:
 
 | Repository | Presence audits A and B | Parity scoreboard (FF-38) | Previous parity run (opf#122) | Parity baseline (history) |
 | --- | --- | --- | --- | --- |
-| opf (core) | `33d636d` | `6263985` | `c278532` | `53be042` |
+| opf (core) | `1ad25df` | `6263985` | `c278532` | `53be042` |
 | opf-render | `bc436f3` | `bc436f3` | `47d19b2` | `e500ed9` |
 | opf-pptx | `9092954` | `9092954` | `5b657c9` | `cf0bc0c` |
 | opf-editor | `214ae69` (audit B) | not used | not used | not used |
@@ -47,7 +47,9 @@ kept at
 [parity/history/2026-09-23-opf137/PARITY.md](gallery-support/parity/history/2026-09-23-opf137/PARITY.md).
 The presence audits were re-run at opf `33d636d` (documentation and harness
 only since `a74f3f6`) with the FF-36 audit probe update; unmodified, they
-reproduce the committed `a74f3f6` classes exactly. pptx-gallery is still `f17e9ae`: none
+reproduce the committed `a74f3f6` classes exactly. They were re-run again at
+opf `1ad25df` (documentation only since `33d636d`) after the FF-36 audit
+hardening, with no class change. pptx-gallery is still `f17e9ae`: none
 of its program PRs (#40 to #46) has merged, so every snippet is the
 pre-program snippet. The per-dimension prose below the summary
 table describes the first measurement unless a paragraph says otherwise.
@@ -171,9 +173,15 @@ substitute).
   FF-24 all 14 colour schemes and all 4 themes were `broken` ("colour
   mismatch", "export non-solid"), and several reasons were fixed text printed
   whatever was measured. Now:
-  - Slide colours resolve `a:schemeClr` through the slide's colour map (the
-    master `p:clrMap` unless the slide overrides it) to the exported theme
-    `clrScheme`. A colour with child transforms (`lumMod`, `lumOff`, `tint`,
+  - Slide colours resolve `a:schemeClr` through each slide's own chain,
+    followed by relationships: slide to layout to master to theme. The colour
+    map is the innermost override (slide `clrMapOvr`, then layout `clrMapOvr`,
+    then the master `p:clrMap`). A missing or ambiguous link, or a master
+    without `p:clrMap`, is a reason in every dimension, and nothing falls back
+    to master 1, theme 1 or a default map. If the slides reach more than one
+    theme, that is also a reason, because the theme font and `clrScheme`
+    checks read one theme. Current exports have one master and one theme, with
+    no override. A colour with child transforms (`lumMod`, `lumOff`, `tint`,
     `shade`, `alpha`) is reported as unresolved and can never count as
     agreeing, because the audit, like the parity harness, does not compute
     transforms. None occurs in current exports.
@@ -202,7 +210,19 @@ substitute).
     the slides' `accent1` references at `accent2`, swapping `bg2`/`tx2` in the
     master colour map, or recolouring theme `accent1` makes every colour scheme
     `broken`; adding `lumMod` to `accent1` references reports the unresolved
-    transform. None of these leaves a value `works`.
+    transform. None of these leaves a value `works`. Pointing the master at a
+    second theme part (`accent1` and `dk2` changed, `theme1.xml` left in
+    place), or giving the layout a `bg2`/`tx2`-swapped `clrMapOvr`, makes every
+    colour scheme `broken`. Dropping slide 1's layout relationship adds
+    "export colour chain unresolved" to all 245 values (0 `works`). The
+    previous audit, which read `theme1.xml` and `slideMaster1.xml` by name,
+    ignored all three.
+  - `handleInExport` searches only slide, layout and master XML. Before, it
+    also searched `ppt/tags/opfDocument.xml`, which embeds the OPF document
+    (hex-encoded today, so the result was the same). With the handles written
+    in plain text into that part, the previous audit dropped the "not in the
+    export" reason; the current one keeps it, and drops it only when the
+    handles are in slide text.
 - **Audit A image treatments (FF-36 audit update).** The probe used to require
   more pictures than a baseline document, but the baseline keeps the slide's
   own image as a picture, so it never fired. It now finds the picture named
@@ -216,7 +236,10 @@ substitute).
   nor export has a slide image and all 15 stay `partial`. In mutation checks,
   removing or renaming the picture, taking its crop from one side (240 pt and
   135 pt crop deltas), or moving it by 1 pt turns both `works` values
-  `partial` with a named reason. The gallery fixes are
+  `partial` with a named reason. When the probe does not run (the value or
+  baseline export failed), the value gets "slide-image probe not run" and
+  cannot be `works`. Before, a failing baseline left `native` null, and
+  `side-by-side` and `image-strip` stayed `works` without a probe. The gallery fixes are
   pptx-gallery#44 and #45, which are still open.
 
 ### Universal blockers

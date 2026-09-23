@@ -206,6 +206,8 @@ if (want('image-treatments')) {
         checks.export.nativeDetail = { pics: count(s, /<p:pic>/g), basePics: count(b, /<p:pic>/g), srcRect: count(s, /<a:srcRect/g), bgBlip: /<p:bg>[\s\S]*a:blipFill/.test(s), slideImagePictures: probe.found, previewSlideImages: probe.expected, slides: probe.slides };
         reasons.push(...probe.reasons);
       } else checks.export.native = null;
+      // A probe that did not run proves nothing: classify() lets native === null through, so it must carry a reason.
+      if (checks.export.native === null) reasons.push(`slide-image probe not run (value export ${m.x.ok ? 'ok' : 'failed'}, baseline export ${m.xb?.ok ? 'ok' : 'failed'})`);
       const impStr = m.im.ok ? JSON.stringify(m.im.doc) : '';
       checks.reimport.retained = m.im.ok ? /slideImage/.test(impStr) : false;
       checks.reimport.imagesImported = m.im.ok ? count(impStr, /"image"/g) : 0;
