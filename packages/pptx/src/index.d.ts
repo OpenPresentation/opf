@@ -58,6 +58,12 @@ export interface ToPptxOptions {
   strictAssets?: boolean;
   timestamp?: string;
   zipDate?: string | number | Date;
+  /**
+   * Today's calendar date (ISO YYYY-MM-DD) for `date: true` header/footer fields. The exporter never
+   * reads a clock: it lays out this date as the cached text of a native PowerPoint date field, which
+   * PowerPoint updates on open. Without it a current date is reported as unresolved content.
+   */
+  date?: string;
 }
 
 export interface FromPptxOptions {

@@ -21,11 +21,14 @@ for(const measured of [false,true])for(const [width,height]of [[1280,720],[720,1
   if(part.type==='image')continue;
   for(const [index,line]of part.fit.sourceLines.entries()){
    const shape=shapes.find(shape=>shape['p:nvSpPr']['p:cNvPr'].name===`OPF furniture 0 part ${partIndex} line ${index}`);assert.ok(shape);
-   const text=array(shape['p:txBody']['a:p']).map(p=>array(p['a:r']).map(run=>run['a:t']??'').join('')).join('\n');assert.equal(text,part.text.slice(line.start,line.end));
+   // Each fixture paragraph holds one run or one native field, so keyed order is safe here.
+   const text=array(shape['p:txBody']['a:p']).map(p=>[...array(p['a:r']),...array(p['a:fld'])].map(run=>run['a:t']??'').join('')).join('\n');assert.equal(text,part.text.slice(line.start,line.end));
+   const fields=array(shape['p:txBody']['a:p']).flatMap(p=>array(p['a:fld']));
+   assert.deepEqual(fields.map(field=>field.type),part.field==='slideNumber'?['slidenum']:[],'Slide numbers are live fields; other furniture is fixed text.');
    const fit=part.fit,placed=fit.placement?.lines[index],factor=part.alignment==='right'?1:part.alignment==='center'?.5:0;
    const area=placed?{x:placed.x+placed.width*factor-part.box.width*factor,y:placed.baseline-fit.fontSize,width:part.box.width,height:placed.height}:{x:part.box.x,y:part.box.y+index*fit.lineHeight,width:part.box.width,height:fit.lineHeight};
    const transform=shape['p:spPr']['a:xfrm'];for(const [actual,expected]of [[transform['a:off'].x,area.x],[transform['a:off'].y,area.y],[transform['a:ext'].cx,area.width],[transform['a:ext'].cy,area.height]])assert.equal(Number(actual),Math.round(expected*9525));
-   for(const paragraph of array(shape['p:txBody']['a:p']))for(const run of array(paragraph['a:r']))assert.equal(Number(run['a:rPr'].sz),Math.round(fit.fontSize*.75*100));
+   for(const paragraph of array(shape['p:txBody']['a:p']))for(const run of [...array(paragraph['a:r']),...array(paragraph['a:fld'])])assert.equal(Number(run['a:rPr'].sz),Math.round(fit.fontSize*.75*100));
    for(const auto of ['a:normAutofit','a:spAutoFit'])assert.ok(!Object.hasOwn(shape['p:txBody']['a:bodyPr'],auto));
   }
  }

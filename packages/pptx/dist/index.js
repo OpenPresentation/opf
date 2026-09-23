@@ -9,6 +9,7 @@ import {attachPlainTextTags,importPlainTextGroups} from './text-provenance.js';
 import {attachTimelineTags,timelineManifest,importTimelineGroups} from './timeline-provenance.js';
 import {attachFurnitureTags, furnitureManifest, importFurniture} from './furniture-provenance.js';
 import {applyDocumentProvenance, attachDocumentProvenance, documentProvenance, restoreDocumentProvenance} from './document-provenance.js';
+import {attachFurnitureFields, furniturePartFields, lineFields, nativeFieldType} from './furniture-fields.js';
 import {importImageOrientation} from './image-import.js';
 import {nativeBackgroundFill, nativeImageBackgroundFill, nativePatternPreset} from './background.js';
 import {importBackground} from './background-import.js';
@@ -195,6 +196,7 @@ export async function toPptx(input, options = {}) {
   context.plainTextTags = new Map();
   context.timelineTags = new Map();
   context.furnitureTags = new Map();
+  context.furnitureFields = new Map();
   context.furnitureManifests = new Map();
   context.codeTags = new Map();
   context.metricTags = new Map();
@@ -1092,7 +1094,7 @@ async function addSlide(pptx, presentation, opfSlide, slideIndex, context, optio
   const titleAlignment=opfSlide.design?.titleAlignment??presentation.design?.titleAlignment;
   const contentAlignment=opfSlide.design?.contentAlignment??presentation.design?.contentAlignment;
   const fieldAlignment=field=>field==='title'?titleAlignment:contentAlignment;
-  const geometry = composeSlide(opfSlide, { width: widthInches * 96, height: heightInches * 96, layout, presentation, slideIndex, fonts: slideContext.fonts, contentAlignment, titleAlignment, textRasterPadding:options.textRasterPadding, contentBox:opfSlide.design?.contentBox??presentation.design?.contentBox, textMeasurement: options.textMeasurement });
+  const geometry = composeSlide(opfSlide, { width: widthInches * 96, height: heightInches * 96, layout, presentation, slideIndex, fonts: slideContext.fonts, contentAlignment, titleAlignment, textRasterPadding:options.textRasterPadding, contentBox:opfSlide.design?.contentBox??presentation.design?.contentBox, textMeasurement: options.textMeasurement, date: options.date });
   for (const diagnostic of geometry.diagnostics) options.onDiagnostic?.(diagnostic);
   await addFurniture(slide,presentation,opfSlide,geometry.furniture,slideContext,options,slideIndex);
   for (const item of geometry.items) {
@@ -1473,7 +1475,10 @@ function addMeasuredPayloadText(slide, text, box, context, options, config) {
     const objectName=config.heading?`OPF heading ${config.path} line ${index}`:config.timeline?`OPF timeline ${config.timeline.group} part ${config.timeline.part} line ${index}`:config.sourceText?`OPF text ${config.path} line ${index}`:config.objectName?`${config.objectName} line ${index}`:undefined;
     if(config.heading)context.headingTags.set(objectName,{v:1,group:config.path,field:config.heading,line:index,count:fit.lines.length,...boundary});
     else if(config.timeline)context.timelineTags.set(objectName,{v:1,role:'text',group:config.timeline.group,part:config.timeline.part,line:index,count:fit.lines.length,...boundary,...(config.timeline.part===0&&index===0?{anchor:config.timeline.anchor}:{})});
-    else if(config.furniture)context.furnitureTags.set(objectName,{v:1,role:'text',...config.furniture,line:index,count:fit.lines.length,...boundary});
+    else if(config.furniture){
+      context.furnitureTags.set(objectName,{v:1,role:'text',...config.furniture,line:index,count:fit.lines.length,...boundary});
+      if(config.liveFields?.[index]?.length)context.furnitureFields.set(objectName,{text:line,fields:config.liveFields[index]});
+    }
     else if(config.sourceText)context.plainTextTags.set(objectName,{v:1,group:config.path,line:index,count:fit.lines.length,...boundary});
     const area=placed?{x:(placed.x+placed.width*factor-box.width*factor)/96,y:(placed.baseline-fit.fontSize)/96,w:box.width/96,h:placed.height/96}:{x:box.x/96,y:(box.y+index*fit.lineHeight)/96,w:box.width/96,h:fit.lineHeight/96};
     slide.addText(line, {
@@ -1501,7 +1506,17 @@ async function addFurniture(slide,presentation,source,layout,context,options,sli
       if (objectName) context.furnitureTags.set(objectName, {v:1, role:'image', group:String(slideIndex), part:index});
     }else{
       if(!part.fit?.sourceLines)throw new OPFPptxError('missing-furniture-layout','Repeated text requires accepted source lines from core.',{path:part.path});
-      addMeasuredPayloadText(slide,part.text,part.box,context,options,{path:part.path,fit:part.fit,textStyle:part.style,align:part.alignment,diagnosticsHandled:true,color:context.colors.mutedText,keepEmpty:true,objectName:`OPF furniture ${slideIndex} part ${index}`,furniture:{group:String(slideIndex),part:index}});
+      // Slide numbers and current dates become native PowerPoint fields; {total}
+      // and fixed dates stay fixed text. A current date whose pattern has no
+      // en-US field type is written as its laid-out text.
+      const fields=[];
+      for(const field of furniturePartFields(part)){
+        const nativeType=nativeFieldType(field);
+        if(nativeType)fields.push({...field,nativeType});
+        else options.onDiagnostic?.({code:'furniture-date-fixed',path:part.path,message:`dateFormat '${field.format}' has no PowerPoint en-US date field; the current date is exported as fixed text that PowerPoint will not update.`});
+      }
+      const liveFields=fields.length?lineFields(part.text,fields,part.fit.sourceLines,part.fit.lines):undefined;
+      addMeasuredPayloadText(slide,part.text,part.box,context,options,{path:part.path,fit:part.fit,textStyle:part.style,align:part.alignment,diagnosticsHandled:true,color:context.colors.mutedText,keepEmpty:true,objectName:`OPF furniture ${slideIndex} part ${index}`,furniture:{group:String(slideIndex),part:index},liveFields});
     }
   }
   const manifest = furnitureManifest(presentation, source, layout, slideIndex);
@@ -1948,6 +1963,7 @@ async function normalizePptxZip(raw, context) {
   attachHeadingTags(entries,context.headingTags);
   attachPlainTextTags(entries,context.plainTextTags);
   attachTimelineTags(entries,context.timelineTags);
+  attachFurnitureFields(entries,context.furnitureFields);
   attachFurnitureTags(entries,context.furnitureTags,context.furnitureManifests);
   for(const [part,bytes]of Object.entries(entries)){
     if(!/^ppt\/slides\/slide\d+\.xml$/.test(part))continue;

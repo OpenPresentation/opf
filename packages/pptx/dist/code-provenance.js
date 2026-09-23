@@ -69,8 +69,10 @@ export function nativeShapeParagraphs(xml) {
   const tree = children(children(root,'p:cSld')[0],'p:spTree')[0];
   return orderedShapes(tree).map(shape=>children(children(shape,'p:txBody')[0],'a:p').map(paragraph=>{
     let text = '', maxFontSize = 0, bullet = false, level = 0;
+    const fields = [];
     for (const child of paragraph) {
       if (child['a:br'] !== undefined) text += '\n';
+      if (child['a:fld'] !== undefined) fields.push({type: String(child[':@']?.type ?? ''), text: children(child['a:fld'],'a:t').map(plainText).join('')});
       for (const key of ['a:r','a:fld']) if (child[key] !== undefined) {
         text += children(child[key],'a:t').map(plainText).join('');
         for (const run of child[key]) {
@@ -83,7 +85,7 @@ export function nativeShapeParagraphs(xml) {
         bullet = child['a:pPr'].some(node=>node['a:buChar'] !== undefined || node['a:buAutoNum'] !== undefined);
       }
     }
-    return {text,maxFontSize,bullet,level};
+    return {text,maxFontSize,bullet,level,fields};
   }));
 }
 
