@@ -3,7 +3,7 @@ import {resolvePresentation,renderSvg} from '../dist/svg.js';
 import {loadOfficeFontRegistry} from '../dist/fonts-node.js';
 import {validatePresentation} from '@openpresentation/opf';
 const fonts=await loadOfficeFontRegistry(),escape=text=>text.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
-let cases=0;
+let cases=0,anchored=0;
 for(const dimensions of [{width:1280,height:720},{width:540,height:960}])for(const align of ['left','center','right'])for(const metric of [0,'',
   {value:1,unit:'%',label:'Completion'},
   {value:42,unit:'ms',label:'Left\tRight  ',description:'Exact\r\n\r\ncontext',delta:0,trend:'flat'},
@@ -26,20 +26,25 @@ for(const dimensions of [{width:1280,height:720},{width:540,height:960}])for(con
   const lines=[...svg.matchAll(/<text\b([^>]*?)(?:\/>|>([\s\S]*?)<\/text>)/g)];assert.equal(lines.length,expected.length);
   lines.forEach(([,attrs,content=''],i)=>{
     const {part,line,origin}=expected[i];
+    // Untabbed centered/right lines anchor at the accepted alignment edge, as native PPTX
+    // metric paragraphs do; tabbed and left lines keep their accepted segment origins.
+    const factor=align==='right'?1:align==='center'?.5:0,edge=factor>0&&!line.segments.some(segment=>segment.kind==='tab');
     assert.equal(attribute(attrs,'data-opf-path'),part.path);assert.equal(attribute(attrs,'data-opf-metric-role'),part.role);
-    assert.equal(attribute(attrs,'text-anchor'),'start');assert.equal(attribute(attrs,'text-rendering'),'geometricPrecision');
+    assert.equal(attribute(attrs,'text-anchor'),edge?(factor===1?'end':'middle'):'start');assert.equal(attribute(attrs,'text-rendering'),'geometricPrecision');
     assert.equal(Number(attribute(attrs,'font-size')),part.fit.fontSize);assert.equal(Number(attribute(attrs,'font-weight')),part.style.fontWeight);
-    assert.ok(Math.abs(Number(attribute(attrs,'x'))-origin.x)<.002);assert.ok(Math.abs(Number(attribute(attrs,'y'))-origin.baseline)<.002);
+    assert.ok(Math.abs(Number(attribute(attrs,'x'))-(origin.x+(edge?line.width*factor:0)))<.002);assert.ok(Math.abs(Number(attribute(attrs,'y'))-origin.baseline)<.002);
+    if(edge)anchored++;
     assert.equal(Number(attribute(attrs,'data-opf-text-start')),line.start);assert.equal(Number(attribute(attrs,'data-opf-text-end')),line.end);assert.equal(Number(attribute(attrs,'data-opf-text-next-start')),line.nextStart);
     assert.equal(content.replace(/<\/?tspan\b[^>]*>/g,''),escape(part.text.slice(line.start,line.end)));
     const segments=[...content.matchAll(/<tspan\b([^>]*)>([\s\S]*?)<\/tspan>/g)];assert.equal(segments.length,line.segments.length);
     segments.forEach(([,attrs,text],j)=>{
       const segment=line.segments[j];assert.equal(text,escape(part.text.slice(segment.start,segment.end)));
-      assert.ok(Math.abs(Number(attribute(attrs,'x'))-origin.x-segment.x)<.002);
+      if(edge)assert.equal(attribute(attrs,'x'),undefined);else assert.ok(Math.abs(Number(attribute(attrs,'x'))-origin.x-segment.x)<.002);
       if(segment.kind==='tab')assert.ok(Math.abs(Number(attribute(attrs,'textLength'))-segment.width)<.002);
     });
   });cases++;
 }
+assert.ok(anchored>0,'centered and right-aligned metrics exercise edge anchoring');
 const strict={slides:[{composition:{overflow:'error',minFontSize:32},blocks:[{metric:{value:42,label:'Unabridged label '.repeat(300)}}]}]};
 assert.throws(()=>renderSvg(strict),e=>e.code==='layout-overflow'&&e.diagnostics.some(d=>d.path.endsWith('.metric.label')));
 let invalidCases=0;
@@ -50,4 +55,4 @@ for(const point of forbidden)for(const field of ['shorthand','value','unit','lab
   assert.throws(()=>renderSvg(deck),e=>e.code==='invalid-metric-text'&&e.path==='slides.0.metric'+(field==='shorthand'?'':'.'+field)&&e.message.includes('UTF-16 offset 4'));
   assert.deepEqual(deck,before);invalidCases++;
 }
-console.log(`Shared metric SVG: ${cases} accepted aligned layouts, exact zero/source/trace/line origins, no repeated measurement, strict rejection and ${invalidCases} XML boundary cases.`);
+console.log(`Shared metric SVG: ${cases} accepted aligned layouts (${anchored} edge-anchored lines), exact zero/source/trace/line origins, no repeated measurement, strict rejection and ${invalidCases} XML boundary cases.`);

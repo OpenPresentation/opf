@@ -821,7 +821,7 @@ function renderSlideContent(bound, width, height, options) {
   for (const diagnostic of [...bound.design.diagnostics, ...bound.geometry.diagnostics]) reportDiagnostic(diagnostic, options);
   return bound.geometry.items.map(item => {
     const frame=item.frameBox;
-    const surface=frame ? tag('rect',{x:frame.x,y:frame.y,width:frame.width,height:frame.height,rx:8*Math.min(width,height)/720,fill:bound.design.colors.surface,stroke:bound.design.colors.border}) : '';
+    const surface=frame ? tag('rect',{x:frame.x,y:frame.y,width:frame.width,height:frame.height,rx:8*Math.min(width,height)/720,fill:bound.design.colors.surface,stroke:bound.design.colors.border,...traceAttrs(options,item.path)}) : '';
     return surface+renderPayload(item, item.box, { ...bound, composition: item.composition }, options);
   });
 }
@@ -863,10 +863,10 @@ function renderPayload(item, box, bound, options) {
 function renderTextPayload(item, box, bound, options) {
   return (Array.isArray(item.value) ? renderRichTextBox : renderTextBox)(Array.isArray(item.value) ? item.value : flattenText(item.value), box, bound, {
     path: item.path,
-    // Titles follow design.titleAlignment only. An unset title alignment is left,
-    // as in core composition; it must not inherit contentAlignment through the
-    // generic text-box fallback when no accepted placement is available.
-    align: item.field === "title" ? bound.design.titleAlignment ?? "left" : bound.design.contentAlignment,
+    // Core resolves one alignment per composed item for every engine. The
+    // fallback keeps cores published before item.alignment working: titles
+    // follow design.titleAlignment only (unset is left, as in core composition).
+    align: item.alignment ?? (item.field === "title" ? bound.design.titleAlignment ?? "left" : bound.design.contentAlignment),
     fontSize: item.field === "title" ? 54 : item.field === "tag" ? 16 : 25,
     fontFamily: item.field === "title" ? bound.design.fonts.heading : bound.design.fonts.body,
     fontWeight: item.field === "title" ? 700 : 400,
@@ -1048,8 +1048,21 @@ function renderMetric(item, box, bound, options) {
     if (!part.visible) continue;
     if (!part.fit||part.linePositions?.length!==part.fit.sourceLines.length) throw new OPFRenderError('layout-overflow','Metric content has no accepted internal line positions; increase its cell size or coordinate package versions.',{path:part.path,issues:layout.diagnostics});
     const partRtl=paragraphRtl(bound,part.text);
+    // Anchor untabbed lines at the accepted alignment edge, as PPTX export does,
+    // so a shaper whose advance differs from the accepted width keeps the edge.
+    // Tabbed lines keep their accepted segment origins.
+    const factor=layout.alignment==='right'?1:layout.alignment==='center'?.5:0;
     const lines=part.fit.sourceLines.map((line,index)=>{
       const origin=part.linePositions[index];
+      if(factor&&!line.segments.some(segment=>segment.kind==='tab'))return tag('text',{x:stableNumber(origin.x+line.width*factor),y:stableNumber(origin.baseline),'text-anchor':factor===1?'end':'middle',
+        'font-family':fontStack(part.style.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(part.fit.fontSize),
+        'font-weight':part.style.fontWeight,'font-style':part.style.italic?'italic':undefined,
+        'xml:space':'preserve',style:'white-space:pre','text-rendering':'geometricPrecision',fill:part.role==='value'?bound.design.colors.primary:bound.design.colors.text,
+        ...traceAttrs(options,part.path),...(options.trace?{'data-opf-metric-role':part.role,'data-opf-text-start':line.start,
+          'data-opf-text-end':line.end,'data-opf-text-next-start':line.nextStart,'data-opf-line-boundary':line.boundary}:{}),
+      },line.segments.map(segment=>segmentSpan({
+        ...(options.trace?{'data-opf-segment':segment.kind,'data-opf-text-start':segment.start,'data-opf-text-end':segment.end}:{}),
+      },segment,part.text.slice(segment.start,segment.end),part.style,bound,bound.design.fontScheme.type,{rtl:partRtl(line.start)})).join(''));
       return tag('text',{x:stableNumber(origin.x),y:stableNumber(origin.baseline),'text-anchor':'start',
         'font-family':fontStack(part.style.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(part.fit.fontSize),
         'font-weight':part.style.fontWeight,'font-style':part.style.italic?'italic':undefined,
