@@ -7,6 +7,9 @@
   "languages": [],
   "major": "Courier New",
   "minor": "Courier New",
+  "code": {
+    "family": "Courier New"
+  },
   "textSample": "Typed letter look",
   "type": "monospace"
 }
