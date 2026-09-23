@@ -1,5 +1,8 @@
 import type { PaginationOptions, PaginationResult } from "@openpresentation/opf/pagination";
 import type { Composition, ComposeSlideOptions, SlideComposition } from "@openpresentation/opf/composition";
+/** Reported when a font-scheme id matches no inline or bundled record; the default font scheme (`aptos`) is the base. */
+export interface FontSchemeDiagnostic { code: "unresolved-font-scheme"; path: string; message: string; id: string; fallback: string }
+export interface EditorDiagnosticOptions { onDiagnostic?: (diagnostic: FontSchemeDiagnostic) => void }
 export declare const packageName = "@openpresentation/opf-editor";
 
 export declare const releaseLane: Readonly<{
@@ -58,8 +61,8 @@ export interface EditorEvent {
 }
 
 export interface EditorSession {
-  paginateSlide(slideIndex: number, options?: PaginationOptions, meta?: Record<string, unknown>): { change: EditorChange | null; pagination: PaginationResult };
-  composeSlide(slideIndex: number, options?: ComposeSlideOptions): SlideComposition;
+  paginateSlide(slideIndex: number, options?: PaginationOptions & EditorDiagnosticOptions, meta?: Record<string, unknown>): { change: EditorChange | null; pagination: PaginationResult };
+  composeSlide(slideIndex: number, options?: ComposeSlideOptions & EditorDiagnosticOptions): SlideComposition;
   setComposition(slideIndex: number, composition: Composition, meta?: Record<string, unknown>): EditorChange;
   readonly document: unknown;
   readonly validation: OPFValidationSummary;

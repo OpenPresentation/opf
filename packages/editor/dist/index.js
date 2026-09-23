@@ -1,6 +1,6 @@
 import { paginateSlide } from "@openpresentation/opf/pagination";
 import { collectReservedPresentationIds } from "./presentation-ids.js";
-import { DEFAULT_FONT_SCHEME } from "./font-defaults.js";
+import { DEFAULT_FONT_SCHEME, resolveFontSchemeReference } from "./font-defaults.js";
 import { composeSlide, resolveCanvasDimensions, resolveFontFamilies } from "@openpresentation/opf/composition";
 import {
   catalogKinds,
@@ -8,7 +8,7 @@ import {
   validatePresentation
 } from "@openpresentation/opf";
 
-function resolveCompositionOptions(document, slideIndex, options = {}) {
+function resolveCompositionOptions(document, slideIndex, { onDiagnostic, ...options } = {}) {
       const slide = document.slides?.[slideIndex];
       if (!Number.isInteger(slideIndex) || !slide) throw new OPFEditorError("slide-index-out-of-range", "Slide index is out of range.");
       const inline = document.catalogs?.layouts?.records ?? [];
@@ -19,8 +19,9 @@ function resolveCompositionOptions(document, slideIndex, options = {}) {
       const theme = document.catalogs?.themes?.records?.find(record => record.id === themeId)
         ?? bundledCatalogs.themes.find(record => record.id === themeId);
       const reference = slide.design?.fontScheme ?? document.design?.fontScheme ?? theme?.fontScheme ?? DEFAULT_FONT_SCHEME;
-      const id = typeof reference === "string" ? reference : reference.id;
-      const fontScheme = {...(document.catalogs?.fontSchemes?.records?.find(record=>record.id===id) ?? bundledCatalogs.fontSchemes.find(record=>record.id===id)),...(typeof reference === "object" ? reference : {})};
+      const fontPath = slide.design?.fontScheme !== undefined ? `slides.${slideIndex}.design.fontScheme` : document.design?.fontScheme !== undefined ? "design.fontScheme" : slide.design?.theme !== undefined ? `slides.${slideIndex}.design.theme` : "design.theme";
+      const { scheme: fontScheme, diagnostic } = resolveFontSchemeReference(reference, id => document.catalogs?.fontSchemes?.records?.find(record=>record.id===id) ?? bundledCatalogs.fontSchemes.find(record=>record.id===id), fontPath);
+      if (diagnostic) onDiagnostic?.(diagnostic);
       return { ...resolveCanvasDimensions(slide.design?.dimensions ?? document.design?.dimensions ?? theme?.dimensions), fonts:resolveFontFamilies(fontScheme), contentAlignment:slide.design?.contentAlignment??document.design?.contentAlignment, titleAlignment:slide.design?.titleAlignment??document.design?.titleAlignment, contentBox:slide.design?.contentBox??document.design?.contentBox, presentation:document, ...options, layout, slideIndex };
 }
 
