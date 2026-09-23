@@ -79,7 +79,7 @@ export type {
   SpecFileKind,
 } from "./spec-files.js";
 
-export { composeSlide, resolveCanvasDimensions, fitText, wrapText, measureText, resolveFontFamilies, DEFAULT_FONT_SCHEME, resolveTextStyle, textWidthMeasurer, layoutQuote, OPFCompositionError, MAX_COMPOSITION_DEPTH } from "./composition.js";
+export { composeSlide, resolveCanvasDimensions, fitText, wrapText, measureText, resolveFontFamilies, resolveFontSchemeReference, DEFAULT_FONT_SCHEME, resolveTextStyle, textWidthMeasurer, layoutQuote, OPFCompositionError, MAX_COMPOSITION_DEPTH } from "./composition.js";
 export {layoutFurniture,type FurnitureLayout,type FurniturePart,type FurnitureTextPart,type FurnitureImagePart,type FurniturePartBase} from './composition.js';
 export type { QuoteContent, QuoteTextSource, QuoteTextPart, QuoteLayoutDiagnostic, QuoteLayout, QuoteLayoutOptions } from './composition.js';
 export {layoutCode} from './composition.js';
@@ -88,6 +88,7 @@ export {layoutMetric} from './composition.js';
 export type {MetricContent,MetricTextSource,MetricTextPart,MetricLayoutDiagnostic,MetricLayout,MetricLayoutOptions} from './composition.js';
 export {layoutTimeline} from './composition.js';
 export type {TimelineEvent,TimelineContent,TimelineTextPart,TimelineLayoutDiagnostic,TimelineLayout,TimelineLayoutOptions} from './composition.js';
+export type { FontSchemeDiagnostic, ResolvedFontScheme } from "./composition.js";
 export type { TextStyle, FontFamilies, TextMeasurement, MeasureTextWidth, Composition, LayoutBox, LayoutDiagnostic, TextFit, ComposedItem, ComposedGroup, ComposedFlow, CompositionTrack, CompositionPenalties, CompositionCandidate, CompositionDecision, CompositionExplanation, SlideComposition, ComposeSlideOptions } from "./composition.js";
 
 export { paginatePresentation, paginateSlide, OPFPaginationError } from './pagination.js';

@@ -1,4 +1,4 @@
-import { DEFAULT_FONT_SCHEME, resolveFontFamilies } from "./composition.js";
+import { DEFAULT_FONT_SCHEME, resolveFontFamilies, resolveFontSchemeReference } from "./composition.js";
 import { isRecord } from "./content-walk.js";
 import { catalogs } from "./generated/catalogs.js";
 
@@ -351,7 +351,7 @@ export function resolveScriptFonts(input: unknown, options: ResolveScriptFontsOp
   }
 
   const theme = resolveReference(lookup, "themes", design.theme ?? "minimal") ?? {};
-  const scheme = resolveReference(lookup, "fontSchemes", design.fontScheme ?? theme.fontScheme ?? DEFAULT_FONT_SCHEME) ?? {};
+  const scheme = resolveFontSchemeReference(design.fontScheme ?? theme.fontScheme ?? DEFAULT_FONT_SCHEME, (id) => lookup("fontSchemes", id)).scheme;
   const latin = resolveFontFamilies(scheme);
 
   const fromOption = options.language !== undefined ? resolveLanguage(document, lookup, options.language) : undefined;

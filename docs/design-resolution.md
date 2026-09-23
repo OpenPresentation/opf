@@ -148,7 +148,6 @@ Every engine shares one last resort, `aptos`, so a custom theme without `fontSch
 | opf-editor composition and slide transfer | `aptos` | `src/font-defaults.js` |
 | opf-pptx export | `aptos` (`DEFAULTS.fontScheme`) | `src/index.js` |
 
-Until a published core carries `DEFAULT_FONT_SCHEME`, the sibling packages keep a local `aptos` and their tests assert it equals core's constant whenever the installed core exports it.
 
 `fontScheme.google` (`roboto`, `noto-sans-sc`, `noto-sans`) is not read by any current engine. It is kept as the intended default for a future Google Slides exporter, whose output renders in Google-hosted fonts.
 
@@ -159,6 +158,34 @@ Aptos is not openly licensed, so no OPF package bundles it. Previews take the sa
 - **Measured layout under the default metric policy**, or with only the base pack: `font-unavailable` for Aptos, as for a document with no `design`. Supply licensed Aptos faces, allow visual substitution, or set a `fallbackFamily`.
 
 Until FF-35 (font-fidelity-everywhere), core pagination, opf-render and opf-editor fell back to `roboto` while opf-pptx used `aptos`, so such a deck was measured in Roboto but exported with Aptos. None of the 126 bundled examples reaches the last resort: all 805 renderer golden rasters and all 126 exported PPTX files are byte-identical before and after the change. `packages/javascript/test/font-scheme-defaults.test.mjs` checks the shared default in core pagination, and each sibling repository has a parity test.
+
+### Unknown font scheme
+
+A font-scheme id that matches no inline or bundled record (`"fontScheme": "no-such-scheme"`, `{ "id": "no-such-scheme", ... }`, or a theme record that names one) is handled the same way in every engine. The document still validates, because an id may name a record from a catalog the engine has not loaded:
+
+1. The `DEFAULT_FONT_SCHEME` record (`aptos`) is the base. Sibling fields on an object reference still override it per key, so `{ "id": "no-such-scheme", "major": "Inter", "minor": "Inter" }` uses Inter, and a `code` role still applies.
+2. The engine reports one `unresolved-font-scheme` diagnostic: `{ code, path, id, fallback: "aptos", message }`. `path` is where the id is written: `slides.N.design.fontScheme`, `design.fontScheme`, or the `slides.N.design.theme` / `design.theme` reference whose record names it.
+3. An object without `id` is an inline scheme on the same base and reports nothing.
+
+`resolveFontSchemeReference(reference, lookup, path)` in `@openpresentation/opf` implements this rule. `resolveFontFamilies()` also falls back to the default scheme's families (Aptos Display, Aptos) when a scheme names no heading or body family, instead of Roboto. Authoring-time `lintPresentation()` already warns about the unknown id (`opf/catalog-reference`).
+
+| Engine | Diagnostic channel | Reported |
+| --- | --- | --- |
+| Core pagination | `paginatePresentation(..., { onDiagnostic })` | once per path per call |
+| opf-render preview | `renderSvg` / `renderSvgDeck` `onDiagnostic` | once per path per rendered slide |
+| opf-editor | `session.composeSlide` / `paginateSlide` `onDiagnostic` option | once per call |
+| opf-pptx export | `toPptx(..., { onDiagnostic })` | once per path per export |
+
+Before FF-35b, core pagination and opf-editor measured such decks in Roboto and opf-render threw `catalog-resolution-failed`. opf-pptx already exported Aptos, but reported nothing. None of the 126 bundled examples names an unknown font scheme. The 805 example SVGs, the 805 golden rasters and the 126 exported PPTX files are byte-identical before and after the change.
+
+### Sibling agreement checks
+
+opf-render, opf-editor and opf-pptx run the same unknown-scheme cases as core (`test/default-font-scheme.mjs`). Each package keeps a local copy of the default, and in opf-editor of the resolver. Their checks against core's `DEFAULT_FONT_SCHEME`, `resolveFontSchemeReference` and `paginatePresentation` run only when the installed core exports them. Those checks are skipped today: the siblings install the published `@openpresentation/opf` 0.11.0, which predates FF-35. They activate in either of two ways:
+
+- **Sibling CI:** after a core release that includes FF-35 and FF-35b is published, and each sibling's `@openpresentation/opf` dependency and lockfile move to it. After that release, the local copies can import core directly.
+- **Core ecosystem CI** (`.github/workflows/ecosystem-ci.yml`), which links this checkout's core into pinned sibling commits and runs their `npm test`: after those pins move to sibling commits that contain the FF-35 and FF-35b tests (the program's sibling pin bump).
+
+Until then, the equality with core is established by running the sibling tests against a locally linked core.
 
 ## Color references in content
 
