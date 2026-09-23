@@ -665,6 +665,7 @@ function renderResolvedSlide(resolved, slideIndex, options) {
   const children = [
     renderEmbeddedFonts(options.embeddedFonts),
     renderBackground(bound, width, height, options),
+    renderSlideImage(bound, options),
     renderBranding(bound, resolved.presentation, width, height, options),
     ...renderSlideContent(bound, width, height, options),
     renderFurniture(bound, resolved.presentation, width, height, options, "header"),
@@ -745,6 +746,15 @@ function renderBackground(bound, width, height, options) {
     fill: bound.design.backgroundColor ?? bound.design.colors.background,
     ...traceAttrs(options, `${bound.path}.design.background`)
   });
+}
+
+// design.slideImage: the shared composition frame, beneath branding and content.
+// crop covers the frame and fit centers the whole image, matching native a:srcRect.
+function renderSlideImage(bound, options) {
+  const image = bound.geometry.slideImage;
+  if (!image) return '';
+  const trace = options.trace ? { 'data-opf-slide-image': image.path, 'data-opf-slide-image-position': image.position } : {};
+  return tag('g', trace, renderImage({ value: image.value, path: image.sourcePath }, image.box, bound, { ...options, imageFit: image.fill === 'crop' ? 'cover' : 'contain' }));
 }
 
 function renderSlideContent(bound, width, height, options) {

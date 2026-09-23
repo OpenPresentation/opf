@@ -1,5 +1,13 @@
 # Raster regression baseline
 
+## FF-26 slide image review
+
+Slide-level images (`design.slideImage`, composed by core as `geometry.slideImage`) change 1 of 805 slides, with an unchanged source digest: `technical/slide-design-overrides.opf.json#3`. The same entry changes in both `opf-examples-png.furniture.sha256.json` and `opf-examples-png.ff25-wdupdiag.sha256.json`. That slide sets its own `design.slideImage` with `position: "right"` and uses the same asset as its root image. The image now fills the right half of the slide and the title wraps in the left half. Before, the image was a content item below the title. The asset is not embedded, so both versions show the ordinary "Image unavailable" placeholder. The before and after renders were reviewed at half scale.
+
+A deck-level slide image applies only where the layout declares `slideImage: true`, or where the slide's root `image` is the same source. None of the 81 decks with a deck-level `slideImage` meets either condition, so they keep their hashes. The other 804 hashes are unchanged.
+
+CI pins the FF-26 core, which also contains the opf#127 `wdUpDiag` examples, so `OPF_GOLDEN_BASELINE` selects the FF-25 manifest there.
+
 ## FF-25 `wdUpDiag` example corpus (pending core release)
 
 `opf-examples-png.ff25-wdupdiag.sha256.json` is the baseline for the core example corpus from [OpenPresentation/opf#127](https://github.com/OpenPresentation/opf/pull/127). That PR changes the pattern-background preset in 11 example decks from the preview-only `diagStripe` to the DrawingML preset `wdUpDiag`. Since #35, `wdUpDiag` draws exactly like `diagStripe`. The manifest was generated with `OPF_EXAMPLES_DIR=<opf#127>/examples node test/golden.mjs --update`. All 805 slide entries are identical to `opf-examples-png.furniture.sha256.json`; only the corpus digest changes, to `d089278ffc10c44d3504f9e53b3369f37178fdb55e8941ccec2b2bb7704a69d4`.
