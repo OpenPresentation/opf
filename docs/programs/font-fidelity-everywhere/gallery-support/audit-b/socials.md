@@ -1,6 +1,6 @@
 # Socials: 10 values
 
-Classification: **works** 10
+Classification: **partial** 10
 
 Schema-valid 10/10. Catalog id resolves in core 10/10.
 
@@ -8,17 +8,18 @@ Schema-valid 10/10. Catalog id resolves in core 10/10.
 
 | count | reason |
 |---|---|
-| 10 | no size/aspect or rendered handle; re-import drops organization/speaker |
+| 10 | the social handle is not rendered in the preview |
+| 10 | the social handle is not in the exported slides |
 
 | id | valid | catalog | engine effect | reasons | class |
 |---|---|---|---|---|---|
-| linkedin | true | true | engine output changes | no size/aspect or rendered handle; re-import drops organization/speaker | works |
-| x | true | true | engine output changes | no size/aspect or rendered handle; re-import drops organization/speaker | works |
-| github | true | true | engine output changes | no size/aspect or rendered handle; re-import drops organization/speaker | works |
-| youtube | true | true | engine output changes | no size/aspect or rendered handle; re-import drops organization/speaker | works |
-| instagram | true | true | engine output changes | no size/aspect or rendered handle; re-import drops organization/speaker | works |
-| facebook | true | true | engine output changes | no size/aspect or rendered handle; re-import drops organization/speaker | works |
-| tiktok | true | true | engine output changes | no size/aspect or rendered handle; re-import drops organization/speaker | works |
-| threads | true | true | engine output changes | no size/aspect or rendered handle; re-import drops organization/speaker | works |
-| mastodon | true | true | engine output changes | no size/aspect or rendered handle; re-import drops organization/speaker | works |
-| bluesky | true | true | engine output changes | no size/aspect or rendered handle; re-import drops organization/speaker | works |
+| linkedin | true | true | removing the socials changes preview=false, export parts: ppt/tags/opfDocument.xml | the social handle is not rendered in the preview; the social handle is not in the exported slides | partial |
+| x | true | true | removing the socials changes preview=false, export parts: ppt/tags/opfDocument.xml | the social handle is not rendered in the preview; the social handle is not in the exported slides | partial |
+| github | true | true | removing the socials changes preview=false, export parts: ppt/tags/opfDocument.xml | the social handle is not rendered in the preview; the social handle is not in the exported slides | partial |
+| youtube | true | true | removing the socials changes preview=false, export parts: ppt/tags/opfDocument.xml | the social handle is not rendered in the preview; the social handle is not in the exported slides | partial |
+| instagram | true | true | removing the socials changes preview=false, export parts: ppt/tags/opfDocument.xml | the social handle is not rendered in the preview; the social handle is not in the exported slides | partial |
+| facebook | true | true | removing the socials changes preview=false, export parts: ppt/tags/opfDocument.xml | the social handle is not rendered in the preview; the social handle is not in the exported slides | partial |
+| tiktok | true | true | removing the socials changes preview=false, export parts: ppt/tags/opfDocument.xml | the social handle is not rendered in the preview; the social handle is not in the exported slides | partial |
+| threads | true | true | removing the socials changes preview=false, export parts: ppt/tags/opfDocument.xml | the social handle is not rendered in the preview; the social handle is not in the exported slides | partial |
+| mastodon | true | true | removing the socials changes preview=false, export parts: ppt/tags/opfDocument.xml | the social handle is not rendered in the preview; the social handle is not in the exported slides | partial |
+| bluesky | true | true | removing the socials changes preview=false, export parts: ppt/tags/opfDocument.xml | the social handle is not rendered in the preview; the social handle is not in the exported slides | partial |

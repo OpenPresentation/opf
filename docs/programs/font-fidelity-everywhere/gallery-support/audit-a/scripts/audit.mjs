@@ -21,6 +21,7 @@ const { loadOfficeFontRegistry } = await import(pathToFileURL(path.join(RENDER, 
 const { toPptx, fromPptx } = await import(pathToFileURL(path.join(PPTX, 'src/index.js')));
 const preq = createRequire(path.join(PPTX, 'package.json'));
 const { unzipSync } = preq('fflate');
+const { probeSlideImages } = await import(pathToFileURL(path.join(HERE, 'slide-image.mjs')));
 
 // 1. Bundle the gallery's own snippet builders (same approach as core scripts/test-gallery-snippets.mjs).
 const creq = createRequire(path.join(CORE, 'packages/javascript/package.json'));
@@ -62,12 +63,12 @@ function validate(doc) {
 function lint(doc) {
   try { const r = core.lintPresentation(doc); const d = r?.diagnostics ?? r?.issues ?? r ?? []; return Array.isArray(d) ? uniq(d.map((x) => x.code ?? x.rule ?? 'lint')) : []; } catch (e) { return [`lint-threw:${e.message}`]; }
 }
-function render(doc) {
+function render(doc, extra = {}) {
   const diagnostics = [];
   try {
-    const svgs = renderSvgDeck(doc, { ...OPTS, onDiagnostic: (d) => diagnostics.push(d) });
+    const svgs = renderSvgDeck(doc, { ...OPTS, ...extra, onDiagnostic: (d) => diagnostics.push(d) });
     const resolved = resolvePresentation(doc, OPTS);
-    return { ok: true, svgs, resolvedLayouts: resolved.slides.map((s) => s.layout?.id ?? null), diagnostics: diagnostics.map((d) => ({ code: d.code, path: d.path, reason: d.reason })) };
+    return { ok: true, svgs, resolvedLayouts: resolved.slides.map((s) => s.layout?.id ?? null), ...(extra.trace ? { resolved } : {}), diagnostics: diagnostics.map((d) => ({ code: d.code, path: d.path, reason: d.reason })) };
   } catch (e) { return { ok: false, error: errInfo(e), diagnostics }; }
 }
 async function exportPptx(doc) {
@@ -196,10 +197,14 @@ if (want('image-treatments')) {
       checks.catalog = { pass: true, note: 'no OPF catalog kind; treatment maps to design.slideImage.position + design.imageFill enums' };
       if (m.x.ok && m.xb?.ok) {
         const s = m.x.slides[0], b = m.xb.slides[0];
-        const pics = count(s, /<p:pic>/g), basePics = count(b, /<p:pic>/g);
-        checks.export.native = pics > basePics || (s.includes('<p:bg>') && s.includes('a:blipFill') && !b.includes('a:blipFill'));
-        checks.export.nativeDetail = { pics, basePics, srcRect: count(s, /<a:srcRect/g), bgBlip: /<p:bg>[\s\S]*a:blipFill/.test(s) };
-        if (doc.design.imageFill === 'crop' && checks.export.native && !checks.export.nativeDetail.srcRect) reasons.push('imageFill crop but no a:srcRect crop in export');
+        // FF-26 exports design.slideImage as one picture named "OPF slide image slides.N". Detect it by name and
+        // image relationship (the baseline keeps the slide's own image as a picture, so a picture count proves
+        // nothing), then compare its visible frame and crop with the traced preview at 0.02 pt (as parity.mjs).
+        const traced = render(clone(vdoc), { trace: true });
+        const probe = traced.ok ? probeSlideImages({ svgs: traced.svgs, resolved: traced.resolved, files: unzipSync(m.x.bytes) }) : { native: false, expected: 0, found: 0, slides: [], reasons: [`traced preview threw ${traced.error?.code}`] };
+        checks.export.native = probe.native;
+        checks.export.nativeDetail = { pics: count(s, /<p:pic>/g), basePics: count(b, /<p:pic>/g), srcRect: count(s, /<a:srcRect/g), bgBlip: /<p:bg>[\s\S]*a:blipFill/.test(s), slideImagePictures: probe.found, previewSlideImages: probe.expected, slides: probe.slides };
+        reasons.push(...probe.reasons);
       } else checks.export.native = null;
       const impStr = m.im.ok ? JSON.stringify(m.im.doc) : '';
       checks.reimport.retained = m.im.ok ? /slideImage/.test(impStr) : false;

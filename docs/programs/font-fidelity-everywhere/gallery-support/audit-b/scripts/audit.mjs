@@ -36,6 +36,8 @@ const officeVisual = await prepareNodeFonts({pack: 'office', substitutionPolicy:
 
 const dec = new TextDecoder();
 const hexes = s => new Set([...s.matchAll(/#([0-9a-fA-F]{6})\b/g)].map(m => m[1].toUpperCase()));
+// Font slot for a text sample, as parity.mjs scriptOf: East Asian (ea), complex script (cs) or latin.
+const scriptOf = t => /[\u3000-\u9FFF\uAC00-\uD7AF\uF900-\uFAFF\uFF00-\uFFEF\u3040-\u30FF]/u.test(t) ? 'ea' : /[\u0590-\u08FF\u0900-\u0DFF\u0E00-\u0EFF\u1000-\u109F\u10A0-\u10FF\u1200-\u137F\u1780-\u17FF]/u.test(t) ? 'cs' : 'latin';
 const svgFamilies = s => [...new Set([...s.matchAll(/font-family="([^"]*)"/g)].map(m => m[1].replace(/&quot;/g, '"')))];
 
 function doRender(doc, mode) {
@@ -50,14 +52,49 @@ function doRender(doc, mode) {
     return {ok: true, fonts: resolved.slides[0].design.fonts, fontSchemeType: resolved.slides[0].design.fontScheme?.type ?? null,
       colors: resolved.slides[0].design.colors ?? null, svgFamilies: svgFamilies(all), svgHexes: [...hexes(all)],
       substitutions: [...new Set((reg?.substitutions ?? []).map(s => `${s.requestedFamily}->${s.resolvedFamily}(${s.compatibility})`))],
-      diagnostics: diagnostics.map(d => d.code ?? d.message), svg: all};
+      diagnostics: diagnostics.map(d => d.code ?? d.message), svg: all, svgs};
   } catch (e) {
     return {ok: false, error: e.code ?? e.name, message: String(e.message).slice(0, 200), details: e.details ? {fontFamily: e.details.fontFamily, character: e.details.character} : undefined, diagnostics: diagnostics.map(d => d.code)};
   }
 }
 
+// Colour references in slide XML (FF-24). a:srgbClr is literal; a:schemeClr resolves through the slide's colour map
+// (master p:clrMap unless the slide overrides it) to the theme clrScheme slot. A colour with child transforms
+// (lumMod, lumOff, tint, shade, alpha, ...) is recorded as unresolved: the audit does not compute transforms, so such
+// a use can never count as agreeing with the preview. phClr, sysClr, prstClr, scrgbClr and hslClr are unresolved too.
+const COLOR_RE = /<a:(srgbClr|schemeClr|sysClr|prstClr|scrgbClr|hslClr)\b([^>]*?)(?:\/>|>([\s\S]*?)<\/a:\1>)/g;
+const DEFAULT_CLRMAP = {bg1: 'lt1', tx1: 'dk1', bg2: 'lt2', tx2: 'dk2', accent1: 'accent1', accent2: 'accent2', accent3: 'accent3', accent4: 'accent4', accent5: 'accent5', accent6: 'accent6', hlink: 'hlink', folHlink: 'folHlink'};
+const clrMapOf = s => s ? Object.fromEntries([...s.matchAll(/(\w+)="(\w+)"/g)].map(m => [m[1], m[2]])) : null;
+function colorUses(xml, themeClr, clrMap) {
+  const out = [];
+  for (const m of xml.matchAll(COLOR_RE)) {
+    const kind = m[1], val = (m[2].match(/\bval="([^"]*)"/) ?? [])[1] ?? null, transforms = [...(m[3] ?? '').matchAll(/<a:(\w+)\b/g)].map(x => x[1]);
+    const u = {kind, val, transforms, hex: null, via: kind === 'srgbClr' ? 'srgb' : kind === 'schemeClr' ? `scheme:${val}` : kind};
+    if (kind === 'srgbClr' && /^[0-9A-Fa-f]{6}$/.test(val ?? '')) u.hex = val.toUpperCase();
+    if (kind === 'schemeClr') { u.slot = clrMap[val] ?? (Object.values(DEFAULT_CLRMAP).includes(val) ? val : null); u.hex = u.slot ? themeClr?.[u.slot] ?? null : null; }
+    u.resolved = !!u.hex && transforms.length === 0;
+    out.push(u);
+  }
+  return out;
+}
+function bgColor(bgXml, themeClr, clrMap) {
+  if (/<p:bgRef\b/.test(bgXml)) return {kind: 'bgRef', hex: null};
+  const fill = bgXml.match(/<p:bgPr>\s*<a:(solidFill|gradFill|blipFill|pattFill|noFill)\b/)?.[1] ?? 'other';
+  if (fill !== 'solidFill') return {kind: fill, hex: null};
+  const u = colorUses(bgXml, themeClr, clrMap)[0];
+  return {kind: 'solid', via: u?.via ?? null, transforms: u?.transforms ?? [], hex: u?.resolved ? u.hex : null};
+}
+
 function inventory(bytes) {
-  const out = {typefaces: [], scriptFonts: 0, scriptFontNames: new Set(), langs: new Set(), altLangs: new Set(), rtl: 0, xlsxFontNames: [], appFonts: [], theme: null, slideSrgb: new Set(), slideBg: []};
+  const out = {typefaces: [], scriptFonts: 0, scriptFontNames: new Set(), langs: new Set(), altLangs: new Set(), rtl: 0, xlsxFontNames: [], appFonts: [], theme: null, slideSrgb: new Set(), slideBg: [], slideColorUses: [], slideParts: [], slideLangs: new Set(), slideRtl: 0};
+  const zip = unzipSync(bytes);
+  // Theme and colour map first: slide colours resolve through them.
+  const themeXml = zip['ppt/theme/theme1.xml'] ? dec.decode(zip['ppt/theme/theme1.xml']) : '';
+  const themeClr = {};
+  for (const m of themeXml.matchAll(/<a:(dk1|lt1|dk2|lt2|accent[1-6]|hlink|folHlink)>(.*?)<\/a:\1>/g)) themeClr[m[1]] = (m[2].match(/(?:val|lastClr)="([0-9A-Fa-f]{6})"/g) ?? []).map(v => v.slice(-7, -1).toUpperCase()).pop();
+  const masterXml = zip['ppt/slideMasters/slideMaster1.xml'] ? dec.decode(zip['ppt/slideMasters/slideMaster1.xml']) : '';
+  const masterClrMap = clrMapOf(masterXml.match(/<p:clrMap\b([^>]*)\/>/)?.[1]);
+  out.clrMap = {master: masterClrMap, masters: Object.keys(zip).filter(n => /^ppt\/slideMasters\/slideMaster\d+\.xml$/.test(n)).length, slideOverrides: 0};
   const walk = (zip, prefix) => {
     for (const [name, data] of Object.entries(zip)) {
       const part = prefix + name;
@@ -81,12 +118,28 @@ function inventory(bytes) {
       }
       if (/^ppt\/slides\/slide\d+\.xml$/.test(part)) {
         for (const m of xml.matchAll(/srgbClr val="([0-9A-Fa-f]{6})"/g)) out.slideSrgb.add(m[1].toUpperCase());
-        const bg = xml.match(/<p:bg>(.*?)<\/p:bg>/); if (bg) out.slideBg.push((bg[1].match(/val="([0-9A-Fa-f]{6})"/) ?? [])[1] ?? 'non-solid');
+        const ovr = xml.match(/<a:overrideClrMapping\b([^>]*)\/>/)?.[1]; if (ovr) out.clrMap.slideOverrides++;
+        const clrMap = clrMapOf(ovr) ?? masterClrMap ?? DEFAULT_CLRMAP;
+        const bg = xml.match(/<p:bg>(.*?)<\/p:bg>/s);
+        const b = bg ? bgColor(bg[1], themeClr, clrMap) : null;
+        out.slideBg.push(b ? b.hex ?? (b.kind === 'solid' ? (b.transforms.length ? 'transformed' : 'unresolved') : 'non-solid') : 'none');
+        for (const u of colorUses(xml, themeClr, clrMap)) out.slideColorUses.push({part, ...u});
+        out.slideParts.push(part);
+        for (const m of xml.matchAll(/<a:(?:rPr|endParaRPr|defRPr)\b[^>]*\blang="([^"]*)"/g)) out.slideLangs.add(m[1]);
+        out.slideRtl += (xml.match(/<a:pPr\b[^>]*\brtl="1"/g) ?? []).length;
       }
     }
   };
-  walk(unzipSync(bytes), '');
-  return {...out, scriptFontNames: [...out.scriptFontNames].length, langs: [...out.langs], altLangs: [...out.altLangs], slideSrgb: [...out.slideSrgb]};
+  walk(zip, '');
+  return {...out, scriptFontNames: [...out.scriptFontNames].length, langs: [...out.langs], altLangs: [...out.altLangs], slideSrgb: [...out.slideSrgb], slideLangs: [...out.slideLangs]};
+}
+// Summary of slide colour uses: resolved hexes (literal or scheme, no transforms) and the uses that stay unresolved.
+function colorSummary(uses) {
+  const n = k => uses.filter(k).length;
+  return {total: uses.length, literal: n(u => u.kind === 'srgbClr'), scheme: n(u => u.kind === 'schemeClr'),
+    transformed: [...new Set(uses.filter(u => u.transforms.length).map(u => `${u.via}+${u.transforms.join('+')}`))],
+    unresolved: [...new Set(uses.filter(u => !u.transforms.length && !u.hex).map(u => u.via))],
+    resolvedHexes: [...new Set(uses.filter(u => u.resolved).map(u => u.hex))]};
 }
 
 function partsMap(bytes) { const z = unzipSync(bytes); return Object.fromEntries(Object.entries(z).filter(([n]) => !n.startsWith('docProps/')).map(([n, d]) => [n, dec.decode(d)])); }
@@ -169,7 +222,7 @@ for (const s of snippets) {
     const im = await doImport(ex.bytes);
     reimport = im.ok ? {ok: true, designKeys: Object.keys(im.doc.design ?? {}), top: Object.keys(im.doc).filter(k => !['$schema', 'slides'].includes(k)), diagnostics: im.diagnostics, doc: im.doc} : im;
   }
-  r.preview = Object.fromEntries(Object.entries(pv).map(([k, p]) => [k, {...p, svg: undefined}]));
+  r.preview = Object.fromEntries(Object.entries(pv).map(([k, p]) => [k, {...p, svg: undefined, svgs: undefined}]));
   r.export = {defaultOk: ex.ok, defaultError: ex.ok ? undefined : ex, baseRegistryOk: exBase.ok, baseRegistryError: exBase.ok ? undefined : {error: exBase.error, message: exBase.message}, diagnostics: ex.diagnostics};
   if (inv) {
     const tfs = inv.typefaces;
@@ -187,9 +240,34 @@ for (const s of snippets) {
     const scheme = byId('colorSchemes', schemeId);
     m.colorScheme = schemeId;
     m.previewSchemeColorsUsed = pv.none.ok ? schemeColorsUsed(pv.none.svgHexes, scheme) : null;
-    m.exportSchemeColorsInSlides = inv ? schemeColorsUsed(inv.slideSrgb, scheme) : null;
+    // Export slide colours: literal srgbClr plus schemeClr resolved through the exported theme clrScheme (FF-24).
+    const cs = inv ? colorSummary(inv.slideColorUses) : null;
+    m.exportColorUses = cs ? {total: cs.total, literal: cs.literal, scheme: cs.scheme, transformed: cs.transformed, unresolved: cs.unresolved} : null;
+    m.exportSchemeColorsInSlides = cs ? schemeColorsUsed(cs.resolvedHexes, scheme) : null;
     m.exportThemeClrScheme = inv ? clrSchemeMatch(inv.theme?.clr, scheme) : null;
+    m.exportClrMap = inv ? {masterMatchesDefault: !!inv.clrMap.master && Object.entries(DEFAULT_CLRMAP).every(([k, v]) => inv.clrMap.master[k] === v), masters: inv.clrMap.masters, slideOverrides: inv.clrMap.slideOverrides} : null;
     m.previewVsExportColorDiff = (m.previewSchemeColorsUsed && m.exportSchemeColorsInSlides) ? {previewOnly: m.previewSchemeColorsUsed.filter(x => !m.exportSchemeColorsInSlides.includes(x)), exportOnly: m.exportSchemeColorsInSlides.filter(x => !m.previewSchemeColorsUsed.includes(x))} : null;
+    // Slide by slide: the scheme slots each preview slide uses against the resolved colours of the matching slide part,
+    // any resolved export colour the preview slide never paints, and the slide background.
+    if (inv && pv.none.ok && scheme) {
+      const bgRect = s => (s.match(/<rect fill="#([0-9A-Fa-f]{6})" height="\d+" opacity="1" width="\d+" x="0" y="0"\/>/) ?? [])[1]?.toUpperCase() ?? null;
+      m.previewSlides = pv.none.svgs.length; m.exportSlides = inv.slideParts.length;
+      m.colorBySlide = inv.slideParts.map((part, i) => {
+        const svg = pv.none.svgs[i] ?? '', pvHex = hexes(svg), exHex = colorSummary(inv.slideColorUses.filter(u => u.part === part)).resolvedHexes;
+        const p = schemeColorsUsed([...pvHex], scheme), e = schemeColorsUsed(exHex, scheme);
+        return {slide: i, previewOnly: p.filter(x => !e.includes(x)), exportOnly: e.filter(x => !p.includes(x)), exportHexesNotInPreview: exHex.filter(h => !pvHex.has(h)), previewBg: bgRect(svg), exportBg: inv.slideBg[i] ?? null};
+      }).filter(s => s.previewOnly.length || s.exportOnly.length || s.exportHexesNotInPreview.length || s.previewBg !== s.exportBg);
+    }
+    // A literal srgbClr whose value is a scheme slot colour that the document never writes as a literal "#RRGGBB" is a
+    // scheme colour exported as RGB: recolouring the theme in PowerPoint would not follow it (FF-24).
+    if (inv && scheme) {
+      const slotHex = new Set(Object.keys(SLOT).map(k => norm(scheme[k])).filter(Boolean));
+      const docLiterals = new Set([...JSON.stringify(doc).matchAll(/"#([0-9A-Fa-f]{6})"/g)].map(x => x[1].toUpperCase()));
+      const slotsOf = h => Object.keys(SLOT).filter(k => norm(scheme[k]) === h).join('/');
+      const lit = inv.slideColorUses.filter(u => u.kind === 'srgbClr' && u.hex && slotHex.has(u.hex) && !docLiterals.has(u.hex));
+      m.literalSchemeHexes = [...new Set(lit.map(u => `${u.hex}=${slotsOf(u.hex)}`))];
+      m.literalSchemeUses = lit.length;
+    }
     m.reimportColorScheme = rd?.design?.colorScheme ?? null;
   }
   if (dim.startsWith('font-schemes') || dim === 'themes' || dim === 'languages') {
@@ -236,7 +314,7 @@ for (const s of snippets) {
     // theme-only (no explicit color/font) to check the bundle is applied by engines themselves
     const bare = structuredClone(doc); delete bare.design.colorScheme; delete bare.design.fontScheme; delete bare.design.background;
     const bp = doRender(bare, 'none'); const be = await doExport(bare, 'none'); const bi = be.ok ? inventory(be.bytes) : null;
-    m.themeOnly = {previewFonts: bp.ok ? bp.fonts : bp.error, previewBackground: bp.ok ? bgRect(bp.svg) : null, exportMajor: bi?.theme?.major?.[0], exportMinor: bi?.theme?.minor?.[0], exportBg: bi?.slideBg, previewSchemeColorsUsed: bp.ok ? schemeColorsUsed(bp.svgHexes, scheme) : null, exportSchemeColors: bi ? schemeColorsUsed(bi.slideSrgb, scheme) : null, themeClr: bi ? clrSchemeMatch(bi.theme?.clr, scheme) : null};
+    m.themeOnly = {previewFonts: bp.ok ? bp.fonts : bp.error, previewBackground: bp.ok ? bgRect(bp.svg) : null, exportMajor: bi?.theme?.major?.[0], exportMinor: bi?.theme?.minor?.[0], exportBg: bi?.slideBg, previewSchemeColorsUsed: bp.ok ? schemeColorsUsed(bp.svgHexes, scheme) : null, exportSchemeColors: bi ? schemeColorsUsed(colorSummary(bi.slideColorUses).resolvedHexes, scheme) : null, themeClr: bi ? clrSchemeMatch(bi.theme?.clr, scheme) : null};
     m.reimportTheme = rd?.design?.theme ?? null; m.reimportDimensions = rd?.design?.dimensions ?? null;
   }
   // consumption diff: remove the dimension field and compare preview SVG + PPTX parts
@@ -254,7 +332,20 @@ for (const s of snippets) {
     const lang = byId('languages', doc.language);
     m.bcp47 = lang?.bcp47; m.exportLangs = inv?.langs; m.exportRtl = inv?.rtl;
     m.langEmitted = inv ? inv.langs.includes(lang?.bcp47) || inv.langs.some(l => l.toLowerCase().startsWith((lang?.bcp47 ?? '#').toLowerCase())) : null;
+    // Catalog expectations (ooxmlLang, script, direction) and what the slides actually carry.
+    m.catalogLanguage = lang ? {ooxmlLang: lang.ooxmlLang ?? null, script: lang.script ?? null, direction: lang.direction ?? null} : null;
+    m.exportSlideLangs = inv?.slideLangs ?? null; m.exportSlideRtlParagraphs = inv?.slideRtl ?? null;
     m.reimportLanguage = rd?.language ?? null;
+    // Preview: the SVG lang attribute and any right-to-left rendering. The consumption diff above says whether
+    // removing the field changes the preview at all; here we record whether the only change is the lang attribute.
+    if (pv.none.ok) {
+      const svg = pv.none.svg;
+      m.previewLangAttrs = [...new Set([...svg.matchAll(/<svg\b[^>]*?\blang="([^"]*)"/g)].map(x => x[1]))];
+      m.previewRtl = (svg.match(/\bdirection="rtl"|direction:\s*rtl|unicode-bidi/g) ?? []).length;
+      const ctrl = strip(doc, ['language', 'catalogs.languages']); const pc = doRender(ctrl, 'none');
+      const dropLang = s => s.replace(/ (?:xml:)?lang="[^"]*"/g, '');
+      m.previewChangeIsLangAttributeOnly = pc.ok ? dropLang(svg) === dropLang(pc.svg) && svg !== pc.svg : null;
+    }
     // Engine-side application: language alone (no gallery-injected design.fontScheme) - do fonts change vs no language?
     const langOnly = strip(doc, ['design.fontScheme']); const noLang = strip(langOnly, ['language', 'catalogs.languages']);
     const a = doRender(langOnly, 'none'), b = doRender(noLang, 'none');
@@ -270,7 +361,12 @@ for (const s of snippets) {
         // Same native text on the only fully bundled scheme (Roboto) and on the record's googleFontScheme, strict base pack:
         robotoBase: (() => { const q = structuredClone(probe); q.design = {...(q.design ?? {}), fontScheme: 'roboto'}; const x = doRender(q, 'base'); return x.ok ? 'ok' : `${x.error}:${x.details?.fontFamily ?? ''}:${x.details?.character ? 'U+' + x.details.character.codePointAt(0).toString(16).toUpperCase() : ''}`; })(),
         googleSchemeBase: lang?.googleFontScheme ? (() => { const q = structuredClone(probe); q.design = {...(q.design ?? {}), fontScheme: lang.googleFontScheme}; const x = doRender(q, 'base'); return `${lang.googleFontScheme}:` + (x.ok ? 'ok' : `${x.error}:${x.details?.fontFamily ?? ''}`); })() : null,
-        exportOk: pe.ok, exportLangs: pi?.langs, exportRunFaces: pi ? [...new Set(pi.typefaces.filter(t => /slides\/slide\d/.test(t.part)).map(t => `${t.tag}:${t.typeface}`))] : null, exportRtl: pi?.rtl};
+        exportOk: pe.ok, exportLangs: pi?.langs, exportRunFaces: pi ? [...new Set(pi.typefaces.filter(t => /slides\/slide\d/.test(t.part)).map(t => `${t.tag}:${t.typeface}`))] : null, exportRtl: pi?.rtl,
+        exportSlideLangs: pi?.slideLangs, exportSlideRtlParagraphs: pi?.slideRtl,
+        // Preview lines the renderer marks right-to-left (RLI/RLE/RLO isolate or embedding controls, or an explicit direction).
+        previewRtlLines: pn.ok ? [...pn.svg.matchAll(/<text\b[^>]*>([\s\S]*?)<\/text>/g)].filter(t => /[\u2067\u202B\u202E]/.test(t[1]) || /direction="rtl"/.test(t[0])).length : null,
+        // The run font slot the native text uses (same script test as parity.mjs) and the faces the slides name in it.
+        scriptSlot: scriptOf(native), slotFaces: pi ? [...new Set(pi.typefaces.filter(t => /slides\/slide\d/.test(t.part) && t.tag === scriptOf(native)).map(t => t.typeface))] : null};
     }
   }
   r.measure = m;

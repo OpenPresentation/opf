@@ -1,13 +1,13 @@
 # Dimension audit A: layouts, content blocks, image treatments, backgrounds, headers & footers
 
-Commits: opf `a74f3f6`, opf-render `bc436f3`, opf-pptx `9092954`, pptx-gallery `f17e9ae`. Node v24.21.0. Core bundled layout catalog: 30 records.
+Commits: opf `33d636d`, opf-render `bc436f3`, opf-pptx `9092954`, pptx-gallery `f17e9ae`. Node v24.21.0. Core bundled layout catalog: 30 records.
 
 Method: gallery lib/opf-snippets.ts builders bundled with esbuild; @openpresentation/opf linked to local core dist; opf-render/opf-pptx from source; engine default text measurement (Office font registry probed separately); no Office/COM. Each value's OPF is the exact document the gallery page emits (lib/opf-snippets.ts). Checks: (1) core validatePresentation, (2) catalog/reference resolution, (3) opf-render SVG vs a baseline document without the dimension, (4) opf-pptx export + OPC parts + dimension-specific native XML, (5) opf-pptx fromPptx re-import, (6) docs/evidence + compatibility-matrix hits. "withAssets" re-runs values whose gallery snippet references undeclared `asset:*` ids with a real raster supplied.
 
 | Dimension | Total | works | partial | schema-only | broken | gallery-only | withAssets variant | preview/export disagree |
 |---|---|---|---|---|---|---|---|---|
 | backgrounds | 6 | 2 | 4 | 0 | 0 | 0 | works 1 | 1 |
-| image-treatments | 15 | 0 | 15 | 0 | 0 | 0 | partial 15 | 15 |
+| image-treatments | 15 | 0 | 15 | 0 | 0 | 0 | partial 13, works 2 | 15 |
 | headers-footers | 10 | 1 | 9 | 0 | 0 | 0 | n/a | 0 |
 | blocks | 32 | 29 | 3 | 0 | 0 | 0 | n/a | 1 |
 | layouts | 485 | 289 | 126 | 0 | 0 | 70 | n/a | 66 |
@@ -53,14 +53,14 @@ Top reasons (count):
 |---|---|---|---|
 | full-bleed | partial | partial | export adds no native picture for design.slideImage; preview diagnostics: unresolved-asset; treatment collapses to {"position":"background","fill":"crop"}, identical OPF to text-overlay, caption-overlay, duotone, background-blur, watermark, cinematic-crop; gallery snippet references asset:hero without an assets entry |
 | text-overlay | partial | partial | export adds no native picture for design.slideImage; preview diagnostics: unresolved-asset; treatment collapses to {"position":"background","fill":"crop"}, identical OPF to full-bleed, caption-overlay, duotone, background-blur, watermark, cinematic-crop; gallery snippet references asset:hero without an assets entry |
-| side-by-side | partial | partial | export adds no native picture for design.slideImage; preview diagnostics: unresolved-asset; gallery snippet references asset:hero without an assets entry |
+| side-by-side | partial | works | export adds no native picture for design.slideImage; preview diagnostics: unresolved-asset; gallery snippet references asset:hero without an assets entry |
 | caption-overlay | partial | partial | export adds no native picture for design.slideImage; preview diagnostics: unresolved-asset; treatment collapses to {"position":"background","fill":"crop"}, identical OPF to full-bleed, text-overlay, duotone, background-blur, watermark, cinematic-crop; gallery snippet references asset:hero without an assets entry |
 | masked-shape | partial | partial | export adds no native picture for design.slideImage; preview diagnostics: unresolved-asset; treatment collapses to {"position":"right","fill":"fit"}, identical OPF to circular-crop, rounded-card, collage-grid, device-frame, cutout-subject; gallery snippet references asset:hero without an assets entry |
 | circular-crop | partial | partial | export adds no native picture for design.slideImage; preview diagnostics: unresolved-asset; treatment collapses to {"position":"right","fill":"fit"}, identical OPF to masked-shape, rounded-card, collage-grid, device-frame, cutout-subject; gallery snippet references asset:hero without an assets entry |
 | rounded-card | partial | partial | export adds no native picture for design.slideImage; preview diagnostics: unresolved-asset; treatment collapses to {"position":"right","fill":"fit"}, identical OPF to masked-shape, circular-crop, collage-grid, device-frame, cutout-subject; gallery snippet references asset:hero without an assets entry |
 | duotone | partial | partial | export adds no native picture for design.slideImage; preview diagnostics: unresolved-asset; treatment collapses to {"position":"background","fill":"crop"}, identical OPF to full-bleed, text-overlay, caption-overlay, background-blur, watermark, cinematic-crop; gallery snippet references asset:hero without an assets entry |
 | background-blur | partial | partial | export adds no native picture for design.slideImage; preview diagnostics: unresolved-asset; treatment collapses to {"position":"background","fill":"crop"}, identical OPF to full-bleed, text-overlay, caption-overlay, duotone, watermark, cinematic-crop; gallery snippet references asset:hero without an assets entry |
-| image-strip | partial | partial | export adds no native picture for design.slideImage; preview diagnostics: unresolved-asset; gallery snippet references asset:hero without an assets entry |
+| image-strip | partial | works | export adds no native picture for design.slideImage; preview diagnostics: unresolved-asset; gallery snippet references asset:hero without an assets entry |
 | collage-grid | partial | partial | export adds no native picture for design.slideImage; preview diagnostics: unresolved-asset; treatment collapses to {"position":"right","fill":"fit"}, identical OPF to masked-shape, circular-crop, rounded-card, device-frame, cutout-subject; gallery snippet references asset:hero without an assets entry |
 | device-frame | partial | partial | export adds no native picture for design.slideImage; preview diagnostics: unresolved-asset; treatment collapses to {"position":"right","fill":"fit"}, identical OPF to masked-shape, circular-crop, rounded-card, collage-grid, cutout-subject; gallery snippet references asset:hero without an assets entry |
 | cutout-subject | partial | partial | export adds no native picture for design.slideImage; preview diagnostics: unresolved-asset; treatment collapses to {"position":"right","fill":"fit"}, identical OPF to masked-shape, circular-crop, rounded-card, collage-grid, device-frame; gallery snippet references asset:hero without an assets entry |

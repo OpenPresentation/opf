@@ -3,7 +3,7 @@
   "generatedBy": "dimension-audit/A/scripts/audit.mjs",
   "node": "v24.21.0",
   "commits": {
-   "opf": "a74f3f6297e848562b40f50dceae347ea68de27f",
+   "opf": "33d636d259c31d55b58931ce32c9365eaedf8f32",
    "opf-render": "bc436f3bf324bcec0c180d18ef773a117dbe29ee",
    "opf-pptx": "9092954664917fd8c49aa29203425c0dcdaaf8e7",
    "pptx-gallery": "f17e9ae5869669d5fbac3720f285652d0c37551c"
@@ -44,7 +44,8 @@
    },
    "disagreements": 15,
    "withAssetsCounts": {
-    "partial": 15
+    "partial": 13,
+    "works": 2
    }
   },
   "headers-footers": {
@@ -1111,7 +1112,18 @@
         "pics": 0,
         "basePics": 0,
         "srcRect": 0,
-        "bgBlip": false
+        "bgBlip": false,
+        "slideImagePictures": 0,
+        "previewSlideImages": 0,
+        "slides": [
+         {
+          "slide": 0,
+          "previewSlideImage": false,
+          "previewPosition": "background",
+          "previewFill": "crop",
+          "pictures": 0
+         }
+        ]
        }
       },
       "reimport": {
@@ -1175,12 +1187,48 @@
        "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
-       "native": false,
+       "native": true,
        "nativeDetail": {
         "pics": 1,
         "basePics": 1,
         "srcRect": 0,
-        "bgBlip": false
+        "bgBlip": false,
+        "slideImagePictures": 1,
+        "previewSlideImages": 1,
+        "slides": [
+         {
+          "slide": 0,
+          "previewSlideImage": true,
+          "previewPosition": "background",
+          "previewFill": "crop",
+          "pictures": 1,
+          "relationship": {
+           "id": "rId1",
+           "type": "image",
+           "target": "ppt/media/image-1-1.png"
+          },
+          "imagePartExists": true,
+          "exportHash": "3ae701b391b694d5",
+          "prst": "rect",
+          "expectedPrst": "rect",
+          "srcRect": {},
+          "previewHash": "3ae701b391b694d5",
+          "frameDeltaPt": 0,
+          "visible": {
+           "x": 0,
+           "y": 0,
+           "w": 1280,
+           "h": 720
+          },
+          "previewVisible": {
+           "x": 0,
+           "y": 0,
+           "w": 1280,
+           "h": 720
+          },
+          "cropDeltaPt": 0
+         }
+        ]
        }
       },
       "reimport": {
@@ -1213,7 +1261,6 @@
      },
      "class": "partial",
      "reasons": [
-      "export adds no native picture for design.slideImage",
       "treatment collapses to {\"position\":\"background\",\"fill\":\"crop\"}, identical OPF to text-overlay, caption-overlay, duotone, background-blur, watermark, cinematic-crop"
      ]
     }
@@ -1259,7 +1306,18 @@
       "pics": 0,
       "basePics": 0,
       "srcRect": 0,
-      "bgBlip": false
+      "bgBlip": false,
+      "slideImagePictures": 0,
+      "previewSlideImages": 0,
+      "slides": [
+       {
+        "slide": 0,
+        "previewSlideImage": false,
+        "previewPosition": "background",
+        "previewFill": "crop",
+        "pictures": 0
+       }
+      ]
      }
     },
     "reimport": {
@@ -1345,7 +1403,18 @@
         "pics": 0,
         "basePics": 0,
         "srcRect": 0,
-        "bgBlip": false
+        "bgBlip": false,
+        "slideImagePictures": 0,
+        "previewSlideImages": 0,
+        "slides": [
+         {
+          "slide": 0,
+          "previewSlideImage": false,
+          "previewPosition": "background",
+          "previewFill": "crop",
+          "pictures": 0
+         }
+        ]
        }
       },
       "reimport": {
@@ -1409,12 +1478,48 @@
        "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
-       "native": false,
+       "native": true,
        "nativeDetail": {
         "pics": 1,
         "basePics": 1,
         "srcRect": 0,
-        "bgBlip": false
+        "bgBlip": false,
+        "slideImagePictures": 1,
+        "previewSlideImages": 1,
+        "slides": [
+         {
+          "slide": 0,
+          "previewSlideImage": true,
+          "previewPosition": "background",
+          "previewFill": "crop",
+          "pictures": 1,
+          "relationship": {
+           "id": "rId1",
+           "type": "image",
+           "target": "ppt/media/image-1-1.png"
+          },
+          "imagePartExists": true,
+          "exportHash": "3ae701b391b694d5",
+          "prst": "rect",
+          "expectedPrst": "rect",
+          "srcRect": {},
+          "previewHash": "3ae701b391b694d5",
+          "frameDeltaPt": 0,
+          "visible": {
+           "x": 0,
+           "y": 0,
+           "w": 1280,
+           "h": 720
+          },
+          "previewVisible": {
+           "x": 0,
+           "y": 0,
+           "w": 1280,
+           "h": 720
+          },
+          "cropDeltaPt": 0
+         }
+        ]
        }
       },
       "reimport": {
@@ -1447,7 +1552,6 @@
      },
      "class": "partial",
      "reasons": [
-      "export adds no native picture for design.slideImage",
       "treatment collapses to {\"position\":\"background\",\"fill\":\"crop\"}, identical OPF to full-bleed, caption-overlay, duotone, background-blur, watermark, cinematic-crop"
      ]
     }
@@ -1493,7 +1597,18 @@
       "pics": 0,
       "basePics": 0,
       "srcRect": 0,
-      "bgBlip": false
+      "bgBlip": false,
+      "slideImagePictures": 0,
+      "previewSlideImages": 0,
+      "slides": [
+       {
+        "slide": 0,
+        "previewSlideImage": false,
+        "previewPosition": "background",
+        "previewFill": "crop",
+        "pictures": 0
+       }
+      ]
      }
     },
     "reimport": {
@@ -1579,7 +1694,18 @@
         "pics": 0,
         "basePics": 0,
         "srcRect": 0,
-        "bgBlip": false
+        "bgBlip": false,
+        "slideImagePictures": 0,
+        "previewSlideImages": 0,
+        "slides": [
+         {
+          "slide": 0,
+          "previewSlideImage": false,
+          "previewPosition": "right",
+          "previewFill": "crop",
+          "pictures": 0
+         }
+        ]
        }
       },
       "reimport": {
@@ -1642,12 +1768,53 @@
        "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
-       "native": false,
+       "native": true,
        "nativeDetail": {
         "pics": 1,
         "basePics": 1,
         "srcRect": 1,
-        "bgBlip": false
+        "bgBlip": false,
+        "slideImagePictures": 1,
+        "previewSlideImages": 1,
+        "slides": [
+         {
+          "slide": 0,
+          "previewSlideImage": true,
+          "previewPosition": "right",
+          "previewFill": "crop",
+          "pictures": 1,
+          "relationship": {
+           "id": "rId1",
+           "type": "image",
+           "target": "ppt/media/image-1-1.png"
+          },
+          "imagePartExists": true,
+          "exportHash": "3ae701b391b694d5",
+          "prst": "rect",
+          "expectedPrst": "rect",
+          "srcRect": {
+           "l": "25000",
+           "t": "0",
+           "r": "25000",
+           "b": "0"
+          },
+          "previewHash": "3ae701b391b694d5",
+          "frameDeltaPt": 0,
+          "visible": {
+           "x": 640,
+           "y": 0,
+           "w": 640,
+           "h": 720
+          },
+          "previewVisible": {
+           "x": 640,
+           "y": 0,
+           "w": 640,
+           "h": 720
+          },
+          "cropDeltaPt": 0
+         }
+        ]
        }
       },
       "reimport": {
@@ -1678,10 +1845,8 @@
        "other": 9
       }
      },
-     "class": "partial",
-     "reasons": [
-      "export adds no native picture for design.slideImage"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
    "editorPathSlugAgnostic": true,
@@ -1724,7 +1889,18 @@
       "pics": 0,
       "basePics": 0,
       "srcRect": 0,
-      "bgBlip": false
+      "bgBlip": false,
+      "slideImagePictures": 0,
+      "previewSlideImages": 0,
+      "slides": [
+       {
+        "slide": 0,
+        "previewSlideImage": false,
+        "previewPosition": "right",
+        "previewFill": "crop",
+        "pictures": 0
+       }
+      ]
      }
     },
     "reimport": {
@@ -1755,7 +1931,7 @@
      "other": 9
     }
    },
-   "withAssetsClass": "partial",
+   "withAssetsClass": "works",
    "previewExportDisagreement": [
     "preview effect=true but export native=false",
     "diagnostics differ: preview[unresolved-asset] export[]"
@@ -1810,7 +1986,18 @@
         "pics": 0,
         "basePics": 0,
         "srcRect": 0,
-        "bgBlip": false
+        "bgBlip": false,
+        "slideImagePictures": 0,
+        "previewSlideImages": 0,
+        "slides": [
+         {
+          "slide": 0,
+          "previewSlideImage": false,
+          "previewPosition": "background",
+          "previewFill": "crop",
+          "pictures": 0
+         }
+        ]
        }
       },
       "reimport": {
@@ -1874,12 +2061,48 @@
        "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
-       "native": false,
+       "native": true,
        "nativeDetail": {
         "pics": 1,
         "basePics": 1,
         "srcRect": 0,
-        "bgBlip": false
+        "bgBlip": false,
+        "slideImagePictures": 1,
+        "previewSlideImages": 1,
+        "slides": [
+         {
+          "slide": 0,
+          "previewSlideImage": true,
+          "previewPosition": "background",
+          "previewFill": "crop",
+          "pictures": 1,
+          "relationship": {
+           "id": "rId1",
+           "type": "image",
+           "target": "ppt/media/image-1-1.png"
+          },
+          "imagePartExists": true,
+          "exportHash": "3ae701b391b694d5",
+          "prst": "rect",
+          "expectedPrst": "rect",
+          "srcRect": {},
+          "previewHash": "3ae701b391b694d5",
+          "frameDeltaPt": 0,
+          "visible": {
+           "x": 0,
+           "y": 0,
+           "w": 1280,
+           "h": 720
+          },
+          "previewVisible": {
+           "x": 0,
+           "y": 0,
+           "w": 1280,
+           "h": 720
+          },
+          "cropDeltaPt": 0
+         }
+        ]
        }
       },
       "reimport": {
@@ -1912,7 +2135,6 @@
      },
      "class": "partial",
      "reasons": [
-      "export adds no native picture for design.slideImage",
       "treatment collapses to {\"position\":\"background\",\"fill\":\"crop\"}, identical OPF to full-bleed, text-overlay, duotone, background-blur, watermark, cinematic-crop"
      ]
     }
@@ -1958,7 +2180,18 @@
       "pics": 0,
       "basePics": 0,
       "srcRect": 0,
-      "bgBlip": false
+      "bgBlip": false,
+      "slideImagePictures": 0,
+      "previewSlideImages": 0,
+      "slides": [
+       {
+        "slide": 0,
+        "previewSlideImage": false,
+        "previewPosition": "background",
+        "previewFill": "crop",
+        "pictures": 0
+       }
+      ]
      }
     },
     "reimport": {
@@ -2044,7 +2277,18 @@
         "pics": 0,
         "basePics": 0,
         "srcRect": 0,
-        "bgBlip": false
+        "bgBlip": false,
+        "slideImagePictures": 0,
+        "previewSlideImages": 0,
+        "slides": [
+         {
+          "slide": 0,
+          "previewSlideImage": false,
+          "previewPosition": "right",
+          "previewFill": "fit",
+          "pictures": 0
+         }
+        ]
        }
       },
       "reimport": {
@@ -2108,12 +2352,53 @@
        "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
-       "native": false,
+       "native": true,
        "nativeDetail": {
         "pics": 1,
         "basePics": 1,
         "srcRect": 1,
-        "bgBlip": false
+        "bgBlip": false,
+        "slideImagePictures": 1,
+        "previewSlideImages": 1,
+        "slides": [
+         {
+          "slide": 0,
+          "previewSlideImage": true,
+          "previewPosition": "right",
+          "previewFill": "fit",
+          "pictures": 1,
+          "relationship": {
+           "id": "rId1",
+           "type": "image",
+           "target": "ppt/media/image-1-1.png"
+          },
+          "imagePartExists": true,
+          "exportHash": "3ae701b391b694d5",
+          "prst": "rect",
+          "expectedPrst": "rect",
+          "srcRect": {
+           "l": "0",
+           "t": "-50000",
+           "r": "0",
+           "b": "-50000"
+          },
+          "previewHash": "3ae701b391b694d5",
+          "frameDeltaPt": 0,
+          "visible": {
+           "x": 640,
+           "y": 180,
+           "w": 640,
+           "h": 360
+          },
+          "previewVisible": {
+           "x": 640,
+           "y": 180,
+           "w": 640,
+           "h": 360
+          },
+          "cropDeltaPt": 0
+         }
+        ]
        }
       },
       "reimport": {
@@ -2146,7 +2431,6 @@
      },
      "class": "partial",
      "reasons": [
-      "export adds no native picture for design.slideImage",
       "treatment collapses to {\"position\":\"right\",\"fill\":\"fit\"}, identical OPF to circular-crop, rounded-card, collage-grid, device-frame, cutout-subject"
      ]
     }
@@ -2192,7 +2476,18 @@
       "pics": 0,
       "basePics": 0,
       "srcRect": 0,
-      "bgBlip": false
+      "bgBlip": false,
+      "slideImagePictures": 0,
+      "previewSlideImages": 0,
+      "slides": [
+       {
+        "slide": 0,
+        "previewSlideImage": false,
+        "previewPosition": "right",
+        "previewFill": "fit",
+        "pictures": 0
+       }
+      ]
      }
     },
     "reimport": {
@@ -2278,7 +2573,18 @@
         "pics": 0,
         "basePics": 0,
         "srcRect": 0,
-        "bgBlip": false
+        "bgBlip": false,
+        "slideImagePictures": 0,
+        "previewSlideImages": 0,
+        "slides": [
+         {
+          "slide": 0,
+          "previewSlideImage": false,
+          "previewPosition": "right",
+          "previewFill": "fit",
+          "pictures": 0
+         }
+        ]
        }
       },
       "reimport": {
@@ -2342,12 +2648,53 @@
        "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
-       "native": false,
+       "native": true,
        "nativeDetail": {
         "pics": 1,
         "basePics": 1,
         "srcRect": 1,
-        "bgBlip": false
+        "bgBlip": false,
+        "slideImagePictures": 1,
+        "previewSlideImages": 1,
+        "slides": [
+         {
+          "slide": 0,
+          "previewSlideImage": true,
+          "previewPosition": "right",
+          "previewFill": "fit",
+          "pictures": 1,
+          "relationship": {
+           "id": "rId1",
+           "type": "image",
+           "target": "ppt/media/image-1-1.png"
+          },
+          "imagePartExists": true,
+          "exportHash": "3ae701b391b694d5",
+          "prst": "rect",
+          "expectedPrst": "rect",
+          "srcRect": {
+           "l": "0",
+           "t": "-50000",
+           "r": "0",
+           "b": "-50000"
+          },
+          "previewHash": "3ae701b391b694d5",
+          "frameDeltaPt": 0,
+          "visible": {
+           "x": 640,
+           "y": 180,
+           "w": 640,
+           "h": 360
+          },
+          "previewVisible": {
+           "x": 640,
+           "y": 180,
+           "w": 640,
+           "h": 360
+          },
+          "cropDeltaPt": 0
+         }
+        ]
        }
       },
       "reimport": {
@@ -2380,7 +2727,6 @@
      },
      "class": "partial",
      "reasons": [
-      "export adds no native picture for design.slideImage",
       "treatment collapses to {\"position\":\"right\",\"fill\":\"fit\"}, identical OPF to masked-shape, rounded-card, collage-grid, device-frame, cutout-subject"
      ]
     }
@@ -2426,7 +2772,18 @@
       "pics": 0,
       "basePics": 0,
       "srcRect": 0,
-      "bgBlip": false
+      "bgBlip": false,
+      "slideImagePictures": 0,
+      "previewSlideImages": 0,
+      "slides": [
+       {
+        "slide": 0,
+        "previewSlideImage": false,
+        "previewPosition": "right",
+        "previewFill": "fit",
+        "pictures": 0
+       }
+      ]
      }
     },
     "reimport": {
@@ -2512,7 +2869,18 @@
         "pics": 0,
         "basePics": 0,
         "srcRect": 0,
-        "bgBlip": false
+        "bgBlip": false,
+        "slideImagePictures": 0,
+        "previewSlideImages": 0,
+        "slides": [
+         {
+          "slide": 0,
+          "previewSlideImage": false,
+          "previewPosition": "right",
+          "previewFill": "fit",
+          "pictures": 0
+         }
+        ]
        }
       },
       "reimport": {
@@ -2576,12 +2944,53 @@
        "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
-       "native": false,
+       "native": true,
        "nativeDetail": {
         "pics": 1,
         "basePics": 1,
         "srcRect": 1,
-        "bgBlip": false
+        "bgBlip": false,
+        "slideImagePictures": 1,
+        "previewSlideImages": 1,
+        "slides": [
+         {
+          "slide": 0,
+          "previewSlideImage": true,
+          "previewPosition": "right",
+          "previewFill": "fit",
+          "pictures": 1,
+          "relationship": {
+           "id": "rId1",
+           "type": "image",
+           "target": "ppt/media/image-1-1.png"
+          },
+          "imagePartExists": true,
+          "exportHash": "3ae701b391b694d5",
+          "prst": "rect",
+          "expectedPrst": "rect",
+          "srcRect": {
+           "l": "0",
+           "t": "-50000",
+           "r": "0",
+           "b": "-50000"
+          },
+          "previewHash": "3ae701b391b694d5",
+          "frameDeltaPt": 0,
+          "visible": {
+           "x": 640,
+           "y": 180,
+           "w": 640,
+           "h": 360
+          },
+          "previewVisible": {
+           "x": 640,
+           "y": 180,
+           "w": 640,
+           "h": 360
+          },
+          "cropDeltaPt": 0
+         }
+        ]
        }
       },
       "reimport": {
@@ -2614,7 +3023,6 @@
      },
      "class": "partial",
      "reasons": [
-      "export adds no native picture for design.slideImage",
       "treatment collapses to {\"position\":\"right\",\"fill\":\"fit\"}, identical OPF to masked-shape, circular-crop, collage-grid, device-frame, cutout-subject"
      ]
     }
@@ -2660,7 +3068,18 @@
       "pics": 0,
       "basePics": 0,
       "srcRect": 0,
-      "bgBlip": false
+      "bgBlip": false,
+      "slideImagePictures": 0,
+      "previewSlideImages": 0,
+      "slides": [
+       {
+        "slide": 0,
+        "previewSlideImage": false,
+        "previewPosition": "right",
+        "previewFill": "fit",
+        "pictures": 0
+       }
+      ]
      }
     },
     "reimport": {
@@ -2746,7 +3165,18 @@
         "pics": 0,
         "basePics": 0,
         "srcRect": 0,
-        "bgBlip": false
+        "bgBlip": false,
+        "slideImagePictures": 0,
+        "previewSlideImages": 0,
+        "slides": [
+         {
+          "slide": 0,
+          "previewSlideImage": false,
+          "previewPosition": "background",
+          "previewFill": "crop",
+          "pictures": 0
+         }
+        ]
        }
       },
       "reimport": {
@@ -2810,12 +3240,48 @@
        "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
-       "native": false,
+       "native": true,
        "nativeDetail": {
         "pics": 1,
         "basePics": 1,
         "srcRect": 0,
-        "bgBlip": false
+        "bgBlip": false,
+        "slideImagePictures": 1,
+        "previewSlideImages": 1,
+        "slides": [
+         {
+          "slide": 0,
+          "previewSlideImage": true,
+          "previewPosition": "background",
+          "previewFill": "crop",
+          "pictures": 1,
+          "relationship": {
+           "id": "rId1",
+           "type": "image",
+           "target": "ppt/media/image-1-1.png"
+          },
+          "imagePartExists": true,
+          "exportHash": "3ae701b391b694d5",
+          "prst": "rect",
+          "expectedPrst": "rect",
+          "srcRect": {},
+          "previewHash": "3ae701b391b694d5",
+          "frameDeltaPt": 0,
+          "visible": {
+           "x": 0,
+           "y": 0,
+           "w": 1280,
+           "h": 720
+          },
+          "previewVisible": {
+           "x": 0,
+           "y": 0,
+           "w": 1280,
+           "h": 720
+          },
+          "cropDeltaPt": 0
+         }
+        ]
        }
       },
       "reimport": {
@@ -2848,7 +3314,6 @@
      },
      "class": "partial",
      "reasons": [
-      "export adds no native picture for design.slideImage",
       "treatment collapses to {\"position\":\"background\",\"fill\":\"crop\"}, identical OPF to full-bleed, text-overlay, caption-overlay, background-blur, watermark, cinematic-crop"
      ]
     }
@@ -2894,7 +3359,18 @@
       "pics": 0,
       "basePics": 0,
       "srcRect": 0,
-      "bgBlip": false
+      "bgBlip": false,
+      "slideImagePictures": 0,
+      "previewSlideImages": 0,
+      "slides": [
+       {
+        "slide": 0,
+        "previewSlideImage": false,
+        "previewPosition": "background",
+        "previewFill": "crop",
+        "pictures": 0
+       }
+      ]
      }
     },
     "reimport": {
@@ -2980,7 +3456,18 @@
         "pics": 0,
         "basePics": 0,
         "srcRect": 0,
-        "bgBlip": false
+        "bgBlip": false,
+        "slideImagePictures": 0,
+        "previewSlideImages": 0,
+        "slides": [
+         {
+          "slide": 0,
+          "previewSlideImage": false,
+          "previewPosition": "background",
+          "previewFill": "crop",
+          "pictures": 0
+         }
+        ]
        }
       },
       "reimport": {
@@ -3044,12 +3531,48 @@
        "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
-       "native": false,
+       "native": true,
        "nativeDetail": {
         "pics": 1,
         "basePics": 1,
         "srcRect": 0,
-        "bgBlip": false
+        "bgBlip": false,
+        "slideImagePictures": 1,
+        "previewSlideImages": 1,
+        "slides": [
+         {
+          "slide": 0,
+          "previewSlideImage": true,
+          "previewPosition": "background",
+          "previewFill": "crop",
+          "pictures": 1,
+          "relationship": {
+           "id": "rId1",
+           "type": "image",
+           "target": "ppt/media/image-1-1.png"
+          },
+          "imagePartExists": true,
+          "exportHash": "3ae701b391b694d5",
+          "prst": "rect",
+          "expectedPrst": "rect",
+          "srcRect": {},
+          "previewHash": "3ae701b391b694d5",
+          "frameDeltaPt": 0,
+          "visible": {
+           "x": 0,
+           "y": 0,
+           "w": 1280,
+           "h": 720
+          },
+          "previewVisible": {
+           "x": 0,
+           "y": 0,
+           "w": 1280,
+           "h": 720
+          },
+          "cropDeltaPt": 0
+         }
+        ]
        }
       },
       "reimport": {
@@ -3082,7 +3605,6 @@
      },
      "class": "partial",
      "reasons": [
-      "export adds no native picture for design.slideImage",
       "treatment collapses to {\"position\":\"background\",\"fill\":\"crop\"}, identical OPF to full-bleed, text-overlay, caption-overlay, duotone, watermark, cinematic-crop"
      ]
     }
@@ -3128,7 +3650,18 @@
       "pics": 0,
       "basePics": 0,
       "srcRect": 0,
-      "bgBlip": false
+      "bgBlip": false,
+      "slideImagePictures": 0,
+      "previewSlideImages": 0,
+      "slides": [
+       {
+        "slide": 0,
+        "previewSlideImage": false,
+        "previewPosition": "background",
+        "previewFill": "crop",
+        "pictures": 0
+       }
+      ]
      }
     },
     "reimport": {
@@ -3214,7 +3747,18 @@
         "pics": 0,
         "basePics": 0,
         "srcRect": 0,
-        "bgBlip": false
+        "bgBlip": false,
+        "slideImagePictures": 0,
+        "previewSlideImages": 0,
+        "slides": [
+         {
+          "slide": 0,
+          "previewSlideImage": false,
+          "previewPosition": "top",
+          "previewFill": "crop",
+          "pictures": 0
+         }
+        ]
        }
       },
       "reimport": {
@@ -3277,12 +3821,53 @@
        "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
-       "native": false,
+       "native": true,
        "nativeDetail": {
         "pics": 1,
         "basePics": 1,
         "srcRect": 1,
-        "bgBlip": false
+        "bgBlip": false,
+        "slideImagePictures": 1,
+        "previewSlideImages": 1,
+        "slides": [
+         {
+          "slide": 0,
+          "previewSlideImage": true,
+          "previewPosition": "top",
+          "previewFill": "crop",
+          "pictures": 1,
+          "relationship": {
+           "id": "rId1",
+           "type": "image",
+           "target": "ppt/media/image-1-1.png"
+          },
+          "imagePartExists": true,
+          "exportHash": "3ae701b391b694d5",
+          "prst": "rect",
+          "expectedPrst": "rect",
+          "srcRect": {
+           "l": "0",
+           "t": "25000",
+           "r": "0",
+           "b": "25000"
+          },
+          "previewHash": "3ae701b391b694d5",
+          "frameDeltaPt": 0,
+          "visible": {
+           "x": 0,
+           "y": 0,
+           "w": 1280,
+           "h": 360
+          },
+          "previewVisible": {
+           "x": 0,
+           "y": 0,
+           "w": 1280,
+           "h": 360
+          },
+          "cropDeltaPt": 0
+         }
+        ]
        }
       },
       "reimport": {
@@ -3313,10 +3898,8 @@
        "other": 9
       }
      },
-     "class": "partial",
-     "reasons": [
-      "export adds no native picture for design.slideImage"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
    "editorPathSlugAgnostic": true,
@@ -3359,7 +3942,18 @@
       "pics": 0,
       "basePics": 0,
       "srcRect": 0,
-      "bgBlip": false
+      "bgBlip": false,
+      "slideImagePictures": 0,
+      "previewSlideImages": 0,
+      "slides": [
+       {
+        "slide": 0,
+        "previewSlideImage": false,
+        "previewPosition": "top",
+        "previewFill": "crop",
+        "pictures": 0
+       }
+      ]
      }
     },
     "reimport": {
@@ -3390,7 +3984,7 @@
      "other": 9
     }
    },
-   "withAssetsClass": "partial",
+   "withAssetsClass": "works",
    "previewExportDisagreement": [
     "preview effect=true but export native=false",
     "diagnostics differ: preview[unresolved-asset] export[]"
@@ -3445,7 +4039,18 @@
         "pics": 0,
         "basePics": 0,
         "srcRect": 0,
-        "bgBlip": false
+        "bgBlip": false,
+        "slideImagePictures": 0,
+        "previewSlideImages": 0,
+        "slides": [
+         {
+          "slide": 0,
+          "previewSlideImage": false,
+          "previewPosition": "right",
+          "previewFill": "fit",
+          "pictures": 0
+         }
+        ]
        }
       },
       "reimport": {
@@ -3509,12 +4114,53 @@
        "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
-       "native": false,
+       "native": true,
        "nativeDetail": {
         "pics": 1,
         "basePics": 1,
         "srcRect": 1,
-        "bgBlip": false
+        "bgBlip": false,
+        "slideImagePictures": 1,
+        "previewSlideImages": 1,
+        "slides": [
+         {
+          "slide": 0,
+          "previewSlideImage": true,
+          "previewPosition": "right",
+          "previewFill": "fit",
+          "pictures": 1,
+          "relationship": {
+           "id": "rId1",
+           "type": "image",
+           "target": "ppt/media/image-1-1.png"
+          },
+          "imagePartExists": true,
+          "exportHash": "3ae701b391b694d5",
+          "prst": "rect",
+          "expectedPrst": "rect",
+          "srcRect": {
+           "l": "0",
+           "t": "-50000",
+           "r": "0",
+           "b": "-50000"
+          },
+          "previewHash": "3ae701b391b694d5",
+          "frameDeltaPt": 0,
+          "visible": {
+           "x": 640,
+           "y": 180,
+           "w": 640,
+           "h": 360
+          },
+          "previewVisible": {
+           "x": 640,
+           "y": 180,
+           "w": 640,
+           "h": 360
+          },
+          "cropDeltaPt": 0
+         }
+        ]
        }
       },
       "reimport": {
@@ -3547,7 +4193,6 @@
      },
      "class": "partial",
      "reasons": [
-      "export adds no native picture for design.slideImage",
       "treatment collapses to {\"position\":\"right\",\"fill\":\"fit\"}, identical OPF to masked-shape, circular-crop, rounded-card, device-frame, cutout-subject"
      ]
     }
@@ -3593,7 +4238,18 @@
       "pics": 0,
       "basePics": 0,
       "srcRect": 0,
-      "bgBlip": false
+      "bgBlip": false,
+      "slideImagePictures": 0,
+      "previewSlideImages": 0,
+      "slides": [
+       {
+        "slide": 0,
+        "previewSlideImage": false,
+        "previewPosition": "right",
+        "previewFill": "fit",
+        "pictures": 0
+       }
+      ]
      }
     },
     "reimport": {
@@ -3679,7 +4335,18 @@
         "pics": 0,
         "basePics": 0,
         "srcRect": 0,
-        "bgBlip": false
+        "bgBlip": false,
+        "slideImagePictures": 0,
+        "previewSlideImages": 0,
+        "slides": [
+         {
+          "slide": 0,
+          "previewSlideImage": false,
+          "previewPosition": "right",
+          "previewFill": "fit",
+          "pictures": 0
+         }
+        ]
        }
       },
       "reimport": {
@@ -3743,12 +4410,53 @@
        "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
-       "native": false,
+       "native": true,
        "nativeDetail": {
         "pics": 1,
         "basePics": 1,
         "srcRect": 1,
-        "bgBlip": false
+        "bgBlip": false,
+        "slideImagePictures": 1,
+        "previewSlideImages": 1,
+        "slides": [
+         {
+          "slide": 0,
+          "previewSlideImage": true,
+          "previewPosition": "right",
+          "previewFill": "fit",
+          "pictures": 1,
+          "relationship": {
+           "id": "rId1",
+           "type": "image",
+           "target": "ppt/media/image-1-1.png"
+          },
+          "imagePartExists": true,
+          "exportHash": "3ae701b391b694d5",
+          "prst": "rect",
+          "expectedPrst": "rect",
+          "srcRect": {
+           "l": "0",
+           "t": "-50000",
+           "r": "0",
+           "b": "-50000"
+          },
+          "previewHash": "3ae701b391b694d5",
+          "frameDeltaPt": 0,
+          "visible": {
+           "x": 640,
+           "y": 180,
+           "w": 640,
+           "h": 360
+          },
+          "previewVisible": {
+           "x": 640,
+           "y": 180,
+           "w": 640,
+           "h": 360
+          },
+          "cropDeltaPt": 0
+         }
+        ]
        }
       },
       "reimport": {
@@ -3781,7 +4489,6 @@
      },
      "class": "partial",
      "reasons": [
-      "export adds no native picture for design.slideImage",
       "treatment collapses to {\"position\":\"right\",\"fill\":\"fit\"}, identical OPF to masked-shape, circular-crop, rounded-card, collage-grid, cutout-subject"
      ]
     }
@@ -3827,7 +4534,18 @@
       "pics": 0,
       "basePics": 0,
       "srcRect": 0,
-      "bgBlip": false
+      "bgBlip": false,
+      "slideImagePictures": 0,
+      "previewSlideImages": 0,
+      "slides": [
+       {
+        "slide": 0,
+        "previewSlideImage": false,
+        "previewPosition": "right",
+        "previewFill": "fit",
+        "pictures": 0
+       }
+      ]
      }
     },
     "reimport": {
@@ -3913,7 +4631,18 @@
         "pics": 0,
         "basePics": 0,
         "srcRect": 0,
-        "bgBlip": false
+        "bgBlip": false,
+        "slideImagePictures": 0,
+        "previewSlideImages": 0,
+        "slides": [
+         {
+          "slide": 0,
+          "previewSlideImage": false,
+          "previewPosition": "right",
+          "previewFill": "fit",
+          "pictures": 0
+         }
+        ]
        }
       },
       "reimport": {
@@ -3977,12 +4706,53 @@
        "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
-       "native": false,
+       "native": true,
        "nativeDetail": {
         "pics": 1,
         "basePics": 1,
         "srcRect": 1,
-        "bgBlip": false
+        "bgBlip": false,
+        "slideImagePictures": 1,
+        "previewSlideImages": 1,
+        "slides": [
+         {
+          "slide": 0,
+          "previewSlideImage": true,
+          "previewPosition": "right",
+          "previewFill": "fit",
+          "pictures": 1,
+          "relationship": {
+           "id": "rId1",
+           "type": "image",
+           "target": "ppt/media/image-1-1.png"
+          },
+          "imagePartExists": true,
+          "exportHash": "3ae701b391b694d5",
+          "prst": "rect",
+          "expectedPrst": "rect",
+          "srcRect": {
+           "l": "0",
+           "t": "-50000",
+           "r": "0",
+           "b": "-50000"
+          },
+          "previewHash": "3ae701b391b694d5",
+          "frameDeltaPt": 0,
+          "visible": {
+           "x": 640,
+           "y": 180,
+           "w": 640,
+           "h": 360
+          },
+          "previewVisible": {
+           "x": 640,
+           "y": 180,
+           "w": 640,
+           "h": 360
+          },
+          "cropDeltaPt": 0
+         }
+        ]
        }
       },
       "reimport": {
@@ -4015,7 +4785,6 @@
      },
      "class": "partial",
      "reasons": [
-      "export adds no native picture for design.slideImage",
       "treatment collapses to {\"position\":\"right\",\"fill\":\"fit\"}, identical OPF to masked-shape, circular-crop, rounded-card, collage-grid, device-frame"
      ]
     }
@@ -4061,7 +4830,18 @@
       "pics": 0,
       "basePics": 0,
       "srcRect": 0,
-      "bgBlip": false
+      "bgBlip": false,
+      "slideImagePictures": 0,
+      "previewSlideImages": 0,
+      "slides": [
+       {
+        "slide": 0,
+        "previewSlideImage": false,
+        "previewPosition": "right",
+        "previewFill": "fit",
+        "pictures": 0
+       }
+      ]
      }
     },
     "reimport": {
@@ -4147,7 +4927,18 @@
         "pics": 0,
         "basePics": 0,
         "srcRect": 0,
-        "bgBlip": false
+        "bgBlip": false,
+        "slideImagePictures": 0,
+        "previewSlideImages": 0,
+        "slides": [
+         {
+          "slide": 0,
+          "previewSlideImage": false,
+          "previewPosition": "background",
+          "previewFill": "crop",
+          "pictures": 0
+         }
+        ]
        }
       },
       "reimport": {
@@ -4211,12 +5002,48 @@
        "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
-       "native": false,
+       "native": true,
        "nativeDetail": {
         "pics": 1,
         "basePics": 1,
         "srcRect": 0,
-        "bgBlip": false
+        "bgBlip": false,
+        "slideImagePictures": 1,
+        "previewSlideImages": 1,
+        "slides": [
+         {
+          "slide": 0,
+          "previewSlideImage": true,
+          "previewPosition": "background",
+          "previewFill": "crop",
+          "pictures": 1,
+          "relationship": {
+           "id": "rId1",
+           "type": "image",
+           "target": "ppt/media/image-1-1.png"
+          },
+          "imagePartExists": true,
+          "exportHash": "3ae701b391b694d5",
+          "prst": "rect",
+          "expectedPrst": "rect",
+          "srcRect": {},
+          "previewHash": "3ae701b391b694d5",
+          "frameDeltaPt": 0,
+          "visible": {
+           "x": 0,
+           "y": 0,
+           "w": 1280,
+           "h": 720
+          },
+          "previewVisible": {
+           "x": 0,
+           "y": 0,
+           "w": 1280,
+           "h": 720
+          },
+          "cropDeltaPt": 0
+         }
+        ]
        }
       },
       "reimport": {
@@ -4249,7 +5076,6 @@
      },
      "class": "partial",
      "reasons": [
-      "export adds no native picture for design.slideImage",
       "treatment collapses to {\"position\":\"background\",\"fill\":\"crop\"}, identical OPF to full-bleed, text-overlay, caption-overlay, duotone, background-blur, cinematic-crop"
      ]
     }
@@ -4295,7 +5121,18 @@
       "pics": 0,
       "basePics": 0,
       "srcRect": 0,
-      "bgBlip": false
+      "bgBlip": false,
+      "slideImagePictures": 0,
+      "previewSlideImages": 0,
+      "slides": [
+       {
+        "slide": 0,
+        "previewSlideImage": false,
+        "previewPosition": "background",
+        "previewFill": "crop",
+        "pictures": 0
+       }
+      ]
      }
     },
     "reimport": {
@@ -4381,7 +5218,18 @@
         "pics": 0,
         "basePics": 0,
         "srcRect": 0,
-        "bgBlip": false
+        "bgBlip": false,
+        "slideImagePictures": 0,
+        "previewSlideImages": 0,
+        "slides": [
+         {
+          "slide": 0,
+          "previewSlideImage": false,
+          "previewPosition": "background",
+          "previewFill": "crop",
+          "pictures": 0
+         }
+        ]
        }
       },
       "reimport": {
@@ -4445,12 +5293,48 @@
        "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
-       "native": false,
+       "native": true,
        "nativeDetail": {
         "pics": 1,
         "basePics": 1,
         "srcRect": 0,
-        "bgBlip": false
+        "bgBlip": false,
+        "slideImagePictures": 1,
+        "previewSlideImages": 1,
+        "slides": [
+         {
+          "slide": 0,
+          "previewSlideImage": true,
+          "previewPosition": "background",
+          "previewFill": "crop",
+          "pictures": 1,
+          "relationship": {
+           "id": "rId1",
+           "type": "image",
+           "target": "ppt/media/image-1-1.png"
+          },
+          "imagePartExists": true,
+          "exportHash": "3ae701b391b694d5",
+          "prst": "rect",
+          "expectedPrst": "rect",
+          "srcRect": {},
+          "previewHash": "3ae701b391b694d5",
+          "frameDeltaPt": 0,
+          "visible": {
+           "x": 0,
+           "y": 0,
+           "w": 1280,
+           "h": 720
+          },
+          "previewVisible": {
+           "x": 0,
+           "y": 0,
+           "w": 1280,
+           "h": 720
+          },
+          "cropDeltaPt": 0
+         }
+        ]
        }
       },
       "reimport": {
@@ -4483,7 +5367,6 @@
      },
      "class": "partial",
      "reasons": [
-      "export adds no native picture for design.slideImage",
       "treatment collapses to {\"position\":\"background\",\"fill\":\"crop\"}, identical OPF to full-bleed, text-overlay, caption-overlay, duotone, background-blur, watermark"
      ]
     }
@@ -4529,7 +5412,18 @@
       "pics": 0,
       "basePics": 0,
       "srcRect": 0,
-      "bgBlip": false
+      "bgBlip": false,
+      "slideImagePictures": 0,
+      "previewSlideImages": 0,
+      "slides": [
+       {
+        "slide": 0,
+        "previewSlideImage": false,
+        "previewPosition": "background",
+        "previewFill": "crop",
+        "pictures": 0
+       }
+      ]
      }
     },
     "reimport": {

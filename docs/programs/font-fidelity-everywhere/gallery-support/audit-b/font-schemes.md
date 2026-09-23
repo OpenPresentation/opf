@@ -8,14 +8,14 @@ Schema-valid 89/89. Catalog id resolves in core 89/89.
 
 | count | reason |
 |---|---|
-| 89 | theme ea/cs empty; re-import drops fontScheme |
-| 81 | no bundled or substitute face: strict preview throws font-unavailable (..); host-font preview is unmeasured fallback |
-| 6 | preview needs office-pack substitution (..)); export with that registry writes the substitute, not the chosen family |
-| 2 | non-Latin textSample: strict font-unavailable:Noto Naskh Arabic |
-| 1 | preview needs office-pack substitution (..),Aptos->Carlito(..)); export with that registry writes the substitute, not the chosen family |
-| 1 | non-Latin textSample: strict font-unavailable:Microsoft YaHei |
-| 1 | non-Latin textSample: strict font-unavailable:SimSun |
-| 1 | non-Latin textSample: strict font-unavailable:FangSong |
+| 89 | theme major/minor ea or cs typeface is empty |
+| 81 | no bundled or substitute face: .. |
+| 60 | non-Latin textSample: .. |
+| 1 | preview needs office-pack substitution (..)); export with that registry writes Consolas/Consolas |
+| 1 | preview needs office-pack substitution (..)); export with that registry writes Courier New/Courier New |
+| 1 | preview needs office-pack substitution (..)); export with that registry writes Calibri/Calibri |
+| 1 | preview needs office-pack substitution (..)); export with that registry writes Tahoma/Tahoma |
+| 1 | preview needs office-pack substitution (..)); export with that registry writes Times New Roman/Times New Roman |
 
 Preview tier: substitute 7, host-only 81, bundled 1. Openly licensed (gallery license/scope) 30/89; bundled for preview 1/89.
 

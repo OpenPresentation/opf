@@ -13,10 +13,11 @@ changes nothing in the preview or the PPTX is not reported as working.
 mains on 2026-09-23, after the FF-20, FF-25, FF-26, FF-27 and FF-34 merges).
 This is the program's progress metric. The 900 values are the 793
 presence-audited values plus 107 parity-only records: 76 charts and 31
-`withAssets` variants. The presence audits below find 362 of 793 values
-`works` (7 at the first measurement); see the
-[measurement notes](#measurement-notes-2026-09-23-re-run) before reading the
-audit B classes.
+`withAssets` variants. The presence audits below find 352 of 793 values
+`works` (7 at the first measurement). Audit B now resolves theme colours and
+classifies languages from measured fields, and audit A detects the native
+slide-image picture; see the
+[measurement notes](#measurement-notes-2026-09-23-re-run).
 
 Two measurements are recorded here:
 
@@ -27,7 +28,7 @@ Two measurements are recorded here:
 
 | Repository | Presence audits A and B | Parity scoreboard (FF-38) | Previous parity run (opf#122) | Parity baseline (history) |
 | --- | --- | --- | --- | --- |
-| opf (core) | `a74f3f6` | `6263985` | `c278532` | `53be042` |
+| opf (core) | `33d636d` | `6263985` | `c278532` | `53be042` |
 | opf-render | `bc436f3` | `bc436f3` | `47d19b2` | `e500ed9` |
 | opf-pptx | `9092954` | `9092954` | `5b657c9` | `cf0bc0c` |
 | opf-editor | `214ae69` (audit B) | not used | not used | not used |
@@ -43,7 +44,10 @@ FF-27 and FF-34 (opf-pptx#65 included), FF-31's exporter half
 the harness learned to map the FF-26 slide-image picture and, since, to fail
 non-finite geometry and check crop position; the run before the mapping is
 kept at
-[parity/history/2026-09-23-opf137/PARITY.md](gallery-support/parity/history/2026-09-23-opf137/PARITY.md). pptx-gallery is still `f17e9ae`: none
+[parity/history/2026-09-23-opf137/PARITY.md](gallery-support/parity/history/2026-09-23-opf137/PARITY.md).
+The presence audits were re-run at opf `33d636d` (documentation and harness
+only since `a74f3f6`) with the FF-36 audit probe update; unmodified, they
+reproduce the committed `a74f3f6` classes exactly. pptx-gallery is still `f17e9ae`: none
 of its program PRs (#40 to #46) has merged, so every snippet is the
 pre-program snippet. The per-dimension prose below the summary
 table describes the first measurement unless a paragraph says otherwise.
@@ -162,27 +166,58 @@ substitute).
   to the preview slide-image group and compares its visible image rect (see
   the [gallery-support README](gallery-support/README.md#slide-image-mapping-ff-26)).
   No tolerance changed and no value regressed.
-- **Audit B classes predate FF-24, FF-32 and FF-34.** Its probes read slide
-  colours and the `p:bg` fill only from `srgbClr`. Since FF-24 the export uses
-  `schemeClr`, so all 14 colour schemes and all 4 themes are classed `broken`
-  ("colour mismatch", "export non-solid"). The parity theme and fills checks
-  pass for the same values. Several reason strings are fixed text in
-  `summarize.mjs`, for example "re-import loses colorScheme id silently", and
-  are printed whatever was measured. Narratives, audiences, tones and socials
-  are `works` only because removing the field changes one exporter-written
-  part, `ppt/tags/opfDocument.xml`. The preview is identical for all 41, and
-  no social handle appears in preview or export (`handleInPreview` and
-  `handleInExport` are false), because the pre-program snippet shows no
-  footer. Re-import does return the socials for 10 of 10. The results are
-  committed as measured; the classifier needs a follow-up before badges
-  (FF-36) use audit B.
-- **Audit A image treatments.** All 15 are `partial` and still report "export
-  adds no native picture for design.slideImage". With the asset supplied, the
-  value and its baseline document both export one `p:pic`, so the probe's
-  "more pictures than the baseline" rule does not fire. The gallery snippets
-  still collapse 13 treatments to two OPF documents and reference `asset:hero`
-  without an `assets` entry. Those gallery fixes are pptx-gallery#44 and #45,
-  which are still open.
+- **Audit B probes and classifier (FF-36 audit update).** Before the update,
+  audit B read slide colours and the `p:bg` fill only from `srgbClr`, so after
+  FF-24 all 14 colour schemes and all 4 themes were `broken` ("colour
+  mismatch", "export non-solid"), and several reasons were fixed text printed
+  whatever was measured. Now:
+  - Slide colours resolve `a:schemeClr` through the slide's colour map (the
+    master `p:clrMap` unless the slide overrides it) to the exported theme
+    `clrScheme`. A colour with child transforms (`lumMod`, `lumOff`, `tint`,
+    `shade`, `alpha`) is reported as unresolved and can never count as
+    agreeing, because the audit, like the parity harness, does not compute
+    transforms. None occurs in current exports.
+  - Preview and export are compared deck-wide and slide by slide: scheme slots
+    used, any resolved export colour the preview slide does not paint, and the
+    slide background. All 14 schemes and 4 themes agree on every slide, with
+    the theme `clrScheme` at 12/12. They are `partial` because 42 of the 55
+    slide colour uses in each colour-scheme deck (2 of 3 in each theme deck)
+    still write a scheme slot colour as literal `srgbClr`, for example text in
+    `light1` `FFFFFF`. The FF-24 acceptance asks for `schemeClr` there.
+  - Languages are classified from the catalog `ooxmlLang`, `direction` and the
+    script slot of the gallery's native name, against the slide runs, `rtl`
+    paragraphs, run and theme `ea`/`cs` faces, the preview and re-import.
+    All 93 are `partial`; see [Languages](#languages).
+  - Every reason is conditional on a measured field, and `works` needs an
+    empty reason list. Socials therefore move from `works` to `partial`: the
+    pre-program snippet renders no handle in preview or export
+    (`handleInPreview` and `handleInExport` false), although re-import returns
+    the socials for 10 of 10. Narratives, audiences and tones stay `works`:
+    removing the field changes `ppt/tags/opfDocument.xml` and re-import returns
+    the value for all 31; the preview is identical, as expected for authoring
+    metadata.
+  - `sharedExportGaps` is now measured over the 245 exports. The only gap
+    every export shares is the `heading-import-reflow` re-import diagnostic.
+  - Mutation checks, run on scratch copies of the exported packages: pointing
+    the slides' `accent1` references at `accent2`, swapping `bg2`/`tx2` in the
+    master colour map, or recolouring theme `accent1` makes every colour scheme
+    `broken`; adding `lumMod` to `accent1` references reports the unresolved
+    transform. None of these leaves a value `works`.
+- **Audit A image treatments (FF-36 audit update).** The probe used to require
+  more pictures than a baseline document, but the baseline keeps the slide's
+  own image as a picture, so it never fired. It now finds the picture named
+  `OPF slide image slides.N`, requires its `r:embed` to resolve to an image
+  part, and compares its visible frame and crop with the traced preview at
+  0.02 pt, using the parity harness geometry (`visibleImage`, `placedImage`,
+  `cropDelta`). With the asset supplied, all 15 pictures match at 0 pt with
+  the preview's image bytes, and `side-by-side` and `image-strip` are `works`.
+  The other 13 are `partial` because their treatment collapses to the same OPF
+  document as others. The published snippets have no asset, so neither preview
+  nor export has a slide image and all 15 stay `partial`. In mutation checks,
+  removing or renaming the picture, taking its crop from one side (240 pt and
+  135 pt crop deltas), or moving it by 1 pt turns both `works` values
+  `partial` with a named reason. The gallery fixes are
+  pptx-gallery#44 and #45, which are still open.
 
 ### Universal blockers
 
@@ -238,11 +273,11 @@ The definitions are the audits' own classifiers
 
 | Status | Definition |
 | --- | --- |
-| `works` | Schema-valid; every catalog reference resolves; the preview shows the value (differs from the baseline); the export is a valid package with the dimension's native PowerPoint XML; re-import keeps the value; and the audit recorded no reason against it. In audit B, only a metadata value whose catalog id resolves and whose removal changes the preview or export could be `works`; none did. |
-| `partial` | Schema-valid, preview and export succeed and the value has an effect in at least one of them, but at least one fidelity check fails (no native XML, preview/export disagreement, re-import loss, unresolved reference, gallery option dropped by the snippet). Audit B: color schemes whose preview and export colours agree; font schemes whose export writes the chosen major/minor families with no foreign typeface; themes whose background and fonts match in both. |
-| `schema-only` | Validates and renders/exports without error, but the preview is identical to the baseline and the export has no native equivalent (audit A); or, for languages, no engine reads the field (audit B). |
+| `works` | Schema-valid; every catalog reference resolves; the preview shows the value (differs from the baseline); the export is a valid package with the dimension's native PowerPoint XML; re-import keeps the value; and the audit recorded no reason against it. In audit B every reason is a measured result, and `works` needs an empty reason list. |
+| `partial` | Schema-valid, preview and export succeed and the value has an effect in at least one of them, but at least one fidelity check fails (no native XML, preview/export disagreement, re-import loss, unresolved reference, gallery option dropped by the snippet). Audit B: color schemes and themes whose preview and export colours agree deck-wide and slide by slide; font schemes whose export writes the chosen major/minor families with no foreign typeface; languages whose field changes the preview or export. |
+| `schema-only` | Validates and renders/exports without error, but the preview is identical to the baseline and the export has no native equivalent (audit A); or, for languages, removing the field changes neither the preview nor any PPTX part (audit B). |
 | `authoring-metadata` | The catalog id resolves in core, and removing the field leaves the SVG and every PPTX part byte-identical. It is consumed only by validator/lint/bundle catalog checks, opf-editor transfer mapping and authoring skills. |
-| `broken` | Schema-invalid, or preview or export throws (audit A); or the export contradicts the value, for example typefaces that differ from the scheme (audit B). At the first measurement no value was `broken`; see the measurement notes for the current audit B `broken` rows. |
+| `broken` | Schema-invalid, or preview, export or re-import throws; or the export contradicts the value, for example typefaces that differ from the scheme, or slide colours (`a:schemeClr` resolved through the exported theme) or backgrounds that differ from the preview (audit B). No value is `broken` on current mains. |
 | `gallery-only` | The gallery id has no core equivalent: a legacy gallery layout slug with no OPF canonical id, portable only through inline `catalogs.layouts.records` (audit A; its measured class is kept as `measuredStatus`); or a narrative/audience id missing from the core catalog (audit B). |
 
 `support-status.json` also flags `previewOnly` for audit A values whose
@@ -251,26 +286,27 @@ preview shows the value while the export has no native equivalent.
 ## Summary
 
 Presence: 793 values measured across 13 dimensions; charts have no presence
-status until FF-22. 362 values are `works` (7 at the first measurement).
+status until FF-22. 352 values are `works` (7 at the first measurement; 362
+before the FF-36 audit probe update moved socials to `partial`).
 Parity: 4 of 900 perfect. Counts are for current mains; the "What actually
 works" column keeps the first measurement's wording unless marked "Now".
 
 | Dimension | Values | works | partial | schema-only | authoring-metadata | gallery-only | broken | Parity perfect | What actually works for a developer |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [Layouts](#layouts) | 485 | 289 | 126 | 0 | 0 | 70 | 0 | 0/485 | Snippets validate, preview and export. Only 30 layouts are in the core catalog. Now: re-import keeps design and emits specific diagnostics (FF-32), so 289 are `works`. |
-| [Color schemes](#color-schemes) | 14 | 0 | 0 | 0 | 0 | 0 | 14 | 0/14 | Now: theme `clrScheme` and `schemeClr` references (FF-24). The 14 `broken` are an audit B probe artifact; see the measurement notes. |
+| [Color schemes](#color-schemes) | 14 | 0 | 14 | 0 | 0 | 0 | 0 | 0/14 | Now: theme `clrScheme` 12/12 and `schemeClr` references (FF-24); preview and export colours agree slide by slide. `partial` because 42 of 55 slide colour uses still write scheme slot colours as literal `srgbClr`. |
 | [Font schemes](#font-schemes) | 93 | 0 | 93 | 0 | 0 | 0 | 0 | 4/93 | Export without a font registry writes the chosen heading/body families for all 93. Now: `calibri`, `courier-new`, `times-new-roman` and `roboto` are perfect by parity. |
-| [Languages](#languages) | 93 | 0 | 0 | 93 | 0 | 0 | 0 | 0/93 | Now: runs carry the language tag, RTL languages export `rtl`, and re-import keeps the language (93/93). The `schema-only` class is a stale classifier; see [Languages](#languages). Parity fails only font resolution. |
+| [Languages](#languages) | 93 | 0 | 93 | 0 | 0 | 0 | 0 | 0/93 | Now: slide runs carry the catalog `ooxmlLang` (93/93), right-to-left text exports `rtl` and previews right-to-left (6/6), and re-import keeps the language (93/93). `partial` on font availability and engine font-scheme derivation. Parity fails only font resolution. |
 | [Backgrounds](#backgrounds) | 6 | 2 | 4 | 0 | 0 | 0 | 0 | 0/6 | Solid and gradient work end to end. Now: `photography` with its asset is `works`; the three pattern slugs still collapse in the gallery snippet (pptx-gallery#43). |
 | [Narratives](#narratives) | 10 | 10 | 0 | 0 | 0 | 0 | 0 | 0/10 | Now: every id resolves in core (FF-28). `works` only because the exporter-written `ppt/tags/opfDocument.xml` part changes; the preview is identical when the field is removed. |
 | [Charts](#charts) | 76 | | | | | | | 0/76 | Core catalog reduced to the 25 Aspose.Slides-supported types (FF-22, opf#121); the gallery half is pending. No presence status yet. Parity: geometry passes; chart text passes for 26, colours for 9. |
-| [Themes](#themes) | 4 | 0 | 0 | 0 | 0 | 0 | 4 | 0/4 | Background and fonts apply in preview and export. The 4 `broken` are an audit B probe artifact; see the measurement notes. |
+| [Themes](#themes) | 4 | 0 | 4 | 0 | 0 | 0 | 0 | 0/4 | Background and fonts apply in preview and export. Now: background and colours resolve through the theme and agree with the preview; `partial` on literal scheme colours and font availability. |
 | [Audiences](#audiences) | 14 | 14 | 0 | 0 | 0 | 0 | 0 | 0/14 | Now: every id resolves in core (FF-28). `works` only because `ppt/tags/opfDocument.xml` changes; the preview is identical. |
 | [Tones](#tones) | 7 | 7 | 0 | 0 | 0 | 0 | 0 | 0/7 | `works` only because `ppt/tags/opfDocument.xml` changes; the preview is identical. |
-| [Socials](#socials) | 10 | 10 | 0 | 0 | 0 | 0 | 0 | 0/10 | Now: re-import returns the organization and speaker socials for 10/10 (FF-34). The pre-program gallery snippet shows no footer, so no handle is rendered in preview or export; `works` comes from the `ppt/tags/opfDocument.xml` diff. The rendering snippet is pptx-gallery#42. Parity fails only font resolution. |
+| [Socials](#socials) | 10 | 0 | 10 | 0 | 0 | 0 | 0 | 0/10 | Now: re-import returns the organization and speaker socials for 10/10 (FF-34). The pre-program gallery snippet shows no footer, so no handle is rendered in preview or export, and audit B now classes them `partial` for that. The rendering snippet is pptx-gallery#42. Parity fails only font resolution. |
 | [Headers & footers](#headers-and-footers) | 10 | 1 | 9 | 0 | 0 | 0 | 0 | 0/10 | Now: native slide-number and date fields (FF-27). The snippet still drops gallery options (pptx-gallery#45), and 3 dated values report `unresolved-content`. |
 | [Content blocks](#content-blocks) | 32 | 29 | 3 | 0 | 0 | 0 | 0 | 0/32 | Blocks render and export. `market-opportunity` and `financial-snapshot` still lose metric text (FF-30, pptx-gallery#44). |
-| [Image treatments](#image-treatments) | 15 | 0 | 15 | 0 | 0 | 0 | 0 | 0/15 | Now: `design.slideImage` renders and exports as a picture (FF-26). The snippets still omit the asset and collapse 13 treatments to two documents (pptx-gallery#44, #45). |
+| [Image treatments](#image-treatments) | 15 | 0 | 15 | 0 | 0 | 0 | 0 | 0/15 | Now: `design.slideImage` renders and exports as a native picture (FF-26); with the asset supplied, all 15 match the preview frame and crop at 0 pt, and `side-by-side` and `image-strip` are `works`. The snippets still omit the asset and collapse 13 treatments to two documents (pptx-gallery#44, #45). |
 
 ### Shared export gaps (every exported value, audit B)
 
@@ -359,6 +395,12 @@ slugs with no OPF canonical id (`gallery-only`; all 70 measured `partial`).
   12 for `corporate-blue`). Recolouring the deck in PowerPoint therefore does
   not follow the chosen scheme.
 - **Re-import.** The colour scheme id is dropped silently (14/14).
+- **Now (audit B, opf `33d636d`).** `partial` 14. The theme `clrScheme`
+  matches 12/12 slots, 11 of 55 slide colour uses per deck are `schemeClr`,
+  and resolved through the theme they agree with the preview on every slide,
+  backgrounds included. 42 uses still write a scheme slot colour as literal
+  `srgbClr` (for example text in `light1`), which FF-24 asks to be
+  `schemeClr`. Re-import returns the colour scheme id for 14 of 14.
 - **Parity (FF-38).** 0 of 14 perfect. Fills, z-order, mapping and, since
   FF-24, the theme check pass. Text and geometry fail on the centered-text
   blocker.
@@ -395,31 +437,32 @@ gallery inlines, not in the core catalog), all `partial`.
 
 ## Languages
 
-93 values, all classed `schema-only` by audit B. That class and three of its
-reason strings are stale: `summarize.mjs` always adds "no engine reads
-`language`" and "re-import drops language", and it adds "RTL language but no
-rtl attribute emitted" by language id, whatever was measured. The measured
-fields in `audit-b/results.json` on current mains (opf `a74f3f6`, opf-pptx
-`9092954`, opf-render `bc436f3`) show the following. Every id resolves in core.
+93 values, all `partial`. Audit B derives the class from measured fields
+only (re-run at opf `33d636d`, opf-pptx `9092954`, opf-render `bc436f3`;
+see the [measurement notes](#measurement-notes-2026-09-23-re-run)). Every id
+resolves in core.
 
 - **Works (FF-07, FF-19, FF-32).**
-  - Removing `language` changes both the preview and the export for all 93
-    (`previewIdentical` false). The export parts that change include the
-    slide, masters, theme and `ppt/tags/opfDocument.xml`.
-  - Runs carry the language tag, not a fixed `en-US`. 84 languages export
-    exactly their region form, for example Arabic `ar-SA`, Hebrew `he-IL` and
-    Japanese `ja-JP`. Only the two English entries export `en-US`.
-  - The 9 remaining languages export a normalised tag. Their catalog
-    `bcp47` differs, which trips the audit's literal comparison:
-    - `zh-Hans` to `zh-CN` and `zh-Hant` to `zh-TW`;
-    - `pa-Guru` to `pa-IN` and `vi-Latn` to `vi-VN`;
-    - `no` to `nb-NO`, `tl` to `fil-PH` and `zsm` to `ms-MY`;
-    - `ctg` to `bn-BD` and `ber-Latn` to `tzm-Latn-DZ`.
-  - Right-to-left languages export `rtl` on 39 paragraphs: Arabic, Hebrew,
-    Pashto, Persian, Urdu and Punjabi (Shahmukhi).
-  - For the 24 languages whose scheme is not `aptos`, theme major/minor `ea`
-    and `cs` carry the language's font, for example Arabic Typesetting, Shonar
-    Bangla and Microsoft YaHei. No foreign typeface appears in any export.
+  - Removing `language` changes both the preview and the export for all 93.
+    In the preview the only change is the SVG `lang` attribute. The export
+    parts that change include the slide, masters, theme and
+    `ppt/tags/opfDocument.xml`.
+  - Slide runs carry exactly the catalog `ooxmlLang` for 93 of 93, for
+    example Arabic `ar-SA`, Japanese `ja-JP`, Norwegian `nb-NO` and
+    Chittagonian `bn-BD`. Only the two English entries export `en-US`.
+  - Direction is measured on the gallery's native name used as the title. The
+    six right-to-left languages (Arabic, Hebrew, Pashto, Persian, Urdu and
+    Punjabi (Shahmukhi)) export `rtl="1"` on that paragraph, and the preview
+    marks the same line right-to-left, 1 of 1 each. No left-to-right language
+    has an `rtl` paragraph. The snippet's own Latin subtitle is written
+    `rtl="0"`. The earlier count of 39 `rtl` attributes was package-wide
+    (presentation, master and notes defaults), not slide paragraphs.
+  - The native name uses the `cs` font slot for 21 languages and `ea` for 4
+    (the parity harness's script test). In each, the runs name the language's
+    font in that slot. For the 24 languages whose scheme is not `aptos`,
+    theme major/minor `ea` and `cs` carry the language's font, for example
+    Arabic Typesetting, Shonar Bangla and Microsoft YaHei. No foreign typeface
+    appears in any export.
   - Re-import returns the language id for 93 of 93, and the font scheme with
     it.
 - **Remaining gaps.**
@@ -431,12 +474,11 @@ fields in `audit-b/results.json` on current mains (opf `a74f3f6`, opf-pptx
     Thai, Urdu and others). This is FF-31 and FF-19.
   - Theme `ea`/`cs` stay empty for 69 languages: the 66 on `aptos`, plus
     Amharic (Nyala), Armenian and Georgian (Sylfaen). Whether those empty
-    values are allowed depends on FF-05.
+    values are allowed depends on FF-05. Amharic and Georgian native text uses
+    the `cs` slot, so audit B records it as a reason for those two.
   - The engines do not yet derive the font scheme from `language` alone
     (`engineAppliesLanguageFontScheme` false for all 93). The visible font
     comes from the `design.fontScheme` that the gallery snippet injects.
-  - The audit B classifier needs the follow-up noted in the
-    [measurement notes](#measurement-notes-2026-09-23-re-run).
 - **Native finding (FF-04, not yet a merged evidence bundle).** PowerPoint's
   `Presentation.Fonts` for an unedited exporter deck lists a nameless font and
   `Aptos` at open. Filling theme major/minor `ea`/`cs` (Carlito) did not change
@@ -446,7 +488,7 @@ fields in `audit-b/results.json` on current mains (opf `a74f3f6`, opf-pptx
   typefaces, re-import, theme and mapping pass for all 93; only font
   resolution fails.
 - **Fixes.** FF-31 (font availability), FF-19 (script fonts), FF-05 (empty
-  `ea`/`cs` policy), and an audit B classifier follow-up.
+  `ea`/`cs` policy).
 
 ## Backgrounds
 
@@ -525,6 +567,12 @@ of FF-22. Per-chart parity is in `support-status.json`
   are not bundled and have no substitute; `bold` substitutes (Anton, Oswald)
   are not bundled.
 - **Re-import.** Keeps only `dimensions`; the theme id is dropped silently.
+- **Now (audit B, opf `33d636d`).** `partial` 4. The theme `clrScheme`
+  matches 12/12, the `p:bg` `schemeClr` resolves to the expected
+  background, and colours agree with the preview. Reasons: text written in a
+  scheme slot colour as literal `srgbClr` (2 uses each), and fonts that are
+  not bundled (`minimal` previews through Carlito). Re-import returns the
+  theme id for 4 of 4.
 - **Parity (FF-38).** 0 of 4 perfect. Geometry and text pass for 3 of 4.
 - **Fixes.** FF-24, FF-31, FF-32.
 
@@ -565,6 +613,10 @@ of FF-22. Per-chart parity is in `support-status.json`
   icons. Neither the schema nor the gallery record carries a platform size or
   aspect ratio.
 - **Re-import.** Organization and speaker are dropped.
+- **Now (audit B, opf `33d636d`).** `partial` 10. Re-import returns the
+  organization and speaker socials for 10 of 10 (FF-34), and removing them
+  changes `ppt/tags/opfDocument.xml`, but the pre-program gallery snippet
+  renders no handle in preview or export (pptx-gallery#42).
 - **Parity (FF-38).** 0 of 10 perfect.
 - **Fixes.** FF-34.
 
@@ -637,6 +689,12 @@ PowerPoint `p:hf` objects stay out of scope.
     PPTX.
 - **Re-import.** `design.slideImage` is dropped (15/15; with an image, also
   `unsupported-image-crop`).
+- **Now (audit A, opf `33d636d`).** `partial` 15. With the asset supplied,
+  each treatment exports one picture named `OPF slide image slides.0` with
+  its image part, the preview's image bytes, and the preview's visible frame
+  and crop (0 pt). `side-by-side` and `image-strip` are `works`; the other
+  13 are `partial` only because their OPF documents collapse. Without the
+  asset, neither preview nor export has a slide image.
 - **Editor.** `/editor?config=image-treatments:<slug>` emits the same design
   for every slug.
 - **Parity (FF-38).** 0 of 15 perfect, with or without an image supplied.
