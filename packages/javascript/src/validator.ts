@@ -735,6 +735,18 @@ function presentationReferenceWarnings(value: unknown): ValidationIssue[] {
     pushIfDefined(issues, unknownIdWarning("narratives", value.narrative, "/narrative", context));
   }
 
+  // Audience strings are often free-form ('Series B investors'); only a bare
+  // kebab-case id reads as a catalog reference, and unknownIdWarning skips
+  // everything else. An inline Audience object's 'id' is always a catalog
+  // reference (a custom audience uses 'name'), so it is checked too.
+  if (Array.isArray(value.audience)) {
+    value.audience.forEach((entry, index) => {
+      pushIfDefined(issues, referenceObjectWarning("audiences", entry, `/audience/${index}`, context));
+    });
+  } else {
+    pushIfDefined(issues, unknownIdWarning("audiences", value.audience, "/audience", context));
+  }
+
   issues.push(...designReferenceWarnings(value.design, "/design", context));
   issues.push(...variableReferenceWarnings(value));
 

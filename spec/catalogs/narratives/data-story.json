@@ -1,0 +1,66 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-narrative/v1",
+  "id": "data-story",
+  "name": "Data Story",
+  "summary": "A data-first narrative that builds from evidence to insight to action, ideal for analysts and data-driven teams.",
+  "description": "A data-first narrative that builds from evidence to insight to action. Set the analytical context and the question the data answers, reveal the headline finding, walk through the supporting analysis and its sources, explain what it means for the business, then make a specific recommendation with its confidence level and assumptions. The tone is analytical and inductive: it builds up from data to insight. Best for analytical briefings, data team presentations, research readouts, and business reviews; typical decks run 6-15 slides.",
+  "audienceFit": [
+    "data-teams",
+    "operations-and-finance",
+    "product-managers",
+    "analytics-stakeholders"
+  ],
+  "durationRange": {
+    "minMinutes": 10,
+    "maxMinutes": 30
+  },
+  "tags": [
+    "analytics",
+    "data",
+    "insight",
+    "recommendation"
+  ],
+  "beats": [
+    {
+      "id": "context",
+      "name": "Context",
+      "description": "Frame why this analysis matters now. What question is this data answering?",
+      "instructions": "Set up the business question and data scope.",
+      "slideType": "list",
+      "layoutHint": "list-1x"
+    },
+    {
+      "id": "key-finding",
+      "name": "Key Finding",
+      "description": "State the single most important thing the data shows. One slide, one insight.",
+      "instructions": "State the one finding the audience must remember.",
+      "slideType": "metric",
+      "layoutHint": "number-1x"
+    },
+    {
+      "id": "analysis",
+      "name": "Analysis",
+      "description": "Unpack the data rigorously. Show sources, methodology, and supporting charts.",
+      "instructions": "Explain the drivers behind the finding.",
+      "slideCount": 2,
+      "slideType": "chart",
+      "layoutHint": "chart-1x"
+    },
+    {
+      "id": "implications",
+      "name": "Implications",
+      "description": "Translate findings into business language. What does this mean for strategy, operations, or customers?",
+      "instructions": "Translate the analysis into business consequences.",
+      "slideType": "text",
+      "layoutHint": "text-2x"
+    },
+    {
+      "id": "recommendation",
+      "name": "Recommendation",
+      "description": "Make an explicit, actionable recommendation backed by the data. Include confidence level and assumptions.",
+      "instructions": "Recommend the next decision or action.",
+      "slideType": "text",
+      "layoutHint": "title"
+    }
+  ]
+}

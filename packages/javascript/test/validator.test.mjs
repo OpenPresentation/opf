@@ -900,4 +900,71 @@ describe("catalog-id warning behavior", () => {
       slides: [{ title: "Slide Title" }],
     }).warnings.length, 0);
   });
+
+  test("unknown audience ids warn like narratives; free-form audiences stay quiet", () => {
+    const single = validatePresentation({
+      name: "Unknown Audience",
+      audience: "no-such-audience",
+      slides: [{ title: "Slide Title" }],
+    });
+    assert.equal(single.valid, true, "unknown catalog ids must warn, never error");
+    assert.ok(
+      single.warnings.some(
+        (warning) => warning.path === "/audience" && warning.message.includes("unknown audiences catalog id 'no-such-audience'"),
+      ),
+      JSON.stringify(single.warnings, null, 2),
+    );
+
+    const list = validatePresentation({
+      name: "Unknown Audience Entries",
+      audience: ["executives", "no-such-audience", { id: "no-such-override", attentionBudgetMinutes: 20 }],
+      slides: [{ title: "Slide Title" }],
+    });
+    assert.deepEqual(list.warnings.map((warning) => warning.path).sort(), ["/audience/1", "/audience/2/id"]);
+
+    // Free-form descriptions, URLs, and custom inline audiences are not catalog references.
+    assert.equal(validatePresentation({
+      name: "Free-form Audience",
+      audience: ["Series B investors", "https://acme.com/decks/audiences/acme-board.json", { name: "Regional Sales Leaders" }],
+      slides: [{ title: "Slide Title" }],
+    }).warnings.length, 0);
+    assert.equal(validatePresentation({
+      name: "Free-form Audience String",
+      audience: "Biology Students and Wildlife Enthusiasts",
+      slides: [{ title: "Slide Title" }],
+    }).warnings.length, 0);
+  });
+
+  test("inline records and custom sources legitimize unknown audience ids", () => {
+    assert.equal(validatePresentation({
+      name: "Inline Audience Record",
+      audience: ["acme-board"],
+      catalogs: { audiences: { records: [{ id: "acme-board", name: "Acme Board" }] } },
+      slides: [{ title: "Slide Title" }],
+    }).warnings.length, 0);
+    assert.equal(validatePresentation({
+      name: "Custom Audience Source",
+      audience: "acme-board",
+      catalogs: { audiences: { source: "https://catalogs.example.com/audiences" } },
+      slides: [{ title: "Slide Title" }],
+    }).warnings.length, 0);
+  });
+
+  test("every pptx.gallery narrative and audience id resolves in the bundled catalogs", () => {
+    // FF-28: the gallery's narrative pages, audience pages, and content blocks reference these ids.
+    const galleryNarratives = [
+      "problem-solution", "heros-journey", "what-so-what-now-what", "situation-complication-resolution",
+      "star-method", "pyramid-principle", "sparkline", "data-story", "change-story", "vision-roadmap",
+    ];
+    const galleryAudiences = [
+      "executive", "investor", "board", "technical", "sales", "marketing", "academic",
+      "internal-team", "customer", "general-public", "media", "partner", "regulatory", "all-hands",
+    ];
+    for (const narrative of galleryNarratives) {
+      const result = validatePresentation({ name: "Gallery Narrative", narrative, slides: [{ title: "Slide Title" }] });
+      assert.deepEqual(result.warnings, [], narrative);
+    }
+    const result = validatePresentation({ name: "Gallery Audiences", audience: galleryAudiences, slides: [{ title: "Slide Title" }] });
+    assert.deepEqual(result.warnings, []);
+  });
 });

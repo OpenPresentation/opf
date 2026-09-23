@@ -304,6 +304,25 @@ test('asset references diagnose missing registry entries and cycles without fetc
 	);
 });
 
+test('unknown bare-id audiences warn like narratives; gallery audience ids resolve', () => {
+	const result = lintPresentation({
+		audience: ['no-such-audience', 'Series B investors', 'executive'],
+		slides: [{ title: 'Keep' }],
+	});
+	assert.equal(result.valid, true);
+	assert.deepEqual(
+		result.diagnostics
+			.filter((issue) => issue.ruleId === 'opf/catalog-reference')
+			.map((issue) => [issue.path, issue.severity]),
+		[['/audience/0', 'warning']],
+	);
+	assert.deepEqual(
+		lintPresentation({ audience: 'general-public', narrative: 'pyramid-principle', slides: [{ title: 'Keep' }] })
+			.diagnostics,
+		[],
+	);
+});
+
 test('custom inline narrative IDs remain custom even without beats', () => {
 	for (const narrative of [
 		{ id: 'custom-arc' },

@@ -1,0 +1,56 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-narrative/v1",
+  "id": "sparkline",
+  "name": "Sparkline",
+  "summary": "A tight comparison arc showing the transformation from an inferior state to a superior one, anchored by contrast.",
+  "description": "A tight comparison arc that shows the move from an inferior state to a superior one, anchored by contrast. Make the painful before state vivid, reveal the product, decision, or event that changes the trajectory, present the new reality in concrete terms, then prove it with data or testimonial. The tone is contrastive: it makes the gap between old and new viscerally clear. Best for product demos, case study summaries, ROI presentations, and before-and-after technology comparisons; typical decks run 4-6 slides.",
+  "audienceFit": [
+    "prospective-buyers",
+    "skeptical-stakeholders",
+    "evaluation-committees"
+  ],
+  "durationRange": {
+    "minMinutes": 3,
+    "maxMinutes": 15
+  },
+  "tags": [
+    "contrast",
+    "transformation",
+    "product",
+    "roi"
+  ],
+  "beats": [
+    {
+      "id": "before-state",
+      "name": "Before State",
+      "description": "Make the current pain or limitation vivid with numbers, stories, or visuals that make the problem real.",
+      "instructions": "Make the current pain or limitation vivid.",
+      "slideType": "text",
+      "layoutHint": "text-2x"
+    },
+    {
+      "id": "contrast-moment",
+      "name": "Contrast Moment",
+      "description": "Introduce the change agent, product, or decision that shifts the trajectory.",
+      "instructions": "Introduce the decision, product, or event that changes the trajectory.",
+      "slideType": "text",
+      "layoutHint": "title"
+    },
+    {
+      "id": "after-state",
+      "name": "After State",
+      "description": "Show the improved reality. Make it concrete and specific instead of relying on vague benefit language.",
+      "instructions": "Show the new reality created by the change.",
+      "slideType": "text",
+      "layoutHint": "text-1x"
+    },
+    {
+      "id": "proof",
+      "name": "Proof",
+      "description": "Validate the after state with metrics, testimonials, or third-party evidence.",
+      "instructions": "Validate the change with evidence.",
+      "slideType": "metric",
+      "layoutHint": "number-1x"
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-narrative/v1",
+  "id": "situation-complication-resolution",
+  "name": "Situation-Complication-Resolution",
+  "summary": "McKinsey-style structure that builds tension before delivering insights.",
+  "description": "A McKinsey-style structure that builds tension before delivering the insight. Establish the context everyone already agrees on, introduce what has changed or what challenge has emerged, name the key question that change raises, then deliver the recommendation that resolves it. The tone is logical: a tight causal chain from context to recommendation. Best for strategy presentations, consulting decks, and analytical reports; typical decks run 4-10 slides (management consulting report, strategic recommendation, board update).",
+  "audienceFit": [
+    "senior-leadership",
+    "consultants",
+    "strategy-teams"
+  ],
+  "durationRange": {
+    "minMinutes": 5,
+    "maxMinutes": 20
+  },
+  "tags": [
+    "strategy",
+    "consulting",
+    "minto",
+    "recommendation"
+  ],
+  "beats": [
+    {
+      "id": "situation",
+      "name": "Situation",
+      "description": "Set the scene with relevant background and context everyone agrees on.",
+      "instructions": "State the shared context the audience already accepts.",
+      "slideType": "list",
+      "layoutHint": "list-1x"
+    },
+    {
+      "id": "complication",
+      "name": "Complication",
+      "description": "Introduce what has changed or what challenge has emerged.",
+      "instructions": "Introduce the change, risk, or tension.",
+      "slideType": "text",
+      "layoutHint": "text-2x"
+    },
+    {
+      "id": "question",
+      "name": "Question",
+      "description": "Articulate the key question that the complication raises.",
+      "instructions": "Frame the decision question raised by the complication.",
+      "slideType": "text",
+      "layoutHint": "title"
+    },
+    {
+      "id": "answer",
+      "name": "Answer",
+      "description": "Deliver your recommendation or insight that resolves the question.",
+      "instructions": "Deliver the recommendation that resolves the question.",
+      "slideType": "timeline",
+      "layoutHint": "timeline-1x"
+    }
+  ]
+}

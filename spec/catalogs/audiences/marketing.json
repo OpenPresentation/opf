@@ -1,0 +1,25 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-audience/v1",
+  "id": "marketing",
+  "name": "Marketing",
+  "summary": "Marketing professionals analyzing campaign performance, brand metrics, and growth strategies.",
+  "description": "Marketing professionals reviewing campaign performance, brand metrics, and growth strategy. Make the funnel visible, highlight engagement metrics, keep the brand consistent, and tell the story visually. Moderate chart density; 15-30 slides.",
+  "seniority": "mixed",
+  "technicalFluency": "low",
+  "decisionPower": "advisory",
+  "attentionBudgetMinutes": 45,
+  "recommendedNarratives": [
+    "data-story",
+    "what-so-what-now-what"
+  ],
+  "recommendedTones": [
+    "casual",
+    "persuasive",
+    "authoritative"
+  ],
+  "tags": [
+    "marketing",
+    "brand",
+    "go-to-market"
+  ]
+}

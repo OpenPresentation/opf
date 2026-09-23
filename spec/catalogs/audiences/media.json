@@ -1,0 +1,24 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-audience/v1",
+  "id": "media",
+  "name": "Media & Press",
+  "summary": "Journalists, analysts, and media professionals seeking newsworthy insights and quotable statistics.",
+  "description": "Journalists, analysts, and media professionals looking for newsworthy insight and quotable statistics. Make headline numbers prominent, attribute every figure clearly, design for print, and add embargo notes when needed. Moderate chart density; 8-12 slides in press-kit format.",
+  "seniority": "mixed",
+  "technicalFluency": "medium",
+  "decisionPower": "informational",
+  "attentionBudgetMinutes": 20,
+  "recommendedNarratives": [
+    "what-so-what-now-what",
+    "pyramid-principle"
+  ],
+  "recommendedTones": [
+    "authoritative",
+    "formal"
+  ],
+  "tags": [
+    "external",
+    "press",
+    "analyst"
+  ]
+}

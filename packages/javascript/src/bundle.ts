@@ -26,11 +26,11 @@ export interface BundleReport {
    * Referenced bare ids that resolve nowhere locally, per kind — listed for
    * exactly the positions the validator warns about, so `unresolved` means
    * "the validator would warn about this": the string shorthand of
-   * `narrative`, the design references `themes`, `colorSchemes` and
-   * `fontSchemes` (string or `{ id }` form, at deck and slide level), and
-   * `chart.type`.
+   * `narrative`, bare-id `audience` entries (string or `{ id }` form), the
+   * design references `themes`, `colorSchemes` and `fontSchemes` (string or
+   * `{ id }` form, at deck and slide level), and `chart.type`.
    *
-   * Every other reference — tones, purposes, audiences, languages, layouts,
+   * Every other reference — tones, purposes, languages, layouts,
    * social platforms, object-form narratives, and anything reached through a
    * record rather than written by the author — is still resolved and inlined
    * when it is found, and skipped in silence when it is not, because the
@@ -148,8 +148,13 @@ function collectDocumentReferences(collector: Collector, document: Record<string
   addReference(collector, "tones", document.tone, false);
   addReference(collector, "purposes", document.purpose, false);
   collectLanguageReferences(collector, document.language);
-  const audiences = Array.isArray(document.audience) ? document.audience : [document.audience];
-  for (const entry of audiences) addReference(collector, "audiences", entry, false);
+  // The validator warns on a bare-id audience string and on an inline
+  // Audience object's id; free-form descriptions never match a bare id.
+  if (Array.isArray(document.audience)) {
+    for (const entry of document.audience) addReference(collector, "audiences", entry, true);
+  } else {
+    addReference(collector, "audiences", document.audience, typeof document.audience === "string");
+  }
   collectDesignReferences(collector, document.design);
   collectSocialReferences(collector, document.organization);
   collectSocialReferences(collector, document.speaker);
