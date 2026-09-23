@@ -64,6 +64,11 @@ export interface RenderSvgOptions {
   /** When false, skip AJV boundary validation. Default true. */
   validate?: boolean;
   slideIndex?: number;
+  /**
+   * Today's calendar date (ISO YYYY-MM-DD) for `date: true` header/footer furniture. The renderer
+   * never reads a clock; without it a current date is reported as unresolved content.
+   */
+  date?: string;
   trace?: boolean;
   catalogs?: Record<string, { records?: unknown[] } | unknown[]>;
   catalogSources?: Record<string, { records?: unknown[] } | unknown[]>;
