@@ -71,7 +71,10 @@ function loadReplacementFace(pkg, weight, italic) {
 const cache = new WeakMap();
 function width(font, text) {
   let map = cache.get(font);
-  if (!map) cache.set(font, (map = new Map()));
+  if (!map) {
+    map = new Map();
+    cache.set(font, map);
+  }
   if (!map.has(text)) {
     let value = NaN;
     try { if ([...text].every((c) => font.hasGlyphForCodePoint(c.codePointAt(0)))) value = font.layout(text).positions.reduce((sum, p) => sum + p.xAdvance, 0) / font.unitsPerEm; } catch { value = NaN; }
