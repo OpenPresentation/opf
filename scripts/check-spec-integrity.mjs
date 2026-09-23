@@ -61,10 +61,11 @@ const CATALOG_KINDS = [
 //     def's flat `required` array.
 //   - ColorScheme/FontScheme $defs additionally expose "abstract role" fields
 //     (primary/secondary/accent/background/surface/text/textSecondary/custom
-//     for color; heading/body/accent/code for font) that the engine maps onto
+//     for color; heading/body/accent for font) that the engine maps onto
 //     OOXML slots — these are OPF-specific inline conveniences with no
 //     counterpart in the catalog record schema (see each $def's own
-//     description in opf.schema.json).
+//     description in opf.schema.json). The font `code` role is shared: catalog
+//     records may carry it too (FF-17), so it is not listed here.
 //   - Narrative's companion schema requires `beats`; the embedded $def does
 //     not, since an inline narrative may reference a catalog id and override
 //     only some fields without repeating all beats.
@@ -81,7 +82,7 @@ const KNOWN_DEF_DIFFERENCES = {
   },
   FontScheme: {
     schemaOnlyProps: ["name", "summary", "description", "tags", "preview", "languages", "textSample"],
-    defOnlyProps: ["heading", "body", "accent", "code"],
+    defOnlyProps: ["heading", "body", "accent"],
     schemaOnlyRequired: ["id", "name", "major", "minor"],
   },
   Language: { schemaOnlyProps: ["preview"], schemaOnlyRequired: ["id", "name", "bcp47"] },

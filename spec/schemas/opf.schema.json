@@ -1117,7 +1117,7 @@
     },
     "FontScheme": {
       "type": "object",
-      "description": "Typography selections used by the design system. The pair fields (major, minor) and refinement fields (type, app, languageFamily) mirror font-scheme.schema.json (https://openpresentation.org/schema/opf-font-scheme/v1) so library records and inline OPF overrides are interchangeable on those fields.\n\nTwo parallel models are supported and may be mixed:\n- OOXML pairs (major, minor) - heading and body family names that round-trip directly to PowerPoint majorFont/minorFont entries.\n- Abstract roles (heading, body, accent, code) - OPF-specific Font objects the engine maps onto the OOXML pair when serializing. Convenient for inline overrides and for adding accent/code roles that don't have a direct OOXML slot; not part of the catalog record schema.\n\nIn design.fontScheme, 'id' resolves a fontSchemes catalog record as the base; pair and role overrides on the same object take precedence over the resolved scheme. The string shorthand on design.fontScheme is equivalent to setting only 'id'.",
+      "description": "Typography selections used by the design system. The pair fields (major, minor) and refinement fields (type, app, languageFamily) mirror font-scheme.schema.json (https://openpresentation.org/schema/opf-font-scheme/v1) so library records and inline OPF overrides are interchangeable on those fields.\n\nTwo parallel models are supported and may be mixed:\n- OOXML pairs (major, minor) - heading and body family names that round-trip directly to PowerPoint majorFont/minorFont entries.\n- Abstract roles (heading, body, accent, code) - OPF-specific Font objects the engine maps onto the OOXML pair when serializing. Convenient for inline overrides and for adding accent/code roles that don't have a direct OOXML slot. Catalog records may also carry 'code' (for example the consolas and courier-new records); heading, body and accent are not part of the catalog record schema.\n\nIn design.fontScheme, 'id' resolves a fontSchemes catalog record as the base; pair and role overrides on the same object take precedence over the resolved scheme. The string shorthand on design.fontScheme is equivalent to setting only 'id'.",
       "properties": {
         "id": {
           "type": "string",
@@ -1163,7 +1163,7 @@
         },
         "code": {
           "$ref": "#/$defs/Font",
-          "description": "Abstract role: monospaced font used for code blocks. No direct OOXML slot."
+          "description": "Abstract role: monospaced font used for code blocks and inline code. No direct OOXML slot. Resolution: this override, then the resolved catalog record's 'code' (for example Consolas for the consolas scheme), then the engine fallback Roboto Mono. Heading and body families are never used as the code fallback."
         }
       }
     },

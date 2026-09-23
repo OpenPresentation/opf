@@ -58,6 +58,44 @@
         "Microsoft YaHei"
       ]
     },
+    "code": {
+      "type": "object",
+      "description": "Optional monospaced font for code blocks and inline code. It has the same shape as the OPF FontScheme 'code' role, so a record and an inline design.fontScheme override are interchangeable. OOXML has no code slot, so exporters write this family on code runs. When neither design.fontScheme nor the resolved record defines 'code', engines fall back to Roboto Mono.",
+      "required": [
+        "family"
+      ],
+      "properties": {
+        "family": {
+          "type": "string",
+          "description": "Monospaced font family name.",
+          "examples": [
+            "Consolas",
+            "Courier New"
+          ]
+        },
+        "weight": {
+          "type": "number",
+          "description": "Numeric font weight (e.g., 400 for regular, 700 for bold)."
+        },
+        "style": {
+          "type": "string",
+          "enum": [
+            "normal",
+            "italic"
+          ],
+          "description": "Font style."
+        },
+        "letterSpacing": {
+          "type": "number",
+          "description": "Letter spacing (tracking) in ems."
+        }
+      },
+      "examples": [
+        {
+          "family": "Consolas"
+        }
+      ]
+    },
     "type": {
       "type": "string",
       "enum": [

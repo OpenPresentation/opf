@@ -189,6 +189,7 @@ OPF documents usually reference these records with string ids such as `design.th
 | `name` | yes | `string` | Human-readable scheme name shown in pickers. |
 | `major` | yes | `string` | Heading (major) font family mirrors the OOXML majorFont entry. |
 | `minor` | yes | `string` | Body (minor) font family mirrors the OOXML minorFont entry. |
+| `code` | no | `object` | Optional monospaced font for code blocks and inline code. It has the same shape as the OPF FontScheme 'code' role, so a record and an inline design.fontScheme override are interchangeable. OOXML has no code slot, so e... |
 | `type` | no | `enum:sans-serif \| serif \| monospace` | High-level typographic class of the scheme. |
 | `app` | no | `enum:PowerPoint \| Google Slides` | Target application this font pairing is intended for. |
 | `languageFamily` | no | `enum:latin \| ea \| cs` | OOXML font-language family this scheme is intended for: 'latin' for Latin-script content, 'ea' for East Asian scripts, 'cs' for Complex Scripts. |

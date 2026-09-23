@@ -317,7 +317,7 @@ _No named properties._
 | `heading` | no | `ref:Font` | Abstract role: font used for slide titles and headings. Maps onto the OOXML major slot when serializing. |
 | `body` | no | `ref:Font` | Abstract role: font used for body copy. Maps onto the OOXML minor slot when serializing. |
 | `accent` | no | `ref:Font` | Abstract role: font used for accent text such as quotes or callouts. No direct OOXML slot. |
-| `code` | no | `ref:Font` | Abstract role: monospaced font used for code blocks. No direct OOXML slot. |
+| `code` | no | `ref:Font` | Abstract role: monospaced font used for code blocks and inline code. No direct OOXML slot. Resolution: this override, then the resolved catalog record's 'code' (for example Consolas for the consolas scheme), then the... |
 
 
 ### Font

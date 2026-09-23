@@ -123,7 +123,30 @@ There is no ambiguity between "override" and "reference": every scheme value *is
 }
 ```
 
-The `aptos` record supplies the OOXML pair (`major`/`minor`). The `code` role is an OPF-specific addition with no OOXML slot, so it layers on top without disturbing the pair. When serializing to PowerPoint, engines write `major`/`minor` to `majorFont`/`minorFont` and map abstract roles (`heading`, `body`) onto those slots; roles like `accent` and `code` are renderer concerns. The same slot-versus-role split applies to color schemes: OOXML slots (`accent1`–`accent6`, `dark1/2`, `light1/2`) round-trip directly, abstract roles (`primary`, `text`, `surface`, …) are mapped onto slots by the engine.
+The `aptos` record supplies the OOXML pair (`major`/`minor`). The `code` role is an OPF-specific addition with no OOXML slot, so it layers on top without disturbing the pair. When serializing to PowerPoint, engines write `major`/`minor` to `majorFont`/`minorFont` and map abstract roles (`heading`, `body`) onto those slots. `accent` has no slot; the `code` family is written directly on code runs. The same slot-versus-role split applies to color schemes: OOXML slots (`accent1`–`accent6`, `dark1/2`, `light1/2`) round-trip directly, abstract roles (`primary`, `text`, `surface`, …) are mapped onto slots by the engine.
+
+### Code font
+
+The `code` role resolves per key like every other override:
+
+1. `code` on the effective `design.fontScheme` object;
+2. `code` on the resolved font-scheme record (the `consolas` and `courier-new` records carry `{ "family": "Consolas" }` and `{ "family": "Courier New" }`);
+3. otherwise **Roboto Mono**, the documented fallback that `@openpresentation/opf-render` bundles.
+
+The heading and body families are never reused as the code fallback, so choosing `aptos` still gives Roboto Mono code unless the deck sets `code`. `resolveFontFamilies()` in `@openpresentation/opf` applies these rules for all engines.
+
+### Engine default font scheme
+
+The last-resort font scheme applies only when neither the slide, the deck nor the resolved theme names one. Every bundled theme names a font scheme (`minimal` uses `aptos`), and engines default the theme to `minimal`, so a document with no `design` gets `aptos` in every engine. The last resort differs by target and is intentional in [`engine-defaults.json`](../spec/reference/engine-defaults.json) (`fontScheme.pptx.latin` is `aptos`, `fontScheme.google.latin` is `roboto`):
+
+| Engine | Last resort | Where |
+| --- | --- | --- |
+| Core pagination | `roboto` | `packages/javascript/src/pagination.ts` |
+| opf-render preview | `roboto` (`engineDefaults.fontScheme.google.latin`) | `src/svg.js` |
+| opf-editor composition and slide transfer | `roboto` | `src/index.js`, `src/transfer.js` |
+| opf-pptx export | `aptos` (`DEFAULTS.fontScheme`) | `src/index.js` |
+
+This only affects a custom theme without `fontScheme`. That deck is measured and previewed in Roboto but exported with Aptos, so give such themes a `fontScheme` (or set `design.fontScheme`) when preview and export must match. None of the 126 bundled examples reaches the last resort. Exporting all of them with the exporter default switched to `roboto` produced byte-identical PPTX files (FF-17, font-fidelity-everywhere). A core test pins the core side of this table; opf-pptx pins its `aptos` default.
 
 ## Color references in content
 

@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- FF-17: the `code` font role now follows the chosen font scheme. Font-scheme records may carry an optional `code` role (same shape as the inline `design.fontScheme.code`). The `consolas` and `courier-new` records now carry Consolas and Courier New, so code in those schemes no longer falls back to Roboto Mono. Other schemes keep the documented Roboto Mono fallback, and inline overrides still win. Document and pin the per-target engine default font scheme (`aptos` for PPTX export, `roboto` for pagination, preview and editor). It applies only to custom themes without a font scheme. The 126 bundled examples export and preview byte-identically. No package version or rendering baseline changes.
 - Align the developer quickstart, compatibility matrix, handoff and immutable verification references with the shipped ColorRef train: core 0.11.0, CLI/renderer 0.9.0, editor 0.8.0 and PPTX 0.9.1. Record production feature adoption separately from remaining browser, font and native Office acceptance. Include shipped furniture and ColorRef in the fresh-registry verifier, retain production findings, and correct stale agent-skill guidance. No package version or rendering baseline changes.
 
 ## 0.11.0

@@ -22,13 +22,18 @@ export interface LayoutDiagnostic {
 export interface FontFaceSelection { family: string; bold: boolean; italic: boolean }
 export interface TextStyle { fontFamily: string; fontWeight: number; italic?: boolean; path?: string; fontFace?: FontFaceSelection }
 export interface FontFamilies { heading: string; body: string; code: string }
+/** Documented monospace fallback for the code role when a resolved scheme defines no `code`. */
+const FALLBACK_CODE_FAMILY = "Roboto Mono";
+/** Resolve role families from an already-merged font scheme (catalog record plus design overrides).
+ * `code` comes from the scheme's `code` role, which catalog records such as consolas and courier-new
+ * carry; otherwise it is Roboto Mono. Heading and body families are never reused for code. */
 export function resolveFontFamilies(input: unknown): FontFamilies {
   const scheme = record(input);
   const family = (value: unknown) => typeof value === "string" ? value : record(value).family;
   return {
     heading: family(scheme.heading) ?? scheme.major ?? scheme.minor ?? "Roboto",
     body: family(scheme.body) ?? scheme.minor ?? scheme.major ?? "Roboto",
-    code: family(scheme.code) ?? "Roboto Mono",
+    code: family(scheme.code) ?? FALLBACK_CODE_FAMILY,
   };
 }
 export interface TextMeasurement {
