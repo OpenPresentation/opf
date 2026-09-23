@@ -169,6 +169,20 @@ merged fix, copy `parity-results.json` and `PARITY.md` back into `parity/`,
 regenerate `support-status.json`, and update the headline in
 [gallery-support.md](../gallery-support.md) and [burndown.md](../burndown.md).
 
+### Slide-image mapping (FF-26)
+
+opf-pptx exports `design.slideImage` as one native picture named
+`OPF slide image slides.N`. `parity.mjs` maps that picture by name to the
+preview's slide-image group, keyed by the resolved
+`geometry.slideImage.sourcePath` (`slides.N.design.slideImage`, or the slide's
+own image path when a deck-level slide image uses it). The frame check
+compares the picture's visible image rect with the preview `<image>` at the
+usual 0.02 pt tolerance. The visible rect is the picture frame widened by
+its `a:srcRect` insets and clipped to the frame, so a negative inset (a fit
+image letterboxed in its frame) compares as the image the preview shows. A
+slide-image picture on a slide whose preview has no slide image fails
+mapping, and so does a preview slide image with no picture.
+
 ## `support-status.json`
 
 Schema version 1. Top level:

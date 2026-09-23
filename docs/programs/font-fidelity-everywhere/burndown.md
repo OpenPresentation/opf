@@ -583,3 +583,11 @@ Append one dated line per state change. Newest last.
     (`photography` with its asset `works`). Audit B marks all colour schemes
     and themes `broken` because its probes predate FF-24.
   - Counts: done 18, review 16, todo 10 (44 rows).
+- 2026-09-23: Parity harness maps the FF-26 slide-image picture
+  (`OPF slide image slides.N`) to the preview slide-image group and compares
+  its visible image rect; no tolerance changed. Re-run at opf `7f88749`,
+  opf-render `bc436f3`, opf-pptx `9092954`, pptx-gallery `f17e9ae`: still 4
+  of 900 perfect; mapping 890 (was 672), geometry 880 (774), fills 766 (674),
+  zOrder 880 (784), no value regressed. The 225 affected values matched the
+  preview exactly (0 pt, identical bytes); the drop at opf#137 was a harness
+  gap, not an export difference.

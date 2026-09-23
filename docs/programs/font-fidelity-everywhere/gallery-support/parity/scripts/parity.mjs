@@ -121,7 +121,7 @@ function parseSlide(xml, rels, files, theme, slidePart) {
     const tx = body.match(/<p:txBody>(.*?)<\/p:txBody>/s)?.[1] ?? (body.includes('<a:tbl>') ? body : null);
     if (tx) s.paragraphs = parseParagraphs(tx, theme);
     if (body.includes('<a:tbl>')) { s.table = true; s.cellFills = uniq([...body.matchAll(/<a:tcPr\b[^>]*>(.*?)<\/a:tcPr>/gs)].map(t => fillOf(t[1].replace(/<a:ln\w\b.*?<\/a:ln\w>/gs, ''), theme)?.rgb).filter(Boolean)); }
-    const blip = body.match(/<a:blip r:embed="([^"]+)"/)?.[1]; if (blip) { const target = rels[blip]; const part = resolveTarget(slidePart, target); s.image = {part, hash: files[part] ? sha(files[part]) : null}; }
+    const blip = body.match(/<a:blip r:embed="([^"]+)"/)?.[1]; if (blip) { const target = rels[blip]; const part = resolveTarget(slidePart, target); s.image = {part, hash: files[part] ? sha(files[part]) : null, srcRect: attrs(body.match(/<a:srcRect\b([^>]*)\/>/)?.[1] ?? '')}; }
     const chartRid = body.match(/<c:chart\b[^>]*r:id="([^"]+)"/)?.[1];
     if (chartRid) { const part = resolveTarget(slidePart, rels[chartRid]); const cx = files[part] ? dec.decode(files[part]) : ''; s.chart = {part, colors: uniq([...cx.matchAll(/<c:ser>.*?<c:spPr>.*?<a:srgbClr val="([0-9A-Fa-f]{6})"/gs)].map(x => x[1].toUpperCase())), typefaces: uniq([...cx.matchAll(/<a:latin typeface="([^"]*)"/g)].map(x => x[1])), sizes: uniq([...cx.matchAll(/<a:defRPr\b[^>]*\bsz="(\d+)"/g)].map(x => +x[1] / 100)), strings: [...cx.matchAll(/<c:v>([^<]*)<\/c:v>/g)].map(x => unesc(x[1]))}; }
     shapes.push(s);
@@ -161,6 +161,10 @@ const center = b => ({x: b.x + b.w / 2, y: b.y + b.h / 2});
 const inside = (pt, b) => pt.x >= b.x - 0.5 && pt.x <= b.x + b.w + 0.5 && pt.y >= b.y - 0.5 && pt.y <= b.y + b.h + 0.5;
 const pathFromName = n => n.match(/^OPF (?:heading|text|card|table|image|chart|code|metric|quote|list) (slides\.\d+\.\S+?)(?: line \d+| part \d+)?$/)?.[1] ?? null;
 const pxToPt = v => r3(v * PX_PT);
+// Visible image rect of a picture: the image spans the frame widened by the a:srcRect insets (a negative inset
+// letterboxes a fit image inside the frame); what shows is that span clipped to the frame.
+function visibleImage(b, c = {}) { const [l, t, r, bt] = ['l', 't', 'r', 'b'].map(k => +(c[k] ?? 0) / 100000); const W = b.w / (1 - l - r), H = b.h / (1 - t - bt), x0 = b.x - l * W, y0 = b.y - t * H;
+  const x = Math.max(b.x, x0), y = Math.max(b.y, y0); return {x, y, w: Math.min(b.x + b.w, x0 + W) - x, h: Math.min(b.y + b.h, y0 + H) - y}; }
 function geomDelta(a, b) { return r3(Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y), Math.abs(a.w - b.w), Math.abs(a.h - b.h)) * PX_PT); }
 const bucket = d => d > 50 ? '>50' : d > 5 ? '>5' : d > TOL.geomNearPt ? '>0.5' : '<=0.5';
 function sev(dPt) { return dPt <= TOL.geomPt ? 'pass' : dPt <= TOL.geomNearPt ? 'near' : 'fail'; }
@@ -203,7 +207,11 @@ async function parity(doc) {
     const under = p => items.find(it => p === it.path || p?.startsWith(it.path + '.'));
     for (const b of P.boxes) if (b.path && !under(b.path) && !items.some(i => i.path === b.path)) items.push({path: b.path, field: 'furniture', type: 'text', box: b});
     const keyOfPreview = p => { if (!p) return 'slide'; const it = items.filter(i => p === i.path || p.startsWith(i.path + '.')).sort((a, b) => b.path.length - a.path.length)[0]; return it?.path ?? p; };
-    const keyOfShape = s => { const byName = pathFromName(s.name); if (byName) { const it = items.find(i => byName === i.path || byName.startsWith(i.path + '.')); return it?.path ?? byName; }
+    // design.slideImage exports as one picture named "OPF slide image slides.N" (FF-26). It maps to the preview
+    // slide-image group (keyed by the image's source path); with no preview slide image the group has no preview
+    // element and mapping fails.
+    const siKey = bound.geometry.slideImage ? keyOfPreview(bound.geometry.slideImage.sourcePath) : `slides.${si}.design.slideImage`;
+    const keyOfShape = s => { if (s.name === `OPF slide image slides.${si}`) return siKey; const byName = pathFromName(s.name); if (byName) { const it = items.find(i => byName === i.path || byName.startsWith(i.path + '.')); return it?.path ?? byName; }
       if (s.name.startsWith('OPF card ')) return s.name.slice(9);
       if (!s.box) return 'unmapped'; const c = center(s.box); const cand = items.filter(i => inside(c, i.frame && s.name.startsWith('OPF card') ? i.frame : i.box)).sort((a, b) => a.box.w * a.box.h - b.box.w * b.box.h)[0]; return cand?.path ?? 'unmapped'; };
     const groups = new Map(); const g = k => { if (!groups.has(k)) groups.set(k, {pv: [], px: [], firstPv: Infinity, firstPx: Infinity}); return groups.get(k); };
@@ -283,11 +291,11 @@ async function parity(doc) {
       }
       // (1) geometry of non-text frames (charts, tables, pictures, cards)
       for (const s of G.px.filter(s => s.box && (s.chart || s.table || s.image || s.name.startsWith('OPF card')))) {
-        const it = items.find(i => i.path === key); if (!it) continue;
+        const it = items.find(i => i.path === key) ?? (key === siKey && s.image ? {box: null} : null); if (!it) continue;
         let ref = s.name.startsWith('OPF card') ? it.frame : s.image ? (G.pv.find(e => e.kind === 'image') ?? it.box) : it.box; if (!ref) continue;
         if (s.image && ref.intrinsic && /meet/.test(ref.par)) { const k = Math.min(ref.w / ref.intrinsic.w, ref.h / ref.intrinsic.h), w = ref.intrinsic.w * k, h = ref.intrinsic.h * k; ref = {x: ref.x + (ref.w - w) / 2, y: ref.y + (ref.h - h) / 2, w, h}; }
-        const d = geomDelta(s.box, ref); stats.geomMaxDeltaPt = Math.max(stats.geomMaxDeltaPt, d);
-        if (d > TOL.geomPt) add('geometry', sev(d), `${s.chart ? 'chart' : s.table ? 'table' : s.image ? 'picture' : 'card'} frame delta ${bucket(d)}pt`, key, `${JSON.stringify(Object.fromEntries(Object.entries(s.box).map(([k, v]) => [k, r3(v)])))} vs ${JSON.stringify(Object.fromEntries(Object.entries(ref).filter(([k]) => 'xywh'.includes(k)).map(([k, v]) => [k, r3(v)])))}`);
+        const sbox = s.image ? visibleImage(s.box, s.image.srcRect) : s.box; const d = geomDelta(sbox, ref); stats.geomMaxDeltaPt = Math.max(stats.geomMaxDeltaPt, d);
+        if (d > TOL.geomPt) add('geometry', sev(d), `${s.chart ? 'chart' : s.table ? 'table' : s.image ? 'picture' : 'card'} frame delta ${bucket(d)}pt`, key, `${JSON.stringify(Object.fromEntries(Object.entries(sbox).map(([k, v]) => [k, r3(v)])))} vs ${JSON.stringify(Object.fromEntries(Object.entries(ref).filter(([k]) => 'xywh'.includes(k)).map(([k, v]) => [k, r3(v)])))}`);
       }
       // (3) fills & images
       if (!isChart) {
