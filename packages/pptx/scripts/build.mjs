@@ -19,6 +19,7 @@ await copyFile(new URL('src/furniture-fields.js', root), new URL('furniture-fiel
 await copyFile(new URL('src/chart-workbook.js', root), new URL('chart-workbook.js', dist));
 await copyFile(new URL("src/index.d.ts", root), new URL("index.d.ts", dist));
 await copyFile(new URL("src/image-geometry.js", root), new URL("image-geometry.js", dist));
+await copyFile(new URL('src/slide-image-provenance.js', root), new URL('slide-image-provenance.js', dist));
 for (const name of ['image-fallback-node.js', 'image-fallback-browser.js']) {
   await copyFile(new URL(`src/${name}`, root), new URL(name, dist));
 }

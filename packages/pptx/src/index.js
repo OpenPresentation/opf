@@ -11,6 +11,7 @@ import {attachFurnitureTags, furnitureManifest, importFurniture} from './furnitu
 import {applyDocumentProvenance, attachDocumentProvenance, documentProvenance, restoreDocumentProvenance} from './document-provenance.js';
 import {attachFurnitureFields, furniturePartFields, lineFields, nativeFieldType} from './furniture-fields.js';
 import {importImageOrientation} from './image-import.js';
+import {placeSlideImages, importSlideImage, slideImageName} from './slide-image-provenance.js';
 import {nativeBackgroundFill, nativeImageBackgroundFill, nativePatternPreset} from './background.js';
 import {importBackground} from './background-import.js';
 import {themeSlotColors, writeThemeColors, schemeColorValue, schemeBackgroundFill, readThemeSlotColors, recoverColorScheme, recoverTheme, presentationThemePath} from './theme-colors.js';
@@ -190,6 +191,7 @@ export async function toPptx(input, options = {}) {
   context.tableHeaders = new Map();
   context.tableCells = new Map();
   context.imagePlacements = new Map();
+  context.slideImages = new Map();
   context.backgroundFills = new Map();
   context.cardTags = new Map();
   context.headingTags = new Map();
@@ -468,6 +470,15 @@ function importSlide(entries, slidePath, slideIndex, presentationDimensions, opt
   if (background) slide.design = {background};
   if (Object.keys(furniture.design).length) slide.design = {...slide.design, ...furniture.design};
   if (furniture.section !== undefined) slide.section = furniture.section;
+  const slideImagePath = `slides.${slideIndex}.design.slideImage`;
+  const slideImage = importSlideImage(nativeContext.pictures, relationships, entries, slideIndex,
+    picture => importPicture(entries, picture, slidePath, relationships, diagnostic => {
+      // The recorded crop/fit is re-derived from design.slideImage.
+      if (diagnostic.code !== 'unsupported-image-crop') options.onDiagnostic?.({...diagnostic, path: slideImagePath});
+    }),
+    diagnostic => options.onDiagnostic?.({...diagnostic, path: slideImagePath}));
+  if (slideImage.design) slide.design = {...slide.design, ...slideImage.design};
+  nativeContext.slideImagePictures = slideImage.consumed;
 
   const items = collectSlideItems(entries, slideRoot, slidePath, relationships, dimensions, options, slideIndex, furniture, nativeContext)
     .sort(comparePositionedItems);
@@ -543,7 +554,7 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   }
 
   for (const [index, picture] of nativeContext.pictures.entries()) {
-    if (furniture.pictures.has(index)) continue;
+    if (furniture.pictures.has(index) || nativeContext.slideImagePictures?.has(index)) continue;
     const report = diagnostic => options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}.pictures.${index}`});
     const item = importPicture(entries, picture, slidePath, relationships, report);
     if (item) items.push(item);
@@ -1096,6 +1107,7 @@ async function addSlide(pptx, presentation, opfSlide, slideIndex, context, optio
   const fieldAlignment=field=>field==='title'?titleAlignment:contentAlignment;
   const geometry = composeSlide(opfSlide, { width: widthInches * 96, height: heightInches * 96, layout, presentation, slideIndex, fonts: slideContext.fonts, contentAlignment, titleAlignment, textRasterPadding:options.textRasterPadding, contentBox:opfSlide.design?.contentBox??presentation.design?.contentBox, textMeasurement: options.textMeasurement, date: options.date });
   for (const diagnostic of geometry.diagnostics) options.onDiagnostic?.(diagnostic);
+  if (geometry.slideImage) await addSlideImage(slide, presentation, geometry.slideImage, slideIndex, slideContext, options);
   await addFurniture(slide,presentation,opfSlide,geometry.furniture,slideContext,options,slideIndex);
   for (const item of geometry.items) {
     const region = { x: item.box.x / 96, y: item.box.y / 96, w: item.box.width / 96, h: item.box.height / 96 };
@@ -1317,6 +1329,22 @@ async function addImagePayload(slide, presentation, asset, region, path, context
     altText: assetAlt(asset, presentation)
   });
   return objectName;
+}
+
+// design.slideImage: one native picture at the shared frame, beneath content.
+// Crop/fit and treatments are written after PptxGenJS embeds the bytes.
+async function addSlideImage(slide, presentation, image, slideIndex, context, options) {
+  const box = { x: image.box.x / 96, y: image.box.y / 96, w: image.box.width / 96, h: image.box.height / 96 };
+  const resolved = await resolveImage(image.value, presentation, options, image.sourcePath);
+  if (!resolved) {
+    addPlaceholderPayload(slide, "Image", image.value, box, context);
+    return;
+  }
+  const objectName = slideImageName(`slides.${slideIndex}`);
+  const configured = image.path === 'design.slideImage' ? presentation.design?.slideImage : presentation.slides[slideIndex].design?.slideImage;
+  const { src: _source, ...treatment } = isPlainObject(configured) && 'position' in configured ? configured : {};
+  context.slideImages.set(objectName, { slide: `slides.${slideIndex}`, box, fill: image.fill, path: image.sourcePath, treatment: { ...treatment, position: image.position } });
+  slide.addImage({ ...resolved, objectName, ...box, altText: assetAlt(image.value, presentation) });
 }
 
 function addChartPayload(slide, chart, region, context) {
@@ -1987,7 +2015,8 @@ async function normalizePptxZip(raw, context) {
     if (!/^ppt\/slides\/slide\d+\.xml$/.test(part)) continue;
     const relationships = parseRelationships(entries, part);
     for (const [picture] of decodeText(bytes).matchAll(/<p:pic>[\s\S]*?<\/p:pic>/g)) {
-      const placement = context.imagePlacements.get(picture.match(/name="(OPF image \d+)"/)?.[1]);
+      const name = picture.match(/<p:cNvPr\b[^>]*\bname="([^"]+)"/)?.[1];
+      const placement = context.imagePlacements.get(name) ?? context.slideImages.get(name);
       const id = picture.match(/<a:blip\b[^>]*r:embed="([^"]+)"/)?.[1];
       if (placement) imageSources.set(relationships.get(id)?.path, placement.path);
     }
@@ -2012,6 +2041,11 @@ async function normalizePptxZip(raw, context) {
     }
     imageMetadata.set(part, metadata);
   }
+  // Slide images need the embedded dimensions; document provenance (FF-32)
+  // later records the placed frames as slide geometry evidence.
+  placeSlideImages(entries, context.slideImages, (part, id) => imageMetadata.get(parseRelationships(entries, part).get(id)?.path), path => {
+    throw new OPFPptxError("unsupported-image-dimensions", "Image fitting requires readable PNG, JPEG, GIF or WebP dimensions. Supply a supported raster image through imageResolver.", { path });
+  });
   // Charts and notes follow the language and fonts of the slide they belong to.
   context.partSlides = new Map();
   for (const part of Object.keys(entries)) {

@@ -163,3 +163,23 @@ export function normalizeImageOrientation(bytes, metadata) {
   new DataView(output.buffer, output.byteOffset, output.byteLength).setUint16(metadata.orientationOffset, 1, metadata.littleEndian);
   return output;
 }
+
+// Keep the picture frame at the allocated box and express crop/fit through
+// a:srcRect. Crop trims the centered overflow (positive insets); fit pads the
+// centered image with negative insets. Frame-based masks, lines and effects
+// therefore apply to the same box as the SVG preview's clipped <image>.
+export function framePicture(image, box, mode) {
+  const scale = (mode === 'crop' ? Math.max : Math.min)(box.w / image.width, box.h / image.height);
+  const horizontal = Math.round((1 - box.w / (image.width * scale)) * 50000) || 0;
+  const vertical = Math.round((1 - box.h / (image.height * scale)) * 50000) || 0;
+  return { ...box, crop: horizontal || vertical ? { l: horizontal, t: vertical, r: horizontal, b: vertical } : null };
+}
+
+export function framedPictureTransform(metadata, box, mode) {
+  const orientation = metadata.orientation ?? 1;
+  const target = orientation >= 5
+    ? { x: box.x + (box.w - box.h) / 2, y: box.y + (box.h - box.w) / 2, w: box.h, h: box.w }
+    : box;
+  const rotation = [0, 0, 0, 180, 0, 90, 90, 90, 270][orientation];
+  return { ...framePicture(metadata, target, mode), rotation, flipH: orientation === 2 || orientation === 7, flipV: orientation === 4 || orientation === 5 };
+}
