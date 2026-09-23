@@ -307,6 +307,8 @@ export async function fromPptx(input, options = {}) {
   let slideProvenance = slidePaths.map(() => ({structure: "untagged"}));
   try {
     const restored = restoreDocumentProvenance(imported, {entries, presentationRoot, presentationRels, organizationConflict: furniture.organizationConflict === true,
+      // Host catalogs format stored socials exactly as export did (FF-34).
+      socialPlatformRecords: catalogs => socialPlatformRecords({catalogs}, options),
       slides: slidePaths.map((path, index) => ({path, root: furnitureContexts[index].root, relationships: furnitureContexts[index].relationships}))}, report);
     // The stored language wins while the runs still carry its tag (FF-07).
     restored.groups = reconcileLanguage(restored.groups, observedLanguage, report);
@@ -1106,7 +1108,7 @@ async function addSlide(pptx, presentation, opfSlide, slideIndex, context, optio
   const titleAlignment=opfSlide.design?.titleAlignment??presentation.design?.titleAlignment;
   const contentAlignment=opfSlide.design?.contentAlignment??presentation.design?.contentAlignment;
   const fieldAlignment=field=>field==='title'?titleAlignment:contentAlignment;
-  const geometry = composeSlide(opfSlide, { width: widthInches * 96, height: heightInches * 96, layout, presentation, slideIndex, fonts: slideContext.fonts, contentAlignment, titleAlignment, textRasterPadding:options.textRasterPadding, contentBox:opfSlide.design?.contentBox??presentation.design?.contentBox, textMeasurement: options.textMeasurement, date: options.date });
+  const geometry = composeSlide(opfSlide, { width: widthInches * 96, height: heightInches * 96, layout, presentation, slideIndex, fonts: slideContext.fonts, contentAlignment, titleAlignment, textRasterPadding:options.textRasterPadding, contentBox:opfSlide.design?.contentBox??presentation.design?.contentBox, textMeasurement: options.textMeasurement, date: options.date, socialPlatforms: socialPlatformRecords(presentation, options) });
   for (const diagnostic of geometry.diagnostics) options.onDiagnostic?.(diagnostic);
   if (geometry.slideImage) await addSlideImage(slide, presentation, geometry.slideImage, slideIndex, slideContext, options);
   await addFurniture(slide,presentation,opfSlide,geometry.furniture,slideContext,options,slideIndex);
@@ -1516,7 +1518,11 @@ function addMeasuredPayloadText(slide, text, box, context, options, config) {
     options.onDiagnostic?.(diagnostic);
     if (context.composition?.overflow === 'error') throw new OPFPptxError('layout-overflow', diagnostic.message, {path: config.path, issues: [diagnostic]});
   }
+  // Generated socials carry one link per explicit source line; wrapped lines share it.
+  let sourceLineIndex = 0;
   for (const [index, line] of fit.lines.entries()) {
+    const link = config.links?.[sourceLineIndex];
+    if (fit.sourceLines?.[index]?.boundary === 'hard') sourceLineIndex += 1;
     if (!line&&!config.heading&&!config.sourceText&&!config.timeline&&!config.keepEmpty) continue;
     const alignment=fit.placement?.alignment??config.align??context.contentAlignment??'left',placed=fit.placement?.lines[index],factor=alignment==='right'?1:alignment==='center'?.5:0;
     const sourceLine=fit.sourceLines?.[index],boundary=sourceLine?{boundary:sourceLine.boundary,separator:String(text).slice(sourceLine.end,sourceLine.nextStart)}:{};
@@ -1529,10 +1535,12 @@ function addMeasuredPayloadText(slide, text, box, context, options, config) {
     }
     else if(config.sourceText)context.plainTextTags.set(objectName,{v:1,group:config.path,line:index,count:fit.lines.length,...boundary});
     const area=placed?{x:(placed.x+placed.width*factor-box.width*factor)/96,y:(placed.baseline-fit.fontSize)/96,w:box.width/96,h:placed.height/96}:{x:box.x/96,y:(box.y+index*fit.lineHeight)/96,w:box.width/96,h:fit.lineHeight/96};
-    slide.addText(line, {
+    // A run-level link keeps the muted, non-underlined furniture look of the preview (hlinkClr=tx, u=none).
+    const lineColor = normalizeHex(config.color ?? context.colors.text);
+    slide.addText(link?.href && line ? [{text: line, options: {hyperlink: {url: link.href}, color: lineColor, underline: {style: 'none'}}}] : line, {
       ...textBoxOptions(area, context, fit.fontSize * .75),
       ...nativeFontOptions(style),
-      color: normalizeHex(config.color ?? context.colors.text), align: alignment,
+      color: lineColor, align: alignment,
       tabStops:sourceLine?.segments.filter(segment=>segment.kind==='tab').map(segment=>({position:(segment.x+segment.width)/96,alignment:'l'})),
       objectName,
       fit: 'none', wrap: false, lineSpacingMultiple: 1,
@@ -1564,7 +1572,7 @@ async function addFurniture(slide,presentation,source,layout,context,options,sli
         else options.onDiagnostic?.({code:'furniture-date-fixed',path:part.path,message:`dateFormat '${field.format}' has no PowerPoint en-US date field; the current date is exported as fixed text that PowerPoint will not update.`});
       }
       const liveFields=fields.length?lineFields(part.text,fields,part.fit.sourceLines,part.fit.lines):undefined;
-      addMeasuredPayloadText(slide,part.text,part.box,context,options,{path:part.path,fit:part.fit,textStyle:part.style,align:part.alignment,diagnosticsHandled:true,color:context.colors.mutedText,keepEmpty:true,objectName:`OPF furniture ${slideIndex} part ${index}`,furniture:{group:String(slideIndex),part:index},liveFields});
+      addMeasuredPayloadText(slide,part.text,part.box,context,options,{path:part.path,fit:part.fit,textStyle:part.style,align:part.alignment,diagnosticsHandled:true,color:context.colors.mutedText,keepEmpty:true,objectName:`OPF furniture ${slideIndex} part ${index}`,furniture:{group:String(slideIndex),part:index},liveFields,links:part.links});
     }
   }
   const manifest = furnitureManifest(presentation, source, layout, slideIndex);
@@ -1919,6 +1927,21 @@ function referenceId(reference) {
   if (typeof reference === "string") return reference;
   if (isPlainObject(reference) && typeof reference.id === "string") return reference.id;
   return null;
+}
+
+const DEFAULT_SOURCE_PREFIX = "https://www.pptx.gallery/";
+
+// Same order as opf-render's socialPlatformRecords so preview and export format
+// socials identically. Core applies inline document records first; then the
+// document catalog source (host-supplied options.catalogSources, or the bundled
+// catalog for pptx.gallery/pkg sources), injected options.catalogs, and the
+// bundled catalog (the engine default source also resolves to it).
+function socialPlatformRecords(presentation, options) {
+  const kind = "socialPlatforms", source = presentation.catalogs?.[kind]?.source;
+  const bySource = typeof source === "string" ? options.catalogSources?.[source] : undefined;
+  const sourceRecords = bySource ? normalizeRecords(bySource)
+    : typeof source === "string" && (source.startsWith(DEFAULT_SOURCE_PREFIX) || source.startsWith("pkg:@openpresentation/opf/")) ? defaultCatalog(kind) : [];
+  return [...sourceRecords, ...normalizeRecords(options.catalogs?.[kind]), ...defaultCatalog(kind)];
 }
 
 function defaultCatalog(kind) {

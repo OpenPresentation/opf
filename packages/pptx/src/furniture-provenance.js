@@ -2,6 +2,7 @@ import {XMLParser} from 'fast-xml-parser';
 import {attachTextTags, decodeTextTag, encodeTextTag} from './code-provenance.js';
 import {sourceLineParagraphs} from './text-provenance.js';
 import {DEFAULT_DATE_FORMAT, NATIVE_DATE_FIELDS, formatSlideNumber, parseDate} from './furniture-fields.js';
+import {schemas} from '@openpresentation/opf';
 
 const TAG = 'OPF_FURNITURE_V1';
 // A slide has one tag list; it also carries the document's OPF_SLIDE_V1 record.
@@ -12,9 +13,16 @@ const enc = new TextEncoder(), dec = new TextDecoder('utf-8', {fatal: true});
 const parser = new XMLParser({ignoreAttributes: false, attributeNamePrefix: '', parseTagValue: false, trimValues: false});
 const array = value => value === undefined ? [] : Array.isArray(value) ? value : [value];
 const kinds = ['header', 'footer'], zones = ['left', 'center', 'right'];
-const fields = ['text', 'image', 'organization', 'section', 'slideNumber', 'date'];
+const fields = ['text', 'image', 'organization', 'socials', 'section', 'slideNumber', 'date'];
 const settings = ['slideNumberFormat', 'dateFormat'];
 const dateFormatForField = Object.fromEntries(Object.entries(NATIVE_DATE_FIELDS).map(([format, type]) => [type, format]));
+// Platform keys follow the Socials schema's propertyNames pattern exactly, so
+// every key a valid document can carry re-imports (and nothing else does).
+const platformId = new RegExp(schemas.presentation.$defs.Socials.propertyNames.pattern, 'u'), schemes = ['', 'https://'];
+// Socials lines show a profile URL without the https:// scheme; the manifest
+// keeps only each line's platform id and the stripped scheme, never its words.
+const socialLines = part => part.links.map(link => ({platform: link.platform,
+  scheme: link.href && !/^[a-z][a-z0-9+.-]*:/i.test(link.text) ? 'https://' : ''}));
 const object = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 const key = part => `${part.kind}.${part.zone}.${part.field}`;
 const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
@@ -46,9 +54,10 @@ export function furnitureManifest(presentation, slide, layout, slideIndex) {
   const organizations = array(presentation.organization);
   const organization = organizations.find(item => item.role === 'primary') ?? organizations[0];
   return {v: 1, role: 'slide', group: String(slideIndex), definitions, ...(Object.keys(formats).length ? {formats} : {}),
-    ...(layout.parts.some(part => part.field === 'organization') ? {organizationId: organization?.id} : {}),
+    ...(layout.parts.some(part => part.field === 'organization' || part.field === 'socials') ? {organizationId: organization?.id} : {}),
     parts: layout.parts.map(part => ({kind: part.kind, zone: part.zone, field: part.field,
-      type: part.type, count: part.type === 'image' ? 1 : part.fit.lines.length}))};
+      type: part.type, count: part.type === 'image' ? 1 : part.fit.lines.length,
+      ...(part.field === 'socials' ? {socials: socialLines(part)} : {})}))};
 }
 
 export function attachFurnitureTags(entries, records, manifests) {
@@ -120,9 +129,13 @@ function validateManifest(manifest) {
   for (const part of manifest.parts) {
     check(object(part) && expected.get(key(part)) === part.type, 'Ambiguous furniture part.');
     check(Number.isSafeInteger(part.count) && part.count >= 1 && part.count <= 10000 && (part.type !== 'image' || part.count === 1), 'Invalid furniture line count.');
+    if (part.field === 'socials') check(Array.isArray(part.socials) && part.socials.length >= 1 && part.socials.length <= 100
+      && part.socials.every(line => object(line) && platformId.test(line.platform) && schemes.includes(line.scheme))
+      && new Set(part.socials.map(line => line.platform)).size === part.socials.length, 'Invalid social profile lines.');
+    else check(part.socials === undefined, 'Unexpected social profile lines.');
     expected.delete(key(part));
   }
-  if (manifest.parts.some(part => part.field === 'organization')) check(typeof manifest.organizationId === 'string' && /^[a-zA-Z0-9_-]+$/.test(manifest.organizationId), 'Invalid organization identity.');
+  if (manifest.parts.some(part => part.field === 'organization' || part.field === 'socials')) check(typeof manifest.organizationId === 'string' && /^[a-zA-Z0-9_-]+$/.test(manifest.organizationId), 'Invalid organization identity.');
 }
 
 function readSlide(context, entries, slideIndex, slideCount, report, taggedText) {
@@ -160,7 +173,7 @@ function readSlide(context, entries, slideIndex, slideCount, report, taggedText)
       if (value !== false) for (const zone of zones) if (definition.value[zone] !== undefined) {
         value[zone] = Object.fromEntries(Object.entries(definition.value[zone]).filter(([, flag]) => flag === false));
       }
-      const candidate = {scope: definition.scope, value, text: [], pictures: [], organizations: [], sections: []};
+      const candidate = {scope: definition.scope, value, text: [], pictures: [], organizations: [], socials: [], sections: []};
       for (const [partIndex, part] of manifest.parts.entries()) {
         if (part.kind !== kind) continue;
         const group = records.filter(record => record.data.part === partIndex);
@@ -187,6 +200,11 @@ function readSlide(context, entries, slideIndex, slideCount, report, taggedText)
           }
           if (part.field === 'section') candidate.sections.push(text);
           if (part.field === 'organization') candidate.organizations.push({id: manifest.organizationId, name: text});
+          if (part.field === 'socials') {
+            const lines = text.split('\n');
+            check(lines.length === part.socials.length && lines.every(line => line.trim()), 'Current social profile lines no longer match their platforms.');
+            candidate.socials.push({id: manifest.organizationId, socials: Object.fromEntries(part.socials.map((line, index) => [line.platform, line.scheme + lines[index]]))});
+          }
           value[part.zone][part.field] = part.field === 'text' ? text : part.field === 'date' ? importedDate(definition.value[part.zone].date, format, text, ordered.flatMap(record => (paragraphs[record.index] ?? []).flatMap(paragraph => paragraph.fields ?? [])), value[part.zone]) : true;
           candidate.text.push(...ordered.map(record => record.index));
         }
@@ -236,6 +254,15 @@ export function importFurniture(contexts, entries, onDiagnostic) {
       delete slide[kind]; report(index, `${kind}: Current section metadata disagrees on this slide.`);
     }
   }
+  // Social profiles belong to the organization named by repeated furniture; without
+  // that name (or with disagreeing values) the lines stay ordinary current text.
+  const owner = candidates.flatMap(slide => Object.values(slide).flatMap(candidate => candidate.organizations))[0];
+  const socials = candidates.flatMap(slide => Object.values(slide).flatMap(candidate => candidate.socials));
+  if (socials.length && (!owner || socials.some(item => item.id !== owner.id || !same(item, socials[0])))) {
+    for (const [index, slide] of candidates.entries()) for (const kind of kinds) if (slide[kind]?.socials.length) {
+      delete slide[kind]; report(index, `${kind}: ${owner ? 'Current social profile metadata disagrees across repeated fields.' : 'Social profiles need a repeated organization name to rebuild organization metadata.'}`);
+    }
+  }
   const result = {design: {}, slides: candidates.map((slide, index) => {
     const values = Object.values(slide), sections = values.flatMap(candidate => candidate.sections);
     return {design: Object.fromEntries(Object.entries(slide).map(([kind, candidate]) => [kind, candidate.value])),
@@ -244,6 +271,8 @@ export function importFurniture(contexts, entries, onDiagnostic) {
   })};
   const validOrganizations = candidates.flatMap(slide => Object.values(slide).flatMap(candidate => candidate.organizations));
   if (validOrganizations.length) result.organization = validOrganizations[0];
+  const validSocials = candidates.flatMap(slide => Object.values(slide).flatMap(candidate => candidate.socials));
+  if (result.organization && validSocials.length) result.organization = {...result.organization, socials: validSocials[0].socials};
   // Stored document metadata (FF-32) must not override disagreeing visible names.
   if (organizationConflict) result.organizationConflict = true;
   for (const kind of kinds) {

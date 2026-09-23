@@ -1,5 +1,7 @@
 import {XMLParser} from 'fast-xml-parser';
 import {decodeTextTag, encodeTextTag} from './code-provenance.js';
+// Namespace import: cores before FF-34 do not export resolveSocialProfile.
+import * as opfCore from '@openpresentation/opf';
 
 // FF-32: document and slide references survive a PPTX round trip.
 //
@@ -36,6 +38,19 @@ const canonical = value => JSON.stringify(value, (_key, item) => object(item) ? 
 const same = (a, b) => canonical(a) === canonical(b);
 const clone = value => value === undefined ? undefined : JSON.parse(JSON.stringify(value));
 const own = (value, key) => object(value) && Object.hasOwn(value, key) && value[key] !== undefined;
+// Furniture socials re-import as the displayed profile URL (FF-34). While a line
+// still shows exactly what the stored authored value formats to, keep the
+// authored form (a handle stays a handle); an edited line keeps its new URL.
+function authoredSocials(stored, observed, records) {
+  if (!object(stored) || !object(observed) || typeof opfCore.resolveSocialProfile !== 'function') return observed;
+  return Object.fromEntries(Object.entries(observed).map(([platform, value]) => {
+    const authored = stored[platform];
+    if (typeof authored !== 'string') return [platform, value];
+    const profile = opfCore.resolveSocialProfile(platform, authored, records, 'organization');
+    const shown = profile.href && !/^[a-z][a-z0-9+.-]*:/i.test(profile.text) ? `https://${profile.text}` : profile.text;
+    return [platform, shown === value ? authored : value];
+  }));
+}
 
 // Deck-level fields. References are gated by native evidence; metadata has no
 // native PowerPoint counterpart and round-trips from the stored value.
@@ -214,7 +229,11 @@ const METADATA_CATALOGS = Object.freeze({narrative: 'narratives', tone: 'tones',
 function collectStrings(value, into = new Set()) {
   if (typeof value === 'string') into.add(value);
   else if (Array.isArray(value)) value.forEach(item => collectStrings(item, into));
-  else if (object(value)) Object.values(value).forEach(item => collectStrings(item, into));
+  else if (object(value)) for (const [key, item] of Object.entries(value)) {
+    // Socials keys are socialPlatforms catalog references (FF-34).
+    if (key === 'socials' && object(item)) Object.keys(item).forEach(id => into.add(id));
+    collectStrings(item, into);
+  }
   return into;
 }
 
@@ -604,7 +623,7 @@ function pruneDangling(value, dangling, path, removed) {
  * validated OPF_SLIDE_V1 value (layout, type, composition, design hints, ...),
  * `catalogRecord` the stored inline layouts record for `layout`, if any.
  */
-export function restoreDocumentProvenance(imported, {entries, presentationRoot, presentationRels, slides, organizationConflict = false}, report) {
+export function restoreDocumentProvenance(imported, {entries, presentationRoot, presentationRels, slides, organizationConflict = false, socialPlatformRecords}, report) {
   const untagged = {groups: [], slides: slides.map(() => ({structure: 'untagged'})), finalize: doc => doc};
   const invalid = message => report({code: 'invalid-document-provenance', path: '', message: `${message} Ordinary import keeps the values observed in the PPTX.`});
   let document;
@@ -771,11 +790,15 @@ export function restoreDocumentProvenance(imported, {entries, presentationRoot, 
     if (value === undefined) continue;
     if (key === 'organization' && object(imported.organization)) {
       const observed = imported.organization;
+      // Same order as export: inline records, then the document source, host catalogs and bundled records.
+      const hostRecords = typeof socialPlatformRecords === 'function' ? socialPlatformRecords(document.catalogs) : (opfCore.catalogs?.socialPlatforms ?? []);
+      const records = [...array(document.catalogs?.socialPlatforms?.records ?? document.catalogs?.socialPlatforms), ...hostRecords].filter(object);
+      const merge = (stored, current) => object(current.socials) && object(stored?.socials) ? {...current, socials: authoredSocials(stored.socials, current.socials, records)} : current;
       const list = array(value);
       const index = list.findIndex(item => object(item) && item.id === observed.id);
       if (index < 0) value = clone(observed);
-      else if (Array.isArray(value)) value[index] = {...list[index], ...clone(observed)};
-      else value = {...value, ...clone(observed)};
+      else if (Array.isArray(value)) value[index] = {...list[index], ...merge(list[index], clone(observed))};
+      else value = {...value, ...merge(value, clone(observed))};
     }
     group(key, [set([key], value)]);
   }

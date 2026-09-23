@@ -64,6 +64,10 @@ export interface ToPptxOptions {
    * PowerPoint updates on open. Without it a current date is reported as unresolved content.
    */
   date?: string;
+  /** Host-supplied catalog records, as in opf-render. Currently consulted for socialPlatforms (generated socials furniture). */
+  catalogs?: Record<string, { records?: unknown[] } | unknown[]>;
+  /** Records for document `catalogs.<kind>.source` URLs, as in opf-render. Currently consulted for socialPlatforms. */
+  catalogSources?: Record<string, { records?: unknown[] } | unknown[]>;
 }
 
 export interface FromPptxOptions {
@@ -71,6 +75,10 @@ export interface FromPptxOptions {
   onDiagnostic?: (diagnostic: {code: string; path: string; message: string}) => void;
   fallbackName?: string;
   schema?: string;
+  /** The export's host catalog records (as in ToPptxOptions). Currently used to recognize unedited socials lines, so authored handles return. */
+  catalogs?: Record<string, { records?: unknown[] } | unknown[]>;
+  /** The export's records for document `catalogs.<kind>.source` URLs (as in ToPptxOptions). Currently used for socialPlatforms. */
+  catalogSources?: Record<string, { records?: unknown[] } | unknown[]>;
 }
 
 export declare class OPFPptxError extends Error {
