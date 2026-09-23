@@ -244,7 +244,7 @@ _No named properties._
 | `titleAlignment` | no | `enum:left \| center \| right` | Default horizontal alignment for title placeholders in resolved layouts. |
 | `contentAlignment` | no | `enum:left \| center \| right` | Default horizontal alignment for body/content regions in resolved layouts. |
 | `contentBox` | no | `boolean` | Whether body/content regions are rendered inside a visible card or surface. |
-| `slideImage` | no | `oneOf:ref:Asset / object` | Optional slide-level image treatment used by layouts that support a decorative or editorial image separate from content images. |
+| `slideImage` | no | `oneOf:ref:Asset / object` | Optional slide-level image, separate from content images. It applies to a slide that sets its own design.slideImage, and to slides whose layout declares slideImage: true or whose root image is the same source as a dec... |
 | `contentDirection` | no | `enum:horizontal \| vertical` | Axis along which parallel body/content regions are arranged. |
 | `chartPrimary` | no | `enum:none \| top \| bottom \| left \| right` | For chart layouts, where the primary chart sits relative to supporting content. 'none' means chart regions have equal weight. |
 | `imageFill` | no | `enum:crop \| fit` | How picture placeholders fill their allocated region. |
