@@ -4,6 +4,8 @@
   "name": "Somali",
   "code": "SOM",
   "bcp47": "so",
+  "script": "Latn",
+  "direction": "ltr",
   "fontScheme": "aptos",
   "googleFontScheme": "roboto"
 }

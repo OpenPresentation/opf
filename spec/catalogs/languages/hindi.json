@@ -4,6 +4,8 @@
   "name": "Hindi",
   "code": "HIN",
   "bcp47": "hi",
+  "script": "Deva",
+  "direction": "ltr",
   "fontScheme": "mangal",
   "googleFontScheme": "noto-sans-devangari"
 }

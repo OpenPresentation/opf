@@ -4,6 +4,8 @@
   "name": "Kannada",
   "code": "KAN",
   "bcp47": "kn",
+  "script": "Knda",
+  "direction": "ltr",
   "fontScheme": "tunga",
   "googleFontScheme": "noto-sans-kannada"
 }

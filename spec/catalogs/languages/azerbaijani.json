@@ -4,6 +4,8 @@
   "name": "Azerbaijani",
   "code": "AZE",
   "bcp47": "az",
+  "script": "Latn",
+  "direction": "ltr",
   "fontScheme": "aptos",
   "googleFontScheme": "roboto"
 }

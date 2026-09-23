@@ -4,6 +4,8 @@
   "name": "Yoruba",
   "code": "YOR",
   "bcp47": "yo",
+  "script": "Latn",
+  "direction": "ltr",
   "fontScheme": "aptos",
   "googleFontScheme": "roboto"
 }

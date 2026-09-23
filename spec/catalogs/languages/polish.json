@@ -4,6 +4,8 @@
   "name": "Polish",
   "code": "POL",
   "bcp47": "pl",
+  "script": "Latn",
+  "direction": "ltr",
   "fontScheme": "aptos",
   "googleFontScheme": "roboto"
 }

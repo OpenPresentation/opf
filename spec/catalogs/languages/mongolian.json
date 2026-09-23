@@ -4,6 +4,8 @@
   "name": "Mongolian",
   "code": "MON",
   "bcp47": "mn",
+  "script": "Cyrl",
+  "direction": "ltr",
   "fontScheme": "aptos",
   "googleFontScheme": "noto-sans-mongolian"
 }

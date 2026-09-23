@@ -4,6 +4,8 @@
   "name": "Albanian",
   "code": "SQI",
   "bcp47": "sq",
+  "script": "Latn",
+  "direction": "ltr",
   "fontScheme": "aptos",
   "googleFontScheme": "roboto"
 }

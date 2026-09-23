@@ -4,6 +4,8 @@
   "name": "Tajik",
   "code": "TGK",
   "bcp47": "tg",
+  "script": "Cyrl",
+  "direction": "ltr",
   "fontScheme": "aptos",
   "googleFontScheme": "noto-sans"
 }

@@ -4,6 +4,8 @@
   "name": "German",
   "code": "DEU",
   "bcp47": "de",
+  "script": "Latn",
+  "direction": "ltr",
   "fontScheme": "aptos",
   "googleFontScheme": "roboto"
 }

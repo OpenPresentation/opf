@@ -96,6 +96,58 @@
         }
       ]
     },
+    "eastAsian": {
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "description": "Optional eastAsian font families, mirroring the OOXML majorFont/minorFont a:ea entries. When set, they fill the eastAsian slot for every language; when omitted, the slot comes from the presentation language's font scheme for East Asian languages, from this scheme's own major/minor when languageFamily is 'ea', and otherwise from the latin (major/minor) families. A missing 'major' or 'minor' falls back to the other.",
+      "properties": {
+        "major": {
+          "type": "string",
+          "description": "Heading (major) eastAsian font family — mirrors majorFont a:ea.",
+          "examples": [
+            "Noto Sans JP",
+            "Meiryo",
+            "Microsoft YaHei"
+          ]
+        },
+        "minor": {
+          "type": "string",
+          "description": "Body (minor) eastAsian font family — mirrors minorFont a:ea.",
+          "examples": [
+            "Noto Sans JP",
+            "Meiryo",
+            "Microsoft YaHei"
+          ]
+        }
+      }
+    },
+    "complexScript": {
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "description": "Optional complexScript font families, mirroring the OOXML majorFont/minorFont a:cs entries. When set, they fill the complexScript slot for every language; when omitted, the slot comes from the presentation language's font scheme for complex-script languages, from this scheme's own major/minor when languageFamily is 'cs', and otherwise from the latin (major/minor) families. A missing 'major' or 'minor' falls back to the other.",
+      "properties": {
+        "major": {
+          "type": "string",
+          "description": "Heading (major) complexScript font family — mirrors majorFont a:cs.",
+          "examples": [
+            "Noto Sans Arabic",
+            "Arial",
+            "Mangal"
+          ]
+        },
+        "minor": {
+          "type": "string",
+          "description": "Body (minor) complexScript font family — mirrors minorFont a:cs.",
+          "examples": [
+            "Noto Sans Arabic",
+            "Arial",
+            "Mangal"
+          ]
+        }
+      }
+    },
     "type": {
       "type": "string",
       "enum": [
@@ -120,7 +172,7 @@
         "ea",
         "cs"
       ],
-      "description": "OOXML font-language family this scheme is intended for: 'latin' for Latin-script content, 'ea' for East Asian scripts, 'cs' for Complex Scripts."
+      "description": "OOXML font-language family this scheme is intended for: 'latin' for Latin-script content, 'ea' for East Asian scripts, 'cs' for Complex Scripts. A scheme with 'ea' or 'cs' also fills that script slot with its own major/minor families when it is the design font scheme."
     },
     "languages": {
       "type": "array",

@@ -4,6 +4,8 @@
   "name": "Oromo",
   "code": "ORM",
   "bcp47": "om",
+  "script": "Latn",
+  "direction": "ltr",
   "fontScheme": "aptos",
   "googleFontScheme": "roboto"
 }

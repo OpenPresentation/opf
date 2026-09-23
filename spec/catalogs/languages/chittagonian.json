@@ -4,6 +4,8 @@
   "name": "Chittagonian",
   "code": "CTG",
   "bcp47": "ctg",
+  "script": "Beng",
+  "direction": "ltr",
   "fontScheme": "vrinda",
   "googleFontScheme": "noto-sans-bengali"
 }

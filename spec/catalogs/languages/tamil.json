@@ -4,6 +4,8 @@
   "name": "Tamil",
   "code": "TAM",
   "bcp47": "ta",
+  "script": "Taml",
+  "direction": "ltr",
   "fontScheme": "latha",
   "googleFontScheme": "noto-sans-tamil"
 }

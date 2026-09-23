@@ -4,6 +4,8 @@
   "name": "Cebuano",
   "code": "CEB",
   "bcp47": "ceb",
+  "script": "Latn",
+  "direction": "ltr",
   "fontScheme": "aptos",
   "googleFontScheme": "roboto"
 }

@@ -190,9 +190,11 @@ OPF documents usually reference these records with string ids such as `design.th
 | `major` | yes | `string` | Heading (major) font family mirrors the OOXML majorFont entry. |
 | `minor` | yes | `string` | Body (minor) font family mirrors the OOXML minorFont entry. |
 | `code` | no | `object` | Optional monospaced font for code blocks and inline code. It has the same shape as the OPF FontScheme 'code' role, so a record and an inline design.fontScheme override are interchangeable. OOXML has no code slot, so e... |
+| `eastAsian` | no | `object` | Optional eastAsian font families, mirroring the OOXML majorFont/minorFont a:ea entries. When set, they fill the eastAsian slot for every language; when omitted, the slot comes from the presentation language's font sch... |
+| `complexScript` | no | `object` | Optional complexScript font families, mirroring the OOXML majorFont/minorFont a:cs entries. When set, they fill the complexScript slot for every language; when omitted, the slot comes from the presentation language's... |
 | `type` | no | `enum:sans-serif \| serif \| monospace` | High-level typographic class of the scheme. |
 | `app` | no | `enum:PowerPoint \| Google Slides` | Target application this font pairing is intended for. |
-| `languageFamily` | no | `enum:latin \| ea \| cs` | OOXML font-language family this scheme is intended for: 'latin' for Latin-script content, 'ea' for East Asian scripts, 'cs' for Complex Scripts. |
+| `languageFamily` | no | `enum:latin \| ea \| cs` | OOXML font-language family this scheme is intended for: 'latin' for Latin-script content, 'ea' for East Asian scripts, 'cs' for Complex Scripts. A scheme with 'ea' or 'cs' also fills that script slot with its own majo... |
 | `languages` | no | `array<string>` | Optional list of human-readable language names this scheme is curated for. Useful for picker UIs that group fonts by language coverage. |
 | `textSample` | no | `string` | Short specimen string used by picker UIs to preview the scheme. |
 | `summary` | no | `string` | One-sentence positioning of the font pairing. |
@@ -215,10 +217,10 @@ OPF documents usually reference these records with string ids such as `design.th
 | `name` | yes | `string` | Human-readable language name. |
 | `code` | no | `string` | ISO 639-3 (or 639-2) three-letter language code. Carried for engines that prefer ISO codes. |
 | `bcp47` | yes | `string` | BCP-47 language tag for this record. Use 'en-GB' for UK English; 'en-UK' is not a valid BCP-47 region form. |
-| `direction` | no | `enum:ltr \| rtl` | Base text direction for the language. |
-| `script` | no | `string` | ISO 15924 script code when the writing system should be explicit. |
-| `fontScheme` | no | `string` | Default font-scheme id for this language when targeting PowerPoint output. Resolves against catalogs.fontSchemes the same way design.fontScheme or design.fontScheme.id does. |
-| `googleFontScheme` | no | `string` | Default font-scheme id for this language when targeting Google Slides output. Resolves against catalogs.fontSchemes the same way design.fontScheme or design.fontScheme.id does. |
+| `direction` | no | `enum:ltr \| rtl` | Base text direction for the language. When omitted, engines derive it from the script: Arabic (Arab), Hebrew (Hebr), Syriac (Syrc), Thaana (Thaa), N'Ko (Nkoo), Adlam (Adlm), Samaritan (Samr), Mandaic (Mand) and Hanifi... |
+| `script` | no | `string` | ISO 15924 script code of the language's writing system. The script selects the OOXML font slot the language's text uses: East Asian scripts (Hans, Hant, Hani, Jpan, Kore, Hang, Hira, Kana, Bopo, Yiii) use the eastAsia... |
+| `fontScheme` | no | `string` | Default font-scheme id for this language when targeting PowerPoint output. Resolves against catalogs.fontSchemes the same way design.fontScheme or design.fontScheme.id does. Its major/minor families fill the language'... |
+| `googleFontScheme` | no | `string` | Default font-scheme id for this language when targeting Google Slides output. Resolves against catalogs.fontSchemes the same way design.fontScheme or design.fontScheme.id does. Used in place of 'fontScheme' when resol... |
 | `summary` | no | `string` | One-sentence note about coverage or font defaults. |
 | `description` | no | `string` | Longer prose describing the language record and any font-pairing rationale. |
 | `tags` | no | `array<string>` | Free-form labels for filtering and search. |

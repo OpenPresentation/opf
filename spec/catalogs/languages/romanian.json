@@ -4,6 +4,8 @@
   "name": "Romanian",
   "code": "RON",
   "bcp47": "ro",
+  "script": "Latn",
+  "direction": "ltr",
   "fontScheme": "aptos",
   "googleFontScheme": "roboto"
 }

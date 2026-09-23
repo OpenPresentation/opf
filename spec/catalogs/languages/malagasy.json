@@ -4,6 +4,8 @@
   "name": "Malagasy",
   "code": "MLG",
   "bcp47": "mg",
+  "script": "Latn",
+  "direction": "ltr",
   "fontScheme": "aptos",
   "googleFontScheme": "roboto"
 }

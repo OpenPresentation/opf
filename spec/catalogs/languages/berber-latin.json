@@ -4,6 +4,8 @@
   "name": "Berber (Latin)",
   "code": "BER",
   "bcp47": "ber-Latn",
+  "script": "Latn",
+  "direction": "ltr",
   "fontScheme": "aptos",
   "googleFontScheme": "roboto"
 }

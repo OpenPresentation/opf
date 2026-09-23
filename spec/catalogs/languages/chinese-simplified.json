@@ -4,6 +4,8 @@
   "name": "Chinese (Simplified)",
   "code": "ZHO",
   "bcp47": "zh-Hans",
+  "script": "Hans",
+  "direction": "ltr",
   "fontScheme": "microsoft-yahei",
   "googleFontScheme": "noto-sans-sc"
 }

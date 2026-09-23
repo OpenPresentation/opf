@@ -4,6 +4,8 @@
   "name": "Bulgarian",
   "code": "BUL",
   "bcp47": "bg",
+  "script": "Cyrl",
+  "direction": "ltr",
   "fontScheme": "aptos",
   "googleFontScheme": "noto-sans"
 }

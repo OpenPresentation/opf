@@ -4,6 +4,8 @@
   "name": "Latvian",
   "code": "LAV",
   "bcp47": "lv",
+  "script": "Latn",
+  "direction": "ltr",
   "fontScheme": "aptos",
   "googleFontScheme": "roboto"
 }

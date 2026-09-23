@@ -4,6 +4,8 @@
   "name": "Aymara",
   "code": "AYM",
   "bcp47": "ay",
+  "script": "Latn",
+  "direction": "ltr",
   "fontScheme": "aptos",
   "googleFontScheme": "roboto"
 }

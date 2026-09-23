@@ -4,6 +4,8 @@
   "name": "Ukrainian",
   "code": "UKR",
   "bcp47": "uk",
+  "script": "Cyrl",
+  "direction": "ltr",
   "fontScheme": "aptos",
   "googleFontScheme": "noto-sans"
 }

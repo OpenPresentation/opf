@@ -4,6 +4,8 @@
   "name": "Malayalam",
   "code": "MAL",
   "bcp47": "ml",
+  "script": "Mlym",
+  "direction": "ltr",
   "fontScheme": "kartika",
   "googleFontScheme": "noto-sans-malayalam"
 }

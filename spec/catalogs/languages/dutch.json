@@ -4,6 +4,8 @@
   "name": "Dutch",
   "code": "NLD",
   "bcp47": "nl",
+  "script": "Latn",
+  "direction": "ltr",
   "fontScheme": "aptos",
   "googleFontScheme": "roboto"
 }

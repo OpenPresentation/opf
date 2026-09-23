@@ -4,6 +4,8 @@
   "name": "Spanish",
   "code": "SPA",
   "bcp47": "es",
+  "script": "Latn",
+  "direction": "ltr",
   "fontScheme": "aptos",
   "googleFontScheme": "roboto"
 }

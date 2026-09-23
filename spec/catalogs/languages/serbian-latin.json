@@ -4,6 +4,8 @@
   "name": "Serbian (Latin)",
   "code": "SRP",
   "bcp47": "sr-Latn",
+  "script": "Latn",
+  "direction": "ltr",
   "fontScheme": "aptos",
   "googleFontScheme": "roboto"
 }

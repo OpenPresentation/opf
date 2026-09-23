@@ -4,6 +4,8 @@
   "name": "Amharic",
   "code": "AMH",
   "bcp47": "am",
+  "script": "Ethi",
+  "direction": "ltr",
   "fontScheme": "nyala",
   "googleFontScheme": "noto-sans-ethiopic"
 }

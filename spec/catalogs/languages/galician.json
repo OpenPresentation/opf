@@ -4,6 +4,8 @@
   "name": "Galician",
   "code": "GLG",
   "bcp47": "gl",
+  "script": "Latn",
+  "direction": "ltr",
   "fontScheme": "aptos",
   "googleFontScheme": "roboto"
 }

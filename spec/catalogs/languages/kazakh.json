@@ -4,6 +4,8 @@
   "name": "Kazakh",
   "code": "KAZ",
   "bcp47": "kk",
+  "script": "Cyrl",
+  "direction": "ltr",
   "fontScheme": "aptos",
   "googleFontScheme": "noto-sans"
 }

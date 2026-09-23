@@ -4,6 +4,8 @@
   "name": "French",
   "code": "FRA",
   "bcp47": "fr",
+  "script": "Latn",
+  "direction": "ltr",
   "fontScheme": "aptos",
   "googleFontScheme": "roboto"
 }

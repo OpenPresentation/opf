@@ -4,6 +4,8 @@
   "name": "Māori",
   "code": "MRI",
   "bcp47": "mi",
+  "script": "Latn",
+  "direction": "ltr",
   "fontScheme": "aptos",
   "googleFontScheme": "roboto"
 }

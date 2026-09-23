@@ -4,6 +4,8 @@
   "name": "Armenian",
   "code": "HYE",
   "bcp47": "hy",
+  "script": "Armn",
+  "direction": "ltr",
   "fontScheme": "sylfaen",
   "googleFontScheme": "noto-sans-armenian"
 }

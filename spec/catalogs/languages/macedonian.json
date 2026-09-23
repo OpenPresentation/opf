@@ -4,6 +4,8 @@
   "name": "Macedonian",
   "code": "MKD",
   "bcp47": "mk",
+  "script": "Cyrl",
+  "direction": "ltr",
   "fontScheme": "aptos",
   "googleFontScheme": "noto-sans"
 }

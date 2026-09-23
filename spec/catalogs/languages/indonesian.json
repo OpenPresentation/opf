@@ -4,6 +4,8 @@
   "name": "Indonesian",
   "code": "IND",
   "bcp47": "id",
+  "script": "Latn",
+  "direction": "ltr",
   "fontScheme": "aptos",
   "googleFontScheme": "roboto"
 }

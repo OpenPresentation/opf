@@ -4,6 +4,8 @@
   "name": "Fulfulde",
   "code": "FUL",
   "bcp47": "ff",
+  "script": "Latn",
+  "direction": "ltr",
   "fontScheme": "aptos",
   "googleFontScheme": "roboto"
 }

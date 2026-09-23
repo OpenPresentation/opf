@@ -4,6 +4,8 @@
   "name": "Greek",
   "code": "ELL",
   "bcp47": "el",
+  "script": "Grek",
+  "direction": "ltr",
   "fontScheme": "aptos",
   "googleFontScheme": "noto-sans"
 }

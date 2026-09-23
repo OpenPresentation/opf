@@ -4,6 +4,8 @@
   "name": "Khmer",
   "code": "KHM",
   "bcp47": "km",
+  "script": "Khmr",
+  "direction": "ltr",
   "fontScheme": "daunpenh",
   "googleFontScheme": "noto-sans-khmer"
 }

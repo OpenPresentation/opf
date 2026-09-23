@@ -4,6 +4,8 @@
   "name": "Danish",
   "code": "DAN",
   "bcp47": "da",
+  "script": "Latn",
+  "direction": "ltr",
   "fontScheme": "aptos",
   "googleFontScheme": "roboto"
 }

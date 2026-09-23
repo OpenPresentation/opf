@@ -4,6 +4,8 @@
   "name": "Bengali",
   "code": "BEN",
   "bcp47": "bn",
+  "script": "Beng",
+  "direction": "ltr",
   "fontScheme": "shonar-bangla",
   "googleFontScheme": "noto-sans-bengali"
 }

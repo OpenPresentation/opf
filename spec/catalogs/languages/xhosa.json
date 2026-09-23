@@ -4,6 +4,8 @@
   "name": "Xhosa",
   "code": "XHO",
   "bcp47": "xh",
+  "script": "Latn",
+  "direction": "ltr",
   "fontScheme": "aptos",
   "googleFontScheme": "roboto"
 }

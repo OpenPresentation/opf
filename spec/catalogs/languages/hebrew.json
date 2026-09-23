@@ -4,6 +4,8 @@
   "name": "Hebrew",
   "code": "HEB",
   "bcp47": "he",
+  "script": "Hebr",
+  "direction": "rtl",
   "fontScheme": "david",
   "googleFontScheme": "noto-sans-hebrew"
 }

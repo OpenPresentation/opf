@@ -4,6 +4,8 @@
   "name": "Filipino",
   "code": "FIL",
   "bcp47": "fil",
+  "script": "Latn",
+  "direction": "ltr",
   "fontScheme": "aptos",
   "googleFontScheme": "roboto"
 }

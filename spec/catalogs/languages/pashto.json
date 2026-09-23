@@ -4,6 +4,8 @@
   "name": "Pashto",
   "code": "PUS",
   "bcp47": "ps",
+  "script": "Arab",
+  "direction": "rtl",
   "fontScheme": "arial",
   "googleFontScheme": "noto-sans-arabic"
 }

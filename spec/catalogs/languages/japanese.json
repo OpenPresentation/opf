@@ -4,6 +4,8 @@
   "name": "Japanese",
   "code": "JPN",
   "bcp47": "ja",
+  "script": "Jpan",
+  "direction": "ltr",
   "fontScheme": "meiryo",
   "googleFontScheme": "noto-sans-jp"
 }

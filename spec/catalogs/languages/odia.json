@@ -4,6 +4,8 @@
   "name": "Odia",
   "code": "ORI",
   "bcp47": "or",
+  "script": "Orya",
+  "direction": "ltr",
   "fontScheme": "kalinga",
   "googleFontScheme": "noto-sans-oriya"
 }

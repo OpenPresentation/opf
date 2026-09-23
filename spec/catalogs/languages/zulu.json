@@ -4,6 +4,8 @@
   "name": "Zulu",
   "code": "ZUL",
   "bcp47": "zu",
+  "script": "Latn",
+  "direction": "ltr",
   "fontScheme": "aptos",
   "googleFontScheme": "roboto"
 }

@@ -4,6 +4,8 @@
   "name": "Uzbek (Latin)",
   "code": "UZB",
   "bcp47": "uz-Latn",
+  "script": "Latn",
+  "direction": "ltr",
   "fontScheme": "aptos",
   "googleFontScheme": "roboto"
 }

@@ -4,6 +4,8 @@
   "name": "Estonian",
   "code": "EST",
   "bcp47": "et",
+  "script": "Latn",
+  "direction": "ltr",
   "fontScheme": "aptos",
   "googleFontScheme": "roboto"
 }

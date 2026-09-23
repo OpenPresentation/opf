@@ -4,6 +4,8 @@
   "name": "Punjabi (Gurmukhi)",
   "code": "PAN",
   "bcp47": "pa-Guru",
+  "script": "Guru",
+  "direction": "ltr",
   "fontScheme": "raavi",
   "googleFontScheme": "noto-sans-gurmukhi"
 }

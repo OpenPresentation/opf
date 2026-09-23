@@ -4,6 +4,8 @@
   "name": "Georgian",
   "code": "KAT",
   "bcp47": "ka",
+  "script": "Geor",
+  "direction": "ltr",
   "fontScheme": "sylfaen",
   "googleFontScheme": "noto-sans-georgian"
 }

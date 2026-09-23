@@ -112,5 +112,15 @@ export {
   textColorForFill,
 } from './color.js';
 export type { ResolveColorRefOptions, ResolveColorRefRoles } from './color.js';
+export { resolveScriptFonts, scriptFontRole } from './script-fonts.js';
+export type {
+  ResolveScriptFontsOptions,
+  ResolvedScriptFonts,
+  ScriptFontApp,
+  ScriptFontSlots,
+  ScriptFontSource,
+  ScriptFontSupplement,
+  ScriptRole,
+} from './script-fonts.js';
 export {measureTextOutline,placeTextLines} from './composition.js';
 export type {TextLineInk,TextPlacementLine,TextPlacement} from './composition.js';

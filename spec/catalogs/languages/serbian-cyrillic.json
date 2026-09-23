@@ -4,6 +4,8 @@
   "name": "Serbian (Cyrillic)",
   "code": "SRP",
   "bcp47": "sr-Cyrl",
+  "script": "Cyrl",
+  "direction": "ltr",
   "fontScheme": "aptos",
   "googleFontScheme": "noto-sans"
 }

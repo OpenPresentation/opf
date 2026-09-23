@@ -4,6 +4,8 @@
   "name": "Tagalog",
   "code": "TGL",
   "bcp47": "tl",
+  "script": "Latn",
+  "direction": "ltr",
   "fontScheme": "aptos",
   "googleFontScheme": "roboto"
 }
