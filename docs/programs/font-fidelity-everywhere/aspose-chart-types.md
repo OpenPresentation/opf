@@ -29,8 +29,23 @@ the [2026 release notes](https://releases.aspose.com/slides/net/release-notes/20
 - *SeriesOfMixedTypes.* The enumeration says this value "only can be returned
   by ChartEx.Type property". It is never a type you can create. It only reports
   a chart that already mixes series types.
-- *ParetoLine.* This is a series type inside a histogram chart, the Office
-  "Histogram Pareto" chart. It is not a standalone plot type.
+- *ParetoLine.* This is the Office "Histogram Pareto" chart: a histogram
+  whose extra series plots the cumulative percentage. OPF offers it as `pareto`.
+
+## Rule: what counts as officially supported
+
+A chart type is officially supported exactly when it is a member of the
+Aspose.Slides `ChartType` enumeration that can back a chart. Every enumeration
+member counts except `SeriesOfMixedTypes`, which Aspose only reports and never
+creates. "Officially supported" never extends to designs that Aspose can only
+build by combining several chart types or helper series in one plot area,
+such as bullets, dot plots, dumbbells, sparklines or lines with high/low
+bands. Those stay deprecated even though each individual series type is
+supported.
+
+`ParetoLine` is an enumeration member, and together with a histogram it forms
+the Office Pareto chart. So `pareto` is kept, mapped to that construct (see
+below), and not treated as a composition.
 
 ## ChartType members and their Open XML constructs
 
@@ -174,7 +189,7 @@ stored in a separate `chartEx` part, and each `cx:series` names its plot through
 | 74 | Treemap | `cx:series layoutId="treemap"` |  | `treemap` |
 | 75 | Sunburst | `cx:series layoutId="sunburst"` |  | — |
 | 76 | Histogram | `cx:series layoutId="clusteredColumn"` with `cx:binning` |  | `histogram` |
-| 77 | ParetoLine | `cx:series layoutId="paretoLine"` inside a histogram chart |  | — |
+| 77 | ParetoLine | `cx:series layoutId="paretoLine"` inside a histogram chart (the Office Pareto chart) |  | `pareto` |
 | 78 | BoxAndWhisker | `cx:series layoutId="boxWhisker"` |  | `box-and-whisker` |
 | 79 | Waterfall | `cx:series layoutId="waterfall"` |  | `waterfall` |
 | 80 | Funnel | `cx:series layoutId="funnel"` |  | `funnel` |
@@ -186,7 +201,7 @@ The bundled catalog has 76 records. Each record names its matching ChartType in
 `mappings.renderers["aspose-slides"].chartType`. The rule is one non-deprecated
 record per ChartType. `pnpm check:spec` (check `[f]`) enforces it.
 
-**Kept (25).** The record listed against a ChartType in the tables above is the
+**Kept (26).** The record listed against a ChartType in the tables above is the
 one that stays. Where several records shared a ChartType, the kept one is the
 record the ecosystem already defaults to:
 
@@ -198,13 +213,18 @@ record the ecosystem already defaults to:
 Kept `-3x` records now carry the plain label, for example "Stacked Column".
 Their ids stay stable because the gallery links to them.
 
-**Deprecated (51).**
+**Deprecated (50).**
 
 - *Duplicates.* 23 records share a ChartType with a kept record. Series count
   and geography come from the chart data, not from the chart type.
-- *Compositions.* 28 records are not a single ChartType. They are Aspose's
+- *Compositions.* 27 records are not a single ChartType. They are Aspose's
   SeriesOfMixedTypes or helper-series designs: bullets, sparklines, dot plots,
-  dumbbell, line with high/low, and the bar-plus-line Pareto.
+  dumbbell, and line with high/low.
+
+`pareto` is kept as `ParetoLine`. Its record used to describe a bar-plus-line
+combination. It now maps to the Office construct: a chartex
+`histogramChart` with `extension: "cx:paretoLine"`. Its id, columns and sample
+data are unchanged, so existing documents keep working.
 
 A deprecated record keeps resolving, so existing documents stay valid, and it
 carries:
@@ -277,7 +297,7 @@ the next breaking release (0.12.0) and are not deleted now.
 | `line-with-markers` | LineWithMarkers | keep | — |
 | `line-with-markers-2x` | LineWithMarkers | deprecate (duplicate) | `line-with-markers` |
 | `line-with-markers-3x` | LineWithMarkers | deprecate (duplicate) | `line-with-markers` |
-| `pareto` | no match (composition) | deprecate (composition) | `histogram` |
+| `pareto` | ParetoLine | keep | — |
 | `pie` | Pie | keep | — |
 | `radar` | Radar | keep | — |
 | `radar-with-markers` | RadarWithMarkers | keep | — |
@@ -330,8 +350,8 @@ substrings of its id:
   - The stacked line and area records lose their stacking.
   - `filled-radar` exports as a standard radar chart.
   - `scatter` writes `c:scatterChart` from category-shaped data.
-- **Not native:** `treemap`, `histogram`, `box-and-whisker`, `waterfall`,
-  `funnel` and `world` (Map). PptxGenJS 4.0.1 cannot write `cx:` parts, so
+- **Not native:** `treemap`, `histogram`, `pareto`, `box-and-whisker`,
+  `waterfall`, `funnel` and `world` (Map). PptxGenJS 4.0.1 cannot write `cx:` parts, so
   these export as a clustered `c:barChart`. There is no `c:stockChart`,
   `c:bubbleChart` or 3D output either.
 - **Unknown ids** silently become a clustered column.
@@ -348,7 +368,7 @@ does not change what the exporter or the renderer emits.
 OPF does not offer the 3D, cylinder, cone and pyramid variants, Line3D, the
 pie variants (Pie3D, PieOfPie, ExplodedPie, BarOfPie), the line scatter
 variants, stock, surface and contour, ExplodedDoughnut, Bubble, Sunburst,
-PercentsStackedLine, PercentsStackedLineWithMarkers and ParetoLine. They are
+PercentsStackedLine and PercentsStackedLineWithMarkers. They are
 officially supported by Aspose.Slides but have no OPF record, because none
 existed before FF-22. Adding any of them is a separate decision, and each needs
 exporter and renderer support first.

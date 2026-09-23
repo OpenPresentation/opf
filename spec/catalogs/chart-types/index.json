@@ -95,6 +95,13 @@
       "file": "line-with-markers.json"
     },
     {
+      "id": "pareto",
+      "name": "PARETO",
+      "label": "Pareto",
+      "group": "Histogram",
+      "file": "pareto.json"
+    },
+    {
       "id": "pie",
       "name": "PIE",
       "label": "Pie",
@@ -492,15 +499,6 @@
       "file": "line-with-markers-3x.json",
       "deprecated": true,
       "replacedBy": "line-with-markers"
-    },
-    {
-      "id": "pareto",
-      "name": "PARETO",
-      "label": "Pareto",
-      "group": "Histogram",
-      "file": "pareto.json",
-      "deprecated": true,
-      "replacedBy": "histogram"
     },
     {
       "id": "sparkline",
