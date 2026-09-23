@@ -113,7 +113,7 @@ export {
   textColorForFill,
 } from './color.js';
 export type { ResolveColorRefOptions, ResolveColorRefRoles } from './color.js';
-export { resolveScriptFonts, scriptFontRole } from './script-fonts.js';
+export { paragraphDirection, resolveScriptFonts, scriptFontRole } from './script-fonts.js';
 export type {
   ResolveScriptFontsOptions,
   ResolvedScriptFonts,
@@ -122,6 +122,7 @@ export type {
   ScriptFontSource,
   ScriptFontSupplement,
   ScriptRole,
+  TextDirection,
 } from './script-fonts.js';
 export {measureTextOutline,placeTextLines} from './composition.js';
 export type {TextLineInk,TextPlacementLine,TextPlacement} from './composition.js';
