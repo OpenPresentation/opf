@@ -193,6 +193,15 @@ JPEG EXIF orientations 1–8 are represented by native picture rotation and mirr
 
 A slide-level image (`design.slideImage`, composed by core as `geometry.slideImage`) exports as one native picture named `OPF slide image slides.N`. It sits beneath the slide's other shapes. Its frame is the shared composition frame for both fills: `crop` writes positive `a:srcRect` insets and `fit` writes negative insets that pad the centered image. The frame therefore matches the preview's `<image>` box exactly. An `OPF_SLIDE_IMAGE_V1` shape tag records the placement and the native picture geometry. On import, an unchanged tagged picture becomes the slide's `design.slideImage` again, with the embedded bytes as its data URI source and `imageFill: "fit"` when the frame was fitted. An edited, duplicated or ambiguous tagged picture is imported as an ordinary image block and reports `invalid-slide-image-provenance` at `slides.N.design.slideImage`. Native PowerPoint raster parity for negative `a:srcRect` insets has not been checked with Office yet.
 
+Slide-image treatments export from core's normalized geometry as native DrawingML:
+
+- `shape` becomes the picture's `a:prstGeom` (`rect`, `roundRect`, `ellipse` or `hexagon`) with core's guide values.
+- `border` becomes a centered solid `a:ln` with a miter join.
+- `recolor` becomes `a:grayscl` or `a:duotone`, followed by `a:alphaModFix` for `opacity`, on the blip only.
+- `overlay` becomes one tagged `OPF slide image overlay slides.N` shape directly above the picture.
+
+An unchanged export imports every treatment field back. An edited overlay drops only the overlay and reports `invalid-slide-image-provenance`. An edited picture or effect drops the slide image. See core `docs/image-treatments.md` for the vocabulary and the unsupported effects: blur, shadows, soft edges and background removal. PowerPoint's luminance weights for grayscale and duotone are unverified natively.
+
 Tests compare SVG/native fit and crop geometry across nine synthetic raster fixtures and cover all eight JPEG orientations. Keynote 14.4 visually preserves proportions for wide/tall fit/crop and displays all eight orientations correctly. This does not establish Microsoft PowerPoint raster parity or WebP support in every Office version.
 
 The structural export/import corpus gate covers every installed core example (126 decks / 805 slides for core 0.4.0). It explicitly substitutes a bundled fallback font and synthetic images, then checks slide XML, unique native object IDs, finite geometry, table grids and imported slide counts. It does not establish original-asset, typography or viewer fidelity. The focused table and image tests separately exercise measured geometry and real fixture bytes.

@@ -11,7 +11,7 @@ import {attachFurnitureTags, furnitureManifest, importFurniture} from './furnitu
 import {applyDocumentProvenance, attachDocumentProvenance, documentProvenance, restoreDocumentProvenance} from './document-provenance.js';
 import {attachFurnitureFields, furniturePartFields, lineFields, nativeFieldType} from './furniture-fields.js';
 import {importImageOrientation} from './image-import.js';
-import {placeSlideImages, importSlideImage, slideImageName} from './slide-image-provenance.js';
+import {placeSlideImages, importSlideImage, slideImageName, slideImageOverlayName} from './slide-image-provenance.js';
 import {nativeBackgroundFill, nativeImageBackgroundFill, nativePatternPreset} from './background.js';
 import {importBackground} from './background-import.js';
 import {themeSlotColors, writeThemeColors, schemeColorValue, schemeBackgroundFill, readThemeSlotColors, recoverColorScheme, recoverTheme, presentationThemePath} from './theme-colors.js';
@@ -471,7 +471,7 @@ function importSlide(entries, slidePath, slideIndex, presentationDimensions, opt
   if (Object.keys(furniture.design).length) slide.design = {...slide.design, ...furniture.design};
   if (furniture.section !== undefined) slide.section = furniture.section;
   const slideImagePath = `slides.${slideIndex}.design.slideImage`;
-  const slideImage = importSlideImage(nativeContext.pictures, relationships, entries, slideIndex,
+  const slideImage = importSlideImage(nativeContext.pictures, nativeContext.shapes, relationships, entries, slideIndex,
     picture => importPicture(entries, picture, slidePath, relationships, diagnostic => {
       // The recorded crop/fit is re-derived from design.slideImage.
       if (diagnostic.code !== 'unsupported-image-crop') options.onDiagnostic?.({...diagnostic, path: slideImagePath});
@@ -479,6 +479,7 @@ function importSlide(entries, slidePath, slideIndex, presentationDimensions, opt
     diagnostic => options.onDiagnostic?.({...diagnostic, path: slideImagePath}));
   if (slideImage.design) slide.design = {...slide.design, ...slideImage.design};
   nativeContext.slideImagePictures = slideImage.consumed;
+  nativeContext.slideImageShapes = slideImage.consumedShapes;
 
   const items = collectSlideItems(entries, slideRoot, slidePath, relationships, dimensions, options, slideIndex, furniture, nativeContext)
     .sort(comparePositionedItems);
@@ -534,7 +535,7 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   for (const item of code.items) items.push({kind:'code',bounds:shapeBounds(item.shape['p:spPr']?.['a:xfrm']),payload:item.payload});
   for (const item of metric.items) items.push({kind:'metric',bounds:shapeBounds(item.shape['p:spPr']?.['a:xfrm']),payload:item.payload});
   for (const [index,shape] of shapes.entries()) {
-    if (furniture.text.has(index)) continue;
+    if (furniture.text.has(index) || nativeContext.slideImageShapes?.has(index)) continue;
     if (code.consumed.has(shape)||metric.consumed.has(shape)||cards.has(shape)||headings.consumed.has(shape)||plainText.consumed.has(shape)||timelines.consumed.has(shape)) continue;
     const item = importShape(shape, dimensions, paragraphs[index], furniture.taggedText.has(index));
     // A damaged/edited furniture group falls back to current native text,
@@ -1343,8 +1344,27 @@ async function addSlideImage(slide, presentation, image, slideIndex, context, op
   const objectName = slideImageName(`slides.${slideIndex}`);
   const configured = image.path === 'design.slideImage' ? presentation.design?.slideImage : presentation.slides[slideIndex].design?.slideImage;
   const { src: _source, ...treatment } = isPlainObject(configured) && 'position' in configured ? configured : {};
-  context.slideImages.set(objectName, { slide: `slides.${slideIndex}`, box, fill: image.fill, path: image.sourcePath, treatment: { ...treatment, position: image.position } });
-  slide.addImage({ ...resolved, objectName, ...box, altText: assetAlt(image.value, presentation) });
+  const paint = (entry, fallback) => {
+    const hex = normalizeHex(exportColor(entry, context, fallback), fallback);
+    const raw = exportColor(entry, context, fallback).replace(/^#/, '');
+    return { hex, alpha: /^[0-9a-f]{8}$/i.test(raw) ? parseInt(raw.slice(6), 16) / 255 : 1 };
+  };
+  // Native effects are resolved here, in the slide's color context.
+  const effects = {
+    shape: image.shape ?? null,
+    border: image.border ? { ...paint(image.border.color, context.colors.border), width: image.border.width } : null,
+    opacity: image.opacity ?? null,
+    recolor: image.recolor?.type === 'grayscale' ? { type: 'grayscale' }
+      : image.recolor?.type === 'duotone' ? { type: 'duotone', dark: paint(image.recolor.dark, '000000'), light: paint(image.recolor.light, 'FFFFFF') } : null,
+    overlay: image.overlay ? { ...paint(image.overlay.color, context.colors.text), opacity: image.overlay.opacity, box: image.overlay.box, shape: image.overlay.shape } : null,
+  };
+  context.slideImages.set(objectName, { slide: `slides.${slideIndex}`, box, fill: image.fill, path: image.sourcePath, treatment: { ...treatment, position: image.position }, effects });
+  slide.addImage({ ...resolved, objectName, ...box, altText: image.alt ?? assetAlt(image.value, presentation) });
+  // The overlay scrim is a separate native shape directly above the picture.
+  if (effects.overlay) {
+    const overlay = effects.overlay.box;
+    slide.addShape('rect', { x: overlay.x / 96, y: overlay.y / 96, w: overlay.width / 96, h: overlay.height / 96, objectName: slideImageOverlayName(`slides.${slideIndex}`), fill: { color: effects.overlay.hex } });
+  }
 }
 
 function addChartPayload(slide, chart, region, context) {
