@@ -57,6 +57,11 @@ export interface ResolveScriptFontsOptions {
   slideIndex?: number;
   /** Language reference to resolve instead of the document's `language` (catalog id, BCP-47 tag or Language object). */
   language?: unknown;
+  /**
+   * Last-resort font scheme id when neither the slide, the deck nor the resolved theme names one. Defaults to
+   * `roboto` (core pagination, preview and editor); the PPTX exporter passes `aptos` (see design-resolution.md).
+   */
+  defaultFontScheme?: string;
   /** Language tag used when neither the document nor `options.language` names a resolvable language. Defaults to `en-US`. */
   defaultLanguage?: string;
 }
@@ -350,7 +355,7 @@ export function resolveScriptFonts(input: unknown, options: ResolveScriptFontsOp
   }
 
   const theme = resolveReference(lookup, "themes", design.theme ?? "minimal") ?? {};
-  const scheme = resolveReference(lookup, "fontSchemes", design.fontScheme ?? theme.fontScheme ?? "roboto") ?? {};
+  const scheme = resolveReference(lookup, "fontSchemes", design.fontScheme ?? theme.fontScheme ?? text(options.defaultFontScheme) ?? "roboto") ?? {};
   const latin = resolveFontFamilies(scheme);
 
   const fromOption = options.language !== undefined ? resolveLanguage(document, lookup, options.language) : undefined;

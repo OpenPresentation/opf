@@ -282,6 +282,13 @@ describe('precedence', () => {
     assert.throws(() => resolveScriptFonts(document, {slideIndex: 0.5}), RangeError);
   });
 
+  test('defaultFontScheme applies only when no slide, deck or theme scheme is named', () => {
+    const customTheme = {slides: [{title: 'Custom theme'}], design: {theme: {name: 'Custom'}}};
+    assert.equal(resolveScriptFonts(customTheme).body.latin, 'Roboto');
+    assert.equal(resolveScriptFonts(customTheme, {defaultFontScheme: 'aptos'}).body.latin, 'Aptos');
+    assert.equal(resolveScriptFonts(deck('english'), {defaultFontScheme: 'aptos'}).body.latin, 'Carlito');
+  });
+
   test('options.language replaces the document language', () => {
     const resolved = resolveScriptFonts(deck('english'), {language: 'th-TH'});
     assert.equal(resolved.lang, 'th-TH');
