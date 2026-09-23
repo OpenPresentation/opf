@@ -19,7 +19,7 @@ for (const name of ['opf-render', 'opf-editor', 'opf-pptx']) {
   if (name === 'opf-render') run('npm', ['run', 'test:font-preparation'], cwd);
   if (name !== 'opf-editor') run('npm', ['run', 'test:font-variants'], cwd);
 }
-for (const task of ['test:skills', 'test:ecosystem', 'test:pagination', 'test:layout', 'test:lists', 'test:rich-text', 'test:data', 'test:fonts']) run('pnpm', [task]);
+for (const task of ['test:skills', 'test:ecosystem', 'test:pagination', 'test:layout', 'test:lists', 'test:rich-text', 'test:data', 'test:fonts', 'test:slide-images']) run('pnpm', [task]);
 run('pnpm', ['demo:editor']);
 run('node', ['scripts/build-rich-table-browser.mjs']);
 run('pnpm', ['pack:ecosystem']);

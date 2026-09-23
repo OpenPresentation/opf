@@ -918,12 +918,92 @@
                 "position": {
                   "type": "string",
                   "enum": ["background", "top", "bottom", "left", "right"],
-                  "description": "Where the slide-level image sits relative to the content. 'background' is a full-bleed image behind the content."
+                  "description": "Where the slide-level image sits relative to the content. 'background' is a full-bleed image behind the content. The other positions give the image a band along that edge (see size) and compose headings and content in the rest of the slide."
+                },
+                "alt": {
+                  "type": "string",
+                  "description": "Alternative text for the slide-level image. Overrides the alt text of a referenced asset."
+                },
+                "fill": {
+                  "type": "string",
+                  "enum": ["crop", "fit"],
+                  "description": "How the image fills its frame: 'crop' covers the frame from the center; 'fit' shows the whole image centered inside it. Overrides design.imageFill for this image. Default: design.imageFill, else 'crop'."
+                },
+                "size": {
+                  "type": "number",
+                  "minimum": 0.1,
+                  "maximum": 0.9,
+                  "description": "Share of the slide width (left/right) or height (top/bottom) given to the image band. Ignored for 'background'. Default 0.5."
+                },
+                "inset": {
+                  "type": "boolean",
+                  "description": "Place the frame inside the slide padding instead of edge to edge, like a card. Default false."
+                },
+                "aspectRatio": {
+                  "type": "number",
+                  "exclusiveMinimum": 0,
+                  "maximum": 10,
+                  "description": "Width-to-height ratio of the frame. The frame becomes the largest centered box with this ratio inside the band or slide, for example 2.39 for a cinematic letterbox or 0.5 for a phone-shaped frame. 'circle' always uses 1."
+                },
+                "shape": {
+                  "type": "string",
+                  "enum": ["rectangle", "rounded", "circle", "hexagon"],
+                  "description": "Mask applied to the frame, exported as the picture's native preset geometry (rect, roundRect, ellipse, hexagon). 'circle' makes the frame square. Default 'rectangle'."
+                },
+                "cornerRadius": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 0.5,
+                  "description": "Corner radius for shape 'rounded' as a fraction of the frame's shorter side. Default 0.16667, PowerPoint's roundRect default."
+                },
+                "border": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["color", "width"],
+                  "properties": {
+                    "color": { "$ref": "#/$defs/ColorRef", "description": "Line color: a hex color, a color-scheme slot or role name, or a 'var:<id>' variable reference." },
+                    "width": { "type": "number", "minimum": 0, "maximum": 64, "description": "Line width in reference pixels at a 720-pixel short edge, centered on the frame outline like a native picture line. 0 removes the line." }
+                  },
+                  "description": "Solid line along the frame's shape. A thick dark border on a rounded portrait frame gives a device bezel."
+                },
+                "opacity": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1,
+                  "description": "Image opacity from 0 to 1, exported as a native alphaModFix. The border and overlay keep their own opacity. Default 1."
+                },
+                "recolor": {
+                  "oneOf": [
+                    { "type": "string", "const": "grayscale", "description": "Replace each pixel with its luminance, exported as native a:grayscl." },
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": ["dark", "light"],
+                      "properties": {
+                        "dark": { "$ref": "#/$defs/ColorRef", "description": "Color at luminance 0." },
+                        "light": { "$ref": "#/$defs/ColorRef", "description": "Color at luminance 1." }
+                      },
+                      "description": "Duotone: map each pixel's luminance linearly from dark to light, exported as native a:duotone."
+                    }
+                  ],
+                  "description": "Color treatment for the image pixels. Luminance uses Rec. 601 weights (0.299, 0.587, 0.114) on sRGB values."
+                },
+                "overlay": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["color", "opacity"],
+                  "properties": {
+                    "color": { "$ref": "#/$defs/ColorRef", "description": "Overlay fill color." },
+                    "opacity": { "type": "number", "minimum": 0, "maximum": 1, "description": "Overlay fill opacity." },
+                    "edge": { "type": "string", "enum": ["top", "bottom", "left", "right"], "description": "Cover only a band along this edge of the frame, for example a caption strip. Rectangle frames only; other shapes report unsupported-image-treatment and draw no overlay. Omit to cover the whole frame." },
+                    "size": { "type": "number", "minimum": 0.05, "maximum": 1, "description": "Band share of the frame for an edge overlay. Default 0.3." }
+                  },
+                  "description": "Solid scrim drawn over the image in the frame's shape, beneath headings and content, for example to keep overlaid text readable. Exported as a native shape above the picture."
                 }
               }
             }
           ],
-          "description": "Optional slide-level image treatment used by layouts that support a decorative or editorial image separate from content images."
+          "description": "Optional slide-level image, separate from content images. It applies to a slide that sets its own design.slideImage, and to slides whose layout declares slideImage: true or whose root image is the same source as a deck-level value. A root image with the same source becomes the slide image instead of a content item. Blur, shadows, soft edges, background removal and device artwork are not part of the treatment vocabulary; see docs/image-treatments.md."
         },
         "contentDirection": {
           "type": "string",

@@ -16,7 +16,7 @@ export interface Composition {
 export const MAX_COMPOSITION_DEPTH = 32;
 export interface LayoutBox { x: number; y: number; width: number; height: number }
 export interface LayoutDiagnostic {
-  code: "text-overflow" | "small-cell" | "unresolved-content";
+  code: "text-overflow" | "small-cell" | "unresolved-content" | "unsupported-image-treatment";
   path: string;
   message: string;
 }
@@ -183,6 +183,26 @@ export interface ComposedSlideImage {
   box: LayoutBox;
   /** True when the slide's root image payload became this slide image instead of a content item. */
   replacesContent: boolean;
+  /** Treatment alt text; engines fall back to the asset's own alt text. */
+  alt?: string;
+  /** Mask on the frame: a DrawingML preset with its guide values, and the same outline as an SVG path. */
+  shape: SlideImageShape;
+  /** Line centered on the shape outline; width in reference pixels (already scaled to the canvas). */
+  border?: { color: unknown; width: number };
+  /** Image opacity below 1; the border and overlay are not affected. */
+  opacity?: number;
+  /** Luminance-based recolor (Rec. 601 weights on sRGB values). */
+  recolor?: { type: 'grayscale' } | { type: 'duotone'; dark: unknown; light: unknown };
+  /** Scrim over the frame (same shape) or over an edge band of a rectangle frame. */
+  overlay?: { color: unknown; opacity: number; box: LayoutBox; shape: SlideImageShape };
+}
+/** A frame mask. path follows the ECMA-376 preset formula for preset/adjust exactly, in reference pixels. */
+export interface SlideImageShape {
+  kind: 'rectangle' | 'rounded' | 'circle' | 'hexagon';
+  preset: 'rect' | 'roundRect' | 'ellipse' | 'hexagon';
+  /** DrawingML avLst guide values (for example adj and vf), in 1/100000 units. */
+  adjust: Record<string, number>;
+  path: string;
 }
 export interface ComposedGroup { path: string; box: LayoutBox; contentBox: LayoutBox; composition: Composition }
 export interface CompositionTrack { offset: number; size: number }
@@ -293,11 +313,38 @@ const kind = (field: string) => field === "items" ? "list" : field === "bullets"
 const round = (value: number) => Math.round(value * 1e6) / 1e6 || value;
 const SLIDE_IMAGE_POSITIONS = ['background', 'top', 'bottom', 'left', 'right'] as const;
 type SlideImagePosition = typeof SLIDE_IMAGE_POSITIONS[number];
-/** Share of the slide width (left/right) or height (top/bottom) given to a banded slide image. */
+/** Default share of the slide width (left/right) or height (top/bottom) given to a banded slide image. */
 const SLIDE_IMAGE_BAND = 0.5;
 const assetSource = (value: unknown): unknown => typeof value === 'string' ? value : record(value).src;
+const finite = (value: unknown, min: number, max: number): number | undefined => typeof value === 'number' && Number.isFinite(value) && value >= min && value <= max ? value : undefined;
+const pathNumber = (value: number) => String(round(value));
+const SLIDE_IMAGE_SHAPES = { rectangle: 'rect', rounded: 'roundRect', circle: 'ellipse', hexagon: 'hexagon' } as const;
 
-function resolveSlideImage(slide: Record<string, any>, layout: Record<string, any>, presentation: unknown, width: number, height: number, path: string): ComposedSlideImage | undefined {
+/**
+ * Outline of a DrawingML preset in a box, following the ECMA-376 presetShapeDefinitions formulas:
+ * roundRect (adj; ss = min(w,h), radius = ss*adj/100000), ellipse, and hexagon (adj, vf).
+ */
+export function slideImageShape(kind: SlideImageShape['kind'], box: LayoutBox, cornerRadius = 1 / 6): SlideImageShape {
+  const { x, y, width: w, height: h } = box, r = x + w, b = y + h, ss = Math.min(w, h), n = pathNumber;
+  const rect = `M${n(x)} ${n(y)}H${n(r)}V${n(b)}H${n(x)}Z`;
+  if (kind === 'rounded') {
+    const adj = Math.round(Math.min(0.5, Math.max(0, cornerRadius)) * 100000), radius = ss * adj / 100000;
+    const path = radius <= 0 ? rect : `M${n(x)} ${n(y + radius)}A${n(radius)} ${n(radius)} 0 0 1 ${n(x + radius)} ${n(y)}H${n(r - radius)}A${n(radius)} ${n(radius)} 0 0 1 ${n(r)} ${n(y + radius)}V${n(b - radius)}A${n(radius)} ${n(radius)} 0 0 1 ${n(r - radius)} ${n(b)}H${n(x + radius)}A${n(radius)} ${n(radius)} 0 0 1 ${n(x)} ${n(b - radius)}Z`;
+    return { kind, preset: 'roundRect', adjust: { adj }, path };
+  }
+  if (kind === 'circle') {
+    const cy = y + h / 2;
+    return { kind, preset: 'ellipse', adjust: {}, path: `M${n(x)} ${n(cy)}A${n(w / 2)} ${n(h / 2)} 0 1 1 ${n(r)} ${n(cy)}A${n(w / 2)} ${n(h / 2)} 0 1 1 ${n(x)} ${n(cy)}Z` };
+  }
+  if (kind === 'hexagon') {
+    const adj = 25000, vf = 115470, a = Math.min(Math.max(adj, 0), 50000 * w / ss);
+    const x1 = ss * a / 100000, x2 = r - x1, vc = y + h / 2, dy1 = h / 2 * vf / 100000 * Math.sin(Math.PI / 3);
+    return { kind, preset: 'hexagon', adjust: { adj, vf }, path: `M${n(x)} ${n(vc)}L${n(x + x1)} ${n(vc - dy1)}L${n(x2)} ${n(vc - dy1)}L${n(r)} ${n(vc)}L${n(x2)} ${n(vc + dy1)}L${n(x + x1)} ${n(vc + dy1)}Z` };
+  }
+  return { kind: 'rectangle', preset: 'rect', adjust: {}, path: rect };
+}
+
+function resolveSlideImage(slide: Record<string, any>, layout: Record<string, any>, presentation: unknown, width: number, height: number, path: string, padding: number, scale: number, diagnostics: LayoutDiagnostic[]): ComposedSlideImage | undefined {
   const own = record(slide.design), deck = record(record(presentation).design);
   const local = own.slideImage !== undefined;
   const configured: unknown = local ? own.slideImage : deck.slideImage;
@@ -316,15 +363,47 @@ function resolveSlideImage(slide: Record<string, any>, layout: Record<string, an
   const value = replacesContent ? root : designSource;
   const source = assetSource(value);
   if (typeof source !== 'string' || !source) return undefined;
-  const fill: 'crop' | 'fit' = (own.imageFill ?? deck.imageFill) === 'fit' ? 'fit' : 'crop';
-  const band = { width: round(width * SLIDE_IMAGE_BAND), height: round(height * SLIDE_IMAGE_BAND) };
+  const t = treatment ?? {};
+  const fill: 'crop' | 'fit' = t.fill === 'crop' || t.fill === 'fit' ? t.fill : (own.imageFill ?? deck.imageFill) === 'fit' ? 'fit' : 'crop';
+  const share = finite(t.size, 0.1, 0.9) ?? SLIDE_IMAGE_BAND;
+  const band = { width: round(width * share), height: round(height * share) };
   const region: LayoutBox = position === 'left' ? { x: 0, y: 0, width: band.width, height }
     : position === 'right' ? { x: round(width - band.width), y: 0, width: band.width, height }
     : position === 'top' ? { x: 0, y: 0, width, height: band.height }
     : position === 'bottom' ? { x: 0, y: round(height - band.height), width, height: band.height }
     : { x: 0, y: 0, width, height };
   const designPath = local ? `${path}.design.slideImage` : 'design.slideImage';
-  return { path: designPath, sourcePath: replacesContent ? `${path}.image` : designPath, value, position, fill, region, box: { ...region }, replacesContent };
+  const kind: SlideImageShape['kind'] = Object.hasOwn(SLIDE_IMAGE_SHAPES, t.shape) ? t.shape : 'rectangle';
+  let box: LayoutBox = t.inset === true ? { x: region.x + padding, y: region.y + padding, width: Math.max(scale, region.width - 2 * padding), height: Math.max(scale, region.height - 2 * padding) } : { ...region };
+  const aspect = kind === 'circle' ? 1 : finite(t.aspectRatio, Number.MIN_VALUE, 10);
+  if (aspect) {
+    const frameWidth = Math.min(box.width, box.height * aspect), frameHeight = frameWidth / aspect;
+    box = { x: box.x + (box.width - frameWidth) / 2, y: box.y + (box.height - frameHeight) / 2, width: frameWidth, height: frameHeight };
+  }
+  box = { x: round(box.x), y: round(box.y), width: round(box.width), height: round(box.height) };
+  const result: ComposedSlideImage = { path: designPath, sourcePath: replacesContent ? `${path}.image` : designPath, value, position, fill, region, box, replacesContent,
+    shape: slideImageShape(kind, box, finite(t.cornerRadius, 0, 0.5)) };
+  if (typeof t.alt === 'string') result.alt = t.alt;
+  const border = record(t.border), borderWidth = finite(border.width, 0, 64);
+  if (border.color !== undefined && borderWidth) result.border = { color: border.color, width: round(borderWidth * scale) };
+  const opacity = finite(t.opacity, 0, 1);
+  if (opacity !== undefined && opacity < 1) result.opacity = opacity;
+  if (t.recolor === 'grayscale') result.recolor = { type: 'grayscale' };
+  else if (record(t.recolor).dark !== undefined && record(t.recolor).light !== undefined) result.recolor = { type: 'duotone', dark: t.recolor.dark, light: t.recolor.light };
+  const overlay = record(t.overlay), overlayOpacity = finite(overlay.opacity, 0, 1);
+  if (overlay.color !== undefined && overlayOpacity !== undefined) {
+    const edge = ['top', 'bottom', 'left', 'right'].includes(overlay.edge) ? overlay.edge as string : undefined;
+    if (edge && kind !== 'rectangle') diagnostics.push({ code: 'unsupported-image-treatment', path: `${designPath}.overlay.edge`, message: 'An edge overlay needs a rectangle frame; a band cannot follow a rounded, circular or hexagonal mask as one native shape. Remove edge or use shape rectangle.' });
+    else {
+      const part = finite(overlay.size, 0.05, 1) ?? 0.3;
+      const bandBox = !edge ? box : edge === 'top' ? { ...box, height: round(box.height * part) }
+        : edge === 'bottom' ? { ...box, y: round(box.y + box.height * (1 - part)), height: round(box.height * part) }
+        : edge === 'left' ? { ...box, width: round(box.width * part) }
+        : { ...box, x: round(box.x + box.width * (1 - part)), width: round(box.width * part) };
+      result.overlay = { color: overlay.color, opacity: overlayOpacity, box: bandBox, shape: edge ? slideImageShape('rectangle', bandBox) : result.shape };
+    }
+  }
+  return result;
 }
 
 export interface FurniturePartBase {
@@ -1554,7 +1633,8 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     : (field==='items'||field==='bullets') ? fitList(value as ListValue[],box,size,minimum,{style:styleFor(field,path),textMeasurement:options.textMeasurement})
     : fitText(text,box,size,minimum,widthFor(field,path));
   const path = `slides.${options.slideIndex ?? 0}`;
-  const slideImage = resolveSlideImage(slide, layout, options.presentation, width, height, path);
+  const slideImageDiagnostics: LayoutDiagnostic[] = [];
+  const slideImage = resolveSlideImage(slide, layout, options.presentation, width, height, path, padding, scale, slideImageDiagnostics);
   // Free area for headings and content: the whole slide unless a banded slide image takes one side.
   const area = { left: 0, top: 0, right: width, bottom: height };
   if (slideImage?.position === 'left') area.left = slideImage.region.width;
@@ -1753,6 +1833,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     unmeasuredPayloads:items.filter(item=>!headings.has(item.field)&&!item.quoteLayout&&!item.codeLayout&&!item.metricLayout&&!item.timelineLayout&&!['text','items','bullets','table'].includes(item.field)).map(item=>item.path),
   } : undefined;
   if (failures.length) throw new OPFCompositionError(failures, explanation);
+  diagnostics.push(...slideImageDiagnostics);
   return { width, height, contentBox, items, groups, flows, diagnostics, composition, ...(furniture?{furniture}:{}), ...(slideImage?{slideImage}:{}), ...(explanation?{explanation}:{}) };
 }
 
