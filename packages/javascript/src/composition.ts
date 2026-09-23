@@ -161,6 +161,29 @@ export interface ComposedItem {
   /** Effective container settings, including inherited readability constraints. */
   composition: Composition;
 }
+/**
+ * Slide-level image resolved from design.slideImage. It is active when the slide sets its own
+ * design.slideImage, or when the deck sets one and either the slide's layout record declares
+ * slideImage: true or the slide's root image is the same source.
+ * Content composes in the part of the slide the image does not occupy; 'background' leaves the whole slide.
+ */
+export interface ComposedSlideImage {
+  /** The design value that configured the image: 'design.slideImage' or 'slides.N.design.slideImage'. */
+  path: string;
+  /** Path of the drawn asset value: the design value, or the slide's root image payload it replaced. */
+  sourcePath: string;
+  /** Asset value (string or Asset object) that engines resolve like any other image. */
+  value: unknown;
+  position: 'background' | 'top' | 'bottom' | 'left' | 'right';
+  /** crop covers the frame (centered); fit shows the whole image centered inside it. */
+  fill: 'crop' | 'fit';
+  /** Band allocated to the image. */
+  region: LayoutBox;
+  /** Image frame inside the region. */
+  box: LayoutBox;
+  /** True when the slide's root image payload became this slide image instead of a content item. */
+  replacesContent: boolean;
+}
 export interface ComposedGroup { path: string; box: LayoutBox; contentBox: LayoutBox; composition: Composition }
 export interface CompositionTrack { offset: number; size: number }
 /** Resolved flow geometry, including empty reserved slots. Promoted regions are not flows. */
@@ -220,11 +243,13 @@ export interface SlideComposition {
   composition: Composition;
   /** Repeated furniture is measured separately from body pagination leaves. */
   furniture?: FurnitureLayout;
+  /** Active slide-level image; absent when design.slideImage does not apply to this slide. */
+  slideImage?: ComposedSlideImage;
   explanation?: CompositionExplanation;
 }
 export interface ComposeSlideOptions {
   /** Context for inherited furniture and generated organization names. */
-  presentation?: { design?: { header?: unknown; footer?: unknown }; organization?: unknown; slides?: unknown };
+  presentation?: { design?: { header?: unknown; footer?: unknown; slideImage?: unknown; imageFill?: unknown }; organization?: unknown; slides?: unknown };
   /** One-based displayed number; source paths still use slideIndex. */
   slideNumber?: number;
   /** Displayed slide count for `{total}` in slideNumberFormat. Defaults to `presentation.slides.length`. */
@@ -266,6 +291,41 @@ const columns = ["left", "center", "right"];
 const record = (value: unknown): Record<string, any> => value && typeof value === "object" && !Array.isArray(value) ? value : {};
 const kind = (field: string) => field === "items" ? "list" : field === "bullets" ? "text" : field;
 const round = (value: number) => Math.round(value * 1e6) / 1e6 || value;
+const SLIDE_IMAGE_POSITIONS = ['background', 'top', 'bottom', 'left', 'right'] as const;
+type SlideImagePosition = typeof SLIDE_IMAGE_POSITIONS[number];
+/** Share of the slide width (left/right) or height (top/bottom) given to a banded slide image. */
+const SLIDE_IMAGE_BAND = 0.5;
+const assetSource = (value: unknown): unknown => typeof value === 'string' ? value : record(value).src;
+
+function resolveSlideImage(slide: Record<string, any>, layout: Record<string, any>, presentation: unknown, width: number, height: number, path: string): ComposedSlideImage | undefined {
+  const own = record(slide.design), deck = record(record(presentation).design);
+  const local = own.slideImage !== undefined;
+  const configured: unknown = local ? own.slideImage : deck.slideImage;
+  if (!configured || (typeof configured !== 'object' && typeof configured !== 'string')) return undefined;
+  const treatment = typeof configured === 'object' && !Array.isArray(configured) && 'position' in configured ? record(configured) : undefined;
+  const alignment = typeof layout.slideImageAlignment === 'string' ? layout.slideImageAlignment.toLowerCase() : undefined;
+  const position = (treatment ? treatment.position : SLIDE_IMAGE_POSITIONS.find(value => value === alignment) ?? 'background') as SlideImagePosition;
+  if (!SLIDE_IMAGE_POSITIONS.includes(position)) return undefined;
+  const designSource = treatment ? treatment.src : configured;
+  // A root image with the same source (or one a source-less treatment places) is the slide image, not content.
+  const root = slide.image, sameSource = root !== undefined && designSource !== undefined && assetSource(root) === assetSource(designSource);
+  // A deck-wide slide image applies where the layout reserves one, or where the slide's own image is that
+  // same source. Other slides keep their geometry, so existing decks with an unused deck value are unchanged.
+  if (!local && layout.slideImage !== true && !sameSource) return undefined;
+  const replacesContent = root !== undefined && (designSource === undefined || sameSource);
+  const value = replacesContent ? root : designSource;
+  const source = assetSource(value);
+  if (typeof source !== 'string' || !source) return undefined;
+  const fill: 'crop' | 'fit' = (own.imageFill ?? deck.imageFill) === 'fit' ? 'fit' : 'crop';
+  const band = { width: round(width * SLIDE_IMAGE_BAND), height: round(height * SLIDE_IMAGE_BAND) };
+  const region: LayoutBox = position === 'left' ? { x: 0, y: 0, width: band.width, height }
+    : position === 'right' ? { x: round(width - band.width), y: 0, width: band.width, height }
+    : position === 'top' ? { x: 0, y: 0, width, height: band.height }
+    : position === 'bottom' ? { x: 0, y: round(height - band.height), width, height: band.height }
+    : { x: 0, y: 0, width, height };
+  const designPath = local ? `${path}.design.slideImage` : 'design.slideImage';
+  return { path: designPath, sourcePath: replacesContent ? `${path}.image` : designPath, value, position, fill, region, box: { ...region }, replacesContent };
+}
 
 export interface FurniturePartBase {
   kind: 'header' | 'footer';
@@ -1494,17 +1554,24 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     : (field==='items'||field==='bullets') ? fitList(value as ListValue[],box,size,minimum,{style:styleFor(field,path),textMeasurement:options.textMeasurement})
     : fitText(text,box,size,minimum,widthFor(field,path));
   const path = `slides.${options.slideIndex ?? 0}`;
+  const slideImage = resolveSlideImage(slide, layout, options.presentation, width, height, path);
+  // Free area for headings and content: the whole slide unless a banded slide image takes one side.
+  const area = { left: 0, top: 0, right: width, bottom: height };
+  if (slideImage?.position === 'left') area.left = slideImage.region.width;
+  else if (slideImage?.position === 'right') area.right = slideImage.region.x;
+  else if (slideImage?.position === 'top') area.top = slideImage.region.height;
+  else if (slideImage?.position === 'bottom') area.bottom = slideImage.region.y;
   const items: ComposedItem[] = [], diagnostics: LayoutDiagnostic[] = [];
   const measuredFurniture=layoutFurniture(slide,options);
   const furniture=measuredFurniture.configured||measuredFurniture.diagnostics.length?measuredFurniture:undefined;
   if(furniture)diagnostics.push(...furniture.diagnostics);
-  const bodyBottom=Math.min(height-padding,furniture&&furniture.footerTop<height?furniture.footerTop-gap*.5:height-padding);
-  let y = Math.max(padding,furniture?.headerBottom?furniture.headerBottom+gap*.5:padding);
+  const bodyBottom=Math.min(area.bottom-padding,furniture&&furniture.footerTop<height?furniture.footerTop-gap*.5:height-padding);
+  let y = Math.max(area.top+padding,furniture?.headerBottom?furniture.headerBottom+gap*.5:padding);
   for (const field of ["tag", "title", "subtitle"]) {
     if (!slide[field]) continue;
     const requested = (field === "title" ? 54 : field === "tag" ? 16 : 25) * scale;
     const maxHeight = Math.max(height * (field === "title" ? 0.26 : field === "subtitle" ? 0.12 : 0.045),minSize*1.22+2*rasterPadding);
-    const box = { x: padding, y, width: width - padding * 2, height: maxHeight };
+    const box = { x: area.left + padding, y, width: area.right - area.left - padding * 2, height: maxHeight };
     const text = fitPlacedText(field,slide[field],String(slide[field]),box,requested,minSize,`${path}.${field}`);
     box.height = Math.min(maxHeight, Math.max(text.lines.length * text.lineHeight,text.placement?.height??0));
     if(furniture&&box.y+box.height>bodyBottom+.01)diagnostics.push({code:'text-overflow',path:`${path}.${field}`,message:'Repeated furniture leaves too little room for this heading. Change the header/footer or slide design.'});
@@ -1512,7 +1579,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     y += box.height + gap * 0.5;
   }
   if (items.length) y += gap * 0.5;
-  const contentBox = { x: padding, y, width: width - padding * 2, height: Math.max(scale, bodyBottom - y) };
+  const contentBox = { x: area.left + padding, y, width: area.right - area.left - padding * 2, height: Math.max(scale, bodyBottom - y) };
   type Pending = { field: string; type: string; value: unknown; path: string; payload: Record<string, unknown>; children?: Pending[]; composition?: Composition; region?: [number[], number[]] };
   const collect = (host: Record<string, any>, basePath: string, depth = 0, ancestors: unknown[] = []): Pending[] => {
     if (Array.isArray(host.blocks)) {
@@ -1528,7 +1595,8 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   const regions = Object.keys(slide).filter(key => regionParts(key)).sort();
   const pending: Pending[] = regions.length
     ? regions.flatMap(key => collect(record(slide[key]), `${path}.${key}`).map(item => ({ ...item, region: regionParts(key) })))
-    : Array.isArray(slide.blocks) ? slide.blocks.flatMap((block: unknown, index: number) => collect(record(block), `${path}.blocks.${index}`)) : collect(slide, path);
+    : Array.isArray(slide.blocks) ? slide.blocks.flatMap((block: unknown, index: number) => collect(record(block), `${path}.blocks.${index}`))
+    : collect(slideImage?.replacesContent ? { ...slide, image: undefined } : slide, path);
   const groups: ComposedGroup[] = [], flows: ComposedFlow[] = [];
   const decisions: CompositionDecision[] | undefined = options.explain ? [] : undefined;
   const inheritedSettings = (parent: Composition, own: Composition = {}): Composition => ({
@@ -1653,6 +1721,8 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     });
   };
   const placeholders = Array.isArray(layout.placeholders) ? layout.placeholders.filter((p: any) => !headings.has(p.type)) : [];
+  // The root image drawn as the slide image no longer needs its content slot.
+  if (slideImage?.replacesContent) { const picture = placeholders.findIndex((p: any) => p.type === 'picture'); if (picture >= 0) placeholders.splice(picture, 1); }
   const rootSettings: Composition = { ...composition, mode: composition.mode ?? (layout.slideLayoutDirection === "Vertical" ? "column" : layout.slideLayoutDirection === "Horizontal" ? "row" : "auto") };
   arrange(pending, contentBox, rootSettings, composition.mode ? 0 : placeholders.length);
 
@@ -1683,7 +1753,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     unmeasuredPayloads:items.filter(item=>!headings.has(item.field)&&!item.quoteLayout&&!item.codeLayout&&!item.metricLayout&&!item.timelineLayout&&!['text','items','bullets','table'].includes(item.field)).map(item=>item.path),
   } : undefined;
   if (failures.length) throw new OPFCompositionError(failures, explanation);
-  return { width, height, contentBox, items, groups, flows, diagnostics, composition, ...(furniture?{furniture}:{}), ...(explanation?{explanation}:{}) };
+  return { width, height, contentBox, items, groups, flows, diagnostics, composition, ...(furniture?{furniture}:{}), ...(slideImage?{slideImage}:{}), ...(explanation?{explanation}:{}) };
 }
 
 /** Canonical physical slide size, converted to reference pixels at 96 pixels/inch. */
