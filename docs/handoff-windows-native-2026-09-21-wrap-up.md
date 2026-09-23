@@ -48,8 +48,9 @@ remain unaccepted.
 
 Font embedding is next. The Gate E fixture's slide runs and theme major/minor
 fonts are `Aptos Display`/`Aptos`, so the pre-SaveAs allowlist would reject it
-before any save. A Carlito-only fixture is being prepared offline. The embed
-attempt runs only after that fixture's PR is reviewed and its CI passes.
+before any save. [PPTX56](https://github.com/OpenPresentation/opf-pptx/pull/56)
+added a reviewed Carlito-only fixture mode, merged as
+`310f873726da976841f61d53c9da04f731007062`; its first embed attempt follows.
 
 ## September 22 native font-embed attempt
 
