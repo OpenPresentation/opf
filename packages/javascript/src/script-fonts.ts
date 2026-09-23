@@ -134,12 +134,15 @@ export type TextDirection = "ltr" | "rtl";
 /**
  * Letters of right-to-left scripts (Unicode Bidi_Class R or AL), plus RLM
  * (U+200F) and ALM (U+061C). Digits, marks and punctuation of those scripts
- * are weak or neutral, so only letters count.
+ * are weak or neutral, so only letters count. Old Uyghur (U+10F70-10FAF) and
+ * Garay (U+10D40-10D8F) are matched by code-point block, because JavaScript
+ * engines do not all know those Script values yet; an engine without their
+ * letters treats them as non-letters.
  */
 const strongRtl =
-  /[‏؜]|(?=\p{L})[\p{Script=Arabic}\p{Script=Hebrew}\p{Script=Syriac}\p{Script=Thaana}\p{Script=Nko}\p{Script=Adlam}\p{Script=Hanifi_Rohingya}\p{Script=Mandaic}\p{Script=Samaritan}\p{Script=Mende_Kikakui}\p{Script=Imperial_Aramaic}\p{Script=Phoenician}\p{Script=Kharoshthi}\p{Script=Old_South_Arabian}\p{Script=Old_North_Arabian}\p{Script=Avestan}\p{Script=Inscriptional_Parthian}\p{Script=Inscriptional_Pahlavi}\p{Script=Psalter_Pahlavi}\p{Script=Old_Turkic}\p{Script=Old_Hungarian}\p{Script=Nabataean}\p{Script=Palmyrene}\p{Script=Hatran}\p{Script=Manichaean}\p{Script=Sogdian}\p{Script=Old_Sogdian}\p{Script=Elymaic}\p{Script=Chorasmian}\p{Script=Yezidi}\p{Script=Cypriot}\p{Script=Lydian}\p{Script=Meroitic_Cursive}\p{Script=Meroitic_Hieroglyphs}]/u;
-/** Letters of every other script (Bidi_Class L), plus LRM (U+200E). */
-const strongLtr = /[‎\p{L}]/u;
+  /[\u200F\u061C]|(?=\p{L})[\p{Script=Arabic}\p{Script=Hebrew}\p{Script=Syriac}\p{Script=Thaana}\p{Script=Nko}\p{Script=Adlam}\p{Script=Hanifi_Rohingya}\p{Script=Mandaic}\p{Script=Samaritan}\p{Script=Mende_Kikakui}\p{Script=Imperial_Aramaic}\p{Script=Phoenician}\p{Script=Kharoshthi}\p{Script=Old_South_Arabian}\p{Script=Old_North_Arabian}\p{Script=Avestan}\p{Script=Inscriptional_Parthian}\p{Script=Inscriptional_Pahlavi}\p{Script=Psalter_Pahlavi}\p{Script=Old_Turkic}\p{Script=Old_Hungarian}\p{Script=Nabataean}\p{Script=Palmyrene}\p{Script=Hatran}\p{Script=Manichaean}\p{Script=Sogdian}\p{Script=Old_Sogdian}\p{Script=Elymaic}\p{Script=Chorasmian}\p{Script=Yezidi}\p{Script=Cypriot}\p{Script=Lydian}\p{Script=Meroitic_Cursive}\p{Script=Meroitic_Hieroglyphs}\u{10F70}-\u{10FAF}\u{10D40}-\u{10D8F}]/u;
+/** Letters (and letter numbers such as Roman numerals) of every other script (Bidi_Class L), plus LRM (U+200E). */
+const strongLtr = /[\u200E\p{L}\p{Nl}]/u;
 
 /**
  * The base direction of one paragraph in a deck, shared by the renderer and
