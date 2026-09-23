@@ -568,7 +568,7 @@
         },
         "socials": {
           "$ref": "#/$defs/Socials",
-          "description": "Optional social media handles or URLs for the organization."
+          "description": "Optional social media handles or URLs for the organization. The primary organization's socials render in header/footer zones that set socials: true; otherwise they are authoring metadata."
         }
       }
     },
@@ -628,7 +628,7 @@
         },
         "socials": {
           "$ref": "#/$defs/Socials",
-          "description": "Optional social media handles or URLs for the speaker."
+          "description": "Optional social media handles or URLs for the speaker. Authoring metadata: no header/footer field renders speaker socials yet."
         }
       }
     },
@@ -1727,6 +1727,10 @@
         "section": {
           "type": "boolean",
           "description": "Whether to render the current slide section label."
+        },
+        "socials": {
+          "type": "boolean",
+          "description": "Whether to render the primary organization's social profiles from organization.socials, one line per platform in key order. A handle is formatted through the platform's socialPlatforms record (companyUrlPattern, else profileUrlPattern, else baseUrl, with handlePrefix stripped) and shown as that profile URL without its 'https://' scheme; a value that is already a URL is shown without an 'https://' scheme; an unknown platform key shows the raw value. Exporters link each line to its full URL when one exists. Speaker socials are not rendered by this field."
         }
       }
     },
