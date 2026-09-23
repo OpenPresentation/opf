@@ -43,7 +43,7 @@
     "layouts"
    ],
    "heads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -65,13 +65,13 @@
    ],
    "heads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
     "node": "24.21.0"
    },
-   "generated": "2026-09-23T13:42:16.940Z",
+   "generated": "2026-09-23T14:08:56.178Z",
    "results": "audit-b/results.json"
   },
   "parity": {
@@ -198,7 +198,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -257,7 +257,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -310,7 +310,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -366,7 +366,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -423,7 +423,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -476,7 +476,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -531,7 +531,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -589,7 +589,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -646,7 +646,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -704,7 +704,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -762,7 +762,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -820,7 +820,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -878,7 +878,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -936,7 +936,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -994,7 +994,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -1051,7 +1051,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -1109,7 +1109,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -1167,7 +1167,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -1225,7 +1225,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -1283,7 +1283,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -1341,7 +1341,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -1397,7 +1397,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -1458,7 +1458,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -1523,7 +1523,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -1591,7 +1591,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -1654,7 +1654,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -1722,7 +1722,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -1786,7 +1786,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -1857,7 +1857,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -1925,7 +1925,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -1990,7 +1990,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -2059,7 +2059,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -2109,7 +2109,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -2167,7 +2167,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -2216,7 +2216,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -2264,7 +2264,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -2315,7 +2315,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -2365,7 +2365,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -2419,7 +2419,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -2466,7 +2466,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -2518,7 +2518,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -2566,7 +2566,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -2618,7 +2618,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -2682,7 +2682,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -2732,7 +2732,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -2781,7 +2781,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -2843,7 +2843,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -2890,7 +2890,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -2938,7 +2938,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -2991,7 +2991,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -3039,7 +3039,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -3087,7 +3087,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -3138,7 +3138,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -3185,7 +3185,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -3233,7 +3233,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -3287,7 +3287,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -3334,7 +3334,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -3381,7 +3381,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -3429,7 +3429,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -3488,7 +3488,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -3537,7 +3537,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -3589,7 +3589,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -3636,7 +3636,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -3670,7 +3670,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -3704,7 +3704,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -3738,7 +3738,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -3772,7 +3772,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -3809,7 +3809,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -3843,7 +3843,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -3877,7 +3877,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -3911,7 +3911,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -3945,7 +3945,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -3979,7 +3979,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -4013,7 +4013,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -4047,7 +4047,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -4081,7 +4081,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -4114,7 +4114,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -4147,7 +4147,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -4180,7 +4180,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -4214,7 +4214,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -4248,7 +4248,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -4282,7 +4282,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -4315,7 +4315,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -4349,7 +4349,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -4383,7 +4383,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -4417,7 +4417,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -4450,7 +4450,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -4486,7 +4486,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -4520,7 +4520,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -4554,7 +4554,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -4588,7 +4588,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -4622,7 +4622,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -4656,7 +4656,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -4690,7 +4690,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -4724,7 +4724,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -4758,7 +4758,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -4792,7 +4792,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -4825,7 +4825,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -4861,7 +4861,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -4895,7 +4895,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -4928,7 +4928,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -4961,7 +4961,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -4997,7 +4997,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -5032,7 +5032,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -5068,7 +5068,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -5103,7 +5103,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -5139,7 +5139,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -5175,7 +5175,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -5209,7 +5209,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -5243,7 +5243,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -5277,7 +5277,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -5311,7 +5311,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -5347,7 +5347,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -5380,7 +5380,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -5414,7 +5414,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -5448,7 +5448,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -5482,7 +5482,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -5515,7 +5515,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -5551,7 +5551,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -5584,7 +5584,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -5620,7 +5620,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -5653,7 +5653,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -5687,7 +5687,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -5721,7 +5721,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -5754,7 +5754,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -5788,7 +5788,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -5822,7 +5822,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -5856,7 +5856,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -5889,7 +5889,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -5922,7 +5922,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -5958,7 +5958,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -5992,7 +5992,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -6025,7 +6025,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -6060,7 +6060,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -6093,7 +6093,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -6128,7 +6128,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -6161,7 +6161,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -6196,7 +6196,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -6229,7 +6229,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -6264,7 +6264,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -6297,7 +6297,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -6332,7 +6332,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -6365,7 +6365,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -6398,7 +6398,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -6431,7 +6431,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -6466,7 +6466,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -6499,7 +6499,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -6532,7 +6532,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -6565,7 +6565,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -6598,7 +6598,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -6631,7 +6631,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -6664,7 +6664,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -6697,7 +6697,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -6730,7 +6730,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -6763,7 +6763,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -6796,7 +6796,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -6829,7 +6829,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -6864,7 +6864,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -6897,7 +6897,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -6930,7 +6930,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -6963,7 +6963,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -6996,7 +6996,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -7029,7 +7029,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -7060,7 +7060,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -7093,7 +7093,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -7124,7 +7124,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -7157,7 +7157,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -7190,7 +7190,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -7223,7 +7223,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -7256,7 +7256,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -7289,7 +7289,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -7322,7 +7322,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -7355,7 +7355,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -7386,7 +7386,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -7417,7 +7417,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -7448,7 +7448,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -7479,7 +7479,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -7510,7 +7510,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -7541,7 +7541,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -7572,7 +7572,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -7603,7 +7603,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -7636,7 +7636,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -7667,7 +7667,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -7700,7 +7700,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -7731,7 +7731,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -7762,7 +7762,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -7793,7 +7793,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -7824,7 +7824,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -7855,7 +7855,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -7886,7 +7886,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -7917,7 +7917,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -7948,7 +7948,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -7979,7 +7979,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -8010,7 +8010,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -8041,7 +8041,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -8072,7 +8072,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -8103,7 +8103,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -8134,7 +8134,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -8165,7 +8165,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -8198,7 +8198,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -8229,7 +8229,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -8260,7 +8260,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -8291,7 +8291,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -8322,7 +8322,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -8353,7 +8353,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -8386,7 +8386,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -8419,7 +8419,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -8452,7 +8452,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -8485,7 +8485,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -8518,7 +8518,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -8551,7 +8551,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -8584,7 +8584,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -8617,7 +8617,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -8650,7 +8650,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -8683,7 +8683,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -8716,7 +8716,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -8749,7 +8749,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -8782,7 +8782,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -8813,7 +8813,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -8846,7 +8846,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -8877,7 +8877,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -8908,7 +8908,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -8939,7 +8939,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -8970,7 +8970,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -9001,7 +9001,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -9034,7 +9034,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -9065,7 +9065,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -9098,7 +9098,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -9129,7 +9129,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -9160,7 +9160,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -9191,7 +9191,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -9222,7 +9222,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -9253,7 +9253,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -9284,7 +9284,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -9315,7 +9315,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -9348,7 +9348,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -9379,7 +9379,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -9410,7 +9410,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -9441,7 +9441,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -9472,7 +9472,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -9503,7 +9503,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -9534,7 +9534,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -9565,7 +9565,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -9598,7 +9598,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -9629,7 +9629,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -9660,7 +9660,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -9691,7 +9691,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -9722,7 +9722,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -9753,7 +9753,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -9786,7 +9786,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -9817,7 +9817,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -9850,7 +9850,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -9881,7 +9881,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -9912,7 +9912,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -9943,7 +9943,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -9976,7 +9976,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -10007,7 +10007,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -10038,7 +10038,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -10069,7 +10069,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -10100,7 +10100,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -10133,7 +10133,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -10164,7 +10164,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -10197,7 +10197,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -10228,7 +10228,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -10261,7 +10261,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -10292,7 +10292,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -10325,7 +10325,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -10356,7 +10356,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -10389,7 +10389,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -10420,7 +10420,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -10451,7 +10451,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -10484,7 +10484,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -10515,7 +10515,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -10548,7 +10548,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -10579,7 +10579,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -10612,7 +10612,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -10643,7 +10643,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -10676,7 +10676,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -10707,7 +10707,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -10740,7 +10740,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -10771,7 +10771,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -10804,7 +10804,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -10835,7 +10835,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -10866,7 +10866,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -10897,7 +10897,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -10930,7 +10930,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -10961,7 +10961,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -10992,7 +10992,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -11023,7 +11023,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -11054,7 +11054,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -11087,7 +11087,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -11118,7 +11118,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -11151,7 +11151,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -11182,7 +11182,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -11213,7 +11213,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -11244,7 +11244,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -11275,7 +11275,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -11306,7 +11306,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -11337,7 +11337,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -11368,7 +11368,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -11399,7 +11399,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -11432,7 +11432,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -11463,7 +11463,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -11494,7 +11494,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -11525,7 +11525,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -11556,7 +11556,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -11587,7 +11587,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -11618,7 +11618,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -11649,7 +11649,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -11682,7 +11682,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -11713,7 +11713,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -11746,7 +11746,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -11777,7 +11777,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -11808,7 +11808,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -11839,7 +11839,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -11872,7 +11872,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -11903,7 +11903,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -11934,7 +11934,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -11965,7 +11965,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -11996,7 +11996,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -12027,7 +12027,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -12058,7 +12058,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -12091,7 +12091,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -12122,7 +12122,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -12153,7 +12153,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -12184,7 +12184,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -12215,7 +12215,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -12246,7 +12246,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -12277,7 +12277,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -12308,7 +12308,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -12339,7 +12339,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -12372,7 +12372,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -12403,7 +12403,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -12434,7 +12434,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -12465,7 +12465,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -12496,7 +12496,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -12527,7 +12527,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -12558,7 +12558,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -12589,7 +12589,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -12622,7 +12622,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -12653,7 +12653,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -12686,7 +12686,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -12717,7 +12717,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -12748,7 +12748,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -12779,7 +12779,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -12812,7 +12812,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -12843,7 +12843,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -12874,7 +12874,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -12905,7 +12905,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -12936,7 +12936,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -12969,7 +12969,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -13000,7 +13000,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -13033,7 +13033,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -13064,7 +13064,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -13095,7 +13095,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -13126,7 +13126,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -13157,7 +13157,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -13188,7 +13188,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -13219,7 +13219,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -13250,7 +13250,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -13281,7 +13281,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -13314,7 +13314,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -13345,7 +13345,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -13376,7 +13376,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -13407,7 +13407,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -13438,7 +13438,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -13469,7 +13469,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -13500,7 +13500,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -13531,7 +13531,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -13564,7 +13564,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -13595,7 +13595,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -13628,7 +13628,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -13659,7 +13659,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -13690,7 +13690,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -13721,7 +13721,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -13754,7 +13754,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -13788,7 +13788,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -13822,7 +13822,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -13861,7 +13861,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -13895,7 +13895,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -13933,7 +13933,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -13964,7 +13964,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -13997,7 +13997,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -14028,7 +14028,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -14059,7 +14059,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -14090,7 +14090,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -14121,7 +14121,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -14152,7 +14152,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -14183,7 +14183,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -14214,7 +14214,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -14245,7 +14245,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -14278,7 +14278,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -14309,7 +14309,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -14340,7 +14340,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -14371,7 +14371,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -14402,7 +14402,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -14433,7 +14433,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -14464,7 +14464,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -14495,7 +14495,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -14528,7 +14528,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -14559,7 +14559,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -14592,7 +14592,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -14623,7 +14623,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -14654,7 +14654,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -14688,7 +14688,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -14729,7 +14729,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -14768,7 +14768,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -14807,7 +14807,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -14846,7 +14846,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -14885,7 +14885,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -14921,7 +14921,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -14954,7 +14954,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -14989,7 +14989,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -15020,7 +15020,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -15053,7 +15053,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -15084,7 +15084,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -15115,7 +15115,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -15146,7 +15146,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -15180,7 +15180,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -15214,7 +15214,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -15253,7 +15253,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -15287,7 +15287,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -15323,7 +15323,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -15356,7 +15356,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -15387,7 +15387,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -15418,7 +15418,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -15449,7 +15449,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -15483,7 +15483,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -15517,7 +15517,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -15551,7 +15551,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -15585,7 +15585,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -15618,7 +15618,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -15651,7 +15651,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -15686,7 +15686,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -15719,7 +15719,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -15752,7 +15752,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -15787,7 +15787,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -15822,7 +15822,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -15855,7 +15855,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -15890,7 +15890,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -15923,7 +15923,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -15956,7 +15956,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -15991,7 +15991,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -16026,7 +16026,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -16059,7 +16059,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -16094,7 +16094,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -16127,7 +16127,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -16160,7 +16160,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -16195,7 +16195,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -16230,7 +16230,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -16263,7 +16263,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -16298,7 +16298,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -16331,7 +16331,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -16364,7 +16364,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -16399,7 +16399,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -16434,7 +16434,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -16467,7 +16467,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -16502,7 +16502,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -16535,7 +16535,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -16568,7 +16568,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -16603,7 +16603,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -16638,7 +16638,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -16671,7 +16671,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -16706,7 +16706,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -16739,7 +16739,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -16772,7 +16772,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -16807,7 +16807,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -16840,7 +16840,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -16871,7 +16871,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -16904,7 +16904,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -16935,7 +16935,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -16968,7 +16968,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -16999,7 +16999,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -17030,7 +17030,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -17063,7 +17063,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -17094,7 +17094,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -17127,7 +17127,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -17158,7 +17158,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -17191,7 +17191,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -17222,7 +17222,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -17255,7 +17255,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -17288,7 +17288,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -17319,7 +17319,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -17352,7 +17352,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -17383,7 +17383,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -17414,7 +17414,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -17445,7 +17445,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -17478,7 +17478,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -17509,7 +17509,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -17542,7 +17542,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -17573,7 +17573,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -17604,7 +17604,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -17637,7 +17637,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -17668,7 +17668,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -17699,7 +17699,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -17730,7 +17730,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -17763,7 +17763,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -17794,7 +17794,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -17827,7 +17827,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -17860,7 +17860,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -17891,7 +17891,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -17922,7 +17922,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -17953,7 +17953,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -17984,7 +17984,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -18015,7 +18015,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -18046,7 +18046,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -18077,7 +18077,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -18110,7 +18110,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -18141,7 +18141,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -18172,7 +18172,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -18205,7 +18205,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -18236,7 +18236,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -18267,7 +18267,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -18298,7 +18298,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -18329,7 +18329,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -18360,7 +18360,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -18393,7 +18393,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -18426,7 +18426,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -18457,7 +18457,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -18488,7 +18488,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -18519,7 +18519,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -18552,7 +18552,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -18585,7 +18585,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -18616,7 +18616,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -18647,7 +18647,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -18678,7 +18678,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -18711,7 +18711,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -18744,7 +18744,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -18775,7 +18775,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -18806,7 +18806,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -18837,7 +18837,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -18868,7 +18868,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -18899,7 +18899,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -18932,7 +18932,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -18965,7 +18965,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -18998,7 +18998,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -19031,7 +19031,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -19064,7 +19064,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -19095,7 +19095,7 @@
    "reasons": [],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -19128,7 +19128,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -19166,7 +19166,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -19199,7 +19199,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -19234,7 +19234,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -19267,7 +19267,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -19300,7 +19300,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -19333,7 +19333,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -19366,7 +19366,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -19399,7 +19399,7 @@
    ],
    "audit": "a",
    "measuredHeads": {
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
@@ -19433,7 +19433,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -19469,7 +19469,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -19505,7 +19505,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -19541,7 +19541,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -19577,7 +19577,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -19613,7 +19613,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -19649,7 +19649,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -19685,7 +19685,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -19721,7 +19721,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -19757,7 +19757,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -19793,7 +19793,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -19829,7 +19829,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -19865,7 +19865,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -19901,7 +19901,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -19938,7 +19938,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -19972,7 +19972,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -20002,7 +20002,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -20036,7 +20036,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -20066,7 +20066,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -20101,7 +20101,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -20135,7 +20135,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -20170,7 +20170,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -20205,7 +20205,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -20239,7 +20239,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -20273,7 +20273,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -20307,7 +20307,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -20341,7 +20341,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -20375,7 +20375,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -20409,7 +20409,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -20443,7 +20443,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -20477,7 +20477,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -20507,7 +20507,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -20542,7 +20542,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -20577,7 +20577,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -20612,7 +20612,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -20647,7 +20647,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -20682,7 +20682,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -20717,7 +20717,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -20752,7 +20752,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -20787,7 +20787,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -20822,7 +20822,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -20857,7 +20857,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -20892,7 +20892,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -20927,7 +20927,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -20962,7 +20962,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -20997,7 +20997,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -21033,7 +21033,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -21069,7 +21069,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -21104,7 +21104,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -21139,7 +21139,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -21174,7 +21174,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -21209,7 +21209,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -21244,7 +21244,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -21279,7 +21279,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -21314,7 +21314,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -21349,7 +21349,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -21384,7 +21384,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -21419,7 +21419,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -21454,7 +21454,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -21489,7 +21489,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -21524,7 +21524,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -21559,7 +21559,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -21594,7 +21594,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -21629,7 +21629,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -21664,7 +21664,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -21699,7 +21699,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -21734,7 +21734,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -21769,7 +21769,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -21804,7 +21804,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -21839,7 +21839,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -21873,7 +21873,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -21907,7 +21907,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -21941,7 +21941,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -21975,7 +21975,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -22009,7 +22009,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -22042,7 +22042,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -22073,7 +22073,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -22108,7 +22108,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -22143,7 +22143,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -22178,7 +22178,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -22213,7 +22213,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -22248,7 +22248,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -22283,7 +22283,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -22318,7 +22318,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -22353,7 +22353,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -22388,7 +22388,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -22423,7 +22423,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -22458,7 +22458,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -22493,7 +22493,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -22528,7 +22528,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -22563,7 +22563,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -22598,7 +22598,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -22633,7 +22633,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -22668,7 +22668,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -22703,7 +22703,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -22738,7 +22738,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -22773,7 +22773,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -22808,7 +22808,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -22843,7 +22843,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -22878,7 +22878,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -22913,7 +22913,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -22948,7 +22948,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -22983,7 +22983,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -23018,7 +23018,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -23054,7 +23054,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -23090,7 +23090,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -23125,7 +23125,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -23160,7 +23160,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -23195,7 +23195,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -23232,7 +23232,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -23267,7 +23267,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -23302,7 +23302,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -23336,7 +23336,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -23371,7 +23371,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -23407,7 +23407,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -23441,7 +23441,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -23476,7 +23476,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -23511,7 +23511,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -23546,7 +23546,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -23581,7 +23581,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -23617,7 +23617,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -23652,7 +23652,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -23686,7 +23686,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -23720,7 +23720,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -23755,7 +23755,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -23790,7 +23790,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -23825,7 +23825,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -23860,7 +23860,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -23895,7 +23895,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -23930,7 +23930,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -23965,7 +23965,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -24000,7 +24000,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -24035,7 +24035,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -24070,7 +24070,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -24105,7 +24105,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -24140,7 +24140,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -24175,7 +24175,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -24210,7 +24210,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -24245,7 +24245,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -24282,7 +24282,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -24316,7 +24316,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -24351,7 +24351,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -24387,7 +24387,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -24421,7 +24421,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -24457,7 +24457,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -24492,7 +24492,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -24526,7 +24526,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -24561,7 +24561,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -24596,7 +24596,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -24631,7 +24631,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -24667,7 +24667,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -24702,7 +24702,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -24736,7 +24736,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -24772,7 +24772,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -24806,7 +24806,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -24842,7 +24842,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -24876,7 +24876,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -24911,7 +24911,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -24946,7 +24946,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -24981,7 +24981,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -25016,7 +25016,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -25051,7 +25051,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -25087,7 +25087,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -25121,7 +25121,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -25157,7 +25157,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -25191,7 +25191,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -25227,7 +25227,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -25261,7 +25261,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -25297,7 +25297,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -25331,7 +25331,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -25367,7 +25367,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -25402,7 +25402,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -25436,7 +25436,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -25471,7 +25471,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -25507,7 +25507,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -25542,7 +25542,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -25576,7 +25576,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -25611,7 +25611,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -25646,7 +25646,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -25681,7 +25681,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -25716,7 +25716,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -25751,7 +25751,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -25786,7 +25786,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -25821,7 +25821,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -25856,7 +25856,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -25891,7 +25891,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -25926,7 +25926,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -25961,7 +25961,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -25996,7 +25996,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -26032,7 +26032,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -26067,7 +26067,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -26102,7 +26102,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -26136,7 +26136,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -26171,7 +26171,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -26207,7 +26207,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -26241,7 +26241,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -26276,7 +26276,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -26311,7 +26311,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -26346,7 +26346,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -26381,7 +26381,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -26416,7 +26416,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -26451,7 +26451,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -26486,7 +26486,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -26521,7 +26521,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -26553,7 +26553,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -26585,7 +26585,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -26617,7 +26617,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -26649,7 +26649,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -26681,7 +26681,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -26713,7 +26713,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -26745,7 +26745,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -26777,7 +26777,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -26809,7 +26809,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -26841,7 +26841,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -26873,7 +26873,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -26905,7 +26905,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -26937,7 +26937,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -26969,7 +26969,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -27001,7 +27001,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -27033,7 +27033,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -27065,7 +27065,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -27097,7 +27097,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -27129,7 +27129,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -27161,7 +27161,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -27193,7 +27193,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -27225,7 +27225,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -27257,7 +27257,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -27289,7 +27289,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -27321,7 +27321,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -27353,7 +27353,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -27385,7 +27385,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -27417,7 +27417,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -27449,7 +27449,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -27481,7 +27481,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -27513,7 +27513,7 @@
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -27543,12 +27543,12 @@
    "opfValue": null,
    "reasons": [
     "the social handle is not rendered in the preview",
-    "the social handle is not in the exported slides"
+    "the social handle is not in the exported slide, layout or master XML"
    ],
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -27578,12 +27578,12 @@
    "opfValue": null,
    "reasons": [
     "the social handle is not rendered in the preview",
-    "the social handle is not in the exported slides"
+    "the social handle is not in the exported slide, layout or master XML"
    ],
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -27613,12 +27613,12 @@
    "opfValue": null,
    "reasons": [
     "the social handle is not rendered in the preview",
-    "the social handle is not in the exported slides"
+    "the social handle is not in the exported slide, layout or master XML"
    ],
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -27648,12 +27648,12 @@
    "opfValue": null,
    "reasons": [
     "the social handle is not rendered in the preview",
-    "the social handle is not in the exported slides"
+    "the social handle is not in the exported slide, layout or master XML"
    ],
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -27683,12 +27683,12 @@
    "opfValue": null,
    "reasons": [
     "the social handle is not rendered in the preview",
-    "the social handle is not in the exported slides"
+    "the social handle is not in the exported slide, layout or master XML"
    ],
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -27718,12 +27718,12 @@
    "opfValue": null,
    "reasons": [
     "the social handle is not rendered in the preview",
-    "the social handle is not in the exported slides"
+    "the social handle is not in the exported slide, layout or master XML"
    ],
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -27753,12 +27753,12 @@
    "opfValue": null,
    "reasons": [
     "the social handle is not rendered in the preview",
-    "the social handle is not in the exported slides"
+    "the social handle is not in the exported slide, layout or master XML"
    ],
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -27788,12 +27788,12 @@
    "opfValue": null,
    "reasons": [
     "the social handle is not rendered in the preview",
-    "the social handle is not in the exported slides"
+    "the social handle is not in the exported slide, layout or master XML"
    ],
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -27823,12 +27823,12 @@
    "opfValue": null,
    "reasons": [
     "the social handle is not rendered in the preview",
-    "the social handle is not in the exported slides"
+    "the social handle is not in the exported slide, layout or master XML"
    ],
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
@@ -27858,12 +27858,12 @@
    "opfValue": null,
    "reasons": [
     "the social handle is not rendered in the preview",
-    "the social handle is not in the exported slides"
+    "the social handle is not in the exported slide, layout or master XML"
    ],
    "audit": "b",
    "measuredHeads": {
     "pptx-gallery": "f17e9ae",
-    "opf": "33d636d",
+    "opf": "1ad25df",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "opf-editor": "214ae69",
