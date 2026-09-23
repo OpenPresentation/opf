@@ -240,6 +240,8 @@ export interface PresentationPaginationOptions {
   textRasterPadding?: number;
   minFontSize?: number;
   maxSlides?: number;
+  /** Host-supplied current calendar date (ISO YYYY-MM-DD) for `date: true` header/footer fields. */
+  date?: string;
   /** Optional host-resolved layout/canvas overrides for each source slide. */
   slideOptions?: (slide: Record<string, any>, index: number) => ComposeSlideOptions;
   /** Receives `unresolved-font-scheme` once per reference path when a font-scheme id matches no record. */
@@ -250,41 +252,59 @@ export interface PresentationPaginationResult {
   pages: (PaginatedPage & { sourceSlideIndex: number })[];
 }
 
+const usesSlideTotal = (presentation: Record<string, any>): boolean => [presentation, ...presentation.slides].some((owner: Record<string, any>) =>
+  ['header','footer'].some(kind => ['left','center','right'].some(zone => {
+    const content = owner?.design?.[kind]?.[zone];
+    return content?.slideNumber === true && typeof content.slideNumberFormat === 'string' && content.slideNumberFormat.includes('{total}');
+  })));
+
 /** Resolve local catalogs and paginate a complete presentation without mutating it. */
 export function paginatePresentation(input: unknown, options: PresentationPaginationOptions = {}): PresentationPaginationResult {
   assertValidPresentation(input);
   const presentation = clone(input) as Record<string, any>;
   const maxSlides = options.maxSlides ?? 100;
   if (!Number.isInteger(maxSlides) || maxSlides < 1 || maxSlides > 10000) throw new RangeError('maxSlides must be an integer between 1 and 10000.');
-  const output: Record<string, any>[] = [], pages: PresentationPaginationResult['pages'] = [];
   // Reserve every id already in the document — slide and payload alike — so a
   // generated continuation id can never collide with one an author chose.
-  const reservedIds: string[] = presentation.slides.flatMap((slide: Record<string,unknown>)=>slideIds(slide));
+  const authoredIds: string[] = presentation.slides.flatMap((slide: Record<string,unknown>)=>slideIds(slide));
   const resolve = (kind: 'layouts' | 'themes' | 'fontSchemes', id: string) => presentation.catalogs?.[kind]?.records?.find((record: any)=>record.id===id) ?? catalogs[kind].find(record=>record.id===id);
+  // Outside run(): a {total} retry must not repeat font-scheme diagnostics.
   const reported = new Set<string>();
-  presentation.slides.forEach((slide: Record<string,any>, index: number) => {
-    const overrides = options.slideOptions?.(slide,index) ?? {};
-    const layout = overrides.layout ?? (slide.layout ? resolve('layouts',slide.layout) : undefined);
-    if (slide.layout && !layout) throw new OPFPaginationError(`Layout '${slide.layout}' must be supplied inline or resolved by the host before pagination.`);
-    const design = {...presentation.design,...slide.design};
-    const reference = design.theme ?? 'minimal';
-    const theme = typeof reference==='string' ? resolve('themes',reference) : {...resolve('themes',reference.id),...reference};
-    if (!theme) throw new OPFPaginationError(`Theme '${reference}' must be supplied inline before pagination.`);
-    if (output.length>=maxSlides) throw new OPFPaginationError(`Pagination needs more than ${maxSlides} slides. No partial result was returned.`);
-    const fontReference = design.fontScheme ?? theme.fontScheme ?? DEFAULT_FONT_SCHEME;
-    const fontPath = slide.design?.fontScheme !== undefined ? `slides.${index}.design.fontScheme` : presentation.design?.fontScheme !== undefined ? 'design.fontScheme' : slide.design?.theme !== undefined ? `slides.${index}.design.theme` : 'design.theme';
-    const {scheme:fontScheme,diagnostic} = resolveFontSchemeReference(fontReference,id=>resolve('fontSchemes',id),fontPath);
-    if (diagnostic && !reported.has(diagnostic.path)) { reported.add(diagnostic.path); options.onDiagnostic?.(diagnostic); }
-    const fonts = resolveFontFamilies(fontScheme);
-    const result = paginateSlide(slide,{...resolveCanvasDimensions(design.dimensions ?? theme.dimensions),layout,fonts,contentAlignment:design.contentAlignment,titleAlignment:design.titleAlignment,contentBox:design.contentBox,textMeasurement:options.textMeasurement,textRasterPadding:options.textRasterPadding,...overrides,presentation,slideIndex:index,slideNumber:output.length+1,maxSlides:maxSlides-output.length,minFontSize:options.minFontSize,reservedIds});
-    const outputStart = output.length;
-    result.pages.forEach((page,pageIndex)=>{
-      const remap=(mapping:PaginationMapping)=>({...mapping,outputPath:mapping.outputPath.replace(/^slides\.\d+/,`slides.${outputStart+pageIndex}`)});
-      pages.push({sourceSlideIndex:index,slideIndex:outputStart+pageIndex,mappings:page.mappings.map(remap),...(page.repeatedMappings?{repeatedMappings:page.repeatedMappings.map(remap)}:{})});
+  const run = (slideCount: number) => {
+    const output: Record<string, any>[] = [], pages: PresentationPaginationResult['pages'] = [], reservedIds = [...authoredIds];
+    presentation.slides.forEach((slide: Record<string,any>, index: number) => {
+      const overrides = options.slideOptions?.(slide,index) ?? {};
+      const layout = overrides.layout ?? (slide.layout ? resolve('layouts',slide.layout) : undefined);
+      if (slide.layout && !layout) throw new OPFPaginationError(`Layout '${slide.layout}' must be supplied inline or resolved by the host before pagination.`);
+      const design = {...presentation.design,...slide.design};
+      const reference = design.theme ?? 'minimal';
+      const theme = typeof reference==='string' ? resolve('themes',reference) : {...resolve('themes',reference.id),...reference};
+      if (!theme) throw new OPFPaginationError(`Theme '${reference}' must be supplied inline before pagination.`);
+      if (output.length>=maxSlides) throw new OPFPaginationError(`Pagination needs more than ${maxSlides} slides. No partial result was returned.`);
+      const fontReference = design.fontScheme ?? theme.fontScheme ?? DEFAULT_FONT_SCHEME;
+      const fontPath = slide.design?.fontScheme !== undefined ? `slides.${index}.design.fontScheme` : presentation.design?.fontScheme !== undefined ? 'design.fontScheme' : slide.design?.theme !== undefined ? `slides.${index}.design.theme` : 'design.theme';
+      const {scheme:fontScheme,diagnostic} = resolveFontSchemeReference(fontReference,id=>resolve('fontSchemes',id),fontPath);
+      if (diagnostic && !reported.has(diagnostic.path)) { reported.add(diagnostic.path); options.onDiagnostic?.(diagnostic); }
+      const fonts = resolveFontFamilies(fontScheme);
+      const result = paginateSlide(slide,{...resolveCanvasDimensions(design.dimensions ?? theme.dimensions),layout,fonts,contentAlignment:design.contentAlignment,titleAlignment:design.titleAlignment,contentBox:design.contentBox,textMeasurement:options.textMeasurement,textRasterPadding:options.textRasterPadding,...overrides,presentation,slideIndex:index,slideNumber:output.length+1,slideCount,date:options.date,maxSlides:maxSlides-output.length,minFontSize:options.minFontSize,reservedIds});
+      const outputStart = output.length;
+      result.pages.forEach((page,pageIndex)=>{
+        const remap=(mapping:PaginationMapping)=>({...mapping,outputPath:mapping.outputPath.replace(/^slides\.\d+/,`slides.${outputStart+pageIndex}`)});
+        pages.push({sourceSlideIndex:index,slideIndex:outputStart+pageIndex,mappings:page.mappings.map(remap),...(page.repeatedMappings?{repeatedMappings:page.repeatedMappings.map(remap)}:{})});
+      });
+      output.push(...result.slides);
+      reservedIds.push(...result.slides.flatMap(slide=>slideIds(slide)));
     });
-    output.push(...result.slides);
-    reservedIds.push(...result.slides.flatMap(slide=>slideIds(slide)));
-  });
+    return {output,pages};
+  };
+  // {total} in a slide-number format depends on the final page count, which can in
+  // turn depend on the width of that label. Iterate to a bounded fixed point.
+  let slideCount = presentation.slides.length, result = run(slideCount);
+  for (let attempt = 0; usesSlideTotal(presentation) && result.output.length !== slideCount; attempt++) {
+    if (attempt >= 3) throw new OPFPaginationError('Slide-number totals did not converge. Change the slide-number format or split the input.');
+    slideCount = result.output.length; result = run(slideCount);
+  }
+  const {output,pages} = result;
   presentation.slides=output;
   assertValidPresentation(presentation);
   return {presentation,pages};

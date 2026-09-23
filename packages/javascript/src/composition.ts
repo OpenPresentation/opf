@@ -1,4 +1,6 @@
 import {tableGrid,type TableCellStyle} from './table.js';
+import {DEFAULT_FURNITURE_DATE_FORMAT,DEFAULT_SLIDE_NUMBER_FORMAT,formatFurnitureDate,formatSlideNumber,parseIsoDate,type FurnitureField} from './furniture-fields.js';
+export {DEFAULT_FURNITURE_DATE_FORMAT,DEFAULT_SLIDE_NUMBER_FORMAT,formatFurnitureDate,formatSlideNumber,type FurnitureField} from './furniture-fields.js';
 export {tableGrid,tableRowBoundaries,type TableCellStyle,type TableBorder,type TableGrid,type TableGridCell,type TableGridIssue} from './table.js';
 export {colorContrast, textColorForFill, chartColorForFill} from './color.js';
 /** Portable layout geometry. No fonts, DOM, renderer, or network dependencies. */
@@ -222,9 +224,16 @@ export interface SlideComposition {
 }
 export interface ComposeSlideOptions {
   /** Context for inherited furniture and generated organization names. */
-  presentation?: { design?: { header?: unknown; footer?: unknown }; organization?: unknown };
+  presentation?: { design?: { header?: unknown; footer?: unknown }; organization?: unknown; slides?: unknown };
   /** One-based displayed number; source paths still use slideIndex. */
   slideNumber?: number;
+  /** Displayed slide count for `{total}` in slideNumberFormat. Defaults to `presentation.slides.length`. */
+  slideCount?: number;
+  /**
+   * Host-supplied current calendar date (ISO YYYY-MM-DD) for `date: true` furniture. Core never
+   * consults a clock; without this option a current date is reported as unresolved content.
+   */
+  date?: string;
   fonts?: Partial<FontFamilies>;
   /** Host-resolved alignment for shared content; slide design can override it. */
   contentAlignment?: 'left' | 'center' | 'right';
@@ -273,6 +282,12 @@ export interface FurniturePartBase {
 export interface FurnitureTextPart extends FurniturePartBase {
   type: 'text'; text: string; style: TextStyle;
   requestedFontSize: number; minFontSize: number; fit: SourceTextFit;
+  /**
+   * Live values inside `text`: every `{current}` slide number, and a whole current
+   * (`date: true`) date. Hosts such as PPTX may emit them as native fields; all other
+   * text, including `{total}` and formatted fixed dates, is fixed.
+   */
+  fields?: FurnitureField[];
 }
 export interface FurnitureImagePart extends FurniturePartBase { type: 'image'; image: unknown }
 export type FurniturePart = FurnitureTextPart | FurnitureImagePart;
@@ -301,6 +316,9 @@ export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {
   if(![width,height,scale,minimum,padding].every(Number.isFinite)||width<=0||height<=0||minimum<=0||padding<0)throw new RangeError('Furniture requires finite positive dimensions and nonnegative raster padding.');
   const number=options.slideNumber??(options.slideIndex??0)+1;
   if(!Number.isSafeInteger(number)||number<1)throw new RangeError('Displayed slide number must be a positive safe integer.');
+  const presentationSlides=options.presentation?.slides,slideCount=options.slideCount??(Array.isArray(presentationSlides)&&presentationSlides.length?presentationSlides.length:undefined);
+  if(slideCount!==undefined&&(!Number.isSafeInteger(slideCount)||slideCount<1))throw new RangeError('Displayed slide count must be a positive safe integer.');
+  if(options.date!==undefined&&(typeof options.date!=='string'||!parseIsoDate(options.date)))throw new RangeError('The furniture date option must be an ISO YYYY-MM-DD calendar date.');
   const outlines=options.textMeasurement?.outlineBounds!==undefined,parts:FurniturePart[]=[],diagnostics:LayoutDiagnostic[]=[];
   const sourceRoot=`slides.${options.slideIndex??0}`,organizations=Array.isArray(options.presentation?.organization)?options.presentation.organization:[options.presentation?.organization];
   const primaryIndex=organizations.findIndex(item=>record(item).role==='primary'),organizationIndex=primaryIndex>=0?primaryIndex:organizations.findIndex(Boolean);
@@ -316,7 +334,7 @@ export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {
     const zones:FurniturePart[][]=[];
     for(const [index,zone]of (['left','center','right'] as const).entries()){
       const content=record(record(value)[zone]),path=`${root}.${zone}`,x=width*(.07+index*.3),zoneWidth=width*.26,zoneParts:FurniturePart[]=[];let y=0;
-      const add=(field:FurniturePartBase['field'],text:unknown,generated=false,sourcePath?:string)=>{
+      const add=(field:FurniturePartBase['field'],text:unknown,generated=false,sourcePath?:string,liveFields?:FurnitureField[])=>{
         if(text===undefined)return;
         if(typeof text!=='string')throw new TypeError(`Furniture field ${path}.${field} requires string content.`);
         const partPath=`${path}.${field}`,style=resolveTextStyle({fontFamily,fontWeight:400,italic:false,path:partPath},options.textMeasurement);
@@ -334,7 +352,7 @@ export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {
         if(!Number.isFinite(partHeight))throw new RangeError('Furniture exceeds finite layout coordinates.');
         const box={x,y,width:zoneWidth,height:Math.max(scale,partHeight)},placement=outlines?placeTextLines(ink,box,zone,padding):undefined;
         const accepted={...fit,...(placement?{placement}:{}),overflow:fit.overflow||!!placement?.overflow};
-        zoneParts.push({type:'text',kind,zone,field,path:partPath,sourcePath:sourcePath??(!generated?partPath:undefined),generated,text,style,requestedFontSize:13*scale,minFontSize:minimum,box,alignment:zone,fit:accepted});
+        zoneParts.push({type:'text',kind,zone,field,path:partPath,sourcePath:sourcePath??(!generated?partPath:undefined),generated,text,style,requestedFontSize:13*scale,minFontSize:minimum,box,alignment:zone,fit:accepted,...(liveFields?.length?{fields:liveFields}:{})});
         if(accepted.overflow)error(partPath,'Repeated text exceeds its zone at the selected readability floor; change the furniture or slide design.');
         y+=box.height;
       };
@@ -345,9 +363,23 @@ export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {
       add('text',content.text);
       if(content.organization===true){if(typeof organization.name==='string')add('organization',organization.name,true,organizationPath);else error(`${path}.organization`,'Generated organization name needs a named organization in the presentation.','unresolved-content');}
       if(content.section===true){if(typeof slide.section==='string')add('section',slide.section,true,`${sourceRoot}.section`);else error(`${path}.section`,'Generated section needs a literal slide section.','unresolved-content');}
-      if(content.slideNumber===true)add('slideNumber',String(number),true);
-      if(content.date===true)error(`${path}.date`,'Use a literal date string for deterministic header/footer content.','unresolved-content');
-      else if(typeof content.date==='string')add('date',content.date);
+      for(const setting of ['slideNumberFormat','dateFormat'])if(content[setting]!==undefined&&typeof content[setting]!=='string')throw new TypeError(`Furniture setting ${path}.${setting} requires a string.`);
+      if(content.slideNumber===true){
+        const resolved=formatSlideNumber(content.slideNumberFormat??DEFAULT_SLIDE_NUMBER_FORMAT,number,slideCount);
+        if('error' in resolved)error(`${path}.slideNumberFormat`,resolved.error,'unresolved-content');
+        else add('slideNumber',resolved.text,true,undefined,resolved.fields);
+      }
+      if(content.date===true){
+        // A current date is a live field: the host supplies today's calendar date.
+        const format=content.dateFormat??DEFAULT_FURNITURE_DATE_FORMAT;
+        if(options.date===undefined)error(`${path}.date`,'A current date needs a host-supplied ISO date option. For fixed content use a literal date, or an ISO date with dateFormat.','unresolved-content');
+        else{const resolved=formatFurnitureDate(options.date,format);if('error' in resolved)error(`${path}.dateFormat`,resolved.error,'unresolved-content');else add('date',resolved.text,true,undefined,[{type:'date',start:0,end:resolved.text.length,format}]);}
+      }
+      else if(typeof content.date==='string'){
+        // Without dateFormat a date string stays literal, editable source text.
+        if(content.dateFormat===undefined)add('date',content.date);
+        else{const resolved=formatFurnitureDate(content.date,content.dateFormat);if('error' in resolved)error(`${path}.${parseIsoDate(content.date)?'dateFormat':'date'}`,resolved.error,'unresolved-content');else add('date',resolved.text,true,`${path}.date`);}
+      }
       zones.push(zoneParts);
     }
     const tallest=Math.max(0,...zones.map(zone=>zone.reduce((sum,part)=>sum+part.box.height,0)));
