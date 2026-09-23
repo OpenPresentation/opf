@@ -4,6 +4,9 @@
   "name": "Bosnian (Latin)",
   "code": "BOS",
   "bcp47": "bs-Latn",
+  "ooxmlLang": "bs-Latn-BA",
+  "script": "Latn",
+  "direction": "ltr",
   "fontScheme": "aptos",
   "googleFontScheme": "roboto"
 }

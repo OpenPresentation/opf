@@ -4,6 +4,9 @@
   "name": "Swedish",
   "code": "SWE",
   "bcp47": "sv",
+  "ooxmlLang": "sv-SE",
+  "script": "Latn",
+  "direction": "ltr",
   "fontScheme": "aptos",
   "googleFontScheme": "roboto"
 }

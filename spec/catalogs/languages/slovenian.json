@@ -4,6 +4,9 @@
   "name": "Slovenian",
   "code": "SLV",
   "bcp47": "sl",
+  "ooxmlLang": "sl-SI",
+  "script": "Latn",
+  "direction": "ltr",
   "fontScheme": "aptos",
   "googleFontScheme": "roboto"
 }

@@ -148,6 +148,8 @@ The last-resort font scheme applies only when neither the slide, the deck nor th
 
 This only affects a custom theme without `fontScheme`. That deck is measured and previewed in Roboto but exported with Aptos, so give such themes a `fontScheme` (or set `design.fontScheme`) when preview and export must match. None of the 126 bundled examples reaches the last resort. Exporting all of them with the exporter default switched to `roboto` produced byte-identical PPTX files (FF-17, font-fidelity-everywhere). A core test pins the core side of this table; opf-pptx pins its `aptos` default.
 
+By owner decision, every engine will share one default, `aptos`. Core exports it as `DEFAULT_FONT_SCHEME`, and `resolveScriptFonts()` already uses it. A separate FF-35 change moves pagination, preview and the editor from `roboto` to it; until then the table above describes the current behavior.
+
 ## Color references in content
 
 Content color fields (`TextRun.color`, styled table cell `style.fill` / `style.color`, table cell border `color`) accept references as well as literal hex, and those references resolve through the same chain above:
@@ -166,6 +168,25 @@ Content color fields (`TextRun.color`, styled table cell `style.fill` / `style.c
 The styled table cell and border color fields enforce the reference forms at the schema level (a typo like `"acent2"` is a schema error there — neither hex, a known name, nor a `var:` reference). Run colors stay open strings so imported decks keep validating: an unrecognized run color is a validation warning, and renderers fall back to the theme text color — the same warn-don't-error posture unknown catalog ids get. Unknown `var:` ids are warnings everywhere.
 
 `@openpresentation/opf` exports `resolveColorRef()` with the shared slot, role, variable, and hex rules above so renderers and exporters do not drift. Pass the effective color scheme, optional resolved role colors, the deck `variables` map, and a theme-text `fallback` for unrecognized references.
+
+## Script fonts and language
+
+OOXML gives each theme font (major and minor) three script slots: `latin`, East Asian (`ea`) and complex script (`cs`). The presentation `language` and the effective font scheme resolve to all three:
+
+```
+  latin          design font scheme heading/body (the chain above)
+  eastAsian      1. design.fontScheme.eastAsian      explicit slot
+  complexScript  2. the scheme's own major/minor     when languageFamily is ea / cs and its
+                                                     languages list is empty or names the language
+                 3. the language's font scheme       when the language's script uses the slot
+                 4. the latin family                 otherwise
+```
+
+- A language record's `script` (ISO 15924) picks its slot. East Asian scripts (`Jpan`, `Hans`, `Hant`, `Kore`, ...) use `eastAsian`. Complex scripts (`Arab`, `Hebr`, `Deva`, `Thai`, ...) use `complexScript`. Latin, Cyrillic, Greek and other scripts use `latin`. `direction` defaults from the script (Arabic and Hebrew are right-to-left).
+- The language's `fontScheme` applies to PowerPoint output and `googleFontScheme` to Google Slides output. For Latin-script languages, the design font scheme always supplies the latin slot.
+- A Latin deck therefore repeats its heading/body family in `ea`/`cs`. A Japanese deck with `design.fontScheme: { "major": "Carlito", "minor": "Carlito" }` keeps the Latin family in `latin` and uses Meiryo (PowerPoint) or Noto Sans JP (Google Slides) in `ea`. `design.fontScheme.eastAsian` / `.complexScript` (`{ "major": ..., "minor": ... }`) name a script font explicitly, for example for CJK text inside a Latin deck.
+
+`@openpresentation/opf` exports `resolveScriptFonts(document, { app, slideIndex })`, which returns the heading and body slots, the OOXML `lang` (a curated `ooxmlLang` culture tag such as `ja-JP` or `ms-MY`, or an authored region tag), the canonical `bcp47` tag, `script`, `direction`/`rtl`, and the per-script supplemental theme font. Renderers and exporters should use it rather than re-deriving slots. The model, the OOXML mapping and the open questions are in [`programs/font-fidelity-everywhere/script-font-model.md`](./programs/font-fidelity-everywhere/script-font-model.md). The renderer and exporter adopt it in separate changes, so their output is unchanged by this model alone.
 
 ## What is *not* part of this chain
 

@@ -4,6 +4,9 @@
   "name": "Lithuanian",
   "code": "LIT",
   "bcp47": "lt",
+  "ooxmlLang": "lt-LT",
+  "script": "Latn",
+  "direction": "ltr",
   "fontScheme": "aptos",
   "googleFontScheme": "roboto"
 }

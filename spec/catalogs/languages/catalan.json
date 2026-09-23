@@ -4,6 +4,9 @@
   "name": "Catalan",
   "code": "CAT",
   "bcp47": "ca",
+  "ooxmlLang": "ca-ES",
+  "script": "Latn",
+  "direction": "ltr",
   "fontScheme": "aptos",
   "googleFontScheme": "roboto"
 }

@@ -4,6 +4,9 @@
   "name": "Swahili",
   "code": "SWA",
   "bcp47": "sw",
+  "ooxmlLang": "sw-KE",
+  "script": "Latn",
+  "direction": "ltr",
   "fontScheme": "aptos",
   "googleFontScheme": "roboto"
 }

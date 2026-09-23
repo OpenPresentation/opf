@@ -24,6 +24,9 @@ export interface TextStyle { fontFamily: string; fontWeight: number; italic?: bo
 export interface FontFamilies { heading: string; body: string; code: string }
 /** Documented monospace fallback for the code role when a resolved scheme defines no `code`. */
 const FALLBACK_CODE_FAMILY = "Roboto Mono";
+/** Shared last-resort font-scheme id when neither the slide, the deck nor the resolved theme names one.
+ * One default for every engine, so preview matches export (font-fidelity-everywhere owner decision). */
+export const DEFAULT_FONT_SCHEME = "aptos";
 /** Resolve role families from an already-merged font scheme (catalog record plus design overrides).
  * `code` comes from the scheme's `code` role, which catalog records such as consolas and courier-new
  * carry; otherwise it is Roboto Mono. Heading and body families are never reused for code. */

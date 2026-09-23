@@ -4,6 +4,9 @@
   "name": "Hausa",
   "code": "HAU",
   "bcp47": "ha",
+  "ooxmlLang": "ha-Latn-NG",
+  "script": "Latn",
+  "direction": "ltr",
   "fontScheme": "aptos",
   "googleFontScheme": "roboto"
 }

@@ -4,6 +4,9 @@
   "name": "Hungarian",
   "code": "HUN",
   "bcp47": "hu",
+  "ooxmlLang": "hu-HU",
+  "script": "Latn",
+  "direction": "ltr",
   "fontScheme": "aptos",
   "googleFontScheme": "roboto"
 }

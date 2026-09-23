@@ -4,6 +4,9 @@
   "name": "English (Australia)",
   "code": "ENG",
   "bcp47": "en-AU",
+  "ooxmlLang": "en-AU",
+  "script": "Latn",
+  "direction": "ltr",
   "fontScheme": "aptos",
   "googleFontScheme": "roboto"
 }

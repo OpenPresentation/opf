@@ -4,6 +4,9 @@
   "name": "Khmer",
   "code": "KHM",
   "bcp47": "km",
+  "ooxmlLang": "km-KH",
+  "script": "Khmr",
+  "direction": "ltr",
   "fontScheme": "daunpenh",
   "googleFontScheme": "noto-sans-khmer"
 }

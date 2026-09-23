@@ -4,6 +4,9 @@
   "name": "Korean",
   "code": "KOR",
   "bcp47": "ko",
+  "ooxmlLang": "ko-KR",
+  "script": "Kore",
+  "direction": "ltr",
   "fontScheme": "malgun-gothic",
   "googleFontScheme": "noto-sans-kr"
 }

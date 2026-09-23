@@ -4,6 +4,9 @@
   "name": "Czech",
   "code": "CES",
   "bcp47": "cs",
+  "ooxmlLang": "cs-CZ",
+  "script": "Latn",
+  "direction": "ltr",
   "fontScheme": "aptos",
   "googleFontScheme": "roboto"
 }

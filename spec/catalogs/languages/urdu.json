@@ -4,6 +4,9 @@
   "name": "Urdu",
   "code": "URD",
   "bcp47": "ur",
+  "ooxmlLang": "ur-PK",
+  "script": "Arab",
+  "direction": "rtl",
   "fontScheme": "arabic-typesetting",
   "googleFontScheme": "noto-nastaliq-urdu"
 }

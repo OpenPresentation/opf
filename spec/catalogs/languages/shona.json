@@ -4,6 +4,9 @@
   "name": "Shona",
   "code": "SNA",
   "bcp47": "sn",
+  "ooxmlLang": "sn-Latn-ZW",
+  "script": "Latn",
+  "direction": "ltr",
   "fontScheme": "aptos",
   "googleFontScheme": "roboto"
 }

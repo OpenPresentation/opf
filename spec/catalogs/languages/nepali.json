@@ -4,6 +4,9 @@
   "name": "Nepali",
   "code": "NEP",
   "bcp47": "ne",
+  "ooxmlLang": "ne-NP",
+  "script": "Deva",
+  "direction": "ltr",
   "fontScheme": "mangal",
   "googleFontScheme": "noto-sans-devangari"
 }

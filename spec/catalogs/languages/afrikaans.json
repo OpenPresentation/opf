@@ -4,6 +4,9 @@
   "name": "Afrikaans",
   "code": "AFR",
   "bcp47": "af",
+  "ooxmlLang": "af-ZA",
+  "script": "Latn",
+  "direction": "ltr",
   "fontScheme": "aptos",
   "googleFontScheme": "roboto"
 }

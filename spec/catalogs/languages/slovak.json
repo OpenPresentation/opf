@@ -4,6 +4,9 @@
   "name": "Slovak",
   "code": "SLK",
   "bcp47": "sk",
+  "ooxmlLang": "sk-SK",
+  "script": "Latn",
+  "direction": "ltr",
   "fontScheme": "aptos",
   "googleFontScheme": "roboto"
 }

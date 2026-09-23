@@ -413,6 +413,11 @@
           "description": "BCP-47 language tag used for locale-aware rendering, proofing, and accessibility metadata. Use 'en-GB' for UK English; 'en-UK' is not a valid BCP-47 region form.",
           "examples": ["en", "en-US", "en-GB", "ar-SA", "zh-Hans"]
         },
+        "ooxmlLang": {
+          "type": "string",
+          "description": "Curated culture tag for OOXML text-run language attributes (a:rPr/@lang, a:endParaRPr/@lang), in the language-[Script-]REGION form Office recognizes (e.g. 'ja-JP', 'ar-SA', 'ms-MY', 'nb-NO', 'fil-PH', 'zh-CN'). Engines emit it instead of 'bcp47' when the document names the language by catalog id or by a tag without a region; a region-bearing tag written by the author is emitted as written. Curated rather than inferred so output does not depend on the runtime's locale data.",
+          "examples": ["en-US", "ja-JP", "ar-SA", "ms-MY", "nb-NO", "zh-CN"]
+        },
         "code": {
           "type": "string",
           "description": "ISO 639-3 or 639-2 language code carried for engines that prefer ISO codes.",
@@ -421,20 +426,20 @@
         "direction": {
           "type": "string",
           "enum": ["ltr", "rtl"],
-          "description": "Base text direction for the language."
+          "description": "Base text direction for the language. When omitted, engines derive it from the script: Arabic (Arab), Hebrew (Hebr), Syriac (Syrc), Thaana (Thaa), N'Ko (Nkoo), Adlam (Adlm), Samaritan (Samr), Mandaic (Mand) and Hanifi Rohingya (Rohg) are right-to-left; every other script is left-to-right. Bundled language records state it explicitly."
         },
         "script": {
           "type": "string",
-          "description": "ISO 15924 script code when the writing system should be explicit.",
-          "examples": ["Latn", "Arab", "Cyrl", "Hans", "Hant"]
+          "description": "ISO 15924 script code of the language's writing system. The script selects the OOXML font slot the language's text uses: East Asian scripts (Hans, Hant, Hani, Jpan, Kore, Hang, Hira, Kana, Bopo, Yiii) use the eastAsian slot; complex scripts (for example Arab, Hebr, Syrc, Thaa, Deva, Beng, Guru, Gujr, Orya, Taml, Telu, Knda, Mlym, Sinh, Thai, Laoo, Tibt, Mymr, Khmr, Mong) use the complexScript slot; every other script (Latn, Cyrl, Grek, Armn, Geor, Ethi, ...) uses the latin slot. When omitted, engines infer it from the BCP-47 tag. Bundled language records state it explicitly. See docs/programs/font-fidelity-everywhere/script-font-model.md.",
+          "examples": ["Latn", "Cyrl", "Grek", "Arab", "Hebr", "Jpan", "Kore", "Hans", "Hant", "Deva", "Thai"]
         },
         "fontScheme": {
           "type": "string",
-          "description": "Default font-scheme id for this language when targeting PowerPoint output."
+          "description": "Default font-scheme id for this language when targeting PowerPoint output. Resolves against catalogs.fontSchemes the same way design.fontScheme or design.fontScheme.id does. Its major/minor families fill the language's script slot (eastAsian or complexScript, chosen by 'script') unless the effective design font scheme sets that slot itself; the latin slot always follows the design font scheme."
         },
         "googleFontScheme": {
           "type": "string",
-          "description": "Default font-scheme id for this language when targeting Google Slides output."
+          "description": "Default font-scheme id for this language when targeting Google Slides output. Resolves against catalogs.fontSchemes the same way design.fontScheme or design.fontScheme.id does. Used in place of 'fontScheme' when resolving script fonts for Google Slides output."
         },
         "summary": {
           "type": "string",
@@ -1134,6 +1139,42 @@
           "description": "Body (minor) font family — mirrors the OOXML minorFont entry. Pairs with 'major'.",
           "examples": ["Aptos", "Calibri", "Microsoft YaHei", "Arial"]
         },
+        "eastAsian": {
+          "type": "object",
+          "additionalProperties": false,
+          "minProperties": 1,
+          "description": "East Asian script fonts. Maps to the OOXML a:ea element of majorFont (major) and minorFont (minor), and to run-level a:ea. When set, they fill the eastAsian slot for every language; when omitted, the slot comes from this scheme's own major/minor when languageFamily is 'ea' and the scheme's languages list is empty or names the presentation language, then from the presentation language's font scheme for East Asian languages, and otherwise from the latin (major/minor) families. A missing 'major' or 'minor' falls back to the other.",
+          "properties": {
+            "major": {
+              "type": "string",
+              "description": "Heading (major) eastAsian font family — mirrors majorFont a:ea.",
+              "examples": ["Noto Sans JP", "Meiryo", "Microsoft YaHei"]
+            },
+            "minor": {
+              "type": "string",
+              "description": "Body (minor) eastAsian font family — mirrors minorFont a:ea.",
+              "examples": ["Noto Sans JP", "Meiryo", "Microsoft YaHei"]
+            }
+          }
+        },
+        "complexScript": {
+          "type": "object",
+          "additionalProperties": false,
+          "minProperties": 1,
+          "description": "Complex-script fonts (for example Arabic, Hebrew, Indic and Thai). Maps to the OOXML a:cs element of majorFont (major) and minorFont (minor), and to run-level a:cs. When set, they fill the complexScript slot for every language; when omitted, the slot comes from this scheme's own major/minor when languageFamily is 'cs' and the scheme's languages list is empty or names the presentation language, then from the presentation language's font scheme for complex-script languages, and otherwise from the latin (major/minor) families. A missing 'major' or 'minor' falls back to the other.",
+          "properties": {
+            "major": {
+              "type": "string",
+              "description": "Heading (major) complexScript font family — mirrors majorFont a:cs.",
+              "examples": ["Noto Sans Arabic", "Arial", "Mangal"]
+            },
+            "minor": {
+              "type": "string",
+              "description": "Body (minor) complexScript font family — mirrors minorFont a:cs.",
+              "examples": ["Noto Sans Arabic", "Arial", "Mangal"]
+            }
+          }
+        },
         "type": {
           "type": "string",
           "enum": ["sans-serif", "serif", "monospace"],
@@ -1147,7 +1188,7 @@
         "languageFamily": {
           "type": "string",
           "enum": ["latin", "ea", "cs"],
-          "description": "OOXML font-language family this scheme is intended for: 'latin' for Latin-script content, 'ea' for East Asian scripts, 'cs' for Complex Scripts."
+          "description": "OOXML font-language family this scheme is intended for: 'latin' for Latin-script content, 'ea' for East Asian scripts, 'cs' for Complex Scripts. As the design font scheme, an 'ea' or 'cs' scheme also fills that script slot with its own major/minor families when its languages list is empty or names the presentation language."
         },
         "heading": {
           "$ref": "#/$defs/Font",

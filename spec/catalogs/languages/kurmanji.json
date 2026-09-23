@@ -4,6 +4,9 @@
   "name": "Kurmanji",
   "code": "KMR",
   "bcp47": "kmr",
+  "ooxmlLang": "kmr-TR",
+  "script": "Latn",
+  "direction": "ltr",
   "fontScheme": "aptos",
   "googleFontScheme": "roboto"
 }

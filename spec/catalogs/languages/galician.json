@@ -4,6 +4,9 @@
   "name": "Galician",
   "code": "GLG",
   "bcp47": "gl",
+  "ooxmlLang": "gl-ES",
+  "script": "Latn",
+  "direction": "ltr",
   "fontScheme": "aptos",
   "googleFontScheme": "roboto"
 }

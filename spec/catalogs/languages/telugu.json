@@ -4,6 +4,9 @@
   "name": "Telugu",
   "code": "TEL",
   "bcp47": "te",
+  "ooxmlLang": "te-IN",
+  "script": "Telu",
+  "direction": "ltr",
   "fontScheme": "gautami",
   "googleFontScheme": "noto-sans-telugu"
 }

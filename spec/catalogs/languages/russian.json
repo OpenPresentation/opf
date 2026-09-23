@@ -4,6 +4,9 @@
   "name": "Russian",
   "code": "RUS",
   "bcp47": "ru",
+  "ooxmlLang": "ru-RU",
+  "script": "Cyrl",
+  "direction": "ltr",
   "fontScheme": "aptos",
   "googleFontScheme": "noto-sans"
 }

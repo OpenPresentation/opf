@@ -4,6 +4,9 @@
   "name": "Vietnamese (Quốc Ngữ)",
   "code": "VIE",
   "bcp47": "vi-Latn",
+  "ooxmlLang": "vi-VN",
+  "script": "Latn",
+  "direction": "ltr",
   "fontScheme": "aptos",
   "googleFontScheme": "roboto"
 }
