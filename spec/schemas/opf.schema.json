@@ -1604,7 +1604,7 @@
     },
     "HeaderFooterItem": {
       "type": "object",
-      "description": "One header/footer zone. Fields may be combined when the renderer supports it; otherwise renderers should prefer image, then text-like generated content.",
+      "description": "One header/footer zone. Every configured field renders; fields in one zone stack top to bottom in the order image, text, organization, section, slide number, date. Put a date and a slide number in different zones to keep each on the zone's single line.",
       "properties": {
         "text": {
           "type": "string",
@@ -1618,14 +1618,27 @@
         },
         "slideNumber": {
           "type": "boolean",
-          "description": "Whether to render the current slide number in this zone."
+          "description": "Whether to render the current slide number in this zone. PPTX export writes it as a live slide-number field."
+        },
+        "slideNumberFormat": {
+          "type": "string",
+          "pattern": "[{]current[}]",
+          "description": "Template for the slide number when slideNumber is true. {current} is the displayed slide number (a live field in PPTX); {total} is the number of slides in the rendered or exported deck, written as fixed text because PowerPoint has no slide-count field. Other characters are literal. Defaults to \"{current}\".",
+          "examples": ["{current}", "{current} / {total}", "A-{current}", "Page {current} of {total}"]
         },
         "date": {
           "oneOf": [
             { "type": "boolean" },
             { "type": "string" }
           ],
-          "description": "Whether to render the presentation date, or a literal date string to render."
+          "description": "true renders the current date: the renderer or exporter must be given today's ISO date by its host (core never reads a clock), and PPTX export writes a live date field that PowerPoint updates. A string is fixed: with dateFormat it must be an ISO YYYY-MM-DD date and is formatted; without dateFormat it is literal text rendered as written.",
+          "examples": [true, "2026-04-23", "April 2026"]
+        },
+        "dateFormat": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Date pattern for date. Tokens: yyyy (2026), yy (26), MMMM (April), MMM (Apr), MM (04), M (4), dd (09), d (9), EEEE (Thursday), EEE (Thu). Text in single quotes and other non-letter characters are literal. Month and weekday names are English, independent of host locale. Defaults to \"M/d/yyyy\" for a current date. PPTX export keeps a current date live only when the pattern matches a PowerPoint en-US date field ('M/d/yyyy'; 'EEEE, MMMM d, yyyy'; 'd MMMM yyyy'; 'MMMM d, yyyy'; 'd-MMM-yy'; 'MMMM yy'; 'MMM-yy'); other patterns export as fixed text.",
+          "examples": ["MMM d, yyyy", "yyyy-MM-dd", "MMM yyyy", "MMMM d, yyyy"]
         },
         "organization": {
           "type": "boolean",

@@ -537,14 +537,16 @@ _No named properties._
 
 - Type: `object`
 - Required fields: none
-- Purpose: One header/footer zone. Fields may be combined when the renderer supports it; otherwise renderers should prefer image, then text-like generated content.
+- Purpose: One header/footer zone. Every configured field renders; fields in one zone stack top to bottom in the order image, text, organization, section, slide number, date. Put a date and a slide number in different zones to keep each on the zone's single line.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `text` | no | `string` | Literal text rendered in this zone. |
 | `image` | no | `ref:Asset` | Generic image rendered in this zone, such as a logo, partner mark, certification badge, or icon. |
-| `slideNumber` | no | `boolean` | Whether to render the current slide number in this zone. |
-| `date` | no | `oneOf:boolean / string` | Whether to render the presentation date, or a literal date string to render. |
+| `slideNumber` | no | `boolean` | Whether to render the current slide number in this zone. PPTX export writes it as a live slide-number field. |
+| `slideNumberFormat` | no | `string` | Template for the slide number when slideNumber is true. {current} is the displayed slide number (a live field in PPTX); {total} is the number of slides in the rendered or exported deck, written as fixed text because P... |
+| `date` | no | `oneOf:boolean / string` | true renders the current date: the renderer or exporter must be given today's ISO date by its host (core never reads a clock), and PPTX export writes a live date field that PowerPoint updates. A string is fixed: with... |
+| `dateFormat` | no | `string` | Date pattern for date. Tokens: yyyy (2026), yy (26), MMMM (April), MMM (Apr), MM (04), M (4), dd (09), d (9), EEEE (Thursday), EEE (Thu). Text in single quotes and other non-letter characters are literal. Month and we... |
 | `organization` | no | `boolean` | Whether to render the primary organization name from organization. |
 | `section` | no | `boolean` | Whether to render the current slide section label. |
 
