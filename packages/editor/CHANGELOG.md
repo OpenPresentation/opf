@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- FF-17: gallery apply keeps every font-scheme role that the record schema defines. A font scheme attached from a gallery descriptor now keeps its `code` role (string or Font object) and valid `type`, `app` and `languageFamily` values, instead of only `major`/`minor`. Gallery `heading`/`body` (strings or Font objects) map onto `major`/`minor` only, so a later inline `design.fontScheme` major/minor override still wins. `accent` is not part of the record schema and is not attached. Invalid values are dropped, and legacy descriptors attach unchanged. Bundled catalog ids are still not re-attached. A new test also pins the editor's last-resort font scheme (`roboto`, used only when a theme has no font scheme).
+
 ## 0.8.0
 
 - Require `@openpresentation/opf` ^0.11.0, `@openpresentation/opf-render` ^0.9.0, and `@openpresentation/opf-pptx` ^0.9.0 (lockfile 0.9.1, render peer ^0.9.0). Reserve the full slide and content-payload id namespace for pagination and transfer insert. Forward validation warnings to the schema inspector; accept documented ColorRef forms in the rich-text toolbar. Canvas named-color paint uses published render 0.9.0; PPTX export hex-resolves through pptx 0.9.1. Native `schemeClr`, theme write, and `p:hf` remain out of scope.
