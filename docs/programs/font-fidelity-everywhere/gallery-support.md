@@ -27,7 +27,7 @@ Two measurements are recorded here:
 
 | Repository | Presence audits A and B | Parity scoreboard (FF-38) | Previous parity run (opf#122) | Parity baseline (history) |
 | --- | --- | --- | --- | --- |
-| opf (core) | `a74f3f6` | `a74f3f6` | `c278532` | `53be042` |
+| opf (core) | `a74f3f6` | `7f88749` | `c278532` | `53be042` |
 | opf-render | `bc436f3` | `bc436f3` | `47d19b2` | `e500ed9` |
 | opf-pptx | `9092954` | `9092954` | `5b657c9` | `cf0bc0c` |
 | opf-editor | `214ae69` (audit B) | not used | not used | not used |
@@ -38,7 +38,11 @@ recorded separately (FF-04, FF-12). All three measurements now run on the same
 merged mains. They include FF-07, FF-08, FF-17, FF-18, FF-19, FF-24, FF-28,
 FF-32, FF-35, FF-35b and FF-39, the merged engine halves of FF-25, FF-26,
 FF-27 and FF-34 (opf-pptx#65 included), FF-31's exporter half
-(opf-pptx#63) and FF-22's core half. pptx-gallery is still `f17e9ae`: none
+(opf-pptx#63) and FF-22's core half. The parity scoreboard was re-run at opf
+`7f88749` (opf#137, documentation only since `a74f3f6`) after the harness
+learned to map the FF-26 slide-image picture; the run before that change is
+kept at
+[parity/history/2026-09-23-opf137/PARITY.md](gallery-support/parity/history/2026-09-23-opf137/PARITY.md). pptx-gallery is still `f17e9ae`: none
 of its program PRs (#40 to #46) has merged, so every snippet is the
 pre-program snippet. The per-dimension prose below the summary
 table describes the first measurement unless a paragraph says otherwise.
@@ -91,11 +95,13 @@ checks are:
 | mapping | Every preview element group has PPTX shapes and the reverse; an unmapped PPTX shape is near. |
 
 Checks passed, all 900 values (current mains, 2026-09-23 re-run), with the
-previous run (opf#122) for comparison:
+run before the slide-image mapping (opf#137) and the opf#122 run for
+comparison:
 
 | Run | perfect | geometry | text | fills | zOrder | slideSize | typefaces | reimport | fontResolution | theme | mapping |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Current mains | 4 | 774 | 759 | 674 | 784 | 900 | 900 | 899 | 5 | 900 | 672 |
+| Current mains | 4 | 880 | 759 | 766 | 880 | 900 | 900 | 899 | 5 | 900 | 890 |
+| Before slide-image mapping (opf#137) | 4 | 774 | 759 | 674 | 784 | 900 | 900 | 899 | 5 | 900 | 672 |
 | Previous (opf#122) | 0 | 390 | 326 | 734 | 880 | 900 | 0 | 0 | 5 | 900 | 890 |
 
 The four perfect values are the font schemes `calibri`, `courier-new`,
@@ -107,20 +113,20 @@ Per dimension (current mains; slideSize, typefaces and theme pass everywhere):
 
 | Dimension | Values | perfect | geometry | text | fills | zOrder | reimport | fontResolution | mapping |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| layouts | 485 | 0 | 378 | 436 | 332 | 392 | 485 | 0 | 280 |
+| layouts | 485 | 0 | 481 | 436 | 421 | 485 | 485 | 0 | 475 |
 | color-schemes | 14 | 0 | 0 | 14 | 14 | 14 | 14 | 0 | 14 |
 | font-schemes | 89 + 4 legacy | 4 | 93 | 93 | 93 | 93 | 93 | 4 | 93 |
 | languages | 93 | 0 | 93 | 93 | 93 | 93 | 93 | 0 | 93 |
 | backgrounds | 6 (+6 withAssets) | 0 (0) | 6 (6) | 6 (6) | 5 (6) | 6 (6) | 5 (6) | 0 (0) | 6 (6) |
 | narratives | 10 | 0 | 10 | 10 | 10 | 10 | 10 | 0 | 10 |
 | charts | 76 | 0 | 76 | 26 | 9 | 76 | 76 | 0 | 76 |
-| themes | 4 | 0 | 4 | 4 | 4 | 4 | 4 | 0 | 3 |
-| audiences | 14 | 0 | 14 | 14 | 14 | 14 | 14 | 0 | 11 |
+| themes | 4 | 0 | 4 | 4 | 4 | 4 | 4 | 0 | 4 |
+| audiences | 14 | 0 | 14 | 14 | 14 | 14 | 14 | 0 | 14 |
 | tones | 7 | 0 | 7 | 7 | 7 | 7 | 7 | 0 | 7 |
 | socials | 10 | 0 | 10 | 10 | 10 | 10 | 10 | 0 | 10 |
 | headers-footers | 10 (+10 withAssets) | 0 (0) | 10 (10) | 0 (0) | 10 (10) | 0 (0) | 10 (10) | 0 (0) | 10 (10) |
-| blocks | 32 | 0 | 27 | 25 | 27 | 29 | 32 | 1 | 28 |
-| image-treatments | 15 (+15 withAssets) | 0 (0) | 15 (15) | 0 (15) | 15 (15) | 15 (15) | 15 (15) | 0 (0) | 15 (0) |
+| blocks | 32 | 0 | 30 | 25 | 30 | 32 | 32 | 1 | 32 |
+| image-treatments | 15 (+15 withAssets) | 0 (0) | 15 (15) | 0 (15) | 15 (15) | 15 (15) | 15 (15) | 0 (0) | 15 (15) |
 
 Socials, tones, narratives, languages and the other non-layout metadata
 dimensions now fail only font resolution (the Aptos to Carlito visual
@@ -139,17 +145,22 @@ substitute).
   those are exactly the per-dimension drops from the baseline (charts 76 to 9,
   layouts 442 to 403, blocks 25 to 23). 842 minus 108 is 734. The other 58
   failures are the same as the baseline's.
-- **Fills 734 to 674, mapping 890 to 672 and zOrder 880 to 784 in this
-  re-run.** These follow the FF-26 slide-image composition. 225 values fail
-  mapping with `preview element group has no PPTX shape (image)`: the exporter
-  now names the picture `OPF slide image slides.N`. The harness recognises
-  names `OPF heading|text|card|table|image|chart|code|metric|quote|list <path>`,
-  so it does not map that name, and the containment fallback finds no item.
-  The same values add `image count` fills failures (106) and `picture frame`
-  geometry failures (106). The z-order failures (116) are inversions between
-  element groups. This PR does not change the harness. Whether these are
-  measurement gaps or real export differences is an open question for the
-  harness owner.
+- **Fills 734 to 674, mapping 890 to 672 and zOrder 880 to 784 at opf#137
+  were a harness gap, now closed.** The FF-26 exporter writes
+  `design.slideImage` as one picture named `OPF slide image slides.N`, which
+  the name matcher did not recognise. The containment fallback left it
+  unmapped or put it in a content item's group, so 225 values failed mapping,
+  106 of them also image count and picture frame geometry, and 96 z-order.
+  The 225 are every value whose snippet has a slide image: 202 layouts, 4
+  blocks, 3 audiences, `themes/dark` and the 15 image treatments with assets.
+  Compared directly, every one has exactly one preview slide image and one
+  exported picture, with 0 pt frame delta, identical image bytes and the
+  picture first in `spTree`. Cropped side and band placements carry the
+  preview's 25% `a:srcRect` crop; fit placements use a -50% inset that
+  letterboxes the image as the preview does. The harness now maps the picture
+  to the preview slide-image group and compares its visible image rect (see
+  the [gallery-support README](gallery-support/README.md#slide-image-mapping-ff-26)).
+  No tolerance changed and no value regressed.
 - **Audit B classes predate FF-24, FF-32 and FF-34.** Its probes read slide
   colours and the `p:bg` fill only from `srgbClr`. Since FF-24 the export uses
   `schemeClr`, so all 14 colour schemes and all 4 themes are classed `broken`
@@ -180,7 +191,7 @@ pass), re-import (FF-32; 899 pass, and the one other value loses its
 background with a specific diagnostic) and package typefaces (FF-08; 900
 pass). FF-07 and FF-08 stay in review pending FF-05. The fourth, centered
 preview text against left-aligned PPTX text (FF-39), is much reduced but not
-cleared: text passes for 759 and geometry for 774. 39 values still show the
+cleared: text passes for 759 and geometry for 880. 39 values still show the
 reverse mismatch, "alignment l (preview) vs ctr (pptx)", so FF-39 stays in
 review.
 
@@ -190,10 +201,8 @@ review.
 
 Other recurring parity failures:
 
-- Slide images: 225 values fail mapping, 106 fail image count and picture
-  frame geometry (see the [measurement notes](#measurement-notes-2026-09-23-re-run)).
-- Z-order inversions between element groups: 116 values, including all 10
-  headers/footers.
+- Z-order inversions between element groups: 20 values, all of them
+  headers/footers (10, plus 10 with assets).
 - Charts and chart blocks: series colours are missing from the preview (108
   values), and preview labels are missing from the chart cache (46 values;
   FF-22, FF-22b).

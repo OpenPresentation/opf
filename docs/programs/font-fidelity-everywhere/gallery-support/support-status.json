@@ -77,13 +77,13 @@
   "parity": {
    "item": "FF-38",
    "heads": {
-    "opf": "a74f3f6",
+    "opf": "7f88749",
     "opf-render": "bc436f3",
     "opf-pptx": "9092954",
     "pptx-gallery": "f17e9ae",
     "node": "24.21.0"
    },
-   "generated": "2026-09-23T11:30:50.032Z",
+   "generated": "2026-09-23T12:09:28.231Z",
    "tolerances": {
     "geomPt": 0.02,
     "geomNearPt": 0.5,
@@ -173,16 +173,16 @@
   "near": 0,
   "mismatch": 896,
   "checksPassed": {
-   "geometry": 774,
+   "geometry": 880,
    "text": 759,
-   "fills": 674,
-   "zOrder": 784,
+   "fills": 766,
+   "zOrder": 880,
    "slideSize": 900,
    "typefaces": 900,
    "reimport": 899,
    "fontResolution": 5,
    "theme": 900,
-   "mapping": 672
+   "mapping": 890
   }
  },
  "items": [
@@ -558,12 +558,10 @@
      "withAssets": {
       "status": "mismatch",
       "failedChecks": [
-       "fontResolution",
-       "mapping"
+       "fontResolution"
       ],
       "nearChecks": [],
       "topReasons": [
-       "mapping | preview element group has no PPTX shape (image)",
        "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
        "fontResolution | preview font visual-substitute: Aptos -> Carlito"
       ]
@@ -618,12 +616,10 @@
      "withAssets": {
       "status": "mismatch",
       "failedChecks": [
-       "fontResolution",
-       "mapping"
+       "fontResolution"
       ],
       "nearChecks": [],
       "topReasons": [
-       "mapping | preview element group has no PPTX shape (image)",
        "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
        "fontResolution | preview font visual-substitute: Aptos -> Carlito"
       ]
@@ -677,12 +673,10 @@
      "withAssets": {
       "status": "mismatch",
       "failedChecks": [
-       "fontResolution",
-       "mapping"
+       "fontResolution"
       ],
       "nearChecks": [],
       "topReasons": [
-       "mapping | preview element group has no PPTX shape (image)",
        "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
        "fontResolution | preview font visual-substitute: Aptos -> Carlito"
       ]
@@ -737,12 +731,10 @@
      "withAssets": {
       "status": "mismatch",
       "failedChecks": [
-       "fontResolution",
-       "mapping"
+       "fontResolution"
       ],
       "nearChecks": [],
       "topReasons": [
-       "mapping | preview element group has no PPTX shape (image)",
        "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
        "fontResolution | preview font visual-substitute: Aptos -> Carlito"
       ]
@@ -797,12 +789,10 @@
      "withAssets": {
       "status": "mismatch",
       "failedChecks": [
-       "fontResolution",
-       "mapping"
+       "fontResolution"
       ],
       "nearChecks": [],
       "topReasons": [
-       "mapping | preview element group has no PPTX shape (image)",
        "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
        "fontResolution | preview font visual-substitute: Aptos -> Carlito"
       ]
@@ -857,12 +847,10 @@
      "withAssets": {
       "status": "mismatch",
       "failedChecks": [
-       "fontResolution",
-       "mapping"
+       "fontResolution"
       ],
       "nearChecks": [],
       "topReasons": [
-       "mapping | preview element group has no PPTX shape (image)",
        "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
        "fontResolution | preview font visual-substitute: Aptos -> Carlito"
       ]
@@ -917,12 +905,10 @@
      "withAssets": {
       "status": "mismatch",
       "failedChecks": [
-       "fontResolution",
-       "mapping"
+       "fontResolution"
       ],
       "nearChecks": [],
       "topReasons": [
-       "mapping | preview element group has no PPTX shape (image)",
        "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
        "fontResolution | preview font visual-substitute: Aptos -> Carlito"
       ]
@@ -977,12 +963,10 @@
      "withAssets": {
       "status": "mismatch",
       "failedChecks": [
-       "fontResolution",
-       "mapping"
+       "fontResolution"
       ],
       "nearChecks": [],
       "topReasons": [
-       "mapping | preview element group has no PPTX shape (image)",
        "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
        "fontResolution | preview font visual-substitute: Aptos -> Carlito"
       ]
@@ -1037,12 +1021,10 @@
      "withAssets": {
       "status": "mismatch",
       "failedChecks": [
-       "fontResolution",
-       "mapping"
+       "fontResolution"
       ],
       "nearChecks": [],
       "topReasons": [
-       "mapping | preview element group has no PPTX shape (image)",
        "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
        "fontResolution | preview font visual-substitute: Aptos -> Carlito"
       ]
@@ -1096,12 +1078,10 @@
      "withAssets": {
       "status": "mismatch",
       "failedChecks": [
-       "fontResolution",
-       "mapping"
+       "fontResolution"
       ],
       "nearChecks": [],
       "topReasons": [
-       "mapping | preview element group has no PPTX shape (image)",
        "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
        "fontResolution | preview font visual-substitute: Aptos -> Carlito"
       ]
@@ -1156,12 +1136,10 @@
      "withAssets": {
       "status": "mismatch",
       "failedChecks": [
-       "fontResolution",
-       "mapping"
+       "fontResolution"
       ],
       "nearChecks": [],
       "topReasons": [
-       "mapping | preview element group has no PPTX shape (image)",
        "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
        "fontResolution | preview font visual-substitute: Aptos -> Carlito"
       ]
@@ -1216,12 +1194,10 @@
      "withAssets": {
       "status": "mismatch",
       "failedChecks": [
-       "fontResolution",
-       "mapping"
+       "fontResolution"
       ],
       "nearChecks": [],
       "topReasons": [
-       "mapping | preview element group has no PPTX shape (image)",
        "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
        "fontResolution | preview font visual-substitute: Aptos -> Carlito"
       ]
@@ -1276,12 +1252,10 @@
      "withAssets": {
       "status": "mismatch",
       "failedChecks": [
-       "fontResolution",
-       "mapping"
+       "fontResolution"
       ],
       "nearChecks": [],
       "topReasons": [
-       "mapping | preview element group has no PPTX shape (image)",
        "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
        "fontResolution | preview font visual-substitute: Aptos -> Carlito"
       ]
@@ -1336,12 +1310,10 @@
      "withAssets": {
       "status": "mismatch",
       "failedChecks": [
-       "fontResolution",
-       "mapping"
+       "fontResolution"
       ],
       "nearChecks": [],
       "topReasons": [
-       "mapping | preview element group has no PPTX shape (image)",
        "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
        "fontResolution | preview font visual-substitute: Aptos -> Carlito"
       ]
@@ -1396,12 +1368,10 @@
      "withAssets": {
       "status": "mismatch",
       "failedChecks": [
-       "fontResolution",
-       "mapping"
+       "fontResolution"
       ],
       "nearChecks": [],
       "topReasons": [
-       "mapping | preview element group has no PPTX shape (image)",
        "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
        "fontResolution | preview font visual-substitute: Aptos -> Carlito"
       ]
@@ -2358,18 +2328,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (2)",
      "fontResolution | preview font missing: Poppins"
     ]
    }
@@ -2470,18 +2432,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (2)",
      "fontResolution | preview font missing: Open Sans"
     ]
    }
@@ -3292,19 +3246,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (2)",
-     "fontResolution | preview font missing: Segoe UI Semibold"
+     "fontResolution | preview font missing: Segoe UI Semibold",
+     "fontResolution | preview font missing: Segoe UI"
     ]
    }
   },
@@ -3447,12 +3394,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -3806,12 +3751,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -4083,12 +4026,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -4387,12 +4328,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -4491,12 +4430,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -4596,12 +4533,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -4973,12 +4908,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -5255,12 +5188,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -5359,12 +5290,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -5431,12 +5360,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -5568,12 +5495,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -5603,19 +5528,14 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
      "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fills | chart series colors not in preview (1)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (1)"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -5677,19 +5597,14 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
      "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fills | chart series colors not in preview (1)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (1)"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -5718,12 +5633,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -5787,12 +5700,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -5823,12 +5734,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -6197,18 +6106,14 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
      "fills",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fills | chart series colors not in preview (1)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -6269,19 +6174,14 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
      "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fills | chart series colors not in preview (1)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (1)"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -6342,19 +6242,14 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
      "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fills | chart series colors not in preview (1)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (1)"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -6416,13 +6311,11 @@
     "status": "mismatch",
     "failedChecks": [
      "fills",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (1)",
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -6486,13 +6379,11 @@
     "status": "mismatch",
     "failedChecks": [
      "fills",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (1)",
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -6553,19 +6444,14 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
      "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (1)",
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (1)"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -6659,19 +6545,14 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
      "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (1)",
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (2)"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -6730,19 +6611,14 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
      "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (1)",
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (1)"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -6801,19 +6677,14 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
      "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (1)",
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (2)"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -6872,19 +6743,14 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
      "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (1)",
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (1)"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -6943,19 +6809,14 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
      "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (1)",
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (2)"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -6981,19 +6842,14 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
      "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (1)",
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (1)"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -7054,19 +6910,14 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
      "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (1)",
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (2)"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -7125,19 +6976,14 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
      "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (1)",
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (1)"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -7196,12 +7042,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -7262,12 +7106,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -7328,12 +7170,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -7396,12 +7236,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -7464,12 +7302,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -7532,12 +7368,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -7596,12 +7430,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -7660,12 +7492,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -7724,12 +7554,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -7788,19 +7616,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 1 preview vs 2 pptx",
-     "zOrder | z-order inversions between element groups (1)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -7859,12 +7680,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -7925,12 +7744,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -7989,12 +7806,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -8053,19 +7868,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 1 preview vs 2 pptx",
-     "zOrder | z-order inversions between element groups (1)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -8122,19 +7930,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 1 preview vs 2 pptx",
-     "zOrder | z-order inversions between element groups (1)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -8191,19 +7992,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 1 preview vs 2 pptx",
-     "zOrder | z-order inversions between element groups (2)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -8260,19 +8054,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 1 preview vs 2 pptx",
-     "zOrder | z-order inversions between element groups (1)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -8329,12 +8116,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -8393,19 +8178,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 1 preview vs 2 pptx",
-     "zOrder | z-order inversions between element groups (1)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -8464,19 +8242,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 1 preview vs 2 pptx",
-     "zOrder | z-order inversions between element groups (2)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -8533,19 +8304,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 1 preview vs 2 pptx",
-     "zOrder | z-order inversions between element groups (1)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -8602,12 +8366,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -8670,12 +8432,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -8738,12 +8498,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -8806,12 +8564,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -8874,12 +8630,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -8942,12 +8696,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -9010,12 +8762,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -9076,12 +8826,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -9142,12 +8890,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -9206,12 +8952,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -9270,19 +9014,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 1 preview vs 2 pptx",
-     "zOrder | z-order inversions between element groups (1)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -9341,12 +9078,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -9407,12 +9142,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -9471,12 +9204,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -9535,19 +9266,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 1 preview vs 2 pptx",
-     "zOrder | z-order inversions between element groups (1)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -9604,19 +9328,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 1 preview vs 2 pptx",
-     "zOrder | z-order inversions between element groups (1)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -9675,19 +9392,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 1 preview vs 2 pptx",
-     "zOrder | z-order inversions between element groups (2)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -9744,19 +9454,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 1 preview vs 2 pptx",
-     "zOrder | z-order inversions between element groups (1)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -9813,12 +9516,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -9877,19 +9578,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 1 preview vs 2 pptx",
-     "zOrder | z-order inversions between element groups (1)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -9948,19 +9642,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 1 preview vs 2 pptx",
-     "zOrder | z-order inversions between element groups (2)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -10017,19 +9704,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 1 preview vs 2 pptx",
-     "zOrder | z-order inversions between element groups (1)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -10086,12 +9766,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -10185,16 +9863,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -10253,19 +9925,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (1)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -10324,16 +9989,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -10392,19 +10051,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (1)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -10461,19 +10113,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (1)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -10532,16 +10177,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -10602,19 +10241,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (1)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -10673,16 +10305,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -10743,19 +10369,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (1)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -10814,19 +10433,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (1)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -10852,16 +10464,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -10922,19 +10528,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (1)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -10993,16 +10592,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -11063,19 +10656,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (1)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -11134,19 +10720,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (1)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -11238,12 +10817,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -11302,12 +10879,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -11368,12 +10943,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -11432,19 +11005,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (1)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -11501,19 +11067,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (1)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -11572,12 +11131,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -11638,12 +11195,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -11702,12 +11257,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -11766,19 +11319,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (1)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -11835,19 +11381,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (1)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -11873,12 +11412,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -11939,12 +11476,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -12003,12 +11538,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -12067,19 +11600,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (1)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -12136,19 +11662,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (1)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -12240,19 +11759,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (1)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -12309,19 +11821,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (2)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -12380,19 +11885,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (1)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -12449,12 +11947,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -12513,12 +12009,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -12577,19 +12071,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (1)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -12648,19 +12135,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (2)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -12717,19 +12197,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (1)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -12786,12 +12259,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -12850,12 +12321,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -12883,19 +12352,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (1)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -12954,19 +12416,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (2)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -13023,19 +12478,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (1)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -13092,19 +12540,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (2)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -13161,19 +12602,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (2)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -13265,12 +12699,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -13329,12 +12761,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -13395,12 +12825,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -13459,19 +12887,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (2)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -13528,19 +12949,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (2)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -13599,12 +13013,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -13665,12 +13077,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -13729,12 +13139,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -13793,19 +13201,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (2)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -13862,19 +13263,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (2)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -13900,12 +13294,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -13966,12 +13358,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -14030,12 +13420,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -14094,19 +13482,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (2)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -14163,19 +13544,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (2)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -14267,12 +13641,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -14331,19 +13703,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (2)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -14402,19 +13767,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (2)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -14477,20 +13835,17 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
      "text",
-     "fills",
-     "zOrder",
-     "fontResolution",
+     "fontResolution"
+    ],
+    "nearChecks": [
      "mapping"
     ],
-    "nearChecks": [],
     "topReasons": [
      "text | list markers differ",
      "text | preview text line missing in PPTX",
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -14553,20 +13908,17 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
      "text",
-     "fills",
-     "zOrder",
-     "fontResolution",
+     "fontResolution"
+    ],
+    "nearChecks": [
      "mapping"
     ],
-    "nearChecks": [],
     "topReasons": [
      "text | list markers differ",
      "text | preview text line missing in PPTX",
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -14625,12 +13977,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -14691,19 +14041,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (2)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -14760,19 +14103,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (2)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -14829,19 +14165,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (2)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -14898,19 +14227,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (2)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -14936,12 +14258,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -15002,19 +14322,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (2)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -15071,19 +14384,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (2)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -15140,12 +14446,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -15204,12 +14508,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -15303,12 +14605,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -15367,19 +14667,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (2)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -15450,14 +14743,14 @@
     "status": "mismatch",
     "failedChecks": [
      "text",
-     "fontResolution",
+     "fontResolution"
+    ],
+    "nearChecks": [
      "mapping"
     ],
-    "nearChecks": [],
     "topReasons": [
      "text | list markers differ",
      "text | preview text line missing in PPTX",
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -15528,14 +14821,14 @@
     "status": "mismatch",
     "failedChecks": [
      "text",
-     "fontResolution",
+     "fontResolution"
+    ],
+    "nearChecks": [
      "mapping"
     ],
-    "nearChecks": [],
     "topReasons": [
      "text | preview text line missing in PPTX",
      "text | list markers differ",
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -15606,14 +14899,14 @@
     "status": "mismatch",
     "failedChecks": [
      "text",
-     "fontResolution",
+     "fontResolution"
+    ],
+    "nearChecks": [
      "mapping"
     ],
-    "nearChecks": [],
     "topReasons": [
      "text | preview text line missing in PPTX",
      "text | list markers differ",
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -15674,21 +14967,14 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [
      "text"
     ],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (2)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -15747,12 +15033,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -15813,19 +15097,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (2)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -15882,12 +15159,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -15953,14 +15228,14 @@
     "status": "mismatch",
     "failedChecks": [
      "text",
-     "fontResolution",
+     "fontResolution"
+    ],
+    "nearChecks": [
      "mapping"
     ],
-    "nearChecks": [],
     "topReasons": [
      "text | list markers differ",
      "text | preview text line missing in PPTX",
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -16026,14 +15301,14 @@
     "status": "mismatch",
     "failedChecks": [
      "text",
-     "fontResolution",
+     "fontResolution"
+    ],
+    "nearChecks": [
      "mapping"
     ],
-    "nearChecks": [],
     "topReasons": [
      "text | list markers differ",
      "text | preview text line missing in PPTX",
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -16061,12 +15336,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -16127,19 +15400,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (2)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -16196,12 +15462,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -16266,19 +15530,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (3)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -16341,19 +15598,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (3)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -16449,19 +15699,14 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
      "text",
-     "fills",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
      "text | alignment l (preview) vs ctr (pptx)",
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -16520,20 +15765,14 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
      "text",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
      "text | alignment l (preview) vs ctr (pptx)",
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (1)"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -16665,13 +15904,11 @@
     "status": "mismatch",
     "failedChecks": [
      "text",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
      "text | alignment l (preview) vs ctr (pptx)",
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -16733,13 +15970,11 @@
     "status": "mismatch",
     "failedChecks": [
      "text",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
      "text | alignment l (preview) vs ctr (pptx)",
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -16872,20 +16107,14 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
      "text",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
      "text | alignment l (preview) vs ctr (pptx)",
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (1)"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -16944,20 +16173,14 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
      "text",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
      "text | alignment l (preview) vs ctr (pptx)",
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (2)"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -17089,13 +16312,11 @@
     "status": "mismatch",
     "failedChecks": [
      "text",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
      "text | alignment l (preview) vs ctr (pptx)",
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -17157,13 +16378,11 @@
     "status": "mismatch",
     "failedChecks": [
      "text",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
      "text | alignment l (preview) vs ctr (pptx)",
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -17297,13 +16516,11 @@
     "status": "mismatch",
     "failedChecks": [
      "text",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
      "text | alignment l (preview) vs ctr (pptx)",
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -17364,20 +16581,14 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
      "text",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
      "text | alignment l (preview) vs ctr (pptx)",
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (2)"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -17509,13 +16720,11 @@
     "status": "mismatch",
     "failedChecks": [
      "text",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
      "text | alignment l (preview) vs ctr (pptx)",
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -17576,20 +16785,14 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
      "text",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
      "text | alignment l (preview) vs ctr (pptx)",
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (2)"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -17840,16 +17043,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -17910,19 +17107,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (1)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -17981,19 +17171,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (1)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -18085,16 +17268,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -18155,19 +17332,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (1)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -18226,19 +17396,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (1)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -18454,12 +17617,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -18520,12 +17681,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -18584,19 +17743,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (1)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -18688,12 +17840,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -18754,12 +17904,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -18818,19 +17966,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (1)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -19044,19 +18185,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (1)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -19115,19 +18249,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (2)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -19184,12 +18311,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -19281,19 +18406,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (1)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -19352,19 +18470,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (2)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -19421,19 +18532,12 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
-     "fills",
-     "zOrder",
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
-     "geometry | picture frame delta >50pt",
-     "fills | image count 0 preview vs 1 pptx",
-     "zOrder | z-order inversions between element groups (2)",
-     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito"
+     "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
+     "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
    }
   },
@@ -19525,12 +18629,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -19558,12 +18660,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -19591,12 +18691,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -19690,12 +18788,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -19723,12 +18819,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -19756,12 +18850,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -19789,12 +18881,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -19822,12 +18912,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -27547,12 +26635,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font missing: Seaford Display",
      "fontResolution | preview font missing: Seaford"
     ]
@@ -28095,12 +27181,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -28233,12 +27317,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
@@ -28337,12 +27419,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fontResolution",
-     "mapping"
+     "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "mapping | preview element group has no PPTX shape (image)",
      "fontResolution | preview font visual-substitute: Aptos Display -> Carlito",
      "fontResolution | preview font visual-substitute: Aptos -> Carlito"
     ]
