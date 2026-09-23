@@ -4,7 +4,13 @@ const deck={organization:{id:'acme',name:'Acme'},design:{header:{left:{text:'Con
 const svg=renderSvg(deck,{trace:true});for(const text of ['Confidential','Results','Acme','2026-09-07','Review','design.header.left'])assert.ok(svg.includes(text),text);
 const hidden=renderSvg({...deck,slides:[{title:'Slide',design:{header:false,footer:false}}]});assert.ok(!hidden.includes('Confidential'));assert.ok(!hidden.includes('Review'));
 for(const angle of [0,90,180]){const svg=renderSvg({design:{background:{type:'gradient',gradient:{angle,stops:[{position:0,color:'#FF0000'},{position:1,color:'#0000FF'}]},opacity:.4}},slides:[{title:'Gradient'}]});assert.match(svg,/opacity="0.4"/);assert.ok(svg.includes(angle===0?'x1="0%"':angle===90?'y1="0%"':'x1="100%"'));}
-for(const preset of ['pct5','ltHorz','diagStripe'])assert.match(renderSvg({design:{background:{type:'pattern',pattern:{preset}}},slides:[{}]}),/<pattern/);
+for(const preset of ['pct5','ltHorz','diagStripe','wdUpDiag','openDmnd','wave']){
+ const diagnostics=[],svg=renderSvg({design:{background:{type:'pattern',pattern:{preset,foregroundColor:'#123456'}}},slides:[{}]},{onDiagnostic:d=>diagnostics.push(d)});
+ assert.match(svg,/<pattern[^>]*>[^]*#123456[^]*<\/pattern>/,preset);assert.deepEqual(diagnostics,[],preset);
+}
+const stripe=preset=>renderSvg({design:{background:{type:'pattern',pattern:{preset}}},slides:[{}]}).match(/<pattern[^]*<\/pattern>/)[0];
+assert.equal(stripe('wdUpDiag'),stripe('diagStripe'),'PPTX export writes diagStripe as wdUpDiag; the preview draws both alike');
+const unknown=[];renderSvg({design:{background:{type:'pattern',pattern:{preset:'engineDots'}}},slides:[{}]},{onDiagnostic:d=>unknown.push(d.code)});assert.deepEqual(unknown,['unsupported-pattern']);
 const raster='data:image/png;base64,iVBORw0KGgo=';
 assert.match(renderSvg({design:{background:{type:'image',image:{src:raster}},watermark:{src:raster,opacity:.12}},slides:[{}]}),/xMidYMid slice/);
 console.log('Design preview: header/footer zones, inheritance suppression, angles, opacity, patterns, image background and watermark passed.');

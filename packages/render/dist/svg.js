@@ -729,7 +729,10 @@ function renderBackground(bound, width, height, options) {
   }
   if(isPlainObject(background) && background.type==='pattern'){
     const pattern=background.pattern??{},id=`opf-s${bound.index+1}-pattern`,color=normalizeColor(pattern.foregroundColor,bound.design.colors.text),preset=pattern.preset;
-    const mark=preset==='ltHorz'?tag('path',{d:'M0 4H8',stroke:color,'stroke-width':1}):preset==='diagStripe'?tag('path',{d:'M-2 2L2 -2M0 8L8 0M6 10L10 6',stroke:color,'stroke-width':2}):preset==='pct5'?tag('circle',{cx:2,cy:2,r:.8,fill:color}):'';
+    // 8px cells approximating DrawingML presets. diagStripe is the engine id that
+    // PPTX export writes as wdUpDiag, so both draw the same rising stripe.
+    const stroke=(d,width=1)=>tag('path',{d,fill:'none',stroke:color,'stroke-width':width});
+    const mark=preset==='ltHorz'?tag('path',{d:'M0 4H8',stroke:color,'stroke-width':1}):preset==='diagStripe'||preset==='wdUpDiag'?tag('path',{d:'M-2 2L2 -2M0 8L8 0M6 10L10 6',stroke:color,'stroke-width':2}):preset==='pct5'?tag('circle',{cx:2,cy:2,r:.8,fill:color}):preset==='openDmnd'?stroke('M0 4L4 0L8 4L4 8Z'):preset==='wave'?stroke('M0 4C2 1 2 1 4 4S6 7 8 4'):'';
     if(!mark)reportDiagnostic({code:'unsupported-pattern',path:`${bound.path}.design.background.pattern.preset`,message:`Pattern ${preset} is not implemented by the SVG preview.`},options);
     return tag('g',{opacity:background.opacity??1},tag('rect',{width,height,fill:normalizeColor(pattern.backgroundColor,'#FFFFFF')})+tag('defs',{},tag('pattern',{id,width:8,height:8,patternUnits:'userSpaceOnUse'},mark))+tag('rect',{width,height,fill:`url(#${id})`}));
   }
