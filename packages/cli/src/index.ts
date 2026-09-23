@@ -24,7 +24,7 @@ const usage = `OPF — local presentation files for agents (Node 24)
   opf schemas
   opf schema [name] [JSON-Pointer]
   opf catalogs
-  opf catalog <kind> [id]
+  opf catalog <kind> [id] [--all]
   opf skills <install|update|status> [--agent <universal|codex|claude-code|cursor>]
              [--global | --directory <skills-directory>]
   opf --version
@@ -48,6 +48,7 @@ locally modified/unmanaged skill folders and keep previous managed versions.`;
 class CliError extends Error {
   constructor(message: string, readonly code = 2, readonly details?: unknown) { super(message); }
 }
+const isDeprecated = (record: object) => "deprecation" in record && !!(record as { deprecation?: unknown }).deprecation;
 const json = (value: unknown) => JSON.stringify(value, null, 2) + "\n";
 const print = (value: unknown) => process.stdout.write(json(value));
 const hash = (text: string) => createHash("sha256").update(text).digest("hex");
@@ -217,17 +218,30 @@ async function main(argv: string[]) {
     await emit(result.presentation, positional[1], options, undefined, { bundle: result.report }); return;
   }
   if (command === "schemas") { arity(args, 0); print(schemaEntries.map(entry => ({ name: entry.name, file: entry.file, id: entry.schema.$id }))); return; }
-  if (command === "catalogs") { arity(args, 0); print(catalogEntries.map(entry => ({ kind: entry.kind, count: entry.records.length }))); return; }
+  if (command === "catalogs") {
+    arity(args, 0);
+    print(catalogEntries.map(entry => {
+      const deprecated = entry.records.filter(isDeprecated).length;
+      return { kind: entry.kind, count: entry.records.length - deprecated, ...(deprecated ? { deprecated } : {}) };
+    }));
+    return;
+  }
   if (command === "schema") {
     arity(args, 0, 2); const entry = schemaEntries.find(entry => entry.name === (args[0] ?? "presentation"));
     if (!entry) throw new CliError("Unknown schema. Run opf schemas.");
     print(lookup(entry.schema, tokens(args[1] ?? ""))); return;
   }
   if (command === "catalog") {
-    arity(args, 1, 2); const entry = catalogEntries.find(entry => entry.kind === args[0]);
+    const { positional, options } = parse(args, ["all"]); arity(positional, 1, 2);
+    const entry = catalogEntries.find(entry => entry.kind === positional[0]);
     if (!entry) throw new CliError("Unknown catalog. Run opf catalogs.");
-    const result = args[1] === undefined ? entry.records : entry.records.find(record => record.id === args[1]);
-    if (!result) throw new CliError(`Unknown ${args[0]} id: ${args[1]}`);
+    // Deprecated records stay resolvable by exact id but are left out of the
+    // default listing; --all includes them.
+    const records = entry.records;
+    const result = positional[1] === undefined
+      ? (options.all ? records : records.filter(record => !isDeprecated(record)))
+      : records.find(record => record.id === positional[1]);
+    if (!result) throw new CliError(`Unknown ${positional[0]} id: ${positional[1]}`);
     print(result); return;
   }
   throw new CliError(`Unknown command: ${command}. Run opf --help.`);

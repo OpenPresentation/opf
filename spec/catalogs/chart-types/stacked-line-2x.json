@@ -8,7 +8,17 @@
       "element": "lineChart",
       "grouping": "stacked",
       "composition": "single"
+    },
+    "renderers": {
+      "aspose-slides": {
+        "chartType": "StackedLine"
+      }
     }
+  },
+  "deprecation": {
+    "replacedBy": "stacked-line-3x",
+    "reason": "Same Aspose.Slides ChartType (StackedLine) as 'stacked-line-3x'. Series count and geography come from the chart data, not the chart type, so the catalog keeps one record per ChartType.",
+    "removal": "0.12.0"
   },
   "categories": 12,
   "columns": [

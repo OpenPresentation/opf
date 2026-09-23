@@ -2,12 +2,17 @@
   "$schema": "https://openpresentation.org/schema/opf-chart-type/v1",
   "id": "world",
   "name": "WORLD",
-  "label": "World",
+  "label": "Map",
   "mappings": {
     "openxml": {
       "element": "mapChart",
       "composition": "extension",
       "notes": "Office extension chart; exact extension markup is renderer-specific."
+    },
+    "renderers": {
+      "aspose-slides": {
+        "chartType": "Map"
+      }
     }
   },
   "categories": 14,

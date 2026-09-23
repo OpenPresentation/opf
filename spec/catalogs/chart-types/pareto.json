@@ -5,20 +5,15 @@
   "label": "Pareto",
   "mappings": {
     "openxml": {
-      "composition": "mixed",
-      "series": [
-        {
-          "element": "barChart",
-          "barDir": "col",
-          "grouping": "clustered",
-          "composition": "single"
-        },
-        {
-          "element": "lineChart",
-          "composition": "single"
-        }
-      ],
-      "notes": "Pareto charts combine sorted columns with a cumulative-percentage line."
+      "element": "histogramChart",
+      "composition": "extension",
+      "extension": "cx:paretoLine",
+      "notes": "Office Pareto chart (Histogram Pareto): a chartex histogram whose cx:series layoutId=\"clusteredColumn\" plots the sorted category values and whose owned cx:series layoutId=\"paretoLine\" plots the cumulative percentage on a secondary axis. Renderers without chartex support may approximate it with sorted columns plus a cumulative-percentage line."
+    },
+    "renderers": {
+      "aspose-slides": {
+        "chartType": "ParetoLine"
+      }
     }
   },
   "categories": 49,

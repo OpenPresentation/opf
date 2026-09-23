@@ -882,6 +882,22 @@ describe("catalog-id warning behavior", () => {
     );
   });
 
+  test("deprecated chart type id stays valid but warns with its replacement", () => {
+    const result = validatePresentation({
+      name: "Deprecated Chart Type",
+      slides: [
+        { title: "Bullet", chart: { type: "bullet-column", data: { columns: ["A", "B"], rows: [["x", 1]] } } },
+        { title: "Column", chart: { type: "column", data: { columns: ["A", "B"], rows: [["x", 1]] } } },
+      ],
+    });
+    assert.equal(result.valid, true);
+    const warning = result.warnings.find((candidate) => candidate.path === "/slides/0/chart/type");
+    assert.ok(warning, JSON.stringify(result.warnings, null, 2));
+    assert.equal(warning.message, "deprecated chartTypes catalog id 'bullet-column'; use 'column'");
+    assert.equal(warning.params.replacedBy, "column");
+    assert.equal(result.warnings.some((candidate) => candidate.path === "/slides/1/chart/type"), false);
+  });
+
   test("inline catalog record legitimizes an id the bundled catalogs don't know", () => {
     // Inline catalog records and custom sources legitimize ids the bundled catalogs don't know.
     assert.equal(validatePresentation({

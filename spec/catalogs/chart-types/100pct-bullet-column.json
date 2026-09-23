@@ -22,6 +22,11 @@
       "notes": "Bullet columns combine threshold bands with a value marker."
     }
   },
+  "deprecation": {
+    "replacedBy": "100pct-stacked-column-3x",
+    "reason": "Composition of several chart series types (bands, markers, helper series, or small multiples), not a single Aspose.Slides ChartType. Use '100pct-stacked-column-3x', the closest supported ChartType.",
+    "removal": "0.12.0"
+  },
   "categories": 8,
   "columns": [
     "ValueCategory",

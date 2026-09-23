@@ -8,7 +8,17 @@
       "element": "treemapChart",
       "composition": "extension",
       "notes": "Office extension chart; exact extension markup is renderer-specific."
+    },
+    "renderers": {
+      "aspose-slides": {
+        "chartType": "Treemap"
+      }
     }
+  },
+  "deprecation": {
+    "replacedBy": "treemap",
+    "reason": "Same Aspose.Slides ChartType (Treemap) as 'treemap'. Series count and geography come from the chart data, not the chart type, so the catalog keeps one record per ChartType.",
+    "removal": "0.12.0"
   },
   "categories": 16,
   "columns": [

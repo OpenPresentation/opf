@@ -22,6 +22,11 @@
       "notes": "High/low variants combine the main line with auxiliary range series."
     }
   },
+  "deprecation": {
+    "replacedBy": "line",
+    "reason": "Composition of several chart series types (bands, markers, helper series, or small multiples), not a single Aspose.Slides ChartType. Use 'line', the closest supported ChartType.",
+    "removal": "0.12.0"
+  },
   "categories": 12,
   "columns": [
     "Series 1",

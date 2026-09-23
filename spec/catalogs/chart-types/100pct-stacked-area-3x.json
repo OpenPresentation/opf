@@ -2,12 +2,17 @@
   "$schema": "https://openpresentation.org/schema/opf-chart-type/v1",
   "id": "100pct-stacked-area-3x",
   "name": "100PCT_STACKED_AREA_3X",
-  "label": "100% Stacked Area 3x",
+  "label": "100% Stacked Area",
   "mappings": {
     "openxml": {
       "element": "areaChart",
       "grouping": "percentStacked",
       "composition": "single"
+    },
+    "renderers": {
+      "aspose-slides": {
+        "chartType": "PercentsStackedArea"
+      }
     }
   },
   "categories": 12,

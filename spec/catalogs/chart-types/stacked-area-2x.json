@@ -8,7 +8,17 @@
       "element": "areaChart",
       "grouping": "stacked",
       "composition": "single"
+    },
+    "renderers": {
+      "aspose-slides": {
+        "chartType": "StackedArea"
+      }
     }
+  },
+  "deprecation": {
+    "replacedBy": "stacked-area-3x",
+    "reason": "Same Aspose.Slides ChartType (StackedArea) as 'stacked-area-3x'. Series count and geography come from the chart data, not the chart type, so the catalog keeps one record per ChartType.",
+    "removal": "0.12.0"
   },
   "categories": 12,
   "columns": [

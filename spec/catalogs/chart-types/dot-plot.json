@@ -11,6 +11,11 @@
       "notes": "Dot plots render as scatter markers in Open XML."
     }
   },
+  "deprecation": {
+    "replacedBy": "scatter",
+    "reason": "Composition of several chart series types (bands, markers, helper series, or small multiples), not a single Aspose.Slides ChartType. Use 'scatter', the closest supported ChartType.",
+    "removal": "0.12.0"
+  },
   "categories": 8,
   "columns": [
     "2023"

@@ -8,6 +8,11 @@
       "element": "lineChart",
       "marker": true,
       "composition": "single"
+    },
+    "renderers": {
+      "aspose-slides": {
+        "chartType": "LineWithMarkers"
+      }
     }
   },
   "categories": 12,

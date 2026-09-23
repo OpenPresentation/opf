@@ -2,13 +2,18 @@
   "$schema": "https://openpresentation.org/schema/opf-chart-type/v1",
   "id": "stacked-line-with-markers-3x",
   "name": "STACKED_LINE_WITH_MARKERS_3X",
-  "label": "Stacked Line with Markers 3x",
+  "label": "Stacked Line with Markers",
   "mappings": {
     "openxml": {
       "element": "lineChart",
       "grouping": "stacked",
       "marker": true,
       "composition": "single"
+    },
+    "renderers": {
+      "aspose-slides": {
+        "chartType": "StackedLineWithMarkers"
+      }
     }
   },
   "categories": 12,

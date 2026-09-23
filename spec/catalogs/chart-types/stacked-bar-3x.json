@@ -2,13 +2,18 @@
   "$schema": "https://openpresentation.org/schema/opf-chart-type/v1",
   "id": "stacked-bar-3x",
   "name": "STACKED_BAR_3X",
-  "label": "Stacked Bar 3x",
+  "label": "Stacked Bar",
   "mappings": {
     "openxml": {
       "element": "barChart",
       "barDir": "bar",
       "grouping": "stacked",
       "composition": "single"
+    },
+    "renderers": {
+      "aspose-slides": {
+        "chartType": "StackedBar"
+      }
     }
   },
   "categories": 6,

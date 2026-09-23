@@ -8,6 +8,11 @@
       "element": "radarChart",
       "radarStyle": "standard",
       "composition": "single"
+    },
+    "renderers": {
+      "aspose-slides": {
+        "chartType": "Radar"
+      }
     }
   },
   "categories": 8,

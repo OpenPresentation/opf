@@ -9,7 +9,17 @@
       "barDir": "col",
       "grouping": "stacked",
       "composition": "single"
+    },
+    "renderers": {
+      "aspose-slides": {
+        "chartType": "StackedColumn"
+      }
     }
+  },
+  "deprecation": {
+    "replacedBy": "stacked-column-3x",
+    "reason": "Same Aspose.Slides ChartType (StackedColumn) as 'stacked-column-3x'. Series count and geography come from the chart data, not the chart type, so the catalog keeps one record per ChartType.",
+    "removal": "0.12.0"
   },
   "categories": 8,
   "columns": [

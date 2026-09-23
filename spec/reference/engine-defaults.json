@@ -29,7 +29,7 @@
   "chartTypes": [
     "stacked-column-3x",
     "stacked-area-3x",
-    "line-with-markers-3x"
+    "line-with-markers"
   ]
 }
 

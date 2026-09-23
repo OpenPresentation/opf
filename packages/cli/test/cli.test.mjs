@@ -87,8 +87,32 @@ describe("opf catalogs", () => {
     for (const entry of catalogEntries) {
       const match = parsed.find((candidate) => candidate.kind === entry.kind);
       assert.ok(match, `expected catalogs output to include kind ${entry.kind}`);
-      assert.equal(match.count, entry.records.length);
+      const deprecated = entry.records.filter((record) => record.deprecation).length;
+      assert.equal(match.count, entry.records.length - deprecated);
+      assert.equal(match.deprecated, deprecated || undefined);
     }
+  });
+});
+
+describe("opf catalog", () => {
+  const chartTypes = catalogEntries.find((entry) => entry.kind === "chartTypes").records;
+  const deprecated = chartTypes.filter((record) => record.deprecation);
+
+  test("leaves deprecated chart types out of the default listing", () => {
+    assert.ok(deprecated.length > 0);
+    const result = runCli(["catalog", "chartTypes"]);
+    assert.equal(result.status, 0, `stderr: ${result.stderr}`);
+    const ids = JSON.parse(result.stdout).map((record) => record.id);
+    assert.equal(ids.length, chartTypes.length - deprecated.length);
+    assert.ok(ids.includes("column"));
+    assert.equal(ids.includes("bullet-column"), false);
+  });
+
+  test("--all includes deprecated records and exact ids still resolve", () => {
+    const all = JSON.parse(runCli(["catalog", "chartTypes", "--all"]).stdout);
+    assert.equal(all.length, chartTypes.length);
+    const record = JSON.parse(runCli(["catalog", "chartTypes", "bullet-column"]).stdout);
+    assert.equal(record.deprecation.replacedBy, "column");
   });
 });
 

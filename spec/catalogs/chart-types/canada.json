@@ -8,7 +8,17 @@
       "element": "mapChart",
       "composition": "extension",
       "notes": "Office extension chart; exact extension markup is renderer-specific."
+    },
+    "renderers": {
+      "aspose-slides": {
+        "chartType": "Map"
+      }
     }
+  },
+  "deprecation": {
+    "replacedBy": "world",
+    "reason": "Same Aspose.Slides ChartType (Map) as 'world'. Series count and geography come from the chart data, not the chart type, so the catalog keeps one record per ChartType.",
+    "removal": "0.12.0"
   },
   "categories": 13,
   "columns": [

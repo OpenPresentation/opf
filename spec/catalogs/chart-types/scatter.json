@@ -8,6 +8,11 @@
       "element": "scatterChart",
       "scatterStyle": "marker",
       "composition": "single"
+    },
+    "renderers": {
+      "aspose-slides": {
+        "chartType": "ScatterWithMarkers"
+      }
     }
   },
   "categories": 9,

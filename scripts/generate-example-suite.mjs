@@ -1,4 +1,4 @@
-import { mkdir, readdir, writeFile } from "node:fs/promises";
+import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { colorContrast } from "../packages/javascript/dist/index.js";
@@ -145,14 +145,20 @@ function slug(value) {
     .replace(/^-+|-+$/g, "");
 }
 
+// Deprecated catalog records (e.g. chart types outside the Aspose.Slides-
+// supported set) stay resolvable but are never picked for new examples.
 async function loadCatalogIds(kind) {
   const entries = await readdir(path.join(catalogRoot, kind), { withFileTypes: true });
-  return entries
+  const names = entries
     .filter((entry) => entry.isFile())
     .map((entry) => entry.name)
-    .filter((name) => name.endsWith(".json") && name !== "index.json")
-    .map((name) => name.replace(/\.json$/, ""))
-    .sort((a, b) => a.localeCompare(b));
+    .filter((name) => name.endsWith(".json") && name !== "index.json");
+  const ids = [];
+  for (const name of names) {
+    const record = JSON.parse(await readFile(path.join(catalogRoot, kind, name), "utf8"));
+    if (!record.deprecation) ids.push(name.replace(/\.json$/, ""));
+  }
+  return ids.sort((a, b) => a.localeCompare(b));
 }
 
 function pick(values, index, offset = 0) {
