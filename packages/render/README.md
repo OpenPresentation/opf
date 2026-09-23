@@ -77,6 +77,14 @@ Header/footer images and watermarks fit their complete artwork within their allo
 
 A slide-level image (`design.slideImage`, composed by core as `geometry.slideImage`) is drawn at the shared composition frame, beneath branding and content. `crop` (the slide image default) covers the frame from the center and `fit` centers the whole image, matching the coordinated PPTX `a:srcRect` export. With `trace: true`, `data-opf-slide-image` names the configuring design path and the `<image>` carries the asset's source path. Unresolved slide images use the ordinary placeholder and `unresolved-asset` diagnostic.
 
+Slide-image treatments render from core's normalized geometry in the native picture's paint order:
+
+1. The image, clipped by the preset outline that core computes from the DrawingML formula. `recolor` is applied as an sRGB `feColorMatrix` with Rec. 601 luminance weights (grayscale, or duotone from dark to light). `opacity` applies to the image only.
+2. The centered border stroke on the same outline.
+3. The overlay scrim.
+
+Unresolved sources draw no treatments. See core `docs/image-treatments.md` for the vocabulary and the unsupported effects: blur, shadows, soft edges and background removal.
+
 PNG and PDF conversion APIs are async because they load the local raster/PDF engines on demand:
 
 ```js

@@ -750,11 +750,59 @@ function renderBackground(bound, width, height, options) {
 
 // design.slideImage: the shared composition frame, beneath branding and content.
 // crop covers the frame and fit centers the whole image, matching native a:srcRect.
+// Treatments mirror the native picture: the preset mask (core outline), recolor
+// and alphaModFix on the pixels only, the centered line, then the overlay shape.
 function renderSlideImage(bound, options) {
   const image = bound.geometry.slideImage;
   if (!image) return '';
   const trace = options.trace ? { 'data-opf-slide-image': image.path, 'data-opf-slide-image-position': image.position } : {};
-  return tag('g', trace, renderImage({ value: image.value, path: image.sourcePath }, image.box, bound, { ...options, imageFit: image.fill === 'crop' ? 'cover' : 'contain' }));
+  const value = image.alt === undefined ? image.value : { ...normalizeAsset(image.value), alt: image.alt };
+  const picture = renderImage({ value, path: image.sourcePath }, image.box, bound, { ...options, imageFit: image.fill === 'crop' ? 'cover' : 'contain' });
+  // Unresolved sources keep the ordinary placeholder without treatments, like the export.
+  if (!picture.startsWith('<image')) return tag('g', trace, picture);
+  const id = `opf-s${bound.index + 1}-slide-image`, shape = image.shape, defs = [];
+  const masked = shape && shape.preset !== 'rect';
+  if (masked) defs.push(tag('clipPath', { id: `${id}-clip` }, tag('path', { d: shape.path })));
+  const matrix = slideImageRecolorMatrix(image.recolor, bound);
+  if (matrix) defs.push(tag('filter', { id: `${id}-recolor`, 'color-interpolation-filters': 'sRGB' }, tag('feColorMatrix', { type: 'matrix', values: matrix })));
+  let pixels = matrix || image.opacity !== undefined ? tag('g', { filter: matrix ? `url(#${id}-recolor)` : undefined, opacity: image.opacity === undefined ? undefined : preciseNumber(image.opacity) }, picture) : picture;
+  if (masked) pixels = tag('g', { 'clip-path': `url(#${id}-clip)` }, pixels);
+  const children = [defs.length ? tag('defs', {}, defs.join('')) : '', pixels];
+  if (image.border) {
+    const paint = slideImagePaint(image.border.color, bound, bound.design.colors.border);
+    children.push(tag('path', { d: shape?.path ?? rectanglePath(image.box), fill: 'none', stroke: paint.color, 'stroke-opacity': paint.alpha < 1 ? preciseNumber(paint.alpha) : undefined, 'stroke-width': stableNumber(image.border.width), 'stroke-linejoin': 'miter', 'stroke-miterlimit': 8 }));
+  }
+  if (image.overlay) {
+    const paint = slideImagePaint(image.overlay.color, bound, bound.design.colors.text);
+    children.push(tag('path', { d: image.overlay.shape?.path ?? rectanglePath(image.overlay.box), fill: paint.color, 'fill-opacity': preciseNumber(paint.alpha * image.overlay.opacity), ...(options.trace ? { 'data-opf-slide-image-overlay': `${image.path}.overlay` } : {}) }));
+  }
+  return tag('g', trace, children.filter(Boolean).join(''));
+}
+
+// Native alpha and color-matrix values keep 1/100000 precision; three decimals would drift.
+const preciseNumber = value => String(Math.round(value * 1e6) / 1e6);
+
+function rectanglePath(box) {
+  return `M${stableNumber(box.x)} ${stableNumber(box.y)}H${stableNumber(box.x + box.width)}V${stableNumber(box.y + box.height)}H${stableNumber(box.x)}Z`;
+}
+
+// ColorRef -> opaque #RRGGBB plus the AA byte as alpha, as the native srgbClr + alpha.
+function slideImagePaint(value, bound, fallback) {
+  const hex = resolveColorRef(value, bound, fallback) ?? fallback;
+  const raw = normalizeColor(hex, fallback).slice(1);
+  return { color: `#${raw.slice(0, 6).toUpperCase()}`, alpha: raw.length === 8 ? parseInt(raw.slice(6), 16) / 255 : 1 };
+}
+
+// Rec. 601 luminance on sRGB values; duotone maps it linearly from dark to light.
+function slideImageRecolorMatrix(recolor, bound) {
+  if (!recolor) return undefined;
+  const weights = [0.299, 0.587, 0.114];
+  const channels = recolor.type === 'duotone'
+    ? [slideImagePaint(recolor.dark, bound, '#000000'), slideImagePaint(recolor.light, bound, '#FFFFFF')].map(paint => [1, 3, 5].map(at => parseInt(paint.color.slice(at, at + 2), 16) / 255))
+    : [[0, 0, 0], [1, 1, 1]];
+  const [dark, light] = channels;
+  const rows = [0, 1, 2].map(channel => [...weights.map(weight => preciseNumber((light[channel] - dark[channel]) * weight)), 0, preciseNumber(dark[channel])].join(' '));
+  return [...rows, '0 0 0 1 0'].join(' ');
 }
 
 function renderSlideContent(bound, width, height, options) {
