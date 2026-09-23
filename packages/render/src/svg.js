@@ -266,6 +266,18 @@ function resolveFontSchemeRecord(reference, context, path) {
   return { scheme, diagnostic: { code: "unresolved-font-scheme", path, id, fallback: DEFAULT_FONT_SCHEME, message: `Font scheme '${id}' is not in the inline or bundled catalogs; using the default font scheme '${DEFAULT_FONT_SCHEME}'.` } };
 }
 
+// Generated socials furniture formats handles in core. Core applies inline
+// document records first; the host supplies the rest in resolution order.
+function socialPlatformRecords(context) {
+  const kind = "socialPlatforms";
+  return [
+    ...sourceRecordsFor(kind, context.presentation.catalogs?.[kind]?.source, context.options),
+    ...normalizeSourceRecords(context.options.catalogs?.[kind]),
+    ...sourceRecordsFor(kind, engineDefaults.catalogs[kind]?.source, context.options),
+    ...defaultCatalogFor(kind)
+  ];
+}
+
 function resolveCatalogRecord(kind, reference, context, path, fallbackId = engineDefaultId(kind)) {
   const id = referenceId(reference) ?? fallbackId;
   const documentCatalog = context.presentation.catalogs?.[kind];
@@ -600,7 +612,7 @@ function bindSlide(presentation, slide, layout, index, context) {
   const scriptFonts = createScriptFonts(scriptProfile(presentation, index, design, context), context.options.textMeasurement);
   const textMeasurement = scriptFonts.textMeasurement ?? context.options.textMeasurement;
   for (const role of ["heading","body","code"]) design.fonts[role] = resolveTextStyle({fontFamily:design.fonts[role],fontWeight:role === "heading" ? 700 : 400},textMeasurement).fontFamily;
-  const geometry = composeSlide(slide, { ...design.dimensions, layout, presentation, slideIndex: index, fonts: design.fonts, contentAlignment:design.contentAlignment, titleAlignment:design.titleAlignment, textRasterPadding:context.options.textRasterPadding, contentBox:design.contentBox, textMeasurement, date: context.options.date });
+  const geometry = composeSlide(slide, { ...design.dimensions, layout, presentation, slideIndex: index, fonts: design.fonts, contentAlignment:design.contentAlignment, titleAlignment:design.titleAlignment, textRasterPadding:context.options.textRasterPadding, contentBox:design.contentBox, textMeasurement, date: context.options.date, socialPlatforms: socialPlatformRecords(context) });
   return {
     scriptFonts,
     textMeasurement,
