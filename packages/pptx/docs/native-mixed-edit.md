@@ -6,6 +6,12 @@ The read-only observation on 2026-09-21 already passed content, style, and outer
 
 Invocation safety is a PowerShell AST check. `Get-MixedEditNumericLiteralValue` unwraps `ParenExpressionAst`, then accepts a constant or a unary minus. `-PureRegression` evaluates `Write-MixedEditStage` before `Invoke-MixedEditCom`, points `$script:stageFile`, `$script:progressFile`, and `$script:sequence` at a temp directory, and deletes that directory in `finally`. Throw strings and comments are not invocations.
 
+## First native attempt, 2026-09-22
+
+The first native attempt (`windows-native-mixed-edit-01`, harness from merge `86afe6c`) completed its owned Office and font lifecycle with exit 0 in about 6.5 seconds, but the independent audit failed and the attempt is preserved as a failure. The audit reported 1,496 stage-record failures and 2 style failures. Every stage wrote `"error":""` because PowerShell coerces `$null` to an empty string for a `[string]` parameter, while the audit correctly requires JSON `null`. After the edit, the whole-cell `Font.Italic` tri-state read `-2` (mixed) in both the edited and reopened phases. All five runs and all seven probes still read italic `0`, and the saved slide XML contains no italic run. The only italic-related change was the explicit `i="0"` that the harness itself wrote to the edited run and `endParaRPr` by reassigning `Font.Name`, `Size`, `Bold` and `Italic` after the text replacement.
+
+The corrected harness keeps the stage error parameter untyped so successful stages serialize JSON `null`, and `-PureRegression` now parses its written stages to assert that. The edit replaces the text only. Reassigning run font properties would overwrite the native style persistence that this proof audits. The audit gates are unchanged. A later attempt must use a fresh output directory; it is not a retry of the first attempt.
+
 ## Offline controls
 
 These commands do not start Office:

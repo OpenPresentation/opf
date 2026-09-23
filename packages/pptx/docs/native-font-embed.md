@@ -35,6 +35,10 @@ For an attempt that passed the native gate, completed the owned close and parent
 node test/native-font-embed-audit.mjs artifacts/windows-native-font-embed-01
 ```
 
+## Stage records
+
+Successful stage records must serialize `error` as JSON `null`. `Write-FontEmbedStage` keeps its error parameter untyped because a PowerShell `[string]` parameter coerces `$null` to an empty string, which the audit rejects for every stage. The mixed-size harness hit exactly this defect in its first native attempt on 2026-09-22. `-PureRegression` writes one successful and one failed stage and checks their serialized form.
+
 ## Non-Office regression
 
 ```powershell

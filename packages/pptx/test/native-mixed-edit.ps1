@@ -92,13 +92,19 @@ function Invoke-MixedEditPureRegression {
         Invoke-Expression $stageDefinition[0].Extent.Text
         Invoke-Expression $comDefinition[0].Extent.Text
         $script:officeOperationsStopped=$false; $script:cleanupConfirmed=$true
+        [void](Invoke-MixedEditCom 'pure.success' { 1 })
         $failureCaught=$false
         try { Invoke-MixedEditCom 'pure.failure' { throw 'Deliberate non-Office failure' } } catch { $failureCaught=$true }
         if(-not $failureCaught -or -not $script:officeOperationsStopped -or $script:cleanupConfirmed) { throw 'COM failure latch did not engage' }
         $script:unexpectedCall=$false
         try { Invoke-MixedEditCom 'pure.forbidden-followup' { $script:unexpectedCall=$true } } catch { }
         if($script:unexpectedCall) { throw 'Operation ran after the failure latch' }
-        [ordered]@{passed=$true;officeOrComCalls=0;embedFontsArgument=0;tolerancePoints=0.02;saveAsArgumentCount=3} | ConvertTo-Json -Depth 4
+        $stageLines=@(Get-Content -LiteralPath $script:stageFile -Encoding UTF8)
+        $stageRecords=@($stageLines | ForEach-Object { $_ | ConvertFrom-Json })
+        if(($stageRecords | ForEach-Object { "$($_.stage)/$($_.status)" }) -join ',' -cne 'pure.success/begin,pure.success/success,pure.failure/begin,pure.failure/error') { throw 'Unexpected pure stage sequence' }
+        if(@($stageLines[0..2] | Where-Object { $_ -notmatch '"error":null,' }).Count -ne 0) { throw 'Non-error stage records must serialize error as JSON null' }
+        if($stageRecords[3].error -cne 'Deliberate non-Office failure') { throw 'Error stage record lost its message' }
+        [ordered]@{passed=$true;officeOrComCalls=0;embedFontsArgument=0;tolerancePoints=0.02;saveAsArgumentCount=3;nonErrorStageErrorIsNull=$true} | ConvertTo-Json -Depth 4
     } finally {
         if(Test-Path -LiteralPath $pureRoot) {
             $resolvedPureRoot=(Resolve-Path -LiteralPath $pureRoot).Path
@@ -302,7 +308,8 @@ function Write-MixedEditReport {
     $report.lastStatus=$script:lastStatus
     $report | ConvertTo-Json -Depth 30 | Set-Content -LiteralPath $reportFile -Encoding UTF8
 }
-function Write-MixedEditStage([string]$StageName,[string]$Status,[string]$ErrorMessage=$null) {
+# [string] parameters coerce `$null to ''; keep the parameter untyped so a successful stage records JSON null.
+function Write-MixedEditStage([string]$StageName,[string]$Status,$ErrorMessage=$null) {
     $script:sequence++
     $script:lastStage=$StageName
     $script:lastStatus=$Status
@@ -311,7 +318,7 @@ function Write-MixedEditStage([string]$StageName,[string]$Status,[string]$ErrorM
         timestamp=(Get-Date).ToUniversalTime().ToString('o')
         stage=$StageName
         status=$Status
-        error=$ErrorMessage
+        error=$(if([string]::IsNullOrEmpty([string]$ErrorMessage)){$null}else{[string]$ErrorMessage})
         cleanupConfirmed=$script:cleanupConfirmed
         officeOperationsStopped=$script:officeOperationsStopped
         ownedPresentationPath=$script:ownedPresentationPath
@@ -492,12 +499,8 @@ try {
     $frame=Invoke-MixedEditCom 'edit.cell.textFrame2.get' { return ,$cellShape.TextFrame2 }
     $range=Invoke-MixedEditCom 'edit.cell.textRange2.get' { return ,$frame.TextRange }
     $runRange=Invoke-MixedEditCom 'edit.run-202-44.get' { return ,$range.Characters(202,44) }
+    # Replace text only. Reassigning run font properties would overwrite the native style persistence this proof audits.
     Invoke-MixedEditCom 'edit.run-202-44.text.set' { $runRange.Text='finishes the control with saved source runs.' }
-    $runFont=Invoke-MixedEditCom 'edit.run-202-44.font.get' { return ,$runRange.Font }
-    Invoke-MixedEditCom 'edit.run-202-44.font.name.set' { $runFont.Name='Carlito' }
-    Invoke-MixedEditCom 'edit.run-202-44.font.size.set' { $runFont.Size=18 }
-    Invoke-MixedEditCom 'edit.run-202-44.font.bold.set' { $runFont.Bold=0 }
-    Invoke-MixedEditCom 'edit.run-202-44.font.italic.set' { $runFont.Italic=0 }
     $report.edited.observation=Read-MixedEditObservation $script:presentation $request.expectations.edited 'edited'
     Write-MixedEditReport
     $slides=Invoke-MixedEditCom 'edited.export.slides.get' { return ,$script:presentation.Slides }

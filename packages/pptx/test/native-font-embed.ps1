@@ -143,12 +143,18 @@ function Invoke-FontEmbedPureRegression {
         Invoke-Expression $stageDefinition[0].Extent.Text
         Invoke-Expression $comDefinition[0].Extent.Text
         $script:officeOperationsStopped=$false; $script:cleanupConfirmed=$true
+        [void](Invoke-FontEmbedCom 'pure.success' { 1 })
         $failureCaught=$false
         try { Invoke-FontEmbedCom 'pure.failure' { throw 'Deliberate non-Office failure' } } catch { $failureCaught=$true }
         if(-not $failureCaught -or -not $script:officeOperationsStopped -or $script:cleanupConfirmed) { throw 'COM failure latch did not engage or cleanup remained misleadingly confirmed' }
         $script:unexpectedCall=$false
         try { Invoke-FontEmbedCom 'pure.forbidden-followup' { $script:unexpectedCall=$true } } catch { }
         if($script:unexpectedCall) { throw 'Operation ran after the failure latch' }
+        $stageLines=@(Get-Content -LiteralPath $script:stageFile -Encoding UTF8)
+        $stageRecords=@($stageLines | ForEach-Object { $_ | ConvertFrom-Json })
+        if(($stageRecords | ForEach-Object { "$($_.stage)/$($_.status)" }) -join ',' -cne 'pure.success/begin,pure.success/success,pure.failure/begin,pure.failure/error') { throw 'Unexpected pure stage sequence' }
+        if(@($stageLines[0..2] | Where-Object { $_ -notmatch '"error":null,' }).Count -ne 0) { throw 'Non-error stage records must serialize error as JSON null' }
+        if($stageRecords[3].error -cne 'Deliberate non-Office failure') { throw 'Error stage record lost its message' }
         $canonicalFonts=@($script:fontEmbedCanonicalFaces.Keys | ForEach-Object {[pscustomobject]@{file=$_;sha256=$script:fontEmbedCanonicalFaces[$_]}})
         $validGeneration=[pscustomobject]@{kind='native-font-edit-fixture';source=[pscustomobject]@{file='source.pptx';sha256=('0'*64)};license=[pscustomobject]@{file='LICENSE_FONT';spdx='OFL-1.1';sha256=$script:fontEmbedLicenseSha256};registration=[pscustomobject]@{flags=0};fonts=$canonicalFonts}
         Assert-FontEmbedCanonicalGeneration $validGeneration
@@ -168,7 +174,7 @@ function Invoke-FontEmbedPureRegression {
         $stringCountGate=Get-FontEmbedNativeFontsGate ([pscustomobject]@{count='1';entries=@([pscustomobject]@{name='Carlito';embedded=0;embeddable=-1})})
         $stringFlagGate=Get-FontEmbedNativeFontsGate ([pscustomobject]@{count=1;entries=@([pscustomobject]@{name='Carlito';embedded='0';embeddable='-1'})})
         if(-not $wrongHashRejected -or -not $missingFlagsRejected -or -not $stringFlagsRejected -or -not $wrongLicenseRejected -or -not $goodGate.passed -or $badGate.passed -or $badGate.unexpectedNames -cnotcontains 'Aptos' -or -not $orderedGoodGate.passed -or $orderedBadGate.passed -or $orderedBadGate.unexpectedNames -cnotcontains 'Aptos' -or $stringCountGate.passed -or $stringFlagGate.passed) { throw 'Canonical provenance or native Fonts negative controls failed' }
-        [ordered]@{passed=$true;officeOrComCalls=0;embedSaveArgument=(-1);noEmbedFontsZero=$true;canonicalHashRejected=$wrongHashRejected;wrongLicenseRejected=$wrongLicenseRejected;strictRegistrationFlagsRejected=($missingFlagsRejected -and $stringFlagsRejected);carlitoGatePassed=($goodGate.passed -and $orderedGoodGate.passed);carlitoAptosGateRejected=(-not $badGate.passed -and -not $orderedBadGate.passed);strictNativeTypesRejected=(-not $stringCountGate.passed -and -not $stringFlagGate.passed);stopLatchPassed=$true} | ConvertTo-Json -Depth 6
+        [ordered]@{passed=$true;officeOrComCalls=0;embedSaveArgument=(-1);noEmbedFontsZero=$true;canonicalHashRejected=$wrongHashRejected;wrongLicenseRejected=$wrongLicenseRejected;strictRegistrationFlagsRejected=($missingFlagsRejected -and $stringFlagsRejected);carlitoGatePassed=($goodGate.passed -and $orderedGoodGate.passed);carlitoAptosGateRejected=(-not $badGate.passed -and -not $orderedBadGate.passed);strictNativeTypesRejected=(-not $stringCountGate.passed -and -not $stringFlagGate.passed);stopLatchPassed=$true;nonErrorStageErrorIsNull=$true} | ConvertTo-Json -Depth 6
     } finally {
         if(Test-Path -LiteralPath $pureRoot) {
             $deleteRoot=(Resolve-Path -LiteralPath $pureRoot).Path
@@ -349,9 +355,10 @@ $report=[ordered]@{
     limitations=@('Native font properties do not identify the physical file used for every glyph.','This control does not replace Gate E geometry persistence or browser/native pixel checks.','Offline audit hashes ppt/fonts package parts; obfuscated bytes may not match fixture TTF SHA-256.')
 }
 function Write-FontEmbedReport { $report.cleanupConfirmed=$script:cleanupConfirmed; $report.officeOperationsStopped=$script:officeOperationsStopped; $report.lastStage=$script:lastStage; $report.lastStatus=$script:lastStatus; $report | ConvertTo-Json -Depth 20 | Set-Content -LiteralPath $reportFile -Encoding UTF8 }
-function Write-FontEmbedStage([string]$StageName,[string]$Status,[string]$ErrorMessage=$null) {
+# [string] parameters coerce `$null to ''; keep the parameter untyped so a successful stage records JSON null.
+function Write-FontEmbedStage([string]$StageName,[string]$Status,$ErrorMessage=$null) {
     $script:sequence++; $script:lastStage=$StageName; $script:lastStatus=$Status
-    $record=[ordered]@{sequence=$script:sequence;timestamp=(Get-Date).ToUniversalTime().ToString('o');stage=$StageName;status=$Status;error=$ErrorMessage;cleanupConfirmed=$script:cleanupConfirmed;officeOperationsStopped=$script:officeOperationsStopped;ownedPresentationPath=$script:ownedPresentationPath}
+    $record=[ordered]@{sequence=$script:sequence;timestamp=(Get-Date).ToUniversalTime().ToString('o');stage=$StageName;status=$Status;error=$(if([string]::IsNullOrEmpty([string]$ErrorMessage)){$null}else{[string]$ErrorMessage});cleanupConfirmed=$script:cleanupConfirmed;officeOperationsStopped=$script:officeOperationsStopped;ownedPresentationPath=$script:ownedPresentationPath}
     $record | ConvertTo-Json -Compress | Add-Content -LiteralPath $script:stageFile -Encoding UTF8
     $record | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath $script:progressFile -Encoding UTF8
 }
