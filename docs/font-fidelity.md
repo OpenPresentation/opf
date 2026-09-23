@@ -4,7 +4,7 @@ For the starter set and delivery priorities, see the [font roadmap](plans/font-r
 
 ## Font policy (FF-31)
 
-OPF keeps one machine-readable font policy table, [`spec/reference/font-policy.json`](../spec/reference/font-policy.json). Core exports it as `FONT_POLICY`, `fontPolicyFor()` and `applyFontPolicyDecisions()` from `@openpresentation/opf` or `@openpresentation/opf/font-policy`. Each row gives a family's license class, where viewers get it, whether OPF may ever embed it, and its preview replacement with a measured width difference. It also lists alternates, ending where possible with a face that already ships with opf-render. The [licensing table](programs/font-fidelity-everywhere/font-licensing.md) lists all 150 rows. The [measurement evidence](evidence/font-replacements-20260923/README.md) explains how each replacement was chosen.
+OPF keeps one machine-readable font policy table, [`spec/reference/font-policy.json`](../spec/reference/font-policy.json). Core exports it as `FONT_POLICY`, `fontPolicyFor()` and `applyFontPolicyDecisions()` from `@openpresentation/opf` or `@openpresentation/opf/font-policy`. Each row gives a family's license class, where viewers get it, whether OPF may ever embed it, and its preview replacement with a measured width difference. It also lists alternates, ending where possible with a face that already ships with opf-render. The [licensing table](programs/font-fidelity-everywhere/font-licensing.md) lists all 153 rows. [`font-policy.schema.json`](../spec/reference/font-policy.schema.json) is its JSON Schema. The [measurement evidence](evidence/font-replacements-20260923/README.md) explains how each replacement was chosen.
 
 **Provisional owner decisions (provisional, owner may revise).** Three choices are pending with the owner. Root resolved them provisionally with the recommended defaults:
 
@@ -12,12 +12,13 @@ OPF keeps one machine-readable font policy table, [`spec/reference/font-policy.j
 | --- | --- | --- |
 | `aptos-preview` | Aptos (the default `aptos` scheme) | Roboto (visual) |
 | `segoe-ui-preview` | Segoe UI, Semibold, Light and Semilight | Red Hat Display (visual) |
-| `cambria-tier` | Cambria | Caladea, reclassified from metric to visual |
+| `cambria-tier` | Cambria | Caladea, reclassified from metric to visual. Its `metricModeFallback` keeps metric-mode registries previewing Cambria with Caladea, reported as visual, as they did before FF-31. |
 
 All three live in one block, `provisionalDecisions`, at the top of the JSON. The rows that follow a decision carry no replacement family of their own. A change of decision is therefore a one-line edit. When a decision changes, a stored measurement of the old family is dropped as unmeasured until `scripts/measure-font-replacements.mjs` is run again.
 
 1. **Licensed, non-free fonts are never bundled or embedded.** This covers Aptos, Calibri, Cambria, Segoe UI, Georgia, Tahoma, Grandview, Seaford, Tenorite, Consolas, Times New Roman, Arial, Courier New and the Windows script fonts. Rendering uses the family's designated open replacement instead:
-   - **Metric-compatible** where one exists and measures identical: Calibri→Carlito, Arial→Arimo, Times New Roman→Tinos, Courier New→Cousine, Georgia→Gelasio.
+   - **Metric-compatible** where one exists and measures identical: Calibri→Carlito, Arial→Arimo, Times New Roman→Tinos and Courier New→Cousine. A metric row needs an upstream statement and a measurement in all four styles, with a mean width difference below 0.1% and no corpus string more than 0.3% off. Georgia→Gelasio fails that test: ligature runs differ by up to 1.02% as opf-render shapes them. It is therefore visual, even though every basic-Latin advance matches.
+   - **Alternates** are tried, in order, when the declared replacement's pack is not loaded. An alternate is always reported as visual, including on a metric row.
    - **Otherwise the closest measured open face**, marked visual. For example, Aptos→Roboto measures a 2.15% mean width difference.
 2. **The PPTX always names the chosen family, and no font file is included.** The exporter writes `Aptos` when the document chose Aptos. PowerPoint resolves standard fonts on the viewer's machine: those shipped with Office, Windows or macOS, and Microsoft 365 cloud fonts. The replacement never reaches the package (opf-pptx `test/export-chosen-fonts.mjs`).
 3. **Openly licensed fonts render as themselves.** Examples are Roboto, Carlito and the Noto script families. They can reach a PPTX only through an explicit embed path (FF-13), never by default.
@@ -115,11 +116,11 @@ registry.resolveFont({fontFamily: 'Calibri', fontWeight: 400});
 | Requested family | Bundled substitute | Current automatic tier |
 | --- | --- | --- |
 | Calibri | Carlito | Metric intent, standard 400/700 styles |
-| Cambria | Caladea | Visual: advances differ from Cambria 6.99 by a mean of 2.7% (FF-31 measurement) |
+| Cambria | Caladea | Visual: advances differ from Cambria 6.99 by a mean of 2.7% (FF-31 measurement). Metric-mode registries still use it, reported as visual (`metricModeFallback`) |
 | Arial | Arimo | Metric, standard 400/700 styles |
 | Times New Roman | Tinos | Metric, standard 400/700 styles |
 | Courier New | Cousine | Metric, standard 400/700 styles |
-| Georgia | Gelasio | Metric: basic-Latin advances identical; ligature runs differ by at most 1% |
+| Georgia | Gelasio | Visual: basic-Latin advances identical, but ligature runs differ by up to 1.02% as opf-render shapes them |
 | Calibri Light | Carlito | Visual: the bundle has no Carlito Light face |
 | Aptos / Aptos Display | Roboto / Carlito (FF-31 policy) | Visual; no Aptos metric claim |
 

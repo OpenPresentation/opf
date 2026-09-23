@@ -48,6 +48,8 @@ export interface FontReplacement {
   compatibility: FontReplacementCompatibility;
   /** Set when the family and compatibility come from a provisional owner decision (provisionalDecisions). */
   decision?: string;
+  /** Copied from the decision: metric-mode registries still preview with this visual replacement. */
+  metricModeFallback?: boolean;
   /** Weight to select in the replacement when the requested family encodes weight in its name
    * (for example Segoe UI Semibold -> 600, Arial Black -> 900). */
   weight?: number;
@@ -77,10 +79,15 @@ export interface FontPolicyEntry {
 export interface FontPolicyDecision {
   replacement: string;
   compatibility: FontReplacementCompatibility;
+  /** Metric-mode registries still preview with this visual replacement (reported as visual), so an
+   * earlier metric behaviour does not regress. It never makes the replacement metric. */
+  metricModeFallback?: boolean;
   note?: string;
 }
 
 export interface FontPolicyTable {
+  /** Relative path of the JSON Schema (spec/reference/font-policy.schema.json). */
+  $schema?: string;
   /** The one place provisional owner decisions live (FF-31). */
   provisionalDecisions: {
     status: string;

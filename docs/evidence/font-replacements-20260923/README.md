@@ -27,7 +27,8 @@ Families whose real font is not on the host are skipped and recorded as `measure
 
 ## Findings
 
-- **Metric replacements.** Carlito for Calibri, Arimo for Arial, Tinos for Times New Roman and Cousine for Courier New match to within 0.3% on every string. Gelasio matches Georgia's basic-Latin advances exactly; only runs where Gelasio applies optional ligatures differ, by at most 1.0%.
+- **Metric replacements.** Carlito for Calibri, Arimo for Arial, Tinos for Times New Roman and Cousine for Courier New are metric. The largest difference on any string, in any of the four styles, is 0.26% (Calibri/Carlito).
+- **Georgia and Gelasio are visual.** Gelasio matches every basic-Latin advance of Georgia 5.59. opf-render shapes with default features, though, and runs where Gelasio applies optional ligatures differ by up to 1.02% in all four styles. That exceeds the 0.3% per-string limit for a metric claim.
 - **Cambria and Caladea.** Caladea is *not* metric-compatible with Cambria 6.99 (Windows 11). Its advances differ by a mean of 2.7% and up to 6.5%, so the policy classes it as visual. Fontconfig still lists Caladea as a metric alias.
 - **Aptos.** Microsoft 365 cloud font, proprietary, not redistributable.
   - Measured candidates (mean |Δ| / signed):
@@ -42,5 +43,5 @@ Families whose real font is not on the host are skipped and recorded as `measure
   - Aptos Display previews with Carlito (1.84%). Aptos Narrow also uses Carlito (2.33%).
   - Akasia, the previously noted experimental clone, could not be pinned: its repository returned 404 and there is no package.
 - **Segoe UI.** Microsoft's own OFL Selawik is the documented fallback, but it is not published as a pinned package. Red Hat Display is the closest measured shipped face: 1.72% regular, 1.01% at 600, 1.87% at 300.
-- **Consolas.** No open monospace face is within 8%. Consolas advances are 0.55 em, while Cousine and Roboto Mono use 0.6 em and Inconsolata uses 0.5 em. The policy uses Roboto Mono (+7.95%). DMCA Sans Serif claims Consolas metrics but has no package.
+- **Consolas.** No open monospace face is within 8%. Consolas advances are 0.55 em, while Cousine and Roboto Mono use 0.6 em and Inconsolata uses 0.5 em. Roboto Mono measures slightly closer (+7.95%) than Cousine (+9.15%). The policy nevertheless uses Cousine, because the bundled Roboto Mono has no italic faces. Roboto Mono is an alternate. DMCA Sans Serif claims Consolas metrics but has no package.
 - **Latin text in non-Latin fonts.** The Latin glyphs of several script fonts differ greatly from Noto's; for example, Noto Sans Thai's Latin is 75% wider than Angsana New's. Measurements for script families describe Latin runs only.

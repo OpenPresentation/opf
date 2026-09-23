@@ -2,17 +2,21 @@
 
 ## Unreleased
 
-- FF-31 (draft): add the OPF font policy table, `spec/reference/font-policy.json`. It has 150 families: 53 open and 97 proprietary-standard.
-  - Three owner decisions live in one `provisionalDecisions` block, marked provisional (owner may revise): Aptos → Roboto, Segoe UI → Red Hat Display, and Cambria → Caladea reclassified as visual. Rows that follow a decision carry no family of their own, so a change is a one-line edit; `applyFontPolicyDecisions()` applies the block and drops a stored measurement of a different family.
+- FF-31: add the OPF font policy table, `spec/reference/font-policy.json`, with its JSON Schema `spec/reference/font-policy.schema.json`, which the tests validate. It has 153 families: 56 open and 97 proprietary-standard.
+  - Three owner decisions live in one `provisionalDecisions` block, marked provisional (owner may revise): Aptos → Roboto, Segoe UI → Red Hat Display, and Cambria → Caladea reclassified as visual. The Cambria decision sets `metricModeFallback`, so metric-mode registries keep previewing Cambria with Caladea, reported as visual, as they did before. Rows that follow a decision carry no family of their own, so a change is a one-line edit; `applyFontPolicyDecisions()` applies the block and drops a stored measurement of a different family.
   - Each proprietary row lists alternates ending with the best measured face that opf-render already bundles (`bundled-candidates.json`).
   - Each row gives the license class, viewer availability (windows, windows-optional, macos, office, office-cloud) and whether OPF may embed the family. Open families may be embedded only through an explicit embed path; proprietary families never.
   - Each row also names the open preview replacement, with its metric/visual tier and a measured width difference.
   - Exported as `FONT_POLICY`, `fontPolicyFor()`, `applyFontPolicyDecisions()` and `fontAvailabilityDiagnostics()` from `@openpresentation/opf`, and from the new `@openpresentation/opf/font-policy` entry point.
   - `scripts/measure-font-replacements.mjs` reproduces the measurements, and its `--check` option fails when they drift. The measurements used locally installed reference fonts, which were never copied.
   - Measured findings:
-    - Metric: Carlito, Arimo, Tinos, Cousine and Gelasio match within 0.3%.
-    - Visual: Caladea against Cambria 6.99 (2.7%).
-    - Aptos → Roboto: 2.15% mean, +0.1% signed.
+    - Metric: Carlito/Calibri, Arimo/Arial, Tinos/Times New Roman and Cousine/Courier New. Mean width difference below 0.01%, and no string in any of the four styles is more than 0.26% off.
+    - The policy test requires this for every metric row: an upstream source, all four styles measured, a mean below 0.1% and a per-string maximum of at most 0.3%.
+    - Georgia → Gelasio stays visual. Every basic-Latin advance matches Georgia 5.59, but opf-render shapes with default features, and runs where Gelasio applies optional ligatures differ by up to 1.02%.
+    - Visual: Caladea against Cambria 6.99, with a 2.7% mean and a 6.5% maximum.
+    - Aptos → Roboto: 2.15% mean, +0.1% signed, 7.4% maximum.
+    - Consolas and Aptos Mono keep Cousine, which has all four styles, with Roboto Mono as an alternate. Roboto Mono measures slightly closer against Consolas (7.95% vs 9.15%), but the bundled Roboto Mono has no italics.
+    - Arial, Times New Roman and Courier New list Liberation Sans/Serif/Mono as alternates. These are OFL and not shipped by opf-render; renderers report an alternate as visual, never metric.
   - Docs: `docs/font-fidelity.md` and `docs/programs/font-fidelity-everywhere/font-licensing.md`.
 
 - FF-29: every item returned by `composeSlide` now carries its resolved text `alignment`. The title uses `titleAlignment`; subtitle, tag, body text, lists, tables and metrics use `contentAlignment`. A slide's design wins over the host option, and the default is `left`. Accepted outline placement and metric internals use this one resolution, so the renderer and PPTX exporter can anchor text to the same value. Geometry is unchanged: the 126 bundled examples compose identically, and the renderer golden is unchanged by this core change.

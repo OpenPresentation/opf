@@ -1,0 +1,328 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openpresentation.org/schema/opf-font-policy/v1",
+  "title": "OPF font policy",
+  "description": "Schema for spec/reference/font-policy.json (font-fidelity-everywhere FF-31): one row per font family with its license class, viewer availability, whether OPF may embed it, and the openly licensed replacement a renderer previews it with. Reference data for engines, not part of the OPF document contract.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "provisionalDecisions",
+    "description",
+    "version",
+    "measurement",
+    "families"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "provisionalDecisions": {
+      "description": "The one place provisional owner decisions live. Rows whose replacement names a decision take its family and compatibility from it.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "note",
+        "decisions"
+      ],
+      "properties": {
+        "status": {
+          "type": "string",
+          "pattern": "provisional"
+        },
+        "note": {
+          "type": "string",
+          "minLength": 1
+        },
+        "decisions": {
+          "type": "object",
+          "minProperties": 1,
+          "propertyNames": {
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "replacement",
+              "compatibility"
+            ],
+            "properties": {
+              "replacement": {
+                "$ref": "#/$defs/family"
+              },
+              "compatibility": {
+                "$ref": "#/$defs/compatibility"
+              },
+              "metricModeFallback": {
+                "description": "Metric-mode registries still preview with this visual replacement (reported as visual) so an earlier metric behaviour does not regress.",
+                "type": "boolean"
+              },
+              "note": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "measurement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tool",
+        "corpus",
+        "evidence",
+        "definition"
+      ],
+      "properties": {
+        "tool": {
+          "type": "string"
+        },
+        "corpus": {
+          "type": "string"
+        },
+        "evidence": {
+          "type": "string"
+        },
+        "definition": {
+          "type": "string"
+        }
+      }
+    },
+    "families": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/entry"
+      }
+    }
+  },
+  "$defs": {
+    "family": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[^\\u0000-\\u001f\"'\\\\<>;]+$"
+    },
+    "compatibility": {
+      "enum": [
+        "metric",
+        "visual"
+      ]
+    },
+    "share": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "measured": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "replacement",
+        "meanAbsWidthDelta",
+        "meanWidthDelta",
+        "maxAbsWidthDelta",
+        "styles",
+        "reference"
+      ],
+      "properties": {
+        "replacement": {
+          "$ref": "#/$defs/family"
+        },
+        "meanAbsWidthDelta": {
+          "$ref": "#/$defs/share"
+        },
+        "meanWidthDelta": {
+          "type": "number",
+          "minimum": -1,
+          "maximum": 1
+        },
+        "maxAbsWidthDelta": {
+          "$ref": "#/$defs/share"
+        },
+        "styles": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4
+        },
+        "reference": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "replacement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "measured"
+      ],
+      "properties": {
+        "family": {
+          "$ref": "#/$defs/family"
+        },
+        "compatibility": {
+          "$ref": "#/$defs/compatibility"
+        },
+        "decision": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "weight": {
+          "type": "integer",
+          "minimum": 100,
+          "maximum": 900
+        },
+        "measured": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/measured"
+            }
+          ]
+        },
+        "source": {
+          "type": "string",
+          "format": "uri"
+        }
+      },
+      "if": {
+        "properties": {
+          "decision": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "decision"
+        ]
+      },
+      "then": {
+        "properties": {
+          "family": false,
+          "compatibility": false
+        }
+      },
+      "else": {
+        "properties": {
+          "family": {
+            "$ref": "#/$defs/family"
+          },
+          "compatibility": {
+            "$ref": "#/$defs/compatibility"
+          }
+        },
+        "required": [
+          "family",
+          "compatibility"
+        ]
+      }
+    },
+    "entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "family",
+        "licenseClass",
+        "license",
+        "availability",
+        "embeddableByOpf",
+        "replacement",
+        "sources"
+      ],
+      "properties": {
+        "family": {
+          "$ref": "#/$defs/family"
+        },
+        "licenseClass": {
+          "enum": [
+            "open",
+            "proprietary-standard",
+            "proprietary-nonstandard"
+          ]
+        },
+        "license": {
+          "type": "string",
+          "minLength": 1
+        },
+        "availability": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "windows",
+              "windows-optional",
+              "macos",
+              "office",
+              "office-cloud"
+            ]
+          }
+        },
+        "embeddableByOpf": {
+          "type": "boolean"
+        },
+        "replacement": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/replacement"
+            }
+          ]
+        },
+        "alternates": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/family"
+          }
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "format": "uri",
+            "pattern": "^https://"
+          }
+        },
+        "note": {
+          "type": "string"
+        }
+      },
+      "if": {
+        "properties": {
+          "licenseClass": {
+            "const": "open"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "embeddableByOpf": {
+            "const": true
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "embeddableByOpf": {
+            "const": false
+          }
+        }
+      }
+    }
+  }
+}

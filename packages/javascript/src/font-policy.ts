@@ -44,6 +44,8 @@ export function applyFontPolicyDecisions(source: unknown): FontPolicyTable {
     if (!decision) throw new Error(`Font policy row '${row.family}' names unknown decision '${replacement.decision}'.`);
     replacement.family = decision.replacement;
     replacement.compatibility = decision.compatibility;
+    if (decision.metricModeFallback) replacement.metricModeFallback = true;
+    else delete replacement.metricModeFallback;
     if (replacement.measured && replacement.measured.replacement !== decision.replacement) replacement.measured = null;
   }
   return table;

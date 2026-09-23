@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
+import { createRequire } from "node:module";
 import { describe, test } from "node:test";
 
 import { FONT_POLICY, applyFontPolicyDecisions, fontAvailabilityDiagnostics, fontPolicyFor, fontSchemes, resolveFontFamilies, DEFAULT_FONT_SCHEME } from "../dist/index.js";
@@ -8,11 +9,28 @@ import * as subpath from "../dist/font-policy.js";
 // FF-31: one machine-readable font policy table. Renderers take replacements from it; exporters
 // never write a replacement and never embed a proprietary family.
 const source = JSON.parse(readFileSync(new URL("../../../spec/reference/font-policy.json", import.meta.url), "utf8"));
+const schema = JSON.parse(readFileSync(new URL("../../../spec/reference/font-policy.schema.json", import.meta.url), "utf8"));
+const require = createRequire(import.meta.url);
+const Ajv2020 = require("ajv/dist/2020.js").default;
+const addFormats = require("ajv-formats").default;
 const rows = FONT_POLICY.families;
 const AVAILABILITY = new Set(["windows", "windows-optional", "macos", "office", "office-cloud"]);
 const NO_TEXT_REPLACEMENT = new Set(["cambria math", "wingdings", "webdings", "symbol", "segoe ui emoji"]);
 
 describe("font policy table", () => {
+  test("font-policy.json is valid against its JSON Schema", () => {
+    const ajv = new Ajv2020({ allErrors: true, strict: true });
+    addFormats(ajv);
+    const validate = ajv.compile(schema);
+    assert.equal(source.$schema, "./font-policy.schema.json");
+    assert.equal(validate(source), true, JSON.stringify(validate.errors, null, 2));
+    // The schema rejects a row that names both a decision and its own family.
+    const broken = structuredClone(source);
+    const aptos = broken.families.find((row) => row.family === "Aptos");
+    aptos.replacement.family = "Carlito";
+    assert.equal(validate(broken), false);
+  });
+
   test("the exported table is the spec reference file with decisions applied, frozen", () => {
     assert.deepEqual(JSON.parse(JSON.stringify(FONT_POLICY)), JSON.parse(JSON.stringify(applyFontPolicyDecisions(source))));
     assert.ok(Object.isFrozen(FONT_POLICY) && Object.isFrozen(rows) && Object.isFrozen(rows[0]));
@@ -75,17 +93,29 @@ describe("font policy table", () => {
         assert.ok(measured.maxAbsWidthDelta + 1e-9 >= measured.meanAbsWidthDelta, row.family);
         assert.ok(measured.styles >= 1 && measured.styles <= 4 && measured.reference.startsWith(row.family), row.family);
       }
-      // A metric claim must be backed by an upstream statement and a near-zero measurement.
+      // A metric claim needs an upstream statement and a measured match on every corpus string of
+      // every style: mean < 0.1% and no single string more than 0.3% off (docs/font-fidelity.md).
       if (row.replacement.compatibility === "metric") {
         assert.ok(row.replacement.source, `${row.family}: metric claim needs a source`);
-        assert.ok(measured && measured.meanAbsWidthDelta < 0.001, `${row.family}: metric claim needs a measured match`);
+        assert.ok(measured, `${row.family}: metric claim needs a measurement`);
+        assert.ok(measured.meanAbsWidthDelta < 0.001, `${row.family}: mean width delta ${measured.meanAbsWidthDelta}`);
+        assert.ok(measured.maxAbsWidthDelta <= 0.003, `${row.family}: max width delta ${measured.maxAbsWidthDelta} exceeds 0.3%`);
+        assert.equal(measured.styles, 4, `${row.family}: metric claims cover regular, bold, italic and bold italic`);
       }
+      // A metric-mode fallback never turns a visual replacement into a metric one.
+      if (row.replacement.metricModeFallback) assert.equal(row.replacement.compatibility, "visual", row.family);
     }
   });
 
   test("the documented metric replacements", () => {
     const metric = rows.filter((row) => row.replacement?.compatibility === "metric").map((row) => `${row.family}->${row.replacement.family}`);
-    assert.deepEqual(metric.sort(), ["Arial->Arimo", "Calibri->Carlito", "Courier New->Cousine", "Georgia->Gelasio", "Times New Roman->Tinos"]);
+    assert.deepEqual(metric.sort(), ["Arial->Arimo", "Calibri->Carlito", "Courier New->Cousine", "Times New Roman->Tinos"]);
+    // Georgia: every basic-Latin advance matches, but ligature runs differ by up to 1.02% as the renderer shapes them.
+    assert.equal(fontPolicyFor("Georgia").replacement.compatibility, "visual");
+    assert.ok(fontPolicyFor("Georgia").replacement.measured.maxAbsWidthDelta > 0.003);
+    // Consolas keeps Cousine, which has all four styles; Roboto Mono is an alternate.
+    assert.equal(fontPolicyFor("Consolas").replacement.family, "Cousine");
+    assert.equal(fontPolicyFor("Aptos Mono").replacement.family, "Cousine");
     assert.equal(fontPolicyFor("Aptos").replacement.family, "Roboto");
     assert.equal(fontPolicyFor("Aptos").replacement.compatibility, "visual");
     assert.equal(fontPolicyFor("Cambria").replacement.compatibility, "visual", "Caladea advances differ from Cambria 6.99");
@@ -108,6 +138,8 @@ describe("provisional owner decisions", () => {
     assert.equal(fontPolicyFor("Aptos").replacement.decision, "aptos-preview");
     for (const family of ["Segoe UI", "Segoe UI Semibold", "Segoe UI Light", "Segoe UI Semilight"]) assert.equal(fontPolicyFor(family).replacement.family, "Red Hat Display");
     assert.deepEqual([fontPolicyFor("Cambria").replacement.family, fontPolicyFor("Cambria").replacement.compatibility], ["Caladea", "visual"]);
+    assert.equal(fontPolicyFor("Cambria").replacement.metricModeFallback, true, "metric-mode registries keep previewing Cambria with Caladea");
+    assert.equal(fontPolicyFor("Aptos").replacement.metricModeFallback, undefined);
   });
 
   test("changing one decision line re-points every row and drops the stale measurement", () => {

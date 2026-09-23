@@ -243,7 +243,7 @@
     },
     {
       "family": "Aptos Mono",
-      "replacement": "Roboto Mono",
+      "replacement": "Cousine",
       "compatibility": "visual",
       "skipped": "reference font not available on this host"
     },
@@ -1379,10 +1379,10 @@
     },
     {
       "family": "Consolas",
-      "replacement": "Roboto Mono",
+      "replacement": "Cousine",
       "compatibility": "visual",
-      "meanAbsWidthDelta": 0.0795,
-      "meanWidthDelta": 0.0795,
+      "meanAbsWidthDelta": 0.0915,
+      "meanWidthDelta": 0.0915,
       "maxAbsWidthDelta": 0.0915,
       "styles": 4,
       "reference": "Consolas 7.01",
@@ -1401,9 +1401,9 @@
             "sha256": "cf00b507b3286870cc5064ebd0633c303f70b491a4af25eec2d32df413db0179"
           },
           "replacement": {
-            "package": "@expo-google-fonts/roboto-mono@0.4.2",
-            "file": "400Regular/RobotoMono_400Regular.ttf",
-            "sha256": "e4bf45837847d4abfa5a502b807a83393aa138727bdb9ea9c93fb17d53208d95"
+            "package": "@expo-google-fonts/cousine@0.4.3",
+            "file": "400Regular/Cousine_400Regular.ttf",
+            "sha256": "ca2264d6750d6c47df703be4486361a37ab943d42de6ea2bf794b7c7af767799"
           }
         },
         {
@@ -1420,9 +1420,9 @@
             "sha256": "7e8de70c92a891722bd3fbd623db005caab2bfe267e5dab5be46b95a44e0c7f1"
           },
           "replacement": {
-            "package": "@expo-google-fonts/roboto-mono@0.4.2",
-            "file": "700Bold/RobotoMono_700Bold.ttf",
-            "sha256": "92649d819cc4c20480b23a47aaa111769924eb31c66b6ecdcf6f573662558c83"
+            "package": "@expo-google-fonts/cousine@0.4.3",
+            "file": "700Bold/Cousine_700Bold.ttf",
+            "sha256": "f03c46c4bc5c0a3af4a1f4fbe5e3e16954581cced05cea20b3bffe12740d99d3"
           }
         },
         {
@@ -1430,18 +1430,18 @@
           "italic": true,
           "replacementWeight": 400,
           "strings": 300,
-          "meanAbs": 0.0675,
-          "mean": 0.0675,
-          "maxAbs": 0.0675,
+          "meanAbs": 0.0915,
+          "mean": 0.0915,
+          "maxAbs": 0.0915,
           "reference": {
             "file": "consolai.ttf",
             "version": "Version 7.01",
             "sha256": "0b5b0484cf69ae973bd39380069f141271a4c9299b8885fa2d13f42aadbefef9"
           },
           "replacement": {
-            "package": "@expo-google-fonts/roboto-mono@0.4.2",
-            "file": "400Regular_Italic/RobotoMono_400Regular_Italic.ttf",
-            "sha256": "82629b0b8a721ce1a79942f68b39438512b406dad2a4a7476c94b72e7794b2f4"
+            "package": "@expo-google-fonts/cousine@0.4.3",
+            "file": "400Regular_Italic/Cousine_400Regular_Italic.ttf",
+            "sha256": "f1626b7287db36af8ba2ff88840c82f121f4cbda8971fe3f717f975e9fd782a8"
           }
         },
         {
@@ -1449,18 +1449,18 @@
           "italic": true,
           "replacementWeight": 700,
           "strings": 300,
-          "meanAbs": 0.0675,
-          "mean": 0.0675,
-          "maxAbs": 0.0675,
+          "meanAbs": 0.0915,
+          "mean": 0.0915,
+          "maxAbs": 0.0915,
           "reference": {
             "file": "consolaz.ttf",
             "version": "Version 7.01",
             "sha256": "9bc225ec52aa8f4b88b98bb735b1908bd72c9e31a12139fafcc1bd6c86bed3b4"
           },
           "replacement": {
-            "package": "@expo-google-fonts/roboto-mono@0.4.2",
-            "file": "700Bold_Italic/RobotoMono_700Bold_Italic.ttf",
-            "sha256": "5bc2918abfd7399aff52e0a7ee22c97d544601f7ae8ff3b49ad176497acff1ed"
+            "package": "@expo-google-fonts/cousine@0.4.3",
+            "file": "700Bold_Italic/Cousine_700Bold_Italic.ttf",
+            "sha256": "acb798f3629cda0041fbd6234237cf549a1b932792f2a71b0986eb3e1382ed37"
           }
         }
       ]
@@ -2031,7 +2031,7 @@
     {
       "family": "Georgia",
       "replacement": "Gelasio",
-      "compatibility": "metric",
+      "compatibility": "visual",
       "meanAbsWidthDelta": 0.0002,
       "meanWidthDelta": -0.0002,
       "maxAbsWidthDelta": 0.0102,
