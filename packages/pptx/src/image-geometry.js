@@ -12,7 +12,15 @@ export function rasterMetadata(bytes) {
   const text = (at, n) => String.fromCharCode(...bytes.subarray(at, at + n));
   const size = (width, height, mediaType) => Number.isInteger(width) && Number.isInteger(height) && width > 0 && height > 0 ? { width, height, mediaType } : null;
   if (bytes.length >= 33 && text(0, 8) === '\x89PNG\r\n\x1a\n' && view.getUint32(8) === 13 && text(12, 4) === 'IHDR') {
-    return size(view.getUint32(16), view.getUint32(20), "image/png");
+    const dimensions = size(view.getUint32(16), view.getUint32(20), "image/png");
+    // pHYs precedes IDAT. Only the metre unit defines a physical resolution.
+    for (let at = 33; dimensions && at + 12 <= bytes.length;) {
+      const length = view.getUint32(at), kind = text(at + 4, 4);
+      if (kind === 'IDAT' || kind === 'IEND' || at + 12 + length > bytes.length) break;
+      if (kind === 'pHYs' && length === 9 && bytes[at + 16] === 1) return { ...dimensions, ...resolution(view.getUint32(at + 8) * .0254, view.getUint32(at + 12) * .0254) };
+      at += 12 + length;
+    }
+    return dimensions;
   }
   if (bytes.length >= 13 && ['GIF87a', 'GIF89a'].includes(text(0, 6))) {
     return size(view.getUint16(6, true), view.getUint16(8, true), "image/gif");
@@ -39,7 +47,10 @@ export function rasterMetadata(bytes) {
     return null;
   }
   if (bytes.length >= 4 && bytes[0] === 0xff && bytes[1] === 0xd8) {
-    let dimensions = null, orientation = null;
+    let dimensions = null, orientation = null, jfif = null, exif = null;
+    // JFIF density (in inches or centimetres) takes precedence over EXIF
+    // X/YResolution; a JFIF aspect-ratio-only density (unit 0) defines no DPI.
+    const result = () => dimensions ? { ...dimensions, ...(jfif ?? exif), ...orientation } : null;
     // JPEG segment lengths include their two length bytes. Every iteration
     // advances within the input, including fill bytes and standalone markers.
     for (let at = 2; at < bytes.length;) {
@@ -47,7 +58,7 @@ export function rasterMetadata(bytes) {
       while (at < bytes.length && bytes[at] === 0xff) at++;
       if (at >= bytes.length) return null;
       const marker = bytes[at++];
-      if (marker === 0xda || marker === 0xd9) return dimensions ? { ...dimensions, ...orientation } : null;
+      if (marker === 0xda || marker === 0xd9) return result();
       if (marker === 0x01 || (marker >= 0xd0 && marker <= 0xd7)) continue;
       if (at + 2 > bytes.length) return null;
       const length = view.getUint16(at);
@@ -55,12 +66,53 @@ export function rasterMetadata(bytes) {
       if ([0xc0, 0xc1, 0xc2, 0xc3, 0xc5, 0xc6, 0xc7, 0xc9, 0xca, 0xcb, 0xcd, 0xce, 0xcf].includes(marker)) {
         dimensions = length >= 8 ? size(view.getUint16(at + 5), view.getUint16(at + 3), "image/jpeg") : null;
       }
-      if (marker === 0xe1 && text(at + 2, 6) === 'Exif\x00\x00') orientation ??= exifOrientation(bytes, at + 8, at + length);
+      if (marker === 0xe1 && text(at + 2, 6) === 'Exif\x00\x00') {
+        orientation ??= exifOrientation(bytes, at + 8, at + length);
+        exif ??= exifResolution(bytes, at + 8, at + length);
+      }
+      if (marker === 0xe0 && length >= 14 && text(at + 2, 5) === 'JFIF\x00' && (bytes[at + 9] === 1 || bytes[at + 9] === 2)) {
+        const unit = bytes[at + 9] === 1 ? 1 : 2.54;
+        jfif ??= resolution(view.getUint16(at + 10) * unit, view.getUint16(at + 12) * unit);
+      }
       at += length;
     }
-    return dimensions ? { ...dimensions, ...orientation } : null;
+    return result();
   }
   return null;
+}
+
+// Physical resolution in dots per inch, when both axes are positive.
+function resolution(x, y) {
+  return Number.isFinite(x) && Number.isFinite(y) && x > 0 && y > 0 ? { dpiX: x, dpiY: y } : null;
+}
+
+// IFD0 XResolution/YResolution (RATIONAL) with ResolutionUnit 2 (inch, the
+// default) or 3 (centimetre). Every value read stays within the APP1 segment.
+function exifResolution(bytes, start, end) {
+  if (start + 8 > end) return null;
+  const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+  const littleEndian = bytes[start] === 0x49 && bytes[start + 1] === 0x49;
+  if (!littleEndian && !(bytes[start] === 0x4d && bytes[start + 1] === 0x4d)) return null;
+  if (view.getUint16(start + 2, littleEndian) !== 42) return null;
+  const directory = start + view.getUint32(start + 4, littleEndian);
+  if (directory < start + 8 || directory + 2 > end) return null;
+  const count = view.getUint16(directory, littleEndian);
+  if (directory + 2 + count * 12 > end) return null;
+  const values = {};
+  for (let i = 0; i < count; i++) {
+    const at = directory + 2 + i * 12, tag = view.getUint16(at, littleEndian), type = view.getUint16(at + 2, littleEndian);
+    if (view.getUint32(at + 4, littleEndian) !== 1) continue;
+    if ((tag === 0x11a || tag === 0x11b) && type === 5) {
+      const value = start + view.getUint32(at + 8, littleEndian);
+      if (value < start + 8 || value + 8 > end) continue;
+      const denominator = view.getUint32(value + 4, littleEndian);
+      if (denominator) values[tag] = view.getUint32(value, littleEndian) / denominator;
+    }
+    if (tag === 0x128 && type === 3) values.unit = view.getUint16(at + 8, littleEndian);
+  }
+  const unit = values.unit ?? 2;
+  if (unit !== 2 && unit !== 3) return null;
+  return resolution(values[0x11a] * (unit === 3 ? 2.54 : 1), values[0x11b] * (unit === 3 ? 2.54 : 1));
 }
 
 // Read only IFD0's inline SHORT orientation. All offsets and entry counts

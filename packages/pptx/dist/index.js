@@ -8,7 +8,7 @@ import {attachPlainTextTags,importPlainTextGroups} from './text-provenance.js';
 import {attachTimelineTags,timelineManifest,importTimelineGroups} from './timeline-provenance.js';
 import {attachFurnitureTags, furnitureManifest, importFurniture} from './furniture-provenance.js';
 import {importImageOrientation} from './image-import.js';
-import {nativeBackgroundFill} from './background.js';
+import {nativeBackgroundFill, nativeImageBackgroundFill, nativePatternPreset} from './background.js';
 import {importBackground} from './background-import.js';
 import {themeSlotColors, writeThemeColors, schemeColorValue, schemeBackgroundFill, readThemeSlotColors, recoverColorScheme, recoverTheme, presentationThemePath} from './theme-colors.js';
 import { webpToPng } from '#image-fallback';
@@ -996,10 +996,30 @@ async function addSlide(pptx, presentation, opfSlide, slideIndex, context, optio
   const slide = pptx.addSlide();
   const slideContext = resolveSlideContext(presentation, opfSlide, context, options);
   slide.background = { color: slideContext.colors.background };
-  const backgroundFill = schemeBackgroundFill(slideContext.backgroundDefinition, slideContext) ?? nativeBackgroundFill(slideContext.backgroundDefinition, {
+  const backgroundDefinition = slideContext.backgroundDefinition;
+  const backgroundPath = `${opfSlide.design?.background !== undefined ? `slides.${slideIndex}.` : ''}design.background`;
+  const backgroundFill = schemeBackgroundFill(backgroundDefinition, slideContext) ?? nativeBackgroundFill(backgroundDefinition, {
     width: slideContext.dimensions.widthInches, height: slideContext.dimensions.heightInches
-  }, slideContext.colors.background);
+  }, slideContext.colors.background, slideContext.colors.text, (reference, hex) => schemeColorValue(reference, hex, slideContext));
   if (backgroundFill) context.backgroundFills.set(`ppt/slides/slide${slideIndex + 1}.xml`, backgroundFill);
+  if (backgroundDefinition?.type === 'pattern' && !nativePatternPreset(backgroundDefinition.pattern?.preset)) {
+    options.onDiagnostic?.({code: 'unsupported-pattern', path: `${backgroundPath}.pattern.preset`, message: `Pattern ${backgroundDefinition.pattern?.preset} has no DrawingML preset; only its background color was exported.`});
+  }
+  if (backgroundDefinition?.type === 'image') {
+    const imagePath = `${backgroundPath}.image`;
+    const resolved = await resolveImage(backgroundDefinition.image, presentation, options, imagePath);
+    if (resolved) {
+      // PptxGenJS embeds the raster and its relationship; packaging replaces
+      // its stretched fill with the fitted native picture fill.
+      slide.background = { ...resolved };
+      context.backgroundFills.set(`ppt/slides/slide${slideIndex + 1}.xml`, { image: {
+        fit: backgroundDefinition.image?.fit ?? 'cover', opacity: backgroundDefinition.opacity ?? 1, imageFill: slideContext.imageFill, path: imagePath,
+        width: slideContext.dimensions.widthInches * 96, height: slideContext.dimensions.heightInches * 96, report: options.onDiagnostic
+      } });
+    } else {
+      options.onDiagnostic?.({code: 'unresolved-asset', path: imagePath, message: 'The background image needs an embedded raster, a declared asset or a host imageResolver; the slide background color was exported instead.'});
+    }
+  }
   slide.color = slideContext.colors.text;
   if (opfSlide.hidden === true) slide.hidden = true;
 
@@ -1754,6 +1774,8 @@ function resolveBackground(value, colorScheme) {
     if (value.type === "theme" && value.slot) {
       return normalizeHex(colorScheme[value.slot] ?? colorScheme.light1 ?? "#FFFFFF", fallback);
     }
+    // Like the SVG preview, text contrast follows a pattern's background color.
+    if (value.type === "pattern") return normalizeHex(value.pattern?.backgroundColor ?? "#FFFFFF", fallback);
     if (value.backgroundColor) return normalizeHex(value.backgroundColor, fallback);
   }
   return normalizeHex(colorScheme.background ?? colorScheme.light1 ?? "#FFFFFF", fallback);
@@ -1832,6 +1854,9 @@ async function normalizePptxZip(raw, context) {
       const id = picture.match(/<a:blip\b[^>]*r:embed="([^"]+)"/)?.[1];
       if (placement) imageSources.set(relationships.get(id)?.path, placement.path);
     }
+    const background = context.backgroundFills.get(part)?.image;
+    const backgroundId = background && decodeText(bytes).match(/<p:bg>[\s\S]*?<a:blip\b[^>]*r:embed="([^"]+)"/)?.[1];
+    if (backgroundId) imageSources.set(relationships.get(backgroundId)?.path, background.path);
   }
   const imageMetadata = new Map();
   for (const [part, bytes] of Object.entries(entries)) {
@@ -1912,7 +1937,18 @@ function normalizePartBytes(path, bytes, context, renameMaps, entries, imageMeta
     if (path === 'ppt/theme/theme1.xml') xml = writeThemeColors(xml, {colors: context.themeColors, schemeName: context.schemeName, themeName: context.themeName});
     if (/^ppt\/slides\/slide\d+\.xml$/.test(path)) {
       const fill = context.backgroundFills.get(path);
-      if (fill) xml = xml.replace(/<p:bg>[\s\S]*?<\/p:bg>/, `<p:bg><p:bgPr>${fill}<a:effectLst/></p:bgPr></p:bg>`);
+      if (typeof fill === 'string') xml = xml.replace(/<p:bg>[\s\S]*?<\/p:bg>/, `<p:bg><p:bgPr>${fill}<a:effectLst/></p:bgPr></p:bg>`);
+      else if (fill?.image) {
+        // Fit the exact raster PptxGenJS embedded for this slide background.
+        const backgroundRelationships = parseRelationships(entries, path);
+        xml = xml.replace(/<p:bg>[\s\S]*?<\/p:bg>/, background => {
+          const id = background.match(/<a:blip\b[^>]*r:embed="([^"]+)"/)?.[1];
+          const metadata = imageMetadata.get(backgroundRelationships.get(id)?.path);
+          if (!id || !metadata) throw new OPFPptxError("unsupported-image-dimensions", "Background image fitting requires readable PNG, JPEG, GIF or WebP dimensions. Supply a supported raster image through imageResolver.", { path: fill.image.path });
+          if ((metadata.orientation ?? 1) !== 1) fill.image.report?.({code: 'unsupported-background-image-orientation', path: fill.image.path, message: 'A slide background picture fill cannot rotate or mirror its image; the JPEG EXIF orientation is not applied in the native background.'});
+          return `<p:bg><p:bgPr>${nativeImageBackgroundFill(id, metadata, fill.image)}<a:effectLst/></p:bgPr></p:bg>`;
+        });
+      }
       // PptxGenJS table IDs can collide with other objects on the same slide.
       // Preserve existing IDs and allocate unused IDs only for duplicates. This
       // export path creates no connector attachments or animation ID references.

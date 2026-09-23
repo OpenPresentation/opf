@@ -16,11 +16,43 @@ function colorXml(value, opacity, fallback) {
   return `<a:srgbClr val="${c.hex}">${alpha === 100000 ? '' : `<a:alpha val="${alpha}"/>`}</a:srgbClr>`;
 }
 
-export function nativeBackgroundFill(background, {width, height}, fallback = 'FFFFFF') {
+// ECMA-376 Part 1, 20.1.10.51 ST_PresetPatternVal. OPF pattern presets with
+// these names are DrawingML presets; any other id is engine-defined.
+export const presetPatterns = new Set(['pct5', 'pct10', 'pct20', 'pct25', 'pct30', 'pct40', 'pct50', 'pct60', 'pct70', 'pct75', 'pct80', 'pct90',
+  'horz', 'vert', 'ltHorz', 'ltVert', 'dkHorz', 'dkVert', 'narHorz', 'narVert', 'dashHorz', 'dashVert', 'cross',
+  'dnDiag', 'upDiag', 'ltDnDiag', 'ltUpDiag', 'dkDnDiag', 'dkUpDiag', 'wdDnDiag', 'wdUpDiag', 'dashDnDiag', 'dashUpDiag', 'diagCross',
+  'smCheck', 'lgCheck', 'smGrid', 'lgGrid', 'dotGrid', 'smConfetti', 'lgConfetti', 'horzBrick', 'diagBrick',
+  'solidDmnd', 'openDmnd', 'dotDmnd', 'plaid', 'sphere', 'weave', 'divot', 'shingle', 'wave', 'trellis', 'zigZag']);
+
+// Engine-defined presets drawn by the SVG preview, with their closest DrawingML
+// preset. diagStripe is a 2px rising diagonal on an 8px cell, as wdUpDiag.
+// Import reports the native preset name; it does not guess the OPF alias.
+const patternAliases = {diagStripe: 'wdUpDiag'};
+export const nativePatternPreset = preset => presetPatterns.has(preset) ? preset : Object.hasOwn(patternAliases, preset) ? patternAliases[preset] : undefined;
+
+// The SVG preview paints the pattern background color and foreground marks,
+// defaulting to white and the slide text color. Other engine-defined presets
+// have no DrawingML equivalent; like the preview, only their background color remains.
+// `scheme(reference, hex)` names the theme color for an authored slot/role
+// reference whose drawn color the deck theme holds exactly (FF-24); pattern
+// colors then become a:schemeClr, keeping any background opacity as alpha.
+export function nativeBackgroundFill(background, {width, height}, fallback = 'FFFFFF', foreground = '000000', scheme = () => undefined) {
   if (typeof background === 'string' && /^#[\da-f]{3}(?:[\da-f]{3}(?:[\da-f]{2})?)?$/i.test(background)) background = {type: 'solid', color: background};
   if (!background || typeof background !== 'object') return null;
   const opacity = background.opacity ?? 1;
   if (background.type === 'solid' || background.type === 'theme') return `<a:solidFill>${colorXml(background.type === 'theme' ? fallback : background.color, opacity, fallback)}</a:solidFill>`;
+  if (background.type === 'pattern') {
+    const paint = (value, base) => {
+      const c = color(value, base), themeValue = c.alpha === 1 ? scheme(value, c.hex) : undefined;
+      if (!themeValue) return colorXml(value, opacity, base);
+      const alpha = Math.round(clamp(opacity) * 100000);
+      return `<a:schemeClr val="${themeValue}">${alpha === 100000 ? '' : `<a:alpha val="${alpha}"/>`}</a:schemeClr>`;
+    };
+    const pattern = background.pattern ?? {}, back = paint(pattern.backgroundColor, 'FFFFFF');
+    const preset = nativePatternPreset(pattern.preset);
+    if (!preset) return `<a:solidFill>${back}</a:solidFill>`;
+    return `<a:pattFill prst="${preset}"><a:fgClr>${paint(pattern.foregroundColor, foreground)}</a:fgClr><a:bgClr>${back}</a:bgClr></a:pattFill>`;
+  }
   if (background.type !== 'gradient') return null;
   const stops = background.gradient?.stops ?? [];
   if (!stops.length) return '<a:noFill/>';
@@ -36,6 +68,42 @@ export function nativeBackgroundFill(background, {width, height}, fallback = 'FF
     return `<a:gs pos="${position}">${colorXml(stop.color, opacity, fallback)}</a:gs>`;
   }).join('');
   return `<a:gradFill rotWithShape="0"><a:gsLst>${nativeStops}</a:gsLst><a:lin ang="${angle}" scaled="0"/></a:gradFill>`;
+}
+
+const rectXml = (name, rect = {}) => `<a:${name}${['l', 't', 'r', 'b'].filter(key => rect[key]).map(key => ` ${key}="${rect[key]}"`).join('')}/>`;
+const percent = value => Math.round(value * 100000);
+
+// Picture fill for an OPF image background, following the SVG preview:
+// cover crops the centered source to the slide aspect, contain letterboxes it
+// with fill-rectangle insets, and tile repeats square cells of min(w,h)/4
+// from the top-left corner. Each cell holds the image by the deck imageFill
+// (crop = cover, otherwise contain; negative source insets are transparent
+// padding). With dpi="0", DrawingML sizes a tile from the raster's own
+// resolution (PNG pHYs, JPEG JFIF or EXIF; 96 dpi when absent), while the
+// preview draws CSS pixels, so the tile scale compensates on each axis.
+export const nativeTileAlignment = {tx: '0', ty: '0', flip: 'none', algn: 'tl'};
+export function nativeTileScale(image, {width, height, imageFill = 'fit'}) {
+  const cell = Math.min(width, height) / 4;
+  const scale = (imageFill === 'crop' ? Math.max : Math.min)(cell / image.width, cell / image.height);
+  return {cell, scale, sx: percent(scale * (image.dpiX ?? 96) / 96), sy: percent(scale * (image.dpiY ?? 96) / 96)};
+}
+export function nativeImageBackgroundFill(relationshipId, image, {fit = 'cover', opacity = 1, width, height, imageFill = 'fit'}) {
+  const alpha = clamp(opacity);
+  const blip = `<a:blip r:embed="${relationshipId}">${alpha === 1 ? '' : `<a:alphaModFix amt="${percent(alpha)}"/>`}</a:blip>`;
+  if (fit === 'tile') {
+    const {cell, scale, sx, sy} = nativeTileScale(image, {width, height, imageFill});
+    const x = percent((1 - cell / (image.width * scale)) / 2), y = percent((1 - cell / (image.height * scale)) / 2);
+    const {tx, ty, flip, algn} = nativeTileAlignment;
+    return `<a:blipFill dpi="0" rotWithShape="1">${blip}${rectXml('srcRect', {l: x, t: y, r: x, b: y})}<a:tile tx="${tx}" ty="${ty}" sx="${sx}" sy="${sy}" flip="${flip}" algn="${algn}"/></a:blipFill>`;
+  }
+  if (fit === 'contain') {
+    const scale = Math.min(width / image.width, height / image.height);
+    const x = percent((1 - image.width * scale / width) / 2), y = percent((1 - image.height * scale / height) / 2);
+    return `<a:blipFill dpi="0" rotWithShape="1">${blip}<a:srcRect/><a:stretch>${rectXml('fillRect', {l: x, t: y, r: x, b: y})}</a:stretch></a:blipFill>`;
+  }
+  const scale = Math.max(width / image.width, height / image.height);
+  const x = percent((1 - width / (image.width * scale)) / 2), y = percent((1 - height / (image.height * scale)) / 2);
+  return `<a:blipFill dpi="0" rotWithShape="1">${blip}${rectXml('srcRect', {l: x, t: y, r: x, b: y})}<a:stretch><a:fillRect/></a:stretch></a:blipFill>`;
 }
 
 // Internal metadata supplied by the ordered XML reader. A Symbol cannot collide
@@ -98,11 +166,28 @@ export function readBackgroundColor(node, context = {}, seen = new Set()) {
   return {hex: luminanceHex(luminance), alpha, luminance};
 }
 
+// A preset pattern with explicit foreground and background colors. ECMA-376
+// defines no default colors, so a pattern missing either one is not guessed.
+function readNativePattern(pattern, report, context) {
+  const foreground = pattern['a:fgClr'] && readBackgroundColor(pattern['a:fgClr'], context);
+  const background = pattern['a:bgClr'] && readBackgroundColor(pattern['a:bgClr'], context);
+  if (!presetPatterns.has(pattern.prst) || !foreground || !background) {
+    report({code: 'unsupported-background-fill', message: 'This native pattern needs a DrawingML preset with resolvable foreground and background colors to become an OPF pattern background.'});
+    return undefined;
+  }
+  const uniform = foreground.alpha === background.alpha;
+  const hex = c => c.hex + (!uniform && c.alpha !== 1 ? Math.round(c.alpha * 255).toString(16).padStart(2, '0').toUpperCase() : '');
+  return {type: 'pattern', pattern: {preset: pattern.prst, foregroundColor: hex(foreground), backgroundColor: hex(background)},
+    ...(uniform && foreground.alpha !== 1 ? {opacity: foreground.alpha} : {})};
+}
+
 export function readNativeBackground(properties, {width, height}, report = () => {}, context = {}) {
   if (!properties) return undefined;
   if (Object.hasOwn(properties, 'a:noFill')) return {type: 'solid', color: '#FFFFFF', opacity: 0};
   const solid = readBackgroundColor(properties['a:solidFill'], context);
   if (solid) return {type: 'solid', color: solid.hex, ...(solid.alpha === 1 ? {} : {opacity: solid.alpha})};
+  if (properties['a:pattFill']) return readNativePattern(properties['a:pattFill'], report, context);
+  if (properties['a:blipFill'] && context.image) return context.image(properties['a:blipFill']);
   const gradient = properties['a:gradFill'];
   if (!gradient) {
     report({code: 'unsupported-background-fill', message: 'This native background fill or color cannot be represented by the OPF background importer.'});
