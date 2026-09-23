@@ -352,8 +352,21 @@ async function generateTypes() {
   }
 }
 
+async function generateFontPolicy() {
+  // FF-31: the authoritative font policy table is reference data, not a catalog.
+  const policy = await readJson(path.join(specRoot, "reference", "font-policy.json"));
+  const lines = [
+    generatedHeader("spec/reference/font-policy.json"),
+    "// Raw JSON: rows that name a provisional decision have no replacement family until font-policy.ts applies it.",
+    `export const fontPolicySource: unknown = ${asTs(policy)};`,
+    "",
+  ];
+  await fs.writeFile(path.join(generatedRoot, "font-policy.ts"), lines.join("\n"));
+}
+
 await fs.rm(generatedRoot, { recursive: true, force: true });
 await fs.mkdir(generatedRoot, { recursive: true });
+await generateFontPolicy();
 await generateSchemas();
 await generateCatalogs();
 await generateCatalogIds();

@@ -125,4 +125,17 @@ export type {
   TextDirection,
 } from './script-fonts.js';
 export {measureTextOutline,placeTextLines} from './composition.js';
+export { FONT_POLICY, applyFontPolicyDecisions, fontPolicyFor, fontAvailabilityDiagnostics } from './font-policy.js';
+export type {
+  FontAvailability,
+  FontAvailabilityCode,
+  FontAvailabilityDiagnostic,
+  FontLicenseClass,
+  FontPolicyDecision,
+  FontPolicyEntry,
+  FontPolicyTable,
+  FontReplacement,
+  FontReplacementCompatibility,
+  FontReplacementMeasurement,
+} from './font-policy.js';
 export type {TextLineInk,TextPlacementLine,TextPlacement} from './composition.js';

@@ -1,0 +1,3388 @@
+{
+  "provisionalDecisions": {
+    "status": "provisional, owner may revise",
+    "note": "Owner decisions resolved provisionally with the recommended defaults. Changing a decision here is the whole edit: every row whose replacement names this decision takes its family and compatibility from it. A recorded measurement for a different family is ignored (treated as unmeasured) until scripts/measure-font-replacements.mjs is re-run.",
+    "decisions": {
+      "aptos-preview": {
+        "replacement": "Roboto",
+        "compatibility": "visual",
+        "note": "Default scheme aptos previews with Roboto; the PPTX still names Aptos."
+      },
+      "segoe-ui-preview": {
+        "replacement": "Red Hat Display",
+        "compatibility": "visual",
+        "note": "Segoe UI previews with Red Hat Display (catalog pack) and falls back to a bundled face."
+      },
+      "cambria-tier": {
+        "replacement": "Caladea",
+        "compatibility": "visual",
+        "note": "Cambria -> Caladea is visual: advances differ from Cambria 6.99 by a mean of 2.7%."
+      }
+    }
+  },
+  "description": "OPF font policy (font-fidelity-everywhere FF-31). One row per font family that OPF catalogs, defaults or renderer rules name. Renderers preview a proprietary family with its openly licensed replacement for measurement and drawing only. Exporters always write the chosen family, never write a replacement, and never embed a proprietary family. Open families may be bundled for rendering and reach a PPTX only through an explicit embed path. See docs/font-fidelity.md.",
+  "version": 1,
+  "measurement": {
+    "tool": "fontkit 2.0.4 shaping with default features (kerning, ligatures), as opf-render measures text",
+    "corpus": "300 Latin title/body strings sampled from the 126 bundled example decks",
+    "evidence": "docs/evidence/font-replacements-20260923/README.md",
+    "definition": "For each style both fonts have (regular, bold, italic, bold italic, or the weight the family name encodes), the shaped advance width of every corpus string in the replacement is divided by the width in the real font. meanAbsWidthDelta averages |ratio - 1| over strings and styles; meanWidthDelta averages the signed value; maxAbsWidthDelta is the largest single-string |ratio - 1|. Reference fonts were read in place from a licensed Windows 11 + Microsoft 365 host and never copied."
+  },
+  "families": [
+    {
+      "family": "Angsana New",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Unity Progress/Monotype/Microsoft, licensed to Microsoft)",
+      "availability": [
+        "windows-optional",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Noto Sans Thai",
+        "compatibility": "visual",
+        "measured": {
+          "replacement": "Noto Sans Thai",
+          "meanAbsWidthDelta": 0.7476,
+          "meanWidthDelta": 0.7476,
+          "maxAbsWidthDelta": 0.8473,
+          "styles": 2,
+          "reference": "Angsana New 5.06"
+        }
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/angsana-new",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Angsana New is a looped Thai design; Noto Sans Thai is loopless. Width measurement covers Latin text only. Windows: Thai Supplemental Fonts FOD."
+    },
+    {
+      "family": "Anton",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/anton/METADATA.pb",
+        "https://www.npmjs.com/package/@expo-google-fonts/anton"
+      ]
+    },
+    {
+      "family": "Aparajita",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Modular Infotech, licensed to Microsoft)",
+      "availability": [
+        "windows-optional",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Noto Sans Devanagari",
+        "compatibility": "visual",
+        "measured": null
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/aparajita",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Script replacement; widths not measured. Windows: Devanagari Supplemental Fonts FOD."
+    },
+    {
+      "family": "Aptos",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "decision": "aptos-preview",
+        "measured": {
+          "replacement": "Roboto",
+          "meanAbsWidthDelta": 0.0215,
+          "meanWidthDelta": 0.0008,
+          "maxAbsWidthDelta": 0.0739,
+          "styles": 4,
+          "reference": "Aptos 2.01;O365"
+        }
+      },
+      "alternates": [
+        "Carlito"
+      ],
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/aptos",
+        "https://support.apple.com/en-us/122869",
+        "https://microsoft.design/articles/a-change-of-typeface-microsoft-s-new-default-font-has-arrived/",
+        "https://www.microsoft.com/en-us/download/details.aspx?id=106087"
+      ],
+      "note": "Microsoft 365 cloud font; not redistributable. Roboto is the closest measured open face with all four styles already in the base pack. Carlito (the previous substitute) measured 7.1% narrower. Not in the Windows 10/11 font lists; delivered as a Microsoft 365 cloud font. Microsoft also offers a standalone download (Download Center id=106087) under Microsoft terms, not an open license."
+    },
+    {
+      "family": "Aptos Display",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Carlito",
+        "compatibility": "visual",
+        "measured": {
+          "replacement": "Carlito",
+          "meanAbsWidthDelta": 0.0184,
+          "meanWidthDelta": -0.0057,
+          "maxAbsWidthDelta": 0.0691,
+          "styles": 4,
+          "reference": "Aptos Display 2.01;O365"
+        }
+      },
+      "alternates": [
+        "Roboto"
+      ],
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/aptos",
+        "https://support.apple.com/en-us/122869",
+        "https://microsoft.design/articles/a-change-of-typeface-microsoft-s-new-default-font-has-arrived/"
+      ],
+      "note": "Part of the Aptos family; cloud font list has Aptos Display (+Bold/Italic/Bold Italic)."
+    },
+    {
+      "family": "Aptos Mono",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Roboto Mono",
+        "compatibility": "visual",
+        "measured": null
+      },
+      "alternates": [
+        "Cousine"
+      ],
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/aptos",
+        "https://support.apple.com/en-us/122869",
+        "https://microsoft.design/articles/a-change-of-typeface-microsoft-s-new-default-font-has-arrived/"
+      ],
+      "note": "Reference not available to the measuring host. Part of the Aptos family; cloud font list has Aptos Mono (+Bold/Italic/Bold Italic)."
+    },
+    {
+      "family": "Aptos Narrow",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Carlito",
+        "compatibility": "visual",
+        "measured": {
+          "replacement": "Carlito",
+          "meanAbsWidthDelta": 0.0233,
+          "meanWidthDelta": 0.0222,
+          "maxAbsWidthDelta": 0.0786,
+          "styles": 4,
+          "reference": "Aptos Narrow 2.01;O365"
+        }
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/aptos",
+        "https://support.apple.com/en-us/122869",
+        "https://microsoft.design/articles/a-change-of-typeface-microsoft-s-new-default-font-has-arrived/"
+      ],
+      "note": "Part of the Aptos family; cloud font list has Aptos Narrow (+Bold/Italic/Bold Italic)."
+    },
+    {
+      "family": "Aptos Serif",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Tinos",
+        "compatibility": "visual",
+        "measured": null
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/aptos",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Reference not available to the measuring host. Aptos family member; cloud list has Aptos Serif, Bold, Italic and Bold Italic."
+    },
+    {
+      "family": "Arabic Typesetting",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "windows-optional",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Noto Naskh Arabic",
+        "compatibility": "visual",
+        "measured": {
+          "replacement": "Noto Naskh Arabic",
+          "meanAbsWidthDelta": 0.6632,
+          "meanWidthDelta": 0.6632,
+          "maxAbsWidthDelta": 0.7426,
+          "styles": 1,
+          "reference": "Arabic Typesetting 6.85"
+        }
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/arabic-typesetting",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Script replacement; the width measurement covers Latin text only. Windows: Arabic Script Supplemental Fonts FOD."
+    },
+    {
+      "family": "Archivo Narrow",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/archivonarrow/METADATA.pb",
+        "https://www.npmjs.com/package/@expo-google-fonts/archivo-narrow"
+      ]
+    },
+    {
+      "family": "Arial",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Monotype, licensed to Microsoft)",
+      "availability": [
+        "windows",
+        "macos",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Arimo",
+        "compatibility": "metric",
+        "measured": {
+          "replacement": "Arimo",
+          "meanAbsWidthDelta": 0,
+          "meanWidthDelta": 0,
+          "maxAbsWidthDelta": 0,
+          "styles": 4,
+          "reference": "Arial 7.06"
+        },
+        "source": "https://github.com/google/fonts/blob/main/ofl/arimo/METADATA.pb"
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/arial",
+        "https://support.apple.com/en-us/122869"
+      ]
+    },
+    {
+      "family": "Arial Black",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Monotype, licensed to Microsoft)",
+      "availability": [
+        "windows",
+        "macos",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Montserrat",
+        "compatibility": "visual",
+        "weight": 900,
+        "measured": {
+          "replacement": "Montserrat",
+          "meanAbsWidthDelta": 0.0075,
+          "meanWidthDelta": -0.0029,
+          "maxAbsWidthDelta": 0.0281,
+          "styles": 1,
+          "reference": "Arial Black 5.23"
+        }
+      },
+      "alternates": [
+        "Arimo"
+      ],
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/arial-black",
+        "https://support.apple.com/en-us/122869"
+      ]
+    },
+    {
+      "family": "Arial Narrow",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Monotype, licensed to Microsoft)",
+      "availability": [
+        "macos",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Archivo Narrow",
+        "compatibility": "visual",
+        "measured": {
+          "replacement": "Archivo Narrow",
+          "meanAbsWidthDelta": 0.0038,
+          "meanWidthDelta": 0.0035,
+          "maxAbsWidthDelta": 0.0431,
+          "styles": 4,
+          "reference": "Arial Narrow 2.40"
+        }
+      },
+      "alternates": [
+        "Carlito"
+      ],
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/arial-narrow",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Liberation Sans Narrow is metric-compatible but only in older GPL releases, so OPF does not ship it. Not in Windows 10/11 lists. On the macOS Tahoe installed/downloadable list."
+    },
+    {
+      "family": "Arimo",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/arimo/METADATA.pb",
+        "https://www.npmjs.com/package/@expo-google-fonts/arimo"
+      ],
+      "note": "Metric-compatible with Arial."
+    },
+    {
+      "family": "Barlow",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/barlow/METADATA.pb",
+        "https://www.npmjs.com/package/@expo-google-fonts/barlow"
+      ]
+    },
+    {
+      "family": "Baskerville Old Face",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Stephenson Blake/URW/Microsoft)",
+      "availability": [
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Libre Caslon Text",
+        "compatibility": "visual",
+        "measured": {
+          "replacement": "Libre Caslon Text",
+          "meanAbsWidthDelta": 0.1923,
+          "meanWidthDelta": 0.1923,
+          "maxAbsWidthDelta": 0.2371,
+          "styles": 1,
+          "reference": "Baskerville Old Face 1.51"
+        }
+      },
+      "alternates": [
+        "Tinos"
+      ],
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/baskerville-old-face",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Not in Windows lists or on the macOS list."
+    },
+    {
+      "family": "Batang",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (HanYang I&C, licensed to Microsoft)",
+      "availability": [
+        "windows-optional",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Noto Sans KR",
+        "compatibility": "visual",
+        "measured": null
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/batang",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Batang is a serif (Myeongjo) design previewed with a sans. Reference not available to the measuring host; widths not measured. Windows: Korean Supplemental Fonts FOD."
+    },
+    {
+      "family": "BatangChe",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (HanYang I&C, licensed to Microsoft)",
+      "availability": [
+        "windows-optional",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Noto Sans KR",
+        "compatibility": "visual",
+        "measured": null
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/batang",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Serif design previewed with a sans. Reference not available to the measuring host; widths not measured. Windows: Korean Supplemental Fonts FOD (in Batang.ttc)."
+    },
+    {
+      "family": "Bebas Neue",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/bebasneue/METADATA.pb",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "macOS Tahoe lists \"Bebas Neue\" only as a document-support font, so \"macos\" omitted."
+    },
+    {
+      "family": "Bitter",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/bitter/METADATA.pb",
+        "https://www.npmjs.com/package/@expo-google-fonts/bitter"
+      ]
+    },
+    {
+      "family": "Bodoni MT",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Monotype, licensed to Microsoft)",
+      "availability": [
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Playfair Display",
+        "compatibility": "visual",
+        "measured": {
+          "replacement": "Playfair Display",
+          "meanAbsWidthDelta": 0.0687,
+          "meanWidthDelta": 0.0556,
+          "maxAbsWidthDelta": 0.1987,
+          "styles": 4,
+          "reference": "Bodoni MT 2.10"
+        }
+      },
+      "alternates": [
+        "Caladea"
+      ],
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/bodoni-mt",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Not in Windows lists or on the macOS list."
+    },
+    {
+      "family": "Book Antiqua",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Monotype, licensed to Microsoft)",
+      "availability": [
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "PT Serif",
+        "compatibility": "visual",
+        "measured": {
+          "replacement": "PT Serif",
+          "meanAbsWidthDelta": 0.024,
+          "meanWidthDelta": 0.0193,
+          "maxAbsWidthDelta": 0.0778,
+          "styles": 4,
+          "reference": "Book Antiqua 2.35"
+        }
+      },
+      "alternates": [
+        "Caladea"
+      ],
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/book-antiqua",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Not in Windows lists. macOS Tahoe lists it only as a document-support font, so \"macos\" omitted."
+    },
+    {
+      "family": "Bookman Old Style",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Monotype, licensed to Microsoft)",
+      "availability": [
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Libre Caslon Text",
+        "compatibility": "visual",
+        "measured": {
+          "replacement": "Libre Caslon Text",
+          "meanAbsWidthDelta": 0.0411,
+          "meanWidthDelta": -0.0381,
+          "maxAbsWidthDelta": 0.1396,
+          "styles": 4,
+          "reference": "Bookman Old Style 2.35/2.36"
+        }
+      },
+      "alternates": [
+        "Gelasio"
+      ],
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/bookman-old-style",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "TeX Gyre Bonum and URW Bookman are documented metric clones but are not OFL/Apache packages. Not in Windows lists. On macOS Tahoe it is only a \"document-support\" font (usable by documents/apps that request it by name, not in the installed/downloadable list), so \"macos\" is omitted."
+    },
+    {
+      "family": "Caladea",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/huertatipografica/Caladea",
+        "https://www.npmjs.com/package/@expo-google-fonts/caladea"
+      ],
+      "note": "Designed as a Cambria replacement; OPF measures it as visual against Cambria 6.99."
+    },
+    {
+      "family": "Calibri",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "windows",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Carlito",
+        "compatibility": "metric",
+        "measured": {
+          "replacement": "Carlito",
+          "meanAbsWidthDelta": 0,
+          "meanWidthDelta": 0,
+          "maxAbsWidthDelta": 0.0026,
+          "styles": 4,
+          "reference": "Calibri 6.27"
+        },
+        "source": "https://github.com/googlefonts/carlito"
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/calibri",
+        "https://support.apple.com/en-us/122869"
+      ]
+    },
+    {
+      "family": "Calibri Light",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "windows",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Carlito",
+        "compatibility": "visual",
+        "measured": {
+          "replacement": "Carlito",
+          "meanAbsWidthDelta": 0.0144,
+          "meanWidthDelta": 0.0144,
+          "maxAbsWidthDelta": 0.0225,
+          "styles": 2,
+          "reference": "Calibri Light 6.27"
+        }
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/calibri",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Carlito has no Light face; the regular face previews it. Style of the Calibri family (Calibril.ttf) in the Windows default set."
+    },
+    {
+      "family": "Cambria",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "windows",
+        "office",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "decision": "cambria-tier",
+        "measured": {
+          "replacement": "Caladea",
+          "meanAbsWidthDelta": 0.0269,
+          "meanWidthDelta": -0.0269,
+          "maxAbsWidthDelta": 0.0647,
+          "styles": 4,
+          "reference": "Cambria 6.99/6.98"
+        },
+        "source": "https://chromium.googlesource.com/external/fontconfig/+/refs/heads/main/conf.d/30-metric-aliases.conf"
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/cambria",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Fontconfig lists Caladea as a metric alias, but its advances differ from Cambria 6.99 (Windows 11), so OPF classes it as visual. \"office\" is from the MS Learn product table (Office 2007, Office Mac 2008); no current per-version Office install list was found."
+    },
+    {
+      "family": "Cambria Math",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "windows",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": null,
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/cambria-math",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Math fonts need an explicit math-aware choice; renderers fail with math-font-required. In Cambria.ttc in the Windows default set."
+    },
+    {
+      "family": "Candara",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "windows",
+        "office",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Source Sans 3",
+        "compatibility": "visual",
+        "measured": {
+          "replacement": "Source Sans 3",
+          "meanAbsWidthDelta": 0.0195,
+          "meanWidthDelta": 0.0064,
+          "maxAbsWidthDelta": 0.0523,
+          "styles": 4,
+          "reference": "Candara 5.64"
+        }
+      },
+      "alternates": [
+        "Carlito"
+      ],
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/candara",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "\"office\" is from the MS Learn product table (Office 2007, Office Mac 2008)."
+    },
+    {
+      "family": "Carlito",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/googlefonts/carlito",
+        "https://www.npmjs.com/package/@expo-google-fonts/carlito"
+      ],
+      "note": "Metric-compatible with Calibri (upstream intent)."
+    },
+    {
+      "family": "Century Gothic",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Monotype, licensed to Microsoft)",
+      "availability": [
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Work Sans",
+        "compatibility": "visual",
+        "measured": {
+          "replacement": "Work Sans",
+          "meanAbsWidthDelta": 0.0255,
+          "meanWidthDelta": 0.0188,
+          "maxAbsWidthDelta": 0.1549,
+          "styles": 4,
+          "reference": "Century Gothic 2.35"
+        }
+      },
+      "alternates": [
+        "Arimo"
+      ],
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/century-gothic",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Not in Windows lists. macOS Tahoe lists it only as a document-support font, so \"macos\" omitted."
+    },
+    {
+      "family": "Century Schoolbook",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Monotype, licensed to Microsoft)",
+      "availability": [
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Gelasio",
+        "compatibility": "visual",
+        "measured": {
+          "replacement": "Gelasio",
+          "meanAbsWidthDelta": 0.0266,
+          "meanWidthDelta": -0.0175,
+          "maxAbsWidthDelta": 0.0753,
+          "styles": 4,
+          "reference": "Century Schoolbook 2.35"
+        }
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/century-schoolbook",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "TeX Gyre Schola and URW C059 are documented metric clones but are not OFL/Apache packages. MS Learn: \"Exclusively included with Microsoft products and services\". On macOS Tahoe only a document-support font, so \"macos\" omitted."
+    },
+    {
+      "family": "Consolas",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "windows",
+        "office",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Roboto Mono",
+        "compatibility": "visual",
+        "measured": {
+          "replacement": "Roboto Mono",
+          "meanAbsWidthDelta": 0.0795,
+          "meanWidthDelta": 0.0795,
+          "maxAbsWidthDelta": 0.0915,
+          "styles": 4,
+          "reference": "Consolas 7.01"
+        }
+      },
+      "alternates": [
+        "Cousine"
+      ],
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/consolas",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Consolas advances are 0.55em; open monospace faces use 0.5em or 0.6em, so every candidate differs by 8-9%. DMCA Sans Serif claims Consolas metrics but has no pinned package. \"office\" is from the MS Learn product table (Office 2007, Office Mac 2008)."
+    },
+    {
+      "family": "Constantia",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "windows",
+        "office",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "PT Serif",
+        "compatibility": "visual",
+        "measured": {
+          "replacement": "PT Serif",
+          "meanAbsWidthDelta": 0.0229,
+          "meanWidthDelta": 0.0036,
+          "maxAbsWidthDelta": 0.0577,
+          "styles": 4,
+          "reference": "Constantia 5.93"
+        }
+      },
+      "alternates": [
+        "Caladea"
+      ],
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/constantia",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "\"office\" is from the MS Learn product table (Office 2007, Office Mac 2008)."
+    },
+    {
+      "family": "Corbel",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "windows",
+        "office",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Source Sans 3",
+        "compatibility": "visual",
+        "measured": {
+          "replacement": "Source Sans 3",
+          "meanAbsWidthDelta": 0.0157,
+          "meanWidthDelta": 0.0151,
+          "maxAbsWidthDelta": 0.0521,
+          "styles": 4,
+          "reference": "Corbel 6.01"
+        }
+      },
+      "alternates": [
+        "Carlito"
+      ],
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/corbel",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "\"office\" is from the MS Learn product table (Office 2007, Office Mac 2008)."
+    },
+    {
+      "family": "Courier New",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Monotype, licensed to Microsoft)",
+      "availability": [
+        "windows",
+        "macos",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Cousine",
+        "compatibility": "metric",
+        "measured": {
+          "replacement": "Cousine",
+          "meanAbsWidthDelta": 0,
+          "meanWidthDelta": 0,
+          "maxAbsWidthDelta": 0,
+          "styles": 4,
+          "reference": "Courier New 6.95"
+        },
+        "source": "https://github.com/google/fonts/blob/main/ofl/cousine/METADATA.pb"
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/courier-new",
+        "https://support.apple.com/en-us/122869"
+      ]
+    },
+    {
+      "family": "Cousine",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/cousine/METADATA.pb",
+        "https://www.npmjs.com/package/@expo-google-fonts/cousine"
+      ],
+      "note": "Metric-compatible with Courier New."
+    },
+    {
+      "family": "DaunPenh",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (OM Mony/Microsoft)",
+      "availability": [
+        "windows-optional",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Noto Sans Khmer",
+        "compatibility": "visual",
+        "measured": null
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/daunpenh",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Script replacement; widths not measured. Windows: Khmer Supplemental Fonts FOD."
+    },
+    {
+      "family": "David",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Kivun Computers/Monotype, licensed to Microsoft)",
+      "availability": [
+        "windows-optional",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Noto Serif Hebrew",
+        "compatibility": "visual",
+        "measured": null
+      },
+      "alternates": [
+        "Noto Sans Hebrew"
+      ],
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/david",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Script replacement; widths not measured. Windows: Hebrew Supplemental Fonts FOD."
+    },
+    {
+      "family": "Didot",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (bundled with macOS; vendor not stated on the Apple page)",
+      "availability": [
+        "macos"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Playfair Display",
+        "compatibility": "visual",
+        "measured": null
+      },
+      "alternates": [
+        "Tinos"
+      ],
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "macOS font; reference not measured. Apple-only: on the macOS Tahoe installed/downloadable list (Regular/Bold/Italic). Not in Windows lists or the Office cloud list. Any Windows/Office \"Didot\" is unrelated."
+    },
+    {
+      "family": "DilleniaUPC",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Unity Progress/Monotype/Microsoft, licensed to Microsoft)",
+      "availability": [
+        "windows-optional",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Noto Sans Thai",
+        "compatibility": "visual",
+        "measured": {
+          "replacement": "Noto Sans Thai",
+          "meanAbsWidthDelta": 0.7077,
+          "meanWidthDelta": 0.7077,
+          "maxAbsWidthDelta": 0.8544,
+          "styles": 2,
+          "reference": "DilleniaUPC 5.05"
+        }
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/dilleniaupc",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Looped Thai design previewed with loopless Noto Sans Thai. Width measurement covers Latin text only. Windows: Thai Supplemental Fonts FOD."
+    },
+    {
+      "family": "EB Garamond",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/ebgaramond/METADATA.pb",
+        "https://www.npmjs.com/package/@expo-google-fonts/eb-garamond"
+      ]
+    },
+    {
+      "family": "Ebrima",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "windows",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Noto Sans",
+        "compatibility": "visual",
+        "measured": {
+          "replacement": "Noto Sans",
+          "meanAbsWidthDelta": 0.0618,
+          "meanWidthDelta": 0.0618,
+          "maxAbsWidthDelta": 0.0934,
+          "styles": 2,
+          "reference": "Ebrima 5.19"
+        }
+      },
+      "alternates": [
+        "Arimo"
+      ],
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/ebrima",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Noto Sans covers Latin only here, not N'Ko, Tifinagh or Vai."
+    },
+    {
+      "family": "FangSong",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Beijing ZhongYi Electronics, licensed to Microsoft)",
+      "availability": [
+        "windows-optional",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Noto Sans SC",
+        "compatibility": "visual",
+        "measured": null
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/fangsong",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "FangSong is a calligraphic serif design previewed with a sans. Reference not available to the measuring host; widths not measured. Windows: Chinese (Simplified) Supplemental Fonts FOD."
+    },
+    {
+      "family": "Figtree",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/figtree/METADATA.pb",
+        "https://www.npmjs.com/package/@expo-google-fonts/figtree"
+      ]
+    },
+    {
+      "family": "Franklin Gothic Book",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (ITC design, licensed to Microsoft)",
+      "availability": [
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Barlow",
+        "compatibility": "visual",
+        "measured": {
+          "replacement": "Barlow",
+          "meanAbsWidthDelta": 0.0181,
+          "meanWidthDelta": 0.0119,
+          "maxAbsWidthDelta": 0.0755,
+          "styles": 2,
+          "reference": "Franklin Gothic Book 2.01"
+        }
+      },
+      "alternates": [
+        "Carlito"
+      ],
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/franklin-gothic",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Not in Windows lists (only Franklin Gothic Medium is default). Cloud list has Book and Book Italic."
+    },
+    {
+      "family": "Franklin Gothic Medium",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (ITC design, licensed to Microsoft)",
+      "availability": [
+        "windows",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Barlow",
+        "compatibility": "visual",
+        "measured": {
+          "replacement": "Barlow",
+          "meanAbsWidthDelta": 0.0142,
+          "meanWidthDelta": -0.0043,
+          "maxAbsWidthDelta": 0.0648,
+          "styles": 2,
+          "reference": "Franklin Gothic Medium 5.02/5.01"
+        }
+      },
+      "alternates": [
+        "Roboto"
+      ],
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/franklin-gothic-medium",
+        "https://support.apple.com/en-us/122869",
+        "https://learn.microsoft.com/en-us/typography/font-list/franklin-gothic"
+      ],
+      "note": "License wording is from the MS Learn franklin-gothic page; the franklin-gothic-medium page has no copyright field."
+    },
+    {
+      "family": "Garamond",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Monotype, licensed to Microsoft)",
+      "availability": [
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "EB Garamond",
+        "compatibility": "visual",
+        "measured": {
+          "replacement": "EB Garamond",
+          "meanAbsWidthDelta": 0.0488,
+          "meanWidthDelta": 0.0277,
+          "maxAbsWidthDelta": 0.1883,
+          "styles": 3,
+          "reference": "Garamond 2.40"
+        }
+      },
+      "alternates": [
+        "Tinos"
+      ],
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/garamond",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Not in Windows lists. On macOS Tahoe only a document-support font, so \"macos\" omitted."
+    },
+    {
+      "family": "Gautami",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "windows-optional",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Noto Sans Telugu",
+        "compatibility": "visual",
+        "measured": null
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/gautami",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Script replacement; widths not measured. Windows: Telugu Supplemental Fonts FOD."
+    },
+    {
+      "family": "Gelasio",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/SorkinType/Gelasio",
+        "https://www.npmjs.com/package/@expo-google-fonts/gelasio"
+      ],
+      "note": "Metric-compatible with Georgia."
+    },
+    {
+      "family": "Georgia",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "windows",
+        "macos",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Gelasio",
+        "compatibility": "metric",
+        "measured": {
+          "replacement": "Gelasio",
+          "meanAbsWidthDelta": 0.0002,
+          "meanWidthDelta": -0.0002,
+          "maxAbsWidthDelta": 0.0102,
+          "styles": 4,
+          "reference": "Georgia 5.59"
+        },
+        "source": "https://github.com/SorkinType/Gelasio"
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/georgia",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "All basic-Latin advances match Georgia 5.59; only runs where Gelasio applies optional ligatures differ (up to 1%)."
+    },
+    {
+      "family": "Gill Sans MT",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Monotype, licensed to Microsoft)",
+      "availability": [
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Source Sans 3",
+        "compatibility": "visual",
+        "measured": {
+          "replacement": "Source Sans 3",
+          "meanAbsWidthDelta": 0.051,
+          "meanWidthDelta": 0.0038,
+          "maxAbsWidthDelta": 0.1456,
+          "styles": 4,
+          "reference": "Gill Sans MT 1.65"
+        }
+      },
+      "alternates": [
+        "Carlito"
+      ],
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/gill-sans-mt",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Not in Windows lists (the Windows Pan-European FOD has the separate family \"Gill Sans Nova\"). Not on the macOS list."
+    },
+    {
+      "family": "Gisha",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "windows-optional",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Noto Sans Hebrew",
+        "compatibility": "visual",
+        "measured": null
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/gisha",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Script replacement; widths not measured. Windows: Hebrew Supplemental Fonts FOD."
+    },
+    {
+      "family": "Grandview",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Barlow",
+        "compatibility": "visual",
+        "measured": null
+      },
+      "alternates": [
+        "Roboto"
+      ],
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://support.apple.com/en-us/122869",
+        "https://microsoft.design/articles/a-change-of-typeface-microsoft-s-new-default-font-has-arrived/"
+      ],
+      "note": "Microsoft 365 cloud font not available to the measuring host; Barlow shares its DIN lineage. One of the five fonts Microsoft commissioned in the 2021 default-font search; no MS Learn font-list page found (404/no product section)."
+    },
+    {
+      "family": "Grandview Display",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Barlow",
+        "compatibility": "visual",
+        "measured": null
+      },
+      "alternates": [
+        "Roboto"
+      ],
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://support.apple.com/en-us/122869",
+        "https://microsoft.design/articles/a-change-of-typeface-microsoft-s-new-default-font-has-arrived/"
+      ],
+      "note": "Reference not available to the measuring host. Cloud list has Grandview Display and Grandview Display Italic only."
+    },
+    {
+      "family": "Gungsuh",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (HanYang I&C, licensed to Microsoft)",
+      "availability": [
+        "windows-optional",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Noto Sans KR",
+        "compatibility": "visual",
+        "measured": null
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/gungsuh",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Serif design previewed with a sans. Reference not available to the measuring host; widths not measured. Windows: Korean Supplemental Fonts FOD (in Batang.ttc)."
+    },
+    {
+      "family": "GungsuhChe",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (HanYang I&C, licensed to Microsoft)",
+      "availability": [
+        "windows-optional",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Noto Sans KR",
+        "compatibility": "visual",
+        "measured": null
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/gungsuh",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Serif design previewed with a sans. Reference not available to the measuring host; widths not measured. Windows: Korean Supplemental Fonts FOD (in Batang.ttc)."
+    },
+    {
+      "family": "Impact",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Monotype, licensed to Microsoft)",
+      "availability": [
+        "windows",
+        "macos",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Anton",
+        "compatibility": "visual",
+        "measured": {
+          "replacement": "Anton",
+          "meanAbsWidthDelta": 0.0192,
+          "meanWidthDelta": -0.019,
+          "maxAbsWidthDelta": 0.0512,
+          "styles": 1,
+          "reference": "Impact 5.11"
+        }
+      },
+      "alternates": [
+        "Carlito"
+      ],
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/impact",
+        "https://support.apple.com/en-us/122869"
+      ]
+    },
+    {
+      "family": "Kalinga",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "windows-optional",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Noto Sans Oriya",
+        "compatibility": "visual",
+        "measured": null
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/kalinga",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Script replacement; widths not measured. Windows: Odia Supplemental Fonts FOD."
+    },
+    {
+      "family": "Kartika",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "windows-optional",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Noto Sans Malayalam",
+        "compatibility": "visual",
+        "measured": null
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/kartika",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Script replacement; widths not measured. Windows: Malayalam Supplemental Fonts FOD."
+    },
+    {
+      "family": "Khmer UI",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "windows-optional",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Noto Sans Khmer",
+        "compatibility": "visual",
+        "measured": null
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/khmer-ui",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Script replacement; widths not measured. Windows: Khmer Supplemental Fonts FOD."
+    },
+    {
+      "family": "Latha",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "windows-optional",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Noto Sans Tamil",
+        "compatibility": "visual",
+        "measured": null
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/latha",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Script replacement; widths not measured. Windows: Tamil Supplemental Fonts FOD."
+    },
+    {
+      "family": "Libre Caslon Text",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/librecaslontext/METADATA.pb",
+        "https://www.npmjs.com/package/@expo-google-fonts/libre-caslon-text"
+      ]
+    },
+    {
+      "family": "Lora",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/lora/METADATA.pb",
+        "https://support.apple.com/en-us/122869"
+      ]
+    },
+    {
+      "family": "Lucida Console",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Bigelow & Holmes, licensed to Microsoft)",
+      "availability": [
+        "windows"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Cousine",
+        "compatibility": "visual",
+        "measured": {
+          "replacement": "Cousine",
+          "meanAbsWidthDelta": 0.0041,
+          "meanWidthDelta": -0.0041,
+          "maxAbsWidthDelta": 0.0041,
+          "styles": 1,
+          "reference": "Lucida Console 5.01"
+        }
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/lucida-console",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Not in the Office cloud font list (the Lucida entries there are Bright, Calligraphy, Fax, Handwriting, Sans, Sans Typewriter and Sans Unicode)."
+    },
+    {
+      "family": "Lucida Sans",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Bigelow & Holmes, licensed to Microsoft)",
+      "availability": [
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Work Sans",
+        "compatibility": "visual",
+        "measured": {
+          "replacement": "Work Sans",
+          "meanAbsWidthDelta": 0.0124,
+          "meanWidthDelta": 0.0047,
+          "maxAbsWidthDelta": 0.0498,
+          "styles": 2,
+          "reference": "Lucida Sans 1.67"
+        }
+      },
+      "alternates": [
+        "Arimo"
+      ],
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/lucida-sans",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Not in Windows lists (Windows ships the different family \"Lucida Sans Unicode\"); not on the macOS Tahoe list (macOS has Lucida Grande)."
+    },
+    {
+      "family": "Lucida Sans Unicode",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Bigelow & Holmes, licensed to Microsoft)",
+      "availability": [
+        "windows",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Work Sans",
+        "compatibility": "visual",
+        "measured": {
+          "replacement": "Work Sans",
+          "meanAbsWidthDelta": 0.0132,
+          "meanWidthDelta": 0.0102,
+          "maxAbsWidthDelta": 0.0498,
+          "styles": 1,
+          "reference": "Lucida Sans Unicode 5.01"
+        }
+      },
+      "alternates": [
+        "Arimo"
+      ],
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/lucida-sans-unicode",
+        "https://support.apple.com/en-us/122869"
+      ]
+    },
+    {
+      "family": "Malgun Gothic",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "windows",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Noto Sans KR",
+        "compatibility": "visual",
+        "measured": {
+          "replacement": "Noto Sans KR",
+          "meanAbsWidthDelta": 0.0176,
+          "meanWidthDelta": 0.0171,
+          "maxAbsWidthDelta": 0.0791,
+          "styles": 2,
+          "reference": "Malgun Gothic 6.69"
+        }
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/malgun-gothic",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Script replacement; the width measurement covers Latin text only."
+    },
+    {
+      "family": "Mangal",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "windows-optional",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Noto Sans Devanagari",
+        "compatibility": "visual",
+        "measured": null
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/mangal",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Script replacement; widths not measured. Windows: Devanagari Supplemental Fonts FOD."
+    },
+    {
+      "family": "Meiryo",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "windows-optional",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Noto Sans JP",
+        "compatibility": "visual",
+        "measured": null
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/meiryo",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Script replacement; widths not measured. Windows: Japanese Supplemental Fonts FOD."
+    },
+    {
+      "family": "Merriweather Sans",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/merriweathersans/METADATA.pb",
+        "https://support.apple.com/en-us/122869"
+      ]
+    },
+    {
+      "family": "Microsoft JhengHei",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "windows",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Noto Sans TC",
+        "compatibility": "visual",
+        "measured": {
+          "replacement": "Noto Sans TC",
+          "meanAbsWidthDelta": 0.0141,
+          "meanWidthDelta": 0.004,
+          "maxAbsWidthDelta": 0.0611,
+          "styles": 2,
+          "reference": "Microsoft JhengHei 6.15"
+        }
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/microsoft-jhenghei",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Script replacement; the width measurement covers Latin text only."
+    },
+    {
+      "family": "Microsoft Sans Serif",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "windows",
+        "macos",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Arimo",
+        "compatibility": "visual",
+        "measured": {
+          "replacement": "Arimo",
+          "meanAbsWidthDelta": 0.002,
+          "meanWidthDelta": 0.0003,
+          "maxAbsWidthDelta": 0.0291,
+          "styles": 1,
+          "reference": "Microsoft Sans Serif 7.04"
+        }
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/microsoft-sans-serif",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Also on the macOS Tahoe installed/downloadable list."
+    },
+    {
+      "family": "Microsoft YaHei",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft; portions Beijing Founder)",
+      "availability": [
+        "windows",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Noto Sans SC",
+        "compatibility": "visual",
+        "measured": {
+          "replacement": "Noto Sans SC",
+          "meanAbsWidthDelta": 0.0314,
+          "meanWidthDelta": -0.0314,
+          "maxAbsWidthDelta": 0.059,
+          "styles": 2,
+          "reference": "Microsoft YaHei 6.31"
+        }
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/microsoft-yahei",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Script replacement; the width measurement covers Latin text only."
+    },
+    {
+      "family": "MingLiU",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (DynaComware, licensed to Microsoft)",
+      "availability": [
+        "windows-optional",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Noto Sans TC",
+        "compatibility": "visual",
+        "measured": null
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/mingliu",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Serif (Ming) design previewed with a sans. Reference not available to the measuring host; widths not measured. Windows: Chinese (Traditional) Supplemental Fonts FOD; only MingLiU-ExtB is in the default set."
+    },
+    {
+      "family": "Miriam",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Kivun Computers/Monotype, licensed to Microsoft)",
+      "availability": [
+        "windows-optional",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Noto Sans Hebrew",
+        "compatibility": "visual",
+        "measured": null
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/miriam",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Script replacement; widths not measured. Windows: Hebrew Supplemental Fonts FOD."
+    },
+    {
+      "family": "Montserrat",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/montserrat/METADATA.pb",
+        "https://support.apple.com/en-us/122869"
+      ]
+    },
+    {
+      "family": "MS Gothic",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Ricoh/Ryobi Imagix, licensed to Microsoft)",
+      "availability": [
+        "windows",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Noto Sans JP",
+        "compatibility": "visual",
+        "measured": {
+          "replacement": "Noto Sans JP",
+          "meanAbsWidthDelta": 0.0493,
+          "meanWidthDelta": -0.0361,
+          "maxAbsWidthDelta": 0.1522,
+          "styles": 1,
+          "reference": "MS Gothic 5.32"
+        }
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/ms-gothic",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Script replacement; the width measurement covers Latin text only. Default on Windows (Msgothic.ttc), unlike MS Mincho, which is FOD."
+    },
+    {
+      "family": "MS Mincho",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Ricoh/Ryobi Imagix, licensed to Microsoft)",
+      "availability": [
+        "windows-optional",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Noto Sans JP",
+        "compatibility": "visual",
+        "measured": null
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/ms-mincho",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "MS Mincho is a serif (Mincho) design previewed with a sans. Reference not available to the measuring host; widths not measured. Windows: Japanese Supplemental Fonts FOD."
+    },
+    {
+      "family": "Nirmala UI",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "windows",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Noto Sans Devanagari",
+        "compatibility": "visual",
+        "measured": {
+          "replacement": "Noto Sans Devanagari",
+          "meanAbsWidthDelta": 0.0638,
+          "meanWidthDelta": 0.0638,
+          "maxAbsWidthDelta": 0.0939,
+          "styles": 2,
+          "reference": "Nirmala UI 1.46"
+        }
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/nirmala-ui",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Nirmala UI covers every Indic script; Devanagari is previewed. Pick the script Noto family for other scripts. Width measurement covers Latin text only."
+    },
+    {
+      "family": "Noto Naskh Arabic",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/notonaskharabic/METADATA.pb",
+        "https://support.apple.com/en-us/122869"
+      ]
+    },
+    {
+      "family": "Noto Nastaliq Urdu",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [
+        "macos"
+      ],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/notonastaliqurdu/METADATA.pb",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "On the macOS Tahoe installed/downloadable list."
+    },
+    {
+      "family": "Noto Sans",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/notosans/METADATA.pb",
+        "https://support.apple.com/en-us/122869"
+      ]
+    },
+    {
+      "family": "Noto Sans Armenian",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/notosansarmenian/METADATA.pb",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "macOS Tahoe lists it only as a document-support font, so \"macos\" omitted."
+    },
+    {
+      "family": "Noto Sans Bengali",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/notosansbengali/METADATA.pb",
+        "https://support.apple.com/en-us/122869"
+      ]
+    },
+    {
+      "family": "Noto Sans Devanagari",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/notosansdevanagari/METADATA.pb",
+        "https://support.apple.com/en-us/122869"
+      ]
+    },
+    {
+      "family": "Noto Sans Ethiopic",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/notosansethiopic/METADATA.pb",
+        "https://support.apple.com/en-us/122869"
+      ]
+    },
+    {
+      "family": "Noto Sans Georgian",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/notosansgeorgian/METADATA.pb",
+        "https://support.apple.com/en-us/122869"
+      ]
+    },
+    {
+      "family": "Noto Sans Gujarati",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/notosansgujarati/METADATA.pb",
+        "https://support.apple.com/en-us/122869"
+      ]
+    },
+    {
+      "family": "Noto Sans Gurmukhi",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/notosansgurmukhi/METADATA.pb",
+        "https://support.apple.com/en-us/122869"
+      ]
+    },
+    {
+      "family": "Noto Sans Hebrew",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/notosanshebrew/METADATA.pb",
+        "https://support.apple.com/en-us/122869"
+      ]
+    },
+    {
+      "family": "Noto Sans JP",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/notosansjp/METADATA.pb",
+        "https://support.apple.com/en-us/122869"
+      ]
+    },
+    {
+      "family": "Noto Sans Kannada",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [
+        "macos"
+      ],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/notosanskannada/METADATA.pb",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "On the macOS Tahoe installed/downloadable list."
+    },
+    {
+      "family": "Noto Sans Khmer",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/notosanskhmer/METADATA.pb",
+        "https://support.apple.com/en-us/122869"
+      ]
+    },
+    {
+      "family": "Noto Sans KR",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/notosanskr/METADATA.pb",
+        "https://support.apple.com/en-us/122869"
+      ]
+    },
+    {
+      "family": "Noto Sans Malayalam",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/notosansmalayalam/METADATA.pb",
+        "https://support.apple.com/en-us/122869"
+      ]
+    },
+    {
+      "family": "Noto Sans Mongolian",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/notosansmongolian/METADATA.pb",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "macOS Tahoe lists it only as a document-support font, so \"macos\" omitted."
+    },
+    {
+      "family": "Noto Sans Oriya",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [
+        "macos"
+      ],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/notosansoriya/METADATA.pb",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "On the macOS Tahoe installed/downloadable list."
+    },
+    {
+      "family": "Noto Sans SC",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/notosanssc/METADATA.pb",
+        "https://support.apple.com/en-us/122869"
+      ]
+    },
+    {
+      "family": "Noto Sans Tamil",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/notosanstamil/METADATA.pb",
+        "https://support.apple.com/en-us/122869"
+      ]
+    },
+    {
+      "family": "Noto Sans TC",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/notosanstc/METADATA.pb",
+        "https://support.apple.com/en-us/122869"
+      ]
+    },
+    {
+      "family": "Noto Sans Telugu",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/notosanstelugu/METADATA.pb",
+        "https://support.apple.com/en-us/122869"
+      ]
+    },
+    {
+      "family": "Noto Sans Thai",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/notosansthai/METADATA.pb",
+        "https://support.apple.com/en-us/122869"
+      ]
+    },
+    {
+      "family": "Noto Serif Hebrew",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/notoserifhebrew/METADATA.pb",
+        "https://www.npmjs.com/package/@expo-google-fonts/noto-serif-hebrew"
+      ]
+    },
+    {
+      "family": "Nyala",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "windows-optional",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Noto Sans Ethiopic",
+        "compatibility": "visual",
+        "measured": null
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/nyala",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Script replacement; widths not measured. Windows: Ethiopic Supplemental Fonts FOD."
+    },
+    {
+      "family": "Open Sans",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/opensans/METADATA.pb",
+        "https://support.apple.com/en-us/122869"
+      ]
+    },
+    {
+      "family": "Palatino Linotype",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Linotype/Heidelberger, licensed to Microsoft)",
+      "availability": [
+        "windows",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "PT Serif",
+        "compatibility": "visual",
+        "measured": {
+          "replacement": "PT Serif",
+          "meanAbsWidthDelta": 0.0252,
+          "meanWidthDelta": 0.0213,
+          "maxAbsWidthDelta": 0.0909,
+          "styles": 4,
+          "reference": "Palatino Linotype 5.03"
+        }
+      },
+      "alternates": [
+        "Caladea"
+      ],
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/palatino-linotype",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "TeX Gyre Pagella and URW P052 are documented clones but are not OFL/Apache packages. Not on the macOS Tahoe list (macOS ships \"Palatino\", a different family name)."
+    },
+    {
+      "family": "Playfair Display",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/playfairdisplay/METADATA.pb",
+        "https://support.apple.com/en-us/122869"
+      ]
+    },
+    {
+      "family": "PMingLiU",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (DynaComware, licensed to Microsoft)",
+      "availability": [
+        "windows-optional",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Noto Sans TC",
+        "compatibility": "visual",
+        "measured": null
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/mingliu",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Serif (Ming) design previewed with a sans. Reference not available to the measuring host; widths not measured. Windows: Chinese (Traditional) Supplemental Fonts FOD (in Mingliu.ttc); only PMingLiU-ExtB is default."
+    },
+    {
+      "family": "Poppins",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/poppins/METADATA.pb",
+        "https://support.apple.com/en-us/122869"
+      ]
+    },
+    {
+      "family": "PT Serif",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [
+        "macos"
+      ],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/ptserif/METADATA.pb",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "On the macOS Tahoe installed/downloadable list."
+    },
+    {
+      "family": "Raavi",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "windows-optional",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Noto Sans Gurmukhi",
+        "compatibility": "visual",
+        "measured": null
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/raavi",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Script replacement; widths not measured. Windows: Gurmukhi Supplemental Fonts FOD."
+    },
+    {
+      "family": "Raleway",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/raleway/METADATA.pb",
+        "https://support.apple.com/en-us/122869"
+      ]
+    },
+    {
+      "family": "Red Hat Display",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/redhatdisplay/METADATA.pb",
+        "https://www.npmjs.com/package/@expo-google-fonts/red-hat-display"
+      ]
+    },
+    {
+      "family": "Red Hat Text",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/redhattext/METADATA.pb",
+        "https://www.npmjs.com/package/@expo-google-fonts/red-hat-text"
+      ]
+    },
+    {
+      "family": "Roboto",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/roboto/METADATA.pb",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Now OFL in google/fonts (ofl/roboto); older releases were Apache-2.0."
+    },
+    {
+      "family": "Roboto Mono",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/robotomono/METADATA.pb",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Now OFL in google/fonts (ofl/robotomono); older releases were Apache-2.0."
+    },
+    {
+      "family": "Rockwell",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Monotype, licensed to Microsoft)",
+      "availability": [
+        "macos",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Bitter",
+        "compatibility": "visual",
+        "measured": {
+          "replacement": "Bitter",
+          "meanAbsWidthDelta": 0.0255,
+          "meanWidthDelta": -0.0149,
+          "maxAbsWidthDelta": 0.0845,
+          "styles": 4,
+          "reference": "Rockwell 1.65"
+        }
+      },
+      "alternates": [
+        "Gelasio"
+      ],
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/rockwell",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Not in Windows lists (Windows Pan-European FOD has the separate family \"Rockwell Nova\"). On the macOS Tahoe installed/downloadable list."
+    },
+    {
+      "family": "Sakkal Majalla",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft; portions Sakkal Design)",
+      "availability": [
+        "windows-optional",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Noto Naskh Arabic",
+        "compatibility": "visual",
+        "measured": {
+          "replacement": "Noto Naskh Arabic",
+          "meanAbsWidthDelta": 0.5423,
+          "meanWidthDelta": 0.5423,
+          "maxAbsWidthDelta": 0.6142,
+          "styles": 2,
+          "reference": "Sakkal Majalla 7.00"
+        }
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/sakkal-majalla",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Script replacement; the width measurement covers Latin text only. Windows: Arabic Script Supplemental Fonts FOD."
+    },
+    {
+      "family": "Seaford",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Source Sans 3",
+        "compatibility": "visual",
+        "measured": null
+      },
+      "alternates": [
+        "Carlito"
+      ],
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://support.apple.com/en-us/122869",
+        "https://microsoft.design/articles/a-change-of-typeface-microsoft-s-new-default-font-has-arrived/"
+      ],
+      "note": "Reference not available to the measuring host. One of the five fonts Microsoft commissioned in 2021; no MS Learn font-list page found."
+    },
+    {
+      "family": "Seaford Display",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Source Sans 3",
+        "compatibility": "visual",
+        "measured": null
+      },
+      "alternates": [
+        "Carlito"
+      ],
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://support.apple.com/en-us/122869",
+        "https://microsoft.design/articles/a-change-of-typeface-microsoft-s-new-default-font-has-arrived/"
+      ],
+      "note": "Reference not available to the measuring host. Cloud list has Seaford Display and Seaford Display Italic."
+    },
+    {
+      "family": "Segoe UI",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "windows",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "decision": "segoe-ui-preview",
+        "measured": {
+          "replacement": "Red Hat Display",
+          "meanAbsWidthDelta": 0.0172,
+          "meanWidthDelta": -0.009,
+          "maxAbsWidthDelta": 0.0709,
+          "styles": 4,
+          "reference": "Segoe UI 5.71"
+        }
+      },
+      "alternates": [
+        "Open Sans",
+        "Arimo"
+      ],
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/segoe-ui",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Microsoft's OFL Selawik is the documented Segoe UI fallback but is not published as a pinned package; Red Hat Display is the closest measured shipped face. MS Learn lists vendor as Agfa Monotype but copyright Microsoft."
+    },
+    {
+      "family": "Segoe UI Emoji",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "windows",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": null,
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/segoe-ui-emoji",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Color emoji; no open replacement is shipped. Color font (COLR). The Windows 11 version is 1.33 per the list."
+    },
+    {
+      "family": "Segoe UI Light",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "windows",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "decision": "segoe-ui-preview",
+        "weight": 300,
+        "measured": {
+          "replacement": "Red Hat Display",
+          "meanAbsWidthDelta": 0.0187,
+          "meanWidthDelta": 0.0179,
+          "maxAbsWidthDelta": 0.0662,
+          "styles": 2,
+          "reference": "Segoe UI Light 5.71"
+        }
+      },
+      "alternates": [
+        "Carlito"
+      ],
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/segoe-ui",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Style of Segoe UI (Segoeuil.ttf) in the Windows default set."
+    },
+    {
+      "family": "Segoe UI Semibold",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "windows",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "decision": "segoe-ui-preview",
+        "weight": 600,
+        "measured": {
+          "replacement": "Red Hat Display",
+          "meanAbsWidthDelta": 0.0101,
+          "meanWidthDelta": -0.0013,
+          "maxAbsWidthDelta": 0.0651,
+          "styles": 2,
+          "reference": "Segoe UI Semibold 5.71"
+        }
+      },
+      "alternates": [
+        "Roboto"
+      ],
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/segoe-ui",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Style of Segoe UI (Seguisb.ttf) in the Windows default set."
+    },
+    {
+      "family": "Segoe UI Semilight",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "windows",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "decision": "segoe-ui-preview",
+        "measured": {
+          "replacement": "Red Hat Display",
+          "meanAbsWidthDelta": 0.0322,
+          "meanWidthDelta": 0.0321,
+          "maxAbsWidthDelta": 0.0905,
+          "styles": 2,
+          "reference": "Segoe UI Semilight 5.71"
+        }
+      },
+      "alternates": [
+        "Roboto"
+      ],
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/segoe-ui",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Style of Segoe UI (Segoeuisl.ttf) in the Windows default set."
+    },
+    {
+      "family": "Shonar Bangla",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "windows-optional",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Noto Sans Bengali",
+        "compatibility": "visual",
+        "measured": null
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/shonar-bangla",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Script replacement; widths not measured. Windows: Bangla Script Supplemental Fonts FOD."
+    },
+    {
+      "family": "Shruti",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "windows-optional",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Noto Sans Gujarati",
+        "compatibility": "visual",
+        "measured": null
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/shruti",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Script replacement; widths not measured. Windows: Gujarati Supplemental Fonts FOD."
+    },
+    {
+      "family": "SimHei",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Beijing ZhongYi Electronics, licensed to Microsoft)",
+      "availability": [
+        "windows-optional",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Noto Sans SC",
+        "compatibility": "visual",
+        "measured": null
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/simhei",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Script replacement; widths not measured. Windows: Chinese (Simplified) Supplemental Fonts FOD."
+    },
+    {
+      "family": "SimSun",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (ZhongYi Electronic, licensed to Microsoft)",
+      "availability": [
+        "windows",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Noto Sans SC",
+        "compatibility": "visual",
+        "measured": {
+          "replacement": "Noto Sans SC",
+          "meanAbsWidthDelta": 0.0493,
+          "meanWidthDelta": -0.0361,
+          "maxAbsWidthDelta": 0.1522,
+          "styles": 1,
+          "reference": "SimSun 5.24"
+        }
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/simsun",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "SimSun is a serif (Song) design previewed with a sans; Noto Serif SC is not in a pinned pack. Width measurement covers Latin text only."
+    },
+    {
+      "family": "Skeena",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Open Sans",
+        "compatibility": "visual",
+        "measured": null
+      },
+      "alternates": [
+        "Carlito"
+      ],
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://support.apple.com/en-us/122869",
+        "https://microsoft.design/articles/a-change-of-typeface-microsoft-s-new-default-font-has-arrived/"
+      ],
+      "note": "Reference not available to the measuring host. One of the five fonts Microsoft commissioned in 2021; no MS Learn font-list page found."
+    },
+    {
+      "family": "Skeena Display",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Open Sans",
+        "compatibility": "visual",
+        "measured": null
+      },
+      "alternates": [
+        "Carlito"
+      ],
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://support.apple.com/en-us/122869",
+        "https://microsoft.design/articles/a-change-of-typeface-microsoft-s-new-default-font-has-arrived/"
+      ],
+      "note": "Reference not available to the measuring host. Cloud list has Skeena Display (+Bold/Italic/Bold Italic)."
+    },
+    {
+      "family": "Source Sans 3",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [
+        "office-cloud"
+      ],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/sourcesans3/METADATA.pb",
+        "https://support.apple.com/en-us/122869",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb"
+      ],
+      "note": "The Office cloud list carries the predecessor family under the name \"Source Sans Pro\" (12 styles), not \"Source Sans 3\". Google Fonts has only Source Sans 3; @expo-google-fonts/source-sans-pro is deprecated."
+    },
+    {
+      "family": "Source Sans Pro",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [
+        "office-cloud"
+      ],
+      "embeddableByOpf": true,
+      "replacement": {
+        "family": "Source Sans 3",
+        "compatibility": "visual",
+        "measured": null
+      },
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/sourcesans3/METADATA.pb",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb"
+      ],
+      "note": "Predecessor name of Source Sans 3; the renamed family previews it."
+    },
+    {
+      "family": "Sylfaen",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "windows",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Noto Sans",
+        "compatibility": "visual",
+        "measured": {
+          "replacement": "Noto Sans",
+          "meanAbsWidthDelta": 0.1096,
+          "meanWidthDelta": 0.1096,
+          "maxAbsWidthDelta": 0.1593,
+          "styles": 1,
+          "reference": "Sylfaen 5.08"
+        }
+      },
+      "alternates": [
+        "Noto Sans Georgian",
+        "Noto Sans Armenian"
+      ],
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/sylfaen",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Sylfaen covers Latin, Georgian and Armenian; Noto Sans previews Latin, and Noto Sans Georgian/Armenian cover those scripts."
+    },
+    {
+      "family": "Symbol",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Monotype, licensed to Microsoft)",
+      "availability": [
+        "windows",
+        "macos",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": null,
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/symbol",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Symbol-encoded; renderers require character mapping (font-encoding-required). macOS lists a \"Symbol\" (version 13.0d2e2), which is Apple's own build, not the Microsoft/Monotype file; the glyph mapping may differ."
+    },
+    {
+      "family": "Tahoma",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "windows",
+        "macos",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Red Hat Text",
+        "compatibility": "visual",
+        "measured": {
+          "replacement": "Red Hat Text",
+          "meanAbsWidthDelta": 0.0167,
+          "meanWidthDelta": -0.0035,
+          "maxAbsWidthDelta": 0.0629,
+          "styles": 2,
+          "reference": "Tahoma 7.05"
+        }
+      },
+      "alternates": [
+        "Open Sans",
+        "Arimo"
+      ],
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/tahoma",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Wine Tahoma (LGPL) is documented as metric-compatible but is not openly licensed under OFL or Apache."
+    },
+    {
+      "family": "Tenorite",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Figtree",
+        "compatibility": "visual",
+        "measured": null
+      },
+      "alternates": [
+        "Roboto"
+      ],
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://support.apple.com/en-us/122869",
+        "https://microsoft.design/articles/a-change-of-typeface-microsoft-s-new-default-font-has-arrived/"
+      ],
+      "note": "Reference not available to the measuring host. One of the five fonts Microsoft commissioned in 2021; no MS Learn font-list page found."
+    },
+    {
+      "family": "Tenorite Display",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Figtree",
+        "compatibility": "visual",
+        "measured": null
+      },
+      "alternates": [
+        "Roboto"
+      ],
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://support.apple.com/en-us/122869",
+        "https://microsoft.design/articles/a-change-of-typeface-microsoft-s-new-default-font-has-arrived/"
+      ],
+      "note": "Reference not available to the measuring host. Cloud list has Tenorite Display Regular/Italic/Bold/Bold Italic."
+    },
+    {
+      "family": "Times New Roman",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Monotype, licensed to Microsoft)",
+      "availability": [
+        "windows",
+        "macos",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Tinos",
+        "compatibility": "metric",
+        "measured": {
+          "replacement": "Tinos",
+          "meanAbsWidthDelta": 0,
+          "meanWidthDelta": 0,
+          "maxAbsWidthDelta": 0,
+          "styles": 4,
+          "reference": "Times New Roman 7.12"
+        },
+        "source": "https://github.com/google/fonts/blob/main/ofl/tinos/METADATA.pb"
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/times-new-roman",
+        "https://support.apple.com/en-us/122869"
+      ]
+    },
+    {
+      "family": "Tinos",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/tinos/METADATA.pb",
+        "https://www.npmjs.com/package/@expo-google-fonts/tinos"
+      ],
+      "note": "Metric-compatible with Times New Roman."
+    },
+    {
+      "family": "Traditional Arabic",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Monotype, licensed to Microsoft)",
+      "availability": [
+        "windows-optional",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Noto Naskh Arabic",
+        "compatibility": "visual",
+        "measured": {
+          "replacement": "Noto Naskh Arabic",
+          "meanAbsWidthDelta": 0.1573,
+          "meanWidthDelta": 0.1573,
+          "maxAbsWidthDelta": 0.2415,
+          "styles": 2,
+          "reference": "Traditional Arabic 6.85"
+        }
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/traditional-arabic",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Script replacement; the width measurement covers Latin text only. Windows: Arabic Script Supplemental Fonts FOD."
+    },
+    {
+      "family": "Trebuchet MS",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "windows",
+        "macos",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Figtree",
+        "compatibility": "visual",
+        "measured": {
+          "replacement": "Figtree",
+          "meanAbsWidthDelta": 0.0149,
+          "meanWidthDelta": -0.007,
+          "maxAbsWidthDelta": 0.0665,
+          "styles": 4,
+          "reference": "Trebuchet MS 5.15"
+        }
+      },
+      "alternates": [
+        "Arimo"
+      ],
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/trebuchet-ms",
+        "https://support.apple.com/en-us/122869"
+      ]
+    },
+    {
+      "family": "Tunga",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "windows-optional",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Noto Sans Kannada",
+        "compatibility": "visual",
+        "measured": null
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/tunga",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Script replacement; widths not measured. Windows: Kannada Supplemental Fonts FOD."
+    },
+    {
+      "family": "Verdana",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "windows",
+        "macos",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Montserrat",
+        "compatibility": "visual",
+        "measured": {
+          "replacement": "Montserrat",
+          "meanAbsWidthDelta": 0.0368,
+          "meanWidthDelta": -0.0281,
+          "maxAbsWidthDelta": 0.0915,
+          "styles": 4,
+          "reference": "Verdana 5.33"
+        }
+      },
+      "alternates": [
+        "Arimo"
+      ],
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/verdana",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "No open metric-compatible face exists; DejaVu Sans is visually similar but narrower."
+    },
+    {
+      "family": "Vrinda",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "windows-optional",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Noto Sans Bengali",
+        "compatibility": "visual",
+        "measured": null
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/vrinda",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Script replacement; widths not measured. Windows: Bangla Script Supplemental Fonts FOD."
+    },
+    {
+      "family": "Webdings",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "windows",
+        "macos",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": null,
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/webdings",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Symbol-encoded; renderers require character mapping (font-encoding-required). Symbol-encoded font. It is also on the macOS Tahoe list."
+    },
+    {
+      "family": "Wingdings",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "windows",
+        "macos",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": null,
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/wingdings",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Symbol-encoded; renderers require character mapping (font-encoding-required). Symbol-encoded font. It is also on the macOS Tahoe list (\"Wingdings Version 5.00x\")."
+    },
+    {
+      "family": "Work Sans",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/worksans/METADATA.pb",
+        "https://www.npmjs.com/package/@expo-google-fonts/work-sans"
+      ]
+    },
+    {
+      "family": "Yu Gothic",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (JIYUKOBO, licensed to Microsoft)",
+      "availability": [
+        "windows",
+        "office-cloud"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Noto Sans JP",
+        "compatibility": "visual",
+        "measured": {
+          "replacement": "Noto Sans JP",
+          "meanAbsWidthDelta": 0.0091,
+          "meanWidthDelta": 0.0032,
+          "maxAbsWidthDelta": 0.0533,
+          "styles": 2,
+          "reference": "Yu Gothic 1.95"
+        }
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
+        "https://learn.microsoft.com/en-us/typography/font-list/yu-gothic",
+        "https://support.apple.com/en-us/122869"
+      ],
+      "note": "Script replacement; the width measurement covers Latin text only. macOS Tahoe lists \"YuGothic\" (Medium/Bold), a different family name from Windows \"Yu Gothic\", so \"macos\" is omitted; name-based matching would not resolve it."
+    }
+  ]
+}

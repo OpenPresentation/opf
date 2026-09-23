@@ -1,0 +1,3723 @@
+{
+  "tool": "fontkit 2.0.4",
+  "corpus": {
+    "strings": 300,
+    "sha256": "611eec19400a21c0985813606e1c97dc3e2ccfc183f463e2626bae066b0972ca"
+  },
+  "host": {
+    "platform": "win32",
+    "node": "v24.21.0"
+  },
+  "results": [
+    {
+      "family": "Angsana New",
+      "replacement": "Noto Sans Thai",
+      "compatibility": "visual",
+      "meanAbsWidthDelta": 0.7476,
+      "meanWidthDelta": 0.7476,
+      "maxAbsWidthDelta": 0.8473,
+      "styles": 2,
+      "reference": "Angsana New 5.06",
+      "detail": [
+        {
+          "weight": 400,
+          "italic": false,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.7459,
+          "mean": 0.7459,
+          "maxAbs": 0.8473,
+          "reference": {
+            "file": "angsana.ttc",
+            "version": "Version 5.06",
+            "sha256": "2aa45686653f0440d130f96c9520b32d1f40c328c1ac35efc47c0f9fe9bf1ec5"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/noto-sans-thai@0.4.2",
+            "file": "400Regular/NotoSansThai_400Regular.ttf",
+            "sha256": "9acb585d8662ca4ed1b1cf5889dfa1393f8555103b3986e1ea1e3af4faef70bd"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": false,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0.7492,
+          "mean": 0.7492,
+          "maxAbs": 0.8111,
+          "reference": {
+            "file": "angsana.ttc",
+            "version": "Version 5.06",
+            "sha256": "2aa45686653f0440d130f96c9520b32d1f40c328c1ac35efc47c0f9fe9bf1ec5"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/noto-sans-thai@0.4.2",
+            "file": "700Bold/NotoSansThai_700Bold.ttf",
+            "sha256": "0be544f347b3ab6382bdc2b555a783727a4858a3dc140670406924670967d916"
+          }
+        }
+      ]
+    },
+    {
+      "family": "Aparajita",
+      "replacement": "Noto Sans Devanagari",
+      "compatibility": "visual",
+      "skipped": "reference font not available on this host"
+    },
+    {
+      "family": "Aptos",
+      "replacement": "Roboto",
+      "compatibility": "visual",
+      "meanAbsWidthDelta": 0.0215,
+      "meanWidthDelta": 0.0008,
+      "maxAbsWidthDelta": 0.0739,
+      "styles": 4,
+      "reference": "Aptos 2.01;O365",
+      "detail": [
+        {
+          "weight": 400,
+          "italic": false,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0351,
+          "mean": 0.035,
+          "maxAbs": 0.0739,
+          "reference": {
+            "file": "30153066857.ttf",
+            "version": "Version 2.01;O365",
+            "sha256": "95980114fcfd42f2f9c446dae429b70582bf2f03097d68433ea9e7d85a49da0b"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/roboto@0.4.3",
+            "file": "400Regular/Roboto_400Regular.ttf",
+            "sha256": "15256405ecb0d880678833a582760efad538ab2932318b52c8105b267d159459"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": false,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0.0078,
+          "mean": -0.0052,
+          "maxAbs": 0.0334,
+          "reference": {
+            "file": "32483553004.ttf",
+            "version": "Version 2.01;O365",
+            "sha256": "cf4b35ac6d81e0eb42ffa44c3829b710c058de6fa3cf2c7cdad0407e22538877"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/roboto@0.4.3",
+            "file": "700Bold/Roboto_700Bold.ttf",
+            "sha256": "4aaf8c5b661a386998c2e70cf2b87e2440f5404e0b8fd81164f0413fb3435ec6"
+          }
+        },
+        {
+          "weight": 400,
+          "italic": true,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0092,
+          "mean": 0.0073,
+          "maxAbs": 0.0458,
+          "reference": {
+            "file": "26395700251.ttf",
+            "version": "Version 2.01;O365",
+            "sha256": "888909eceb9acd84157078cc097c11f8a94a34ff3bd3fe08194ce7866f5998d1"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/roboto@0.4.3",
+            "file": "400Regular_Italic/Roboto_400Regular_Italic.ttf",
+            "sha256": "6a372c348dc20c246b92d60b9bda3c0a9ffedc129790ed3f31faf89daa99d793"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": true,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0.0341,
+          "mean": -0.0341,
+          "maxAbs": 0.0551,
+          "reference": {
+            "file": "26205970649.ttf",
+            "version": "Version 2.01;O365",
+            "sha256": "7d7ba35b867c5873274466c743a9812c7bca1a0828f137f7697ae311664f41b9"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/roboto@0.4.3",
+            "file": "700Bold_Italic/Roboto_700Bold_Italic.ttf",
+            "sha256": "c6a5e7c224d3bf6698e5d3c124f0f0220cad20d5d413920447a96f033a0292ee"
+          }
+        }
+      ]
+    },
+    {
+      "family": "Aptos Display",
+      "replacement": "Carlito",
+      "compatibility": "visual",
+      "meanAbsWidthDelta": 0.0184,
+      "meanWidthDelta": -0.0057,
+      "maxAbsWidthDelta": 0.0691,
+      "styles": 4,
+      "reference": "Aptos Display 2.01;O365",
+      "detail": [
+        {
+          "weight": 400,
+          "italic": false,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0148,
+          "mean": 0.011,
+          "maxAbs": 0.0493,
+          "reference": {
+            "file": "30169865670.ttf",
+            "version": "Version 2.01;O365",
+            "sha256": "af7a83e6f1d18b62535a8ee97939ab8653d5ac1fe1861cdb8fce829d3878d901"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/carlito@0.4.1",
+            "file": "400Regular/Carlito_400Regular.ttf",
+            "sha256": "ca019755404c45627a8566915df99068949dc32ee2bce48d6aeee7542d2a0a89"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": false,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0.0207,
+          "mean": -0.0203,
+          "maxAbs": 0.063,
+          "reference": {
+            "file": "32677218994.ttf",
+            "version": "Version 2.01;O365",
+            "sha256": "e66a3774f5c9f2799f1a7f4734f5d1ad942cc9aeb173eb2c94bc09a5f1bf1142"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/carlito@0.4.1",
+            "file": "700Bold/Carlito_700Bold.ttf",
+            "sha256": "51edbfa32d8af939913ae1f4ad0a5173e32083499218c133384638090295f0b0"
+          }
+        },
+        {
+          "weight": 400,
+          "italic": true,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0147,
+          "mean": 0.0085,
+          "maxAbs": 0.0601,
+          "reference": {
+            "file": "31638818185.ttf",
+            "version": "Version 2.01;O365",
+            "sha256": "a47bafebfe957f26bd59cfd2d063950c547cb505ce0c8e0951f496dc5eaae432"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/carlito@0.4.1",
+            "file": "400Regular_Italic/Carlito_400Regular_Italic.ttf",
+            "sha256": "074cd1b89d53765d90d0ed3b4bfe49523efaaf4f3f430c006bc3233778b0ebb5"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": true,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0.0233,
+          "mean": -0.0221,
+          "maxAbs": 0.0691,
+          "reference": {
+            "file": "25576969643.ttf",
+            "version": "Version 2.01;O365",
+            "sha256": "67efa2915e860d32365f01fae22400a0ab5a36d7942dd2024dd210910894f0f2"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/carlito@0.4.1",
+            "file": "700Bold_Italic/Carlito_700Bold_Italic.ttf",
+            "sha256": "25f5672c1985d168d6bc2973864fc5a7e374bb95fe8d0f91cff47ae17fa67691"
+          }
+        }
+      ]
+    },
+    {
+      "family": "Aptos Mono",
+      "replacement": "Roboto Mono",
+      "compatibility": "visual",
+      "skipped": "reference font not available on this host"
+    },
+    {
+      "family": "Aptos Narrow",
+      "replacement": "Carlito",
+      "compatibility": "visual",
+      "meanAbsWidthDelta": 0.0233,
+      "meanWidthDelta": 0.0222,
+      "maxAbsWidthDelta": 0.0786,
+      "styles": 4,
+      "reference": "Aptos Narrow 2.01;O365",
+      "detail": [
+        {
+          "weight": 400,
+          "italic": false,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.028,
+          "mean": 0.0277,
+          "maxAbs": 0.0628,
+          "reference": {
+            "file": "27970306811.ttf",
+            "version": "Version 2.01;O365",
+            "sha256": "ded7515aa064578485a09c11a798a05d0303bdacdd7f2de92d0521f3bc7793ba"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/carlito@0.4.1",
+            "file": "400Regular/Carlito_400Regular.ttf",
+            "sha256": "ca019755404c45627a8566915df99068949dc32ee2bce48d6aeee7542d2a0a89"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": false,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0.0133,
+          "mean": 0.011,
+          "maxAbs": 0.0445,
+          "reference": {
+            "file": "25065980124.ttf",
+            "version": "Version 2.01;O365",
+            "sha256": "217defe9a60387f83f2544d36815c7e86a9abf3fbff5aa0388f04ff3bd1a3fca"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/carlito@0.4.1",
+            "file": "700Bold/Carlito_700Bold.ttf",
+            "sha256": "51edbfa32d8af939913ae1f4ad0a5173e32083499218c133384638090295f0b0"
+          }
+        },
+        {
+          "weight": 400,
+          "italic": true,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0296,
+          "mean": 0.0291,
+          "maxAbs": 0.0786,
+          "reference": {
+            "file": "28903934312.ttf",
+            "version": "Version 2.01;O365",
+            "sha256": "20f9138ae3e5204e76e966577ed1d66e60dc66e6e39f59aafcef4579111c9c1f"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/carlito@0.4.1",
+            "file": "400Regular_Italic/Carlito_400Regular_Italic.ttf",
+            "sha256": "074cd1b89d53765d90d0ed3b4bfe49523efaaf4f3f430c006bc3233778b0ebb5"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": true,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0.0224,
+          "mean": 0.0212,
+          "maxAbs": 0.069,
+          "reference": {
+            "file": "29867269125.ttf",
+            "version": "Version 2.01;O365",
+            "sha256": "4fedf90c05d024730d52a49093ca455efcd26b7ad3465c13c10970609bc06fd9"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/carlito@0.4.1",
+            "file": "700Bold_Italic/Carlito_700Bold_Italic.ttf",
+            "sha256": "25f5672c1985d168d6bc2973864fc5a7e374bb95fe8d0f91cff47ae17fa67691"
+          }
+        }
+      ]
+    },
+    {
+      "family": "Aptos Serif",
+      "replacement": "Tinos",
+      "compatibility": "visual",
+      "skipped": "reference font not available on this host"
+    },
+    {
+      "family": "Arabic Typesetting",
+      "replacement": "Noto Naskh Arabic",
+      "compatibility": "visual",
+      "meanAbsWidthDelta": 0.6632,
+      "meanWidthDelta": 0.6632,
+      "maxAbsWidthDelta": 0.7426,
+      "styles": 1,
+      "reference": "Arabic Typesetting 6.85",
+      "detail": [
+        {
+          "weight": 400,
+          "italic": false,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.6632,
+          "mean": 0.6632,
+          "maxAbs": 0.7426,
+          "reference": {
+            "file": "arabtype.ttf",
+            "version": "Version 6.85",
+            "sha256": "4ed03578cc142089843eb8d33a01a1533382bca42a9e4aa71d804305bb89a8da"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/noto-naskh-arabic@0.4.5",
+            "file": "400Regular/NotoNaskhArabic_400Regular.ttf",
+            "sha256": "706b4580c025f6c75ec1c06013e17f00a23ec1780091b77a5a5b339469bda94d"
+          }
+        }
+      ]
+    },
+    {
+      "family": "Arial",
+      "replacement": "Arimo",
+      "compatibility": "metric",
+      "meanAbsWidthDelta": 0,
+      "meanWidthDelta": 0,
+      "maxAbsWidthDelta": 0,
+      "styles": 4,
+      "reference": "Arial 7.06",
+      "detail": [
+        {
+          "weight": 400,
+          "italic": false,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0,
+          "mean": 0,
+          "maxAbs": 0,
+          "reference": {
+            "file": "arial.ttf",
+            "version": "Version 7.06",
+            "sha256": "b3658eadae55e682b5f69eb64c439c1ecc8f196c0bb8d4756d145d13bc86476a"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/arimo@0.4.3",
+            "file": "400Regular/Arimo_400Regular.ttf",
+            "sha256": "88cc899855d30f9c779b73c3319d0e077b098f927187aafce11ca029add707a6"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": false,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0,
+          "mean": 0,
+          "maxAbs": 0,
+          "reference": {
+            "file": "arialbd.ttf",
+            "version": "Version 7.06",
+            "sha256": "e8f4e3baf6cc35fed6fcce3a540e8b39e8f6cda1d22a28f2ec8f526fef7a43f5"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/arimo@0.4.3",
+            "file": "700Bold/Arimo_700Bold.ttf",
+            "sha256": "ec96ac9fdd94766f66f6140c1375bf011577558f88d43f76b3b59307d2a6bca3"
+          }
+        },
+        {
+          "weight": 400,
+          "italic": true,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0,
+          "mean": 0,
+          "maxAbs": 0,
+          "reference": {
+            "file": "ariali.ttf",
+            "version": "Version 7.06",
+            "sha256": "86b32db9a06f9694e2a3760c42e5117bcdc5cc1255bb5186ca8ce0305e22f288"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/arimo@0.4.3",
+            "file": "400Regular_Italic/Arimo_400Regular_Italic.ttf",
+            "sha256": "6bd2c6a6fa87f4566cf0a92c5834884597acbd7be9719e550837865ac4167a42"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": true,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0,
+          "mean": 0,
+          "maxAbs": 0,
+          "reference": {
+            "file": "arialbi.ttf",
+            "version": "Version 7.06",
+            "sha256": "267a411525980d648f10a7222a6ff1ebe4d4feeefbf9b3100cae2b5cfab5594a"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/arimo@0.4.3",
+            "file": "700Bold_Italic/Arimo_700Bold_Italic.ttf",
+            "sha256": "b42b19c10bf5d526f00068303a643282c3df55a79c6fa2eea80b4a078a4a705a"
+          }
+        }
+      ]
+    },
+    {
+      "family": "Arial Black",
+      "replacement": "Montserrat",
+      "compatibility": "visual",
+      "weight": 900,
+      "meanAbsWidthDelta": 0.0075,
+      "meanWidthDelta": -0.0029,
+      "maxAbsWidthDelta": 0.0281,
+      "styles": 1,
+      "reference": "Arial Black 5.23",
+      "detail": [
+        {
+          "weight": 900,
+          "italic": false,
+          "replacementWeight": 900,
+          "strings": 300,
+          "meanAbs": 0.0075,
+          "mean": -0.0029,
+          "maxAbs": 0.0281,
+          "reference": {
+            "file": "ariblk.ttf",
+            "version": "Version 5.23",
+            "sha256": "10df702864b1f89cb29ba0d6b97c04228338d16807e13e8d8c74b91aba5e5f23"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/montserrat@0.4.2",
+            "file": "900Black/Montserrat_900Black.ttf",
+            "sha256": "b48e6741b9889ede4ffe3d8acfda3e6917c62127537b19fe7206cba04e6ebb63"
+          }
+        }
+      ]
+    },
+    {
+      "family": "Arial Narrow",
+      "replacement": "Archivo Narrow",
+      "compatibility": "visual",
+      "meanAbsWidthDelta": 0.0038,
+      "meanWidthDelta": 0.0035,
+      "maxAbsWidthDelta": 0.0431,
+      "styles": 4,
+      "reference": "Arial Narrow 2.40",
+      "detail": [
+        {
+          "weight": 400,
+          "italic": false,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0073,
+          "mean": 0.0072,
+          "maxAbs": 0.0431,
+          "reference": {
+            "file": "ARIALN.TTF",
+            "version": "Version 2.40",
+            "sha256": "cad552553cf2a75afca01955751aaa115e2a64fd6c6eea42e1fbd236630b7e0a"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/archivo-narrow@0.4.2",
+            "file": "400Regular/ArchivoNarrow_400Regular.ttf",
+            "sha256": "a6f42674111326d8a14897d87de4ce667090560941afc3e190709021982abf5a"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": false,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0.0002,
+          "mean": -0.0002,
+          "maxAbs": 0.006,
+          "reference": {
+            "file": "ARIALNB.TTF",
+            "version": "Version 2.40",
+            "sha256": "6c4a4b643461def5411e0217b74a625dcf2fb681252ef5da1db0af4eae80aa7e"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/archivo-narrow@0.4.2",
+            "file": "700Bold/ArchivoNarrow_700Bold.ttf",
+            "sha256": "bc2698008c4fa878f17b9ffb64c6fd2f0c83ca1f69cda591253221efb357a78d"
+          }
+        },
+        {
+          "weight": 400,
+          "italic": true,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0073,
+          "mean": 0.0072,
+          "maxAbs": 0.0431,
+          "reference": {
+            "file": "ARIALNI.TTF",
+            "version": "Version 2.40",
+            "sha256": "faf73aa7ce40b77ad19c09507a2263fe3f3ce9fa5642e8a1cd54fb3c9f52d599"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/archivo-narrow@0.4.2",
+            "file": "400Regular_Italic/ArchivoNarrow_400Regular_Italic.ttf",
+            "sha256": "61653c68a59fc5f0a660f2cfec0bad7344a626b8177649370e94cb732eabbb37"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": true,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0.0002,
+          "mean": -0.0002,
+          "maxAbs": 0.006,
+          "reference": {
+            "file": "ARIALNBI.TTF",
+            "version": "Version 2.40",
+            "sha256": "161b859efd20c69ddebb23012a49f4f2030d56a0c1b9bcfd4df753217ce3e358"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/archivo-narrow@0.4.2",
+            "file": "700Bold_Italic/ArchivoNarrow_700Bold_Italic.ttf",
+            "sha256": "dd588c564e4dec669335f6fea01b1f229f7629c3e836178e3ad9db8d6e9d6228"
+          }
+        }
+      ]
+    },
+    {
+      "family": "Baskerville Old Face",
+      "replacement": "Libre Caslon Text",
+      "compatibility": "visual",
+      "meanAbsWidthDelta": 0.1923,
+      "meanWidthDelta": 0.1923,
+      "maxAbsWidthDelta": 0.2371,
+      "styles": 1,
+      "reference": "Baskerville Old Face 1.51",
+      "detail": [
+        {
+          "weight": 400,
+          "italic": false,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.1923,
+          "mean": 0.1923,
+          "maxAbs": 0.2371,
+          "reference": {
+            "file": "BASKVILL.TTF",
+            "version": "Version 1.51",
+            "sha256": "529c972a6d5c1992c76e908255f655f98989b74b146058c90555af6d925a1715"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/libre-caslon-text@0.4.0",
+            "file": "400Regular/LibreCaslonText_400Regular.ttf",
+            "sha256": "912cda295d683d283f65944563ef2204413ef85bf49748482a5e263c4d56afd4"
+          }
+        }
+      ]
+    },
+    {
+      "family": "Batang",
+      "replacement": "Noto Sans KR",
+      "compatibility": "visual",
+      "skipped": "reference font not available on this host"
+    },
+    {
+      "family": "BatangChe",
+      "replacement": "Noto Sans KR",
+      "compatibility": "visual",
+      "skipped": "reference font not available on this host"
+    },
+    {
+      "family": "Bodoni MT",
+      "replacement": "Playfair Display",
+      "compatibility": "visual",
+      "meanAbsWidthDelta": 0.0687,
+      "meanWidthDelta": 0.0556,
+      "maxAbsWidthDelta": 0.1987,
+      "styles": 4,
+      "reference": "Bodoni MT 2.10",
+      "detail": [
+        {
+          "weight": 400,
+          "italic": false,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0622,
+          "mean": 0.0621,
+          "maxAbs": 0.1574,
+          "reference": {
+            "file": "BOD_R.TTF",
+            "version": "Version 2.10",
+            "sha256": "17b06990413ab318b9e9f2c05d3816059f56d7a678f4712849a3318a9e5e7c7a"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/playfair-display@0.4.2",
+            "file": "400Regular/PlayfairDisplay_400Regular.ttf",
+            "sha256": "861f838d481d28cbbd4793e45dc02f01d04c81e06ed98ab2779ca152ace9f27b"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": false,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0.1213,
+          "mean": 0.1213,
+          "maxAbs": 0.1987,
+          "reference": {
+            "file": "BOD_B.TTF",
+            "version": "Version 2.10",
+            "sha256": "051b0031db491fa893feddd485b917b24a9d12f15a1e99e782c2420da0a3ffb5"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/playfair-display@0.4.2",
+            "file": "700Bold/PlayfairDisplay_700Bold.ttf",
+            "sha256": "4f3b87b5aa297eed5e5a48dbd9941356ca0313d4725b02c29a298cb042b7b31b"
+          }
+        },
+        {
+          "weight": 400,
+          "italic": true,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0653,
+          "mean": 0.0653,
+          "maxAbs": 0.1464,
+          "reference": {
+            "file": "BOD_I.TTF",
+            "version": "Version 2.10",
+            "sha256": "960458b4c0851b8b9f1d047fe50f7fa01ddfbecaec692521d262660882e9596a"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/playfair-display@0.4.2",
+            "file": "400Regular_Italic/PlayfairDisplay_400Regular_Italic.ttf",
+            "sha256": "40a6afa92220254c2c426ccef129d3615dd19e4c591fbfa997e5f28ebba8302c"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": true,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0.0263,
+          "mean": -0.0263,
+          "maxAbs": 0.0717,
+          "reference": {
+            "file": "BOD_BI.TTF",
+            "version": "Version 2.10",
+            "sha256": "9729e2ae73b15871db606a18a48b8674ce2bae35d76a511d3510c4a9db2385ef"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/playfair-display@0.4.2",
+            "file": "700Bold_Italic/PlayfairDisplay_700Bold_Italic.ttf",
+            "sha256": "db5737059ff617317aca97e9e35730f8933a2e187c75bbe2deaf45c4d72f5b1d"
+          }
+        }
+      ]
+    },
+    {
+      "family": "Book Antiqua",
+      "replacement": "PT Serif",
+      "compatibility": "visual",
+      "meanAbsWidthDelta": 0.024,
+      "meanWidthDelta": 0.0193,
+      "maxAbsWidthDelta": 0.0778,
+      "styles": 4,
+      "reference": "Book Antiqua 2.35",
+      "detail": [
+        {
+          "weight": 400,
+          "italic": false,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.009,
+          "mean": -0.0057,
+          "maxAbs": 0.0346,
+          "reference": {
+            "file": "BKANT.TTF",
+            "version": "Version 2.35",
+            "sha256": "c019f155a0004760f32079c22c29ef0ddd223d0c2c79e2487122e66d38a53b32"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/pt-serif@0.4.1",
+            "file": "400Regular/PTSerif_400Regular.ttf",
+            "sha256": "13d9f82f41fcd7d2813dc0a44a9639dec0c1e9a922ab96c7de8dec467c3dec55"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": false,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0.0399,
+          "mean": 0.0399,
+          "maxAbs": 0.0778,
+          "reference": {
+            "file": "ANTQUAB.TTF",
+            "version": "Version 2.35",
+            "sha256": "134a9f8ecf618660305d7d34b6905375c1d5d7838ea15cdb2789ba94317f4117"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/pt-serif@0.4.1",
+            "file": "700Bold/PTSerif_700Bold.ttf",
+            "sha256": "e868267095de0f61d908dfc18de98c5fc7b9185c8505a814f0fbb8eac627ecc5"
+          }
+        },
+        {
+          "weight": 400,
+          "italic": true,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0377,
+          "mean": 0.0376,
+          "maxAbs": 0.0706,
+          "reference": {
+            "file": "ANTQUAI.TTF",
+            "version": "Version 2.35",
+            "sha256": "6b00590bd7a52a94e9e90e35a28c1d2fa03f83f458d2f2dfbced70a9c1ea0c80"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/pt-serif@0.4.1",
+            "file": "400Regular_Italic/PTSerif_400Regular_Italic.ttf",
+            "sha256": "b75d426f372d18a53a4f7206b1cb90816432f699ba106ed8d1a79aef79622666"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": true,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0.0093,
+          "mean": 0.0054,
+          "maxAbs": 0.0357,
+          "reference": {
+            "file": "ANTQUABI.TTF",
+            "version": "Version 2.35",
+            "sha256": "bc546e3e96f8cdd9e6cf02eb5c8ac5551ef20ef4639ff701c338ea281f56fbd0"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/pt-serif@0.4.1",
+            "file": "700Bold_Italic/PTSerif_700Bold_Italic.ttf",
+            "sha256": "8c97cd67f86c470eec73f5795affc6303c0fadf682df48f0b0d837a3900cfbce"
+          }
+        }
+      ]
+    },
+    {
+      "family": "Bookman Old Style",
+      "replacement": "Libre Caslon Text",
+      "compatibility": "visual",
+      "meanAbsWidthDelta": 0.0411,
+      "meanWidthDelta": -0.0381,
+      "maxAbsWidthDelta": 0.1396,
+      "styles": 4,
+      "reference": "Bookman Old Style 2.35/2.36",
+      "detail": [
+        {
+          "weight": 300,
+          "italic": false,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0307,
+          "mean": -0.0305,
+          "maxAbs": 0.0619,
+          "reference": {
+            "file": "BOOKOS.TTF",
+            "version": "Version 2.35",
+            "sha256": "8f2df7dbc1f2b790f6e6fdd24dbb6c2a96b6e554ba2031c3ab0fe34d322a1b3e"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/libre-caslon-text@0.4.0",
+            "file": "400Regular/LibreCaslonText_400Regular.ttf",
+            "sha256": "912cda295d683d283f65944563ef2204413ef85bf49748482a5e263c4d56afd4"
+          }
+        },
+        {
+          "weight": 600,
+          "italic": false,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0.0106,
+          "mean": -0.0043,
+          "maxAbs": 0.0395,
+          "reference": {
+            "file": "BOOKOSB.TTF",
+            "version": "Version 2.35",
+            "sha256": "ec95c7380ab7f92ebc75bba6c56a80646fcb450ef6cccc631852a8b97be75c55"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/libre-caslon-text@0.4.0",
+            "file": "700Bold/LibreCaslonText_700Bold.ttf",
+            "sha256": "ddff46045846dfc35f20db138117a2bf249bb75b9336c4ee823b162d22ac82e6"
+          }
+        },
+        {
+          "weight": 600,
+          "italic": true,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.1102,
+          "mean": -0.1102,
+          "maxAbs": 0.1396,
+          "reference": {
+            "file": "BOOKOSBI.TTF",
+            "version": "Version 2.35",
+            "sha256": "2de5e34daf966be8e165bd5604ac0714a7946ea2a0a08f86ff04e687ed54d8d7"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/libre-caslon-text@0.4.0",
+            "file": "400Regular_Italic/LibreCaslonText_400Regular_Italic.ttf",
+            "sha256": "a32b7d8314e5f7e6dd919d1df2334ecc7b92e54173c8cc421ef8e9e4bae97061"
+          }
+        },
+        {
+          "weight": 300,
+          "italic": true,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.013,
+          "mean": -0.0073,
+          "maxAbs": 0.0519,
+          "reference": {
+            "file": "BOOKOSI.TTF",
+            "version": "Version 2.36",
+            "sha256": "ec990c65df2ba6ead654bcb69f7f88bb76910b029f2edf663710cae3fde5f7dd"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/libre-caslon-text@0.4.0",
+            "file": "400Regular_Italic/LibreCaslonText_400Regular_Italic.ttf",
+            "sha256": "a32b7d8314e5f7e6dd919d1df2334ecc7b92e54173c8cc421ef8e9e4bae97061"
+          }
+        }
+      ]
+    },
+    {
+      "family": "Calibri",
+      "replacement": "Carlito",
+      "compatibility": "metric",
+      "meanAbsWidthDelta": 0,
+      "meanWidthDelta": 0,
+      "maxAbsWidthDelta": 0.0026,
+      "styles": 4,
+      "reference": "Calibri 6.27",
+      "detail": [
+        {
+          "weight": 400,
+          "italic": false,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0,
+          "mean": 0,
+          "maxAbs": 0,
+          "reference": {
+            "file": "calibri.ttf",
+            "version": "Version 6.27",
+            "sha256": "57e93ff143572bcc092c1f56202d43ddc07bb119aa104c6d7af163470fb551f6"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/carlito@0.4.1",
+            "file": "400Regular/Carlito_400Regular.ttf",
+            "sha256": "ca019755404c45627a8566915df99068949dc32ee2bce48d6aeee7542d2a0a89"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": false,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0,
+          "mean": 0,
+          "maxAbs": 0.0026,
+          "reference": {
+            "file": "calibrib.ttf",
+            "version": "Version 6.27",
+            "sha256": "0a8296747536ead27d5f48f67e911cc3b207742b3f704e66995251d12fd422e5"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/carlito@0.4.1",
+            "file": "700Bold/Carlito_700Bold.ttf",
+            "sha256": "51edbfa32d8af939913ae1f4ad0a5173e32083499218c133384638090295f0b0"
+          }
+        },
+        {
+          "weight": 400,
+          "italic": true,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0,
+          "mean": 0,
+          "maxAbs": 0,
+          "reference": {
+            "file": "calibrii.ttf",
+            "version": "Version 6.27",
+            "sha256": "7f150e9eabe5db3e1b0f9469dca5c96176bc2fbb306dc9d48b7029dc69c52763"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/carlito@0.4.1",
+            "file": "400Regular_Italic/Carlito_400Regular_Italic.ttf",
+            "sha256": "074cd1b89d53765d90d0ed3b4bfe49523efaaf4f3f430c006bc3233778b0ebb5"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": true,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0,
+          "mean": 0,
+          "maxAbs": 0.0002,
+          "reference": {
+            "file": "calibriz.ttf",
+            "version": "Version 6.27",
+            "sha256": "760539bfedbe24e7853ca8a621d9cb1f3de52036c116e81aae36b33c4ab60a7c"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/carlito@0.4.1",
+            "file": "700Bold_Italic/Carlito_700Bold_Italic.ttf",
+            "sha256": "25f5672c1985d168d6bc2973864fc5a7e374bb95fe8d0f91cff47ae17fa67691"
+          }
+        }
+      ]
+    },
+    {
+      "family": "Calibri Light",
+      "replacement": "Carlito",
+      "compatibility": "visual",
+      "meanAbsWidthDelta": 0.0144,
+      "meanWidthDelta": 0.0144,
+      "maxAbsWidthDelta": 0.0225,
+      "styles": 2,
+      "reference": "Calibri Light 6.27",
+      "detail": [
+        {
+          "weight": 300,
+          "italic": false,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0135,
+          "mean": 0.0135,
+          "maxAbs": 0.0205,
+          "reference": {
+            "file": "calibril.ttf",
+            "version": "Version 6.27",
+            "sha256": "2db491080305b349588b9851fb6fe960eee04cd7c1097784a987287d782f0a54"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/carlito@0.4.1",
+            "file": "400Regular/Carlito_400Regular.ttf",
+            "sha256": "ca019755404c45627a8566915df99068949dc32ee2bce48d6aeee7542d2a0a89"
+          }
+        },
+        {
+          "weight": 300,
+          "italic": true,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0153,
+          "mean": 0.0153,
+          "maxAbs": 0.0225,
+          "reference": {
+            "file": "calibrili.ttf",
+            "version": "Version 6.27",
+            "sha256": "64ca9b15ca79927c3c4c69094bb41f78e5f0d79e9501d9d381a8794b220eead1"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/carlito@0.4.1",
+            "file": "400Regular_Italic/Carlito_400Regular_Italic.ttf",
+            "sha256": "074cd1b89d53765d90d0ed3b4bfe49523efaaf4f3f430c006bc3233778b0ebb5"
+          }
+        }
+      ]
+    },
+    {
+      "family": "Cambria",
+      "replacement": "Caladea",
+      "compatibility": "visual",
+      "meanAbsWidthDelta": 0.0269,
+      "meanWidthDelta": -0.0269,
+      "maxAbsWidthDelta": 0.0647,
+      "styles": 4,
+      "reference": "Cambria 6.99/6.98",
+      "detail": [
+        {
+          "weight": 400,
+          "italic": false,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0437,
+          "mean": -0.0437,
+          "maxAbs": 0.0647,
+          "reference": {
+            "file": "cambria.ttc",
+            "version": "Version 6.99",
+            "sha256": "84e70ccc1664482f4a960442c7a166c91a1b2cf98ff88c33cb73f79403f66d7b"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/caladea@0.4.2",
+            "file": "400Regular/Caladea_400Regular.ttf",
+            "sha256": "59faf27a90dee5c1b7813b12b26c725ea88adc1bfe37b0ac8e0b8b32a5732c2a"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": false,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0.0219,
+          "mean": -0.0219,
+          "maxAbs": 0.0366,
+          "reference": {
+            "file": "cambriab.ttf",
+            "version": "Version 6.98",
+            "sha256": "6685c657a7e292083e28f19bbf1a1e90509ce3e1130dbc4ed1c62ba3f9140543"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/caladea@0.4.2",
+            "file": "700Bold/Caladea_700Bold.ttf",
+            "sha256": "11d1e1dc461d1e491b6a396d91934c3bb09d06a77cc3d21ad0b10346c39c3ec2"
+          }
+        },
+        {
+          "weight": 400,
+          "italic": true,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0337,
+          "mean": -0.0337,
+          "maxAbs": 0.0537,
+          "reference": {
+            "file": "cambriai.ttf",
+            "version": "Version 6.98",
+            "sha256": "6905f0ac846d1ec4326cd14a46cb7379204940aa293b098ee4c1a69723bbd165"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/caladea@0.4.2",
+            "file": "400Regular_Italic/Caladea_400Regular_Italic.ttf",
+            "sha256": "669e65b265d40899b59d7f3531ca136b7e0fda80a3d1b5d47bbe7825be81fbe3"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": true,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0.0085,
+          "mean": -0.0085,
+          "maxAbs": 0.0175,
+          "reference": {
+            "file": "cambriaz.ttf",
+            "version": "Version 6.98",
+            "sha256": "fa90f376ad37f308a819b341c8185f788d30a1012829278592eab45a41818d1a"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/caladea@0.4.2",
+            "file": "700Bold_Italic/Caladea_700Bold_Italic.ttf",
+            "sha256": "93d7c2003fe3fd8381cbd518af6cc2f4b510a37c7741c49a95893b6da8edbbc7"
+          }
+        }
+      ]
+    },
+    {
+      "family": "Candara",
+      "replacement": "Source Sans 3",
+      "compatibility": "visual",
+      "meanAbsWidthDelta": 0.0195,
+      "meanWidthDelta": 0.0064,
+      "maxAbsWidthDelta": 0.0523,
+      "styles": 4,
+      "reference": "Candara 5.64",
+      "detail": [
+        {
+          "weight": 400,
+          "italic": false,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0179,
+          "mean": -0.0175,
+          "maxAbs": 0.0523,
+          "reference": {
+            "file": "Candara.ttf",
+            "version": "Version 5.64",
+            "sha256": "002c1e3378d02ed7dbdb3df1c94d433413a56f3f2f3aa8315a57720ee851dc45"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/source-sans-3@0.4.1",
+            "file": "400Regular/SourceSans3_400Regular.ttf",
+            "sha256": "393fb5b878ceed04aebc34b097e853ae5138c51d0c34b496ce8e2b47e0d0b94a"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": false,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0.0226,
+          "mean": 0.0226,
+          "maxAbs": 0.0491,
+          "reference": {
+            "file": "Candarab.ttf",
+            "version": "Version 5.64",
+            "sha256": "ec0dce5170aaaf2cf485d4ba39d86fbba1dd1c76d9140cbf75a6b84b50fb20de"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/source-sans-3@0.4.1",
+            "file": "700Bold/SourceSans3_700Bold.ttf",
+            "sha256": "7109021766e915ecd9721e28d11dfc732d57affda49e4ca15bb6d1529add7fdd"
+          }
+        },
+        {
+          "weight": 400,
+          "italic": true,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0106,
+          "mean": -0.0063,
+          "maxAbs": 0.0412,
+          "reference": {
+            "file": "Candarai.ttf",
+            "version": "Version 5.64",
+            "sha256": "c165dbbc35bbf1fefae865c3e6b02404c8d182074fe04e78e221bab7d35ce3f8"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/source-sans-3@0.4.1",
+            "file": "400Regular_Italic/SourceSans3_400Regular_Italic.ttf",
+            "sha256": "f17facaa9ed293bb38526db3638e240510b7393c37ffa70e5c48f39575de44ab"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": true,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0.0267,
+          "mean": 0.0267,
+          "maxAbs": 0.0483,
+          "reference": {
+            "file": "Candaraz.ttf",
+            "version": "Version 5.64",
+            "sha256": "a873581d9f0886441bd45c5e425a734e86e063ef583b9cf8081b1aa03b871f1c"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/source-sans-3@0.4.1",
+            "file": "700Bold_Italic/SourceSans3_700Bold_Italic.ttf",
+            "sha256": "b66029c11e09452eaa321abe93883970bc0f3eacc347a1c9d5828db9d379cbb0"
+          }
+        }
+      ]
+    },
+    {
+      "family": "Century Gothic",
+      "replacement": "Work Sans",
+      "compatibility": "visual",
+      "meanAbsWidthDelta": 0.0255,
+      "meanWidthDelta": 0.0188,
+      "maxAbsWidthDelta": 0.1549,
+      "styles": 4,
+      "reference": "Century Gothic 2.35",
+      "detail": [
+        {
+          "weight": 400,
+          "italic": false,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.022,
+          "mean": 0.0135,
+          "maxAbs": 0.1363,
+          "reference": {
+            "file": "GOTHIC.TTF",
+            "version": "Version 2.35",
+            "sha256": "3a9cbb5d75b2a2b0d22dc94571608e4e9dc7b88e825374985880c5722c1c9e5f"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/work-sans@0.4.2",
+            "file": "400Regular/WorkSans_400Regular.ttf",
+            "sha256": "e67985a843df0d3cdee51a3d0f329eb1774a344ad9ff0c9ab923751f1577e2a4"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": false,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0.0315,
+          "mean": 0.0295,
+          "maxAbs": 0.1549,
+          "reference": {
+            "file": "GOTHICB.TTF",
+            "version": "Version 2.35",
+            "sha256": "90cb613b492874a560c0ff18a3402b1d24fb7e846dff11295d5c4644d6c75e83"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/work-sans@0.4.2",
+            "file": "700Bold/WorkSans_700Bold.ttf",
+            "sha256": "240d125fc9f8561363dc1ea3f513501253bd70942f41468f48f0b0cafb0c82e2"
+          }
+        },
+        {
+          "weight": 400,
+          "italic": true,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.016,
+          "mean": 0.001,
+          "maxAbs": 0.1086,
+          "reference": {
+            "file": "GOTHICI.TTF",
+            "version": "Version 2.35",
+            "sha256": "6cf57be6f9d0bd60bd5dc6eee7c11e87e5b19df210156495a524b974185b9fb9"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/work-sans@0.4.2",
+            "file": "400Regular_Italic/WorkSans_400Regular_Italic.ttf",
+            "sha256": "6b7f7002e0b0c8b261fe878658ef5551e3e59d9f6b609b04efb90dde1e2c1ada"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": true,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0.0323,
+          "mean": 0.0311,
+          "maxAbs": 0.146,
+          "reference": {
+            "file": "GOTHICBI.TTF",
+            "version": "Version 2.35",
+            "sha256": "2dc5949d57d2e172601fb6f5093c1fbf15a463e29ed47c4c8ff2434baf1c2b19"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/work-sans@0.4.2",
+            "file": "700Bold_Italic/WorkSans_700Bold_Italic.ttf",
+            "sha256": "a5b2cad813df0aaa7d16621f2e93b5117c25e9bc788bc9a3ad218e9d6348ce34"
+          }
+        }
+      ]
+    },
+    {
+      "family": "Century Schoolbook",
+      "replacement": "Gelasio",
+      "compatibility": "visual",
+      "meanAbsWidthDelta": 0.0266,
+      "meanWidthDelta": -0.0175,
+      "maxAbsWidthDelta": 0.0753,
+      "styles": 4,
+      "reference": "Century Schoolbook 2.35",
+      "detail": [
+        {
+          "weight": 400,
+          "italic": false,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0506,
+          "mean": -0.0506,
+          "maxAbs": 0.0753,
+          "reference": {
+            "file": "CENSCBK.TTF",
+            "version": "Version 2.35",
+            "sha256": "8209f9295b20a9c3d0f7e5163d7ef9946353e653c40f25e7ef9f905856ec246a"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/gelasio@0.4.1",
+            "file": "400Regular/Gelasio_400Regular.ttf",
+            "sha256": "44aae47442ad39e623788930f38f1e702febcf094c284c5058bf49f7da23de9a"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": false,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0.0185,
+          "mean": -0.0184,
+          "maxAbs": 0.0375,
+          "reference": {
+            "file": "SCHLBKB.TTF",
+            "version": "Version 2.35",
+            "sha256": "a13c13a72c0aafc2be6baf52fd28b1745af6f0fd5fbd365499c7298f4ee416a1"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/gelasio@0.4.1",
+            "file": "700Bold/Gelasio_700Bold.ttf",
+            "sha256": "fade86eca52203e2ccaf9aee494aa4b0335589879738c47e9d92a53630696d10"
+          }
+        },
+        {
+          "weight": 400,
+          "italic": true,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0192,
+          "mean": -0.0189,
+          "maxAbs": 0.0496,
+          "reference": {
+            "file": "SCHLBKI.TTF",
+            "version": "Version 2.35",
+            "sha256": "73ff30499a0c673440e6df6e134e0731e586112ab99a0553f7c4dbb28f84366a"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/gelasio@0.4.1",
+            "file": "400Regular_Italic/Gelasio_400Regular_Italic.ttf",
+            "sha256": "2b24b3d41c06d030a31db6610454595775e572a2992d73171cab783407d202a8"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": true,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0.0183,
+          "mean": 0.0177,
+          "maxAbs": 0.0421,
+          "reference": {
+            "file": "SCHLBKBI.TTF",
+            "version": "Version 2.35",
+            "sha256": "8decca6df27be6bb2bd15801dd9cde62502bf4fb20efd835038861455ffe763b"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/gelasio@0.4.1",
+            "file": "700Bold_Italic/Gelasio_700Bold_Italic.ttf",
+            "sha256": "24f1cb5cf5f765acc5d744a54a6c5dfe34723e58842f5b1b696716497e032852"
+          }
+        }
+      ]
+    },
+    {
+      "family": "Consolas",
+      "replacement": "Roboto Mono",
+      "compatibility": "visual",
+      "meanAbsWidthDelta": 0.0795,
+      "meanWidthDelta": 0.0795,
+      "maxAbsWidthDelta": 0.0915,
+      "styles": 4,
+      "reference": "Consolas 7.01",
+      "detail": [
+        {
+          "weight": 400,
+          "italic": false,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0915,
+          "mean": 0.0915,
+          "maxAbs": 0.0915,
+          "reference": {
+            "file": "consola.ttf",
+            "version": "Version 7.01",
+            "sha256": "cf00b507b3286870cc5064ebd0633c303f70b491a4af25eec2d32df413db0179"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/roboto-mono@0.4.2",
+            "file": "400Regular/RobotoMono_400Regular.ttf",
+            "sha256": "e4bf45837847d4abfa5a502b807a83393aa138727bdb9ea9c93fb17d53208d95"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": false,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0.0915,
+          "mean": 0.0915,
+          "maxAbs": 0.0915,
+          "reference": {
+            "file": "consolab.ttf",
+            "version": "Version 7.01",
+            "sha256": "7e8de70c92a891722bd3fbd623db005caab2bfe267e5dab5be46b95a44e0c7f1"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/roboto-mono@0.4.2",
+            "file": "700Bold/RobotoMono_700Bold.ttf",
+            "sha256": "92649d819cc4c20480b23a47aaa111769924eb31c66b6ecdcf6f573662558c83"
+          }
+        },
+        {
+          "weight": 400,
+          "italic": true,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0675,
+          "mean": 0.0675,
+          "maxAbs": 0.0675,
+          "reference": {
+            "file": "consolai.ttf",
+            "version": "Version 7.01",
+            "sha256": "0b5b0484cf69ae973bd39380069f141271a4c9299b8885fa2d13f42aadbefef9"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/roboto-mono@0.4.2",
+            "file": "400Regular_Italic/RobotoMono_400Regular_Italic.ttf",
+            "sha256": "82629b0b8a721ce1a79942f68b39438512b406dad2a4a7476c94b72e7794b2f4"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": true,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0.0675,
+          "mean": 0.0675,
+          "maxAbs": 0.0675,
+          "reference": {
+            "file": "consolaz.ttf",
+            "version": "Version 7.01",
+            "sha256": "9bc225ec52aa8f4b88b98bb735b1908bd72c9e31a12139fafcc1bd6c86bed3b4"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/roboto-mono@0.4.2",
+            "file": "700Bold_Italic/RobotoMono_700Bold_Italic.ttf",
+            "sha256": "5bc2918abfd7399aff52e0a7ee22c97d544601f7ae8ff3b49ad176497acff1ed"
+          }
+        }
+      ]
+    },
+    {
+      "family": "Constantia",
+      "replacement": "PT Serif",
+      "compatibility": "visual",
+      "meanAbsWidthDelta": 0.0229,
+      "meanWidthDelta": 0.0036,
+      "maxAbsWidthDelta": 0.0577,
+      "styles": 4,
+      "reference": "Constantia 5.93",
+      "detail": [
+        {
+          "weight": 400,
+          "italic": false,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0324,
+          "mean": 0.0324,
+          "maxAbs": 0.049,
+          "reference": {
+            "file": "constan.ttf",
+            "version": "Version 5.93",
+            "sha256": "495577bf8ef74deab6ecc2e7acf63cd966184148f9bc2044a1068cd58501577e"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/pt-serif@0.4.1",
+            "file": "400Regular/PTSerif_400Regular.ttf",
+            "sha256": "13d9f82f41fcd7d2813dc0a44a9639dec0c1e9a922ab96c7de8dec467c3dec55"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": false,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0.0191,
+          "mean": 0.0191,
+          "maxAbs": 0.0461,
+          "reference": {
+            "file": "constanb.ttf",
+            "version": "Version 5.93",
+            "sha256": "b6c66a1858370fe575629e19d53c05350738bf5105e18ceac07fe9efc9cd008d"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/pt-serif@0.4.1",
+            "file": "700Bold/PTSerif_700Bold.ttf",
+            "sha256": "e868267095de0f61d908dfc18de98c5fc7b9185c8505a814f0fbb8eac627ecc5"
+          }
+        },
+        {
+          "weight": 400,
+          "italic": true,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0054,
+          "mean": -0.0025,
+          "maxAbs": 0.0297,
+          "reference": {
+            "file": "constani.ttf",
+            "version": "Version 5.93",
+            "sha256": "2314a03c53506fa79525bc479ea4be9c036d1ebd86a1ffb5837ca5b43ff51f07"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/pt-serif@0.4.1",
+            "file": "400Regular_Italic/PTSerif_400Regular_Italic.ttf",
+            "sha256": "b75d426f372d18a53a4f7206b1cb90816432f699ba106ed8d1a79aef79622666"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": true,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0.0345,
+          "mean": -0.0345,
+          "maxAbs": 0.0577,
+          "reference": {
+            "file": "constanz.ttf",
+            "version": "Version 5.93",
+            "sha256": "9311aadcbd919746f50d222fa0215fb44266d6993221c14a196f0725fdae464f"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/pt-serif@0.4.1",
+            "file": "700Bold_Italic/PTSerif_700Bold_Italic.ttf",
+            "sha256": "8c97cd67f86c470eec73f5795affc6303c0fadf682df48f0b0d837a3900cfbce"
+          }
+        }
+      ]
+    },
+    {
+      "family": "Corbel",
+      "replacement": "Source Sans 3",
+      "compatibility": "visual",
+      "meanAbsWidthDelta": 0.0157,
+      "meanWidthDelta": 0.0151,
+      "maxAbsWidthDelta": 0.0521,
+      "styles": 4,
+      "reference": "Corbel 6.01",
+      "detail": [
+        {
+          "weight": 400,
+          "italic": false,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0079,
+          "mean": 0.0064,
+          "maxAbs": 0.0276,
+          "reference": {
+            "file": "corbel.ttf",
+            "version": "Version 6.01",
+            "sha256": "a183b77b655df66793639af7874828fb50f748dc4af57ae40f758156f7f34634"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/source-sans-3@0.4.1",
+            "file": "400Regular/SourceSans3_400Regular.ttf",
+            "sha256": "393fb5b878ceed04aebc34b097e853ae5138c51d0c34b496ce8e2b47e0d0b94a"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": false,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0.0195,
+          "mean": 0.0192,
+          "maxAbs": 0.0521,
+          "reference": {
+            "file": "corbelb.ttf",
+            "version": "Version 6.01",
+            "sha256": "fa008372f8a94945d0daef9daf0bfb9e3fba3a25fd17f2607d47ac6861bd0303"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/source-sans-3@0.4.1",
+            "file": "700Bold/SourceSans3_700Bold.ttf",
+            "sha256": "7109021766e915ecd9721e28d11dfc732d57affda49e4ca15bb6d1529add7fdd"
+          }
+        },
+        {
+          "weight": 400,
+          "italic": true,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0196,
+          "mean": 0.0193,
+          "maxAbs": 0.0416,
+          "reference": {
+            "file": "corbeli.ttf",
+            "version": "Version 6.01",
+            "sha256": "9be778c9ed418770f6b5a02064d9c0b47a8fdea1137618f0bec9ac4072430a45"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/source-sans-3@0.4.1",
+            "file": "400Regular_Italic/SourceSans3_400Regular_Italic.ttf",
+            "sha256": "f17facaa9ed293bb38526db3638e240510b7393c37ffa70e5c48f39575de44ab"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": true,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0.016,
+          "mean": 0.0157,
+          "maxAbs": 0.042,
+          "reference": {
+            "file": "corbelz.ttf",
+            "version": "Version 6.01",
+            "sha256": "588f090ae3a6d31370457312683d14ee3a5bfbdaaa0a070b7c80225b55b23e78"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/source-sans-3@0.4.1",
+            "file": "700Bold_Italic/SourceSans3_700Bold_Italic.ttf",
+            "sha256": "b66029c11e09452eaa321abe93883970bc0f3eacc347a1c9d5828db9d379cbb0"
+          }
+        }
+      ]
+    },
+    {
+      "family": "Courier New",
+      "replacement": "Cousine",
+      "compatibility": "metric",
+      "meanAbsWidthDelta": 0,
+      "meanWidthDelta": 0,
+      "maxAbsWidthDelta": 0,
+      "styles": 4,
+      "reference": "Courier New 6.95",
+      "detail": [
+        {
+          "weight": 400,
+          "italic": false,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0,
+          "mean": 0,
+          "maxAbs": 0,
+          "reference": {
+            "file": "cour.ttf",
+            "version": "Version 6.95",
+            "sha256": "e4a66a0259718d0c8f4b6e14319b4803ced45afbddf3abba8b8c3e2006856206"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/cousine@0.4.3",
+            "file": "400Regular/Cousine_400Regular.ttf",
+            "sha256": "ca2264d6750d6c47df703be4486361a37ab943d42de6ea2bf794b7c7af767799"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": false,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0,
+          "mean": 0,
+          "maxAbs": 0,
+          "reference": {
+            "file": "courbd.ttf",
+            "version": "Version 6.95",
+            "sha256": "11e629cef937cd08f942aa1bd994a71302dbe2819c72c6d4c183a623acbb421a"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/cousine@0.4.3",
+            "file": "700Bold/Cousine_700Bold.ttf",
+            "sha256": "f03c46c4bc5c0a3af4a1f4fbe5e3e16954581cced05cea20b3bffe12740d99d3"
+          }
+        },
+        {
+          "weight": 400,
+          "italic": true,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0,
+          "mean": 0,
+          "maxAbs": 0,
+          "reference": {
+            "file": "couri.ttf",
+            "version": "Version 6.95",
+            "sha256": "d82eeeb458f661d867f916d691fc6d3c53f8735fe4d5b04b54a5757321ee03e0"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/cousine@0.4.3",
+            "file": "400Regular_Italic/Cousine_400Regular_Italic.ttf",
+            "sha256": "f1626b7287db36af8ba2ff88840c82f121f4cbda8971fe3f717f975e9fd782a8"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": true,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0,
+          "mean": 0,
+          "maxAbs": 0,
+          "reference": {
+            "file": "courbi.ttf",
+            "version": "Version 6.95",
+            "sha256": "2d61f452de49b57d9ef14ce8896bc1cd2ed8285c2e9fb2e73e78a4b23f91d308"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/cousine@0.4.3",
+            "file": "700Bold_Italic/Cousine_700Bold_Italic.ttf",
+            "sha256": "acb798f3629cda0041fbd6234237cf549a1b932792f2a71b0986eb3e1382ed37"
+          }
+        }
+      ]
+    },
+    {
+      "family": "DaunPenh",
+      "replacement": "Noto Sans Khmer",
+      "compatibility": "visual",
+      "skipped": "reference font not available on this host"
+    },
+    {
+      "family": "David",
+      "replacement": "Noto Serif Hebrew",
+      "compatibility": "visual",
+      "skipped": "reference font not available on this host"
+    },
+    {
+      "family": "Didot",
+      "replacement": "Playfair Display",
+      "compatibility": "visual",
+      "skipped": "reference font not available on this host"
+    },
+    {
+      "family": "DilleniaUPC",
+      "replacement": "Noto Sans Thai",
+      "compatibility": "visual",
+      "meanAbsWidthDelta": 0.7077,
+      "meanWidthDelta": 0.7077,
+      "maxAbsWidthDelta": 0.8544,
+      "styles": 2,
+      "reference": "DilleniaUPC 5.05",
+      "detail": [
+        {
+          "weight": 400,
+          "italic": false,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.6678,
+          "mean": 0.6678,
+          "maxAbs": 0.7855,
+          "reference": {
+            "file": "upcdl.ttf",
+            "version": "Version 5.05",
+            "sha256": "b2cd4d6d863303015403b042830d13571ed04466fc37fb2e62b4ce8b763b9331"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/noto-sans-thai@0.4.2",
+            "file": "400Regular/NotoSansThai_400Regular.ttf",
+            "sha256": "9acb585d8662ca4ed1b1cf5889dfa1393f8555103b3986e1ea1e3af4faef70bd"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": false,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0.7475,
+          "mean": 0.7475,
+          "maxAbs": 0.8544,
+          "reference": {
+            "file": "upcdb.ttf",
+            "version": "Version 5.05",
+            "sha256": "3faa1151ad1223e67d5239e1a720dd393852eff0b14e1738afce9b2a4f73881f"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/noto-sans-thai@0.4.2",
+            "file": "700Bold/NotoSansThai_700Bold.ttf",
+            "sha256": "0be544f347b3ab6382bdc2b555a783727a4858a3dc140670406924670967d916"
+          }
+        }
+      ]
+    },
+    {
+      "family": "Ebrima",
+      "replacement": "Noto Sans",
+      "compatibility": "visual",
+      "meanAbsWidthDelta": 0.0618,
+      "meanWidthDelta": 0.0618,
+      "maxAbsWidthDelta": 0.0934,
+      "styles": 2,
+      "reference": "Ebrima 5.19",
+      "detail": [
+        {
+          "weight": 400,
+          "italic": false,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0653,
+          "mean": 0.0653,
+          "maxAbs": 0.0934,
+          "reference": {
+            "file": "ebrima.ttf",
+            "version": "Version 5.19",
+            "sha256": "1dcd304f0ba642dbc3c3f3ccb70c24e9fad7ada2e2d5d0061c7cacab86e8df92"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/noto-sans@0.4.2",
+            "file": "400Regular/NotoSans_400Regular.ttf",
+            "sha256": "fe8c022f48d8dd29f17b744d16f9346f4357e16f7d4f7be58b000ae7c291b614"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": false,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0.0582,
+          "mean": 0.0582,
+          "maxAbs": 0.0839,
+          "reference": {
+            "file": "ebrimabd.ttf",
+            "version": "Version 5.19",
+            "sha256": "a7bc75937950d0f217f79313631d81f5b92459c414a4099d6ea3c0c0262a716b"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/noto-sans@0.4.2",
+            "file": "700Bold/NotoSans_700Bold.ttf",
+            "sha256": "13a813c49624ae3ba3c5c6e72c5ebffc4b9e1e6ea32f421c04069b037c6ad431"
+          }
+        }
+      ]
+    },
+    {
+      "family": "FangSong",
+      "replacement": "Noto Sans SC",
+      "compatibility": "visual",
+      "skipped": "reference font not available on this host"
+    },
+    {
+      "family": "Franklin Gothic Book",
+      "replacement": "Barlow",
+      "compatibility": "visual",
+      "meanAbsWidthDelta": 0.0181,
+      "meanWidthDelta": 0.0119,
+      "maxAbsWidthDelta": 0.0755,
+      "styles": 2,
+      "reference": "Franklin Gothic Book 2.01",
+      "detail": [
+        {
+          "weight": 400,
+          "italic": false,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0279,
+          "mean": 0.0279,
+          "maxAbs": 0.0755,
+          "reference": {
+            "file": "FRABK.TTF",
+            "version": "Version 2.01",
+            "sha256": "9ad3d0e5ef31c4a9a98cb0e169e4e625286aa34c712add3e001c0100138730d4"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/barlow@0.4.1",
+            "file": "400Regular/Barlow_400Regular.ttf",
+            "sha256": "77fb1ac54d2ceb980e3ebdfa7a9d0f64e85a66e4fdfb7f914a7b0aa08fb33a5d"
+          }
+        },
+        {
+          "weight": 400,
+          "italic": true,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0082,
+          "mean": -0.0041,
+          "maxAbs": 0.0401,
+          "reference": {
+            "file": "FRABKIT.TTF",
+            "version": "Version 2.01",
+            "sha256": "2fc6ff3c5253dca997c68d592e8cfa066b516a782d4b2747acf297c6523f9306"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/barlow@0.4.1",
+            "file": "400Regular_Italic/Barlow_400Regular_Italic.ttf",
+            "sha256": "b4f6fcb952de98bb75f9754526213f4a8f5bf0878638e60730c8bc947f29ce2a"
+          }
+        }
+      ]
+    },
+    {
+      "family": "Franklin Gothic Medium",
+      "replacement": "Barlow",
+      "compatibility": "visual",
+      "meanAbsWidthDelta": 0.0142,
+      "meanWidthDelta": -0.0043,
+      "maxAbsWidthDelta": 0.0648,
+      "styles": 2,
+      "reference": "Franklin Gothic Medium 5.02/5.01",
+      "detail": [
+        {
+          "weight": 400,
+          "italic": false,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0109,
+          "mean": 0.0085,
+          "maxAbs": 0.0648,
+          "reference": {
+            "file": "framd.ttf",
+            "version": "Version 5.02",
+            "sha256": "bac844bd41f847cf138737026d41c983387a1065535c32e78aa22c48708b52ad"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/barlow@0.4.1",
+            "file": "400Regular/Barlow_400Regular.ttf",
+            "sha256": "77fb1ac54d2ceb980e3ebdfa7a9d0f64e85a66e4fdfb7f914a7b0aa08fb33a5d"
+          }
+        },
+        {
+          "weight": 400,
+          "italic": true,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0175,
+          "mean": -0.017,
+          "maxAbs": 0.0469,
+          "reference": {
+            "file": "framdit.ttf",
+            "version": "Version 5.01",
+            "sha256": "df59f9ea915957b22a389d68580bf40dc5bd05822cc65b5fdcc188c706a694e7"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/barlow@0.4.1",
+            "file": "400Regular_Italic/Barlow_400Regular_Italic.ttf",
+            "sha256": "b4f6fcb952de98bb75f9754526213f4a8f5bf0878638e60730c8bc947f29ce2a"
+          }
+        }
+      ]
+    },
+    {
+      "family": "Garamond",
+      "replacement": "EB Garamond",
+      "compatibility": "visual",
+      "meanAbsWidthDelta": 0.0488,
+      "meanWidthDelta": 0.0277,
+      "maxAbsWidthDelta": 0.1883,
+      "styles": 3,
+      "reference": "Garamond 2.40",
+      "detail": [
+        {
+          "weight": 400,
+          "italic": false,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0178,
+          "mean": -0.0164,
+          "maxAbs": 0.042,
+          "reference": {
+            "file": "GARA.TTF",
+            "version": "Version 2.40",
+            "sha256": "6204f2ace1a6c196b95b079f10ded04af8f431ce8eb2cf3945acc89b594c3728"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/eb-garamond@0.4.3",
+            "file": "400Regular/EBGaramond_400Regular.ttf",
+            "sha256": "d5baed6e48bf4c99a770e6edc86ddaf67942bb1850491ed54f94d5c2c213531e"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": false,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0.0159,
+          "mean": -0.0134,
+          "maxAbs": 0.0526,
+          "reference": {
+            "file": "GARABD.TTF",
+            "version": "Version 2.40",
+            "sha256": "76487d4b739ffea6d64f86d0e6a19a8d0031dc67ba2fa2518bbc1818351543ff"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/eb-garamond@0.4.3",
+            "file": "700Bold/EBGaramond_700Bold.ttf",
+            "sha256": "8bb7f13020d522de1c441da0a76f05843b74d788c1b16a933af3be4880782d17"
+          }
+        },
+        {
+          "weight": 400,
+          "italic": true,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.1128,
+          "mean": 0.1128,
+          "maxAbs": 0.1883,
+          "reference": {
+            "file": "GARAIT.TTF",
+            "version": "Version 2.40",
+            "sha256": "9cda64dabb9b2aef5a810fe7ed231ca34c4cf42ae5a108c368ab6a21af2c4ccf"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/eb-garamond@0.4.3",
+            "file": "400Regular_Italic/EBGaramond_400Regular_Italic.ttf",
+            "sha256": "228da33df456ec4e0a149f33cfc2264d5bd500bdfcf55ee36710ca8df923cbd6"
+          }
+        }
+      ]
+    },
+    {
+      "family": "Gautami",
+      "replacement": "Noto Sans Telugu",
+      "compatibility": "visual",
+      "skipped": "reference font not available on this host"
+    },
+    {
+      "family": "Georgia",
+      "replacement": "Gelasio",
+      "compatibility": "metric",
+      "meanAbsWidthDelta": 0.0002,
+      "meanWidthDelta": -0.0002,
+      "maxAbsWidthDelta": 0.0102,
+      "styles": 4,
+      "reference": "Georgia 5.59",
+      "detail": [
+        {
+          "weight": 400,
+          "italic": false,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0002,
+          "mean": -0.0002,
+          "maxAbs": 0.0082,
+          "reference": {
+            "file": "georgia.ttf",
+            "version": "Version 5.59",
+            "sha256": "38dffcaf1fac89492f7c56c600a14daf36ae42f7c21985cd4134ae113124a58f"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/gelasio@0.4.1",
+            "file": "400Regular/Gelasio_400Regular.ttf",
+            "sha256": "44aae47442ad39e623788930f38f1e702febcf094c284c5058bf49f7da23de9a"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": false,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0.0002,
+          "mean": -0.0002,
+          "maxAbs": 0.0102,
+          "reference": {
+            "file": "georgiab.ttf",
+            "version": "Version 5.59",
+            "sha256": "72a6cd94fab6c179392075d3fb361e269cdddfad41bb7ab385fa22a37e49a900"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/gelasio@0.4.1",
+            "file": "700Bold/Gelasio_700Bold.ttf",
+            "sha256": "fade86eca52203e2ccaf9aee494aa4b0335589879738c47e9d92a53630696d10"
+          }
+        },
+        {
+          "weight": 400,
+          "italic": true,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0002,
+          "mean": -0.0002,
+          "maxAbs": 0.0097,
+          "reference": {
+            "file": "georgiai.ttf",
+            "version": "Version 5.59",
+            "sha256": "d3e4bad27651d120ac8f2cea42cf4b4f077264fb243f66b3caffcfd35465f49b"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/gelasio@0.4.1",
+            "file": "400Regular_Italic/Gelasio_400Regular_Italic.ttf",
+            "sha256": "2b24b3d41c06d030a31db6610454595775e572a2992d73171cab783407d202a8"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": true,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0.0002,
+          "mean": -0.0002,
+          "maxAbs": 0.0087,
+          "reference": {
+            "file": "georgiaz.ttf",
+            "version": "Version 5.59",
+            "sha256": "3f9e512f82eaf6f1b7869b82013fb79f6eaf1a41e75a0e7b96f31f35b1022ae4"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/gelasio@0.4.1",
+            "file": "700Bold_Italic/Gelasio_700Bold_Italic.ttf",
+            "sha256": "24f1cb5cf5f765acc5d744a54a6c5dfe34723e58842f5b1b696716497e032852"
+          }
+        }
+      ]
+    },
+    {
+      "family": "Gill Sans MT",
+      "replacement": "Source Sans 3",
+      "compatibility": "visual",
+      "meanAbsWidthDelta": 0.051,
+      "meanWidthDelta": 0.0038,
+      "maxAbsWidthDelta": 0.1456,
+      "styles": 4,
+      "reference": "Gill Sans MT 1.65",
+      "detail": [
+        {
+          "weight": 400,
+          "italic": false,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.021,
+          "mean": 0.0185,
+          "maxAbs": 0.0706,
+          "reference": {
+            "file": "GIL_____.TTF",
+            "version": "Version 1.65",
+            "sha256": "f6664b244192ab4cf3a58bb6a653700d1f345d03bb8879888bcea1b6f8f3f97c"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/source-sans-3@0.4.1",
+            "file": "400Regular/SourceSans3_400Regular.ttf",
+            "sha256": "393fb5b878ceed04aebc34b097e853ae5138c51d0c34b496ce8e2b47e0d0b94a"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": false,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0.0645,
+          "mean": -0.0645,
+          "maxAbs": 0.103,
+          "reference": {
+            "file": "GILB____.TTF",
+            "version": "Version 1.65",
+            "sha256": "c95e47d509eada17f78d730010a5bbb69f60a940c17df6e4e7354c62262c1ab8"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/source-sans-3@0.4.1",
+            "file": "700Bold/SourceSans3_700Bold.ttf",
+            "sha256": "7109021766e915ecd9721e28d11dfc732d57affda49e4ca15bb6d1529add7fdd"
+          }
+        },
+        {
+          "weight": 400,
+          "italic": true,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0898,
+          "mean": 0.0898,
+          "maxAbs": 0.1456,
+          "reference": {
+            "file": "GILI____.TTF",
+            "version": "Version 1.65",
+            "sha256": "5b81f2b18d3b19baa4cf151cd6eb6c49f8e0e58194fd0a02995cccdec803448e"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/source-sans-3@0.4.1",
+            "file": "400Regular_Italic/SourceSans3_400Regular_Italic.ttf",
+            "sha256": "f17facaa9ed293bb38526db3638e240510b7393c37ffa70e5c48f39575de44ab"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": true,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0.0287,
+          "mean": -0.0284,
+          "maxAbs": 0.07,
+          "reference": {
+            "file": "GILBI___.TTF",
+            "version": "Version 1.65",
+            "sha256": "e79f9c1768515a1844bd889092ecebf5c40f301e4415ad1238a8e2f09ce8543e"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/source-sans-3@0.4.1",
+            "file": "700Bold_Italic/SourceSans3_700Bold_Italic.ttf",
+            "sha256": "b66029c11e09452eaa321abe93883970bc0f3eacc347a1c9d5828db9d379cbb0"
+          }
+        }
+      ]
+    },
+    {
+      "family": "Gisha",
+      "replacement": "Noto Sans Hebrew",
+      "compatibility": "visual",
+      "skipped": "reference font not available on this host"
+    },
+    {
+      "family": "Grandview",
+      "replacement": "Barlow",
+      "compatibility": "visual",
+      "skipped": "reference font not available on this host"
+    },
+    {
+      "family": "Grandview Display",
+      "replacement": "Barlow",
+      "compatibility": "visual",
+      "skipped": "reference font not available on this host"
+    },
+    {
+      "family": "Gungsuh",
+      "replacement": "Noto Sans KR",
+      "compatibility": "visual",
+      "skipped": "reference font not available on this host"
+    },
+    {
+      "family": "GungsuhChe",
+      "replacement": "Noto Sans KR",
+      "compatibility": "visual",
+      "skipped": "reference font not available on this host"
+    },
+    {
+      "family": "Impact",
+      "replacement": "Anton",
+      "compatibility": "visual",
+      "meanAbsWidthDelta": 0.0192,
+      "meanWidthDelta": -0.019,
+      "maxAbsWidthDelta": 0.0512,
+      "styles": 1,
+      "reference": "Impact 5.11",
+      "detail": [
+        {
+          "weight": 400,
+          "italic": false,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0192,
+          "mean": -0.019,
+          "maxAbs": 0.0512,
+          "reference": {
+            "file": "impact.ttf",
+            "version": "Version 5.11",
+            "sha256": "d8bbdb72e3f930157824b2e59677d3a912d4512c14a948e6656a2e3fb0c935ad"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/anton@0.4.2",
+            "file": "400Regular/Anton_400Regular.ttf",
+            "sha256": "97aae409210d255fb3b92f18c8af2ed14941e10a1ee134a35bb91f52086de1d0"
+          }
+        }
+      ]
+    },
+    {
+      "family": "Kalinga",
+      "replacement": "Noto Sans Oriya",
+      "compatibility": "visual",
+      "skipped": "reference font not available on this host"
+    },
+    {
+      "family": "Kartika",
+      "replacement": "Noto Sans Malayalam",
+      "compatibility": "visual",
+      "skipped": "reference font not available on this host"
+    },
+    {
+      "family": "Khmer UI",
+      "replacement": "Noto Sans Khmer",
+      "compatibility": "visual",
+      "skipped": "reference font not available on this host"
+    },
+    {
+      "family": "Latha",
+      "replacement": "Noto Sans Tamil",
+      "compatibility": "visual",
+      "skipped": "reference font not available on this host"
+    },
+    {
+      "family": "Lucida Console",
+      "replacement": "Cousine",
+      "compatibility": "visual",
+      "meanAbsWidthDelta": 0.0041,
+      "meanWidthDelta": -0.0041,
+      "maxAbsWidthDelta": 0.0041,
+      "styles": 1,
+      "reference": "Lucida Console 5.01",
+      "detail": [
+        {
+          "weight": 400,
+          "italic": false,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0041,
+          "mean": -0.0041,
+          "maxAbs": 0.0041,
+          "reference": {
+            "file": "lucon.ttf",
+            "version": "Version 5.01",
+            "sha256": "2ca2cfde263fa420e8d39420f075ee9ac80bc0794272c53ac4571a88f8a075a6"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/cousine@0.4.3",
+            "file": "400Regular/Cousine_400Regular.ttf",
+            "sha256": "ca2264d6750d6c47df703be4486361a37ab943d42de6ea2bf794b7c7af767799"
+          }
+        }
+      ]
+    },
+    {
+      "family": "Lucida Sans",
+      "replacement": "Work Sans",
+      "compatibility": "visual",
+      "meanAbsWidthDelta": 0.0124,
+      "meanWidthDelta": 0.0047,
+      "maxAbsWidthDelta": 0.0498,
+      "styles": 2,
+      "reference": "Lucida Sans 1.67",
+      "detail": [
+        {
+          "weight": 400,
+          "italic": false,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0141,
+          "mean": 0.0112,
+          "maxAbs": 0.0498,
+          "reference": {
+            "file": "LSANS.TTF",
+            "version": "Version 1.67",
+            "sha256": "eb3f949ba0f1368698e69396259e667d9fb913ebfde3c742d493aae5dd57141e"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/work-sans@0.4.2",
+            "file": "400Regular/WorkSans_400Regular.ttf",
+            "sha256": "e67985a843df0d3cdee51a3d0f329eb1774a344ad9ff0c9ab923751f1577e2a4"
+          }
+        },
+        {
+          "weight": 400,
+          "italic": true,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0106,
+          "mean": -0.0019,
+          "maxAbs": 0.044,
+          "reference": {
+            "file": "LSANSI.TTF",
+            "version": "Version 1.67",
+            "sha256": "ca117345d190cda8ad6c7a41af1d6d43c475d0fdc99c97b8d325986309597f7a"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/work-sans@0.4.2",
+            "file": "400Regular_Italic/WorkSans_400Regular_Italic.ttf",
+            "sha256": "6b7f7002e0b0c8b261fe878658ef5551e3e59d9f6b609b04efb90dde1e2c1ada"
+          }
+        }
+      ]
+    },
+    {
+      "family": "Lucida Sans Unicode",
+      "replacement": "Work Sans",
+      "compatibility": "visual",
+      "meanAbsWidthDelta": 0.0132,
+      "meanWidthDelta": 0.0102,
+      "maxAbsWidthDelta": 0.0498,
+      "styles": 1,
+      "reference": "Lucida Sans Unicode 5.01",
+      "detail": [
+        {
+          "weight": 400,
+          "italic": false,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0132,
+          "mean": 0.0102,
+          "maxAbs": 0.0498,
+          "reference": {
+            "file": "l_10646.ttf",
+            "version": "Version 5.01",
+            "sha256": "97226e81f19eff8c8fb191745748bab920472c005d3ec4e23d9a50a12c471d92"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/work-sans@0.4.2",
+            "file": "400Regular/WorkSans_400Regular.ttf",
+            "sha256": "e67985a843df0d3cdee51a3d0f329eb1774a344ad9ff0c9ab923751f1577e2a4"
+          }
+        }
+      ]
+    },
+    {
+      "family": "Malgun Gothic",
+      "replacement": "Noto Sans KR",
+      "compatibility": "visual",
+      "meanAbsWidthDelta": 0.0176,
+      "meanWidthDelta": 0.0171,
+      "maxAbsWidthDelta": 0.0791,
+      "styles": 2,
+      "reference": "Malgun Gothic 6.69",
+      "detail": [
+        {
+          "weight": 400,
+          "italic": false,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0168,
+          "mean": 0.0161,
+          "maxAbs": 0.0791,
+          "reference": {
+            "file": "malgun.ttf",
+            "version": "Version 6.69",
+            "sha256": "7a183cf1c6c56b9609fcc16eda8b5229fbc11758a21e669ec00343239b02192f"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/noto-sans-kr@0.4.3",
+            "file": "400Regular/NotoSansKR_400Regular.ttf",
+            "sha256": "8cbc9b353bb9ce848fd69bb6a507319dfacc659cf5fd643db5d88f3c4970e1dd"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": false,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0.0184,
+          "mean": 0.0181,
+          "maxAbs": 0.0773,
+          "reference": {
+            "file": "malgunbd.ttf",
+            "version": "Version 6.69",
+            "sha256": "e8cbc0b2afcc14fb45dfb6086d5102c0b23a96e7b6e708f3122acde1b86c9082"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/noto-sans-kr@0.4.3",
+            "file": "700Bold/NotoSansKR_700Bold.ttf",
+            "sha256": "4ffa20c272ae6d689f7c8d34ff9c8039a326e9c334d9fc8852b2a7396227d077"
+          }
+        }
+      ]
+    },
+    {
+      "family": "Mangal",
+      "replacement": "Noto Sans Devanagari",
+      "compatibility": "visual",
+      "skipped": "reference font not available on this host"
+    },
+    {
+      "family": "Meiryo",
+      "replacement": "Noto Sans JP",
+      "compatibility": "visual",
+      "skipped": "reference font not available on this host"
+    },
+    {
+      "family": "Microsoft JhengHei",
+      "replacement": "Noto Sans TC",
+      "compatibility": "visual",
+      "meanAbsWidthDelta": 0.0141,
+      "meanWidthDelta": 0.004,
+      "maxAbsWidthDelta": 0.0611,
+      "styles": 2,
+      "reference": "Microsoft JhengHei 6.15",
+      "detail": [
+        {
+          "weight": 400,
+          "italic": false,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0106,
+          "mean": -0.0094,
+          "maxAbs": 0.0433,
+          "reference": {
+            "file": "msjh.ttc",
+            "version": "Version 6.15",
+            "sha256": "1fd5fc7046e0eea753988ee06d1a5a731df68475614e2174fbba9b4800f392ac"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/noto-sans-tc@0.4.3",
+            "file": "400Regular/NotoSansTC_400Regular.ttf",
+            "sha256": "add35d53f70727657b4509531677c4e3712b67df3d54661efdee5d3a0c16d954"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": false,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0.0176,
+          "mean": 0.0174,
+          "maxAbs": 0.0611,
+          "reference": {
+            "file": "msjhbd.ttc",
+            "version": "Version 6.15",
+            "sha256": "7d55cd4801102131d991630cea74534dcf73a9fabf4a33e54fe05dfb4f5aa790"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/noto-sans-tc@0.4.3",
+            "file": "700Bold/NotoSansTC_700Bold.ttf",
+            "sha256": "ed4ae6ed781e34d0beee896e9be5d835a938ac7adabbcc1b6b6904290006f372"
+          }
+        }
+      ]
+    },
+    {
+      "family": "Microsoft Sans Serif",
+      "replacement": "Arimo",
+      "compatibility": "visual",
+      "meanAbsWidthDelta": 0.002,
+      "meanWidthDelta": 0.0003,
+      "maxAbsWidthDelta": 0.0291,
+      "styles": 1,
+      "reference": "Microsoft Sans Serif 7.04",
+      "detail": [
+        {
+          "weight": 400,
+          "italic": false,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.002,
+          "mean": 0.0003,
+          "maxAbs": 0.0291,
+          "reference": {
+            "file": "micross.ttf",
+            "version": "Version 7.04",
+            "sha256": "89b42a12ea0379133fb2f4a1d1bd53058fb61e2343c1d509452d5761acc85b7a"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/arimo@0.4.3",
+            "file": "400Regular/Arimo_400Regular.ttf",
+            "sha256": "88cc899855d30f9c779b73c3319d0e077b098f927187aafce11ca029add707a6"
+          }
+        }
+      ]
+    },
+    {
+      "family": "Microsoft YaHei",
+      "replacement": "Noto Sans SC",
+      "compatibility": "visual",
+      "meanAbsWidthDelta": 0.0314,
+      "meanWidthDelta": -0.0314,
+      "maxAbsWidthDelta": 0.059,
+      "styles": 2,
+      "reference": "Microsoft YaHei 6.31",
+      "detail": [
+        {
+          "weight": 400,
+          "italic": false,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0322,
+          "mean": -0.0322,
+          "maxAbs": 0.059,
+          "reference": {
+            "file": "msyh.ttc",
+            "version": "Version 6.31",
+            "sha256": "d79c55e68b1131eea0cc1c47be4f572d964f28c682e143db2ad09c1e4cb07a3f"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/noto-sans-sc@0.4.3",
+            "file": "400Regular/NotoSansSC_400Regular.ttf",
+            "sha256": "d45f67f0a7c0ca3f256950777ce6a61cc7ce5f9696d02900cbbaac25f8aa7d16"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": false,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0.0306,
+          "mean": -0.0305,
+          "maxAbs": 0.0517,
+          "reference": {
+            "file": "msyhbd.ttc",
+            "version": "Version 6.31",
+            "sha256": "4508821b3dffe01f0ef5e5326a3e60df705a44633858811f67b6982dce3f6ee6"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/noto-sans-sc@0.4.3",
+            "file": "700Bold/NotoSansSC_700Bold.ttf",
+            "sha256": "9a38ae0ab28cd5a256f9ea8e00dedc688aac17f7915fcb000572990afa956b96"
+          }
+        }
+      ]
+    },
+    {
+      "family": "MingLiU",
+      "replacement": "Noto Sans TC",
+      "compatibility": "visual",
+      "skipped": "reference font not available on this host"
+    },
+    {
+      "family": "Miriam",
+      "replacement": "Noto Sans Hebrew",
+      "compatibility": "visual",
+      "skipped": "reference font not available on this host"
+    },
+    {
+      "family": "MS Gothic",
+      "replacement": "Noto Sans JP",
+      "compatibility": "visual",
+      "meanAbsWidthDelta": 0.0493,
+      "meanWidthDelta": -0.0361,
+      "maxAbsWidthDelta": 0.1522,
+      "styles": 1,
+      "reference": "MS Gothic 5.32",
+      "detail": [
+        {
+          "weight": 400,
+          "italic": false,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0493,
+          "mean": -0.0361,
+          "maxAbs": 0.1522,
+          "reference": {
+            "file": "msgothic.ttc",
+            "version": "Version 5.32",
+            "sha256": "4bde3e6392b96910fb59094c6c1a4dbfae18fee78d0bf13dc30616837c4f95db"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/noto-sans-jp@0.4.3",
+            "file": "400Regular/NotoSansJP_400Regular.ttf",
+            "sha256": "d930d5d52d15231c283089760f84584272ad5e37e14607ba0d19c798e7a9caec"
+          }
+        }
+      ]
+    },
+    {
+      "family": "MS Mincho",
+      "replacement": "Noto Sans JP",
+      "compatibility": "visual",
+      "skipped": "reference font not available on this host"
+    },
+    {
+      "family": "Nirmala UI",
+      "replacement": "Noto Sans Devanagari",
+      "compatibility": "visual",
+      "meanAbsWidthDelta": 0.0638,
+      "meanWidthDelta": 0.0638,
+      "maxAbsWidthDelta": 0.0939,
+      "styles": 2,
+      "reference": "Nirmala UI 1.46",
+      "detail": [
+        {
+          "weight": 400,
+          "italic": false,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0682,
+          "mean": 0.0682,
+          "maxAbs": 0.0939,
+          "reference": {
+            "file": "Nirmala.ttc",
+            "version": "Version 1.46",
+            "sha256": "ad02cdfc06e144ac45f318e8e5a64cbe04c7479d4beb91d25f5a319a466b1767"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/noto-sans-devanagari@0.4.1",
+            "file": "400Regular/NotoSansDevanagari_400Regular.ttf",
+            "sha256": "084a94d89eb54aafb93a056e15425c34fd859f6342875165d304837b3bcfc2d2"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": false,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0.0594,
+          "mean": 0.0594,
+          "maxAbs": 0.0784,
+          "reference": {
+            "file": "Nirmala.ttc",
+            "version": "Version 1.46",
+            "sha256": "ad02cdfc06e144ac45f318e8e5a64cbe04c7479d4beb91d25f5a319a466b1767"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/noto-sans-devanagari@0.4.1",
+            "file": "700Bold/NotoSansDevanagari_700Bold.ttf",
+            "sha256": "67f1ec9e2ac30b261090e32953b2df0adf6c942ab26ac47efb490fa7315bddab"
+          }
+        }
+      ]
+    },
+    {
+      "family": "Nyala",
+      "replacement": "Noto Sans Ethiopic",
+      "compatibility": "visual",
+      "skipped": "reference font not available on this host"
+    },
+    {
+      "family": "Palatino Linotype",
+      "replacement": "PT Serif",
+      "compatibility": "visual",
+      "meanAbsWidthDelta": 0.0252,
+      "meanWidthDelta": 0.0213,
+      "maxAbsWidthDelta": 0.0909,
+      "styles": 4,
+      "reference": "Palatino Linotype 5.03",
+      "detail": [
+        {
+          "weight": 400,
+          "italic": false,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0085,
+          "mean": -0.0041,
+          "maxAbs": 0.034,
+          "reference": {
+            "file": "pala.ttf",
+            "version": "Version 5.03",
+            "sha256": "e47d594e2e2bc31b28f87b6f66483d32f925843ceb002f919c7a403aca48813d"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/pt-serif@0.4.1",
+            "file": "400Regular/PTSerif_400Regular.ttf",
+            "sha256": "13d9f82f41fcd7d2813dc0a44a9639dec0c1e9a922ab96c7de8dec467c3dec55"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": false,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0.0424,
+          "mean": 0.0424,
+          "maxAbs": 0.0778,
+          "reference": {
+            "file": "palab.ttf",
+            "version": "Version 5.03",
+            "sha256": "8e14668bbae03f78ed668dbe3261218881960dcd9fb80ad6c1d1dfb4226a57c3"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/pt-serif@0.4.1",
+            "file": "700Bold/PTSerif_700Bold.ttf",
+            "sha256": "e868267095de0f61d908dfc18de98c5fc7b9185c8505a814f0fbb8eac627ecc5"
+          }
+        },
+        {
+          "weight": 400,
+          "italic": true,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0397,
+          "mean": 0.0396,
+          "maxAbs": 0.0909,
+          "reference": {
+            "file": "palai.ttf",
+            "version": "Version 5.03",
+            "sha256": "99f0af2d1941707fecda23da38bafbed5144a73a3720d773c05b9d4c445920ed"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/pt-serif@0.4.1",
+            "file": "400Regular_Italic/PTSerif_400Regular_Italic.ttf",
+            "sha256": "b75d426f372d18a53a4f7206b1cb90816432f699ba106ed8d1a79aef79622666"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": true,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0.0101,
+          "mean": 0.0072,
+          "maxAbs": 0.0321,
+          "reference": {
+            "file": "palabi.ttf",
+            "version": "Version 5.03",
+            "sha256": "d0e722b91ffd5391cc2e7d6e976f274d5aee9fe0b8d0fedfffe093763e695cde"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/pt-serif@0.4.1",
+            "file": "700Bold_Italic/PTSerif_700Bold_Italic.ttf",
+            "sha256": "8c97cd67f86c470eec73f5795affc6303c0fadf682df48f0b0d837a3900cfbce"
+          }
+        }
+      ]
+    },
+    {
+      "family": "PMingLiU",
+      "replacement": "Noto Sans TC",
+      "compatibility": "visual",
+      "skipped": "reference font not available on this host"
+    },
+    {
+      "family": "Raavi",
+      "replacement": "Noto Sans Gurmukhi",
+      "compatibility": "visual",
+      "skipped": "reference font not available on this host"
+    },
+    {
+      "family": "Rockwell",
+      "replacement": "Bitter",
+      "compatibility": "visual",
+      "meanAbsWidthDelta": 0.0255,
+      "meanWidthDelta": -0.0149,
+      "maxAbsWidthDelta": 0.0845,
+      "styles": 4,
+      "reference": "Rockwell 1.65",
+      "detail": [
+        {
+          "weight": 400,
+          "italic": false,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0112,
+          "mean": 0.0059,
+          "maxAbs": 0.0657,
+          "reference": {
+            "file": "ROCK.TTF",
+            "version": "Version 1.65",
+            "sha256": "0c61e5ce8296a55761cdb9d350d4c990be4cda8890cc70f2abdedfc357f96d00"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/bitter@0.4.2",
+            "file": "400Regular/Bitter_400Regular.ttf",
+            "sha256": "46a52a6b4e3202563bac5134c02e4d9db63685c439104a803a0b4fbf9e8ceaf4"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": false,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0.0436,
+          "mean": -0.0436,
+          "maxAbs": 0.0845,
+          "reference": {
+            "file": "ROCKB.TTF",
+            "version": "Version 1.65",
+            "sha256": "fc9fd442d2dcd719c88d42121d69f5dd9dda02cc1c8afa025d261ec28795468f"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/bitter@0.4.2",
+            "file": "700Bold/Bitter_700Bold.ttf",
+            "sha256": "391582a3004c7600b7234123c3c810b8c2c5ed3c90af7f087fe55f003cc075bf"
+          }
+        },
+        {
+          "weight": 400,
+          "italic": true,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0145,
+          "mean": 0.0106,
+          "maxAbs": 0.0688,
+          "reference": {
+            "file": "ROCKI.TTF",
+            "version": "Version 1.65",
+            "sha256": "70af64a5bc061505e7a1cb1cd691811768a7cc84e53d48fcb526deb53f8c7a57"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/bitter@0.4.2",
+            "file": "400Regular_Italic/Bitter_400Regular_Italic.ttf",
+            "sha256": "4eda5cb005b1af2d5a733e0dcd727f65e2bddd0ea0466893f6d9259929ef20b2"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": true,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0.0326,
+          "mean": -0.0324,
+          "maxAbs": 0.0679,
+          "reference": {
+            "file": "ROCKBI.TTF",
+            "version": "Version 1.65",
+            "sha256": "c8a0f6976209cc198bc47ee287fd872fd86690f4d2893057e7ee92dd1235fb5f"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/bitter@0.4.2",
+            "file": "700Bold_Italic/Bitter_700Bold_Italic.ttf",
+            "sha256": "65fad0650e416aebb4a7f6893633907f0e10ea153974b0c69f9074b611c259c4"
+          }
+        }
+      ]
+    },
+    {
+      "family": "Sakkal Majalla",
+      "replacement": "Noto Naskh Arabic",
+      "compatibility": "visual",
+      "meanAbsWidthDelta": 0.5423,
+      "meanWidthDelta": 0.5423,
+      "maxAbsWidthDelta": 0.6142,
+      "styles": 2,
+      "reference": "Sakkal Majalla 7.00",
+      "detail": [
+        {
+          "weight": 400,
+          "italic": false,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.5497,
+          "mean": 0.5497,
+          "maxAbs": 0.6142,
+          "reference": {
+            "file": "majalla.ttf",
+            "version": "Version 7.00",
+            "sha256": "922fe2bf58cef1d78635c8765ede234607aa7b09c44127d702fb600c943caa12"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/noto-naskh-arabic@0.4.5",
+            "file": "400Regular/NotoNaskhArabic_400Regular.ttf",
+            "sha256": "706b4580c025f6c75ec1c06013e17f00a23ec1780091b77a5a5b339469bda94d"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": false,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0.5349,
+          "mean": 0.5349,
+          "maxAbs": 0.5975,
+          "reference": {
+            "file": "majallab.ttf",
+            "version": "Version 7.00",
+            "sha256": "8fca2918fb86953dfdd76a2c3b4a80f2372f6a6be60de23d104e64e5fd410393"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/noto-naskh-arabic@0.4.5",
+            "file": "700Bold/NotoNaskhArabic_700Bold.ttf",
+            "sha256": "35418f91100645a36e4d72d75866b61c5da14dc5ebbade64db434d2c9e76234c"
+          }
+        }
+      ]
+    },
+    {
+      "family": "Seaford",
+      "replacement": "Source Sans 3",
+      "compatibility": "visual",
+      "skipped": "reference font not available on this host"
+    },
+    {
+      "family": "Seaford Display",
+      "replacement": "Source Sans 3",
+      "compatibility": "visual",
+      "skipped": "reference font not available on this host"
+    },
+    {
+      "family": "Segoe UI",
+      "replacement": "Red Hat Display",
+      "compatibility": "visual",
+      "meanAbsWidthDelta": 0.0172,
+      "meanWidthDelta": -0.009,
+      "maxAbsWidthDelta": 0.0709,
+      "styles": 4,
+      "reference": "Segoe UI 5.71",
+      "detail": [
+        {
+          "weight": 400,
+          "italic": false,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0095,
+          "mean": 0.0002,
+          "maxAbs": 0.0439,
+          "reference": {
+            "file": "segoeui.ttf",
+            "version": "Version 5.71",
+            "sha256": "8134dbcd09e7b123c9a7f229d49cffbcb01352cc72ea5e1076b65d0dca9f73cd"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/red-hat-display@0.4.1",
+            "file": "400Regular/RedHatDisplay_400Regular.ttf",
+            "sha256": "b3c6289677cb95107738025b86cba835f0283b46dc60d6ace3bff9b9700bfbd0"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": false,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0.0186,
+          "mean": -0.0176,
+          "maxAbs": 0.0548,
+          "reference": {
+            "file": "segoeuib.ttf",
+            "version": "Version 5.71",
+            "sha256": "aeb9e4a6ec5cc59f4d72df8189032d7dbb28f45161cf1552174818b5465dac4e"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/red-hat-display@0.4.1",
+            "file": "700Bold/RedHatDisplay_700Bold.ttf",
+            "sha256": "861c7d8c0ebe239611dddce4f017d6a5c3389aea28bb31d9ee5bf8cded0826d0"
+          }
+        },
+        {
+          "weight": 400,
+          "italic": true,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0132,
+          "mean": 0.0083,
+          "maxAbs": 0.0709,
+          "reference": {
+            "file": "segoeuii.ttf",
+            "version": "Version 5.71",
+            "sha256": "be525b9a6d307d73c23908cd269be9be754210a9d93c0c1eaaa126d2a174290a"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/red-hat-display@0.4.1",
+            "file": "400Regular_Italic/RedHatDisplay_400Regular_Italic.ttf",
+            "sha256": "947a7431db8083115e2aa2db5265a1abcb5a80a56c6d46e2c7862b9fab406b90"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": true,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0.0275,
+          "mean": -0.0267,
+          "maxAbs": 0.0638,
+          "reference": {
+            "file": "segoeuiz.ttf",
+            "version": "Version 5.71",
+            "sha256": "c886161fa6d102090ff992519b6fdc73057a0e838e9d40b27e187e9e61300a92"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/red-hat-display@0.4.1",
+            "file": "700Bold_Italic/RedHatDisplay_700Bold_Italic.ttf",
+            "sha256": "6af3f3c0ce2b4aa5cee332cc5f075e3cab7707ce02db8a4dc241ab8104cb21cc"
+          }
+        }
+      ]
+    },
+    {
+      "family": "Segoe UI Light",
+      "replacement": "Red Hat Display",
+      "compatibility": "visual",
+      "weight": 300,
+      "meanAbsWidthDelta": 0.0187,
+      "meanWidthDelta": 0.0179,
+      "maxAbsWidthDelta": 0.0662,
+      "styles": 2,
+      "reference": "Segoe UI Light 5.71",
+      "detail": [
+        {
+          "weight": 300,
+          "italic": false,
+          "replacementWeight": 300,
+          "strings": 300,
+          "meanAbs": 0.0171,
+          "mean": 0.0164,
+          "maxAbs": 0.0544,
+          "reference": {
+            "file": "segoeuil.ttf",
+            "version": "Version 5.71",
+            "sha256": "866557576dfc772395301b581eccef4c0daf1dbb75f9667f26784b260bce7da1"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/red-hat-display@0.4.1",
+            "file": "300Light/RedHatDisplay_300Light.ttf",
+            "sha256": "77eae6c6360c8a8445268dac09c32b6915f658aed2613408d7e118436a0c3eef"
+          }
+        },
+        {
+          "weight": 300,
+          "italic": true,
+          "replacementWeight": 300,
+          "strings": 300,
+          "meanAbs": 0.0203,
+          "mean": 0.0194,
+          "maxAbs": 0.0662,
+          "reference": {
+            "file": "seguili.ttf",
+            "version": "Version 5.71",
+            "sha256": "3cb01ed58922781a62af14e738cd96023957f60d8d6733920a8808614f477dd8"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/red-hat-display@0.4.1",
+            "file": "300Light_Italic/RedHatDisplay_300Light_Italic.ttf",
+            "sha256": "b76f8742593b53a466c99c61522f494aed59a3e4485f94fcdb2d2600bab0d6fb"
+          }
+        }
+      ]
+    },
+    {
+      "family": "Segoe UI Semibold",
+      "replacement": "Red Hat Display",
+      "compatibility": "visual",
+      "weight": 600,
+      "meanAbsWidthDelta": 0.0101,
+      "meanWidthDelta": -0.0013,
+      "maxAbsWidthDelta": 0.0651,
+      "styles": 2,
+      "reference": "Segoe UI Semibold 5.71",
+      "detail": [
+        {
+          "weight": 600,
+          "italic": false,
+          "replacementWeight": 600,
+          "strings": 300,
+          "meanAbs": 0.0087,
+          "mean": 0.0012,
+          "maxAbs": 0.051,
+          "reference": {
+            "file": "seguisb.ttf",
+            "version": "Version 5.71",
+            "sha256": "2d9b22d71f72de2823fee5d9c8bc1b0fc32b2577c4c27b9ec6abdbb8df0e1731"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/red-hat-display@0.4.1",
+            "file": "600SemiBold/RedHatDisplay_600SemiBold.ttf",
+            "sha256": "d8a250cf848e2b52e505776ec15c078dd022d920846d83f21bdb7a56e43c5ad8"
+          }
+        },
+        {
+          "weight": 600,
+          "italic": true,
+          "replacementWeight": 600,
+          "strings": 300,
+          "meanAbs": 0.0114,
+          "mean": -0.0038,
+          "maxAbs": 0.0651,
+          "reference": {
+            "file": "seguisbi.ttf",
+            "version": "Version 5.71",
+            "sha256": "454295546b78810c95ffd7fc9d57890ed15a03b7cfd0d7e3485786400152b740"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/red-hat-display@0.4.1",
+            "file": "600SemiBold_Italic/RedHatDisplay_600SemiBold_Italic.ttf",
+            "sha256": "d39a86c7334a400505a068b1c1a824c91b3ebae37563e36836c19bf889bfcd3a"
+          }
+        }
+      ]
+    },
+    {
+      "family": "Segoe UI Semilight",
+      "replacement": "Red Hat Display",
+      "compatibility": "visual",
+      "meanAbsWidthDelta": 0.0322,
+      "meanWidthDelta": 0.0321,
+      "maxAbsWidthDelta": 0.0905,
+      "styles": 2,
+      "reference": "Segoe UI Semilight 5.71",
+      "detail": [
+        {
+          "weight": 350,
+          "italic": false,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0296,
+          "mean": 0.0295,
+          "maxAbs": 0.0713,
+          "reference": {
+            "file": "segoeuisl.ttf",
+            "version": "Version 5.71",
+            "sha256": "3432de66f335c7e3058154f7cbb13ef051195653a544b49b1992267e558b33ef"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/red-hat-display@0.4.1",
+            "file": "400Regular/RedHatDisplay_400Regular.ttf",
+            "sha256": "b3c6289677cb95107738025b86cba835f0283b46dc60d6ace3bff9b9700bfbd0"
+          }
+        },
+        {
+          "weight": 350,
+          "italic": true,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0348,
+          "mean": 0.0347,
+          "maxAbs": 0.0905,
+          "reference": {
+            "file": "seguisli.ttf",
+            "version": "Version 5.71",
+            "sha256": "4dc2db1870047663878da07fa5f8217e518ef875c8ad33287fcbad6aba5a7e73"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/red-hat-display@0.4.1",
+            "file": "400Regular_Italic/RedHatDisplay_400Regular_Italic.ttf",
+            "sha256": "947a7431db8083115e2aa2db5265a1abcb5a80a56c6d46e2c7862b9fab406b90"
+          }
+        }
+      ]
+    },
+    {
+      "family": "Shonar Bangla",
+      "replacement": "Noto Sans Bengali",
+      "compatibility": "visual",
+      "skipped": "reference font not available on this host"
+    },
+    {
+      "family": "Shruti",
+      "replacement": "Noto Sans Gujarati",
+      "compatibility": "visual",
+      "skipped": "reference font not available on this host"
+    },
+    {
+      "family": "SimHei",
+      "replacement": "Noto Sans SC",
+      "compatibility": "visual",
+      "skipped": "reference font not available on this host"
+    },
+    {
+      "family": "SimSun",
+      "replacement": "Noto Sans SC",
+      "compatibility": "visual",
+      "meanAbsWidthDelta": 0.0493,
+      "meanWidthDelta": -0.0361,
+      "maxAbsWidthDelta": 0.1522,
+      "styles": 1,
+      "reference": "SimSun 5.24",
+      "detail": [
+        {
+          "weight": 400,
+          "italic": false,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0493,
+          "mean": -0.0361,
+          "maxAbs": 0.1522,
+          "reference": {
+            "file": "simsun.ttc",
+            "version": "Version 5.24",
+            "sha256": "1526ac24375f51f6eb73bc2d3f8072dbe4a80a3a65217677c9d9a84f67dab2ab"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/noto-sans-sc@0.4.3",
+            "file": "400Regular/NotoSansSC_400Regular.ttf",
+            "sha256": "d45f67f0a7c0ca3f256950777ce6a61cc7ce5f9696d02900cbbaac25f8aa7d16"
+          }
+        }
+      ]
+    },
+    {
+      "family": "Skeena",
+      "replacement": "Open Sans",
+      "compatibility": "visual",
+      "skipped": "reference font not available on this host"
+    },
+    {
+      "family": "Skeena Display",
+      "replacement": "Open Sans",
+      "compatibility": "visual",
+      "skipped": "reference font not available on this host"
+    },
+    {
+      "family": "Sylfaen",
+      "replacement": "Noto Sans",
+      "compatibility": "visual",
+      "meanAbsWidthDelta": 0.1096,
+      "meanWidthDelta": 0.1096,
+      "maxAbsWidthDelta": 0.1593,
+      "styles": 1,
+      "reference": "Sylfaen 5.08",
+      "detail": [
+        {
+          "weight": 400,
+          "italic": false,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.1096,
+          "mean": 0.1096,
+          "maxAbs": 0.1593,
+          "reference": {
+            "file": "sylfaen.ttf",
+            "version": "Version 5.08",
+            "sha256": "ac278d932d59558a76817e98051b1dae53867aa81ad83e5198b1b4c4b8066a08"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/noto-sans@0.4.2",
+            "file": "400Regular/NotoSans_400Regular.ttf",
+            "sha256": "fe8c022f48d8dd29f17b744d16f9346f4357e16f7d4f7be58b000ae7c291b614"
+          }
+        }
+      ]
+    },
+    {
+      "family": "Tahoma",
+      "replacement": "Red Hat Text",
+      "compatibility": "visual",
+      "meanAbsWidthDelta": 0.0167,
+      "meanWidthDelta": -0.0035,
+      "maxAbsWidthDelta": 0.0629,
+      "styles": 2,
+      "reference": "Tahoma 7.05",
+      "detail": [
+        {
+          "weight": 400,
+          "italic": false,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0136,
+          "mean": 0.0126,
+          "maxAbs": 0.0629,
+          "reference": {
+            "file": "tahoma.ttf",
+            "version": "Version 7.05",
+            "sha256": "9af03d4ad44a3b413d92f7de48b94aa7cc8a1471a75d498406eae837f62ee1d1"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/red-hat-text@0.4.1",
+            "file": "400Regular/RedHatText_400Regular.ttf",
+            "sha256": "65bce50e2d904363a2ade7dac0b381c72638c43fd690a65a35aad1cc874f75cf"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": false,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0.0199,
+          "mean": -0.0196,
+          "maxAbs": 0.0466,
+          "reference": {
+            "file": "tahomabd.ttf",
+            "version": "Version 7.05",
+            "sha256": "b16ed1a15e0cabea8d41d9f8899c253cd61ac466af5e3980d02bd0cf311c2267"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/red-hat-text@0.4.1",
+            "file": "700Bold/RedHatText_700Bold.ttf",
+            "sha256": "a82d498bd5314be56ccb79fb5c2244513a41a5c2b04be56a45751c26a2132a03"
+          }
+        }
+      ]
+    },
+    {
+      "family": "Tenorite",
+      "replacement": "Figtree",
+      "compatibility": "visual",
+      "skipped": "reference font not available on this host"
+    },
+    {
+      "family": "Tenorite Display",
+      "replacement": "Figtree",
+      "compatibility": "visual",
+      "skipped": "reference font not available on this host"
+    },
+    {
+      "family": "Times New Roman",
+      "replacement": "Tinos",
+      "compatibility": "metric",
+      "meanAbsWidthDelta": 0,
+      "meanWidthDelta": 0,
+      "maxAbsWidthDelta": 0,
+      "styles": 4,
+      "reference": "Times New Roman 7.12",
+      "detail": [
+        {
+          "weight": 400,
+          "italic": false,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0,
+          "mean": 0,
+          "maxAbs": 0,
+          "reference": {
+            "file": "times.ttf",
+            "version": "Version 7.12",
+            "sha256": "931c5de5c70401d9324d5014c123802b4fb753000360ceb2f56c589403cd58c5"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/tinos@0.4.2",
+            "file": "400Regular/Tinos_400Regular.ttf",
+            "sha256": "924ef269e73da94c1803ff68877f5d998dd16605c5ffad82ee181034f8a1fffe"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": false,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0,
+          "mean": 0,
+          "maxAbs": 0,
+          "reference": {
+            "file": "timesbd.ttf",
+            "version": "Version 7.12",
+            "sha256": "54fbe2c70af7c85a97bed0573227e3ccc4b2486012e3ca2a40c6bc77065846f5"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/tinos@0.4.2",
+            "file": "700Bold/Tinos_700Bold.ttf",
+            "sha256": "576a19b5dc026cafe6ae8fde4c849588dae6475cf5d912cebdf2827388c43ad9"
+          }
+        },
+        {
+          "weight": 400,
+          "italic": true,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0,
+          "mean": 0,
+          "maxAbs": 0,
+          "reference": {
+            "file": "timesi.ttf",
+            "version": "Version 7.12",
+            "sha256": "e7f7a88b65188328aea58670f955022e23c712f55679524729da1e4e03c49d88"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/tinos@0.4.2",
+            "file": "400Regular_Italic/Tinos_400Regular_Italic.ttf",
+            "sha256": "4a52de5bcf70e37bd71949f8a85302b75795a1943aedffbbee4f2db7744e1c81"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": true,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0,
+          "mean": 0,
+          "maxAbs": 0,
+          "reference": {
+            "file": "timesbi.ttf",
+            "version": "Version 7.12",
+            "sha256": "3a29d114cb5229e8dbda5bef6c69be4a210a13b7277de4d66e9fc86963226f6c"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/tinos@0.4.2",
+            "file": "700Bold_Italic/Tinos_700Bold_Italic.ttf",
+            "sha256": "10c90ef7896d758923c06a1485d7824cdb457466da0bf7d42f81c5228931281b"
+          }
+        }
+      ]
+    },
+    {
+      "family": "Traditional Arabic",
+      "replacement": "Noto Naskh Arabic",
+      "compatibility": "visual",
+      "meanAbsWidthDelta": 0.1573,
+      "meanWidthDelta": 0.1573,
+      "maxAbsWidthDelta": 0.2415,
+      "styles": 2,
+      "reference": "Traditional Arabic 6.85",
+      "detail": [
+        {
+          "weight": 400,
+          "italic": false,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.1841,
+          "mean": 0.1841,
+          "maxAbs": 0.2415,
+          "reference": {
+            "file": "trado.ttf",
+            "version": "Version 6.85",
+            "sha256": "c696147f0269567f6afb23e9ac1269e4651c0cd7d48ac0e3698509262a1151c7"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/noto-naskh-arabic@0.4.5",
+            "file": "400Regular/NotoNaskhArabic_400Regular.ttf",
+            "sha256": "706b4580c025f6c75ec1c06013e17f00a23ec1780091b77a5a5b339469bda94d"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": false,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0.1304,
+          "mean": 0.1304,
+          "maxAbs": 0.1778,
+          "reference": {
+            "file": "tradbdo.ttf",
+            "version": "Version 6.85",
+            "sha256": "d2c013b074196cedb8b7cfd2b1b0cf906c75171501b86e22a3f5c91e537e78a1"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/noto-naskh-arabic@0.4.5",
+            "file": "700Bold/NotoNaskhArabic_700Bold.ttf",
+            "sha256": "35418f91100645a36e4d72d75866b61c5da14dc5ebbade64db434d2c9e76234c"
+          }
+        }
+      ]
+    },
+    {
+      "family": "Trebuchet MS",
+      "replacement": "Figtree",
+      "compatibility": "visual",
+      "meanAbsWidthDelta": 0.0149,
+      "meanWidthDelta": -0.007,
+      "maxAbsWidthDelta": 0.0665,
+      "styles": 4,
+      "reference": "Trebuchet MS 5.15",
+      "detail": [
+        {
+          "weight": 400,
+          "italic": false,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0112,
+          "mean": 0.001,
+          "maxAbs": 0.0503,
+          "reference": {
+            "file": "trebuc.ttf",
+            "version": "Version 5.15",
+            "sha256": "fe3e8bdd64c1c9f3b9cf5189d06510c80d72cec28e03d04bffc560f77eec58d1"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/figtree@0.4.1",
+            "file": "400Regular/Figtree_400Regular.ttf",
+            "sha256": "4e2e9876c4a908c2cbe410ceb648e4724464a84492bd49cb2d6e7b0d3f769a66"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": false,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0.0152,
+          "mean": -0.0135,
+          "maxAbs": 0.0455,
+          "reference": {
+            "file": "trebucbd.ttf",
+            "version": "Version 5.15",
+            "sha256": "dfcc306777a594d2815368547dd897e2ac82aff8073e55d9e682569939e49b81"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/figtree@0.4.1",
+            "file": "700Bold/Figtree_700Bold.ttf",
+            "sha256": "183bf1a8523731738c72be9aa8236453a21d6a3ed70bd8e5266723b212331dc4"
+          }
+        },
+        {
+          "weight": 400,
+          "italic": true,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0135,
+          "mean": 0.0031,
+          "maxAbs": 0.061,
+          "reference": {
+            "file": "trebucit.ttf",
+            "version": "Version 5.15",
+            "sha256": "9c9dc0cd0fd6b1a06e8f406d04bb15a88aaf20328d3e166c12d6bc7994b781d2"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/figtree@0.4.1",
+            "file": "400Regular_Italic/Figtree_400Regular_Italic.ttf",
+            "sha256": "9e77e88c4713c641faa7385d8c367a52542969fcb24022fc649c06422ad721f5"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": true,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0.0196,
+          "mean": -0.0185,
+          "maxAbs": 0.0665,
+          "reference": {
+            "file": "trebucbi.ttf",
+            "version": "Version 5.15",
+            "sha256": "87942234ab0cc4400088648bef8d1f7afc4c44e676c7ed6b32ca31462c18307d"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/figtree@0.4.1",
+            "file": "700Bold_Italic/Figtree_700Bold_Italic.ttf",
+            "sha256": "eccf9cafb8a6112216b040112ce783553e30b30b1eb2649b9f2913e34d7ecbd2"
+          }
+        }
+      ]
+    },
+    {
+      "family": "Tunga",
+      "replacement": "Noto Sans Kannada",
+      "compatibility": "visual",
+      "skipped": "reference font not available on this host"
+    },
+    {
+      "family": "Verdana",
+      "replacement": "Montserrat",
+      "compatibility": "visual",
+      "meanAbsWidthDelta": 0.0368,
+      "meanWidthDelta": -0.0281,
+      "maxAbsWidthDelta": 0.0915,
+      "styles": 4,
+      "reference": "Verdana 5.33",
+      "detail": [
+        {
+          "weight": 400,
+          "italic": false,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0116,
+          "mean": -0.0006,
+          "maxAbs": 0.041,
+          "reference": {
+            "file": "verdana.ttf",
+            "version": "Version 5.33",
+            "sha256": "6a8481fe107ee547893c018b13dba291c2020bec3de5da6525d9ac09f6bc2105"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/montserrat@0.4.2",
+            "file": "400Regular/Montserrat_400Regular.ttf",
+            "sha256": "ef9cf99f0175bef530b88934bd904fcf56f773cec6fd4dfb8ccaf7ce2bbd395e"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": false,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0.0648,
+          "mean": -0.0648,
+          "maxAbs": 0.0915,
+          "reference": {
+            "file": "verdanab.ttf",
+            "version": "Version 5.33",
+            "sha256": "f3245f5f38f61bd1ceefb0f1338a5b88a21e6220832c2f43a38bbc7e1547c36f"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/montserrat@0.4.2",
+            "file": "700Bold/Montserrat_700Bold.ttf",
+            "sha256": "7fa93d7daa5c2f881a6727229c211782de6b76008fbd6346b3d7664e8fc83f43"
+          }
+        },
+        {
+          "weight": 400,
+          "italic": true,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0148,
+          "mean": 0.0093,
+          "maxAbs": 0.0487,
+          "reference": {
+            "file": "verdanai.ttf",
+            "version": "Version 5.33",
+            "sha256": "14f2ebcdaa1b77e5993a8533662e4bd3ebfe2c5771b6daafd8ccb39b2ad588b9"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/montserrat@0.4.2",
+            "file": "400Regular_Italic/Montserrat_400Regular_Italic.ttf",
+            "sha256": "7e87c0f96b39fbb919b30aef8991323d0b257649f391e6456bcf03c231448f49"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": true,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0.0563,
+          "mean": -0.0563,
+          "maxAbs": 0.085,
+          "reference": {
+            "file": "verdanaz.ttf",
+            "version": "Version 5.33",
+            "sha256": "d71f81c83ec63eaa32d36d5df7be1d9e71d3ea9150f47cebda2924923cbbf18a"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/montserrat@0.4.2",
+            "file": "700Bold_Italic/Montserrat_700Bold_Italic.ttf",
+            "sha256": "001a59b0f2c541080033b83ca6dfacce03095d99caa3594835f51b7c6d9ce758"
+          }
+        }
+      ]
+    },
+    {
+      "family": "Vrinda",
+      "replacement": "Noto Sans Bengali",
+      "compatibility": "visual",
+      "skipped": "reference font not available on this host"
+    },
+    {
+      "family": "Yu Gothic",
+      "replacement": "Noto Sans JP",
+      "compatibility": "visual",
+      "meanAbsWidthDelta": 0.0091,
+      "meanWidthDelta": 0.0032,
+      "maxAbsWidthDelta": 0.0533,
+      "styles": 2,
+      "reference": "Yu Gothic 1.95",
+      "detail": [
+        {
+          "weight": 400,
+          "italic": false,
+          "replacementWeight": 400,
+          "strings": 300,
+          "meanAbs": 0.0092,
+          "mean": 0.003,
+          "maxAbs": 0.0518,
+          "reference": {
+            "file": "YuGothR.ttc",
+            "version": "Version 1.95",
+            "sha256": "cd24b5617c1e26572b0a7fe7e558f7121ca42c36f7b50e8d9216ac222a1c0a93"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/noto-sans-jp@0.4.3",
+            "file": "400Regular/NotoSansJP_400Regular.ttf",
+            "sha256": "d930d5d52d15231c283089760f84584272ad5e37e14607ba0d19c798e7a9caec"
+          }
+        },
+        {
+          "weight": 700,
+          "italic": false,
+          "replacementWeight": 700,
+          "strings": 300,
+          "meanAbs": 0.009,
+          "mean": 0.0035,
+          "maxAbs": 0.0533,
+          "reference": {
+            "file": "YuGothB.ttc",
+            "version": "Version 1.95",
+            "sha256": "d923a57f781f06198167da4f58287be7ac64a954a47aff4295e078a42b4b68b2"
+          },
+          "replacement": {
+            "package": "@expo-google-fonts/noto-sans-jp@0.4.3",
+            "file": "700Bold/NotoSansJP_700Bold.ttf",
+            "sha256": "c5b7b9d6a6eb682b0d4e6bbb38509575fd2759a28f147daa74714d1359a7909e"
+          }
+        }
+      ]
+    }
+  ]
+}
