@@ -76,7 +76,7 @@ console.log('Packed consumer: vendored licenses/hashes, absent unused dependenci
     dependencies[name]={version:entry.version,resolved:entry.resolved,integrity:entry.integrity};
   }
   const registryFixtures=[];
-  for(const file of ['shared-quote.mjs','shared-code.mjs','code-provenance.mjs','shared-timeline.mjs','font-variants.mjs']){
+  for(const file of ['shared-quote.mjs','shared-code.mjs','code-provenance.mjs','shared-timeline.mjs','font-variants.mjs','script-fonts.mjs']){
     const shared=(await readFile(path.join(root,'test',file),'utf8'))
       .replaceAll("'../dist/index.js'","'@openpresentation/opf-pptx'")
       .replaceAll("'../dist/code-provenance.js'","'./node_modules/@openpresentation/opf-pptx/dist/code-provenance.js'")
