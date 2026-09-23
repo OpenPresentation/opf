@@ -158,7 +158,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "sparkline",
+        "type": "area",
         "data": {
           "columns": [
             "Quarter",

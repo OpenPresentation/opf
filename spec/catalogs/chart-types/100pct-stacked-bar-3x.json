@@ -2,13 +2,18 @@
   "$schema": "https://openpresentation.org/schema/opf-chart-type/v1",
   "id": "100pct-stacked-bar-3x",
   "name": "100PCT_STACKED_BAR_3X",
-  "label": "100% Stacked Bar 3x",
+  "label": "100% Stacked Bar",
   "mappings": {
     "openxml": {
       "element": "barChart",
       "barDir": "bar",
       "grouping": "percentStacked",
       "composition": "single"
+    },
+    "renderers": {
+      "aspose-slides": {
+        "chartType": "PercentsStackedBar"
+      }
     }
   },
   "categories": 6,

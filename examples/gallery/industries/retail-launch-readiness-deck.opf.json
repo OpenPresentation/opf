@@ -144,7 +144,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "bullet-column-3x",
+        "type": "world",
         "data": {
           "columns": [
             "Quarter",

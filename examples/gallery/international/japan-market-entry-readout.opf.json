@@ -57,7 +57,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "australia",
+        "type": "radar-with-markers",
         "data": {
           "columns": [
             "Quarter",

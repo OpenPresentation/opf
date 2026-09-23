@@ -165,7 +165,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "area",
+        "type": "radar",
         "data": {
           "columns": [
             "Quarter",
@@ -335,7 +335,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "bullet-column",
+            "type": "waterfall",
             "data": {
               "columns": [
                 "Quarter",

@@ -44,7 +44,7 @@
         "contentDirection": "vertical"
       },
       "chart": {
-        "type": "line-2x",
+        "type": "line",
         "data": {
           "columns": [
             "Week",

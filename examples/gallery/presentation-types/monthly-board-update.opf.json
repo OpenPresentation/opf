@@ -57,7 +57,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "100pct-bullet-column-3x",
+        "type": "column",
         "data": {
           "columns": [
             "Quarter",

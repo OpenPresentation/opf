@@ -2,12 +2,17 @@
   "$schema": "https://openpresentation.org/schema/opf-chart-type/v1",
   "id": "stacked-area-3x",
   "name": "STACKED_AREA_3X",
-  "label": "Stacked Area 3x",
+  "label": "Stacked Area",
   "mappings": {
     "openxml": {
       "element": "areaChart",
       "grouping": "stacked",
       "composition": "single"
+    },
+    "renderers": {
+      "aspose-slides": {
+        "chartType": "StackedArea"
+      }
     }
   },
   "categories": 12,

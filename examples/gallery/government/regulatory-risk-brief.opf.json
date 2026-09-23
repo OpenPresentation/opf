@@ -148,7 +148,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "united-kingdom",
+        "type": "treemap",
         "data": {
           "columns": [
             "Quarter",

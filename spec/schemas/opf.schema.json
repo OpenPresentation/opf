@@ -2580,10 +2580,10 @@
       "properties": {
         "type": {
           "type": "string",
-          "description": "Chart type id. Resolves to the id of a chartTypes catalog record; renderers map that record through mappings.openxml and any renderer-specific mapping they understand.",
+          "description": "Chart type id. Resolves to the id of a chartTypes catalog record; renderers map that record through mappings.openxml and any renderer-specific mapping they understand. The bundled catalog covers the chart types Aspose.Slides officially supports; deprecated ids still resolve but validate with a warning naming their replacement.",
           "examples": [
-            "bar", "column", "line", "pie", "donut", "doughnut", "area", "scatter", "radar",
-            "waterfall", "funnel", "treemap", "combo"
+            "column", "bar", "line", "pie", "doughnut", "area", "scatter", "radar",
+            "waterfall", "funnel", "treemap", "stacked-column-3x"
           ]
         },
         "data": {

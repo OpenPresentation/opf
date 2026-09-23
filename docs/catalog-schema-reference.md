@@ -63,7 +63,7 @@ OPF documents usually reference these records with string ids such as `design.th
 - Schema id: `https://openpresentation.org/schema/opf-chart-type/v1`
 - Type: `object`
 - Required fields: `$schema`, `id`, `name`, `mappings`
-- Purpose: Schema for chart-type records in the pptx.gallery catalog. Each record describes a named chart variant, its Open XML mapping, its series/category cardinality, the column structure of the underlying workbook, and a small sample dataset suitable for previews. Chart types are referenced from OPF chart content payloads; the engine resolves the reference against catalogs.chartTypes (inline) -> catalogs.chartTypes.source -> the default catalog at https://www.pptx.gallery/chart-types.
+- Purpose: Schema for chart-type records in the pptx.gallery catalog. The bundled catalog holds one record per chart type that Aspose.Slides officially supports (see mappings.renderers["aspose-slides"].chartType). Each record describes a named chart variant, its Open XML mapping, its series/category cardinality, the column structure of the underlying workbook, and a small sample dataset suitable for previews. Chart types are referenced from OPF chart content payloads; the engine resolves the reference a...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -74,6 +74,7 @@ OPF documents usually reference these records with string ids such as `design.th
 | `summary` | no | `string` | One-sentence positioning: when to reach for this chart variant. |
 | `description` | no | `string` | Longer prose describing the chart and ideal use cases. |
 | `mappings` | yes | `ref:ChartTypeMappings` | Canonical and optional renderer-specific mappings used by engines to render this chart type. |
+| `deprecation` | no | `ref:ChartTypeDeprecation` | Present when this chart type is deprecated. Deprecated records stay resolvable so existing documents keep validating, but pickers and default listings exclude them, validators warn when a document references them, and... |
 | `group` | no | `string` | Top-level grouping in the chart picker (column, bar, line, area, pie, radar, etc.). |
 | `groupSort` | no | `integer` | Display ordering hint within the chart group. |
 | `complexity` | no | `enum:simple \| calculated \| hierarchical \| normalized` | Shape of the underlying data: a flat series ('simple'), one with engine-side calculation ('calculated'), parent-child rows ('hierarchical'), or pre-normalized rows ('normalized'). |
@@ -92,6 +93,17 @@ OPF documents usually reference these records with string ids such as `design.th
 
 ### Nested Types
 
+#### ChartTypeDeprecation
+
+- Type: `object`
+- Required fields: `replacedBy`
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `replacedBy` | yes | `string` | Id of the non-deprecated chart type that documents should reference instead. |
+| `reason` | no | `string` | Why the record is deprecated. |
+| `removal` | no | `string` | Package version in which the record is scheduled for removal from the bundled catalog. |
+
 #### ChartTypeMappings
 
 - Type: `object`
@@ -100,7 +112,7 @@ OPF documents usually reference these records with string ids such as `design.th
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `openxml` | yes | `ref:OpenXmlChartMapping` | Canonical mapping to Open XML chart structures. |
-| `renderers` | no | `object` | Optional renderer-specific mappings. Keys are renderer ids; values are intentionally opaque to OPF. |
+| `renderers` | no | `object` | Optional renderer-specific mappings. Keys are renderer ids; values are intentionally opaque to OPF. The bundled catalog records the matching Aspose.Slides ChartType enumeration member under the "aspose-slides" key, e.... |
 
 #### OpenXmlChartMapping
 

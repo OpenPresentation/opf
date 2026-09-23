@@ -1,96 +1,26 @@
 {
   "$schema": "https://openpresentation.org/schema/opf-catalog-index/v1",
   "version": "1",
-  "description": "Catalog of chart types available in the pptx.gallery catalog. Each entry is a lightweight summary; full chart-type records live in the per-id JSON files alongside this index.",
+  "description": "Catalog of chart types available in the pptx.gallery catalog, reduced to the chart types Aspose.Slides officially supports (one record per Aspose.Slides ChartType). Each entry is a lightweight summary; full chart-type records live in the per-id JSON files alongside this index. Entries marked deprecated remain resolvable for existing documents, point at their replacement through replacedBy, are excluded from default listings, and are scheduled for removal in 0.12.0.",
   "records": [
-    {
-      "id": "100pct-bullet-bar",
-      "name": "100PCT_BULLET_BAR",
-      "label": "100% Bullet Bar",
-      "group": "Bullet",
-      "file": "100pct-bullet-bar.json"
-    },
-    {
-      "id": "100pct-bullet-bar-2x",
-      "name": "100PCT_BULLET_BAR_2X",
-      "label": "100% Bullet Bar 2x",
-      "group": "Bullet",
-      "file": "100pct-bullet-bar-2x.json"
-    },
-    {
-      "id": "100pct-bullet-bar-3x",
-      "name": "100PCT_BULLET_BAR_3X",
-      "label": "100% Bullet Bar 3x",
-      "group": "Bullet",
-      "file": "100pct-bullet-bar-3x.json"
-    },
-    {
-      "id": "100pct-bullet-column",
-      "name": "100PCT_BULLET_COLUMN",
-      "label": "100% Bullet Column",
-      "group": "Bullet",
-      "file": "100pct-bullet-column.json"
-    },
-    {
-      "id": "100pct-bullet-column-2x",
-      "name": "100PCT_BULLET_COLUMN_2X",
-      "label": "100% Bullet Colum 2x",
-      "group": "Bullet",
-      "file": "100pct-bullet-column-2x.json"
-    },
-    {
-      "id": "100pct-bullet-column-3x",
-      "name": "100PCT_BULLET_COLUMN_3X",
-      "label": "100% Bullet Column 3x",
-      "group": "Bullet",
-      "file": "100pct-bullet-column-3x.json"
-    },
-    {
-      "id": "100pct-progress-bar",
-      "name": "100PCT_PROGRESS_BAR",
-      "label": "100% Progress Bar",
-      "group": "Bar",
-      "file": "100pct-progress-bar.json"
-    },
-    {
-      "id": "100pct-stacked-area-2x",
-      "name": "100PCT_STACKED_AREA_2X",
-      "label": "100% Stacked Area 2x",
-      "group": "Area",
-      "file": "100pct-stacked-area-2x.json"
-    },
     {
       "id": "100pct-stacked-area-3x",
       "name": "100PCT_STACKED_AREA_3X",
-      "label": "100% Stacked Area 3x",
+      "label": "100% Stacked Area",
       "group": "Area",
       "file": "100pct-stacked-area-3x.json"
     },
     {
-      "id": "100pct-stacked-bar-2x",
-      "name": "100PCT_STACKED_BAR_2X",
-      "label": "100% Stacked Bar 2x",
-      "group": "Bar",
-      "file": "100pct-stacked-bar-2x.json"
-    },
-    {
       "id": "100pct-stacked-bar-3x",
       "name": "100PCT_STACKED_BAR_3X",
-      "label": "100% Stacked Bar 3x",
+      "label": "100% Stacked Bar",
       "group": "Bar",
       "file": "100pct-stacked-bar-3x.json"
     },
     {
-      "id": "100pct-stacked-column-2x",
-      "name": "100PCT_STACKED_COLUMN_2X",
-      "label": "100% Stacked Column 2x",
-      "group": "Column",
-      "file": "100pct-stacked-column-2x.json"
-    },
-    {
       "id": "100pct-stacked-column-3x",
       "name": "100PCT_STACKED_COLUMN_3X",
-      "label": "100% Stacked Column 3x",
+      "label": "100% Stacked Column",
       "group": "Column",
       "file": "100pct-stacked-column-3x.json"
     },
@@ -100,13 +30,6 @@
       "label": "Area",
       "group": "Area",
       "file": "area.json"
-    },
-    {
-      "id": "australia",
-      "name": "AUSTRALIA",
-      "label": "Australia",
-      "group": "Map",
-      "file": "australia.json"
     },
     {
       "id": "bar",
@@ -123,83 +46,6 @@
       "file": "box-and-whisker.json"
     },
     {
-      "id": "box-and-whisker-2x",
-      "name": "BOX_AND_WHISKER_2X",
-      "label": "Box & Whisker 2x",
-      "group": "Other",
-      "file": "box-and-whisker-2x.json"
-    },
-    {
-      "id": "box-and-whisker-3x",
-      "name": "BOX_AND_WHISKER_3X",
-      "label": "Box & Whisker 3x",
-      "group": "Other",
-      "file": "box-and-whisker-3x.json"
-    },
-    {
-      "id": "bullet-bar",
-      "name": "BULLET_BAR",
-      "label": "Bullet Bar",
-      "group": "Bullet",
-      "file": "bullet-bar.json"
-    },
-    {
-      "id": "bullet-bar-2x",
-      "name": "BULLET_BAR_2X",
-      "label": "Bullet Bar 2x",
-      "group": "Bullet",
-      "file": "bullet-bar-2x.json"
-    },
-    {
-      "id": "bullet-bar-3x",
-      "name": "BULLET_BAR_3X",
-      "label": "Bullet Bar 3x",
-      "group": "Bullet",
-      "file": "bullet-bar-3x.json"
-    },
-    {
-      "id": "bullet-column",
-      "name": "BULLET_COLUMN",
-      "label": "Bullet Column",
-      "group": "Bullet",
-      "file": "bullet-column.json"
-    },
-    {
-      "id": "bullet-column-2x",
-      "name": "BULLET_COLUMN_2X",
-      "label": "Bullet Column 2x",
-      "group": "Bullet",
-      "file": "bullet-column-2x.json"
-    },
-    {
-      "id": "bullet-column-3x",
-      "name": "BULLET_COLUMN_3X",
-      "label": "Bullet Column 3x",
-      "group": "Bullet",
-      "file": "bullet-column-3x.json"
-    },
-    {
-      "id": "canada",
-      "name": "CANADA",
-      "label": "Canada",
-      "group": "Map",
-      "file": "canada.json"
-    },
-    {
-      "id": "clustered-bar-2x",
-      "name": "CLUSTERED_BAR_2X",
-      "label": "Clustered Bar 2x",
-      "group": "Bar",
-      "file": "clustered-bar-2x.json"
-    },
-    {
-      "id": "clustered-column",
-      "name": "CLUSTERED_COLUMN",
-      "label": "Clustered Column",
-      "group": "Column",
-      "file": "clustered-column.json"
-    },
-    {
       "id": "column",
       "name": "COLUMN",
       "label": "Column",
@@ -207,60 +53,11 @@
       "file": "column.json"
     },
     {
-      "id": "dot-plot",
-      "name": "DOT_PLOT",
-      "label": "Dot Plot",
-      "group": "XY (Scatter)",
-      "file": "dot-plot.json"
-    },
-    {
-      "id": "dot-plot-2x",
-      "name": "DOT_PLOT_2X",
-      "label": "Dot Plot 2x",
-      "group": "XY (Scatter)",
-      "file": "dot-plot-2x.json"
-    },
-    {
-      "id": "dot-plot-3x",
-      "name": "DOT_PLOT_3X",
-      "label": "Dot Plot 3x",
-      "group": "XY (Scatter)",
-      "file": "dot-plot-3x.json"
-    },
-    {
-      "id": "dot-plot-4x",
-      "name": "DOT_PLOT_4X",
-      "label": "Dot Plot 4x",
-      "group": "XY (Scatter)",
-      "file": "dot-plot-4x.json"
-    },
-    {
-      "id": "dot-plot-5x",
-      "name": "DOT_PLOT_5X",
-      "label": "Dot Plot 5x",
-      "group": "XY (Scatter)",
-      "file": "dot-plot-5x.json"
-    },
-    {
-      "id": "dot-plot-6x",
-      "name": "DOT_PLOT_6X",
-      "label": "Dot Plot 6x",
-      "group": "XY (Scatter)",
-      "file": "dot-plot-6x.json"
-    },
-    {
       "id": "doughnut",
       "name": "DOUGHNUT",
       "label": "Doughnut",
       "group": "Pie",
       "file": "doughnut.json"
-    },
-    {
-      "id": "dumbbell",
-      "name": "DUMBBELL",
-      "label": "Dumbbell",
-      "group": "Other",
-      "file": "dumbbell.json"
     },
     {
       "id": "filled-radar",
@@ -291,60 +88,11 @@
       "file": "line.json"
     },
     {
-      "id": "line-2x",
-      "name": "LINE_2X",
-      "label": "Line 2x",
-      "group": "Line",
-      "file": "line-2x.json"
-    },
-    {
-      "id": "line-3x",
-      "name": "LINE_3X",
-      "label": "Line 3x",
-      "group": "Line",
-      "file": "line-3x.json"
-    },
-    {
-      "id": "line-with-high-low",
-      "name": "LINE_WITH_HIGH_LOW",
-      "label": "Line with High/Low",
-      "group": "Line",
-      "file": "line-with-high-low.json"
-    },
-    {
-      "id": "line-with-high-low-and-markers",
-      "name": "LINE_WITH_HIGH_LOW_AND_MARKERS",
-      "label": "Line with High/Low and Markers",
-      "group": "Line",
-      "file": "line-with-high-low-and-markers.json"
-    },
-    {
       "id": "line-with-markers",
       "name": "LINE_WITH_MARKERS",
       "label": "Line with Markers",
       "group": "Line",
       "file": "line-with-markers.json"
-    },
-    {
-      "id": "line-with-markers-2x",
-      "name": "LINE_WITH_MARKERS_2X",
-      "label": "Line with Markers 2x",
-      "group": "Line",
-      "file": "line-with-markers-2x.json"
-    },
-    {
-      "id": "line-with-markers-3x",
-      "name": "LINE_WITH_MARKERS_3X",
-      "label": "Line with Markers 3x",
-      "group": "Line",
-      "file": "line-with-markers-3x.json"
-    },
-    {
-      "id": "pareto",
-      "name": "PARETO",
-      "label": "Pareto",
-      "group": "Histogram",
-      "file": "pareto.json"
     },
     {
       "id": "pie",
@@ -375,114 +123,37 @@
       "file": "scatter.json"
     },
     {
-      "id": "sparkline",
-      "name": "SPARKLINE",
-      "label": "Sparkline",
-      "group": "Sparkline",
-      "file": "sparkline.json"
-    },
-    {
-      "id": "sparkline-2x",
-      "name": "SPARKLINE_2X",
-      "label": "Sparkline 2x",
-      "group": "Sparkline",
-      "file": "sparkline-2x.json"
-    },
-    {
-      "id": "sparkline-3x",
-      "name": "SPARKLINE_3X",
-      "label": "Sparkline 3x",
-      "group": "Sparkline",
-      "file": "sparkline-3x.json"
-    },
-    {
-      "id": "sparkline-4x",
-      "name": "SPARKLINE_4X",
-      "label": "Sparkline 4x",
-      "group": "Sparkline",
-      "file": "sparkline-4x.json"
-    },
-    {
-      "id": "sparkline-5x",
-      "name": "SPARKLINE_5X",
-      "label": "Sparkline 5x",
-      "group": "Sparkline",
-      "file": "sparkline-5x.json"
-    },
-    {
-      "id": "sparkline-6x",
-      "name": "SPARKLINE_6X",
-      "label": "Sparkline 6x",
-      "group": "Sparkline",
-      "file": "sparkline-6x.json"
-    },
-    {
-      "id": "stacked-area-2x",
-      "name": "STACKED_AREA_2X",
-      "label": "Stacked Area 2x",
-      "group": "Area",
-      "file": "stacked-area-2x.json"
-    },
-    {
       "id": "stacked-area-3x",
       "name": "STACKED_AREA_3X",
-      "label": "Stacked Area 3x",
+      "label": "Stacked Area",
       "group": "Area",
       "file": "stacked-area-3x.json"
     },
     {
-      "id": "stacked-bar-2x",
-      "name": "STACKED_BAR_2X",
-      "label": "Stacked Bar 2x",
-      "group": "Bar",
-      "file": "stacked-bar-2x.json"
-    },
-    {
       "id": "stacked-bar-3x",
       "name": "STACKED_BAR_3X",
-      "label": "Stacked Bar 3x",
+      "label": "Stacked Bar",
       "group": "Bar",
       "file": "stacked-bar-3x.json"
     },
     {
-      "id": "stacked-column-2x",
-      "name": "STACKED_COLUMN_2X",
-      "label": "Stacked Column 2x",
-      "group": "Column",
-      "file": "stacked-column-2x.json"
-    },
-    {
       "id": "stacked-column-3x",
       "name": "STACKED_COLUMN_3X",
-      "label": "Stacked Column 3x",
+      "label": "Stacked Column",
       "group": "Column",
       "file": "stacked-column-3x.json"
     },
     {
-      "id": "stacked-line-2x",
-      "name": "STACKED_LINE_2X",
-      "label": "Stacked Line 2x",
-      "group": "Line",
-      "file": "stacked-line-2x.json"
-    },
-    {
       "id": "stacked-line-3x",
       "name": "STACKED_LINE_3X",
-      "label": "Stacked Line 3x",
+      "label": "Stacked Line",
       "group": "Line",
       "file": "stacked-line-3x.json"
     },
     {
-      "id": "stacked-line-with-markers-2x",
-      "name": "STACKED_LINE_WITH_MARKERS_2X",
-      "label": "Stacked Line with Markers 2x",
-      "group": "Line",
-      "file": "stacked-line-with-markers-2x.json"
-    },
-    {
       "id": "stacked-line-with-markers-3x",
       "name": "STACKED_LINE_WITH_MARKERS_3X",
-      "label": "Stacked Line with Markers 3x",
+      "label": "Stacked Line with Markers",
       "group": "Line",
       "file": "stacked-line-with-markers-3x.json"
     },
@@ -494,34 +165,6 @@
       "file": "treemap.json"
     },
     {
-      "id": "treemap-2x",
-      "name": "TREEMAP_2X",
-      "label": "Treemap 2x",
-      "group": "Treemap",
-      "file": "treemap-2x.json"
-    },
-    {
-      "id": "treemap-3x",
-      "name": "TREEMAP_3X",
-      "label": "Treemap 3x",
-      "group": "Treemap",
-      "file": "treemap-3x.json"
-    },
-    {
-      "id": "united-kingdom",
-      "name": "UNITED_KINGDOM",
-      "label": "United Kingdom",
-      "group": "Map",
-      "file": "united-kingdom.json"
-    },
-    {
-      "id": "united-states",
-      "name": "UNITED_STATES",
-      "label": "United States",
-      "group": "Map",
-      "file": "united-states.json"
-    },
-    {
       "id": "waterfall",
       "name": "WATERFALL",
       "label": "Waterfall",
@@ -531,9 +174,468 @@
     {
       "id": "world",
       "name": "WORLD",
-      "label": "World",
+      "label": "Map",
       "group": "Map",
       "file": "world.json"
+    },
+    {
+      "id": "100pct-bullet-bar",
+      "name": "100PCT_BULLET_BAR",
+      "label": "100% Bullet Bar",
+      "group": "Bullet",
+      "file": "100pct-bullet-bar.json",
+      "deprecated": true,
+      "replacedBy": "100pct-stacked-bar-3x"
+    },
+    {
+      "id": "100pct-bullet-bar-2x",
+      "name": "100PCT_BULLET_BAR_2X",
+      "label": "100% Bullet Bar 2x",
+      "group": "Bullet",
+      "file": "100pct-bullet-bar-2x.json",
+      "deprecated": true,
+      "replacedBy": "100pct-stacked-bar-3x"
+    },
+    {
+      "id": "100pct-bullet-bar-3x",
+      "name": "100PCT_BULLET_BAR_3X",
+      "label": "100% Bullet Bar 3x",
+      "group": "Bullet",
+      "file": "100pct-bullet-bar-3x.json",
+      "deprecated": true,
+      "replacedBy": "100pct-stacked-bar-3x"
+    },
+    {
+      "id": "100pct-bullet-column",
+      "name": "100PCT_BULLET_COLUMN",
+      "label": "100% Bullet Column",
+      "group": "Bullet",
+      "file": "100pct-bullet-column.json",
+      "deprecated": true,
+      "replacedBy": "100pct-stacked-column-3x"
+    },
+    {
+      "id": "100pct-bullet-column-2x",
+      "name": "100PCT_BULLET_COLUMN_2X",
+      "label": "100% Bullet Colum 2x",
+      "group": "Bullet",
+      "file": "100pct-bullet-column-2x.json",
+      "deprecated": true,
+      "replacedBy": "100pct-stacked-column-3x"
+    },
+    {
+      "id": "100pct-bullet-column-3x",
+      "name": "100PCT_BULLET_COLUMN_3X",
+      "label": "100% Bullet Column 3x",
+      "group": "Bullet",
+      "file": "100pct-bullet-column-3x.json",
+      "deprecated": true,
+      "replacedBy": "100pct-stacked-column-3x"
+    },
+    {
+      "id": "100pct-progress-bar",
+      "name": "100PCT_PROGRESS_BAR",
+      "label": "100% Progress Bar",
+      "group": "Bar",
+      "file": "100pct-progress-bar.json",
+      "deprecated": true,
+      "replacedBy": "100pct-stacked-bar-3x"
+    },
+    {
+      "id": "100pct-stacked-area-2x",
+      "name": "100PCT_STACKED_AREA_2X",
+      "label": "100% Stacked Area 2x",
+      "group": "Area",
+      "file": "100pct-stacked-area-2x.json",
+      "deprecated": true,
+      "replacedBy": "100pct-stacked-area-3x"
+    },
+    {
+      "id": "100pct-stacked-bar-2x",
+      "name": "100PCT_STACKED_BAR_2X",
+      "label": "100% Stacked Bar 2x",
+      "group": "Bar",
+      "file": "100pct-stacked-bar-2x.json",
+      "deprecated": true,
+      "replacedBy": "100pct-stacked-bar-3x"
+    },
+    {
+      "id": "100pct-stacked-column-2x",
+      "name": "100PCT_STACKED_COLUMN_2X",
+      "label": "100% Stacked Column 2x",
+      "group": "Column",
+      "file": "100pct-stacked-column-2x.json",
+      "deprecated": true,
+      "replacedBy": "100pct-stacked-column-3x"
+    },
+    {
+      "id": "australia",
+      "name": "AUSTRALIA",
+      "label": "Australia",
+      "group": "Map",
+      "file": "australia.json",
+      "deprecated": true,
+      "replacedBy": "world"
+    },
+    {
+      "id": "box-and-whisker-2x",
+      "name": "BOX_AND_WHISKER_2X",
+      "label": "Box & Whisker 2x",
+      "group": "Other",
+      "file": "box-and-whisker-2x.json",
+      "deprecated": true,
+      "replacedBy": "box-and-whisker"
+    },
+    {
+      "id": "box-and-whisker-3x",
+      "name": "BOX_AND_WHISKER_3X",
+      "label": "Box & Whisker 3x",
+      "group": "Other",
+      "file": "box-and-whisker-3x.json",
+      "deprecated": true,
+      "replacedBy": "box-and-whisker"
+    },
+    {
+      "id": "bullet-bar",
+      "name": "BULLET_BAR",
+      "label": "Bullet Bar",
+      "group": "Bullet",
+      "file": "bullet-bar.json",
+      "deprecated": true,
+      "replacedBy": "bar"
+    },
+    {
+      "id": "bullet-bar-2x",
+      "name": "BULLET_BAR_2X",
+      "label": "Bullet Bar 2x",
+      "group": "Bullet",
+      "file": "bullet-bar-2x.json",
+      "deprecated": true,
+      "replacedBy": "bar"
+    },
+    {
+      "id": "bullet-bar-3x",
+      "name": "BULLET_BAR_3X",
+      "label": "Bullet Bar 3x",
+      "group": "Bullet",
+      "file": "bullet-bar-3x.json",
+      "deprecated": true,
+      "replacedBy": "bar"
+    },
+    {
+      "id": "bullet-column",
+      "name": "BULLET_COLUMN",
+      "label": "Bullet Column",
+      "group": "Bullet",
+      "file": "bullet-column.json",
+      "deprecated": true,
+      "replacedBy": "column"
+    },
+    {
+      "id": "bullet-column-2x",
+      "name": "BULLET_COLUMN_2X",
+      "label": "Bullet Column 2x",
+      "group": "Bullet",
+      "file": "bullet-column-2x.json",
+      "deprecated": true,
+      "replacedBy": "column"
+    },
+    {
+      "id": "bullet-column-3x",
+      "name": "BULLET_COLUMN_3X",
+      "label": "Bullet Column 3x",
+      "group": "Bullet",
+      "file": "bullet-column-3x.json",
+      "deprecated": true,
+      "replacedBy": "column"
+    },
+    {
+      "id": "canada",
+      "name": "CANADA",
+      "label": "Canada",
+      "group": "Map",
+      "file": "canada.json",
+      "deprecated": true,
+      "replacedBy": "world"
+    },
+    {
+      "id": "clustered-bar-2x",
+      "name": "CLUSTERED_BAR_2X",
+      "label": "Clustered Bar 2x",
+      "group": "Bar",
+      "file": "clustered-bar-2x.json",
+      "deprecated": true,
+      "replacedBy": "bar"
+    },
+    {
+      "id": "clustered-column",
+      "name": "CLUSTERED_COLUMN",
+      "label": "Clustered Column",
+      "group": "Column",
+      "file": "clustered-column.json",
+      "deprecated": true,
+      "replacedBy": "column"
+    },
+    {
+      "id": "dot-plot",
+      "name": "DOT_PLOT",
+      "label": "Dot Plot",
+      "group": "XY (Scatter)",
+      "file": "dot-plot.json",
+      "deprecated": true,
+      "replacedBy": "scatter"
+    },
+    {
+      "id": "dot-plot-2x",
+      "name": "DOT_PLOT_2X",
+      "label": "Dot Plot 2x",
+      "group": "XY (Scatter)",
+      "file": "dot-plot-2x.json",
+      "deprecated": true,
+      "replacedBy": "scatter"
+    },
+    {
+      "id": "dot-plot-3x",
+      "name": "DOT_PLOT_3X",
+      "label": "Dot Plot 3x",
+      "group": "XY (Scatter)",
+      "file": "dot-plot-3x.json",
+      "deprecated": true,
+      "replacedBy": "scatter"
+    },
+    {
+      "id": "dot-plot-4x",
+      "name": "DOT_PLOT_4X",
+      "label": "Dot Plot 4x",
+      "group": "XY (Scatter)",
+      "file": "dot-plot-4x.json",
+      "deprecated": true,
+      "replacedBy": "scatter"
+    },
+    {
+      "id": "dot-plot-5x",
+      "name": "DOT_PLOT_5X",
+      "label": "Dot Plot 5x",
+      "group": "XY (Scatter)",
+      "file": "dot-plot-5x.json",
+      "deprecated": true,
+      "replacedBy": "scatter"
+    },
+    {
+      "id": "dot-plot-6x",
+      "name": "DOT_PLOT_6X",
+      "label": "Dot Plot 6x",
+      "group": "XY (Scatter)",
+      "file": "dot-plot-6x.json",
+      "deprecated": true,
+      "replacedBy": "scatter"
+    },
+    {
+      "id": "dumbbell",
+      "name": "DUMBBELL",
+      "label": "Dumbbell",
+      "group": "Other",
+      "file": "dumbbell.json",
+      "deprecated": true,
+      "replacedBy": "scatter"
+    },
+    {
+      "id": "line-2x",
+      "name": "LINE_2X",
+      "label": "Line 2x",
+      "group": "Line",
+      "file": "line-2x.json",
+      "deprecated": true,
+      "replacedBy": "line"
+    },
+    {
+      "id": "line-3x",
+      "name": "LINE_3X",
+      "label": "Line 3x",
+      "group": "Line",
+      "file": "line-3x.json",
+      "deprecated": true,
+      "replacedBy": "line"
+    },
+    {
+      "id": "line-with-high-low",
+      "name": "LINE_WITH_HIGH_LOW",
+      "label": "Line with High/Low",
+      "group": "Line",
+      "file": "line-with-high-low.json",
+      "deprecated": true,
+      "replacedBy": "line"
+    },
+    {
+      "id": "line-with-high-low-and-markers",
+      "name": "LINE_WITH_HIGH_LOW_AND_MARKERS",
+      "label": "Line with High/Low and Markers",
+      "group": "Line",
+      "file": "line-with-high-low-and-markers.json",
+      "deprecated": true,
+      "replacedBy": "line-with-markers"
+    },
+    {
+      "id": "line-with-markers-2x",
+      "name": "LINE_WITH_MARKERS_2X",
+      "label": "Line with Markers 2x",
+      "group": "Line",
+      "file": "line-with-markers-2x.json",
+      "deprecated": true,
+      "replacedBy": "line-with-markers"
+    },
+    {
+      "id": "line-with-markers-3x",
+      "name": "LINE_WITH_MARKERS_3X",
+      "label": "Line with Markers 3x",
+      "group": "Line",
+      "file": "line-with-markers-3x.json",
+      "deprecated": true,
+      "replacedBy": "line-with-markers"
+    },
+    {
+      "id": "pareto",
+      "name": "PARETO",
+      "label": "Pareto",
+      "group": "Histogram",
+      "file": "pareto.json",
+      "deprecated": true,
+      "replacedBy": "histogram"
+    },
+    {
+      "id": "sparkline",
+      "name": "SPARKLINE",
+      "label": "Sparkline",
+      "group": "Sparkline",
+      "file": "sparkline.json",
+      "deprecated": true,
+      "replacedBy": "line"
+    },
+    {
+      "id": "sparkline-2x",
+      "name": "SPARKLINE_2X",
+      "label": "Sparkline 2x",
+      "group": "Sparkline",
+      "file": "sparkline-2x.json",
+      "deprecated": true,
+      "replacedBy": "line"
+    },
+    {
+      "id": "sparkline-3x",
+      "name": "SPARKLINE_3X",
+      "label": "Sparkline 3x",
+      "group": "Sparkline",
+      "file": "sparkline-3x.json",
+      "deprecated": true,
+      "replacedBy": "line"
+    },
+    {
+      "id": "sparkline-4x",
+      "name": "SPARKLINE_4X",
+      "label": "Sparkline 4x",
+      "group": "Sparkline",
+      "file": "sparkline-4x.json",
+      "deprecated": true,
+      "replacedBy": "line"
+    },
+    {
+      "id": "sparkline-5x",
+      "name": "SPARKLINE_5X",
+      "label": "Sparkline 5x",
+      "group": "Sparkline",
+      "file": "sparkline-5x.json",
+      "deprecated": true,
+      "replacedBy": "line"
+    },
+    {
+      "id": "sparkline-6x",
+      "name": "SPARKLINE_6X",
+      "label": "Sparkline 6x",
+      "group": "Sparkline",
+      "file": "sparkline-6x.json",
+      "deprecated": true,
+      "replacedBy": "line"
+    },
+    {
+      "id": "stacked-area-2x",
+      "name": "STACKED_AREA_2X",
+      "label": "Stacked Area 2x",
+      "group": "Area",
+      "file": "stacked-area-2x.json",
+      "deprecated": true,
+      "replacedBy": "stacked-area-3x"
+    },
+    {
+      "id": "stacked-bar-2x",
+      "name": "STACKED_BAR_2X",
+      "label": "Stacked Bar 2x",
+      "group": "Bar",
+      "file": "stacked-bar-2x.json",
+      "deprecated": true,
+      "replacedBy": "stacked-bar-3x"
+    },
+    {
+      "id": "stacked-column-2x",
+      "name": "STACKED_COLUMN_2X",
+      "label": "Stacked Column 2x",
+      "group": "Column",
+      "file": "stacked-column-2x.json",
+      "deprecated": true,
+      "replacedBy": "stacked-column-3x"
+    },
+    {
+      "id": "stacked-line-2x",
+      "name": "STACKED_LINE_2X",
+      "label": "Stacked Line 2x",
+      "group": "Line",
+      "file": "stacked-line-2x.json",
+      "deprecated": true,
+      "replacedBy": "stacked-line-3x"
+    },
+    {
+      "id": "stacked-line-with-markers-2x",
+      "name": "STACKED_LINE_WITH_MARKERS_2X",
+      "label": "Stacked Line with Markers 2x",
+      "group": "Line",
+      "file": "stacked-line-with-markers-2x.json",
+      "deprecated": true,
+      "replacedBy": "stacked-line-with-markers-3x"
+    },
+    {
+      "id": "treemap-2x",
+      "name": "TREEMAP_2X",
+      "label": "Treemap 2x",
+      "group": "Treemap",
+      "file": "treemap-2x.json",
+      "deprecated": true,
+      "replacedBy": "treemap"
+    },
+    {
+      "id": "treemap-3x",
+      "name": "TREEMAP_3X",
+      "label": "Treemap 3x",
+      "group": "Treemap",
+      "file": "treemap-3x.json",
+      "deprecated": true,
+      "replacedBy": "treemap"
+    },
+    {
+      "id": "united-kingdom",
+      "name": "UNITED_KINGDOM",
+      "label": "United Kingdom",
+      "group": "Map",
+      "file": "united-kingdom.json",
+      "deprecated": true,
+      "replacedBy": "world"
+    },
+    {
+      "id": "united-states",
+      "name": "UNITED_STATES",
+      "label": "United States",
+      "group": "Map",
+      "file": "united-states.json",
+      "deprecated": true,
+      "replacedBy": "world"
     }
   ]
 }

@@ -21,6 +21,11 @@
       "notes": "Pareto charts combine sorted columns with a cumulative-percentage line."
     }
   },
+  "deprecation": {
+    "replacedBy": "histogram",
+    "reason": "Composition of several chart series types (bands, markers, helper series, or small multiples), not a single Aspose.Slides ChartType. Use 'histogram', the closest supported ChartType.",
+    "removal": "0.12.0"
+  },
   "categories": 49,
   "columns": [
     "Category",

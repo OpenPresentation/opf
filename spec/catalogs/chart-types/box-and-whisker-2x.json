@@ -8,7 +8,17 @@
       "element": "boxWhiskerChart",
       "composition": "extension",
       "notes": "Office extension chart; exact extension markup is renderer-specific."
+    },
+    "renderers": {
+      "aspose-slides": {
+        "chartType": "BoxAndWhisker"
+      }
     }
+  },
+  "deprecation": {
+    "replacedBy": "box-and-whisker",
+    "reason": "Same Aspose.Slides ChartType (BoxAndWhisker) as 'box-and-whisker'. Series count and geography come from the chart data, not the chart type, so the catalog keeps one record per ChartType.",
+    "removal": "0.12.0"
   },
   "categories": 22,
   "columns": [

@@ -2,12 +2,17 @@
   "$schema": "https://openpresentation.org/schema/opf-chart-type/v1",
   "id": "stacked-line-3x",
   "name": "STACKED_LINE_3X",
-  "label": "Stacked Line 3x",
+  "label": "Stacked Line",
   "mappings": {
     "openxml": {
       "element": "lineChart",
       "grouping": "stacked",
       "composition": "single"
+    },
+    "renderers": {
+      "aspose-slides": {
+        "chartType": "StackedLine"
+      }
     }
   },
   "categories": 12,

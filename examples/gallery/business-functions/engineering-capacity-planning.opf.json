@@ -174,7 +174,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "column",
+        "type": "area",
         "data": {
           "src": "asset:metric-data",
           "sheet": "Summary",
@@ -325,7 +325,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "filled-radar",
+            "type": "line-with-markers",
             "data": {
               "columns": [
                 "Quarter",

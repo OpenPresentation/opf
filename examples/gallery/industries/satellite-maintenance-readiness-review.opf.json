@@ -158,7 +158,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "area",
+        "type": "pie",
         "data": {
           "columns": [
             "Quarter",

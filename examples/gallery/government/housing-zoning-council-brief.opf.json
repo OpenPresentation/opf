@@ -174,7 +174,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "stacked-line-3x",
+        "type": "scatter",
         "data": {
           "columns": [
             "Quarter",
@@ -344,7 +344,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "world",
+            "type": "100pct-stacked-area-3x",
             "data": {
               "columns": [
                 "Quarter",

@@ -142,7 +142,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "waterfall",
+        "type": "world",
         "data": {
           "columns": [
             "Quarter",

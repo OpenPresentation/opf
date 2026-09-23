@@ -8,6 +8,11 @@
       "element": "radarChart",
       "radarStyle": "filled",
       "composition": "single"
+    },
+    "renderers": {
+      "aspose-slides": {
+        "chartType": "FilledRadar"
+      }
     }
   },
   "categories": 8,

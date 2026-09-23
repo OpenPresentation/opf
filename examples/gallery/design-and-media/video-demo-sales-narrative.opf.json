@@ -167,7 +167,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "bullet-bar-2x",
+        "type": "stacked-line-with-markers-3x",
         "data": {
           "src": "asset:metric-data",
           "sheet": "Summary",
@@ -318,7 +318,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "dot-plot",
+            "type": "box-and-whisker",
             "data": {
               "columns": [
                 "Quarter",

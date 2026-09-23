@@ -142,7 +142,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "100pct-progress-bar",
+        "type": "doughnut",
         "data": {
           "columns": [
             "Quarter",

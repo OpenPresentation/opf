@@ -167,7 +167,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "box-and-whisker",
+        "type": "scatter",
         "data": {
           "src": "asset:metric-data",
           "sheet": "Summary",
@@ -318,7 +318,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "canada",
+            "type": "100pct-stacked-area-3x",
             "data": {
               "columns": [
                 "Quarter",

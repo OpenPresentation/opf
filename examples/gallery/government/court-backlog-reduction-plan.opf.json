@@ -142,7 +142,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "united-states",
+        "type": "waterfall",
         "data": {
           "columns": [
             "Quarter",

@@ -103,7 +103,7 @@ opf catalog layouts
 opf catalog fontSchemes roboto
 ```
 
-`schemas` and `catalogs` list available names/kinds. `schema` returns the whole schema or a branch addressed by a pointer into the schema. `catalog` returns all records in a kind, or one exact ID. These commands inspect the bundled version and do not fetch galleries.
+`schemas` and `catalogs` list available names/kinds. `schema` returns the whole schema or a branch addressed by a pointer into the schema. `catalog` returns the records in a kind, or one exact ID. Deprecated records (for example chart types outside the Aspose.Slides-supported set, which carry a `deprecation.replacedBy` id) are left out of listings and counts unless you pass `--all`, but an exact ID still returns them; `catalogs` reports how many each kind has as `deprecated`. These commands inspect the bundled version and do not fetch galleries.
 
 ```sh
 opf paginate decision.opf.json paginated.opf.json

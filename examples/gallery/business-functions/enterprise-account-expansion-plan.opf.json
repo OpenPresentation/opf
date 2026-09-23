@@ -135,7 +135,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "canada",
+        "type": "100pct-stacked-area-3x",
         "data": {
           "columns": [
             "Quarter",

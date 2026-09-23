@@ -167,7 +167,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "sparkline-4x",
+        "type": "column",
         "data": {
           "src": "asset:metric-data",
           "sheet": "Summary",
@@ -318,7 +318,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "stacked-line-2x",
+            "type": "radar-with-markers",
             "data": {
               "columns": [
                 "Quarter",

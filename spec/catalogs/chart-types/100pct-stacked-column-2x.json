@@ -9,7 +9,17 @@
       "barDir": "col",
       "grouping": "percentStacked",
       "composition": "single"
+    },
+    "renderers": {
+      "aspose-slides": {
+        "chartType": "PercentsStackedColumn"
+      }
     }
+  },
+  "deprecation": {
+    "replacedBy": "100pct-stacked-column-3x",
+    "reason": "Same Aspose.Slides ChartType (PercentsStackedColumn) as '100pct-stacked-column-3x'. Series count and geography come from the chart data, not the chart type, so the catalog keeps one record per ChartType.",
+    "removal": "0.12.0"
   },
   "categories": 8,
   "columns": [

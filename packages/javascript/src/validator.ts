@@ -5,7 +5,7 @@ import { catalogSchemaNames, type CatalogKind } from "./catalogs.js";
 import { MAX_COMPOSITION_DEPTH } from "./composition.js";
 import { bareIdPattern, isRecord, pathFor, promotedRegionKeys, visitContentPayloads } from "./content-walk.js";
 import {tableGrid} from "./table.js";
-import { catalogIds } from "./generated/catalog-ids.js";
+import { catalogIds, deprecatedCatalogIds } from "./generated/catalog-ids.js";
 import type { JsonSchema } from "./json.js";
 import { schemas, type SchemaName } from "./schemas.js";
 import { rememberValidationDefinition } from './validation-definitions.js';
@@ -526,7 +526,10 @@ function unknownIdWarning(
   }
 
   if ((catalogIds[kind] as readonly string[]).includes(value)) {
-    return undefined;
+    const replacedBy = deprecatedCatalogIds[`${kind}/${value}`];
+    return replacedBy === undefined
+      ? undefined
+      : semanticIssue(path, `deprecated ${kind} catalog id '${value}'; use '${replacedBy}'`, { kind, id: value, replacedBy });
   }
 
   return semanticIssue(path, `unknown ${kind} catalog id '${value}'`, { kind, id: value });

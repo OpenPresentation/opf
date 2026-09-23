@@ -172,7 +172,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "funnel",
+        "type": "pie",
         "data": {
           "columns": [
             "Quarter",
@@ -342,7 +342,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "line-with-markers-3x",
+            "type": "treemap",
             "data": {
               "columns": [
                 "Quarter",

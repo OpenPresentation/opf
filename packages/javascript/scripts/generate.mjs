@@ -262,6 +262,7 @@ async function generateCatalogIds() {
   // Lightweight id-only view of the bundled catalogs so the validator can
   // check references without pulling full catalog records into its bundle.
   const lines = [generatedHeader("spec/catalogs/<catalog-kind>/*.json")];
+  const deprecated = [];
   lines.push("export const catalogIds = {");
   for (const definition of catalogDefinitions) {
     const catalogDir = path.join(catalogRoot, definition.dir);
@@ -272,11 +273,21 @@ async function generateCatalogIds() {
       const record = await readJson(path.join(catalogDir, file));
       if (typeof record.id === "string") {
         ids.push(record.id);
+        if (typeof record.deprecation?.replacedBy === "string") {
+          deprecated.push([definition.kind, record.id, record.deprecation.replacedBy]);
+        }
       }
     }
     lines.push(`  ${definition.kind}: ${asTs(ids)},`);
   }
   lines.push("} as const;", "");
+  // Deprecated bundled records stay resolvable; the validator warns and names
+  // the replacement. Keyed "<kind>/<id>" -> replacement id.
+  lines.push("export const deprecatedCatalogIds: Readonly<Record<string, string>> = {");
+  for (const [kind, id, replacedBy] of deprecated) {
+    lines.push(`  ${JSON.stringify(`${kind}/${id}`)}: ${JSON.stringify(replacedBy)},`);
+  }
+  lines.push("};", "");
 
   await fs.writeFile(path.join(generatedRoot, "catalog-ids.ts"), lines.join("\n"));
 }

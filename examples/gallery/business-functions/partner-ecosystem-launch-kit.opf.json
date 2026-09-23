@@ -53,7 +53,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "line-2x",
+        "type": "scatter",
         "data": {
           "columns": [
             "Quarter",

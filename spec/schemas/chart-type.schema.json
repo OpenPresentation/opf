@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://openpresentation.org/schema/opf-chart-type/v1",
   "title": "Chart Type",
-  "description": "Schema for chart-type records in the pptx.gallery catalog. Each record describes a named chart variant, its Open XML mapping, its series/category cardinality, the column structure of the underlying workbook, and a small sample dataset suitable for previews. Chart types are referenced from OPF chart content payloads; the engine resolves the reference against catalogs.chartTypes (inline) -> catalogs.chartTypes.source -> the default catalog at https://www.pptx.gallery/chart-types.",
+  "description": "Schema for chart-type records in the pptx.gallery catalog. The bundled catalog holds one record per chart type that Aspose.Slides officially supports (see mappings.renderers[\"aspose-slides\"].chartType). Each record describes a named chart variant, its Open XML mapping, its series/category cardinality, the column structure of the underlying workbook, and a small sample dataset suitable for previews. Chart types are referenced from OPF chart content payloads; the engine resolves the reference against catalogs.chartTypes (inline) -> catalogs.chartTypes.source -> the default catalog at https://www.pptx.gallery/chart-types.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -23,11 +23,11 @@
       "description": "Stable slug used by OPF documents to reference this chart type. Lowercase kebab-case. Chart type ids may start with a digit (e.g., '100pct-stacked-column', '3d-column') to mirror conventional chart naming.",
       "examples": [
         "column",
-        "clustered-column",
-        "stacked-column",
+        "bar",
+        "stacked-column-3x",
         "doughnut",
-        "bullet-column",
-        "100pct-stacked-column"
+        "treemap",
+        "100pct-stacked-column-3x"
       ]
     },
     "name": {
@@ -35,9 +35,9 @@
       "description": "Stable display/programmatic name for this chart type.",
       "examples": [
         "COLUMN",
-        "CLUSTERED_COLUMN",
+        "STACKED_COLUMN_3X",
         "DOUGHNUT",
-        "BULLET_COLUMN"
+        "TREEMAP"
       ]
     },
     "label": {
@@ -45,9 +45,9 @@
       "description": "Human-readable label shown in chart pickers.",
       "examples": [
         "Column",
-        "Clustered Column",
+        "Stacked Column",
         "Doughnut",
-        "Bullet Column"
+        "Treemap"
       ]
     },
     "summary": {
@@ -68,6 +68,10 @@
     "mappings": {
       "$ref": "#/$defs/ChartTypeMappings",
       "description": "Canonical and optional renderer-specific mappings used by engines to render this chart type."
+    },
+    "deprecation": {
+      "$ref": "#/$defs/ChartTypeDeprecation",
+      "description": "Present when this chart type is deprecated. Deprecated records stay resolvable so existing documents keep validating, but pickers and default listings exclude them, validators warn when a document references them, and they are removed in the release named by `removal`."
     },
     "group": {
       "type": "string",
@@ -305,6 +309,35 @@
     }
   },
   "$defs": {
+    "ChartTypeDeprecation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "replacedBy"
+      ],
+      "properties": {
+        "replacedBy": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$",
+          "description": "Id of the non-deprecated chart type that documents should reference instead.",
+          "examples": [
+            "column",
+            "stacked-column-3x"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "description": "Why the record is deprecated."
+        },
+        "removal": {
+          "type": "string",
+          "description": "Package version in which the record is scheduled for removal from the bundled catalog.",
+          "examples": [
+            "0.12.0"
+          ]
+        }
+      }
+    },
     "ChartTypeMappings": {
       "type": "object",
       "additionalProperties": false,
@@ -318,11 +351,18 @@
         },
         "renderers": {
           "type": "object",
-          "description": "Optional renderer-specific mappings. Keys are renderer ids; values are intentionally opaque to OPF.",
+          "description": "Optional renderer-specific mappings. Keys are renderer ids; values are intentionally opaque to OPF. The bundled catalog records the matching Aspose.Slides ChartType enumeration member under the \"aspose-slides\" key, e.g. {\"aspose-slides\": {\"chartType\": \"StackedColumn\"}}.",
           "additionalProperties": {
             "type": "object",
             "additionalProperties": true
-          }
+          },
+          "examples": [
+            {
+              "aspose-slides": {
+                "chartType": "ClusteredColumn"
+              }
+            }
+          ]
         }
       }
     },

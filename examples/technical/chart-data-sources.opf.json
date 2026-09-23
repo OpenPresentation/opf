@@ -48,7 +48,7 @@
     {
       "title": "CSV Chart Data",
       "chart": {
-        "type": "clustered-column",
+        "type": "column",
         "data": {
           "src": "asset:revenue-csv",
           "columns": [

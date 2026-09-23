@@ -757,7 +757,7 @@ _No named properties._
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `type` | yes | `string` | Chart type id. Resolves to the id of a chartTypes catalog record; renderers map that record through mappings.openxml and any renderer-specific mapping they understand. |
+| `type` | yes | `string` | Chart type id. Resolves to the id of a chartTypes catalog record; renderers map that record through mappings.openxml and any renderer-specific mapping they understand. The bundled catalog covers the chart types Aspose... |
 | `data` | yes | `oneOf:ref:ChartData / ref:ChartDataSource` | Chart data. Inline data uses a tabular columns/rows shape; renderers convert rows to chart series internally. |
 
 

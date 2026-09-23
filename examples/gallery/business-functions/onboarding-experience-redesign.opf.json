@@ -53,7 +53,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "dot-plot-3x",
+        "type": "column",
         "data": {
           "columns": [
             "Quarter",

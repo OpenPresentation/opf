@@ -10,6 +10,11 @@
       "notes": "Presentation sparklines render as compact line charts."
     }
   },
+  "deprecation": {
+    "replacedBy": "line",
+    "reason": "Composition of several chart series types (bands, markers, helper series, or small multiples), not a single Aspose.Slides ChartType. Use 'line', the closest supported ChartType.",
+    "removal": "0.12.0"
+  },
   "categories": 12,
   "columns": [
     "Period",

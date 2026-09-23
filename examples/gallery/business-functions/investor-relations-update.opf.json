@@ -165,7 +165,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "pie",
+        "type": "world",
         "data": {
           "columns": [
             "Quarter",
@@ -335,7 +335,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "sparkline-6x",
+            "type": "filled-radar",
             "data": {
               "columns": [
                 "Quarter",

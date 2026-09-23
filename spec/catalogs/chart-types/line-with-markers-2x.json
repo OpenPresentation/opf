@@ -8,7 +8,17 @@
       "element": "lineChart",
       "marker": true,
       "composition": "single"
+    },
+    "renderers": {
+      "aspose-slides": {
+        "chartType": "LineWithMarkers"
+      }
     }
+  },
+  "deprecation": {
+    "replacedBy": "line-with-markers",
+    "reason": "Same Aspose.Slides ChartType (LineWithMarkers) as 'line-with-markers'. Series count and geography come from the chart data, not the chart type, so the catalog keeps one record per ChartType.",
+    "removal": "0.12.0"
   },
   "categories": 12,
   "columns": [

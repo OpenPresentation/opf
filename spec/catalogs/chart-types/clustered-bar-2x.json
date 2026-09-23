@@ -9,7 +9,17 @@
       "barDir": "bar",
       "grouping": "clustered",
       "composition": "single"
+    },
+    "renderers": {
+      "aspose-slides": {
+        "chartType": "ClusteredBar"
+      }
     }
+  },
+  "deprecation": {
+    "replacedBy": "bar",
+    "reason": "Same Aspose.Slides ChartType (ClusteredBar) as 'bar'. Series count and geography come from the chart data, not the chart type, so the catalog keeps one record per ChartType.",
+    "removal": "0.12.0"
   },
   "categories": 6,
   "columns": [

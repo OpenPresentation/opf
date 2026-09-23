@@ -53,7 +53,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "treemap-3x",
+        "type": "stacked-line-with-markers-3x",
         "data": {
           "columns": [
             "Quarter",

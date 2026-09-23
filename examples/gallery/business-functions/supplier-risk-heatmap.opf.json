@@ -178,7 +178,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "dumbbell",
+        "type": "line",
         "data": {
           "src": "asset:metric-data",
           "sheet": "Summary",
@@ -329,7 +329,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "line-with-markers",
+            "type": "stacked-line-3x",
             "data": {
               "columns": [
                 "Quarter",

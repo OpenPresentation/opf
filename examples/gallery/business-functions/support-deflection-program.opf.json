@@ -142,7 +142,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "dot-plot-6x",
+        "type": "funnel",
         "data": {
           "columns": [
             "Quarter",

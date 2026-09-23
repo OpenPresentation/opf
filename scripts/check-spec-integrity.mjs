@@ -1,7 +1,8 @@
 // Verifies internal consistency of spec/** that no single schema validator can
 // check on its own: catalog index <-> on-disk record parity, catalog record
 // schema <-> embedded opf.schema.json $def parity, preview index <-> on-disk
-// HTML parity, and index-file $schema URIs.
+// HTML parity, index-file $schema URIs, and the Aspose.Slides chart-type
+// reduction (one non-deprecated record per Aspose.Slides ChartType).
 //
 // Zero external dependencies by design. Run via `pnpm check:spec` (root) or
 // `node scripts/check-spec-integrity.mjs` directly. Exits non-zero with a
@@ -311,6 +312,79 @@ async function checkIndexSchemaUris() {
   }
 }
 
+// (f) Chart types are reduced to the chart types Aspose.Slides officially
+// supports (FF-22). Every record names its Aspose.Slides ChartType under
+// mappings.renderers["aspose-slides"].chartType (compositions with no single
+// ChartType may omit it, but only when deprecated); the non-deprecated records
+// hold exactly one record per ChartType; and every deprecated record points
+// at a non-deprecated replacement and is flagged in index.json. Source:
+// https://reference.aspose.com/slides/net/aspose.slides.charts/charttype/
+// (see docs/programs/font-fidelity-everywhere/aspose-chart-types.md).
+const ASPOSE_SLIDES_CHART_TYPES = new Set([
+  "ClusteredColumn", "StackedColumn", "PercentsStackedColumn", "ClusteredColumn3D", "StackedColumn3D",
+  "PercentsStackedColumn3D", "Column3D", "ClusteredCylinder", "StackedCylinder", "PercentsStackedCylinder",
+  "Cylinder3D", "ClusteredCone", "StackedCone", "PercentsStackedCone", "Cone3D", "ClusteredPyramid",
+  "StackedPyramid", "PercentsStackedPyramid", "Pyramid3D", "Line", "StackedLine", "PercentsStackedLine",
+  "LineWithMarkers", "StackedLineWithMarkers", "PercentsStackedLineWithMarkers", "Line3D", "Pie", "Pie3D",
+  "PieOfPie", "ExplodedPie", "ExplodedPie3D", "BarOfPie", "PercentsStackedBar", "ClusteredBar3D",
+  "ClusteredBar", "StackedBar", "StackedBar3D", "PercentsStackedBar3D", "ClusteredHorizontalCylinder",
+  "StackedHorizontalCylinder", "PercentsStackedHorizontalCylinder", "ClusteredHorizontalCone",
+  "StackedHorizontalCone", "PercentsStackedHorizontalCone", "ClusteredHorizontalPyramid",
+  "StackedHorizontalPyramid", "PercentsStackedHorizontalPyramid", "Area", "StackedArea", "PercentsStackedArea",
+  "Area3D", "StackedArea3D", "PercentsStackedArea3D", "ScatterWithMarkers", "ScatterWithSmoothLinesAndMarkers",
+  "ScatterWithSmoothLines", "ScatterWithStraightLinesAndMarkers", "ScatterWithStraightLines", "HighLowClose",
+  "OpenHighLowClose", "VolumeHighLowClose", "VolumeOpenHighLowClose", "Surface3D", "WireframeSurface3D",
+  "Contour", "WireframeContour", "Doughnut", "ExplodedDoughnut", "Bubble", "BubbleWith3D", "Radar",
+  "RadarWithMarkers", "FilledRadar", "Treemap", "Sunburst", "Histogram", "ParetoLine", "BoxAndWhisker",
+  "Waterfall", "Funnel", "Map",
+]);
+
+async function checkChartTypesAsposeSupported() {
+  const dir = path.join(catalogsRoot, "chart-types");
+  const index = await readJson(path.join(dir, "index.json"));
+  const indexById = new Map((index.records ?? []).map((record) => [record.id, record]));
+  const records = new Map();
+  for (const file of await listJsonRecordFiles(dir)) {
+    const record = await readJson(path.join(dir, file));
+    records.set(record.id, record);
+  }
+  const owners = new Map();
+  for (const [id, record] of records) {
+    const where = `[f] chart-types/${id}.json`;
+    const chartType = record.mappings?.renderers?.["aspose-slides"]?.chartType;
+    const deprecation = record.deprecation;
+    if (chartType !== undefined && !ASPOSE_SLIDES_CHART_TYPES.has(chartType)) {
+      fail(`${where}: '${chartType}' is not an Aspose.Slides ChartType member`);
+    }
+    if (chartType === "SeriesOfMixedTypes") {
+      fail(`${where}: SeriesOfMixedTypes is read-only in Aspose.Slides and cannot back a chart type`);
+    }
+    const indexRecord = indexById.get(id);
+    if (Boolean(indexRecord?.deprecated) !== Boolean(deprecation)) {
+      fail(`${where}: index.json 'deprecated' flag does not match the record's deprecation`);
+    }
+    if (deprecation) {
+      const replacement = records.get(deprecation.replacedBy);
+      if (!replacement || replacement.deprecation) {
+        fail(`${where}: deprecation.replacedBy '${deprecation.replacedBy}' must name a non-deprecated chart type`);
+      }
+      if (indexRecord?.replacedBy !== deprecation.replacedBy) {
+        fail(`${where}: index.json replacedBy does not match deprecation.replacedBy`);
+      }
+      continue;
+    }
+    if (chartType === undefined) {
+      fail(`${where}: non-deprecated chart types must name an Aspose.Slides ChartType in mappings.renderers["aspose-slides"].chartType`);
+      continue;
+    }
+    if (owners.has(chartType)) {
+      fail(`${where}: Aspose.Slides ChartType '${chartType}' is already covered by '${owners.get(chartType)}'; deprecate one of them`);
+    }
+    owners.set(chartType, id);
+  }
+  notes.push(`chart-types: ${owners.size} Aspose.Slides-supported chart types, ${records.size - owners.size} deprecated`);
+}
+
 async function main() {
   const opfSchema = await readJson(path.join(schemasRoot, "opf.schema.json"));
 
@@ -319,6 +393,7 @@ async function main() {
   await checkNarrativeLayoutHints();
   await checkPreviewIndex();
   await checkIndexSchemaUris();
+  await checkChartTypesAsposeSupported();
 
   if (failures.length > 0) {
     process.stderr.write(`spec integrity check failed: ${failures.length} problem(s) found\n\n`);

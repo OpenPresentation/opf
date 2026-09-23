@@ -144,7 +144,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "dot-plot-4x",
+        "type": "doughnut",
         "data": {
           "columns": [
             "Quarter",
