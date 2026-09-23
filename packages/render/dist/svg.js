@@ -239,6 +239,29 @@ function engineDefaultId(kind) {
   return engineDefaults[key];
 }
 
+function findCatalogRecord(kind, id, context) {
+  if (!id) return null;
+  const documentCatalog = context.presentation.catalogs?.[kind];
+  return findById(normalizeSourceRecords(documentCatalog), id) ??
+    findById(sourceRecordsFor(kind, documentCatalog?.source, context.options), id) ??
+    findById(normalizeSourceRecords(context.options.catalogs?.[kind]), id) ??
+    findById(sourceRecordsFor(kind, engineDefaults.catalogs[kind]?.source, context.options), id) ??
+    findById(defaultCatalogFor(kind), id);
+}
+
+// Font schemes follow the shared core rule (resolveFontSchemeReference in
+// @openpresentation/opf): an id that matches no record reports one
+// `unresolved-font-scheme` diagnostic and uses the DEFAULT_FONT_SCHEME record as the
+// base, with sibling overrides on top, so preview and PPTX export use the same fonts.
+function resolveFontSchemeRecord(reference, context, path) {
+  const id = referenceId(reference);
+  const found = findCatalogRecord("fontSchemes", id, context);
+  const base = found ?? findCatalogRecord("fontSchemes", DEFAULT_FONT_SCHEME, context) ?? {};
+  const scheme = cloneWithSortedKeys(isPlainObject(reference) ? { ...base, ...reference } : base);
+  if (!id || found) return { scheme };
+  return { scheme, diagnostic: { code: "unresolved-font-scheme", path, id, fallback: DEFAULT_FONT_SCHEME, message: `Font scheme '${id}' is not in the inline or bundled catalogs; using the default font scheme '${DEFAULT_FONT_SCHEME}'.` } };
+}
+
 function resolveCatalogRecord(kind, reference, context, path, fallbackId = engineDefaultId(kind)) {
   const id = referenceId(reference) ?? fallbackId;
   const documentCatalog = context.presentation.catalogs?.[kind];
@@ -344,7 +367,7 @@ function colorLuminance(color) {
   return channels[0] * 0.2126 + channels[1] * 0.7152 + channels[2] * 0.0722;
 }
 
-function resolveDesign(presentation, slide, context) {
+function resolveDesign(presentation, slide, context, index) {
   const deckDesign = presentation.design ?? {};
   const slideDesign = slide.design ?? {};
 
@@ -360,11 +383,13 @@ function resolveDesign(presentation, slide, context) {
     context,
     "design.colorScheme"
   );
-  const fontScheme = resolveCatalogRecord(
-    "fontSchemes",
+  const fontPath = slideDesign.fontScheme !== undefined ? `slides.${index}.design.fontScheme`
+    : deckDesign.fontScheme !== undefined ? "design.fontScheme"
+    : slideDesign.theme !== undefined ? `slides.${index}.design.theme` : "design.theme";
+  const { scheme: fontScheme, diagnostic: fontSchemeDiagnostic } = resolveFontSchemeRecord(
     slideDesign.fontScheme ?? deckDesign.fontScheme ?? theme.fontScheme ?? DEFAULT_FONT_SCHEME,
     context,
-    "design.fontScheme"
+    fontPath
   );
   const dimensions = resolveDimensions(slideDesign.dimensions ?? deckDesign.dimensions ?? theme.dimensions);
   const backgroundDefinition = slideDesign.background ?? deckDesign.background ?? theme.background;
@@ -392,7 +417,8 @@ function resolveDesign(presentation, slide, context) {
       accent: normalizeColor(colorScheme.accent, null) ?? colorFromScheme(colorScheme, "accent3", "#F59E0B"),
       border: colorFromScheme(colorScheme, "accent5", "#CBD5E1")
     },
-    fonts: resolveFontFamilies(fontScheme)
+    fonts: resolveFontFamilies(fontScheme),
+    diagnostics: fontSchemeDiagnostic ? [fontSchemeDiagnostic] : []
   };
 }
 
@@ -517,7 +543,7 @@ function bindSlide(presentation, slide, layout, index, context) {
   ];
   const blocks = blockContent(slide, slidePath);
 
-  const design = resolveDesign(presentation, slide, context);
+  const design = resolveDesign(presentation, slide, context, index);
   for (const role of ["heading","body","code"]) design.fonts[role] = resolveTextStyle({fontFamily:design.fonts[role],fontWeight:role === "heading" ? 700 : 400},context.options.textMeasurement).fontFamily;
   const geometry = composeSlide(slide, { ...design.dimensions, layout, presentation, slideIndex: index, fonts: design.fonts, contentAlignment:design.contentAlignment, titleAlignment:design.titleAlignment, textRasterPadding:context.options.textRasterPadding, contentBox:design.contentBox, textMeasurement: context.options.textMeasurement });
   return {
@@ -656,7 +682,7 @@ function renderBackground(bound, width, height, options) {
 }
 
 function renderSlideContent(bound, width, height, options) {
-  for (const diagnostic of bound.geometry.diagnostics) reportDiagnostic(diagnostic, options);
+  for (const diagnostic of [...bound.design.diagnostics, ...bound.geometry.diagnostics]) reportDiagnostic(diagnostic, options);
   return bound.geometry.items.map(item => {
     const frame=item.frameBox;
     const surface=frame ? tag('rect',{x:frame.x,y:frame.y,width:frame.width,height:frame.height,rx:8*Math.min(width,height)/720,fill:bound.design.colors.surface,stroke:bound.design.colors.border}) : '';

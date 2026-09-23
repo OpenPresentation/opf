@@ -36,6 +36,13 @@ export type RenderDiagnostic = LayoutDiagnostic | {
   path: string;
   message: string;
 } | {
+  /** A font-scheme id matched no record; the default font scheme (`aptos`) was used as the base. */
+  code: "unresolved-font-scheme";
+  path: string;
+  message: string;
+  id: string;
+  fallback: string;
+} | {
   code: "unresolved-asset";
   path: string;
   message: string;
