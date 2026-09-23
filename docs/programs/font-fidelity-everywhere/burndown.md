@@ -12,16 +12,19 @@ Every item's criteria must all hold before it is `done`. Dates are UTC.
 
 | Status | Count |
 | --- | --- |
-| done | 11 |
-| review / in-progress | 21 |
-| todo | 12 |
+| done | 18 |
+| review / in-progress | 16 |
+| todo | 10 |
 
-**Headline progress: 0 of 900 gallery values perfect by parity** (FF-38 on
-current mains, 2026-09-23: opf `c278532`, opf-render `47d19b2`, opf-pptx
-`5b657c9`, pptx-gallery `f17e9ae`; the first baseline at `53be042` /
-`cf0bc0c` was also 0 of 900). The 900 values are the 793 presence items
-plus 76 charts and 31 `withAssets` variants. The FF-23 presence audit
-baseline is 7 of 793 `works`. See the
+**Headline progress: 4 of 900 gallery values perfect by parity** (FF-38 on
+current mains, 2026-09-23: opf `a74f3f6`, opf-render `bc436f3`, opf-pptx
+`9092954`, pptx-gallery `f17e9ae`; the previous run at opf `c278532` /
+opf-pptx `5b657c9` and the first baseline at `53be042` / `cf0bc0c` were
+0 of 900). The 900 values are the 793 presence items plus 76 charts and 31
+`withAssets` variants. The FF-23 presence audits on the same heads find 362
+of 793 `works` (baseline 7); read the
+[measurement notes](gallery-support.md#measurement-notes-2026-09-23-re-run)
+first. See the
 [scoreboard](gallery-support.md#parity-scoreboard) and its
 [universal blockers](gallery-support.md#universal-blockers).
 
@@ -31,13 +34,13 @@ baseline is 7 of 793 `works`. See the
 | --- | --- | --- | --- | --- | --- |
 | FF-00 | Program tracker and agent entrypoints | all | none | done | [opf#116](https://github.com/OpenPresentation/opf/pull/116) `642f37af`; [opf-pptx#60](https://github.com/OpenPresentation/opf-pptx/pull/60), [opf-render#31](https://github.com/OpenPresentation/opf-render/pull/31), [opf-editor#29](https://github.com/OpenPresentation/opf-editor/pull/29) |
 | FF-01 | Exporter master bullets follow the theme body font | opf-pptx | none | done | [opf-pptx#57](https://github.com/OpenPresentation/opf-pptx/pull/57), `7b34f557` |
-| FF-02 | Embed harness records pre-edit, post-text and post-edit font observations | opf-pptx | none | review | [opf-pptx#58](https://github.com/OpenPresentation/opf-pptx/pull/58) `b6eb3bfd` merged; hardening [opf-pptx#62](https://github.com/OpenPresentation/opf-pptx/pull/62) open |
+| FF-02 | Embed harness records pre-edit, post-text and post-edit font observations | opf-pptx | none | done | [opf-pptx#58](https://github.com/OpenPresentation/opf-pptx/pull/58) `b6eb3bfd`; hardening [opf-pptx#62](https://github.com/OpenPresentation/opf-pptx/pull/62) `83a41b9a` |
 | FF-03 | Read-only native font inventory worker | opf-pptx | none | done | [opf-pptx#59](https://github.com/OpenPresentation/opf-pptx/pull/59) `ef8a1583` |
 | FF-04 | Native inventory of the unedited fixture, with and without temporary fonts | opf-pptx / opf | FF-03 | todo |  |
 | FF-05 | Aptos root cause determined | opf | FF-02, FF-04 | todo | [brief](aptos-origin-brief.md) |
 | FF-06 | Font-flow map across all 14 dimensions and environments | opf | none | done | [font-flow-map.md](font-flow-map.md), [opf#116](https://github.com/OpenPresentation/opf/pull/116) |
-| FF-07 | Exporter writes chosen fonts into theme and run East Asian/complex-script slots, with `lang`/RTL | opf-pptx | FF-05, FF-06, FF-18 | review | [opf-pptx#70](https://github.com/OpenPresentation/opf-pptx/pull/70) |
-| FF-08 | Exporter leaks no hard-coded or default font in any part | opf-pptx | FF-05, FF-06, FF-17 | review | [opf-pptx#69](https://github.com/OpenPresentation/opf-pptx/pull/69) |
+| FF-07 | Exporter writes chosen fonts into theme and run East Asian/complex-script slots, with `lang`/RTL | opf-pptx | FF-05, FF-06, FF-18 | review | merged: [opf-pptx#70](https://github.com/OpenPresentation/opf-pptx/pull/70) `0e886f30`, [opf#134](https://github.com/OpenPresentation/opf/pull/134) `9695bf37`, [opf#135](https://github.com/OpenPresentation/opf/pull/135) `3512af0b`; pending FF-05 native root-cause evidence (criteria are subject to FF-05) |
+| FF-08 | Exporter leaks no hard-coded or default font in any part | opf-pptx | FF-05, FF-06, FF-17 | review | merged: [opf-pptx#69](https://github.com/OpenPresentation/opf-pptx/pull/69) `405963ce`; pending FF-05 native root-cause evidence (empty values must be allowed by FF-05) |
 | FF-09 | Offline pairwise matrix across the 14 gallery dimensions | opf (ecosystem) | FF-07, FF-08, FF-19, FF-20 | todo |  |
 | FF-10 | Matrix in CI on ubuntu, windows, macos via a packed TypeScript consumer | opf | FF-09 | todo |  |
 | FF-11 | Export determinism independent of host fonts, OS, locale and timezone | opf-pptx / opf | FF-06 | todo |  |
@@ -48,30 +51,30 @@ baseline is 7 of 793 `works`. See the
 | FF-16 | Editor switch operations for every dimension patch, undo and refresh the preview | opf-editor | FF-06, FF-17 | todo |  |
 | FF-17 | Code-font default follows the scheme; gallery apply keeps roles (shared default delivered by FF-35) | opf, opf-editor, opf-pptx | FF-06 | done | [opf#120](https://github.com/OpenPresentation/opf/pull/120) `53be0427`, [opf-pptx#61](https://github.com/OpenPresentation/opf-pptx/pull/61) `cf0bc0cc`, [opf-editor#30](https://github.com/OpenPresentation/opf-editor/pull/30) `f75372f2` |
 | FF-18 | Language/script model: per-script fonts resolvable from language and font scheme | opf | FF-06 | done | [opf#118](https://github.com/OpenPresentation/opf/pull/118) `d03a583c` |
-| FF-19 | Renderer script fonts (CJK, Arabic, Indic), `lang` and RTL in previews | opf-render | FF-18 | todo |  |
-| FF-20 | Bump ecosystem-ci sibling pins after each opf-pptx font fix | opf | FF-07, FF-08 | in-progress | first bump [opf#117](https://github.com/OpenPresentation/opf/pull/117) `7b4589b6`; sibling CI pins pending |
+| FF-19 | Renderer script fonts (CJK, Arabic, Indic), `lang` and RTL in previews | opf-render | FF-18 | done | [opf-render#41](https://github.com/OpenPresentation/opf-render/pull/41) `f0cf1a81` |
+| FF-20 | Bump ecosystem-ci sibling pins after each opf-pptx font fix | opf | FF-07, FF-08 | done | first bump [opf#117](https://github.com/OpenPresentation/opf/pull/117) `7b4589b6`; pins past FF-07/FF-08/FF-31 [opf#136](https://github.com/OpenPresentation/opf/pull/136) `17da7ac3` |
 | FF-21 | Non-blocking macOS browser job tracking opf-render#24 | opf-render | none | done | [opf-render#32](https://github.com/OpenPresentation/opf-render/pull/32) `df27685c` |
 | FF-22 | Charts reduced to Aspose.Slides-supported chart types (core catalog and pptx.gallery; deprecate if breaking) | opf, pptx-gallery | none | review | core merged: [opf#121](https://github.com/OpenPresentation/opf/pull/121) `13ab00bb`, [aspose-chart-types.md](aspose-chart-types.md); gallery half [pptx-gallery#40](https://github.com/Data-Advantage/pptx-gallery/pull/40) open |
-| FF-22b | Native `chartex` export and full renderer coverage for the kept chart types | opf-pptx, opf-render | FF-22 | in-progress |  |
-| FF-23 | Measured pptx.gallery support table by dimension and reproducible audit | opf | none | review | [opf#122](https://github.com/OpenPresentation/opf/pull/122), [gallery-support.md](gallery-support.md) |
+| FF-22b | Native `chartex` export and full renderer coverage for the kept chart types | opf-pptx, opf-render | FF-22 | review | [opf-pptx#76](https://github.com/OpenPresentation/opf-pptx/pull/76), [opf-render#42](https://github.com/OpenPresentation/opf-render/pull/42) open |
+| FF-23 | Measured pptx.gallery support table by dimension and reproducible audit | opf | none | done | [opf#122](https://github.com/OpenPresentation/opf/pull/122) `e18df26b`, [gallery-support.md](gallery-support.md) |
 | FF-24 | Color schemes export as theme colors and re-import | opf-pptx | none | done | [opf-pptx#67](https://github.com/OpenPresentation/opf-pptx/pull/67) `5b657c9b` |
-| FF-24b | Follow-up to FF-24 (remaining theme-colour items from the opf-pptx#67 review) | opf-pptx | FF-24 | in-progress |  |
-| FF-25 | Pattern and photo backgrounds export natively and stay distinct | opf, opf-pptx, opf-render, pptx-gallery | none | review | [opf-pptx#66](https://github.com/OpenPresentation/opf-pptx/pull/66), [opf-render#35](https://github.com/OpenPresentation/opf-render/pull/35), [opf#127](https://github.com/OpenPresentation/opf/pull/127), [pptx-gallery#43](https://github.com/Data-Advantage/pptx-gallery/pull/43) (blocked on release) |
-| FF-26 | Image treatments export as native pictures with distinct values | opf, opf-render, opf-pptx, pptx-gallery | none | review | [opf#126](https://github.com/OpenPresentation/opf/pull/126), [opf-pptx#68](https://github.com/OpenPresentation/opf-pptx/pull/68), [opf-render#36](https://github.com/OpenPresentation/opf-render/pull/36) |
-| FF-27 | Headers/footers as OPF furniture with PowerPoint slide-number and date fields | opf-pptx, pptx-gallery | none | todo |  |
+| FF-24b | Follow-up to FF-24 (remaining theme-colour items from the opf-pptx#67 review) | opf-pptx | FF-24 | review | [opf-pptx#77](https://github.com/OpenPresentation/opf-pptx/pull/77) open |
+| FF-25 | Pattern and photo backgrounds export natively and stay distinct | opf, opf-pptx, opf-render, pptx-gallery | none | review | engine halves merged: [opf-pptx#66](https://github.com/OpenPresentation/opf-pptx/pull/66) `2d206b3a`, [opf-render#35](https://github.com/OpenPresentation/opf-render/pull/35) `527f46d1`, [opf#127](https://github.com/OpenPresentation/opf/pull/127) `1e4cc880`, [opf-render#45](https://github.com/OpenPresentation/opf-render/pull/45) `d7d0b686`; gallery half [pptx-gallery#43](https://github.com/Data-Advantage/pptx-gallery/pull/43) open (blocked on release) |
+| FF-26 | Image treatments export as native pictures with distinct values | opf, opf-render, opf-pptx, pptx-gallery | none | review | engine PRs merged: [opf#126](https://github.com/OpenPresentation/opf/pull/126) `57679388`, [opf#129](https://github.com/OpenPresentation/opf/pull/129) `bb72349f`, [opf-render#36](https://github.com/OpenPresentation/opf-render/pull/36) `37572f50`, [opf-render#38](https://github.com/OpenPresentation/opf-render/pull/38) `410e5145`, [opf-pptx#68](https://github.com/OpenPresentation/opf-pptx/pull/68) `8e315610`, [opf-pptx#73](https://github.com/OpenPresentation/opf-pptx/pull/73) `29e35ac5`; gallery snippets (asset, distinct treatments) in [pptx-gallery#44](https://github.com/Data-Advantage/pptx-gallery/pull/44) and [pptx-gallery#45](https://github.com/Data-Advantage/pptx-gallery/pull/45) open; audit A still 15/15 `partial` |
+| FF-27 | Headers/footers as OPF furniture with PowerPoint slide-number and date fields | opf-pptx, pptx-gallery | none | review | engine PRs merged: [opf#130](https://github.com/OpenPresentation/opf/pull/130) `f2dcdbd4`, [opf-render#39](https://github.com/OpenPresentation/opf-render/pull/39) `5f6bc7e8`, [opf-pptx#74](https://github.com/OpenPresentation/opf-pptx/pull/74) `23e2dfc2`; gallery snippet options in [pptx-gallery#45](https://github.com/Data-Advantage/pptx-gallery/pull/45) open; audit A headers-footers 1/10 `works` |
 | FF-28 | Narrative and audience catalog parity | opf, pptx-gallery | none | done | [opf#123](https://github.com/OpenPresentation/opf/pull/123) `c2785324` (content blocks 5 to 29 `works` by audit A) |
-| FF-29 | Layout catalog parity and export fidelity | opf, opf-pptx, pptx-gallery | none | in-progress |  |
+| FF-29 | Layout catalog parity and export fidelity | opf, opf-pptx, pptx-gallery | none | review | [opf#132](https://github.com/OpenPresentation/opf/pull/132), [opf-render#43](https://github.com/OpenPresentation/opf-render/pull/43), [opf-pptx#78](https://github.com/OpenPresentation/opf-pptx/pull/78), [opf-pptx#79](https://github.com/OpenPresentation/opf-pptx/pull/79) open |
 | FF-30 | Content blocks keep metric text in preview and export | opf, opf-render, opf-pptx, pptx-gallery | none | review | [pptx-gallery#44](https://github.com/Data-Advantage/pptx-gallery/pull/44) (with #45 and a modified harness: blocks 31/32, image treatments 6/15; gallery CI blocked by Actions billing) |
-| FF-31 | Font provisioning per the owner font policy: licensed fonts never bundled or embedded (shipped open replacements render, PPTX keeps the real name); open fonts bundled, embeddable only via FF-13; policy table in core | opf, opf-render, opf-pptx | FF-35 | review | [opf-pptx#63](https://github.com/OpenPresentation/opf-pptx/pull/63) |
-| FF-32 | Re-import retains design or emits specific diagnostics | opf-pptx | FF-07, FF-24 | review | [opf-pptx#71](https://github.com/OpenPresentation/opf-pptx/pull/71) |
+| FF-31 | Font provisioning per the owner font policy: licensed fonts never bundled or embedded (shipped open replacements render, PPTX keeps the real name); open fonts bundled, embeddable only via FF-13; policy table in core | opf, opf-render, opf-pptx | FF-35 | review | [opf-pptx#63](https://github.com/OpenPresentation/opf-pptx/pull/63) `f2a7e14e` merged; [opf#133](https://github.com/OpenPresentation/opf/pull/133), [opf-render#44](https://github.com/OpenPresentation/opf-render/pull/44) open |
+| FF-32 | Re-import retains design or emits specific diagnostics | opf-pptx | FF-07, FF-24 | done | [opf-pptx#71](https://github.com/OpenPresentation/opf-pptx/pull/71) `810ee419` |
 | FF-33 | Gallery snippet and "open in editor" emit every dimension's selected value | pptx-gallery | FF-26, FF-27 | review | [pptx-gallery#45](https://github.com/Data-Advantage/pptx-gallery/pull/45) (gallery CI blocked by Actions billing) |
-| FF-34 | Socials produce the platform size/aspect ratio or are documented as authoring-only | opf, opf-pptx, opf-render, pptx-gallery | none | review | [opf#125](https://github.com/OpenPresentation/opf/pull/125), [opf-pptx#65](https://github.com/OpenPresentation/opf-pptx/pull/65), [opf-render#34](https://github.com/OpenPresentation/opf-render/pull/34), [pptx-gallery#42](https://github.com/Data-Advantage/pptx-gallery/pull/42) |
+| FF-34 | Socials produce the platform size/aspect ratio or are documented as authoring-only | opf, opf-pptx, opf-render, pptx-gallery | none | review | engine PRs merged: [opf#125](https://github.com/OpenPresentation/opf/pull/125) `a74f3f62`, [opf-render#34](https://github.com/OpenPresentation/opf-render/pull/34) `bc436f3b`, [opf-pptx#65](https://github.com/OpenPresentation/opf-pptx/pull/65) `90929546`; gallery half [pptx-gallery#42](https://github.com/Data-Advantage/pptx-gallery/pull/42) open; audit B socials 10/10 `works` (re-import keeps socials; no handle rendered by the pre-program snippet) |
 | FF-35 | Shared default font scheme `aptos` across every engine | opf, opf-render, opf-editor, opf-pptx | FF-17 | done | [opf#124](https://github.com/OpenPresentation/opf/pull/124) `3ba21ff4`, [opf-render#33](https://github.com/OpenPresentation/opf-render/pull/33) `47d19b25`, [opf-editor#31](https://github.com/OpenPresentation/opf-editor/pull/31) `4e47bf95`, [opf-pptx#64](https://github.com/OpenPresentation/opf-pptx/pull/64) `e1627898` |
-| FF-35b | Follow-up: unknown font-scheme ids fall back to `aptos`, not a Roboto literal | engines with the literal | FF-35 | in-progress |  |
+| FF-35b | Follow-up: unknown font-scheme ids fall back to `aptos`, not a Roboto literal | engines with the literal | FF-35 | done | [opf#131](https://github.com/OpenPresentation/opf/pull/131) `27d0ac14`, [opf-render#40](https://github.com/OpenPresentation/opf-render/pull/40) `0fa35b63`, [opf-pptx#75](https://github.com/OpenPresentation/opf-pptx/pull/75) `c606780f`, [opf-editor#32](https://github.com/OpenPresentation/opf-editor/pull/32) `214ae695` |
 | FF-36 | pptx.gallery items show their measured support status | pptx-gallery, opf | FF-23 | review | [pptx-gallery#41](https://github.com/Data-Advantage/pptx-gallery/pull/41) |
 | FF-37 | pptx.gallery as a first-class OPF catalog: spec URLs serve schema-valid records; core bundles a pinned, drift-checked snapshot | opf, pptx-gallery | none | review | [opf#128](https://github.com/OpenPresentation/opf/pull/128), [pptx-gallery#46](https://github.com/Data-Advantage/pptx-gallery/pull/46) |
-| FF-38 | Parity audit harness and progress scoreboard (defines "perfect") | opf | FF-23 | review | [opf#122](https://github.com/OpenPresentation/opf/pull/122), [PARITY.md](gallery-support/parity/PARITY.md) (0/900 baseline) |
-| FF-39 | Alignment parity: preview and PPTX text alignment and anchors agree | opf-pptx, opf-render | FF-38 | review | renderer half merged: [opf-render#37](https://github.com/OpenPresentation/opf-render/pull/37) `3f34448e`; exporter half [opf-pptx#72](https://github.com/OpenPresentation/opf-pptx/pull/72) open (combined parity geometry 378 to 841, text 273 to 713 against the baseline) |
+| FF-38 | Parity audit harness and progress scoreboard (defines "perfect") | opf | FF-23 | done | [opf#122](https://github.com/OpenPresentation/opf/pull/122) `e18df26b`, [PARITY.md](gallery-support/parity/PARITY.md) |
+| FF-39 | Alignment parity: preview and PPTX text alignment and anchors agree | opf-pptx, opf-render | FF-38 | review | merged: [opf-render#37](https://github.com/OpenPresentation/opf-render/pull/37) `3f34448e`, [opf-pptx#72](https://github.com/OpenPresentation/opf-pptx/pull/72) `0330e6d0`; 39 values still report "alignment l (preview) vs ctr (pptx)" (reverse mismatches; see FF-29, [opf#132](https://github.com/OpenPresentation/opf/pull/132)) |
 | FF-R0 | Prior: mixed-size table edit/save/reopen and first embed attempt | opf, opf-pptx | none | done | [opf#114](https://github.com/OpenPresentation/opf/pull/114), [opf#115](https://github.com/OpenPresentation/opf/pull/115) |
 
 ## Acceptance criteria
@@ -554,3 +557,29 @@ Append one dated line per state change. Newest last.
   - The baseline report is kept under `gallery-support/parity/history/`.
 - 2026-09-23: FF-39 renderer half merged (opf-render#37); the exporter half
   (opf-pptx#72) is still in review.
+- 2026-09-23: Tracker reconciled after the FF-20, FF-25, FF-26, FF-27 and FF-34
+  merges, with the parity and presence audits re-run on current mains (opf
+  `a74f3f6`, opf-render `bc436f3`, opf-pptx `9092954`, pptx-gallery
+  `f17e9ae`).
+  - Done: FF-02, FF-19, FF-20, FF-23, FF-32, FF-35b and FF-38.
+  - All PRs merged but kept in review: FF-07 and FF-08 (pending FF-05 native
+    root-cause evidence) and FF-39 (39 values still report "alignment l
+    (preview) vs ctr (pptx)").
+  - Engine PRs merged, gallery half open: FF-25, FF-26, FF-27 and FF-34. FF-22b,
+    FF-24b, FF-29 and FF-31 are in review.
+  - Parity: 4 of 900 perfect (`calibri`, `courier-new`,
+    `times-new-roman`, `roboto`). Checks passed: geometry 774 (was 390),
+    text 759 (326), fills 674 (734), zOrder 784 (880), slideSize 900,
+    typefaces 900 (0), re-import 899 (0), font resolution 5, theme 900,
+    mapping 672 (890). Alignment is reduced but not cleared: 39 values
+    still report "alignment l (preview) vs ctr (pptx)".
+  - Fills 842 to 734 at opf#122 was the chart-colour comparison starting to
+    run (108 values fail only on it), not a regression. The new mapping,
+    z-order and fills failures follow the FF-26 slide image; the harness does
+    not map `OPF slide image` names. See the
+    [measurement notes](gallery-support.md#measurement-notes-2026-09-23-re-run).
+  - Presence: 362 of 793 `works`. Socials 10/10 `works`, image treatments
+    15/15 `partial`, headers/footers 1/10 `works`, backgrounds 2/6
+    (`photography` with its asset `works`). Audit B marks all colour schemes
+    and themes `broken` because its probes predate FF-24.
+  - Counts: done 18, review 16, todo 10 (44 rows).

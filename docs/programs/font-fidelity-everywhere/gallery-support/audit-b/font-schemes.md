@@ -21,15 +21,15 @@ Preview tier: substitute 7, host-only 81, bundled 1. Openly licensed (gallery li
 
 | id | family | script | license scope | open | preview tier | strict preview | office-pack preview | PPTX major/minor | export w/ office registry | class |
 |---|---|---|---|---|---|---|---|---|---|---|
-| consolas | Consolas / Consolas | latin | system | no | substitute | font-unavailable:Consolas | Consolas->Cousine(visual) | Consolas / Consolas | Cousine | partial |
-| courier-new | Courier New / Courier New | latin | system | no | substitute | font-unavailable:Courier New | Courier New->Cousine(metric) | Courier New / Courier New | Cousine | partial |
+| consolas | Consolas / Consolas | latin | system | no | substitute | font-unavailable:Consolas | Consolas->Cousine(visual) | Consolas / Consolas | Consolas | partial |
+| courier-new | Courier New / Courier New | latin | system | no | substitute | font-unavailable:Courier New | Courier New->Cousine(metric) | Courier New / Courier New | Courier New | partial |
 | arial | Arial Black / Arial | latin | system | no | host-only | font-unavailable:Arial Black | font-unavailable:Arial Black | Arial Black / Arial | font-unavailable | partial |
-| calibri | Calibri / Calibri | latin | system | no | substitute | font-unavailable:Calibri | Calibri->Carlito(metric) | Calibri / Calibri | Carlito | partial |
+| calibri | Calibri / Calibri | latin | system | no | substitute | font-unavailable:Calibri | Calibri->Carlito(metric) | Calibri / Calibri | Calibri | partial |
 | impact | Impact / Grandview | latin | system | no | host-only | font-unavailable:Impact | font-unavailable:Impact | Impact / Grandview | font-unavailable | partial |
 | lucida-sans | Lucida Sans / Lucida Sans | latin | system | no | host-only | font-unavailable:Lucida Sans | font-unavailable:Lucida Sans | Lucida Sans / Lucida Sans | font-unavailable | partial |
 | segoe-ui | Segoe UI Semibold / Segoe UI | latin | system | no | host-only | font-unavailable:Segoe UI Semibold | font-unavailable:Segoe UI Semibold | Segoe UI Semibold / Segoe UI | font-unavailable | partial |
 | segoe-ui-light | Segoe UI Semilight / Segoe UI Light | latin | system | no | host-only | font-unavailable:Segoe UI Semilight | font-unavailable:Segoe UI Semilight | Segoe UI Semilight / Segoe UI Light | font-unavailable | partial |
-| tahoma | Tahoma / Tahoma | latin | system | no | substitute | font-unavailable:Tahoma | Tahoma->Arimo(visual) | Tahoma / Tahoma | Arimo | partial |
+| tahoma | Tahoma / Tahoma | latin | system | no | substitute | font-unavailable:Tahoma | Tahoma->Arimo(visual) | Tahoma / Tahoma | Tahoma | partial |
 | trebuchet-ms | Trebuchet MS / Trebuchet MS | latin | system | no | host-only | font-unavailable:Trebuchet MS | font-unavailable:Trebuchet MS | Trebuchet MS / Trebuchet MS | font-unavailable | partial |
 | verdana | Verdana / Verdana | latin | system | no | host-only | font-unavailable:Verdana | font-unavailable:Verdana | Verdana / Verdana | font-unavailable | partial |
 | bookman | Bookman Old Style / Bookman Old Style | latin | system | no | host-only | font-unavailable:Bookman Old Style | font-unavailable:Bookman Old Style | Bookman Old Style / Bookman Old Style | font-unavailable | partial |
@@ -37,13 +37,13 @@ Preview tier: substitute 7, host-only 81, bundled 1. Openly licensed (gallery li
 | constantia | Constantia / Constantia | latin | system | no | host-only | font-unavailable:Constantia | font-unavailable:Constantia | Constantia / Constantia | font-unavailable | partial |
 | garamond | Garamond / Garamond | latin | system | no | host-only | font-unavailable:Garamond | font-unavailable:Garamond | Garamond / Garamond | font-unavailable | partial |
 | rockwell | Rockwell / Rockwell | latin | system | no | host-only | font-unavailable:Rockwell | font-unavailable:Rockwell | Rockwell / Rockwell | font-unavailable | partial |
-| times-new-roman | Times New Roman / Times New Roman | latin | system | no | substitute | font-unavailable:Times New Roman | Times New Roman->Tinos(metric) | Times New Roman / Times New Roman | Tinos | partial |
-| aptos | Aptos Display / Aptos | latin | system | no | substitute | font-unavailable:Aptos Display | Aptos Display->Carlito(visual), Aptos->Carlito(visual) | Aptos Display / Aptos | Carlito | partial |
+| times-new-roman | Times New Roman / Times New Roman | latin | system | no | substitute | font-unavailable:Times New Roman | Times New Roman->Tinos(metric) | Times New Roman / Times New Roman | Times New Roman | partial |
+| aptos | Aptos Display / Aptos | latin | system | no | substitute | font-unavailable:Aptos Display | Aptos Display->Carlito(visual), Aptos->Carlito(visual) | Aptos Display / Aptos | Aptos Display | partial |
 | grandview | Grandview Display / Grandview | latin | system | no | host-only | font-unavailable:Grandview Display | font-unavailable:Grandview Display | Grandview Display / Grandview | font-unavailable | partial |
 | seaford | Seaford Display / Seaford | latin | system | no | host-only | font-unavailable:Seaford Display | font-unavailable:Seaford Display | Seaford Display / Seaford | font-unavailable | partial |
 | skeena | Skeena Display / Skeena | latin | system | no | host-only | font-unavailable:Skeena Display | font-unavailable:Skeena Display | Skeena Display / Skeena | font-unavailable | partial |
 | tenorite | Tenorite Display / Tenorite | latin | system | no | host-only | font-unavailable:Tenorite Display | font-unavailable:Tenorite Display | Tenorite Display / Tenorite | font-unavailable | partial |
-| georgia | Georgia / Georgia | latin | system | no | substitute | font-unavailable:Georgia | Georgia->Gelasio(visual) | Georgia / Georgia | Gelasio | partial |
+| georgia | Georgia / Georgia | latin | system | no | substitute | font-unavailable:Georgia | Georgia->Gelasio(visual) | Georgia / Georgia | Georgia | partial |
 | microsoft-yahei | Microsoft YaHei / Microsoft YaHei | non-Latin | system | no | host-only | font-unavailable:Microsoft YaHei | font-unavailable:Microsoft YaHei | Microsoft YaHei / Microsoft YaHei | font-unavailable | partial |
 | simsun | SimSun / SimSun | non-Latin | system | no | host-only | font-unavailable:SimSun | font-unavailable:SimSun | SimSun / SimSun | font-unavailable | partial |
 | fangsong | FangSong / FangSong | non-Latin | system | no | host-only | font-unavailable:FangSong | font-unavailable:FangSong | FangSong / FangSong | font-unavailable | partial |
