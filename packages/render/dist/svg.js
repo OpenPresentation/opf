@@ -701,7 +701,10 @@ function renderPayload(item, box, bound, options) {
 function renderTextPayload(item, box, bound, options) {
   return (Array.isArray(item.value) ? renderRichTextBox : renderTextBox)(Array.isArray(item.value) ? item.value : flattenText(item.value), box, bound, {
     path: item.path,
-    align: item.field === "title" ? bound.design.titleAlignment : bound.design.contentAlignment,
+    // Titles follow design.titleAlignment only. An unset title alignment is left,
+    // as in core composition; it must not inherit contentAlignment through the
+    // generic text-box fallback when no accepted placement is available.
+    align: item.field === "title" ? bound.design.titleAlignment ?? "left" : bound.design.contentAlignment,
     fontSize: item.field === "title" ? 54 : item.field === "tag" ? 16 : 25,
     fontFamily: item.field === "title" ? bound.design.fonts.heading : bound.design.fonts.body,
     fontWeight: item.field === "title" ? 700 : 400,

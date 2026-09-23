@@ -10,3 +10,18 @@ assert.match(renderSvg({design:{background:{type:'image',image:{src:raster}},wat
 console.log('Design preview: header/footer zones, inheritance suppression, angles, opacity, patterns, image background and watermark passed.');
 
 assert.match(renderSvg({design:{titleAlignment:'right',contentAlignment:'center',contentBox:true},slides:[{title:'Right',text:'Center'}]}),/text-anchor="end"/);
+
+// Titles follow design.titleAlignment only (unset: left, as core composition
+// places them); subtitle, tag and body text follow contentAlignment. Default
+// estimated measurement and accepted outline placement must agree.
+{
+  const {prepareNodeFonts}=await import('../src/fonts-node.js');
+  const {options:measured}=await prepareNodeFonts();
+  const anchors=svg=>Object.fromEntries([...svg.matchAll(/<text\b[^>]*>/g)].map(m=>m[0]).filter(tag=>/data-opf-path="slides\.0\.(title|subtitle|tag|text)"/.test(tag)).map(tag=>[tag.match(/data-opf-path="slides\.0\.(\w+)"/)[1],tag.match(/text-anchor="(\w+)"/)?.[1]??'start']));
+  const slide={tag:'Tag',title:'Title',subtitle:'Subtitle',text:'Body'};
+  for(const options of [{},measured]){
+    assert.deepEqual(anchors(renderSvg({design:{fontScheme:'roboto',contentAlignment:'center'},slides:[slide]},{...options,trace:true})),{tag:'middle',title:'start',subtitle:'middle',text:'middle'});
+    assert.deepEqual(anchors(renderSvg({design:{fontScheme:'roboto',contentAlignment:'right',titleAlignment:'center'},slides:[{...slide,design:{titleAlignment:'right',contentAlignment:'left'}}]},{...options,trace:true})),{tag:'start',title:'end',subtitle:'start',text:'start'});
+  }
+  console.log('Design preview alignment: titles use titleAlignment (default left) and headings/body use contentAlignment with estimated and outline measurement.');
+}

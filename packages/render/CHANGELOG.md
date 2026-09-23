@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- FF-39: titles follow only `design.titleAlignment`. When it is unset, a title is left-aligned, the same as core composition. Previously, a title without an accepted outline placement fell through to `design.contentAlignment`. A deck that set `contentAlignment: "center"` but no `titleAlignment` therefore previewed centered titles with the default measurement and left titles with outline measurement, and exported them left-aligned. Subtitle, tag and body text still follow `contentAlignment`. `test/design-preview.mjs` checks the anchors with both estimated and outline measurement. No bundled example sets `contentAlignment` without `titleAlignment`, so the 805-slide golden corpus is unchanged. Some pptx.gallery layout previews (chart/list/number `Nx`) do change.
+
 - FF-35: fall back to the shared engine default font scheme, `aptos` (`engineDefaults.fontScheme.pptx.latin`, core `DEFAULT_FONT_SCHEME`), instead of `roboto` when the slide, deck and resolved theme name no font scheme. Previews of a custom theme without a font scheme now use the fonts that core pagination, opf-editor and opf-pptx use. Aptos is not bundled: estimated SVG names `Aptos`/`Aptos Display` and the default raster draws Roboto, as for any `aptos` deck; measured previews need the office pack with `substitutionPolicy: "visual"` (Carlito, approximate), licensed Aptos faces, or a `fallbackFamily`, and otherwise fail with `font-unavailable`. `engineDefaults.fontScheme.google` stays for a future Google Slides target. All 805 golden rasters and all 805 example SVGs are unchanged; `test/default-font-scheme.mjs` checks parity with core. No package version change.
 
 ## 0.9.0
