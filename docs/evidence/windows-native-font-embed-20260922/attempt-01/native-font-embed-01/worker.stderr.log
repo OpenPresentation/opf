@@ -1,0 +1,10 @@
+Native Presentation.Fonts allowlist/embeddability gate failed before SaveAs; the owned presentation was closed without 
+saving and no retry was started.
+At C:\Users\micha\.codex\worktrees\fd3f\opf\artifacts\windows-mixed-edit-20260922\native-font-embed-01\inputs\native-fo
+nt-embed.ps1:410 char:9
++         throw 'Native Presentation.Fonts allowlist/embeddability gate ...
++         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (Native Presenta...ry was started.:String) [], RuntimeException
+    + FullyQualifiedErrorId : Native Presentation.Fonts allowlist/embeddability gate failed before SaveAs; the owned p 
+   resentation was closed without saving and no retry was started.
+ 

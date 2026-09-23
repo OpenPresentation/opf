@@ -1,0 +1,11 @@
+﻿{
+    "timestamp":  "2026-09-23T02:27:43.5955926Z",
+    "harness":  "opf-pptx main 310f873726da976841f61d53c9da04f731007062",
+    "fixture":  "fixture-carlito-02",
+    "fixtureSourceSha256":  "f505236ecef4fad838a198449adede1f4afa39d7bac74613626eee2f2a419aeb",
+    "officeProcesses":  [
+                            "POWERPNT:27220"
+                        ],
+    "uiInspection":  "PowerPoint window empty, no presentation, no dialog",
+    "offlineControls":  "font-embed 16 + PS5.1 pure regression pass on merged main"
+}

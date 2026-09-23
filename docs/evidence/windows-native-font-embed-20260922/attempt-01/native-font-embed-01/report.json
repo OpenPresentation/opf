@@ -1,0 +1,157 @@
+﻿{
+    "schemaVersion":  1,
+    "kind":  "native-font-embed",
+    "source":  {
+                   "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-mixed-edit-20260922\\fixture-carlito-02\\source.pptx",
+                   "sha256":  "f505236ecef4fad838a198449adede1f4afa39d7bac74613626eee2f2a419aeb",
+                   "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-mixed-edit-20260922\\native-font-embed-01\\inputs\\source.pptx",
+                   "snapshotSha256":  "f505236ecef4fad838a198449adede1f4afa39d7bac74613626eee2f2a419aeb"
+               },
+    "saved":  {
+                  "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-mixed-edit-20260922\\native-font-embed-01\\native-font-embed.pptx",
+                  "sha256":  null
+              },
+    "embedFonts":  {
+                       "saveFormat":  24,
+                       "saveArgument":  -1,
+                       "stage":  "edited.presentation.saveAs-owned-copy-embed-fonts",
+                       "attempted":  false,
+                       "completed":  false,
+                       "blockedByNativeFontsGate":  true
+                   },
+    "opcFontParts":  null,
+    "requested":  {
+                      "title":  {
+                                    "text":  "Gate E - Carlito",
+                                    "family":  "Carlito",
+                                    "size":  30,
+                                    "bold":  true,
+                                    "italic":  false
+                                },
+                      "body":  {
+                                   "text":  "Regular 18 | Bold 20 | Italic 22 | BoldItalic 24",
+                                   "family":  "Carlito",
+                                   "defaultSize":  18,
+                                   "runs":  [
+                                                {
+                                                    "start":  1,
+                                                    "length":  10,
+                                                    "text":  "Regular 18",
+                                                    "size":  18,
+                                                    "bold":  false,
+                                                    "italic":  false
+                                                },
+                                                {
+                                                    "start":  14,
+                                                    "length":  7,
+                                                    "text":  "Bold 20",
+                                                    "size":  20,
+                                                    "bold":  true,
+                                                    "italic":  false
+                                                },
+                                                {
+                                                    "start":  24,
+                                                    "length":  9,
+                                                    "text":  "Italic 22",
+                                                    "size":  22,
+                                                    "bold":  false,
+                                                    "italic":  true
+                                                },
+                                                {
+                                                    "start":  36,
+                                                    "length":  13,
+                                                    "text":  "BoldItalic 24",
+                                                    "size":  24,
+                                                    "bold":  true,
+                                                    "italic":  true
+                                                }
+                                            ]
+                               },
+                      "embedFonts":  {
+                                         "saveFormat":  24,
+                                         "saveArgument":  -1,
+                                         "meaning":  "Presentation.SaveAs third argument -1 (msoTrue) on the owned presentation only"
+                                     },
+                      "nativeFonts":  {
+                                          "allowedNames":  [
+                                                               "Carlito",
+                                                               "Carlito Bold",
+                                                               "Carlito Italic",
+                                                               "Carlito Bold Italic"
+                                                           ],
+                                          "maxEntries":  64,
+                                          "unexpectedNamesBlockSave":  true,
+                                          "requireEmbeddable":  true
+                                      }
+                  },
+    "nativeFontsObservation":  {
+                                   "count":  2,
+                                   "entries":  [
+                                                   {
+                                                       "index":  1,
+                                                       "name":  "Carlito",
+                                                       "embedded":  0,
+                                                       "embeddable":  -1
+                                                   },
+                                                   {
+                                                       "index":  2,
+                                                       "name":  "Aptos",
+                                                       "embedded":  0,
+                                                       "embeddable":  -1
+                                                   }
+                                               ]
+                               },
+    "nativeFontsGate":  {
+                            "passed":  false,
+                            "reportedCount":  2,
+                            "entryCount":  2,
+                            "countValid":  true,
+                            "baseFamilyPresent":  true,
+                            "allowedReportedNames":  [
+                                                         "Carlito",
+                                                         "Carlito Bold",
+                                                         "Carlito Italic",
+                                                         "Carlito Bold Italic"
+                                                     ],
+                            "unexpectedNames":  [
+                                                    "Aptos"
+                                                ],
+                            "unembeddableNames":  [
+
+                                                  ],
+                            "entries":  [
+                                            {
+                                                "index":  1,
+                                                "name":  "Carlito",
+                                                "embedded":  0,
+                                                "embeddable":  -1
+                                            },
+                                            {
+                                                "index":  2,
+                                                "name":  "Aptos",
+                                                "embedded":  0,
+                                                "embeddable":  -1
+                                            }
+                                        ],
+                            "scope":  "Exact Presentation.Fonts Name values and native Embeddable flags are a fail-closed semantic gate. They do not prove physical font-file or per-glyph identity."
+                        },
+    "ownedCloseCount":  1,
+    "environment":  {
+                        "hostVersion":  "5.1.26100.9444",
+                        "windowsProductName":  "Windows 10 Home",
+                        "windowsDisplayVersion":  "25H2",
+                        "windowsBuild":  "26200.9457",
+                        "powerPointVersion":  "16.0"
+                    },
+    "cleanupConfirmed":  true,
+    "officeOperationsStopped":  false,
+    "lastStage":  "worker.failure",
+    "lastStatus":  "error",
+    "error":  "Native Presentation.Fonts allowlist/embeddability gate failed before SaveAs; the owned presentation was closed without saving and no retry was started.",
+    "scope":  "Open one owned Gate E fixture snapshot, apply the same Carlito edit spans, save with EmbedFonts -1 on that presentation only, and record filesystem evidence for offline OPC font-part audit. COM Font.Name does not prove which TTF drew each glyph.",
+    "limitations":  [
+                        "Native font properties do not identify the physical file used for every glyph.",
+                        "This control does not replace Gate E geometry persistence or browser/native pixel checks.",
+                        "Offline audit hashes ppt/fonts package parts; obfuscated bytes may not match fixture TTF SHA-256."
+                    ]
+}
