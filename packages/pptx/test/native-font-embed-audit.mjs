@@ -4,6 +4,7 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {unzipSync} from 'fflate';
 import {XMLParser, XMLValidator} from 'fast-xml-parser';
+import {auditHarnessSourcePolicy, scanPowerShellSource, stripPowerShellLiteralsForScan} from './powershell-scan.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -25,27 +26,57 @@ const FONT_RELATIONSHIP = 'http://schemas.openxmlformats.org/officeDocument/2006
 const FONT_CONTENT_TYPES = new Set(['application/x-fontdata', 'application/vnd.openxmlformats-officedocument.obfuscatedFont']);
 const FONT_STYLES = Object.freeze(['p:regular', 'p:bold', 'p:italic', 'p:boldItalic']);
 
-export function stripPowerShellLiteralsForScan(sourceText) {
-  return sourceText.replace(/'(?:''|[^'])*'/g, "''").replace(/"(?:`"|[^"])*"/g, '""').replace(/#.*$/gm, '');
-}
+export {scanPowerShellSource, stripPowerShellLiteralsForScan};
 
+// Any member reference named Quit in code (not in a comment or string literal): $app.Quit(), $app.Quit.Invoke(), ${app}.Quit(),
+// $x.Application.Quit(), $apps[0].Quit(). The pure regression's AST policy remains the authoritative PowerShell check.
 export function hasOfficeQuitInvocation(sourceText) {
-  const code = stripPowerShellLiteralsForScan(sourceText);
-  return /(?:\$[\w]+\.Quit|\.Application\.Quit)\s*\(/i.test(code);
+  return /\.\s*Quit\b/i.test(stripPowerShellLiteralsForScan(sourceText));
 }
 
-const OWNED_EMBED_SAVE_OFF = /\.SaveAs\(\$savedPath,\s*24\s*,\s*0\s*\)/;
+// Reviewed allowlist policy for native-font-embed.ps1. The controls assert that every list below equals the matching
+// $script:FontEmbedPolicy* list in that file, which its PowerShell AST check enforces.
+export const EMBED_SOURCE_POLICY = Object.freeze({
+  commands: Object.freeze(['Add-Content', 'ConvertFrom-Json', 'ConvertTo-Json', 'Copy-Item', 'ForEach-Object', 'Get-Content', 'Get-Date', 'Get-FileHash', 'Get-ItemProperty', 'Invoke-OpfNativeWorker', 'Invoke-OpfWithTemporaryFonts', 'Join-Path', 'New-Item', 'New-Object', 'Remove-Item', 'Resolve-Path', 'Set-Content', 'Test-Path', 'Where-Object', 'Write-Host', 'Write-Output']),
+  scoped: Object.freeze(['Invoke-Expression|Invoke-FontEmbedPureRegression', 'Add-Member|New-FontEmbedFakeShape', 'Add-Member|Invoke-FontEmbedPureRegression']),
+  forms: Object.freeze(['New-Object|^New-Object -ComObject PowerPoint\\.Application$']),
+  instance: Object.freeze(['Characters', 'Close', 'Contains', 'ContainsKey', 'FindAll', 'GetCommandName', 'Item', 'Open', 'SaveAs', 'StartsWith', 'ToLowerInvariant', 'ToString', 'ToUniversalTime', 'TrimEnd', 'Substring']),
+  statics: Object.freeze(['Guid::NewGuid', 'IO.File::WriteAllText', 'IO.Path::GetExtension', 'IO.Path::GetFullPath', 'IO.Path::GetTempPath', 'string::IsNullOrEmpty', 'string::IsNullOrWhiteSpace', 'System.Management.Automation.Language.Parser::ParseFile']),
+  properties: Object.freeze(['IO.Path::AltDirectorySeparatorChar', 'IO.Path::DirectorySeparatorChar', 'StringComparison::OrdinalIgnoreCase', 'System.Management.Automation.Language.TokenKind::Dot', 'System.Management.Automation.Language.TokenKind::Minus', 'System.Management.Automation.Language.TokenKind::Unknown', 'System.Management.Automation.Language.StringConstantType::BareWord', 'System.Management.Automation.Language.TokenKind::Equals']),
+  types: Object.freeze(['bool', 'double', 'Guid', 'int', 'IO.File', 'IO.Path', 'long', 'ordered', 'pscustomobject', 'ref', 'scriptblock', 'string', 'StringComparison', 'switch', 'void', 'ValidateRange', 'System.Collections.IDictionary', 'System.Management.Automation.Language.AssignmentStatementAst', 'System.Management.Automation.Language.AttributeBaseAst', 'System.Management.Automation.Language.CommandAst', 'System.Management.Automation.Language.ConstantExpressionAst', 'System.Management.Automation.Language.ConvertExpressionAst', 'System.Management.Automation.Language.FunctionDefinitionAst', 'System.Management.Automation.Language.IndexExpressionAst', 'System.Management.Automation.Language.InvokeMemberExpressionAst', 'System.Management.Automation.Language.MemberExpressionAst', 'System.Management.Automation.Language.ParenExpressionAst', 'System.Management.Automation.Language.Parser', 'System.Management.Automation.Language.ScriptBlockExpressionAst', 'System.Management.Automation.Language.StringConstantExpressionAst', 'System.Management.Automation.Language.StringConstantType', 'System.Management.Automation.Language.TokenKind', 'System.Management.Automation.Language.TypeExpressionAst', 'System.Management.Automation.Language.UnaryExpressionAst', 'System.Management.Automation.Language.VariableExpressionAst', 'System.Management.Automation.Language.ArrayLiteralAst', 'System.Management.Automation.Language.CommandExpressionAst', 'System.Management.Automation.Language.CommandParameterAst', 'System.Management.Automation.Language.ForEachStatementAst', 'System.Management.Automation.Language.HashtableAst', 'System.Management.Automation.Language.ParameterAst', 'System.Management.Automation.Language.RedirectionAst']),
+  sites: Object.freeze(['Invoke-FontEmbedCom|&|Operation', '|.|processSnapshot', '|.|fontHelperSnapshot']),
+  pipelines: Object.freeze([]),
+  roots: Object.freeze(['report', 'seen', 'inventory', 'wrongGeneration']),
+  setters: Object.freeze(['Range.Text', 'wholeFont.Name', 'wholeFont.Size', 'wholeFont.Bold', 'wholeFont.Italic', 'runFont.Name', 'runFont.Size', 'runFont.Bold', 'runFont.Italic', 'presentation.Saved']),
+  rootSources: Object.freeze([]),
+  bareArguments: Object.freeze(['Characters', 'Directory', 'Item', 'Leaf', 'PowerPoint.Application', 'SHA256', 'ScriptMethod', 'SilentlyContinue', 'UTF8']),
+  exactForms: Object.freeze(['New-Item|New-Item -ItemType Directory -Path $pureRoot', 'Remove-Item|Remove-Item -LiteralPath $deleteRoot -Recurse -Force -ErrorAction SilentlyContinue', 'New-Item|New-Item -ItemType Directory -Path $outputRoot', 'New-Item|New-Item -ItemType Directory -Path $snapshotRoot', 'New-Item|New-Item -ItemType Directory -Path (Join-Path $snapshotRoot \'fonts\')', 'Copy-Item|Copy-Item -LiteralPath $PSCommandPath -Destination $verifierSnapshot', 'Copy-Item|Copy-Item -LiteralPath $processOriginal -Destination $processSnapshot', 'Copy-Item|Copy-Item -LiteralPath $fontHelperOriginal -Destination $fontHelperSnapshot', 'Copy-Item|Copy-Item -LiteralPath $inputPath -Destination $sourceSnapshot', 'Copy-Item|Copy-Item -LiteralPath $fixture.generationPath -Destination $generationSnapshot', 'Copy-Item|Copy-Item -LiteralPath $fixture.licensePath -Destination $licenseSnapshot', 'Copy-Item|Copy-Item -LiteralPath $external -Destination $snapshot', 'Set-Content|Set-Content -LiteralPath (Join-Path $outputRoot \'request.json\') -Encoding UTF8', 'Invoke-OpfWithTemporaryFonts|Invoke-OpfWithTemporaryFonts -Generation $generation -EvidenceRoot $snapshotRoot -RunRoot $outputRoot -Action { $script:fontEmbedWorkerResult=Invoke-OpfNativeWorker -ScriptPath $verifierSnapshot -WorkerArguments @(\'-OutputDirectory\',$outputRoot,\'-InputPresentation\',$sourceSnapshot,\'-FontFixtureDirectory\',$snapshotRoot,\'-Worker\') -OutputDirectory $outputRoot -TimeoutSeconds $TimeoutSeconds }', 'Invoke-OpfNativeWorker|Invoke-OpfNativeWorker -ScriptPath $verifierSnapshot -WorkerArguments @(\'-OutputDirectory\',$outputRoot,\'-InputPresentation\',$sourceSnapshot,\'-FontFixtureDirectory\',$snapshotRoot,\'-Worker\') -OutputDirectory $outputRoot -TimeoutSeconds $TimeoutSeconds', 'Set-Content|Set-Content -LiteralPath (Join-Path $outputRoot \'supervisor.json\') -Encoding UTF8', 'Set-Content|Set-Content -LiteralPath $reportFile -Encoding UTF8', 'Add-Content|Add-Content -LiteralPath $script:stageFile -Encoding UTF8', 'Set-Content|Set-Content -LiteralPath $script:progressFile -Encoding UTF8']),
+  exactApis: Object.freeze(['IO.File::WriteAllText|[IO.File]::WriteAllText($wrongLicense,\'not the OFL fixture license\')']),
+  exactMembers: Object.freeze(['SaveAs|.SaveAs($savedPath,24,(-1))']),
+  pinned: Object.freeze(['operation', 'processsnapshot', 'fonthelpersnapshot', 'pureroot', 'deleteroot', 'outputroot', 'snapshotroot', 'verifiersnapshot', 'sourcesnapshot', 'generationsnapshot', 'licensesnapshot', 'snapshot', 'reportfile', 'stagefile', 'progressfile', 'wronglicense', 'temproot', 'root', 'savedpath']),
+  pinnedBindings: Object.freeze(['temproot|=|[IO.Path]::GetFullPath([IO.Path]::GetTempPath()).TrimEnd([IO.Path]::DirectorySeparatorChar,[IO.Path]::AltDirectorySeparatorChar)', 'pureroot|=|Join-Path $tempRoot (\'opf-font-embed-pure-\' + [Guid]::NewGuid().ToString(\'n\'))', 'pureroot|=|(Resolve-Path -LiteralPath $pureRoot).Path', 'stagefile|=|Join-Path $pureRoot \'stages.jsonl\'', 'progressfile|=|Join-Path $pureRoot \'progress.json\'', 'wronglicense|=|Join-Path $pureRoot \'wrong-license.txt\'', 'stagefile|=|Join-Path $pureRoot \'observation-stages.jsonl\'', 'deleteroot|=|(Resolve-Path -LiteralPath $pureRoot).Path', 'outputroot|=|[IO.Path]::GetFullPath($OutputDirectory)', 'snapshotroot|=|Join-Path $outputRoot \'inputs\'', 'verifiersnapshot|=|Join-Path $snapshotRoot \'native-font-embed.ps1\'', 'processsnapshot|=|Join-Path $snapshotRoot \'native-process.ps1\'', 'fonthelpersnapshot|=|Join-Path $snapshotRoot \'native-text-fonts.ps1\'', 'sourcesnapshot|=|Join-Path $snapshotRoot \'source.pptx\'', 'generationsnapshot|=|Join-Path $snapshotRoot \'generation.json\'', 'licensesnapshot|=|Join-Path $snapshotRoot \'LICENSE_FONT\'', 'snapshot|=|Join-Path $snapshotRoot $font.file', 'root|=|(Resolve-Path -LiteralPath $OutputDirectory).Path', 'sourcesnapshot|=|(Resolve-Path -LiteralPath $request.source.snapshotPath).Path', 'savedpath|=|Join-Path $root \'native-font-embed.pptx\'', 'stagefile|=|Join-Path $root \'stages.jsonl\'', 'progressfile|=|Join-Path $root \'progress.json\'', 'reportfile|=|Join-Path $root \'report.json\'', 'operation|param|Invoke-FontEmbedCom|ScriptBlock']),
+  dynamicMemberSites: Object.freeze([]),
+  exemptFunction: 'Invoke-FontEmbedPureRegression',
+  exemptInvocations: Object.freeze(['Invoke-Expression $stageDefinition[0].Extent.Text', 'Invoke-Expression $comDefinition[0].Extent.Text']),
+});
+// Member assignments the embed worker may make: local report/evidence roots, plus the documented COM setters
+// (the edit's Text and whole-range/run Font2 Name, Size, Bold, Italic, and Saved on the discard-without-save path).
+export const EMBED_LOCAL_ASSIGNMENT_ROOTS = EMBED_SOURCE_POLICY.roots;
+export const EMBED_COM_SETTERS = EMBED_SOURCE_POLICY.setters;
+
+const OWNED_EMBED_SAVE_OFF =/\.SaveAs\(\$savedPath,\s*24\s*,\s*0\s*\)/;
 const OWNED_EMBED_SAVE_ON = /\.SaveAs\(\$savedPath,\s*24\s*,\s*(?:\(-1\)|-1)\s*\)/;
 
 export function auditEmbedVerifierSource(sourceText, {label = 'native-font-embed.ps1'} = {}) {
-  const failures = [];
+  const scan = scanPowerShellSource(sourceText);
+  const failures = auditHarnessSourcePolicy(sourceText, {label, ...EMBED_SOURCE_POLICY});
   if (OWNED_EMBED_SAVE_OFF.test(sourceText)) failures.push({code: 'embed-forced-off', message: `${label} must not call SaveAs with EmbedFonts 0`});
   if (!OWNED_EMBED_SAVE_ON.test(sourceText)) failures.push({code: 'embed-not-requested', message: `${label} must call SaveAs with EmbedFonts -1 on the owned presentation`});
   if (hasOfficeQuitInvocation(sourceText)) failures.push({code: 'application-quit', message: `${label} must not call Application.Quit or .Quit()`});
   for (const required of ['nativeFontsGate', 'blockedByNativeFontsGate', 'edited.presentation.native-fonts-gate']) {
     if (!sourceText.includes(required)) failures.push({code: 'missing-native-font-gate', message: `${label} lacks ${required}`});
   }
-  const gateInputs = [...stripPowerShellLiteralsForScan(sourceText).matchAll(/Get-FontEmbedNativeFontsGate\s+(\$[\w:.]+)/g)].map(match => match[1]);
+  const gateInputs = [...scan.code.matchAll(/Get-FontEmbedNativeFontsGate\s+(\$[\w:.]+)/g)].map(match => match[1]);
   if (JSON.stringify(gateInputs) !== JSON.stringify(['$report.nativeFontsObservation'])) failures.push({code: 'native-font-gate-input', message: `${label} must gate SaveAs on exactly one post-edit $report.nativeFontsObservation; found ${gateInputs.join(', ') || 'none'}`});
   for (const required of ['preEditFontsObservation', 'postTextFontsObservations', 'postFormatFontsObservations', 'fontSlotObservations', 'Get-FontEmbedFontsInventory', 'Get-FontEmbedRangeSnapshot', 'Get-FontEmbedFontSlotObservations']) {
     if (!sourceText.includes(required)) failures.push({code: 'missing-diagnostic-observation', message: `${label} lacks ${required}`});
@@ -519,7 +550,7 @@ async function loadAndBindEvidence(root, {requirePptx}) {
   const registrations = await readRequired(root, 'font-registration.json', failures, rawHashes);
   const generation = await readRequired(root, 'inputs/generation.json', failures, rawHashes);
   const stages = await readRequired(root, 'stages.jsonl', failures, rawHashes, bytes => {
-    const text = Buffer.from(bytes).toString('utf8').replace(/^﻿/, '').trim();
+    const text = Buffer.from(bytes).toString('utf8').replace(/^\uFEFF/, '').trim();
     return text ? text.split(/\r?\n/).map(line => JSON.parse(line)) : [];
   });
   for (const [name, value] of Object.entries({request, report, supervisor, worker, progress, generation})) need(value !== null && typeof value === 'object' && !Array.isArray(value), 'evidence-object', `${name}.json must contain a JSON object`);

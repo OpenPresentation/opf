@@ -83,13 +83,13 @@ node test/native-font-inventory-audit.mjs artifacts/native-font-inventory-01
 The audit writes `audit.json` with exclusive create and refuses to overwrite it. It starts no Office, COM or font API, and it checks:
 
 - Every snapshot and original hash, and that the snapshots match the reviewed `native-font-inventory.ps1`, `native-process.ps1` and `native-text-fonts.ps1` beside the auditor.
-- The verifier's read-only source policy: one `Open(…, (-1), 0, 0)`, one owned `Close()`, and only allowlisted invoked members, the same list as the worker's AST check. The controls assert that both lists match.
+- The verifier's read-only source policy: one `Open(…, (-1), 0, 0)`, one owned `Close()`, and only allowlisted invoked members, the same list as the worker's AST check. The controls assert that both lists match. The policy reads code through the shared lexer in `test/powershell-scan.mjs`, so comments, strings and here-strings are blanked with offsets preserved, and syntax the lexer does not model fails closed. It also applies the reviewed command, member, static, type and invocation-site allowlist (`INVENTORY_SOURCE_POLICY`, asserted equal to `$script:InventoryPolicy*` in the worker). Anything not on it fails, including `Invoke-Expression`, `iex`, `Add-Type`, `Invoke-Command`, `Set-Alias`, `[scriptblock]::Create`, `InvokeScript`, `$ExecutionContext`, and string-named commands and members. Any non-literal `&` or `.` invocation also fails, other than `& $Operation` in `Invoke-InventoryCom`, `& $decide` and `& $mutate` in the pure regression, and the script-level dot-sourcing of the two helper snapshots. It also rejects any member assignment or `set_*` call whose root is not one of the worker's local report roots (`INVENTORY_ASSIGNMENT_ROOTS`). The inventory worker has no COM setter. The worker's AST check forbids the same dynamic code, and its pure regression carries negatives for each form.
 - The worker outcome and the supervisor and progress records.
 - The registration ledger: four canonical additions and removals in the default mode, no registration file otherwise.
 - No outputs besides the expected evidence files, so a saved `.pptx` fails the audit.
 - The report: `ReadOnly = -1`, exactly one owned open and one owned close, and complete observations within bounds.
 
-It rebuilds the exact stage sequence from the observations and requires the recorded stages to match it one for one, with no error and with the owned path set only between open and close. It recomputes the font ledger from the raw observations and compares it. A passing attempt must have `failureCleanup` null. `findings` in `audit.json` repeats the observations and the ledger, and `findings.failureCleanup` checks a failed attempt's cleanup:
+It rebuilds the exact stage sequence from the observations and requires the recorded stages to match it one for one, with no error and with the owned path set only between open and close. It recomputes the font ledger from the raw observations and compares it. A `Presentation.Fonts` entry whose name is the empty string is a valid observation. PowerPoint was observed returning `{name: "", embedded: 0, embeddable: 0}`. The name ledgers omit empty names, as the worker's ledger does, and the audit adds `emptyNameFontReported` and `emptyNamePresentationFontIndexes` to `findings.ledger` as a finding. These two fields are not part of the worker's `fontLedger` comparison. Audit output is `schemaVersion` 2. A passing attempt must have `failureCleanup` null. `findings` in `audit.json` repeats the observations and the ledger, and `findings.failureCleanup` checks a failed attempt's cleanup:
 
 - `Close()` ran at most once.
 - An error close happened only without a COM failure, after an owned open and with no earlier close, directly before `worker.failure`, with cleanup confirmed.
@@ -97,13 +97,21 @@ It rebuilds the exact stage sequence from the observations and requires the reco
 
 Treat findings as evidence only when `passed` is true; `findings.failureCleanup` is a diagnostic for failed attempts.
 
+To re-audit an evidence directory that already has `audit.json`, for example one rejected only because of an empty font name, use `--reaudit-v2`:
+
+```bash
+node test/native-font-inventory-audit.mjs artifacts/native-font-inventory-01 --reaudit-v2
+```
+
+It writes `audit-v2.json` with exclusive create and never touches `audit.json`. The default mode binds the verifier snapshot only to the reviewed companion beside the auditor. `--reaudit-v2` also accepts one of the hashes pinned in `PRIOR_REVIEWED_INVENTORY_VERIFIER_SHA256`: the FF-03 worker (#59, `ef8a158`) with LF or CRLF line endings. That revision predates only this PR's static AST hardening: the dynamic-code prohibition and the allowlist block. The audit's own Node source policy still applies the full current allowlist to that snapshot, and the three existing FF-03 evidence directories pass it. The default mode rejects an `audit-v2.json` in the evidence directory as unexpected output; only `--reaudit-v2` tolerates one. `reviewedVerifierRevision` records which revision matched, and the other inputs are bound exactly as in the default mode.
+
 ## Offline controls
 
 ```bash
 npm run test:native-font-inventory-controls
 ```
 
-The controls cover the static policy (including `Add`, `ApplyTemplate`, `ApplyTheme`, `Fonts.Replace`, static and dynamic invocations, and parity between the Node and PowerShell allowlists), the pure regression (Windows), the font ledger and close-on-failure consistency. They build synthetic evidence for all three modes and check that an Aptos observation passes the audit as a finding. Negative cases include a SaveAs stage, a second open or close, a non-read-only open, an empty-string stage error, a wrong owned path, a missing run stage, a forged ledger, exceeded bounds, a timeout, a saved output, a stray registration file and an unremoved font. The CLI must refuse to overwrite `audit.json`.
+The controls cover the static policy (including `Add`, `ApplyTemplate`, `ApplyTheme`, `Fonts.Replace`, static and dynamic invocations, and parity between the Node and PowerShell allowlists), the pure regression (Windows), the font ledger and close-on-failure consistency. They build synthetic evidence for all three modes and check that an Aptos observation passes the audit as a finding. Negative cases include a SaveAs stage, a second open or close, a non-read-only open, an empty-string stage error, a wrong owned path, a missing run stage, a forged ledger, exceeded bounds, a timeout, a saved output, a stray registration file and an unremoved font. The CLI must refuse to overwrite `audit.json`, and `--reaudit-v2` must write `audit-v2.json` beside it and refuse to overwrite that. They also check that an empty-name `Presentation.Fonts` entry passes as a finding, while a non-string name still fails. A prior reviewed verifier revision binds only when enabled explicitly and only by hash. The Node policy rejects COM member assignments and dynamic code, and allows comments, strings and local report roots. The Node and PowerShell allowlists must be equal, and every independent-review probe in `test/powershell-scan-probes.mjs` must be rejected by both layers.
 
 On Windows, the controls also run the real parent and worker end to end against `test/native-font-inventory-mock.ps1`, an offline stand-in for the PowerPoint object model, in the fixture, control-deck, Aptos and already-open-cloud-deck (URL `FullName`) variants. They also run three failure variants and check the cleanup outcome of each:
 

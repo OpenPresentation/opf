@@ -69,6 +69,48 @@ How to read the result: if Aptos is already in `preEditFontsObservation`, the ed
 
 These observations are diagnostics, not gates. The only input to `nativeFontsGate`, and so to `SaveAs`, is still the post-edit `nativeFontsObservation`, with the unchanged Carlito allowlist and embeddability rule. Aptos in any observation neither passes nor fails an attempt; Aptos in the post-edit inventory still blocks `SaveAs`. The `-PureRegression` AST check requires exactly one worker gate call, `Get-FontEmbedNativeFontsGate $report.nativeFontsObservation`, and the offline source policy checks the same thing.
 
+The offline source policies in `test/native-font-embed-audit.mjs`, `test/native-mixed-edit-audit.mjs` and `test/native-font-inventory-audit.mjs` share one PowerShell lexer (`test/powershell-scan.mjs`). It reads the verifier left to right once and blanks these comments and literals:
+
+- `#` line comments and `<# #>` block comments.
+- Single-quoted strings, with `''` as the escape.
+- Double-quoted strings, with backtick escapes and `""`. `$(...)` subexpressions stay visible as code, and `${name}` braced variables are skipped as names.
+- `@' '@` and `@" "@` here-strings whose terminator starts a line.
+
+Character offsets and line breaks are preserved. An apostrophe in a comment or a quote inside `${...}` therefore can neither hide a following `$app.Quit()` nor invent a string. The audit fails with `source-scan-unsupported` on syntax the lexer does not model: a `#` or `<#` glued to a preceding word, a backtick escape in code (``i`ex``), a lone carriage return, or an unterminated string, comment, here-string or subexpression.
+
+On that code each harness is checked against an allowlist, not a list of known-bad constructs. A bare word, invoked member, static access or type literal that is not on the harness's reviewed lists fails the audit:
+
+| Kind | Rule |
+| --- | --- |
+| Commands and bare words | Cmdlets and helper functions on the list, or functions declared in the file. Some are scoped to one function (`Add-Member` to the pure-regression fakes) or restricted to one exact form (`New-Object -ComObject PowerPoint.Application`). `ForEach-Object` and `Where-Object` must take exactly one script block, so `ForEach-Object Quit` and `% Quit` fail. |
+| Instance members | Invoked members on the list. `.Invoke()`, `.ExpandString()`, `.AddScript()` and `set_*()` are not on it, which closes `$app.Quit.Invoke()` and `PSObject.Methods['Quit'].Invoke()`. |
+| Static members and properties | Exact `Type::Member` pairs on a type literal. Static access on a variable or an expression (`$t::Create`, `([type]'scriptblock')::Create`) always fails. |
+| Types | Casts, parameter constraints, attributes and static-access targets on the list, so `[powershell]` and `[type]` fail. |
+
+The harness's own PowerShell AST check enforces the same lists (`$script:FontEmbedPolicy*`, `$script:MixedEditPolicy*`, `$script:InventoryPolicy*`), and the controls assert that the Node and PowerShell copies are equal.
+
+Both layers also reject the following, with two exact exemptions:
+
+- **Dynamic code:** `Invoke-Expression`, `iex`, `Add-Type`, `Invoke-Command`, `[scriptblock]::Create`, `InvokeScript`, `NewScriptBlock` and any `$ExecutionContext` reference. They also reject aliases such as `Set-Alias` and `New-Alias`, string-named or variable-named member calls, and any `&` or `.` whose target is not a literal command. `$a=. $y`, `. "$y"` and `& "$y"` are included.
+- **First exemption:** the pure regression may re-evaluate its own two extracted helper definitions with those exact `Invoke-Expression` lines inside `Invoke-*PureRegression`.
+- **Second exemption:** a short list of exact function, operator and variable sites. These are the COM wrapper's `& $Operation` and the script-level dot-sourcing of the two hash-checked helper snapshots, `. $processSnapshot` and `. $fontHelperSnapshot`. The inventory pure regression's local `& $decide` and `& $mutate` are also on its list.
+
+Member assignments (`=`, compound assignment, `++` and `--`) may target only a local report root or a documented COM setter; anything else fails with `com-property-assignment`. A local report root may be bound only to a hashtable literal or to a reviewed exact source. It may not be bound through a multiple assignment, a parameter, a `foreach` variable or a variable-binding common parameter such as `-OutVariable`. A root therefore cannot alias a COM object, and anything else fails with `local-root-binding`. The embed worker's COM setters are the edited range's `Text`, the whole-range and run `Font2` `Name`, `Size`, `Bold` and `Italic`, and `Saved` on the discard-without-save path (`EMBED_SOURCE_POLICY.setters`).
+
+Two further rules make an allowed site trustworthy, and both layers enforce them:
+
+- **Pinned variables.** The variables an allowed invocation site or file-system write depends on are pinned (`pinned` and `pinnedBindings`). These are `$Operation`, the helper snapshots, the owned output, snapshot and pure-regression roots, and the stage, progress, report, saved and PNG paths. Every assignment, `foreach` binding, parameter declaration and increment of a pinned variable must be one of its reviewed exact bindings. For example, `$Operation` must be a `[scriptblock]` parameter of the COM wrapper, so `$processSnapshot = Join-Path $env:TEMP 'evil.ps1'` and `$script:stageFile = $PROFILE` fail.
+- **Exact forms.** Each call of `Remove-Item`, `Set-Content`, `Add-Content`, `Copy-Item`, `New-Item`, `Invoke-OpfNativeWorker` and `Invoke-OpfWithTemporaryFonts` must match one reviewed, whitespace-normalized text (`exactForms`). So must `[IO.File]` writes (`exactApis`) and COM `SaveAs` and `Export` calls (`exactMembers`). An arbitrary `-ScriptPath`, path or splatted argument therefore fails.
+
+Both layers also reject the following:
+
+- A function defined more than once.
+- A drive-qualified variable other than `$env:`, such as `${variable:ExecutionContext}`, `$variable:ExecutionContext` or `${function:...}`.
+- Splatting and redirection.
+- A bare-word argument that is not on the reviewed list.
+
+The independent-review probes in `test/powershell-scan-probes.mjs` are permanent negative controls. The three control suites append every probe to each real harness and require the Node audit to add a failure. On Windows they also require the harness's PowerShell AST check, run offline through `test/native-source-policy-probes.ps1`, to reject it.
+
 `Font2` slot names and `Presentation.Fonts` names are what PowerPoint reports through COM. They do not prove which physical font file drew any glyph, and a reported slot name does not show that the font is installed, embedded or used for rendering.
 
 The offline audit requires these fields to be present, finite and well-typed:
@@ -87,7 +129,9 @@ The default audit accepts only a completed embed save, so on its own it never ch
 - **Gate consistency.** The post-edit inventory is bounded and well-typed. The recorded `nativeFontsGate` must fail and must match, field by field, a recomputation from that inventory (`unexpectedNames`, `unembeddableNames`, counts, `baseFamilyPresent`, `entries`). The `blocked` gate stage error must be `unexpected|unembeddable`.
 - **Stages and diagnostics.** The same pairing, bounds and order rules as above, and the same field checks.
 
-The output never passes the embed audit. It has no `passed` field, and `embedGatePassed` is always `false`. `diagnosticEvidenceValid` states whether the blocked evidence is trustworthy. `fontsTimeline` lists the names each Fonts snapshot reported, in the order they were taken, as a reading aid. The exit code is 0 only when `diagnosticEvidenceValid` is `true`. The default mode still rejects blocked evidence, and `--blocked` rejects evidence from a completed save.
+The output never passes the embed audit. It has no `passed` field, and `embedGatePassed` is always `false`. `diagnosticEvidenceValid` states whether the blocked evidence is trustworthy. `fontsTimeline` lists the names each Fonts snapshot reported, in the order they were taken, as a reading aid. The exit code is 0 only when `diagnosticEvidenceValid` is `true`.
+
+**`--blocked` exit 0 is not an embed pass.** It means only that the blocked run's diagnostic evidence is valid. The gate still blocked `SaveAs`, so nothing was embedded. Automation must read `embedGatePassed`, which is always `false` in this mode, and must never treat the exit code of a `--blocked` audit as embed success. The default mode still rejects blocked evidence, and `--blocked` rejects evidence from a completed save.
 
 ## Stage records
 
