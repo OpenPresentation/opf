@@ -38,6 +38,19 @@ Pagination repeats these fields without putting them among body slices. An optio
 
 Published PPTX 0.9.1 draws the accepted editable text boxes and fitted images and records furniture provenance in tagged slide shapes. Reimport uses current native text and images; damaged or ambiguous provenance retains visible content with diagnostics. The [fresh installed-package evidence](evidence/shipped-train-20260921/installed/acceptance-summary.json) includes deterministic export, current-content reimport controls and offline canvas editing/undo. Native PowerPoint acceptance, font compatibility and full visual review remain separate gates; this is not native `p:hf` Header/Footer support. Bounds/readability checks do not certify whole-slide design quality: long labels can wrap heavily in portrait zones, and outline agreement does not establish native font identity.
 
+## Slide-level images
+
+Unreleased core composition resolves `design.slideImage` into `geometry.slideImage`, beside body `items`. It applies to a slide in two cases:
+
+- The slide sets its own `design.slideImage`.
+- The deck sets `design.slideImage` and the slide's layout record declares `slideImage: true`.
+
+A deck-level value on a layout without `slideImage: true` is still ignored. Existing decks therefore keep their geometry: 81 bundled example decks set a deck-level slide image and none of them changes. When the value is the asset shorthand rather than a `{ position }` object, the layout's `slideImageAlignment` supplies the position, and `background` is the fallback.
+
+`background` gives the image the whole slide, and headings and content compose unchanged over it. `left`, `right`, `top` and `bottom` give the image half the slide, edge to edge, and headings and content compose in the other half with the usual padding. Header and footer bands keep their full-width placement. The frame uses `design.imageFill`, with `crop` as the default: `crop` covers the frame from the center and `fit` shows the whole image centered inside it. Without `design.imageFill`, the content-image default stays `fit`.
+
+The slide's root `image` becomes the slide image, not a second content item, in two cases: the treatment object omits `src`, or `src` is the same source as the root image. A root image with a different source stays content. The result reports `path` (the configuring design value), `sourcePath` (where the drawn asset lives), `region`, `box` and `replacesContent`. Coordinated opf-render draws the frame beneath content. Coordinated opf-pptx exports one native `p:pic` at the same frame, with crop and fit written as `a:srcRect`. A tagged picture that has not been edited imports back as the slide's `design.slideImage`.
+
 ## Nested groups
 
 ### Shared content cards
