@@ -162,8 +162,8 @@ export function paragraphDirection(text: string, deckDirection: TextDirection | 
   if (deckDirection !== "rtl") return "ltr";
   let isolates = 0;
   for (const char of String(text ?? "")) {
-    if (char === "⁦" || char === "⁧" || char === "⁨") isolates += 1;
-    else if (char === "⁩") isolates = Math.max(0, isolates - 1);
+    if (char === "\u2066" || char === "\u2067" || char === "\u2068") isolates += 1;
+    else if (char === "\u2069") isolates = Math.max(0, isolates - 1);
     else if (isolates === 0) {
       if (strongRtl.test(char)) return "rtl";
       if (strongLtr.test(char)) return "ltr";
