@@ -57,11 +57,6 @@ export interface ResolveScriptFontsOptions {
   slideIndex?: number;
   /** Language reference to resolve instead of the document's `language` (catalog id, BCP-47 tag or Language object). */
   language?: unknown;
-  /**
-   * Last-resort font scheme id when neither the slide, the deck nor the resolved theme names one. Defaults to
-   * the shared `DEFAULT_FONT_SCHEME` (`aptos`).
-   */
-  defaultFontScheme?: string;
   /** Language tag used when neither the document nor `options.language` names a resolvable language. Defaults to `en-US`. */
   defaultLanguage?: string;
 }
@@ -114,7 +109,7 @@ const latinSlotScripts = new Set(["Latn", "Cyrl", "Grek", "Zyyy", "Zzzz"]);
 const deprecatedLanguages: Record<string, string> = { iw: "he", in: "id", ji: "yi" };
 
 /** Language subtags treated as equal when matching a tag to a catalog record. */
-const matchingLanguages: Record<string, string> = { ...deprecatedLanguages, no: "nb", zsm: "ms" };
+const matchingLanguages: Record<string, string> = { ...deprecatedLanguages, no: "nb", zsm: "ms", ku: "kmr" };
 
 /**
  * Vendored CLDR likely scripts for the catalog languages written in more than
@@ -332,7 +327,8 @@ function schemeServesLanguage(scheme: Record<string, unknown>, language: Record<
  * presentation (or a `{ design, language, catalogs }` subset of one).
  *
  * The latin slot follows the effective design font scheme exactly as
- * `resolveFontFamilies` does. Each of the eastAsian and complexScript slots
+ * `resolveFontFamilies` does; when nothing names a font scheme it falls back to
+ * the shared `DEFAULT_FONT_SCHEME`. Each of the eastAsian and complexScript slots
  * takes, in order: the design font scheme's explicit slot; the scheme's own
  * families when its `languageFamily` names the slot and its `languages` list
  * is empty or names the language; the language's font scheme when the
@@ -355,7 +351,7 @@ export function resolveScriptFonts(input: unknown, options: ResolveScriptFontsOp
   }
 
   const theme = resolveReference(lookup, "themes", design.theme ?? "minimal") ?? {};
-  const scheme = resolveReference(lookup, "fontSchemes", design.fontScheme ?? theme.fontScheme ?? text(options.defaultFontScheme) ?? DEFAULT_FONT_SCHEME) ?? {};
+  const scheme = resolveReference(lookup, "fontSchemes", design.fontScheme ?? theme.fontScheme ?? DEFAULT_FONT_SCHEME) ?? {};
   const latin = resolveFontFamilies(scheme);
 
   const fromOption = options.language !== undefined ? resolveLanguage(document, lookup, options.language) : undefined;

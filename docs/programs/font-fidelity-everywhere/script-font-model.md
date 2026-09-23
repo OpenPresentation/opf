@@ -36,7 +36,10 @@ tags). Catalog ids and catalog tags resolve without the runtime's locale data:
 
 - Tags are parsed and cased by the resolver itself, not by `Intl`.
 - A vendored alias table treats `iw`/`he`, `in`/`id`, `ji`/`yi`,
-  `no`/`nb` and `zsm`/`ms` as equal when matching.
+  `no`/`nb`, `zsm`/`ms` and `ku`/`kmr` as equal when matching. `ku` matches
+  the Kurmanji record only in Latin script, so `ku-Arab` (Sorani) stays
+  uncatalogued. The catalog has no Yiddish record. If one is added, its
+  curated `ooxmlLang` should be `yi-001`, the MS-LCID culture name, not `yi`.
 - A vendored likely-script table (from CLDR likely subtags) covers the catalog
   languages written in more than one script:
 
@@ -75,9 +78,9 @@ this order:
 
 1. `latin` is the design font scheme's heading/body, exactly as
    `resolveFontFamilies` computes it. The design scheme comes from slide
-   design, then deck design, then theme, then `options.defaultFontScheme`. That
-   last resort defaults to the shared `DEFAULT_FONT_SCHEME` (`aptos`), which
-   core now exports. By owner decision, one default applies across core
+   design, then deck design, then theme, then the shared `DEFAULT_FONT_SCHEME`
+   (`aptos`), which core now exports. There is no per-call option, so the
+   last resort cannot drift between engines. By owner decision, one default applies across core
    pagination, opf-render, opf-editor and opf-pptx, so preview matches export.
    The resolver uses it already. A separate FF-35 PR wires the other engines,
    which still use `roboto` for preview and pagination today.
@@ -145,7 +148,7 @@ The curated values are Windows culture names, with these noted choices:
 - `scriptFontRole(script)`.
 
 The options are `app` (`"PowerPoint"` or `"Google Slides"`), `slideIndex`,
-`language`, `defaultLanguage` and `defaultFontScheme`. The result carries:
+`language` and `defaultLanguage`. The result carries:
 
 - `heading` and `body` slots (`{ latin, eastAsian, complexScript }`). The top
   level repeats `body`.
@@ -254,7 +257,7 @@ All changes are additive:
    slots.
 3. **Default language and font scheme.** Keep `en-US`. The owner chose one
    shared default font scheme, `aptos` (`DEFAULT_FONT_SCHEME`), for every
-   engine. The resolver defaults to it, and FF-35 wires pagination, the
+   engine. The resolver falls back to it, with no per-call override, and FF-35 wires pagination, the
    renderer and the editor to it. Reconciling `engine-defaults.json` (`english`, `en`)
    with `en-US` remains an FF-17 follow-up.
 4. **Filled `ea`/`cs` in Latin decks.** The resolver reports the chosen

@@ -170,6 +170,8 @@ describe('language tags', () => {
       ['in', 'id-ID', 'id', 'indonesian'],
       ['nb-NO', 'nb-NO', 'nb-NO', 'norwegian'],
       ['ms-MY', 'ms-MY', 'ms-MY', 'malay'],
+      ['ku', 'kmr-TR', 'ku', 'kurmanji'],
+      ['ku-Latn-TR', 'ku-Latn-TR', 'ku-Latn-TR', 'kurmanji'],
       ['sr-latn', 'sr-Latn-RS', 'sr-Latn', 'serbian-latin'],
     ]) {
       const resolved = resolveScriptFonts(deck(language));
@@ -282,13 +284,14 @@ describe('precedence', () => {
     assert.throws(() => resolveScriptFonts(document, {slideIndex: 0.5}), RangeError);
   });
 
-  test('defaultFontScheme applies only when no slide, deck or theme scheme is named', () => {
+  test('the shared DEFAULT_FONT_SCHEME applies only when no slide, deck or theme scheme is named', () => {
     const customTheme = {slides: [{title: 'Custom theme'}], design: {theme: {name: 'Custom'}}};
     assert.equal(DEFAULT_FONT_SCHEME, 'aptos');
     assert.deepEqual(resolveScriptFonts(customTheme).heading, same('Aptos Display'), 'the shared default applies');
     assert.equal(resolveScriptFonts(customTheme).body.latin, 'Aptos');
-    assert.equal(resolveScriptFonts(customTheme, {defaultFontScheme: 'roboto'}).body.latin, 'Roboto');
-    assert.equal(resolveScriptFonts(deck('english'), {defaultFontScheme: 'roboto'}).body.latin, 'Carlito');
+    assert.equal(resolveScriptFonts(customTheme, {defaultFontScheme: 'roboto'}).body.latin, 'Aptos', 'there is no per-call default option');
+    assert.equal(resolveScriptFonts({slides: [], design: {theme: {name: 'Custom', fontScheme: 'roboto'}}}).body.latin, 'Roboto');
+    assert.equal(resolveScriptFonts(deck('english')).body.latin, 'Carlito');
   });
 
   test('options.language replaces the document language', () => {
