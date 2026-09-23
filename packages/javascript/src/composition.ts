@@ -163,7 +163,8 @@ export interface ComposedItem {
 }
 /**
  * Slide-level image resolved from design.slideImage. It is active when the slide sets its own
- * design.slideImage, or when the deck sets one and the slide's layout record declares slideImage: true.
+ * design.slideImage, or when the deck sets one and either the slide's layout record declares
+ * slideImage: true or the slide's root image is the same source.
  * Content composes in the part of the slide the image does not occupy; 'background' leaves the whole slide.
  */
 export interface ComposedSlideImage {
@@ -300,15 +301,18 @@ function resolveSlideImage(slide: Record<string, any>, layout: Record<string, an
   const own = record(slide.design), deck = record(record(presentation).design);
   const local = own.slideImage !== undefined;
   const configured: unknown = local ? own.slideImage : deck.slideImage;
-  // Deck-wide slide images apply only where the layout reserves one, so existing decks keep their geometry.
-  if (!configured || (typeof configured !== 'object' && typeof configured !== 'string') || (!local && layout.slideImage !== true)) return undefined;
+  if (!configured || (typeof configured !== 'object' && typeof configured !== 'string')) return undefined;
   const treatment = typeof configured === 'object' && !Array.isArray(configured) && 'position' in configured ? record(configured) : undefined;
   const alignment = typeof layout.slideImageAlignment === 'string' ? layout.slideImageAlignment.toLowerCase() : undefined;
   const position = (treatment ? treatment.position : SLIDE_IMAGE_POSITIONS.find(value => value === alignment) ?? 'background') as SlideImagePosition;
   if (!SLIDE_IMAGE_POSITIONS.includes(position)) return undefined;
   const designSource = treatment ? treatment.src : configured;
   // A root image with the same source (or one a source-less treatment places) is the slide image, not content.
-  const root = slide.image, replacesContent = root !== undefined && (designSource === undefined || assetSource(root) === assetSource(designSource));
+  const root = slide.image, sameSource = root !== undefined && designSource !== undefined && assetSource(root) === assetSource(designSource);
+  // A deck-wide slide image applies where the layout reserves one, or where the slide's own image is that
+  // same source. Other slides keep their geometry, so existing decks with an unused deck value are unchanged.
+  if (!local && layout.slideImage !== true && !sameSource) return undefined;
+  const replacesContent = root !== undefined && (designSource === undefined || sameSource);
   const value = replacesContent ? root : designSource;
   const source = assetSource(value);
   if (typeof source !== 'string' || !source) return undefined;

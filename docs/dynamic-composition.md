@@ -40,12 +40,13 @@ Published PPTX 0.9.1 draws the accepted editable text boxes and fitted images an
 
 ## Slide-level images
 
-Unreleased core composition resolves `design.slideImage` into `geometry.slideImage`, beside body `items`. It applies to a slide in two cases:
+Unreleased core composition resolves `design.slideImage` into `geometry.slideImage`, beside body `items`. It applies to a slide in three cases:
 
 - The slide sets its own `design.slideImage`.
 - The deck sets `design.slideImage` and the slide's layout record declares `slideImage: true`.
+- The deck sets `design.slideImage` and the slide's root `image` is the same source, as in the pptx.gallery image-treatment snippets.
 
-A deck-level value on a layout without `slideImage: true` is still ignored. Existing decks therefore keep their geometry: 81 bundled example decks set a deck-level slide image and none of them changes. When the value is the asset shorthand rather than a `{ position }` object, the layout's `slideImageAlignment` supplies the position, and `background` is the fallback.
+Other slides ignore a deck-level value, so existing decks keep their geometry: 81 bundled example decks set a deck-level slide image and none of them changes. When the value is the asset shorthand rather than a `{ position }` object, the layout's `slideImageAlignment` supplies the position, and `background` is the fallback.
 
 `background` gives the image the whole slide, and headings and content compose unchanged over it. `left`, `right`, `top` and `bottom` give the image half the slide, edge to edge, and headings and content compose in the other half with the usual padding. Header and footer bands keep their full-width placement. The frame uses `design.imageFill`, with `crop` as the default: `crop` covers the frame from the center and `fit` shows the whole image centered inside it. Without `design.imageFill`, the content-image default stays `fit`.
 

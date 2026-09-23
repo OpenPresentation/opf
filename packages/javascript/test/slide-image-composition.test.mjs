@@ -8,7 +8,7 @@ const within = (box, area) => box.x >= area.x - 1e-6 && box.y >= area.y - 1e-6
   && box.x + box.width <= area.x + area.width + 1e-6 && box.y + box.height <= area.y + area.height + 1e-6;
 const overlaps = (a, b) => a.x < b.x + b.width - 1e-6 && a.x + a.width > b.x + 1e-6 && a.y < b.y + b.height - 1e-6 && a.y + a.height > b.y + 1e-6;
 
-test('deck slide images apply only to layouts that reserve one', () => {
+test('deck slide images apply to reserving layouts and same-source slide images', () => {
   const presentation = { design: { slideImage: { src: photo, position: 'left' } } };
   const slide = { title: 'Heading', text: 'Body' };
   const plain = composeSlide(slide, { presentation });
@@ -21,6 +21,16 @@ test('deck slide images apply only to layouts that reserve one', () => {
   assert.equal(reserved.slideImage.sourcePath, 'design.slideImage');
   assert.equal(reserved.slideImage.value, photo);
   assert.equal(reserved.slideImage.replacesContent, false);
+  // The slide's own image naming the same source links it to the deck treatment without a layout opt-in.
+  const linked = composeSlide({ title: 'Heading', image: { src: photo, alt: 'Harbor' } }, { presentation, layout: { slideImage: false } });
+  assert.equal(linked.slideImage.replacesContent, true);
+  assert.equal(linked.slideImage.path, 'design.slideImage');
+  assert.equal(linked.slideImage.sourcePath, 'slides.0.image');
+  assert.deepEqual(linked.items.map(item => item.field), ['title']);
+  const unrelated = composeSlide({ title: 'Heading', image: 'data:image/png;base64,AAAA' }, { presentation });
+  assert.equal(unrelated.slideImage, undefined);
+  // A deck-level source-less treatment still needs the layout opt-in.
+  assert.equal(composeSlide({ title: 'Heading', image: photo }, { presentation: { design: { slideImage: { position: 'left' } } } }).slideImage, undefined);
 });
 
 test('band positions give the image one side and compose content in the rest', () => {
