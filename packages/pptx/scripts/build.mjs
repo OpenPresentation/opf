@@ -30,3 +30,5 @@ await copyFile(new URL('src/table-cell-import.js', root), new URL('table-cell-im
 await copyFile(new URL('src/table-border-import.js', root), new URL('table-border-import.js', dist));
 await copyFile(new URL('src/color-ref.js', root), new URL('color-ref.js', dist));
 await copyFile(new URL('src/theme-colors.js', root), new URL('theme-colors.js', dist));
+await copyFile(new URL('src/typeface-inventory.js', root), new URL('typeface-inventory.js', dist));
+await copyFile(new URL('src/package-fonts.js', root), new URL('package-fonts.js', dist));

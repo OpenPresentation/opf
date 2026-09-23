@@ -72,8 +72,9 @@ export function themeFontSlots(pptxBytes) {
   return {majorFont: slot('majorFont'), minorFont: slot('minorFont')};
 }
 
-// docProps/app.xml "Fonts Used" is static PptxGenJS metadata (Arial, Calibri) that PowerPoint rewrites on
-// save. It is recorded as a residual, not transformed, because it is not a text or theme font slot.
+// docProps/app.xml "Fonts Used": published exporters up to 0.9.1 write static PptxGenJS metadata (Arial,
+// Calibri) that PowerPoint rewrites on save; current exporter source regenerates it from the package's fonts
+// (FF-08). It is recorded, not transformed, because it is not a text or theme font slot.
 export function declaredFontsUsed(pptxBytes) {
   const app = strFromU8(unzipSync(new Uint8Array(pptxBytes))['docProps/app.xml'] ?? new Uint8Array());
   const count = Number(app.match(/<vt:lpstr>Fonts Used<\/vt:lpstr><\/vt:variant>\s*<vt:variant><vt:i4>(\d+)<\/vt:i4>/)?.[1] ?? 0);

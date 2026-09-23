@@ -132,7 +132,10 @@ record('canonical-manifest-negatives');
   assert.ok(aptos.failures.some(item => item.code === 'non-carlito-text-typeface' && /Aptos/.test(item.row.typeface)));
   assert.ok(aptos.failures.some(item => item.code === 'theme-latin-not-carlito'));
   assert.throws(() => applyMasterBulletFontTransform(transformed.bytes), /Expected 9 Arial master bullet fonts/);
-  assert.deepEqual(declaredFontsUsed(transformed.bytes), ['Arial', 'Calibri'], 'Review the documented static docProps Fonts Used residual');
+  // FF-08: the exporter regenerates docProps "Fonts Used" from the package's own fonts, so the
+  // former static Arial/Calibri residual is gone from current source output.
+  assert.deepEqual(declaredFontsUsed(carlitoBytes), ['Carlito'], 'docProps Fonts Used lists only the package fonts');
+  assert.deepEqual(declaredFontsUsed(transformed.bytes), ['Carlito'], 'docProps Fonts Used lists only the package fonts');
   record('carlito-only-fixture-typefaces');
 }
 
