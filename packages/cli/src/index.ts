@@ -237,7 +237,7 @@ async function main(argv: string[]) {
     if (!entry) throw new CliError("Unknown catalog. Run opf catalogs.");
     // Deprecated records stay resolvable by exact id but are left out of the
     // default listing; --all includes them.
-    const records: readonly Record<string, unknown>[] = entry.records;
+    const records = entry.records;
     const result = positional[1] === undefined
       ? (options.all ? records : records.filter(record => !isDeprecated(record)))
       : records.find(record => record.id === positional[1]);
