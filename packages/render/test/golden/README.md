@@ -1,5 +1,11 @@
 # Raster regression baseline
 
+## FF-25 `wdUpDiag` example corpus (pending core release)
+
+`opf-examples-png.ff25-wdupdiag.sha256.json` is the baseline for the core example corpus from [OpenPresentation/opf#127](https://github.com/OpenPresentation/opf/pull/127). That PR changes the pattern-background preset in 11 example decks from the preview-only `diagStripe` to the DrawingML preset `wdUpDiag`. Since #35, `wdUpDiag` draws exactly like `diagStripe`. The manifest was generated with `OPF_EXAMPLES_DIR=<opf#127>/examples node test/golden.mjs --update`. All 805 slide entries are identical to `opf-examples-png.furniture.sha256.json`; only the corpus digest changes, to `d089278ffc10c44d3504f9e53b3369f37178fdb55e8941ccec2b2bb7704a69d4`.
+
+The core ecosystem CI selects this file through `OPF_GOLDEN_BASELINE`. `npm test` here keeps `opf-examples-png.furniture.sha256.json`, because the installed and pinned core still use `diagStripe`. Once a core release containing opf#127 is pinned here, this file becomes the default baseline, and the furniture manifest is retained for history.
+
 ## Unreleased shared code review
 
 The shared code integration changes 43 of 805 slides, with the same 126-deck source digest. Every changed image was reproduced against ordinary registry renderer 0.6.0 and reviewed in eight before/after sheets; all three technical slides and one representative gallery code slide were also inspected at full resolution. Filenames now appear, metadata retains case, source indentation survives and code uses left alignment. The other 762 hashes are unchanged. Sparse gallery code panels and existing theme/logo placeholders remain quality limitations.
