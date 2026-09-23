@@ -171,7 +171,7 @@ The options are `app` (`"PowerPoint"` or `"Google Slides"`), `slideIndex`,
 | `heading.*` / `body.*` | explicit run `a:rPr` `a:latin` / `a:ea` / `a:cs` for title and body text |
 | `lang` | run `a:rPr@lang` and `a:endParaRPr@lang`, instead of a fixed `en-US`. It is always the curated OOXML tag or an authored region tag, never a bare `zsm` or `no`. |
 | `altLang` | omitted. It names the editing-UI language, which OPF does not model. Readers use `lang` when it is absent. |
-| `rtl` | paragraph `a:pPr@rtl="1"` for every paragraph, and a run-level RTL flag where the writer supports one (`rtlMode`). Default alignment for RTL text is an FF-07 decision. |
+| `rtl` + `paragraphDirection(text, direction)` | paragraph `a:pPr@rtl="1"` only for paragraphs that `paragraphDirection()` makes right-to-left, and master default levels only when the deck is right-to-left. Alignment stays the composed absolute alignment (FF-07). |
 
 **Latin-only decks.** `ea` and `cs` repeat the chosen heading/body family
 instead of staying empty, so `+mn-ea`/`+mn-cs` references in masters, notes
@@ -185,6 +185,16 @@ Carlito did not change that. FF-07 therefore keeps the fill gated on FF-05.
 `design.fontScheme.eastAsian` (for example Noto Sans JP), which fills the slot
 for every language. Without it, the slot stays Latin and PowerPoint falls back
 by font linking. Per-run language is out of scope.
+
+## Paragraph direction (FF-07, FF-19)
+
+`paragraphDirection(text, deckDirection)` is the one rule both the renderer and the exporter use for a paragraph's base direction:
+
+- In a left-to-right deck every paragraph is left-to-right.
+- In a right-to-left deck a paragraph is right-to-left when its first strong character is right-to-left, or when it has no strong character (digits, punctuation, marks or empty text). A paragraph whose first strong character is left-to-right, such as an English quote or code, stays left-to-right.
+- Strong characters follow UAX #9 rule P2: text inside directional isolates is skipped, and LRM/RLM/ALM count. Letters are strong; letters of right-to-left scripts (Bidi_Class R/AL) are right-to-left. No locale data is used, only the JavaScript engine's Unicode tables.
+
+The PPTX exporter writes `rtl="1"` on exactly those paragraphs. The renderer sets the SVG/HTML `direction` of each paragraph from the same function.
 
 ## Renderer (FF-19)
 
