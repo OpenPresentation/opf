@@ -34,9 +34,13 @@ const zip=unzipSync(pptx);
 for(let i=0;i<presentation.slides.length;i++) {
   const xml=new TextDecoder().decode(zip[`ppt/slides/slide${i+1}.xml`]);
   const family=resolved.slides[i].geometry.items.find(item=>item.text)?.textStyle.fontFamily;
-  assert.ok(pairs.some(([,substitute])=>substitute===family));
-  assert.ok(xml.includes(`typeface="${family}"`));
+  const [requested,substitute]=pairs[i];
+  // Preview measures and draws with the open substitute...
+  assert.equal(family,substitute);
   assert.ok(svgs[i].includes(`font-family="${family}`));
+  // ...but the PPTX names the chosen family and never the substitute (opf-pptx FF-31).
+  assert.ok(xml.includes(`typeface="${requested}"`),`slide ${i+1} names ${requested}`);
+  assert.ok(!xml.includes(`typeface="${substitute}"`),`slide ${i+1} must not name the preview substitute ${substitute}`);
   const shapes=array(parser.parse(xml)['p:sld']['p:cSld']['p:spTree']['p:sp']);
   const lines=resolved.slides[i].geometry.items.flatMap(item=>item.text.placement.lines.map((placed,index)=>({item,placed,index})).filter(({index})=>item.text.lines[index]));
   assert.equal(shapes.length,lines.length,'Each accepted substitute-font line remains editable');
@@ -76,5 +80,5 @@ if(process.argv.includes('--system')) {
   }
 }
 await writeFile(new URL('report.json',output),JSON.stringify(report,null,2));
-console.log(`Office fonts passed: ${presentation.slides.length} pages, matching editor/SVG geometry and resolved native PPTX families; 24 substitute faces with license notices.`);
+console.log(`Office fonts passed: ${presentation.slides.length} pages, matching editor/SVG geometry, substitute-measured previews and chosen native PPTX families; 24 substitute faces with license notices.`);
 for(const result of report.comparisons) console.log(`${result.fontFamily} ${result.fontWeight}${result.italic?' italic':''}: ${result.skipped ?? `${(result.maxRelativeDelta*100).toFixed(4)}% maximum shaped-width difference`}`);
