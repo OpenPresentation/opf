@@ -81,18 +81,30 @@ const deck = structuredClone(exportDeck);
 const bytes = await toPptx(deck);
 const slideXmls = deck.slides.map((_, index) => new TextDecoder().decode(unzipSync(bytes)[`ppt/slides/slide${index + 1}.xml`]));
 const xml = slideXmls.join("\n");
+// FF-24: named slots and roles export as a:schemeClr through the master clrMap
+// (tx1=dk1, bg1=lt1, tx2=dk2, bg2=lt2) into the theme clrScheme, which now holds
+// the deck color scheme. Resolve each fill through the exported theme.
+const contentSlot = { tx1: "dk1", bg1: "lt1", tx2: "dk2", bg2: "lt2" };
+const themeColors = (pptx) => {
+  const themeXml = new TextDecoder().decode(unzipSync(pptx)["ppt/theme/theme1.xml"]);
+  return Object.fromEntries([...themeXml.matchAll(/<a:(dk1|lt1|dk2|lt2|accent[1-6]|hlink|folHlink)><a:srgbClr val="([0-9A-F]{6})"\/><\/a:\1>/g)].map((m) => [m[1], m[2]]));
+};
+const theme = themeColors(bytes);
+const schemeHex = (solidFill, colors = theme) => colors[contentSlot[solidFill["a:schemeClr"].val] ?? solidFill["a:schemeClr"].val];
 assert.doesNotMatch(xml, /srgbClr val="ACCENT/i);
 assert.doesNotMatch(xml, /srgbClr val="SURFACE/i);
 
 const runs = find(parser.parse(xml), "a:r");
 const accentRun = runs.find((run) => run["a:t"] === "theme-portable");
 assert.ok(accentRun, "accent2 run");
-assert.equal(accentRun["a:rPr"]["a:solidFill"]["a:srgbClr"].val, forest.accent2.replace(/^#/, "").toUpperCase().slice(0, 6));
+assert.equal(accentRun["a:rPr"]["a:solidFill"]["a:schemeClr"].val, "accent2");
+assert.equal(schemeHex(accentRun["a:rPr"]["a:solidFill"]), forest.accent2.replace(/^#/, "").toUpperCase().slice(0, 6));
 
 const cells = find(parser.parse(xml), "a:tc");
 const styled = cells.find((cell) => cellText(cell).includes("At risk"));
 assert.ok(styled, "styled cell");
-const fill = styled["a:tcPr"]["a:solidFill"]["a:srgbClr"].val;
+const fill = schemeHex(styled["a:tcPr"]["a:solidFill"]);
+assert.equal(styled["a:tcPr"]["a:solidFill"]["a:schemeClr"].val, "bg2", "surface on a light background is light2");
 const expectedSurface = resolveExportColor("surface", colorContext({
   colorScheme: forest,
   colors: {
@@ -108,16 +120,18 @@ const expectedSurface = resolveExportColor("surface", colorContext({
 assert.equal(fill, expectedSurface);
 const runFill = find(styled, "a:r").find((run) => (typeof run["a:t"] === "string" ? run["a:t"] : run["a:t"]?.["#text"]) === "At risk")["a:rPr"]["a:solidFill"]["a:srgbClr"].val;
 assert.equal(runFill, "B42318");
-const bottom = styled["a:tcPr"]["a:lnB"]["a:solidFill"]["a:srgbClr"].val;
+assert.equal(styled["a:tcPr"]["a:lnB"]["a:solidFill"]["a:schemeClr"].val, "accent1");
+const bottom = schemeHex(styled["a:tcPr"]["a:lnB"]["a:solidFill"]);
 assert.equal(bottom, forest.accent1.replace(/^#/, "").toUpperCase().slice(0, 6));
 
 const slideTextDeck = {
   design: { colorScheme: { id: "cool-horizon", dark1: "#000000", light1: "#FFFFFF", accent2: "#ED7D31" } },
   slides: [{ text: [{ text: "named", color: "accent2" }, { text: "bad", color: "invalid" }] }],
 };
-const slideXml = new TextDecoder().decode(unzipSync(await toPptx(slideTextDeck))["ppt/slides/slide1.xml"]);
+const slideTextBytes = await toPptx(slideTextDeck);
+const slideXml = new TextDecoder().decode(unzipSync(slideTextBytes)["ppt/slides/slide1.xml"]);
 const slideRuns = find(parser.parse(slideXml), "a:r");
-assert.equal(slideRuns.find((run) => run["a:t"] === "named")["a:rPr"]["a:solidFill"]["a:srgbClr"].val, "ED7D31");
+assert.equal(schemeHex(slideRuns.find((run) => run["a:t"] === "named")["a:rPr"]["a:solidFill"], themeColors(slideTextBytes)), "ED7D31", "Inline slot overrides reach the theme");
 const badRun = slideRuns.find((run) => run["a:t"] === "bad")["a:rPr"]["a:solidFill"]["a:srgbClr"].val;
 assert.match(badRun, /^[0-9A-F]{6}$/);
 assert.notEqual(badRun, "INVALID");

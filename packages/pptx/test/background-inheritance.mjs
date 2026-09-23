@@ -22,8 +22,11 @@ async function check(change, expected, diagnostic) {
   for(const [slot,hex] of [['accent1','123456'],['accent2','ABCDEF']]) edit(parts,theme,xml => xml.replace(new RegExp(`<a:${slot}>.*?</a:${slot}>`,'s'),`<a:${slot}><a:srgbClr val="${hex}"/></a:${slot}>`));
   change(parts);
   for(const [path,bytes] of Object.entries(parts)) if(path.endsWith('.xml'))assert.equal(XMLValidator.validate(decoder.decode(bytes)),true,path);
-  const bytes=zipSync(parts), original=new Uint8Array(bytes), reports=[];
-  const imported=await fromPptx(bytes,{onDiagnostic:d=>reports.push(d)});
+  const bytes=zipSync(parts), original=new Uint8Array(bytes), reports=[], themeReports=[];
+  // Deck theme colors are reported separately (FF-24); translucent or missing
+  // theme slots are not OPF color-scheme values. Backgrounds still resolve them.
+  const imported=await fromPptx(bytes,{onDiagnostic:d=>(d.path?.startsWith('design.')?themeReports:reports).push(d)});
+  assert.ok(themeReports.every(d=>d.code==='unsupported-theme-colors'),JSON.stringify(themeReports));
   assert.deepEqual(bytes,original,'Native source bytes stay intact');
   assert.equal(validatePresentation(imported).valid,true);
   const comparable = background => background?.opacity === undefined ? background : {...background, opacity: Math.round(background.opacity * 1e12) / 1e12};

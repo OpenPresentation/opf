@@ -72,7 +72,7 @@ The first exporter keeps the public API stable while using `pptxgenjs` internall
 
 - `Slide.title`, `Slide.subtitle`, and `Slide.tag` become editable text boxes, not PowerPoint master placeholders.
 - Root payloads, `blocks[]`, and promoted region keys become editable slide objects in deterministic regions. Promoted keys use the OPF 3x3 region vocabulary (`top`, `middle`, `bottom`, `left`, `center`, `right`).
-- Text, lists, metrics, quotes, timelines, code, tables, and inline-data charts are emitted as editable PowerPoint text, table, and chart objects. Content ColorRef values (hex, scheme slots/roles, and `var:<id>`) flatten to `a:srgbClr` via core `resolveColorRef()`; this is hex-resolve, not native `schemeClr` / theme write.
+- Text, lists, metrics, quotes, timelines, code, tables, and inline-data charts are emitted as editable PowerPoint text, table, and chart objects. Content ColorRef values (hex, scheme slots/roles, and `var:<id>`) resolve through core `resolveColorRef()`. Slot and role names become native `a:schemeClr` references when the exported theme holds that exact color; hex, `var:<id>` and slide-override colors stay `a:srgbClr` (see [Theme color scheme](#theme-color-scheme)).
 - Image assets are embedded only when supplied as data URIs, local paths, or host-resolved bytes/paths. Remote asset URLs are never fetched by the runtime path.
 - ZIP entries, generated chart/workbook part names, core-property timestamps, and nested chart workbook timestamps are normalized for reproducible bytes.
 
@@ -83,6 +83,7 @@ This pass did not require an OPF schema change. The deferred full OOXML placehol
 The first importer is mechanical and schema-compatible:
 
 - Presentation core properties map to OPF `name`, `description`, and `author`.
+- The first slide master's theme `clrScheme` maps to `design.colorScheme`: a catalog id on an exact twelve-slot match, otherwise inline slots. A theme named like a catalog theme maps to `design.theme` when its colors or heading/body fonts corroborate it (see [Theme color scheme](#theme-color-scheme)).
 - Native title/subtitle placeholders retain their roles. On slides without complete OPF heading tags, recognizable text-box positions and sizes provide a fallback. If any complete OPF heading role is recovered, untagged body text stays in `blocks[]` instead of being promoted into an absent heading role. Damaged tags retain visible text through ordinary import and diagnostics.
 - Remaining text boxes map to `blocks[]` as text or list payloads, sorted by OOXML position.
 - PowerPoint tables map to OPF table blocks, embedded images map to data URI image blocks, and cached chart series map to basic OPF chart blocks.
@@ -188,6 +189,20 @@ Import reads supported native RGB solid/linear fills directly; it uses no hidden
 
 Node 20/24 tests and the 126-deck / 805-slide structural corpus pass. This proves serialization and the mathematical mapping, not native viewer pixels. Keynote 14.4 recognizes the editable native gradients. Twelve captured native PNGs now support 18 comparisons, including a Keynote-generated PPTX import: opaque differences are at most 4/255 per channel (mean below 0.38), and transparent portrait alpha differs by at most 1/255. The checked-in references run in ordinary Node tests without Keynote. Quick Look still renders these specimens as a flat average color, so its thumbnails are not evidence of their native appearance. Microsoft PowerPoint remains unavailable and unverified. Pattern/image backgrounds, theme-aware native fills, and other design decorations remain separate fidelity work.
 
+
+## Theme color scheme
+
+Export writes the deck's resolved color scheme into `ppt/theme/theme1.xml` `a:clrScheme`, named after the scheme. The OPF slots map one to one: `dark1`/`light1`/`dark2`/`light2` to `dk1`/`lt1`/`dk2`/`lt2`, `accent1`-`accent6` to themselves, and `hyperlink`/`followedHyperlink` to `hlink`/`folHlink`. An abstract role fills a slot only when the scheme leaves that slot unset. Previously every export carried the vendored Office palette (`accent1` `4472C4`). When the deck names a catalog `design.theme`, `a:theme` and its `thm15:themeFamily` take that theme's name. The rewrite happens during package normalization; the vendored PptxGenJS bytes are unchanged.
+
+Document colors that name a slot or role (`accent2`, `textSecondary`, `surface`, ...) become `a:schemeClr` in runs, table cell fills and text, and table borders. Theme-slot backgrounds (`{type:'theme', slot}` or a slot name) do the same. Slide content reaches the theme through the master color map, so `dark1`, `light1`, `dark2` and `light2` are written as `tx1`, `bg1`, `tx2` and `bg2`. A reference becomes `schemeClr` only when the deck theme slot holds exactly the color the slide resolved. PowerPoint has one theme per master, so a slide-level `design.colorScheme` that changes a slot keeps that color literal. These stay `a:srgbClr`:
+
+- literal hex colors, even when they equal a scheme slot;
+- `var:<id>` variables;
+- translucent colors;
+- engine-derived chrome: default text, headings, list markers, muted text, card and chart panels, chart series, and default table header fill. These colors are contrast-selected per slide, not named by the document.
+- `hyperlink` and `followedHyperlink` run and cell colors, because PptxGenJS 4.0.1 cannot emit `hlink`/`folHlink`. Borders and backgrounds can.
+
+Import reads the first slide master's theme. An exact twelve-slot match with a bundled catalog scheme returns its id; the `clrScheme` name breaks ties. Otherwise the importer returns inline slots, relative to the catalog scheme the `clrScheme` is named after when there is one (`{id:'boost', accent1:'#123456'}`). A theme whose name equals a catalog theme's name maps to `design.theme` only if the package's color scheme or heading/body fonts match that theme; otherwise `theme-unverified` is reported. A missing theme, or slots that are not opaque sRGB/system colors, report `unsupported-theme-colors` on `design.colorScheme`. Slide colors are still imported as resolved hex. Role overrides such as `primary` have no theme slot and are not recovered. `test/theme-colors.mjs` covers all 14 catalog schemes and 4 catalog themes, override, foreign and damaged themes, and the literal-color boundaries. This establishes package structure and round-trip, not PowerPoint rendering.
 
 ## JPEG orientation on import
 

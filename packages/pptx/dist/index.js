@@ -10,6 +10,7 @@ import {attachFurnitureTags, furnitureManifest, importFurniture} from './furnitu
 import {importImageOrientation} from './image-import.js';
 import {nativeBackgroundFill} from './background.js';
 import {importBackground} from './background-import.js';
+import {themeSlotColors, writeThemeColors, schemeColorValue, schemeBackgroundFill, readThemeSlotColors, recoverColorScheme, recoverTheme, presentationThemePath} from './theme-colors.js';
 import { webpToPng } from '#image-fallback';
 import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './image-geometry.js';
 import { layoutTable, composeSlide, fitText, fitRichText, textWidthMeasurer, resolveCanvasDimensions, resolveFontFamilies, resolveTextStyle, textColorForFill, chartColorForFill } from "@openpresentation/opf/composition";
@@ -190,6 +191,7 @@ export async function toPptx(input, options = {}) {
   context.metricTags = new Map();
   context.chartHeadings = new Map();
   context.imageFormat = options.imageFormat ?? "compatible";
+  Object.assign(context, exportTheme(presentation, context));
   const pptx = new PptxGenJS();
   configurePresentation(pptx, presentation, {...context,fonts:resolveSlideContext(presentation,presentation.slides[0],context,options).fonts});
 
@@ -236,7 +238,9 @@ export async function fromPptx(input, options = {}) {
 
   if (core.description) imported.description = core.description;
   if (core.author) imported.author = core.author;
-  if (dimensions) imported.design = { dimensions };
+  const themeDesign = importThemeDesign(entries, presentationRoot, presentationRels);
+  const design = {...themeDesign.design, ...(dimensions ? {dimensions} : {})};
+  if (Object.keys(design).length) imported.design = design;
 
   const furnitureContexts = slidePaths.map((slidePath, index) => {
     const root = parseRequiredXml(entries, slidePath)['p:sld'];
@@ -254,6 +258,8 @@ export async function fromPptx(input, options = {}) {
   for (let index = 0; index < slidePaths.length; index += 1) {
     imported.slides.push(importSlide(entries, slidePaths[index], index, dimensions, options, furniture.slides[index], furnitureContexts[index]));
   }
+  // Report after the slides so slide diagnostics keep their established order.
+  for (const diagnostic of themeDesign.diagnostics) options.onDiagnostic?.(diagnostic);
 
   const result = validatePresentation(imported);
   if (!result.valid) {
@@ -919,6 +925,55 @@ function exportColor(entry, context, fallback) {
   return resolveExportColor(entry, colorContext(context, fallback));
 }
 
+// PptxGenJS color for a document color reference: a theme scheme value when the
+// reference names a scheme slot or role that the deck theme holds exactly,
+// otherwise the resolved literal RRGGBB. Alpha stays in the caller's transparency.
+function nativeColor(reference, hex, context) {
+  return schemeColorValue(reference, hex, context, {vendor: true}) ?? normalizeHex(hex);
+}
+
+// The theme part carries the deck-level scheme (slide overrides stay literal)
+// and, for an explicit catalog theme, that theme's name.
+function exportTheme(presentation, context) {
+  const reference = presentation.design?.theme;
+  const id = referenceId(reference);
+  const theme = id ? resolveDesignRecord(presentation, "themes", reference, DEFAULTS.theme) : null;
+  const scheme = context.colorScheme;
+  return {
+    themeColors: themeSlotColors(scheme),
+    schemeName: scheme.name ?? scheme.id ?? "OpenPresentation",
+    themeName: theme?.id === id ? theme.name ?? theme.id : undefined
+  };
+}
+
+function importThemeDesign(entries, presentationRoot, presentationRels) {
+  const diagnostics = [], design = {};
+  const report = (code, path, message) => diagnostics.push({code, path, message});
+  const themePath = presentationThemePath(presentationRoot, presentationRels, path => parseRelationships(entries, path), entries);
+  const theme = themePath ? parseOptionalXml(entries, themePath)?.["a:theme"] : undefined;
+  const elements = theme?.["a:themeElements"];
+  const clrScheme = elements?.["a:clrScheme"];
+  if (!clrScheme || Array.isArray(clrScheme)) {
+    report("unsupported-theme-colors", "design.colorScheme", "The PPTX has no readable theme color scheme, so design.colorScheme was not imported.");
+    return {design, diagnostics};
+  }
+  const {colors, unreadable} = readThemeSlotColors(clrScheme);
+  const records = defaultCatalog("colorSchemes");
+  if (Object.keys(colors).length) design.colorScheme = recoverColorScheme({colors, unreadable, name: scalarText(clrScheme.name)}, records).value;
+  if (unreadable.length) report("unsupported-theme-colors", "design.colorScheme", `Theme color slot(s) ${unreadable.join(", ")} do not resolve to an opaque sRGB color and were not imported.`);
+  const latin = font => scalarText(elements?.["a:fontScheme"]?.[font]?.["a:latin"]?.typeface);
+  const recoveredTheme = recoverTheme({themeName: scalarText(theme?.name), colors, majorFont: latin("a:majorFont"), minorFont: latin("a:minorFont")}, {
+    themes: defaultCatalog("themes"),
+    colorSchemes: records,
+    fontFamilies: id => {
+      const record = findById(defaultCatalog("fontSchemes"), id);
+      return record ? resolveFontFamilies(record) : null;
+    }
+  });
+  if (recoveredTheme.unverified) report("theme-unverified", "design.theme", `The native theme has the name of OPF catalog theme '${recoveredTheme.unverified}', but neither its color scheme nor its heading/body fonts match that theme, so design.theme was not set.`);
+  return {design: recoveredTheme.id ? {theme: recoveredTheme.id, ...design} : design, diagnostics};
+}
+
 function configurePresentation(pptx, presentation, context) {
   pptx.defineLayout({
     name: context.layoutName,
@@ -941,7 +996,7 @@ async function addSlide(pptx, presentation, opfSlide, slideIndex, context, optio
   const slide = pptx.addSlide();
   const slideContext = resolveSlideContext(presentation, opfSlide, context, options);
   slide.background = { color: slideContext.colors.background };
-  const backgroundFill = nativeBackgroundFill(slideContext.backgroundDefinition, {
+  const backgroundFill = schemeBackgroundFill(slideContext.backgroundDefinition, slideContext) ?? nativeBackgroundFill(slideContext.backgroundDefinition, {
     width: slideContext.dimensions.widthInches, height: slideContext.dimensions.heightInches
   }, slideContext.colors.background);
   if (backgroundFill) context.backgroundFills.set(`ppt/slides/slide${slideIndex + 1}.xml`, backgroundFill);
@@ -986,7 +1041,8 @@ async function addSlide(pptx, presentation, opfSlide, slideIndex, context, optio
       for(const [index,line] of item.text.richLines.entries()){
         const runs=line.fragments.map(fragment=>{
           const runColor=exportColor(fragment.run.color,slideContext,slideContext.colors.text);
-          return {text:fragment.text,options:{...nativeFontOptions(fragment.style),fontSize:fragment.fontSize*.75,color:normalizeHex(runColor),underline:fragment.run.underline?{color:normalizeHex(runColor)}:undefined,strike:fragment.run.strikethrough?'sngStrike':undefined,baseline:fragment.baselineShift?-fragment.baselineShift/fragment.fontSize*2000:undefined,hyperlink:fragment.run.link&&/^(https?:|mailto:)/i.test(fragment.run.link)?{url:fragment.run.link}:undefined}};
+          const color=nativeColor(fragment.run.color,runColor,slideContext);
+          return {text:fragment.text,options:{...nativeFontOptions(fragment.style),fontSize:fragment.fontSize*.75,color,underline:fragment.run.underline?{color}:undefined,strike:fragment.run.strikethrough?'sngStrike':undefined,baseline:fragment.baselineShift?-fragment.baselineShift/fragment.fontSize*2000:undefined,hyperlink:fragment.run.link&&/^(https?:|mailto:)/i.test(fragment.run.link)?{url:fragment.run.link}:undefined}};
         });
         const placed=item.text.placement?.lines[index],factor=alignment==='right'?1:alignment==='center'?.5:0;
         const area=placed?{...region,x:(placed.x+line.width*factor-item.box.width*factor)/96,y:placed.y/96,h:placed.height/96}:{...region,y:region.y+line.y/96,h:line.height/96};
@@ -1079,8 +1135,8 @@ function addTextPayload(slide, value, region, context) {
 function richLineRuns(line,color,context) {
   const fallback=color.replace(/^#/,'');
   return line.fragments.map(fragment=>{
-    const runColor=exportColor(fragment.run.color,context,fallback);
-    return {text:fragment.text,options:{...nativeFontOptions(fragment.style),fontSize:fragment.fontSize*.75,color:normalizeHex(runColor),underline:fragment.run.underline?{color:normalizeHex(runColor)}:undefined,strike:fragment.run.strikethrough?'sngStrike':undefined,baseline:fragment.baselineShift?-fragment.baselineShift/fragment.fontSize*2000:undefined,hyperlink:fragment.run.link&&/^(https?:|mailto:)/i.test(fragment.run.link)?{url:fragment.run.link}:undefined}};
+    const runColor=exportColor(fragment.run.color,context,fallback),color=nativeColor(fragment.run.color,runColor,context);
+    return {text:fragment.text,options:{...nativeFontOptions(fragment.style),fontSize:fragment.fontSize*.75,color,underline:fragment.run.underline?{color}:undefined,strike:fragment.run.strikethrough?'sngStrike':undefined,baseline:fragment.baselineShift?-fragment.baselineShift/fragment.fontSize*2000:undefined,hyperlink:fragment.run.link&&/^(https?:|mailto:)/i.test(fragment.run.link)?{url:fragment.run.link}:undefined}};
   });
 }
 function addMeasuredList(slide,fit,context) {
@@ -1236,7 +1292,7 @@ function addTablePayload(slide, table, region, context, options, path) {
       const fragment = fragments.find(item => item.runIndex === index);
       const runStyle = fragment?.style ?? resolveTextStyle({...style,fontFamily:run.fontFamily ?? style.fontFamily,fontWeight:run.bold === undefined ? style.fontWeight : run.bold ? 700 : 400,italic:run.italic ?? style.italic}, options.textMeasurement);
       const rawColor = run.color !== undefined && run.color !== '' ? exportColor(run.color, context, baseColor) : baseColor;
-      const color = normalizeHex(rawColor), transparency = rawColor.length === 8 ? (1 - parseInt(rawColor.slice(6), 16) / 255) * 100 : 0;
+      const color = nativeColor(run.color !== undefined && run.color !== '' ? run.color : cellStyle.color, rawColor, context), transparency = rawColor.length === 8 ? (1 - parseInt(rawColor.slice(6), 16) / 255) * 100 : 0;
       const runOptions = {
         ...nativeFontOptions(runStyle),fontSize:fragment ? fragment.fontSize * .75 : fit.fontSize * .75,
         underline:run.underline ? {color} : undefined,strike:run.strikethrough ? 'sngStrike' : undefined,
@@ -1266,11 +1322,11 @@ function addTablePayload(slide, table, region, context, options, path) {
         valign: cellStyle.verticalAlign ?? 'top',
         ...(cell.colSpan > 1 ? {colspan:cell.colSpan} : {}),
         ...(cell.rowSpan > 1 ? {rowspan:cell.rowSpan} : {}),
-        color: normalizeHex(baseColor),
+        color: nativeColor(cellStyle.color, baseColor, context),
         // Rich runs carry resolved alpha. A translucent cell default would
         // overwrite an explicit opaque run because PptxGenJS inherits falsy 0.
         ...(cellStyle.color && !rich ? {transparency:alpha(baseColor)} : {}),
-        fill: { color: normalizeHex(baseFill), ...(cellStyle.fill ? {transparency:alpha(baseFill)} : {}) },
+        fill: { color: nativeColor(cellStyle.fill, baseFill, context), ...(cellStyle.fill ? {transparency:alpha(baseFill)} : {}) },
       },
     };
   }));
@@ -1510,9 +1566,9 @@ function textRuns(value, context, fallbackFontSize) {
       options: {
         bold: run?.bold,
         italic: run?.italic,
-        underline: run?.underline ? { color: normalizeHex(exportColor(run?.color, context, context.colors.text)) } : undefined,
+        underline: run?.underline ? { color: nativeColor(run?.color, exportColor(run?.color, context, context.colors.text), context) } : undefined,
         strike: run?.strikethrough ? "sngStrike" : undefined,
-        color: normalizeHex(exportColor(run?.color, context, context.colors.text)),
+        color: nativeColor(run?.color, exportColor(run?.color, context, context.colors.text), context),
         fontFace: run?.fontFamily ?? context.fonts.body,
         fontSize: run?.fontSize ?? fallbackFontSize,
         superscript: run?.superscript,
@@ -1853,6 +1909,7 @@ function normalizePartBytes(path, bytes, context, renameMaps, entries, imageMeta
       xml = xml.replace('</Types>', `${overrides}</Types>`);
     }
     if (/^ppt\/slideMasters\/slideMaster\d+\.xml$/.test(path)) xml = themeMasterBulletFonts(xml);
+    if (path === 'ppt/theme/theme1.xml') xml = writeThemeColors(xml, {colors: context.themeColors, schemeName: context.schemeName, themeName: context.themeName});
     if (/^ppt\/slides\/slide\d+\.xml$/.test(path)) {
       const fill = context.backgroundFills.get(path);
       if (fill) xml = xml.replace(/<p:bg>[\s\S]*?<\/p:bg>/, `<p:bg><p:bgPr>${fill}<a:effectLst/></p:bgPr></p:bg>`);
@@ -1915,7 +1972,8 @@ function normalizePartBytes(path, bytes, context, renameMaps, entries, imageMeta
                 if (!border) continue;
                 const borderHex = exportColor(border.color, context, context.colors.border);
                 const borderOpacity = borderHex.length === 8 ? parseInt(borderHex.slice(6), 16) / 255 : 1;
-                const fill = border.width === 0 ? '<a:noFill/>' : nativeBackgroundFill({type:'solid',color:'#' + borderHex.slice(0, 6), opacity: borderOpacity},{width:1,height:1}, context.colors.border);
+                const borderScheme = borderOpacity === 1 ? schemeColorValue(border.color, borderHex, context) : undefined;
+                const fill = border.width === 0 ? '<a:noFill/>' : borderScheme ? `<a:solidFill><a:schemeClr val="${borderScheme}"/></a:solidFill>` : nativeBackgroundFill({type:'solid',color:'#' + borderHex.slice(0, 6), opacity: borderOpacity},{width:1,height:1}, context.colors.border);
                 const dash = {solid:'solid',dash:'dash',dot:'sysDot'}[border.dash ?? 'solid'];
                 const line = `<a:${native} w="${Math.round(border.width * table.scale * 9525)}" cap="flat" cmpd="sng" algn="ctr">${fill}<a:prstDash val="${dash}"/></a:${native}>`;
                 const existing = new RegExp(`<a:${native}\\b[^>]*>[\\s\\S]*?<\\/a:${native}>`);

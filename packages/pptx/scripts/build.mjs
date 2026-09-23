@@ -29,3 +29,4 @@ await copyFile(new URL('src/table-import.js', root), new URL('table-import.js', 
 await copyFile(new URL('src/table-cell-import.js', root), new URL('table-cell-import.js', dist));
 await copyFile(new URL('src/table-border-import.js', root), new URL('table-border-import.js', dist));
 await copyFile(new URL('src/color-ref.js', root), new URL('color-ref.js', dist));
+await copyFile(new URL('src/theme-colors.js', root), new URL('theme-colors.js', dist));
