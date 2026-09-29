@@ -14,7 +14,7 @@
     "test:gallery": "node --import ./scripts/register-local-opf.mjs scripts/test-gallery-snippets.mjs",
     "demo:editor": "node scripts/build-editor-demo.mjs",
     "test:pagination": "node --import ./scripts/register-local-opf.mjs scripts/test-pagination-ecosystem.mjs",
-    "test:fonts": "node --import ./scripts/register-local-opf.mjs scripts/test-font-ecosystem.mjs && node --import ./scripts/register-local-opf.mjs scripts/test-office-fonts.mjs",
+    "test:fonts": "node --import ./scripts/register-local-opf.mjs scripts/test-font-ecosystem.mjs && node --import ./scripts/register-local-opf.mjs scripts/test-office-fonts.mjs && node --import ./scripts/register-local-opf.mjs scripts/test-font-switch-ecosystem.mjs",
     "pack:ecosystem": "node scripts/pack-ecosystem.mjs",
     "test:packed-ecosystem": "node scripts/test-packed-ecosystem.mjs",
     "test:packed-browser": "node scripts/test-packed-browser.mjs",
