@@ -1,0 +1,50 @@
+{
+  "checkedAt": "2026-09-29T16:22:02.123737+00:00",
+  "records": [
+    {
+      "name": "@openpresentation/opf",
+      "version": "0.11.0",
+      "engines": {
+        "node": "24.x"
+      },
+      "distIntegrity": "sha512-7Gm/FSyiGngHRkDG0SPL8V6FEC5nC8UpoffNWf8CqkyjXsqQ2BUIzVAEwHwKjEsEZ04FR2DT+Ohh8PJofNPFiw==",
+      "url": "https://registry.npmjs.org/%40openpresentation%2Fopf/latest"
+    },
+    {
+      "name": "@openpresentation/cli",
+      "version": "0.9.0",
+      "engines": {
+        "node": "24.x"
+      },
+      "distIntegrity": "sha512-YR0zhGe0fpcKp617Aqjz6ZIql0fsNrMVcSW84tEkMBc/9DLxLFAyxJLkExorOrfFYanhvWmhoRG94x3AuMTvpQ==",
+      "url": "https://registry.npmjs.org/%40openpresentation%2Fcli/latest"
+    },
+    {
+      "name": "@openpresentation/opf-render",
+      "version": "0.9.0",
+      "engines": {
+        "node": "24.x"
+      },
+      "distIntegrity": "sha512-uHWABof7cuLmTAglctvcjuV5dRyIa2qmeGdwONIuKCAnNQXjAOQKXido9OcyGtk6xFjzBFtLtvD3sZOwPEJIJA==",
+      "url": "https://registry.npmjs.org/%40openpresentation%2Fopf-render/latest"
+    },
+    {
+      "name": "@openpresentation/opf-pptx",
+      "version": "0.9.1",
+      "engines": {
+        "node": "24.x"
+      },
+      "distIntegrity": "sha512-krzDAKjDByP2zsoR4VeyyIwU7uhcVbxpeBYEIw7vlkoRWWiFq170rhQzQZx5lbMD7u2magYEkdUt3rUgByCKjw==",
+      "url": "https://registry.npmjs.org/%40openpresentation%2Fopf-pptx/latest"
+    },
+    {
+      "name": "@openpresentation/opf-editor",
+      "version": "0.8.0",
+      "engines": {
+        "node": "24.x"
+      },
+      "distIntegrity": "sha512-cSx6DkfK4N95Zk3lvCBxhQePWIIgBDvON4hcKLvELulpbKiYnvmoAb07LJE4pbXGE0npUdmU/r25TShdtOcR4A==",
+      "url": "https://registry.npmjs.org/%40openpresentation%2Fopf-editor/latest"
+    }
+  ]
+}

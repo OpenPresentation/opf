@@ -107,6 +107,12 @@ linked, and specifically:
 - 2026-09-23 (owner): charts are reduced to the chart types Aspose.Slides
   documents as supported. Tracked as FF-22.
 
+- 2026-09-29 (owner): during the Actions credit shortage, run appropriate local
+  tests and merge reviewed PRs when those tests pass. Preserve original CI
+  denials/failures and separate local, cross-platform, native and release claims.
+  This merge policy does not complete criteria that still need platform/native
+  evidence, lower tolerances or authorize skipping release-specific gates.
+
 ## Scope
 
 | In scope | Out of scope |
@@ -163,16 +169,18 @@ Any session (root or subagent) resuming this program:
    `codex/ff-07-script-slots`) and start the PR title with the ID (`FF-07: `).
    Branches opened before this tracker are grandfathered.
 5. Each item has explicit acceptance criteria. An item is `done` only when its
-   PR is merged after independent review and green CI on the exact head, and
-   its evidence link is recorded.
+   criteria hold, its PR is merged after independent review under the applicable
+   merge policy, and its evidence link is recorded. The September 29 local-test
+   exception permits PR merges; it does not establish unrun cross-platform,
+   native, physical-font or final release acceptance.
 6. When an item changes state, update its row and append one dated line to the
    progress log in the same PR, or in a small follow-up tracker PR.
 7. Native PowerPoint items are root-only on the Windows host. Inspect the host
    first and record preflight and postflight evidence.
 
-Roles: the root session plans, reviews, merges (reviewed and CI-green only)
-and runs native attempts. Parallel subagents implement offline items and open
-PRs. A separate reviewer agent reviews each PR.
+Roles: the root session plans, reviews and merges exact reviewed heads under
+this policy. Only the Windows root owner runs native attempts. Parallel subagents
+implement offline items and open PRs. A separate reviewer agent reviews each PR.
 
 ## Environments
 

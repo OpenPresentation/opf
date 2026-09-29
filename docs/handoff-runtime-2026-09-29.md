@@ -2,11 +2,110 @@
 
 The delivery goal remains open, and work has resumed.
 This checkpoint separates accepted source, installed-package checks, native
-compatibility and publication. No package or website was released by this review.
+compatibility and publication. No package was published by this review. Web merges
+may trigger existing deployment automation; local acceptance does not establish
+production acceptance.
 Official npm latest metadata checked on September 29 still reports the
 September 17 train: core 0.11.0, CLI/render 0.9.0, PPTX 0.9.1 and editor 0.8.0
 on Node 24.x. See the [published compatibility
 matrix](compatibility-matrix.md) and [earlier checkpoint](handoff-2026-09-29.md).
+
+The earlier [notes/scalar whitespace repair, PPTX87](https://github.com/OpenPresentation/opf-pptx/pull/87),
+accepted as `170bb8755ba07c1e81b0a6a0c98b3e7d84f06eb0`, passes 123 controls in
+source, registry-packed and coordinated installed contexts. Original Linux and
+Windows premerge CI passed. The first automatic postmerge run was canceled on
+both platforms; the distinct later run's retained snapshot records Linux success
+and Windows pending. Neither is relabeled a complete postmerge pass. It preserves
+notes, description and native
+scalar characters. Supported ordinary body formatting is now accepted separately
+in PPTX90 below; original source-shape reconstruction remains open. No new
+package version is implied.
+
+[Core155](https://github.com/OpenPresentation/opf/pull/155) accepted the six
+renderer-absent furniture groups and coordinated UTC fixture, with original
+core/ecosystem CI passing. Two synthetic edited copies differed only in caller
+ZIP timestamps; their original whole-byte comparison failure remains retained
+alongside equal member contents. [Core156](https://github.com/OpenPresentation/opf/pull/156),
+accepted as `b3c8fbf762d975bd2e7d65d56b7e9838c94ae2e7`, adds the installed
+portability foundation. Its original macOS missing-Chromium setup failure was
+preserved and the browser installation moved before first use; all corrected
+premerge jobs passed. Installed Linux/macOS/Windows and strict compiler controls
+remain distinct from FF-09 font switching, physical-font/native acceptance and
+final unmodified release tarballs. The postmerge snapshot retained Linux/Windows
+pending results without relabeling them as passes.
+
+## Local acceptance during the Actions credit shortage
+
+On September 29 the owner explicitly authorized local tests and reviewed PR merges
+while Actions credits are unavailable. Fresh appropriate local acceptance is now
+sufficient for these merges; zero-step billing denials remain recorded as such.
+No workflow protection, test assertion, native tolerance or release gate was
+relaxed. Passing local tests is not a cross-platform, production or desktop
+PowerPoint result.
+
+The following accepted trees were independently reviewed and verified after
+squash merge. [Compact merge receipts](evidence/local-acceptance-merges-20260929/README.md)
+record each exact head, base, tree and accepted commit.
+
+| Accepted PR | Change and local evidence |
+| --- | --- |
+| [App52](https://github.com/Data-Advantage/pptx-dev/pull/52) | Nano ID 6; 704 unit tests, 13 standalone controls, 43 browser cases, SDK/CLI and app build/type checks, zero audit findings. |
+| [App57](https://github.com/Data-Advantage/pptx-dev/pull/57) | Six SDK/CLI workflow commands now have separate required steps, preserving Windows exit status. Structural negative controls and the same six local commands pass; no new PowerShell result is claimed. |
+| [PPTX89](https://github.com/OpenPresentation/opf-pptx/pull/89) | Explicit native underline at four exporter sites. Source/current-installed controls, packed regressions and reviewed export comparisons pass; original failures and the published-core furniture limitation remain separate. |
+| [Gallery37](https://github.com/Data-Advantage/pptx-gallery/pull/37) | Dependency update with fast-uri security correction; 117 units, 7 browser cases, build/type/registry/editor checks and zero audit findings. |
+| [App58](https://github.com/Data-Advantage/pptx-dev/pull/58) | Exact-source preset history and synchronous accepted-replacement guards; 737 units, 13 standalone controls, 49 browser cases and build/type checks. |
+| [Site48](https://github.com/Data-Advantage/openpresentation-site/pull/48) | Dependency/security update plus compatible Lezer common deduplication. The first green browser run lost syntax highlighting; the corrected candidate passes the real highlighting regression and 27 browser cases, with visual review and zero audit findings. |
+| [App51](https://github.com/Data-Advantage/pptx-dev/pull/51) | TypeScript 6 with explicit SDK/CLI Node types, declaration-only tsup accommodation and one source-bound test-helper correction; 737 units, 13 standalone controls, 49 browser cases, SDK/CLI and app build/type checks pass. |
+| [Gallery48](https://github.com/Data-Advantage/pptx-gallery/pull/48) | Selected detail-page, registry and editor JSON agree, including legacy hash links; 135 units and 7 original plus 5 scoped browser cases pass. Supersedes closed Gallery45 without merging Gallery44. |
+| [App56](https://github.com/Data-Advantage/pptx-dev/pull/56) | Dependency update; 737 units, 13 standalone controls, 49 browser cases, SDK/CLI and app build/type checks, zero audit findings and eight bounded HTTP MCP limit cases in CJS and public ESM pass. Scoped visual differences were reviewed; live authentication/provider and production acceptance remain separate. |
+| [PPTX90](https://github.com/OpenPresentation/opf-pptx/pull/90) | Supported current native body/list formatting survives import. All 16 portable stages, 42 body and 123 notes controls across source/registry-backed/installed contexts, seven source browser suites and 108 installed browser checks pass; six previews reviewed. |
+| [Gallery49](https://github.com/Data-Advantage/pptx-gallery/pull/49) | Metric values and labels remain readable; financial KPIs sit above the original chart. 144 units and 7 original plus 5 scoped browser cases pass, including edit/undo and all 15 pairs in native export. Four metric previews reviewed. |
+
+All application/gallery browser counts above are single runs with zero retries.
+Site48's original visually failing run is retained separately from its corrected
+candidate. Root and delegated reviews retain bound source, original failures,
+logs, screenshots, downloads and browser traces in the private task archive;
+compact public receipts are an index, not a replacement for raw evidence.
+No new npm train or manual deployment is included.
+
+PPTX90 intentionally lets some ordinary untagged body/list values import as rich
+arrays instead of strings, preserving current native runs, fields, breaks,
+whitespace and supported styles. Heading inference and tagged recovery stay
+separate. Exact current native text/styles replace the affected scalar test
+expectations; their original failures remain retained. The portable native-quote
+comparator keeps exact characters and block structure while allowing schema-valid
+rich values. This does not reconstruct original cross-shape authoring boundaries,
+source run identities or master/layout inheritance, and does not complete FF-09
+or native/font compatibility. The only post-acceptance source change removed one
+extra EOF newline from two identical modules, with byte, syntax and parity checks.
+
+Gallery49 isolates the metric repair from the held image recipes. It preserves
+original chart data, all image snippet bytes and visible missing-asset refusal.
+Unknown whitespace or ambiguous metric strings remain exact. This is bounded
+metric/payload ordering, not universal lossless prose parsing; quote reimport and
+the rest of FF-30 remain open.
+
+App51 does not fix the existing standalone `@pptx/cli` declaration dependency:
+a CLI-only tarball cannot resolve its SDK type dependency, also on the preceding
+TypeScript 5.9 graph. The co-installed SDK/CLI consumer passes. Experimental
+bundled declarations caused incompatible private class identity and were rejected;
+standalone package release remains a separate gate.
+
+Gallery44 remains held despite 149 units and 7 original plus 6 scoped browser
+cases passing on its reviewed pair. Its five new image recipes change a visible
+missing-asset export refusal into successful output with missing images and no
+diagnostic; two yield white text on white. A detail-page note does not protect
+direct editor links or external consumers. Gallery48 preserves the original
+clear refusal and does not claim to fix image fidelity. Gallery49 separately
+repairs the reviewed metric wrapping; the unresolved image work remains open.
+
+The published graph also still ignores all ten Gallery42 `socials: true`
+examples: removing that flag leaves preview SVG and native slide XML unchanged,
+and reimport omits organization socials. Its future-release qualification is
+accurate, but it is not current functional feature acceptance. Gallery47's newer
+number/date field options and Gallery43 backgrounds likewise retain their
+coordinated release requirements. Their branch proposals are not a shipped
+package capability.
 
 ## Accepted portable fixes
 
@@ -250,13 +349,14 @@ Core #128 has a reviewed provenance correction and a main integration at
 but the actual external gallery comparison was skipped because its checkout
 token is absent. A separate local comparison passed against clean gallery
 `58aa122690489a9206e1b583e5d9eea5e8cfd84e`. Keep the gallery #46 publisher-first
-hold and require the external CI comparison; do not label the skipped step green.
+hold and the actual external-catalog comparison contract. The comparison may
+run locally under the owner's policy, but the skipped CI step is not green and
+local source parity does not establish that the required catalog is published.
 
-Data-Advantage Actions remain unable to start due to a payment failure or spending
-limit restriction. The observed annotation does not identify which. An account
-administrator must restore execution before app #57 and the other held app/site/
-gallery changes can obtain fresh required checks. No unchanged failed run is
-retried to manufacture acceptance.
+The captured Data-Advantage Actions denials remain zero-step account/billing
+failures. The owner's later local-test merge authorization is recorded above;
+restoring credit is no longer a prerequisite for these reviewed PR merges.
+No unchanged failed run was retried, and no denial is represented as a test pass.
 
 PPTX #77 remains a substantive theme draft: accepted main does not contain its
 changes, a read-only merge preview found 17 conflict regions, and per-reference
@@ -274,27 +374,16 @@ that an edited escaped token can be reconstructed with different JSON spelling.
 That finding is source-derived, not a new browser observation. Never merge only
 the site half or substitute the old geometry golden for current visual review.
 
-[Draft app #58](https://github.com/Data-Advantage/pptx-dev/pull/58) is now at
-`19ad2441ef0fe28365799f4ba1993b0b659040be`, a normal fast-forward from
-`fe581ec627de6568ad8bb98856835ee5a1862f43`. The source/history guard binds preset
-undo to exact source, format and document generation, commits pending preview
-edits, and invalidates after local replacement/import. The newer guard for
-accepted asynchronous replacements invalidates the old group synchronously when
-handoff, thread load, agent finish or account save supplies a replacement;
-pending, cancelled, null and failed responses do not. Source bytes and public
-EditorSession history remain part of the contract.
-
-Independent local Node 24 checks passed 737 units, 13 standalone controls and
-49 browser tests without retries, plus build/typecheck; existing lint findings
-remain baseline-equivalent. The original predecessor
-[CI run](https://github.com/Data-Advantage/pptx-dev/actions/runs/36551435303) and
-original [new-head CI](https://github.com/Data-Advantage/pptx-dev/actions/runs/36555556882)
-were denied on both platforms by the account restriction before any step or test
-ran. Those denials are preserved; local results do not replace fresh required CI.
-The PR remains draft. Signed-in UI, deferred source effects, broader stale-response
-ordering and production acceptance remain separate requirements.
-The September 21 canonical 34/39 and Windows 38/39 results remain separate failed
-gates; smaller later checks cannot replace them.
+[App #58](https://github.com/Data-Advantage/pptx-dev/pull/58) is merged as
+`4613656add2ed810eb70a7dc3a8a995dd6618255`, at the exact locally reviewed tree.
+Its history guard binds preset undo to exact source, format and document
+generation, commits pending preview edits, and invalidates on accepted local,
+handoff, thread, agent or account replacements. Pending, cancelled, null and
+failed responses do not invalidate the group. Its earlier and final zero-step
+CI denials remain preserved; the owner explicitly accepted reviewed local
+results for this merge. Signed-in UI, deferred source effects, broader stale
+response ordering and production acceptance remain separate. The September 21
+canonical 34/39 and Windows 38/39 failures are not erased by this narrower pass.
 
 The Windows supervisor retains sole desktop Office control and owns its native
 branches and evidence. Core [#148](https://github.com/OpenPresentation/opf/pull/148),
@@ -305,7 +394,9 @@ The subsequent explicit-slot control in accepted
 in the native font collection after filling the four empty theme slots with
 Calibri. Empty slots are unnecessary for that observation; its cause remains
 open. Reported names and an orderly native lifecycle do not prove physical glyph
-identity, an allowlist or embedding success. This task did not repeat Office testing.
+identity, an allowlist or embedding success. The later accepted [query-order evidence](https://github.com/OpenPresentation/opf/pull/157)
+retains the same collection before and after bounded content reads; it establishes
+stability over that interval, not the cause. This task did not repeat Office testing.
 The latest accepted parity measurement in core #147 is 5/900 perfect, zero near
 and 895 mismatches on its documented graph; it is not an overall completion
 percentage. Physical fonts, embedding and native wrapping remain unresolved.
