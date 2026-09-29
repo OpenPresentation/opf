@@ -64,7 +64,7 @@ Bug fixes, generator script changes, and documentation improvements can go strai
 
 ### Releases
 
-Only maintainers cut releases. See [`docs/release-process.md`](./docs/release-process.md) for the full release runbook (tagging, npm trusted publishing, and release notes).
+Only maintainers cut releases. The owner has authorized agents to prepare and publish npm releases through the documented workflow when a release is required (authorized 2026-09-29; see [`docs/release-process.md`](./docs/release-process.md#agent-authorization-and-coordinated-release-order)). See that runbook for the full procedure (tagging, npm trusted publishing with provenance, coordinated package order and release notes).
 
 ## Pull requests
 
