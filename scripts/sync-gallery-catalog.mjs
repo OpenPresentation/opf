@@ -293,7 +293,7 @@ function gallerySource(galleryDir, allowDirty) {
   const commit = git(["rev-parse", "HEAD"]);
   const dirty = git(["status", "--porcelain", "--", GALLERY_PUBLISHED_PATH, "data"]);
   if (dirty && !allowDirty) {
-    throw new Error(`The gallery checkout has uncommitted catalog changes, so its commit would not pin them:\n${dirty}\nCommit them first (or pass --allow-dirty for a dry run).`);
+      throw new Error(`The gallery checkout has uncommitted catalog changes, so its commit would not pin them:\n${dirty}\nCommit them first, or use --check or --report for a read-only comparison.`);
   }
   return { repository: GALLERY_REPOSITORY, commit, path: GALLERY_PUBLISHED_PATH };
 }
@@ -327,6 +327,13 @@ export async function main(argv = process.argv.slice(2)) {
   const galleryDir = option(argv, "--gallery");
   const url = option(argv, "--url");
   if (!galleryDir && !url) throw new Error("Pass --gallery <pptx-gallery checkout> or --url <base URL> (or --verify).");
+  const readOnly = argv.includes("--check") || argv.includes("--report");
+  if (argv.includes("--allow-dirty") && !readOnly) {
+    throw new Error("--allow-dirty requires --check or --report; snapshot writes must pin committed catalog bytes.");
+  }
+  if (url && !readOnly) {
+    throw new Error("--url requires --check or --report because a live response cannot prove a source commit; write snapshots from a clean --gallery checkout.");
+  }
 
   const { current, manifest } = await readCurrentSnapshot(catalogsRoot);
   let gallery;
@@ -334,7 +341,7 @@ export async function main(argv = process.argv.slice(2)) {
   if (galleryDir) {
     const dir = path.resolve(galleryDir);
     gallery = await readGalleryCheckout(dir);
-    source = gallerySource(dir, argv.includes("--allow-dirty") || argv.includes("--check") || argv.includes("--report"));
+    source = gallerySource(dir, readOnly);
   } else {
     gallery = await fetchGalleryCatalog(url);
     // A live fetch cannot name a commit; keep the pinned source so --check
