@@ -18,7 +18,7 @@ jobs:
       run:
         working-directory: opf-render
     env:
-      OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf-render/test/golden/opf-examples-png.ff25-wdupdiag.sha256.json
+      OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf-render/test/golden/opf-examples-png.cover-centering.sha256.json
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -30,10 +30,11 @@ jobs:
       # FF-29 pins merged core (opf#132) that adds composed item.alignment.
       # FF-31 pins merged core (opf#133): src/font-policy.js snapshots its spec/reference/font-policy.json.
       # FF-31 Gelasio metric tier pins merged core opf#163 (Georgia disabledFeatures). opf-pptx and opf-editor move to the coordinated heads core main pins (ecosystem-ci), which pass core#155 and its packed quote test.
+      # Cover centering pins merged core opf#169 (ce3c779): 103 golden slides move, selected through OPF_GOLDEN_BASELINE.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf
-          ref: b1fdfa70a15c059dc082ea54e615e761b8153193
+          ref: ce3c779afff2bc8132c082765d3d3121bb5e5288
           path: opf
           fetch-depth: 0
           persist-credentials: false
