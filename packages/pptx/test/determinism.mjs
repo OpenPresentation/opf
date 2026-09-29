@@ -26,20 +26,49 @@ import {fileURLToPath, pathToFileURL} from 'node:url';
 
 const here = fileURLToPath(import.meta.url);
 const root = path.resolve(path.dirname(here), '..');
-// Directories a child may read: this checkout plus, when core/renderer are symlinked
-// from sibling checkouts (link-ecosystem), the checkouts those links resolve to.
-function readRoots() {
-  const roots = new Set([root, realpathSync(root)]);
-  for (const name of ['opf', 'opf-render']) {
-    const link = path.join(root, 'node_modules', '@openpresentation', name);
-    if (!existsSync(link)) continue;
-    const real = realpathSync(link);
-    if (path.relative(realpathSync(root), real).startsWith('..')) {
-      let checkout = real;
-      while (!existsSync(path.join(checkout, '.git')) && path.dirname(checkout) !== checkout) checkout = path.dirname(checkout);
-      roots.add(existsSync(path.join(checkout, '.git')) ? checkout : real);
-    }
+// System font directories the sandbox must keep unreadable.
+function fontDirectories() {
+  return process.platform === 'win32' ? [path.join(process.env.WINDIR ?? 'C:\\Windows', 'Fonts')]
+    : ['/usr/share/fonts', '/Library/Fonts', '/System/Library/Fonts', '/usr/local/share/fonts'];
+}
+const contains = (base, file) => { const relative = path.relative(base, file); return !relative.startsWith('..') && !path.isAbsolute(relative); };
+// The directory that owns a dependency resolved outside this checkout: its git checkout
+// (sibling checkouts from link-ecosystem, which also hold their own dependencies), else
+// the outermost node_modules directory it lives in (a shared store), else its own real path.
+function ownerOf(real) {
+  for (let dir = real; ; dir = path.dirname(dir)) {
+    if (existsSync(path.join(dir, '.git'))) return dir;
+    if (path.dirname(dir) === dir) break;
   }
+  const segments = real.split(path.sep), first = segments.indexOf('node_modules');
+  return first > 0 ? segments.slice(0, first + 1).join(path.sep) : real;
+}
+// Directories a child may read, from real paths: this checkout plus the owner of every
+// installed package (top-level and scoped) that a symlink or junction sends elsewhere.
+// Nothing here is font-specific, and a root that would contain a font directory is refused.
+function readRoots() {
+  const checkout = realpathSync(root);
+  const roots = new Set([root, checkout]);
+  const modules = path.join(checkout, 'node_modules');
+  const packages = [];
+  const list = directory => { try { return readdirSync(directory, {withFileTypes: true}); } catch { return []; } };
+  for (const entry of list(modules)) {
+    if (entry.name.startsWith('.')) continue;
+    if (entry.name.startsWith('@')) for (const child of list(path.join(modules, entry.name))) packages.push(path.join(modules, entry.name, child.name));
+    else packages.push(path.join(modules, entry.name));
+  }
+  for (const link of packages) {
+    let real;
+    try { real = realpathSync(link); } catch { continue; } // dangling link: nothing to read
+    if (!contains(checkout, real)) roots.add(ownerOf(real));
+  }
+  for (const base of roots) {
+    assert.ok(path.dirname(base) !== base, `read root ${base} is a filesystem root`);
+    for (const fonts of fontDirectories()) assert.ok(!contains(base, fonts), `read root ${base} would allow the font directory ${fonts}`);
+  }
+  // detect-libc (used by sharp) reads the ELF header of the running executable via
+  // /proc/self/exe to tell glibc from musl. Allow exactly that file, never a directory.
+  if (process.platform === 'linux') for (const file of ['/proc/self/exe', realpathSync(process.execPath)]) roots.add(file);
   return [...roots];
 }
 const FONT_DIRECTORY = /(?:^|[\\/])(?:fonts?|\.fonts|fontconfig)(?:[\\/]|$)/i;
@@ -105,7 +134,9 @@ async function worker(config) {
     lcAll: process.env.LC_ALL ?? null,
     icuDefaultLocale: new Intl.DateTimeFormat().resolvedOptions().locale,
     numberSample: (1234567.891).toLocaleString(),
-    turkishCollationDiffers: 'Id'.localeCompare('id') !== new Intl.Collator('und').compare('Id', 'id'),
+    // The reference must name a locale: V8 resolves an unsupported tag such as 'und' to the host default,
+    // which follows LANG on Linux (tr_TR would then equal the hostile locale and hide the change).
+    turkishCollationDiffers: 'Id'.localeCompare('id') !== new Intl.Collator('en-US').compare('Id', 'id'),
     // toUpperCase/toLowerCase are locale-independent by specification.
     plainCase: ['i'.toUpperCase(), 'I'.toLowerCase(), '\u{130}'.toLowerCase().length],
     clock: new Date().toISOString(),
@@ -119,8 +150,7 @@ async function worker(config) {
   if (config.sandbox) {
     // The permission model must actually deny host font discovery.
     const require = createRequire(import.meta.url), fs = require('node:fs'), cp = require('node:child_process');
-    const directories = process.platform === 'win32' ? [path.join(process.env.WINDIR ?? 'C:\\Windows', 'Fonts')]
-      : ['/usr/share/fonts', '/Library/Fonts', '/System/Library/Fonts', '/usr/local/share/fonts'];
+    const directories = fontDirectories();
     probe.sandbox = {
       fontDirectoriesDenied: directories.every(directory => { try { fs.readdirSync(directory); return false; } catch (error) { return error.code === 'ERR_ACCESS_DENIED'; } }),
       childProcessDenied: (() => { try { cp.spawnSync(process.execPath, ['-e', '0']); return false; } catch (error) { return error.code === 'ERR_ACCESS_DENIED'; } })(),
@@ -130,7 +160,7 @@ async function worker(config) {
   }
   const {suites} = await import(pathToFileURL(path.join(root, 'test', 'determinism-fixtures.mjs')).href);
   const cases = await suites[config.suite](config);
-  const inside = file => config.roots.some(base => { const relative = path.relative(base, file); return !relative.startsWith('..') && !path.isAbsolute(relative); });
+  const inside = file => config.roots.some(base => contains(base, file));
   const outsideRoot = [...new Set(audit)].filter(file => !inside(file));
   process.stdout.write(JSON.stringify({probe, cases, audit: {total: audit.length, outsideRoot, fontDirectoryReads: audit.filter(file => FONT_DIRECTORY.test(file) && !/(?:^|[\\/])node_modules[\\/]/.test(file))}}));
 }

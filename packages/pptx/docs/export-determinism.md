@@ -39,7 +39,8 @@ workbook. The parent requires every digest to equal the baseline child's
   which were not run). The test asserts that the hostile mode
   really changed number formatting, the ICU default locale and collation.
 - Fonts: children run under `node --permission` with reads limited to this checkout
-  (plus linked sibling checkouts) and no child processes, with an empty fontconfig and
+  (plus the real location of every symlinked or junctioned dependency, and on Linux
+  the running executable, which sharp's libc detection reads) and no child processes, with an empty fontconfig and
   an fs audit. The test asserts that the sandbox denied the system font directory and
   subprocess creation, and that the exporter read nothing outside the allowed
   directories or in any font directory.

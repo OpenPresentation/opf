@@ -37,7 +37,7 @@ jobs:
         with:
           repository: OpenPresentation/opf
           # FF-29: merged core (opf#132) with composed item.alignment.
-          ref: 4b991553f8d9706de1003f8f8f547e46d902da74
+          ref: e00038c1fc96a5cba66140f4b3256ede0fe1bae2
           path: opf
           fetch-depth: 0
           persist-credentials: false
@@ -45,7 +45,7 @@ jobs:
         with:
           repository: OpenPresentation/opf-render
           # FF-29: merged renderer (opf-render#43) that anchors preview text to item.alignment.
-          ref: 0337ce2e8682f8dd3ea320e0614490735f554ed3
+          ref: c62b3f98a4ac98cdec8ffd28c035a17a04197396
           path: opf-render
           fetch-depth: 0
           persist-credentials: false
@@ -119,6 +119,8 @@ jobs:
       - name: Install and exercise coordinated candidate tarballs
         working-directory: opf
         run: |
+          # Git-for-Windows GNU tar (first on PATH under bash) reads C:... as host:path; use Windows bsdtar.
+          if [ "$RUNNER_OS" = Windows ]; then export PATH="/c/Windows/System32:$PATH"; fi
           pnpm pack:ecosystem
           pnpm test:packed-ecosystem
           pnpm test:packed-browser
