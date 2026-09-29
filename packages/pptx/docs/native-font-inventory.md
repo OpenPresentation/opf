@@ -2,20 +2,25 @@
 
 `test/native-font-inventory.ps1` answers one question without editing anything: which font names does Microsoft PowerPoint report for an unedited presentation? It opens one owned snapshot read-only, reads `Presentation.Fonts` first, then the theme font slots and the Font2 slots of text ranges, closes that exact presentation and writes JSON. It never edits, saves, exports, reopens, embeds, calls `Application.Quit`, or terminates Office.
 
-It is the E0 pre-edit baseline for the Aptos question in the [native font embed harness](./native-font-embed.md). The earlier Carlito-only embed attempt reported `Carlito` and an unexpected `Aptos` after its edits. If this inventory reports Aptos on the unedited fixture, the name comes from load-time resolution; if not, an edit introduced it. `-ControlDeck` supports the E6 control on any other deck.
+It is the E0 pre-edit baseline for the Aptos question in the [native font embed harness](./native-font-embed.md). The earlier Carlito-only embed attempt reported `Carlito` and an unexpected `Aptos` after its edits. This inventory records whether Aptos is reported in an initial unedited observation. An absent initial name does not establish that an edit caused a later observation: query order and elapsed initialization can also matter. `-ControlDeck` supports an arbitrary hashed control deck. FF-05 remains open; these observations do not authorize changing the font allowlist or resuming embedding.
 
 ## What is observed
 
 In this order, on the owned read-only presentation:
 
-1. `Presentation.Fonts`: `Name`, `Embedded` and `Embeddable` for every entry (at most 64). Nothing else is read first.
+1. `Presentation.Fonts`: `Name`, `Embedded` and `Embeddable` for every entry (at most 64), using 1-based collection indices. This is the first presentation-content observation, before theme or text queries; the required ownership `FullName` and `ReadOnly` metadata checks precede it.
 2. Theme font slots from the first slide master: `ThemeFontScheme.MajorFont` and `MinorFont`, `Item(1)` latin, `Item(2)` complex script and `Item(3)` East Asian `Name`.
 3. For every shape on each slide (at most 2 slides and 10 shapes per slide): `Name`, `Type`, `HasTextFrame`. For a text frame: `TextFrame2.HasText`, the whole `TextRange2` text and its Font2 slots. When the frame has text, it also reads every paragraph (`Paragraphs(i, 1)`) and every run (`Runs(i, 1)`), each with text, start, length and Font2 slots.
 4. The same shape observation for the first slide master's shapes.
+5. Only with `-CompareAfterContentFonts`: reacquire `Presentation.Fonts` once on the same owned presentation, after those content queries and immediately before the ownership-checked close. The second snapshot has its own 64-entry bound. The default mode adds no second COM read or stage.
 
 Font2 slots are `Name`, `NameAscii`, `NameOther`, `NameFarEast`, `NameComplexScript`, plus `Size`, `Bold` and `Italic`. Bounds are 12 paragraphs and 24 runs per shape, and 24 paragraphs and 40 runs in total. Exceeding any bound fails the attempt after the owned close; the partial observation stays in `report.json`.
 
 `report.fontLedger` summarizes where each name was reported: `presentationFontNames`, `slideTextSlotNames`, `masterTextSlotNames` and `themeFontNames`. For each of these it also lists names starting with `Aptos` (case-insensitive), sets `aptosReported`, and records whether `Presentation.Fonts` contains only permitted Carlito names. An Aptos entry is a finding, not a failure of this worker.
+
+With the opt-in switch, `request`, `report` and `supervisor` bind the strict boolean `compareAfterContentFonts`. The worker requires its direct switch to agree with the hashed request before Office startup. `presentationFonts` and `fontLedger` continue to describe the initial collection; that snapshot and ledger are persisted before the second read. `presentationFontsAfterContent` records the second ordered collection, and `fontQueryComparison` compares exact entries, names in order and the entry multiset (ignoring only enumeration indices). It retains duplicates, case, empty names and both flags. The existing getters normalize names to `[string]` and flags to `[int]`; these are normalized getter observations, not uncoerced COM variants. New comparison equality is ordinal, so distinct Unicode names are not conflated by PowerShell's linguistic equality.
+
+The comparison labels the result `unchanged`, `reordered` (different ordered entries but the same complete name/flag multiset), or `changed`. Name-only equality never implies equal flags. Before/after Aptos and empty-name findings are recorded separately. A difference is an observation, not failure or proof of cause; it cannot separate query order from elapsed initialization or identify a physical font. Opt-out snapshots/comparisons are JSON `null`, never an inferred unchanged result. A second-read COM error preserves the first snapshot/ledger and completed second entries, latches later COM calls and prevents close through the latch.
 
 ### Not observed
 
@@ -74,6 +79,8 @@ Add `-WithoutTemporaryFonts` for the same fixture without registration, in a dif
 
 Each command prints one JSON summary line (`passed`, `aptosReported`, `presentationFontNames`). Preserve every attempt and use a fresh directory for any new one.
 
+Add `-CompareAfterContentFonts` to any mode for the optional second observation. It uses the same single open, ownership-checked close and 45-second default/60-second maximum helper deadline. No extra presentation, edit, save, export, retry or Office termination is introduced. Native runs remain root-only.
+
 ## Offline audit
 
 ```powershell
@@ -103,7 +110,11 @@ To re-audit an evidence directory that already has `audit.json`, for example one
 node test/native-font-inventory-audit.mjs artifacts/native-font-inventory-01 --reaudit-v2
 ```
 
-It writes `audit-v2.json` with exclusive create and never touches `audit.json`. The default mode binds the verifier snapshot only to the reviewed companion beside the auditor. `--reaudit-v2` also accepts one of the hashes pinned in `PRIOR_REVIEWED_INVENTORY_VERIFIER_SHA256`: the FF-03 worker (#59, `ef8a158`) with LF or CRLF line endings. That revision predates only this PR's static AST hardening: the dynamic-code prohibition and the allowlist block. The audit's own Node source policy still applies the full current allowlist to that snapshot, and the three existing FF-03 evidence directories pass it. The default mode rejects an `audit-v2.json` in the evidence directory as unexpected output; only `--reaudit-v2` tolerates one. `reviewedVerifierRevision` records which revision matched, and the other inputs are bound exactly as in the default mode.
+It writes `audit-v2.json` with exclusive create and never touches `audit.json`. The default mode binds the verifier snapshot only to the reviewed companion beside the auditor. `--reaudit-v2` also accepts the exact hashes in `PRIOR_REVIEWED_INVENTORY_VERIFIER_SHA256`: the FF-03 worker (#59, `ef8a158`) and pre-comparison worker `357171a5`, each with LF or CRLF line endings. The latter's hashes are `03534696f36fbc134cb54f733594636ac1d9dd25e1966c9aa40e18dd3c7eae16` (LF) and `f8f24330db965436167758e54f907e1cc9b6bd9eb25e30b5110796823701ae7f` (CRLF), used by the accepted E6/E7 inventories. No arbitrary old worker or missing comparison mode is accepted. All current source-policy and input/original-byte checks still apply. Historical default request/report/supervisor records may omit the comparison boolean only together and only for a pinned prior worker; carrying an after snapshot or comparison remains invalid.
+
+The default mode rejects an `audit-v2.json` in the evidence directory as unexpected output; only `--reaudit-v2` tolerates one. `reviewedVerifierRevision` records the matched revision. A historical original worker path that now contains different bytes fails the original-hash check even with opt-in compatibility; use its accepted bundled verifier to validate the preserved public evidence. Reconstructed compatibility-test copies with paths rebound to preserved inputs are tests, not fresh audits of the original actual attempt.
+
+In comparison mode, the auditor independently recomputes the entire comparison from both raw collections, validates completeness and the 64-entry bound independently, and requires the exact second-read stage pairs after master/content reads and before close. Mode mismatches, absent/forged comparisons, default mode carrying second data/stages, and reordered or flag-altered observations with stale summaries fail the audit. The comparison finding is JSON `null` unless both collections are complete, within bounds and have valid indexed name/flag entries; a missing or partial second snapshot never becomes an unchanged result, including when the first collection is empty. Complete raw collections retain their recomputed comparison if another audit gate fails; the attempt still fails and the finding is not native evidence.
 
 ## Offline controls
 
@@ -119,4 +130,6 @@ On Windows, the controls also run the real parent and worker end to end against 
 - A COM failure while open leaves the presentation open.
 - An opened object with a different `FullName` is left open.
 
-They run a temporary copy whose single `ComObject` construction is replaced, and they check that the copy contains no COM construction before running it. The audit of successful mock evidence must fail only with `com-construction`, so mock evidence can never pass as native evidence. The controls never register fonts.
+Dual-snapshot cases exercise unchanged and changed collections, reordered duplicate/empty entries, flag-only changes, emptied collections and distinct Unicode names (soft hyphen, composed/decomposed text and ignorable versus empty). They reject forged mode/ledger/comparison/stage records and incomplete or over-bound second snapshots. Six wrapper-injected error-latch tests throw at the second `Fonts`, `Count`, `Item`, `Name`, `Embedded` and `Embeddable` stage boundaries and verify the stop latch, absence of later calls/close, retained first snapshot/ledger and completed partial second entries. They do not establish native COM getter exception propagation. Additional mocks cover second-read overflow, read-only and owned-path safety, conflicting worker switches and an opt-out run adding no second stages. Ordinal `string::Equals` invocation forms are pinned in both source policies; culture-default overloads remain rejected.
+
+They run a temporary copy whose single `ComObject` construction is replaced, and they check that the copy contains no COM construction before running it. A test-only fault hook inside that copy's existing COM wrapper simulates terminating second-getter failures: PowerShell ScriptProperty exceptions can be swallowed by property access, so those getter mocks alone do not represent terminating COM failures. The production worker contains no mock hook. The audit of successful mock evidence must report exactly `com-construction`, `dynamic-code` and `forbidden-command` from the substituted mock construction/hook, so mock evidence can never pass as native evidence. The controls never register fonts.

@@ -47,7 +47,7 @@ const INPUT_MODES = Object.freeze({'carlito-fixture': ['temporary-session', 'non
 // other member are rejected. COM property reads are not invocations.
 export const ALLOWED_COM_MEMBERS = Object.freeze(['Open', 'Close', 'Item', 'Paragraphs', 'Runs']);
 export const ALLOWED_INSTANCE_MEMBERS = Object.freeze(['Contains', 'ContainsKey', 'FindAll', 'GetCommandName', 'StartsWith', 'Substring', 'ToLowerInvariant', 'ToString', 'ToUniversalTime', 'TrimEnd']);
-export const ALLOWED_STATIC_MEMBERS = Object.freeze(['GetExtension', 'GetFullPath', 'GetTempPath', 'IsNullOrEmpty', 'IsNullOrWhiteSpace', 'Max', 'Min', 'NewGuid', 'ParseFile', 'Sort', 'WriteAllText']);
+export const ALLOWED_STATIC_MEMBERS = Object.freeze(['Equals', 'GetExtension', 'GetFullPath', 'GetTempPath', 'IsNullOrEmpty', 'IsNullOrWhiteSpace', 'Max', 'Min', 'NewGuid', 'ParseFile', 'Sort', 'WriteAllText']);
 // Mirrors $script:inventoryAssignmentRoots: member assignments may target only local report/evidence dictionaries, never
 // a COM object, and the inventory worker has no COM setter at all.
 export const INVENTORY_ASSIGNMENT_ROOTS = Object.freeze(['report', 'slideRecord', 'shapeRecord', 'seen', 'wrongGeneration', 'sample', 'sampleRows', 'policyRejected', 'errorCloseOutcomes']);
@@ -57,6 +57,9 @@ export const INVENTORY_ASSIGNMENT_ROOTS = Object.freeze(['report', 'slideRecord'
 export const PRIOR_REVIEWED_INVENTORY_VERIFIER_SHA256 = Object.freeze({
   'ecbeb36ddc1913be7bd42f7e9dce07d20b734a7e64dc20cc60e1e58a44ea6cd2': 'ff-03-ef8a158-lf',
   '067e96dd14ed89bd98036569af0bf85593ca4fad1447bb8bce5802d00ac9a401': 'ff-03-ef8a158-crlf',
+  // Exact pre-comparison worker from 357171a5, used by accepted E6/E7.
+  '03534696f36fbc134cb54f733594636ac1d9dd25e1966c9aa40e18dd3c7eae16': 'ff-05-357171a-lf',
+  'f8f24330db965436167758e54f907e1cc9b6bd9eb25e30b5110796823701ae7f': 'ff-05-357171a-crlf',
 });
 // Reviewed allowlist policy for native-font-inventory.ps1. The controls assert that every list below equals the matching
 // $script:InventoryPolicy* list in that file, which its PowerShell AST check enforces.
@@ -65,8 +68,8 @@ export const INVENTORY_SOURCE_POLICY = Object.freeze({
   scoped: Object.freeze(['Add-Member|Invoke-InventoryPureRegression']),
   forms: Object.freeze(['New-Object|^New-Object -ComObject PowerPoint\\.Application$', 'New-Object|^New-Object -TypeName \'System\\.Collections\\.Generic\\.HashSet\\[string\\]\' -ArgumentList \\$strings,\\(\\[StringComparer\\]::Ordinal\\)$', 'Get-Variable|^Get-Variable -Scope Script -Name \\$TotalCounter -ValueOnly$', 'Set-Variable|^Set-Variable -Scope Script -Name \\$TotalCounter -Value \\(\\$used\\+\\$allowed\\)$']),
   instance: Object.freeze(['Close', 'Contains', 'ContainsKey', 'FindAll', 'GetCommandName', 'Item', 'Open', 'Paragraphs', 'Runs', 'StartsWith', 'Substring', 'ToLowerInvariant', 'ToString', 'ToUniversalTime', 'TrimEnd']),
-  statics: Object.freeze(['Array::Sort', 'Guid::NewGuid', 'IO.File::WriteAllText', 'IO.Path::GetExtension', 'IO.Path::GetFullPath', 'IO.Path::GetTempPath', 'Math::Max', 'Math::Min', 'string::IsNullOrEmpty', 'string::IsNullOrWhiteSpace', 'System.Management.Automation.Language.Parser::ParseFile']),
-  properties: Object.freeze(['IO.Path::AltDirectorySeparatorChar', 'IO.Path::DirectorySeparatorChar', 'StringComparer::Ordinal', 'StringComparison::OrdinalIgnoreCase', 'System.Management.Automation.Language.TokenKind::Dot', 'System.Management.Automation.Language.TokenKind::Unknown', 'System.Management.Automation.Language.StringConstantType::BareWord', 'System.Management.Automation.Language.TokenKind::Equals']),
+  statics: Object.freeze(['Array::Sort', 'Guid::NewGuid', 'IO.File::WriteAllText', 'IO.Path::GetExtension', 'IO.Path::GetFullPath', 'IO.Path::GetTempPath', 'Math::Max', 'Math::Min', 'string::Equals', 'string::IsNullOrEmpty', 'string::IsNullOrWhiteSpace', 'System.Management.Automation.Language.Parser::ParseFile']),
+  properties: Object.freeze(['IO.Path::AltDirectorySeparatorChar', 'IO.Path::DirectorySeparatorChar', 'StringComparer::Ordinal', 'StringComparison::Ordinal', 'StringComparison::OrdinalIgnoreCase', 'System.Management.Automation.Language.TokenKind::Dot', 'System.Management.Automation.Language.TokenKind::Unknown', 'System.Management.Automation.Language.StringConstantType::BareWord', 'System.Management.Automation.Language.TokenKind::Equals']),
   types: Object.freeze(['Array', 'bool', 'double', 'Guid', 'int', 'IO.File', 'IO.Path', 'long', 'Math', 'ordered', 'pscustomobject', 'ref', 'scriptblock', 'string', 'string[]', 'StringComparer', 'StringComparison', 'switch', 'void', 'ValidateRange', 'System.Collections.IDictionary', 'System.Management.Automation.Language.AssignmentStatementAst', 'System.Management.Automation.Language.AttributeBaseAst', 'System.Management.Automation.Language.CommandAst', 'System.Management.Automation.Language.ConvertExpressionAst', 'System.Management.Automation.Language.FunctionDefinitionAst', 'System.Management.Automation.Language.IndexExpressionAst', 'System.Management.Automation.Language.InvokeMemberExpressionAst', 'System.Management.Automation.Language.MemberExpressionAst', 'System.Management.Automation.Language.Parser', 'System.Management.Automation.Language.ScriptBlockExpressionAst', 'System.Management.Automation.Language.StringConstantExpressionAst', 'System.Management.Automation.Language.StringConstantType', 'System.Management.Automation.Language.TokenKind', 'System.Management.Automation.Language.TypeExpressionAst', 'System.Management.Automation.Language.UnaryExpressionAst', 'System.Management.Automation.Language.VariableExpressionAst', 'System.Management.Automation.Language.ArrayLiteralAst', 'System.Management.Automation.Language.CommandExpressionAst', 'System.Management.Automation.Language.CommandParameterAst', 'System.Management.Automation.Language.ForEachStatementAst', 'System.Management.Automation.Language.HashtableAst', 'System.Management.Automation.Language.ParameterAst', 'System.Management.Automation.Language.RedirectionAst']),
   sites: Object.freeze(['Invoke-InventoryCom|&|Operation', 'Invoke-InventoryPureRegression|&|decide', 'Invoke-InventoryPureRegression|&|mutate', '|.|processSnapshot', '|.|fontHelperSnapshot']),
   pipelines: Object.freeze(['Select-InventoryNames|Where-Object $Predicate']),
@@ -75,10 +78,10 @@ export const INVENTORY_SOURCE_POLICY = Object.freeze({
   rootSources: Object.freeze(['sampleRows|@($script:inventoryCanonicalFaces.Keys | ForEach-Object {@{file=$_;sha256=$script:inventoryCanonicalFaces[$_];added=1;removed=$true}})', 'sample|$goodReport | ConvertTo-Json -Depth 10 | ConvertFrom-Json']),
   bareArguments: Object.freeze(['Close', 'Directory', 'Leaf', 'PowerPoint.Application', 'SHA256', 'Script', 'ScriptMethod', 'SilentlyContinue', 'UTF8']),
   exactForms: Object.freeze(['Add-Content|Add-Content -LiteralPath $script:stageFile -Encoding UTF8', 'Set-Content|Set-Content -LiteralPath $script:progressFile -Encoding UTF8', 'Set-Content|Set-Content -LiteralPath $script:reportFile -Encoding UTF8', 'New-Item|New-Item -ItemType Directory -Path $pureRoot', 'Set-Content|Set-Content -LiteralPath $registrationPath -Encoding UTF8', 'Remove-Item|Remove-Item -LiteralPath $deleteRoot -Recurse -Force -ErrorAction SilentlyContinue', 'New-Item|New-Item -ItemType Directory -Path $outputRoot', 'New-Item|New-Item -ItemType Directory -Path $snapshotRoot', 'Copy-Item|Copy-Item -LiteralPath $PSCommandPath -Destination $verifierSnapshot', 'Copy-Item|Copy-Item -LiteralPath $processOriginal -Destination $processSnapshot', 'Copy-Item|Copy-Item -LiteralPath $fontHelperOriginal -Destination $fontHelperSnapshot', 'Copy-Item|Copy-Item -LiteralPath $inputPath -Destination $sourceSnapshot', 'New-Item|New-Item -ItemType Directory -Path (Join-Path $snapshotRoot \'fonts\')', 'Copy-Item|Copy-Item -LiteralPath $generationPath -Destination $generationSnapshot', 'Copy-Item|Copy-Item -LiteralPath $licensePath -Destination $licenseSnapshot', 'Copy-Item|Copy-Item -LiteralPath $external -Destination $snapshot', 'Set-Content|Set-Content -LiteralPath (Join-Path $outputRoot \'request.json\') -Encoding UTF8', 'Invoke-OpfWithTemporaryFonts|Invoke-OpfWithTemporaryFonts -Generation $generation -EvidenceRoot $snapshotRoot -RunRoot $outputRoot -Action { $script:inventoryWorkerResult=Invoke-OpfNativeWorker -ScriptPath $verifierSnapshot -WorkerArguments $workerArguments -OutputDirectory $outputRoot -TimeoutSeconds $TimeoutSeconds }', 'Invoke-OpfNativeWorker|Invoke-OpfNativeWorker -ScriptPath $verifierSnapshot -WorkerArguments $workerArguments -OutputDirectory $outputRoot -TimeoutSeconds $TimeoutSeconds', 'Set-Content|Set-Content -LiteralPath (Join-Path $outputRoot \'supervisor.json\') -Encoding UTF8']),
-  exactApis: Object.freeze(['IO.File::WriteAllText|[IO.File]::WriteAllText($negativePath,$policyNegatives[$key])', 'IO.File::WriteAllText|[IO.File]::WriteAllText($positivePath,\'$p=$a.Open($x,-1,0,0); $n=$p.Fonts.Item(1).Name; $report.name=$n; $p.Close()\')']),
+  exactApis: Object.freeze(['IO.File::WriteAllText|[IO.File]::WriteAllText($negativePath,$policyNegatives[$key])', 'IO.File::WriteAllText|[IO.File]::WriteAllText($positivePath,\'$p=$a.Open($x,-1,0,0); $n=$p.Fonts.Item(1).Name; $report.name=$n; $p.Close()\')', "string::Equals|[string]::Equals($key,$afterKeys[$i],[StringComparison]::Ordinal)", "string::Equals|[string]::Equals((ConvertTo-Json -InputObject $beforeEntries -Depth 5 -Compress),(ConvertTo-Json -InputObject $afterEntries -Depth 5 -Compress),[StringComparison]::Ordinal)", "string::Equals|[string]::Equals((ConvertTo-Json -InputObject @($beforeEntries | ForEach-Object {$_.name}) -Compress),(ConvertTo-Json -InputObject @($afterEntries | ForEach-Object {$_.name}) -Compress),[StringComparison]::Ordinal)", "string::Equals|[string]::Equals($_.name,'',[StringComparison]::Ordinal)"]),
   exactMembers: Object.freeze([]),
   pinned: Object.freeze(['operation', 'decide', 'mutate', 'processsnapshot', 'fonthelpersnapshot', 'pureroot', 'deleteroot', 'outputroot', 'snapshotroot', 'verifiersnapshot', 'sourcesnapshot', 'generationsnapshot', 'licensesnapshot', 'snapshot', 'reportfile', 'stagefile', 'progressfile', 'registrationpath', 'temproot', 'root', 'negativepath', 'positivepath', 'workerarguments']),
-  pinnedBindings: Object.freeze(['root|=|Get-InventoryAssignmentRoot $left', 'root|=|Get-InventoryAssignmentRoot $unary.Child', 'temproot|=|[IO.Path]::GetFullPath([IO.Path]::GetTempPath()).TrimEnd([IO.Path]::DirectorySeparatorChar,[IO.Path]::AltDirectorySeparatorChar)', 'pureroot|=|Join-Path $tempRoot (\'opf-font-inventory-pure-\' + [Guid]::NewGuid().ToString(\'n\'))', 'pureroot|=|(Resolve-Path -LiteralPath $pureRoot).Path', 'negativepath|=|Join-Path $pureRoot "policy-$key.ps1"', 'positivepath|=|Join-Path $pureRoot \'policy-positive.ps1\'', 'stagefile|=|Join-Path $pureRoot \'stages.jsonl\'', 'progressfile|=|Join-Path $pureRoot \'progress.json\'', 'reportfile|=|Join-Path $pureRoot \'report.json\'', 'stagefile|=|Join-Path $pureRoot "error-close-$($case[0]).jsonl"', 'progressfile|=|Join-Path $pureRoot "error-close-$($case[0]).progress.json"', 'registrationpath|=|Join-Path $pureRoot \'font-registration.json\'', 'decide|=|{ param($Result,$Durable,$Report,$Mode,$Registrations,$Present,$Inputs) Get-InventoryParentDecision $Result $Durable $Report $Mode $Registrations $Present $Inputs $null }', 'mutate|=|{ param($Name,$Value) $sample=$goodReport | ConvertTo-Json -Depth 10 | ConvertFrom-Json; if($Name -like \'source.*\'){ $sample.source.($Name.Substring(7))=$Value } else { $sample.$Name=$Value }; return ,$sample }', 'deleteroot|=|(Resolve-Path -LiteralPath $pureRoot).Path', 'outputroot|=|[IO.Path]::GetFullPath($OutputDirectory)', 'snapshotroot|=|Join-Path $outputRoot \'inputs\'', 'verifiersnapshot|=|Join-Path $snapshotRoot \'native-font-inventory.ps1\'', 'processsnapshot|=|Join-Path $snapshotRoot \'native-process.ps1\'', 'fonthelpersnapshot|=|Join-Path $snapshotRoot \'native-text-fonts.ps1\'', 'sourcesnapshot|=|Join-Path $snapshotRoot \'source.pptx\'', 'generationsnapshot|=|Join-Path $snapshotRoot \'generation.json\'', 'licensesnapshot|=|Join-Path $snapshotRoot \'LICENSE_FONT\'', 'snapshot|=|Join-Path $snapshotRoot $font.file', 'workerarguments|=|@(\'-OutputDirectory\',$outputRoot,\'-InputPresentation\',$sourceSnapshot,\'-Worker\')', 'registrationpath|=|Join-Path $outputRoot \'font-registration.json\'', 'root|=|(Resolve-Path -LiteralPath $OutputDirectory).Path', 'sourcesnapshot|=|(Resolve-Path -LiteralPath $request.source.snapshotPath).Path', 'stagefile|=|Join-Path $root \'stages.jsonl\'', 'progressfile|=|Join-Path $root \'progress.json\'', 'reportfile|=|Join-Path $root \'report.json\'', 'operation|param|Invoke-InventoryCom|ScriptBlock']),
+  pinnedBindings: Object.freeze(['root|=|Get-InventoryAssignmentRoot $left', 'root|=|Get-InventoryAssignmentRoot $unary.Child', 'temproot|=|[IO.Path]::GetFullPath([IO.Path]::GetTempPath()).TrimEnd([IO.Path]::DirectorySeparatorChar,[IO.Path]::AltDirectorySeparatorChar)', 'pureroot|=|Join-Path $tempRoot (\'opf-font-inventory-pure-\' + [Guid]::NewGuid().ToString(\'n\'))', 'pureroot|=|(Resolve-Path -LiteralPath $pureRoot).Path', 'negativepath|=|Join-Path $pureRoot "policy-$key.ps1"', 'positivepath|=|Join-Path $pureRoot \'policy-positive.ps1\'', 'stagefile|=|Join-Path $pureRoot \'stages.jsonl\'', 'progressfile|=|Join-Path $pureRoot \'progress.json\'', 'reportfile|=|Join-Path $pureRoot \'report.json\'', 'stagefile|=|Join-Path $pureRoot "error-close-$($case[0]).jsonl"', 'progressfile|=|Join-Path $pureRoot "error-close-$($case[0]).progress.json"', 'registrationpath|=|Join-Path $pureRoot \'font-registration.json\'', 'decide|=|{ param($Result,$Durable,$Report,$Mode,$Registrations,$Present,$Inputs) Get-InventoryParentDecision $Result $Durable $Report $Mode $Registrations $Present $Inputs $null }', 'mutate|=|{ param($Name,$Value) $sample=$goodReport | ConvertTo-Json -Depth 10 | ConvertFrom-Json; if($Name -like \'source.*\'){ $sample.source.($Name.Substring(7))=$Value } else { $sample.$Name=$Value }; return ,$sample }', 'deleteroot|=|(Resolve-Path -LiteralPath $pureRoot).Path', 'outputroot|=|[IO.Path]::GetFullPath($OutputDirectory)', 'snapshotroot|=|Join-Path $outputRoot \'inputs\'', 'verifiersnapshot|=|Join-Path $snapshotRoot \'native-font-inventory.ps1\'', 'processsnapshot|=|Join-Path $snapshotRoot \'native-process.ps1\'', 'fonthelpersnapshot|=|Join-Path $snapshotRoot \'native-text-fonts.ps1\'', 'sourcesnapshot|=|Join-Path $snapshotRoot \'source.pptx\'', 'generationsnapshot|=|Join-Path $snapshotRoot \'generation.json\'', 'licensesnapshot|=|Join-Path $snapshotRoot \'LICENSE_FONT\'', 'snapshot|=|Join-Path $snapshotRoot $font.file', 'workerarguments|=|@(\'-OutputDirectory\',$outputRoot,\'-InputPresentation\',$sourceSnapshot,\'-Worker\')', 'workerarguments|=|@(\'-OutputDirectory\',$outputRoot,\'-InputPresentation\',$sourceSnapshot,\'-Worker\',\'-CompareAfterContentFonts\')', 'registrationpath|=|Join-Path $outputRoot \'font-registration.json\'', 'root|=|(Resolve-Path -LiteralPath $OutputDirectory).Path', 'sourcesnapshot|=|(Resolve-Path -LiteralPath $request.source.snapshotPath).Path', 'stagefile|=|Join-Path $root \'stages.jsonl\'', 'progressfile|=|Join-Path $root \'progress.json\'', 'reportfile|=|Join-Path $root \'report.json\'', 'operation|param|Invoke-InventoryCom|ScriptBlock']),
   dynamicMemberSites: Object.freeze(['Invoke-InventoryPureRegression|sample']),
   exemptFunction: null,
   exemptInvocations: Object.freeze([]),
@@ -151,6 +154,29 @@ export function computeFontLedger(report) {
   return ledger;
 }
 
+function completePresentationFonts(snapshot) {
+  return isObject(snapshot) && isInt(snapshot.count) && snapshot.count >= 0 && snapshot.count <= INVENTORY_BOUNDS.maxPresentationFonts
+    && Array.isArray(snapshot.entries) && snapshot.entries.length === snapshot.count
+    && snapshot.entries.every((entry, offset) => isObject(entry) && entry.index === offset + 1 && typeof entry.name === 'string' && isInt(entry.embedded) && isInt(entry.embeddable));
+}
+
+export function computeFontsComparison(before, after) {
+  const entries = snapshot => Array.isArray(snapshot?.entries) ? snapshot.entries : [];
+  const first = entries(before), second = entries(after);
+  const raw = list => list.map(entry => [entry?.index, entry?.name, entry?.embedded, entry?.embeddable]);
+  const multiset = list => list.map(entry => canonical([entry?.name, entry?.embedded, entry?.embeddable])).sort();
+  const entriesEqual = canonical(raw(first)) === canonical(raw(second));
+  const entriesEqualIgnoringOrder = canonical(multiset(first)) === canonical(multiset(second));
+  return {
+    beforeCount: before?.count ?? null, afterCount: after?.count ?? null, entriesEqual,
+    namesEqualInOrder: canonical(first.map(entry => entry?.name)) === canonical(second.map(entry => entry?.name)),
+    entriesEqualIgnoringOrder, outcome: entriesEqual ? 'unchanged' : entriesEqualIgnoringOrder ? 'reordered' : 'changed',
+    beforeAptosReported: first.some(entry => aptos(entry?.name)), afterAptosReported: second.some(entry => aptos(entry?.name)),
+    beforeEmptyNameIndexes: first.filter(entry => entry?.name === '').map(entry => entry.index),
+    afterEmptyNameIndexes: second.filter(entry => entry?.name === '').map(entry => entry.index),
+  };
+}
+
 function validFont2(font) {
   return isObject(font) && FONT2_SLOTS.every(slot => typeof font[slot] === 'string') && typeof font.size === 'number' && Number.isFinite(font.size) && isInt(font.bold) && isInt(font.italic);
 }
@@ -164,6 +190,14 @@ export function expectedInventoryStages(report, failures = []) {
   const need = (condition, code, message) => { if (!condition) failures.push({code, message}); };
   const stages = [];
   const pair = name => stages.push([name, 'pair']);
+  const fontCollection = (fonts, prefix, label) => {
+    pair(`${prefix}.get`); pair(`${prefix}.count.get`);
+    need(isInt(fonts?.count) && fonts.count >= 0 && fonts.count <= INVENTORY_BOUNDS.maxPresentationFonts && Array.isArray(fonts?.entries) && fonts.entries.length === fonts.count, 'observation-fonts', `${label} must be complete and within 64 entries`);
+    for (const [offset, entry] of (Array.isArray(fonts?.entries) ? fonts.entries : []).entries()) {
+      for (const suffix of ['get', 'name.get', 'embedded.get', 'embeddable.get']) pair(`${prefix}.item-${offset + 1}.${suffix}`);
+      need(isObject(entry) && entry.index === offset + 1 && typeof entry.name === 'string' && isInt(entry.embedded) && isInt(entry.embeddable), 'observation-font-entry', `${label} item ${offset + 1} is invalid`);
+    }
+  };
   const font2 = prefix => { pair(`${prefix}.font.get`); for (const property of FONT2_PROPERTIES) pair(`${prefix}.font.${property}.get`); };
   const totals = {paragraphs: 0, runs: 0};
   const shapes = (prefix, record, label) => {
@@ -215,13 +249,7 @@ export function expectedInventoryStages(report, failures = []) {
   pair('input.presentations.get'); pair('input.presentation.open-readonly');
   pair('owned.presentation.fullName.get'); pair('owned.presentation.readOnly.get');
   need(report?.source?.readOnly === -1, 'observation-read-only', 'PowerPoint must report the owned presentation ReadOnly = -1');
-  pair('owned.presentation.fonts.get'); pair('owned.presentation.fonts.count.get');
-  const fonts = report?.presentationFonts;
-  need(isInt(fonts?.count) && fonts.count >= 0 && fonts.count <= INVENTORY_BOUNDS.maxPresentationFonts && Array.isArray(fonts?.entries) && fonts.entries.length === fonts.count, 'observation-fonts', 'Presentation.Fonts must be complete and within 64 entries');
-  for (const [offset, entry] of (Array.isArray(fonts?.entries) ? fonts.entries : []).entries()) {
-    for (const suffix of ['get', 'name.get', 'embedded.get', 'embeddable.get']) pair(`owned.presentation.fonts.item-${offset + 1}.${suffix}`);
-    need(isObject(entry) && entry.index === offset + 1 && typeof entry.name === 'string' && isInt(entry.embedded) && isInt(entry.embeddable), 'observation-font-entry', `Presentation.Fonts item ${offset + 1} is invalid`);
-  }
+  fontCollection(report?.presentationFonts, 'owned.presentation.fonts', 'Initial Presentation.Fonts');
   pair('owned.presentation.slideMaster.get'); pair('owned.slideMaster.theme.get'); pair('owned.theme.themeFontScheme.get');
   for (const kind of ['major', 'minor']) {
     pair(`owned.theme.${kind}Font.get`);
@@ -240,6 +268,7 @@ export function expectedInventoryStages(report, failures = []) {
   pair('owned.slideMaster.shapes.get');
   shapes('owned.slideMaster', report?.slideMaster, 'Slide master');
   need(totals.paragraphs <= INVENTORY_BOUNDS.maxParagraphsTotal && totals.runs <= INVENTORY_BOUNDS.maxRunsTotal, 'observation-totals', 'Paragraph and run totals exceed the bounded inventory');
+  if (report?.compareAfterContentFonts === true) fontCollection(report.presentationFontsAfterContent, 'owned.presentation.fonts-after-content', 'After-content Presentation.Fonts');
   pair('owned.presentation.fullName-before-close.get'); pair('owned.presentation.close');
   stages.push(['owned.presentation.cleanup', 'single'], ['worker.complete', 'single']);
   return stages;
@@ -284,10 +313,15 @@ export function analyzeFailureCleanup(report, stages) {
   return {applicable: true, outcome, closeInvocations, consistent: problems.length === 0, problems};
 }
 
-function auditLifecycle({request, report, supervisor, worker, progress, stages, registrations, registrationFilePresent}) {
+function auditLifecycle({request, report, supervisor, worker, progress, stages, registrations, registrationFilePresent, legacyMode = false}) {
   const failures = [];
   const need = (condition, code, message) => { if (!condition) failures.push({code, message}); };
   const mode = request?.fontRegistration?.mode;
+  const legacyDefault = legacyMode && !Object.hasOwn(request, 'compareAfterContentFonts') && !Object.hasOwn(report, 'compareAfterContentFonts') && !Object.hasOwn(supervisor, 'compareAfterContentFonts');
+  need(legacyDefault || (typeof request?.compareAfterContentFonts === 'boolean' && report?.compareAfterContentFonts === request.compareAfterContentFonts && supervisor?.compareAfterContentFonts === request.compareAfterContentFonts), 'comparison-mode', 'Strict boolean comparison mode must bind request, report and supervisor; absence is only a pinned historical default');
+  const compare = request?.compareAfterContentFonts === true && report?.compareAfterContentFonts === true;
+  if (compare) need(canonical(report?.fontQueryComparison) === canonical(computeFontsComparison(report?.presentationFonts, report?.presentationFontsAfterContent)), 'font-query-comparison', 'Before/after comparison must equal independent recomputation from raw ordered entries and flags');
+  else need(legacyDefault ? !Object.hasOwn(report, 'presentationFontsAfterContent') && !Object.hasOwn(report, 'fontQueryComparison') : report?.presentationFontsAfterContent === null && report?.fontQueryComparison === null, 'comparison-absent', 'Default mode must not carry a second snapshot or comparison');
   need(report?.kind === 'native-font-inventory' && report?.schemaVersion === 1, 'report-kind', 'report.json must be native-font-inventory schema 1');
   need(report?.error === null && report?.cleanupConfirmed === true && report?.officeOperationsStopped === false && report?.ownedOpenCount === 1 && report?.ownedCloseCount === 1 && report?.lastStage === 'worker.complete' && report?.lastStatus === 'success' && report?.failureCleanup === null, 'report-lifecycle', 'Worker report must end successfully with confirmed cleanup, one owned open and one owned close');
   need(report?.source?.openedPathMatches === true && samePath(report?.source?.fullName, report?.source?.snapshotPath) && report?.source?.readOnly === -1 && report?.source?.snapshotUnchangedAfterClose === true, 'report-read-only', 'The opened FullName must be the owned snapshot, ReadOnly must be -1, and the snapshot must be unchanged after close');
@@ -461,12 +495,18 @@ export async function auditEvidenceDirectory(evidenceDirectory, {reviewedRoot = 
   }
   let ledger = null;
   if (isObject(request) && isObject(report) && isObject(supervisor) && isObject(worker) && isObject(progress) && Array.isArray(stages)) {
-    const lifecycle = auditLifecycle({request, report, supervisor, worker, progress, stages, registrations, registrationFilePresent});
+    const legacyMode = priorReviewedVerifiers !== false && Object.hasOwn(PRIOR_REVIEWED_INVENTORY_VERIFIER_SHA256, request?.verifier?.sha256 ?? '') && reviewedVerifierRevision === PRIOR_REVIEWED_INVENTORY_VERIFIER_SHA256[request.verifier.sha256];
+    const lifecycle = auditLifecycle({request, report, supervisor, worker, progress, stages, registrations, registrationFilePresent, legacyMode});
     failures.push(...lifecycle.failures); ledger = lifecycle.ledger;
   }
   const findings = {
     inputMode: inputMode ?? null, fontRegistrationMode: mode ?? null, powerPointVersion: report?.environment?.powerPointVersion ?? null,
     presentationFonts: report?.presentationFonts?.entries ?? null, theme: report?.theme ?? null, ledger,
+    presentationFontsAfterContent: report?.compareAfterContentFonts === true ? report?.presentationFontsAfterContent?.entries ?? null : null,
+    // A missing/partial collection is unavailable, even when the first is empty.
+    // Complete raw observations remain useful when another audit gate fails.
+    fontQueryComparison: report?.compareAfterContentFonts === true && completePresentationFonts(report?.presentationFonts) && completePresentationFonts(report?.presentationFontsAfterContent)
+      ? computeFontsComparison(report.presentationFonts, report.presentationFontsAfterContent) : null,
     failureCleanup: analyzeFailureCleanup(report, Array.isArray(stages) ? stages : []),
     note: 'Findings are evidence only when passed is true. Reported names do not prove physical font-file or per-glyph identity.',
   };

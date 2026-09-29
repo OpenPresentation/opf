@@ -7,7 +7,7 @@ import os from 'node:os';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {PERMITTED_CARLITO_FIXTURE, PERMITTED_CARLITO_FIXTURE_FILES, PERMITTED_CARLITO_LICENSE_SHA256, stripPowerShellLiteralsForScan} from './native-font-embed-audit.mjs';
-import {ALLOWED_COM_MEMBERS, ALLOWED_INSTANCE_MEMBERS, ALLOWED_STATIC_MEMBERS, analyzeFailureCleanup, AUDIT_SCHEMA_VERSION, auditEvidenceDirectory, auditInventoryVerifierSource, computeFontLedger, emptyNameFontFindings, expectedInventoryStages, INVENTORY_ASSIGNMENT_ROOTS, INVENTORY_BOUNDS, invokedMembers, PRIOR_REVIEWED_INVENTORY_VERIFIER_SHA256, INVENTORY_SOURCE_POLICY} from './native-font-inventory-audit.mjs';
+import {ALLOWED_COM_MEMBERS, ALLOWED_INSTANCE_MEMBERS, ALLOWED_STATIC_MEMBERS, analyzeFailureCleanup, AUDIT_SCHEMA_VERSION, auditEvidenceDirectory, auditInventoryVerifierSource, computeFontLedger, computeFontsComparison, emptyNameFontFindings, expectedInventoryStages, INVENTORY_ASSIGNMENT_ROOTS, INVENTORY_BOUNDS, invokedMembers, PRIOR_REVIEWED_INVENTORY_VERIFIER_SHA256, INVENTORY_SOURCE_POLICY} from './native-font-inventory-audit.mjs';
 import {assertSourcePolicyProbes} from './powershell-scan-probes.mjs';
 import {readPowerShellPolicyLists} from './powershell-scan.mjs';
 
@@ -50,6 +50,10 @@ const policyNegatives = [
 for (const [name, text, code] of policyNegatives) assert.ok(auditInventoryVerifierSource(text).some(item => item.code === code), name);
 assert.deepEqual(auditInventoryVerifierSource(verifierSource + "\n# $app.Quit() and .SaveAs( in a comment\n$note='SaveAs( and .Quit() in a string'\n"), []);
 record('verifier-read-only-source-policy');
+assert(auditInventoryVerifierSource(verifierSource.replace('[string]::Equals($key,$afterKeys[$i],[StringComparison]::Ordinal)', '[string]::Equals($key,$afterKeys[$i])')).some(item=>item.code==='unreviewed-form'),'Reject culture-default string Equals overload');
+assert(auditInventoryVerifierSource(verifierSource.replace('[string]::Equals($_.name,\'\',[StringComparison]::Ordinal)', '[string]::Equals($_.name,\'\',[StringComparison]::OrdinalIgnoreCase)')).some(item=>item.code==='unreviewed-form'),'Reject non-exact empty-name comparison');
+assert(auditInventoryVerifierSource(verifierSource+'\n$null=$font.Equals($other)\n').some(item=>item.code==='forbidden-member'),'Instance Equals remains denied');
+record('comparison-ordinal-equals-invocations-pinned');
 
 // The inventory worker has no COM setter: every member assignment must target a local report root, and dynamic code is
 // forbidden outright (it has no pure-regression re-evaluation).
@@ -182,7 +186,7 @@ let buildCounter = 0;
 
 // Build one synthetic evidence directory whose raw files follow the worker's
 // contract. `mutate` edits the in-memory evidence before it is written.
-async function buildEvidence({inputMode = 'carlito-fixture', mode = 'none', fonts = ['Carlito'], mutate = () => {}} = {}) {
+async function buildEvidence({inputMode = 'carlito-fixture', mode = 'none', fonts = ['Carlito'], compareAfterContentFonts = false, afterEntries = null, mutate = () => {}} = {}) {
   const base = path.join(scratch, `synthetic-${++buildCounter}`);
   const evidence = path.join(base, 'evidence'), originals = path.join(base, 'originals'), inputs = path.join(evidence, 'inputs');
   await mkdir(inputs, {recursive: true}); await mkdir(originals, {recursive: true});
@@ -207,19 +211,21 @@ async function buildEvidence({inputMode = 'carlito-fixture', mode = 'none', font
   const snapshot = path.join(inputs, 'source.pptx');
   const fontRegistration = {mode, flags: mode === 'none' ? null : 0};
   const request = {
-    schemaVersion: 1, kind: 'native-font-inventory', inputMode, source: item(path.join(originals, 'source.pptx'), snapshot, sourceHash), fixture,
+    schemaVersion: 1, kind: 'native-font-inventory', inputMode, compareAfterContentFonts, source: item(path.join(originals, 'source.pptx'), snapshot, sourceHash), fixture,
     verifier: helpers['native-font-inventory.ps1'], processHelper: helpers['native-process.ps1'], fontHelper: helpers['native-text-fonts.ps1'],
     fontRegistration, bounds: {...INVENTORY_BOUNDS}, scope: 'synthetic control',
   };
   const observed = observation({fonts});
   const report = {
-    schemaVersion: 1, kind: 'native-font-inventory', inputMode,
+    schemaVersion: 1, kind: 'native-font-inventory', inputMode, compareAfterContentFonts,
     source: {path: request.source.path, sha256: sourceHash, snapshotPath: snapshot, snapshotSha256: sourceHash, fullName: snapshot, openedPathMatches: true, readOnly: -1, snapshotUnchangedAfterClose: true},
     fontRegistration, bounds: {...INVENTORY_BOUNDS}, ...observed, boundsExceeded: [], semanticFailures: [], fontLedger: null,
     preflightPresentationCount: 0, ownedOpenCount: 1, ownedCloseCount: 1, failureCleanup: null, environment: {powerPointVersion: 'synthetic'},
     cleanupConfirmed: true, officeOperationsStopped: false, lastStage: 'worker.complete', lastStatus: 'success', error: null,
   };
   report.fontLedger = {...computeFontLedger(report), scope: 'synthetic'};
+  report.presentationFontsAfterContent = compareAfterContentFonts ? {count: (afterEntries ?? observed.presentationFonts.entries).length, entries: structuredClone(afterEntries ?? observed.presentationFonts.entries)} : null;
+  report.fontQueryComparison = compareAfterContentFonts ? computeFontsComparison(report.presentationFonts, report.presentationFontsAfterContent) : null;
   const expected = expectedInventoryStages(report);
   const rows = []; for (const [name, kind] of expected) { if (kind === 'pair') rows.push([name, 'begin'], [name, 'success']); else rows.push([name, 'success']); }
   const openBegin = rows.findIndex(([name, status]) => name === 'input.presentation.open-readonly' && status === 'begin');
@@ -232,7 +238,7 @@ async function buildEvidence({inputMode = 'carlito-fixture', mode = 'none', font
   const final = stages.at(-1);
   const bindings = [['source', request.source], ...(fixture ? [['generation', fixture.generation], ['license', fixture.license]] : []), ['verifier', request.verifier], ['process-helper', request.processHelper], ['font-helper', request.fontHelper], ...(fixture ? fixture.fonts.map(entry => [`font:${entry.file}`, entry]) : [])];
   const supervisor = {
-    timestamp: new Date(Date.parse(final.timestamp) + 1000).toISOString(), passed: true, timedOut: false, exitCode: 0, inputMode, fontRegistrationMode: mode,
+    timestamp: new Date(Date.parse(final.timestamp) + 1000).toISOString(), passed: true, timedOut: false, exitCode: 0, inputMode, compareAfterContentFonts, fontRegistrationMode: mode,
     officeLifecycleComplete: true, readOnlyConfirmed: true, inventoryComplete: true, fontCleanupConfirmed: mode === 'none' ? null : true, registrationFilePresent: mode !== 'none', inputsUnchanged: true,
     ownedOpenCount: 1, ownedCloseCount: 1, lastDurableStage: 'worker.complete', lastDurableStatus: 'success', parentError: null,
     aptosReported: report.fontLedger.aptosReported, presentationFontNames: report.fontLedger.presentationFontNames,
@@ -263,6 +269,77 @@ try {
     assert.equal(result.findings.ledger.aptosReported, false);
   }
   record('synthetic-positive-modes', {modes: ['carlito-fixture/none', 'carlito-fixture/temporary-session', 'control-deck/none']});
+
+  {
+    const entry = (index, name, embedded = 0, embeddable = -1) => ({index, name, embedded, embeddable});
+    const fonts = ['', 'Carlito', 'Carlito', 'Aptos'];
+    const cases = [
+      ['unchanged', null, 'unchanged', true],
+      ['reordered-with-duplicates-and-empty', [entry(1, 'Aptos'), entry(2, 'Carlito'), entry(3, ''), entry(4, 'Carlito')], 'reordered', false],
+      ['flags-only', fonts.map((name, i) => entry(i + 1, name, i === 1 ? -1 : 0)), 'changed', true],
+      ['removed-duplicate', [entry(1, ''), entry(2, 'Carlito'), entry(3, 'Aptos')], 'changed', false],
+      ['case-changed', [entry(1, ''), entry(2, 'carlito'), entry(3, 'Carlito'), entry(4, 'Aptos')], 'changed', false],
+      ['cleared', [], 'changed', false],
+    ];
+    for (const [name, afterEntries, outcome, namesEqualInOrder] of cases) {
+      const result = await auditEvidenceDirectory(await buildEvidence({inputMode: 'control-deck', fonts, compareAfterContentFonts: true, afterEntries}));
+      assert.equal(result.passed, true, `${name}: ${JSON.stringify(result.failures)}`);
+      assert.equal(result.findings.fontQueryComparison.outcome, outcome, name);
+      assert.equal(result.findings.fontQueryComparison.namesEqualInOrder, namesEqualInOrder, name);
+      assert.deepEqual(result.findings.fontQueryComparison.beforeEmptyNameIndexes, [1], name);
+      assert.equal(result.findings.ledger.aptosReported, true, name);
+    }
+    const added = await auditEvidenceDirectory(await buildEvidence({inputMode: 'control-deck', compareAfterContentFonts: true, afterEntries: [entry(1, ''), entry(2, 'Aptos', 0, -1)]}));
+    assert.equal(added.passed, true, JSON.stringify(added.failures));
+    assert.equal(added.findings.ledger.aptosReported, false, 'First-snapshot ledger must remain unchanged');
+    assert.equal(added.findings.fontQueryComparison.afterAptosReported, true);
+    const empty = await auditEvidenceDirectory(await buildEvidence({fonts: [], compareAfterContentFonts: true, afterEntries: []}));
+    assert.equal(empty.passed, true, JSON.stringify(empty.failures)); assert.equal(empty.findings.fontQueryComparison.outcome, 'unchanged');
+    record('dual-snapshot-raw-comparison-findings', {cases: cases.map(item => item[0])});
+
+    const negatives = [
+      ['string-mode', s => { s.request.compareAfterContentFonts = 'true'; }, 'comparison-mode'],
+      ['report-mode', s => { s.report.compareAfterContentFonts = false; }, 'comparison-mode'],
+      ['supervisor-mode', s => { s.supervisor.compareAfterContentFonts = false; }, 'comparison-mode'],
+      ['missing-mode', s => { delete s.request.compareAfterContentFonts; }, 'comparison-mode'],
+      ['missing-second', s => { s.report.presentationFontsAfterContent = null; }, 'observation-fonts'],
+      ['forged-comparison', s => { s.report.fontQueryComparison.outcome = 'changed'; }, 'font-query-comparison'],
+      ['forged-before-ledger', s => { s.report.fontLedger.aptosReported = true; }, 'font-ledger'],
+      ['forged-after-flags', s => { s.report.presentationFontsAfterContent.entries[0].embedded = -1; }, 'font-query-comparison'],
+      ['second-overflow', s => { s.report.presentationFontsAfterContent.count = 65; s.report.presentationFontsAfterContent.entries = Array.from({length:65}, (_, i) => entry(i+1, 'Carlito')); }, 'observation-fonts'],
+      ['second-incomplete', s => { s.report.presentationFontsAfterContent.entries = []; }, 'observation-fonts'],
+      ['missing-second-stage', s => { s.stages = s.stages.filter(row => row.stage !== 'owned.presentation.fonts-after-content.item-1.embedded.get'); renumber(s); }, 'stage-sequence'],
+      ['second-before-content', s => { const rows = s.stages.filter(row => row.stage.startsWith('owned.presentation.fonts-after-content')); s.stages = s.stages.filter(row => !row.stage.startsWith('owned.presentation.fonts-after-content')); const i = s.stages.findIndex(row => row.stage === 'owned.presentation.slideMaster.get'); s.stages.splice(i, 0, ...rows); renumber(s); }, 'stage-sequence'],
+    ];
+    for (const [name, mutate, code] of negatives) {
+      const result = await auditEvidenceDirectory(await buildEvidence({inputMode:'control-deck', compareAfterContentFonts:true, mutate}));
+      assert.equal(result.passed, false, name); assert(codes(result).has(code), `${name}: ${JSON.stringify(result.failures)}`);
+    }
+    const unavailable = [
+      ['missing-second', s => { s.report.presentationFontsAfterContent = null; }, 'observation-fonts'],
+      ['unknown-second-count', s => { s.report.presentationFontsAfterContent.count = null; }, 'observation-fonts'],
+      ['partial-second', s => { s.report.presentationFontsAfterContent = {count: 2, entries: [entry(1, 'Carlito')]}; }, 'observation-fonts'],
+      ['malformed-second-index', s => { s.report.presentationFontsAfterContent = {count: 1, entries: [entry(2, 'Carlito')]}; }, 'observation-font-entry'],
+      ['malformed-second-name', s => { s.report.presentationFontsAfterContent = {count: 1, entries: [entry(1, null)]}; }, 'observation-font-entry'],
+      ['malformed-second-flags', s => { s.report.presentationFontsAfterContent = {count: 1, entries: [entry(1, 'Carlito', '0')]}; }, 'observation-font-entry'],
+      ['over-bound-second', s => { s.report.presentationFontsAfterContent = {count: 65, entries: Array.from({length: 65}, (_, i) => entry(i + 1, 'Carlito'))}; }, 'observation-fonts'],
+      ['missing-first', s => { s.report.presentationFonts = null; }, 'observation-fonts'],
+    ];
+    for (const [name, mutate, code] of unavailable) {
+      const result = await auditEvidenceDirectory(await buildEvidence({inputMode: 'control-deck', fonts: [], compareAfterContentFonts: true, mutate}));
+      assert.equal(result.passed, false, name); assert(codes(result).has(code), `${name}: ${JSON.stringify(result.failures)}`);
+      assert.equal(result.findings.fontQueryComparison, null, `${name}: incomplete observations must never imply unchanged`);
+    }
+    const completeFailed = await auditEvidenceDirectory(await buildEvidence({fonts: [], compareAfterContentFonts: true, mutate: s => { s.report.cleanupConfirmed = false; }}));
+    assert.equal(completeFailed.passed, false); assert(codes(completeFailed).has('report-lifecycle'));
+    assert.equal(completeFailed.findings.fontQueryComparison.outcome, 'unchanged', 'Complete raw collections retain a comparison when a separate lifecycle gate fails');
+    record('comparison-findings-require-two-complete-valid-collections', {unavailable: unavailable.map(item => item[0]),completeFailedLifecycleRetainsComparison: true});
+    const defaultExtra = await auditEvidenceDirectory(await buildEvidence({mutate:s => { s.report.presentationFontsAfterContent = structuredClone(s.report.presentationFonts); s.report.fontQueryComparison = computeFontsComparison(s.report.presentationFonts, s.report.presentationFontsAfterContent); }}));
+    assert(codes(defaultExtra).has('comparison-absent'));
+    const defaultMissing = await auditEvidenceDirectory(await buildEvidence({mutate:s => { delete s.request.compareAfterContentFonts; delete s.report.compareAfterContentFonts; delete s.supervisor.compareAfterContentFonts; delete s.report.presentationFontsAfterContent; delete s.report.fontQueryComparison; }}));
+    assert(codes(defaultMissing).has('comparison-mode'), 'Current worker cannot use absent legacy mode');
+    record('dual-snapshot-mode-observation-ledger-stage-negatives', {cases:negatives.map(item=>item[0])});
+  }
 
   const aptosResult = await auditEvidenceDirectory(await buildEvidence({fonts: ['Carlito', 'Aptos']}));
   assert.equal(aptosResult.passed, true, JSON.stringify(aptosResult.failures));
@@ -363,7 +440,7 @@ try {
 
   {
     // Prior reviewed verifier revisions bind only when explicitly enabled (the CLI's --reaudit-v2), and only by hash.
-    assert.deepEqual(Object.values(PRIOR_REVIEWED_INVENTORY_VERIFIER_SHA256).sort(), ['ff-03-ef8a158-crlf', 'ff-03-ef8a158-lf']);
+    assert.deepEqual(Object.values(PRIOR_REVIEWED_INVENTORY_VERIFIER_SHA256).sort(), ['ff-03-ef8a158-crlf', 'ff-03-ef8a158-lf', 'ff-05-357171a-crlf', 'ff-05-357171a-lf']);
     const evidence = await buildEvidence();
     const newerRoot = path.join(scratch, 'newer-reviewed'); await mkdir(newerRoot);
     await writeFile(path.join(newerRoot, 'native-font-inventory.ps1'), `${verifierSource}\n# a newer reviewed revision\n`);
@@ -383,7 +460,10 @@ try {
     const harness = path.join(scratch, 'mock-harness'); await mkdir(harness);
     const needle = '(New-Object -ComObject PowerPoint.Application)';
     assert.equal(verifierSource.split(needle).length, 2, 'Expected exactly one ComObject construction to replace');
-    const mocked = verifierSource.replace(needle, `$(. '${mockPath.replaceAll("'", "''")}'; New-OpfInventoryMockApplication)`);
+    const wrapper = 'try { $value=& $Operation;';
+    assert.equal(verifierSource.split(wrapper).length,2,'Exactly one COM wrapper to instrument for terminating mock faults');
+    const mocked = verifierSource.replace(needle, `$(. '${mockPath.replaceAll("'", "''")}'; New-OpfInventoryMockApplication)`)
+      .replace(wrapper,"try { if($StageName -like 'owned.presentation.fonts-after-content*') { Invoke-OpfInventoryMockFault $StageName }; $value=& $Operation;");
     // The reviewed policy lists name the construction in string literals; the mock copy's code must not construct it.
     assert.doesNotMatch(stripPowerShellLiteralsForScan(mocked), /ComObject|PowerPoint\.Application/, 'Mock copy must not construct any COM object');
     // The mock line is never valid native evidence: it dot-sources a string path, calls an unreviewed command and
@@ -415,6 +495,59 @@ try {
       assert.equal(result.findings.failureCleanup.applicable, false, name);
       if (variant === 'cloud') assert.equal(JSON.parse((await readFile(path.join(args[args.indexOf('-OutputDirectory') + 1], 'report.json'), 'utf8')).replace(/^\uFEFF/, '')).preflightPresentationCount, 1);
     }
+    const parseFile = async (out, name) => JSON.parse((await readFile(path.join(out, name), 'utf8')).replace(/^\uFEFF/, ''));
+    const dualCases = [
+      ['dual-unchanged','unchanged'],['dual-changed','changed'],['dual-reordered','reordered'],['dual-flags','changed'],
+      ['dual-soft-hyphen','changed'],['dual-composed','changed'],['dual-empty-ignorable','changed'],['dual-cleared','changed'],['dual-empty-both','unchanged'],
+    ];
+    for (const [variant, outcome] of dualCases) {
+      const out = path.join(harness, `run-${variant}`);
+      const args = ['-ControlDeck','-CompareAfterContentFonts','-OutputDirectory',out,'-InputPresentation',path.join(harness,'control.pptx')];
+      const child = mockRun(args, variant); assert.equal(child.status,0, `${variant}: ${child.stderr || child.stdout}`);
+      const result = await auditEvidenceDirectory(out,{reviewedRoot:harness});
+      assert.deepEqual([...codes(result)].sort(),mockCodes,`${variant}: ${JSON.stringify(result.failures)}`);
+      const report = await parseFile(out,'report.json');
+      assert.equal(report.compareAfterContentFonts,true); assert.equal(report.fontQueryComparison.outcome,outcome,variant);
+      assert.deepEqual(report.fontQueryComparison,computeFontsComparison(report.presentationFonts,report.presentationFontsAfterContent),variant);
+      const {scope,...firstLedger}=report.fontLedger; assert.deepEqual(firstLedger,computeFontLedger(report),variant);
+      assert.equal(report.ownedOpenCount,1); assert.equal(report.ownedCloseCount,1);
+      if(variant==='dual-changed'){assert.equal(report.fontLedger.aptosReported,false);assert.equal(report.fontQueryComparison.afterAptosReported,true);}
+      if(variant==='dual-flags')assert.equal(report.fontQueryComparison.namesEqualInOrder,true);
+      if(variant==='dual-empty-ignorable'){assert.deepEqual(report.fontQueryComparison.beforeEmptyNameIndexes,[1]);assert.deepEqual(report.fontQueryComparison.afterEmptyNameIndexes,[]);}
+      const conflict=spawnSync(ps,['-NoProfile','-NonInteractive','-File',path.join(out,'inputs/native-font-inventory.ps1'),'-Worker','-OutputDirectory',out,'-InputPresentation',path.join(out,'inputs/source.pptx')],spawnOptions);
+      assert.notEqual(conflict.status,0); assert.match(conflict.stderr+conflict.stdout,/strict boolean request mode before Office startup/);
+    }
+    const defaultOut=path.join(harness,'run-dual-default');
+    const defaultChild=mockRun(['-ControlDeck','-OutputDirectory',defaultOut,'-InputPresentation',path.join(harness,'control.pptx')],'dual-changed');
+    assert.equal(defaultChild.status,0,defaultChild.stderr||defaultChild.stdout);
+    const defaultReport=await parseFile(defaultOut,'report.json');assert.equal(defaultReport.compareAfterContentFonts,false);assert.equal(defaultReport.presentationFontsAfterContent,null);assert.equal(defaultReport.fontQueryComparison,null);
+    const defaultStages=(await readFile(path.join(defaultOut,'stages.jsonl'),'utf8')).replace(/^\uFEFF/,'').trim().split(/\r?\n/).map(JSON.parse);
+    assert(!defaultStages.some(row=>row.stage.includes('fonts-after-content')));
+    record('mock-dual-snapshot-findings-and-unicode-ordinal-comparison',{cases:dualCases.map(row=>row[0]),defaultAddsNoStages:true,workerSwitchConflictRejected:true});
+
+    // Inject at the existing wrapper try boundary: these test the error latch
+    // and persisted observations, not native COM getter exception propagation.
+    for(const suffix of ['get','count','item','name','embedded','embeddable']){
+      const variant=`dual-${suffix}-error`,out=path.join(harness,`run-${variant}`);
+      const child=mockRun(['-ControlDeck','-CompareAfterContentFonts','-OutputDirectory',out,'-InputPresentation',path.join(harness,'control.pptx')],variant);
+      assert.notEqual(child.status,0,variant);
+      const report=await parseFile(out,'report.json'),supervisor=await parseFile(out,'supervisor.json');
+      assert.equal(report.officeOperationsStopped,true,variant);assert.equal(report.ownedCloseCount,0,variant);assert.equal(report.cleanupConfirmed,false,variant);assert.equal(supervisor.passed,false,variant);
+      assert.equal(report.presentationFonts.count,1);assert.equal(report.presentationFonts.entries[0].name,'Carlito');assert(report.fontLedger,'Persist first ledger before second COM access');assert.equal(report.fontQueryComparison,null);
+      const stages=(await readFile(path.join(out,'stages.jsonl'),'utf8')).replace(/^\uFEFF/,'').trim().split(/\r?\n/).map(JSON.parse);
+      const failure=stages.findIndex(row=>row.status==='error'&&row.stage.includes('fonts-after-content'));
+      assert(failure>=0,variant);assert.deepEqual(stages.slice(failure+1).map(row=>row.stage),['worker.failure'],variant);
+      assert.equal(report.presentationFontsAfterContent.entries.length,['item','name','embedded','embeddable'].includes(suffix)?1:0,variant);
+      assert.equal(analyzeFailureCleanup(report,stages).consistent,true,variant);
+    }
+    for(const variant of ['dual-overflow','dual-wrongfullname','dual-writable']){
+      const out=path.join(harness,`run-${variant}`),child=mockRun(['-ControlDeck','-CompareAfterContentFonts','-OutputDirectory',out,'-InputPresentation',path.join(harness,'control.pptx')],variant);
+      assert.notEqual(child.status,0,variant);const report=await parseFile(out,'report.json');
+      if(variant==='dual-overflow'){assert.deepEqual(report.boundsExceeded,['presentationFontsAfterContent']);assert.equal(report.presentationFontsAfterContent.count,65);assert.equal(report.presentationFontsAfterContent.entries.length,0);assert.equal(report.ownedCloseCount,1);assert.equal(report.fontQueryComparison,null);assert(report.fontLedger);}
+      if(variant==='dual-wrongfullname'){assert.equal(report.ownedCloseCount,0);assert.equal(report.cleanupConfirmed,false);}
+      if(variant==='dual-writable'){assert(report.semanticFailures.includes('presentation-not-read-only'));assert.equal(report.presentationFontsAfterContent,null);}
+    }
+    record('mock-dual-snapshot-wrapper-error-latch-bounds-ownership',{wrapperInjectedStages:['get','count','item','name','embedded','embeddable'],other:['overflow','wrongfullname','writable'],firstSnapshotRetained:true});
     // Failures while the owned presentation is open: exactly one error close
     // only for a non-COM failure with the owned FullName; otherwise left open.
     const failureRuns = [
