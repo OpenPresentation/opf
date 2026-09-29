@@ -7,7 +7,7 @@
 - Node `24.x` (`engines`, `.nvmrc`). This repo uses npm with `package-lock.json`; install with `npm ci`. Core uses pnpm.
 - Commands (all in `package.json`): `npm run build`, `npm run typecheck`, `npm test`, `npm run validate`, `npm run test:packed`, `npm run test:browser`, `npm run test:code`, `npm run test:font-variants`, and the offline native controls `npm run test:native-picture-edit-controls`, `npm run test:native-font-embed-controls`, `npm run test:native-mixed-edit-controls`.
 - CI (`.github/workflows/ci.yml`) runs one `package` job on `ubuntu-latest` (Playwright container) and `windows-latest`. It checks out core, opf-render and opf-editor at pinned SHAs, runs `test:packed` against published dependencies, links sources with core's `scripts/link-ecosystem.mjs --packages-only`, then runs audit, typecheck, the native controls, validate, test, font-variants, code, browser and core's coordinated packed-tarball checks. Windows CI also runs the harness checks and `-PureRegression` modes without Office.
-- `release.yml` publishes on `opf-pptx-v*` tags with npm provenance.
+- `release.yml` publishes on `opf-pptx-v*` tags (or manual dispatch) with npm provenance, after rerunning the full check set.
 
 ### Windows notes
 
@@ -33,7 +33,7 @@ The cross-repo program tracker lives in core at [docs/programs/font-fidelity-eve
 - Never kill Office, call `Application.Quit`, close unrelated presentations, or change Office security. Run one bounded native worker at a time (45 s default, 60 s max, via `native-process.ps1`). Never retry a native attempt in place; a new attempt uses a fresh output directory, and failed attempts are preserved as evidence.
 - Never relax the 0.02 pt tab/geometry gate, the 0.1 pt character-bound gate, or any other gate or tolerance to make a run pass.
 - Font programs (TTF/OTF, PDFs with embedded fonts) are test inputs and are never committed as evidence.
-- No package publish or version bump outside the release process.
+- Publishing npm packages is authorized by the owner (2026-09-29) whenever a release is required, but only through the release process in `README.md` (Release Lane): a release-prep PR, merge, then the tag-triggered `release.yml` with provenance. No ad hoc publish or version bump outside it.
 
 ## Fidelity and scope
 

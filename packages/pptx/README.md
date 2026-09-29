@@ -1,6 +1,8 @@
 # OPF PPTX
 
-Version 0.9.1 keeps core `^0.11.0` and raises the optional `@openpresentation/opf-render` peer to `^0.9.0` so it coexists with editor 0.8.0. ColorRef / `variables` on content colors still hex-resolve through core `resolveColorRef()` before PptxGenJS `srgbClr` export. Unrecognized run colors such as `color:'invalid'` still validate and fall back to the theme text color. Native DrawingML `schemeClr` and theme `clrScheme` writes, and native `p:hf` headers/footers, are not in this release. Import still flattens theme colors to hex. Metric, quote and timeline layout placeholders and the corrected text-bullet contract from 0.8.1 are retained.
+Version 0.10.0 requires core `^0.11.1` and the optional `@openpresentation/opf-render` peer `^0.10.0`. It adds native slide-number and date fields, socials, slide-image treatments, theme color schemes, script-slot fonts and RTL, re-import of design and metadata references, native underline and current-body formatting on import, and UTC-canonical `zipDate` (see the changelog for the intentional contract changes).
+
+Version 0.9.1 kept core `^0.11.0` and raised the optional `@openpresentation/opf-render` peer to `^0.9.0` so it coexists with editor 0.8.0. ColorRef / `variables` on content colors still hex-resolve through core `resolveColorRef()` before PptxGenJS `srgbClr` export. Unrecognized run colors such as `color:'invalid'` still validate and fall back to the theme text color. Native DrawingML `schemeClr` and theme `clrScheme` writes, and native `p:hf` headers/footers, are not in this release. Import still flattens theme colors to hex. Metric, quote and timeline layout placeholders and the corrected text-bullet contract from 0.8.1 are retained.
 
 Unfinished prepared shaping work is preserved in the [September 15 roadmap](docs/roadmap-shaping-20260915.md); it is not part of the published runtime.
 
@@ -66,9 +68,9 @@ await fs.promises.writeFile("round-trip.pptx", roundTripBytes);
 
 The importer reads core properties, slide order, text boxes, speaker notes, embedded images, tables, and basic cached chart data from the OOXML parts. Slides or objects that do not map cleanly fall back to editable `blocks[]` payloads; OOXML positions are used for deterministic ordering and title/subtitle detection while keeping the emitted OPF schema-valid.
 
-### Unreleased: native notes and property whitespace
+### New in 0.10.0: native notes and property whitespace
 
-Current source preserves spaces, tabs, NBSP and authored CR/LF/CRLF in speaker notes and scalar presentation `name`, `description` and `author`; published npm `0.9.1` does not contain this repair. Import reads current native notes body paragraphs in run/field/line-break order, retaining blank paragraphs. Explicit paragraph and line-break boundaries import as LF. XML character references decode once, so literal text such as `&#13;` remains literal. Export writes authored CR as character references in native text, without adding source-recovery tags; ordinary exports with no authored CR remain byte-identical.
+Current source preserves spaces, tabs, NBSP and authored CR/LF/CRLF in speaker notes and scalar presentation `name`, `description` and `author`; published npm `0.9.1` does not contain this repair (0.10.0 does). Import reads current native notes body paragraphs in run/field/line-break order, retaining blank paragraphs. Explicit paragraph and line-break boundaries import as LF. XML character references decode once, so literal text such as `&#13;` remains literal. Export writes authored CR as character references in native text, without adding source-recovery tags; ordinary exports with no authored CR remain byte-identical.
 
 Native edits, cleared/deleted note bodies or parts, core-property edits/deletions and slide relationship order remain authoritative in all provenance modes. Empty notes and absent notes still both import absent; an empty or absent title uses the existing fallback, and empty description/author import absent. Author arrays still export as a joined scalar. External literal XML line endings follow XML normalization; exact CR requires character references. These are portable XML conversion controls, not native Office or visual acceptance.
 
@@ -87,9 +89,9 @@ The first exporter keeps the public API stable while using `pptxgenjs` internall
 
 This pass did not require an OPF schema change. The deferred full OOXML placeholder mapping from `docs/plans/layout-placeholders.md` remains a later hand-written OOXML emitter concern.
 
-### Unreleased: explicit ZIP dates
+### New in 0.10.0: explicit ZIP dates
 
-The following behavior is in current source; the published npm `0.9.1` package does not yet contain this repair or tightened option contract.
+The following behavior is in current source; the published npm `0.9.1` package does not contain this repair or tightened option contract; `0.10.0` does.
 
 Omitting `zipDate` (or passing `undefined`) keeps the established fixed 1980 ZIP bytes. Explicit `zipDate` values now encode **UTC calendar fields** in both the PPTX and embedded workbook ZIPs, independently of the host timezone. This option changes ZIP metadata; the separate `timestamp` option controls core-property XML.
 
@@ -99,7 +101,7 @@ This intentionally tightens the previous host-dependent `Date` parsing contract.
 
 ## v1 Import Mapping
 
-### Unreleased: current native body formatting
+### New in 0.10.0: current native body formatting
 
 Current source imports supported formatting from ordinary untagged native body text and list items. A value that previously imported as a string can now be a rich-run array containing the same current characters with explicit native properties. Unstyled values remain strings; title/subtitle selection and tagged recovery stay separate. Run, field and break order, blank paragraphs, significant whitespace, explicit normal overrides, paragraph/list defaults, point sizes, Latin font families, supported colors/alpha, hyperlinks and script direction come from the current PPTX. Edits, clears and deletion remain authoritative in every provenance mode.
 
@@ -146,7 +148,7 @@ When the package carries an FF-32 stored `language` ([document round trip](docs/
 
 Exports report `language-unresolved` when the document's language cannot be resolved locally (a URL, `pkg:` reference or unknown id) and `en-US` is used.
 
-**Core without the resolver.** Published `@openpresentation/opf` 0.11.0 has no `resolveScriptFonts`. Export with it is byte-identical to the output before FF-07 (`lang="en-US"`, empty theme `ea`/`cs`, no `rtl`), and a document that names a language gets a `language-export-unavailable` diagnostic. A core with the resolver but without `paragraphDirection` marks no paragraph direction and reports `paragraph-direction-unavailable` for a right-to-left deck. Import then matches run tags against the installed catalog's `bcp47` and primary language. `npm run test:packed` exercises this path against the registry release. CI links core at a pinned commit that has the resolver.
+**Core without the resolver.** Core `@openpresentation/opf` 0.11.0 and earlier have no `resolveScriptFonts` (this release requires ^0.11.1, so this only applies to a forced older core). Export with it is byte-identical to the output before FF-07 (`lang="en-US"`, empty theme `ea`/`cs`, no `rtl`), and a document that names a language gets a `language-export-unavailable` diagnostic. A core with the resolver but without `paragraphDirection` marks no paragraph direction and reports `paragraph-direction-unavailable` for a right-to-left deck. Import then matches run tags against the installed catalog's `bcp47` and primary language. `npm run test:packed` exercises this path against the registry release. CI links core at a pinned commit that has the resolver.
 
 ## Runtime Policy
 
@@ -175,15 +177,11 @@ LibreOffice is not a runtime dependency. When it is installed in CI or a local v
 
 ## Release Lane
 
-Public npm package publication is handled by `.github/workflows/release.yml` with npm provenance.
+Public npm package publication is handled by `.github/workflows/release.yml` through npm Trusted Publishing (GitHub Actions OIDC) with npm provenance; no npm token is stored. The owner authorized agents to prepare and publish npm releases whenever a release is required (2026-09-29). This authorization does not waive any gate.
 
-Required first-publish setup:
-
-1. An npm owner for the `@openpresentation` scope must run the first publish or reserve/grant the `@openpresentation/opf-pptx` package.
-2. Configure npm Trusted Publishing for GitHub repository `OpenPresentation/opf-pptx` and workflow `.github/workflows/release.yml`.
-3. Publish by creating a GitHub Release or manually running the Release workflow after CI passes.
-
-This repo does not require an npm automation token when Trusted Publishing is configured.
+1. Open a release-prep PR containing only the version bump, `CHANGELOG.md`, dependency ranges, lockfile and current-instruction docs. Publish in dependency order (core, then renderer, then PPTX, then editor): refresh this repo's lockfile only after the required `@openpresentation/opf` and `@openpresentation/opf-render` versions are on the registry (`npm install --package-lock-only`), then run `npm run test:packed` against them.
+2. Merge after CI is green, then publish by pushing the git tag `opf-pptx-v<version>` (or `@openpresentation/opf-pptx@v<version>`) at the merge commit. The workflow verifies that the tag matches `package.json` and reruns audit, typecheck, validate, tests, packed and browser checks before `npm publish --access public --provenance`. A manual `workflow_dispatch` runs the same job without the tag check and is a fallback only.
+3. Verify with `npm view @openpresentation/opf-pptx@<version> version gitHead dist.attestations` and, from the core repo, `node scripts/test-pptx-publication.mjs <version> <release-commit> <this-checkout>`. Never republish an existing version.
 
 ## Shared dynamic composition
 
