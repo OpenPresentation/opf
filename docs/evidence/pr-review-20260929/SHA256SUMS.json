@@ -1,0 +1,38 @@
+{
+  "application-artifact-ci.json": {
+    "bytes": 923,
+    "sha256": "47dd41342626f57d974fd1aeedbe339db6e606979d103056ac7b3c871ca151f0"
+  },
+  "application-ci-classification.json": {
+    "bytes": 1589,
+    "sha256": "0b9196a93503fe2c1896c15e728ad3254b15b7e175f75ef8e51780c57d9cf766"
+  },
+  "application-ci.json": {
+    "bytes": 917,
+    "sha256": "09454f6bd646855f56af06d2c01d0da025173722cbea2fe4d6d49515f4042330"
+  },
+  "catalog-ci.json": {
+    "bytes": 8433,
+    "sha256": "169f56ac0e88e92d1f4aafb712304c3f45c843c44e73c03f17d6c82c20f035cf"
+  },
+  "catalog-local-comparison.json": {
+    "bytes": 1076,
+    "sha256": "715270ff21444993263ce8e79cf051eb016c5e5e850cd0678837eebde8321cc2"
+  },
+  "dependency-ci.json": {
+    "bytes": 19290,
+    "sha256": "86a2dec57de7c0bd5bc32c7baa3b0b092a8307b17285161946107c9f92354336"
+  },
+  "dependency-source-binding.json": {
+    "bytes": 1500,
+    "sha256": "9a2cdfc1eeb9cf02cb579b0d91f15f360738c56bff6d1e02ee37ba4f6f05fac8"
+  },
+  "program-reconciliation.json": {
+    "bytes": 2153,
+    "sha256": "05a330d87169dea4e7522bede7f17713bb82e679090c071c25b7c02127a12421"
+  },
+  "registry-metadata.json": {
+    "bytes": 10177,
+    "sha256": "b966c04cd85017803c0bf0f72f7a588b54c76192228bea637b457460641c2d11"
+  }
+}
