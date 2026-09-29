@@ -149,6 +149,15 @@ console.log('Installed font preparation passed layout, edit/undo, SVG/PNG, edita
       await readHarnessBytes('opf-pptx', `test/fixtures/images/${name}`));
     await writeFile(path.join(consumer, 'furniture-provenance.mjs'), furnitureHarness);
     run(process.execPath, ['furniture-provenance.mjs']);
+    // Formatted furniture fields are newer than the immutable registry train.
+    // Exercise the complete existing fixture only against candidate tarballs.
+    if (!registry) {
+      const fieldsHarness = (await readHarness('opf-pptx', 'test/furniture-fields.mjs'))
+        .replaceAll("'../dist/index.js'", "'@openpresentation/opf-pptx'")
+        .replaceAll("'../dist/furniture-fields.js'", "'./node_modules/@openpresentation/opf-pptx/dist/furniture-fields.js'");
+      await writeFile(path.join(consumer, 'furniture-fields.mjs'), fieldsHarness);
+      run(process.execPath, ['furniture-fields.mjs']);
+    }
   }
   for (const repo of ['opf-render','opf-pptx']) {
     const source=(await readHarness(repo,'test/font-variants.mjs'))
