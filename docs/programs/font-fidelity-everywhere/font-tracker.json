@@ -28,7 +28,7 @@
     "renderManifest": {
       "file": "docs/programs/font-fidelity-everywhere/font-tracker.render-manifest.json",
       "repository": "OpenPresentation/opf-render",
-      "commit": "c6038ed19f613306d12f5a4e468aec93487e6df0",
+      "commit": "0fdb36a824715705da782bd02901f564bbaec407",
       "path": "src/font-manifest.js",
       "capturedAt": "2026-09-29",
       "manifestVersion": 1,
@@ -515,8 +515,12 @@
           "url": "docs/evidence/font-replacements-20260923/bundled-replacements-ff43-20260929.json"
         },
         {
-          "label": "opf-render FF-43 (open replacement faces bundled; open-fonts and lazy-fonts-browser tests)",
-          "url": "https://github.com/OpenPresentation/opf-render/pulls?q=claude%2Fff-43-bundle-open-candidates"
+          "label": "opf-render#60 (FF-43: open replacement faces bundled; open-fonts and lazy-fonts-browser tests)",
+          "url": "https://github.com/OpenPresentation/opf-render/pull/60"
+        },
+        {
+          "label": "opf#178 (FF-43: measurements, tracker, burndown)",
+          "url": "https://github.com/OpenPresentation/opf/pull/178"
         }
       ],
       "priority": {
@@ -2313,8 +2317,12 @@
           "url": "docs/evidence/font-replacements-20260923/bundled-replacements-ff43-20260929.json"
         },
         {
-          "label": "opf-render FF-43 (open replacement faces bundled; open-fonts and lazy-fonts-browser tests)",
-          "url": "https://github.com/OpenPresentation/opf-render/pulls?q=claude%2Fff-43-bundle-open-candidates"
+          "label": "opf-render#60 (FF-43: open replacement faces bundled; open-fonts and lazy-fonts-browser tests)",
+          "url": "https://github.com/OpenPresentation/opf-render/pull/60"
+        },
+        {
+          "label": "opf#178 (FF-43: measurements, tracker, burndown)",
+          "url": "https://github.com/OpenPresentation/opf/pull/178"
         }
       ],
       "priority": {
@@ -3253,8 +3261,12 @@
           "url": "docs/evidence/font-replacements-20260923/bundled-replacements-ff43-20260929.json"
         },
         {
-          "label": "opf-render FF-43 (open replacement faces bundled; open-fonts and lazy-fonts-browser tests)",
-          "url": "https://github.com/OpenPresentation/opf-render/pulls?q=claude%2Fff-43-bundle-open-candidates"
+          "label": "opf-render#60 (FF-43: open replacement faces bundled; open-fonts and lazy-fonts-browser tests)",
+          "url": "https://github.com/OpenPresentation/opf-render/pull/60"
+        },
+        {
+          "label": "opf#178 (FF-43: measurements, tracker, burndown)",
+          "url": "https://github.com/OpenPresentation/opf/pull/178"
         }
       ],
       "priority": {
@@ -8035,8 +8047,12 @@
           "url": "docs/evidence/font-replacements-20260923/bundled-replacements-ff43-20260929.json"
         },
         {
-          "label": "opf-render FF-43 (open replacement faces bundled; open-fonts and lazy-fonts-browser tests)",
-          "url": "https://github.com/OpenPresentation/opf-render/pulls?q=claude%2Fff-43-bundle-open-candidates"
+          "label": "opf-render#60 (FF-43: open replacement faces bundled; open-fonts and lazy-fonts-browser tests)",
+          "url": "https://github.com/OpenPresentation/opf-render/pull/60"
+        },
+        {
+          "label": "opf#178 (FF-43: measurements, tracker, burndown)",
+          "url": "https://github.com/OpenPresentation/opf/pull/178"
         }
       ],
       "priority": {
@@ -8559,8 +8575,12 @@
           "url": "docs/evidence/font-replacements-20260923/bundled-replacements-ff43-20260929.json"
         },
         {
-          "label": "opf-render FF-43 (open replacement faces bundled; open-fonts and lazy-fonts-browser tests)",
-          "url": "https://github.com/OpenPresentation/opf-render/pulls?q=claude%2Fff-43-bundle-open-candidates"
+          "label": "opf-render#60 (FF-43: open replacement faces bundled; open-fonts and lazy-fonts-browser tests)",
+          "url": "https://github.com/OpenPresentation/opf-render/pull/60"
+        },
+        {
+          "label": "opf#178 (FF-43: measurements, tracker, burndown)",
+          "url": "https://github.com/OpenPresentation/opf/pull/178"
         }
       ],
       "priority": {
@@ -12680,8 +12700,12 @@
           "url": "docs/evidence/font-replacements-20260923/bundled-replacements-ff43-20260929.json"
         },
         {
-          "label": "opf-render FF-43 (open replacement faces bundled; open-fonts and lazy-fonts-browser tests)",
-          "url": "https://github.com/OpenPresentation/opf-render/pulls?q=claude%2Fff-43-bundle-open-candidates"
+          "label": "opf-render#60 (FF-43: open replacement faces bundled; open-fonts and lazy-fonts-browser tests)",
+          "url": "https://github.com/OpenPresentation/opf-render/pull/60"
+        },
+        {
+          "label": "opf#178 (FF-43: measurements, tracker, burndown)",
+          "url": "https://github.com/OpenPresentation/opf/pull/178"
         }
       ],
       "priority": {
@@ -21818,8 +21842,12 @@
           "url": "docs/evidence/font-replacements-20260923/bundled-replacements-ff43-20260929.json"
         },
         {
-          "label": "opf-render FF-43 (open replacement faces bundled; open-fonts and lazy-fonts-browser tests)",
-          "url": "https://github.com/OpenPresentation/opf-render/pulls?q=claude%2Fff-43-bundle-open-candidates"
+          "label": "opf-render#60 (FF-43: open replacement faces bundled; open-fonts and lazy-fonts-browser tests)",
+          "url": "https://github.com/OpenPresentation/opf-render/pull/60"
+        },
+        {
+          "label": "opf#178 (FF-43: measurements, tracker, burndown)",
+          "url": "https://github.com/OpenPresentation/opf/pull/178"
         }
       ],
       "priority": {
@@ -21974,8 +22002,12 @@
           "url": "docs/evidence/font-replacements-20260923/bundled-replacements-ff43-20260929.json"
         },
         {
-          "label": "opf-render FF-43 (open replacement faces bundled; open-fonts and lazy-fonts-browser tests)",
-          "url": "https://github.com/OpenPresentation/opf-render/pulls?q=claude%2Fff-43-bundle-open-candidates"
+          "label": "opf-render#60 (FF-43: open replacement faces bundled; open-fonts and lazy-fonts-browser tests)",
+          "url": "https://github.com/OpenPresentation/opf-render/pull/60"
+        },
+        {
+          "label": "opf#178 (FF-43: measurements, tracker, burndown)",
+          "url": "https://github.com/OpenPresentation/opf/pull/178"
         }
       ],
       "priority": {
@@ -27940,8 +27972,12 @@
           "url": "docs/evidence/font-replacements-20260923/bundled-replacements-ff43-20260929.json"
         },
         {
-          "label": "opf-render FF-43 (open replacement faces bundled; open-fonts and lazy-fonts-browser tests)",
-          "url": "https://github.com/OpenPresentation/opf-render/pulls?q=claude%2Fff-43-bundle-open-candidates"
+          "label": "opf-render#60 (FF-43: open replacement faces bundled; open-fonts and lazy-fonts-browser tests)",
+          "url": "https://github.com/OpenPresentation/opf-render/pull/60"
+        },
+        {
+          "label": "opf#178 (FF-43: measurements, tracker, burndown)",
+          "url": "https://github.com/OpenPresentation/opf/pull/178"
         }
       ],
       "priority": {

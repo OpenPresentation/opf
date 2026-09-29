@@ -2,7 +2,7 @@
   "description": "Pinned snapshot of the opf-render bundled font manifest (src/font-manifest.js, BUNDLED_FONT_MANIFEST), reduced to the fields the font tracker reads. Refresh with: node scripts/build-font-tracker.mjs --snapshot-manifest <opf-render>/src/font-manifest.js --commit <sha>. Core tests read this file so they never need the sibling repository.",
   "source": {
     "repository": "OpenPresentation/opf-render",
-    "commit": "c6038ed19f613306d12f5a4e468aec93487e6df0",
+    "commit": "0fdb36a824715705da782bd02901f564bbaec407",
     "path": "src/font-manifest.js",
     "capturedAt": "2026-09-29",
     "manifestVersion": 1

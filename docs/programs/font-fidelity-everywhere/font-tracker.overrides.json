@@ -2380,10 +2380,16 @@
       "label": "FF-43 bundled replacement measurements (widths, vertical metrics, outline identity, 2026-09-29)",
       "url": "docs/evidence/font-replacements-20260923/bundled-replacements-ff43-20260929.json"
     },
-    "ff43Render": {
-      "label": "opf-render FF-43 (open replacement faces bundled; open-fonts and lazy-fonts-browser tests)",
-      "url": "https://github.com/OpenPresentation/opf-render/pulls?q=claude%2Fff-43-bundle-open-candidates"
-    }
+    "ff43Render": [
+      {
+        "label": "opf-render#60 (FF-43: open replacement faces bundled; open-fonts and lazy-fonts-browser tests)",
+        "url": "https://github.com/OpenPresentation/opf-render/pull/60"
+      },
+      {
+        "label": "opf#178 (FF-43: measurements, tracker, burndown)",
+        "url": "https://github.com/OpenPresentation/opf/pull/178"
+      }
+    ]
   },
   "galleryFontsSnapshot": "docs/programs/font-fidelity-everywhere/font-tracker.gallery-preview-fonts.json",
   "measurementSources": {
