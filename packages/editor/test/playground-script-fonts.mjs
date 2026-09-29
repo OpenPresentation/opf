@@ -8,8 +8,12 @@ import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
 import * as renderFonts from '@openpresentation/opf-render/fonts-node';
 
-if (typeof renderFonts.scriptFontPackages !== 'function') {
-  console.log('Playground script fonts skipped: the installed renderer has no script font pack.');
+// The playground loads script faces through the browser registry's pendingScripts()/ensureScripts() (it keeps Latin fonts
+// without them). Renderer 0.10.0 ships scriptFontPackages but not that loader, so require both, as the playground does.
+// The registry needs the browser Font Loading API, so check the installed module that the playground bundle is built from.
+const browserFonts = await readFile(fileURLToPath(import.meta.resolve('@openpresentation/opf-render/fonts-browser')), 'utf8');
+if (typeof renderFonts.scriptFontPackages !== 'function' || !/\bpendingScripts\s*\(/.test(browserFonts) || !/\bensureScripts\s*\(/.test(browserFonts)) {
+  console.log('Playground script fonts skipped: the installed renderer has no lazy script font loader (pendingScripts/ensureScripts).');
   process.exit(0);
 }
 const root = fileURLToPath(new URL('../artifacts/playground/', import.meta.url));
