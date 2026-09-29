@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {describe, test} from 'node:test';
-import {DEFAULT_FONT_SCHEME, fontSchemes, languages, resolveScriptFonts, scriptFontRole, validatePresentation} from '../dist/index.js';
+import {DEFAULT_FONT_SCHEME, fontSchemes, languages, paragraphDirection, resolveScriptFonts, scriptFontRole, validatePresentation} from '../dist/index.js';
 
 // Fixtures choose openly licensed families (Carlito for the Calibri class,
 // Noto for CJK, Arabic, Hebrew, Devanagari and Thai). The resolver only
@@ -373,5 +373,48 @@ describe('schema', () => {
     assert.equal(validatePresentation(deck('japanese', 'meiryo')).valid, true);
     assert.equal(validatePresentation(deck({id: 'english', bcp47: 'en-US', fontScheme: 'aptos', googleFontScheme: 'roboto'})).valid, true);
     assert.equal(validatePresentation(deck({id: 'malay', ooxmlLang: 'ms-MY'})).valid, true);
+  });
+});
+
+describe('paragraphDirection (FF-07 RTL paragraph rule)', () => {
+  test('a left-to-right deck keeps every paragraph left-to-right', () => {
+    for (const text of ['English', 'العربية', 'עברית', '', '123']) assert.equal(paragraphDirection(text, 'ltr'), 'ltr');
+    assert.equal(paragraphDirection('العربية', undefined), 'ltr');
+  });
+  test('a right-to-left deck follows the first strong character', () => {
+    assert.equal(paragraphDirection('مرحبا بالعالم', 'rtl'), 'rtl');
+    assert.equal(paragraphDirection('שלום עולם', 'rtl'), 'rtl');
+    assert.equal(paragraphDirection('ދިވެހި', 'rtl'), 'rtl');
+    assert.equal(paragraphDirection('Hello مرحبا', 'rtl'), 'ltr');
+    assert.equal(paragraphDirection('const x = 1;', 'rtl'), 'ltr');
+    assert.equal(paragraphDirection('日本語', 'rtl'), 'ltr');
+    assert.equal(paragraphDirection('2026 — مرحبا', 'rtl'), 'rtl');
+    assert.equal(paragraphDirection('«Hello»', 'rtl'), 'ltr');
+  });
+  test('digits, punctuation, marks and empty text take the deck direction', () => {
+    for (const text of ['', '   ', '42%', '١٢٣', '٬ ،', 'ً']) assert.equal(paragraphDirection(text, 'rtl'), 'rtl');
+  });
+  const mark = (...codes) => String.fromCodePoint(...codes);
+  const [LRM, RLM, ALM, LRI, RLI, PDI] = [0x200e, 0x200f, 0x061c, 0x2066, 0x2067, 0x2069].map(code => mark(code));
+  test('directional marks are strong and isolates are skipped', () => {
+    assert.equal(paragraphDirection(`${LRM}١٢٣`, 'rtl'), 'ltr');
+    assert.equal(paragraphDirection(`${RLM}123 abc`, 'rtl'), 'rtl');
+    assert.equal(paragraphDirection(`${ALM}123 abc`, 'rtl'), 'rtl');
+    assert.equal(paragraphDirection(`${LRI}English${PDI} مرحبا`, 'rtl'), 'rtl');
+    assert.equal(paragraphDirection(`${RLI}مرحبا${PDI} Hello`, 'rtl'), 'ltr');
+  });
+  test('Old Uyghur and Garay letters are right-to-left; their digits are not strong', () => {
+    assert.equal(paragraphDirection(`${mark(0x10f70, 0x10f71)} abc`, 'rtl'), 'rtl');
+    assert.equal(paragraphDirection(`${mark(0x10d4a, 0x10d4b)} abc`, 'rtl'), 'rtl');
+    assert.equal(paragraphDirection(`${mark(0x10d40, 0x10d41)} abc`, 'rtl'), 'ltr');
+  });
+  test('letter numbers such as Roman numerals are left-to-right strong', () => {
+    assert.equal(paragraphDirection(`${mark(0x2162)} مرحبا`, 'rtl'), 'ltr');
+    assert.equal(paragraphDirection(`${mark(0x216b)}`, 'rtl'), 'ltr');
+  });
+  test('it pairs with the resolver direction', () => {
+    const {direction} = resolveScriptFonts(deck('arabic'));
+    assert.equal(paragraphDirection('مرحبا', direction), 'rtl');
+    assert.equal(paragraphDirection('مرحبا', resolveScriptFonts(deck('english')).direction), 'ltr');
   });
 });

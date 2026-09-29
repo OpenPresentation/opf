@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {test} from 'node:test';
-import {DEFAULT_FONT_SCHEME,fontSchemes,themes,validatePresentation} from '../dist/index.js';
+import {DEFAULT_FONT_SCHEME,fontSchemes,resolveFontSchemeReference,themes,validatePresentation} from '../dist/index.js';
 import {resolveFontFamilies} from '../dist/composition.js';
 import {paginatePresentation} from '../dist/pagination.js';
 
@@ -83,4 +83,43 @@ test('pagination measures a custom theme without a font scheme in the shared def
   assert.deepEqual([...measuredFamilies({name:'Explicit',design:{fontScheme:DEFAULT_FONT_SCHEME},slides})].sort(),aptos);
   // Deck and slide choices still win over the last resort.
   assert.deepEqual([...measuredFamilies({name:'Deck',design:{theme:'bare',fontScheme:'roboto'},catalogs:{themes:{records:[bare]}},slides})].sort(),['Roboto']);
+});
+
+// FF-35b: an unresolvable font scheme behaves the same in every engine. The
+// DEFAULT_FONT_SCHEME record is the base, sibling overrides still apply, and one
+// `unresolved-font-scheme` diagnostic names the reference. opf-render, opf-editor
+// and opf-pptx run the same cases in their own test/default-font-scheme.mjs.
+const unknownCases=[
+  ['string id',{design:{fontScheme:'no-such-scheme'}},['Aptos','Aptos Display'],'design.fontScheme'],
+  ['object id',{design:{fontScheme:{id:'no-such-scheme'}}},['Aptos','Aptos Display'],'design.fontScheme'],
+  ['object id with a family pair',{design:{fontScheme:{id:'no-such-scheme',major:'Inter',minor:'Inter'}}},['Inter'],'design.fontScheme'],
+  ['slide design',{slideDesign:{fontScheme:'no-such-scheme'}},['Aptos','Aptos Display'],'slides.0.design.fontScheme'],
+  ['theme record',{design:{theme:'bare-unknown'},catalogs:{themes:{records:[{$schema:'https://openpresentation.org/schema/opf-theme/v1',id:'bare-unknown',name:'Bare',fontScheme:'no-such-scheme'}]}}},['Aptos','Aptos Display'],'design.theme'],
+  ['inline scheme without id',{design:{fontScheme:{major:'Inter',minor:'Inter'}}},['Inter'],undefined],
+  ['inline code role without id',{design:{fontScheme:{code:{family:'JetBrains Mono'}}}},['Aptos','Aptos Display'],undefined],
+];
+const unknownDeck=({design,slideDesign,catalogs})=>({name:'Unknown font scheme',...(design?{design}:{}),...(catalogs?{catalogs}:{}),slides:[{id:'t',title:'Title',text:'Body',...(slideDesign?{design:slideDesign}:{})},{id:'u',title:'Second',text:'Body'}]});
+
+test('an unresolved font scheme falls back to the shared default with one diagnostic',()=>{
+  for(const [name,input,families,path] of unknownCases){
+    const deck=unknownDeck(input),diagnostics=[],measured=new Set();
+    assert.equal(validatePresentation(deck).valid,true,name);
+    paginatePresentation(structuredClone(deck),{onDiagnostic:diagnostic=>diagnostics.push(diagnostic),textMeasurement:{measure:(text,size,style)=>{measured.add(style.fontFamily);return text.length*size*.5;}}});
+    assert.deepEqual([...measured].sort(),families,name);
+    assert.deepEqual(diagnostics,path?[{code:'unresolved-font-scheme',path,id:'no-such-scheme',fallback:DEFAULT_FONT_SCHEME,message:`Font scheme 'no-such-scheme' is not in the inline or bundled catalogs; using the default font scheme '${DEFAULT_FONT_SCHEME}'.`}]:[],name);
+  }
+});
+
+test('resolveFontSchemeReference and resolveFontFamilies share the default base',()=>{
+  const lookup=id=>record(id);
+  assert.deepEqual(resolveFontFamilies(undefined),resolveFontFamilies(record(DEFAULT_FONT_SCHEME)),'inlined default families match the aptos record');
+  assert.deepEqual(resolveFontFamilies({}),{heading:'Aptos Display',body:'Aptos',code:'Roboto Mono'});
+  assert.deepEqual(resolveFontSchemeReference('roboto',lookup),{scheme:record('roboto')});
+  assert.deepEqual(resolveFontSchemeReference({id:'consolas',minor:'Consolas'},lookup).scheme,{...record('consolas'),id:'consolas',minor:'Consolas'});
+  const unresolved=resolveFontSchemeReference({id:'nope',code:{family:'JetBrains Mono'}},lookup,'slides.2.design.fontScheme');
+  assert.deepEqual(unresolved.scheme,{...record(DEFAULT_FONT_SCHEME),id:'nope',code:{family:'JetBrains Mono'}});
+  assert.equal(unresolved.diagnostic.path,'slides.2.design.fontScheme');
+  assert.deepEqual(resolveFontFamilies(unresolved.scheme),{heading:'Aptos Display',body:'Aptos',code:'JetBrains Mono'});
+  // A host that cannot supply even the default record still gets the default families.
+  assert.deepEqual(resolveFontFamilies(resolveFontSchemeReference('nope',()=>undefined).scheme),{heading:'Aptos Display',body:'Aptos',code:'Roboto Mono'});
 });

@@ -84,6 +84,10 @@
       "types": "./dist/data.d.ts",
       "import": "./dist/data.js"
     },
+    "./font-policy": {
+      "types": "./dist/font-policy.d.ts",
+      "import": "./dist/font-policy.js"
+    },
     "./lint": {
       "types": "./dist/lint.d.ts",
       "import": "./dist/lint.js"

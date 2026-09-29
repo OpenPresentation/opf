@@ -1,4 +1,4 @@
-import { DEFAULT_FONT_SCHEME, resolveFontFamilies } from "./composition.js";
+import { DEFAULT_FONT_SCHEME, resolveFontFamilies, resolveFontSchemeReference } from "./composition.js";
 import { isRecord } from "./content-walk.js";
 import { catalogs } from "./generated/catalogs.js";
 
@@ -127,6 +127,50 @@ const likelyScripts: Record<string, { script: string; regions?: Record<string, s
 };
 
 const bareLanguageId = /^[a-z][a-z0-9-]*$/;
+
+/** Paragraph base direction. */
+export type TextDirection = "ltr" | "rtl";
+
+/**
+ * Letters of right-to-left scripts (Unicode Bidi_Class R or AL), plus RLM
+ * (U+200F) and ALM (U+061C). Digits, marks and punctuation of those scripts
+ * are weak or neutral, so only letters count. Old Uyghur (U+10F70-10FAF) and
+ * Garay (U+10D40-10D8F) are matched by code-point block, because JavaScript
+ * engines do not all know those Script values yet; an engine without their
+ * letters treats them as non-letters.
+ */
+const strongRtl =
+  /[\u200F\u061C]|(?=\p{L})[\p{Script=Arabic}\p{Script=Hebrew}\p{Script=Syriac}\p{Script=Thaana}\p{Script=Nko}\p{Script=Adlam}\p{Script=Hanifi_Rohingya}\p{Script=Mandaic}\p{Script=Samaritan}\p{Script=Mende_Kikakui}\p{Script=Imperial_Aramaic}\p{Script=Phoenician}\p{Script=Kharoshthi}\p{Script=Old_South_Arabian}\p{Script=Old_North_Arabian}\p{Script=Avestan}\p{Script=Inscriptional_Parthian}\p{Script=Inscriptional_Pahlavi}\p{Script=Psalter_Pahlavi}\p{Script=Old_Turkic}\p{Script=Old_Hungarian}\p{Script=Nabataean}\p{Script=Palmyrene}\p{Script=Hatran}\p{Script=Manichaean}\p{Script=Sogdian}\p{Script=Old_Sogdian}\p{Script=Elymaic}\p{Script=Chorasmian}\p{Script=Yezidi}\p{Script=Cypriot}\p{Script=Lydian}\p{Script=Meroitic_Cursive}\p{Script=Meroitic_Hieroglyphs}\u{10F70}-\u{10FAF}\u{10D40}-\u{10D8F}]/u;
+/** Letters (and letter numbers such as Roman numerals) of every other script (Bidi_Class L), plus LRM (U+200E). */
+const strongLtr = /[\u200E\p{L}\p{Nl}]/u;
+
+/**
+ * The base direction of one paragraph in a deck, shared by the renderer and
+ * the PPTX exporter so preview and export agree. In a right-to-left deck a
+ * paragraph is right-to-left when its first strong character is
+ * right-to-left, or when it has no strong character (digits, punctuation or
+ * empty text); a paragraph whose first strong character is left-to-right
+ * (for example an English quote or code) stays left-to-right. In a
+ * left-to-right deck every paragraph is left-to-right.
+ *
+ * Strong characters follow UAX #9 rule P2: text inside directional isolates
+ * (LRI, RLI or FSI up to the matching PDI) is skipped. Letters count as
+ * strong; RTL letters are those of right-to-left scripts. The result does not
+ * depend on locale data, only on the JavaScript engine's Unicode tables.
+ */
+export function paragraphDirection(text: string, deckDirection: TextDirection | string | undefined): TextDirection {
+  if (deckDirection !== "rtl") return "ltr";
+  let isolates = 0;
+  for (const char of String(text ?? "")) {
+    if (char === "\u2066" || char === "\u2067" || char === "\u2068") isolates += 1;
+    else if (char === "\u2069") isolates = Math.max(0, isolates - 1);
+    else if (isolates === 0) {
+      if (strongRtl.test(char)) return "rtl";
+      if (strongLtr.test(char)) return "ltr";
+    }
+  }
+  return "rtl";
+}
 
 /** The OOXML script slot for an ISO 15924 script code. Unknown scripts use the latin slot. */
 export function scriptFontRole(script: string): ScriptRole {
@@ -351,7 +395,7 @@ export function resolveScriptFonts(input: unknown, options: ResolveScriptFontsOp
   }
 
   const theme = resolveReference(lookup, "themes", design.theme ?? "minimal") ?? {};
-  const scheme = resolveReference(lookup, "fontSchemes", design.fontScheme ?? theme.fontScheme ?? DEFAULT_FONT_SCHEME) ?? {};
+  const scheme = resolveFontSchemeReference(design.fontScheme ?? theme.fontScheme ?? DEFAULT_FONT_SCHEME, (id) => lookup("fontSchemes", id)).scheme;
   const latin = resolveFontFamilies(scheme);
 
   const fromOption = options.language !== undefined ? resolveLanguage(document, lookup, options.language) : undefined;

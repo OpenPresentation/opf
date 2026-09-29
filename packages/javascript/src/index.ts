@@ -79,8 +79,8 @@ export type {
   SpecFileKind,
 } from "./spec-files.js";
 
-export { composeSlide, resolveCanvasDimensions, fitText, wrapText, measureText, resolveFontFamilies, DEFAULT_FONT_SCHEME, resolveTextStyle, textWidthMeasurer, layoutQuote, OPFCompositionError, MAX_COMPOSITION_DEPTH } from "./composition.js";
-export {layoutFurniture,type FurnitureLayout,type FurniturePart,type FurnitureTextPart,type FurnitureImagePart,type FurniturePartBase} from './composition.js';
+export { composeSlide, resolveCanvasDimensions, fitText, wrapText, measureText, resolveFontFamilies, resolveFontSchemeReference, DEFAULT_FONT_SCHEME, resolveTextStyle, textWidthMeasurer, layoutQuote, OPFCompositionError, MAX_COMPOSITION_DEPTH } from "./composition.js";
+export {layoutFurniture,resolveSocialProfile,type FurnitureSocialLink,type FurnitureTextExtras,type SocialPlatformRecord,type SocialProfile,formatFurnitureDate,formatSlideNumber,DEFAULT_FURNITURE_DATE_FORMAT,DEFAULT_SLIDE_NUMBER_FORMAT,type FurnitureLayout,type FurniturePart,type FurnitureTextPart,type FurnitureImagePart,type FurniturePartBase,type FurnitureField} from './composition.js';
 export type { QuoteContent, QuoteTextSource, QuoteTextPart, QuoteLayoutDiagnostic, QuoteLayout, QuoteLayoutOptions } from './composition.js';
 export {layoutCode} from './composition.js';
 export type {CodeContent,CodeLineSegment,CodeLineSource,CodeTextFit,CodeTextPart,CodeLayoutDiagnostic,CodeLayout,CodeLayoutOptions} from './composition.js';
@@ -88,7 +88,8 @@ export {layoutMetric} from './composition.js';
 export type {MetricContent,MetricTextSource,MetricTextPart,MetricLayoutDiagnostic,MetricLayout,MetricLayoutOptions} from './composition.js';
 export {layoutTimeline} from './composition.js';
 export type {TimelineEvent,TimelineContent,TimelineTextPart,TimelineLayoutDiagnostic,TimelineLayout,TimelineLayoutOptions} from './composition.js';
-export type { TextStyle, FontFamilies, TextMeasurement, MeasureTextWidth, Composition, LayoutBox, LayoutDiagnostic, TextFit, ComposedItem, ComposedGroup, ComposedFlow, CompositionTrack, CompositionPenalties, CompositionCandidate, CompositionDecision, CompositionExplanation, SlideComposition, ComposeSlideOptions } from "./composition.js";
+export type { FontSchemeDiagnostic, ResolvedFontScheme } from "./composition.js";
+export type { TextStyle, FontFamilies, TextMeasurement, MeasureTextWidth, Composition, LayoutBox, LayoutDiagnostic, TextFit, ComposedItem, ComposedSlideImage, SlideImageShape, ComposedGroup, ComposedFlow, CompositionTrack, CompositionPenalties, CompositionCandidate, CompositionDecision, CompositionExplanation, SlideComposition, ComposeSlideOptions } from "./composition.js";
 
 export { paginatePresentation, paginateSlide, OPFPaginationError } from './pagination.js';
 export type { PresentationPaginationOptions, PresentationPaginationResult, PaginationOptions, PaginationResult, PaginatedPage, PaginationMapping } from './pagination.js';
@@ -112,7 +113,7 @@ export {
   textColorForFill,
 } from './color.js';
 export type { ResolveColorRefOptions, ResolveColorRefRoles } from './color.js';
-export { resolveScriptFonts, scriptFontRole } from './script-fonts.js';
+export { paragraphDirection, resolveScriptFonts, scriptFontRole } from './script-fonts.js';
 export type {
   ResolveScriptFontsOptions,
   ResolvedScriptFonts,
@@ -121,6 +122,20 @@ export type {
   ScriptFontSource,
   ScriptFontSupplement,
   ScriptRole,
+  TextDirection,
 } from './script-fonts.js';
 export {measureTextOutline,placeTextLines} from './composition.js';
+export { FONT_POLICY, applyFontPolicyDecisions, fontPolicyFor, fontAvailabilityDiagnostics } from './font-policy.js';
+export type {
+  FontAvailability,
+  FontAvailabilityCode,
+  FontAvailabilityDiagnostic,
+  FontLicenseClass,
+  FontPolicyDecision,
+  FontPolicyEntry,
+  FontPolicyTable,
+  FontReplacement,
+  FontReplacementCompatibility,
+  FontReplacementMeasurement,
+} from './font-policy.js';
 export type {TextLineInk,TextPlacementLine,TextPlacement} from './composition.js';

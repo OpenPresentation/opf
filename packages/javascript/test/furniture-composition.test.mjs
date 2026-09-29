@@ -108,3 +108,133 @@ test('a continuation whose wider number cannot fit fails atomically',()=>{
   assert.throws(()=>paginateSlide(slide,{slideNumber:9,textMeasurement}),error=>error instanceof OPFPaginationError&&error.diagnostics.some(d=>d.path==='slides.0.design.footer.right.slideNumber'));
   assert.ok(seen.has('9')&&seen.has('10'));assert.deepEqual(slide,before);
 });
+test('slide-number formats keep {current} live and resolve {total} from the displayed deck',()=>{
+  const part=(content,options={})=>layoutFurniture({design:{footer:{right:{slideNumber:true,...content}}}},options);
+  const plain=part({},{slideNumber:7}).parts[0];
+  assert.equal(plain.text,'7');assert.deepEqual(plain.fields,[{type:'slideNumber',start:0,end:1}]);
+  const appendix=part({slideNumberFormat:'A-{current}'},{slideNumber:12}).parts[0];
+  assert.equal(appendix.text,'A-12');assert.deepEqual(appendix.fields,[{type:'slideNumber',start:2,end:4}]);assert.equal(appendix.generated,true);
+  const presentation={slides:[{},{},{},{},{}]};
+  const progress=part({slideNumberFormat:'{current} / {total}'},{presentation,slideNumber:2}).parts[0];
+  assert.equal(progress.text,'2 / 5');assert.deepEqual(progress.fields,[{type:'slideNumber',start:0,end:1}]);
+  assert.equal(part({slideNumberFormat:'Page {current} of {total}'},{presentation,slideNumber:3,slideCount:40}).parts[0].text,'Page 3 of 40');
+  const unknownTotal=part({slideNumberFormat:'{current}/{total}'});
+  assert.deepEqual(unknownTotal.parts,[]);assert.deepEqual(unknownTotal.diagnostics.map(d=>[d.code,d.path]),[['unresolved-content','slides.0.design.footer.right.slideNumberFormat']]);
+  assert.deepEqual(part({slideNumberFormat:'No number'}).diagnostics.map(d=>d.path),['slides.0.design.footer.right.slideNumberFormat']);
+  assert.deepEqual(part({slideNumber:false,slideNumberFormat:'{current}/{total}'}).diagnostics,[]);
+  assert.throws(()=>part({slideNumberFormat:4}),TypeError);
+  assert.throws(()=>part({},{slideCount:0}),RangeError);
+});
+test('dates are fixed ISO values formatted without a clock, or host-supplied current dates',()=>{
+  const part=(content,options={})=>layoutFurniture({design:{footer:{left:content}}},options);
+  const text=(content,options)=>part(content,options).parts[0]?.text;
+  assert.equal(text({date:'2026-04-23',dateFormat:'MMM d, yyyy'}),'Apr 23, 2026');
+  assert.equal(text({date:'2026-04-23',dateFormat:'yyyy-MM-dd'}),'2026-04-23');
+  assert.equal(text({date:'2026-04-23',dateFormat:'MMM yyyy'}),'Apr 2026');
+  assert.equal(text({date:'2026-04-03',dateFormat:'EEEE, MMMM d, yyyy'}),'Friday, April 3, 2026');
+  assert.equal(text({date:'2026-04-23',dateFormat:"EEE dd/MM/yy 'at ''Q'''"}),"Thu 23/04/26 at 'Q'");
+  assert.equal(text({date:'2024-02-29',dateFormat:'d MMMM yyyy'}),'29 February 2024');
+  const fixed=part({date:'2026-04-23',dateFormat:'MMM d, yyyy'}).parts[0];
+  assert.equal(fixed.generated,true);assert.equal(fixed.sourcePath,'slides.0.design.footer.left.date');assert.equal(fixed.fields,undefined);
+  const literal=part({date:' 2026-04-23 '}).parts[0];
+  assert.equal(literal.text,' 2026-04-23 ');assert.equal(literal.generated,false);assert.equal(literal.sourcePath,'slides.0.design.footer.left.date');
+  for(const [content,path] of [[{date:'April 2026',dateFormat:'MMM yyyy'},'date'],[{date:'2026-02-29',dateFormat:'yyyy'},'date'],[{date:'2026-04-23',dateFormat:'hh:mm'},'dateFormat'],[{date:'2026-04-23',dateFormat:"'open"},'dateFormat'],[{date:'2026-04-23',dateFormat:''},'dateFormat']]){
+    const result=part(content);assert.deepEqual(result.parts,[]);assert.deepEqual(result.diagnostics.map(d=>[d.code,d.path]),[['unresolved-content',`slides.0.design.footer.left.${path}`]]);
+  }
+  const current=part({date:true},{date:'2026-04-23'}).parts[0];
+  assert.equal(current.text,'4/23/2026');assert.equal(current.generated,true);assert.equal(current.sourcePath,undefined);
+  assert.deepEqual(current.fields,[{type:'date',start:0,end:9,format:'M/d/yyyy'}]);
+  const formatted=part({date:true,dateFormat:'MMMM d, yyyy'},{date:'2026-04-23'}).parts[0];
+  assert.equal(formatted.text,'April 23, 2026');assert.deepEqual(formatted.fields,[{type:'date',start:0,end:14,format:'MMMM d, yyyy'}]);
+  assert.deepEqual(part({date:true}).diagnostics.map(d=>d.path),['slides.0.design.footer.left.date']);
+  assert.deepEqual(part({date:true,dateFormat:'q'},{date:'2026-04-23'}).diagnostics.map(d=>d.path),['slides.0.design.footer.left.dateFormat']);
+  assert.throws(()=>part({date:true},{date:'2026-04-23T00:00:00Z'}),RangeError);
+  assert.throws(()=>part({date:'2026-04-23',dateFormat:7}),TypeError);
+});
+test('date and slide number in one zone stack; in separate zones each keeps one line',()=>{
+  const shared=layoutFurniture({design:{footer:{right:{slideNumber:true,date:'2026-04-23',dateFormat:'yyyy-MM-dd'}}}},{slideNumber:3});
+  assert.deepEqual(shared.diagnostics,[]);assert.deepEqual(shared.parts.map(p=>[p.field,p.text]),[['slideNumber','3'],['date','2026-04-23']]);
+  assert.ok(shared.parts[1].box.y>=shared.parts[0].box.y+shared.parts[0].box.height);
+  const split=layoutFurniture({design:{footer:{left:{date:'2026-04-23',dateFormat:'MMM d, yyyy'},right:{slideNumber:true}}}},{slideNumber:3});
+  assert.deepEqual(split.diagnostics,[]);assert.equal(split.parts[0].box.y,split.parts[1].box.y);assert.ok(split.footerTop>shared.footerTop);
+});
+test('whole-deck pagination resolves {total} to the final page count',()=>{
+  const source='First sentence with enough detail. '.repeat(160);
+  const input={design:{footer:{right:{slideNumber:true,slideNumberFormat:'{current} / {total}'},left:{date:true,dateFormat:'MMM d, yyyy'}}},slides:[{title:'Title',text:source},{text:'Last slide'}]};
+  const before=structuredClone(input),result=paginatePresentation(input,{minFontSize:24,date:'2026-04-23'});
+  assert.deepEqual(input,before);const total=result.presentation.slides.length;assert.ok(total>2);
+  for(const [index,slide]of result.presentation.slides.entries()){
+    const geometry=composeSlide(slide,{presentation:result.presentation,slideIndex:index,date:'2026-04-23'});assert.deepEqual(geometry.diagnostics,[]);
+    assert.equal(geometry.furniture.parts.find(p=>p.field==='slideNumber').text,`${index+1} / ${total}`);
+    assert.equal(geometry.furniture.parts.find(p=>p.field==='date').text,'Apr 23, 2026');
+  }
+  assert.throws(()=>paginatePresentation(input,{minFontSize:24}),OPFPaginationError);
+});
+test('a {total} retry reports each unknown font scheme once',()=>{
+  const source='First sentence with enough detail. '.repeat(160),issues=[];
+  const input={design:{fontScheme:'no-such-scheme',footer:{right:{slideNumber:true,slideNumberFormat:'{current} / {total}'}}},slides:[{title:'Title',text:source},{text:'Last slide'}]};
+  const result=paginatePresentation(input,{minFontSize:24,onDiagnostic:issue=>issues.push(issue)});
+  assert.ok(result.presentation.slides.length>2,'The retry path runs: the page count differs from the source count.');
+  assert.deepEqual(issues.map(issue=>[issue.code,issue.path]),[['unresolved-font-scheme','design.fontScheme']]);
+});
+test('generated socials format the primary organization profiles through platform records',async()=>{
+  const {socialPlatforms}=await import('../dist/catalogs.js');
+  const {resolveSocialProfile}=await import('../dist/index.js');
+  const organization={id:'acme',name:'Acme',socials:{linkedin:'acme',x:'@acme',github:'acme',mastodon:'@acme@hachyderm.io',bluesky:'https://bsky.app/profile/acme.bsky.social',custom:' Visit  us ',blank:'  '}};
+  const presentation={organization:[{id:'other',name:'Other',socials:{x:'other'}},{...organization,role:'primary'}],design:{footer:{right:{organization:true,socials:true}}}};
+  const before=structuredClone(presentation);
+  const layout=layoutFurniture({text:'Body'},{presentation,socialPlatforms});
+  assert.deepEqual(presentation,before);assert.deepEqual(layout.diagnostics,[]);
+  const part=layout.parts.find(item=>item.field==='socials');
+  assert.equal(part.generated,true);assert.equal(part.path,'design.footer.right.socials');assert.equal(part.sourcePath,'organization.1.socials');
+  assert.deepEqual(layout.parts.map(item=>item.field),['organization','socials']);
+  assert.equal(part.text,['linkedin.com/company/acme','x.com/acme','github.com/acme','mastodon.social/@acme@hachyderm.io','bsky.app/profile/acme.bsky.social','Visit us'].join('\n'));
+  assert.deepEqual(part.links.map(link=>[link.platform,link.href,link.resolved,link.sourcePath]),[
+    ['linkedin','https://linkedin.com/company/acme',true,'organization.1.socials.linkedin'],
+    ['x','https://x.com/acme',true,'organization.1.socials.x'],
+    ['github','https://github.com/acme',true,'organization.1.socials.github'],
+    ['mastodon','https://mastodon.social/@acme@hachyderm.io',true,'organization.1.socials.mastodon'],
+    ['bluesky','https://bsky.app/profile/acme.bsky.social',false,'organization.1.socials.bluesky'],
+    ['custom',undefined,false,'organization.1.socials.custom'],
+  ]);
+  assert.equal(part.fit.sourceLines.filter(line=>line.boundary!=='soft').length,part.links.length);
+  // Speakers use member profile patterns; inline records win over host records.
+  assert.equal(resolveSocialProfile('linkedin','alice-chen',socialPlatforms,'speaker').text,'linkedin.com/in/alice-chen');
+  const inline=layoutFurniture({},{presentation:{...presentation,catalogs:{socialPlatforms:{records:[{id:'x',profileUrlPattern:'https://example.test/u/{handle}',handlePrefix:'@'}]}}},socialPlatforms});
+  assert.equal(inline.parts[1].links[1].text,'example.test/u/acme');
+  // Without any record a handle stays the raw authored value (Socials engine fallback).
+  const bare=layoutFurniture({},{presentation});
+  assert.deepEqual(bare.parts[1].links.slice(0,2).map(link=>[link.text,link.href]),[['acme',undefined],['@acme',undefined]]);
+  // Every catalog platform formats its own example handle.
+  for(const platformRecord of socialPlatforms){
+    const profile=resolveSocialProfile(platformRecord.id,platformRecord.handleExample,socialPlatforms);
+    assert.equal(profile.resolved,true,platformRecord.id);assert.match(profile.href,/^https:\/\//);assert.equal(`https://${profile.text}`,decodeURI(profile.href));
+  }
+});
+test('generated socials without organization socials diagnose their controlling path',()=>{
+  for(const organization of [undefined,{id:'acme',name:'Acme'},{id:'acme',name:'Acme',socials:{x:' '}}]){
+    const layout=layoutFurniture({},{presentation:{organization,design:{header:{left:{socials:true}}}}});
+    assert.deepEqual(layout.parts,[]);assert.deepEqual(layout.diagnostics.map(d=>[d.code,d.path]),[['unresolved-content','design.header.left.socials']]);
+  }
+  assert.deepEqual(layoutFurniture({},{presentation:{organization:{id:'a',name:'A',socials:{x:'a'}},design:{header:{left:{socials:false}}}}}).parts,[]);
+});
+test('whole-deck pagination accepts generated socials and rejects missing ones atomically',()=>{
+  const input={$schema:'https://openpresentation.org/schema/opf/v1',organization:{id:'acme',name:'Acme',socials:{x:'@acme'}},design:{footer:{right:{socials:true}}},slides:[{text:'Body'}]};
+  const {pages}=paginatePresentation(input);
+  assert.equal(pages.length,1);
+  assert.throws(()=>paginatePresentation({...input,organization:{id:'acme',name:'Acme'}}),OPFPaginationError);
+});
+test('one footer carries FF-27 live slide-number fields and FF-34 social links without mixing them',async()=>{
+  const {socialPlatforms}=await import('../dist/catalogs.js');
+  const presentation={organization:{id:'acme',name:'Acme',socials:{x:'@acme',custom:'Visit us'}},slides:[{},{},{}],
+    design:{footer:{left:{slideNumber:true,slideNumberFormat:'Slide {current} of {total}'},right:{slideNumber:true,socials:true}}}};
+  const layout=layoutFurniture({},{presentation,socialPlatforms,slideIndex:1});
+  assert.deepEqual(layout.diagnostics,[]);
+  assert.deepEqual(layout.parts.map(part=>[part.zone,part.field]),[['left','slideNumber'],['right','socials'],['right','slideNumber']]);
+  const [numbered,socials,bare]=layout.parts;
+  assert.equal(numbered.text,'Slide 2 of 3');assert.deepEqual(numbered.fields,[{type:'slideNumber',start:6,end:7}]);assert.equal(numbered.links,undefined);
+  assert.equal(socials.text,'x.com/acme\nVisit us');assert.equal(socials.fields,undefined);
+  assert.deepEqual(socials.links.map(link=>[link.platform,link.href]),[['x','https://x.com/acme'],['custom',undefined]]);
+  assert.equal(bare.text,'2');assert.deepEqual(bare.fields,[{type:'slideNumber',start:0,end:1}]);assert.equal(bare.links,undefined);
+  assert.ok(bare.box.y>=socials.box.y+socials.box.height);
+});

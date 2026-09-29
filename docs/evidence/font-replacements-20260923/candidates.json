@@ -1,0 +1,4654 @@
+{
+  "tool": "fontkit 2.0.4",
+  "corpus": {
+    "strings": 300,
+    "sha256": "611eec19400a21c0985813606e1c97dc3e2ccfc183f463e2626bae066b0972ca"
+  },
+  "packages": 111,
+  "ranking": [
+    {
+      "family": "Angsana New",
+      "chosen": "Noto Sans Thai",
+      "top": [
+        {
+          "package": "league-gothic",
+          "meanAbsWidthDelta": 0.0588,
+          "meanWidthDelta": -0.0587,
+          "maxAbsWidthDelta": 0.1527,
+          "styles": 2,
+          "reference": "Angsana New 5.06"
+        },
+        {
+          "package": "bebas-neue",
+          "meanAbsWidthDelta": 0.2236,
+          "meanWidthDelta": 0.2236,
+          "maxAbsWidthDelta": 0.3511,
+          "styles": 2,
+          "reference": "Angsana New 5.06"
+        },
+        {
+          "package": "pt-sans-narrow",
+          "meanAbsWidthDelta": 0.2545,
+          "meanWidthDelta": 0.2545,
+          "maxAbsWidthDelta": 0.3209,
+          "styles": 2,
+          "reference": "Angsana New 5.06"
+        },
+        {
+          "package": "cormorant-garamond",
+          "meanAbsWidthDelta": 0.3747,
+          "meanWidthDelta": 0.3747,
+          "maxAbsWidthDelta": 0.5603,
+          "styles": 4,
+          "reference": "Angsana New 5.06"
+        },
+        {
+          "package": "archivo-narrow",
+          "meanAbsWidthDelta": 0.3794,
+          "meanWidthDelta": 0.3794,
+          "maxAbsWidthDelta": 0.4842,
+          "styles": 4,
+          "reference": "Angsana New 5.06"
+        },
+        {
+          "package": "oswald",
+          "meanAbsWidthDelta": 0.3816,
+          "meanWidthDelta": 0.3816,
+          "maxAbsWidthDelta": 0.493,
+          "styles": 2,
+          "reference": "Angsana New 5.06"
+        },
+        {
+          "package": "fjalla-one",
+          "meanAbsWidthDelta": 0.3835,
+          "meanWidthDelta": 0.3835,
+          "maxAbsWidthDelta": 0.5072,
+          "styles": 2,
+          "reference": "Angsana New 5.06"
+        },
+        {
+          "package": "roboto-condensed",
+          "meanAbsWidthDelta": 0.4226,
+          "meanWidthDelta": 0.4226,
+          "maxAbsWidthDelta": 0.5157,
+          "styles": 4,
+          "reference": "Angsana New 5.06"
+        },
+        {
+          "package": "anton",
+          "meanAbsWidthDelta": 0.4454,
+          "meanWidthDelta": 0.4454,
+          "maxAbsWidthDelta": 0.5658,
+          "styles": 2,
+          "reference": "Angsana New 5.06"
+        },
+        {
+          "package": "crimson-pro",
+          "meanAbsWidthDelta": 0.4575,
+          "meanWidthDelta": 0.4575,
+          "maxAbsWidthDelta": 0.5905,
+          "styles": 4,
+          "reference": "Angsana New 5.06"
+        }
+      ]
+    },
+    {
+      "family": "Aptos",
+      "chosen": "Roboto",
+      "top": [
+        {
+          "package": "hind",
+          "meanAbsWidthDelta": 0.0097,
+          "meanWidthDelta": 0.0003,
+          "maxAbsWidthDelta": 0.0483,
+          "styles": 2,
+          "reference": "Aptos 2.01;O365"
+        },
+        {
+          "package": "sarabun",
+          "meanAbsWidthDelta": 0.0113,
+          "meanWidthDelta": 0.0055,
+          "maxAbsWidthDelta": 0.0578,
+          "styles": 4,
+          "reference": "Aptos 2.01;O365"
+        },
+        {
+          "package": "red-hat-display",
+          "meanAbsWidthDelta": 0.0184,
+          "meanWidthDelta": 0.0173,
+          "maxAbsWidthDelta": 0.0598,
+          "styles": 4,
+          "reference": "Aptos 2.01;O365"
+        },
+        {
+          "package": "roboto",
+          "meanAbsWidthDelta": 0.0215,
+          "meanWidthDelta": 0.0008,
+          "maxAbsWidthDelta": 0.0739,
+          "styles": 4,
+          "reference": "Aptos 2.01;O365"
+        },
+        {
+          "package": "outfit",
+          "meanAbsWidthDelta": 0.0239,
+          "meanWidthDelta": 0.0225,
+          "maxAbsWidthDelta": 0.0821,
+          "styles": 2,
+          "reference": "Aptos 2.01;O365"
+        },
+        {
+          "package": "barlow",
+          "meanAbsWidthDelta": 0.0252,
+          "meanWidthDelta": -0.0218,
+          "maxAbsWidthDelta": 0.0818,
+          "styles": 4,
+          "reference": "Aptos 2.01;O365"
+        },
+        {
+          "package": "playfair-display",
+          "meanAbsWidthDelta": 0.0257,
+          "meanWidthDelta": 0.0192,
+          "maxAbsWidthDelta": 0.1032,
+          "styles": 4,
+          "reference": "Aptos 2.01;O365"
+        },
+        {
+          "package": "old-standard-tt",
+          "meanAbsWidthDelta": 0.0259,
+          "meanWidthDelta": -0.0045,
+          "maxAbsWidthDelta": 0.1213,
+          "styles": 4,
+          "reference": "Aptos 2.01;O365"
+        },
+        {
+          "package": "quattrocento-sans",
+          "meanAbsWidthDelta": 0.0265,
+          "meanWidthDelta": -0.0152,
+          "maxAbsWidthDelta": 0.0725,
+          "styles": 4,
+          "reference": "Aptos 2.01;O365"
+        },
+        {
+          "package": "overpass",
+          "meanAbsWidthDelta": 0.0275,
+          "meanWidthDelta": 0.0119,
+          "maxAbsWidthDelta": 0.0772,
+          "styles": 4,
+          "reference": "Aptos 2.01;O365"
+        }
+      ]
+    },
+    {
+      "family": "Aptos Display",
+      "chosen": "Carlito",
+      "top": [
+        {
+          "package": "carlito",
+          "meanAbsWidthDelta": 0.0184,
+          "meanWidthDelta": -0.0057,
+          "maxAbsWidthDelta": 0.0691,
+          "styles": 4,
+          "reference": "Aptos Display 2.01;O365"
+        },
+        {
+          "package": "tinos",
+          "meanAbsWidthDelta": 0.0209,
+          "meanWidthDelta": 0.012,
+          "maxAbsWidthDelta": 0.0824,
+          "styles": 4,
+          "reference": "Aptos Display 2.01;O365"
+        },
+        {
+          "package": "cabin",
+          "meanAbsWidthDelta": 0.0219,
+          "meanWidthDelta": 0.0138,
+          "maxAbsWidthDelta": 0.0703,
+          "styles": 4,
+          "reference": "Aptos Display 2.01;O365"
+        },
+        {
+          "package": "source-sans-3",
+          "meanAbsWidthDelta": 0.0277,
+          "meanWidthDelta": 0.026,
+          "maxAbsWidthDelta": 0.0811,
+          "styles": 4,
+          "reference": "Aptos Display 2.01;O365"
+        },
+        {
+          "package": "pt-sans",
+          "meanAbsWidthDelta": 0.0332,
+          "meanWidthDelta": 0.0103,
+          "maxAbsWidthDelta": 0.1123,
+          "styles": 4,
+          "reference": "Aptos Display 2.01;O365"
+        },
+        {
+          "package": "anton",
+          "meanAbsWidthDelta": 0.0333,
+          "meanWidthDelta": -0.0247,
+          "maxAbsWidthDelta": 0.0967,
+          "styles": 2,
+          "reference": "Aptos Display 2.01;O365"
+        },
+        {
+          "package": "crimson-pro",
+          "meanAbsWidthDelta": 0.0339,
+          "meanWidthDelta": -0.0246,
+          "maxAbsWidthDelta": 0.1266,
+          "styles": 4,
+          "reference": "Aptos Display 2.01;O365"
+        },
+        {
+          "package": "eb-garamond",
+          "meanAbsWidthDelta": 0.0366,
+          "meanWidthDelta": -0.0236,
+          "maxAbsWidthDelta": 0.1492,
+          "styles": 4,
+          "reference": "Aptos Display 2.01;O365"
+        },
+        {
+          "package": "caladea",
+          "meanAbsWidthDelta": 0.0382,
+          "meanWidthDelta": 0.034,
+          "maxAbsWidthDelta": 0.1144,
+          "styles": 4,
+          "reference": "Aptos Display 2.01;O365"
+        },
+        {
+          "package": "mukta",
+          "meanAbsWidthDelta": 0.0412,
+          "meanWidthDelta": 0.0411,
+          "maxAbsWidthDelta": 0.0937,
+          "styles": 2,
+          "reference": "Aptos Display 2.01;O365"
+        }
+      ]
+    },
+    {
+      "family": "Aptos Narrow",
+      "chosen": "Carlito",
+      "top": [
+        {
+          "package": "anton",
+          "meanAbsWidthDelta": 0.0217,
+          "meanWidthDelta": -0.0013,
+          "maxAbsWidthDelta": 0.0632,
+          "styles": 2,
+          "reference": "Aptos Narrow 2.01;O365"
+        },
+        {
+          "package": "roboto-condensed",
+          "meanAbsWidthDelta": 0.023,
+          "meanWidthDelta": -0.0213,
+          "maxAbsWidthDelta": 0.068,
+          "styles": 4,
+          "reference": "Aptos Narrow 2.01;O365"
+        },
+        {
+          "package": "carlito",
+          "meanAbsWidthDelta": 0.0233,
+          "meanWidthDelta": 0.0222,
+          "maxAbsWidthDelta": 0.0786,
+          "styles": 4,
+          "reference": "Aptos Narrow 2.01;O365"
+        },
+        {
+          "package": "crimson-pro",
+          "meanAbsWidthDelta": 0.0332,
+          "meanWidthDelta": 0.003,
+          "maxAbsWidthDelta": 0.1037,
+          "styles": 4,
+          "reference": "Aptos Narrow 2.01;O365"
+        },
+        {
+          "package": "eb-garamond",
+          "meanAbsWidthDelta": 0.04,
+          "meanWidthDelta": 0.0043,
+          "maxAbsWidthDelta": 0.1297,
+          "styles": 4,
+          "reference": "Aptos Narrow 2.01;O365"
+        },
+        {
+          "package": "tinos",
+          "meanAbsWidthDelta": 0.0407,
+          "meanWidthDelta": 0.0405,
+          "maxAbsWidthDelta": 0.119,
+          "styles": 4,
+          "reference": "Aptos Narrow 2.01;O365"
+        },
+        {
+          "package": "pt-sans",
+          "meanAbsWidthDelta": 0.0408,
+          "meanWidthDelta": 0.0385,
+          "maxAbsWidthDelta": 0.1272,
+          "styles": 4,
+          "reference": "Aptos Narrow 2.01;O365"
+        },
+        {
+          "package": "cabin",
+          "meanAbsWidthDelta": 0.043,
+          "meanWidthDelta": 0.0424,
+          "maxAbsWidthDelta": 0.1119,
+          "styles": 4,
+          "reference": "Aptos Narrow 2.01;O365"
+        },
+        {
+          "package": "fjalla-one",
+          "meanAbsWidthDelta": 0.0447,
+          "meanWidthDelta": -0.044,
+          "maxAbsWidthDelta": 0.107,
+          "styles": 2,
+          "reference": "Aptos Narrow 2.01;O365"
+        },
+        {
+          "package": "oswald",
+          "meanAbsWidthDelta": 0.0474,
+          "meanWidthDelta": -0.0446,
+          "maxAbsWidthDelta": 0.1267,
+          "styles": 2,
+          "reference": "Aptos Narrow 2.01;O365"
+        }
+      ]
+    },
+    {
+      "family": "Arabic Typesetting",
+      "chosen": "Noto Naskh Arabic",
+      "top": [
+        {
+          "package": "league-gothic",
+          "meanAbsWidthDelta": 0.0859,
+          "meanWidthDelta": -0.0859,
+          "maxAbsWidthDelta": 0.1445,
+          "styles": 1,
+          "reference": "Arabic Typesetting 6.85"
+        },
+        {
+          "package": "bebas-neue",
+          "meanAbsWidthDelta": 0.1883,
+          "meanWidthDelta": 0.1883,
+          "maxAbsWidthDelta": 0.2813,
+          "styles": 1,
+          "reference": "Arabic Typesetting 6.85"
+        },
+        {
+          "package": "pt-sans-narrow",
+          "meanAbsWidthDelta": 0.2009,
+          "meanWidthDelta": 0.2009,
+          "maxAbsWidthDelta": 0.2376,
+          "styles": 1,
+          "reference": "Arabic Typesetting 6.85"
+        },
+        {
+          "package": "oswald",
+          "meanAbsWidthDelta": 0.2594,
+          "meanWidthDelta": 0.2594,
+          "maxAbsWidthDelta": 0.3241,
+          "styles": 1,
+          "reference": "Arabic Typesetting 6.85"
+        },
+        {
+          "package": "archivo-narrow",
+          "meanAbsWidthDelta": 0.2831,
+          "meanWidthDelta": 0.2831,
+          "maxAbsWidthDelta": 0.3634,
+          "styles": 1,
+          "reference": "Arabic Typesetting 6.85"
+        },
+        {
+          "package": "fjalla-one",
+          "meanAbsWidthDelta": 0.3435,
+          "meanWidthDelta": 0.3435,
+          "maxAbsWidthDelta": 0.4077,
+          "styles": 1,
+          "reference": "Arabic Typesetting 6.85"
+        },
+        {
+          "package": "eb-garamond",
+          "meanAbsWidthDelta": 0.35,
+          "meanWidthDelta": 0.35,
+          "maxAbsWidthDelta": 0.4043,
+          "styles": 1,
+          "reference": "Arabic Typesetting 6.85"
+        },
+        {
+          "package": "roboto-condensed",
+          "meanAbsWidthDelta": 0.3772,
+          "meanWidthDelta": 0.3772,
+          "maxAbsWidthDelta": 0.4397,
+          "styles": 1,
+          "reference": "Arabic Typesetting 6.85"
+        },
+        {
+          "package": "cormorant-garamond",
+          "meanAbsWidthDelta": 0.3817,
+          "meanWidthDelta": 0.3817,
+          "maxAbsWidthDelta": 0.4311,
+          "styles": 1,
+          "reference": "Arabic Typesetting 6.85"
+        },
+        {
+          "package": "crimson-pro",
+          "meanAbsWidthDelta": 0.3981,
+          "meanWidthDelta": 0.3981,
+          "maxAbsWidthDelta": 0.4458,
+          "styles": 1,
+          "reference": "Arabic Typesetting 6.85"
+        }
+      ]
+    },
+    {
+      "family": "Arial",
+      "chosen": "Arimo",
+      "top": [
+        {
+          "package": "arimo",
+          "meanAbsWidthDelta": 0,
+          "meanWidthDelta": 0,
+          "maxAbsWidthDelta": 0,
+          "styles": 4,
+          "reference": "Arial 7.06"
+        },
+        {
+          "package": "archivo",
+          "meanAbsWidthDelta": 0.0087,
+          "meanWidthDelta": -0.0078,
+          "maxAbsWidthDelta": 0.0257,
+          "styles": 4,
+          "reference": "Arial 7.06"
+        },
+        {
+          "package": "atkinson-hyperlegible",
+          "meanAbsWidthDelta": 0.0105,
+          "meanWidthDelta": -0.006,
+          "maxAbsWidthDelta": 0.0577,
+          "styles": 4,
+          "reference": "Arial 7.06"
+        },
+        {
+          "package": "gothic-a1",
+          "meanAbsWidthDelta": 0.0131,
+          "meanWidthDelta": 0.0079,
+          "maxAbsWidthDelta": 0.0648,
+          "styles": 2,
+          "reference": "Arial 7.06"
+        },
+        {
+          "package": "josefin-sans",
+          "meanAbsWidthDelta": 0.016,
+          "meanWidthDelta": 0.0078,
+          "maxAbsWidthDelta": 0.0663,
+          "styles": 4,
+          "reference": "Arial 7.06"
+        },
+        {
+          "package": "red-hat-text",
+          "meanAbsWidthDelta": 0.0185,
+          "meanWidthDelta": 0.0086,
+          "maxAbsWidthDelta": 0.0894,
+          "styles": 4,
+          "reference": "Arial 7.06"
+        },
+        {
+          "package": "nunito-sans",
+          "meanAbsWidthDelta": 0.0198,
+          "meanWidthDelta": -0.0068,
+          "maxAbsWidthDelta": 0.0501,
+          "styles": 4,
+          "reference": "Arial 7.06"
+        },
+        {
+          "package": "instrument-sans",
+          "meanAbsWidthDelta": 0.0209,
+          "meanWidthDelta": 0.0127,
+          "maxAbsWidthDelta": 0.0949,
+          "styles": 4,
+          "reference": "Arial 7.06"
+        },
+        {
+          "package": "ubuntu",
+          "meanAbsWidthDelta": 0.0209,
+          "meanWidthDelta": -0.0052,
+          "maxAbsWidthDelta": 0.0878,
+          "styles": 4,
+          "reference": "Arial 7.06"
+        },
+        {
+          "package": "raleway",
+          "meanAbsWidthDelta": 0.0211,
+          "meanWidthDelta": 0.0039,
+          "maxAbsWidthDelta": 0.0794,
+          "styles": 4,
+          "reference": "Arial 7.06"
+        }
+      ]
+    },
+    {
+      "family": "Arial Black",
+      "chosen": "Montserrat",
+      "top": [
+        {
+          "package": "montserrat",
+          "meanAbsWidthDelta": 0.0075,
+          "meanWidthDelta": -0.0029,
+          "maxAbsWidthDelta": 0.0281,
+          "styles": 1,
+          "reference": "Arial Black 5.23"
+        },
+        {
+          "package": "noto-serif",
+          "meanAbsWidthDelta": 0.0319,
+          "meanWidthDelta": -0.0316,
+          "maxAbsWidthDelta": 0.069,
+          "styles": 1,
+          "reference": "Arial Black 5.23"
+        },
+        {
+          "package": "archivo",
+          "meanAbsWidthDelta": 0.0327,
+          "meanWidthDelta": -0.0327,
+          "maxAbsWidthDelta": 0.0546,
+          "styles": 1,
+          "reference": "Arial Black 5.23"
+        },
+        {
+          "package": "libre-baskerville",
+          "meanAbsWidthDelta": 0.0361,
+          "meanWidthDelta": -0.0356,
+          "maxAbsWidthDelta": 0.081,
+          "styles": 1,
+          "reference": "Arial Black 5.23"
+        },
+        {
+          "package": "rubik",
+          "meanAbsWidthDelta": 0.039,
+          "meanWidthDelta": -0.0387,
+          "maxAbsWidthDelta": 0.0702,
+          "styles": 1,
+          "reference": "Arial Black 5.23"
+        },
+        {
+          "package": "poppins",
+          "meanAbsWidthDelta": 0.0441,
+          "meanWidthDelta": -0.044,
+          "maxAbsWidthDelta": 0.0808,
+          "styles": 1,
+          "reference": "Arial Black 5.23"
+        },
+        {
+          "package": "arvo",
+          "meanAbsWidthDelta": 0.0474,
+          "meanWidthDelta": -0.0472,
+          "maxAbsWidthDelta": 0.1067,
+          "styles": 1,
+          "reference": "Arial Black 5.23"
+        },
+        {
+          "package": "noto-sans-malayalam",
+          "meanAbsWidthDelta": 0.0491,
+          "meanWidthDelta": -0.0491,
+          "maxAbsWidthDelta": 0.0862,
+          "styles": 1,
+          "reference": "Arial Black 5.23"
+        },
+        {
+          "package": "libre-caslon-text",
+          "meanAbsWidthDelta": 0.0497,
+          "meanWidthDelta": -0.0497,
+          "maxAbsWidthDelta": 0.0885,
+          "styles": 1,
+          "reference": "Arial Black 5.23"
+        },
+        {
+          "package": "noto-sans-kannada",
+          "meanAbsWidthDelta": 0.053,
+          "meanWidthDelta": -0.053,
+          "maxAbsWidthDelta": 0.0903,
+          "styles": 1,
+          "reference": "Arial Black 5.23"
+        }
+      ]
+    },
+    {
+      "family": "Arial Narrow",
+      "chosen": "Archivo Narrow",
+      "top": [
+        {
+          "package": "archivo-narrow",
+          "meanAbsWidthDelta": 0.0038,
+          "meanWidthDelta": 0.0035,
+          "maxAbsWidthDelta": 0.0431,
+          "styles": 4,
+          "reference": "Arial Narrow 2.40"
+        },
+        {
+          "package": "oswald",
+          "meanAbsWidthDelta": 0.0273,
+          "meanWidthDelta": 0.0138,
+          "maxAbsWidthDelta": 0.0853,
+          "styles": 2,
+          "reference": "Arial Narrow 2.40"
+        },
+        {
+          "package": "fjalla-one",
+          "meanAbsWidthDelta": 0.0397,
+          "meanWidthDelta": 0.0157,
+          "maxAbsWidthDelta": 0.1323,
+          "styles": 2,
+          "reference": "Arial Narrow 2.40"
+        },
+        {
+          "package": "roboto-condensed",
+          "meanAbsWidthDelta": 0.0406,
+          "meanWidthDelta": 0.0356,
+          "maxAbsWidthDelta": 0.1208,
+          "styles": 4,
+          "reference": "Arial Narrow 2.40"
+        },
+        {
+          "package": "cormorant-garamond",
+          "meanAbsWidthDelta": 0.052,
+          "meanWidthDelta": 0.0012,
+          "maxAbsWidthDelta": 0.1722,
+          "styles": 4,
+          "reference": "Arial Narrow 2.40"
+        },
+        {
+          "package": "anton",
+          "meanAbsWidthDelta": 0.0621,
+          "meanWidthDelta": 0.061,
+          "maxAbsWidthDelta": 0.1474,
+          "styles": 2,
+          "reference": "Arial Narrow 2.40"
+        },
+        {
+          "package": "crimson-pro",
+          "meanAbsWidthDelta": 0.0627,
+          "meanWidthDelta": 0.0607,
+          "maxAbsWidthDelta": 0.1949,
+          "styles": 4,
+          "reference": "Arial Narrow 2.40"
+        },
+        {
+          "package": "eb-garamond",
+          "meanAbsWidthDelta": 0.0638,
+          "meanWidthDelta": 0.0616,
+          "maxAbsWidthDelta": 0.1931,
+          "styles": 4,
+          "reference": "Arial Narrow 2.40"
+        },
+        {
+          "package": "pt-sans-narrow",
+          "meanAbsWidthDelta": 0.0791,
+          "meanWidthDelta": -0.0791,
+          "maxAbsWidthDelta": 0.133,
+          "styles": 2,
+          "reference": "Arial Narrow 2.40"
+        },
+        {
+          "package": "carlito",
+          "meanAbsWidthDelta": 0.0815,
+          "meanWidthDelta": 0.0815,
+          "maxAbsWidthDelta": 0.1849,
+          "styles": 4,
+          "reference": "Arial Narrow 2.40"
+        }
+      ]
+    },
+    {
+      "family": "Baskerville Old Face",
+      "chosen": "Libre Caslon Text",
+      "top": [
+        {
+          "package": "crimson-pro",
+          "meanAbsWidthDelta": 0.0143,
+          "meanWidthDelta": -0.0002,
+          "maxAbsWidthDelta": 0.0632,
+          "styles": 1,
+          "reference": "Baskerville Old Face 1.51"
+        },
+        {
+          "package": "cormorant-garamond",
+          "meanAbsWidthDelta": 0.0149,
+          "meanWidthDelta": -0.0119,
+          "maxAbsWidthDelta": 0.0498,
+          "styles": 1,
+          "reference": "Baskerville Old Face 1.51"
+        },
+        {
+          "package": "roboto-condensed",
+          "meanAbsWidthDelta": 0.0182,
+          "meanWidthDelta": -0.0152,
+          "maxAbsWidthDelta": 0.0844,
+          "styles": 1,
+          "reference": "Baskerville Old Face 1.51"
+        },
+        {
+          "package": "carlito",
+          "meanAbsWidthDelta": 0.0191,
+          "meanWidthDelta": 0.0125,
+          "maxAbsWidthDelta": 0.0824,
+          "styles": 1,
+          "reference": "Baskerville Old Face 1.51"
+        },
+        {
+          "package": "tinos",
+          "meanAbsWidthDelta": 0.0194,
+          "meanWidthDelta": 0.018,
+          "maxAbsWidthDelta": 0.0503,
+          "styles": 1,
+          "reference": "Baskerville Old Face 1.51"
+        },
+        {
+          "package": "anton",
+          "meanAbsWidthDelta": 0.0227,
+          "meanWidthDelta": 0.0038,
+          "maxAbsWidthDelta": 0.0859,
+          "styles": 1,
+          "reference": "Baskerville Old Face 1.51"
+        },
+        {
+          "package": "caladea",
+          "meanAbsWidthDelta": 0.0245,
+          "meanWidthDelta": 0.0214,
+          "maxAbsWidthDelta": 0.0681,
+          "styles": 1,
+          "reference": "Baskerville Old Face 1.51"
+        },
+        {
+          "package": "eb-garamond",
+          "meanAbsWidthDelta": 0.0348,
+          "meanWidthDelta": -0.0346,
+          "maxAbsWidthDelta": 0.0805,
+          "styles": 1,
+          "reference": "Baskerville Old Face 1.51"
+        },
+        {
+          "package": "fjalla-one",
+          "meanAbsWidthDelta": 0.0394,
+          "meanWidthDelta": -0.0392,
+          "maxAbsWidthDelta": 0.1289,
+          "styles": 1,
+          "reference": "Baskerville Old Face 1.51"
+        },
+        {
+          "package": "source-sans-3",
+          "meanAbsWidthDelta": 0.0401,
+          "meanWidthDelta": 0.0392,
+          "maxAbsWidthDelta": 0.0823,
+          "styles": 1,
+          "reference": "Baskerville Old Face 1.51"
+        }
+      ]
+    },
+    {
+      "family": "Bodoni MT",
+      "chosen": "Playfair Display",
+      "top": [
+        {
+          "package": "mukta",
+          "meanAbsWidthDelta": 0.0413,
+          "meanWidthDelta": 0.0246,
+          "maxAbsWidthDelta": 0.1119,
+          "styles": 2,
+          "reference": "Bodoni MT 2.10"
+        },
+        {
+          "package": "anton",
+          "meanAbsWidthDelta": 0.0416,
+          "meanWidthDelta": -0.041,
+          "maxAbsWidthDelta": 0.1442,
+          "styles": 2,
+          "reference": "Bodoni MT 2.10"
+        },
+        {
+          "package": "cabin",
+          "meanAbsWidthDelta": 0.043,
+          "meanWidthDelta": -0.0193,
+          "maxAbsWidthDelta": 0.1527,
+          "styles": 4,
+          "reference": "Bodoni MT 2.10"
+        },
+        {
+          "package": "caladea",
+          "meanAbsWidthDelta": 0.0482,
+          "meanWidthDelta": 0.0003,
+          "maxAbsWidthDelta": 0.1337,
+          "styles": 4,
+          "reference": "Bodoni MT 2.10"
+        },
+        {
+          "package": "source-sans-3",
+          "meanAbsWidthDelta": 0.0486,
+          "meanWidthDelta": -0.0071,
+          "maxAbsWidthDelta": 0.1286,
+          "styles": 4,
+          "reference": "Bodoni MT 2.10"
+        },
+        {
+          "package": "carlito",
+          "meanAbsWidthDelta": 0.0487,
+          "meanWidthDelta": -0.038,
+          "maxAbsWidthDelta": 0.1745,
+          "styles": 4,
+          "reference": "Bodoni MT 2.10"
+        },
+        {
+          "package": "pt-sans",
+          "meanAbsWidthDelta": 0.0503,
+          "meanWidthDelta": -0.0221,
+          "maxAbsWidthDelta": 0.1744,
+          "styles": 4,
+          "reference": "Bodoni MT 2.10"
+        },
+        {
+          "package": "tinos",
+          "meanAbsWidthDelta": 0.0529,
+          "meanWidthDelta": -0.0205,
+          "maxAbsWidthDelta": 0.1524,
+          "styles": 4,
+          "reference": "Bodoni MT 2.10"
+        },
+        {
+          "package": "quattrocento-sans",
+          "meanAbsWidthDelta": 0.0536,
+          "meanWidthDelta": 0.0202,
+          "maxAbsWidthDelta": 0.1796,
+          "styles": 4,
+          "reference": "Bodoni MT 2.10"
+        },
+        {
+          "package": "barlow",
+          "meanAbsWidthDelta": 0.0537,
+          "meanWidthDelta": 0.0136,
+          "maxAbsWidthDelta": 0.1507,
+          "styles": 4,
+          "reference": "Bodoni MT 2.10"
+        }
+      ]
+    },
+    {
+      "family": "Book Antiqua",
+      "chosen": "PT Serif",
+      "top": [
+        {
+          "package": "commissioner",
+          "meanAbsWidthDelta": 0.0118,
+          "meanWidthDelta": -0.0001,
+          "maxAbsWidthDelta": 0.0597,
+          "styles": 2,
+          "reference": "Book Antiqua 2.35"
+        },
+        {
+          "package": "outfit",
+          "meanAbsWidthDelta": 0.0164,
+          "meanWidthDelta": -0.0116,
+          "maxAbsWidthDelta": 0.0631,
+          "styles": 2,
+          "reference": "Book Antiqua 2.35"
+        },
+        {
+          "package": "playfair-display",
+          "meanAbsWidthDelta": 0.019,
+          "meanWidthDelta": 0.0141,
+          "maxAbsWidthDelta": 0.0892,
+          "styles": 4,
+          "reference": "Book Antiqua 2.35"
+        },
+        {
+          "package": "spectral",
+          "meanAbsWidthDelta": 0.02,
+          "meanWidthDelta": -0.0127,
+          "maxAbsWidthDelta": 0.0879,
+          "styles": 4,
+          "reference": "Book Antiqua 2.35"
+        },
+        {
+          "package": "abril-fatface",
+          "meanAbsWidthDelta": 0.0208,
+          "meanWidthDelta": 0.0138,
+          "maxAbsWidthDelta": 0.1014,
+          "styles": 2,
+          "reference": "Book Antiqua 2.35"
+        },
+        {
+          "package": "pt-serif",
+          "meanAbsWidthDelta": 0.024,
+          "meanWidthDelta": 0.0193,
+          "maxAbsWidthDelta": 0.0778,
+          "styles": 4,
+          "reference": "Book Antiqua 2.35"
+        },
+        {
+          "package": "gothic-a1",
+          "meanAbsWidthDelta": 0.0245,
+          "meanWidthDelta": 0.0201,
+          "maxAbsWidthDelta": 0.1079,
+          "styles": 2,
+          "reference": "Book Antiqua 2.35"
+        },
+        {
+          "package": "overpass",
+          "meanAbsWidthDelta": 0.0259,
+          "meanWidthDelta": 0.0069,
+          "maxAbsWidthDelta": 0.0996,
+          "styles": 4,
+          "reference": "Book Antiqua 2.35"
+        },
+        {
+          "package": "red-hat-display",
+          "meanAbsWidthDelta": 0.0288,
+          "meanWidthDelta": 0.0128,
+          "maxAbsWidthDelta": 0.15,
+          "styles": 4,
+          "reference": "Book Antiqua 2.35"
+        },
+        {
+          "package": "karla",
+          "meanAbsWidthDelta": 0.0293,
+          "meanWidthDelta": 0.0009,
+          "maxAbsWidthDelta": 0.1112,
+          "styles": 4,
+          "reference": "Book Antiqua 2.35"
+        }
+      ]
+    },
+    {
+      "family": "Bookman Old Style",
+      "chosen": "Libre Caslon Text",
+      "top": [
+        {
+          "package": "arvo",
+          "meanAbsWidthDelta": 0.0257,
+          "meanWidthDelta": 0.0103,
+          "maxAbsWidthDelta": 0.1384,
+          "styles": 4,
+          "reference": "Bookman Old Style 2.35/2.36"
+        },
+        {
+          "package": "montserrat",
+          "meanAbsWidthDelta": 0.026,
+          "meanWidthDelta": 0.0208,
+          "maxAbsWidthDelta": 0.123,
+          "styles": 4,
+          "reference": "Bookman Old Style 2.35/2.36"
+        },
+        {
+          "package": "poppins",
+          "meanAbsWidthDelta": 0.0292,
+          "meanWidthDelta": 0.0018,
+          "maxAbsWidthDelta": 0.11,
+          "styles": 4,
+          "reference": "Bookman Old Style 2.35/2.36"
+        },
+        {
+          "package": "noto-serif",
+          "meanAbsWidthDelta": 0.0295,
+          "meanWidthDelta": -0.0292,
+          "maxAbsWidthDelta": 0.0706,
+          "styles": 4,
+          "reference": "Bookman Old Style 2.35/2.36"
+        },
+        {
+          "package": "noto-naskh-arabic",
+          "meanAbsWidthDelta": 0.0349,
+          "meanWidthDelta": -0.0348,
+          "maxAbsWidthDelta": 0.0715,
+          "styles": 2,
+          "reference": "Bookman Old Style 2.35"
+        },
+        {
+          "package": "noto-sans-malayalam",
+          "meanAbsWidthDelta": 0.0356,
+          "meanWidthDelta": -0.0356,
+          "maxAbsWidthDelta": 0.1069,
+          "styles": 2,
+          "reference": "Bookman Old Style 2.35"
+        },
+        {
+          "package": "work-sans",
+          "meanAbsWidthDelta": 0.0369,
+          "meanWidthDelta": -0.0286,
+          "maxAbsWidthDelta": 0.0997,
+          "styles": 4,
+          "reference": "Bookman Old Style 2.35/2.36"
+        },
+        {
+          "package": "domine",
+          "meanAbsWidthDelta": 0.0388,
+          "meanWidthDelta": -0.0384,
+          "maxAbsWidthDelta": 0.0992,
+          "styles": 2,
+          "reference": "Bookman Old Style 2.35"
+        },
+        {
+          "package": "noto-sans-telugu",
+          "meanAbsWidthDelta": 0.0408,
+          "meanWidthDelta": -0.0408,
+          "maxAbsWidthDelta": 0.112,
+          "styles": 2,
+          "reference": "Bookman Old Style 2.35"
+        },
+        {
+          "package": "libre-caslon-text",
+          "meanAbsWidthDelta": 0.0411,
+          "meanWidthDelta": -0.0381,
+          "maxAbsWidthDelta": 0.1396,
+          "styles": 4,
+          "reference": "Bookman Old Style 2.35/2.36"
+        }
+      ]
+    },
+    {
+      "family": "Calibri",
+      "chosen": "Carlito",
+      "top": [
+        {
+          "package": "carlito",
+          "meanAbsWidthDelta": 0,
+          "meanWidthDelta": 0,
+          "maxAbsWidthDelta": 0.0026,
+          "styles": 4,
+          "reference": "Calibri 6.27"
+        },
+        {
+          "package": "anton",
+          "meanAbsWidthDelta": 0.022,
+          "meanWidthDelta": -0.0203,
+          "maxAbsWidthDelta": 0.0841,
+          "styles": 2,
+          "reference": "Calibri 6.27"
+        },
+        {
+          "package": "tinos",
+          "meanAbsWidthDelta": 0.0223,
+          "meanWidthDelta": 0.0181,
+          "maxAbsWidthDelta": 0.1061,
+          "styles": 4,
+          "reference": "Calibri 6.27"
+        },
+        {
+          "package": "pt-sans",
+          "meanAbsWidthDelta": 0.0275,
+          "meanWidthDelta": 0.016,
+          "maxAbsWidthDelta": 0.0874,
+          "styles": 4,
+          "reference": "Calibri 6.27"
+        },
+        {
+          "package": "cabin",
+          "meanAbsWidthDelta": 0.0301,
+          "meanWidthDelta": 0.0199,
+          "maxAbsWidthDelta": 0.0751,
+          "styles": 4,
+          "reference": "Calibri 6.27"
+        },
+        {
+          "package": "source-sans-3",
+          "meanAbsWidthDelta": 0.0327,
+          "meanWidthDelta": 0.0322,
+          "maxAbsWidthDelta": 0.0955,
+          "styles": 4,
+          "reference": "Calibri 6.27"
+        },
+        {
+          "package": "crimson-pro",
+          "meanAbsWidthDelta": 0.0348,
+          "meanWidthDelta": -0.0186,
+          "maxAbsWidthDelta": 0.1134,
+          "styles": 4,
+          "reference": "Calibri 6.27"
+        },
+        {
+          "package": "zilla-slab",
+          "meanAbsWidthDelta": 0.0416,
+          "meanWidthDelta": 0.0378,
+          "maxAbsWidthDelta": 0.1377,
+          "styles": 4,
+          "reference": "Calibri 6.27"
+        },
+        {
+          "package": "roboto-condensed",
+          "meanAbsWidthDelta": 0.0425,
+          "meanWidthDelta": -0.0424,
+          "maxAbsWidthDelta": 0.0973,
+          "styles": 4,
+          "reference": "Calibri 6.27"
+        },
+        {
+          "package": "eb-garamond",
+          "meanAbsWidthDelta": 0.0433,
+          "meanWidthDelta": -0.0174,
+          "maxAbsWidthDelta": 0.1312,
+          "styles": 4,
+          "reference": "Calibri 6.27"
+        }
+      ]
+    },
+    {
+      "family": "Calibri Light",
+      "chosen": "Carlito",
+      "top": [
+        {
+          "package": "anton",
+          "meanAbsWidthDelta": 0.0121,
+          "meanWidthDelta": 0.0046,
+          "maxAbsWidthDelta": 0.0472,
+          "styles": 1,
+          "reference": "Calibri Light 6.27"
+        },
+        {
+          "package": "carlito",
+          "meanAbsWidthDelta": 0.0144,
+          "meanWidthDelta": 0.0144,
+          "maxAbsWidthDelta": 0.0225,
+          "styles": 2,
+          "reference": "Calibri Light 6.27"
+        },
+        {
+          "package": "caladea",
+          "meanAbsWidthDelta": 0.0175,
+          "meanWidthDelta": 0.0168,
+          "maxAbsWidthDelta": 0.0735,
+          "styles": 2,
+          "reference": "Calibri Light 6.27"
+        },
+        {
+          "package": "tinos",
+          "meanAbsWidthDelta": 0.0234,
+          "meanWidthDelta": 0.0221,
+          "maxAbsWidthDelta": 0.0944,
+          "styles": 2,
+          "reference": "Calibri Light 6.27"
+        },
+        {
+          "package": "roboto-condensed",
+          "meanAbsWidthDelta": 0.0263,
+          "meanWidthDelta": -0.0254,
+          "maxAbsWidthDelta": 0.0708,
+          "styles": 2,
+          "reference": "Calibri Light 6.27"
+        },
+        {
+          "package": "cabin",
+          "meanAbsWidthDelta": 0.0298,
+          "meanWidthDelta": 0.0222,
+          "maxAbsWidthDelta": 0.0887,
+          "styles": 2,
+          "reference": "Calibri Light 6.27"
+        },
+        {
+          "package": "source-sans-3",
+          "meanAbsWidthDelta": 0.0311,
+          "meanWidthDelta": 0.031,
+          "maxAbsWidthDelta": 0.0698,
+          "styles": 2,
+          "reference": "Calibri Light 6.27"
+        },
+        {
+          "package": "fjalla-one",
+          "meanAbsWidthDelta": 0.0384,
+          "meanWidthDelta": -0.0383,
+          "maxAbsWidthDelta": 0.0782,
+          "styles": 1,
+          "reference": "Calibri Light 6.27"
+        },
+        {
+          "package": "crimson-pro",
+          "meanAbsWidthDelta": 0.0385,
+          "meanWidthDelta": -0.0334,
+          "maxAbsWidthDelta": 0.1017,
+          "styles": 2,
+          "reference": "Calibri Light 6.27"
+        },
+        {
+          "package": "pt-sans",
+          "meanAbsWidthDelta": 0.0426,
+          "meanWidthDelta": 0.0424,
+          "maxAbsWidthDelta": 0.104,
+          "styles": 2,
+          "reference": "Calibri Light 6.27"
+        }
+      ]
+    },
+    {
+      "family": "Cambria",
+      "chosen": "Caladea",
+      "top": [
+        {
+          "package": "hind",
+          "meanAbsWidthDelta": 0.0117,
+          "meanWidthDelta": -0.0042,
+          "maxAbsWidthDelta": 0.0798,
+          "styles": 2,
+          "reference": "Cambria 6.99/6.98"
+        },
+        {
+          "package": "outfit",
+          "meanAbsWidthDelta": 0.0225,
+          "meanWidthDelta": 0.0179,
+          "maxAbsWidthDelta": 0.0821,
+          "styles": 2,
+          "reference": "Cambria 6.99/6.98"
+        },
+        {
+          "package": "sarabun",
+          "meanAbsWidthDelta": 0.0225,
+          "meanWidthDelta": 0.0136,
+          "maxAbsWidthDelta": 0.0833,
+          "styles": 4,
+          "reference": "Cambria 6.99/6.98"
+        },
+        {
+          "package": "barlow",
+          "meanAbsWidthDelta": 0.0255,
+          "meanWidthDelta": -0.014,
+          "maxAbsWidthDelta": 0.0866,
+          "styles": 4,
+          "reference": "Cambria 6.99/6.98"
+        },
+        {
+          "package": "caladea",
+          "meanAbsWidthDelta": 0.0269,
+          "meanWidthDelta": -0.0269,
+          "maxAbsWidthDelta": 0.0647,
+          "styles": 4,
+          "reference": "Cambria 6.99/6.98"
+        },
+        {
+          "package": "red-hat-display",
+          "meanAbsWidthDelta": 0.0276,
+          "meanWidthDelta": 0.0254,
+          "maxAbsWidthDelta": 0.1207,
+          "styles": 4,
+          "reference": "Cambria 6.99/6.98"
+        },
+        {
+          "package": "playfair-display",
+          "meanAbsWidthDelta": 0.0278,
+          "meanWidthDelta": 0.0271,
+          "maxAbsWidthDelta": 0.0946,
+          "styles": 4,
+          "reference": "Cambria 6.99/6.98"
+        },
+        {
+          "package": "overpass",
+          "meanAbsWidthDelta": 0.0291,
+          "meanWidthDelta": 0.0198,
+          "maxAbsWidthDelta": 0.082,
+          "styles": 4,
+          "reference": "Cambria 6.99/6.98"
+        },
+        {
+          "package": "roboto",
+          "meanAbsWidthDelta": 0.0301,
+          "meanWidthDelta": 0.0089,
+          "maxAbsWidthDelta": 0.0923,
+          "styles": 4,
+          "reference": "Cambria 6.99/6.98"
+        },
+        {
+          "package": "old-standard-tt",
+          "meanAbsWidthDelta": 0.0308,
+          "meanWidthDelta": 0.0034,
+          "maxAbsWidthDelta": 0.1403,
+          "styles": 4,
+          "reference": "Cambria 6.99/6.98"
+        }
+      ]
+    },
+    {
+      "family": "Candara",
+      "chosen": "Source Sans 3",
+      "top": [
+        {
+          "package": "pt-sans",
+          "meanAbsWidthDelta": 0.0155,
+          "meanWidthDelta": -0.0097,
+          "maxAbsWidthDelta": 0.0584,
+          "styles": 4,
+          "reference": "Candara 5.64"
+        },
+        {
+          "package": "mukta",
+          "meanAbsWidthDelta": 0.0174,
+          "meanWidthDelta": 0.0045,
+          "maxAbsWidthDelta": 0.042,
+          "styles": 2,
+          "reference": "Candara 5.64"
+        },
+        {
+          "package": "cabin",
+          "meanAbsWidthDelta": 0.0185,
+          "meanWidthDelta": -0.0057,
+          "maxAbsWidthDelta": 0.0765,
+          "styles": 4,
+          "reference": "Candara 5.64"
+        },
+        {
+          "package": "source-sans-3",
+          "meanAbsWidthDelta": 0.0195,
+          "meanWidthDelta": 0.0064,
+          "maxAbsWidthDelta": 0.0523,
+          "styles": 4,
+          "reference": "Candara 5.64"
+        },
+        {
+          "package": "tinos",
+          "meanAbsWidthDelta": 0.0203,
+          "meanWidthDelta": -0.0073,
+          "maxAbsWidthDelta": 0.0859,
+          "styles": 4,
+          "reference": "Candara 5.64"
+        },
+        {
+          "package": "zilla-slab",
+          "meanAbsWidthDelta": 0.0211,
+          "meanWidthDelta": 0.0115,
+          "maxAbsWidthDelta": 0.0799,
+          "styles": 4,
+          "reference": "Candara 5.64"
+        },
+        {
+          "package": "lato",
+          "meanAbsWidthDelta": 0.0239,
+          "meanWidthDelta": 0.0156,
+          "maxAbsWidthDelta": 0.0816,
+          "styles": 4,
+          "reference": "Candara 5.64"
+        },
+        {
+          "package": "carlito",
+          "meanAbsWidthDelta": 0.0252,
+          "meanWidthDelta": -0.0248,
+          "maxAbsWidthDelta": 0.068,
+          "styles": 4,
+          "reference": "Candara 5.64"
+        },
+        {
+          "package": "barlow",
+          "meanAbsWidthDelta": 0.0275,
+          "meanWidthDelta": 0.0271,
+          "maxAbsWidthDelta": 0.0851,
+          "styles": 4,
+          "reference": "Candara 5.64"
+        },
+        {
+          "package": "hind",
+          "meanAbsWidthDelta": 0.034,
+          "meanWidthDelta": 0.0338,
+          "maxAbsWidthDelta": 0.0766,
+          "styles": 2,
+          "reference": "Candara 5.64"
+        }
+      ]
+    },
+    {
+      "family": "Century Gothic",
+      "chosen": "Work Sans",
+      "top": [
+        {
+          "package": "golos-text",
+          "meanAbsWidthDelta": 0.0185,
+          "meanWidthDelta": 0.0033,
+          "maxAbsWidthDelta": 0.1368,
+          "styles": 2,
+          "reference": "Century Gothic 2.35"
+        },
+        {
+          "package": "plus-jakarta-sans",
+          "meanAbsWidthDelta": 0.0208,
+          "meanWidthDelta": -0.0095,
+          "maxAbsWidthDelta": 0.1054,
+          "styles": 4,
+          "reference": "Century Gothic 2.35"
+        },
+        {
+          "package": "inter",
+          "meanAbsWidthDelta": 0.0214,
+          "meanWidthDelta": -0.0011,
+          "maxAbsWidthDelta": 0.122,
+          "styles": 4,
+          "reference": "Century Gothic 2.35"
+        },
+        {
+          "package": "domine",
+          "meanAbsWidthDelta": 0.0238,
+          "meanWidthDelta": 0.0111,
+          "maxAbsWidthDelta": 0.1721,
+          "styles": 2,
+          "reference": "Century Gothic 2.35"
+        },
+        {
+          "package": "onest",
+          "meanAbsWidthDelta": 0.0239,
+          "meanWidthDelta": -0.0155,
+          "maxAbsWidthDelta": 0.0908,
+          "styles": 2,
+          "reference": "Century Gothic 2.35"
+        },
+        {
+          "package": "roboto-slab",
+          "meanAbsWidthDelta": 0.0243,
+          "meanWidthDelta": -0.0114,
+          "maxAbsWidthDelta": 0.1361,
+          "styles": 2,
+          "reference": "Century Gothic 2.35"
+        },
+        {
+          "package": "work-sans",
+          "meanAbsWidthDelta": 0.0255,
+          "meanWidthDelta": 0.0188,
+          "maxAbsWidthDelta": 0.1549,
+          "styles": 4,
+          "reference": "Century Gothic 2.35"
+        },
+        {
+          "package": "noto-sans-kannada",
+          "meanAbsWidthDelta": 0.026,
+          "meanWidthDelta": -0.0228,
+          "maxAbsWidthDelta": 0.1015,
+          "styles": 2,
+          "reference": "Century Gothic 2.35"
+        },
+        {
+          "package": "libre-franklin",
+          "meanAbsWidthDelta": 0.0297,
+          "meanWidthDelta": -0.0218,
+          "maxAbsWidthDelta": 0.1447,
+          "styles": 4,
+          "reference": "Century Gothic 2.35"
+        },
+        {
+          "package": "dm-sans",
+          "meanAbsWidthDelta": 0.0318,
+          "meanWidthDelta": -0.0118,
+          "maxAbsWidthDelta": 0.1297,
+          "styles": 4,
+          "reference": "Century Gothic 2.35"
+        }
+      ]
+    },
+    {
+      "family": "Century Schoolbook",
+      "chosen": "Gelasio",
+      "top": [
+        {
+          "package": "noto-serif",
+          "meanAbsWidthDelta": 0.0204,
+          "meanWidthDelta": -0.0029,
+          "maxAbsWidthDelta": 0.0575,
+          "styles": 4,
+          "reference": "Century Schoolbook 2.35"
+        },
+        {
+          "package": "gelasio",
+          "meanAbsWidthDelta": 0.0266,
+          "meanWidthDelta": -0.0175,
+          "maxAbsWidthDelta": 0.0753,
+          "styles": 4,
+          "reference": "Century Schoolbook 2.35"
+        },
+        {
+          "package": "noto-naskh-arabic",
+          "meanAbsWidthDelta": 0.0291,
+          "meanWidthDelta": -0.0133,
+          "maxAbsWidthDelta": 0.0662,
+          "styles": 2,
+          "reference": "Century Schoolbook 2.35"
+        },
+        {
+          "package": "noto-sans-malayalam",
+          "meanAbsWidthDelta": 0.0299,
+          "meanWidthDelta": -0.0141,
+          "maxAbsWidthDelta": 0.1009,
+          "styles": 2,
+          "reference": "Century Schoolbook 2.35"
+        },
+        {
+          "package": "noto-sans-bengali",
+          "meanAbsWidthDelta": 0.0305,
+          "meanWidthDelta": -0.0225,
+          "maxAbsWidthDelta": 0.1045,
+          "styles": 2,
+          "reference": "Century Schoolbook 2.35"
+        },
+        {
+          "package": "noto-sans-telugu",
+          "meanAbsWidthDelta": 0.031,
+          "meanWidthDelta": -0.0195,
+          "maxAbsWidthDelta": 0.1061,
+          "styles": 2,
+          "reference": "Century Schoolbook 2.35"
+        },
+        {
+          "package": "rubik",
+          "meanAbsWidthDelta": 0.0312,
+          "meanWidthDelta": -0.0218,
+          "maxAbsWidthDelta": 0.0981,
+          "styles": 4,
+          "reference": "Century Schoolbook 2.35"
+        },
+        {
+          "package": "noto-sans-ethiopic",
+          "meanAbsWidthDelta": 0.0316,
+          "meanWidthDelta": -0.0223,
+          "maxAbsWidthDelta": 0.0928,
+          "styles": 2,
+          "reference": "Century Schoolbook 2.35"
+        },
+        {
+          "package": "noto-sans-gurmukhi",
+          "meanAbsWidthDelta": 0.0323,
+          "meanWidthDelta": -0.0242,
+          "maxAbsWidthDelta": 0.1107,
+          "styles": 2,
+          "reference": "Century Schoolbook 2.35"
+        },
+        {
+          "package": "noto-sans-tamil",
+          "meanAbsWidthDelta": 0.0323,
+          "meanWidthDelta": -0.0243,
+          "maxAbsWidthDelta": 0.1107,
+          "styles": 2,
+          "reference": "Century Schoolbook 2.35"
+        }
+      ]
+    },
+    {
+      "family": "Consolas",
+      "chosen": "Roboto Mono",
+      "top": [
+        {
+          "package": "montserrat",
+          "meanAbsWidthDelta": 0.0478,
+          "meanWidthDelta": -0.0201,
+          "maxAbsWidthDelta": 0.199,
+          "styles": 4,
+          "reference": "Consolas 7.01"
+        },
+        {
+          "package": "arvo",
+          "meanAbsWidthDelta": 0.0515,
+          "meanWidthDelta": -0.0303,
+          "maxAbsWidthDelta": 0.1772,
+          "styles": 4,
+          "reference": "Consolas 7.01"
+        },
+        {
+          "package": "poppins",
+          "meanAbsWidthDelta": 0.0532,
+          "meanWidthDelta": -0.0387,
+          "maxAbsWidthDelta": 0.2345,
+          "styles": 4,
+          "reference": "Consolas 7.01"
+        },
+        {
+          "package": "work-sans",
+          "meanAbsWidthDelta": 0.071,
+          "meanWidthDelta": -0.0684,
+          "maxAbsWidthDelta": 0.2286,
+          "styles": 4,
+          "reference": "Consolas 7.01"
+        },
+        {
+          "package": "libre-baskerville",
+          "meanAbsWidthDelta": 0.0716,
+          "meanWidthDelta": -0.0545,
+          "maxAbsWidthDelta": 0.2151,
+          "styles": 4,
+          "reference": "Consolas 7.01"
+        },
+        {
+          "package": "noto-serif",
+          "meanAbsWidthDelta": 0.0753,
+          "meanWidthDelta": -0.0676,
+          "maxAbsWidthDelta": 0.2057,
+          "styles": 4,
+          "reference": "Consolas 7.01"
+        },
+        {
+          "package": "noto-naskh-arabic",
+          "meanAbsWidthDelta": 0.0768,
+          "meanWidthDelta": -0.0712,
+          "maxAbsWidthDelta": 0.1959,
+          "styles": 2,
+          "reference": "Consolas 7.01"
+        },
+        {
+          "package": "noto-sans-malayalam",
+          "meanAbsWidthDelta": 0.0771,
+          "meanWidthDelta": -0.072,
+          "maxAbsWidthDelta": 0.2335,
+          "styles": 2,
+          "reference": "Consolas 7.01"
+        },
+        {
+          "package": "domine",
+          "meanAbsWidthDelta": 0.0783,
+          "meanWidthDelta": -0.0753,
+          "maxAbsWidthDelta": 0.1901,
+          "styles": 2,
+          "reference": "Consolas 7.01"
+        },
+        {
+          "package": "roboto-mono",
+          "meanAbsWidthDelta": 0.0795,
+          "meanWidthDelta": 0.0795,
+          "maxAbsWidthDelta": 0.0915,
+          "styles": 4,
+          "reference": "Consolas 7.01"
+        }
+      ]
+    },
+    {
+      "family": "Constantia",
+      "chosen": "PT Serif",
+      "top": [
+        {
+          "package": "archivo",
+          "meanAbsWidthDelta": 0.0227,
+          "meanWidthDelta": 0.0185,
+          "maxAbsWidthDelta": 0.0998,
+          "styles": 4,
+          "reference": "Constantia 5.93"
+        },
+        {
+          "package": "pt-serif",
+          "meanAbsWidthDelta": 0.0229,
+          "meanWidthDelta": 0.0036,
+          "maxAbsWidthDelta": 0.0577,
+          "styles": 4,
+          "reference": "Constantia 5.93"
+        },
+        {
+          "package": "atkinson-hyperlegible",
+          "meanAbsWidthDelta": 0.0233,
+          "meanWidthDelta": 0.0202,
+          "maxAbsWidthDelta": 0.0851,
+          "styles": 4,
+          "reference": "Constantia 5.93"
+        },
+        {
+          "package": "red-hat-display",
+          "meanAbsWidthDelta": 0.0234,
+          "meanWidthDelta": -0.0031,
+          "maxAbsWidthDelta": 0.0941,
+          "styles": 4,
+          "reference": "Constantia 5.93"
+        },
+        {
+          "package": "outfit",
+          "meanAbsWidthDelta": 0.026,
+          "meanWidthDelta": -0.0026,
+          "maxAbsWidthDelta": 0.0806,
+          "styles": 2,
+          "reference": "Constantia 5.93"
+        },
+        {
+          "package": "hind",
+          "meanAbsWidthDelta": 0.0262,
+          "meanWidthDelta": -0.0244,
+          "maxAbsWidthDelta": 0.0967,
+          "styles": 2,
+          "reference": "Constantia 5.93"
+        },
+        {
+          "package": "playfair-display",
+          "meanAbsWidthDelta": 0.0263,
+          "meanWidthDelta": -0.0014,
+          "maxAbsWidthDelta": 0.0843,
+          "styles": 4,
+          "reference": "Constantia 5.93"
+        },
+        {
+          "package": "ubuntu",
+          "meanAbsWidthDelta": 0.0267,
+          "meanWidthDelta": 0.0209,
+          "maxAbsWidthDelta": 0.0841,
+          "styles": 4,
+          "reference": "Constantia 5.93"
+        },
+        {
+          "package": "sarabun",
+          "meanAbsWidthDelta": 0.0272,
+          "meanWidthDelta": -0.0146,
+          "maxAbsWidthDelta": 0.0865,
+          "styles": 4,
+          "reference": "Constantia 5.93"
+        },
+        {
+          "package": "ibm-plex-sans",
+          "meanAbsWidthDelta": 0.0282,
+          "meanWidthDelta": 0.0082,
+          "maxAbsWidthDelta": 0.075,
+          "styles": 4,
+          "reference": "Constantia 5.93"
+        }
+      ]
+    },
+    {
+      "family": "Corbel",
+      "chosen": "Source Sans 3",
+      "top": [
+        {
+          "package": "cabin",
+          "meanAbsWidthDelta": 0.0109,
+          "meanWidthDelta": 0.003,
+          "maxAbsWidthDelta": 0.045,
+          "styles": 4,
+          "reference": "Corbel 6.01"
+        },
+        {
+          "package": "mukta",
+          "meanAbsWidthDelta": 0.0153,
+          "meanWidthDelta": 0.0148,
+          "maxAbsWidthDelta": 0.0361,
+          "styles": 2,
+          "reference": "Corbel 6.01"
+        },
+        {
+          "package": "source-sans-3",
+          "meanAbsWidthDelta": 0.0157,
+          "meanWidthDelta": 0.0151,
+          "maxAbsWidthDelta": 0.0521,
+          "styles": 4,
+          "reference": "Corbel 6.01"
+        },
+        {
+          "package": "tinos",
+          "meanAbsWidthDelta": 0.0164,
+          "meanWidthDelta": 0.0014,
+          "maxAbsWidthDelta": 0.0853,
+          "styles": 4,
+          "reference": "Corbel 6.01"
+        },
+        {
+          "package": "carlito",
+          "meanAbsWidthDelta": 0.0228,
+          "meanWidthDelta": -0.0161,
+          "maxAbsWidthDelta": 0.0751,
+          "styles": 4,
+          "reference": "Corbel 6.01"
+        },
+        {
+          "package": "pt-sans",
+          "meanAbsWidthDelta": 0.0247,
+          "meanWidthDelta": -0.0006,
+          "maxAbsWidthDelta": 0.0609,
+          "styles": 4,
+          "reference": "Corbel 6.01"
+        },
+        {
+          "package": "caladea",
+          "meanAbsWidthDelta": 0.0302,
+          "meanWidthDelta": 0.0232,
+          "maxAbsWidthDelta": 0.0984,
+          "styles": 4,
+          "reference": "Corbel 6.01"
+        },
+        {
+          "package": "zilla-slab",
+          "meanAbsWidthDelta": 0.0303,
+          "meanWidthDelta": 0.0206,
+          "maxAbsWidthDelta": 0.0881,
+          "styles": 4,
+          "reference": "Corbel 6.01"
+        },
+        {
+          "package": "lato",
+          "meanAbsWidthDelta": 0.0326,
+          "meanWidthDelta": 0.0248,
+          "maxAbsWidthDelta": 0.0951,
+          "styles": 4,
+          "reference": "Corbel 6.01"
+        },
+        {
+          "package": "crimson-pro",
+          "meanAbsWidthDelta": 0.0358,
+          "meanWidthDelta": -0.0352,
+          "maxAbsWidthDelta": 0.1076,
+          "styles": 4,
+          "reference": "Corbel 6.01"
+        }
+      ]
+    },
+    {
+      "family": "Courier New",
+      "chosen": "Cousine",
+      "top": [
+        {
+          "package": "cousine",
+          "meanAbsWidthDelta": 0,
+          "meanWidthDelta": 0,
+          "maxAbsWidthDelta": 0,
+          "styles": 4,
+          "reference": "Courier New 6.95"
+        },
+        {
+          "package": "fira-mono",
+          "meanAbsWidthDelta": 0.0002,
+          "meanWidthDelta": -0.0002,
+          "maxAbsWidthDelta": 0.0002,
+          "styles": 2,
+          "reference": "Courier New 6.95"
+        },
+        {
+          "package": "ibm-plex-mono",
+          "meanAbsWidthDelta": 0.0002,
+          "meanWidthDelta": -0.0002,
+          "maxAbsWidthDelta": 0.0002,
+          "styles": 4,
+          "reference": "Courier New 6.95"
+        },
+        {
+          "package": "jetbrains-mono",
+          "meanAbsWidthDelta": 0.0002,
+          "meanWidthDelta": -0.0002,
+          "maxAbsWidthDelta": 0.0002,
+          "styles": 4,
+          "reference": "Courier New 6.95"
+        },
+        {
+          "package": "source-code-pro",
+          "meanAbsWidthDelta": 0.0002,
+          "meanWidthDelta": -0.0002,
+          "maxAbsWidthDelta": 0.0002,
+          "styles": 4,
+          "reference": "Courier New 6.95"
+        },
+        {
+          "package": "roboto-mono",
+          "meanAbsWidthDelta": 0.011,
+          "meanWidthDelta": -0.011,
+          "maxAbsWidthDelta": 0.022,
+          "styles": 4,
+          "reference": "Courier New 6.95"
+        },
+        {
+          "package": "montserrat",
+          "meanAbsWidthDelta": 0.1037,
+          "meanWidthDelta": -0.1022,
+          "maxAbsWidthDelta": 0.2661,
+          "styles": 4,
+          "reference": "Courier New 6.95"
+        },
+        {
+          "package": "arvo",
+          "meanAbsWidthDelta": 0.1126,
+          "meanWidthDelta": -0.1116,
+          "maxAbsWidthDelta": 0.2462,
+          "styles": 4,
+          "reference": "Courier New 6.95"
+        },
+        {
+          "package": "poppins",
+          "meanAbsWidthDelta": 0.1199,
+          "meanWidthDelta": -0.1193,
+          "maxAbsWidthDelta": 0.2986,
+          "styles": 4,
+          "reference": "Courier New 6.95"
+        },
+        {
+          "package": "libre-baskerville",
+          "meanAbsWidthDelta": 0.1346,
+          "meanWidthDelta": -0.1337,
+          "maxAbsWidthDelta": 0.2809,
+          "styles": 4,
+          "reference": "Courier New 6.95"
+        }
+      ]
+    },
+    {
+      "family": "DilleniaUPC",
+      "chosen": "Noto Sans Thai",
+      "top": [
+        {
+          "package": "league-gothic",
+          "meanAbsWidthDelta": 0.0809,
+          "meanWidthDelta": -0.0809,
+          "maxAbsWidthDelta": 0.1341,
+          "styles": 2,
+          "reference": "DilleniaUPC 5.05"
+        },
+        {
+          "package": "bebas-neue",
+          "meanAbsWidthDelta": 0.1948,
+          "meanWidthDelta": 0.1948,
+          "maxAbsWidthDelta": 0.3382,
+          "styles": 2,
+          "reference": "DilleniaUPC 5.05"
+        },
+        {
+          "package": "pt-sans-narrow",
+          "meanAbsWidthDelta": 0.2253,
+          "meanWidthDelta": 0.2253,
+          "maxAbsWidthDelta": 0.2767,
+          "styles": 2,
+          "reference": "DilleniaUPC 5.05"
+        },
+        {
+          "package": "cormorant-garamond",
+          "meanAbsWidthDelta": 0.3318,
+          "meanWidthDelta": 0.3318,
+          "maxAbsWidthDelta": 0.5081,
+          "styles": 4,
+          "reference": "DilleniaUPC 5.05"
+        },
+        {
+          "package": "archivo-narrow",
+          "meanAbsWidthDelta": 0.3361,
+          "meanWidthDelta": 0.3361,
+          "maxAbsWidthDelta": 0.4252,
+          "styles": 4,
+          "reference": "DilleniaUPC 5.05"
+        },
+        {
+          "package": "fjalla-one",
+          "meanAbsWidthDelta": 0.3509,
+          "meanWidthDelta": 0.3509,
+          "maxAbsWidthDelta": 0.4701,
+          "styles": 2,
+          "reference": "DilleniaUPC 5.05"
+        },
+        {
+          "package": "oswald",
+          "meanAbsWidthDelta": 0.3509,
+          "meanWidthDelta": 0.3509,
+          "maxAbsWidthDelta": 0.4928,
+          "styles": 2,
+          "reference": "DilleniaUPC 5.05"
+        },
+        {
+          "package": "roboto-condensed",
+          "meanAbsWidthDelta": 0.3776,
+          "meanWidthDelta": 0.3776,
+          "maxAbsWidthDelta": 0.4829,
+          "styles": 4,
+          "reference": "DilleniaUPC 5.05"
+        },
+        {
+          "package": "anton",
+          "meanAbsWidthDelta": 0.4112,
+          "meanWidthDelta": 0.4112,
+          "maxAbsWidthDelta": 0.4981,
+          "styles": 2,
+          "reference": "DilleniaUPC 5.05"
+        },
+        {
+          "package": "crimson-pro",
+          "meanAbsWidthDelta": 0.4122,
+          "meanWidthDelta": 0.4122,
+          "maxAbsWidthDelta": 0.5789,
+          "styles": 4,
+          "reference": "DilleniaUPC 5.05"
+        }
+      ]
+    },
+    {
+      "family": "Ebrima",
+      "chosen": "Noto Sans",
+      "top": [
+        {
+          "package": "atkinson-hyperlegible",
+          "meanAbsWidthDelta": 0.0109,
+          "meanWidthDelta": 0.0015,
+          "maxAbsWidthDelta": 0.0449,
+          "styles": 2,
+          "reference": "Ebrima 5.19"
+        },
+        {
+          "package": "vollkorn",
+          "meanAbsWidthDelta": 0.0111,
+          "meanWidthDelta": -0.0011,
+          "maxAbsWidthDelta": 0.0678,
+          "styles": 2,
+          "reference": "Ebrima 5.19"
+        },
+        {
+          "package": "archivo",
+          "meanAbsWidthDelta": 0.0124,
+          "meanWidthDelta": 0.0015,
+          "maxAbsWidthDelta": 0.0514,
+          "styles": 2,
+          "reference": "Ebrima 5.19"
+        },
+        {
+          "package": "ibm-plex-sans",
+          "meanAbsWidthDelta": 0.0129,
+          "meanWidthDelta": 0.0053,
+          "maxAbsWidthDelta": 0.0449,
+          "styles": 2,
+          "reference": "Ebrima 5.19"
+        },
+        {
+          "package": "overpass",
+          "meanAbsWidthDelta": 0.0137,
+          "meanWidthDelta": 0.0011,
+          "maxAbsWidthDelta": 0.0555,
+          "styles": 2,
+          "reference": "Ebrima 5.19"
+        },
+        {
+          "package": "red-hat-display",
+          "meanAbsWidthDelta": 0.0145,
+          "meanWidthDelta": -0.0103,
+          "maxAbsWidthDelta": 0.0558,
+          "styles": 2,
+          "reference": "Ebrima 5.19"
+        },
+        {
+          "package": "arimo",
+          "meanAbsWidthDelta": 0.0153,
+          "meanWidthDelta": 0.0108,
+          "maxAbsWidthDelta": 0.0708,
+          "styles": 2,
+          "reference": "Ebrima 5.19"
+        },
+        {
+          "package": "pt-serif",
+          "meanAbsWidthDelta": 0.0159,
+          "meanWidthDelta": 0.0155,
+          "maxAbsWidthDelta": 0.0706,
+          "styles": 2,
+          "reference": "Ebrima 5.19"
+        },
+        {
+          "package": "nunito-sans",
+          "meanAbsWidthDelta": 0.0165,
+          "meanWidthDelta": 0.0038,
+          "maxAbsWidthDelta": 0.0747,
+          "styles": 2,
+          "reference": "Ebrima 5.19"
+        },
+        {
+          "package": "spectral",
+          "meanAbsWidthDelta": 0.0166,
+          "meanWidthDelta": 0.0006,
+          "maxAbsWidthDelta": 0.0823,
+          "styles": 2,
+          "reference": "Ebrima 5.19"
+        }
+      ]
+    },
+    {
+      "family": "Franklin Gothic Book",
+      "chosen": "Barlow",
+      "top": [
+        {
+          "package": "mukta",
+          "meanAbsWidthDelta": 0.0112,
+          "meanWidthDelta": -0.003,
+          "maxAbsWidthDelta": 0.0428,
+          "styles": 1,
+          "reference": "Franklin Gothic Book 2.01"
+        },
+        {
+          "package": "barlow",
+          "meanAbsWidthDelta": 0.0181,
+          "meanWidthDelta": 0.0119,
+          "maxAbsWidthDelta": 0.0755,
+          "styles": 2,
+          "reference": "Franklin Gothic Book 2.01"
+        },
+        {
+          "package": "hind",
+          "meanAbsWidthDelta": 0.0242,
+          "meanWidthDelta": 0.0236,
+          "maxAbsWidthDelta": 0.0708,
+          "styles": 1,
+          "reference": "Franklin Gothic Book 2.01"
+        },
+        {
+          "package": "source-sans-3",
+          "meanAbsWidthDelta": 0.0243,
+          "meanWidthDelta": -0.0223,
+          "maxAbsWidthDelta": 0.0659,
+          "styles": 2,
+          "reference": "Franklin Gothic Book 2.01"
+        },
+        {
+          "package": "quattrocento-sans",
+          "meanAbsWidthDelta": 0.0297,
+          "meanWidthDelta": 0.0297,
+          "maxAbsWidthDelta": 0.0752,
+          "styles": 2,
+          "reference": "Franklin Gothic Book 2.01"
+        },
+        {
+          "package": "pt-sans",
+          "meanAbsWidthDelta": 0.0302,
+          "meanWidthDelta": -0.0114,
+          "maxAbsWidthDelta": 0.0797,
+          "styles": 2,
+          "reference": "Franklin Gothic Book 2.01"
+        },
+        {
+          "package": "sarabun",
+          "meanAbsWidthDelta": 0.0307,
+          "meanWidthDelta": 0.0307,
+          "maxAbsWidthDelta": 0.0743,
+          "styles": 2,
+          "reference": "Franklin Gothic Book 2.01"
+        },
+        {
+          "package": "tinos",
+          "meanAbsWidthDelta": 0.0319,
+          "meanWidthDelta": -0.0309,
+          "maxAbsWidthDelta": 0.0739,
+          "styles": 2,
+          "reference": "Franklin Gothic Book 2.01"
+        },
+        {
+          "package": "cabin",
+          "meanAbsWidthDelta": 0.0353,
+          "meanWidthDelta": -0.0306,
+          "maxAbsWidthDelta": 0.0881,
+          "styles": 2,
+          "reference": "Franklin Gothic Book 2.01"
+        },
+        {
+          "package": "zilla-slab",
+          "meanAbsWidthDelta": 0.0359,
+          "meanWidthDelta": -0.0003,
+          "maxAbsWidthDelta": 0.0967,
+          "styles": 2,
+          "reference": "Franklin Gothic Book 2.01"
+        }
+      ]
+    },
+    {
+      "family": "Franklin Gothic Medium",
+      "chosen": "Barlow",
+      "top": [
+        {
+          "package": "mukta",
+          "meanAbsWidthDelta": 0.0103,
+          "meanWidthDelta": -0.0038,
+          "maxAbsWidthDelta": 0.0424,
+          "styles": 1,
+          "reference": "Franklin Gothic Medium 5.02"
+        },
+        {
+          "package": "barlow",
+          "meanAbsWidthDelta": 0.0141,
+          "meanWidthDelta": 0.0059,
+          "maxAbsWidthDelta": 0.0759,
+          "styles": 2,
+          "reference": "Franklin Gothic Medium 5.02/5.01"
+        },
+        {
+          "package": "quattrocento-sans",
+          "meanAbsWidthDelta": 0.0157,
+          "meanWidthDelta": 0.0132,
+          "maxAbsWidthDelta": 0.0698,
+          "styles": 2,
+          "reference": "Franklin Gothic Medium 5.02/5.01"
+        },
+        {
+          "package": "old-standard-tt",
+          "meanAbsWidthDelta": 0.0219,
+          "meanWidthDelta": 0.0198,
+          "maxAbsWidthDelta": 0.1188,
+          "styles": 2,
+          "reference": "Franklin Gothic Medium 5.02/5.01"
+        },
+        {
+          "package": "hind",
+          "meanAbsWidthDelta": 0.022,
+          "meanWidthDelta": 0.0213,
+          "maxAbsWidthDelta": 0.0583,
+          "styles": 1,
+          "reference": "Franklin Gothic Medium 5.02"
+        },
+        {
+          "package": "source-sans-3",
+          "meanAbsWidthDelta": 0.0246,
+          "meanWidthDelta": -0.0239,
+          "maxAbsWidthDelta": 0.0663,
+          "styles": 2,
+          "reference": "Franklin Gothic Medium 5.02/5.01"
+        },
+        {
+          "package": "cabin",
+          "meanAbsWidthDelta": 0.0271,
+          "meanWidthDelta": -0.0257,
+          "maxAbsWidthDelta": 0.0696,
+          "styles": 2,
+          "reference": "Franklin Gothic Medium 5.02/5.01"
+        },
+        {
+          "package": "pt-serif",
+          "meanAbsWidthDelta": 0.0287,
+          "meanWidthDelta": 0.0197,
+          "maxAbsWidthDelta": 0.0906,
+          "styles": 2,
+          "reference": "Franklin Gothic Medium 5.02/5.01"
+        },
+        {
+          "package": "sarabun",
+          "meanAbsWidthDelta": 0.0302,
+          "meanWidthDelta": 0.0302,
+          "maxAbsWidthDelta": 0.0791,
+          "styles": 2,
+          "reference": "Franklin Gothic Medium 5.02/5.01"
+        },
+        {
+          "package": "pt-sans",
+          "meanAbsWidthDelta": 0.0309,
+          "meanWidthDelta": -0.0273,
+          "maxAbsWidthDelta": 0.097,
+          "styles": 2,
+          "reference": "Franklin Gothic Medium 5.02/5.01"
+        }
+      ]
+    },
+    {
+      "family": "Garamond",
+      "chosen": "EB Garamond",
+      "top": [
+        {
+          "package": "crimson-pro",
+          "meanAbsWidthDelta": 0.0451,
+          "meanWidthDelta": 0.0387,
+          "maxAbsWidthDelta": 0.1639,
+          "styles": 3,
+          "reference": "Garamond 2.40"
+        },
+        {
+          "package": "cormorant-garamond",
+          "meanAbsWidthDelta": 0.0454,
+          "meanWidthDelta": 0.0001,
+          "maxAbsWidthDelta": 0.121,
+          "styles": 3,
+          "reference": "Garamond 2.40"
+        },
+        {
+          "package": "mukta",
+          "meanAbsWidthDelta": 0.0456,
+          "meanWidthDelta": 0.0447,
+          "maxAbsWidthDelta": 0.1021,
+          "styles": 2,
+          "reference": "Garamond 2.40"
+        },
+        {
+          "package": "anton",
+          "meanAbsWidthDelta": 0.0464,
+          "meanWidthDelta": -0.0208,
+          "maxAbsWidthDelta": 0.1332,
+          "styles": 2,
+          "reference": "Garamond 2.40"
+        },
+        {
+          "package": "eb-garamond",
+          "meanAbsWidthDelta": 0.0488,
+          "meanWidthDelta": 0.0277,
+          "maxAbsWidthDelta": 0.1883,
+          "styles": 3,
+          "reference": "Garamond 2.40"
+        },
+        {
+          "package": "fjalla-one",
+          "meanAbsWidthDelta": 0.0638,
+          "meanWidthDelta": -0.0627,
+          "maxAbsWidthDelta": 0.1739,
+          "styles": 2,
+          "reference": "Garamond 2.40"
+        },
+        {
+          "package": "oswald",
+          "meanAbsWidthDelta": 0.0647,
+          "meanWidthDelta": -0.0647,
+          "maxAbsWidthDelta": 0.1415,
+          "styles": 2,
+          "reference": "Garamond 2.40"
+        },
+        {
+          "package": "roboto-condensed",
+          "meanAbsWidthDelta": 0.0728,
+          "meanWidthDelta": 0.0265,
+          "maxAbsWidthDelta": 0.2294,
+          "styles": 3,
+          "reference": "Garamond 2.40"
+        },
+        {
+          "package": "hind",
+          "meanAbsWidthDelta": 0.0752,
+          "meanWidthDelta": 0.0752,
+          "maxAbsWidthDelta": 0.1307,
+          "styles": 2,
+          "reference": "Garamond 2.40"
+        },
+        {
+          "package": "archivo-narrow",
+          "meanAbsWidthDelta": 0.0805,
+          "meanWidthDelta": -0.0182,
+          "maxAbsWidthDelta": 0.1765,
+          "styles": 3,
+          "reference": "Garamond 2.40"
+        }
+      ]
+    },
+    {
+      "family": "Georgia",
+      "chosen": "Gelasio",
+      "top": [
+        {
+          "package": "gelasio",
+          "meanAbsWidthDelta": 0.0002,
+          "meanWidthDelta": -0.0002,
+          "maxAbsWidthDelta": 0.0102,
+          "styles": 4,
+          "reference": "Georgia 5.59"
+        },
+        {
+          "package": "noto-serif",
+          "meanAbsWidthDelta": 0.037,
+          "meanWidthDelta": 0.0156,
+          "maxAbsWidthDelta": 0.0976,
+          "styles": 4,
+          "reference": "Georgia 5.59"
+        },
+        {
+          "package": "rubik",
+          "meanAbsWidthDelta": 0.0404,
+          "meanWidthDelta": -0.0037,
+          "maxAbsWidthDelta": 0.0894,
+          "styles": 4,
+          "reference": "Georgia 5.59"
+        },
+        {
+          "package": "noto-sans-bengali",
+          "meanAbsWidthDelta": 0.0423,
+          "meanWidthDelta": 0.0128,
+          "maxAbsWidthDelta": 0.0769,
+          "styles": 2,
+          "reference": "Georgia 5.59"
+        },
+        {
+          "package": "noto-nastaliq-urdu",
+          "meanAbsWidthDelta": 0.0425,
+          "meanWidthDelta": 0.0057,
+          "maxAbsWidthDelta": 0.0909,
+          "styles": 2,
+          "reference": "Georgia 5.59"
+        },
+        {
+          "package": "red-hat-text",
+          "meanAbsWidthDelta": 0.0439,
+          "meanWidthDelta": -0.041,
+          "maxAbsWidthDelta": 0.1147,
+          "styles": 4,
+          "reference": "Georgia 5.59"
+        },
+        {
+          "package": "noto-sans-gurmukhi",
+          "meanAbsWidthDelta": 0.0442,
+          "meanWidthDelta": 0.0111,
+          "maxAbsWidthDelta": 0.0769,
+          "styles": 2,
+          "reference": "Georgia 5.59"
+        },
+        {
+          "package": "noto-sans-hebrew",
+          "meanAbsWidthDelta": 0.0442,
+          "meanWidthDelta": 0.0059,
+          "maxAbsWidthDelta": 0.081,
+          "styles": 2,
+          "reference": "Georgia 5.59"
+        },
+        {
+          "package": "noto-sans-armenian",
+          "meanAbsWidthDelta": 0.0443,
+          "meanWidthDelta": 0.0109,
+          "maxAbsWidthDelta": 0.0769,
+          "styles": 2,
+          "reference": "Georgia 5.59"
+        },
+        {
+          "package": "noto-sans-gujarati",
+          "meanAbsWidthDelta": 0.0443,
+          "meanWidthDelta": 0.0109,
+          "maxAbsWidthDelta": 0.0769,
+          "styles": 2,
+          "reference": "Georgia 5.59"
+        }
+      ]
+    },
+    {
+      "family": "Gill Sans MT",
+      "chosen": "Source Sans 3",
+      "top": [
+        {
+          "package": "vollkorn",
+          "meanAbsWidthDelta": 0.0342,
+          "meanWidthDelta": 0.0273,
+          "maxAbsWidthDelta": 0.1437,
+          "styles": 4,
+          "reference": "Gill Sans MT 1.65"
+        },
+        {
+          "package": "caladea",
+          "meanAbsWidthDelta": 0.0385,
+          "meanWidthDelta": 0.0108,
+          "maxAbsWidthDelta": 0.144,
+          "styles": 4,
+          "reference": "Gill Sans MT 1.65"
+        },
+        {
+          "package": "hind",
+          "meanAbsWidthDelta": 0.0432,
+          "meanWidthDelta": 0.0075,
+          "maxAbsWidthDelta": 0.0928,
+          "styles": 2,
+          "reference": "Gill Sans MT 1.65"
+        },
+        {
+          "package": "mukta",
+          "meanAbsWidthDelta": 0.0448,
+          "meanWidthDelta": -0.021,
+          "maxAbsWidthDelta": 0.1002,
+          "styles": 2,
+          "reference": "Gill Sans MT 1.65"
+        },
+        {
+          "package": "source-sans-3",
+          "meanAbsWidthDelta": 0.051,
+          "meanWidthDelta": 0.0038,
+          "maxAbsWidthDelta": 0.1456,
+          "styles": 4,
+          "reference": "Gill Sans MT 1.65"
+        },
+        {
+          "package": "crimson-pro",
+          "meanAbsWidthDelta": 0.0511,
+          "meanWidthDelta": -0.047,
+          "maxAbsWidthDelta": 0.1451,
+          "styles": 4,
+          "reference": "Gill Sans MT 1.65"
+        },
+        {
+          "package": "cabin",
+          "meanAbsWidthDelta": 0.0527,
+          "meanWidthDelta": -0.0082,
+          "maxAbsWidthDelta": 0.1277,
+          "styles": 4,
+          "reference": "Gill Sans MT 1.65"
+        },
+        {
+          "package": "outfit",
+          "meanAbsWidthDelta": 0.0538,
+          "meanWidthDelta": 0.0302,
+          "maxAbsWidthDelta": 0.1503,
+          "styles": 2,
+          "reference": "Gill Sans MT 1.65"
+        },
+        {
+          "package": "eb-garamond",
+          "meanAbsWidthDelta": 0.054,
+          "meanWidthDelta": -0.046,
+          "maxAbsWidthDelta": 0.1386,
+          "styles": 4,
+          "reference": "Gill Sans MT 1.65"
+        },
+        {
+          "package": "tinos",
+          "meanAbsWidthDelta": 0.0592,
+          "meanWidthDelta": -0.0094,
+          "maxAbsWidthDelta": 0.1983,
+          "styles": 4,
+          "reference": "Gill Sans MT 1.65"
+        }
+      ]
+    },
+    {
+      "family": "Impact",
+      "chosen": "Anton",
+      "top": [
+        {
+          "package": "caladea",
+          "meanAbsWidthDelta": 0.012,
+          "meanWidthDelta": -0.0015,
+          "maxAbsWidthDelta": 0.0445,
+          "styles": 1,
+          "reference": "Impact 5.11"
+        },
+        {
+          "package": "carlito",
+          "meanAbsWidthDelta": 0.0133,
+          "meanWidthDelta": -0.0103,
+          "maxAbsWidthDelta": 0.0499,
+          "styles": 1,
+          "reference": "Impact 5.11"
+        },
+        {
+          "package": "source-sans-3",
+          "meanAbsWidthDelta": 0.0162,
+          "meanWidthDelta": 0.0158,
+          "maxAbsWidthDelta": 0.0487,
+          "styles": 1,
+          "reference": "Impact 5.11"
+        },
+        {
+          "package": "tinos",
+          "meanAbsWidthDelta": 0.0162,
+          "meanWidthDelta": -0.0046,
+          "maxAbsWidthDelta": 0.0585,
+          "styles": 1,
+          "reference": "Impact 5.11"
+        },
+        {
+          "package": "anton",
+          "meanAbsWidthDelta": 0.0192,
+          "meanWidthDelta": -0.019,
+          "maxAbsWidthDelta": 0.0512,
+          "styles": 1,
+          "reference": "Impact 5.11"
+        },
+        {
+          "package": "mukta",
+          "meanAbsWidthDelta": 0.0212,
+          "meanWidthDelta": 0.0207,
+          "maxAbsWidthDelta": 0.0645,
+          "styles": 1,
+          "reference": "Impact 5.11"
+        },
+        {
+          "package": "crimson-pro",
+          "meanAbsWidthDelta": 0.0237,
+          "meanWidthDelta": -0.0226,
+          "maxAbsWidthDelta": 0.0606,
+          "styles": 1,
+          "reference": "Impact 5.11"
+        },
+        {
+          "package": "cabin",
+          "meanAbsWidthDelta": 0.0257,
+          "meanWidthDelta": 0.0248,
+          "maxAbsWidthDelta": 0.0764,
+          "styles": 1,
+          "reference": "Impact 5.11"
+        },
+        {
+          "package": "cormorant-garamond",
+          "meanAbsWidthDelta": 0.0358,
+          "meanWidthDelta": -0.0339,
+          "maxAbsWidthDelta": 0.079,
+          "styles": 1,
+          "reference": "Impact 5.11"
+        },
+        {
+          "package": "roboto-condensed",
+          "meanAbsWidthDelta": 0.0373,
+          "meanWidthDelta": -0.0373,
+          "maxAbsWidthDelta": 0.0688,
+          "styles": 1,
+          "reference": "Impact 5.11"
+        }
+      ]
+    },
+    {
+      "family": "Lucida Console",
+      "chosen": "Cousine",
+      "top": [
+        {
+          "package": "cousine",
+          "meanAbsWidthDelta": 0.0041,
+          "meanWidthDelta": -0.0041,
+          "maxAbsWidthDelta": 0.0041,
+          "styles": 1,
+          "reference": "Lucida Console 5.01"
+        },
+        {
+          "package": "roboto-mono",
+          "meanAbsWidthDelta": 0.0041,
+          "meanWidthDelta": -0.0041,
+          "maxAbsWidthDelta": 0.0041,
+          "styles": 1,
+          "reference": "Lucida Console 5.01"
+        },
+        {
+          "package": "fira-mono",
+          "meanAbsWidthDelta": 0.0042,
+          "meanWidthDelta": -0.0042,
+          "maxAbsWidthDelta": 0.0042,
+          "styles": 1,
+          "reference": "Lucida Console 5.01"
+        },
+        {
+          "package": "ibm-plex-mono",
+          "meanAbsWidthDelta": 0.0042,
+          "meanWidthDelta": -0.0042,
+          "maxAbsWidthDelta": 0.0042,
+          "styles": 1,
+          "reference": "Lucida Console 5.01"
+        },
+        {
+          "package": "jetbrains-mono",
+          "meanAbsWidthDelta": 0.0042,
+          "meanWidthDelta": -0.0042,
+          "maxAbsWidthDelta": 0.0042,
+          "styles": 1,
+          "reference": "Lucida Console 5.01"
+        },
+        {
+          "package": "source-code-pro",
+          "meanAbsWidthDelta": 0.0042,
+          "meanWidthDelta": -0.0042,
+          "maxAbsWidthDelta": 0.0042,
+          "styles": 1,
+          "reference": "Lucida Console 5.01"
+        },
+        {
+          "package": "libre-baskerville",
+          "meanAbsWidthDelta": 0.1101,
+          "meanWidthDelta": -0.1094,
+          "maxAbsWidthDelta": 0.2162,
+          "styles": 1,
+          "reference": "Lucida Console 5.01"
+        },
+        {
+          "package": "montserrat",
+          "meanAbsWidthDelta": 0.1331,
+          "meanWidthDelta": -0.1327,
+          "maxAbsWidthDelta": 0.2691,
+          "styles": 1,
+          "reference": "Lucida Console 5.01"
+        },
+        {
+          "package": "poppins",
+          "meanAbsWidthDelta": 0.1407,
+          "meanWidthDelta": -0.1406,
+          "maxAbsWidthDelta": 0.3015,
+          "styles": 1,
+          "reference": "Lucida Console 5.01"
+        },
+        {
+          "package": "arvo",
+          "meanAbsWidthDelta": 0.1517,
+          "meanWidthDelta": -0.1517,
+          "maxAbsWidthDelta": 0.2492,
+          "styles": 1,
+          "reference": "Lucida Console 5.01"
+        }
+      ]
+    },
+    {
+      "family": "Lucida Sans",
+      "chosen": "Work Sans",
+      "top": [
+        {
+          "package": "domine",
+          "meanAbsWidthDelta": 0.0104,
+          "meanWidthDelta": -0.0037,
+          "maxAbsWidthDelta": 0.0434,
+          "styles": 1,
+          "reference": "Lucida Sans 1.67"
+        },
+        {
+          "package": "golos-text",
+          "meanAbsWidthDelta": 0.011,
+          "meanWidthDelta": -0.0073,
+          "maxAbsWidthDelta": 0.0362,
+          "styles": 1,
+          "reference": "Lucida Sans 1.67"
+        },
+        {
+          "package": "work-sans",
+          "meanAbsWidthDelta": 0.0124,
+          "meanWidthDelta": 0.0047,
+          "maxAbsWidthDelta": 0.0498,
+          "styles": 2,
+          "reference": "Lucida Sans 1.67"
+        },
+        {
+          "package": "libre-caslon-text",
+          "meanAbsWidthDelta": 0.0208,
+          "meanWidthDelta": -0.0184,
+          "maxAbsWidthDelta": 0.0515,
+          "styles": 2,
+          "reference": "Lucida Sans 1.67"
+        },
+        {
+          "package": "noto-naskh-arabic",
+          "meanAbsWidthDelta": 0.0214,
+          "meanWidthDelta": -0.0198,
+          "maxAbsWidthDelta": 0.0513,
+          "styles": 1,
+          "reference": "Lucida Sans 1.67"
+        },
+        {
+          "package": "noto-sans-malayalam",
+          "meanAbsWidthDelta": 0.0215,
+          "meanWidthDelta": -0.0214,
+          "maxAbsWidthDelta": 0.0748,
+          "styles": 1,
+          "reference": "Lucida Sans 1.67"
+        },
+        {
+          "package": "inter",
+          "meanAbsWidthDelta": 0.0222,
+          "meanWidthDelta": -0.0213,
+          "maxAbsWidthDelta": 0.055,
+          "styles": 2,
+          "reference": "Lucida Sans 1.67"
+        },
+        {
+          "package": "roboto-slab",
+          "meanAbsWidthDelta": 0.0222,
+          "meanWidthDelta": -0.0209,
+          "maxAbsWidthDelta": 0.0644,
+          "styles": 1,
+          "reference": "Lucida Sans 1.67"
+        },
+        {
+          "package": "noto-sans-kannada",
+          "meanAbsWidthDelta": 0.0259,
+          "meanWidthDelta": -0.0259,
+          "maxAbsWidthDelta": 0.0795,
+          "styles": 1,
+          "reference": "Lucida Sans 1.67"
+        },
+        {
+          "package": "noto-serif",
+          "meanAbsWidthDelta": 0.0262,
+          "meanWidthDelta": -0.0247,
+          "maxAbsWidthDelta": 0.0644,
+          "styles": 2,
+          "reference": "Lucida Sans 1.67"
+        }
+      ]
+    },
+    {
+      "family": "Lucida Sans Unicode",
+      "chosen": "Work Sans",
+      "top": [
+        {
+          "package": "domine",
+          "meanAbsWidthDelta": 0.0113,
+          "meanWidthDelta": -0.0047,
+          "maxAbsWidthDelta": 0.0476,
+          "styles": 1,
+          "reference": "Lucida Sans Unicode 5.01"
+        },
+        {
+          "package": "golos-text",
+          "meanAbsWidthDelta": 0.0119,
+          "meanWidthDelta": -0.0083,
+          "maxAbsWidthDelta": 0.0362,
+          "styles": 1,
+          "reference": "Lucida Sans Unicode 5.01"
+        },
+        {
+          "package": "merriweather",
+          "meanAbsWidthDelta": 0.0122,
+          "meanWidthDelta": -0.0054,
+          "maxAbsWidthDelta": 0.0461,
+          "styles": 1,
+          "reference": "Lucida Sans Unicode 5.01"
+        },
+        {
+          "package": "work-sans",
+          "meanAbsWidthDelta": 0.0132,
+          "meanWidthDelta": 0.0102,
+          "maxAbsWidthDelta": 0.0498,
+          "styles": 1,
+          "reference": "Lucida Sans Unicode 5.01"
+        },
+        {
+          "package": "arvo",
+          "meanAbsWidthDelta": 0.0159,
+          "meanWidthDelta": 0.0122,
+          "maxAbsWidthDelta": 0.0614,
+          "styles": 1,
+          "reference": "Lucida Sans Unicode 5.01"
+        },
+        {
+          "package": "noto-serif",
+          "meanAbsWidthDelta": 0.016,
+          "meanWidthDelta": -0.013,
+          "maxAbsWidthDelta": 0.0612,
+          "styles": 1,
+          "reference": "Lucida Sans Unicode 5.01"
+        },
+        {
+          "package": "source-serif-4",
+          "meanAbsWidthDelta": 0.0179,
+          "meanWidthDelta": -0.0162,
+          "maxAbsWidthDelta": 0.0605,
+          "styles": 1,
+          "reference": "Lucida Sans Unicode 5.01"
+        },
+        {
+          "package": "libre-caslon-text",
+          "meanAbsWidthDelta": 0.0204,
+          "meanWidthDelta": -0.0183,
+          "maxAbsWidthDelta": 0.0455,
+          "styles": 1,
+          "reference": "Lucida Sans Unicode 5.01"
+        },
+        {
+          "package": "noto-naskh-arabic",
+          "meanAbsWidthDelta": 0.0224,
+          "meanWidthDelta": -0.0208,
+          "maxAbsWidthDelta": 0.0679,
+          "styles": 1,
+          "reference": "Lucida Sans Unicode 5.01"
+        },
+        {
+          "package": "noto-sans-malayalam",
+          "meanAbsWidthDelta": 0.0225,
+          "meanWidthDelta": -0.0224,
+          "maxAbsWidthDelta": 0.0748,
+          "styles": 1,
+          "reference": "Lucida Sans Unicode 5.01"
+        }
+      ]
+    },
+    {
+      "family": "Malgun Gothic",
+      "chosen": "Noto Sans KR",
+      "top": [
+        {
+          "package": "ubuntu",
+          "meanAbsWidthDelta": 0.0104,
+          "meanWidthDelta": -0.0053,
+          "maxAbsWidthDelta": 0.0535,
+          "styles": 2,
+          "reference": "Malgun Gothic 6.69"
+        },
+        {
+          "package": "manrope",
+          "meanAbsWidthDelta": 0.0112,
+          "meanWidthDelta": 0.0045,
+          "maxAbsWidthDelta": 0.0641,
+          "styles": 2,
+          "reference": "Malgun Gothic 6.69"
+        },
+        {
+          "package": "raleway",
+          "meanAbsWidthDelta": 0.0117,
+          "meanWidthDelta": 0.0033,
+          "maxAbsWidthDelta": 0.0532,
+          "styles": 2,
+          "reference": "Malgun Gothic 6.69"
+        },
+        {
+          "package": "karla",
+          "meanAbsWidthDelta": 0.0124,
+          "meanWidthDelta": -0.0062,
+          "maxAbsWidthDelta": 0.0519,
+          "styles": 2,
+          "reference": "Malgun Gothic 6.69"
+        },
+        {
+          "package": "gothic-a1",
+          "meanAbsWidthDelta": 0.0126,
+          "meanWidthDelta": -0.0082,
+          "maxAbsWidthDelta": 0.0555,
+          "styles": 2,
+          "reference": "Malgun Gothic 6.69"
+        },
+        {
+          "package": "instrument-sans",
+          "meanAbsWidthDelta": 0.0126,
+          "meanWidthDelta": -0.0034,
+          "maxAbsWidthDelta": 0.0653,
+          "styles": 2,
+          "reference": "Malgun Gothic 6.69"
+        },
+        {
+          "package": "mulish",
+          "meanAbsWidthDelta": 0.0131,
+          "meanWidthDelta": 0.0025,
+          "maxAbsWidthDelta": 0.0683,
+          "styles": 2,
+          "reference": "Malgun Gothic 6.69"
+        },
+        {
+          "package": "josefin-sans",
+          "meanAbsWidthDelta": 0.0137,
+          "meanWidthDelta": -0.0068,
+          "maxAbsWidthDelta": 0.0473,
+          "styles": 2,
+          "reference": "Malgun Gothic 6.69"
+        },
+        {
+          "package": "wix-madefor-text",
+          "meanAbsWidthDelta": 0.0153,
+          "meanWidthDelta": 0.009,
+          "maxAbsWidthDelta": 0.0654,
+          "styles": 2,
+          "reference": "Malgun Gothic 6.69"
+        },
+        {
+          "package": "libre-franklin",
+          "meanAbsWidthDelta": 0.0157,
+          "meanWidthDelta": 0.0088,
+          "maxAbsWidthDelta": 0.0824,
+          "styles": 2,
+          "reference": "Malgun Gothic 6.69"
+        }
+      ]
+    },
+    {
+      "family": "Microsoft JhengHei",
+      "chosen": "Noto Sans TC",
+      "top": [
+        {
+          "package": "wix-madefor-text",
+          "meanAbsWidthDelta": 0.0076,
+          "meanWidthDelta": -0.0041,
+          "maxAbsWidthDelta": 0.0336,
+          "styles": 2,
+          "reference": "Microsoft JhengHei 6.15"
+        },
+        {
+          "package": "lora",
+          "meanAbsWidthDelta": 0.0078,
+          "meanWidthDelta": -0.0005,
+          "maxAbsWidthDelta": 0.0616,
+          "styles": 2,
+          "reference": "Microsoft JhengHei 6.15"
+        },
+        {
+          "package": "libre-franklin",
+          "meanAbsWidthDelta": 0.0095,
+          "meanWidthDelta": -0.0043,
+          "maxAbsWidthDelta": 0.0456,
+          "styles": 2,
+          "reference": "Microsoft JhengHei 6.15"
+        },
+        {
+          "package": "onest",
+          "meanAbsWidthDelta": 0.0102,
+          "meanWidthDelta": 0.0022,
+          "maxAbsWidthDelta": 0.0467,
+          "styles": 2,
+          "reference": "Microsoft JhengHei 6.15"
+        },
+        {
+          "package": "plus-jakarta-sans",
+          "meanAbsWidthDelta": 0.0108,
+          "meanWidthDelta": 0.0069,
+          "maxAbsWidthDelta": 0.0672,
+          "styles": 2,
+          "reference": "Microsoft JhengHei 6.15"
+        },
+        {
+          "package": "public-sans",
+          "meanAbsWidthDelta": 0.0112,
+          "meanWidthDelta": -0.0075,
+          "maxAbsWidthDelta": 0.0523,
+          "styles": 2,
+          "reference": "Microsoft JhengHei 6.15"
+        },
+        {
+          "package": "noticia-text",
+          "meanAbsWidthDelta": 0.0113,
+          "meanWidthDelta": 0.0022,
+          "maxAbsWidthDelta": 0.0655,
+          "styles": 2,
+          "reference": "Microsoft JhengHei 6.15"
+        },
+        {
+          "package": "raleway",
+          "meanAbsWidthDelta": 0.012,
+          "meanWidthDelta": -0.0097,
+          "maxAbsWidthDelta": 0.0495,
+          "styles": 2,
+          "reference": "Microsoft JhengHei 6.15"
+        },
+        {
+          "package": "mulish",
+          "meanAbsWidthDelta": 0.0132,
+          "meanWidthDelta": -0.0106,
+          "maxAbsWidthDelta": 0.0461,
+          "styles": 2,
+          "reference": "Microsoft JhengHei 6.15"
+        },
+        {
+          "package": "noto-sans-jp",
+          "meanAbsWidthDelta": 0.0141,
+          "meanWidthDelta": 0.004,
+          "maxAbsWidthDelta": 0.0611,
+          "styles": 2,
+          "reference": "Microsoft JhengHei 6.15"
+        }
+      ]
+    },
+    {
+      "family": "Microsoft Sans Serif",
+      "chosen": "Arimo",
+      "top": [
+        {
+          "package": "arimo",
+          "meanAbsWidthDelta": 0.002,
+          "meanWidthDelta": 0.0003,
+          "maxAbsWidthDelta": 0.0291,
+          "styles": 1,
+          "reference": "Microsoft Sans Serif 7.04"
+        },
+        {
+          "package": "archivo",
+          "meanAbsWidthDelta": 0.0077,
+          "meanWidthDelta": -0.007,
+          "maxAbsWidthDelta": 0.0282,
+          "styles": 1,
+          "reference": "Microsoft Sans Serif 7.04"
+        },
+        {
+          "package": "red-hat-text",
+          "meanAbsWidthDelta": 0.0089,
+          "meanWidthDelta": 0.0021,
+          "maxAbsWidthDelta": 0.0492,
+          "styles": 1,
+          "reference": "Microsoft Sans Serif 7.04"
+        },
+        {
+          "package": "roboto",
+          "meanAbsWidthDelta": 0.0089,
+          "meanWidthDelta": -0.0005,
+          "maxAbsWidthDelta": 0.0403,
+          "styles": 1,
+          "reference": "Microsoft Sans Serif 7.04"
+        },
+        {
+          "package": "overpass",
+          "meanAbsWidthDelta": 0.0116,
+          "meanWidthDelta": 0.0066,
+          "maxAbsWidthDelta": 0.0684,
+          "styles": 1,
+          "reference": "Microsoft Sans Serif 7.04"
+        },
+        {
+          "package": "red-hat-display",
+          "meanAbsWidthDelta": 0.0117,
+          "meanWidthDelta": -0.0084,
+          "maxAbsWidthDelta": 0.0603,
+          "styles": 1,
+          "reference": "Microsoft Sans Serif 7.04"
+        },
+        {
+          "package": "atkinson-hyperlegible",
+          "meanAbsWidthDelta": 0.0119,
+          "meanWidthDelta": -0.0102,
+          "maxAbsWidthDelta": 0.0697,
+          "styles": 1,
+          "reference": "Microsoft Sans Serif 7.04"
+        },
+        {
+          "package": "ibm-plex-sans",
+          "meanAbsWidthDelta": 0.0124,
+          "meanWidthDelta": 0.0084,
+          "maxAbsWidthDelta": 0.0861,
+          "styles": 1,
+          "reference": "Microsoft Sans Serif 7.04"
+        },
+        {
+          "package": "hanken-grotesk",
+          "meanAbsWidthDelta": 0.013,
+          "meanWidthDelta": 0.007,
+          "maxAbsWidthDelta": 0.0539,
+          "styles": 1,
+          "reference": "Microsoft Sans Serif 7.04"
+        },
+        {
+          "package": "outfit",
+          "meanAbsWidthDelta": 0.0134,
+          "meanWidthDelta": -0.004,
+          "maxAbsWidthDelta": 0.0799,
+          "styles": 1,
+          "reference": "Microsoft Sans Serif 7.04"
+        }
+      ]
+    },
+    {
+      "family": "Microsoft YaHei",
+      "chosen": "Noto Sans SC",
+      "top": [
+        {
+          "package": "noto-sans-malayalam",
+          "meanAbsWidthDelta": 0.0072,
+          "meanWidthDelta": -0.0038,
+          "maxAbsWidthDelta": 0.0336,
+          "styles": 2,
+          "reference": "Microsoft YaHei 6.31"
+        },
+        {
+          "package": "noto-sans-telugu",
+          "meanAbsWidthDelta": 0.0105,
+          "meanWidthDelta": -0.0093,
+          "maxAbsWidthDelta": 0.0365,
+          "styles": 2,
+          "reference": "Microsoft YaHei 6.31"
+        },
+        {
+          "package": "noto-serif",
+          "meanAbsWidthDelta": 0.0106,
+          "meanWidthDelta": 0.0049,
+          "maxAbsWidthDelta": 0.0584,
+          "styles": 2,
+          "reference": "Microsoft YaHei 6.31"
+        },
+        {
+          "package": "noto-naskh-arabic",
+          "meanAbsWidthDelta": 0.0115,
+          "meanWidthDelta": -0.0029,
+          "maxAbsWidthDelta": 0.0584,
+          "styles": 2,
+          "reference": "Microsoft YaHei 6.31"
+        },
+        {
+          "package": "noto-sans-ethiopic",
+          "meanAbsWidthDelta": 0.013,
+          "meanWidthDelta": -0.012,
+          "maxAbsWidthDelta": 0.039,
+          "styles": 2,
+          "reference": "Microsoft YaHei 6.31"
+        },
+        {
+          "package": "noto-sans-bengali",
+          "meanAbsWidthDelta": 0.0132,
+          "meanWidthDelta": -0.0122,
+          "maxAbsWidthDelta": 0.039,
+          "styles": 2,
+          "reference": "Microsoft YaHei 6.31"
+        },
+        {
+          "package": "noto-sans-gurmukhi",
+          "meanAbsWidthDelta": 0.0145,
+          "meanWidthDelta": -0.014,
+          "maxAbsWidthDelta": 0.039,
+          "styles": 2,
+          "reference": "Microsoft YaHei 6.31"
+        },
+        {
+          "package": "noto-sans-tamil",
+          "meanAbsWidthDelta": 0.0146,
+          "meanWidthDelta": -0.0141,
+          "maxAbsWidthDelta": 0.039,
+          "styles": 2,
+          "reference": "Microsoft YaHei 6.31"
+        },
+        {
+          "package": "noto-sans-armenian",
+          "meanAbsWidthDelta": 0.0147,
+          "meanWidthDelta": -0.0142,
+          "maxAbsWidthDelta": 0.039,
+          "styles": 2,
+          "reference": "Microsoft YaHei 6.31"
+        },
+        {
+          "package": "noto-sans-gujarati",
+          "meanAbsWidthDelta": 0.0147,
+          "meanWidthDelta": -0.0142,
+          "maxAbsWidthDelta": 0.039,
+          "styles": 2,
+          "reference": "Microsoft YaHei 6.31"
+        }
+      ]
+    },
+    {
+      "family": "MS Gothic",
+      "chosen": "Noto Sans JP",
+      "top": [
+        {
+          "package": "inconsolata",
+          "meanAbsWidthDelta": 0,
+          "meanWidthDelta": 0,
+          "maxAbsWidthDelta": 0,
+          "styles": 1,
+          "reference": "MS Gothic 5.32"
+        },
+        {
+          "package": "golos-text",
+          "meanAbsWidthDelta": 0.0344,
+          "meanWidthDelta": 0.0013,
+          "maxAbsWidthDelta": 0.1533,
+          "styles": 1,
+          "reference": "MS Gothic 5.32"
+        },
+        {
+          "package": "work-sans",
+          "meanAbsWidthDelta": 0.035,
+          "meanWidthDelta": 0.0198,
+          "maxAbsWidthDelta": 0.1828,
+          "styles": 1,
+          "reference": "MS Gothic 5.32"
+        },
+        {
+          "package": "noto-serif",
+          "meanAbsWidthDelta": 0.0364,
+          "meanWidthDelta": -0.0034,
+          "maxAbsWidthDelta": 0.1436,
+          "styles": 1,
+          "reference": "MS Gothic 5.32"
+        },
+        {
+          "package": "source-serif-4",
+          "meanAbsWidthDelta": 0.0364,
+          "meanWidthDelta": -0.0067,
+          "maxAbsWidthDelta": 0.1379,
+          "styles": 1,
+          "reference": "MS Gothic 5.32"
+        },
+        {
+          "package": "domine",
+          "meanAbsWidthDelta": 0.0369,
+          "meanWidthDelta": 0.0051,
+          "maxAbsWidthDelta": 0.1673,
+          "styles": 1,
+          "reference": "MS Gothic 5.32"
+        },
+        {
+          "package": "merriweather",
+          "meanAbsWidthDelta": 0.0369,
+          "meanWidthDelta": 0.0043,
+          "maxAbsWidthDelta": 0.1594,
+          "styles": 1,
+          "reference": "MS Gothic 5.32"
+        },
+        {
+          "package": "noto-sans-malayalam",
+          "meanAbsWidthDelta": 0.0378,
+          "meanWidthDelta": -0.0129,
+          "maxAbsWidthDelta": 0.1572,
+          "styles": 1,
+          "reference": "MS Gothic 5.32"
+        },
+        {
+          "package": "libre-caslon-text",
+          "meanAbsWidthDelta": 0.0382,
+          "meanWidthDelta": -0.0087,
+          "maxAbsWidthDelta": 0.1412,
+          "styles": 1,
+          "reference": "MS Gothic 5.32"
+        },
+        {
+          "package": "inter",
+          "meanAbsWidthDelta": 0.0387,
+          "meanWidthDelta": -0.015,
+          "maxAbsWidthDelta": 0.1649,
+          "styles": 1,
+          "reference": "MS Gothic 5.32"
+        }
+      ]
+    },
+    {
+      "family": "Nirmala UI",
+      "chosen": "Noto Sans Devanagari",
+      "top": [
+        {
+          "package": "atkinson-hyperlegible",
+          "meanAbsWidthDelta": 0.0113,
+          "meanWidthDelta": 0.0039,
+          "maxAbsWidthDelta": 0.048,
+          "styles": 2,
+          "reference": "Nirmala UI 1.46"
+        },
+        {
+          "package": "vollkorn",
+          "meanAbsWidthDelta": 0.0113,
+          "meanWidthDelta": 0.0013,
+          "maxAbsWidthDelta": 0.0678,
+          "styles": 2,
+          "reference": "Nirmala UI 1.46"
+        },
+        {
+          "package": "archivo",
+          "meanAbsWidthDelta": 0.0128,
+          "meanWidthDelta": 0.0039,
+          "maxAbsWidthDelta": 0.0652,
+          "styles": 2,
+          "reference": "Nirmala UI 1.46"
+        },
+        {
+          "package": "red-hat-display",
+          "meanAbsWidthDelta": 0.0136,
+          "meanWidthDelta": -0.0079,
+          "maxAbsWidthDelta": 0.0537,
+          "styles": 2,
+          "reference": "Nirmala UI 1.46"
+        },
+        {
+          "package": "ibm-plex-sans",
+          "meanAbsWidthDelta": 0.0137,
+          "meanWidthDelta": 0.0077,
+          "maxAbsWidthDelta": 0.0554,
+          "styles": 2,
+          "reference": "Nirmala UI 1.46"
+        },
+        {
+          "package": "overpass",
+          "meanAbsWidthDelta": 0.0142,
+          "meanWidthDelta": 0.0036,
+          "maxAbsWidthDelta": 0.0582,
+          "styles": 2,
+          "reference": "Nirmala UI 1.46"
+        },
+        {
+          "package": "arimo",
+          "meanAbsWidthDelta": 0.0168,
+          "meanWidthDelta": 0.0132,
+          "maxAbsWidthDelta": 0.0753,
+          "styles": 2,
+          "reference": "Nirmala UI 1.46"
+        },
+        {
+          "package": "nunito-sans",
+          "meanAbsWidthDelta": 0.017,
+          "meanWidthDelta": 0.0062,
+          "maxAbsWidthDelta": 0.08,
+          "styles": 2,
+          "reference": "Nirmala UI 1.46"
+        },
+        {
+          "package": "spectral",
+          "meanAbsWidthDelta": 0.017,
+          "meanWidthDelta": 0.003,
+          "maxAbsWidthDelta": 0.0899,
+          "styles": 2,
+          "reference": "Nirmala UI 1.46"
+        },
+        {
+          "package": "pt-serif",
+          "meanAbsWidthDelta": 0.0181,
+          "meanWidthDelta": 0.0179,
+          "maxAbsWidthDelta": 0.0724,
+          "styles": 2,
+          "reference": "Nirmala UI 1.46"
+        }
+      ]
+    },
+    {
+      "family": "Palatino Linotype",
+      "chosen": "PT Serif",
+      "top": [
+        {
+          "package": "commissioner",
+          "meanAbsWidthDelta": 0.0118,
+          "meanWidthDelta": 0.0019,
+          "maxAbsWidthDelta": 0.0597,
+          "styles": 2,
+          "reference": "Palatino Linotype 5.03"
+        },
+        {
+          "package": "outfit",
+          "meanAbsWidthDelta": 0.0154,
+          "meanWidthDelta": -0.0096,
+          "maxAbsWidthDelta": 0.0608,
+          "styles": 2,
+          "reference": "Palatino Linotype 5.03"
+        },
+        {
+          "package": "playfair-display",
+          "meanAbsWidthDelta": 0.0197,
+          "meanWidthDelta": 0.0161,
+          "maxAbsWidthDelta": 0.0892,
+          "styles": 4,
+          "reference": "Palatino Linotype 5.03"
+        },
+        {
+          "package": "spectral",
+          "meanAbsWidthDelta": 0.0199,
+          "meanWidthDelta": -0.0107,
+          "maxAbsWidthDelta": 0.0802,
+          "styles": 4,
+          "reference": "Palatino Linotype 5.03"
+        },
+        {
+          "package": "abril-fatface",
+          "meanAbsWidthDelta": 0.0215,
+          "meanWidthDelta": 0.0158,
+          "maxAbsWidthDelta": 0.1014,
+          "styles": 2,
+          "reference": "Palatino Linotype 5.03"
+        },
+        {
+          "package": "pt-serif",
+          "meanAbsWidthDelta": 0.0252,
+          "meanWidthDelta": 0.0213,
+          "maxAbsWidthDelta": 0.0909,
+          "styles": 4,
+          "reference": "Palatino Linotype 5.03"
+        },
+        {
+          "package": "gothic-a1",
+          "meanAbsWidthDelta": 0.026,
+          "meanWidthDelta": 0.0221,
+          "maxAbsWidthDelta": 0.1079,
+          "styles": 2,
+          "reference": "Palatino Linotype 5.03"
+        },
+        {
+          "package": "overpass",
+          "meanAbsWidthDelta": 0.0262,
+          "meanWidthDelta": 0.0089,
+          "maxAbsWidthDelta": 0.1012,
+          "styles": 4,
+          "reference": "Palatino Linotype 5.03"
+        },
+        {
+          "package": "red-hat-display",
+          "meanAbsWidthDelta": 0.0291,
+          "meanWidthDelta": 0.0148,
+          "maxAbsWidthDelta": 0.15,
+          "styles": 4,
+          "reference": "Palatino Linotype 5.03"
+        },
+        {
+          "package": "karla",
+          "meanAbsWidthDelta": 0.0297,
+          "meanWidthDelta": 0.0029,
+          "maxAbsWidthDelta": 0.1036,
+          "styles": 4,
+          "reference": "Palatino Linotype 5.03"
+        }
+      ]
+    },
+    {
+      "family": "Rockwell",
+      "chosen": "Bitter",
+      "top": [
+        {
+          "package": "noto-sans-jp",
+          "meanAbsWidthDelta": 0.0119,
+          "meanWidthDelta": -0.0019,
+          "maxAbsWidthDelta": 0.0546,
+          "styles": 2,
+          "reference": "Rockwell 1.65"
+        },
+        {
+          "package": "noto-sans-kr",
+          "meanAbsWidthDelta": 0.0119,
+          "meanWidthDelta": -0.0019,
+          "maxAbsWidthDelta": 0.0546,
+          "styles": 2,
+          "reference": "Rockwell 1.65"
+        },
+        {
+          "package": "noto-sans-sc",
+          "meanAbsWidthDelta": 0.0119,
+          "meanWidthDelta": -0.0019,
+          "maxAbsWidthDelta": 0.0546,
+          "styles": 2,
+          "reference": "Rockwell 1.65"
+        },
+        {
+          "package": "noto-sans-tc",
+          "meanAbsWidthDelta": 0.0119,
+          "meanWidthDelta": -0.0019,
+          "maxAbsWidthDelta": 0.0546,
+          "styles": 2,
+          "reference": "Rockwell 1.65"
+        },
+        {
+          "package": "open-sans",
+          "meanAbsWidthDelta": 0.0139,
+          "meanWidthDelta": 0.0006,
+          "maxAbsWidthDelta": 0.0678,
+          "styles": 4,
+          "reference": "Rockwell 1.65"
+        },
+        {
+          "package": "noto-sans",
+          "meanAbsWidthDelta": 0.0142,
+          "meanWidthDelta": 0.0042,
+          "maxAbsWidthDelta": 0.0646,
+          "styles": 4,
+          "reference": "Rockwell 1.65"
+        },
+        {
+          "package": "noto-nastaliq-urdu",
+          "meanAbsWidthDelta": 0.0146,
+          "meanWidthDelta": 0.0106,
+          "maxAbsWidthDelta": 0.0819,
+          "styles": 2,
+          "reference": "Rockwell 1.65"
+        },
+        {
+          "package": "noto-sans-hebrew",
+          "meanAbsWidthDelta": 0.0148,
+          "meanWidthDelta": 0.0107,
+          "maxAbsWidthDelta": 0.0597,
+          "styles": 2,
+          "reference": "Rockwell 1.65"
+        },
+        {
+          "package": "noto-sans-georgian",
+          "meanAbsWidthDelta": 0.0168,
+          "meanWidthDelta": 0.0137,
+          "maxAbsWidthDelta": 0.0646,
+          "styles": 2,
+          "reference": "Rockwell 1.65"
+        },
+        {
+          "package": "noto-sans-khmer",
+          "meanAbsWidthDelta": 0.0168,
+          "meanWidthDelta": 0.0138,
+          "maxAbsWidthDelta": 0.0646,
+          "styles": 2,
+          "reference": "Rockwell 1.65"
+        }
+      ]
+    },
+    {
+      "family": "Sakkal Majalla",
+      "chosen": "Noto Naskh Arabic",
+      "top": [
+        {
+          "package": "bebas-neue",
+          "meanAbsWidthDelta": 0.0697,
+          "meanWidthDelta": 0.0679,
+          "maxAbsWidthDelta": 0.1936,
+          "styles": 2,
+          "reference": "Sakkal Majalla 7.00"
+        },
+        {
+          "package": "pt-sans-narrow",
+          "meanAbsWidthDelta": 0.0947,
+          "meanWidthDelta": 0.0947,
+          "maxAbsWidthDelta": 0.1507,
+          "styles": 2,
+          "reference": "Sakkal Majalla 7.00"
+        },
+        {
+          "package": "league-gothic",
+          "meanAbsWidthDelta": 0.1785,
+          "meanWidthDelta": -0.1785,
+          "maxAbsWidthDelta": 0.2575,
+          "styles": 2,
+          "reference": "Sakkal Majalla 7.00"
+        },
+        {
+          "package": "archivo-narrow",
+          "meanAbsWidthDelta": 0.1933,
+          "meanWidthDelta": 0.1933,
+          "maxAbsWidthDelta": 0.2484,
+          "styles": 2,
+          "reference": "Sakkal Majalla 7.00"
+        },
+        {
+          "package": "oswald",
+          "meanAbsWidthDelta": 0.2054,
+          "meanWidthDelta": 0.2054,
+          "maxAbsWidthDelta": 0.2842,
+          "styles": 2,
+          "reference": "Sakkal Majalla 7.00"
+        },
+        {
+          "package": "fjalla-one",
+          "meanAbsWidthDelta": 0.2074,
+          "meanWidthDelta": 0.2074,
+          "maxAbsWidthDelta": 0.3113,
+          "styles": 2,
+          "reference": "Sakkal Majalla 7.00"
+        },
+        {
+          "package": "roboto-condensed",
+          "meanAbsWidthDelta": 0.249,
+          "meanWidthDelta": 0.249,
+          "maxAbsWidthDelta": 0.3334,
+          "styles": 2,
+          "reference": "Sakkal Majalla 7.00"
+        },
+        {
+          "package": "cormorant-garamond",
+          "meanAbsWidthDelta": 0.25,
+          "meanWidthDelta": 0.25,
+          "maxAbsWidthDelta": 0.3765,
+          "styles": 2,
+          "reference": "Sakkal Majalla 7.00"
+        },
+        {
+          "package": "anton",
+          "meanAbsWidthDelta": 0.2614,
+          "meanWidthDelta": 0.2614,
+          "maxAbsWidthDelta": 0.3582,
+          "styles": 2,
+          "reference": "Sakkal Majalla 7.00"
+        },
+        {
+          "package": "eb-garamond",
+          "meanAbsWidthDelta": 0.2695,
+          "meanWidthDelta": 0.2695,
+          "maxAbsWidthDelta": 0.3711,
+          "styles": 2,
+          "reference": "Sakkal Majalla 7.00"
+        }
+      ]
+    },
+    {
+      "family": "Segoe UI",
+      "chosen": "Red Hat Display",
+      "top": [
+        {
+          "package": "red-hat-display",
+          "meanAbsWidthDelta": 0.0172,
+          "meanWidthDelta": -0.009,
+          "maxAbsWidthDelta": 0.0709,
+          "styles": 4,
+          "reference": "Segoe UI 5.71"
+        },
+        {
+          "package": "archivo",
+          "meanAbsWidthDelta": 0.0183,
+          "meanWidthDelta": 0.0127,
+          "maxAbsWidthDelta": 0.0932,
+          "styles": 4,
+          "reference": "Segoe UI 5.71"
+        },
+        {
+          "package": "ubuntu",
+          "meanAbsWidthDelta": 0.0185,
+          "meanWidthDelta": 0.015,
+          "maxAbsWidthDelta": 0.0732,
+          "styles": 4,
+          "reference": "Segoe UI 5.71"
+        },
+        {
+          "package": "atkinson-hyperlegible",
+          "meanAbsWidthDelta": 0.0188,
+          "meanWidthDelta": 0.0144,
+          "maxAbsWidthDelta": 0.0704,
+          "styles": 4,
+          "reference": "Segoe UI 5.71"
+        },
+        {
+          "package": "outfit",
+          "meanAbsWidthDelta": 0.0192,
+          "meanWidthDelta": -0.0113,
+          "maxAbsWidthDelta": 0.0569,
+          "styles": 2,
+          "reference": "Segoe UI 5.71"
+        },
+        {
+          "package": "ibm-plex-sans",
+          "meanAbsWidthDelta": 0.0197,
+          "meanWidthDelta": 0.0022,
+          "maxAbsWidthDelta": 0.0545,
+          "styles": 4,
+          "reference": "Segoe UI 5.71"
+        },
+        {
+          "package": "pt-serif",
+          "meanAbsWidthDelta": 0.0198,
+          "meanWidthDelta": -0.0021,
+          "maxAbsWidthDelta": 0.0709,
+          "styles": 4,
+          "reference": "Segoe UI 5.71"
+        },
+        {
+          "package": "playfair-display",
+          "meanAbsWidthDelta": 0.0211,
+          "meanWidthDelta": -0.0072,
+          "maxAbsWidthDelta": 0.0921,
+          "styles": 4,
+          "reference": "Segoe UI 5.71"
+        },
+        {
+          "package": "gothic-a1",
+          "meanAbsWidthDelta": 0.0213,
+          "meanWidthDelta": 0.0202,
+          "maxAbsWidthDelta": 0.0746,
+          "styles": 2,
+          "reference": "Segoe UI 5.71"
+        },
+        {
+          "package": "nunito-sans",
+          "meanAbsWidthDelta": 0.0221,
+          "meanWidthDelta": 0.0135,
+          "maxAbsWidthDelta": 0.0988,
+          "styles": 4,
+          "reference": "Segoe UI 5.71"
+        }
+      ]
+    },
+    {
+      "family": "Segoe UI Light",
+      "chosen": "Red Hat Display",
+      "top": [
+        {
+          "package": "hind",
+          "meanAbsWidthDelta": 0.0149,
+          "meanWidthDelta": 0.0141,
+          "maxAbsWidthDelta": 0.0608,
+          "styles": 1,
+          "reference": "Segoe UI Light 5.71"
+        },
+        {
+          "package": "red-hat-display",
+          "meanAbsWidthDelta": 0.0187,
+          "meanWidthDelta": 0.0179,
+          "maxAbsWidthDelta": 0.0662,
+          "styles": 2,
+          "reference": "Segoe UI Light 5.71"
+        },
+        {
+          "package": "tinos",
+          "meanAbsWidthDelta": 0.0192,
+          "meanWidthDelta": -0.0129,
+          "maxAbsWidthDelta": 0.0925,
+          "styles": 2,
+          "reference": "Segoe UI Light 5.71"
+        },
+        {
+          "package": "pt-sans",
+          "meanAbsWidthDelta": 0.0199,
+          "meanWidthDelta": 0.0066,
+          "maxAbsWidthDelta": 0.0761,
+          "styles": 2,
+          "reference": "Segoe UI Light 5.71"
+        },
+        {
+          "package": "carlito",
+          "meanAbsWidthDelta": 0.0206,
+          "meanWidthDelta": -0.0203,
+          "maxAbsWidthDelta": 0.0557,
+          "styles": 2,
+          "reference": "Segoe UI Light 5.71"
+        },
+        {
+          "package": "caladea",
+          "meanAbsWidthDelta": 0.0209,
+          "meanWidthDelta": -0.018,
+          "maxAbsWidthDelta": 0.0743,
+          "styles": 2,
+          "reference": "Segoe UI Light 5.71"
+        },
+        {
+          "package": "cabin",
+          "meanAbsWidthDelta": 0.022,
+          "meanWidthDelta": -0.013,
+          "maxAbsWidthDelta": 0.0588,
+          "styles": 2,
+          "reference": "Segoe UI Light 5.71"
+        },
+        {
+          "package": "mukta",
+          "meanAbsWidthDelta": 0.0226,
+          "meanWidthDelta": -0.0219,
+          "maxAbsWidthDelta": 0.0577,
+          "styles": 1,
+          "reference": "Segoe UI Light 5.71"
+        },
+        {
+          "package": "barlow",
+          "meanAbsWidthDelta": 0.0241,
+          "meanWidthDelta": 0.0229,
+          "maxAbsWidthDelta": 0.1122,
+          "styles": 2,
+          "reference": "Segoe UI Light 5.71"
+        },
+        {
+          "package": "zilla-slab",
+          "meanAbsWidthDelta": 0.0247,
+          "meanWidthDelta": 0.0112,
+          "maxAbsWidthDelta": 0.1184,
+          "styles": 2,
+          "reference": "Segoe UI Light 5.71"
+        }
+      ]
+    },
+    {
+      "family": "Segoe UI Semibold",
+      "chosen": "Red Hat Display",
+      "top": [
+        {
+          "package": "fira-sans",
+          "meanAbsWidthDelta": 0.0064,
+          "meanWidthDelta": -0.0006,
+          "maxAbsWidthDelta": 0.0446,
+          "styles": 2,
+          "reference": "Segoe UI Semibold 5.71"
+        },
+        {
+          "package": "commissioner",
+          "meanAbsWidthDelta": 0.01,
+          "meanWidthDelta": 0.0068,
+          "maxAbsWidthDelta": 0.0616,
+          "styles": 1,
+          "reference": "Segoe UI Semibold 5.71"
+        },
+        {
+          "package": "red-hat-display",
+          "meanAbsWidthDelta": 0.0101,
+          "meanWidthDelta": -0.0013,
+          "maxAbsWidthDelta": 0.0651,
+          "styles": 2,
+          "reference": "Segoe UI Semibold 5.71"
+        },
+        {
+          "package": "outfit",
+          "meanAbsWidthDelta": 0.0112,
+          "meanWidthDelta": -0.0058,
+          "maxAbsWidthDelta": 0.0392,
+          "styles": 1,
+          "reference": "Segoe UI Semibold 5.71"
+        },
+        {
+          "package": "playfair-display",
+          "meanAbsWidthDelta": 0.0119,
+          "meanWidthDelta": 0.0019,
+          "maxAbsWidthDelta": 0.0764,
+          "styles": 2,
+          "reference": "Segoe UI Semibold 5.71"
+        },
+        {
+          "package": "hanken-grotesk",
+          "meanAbsWidthDelta": 0.012,
+          "meanWidthDelta": 0.0058,
+          "maxAbsWidthDelta": 0.0463,
+          "styles": 2,
+          "reference": "Segoe UI Semibold 5.71"
+        },
+        {
+          "package": "caladea",
+          "meanAbsWidthDelta": 0.0131,
+          "meanWidthDelta": -0.0106,
+          "maxAbsWidthDelta": 0.0615,
+          "styles": 2,
+          "reference": "Segoe UI Semibold 5.71"
+        },
+        {
+          "package": "sarabun",
+          "meanAbsWidthDelta": 0.0135,
+          "meanWidthDelta": -0.0107,
+          "maxAbsWidthDelta": 0.054,
+          "styles": 2,
+          "reference": "Segoe UI Semibold 5.71"
+        },
+        {
+          "package": "nunito-sans",
+          "meanAbsWidthDelta": 0.0138,
+          "meanWidthDelta": 0.0129,
+          "maxAbsWidthDelta": 0.0652,
+          "styles": 2,
+          "reference": "Segoe UI Semibold 5.71"
+        },
+        {
+          "package": "ibm-plex-sans",
+          "meanAbsWidthDelta": 0.0146,
+          "meanWidthDelta": 0.0125,
+          "maxAbsWidthDelta": 0.0541,
+          "styles": 2,
+          "reference": "Segoe UI Semibold 5.71"
+        }
+      ]
+    },
+    {
+      "family": "Segoe UI Semilight",
+      "chosen": "Red Hat Display",
+      "top": [
+        {
+          "package": "hind",
+          "meanAbsWidthDelta": 0.0066,
+          "meanWidthDelta": 0.0023,
+          "maxAbsWidthDelta": 0.0328,
+          "styles": 1,
+          "reference": "Segoe UI Semilight 5.71"
+        },
+        {
+          "package": "barlow",
+          "meanAbsWidthDelta": 0.0121,
+          "meanWidthDelta": 0.0046,
+          "maxAbsWidthDelta": 0.0775,
+          "styles": 2,
+          "reference": "Segoe UI Semilight 5.71"
+        },
+        {
+          "package": "pt-sans",
+          "meanAbsWidthDelta": 0.0219,
+          "meanWidthDelta": -0.0189,
+          "maxAbsWidthDelta": 0.0637,
+          "styles": 2,
+          "reference": "Segoe UI Semilight 5.71"
+        },
+        {
+          "package": "zilla-slab",
+          "meanAbsWidthDelta": 0.0232,
+          "meanWidthDelta": -0.008,
+          "maxAbsWidthDelta": 0.0901,
+          "styles": 2,
+          "reference": "Segoe UI Semilight 5.71"
+        },
+        {
+          "package": "quattrocento-sans",
+          "meanAbsWidthDelta": 0.0237,
+          "meanWidthDelta": 0.0224,
+          "maxAbsWidthDelta": 0.0744,
+          "styles": 2,
+          "reference": "Segoe UI Semilight 5.71"
+        },
+        {
+          "package": "mukta",
+          "meanAbsWidthDelta": 0.0239,
+          "meanWidthDelta": -0.0237,
+          "maxAbsWidthDelta": 0.0528,
+          "styles": 1,
+          "reference": "Segoe UI Semilight 5.71"
+        },
+        {
+          "package": "sarabun",
+          "meanAbsWidthDelta": 0.0243,
+          "meanWidthDelta": 0.0234,
+          "maxAbsWidthDelta": 0.0712,
+          "styles": 2,
+          "reference": "Segoe UI Semilight 5.71"
+        },
+        {
+          "package": "lato",
+          "meanAbsWidthDelta": 0.0275,
+          "meanWidthDelta": -0.0044,
+          "maxAbsWidthDelta": 0.0972,
+          "styles": 2,
+          "reference": "Segoe UI Semilight 5.71"
+        },
+        {
+          "package": "pt-serif",
+          "meanAbsWidthDelta": 0.0288,
+          "meanWidthDelta": 0.0285,
+          "maxAbsWidthDelta": 0.1117,
+          "styles": 2,
+          "reference": "Segoe UI Semilight 5.71"
+        },
+        {
+          "package": "source-sans-3",
+          "meanAbsWidthDelta": 0.0296,
+          "meanWidthDelta": -0.0295,
+          "maxAbsWidthDelta": 0.0592,
+          "styles": 2,
+          "reference": "Segoe UI Semilight 5.71"
+        }
+      ]
+    },
+    {
+      "family": "SimSun",
+      "chosen": "Noto Sans SC",
+      "top": [
+        {
+          "package": "inconsolata",
+          "meanAbsWidthDelta": 0,
+          "meanWidthDelta": 0,
+          "maxAbsWidthDelta": 0,
+          "styles": 1,
+          "reference": "SimSun 5.24"
+        },
+        {
+          "package": "golos-text",
+          "meanAbsWidthDelta": 0.0344,
+          "meanWidthDelta": 0.0013,
+          "maxAbsWidthDelta": 0.1533,
+          "styles": 1,
+          "reference": "SimSun 5.24"
+        },
+        {
+          "package": "work-sans",
+          "meanAbsWidthDelta": 0.035,
+          "meanWidthDelta": 0.0198,
+          "maxAbsWidthDelta": 0.1828,
+          "styles": 1,
+          "reference": "SimSun 5.24"
+        },
+        {
+          "package": "noto-serif",
+          "meanAbsWidthDelta": 0.0364,
+          "meanWidthDelta": -0.0034,
+          "maxAbsWidthDelta": 0.1436,
+          "styles": 1,
+          "reference": "SimSun 5.24"
+        },
+        {
+          "package": "source-serif-4",
+          "meanAbsWidthDelta": 0.0364,
+          "meanWidthDelta": -0.0067,
+          "maxAbsWidthDelta": 0.1379,
+          "styles": 1,
+          "reference": "SimSun 5.24"
+        },
+        {
+          "package": "domine",
+          "meanAbsWidthDelta": 0.0369,
+          "meanWidthDelta": 0.0051,
+          "maxAbsWidthDelta": 0.1673,
+          "styles": 1,
+          "reference": "SimSun 5.24"
+        },
+        {
+          "package": "merriweather",
+          "meanAbsWidthDelta": 0.0369,
+          "meanWidthDelta": 0.0043,
+          "maxAbsWidthDelta": 0.1594,
+          "styles": 1,
+          "reference": "SimSun 5.24"
+        },
+        {
+          "package": "noto-sans-malayalam",
+          "meanAbsWidthDelta": 0.0378,
+          "meanWidthDelta": -0.0129,
+          "maxAbsWidthDelta": 0.1572,
+          "styles": 1,
+          "reference": "SimSun 5.24"
+        },
+        {
+          "package": "libre-caslon-text",
+          "meanAbsWidthDelta": 0.0382,
+          "meanWidthDelta": -0.0087,
+          "maxAbsWidthDelta": 0.1412,
+          "styles": 1,
+          "reference": "SimSun 5.24"
+        },
+        {
+          "package": "inter",
+          "meanAbsWidthDelta": 0.0387,
+          "meanWidthDelta": -0.015,
+          "maxAbsWidthDelta": 0.1649,
+          "styles": 1,
+          "reference": "SimSun 5.24"
+        }
+      ]
+    },
+    {
+      "family": "Sylfaen",
+      "chosen": "Noto Sans Georgian",
+      "top": [
+        {
+          "package": "pt-sans",
+          "meanAbsWidthDelta": 0.0129,
+          "meanWidthDelta": 0.0076,
+          "maxAbsWidthDelta": 0.0542,
+          "styles": 1,
+          "reference": "Sylfaen 5.08"
+        },
+        {
+          "package": "cardo",
+          "meanAbsWidthDelta": 0.014,
+          "meanWidthDelta": 0.0137,
+          "maxAbsWidthDelta": 0.0409,
+          "styles": 1,
+          "reference": "Sylfaen 5.08"
+        },
+        {
+          "package": "cabin",
+          "meanAbsWidthDelta": 0.0147,
+          "meanWidthDelta": -0.0098,
+          "maxAbsWidthDelta": 0.0694,
+          "styles": 1,
+          "reference": "Sylfaen 5.08"
+        },
+        {
+          "package": "mukta",
+          "meanAbsWidthDelta": 0.0155,
+          "meanWidthDelta": -0.0138,
+          "maxAbsWidthDelta": 0.0858,
+          "styles": 1,
+          "reference": "Sylfaen 5.08"
+        },
+        {
+          "package": "hind",
+          "meanAbsWidthDelta": 0.0163,
+          "meanWidthDelta": 0.0126,
+          "maxAbsWidthDelta": 0.0627,
+          "styles": 1,
+          "reference": "Sylfaen 5.08"
+        },
+        {
+          "package": "source-sans-3",
+          "meanAbsWidthDelta": 0.0192,
+          "meanWidthDelta": -0.0185,
+          "maxAbsWidthDelta": 0.0858,
+          "styles": 1,
+          "reference": "Sylfaen 5.08"
+        },
+        {
+          "package": "quattrocento-sans",
+          "meanAbsWidthDelta": 0.0194,
+          "meanWidthDelta": 0.0155,
+          "maxAbsWidthDelta": 0.0647,
+          "styles": 1,
+          "reference": "Sylfaen 5.08"
+        },
+        {
+          "package": "barlow",
+          "meanAbsWidthDelta": 0.0204,
+          "meanWidthDelta": 0.0169,
+          "maxAbsWidthDelta": 0.0752,
+          "styles": 1,
+          "reference": "Sylfaen 5.08"
+        },
+        {
+          "package": "sarabun",
+          "meanAbsWidthDelta": 0.0224,
+          "meanWidthDelta": 0.0206,
+          "maxAbsWidthDelta": 0.0593,
+          "styles": 1,
+          "reference": "Sylfaen 5.08"
+        },
+        {
+          "package": "zilla-slab",
+          "meanAbsWidthDelta": 0.0243,
+          "meanWidthDelta": 0.0242,
+          "maxAbsWidthDelta": 0.0618,
+          "styles": 1,
+          "reference": "Sylfaen 5.08"
+        }
+      ]
+    },
+    {
+      "family": "Tahoma",
+      "chosen": "Red Hat Text",
+      "top": [
+        {
+          "package": "red-hat-text",
+          "meanAbsWidthDelta": 0.0167,
+          "meanWidthDelta": -0.0035,
+          "maxAbsWidthDelta": 0.0629,
+          "styles": 2,
+          "reference": "Tahoma 7.05"
+        },
+        {
+          "package": "gelasio",
+          "meanAbsWidthDelta": 0.0216,
+          "meanWidthDelta": 0.0204,
+          "maxAbsWidthDelta": 0.0783,
+          "styles": 2,
+          "reference": "Tahoma 7.05"
+        },
+        {
+          "package": "pt-serif",
+          "meanAbsWidthDelta": 0.0311,
+          "meanWidthDelta": -0.015,
+          "maxAbsWidthDelta": 0.0831,
+          "styles": 2,
+          "reference": "Tahoma 7.05"
+        },
+        {
+          "package": "arimo",
+          "meanAbsWidthDelta": 0.0318,
+          "meanWidthDelta": -0.0196,
+          "maxAbsWidthDelta": 0.1111,
+          "styles": 2,
+          "reference": "Tahoma 7.05"
+        },
+        {
+          "package": "atkinson-hyperlegible",
+          "meanAbsWidthDelta": 0.0324,
+          "meanWidthDelta": -0.0286,
+          "maxAbsWidthDelta": 0.0872,
+          "styles": 2,
+          "reference": "Tahoma 7.05"
+        },
+        {
+          "package": "open-sans",
+          "meanAbsWidthDelta": 0.0337,
+          "meanWidthDelta": 0.0262,
+          "maxAbsWidthDelta": 0.0952,
+          "styles": 2,
+          "reference": "Tahoma 7.05"
+        },
+        {
+          "package": "rubik",
+          "meanAbsWidthDelta": 0.0346,
+          "meanWidthDelta": 0.0243,
+          "maxAbsWidthDelta": 0.0979,
+          "styles": 2,
+          "reference": "Tahoma 7.05"
+        },
+        {
+          "package": "archivo",
+          "meanAbsWidthDelta": 0.0364,
+          "meanWidthDelta": -0.0285,
+          "maxAbsWidthDelta": 0.1018,
+          "styles": 2,
+          "reference": "Tahoma 7.05"
+        },
+        {
+          "package": "noto-sans-bengali",
+          "meanAbsWidthDelta": 0.0371,
+          "meanWidthDelta": 0.0333,
+          "maxAbsWidthDelta": 0.1062,
+          "styles": 2,
+          "reference": "Tahoma 7.05"
+        },
+        {
+          "package": "vollkorn",
+          "meanAbsWidthDelta": 0.0374,
+          "meanWidthDelta": -0.031,
+          "maxAbsWidthDelta": 0.101,
+          "styles": 2,
+          "reference": "Tahoma 7.05"
+        }
+      ]
+    },
+    {
+      "family": "Times New Roman",
+      "chosen": "Tinos",
+      "top": [
+        {
+          "package": "tinos",
+          "meanAbsWidthDelta": 0,
+          "meanWidthDelta": 0,
+          "maxAbsWidthDelta": 0,
+          "styles": 4,
+          "reference": "Times New Roman 7.12"
+        },
+        {
+          "package": "source-sans-3",
+          "meanAbsWidthDelta": 0.0196,
+          "meanWidthDelta": 0.0141,
+          "maxAbsWidthDelta": 0.0757,
+          "styles": 4,
+          "reference": "Times New Roman 7.12"
+        },
+        {
+          "package": "carlito",
+          "meanAbsWidthDelta": 0.0215,
+          "meanWidthDelta": -0.0172,
+          "maxAbsWidthDelta": 0.0959,
+          "styles": 4,
+          "reference": "Times New Roman 7.12"
+        },
+        {
+          "package": "mukta",
+          "meanAbsWidthDelta": 0.0233,
+          "meanWidthDelta": 0.0201,
+          "maxAbsWidthDelta": 0.0884,
+          "styles": 2,
+          "reference": "Times New Roman 7.12"
+        },
+        {
+          "package": "cabin",
+          "meanAbsWidthDelta": 0.0234,
+          "meanWidthDelta": 0.0021,
+          "maxAbsWidthDelta": 0.0993,
+          "styles": 4,
+          "reference": "Times New Roman 7.12"
+        },
+        {
+          "package": "pt-sans",
+          "meanAbsWidthDelta": 0.0275,
+          "meanWidthDelta": -0.0017,
+          "maxAbsWidthDelta": 0.0831,
+          "styles": 4,
+          "reference": "Times New Roman 7.12"
+        },
+        {
+          "package": "zilla-slab",
+          "meanAbsWidthDelta": 0.0292,
+          "meanWidthDelta": 0.0195,
+          "maxAbsWidthDelta": 0.1325,
+          "styles": 4,
+          "reference": "Times New Roman 7.12"
+        },
+        {
+          "package": "caladea",
+          "meanAbsWidthDelta": 0.0321,
+          "meanWidthDelta": 0.0221,
+          "maxAbsWidthDelta": 0.1123,
+          "styles": 4,
+          "reference": "Times New Roman 7.12"
+        },
+        {
+          "package": "lato",
+          "meanAbsWidthDelta": 0.0325,
+          "meanWidthDelta": 0.0238,
+          "maxAbsWidthDelta": 0.1387,
+          "styles": 4,
+          "reference": "Times New Roman 7.12"
+        },
+        {
+          "package": "barlow",
+          "meanAbsWidthDelta": 0.0367,
+          "meanWidthDelta": 0.0352,
+          "maxAbsWidthDelta": 0.119,
+          "styles": 4,
+          "reference": "Times New Roman 7.12"
+        }
+      ]
+    },
+    {
+      "family": "Traditional Arabic",
+      "chosen": "Noto Naskh Arabic",
+      "top": [
+        {
+          "package": "caladea",
+          "meanAbsWidthDelta": 0.0176,
+          "meanWidthDelta": 0.0094,
+          "maxAbsWidthDelta": 0.0823,
+          "styles": 2,
+          "reference": "Traditional Arabic 6.85"
+        },
+        {
+          "package": "tinos",
+          "meanAbsWidthDelta": 0.0249,
+          "meanWidthDelta": -0.0099,
+          "maxAbsWidthDelta": 0.0809,
+          "styles": 2,
+          "reference": "Traditional Arabic 6.85"
+        },
+        {
+          "package": "source-sans-3",
+          "meanAbsWidthDelta": 0.0282,
+          "meanWidthDelta": 0.0081,
+          "maxAbsWidthDelta": 0.1045,
+          "styles": 2,
+          "reference": "Traditional Arabic 6.85"
+        },
+        {
+          "package": "mukta",
+          "meanAbsWidthDelta": 0.0309,
+          "meanWidthDelta": 0.0102,
+          "maxAbsWidthDelta": 0.1086,
+          "styles": 2,
+          "reference": "Traditional Arabic 6.85"
+        },
+        {
+          "package": "crimson-pro",
+          "meanAbsWidthDelta": 0.0319,
+          "meanWidthDelta": -0.0271,
+          "maxAbsWidthDelta": 0.1148,
+          "styles": 2,
+          "reference": "Traditional Arabic 6.85"
+        },
+        {
+          "package": "hind",
+          "meanAbsWidthDelta": 0.0418,
+          "meanWidthDelta": 0.0396,
+          "maxAbsWidthDelta": 0.117,
+          "styles": 2,
+          "reference": "Traditional Arabic 6.85"
+        },
+        {
+          "package": "cabin",
+          "meanAbsWidthDelta": 0.0432,
+          "meanWidthDelta": 0.0012,
+          "maxAbsWidthDelta": 0.1185,
+          "styles": 2,
+          "reference": "Traditional Arabic 6.85"
+        },
+        {
+          "package": "barlow",
+          "meanAbsWidthDelta": 0.045,
+          "meanWidthDelta": 0.0296,
+          "maxAbsWidthDelta": 0.1393,
+          "styles": 2,
+          "reference": "Traditional Arabic 6.85"
+        },
+        {
+          "package": "sarabun",
+          "meanAbsWidthDelta": 0.046,
+          "meanWidthDelta": 0.0425,
+          "maxAbsWidthDelta": 0.1237,
+          "styles": 2,
+          "reference": "Traditional Arabic 6.85"
+        },
+        {
+          "package": "zilla-slab",
+          "meanAbsWidthDelta": 0.046,
+          "meanWidthDelta": 0.0363,
+          "maxAbsWidthDelta": 0.1362,
+          "styles": 2,
+          "reference": "Traditional Arabic 6.85"
+        }
+      ]
+    },
+    {
+      "family": "Trebuchet MS",
+      "chosen": "Figtree",
+      "top": [
+        {
+          "package": "figtree",
+          "meanAbsWidthDelta": 0.0149,
+          "meanWidthDelta": -0.007,
+          "maxAbsWidthDelta": 0.0665,
+          "styles": 4,
+          "reference": "Trebuchet MS 5.15"
+        },
+        {
+          "package": "nunito-sans",
+          "meanAbsWidthDelta": 0.0156,
+          "meanWidthDelta": -0.0071,
+          "maxAbsWidthDelta": 0.0815,
+          "styles": 4,
+          "reference": "Trebuchet MS 5.15"
+        },
+        {
+          "package": "gothic-a1",
+          "meanAbsWidthDelta": 0.0169,
+          "meanWidthDelta": 0.0151,
+          "maxAbsWidthDelta": 0.0653,
+          "styles": 2,
+          "reference": "Trebuchet MS 5.15"
+        },
+        {
+          "package": "josefin-sans",
+          "meanAbsWidthDelta": 0.0172,
+          "meanWidthDelta": 0.0076,
+          "maxAbsWidthDelta": 0.0798,
+          "styles": 4,
+          "reference": "Trebuchet MS 5.15"
+        },
+        {
+          "package": "commissioner",
+          "meanAbsWidthDelta": 0.0179,
+          "meanWidthDelta": -0.0047,
+          "maxAbsWidthDelta": 0.0593,
+          "styles": 2,
+          "reference": "Trebuchet MS 5.15"
+        },
+        {
+          "package": "instrument-sans",
+          "meanAbsWidthDelta": 0.0184,
+          "meanWidthDelta": 0.0124,
+          "maxAbsWidthDelta": 0.0847,
+          "styles": 4,
+          "reference": "Trebuchet MS 5.15"
+        },
+        {
+          "package": "atkinson-hyperlegible",
+          "meanAbsWidthDelta": 0.0192,
+          "meanWidthDelta": -0.0061,
+          "maxAbsWidthDelta": 0.0817,
+          "styles": 4,
+          "reference": "Trebuchet MS 5.15"
+        },
+        {
+          "package": "outfit",
+          "meanAbsWidthDelta": 0.0197,
+          "meanWidthDelta": -0.0163,
+          "maxAbsWidthDelta": 0.0579,
+          "styles": 2,
+          "reference": "Trebuchet MS 5.15"
+        },
+        {
+          "package": "albert-sans",
+          "meanAbsWidthDelta": 0.02,
+          "meanWidthDelta": 0.0037,
+          "maxAbsWidthDelta": 0.0779,
+          "styles": 4,
+          "reference": "Trebuchet MS 5.15"
+        },
+        {
+          "package": "arimo",
+          "meanAbsWidthDelta": 0.0208,
+          "meanWidthDelta": 0.0001,
+          "maxAbsWidthDelta": 0.0841,
+          "styles": 4,
+          "reference": "Trebuchet MS 5.15"
+        }
+      ]
+    },
+    {
+      "family": "Verdana",
+      "chosen": "Montserrat",
+      "top": [
+        {
+          "package": "montserrat",
+          "meanAbsWidthDelta": 0.0368,
+          "meanWidthDelta": -0.0281,
+          "maxAbsWidthDelta": 0.0915,
+          "styles": 4,
+          "reference": "Verdana 5.33"
+        },
+        {
+          "package": "arvo",
+          "meanAbsWidthDelta": 0.0444,
+          "meanWidthDelta": -0.0382,
+          "maxAbsWidthDelta": 0.117,
+          "styles": 4,
+          "reference": "Verdana 5.33"
+        },
+        {
+          "package": "poppins",
+          "meanAbsWidthDelta": 0.049,
+          "meanWidthDelta": -0.0462,
+          "maxAbsWidthDelta": 0.118,
+          "styles": 4,
+          "reference": "Verdana 5.33"
+        },
+        {
+          "package": "work-sans",
+          "meanAbsWidthDelta": 0.075,
+          "meanWidthDelta": -0.075,
+          "maxAbsWidthDelta": 0.1416,
+          "styles": 4,
+          "reference": "Verdana 5.33"
+        },
+        {
+          "package": "libre-baskerville",
+          "meanAbsWidthDelta": 0.0753,
+          "meanWidthDelta": -0.0619,
+          "maxAbsWidthDelta": 0.1896,
+          "styles": 4,
+          "reference": "Verdana 5.33"
+        },
+        {
+          "package": "noto-serif",
+          "meanAbsWidthDelta": 0.0758,
+          "meanWidthDelta": -0.0758,
+          "maxAbsWidthDelta": 0.1345,
+          "styles": 4,
+          "reference": "Verdana 5.33"
+        },
+        {
+          "package": "noto-naskh-arabic",
+          "meanAbsWidthDelta": 0.0786,
+          "meanWidthDelta": -0.0786,
+          "maxAbsWidthDelta": 0.1374,
+          "styles": 2,
+          "reference": "Verdana 5.33"
+        },
+        {
+          "package": "noto-sans-malayalam",
+          "meanAbsWidthDelta": 0.0794,
+          "meanWidthDelta": -0.0794,
+          "maxAbsWidthDelta": 0.1336,
+          "styles": 2,
+          "reference": "Verdana 5.33"
+        },
+        {
+          "package": "domine",
+          "meanAbsWidthDelta": 0.0817,
+          "meanWidthDelta": -0.0816,
+          "maxAbsWidthDelta": 0.1536,
+          "styles": 2,
+          "reference": "Verdana 5.33"
+        },
+        {
+          "package": "libre-caslon-text",
+          "meanAbsWidthDelta": 0.0843,
+          "meanWidthDelta": -0.0843,
+          "maxAbsWidthDelta": 0.2016,
+          "styles": 4,
+          "reference": "Verdana 5.33"
+        }
+      ]
+    },
+    {
+      "family": "Yu Gothic",
+      "chosen": "Noto Sans JP",
+      "top": [
+        {
+          "package": "dm-sans",
+          "meanAbsWidthDelta": 0.0087,
+          "meanWidthDelta": 0.0016,
+          "maxAbsWidthDelta": 0.0515,
+          "styles": 2,
+          "reference": "Yu Gothic 1.95"
+        },
+        {
+          "package": "noto-sans-jp",
+          "meanAbsWidthDelta": 0.0091,
+          "meanWidthDelta": 0.0032,
+          "maxAbsWidthDelta": 0.0533,
+          "styles": 2,
+          "reference": "Yu Gothic 1.95"
+        },
+        {
+          "package": "noto-sans-kr",
+          "meanAbsWidthDelta": 0.0091,
+          "meanWidthDelta": 0.0032,
+          "maxAbsWidthDelta": 0.0533,
+          "styles": 2,
+          "reference": "Yu Gothic 1.95"
+        },
+        {
+          "package": "noto-sans-sc",
+          "meanAbsWidthDelta": 0.0091,
+          "meanWidthDelta": 0.0032,
+          "maxAbsWidthDelta": 0.0533,
+          "styles": 2,
+          "reference": "Yu Gothic 1.95"
+        },
+        {
+          "package": "noto-sans-tc",
+          "meanAbsWidthDelta": 0.0091,
+          "meanWidthDelta": 0.0032,
+          "maxAbsWidthDelta": 0.0533,
+          "styles": 2,
+          "reference": "Yu Gothic 1.95"
+        },
+        {
+          "package": "manrope",
+          "meanAbsWidthDelta": 0.011,
+          "meanWidthDelta": -0.0092,
+          "maxAbsWidthDelta": 0.0434,
+          "styles": 2,
+          "reference": "Yu Gothic 1.95"
+        },
+        {
+          "package": "libre-franklin",
+          "meanAbsWidthDelta": 0.0123,
+          "meanWidthDelta": -0.005,
+          "maxAbsWidthDelta": 0.0373,
+          "styles": 2,
+          "reference": "Yu Gothic 1.95"
+        },
+        {
+          "package": "onest",
+          "meanAbsWidthDelta": 0.0132,
+          "meanWidthDelta": 0.0015,
+          "maxAbsWidthDelta": 0.0421,
+          "styles": 2,
+          "reference": "Yu Gothic 1.95"
+        },
+        {
+          "package": "wix-madefor-text",
+          "meanAbsWidthDelta": 0.0134,
+          "meanWidthDelta": -0.0047,
+          "maxAbsWidthDelta": 0.0427,
+          "styles": 2,
+          "reference": "Yu Gothic 1.95"
+        },
+        {
+          "package": "raleway",
+          "meanAbsWidthDelta": 0.0136,
+          "meanWidthDelta": -0.0104,
+          "maxAbsWidthDelta": 0.042,
+          "styles": 2,
+          "reference": "Yu Gothic 1.95"
+        }
+      ]
+    }
+  ]
+}

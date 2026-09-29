@@ -33,9 +33,7 @@ This was a read-only investigation. No edits, pushes or Office runs.
 - Exporter: P:882-891 and per slide at P:1005-1011.
 - Renderer: R:340-390.
 
-The final default is **inconsistent**:
-- The exporter falls back to `aptos` (P:151).
-- Core pagination, the renderer and the editor fall back to `roboto` (C `pagination.ts:271`, R:230/359, opf-editor `src/index.js:20`). Editor transfer pins `roboto` on import (`src/transfer.js:130-145`).
+The final default is `aptos` in every engine (FF-35: opf#124, opf-render#33, opf-editor#31, opf-pptx#64). Core exports `DEFAULT_FONT_SCHEME`, and pagination, the renderer, the editor and the exporter all fall back to it. At the time of this map (FF-06), the exporter fell back to `aptos` (P:151), while core pagination, the renderer and the editor fell back to `roboto` (C `pagination.ts:271`, R:230/359, opf-editor `src/index.js:20`), and editor transfer pinned `roboto` on import (`src/transfer.js:130-145`). A remaining Roboto literal for unknown schemes is tracked as FF-35b.
 
 This only bites when a theme lacks a fontScheme. All four themes carry one: minimal=aptos, classic=tenorite, dark=seaford, bold=impact.
 
@@ -102,7 +100,7 @@ This only bites when a theme lacks a fontScheme. All four themes carry one: mini
 | G7 | `language` is ignored: no `lang`/`altLang`, no `rtl`, ea/cs = the Latin family (so CJK in a Carlito deck falls back to PowerPoint font-linking, e.g. Yu Gothic, which is not embeddable-by-choice) | core: resolve `language.fontScheme` into an ea or cs role. opf-pptx: emit `lang` and `rtlMode`, and put the language scheme in the theme ea/cs + run ea/cs. The renderer needs script faces |
 | G8 | `pitchFamily="34"` is written for monospace | opf-pptx: omit it or use 49 for monospace |
 | G9 | Notes and `endParaRPr` have no explicit face | fixed by G1 (theme-level) |
-| G10 | Default mismatch (aptos vs roboto) | core: one exported `DEFAULT_FONT_SCHEME` |
+| G10 | Default mismatch (aptos vs roboto). **Resolved** by FF-35 (opf#124, opf-render#33, opf-editor#31, opf-pptx#64); follow-up FF-35b | core: one exported `DEFAULT_FONT_SCHEME` |
 | G11 | ecosystem-ci pins opf-pptx `fcc006a`, 16 commits behind (pre-#57) (`ecosystem-ci.yml:43`) | bump the pin with the matrix |
 | G12 | Per-slide fontScheme overrides reach runs but not the theme, so placeholders and notes use the deck scheme | document it; the matrix must include a per-slide override |
 

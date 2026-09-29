@@ -1,4 +1,6 @@
 import {tableGrid,type TableCellStyle} from './table.js';
+import {DEFAULT_FURNITURE_DATE_FORMAT,DEFAULT_SLIDE_NUMBER_FORMAT,formatFurnitureDate,formatSlideNumber,parseIsoDate,type FurnitureField} from './furniture-fields.js';
+export {DEFAULT_FURNITURE_DATE_FORMAT,DEFAULT_SLIDE_NUMBER_FORMAT,formatFurnitureDate,formatSlideNumber,type FurnitureField} from './furniture-fields.js';
 export {tableGrid,tableRowBoundaries,type TableCellStyle,type TableBorder,type TableGrid,type TableGridCell,type TableGridIssue} from './table.js';
 export {colorContrast, textColorForFill, chartColorForFill} from './color.js';
 /** Portable layout geometry. No fonts, DOM, renderer, or network dependencies. */
@@ -14,7 +16,7 @@ export interface Composition {
 export const MAX_COMPOSITION_DEPTH = 32;
 export interface LayoutBox { x: number; y: number; width: number; height: number }
 export interface LayoutDiagnostic {
-  code: "text-overflow" | "small-cell" | "unresolved-content";
+  code: "text-overflow" | "small-cell" | "unresolved-content" | "unsupported-image-treatment";
   path: string;
   message: string;
 }
@@ -27,15 +29,47 @@ const FALLBACK_CODE_FAMILY = "Roboto Mono";
 /** Shared last-resort font-scheme id when neither the slide, the deck nor the resolved theme names one.
  * One default for every engine, so preview matches export (font-fidelity-everywhere owner decision). */
 export const DEFAULT_FONT_SCHEME = "aptos";
+/** Heading and body families of the DEFAULT_FONT_SCHEME catalog record. They are inlined so this module
+ * does not load the catalogs; a core test checks them against the record. */
+const DEFAULT_FONT_FAMILIES = { heading: "Aptos Display", body: "Aptos" } as const;
+/** Reported when a font-scheme id matches no inline or bundled record. Every engine then uses the
+ * DEFAULT_FONT_SCHEME record as the base, with any sibling overrides on top. */
+export interface FontSchemeDiagnostic {
+  code: "unresolved-font-scheme";
+  /** Where the unresolved id is written: `slides.N.design.fontScheme`, `design.fontScheme`, or the
+   * `design.theme` reference whose record names it. */
+  path: string;
+  message: string;
+  /** The unresolved font-scheme id. */
+  id: string;
+  /** The font scheme used instead (DEFAULT_FONT_SCHEME). */
+  fallback: string;
+}
+export interface ResolvedFontScheme { scheme: Record<string, unknown>; diagnostic?: FontSchemeDiagnostic }
+/** Resolve a font-scheme reference the same way in every engine. A string id, or the `id` of an object
+ * reference, resolves through `lookup` (inline records, then bundled or host catalogs). An unresolved id
+ * returns a diagnostic, and the DEFAULT_FONT_SCHEME record becomes the base, so preview and export use
+ * the same families. An object without `id` is an inline scheme on the same base. Sibling fields on an
+ * object reference override the base per key. */
+export function resolveFontSchemeReference(reference: unknown, lookup: (id: string) => unknown, path = "design.fontScheme"): ResolvedFontScheme {
+  const overrides = typeof reference === "object" && reference !== null && !Array.isArray(reference) ? reference as Record<string, unknown> : undefined;
+  const id = typeof reference === "string" ? reference : typeof overrides?.id === "string" ? overrides.id : undefined;
+  const found = id === undefined ? undefined : lookup(id);
+  const base = record(found ?? lookup(DEFAULT_FONT_SCHEME));
+  const scheme = overrides ? { ...base, ...overrides } : { ...base };
+  if (id === undefined || found !== undefined) return { scheme };
+  return { scheme, diagnostic: { code: "unresolved-font-scheme", path, id, fallback: DEFAULT_FONT_SCHEME, message: `Font scheme '${id}' is not in the inline or bundled catalogs; using the default font scheme '${DEFAULT_FONT_SCHEME}'.` } };
+}
 /** Resolve role families from an already-merged font scheme (catalog record plus design overrides).
+ * A scheme that names no heading or body family gets the DEFAULT_FONT_SCHEME families (Aptos Display, Aptos).
  * `code` comes from the scheme's `code` role, which catalog records such as consolas and courier-new
  * carry; otherwise it is Roboto Mono. Heading and body families are never reused for code. */
 export function resolveFontFamilies(input: unknown): FontFamilies {
   const scheme = record(input);
   const family = (value: unknown) => typeof value === "string" ? value : record(value).family;
   return {
-    heading: family(scheme.heading) ?? scheme.major ?? scheme.minor ?? "Roboto",
-    body: family(scheme.body) ?? scheme.minor ?? scheme.major ?? "Roboto",
+    heading: family(scheme.heading) ?? scheme.major ?? scheme.minor ?? DEFAULT_FONT_FAMILIES.heading,
+    body: family(scheme.body) ?? scheme.minor ?? scheme.major ?? DEFAULT_FONT_FAMILIES.body,
     code: family(scheme.code) ?? FALLBACK_CODE_FAMILY,
   };
 }
@@ -126,6 +160,55 @@ export interface ComposedItem {
   timelineLayout?: TimelineLayout;
   /** Effective container settings, including inherited readability constraints. */
   composition: Composition;
+  /**
+   * Resolved horizontal text alignment for this item: titleAlignment for the
+   * title, contentAlignment for every other item (slide design, then host
+   * option, then left). Engines anchor native and preview text to this value.
+   */
+  alignment: 'left' | 'center' | 'right';
+}
+/**
+ * Slide-level image resolved from design.slideImage. It is active when the slide sets its own
+ * design.slideImage, or when the deck sets one and either the slide's layout record declares
+ * slideImage: true or the slide's root image is the same source.
+ * Content composes in the part of the slide the image does not occupy; 'background' leaves the whole slide.
+ */
+export interface ComposedSlideImage {
+  /** The design value that configured the image: 'design.slideImage' or 'slides.N.design.slideImage'. */
+  path: string;
+  /** Path of the drawn asset value: the design value, or the slide's root image payload it replaced. */
+  sourcePath: string;
+  /** Asset value (string or Asset object) that engines resolve like any other image. */
+  value: unknown;
+  position: 'background' | 'top' | 'bottom' | 'left' | 'right';
+  /** crop covers the frame (centered); fit shows the whole image centered inside it. */
+  fill: 'crop' | 'fit';
+  /** Band allocated to the image. */
+  region: LayoutBox;
+  /** Image frame inside the region. */
+  box: LayoutBox;
+  /** True when the slide's root image payload became this slide image instead of a content item. */
+  replacesContent: boolean;
+  /** Treatment alt text; engines fall back to the asset's own alt text. */
+  alt?: string;
+  /** Mask on the frame: a DrawingML preset with its guide values, and the same outline as an SVG path. */
+  shape: SlideImageShape;
+  /** Line centered on the shape outline; width in reference pixels (already scaled to the canvas). */
+  border?: { color: unknown; width: number };
+  /** Image opacity below 1; the border and overlay are not affected. */
+  opacity?: number;
+  /** Luminance-based recolor (Rec. 601 weights on sRGB values). */
+  recolor?: { type: 'grayscale' } | { type: 'duotone'; dark: unknown; light: unknown };
+  /** Scrim over the frame (same shape) or over an edge band of a rectangle frame. */
+  overlay?: { color: unknown; opacity: number; box: LayoutBox; shape: SlideImageShape };
+}
+/** A frame mask. path follows the ECMA-376 preset formula for preset/adjust exactly, in reference pixels. */
+export interface SlideImageShape {
+  kind: 'rectangle' | 'rounded' | 'circle' | 'hexagon';
+  preset: 'rect' | 'roundRect' | 'ellipse' | 'hexagon';
+  /** DrawingML avLst guide values (for example adj and vf), in 1/100000 units. */
+  adjust: Record<string, number>;
+  path: string;
 }
 export interface ComposedGroup { path: string; box: LayoutBox; contentBox: LayoutBox; composition: Composition }
 export interface CompositionTrack { offset: number; size: number }
@@ -186,13 +269,29 @@ export interface SlideComposition {
   composition: Composition;
   /** Repeated furniture is measured separately from body pagination leaves. */
   furniture?: FurnitureLayout;
+  /** Active slide-level image; absent when design.slideImage does not apply to this slide. */
+  slideImage?: ComposedSlideImage;
   explanation?: CompositionExplanation;
 }
 export interface ComposeSlideOptions {
-  /** Context for inherited furniture and generated organization names. */
-  presentation?: { design?: { header?: unknown; footer?: unknown }; organization?: unknown };
+  /** Context for inherited furniture, generated organization names and social profiles. */
+  presentation?: { design?: { header?: unknown; footer?: unknown; slideImage?: unknown; imageFill?: unknown }; organization?: unknown; slides?: unknown; catalogs?: unknown };
+  /**
+   * Host-resolved social-platform records for generated `socials` furniture.
+   * Inline `presentation.catalogs.socialPlatforms.records` take precedence. Hosts
+   * normally pass the bundled catalog; without a matching record a handle renders
+   * as its raw value, as the Socials contract specifies.
+   */
+  socialPlatforms?: readonly SocialPlatformRecord[];
   /** One-based displayed number; source paths still use slideIndex. */
   slideNumber?: number;
+  /** Displayed slide count for `{total}` in slideNumberFormat. Defaults to `presentation.slides.length`. */
+  slideCount?: number;
+  /**
+   * Host-supplied current calendar date (ISO YYYY-MM-DD) for `date: true` furniture. Core never
+   * consults a clock; without this option a current date is reported as unresolved content.
+   */
+  date?: string;
   fonts?: Partial<FontFamilies>;
   /** Host-resolved alignment for shared content; slide design can override it. */
   contentAlignment?: 'left' | 'center' | 'right';
@@ -225,11 +324,105 @@ const columns = ["left", "center", "right"];
 const record = (value: unknown): Record<string, any> => value && typeof value === "object" && !Array.isArray(value) ? value : {};
 const kind = (field: string) => field === "items" ? "list" : field === "bullets" ? "text" : field;
 const round = (value: number) => Math.round(value * 1e6) / 1e6 || value;
+const SLIDE_IMAGE_POSITIONS = ['background', 'top', 'bottom', 'left', 'right'] as const;
+type SlideImagePosition = typeof SLIDE_IMAGE_POSITIONS[number];
+/** Default share of the slide width (left/right) or height (top/bottom) given to a banded slide image. */
+const SLIDE_IMAGE_BAND = 0.5;
+const assetSource = (value: unknown): unknown => typeof value === 'string' ? value : record(value).src;
+const finite = (value: unknown, min: number, max: number): number | undefined => typeof value === 'number' && Number.isFinite(value) && value >= min && value <= max ? value : undefined;
+const pathNumber = (value: number) => String(round(value));
+const SLIDE_IMAGE_SHAPES = { rectangle: 'rect', rounded: 'roundRect', circle: 'ellipse', hexagon: 'hexagon' } as const;
+
+/**
+ * Outline of a DrawingML preset in a box, following the ECMA-376 presetShapeDefinitions formulas:
+ * roundRect (adj; ss = min(w,h), radius = ss*adj/100000), ellipse, and hexagon (adj, vf).
+ */
+export function slideImageShape(kind: SlideImageShape['kind'], box: LayoutBox, cornerRadius = 1 / 6): SlideImageShape {
+  const { x, y, width: w, height: h } = box, r = x + w, b = y + h, ss = Math.min(w, h), n = pathNumber;
+  const rect = `M${n(x)} ${n(y)}H${n(r)}V${n(b)}H${n(x)}Z`;
+  if (kind === 'rounded') {
+    const adj = Math.round(Math.min(0.5, Math.max(0, cornerRadius)) * 100000), radius = ss * adj / 100000;
+    const path = radius <= 0 ? rect : `M${n(x)} ${n(y + radius)}A${n(radius)} ${n(radius)} 0 0 1 ${n(x + radius)} ${n(y)}H${n(r - radius)}A${n(radius)} ${n(radius)} 0 0 1 ${n(r)} ${n(y + radius)}V${n(b - radius)}A${n(radius)} ${n(radius)} 0 0 1 ${n(r - radius)} ${n(b)}H${n(x + radius)}A${n(radius)} ${n(radius)} 0 0 1 ${n(x)} ${n(b - radius)}Z`;
+    return { kind, preset: 'roundRect', adjust: { adj }, path };
+  }
+  if (kind === 'circle') {
+    const cy = y + h / 2;
+    return { kind, preset: 'ellipse', adjust: {}, path: `M${n(x)} ${n(cy)}A${n(w / 2)} ${n(h / 2)} 0 1 1 ${n(r)} ${n(cy)}A${n(w / 2)} ${n(h / 2)} 0 1 1 ${n(x)} ${n(cy)}Z` };
+  }
+  if (kind === 'hexagon') {
+    const adj = 25000, vf = 115470, a = Math.min(Math.max(adj, 0), 50000 * w / ss);
+    const x1 = ss * a / 100000, x2 = r - x1, vc = y + h / 2, dy1 = h / 2 * vf / 100000 * Math.sin(Math.PI / 3);
+    return { kind, preset: 'hexagon', adjust: { adj, vf }, path: `M${n(x)} ${n(vc)}L${n(x + x1)} ${n(vc - dy1)}L${n(x2)} ${n(vc - dy1)}L${n(r)} ${n(vc)}L${n(x2)} ${n(vc + dy1)}L${n(x + x1)} ${n(vc + dy1)}Z` };
+  }
+  return { kind: 'rectangle', preset: 'rect', adjust: {}, path: rect };
+}
+
+function resolveSlideImage(slide: Record<string, any>, layout: Record<string, any>, presentation: unknown, width: number, height: number, path: string, padding: number, scale: number, diagnostics: LayoutDiagnostic[]): ComposedSlideImage | undefined {
+  const own = record(slide.design), deck = record(record(presentation).design);
+  const local = own.slideImage !== undefined;
+  const configured: unknown = local ? own.slideImage : deck.slideImage;
+  if (!configured || (typeof configured !== 'object' && typeof configured !== 'string')) return undefined;
+  const treatment = typeof configured === 'object' && !Array.isArray(configured) && 'position' in configured ? record(configured) : undefined;
+  const alignment = typeof layout.slideImageAlignment === 'string' ? layout.slideImageAlignment.toLowerCase() : undefined;
+  const position = (treatment ? treatment.position : SLIDE_IMAGE_POSITIONS.find(value => value === alignment) ?? 'background') as SlideImagePosition;
+  if (!SLIDE_IMAGE_POSITIONS.includes(position)) return undefined;
+  const designSource = treatment ? treatment.src : configured;
+  // A root image with the same source (or one a source-less treatment places) is the slide image, not content.
+  const root = slide.image, sameSource = root !== undefined && designSource !== undefined && assetSource(root) === assetSource(designSource);
+  // A deck-wide slide image applies where the layout reserves one, or where the slide's own image is that
+  // same source. Other slides keep their geometry, so existing decks with an unused deck value are unchanged.
+  if (!local && layout.slideImage !== true && !sameSource) return undefined;
+  const replacesContent = root !== undefined && (designSource === undefined || sameSource);
+  const value = replacesContent ? root : designSource;
+  const source = assetSource(value);
+  if (typeof source !== 'string' || !source) return undefined;
+  const t = treatment ?? {};
+  const fill: 'crop' | 'fit' = t.fill === 'crop' || t.fill === 'fit' ? t.fill : (own.imageFill ?? deck.imageFill) === 'fit' ? 'fit' : 'crop';
+  const share = finite(t.size, 0.1, 0.9) ?? SLIDE_IMAGE_BAND;
+  const band = { width: round(width * share), height: round(height * share) };
+  const region: LayoutBox = position === 'left' ? { x: 0, y: 0, width: band.width, height }
+    : position === 'right' ? { x: round(width - band.width), y: 0, width: band.width, height }
+    : position === 'top' ? { x: 0, y: 0, width, height: band.height }
+    : position === 'bottom' ? { x: 0, y: round(height - band.height), width, height: band.height }
+    : { x: 0, y: 0, width, height };
+  const designPath = local ? `${path}.design.slideImage` : 'design.slideImage';
+  const kind: SlideImageShape['kind'] = Object.hasOwn(SLIDE_IMAGE_SHAPES, t.shape) ? t.shape : 'rectangle';
+  let box: LayoutBox = t.inset === true ? { x: region.x + padding, y: region.y + padding, width: Math.max(scale, region.width - 2 * padding), height: Math.max(scale, region.height - 2 * padding) } : { ...region };
+  const aspect = kind === 'circle' ? 1 : finite(t.aspectRatio, Number.MIN_VALUE, 10);
+  if (aspect) {
+    const frameWidth = Math.min(box.width, box.height * aspect), frameHeight = frameWidth / aspect;
+    box = { x: box.x + (box.width - frameWidth) / 2, y: box.y + (box.height - frameHeight) / 2, width: frameWidth, height: frameHeight };
+  }
+  box = { x: round(box.x), y: round(box.y), width: round(box.width), height: round(box.height) };
+  const result: ComposedSlideImage = { path: designPath, sourcePath: replacesContent ? `${path}.image` : designPath, value, position, fill, region, box, replacesContent,
+    shape: slideImageShape(kind, box, finite(t.cornerRadius, 0, 0.5)) };
+  if (typeof t.alt === 'string') result.alt = t.alt;
+  const border = record(t.border), borderWidth = finite(border.width, 0, 64);
+  if (border.color !== undefined && borderWidth) result.border = { color: border.color, width: round(borderWidth * scale) };
+  const opacity = finite(t.opacity, 0, 1);
+  if (opacity !== undefined && opacity < 1) result.opacity = opacity;
+  if (t.recolor === 'grayscale') result.recolor = { type: 'grayscale' };
+  else if (record(t.recolor).dark !== undefined && record(t.recolor).light !== undefined) result.recolor = { type: 'duotone', dark: t.recolor.dark, light: t.recolor.light };
+  const overlay = record(t.overlay), overlayOpacity = finite(overlay.opacity, 0, 1);
+  if (overlay.color !== undefined && overlayOpacity !== undefined) {
+    const edge = ['top', 'bottom', 'left', 'right'].includes(overlay.edge) ? overlay.edge as string : undefined;
+    if (edge && kind !== 'rectangle') diagnostics.push({ code: 'unsupported-image-treatment', path: `${designPath}.overlay.edge`, message: 'An edge overlay needs a rectangle frame; a band cannot follow a rounded, circular or hexagonal mask as one native shape. Remove edge or use shape rectangle.' });
+    else {
+      const part = finite(overlay.size, 0.05, 1) ?? 0.3;
+      const bandBox = !edge ? box : edge === 'top' ? { ...box, height: round(box.height * part) }
+        : edge === 'bottom' ? { ...box, y: round(box.y + box.height * (1 - part)), height: round(box.height * part) }
+        : edge === 'left' ? { ...box, width: round(box.width * part) }
+        : { ...box, x: round(box.x + box.width * (1 - part)), width: round(box.width * part) };
+      result.overlay = { color: overlay.color, opacity: overlayOpacity, box: bandBox, shape: edge ? slideImageShape('rectangle', bandBox) : result.shape };
+    }
+  }
+  return result;
+}
 
 export interface FurniturePartBase {
   kind: 'header' | 'footer';
   zone: 'left' | 'center' | 'right';
-  field: 'text' | 'image' | 'organization' | 'section' | 'slideNumber' | 'date';
+  field: 'text' | 'image' | 'organization' | 'socials' | 'section' | 'slideNumber' | 'date';
   /** Literal field or controlling flag, with the actual inherited/local path. */
   path: string;
   /** String/asset source, when different from a generated field's flag. */
@@ -241,6 +434,64 @@ export interface FurniturePartBase {
 export interface FurnitureTextPart extends FurniturePartBase {
   type: 'text'; text: string; style: TextStyle;
   requestedFontSize: number; minFontSize: number; fit: SourceTextFit;
+  /**
+   * Live values inside `text`: every `{current}` slide number, and a whole current
+   * (`date: true`) date. Hosts such as PPTX may emit them as native fields; all other
+   * text, including `{total}` and formatted fixed dates, is fixed.
+   */
+  fields?: FurnitureField[];
+  /**
+   * Generated `socials` only: one entry per explicit source line of `text`, in
+   * order. A part may carry both `fields` and `links`; hosts apply each link to
+   * its whole source line and each field range within it.
+   */
+  links?: FurnitureSocialLink[];
+}
+/** Optional generated metadata for one furniture text part (live fields and/or social links). */
+export interface FurnitureTextExtras { fields?: FurnitureField[]; links?: FurnitureSocialLink[] }
+/** Social-platform catalog fields used to format a profile. */
+export interface SocialPlatformRecord {
+  id: string;
+  name?: string;
+  baseUrl?: string;
+  profileUrlPattern?: string;
+  companyUrlPattern?: string;
+  handlePrefix?: string;
+}
+export interface SocialProfile {
+  /** Single-line display text: the profile URL without an `https://` scheme, or the raw value. */
+  text: string;
+  /** Full http(s) URL when the value is one or its platform record formats one. */
+  href?: string;
+  /** Whether a socialPlatforms record formatted a handle. */
+  resolved: boolean;
+}
+export interface FurnitureSocialLink extends SocialProfile {
+  /** Socials key (platform id). */
+  platform: string;
+  /** Authored value path, such as `organization.socials.x`. */
+  sourcePath: string;
+}
+
+const webUrl = /^https?:\/\/\S+$/i;
+/**
+ * Format one Socials value through its platform record, deterministically and
+ * without network access. `owner` selects companyUrlPattern for organizations.
+ * URLs pass through; unknown platforms and unformattable values stay raw.
+ */
+export function resolveSocialProfile(platform: string, value: string, records: readonly SocialPlatformRecord[] = [], owner: 'organization' | 'speaker' = 'organization'): SocialProfile {
+  const raw = String(value).trim().replace(/\s+/gu, ' ');
+  const display = (url: string) => url.replace(/^https:\/\//i, '');
+  if (webUrl.test(raw)) return {text: display(raw), href: raw, resolved: false};
+  const platformRecord = records.find(item => item?.id === platform);
+  const base = typeof platformRecord?.baseUrl === 'string' && webUrl.test(platformRecord.baseUrl) ? `${platformRecord.baseUrl.replace(/\/+$/u, '')}/{handle}` : undefined;
+  const pattern = (owner === 'organization' ? platformRecord?.companyUrlPattern : undefined) ?? platformRecord?.profileUrlPattern ?? base;
+  const prefix = platformRecord?.handlePrefix ?? '';
+  const handle = prefix && raw.startsWith(prefix) ? raw.slice(prefix.length) : raw;
+  if (!handle || typeof pattern !== 'string' || !pattern.includes('{handle}')) return {text: raw, resolved: false};
+  const url = pattern.split('{handle}').join(handle);
+  if (!webUrl.test(url)) return {text: raw, resolved: false};
+  return {text: display(url), href: encodeURI(url), resolved: true};
 }
 export interface FurnitureImagePart extends FurniturePartBase { type: 'image'; image: unknown }
 export type FurniturePart = FurnitureTextPart | FurnitureImagePart;
@@ -269,10 +520,14 @@ export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {
   if(![width,height,scale,minimum,padding].every(Number.isFinite)||width<=0||height<=0||minimum<=0||padding<0)throw new RangeError('Furniture requires finite positive dimensions and nonnegative raster padding.');
   const number=options.slideNumber??(options.slideIndex??0)+1;
   if(!Number.isSafeInteger(number)||number<1)throw new RangeError('Displayed slide number must be a positive safe integer.');
+  const presentationSlides=options.presentation?.slides,slideCount=options.slideCount??(Array.isArray(presentationSlides)&&presentationSlides.length?presentationSlides.length:undefined);
+  if(slideCount!==undefined&&(!Number.isSafeInteger(slideCount)||slideCount<1))throw new RangeError('Displayed slide count must be a positive safe integer.');
+  if(options.date!==undefined&&(typeof options.date!=='string'||!parseIsoDate(options.date)))throw new RangeError('The furniture date option must be an ISO YYYY-MM-DD calendar date.');
   const outlines=options.textMeasurement?.outlineBounds!==undefined,parts:FurniturePart[]=[],diagnostics:LayoutDiagnostic[]=[];
   const sourceRoot=`slides.${options.slideIndex??0}`,organizations=Array.isArray(options.presentation?.organization)?options.presentation.organization:[options.presentation?.organization];
   const primaryIndex=organizations.findIndex(item=>record(item).role==='primary'),organizationIndex=primaryIndex>=0?primaryIndex:organizations.findIndex(Boolean);
-  const organization=record(organizations[organizationIndex]),organizationPath=Array.isArray(options.presentation?.organization)?`organization.${organizationIndex}.name`:'organization.name';
+  const organization=record(organizations[organizationIndex]),organizationRoot=Array.isArray(options.presentation?.organization)?`organization.${organizationIndex}`:'organization',organizationPath=`${organizationRoot}.name`;
+  const inlinePlatforms=record(record(options.presentation?.catalogs).socialPlatforms).records,platformRecords=[...(Array.isArray(inlinePlatforms)?inlinePlatforms:[]),...(options.socialPlatforms??[])];
   const fontFamily=options.fonts?.body??'sans-serif';let headerBottom=0,footerTop=height,configured=false;
   const error=(path:string,message:string,code:LayoutDiagnostic['code']='text-overflow')=>diagnostics.push({code,path,message});
   for(const kind of ['header','footer'] as const){
@@ -284,7 +539,7 @@ export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {
     const zones:FurniturePart[][]=[];
     for(const [index,zone]of (['left','center','right'] as const).entries()){
       const content=record(record(value)[zone]),path=`${root}.${zone}`,x=width*(.07+index*.3),zoneWidth=width*.26,zoneParts:FurniturePart[]=[];let y=0;
-      const add=(field:FurniturePartBase['field'],text:unknown,generated=false,sourcePath?:string)=>{
+      const add=(field:FurniturePartBase['field'],text:unknown,generated=false,sourcePath?:string,extras:FurnitureTextExtras={})=>{
         if(text===undefined)return;
         if(typeof text!=='string')throw new TypeError(`Furniture field ${path}.${field} requires string content.`);
         const partPath=`${path}.${field}`,style=resolveTextStyle({fontFamily,fontWeight:400,italic:false,path:partPath},options.textMeasurement);
@@ -302,7 +557,7 @@ export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {
         if(!Number.isFinite(partHeight))throw new RangeError('Furniture exceeds finite layout coordinates.');
         const box={x,y,width:zoneWidth,height:Math.max(scale,partHeight)},placement=outlines?placeTextLines(ink,box,zone,padding):undefined;
         const accepted={...fit,...(placement?{placement}:{}),overflow:fit.overflow||!!placement?.overflow};
-        zoneParts.push({type:'text',kind,zone,field,path:partPath,sourcePath:sourcePath??(!generated?partPath:undefined),generated,text,style,requestedFontSize:13*scale,minFontSize:minimum,box,alignment:zone,fit:accepted});
+        zoneParts.push({type:'text',kind,zone,field,path:partPath,sourcePath:sourcePath??(!generated?partPath:undefined),generated,text,style,requestedFontSize:13*scale,minFontSize:minimum,box,alignment:zone,fit:accepted,...(extras.fields?.length?{fields:extras.fields}:{}),...(extras.links?.length?{links:extras.links}:{})});
         if(accepted.overflow)error(partPath,'Repeated text exceeds its zone at the selected readability floor; change the furniture or slide design.');
         y+=box.height;
       };
@@ -312,10 +567,28 @@ export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {
       }
       add('text',content.text);
       if(content.organization===true){if(typeof organization.name==='string')add('organization',organization.name,true,organizationPath);else error(`${path}.organization`,'Generated organization name needs a named organization in the presentation.','unresolved-content');}
+      if(content.socials===true){
+        const links:FurnitureSocialLink[]=Object.entries(record(organization.socials)).filter(([,value])=>typeof value==='string'&&value.trim()).map(([platform,value])=>({platform,sourcePath:`${organizationRoot}.socials.${platform}`,...resolveSocialProfile(platform,value as string,platformRecords,'organization')}));
+        if(links.length)add('socials',links.map(link=>link.text).join('\n'),true,`${organizationRoot}.socials`,{links});else error(`${path}.socials`,'Generated social profiles need a primary organization with socials.','unresolved-content');
+      }
       if(content.section===true){if(typeof slide.section==='string')add('section',slide.section,true,`${sourceRoot}.section`);else error(`${path}.section`,'Generated section needs a literal slide section.','unresolved-content');}
-      if(content.slideNumber===true)add('slideNumber',String(number),true);
-      if(content.date===true)error(`${path}.date`,'Use a literal date string for deterministic header/footer content.','unresolved-content');
-      else if(typeof content.date==='string')add('date',content.date);
+      for(const setting of ['slideNumberFormat','dateFormat'])if(content[setting]!==undefined&&typeof content[setting]!=='string')throw new TypeError(`Furniture setting ${path}.${setting} requires a string.`);
+      if(content.slideNumber===true){
+        const resolved=formatSlideNumber(content.slideNumberFormat??DEFAULT_SLIDE_NUMBER_FORMAT,number,slideCount);
+        if('error' in resolved)error(`${path}.slideNumberFormat`,resolved.error,'unresolved-content');
+        else add('slideNumber',resolved.text,true,undefined,{fields:resolved.fields});
+      }
+      if(content.date===true){
+        // A current date is a live field: the host supplies today's calendar date.
+        const format=content.dateFormat??DEFAULT_FURNITURE_DATE_FORMAT;
+        if(options.date===undefined)error(`${path}.date`,'A current date needs a host-supplied ISO date option. For fixed content use a literal date, or an ISO date with dateFormat.','unresolved-content');
+        else{const resolved=formatFurnitureDate(options.date,format);if('error' in resolved)error(`${path}.dateFormat`,resolved.error,'unresolved-content');else add('date',resolved.text,true,undefined,{fields:[{type:'date',start:0,end:resolved.text.length,format}]});}
+      }
+      else if(typeof content.date==='string'){
+        // Without dateFormat a date string stays literal, editable source text.
+        if(content.dateFormat===undefined)add('date',content.date);
+        else{const resolved=formatFurnitureDate(content.date,content.dateFormat);if('error' in resolved)error(`${path}.${parseIsoDate(content.date)?'dateFormat':'date'}`,resolved.error,'unresolved-content');else add('date',resolved.text,true,`${path}.date`);}
+      }
       zones.push(zoneParts);
     }
     const tallest=Math.max(0,...zones.map(zone=>zone.reduce((sum,part)=>sum+part.box.height,0)));
@@ -1382,6 +1655,9 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   const minSize = (composition.minFontSize ?? 16) * scale;
   const rasterPadding=(options.textRasterPadding??1)*scale;
   if(!Number.isFinite(rasterPadding)||rasterPadding<0)throw new RangeError('Text raster padding must be finite and nonnegative.');
+  // One alignment resolution for placement, internal payload layouts and consumers.
+  const alignmentFor = (field: string): 'left' | 'center' | 'right' =>
+    (field === 'title' ? record(slide.design).titleAlignment ?? options.titleAlignment : record(slide.design).contentAlignment ?? options.contentAlignment) ?? 'left';
   const styleFor = (field: string, path: string): TextStyle => resolveTextStyle({
     fontFamily: (field === "title" ? options.fonts?.heading : field === "code" ? options.fonts?.code : options.fonts?.body) ?? (field === "code" ? "monospace" : "sans-serif"),
     fontWeight: field === "title" ? 700 : 400, path,
@@ -1390,7 +1666,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   const fitPlacedText = (field:string,value:unknown,text:string,box:LayoutBox,size:number,minimum:number,path:string):TextFit|RichTextFit => {
     const style=styleFor(field,path),rich=field==='text'&&Array.isArray(value);
     if(!options.textMeasurement?.outlineBounds)return rich?fitRichText(value,box,size,minimum,{style,textMeasurement:options.textMeasurement}):fitText(text,box,size,minimum,textWidthMeasurer(style,options.textMeasurement));
-    const alignment=(field==='title'?record(slide.design).titleAlignment??options.titleAlignment:record(slide.design).contentAlignment??options.contentAlignment)??'left';
+    const alignment=alignmentFor(field);
     const richLayout=rich?richTextLayouter(value,box,size,{style,textMeasurement:options.textMeasurement}):undefined;
     const measure=textWidthMeasurer(style,options.textMeasurement),floor=rich?richMinimum(value,size,minimum):minimum,start=Math.max(size,floor);
     // The nominal heading/body range fits within 64 reference-pixel steps; the
@@ -1430,25 +1706,33 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     : (field==='items'||field==='bullets') ? fitList(value as ListValue[],box,size,minimum,{style:styleFor(field,path),textMeasurement:options.textMeasurement})
     : fitText(text,box,size,minimum,widthFor(field,path));
   const path = `slides.${options.slideIndex ?? 0}`;
+  const slideImageDiagnostics: LayoutDiagnostic[] = [];
+  const slideImage = resolveSlideImage(slide, layout, options.presentation, width, height, path, padding, scale, slideImageDiagnostics);
+  // Free area for headings and content: the whole slide unless a banded slide image takes one side.
+  const area = { left: 0, top: 0, right: width, bottom: height };
+  if (slideImage?.position === 'left') area.left = slideImage.region.width;
+  else if (slideImage?.position === 'right') area.right = slideImage.region.x;
+  else if (slideImage?.position === 'top') area.top = slideImage.region.height;
+  else if (slideImage?.position === 'bottom') area.bottom = slideImage.region.y;
   const items: ComposedItem[] = [], diagnostics: LayoutDiagnostic[] = [];
   const measuredFurniture=layoutFurniture(slide,options);
   const furniture=measuredFurniture.configured||measuredFurniture.diagnostics.length?measuredFurniture:undefined;
   if(furniture)diagnostics.push(...furniture.diagnostics);
-  const bodyBottom=Math.min(height-padding,furniture&&furniture.footerTop<height?furniture.footerTop-gap*.5:height-padding);
-  let y = Math.max(padding,furniture?.headerBottom?furniture.headerBottom+gap*.5:padding);
+  const bodyBottom=Math.min(area.bottom-padding,furniture&&furniture.footerTop<height?furniture.footerTop-gap*.5:height-padding);
+  let y = Math.max(area.top+padding,furniture?.headerBottom?furniture.headerBottom+gap*.5:padding);
   for (const field of ["tag", "title", "subtitle"]) {
     if (!slide[field]) continue;
     const requested = (field === "title" ? 54 : field === "tag" ? 16 : 25) * scale;
     const maxHeight = Math.max(height * (field === "title" ? 0.26 : field === "subtitle" ? 0.12 : 0.045),minSize*1.22+2*rasterPadding);
-    const box = { x: padding, y, width: width - padding * 2, height: maxHeight };
+    const box = { x: area.left + padding, y, width: area.right - area.left - padding * 2, height: maxHeight };
     const text = fitPlacedText(field,slide[field],String(slide[field]),box,requested,minSize,`${path}.${field}`);
     box.height = Math.min(maxHeight, Math.max(text.lines.length * text.lineHeight,text.placement?.height??0));
     if(furniture&&box.y+box.height>bodyBottom+.01)diagnostics.push({code:'text-overflow',path:`${path}.${field}`,message:'Repeated furniture leaves too little room for this heading. Change the header/footer or slide design.'});
-    items.push({ path: `${path}.${field}`, field, type: "text", value: slide[field], payload: { text: slide[field] }, box, text, textStyle: styleFor(field,`${path}.${field}`), composition });
+    items.push({ path: `${path}.${field}`, field, type: "text", value: slide[field], payload: { text: slide[field] }, box, text, textStyle: styleFor(field,`${path}.${field}`), composition, alignment: alignmentFor(field) });
     y += box.height + gap * 0.5;
   }
   if (items.length) y += gap * 0.5;
-  const contentBox = { x: padding, y, width: width - padding * 2, height: Math.max(scale, bodyBottom - y) };
+  const contentBox = { x: area.left + padding, y, width: area.right - area.left - padding * 2, height: Math.max(scale, bodyBottom - y) };
   type Pending = { field: string; type: string; value: unknown; path: string; payload: Record<string, unknown>; children?: Pending[]; composition?: Composition; region?: [number[], number[]] };
   const collect = (host: Record<string, any>, basePath: string, depth = 0, ancestors: unknown[] = []): Pending[] => {
     if (Array.isArray(host.blocks)) {
@@ -1464,7 +1748,8 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   const regions = Object.keys(slide).filter(key => regionParts(key)).sort();
   const pending: Pending[] = regions.length
     ? regions.flatMap(key => collect(record(slide[key]), `${path}.${key}`).map(item => ({ ...item, region: regionParts(key) })))
-    : Array.isArray(slide.blocks) ? slide.blocks.flatMap((block: unknown, index: number) => collect(record(block), `${path}.blocks.${index}`)) : collect(slide, path);
+    : Array.isArray(slide.blocks) ? slide.blocks.flatMap((block: unknown, index: number) => collect(record(block), `${path}.blocks.${index}`))
+    : collect(slideImage?.replacesContent ? { ...slide, image: undefined } : slide, path);
   const groups: ComposedGroup[] = [], flows: ComposedFlow[] = [];
   const decisions: CompositionDecision[] | undefined = options.explain ? [] : undefined;
   const inheritedSettings = (parent: Composition, own: Composition = {}): Composition => ({
@@ -1493,7 +1778,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   const measureMetric = (node: Pending, box: LayoutBox, settings: Composition) => layoutMetric(node.value as string | number | MetricContent, acceptedBox(box), {
     fonts:options.fonts,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,
     textRasterPadding:options.textRasterPadding,
-    align:record(slide.design).contentAlignment??options.contentAlignment,
+    align:alignmentFor('metric'),
   });
   const measureTimeline = (node: Pending, box: LayoutBox, settings: Composition) => layoutTimeline(node.value as TimelineContent, acceptedBox(box), {
     fonts:options.fonts,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,textRasterPadding:options.textRasterPadding,
@@ -1583,12 +1868,14 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
         const text = internal ? body?.fit : textValue !== undefined ? fitContent(node.field,node.value,textValue,box,25*scale,(settings.minFontSize??16)*scale,node.path) : undefined;
         items.push({ path: node.path, field: node.field, type: node.type, value: node.value, payload: node.payload, box:internal?acceptedBox(box):box,
           ...(frameBox ? {frameBox} : {}),
-          text, textStyle: body?.style ?? styleFor(node.field,node.path), composition: settings, ...(quoteLayout?{quoteLayout}:{}), ...(codeLayout?{codeLayout}:{}), ...(metricLayout?{metricLayout}:{}), ...(timelineLayout?{timelineLayout}:{}) });
+          text, textStyle: body?.style ?? styleFor(node.field,node.path), composition: settings, alignment: alignmentFor(node.field), ...(quoteLayout?{quoteLayout}:{}), ...(codeLayout?{codeLayout}:{}), ...(metricLayout?{metricLayout}:{}), ...(timelineLayout?{timelineLayout}:{}) });
         if (box.width < 100 * scale || box.height < 60 * scale) diagnostics.push({ code: "small-cell", path: node.path, message: "Content cell is too small for comfortable reading; use fewer blocks or a different composition." });
       }
     });
   };
   const placeholders = Array.isArray(layout.placeholders) ? layout.placeholders.filter((p: any) => !headings.has(p.type)) : [];
+  // The root image drawn as the slide image no longer needs its content slot.
+  if (slideImage?.replacesContent) { const picture = placeholders.findIndex((p: any) => p.type === 'picture'); if (picture >= 0) placeholders.splice(picture, 1); }
   const rootSettings: Composition = { ...composition, mode: composition.mode ?? (layout.slideLayoutDirection === "Vertical" ? "column" : layout.slideLayoutDirection === "Horizontal" ? "row" : "auto") };
   arrange(pending, contentBox, rootSettings, composition.mode ? 0 : placeholders.length);
 
@@ -1619,7 +1906,8 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     unmeasuredPayloads:items.filter(item=>!headings.has(item.field)&&!item.quoteLayout&&!item.codeLayout&&!item.metricLayout&&!item.timelineLayout&&!['text','items','bullets','table'].includes(item.field)).map(item=>item.path),
   } : undefined;
   if (failures.length) throw new OPFCompositionError(failures, explanation);
-  return { width, height, contentBox, items, groups, flows, diagnostics, composition, ...(furniture?{furniture}:{}), ...(explanation?{explanation}:{}) };
+  diagnostics.push(...slideImageDiagnostics);
+  return { width, height, contentBox, items, groups, flows, diagnostics, composition, ...(furniture?{furniture}:{}), ...(slideImage?{slideImage}:{}), ...(explanation?{explanation}:{}) };
 }
 
 /** Canonical physical slide size, converted to reference pixels at 96 pixels/inch. */

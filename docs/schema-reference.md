@@ -156,7 +156,7 @@ _No named properties._
 | `phone` | no | `string` | Main contact phone number for the organization. E.164 format is recommended. |
 | `tagline` | no | `string` | Short tagline rendered alongside the organization name on cover slides. |
 | `role` | no | `enum:primary \| partner \| client \| sponsor \| host` | Role of the organization relative to the presentation. When omitted, the single organization or first organization in array form is treated as primary. |
-| `socials` | no | `ref:Socials` | Optional social media handles or URLs for the organization. |
+| `socials` | no | `ref:Socials` | Optional social media handles or URLs for the organization. The primary organization's socials render in header/footer zones that set socials: true; otherwise they are authoring metadata. |
 
 
 ### Speaker
@@ -175,7 +175,7 @@ _No named properties._
 | `phone` | no | `string` | Contact phone number for the speaker. E.164 format is recommended. |
 | `bio` | no | `string` | Short biographical paragraph for bio or 'about the speaker' slides. |
 | `organizationId` | no | `string` | Reference to an Organization.id in organization. Lets a speaker be attributed to their org in panel or multi-org decks without repeating organization details. |
-| `socials` | no | `ref:Socials` | Optional social media handles or URLs for the speaker. |
+| `socials` | no | `ref:Socials` | Optional social media handles or URLs for the speaker. Authoring metadata: no header/footer field renders speaker socials yet. |
 
 
 ### Socials
@@ -244,7 +244,7 @@ _No named properties._
 | `titleAlignment` | no | `enum:left \| center \| right` | Default horizontal alignment for title placeholders in resolved layouts. |
 | `contentAlignment` | no | `enum:left \| center \| right` | Default horizontal alignment for body/content regions in resolved layouts. |
 | `contentBox` | no | `boolean` | Whether body/content regions are rendered inside a visible card or surface. |
-| `slideImage` | no | `oneOf:ref:Asset / object` | Optional slide-level image treatment used by layouts that support a decorative or editorial image separate from content images. |
+| `slideImage` | no | `oneOf:ref:Asset / object` | Optional slide-level image, separate from content images. It applies to a slide that sets its own design.slideImage, and to slides whose layout declares slideImage: true or whose root image is the same source as a dec... |
 | `contentDirection` | no | `enum:horizontal \| vertical` | Axis along which parallel body/content regions are arranged. |
 | `chartPrimary` | no | `enum:none \| top \| bottom \| left \| right` | For chart layouts, where the primary chart sits relative to supporting content. 'none' means chart regions have equal weight. |
 | `imageFill` | no | `enum:crop \| fit` | How picture placeholders fill their allocated region. |
@@ -537,16 +537,19 @@ _No named properties._
 
 - Type: `object`
 - Required fields: none
-- Purpose: One header/footer zone. Fields may be combined when the renderer supports it; otherwise renderers should prefer image, then text-like generated content.
+- Purpose: One header/footer zone. Every configured field renders; fields in one zone stack top to bottom in the order image, text, organization, section, slide number, date. Put a date and a slide number in different zones to keep each on the zone's single line.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `text` | no | `string` | Literal text rendered in this zone. |
 | `image` | no | `ref:Asset` | Generic image rendered in this zone, such as a logo, partner mark, certification badge, or icon. |
-| `slideNumber` | no | `boolean` | Whether to render the current slide number in this zone. |
-| `date` | no | `oneOf:boolean / string` | Whether to render the presentation date, or a literal date string to render. |
+| `slideNumber` | no | `boolean` | Whether to render the current slide number in this zone. PPTX export writes it as a live slide-number field. |
+| `slideNumberFormat` | no | `string` | Template for the slide number when slideNumber is true. {current} is the displayed slide number (a live field in PPTX); {total} is the number of slides in the rendered or exported deck, written as fixed text because P... |
+| `date` | no | `oneOf:boolean / string` | true renders the current date: the renderer or exporter must be given today's ISO date by its host (core never reads a clock), and PPTX export writes a live date field that PowerPoint updates. A string is fixed: with... |
+| `dateFormat` | no | `string` | Date pattern for date. Tokens: yyyy (2026), yy (26), MMMM (April), MMM (Apr), MM (04), M (4), dd (09), d (9), EEEE (Thursday), EEE (Thu). Text in single quotes and other non-letter characters are literal. Month and we... |
 | `organization` | no | `boolean` | Whether to render the primary organization name from organization. |
 | `section` | no | `boolean` | Whether to render the current slide section label. |
+| `socials` | no | `boolean` | Whether to render the primary organization's social profiles from organization.socials, one line per platform in key order. A handle is formatted through the platform's socialPlatforms record (companyUrlPattern, else... |
 
 
 ### Slide

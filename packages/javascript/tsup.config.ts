@@ -3,6 +3,7 @@ import { defineConfig } from "tsup";
 export default defineConfig({
   entry: {
     lint: "src/lint.ts",
+    "font-policy": "src/font-policy.ts",
     data: "src/data.ts",
     pagination: "src/pagination.ts",
     composition: "src/composition.ts",

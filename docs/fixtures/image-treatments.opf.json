@@ -1,0 +1,262 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Image treatments reference",
+  "description": "One slide per pptx.gallery image treatment, expressed with the design.slideImage treatment vocabulary. See docs/image-treatments.md for support status and gaps.",
+  "assets": {
+    "hero": {
+      "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAABkBAMAAADzmCa8AAAAMFBMVEU2hqFVaY82aKFyZ35ThpAhWFfwvjw3WEqTZmpMWD1uiYBfWDGseFuwZFiXjGeyi1fEUblAAAAACXBIWXMAAAPoAAAD6AG1e1JrAAABR0lEQVRYw+3QwU3EMBCF4W1hRQXQAhLiipQTd0QHFieuiA72EAqggRzmQAO04NVWQAeRKcFskjXJjAcF24PwYf4CPs2bzQXpfIu7JF3vcC8fuE0puFNQQQUlwK2CCip4zO5lwdZaWz+4JFNBM/aweOHUPhM0hoo2lAUaE4nf4OnIJPBqBo0EuPSC2FqLyVXwjBs8j0bg8MgEEB94OtHS/hMk3rS5AKQHjie20qBdB5umQSDAD4vHzQxIa0I3ARz6AzBePGxOAacg1DGgc/WDvTRITzz46sCeeLKg9+WgI1452GOvZtALgQ57vwch9h7dfKKXBQ8+A+z4xYng7TroFnuTQOAXH0/0mWDHH+g+qwGBX1wAduyBBSASnQQIzOAyEBivDITYSwMh6s3RFFRQwQzwjuv+ien5Ne49SkEFFVRQQQUVrAf8AtnA+Gh85eJ6AAAAAElFTkSuQmCC",
+      "alt": "Project-authored posterized landscape with a sun",
+      "mediaType": "image/png"
+    }
+  },
+  "design": {
+    "theme": "classic"
+  },
+  "slides": [
+    {
+      "id": "full-bleed",
+      "title": "Full-Bleed",
+      "subtitle": "pptx.gallery image-treatments/full-bleed",
+      "design": {
+        "slideImage": {
+          "src": "asset:hero",
+          "position": "background",
+          "fill": "crop",
+          "overlay": {
+            "color": "dark1",
+            "opacity": 0.2
+          }
+        }
+      }
+    },
+    {
+      "id": "text-overlay",
+      "title": "Text Overlay",
+      "subtitle": "pptx.gallery image-treatments/text-overlay",
+      "design": {
+        "slideImage": {
+          "src": "asset:hero",
+          "position": "background",
+          "fill": "crop",
+          "overlay": {
+            "color": "dark1",
+            "opacity": 0.55
+          }
+        }
+      }
+    },
+    {
+      "id": "side-by-side",
+      "title": "Side-by-Side",
+      "subtitle": "pptx.gallery image-treatments/side-by-side",
+      "design": {
+        "slideImage": {
+          "src": "asset:hero",
+          "position": "left",
+          "size": 0.46,
+          "fill": "crop"
+        }
+      }
+    },
+    {
+      "id": "caption-overlay",
+      "title": "Caption Overlay",
+      "subtitle": "pptx.gallery image-treatments/caption-overlay",
+      "design": {
+        "slideImage": {
+          "src": "asset:hero",
+          "position": "background",
+          "inset": true,
+          "fill": "crop",
+          "overlay": {
+            "color": "dark1",
+            "opacity": 0.75,
+            "edge": "bottom",
+            "size": 0.25
+          }
+        }
+      }
+    },
+    {
+      "id": "masked-shape",
+      "title": "Masked Shape",
+      "subtitle": "pptx.gallery image-treatments/masked-shape",
+      "design": {
+        "slideImage": {
+          "src": "asset:hero",
+          "position": "right",
+          "inset": true,
+          "shape": "hexagon",
+          "aspectRatio": 1.1547,
+          "fill": "crop"
+        }
+      }
+    },
+    {
+      "id": "circular-crop",
+      "title": "Circular Crop",
+      "subtitle": "pptx.gallery image-treatments/circular-crop",
+      "design": {
+        "slideImage": {
+          "src": "asset:hero",
+          "position": "left",
+          "size": 0.4,
+          "inset": true,
+          "shape": "circle",
+          "fill": "crop"
+        }
+      }
+    },
+    {
+      "id": "rounded-card",
+      "title": "Rounded Card",
+      "subtitle": "pptx.gallery image-treatments/rounded-card",
+      "design": {
+        "slideImage": {
+          "src": "asset:hero",
+          "position": "background",
+          "inset": true,
+          "shape": "rounded",
+          "cornerRadius": 0.05,
+          "fill": "crop",
+          "border": {
+            "color": "accent5",
+            "width": 1
+          }
+        }
+      }
+    },
+    {
+      "id": "duotone",
+      "title": "Duotone",
+      "subtitle": "pptx.gallery image-treatments/duotone",
+      "design": {
+        "slideImage": {
+          "src": "asset:hero",
+          "position": "background",
+          "fill": "crop",
+          "recolor": {
+            "dark": "accent1",
+            "light": "light1"
+          }
+        }
+      }
+    },
+    {
+      "id": "background-blur",
+      "title": "Background Blur",
+      "subtitle": "pptx.gallery image-treatments/background-blur",
+      "design": {
+        "contentBox": true,
+        "slideImage": {
+          "src": "asset:hero",
+          "position": "background",
+          "fill": "crop",
+          "overlay": {
+            "color": "light1",
+            "opacity": 0.4
+          }
+        }
+      }
+    },
+    {
+      "id": "image-strip",
+      "title": "Image Strip",
+      "subtitle": "pptx.gallery image-treatments/image-strip",
+      "design": {
+        "slideImage": {
+          "src": "asset:hero",
+          "position": "bottom",
+          "size": 0.3,
+          "fill": "crop"
+        }
+      }
+    },
+    {
+      "id": "collage-grid",
+      "title": "Collage Grid",
+      "design": {
+        "imageFill": "crop"
+      },
+      "composition": {
+        "mode": "grid",
+        "columns": 2
+      },
+      "blocks": [
+        {
+          "image": "asset:hero"
+        },
+        {
+          "image": "asset:hero"
+        },
+        {
+          "image": "asset:hero"
+        },
+        {
+          "image": "asset:hero"
+        }
+      ]
+    },
+    {
+      "id": "device-frame",
+      "title": "Device Frame",
+      "subtitle": "pptx.gallery image-treatments/device-frame",
+      "design": {
+        "slideImage": {
+          "src": "asset:hero",
+          "position": "right",
+          "inset": true,
+          "aspectRatio": 0.5,
+          "shape": "rounded",
+          "cornerRadius": 0.12,
+          "fill": "crop",
+          "border": {
+            "color": "dark1",
+            "width": 12
+          }
+        }
+      }
+    },
+    {
+      "id": "cutout-subject",
+      "title": "Cutout Subject",
+      "subtitle": "pptx.gallery image-treatments/cutout-subject",
+      "design": {
+        "slideImage": {
+          "src": "asset:hero",
+          "position": "right",
+          "fill": "fit"
+        }
+      }
+    },
+    {
+      "id": "watermark",
+      "title": "Watermark",
+      "subtitle": "pptx.gallery image-treatments/watermark",
+      "design": {
+        "slideImage": {
+          "src": "asset:hero",
+          "position": "background",
+          "inset": true,
+          "fill": "fit",
+          "opacity": 0.1,
+          "recolor": "grayscale"
+        }
+      }
+    },
+    {
+      "id": "cinematic-crop",
+      "title": "Cinematic Crop",
+      "subtitle": "pptx.gallery image-treatments/cinematic-crop",
+      "design": {
+        "background": "dark1",
+        "slideImage": {
+          "src": "asset:hero",
+          "position": "background",
+          "aspectRatio": 2.39,
+          "fill": "crop"
+        }
+      }
+    }
+  ]
+}
