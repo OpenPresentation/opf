@@ -1,6 +1,6 @@
 # pptx.gallery support by dimension (FF-23)
 
-Measured 2026-09-23 (UTC). Program: [README.md](README.md). Tracker:
+Parity measured 2026-09-29; presence measured 2026-09-23 (UTC). Program: [README.md](README.md). Tracker:
 [burndown.md](burndown.md). Audit scripts, raw results and the per-item
 machine-readable file: [gallery-support/](gallery-support/README.md).
 
@@ -9,8 +9,10 @@ pptx.gallery value's "OPF Config" snippet and run it through the OpenPresentatio
 packages. It measures the engines, not the schema: a value that validates but
 changes nothing in the preview or the PPTX is not reported as working.
 
-**Headline: 4 of 900 gallery values are perfect by parity** (FF-38, current
-mains on 2026-09-23, after the FF-20, FF-25, FF-26, FF-27 and FF-34 merges).
+**Headline: 5 of 900 gallery values are perfect by parity** (FF-38, accepted
+merged source graph on 2026-09-29; 0 near, 895 mismatch). The unchanged full
+audit improves the September 23 result from 4 to 5, with no classification
+regressions. This graph includes PPTX79 and PPTX81 and core145's FF-04 evidence.
 This is the program's progress metric. The 900 values are the 793
 presence-audited values plus 107 parity-only records: 76 charts and 31
 `withAssets` variants. The presence audits below find 352 of 793 values
@@ -26,20 +28,21 @@ Two measurements are recorded here:
 - **Parity (FF-38).** Do the preview and the exported PPTX agree element by
   element?
 
-| Repository | Presence audits A and B | Parity scoreboard (FF-38) | Previous parity run (opf#122) | Parity baseline (history) |
+| Repository | Presence audits A and B (September 23) | Accepted parity (September 29) | Previous parity run (opf#122) | Parity baseline (history) |
 | --- | --- | --- | --- | --- |
-| opf (core) | `1ad25df` | `6263985` | `c278532` | `53be042` |
-| opf-render | `bc436f3` | `bc436f3` | `47d19b2` | `e500ed9` |
-| opf-pptx | `9092954` | `9092954` | `5b657c9` | `cf0bc0c` |
+| opf (core) | `1ad25df` | `a85facf` | `c278532` | `53be042` |
+| opf-render | `bc436f3` | `6c7d781` | `47d19b2` | `e500ed9` |
+| opf-pptx | `9092954` | `c749c35` | `5b657c9` | `cf0bc0c` |
 | opf-editor | `214ae69` (audit B) | not used | not used | not used |
 | pptx-gallery | `f17e9ae` | `f17e9ae` | `f17e9ae` | `f17e9ae` |
 
 Node 24.21.0. No Office or COM was used; native PowerPoint behaviour is
-recorded separately (FF-04, FF-12). All three measurements now run on the same
-merged mains. They include FF-07, FF-08, FF-17, FF-18, FF-19, FF-24, FF-28,
+recorded separately (FF-04, FF-12). Presence audits retain their September 23
+heads and results; they were not rerun at the September 29 parity heads.
+The accepted source graph includes FF-07, FF-08, FF-17, FF-18, FF-19, FF-24, FF-28,
 FF-32, FF-35, FF-35b and FF-39, the merged engine halves of FF-25, FF-26,
 FF-27 and FF-34 (opf-pptx#65 included), FF-31's exporter half
-(opf-pptx#63) and FF-22's core half. The parity scoreboard was re-run at opf
+(opf-pptx#63) and FF-22's core half. The September 23 parity scoreboard was re-run at opf
 `6263985` (opf#139; documentation and harness only since `a74f3f6`) after
 the harness learned to map the FF-26 slide-image picture and, since, to fail
 non-finite geometry and check crop position; the run before the mapping is
@@ -53,6 +56,22 @@ hardening, with no class change. pptx-gallery is still `f17e9ae`: none
 of its program PRs (#40 to #46) has merged, so every snippet is the
 pre-program snippet. The per-dimension prose below the summary
 table describes the first measurement unless a paragraph says otherwise.
+
+The accepted local raw receipt is `baseline81-results.json`, generated at
+`2026-09-29T08:23:46.429Z`; the committed [results](gallery-support/parity/parity-results.json)
+and [scoreboard](gallery-support/parity/PARITY.md) record that run with the
+[documented one-slug normalization](gallery-support/README.md#normalized-ids).
+Editor `d0c95a1` was refreshed by a dependency-only merge and was not used by
+parity. A separate local raw candidate receipt, `candidate78-results.json`
+at `2026-09-29T08:30:22.322Z`, uses the same core, renderer and gallery with
+[PPTX78](https://github.com/OpenPresentation/opf-pptx/pull/78) head
+`7cc779129323af6123ef5e194226a545e743f195`: also 5 perfect, 0 near, 895 mismatch,
+with text 798 to 799 and fills 790 to 791 and no classification change.
+Candidate CI [36543078806](https://github.com/OpenPresentation/opf-pptx/actions/runs/36543078806)
+is pending at this checkpoint. It does not replace the accepted baseline.
+PPTX80's old-base caption/fallback findings were reconciled into PPTX78;
+PPTX80 was not merged as-is. These are source/package measurements, without
+new Office acceptance; FF-29 remains in review and FF-05 remains open.
 
 ## Method
 
@@ -101,26 +120,28 @@ checks are:
 | theme | Theme major/minor `latin` equal the preview heading/body fonts, and the theme `clrScheme` equals the document color scheme. |
 | mapping | Every preview element group has PPTX shapes and the reverse; an unmapped PPTX shape is near. |
 
-Checks passed, all 900 values (current mains, 2026-09-23 re-run), with the
+Checks passed, all 900 values (accepted merged graph, 2026-09-29), with the
 run before the slide-image mapping (opf#137) and the opf#122 run for
 comparison:
 
 | Run | perfect | geometry | text | fills | zOrder | slideSize | typefaces | reimport | fontResolution | theme | mapping |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Current mains | 4 | 880 | 759 | 766 | 880 | 900 | 900 | 899 | 5 | 900 | 890 |
+| Accepted merged graph (September 29) | 5 | 880 | 798 | 790 | 880 | 900 | 900 | 899 | 5 | 900 | 890 |
+| Previous scoreboard (September 23) | 4 | 880 | 759 | 766 | 880 | 900 | 900 | 899 | 5 | 900 | 890 |
 | Before slide-image mapping (opf#137) | 4 | 774 | 759 | 674 | 784 | 900 | 900 | 899 | 5 | 900 | 672 |
 | Previous (opf#122) | 0 | 390 | 326 | 734 | 880 | 900 | 0 | 0 | 5 | 900 | 890 |
 
-The four perfect values are the font schemes `calibri`, `courier-new`,
-`times-new-roman` and `roboto`. slideSize, typefaces and theme pass
+The five perfect values are the font schemes `calibri`, `courier-new`,
+`times-new-roman` and `roboto`, plus the content block `kpi-dashboard`.
+slideSize, typefaces and theme pass
 everywhere. Re-import passes for 899; the `photography` snippet, which has no
 asset, loses its background with a specific diagnostic (near).
 
-Per dimension (current mains; slideSize, typefaces and theme pass everywhere):
+Per dimension (accepted September 29 graph; slideSize, typefaces and theme pass everywhere):
 
 | Dimension | Values | perfect | geometry | text | fills | zOrder | reimport | fontResolution | mapping |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| layouts | 485 | 0 | 481 | 436 | 421 | 485 | 485 | 0 | 475 |
+| layouts | 485 | 0 | 481 | 472 | 445 | 485 | 485 | 0 | 475 |
 | color-schemes | 14 | 0 | 0 | 14 | 14 | 14 | 14 | 0 | 14 |
 | font-schemes | 89 + 4 legacy | 4 | 93 | 93 | 93 | 93 | 93 | 4 | 93 |
 | languages | 93 | 0 | 93 | 93 | 93 | 93 | 93 | 0 | 93 |
@@ -132,12 +153,12 @@ Per dimension (current mains; slideSize, typefaces and theme pass everywhere):
 | tones | 7 | 0 | 7 | 7 | 7 | 7 | 7 | 0 | 7 |
 | socials | 10 | 0 | 10 | 10 | 10 | 10 | 10 | 0 | 10 |
 | headers-footers | 10 (+10 withAssets) | 0 (0) | 10 (10) | 0 (0) | 10 (10) | 0 (0) | 10 (10) | 0 (0) | 10 (10) |
-| blocks | 32 | 0 | 30 | 25 | 30 | 32 | 32 | 1 | 32 |
+| blocks | 32 | 1 | 30 | 28 | 30 | 32 | 32 | 1 | 32 |
 | image-treatments | 15 (+15 withAssets) | 0 (0) | 15 (15) | 0 (15) | 15 (15) | 15 (15) | 15 (15) | 0 (0) | 15 (15) |
 
 Socials, tones, narratives, languages and the other non-layout metadata
-dimensions now fail only font resolution (the Aptos to Carlito visual
-substitute).
+dimensions now fail only font resolution (visual substitutes, including
+Aptos Display to Carlito and Aptos to Roboto).
 
 ### Measurement notes (2026-09-23 re-run)
 
@@ -245,18 +266,19 @@ substitute).
 ### Universal blockers
 
 One failure still blocks nearly every value. Three earlier universal blockers
-no longer fail on current mains: the theme `clrScheme` (FF-24; theme 900
+no longer fail on the accepted September 29 graph: the theme `clrScheme` (FF-24; theme 900
 pass), re-import (FF-32; 899 pass, and the one other value loses its
 background with a specific diagnostic) and package typefaces (FF-08; 900
 pass). FF-07 and FF-08 stay in review pending FF-05. The fourth, centered
 preview text against left-aligned PPTX text (FF-39), is much reduced but not
-cleared: text passes for 759 and geometry for 880. 39 values still show the
-reverse mismatch, "alignment l (preview) vs ctr (pptx)", so FF-39 stays in
-review.
+cleared across every check: text passes for 798 and geometry for 880. The
+September 23 reverse mismatch, "alignment l (preview) vs ctr (pptx)", no
+longer occurs in this run; remaining text/geometry failures and native
+acceptance keep FF-39 in review.
 
 | Blocker | Check (passed) | Values hit | Fix |
 | --- | --- | --- | --- |
-| The preview renders Aptos and Aptos Display with the visual substitute Carlito (754). 93 families have no face at all (133 values). | fontResolution (5) | 754+ | FF-31 (core and renderer halves open: opf#133, opf-render#44) |
+| The preview uses visual substitutes for Aptos Display (Carlito) and Aptos (Roboto), affecting 754 values. 71 families have no face at all (104 values). | fontResolution (5) | 754+ | FF-31 (core133 and renderer44 merged; policy acceptance remains open) |
 
 Other recurring parity failures:
 
@@ -265,8 +287,8 @@ Other recurring parity failures:
 - Charts and chart blocks: series colours are missing from the preview (108
   values), and preview labels are missing from the chart cache (46 values;
   FF-22, FF-22b).
-- Text: 45 values have a preview line missing in the PPTX, and 39 are still
-  left-aligned in the preview but centered in the PPTX (FF-39, FF-29 opf#132).
+- Text: 45 values have a preview line missing in the PPTX; list markers differ
+  for 10 layouts. The previous 39 reverse-alignment mismatches are absent.
 
 The per-item parity status is in `support-status.json` (`parity`, plus
 `parityOnly` for charts). The full report, with a before/after table against
@@ -311,8 +333,9 @@ preview shows the value while the export has no native equivalent.
 Presence: 793 values measured across 13 dimensions; charts have no presence
 status until FF-22. 352 values are `works` (7 at the first measurement; 362
 before the FF-36 audit probe update moved socials to `partial`).
-Parity: 4 of 900 perfect. Counts are for current mains; the "What actually
-works" column keeps the first measurement's wording unless marked "Now".
+Parity: 5 of 900 perfect on the accepted September 29 graph. Presence counts
+retain the September 23 heads above; the "What actually works" column keeps
+the first measurement's wording unless marked "Now".
 
 | Dimension | Values | works | partial | schema-only | authoring-metadata | gallery-only | broken | Parity perfect | What actually works for a developer |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -328,7 +351,7 @@ works" column keeps the first measurement's wording unless marked "Now".
 | [Tones](#tones) | 7 | 7 | 0 | 0 | 0 | 0 | 0 | 0/7 | `works` only because `ppt/tags/opfDocument.xml` changes; the preview is identical. |
 | [Socials](#socials) | 10 | 0 | 10 | 0 | 0 | 0 | 0 | 0/10 | Now: re-import returns the organization and speaker socials for 10/10 (FF-34). The pre-program gallery snippet shows no footer, so no handle is rendered in preview or export, and audit B now classes them `partial` for that. The rendering snippet is pptx-gallery#42. Parity fails only font resolution. |
 | [Headers & footers](#headers-and-footers) | 10 | 1 | 9 | 0 | 0 | 0 | 0 | 0/10 | Now: native slide-number and date fields (FF-27). The snippet still drops gallery options (pptx-gallery#45), and 3 dated values report `unresolved-content`. |
-| [Content blocks](#content-blocks) | 32 | 29 | 3 | 0 | 0 | 0 | 0 | 0/32 | Blocks render and export. `market-opportunity` and `financial-snapshot` still lose metric text (FF-30, pptx-gallery#44). |
+| [Content blocks](#content-blocks) | 32 | 29 | 3 | 0 | 0 | 0 | 0 | 1/32 | Presence: blocks render and export; `market-opportunity` and `financial-snapshot` lose metric text at the September 23 heads (FF-30, pptx-gallery#44). Accepted parity: `kpi-dashboard` is perfect. |
 | [Image treatments](#image-treatments) | 15 | 0 | 15 | 0 | 0 | 0 | 0 | 0/15 | Now: `design.slideImage` renders and exports as a native picture (FF-26); with the asset supplied, all 15 match the preview frame and crop at 0 pt, and `side-by-side` and `image-strip` are `works`. The snippets still omit the asset and collapse 13 treatments to two documents (pptx-gallery#44, #45). |
 
 ### Shared export gaps (every exported value, audit B)
