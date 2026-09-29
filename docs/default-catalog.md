@@ -149,8 +149,12 @@ node scripts/sync-gallery-catalog.mjs --gallery ../pptx-gallery --report # per-k
 
 The sync validates every published index and record against the schemas in
 `spec/schemas/`, checks the published `contentSha256`, drops `x-*` members, and
-rewrites only the files whose content changed. `--url https://www.pptx.gallery`
-reads the live site instead of a checkout, for inspection.
+rewrites only the files whose content changed. Writes require a clean gallery
+checkout so the manifest commit identifies the actual catalog bytes.
+`--url https://www.pptx.gallery` reads the live site for inspection and requires
+`--check` or `--report`; a live response cannot prove a source commit.
+Dirty checkout inspection also stays read-only: `--allow-dirty` is accepted only
+with `--check` or `--report` and cannot bypass the write guard.
 
 To bundle more of a subset kind, reconcile it in the gallery first, then change
 its `mode` to `mirror` in the manifest and re-run the sync.

@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
 import { cp, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
@@ -11,7 +12,7 @@ import {
   readJson,
   verifySnapshot,
 } from "./catalog-snapshot.mjs";
-import { applySnapshot, diffSnapshot, loadValidators, planSnapshot, readCurrentSnapshot } from "./sync-gallery-catalog.mjs";
+import { applySnapshot, diffSnapshot, loadValidators, main, planSnapshot, readCurrentSnapshot } from "./sync-gallery-catalog.mjs";
 
 const catalogsRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "spec", "catalogs");
 const source = { repository: "https://github.com/Data-Advantage/pptx-gallery", commit: "0".repeat(40), path: "public" };
@@ -139,3 +140,73 @@ describe("applySnapshot", () => {
     assert.ok(problems.some((problem) => problem.startsWith("tones/index.json: contentSha256")), problems.join("\n"));
   });
 });
+
+describe("snapshot source provenance", () => {
+  let workdir;
+  let galleryDir;
+  let target;
+  let commit;
+  const git = (...args) => execFileSync("git", ["-C", galleryDir, ...args], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }).trim();
+  before(async () => {
+    workdir = await mkdtemp(path.join(tmpdir(), "opf-catalog-provenance-"));
+    galleryDir = path.join(workdir, "gallery");
+    target = path.join(workdir, "snapshot");
+    await cp(catalogsRoot, path.join(galleryDir, "public"), { recursive: true });
+    await cp(catalogsRoot, target, { recursive: true });
+    git("init");
+    git("add", "public");
+    git("-c", "user.name=Catalog test", "-c", "user.email=catalog@example.invalid", "commit", "-m", "Catalog fixture");
+    commit = git("rev-parse", "HEAD");
+  });
+  after(async () => {
+    await rm(workdir, { recursive: true, force: true });
+  });
+
+  test("a clean checkout writes a snapshot pinned to its actual commit", async () => {
+    await main(["--gallery", galleryDir, "--catalogs", target]);
+    assert.equal((await readJson(path.join(target, "manifest.json"))).source.commit, commit);
+    assert.deepEqual(await verifySnapshot(target), []);
+  });
+
+  test("dirty catalog bytes cannot be written under a clean commit, even with --allow-dirty", async () => {
+    const formal = path.join(galleryDir, "public", "tones", "formal.json");
+    await writeFile(formal, serializeForTest({ ...(await readJson(formal)), name: "Uncommitted name" }));
+    const indexPath = path.join(galleryDir, "public", "tones", "index.json");
+    const index = await readJson(indexPath);
+    index.contentSha256 = catalogContentSha256(await Promise.all(index.records.map((entry) => readJson(path.join(galleryDir, "public", "tones", entry.file)))));
+    await writeFile(indexPath, serializeForTest(index));
+
+    const before = await readCurrentSnapshot(target);
+    await assert.rejects(main(["--gallery", galleryDir, "--catalogs", target]), /uncommitted catalog changes/);
+    await assert.rejects(main(["--gallery", galleryDir, "--catalogs", target, "--allow-dirty"]), /--allow-dirty requires --check or --report/);
+    assert.deepEqual(await readCurrentSnapshot(target), before);
+    // The changed input remains inspectable without giving it false provenance.
+    await main(["--gallery", galleryDir, "--catalogs", target, "--allow-dirty", "--report"]);
+    await assert.rejects(main(["--gallery", galleryDir, "--catalogs", target, "--check"]), /does not match the gallery catalog/);
+    assert.deepEqual(await readCurrentSnapshot(target), before);
+  });
+
+  test("a live response can be compared but cannot reuse an unrelated source pin for a write", async () => {
+    const before = await readCurrentSnapshot(target);
+    const originalFetch = globalThis.fetch;
+    let requests = 0;
+    globalThis.fetch = async (url) => {
+      requests += 1;
+      return { ok: true, json: () => readJson(path.join(galleryDir, "public", new URL(url).pathname)) };
+    };
+    try {
+      await assert.rejects(main(["--url", "https://catalog.example.invalid", "--catalogs", target]), /live response cannot prove a source commit/);
+      assert.equal(requests, 0, "reject unsafe writes before any remote reads");
+      await main(["--url", "https://catalog.example.invalid", "--catalogs", target, "--report"]);
+      assert.ok(requests > 0);
+      await assert.rejects(main(["--url", "https://catalog.example.invalid", "--catalogs", target, "--check"]), /does not match the gallery catalog/);
+    } finally {
+      globalThis.fetch = originalFetch;
+    }
+    assert.deepEqual(await readCurrentSnapshot(target), before);
+  });
+});
+
+function serializeForTest(value) {
+  return `${JSON.stringify(value, null, 2)}\n`;
+}
