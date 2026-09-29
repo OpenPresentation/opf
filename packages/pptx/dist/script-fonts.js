@@ -220,7 +220,7 @@ export function observeLanguage({slides, theme, catalogs}) {
     }
     rtlParagraphs += xml.match(/<a:pPr\b[^>]*?\srtl="1"/g)?.length ?? 0;
   }
-  const ranked = [...counts].sort((left, right) => right[1] - left[1] || left[0].localeCompare(right[0]));
+  const ranked = [...counts].sort((left, right) => right[1] - left[1] || (left[0] < right[0] ? -1 : left[0] > right[0] ? 1 : 0));
   const lang = ranked[0]?.[0];
   const match = lang === undefined ? null : matchCatalogLanguage(lang, catalogs);
   return {lang, language: lang === undefined ? undefined : match?.language ?? lang, match, ranked, rtlParagraphs, theme};

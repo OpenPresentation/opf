@@ -449,7 +449,7 @@ function resolveSlidePaths(entries, presentationRoot, relationships) {
 }
 
 function compareSlidePaths(left, right) {
-  return slideNumber(left) - slideNumber(right) || left.localeCompare(right);
+  return slideNumber(left) - slideNumber(right) || (left < right ? -1 : left > right ? 1 : 0);
 }
 
 function slideNumber(path) {
