@@ -30,6 +30,10 @@ assert.ok(pkg.peerDependencies?.["@openpresentation/opf-render"], "Must declare 
 assert.ok(pkg.exports?.["./react"], "Must expose optional React bindings as a separate entry point.");
 assert.ok(pkg.exports?.["./svelte"], "Must expose optional Svelte bindings as a separate entry point.");
 
+assert.ok(pkg.exports?.["./switches"], "Must expose the FF-16 dimension switches as a separate entry point.");
+assert.equal(pkg.exports["./switches"].default, "./dist/switches.js");
+assert.equal(pkg.exports["./switches"].types, "./dist/switches.d.ts");
+
 for (const forbidden of forbiddenDependencyNames) {
   assert.ok(!deps[forbidden], `Forbidden critical-path dependency: ${forbidden}`);
 }

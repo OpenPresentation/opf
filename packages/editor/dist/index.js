@@ -25,6 +25,15 @@ function resolveCompositionOptions(document, slideIndex, { onDiagnostic, ...opti
       return { ...resolveCanvasDimensions(slide.design?.dimensions ?? document.design?.dimensions ?? theme?.dimensions), fonts:resolveFontFamilies(fontScheme), contentAlignment:slide.design?.contentAlignment??document.design?.contentAlignment, titleAlignment:slide.design?.titleAlignment??document.design?.titleAlignment, contentBox:slide.design?.contentBox??document.design?.contentBox, presentation:document, ...options, layout, slideIndex };
 }
 
+/**
+ * The font families a slide resolves to (`heading`, `body`, `code`), by the same slide, deck,
+ * theme, default order that composition, pagination and export use. Hosts read this after a
+ * font-scheme or theme switch to show the fonts the preview now uses.
+ */
+export function resolveSlideFonts(document, slideIndex = 0, options = {}) {
+  return resolveCompositionOptions(document, slideIndex, options).fonts;
+}
+
 export const packageName = "@openpresentation/opf-editor";
 
 export const releaseLane = Object.freeze({

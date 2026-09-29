@@ -31,4 +31,4 @@ export function prepareTrackResize(document, flow, boundary, fraction) {
   return {document:next,patches,composition,fraction:share};
 }
 
-export {prepareBlockMove,listBlockContainers,prepareBlockInsert,prepareBlockDuplicate,prepareBlockRemove,createContentBlock} from './blocks.js';
+export {prepareBlockMove,listBlockContainers,prepareBlockInsert,prepareBlockDuplicate,prepareBlockRemove,prepareBlockReplace,createContentBlock} from './blocks.js';

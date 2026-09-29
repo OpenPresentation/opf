@@ -5,6 +5,6 @@ export declare function prepareTrackResize(document:unknown,flow:ComposedFlow,bo
   document:unknown;patches:JsonPatchOperation[];composition:Composition;fraction:number;
 };
 
-export {prepareBlockMove,listBlockContainers,prepareBlockInsert,prepareBlockDuplicate,prepareBlockRemove,createContentBlock} from './blocks.js';
+export {prepareBlockMove,listBlockContainers,prepareBlockInsert,prepareBlockDuplicate,prepareBlockRemove,prepareBlockReplace,createContentBlock} from './blocks.js';
 
 export type {PreparedBlockChange,ContentBlockKind} from './blocks.js';

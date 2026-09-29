@@ -162,6 +162,9 @@ export declare function invertJsonPatch(document: unknown, operations: JsonPatch
 
 export declare function validateOpfDocument(document: unknown, validator?: (document: unknown) => unknown): OPFValidationSummary;
 
+/** Font families the slide resolves to (slide, deck, theme, then the shared default scheme). */
+export declare function resolveSlideFonts(document: unknown, slideIndex?: number, options?: EditorDiagnosticOptions): { heading?: string; body?: string; code?: string; [role: string]: string | undefined };
+
 export declare function createEditorSession(input: unknown, options?: CreateEditorSessionOptions): EditorSession;
 
 export declare function createSvgTraceBinding(

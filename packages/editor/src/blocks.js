@@ -83,6 +83,39 @@ function checkedBlock(document,path) {
   if(index>=blocks.length)throw new RangeError('Block does not exist.');
   return {parts,container,index,blocks};
 }
+/**
+ * Replace one complete block with another block. This is block replacement only (FF-16):
+ * the old payload is discarded and nothing is converted into the new content type. The
+ * block keeps its `id` and `extensions` when the new block sets none. An implicit slide or
+ * region payload (exactly one content field, no `blocks`) is replaced in place, keeping its
+ * other slide fields. The test guard fails if the block changed since it was read.
+ */
+export function prepareBlockReplace(document,path,block) {
+  if(!block||typeof block!=='object'||Array.isArray(block))throw new TypeError('Replace with an OPF content block object.');
+  const parts=splitOpfPath(path),pointer=opfPathToJsonPointer(parts);
+  const explicit=parts.at(-2)==='blocks'&&/^(0|[1-9][0-9]*)$/.test(parts.at(-1)??'');
+  let old,next;
+  if(explicit){
+    const {index,blocks}=checkedBlock(document,path);
+    old=blocks[index];
+    next=structuredClone(block);
+    for(const key of ['id','extensions'])if(next[key]===undefined&&old[key]!==undefined)next[key]=structuredClone(old[key]);
+  } else {
+    const implicit=listBlockContainers(document,{includeImplicit:true}).find(c=>c.path===pointer&&c.implicit);
+    if(!implicit)throw new TypeError('Choose a complete block using its blocks/index path, or a slide or region with one content field.');
+    if(implicit.count!==1)throw new TypeError('This slide or region holds several content fields. Choose one block, or insert and remove blocks.');
+    old=getValueAtPath(document,parts);
+    next=structuredClone(old);
+    for(const key of [...contentFields,'type'])delete next[key];
+    // The block's own id and extensions would overwrite the slide's; they are not carried over.
+    const {id:ignoredId,extensions:ignoredExtensions,...payload}=structuredClone(block);
+    Object.assign(next,payload);
+  }
+  const patches=[{op:'test',path:pointer,value:structuredClone(old)},{op:'replace',path:pointer,value:next}];
+  const result=applyJsonPatch(document,patches),validation=validateOpfDocument(result);
+  if(!validation.valid)throw new Error(validation.errors[0]?.message??'The replaced block is not valid OPF.');
+  return {document:result,patches,path:pointer,changed:JSON.stringify(old)!==JSON.stringify(next)};
+}
 /** Duplicate the entire block immediately after itself, preserving formatting and asset references. */
 export function prepareBlockDuplicate(document,path) {
   const {container,index,blocks}=checkedBlock(document,path);
