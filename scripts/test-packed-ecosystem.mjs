@@ -157,6 +157,10 @@ console.log('Installed font preparation passed layout, edit/undo, SVG/PNG, edita
         .replaceAll("'../dist/furniture-fields.js'", "'./node_modules/@openpresentation/opf-pptx/dist/furniture-fields.js'");
       await writeFile(path.join(consumer, 'furniture-fields.mjs'), fieldsHarness);
       run(process.execPath, ['furniture-fields.mjs']);
+      const wrappedFieldsHarness = (await readHarness('opf-pptx', 'test/furniture-wrapped-date.mjs'))
+        .replaceAll("'../dist/index.js'", "'@openpresentation/opf-pptx'");
+      await writeFile(path.join(consumer, 'furniture-wrapped-date.mjs'), wrappedFieldsHarness);
+      run(process.execPath, ['furniture-wrapped-date.mjs']);
     }
   }
   for (const repo of ['opf-render','opf-pptx']) {
