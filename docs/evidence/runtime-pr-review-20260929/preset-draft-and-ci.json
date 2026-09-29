@@ -1,0 +1,51 @@
+{
+  "pr": "https://github.com/Data-Advantage/pptx-dev/pull/58",
+  "draft": true,
+  "head": "fe581ec627de6568ad8bb98856835ee5a1862f43",
+  "tree": "9ecb20aeb1f9272f89b334a71f8aa75f49d41508",
+  "base": "166b62c20732bbf93430cfdf27a1a7f2af54eb55",
+  "committedFiles": 150,
+  "frozenOriginalMembersExact": 141,
+  "publicationManifestEntries": 143,
+  "publicationManifestSha256": "dce80febe10f7067e3c18bb6d28aa32febdbdc3f6e13319f4dbe1b95bb1aba25",
+  "fiveTestedSourceAndTestHashesUnchanged": true,
+  "originalCi": {
+    "id": 36551435303,
+    "url": "https://github.com/Data-Advantage/pptx-dev/actions/runs/36551435303",
+    "event": "pull_request",
+    "attempt": 1,
+    "status": "completed",
+    "conclusion": "failure",
+    "jobs": [
+      {
+        "id": 109350290120,
+        "name": "verify (windows-latest)",
+        "conclusion": "failure",
+        "executedSteps": 0
+      },
+      {
+        "id": 109350290377,
+        "name": "verify (ubuntu-latest)",
+        "conclusion": "failure",
+        "executedSteps": 0
+      }
+    ],
+    "reason": "Explicit GitHub payment/spending-limit startup denial; zero tests executed",
+    "artifactCount": 0
+  },
+  "localValidation": {
+    "unit": 716,
+    "standalone": 13,
+    "browser": 49,
+    "browserRetries": 0,
+    "build": "passed",
+    "typecheck": "passed",
+    "lint": "baseline28errors12warnings unchanged"
+  },
+  "openGates": [
+    "Fresh required Linux/Windows execution after billing restored",
+    "Production acceptance",
+    "Unbusy asynchronous account replacement-intent invalidation and held-response control"
+  ],
+  "derivation": "Compact selected fields from the frozen app publication receipt; original private logs, traces and approval metadata remain separately archived."
+}

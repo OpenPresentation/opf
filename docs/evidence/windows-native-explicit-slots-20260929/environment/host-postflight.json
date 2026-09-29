@@ -1,0 +1,19 @@
+{
+  "observedAt": "2026-09-29T09:38:56.4019525Z",
+  "uiObservation": "PowerPoint Home; no open presentation, recovery/security prompt or dialog after the owned read-only E7 inventory completed.",
+  "officeProcesses": [
+    {
+      "processId": 30776,
+      "name": "POWERPNT",
+      "startedAt": "2026-09-29T07:20:37.2151144Z",
+      "fileVersion": "16.0.20430.20092",
+      "productVersion": "16.0.20430.20092"
+    }
+  ],
+  "attemptedNativeRunsThisExperiment": 1,
+  "temporaryFontRegistrations": 0,
+  "auditPassed": true,
+  "sourceSha256": "4e2bab2a4f5a0f09350d2edc2463bcb29302fa7db34a8c621e39fcd5c9a16cd7",
+  "aptosReported": true,
+  "physicalFontIdentityProven": false
+}

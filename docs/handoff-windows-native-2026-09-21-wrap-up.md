@@ -1,5 +1,31 @@
 # Windows native compatibility weekly handoff
 
+## September 29 explicit theme-slot control (09:38 UTC)
+
+The [FF-05 E7 evidence](evidence/windows-native-explicit-slots-20260929/README.md)
+records one bounded read-only inventory after changing only four empty theme
+major/minor ea/cs attributes in the accepted E6 Calibri control to Calibri.
+The other 40 ZIP entry contents and all relationships remained unchanged.
+The audit passed with zero failures: one owned open/close, unchanged inputs,
+no temporary fonts, 1,227 ms under the 45-second helper deadline. PowerPoint
+Home showed no open presentation or dialog before and after the run; the
+running executable reported version `16.0.20430.20092`.
+
+All six theme names reported Calibri, but the initial `Presentation.Fonts`
+collection still contained an empty-name entry and Aptos. The nonempty inspected
+slide Font2 names remained Calibri; `NameOther` stayed empty. Empty theme ea/cs
+slots are not necessary for this observation, and their removal does not clear
+the font allowlist. Root cause, physical glyph identity and embedding remain
+unproven. The [brief](programs/font-fidelity-everywhere/aptos-origin-brief.md)
+proposes a separately reviewed second Fonts snapshot after the existing content
+queries; that harness has not been implemented or run in this evidence.
+
+E6 evidence merged in [core148](https://github.com/OpenPresentation/opf/pull/148)
+as `0e81a407` after independent review and green CI. E7's actual source graph
+was core `0e81a407`, PPTX `7fca9a2`, renderer `6c7d7818`, editor `d0c95a1`.
+FF-05 remains in progress; tracker counts and the dated parity scoreboard are
+unchanged. No native retry, tolerance change, package publication or deployment.
+
 ## September 29 Calibri control (09:01 UTC)
 
 The [FF-05 E6 evidence](evidence/windows-native-calibri-control-20260929/README.md)

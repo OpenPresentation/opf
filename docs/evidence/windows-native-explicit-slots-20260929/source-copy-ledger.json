@@ -1,0 +1,301 @@
+{
+  "schemaVersion": 1,
+  "files": [
+    {
+      "bundlePath": "auditor/native-font-embed-audit.mjs",
+      "sourceArtifactPath": "sources/opf-pptx/test/native-font-embed-audit.mjs",
+      "kind": "byte-copy",
+      "sourceSha256": "6ad35992b75e1c677194c832289824d588c223a3d25aff029983bf3ba3f4d704",
+      "bundleSha256": "6ad35992b75e1c677194c832289824d588c223a3d25aff029983bf3ba3f4d704",
+      "bytes": 69666
+    },
+    {
+      "bundlePath": "auditor/native-font-inventory-audit.mjs",
+      "sourceArtifactPath": "sources/opf-pptx/test/native-font-inventory-audit.mjs",
+      "kind": "byte-copy",
+      "sourceSha256": "09277b959c9ca76db40eacd85b89e8ba3e537729713aa1669968f6d438dfe3e7",
+      "bundleSha256": "09277b959c9ca76db40eacd85b89e8ba3e537729713aa1669968f6d438dfe3e7",
+      "bytes": 54641
+    },
+    {
+      "bundlePath": "auditor/native-font-inventory.ps1",
+      "sourceArtifactPath": "sources/opf-pptx/test/native-font-inventory.ps1",
+      "kind": "byte-copy",
+      "sourceSha256": "f8f24330db965436167758e54f907e1cc9b6bd9eb25e30b5110796823701ae7f",
+      "bundleSha256": "f8f24330db965436167758e54f907e1cc9b6bd9eb25e30b5110796823701ae7f",
+      "bytes": 99498
+    },
+    {
+      "bundlePath": "auditor/native-process.ps1",
+      "sourceArtifactPath": "sources/opf-pptx/test/native-process.ps1",
+      "kind": "byte-copy",
+      "sourceSha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+      "bundleSha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+      "bytes": 2372
+    },
+    {
+      "bundlePath": "auditor/native-text-fonts.ps1",
+      "sourceArtifactPath": "sources/opf-pptx/test/native-text-fonts.ps1",
+      "kind": "byte-copy",
+      "sourceSha256": "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6",
+      "bundleSha256": "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6",
+      "bytes": 2446
+    },
+    {
+      "bundlePath": "auditor/powershell-scan.mjs",
+      "sourceArtifactPath": "sources/opf-pptx/test/powershell-scan.mjs",
+      "kind": "byte-copy",
+      "sourceSha256": "02df02cdc1ef0ecf9d24358575899a825d58ffada62ad8ac0e0ac47ce2bc41e6",
+      "bundleSha256": "02df02cdc1ef0ecf9d24358575899a825d58ffada62ad8ac0e0ac47ce2bc41e6",
+      "bytes": 40899
+    },
+    {
+      "bundlePath": "environment/host-postflight.json",
+      "sourceArtifactPath": "ff05-calibri-explicit-slots-01/host-postflight.json",
+      "kind": "byte-copy",
+      "sourceSha256": "3f3130f03f4e0f8a657259dc78f0f5535d48b9dcc64c242cafb15ccc51f3b932",
+      "bundleSha256": "3f3130f03f4e0f8a657259dc78f0f5535d48b9dcc64c242cafb15ccc51f3b932",
+      "bytes": 693
+    },
+    {
+      "bundlePath": "environment/host-preflight.json",
+      "sourceArtifactPath": "ff05-calibri-explicit-slots-01/host-preflight.json",
+      "kind": "byte-copy",
+      "sourceSha256": "307a9795983b3af4a3354a47829079783b374704dd6c411214f242c1beee8ff4",
+      "bundleSha256": "307a9795983b3af4a3354a47829079783b374704dd6c411214f242c1beee8ff4",
+      "bytes": 912
+    },
+    {
+      "bundlePath": "fixture/calibri-explicit-slots-control.pptx",
+      "sourceArtifactPath": "ff05-calibri-explicit-slots-01/prepared-01/calibri-explicit-slots-control.pptx",
+      "kind": "byte-copy",
+      "sourceSha256": "4e2bab2a4f5a0f09350d2edc2463bcb29302fa7db34a8c621e39fcd5c9a16cd7",
+      "bundleSha256": "4e2bab2a4f5a0f09350d2edc2463bcb29302fa7db34a8c621e39fcd5c9a16cd7",
+      "bytes": 15616
+    },
+    {
+      "bundlePath": "fixture/parent/source.pptx",
+      "sourceArtifactPath": "sources/opf/docs/evidence/windows-native-calibri-control-20260929/fixture/calibri-control.pptx",
+      "kind": "byte-copy",
+      "sourceSha256": "776147ddfd2a35ceca4480b66d58c82c9255609b5abe245a2b3bb342651ebce5",
+      "bundleSha256": "776147ddfd2a35ceca4480b66d58c82c9255609b5abe245a2b3bb342651ebce5",
+      "bytes": 15621
+    },
+    {
+      "bundlePath": "native-inventory-01/audit.json",
+      "sourceArtifactPath": "ff05-calibri-explicit-slots-01/native-inventory-01/audit.json",
+      "kind": "byte-copy",
+      "sourceSha256": "a68a8fbbcbd3ccd162879d1015a3c920a25eaab143086b8d1eb509c8f350732b",
+      "bundleSha256": "a68a8fbbcbd3ccd162879d1015a3c920a25eaab143086b8d1eb509c8f350732b",
+      "bytes": 3703
+    },
+    {
+      "bundlePath": "native-inventory-01/inputs/native-font-inventory.ps1",
+      "sourceArtifactPath": "ff05-calibri-explicit-slots-01/native-inventory-01/inputs/native-font-inventory.ps1",
+      "kind": "byte-copy",
+      "sourceSha256": "f8f24330db965436167758e54f907e1cc9b6bd9eb25e30b5110796823701ae7f",
+      "bundleSha256": "f8f24330db965436167758e54f907e1cc9b6bd9eb25e30b5110796823701ae7f",
+      "bytes": 99498
+    },
+    {
+      "bundlePath": "native-inventory-01/inputs/native-process.ps1",
+      "sourceArtifactPath": "ff05-calibri-explicit-slots-01/native-inventory-01/inputs/native-process.ps1",
+      "kind": "byte-copy",
+      "sourceSha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+      "bundleSha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+      "bytes": 2372
+    },
+    {
+      "bundlePath": "native-inventory-01/inputs/native-text-fonts.ps1",
+      "sourceArtifactPath": "ff05-calibri-explicit-slots-01/native-inventory-01/inputs/native-text-fonts.ps1",
+      "kind": "byte-copy",
+      "sourceSha256": "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6",
+      "bundleSha256": "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6",
+      "bytes": 2446
+    },
+    {
+      "bundlePath": "native-inventory-01/inputs/source.pptx",
+      "sourceArtifactPath": "ff05-calibri-explicit-slots-01/native-inventory-01/inputs/source.pptx",
+      "kind": "byte-copy",
+      "sourceSha256": "4e2bab2a4f5a0f09350d2edc2463bcb29302fa7db34a8c621e39fcd5c9a16cd7",
+      "bundleSha256": "4e2bab2a4f5a0f09350d2edc2463bcb29302fa7db34a8c621e39fcd5c9a16cd7",
+      "bytes": 15616
+    },
+    {
+      "bundlePath": "native-inventory-01/progress.json",
+      "sourceArtifactPath": "ff05-calibri-explicit-slots-01/native-inventory-01/progress.json",
+      "kind": "byte-copy",
+      "sourceSha256": "88438c0816bb89a75fb2e561b96ca0b817bc9bf6f684bdfa522253b08cbc0108",
+      "bundleSha256": "88438c0816bb89a75fb2e561b96ca0b817bc9bf6f684bdfa522253b08cbc0108",
+      "bytes": 273
+    },
+    {
+      "bundlePath": "native-inventory-01/report.json",
+      "sourceArtifactPath": "ff05-calibri-explicit-slots-01/native-inventory-01/report.json",
+      "kind": "byte-copy",
+      "sourceSha256": "134aea6a96af5707410f66829f263a86565cadc06b07033d5fd732cba8772216",
+      "bundleSha256": "134aea6a96af5707410f66829f263a86565cadc06b07033d5fd732cba8772216",
+      "bytes": 18324
+    },
+    {
+      "bundlePath": "native-inventory-01/request.json",
+      "sourceArtifactPath": "ff05-calibri-explicit-slots-01/native-inventory-01/request.json",
+      "kind": "byte-copy",
+      "sourceSha256": "2dc917c4007ac127d08901364b95948e1dd1a764c3f642c85ee95a1df18cb409",
+      "bundleSha256": "2dc917c4007ac127d08901364b95948e1dd1a764c3f642c85ee95a1df18cb409",
+      "bytes": 3538
+    },
+    {
+      "bundlePath": "native-inventory-01/stages.jsonl",
+      "sourceArtifactPath": "ff05-calibri-explicit-slots-01/native-inventory-01/stages.jsonl",
+      "kind": "byte-copy",
+      "sourceSha256": "ca0afe508d251b80779ce7834dcf6331e18501e06e8c335177917743182d1b4b",
+      "bundleSha256": "ca0afe508d251b80779ce7834dcf6331e18501e06e8c335177917743182d1b4b",
+      "bytes": 105688
+    },
+    {
+      "bundlePath": "native-inventory-01/supervisor.json",
+      "sourceArtifactPath": "ff05-calibri-explicit-slots-01/native-inventory-01/supervisor.json",
+      "kind": "byte-copy",
+      "sourceSha256": "b85dab16417c05f0c336f4468369e740208ef22051c3adf948584a2ad0bf2c63",
+      "bundleSha256": "b85dab16417c05f0c336f4468369e740208ef22051c3adf948584a2ad0bf2c63",
+      "bytes": 5674
+    },
+    {
+      "bundlePath": "native-inventory-01/worker.json",
+      "sourceArtifactPath": "ff05-calibri-explicit-slots-01/native-inventory-01/worker.json",
+      "kind": "byte-copy",
+      "sourceSha256": "dfade2a3078140453073c891d0c49f650e03b409b016a8d21a0d5356a8563644",
+      "bundleSha256": "dfade2a3078140453073c891d0c49f650e03b409b016a8d21a0d5356a8563644",
+      "bytes": 341
+    },
+    {
+      "bundlePath": "native-inventory-01/worker.stderr.log",
+      "sourceArtifactPath": "ff05-calibri-explicit-slots-01/native-inventory-01/worker.stderr.log",
+      "kind": "byte-copy",
+      "sourceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bundleSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "bundlePath": "native-inventory-01/worker.stdout.log",
+      "sourceArtifactPath": "ff05-calibri-explicit-slots-01/native-inventory-01/worker.stdout.log",
+      "kind": "byte-copy",
+      "sourceSha256": "97fe87c9eb4f110dbd346af22de39dec5fdb50691ac31bea5df1c8e2d8d8c588",
+      "bundleSha256": "97fe87c9eb4f110dbd346af22de39dec5fdb50691ac31bea5df1c8e2d8d8c588",
+      "bytes": 99
+    },
+    {
+      "bundlePath": "preparation/existing-output-rejected.log",
+      "sourceArtifactPath": "ff05-calibri-explicit-slots-01/existing-output-rejected.log",
+      "kind": "byte-copy",
+      "sourceSha256": "57f83c1c5c328e8965c388a0fffa937b3d1ff0d3a5d60f06d7b796e6d9ffaede",
+      "bundleSha256": "57f83c1c5c328e8965c388a0fffa937b3d1ff0d3a5d60f06d7b796e6d9ffaede",
+      "bytes": 685
+    },
+    {
+      "bundlePath": "preparation/fflate/index.mjs",
+      "sourceArtifactPath": "sources/opf-pptx/node_modules/fflate/esm/index.mjs",
+      "kind": "byte-copy",
+      "sourceSha256": "8d75534a30a0580608e1271c13d70943ed4cd3589fddff7b1197748036a5116e",
+      "bundleSha256": "8d75534a30a0580608e1271c13d70943ed4cd3589fddff7b1197748036a5116e",
+      "bytes": 91765
+    },
+    {
+      "bundlePath": "preparation/fflate/LICENSE",
+      "sourceArtifactPath": "sources/opf-pptx/node_modules/fflate/LICENSE",
+      "kind": "byte-copy",
+      "sourceSha256": "0a1df3a083d0c010560aa342e87959c8c1070e6fd54545741f083f22d0c8b551",
+      "bundleSha256": "0a1df3a083d0c010560aa342e87959c8c1070e6fd54545741f083f22d0c8b551",
+      "bytes": 1069
+    },
+    {
+      "bundlePath": "preparation/fflate/package.json",
+      "sourceArtifactPath": "sources/opf-pptx/node_modules/fflate/package.json",
+      "kind": "byte-copy",
+      "sourceSha256": "5922d8150b307bc0e4e441491c779c45379e9913d348848fca8d5cf02db4d134",
+      "bundleSha256": "5922d8150b307bc0e4e441491c779c45379e9913d348848fca8d5cf02db4d134",
+      "bytes": 3543
+    },
+    {
+      "bundlePath": "preparation/preparation-01.log",
+      "sourceArtifactPath": "ff05-calibri-explicit-slots-01/preparation-01.log",
+      "kind": "byte-copy",
+      "sourceSha256": "ac591254c11ea3335d2cbb192c133f84aa61f08590bd6d50f72705de97bb1652",
+      "bundleSha256": "ac591254c11ea3335d2cbb192c133f84aa61f08590bd6d50f72705de97bb1652",
+      "bytes": 791
+    },
+    {
+      "bundlePath": "preparation/preparation-repeat-01.log",
+      "sourceArtifactPath": "ff05-calibri-explicit-slots-01/preparation-repeat-01.log",
+      "kind": "byte-copy",
+      "sourceSha256": "ac591254c11ea3335d2cbb192c133f84aa61f08590bd6d50f72705de97bb1652",
+      "bundleSha256": "ac591254c11ea3335d2cbb192c133f84aa61f08590bd6d50f72705de97bb1652",
+      "bytes": 791
+    },
+    {
+      "bundlePath": "preparation/prepare-explicit-slots.mjs",
+      "sourceArtifactPath": "ff05-calibri-explicit-slots-01/prepare-explicit-slots.mjs",
+      "kind": "byte-copy",
+      "sourceSha256": "0a94df58d8cf58695d3f9b178ff98d8aa2558130a170a37f15148facbc2d3bd1",
+      "bundleSha256": "0a94df58d8cf58695d3f9b178ff98d8aa2558130a170a37f15148facbc2d3bd1",
+      "bytes": 10941
+    },
+    {
+      "bundlePath": "preparation/prepared-01/manifest.json",
+      "sourceArtifactPath": "ff05-calibri-explicit-slots-01/prepared-01/manifest.json",
+      "kind": "byte-copy",
+      "sourceSha256": "23c10c7d5dfd6a2022647f519d30360eb9959dd3c3466cbdc57fd85df5af4f53",
+      "bundleSha256": "23c10c7d5dfd6a2022647f519d30360eb9959dd3c3466cbdc57fd85df5af4f53",
+      "bytes": 18937
+    },
+    {
+      "bundlePath": "preparation/prepared-01/xml-attribute-diff.txt",
+      "sourceArtifactPath": "ff05-calibri-explicit-slots-01/prepared-01/xml-attribute-diff.txt",
+      "kind": "byte-copy",
+      "sourceSha256": "4ad0f704c1d1d09e23927874bb4d1717bd6a0b317ffe9413ca9ce1f14b4f5b69",
+      "bundleSha256": "4ad0f704c1d1d09e23927874bb4d1717bd6a0b317ffe9413ca9ce1f14b4f5b69",
+      "bytes": 687
+    },
+    {
+      "bundlePath": "preparation/prepared-repeat-01/calibri-explicit-slots-control.pptx",
+      "sourceArtifactPath": "ff05-calibri-explicit-slots-01/prepared-repeat-01/calibri-explicit-slots-control.pptx",
+      "kind": "byte-copy",
+      "sourceSha256": "4e2bab2a4f5a0f09350d2edc2463bcb29302fa7db34a8c621e39fcd5c9a16cd7",
+      "bundleSha256": "4e2bab2a4f5a0f09350d2edc2463bcb29302fa7db34a8c621e39fcd5c9a16cd7",
+      "bytes": 15616
+    },
+    {
+      "bundlePath": "preparation/prepared-repeat-01/manifest.json",
+      "sourceArtifactPath": "ff05-calibri-explicit-slots-01/prepared-repeat-01/manifest.json",
+      "kind": "byte-copy",
+      "sourceSha256": "3c7e8316ce3fd9c1248c96c0bfe419183c2ce47a8f09468ff4fdb6b088d86e19",
+      "bundleSha256": "3c7e8316ce3fd9c1248c96c0bfe419183c2ce47a8f09468ff4fdb6b088d86e19",
+      "bytes": 18944
+    },
+    {
+      "bundlePath": "preparation/prepared-repeat-01/xml-attribute-diff.txt",
+      "sourceArtifactPath": "ff05-calibri-explicit-slots-01/prepared-repeat-01/xml-attribute-diff.txt",
+      "kind": "byte-copy",
+      "sourceSha256": "4ad0f704c1d1d09e23927874bb4d1717bd6a0b317ffe9413ca9ce1f14b4f5b69",
+      "bundleSha256": "4ad0f704c1d1d09e23927874bb4d1717bd6a0b317ffe9413ca9ce1f14b4f5b69",
+      "bytes": 687
+    },
+    {
+      "bundlePath": "preparation/README.md",
+      "sourceArtifactPath": "ff05-calibri-explicit-slots-01/README.md",
+      "kind": "byte-copy",
+      "sourceSha256": "724095b3b0c803433a49314afc6475db9f29e9f25bc66608740b5537e17fc337",
+      "bundleSha256": "724095b3b0c803433a49314afc6475db9f29e9f25bc66608740b5537e17fc337",
+      "bytes": 4314
+    },
+    {
+      "bundlePath": "preparation/verification-receipt.json",
+      "sourceArtifactPath": "ff05-calibri-explicit-slots-01/verification-receipt.json",
+      "kind": "byte-copy",
+      "sourceSha256": "a6b831640e2a4946867ff00aaf134197a43add21721a280cd332353d1606b7e0",
+      "bundleSha256": "a6b831640e2a4946867ff00aaf134197a43add21721a280cd332353d1606b7e0",
+      "bytes": 764
+    }
+  ]
+}

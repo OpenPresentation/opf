@@ -1,0 +1,35 @@
+{
+  "sha": "357171a5ceb798ccd550207ec365b08a694c5d6d",
+  "node_id": "C_kwDOSoCN3toAKDM1NzE3MWE1Y2ViNzk4Y2NkNTUwMjA3ZWMzNjViMDhhNjk0YzVkNmQ",
+  "url": "https://api.github.com/repos/OpenPresentation/opf-pptx/git/commits/357171a5ceb798ccd550207ec365b08a694c5d6d",
+  "html_url": "https://github.com/OpenPresentation/opf-pptx/commit/357171a5ceb798ccd550207ec365b08a694c5d6d",
+  "author": {
+    "name": "Michael Grimm",
+    "email": "michaeljgrimm@gmail.com",
+    "date": "2026-09-29T09:39:27Z"
+  },
+  "committer": {
+    "name": "GitHub",
+    "email": "noreply@github.com",
+    "date": "2026-09-29T09:39:27Z"
+  },
+  "tree": {
+    "sha": "dd340476cf97b72feb51004fb851656a90a0c87d",
+    "url": "https://api.github.com/repos/OpenPresentation/opf-pptx/git/trees/dd340476cf97b72feb51004fb851656a90a0c87d"
+  },
+  "message": "FF-29: preserve media caption whitespace and cleared captions (#83)\n\n* fix: preserve media caption boundaries and cleared fallback\n\n* fix: retain unambiguous parent media boundaries",
+  "parents": [
+    {
+      "sha": "7fca9a2eb5088ee2325fb686d1ff84332af2b8d9",
+      "url": "https://api.github.com/repos/OpenPresentation/opf-pptx/git/commits/7fca9a2eb5088ee2325fb686d1ff84332af2b8d9",
+      "html_url": "https://github.com/OpenPresentation/opf-pptx/commit/7fca9a2eb5088ee2325fb686d1ff84332af2b8d9"
+    }
+  ],
+  "verification": {
+    "verified": true,
+    "reason": "valid",
+    "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJqu4dPCRC1aQ7uu5UhlAAA+g4QAKD8J+Ugj2+JmZCnyxB2tfdD\nzwhXzQsx8d57A73jS/Wv1cfNDaFOIBpF2ucXYh37dxK6z4KAO2wqf2dU6cZ8FGA9\np55N3WcIlrCbhg1LdCk+O00bOrE0/lAfuVtXdSMFQehigLqPpyk3qv6ARTQzfkK+\ntgrNgsVzjzp/RHODmgWnRUtzU3lu+dS1Xmvl2Gtwkbasy2Rx1UCL0BbA1L9pYn6/\nTj/hb/h6Hw2Ww79J8WLJiqoNkJj53EfyuGA371ScHvZvIZXXdYU/Bc+W5GDsw8DC\n2QbRyYhG4KtrG5m132+9ZjasuAMOBlEnzk3QkA9qZlrY6ekutNW3lwgxjP6bXMuv\nFyMOLXAVCyUCiuzo7PdxUVvGDZWGHmSwEkmJyrX+N7JG+ROGt/eC/olcsLBixX6M\nunX492VYmrSKYzS5mbpNhGLkwgM4+UjXeflTDCF7F+v6ACA1nD3aBHC73DzZ4wTj\nXodlHL0qRTj/H7PKPUqHvC95Zs592rjY8wexzKJTVxH9eHSTC3TH/ax6fG73B3p+\niIqz/9OWAv9ZwhRWgn2rjX3bZKfr3D33EwtZkQ/AZ+3//JIcIf9hj1ZY9M68r00t\nr+QKU4UTXzwFTyAHzr6a776MwL3xZMpJqkbdFP8GYUvb+krKbEVvxT9I+So0Q3fq\nFUTvWZJnCPPEO8LmRgqw\n=KtmZ\n-----END PGP SIGNATURE-----\n",
+    "payload": "tree dd340476cf97b72feb51004fb851656a90a0c87d\nparent 7fca9a2eb5088ee2325fb686d1ff84332af2b8d9\nauthor Michael Grimm <michaeljgrimm@gmail.com> 1790674767 -0700\ncommitter GitHub <noreply@github.com> 1790674767 -0700\n\nFF-29: preserve media caption whitespace and cleared captions (#83)\n\n* fix: preserve media caption boundaries and cleared fallback\n\n* fix: retain unambiguous parent media boundaries",
+    "verified_at": "2026-09-29T09:39:27Z"
+  }
+}

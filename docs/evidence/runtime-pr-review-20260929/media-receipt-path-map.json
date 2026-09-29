@@ -1,0 +1,24 @@
+{
+  "derived": true,
+  "receiptsUnmodified": true,
+  "receipts": [
+    {
+      "summary": "media-original-ci-summary.json",
+      "retainedPrivateBundle": "pptx83-integration-ci",
+      "publicOriginalNameMapping": {
+        "artifact-integrity.json": "media-original-artifact-integrity.json",
+        "tested-source-binding.json": "media-tested-source.json"
+      },
+      "note": "The artifactIntegrity and sourceBinding fields retain their original filenames. Resolve those two fields through this mapping. ZIPs, inventories and packedReceiptPath members named inside artifact receipts remain in the same immutable private source bundle; their hashes and binding results are retained here."
+    },
+    {
+      "summary": "media-postmerge-ci-summary.json",
+      "retainedPrivateBundle": "pptx83-postmerge-ci",
+      "publicOriginalNameMapping": {
+        "artifact-integrity.json": "media-postmerge-artifact-integrity.json",
+        "tested-source-binding.json": "media-postmerge-source.json"
+      },
+      "note": "The artifactIntegrity and sourceBinding fields retain their original filenames. Resolve those two fields through this mapping. ZIPs, inventories and packedReceiptPath members named inside artifact receipts remain in the same immutable private source bundle; their hashes and binding results are retained here."
+    }
+  ]
+}
