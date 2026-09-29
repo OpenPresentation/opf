@@ -190,6 +190,15 @@ regenerate `support-status.json`, and update the headline in
   devDependencies of opf-render, so `npm ci` installs them); the same 850 values
   then score 29 perfect, 669 near, 152 mismatch. Do not commit such a run as the
   scoreboard until a shipped host loads the pack.
+- **Table frames (FF-39, 2026-09-29).** A PPTX table frame is compared with the
+  preview's drawn table (`scripts/table-box.mjs`: the union of the table's cell
+  rectangles), not with the composed allocation box, because PowerPoint derives a
+  table's height from its rows and a table can be shorter than its allocation.
+  Chart, picture and card frames still use the composed box. The tolerance is
+  unchanged. `node --test scripts/table-box.test.mjs` covers it. The run is
+  `parity-results-2026-09-29-table-drawn-extent.json`, and
+  `build-support-status.mjs` reads it by default; the rationale and the
+  before/after are in [gallery-support.md](../gallery-support.md).
 
 ### Slide-image mapping (FF-26)
 
