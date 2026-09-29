@@ -5,7 +5,7 @@ import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { registryToolchain } from './registry-toolchain.mjs';
-import { galleryScriptFontManifest } from './gallery-script-fonts.mjs';
+import { galleryScriptFontManifestForExample } from './gallery-script-fonts.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const registry = await registryToolchain();
@@ -97,11 +97,10 @@ for (const file of Object.keys(bundle.metafile.inputs)) {
 }
 const { loadOfficeFontRegistry } = await registry.import('@openpresentation/opf-render/fonts-node');
 await writeFile(path.join(out, 'fonts.json'), JSON.stringify((await loadOfficeFontRegistry()).embeddedFonts));
-// FF-19 script fonts: when the pinned editor example fetches faces from ./script-fonts/ and the pinned renderer has the
-// script pack, ship the hash-pinned manifest. The faces themselves are binaries: the gallery build copies them from
+// FF-19 script fonts: when the pinned editor example fetches faces from ./script-fonts/, ship the hash-pinned manifest
+// (the build fails if the pinned renderer has no script pack). The faces themselves are binaries: the gallery build copies them from
 // the pinned npm packages into an untracked path, verifying every hash (see gallery-script-fonts.mjs).
-const scriptFontManifest = /\.\/script-fonts\//.test(await readFile(path.join(source, 'playground.js'), 'utf8'))
-  ? galleryScriptFontManifest(await registry.import('@openpresentation/opf-render/fonts-node')) : undefined;
+const scriptFontManifest = galleryScriptFontManifestForExample(await registry.import('@openpresentation/opf-render/fonts-node'), await readFile(path.join(source, 'playground.js'), 'utf8'));
 if (scriptFontManifest) await writeFile(path.join(out, 'script-fonts.json'), JSON.stringify(scriptFontManifest, null, 2) + '\n');
 else await rm(path.join(out, 'script-fonts.json'), { force: true });
 await copyFile(path.join(source, 'playground.css'), path.join(out, 'playground.css'));

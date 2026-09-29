@@ -30,6 +30,18 @@ export function galleryScriptFontManifest(renderFonts) {
   return manifest;
 }
 
+/**
+ * The manifest the gallery editor build ships, decided by the pinned editor example. An example that does not fetch
+ * from `./script-fonts/` needs none (undefined). An example that does, with a renderer that has no script pack, would
+ * ship an editor whose script text fails to load fonts, so that fails loudly instead of building silently without it.
+ */
+export function galleryScriptFontManifestForExample(renderFonts, exampleSource) {
+  if (!/\.\/script-fonts\//.test(exampleSource)) return undefined;
+  const manifest = galleryScriptFontManifest(renderFonts);
+  if (!manifest) throw new Error('The pinned editor example loads ./script-fonts/ but the pinned @openpresentation/opf-render has no script font pack (scriptFontPackages, 0.10.0 and later). Move release-plan.json to a renderer release that has it, or to an editor example that does not load script fonts.');
+  return manifest;
+}
+
 /** Throws unless every package is an exact-version, allowed-license, hash-pinned local face set. */
 export function verifyGalleryScriptFontManifest(manifest) {
   const fail = message => { throw new Error(`Script font manifest: ${message}`); };

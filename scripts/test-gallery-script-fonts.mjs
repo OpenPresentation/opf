@@ -4,7 +4,7 @@ import { existsSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { galleryScriptFontManifest, verifyGalleryScriptFontManifest, SCRIPT_FONTS_CONTRACT } from './gallery-script-fonts.mjs';
+import { galleryScriptFontManifest, galleryScriptFontManifestForExample, verifyGalleryScriptFontManifest, SCRIPT_FONTS_CONTRACT } from './gallery-script-fonts.mjs';
 
 const hash = seed => seed.repeat(64).slice(0, 64);
 const pkg = (name, overrides = {}) => ({
@@ -35,7 +35,14 @@ rejects({ faces: [{ file: 'https://fonts.example/x.ttf', family: 'X', weight: 40
 rejects({ faces: [] }, /no faces/);
 assert.throws(() => galleryScriptFontManifest(renderFonts([pkg('noto-sans-jp'), pkg('noto-sans-jp')])), /unique relative/);
 assert.throws(() => galleryScriptFontManifest(renderFonts([{ ...pkg('noto-sans-jp'), name: '@evil/noto-sans-jp' }])), /not a pinned @expo-google-fonts/);
-assert.throws(() => verifyGalleryScriptFontManifest({ ...manifest, baseUrl: 'https://fonts.googleapis.com/' }), /relative script-fonts/);
+assert.throws(() => verifyGalleryScriptFontManifest({ ...manifest, baseUrl: 'https://cdn.example.test/' }), /relative script-fonts/);
+
+// The pinned editor example decides: no reference, no manifest; a reference without a script pack fails loudly.
+const fake = renderFonts([pkg('noto-sans-jp')]);
+assert.equal(galleryScriptFontManifestForExample({}, 'fetch("./fonts.json")'), undefined);
+assert.equal(galleryScriptFontManifestForExample(fake, 'fetch("./fonts.json")'), undefined);
+assert.equal(galleryScriptFontManifestForExample(fake, "scriptBaseUrl:'./script-fonts/'").packages.length, 1);
+assert.throws(() => galleryScriptFontManifestForExample({}, "scriptBaseUrl:'./script-fonts/'"), /loads \.\/script-fonts\/ but the pinned @openpresentation\/opf-render has no script font pack/);
 
 // The renderer checked out beside this repository (when built) yields a manifest that passes the same checks.
 const sibling = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../opf-render/dist/fonts-node.js');
