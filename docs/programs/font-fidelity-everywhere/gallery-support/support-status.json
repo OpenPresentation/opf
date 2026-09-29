@@ -77,13 +77,13 @@
   "parity": {
    "item": "FF-38",
    "heads": {
-    "opf": "03a55ae",
-    "opf-render": "aa7e898",
-    "opf-pptx": "ca34da7",
-    "pptx-gallery": "23f9216",
+    "opf": "b1fdfa7",
+    "opf-render": "762dbb9",
+    "opf-pptx": "874d9e9",
+    "pptx-gallery": "5963702",
     "node": "24.21.0"
    },
-   "generated": "2026-09-29T18:52:41.166Z",
+   "generated": "2026-09-29T19:37:51.028Z",
    "tolerances": {
     "geomPt": 0.02,
     "geomNearPt": 0.5,
@@ -102,7 +102,7 @@
     "theme",
     "mapping"
    ],
-   "results": "parity/parity-results-2026-09-29-field-text.json",
+   "results": "parity/parity-results-2026-09-29-table-drawn-extent.json",
    "fontResolutionDefinition": "owner decision 2026-09-29: look-alike replacements are intended; the PPTX names the selected family. pass = real face or FF-31 metric-compatible replacement + PPTX names selected family; near = FF-31 visual-only route + PPTX names selected family; fail = no policy route, unrouted preview face, or PPTX writes a replacement name. Old definition kept per value under results[].legacy.",
    "records": 850,
    "withAssetsRecords": 31,
@@ -167,10 +167,10 @@
  "parityCounts": {
   "total": 850,
   "perfect": 5,
-  "near": 608,
-  "mismatch": 237,
+  "near": 627,
+  "mismatch": 218,
   "checksPassed": {
-   "geometry": 830,
+   "geometry": 850,
    "text": 805,
    "fills": 782,
    "zOrder": 830,
@@ -2607,16 +2607,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "geometry"
-    ],
+    "status": "near",
+    "failedChecks": [],
     "nearChecks": [
      "fontResolution"
     ],
-    "topReasons": [
-     "geometry | table frame delta >50pt"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -2762,12 +2758,10 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "geometry",
      "fontResolution"
     ],
     "nearChecks": [],
     "topReasons": [
-     "geometry | table frame delta >50pt",
      "fontResolution | preview has no face for open family Open Sans"
     ]
    }
@@ -4176,16 +4170,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "geometry"
-    ],
+    "status": "near",
+    "failedChecks": [],
     "nearChecks": [
      "fontResolution"
     ],
-    "topReasons": [
-     "geometry | table frame delta >50pt"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -4520,16 +4510,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "geometry"
-    ],
+    "status": "near",
+    "failedChecks": [],
     "nearChecks": [
      "fontResolution"
     ],
-    "topReasons": [
-     "geometry | table frame delta >50pt"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -4715,16 +4701,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "geometry"
-    ],
+    "status": "near",
+    "failedChecks": [],
     "nearChecks": [
      "fontResolution"
     ],
-    "topReasons": [
-     "geometry | table frame delta >50pt"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -17526,16 +17508,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "geometry"
-    ],
+    "status": "near",
+    "failedChecks": [],
     "nearChecks": [
      "fontResolution"
     ],
-    "topReasons": [
-     "geometry | table frame delta >50pt"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -17741,16 +17719,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "geometry"
-    ],
+    "status": "near",
+    "failedChecks": [],
     "nearChecks": [
      "fontResolution"
     ],
-    "topReasons": [
-     "geometry | table frame delta >50pt"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -17776,16 +17750,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "geometry"
-    ],
+    "status": "near",
+    "failedChecks": [],
     "nearChecks": [
      "fontResolution"
     ],
-    "topReasons": [
-     "geometry | table frame delta >50pt"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -17811,16 +17781,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "geometry"
-    ],
+    "status": "near",
+    "failedChecks": [],
     "nearChecks": [
      "fontResolution"
     ],
-    "topReasons": [
-     "geometry | table frame delta >50pt"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -17846,16 +17812,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "geometry"
-    ],
+    "status": "near",
+    "failedChecks": [],
     "nearChecks": [
      "fontResolution"
     ],
-    "topReasons": [
-     "geometry | table frame delta >50pt"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -17881,16 +17843,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "geometry"
-    ],
+    "status": "near",
+    "failedChecks": [],
     "nearChecks": [
      "fontResolution"
     ],
-    "topReasons": [
-     "geometry | table frame delta >50pt"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -17916,16 +17874,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "geometry"
-    ],
+    "status": "near",
+    "failedChecks": [],
     "nearChecks": [
      "fontResolution"
     ],
-    "topReasons": [
-     "geometry | table frame delta >50pt"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -17951,16 +17905,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "geometry"
-    ],
+    "status": "near",
+    "failedChecks": [],
     "nearChecks": [
      "fontResolution"
     ],
-    "topReasons": [
-     "geometry | table frame delta >50pt"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -17986,16 +17936,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "geometry"
-    ],
+    "status": "near",
+    "failedChecks": [],
     "nearChecks": [
      "fontResolution"
     ],
-    "topReasons": [
-     "geometry | table frame delta >50pt"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -18021,16 +17967,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "geometry"
-    ],
+    "status": "near",
+    "failedChecks": [],
     "nearChecks": [
      "fontResolution"
     ],
-    "topReasons": [
-     "geometry | table frame delta >50pt"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -18056,16 +17998,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "geometry"
-    ],
+    "status": "near",
+    "failedChecks": [],
     "nearChecks": [
      "fontResolution"
     ],
-    "topReasons": [
-     "geometry | table frame delta >50pt"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -18091,16 +18029,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "geometry"
-    ],
+    "status": "near",
+    "failedChecks": [],
     "nearChecks": [
      "fontResolution"
     ],
-    "topReasons": [
-     "geometry | table frame delta >50pt"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -18126,16 +18060,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "geometry"
-    ],
+    "status": "near",
+    "failedChecks": [],
     "nearChecks": [
      "fontResolution"
     ],
-    "topReasons": [
-     "geometry | table frame delta >50pt"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -18161,16 +18091,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "geometry"
-    ],
+    "status": "near",
+    "failedChecks": [],
     "nearChecks": [
      "fontResolution"
     ],
-    "topReasons": [
-     "geometry | table frame delta >50pt"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -18196,16 +18122,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "geometry"
-    ],
+    "status": "near",
+    "failedChecks": [],
     "nearChecks": [
      "fontResolution"
     ],
-    "topReasons": [
-     "geometry | table frame delta >50pt"
-    ]
+    "topReasons": []
    }
   },
   {

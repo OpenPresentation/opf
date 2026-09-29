@@ -11,6 +11,7 @@ This folder records how each proprietary family's preview replacement in `spec/r
 
 - `corpus.json`: 300 Latin title and body strings sampled evenly from the 126 bundled example decks.
 - `report.json`: the policy replacement for each family, measured per style. Styles are regular, bold, italic and bold italic, or the weight that the family name encodes. Each entry gives the mean |ratio − 1|, the signed mean and the maximum, plus the file digests.
+  - Provenance: the Georgia entry was replaced on 2026-09-29 with a re-run that shapes Gelasio with `liga` and `clig` off (see Findings). The rest of the file is unchanged from the 2026-09-23 host, which had the Microsoft 365 cloud fonts. A full regeneration on a host without them would drop those rows, so this entry was patched from `--out` output rather than regenerating the file.
 - `bundled-candidates.json`: the same ranking restricted to the faces opf-render already ships (Roboto, Roboto Mono, Carlito, Caladea, Arimo, Tinos, Cousine, Gelasio). It chose each row's last, bundled alternate.
 - `candidates.json`: every installed open package ranked against each measurable family, top 10 by mean |ratio − 1|. The ranking ignores category, so it can list a proprietary sans next to a serif. Choices also weighed style coverage, category, and whether the face already ships in a pack.
 
