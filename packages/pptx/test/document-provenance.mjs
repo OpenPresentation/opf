@@ -181,10 +181,21 @@ const tagValue = xml => JSON.parse(Buffer.from(xml.match(/\bval="([^"]+)"/)[1], 
 
 // Stripped tags are an ordinary foreign deck; damaged or invalid ones fall back with a diagnostic.
 {
+  // Without the document tag, deck references, metadata and slide ids are gone,
+  // but each slide tag still restores its layout intent and inline layout record (FF-29).
   const stripped = await read(modify(exported, entries => text(entries, 'ppt/presentation.xml', xml => xml.replace(/<p:custDataLst>[\s\S]*?<\/p:custDataLst>/, ''))));
   assert.deepEqual(stripped.provenance, []);
   assert.equal(stripped.deck.narrative, undefined);
-  assert.equal(stripped.deck.slides[0].layout, undefined);
+  assert.deepEqual(stripped.deck.slides.map(slide => [slide.id, slide.layout]), [[undefined, 'hero-title'], [undefined, 'title-subtitle'], [undefined, 'title-subtitle']]);
+  assert.deepEqual([stripped.deck.slides[0].design.titleAlignment, stripped.deck.slides[0].design.contentBox], ['center', false]);
+  assert.deepEqual(stripped.deck.catalogs, {layouts: {records: [layoutRecord]}});
+  // With no customer data at all it is an ordinary foreign deck.
+  const foreign = await read(modify(exported, entries => {
+    for (const path of Object.keys(entries).filter(path => /^ppt\/(presentation|slides\/slide\d+)\.xml$/.test(path))) text(entries, path, xml => xml.replace(/<p:custDataLst>[\s\S]*?<\/p:custDataLst>/g, ''));
+  }));
+  assert.deepEqual(foreign.provenance, []);
+  assert.equal(foreign.deck.slides[0].layout, undefined);
+  assert.equal(foreign.deck.catalogs, undefined);
 
   const damaged = await read(modify(exported, entries => text(entries, 'ppt/tags/opfDocument.xml', xml => xml.replace(/val="[0-9A-F]{8}/, 'val="ZZZZZZZZ'))));
   assert.deepEqual(damaged.provenance.map(issue => [issue.code, issue.path]), [['invalid-document-provenance', '']]);

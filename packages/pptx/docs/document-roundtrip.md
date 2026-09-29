@@ -33,6 +33,7 @@ Only values the document states are stored; engine defaults are not. A document 
 | `organization`, `speaker`, `takeaway`, `duration`, `tags`, `variables` | yes | no | |
 | slide `id` | yes | no | |
 | slide `beat`, `layout`, `type`, `composition`, slide design references and hints | yes | yes (design values without image/file/URL sources) | |
+| slide `layoutRecord`: the inline `catalogs.layouts` record for the slide's `layout` (FF-29) | yes | yes, unless it names an image, file or URL (its own `$schema` excepted) | |
 | `assets` entries referenced by stored values | yes | no | |
 | inline `catalogs` records referenced by the document | yes | yes, referenced by stored values | |
 | native evidence (hashes and theme values, below) | yes | yes | |
@@ -86,19 +87,40 @@ Restores are applied as independent groups, one per OPF field. The deck backgrou
 
 ## Untrusted input
 
-Tags can be written by anyone who can edit the file. The hash is a change detector, not a signature. Tag values are size-limited and decoded as JSON. Only known fields are accepted, media references must name an existing `ppt/media/` part, and every restored field must validate with `validatePresentation`. Nothing in a tag is executed or fetched. A package whose tags were stripped imports as an ordinary foreign deck without a diagnostic.
+Tags can be written by anyone who can edit the file. The hash is a change detector, not a signature. Tag values are size-limited and decoded as JSON. Only known fields are accepted, media references must name an existing `ppt/media/` part, and every restored field must validate with `validatePresentation`. Nothing in a tag is executed or fetched. A package whose tags were all stripped imports as an ordinary foreign deck without a diagnostic. When only `OPF_DOCUMENT_V1` is missing or unreadable, the slide tags still restore their layout intent (below).
+
+## Layout intent (FF-29)
+
+Layout intent is part of each slide's `OPF_SLIDE_V1` record, not a separate tag: the slide's `layout` id, `type`, `composition` and composition hints (`design.titleAlignment`, `contentAlignment`, `contentBox`, `contentDirection`, `chartPrimary`, `imageFill`, `listBullet`), plus `layoutRecord`. `layoutRecord` is the document's inline `catalogs.layouts` record for that id, stored with the slide as well as in the document's `catalogs`. Bundled ids carry no record. Geometry, text and images are never stored; composition re-derives placement from the restored intent, and native shapes supply every word and payload.
+
+Neither mode stores the asset registry entries a layout record references; as before FF-29, catalog records never pull assets into the tags.
+
+Import restores the intent while the slide's arrangement is unchanged (see the table above). Each layout id resolves to exactly one record, in this order:
+
+1. the document's inline record (`OPF_DOCUMENT_V1`, FF-32);
+2. a bundled layout. A slide's override of a bundled id is used only when there is no document record, or its record for that id was rejected, and every restored slide with that id carries the same override, so it never changes the layout of another slide;
+3. the first restored slide's `layoutRecord`.
+
+- A slide whose own `layoutRecord` disagrees with the chosen record keeps its content and composition hints without the layout id and reports `layout-reference-changed` at `slides.N.layout`. Examples: a slide pasted from another deck whose `gallery-hero` record differs, or a pasted slide whose inline record overrides a bundled id such as `title-subtitle` that the host's own slides use. The override is never added to the host's catalog.
+- A pasted slide whose inline-only id the host lacks brings its own `layoutRecord`, which is added to `catalogs.layouts`.
+- A layout id that resolves to no record (for example a deck exported before FF-29, whose slides carry no `layoutRecord`, after its document tag was stripped) is not restored, and `unresolved-layout-reference` names the layout at `slides.N.layout`. The imported document therefore always renders.
+- Without `OPF_DOCUMENT_V1`, or when it is unreadable (`invalid-document-provenance` at `''`), slide records still restore layout intent under these rules. Deck references, deck composition defaults, metadata, slide ids and beats need the document record and are not restored.
+- A `layoutRecord` whose `id` differs from the slide's `layout` is ignored and reported as `invalid-document-provenance` at `slides.N.layoutRecord`; a malformed one rejects the slide record (`slides.N`).
+- Inline layout records from both document and slide tags must also validate against the core layouts catalog schema after resolving packaged media. Invalid records are omitted with `invalid-document-provenance` at `catalogs.layouts.records.N` or `slides.N.layoutRecord`. A valid other copy can still supply the layout; otherwise an inline-only id is omitted with `unresolved-layout-reference`. Native content and unrelated composition hints remain available.
+
+Importers from before FF-29 ignore the `layoutRecord` field, as `OPF_SLIDE_V1` readers ignore unknown top-level fields.
 
 ## Contract for layout-structure recovery (FF-29)
 
-`restoreDocumentProvenance()` in `src/document-provenance.js` reads the tags without modifying the document. `fromPptx` keeps its per-slide result as `slideProvenance`:
+`restoreDocumentProvenance()` in `src/document-provenance.js` reads the tags without modifying the document, with or without `OPF_DOCUMENT_V1`. `fromPptx` keeps its per-slide result as `slideProvenance`:
 
 ```js
 slideProvenance[i] = {
   layout,         // stored layout id (string) or undefined
   structure,      // 'match' | 'changed' | 'untagged'
   record,         // validated OPF_SLIDE_V1 value without native evidence:
-                  // {v, slide, id?, beat?, layout?, type?, composition?, design?, omitted?}
-  catalogRecord   // the stored inline catalogs.layouts record for `layout`, if any
+                  // {v, slide, id?, beat?, layout?, type?, composition?, design?, layoutRecord?, omitted?}
+  catalogRecord   // the inline catalogs.layouts record for `layout`, if any: the document's, else the slide's layoutRecord
 };
 ```
 

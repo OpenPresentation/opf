@@ -21,6 +21,13 @@ import * as opfCore from '@openpresentation/opf';
 // edit the observed native values stay and a specific diagnostic names the
 // reference that was not restored. Tags are untrusted input: they are parsed,
 // size-limited, validated with the whole imported document, and never executed.
+//
+// Layout intent (FF-29) is part of each OPF_SLIDE_V1 record: the slide's
+// layout id, type, composition and composition hints, plus `layoutRecord`,
+// the document's inline catalogs.layouts record for that id. The record is
+// kept on the slide as well as in the document's catalogs, so a slide keeps
+// its layout when OPF_DOCUMENT_V1 is missing or unreadable (for example a
+// slide pasted into another deck), and a pasted slide brings its own record.
 
 export const DOCUMENT_TAG = 'OPF_DOCUMENT_V1';
 export const SLIDE_TAG = 'OPF_SLIDE_V1';
@@ -276,6 +283,35 @@ function referencedCatalogs(catalogs, referenced) {
   return pruned;
 }
 
+const layoutRecords = catalogs => array(Array.isArray(catalogs?.layouts) ? catalogs.layouts : catalogs?.layouts?.records);
+
+// Presentation validation deliberately accepts arbitrary inline catalog objects.
+// Recovered layouts must also pass their companion schema before composition
+// can use them (for example, a null placeholder otherwise crashes rendering).
+function validLayoutRecord(value) {
+  try { return opfCore.validateCatalogRecord('layouts', value).valid; }
+  catch { return false; }
+}
+
+function validatedLayoutCatalog(catalogs, entries, report, rejectedIds) {
+  if (!object(catalogs) || catalogs.layouts === undefined) return catalogs;
+  const current = catalogs.layouts;
+  const records = layoutRecords(catalogs).flatMap((record, index) => {
+    const {value, unresolved} = resolveMedia(record, entries);
+    if (!unresolved && validLayoutRecord(value)) return [value];
+    if (typeof record?.id === 'string') rejectedIds.add(record.id);
+    const path = `catalogs.layouts.${Array.isArray(current) ? '' : 'records.'}${index}`;
+    report({code: unresolved ? 'unresolved-asset-reference' : 'invalid-document-provenance', path,
+      message: `The stored layout record at ${path} ${unresolved ? 'refers to unavailable media' : 'does not validate against the layouts catalog schema'}, so it was not restored.`});
+    return [];
+  });
+  const result = {...catalogs};
+  if (records.length) result.layouts = Array.isArray(current) ? records : {...current, records};
+  else if (object(current) && current.source !== undefined) { result.layouts = {...current}; delete result.layouts.records; }
+  else delete result.layouts;
+  return Object.keys(result).length ? result : undefined;
+}
+
 const assetReferences = value => [...collectStrings(value)].filter(item => item.startsWith('asset:')).map(item => item.slice(6));
 
 /**
@@ -313,6 +349,12 @@ export function documentProvenance(presentation, {mode = 'full', isCatalogId = (
   const slides = presentation.slides.map((slide, index) => {
     const record = {v: 1, slide: index};
     for (const key of [...(referencesOnly ? [] : ['id']), 'beat', ...SLIDE_STRUCTURE]) if (own(slide, key)) record[key] = clone(slide[key]);
+    const layoutRecord = typeof slide.layout === 'string' ? layoutRecords(presentation.catalogs).find(item => item?.id === slide.layout) : undefined;
+    // The layout record is a catalog record. 'references-only' stores it only
+    // when it names no image, file or URL; neither mode stores the assets it
+    // references (as before FF-29, catalog records never pulled in assets).
+    // A record's own $schema URL identifies its format and is not a source.
+    if (layoutRecord && !(referencesOnly && carriesSource({...layoutRecord, $schema: undefined}))) record.layoutRecord = clone(layoutRecord);
     const slideDesign = {};
     for (const key of [...STYLE_REFERENCES, 'background', ...COMPOSITION_HINTS]) {
       if (!own(slide.design, key) || (referencesOnly && carriesSource(slide.design[key]))) continue;
@@ -327,7 +369,7 @@ export function documentProvenance(presentation, {mode = 'full', isCatalogId = (
   if (Object.keys(design).length) document.design = design;
   if (Object.keys(metadata).length) document.metadata = metadata;
   const stored = [design, metadata, slides];
-  const assetIds = [...new Set(assetReferences(stored))].filter(id => own(presentation.assets, id));
+  const assetIds = [...new Set(assetReferences([design, metadata, slides.map(({layoutRecord: _record, ...rest}) => rest)]))].filter(id => own(presentation.assets, id));
   if (assetIds.length) document.assets = Object.fromEntries(assetIds.map(id => [id, clone(presentation.assets[id])]));
   const {catalogs, ...rest} = presentation;
   const catalogRecords = referencedCatalogs(catalogs, collectStrings(referencesOnly ? stored : rest));
@@ -441,6 +483,14 @@ function storable(entries, provenance) {
       const value = prepare(`slides.${index}.${key}`, record[key]);
       if (value !== undefined) result[key] = value;
     }
+    // The layout record is only meaningful with its layout id and assets.
+    if (record.layoutRecord !== undefined && result.layout !== undefined) {
+      if (unstoredAsset(record.layoutRecord)) omit(`slides.${index}.layoutRecord`, 'the asset it references could not be stored');
+      else {
+        const value = prepare(`slides.${index}.layoutRecord`, record.layoutRecord);
+        if (value !== undefined) result.layoutRecord = value;
+      }
+    }
     const slideDesign = {};
     for (const [key, value] of Object.entries(record.design ?? {})) {
       const path = `slides.${index}.design.${key}`;
@@ -465,11 +515,12 @@ function storable(entries, provenance) {
   }
   for (const [index, record] of slides.entries()) {
     while (tagChars(record) > budget) {
-      const candidates = [...['id', 'beat', ...SLIDE_STRUCTURE].filter(key => record[key] !== undefined).map(key => ({key, size: sizeOf(record[key])})),
+      const candidates = [...['id', 'beat', ...SLIDE_STRUCTURE, 'layoutRecord'].filter(key => record[key] !== undefined).map(key => ({key, size: sizeOf(record[key])})),
         ...Object.keys(record.design ?? {}).map(key => ({key, design: true, size: sizeOf(record.design[key])}))];
       if (!candidates.length) break;
       const largest = candidates.sort((a, b) => b.size - a.size)[0];
       if (largest.design) delete record.design[largest.key]; else delete record[largest.key];
+      if (largest.key === 'layout' && record.layoutRecord !== undefined) { delete record.layoutRecord; shed(record, `slides.${index}.layoutRecord`); }
       shed(record, `slides.${index}.${largest.design ? 'design.' : ''}${largest.key}`);
     }
   }
@@ -573,6 +624,7 @@ function validateSlide(value) {
   if (!object(value.native) || typeof value.native.structure !== 'string' || typeof value.native.background !== 'string' || typeof value.native.style !== 'string') throw Error('Missing slide native evidence.');
   if (value.design !== undefined && !object(value.design)) throw Error('Invalid slide design record.');
   for (const key of Object.keys(value.design ?? {})) if (![...STYLE_REFERENCES, 'background', ...COMPOSITION_HINTS].includes(key)) throw Error(`Unknown slide design field ${key}.`);
+  if (value.layoutRecord !== undefined && (!object(value.layoutRecord) || typeof value.layoutRecord.id !== 'string')) throw Error('Invalid slide layout record.');
   validateOmitted(value.omitted);
   return value;
 }
@@ -624,17 +676,16 @@ function pruneDangling(value, dangling, path, removed) {
  * `catalogRecord` the stored inline layouts record for `layout`, if any.
  */
 export function restoreDocumentProvenance(imported, {entries, presentationRoot, presentationRels, slides, organizationConflict = false, socialPlatformRecords}, report) {
-  const untagged = {groups: [], slides: slides.map(() => ({structure: 'untagged'})), finalize: doc => doc};
   const invalid = message => report({code: 'invalid-document-provenance', path: '', message: `${message} Ordinary import keeps the values observed in the PPTX.`});
   let document;
   try {
     const found = readTag(entries, presentationRoot?.['p:custDataLst'], presentationRels, DOCUMENT_TAG);
-    if (found.missing) {
-      if (found.unreadable) invalid('Presentation customer data could not be read.');
-      return untagged;
-    }
-    document = validateDocument(found.value);
-  } catch (error) { invalid(`${error.message}`); return untagged; }
+    if (found.missing) { if (found.unreadable) invalid('Presentation customer data could not be read.'); }
+    else document = validateDocument(found.value);
+  } catch (error) { invalid(`${error.message}`); document = undefined; }
+
+  const rejectedLayoutIds = new Set();
+  if (document) document = {...document, catalogs: validatedLayoutCatalog(document.catalogs, entries, report, rejectedLayoutIds)};
 
   const slideRecords = slides.map(({root, relationships: rels, path}, index) => {
     try {
@@ -646,6 +697,18 @@ export function restoreDocumentProvenance(imported, {entries, presentationRoot, 
       return null;
     }
   });
+  const groups = [];
+  const group = (field, ops) => groups.push({field, ops});
+  const intent = layoutIntent(document ? layoutRecords(document.catalogs) : [], Boolean(document), slideRecords, entries, group, report, rejectedLayoutIds);
+
+  // Without document provenance (a slide pasted into another deck, or a
+  // missing or unreadable OPF_DOCUMENT_V1), each OPF_SLIDE_V1 still restores
+  // its layout intent; deck references, metadata and slide ids need the
+  // document record and are not restored.
+  if (!document) {
+    const layouts = imported.slides.map((_, index) => slideRecords[index] ? intent.slide(index, slideRecords[index]).entry : {structure: 'untagged'});
+    return {groups, slides: layouts, finalize: doc => intent.finalize(doc)};
+  }
 
   // Stored assets resolve against current media parts; a missing part leaves the asset unavailable.
   const storedAssets = {};
@@ -654,7 +717,6 @@ export function restoreDocumentProvenance(imported, {entries, presentationRoot, 
     if (!unresolved) storedAssets[id] = value;
   }
   const available = id => own(imported.assets, id) || Object.hasOwn(storedAssets, id);
-  const groups = [];
   const changed = (path, message) => report({code: 'design-reference-changed', path, message});
   // A value is restorable only when its media and asset references resolve.
   const restorable = (field, value, {prune = false} = {}) => {
@@ -668,7 +730,6 @@ export function restoreDocumentProvenance(imported, {entries, presentationRoot, 
     for (const path of removed) report({code: 'unresolved-asset-reference', path, message: `${path} refers to an asset the PPTX no longer provides and was left out of the restored ${field}.`});
     return pruned;
   };
-  const group = (field, ops) => groups.push({field, ops});
   const set = (path, value) => ({path, value});
   const remove = path => ({path, remove: true});
 
@@ -703,38 +764,22 @@ export function restoreDocumentProvenance(imported, {entries, presentationRoot, 
   // Slide-level references.
   const layouts = [];
   const seenIds = new Set();
-  const storedLayouts = document.catalogs?.layouts;
-  const layoutRecords = array(Array.isArray(storedLayouts) ? storedLayouts : storedLayouts?.records);
   let allStructure = slideRecords.length === document.slides && slideRecords.every(Boolean);
   const backgroundInheritors = [];
   for (const [index, slide] of imported.slides.entries()) {
     const entry = slideRecords[index];
     if (!entry) { layouts.push({structure: 'untagged'}); allStructure = false; continue; }
     const {record, native: observed} = entry;
-    const structureMatch = record.native.structure === observed.structure;
+    const {entry: layoutEntry, structureMatch} = intent.slide(index, entry);
     if (!structureMatch) allStructure = false;
-    const {native: _native, ...recordValue} = record;
-    const layout = typeof record.layout === 'string' ? record.layout : undefined;
-    layouts.push({layout, structure: structureMatch ? 'match' : 'changed', record: clone(recordValue),
-      ...(layout && layoutRecords.some(item => item?.id === layout) ? {catalogRecord: clone(layoutRecords.find(item => item?.id === layout))} : {})});
+    layouts.push(layoutEntry);
     const at = (...path) => ['slides', index, ...path];
     if (record.id !== undefined) {
       if (seenIds.has(record.id)) report({code: 'duplicate-slide-id', path: `slides.${index}.id`, message: `Slide id '${record.id}' appears on more than one slide (a duplicated slide); the first keeps it.`});
       else { seenIds.add(record.id); group(`slides.${index}.id`, [set(at('id'), clone(record.id))]); }
     }
     if (record.beat !== undefined) group(`slides.${index}.beat`, [set(at('beat'), clone(record.beat))]);
-    for (const key of SLIDE_STRUCTURE) {
-      if (record[key] === undefined) continue;
-      if (structureMatch) group(`slides.${index}.${key}`, [set(at(key), clone(record[key]))]);
-      else report({code: key === 'layout' ? 'layout-reference-changed' : 'slide-reference-changed', path: `slides.${index}.${key}`,
-        message: `The slide's objects were moved, resized, added or removed since export, so slides.${index}.${key} ${label(record[key])} was not restored; the imported slide keeps its observed arrangement.`});
-    }
     const recordDesign = record.design ?? {};
-    for (const key of COMPOSITION_HINTS) {
-      if (recordDesign[key] === undefined) continue;
-      if (structureMatch) group(`slides.${index}.design.${key}`, [set(at('design', key), clone(recordDesign[key]))]);
-      else changed(`slides.${index}.design.${key}`, `The slide's objects changed since export, so slides.${index}.design.${key} was not restored.`);
-    }
     const styleMatch = record.native.style === observed.style;
     for (const key of STYLE_REFERENCES) {
       if (recordDesign[key] === undefined) continue;
@@ -812,9 +857,102 @@ export function restoreDocumentProvenance(imported, {entries, presentationRoot, 
       const {value, unresolved} = resolveMedia(referencedCatalogs(document.catalogs, collectStrings(rest)), entries);
       if (value && !unresolved) doc.catalogs = value;
     }
-    return doc;
+    return intent.finalize(doc);
   };
   return {groups, slides: layouts, finalize};
+}
+
+/**
+ * Layout intent of the tagged slides (FF-29): layout id, type, composition and
+ * composition hints are restored while a slide's arrangement is unchanged.
+ * Each layout id resolves to exactly one record, in this order:
+ * - the document's inline record (OPF_DOCUMENT_V1);
+ * - a bundled layout. A slide's override of a bundled id is used only when
+ *   there is no document record, or its record for that id was rejected, and
+ *   every restored slide with that id carries the same override, so it never
+ *   changes another slide's layout;
+ * - the first restored slide's `layoutRecord`.
+ * A slide whose own record disagrees with the chosen one keeps its content
+ * without the layout id (`layout-reference-changed`), and an id that resolves
+ * to no record is not restored (`unresolved-layout-reference`), so the
+ * imported document always renders. `finalize` adds the slide-level records
+ * that the imported document references.
+ */
+function layoutIntent(documentRecords, hasDocument, slideRecords, entries, group, report, rejectedDocumentIds) {
+  const bundled = id => array(opfCore.catalogs?.layouts).find(item => item?.id === id);
+  const owns = slideRecords.map(entry => {
+    if (!entry) return null;
+    const {record, native: observed} = entry;
+    const structureMatch = record.native.structure === observed.structure;
+    const layout = typeof record.layout === 'string' ? record.layout : undefined;
+    let own = record.layoutRecord, problem;
+    // A record for another id is ignored and reported.
+    if (own !== undefined && own.id !== layout) { problem = layout === undefined ? undefined : 'mismatch'; own = undefined; }
+    else if (own !== undefined) {
+      const {value, unresolved} = resolveMedia(own, entries);
+      if (unresolved) { own = undefined; problem = 'media'; }
+      else if (!validLayoutRecord(value)) { own = undefined; problem = 'schema'; }
+      else own = value;
+    }
+    return {structureMatch, layout, own, problem, stated: record.layoutRecord};
+  });
+  const resolved = new Map();
+  for (const id of new Set(owns.filter(item => item?.structureMatch && item.layout !== undefined).map(item => item.layout))) {
+    const members = owns.filter(item => item?.structureMatch && item.layout === id);
+    const fromDocument = documentRecords.find(item => item?.id === id), builtIn = bundled(id);
+    if (fromDocument) resolved.set(id, {record: fromDocument, source: 'document'});
+    else if (builtIn) {
+      const overrides = members.filter(item => item.own && !same(item.own, builtIn));
+      if ((!hasDocument || rejectedDocumentIds.has(id)) && overrides.length && overrides.length === members.length && overrides.every(item => same(item.own, overrides[0].own))) resolved.set(id, {record: overrides[0].own, source: 'slides', add: true});
+      else resolved.set(id, {record: builtIn, source: 'bundled'});
+    } else {
+      const first = members.find(item => item.own);
+      if (first) resolved.set(id, {record: first.own, source: 'slides', add: true});
+    }
+  }
+  const chosen = new Map([...resolved].filter(([, item]) => item.add).map(([id, item]) => [id, item.record]));
+  const against = {document: 'the document', bundled: 'the built-in layout', slides: 'another slide'};
+  const slide = (index, {record}) => {
+    const {structureMatch, layout, own, problem, stated} = owns[index];
+    const {native: _native, ...recordValue} = record;
+    if (structureMatch && problem === 'mismatch') report({code: 'invalid-document-provenance', path: `slides.${index}.layoutRecord`, message: `The stored layout record '${stated?.id}' does not match slides.${index}.layout '${layout}', so it was not restored.`});
+    if (structureMatch && problem === 'media') report({code: 'unresolved-asset-reference', path: `slides.${index}.layoutRecord`, message: `slides.${index}.layoutRecord refers to a picture that is no longer in the PPTX, so the slide's stored layout record was not restored.`});
+    if (structureMatch && problem === 'schema') report({code: 'invalid-document-provenance', path: `slides.${index}.layoutRecord`, message: `slides.${index}.layoutRecord does not validate against the layouts catalog schema, so the slide's stored layout record was not restored.`});
+    const target = layout === undefined ? undefined : resolved.get(layout);
+    let restoreLayout = structureMatch;
+    if (structureMatch && layout !== undefined) {
+      if (!target) {
+        restoreLayout = false;
+        report({code: 'unresolved-layout-reference', path: `slides.${index}.layout`, message: `Layout '${layout}' is not a bundled layout and the PPTX carries no inline record for it, so slides.${index}.layout was not restored; the imported slide keeps its observed arrangement.`});
+      } else if (own && !same(own, target.record)) {
+        restoreLayout = false;
+        report({code: 'layout-reference-changed', path: `slides.${index}.layout`, message: `This slide stores a different record for layout '${layout}' than ${against[target.source]}, so slides.${index}.layout was not restored; the imported slide keeps its observed arrangement.`});
+      }
+    }
+    const catalogRecord = target && target.source !== 'bundled' ? target.record : undefined;
+    const at = (...path) => ['slides', index, ...path];
+    for (const key of SLIDE_STRUCTURE) {
+      if (record[key] === undefined) continue;
+      if (!structureMatch) report({code: key === 'layout' ? 'layout-reference-changed' : 'slide-reference-changed', path: `slides.${index}.${key}`,
+        message: `The slide's objects were moved, resized, added or removed since export, so slides.${index}.${key} ${label(record[key])} was not restored; the imported slide keeps its observed arrangement.`});
+      else if (key !== 'layout' || restoreLayout) group(`slides.${index}.${key}`, [{path: at(key), value: clone(record[key])}]);
+    }
+    for (const key of COMPOSITION_HINTS) {
+      const value = record.design?.[key];
+      if (value === undefined) continue;
+      if (structureMatch) group(`slides.${index}.design.${key}`, [{path: at('design', key), value: clone(value)}]);
+      else report({code: 'design-reference-changed', path: `slides.${index}.design.${key}`, message: `The slide's objects changed since export, so slides.${index}.design.${key} was not restored.`});
+    }
+    return {structureMatch, entry: {layout, structure: structureMatch ? 'match' : 'changed', record: clone(recordValue), ...(catalogRecord !== undefined ? {catalogRecord: clone(catalogRecord)} : {})}};
+  };
+  const finalize = doc => {
+    const needed = [...chosen].filter(([id]) => array(doc.slides).some(item => item?.layout === id) && !layoutRecords(doc.catalogs).some(item => item?.id === id));
+    if (!needed.length) return doc;
+    const catalogs = object(doc.catalogs) ? doc.catalogs : {}, current = catalogs.layouts, records = needed.map(([, record]) => clone(record));
+    doc.catalogs = {...catalogs, layouts: Array.isArray(current) ? [...current, ...records] : {...(object(current) ? current : {}), records: [...array(current?.records), ...records]}};
+    return doc;
+  };
+  return {slide, finalize};
 }
 
 function applyOp(doc, {path, value, remove: removing}) {
