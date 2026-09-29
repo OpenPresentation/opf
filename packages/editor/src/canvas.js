@@ -21,6 +21,38 @@ import { createRichTextInput } from "./rich-text-input.js";
 import { createRichTextToolbar } from "./rich-text-toolbar.js";
 export { getEditableFields } from "./canvas-fields.js";
 
+/** Allocated placeholder or internal-part bounds for the selection outline, not glyph ink. */
+export function allocatedSelectionBox(node, item) {
+  const traced = {
+    x: Number(node.dataset?.opfBoxX),
+    y: Number(node.dataset?.opfBoxY),
+    width: Number(node.dataset?.opfBoxWidth),
+    height: Number(node.dataset?.opfBoxHeight),
+  };
+  const hasTraced = [traced.x, traced.y, traced.width, traced.height].every(Number.isFinite) && (traced.width > 0 || traced.height > 0);
+  const partRole = typeof node.hasAttribute === "function" && (
+    node.hasAttribute("data-opf-code-role") ||
+    node.hasAttribute("data-opf-metric-role") ||
+    node.hasAttribute("data-opf-source-text")
+  );
+  if (partRole && hasTraced) return traced;
+  if (item?.box && [item.box.x, item.box.y, item.box.width, item.box.height].every(Number.isFinite)) {
+    return { x: item.box.x, y: item.box.y, width: item.box.width, height: item.box.height };
+  }
+  if (hasTraced) return traced;
+  let bounds = typeof node.getBBox === "function" ? node.getBBox() : { x: 0, y: 0, width: 0, height: 0 };
+  const lines = JSON.parse(node.getAttribute?.("data-opf-rich-lines") ?? "[]");
+  if (!bounds.width && !bounds.height && lines.length) {
+    return {
+      x: lines[0].x,
+      y: lines[0].y,
+      width: Number(node.getAttribute("data-opf-box-width")) || 8,
+      height: lines.reduce((sum, line) => sum + line.height, 0),
+    };
+  }
+  return bounds;
+}
+
 /** A framework-independent SVG canvas. Drafts render immediately; each edit commits once. */
 export function createCanvasEditor(container, options = {}) {
   if (!container?.ownerDocument)
@@ -160,10 +192,7 @@ export function createCanvasEditor(container, options = {}) {
         `Edit ${path.split(".").at(-1)}: ${["string", "number"].includes(typeof value) ? String(value).slice(0, 80) : "content properties"}`,
       );
       if (node.matches("g")) {
-        let bounds = node.getBBox();
-        if (!bounds.width && !bounds.height && (node.hasAttribute('data-opf-code-role')||node.hasAttribute('data-opf-metric-role')||node.hasAttribute('data-opf-source-text'))) bounds={x:Number(node.dataset.opfBoxX),y:Number(node.dataset.opfBoxY),width:Number(node.dataset.opfBoxWidth),height:Number(node.dataset.opfBoxHeight)};
-        const lines = JSON.parse(node.getAttribute("data-opf-rich-lines") ?? "[]");
-        if (!bounds.width && !bounds.height && lines.length) bounds = {x:lines[0].x,y:lines[0].y,width:Number(node.getAttribute("data-opf-box-width"))||8,height:lines.reduce((sum,line)=>sum+line.height,0)};
+        const bounds = allocatedSelectionBox(node, item);
         const rect = doc.createElementNS("http://www.w3.org/2000/svg", "rect");
         for (const [key, value] of Object.entries({
           x: bounds.x - 4,

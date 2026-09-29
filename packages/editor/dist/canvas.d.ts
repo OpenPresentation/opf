@@ -54,6 +54,15 @@ export interface CanvasEditor {
   setRenderOptions(options: RenderSvgOptions): boolean;
   destroy(): void;
 }
+export declare function allocatedSelectionBox(
+  node: {
+    dataset?: DOMStringMap | Record<string, string>;
+    hasAttribute?(name: string): boolean;
+    getAttribute?(name: string): string | null;
+    getBBox?(): { x: number; y: number; width: number; height: number };
+  },
+  item?: { box?: { x: number; y: number; width: number; height: number } },
+): { x: number; y: number; width: number; height: number };
 export declare function createCanvasEditor(
   container: HTMLElement,
   options: CanvasEditorOptions,

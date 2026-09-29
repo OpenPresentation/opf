@@ -5,8 +5,8 @@
 ## Toolchain
 
 - Node `24.x` (`engines`, `.nvmrc`). This repo uses npm with `package-lock.json`; install with `npm ci`. Core uses pnpm.
-- Commands (all in `package.json`): `npm run build`, `npm run typecheck`, `npm test`, `npm run validate`, `npm run test:packed`, `npm run test:json`, `npm run test:json-browser`, `npm run test:rich-input-browser`, `npm run test:code-browser`, `npm run test:metric-browser`, `npm run build:playground`, `npm run test:playground`.
-- CI (`.github/workflows/ci.yml`) runs one job on `ubuntu-latest` in the pinned Playwright container. It checks out core, opf-render and opf-pptx at pinned SHAs, runs `test:packed` against published dependencies, links sources with core's `scripts/link-ecosystem.mjs --packages-only`, then runs audit, typecheck, validate, test, playground, code-browser, json-browser, rich-input-browser (measured and estimated) and core's coordinated packed-tarball checks.
+- Commands (all in `package.json`): `npm run build`, `npm run typecheck`, `npm test`, `npm run validate`, `npm run test:packed`, `npm run test:json`, `npm run test:json-browser`, `npm run test:rich-input-browser`, `npm run test:code-browser`, `npm run test:selection-browser`, `npm run test:metric-browser`, `npm run build:playground`, `npm run test:playground`.
+- CI (`.github/workflows/ci.yml`) runs one job on `ubuntu-latest` in the pinned Playwright container. It checks out core, opf-render and opf-pptx at pinned SHAs, runs `test:packed` against published dependencies, links sources with core's `scripts/link-ecosystem.mjs --packages-only`, then runs audit, typecheck, validate, test, playground, code-browser, selection-browser, json-browser, selection-browser, rich-input-browser (measured and estimated) and core's coordinated packed-tarball checks.
 - `release.yml` publishes on `opf-editor-v*` tags with npm provenance.
 
 ### Windows notes
