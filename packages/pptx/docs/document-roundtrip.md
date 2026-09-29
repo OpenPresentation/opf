@@ -135,6 +135,12 @@ Import restores the intent while the slide's arrangement is unchanged (see the t
 
 Importers from before FF-29 ignore the `layoutRecord` field, as `OPF_SLIDE_V1` readers ignore unknown top-level fields.
 
+## Media caption boundaries (FF-29)
+
+Media import uses current native caption characters and the current frame hyperlink. A soft wrap adds no character. Full caption tags retain validated CR/LF/CRLF separators and emitted-line fingerprints; exact current text must also agree with the stored authored caption before the original video value is restored. Older full tags with an explicit soft/end boundary and no separator safely imply an empty separator; older hard boundaries remain conservative because their CR/LF spelling is unavailable. Edited captions and missing or invalid boundary evidence leave current native lines as separate ordinary text with `invalid-media-provenance`, following ordinary-import item ordering. That fallback does not reconstruct the original cross-shape source CRLF spelling.
+
+References-only tags carry structural boundaries without authored separator bytes or fingerprints; hard breaks become semantic LF. Provenance-off writes no media tags. Neither limited mode promises original CRLF spelling. A cleared current caption cannot safely become a video with an empty title because the renderer displays the source for that authored value; import instead keeps the current URL as linked text and the cleared caption as empty text, with a diagnostic. Native formatting, geometry and general native-shape reading order are not reconstructed as authored OPF by these rules. Fallback caption shapes remain separate so unrelated or repositioned native items can retain their ordinary-import ordering; re-export can reflow them.
+
 ## Contract for layout-structure recovery (FF-29)
 
 `restoreDocumentProvenance()` in `src/document-provenance.js` reads the tags without modifying the document, with or without `OPF_DOCUMENT_V1`. `fromPptx` keeps its per-slide result as `slideProvenance`:

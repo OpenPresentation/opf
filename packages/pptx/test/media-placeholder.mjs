@@ -396,13 +396,185 @@ for (const video of ['file:clip.mp4', 'data:video/mp4;base64,PRIVATE']) {
   const restricted = await toPptx(input, {seed: 1, provenance: 'references-only'});
   for (const caption of [' A  B ', 'A\tB', '']) {
     const result = await read(modify(restricted, entries => text(entries, 'ppt/slides/slide1.xml', xml => xml.replace('<a:t>A B</a:t>', `<a:t>${caption}</a:t>`))));
-    assert.deepEqual(videos(result.doc), [[{src: source, title: caption}]]);
-    assert.deepEqual(result.media, []);
+    if (caption === '') {
+      assert.deepEqual(result.doc.slides[0].blocks, [linkedText(source), {type: 'text', text: ''}]);
+      assert.deepEqual(result.media, [['invalid-media-provenance', 'slides.0.video']]);
+    } else {
+      assert.deepEqual(videos(result.doc), [[{src: source, title: caption}]]);
+      assert.deepEqual(result.media, []);
+    }
   }
   const legacy = await read(modify(bytes, entries => {
     for (const part of tagParts(entries)) updateTag(entries, part, record => { const {fingerprint, boundary, ...old} = record; return old; });
   }));
   assert.deepEqual(legacy.doc.slides[0].blocks, [linkedText(source), {type: 'text', text: 'A B'}]);
+  checks++;
+}
+
+// Soft wraps carry no source character. Full boundaries preserve exact CR/LF
+// spelling; references-only preserves structural LF without authored bytes.
+{
+  const url = 'https://example.com/boundary.mp4', current = 'https://example.com/current.mp4';
+  const title = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.repeat(12);
+  const local = 'file:///offline/' + 'long-local-path-segment/'.repeat(10) + 'clip.mp4';
+  for (const video of [local, {src: url, title}]) {
+    const bytes = await toPptx({slides: [{video}]}, {seed: 1});
+    const records = tagParts(unzipSync(bytes)).map(path => tagValue(dec.decode(unzipSync(bytes)[path]))).filter(record => record.role === 'caption');
+    assert.ok(records.length > 1 && records.some(record => record.boundary === 'soft'), 'Exercise actual measured soft wraps.');
+    const result = await read(bytes);
+    assert.deepEqual(videos(result.doc), [[video]], 'Unchanged unbroken native content must not gain spaces or lose video intent.');
+    assert.deepEqual(result.media, []);
+    assert.deepEqual(videos((await read(await toPptx(result.doc, {seed: 1}))).doc), [[video]]);
+  }
+  for (const provenance of ['full', 'references-only']) {
+    const bytes = await toPptx({slides: [{video: {src: url, title}}]}, {seed: 1, provenance});
+    const result = await read(modify(bytes, entries => text(entries, 'ppt/slides/_rels/slide1.xml.rels', xml => xml.replaceAll(url, current))));
+    assert.deepEqual(videos(result.doc), [[{src: current, title}]], 'A current URL must not introduce soft-wrap spaces.');
+    assert.deepEqual(videos((await read(await toPptx(result.doc, {seed: 1, provenance}))).doc), [[{src: current, title}]]);
+  }
+  checks++;
+}
+{
+  const url = 'https://example.com/crlf.mp4', current = 'https://example.com/current.mp4', title = 'One\r\n\r\nTwo ';
+  const bytes = await toPptx({slides: [{video: {src: url, title}}]}, {seed: 1});
+  const changed = await read(modify(bytes, entries => text(entries, 'ppt/slides/_rels/slide1.xml.rels', xml => xml.replaceAll(url, current))));
+  assert.deepEqual(videos(changed.doc), [[{src: current, title}]], 'Changing only the URL preserves full-mode authored CRLF.');
+  assert.deepEqual(videos((await read(await toPptx(changed.doc, {seed: 1}))).doc), [[{src: current, title}]]);
+  const edited = await read(modify(bytes, entries => text(entries, 'ppt/slides/slide1.xml', xml => xml.replace('<a:t>One</a:t>', '<a:t>Native  edit</a:t>'))));
+  assert.deepEqual(edited.doc.slides[0].blocks, [linkedText(url), {type: 'text', text: 'Native  edit'}, {type: 'text', text: ''}, {type: 'text', text: 'Two '}], 'Edited captions retain separate current native lines.');
+  assert.deepEqual(edited.media, [['invalid-media-provenance', 'slides.0.video']]);
+  assert.deepEqual((await read(await toPptx(edited.doc, {seed: 1}))).doc.slides[0].blocks.filter(block => typeof block.text === 'string').map(block => block.text), [url, 'Native  edit', '', 'Two ']);
+  for (const provenance of ['references-only', false]) {
+    const restricted = await toPptx({slides: [{video: {src: url, title}}]}, {seed: 1, provenance});
+    const records = tagParts(unzipSync(restricted)).map(path => tagValue(dec.decode(unzipSync(restricted)[path])));
+    assert.ok(records.every(record => record.separator === undefined && record.fingerprint === undefined && record.video === undefined), 'Limited tags do not store full source evidence.');
+    const result = await read(restricted);
+    if (provenance === false) { assert.deepEqual(records, []); assert.deepEqual(videos(result.doc), [[]]); }
+    else {
+      assert.deepEqual(videos(result.doc), [[{src: url, title: 'One\n\nTwo '}]], 'Restricted hard boundaries retain semantic LF, not unavailable authored CRLF.');
+      assert.deepEqual(videos((await read(await toPptx(result.doc, {seed: 1, provenance}))).doc), [[{src: url, title: 'One\n\nTwo '}]]);
+    }
+  }
+  checks++;
+}
+
+// Empty current captions cannot be represented by a video title: the renderer
+// intentionally displays its source for an authored empty title. Keep current
+// links and blank editable text instead of resurrecting a caption on re-export.
+{
+  const url = 'https://example.com/clear.mp4', current = 'https://example.com/current.mp4';
+  for (const [provenance, changeURL] of [['references-only', false], ['full', true]]) {
+    const bytes = await toPptx({slides: [{video: {src: url, title: 'Clear me'}}]}, {seed: 1, provenance});
+    const result = await read(modify(bytes, entries => {
+      text(entries, 'ppt/slides/slide1.xml', xml => xml.replace('<a:t>Clear me</a:t>', '<a:t></a:t>'));
+      if (changeURL) text(entries, 'ppt/slides/_rels/slide1.xml.rels', xml => xml.replaceAll(url, current));
+    }));
+    const target = changeURL ? current : url;
+    assert.deepEqual(result.doc.slides[0].blocks, [linkedText(target), {type: 'text', text: ''}]);
+    assert.deepEqual(result.media, [['invalid-media-provenance', 'slides.0.video']]);
+    const again = await toPptx(result.doc, {seed: 1});
+    assert.ok(!dec.decode(unzipSync(again)['ppt/slides/slide1.xml']).includes('name="OPF media '), 'No fabricated media caption on re-export.');
+    assert.ok((await read(again)).doc.slides[0].blocks.some(block => block.text === ''));
+    assert.ok(dec.decode(unzipSync(again)['ppt/slides/_rels/slide1.xml.rels']).includes(target));
+  }
+  const input = {assets: {clip: {src: url}}, slides: [{video: {src: 'asset:clip', title: 'Keep'}}, {video: {src: 'asset:clip', title: 'Clear me'}}]};
+  const result = await read(modify(await toPptx(input, {seed: 1}), entries => {
+    updateTag(entries, frameTag(entries, 'slides.1.video'), record => ({...record, assets: {clip: {src: current}}}));
+    text(entries, 'ppt/slides/_rels/slide2.xml.rels', xml => xml.replaceAll(url, current));
+    text(entries, 'ppt/slides/slide2.xml', xml => xml.replace('<a:t>Clear me</a:t>', '<a:t></a:t>'));
+  }));
+  assert.deepEqual(videos(result.doc), [[input.slides[0].video], []]);
+  assert.deepEqual(result.doc.slides[1].blocks, [linkedText(current), {type: 'text', text: ''}]);
+  assert.deepEqual(result.doc.assets, input.assets);
+  assert.deepEqual(result.media, [['invalid-media-provenance', 'slides.1.video']]);
+  const again = await toPptx(result.doc, {seed: 1});
+  assert.ok(!dec.decode(unzipSync(again)['ppt/slides/slide2.xml']).includes('name="OPF media '));
+  assert.ok((await read(again)).doc.slides[1].blocks.some(block => block.text === ''));
+  checks++;
+}
+
+// Malformed or missing full boundaries cannot inject characters or restore
+// hidden text. A matching line fingerprint alone does not authenticate tags.
+{
+  const url = 'https://example.com/strict.mp4';
+  const bytes = await toPptx({slides: [{video: {src: url, title: 'Before\r\nAfter'}}]}, {seed: 1});
+  for (const mutate of [
+    record => ({...record, separator: 'INJECTED'}),
+    record => ({...record, separator: ''}),
+    record => ({...record, boundary: 'soft', separator: '\r\n'}),
+    record => { const {separator, ...legacy} = record; return legacy; },
+  ]) {
+    const result = await read(modify(bytes, entries => {
+      const part = tagParts(entries).find(path => { const record = tagValue(dec.decode(entries[path])); return record.role === 'caption' && record.line === 0; });
+      updateTag(entries, part, mutate);
+    }));
+    assert.deepEqual(videos(result.doc), [[]]);
+    assert.ok(result.media.some(([code]) => code === 'invalid-media-provenance'));
+    for (const value of ['Before', 'After']) assert.ok(result.doc.slides[0].blocks.some(block => block.text === value));
+    assert.ok(!JSON.stringify(result.doc).includes('INJECTED'));
+    assert.ok(result.doc.slides[0].blocks.some(block => JSON.stringify(block) === JSON.stringify(linkedText(url))));
+  }
+  const original = await toPptx({slides: [{video: {src: url, title: 'A B'}}]}, {seed: 1});
+  const forged = await read(modify(original, entries => updateTag(entries, frameTag(entries, 'slides.0.video'), record => ({...record, video: {...record.video, title: 'A  B'}}))));
+  assert.deepEqual(forged.doc.slides[0].blocks, [linkedText(url), {type: 'text', text: 'A B'}]);
+  assert.deepEqual(forged.media, [['invalid-media-provenance', 'slides.0.video']]);
+  checks++;
+}
+
+// Edited/damaged caption groups keep ordinary native reading order. Do not
+// coalesce native shapes across changed positions or unrelated content.
+{
+  const input = {slides: [{blocks: [{type: 'video', video: {src: 'https://example.com/order.mp4', title: 'First\r\nSecond'}}, {type: 'text', text: 'Unrelated note'}]}]};
+  const bytes = await toPptx(input, {seed: 1});
+  for (const [label, ys, expected] of [
+    ['reordered', [4000000, 2000000, 6000000], ['Second', 'Edited first', 'Unrelated note']],
+    ['interleaved', [2000000, 4000000, 3000000], ['Edited first', 'Unrelated note', 'Second']],
+  ]) {
+    const result = await read(modify(bytes, entries => text(entries, 'ppt/slides/slide1.xml', xml => {
+      let moved = 0;
+      const current = xml.replace(/<p:sp>[\s\S]*?<\/p:sp>/g, shape => {
+        const index = shape.includes('caption line 0"') ? 0 : shape.includes('caption line 1"') ? 1 : shape.includes('<a:t>Unrelated note</a:t>') ? 2 : -1;
+        if (index === -1) return shape;
+        moved++;
+        return shape.replace('<a:t>First</a:t>', '<a:t>Edited first</a:t>').replace(/(<a:off\b[^>]*\by=")[^"]+/, (_match, prefix) => prefix + ys[index]);
+      });
+      assert.equal(moved, 3, 'Move actual caption and unrelated native text shapes.');
+      return current;
+    })));
+    assert.deepEqual(videos(result.doc), [[]]);
+    assert.deepEqual(result.doc.slides[0].blocks.filter(block => typeof block.text === 'string').map(block => block.text), expected, `${label}: preserve current native item order`);
+    assert.ok(result.media.some(([code]) => code === 'invalid-media-provenance'));
+  }
+  checks++;
+}
+
+// Parent FF-29 full tags have explicit soft/end boundaries and fingerprints,
+// but no separator field. Those boundaries unambiguously insert no character.
+// Old hard boundaries cannot distinguish CR/LF/CRLF and stay conservative.
+{
+  const url = 'https://example.com/parent.mp4';
+  const oldFull = async video => modify(await toPptx({slides: [{video}]}, {seed: 1}), entries => {
+    for (const part of tagParts(entries)) updateTag(entries, part, record => { const {separator, ...old} = record; return old; });
+  });
+  for (const video of [{src: url, title: ' A  B '}, {src: url, title: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.repeat(12)}, 'file:///offline/' + 'long-local-path-segment/'.repeat(10) + 'clip.mp4']) {
+    const result = await read(await oldFull(video));
+    assert.deepEqual(videos(result.doc), [[video]], 'Intact parent soft/end tags retain video without inventing characters.');
+    assert.deepEqual(result.media, []);
+    assert.deepEqual(videos((await read(await toPptx(result.doc, {seed: 1}))).doc), [[video]]);
+  }
+  const bytes = await oldFull({src: url, title: 'A B'});
+  for (const tamper of [
+    entries => updateTag(entries, frameTag(entries, 'slides.0.video'), record => ({...record, video: {...record.video, title: 'A  B'}})),
+    entries => { const part = tagParts(entries).find(path => tagValue(dec.decode(entries[path])).role === 'caption'); updateTag(entries, part, record => ({...record, fingerprint: '0:deadbeef41c6ce57'})); },
+    entries => { const part = tagParts(entries).find(path => tagValue(dec.decode(entries[path])).role === 'caption'); updateTag(entries, part, record => { const {boundary, ...missing} = record; return missing; }); },
+  ]) {
+    const result = await read(modify(bytes, tamper));
+    assert.deepEqual(result.doc.slides[0].blocks, [linkedText(url), {type: 'text', text: 'A B'}]);
+    assert.deepEqual(result.media, [['invalid-media-provenance', 'slides.0.video']]);
+  }
+  const hard = await read(await oldFull({src: url, title: 'One\r\nTwo'}));
+  assert.deepEqual(hard.doc.slides[0].blocks, [linkedText(url), {type: 'text', text: 'One'}, {type: 'text', text: 'Two'}]);
+  assert.deepEqual(hard.media, [['invalid-media-provenance', 'slides.0.video']], 'Never infer authored CRLF from an old hard boundary.');
   checks++;
 }
 

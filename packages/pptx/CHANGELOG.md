@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- FF-29: preserve exact media caption boundaries across soft wraps, current-link edits and re-export. Full tags retain validated CR/LF/CRLF separators, and older explicit soft/end tags safely imply no inserted character; references-only keeps structural LF without authored separator bytes. Cleared current captions use linked-text and empty-text fallback rather than reappearing as the URL. Fresh packed-consumer checks now include media and layout-intent fixtures against published core and renderer dependencies.
+
 - FF-29: preserve valid inline layout records that omit the standalone `$schema` identifier during PPTX reimport. Validation supplies the known layout identifier without changing authored records; explicit invalid identifiers and malformed content remain rejected.
 
 - FF-29: native heading, body and payload paragraphs read core's per-item `alignment` (`composeSlide` resolves it once for every engine). Cores without `item.alignment` keep the FF-39 design fallback. With the FF-29 core, all 126 bundled examples export the same alignment bytes as before (estimated and measured), because FF-39 already matched the design values. `test/layout-parity.mjs` checks that titles, subtitles, body text and metric lines agree with the preview anchor and with core's `item.alignment`, with estimated and measured text.

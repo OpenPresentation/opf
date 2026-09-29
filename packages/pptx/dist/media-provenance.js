@@ -1,6 +1,7 @@
 import {XMLParser} from 'fast-xml-parser';
 import {validatePresentation} from '@openpresentation/opf';
 import {attachTextTags, decodeTextTag} from './code-provenance.js';
+import {sourceLineParagraphs} from './text-provenance.js';
 
 // A video payload exports as the preview's placeholder: a frame, a play badge,
 // a play triangle and caption lines (FF-29). PPTX has no native field for the
@@ -17,7 +18,6 @@ const parser = new XMLParser({ignoreAttributes: false, attributeNamePrefix: '', 
 const decoder = new TextDecoder('utf-8', {fatal: true}), encoder = new TextEncoder();
 const array = value => value === undefined ? [] : Array.isArray(value) ? value : [value];
 const object = value => value !== null && typeof value === 'object' && !Array.isArray(value);
-const visibleWords = value => String(value).replace(/\s+/g, ' ').trim();
 const canonical = value => JSON.stringify(value, (_key, item) => object(item) ? Object.fromEntries(Object.keys(item).sort().map(key => [key, item[key]])) : item);
 const sizeOf = value => encoder.encode(JSON.stringify(value)).byteLength;
 const sourceOf = value => typeof value === 'string' ? value : value?.src;
@@ -125,9 +125,9 @@ export function importMediaGroups(shapes, paragraphs, relationships, entries, sl
       if (typeof own[0].val !== 'string' || own[0].val.length > MAX_VALUE_BYTES * 2) throw Error('oversized');
       record = decodeTextTag(own[0].val);
       if (!object(record) || record.v !== 1 || !ROLES.includes(record.role) || !mediaPath(record.path)) throw Error('invalid');
-      const allowed = ['v', 'role', 'path', ...(record.role === 'frame' ? ['video', 'assets', 'omitted', 'nativeOnly'] : record.role === 'caption' ? ['line', 'count', 'boundary', 'fingerprint'] : [])];
+      const allowed = ['v', 'role', 'path', ...(record.role === 'frame' ? ['video', 'assets', 'omitted', 'nativeOnly'] : record.role === 'caption' ? ['line', 'count', 'boundary', 'separator', 'fingerprint'] : [])];
       if (Object.keys(record).some(key => !allowed.includes(key))) throw Error('unknown field');
-      if (record.role === 'caption' && (record.boundary !== undefined && !['hard', 'soft', 'end'].includes(record.boundary) || record.fingerprint !== undefined && (typeof record.fingerprint !== 'string' || !/^\d+:[0-9a-f]{16}$/.test(record.fingerprint)))) throw Error('invalid caption evidence');
+      if (record.role === 'caption' && (record.boundary !== undefined && !['hard', 'soft', 'end'].includes(record.boundary) || record.separator !== undefined && (typeof record.separator !== 'string' || !/^(?:\r\n|\r|\n)?$/.test(record.separator)) || record.fingerprint !== undefined && (typeof record.fingerprint !== 'string' || !/^\d+:[0-9a-f]{16}$/.test(record.fingerprint)))) throw Error('invalid caption evidence');
       if (record.role === 'frame' && (record.omitted !== undefined && record.omitted !== true || record.nativeOnly !== undefined && record.nativeOnly !== true || (record.omitted || record.nativeOnly) && (Object.hasOwn(record, 'video') || Object.hasOwn(record, 'assets')) || record.omitted && record.nativeOnly)) throw Error('inconsistent frame');
     } catch { record = null; }
     const key = record?.path ?? `slides.${slideIndex}`;
@@ -144,7 +144,21 @@ export function importMediaGroups(shapes, paragraphs, relationships, entries, sl
     const [frame] = byRole('frame'), captions = byRole('caption').sort((a, b) => a.record.line - b.record.line);
     const decorations = group.members.filter(member => ['frame', 'badge', 'play'].includes(member.role));
     const path = currentPath(group.path, slideIndex);
-    const caption = captions.map((member, index) => text(member) + (index === captions.length - 1 ? '' : member.record.boundary === 'hard' ? '\n' : ' ')).join('');
+    // Current characters supply the text. Soft wraps insert nothing; full
+    // source separators retain CR/LF spelling. Restricted mode has only
+    // structural hard breaks, represented as LF without hidden source bytes.
+    let caption;
+    if (captions.length && captions.every((member, index) => member.record.line === index && member.record.count === captions.length && name(member, `caption line ${index}`))) try {
+      caption = sourceLineParagraphs(captions.map(member => {
+        let data = frame?.record.nativeOnly === true
+          ? {boundary: member.record.boundary, separator: member.record.boundary === 'hard' ? '\n' : ''}
+          : member.record;
+        // Parent full tags omitted separators. Explicit soft/end inserts no
+        // character; an old hard boundary cannot establish CR/LF spelling.
+        if (!Object.hasOwn(data, 'separator') && ['soft', 'end'].includes(data.boundary)) data = {...data, separator: ''};
+        return {index: member.index, data};
+      }), paragraphs)[0].text;
+    } catch { /* Missing or damaged boundaries use current native fallback. */ }
     const links = array(frame?.shape['p:nvSpPr']?.['p:cNvPr']?.['a:hlinkClick']);
     const rel = links.length === 1 ? relationships.get(links[0]['r:id']) : undefined;
     const href = rel?.type === 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink' && rel.targetMode === 'External' ? webSource(rel.target) : null;
@@ -154,8 +168,10 @@ export function importMediaGroups(shapes, paragraphs, relationships, entries, sl
     else if (!decorations.every(member => name(member, member.role) && !text(member)) || !captions.every(member => name(member, `caption line ${member.record.line}`))) reason = 'placeholder shapes were renamed or given text';
     else if (!captions.every((member, index) => member.record.line === index && member.record.count === captions.length)) reason = 'caption lines were removed or duplicated';
     else if (links.length && !href) reason = 'the native hyperlink is ambiguous or unsupported';
+    else if (caption === undefined) reason = 'its caption source boundaries are missing or invalid';
     else if (frame.record.nativeOnly === true) {
       if (!href) reason = 'no native web hyperlink is available';
+      else if (caption === '') reason = 'its current caption was cleared';
       else video = caption === href ? href : {src: href, title: caption};
     }
     else if (frame.record.omitted || !Object.hasOwn(frame.record, 'video')) reason = 'the video value was omitted at export';
@@ -175,6 +191,7 @@ export function importMediaGroups(shapes, paragraphs, relationships, entries, sl
       else if (source === undefined) reason = 'the stored asset reference cannot be resolved';
       else if (webSource(source) !== href) {
         if (!href) reason = 'its source hyperlink was removed';
+        else if (caption === '') reason = 'its current caption was cleared';
         else {
           // Preserve the current URL and caption; hidden metadata describes the old source.
           video = caption === href ? href : {src: href, title: caption};
@@ -182,13 +199,14 @@ export function importMediaGroups(shapes, paragraphs, relationships, entries, sl
         }
       }
       else if (!captions.every(member => typeof member.record.fingerprint === 'string' && mediaTextFingerprint(text(member)) === member.record.fingerprint)) reason = 'its caption text was edited or exact caption evidence is missing';
-      // Exact line evidence detects native edits; this additional comparison
-      // binds the stored authored title to visible words despite line wrapping.
-      else if (visibleWords(caption) !== visibleWords(mediaCaption(frame.record.video))) reason = 'its stored caption disagrees with current native text';
+      // Line evidence is not authentication: bind the stored authored title
+      // to exact current characters and validated boundaries as well.
+      else if (caption !== mediaCaption(frame.record.video)) reason = 'its stored caption disagrees with current native text';
       else if (!href && caption !== source) reason = 'its source has no current native hyperlink or source caption';
       else {
         const conflict = Object.entries(frame.record.assets ?? {}).some(([id, asset]) => Object.hasOwn(registry, id) && canonical(registry[id]) !== canonical(asset));
         if (conflict && !href) reason = 'its stored assets conflict with another video';
+        else if (conflict && caption === '') reason = 'its current caption was cleared';
         else if (conflict) {
           video = caption === href ? href : {src: href, title: caption};
           report({code: 'media-asset-conflict', path, message: `Stored asset IDs at ${path} conflict with another video; import keeps this placeholder's current URL and caption.`});

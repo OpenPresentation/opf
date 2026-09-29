@@ -76,10 +76,11 @@ console.log('Packed consumer: vendored licenses/hashes, absent unused dependenci
     dependencies[name]={version:entry.version,resolved:entry.resolved,integrity:entry.integrity};
   }
   const registryFixtures=[];
-  for(const file of ['shared-quote.mjs','shared-code.mjs','code-provenance.mjs','shared-timeline.mjs','font-variants.mjs','script-fonts.mjs','chart-cache-import.mjs']){
+  for(const file of ['shared-quote.mjs','shared-code.mjs','code-provenance.mjs','shared-timeline.mjs','font-variants.mjs','script-fonts.mjs','media-placeholder.mjs','layout-intent.mjs','chart-cache-import.mjs']){
     const shared=(await readFile(path.join(root,'test',file),'utf8'))
       .replaceAll("'../dist/index.js'","'@openpresentation/opf-pptx'")
       .replaceAll("'../dist/code-provenance.js'","'./node_modules/@openpresentation/opf-pptx/dist/code-provenance.js'")
+      .replaceAll("'../dist/media-provenance.js'","'./node_modules/@openpresentation/opf-pptx/dist/media-provenance.js'")
       .replaceAll("'../vendor/pptxgenjs/pptxgen.es.js'","'./node_modules/@openpresentation/opf-pptx/vendor/pptxgenjs/pptxgen.es.js'");
     await writeFile(path.join(consumer,file),shared);
     process.stdout.write(execFileSync(process.execPath,[file],{cwd:consumer,encoding:'utf8'}));
@@ -108,7 +109,7 @@ console.log('Packed consumer: vendored licenses/hashes, absent unused dependenci
     nativeCodeEvidence={report:path.relative(root,path.join(codeEvidence,'comparison.json')).split(path.sep).join('/'),sha256:hash(await readFile(path.join(codeEvidence,'comparison.json'))),sourceHarnessSha256:hash(codeSource),installedHarnessSha256:hash(codeHarness)};
   }
   await mkdir(path.join(root,'artifacts'),{recursive:true});
-  await writeFile(path.join(root,`artifacts/packed-consumer-node${process.versions.node.split('.')[0]}.json`),JSON.stringify({node:process.version,name:manifest.name,version:manifest.version,integrity:packed.integrity,files,dependencies,registryFixtures,knownVulnerabilities:0,signatureVerification:signatures.trim(),nativeEvidence,nativeCodeEvidence,boundary:'Fresh installed candidate, every shipped file byte-matched, actual registry predecessors, optional-renderer absence, shared accepted quote/code/timeline geometry, physical font variants, guarded code/timeline provenance and indexed sparse chart-cache import tested. Native evidence, when present, covers twelve controlled Calibri quote and eight Courier New code cases, including source/metadata edits and save/reopen; raster differences are observations without an equivalence threshold.'},null,2)+'\n');
+  await writeFile(path.join(root,`artifacts/packed-consumer-node${process.versions.node.split('.')[0]}.json`),JSON.stringify({node:process.version,name:manifest.name,version:manifest.version,integrity:packed.integrity,files,dependencies,registryFixtures,knownVulnerabilities:0,signatureVerification:signatures.trim(),nativeEvidence,nativeCodeEvidence,boundary:'Fresh installed candidate, every shipped file byte-matched, actual registry predecessors, optional-renderer absence, shared accepted quote/code/timeline geometry, media current-caption/link re-export and layout intent, physical font variants, guarded code/timeline provenance and indexed sparse chart-cache import tested. Native evidence, when present, covers twelve controlled Calibri quote and eight Courier New code cases, including source/metadata edits and save/reopen; raster differences are observations without an equivalence threshold.'},null,2)+'\n');
   console.log(`Packed installation audit: zero known vulnerabilities; ${packed.filename}, ${packed.integrity}`);
 } finally {
   const actual=await realpath(temporary);assert.equal(actual,actualTemporary);
