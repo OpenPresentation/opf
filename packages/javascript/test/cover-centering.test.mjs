@@ -190,3 +190,35 @@ test('content and region slides keep the pre-centering geometry', () => {
   const bodyOnCover = composeSlide({title: 'Has body', text: 'Body'}, {layout: titleSubtitle});
   assert.ok(Math.abs(byField(bodyOnCover, 'title').box.y - padding) < 1e-6);
 });
+
+test('empty body payloads are not body: such title slides center too', () => {
+  const centered = result => {
+    const {top, bottom} = headingGroup(result);
+    return Math.abs((top + bottom) / 2 - 360) < 1e-6;
+  };
+  const reference = headingGroup(composeSlide({title: 'Empty payloads', subtitle: 'Still a cover'}, {layout: titleSubtitle}));
+  const empties = {
+    'empty blocks': {blocks: []},
+    'empty text': {text: ''},
+    'whitespace text': {text: ' \n\t '},
+    'empty rich text': {text: []},
+    'empty items': {items: []},
+    'empty regions': {left: {}, bottom: {blocks: []}},
+  };
+  for (const [name, payload] of Object.entries(empties)) {
+    for (const layout of [titleSubtitle, undefined]) {
+      const result = composeSlide({title: 'Empty payloads', subtitle: 'Still a cover', ...payload}, {layout});
+      assert.ok(centered(result), `${name} centers${layout ? '' : ' without a layout'}`);
+      assert.ok(Math.abs(headingGroup(result).top - reference.top) < 1e-6, `${name} matches the payload-free cover`);
+      assert.deepEqual(result.diagnostics, [], `${name} adds no diagnostics`);
+    }
+  }
+  // A blank region text or empty list still centers; its empty cell keeps its item in the smaller remaining area and may report small-cell.
+  const blankRegion = composeSlide({title: 'Empty payloads', subtitle: 'Still a cover', 'top:right': {text: ' '}}, {layout: titleSubtitle});
+  assert.ok(centered(blankRegion));
+  // Any real payload, however small, still makes it a content slide.
+  for (const payload of [{blocks: [{text: 'x'}]}, {text: 'x'}, {items: ['x']}, {image: photo}, {left: {text: 'x'}}, {blocks: [{}]}]) {
+    const result = composeSlide({title: 'Real payload', subtitle: 'Not a cover', ...payload}, {layout: titleSubtitle});
+    assert.ok(Math.abs(byField(result, 'title').box.y - 0.08 * 720) < 1e-6, `${JSON.stringify(payload).slice(0, 30)} keeps the top origin`);
+  }
+});
