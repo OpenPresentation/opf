@@ -6,9 +6,12 @@ It is not universal Office parity and does not describe archived prototypes as
 shipped.
 
 Verify live versions with `npm view <package> version` before treating a
-dated handoff as current. The pin set below matches `release-plan.json` at the
-time this file was updated (21 September 2026). Immutable tag commits pin
-the verification harnesses; see [current evidence](evidence/shipped-train-20260921/README.md).
+dated handoff as current. The pin set below matches the 21 September 2026 published verification
+checkpoint in `release-plan.json`. Immutable tag commits pin
+the verification harnesses; see [published evidence](evidence/shipped-train-20260921/README.md).
+The [September 29 source checkpoint](handoff-runtime-2026-09-29.md) records later
+accepted fixes and release prerequisites. Those source changes have not updated
+the versions below or established complete native compatibility.
 
 ## Runtime
 
@@ -297,13 +300,17 @@ passing on each. Windows fails initial gallery-rail title visibility after 5,000
 with correct source, clean schema and Loading slide fonts; later editing/export/
 reimport checks were not reached. The [final audit](evidence/font-readiness-acceptance-20260921/app54/merged8f/postmerge-ci/REPORT.md.txt)
 preserves this separate failed gate without cause inference or a retry. No canonical
-pass or general native/font acceptance is claimed. Work is paused until user resumption.
+pass or general native/font acceptance is claimed. That September 21 checkpoint was paused; the user resumed work on September 29. See the [current source checkpoint](handoff-runtime-2026-09-29.md) for ongoing repairs and release holds.
 
-Separate local negative controls confirm that preset Undo all discards New run
-and imported replacement documents; ordinary-edit Undo remains untested after a
-raw-buffer precondition failure. The proposed guarded preset correction remains
-unapplied pending its separately requested approval. Local author/filename/gallery/preset writers
-still serialize source. These unresolved local findings and raw imported-file/account/agent/metadata boundaries remain outside
+Separate local negative controls confirmed that preset Undo all discarded New run
+and imported replacement documents. The guarded correction is now preserved in
+[draft app #58](https://github.com/Data-Advantage/pptx-dev/pull/58): independent
+review and local Node 24 checks passed (716 units, 13 standalone controls and
+49 browsers without retries). Original Linux/Windows CI could not start because
+of the account payment/spending-limit restriction; no application CI or production
+acceptance is claimed. Unbusy asynchronous account replacements still need a
+synchronous invalidation guard and held-response control.
+Other local source writers still require their separate preservation checks. These unresolved local findings and raw imported-file/account/agent/metadata boundaries remain outside
 App53 and App54. See the [App53 ledger](evidence/author-source-acceptance-20260921/README.md)
 and its immutable application evidence links. Issue88 remains OPEN. Native/font
 compatibility, required repair and release gates remain separate; geometry is

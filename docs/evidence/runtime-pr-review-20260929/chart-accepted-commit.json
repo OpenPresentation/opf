@@ -1,0 +1,35 @@
+{
+  "sha": "7fca9a2eb5088ee2325fb686d1ff84332af2b8d9",
+  "node_id": "C_kwDOSoCN3toAKDdmY2E5YTJlYjUwODhlZTIzMjVmYjY4NmQxZmY4NDMzMmFmMmI4ZDk",
+  "url": "https://api.github.com/repos/OpenPresentation/opf-pptx/git/commits/7fca9a2eb5088ee2325fb686d1ff84332af2b8d9",
+  "html_url": "https://github.com/OpenPresentation/opf-pptx/commit/7fca9a2eb5088ee2325fb686d1ff84332af2b8d9",
+  "author": {
+    "name": "Michael Grimm",
+    "email": "michaeljgrimm@gmail.com",
+    "date": "2026-09-29T09:17:30Z"
+  },
+  "committer": {
+    "name": "GitHub",
+    "email": "noreply@github.com",
+    "date": "2026-09-29T09:17:30Z"
+  },
+  "tree": {
+    "sha": "3660a7489c406f2ddeba4bd2f5ccbffb20ae74c9",
+    "url": "https://api.github.com/repos/OpenPresentation/opf-pptx/git/trees/3660a7489c406f2ddeba4bd2f5ccbffb20ae74c9"
+  },
+  "message": "FF-22: preserve indexed chart cache gaps on import (#82)",
+  "parents": [
+    {
+      "sha": "bf3f78f9c4d7e38363b4e5df425e49165591408f",
+      "url": "https://api.github.com/repos/OpenPresentation/opf-pptx/git/commits/bf3f78f9c4d7e38363b4e5df425e49165591408f",
+      "html_url": "https://github.com/OpenPresentation/opf-pptx/commit/bf3f78f9c4d7e38363b4e5df425e49165591408f"
+    }
+  ],
+  "verification": {
+    "verified": true,
+    "reason": "valid",
+    "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJqu4IqCRC1aQ7uu5UhlAAAPOgQAElArU6NxaWlHsRAM+EL31Mb\nu0yftVL9ZRj4TkyArx8dr0ju64mrBky4kY58IqqaSIDmoes2bpvscY6z6dUJBTfM\nf2HND3Bs1DQHV+Ij44r6qh/nQaGEYJCZsM4EenBglh1TP/BYfF5SVL98HjtHeEG0\nN/P6IpEhZlw19u/3QiayR/jfgBygyLqz20Fxl0E76gsPpnRbMi72ISytRJjtOjJP\nxNk0xCVzye6wdg6AOhEXo5pFjJBlGZdhJUkvSFT5waXxa7CDy7Bh7qiEyvLewpJR\nUf+9DGGzjodkeJ7bIERViEN+XMTwSe0eMVbcxeVoz+MdpJU+b9JobVWPP8Zbp6Pa\nrOqijxenI2n7fZcyANxyPYJY3+FQEdvmJ2xq5hYvJNGibGSR858EjUiCYymOwyNC\niC0kbZhovUOYylmfdspd9cbt2AtMXHmzjNCvPw85yCQJymWcXX2h4VTfWe0twST3\n1ykNmf/XKXN1TiCNXBkFaZ7Egt5gGpuH2ykJVjfrGbfZB20oQSfafnnxv8PTRqM/\nKhPbfA2tzZpsKf2aW7+qa8TnxjXVPYuD2EjWGbKFO1jCVYnutYuSk0IzHnvj5rkY\n1Jcsz5lVDIVeDnUv5pKKQbRn7TrquZtJw855t5SKLIAU6fw5z1rTYyZPXSapkmzc\n5J4uYaPOgBdTghXcR0nk\n=yBoc\n-----END PGP SIGNATURE-----\n",
+    "payload": "tree 3660a7489c406f2ddeba4bd2f5ccbffb20ae74c9\nparent bf3f78f9c4d7e38363b4e5df425e49165591408f\nauthor Michael Grimm <michaeljgrimm@gmail.com> 1790673450 -0700\ncommitter GitHub <noreply@github.com> 1790673450 -0700\n\nFF-22: preserve indexed chart cache gaps on import (#82)",
+    "verified_at": "2026-09-29T09:17:31Z"
+  }
+}

@@ -1,0 +1,313 @@
+{
+  "id": 36542244211,
+  "name": "CI",
+  "head_sha": "c749c356b4fb5a5b5dfa77db8f1f7dd3c7daef63",
+  "head_branch": "main",
+  "event": "push",
+  "run_attempt": 1,
+  "status": "completed",
+  "conclusion": "success",
+  "created_at": "2026-09-29T08:21:51Z",
+  "updated_at": "2026-09-29T08:35:19Z",
+  "html_url": "https://github.com/OpenPresentation/opf-pptx/actions/runs/36542244211",
+  "jobs": [
+    {
+      "id": 109320181354,
+      "name": "package (windows-latest)",
+      "conclusion": "success",
+      "startedAt": "2026-09-29T08:21:54Z",
+      "completedAt": "2026-09-29T08:35:18Z",
+      "steps": [
+        {
+          "name": "Set up job",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020",
+          "conclusion": "success"
+        },
+        {
+          "name": "Install locked coordinated dependencies",
+          "conclusion": "success"
+        },
+        {
+          "name": "Verify PPTX with published dependencies",
+          "conclusion": "success"
+        },
+        {
+          "name": "Build and link coordinated sources",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run npm audit",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run npm run typecheck",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run npm run test:native-picture-edit-controls",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run npm run test:native-font-embed-controls",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run npm run test:native-mixed-edit-controls",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run npm run test:native-font-inventory-controls",
+          "conclusion": "success"
+        },
+        {
+          "name": "Verify bounded native harness without Office",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run npm run validate",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run npm test",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run npm run test:font-variants",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run npm run test:code",
+          "conclusion": "success"
+        },
+        {
+          "name": "Verify Playwright image version",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run npx playwright install chromium",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run npm run test:browser",
+          "conclusion": "success"
+        },
+        {
+          "name": "Install and exercise coordinated candidate tarballs",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run npm pack --dry-run",
+          "conclusion": "success"
+        },
+        {
+          "name": "Preserve candidate and raster evidence",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "id": 109320181709,
+      "name": "package (ubuntu-latest)",
+      "conclusion": "success",
+      "startedAt": "2026-09-29T08:21:54Z",
+      "completedAt": "2026-09-29T08:27:29Z",
+      "steps": [
+        {
+          "name": "Set up job",
+          "conclusion": "success"
+        },
+        {
+          "name": "Initialize containers",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020",
+          "conclusion": "success"
+        },
+        {
+          "name": "Install locked coordinated dependencies",
+          "conclusion": "success"
+        },
+        {
+          "name": "Verify PPTX with published dependencies",
+          "conclusion": "success"
+        },
+        {
+          "name": "Build and link coordinated sources",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run npm audit",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run npm run typecheck",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run npm run test:native-picture-edit-controls",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run npm run test:native-font-embed-controls",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run npm run test:native-mixed-edit-controls",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run npm run test:native-font-inventory-controls",
+          "conclusion": "success"
+        },
+        {
+          "name": "Verify bounded native harness without Office",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Run npm run validate",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run npm test",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run npm run test:font-variants",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run npm run test:code",
+          "conclusion": "success"
+        },
+        {
+          "name": "Verify Playwright image version",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run npx playwright install chromium",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Run npm run test:browser",
+          "conclusion": "success"
+        },
+        {
+          "name": "Install and exercise coordinated candidate tarballs",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run npm pack --dry-run",
+          "conclusion": "success"
+        },
+        {
+          "name": "Preserve candidate and raster evidence",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "conclusion": "success"
+        },
+        {
+          "name": "Stop containers",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "conclusion": "success"
+        }
+      ]
+    }
+  ]
+}

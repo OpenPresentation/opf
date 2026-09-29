@@ -1,0 +1,46 @@
+{
+  "head": "357171a5ceb798ccd550207ec365b08a694c5d6d",
+  "tree": "dd340476cf97b72feb51004fb851656a90a0c87d",
+  "testedAcceptedMerge": "357171a5ceb798ccd550207ec365b08a694c5d6d",
+  "platforms": {
+    "linux": {
+      "checkouts": {
+        "opf-pptx-accepted-merge": "357171a5ceb798ccd550207ec365b08a694c5d6d",
+        "opf": "4b991553f8d9706de1003f8f8f547e46d902da74",
+        "opf-render": "0337ce2e8682f8dd3ea320e0614490735f554ed3",
+        "opf-editor": "2622d6be718abd52a7241e098cfecf5eaa3bb8c1"
+      },
+      "chartCacheFixtureRuns": 2,
+      "chartCacheCasesPerRun": 44,
+      "mediaGroupsPerRun": 37,
+      "layoutGroupsPerRun": 11,
+      "fixtureRunScopes": [
+        "fresh actual registry consumer",
+        "coordinated source full npm test"
+      ],
+      "installedEditorBrowserWorkflows": 8,
+      "packedLayoutAssertions": 26,
+      "packedLayoutInteractionScenarios": 4
+    },
+    "windows": {
+      "checkouts": {
+        "opf-pptx-accepted-merge": "357171a5ceb798ccd550207ec365b08a694c5d6d",
+        "opf": "4b991553f8d9706de1003f8f8f547e46d902da74",
+        "opf-render": "0337ce2e8682f8dd3ea320e0614490735f554ed3",
+        "opf-editor": "2622d6be718abd52a7241e098cfecf5eaa3bb8c1"
+      },
+      "chartCacheFixtureRuns": 2,
+      "chartCacheCasesPerRun": 44,
+      "mediaGroupsPerRun": 37,
+      "layoutGroupsPerRun": 11,
+      "fixtureRunScopes": [
+        "fresh actual registry consumer",
+        "coordinated source full npm test"
+      ],
+      "installedEditorBrowserWorkflows": 8,
+      "packedLayoutAssertions": 26,
+      "packedLayoutInteractionScenarios": 4
+    }
+  },
+  "sourceBoundary": "CI uses its pinned older graph4b991/0337/2622; separate local combined suite uses current accepted061499/6c7."
+}
