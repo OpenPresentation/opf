@@ -5,7 +5,14 @@
 // only their version strings and SHA-256 digests. Replacement faces come from the pinned
 // @expo-google-fonts packages installed next to opf-render (or --packages <node_modules>).
 //
-// node scripts/measure-font-replacements.mjs [--packages <dir>] [--out <report.json>] [--check | --explore]
+// Vendored replacement families (opf-render fonts/<name>/, for example Intos) are read from the
+// opf-render checkout that holds the packages (the parent of --packages, or --render <dir>), through
+// its pinned src/font-manifest.js.
+// A reference font that is not installed on the host can be measured from a directory of font files
+// with --reference-dir <dir> (for example Aptos Serif from Microsoft's Aptos Fonts download). The
+// files are only read; nothing from them is copied or committed.
+//
+// node scripts/measure-font-replacements.mjs [--packages <dir>] [--render <dir>] [--reference-dir <dir>] [--out <report.json>] [--check | --explore]
 //   --check    compare the measured values with spec/reference/font-policy.json and fail on drift.
 //   --explore  rank every installed @expo-google-fonts package against each measurable family
 //              (writes candidates.json next to the report); this is how replacements were chosen.
@@ -15,7 +22,7 @@ import { createHash } from "node:crypto";
 import { readFileSync, readdirSync, statSync, writeFileSync, existsSync } from "node:fs";
 import { createRequire } from "node:module";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const args = process.argv.slice(2);
@@ -32,7 +39,7 @@ const corpus = JSON.parse(readFileSync(corpusFile, "utf8"));
 const sha256 = (bytes) => createHash("sha256").update(bytes).digest("hex");
 
 // Reference faces, indexed by preferred and legacy family name, weight and italic.
-const referenceDirs = [process.env.WINDIR && path.join(process.env.WINDIR, "Fonts"), process.env.LOCALAPPDATA && path.join(process.env.LOCALAPPDATA, "Microsoft/FontCache/4/CloudFonts"), "/Library/Fonts", "/System/Library/Fonts/Supplemental"].filter((dir) => dir && existsSync(dir));
+const referenceDirs = [...args.flatMap((arg, index) => arg === "--reference-dir" ? [path.resolve(args[index + 1])] : []), process.env.WINDIR && path.join(process.env.WINDIR, "Fonts"), process.env.LOCALAPPDATA && path.join(process.env.LOCALAPPDATA, "Microsoft/FontCache/4/CloudFonts"), "/Library/Fonts", "/System/Library/Fonts/Supplemental"].filter((dir) => dir && existsSync(dir));
 const walk = (dir) => readdirSync(dir).flatMap((name) => { const file = path.join(dir, name); return statSync(file).isDirectory() ? walk(file) : /\.(ttf|otf|ttc)$/i.test(name) ? [file] : []; });
 const faceInfo = (font) => ({ preferred: font.getName?.("preferredFamily", "en") ?? font.familyName, legacy: font.familyName, weight: font["OS/2"]?.usWeightClass ?? 400, italic: Boolean(font["OS/2"]?.fsSelection?.italic || font.italicAngle) });
 const references = new Map();
@@ -44,16 +51,31 @@ for (const file of referenceDirs.flatMap(walk)) {
     const info = faceInfo(font);
     for (const family of new Set([info.preferred, info.legacy])) {
       const key = `${family.toLowerCase()}|${info.weight}|${info.italic}`;
-      // Prefer the normal-width face when a preferred family also has condensed/expanded faces.
-      const width = font["OS/2"]?.usWidthClass ?? 5, previous = references.get(key);
-      if (!previous || (previous.width !== 5 && width === 5)) references.set(key, { font, width, file: path.basename(file), sha256: sha256(bytes), version: String(font.version ?? "") });
+      // Prefer the normal-width face when a preferred family also has condensed/expanded faces, and a
+      // face whose own family name matches over one that only shares the preferred name (Aptos Display
+      // has the preferred family Aptos in Microsoft's download).
+      const width = font["OS/2"]?.usWidthClass ?? 5, exact = family === info.legacy, previous = references.get(key);
+      if (!previous || (previous.width !== 5 && width === 5) || (previous.width === width && !previous.exact && exact)) references.set(key, { font, width, exact, file: path.basename(file), sha256: sha256(bytes), version: String(font.version ?? "") });
     }
   }
 }
 // Replacement faces from the pinned packages: <package>/<weight><Style>[_Italic]/<file>.ttf.
+// Vendored families come from the pinned opf-render manifest: <render>/fonts/<name>/<file>.ttf.
+const renderRoot = path.resolve(option("--render", path.dirname(packages)));
+const vendored = new Map();
+if (existsSync(path.join(renderRoot, "src/font-manifest.js"))) {
+  const { BUNDLED_FONT_MANIFEST } = await import(pathToFileURL(path.join(renderRoot, "src/font-manifest.js")).href);
+  for (const pkg of BUNDLED_FONT_MANIFEST.packages.filter((item) => item.vendored)) for (const face of pkg.faces) {
+    const bytes = readFileSync(path.join(renderRoot, pkg.directory, face.file));
+    assert.equal(sha256(bytes), face.sha256, `${pkg.name}/${face.file} differs from the pinned manifest`);
+    vendored.set(`${face.family.toLowerCase()}|${face.weight}|${face.italic}`, { font: fontkit.create(bytes), weight: face.weight, package: `${pkg.name}@${pkg.commit.slice(0, 12)}`, file: face.file, sha256: face.sha256 });
+  }
+}
 const packageOf = (family) => `@expo-google-fonts/${family.toLowerCase().replace(/\s+/g, "-")}`;
 const faceCache = new Map();
 function replacementFace(family, weight, italic, pkg = packageOf(family)) {
+  const own = vendored.get(`${family.toLowerCase()}|${weight}|${italic}`);
+  if (own) return own;
   const id = `${pkg}|${weight}|${italic}`;
   if (!faceCache.has(id)) faceCache.set(id, loadReplacementFace(pkg, weight, italic));
   return faceCache.get(id);

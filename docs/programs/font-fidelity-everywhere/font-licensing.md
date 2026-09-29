@@ -2,24 +2,24 @@
 
 Generated from [`spec/reference/font-policy.json`](../../../spec/reference/font-policy.json); edit the JSON, not this table. Schema: [`font-policy.schema.json`](../../../spec/reference/font-policy.schema.json). Guide: [docs/font-fidelity.md](../../font-fidelity.md). Measurement method and raw data: [evidence](../../evidence/font-replacements-20260923/README.md).
 
-**Provisional owner decisions (owner may revise):** `aptos-preview` → Roboto (visual); `segoe-ui-preview` → Red Hat Display (visual); `cambria-tier` → Caladea (visual, metric-mode fallback). They live in one block, `provisionalDecisions`, at the top of the JSON. Rows marked † below follow a decision.
+**Provisional owner decisions (owner may revise):** `aptos-preview` → Intos (metric; owner policy 2026-09-29, Roboto and Carlito remain alternates); `segoe-ui-preview` → Red Hat Display (visual); `cambria-tier` → Caladea (visual, metric-mode fallback). They live in one block, `provisionalDecisions`, at the top of the JSON. Rows marked † below follow a decision.
 
 Availability: `windows` = Windows 10/11 default; `windows-optional` = a language Supplemental Fonts feature; `macos` = installed or downloadable on current macOS; `office` = Office desktop; `office-cloud` = Microsoft 365 cloud font.
 
-Width delta = mean |replacement/real - 1| over 300 example-deck strings (signed mean in parentheses; maximum on any single string after the slash), fontkit shaping with default features, per style available on the measuring host. For non-Latin families the corpus is Latin text only. "n/m" = the real font was not on the measuring host. Metric rows need a mean below 0.1% and a maximum of at most 0.3% in all four styles. Alternates are tried in order when the replacement's font pack is not loaded and are always reported as visual; the last alternate is a face bundled with opf-render where one was chosen.
+Width delta = mean |replacement/real - 1| over 300 example-deck strings (signed mean in parentheses; maximum on any single string after the slash), fontkit shaping with default features, per style available on the measuring host. For non-Latin families the corpus is Latin text only. "n/m" = the real font was not on the measuring host. Aptos rows were measured against Aptos 2.01 (Aptos Serif from Microsoft's standalone Aptos Fonts download, the others from the Microsoft 365 cloud fonts). Metric rows need a mean below 0.1% and a maximum of at most 0.3% in all four styles. Alternates are tried in order when the replacement's font pack is not loaded and are always reported as visual; the last alternate is a face bundled with opf-render where one was chosen.
 
-153 families: 56 open, 97 proprietary-standard, 0 proprietary-nonstandard.
+157 families: 60 open, 97 proprietary-standard, 0 proprietary-nonstandard.
 
 | Family | License class | License | Availability | Preview replacement | Tier | Width delta | Alternates | OPF may embed |
 |---|---|---|---|---|---|---|---|---|
 | Angsana New | proprietary-standard | proprietary (Unity Progress/Monotype/Microsoft, licensed to Microsoft) | windows-optional, office-cloud | Noto Sans Thai | visual | 74.8% (+74.8%) / 84.7% | — | never |
 | Anton | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
 | Aparajita | proprietary-standard | proprietary (Modular Infotech, licensed to Microsoft) | windows-optional, office-cloud | Noto Sans Devanagari | visual | n/m | — | never |
-| Aptos | proprietary-standard | proprietary (Microsoft) | office-cloud | Roboto † | visual | 2.1% (+0.1%) / 7.4% | Carlito | never |
-| Aptos Display | proprietary-standard | proprietary (Microsoft) | office-cloud | Carlito | visual | 1.8% (-0.6%) / 6.9% | Roboto | never |
+| Aptos | proprietary-standard | proprietary (Microsoft) | office-cloud | Intos † | metric | 0.0% (+0.0%) / 0.0% | Roboto, Carlito | never |
+| Aptos Display | proprietary-standard | proprietary (Microsoft) | office-cloud | Intos Display | metric | 0.0% (+0.0%) / 0.0% | Carlito, Roboto | never |
 | Aptos Mono | proprietary-standard | proprietary (Microsoft) | office-cloud | Cousine | visual | n/m | Roboto Mono | never |
-| Aptos Narrow | proprietary-standard | proprietary (Microsoft) | office-cloud | Carlito | visual | 2.3% (+2.2%) / 7.9% | — | never |
-| Aptos Serif | proprietary-standard | proprietary (Microsoft) | office-cloud | Tinos | visual | n/m | — | never |
+| Aptos Narrow | proprietary-standard | proprietary (Microsoft) | office-cloud | Intos Narrow | metric | 0.0% (+0.0%) / 0.0% | Carlito | never |
+| Aptos Serif | proprietary-standard | proprietary (Microsoft) | office-cloud | Intos Serif | metric | 0.0% (+0.0%) / 0.0% | Tinos | never |
 | Arabic Typesetting | proprietary-standard | proprietary (Microsoft) | windows-optional, office-cloud | Noto Naskh Arabic | visual | 66.3% (+66.3%) / 74.3% | — | never |
 | Archivo Narrow | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
 | Arial | proprietary-standard | proprietary (Monotype, licensed to Microsoft) | windows, macos, office-cloud | Arimo | metric | 0.0% (+0.0%) / 0.0% | Liberation Sans | never |
@@ -70,6 +70,10 @@ Width delta = mean |replacement/real - 1| over 300 example-deck strings (signed 
 | Gungsuh | proprietary-standard | proprietary (HanYang I&C, licensed to Microsoft) | windows-optional, office-cloud | Noto Sans KR | visual | n/m | — | never |
 | GungsuhChe | proprietary-standard | proprietary (HanYang I&C, licensed to Microsoft) | windows-optional, office-cloud | Noto Sans KR | visual | n/m | — | never |
 | Impact | proprietary-standard | proprietary (Monotype, licensed to Microsoft) | windows, macos, office-cloud | Anton | visual | 1.9% (-1.9%) / 5.1% | Carlito | never |
+| Intos | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
+| Intos Display | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
+| Intos Narrow | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
+| Intos Serif | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
 | Kalinga | proprietary-standard | proprietary (Microsoft) | windows-optional, office-cloud | Noto Sans Oriya | visual | n/m | — | never |
 | Kartika | proprietary-standard | proprietary (Microsoft) | windows-optional, office-cloud | Noto Sans Malayalam | visual | n/m | — | never |
 | Khmer UI | proprietary-standard | proprietary (Microsoft) | windows-optional, office-cloud | Noto Sans Khmer | visual | n/m | — | never |
@@ -165,3 +169,24 @@ Width delta = mean |replacement/real - 1| over 300 example-deck strings (signed 
 | Wingdings | proprietary-standard | proprietary (Microsoft) | windows, macos, office-cloud | none | — | — | — | never |
 | Work Sans | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
 | Yu Gothic | proprietary-standard | proprietary (JIYUKOBO, licensed to Microsoft) | windows, office-cloud | Noto Sans JP | visual | 0.9% (+0.3%) / 5.3% | — | never |
+
+## Replacement font acceptance rules
+
+Owner policy, 2026-09-29: for a licensed font the user selects (for example Aptos), previews use an open replacement that looks similar and has the same size on screen (metric-compatible). The PPTX keeps the selected name, so PowerPoint shows the real font. Licensed fonts are never bundled or embedded. Root decisions on which replacements qualify:
+
+1. **Metric matching to a proprietary font is acceptable when the outlines are original.** A font whose advance widths, kerning and vertical metrics were matched to a proprietary font is accepted, as Carlito is for Calibri and Liberation or Croscore fonts are for Arial, Times New Roman and Courier New. Metrics are functional layout data. A font whose outlines are copied from a proprietary font is never accepted. No proprietary font file is committed, and none of its tables is dumped into the repository; aggregate delta numbers are fine. `scripts/measure-font-candidates.mjs` counts identical outlines against the installed real font as part of every acceptance measurement.
+2. **Bundle only permissive font licenses:** SIL OFL 1.1, Apache 2.0, MIT, the Ubuntu Font Licence, and Bitstream Vera-style licenses. GPL, LGPL and AGPL fonts and public-domain fonts with unclear provenance are not bundled. The license is read from the license file that ships with the downloaded files. The renderer's font manifest records the SPDX license, whether the license declares a Reserved Font Name, the source URL, the exact commit or version, and a SHA-256 for every file. Files are bundled pinned and are never hotlinked from a font CDN. A font with a Reserved Font Name is bundled unmodified only, and is never modified under that name.
+3. **Young or single-maintainer projects are acceptable** when they are pinned by exact commit or version plus SHA-256 in the font manifest, and the previous replacement stays as a fallback or alternate.
+4. **The replacement's family name must not be a trademark of the original.** "Intos" is fine; "Aptos Open" would not be.
+5. **The metric bar is unchanged:** a mean below 0.1% and a maximum of at most 0.3% on any corpus string, in every style of all four (regular, bold, italic, bold italic). A family where only some styles qualify is not claimed metric. The candidate's vertical metrics (hhea ascent, descent and line gap, OS/2 typo and win values, x-height and cap-height) and painted glyph heights are compared as well, because the owner cares about on-screen size.
+6. **A candidate that misses the bar is recorded, not switched to.** Its measurement is kept as visual or rejected, in the evidence folder and, for a rejected candidate, in `EXPERIMENTAL_FONT_CANDIDATES`.
+
+### Decisions under these rules
+
+| Candidate | For | Verdict | Basis |
+|---|---|---|---|
+| Intos, Intos Display, Intos Narrow, Intos Serif (commit `fef9315c14da9e4b23b4c3cac8e718998d4e4736`, OFL-1.1, no Reserved Font Name) | Aptos, Aptos Display, Aptos Narrow, Aptos Serif | **Accepted, metric** | 0.000% mean and 0.000% maximum in all four styles of each family against Aptos 2.01. hhea, OS/2 and x-height/cap-height values equal. No identical outline in the sans faces (0 of 975 shared glyphs); the serif shares eight plain rectangles such as the hyphen. Sans outlines derive from Inter and the serif from Gelasio, both OFL. Vendored in opf-render's `aptos` pack. |
+| Selawik 1.01 (OFL-1.1, Reserved Font Name "Selawik") | Segoe UI and its Light, Semilight, Semibold styles | **Rejected** | Regular 0.16% mean and 2.5% maximum; bold 0.20% and 2.1%; no italic faces, so the upright face is 2.65% off in italic; Semibold 1.75%; Light 0.31%. Advances of basic Latin are identical, the differences are missing kerning and only 349 code points. Lowercase is 4.8% shorter than Segoe UI and hhea ascent 8% smaller. Red Hat Display stays the visual replacement. |
+| Akasia | Aptos | **Dropped** | The repository is no longer available. Intos replaces it. The earlier [assessment](../../evidence/akasia-assessment/README.md) remains as history. |
+
+Measurements and the method are in [the evidence folder](../../evidence/font-replacements-20260923/README.md).
