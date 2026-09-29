@@ -199,6 +199,7 @@ export async function toPptx(input, options = {}) {
 
   const context = resolvePresentationContext(presentation, {...options,textMeasurement:undefined});
   context.listMarkers = new Map();
+  context.imagePlaceholders = new Map();
   context.tableHeaders = new Map();
   context.tableCells = new Map();
   context.imagePlacements = new Map();
@@ -1252,7 +1253,7 @@ async function addSlide(pptx, presentation, opfSlide, slideIndex, context, optio
         breakLine: false
       });
     } else if ((item.field === "items" || item.field === "bullets") && item.text?.listEntries) {
-      addMeasuredList(slide,item.text,slideContext);
+      addMeasuredList(slide,item.text,slideContext,item.path);
     } else if (item.field === "text" && item.text?.richLines) {
       const alignment=item.text.placement?.alignment??alignmentFor(item)??'left';
       for(const [index,line] of item.text.richLines.entries()){
@@ -1370,13 +1371,19 @@ function richLineRuns(line,color,context) {
     return {text:fragment.text,options:{...nativeFontOptions(fragment.style),fontSize:fragment.fontSize*.75,color,underline:fragment.run.underline?{style:'sng',color}:undefined,strike:fragment.run.strikethrough?'sngStrike':undefined,baseline:fragment.baselineShift?-fragment.baselineShift/fragment.fontSize*2000:undefined,hyperlink:fragment.run.link&&/^(https?:|mailto:)/i.test(fragment.run.link)?{url:fragment.run.link}:undefined}};
   });
 }
-function addMeasuredList(slide,fit,context) {
+// Every native line of a list, marker paragraph or not, is named for the list's
+// composed path (`OPF list <path> line N`, N counting across the whole list) like
+// the other measured text shapes. A reader maps lines to their list by name, not
+// by geometry, so lines of an overflowing list that fall below its box still
+// belong to it.
+function addMeasuredList(slide,fit,context,path) {
+  let lineNumber=0;
   for(const entry of fit.listEntries){
     const addLines=(text,box,color,withBullet)=>{
       text.richLines.forEach((line,index)=>{
         const first=withBullet&&index===0,level=Math.min(8,entry.level),inset=first?entry.marker.indent*(level+1):0;
         const region={x:(box.x-inset)/96,y:(box.y+line.y)/96,w:(box.width+inset)/96,h:line.height/96};
-        const objectName=first?`OPF list paragraph ${context.listMarkers.size+1}`:undefined;
+        const objectName=`OPF list ${path} line ${lineNumber++}`;
         if(first)context.listMarkers.set(objectName,{fontFamily:entry.marker.style.fontFamily,fontSize:entry.marker.fontSize*.75,color:normalizeHex(context.colors.text)});
         const paragraph=first?{bullet:{characterCode:entry.marker.text.codePointAt(0).toString(16).padStart(4,'0'),indent:entry.marker.indent*.75},indentLevel:level}:{bullet:false};
         const runs=richLineRuns(line,color,context);
@@ -1434,7 +1441,7 @@ function addListPayload(slide, items, region, context) {
 async function addImagePayload(slide, presentation, asset, region, path, context, options) {
   const resolved = await resolveImage(asset, presentation, options, path);
   if (!resolved) {
-    addPlaceholderPayload(slide, "Image", asset, region, context);
+    addImagePlaceholder(slide, presentation, asset, region, path, context, options);
     return;
   }
   const objectName = `OPF image ${context.imagePlacements.size + 1}`;
@@ -1457,7 +1464,7 @@ async function addSlideImage(slide, presentation, image, slideIndex, context, op
   const box = { x: image.box.x / 96, y: image.box.y / 96, w: image.box.width / 96, h: image.box.height / 96 };
   const resolved = await resolveImage(image.value, presentation, options, image.sourcePath);
   if (!resolved) {
-    addPlaceholderPayload(slide, "Image", image.value, box, context);
+    addImagePlaceholder(slide, presentation, image.value, box, image.sourcePath, context, options);
     return;
   }
   const objectName = slideImageName(`slides.${slideIndex}`);
@@ -1816,6 +1823,76 @@ function addMediaPayload(slide, presentation, value, region, path, context, opti
   slide.addShape("triangle", {x: (icon.x + 28) / 96, y: (icon.y + 22) / 96, w: 28 / 96, h: 28 / 96, rotate: 90, fill: {color: "FFFFFF"}, line: {transparency: 100}, hyperlink: hyperlink && {url: source}, objectName: names.play});
   addMeasuredPayloadText(slide, mediaCaption(value), {...box, y: icon.y + 72 + 20, height: 50}, context, options,
     {path, fontSize: 18, fontFamily: context.fonts.body, fontWeight: 600, align: "center", color: context.colors.mutedText, objectName: `OPF media ${path} caption`, media: true, keepEmpty: true, hyperlink});
+}
+
+// The asset an image block names, layered as the preview layers it: fields on the
+// block win over the registry entry it references, and an unknown reference keeps
+// the block's own fields.
+function placeholderAsset(asset, presentation) {
+  const plain = value => typeof value === "string" ? { src: value } : isPlainObject(value) ? value : { src: "" };
+  let current = plain(asset);
+  const seen = new Set();
+  while (typeof current.src === "string" && current.src.startsWith("asset:")) {
+    const id = current.src.slice(6);
+    if (seen.has(id) || !Object.hasOwn(presentation.assets ?? {}, id)) break;
+    seen.add(id);
+    const { src: _source, ...overrides } = current;
+    current = { ...plain(presentation.assets[id]), ...overrides };
+  }
+  return current;
+}
+
+// An image that cannot be embedded exports the preview's placeholder, not a second
+// design: a dashed panel with a centered "Image unavailable" over the asset's alt
+// text (else title, else "Image"), set bold at 20 px (shrinking to the composition
+// minimum) in the readable text colour for the panel, or a cross when the label
+// cannot fit even at that minimum. The panel carries the accessible name the
+// preview gives its group, "Image unavailable: <description>".
+function addImagePlaceholder(slide, presentation, asset, region, path, context, options) {
+  const layered = placeholderAsset(asset, presentation);
+  const description = String(layered.alt ?? layered.title ?? "Image");
+  const label = `Image unavailable\n${description}`;
+  // The preview rejects characters DrawingML/SVG XML cannot represent when it draws the label.
+  // The cross and the accessible name would otherwise carry them into the slide XML, so check
+  // up front and fail the same way whichever form the placeholder takes.
+  const invalid = /[\u0000-\u0008\u000B\u000C\u000E-\u001F\uD800-\uDFFF￾￿]/u.exec(label);
+  if (invalid) throw new OPFPptxError("invalid-text", `Text contains U+${invalid[0].codePointAt(0).toString(16).toUpperCase().padStart(4, "0")} at UTF-16 offset ${invalid.index}, which DrawingML XML cannot represent.`, { path });
+  const scale = Math.min(context.dimensions.widthInches, context.dimensions.heightInches) * 96 / 720;
+  const box = pixelBox(region);
+  const padding = Math.min(24 * scale, box.width * .06, box.height * .1);
+  const inner = { x: box.x + padding, y: box.y + padding, width: Math.max(1, box.width - padding * 2), height: Math.max(1, box.height - padding * 2) };
+  const surface = normalizeHex(context.colors.surface);
+  const textColor = normalizeHex(textColorForFill(`#${surface}`, `#${context.colors.text}`));
+  const style = resolveTextStyle({ fontFamily: context.fonts.body, fontWeight: 600, path }, options.textMeasurement);
+  const measurer = textWidthMeasurer(style, options.textMeasurement);
+  const minimum = (context.composition?.minFontSize ?? 16) * scale;
+  const fit = fitText(label, inner, 20 * scale, minimum, measurer);
+  const objectName = `OPF image placeholder ${context.imagePlaceholders.size + 1}`;
+  context.imagePlaceholders.set(objectName, `Image unavailable: ${description}`);
+  slide.addShape("rect", {
+    x: region.x, y: region.y, w: region.w, h: region.h,
+    fill: { color: surface },
+    line: { color: context.colors.border, width: .75, dashType: "dash" },
+    objectName
+  });
+  if (!fit.overflow) {
+    // The lines are centered vertically in the padded box. Fit against the shifted
+    // box so any per-line placement carries the same offset.
+    const offset = Math.max(0, (inner.height - fit.lines.length * fit.lineHeight) / 2);
+    const centered = { ...inner, y: inner.y + offset };
+    addMeasuredPayloadText(slide, label, centered, context, options, {
+      path, fit: fitText(label, centered, 20 * scale, minimum, measurer), textStyle: style,
+      diagnosticsHandled: true, align: "center", color: textColor
+    });
+    return;
+  }
+  // A status indicator, not shortened authored content: the full description stays
+  // in the panel's accessible name.
+  const size = Math.max(0, Math.min(inner.width, inner.height, 24 * scale));
+  if (!size) return;
+  const icon = { x: inner.x + (inner.width - size) / 2, y: inner.y + (inner.height - size) / 2 };
+  const line = { color: textColor, width: Math.min(2 * scale, size / 8) * .75 };
+  for (const flipV of [false, true]) slide.addShape("line", { x: icon.x / 96, y: icon.y / 96, w: size / 96, h: size / 96, line, flipV });
 }
 
 function addPlaceholderPayload(slide, label, value, region, context) {
@@ -2460,10 +2537,18 @@ function normalizePartBytes(path, bytes, context, renameMaps, entries, imageMeta
       // Native bullets otherwise inherit the first rich run's size, font and
       // color, which can differ from the measured list marker.
       xml=xml.replace(/<p:sp>([\s\S]*?)<\/p:sp>/g,(shape)=>{
-        const marker=context.listMarkers.get(shape.match(/name="(OPF list paragraph \d+)"/)?.[1]);
+        const marker=context.listMarkers.get(shape.match(/name="(OPF list [^"]* line \d+)"/)?.[1]);
         if(!marker)return shape;
         const family=marker.fontFamily.replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&apos;'}[char]));
         return shape.replace(/<a:buSzPct val="100000"\/>/g,`<a:buClr><a:srgbClr val="${marker.color}"/></a:buClr><a:buSzPts val="${Math.round(marker.fontSize*100)}"/><a:buFont typeface="${family}"/>`);
+      });
+      // PptxGenJS gives shapes no alternative text. An unavailable image's panel
+      // carries the accessible name the preview gives its group.
+      xml=xml.replace(/<p:cNvPr id="(\d+)" name="(OPF image placeholder \d+)">/g,(node,id,name)=>{
+        const description=context.imagePlaceholders.get(name);
+        if(description===undefined)return node;
+        const escapes={'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&apos;','\r':'&#13;','\n':'&#10;','\t':'&#9;'};
+        return `<p:cNvPr id="${id}" name="${name}" descr="${description.replace(/[&<>"'\r\n\t]/g,char=>escapes[char])}">`;
       });
       // PptxGenJS 4 emits pPr before each rich run. OOXML allows one pPr,
       // before all runs. Paragraph options belong to the first run.
