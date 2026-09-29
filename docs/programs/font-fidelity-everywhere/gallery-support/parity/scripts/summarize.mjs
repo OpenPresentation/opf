@@ -22,15 +22,16 @@ L.push('## What "perfect" means', '',
   '| slideSize | `p:sldSz` equals the SVG viewBox within 0.02 pt. |',
   '| typefaces | Every `typeface=` in every part (charts and embedded workbook styles included) and every font listed in app.xml is a family the preview uses. Theme per-script supplements are reported separately and are not gated. |',
   '| reimport | `fromPptx` preserves design.colorScheme, fontScheme, theme, background, dimensions, language, narrative, tone, audience and slide layout ids. A loss with a specific diagnostic counts as near; a silent loss fails. |',
-  '| fontResolution | Every family the preview uses resolves, in the office pack with visual substitution, to the real face (`exact`) or to a metric-compatible substitute. A visual substitute or a missing face fails. |',
+  '| fontResolution | For every family the selected design uses (owner decision, 2026-09-29; see below): **pass** when the PPTX names the selected family (theme major/minor for the heading/body fonts, run or chart slots otherwise) and the preview draws the real face (an open bundled family) or the FF-31 policy table\'s metric-compatible replacement. **near** when the PPTX names the selected family and the preview draws the policy table\'s route for it, but only at the visual look-alike tier ("visual-only replacement"; layout not guaranteed). **fail** when the family has no row in the policy table, the preview has no face for it, the preview draws a face that is not the table\'s route (an unexpected host, system or generic fallback), or the PPTX writes a replacement name instead of the selected name. The metric or visual tier is reported per family. |',
   '| theme | Theme major/minor latin equal the preview heading/body fonts, and the theme clrScheme equals the document colour scheme. |',
   '| mapping | Every preview element group has PPTX shapes and the reverse. An unmapped PPTX shape counts as near. A slide-image picture with no preview slide image fails. |', '',
+  'fontResolution owner decision, 2026-09-29 (verbatim): "look-alike fonts are to get around any font licensing restrictions. They are desirable for open source but if we export to PowerPoint the pptx file should include references to the font they selected and want to see in PowerPoint." Refinement, later the same day (verbatim): "if the user wants Aptos... if Aptos is license restricted we can substitute a font (Aptos2 or whatever it\'s named) that looks similar and has the same size in pixels on the screen for rendering live previews of SVG. When we export to PPTX we should have PowerPoint open that file and display actual Aptos." So a look-alike is intended, the PPTX must keep the selected name, and the target look-alike is metric-compatible; a visual-only look-alike is policy-conformant but reported as near. Before this decision the check passed only for the real face or a metric-compatible substitute; that old definition is computed from the same run (`results[].legacy`) and compared below.', '',
   'Classification: **perfect** means every check passes; **near** means only near deltas; **mismatch** means at least one check fails. Both engines use the default layout measurement (no host registry), so geometry is computed from the same composition.', '');
 L.push('## Per-dimension counts', '', `| dimension | n | perfect | near | mismatch | ${CHECKS.join(' | ')} |`, `|---|---|---|---|---|${CHECKS.map(() => '---').join('|')}|`);
-const pct = (rs, c) => { const p = rs.filter(r => r.checks?.[c] === 'pass').length; return `${p}/${rs.length}`; };
+const pct = (rs, c) => { const p = rs.filter(r => r.checks?.[c] === 'pass').length; const nr = c === 'fontResolution' ? rs.filter(r => r.checks?.[c] === 'near').length : 0; return `${p}/${rs.length}${nr ? ` (+${nr} near)` : ''}`; };
 for (const d of dims) { const rs = results.filter(r => dimKey(r) === d); L.push(`| ${d} | ${rs.length} | ${count(rs, 'perfect')} | ${count(rs, 'near')} | ${count(rs, 'mismatch')} | ${CHECKS.map(c => pct(rs, c)).join(' | ')} |`); }
 L.push(`| **all** | ${results.length} | ${count(results, 'perfect')} | ${count(results, 'near')} | ${count(results, 'mismatch')} | ${CHECKS.map(c => pct(results, c)).join(' | ')} |`, '');
-L.push('The check columns count values that pass that check. A value is perfect only when every check passes.', '');
+L.push('The check columns count values that pass that check (fontResolution also shows how many are near). A value is perfect only when every check passes.', '');
 if (meta.cropCheck) L.push(`Picture crop-position check: ${meta.cropCheck.measured} of ${meta.cropCheck.pictures} pictures measured; ${meta.cropCheck.unmeasured} unmeasured (preview image size unknown, reported as near).`, '');
 if (base) {
   const bk = r => `${r.dimension}|${r.id}|${r.variant}`; const bm = new Map(base.results.map(r => [bk(r), r]));
@@ -39,6 +40,41 @@ if (base) {
   for (const d of [...dims, '**all**']) { const rs = d === '**all**' ? results : results.filter(r => dimKey(r) === d); const bs = rs.map(r => bm.get(bk(r))).filter(Boolean);
     const imp = rs.filter(r => bm.has(bk(r)) && rank[r.class] > rank[bm.get(bk(r)).class]).length, reg = rs.filter(r => bm.has(bk(r)) && rank[r.class] < rank[bm.get(bk(r)).class]).length;
     L.push(`| ${d} | ${count(bs, 'perfect')} | ${count(rs, 'perfect')} | ${count(bs, 'near')} | ${count(rs, 'near')} | ${imp} | ${reg} |`); }
+  L.push('');
+}
+// old vs new fontResolution definition, from the same run
+if (results.some(r => r.legacy)) {
+  const oldChecks = r => ({...(r.checks ?? {}), ...(r.legacy?.checks ?? {})}); const oldClass = r => r.legacy?.class ?? r.class;
+  const cnt = (rs, f, v) => rs.filter(r => f(r) === v).length;
+  L.push('## fontResolution definition change (owner decision 2026-09-29): old vs new, same run', '',
+    'Both columns come from the same run on the same heads. The old definition passes only the real face or a metric-compatible substitute. The new one is defined above. Every other check is identical under both, so the only difference is fontResolution and the classes that follow from it.', '',
+    '| dimension | n | perfect old | perfect new | near old | near new | mismatch old | mismatch new | fontResolution pass old | pass new | near new | fail new |', '|---|---|---|---|---|---|---|---|---|---|---|---|');
+  for (const d of [...dims, '**all**']) { const rs = d === '**all**' ? results : results.filter(r => dimKey(r) === d);
+    L.push(`| ${d} | ${rs.length} | ${cnt(rs, oldClass, 'perfect')} | ${count(rs, 'perfect')} | ${cnt(rs, oldClass, 'near')} | ${count(rs, 'near')} | ${cnt(rs, oldClass, 'mismatch')} | ${count(rs, 'mismatch')} | ${cnt(rs, r => oldChecks(r).fontResolution, 'pass')} | ${cnt(rs, r => r.checks?.fontResolution, 'pass')} | ${cnt(rs, r => r.checks?.fontResolution, 'near')} | ${cnt(rs, r => r.checks?.fontResolution, 'fail')} |`); }
+  L.push('', '| check (all values, pass count) | old definition | new definition |', '|---|---|---|');
+  for (const c of CHECKS) L.push(`| ${c} | ${cnt(results, r => oldChecks(r)[c], 'pass')} | ${cnt(results, r => r.checks?.[c], 'pass')} |`);
+  L.push('');
+  const fam = {};
+  for (const r of results) for (const [f, v] of Object.entries(r.fontResolution ?? {})) { const e = fam[f + " " + v.verdict] ??= {n: 0, v, f}; e.n++; }
+  const rowsOf = rows => rows.map(([f, e]) => `| ${e.f} | ${e.v.resolved ?? '-'} | ${e.v.licenseClass ?? 'not in policy table'} | ${e.v.route ?? '-'} | ${e.n} |`);
+  const near = Object.entries(fam).filter(([, e]) => e.v.verdict === 'near').sort((a, b) => b[1].n - a[1].n || a[1].f.localeCompare(b[1].f));
+  const nearRoute = near.filter(([, e]) => e.v.route === 'replacement').length;
+  L.push('### Selected families with only a visual-only replacement (near)', '',
+    `These ${near.length} selected families render in the preview with a policy-table look-alike that is not metric-compatible (${nearRoute} with the table's listed replacement, ${near.length - nearRoute} with a listed alternate). Each needs a metric-compatible open replacement, or a supplied real face, to pass. "values" is the number of the ${results.length} values that select the family.`, '',
+    '| selected family | preview face | license class | route | values |', '|---|---|---|---|---|', ...rowsOf(near), '');
+  const okFams = Object.entries(fam).filter(([, e]) => e.v.verdict === 'pass').sort((a, b) => b[1].n - a[1].n || a[1].f.localeCompare(b[1].f));
+  L.push('### Selected families that pass', '', '| selected family | preview face | license class | route | values |', '|---|---|---|---|---|', ...rowsOf(okFams), '');
+  const failFams = Object.entries(fam).filter(([, e]) => e.v.verdict === 'fail');
+  const KINDS = ['no route in the FF-31 font policy table', 'preview has no face for open family', 'preview has no face for', 'preview face is not the policy route for', 'preview uses an unexpected fallback face for', 'PPTX writes replacement name', 'PPTX does not name the selected family'];
+  const kindOf = reason => KINDS.find(k => reason.startsWith(k)) ?? reason;
+  const failReason = {};
+  for (const r of results) for (const d of r.diffs ?? []) if (d.check === 'fontResolution' && d.status === 'fail') failReason[kindOf(d.reason)] = (failReason[kindOf(d.reason)] ?? 0) + 1;
+  const allDiffs = results.flatMap(r => r.diffs ?? []);
+  L.push('### fontResolution failures (new definition)', '', `${failFams.length} selected families fail. Family-value failures by reason kind (a value with several failing families counts once per family):`, '', '| reason kind | family-value failures |', '|---|---|', ...Object.entries(failReason).sort((a, b) => b[1] - a[1]).map(([k, c]) => `| ${k} | ${c} |`), '',
+    '| failing family | license class | policy route | values | reason |', '|---|---|---|---|---|');
+  const failSorted = failFams.sort((a, b) => b[1].n - a[1].n || a[1].f.localeCompare(b[1].f));
+  for (const [, e] of failSorted.slice(0, 25)) { const f = e.f; const why = allDiffs.find(d => d.check === 'fontResolution' && d.status === 'fail' && d.where?.includes(f))?.reason ?? ''; L.push(`| ${f} | ${e.v.licenseClass ?? 'not in policy table'} | ${e.v.error ? 'not loaded in preview' : (e.v.route ?? 'unrouted')} | ${e.n} | ${why.replace(/\|/g, '\\|')} |`); }
+  if (failSorted.length > 25) L.push('', `… and ${failSorted.length - 25} more failing families (one value each unless listed above); the full per-family verdicts are in the results file under results[].fontResolution.`);
   L.push('');
 }
 // top mismatch reasons per dimension
@@ -64,10 +100,10 @@ Object.entries(pat).filter(([, v]) => v.status === 'near').sort((a, b) => b[1].n
 // font resolution
 const fr = {}; for (const r of results) for (const [f, v] of Object.entries(r.fontResolution ?? {})) { fr[f] ??= {status: v.status, resolved: v.resolved, n: 0}; fr[f].n++; }
 const byStatus = s => Object.entries(fr).filter(([, v]) => v.status === s).sort((a, b) => b[1].n - a[1].n);
-L.push('', '## Preview font resolution', '', 'Families the traced preview uses plus the resolved design heading/body/code fonts, resolved against the office pack (plus base) with `substitutionPolicy:"visual"`. "Metric" follows the `FONT_COMPATIBILITY` policy in opf-render.', '', '| status | families | values affected | families (values) |', '|---|---|---|---|');
+L.push('', '## Preview font resolution (registry status, the old-definition view)', '', 'Families the traced preview uses plus the resolved design heading/body/code fonts, resolved against the office pack (plus base) with `substitutionPolicy:"visual"`. "Metric" follows the `FONT_COMPATIBILITY` policy in opf-render. This is the registry status the old definition gated on; the verdict under the new definition is in the section above.', '', '| status | families | values affected | families (values) |', '|---|---|---|---|');
 for (const s of ['real', 'metric-substitute', 'visual-substitute', 'missing']) { const e = byStatus(s); const vals = results.filter(r => Object.values(r.fontResolution ?? {}).some(v => v.status === s)).length; L.push(`| ${s} | ${e.length} | ${vals} | ${e.slice(0, 40).map(([f, v]) => `${f}${v.resolved && v.resolved !== f ? '→' + v.resolved : ''} (${v.n})`).join(', ')}${e.length > 40 ? ', …' : ''} |`); }
 const renderOk = results.filter(r => r.fontResolution && Object.values(r.fontResolution).every(v => v.status === 'real' || v.status === 'metric-substitute')).length;
-L.push('', `${renderOk}/${results.length} values render only with the chosen font or a metric-compatible substitute.`, '');
+L.push('', `${renderOk}/${results.length} values render only with the chosen font or a metric-compatible substitute (the old fontResolution pass).`, '');
 // typeface inventory
 const sup = new Set(); for (const r of results) for (const f of r.typefaces?.scriptSupplementFaces ?? []) sup.add(f);
 const fset = {}; for (const r of results) for (const f of r.typefaces?.foreign ?? []) fset[f] = (fset[f] ?? 0) + 1;

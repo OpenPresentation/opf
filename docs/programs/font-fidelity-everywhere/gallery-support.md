@@ -10,7 +10,7 @@ packages. It measures the engines, not the schema: a value that validates but
 changes nothing in the preview or the PPTX is not reported as working.
 
 **Headline: 5 of 900 gallery values are perfect by parity** (FF-38, accepted
-merged source graph on 2026-09-29; 0 near, 895 mismatch). The unchanged full
+merged source graph on 2026-09-29; 0 near, 895 mismatch under the old fontResolution definition; 608 near, 287 mismatch under the definition adopted on 2026-09-29, see [below](#fontresolution-definition-change-owner-decision-2026-09-29)). The unchanged full
 audit improves the September 23 result from 4 to 5, with no classification
 regressions. This graph includes PPTX79 and PPTX81 and core145's FF-04 evidence.
 This is the program's progress metric. The 900 values are the 793
@@ -65,7 +65,7 @@ Editor `d0c95a1` was refreshed by a dependency-only merge and was not used by
 parity. A separate local raw candidate receipt, `candidate78-results.json`
 at `2026-09-29T08:30:22.322Z`, uses the same core, renderer and gallery with
 [PPTX78](https://github.com/OpenPresentation/opf-pptx/pull/78) head
-`7cc779129323af6123ef5e194226a545e743f195`: also 5 perfect, 0 near, 895 mismatch,
+`7cc779129323af6123ef5e194226a545e743f195`: also 5 perfect, 0 near, 895 mismatch (old fontResolution definition),
 with text 798 to 799 and fills 790 to 791 and no classification change.
 Candidate CI [36543078806](https://github.com/OpenPresentation/opf-pptx/actions/runs/36543078806)
 is pending at this checkpoint. It does not replace the accepted baseline.
@@ -116,7 +116,7 @@ checks are:
 | slideSize | `p:sldSz` equals the SVG viewBox within 0.02 pt. |
 | typefaces | Every `typeface=` in every part, charts and embedded workbooks included, and every font in `app.xml` is a family the preview uses. Theme per-script supplements are reported but not gated. |
 | reimport | `fromPptx` preserves color scheme, font scheme, theme, background, dimensions, language, narrative, tone, audience and slide layout ids. A loss with a specific diagnostic is near; a silent loss fails. |
-| fontResolution | Every family the preview uses resolves, in the office pack with visual substitution, to the real face or a metric-compatible substitute. |
+| fontResolution | Since the owner decision of 2026-09-29, for every family the selected design uses: **pass** when the PPTX names the selected family (theme major/minor for the heading and body fonts, run or chart slots otherwise) and the preview draws the real face (an open bundled family) or the FF-31 policy table's metric-compatible replacement; **near** when the PPTX names the selected family and the preview draws the policy table's route for it at the visual look-alike tier only ("visual-only replacement"); **fail** when the family has no row in the policy table, the preview has no face for it, the preview draws a face that is not the table's route, or the PPTX writes a replacement name instead of the selected one. Before that decision: every family the preview uses resolved, in the office pack with visual substitution, to the real face or a metric-compatible substitute (the September 23 and earlier rows below use this). |
 | theme | Theme major/minor `latin` equal the preview heading/body fonts, and the theme `clrScheme` equals the document color scheme. |
 | mapping | Every preview element group has PPTX shapes and the reverse; an unmapped PPTX shape is near. |
 
@@ -126,10 +126,51 @@ comparison:
 
 | Run | perfect | geometry | text | fills | zOrder | slideSize | typefaces | reimport | fontResolution | theme | mapping |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Look-alike fonts accepted, new fontResolution definition (September 29, owner decision 2026-09-29; opf `401f2e3`, opf-render `c62b3f9`, opf-pptx `54f7e4c`, pptx-gallery `4b48e69`) | 5 (608 near, 287 mismatch) | 880 | 800 | 791 | 880 | 900 | 900 | 899 | 5 pass, 791 near, 104 fail | 900 | 890 |
+| Same run, old fontResolution definition | 5 (0 near, 895 mismatch) | 880 | 800 | 791 | 880 | 900 | 900 | 899 | 5 | 900 | 890 |
 | Accepted merged graph (September 29) | 5 | 880 | 798 | 790 | 880 | 900 | 900 | 899 | 5 | 900 | 890 |
 | Previous scoreboard (September 23) | 4 | 880 | 759 | 766 | 880 | 900 | 900 | 899 | 5 | 900 | 890 |
 | Before slide-image mapping (opf#137) | 4 | 774 | 759 | 674 | 784 | 900 | 900 | 899 | 5 | 900 | 672 |
 | Previous (opf#122) | 0 | 390 | 326 | 734 | 880 | 900 | 0 | 0 | 5 | 900 | 890 |
+
+#### fontResolution definition change (owner decision, 2026-09-29)
+
+The first two rows above are one run, measured on the merged heads listed in
+the row, and differ only in how fontResolution is judged. The owner decided on
+2026-09-29 (verbatim): "look-alike fonts are to get around any font licensing
+restrictions. They are desirable for open source but if we export to PowerPoint
+the pptx file should include references to the font they selected and want to
+see in PowerPoint." Later the same day (verbatim): "if the user wants Aptos...
+if Aptos is license restricted we can substitute a font (Aptos2 or whatever
+it's named) that looks similar and has the same size in pixels on the screen
+for rendering live previews of SVG. When we export to PPTX we should have
+PowerPoint open that file and display actual Aptos." So a look-alike preview
+font is intended, the PPTX must name the selected family and never the
+replacement, and the target look-alike is metric-compatible. The check now
+takes its routes from core's FF-31 font policy table (the listed replacement,
+or a listed alternate when the replacement is not loaded in the preview):
+metric-compatible passes, visual-only is near, and a family with no route, a
+face that is not the table's route, or a PPTX that writes a replacement name
+fails. No tolerance and no other check changed; the same run under the old
+definition is stored per value (`results[].legacy`), and every other check
+count is identical under both.
+
+Under the new definition 791 values are near only because of visual-only
+replacements (Aptos to Roboto and Aptos Display to Carlito for 754 values, then
+27 families in all; the list is in [the run's scoreboard](gallery-support/parity/PARITY-2026-09-29-lookalike-fonts.md#selected-families-with-only-a-visual-only-replacement-near)),
+and the 104 fontResolution failures are all faces the modelled preview does
+not load (the office pack without script packs): Noto and other script
+replacements that the `scripts` pack bundles (85 values), and open families no
+pack bundles (Open Sans, Montserrat, Poppins, Raleway, PT Serif, Playfair
+Display, Bebas Neue, Lora, Merriweather Sans, Source Sans Pro: 19 values, some
+with a script-pack family as well). No value fails because the PPTX names a
+replacement. Head drift since the earlier accepted run (opf-pptx, opf-render,
+core) moves text 798 to 800 and fills 790 to 791; that is not part of this
+change. pptx-gallery `origin/main` moved to `23f9216` (FF-22, reduced charts)
+after the audited `4b48e69` and is not measured here. Results:
+[parity-results-2026-09-29-lookalike-fonts.json](gallery-support/parity/parity-results-2026-09-29-lookalike-fonts.json),
+[scoreboard](gallery-support/parity/PARITY-2026-09-29-lookalike-fonts.md).
+The earlier accepted results and scoreboard are kept unchanged.
 
 The five perfect values are the font schemes `calibri`, `courier-new`,
 `times-new-roman` and `roboto`, plus the content block `kpi-dashboard`.
@@ -137,7 +178,7 @@ slideSize, typefaces and theme pass
 everywhere. Re-import passes for 899; the `photography` snippet, which has no
 asset, loses its background with a specific diagnostic (near).
 
-Per dimension (accepted September 29 graph; slideSize, typefaces and theme pass everywhere):
+Per dimension (accepted September 29 graph, old fontResolution definition, so its fontResolution column counts only real or metric-compatible faces; slideSize, typefaces and theme pass everywhere; the new definition's per-dimension near and fail counts are in the [look-alike run's scoreboard](gallery-support/parity/PARITY-2026-09-29-lookalike-fonts.md)):
 
 | Dimension | Values | perfect | geometry | text | fills | zOrder | reimport | fontResolution | mapping |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -156,9 +197,11 @@ Per dimension (accepted September 29 graph; slideSize, typefaces and theme pass 
 | blocks | 32 | 1 | 30 | 28 | 30 | 32 | 32 | 1 | 32 |
 | image-treatments | 15 (+15 withAssets) | 0 (0) | 15 (15) | 0 (15) | 15 (15) | 15 (15) | 15 (15) | 0 (0) | 15 (15) |
 
-Socials, tones, narratives, languages and the other non-layout metadata
-dimensions now fail only font resolution (visual substitutes, including
-Aptos Display to Carlito and Aptos to Roboto).
+Under the old fontResolution definition, socials, tones, narratives, languages
+and the other non-layout metadata dimensions failed only font resolution
+(visual substitutes, including Aptos Display to Carlito and Aptos to Roboto).
+Under the definition adopted on 2026-09-29 those visual substitutes are near,
+so the same run reports 608 near and 287 mismatch in all.
 
 ### Measurement notes (2026-09-23 re-run)
 
@@ -278,7 +321,7 @@ acceptance keep FF-39 in review.
 
 | Blocker | Check (passed) | Values hit | Fix |
 | --- | --- | --- | --- |
-| The preview uses visual substitutes for Aptos Display (Carlito) and Aptos (Roboto), affecting 754 values. 71 families have no face at all (104 values). | fontResolution (5) | 754+ | FF-31 (core133 and renderer44 merged; policy acceptance remains open) |
+| Under the new fontResolution definition (owner decision 2026-09-29), Aptos Display (Carlito) and Aptos (Roboto) are visual-only replacements: 754 values are near (791 in all across 27 families). 104 values fail because the modelled office-pack preview has no face: 85 values need script-pack faces that the `scripts` pack bundles but the preview does not load, and 19 values name open families no pack bundles (Open Sans, Montserrat, Poppins and others). | fontResolution (5 pass, 791 near, 104 fail) | 791 near, 104 fail | FF-31 metric-compatible open replacements (Intos candidate for Aptos); font bundling PR in progress |
 
 Other recurring parity failures:
 

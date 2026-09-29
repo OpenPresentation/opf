@@ -11,7 +11,10 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const read = async (p) => JSON.parse(await readFile(path.join(here, p), 'utf8'));
 const a = await read('audit-a/results.json');
 const b = await read('audit-b/results.json');
-const p = await read('parity/parity-results.json');
+// The parity run to publish. Default: the run under the owner-decided fontResolution definition (2026-09-29).
+// PARITY_RESULTS=parity/parity-results.json rebuilds the file from the earlier accepted run.
+const PARITY_RESULTS = process.env.PARITY_RESULTS ?? 'parity/parity-results-2026-09-29-lookalike-fonts.json';
+const p = await read(PARITY_RESULTS);
 
 const short = (sha) => (typeof sha === 'string' ? sha.slice(0, 7) : null);
 const shortHeads = (heads, node) => {
@@ -188,7 +191,8 @@ const out = {
       generated: p.meta.generatedAt,
       tolerances: p.meta.tolerances,
       checks: PARITY_CHECKS,
-      results: 'parity/parity-results.json',
+      results: PARITY_RESULTS,
+      ...(p.meta.fontResolution ? { fontResolutionDefinition: p.meta.fontResolution.definition } : {}),
       records: p.results.length,
       withAssetsRecords,
       parityOnlyValues: parityOnly.length,
