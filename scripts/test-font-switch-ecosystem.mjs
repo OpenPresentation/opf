@@ -72,7 +72,7 @@ const decoder = new TextDecoder();
 // ---------------------------------------------------------------------------
 const {registry} = await prepareNodeFonts({pack: 'office', substitutionPolicy: 'visual', scripts: 'all'});
 const EXPECTED_SUBSTITUTIONS = Object.freeze({
-  'Aptos Display': 'Carlito', Aptos: 'Roboto', Calibri: 'Carlito', Georgia: 'Gelasio', Consolas: 'Cousine', 'Courier New': 'Cousine',
+  'Aptos Display': 'Intos Display', Aptos: 'Intos', Calibri: 'Carlito', Georgia: 'Gelasio', Consolas: 'Cousine', 'Courier New': 'Cousine',
   Meiryo: 'Noto Sans JP', 'Yu Gothic': 'Noto Sans JP', 'Microsoft YaHei': 'Noto Sans SC', 'Malgun Gothic': 'Noto Sans KR', 'Microsoft JhengHei': 'Noto Sans TC',
   Mangal: 'Noto Sans Devanagari', 'Arabic Typesetting': 'Noto Naskh Arabic', David: 'Noto Serif Hebrew', 'Angsana New': 'Noto Sans Thai',
   Tahoma: 'Arimo', Verdana: 'Arimo', 'Times New Roman': 'Tinos', Garamond: 'Tinos', Constantia: 'Caladea',
@@ -108,9 +108,9 @@ function schemeClass(scheme) {
 // Members rotate within a class so the sample covers more catalog records. A member the pinned
 // registry cannot preview yet is not drawn; its named expected failure below says why.
 const SCHEME_CLASSES = [
-  {id: 'sans-metric', members: ['calibri']},
+  {id: 'sans-metric', members: ['calibri', 'aptos']},
   {id: 'serif-metric', members: ['times-new-roman']},
-  {id: 'sans-visual', members: ['aptos', 'tahoma', 'verdana']},
+  {id: 'sans-visual', members: ['tahoma', 'verdana']},
   {id: 'serif-visual', members: ['georgia', 'garamond', 'constantia']},
   {id: 'monospace', members: ['consolas', 'courier-new']},
   {id: 'open-google', members: ['roboto', 'open-sans', 'montserrat', 'poppins', 'raleway', 'pt-serif']},
