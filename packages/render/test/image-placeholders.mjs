@@ -31,4 +31,18 @@ const cropped={assets:{a:{src:raster}},design:{imageFill:'crop',header:{right:{i
 const fitted=renderSvg(cropped,{trace:true,strictAssets:true});
 for(const [,attrs]of fitted.matchAll(/<image\b([^>]*)>/g))assert.ok(attrs.includes(attrs.includes('data-opf-path="slides.0.image"')?'preserveAspectRatio="xMidYMid slice"':'preserveAspectRatio="xMidYMid meet"'),'Crop content pictures while fitting complete header/footer/watermark artwork');
 assert.equal([...fitted.matchAll(/<image\b/g)].length,4);
+// FF-38: this is the placeholder contract opf-pptx exports natively (test/image-placeholder.mjs there):
+// a dashed panel, centered semibold "Image unavailable" over the description (alt, else title, else
+// "Image") at 20 px on a 1280x720 canvas, and the group's accessible name.
+const contract=renderSvgDeck({slides:[{image:{src:'./missing.png',alt:'Team photo'}},{image:{src:'./missing.png',title:'Only a title'}},{image:'./missing.png'}]},{trace:true}).join('\n');
+const contractGroups=[...contract.matchAll(/<g\b[^>]*data-opf-asset-status="unresolved"[^>]*>[\s\S]*?<\/g>\s*<\/g>/g)].map(match=>match[0]);
+assert.equal(contractGroups.length,3);
+for(const [index,description]of ['Team photo','Only a title','Image'].entries()){
+ const group=contractGroups[index];
+ assert.ok(group.startsWith(`<g aria-label="Image unavailable: ${description}"`));
+ assert.deepEqual([...group.matchAll(/<text\b[^>]*>([^<]*)<\/text>/g)].map(match=>match[1]),['Image unavailable',description]);
+ for(const [,attrs]of group.matchAll(/<text\b([^>]*)>/g))for(const expected of ['font-size="20"','font-weight="600"','text-anchor="middle"'])assert.ok(attrs.includes(expected),`Placeholder text keeps ${expected}`);
+ assert.ok(group.includes('stroke-dasharray="4 3"')&&group.includes('stroke-width="1"'),'Placeholder panel keeps its 4 3 dashed 1 px border');
+}
+cases++;
 console.log(`Image placeholders passed: ${cases} source-preserving theme, bounded-label/icon, accessible-description, alias override and resolver cases; opacity preserved and asset failures explicit.`);

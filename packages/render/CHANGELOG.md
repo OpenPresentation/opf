@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- FF-38: pin the missing-image placeholder as the contract opf-pptx exports. `test/image-placeholders.mjs` asserts the dashed 1 px panel, the centered semibold 20 px `Image unavailable` label over the description (alt, else title, else `Image`) and the group's `Image unavailable: <description>` accessible name. The preview is unchanged. Before, opf-pptx drew a plain `Image` label at 11 pt, so the gallery parity harness failed the text check for all 15 image-treatment values that have no assets.
+
 - FF-31: the renderer now chooses preview replacements from a snapshot of the core OPF font policy table. The snapshot is `src/font-policy.js`, generated from opf `spec/reference/font-policy.json` by `scripts/update-font-policy.mjs`, with a `--check` option for drift. It exports `FONT_POLICY`, `FONT_POLICY_DECISIONS`, `FONT_POLICY_SOURCE` and `fontPolicyFor`, and `FONT_COMPATIBILITY` is derived from it. Legacy rules stay only for families that the table does not list, and the FF-19 script replacements are unchanged.
   - **Provisional owner decisions (owner may revise):**
     - Aptos → Roboto, measured at a 2.15% mean width difference (signed +0.1%). Before, Aptos previewed with Carlito, which is 7.1% narrower. Aptos Display keeps Carlito.
