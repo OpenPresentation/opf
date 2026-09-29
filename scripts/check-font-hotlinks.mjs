@@ -34,6 +34,9 @@ export const FONT_CDN_HOSTS = [
   dot("use", "fontawesome", "com"),
   dot("kit", "fontawesome", "com"),
   dot("fonts", "adobe", "com"),
+  dot("api", "fontshare", "com"),
+  dot("cdn", "fontshare", "com"),
+  dot("ajax", "googleapis", "com") + "/ajax/libs/webfont",
 ];
 
 const URL_CHARS = String.raw`[^\s"'\x60)<>]*`;
@@ -44,11 +47,29 @@ export const RULES = [
     re: new RegExp(`${escapeRe(dot("cdnjs", "cloudflare", "com"))}/${URL_CHARS}font${URL_CHARS}\\.css`, "i"),
   },
   {
+    // jsDelivr (npm/ and gh/), unpkg and cdnjs: font CSS, or any font file whatever its path.
     id: "package-cdn-font-file",
-    re: new RegExp(`(?:${escapeRe(dot("cdn", "jsdelivr", "net"))}|${escapeRe(dot("unpkg", "com"))})/${URL_CHARS}font${URL_CHARS}\\.(?:css|woff2?|ttf|otf)`, "i"),
+    re: new RegExp(
+      `(?:${escapeRe(dot("cdn", "jsdelivr", "net"))}|${escapeRe(dot("unpkg", "com"))}|${escapeRe(dot("cdnjs", "cloudflare", "com"))})/(?:${URL_CHARS}font${URL_CHARS}\\.css|${URL_CHARS}\\.(?:woff2?|ttf|otf|eot))`,
+      "i",
+    ),
+  },
+  {
+    // A runtime fetch(), import(), XHR or FontFace load of a remote font file.
+    id: "remote-font-fetch",
+    re: new RegExp(
+      String.raw`(?:fetch|import|importScripts|axios\.get|loadFont|FontFace)\s*\(\s*(?:new\s+URL\(\s*)?["'\x60](?:https?:)?//[^"'\x60\s]+\.(?:woff2?|ttf|otf|eot)\b|\.open\s*\(\s*["']GET["']\s*,\s*["'\x60](?:https?:)?//[^"'\x60\s]+\.(?:woff2?|ttf|otf|eot)\b`,
+      "i",
+    ),
   },
   { id: "remote-font-import", re: /@import\s+(?:url\(\s*)?["']?(?:https?:)?\/\/[^"')\s;]*font/i },
   { id: "remote-font-file-in-css", re: /url\(\s*["']?(?:https?:)?\/\/[^)"']+\.(?:woff2?|ttf|otf|eot)\b/i },
+];
+
+// Rules that span lines: matched against the whole file and reported at the line where the match starts.
+export const TEXT_RULES = [
+  // webfontloader pointed at a font service: WebFont.load({ <service>: ... })
+  { id: "webfont-loader", re: /WebFont\.load\s*\(\s*\{[^)]{0,400}?\b(?:google|typekit|fontdeck|monotype)\s*:/i },
 ];
 
 const BINARY_EXTENSIONS = new Set(
@@ -65,6 +86,12 @@ export function scanText(text) {
     for (const rule of RULES) {
       const match = rule.re.exec(lines[i]);
       if (match) findings.push({ line: i + 1, rule: rule.id, match: match[0].slice(0, 120) });
+    }
+  }
+  for (const rule of TEXT_RULES) {
+    const match = rule.re.exec(text);
+    if (match) {
+      findings.push({ line: text.slice(0, match.index).split(/\r?\n/).length, rule: rule.id, match: match[0].replace(/\s+/g, " ").slice(0, 120) });
     }
   }
   return findings;

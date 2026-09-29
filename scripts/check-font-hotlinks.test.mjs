@@ -20,9 +20,22 @@ test("flags each kind of font CDN reference", () => {
     `<link href="https://${host("cdn", "jsdelivr", "net")}/npm/@fontsource/inter/index.css">`,
     `@import url("https://example.test/fo${"nts"}/inter.css");`,
     `@font-face{font-family:X;src:url("https://example.test/assets/x.wo${"ff2"}")}`,
+    `const face = await fetch("https://example.test/assets/x.wo${"ff2"}");`,
+    `const mod = await import('https://example.test/assets/x.tt${"f"}');`,
+    `xhr.open("GET", "https://example.test/assets/x.ot${"f"}");`,
+    `new FontFace("X", await fetch(new URL("https://example.test/x.wo${"ff"}")));`,
+    `<link href="https://${host("api", "fontshare", "com")}/v2/css?f[]=satoshi@1">`,
+    `<script src="https://${host("ajax", "googleapis", "com")}/ajax/libs/webfont/1.6.26/webfont.js"></script>`,
+    `WebFont.load({
+  goo${"gle"}: { families: ["Inter"] },
+});`,
+    `WebFont.load({ typek${"it"}: { id: "abc" } });`,
+    `<link href="https://${host("cdn", "jsdelivr", "net")}/gh/rsms/inter@v4/docs/font-files/InterVariable.wo${"ff2"}">`,
+    `import "https://${host("cdn", "jsdelivr", "net")}/gh/user/repo@1/dist/Brand.wo${"ff"}";`,
+    `<link href="https://${host("unpkg", "com")}/some-pkg/dist/Brand.tt${"f"}">`,
   ];
   for (const sample of samples) assert.ok(scanText(sample).length > 0, `not flagged: ${sample}`);
-  assert.ok(FONT_CDN_HOSTS.length >= 8);
+  assert.ok(FONT_CDN_HOSTS.length >= 11);
 });
 
 test("does not flag bundled files, data URLs or provenance strings", () => {
@@ -32,6 +45,11 @@ test("does not flag bundled files, data URLs or provenance strings", () => {
     `import "@fontsource/inter/400.css";`,
     `"source": "https://github.com/googlefonts/roboto/raw/main/Roboto.ttf"`,
     `@import "./local.css";`,
+    `const face = await fetch("./assets/x.wo${"ff2"}");`,
+    `const face = await fetch("/fonts/x.wo${"ff2"}");`,
+    `"url": "https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/carlito/Carlito-Regular.tt${"f"}"`,
+    `WebFont.load({ custom: { families: ["Local"], urls: ["/fonts.css"] } });`,
+    `import fontUrl from "./fonts/x.wo${"ff2"}?url";`,
   ];
   for (const sample of clean) assert.deepEqual(scanText(sample), [], `false positive: ${sample}`);
 });
