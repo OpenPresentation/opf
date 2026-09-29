@@ -80,6 +80,16 @@ The first exporter keeps the public API stable while using `pptxgenjs` internall
 
 This pass did not require an OPF schema change. The deferred full OOXML placeholder mapping from `docs/plans/layout-placeholders.md` remains a later hand-written OOXML emitter concern.
 
+### Unreleased: explicit ZIP dates
+
+The following behavior is in current source; the published npm `0.9.1` package does not yet contain this repair or tightened option contract.
+
+Omitting `zipDate` (or passing `undefined`) keeps the established fixed 1980 ZIP bytes. Explicit `zipDate` values now encode **UTC calendar fields** in both the PPTX and embedded workbook ZIPs, independently of the host timezone. This option changes ZIP metadata; the separate `timestamp` option controls core-property XML.
+
+Accepted values are a valid `Date`, finite epoch milliseconds, `YYYY-MM-DD` (UTC midnight), or `YYYY-MM-DDTHH:mm[:ss[.fraction]]` ending in `Z` or `±HH:mm`. Calendar components must be valid and the resulting UTC year must be **1980–2099**, matching the existing ZIP writer's supported range. ZIP timestamps have two-second resolution: fractional and odd seconds are truncated.
+
+This intentionally tightens the previous host-dependent `Date` parsing contract. Datetimes without a timezone, legacy date strings, invalid dates, and values outside that range throw `OPFPptxError` with code `invalid-zip-date` and path `options.zipDate`. Explicit `null`, `''` and `0` no longer silently use the default (`0` is a 1970 epoch date). Existing successful UTC output and default output remain byte-identical; explicit dates on other timezones change to the canonical UTC result.
+
 ## v1 Import Mapping
 
 The first importer is mechanical and schema-compatible:

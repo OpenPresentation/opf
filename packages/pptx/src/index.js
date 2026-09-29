@@ -66,6 +66,9 @@ const FIXED_TIMESTAMP = "1980-01-01T00:00:00Z";
 // local components: a UTC instant rolls back to 1979 west of UTC (below
 // fflate's 1980 floor) and would otherwise yield timezone-dependent bytes.
 const FIXED_ZIP_DATE = new Date(1980, 0, 1, 0, 0, 0);
+// Explicit stamps overwrite these fields after ZIP generation. Keep the
+// temporary instant well inside fflate's range even if the host changes TZ.
+const EXPLICIT_ZIP_SENTINEL = new Date('2000-01-01T12:00:00Z');
 const DEFAULT_SEED = 0x4f504658;
 const CANONICAL_SCHEMA = "https://openpresentation.org/schema/opf/v1";
 const EMUS_PER_INCH = 914400;
@@ -1067,7 +1070,8 @@ function resolvePresentationContext(presentation, options) {
   return {
     seed: Number.isInteger(options.seed) ? options.seed : DEFAULT_SEED,
     timestamp: options.timestamp ?? FIXED_TIMESTAMP,
-    zipDate: options.zipDate ? new Date(options.zipDate) : FIXED_ZIP_DATE,
+    zipDate: options.zipDate === undefined ? FIXED_ZIP_DATE : EXPLICIT_ZIP_SENTINEL,
+    zipDateStamp: resolveZipDateStamp(options.zipDate),
     compressionLevel: Number.isInteger(options.compressionLevel) ? options.compressionLevel : 6,
     layoutName: "OPF_CANVAS",
     dimensions,
@@ -2267,10 +2271,10 @@ async function normalizePptxZip(raw, context) {
 
   // Sort after chart/worksheet renaming; source counters can cross digit widths.
   const sortedOutput = Object.fromEntries(Object.keys(output).sort().map(path => [path, output[path]]));
-  return zipSync(sortedOutput, {
+  return stampGeneratedZip(zipSync(sortedOutput, {
     level: context.compressionLevel,
     mtime: context.zipDate
-  });
+  }), context.zipDateStamp);
 }
 
 function normalizeCoreProperties(xml, timestamp) {
@@ -2499,10 +2503,82 @@ function normalizeNestedZip(bytes, context) {
       mtime: context.zipDate
     }];
   }
-  return zipSync(output, {
+  return stampGeneratedZip(zipSync(output, {
     level: context.compressionLevel,
     mtime: context.zipDate
-  });
+  }), context.zipDateStamp);
+}
+
+// Explicit ZIP dates use UTC calendar fields. fflate clones mtime and reads
+// local fields, so passing a Date cannot express this reliably (including DST
+// gaps and skipped civil days). Leave the established default path unchanged.
+function resolveZipDateStamp(value) {
+  if (value === undefined) return null;
+  const invalid = () => {
+    throw new OPFPptxError('invalid-zip-date', 'zipDate must be a valid Date, finite epoch milliseconds, an ISO date, or an ISO datetime with Z/offset, within UTC years 1980–2099.', {path: 'options.zipDate'});
+  };
+  let time;
+  if (typeof value === 'string') {
+    const match = /^(\d{4})-(\d{2})-(\d{2})(?:T(\d{2}):(\d{2})(?::(\d{2})(?:\.(\d+))?)?(Z|[+-]\d{2}:\d{2}))?$/.exec(value);
+    if (!match) invalid();
+    const [, year, month, day, hour = '00', minute = '00', second = '00', fraction = '', zone = 'Z'] = match;
+    const parts = [year, month, day, hour, minute, second].map(Number);
+    if (parts[1] < 1 || parts[1] > 12 || parts[2] < 1 || parts[3] > 23 || parts[4] > 59 || parts[5] > 59) invalid();
+    const date = new Date(0);
+    date.setUTCFullYear(parts[0], parts[1] - 1, parts[2]);
+    date.setUTCHours(parts[3], parts[4], parts[5], Number(fraction.slice(0, 3).padEnd(3, '0')));
+    if (date.getUTCFullYear() !== parts[0] || date.getUTCMonth() !== parts[1] - 1 || date.getUTCDate() !== parts[2]) invalid();
+    const offsetHours = zone === 'Z' ? 0 : Number(zone.slice(1, 3));
+    const offsetMinutes = zone === 'Z' ? 0 : Number(zone.slice(4, 6));
+    if (offsetHours > 23 || offsetMinutes > 59) invalid();
+    const offset = (offsetHours * 60 + offsetMinutes) * (zone[0] === '-' ? -1 : 1);
+    time = date.getTime() - offset * 60000;
+  } else if (typeof value === 'number') {
+    time = value;
+  } else {
+    // The native brand check accepts cross-realm Dates without coercing objects.
+    try { time = Date.prototype.getTime.call(value); } catch { invalid(); }
+  }
+  const date = new Date(time);
+  const year = date.getUTCFullYear();
+  if (!Number.isFinite(time) || !Number.isFinite(year) || year < 1980 || year > 2099) invalid();
+  return (((year - 1980) << 25) | ((date.getUTCMonth() + 1) << 21) | (date.getUTCDate() << 16) |
+    (date.getUTCHours() << 11) | (date.getUTCMinutes() << 5) | (date.getUTCSeconds() >> 1)) >>> 0;
+}
+
+function stampGeneratedZip(bytes, stamp) {
+  if (stamp === null) return bytes;
+  const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+  const fail = () => { throw new OPFPptxError('packaging-failed', 'Generated ZIP headers could not be timestamped safely.'); };
+  const end = bytes.length - 22;
+  if (end < 0 || view.getUint32(end, true) !== 0x06054b50 || view.getUint16(end + 4, true) !== 0 ||
+    view.getUint16(end + 6, true) !== 0 || view.getUint16(end + 20, true) !== 0) fail();
+  const count = view.getUint16(end + 10, true);
+  const start = view.getUint32(end + 16, true);
+  if (count !== view.getUint16(end + 8, true) || start + view.getUint32(end + 12, true) !== end) fail();
+  const positions = [];
+  let central = start, localEnd = 0;
+  for (let i = 0; i < count; i++) {
+    if (central + 46 > end || view.getUint32(central, true) !== 0x02014b50) fail();
+    const nameSize = view.getUint16(central + 28, true);
+    const next = central + 46 + nameSize + view.getUint16(central + 30, true) + view.getUint16(central + 32, true);
+    const local = view.getUint32(central + 42, true);
+    if (next > end || local !== localEnd || local + 30 > start || view.getUint32(local, true) !== 0x04034b50 ||
+      view.getUint16(local + 26, true) !== nameSize || view.getUint16(central + 34, true) !== 0) fail();
+    const content = local + 30 + nameSize + view.getUint16(local + 28, true);
+    localEnd = content + view.getUint32(central + 20, true);
+    if (content > start || localEnd > start || view.getUint32(local + 18, true) !== view.getUint32(central + 20, true) ||
+      view.getUint32(local + 14, true) !== view.getUint32(central + 16, true) ||
+      view.getUint32(local + 22, true) !== view.getUint32(central + 24, true) ||
+      view.getUint16(local + 6, true) !== view.getUint16(central + 8, true) ||
+      view.getUint16(local + 8, true) !== view.getUint16(central + 10, true)) fail();
+    for (let j = 0; j < nameSize; j++) if (bytes[local + 30 + j] !== bytes[central + 46 + j]) fail();
+    positions.push(local + 10, central + 12);
+    central = next;
+  }
+  if (central !== end || localEnd !== start) fail();
+  for (const position of positions) view.setUint32(position, stamp, true);
+  return bytes;
 }
 
 function escapeRegExp(value) {

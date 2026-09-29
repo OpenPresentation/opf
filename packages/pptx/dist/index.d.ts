@@ -58,6 +58,14 @@ export interface ToPptxOptions {
   seed?: number;
   strictAssets?: boolean;
   timestamp?: string;
+  /**
+   * ZIP calendar timestamps, including embedded workbooks, use UTC fields at
+   * two-second resolution. Omitted/undefined retains the fixed 1980 default.
+   * Accepts a valid Date, finite epoch milliseconds, YYYY-MM-DD (UTC midnight),
+   * or YYYY-MM-DDTHH:mm[:ss[.fraction]] with Z or ±HH:mm. UTC years 1980–2099 only.
+   * Ambiguous/legacy strings and invalid/out-of-range values throw OPFPptxError
+   * at options.zipDate; null, empty string and zero no longer choose the default.
+   */
   zipDate?: string | number | Date;
   /**
    * Today's calendar date (ISO YYYY-MM-DD) for `date: true` header/footer fields. The exporter never
