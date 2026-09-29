@@ -30,6 +30,7 @@ The cross-repo program tracker lives in core at [docs/programs/font-fidelity-eve
 - `test/native-playground.ps1` opens desktop PowerPoint. Only the root session runs it, on the Windows host; agents do not. Never kill Office or retry a native attempt in place.
 - Browser playground results are browser behavior evidence, not native PowerPoint raster equivalence. The PPTX download does not embed font binaries.
 - No package publish or version bump outside the release process.
+- Fonts: bundle pinned files, never hotlink font CDNs; every bundled face records a verified permissive license (OFL-1.1, Apache-2.0, MIT or UFL-1.0 only), see [Font files: bundling and licenses](https://github.com/OpenPresentation/opf/blob/main/docs/programs/font-fidelity-everywhere/font-licensing.md#font-files-bundling-and-licenses). The editor ships no font files of its own: it loads the renderer's verified registry, and the playground embeds those bytes. `npm run check:font-hotlinks` fails on any font CDN reference in tracked files (allowlist: `scripts/font-hotlink-allowlist.json`); `npm run check:font-hotlinks:built` scans `dist` and the built playground and runs in `test:playground`.
 
 ## Fidelity and scope
 
