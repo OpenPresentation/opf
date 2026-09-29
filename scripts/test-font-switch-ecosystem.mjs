@@ -109,9 +109,9 @@ function schemeClass(scheme) {
 // registry cannot preview yet is not drawn; its named expected failure below says why.
 const SCHEME_CLASSES = [
   {id: 'sans-metric', members: ['calibri']},
-  {id: 'serif-metric', members: ['times-new-roman']},
+  {id: 'serif-metric', members: ['times-new-roman', 'georgia']},
   {id: 'sans-visual', members: ['aptos', 'tahoma', 'verdana']},
-  {id: 'serif-visual', members: ['georgia', 'garamond', 'constantia']},
+  {id: 'serif-visual', members: ['garamond', 'constantia']},
   {id: 'monospace', members: ['consolas', 'courier-new']},
   {id: 'open-google', members: ['roboto', 'open-sans', 'montserrat', 'poppins', 'raleway', 'pt-serif']},
   {id: 'east-asian', members: ['meiryo', 'yu-gothic', 'microsoft-yahei', 'malgun-gothic']},
@@ -982,4 +982,4 @@ const seconds = (Date.now() - started) / 1000;
 assert.ok(seconds < MAX_SECONDS, `the matrix took ${seconds} s; its CI budget is ${MAX_SECONDS} s`);
 await mkdir(new URL('../artifacts/font-switch-matrix/', import.meta.url), {recursive: true});
 await writeFile(new URL('../artifacts/font-switch-matrix/report.json', import.meta.url), `${JSON.stringify({seed: matrix.seed, decks: matrix.rows.length, factors: FACTORS, rows: matrix.rows, chainLanguages: CHAIN_LANGUAGES, pendingSchemes, chartPaths, previewApproximatedCharts: chartPaths.filter((path) => !path.previewNative).map((path) => path.id), exportFallbackCharts: Object.keys(EXPORT_FALLBACK), expectedFailures: EXPECTED_FAILURES.map(({id, reason, preview, measuredExport}) => ({id, reason, preview, measuredExport})), substitutions: substitutionsSeen, unusedExpectations, states: stateReports}, null, 1)}\n`);
-console.log(`Font switch matrix passed: ${matrix.rows.length} pairwise decks and ${switches - matrix.rows.length} fixed switches, ${stateReports.length} verified states, ${chartPaths.length} chart paths, ${Object.keys(substitutionsSeen).length} recorded substitutions, ${EXPECTED_FAILURES.length + 1} named expected failures, ${seconds.toFixed(1)} s.`);
+console.log(`Font switch matrix passed: ${matrix.rows.length} pairwise decks and ${switches - matrix.rows.length} fixed switches, ${stateReports.length} verified states, ${chartPaths.length} chart paths, ${Object.keys(substitutionsSeen).length} recorded substitutions, ${EXPECTED_FAILURES.length} named expected failures, ${seconds.toFixed(1)} s.`);
