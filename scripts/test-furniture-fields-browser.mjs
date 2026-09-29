@@ -33,7 +33,7 @@ import {resolvePresentation, renderSvg} from '@openpresentation/opf-render/svg';
 import {toPptx, fromPptx} from '@openpresentation/opf-pptx';
 window.mount = async ({deck, faces, date, paginate}) => {
   window.canvasEditor?.destroy(); window.fonts?.dispose(); window.unsubscribe?.();
-  window.failures = []; window.events = []; window.lastExport = null; window.lastImport = null;
+  window.failures = []; window.events = []; window.lastExport = null; window.lastImport = null; window.exportDiagnostics = [];
   window.authored = deck;
   window.fonts = await loadBrowserFontRegistry(faces.map(face => ({...face,
     data: Uint8Array.from(atob(face.dataUrl.split(',')[1]), c => c.charCodeAt(0))
@@ -59,8 +59,9 @@ window.mount = async ({deck, faces, date, paginate}) => {
   });
   action('export', async () => {
     if (!canvasEditor.commit()) throw Error('Export refused an uncommitted draft.');
-    window.lastExport = null; window.lastImport = null;
-    const options = {...renderOptions, seed: 7, timestamp: '2026-01-01T00:00:00Z', zipDate: '2026-01-01T00:00:00Z'};
+    window.lastExport = null; window.lastImport = null; window.exportDiagnostics = [];
+    const options = {...renderOptions, seed: 7, timestamp: '2026-01-01T00:00:00Z', zipDate: '2026-01-01T00:00:00Z',
+      onDiagnostic: issue => exportDiagnostics.push(issue)};
     window.lastExport = await toPptx(editor.document, options);
     window.lastImport = await fromPptx(lastExport);
   });
@@ -124,7 +125,7 @@ function cacheRows(bytes) {
       .flatMap(shape => [...shape.matchAll(/<a:p>[\s\S]*?<\/a:p>/g)].map(match => [...match[0].matchAll(/<a:(r|fld)\b([^>]*)>[\s\S]*?<a:t>([^<]*)<\/a:t><\/a:\1>/g)]
         .map(([, kind, attributes, text]) => ({text, ...(kind === 'fld' ? {type: attributes.match(/type="([^"]+)"/)[1]} : {})}))))}));
 }
-function verifyCaches(rows, document, date, hidden) {
+function verifyCaches(rows, document, date, hidden, wrapped = false) {
   assert.equal(rows.length, document.slides.length);
   for (const [index, row] of rows.entries()) {
     const runs = row.paragraphs.flat();
@@ -135,7 +136,12 @@ function verifyCaches(rows, document, date, hidden) {
       continue;
     }
     assert.deepEqual(numbers, [{text: String(index + 1), type: 'slidenum'}]);
-    assert.deepEqual(dates, [{text: currentText(date), type: 'datetime4'}]);
+    assert.deepEqual(dates, wrapped ? [] : [{text: currentText(date), type: 'datetime4'}]);
+    if (wrapped) {
+      const numberIndex = runs.findIndex(run => run.type === 'slidenum');
+      assert.deepEqual(runs.slice(numberIndex - 2, numberIndex), [{text: 'September '}, {text: currentText(date).slice(10)}],
+        'Static wrapped date lines retain exact words and reading order before the slide number.');
+    }
     assert.ok(row.paragraphs.some(parts => parts.map(run => run.text).join('') === 'Apr 23, 2026'));
     assert.ok(row.paragraphs.some(parts => parts.map(run => run.text).join('') === `${index + 1} / ${document.slides.length}`));
   }
@@ -182,17 +188,19 @@ async function inspectAll(date, total, hidden) {
   }
   return states;
 }
-async function exportAndCheck(name, date, hidden, source) {
+async function exportAndCheck(name, date, hidden, source, wrapped = false) {
   await page.getByRole('button', {name: 'Export', exact: true}).click();
   await page.waitForFunction(() => lastImport !== null || failures.length > 0);
   assert.deepEqual(await page.evaluate(() => failures), []);
-  const result = await page.evaluate(() => ({bytes: Array.from(lastExport), imported: lastImport, source: editor.document}));
+  const result = await page.evaluate(() => ({bytes: Array.from(lastExport), imported: lastImport, source: editor.document, diagnostics: exportDiagnostics}));
   assert.deepEqual(result.source, source);
   const bytes = Uint8Array.from(result.bytes), rows = cacheRows(bytes);
-  latestExport = {file: `${name}.pptx`, sha256: hash(bytes), rows, imported: result.imported};
+  latestExport = {file: `${name}.pptx`, sha256: hash(bytes), rows, imported: result.imported, diagnostics: result.diagnostics};
   await writeFile(path.join(output, latestExport.file), bytes);
   await writeFile(path.join(output, `${name}-cache.json`), JSON.stringify(latestExport, null, 2) + '\n');
-  verifyCaches(rows, source, date, hidden);
+  verifyCaches(rows, source, date, hidden, wrapped);
+  assert.deepEqual(result.diagnostics.map(({code, path}) => ({code, path})), wrapped
+    ? source.slides.filter((_, index) => !(hidden && index === 0)).map(() => ({code: 'furniture-field-fixed', path: 'design.footer.center.date'})) : []);
   assert.deepEqual(result.imported.design.footer, source.design.footer);
   assert.deepEqual(result.imported.design.header, source.design.header);
   assert.deepEqual(result.imported.slides.map(slide => slide.design?.footer), source.slides.map(slide => slide.design?.footer));
@@ -212,11 +220,13 @@ try {
   await page.setContent('<button id="previous">Previous</button><button id="next">Next</button><button id="undo">Undo</button><button id="redo">Redo</button><button id="date">Next host date</button><button id="export">Export</button><div id="canvas" style="width:900px"></div>');
   await page.addScriptTag({content: bundle});
   const footer = {left: {date: '2026-04-23', dateFormat: 'MMM d, yyyy'}, center: {date: true, dateFormat: 'MMMM d, yyyy'}, right: {slideNumber: true, slideNumberFormat: '{current} / {total}'}};
-  for (const [name, width, height, paginate] of [['wide', 1280, 720, false], ['portrait', 720, 1280, false], ['paginated', 1280, 720, true]]) {
+  for (const [name, width, height, paginate, wrapped] of [['wide', 1280, 720, false, false], ['portrait', 720, 1280, false, false],
+    ['paginated', 1280, 720, true, false], ['portrait-wrapped', 720, 1280, false, true]]) {
     activeCase = name;
     const deck = {design: {fontScheme: 'roboto', dimensions: {widthInches: width / 96, heightInches: height / 96}, header: {left: {text: '  Review\tcopy  \r\n'}}, footer},
       slides: paginate ? [{title: 'Paginated fields', text: 'First sentence with enough detail. '.repeat(160)}, {title: 'Last slide', text: 'Last source body.'}]
         : [{title: 'Hidden title footer', text: 'The title still counts.', design: {footer: false}}, {title: 'Second slide', text: 'Authored second body.'}, {title: 'Third slide', text: 'Authored third body.'}]};
+    if (wrapped) for (const slide of deck.slides.slice(1)) slide.composition = {minFontSize: 32, overflow: 'error'};
     const original = structuredClone(deck);
     await page.evaluate(args => mount(args), {deck, faces: registry.embeddedFonts, date: '2026-09-22', paginate});
     const mounted = await page.evaluate(() => ({source: editor.document, authored, pagination, canUndo: editor.canUndo, canRedo: editor.canRedo, events}));
@@ -225,6 +235,9 @@ try {
     if (paginate) {assert.ok(total > deck.slides.length); verifyMappings(original, mounted.pagination);}
     else assert.deepEqual(mounted.source, original);
     const before = await inspectAll('2026-09-22', total, !paginate);
+    if (wrapped) for (const state of before.slice(1)) {
+      assert.deepEqual(state.geometry.furniture.parts.find(part => part.field === 'date' && part.zone === 'center').fit.lines, ['September ', '22, 2026']);
+    }
     // Real canvas edit and ordinary undo/redo must preserve generated field settings.
     const target = page.locator('[data-canvas-target][data-opf-path="design.header.left.text"]');
     await target.dblclick(); const input = page.getByRole('textbox', {name: 'Edit text inline', exact: true});
@@ -233,15 +246,18 @@ try {
     assert.equal(edited.design.header.left.text, '  Reviewed\tcopy  \r\n'); assert.deepEqual(edited.design.footer, footer);
     await page.getByRole('button', {name: 'Undo', exact: true}).click(); assert.deepEqual(await page.evaluate(() => editor.document), mounted.source);
     await page.getByRole('button', {name: 'Redo', exact: true}).click(); assert.deepEqual(await page.evaluate(() => editor.document), edited);
-    const exported = await exportAndCheck(`${name}-first-date`, '2026-09-22', !paginate, edited);
+    const exported = await exportAndCheck(`${name}-first-date`, '2026-09-22', !paginate, edited, wrapped);
     await page.getByRole('button', {name: 'Undo', exact: true}).click();
     const historyBefore = await page.evaluate(() => {window.savedEditor = editor; return {source: editor.document, canUndo: editor.canUndo, canRedo: editor.canRedo, events};});
     await page.getByRole('button', {name: 'Next host date', exact: true}).click();
     const historyAfter = await page.evaluate(() => ({sameSession: savedEditor === editor, source: editor.document, canUndo: editor.canUndo, canRedo: editor.canRedo, events}));
     assert.equal(historyAfter.sameSession, true); delete historyAfter.sameSession; assert.deepEqual(historyAfter, historyBefore);
     const after = await inspectAll('2026-09-23', total, !paginate);
-    const updated = await exportAndCheck(`${name}-second-date`, '2026-09-23', !paginate, mounted.source);
-    assert.throws(() => verifyCaches(updated.rows, mounted.source, '2026-09-22', !paginate), assert.AssertionError);
+    if (wrapped) for (const state of after.slice(1)) {
+      assert.deepEqual(state.geometry.furniture.parts.find(part => part.field === 'date' && part.zone === 'center').fit.lines, ['September ', '23, 2026']);
+    }
+    const updated = await exportAndCheck(`${name}-second-date`, '2026-09-23', !paginate, mounted.source, wrapped);
+    assert.throws(() => verifyCaches(updated.rows, mounted.source, '2026-09-22', !paginate, wrapped), assert.AssertionError);
     controls.push({case: name, wrongHostDateRejected: true});
     if (paginate) {
       const fields = after[0].geometry.furniture.parts.filter(part => part.kind === 'footer').map(part => part.text);
@@ -260,8 +276,8 @@ try {
   assert.equal(refused.invalid?.name, 'RangeError'); controls.push({refused});
   assert.deepEqual(errors, []); assert.deepEqual(requests, []); assert.deepEqual(await page.evaluate(() => failures), []);
   await writeFile(path.join(output, 'report.json'), JSON.stringify({...binding, results, controls, errors, requests,
-    scope: 'Three offline installed-candidate workflows: explicit host date, actual SVG source ranges, generated-field editability, hidden-title count, native PPTX cached fields, source-preserving edit/undo and final pagination mappings. No native PowerPoint refresh/save/reopen, registry floor, raw JSON lexical preservation or general parity claim.'}, null, 2) + '\n');
-  console.log('Installed furniture fields passed: 3 browser workflows, shared host dates, final totals, actual source ranges, edit/undo, cached PPTX fields and refusal/oracle controls.');
+    scope: 'Four offline installed-candidate workflows: explicit host date, actual SVG source ranges, generated-field editability, hidden-title count, native PPTX cached fields, static wrapped-date diagnostics and unchanged OPF intent recovery, source-preserving edit/undo and final pagination mappings. No native PowerPoint refresh/save/reopen, registry floor, raw JSON lexical preservation or general parity claim.'}, null, 2) + '\n');
+  console.log('Installed furniture fields passed: 4 browser workflows, shared host dates, final totals, actual source ranges, edit/undo, cached PPTX fields, static wrapped-date recovery and refusal/oracle controls.');
 } catch (error) {
   await writeFile(path.join(output, 'failure.json'), JSON.stringify({...binding, activeCase, message: error.message, stack: error.stack, lastSnapshot, latestExport, results, controls, errors, requests}, null, 2) + '\n');
   try {await page?.screenshot({path: path.join(output, 'failure-page.png'), fullPage: true});} catch { /* Original failure remains authoritative. */ }

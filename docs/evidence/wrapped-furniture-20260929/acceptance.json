@@ -1,0 +1,221 @@
+{
+  "schemaVersion": 1,
+  "preparedAt": "2026-09-29T11:01:42.292854+00:00",
+  "purpose": "Derived compact receipt for local installed furniture acceptance and accepted predecessor checks. Original logs, ZIPs, source inventories, screenshots and first failures are retained in the private durable archive; this receipt does not replace them.",
+  "acceptedCoreBase": "de88f4e0607ef099f41c96331b1c353502ba7cec",
+  "candidateFiles": {
+    "scripts/test-furniture-fields-browser.mjs": {
+      "sha256": "00189fa75e54c30897180eec8357826dcb651457ecb2d775f04cc2814aca8936",
+      "bytes": 21926
+    },
+    "spec/schemas/opf.schema.json": {
+      "sha256": "e01deb515b4410cbe4550c0106279a0b66bbb2fcc74f40a9f829431f07292a8c",
+      "bytes": 149108
+    },
+    "scripts/test-packed-ecosystem.mjs": {
+      "sha256": "bc8cb46d536354450b6bb30d5b9d36c297779071b4716f2821216284c0f46ce4",
+      "bytes": 31619
+    },
+    ".github/workflows/ecosystem-ci.yml": {
+      "sha256": "4163f57c018a1179fa9d7d7e9b05e77f2392ce3a3c072d670390e287c0259d75",
+      "bytes": 8219
+    }
+  },
+  "graph": {
+    "opf-render": "6c7d7818e40d0f9c519e4b34f7a24e9150c1787f",
+    "opf-editor": "d0c95a16b50eccb3eee695ace44cc6c3a6754f2f",
+    "opf-pptx": "f91fbf82f7407b669ae159435aa4d7925ac51832"
+  },
+  "localRuntime": {
+    "node": "v24.21.0",
+    "platform": "darwin",
+    "browser": "153.0.8010.12",
+    "mode": "installed-candidate",
+    "verifierSha256": "00189fa75e54c30897180eec8357826dcb651457ecb2d775f04cc2814aca8936",
+    "lockSha256": "d41d8c00ce92d4c0a8fa0f49e3b184ca16fa0134a25a522bb5bb401e9541c47b",
+    "bundleSha256": "5e9df9fe092c79d260e6ea1e5b34bb1f5f334ca37531056c9cf4617c7a8585f7"
+  },
+  "localResults": {
+    "coreModelTests": 707,
+    "cliNodeTests": 16,
+    "textIntegrityControls": 4,
+    "typecheck": 0,
+    "lint": 0,
+    "coreTest": 0,
+    "packageSequential": 0,
+    "wrappedSourceGroups": 19,
+    "wrappedInstalledGroups": 19,
+    "packedCLICommands": 81,
+    "browserCases": 4,
+    "browserPositiveAttempts": 1,
+    "networkRequests": 0,
+    "pageErrors": 0,
+    "independentZipXmlExports": 8,
+    "screenshotsReviewed": 4
+  },
+  "localInputCounts": {
+    "negative": 14581,
+    "positive": 14582
+  },
+  "negativeControl": {
+    "pptx": "357171a5ceb798ccd550207ec365b08a694c5d6d",
+    "exitCode": 1,
+    "passedCases": 3,
+    "firstFailure": "Expected two furniture-field-fixed diagnostics; got none in portrait-wrapped.",
+    "capturedImportAlsoLostGeneratedDate": true,
+    "rerun": false
+  },
+  "orchestrationFailure": "Initial packages check overlapped pnpm test rebuilding/cleaning core dist and failed resolving a generated chunk. Original logs/timestamps remain; sequential unchanged package run passed. Exact instant not instrumented.",
+  "preparationFailure": "Identical-tree squash ancestry could not fast-forward; additive no-commit integration used without dropping prepared edits.",
+  "goldens": {
+    "decks": 126,
+    "slides": 805,
+    "changed": 0
+  },
+  "preservedFailures": true,
+  "acceptedCI": {
+    "core152": {
+      "original": [
+        36555305435,
+        36555305454
+      ],
+      "postmerge": [
+        36556931351,
+        36556931527
+      ],
+      "conclusion": "success; original attempts, all steps",
+      "sourceCommit": "de88f4e0607ef099f41c96331b1c353502ba7cec"
+    },
+    "pptx84": {
+      "original": [
+        36556325988
+      ],
+      "conclusion": "Linux and Windows success; original attempt, all steps",
+      "reviewedCommit": "155c82f27256cb91285773e0d9f99a167ab5c3c8",
+      "acceptedCommit": "f91fbf82f7407b669ae159435aa4d7925ac51832",
+      "identicalTree": "7fdf9d0a3fb4422112e8a93b8b2e63d3edf19ce3",
+      "postmerge": [
+        36557698682
+      ],
+      "postmergeConclusion": "Linux and Windows success; original attempt, all steps, acceptedf91 exact reviewed tree"
+    }
+  },
+  "publishedRegistryMetadata": {
+    "capturedAt": "2026-09-29T10:51:22.546762+00:00",
+    "source": "npm official registry latest metadata; read-only, no package publish or install",
+    "packages": [
+      {
+        "package": "@openpresentation/opf",
+        "version": "0.11.0",
+        "url": "https://registry.npmjs.org/@openpresentation%2fopf/latest",
+        "bytes": 4009,
+        "sha256": "9223c813f2734d1524907cd7609e9125a4a83edb1c553614b156123c912da710",
+        "integrity": "sha512-7Gm/FSyiGngHRkDG0SPL8V6FEC5nC8UpoffNWf8CqkyjXsqQ2BUIzVAEwHwKjEsEZ04FR2DT+Ohh8PJofNPFiw==",
+        "tarball": "https://registry.npmjs.org/@openpresentation/opf/-/opf-0.11.0.tgz"
+      },
+      {
+        "package": "@openpresentation/cli",
+        "version": "0.9.0",
+        "url": "https://registry.npmjs.org/@openpresentation%2fcli/latest",
+        "bytes": 2348,
+        "sha256": "171801fda53e72d88bb1b887656d14cfc2adbe28a4d180f52e70a0497918b9f1",
+        "integrity": "sha512-YR0zhGe0fpcKp617Aqjz6ZIql0fsNrMVcSW84tEkMBc/9DLxLFAyxJLkExorOrfFYanhvWmhoRG94x3AuMTvpQ==",
+        "tarball": "https://registry.npmjs.org/@openpresentation/cli/-/cli-0.9.0.tgz"
+      },
+      {
+        "package": "@openpresentation/opf-render",
+        "version": "0.9.0",
+        "url": "https://registry.npmjs.org/@openpresentation%2fopf-render/latest",
+        "bytes": 6088,
+        "sha256": "3fd1498caa177b2e77325cc008ae4ea76fd543f0f88aa625495ef88a0ae73a87",
+        "integrity": "sha512-uHWABof7cuLmTAglctvcjuV5dRyIa2qmeGdwONIuKCAnNQXjAOQKXido9OcyGtk6xFjzBFtLtvD3sZOwPEJIJA==",
+        "tarball": "https://registry.npmjs.org/@openpresentation/opf-render/-/opf-render-0.9.0.tgz"
+      },
+      {
+        "package": "@openpresentation/opf-pptx",
+        "version": "0.9.1",
+        "url": "https://registry.npmjs.org/@openpresentation%2fopf-pptx/latest",
+        "bytes": 6002,
+        "sha256": "a76baa5ff1d3ecaad80fafb7757c00b07e7957f4b888858f564ef4421fe3903d",
+        "integrity": "sha512-krzDAKjDByP2zsoR4VeyyIwU7uhcVbxpeBYEIw7vlkoRWWiFq170rhQzQZx5lbMD7u2magYEkdUt3rUgByCKjw==",
+        "tarball": "https://registry.npmjs.org/@openpresentation/opf-pptx/-/opf-pptx-0.9.1.tgz"
+      },
+      {
+        "package": "@openpresentation/opf-editor",
+        "version": "0.8.0",
+        "url": "https://registry.npmjs.org/@openpresentation%2fopf-editor/latest",
+        "bytes": 5911,
+        "sha256": "7d50e49f3938dfd99ce1cc71b632d2a7499b2c794d576880caafc3ec51cf7f9a",
+        "integrity": "sha512-cSx6DkfK4N95Zk3lvCBxhQePWIIgBDvON4hcKLvELulpbKiYnvmoAb07LJE4pbXGE0npUdmU/r25TShdtOcR4A==",
+        "tarball": "https://registry.npmjs.org/@openpresentation/opf-editor/-/opf-editor-0.8.0.tgz"
+      }
+    ]
+  },
+  "originalEvidenceManifests": [
+    {
+      "bundle": "furniture-wrapped-field-probe",
+      "manifestSha256": "a7648560564e7f418e34445b7d1085303c5619face9b705a0c13ceda163f2d4c",
+      "entries": 10
+    },
+    {
+      "bundle": "furniture-wrapped-date-repair/evidence",
+      "manifestSha256": "275d894addfebd3545f177464b02270c951468a810ad5b7f164da8c70c91043b",
+      "entries": 44
+    },
+    {
+      "bundle": "furniture-wrapped-date-repair/ci",
+      "manifestSha256": "6ee23c6dacae07c7df9b7f5235433041f115bb3f95994602f3bdffada7993cac",
+      "entries": 38
+    },
+    {
+      "bundle": "pptx84-merge",
+      "manifestSha256": "16f9e85ae52d6c2cc2c2bd9079dfdfa57b3fd30027bb1f05b52feb90e13ea7fb",
+      "entries": 4
+    },
+    {
+      "bundle": "core152-postmerge-ci",
+      "manifestSha256": "a9a2325f9a59aed24d69d66f93ff14d6cdfabcd1719e1d8813813bcb6df65b78",
+      "entries": 42
+    },
+    {
+      "bundle": "furniture-wrapped-contract/review-evidence",
+      "manifestSha256": "3903bfbb268a08f2912aa9da3ab8f6e18db8a5e178119a5dc1debfe43bfd1384",
+      "entries": 122
+    },
+    {
+      "bundle": "furniture-wrapped-contract-independent-review",
+      "manifestSha256": "c29dffdfde3e7c93269beef314620dbe7848235d2c6884b80c8b28ff3b4c3978",
+      "entries": 1
+    },
+    {
+      "bundle": "furniture-wrapped-contract/handoff-proposal-review",
+      "manifestSha256": "7ef29ce221a2e2f44b975b9f67c3ce3bbdf95ee2c8b655cad47bdb8873b92627",
+      "entries": 4
+    },
+    {
+      "bundle": "registry-latest-snapshot",
+      "manifestSha256": "f4673f356cc096d155eab40d25ab96f0341949271e99fdfeb6aeccb6f8ba0e29",
+      "entries": 6
+    },
+    {
+      "bundle": "pptx84-postmerge-ci",
+      "manifestSha256": "8eeb50825f4f63c9560ee4bcbcf860c8396db2cd3c2335acba55a131dc4eee57",
+      "entries": 35
+    }
+  ],
+  "limits": [
+    "Local Node24/macOS installed candidate tarballs, not registry minimum-floor acceptance or a package release.",
+    "Static wrapped date emits diagnostics and remains static native text. Only unchanged supported full-provenance date intent is recovered on OPF import.",
+    "No PowerPoint/COM, field refresh/save/reopen, physical-font/embedding/general geometry fidelity or tolerance changes.",
+    "The local record precedes GitHub acceptance of this coordinated core change. Its associated pull request records fresh exact-head CI and review; local success alone does not authorize publication."
+  ],
+  "originalZipPreservation": {
+    "totalEntries": 62,
+    "fileEntries": 43,
+    "directoryEntries": 19,
+    "changedTagFiles": 2,
+    "unchangedFiles": 41,
+    "unchangedDirectories": 19,
+    "clarification": "Earlier frozen reports called all60 unchanged ZIP members parts;19 are directory entries. Every native drawing/text/media/theme file remains unchanged."
+  }
+}
