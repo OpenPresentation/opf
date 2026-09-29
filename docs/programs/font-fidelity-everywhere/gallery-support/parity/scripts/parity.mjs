@@ -11,6 +11,7 @@ import {fileURLToPath, pathToFileURL} from 'node:url';
 import {createRequire} from 'node:module';
 import {classifyFontResolution, legacyPasses, pptxNaming} from './font-resolution.mjs';
 import {runElements} from './pptx-runs.mjs';
+import {drawnTableBox} from './table-box.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(here, '..');
@@ -366,7 +367,7 @@ async function parity(doc) {
       for (const s of G.px.filter(s => s.box && (s.chart || s.table || s.image || s.name.startsWith('OPF card')))) {
         const it = items.find(i => i.path === key) ?? (key === siKey && s.image ? {box: null} : null); if (!it) continue;
         const pvImage = s.image ? G.pv.find(e => e.kind === 'image') : null;
-        let ref = s.name.startsWith('OPF card') ? it.frame : s.image ? (pvImage ?? it.box) : it.box; if (!ref) continue;
+        let ref = s.name.startsWith('OPF card') ? it.frame : s.image ? (pvImage ?? it.box) : s.table ? (drawnTableBox(G.pv, key) ?? it.box) : it.box; if (!ref) continue;
         if (s.image && ref === pvImage && (pvImage.intrinsic || /^none/.test(pvImage.par))) { const p = placedImage(pvImage), x = Math.max(ref.x, p.x), y = Math.max(ref.y, p.y); ref = {x, y, w: Math.min(ref.x + ref.w, p.x + p.w) - x, h: Math.min(ref.y + ref.h, p.y + p.h) - y}; }
         const sbox = s.image ? visibleImage(s.box, s.image.srcRect) : s.box; const d = geomDelta(sbox, ref); maxDelta(d);
         if (overTol(d)) add('geometry', sev(d), `${s.chart ? 'chart' : s.table ? 'table' : s.image ? 'picture' : 'card'} frame delta ${bucket(d)}`, key, `${JSON.stringify(Object.fromEntries(Object.entries(sbox).map(([k, v]) => [k, r3(v)])))} vs ${JSON.stringify(Object.fromEntries(Object.entries(ref).filter(([k]) => 'xywh'.includes(k)).map(([k, v]) => [k, r3(v)])))}`);
