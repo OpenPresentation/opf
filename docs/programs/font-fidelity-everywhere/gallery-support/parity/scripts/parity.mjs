@@ -9,6 +9,7 @@ import {execFileSync} from 'node:child_process';
 import path from 'node:path';
 import {fileURLToPath, pathToFileURL} from 'node:url';
 import {createRequire} from 'node:module';
+import {classifyFontResolution, legacyPasses} from './font-resolution.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(here, '..');
@@ -17,10 +18,10 @@ const PFX = process.env.PARITY_PREFIX ?? 'parity';
 const CORE = path.join(SRC, `${PFX}-opf`), RENDER = path.join(SRC, `${PFX}-opf-render`), PPTX = path.join(SRC, `${PFX}-opf-pptx`), GALLERY = process.env.GALLERY_DIR ?? path.join(SRC, `${PFX}-pptx-gallery`);
 const imp = p => import(pathToFileURL(p).href);
 const render = await imp(path.join(RENDER, 'dist/index.js'));
-const {prepareNodeFonts} = await imp(path.join(RENDER, 'dist/fonts-node.js'));
+const {prepareNodeFonts, BUNDLED_FONT_MANIFEST} = await imp(path.join(RENDER, 'dist/fonts-node.js'));
 const {toPptx, fromPptx} = await imp(path.join(PPTX, 'dist/index.js'));
 // Core's default text measurement: the same estimate both engines use here (no host registry).
-const {measureText} = await imp(path.join(CORE, 'packages/javascript/dist/index.js'));
+const {measureText, fontPolicyFor, FONT_POLICY} = await imp(path.join(CORE, 'packages/javascript/dist/index.js'));
 const {unzipSync} = createRequire(path.join(PPTX, 'package.json'))('fflate');
 const head = d => { try { return execFileSync('git', ['-C', d, 'rev-parse', 'HEAD'], {encoding: 'utf8'}).trim(); } catch { return null; } };
 
@@ -191,13 +192,17 @@ function inventory(files) {
 }
 
 // ---------- font resolution (preview) ----------
+// Registry resolution of a family in the modelled preview host (office pack, visual substitution). The verdict per
+// family comes from font-resolution.mjs (owner decision 2026-09-29: look-alikes are intended, the PPTX names the
+// selected family); `status` and `resolved` keep the old-definition view (real, metric, visual, missing).
 const fontCache = new Map();
 function resolveFamily(family, weight = 400, italic = false) {
   const k = `${family}|${weight}|${italic}`; if (fontCache.has(k)) return fontCache.get(k);
-  let v; try { const r = office.registry.resolveFont({fontFamily: family, fontWeight: weight, italic}); v = {status: r.compatibility === 'exact' ? 'real' : r.compatibility === 'metric' ? 'metric-substitute' : r.compatibility === 'generic' ? 'missing' : 'visual-substitute', resolved: r.resolvedFamily}; }
-  catch (e) { v = {status: 'missing', resolved: null, error: e.code}; }
+  let v; try { const r = office.registry.resolveFont({fontFamily: family, fontWeight: weight, italic}); v = {ok: true, compatibility: r.compatibility, resolvedFamily: r.resolvedFamily}; }
+  catch (e) { v = {ok: false, code: e.code}; }
   fontCache.set(k, v); return v;
 }
+const bundledIn = family => [...new Set(BUNDLED_FONT_MANIFEST.packages.filter(p => p.faces.some(f => f.family.toLowerCase() === family.toLowerCase())).map(p => p.pack))];
 
 // ---------- helpers ----------
 const center = b => ({x: b.x + b.w / 2, y: b.y + b.h / 2});
@@ -259,9 +264,12 @@ async function parity(doc) {
   const slideParts = Object.keys(files).filter(n => /^ppt\/slides\/slide\d+\.xml$/.test(n)).sort((a, b) => parseInt(a.match(/\d+/)) - parseInt(b.match(/\d+/)));
   if (slideParts.length !== svgs.length) add('zOrder', 'fail', `slide count ${svgs.length} preview vs ${slideParts.length} pptx`);
   const chosenFamilies = new Set(); const fontRes = {};
+  const previewRunFamilies = new Set(); const pptxSlotNames = new Set(); // families the preview draws / the PPTX writes in run and chart slots
   for (let si = 0; si < Math.min(svgs.length, slideParts.length); si++) {
     const P = parseSvg(svgs[si]); const X = parseSlide(dec.decode(files[slideParts[si]]), relsOf(files, slideParts[si]), files, theme, slideParts[si]);
     const bound = resolved.slides[si];
+    for (const e of P.elements) if (e.kind === 'text') for (const r of e.runs) if (r.family) previewRunFamilies.add(r.family);
+    for (const s of X.shapes) { for (const p of s.paragraphs ?? []) for (const r of p.runs) for (const k of ['latin', 'ea', 'cs']) if (r[k]) pptxSlotNames.add(r[k]); for (const t of s.chart?.typefaces ?? []) pptxSlotNames.add(t); }
     for (const f of Object.values(bound.design.fonts ?? {})) if (f) chosenFamilies.add(firstFamily(f));
     // Items: resolved geometry items + SVG boxes not under an item.
     const items = bound.geometry.items.map(it => ({path: it.path, field: it.field, type: it.type, box: {x: it.box.x, y: it.box.y, w: it.box.width, h: it.box.height}, frame: it.frameBox ? {x: it.frameBox.x, y: it.frameBox.y, w: it.frameBox.width, h: it.frameBox.height} : null}));
@@ -386,9 +394,9 @@ async function parity(doc) {
     let inv = 0; for (let i = 0; i < byPv.length; i++) for (let j = i + 1; j < byPv.length; j++) if (byPx.indexOf(byPv[i]) > byPx.indexOf(byPv[j])) inv++;
     if (inv) add('zOrder', 'fail', `z-order inversions between element groups (${inv})`, `slide ${si}`);
   }
-  // Font resolution for every family the preview actually uses
-  for (const f of chosenFamilies) if (f) fontRes[f] = resolveFamily(f);
-  for (const [f, r] of Object.entries(fontRes)) if (r.status === 'visual-substitute' || r.status === 'missing') add('fontResolution', 'fail', `preview font ${r.status}: ${f}${r.resolved ? ' -> ' + r.resolved : ''}`, f);
+  // Font resolution (owner decision 2026-09-29; see font-resolution.mjs) is evaluated below, after the package
+  // inventory and the theme, because it also checks what the PPTX names.
+  const legacyFontReasons = [];
 
   // (6) package typeface inventory
   const invt = inventory(files); const foreign = uniq(invt.typefaces.filter(t => t.typeface && !t.typeface.startsWith('+') && !chosenFamilies.has(t.typeface)).map(t => `${t.typeface}@${t.part.replace(/\d+/g, 'N')}:${t.tag}`));
@@ -404,6 +412,29 @@ async function parity(doc) {
   const slotMiss = Object.entries(SLOT).filter(([k, s]) => typeof cs[k] === 'string' && hex(cs[k]) !== theme.clr[s]).map(([k]) => k);
   if (slotMiss.length) add('theme', 'fail', `theme clrScheme differs from document color scheme (${slotMiss.length} slots)`);
 
+  // (8) fontResolution. For every family the selected design uses: the PPTX must name the selected family (theme
+  // major/minor for the heading/body fonts, run or chart slots for any other family the preview draws), never its
+  // replacement; and the preview must draw the real face or the FF-31 policy table's route. Metric-compatible
+  // routes pass, visual-only routes are near (reported), everything else fails.
+  const roles = Object.fromEntries(Object.entries(d0.fonts ?? {}).filter(([, v]) => v).map(([k, v]) => [k, firstFamily(v)]));
+  const themeNames = [theme.major, theme.minor].flatMap(t => [t.latin, t.ea, t.cs]).filter(Boolean);
+  const packageNames = new Set([...invt.typefaces.map(t => t.typeface), ...invt.appFonts].filter(Boolean).map(x => x.toLowerCase()));
+  for (const f of chosenFamilies) {
+    if (!f) continue;
+    const policyRow = fontPolicyFor(f), preview = resolveFamily(f);
+    let named = true, slot;
+    const heading = roles.heading === f, body = roles.body === f;
+    if (heading && theme.major.latin !== f) { named = false; slot = 'theme major latin'; }
+    else if (body && theme.minor.latin !== f) { named = false; slot = 'theme minor latin'; }
+    else if (!heading && !body && previewRunFamilies.has(f) && !pptxSlotNames.has(f) && !themeNames.includes(f)) { named = false; slot = 'run latin/ea/cs slots'; }
+    const routeNames = policyRow?.replacement ? [policyRow.replacement.family, ...(policyRow.alternates ?? [])] : [];
+    const replacementNames = routeNames.filter(r => r.toLowerCase() !== f.toLowerCase() && !chosenFamilies.has(r) && packageNames.has(r.toLowerCase()));
+    const cls = classifyFontResolution({family: f, policyRow, preview, pptx: {named, slot, replacementNames}, bundledIn: preview.ok ? [] : [...new Set([f, ...routeNames].flatMap(bundledIn))]});
+    fontRes[f] = {status: cls.legacy, resolved: cls.resolved, verdict: cls.verdict, tier: cls.tier, route: cls.route, policyTier: cls.policyTier, licenseClass: cls.licenseClass, ...(preview.ok ? {} : {error: preview.code}), pptx: {named, ...(slot ? {slot} : {}), replacementNames}};
+    for (const r of cls.reasons) add('fontResolution', r.status, r.reason, f);
+    if (!legacyPasses(preview)) legacyFontReasons.push(`preview font ${cls.legacy}: ${f}${cls.resolved ? ' -> ' + cls.resolved : ''}`);
+  }
+
   // (7) re-import round trip
   const idiag = []; let rt;
   try { rt = await fromPptx(bytes, {onDiagnostic: d => idiag.push({code: d.code, path: d.path})}); } catch (e) { add('reimport', 'fail', `fromPptx threw ${e.code ?? e.name}`); }
@@ -416,10 +447,14 @@ async function parity(doc) {
   // classify
   const CHECKS = ['geometry', 'text', 'fills', 'zOrder', 'slideSize', 'typefaces', 'reimport', 'fontResolution', 'theme', 'mapping'];
   const checks = Object.fromEntries(CHECKS.map(c => { const ds = diffs.filter(d => d.check === c); return [c, ds.some(d => d.status === 'fail') ? 'fail' : ds.length ? 'near' : 'pass']; }));
-  const cls = Object.values(checks).includes('fail') ? 'mismatch' : Object.values(checks).includes('near') ? 'near' : 'perfect';
+  const classOf = cs => Object.values(cs).includes('fail') ? 'mismatch' : Object.values(cs).includes('near') ? 'near' : 'perfect';
+  const cls = classOf(checks);
+  // The same run under the old fontResolution definition (real face or metric-compatible substitute only); every other check is identical.
+  const legacyChecks = {...checks, fontResolution: legacyFontReasons.length ? 'fail' : 'pass'};
+  const legacy = {class: classOf(legacyChecks), checks: {fontResolution: legacyChecks.fontResolution}, fontResolutionReasons: legacyFontReasons};
   const counted = {}; for (const d of diffs) { const k = `${d.check}|${d.status}|${d.reason}`; counted[k] ??= {check: d.check, status: d.status, reason: d.reason, count: 0, where: [], samples: []}; counted[k].count++; if (d.where && counted[k].where.length < 3 && !counted[k].where.includes(d.where)) counted[k].where.push(d.where); if (d.sample && counted[k].samples.length < 2) counted[k].samples.push(d.sample); }
   const top = Object.values(counted).sort((a, b) => (a.status === 'fail' ? 0 : 1) - (b.status === 'fail' ? 0 : 1) || b.count - a.count);
-  return {class: cls, checks, stats: {...stats, geomMaxDeltaPt: r3(stats.geomMaxDeltaPt)}, fontResolution: fontRes, typefaces: {distinct: uniq(invt.typefaces.map(t => t.typeface)), foreign, scriptSupplements: uniq(invt.scriptSupplements).length, scriptSupplementFaces: uniq(invt.scriptSupplements.map(s => s.split('=')[1])), emptySlots, appFonts: invt.appFonts}, previewDiagnostics: uniq(pv.pdiag), exportDiagnostics: uniq(ediag), reimportDiagnostics: uniq(idiag.map(d => d.code)), diffs: top.slice(0, 25)};
+  return {class: cls, legacy, checks, stats: {...stats, geomMaxDeltaPt: r3(stats.geomMaxDeltaPt)}, fontResolution: fontRes, typefaces: {distinct: uniq(invt.typefaces.map(t => t.typeface)), foreign, scriptSupplements: uniq(invt.scriptSupplements).length, scriptSupplementFaces: uniq(invt.scriptSupplements.map(s => s.split('=')[1])), emptySlots, appFonts: invt.appFonts}, previewDiagnostics: uniq(pv.pdiag), exportDiagnostics: uniq(ediag), reimportDiagnostics: uniq(idiag.map(d => d.code)), diffs: top.slice(0, 25)};
 }
 
 const CROP = {pictures: 0, measured: 0, unmeasured: 0};
@@ -436,7 +471,8 @@ for (const s of snippets) {
 const meta = {generatedBy: 'dimension-audit/parity/scripts/parity.mjs', generatedAt: new Date().toISOString(), node: process.version, prefix: PFX,
   heads: {opf: head(CORE), 'opf-render': head(RENDER), 'opf-pptx': head(PPTX), 'pptx-gallery': head(GALLERY)},
   tolerances: TOL, previewMode: 'engine default measurement (no host registry) for geometry/text; office pack + visual substitution registry for font resolution',
-  exportMode: 'toPptx default options (no registry)', cropCheck: CROP};
+  exportMode: 'toPptx default options (no registry)', cropCheck: CROP,
+  fontResolution: {definition: 'owner decision 2026-09-29: look-alike replacements are intended; the PPTX names the selected family. pass = real face or FF-31 metric-compatible replacement + PPTX names selected family; near = FF-31 visual-only route + PPTX names selected family; fail = no policy route, unrouted preview face, or PPTX writes a replacement name. Old definition kept per value under results[].legacy.', policy: {version: FONT_POLICY.version, families: FONT_POLICY.families.length}}};
 const OUT = process.env.OUT ?? path.join(ROOT, 'parity-results.json');
 await writeFile(OUT, JSON.stringify({meta, results}, null, 1));
 console.error(`wrote ${results.length} results to ${OUT} in ${((Date.now() - t0) / 1000).toFixed(0)}s`);

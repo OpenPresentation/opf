@@ -1,5 +1,7 @@
 # Preview vs PPTX parity: pptx.gallery values
 
+> **Definition change, 2026-09-29.** This file and `parity-results.json` record the accepted run under the original fontResolution definition (real face or metric-compatible substitute only) and are kept unchanged as history. By owner decision (look-alike fonts are intended; the PPTX must name the selected family), fontResolution is now judged against core's FF-31 policy table: metric-compatible replacement or real face passes, visual-only look-alike is near, no route or a replacement name in the PPTX fails. The run under the new definition, with the old definition computed from the same run for comparison, is [PARITY-2026-09-29-lookalike-fonts.md](PARITY-2026-09-29-lookalike-fonts.md) (results: `parity-results-2026-09-29-lookalike-fonts.json`). The classifier is `scripts/font-resolution.mjs`; its controls run with `node --test scripts/font-resolution.test.mjs`.
+
 Generated 2026-09-29T08:23:46.429Z by `dimension-audit/parity/scripts/parity.mjs` (Node v24.21.0, worktree prefix `baseline81`). No Office was used.
 
 Heads: opf `a85facf`, opf-render `6c7d781`, opf-pptx `c749c35`, pptx-gallery `f17e9ae`.
