@@ -199,16 +199,31 @@ export function itemizeScripts(text, profile) {
   return runs;
 }
 
-/** Script keys (as used by the script font pack) present in the strings of any JSON value. */
-export function detectScripts(value, profile) {
-  const scripts = new Set();
+/**
+ * Non-Latin script keys the renderer would plan runs for in `text`. It applies the same shortcut as drawing
+ * (`createScriptFonts().plan`): Latin, Greek and Cyrillic text is one run in the design font, except that
+ * with an East Asian document language the curly quotes, dashes and ellipsis are East Asian characters.
+ */
+export function scriptsOfText(text, profile) {
+  const source = String(text ?? "");
+  if (latinOnly.test(source) && !(eastAsianLanguage(profile) && eastAsianAmbiguous.test(source))) return [];
+  return itemizeScripts(source, profile).filter(run => run.script !== "Latn").map(run => run.script);
+}
+
+/**
+ * Script keys (as used by the script font pack) present in the strings of any JSON value.
+ * The profile's own script is included too, unless `includeLanguage` is false (then only
+ * text decides). `ignoreKeys` names object keys whose values are not visited.
+ */
+export function detectScripts(value, profile, { includeLanguage = true, ignoreKeys = [] } = {}) {
+  const scripts = new Set(), ignored = new Set(ignoreKeys);
   const visit = item => {
-    if (typeof item === "string") { if (!latinOnly.test(item)) for (const run of itemizeScripts(item, profile)) if (run.script !== "Latn") scripts.add(run.script); }
+    if (typeof item === "string") { for (const script of scriptsOfText(item, profile)) scripts.add(script); }
     else if (Array.isArray(item)) item.forEach(visit);
-    else if (item && typeof item === "object") Object.values(item).forEach(visit);
+    else if (item && typeof item === "object") for (const [key, child] of Object.entries(item)) if (!ignored.has(key)) visit(child);
   };
   visit(value);
-  if (profile?.script && !latinGroup.has(profile.script)) scripts.add(fontKey(profile.script, "", profile));
+  if (includeLanguage && profile?.script && !latinGroup.has(profile.script)) scripts.add(fontKey(profile.script, "", profile));
   return [...scripts].sort();
 }
 

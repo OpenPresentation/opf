@@ -47,6 +47,10 @@ export interface FontRegistry {
   /** Parsed face metadata in entry order, without encoding font bytes. */
   describeFaces(): FaceDescription[];
   readonly substitutions: FontResolution[];
+  /** True when a loaded script-pack face has a glyph for the character. */
+  scriptFacesCover(character: string): boolean;
+  /** Register more faces (FF-19 script faces once a document needs them). Atomic; returns the added faces' metadata. */
+  addFaces(entries: FontFaceInput[]): { family: string; weight: number; italic: boolean; scripts?: string[] }[];
 }
 export declare class OPFFontError extends Error { code:string; details:Record<string,unknown>; constructor(code:string,message:string,details?:Record<string,unknown>) }
 export declare function createFontRegistry(entries: FontFaceInput[], options?: FontRegistryOptions): FontRegistry;
@@ -77,7 +81,8 @@ export declare const SCRIPT_FONT_REPLACEMENTS: readonly Readonly<{requestedFamil
 export declare function scriptOfCharacter(character: string): string;
 export declare function scriptFontRole(script: string): ScriptRole;
 export declare function itemizeScripts(text: string, profile?: ScriptFontProfile): ScriptRun[];
-export declare function detectScripts(value: unknown, profile?: ScriptFontProfile): string[];
+/** Script keys in the strings of a JSON value. The profile's own script counts unless `includeLanguage` is false; `ignoreKeys` are not visited. */
+export declare function detectScripts(value: unknown, profile?: ScriptFontProfile, options?: { includeLanguage?: boolean; ignoreKeys?: readonly string[] }): string[];
 export declare function designatedFamilies(script: string, serif?: boolean): string[];
 export declare function scriptFontAliases(families: Iterable<string>): Record<string, string>;
 export declare function createScriptFonts(profile?: ScriptFontProfile, measurement?: TextMeasurement): ScriptFonts;

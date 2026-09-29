@@ -1481,7 +1481,7 @@ function segmentSpan(attrs, segment, text, style, bound, type, options) {
   return tag("tspan", { ...attrs, "font-family": scripted.family }, scripted.content);
 }
 
-// Faces flagged embed:"used" (only the vendored open-pack faces load with it) are embedded only when the
+// Faces flagged embed:"used" (the vendored open-pack faces and the script-pack faces load with it) are embedded only when the
 // slide's own markup names the family in a font-family list. Every other face is embedded as before.
 function embeddedFontsFor(fonts = [], content) {
   if (!fonts.some(font => font?.embed === "used")) return fonts;
