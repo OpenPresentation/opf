@@ -162,7 +162,7 @@ All four repos test on Node 24 only, and every package declares `engines: node 2
 - **PPTX bytes do not depend on OS, locale or timezone.** Timestamp and ZIP date are fixed (P:55-59) and normalized for `core.xml` and the nested xlsx (P:1827, 2026). The seed is fixed. No host font lookup exists.
 - **Two caveats:**
   - WebP→PNG uses sharp on Node but canvas in the browser, so those bytes differ.
-  - **Exported typefaces depend on the caller's `textMeasurement` registry.** P:891 passes heading, body and code through `resolveStyle`, so a substituting registry (for example `loadOfficeFontRegistry({substitutionPolicy:'visual'})`, Calibri→Carlito) changes the family written to the PPTX. The matrix must pin the registry and record the substitution.
+  - **Exported typefaces depend on the caller's `textMeasurement` registry.** P:891 passes heading, body and code through `resolveStyle`, so a substituting registry (for example `loadOfficeFontRegistry({substitutionPolicy:'visual'})`, Calibri→Carlito) changes the family written to the PPTX. The matrix must pin the registry and record the substitution. *Superseded by FF-31: the exporter now writes the selected family, never the replacement, whatever registry is passed (see [font-fidelity.md](../../font-fidelity.md#font-policy-ff-31)).*
 - **Preview:**
   - opf-render loads only bundled or caller-supplied fonts (`fonts-node.js:1,42`; `fonts-browser.js`; goldens use `systemFonts:false`).
   - Core uses `Intl.Segmenter("und")` (C:328, `pagination.ts:45`), so its output follows the runtime ICU version.

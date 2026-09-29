@@ -113,6 +113,39 @@ linked, and specifically:
   This merge policy does not complete criteria that still need platform/native
   evidence, lower tolerances or authorize skipping release-specific gates.
 
+- 2026-09-29 (owner): look-alike fonts and the PPTX font name. First message,
+  verbatim: "look-alike fonts are to get around any font licensing
+  restrictions. They are desirable for open source but if we export to
+  PowerPoint the pptx file should include references to the font they selected
+  and want to see in PowerPoint. If this isn't clear in docs/markdown
+  everywhere then it should be." Later message, verbatim: "so a scenario... if
+  the user wants Aptos... if Aptos is license restricted we can substitute a
+  font (Aptos2 or whatever it's named) that looks similar and has the same size
+  in pixels on the screen for rendering live previews of SVG. When we export to
+  PPTX we should have PowerPoint open that file and display actual Aptos."
+  Consequences:
+  - The user's selected font is the source of truth. Licensed fonts are never
+    bundled or embedded.
+  - For previews, SVG, the editor and thumbnails, the replacement should look
+    similar and be metric-compatible (same advance widths and line metrics), so
+    text occupies the same size on screen and wraps identically to PowerPoint.
+    A metric-compatible look-alike is the goal (Calibri to Carlito).
+  - Where no metric-compatible open replacement exists yet (Aptos today), a
+    visual-only look-alike is a documented fallback and a known layout-fidelity
+    gap to close, not the intended end state.
+  - PPTX export always writes the selected font name (for example
+    `typeface="Aptos"` in the theme and in runs), never the replacement, so
+    PowerPoint opens the file and shows the actual font (installed or Office
+    cloud font). Only open fonts may be embedded, through FF-13.
+  - The FF-38 `fontResolution` check must accept the
+    [policy table](font-licensing.md)'s replacements for licensed fonts,
+    provided the PPTX keeps the selected name: a metric-compatible replacement
+    is perfect, and a visual-only replacement is classified near, not perfect.
+    A separate PR updates the harness and scoreboard; this entry changes no
+    gate.
+  - The canonical statement is in [font-fidelity.md](../../font-fidelity.md#font-policy-ff-31).
+    The sibling repositories link to it.
+
 ## Scope
 
 | In scope | Out of scope |
