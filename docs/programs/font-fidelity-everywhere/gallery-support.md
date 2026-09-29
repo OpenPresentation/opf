@@ -505,6 +505,10 @@ merged, and the parity theme, typefaces and re-import checks pass for 900,
 
 ### Fonts in every environment
 
+Per-font status, priorities and next actions for every family behind these readings are in the
+[font tracker (FF-40)](font-tracker.md); its priority score weighs the values each family affects in the
+parity scoreboard above by the size of its gap.
+
 - **Export.** With no font registry, `toPptx` writes the chosen family names
   and needs no installed fonts, so it behaves the same locally and in
   containers or serverless functions without system fonts. With the office

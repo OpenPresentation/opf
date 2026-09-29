@@ -1,0 +1,2229 @@
+{
+  "$comment": "Authored input for scripts/build-font-tracker.mjs. Derived fields (policy, bundle, measurements, parity) are never written here; this file holds owner-plan text, reconciled next actions, evidence keys, classes, scripts, style rules and in-flight candidates. Regenerate with: node scripts/build-font-tracker.mjs",
+  "asOf": "2026-09-29",
+  "paritySource": "docs/programs/font-fidelity-everywhere/gallery-support/parity/parity-results-2026-09-29-table-drawn-extent.json",
+  "manifestSnapshot": "docs/programs/font-fidelity-everywhere/font-tracker.render-manifest.json",
+  "measurementReport": "docs/evidence/font-replacements-20260923/report.json",
+  "ownerPlan": {
+    "date": "2026-09-29",
+    "request": "work this in as a tracker and to help prioritize work.",
+    "summary": "The owner completed 160 font-specific reviews: all 153 policy registry families plus seven shipped script-font dependencies missing from the registry. No repository files were changed by those reviews.",
+    "phases": [
+      {
+        "phase": 1,
+        "title": "Reconcile and baseline",
+        "text": "Reconcile the inventory and establish a fresh baseline. Record each font's selected name, preview face, version, hashes, available styles, scripts, and acceptance evidence."
+      },
+      {
+        "phase": 2,
+        "title": "Loading and style coverage",
+        "text": "Finish loading and style coverage. Connect the shipped editor, gallery, browser, and Node hosts to the intended faces; eliminate unintended fallbacks."
+      },
+      {
+        "phase": 3,
+        "title": "Aptos compatibility",
+        "text": "Prioritize Aptos and Aptos Display compatibility. Measure them separately and qualify candidates before adopting them."
+      },
+      {
+        "phase": 4,
+        "title": "Remaining replacements",
+        "text": "Complete the remaining replacement work. Packaging, script shaping, and metric compatibility remain separate deliverables."
+      },
+      {
+        "phase": 5,
+        "title": "Native verification and parity",
+        "text": "Complete native verification and rerun the full parity audit. Keep source, installed-package, and live-site claims separate."
+      }
+    ],
+    "rules": [
+      "Every family gets its own fixture and acceptance record. Grouped rows share work, but a result for one family does not establish acceptance for another.",
+      "For proprietary fonts, PPTX always retains the user's selected name.",
+      "Preview replacements must use pinned, permitted files.",
+      "Metric qualification requires per-style measurements, matching line breaks and line metrics, and the unchanged geometry tolerances, not just a favorable average width.",
+      "The current Latin-only corpus must also be extended with script-specific text.",
+      "Most script packs currently provide regular and bold only. Required italic or other styles need genuine qualified faces; diagnostics preserve honesty but do not complete an outstanding fidelity requirement."
+    ],
+    "criticalPath": "Aptos and Aptos Display are the critical path: each appears in 704 of the 850 audited gallery values."
+  },
+  "reconciliation": [
+    "Aptos family (the owner's review predates this). opf#166 is merged (338ddcd4): the policy now routes Aptos, Aptos Display, Aptos Narrow and Aptos Serif to Intos, Intos Display, Intos Narrow and Intos Serif at the metric tier, measured 0.000% mean and maximum width delta in all four styles against Aptos 2.01, with equal vertical metrics and original (Inter-derived; serif Gelasio-derived) outlines under OFL-1.1 with no Reserved Font Name. Independently re-verified for Aptos, Aptos Display and Aptos Narrow; Aptos Serif was measured from Microsoft's Aptos Fonts download. The four Intos rows are new policy families and have records. The faces themselves are not bundled until opf-render#54 lands and browser hosts load them lazily with opf-editor#42, so the Aptos records are `metric-measured` with hosts unverified and the parity run, which still shows Roboto and Carlito substitutes, needs a rerun (the owner's \"no verified compatible replacement\" is superseded).",
+    "Root-reported parity movement, not committed evidence and not used for priorities: mains 25 perfect, 667 near, 158 mismatch; with the Intos pull requests roughly 640 perfect, 32 near, 178 mismatch. The committed run is 5 perfect, 627 near, 218 mismatch (2026-09-29, table drawn extent). Rerun the audit before using either.",
+    "Georgia now has a metric tier: Gelasio with liga and clig disabled (opf#163, opf-render#49, including the raster ZWNJ fix). The committed parity run predates it and still reports Georgia as a visual substitute.",
+    "Open families are now vendored from unmodified upstream or npm packages (opf-render#50): Open Sans, Montserrat (including 900), Poppins, Bebas Neue, PT Serif, Lora, Merriweather Sans, Source Sans 3 (with the Source Sans Pro alias), Red Hat Display (300, 400, 700) and Red Hat Text (400, 700). Raleway and Playfair Display are not bundled because resvg ignores the wght axis. The owner's \"bundle\" rows for the bundled families become verification work; the remaining bundling work is Anton, Archivo Narrow, Barlow, Bitter, EB Garamond, Figtree, Libre Caslon Text, Work Sans, Liberation Mono, Sans and Serif, Playfair Display and Raleway.",
+    "Carlito is vendored as unmodified google/fonts files (opf-render#58) because its Reserved Font Name applies. Licenses, Reserved Font Names and no-hotlink rules are guarded in core and the renderer (opf#165, opf-render#53).",
+    "Script fonts: previews now load script faces automatically (opf-render#55, opf-editor#40) and fall back per character to Noto Sans (opf-render#57). The parity run records 109 family uses as `missing` because it models a host without the script pack; those readings are stale until the audit is rerun, and loading is not verification per family.",
+    "Hosts are recorded separately. The default Node registry (`prepareNodeFonts`) uses the `base` pack (Roboto and Roboto Mono only); the office-pack faces (Carlito, Arimo, Tinos, Cousine, Gelasio, Caladea) and the open pack load only when `pack: 'office'` is requested, and script faces only when the `scripts` option is passed. The browser, the opf-editor playground and the gallery editor (a vendored opf-editor bundle) load the 33 eager base and office faces; the vendored open pack reaches them only with opf-render#54 and opf-editor#42, so families served by that pack carry a loading gap there until then.",
+    "Gallery cards are a different host from the gallery editor. pptx-gallery self-hosts preview webfonts (pptx-gallery#53 and #54; replacement data in #51) for 49 families, including Anton, Barlow, Bitter, EB Garamond, Figtree, Libre Caslon Text, Work Sans, Playfair Display, Raleway, Open Sans and Montserrat, as upright regular and bold faces from pinned @fontsource packages or unmodified upstream files. The tracker reads that list from a pinned snapshot (`galleryCards`). Card previews do not change the editor's bundle, and no per-family card verification exists.",
+    "fontResolution treats a policy look-alike as near, not fail, when the PPTX names the selected family (opf#159). Parity harness fixes merged in opf#164 and opf#168. The value set is 850 after pptx-gallery#40 removed 50 unsupported chart types; Aptos and Aptos Display each appear in 704 of them.",
+    "Selawik 1.01 was measured and rejected as a Segoe UI replacement (opf#166: regular 0.16% mean and 2.51% max on the standard 300-string corpus, 0.73% and 9.7% on the reviewer's broader corpus); Red Hat Display stays the visual route. Segoe UI Light, Semilight and Semibold were measured separately.",
+    "Cover slide centering (opf-pptx#97) is geometry work with no font impact.",
+    "The seven shipped script-font dependencies missing from the registry (Noto Sans Arabic, Sinhala, Lao, Myanmar, Thaana, Syriac and Noto Serif Tibetan) are tracked as policy-gap records. Adding their policy rows is follow-up work: this change does not edit font-policy.json."
+  ],
+  "statusDefs": {
+    "loading-gap": {
+      "severity": 3,
+      "meaning": "The family's preview face is not bundled, or is bundled but not yet loaded by the shipped browser, editor and gallery-editor hosts, so those hosts fall back to another face. Gallery cards (self-hosted webfonts) are tracked separately."
+    },
+    "style-gap": {
+      "severity": 2.5,
+      "meaning": "The preview face is bundled, but styles the family needs are missing from the bundle."
+    },
+    "policy-gap": {
+      "severity": 2,
+      "meaning": "A face ships in the renderer but the family has no row in the font policy registry."
+    },
+    "needs-special-path": {
+      "severity": 3,
+      "meaning": "No ordinary look-alike can serve the family: it needs a dedicated math, emoji or symbol-encoding path."
+    },
+    "visual-gap": {
+      "severity": 2,
+      "meaning": "A bundled visual look-alike is routed, with styles present; metric qualification, appearance or measurement work remains."
+    },
+    "script-gap": {
+      "severity": 2,
+      "meaning": "A bundled Noto script face is routed; native-script measurement, shaping, style and appearance qualification remain (the current corpus is Latin only)."
+    },
+    "baseline-needed": {
+      "severity": 1,
+      "meaning": "An open family is bundled with the styles it needs; a fresh per-host verification and acceptance record is the remaining work."
+    },
+    "metric-measured": {
+      "severity": 0.5,
+      "meaning": "A metric-tier route measured against the real font in four styles on the source path (width bar met). Vertical metrics and line breaks are not yet recorded, and per-host and native verification remain, so it is not verified."
+    }
+  },
+  "hostLoading": {
+    "note": "Derived from the pack a face ships in, the linked pull requests and the opf-render loaders. It is a source-level model, not a per-family verification. Gallery cards (pptx.gallery self-hosted preview webfonts, pptx-gallery#53 and #54) are recorded separately as galleryCards from the pinned gallery snapshot; the gallery editor is the vendored opf-editor bundle.",
+    "packs": {
+      "base": {
+        "node": "default: prepareNodeFonts pack 'base' (Roboto and Roboto Mono only)",
+        "browser": "eager (33-face registry)",
+        "editor": "eager (33-face registry)",
+        "galleryEditor": "eager (33-face registry, vendored opf-editor bundle)"
+      },
+      "office": {
+        "node": "only when pack: 'office' is requested (loadOfficeFontRegistry); not in the default 'base' pack",
+        "browser": "eager (33-face registry)",
+        "editor": "eager (33-face registry)",
+        "galleryEditor": "eager (33-face registry, vendored opf-editor bundle)"
+      },
+      "open": {
+        "node": "only when pack: 'office' is requested (loadOfficeFontRegistry adds the open pack unless includeOpenFonts is false)",
+        "browser": "not loaded until opf-render#54",
+        "editor": "not loaded until opf-editor#42",
+        "galleryEditor": "not loaded until opf-editor#42 and a gallery editor ref bump"
+      },
+      "scripts": {
+        "node": "only when the scripts option is passed ('auto' or a script list; opf-render#55)",
+        "browser": "when the host requests scripts (opf-render#55)",
+        "editor": "auto (opf-editor#40)",
+        "galleryEditor": "script-font manifest (opf#171)"
+      }
+    },
+    "lazyPendingPacks": [
+      "open"
+    ]
+  },
+  "classes": {
+    "proprietaryScript": [
+      "Arabic Typesetting",
+      "Sakkal Majalla",
+      "Traditional Arabic",
+      "David",
+      "Gisha",
+      "Miriam",
+      "Angsana New",
+      "DilleniaUPC",
+      "Aparajita",
+      "Mangal",
+      "Nirmala UI",
+      "Shonar Bangla",
+      "Vrinda",
+      "Shruti",
+      "Raavi",
+      "Kalinga",
+      "Latha",
+      "Gautami",
+      "Tunga",
+      "Kartika",
+      "DaunPenh",
+      "Khmer UI",
+      "Nyala",
+      "Sylfaen",
+      "Ebrima",
+      "Meiryo",
+      "MS Gothic",
+      "MS Mincho",
+      "Yu Gothic",
+      "Microsoft YaHei",
+      "SimHei",
+      "SimSun",
+      "FangSong",
+      "Microsoft JhengHei",
+      "MingLiU",
+      "PMingLiU",
+      "Malgun Gothic",
+      "Batang",
+      "BatangChe",
+      "Gungsuh",
+      "GungsuhChe"
+    ],
+    "special": [
+      "Cambria Math",
+      "Segoe UI Emoji",
+      "Symbol",
+      "Webdings",
+      "Wingdings"
+    ]
+  },
+  "extras": [
+    {
+      "family": "Noto Sans Arabic",
+      "scripts": [
+        "Arabic"
+      ],
+      "nextAction": "Add a policy entry, verify host loading, and add its own Arabic corpus: joining, marks and RTL, distinct from Noto Naskh Arabic."
+    },
+    {
+      "family": "Noto Sans Sinhala",
+      "scripts": [
+        "Sinhala"
+      ],
+      "nextAction": "Add a policy entry, verify host loading, and add its own corpus: conjuncts, vowels and mark bounds."
+    },
+    {
+      "family": "Noto Sans Lao",
+      "scripts": [
+        "Lao"
+      ],
+      "nextAction": "Add a policy entry, verify host loading, and add its own corpus: stacked marks and line breaks."
+    },
+    {
+      "family": "Noto Sans Myanmar",
+      "scripts": [
+        "Myanmar"
+      ],
+      "nextAction": "Add a policy entry, verify host loading, and add its own corpus: stacked clusters, medials, marks and line breaks."
+    },
+    {
+      "family": "Noto Sans Thaana",
+      "scripts": [
+        "Thaana"
+      ],
+      "nextAction": "Add a policy entry, verify host loading, and add its own corpus: RTL vowels, punctuation and mixed text."
+    },
+    {
+      "family": "Noto Sans Syriac",
+      "scripts": [
+        "Syriac"
+      ],
+      "nextAction": "Add a policy entry, verify host loading, and add its own corpus: joining, diacritics and RTL."
+    },
+    {
+      "family": "Noto Serif Tibetan",
+      "scripts": [
+        "Tibetan"
+      ],
+      "nextAction": "Add a policy entry, verify host loading, and add its own corpus: stacks, marks, tsheg breaks and vertical bounds."
+    }
+  ],
+  "scripts": {
+    "Arabic Typesetting": [
+      "Arabic",
+      "Latin"
+    ],
+    "Sakkal Majalla": [
+      "Arabic",
+      "Latin"
+    ],
+    "Traditional Arabic": [
+      "Arabic",
+      "Latin"
+    ],
+    "David": [
+      "Hebrew",
+      "Latin"
+    ],
+    "Gisha": [
+      "Hebrew",
+      "Latin"
+    ],
+    "Miriam": [
+      "Hebrew",
+      "Latin"
+    ],
+    "Angsana New": [
+      "Thai",
+      "Latin"
+    ],
+    "DilleniaUPC": [
+      "Thai",
+      "Latin"
+    ],
+    "Aparajita": [
+      "Devanagari",
+      "Latin"
+    ],
+    "Mangal": [
+      "Devanagari",
+      "Latin"
+    ],
+    "Nirmala UI": [
+      "Devanagari",
+      "Bengali",
+      "Gujarati",
+      "Gurmukhi",
+      "Kannada",
+      "Malayalam",
+      "Oriya",
+      "Tamil",
+      "Telugu",
+      "Sinhala",
+      "Latin"
+    ],
+    "Shonar Bangla": [
+      "Bengali",
+      "Latin"
+    ],
+    "Vrinda": [
+      "Bengali",
+      "Latin"
+    ],
+    "Shruti": [
+      "Gujarati",
+      "Latin"
+    ],
+    "Raavi": [
+      "Gurmukhi",
+      "Latin"
+    ],
+    "Kalinga": [
+      "Oriya",
+      "Latin"
+    ],
+    "Latha": [
+      "Tamil",
+      "Latin"
+    ],
+    "Gautami": [
+      "Telugu",
+      "Latin"
+    ],
+    "Tunga": [
+      "Kannada",
+      "Latin"
+    ],
+    "Kartika": [
+      "Malayalam",
+      "Latin"
+    ],
+    "DaunPenh": [
+      "Khmer",
+      "Latin"
+    ],
+    "Khmer UI": [
+      "Khmer",
+      "Latin"
+    ],
+    "Nyala": [
+      "Ethiopic",
+      "Latin"
+    ],
+    "Sylfaen": [
+      "Latin",
+      "Armenian",
+      "Georgian"
+    ],
+    "Ebrima": [
+      "Latin",
+      "N'Ko",
+      "Tifinagh",
+      "Vai"
+    ],
+    "Meiryo": [
+      "Japanese",
+      "Latin"
+    ],
+    "MS Gothic": [
+      "Japanese",
+      "Latin"
+    ],
+    "MS Mincho": [
+      "Japanese",
+      "Latin"
+    ],
+    "Yu Gothic": [
+      "Japanese",
+      "Latin"
+    ],
+    "Microsoft YaHei": [
+      "Simplified Chinese",
+      "Latin"
+    ],
+    "SimHei": [
+      "Simplified Chinese",
+      "Latin"
+    ],
+    "SimSun": [
+      "Simplified Chinese",
+      "Latin"
+    ],
+    "FangSong": [
+      "Simplified Chinese",
+      "Latin"
+    ],
+    "Microsoft JhengHei": [
+      "Traditional Chinese",
+      "Latin"
+    ],
+    "MingLiU": [
+      "Traditional Chinese",
+      "Latin"
+    ],
+    "PMingLiU": [
+      "Traditional Chinese",
+      "Latin"
+    ],
+    "Malgun Gothic": [
+      "Korean",
+      "Latin"
+    ],
+    "Batang": [
+      "Korean",
+      "Latin"
+    ],
+    "BatangChe": [
+      "Korean",
+      "Latin"
+    ],
+    "Gungsuh": [
+      "Korean",
+      "Latin"
+    ],
+    "GungsuhChe": [
+      "Korean",
+      "Latin"
+    ],
+    "Cambria Math": [
+      "Math"
+    ],
+    "Segoe UI Emoji": [
+      "Emoji (color)"
+    ],
+    "Symbol": [
+      "Symbol encoding"
+    ],
+    "Webdings": [
+      "Symbol encoding (pictographs)"
+    ],
+    "Wingdings": [
+      "Symbol encoding (dingbats)"
+    ],
+    "Noto Naskh Arabic": [
+      "Arabic"
+    ],
+    "Noto Nastaliq Urdu": [
+      "Arabic (Nastaliq)"
+    ],
+    "Noto Sans Hebrew": [
+      "Hebrew"
+    ],
+    "Noto Serif Hebrew": [
+      "Hebrew"
+    ],
+    "Noto Sans Bengali": [
+      "Bengali"
+    ],
+    "Noto Sans Devanagari": [
+      "Devanagari"
+    ],
+    "Noto Sans Gujarati": [
+      "Gujarati"
+    ],
+    "Noto Sans Gurmukhi": [
+      "Gurmukhi"
+    ],
+    "Noto Sans Kannada": [
+      "Kannada"
+    ],
+    "Noto Sans Malayalam": [
+      "Malayalam"
+    ],
+    "Noto Sans Oriya": [
+      "Oriya"
+    ],
+    "Noto Sans Tamil": [
+      "Tamil"
+    ],
+    "Noto Sans Telugu": [
+      "Telugu"
+    ],
+    "Noto Sans Thai": [
+      "Thai"
+    ],
+    "Noto Sans Khmer": [
+      "Khmer"
+    ],
+    "Noto Sans Armenian": [
+      "Armenian"
+    ],
+    "Noto Sans Georgian": [
+      "Georgian"
+    ],
+    "Noto Sans Ethiopic": [
+      "Ethiopic"
+    ],
+    "Noto Sans Mongolian": [
+      "Mongolian"
+    ],
+    "Noto Sans JP": [
+      "Japanese"
+    ],
+    "Noto Sans SC": [
+      "Simplified Chinese"
+    ],
+    "Noto Sans TC": [
+      "Traditional Chinese"
+    ],
+    "Noto Sans KR": [
+      "Korean"
+    ],
+    "Noto Sans": [
+      "Latin",
+      "Greek",
+      "Cyrillic"
+    ]
+  },
+  "stylesRequired": {
+    "Roboto Mono": {
+      "styles": [
+        "400",
+        "700"
+      ],
+      "explicitGaps": [
+        "400i",
+        "700i"
+      ],
+      "reason": "Code font. Italic faces exist upstream but are not bundled; the gap stays explicit until a gallery value needs them."
+    },
+    "Bebas Neue": {
+      "styles": [
+        "400"
+      ],
+      "reason": "Upstream ships a single upright face; unavailable styles must stay explicit rather than be synthesized."
+    },
+    "Anton": {
+      "styles": [
+        "400"
+      ],
+      "reason": "Upstream ships a single upright face; unavailable styles must stay explicit rather than be synthesized."
+    },
+    "Noto Sans Mongolian": {
+      "styles": [
+        "400",
+        "700"
+      ],
+      "reason": "Bold is required for parity with the other script packs; the pinned package ships regular only (owner: resolve the regular-only coverage)."
+    }
+  },
+  "metricBar": {
+    "meanBelow": 0.001,
+    "maxAtMost": 0.003,
+    "styles": 4
+  },
+  "measurementDates": {
+    "default": "2026-09-23",
+    "Georgia": "2026-09-29",
+    "Aptos": "2026-09-29",
+    "Aptos Display": "2026-09-29",
+    "Aptos Narrow": "2026-09-29",
+    "Aptos Serif": "2026-09-29"
+  },
+  "phaseOverrides": {
+    "Aptos Mono": {
+      "phase": 3,
+      "reason": "Member of the Aptos family; Intos has no mono face, so it needs its own reference measurement alongside the family work."
+    },
+    "Aptos": {
+      "phase": 3,
+      "reason": "Aptos family: critical path (owner phase 3). Measured metric in policy; host loading and verification wait on opf-render#54 and opf-editor#42, then a parity rerun."
+    },
+    "Aptos Display": {
+      "phase": 3,
+      "reason": "Aptos family: critical path (owner phase 3). Measured metric in policy; host loading and verification wait on opf-render#54 and opf-editor#42, then a parity rerun."
+    },
+    "Aptos Narrow": {
+      "phase": 3,
+      "reason": "Aptos family: critical path (owner phase 3). Measured metric in policy; host loading and verification wait on opf-render#54 and opf-editor#42, then a parity rerun."
+    },
+    "Aptos Serif": {
+      "phase": 3,
+      "reason": "Aptos family: critical path (owner phase 3). Measured metric in policy; host loading and verification wait on opf-render#54 and opf-editor#42, then a parity rerun."
+    }
+  },
+  "hostVerification": {
+    "Roboto": {
+      "node": "verified",
+      "browser": "verified",
+      "evidence": [
+        "baseFonts",
+        "variants"
+      ],
+      "note": "Nine base faces (Roboto 7, Roboto Mono 2) loaded offline in Chromium and Node with advances matching within 0.1 px; Latin sample, 2026-09-10 (opf-render docs/evidence). Editor, gallery editor and gallery cards are unverified."
+    },
+    "Roboto Mono": {
+      "node": "verified",
+      "browser": "verified",
+      "evidence": [
+        "baseFonts",
+        "variants"
+      ],
+      "note": "Nine base faces (Roboto 7, Roboto Mono 2) loaded offline in Chromium and Node with advances matching within 0.1 px; Latin sample, 2026-09-10 (opf-render docs/evidence). Editor, gallery editor and gallery cards are unverified."
+    }
+  },
+  "nativeVerification": {
+    "Aptos": {
+      "status": "partial",
+      "note": "Aptos 2.01 is present on the native host and PowerPoint lists it in Presentation.Fonts (FF-04); which part or style requests it, and which face draws, is open (FF-05). No per-family native rendering acceptance.",
+      "evidence": [
+        "nativeInventory",
+        "aptosBrief"
+      ]
+    },
+    "Calibri": {
+      "status": "unverified",
+      "note": "The native Calibri control still reports Aptos (FF-05 open); no per-family native rendering acceptance.",
+      "evidence": [
+        "calibriControl"
+      ]
+    }
+  },
+  "families": {
+    "Aptos": {
+      "nextAction": "Metric route Intos is merged in policy (opf#166; 0.000% mean and max in all four styles against Aptos 2.01, vertical metrics equal, original Inter-derived outlines, OFL-1.1, no Reserved Font Name). Land opf-render#54 (faces) and opf-editor#42 (lazy loading), then verify the route in Node (pack office), browser, editor and gallery editor, rerun parity, and confirm the PPTX still names the selected family. Roboto and Carlito stay alternates. The committed parity run still shows Aptos as a Roboto substitute (704 values) until then.",
+      "evidence": [
+        "intos",
+        "metricCandidates",
+        "aptosBrief",
+        "measurement"
+      ]
+    },
+    "Aptos Display": {
+      "nextAction": "Metric route Intos Display is merged in policy (opf#166), measured separately from Aptos: 0.000% in all four styles against Aptos Display 2.01, independently re-verified. Land opf-render#54 and opf-editor#42, then verify the route in Node (pack office), browser, editor and gallery editor, rerun parity, and confirm the PPTX still names the selected family. Do not inherit Aptos results.",
+      "evidence": [
+        "intos",
+        "metricCandidates",
+        "aptosBrief"
+      ]
+    },
+    "Aptos Narrow": {
+      "nextAction": "Metric route Intos Narrow is merged in policy (opf#166): 0.000% in all four styles against Aptos Narrow 2.01, independently re-verified. Land opf-render#54 and opf-editor#42, then verify the route in Node (pack office), browser, editor and gallery editor, rerun parity, and confirm the PPTX still names the selected family.",
+      "evidence": [
+        "intos",
+        "metricCandidates"
+      ]
+    },
+    "Aptos Serif": {
+      "nextAction": "Metric route Intos Serif is merged in policy (opf#166): 0.000% in all four styles, measured from Microsoft's Aptos Fonts download (Gelasio-derived outlines share eight plain rectangles with the original). Land opf-render#54 and opf-editor#42, then verify the route in Node (pack office), browser, editor and gallery editor, rerun parity, and confirm the PPTX still names the selected family. Check serif kerning and wrapping.",
+      "evidence": [
+        "intos",
+        "metricCandidates"
+      ]
+    },
+    "Aptos Mono": {
+      "nextAction": "Obtain Aptos Mono reference measurements (unmeasured; Intos has no mono face). Compare cell width, tabs, spaces, baselines and all four styles for Cousine and Roboto Mono before choosing a route.",
+      "evidence": [
+        "measurement"
+      ]
+    },
+    "Arial": {
+      "nextAction": "Preserve the established metric route (Arimo, 0.000% in four styles). Run fresh four-style host regressions and native wrapping checks with its own fixture.",
+      "evidence": [
+        "measurement"
+      ]
+    },
+    "Calibri": {
+      "nextAction": "Preserve the established metric route (Carlito, unmodified upstream bytes since opf-render#58). Verify actual geometry and all four styles in every host; the native Calibri control still reports Aptos (FF-05 open).",
+      "evidence": [
+        "measurement",
+        "carlito",
+        "calibriControl"
+      ]
+    },
+    "Courier New": {
+      "nextAction": "Preserve the established metric route (Cousine, 0.000%). Test tabs, spaces, digits and italics in every host with its own fixture.",
+      "evidence": [
+        "measurement"
+      ]
+    },
+    "Times New Roman": {
+      "nextAction": "Preserve the established metric route (Tinos, 0.000%). Regress punctuation, kerning and all four styles in every host.",
+      "evidence": [
+        "measurement"
+      ]
+    },
+    "Georgia": {
+      "nextAction": "Verify the merged metric fix (Gelasio with liga and clig off) is applied consistently in measurement, SVG, browser and raster paths in every host. The parity run predates it and still reports Georgia as visual.",
+      "evidence": [
+        "georgia",
+        "measurement"
+      ],
+      "note": "Parity run heads predate opf#163 and opf-render#49."
+    },
+    "Arial Black": {
+      "nextAction": "Ensure the bundled Montserrat 900 face actually activates in every host (regular-weight width comparison only: mean 0.75%, max 2.8%). Qualify heavy glyph widths, line breaks and wrapping.",
+      "evidence": [
+        "openPack",
+        "measurement"
+      ]
+    },
+    "Arial Narrow": {
+      "nextAction": "Bundle Archivo Narrow and improve condensed metrics; mean 0.38% and max 4.3% do not qualify it as metric.",
+      "evidence": [
+        "measurement"
+      ]
+    },
+    "Baskerville Old Face": {
+      "nextAction": "Bundle Libre Caslon Text and reconsider compatibility: measured maximum drift is 23.7% and mean 19.2%, regular only.",
+      "evidence": [
+        "measurement"
+      ]
+    },
+    "Bodoni MT": {
+      "nextAction": "Resolve Playfair Display's renderer limitation (resvg ignores the wght axis, so it is not bundled), then qualify high-contrast appearance and metrics (max 19.9%).",
+      "evidence": [
+        "measurement"
+      ]
+    },
+    "Book Antiqua": {
+      "nextAction": "Measure four styles, kerning, line metrics and native wrapping against bundled PT Serif (mean 2.4%, max 7.8%).",
+      "evidence": [
+        "openPack",
+        "measurement"
+      ]
+    },
+    "Bookman Old Style": {
+      "nextAction": "Bundle permitted Libre Caslon Text files; improve the substantial width differences (max 14.0%).",
+      "evidence": [
+        "measurement"
+      ]
+    },
+    "Calibri Light": {
+      "nextAction": "Find or develop a genuine light face: regular Carlito cannot establish Light fidelity (Light and Light Italic were measured against Carlito 400).",
+      "evidence": [
+        "measurement"
+      ]
+    },
+    "Cambria": {
+      "nextAction": "Keep its visual classification; qualify a better candidate against the actual Cambria version (Caladea: mean 2.7%, max 6.5%).",
+      "evidence": [
+        "measurement",
+        "licensing"
+      ]
+    },
+    "Candara": {
+      "nextAction": "Verify Source Sans 3 route activation now that it is bundled, then improve per-style metrics and wrapping (max 5.2%).",
+      "evidence": [
+        "openPack",
+        "measurement"
+      ]
+    },
+    "Century Gothic": {
+      "nextAction": "Bundle Work Sans; qualify geometric appearance, widths and ink bounds (max 15.5%).",
+      "evidence": [
+        "measurement"
+      ]
+    },
+    "Century Schoolbook": {
+      "nextAction": "Independent compatibility work with Gelasio; the Georgia result does not apply here (max 7.5%).",
+      "evidence": [
+        "measurement"
+      ]
+    },
+    "Consolas": {
+      "nextAction": "Investigate compatible monospace advances and baselines; Cousine cell-width drift is 9.15%.",
+      "evidence": [
+        "measurement"
+      ]
+    },
+    "Constantia": {
+      "nextAction": "Verify the newly bundled PT Serif route, then qualify metrics and wrapping (max 5.8%).",
+      "evidence": [
+        "openPack",
+        "measurement"
+      ]
+    },
+    "Corbel": {
+      "nextAction": "Qualify each style's widths, kerning, line height and wrapping against bundled Source Sans 3 (max 5.2%).",
+      "evidence": [
+        "openPack",
+        "measurement"
+      ]
+    },
+    "Didot": {
+      "nextAction": "Measure the specific Apple Didot reference (unmeasured) and resolve the Playfair Display renderer limitation.",
+      "evidence": [
+        "measurement"
+      ]
+    },
+    "Franklin Gothic Book": {
+      "nextAction": "Bundle Barlow; verify Book and Italic weight linking and independent metrics (max 7.6%).",
+      "evidence": [
+        "measurement"
+      ]
+    },
+    "Franklin Gothic Medium": {
+      "nextAction": "Qualify Medium-specific weight and italic mapping separately from Book (max 6.5%).",
+      "evidence": [
+        "measurement"
+      ]
+    },
+    "Garamond": {
+      "nextAction": "Bundle complete EB Garamond styles and fill the missing reference-style measurements (three styles measured; italic drifts up to 18.8%).",
+      "evidence": [
+        "measurement"
+      ]
+    },
+    "Gill Sans MT": {
+      "nextAction": "Qualify humanist appearance and improve the substantial maximum width drift (14.6%) against Source Sans 3.",
+      "evidence": [
+        "openPack",
+        "measurement"
+      ]
+    },
+    "Grandview": {
+      "nextAction": "Bundle Barlow and obtain a separate reference measurement for Grandview (unmeasured).",
+      "evidence": [
+        "measurement"
+      ]
+    },
+    "Grandview Display": {
+      "nextAction": "Bundle Barlow and obtain a separate reference measurement for Grandview Display (unmeasured).",
+      "evidence": [
+        "measurement"
+      ]
+    },
+    "Impact": {
+      "nextAction": "Bundle Anton; qualify condensed-heavy appearance, widths and line breaks (max 5.1%).",
+      "evidence": [
+        "measurement"
+      ]
+    },
+    "Lucida Console": {
+      "nextAction": "Qualify its own cell advances and baselines on Cousine; 0.41% drift still exceeds the metric threshold.",
+      "evidence": [
+        "measurement"
+      ]
+    },
+    "Lucida Sans": {
+      "nextAction": "Bundle Work Sans; measure Lucida Sans separately from Lucida Sans Unicode (max 5.0%).",
+      "evidence": [
+        "measurement"
+      ]
+    },
+    "Lucida Sans Unicode": {
+      "nextAction": "Bundle Work Sans; measure separately from Lucida Sans and verify Unicode coverage (max 5.0%).",
+      "evidence": [
+        "measurement"
+      ]
+    },
+    "Microsoft Sans Serif": {
+      "nextAction": "Independent measurements and coverage tests on Arimo (mean 0.2%, max 2.9%, regular only); Arial acceptance cannot be reused.",
+      "evidence": [
+        "measurement"
+      ]
+    },
+    "Palatino Linotype": {
+      "nextAction": "Qualify serif metrics and wrapping on bundled PT Serif (max 9.1%); keep it distinct from similarly named Palatino.",
+      "evidence": [
+        "openPack",
+        "measurement"
+      ]
+    },
+    "Rockwell": {
+      "nextAction": "Bundle Bitter; qualify slab-serif appearance, kerning and wrapping (max 8.5%).",
+      "evidence": [
+        "measurement"
+      ]
+    },
+    "Seaford": {
+      "nextAction": "Obtain a separate reference for Seaford (unmeasured) and qualify all required styles on Source Sans 3.",
+      "evidence": [
+        "openPack",
+        "measurement"
+      ]
+    },
+    "Seaford Display": {
+      "nextAction": "Obtain a separate reference for Seaford Display (unmeasured) and qualify all required styles on Source Sans 3.",
+      "evidence": [
+        "openPack",
+        "measurement"
+      ]
+    },
+    "Segoe UI": {
+      "nextAction": "Complete Red Hat Display italic coverage and qualify metrics (mean 1.7%, max 7.1%). Selawik was measured and rejected in opf#166 (regular 0.16% mean and 2.5% max on the FF-31 corpus, 0.73% and 9.7% on the reviewer's broader corpus; no italic faces); Red Hat Display stays the visual route.",
+      "evidence": [
+        "openPack",
+        "measurement",
+        "selawik"
+      ]
+    },
+    "Segoe UI Semibold": {
+      "nextAction": "Add the missing Red Hat Display 600 faces (upright and italic) and qualify the named style independently (Semibold 600 and 600 italic, mean 1.0%).",
+      "evidence": [
+        "openPack",
+        "measurement",
+        "selawik"
+      ]
+    },
+    "Segoe UI Light": {
+      "nextAction": "Complete required Red Hat Display 300 italic coverage and qualify light metrics (mean 1.9%, max 6.6%).",
+      "evidence": [
+        "openPack",
+        "measurement",
+        "selawik"
+      ]
+    },
+    "Segoe UI Semilight": {
+      "nextAction": "Define an explicit matching Red Hat Display weight for weight 350 (measured against 400) and qualify Semilight independently (max 9.1%).",
+      "evidence": [
+        "openPack",
+        "measurement",
+        "selawik"
+      ]
+    },
+    "Skeena": {
+      "nextAction": "Obtain a distinct reference for Skeena (unmeasured) and qualify styles and metrics on Open Sans.",
+      "evidence": [
+        "openPack",
+        "measurement"
+      ]
+    },
+    "Skeena Display": {
+      "nextAction": "Obtain a distinct reference for Skeena Display (unmeasured) and qualify styles and metrics on Open Sans.",
+      "evidence": [
+        "openPack",
+        "measurement"
+      ]
+    },
+    "Tahoma": {
+      "nextAction": "Qualify widths and line metrics on Red Hat Text (max 6.3%); respect the existing license restrictions on alternative clones.",
+      "evidence": [
+        "openPack",
+        "measurement",
+        "licensing"
+      ]
+    },
+    "Tenorite": {
+      "nextAction": "Bundle Figtree and obtain a separate reference for Tenorite (unmeasured).",
+      "evidence": [
+        "measurement"
+      ]
+    },
+    "Tenorite Display": {
+      "nextAction": "Bundle Figtree and obtain a separate reference for Tenorite Display (unmeasured).",
+      "evidence": [
+        "measurement"
+      ]
+    },
+    "Trebuchet MS": {
+      "nextAction": "Bundle Figtree; improve metrics (max 6.7%) and verify native wrapping.",
+      "evidence": [
+        "measurement"
+      ]
+    },
+    "Verdana": {
+      "nextAction": "Evaluate closer candidates or open replacement development than Montserrat (mean 3.7%, max 9.2%); the route remains visual.",
+      "evidence": [
+        "openPack",
+        "measurement"
+      ]
+    },
+    "Arabic Typesetting": {
+      "nextAction": "Joining, marks, RTL layout, line height and appearance (Noto Naskh Arabic; Latin-corpus width delta 66%). Requires host loading proof, native-script measurements (the current corpus is Latin only), mixed Latin text, and a native PowerPoint comparison.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel",
+        "measurement"
+      ]
+    },
+    "Sakkal Majalla": {
+      "nextAction": "Independent Arabic style and metric qualification. Requires host loading proof, native-script measurements (the current corpus is Latin only), mixed Latin text, and a native PowerPoint comparison.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel",
+        "measurement"
+      ]
+    },
+    "Traditional Arabic": {
+      "nextAction": "Independent joining, marks, RTL and mixed-text measurements. Requires host loading proof, native-script measurements (the current corpus is Latin only), mixed Latin text, and a native PowerPoint comparison.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel",
+        "measurement"
+      ]
+    },
+    "David": {
+      "nextAction": "Serif appearance, niqqud, RTL punctuation and line spacing (Noto Serif Hebrew). Requires host loading proof, native-script measurements (the current corpus is Latin only), mixed Latin text, and a native PowerPoint comparison.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel",
+        "measurement"
+      ]
+    },
+    "Gisha": {
+      "nextAction": "Separate Hebrew metrics, niqqud, punctuation and mixed-text tests. Requires host loading proof, native-script measurements (the current corpus is Latin only), mixed Latin text, and a native PowerPoint comparison.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel",
+        "measurement"
+      ]
+    },
+    "Miriam": {
+      "nextAction": "Separate Hebrew metrics, niqqud, punctuation and mixed-text tests. Requires host loading proof, native-script measurements (the current corpus is Latin only), mixed Latin text, and a native PowerPoint comparison.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel",
+        "measurement"
+      ]
+    },
+    "Angsana New": {
+      "nextAction": "Evaluate its serif character and stacked marks; the existing Latin measurements (75% delta) are insufficient. Requires host loading proof, native-script measurements (the current corpus is Latin only), mixed Latin text, and a native PowerPoint comparison.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel",
+        "measurement"
+      ]
+    },
+    "DilleniaUPC": {
+      "nextAction": "Evaluate a looped Thai candidate and matching line metrics. Requires host loading proof, native-script measurements (the current corpus is Latin only), mixed Latin text, and a native PowerPoint comparison.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel",
+        "measurement"
+      ]
+    },
+    "Aparajita": {
+      "nextAction": "Address serif-to-sans differences; test conjuncts, marks and wrapping. Requires host loading proof, native-script measurements (the current corpus is Latin only), mixed Latin text, and a native PowerPoint comparison.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel",
+        "measurement"
+      ]
+    },
+    "Mangal": {
+      "nextAction": "Conjuncts, reph, vowel placement and line metrics. Requires host loading proof, native-script measurements (the current corpus is Latin only), mixed Latin text, and a native PowerPoint comparison.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel",
+        "measurement"
+      ]
+    },
+    "Nirmala UI": {
+      "nextAction": "Provide and qualify routes for every required Indic script, not just Devanagari. Requires host loading proof, native-script measurements (the current corpus is Latin only), mixed Latin text, and a native PowerPoint comparison.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel",
+        "measurement"
+      ]
+    },
+    "Shonar Bangla": {
+      "nextAction": "Measure separately from Vrinda; address Shonar Bangla's serif character. Requires host loading proof, native-script measurements (the current corpus is Latin only), mixed Latin text, and a native PowerPoint comparison.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel",
+        "measurement"
+      ]
+    },
+    "Vrinda": {
+      "nextAction": "Measure separately from Shonar Bangla. Requires host loading proof, native-script measurements (the current corpus is Latin only), mixed Latin text, and a native PowerPoint comparison.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel",
+        "measurement"
+      ]
+    },
+    "Shruti": {
+      "nextAction": "Conjuncts, marks and wrapping. Requires host loading proof, native-script measurements (the current corpus is Latin only), mixed Latin text, and a native PowerPoint comparison.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel",
+        "measurement"
+      ]
+    },
+    "Raavi": {
+      "nextAction": "Addak, tippi, bindi, marks and wrapping. Requires host loading proof, native-script measurements (the current corpus is Latin only), mixed Latin text, and a native PowerPoint comparison.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel",
+        "measurement"
+      ]
+    },
+    "Kalinga": {
+      "nextAction": "Odia conjuncts, vowel positioning and line metrics. Requires host loading proof, native-script measurements (the current corpus is Latin only), mixed Latin text, and a native PowerPoint comparison.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel",
+        "measurement"
+      ]
+    },
+    "Latha": {
+      "nextAction": "Marks, mixed-text widths and wrapping. Requires host loading proof, native-script measurements (the current corpus is Latin only), mixed Latin text, and a native PowerPoint comparison.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel",
+        "measurement"
+      ]
+    },
+    "Gautami": {
+      "nextAction": "Conjuncts, marks and line bounds. Requires host loading proof, native-script measurements (the current corpus is Latin only), mixed Latin text, and a native PowerPoint comparison.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel",
+        "measurement"
+      ]
+    },
+    "Tunga": {
+      "nextAction": "Ottakshara, vowel placement and wrapping. Requires host loading proof, native-script measurements (the current corpus is Latin only), mixed Latin text, and a native PowerPoint comparison.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel",
+        "measurement"
+      ]
+    },
+    "Kartika": {
+      "nextAction": "Conjuncts, chillus, marks and wrapping. Requires host loading proof, native-script measurements (the current corpus is Latin only), mixed Latin text, and a native PowerPoint comparison.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel",
+        "measurement"
+      ]
+    },
+    "DaunPenh": {
+      "nextAction": "Separate coeng and conjunct, mark-bound and line-height tests. Requires host loading proof, native-script measurements (the current corpus is Latin only), mixed Latin text, and a native PowerPoint comparison.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel",
+        "measurement"
+      ]
+    },
+    "Khmer UI": {
+      "nextAction": "Separate coeng and conjunct, mark-bound and line-height tests. Requires host loading proof, native-script measurements (the current corpus is Latin only), mixed Latin text, and a native PowerPoint comparison.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel",
+        "measurement"
+      ]
+    },
+    "Nyala": {
+      "nextAction": "Address serif-to-sans differences; verify glyphs and line metrics. Requires host loading proof, native-script measurements (the current corpus is Latin only), mixed Latin text, and a native PowerPoint comparison.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel",
+        "measurement"
+      ]
+    },
+    "Sylfaen": {
+      "nextAction": "Load all required scripts (Latin, Armenian, Georgian) and qualify each script independently; the route is Noto Sans (Latin delta 11%). Requires host loading proof, native-script measurements (the current corpus is Latin only), mixed Latin text, and a native PowerPoint comparison.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel",
+        "measurement"
+      ]
+    },
+    "Ebrima": {
+      "nextAction": "Add qualified coverage for N'Ko, Tifinagh and Vai; the Noto Sans route is incomplete. Requires host loading proof, native-script measurements (the current corpus is Latin only), mixed Latin text, and a native PowerPoint comparison.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel",
+        "measurement"
+      ]
+    },
+    "Meiryo": {
+      "nextAction": "Japanese glyphs, punctuation, Latin widths and line height. Requires host loading proof, native-script measurements (the current corpus is Latin only), mixed Latin text, and a native PowerPoint comparison.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel",
+        "measurement",
+        "glyphFallback"
+      ]
+    },
+    "MS Gothic": {
+      "nextAction": "Qualify fixed-pitch Japanese and Latin behavior (Latin-corpus delta up to 15%). Requires host loading proof, native-script measurements (the current corpus is Latin only), mixed Latin text, and a native PowerPoint comparison.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel",
+        "measurement",
+        "glyphFallback"
+      ]
+    },
+    "MS Mincho": {
+      "nextAction": "Evaluate a suitable Japanese serif candidate (currently sans Noto Sans JP). Requires host loading proof, native-script measurements (the current corpus is Latin only), mixed Latin text, and a native PowerPoint comparison.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel",
+        "measurement",
+        "glyphFallback"
+      ]
+    },
+    "Yu Gothic": {
+      "nextAction": "Japanese metrics and explicit handling of the differing macOS family name. Requires host loading proof, native-script measurements (the current corpus is Latin only), mixed Latin text, and a native PowerPoint comparison.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel",
+        "measurement",
+        "glyphFallback"
+      ]
+    },
+    "Microsoft YaHei": {
+      "nextAction": "Separate Simplified Chinese glyph, punctuation and metric tests. Requires host loading proof, native-script measurements (the current corpus is Latin only), mixed Latin text, and a native PowerPoint comparison.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel",
+        "measurement",
+        "glyphFallback"
+      ]
+    },
+    "SimHei": {
+      "nextAction": "Separate Simplified Chinese glyph, punctuation and metric tests. Requires host loading proof, native-script measurements (the current corpus is Latin only), mixed Latin text, and a native PowerPoint comparison.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel",
+        "measurement",
+        "glyphFallback"
+      ]
+    },
+    "SimSun": {
+      "nextAction": "Evaluate a suitable Song-style serif candidate (currently sans Noto Sans SC). Requires host loading proof, native-script measurements (the current corpus is Latin only), mixed Latin text, and a native PowerPoint comparison.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel",
+        "measurement",
+        "glyphFallback"
+      ]
+    },
+    "FangSong": {
+      "nextAction": "Evaluate a candidate matching its calligraphic serif character. Requires host loading proof, native-script measurements (the current corpus is Latin only), mixed Latin text, and a native PowerPoint comparison.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel",
+        "measurement",
+        "glyphFallback"
+      ]
+    },
+    "Microsoft JhengHei": {
+      "nextAction": "Traditional Chinese localization, punctuation and metrics. Requires host loading proof, native-script measurements (the current corpus is Latin only), mixed Latin text, and a native PowerPoint comparison.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel",
+        "measurement",
+        "glyphFallback"
+      ]
+    },
+    "MingLiU": {
+      "nextAction": "Evaluate serif candidates; distinguish spacing behavior and Extension B coverage. Requires host loading proof, native-script measurements (the current corpus is Latin only), mixed Latin text, and a native PowerPoint comparison.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel",
+        "measurement",
+        "glyphFallback"
+      ]
+    },
+    "PMingLiU": {
+      "nextAction": "Evaluate serif candidates; distinguish proportional spacing and Extension B coverage. Requires host loading proof, native-script measurements (the current corpus is Latin only), mixed Latin text, and a native PowerPoint comparison.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel",
+        "measurement",
+        "glyphFallback"
+      ]
+    },
+    "Malgun Gothic": {
+      "nextAction": "Hangul, Hanja, localization and Latin metrics. Requires host loading proof, native-script measurements (the current corpus is Latin only), mixed Latin text, and a native PowerPoint comparison.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel",
+        "measurement",
+        "glyphFallback"
+      ]
+    },
+    "Batang": {
+      "nextAction": "Evaluate Korean serif candidates (currently sans Noto Sans KR). Requires host loading proof, native-script measurements (the current corpus is Latin only), mixed Latin text, and a native PowerPoint comparison.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel",
+        "measurement",
+        "glyphFallback"
+      ]
+    },
+    "BatangChe": {
+      "nextAction": "Evaluate Korean serif candidates; qualify Che fixed spacing independently. Requires host loading proof, native-script measurements (the current corpus is Latin only), mixed Latin text, and a native PowerPoint comparison.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel",
+        "measurement",
+        "glyphFallback"
+      ]
+    },
+    "Gungsuh": {
+      "nextAction": "Evaluate appropriate serif appearance. Requires host loading proof, native-script measurements (the current corpus is Latin only), mixed Latin text, and a native PowerPoint comparison.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel",
+        "measurement",
+        "glyphFallback"
+      ]
+    },
+    "GungsuhChe": {
+      "nextAction": "Evaluate appropriate serif appearance and distinguish Che fixed spacing. Requires host loading proof, native-script measurements (the current corpus is Latin only), mixed Latin text, and a native PowerPoint comparison.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel",
+        "measurement",
+        "glyphFallback"
+      ]
+    },
+    "Roboto": {
+      "nextAction": "Regress four exact faces across shipped hosts (Node and browser exact-face evidence dates from 2026-09-10; editor, gallery editor and gallery cards are unverified).",
+      "evidence": [
+        "baseFonts",
+        "variants"
+      ]
+    },
+    "Roboto Mono": {
+      "nextAction": "Verify regular and bold in the editor and gallery editor (gallery cards do not self-host it); italic faces stay explicit gaps (not bundled) until a gallery value needs them. Used by 848 of the 850 parity values as the code font, all already real and pass, so it ranks low.",
+      "evidence": [
+        "baseFonts",
+        "variants"
+      ]
+    },
+    "Arimo": {
+      "nextAction": "Verify four pinned styles and its Arial metric role independently of the family itself.",
+      "evidence": [
+        "measurement"
+      ]
+    },
+    "Carlito": {
+      "nextAction": "Verify four pinned styles and its Calibri role independently. Preserve the upstream bytes: the Reserved Font Name applies.",
+      "evidence": [
+        "carlito",
+        "guards"
+      ]
+    },
+    "Cousine": {
+      "nextAction": "Verify four pinned styles and its Courier New role independently of the family itself.",
+      "evidence": [
+        "measurement"
+      ]
+    },
+    "Tinos": {
+      "nextAction": "Verify four pinned styles and its Times New Roman role independently of the family itself.",
+      "evidence": [
+        "measurement"
+      ]
+    },
+    "Caladea": {
+      "nextAction": "Verify exact Caladea rendering separately from Cambria compatibility.",
+      "evidence": [
+        "measurement"
+      ]
+    },
+    "Gelasio": {
+      "nextAction": "Verify consistent feature handling (liga and clig off for Georgia) across measurement, SVG, browser and raster paths.",
+      "evidence": [
+        "georgia"
+      ]
+    },
+    "Open Sans": {
+      "nextAction": "Verify the newly bundled faces in actual hosts and rerun the old missing-face failures; the editor and gallery editor load them only after opf-editor#42 (gallery cards already self-host it).",
+      "evidence": [
+        "openPack",
+        "intos"
+      ]
+    },
+    "Montserrat": {
+      "nextAction": "Verify the newly bundled faces in actual hosts, including the 900 face used for Arial Black, and rerun the old missing-face failures.",
+      "evidence": [
+        "openPack"
+      ]
+    },
+    "Poppins": {
+      "nextAction": "Verify the newly bundled faces in actual hosts and rerun the old missing-face failures.",
+      "evidence": [
+        "openPack"
+      ]
+    },
+    "PT Serif": {
+      "nextAction": "Verify the newly bundled faces (unmodified upstream, Reserved Font Name) in actual hosts and rerun the old missing-face failure.",
+      "evidence": [
+        "openPack",
+        "guards"
+      ]
+    },
+    "Lora": {
+      "nextAction": "Verify the newly bundled faces in actual hosts and rerun the old missing-face failure.",
+      "evidence": [
+        "openPack"
+      ]
+    },
+    "Merriweather Sans": {
+      "nextAction": "Verify the newly bundled faces in actual hosts and rerun the old missing-face failure.",
+      "evidence": [
+        "openPack"
+      ]
+    },
+    "Source Sans 3": {
+      "nextAction": "Verify the newly bundled faces in actual hosts; it also serves Candara, Corbel, Gill Sans MT and Seaford.",
+      "evidence": [
+        "openPack"
+      ]
+    },
+    "Source Sans Pro": {
+      "nextAction": "Qualify the Source Sans 3 alias across all hosts or bundle the genuine Source Sans Pro version; the alias is reported visual.",
+      "evidence": [
+        "openPack"
+      ]
+    },
+    "Bebas Neue": {
+      "nextAction": "Verify the upright face in actual hosts; keep unavailable style handling explicit.",
+      "evidence": [
+        "openPack"
+      ]
+    },
+    "Red Hat Display": {
+      "nextAction": "Complete the required 600 and italic faces (bundled: 300, 400, 700 upright) needed by Segoe UI, Semibold, Light and Semilight.",
+      "evidence": [
+        "openPack"
+      ]
+    },
+    "Red Hat Text": {
+      "nextAction": "Complete required style coverage beyond upright regular and bold (italics), needed by Tahoma.",
+      "evidence": [
+        "openPack"
+      ]
+    },
+    "Anton": {
+      "nextAction": "Add a permitted, pinned renderer bundle; verify exact-face behavior and its Impact role separately.",
+      "evidence": [
+        "measurement"
+      ]
+    },
+    "Archivo Narrow": {
+      "nextAction": "Add a permitted, pinned renderer bundle with all required styles; verify its Arial Narrow role separately.",
+      "evidence": [
+        "measurement"
+      ]
+    },
+    "Barlow": {
+      "nextAction": "Add a permitted, pinned renderer bundle with all required styles; verify its Franklin Gothic and Grandview roles separately.",
+      "evidence": [
+        "measurement"
+      ]
+    },
+    "Bitter": {
+      "nextAction": "Add a permitted, pinned renderer bundle with all required styles; verify its Rockwell role separately.",
+      "evidence": [
+        "measurement"
+      ]
+    },
+    "EB Garamond": {
+      "nextAction": "Add a permitted, pinned renderer bundle with all required styles; verify its Garamond role separately.",
+      "evidence": [
+        "measurement"
+      ]
+    },
+    "Figtree": {
+      "nextAction": "Add a permitted, pinned renderer bundle with all required styles; verify its Tenorite and Trebuchet roles separately.",
+      "evidence": [
+        "measurement"
+      ]
+    },
+    "Libre Caslon Text": {
+      "nextAction": "Add a permitted, pinned renderer bundle with all required styles; verify its Baskerville and Bookman roles separately.",
+      "evidence": [
+        "measurement"
+      ]
+    },
+    "Work Sans": {
+      "nextAction": "Add a permitted, pinned renderer bundle with all required styles; verify its Century Gothic and Lucida Sans roles separately.",
+      "evidence": [
+        "measurement"
+      ]
+    },
+    "Liberation Mono": {
+      "nextAction": "Verify permitted release licenses, bundle required styles, and independently qualify its Courier New metric role (currently the alternate to Cousine).",
+      "evidence": [
+        "guards",
+        "measurement"
+      ]
+    },
+    "Liberation Sans": {
+      "nextAction": "Verify permitted release licenses, bundle required styles, and independently qualify its Arial metric role (currently the alternate to Arimo).",
+      "evidence": [
+        "guards",
+        "measurement"
+      ]
+    },
+    "Liberation Serif": {
+      "nextAction": "Verify permitted release licenses, bundle required styles, and independently qualify its Times New Roman metric role (currently the alternate to Tinos).",
+      "evidence": [
+        "guards",
+        "measurement"
+      ]
+    },
+    "Playfair Display": {
+      "nextAction": "Resolve the raster variable-axis limitation (resvg ignores wght, so it is not bundled) with upstream static files, supported variable rendering, or properly renamed permitted instances; prove distinct weights.",
+      "evidence": [
+        "openPack"
+      ]
+    },
+    "Raleway": {
+      "nextAction": "Resolve the raster variable-axis limitation (resvg ignores wght, so it is not bundled); the Reserved Font Name forbids renamed instances, so use unmodified upstream static files; prove distinct weights.",
+      "evidence": [
+        "openPack",
+        "guards"
+      ]
+    },
+    "Noto Sans": {
+      "nextAction": "Load the selected-family faces even for Latin-only samples; verify Latin, Greek, Cyrillic and four styles. It is the default glyph-fallback face.",
+      "evidence": [
+        "glyphFallback",
+        "scriptAuto"
+      ]
+    },
+    "Noto Sans JP": {
+      "nextAction": "Explicit family loading, locale-specific glyphs, punctuation, fallback coverage and distinct weights.",
+      "evidence": [
+        "scriptAuto",
+        "glyphFallback"
+      ]
+    },
+    "Noto Sans SC": {
+      "nextAction": "Explicit family loading, locale-specific glyphs, punctuation, fallback coverage and distinct weights.",
+      "evidence": [
+        "scriptAuto",
+        "glyphFallback"
+      ]
+    },
+    "Noto Sans TC": {
+      "nextAction": "Explicit family loading, locale-specific glyphs, punctuation, fallback coverage and distinct weights.",
+      "evidence": [
+        "scriptAuto",
+        "glyphFallback"
+      ]
+    },
+    "Noto Sans KR": {
+      "nextAction": "Explicit family loading, locale-specific glyphs, punctuation, fallback coverage and distinct weights.",
+      "evidence": [
+        "scriptAuto",
+        "glyphFallback"
+      ]
+    },
+    "Noto Naskh Arabic": {
+      "nextAction": "Joining, marks, RTL and mixed-text proof.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel"
+      ]
+    },
+    "Noto Nastaliq Urdu": {
+      "nextAction": "Nastaliq shaping, tall marks, RTL wrapping and line bounds.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel"
+      ]
+    },
+    "Noto Sans Hebrew": {
+      "nextAction": "Independent RTL, niqqud, punctuation and ink-bound tests.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel"
+      ]
+    },
+    "Noto Serif Hebrew": {
+      "nextAction": "Independent RTL, niqqud, punctuation and ink-bound tests.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel"
+      ]
+    },
+    "Noto Sans Bengali": {
+      "nextAction": "Its own Bengali corpus: conjuncts, vowel and mark positioning, mixed text and wrapping.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel"
+      ]
+    },
+    "Noto Sans Devanagari": {
+      "nextAction": "Its own Devanagari corpus: conjuncts, vowel and mark positioning, mixed text and wrapping.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel"
+      ]
+    },
+    "Noto Sans Gujarati": {
+      "nextAction": "Its own Gujarati corpus: conjuncts, vowel and mark positioning, mixed text and wrapping.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel"
+      ]
+    },
+    "Noto Sans Gurmukhi": {
+      "nextAction": "Its own Gurmukhi corpus: conjuncts, vowel and mark positioning, mixed text and wrapping.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel"
+      ]
+    },
+    "Noto Sans Kannada": {
+      "nextAction": "Its own Kannada corpus: conjuncts, vowel and mark positioning, mixed text and wrapping.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel"
+      ]
+    },
+    "Noto Sans Malayalam": {
+      "nextAction": "Its own Malayalam corpus: conjuncts, vowel and mark positioning, mixed text and wrapping.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel"
+      ]
+    },
+    "Noto Sans Oriya": {
+      "nextAction": "Its own Oriya corpus: conjuncts, vowel and mark positioning, mixed text and wrapping.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel"
+      ]
+    },
+    "Noto Sans Tamil": {
+      "nextAction": "Its own Tamil corpus: conjuncts, vowel and mark positioning, mixed text and wrapping.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel"
+      ]
+    },
+    "Noto Sans Telugu": {
+      "nextAction": "Its own Telugu corpus: conjuncts, vowel and mark positioning, mixed text and wrapping.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel"
+      ]
+    },
+    "Noto Sans Thai": {
+      "nextAction": "Separate stacked-mark and line-break tests.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel"
+      ]
+    },
+    "Noto Sans Khmer": {
+      "nextAction": "Separate conjunct and mark-bound tests.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel"
+      ]
+    },
+    "Noto Sans Armenian": {
+      "nextAction": "Separate script coverage, punctuation, marks and line-bound tests.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel"
+      ]
+    },
+    "Noto Sans Georgian": {
+      "nextAction": "Separate script coverage, punctuation, marks and line-bound tests.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel"
+      ]
+    },
+    "Noto Sans Ethiopic": {
+      "nextAction": "Separate script coverage, punctuation, marks and line-bound tests.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel"
+      ]
+    },
+    "Noto Sans Mongolian": {
+      "nextAction": "Verify joining and vertical-writing boundaries; resolve the regular-only style coverage.",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel"
+      ]
+    },
+    "Cambria Math": {
+      "nextAction": "Qualify a permitted math font and a math-aware layout and export path using fractions, radicals, operators and native equations (renderers fail with math-font-required today).",
+      "evidence": [
+        "licensing"
+      ]
+    },
+    "Segoe UI Emoji": {
+      "nextAction": "Qualify a permitted color-emoji path, including ZWJ sequences, variation selectors and skin tones, with browser, raster and native behavior.",
+      "evidence": [
+        "licensing"
+      ]
+    },
+    "Symbol": {
+      "nextAction": "Build reversible, version-specific character-to-glyph mappings; account for Apple and Microsoft differences.",
+      "evidence": [
+        "licensing"
+      ]
+    },
+    "Webdings": {
+      "nextAction": "Qualify permitted glyph replacements with exhaustive code, advance, bounds, export and round-trip tests.",
+      "evidence": [
+        "licensing"
+      ]
+    },
+    "Wingdings": {
+      "nextAction": "Build and verify its own reversible mapping; retain original PPTX font names and codes (renderers require font-encoding-required today).",
+      "evidence": [
+        "licensing"
+      ]
+    },
+    "Intos": {
+      "nextAction": "Vendor Intos in opf-render (opf-render#54; pinned commit fef9315c14da9e4b23b4c3cac8e718998d4e4736, OFL-1.1, no Reserved Font Name, single-maintainer project so Roboto and Carlito stay as alternates) and load it lazily in the browser hosts (opf-editor#42); then verify four styles in every host and its role as the Aptos replacement independently.",
+      "evidence": [
+        "intos",
+        "licensing"
+      ]
+    },
+    "Intos Display": {
+      "nextAction": "Vendor Intos Display in opf-render (opf-render#54; pinned commit fef9315c14da9e4b23b4c3cac8e718998d4e4736, OFL-1.1, no Reserved Font Name, single-maintainer project so Roboto and Carlito stay as alternates) and load it lazily in the browser hosts (opf-editor#42); then verify four styles in every host and its role as the Aptos Display replacement independently.",
+      "evidence": [
+        "intos",
+        "licensing"
+      ]
+    },
+    "Intos Narrow": {
+      "nextAction": "Vendor Intos Narrow in opf-render (opf-render#54; pinned commit fef9315c14da9e4b23b4c3cac8e718998d4e4736, OFL-1.1, no Reserved Font Name, single-maintainer project so Roboto and Carlito stay as alternates) and load it lazily in the browser hosts (opf-editor#42); then verify four styles in every host and its role as the Aptos Narrow replacement independently.",
+      "evidence": [
+        "intos",
+        "licensing"
+      ]
+    },
+    "Intos Serif": {
+      "nextAction": "Vendor Intos Serif in opf-render (opf-render#54; pinned commit fef9315c14da9e4b23b4c3cac8e718998d4e4736, OFL-1.1, no Reserved Font Name, single-maintainer project so Roboto and Carlito stay as alternates) and load it lazily in the browser hosts (opf-editor#42); then verify four styles in every host and its role as the Aptos Serif replacement independently.",
+      "evidence": [
+        "intos",
+        "licensing"
+      ]
+    }
+  },
+  "candidates": {
+    "Aptos": [
+      {
+        "name": "Intos",
+        "verdict": "accepted-metric (policy, opf#166 merged as 338ddcd4)",
+        "license": "OFL-1.1",
+        "reservedFontName": null,
+        "source": "https://github.com/muglug/intos/tree/fef9315c14da9e4b23b4c3cac8e718998d4e4736",
+        "commit": "fef9315c14da9e4b23b4c3cac8e718998d4e4736",
+        "outlines": "original (Inter-derived; 0 of 975 shared glyphs identical)",
+        "reference": "Aptos 2.01;O365",
+        "perStyle": [
+          {
+            "style": "400",
+            "meanAbsWidthDelta": 0,
+            "maxAbsWidthDelta": 0
+          },
+          {
+            "style": "700",
+            "meanAbsWidthDelta": 0,
+            "maxAbsWidthDelta": 0
+          },
+          {
+            "style": "400i",
+            "meanAbsWidthDelta": 0,
+            "maxAbsWidthDelta": 0
+          },
+          {
+            "style": "700i",
+            "meanAbsWidthDelta": 0,
+            "maxAbsWidthDelta": 0
+          }
+        ],
+        "meanAbsWidthDelta": 0,
+        "maxAbsWidthDelta": 0,
+        "verticalMetricsMatch": true,
+        "verifiedBy": "independently re-verified for this family",
+        "date": "2026-09-29",
+        "prs": [
+          "opf#166 (merged)",
+          "opf-render#54 (open)",
+          "opf-editor#42 (open)"
+        ],
+        "corpus": "Latin, 300 strings (script-specific text not applicable to Latin Aptos)"
+      }
+    ],
+    "Aptos Display": [
+      {
+        "name": "Intos Display",
+        "verdict": "accepted-metric (policy, opf#166 merged as 338ddcd4)",
+        "license": "OFL-1.1",
+        "reservedFontName": null,
+        "source": "https://github.com/muglug/intos/tree/fef9315c14da9e4b23b4c3cac8e718998d4e4736",
+        "commit": "fef9315c14da9e4b23b4c3cac8e718998d4e4736",
+        "outlines": "original (Inter-derived; 0 of 975 shared glyphs identical)",
+        "reference": "Aptos Display 2.01;O365",
+        "perStyle": [
+          {
+            "style": "400",
+            "meanAbsWidthDelta": 0,
+            "maxAbsWidthDelta": 0
+          },
+          {
+            "style": "700",
+            "meanAbsWidthDelta": 0,
+            "maxAbsWidthDelta": 0
+          },
+          {
+            "style": "400i",
+            "meanAbsWidthDelta": 0,
+            "maxAbsWidthDelta": 0
+          },
+          {
+            "style": "700i",
+            "meanAbsWidthDelta": 0,
+            "maxAbsWidthDelta": 0
+          }
+        ],
+        "meanAbsWidthDelta": 0,
+        "maxAbsWidthDelta": 0,
+        "verticalMetricsMatch": true,
+        "verifiedBy": "independently re-verified for this family",
+        "date": "2026-09-29",
+        "prs": [
+          "opf#166 (merged)",
+          "opf-render#54 (open)",
+          "opf-editor#42 (open)"
+        ],
+        "corpus": "Latin, 300 strings (script-specific text not applicable to Latin Aptos)"
+      }
+    ],
+    "Aptos Narrow": [
+      {
+        "name": "Intos Narrow",
+        "verdict": "accepted-metric (policy, opf#166 merged as 338ddcd4)",
+        "license": "OFL-1.1",
+        "reservedFontName": null,
+        "source": "https://github.com/muglug/intos/tree/fef9315c14da9e4b23b4c3cac8e718998d4e4736",
+        "commit": "fef9315c14da9e4b23b4c3cac8e718998d4e4736",
+        "outlines": "original (Inter-derived; 0 of 975 shared glyphs identical)",
+        "reference": "Aptos Narrow 2.01;O365",
+        "perStyle": [
+          {
+            "style": "400",
+            "meanAbsWidthDelta": 0,
+            "maxAbsWidthDelta": 0
+          },
+          {
+            "style": "700",
+            "meanAbsWidthDelta": 0,
+            "maxAbsWidthDelta": 0
+          },
+          {
+            "style": "400i",
+            "meanAbsWidthDelta": 0,
+            "maxAbsWidthDelta": 0
+          },
+          {
+            "style": "700i",
+            "meanAbsWidthDelta": 0,
+            "maxAbsWidthDelta": 0
+          }
+        ],
+        "meanAbsWidthDelta": 0,
+        "maxAbsWidthDelta": 0,
+        "verticalMetricsMatch": true,
+        "verifiedBy": "independently re-verified for this family",
+        "date": "2026-09-29",
+        "prs": [
+          "opf#166 (merged)",
+          "opf-render#54 (open)",
+          "opf-editor#42 (open)"
+        ],
+        "corpus": "Latin, 300 strings (script-specific text not applicable to Latin Aptos)"
+      }
+    ],
+    "Aptos Serif": [
+      {
+        "name": "Intos Serif",
+        "verdict": "accepted-metric (policy, opf#166 merged as 338ddcd4)",
+        "license": "OFL-1.1",
+        "reservedFontName": null,
+        "source": "https://github.com/muglug/intos/tree/fef9315c14da9e4b23b4c3cac8e718998d4e4736",
+        "commit": "fef9315c14da9e4b23b4c3cac8e718998d4e4736",
+        "outlines": "original (Gelasio-derived; shares eight plain rectangles with the original)",
+        "reference": "Aptos Serif 2.01;240513210638;O365 (Microsoft download)",
+        "perStyle": [
+          {
+            "style": "400",
+            "meanAbsWidthDelta": 0,
+            "maxAbsWidthDelta": 0
+          },
+          {
+            "style": "700",
+            "meanAbsWidthDelta": 0,
+            "maxAbsWidthDelta": 0
+          },
+          {
+            "style": "400i",
+            "meanAbsWidthDelta": 0,
+            "maxAbsWidthDelta": 0
+          },
+          {
+            "style": "700i",
+            "meanAbsWidthDelta": 0,
+            "maxAbsWidthDelta": 0
+          }
+        ],
+        "meanAbsWidthDelta": 0,
+        "maxAbsWidthDelta": 0,
+        "verticalMetricsMatch": true,
+        "verifiedBy": "measured from the Microsoft Aptos Fonts download (not independently re-measured)",
+        "date": "2026-09-29",
+        "prs": [
+          "opf#166 (merged)",
+          "opf-render#54 (open)",
+          "opf-editor#42 (open)"
+        ],
+        "corpus": "Latin, 300 strings (script-specific text not applicable to Latin Aptos)"
+      }
+    ],
+    "Segoe UI": [
+      {
+        "name": "Selawik 1.01",
+        "verdict": "rejected",
+        "license": "OFL-1.1",
+        "reservedFontName": "Selawik",
+        "reference": "Segoe UI 5.71",
+        "perStyle": [
+          {
+            "style": "400",
+            "corpus": "FF-31 standard corpus (300 Latin strings; opf#166 author)",
+            "meanAbsWidthDelta": 0.0016,
+            "maxAbsWidthDelta": 0.0251
+          },
+          {
+            "style": "700",
+            "corpus": "FF-31 standard corpus (300 Latin strings; opf#166 author)",
+            "meanAbsWidthDelta": 0.002,
+            "maxAbsWidthDelta": 0.021
+          },
+          {
+            "style": "400i",
+            "corpus": "FF-31 standard corpus (300 Latin strings; opf#166 author)",
+            "meanAbsWidthDelta": 0.0265,
+            "maxAbsWidthDelta": 0.0516,
+            "note": "no italic faces; the upright face stands in"
+          },
+          {
+            "style": "700i",
+            "corpus": "FF-31 standard corpus (300 Latin strings; opf#166 author)",
+            "meanAbsWidthDelta": 0.0109,
+            "maxAbsWidthDelta": 0.0438,
+            "note": "no italic faces; the upright face stands in"
+          },
+          {
+            "style": "400",
+            "corpus": "opf#166 reviewer's broader own corpus (Latin; not committed)",
+            "meanAbsWidthDelta": 0.0073,
+            "maxAbsWidthDelta": 0.097,
+            "note": "regular; independent measurement by the opf#166 reviewer"
+          }
+        ],
+        "note": "Basic-Latin advances are identical; the differences are missing kerning and only 349 code points. Lowercase is 4.8% shorter and hhea ascent 8% smaller. Measured in opf#166.",
+        "date": "2026-09-29",
+        "prs": [
+          "opf#166"
+        ],
+        "corpusNote": "Both regular figures are correct for their corpus: 0.16% mean and 2.51% max on the standard 300-string FF-31 corpus, 0.73% mean and 9.7% max on the reviewer's broader corpus. Verdict unchanged: rejected, not metric."
+      }
+    ],
+    "Segoe UI Light": [
+      {
+        "name": "Selawik 1.01",
+        "verdict": "rejected",
+        "license": "OFL-1.1",
+        "reservedFontName": "Selawik",
+        "reference": "Segoe UI Light 5.71",
+        "perStyle": [
+          {
+            "style": "300",
+            "corpus": "FF-31 standard corpus (300 Latin strings; opf#166 author)",
+            "meanAbsWidthDelta": 0.0031,
+            "maxAbsWidthDelta": 0.0438
+          }
+        ],
+        "note": "Basic-Latin advances are identical; the differences are missing kerning and only 349 code points. Lowercase is 4.8% shorter and hhea ascent 8% smaller. Measured in opf#166.",
+        "date": "2026-09-29",
+        "prs": [
+          "opf#166"
+        ]
+      }
+    ],
+    "Segoe UI Semilight": [
+      {
+        "name": "Selawik 1.01",
+        "verdict": "rejected",
+        "license": "OFL-1.1",
+        "reservedFontName": "Selawik",
+        "reference": "Segoe UI Semilight 5.71",
+        "perStyle": [
+          {
+            "style": "350",
+            "corpus": "FF-31 standard corpus (300 Latin strings; opf#166 author)",
+            "meanAbsWidthDelta": 0.0034,
+            "maxAbsWidthDelta": 0.0276
+          }
+        ],
+        "note": "Basic-Latin advances are identical; the differences are missing kerning and only 349 code points. Lowercase is 4.8% shorter and hhea ascent 8% smaller. Measured in opf#166.",
+        "date": "2026-09-29",
+        "prs": [
+          "opf#166"
+        ]
+      }
+    ],
+    "Segoe UI Semibold": [
+      {
+        "name": "Selawik 1.01",
+        "verdict": "rejected",
+        "license": "OFL-1.1",
+        "reservedFontName": "Selawik",
+        "reference": "Segoe UI Semibold 5.71",
+        "perStyle": [
+          {
+            "style": "600",
+            "corpus": "FF-31 standard corpus (300 Latin strings; opf#166 author)",
+            "meanAbsWidthDelta": 0.0175,
+            "maxAbsWidthDelta": 0.0441
+          }
+        ],
+        "note": "Basic-Latin advances are identical; the differences are missing kerning and only 349 code points. Lowercase is 4.8% shorter and hhea ascent 8% smaller. Measured in opf#166.",
+        "date": "2026-09-29",
+        "prs": [
+          "opf#166"
+        ]
+      }
+    ]
+  },
+  "evidence": {
+    "measurement": {
+      "label": "Font replacement measurements (2026-09-23)",
+      "url": "docs/evidence/font-replacements-20260923/README.md"
+    },
+    "licensing": {
+      "label": "Font licensing and policy table",
+      "url": "docs/programs/font-fidelity-everywhere/font-licensing.md"
+    },
+    "intos": [
+      {
+        "label": "opf#166 (Intos policy, merged 338ddcd4)",
+        "url": "https://github.com/OpenPresentation/opf/pull/166"
+      },
+      {
+        "label": "opf-render#54 (Intos faces, in flight)",
+        "url": "https://github.com/OpenPresentation/opf-render/pull/54"
+      },
+      {
+        "label": "opf-editor#42 (lazy loading, in flight)",
+        "url": "https://github.com/OpenPresentation/opf-editor/pull/42"
+      }
+    ],
+    "georgia": [
+      {
+        "label": "opf#163 (Georgia metric tier)",
+        "url": "https://github.com/OpenPresentation/opf/pull/163"
+      },
+      {
+        "label": "opf-render#49 (liga/clig off, raster ZWNJ)",
+        "url": "https://github.com/OpenPresentation/opf-render/pull/49"
+      }
+    ],
+    "openPack": {
+      "label": "opf-render#50 (open families bundled)",
+      "url": "https://github.com/OpenPresentation/opf-render/pull/50"
+    },
+    "carlito": {
+      "label": "opf-render#58 (unmodified upstream Carlito)",
+      "url": "https://github.com/OpenPresentation/opf-render/pull/58"
+    },
+    "scriptAuto": [
+      {
+        "label": "opf-render#55 (auto script fonts)",
+        "url": "https://github.com/OpenPresentation/opf-render/pull/55"
+      },
+      {
+        "label": "opf-editor#40 (editor script fonts)",
+        "url": "https://github.com/OpenPresentation/opf-editor/pull/40"
+      }
+    ],
+    "glyphFallback": {
+      "label": "opf-render#57 (glyph fallback)",
+      "url": "https://github.com/OpenPresentation/opf-render/pull/57"
+    },
+    "galleryFonts": [
+      {
+        "label": "pptx-gallery#53 (bundled previews)",
+        "url": "https://github.com/Data-Advantage/pptx-gallery/pull/53"
+      },
+      {
+        "label": "pptx-gallery#54 (unmodified RFN upstream files)",
+        "url": "https://github.com/Data-Advantage/pptx-gallery/pull/54"
+      }
+    ],
+    "guards": [
+      {
+        "label": "opf#165 (license and no-hotlink guards)",
+        "url": "https://github.com/OpenPresentation/opf/pull/165"
+      },
+      {
+        "label": "opf-render#53 (license guards)",
+        "url": "https://github.com/OpenPresentation/opf-render/pull/53"
+      }
+    ],
+    "selawik": {
+      "label": "opf#166 (Selawik rejected for Segoe UI)",
+      "url": "https://github.com/OpenPresentation/opf/pull/166"
+    },
+    "fontResolution": {
+      "label": "opf#159 (look-alike fontResolution)",
+      "url": "https://github.com/OpenPresentation/opf/pull/159"
+    },
+    "parity": {
+      "label": "Parity run 2026-09-29 (table drawn extent)",
+      "url": "docs/programs/font-fidelity-everywhere/gallery-support/parity/PARITY-2026-09-29-table-drawn-extent.md"
+    },
+    "scriptModel": {
+      "label": "Script font model",
+      "url": "docs/programs/font-fidelity-everywhere/script-font-model.md"
+    },
+    "aptosBrief": {
+      "label": "Aptos origin brief (FF-05)",
+      "url": "docs/programs/font-fidelity-everywhere/aptos-origin-brief.md"
+    },
+    "baseFonts": {
+      "label": "opf-render font-preparation evidence (2026-09-10, nine base faces, Node and browser)",
+      "url": "https://github.com/OpenPresentation/opf-render/tree/main/docs/evidence/font-preparation"
+    },
+    "variants": {
+      "label": "opf-render font-variants evidence (exact face selection)",
+      "url": "https://github.com/OpenPresentation/opf-render/tree/main/docs/evidence/font-variants"
+    },
+    "nativeInventory": {
+      "label": "Native font inventory (FF-04, 2026-09-29)",
+      "url": "docs/evidence/windows-native-font-inventory-20260929/README.md"
+    },
+    "calibriControl": {
+      "label": "Native Calibri control (FF-05 E6)",
+      "url": "docs/evidence/windows-native-calibri-control-20260929/README.md"
+    },
+    "metricCandidates": {
+      "label": "Intos and Selawik acceptance measurement (2026-09-29)",
+      "url": "docs/evidence/font-replacements-20260923/metric-candidates-20260929.json"
+    }
+  },
+  "galleryFontsSnapshot": "docs/programs/font-fidelity-everywhere/font-tracker.gallery-preview-fonts.json",
+  "measurementSources": {
+    "Georgia": {
+      "source": "docs/evidence/font-replacements-20260923/report.json",
+      "note": "The Georgia entry was replaced on 2026-09-29 by the Gelasio re-run with liga and clig off (opf#163); the other rows are the 2026-09-23 host run."
+    },
+    "Aptos": {
+      "source": "docs/evidence/font-replacements-20260923/metric-candidates-20260929.json",
+      "note": "Measured on 2026-09-29 (opf#166) against the Microsoft 365 cloud fonts, Aptos 2.01."
+    },
+    "Aptos Display": {
+      "source": "docs/evidence/font-replacements-20260923/metric-candidates-20260929.json",
+      "note": "Measured on 2026-09-29 (opf#166) against the Microsoft 365 cloud fonts, Aptos 2.01."
+    },
+    "Aptos Narrow": {
+      "source": "docs/evidence/font-replacements-20260923/metric-candidates-20260929.json",
+      "note": "Measured on 2026-09-29 (opf#166) against the Microsoft 365 cloud fonts, Aptos 2.01."
+    },
+    "Aptos Serif": {
+      "source": "docs/evidence/font-replacements-20260923/metric-candidates-20260929.json",
+      "note": "Measured on 2026-09-29 (opf#166) from the files in Microsoft's Aptos Fonts download, because Aptos Serif is not installed on the measuring host."
+    }
+  },
+  "acceptance": {},
+  "pendingBundle": {
+    "Aptos": {
+      "prs": [
+        "opf-render#54",
+        "opf-editor#42"
+      ],
+      "note": "Intos is the metric route in the merged policy (opf#166); its faces are vendored in the open opf-render#54 and lazy-loaded by the open opf-editor#42."
+    },
+    "Intos": {
+      "prs": [
+        "opf-render#54",
+        "opf-editor#42"
+      ],
+      "note": "Intos faces are vendored in the open opf-render#54 and lazy-loaded by the open opf-editor#42."
+    },
+    "Aptos Display": {
+      "prs": [
+        "opf-render#54",
+        "opf-editor#42"
+      ],
+      "note": "Intos Display is the metric route in the merged policy (opf#166); its faces are vendored in the open opf-render#54 and lazy-loaded by the open opf-editor#42."
+    },
+    "Intos Display": {
+      "prs": [
+        "opf-render#54",
+        "opf-editor#42"
+      ],
+      "note": "Intos Display faces are vendored in the open opf-render#54 and lazy-loaded by the open opf-editor#42."
+    },
+    "Aptos Narrow": {
+      "prs": [
+        "opf-render#54",
+        "opf-editor#42"
+      ],
+      "note": "Intos Narrow is the metric route in the merged policy (opf#166); its faces are vendored in the open opf-render#54 and lazy-loaded by the open opf-editor#42."
+    },
+    "Intos Narrow": {
+      "prs": [
+        "opf-render#54",
+        "opf-editor#42"
+      ],
+      "note": "Intos Narrow faces are vendored in the open opf-render#54 and lazy-loaded by the open opf-editor#42."
+    },
+    "Aptos Serif": {
+      "prs": [
+        "opf-render#54",
+        "opf-editor#42"
+      ],
+      "note": "Intos Serif is the metric route in the merged policy (opf#166); its faces are vendored in the open opf-render#54 and lazy-loaded by the open opf-editor#42."
+    },
+    "Intos Serif": {
+      "prs": [
+        "opf-render#54",
+        "opf-editor#42"
+      ],
+      "note": "Intos Serif faces are vendored in the open opf-render#54 and lazy-loaded by the open opf-editor#42."
+    }
+  },
+  "measurementDetails": {
+    "Aptos": {
+      "verticalMetricsMatch": true,
+      "note": "hhea, OS/2 typo and win, x-height and cap-height equal in all 16 styles; painted x-height and cap-height boxes agree (opf#166). Line breaks are not recorded."
+    },
+    "Aptos Display": {
+      "verticalMetricsMatch": true,
+      "note": "hhea, OS/2 typo and win, x-height and cap-height equal in all 16 styles; painted x-height and cap-height boxes agree (opf#166). Line breaks are not recorded."
+    },
+    "Aptos Narrow": {
+      "verticalMetricsMatch": true,
+      "note": "hhea, OS/2 typo and win, x-height and cap-height equal in all 16 styles; painted x-height and cap-height boxes agree (opf#166). Line breaks are not recorded."
+    },
+    "Aptos Serif": {
+      "verticalMetricsMatch": true,
+      "note": "hhea, OS/2 typo and win, x-height and cap-height equal in all 16 styles; painted x-height and cap-height boxes agree (opf#166). Line breaks are not recorded."
+    }
+  }
+}
