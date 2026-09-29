@@ -1,0 +1,170 @@
+{
+  "schemaVersion": 1,
+  "inputAncestry": {
+    "bundle": "../windows-native-explicit-slots-20260929/README.md",
+    "sha256": "4e2bab2a4f5a0f09350d2edc2463bcb29302fa7db34a8c621e39fcd5c9a16cd7",
+    "bytes": 15616
+  },
+  "nativeSourceGraph": {
+    "opf": "9261eac59011cec04aebc3c9003809f05c7b1cd3",
+    "opf-pptx": "9a7f3c1513c5875b4ac9d5974c04151a4ac26cbe",
+    "opf-render": "c62b3f98a4ac98cdec8ffd28c035a17a04197396",
+    "opf-editor": "d0c95a16b50eccb3eee695ace44cc6c3a6754f2f",
+    "pptx-gallery": "f17e9ae5869669d5fbac3720f285652d0c37551c"
+  },
+  "harnessReview": {
+    "mergedHead": "9a7f3c1513c5875b4ac9d5974c04151a4ac26cbe",
+    "reviewedHead": "2822107cde8549b5150dab49fed403b52e9a232d",
+    "equalTree": "5807a63ab571c173689e995ef69991f19aaff82b",
+    "ownerAcceptedLocalChecks": true,
+    "ownerReportedActionsCreditShortage": true
+  },
+  "scope": "Byte-preserved E8 native observation. Metadata records review and ancestry; this is not a relocated native audit or a root-cause/physical-font/allowlist/embed acceptance.",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "path": "README.md",
+      "bytes": 7996,
+      "sha256": "85108744c055aef8ab36fd0b4deeabde7ef142e1fe2d8166b6f30b922db8d3e9"
+    },
+    {
+      "path": "auditor/native-font-embed-audit.mjs",
+      "bytes": 69666,
+      "sha256": "6ad35992b75e1c677194c832289824d588c223a3d25aff029983bf3ba3f4d704"
+    },
+    {
+      "path": "auditor/native-font-inventory-audit.mjs",
+      "bytes": 59824,
+      "sha256": "f0a9f9652a1f7d84202910f615cb1ad64246b521474b90e97f77411e03492352"
+    },
+    {
+      "path": "auditor/native-font-inventory.ps1",
+      "bytes": 104627,
+      "sha256": "dd21258aca3b8b4777e928bb96ee7c6488199b53326c594e0c2bd63ea4322c82"
+    },
+    {
+      "path": "auditor/native-process.ps1",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+    },
+    {
+      "path": "auditor/native-text-fonts.ps1",
+      "bytes": 2446,
+      "sha256": "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6"
+    },
+    {
+      "path": "auditor/powershell-scan.mjs",
+      "bytes": 40899,
+      "sha256": "02df02cdc1ef0ecf9d24358575899a825d58ffada62ad8ac0e0ac47ce2bc41e6"
+    },
+    {
+      "path": "environment/host-postflight.json",
+      "bytes": 1030,
+      "sha256": "fd2ba8803d5ac4d29e46008eed430a2438a2ab0535d6c360e1564f67be9010ad"
+    },
+    {
+      "path": "environment/host-preflight.json",
+      "bytes": 1625,
+      "sha256": "2c1a88848d574e43df7698b5bddb5740f36638bb064598c79e3424b46494dc57"
+    },
+    {
+      "path": "fixture/calibri-explicit-slots-control.pptx",
+      "bytes": 15616,
+      "sha256": "4e2bab2a4f5a0f09350d2edc2463bcb29302fa7db34a8c621e39fcd5c9a16cd7"
+    },
+    {
+      "path": "invocation/native-audit.log",
+      "bytes": 305,
+      "sha256": "da5f7e68bb0256e5979e474404067d0162ec56582f6924338e38d1001961f543"
+    },
+    {
+      "path": "invocation/native-invocation.json",
+      "bytes": 87,
+      "sha256": "c183a12ba42d28d82042921b59f5b67e4d989d5d5d0a931901ca4e453107a6e6"
+    },
+    {
+      "path": "invocation/native-parent.log",
+      "bytes": 378,
+      "sha256": "94cc0f83afcaefde312e5e8a00ecb42c07ae3a508a8e507c845673e6f49bb82f"
+    },
+    {
+      "path": "native-inventory-01/audit.json",
+      "bytes": 4344,
+      "sha256": "80428f94066a9c09b1235c6672e0aa3e05957293a3b89203dfece38f480144bb"
+    },
+    {
+      "path": "native-inventory-01/inputs/native-font-inventory.ps1",
+      "bytes": 104627,
+      "sha256": "dd21258aca3b8b4777e928bb96ee7c6488199b53326c594e0c2bd63ea4322c82"
+    },
+    {
+      "path": "native-inventory-01/inputs/native-process.ps1",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+    },
+    {
+      "path": "native-inventory-01/inputs/native-text-fonts.ps1",
+      "bytes": 2446,
+      "sha256": "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6"
+    },
+    {
+      "path": "native-inventory-01/inputs/source.pptx",
+      "bytes": 15616,
+      "sha256": "4e2bab2a4f5a0f09350d2edc2463bcb29302fa7db34a8c621e39fcd5c9a16cd7"
+    },
+    {
+      "path": "native-inventory-01/progress.json",
+      "bytes": 273,
+      "sha256": "957d7f1933d316343a209af5a8f8e5e49ce056377b4f0983743f13728e3a78a3"
+    },
+    {
+      "path": "native-inventory-01/report.json",
+      "bytes": 20425,
+      "sha256": "8d8950385a508de809d49bdf831f6cbef758db108c310b9612f6cfa83ea37756"
+    },
+    {
+      "path": "native-inventory-01/request.json",
+      "bytes": 3656,
+      "sha256": "cc996a27f144ebeeba3cf82f7aa05e4e1dc3c28679a72fe5418d5bf88ab869ea"
+    },
+    {
+      "path": "native-inventory-01/stages.jsonl",
+      "bytes": 111872,
+      "sha256": "e9cbc35d1e5d3ba9f9040ebea0240cf450b43dc5dc49fe45cecd67b325e7a95a"
+    },
+    {
+      "path": "native-inventory-01/supervisor.json",
+      "bytes": 5724,
+      "sha256": "81719e529c6f702ad6dd9b9b300458d4c499f1c668d52e8386f727564ac58b13"
+    },
+    {
+      "path": "native-inventory-01/worker.json",
+      "bytes": 340,
+      "sha256": "fe888baff064a49a5b1e6788b5ae6b76500d03d3d9e7439a77919142c90fbd22"
+    },
+    {
+      "path": "native-inventory-01/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native-inventory-01/worker.stdout.log",
+      "bytes": 99,
+      "sha256": "97fe87c9eb4f110dbd346af22de39dec5fdb50691ac31bea5df1c8e2d8d8c588"
+    },
+    {
+      "path": "source-copy-ledger.json",
+      "bytes": 9864,
+      "sha256": "035915949ce36e36b26d9d3c8f19582fd32469a4c43a77409f2f424dfe1d9394"
+    },
+    {
+      "path": "verify.mjs",
+      "bytes": 22640,
+      "sha256": "4d30195e68fcb98a3c910c85e6cb6a7c7cad530504300b881769b7cb0d8698ce"
+    }
+  ]
+}

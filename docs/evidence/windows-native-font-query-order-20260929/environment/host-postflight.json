@@ -1,0 +1,34 @@
+{
+  "observedAt": "2026-09-29T15:08:13.0180212Z",
+  "uiObservation": "PowerPoint Home, no open presentation, recovery/security prompt or dialog after the owned E8 read-only comparison completed.",
+  "officeProcesses": [
+    {
+      "processId": 5288,
+      "name": "POWERPNT",
+      "startedAt": "2026-09-29T14:52:46.9201081Z",
+      "fileVersion": "16.0.20430.20092",
+      "productVersion": "16.0.20430.20092"
+    }
+  ],
+  "attemptedNativeRunsThisExperiment": 1,
+  "temporaryFontRegistrations": 0,
+  "auditPassed": true,
+  "sourceSha256": "4e2bab2a4f5a0f09350d2edc2463bcb29302fa7db34a8c621e39fcd5c9a16cd7",
+  "comparison": {
+    "beforeCount": 2,
+    "afterCount": 2,
+    "entriesEqual": true,
+    "namesEqualInOrder": true,
+    "entriesEqualIgnoringOrder": true,
+    "outcome": "unchanged",
+    "beforeAptosReported": true,
+    "afterAptosReported": true,
+    "beforeEmptyNameIndexes": [
+      1
+    ],
+    "afterEmptyNameIndexes": [
+      1
+    ]
+  },
+  "physicalFontIdentityProven": false
+}

@@ -1,0 +1,206 @@
+{
+  "schemaVersion": 1,
+  "scope": "Original files copied byte-for-byte. Relative source artifact paths are provenance labels and are never opened by the portable verifier.",
+  "files": [
+    {
+      "bundlePath": "auditor/native-font-embed-audit.mjs",
+      "sourceArtifactPath": "sources/opf-pptx/test/native-font-embed-audit.mjs",
+      "kind": "byte-copy",
+      "bytes": 69666,
+      "sourceSha256": "6ad35992b75e1c677194c832289824d588c223a3d25aff029983bf3ba3f4d704",
+      "bundleSha256": "6ad35992b75e1c677194c832289824d588c223a3d25aff029983bf3ba3f4d704"
+    },
+    {
+      "bundlePath": "auditor/native-font-inventory-audit.mjs",
+      "sourceArtifactPath": "sources/opf-pptx/test/native-font-inventory-audit.mjs",
+      "kind": "byte-copy",
+      "bytes": 59824,
+      "sourceSha256": "f0a9f9652a1f7d84202910f615cb1ad64246b521474b90e97f77411e03492352",
+      "bundleSha256": "f0a9f9652a1f7d84202910f615cb1ad64246b521474b90e97f77411e03492352"
+    },
+    {
+      "bundlePath": "auditor/native-font-inventory.ps1",
+      "sourceArtifactPath": "sources/opf-pptx/test/native-font-inventory.ps1",
+      "kind": "byte-copy",
+      "bytes": 104627,
+      "sourceSha256": "dd21258aca3b8b4777e928bb96ee7c6488199b53326c594e0c2bd63ea4322c82",
+      "bundleSha256": "dd21258aca3b8b4777e928bb96ee7c6488199b53326c594e0c2bd63ea4322c82"
+    },
+    {
+      "bundlePath": "auditor/native-process.ps1",
+      "sourceArtifactPath": "sources/opf-pptx/test/native-process.ps1",
+      "kind": "byte-copy",
+      "bytes": 2372,
+      "sourceSha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+      "bundleSha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+    },
+    {
+      "bundlePath": "auditor/native-text-fonts.ps1",
+      "sourceArtifactPath": "sources/opf-pptx/test/native-text-fonts.ps1",
+      "kind": "byte-copy",
+      "bytes": 2446,
+      "sourceSha256": "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6",
+      "bundleSha256": "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6"
+    },
+    {
+      "bundlePath": "auditor/powershell-scan.mjs",
+      "sourceArtifactPath": "sources/opf-pptx/test/powershell-scan.mjs",
+      "kind": "byte-copy",
+      "bytes": 40899,
+      "sourceSha256": "02df02cdc1ef0ecf9d24358575899a825d58ffada62ad8ac0e0ac47ce2bc41e6",
+      "bundleSha256": "02df02cdc1ef0ecf9d24358575899a825d58ffada62ad8ac0e0ac47ce2bc41e6"
+    },
+    {
+      "bundlePath": "environment/host-postflight.json",
+      "sourceArtifactPath": "ff05-font-query-order-01/host-postflight.json",
+      "kind": "byte-copy",
+      "bytes": 1030,
+      "sourceSha256": "fd2ba8803d5ac4d29e46008eed430a2438a2ab0535d6c360e1564f67be9010ad",
+      "bundleSha256": "fd2ba8803d5ac4d29e46008eed430a2438a2ab0535d6c360e1564f67be9010ad"
+    },
+    {
+      "bundlePath": "environment/host-preflight.json",
+      "sourceArtifactPath": "ff05-font-query-order-01/host-preflight.json",
+      "kind": "byte-copy",
+      "bytes": 1625,
+      "sourceSha256": "2c1a88848d574e43df7698b5bddb5740f36638bb064598c79e3424b46494dc57",
+      "bundleSha256": "2c1a88848d574e43df7698b5bddb5740f36638bb064598c79e3424b46494dc57"
+    },
+    {
+      "bundlePath": "fixture/calibri-explicit-slots-control.pptx",
+      "sourceArtifactPath": "sources/opf/docs/evidence/windows-native-explicit-slots-20260929/fixture/calibri-explicit-slots-control.pptx",
+      "kind": "byte-copy",
+      "bytes": 15616,
+      "sourceSha256": "4e2bab2a4f5a0f09350d2edc2463bcb29302fa7db34a8c621e39fcd5c9a16cd7",
+      "bundleSha256": "4e2bab2a4f5a0f09350d2edc2463bcb29302fa7db34a8c621e39fcd5c9a16cd7"
+    },
+    {
+      "bundlePath": "invocation/native-audit.log",
+      "sourceArtifactPath": "ff05-font-query-order-01/native-audit.log",
+      "kind": "byte-copy",
+      "bytes": 305,
+      "sourceSha256": "da5f7e68bb0256e5979e474404067d0162ec56582f6924338e38d1001961f543",
+      "bundleSha256": "da5f7e68bb0256e5979e474404067d0162ec56582f6924338e38d1001961f543"
+    },
+    {
+      "bundlePath": "invocation/native-invocation.json",
+      "sourceArtifactPath": "ff05-font-query-order-01/native-invocation.json",
+      "kind": "byte-copy",
+      "bytes": 87,
+      "sourceSha256": "c183a12ba42d28d82042921b59f5b67e4d989d5d5d0a931901ca4e453107a6e6",
+      "bundleSha256": "c183a12ba42d28d82042921b59f5b67e4d989d5d5d0a931901ca4e453107a6e6"
+    },
+    {
+      "bundlePath": "invocation/native-parent.log",
+      "sourceArtifactPath": "ff05-font-query-order-01/native-parent.log",
+      "kind": "byte-copy",
+      "bytes": 378,
+      "sourceSha256": "94cc0f83afcaefde312e5e8a00ecb42c07ae3a508a8e507c845673e6f49bb82f",
+      "bundleSha256": "94cc0f83afcaefde312e5e8a00ecb42c07ae3a508a8e507c845673e6f49bb82f"
+    },
+    {
+      "bundlePath": "native-inventory-01/audit.json",
+      "sourceArtifactPath": "ff05-font-query-order-01/native-inventory-01/audit.json",
+      "kind": "byte-copy",
+      "bytes": 4344,
+      "sourceSha256": "80428f94066a9c09b1235c6672e0aa3e05957293a3b89203dfece38f480144bb",
+      "bundleSha256": "80428f94066a9c09b1235c6672e0aa3e05957293a3b89203dfece38f480144bb"
+    },
+    {
+      "bundlePath": "native-inventory-01/inputs/native-font-inventory.ps1",
+      "sourceArtifactPath": "ff05-font-query-order-01/native-inventory-01/inputs/native-font-inventory.ps1",
+      "kind": "byte-copy",
+      "bytes": 104627,
+      "sourceSha256": "dd21258aca3b8b4777e928bb96ee7c6488199b53326c594e0c2bd63ea4322c82",
+      "bundleSha256": "dd21258aca3b8b4777e928bb96ee7c6488199b53326c594e0c2bd63ea4322c82"
+    },
+    {
+      "bundlePath": "native-inventory-01/inputs/native-process.ps1",
+      "sourceArtifactPath": "ff05-font-query-order-01/native-inventory-01/inputs/native-process.ps1",
+      "kind": "byte-copy",
+      "bytes": 2372,
+      "sourceSha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+      "bundleSha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+    },
+    {
+      "bundlePath": "native-inventory-01/inputs/native-text-fonts.ps1",
+      "sourceArtifactPath": "ff05-font-query-order-01/native-inventory-01/inputs/native-text-fonts.ps1",
+      "kind": "byte-copy",
+      "bytes": 2446,
+      "sourceSha256": "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6",
+      "bundleSha256": "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6"
+    },
+    {
+      "bundlePath": "native-inventory-01/inputs/source.pptx",
+      "sourceArtifactPath": "ff05-font-query-order-01/native-inventory-01/inputs/source.pptx",
+      "kind": "byte-copy",
+      "bytes": 15616,
+      "sourceSha256": "4e2bab2a4f5a0f09350d2edc2463bcb29302fa7db34a8c621e39fcd5c9a16cd7",
+      "bundleSha256": "4e2bab2a4f5a0f09350d2edc2463bcb29302fa7db34a8c621e39fcd5c9a16cd7"
+    },
+    {
+      "bundlePath": "native-inventory-01/progress.json",
+      "sourceArtifactPath": "ff05-font-query-order-01/native-inventory-01/progress.json",
+      "kind": "byte-copy",
+      "bytes": 273,
+      "sourceSha256": "957d7f1933d316343a209af5a8f8e5e49ce056377b4f0983743f13728e3a78a3",
+      "bundleSha256": "957d7f1933d316343a209af5a8f8e5e49ce056377b4f0983743f13728e3a78a3"
+    },
+    {
+      "bundlePath": "native-inventory-01/report.json",
+      "sourceArtifactPath": "ff05-font-query-order-01/native-inventory-01/report.json",
+      "kind": "byte-copy",
+      "bytes": 20425,
+      "sourceSha256": "8d8950385a508de809d49bdf831f6cbef758db108c310b9612f6cfa83ea37756",
+      "bundleSha256": "8d8950385a508de809d49bdf831f6cbef758db108c310b9612f6cfa83ea37756"
+    },
+    {
+      "bundlePath": "native-inventory-01/request.json",
+      "sourceArtifactPath": "ff05-font-query-order-01/native-inventory-01/request.json",
+      "kind": "byte-copy",
+      "bytes": 3656,
+      "sourceSha256": "cc996a27f144ebeeba3cf82f7aa05e4e1dc3c28679a72fe5418d5bf88ab869ea",
+      "bundleSha256": "cc996a27f144ebeeba3cf82f7aa05e4e1dc3c28679a72fe5418d5bf88ab869ea"
+    },
+    {
+      "bundlePath": "native-inventory-01/stages.jsonl",
+      "sourceArtifactPath": "ff05-font-query-order-01/native-inventory-01/stages.jsonl",
+      "kind": "byte-copy",
+      "bytes": 111872,
+      "sourceSha256": "e9cbc35d1e5d3ba9f9040ebea0240cf450b43dc5dc49fe45cecd67b325e7a95a",
+      "bundleSha256": "e9cbc35d1e5d3ba9f9040ebea0240cf450b43dc5dc49fe45cecd67b325e7a95a"
+    },
+    {
+      "bundlePath": "native-inventory-01/supervisor.json",
+      "sourceArtifactPath": "ff05-font-query-order-01/native-inventory-01/supervisor.json",
+      "kind": "byte-copy",
+      "bytes": 5724,
+      "sourceSha256": "81719e529c6f702ad6dd9b9b300458d4c499f1c668d52e8386f727564ac58b13",
+      "bundleSha256": "81719e529c6f702ad6dd9b9b300458d4c499f1c668d52e8386f727564ac58b13"
+    },
+    {
+      "bundlePath": "native-inventory-01/worker.json",
+      "sourceArtifactPath": "ff05-font-query-order-01/native-inventory-01/worker.json",
+      "kind": "byte-copy",
+      "bytes": 340,
+      "sourceSha256": "fe888baff064a49a5b1e6788b5ae6b76500d03d3d9e7439a77919142c90fbd22",
+      "bundleSha256": "fe888baff064a49a5b1e6788b5ae6b76500d03d3d9e7439a77919142c90fbd22"
+    },
+    {
+      "bundlePath": "native-inventory-01/worker.stderr.log",
+      "sourceArtifactPath": "ff05-font-query-order-01/native-inventory-01/worker.stderr.log",
+      "kind": "byte-copy",
+      "bytes": 0,
+      "sourceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bundleSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bundlePath": "native-inventory-01/worker.stdout.log",
+      "sourceArtifactPath": "ff05-font-query-order-01/native-inventory-01/worker.stdout.log",
+      "kind": "byte-copy",
+      "bytes": 99,
+      "sourceSha256": "97fe87c9eb4f110dbd346af22de39dec5fdb50691ac31bea5df1c8e2d8d8c588",
+      "bundleSha256": "97fe87c9eb4f110dbd346af22de39dec5fdb50691ac31bea5df1c8e2d8d8c588"
+    }
+  ]
+}

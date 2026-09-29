@@ -1,5 +1,46 @@
 # Windows native compatibility weekly handoff
 
+## September 29 resumed query-order control (15:07 UTC)
+
+[PPTX88](https://github.com/OpenPresentation/opf-pptx/pull/88) merged as
+`9a7f3c1513c5875b4ac9d5974c04151a4ac26cbe`; its entire tree matches reviewed
+head `2822107`. The owner authorized local tests in place of Actions during
+the credit shortage. The final head passed 22 inventory-control groups,
+29 independent audit cases, source build/typecheck/validate/full tests,
+six browser suites (138 reported checks) and a fresh packed consumer.
+The initial full suite against published core 0.11.0 failed a known furniture
+expectation; the coordinated source graph passed without changing tests.
+Source linking completed renderer/PPTX and stopped at the editor's missing
+installed dependencies, so no editor validation is claimed. No remote CI pass
+is claimed by this receipt and no workflow or tolerance was changed.
+
+The [E8 evidence](evidence/windows-native-font-query-order-20260929/README.md)
+records one native run using the exact E7 input, SHA-256
+`4e2bab2a4f5a0f09350d2edc2463bcb29302fa7db34a8c621e39fcd5c9a16cd7`.
+The opt-in comparison retains the initial `Presentation.Fonts` collection and
+reads it once more after the existing bounded content queries, before the
+same owned close. It completed in about 1,405 ms with 303 stages, one owned
+read-only open/close, unchanged inputs, no temporary fonts and zero audit
+failures. Both collections and their flags were identical: empty-name entry,
+then Aptos. All six theme names remained Calibri.
+
+PowerPoint was absent after sleep and launched through supported computer use.
+Fresh preflight/postflight showed Home without an open presentation or dialog.
+E8 process 5288 differs from E7 process 30776; executable file/product version
+was `16.0.20430.20092`. The actual native graph was core `9261eac5`, PPTX
+`9a7f3c1`, renderer `c62b3f9`, editor `d0c95a1`, gallery `f17e9ae5`. The later
+evidence branch also incorporates core156's FF-10 foundation from main, without
+rewriting those historical native inputs or source commits.
+
+FF-05 remains in progress: unchanged means stable only over this query
+sequence/elapsed interval. Root cause, physical glyph identity, font allowlist
+and embedding remain open. The tracker is 19 done, 19 review/in-progress,
+6 todo; the dated parity headline remains 5/900. Next: inspect remaining
+style/part references offline and review a minimal fixture change before any
+later native run. Keep existing failures, the 0.02 pt and 0.1 reference-pixel
+gates, and all Office ownership rules. Do not redo accepted proofs, publish,
+deploy, retry embedding, implement native `p:hf` or merge deferred geometry.
+
 ## September 29 explicit theme-slot control (09:38 UTC)
 
 The [FF-05 E7 evidence](evidence/windows-native-explicit-slots-20260929/README.md)
