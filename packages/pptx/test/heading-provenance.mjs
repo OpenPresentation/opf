@@ -59,7 +59,14 @@ for(const dimensions of [{widthInches:1280/96,heightInches:720/96},{widthInches:
  for(const headings of [{title:'Known title'},{tag:'Known tag'},{subtitle:'Known subtitle'},{title:'Known title',subtitle:'Known subtitle'}]) {
   const document={design:{dimensions,fontScheme:'roboto'},slides:[{...headings,quote:{text:'Keep this body line in the body. '.repeat(6),attribution:'A reviewer',source:'Recorded interview'}}]};
   const source=structuredClone(document),bound=resolvePresentation(document,{textMeasurement}).slides[0];
-  const expected=bound.geometry.items.find(item=>item.quoteLayout).quoteLayout.parts.flatMap(part=>part.fit.lines.filter(Boolean).map(text=>({type:'text',text})));
+  const quoteParts=bound.geometry.items.find(item=>item.quoteLayout).quoteLayout.parts;
+  const expectedLines=quoteParts.flatMap(part=>part.fit.lines.filter(Boolean));
+  const expected=quoteParts.flatMap(part=>part.fit.lines.filter(Boolean).map(text=>({type:'text',text:[{
+   text,...(!textMeasurement&&part.role==='body'?{bold:true}:{}),
+   fontSize:Math.round(part.fit.fontSize*75)/100,
+   fontFamily:textMeasurement?(part.role==='body'?'Roboto SemiBold':'Roboto Medium'):'Roboto',
+   color:part.role==='body'?'#FFFFFF':'#F0F0F0'
+  }]})));
   const exported=await toPptx(document,{textMeasurement}),copy=new Uint8Array(exported),result=(await fromPptx(exported)).slides[0];
   assert.deepEqual(document,source);assert.deepEqual(exported,copy);
   for(const field of ['title','subtitle','tag'])assert.equal(result[field],headings[field]);
@@ -73,7 +80,7 @@ for(const dimensions of [{widthInches:1280/96,heightInches:720/96},{widthInches:
    }));
    assert.ok(changed);
    const explicit=(await fromPptx(zipSync(parts))).slides[0];
-   assert.equal(explicit.subtitle,expected[0].text,'A current native subtitle placeholder remains authoritative');
+   assert.equal(explicit.subtitle,expectedLines[0],'A current native subtitle placeholder remains authoritative');
    assert.deepEqual(explicit.blocks,expected.slice(1));
   }
  }
@@ -85,5 +92,5 @@ native.addText('Ordinary subtitle',{x:.4,y:.9,w:8,h:.3,fontSize:18});
 native.addText('Ordinary body',{x:.4,y:2,w:8,h:1,fontSize:16});
 const inferred=(await fromPptx(await ordinary.write({outputType:'nodebuffer'}))).slides[0];
 assert.equal(inferred.title,'Ordinary title');assert.equal(inferred.subtitle,'Ordinary subtitle');
-assert.deepEqual(inferred.blocks,[{type:'text',text:'Ordinary body'}]);
+assert.deepEqual(inferred.blocks,[{type:'text',text:[{text:'Ordinary body',fontSize:16,color:'#000000'}]}]);
 console.log(`Heading role isolation: ${roleCases} wide/portrait quote imports, explicit native placeholders and ordinary untagged title/subtitle inference pass.`);

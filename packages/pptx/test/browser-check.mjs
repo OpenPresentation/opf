@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
-import { readFile } from 'node:fs/promises';
+import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
@@ -25,7 +25,7 @@ let browser;
 try {
   browser = await chromium.launch({ channel: process.platform === 'win32' && !process.env.CI ? 'msedge' : undefined });
   const report = [];
-  for (const suite of ['webp-fallback', 'native-rich-table-import', 'native-table-styles', 'native-styled-table-import', 'native-content-layout', 'chart-colors']) {
+  for (const suite of ['webp-fallback', 'native-rich-table-import', 'native-table-styles', 'native-styled-table-import', 'native-content-layout', 'chart-colors', 'native-body-rich-text']) {
     const page = await browser.newPage();
     const errors = [];
     page.on('pageerror', error => errors.push(error.message));
@@ -34,6 +34,10 @@ try {
     assert.equal(response.status(), 200);
     await page.waitForFunction(() => /^(PASS|FAIL):/.test(document.title), undefined, { timeout: 60000 });
     const result = await page.locator('pre').innerText();
+    if (suite === 'native-body-rich-text') {
+      await page.screenshot({path:path.join(root,'artifacts/native-body-rich-text/browser/result.png'),fullPage:true});
+      await writeFile(path.join(root,'artifacts/native-body-rich-text/browser/result.json'),JSON.stringify({result,errors,evidence:await page.evaluate(()=>window.nativeBodyEvidence??null)},null,2)+'\n');
+    }
     assert.match(await page.title(), /^PASS:/, result);
     assert.deepEqual(errors, [], `${suite}: browser errors`);
     const parsed = JSON.parse(result);

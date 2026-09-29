@@ -10,6 +10,7 @@ import {renderSvgDeck, svgToPng, resolvePresentation} from '@openpresentation/op
 import {createFontRegistry} from '@openpresentation/opf-render/fonts';
 import sharp from 'sharp';
 import {toPptx, fromPptx} from '@openpresentation/opf-pptx';
+import {assertNativeQuoteImport} from './native-quote-import-contract.mjs';
 
 const [mode, directory = 'artifacts/native-quote',selectedDeck] = process.argv.slice(2);
 assert.ok(['generate','compare','compare-deck'].includes(mode));
@@ -22,7 +23,7 @@ const json = async file => JSON.parse((await readFile(file,'utf8')).replace(/^\u
 const write = (file,value) => writeFile(path.join(output,file),JSON.stringify(value,null,2)+'\n');
 const runtime = {};
 for(const file of ['package.json',...(await readdir(path.join(root,'dist'),{recursive:true})).filter(file=>file.endsWith('.js')).map(file=>'dist/'+file)]) runtime['@openpresentation/opf-pptx/'+file.split(path.sep).join('/')]=hash(await readFile(path.join(root,file)));
-for(const file of ['test/native-quote.mjs','test/native-quote.ps1','test/native-deck.ps1','test/native-process.ps1','vendor/pptxgenjs/pptxgen.es.js','package-lock.json'])runtime[file]=hash(await readFile(path.join(verificationRoot,file)));
+for(const file of ['test/native-quote.mjs','test/native-quote-import-contract.mjs','test/native-quote.ps1','test/native-deck.ps1','test/native-process.ps1','vendor/pptxgenjs/pptxgen.es.js','package-lock.json'])runtime[file]=hash(await readFile(path.join(verificationRoot,file)));
 for (const name of ['@openpresentation/opf','@openpresentation/opf-render']) {
   const directory=path.dirname(fileURLToPath(import.meta.resolve(name+'/package.json')));
   runtime[name+'/package.json']=hash(await readFile(path.join(directory,'package.json')));
@@ -107,9 +108,8 @@ if(mode==='generate') {
       const restored=await fromPptx(bytes);
       assert.ok(validatePresentation(restored).valid);assert.equal(restored.slides.length,record.slides);
       for(const [index,slide] of restored.slides.entries()) {
-        const expected=record.layouts[index].parts.flatMap(part=>part.fit.lines.filter(line=>line!=='').map(text=>({type:'text',text})));
-        assert.deepEqual(slide.blocks,expected,'Every current body/footer line survives in exact order and multiplicity');
-        assert.equal(slide.title,suffix==='-native-edited'?`Native edit ${record.id} slide ${index+1}`:'A quote and its source');
+        const expectedLines=record.layouts[index].parts.flatMap(part=>part.fit.lines.filter(line=>line!=='').map(text=>text));
+        assertNativeQuoteImport(slide,expectedLines,suffix==='-native-edited'?`Native edit ${record.id} slide ${index+1}`:'A quote and its source');
       }
       imports.push({file,slides:restored.slides.length,valid:true,bodyAndFooterLinesExact:true,semanticQuoteTypeRecovered:false,editsPreserved:suffix==='-native-edited'});
     }

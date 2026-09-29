@@ -88,7 +88,10 @@ for (const provenance of ['references-only', false]) {
   if (provenance === false) {
     assert.equal(records.length, 0);
     assert.deepEqual(videos(doc), [[], [], []]);
-    assert.ok(blockTexts(doc).includes('Asset clip'));
+    assert.deepEqual(doc.slides[1].blocks, [
+      ...['frame','badge','play'].map(role=>({type:'text',text:`PowerPoint shape: OPF media slides.1.video ${role}`})),
+      {type:'text',text:[{text:'Asset clip',bold:true,underline:false,fontSize:13.5,fontFamily:'Roboto',color:'#F0F0F0',link:deck.assets['demo-video'].src}]}
+    ]);
   } else {
     assert.ok(records.every(record => record.video === undefined));
     assert.deepEqual(videos(doc), [
@@ -169,7 +172,11 @@ for (const assetBacked of [false, true]) for (const provenance of ['full', 'refe
   }
   const result = await read(bytes);
   assert.deepEqual(videos(result.doc), [[]]);
-  assert.ok(blockTexts(result.doc).includes('Visible'));
+  if(provenance===false) assert.deepEqual(result.doc.slides[0].blocks,[
+    ...['frame','badge','play'].map(role=>({type:'text',text:`PowerPoint shape: OPF media slides.0.video ${role}`})),
+    {type:'text',text:[{text:'Visible',bold:true,fontSize:13.5,fontFamily:'Aptos',color:'#F0F0F0'}]}
+  ]);
+  else assert.ok(blockTexts(result.doc).includes('Visible'));
   checks++;
 }
 
@@ -443,7 +450,10 @@ for (const video of ['file:clip.mp4', 'data:video/mp4;base64,PRIVATE']) {
   const edited = await read(modify(bytes, entries => text(entries, 'ppt/slides/slide1.xml', xml => xml.replace('<a:t>One</a:t>', '<a:t>Native  edit</a:t>'))));
   assert.deepEqual(edited.doc.slides[0].blocks, [linkedText(url), {type: 'text', text: 'Native  edit'}, {type: 'text', text: ''}, {type: 'text', text: 'Two '}], 'Edited captions retain separate current native lines.');
   assert.deepEqual(edited.media, [['invalid-media-provenance', 'slides.0.video']]);
-  assert.deepEqual((await read(await toPptx(edited.doc, {seed: 1}))).doc.slides[0].blocks.filter(block => typeof block.text === 'string').map(block => block.text), [url, 'Native  edit', '', 'Two ']);
+  assert.deepEqual((await read(await toPptx(edited.doc, {seed: 1}))).doc.slides[0].blocks, [
+    {type:'text',text:[{text:url,underline:true,fontSize:18.75,fontFamily:'Aptos',color:'#FFFFFF',link:url}]},
+    {type:'text',text:'Native  edit'},{type:'text',text:''},{type:'text',text:'Two '}
+  ]);
   for (const provenance of ['references-only', false]) {
     const restricted = await toPptx({slides: [{video: {src: url, title}}]}, {seed: 1, provenance});
     const records = tagParts(unzipSync(restricted)).map(path => tagValue(dec.decode(unzipSync(restricted)[path])));

@@ -98,6 +98,12 @@ This intentionally tightens the previous host-dependent `Date` parsing contract.
 
 ## v1 Import Mapping
 
+### Unreleased: current native body formatting
+
+Current source imports supported formatting from ordinary untagged native body text and list items. A value that previously imported as a string can now be a rich-run array containing the same current characters with explicit native properties. Unstyled values remain strings; title/subtitle selection and tagged recovery stay separate. Run, field and break order, blank paragraphs, significant whitespace, explicit normal overrides, paragraph/list defaults, point sizes, Latin font families, supported colors/alpha, hyperlinks and script direction come from the current PPTX. Edits, clears and deletion remain authoritative in every provenance mode.
+
+This does not reconstruct original source run identities or boundaries between native shapes, infer master/layout text styles, or recover cached authored content. Native paragraph/break boundaries become LF; character-reference CR remains explicit. Unsupported properties report body-path diagnostics rather than claim exact formatting. Reading order still uses current native positions. Published npm `0.9.1` does not contain this representation change; portable conversion checks do not establish Office rendering or general rich-text round-trip fidelity.
+
 The first importer is mechanical and schema-compatible:
 
 - Presentation core properties map to OPF `name`, `description`, and `author`.

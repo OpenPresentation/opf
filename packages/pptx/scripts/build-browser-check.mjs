@@ -61,3 +61,11 @@ const chartResult=await build({alias:browserAliases,entryPoints:[fileURLToPath(n
 assert.ok(!Object.keys(chartResult.metafile.inputs).some(path=>path.includes('sharp')||path.includes('image-fallback-node')),'Chart browser output must exclude the native decoder');
 await writeFile(new URL('index.html',chartDirectory),'<!doctype html><meta charset="utf-8"><title>Chart colors</title><pre>Running…</pre><main></main><script type="module" src="./bundle.js"></script>');
 console.log('Chart color/workbook browser bundle ready at /artifacts/chart-colors/browser/index.html.');
+
+const bodyDirectory=new URL('../artifacts/native-body-rich-text/browser/',import.meta.url);
+await mkdir(bodyDirectory,{recursive:true});
+const bodyResult=await build({alias:browserAliases,entryPoints:[fileURLToPath(new URL('../test/native-body-rich-text-browser.js',import.meta.url))],bundle:true,platform:'browser',format:'esm',outfile:fileURLToPath(new URL('bundle.js',bodyDirectory)),metafile:true});
+assert.ok(!Object.keys(bodyResult.metafile.inputs).some(path=>path.includes('sharp')||path.includes('image-fallback-node')),'Body import browser output must exclude native Node modules');
+await writeFile(new URL('bundle-metafile.json',bodyDirectory),JSON.stringify(bodyResult.metafile,null,2)+'\n');
+await writeFile(new URL('index.html',bodyDirectory),'<!doctype html><meta charset="utf-8"><title>Native body rich text</title><h1>Current native body formatting</h1><pre>Running…</pre><main style="max-width:960px"></main><script type="module" src="./bundle.js"></script>');
+console.log('Current native body browser bundle ready at /artifacts/native-body-rich-text/browser/index.html.');

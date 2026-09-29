@@ -1,3 +1,4 @@
+import {nativeBodyReader, joinNativeParagraphs} from './body-text-import.js';
 import {importTableFrames} from './table-import.js';
 import {applyChartFonts, applyPitchFamilies, finalizeFontsUsed, fontPitchFamilies} from './package-fonts.js';
 import {readChartCategoryHeading,writeChartCategoryHeading} from './chart-workbook.js';
@@ -513,6 +514,15 @@ function importSlide(entries, slidePath, slideIndex, presentationDimensions, opt
   const subtitleItem = heading('subtitle')??takeSubtitleItem(items, titleItem, dimensions, inferHeadings);
   if (subtitleItem) slide.subtitle = subtitleItem.text;
 
+  // Heading inference keeps its existing scalar/native metrics. Only remaining
+  // ordinary body shapes gain current rich values; tagged recovery is separate.
+  for (const item of items) if (item.readNativeBody) {
+    const current = item.readNativeBody();
+    if (current) {
+      item.paragraphs = current.map((paragraph, index) => ({...item.paragraphs[index], ...paragraph}));
+      item.text = current.map(paragraph => paragraph.text).join('\n');
+    }
+  }
   const blocks = mergeAdjacentBulletShapes(items)
     .map((item) => payloadFromSlideItem(item))
     .filter(Boolean);
@@ -532,6 +542,9 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   const shapes = nativeContext.shapes;
   if (tree?.['p:grpSp']) options.onDiagnostic?.({code:'grouped-text-reflow',path:`slides.${slideIndex}`,message:'Grouped native text and pictures are retained, but group transforms and unsupported group members are not reconstructed; review the reflowed OPF.'});
   const paragraphs = nativeContext.paragraphs;
+  const readBody = nativeBodyReader(slidePath, {
+    part: (path, parser) => parseRequiredXml(entries, path, parser), relationships: path => parseRelationships(entries, path), bytes: path => entries[path]
+  }, relationships, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.${diagnostic.path}`}));
   const code = importCodeGroups(shapes, paragraphs, relationships, entries, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.code`}));
   const metric = importMetricGroups(shapes, paragraphs, relationships, entries, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.metric`}));
   const cards = importCardFrames(shapes, paragraphs, relationships, entries, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}));
@@ -559,7 +572,9 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   for (const [index,shape] of shapes.entries()) {
     if (furniture.text.has(index) || nativeContext.slideImageShapes?.has(index)) continue;
     if (code.consumed.has(shape)||metric.consumed.has(shape)||cards.has(shape)||media.consumed.has(shape)||headings.consumed.has(shape)||plainText.consumed.has(shape)||timelines.consumed.has(shape)) continue;
-    const item = importShape(shape, dimensions, paragraphs[index], furniture.taggedText.has(index) || media.captionShapes.has(shape));
+    const ordinaryBody = Object.hasOwn(shape, 'p:txBody') && !shape['p:nvSpPr']?.['p:nvPr']?.['p:custDataLst']?.['p:tags'];
+    const item = importShape(shape, dimensions, paragraphs[index], ordinaryBody || furniture.taggedText.has(index) || media.captionShapes.has(shape));
+    if (item && ordinaryBody) item.readNativeBody = () => readBody(index);
     // A damaged/edited furniture group falls back to current native text,
     // including cleared text boxes, without inventing a title or shape label.
     if (item && (furniture.taggedText.has(index) || media.captionShapes.has(shape))) item.sourceText = true;
@@ -788,12 +803,12 @@ function payloadFromSlideItem(item) {
         type: "list",
         items: item.paragraphs.map((paragraph) => (
           paragraph.level > 0
-            ? { text: paragraph.text, level: paragraph.level }
-            : paragraph.text
+            ? { text: paragraph.richText ?? paragraph.text, level: paragraph.level }
+            : (paragraph.richText ?? paragraph.text)
         ))
       };
     }
-    return { type: "text", text: item.text };
+    return { type: "text", text: joinNativeParagraphs(item.paragraphs) };
   }
   if (item.kind === "unknown" && item.text) return { type: "text", text: item.text };
   return null;

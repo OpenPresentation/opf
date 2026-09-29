@@ -41,7 +41,10 @@ try {
   for(const width of [1280,540])for(const heading of ['title','subtitle','tag']) {
     const quote={design:{fontScheme:'roboto',dimensions:{widthInches:width/96,heightInches:(width===540?960:720)/96}},slides:[{[heading]:'Known heading',quote:{text:'Keep the complete body line. '.repeat(6),attribution:'Reviewer',source:'Interview'}}]};
     const layout=resolvePresentation(quote).slides[0].geometry.items.find(item=>item.quoteLayout).quoteLayout;
-    const expected=layout.parts.flatMap(part=>part.fit.lines.filter(Boolean).map(text=>({type:'text',text})));
+    const expected=layout.parts.flatMap(part=>part.fit.lines.filter(Boolean).map(text=>({type:'text',text:[{
+      text,...(part.role==='body'?{bold:true}:{}),fontSize:Math.round(part.fit.fontSize*75)/100,
+      fontFamily:'Roboto',color:part.role==='body'?'#FFFFFF':'#F0F0F0'
+    }]})));
     const restored=(await fromPptx(await toPptx(quote))).slides[0];
     for(const field of ['title','subtitle','tag'])check(restored[field]===(field===heading?'Known heading':undefined),'Absent heading roles stay absent: '+field);
     check(JSON.stringify(restored.blocks)===JSON.stringify(expected),'Every quote body/footer line retains its order, multiplicity and role');

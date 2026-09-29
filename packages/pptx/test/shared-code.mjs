@@ -42,7 +42,10 @@ for(const dimensions of [{width:1280,height:720},{width:540,height:960}]) for(co
 for(const source of ['a\tb','  indentation  ','\t\t','a\t','\nfirst\n\nlast\n',' \t \tkeep  ']) {
   const pptx=new PptxGenJS();pptx.layout='LAYOUT_WIDE';pptx.addSlide().addText(source,{x:1,y:2,w:10,h:3,fontSize:13.5,fontFace:'Courier New',margin:0});
   const imported=await fromPptx(await pptx.write({outputType:'uint8array'}));
-  assert.equal(imported.slides[0].blocks[0].text,source,'Native shape import preserves meaningful whitespace and unbulleted paragraphs');
+  const current=imported.slides[0].blocks[0].text;
+  const expected=[{text:source,fontSize:13.5,fontFamily:'Courier New',color:'#000000'}];
+  assert.deepEqual(current,expected,'Current native run properties and paragraph ordering survive');
+  assert.equal(current.map(run=>typeof run==='string'?run:run.text).join(''),source,'Native shape import preserves meaningful whitespace and unbulleted paragraphs');
 }
 for(const code of [{source:'Body\n'.repeat(500)}, {source:'',filename:'Metadata '.repeat(1000)}]) {
   await assert.rejects(()=>toPptx({design:{fontScheme:'roboto'},slides:[{composition:{overflow:'error'},code}]},{textMeasurement:fonts.textMeasurement}),{code:'layout-overflow'});
