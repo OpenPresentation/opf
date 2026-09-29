@@ -232,10 +232,10 @@ jobs:
       - run: pnpm build
       - run: node scripts/link-ecosystem.mjs --packages-only
       - run: node scripts/pack-ecosystem.mjs
-      - run: node scripts/test-packed-ecosystem.mjs
-      - run: node scripts/test-packed-types-infrastructure.mjs artifacts/npm/consumer
       - run: node -e "if (require('../opf-render/node_modules/playwright/package.json').version !== '1.63.0') throw new Error('Review the pinned browser toolchain.');"
       - run: node ../opf-render/node_modules/playwright/cli.js install chromium
+      - run: node scripts/test-packed-ecosystem.mjs
+      - run: node scripts/test-packed-types-infrastructure.mjs artifacts/npm/consumer
       - run: node scripts/test-packed-browser.mjs
       - run: node scripts/test-furniture-fields-browser.mjs artifacts/furniture-fields-browser
       - name: Preserve installed portability evidence
