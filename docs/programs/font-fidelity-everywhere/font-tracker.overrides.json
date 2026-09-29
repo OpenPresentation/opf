@@ -55,7 +55,7 @@
     "The shipped browser hosts still load only the 33 eager faces (base and office packs). The vendored open pack reaches the editor and gallery only with opf-render#54 and opf-editor#42, so families served by that pack carry a loading gap until then.",
     "Gallery previews use the bundled replacement faces (pptx-gallery#53, #54) and replacement data is published (pptx-gallery#51). This covers gallery cards, not per-family editor verification.",
     "fontResolution treats a policy look-alike as near, not fail, when the PPTX names the selected family (opf#159). Parity harness fixes merged in opf#164 and opf#168. The value set is 850 after pptx-gallery#40 removed 50 unsupported chart types; Aptos and Aptos Display each appear in 704 of them.",
-    "Selawik 1.01 was measured and rejected as a Segoe UI replacement (opf#166); Red Hat Display stays the visual route. Segoe UI Light, Semilight and Semibold were measured separately.",
+    "Selawik 1.01 was measured and rejected as a Segoe UI replacement (opf#166: regular 0.16% mean and 2.51% max on the standard 300-string corpus, 0.73% and 9.7% on the reviewer's broader corpus); Red Hat Display stays the visual route. Segoe UI Light, Semilight and Semibold were measured separately.",
     "Cover slide centering (opf-pptx#97) is geometry work with no font impact.",
     "The seven shipped script-font dependencies missing from the registry (Noto Sans Arabic, Sinhala, Lao, Myanmar, Thaana, Syriac and Noto Serif Tibetan) are tracked as policy-gap records. Adding their policy rows is follow-up work: this change does not edit font-policy.json."
   ],
@@ -842,7 +842,7 @@
       ]
     },
     "Segoe UI": {
-      "nextAction": "Complete Red Hat Display italic coverage and qualify metrics (mean 1.7%, max 7.1%). Selawik was measured and rejected in opf#166 (regular 0.16% mean and 2.5% max, no italic faces); Red Hat Display stays the visual route.",
+      "nextAction": "Complete Red Hat Display italic coverage and qualify metrics (mean 1.7%, max 7.1%). Selawik was measured and rejected in opf#166 (regular 0.16% mean and 2.5% max on the FF-31 corpus, 0.73% and 9.7% on the reviewer's broader corpus; no italic faces); Red Hat Display stays the visual route.",
       "evidence": [
         "openPack",
         "measurement",
@@ -1859,32 +1859,44 @@
         "perStyle": [
           {
             "style": "400",
+            "corpus": "FF-31 standard corpus (300 Latin strings; opf#166 author)",
             "meanAbsWidthDelta": 0.0016,
             "maxAbsWidthDelta": 0.0251
           },
           {
             "style": "700",
+            "corpus": "FF-31 standard corpus (300 Latin strings; opf#166 author)",
             "meanAbsWidthDelta": 0.002,
             "maxAbsWidthDelta": 0.021
           },
           {
             "style": "400i",
+            "corpus": "FF-31 standard corpus (300 Latin strings; opf#166 author)",
             "meanAbsWidthDelta": 0.0265,
             "maxAbsWidthDelta": 0.0516,
             "note": "no italic faces; the upright face stands in"
           },
           {
             "style": "700i",
+            "corpus": "FF-31 standard corpus (300 Latin strings; opf#166 author)",
             "meanAbsWidthDelta": 0.0109,
             "maxAbsWidthDelta": 0.0438,
             "note": "no italic faces; the upright face stands in"
+          },
+          {
+            "style": "400",
+            "corpus": "opf#166 reviewer's broader own corpus (Latin; not committed)",
+            "meanAbsWidthDelta": 0.0073,
+            "maxAbsWidthDelta": 0.097,
+            "note": "regular; independent measurement by the opf#166 reviewer"
           }
         ],
         "note": "Basic-Latin advances are identical; the differences are missing kerning and only 349 code points. Lowercase is 4.8% shorter and hhea ascent 8% smaller. Measured in opf#166.",
         "date": "2026-09-29",
         "prs": [
           "opf#166"
-        ]
+        ],
+        "corpusNote": "Both regular figures are correct for their corpus: 0.16% mean and 2.51% max on the standard 300-string FF-31 corpus, 0.73% mean and 9.7% max on the reviewer's broader corpus. Verdict unchanged: rejected, not metric."
       }
     ],
     "Segoe UI Light": [
@@ -1897,6 +1909,7 @@
         "perStyle": [
           {
             "style": "300",
+            "corpus": "FF-31 standard corpus (300 Latin strings; opf#166 author)",
             "meanAbsWidthDelta": 0.0031,
             "maxAbsWidthDelta": 0.0438
           }
@@ -1918,6 +1931,7 @@
         "perStyle": [
           {
             "style": "350",
+            "corpus": "FF-31 standard corpus (300 Latin strings; opf#166 author)",
             "meanAbsWidthDelta": 0.0034,
             "maxAbsWidthDelta": 0.0276
           }
@@ -1939,6 +1953,7 @@
         "perStyle": [
           {
             "style": "600",
+            "corpus": "FF-31 standard corpus (300 Latin strings; opf#166 author)",
             "meanAbsWidthDelta": 0.0175,
             "maxAbsWidthDelta": 0.0441
           }
