@@ -77,13 +77,13 @@
   "parity": {
    "item": "FF-38",
    "heads": {
-    "opf": "401f2e3",
-    "opf-render": "c62b3f9",
-    "opf-pptx": "54f7e4c",
-    "pptx-gallery": "4b48e69",
+    "opf": "03a55ae",
+    "opf-render": "aa7e898",
+    "opf-pptx": "ca34da7",
+    "pptx-gallery": "23f9216",
     "node": "24.21.0"
    },
-   "generated": "2026-09-29T18:40:39.071Z",
+   "generated": "2026-09-29T18:52:41.166Z",
    "tolerances": {
     "geomPt": 0.02,
     "geomNearPt": 0.5,
@@ -102,11 +102,11 @@
     "theme",
     "mapping"
    ],
-   "results": "parity/parity-results-2026-09-29-lookalike-fonts.json",
+   "results": "parity/parity-results-2026-09-29-field-text.json",
    "fontResolutionDefinition": "owner decision 2026-09-29: look-alike replacements are intended; the PPTX names the selected family. pass = real face or FF-31 metric-compatible replacement + PPTX names selected family; near = FF-31 visual-only route + PPTX names selected family; fail = no policy route, unrouted preview face, or PPTX writes a replacement name. Old definition kept per value under results[].legacy.",
-   "records": 900,
+   "records": 850,
    "withAssetsRecords": 31,
-   "parityOnlyValues": 76
+   "parityOnlyValues": 26
   }
  },
  "notMeasured": [
@@ -165,21 +165,21 @@
   }
  },
  "parityCounts": {
-  "total": 900,
+  "total": 850,
   "perfect": 5,
   "near": 608,
-  "mismatch": 287,
+  "mismatch": 237,
   "checksPassed": {
-   "geometry": 880,
-   "text": 800,
-   "fills": 791,
-   "zOrder": 880,
-   "slideSize": 900,
-   "typefaces": 900,
-   "reimport": 899,
+   "geometry": 830,
+   "text": 805,
+   "fills": 782,
+   "zOrder": 830,
+   "slideSize": 850,
+   "typefaces": 850,
+   "reimport": 849,
    "fontResolution": 5,
-   "theme": 900,
-   "mapping": 890
+   "theme": 850,
+   "mapping": 840
   }
  },
  "items": [
@@ -1312,28 +1312,24 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "text",
      "zOrder"
     ],
     "nearChecks": [
      "fontResolution"
     ],
     "topReasons": [
-     "text | preview text line missing in PPTX",
      "zOrder | z-order inversions between element groups (2)"
     ],
     "variants": {
      "withAssets": {
       "status": "mismatch",
       "failedChecks": [
-       "text",
        "zOrder"
       ],
       "nearChecks": [
        "fontResolution"
       ],
       "topReasons": [
-       "text | preview text line missing in PPTX",
        "zOrder | z-order inversions between element groups (2)"
       ]
      }
@@ -1371,28 +1367,24 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "text",
      "zOrder"
     ],
     "nearChecks": [
      "fontResolution"
     ],
     "topReasons": [
-     "text | preview text line missing in PPTX",
      "zOrder | z-order inversions between element groups (2)"
     ],
     "variants": {
      "withAssets": {
       "status": "mismatch",
       "failedChecks": [
-       "text",
        "zOrder"
       ],
       "nearChecks": [
        "fontResolution"
       ],
       "topReasons": [
-       "text | preview text line missing in PPTX",
        "zOrder | z-order inversions between element groups (2)"
       ]
      }
@@ -1434,28 +1426,24 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "text",
      "zOrder"
     ],
     "nearChecks": [
      "fontResolution"
     ],
     "topReasons": [
-     "text | preview text line missing in PPTX",
      "zOrder | z-order inversions between element groups (4)"
     ],
     "variants": {
      "withAssets": {
       "status": "mismatch",
       "failedChecks": [
-       "text",
        "zOrder"
       ],
       "nearChecks": [
        "fontResolution"
       ],
       "topReasons": [
-       "text | preview text line missing in PPTX",
        "zOrder | z-order inversions between element groups (4)"
       ]
      }
@@ -1500,28 +1488,24 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "text",
      "zOrder"
     ],
     "nearChecks": [
      "fontResolution"
     ],
     "topReasons": [
-     "text | preview text line missing in PPTX",
      "zOrder | z-order inversions between element groups (4)"
     ],
     "variants": {
      "withAssets": {
       "status": "mismatch",
       "failedChecks": [
-       "text",
        "zOrder"
       ],
       "nearChecks": [
        "fontResolution"
       ],
       "topReasons": [
-       "text | preview text line missing in PPTX",
        "zOrder | z-order inversions between element groups (4)"
       ]
      }
@@ -1561,28 +1545,24 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "text",
      "zOrder"
     ],
     "nearChecks": [
      "fontResolution"
     ],
     "topReasons": [
-     "text | preview text line missing in PPTX",
      "zOrder | z-order inversions between element groups (4)"
     ],
     "variants": {
      "withAssets": {
       "status": "mismatch",
       "failedChecks": [
-       "text",
        "zOrder"
       ],
       "nearChecks": [
        "fontResolution"
       ],
       "topReasons": [
-       "text | preview text line missing in PPTX",
        "zOrder | z-order inversions between element groups (4)"
       ]
      }
@@ -1627,28 +1607,24 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "text",
      "zOrder"
     ],
     "nearChecks": [
      "fontResolution"
     ],
     "topReasons": [
-     "text | preview text line missing in PPTX",
      "zOrder | z-order inversions between element groups (4)"
     ],
     "variants": {
      "withAssets": {
       "status": "mismatch",
       "failedChecks": [
-       "text",
        "zOrder"
       ],
       "nearChecks": [
        "fontResolution"
       ],
       "topReasons": [
-       "text | preview text line missing in PPTX",
        "zOrder | z-order inversions between element groups (4)"
       ]
      }
@@ -1689,28 +1665,24 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "text",
      "zOrder"
     ],
     "nearChecks": [
      "fontResolution"
     ],
     "topReasons": [
-     "text | preview text line missing in PPTX",
      "zOrder | z-order inversions between element groups (6)"
     ],
     "variants": {
      "withAssets": {
       "status": "mismatch",
       "failedChecks": [
-       "text",
        "zOrder"
       ],
       "nearChecks": [
        "fontResolution"
       ],
       "topReasons": [
-       "text | preview text line missing in PPTX",
        "zOrder | z-order inversions between element groups (6)"
       ]
      }
@@ -1758,28 +1730,24 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "text",
      "zOrder"
     ],
     "nearChecks": [
      "fontResolution"
     ],
     "topReasons": [
-     "text | preview text line missing in PPTX",
      "zOrder | z-order inversions between element groups (8)"
     ],
     "variants": {
      "withAssets": {
       "status": "mismatch",
       "failedChecks": [
-       "text",
        "zOrder"
       ],
       "nearChecks": [
        "fontResolution"
       ],
       "topReasons": [
-       "text | preview text line missing in PPTX",
        "zOrder | z-order inversions between element groups (8)"
       ]
      }
@@ -1824,28 +1792,24 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "text",
      "zOrder"
     ],
     "nearChecks": [
      "fontResolution"
     ],
     "topReasons": [
-     "text | preview text line missing in PPTX",
      "zOrder | z-order inversions between element groups (4)"
     ],
     "variants": {
      "withAssets": {
       "status": "mismatch",
       "failedChecks": [
-       "text",
        "zOrder"
       ],
       "nearChecks": [
        "fontResolution"
       ],
       "topReasons": [
-       "text | preview text line missing in PPTX",
        "zOrder | z-order inversions between element groups (4)"
       ]
      }
@@ -1887,28 +1851,24 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "text",
      "zOrder"
     ],
     "nearChecks": [
      "fontResolution"
     ],
     "topReasons": [
-     "text | preview text line missing in PPTX",
      "zOrder | z-order inversions between element groups (4)"
     ],
     "variants": {
      "withAssets": {
       "status": "mismatch",
       "failedChecks": [
-       "text",
        "zOrder"
       ],
       "nearChecks": [
        "fontResolution"
       ],
       "topReasons": [
-       "text | preview text line missing in PPTX",
        "zOrder | z-order inversions between element groups (4)"
       ]
      }
@@ -25844,61 +25804,7 @@
   },
   {
    "dimension": "charts",
-   "galleryId": "clustered-column",
-   "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text",
-     "fills"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "text | chart preview text not in native chart cache",
-     "fills | chart series colors not in preview (6)"
-    ]
-   }
-  },
-  {
-   "dimension": "charts",
-   "galleryId": "stacked-column-2x",
-   "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text",
-     "fills"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "text | chart preview text not in native chart cache",
-     "fills | chart series colors not in preview (6)"
-    ]
-   }
-  },
-  {
-   "dimension": "charts",
    "galleryId": "stacked-column-3x",
-   "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text",
-     "fills"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "text | chart preview text not in native chart cache",
-     "fills | chart series colors not in preview (6)"
-    ]
-   }
-  },
-  {
-   "dimension": "charts",
-   "galleryId": "100pct-stacked-column-2x",
    "parity": {
     "status": "mismatch",
     "failedChecks": [
@@ -25934,42 +25840,6 @@
   },
   {
    "dimension": "charts",
-   "galleryId": "line-with-high-low",
-   "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text",
-     "fills"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "text | chart preview text not in native chart cache",
-     "fills | chart series colors not in preview (11)"
-    ]
-   }
-  },
-  {
-   "dimension": "charts",
-   "galleryId": "line-with-high-low-and-markers",
-   "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text",
-     "fills"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "text | chart preview text not in native chart cache",
-     "fills | chart series colors not in preview (11)"
-    ]
-   }
-  },
-  {
-   "dimension": "charts",
    "galleryId": "line",
    "parity": {
     "status": "mismatch",
@@ -25997,114 +25867,6 @@
      "fontResolution"
     ],
     "topReasons": [
-     "fills | chart series colors not in preview (11)"
-    ]
-   }
-  },
-  {
-   "dimension": "charts",
-   "galleryId": "line-2x",
-   "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text",
-     "fills"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "text | chart preview text not in native chart cache",
-     "fills | chart series colors not in preview (11)"
-    ]
-   }
-  },
-  {
-   "dimension": "charts",
-   "galleryId": "line-with-markers-2x",
-   "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text",
-     "fills"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "text | chart preview text not in native chart cache",
-     "fills | chart series colors not in preview (11)"
-    ]
-   }
-  },
-  {
-   "dimension": "charts",
-   "galleryId": "stacked-line-2x",
-   "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text",
-     "fills"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "text | chart preview text not in native chart cache",
-     "fills | chart series colors not in preview (11)"
-    ]
-   }
-  },
-  {
-   "dimension": "charts",
-   "galleryId": "stacked-line-with-markers-2x",
-   "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text",
-     "fills"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "text | chart preview text not in native chart cache",
-     "fills | chart series colors not in preview (11)"
-    ]
-   }
-  },
-  {
-   "dimension": "charts",
-   "galleryId": "line-3x",
-   "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text",
-     "fills"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "text | chart preview text not in native chart cache",
-     "fills | chart series colors not in preview (11)"
-    ]
-   }
-  },
-  {
-   "dimension": "charts",
-   "galleryId": "line-with-markers-3x",
-   "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text",
-     "fills"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "text | chart preview text not in native chart cache",
      "fills | chart series colors not in preview (11)"
     ]
    }
@@ -26200,61 +25962,7 @@
   },
   {
    "dimension": "charts",
-   "galleryId": "clustered-bar-2x",
-   "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text",
-     "fills"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "text | chart preview text not in native chart cache",
-     "fills | chart series colors not in preview (4)"
-    ]
-   }
-  },
-  {
-   "dimension": "charts",
-   "galleryId": "stacked-bar-2x",
-   "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text",
-     "fills"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "text | chart preview text not in native chart cache",
-     "fills | chart series colors not in preview (4)"
-    ]
-   }
-  },
-  {
-   "dimension": "charts",
    "galleryId": "stacked-bar-3x",
-   "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text",
-     "fills"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "text | chart preview text not in native chart cache",
-     "fills | chart series colors not in preview (4)"
-    ]
-   }
-  },
-  {
-   "dimension": "charts",
-   "galleryId": "100pct-stacked-bar-2x",
    "parity": {
     "status": "mismatch",
     "failedChecks": [
@@ -26290,24 +25998,6 @@
   },
   {
    "dimension": "charts",
-   "galleryId": "100pct-progress-bar",
-   "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text",
-     "fills"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "text | chart preview text not in native chart cache",
-     "fills | chart series colors not in preview (4)"
-    ]
-   }
-  },
-  {
-   "dimension": "charts",
    "galleryId": "area",
    "parity": {
     "status": "mismatch",
@@ -26325,43 +26015,7 @@
   },
   {
    "dimension": "charts",
-   "galleryId": "stacked-area-2x",
-   "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text",
-     "fills"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "text | chart preview text not in native chart cache",
-     "fills | chart series colors not in preview (11)"
-    ]
-   }
-  },
-  {
-   "dimension": "charts",
    "galleryId": "stacked-area-3x",
-   "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text",
-     "fills"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "text | chart preview text not in native chart cache",
-     "fills | chart series colors not in preview (11)"
-    ]
-   }
-  },
-  {
-   "dimension": "charts",
-   "galleryId": "100pct-stacked-area-2x",
    "parity": {
     "status": "mismatch",
     "failedChecks": [
@@ -26409,102 +26063,6 @@
     ],
     "topReasons": [
      "text | chart preview text not in native chart cache",
-     "fills | chart series colors not in preview (6)"
-    ]
-   }
-  },
-  {
-   "dimension": "charts",
-   "galleryId": "dot-plot",
-   "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "fills"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "fills | chart series colors not in preview (7)"
-    ]
-   }
-  },
-  {
-   "dimension": "charts",
-   "galleryId": "dot-plot-2x",
-   "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "fills"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "fills | chart series colors not in preview (6)"
-    ]
-   }
-  },
-  {
-   "dimension": "charts",
-   "galleryId": "dot-plot-3x",
-   "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "fills"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "fills | chart series colors not in preview (6)"
-    ]
-   }
-  },
-  {
-   "dimension": "charts",
-   "galleryId": "dot-plot-4x",
-   "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "fills"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "fills | chart series colors not in preview (6)"
-    ]
-   }
-  },
-  {
-   "dimension": "charts",
-   "galleryId": "dot-plot-5x",
-   "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "fills"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "fills | chart series colors not in preview (6)"
-    ]
-   }
-  },
-  {
-   "dimension": "charts",
-   "galleryId": "dot-plot-6x",
-   "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "fills"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
      "fills | chart series colors not in preview (6)"
     ]
    }
@@ -26575,40 +26133,6 @@
   },
   {
    "dimension": "charts",
-   "galleryId": "treemap-2x",
-   "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "text | chart preview text not in native chart cache"
-    ]
-   }
-  },
-  {
-   "dimension": "charts",
-   "galleryId": "treemap-3x",
-   "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text",
-     "fills"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "text | chart preview text not in native chart cache",
-     "fills | chart series colors not in preview (1)"
-    ]
-   }
-  },
-  {
-   "dimension": "charts",
    "galleryId": "histogram",
    "parity": {
     "status": "mismatch",
@@ -26641,304 +26165,6 @@
   },
   {
    "dimension": "charts",
-   "galleryId": "bullet-column",
-   "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "fills"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "fills | chart series colors not in preview (1)"
-    ]
-   }
-  },
-  {
-   "dimension": "charts",
-   "galleryId": "bullet-column-2x",
-   "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "text | chart preview text not in native chart cache"
-    ]
-   }
-  },
-  {
-   "dimension": "charts",
-   "galleryId": "bullet-column-3x",
-   "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "text | chart preview text not in native chart cache"
-    ]
-   }
-  },
-  {
-   "dimension": "charts",
-   "galleryId": "100pct-bullet-column",
-   "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "fills"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "fills | chart series colors not in preview (1)"
-    ]
-   }
-  },
-  {
-   "dimension": "charts",
-   "galleryId": "100pct-bullet-column-2x",
-   "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "text | chart preview text not in native chart cache"
-    ]
-   }
-  },
-  {
-   "dimension": "charts",
-   "galleryId": "100pct-bullet-column-3x",
-   "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "text | chart preview text not in native chart cache"
-    ]
-   }
-  },
-  {
-   "dimension": "charts",
-   "galleryId": "bullet-bar",
-   "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "fills"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "fills | chart series colors not in preview (1)"
-    ]
-   }
-  },
-  {
-   "dimension": "charts",
-   "galleryId": "bullet-bar-2x",
-   "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "text | chart preview text not in native chart cache"
-    ]
-   }
-  },
-  {
-   "dimension": "charts",
-   "galleryId": "bullet-bar-3x",
-   "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "text | chart preview text not in native chart cache"
-    ]
-   }
-  },
-  {
-   "dimension": "charts",
-   "galleryId": "100pct-bullet-bar",
-   "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "fills"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "fills | chart series colors not in preview (1)"
-    ]
-   }
-  },
-  {
-   "dimension": "charts",
-   "galleryId": "100pct-bullet-bar-2x",
-   "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "text | chart preview text not in native chart cache"
-    ]
-   }
-  },
-  {
-   "dimension": "charts",
-   "galleryId": "100pct-bullet-bar-3x",
-   "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "text | chart preview text not in native chart cache"
-    ]
-   }
-  },
-  {
-   "dimension": "charts",
-   "galleryId": "sparkline",
-   "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "fills"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "fills | chart series colors not in preview (11)"
-    ]
-   }
-  },
-  {
-   "dimension": "charts",
-   "galleryId": "sparkline-2x",
-   "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text",
-     "fills"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "text | chart preview text not in native chart cache",
-     "fills | chart series colors not in preview (11)"
-    ]
-   }
-  },
-  {
-   "dimension": "charts",
-   "galleryId": "sparkline-3x",
-   "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text",
-     "fills"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "text | chart preview text not in native chart cache",
-     "fills | chart series colors not in preview (11)"
-    ]
-   }
-  },
-  {
-   "dimension": "charts",
-   "galleryId": "sparkline-4x",
-   "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text",
-     "fills"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "text | chart preview text not in native chart cache",
-     "fills | chart series colors not in preview (11)"
-    ]
-   }
-  },
-  {
-   "dimension": "charts",
-   "galleryId": "sparkline-5x",
-   "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text",
-     "fills"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "text | chart preview text not in native chart cache",
-     "fills | chart series colors not in preview (11)"
-    ]
-   }
-  },
-  {
-   "dimension": "charts",
-   "galleryId": "sparkline-6x",
-   "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text",
-     "fills"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "text | chart preview text not in native chart cache",
-     "fills | chart series colors not in preview (11)"
-    ]
-   }
-  },
-  {
-   "dimension": "charts",
    "galleryId": "world",
    "parity": {
     "status": "mismatch",
@@ -26955,79 +26181,6 @@
   },
   {
    "dimension": "charts",
-   "galleryId": "united-states",
-   "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "fills"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "fills | chart series colors not in preview (10)"
-    ]
-   }
-  },
-  {
-   "dimension": "charts",
-   "galleryId": "canada",
-   "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "fills"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "fills | chart series colors not in preview (11)"
-    ]
-   }
-  },
-  {
-   "dimension": "charts",
-   "galleryId": "united-kingdom",
-   "galleryIdNormalized": {
-    "fromParts": [
-     "united",
-     "kindom"
-    ],
-    "joiner": "-",
-    "to": "united-kingdom",
-    "reason": "pptx-gallery uses a misspelled slug for this chart that core check-text-integrity rejects; recorded under the core chart-type id"
-   },
-   "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "fills"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "fills | chart series colors not in preview (3)"
-    ]
-   }
-  },
-  {
-   "dimension": "charts",
-   "galleryId": "australia",
-   "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "fills"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "fills | chart series colors not in preview (7)"
-    ]
-   }
-  },
-  {
-   "dimension": "charts",
    "galleryId": "box-and-whisker",
    "parity": {
     "status": "mismatch",
@@ -27039,42 +26192,6 @@
     ],
     "topReasons": [
      "fills | chart series colors not in preview (11)"
-    ]
-   }
-  },
-  {
-   "dimension": "charts",
-   "galleryId": "box-and-whisker-2x",
-   "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text",
-     "fills"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "text | chart preview text not in native chart cache",
-     "fills | chart series colors not in preview (10)"
-    ]
-   }
-  },
-  {
-   "dimension": "charts",
-   "galleryId": "box-and-whisker-3x",
-   "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text",
-     "fills"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "text | chart preview text not in native chart cache",
-     "fills | chart series colors not in preview (10)"
     ]
    }
   },
@@ -27106,24 +26223,6 @@
      "fontResolution"
     ],
     "topReasons": [
-     "fills | chart series colors not in preview (4)"
-    ]
-   }
-  },
-  {
-   "dimension": "charts",
-   "galleryId": "dumbbell",
-   "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text",
-     "fills"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "text | chart preview text not in native chart cache",
      "fills | chart series colors not in preview (4)"
     ]
    }

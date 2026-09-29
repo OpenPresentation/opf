@@ -126,6 +126,7 @@ comparison:
 
 | Run | perfect | geometry | text | fills | zOrder | slideSize | typefaces | reimport | fontResolution | theme | mapping |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Field text counted, 850-value set (September 29, after pptx-gallery#40 and a harness fix; opf `03a55ae`, opf-render `aa7e898`, opf-pptx `ca34da7`, pptx-gallery `23f9216`) | 5 (608 near, 237 mismatch) | 830 | 805 | 782 | 830 | 850 | 850 | 849 | 5 pass, 741 near, 104 fail | 850 | 840 |
 | Look-alike fonts accepted, new fontResolution definition (September 29, owner decision 2026-09-29; opf `401f2e3`, opf-render `c62b3f9`, opf-pptx `54f7e4c`, pptx-gallery `4b48e69`) | 5 (608 near, 287 mismatch) | 880 | 800 | 791 | 880 | 900 | 900 | 899 | 5 pass, 791 near, 104 fail | 900 | 890 |
 | Same run, old fontResolution definition | 5 (0 near, 895 mismatch) | 880 | 800 | 791 | 880 | 900 | 900 | 899 | 5 | 900 | 890 |
 | Accepted merged graph (September 29) | 5 | 880 | 798 | 790 | 880 | 900 | 900 | 899 | 5 | 900 | 890 |
@@ -171,6 +172,48 @@ after the audited `4b48e69` and is not measured here. Results:
 [parity-results-2026-09-29-lookalike-fonts.json](gallery-support/parity/parity-results-2026-09-29-lookalike-fonts.json),
 [scoreboard](gallery-support/parity/PARITY-2026-09-29-lookalike-fonts.md).
 The earlier accepted results and scoreboard are kept unchanged.
+
+#### Field text and the 850-value set (2026-09-29 re-measure)
+
+The first row of the table above is a later run on the current mains of all four
+repositories (opf `03a55ae`, opf-render `aa7e898`, opf-pptx `ca34da7`,
+pptx-gallery `23f9216`). Two things changed against the look-alike row, and a third was checked.
+
+- **Value set: 900 to 850.** pptx-gallery#40 (FF-22) reduced the charts from 76
+  to the 26 Aspose.Slides-supported types, so the 900 values are now 850 (793
+  presence-audited values, 26 charts and 31 `withAssets` variants). The
+  50 removed charts were all mismatches and passed geometry, zOrder, slideSize,
+  typefaces, reimport, theme and mapping (15 passed text, 9 passed fills), so
+  those passing counts fall by 50, 15 and 9: a change of denominator, not a
+  regression. The presence audits A and B still measure the earlier gallery heads.
+- **Instrument fix: field text.** The harness read PPTX text runs with
+  `<a:(r|fld)>`, which never matches `<a:fld id="{...}" type="slidenum">`, so the
+  slide-number and date text ("1") of the 20 header and footer values (10, and 10
+  `withAssets`) was reported missing from the PPTX. It now uses
+  `parity/scripts/pptx-runs.mjs` (`<a:(r|fld)\b[^>]*>`, unit-tested in
+  `pptx-runs.test.mjs`). Run on the same four heads, the old and the fixed harness
+  differ in exactly those 20 values: text fails 20 fewer (785 to 805 passing of
+  850), and every other check and every classification is identical (5 perfect, 608
+  near, 237 mismatch both times). The 20 values stay mismatches: zOrder still
+  fails for all 20 (z-order inversions between element groups) and fontResolution is
+  near.
+- **Script font pack: not modelled, a product gap.** The modelled preview host
+  still loads the office pack with visual substitution and no `scripts` pack, so
+  the 85 fontResolution failures that need Noto script faces stay failures. The
+  shipped previews do the same: the opf-editor playground that pptx.gallery embeds
+  builds its registry with `loadOfficeFontRegistry()` (33 faces of 11 open
+  families, no Noto), the gallery layout thumbnails use no registry, and
+  opf-render never loads the script pack by itself (a host has to pass
+  `scripts`, for example from `detectScripts(presentation)`; no shipped host
+  does). For scale, an exploratory run of the same heads with `scripts: 'all'`
+  gives 29 perfect, 669 near, 152 mismatch (24 fontResolution fail to pass, 61 to
+  near; nothing else changes). It is not on the scoreboard.
+
+Results:
+[parity-results-2026-09-29-field-text.json](gallery-support/parity/parity-results-2026-09-29-field-text.json),
+[scoreboard](gallery-support/parity/PARITY-2026-09-29-field-text.md) (the
+before/after in it compares against the old harness at the same heads; that
+baseline run is not committed). `support-status.json` is rebuilt from this run.
 
 The five perfect values are the font schemes `calibri`, `courier-new`,
 `times-new-roman` and `roboto`, plus the content block `kpi-dashboard`.

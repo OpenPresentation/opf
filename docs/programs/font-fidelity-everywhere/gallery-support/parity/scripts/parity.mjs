@@ -10,6 +10,7 @@ import path from 'node:path';
 import {fileURLToPath, pathToFileURL} from 'node:url';
 import {createRequire} from 'node:module';
 import {classifyFontResolution, legacyPasses, pptxNaming} from './font-resolution.mjs';
+import {runElements} from './pptx-runs.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(here, '..');
@@ -135,9 +136,10 @@ function fillOf(xml, theme) {
 function parseParagraphs(txXml, theme, defaults = {}) {
   return [...txXml.matchAll(/<a:p>(.*?)<\/a:p>/gs)].map(pm => {
     const p = pm[1]; const pPr = p.match(/<a:pPr\b([^>]*)/)?.[1] ?? ''; const pa = attrs(pPr); const algn = pa.algn ?? 'l'; const bu = unesc(p.match(/<a:buChar char="([^"]*)"/)?.[1] ?? '') || (p.includes('<a:buAutoNum') ? '#auto' : null);
-    const runs = [...p.matchAll(/<a:(r|fld)>(.*?)<\/a:\1>/gs)].map(rm => {
-      const rPr = rm[2].match(/<a:rPr\b([^>]*?)(?:\/>|>(.*?)<\/a:rPr>)/s); const ra = attrs(rPr?.[1] ?? ''), inner = rPr?.[2] ?? '';
-      const text = unesc(rm[2].match(/<a:t>(.*?)<\/a:t>/s)?.[1] ?? '');
+    // a:r and a:fld (slide-number and date fields, which carry id/type attributes) both hold text; see pptx-runs.mjs.
+    const runs = runElements(p).map(rm => {
+      const rPr = rm.inner.match(/<a:rPr\b([^>]*?)(?:\/>|>(.*?)<\/a:rPr>)/s); const ra = attrs(rPr?.[1] ?? ''), inner = rPr?.[2] ?? '';
+      const text = unesc(rm.inner.match(/<a:t>(.*?)<\/a:t>/s)?.[1] ?? '');
       const tf = k => inner.match(new RegExp(`<a:${k} typeface="([^"]*)"`))?.[1];
       return {text, latin: tf('latin'), ea: tf('ea'), cs: tf('cs'), sizePt: ra.sz ? +ra.sz / 100 : defaults.sizePt ?? null, bold: ra.b === '1', italic: ra.i === '1', fill: fillOf(inner, theme), lang: ra.lang ?? null};
     });
@@ -469,7 +471,7 @@ for (const s of snippets) {
 }
 const meta = {generatedBy: 'dimension-audit/parity/scripts/parity.mjs', generatedAt: new Date().toISOString(), node: process.version, prefix: PFX,
   heads: {opf: head(CORE), 'opf-render': head(RENDER), 'opf-pptx': head(PPTX), 'pptx-gallery': head(GALLERY)},
-  tolerances: TOL, previewMode: 'engine default measurement (no host registry) for geometry/text; office pack + visual substitution registry for font resolution',
+  tolerances: TOL, previewMode: 'engine default measurement (no host registry) for geometry/text; office pack + visual substitution registry (no scripts pack, as in the shipped editor and gallery previews) for font resolution',
   exportMode: 'toPptx default options (no registry)', cropCheck: CROP,
   fontResolution: {definition: 'owner decision 2026-09-29: look-alike replacements are intended; the PPTX names the selected family. pass = real face or FF-31 metric-compatible replacement + PPTX names selected family; near = FF-31 visual-only route + PPTX names selected family; fail = no policy route, unrouted preview face, or PPTX writes a replacement name. Old definition kept per value under results[].legacy.', policy: {version: FONT_POLICY.version, families: FONT_POLICY.families.length}}};
 const OUT = process.env.OUT ?? path.join(ROOT, 'parity-results.json');
