@@ -1,6 +1,6 @@
 # Program: font fidelity everywhere
 
-Status: **active** (opened 2026-09-23). Tracker: [burndown.md](burndown.md).
+Status: **active** (opened 2026-09-23). Tracker: [burndown.md](burndown.md); per-font tracker: [font-tracker.md](font-tracker.md).
 This is the single source of truth for the cross-repository program. Agents and
 people resuming work start here, not from chat history or local scratch files.
 
@@ -231,6 +231,9 @@ implement offline items and open PRs. A separate reviewer agent reviews each PR.
 
 ## Related
 
+- [Per-font fidelity tracker (FF-40)](font-tracker.md): one record per font family with route, bundled face, styles,
+  measurements, host and native status, parity signals, phase, status and next action, sorted by priority
+  (machine-readable: [font-tracker.json](font-tracker.json))
 - [Windows native handoff](../../handoff-windows-native-2026-09-21-wrap-up.md)
 - [Font fidelity](../../font-fidelity.md)
 - [pptx.gallery support by dimension](gallery-support.md) and its
