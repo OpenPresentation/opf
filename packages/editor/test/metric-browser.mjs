@@ -64,9 +64,18 @@ try {
     assert.equal(geometry.alignment,alignment);
     for(const part of geometry.parts){
       assert.equal(await target(part.path).count(),1);
-      const origins=await target(part.path).locator('text').evaluateAll(nodes=>nodes.map(node=>({x:Number(node.getAttribute('x')),baseline:Number(node.getAttribute('y'))})));
+      const origins=await target(part.path).locator('text').evaluateAll(nodes=>nodes.map(node=>({x:Number(node.getAttribute('x')),baseline:Number(node.getAttribute('y')),anchor:node.getAttribute('text-anchor')})));
       assert.equal(origins.length,part.linePositions.length);
-      for(const [i,origin] of origins.entries())for(const key of ['x','baseline'])assert.ok(Math.abs(origin[key]-part.linePositions[i][key])<=.00051,'SVG serializes accepted positions to three decimal places');
+      // Since opf-render#43 (FF-29) untabbed centered/right lines are edge-anchored: x is the
+      // accepted line origin plus the accepted width times the alignment factor, with a matching
+      // text-anchor. Tabbed lines keep their accepted origin with a start anchor.
+      const factor=alignment==='right'?1:alignment==='center'?.5:0;
+      for(const [i,origin] of origins.entries()){
+        const line=part.fit.sourceLines[i],edge=factor>0&&!line.segments.some(segment=>segment.kind==='tab');
+        assert.equal(origin.anchor,edge?(factor===1?'end':'middle'):'start');
+        assert.ok(Math.abs(origin.x-(part.linePositions[i].x+(edge?line.width*factor:0)))<=.00051,'SVG serializes accepted positions to three decimal places');
+        assert.ok(Math.abs(origin.baseline-part.linePositions[i].baseline)<=.00051,'SVG serializes accepted positions to three decimal places');
+      }
       await edit(part.path);assert.deepEqual(await document(),deck);
       assert.equal(await page.evaluate(()=>editor.canUndo),false,'Opening any metric field must preserve source and scalar types');
     }

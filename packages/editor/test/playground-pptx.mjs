@@ -187,7 +187,12 @@ try {
   const quoteImport=await fromPptx(quoteBytes);
   assert.equal(validatePresentation(quoteImport).valid,true);
   assert.equal(quoteImport.slides.length,1);
-  assert.deepEqual(quoteImport.slides[0].blocks.map(block=>block.text),['"Edited quote body"','Reviewer - Recorded interview']);
+  // Before opf-pptx#90 these native lines imported as plain strings. Since then it
+  // keeps current native run formatting, so a styled line is a schema-valid TextRun[].
+  // Both shapes are valid OPF text; the contract here is the exact visible text and
+  // block order, so project each value to its concatenated run text.
+  const visible=text=>Array.isArray(text)?text.map(run=>typeof run==='string'?run:run.text).join(''):text;
+  assert.deepEqual(quoteImport.slides[0].blocks.map(block=>visible(block.text)),['"Edited quote body"','Reviewer - Recorded interview']);
   // Current OOXML import retains editable lines, not the original OPF quote,
   // font scheme or pagination policy. Keep this boundary explicit in evidence.
   assert.equal(quoteImport.slides[0].quote,undefined);
