@@ -37,7 +37,8 @@ and merged as `bf3f78f`; the final merged-source audit retained those counts
 headline above remains the explicitly dated pre-PPTX78 baseline. These
 source/package audits use no Office; FF-29 remains in review. FF-05 is now
 in progress: its Calibri controls still report Aptos, including with all six
-theme font slots explicit, without identifying the precise cause.
+theme font slots explicit and unchanged before/after bounded content reads,
+without identifying the precise cause.
 
 ## Items
 
@@ -48,7 +49,7 @@ theme font slots explicit, without identifying the precise cause.
 | FF-02 | Embed harness records pre-edit, post-text and post-edit font observations | opf-pptx | none | done | [opf-pptx#58](https://github.com/OpenPresentation/opf-pptx/pull/58) `b6eb3bfd`; hardening [opf-pptx#62](https://github.com/OpenPresentation/opf-pptx/pull/62) `83a41b9a` |
 | FF-03 | Read-only native font inventory worker | opf-pptx | none | done | [opf-pptx#59](https://github.com/OpenPresentation/opf-pptx/pull/59) `ef8a1583` |
 | FF-04 | Native inventory of the unedited fixture, with and without temporary fonts | opf-pptx / opf | FF-03 | done | [opf#145](https://github.com/OpenPresentation/opf/pull/145) merged `a85facf`, [September 29 evidence](../../evidence/windows-native-font-inventory-20260929/README.md): both fixture conditions and exporter control audited; Aptos present before edits; portable staged-blob verification and independent review passed |
-| FF-05 | Aptos root cause determined | opf | FF-02, FF-04 | in-progress | [brief](aptos-origin-brief.md), [E6 Calibri control](../../evidence/windows-native-calibri-control-20260929/README.md), [E7 explicit theme slots](../../evidence/windows-native-explicit-slots-20260929/README.md): Aptos persists without Carlito references, empty theme ea/cs slots or temporary registration; exact style/part or native-resolution cause remains open |
+| FF-05 | Aptos root cause determined | opf | FF-02, FF-04 | in-progress | [brief](aptos-origin-brief.md), [E6 Calibri control](../../evidence/windows-native-calibri-control-20260929/README.md), [E7 explicit theme slots](../../evidence/windows-native-explicit-slots-20260929/README.md), [E8 before/after content reads](../../evidence/windows-native-font-query-order-20260929/README.md): the collection stays empty-name + Aptos across the bounded query interval; exact style/part or native-resolution cause remains open |
 | FF-06 | Font-flow map across all 14 dimensions and environments | opf | none | done | [font-flow-map.md](font-flow-map.md), [opf#116](https://github.com/OpenPresentation/opf/pull/116) |
 | FF-07 | Exporter writes chosen fonts into theme and run East Asian/complex-script slots, with `lang`/RTL | opf-pptx | FF-05, FF-06, FF-18 | review | merged: [opf-pptx#70](https://github.com/OpenPresentation/opf-pptx/pull/70) `0e886f30`, [opf#134](https://github.com/OpenPresentation/opf/pull/134) `9695bf37`, [opf#135](https://github.com/OpenPresentation/opf/pull/135) `3512af0b`; pending FF-05 native root-cause evidence (criteria are subject to FF-05) |
 | FF-08 | Exporter leaks no hard-coded or default font in any part | opf-pptx | FF-05, FF-06, FF-17 | review | merged: [opf-pptx#69](https://github.com/OpenPresentation/opf-pptx/pull/69) `405963ce`; pending FF-05 native root-cause evidence (empty values must be allowed by FF-05) |
@@ -763,3 +764,26 @@ Append one dated line per state change. Newest last.
   no-system-font-discovery path are reused. Fresh original cross-OS CI and visual
   review are required; this is not the FF-09 font-switch matrix, installed FF-38
   parity, a physically fontless host, native fidelity or release acceptance.
+
+- 2026-09-29 15:07 UTC: FF-05 E8 used the exact E7 input with
+  [PPTX88](https://github.com/OpenPresentation/opf-pptx/pull/88) merged
+  `9a7f3c1513c5875b4ac9d5974c04151a4ac26cbe`. One owned read-only open/close,
+  303 stages, about 1,405 ms under the 45-second helper deadline, unchanged
+  inputs and zero temporary registrations passed the observational audit.
+  Both ordered Fonts collections and flags remained empty-name + Aptos before
+  and after existing content reads. This proves stability only over that
+  sequence/interval, not root cause, physical font identity, allowlist or
+  embedding. [Evidence](../../evidence/windows-native-font-query-order-20260929/README.md).
+  PowerPoint was freshly launched after sleep; its process differs from E7.
+  Actual native source graph: core `9261eac5`, PPTX `9a7f3c1`, renderer
+  `c62b3f9`, editor `d0c95a1`, gallery `f17e9ae5`.
+  - The owner explicitly authorized independently reviewed merges after local
+    tests during the Actions credit shortage. PPTX88 passed 22 focused groups,
+    29 independent audit cases, source build/typecheck/validate/full tests,
+    six browser suites and a fresh packed consumer. Registry and source
+    dependency results remain separate; no remote CI pass is claimed here.
+    Fidelity and native safety gates remain unchanged.
+  - FF-05 remains in progress. Preserve the concurrently merged FF-10/FF-11
+    work: summary stays 19 done, 19 review/in-progress, 6 todo and the dated
+    parity headline stays 5/900. Next is offline style/part isolation review,
+    not another unmodified inventory or an embed retry. No publish/deploy.

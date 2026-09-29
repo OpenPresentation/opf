@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 2,
+  "kind": "native-font-inventory-audit",
+  "evidenceDirectory": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-native-20260929\\ff05-font-query-order-01\\native-inventory-01",
+  "reviewedVerifierRevision": "current",
+  "passed": true,
+  "failures": [],
+  "rawHashes": {
+    "request.json": "cc996a27f144ebeeba3cf82f7aa05e4e1dc3c28679a72fe5418d5bf88ab869ea",
+    "report.json": "8d8950385a508de809d49bdf831f6cbef758db108c310b9612f6cfa83ea37756",
+    "supervisor.json": "81719e529c6f702ad6dd9b9b300458d4c499f1c668d52e8386f727564ac58b13",
+    "worker.json": "fe888baff064a49a5b1e6788b5ae6b76500d03d3d9e7439a77919142c90fbd22",
+    "progress.json": "957d7f1933d316343a209af5a8f8e5e49ce056377b4f0983743f13728e3a78a3",
+    "stages.jsonl": "e9cbc35d1e5d3ba9f9040ebea0240cf450b43dc5dc49fe45cecd67b325e7a95a",
+    "inputs/native-font-inventory.ps1": "dd21258aca3b8b4777e928bb96ee7c6488199b53326c594e0c2bd63ea4322c82",
+    "inputs/source.pptx": "4e2bab2a4f5a0f09350d2edc2463bcb29302fa7db34a8c621e39fcd5c9a16cd7",
+    "original:source": "4e2bab2a4f5a0f09350d2edc2463bcb29302fa7db34a8c621e39fcd5c9a16cd7",
+    "original:verifier": "dd21258aca3b8b4777e928bb96ee7c6488199b53326c594e0c2bd63ea4322c82",
+    "inputs/native-process.ps1": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+    "original:process-helper": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+    "inputs/native-text-fonts.ps1": "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6",
+    "original:font-helper": "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6",
+    "reviewed/native-font-inventory.ps1": "dd21258aca3b8b4777e928bb96ee7c6488199b53326c594e0c2bd63ea4322c82",
+    "reviewed/native-process.ps1": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+    "reviewed/native-text-fonts.ps1": "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6"
+  },
+  "findings": {
+    "inputMode": "control-deck",
+    "fontRegistrationMode": "none",
+    "powerPointVersion": "16.0",
+    "presentationFonts": [
+      {
+        "index": 1,
+        "name": "",
+        "embedded": 0,
+        "embeddable": 0
+      },
+      {
+        "index": 2,
+        "name": "Aptos",
+        "embedded": 0,
+        "embeddable": -1
+      }
+    ],
+    "theme": {
+      "major": {
+        "latin": "Calibri",
+        "complexScript": "Calibri",
+        "eastAsian": "Calibri"
+      },
+      "minor": {
+        "latin": "Calibri",
+        "complexScript": "Calibri",
+        "eastAsian": "Calibri"
+      }
+    },
+    "ledger": {
+      "presentationFontNames": [
+        "Aptos"
+      ],
+      "slideTextSlotNames": [
+        "Calibri"
+      ],
+      "masterTextSlotNames": [],
+      "themeFontNames": [
+        "Calibri"
+      ],
+      "aptosPresentationFontNames": [
+        "Aptos"
+      ],
+      "aptosSlideTextSlotNames": [],
+      "aptosMasterTextSlotNames": [],
+      "aptosThemeFontNames": [],
+      "nonCarlitoPresentationFontNames": [
+        "Aptos"
+      ],
+      "carlitoOnlyPresentationFonts": false,
+      "aptosReported": true,
+      "emptyNamePresentationFontIndexes": [
+        1
+      ],
+      "emptyNameFontReported": true
+    },
+    "presentationFontsAfterContent": [
+      {
+        "index": 1,
+        "name": "",
+        "embedded": 0,
+        "embeddable": 0
+      },
+      {
+        "index": 2,
+        "name": "Aptos",
+        "embedded": 0,
+        "embeddable": -1
+      }
+    ],
+    "fontQueryComparison": {
+      "beforeCount": 2,
+      "afterCount": 2,
+      "entriesEqual": true,
+      "namesEqualInOrder": true,
+      "entriesEqualIgnoringOrder": true,
+      "outcome": "unchanged",
+      "beforeAptosReported": true,
+      "afterAptosReported": true,
+      "beforeEmptyNameIndexes": [
+        1
+      ],
+      "afterEmptyNameIndexes": [
+        1
+      ]
+    },
+    "failureCleanup": {
+      "applicable": false,
+      "outcome": null,
+      "closeInvocations": 1,
+      "consistent": true,
+      "problems": []
+    },
+    "note": "Findings are evidence only when passed is true. Reported names do not prove physical font-file or per-glyph identity."
+  },
+  "scope": "Offline input, lifecycle, read-only, stage-sequence and font-ledger audit of one native font inventory attempt. No Office, COM or font API is started.",
+  "mode": "audit"
+}

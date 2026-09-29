@@ -66,17 +66,33 @@ responsible style, prove native collection behavior is a defect, or establish
 glyph identity. E6 and E7 were sequential runs in the same PowerPoint process;
 they do not control every host variable.
 
-The next proposed discriminator is a separately reviewed harness that retains
-the initial `Presentation.Fonts` snapshot and reads it once more after the
-existing bounded content queries, before closing the same owned presentation.
-Compare raw names (including empty entries), `Embedded` and `Embeddable` flags.
-A changed collection would indicate dependence on query order or elapsed
-initialization; it would not separate those factors or locate a style. An
-unchanged collection would leave those explanations unresolved. Preserve the
-first snapshot and all failure latches; do not add saves, edits, new presentation
-opens or retries. This harness is not implemented or run in the E7 evidence.
-FF-05 remains in progress. Do not change the allowlist or resume embedding on
-the basis of these inventories alone.
+**E8 completed at 15:07 UTC.** The [dual-snapshot evidence](../../evidence/windows-native-font-query-order-20260929/README.md)
+uses the exact E7 input above and the separately reviewed opt-in harness from
+[PPTX88](https://github.com/OpenPresentation/opf-pptx/pull/88), merged as
+`9a7f3c1`. It reads `Presentation.Fonts` first and once more after the existing
+bounded theme/slide/master queries, before closing the same owned presentation.
+One read-only open/close completed in about 1,405 ms under the 45-second helper
+deadline, with 303 stages, unchanged inputs, no temporary registration and zero
+audit failures. The first snapshot and its ledger are preserved separately.
+
+**F.** Both collections contain exactly the same ordered entries and flags:
+empty name (`Embedded=0`, `Embeddable=0`), then Aptos (`Embedded=0`,
+`Embeddable=-1`). All six theme names report Calibri; the six inspected slide
+Font2 records retain Calibri in their nonempty names and empty `NameOther`.
+PowerPoint Home was observed before and after the attempt. After the computer
+slept, PowerPoint was absent and was launched through supported computer use;
+E8 used process 5288, distinct from E7's process 30776. Its measured executable
+file/product version was `16.0.20430.20092`.
+
+**I.** This collection was stable over this exact query sequence and elapsed
+interval. It does not rule out all initialization behavior, distinguish the
+effect of reads from elapsed time, or locate a remaining style/part reference.
+E7 and E8 do not form a same-process comparison. FF-05 remains in progress;
+root cause, physical font identity, allowlist and embedding remain unresolved.
+Next, inspect the remaining style/part references offline and independently
+review a minimal fixture change before any later bounded native attempt.
+Do not repeat accepted inventories or change a gate to make this observation
+pass the font allowlist.
 
 The expressibility statements in the historical research below describe the
 September 22 source. FF-18 and FF-07 subsequently added language/script font
