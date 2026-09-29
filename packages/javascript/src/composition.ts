@@ -139,6 +139,22 @@ export function placeTextLines(lines: readonly TextLineInk[], box: LayoutBox, al
   }
   return {alignment,rasterPadding,lines:placed,height,overflow};
 }
+/** Keep accepted line and outline origins aligned when a heading box is recentered. */
+function translateTextFit<T extends {placement?: TextPlacement}>(fit: T, dy: number): T {
+  if (!dy || !fit.placement) return fit;
+  return {
+    ...fit,
+    placement: {
+      ...fit.placement,
+      lines: fit.placement.lines.map(line => ({
+        ...line,
+        y: line.y + dy,
+        baseline: line.baseline + dy,
+        outline: line.outline ? {...line.outline, y: line.outline.y + dy} : line.outline,
+      })),
+    },
+  };
+}
 export interface ComposedItem {
   path: string;
   field: string;
@@ -319,6 +335,8 @@ export class OPFCompositionError extends Error {
 }
 const fields = ["text", "items", "bullets", "image", "video", "chart", "table", "code", "metric", "quote", "timeline"];
 const headings = new Set(["title", "subtitle", "tag"]);
+/** Layout ids whose only content is the heading group; that group is centered when the slide has no body. */
+const COVER_LAYOUT_IDS = new Set(["title", "title-subtitle"]);
 const rows = ["top", "middle", "bottom"];
 const columns = ["left", "center", "right"];
 const record = (value: unknown): Record<string, any> => value && typeof value === "object" && !Array.isArray(value) ? value : {};
@@ -1719,7 +1737,17 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   const furniture=measuredFurniture.configured||measuredFurniture.diagnostics.length?measuredFurniture:undefined;
   if(furniture)diagnostics.push(...furniture.diagnostics);
   const bodyBottom=Math.min(area.bottom-padding,furniture&&furniture.footerTop<height?furniture.footerTop-gap*.5:height-padding);
-  let y = Math.max(area.top+padding,furniture?.headerBottom?furniture.headerBottom+gap*.5:padding);
+  const headingTop = Math.max(area.top+padding,furniture?.headerBottom?furniture.headerBottom+gap*.5:padding);
+  // Cover detection reads the layout's raw placeholders and the slide payload only, so it is
+  // independent of the picture-slot removal applied to the content placeholders below.
+  const layoutPlaceholders: {type?: string}[] = Array.isArray(layout.placeholders) ? layout.placeholders : [];
+  const headingOnlyLayout = COVER_LAYOUT_IDS.has(String(layout.id ?? "")) || (layoutPlaceholders.length > 0 && layoutPlaceholders.every(placeholder => headings.has(placeholder.type ?? "")));
+  const regions = Object.keys(slide).filter(key => regionParts(key)).sort();
+  // A root image counts as body even when it is drawn as the slide image, so image slides keep the content origin.
+  const hasBodyPayload = regions.length > 0 || Array.isArray(slide.blocks) || fields.some(field => slide[field] !== undefined);
+  const isCover = !hasBodyPayload && (headingOnlyLayout || (!layout.id && !layoutPlaceholders.some(placeholder => !headings.has(placeholder.type ?? ""))));
+  let y = headingTop;
+  const headingItems: ComposedItem[] = [];
   for (const field of ["tag", "title", "subtitle"]) {
     if (!slide[field]) continue;
     const requested = (field === "title" ? 54 : field === "tag" ? 16 : 25) * scale;
@@ -1728,10 +1756,24 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     const text = fitPlacedText(field,slide[field],String(slide[field]),box,requested,minSize,`${path}.${field}`);
     box.height = Math.min(maxHeight, Math.max(text.lines.length * text.lineHeight,text.placement?.height??0));
     if(furniture&&box.y+box.height>bodyBottom+.01)diagnostics.push({code:'text-overflow',path:`${path}.${field}`,message:'Repeated furniture leaves too little room for this heading. Change the header/footer or slide design.'});
-    items.push({ path: `${path}.${field}`, field, type: "text", value: slide[field], payload: { text: slide[field] }, box, text, textStyle: styleFor(field,`${path}.${field}`), composition, alignment: alignmentFor(field) });
+    const item: ComposedItem = { path: `${path}.${field}`, field, type: "text", value: slide[field], payload: { text: slide[field] }, box, text, textStyle: styleFor(field,`${path}.${field}`), composition, alignment: alignmentFor(field) };
+    headingItems.push(item);
+    items.push(item);
     y += box.height + gap * 0.5;
   }
-  if (items.length) y += gap * 0.5;
+  if (headingItems.length) {
+    if (isCover) {
+      // Center the tag/title/subtitle group between the image-safe top (or header furniture)
+      // and the bottom (or footer furniture); a group taller than that span is not moved.
+      const last = headingItems[headingItems.length - 1]!;
+      const shift = Math.max(0, (bodyBottom - (last.box.y + last.box.height)) / 2);
+      if (shift) for (const item of headingItems) {
+        item.box.y += shift;
+        if (item.text) item.text = translateTextFit(item.text, shift);
+      }
+      y = last.box.y + last.box.height + gap;
+    } else y += gap * 0.5;
+  }
   const contentBox = { x: area.left + padding, y, width: area.right - area.left - padding * 2, height: Math.max(scale, bodyBottom - y) };
   type Pending = { field: string; type: string; value: unknown; path: string; payload: Record<string, unknown>; children?: Pending[]; composition?: Composition; region?: [number[], number[]] };
   const collect = (host: Record<string, any>, basePath: string, depth = 0, ancestors: unknown[] = []): Pending[] => {
@@ -1745,7 +1787,6 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     return fields.filter(field => host[field] !== undefined).map(field => ({ field, type: host.type ?? kind(field), value: host[field], path: `${basePath}.${field}`, payload: { type: host.type ?? kind(field), [field]: host[field] } }));
   };
   // Valid documents choose exactly one of regions, blocks, or root payloads.
-  const regions = Object.keys(slide).filter(key => regionParts(key)).sort();
   const pending: Pending[] = regions.length
     ? regions.flatMap(key => collect(record(slide[key]), `${path}.${key}`).map(item => ({ ...item, region: regionParts(key) })))
     : Array.isArray(slide.blocks) ? slide.blocks.flatMap((block: unknown, index: number) => collect(record(block), `${path}.blocks.${index}`))

@@ -2,6 +2,8 @@
 
 The shared reference coordinates use 96 pixels per inch. Default widescreen dimensions are resolved by the engine; use the resolved dimensions rather than assuming every deck is 1280×720. Composition gap and padding are fractions of the container's shorter edge. Body font minima use reference pixels at a 720-pixel canvas short edge.
 
+Default heading geometry is a reference-engine policy, not extra JSON. Title and subtitle share the padded width of the free area. Cover slides (no body payload on `title`, `title-subtitle`, an all-heading layout or no layout; a root `image` counts as body) center the tag/title/subtitle group vertically inside the image-safe area between header and footer furniture; wrapping recenters the group and a group that fills the area is not moved. Content slides keep headings at the top. Reuse `item.box` (and accepted internal part boxes, line and outline origins) for preview, selection and export. Do not silently truncate; report overflow.
+
 Current bounds: columns 1–12; gap 0–0.1; padding 0–0.2; positive weights up to 100; minFontSize 8–32. Check the installed schema before relying on these bounds. Nesting is bounded at 32 group levels. Groups inherit only readability constraints (`minFontSize`, `overflow`), and a strict ancestor cannot be weakened by a child. Child padding defaults to zero.
 
 A two-level arrangement:

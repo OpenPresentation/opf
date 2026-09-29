@@ -76,7 +76,7 @@ jobs:
       - name: Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks
         working-directory: opf
         env:
-          OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf-render/test/golden/opf-examples-png.ff25-wdupdiag.sha256.json
+          OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf/scripts/fixtures/opf-examples-png.cover-centering.sha256.json
         run: pnpm test:packages
       - name: Verify installed type failure propagation
         working-directory: opf
