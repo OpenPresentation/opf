@@ -40,7 +40,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-pptx
-          ref: 2fa70d8b71be13d7053b295994c984e6478f761d
+          ref: 373dfa39688e787d861202e7a8069ebff7e8be36
           path: opf-pptx
           fetch-depth: 0
           persist-credentials: false
@@ -142,6 +142,9 @@ jobs:
             opf/artifacts/timeline-workflow/**
             opf/artifacts/furniture-workflow/**
             opf/artifacts/furniture-fields-browser/**
+            opf/artifacts/npm/renderer-absent-furniture/**
+            opf/artifacts/npm/zip-date-candidate/**
+            opf-pptx/artifacts/zip-date/**
             opf/artifacts/timeline-acceptance.json
             opf-render/artifacts/plain-whitespace-browser/**
           retention-days: 7

@@ -155,6 +155,55 @@ and eight exported PPTX files are byte-identical between those original premerge
 and postmerge runs. The wrapped date is legible; the 805-slide golden is unchanged.
 These candidate results are not a published or native compatibility claim.
 
+## UTC ZIP dates and the renderer-absent candidate gate
+
+Core [#154](https://github.com/OpenPresentation/opf/pull/154), accepted as
+`4bdaa5900ecd6a647d491c0322bfbf5bc71f59dc`, passed its original accepted-main
+[core](https://github.com/OpenPresentation/opf/actions/runs/36568416311) and
+[ecosystem](https://github.com/OpenPresentation/opf/actions/runs/36568416369)
+workflows. That checkpoint binds the accepted chart fixes, 19 installed
+wrapped-date controls, four installed furniture browser workflows and unchanged
+805-slide golden. Its eight Linux PPTX exports match the prior Linux run.
+The separate local-versus-Linux comparison found identical uncompressed content
+across 714 ZIP members, with only timestamp metadata differing; it did not pass
+whole-file cross-timezone determinism.
+
+[PPTX #86](https://github.com/OpenPresentation/opf-pptx/pull/86), accepted as
+`373dfa39688e787d861202e7a8069ebff7e8be36`, repairs explicit `zipDate` handling
+using UTC calendar fields in both PPTX and embedded workbook archives. The tree
+`2405fa1b86ac1abc034f14ab47e01bd8d38a56c2` matches reviewed head `5865743`.
+Omission/undefined retains established fixed 1980 output; `timestamp` remains
+the separate core-property XML option. Ambiguous, invalid and out-of-range
+explicit dates now reject with `invalid-zip-date` at `options.zipDate`, an
+intentional unreleased input-contract tightening. Original
+[Linux/Windows CI](https://github.com/OpenPresentation/opf-pptx/actions/runs/36570457498)
+passed the public timezone fixture in source and fresh packed contexts. Whole
+control-PPTX bytes agree across those platforms within each recorded dependency
+graph; that older CI graph and registry-backed packed checks remain separate from the
+new coordinated candidate. At source preparation (`2026-09-29T13:05:16.240058+00:00`),
+the original accepted-main CI audit was still pending; its result is recorded
+separately from these permanent verification requirements.
+
+The coordinated candidate checks pin accepted #86, retain its original public
+UTC fixture with only the two installed-package import substitutions, and save
+unique source and installed outputs. They also include the six reviewed
+renderer-absent furniture groups in a separate fresh consumer. The isolated
+preparation passed those groups with copied preview tarballs, including a real
+wrapped date, exact authored whitespace, local overrides and current edited or
+cleared text; it used estimated composition with no renderer or font provider.
+The acceptance protocol requires 41 sequential stages on the combined accepted
+graph and an independent whole-byte comparison of its eight furniture PPTX
+outputs against frozen core154 Linux files. Resulting PNGs require separate
+visual review; package byte equality does not establish raster equivalence.
+
+[FF-11](programs/font-fidelity-everywhere/burndown.md) is **in-progress**, not done.
+Font availability/substitution, LANG/locale, broader OS/runtime/ICU and complete
+export determinism still need their own evidence. Default behavior after a host
+TZ mutation is excluded from the bounded control. FF-27 remains in review;
+static wrapped dates, native refresh/save/reopen, physical fonts, renderer's
+0.1 reference-pixel compatibility limit and release dependency floors remain
+separate gates. No package or production site changed.
+
 ## Release holds
 
 The retained dependency-floor finding from the earlier PPTX #83 checkpoint remains:

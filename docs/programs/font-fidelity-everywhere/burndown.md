@@ -13,8 +13,8 @@ Every item's criteria must all hold before it is `done`. Dates are UTC.
 | Status | Count |
 | --- | --- |
 | done | 19 |
-| review / in-progress | 17 |
-| todo | 8 |
+| review / in-progress | 18 |
+| todo | 7 |
 
 **Headline progress: 5 of 900 gallery values perfect by parity** (accepted
 merged source graph, 2026-09-29: opf `a85facf`, opf-render `6c7d781`, opf-pptx
@@ -54,7 +54,7 @@ theme font slots explicit, without identifying the precise cause.
 | FF-08 | Exporter leaks no hard-coded or default font in any part | opf-pptx | FF-05, FF-06, FF-17 | review | merged: [opf-pptx#69](https://github.com/OpenPresentation/opf-pptx/pull/69) `405963ce`; pending FF-05 native root-cause evidence (empty values must be allowed by FF-05) |
 | FF-09 | Offline pairwise matrix across the 14 gallery dimensions | opf (ecosystem) | FF-07, FF-08, FF-19, FF-20 | todo |  |
 | FF-10 | Matrix in CI on ubuntu, windows, macos via a packed TypeScript consumer | opf | FF-09 | todo |  |
-| FF-11 | Export determinism independent of host fonts, OS, locale and timezone | opf-pptx / opf | FF-06 | todo |  |
+| FF-11 | Export determinism independent of host fonts, OS, locale and timezone | opf-pptx / opf | FF-06 | in-progress | accepted [opf-pptx#86](https://github.com/OpenPresentation/opf-pptx/pull/86) `373dfa39688e787d861202e7a8069ebff7e8be36`: explicit ZIP dates use UTC in PPTX and embedded workbooks; original Linux/Windows source and packed checks passed. [Runtime checkpoint](../../handoff-runtime-2026-09-29.md#utc-zip-dates-and-the-renderer-absent-candidate-gate); coordinated candidate checks run the unchanged public fixture; outcomes are recorded separately. Font, locale/LANG, broader OS/ICU and complete determinism criteria remain open. |
 | FF-12 | Native PowerPoint sample of the matrix, including CJK and RTL | opf-pptx / opf | FF-03, FF-07, FF-09, FF-18 | todo |  |
 | FF-13 | Font-embed attempt from merged main, audited | opf-pptx / opf | FF-02, FF-07, FF-08 | todo |  |
 | FF-14 | Evidence bundles, compatibility matrix and handoff merged | opf | FF-10, FF-11, FF-12, FF-13, FF-16, FF-19 | todo |  |
@@ -733,3 +733,24 @@ Append one dated line per state change. Newest last.
   remain 19 done, 17 review/in-progress, 8 todo. Next: separately reviewed
   dual Fonts snapshots before/after the existing bounded content queries;
   no such harness or native run is part of this evidence.
+
+- 2026-09-29: FF-11 moves from todo to in-progress for the bounded explicit ZIP
+  timestamp repair in [opf-pptx#86](https://github.com/OpenPresentation/opf-pptx/pull/86),
+  accepted `373dfa39688e787d861202e7a8069ebff7e8be36` with reviewed tree
+  `2405fa1b86ac1abc034f14ab47e01bd8d38a56c2`. Original
+  [Linux/Windows CI](https://github.com/OpenPresentation/opf-pptx/actions/runs/36570457498)
+  passed source and fresh packed timezone controls; those dependency graphs
+  remain distinct. Explicit `zipDate` uses UTC calendar fields in PPTX and nested
+  workbooks, while omitted/undefined input preserves the established fixed
+  output. Ambiguous/invalid explicit values reject at `options.zipDate`.
+  - The combined core candidate pins that accepted source and runs the unchanged
+    public timezone fixture against coordinated installed packages, alongside
+    six renderer-absent furniture groups. Acceptance requires the full 41-stage
+    protocol and comparison of eight local furniture PPTX files against frozen
+    core154 Linux outputs; outcomes are recorded separately. Original
+    accepted-main PPTX CI is audited independently.
+  - Font availability/substitution, LANG/locale, broader OS/runtime/ICU and
+    complete export determinism remain open; default behavior after a host TZ
+    mutation is outside this bounded control. FF-27 remains in review. No Office,
+    package publication, deployment or tolerance change; summary becomes
+    19 done, 18 review/in-progress, 7 todo. The parity headline is unchanged.
