@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- FF-31: two owner-approved font-file rules, documented in `docs/programs/font-fidelity-everywhere/font-licensing.md` (Font files: bundling and licenses) and the `opf-export` skill. Fonts ship as pinned files (exact npm versions or vendored files with sha256) and are never loaded from a font CDN at runtime. Every bundled face records a verified permissive license (OFL-1.1, Apache-2.0, MIT, UFL-1.0 or Bitstream-Vera-style), whether it declares a Reserved Font Name, its source URL, package@version and sha256. `pnpm check:font-hotlinks` (`scripts/check-font-hotlinks.mjs`, allowlist `scripts/font-hotlink-allowlist.json`) fails on font CDN references in tracked files and runs in `pnpm test`.
+
 ## 0.11.1
 
 - Release 0.11.1. It is additive: no schema, catalog or exported API is removed, and `pnpm check:breaking` reports no breaking changes against 0.11.0. It ships the shared font-fidelity contract that renderer 0.10.0, PPTX 0.10.0 and editor 0.9.0 require (`FONT_POLICY`, `resolveScriptFonts()`, `resolveFontSchemeReference()`, `paragraphDirection()`, `resolveSocialProfile()`, per-item `alignment`, formatted slide-number/date furniture with `fields`, `design.slideImage` geometry), so those packages raise their core floor to `^0.11.1`. The chart-type records deprecated below still resolve; their removal stays scheduled for 0.12.0 (see [migration notes](docs/migrations/0.12.0.md)). CLI 0.9.0 is unchanged and still bundles core 0.11.0.

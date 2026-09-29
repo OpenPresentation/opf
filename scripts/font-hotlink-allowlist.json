@@ -1,0 +1,12 @@
+{
+  "allow": [
+    {
+      "path": "docs/programs/font-fidelity-everywhere/font-licensing.md",
+      "reason": "Font files policy: names the forbidden font hosts in prose."
+    },
+    {
+      "path": "docs/programs/font-fidelity-everywhere/gallery-support/audit-b/results.json",
+      "reason": "Recorded audit data: webFontUrl values copied from the gallery dataset at audit time. Evidence only, never fetched or rendered."
+    }
+  ]
+}
