@@ -200,7 +200,6 @@ test('empty body payloads are not body: such title slides center too', () => {
   const empties = {
     'empty blocks': {blocks: []},
     'empty text': {text: ''},
-    'whitespace text': {text: ' \n\t '},
     'empty rich text': {text: []},
     'empty items': {items: []},
     'empty regions': {left: {}, bottom: {blocks: []}},
@@ -213,11 +212,11 @@ test('empty body payloads are not body: such title slides center too', () => {
       assert.deepEqual(result.diagnostics, [], `${name} adds no diagnostics`);
     }
   }
-  // A blank region text or empty list still centers; its empty cell keeps its item in the smaller remaining area and may report small-cell.
-  const blankRegion = composeSlide({title: 'Empty payloads', subtitle: 'Still a cover', 'top:right': {text: ' '}}, {layout: titleSubtitle});
+  // An empty region text or list still centers; its empty cell keeps its item in the smaller remaining area and may report small-cell.
+  const blankRegion = composeSlide({title: 'Empty payloads', subtitle: 'Still a cover', 'top:right': {text: ''}}, {layout: titleSubtitle});
   assert.ok(centered(blankRegion));
   // Any real payload, however small, still makes it a content slide.
-  for (const payload of [{blocks: [{text: 'x'}]}, {text: 'x'}, {items: ['x']}, {image: photo}, {left: {text: 'x'}}, {blocks: [{}]}]) {
+  for (const payload of [{blocks: [{text: 'x'}]}, {text: 'x'}, {text: ' \n\t '}, {items: ['x']}, {image: photo}, {left: {text: 'x'}}, {blocks: [{}]}]) {
     const result = composeSlide({title: 'Real payload', subtitle: 'Not a cover', ...payload}, {layout: titleSubtitle});
     assert.ok(Math.abs(byField(result, 'title').box.y - 0.08 * 720) < 1e-6, `${JSON.stringify(payload).slice(0, 30)} keeps the top origin`);
   }

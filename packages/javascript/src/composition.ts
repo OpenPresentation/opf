@@ -1743,8 +1743,9 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   const layoutPlaceholders: {type?: string}[] = Array.isArray(layout.placeholders) ? layout.placeholders : [];
   const headingOnlyLayout = COVER_LAYOUT_IDS.has(String(layout.id ?? "")) || (layoutPlaceholders.length > 0 && layoutPlaceholders.every(placeholder => headings.has(placeholder.type ?? "")));
   const regions = Object.keys(slide).filter(key => regionParts(key)).sort();
-  // Empty payloads (`blocks: []`, blank text, empty lists, regions with nothing in them) draw nothing, so they are not body.
-  const emptyPayload = (value: unknown) => value === undefined || value === null || (typeof value === "string" && value.trim() === "") || (Array.isArray(value) && value.length === 0);
+  // Empty payloads (`blocks: []`, `text: ""`, empty lists, regions with nothing in them) draw nothing, so they are not body.
+  // Whitespace-only text stays body: callers that infer a layout from it (the renderer picks a text layout) must agree with callers that do not (the editor).
+  const emptyPayload = (value: unknown) => value === undefined || value === null || value === "" || (Array.isArray(value) && value.length === 0);
   const emptyHost = (host: Record<string, any>) => emptyPayload(host.blocks) && fields.every(field => emptyPayload(host[field]));
   // A root image counts as body even when it is drawn as the slide image, so image slides keep the content origin.
   const hasBodyPayload = regions.some(key => !emptyHost(record(slide[key]))) || !emptyPayload(slide.blocks) || fields.some(field => !emptyPayload(slide[field]));
