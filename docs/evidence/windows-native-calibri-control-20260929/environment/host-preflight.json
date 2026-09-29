@@ -1,0 +1,19 @@
+{
+  "observedAt": "2026-09-29T09:01:37.8735193Z",
+  "uiObservation": "Supported computer-use screenshot shows PowerPoint Home, no open presentation and no recovery/security/dialog prompt.",
+  "officeProcesses": [
+    {
+      "processId": 30776,
+      "name": "POWERPNT",
+      "startedAt": "2026-09-29T07:20:37.2151144Z"
+    }
+  ],
+  "plannedInputSha256": "776147ddfd2a35ceca4480b66d58c82c9255609b5abe245a2b3bb342651ebce5",
+  "plannedMode": "control-deck",
+  "plannedRegistrationMode": "none",
+  "timeoutSeconds": 45,
+  "priorNativeInventoryRunsThisSession": 1,
+  "temporaryFontRegistrationsThisSession": 0,
+  "windowsBuild": "26200.9457",
+  "scope": "Direct UI observation and process identity are readiness evidence, not a guarantee of later COM success. No Office process terminated; no private recent-file names retained."
+}

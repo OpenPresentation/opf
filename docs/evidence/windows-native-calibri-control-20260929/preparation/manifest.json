@@ -1,0 +1,784 @@
+{
+  "purpose": "FF-05 E6 offline Calibri control input preparation; no native run or root-cause claim.",
+  "finiteControlGuard": {
+    "expectedSourceSha256": "f505236ecef4fad838a198449adede1f4afa39d7bac74613626eee2f2a419aeb",
+    "expectedChangedAttributes": 17,
+    "expectedChangedParts": 3,
+    "expectedRemainingCarlitoOccurrences": 0,
+    "expectedNonAttributeCarlitoOccurrences": 0,
+    "expectedEmptyThemeScriptSlots": 4
+  },
+  "canonicalSource": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-mixed-edit-20260922\\fixture-carlito-02\\source.pptx",
+  "sourceSha256": "f505236ecef4fad838a198449adede1f4afa39d7bac74613626eee2f2a419aeb",
+  "sourceBytes": 15624,
+  "output": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-native-20260929\\ff05-calibri-control-01\\calibri-control.pptx",
+  "outputSha256": "776147ddfd2a35ceca4480b66d58c82c9255609b5abe245a2b3bb342651ebce5",
+  "outputBytes": 15621,
+  "script": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-native-20260929\\ff05-calibri-control-01\\prepare-calibri-control.mjs",
+  "scriptSha256": "7cb89aa329b9ae4332162503a67a69bbfface2dba35d0f7f95dc2f1d9478eedd",
+  "dependency": {
+    "name": "fflate",
+    "version": "0.8.3",
+    "source": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-native-20260929\\sources\\opf-pptx\\node_modules\\fflate\\esm\\index.mjs",
+    "sha256": "8d75534a30a0580608e1271c13d70943ed4cd3589fddff7b1197748036a5116e"
+  },
+  "zipPolicy": {
+    "entryOrder": "lexicographic",
+    "compressionLevel": 9,
+    "localCalendarTimestamp": "2000-01-01 00:00:00",
+    "os": 0,
+    "note": "ZIP container metadata is normalized on repack; all unmodified OPC entry contents remain byte-identical."
+  },
+  "counts": {
+    "entries": 41,
+    "changedParts": 3,
+    "changedTypefaceAttributes": 17,
+    "originalLiteralCarlitoOccurrences": 17,
+    "nonAttributeOccurrencesBefore": 0,
+    "remainingLiteralCarlitoOccurrences": 0,
+    "emptyScriptSlots": 4
+  },
+  "verified": {
+    "canonicalSourceUnchanged": true,
+    "deterministicRepeatedOutput": true,
+    "exactEntrySet": true,
+    "onlyListedAttributesChanged": true,
+    "allOtherPartBytesUnchanged": true,
+    "allRelationshipsUnchanged": true,
+    "emptyScriptSlotsUnchanged": true,
+    "noEmbeddedFonts": true
+  },
+  "changedParts": [
+    {
+      "part": "ppt/slideMasters/slideMaster1.xml",
+      "beforeSha256": "852694bee05108c5e1edfd941bb41bf7f1b0c278d82c8661df03b853ed5b782f",
+      "afterSha256": "ea76f6480270ed57920eb8b6c7e5a4662527bc543607760acc30011db3ec0211",
+      "beforeBytes": 7849,
+      "afterBytes": 7849,
+      "changedAttributes": 9
+    },
+    {
+      "part": "ppt/slides/slide1.xml",
+      "beforeSha256": "c68476f21aea425b6125d46db8815d65675bb885ed37720f197808cc05f102d2",
+      "afterSha256": "a3f0089d241fca0cda39b3414d5f6b84079786e6932800b26ebc4dbca00fd669",
+      "beforeBytes": 2661,
+      "afterBytes": 2661,
+      "changedAttributes": 6
+    },
+    {
+      "part": "ppt/theme/theme1.xml",
+      "beforeSha256": "ee94e6cf5afe02edb1599deb16b25da89b5229b398f3366f6cb1ebf50b5b106e",
+      "afterSha256": "26141620c25550d557022185eb4af6fa1c261c46d7ebf7a3be35697b50b9d6f0",
+      "beforeBytes": 8331,
+      "afterBytes": 8331,
+      "changedAttributes": 2
+    }
+  ],
+  "changes": [
+    {
+      "part": "ppt/slideMasters/slideMaster1.xml",
+      "path": "/p:sldMaster[1]/p:txStyles[1]/p:bodyStyle[1]/a:lvl1pPr[1]/a:buFont[1]",
+      "element": "a:buFont",
+      "attribute": "typeface",
+      "valueCharacterOffset": 1411,
+      "valueByteOffset": 1411,
+      "beforeAttribute": "typeface=\"Carlito\"",
+      "beforeValue": "Carlito",
+      "afterValue": "Calibri",
+      "afterAttribute": "typeface=\"Calibri\"",
+      "beforeOpeningTag": "<a:buFont typeface=\"Carlito\" pitchFamily=\"34\" charset=\"0\"/>",
+      "afterOpeningTag": "<a:buFont typeface=\"Calibri\" pitchFamily=\"34\" charset=\"0\"/>"
+    },
+    {
+      "part": "ppt/slideMasters/slideMaster1.xml",
+      "path": "/p:sldMaster[1]/p:txStyles[1]/p:bodyStyle[1]/a:lvl2pPr[1]/a:buFont[1]",
+      "element": "a:buFont",
+      "attribute": "typeface",
+      "valueCharacterOffset": 1841,
+      "valueByteOffset": 1843,
+      "beforeAttribute": "typeface=\"Carlito\"",
+      "beforeValue": "Carlito",
+      "afterValue": "Calibri",
+      "afterAttribute": "typeface=\"Calibri\"",
+      "beforeOpeningTag": "<a:buFont typeface=\"Carlito\" pitchFamily=\"34\" charset=\"0\"/>",
+      "afterOpeningTag": "<a:buFont typeface=\"Calibri\" pitchFamily=\"34\" charset=\"0\"/>"
+    },
+    {
+      "part": "ppt/slideMasters/slideMaster1.xml",
+      "path": "/p:sldMaster[1]/p:txStyles[1]/p:bodyStyle[1]/a:lvl3pPr[1]/a:buFont[1]",
+      "element": "a:buFont",
+      "attribute": "typeface",
+      "valueCharacterOffset": 2272,
+      "valueByteOffset": 2276,
+      "beforeAttribute": "typeface=\"Carlito\"",
+      "beforeValue": "Carlito",
+      "afterValue": "Calibri",
+      "afterAttribute": "typeface=\"Calibri\"",
+      "beforeOpeningTag": "<a:buFont typeface=\"Carlito\" pitchFamily=\"34\" charset=\"0\"/>",
+      "afterOpeningTag": "<a:buFont typeface=\"Calibri\" pitchFamily=\"34\" charset=\"0\"/>"
+    },
+    {
+      "part": "ppt/slideMasters/slideMaster1.xml",
+      "path": "/p:sldMaster[1]/p:txStyles[1]/p:bodyStyle[1]/a:lvl4pPr[1]/a:buFont[1]",
+      "element": "a:buFont",
+      "attribute": "typeface",
+      "valueCharacterOffset": 2703,
+      "valueByteOffset": 2709,
+      "beforeAttribute": "typeface=\"Carlito\"",
+      "beforeValue": "Carlito",
+      "afterValue": "Calibri",
+      "afterAttribute": "typeface=\"Calibri\"",
+      "beforeOpeningTag": "<a:buFont typeface=\"Carlito\" pitchFamily=\"34\" charset=\"0\"/>",
+      "afterOpeningTag": "<a:buFont typeface=\"Calibri\" pitchFamily=\"34\" charset=\"0\"/>"
+    },
+    {
+      "part": "ppt/slideMasters/slideMaster1.xml",
+      "path": "/p:sldMaster[1]/p:txStyles[1]/p:bodyStyle[1]/a:lvl5pPr[1]/a:buFont[1]",
+      "element": "a:buFont",
+      "attribute": "typeface",
+      "valueCharacterOffset": 3134,
+      "valueByteOffset": 3142,
+      "beforeAttribute": "typeface=\"Carlito\"",
+      "beforeValue": "Carlito",
+      "afterValue": "Calibri",
+      "afterAttribute": "typeface=\"Calibri\"",
+      "beforeOpeningTag": "<a:buFont typeface=\"Carlito\" pitchFamily=\"34\" charset=\"0\"/>",
+      "afterOpeningTag": "<a:buFont typeface=\"Calibri\" pitchFamily=\"34\" charset=\"0\"/>"
+    },
+    {
+      "part": "ppt/slideMasters/slideMaster1.xml",
+      "path": "/p:sldMaster[1]/p:txStyles[1]/p:bodyStyle[1]/a:lvl6pPr[1]/a:buFont[1]",
+      "element": "a:buFont",
+      "attribute": "typeface",
+      "valueCharacterOffset": 3565,
+      "valueByteOffset": 3574,
+      "beforeAttribute": "typeface=\"Carlito\"",
+      "beforeValue": "Carlito",
+      "afterValue": "Calibri",
+      "afterAttribute": "typeface=\"Calibri\"",
+      "beforeOpeningTag": "<a:buFont typeface=\"Carlito\" pitchFamily=\"34\" charset=\"0\"/>",
+      "afterOpeningTag": "<a:buFont typeface=\"Calibri\" pitchFamily=\"34\" charset=\"0\"/>"
+    },
+    {
+      "part": "ppt/slideMasters/slideMaster1.xml",
+      "path": "/p:sldMaster[1]/p:txStyles[1]/p:bodyStyle[1]/a:lvl7pPr[1]/a:buFont[1]",
+      "element": "a:buFont",
+      "attribute": "typeface",
+      "valueCharacterOffset": 3996,
+      "valueByteOffset": 4007,
+      "beforeAttribute": "typeface=\"Carlito\"",
+      "beforeValue": "Carlito",
+      "afterValue": "Calibri",
+      "afterAttribute": "typeface=\"Calibri\"",
+      "beforeOpeningTag": "<a:buFont typeface=\"Carlito\" pitchFamily=\"34\" charset=\"0\"/>",
+      "afterOpeningTag": "<a:buFont typeface=\"Calibri\" pitchFamily=\"34\" charset=\"0\"/>"
+    },
+    {
+      "part": "ppt/slideMasters/slideMaster1.xml",
+      "path": "/p:sldMaster[1]/p:txStyles[1]/p:bodyStyle[1]/a:lvl8pPr[1]/a:buFont[1]",
+      "element": "a:buFont",
+      "attribute": "typeface",
+      "valueCharacterOffset": 4427,
+      "valueByteOffset": 4440,
+      "beforeAttribute": "typeface=\"Carlito\"",
+      "beforeValue": "Carlito",
+      "afterValue": "Calibri",
+      "afterAttribute": "typeface=\"Calibri\"",
+      "beforeOpeningTag": "<a:buFont typeface=\"Carlito\" pitchFamily=\"34\" charset=\"0\"/>",
+      "afterOpeningTag": "<a:buFont typeface=\"Calibri\" pitchFamily=\"34\" charset=\"0\"/>"
+    },
+    {
+      "part": "ppt/slideMasters/slideMaster1.xml",
+      "path": "/p:sldMaster[1]/p:txStyles[1]/p:bodyStyle[1]/a:lvl9pPr[1]/a:buFont[1]",
+      "element": "a:buFont",
+      "attribute": "typeface",
+      "valueCharacterOffset": 4858,
+      "valueByteOffset": 4873,
+      "beforeAttribute": "typeface=\"Carlito\"",
+      "beforeValue": "Carlito",
+      "afterValue": "Calibri",
+      "afterAttribute": "typeface=\"Calibri\"",
+      "beforeOpeningTag": "<a:buFont typeface=\"Carlito\" pitchFamily=\"34\" charset=\"0\"/>",
+      "afterOpeningTag": "<a:buFont typeface=\"Calibri\" pitchFamily=\"34\" charset=\"0\"/>"
+    },
+    {
+      "part": "ppt/slides/slide1.xml",
+      "path": "/p:sld[1]/p:cSld[1]/p:spTree[1]/p:sp[1]/p:txBody[1]/a:p[1]/a:r[1]/a:rPr[1]/a:latin[1]",
+      "element": "a:latin",
+      "attribute": "typeface",
+      "valueCharacterOffset": 1342,
+      "valueByteOffset": 1342,
+      "beforeAttribute": "typeface=\"Carlito\"",
+      "beforeValue": "Carlito",
+      "afterValue": "Calibri",
+      "afterAttribute": "typeface=\"Calibri\"",
+      "beforeOpeningTag": "<a:latin typeface=\"Carlito\" pitchFamily=\"34\" charset=\"0\"/>",
+      "afterOpeningTag": "<a:latin typeface=\"Calibri\" pitchFamily=\"34\" charset=\"0\"/>"
+    },
+    {
+      "part": "ppt/slides/slide1.xml",
+      "path": "/p:sld[1]/p:cSld[1]/p:spTree[1]/p:sp[1]/p:txBody[1]/a:p[1]/a:r[1]/a:rPr[1]/a:ea[1]",
+      "element": "a:ea",
+      "attribute": "typeface",
+      "valueCharacterOffset": 1397,
+      "valueByteOffset": 1397,
+      "beforeAttribute": "typeface=\"Carlito\"",
+      "beforeValue": "Carlito",
+      "afterValue": "Calibri",
+      "afterAttribute": "typeface=\"Calibri\"",
+      "beforeOpeningTag": "<a:ea typeface=\"Carlito\" pitchFamily=\"34\" charset=\"-122\"/>",
+      "afterOpeningTag": "<a:ea typeface=\"Calibri\" pitchFamily=\"34\" charset=\"-122\"/>"
+    },
+    {
+      "part": "ppt/slides/slide1.xml",
+      "path": "/p:sld[1]/p:cSld[1]/p:spTree[1]/p:sp[1]/p:txBody[1]/a:p[1]/a:r[1]/a:rPr[1]/a:cs[1]",
+      "element": "a:cs",
+      "attribute": "typeface",
+      "valueCharacterOffset": 1455,
+      "valueByteOffset": 1455,
+      "beforeAttribute": "typeface=\"Carlito\"",
+      "beforeValue": "Carlito",
+      "afterValue": "Calibri",
+      "afterAttribute": "typeface=\"Calibri\"",
+      "beforeOpeningTag": "<a:cs typeface=\"Carlito\" pitchFamily=\"34\" charset=\"-120\"/>",
+      "afterOpeningTag": "<a:cs typeface=\"Calibri\" pitchFamily=\"34\" charset=\"-120\"/>"
+    },
+    {
+      "part": "ppt/slides/slide1.xml",
+      "path": "/p:sld[1]/p:cSld[1]/p:spTree[1]/p:sp[2]/p:txBody[1]/a:p[1]/a:r[1]/a:rPr[1]/a:latin[1]",
+      "element": "a:latin",
+      "attribute": "typeface",
+      "valueCharacterOffset": 2318,
+      "valueByteOffset": 2318,
+      "beforeAttribute": "typeface=\"Carlito\"",
+      "beforeValue": "Carlito",
+      "afterValue": "Calibri",
+      "afterAttribute": "typeface=\"Calibri\"",
+      "beforeOpeningTag": "<a:latin typeface=\"Carlito\" pitchFamily=\"34\" charset=\"0\"/>",
+      "afterOpeningTag": "<a:latin typeface=\"Calibri\" pitchFamily=\"34\" charset=\"0\"/>"
+    },
+    {
+      "part": "ppt/slides/slide1.xml",
+      "path": "/p:sld[1]/p:cSld[1]/p:spTree[1]/p:sp[2]/p:txBody[1]/a:p[1]/a:r[1]/a:rPr[1]/a:ea[1]",
+      "element": "a:ea",
+      "attribute": "typeface",
+      "valueCharacterOffset": 2373,
+      "valueByteOffset": 2373,
+      "beforeAttribute": "typeface=\"Carlito\"",
+      "beforeValue": "Carlito",
+      "afterValue": "Calibri",
+      "afterAttribute": "typeface=\"Calibri\"",
+      "beforeOpeningTag": "<a:ea typeface=\"Carlito\" pitchFamily=\"34\" charset=\"-122\"/>",
+      "afterOpeningTag": "<a:ea typeface=\"Calibri\" pitchFamily=\"34\" charset=\"-122\"/>"
+    },
+    {
+      "part": "ppt/slides/slide1.xml",
+      "path": "/p:sld[1]/p:cSld[1]/p:spTree[1]/p:sp[2]/p:txBody[1]/a:p[1]/a:r[1]/a:rPr[1]/a:cs[1]",
+      "element": "a:cs",
+      "attribute": "typeface",
+      "valueCharacterOffset": 2431,
+      "valueByteOffset": 2431,
+      "beforeAttribute": "typeface=\"Carlito\"",
+      "beforeValue": "Carlito",
+      "afterValue": "Calibri",
+      "afterAttribute": "typeface=\"Calibri\"",
+      "beforeOpeningTag": "<a:cs typeface=\"Carlito\" pitchFamily=\"34\" charset=\"-120\"/>",
+      "afterOpeningTag": "<a:cs typeface=\"Calibri\" pitchFamily=\"34\" charset=\"-120\"/>"
+    },
+    {
+      "part": "ppt/theme/theme1.xml",
+      "path": "/a:theme[1]/a:themeElements[1]/a:fontScheme[1]/a:majorFont[1]/a:latin[1]",
+      "element": "a:latin",
+      "attribute": "typeface",
+      "valueCharacterOffset": 844,
+      "valueByteOffset": 844,
+      "beforeAttribute": "typeface=\"Carlito\"",
+      "beforeValue": "Carlito",
+      "afterValue": "Calibri",
+      "afterAttribute": "typeface=\"Calibri\"",
+      "beforeOpeningTag": "<a:latin typeface=\"Carlito\"/>",
+      "afterOpeningTag": "<a:latin typeface=\"Calibri\"/>"
+    },
+    {
+      "part": "ppt/theme/theme1.xml",
+      "path": "/a:theme[1]/a:themeElements[1]/a:fontScheme[1]/a:minorFont[1]/a:latin[1]",
+      "element": "a:latin",
+      "attribute": "typeface",
+      "valueCharacterOffset": 3084,
+      "valueByteOffset": 3114,
+      "beforeAttribute": "typeface=\"Carlito\"",
+      "beforeValue": "Carlito",
+      "afterValue": "Calibri",
+      "afterAttribute": "typeface=\"Calibri\"",
+      "beforeOpeningTag": "<a:latin typeface=\"Carlito\"/>",
+      "afterOpeningTag": "<a:latin typeface=\"Calibri\"/>"
+    }
+  ],
+  "parts": [
+    {
+      "part": "[Content_Types].xml",
+      "beforeSha256": "6d711539db4ce6b458a352b3c2528c5a925ab310f9a4c8a7b1830fcec8e6a312",
+      "afterSha256": "6d711539db4ce6b458a352b3c2528c5a925ab310f9a4c8a7b1830fcec8e6a312",
+      "beforeBytes": 2724,
+      "afterBytes": 2724,
+      "changedAttributes": 0
+    },
+    {
+      "part": "_rels/",
+      "beforeSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "afterSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "beforeBytes": 0,
+      "afterBytes": 0,
+      "changedAttributes": 0
+    },
+    {
+      "part": "_rels/.rels",
+      "beforeSha256": "a73dc65f1cb1959ca09044852c3697385e6124853bf5a0fa3f0215f608e86b47",
+      "afterSha256": "a73dc65f1cb1959ca09044852c3697385e6124853bf5a0fa3f0215f608e86b47",
+      "beforeBytes": 605,
+      "afterBytes": 605,
+      "changedAttributes": 0
+    },
+    {
+      "part": "docProps/",
+      "beforeSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "afterSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "beforeBytes": 0,
+      "afterBytes": 0,
+      "changedAttributes": 0
+    },
+    {
+      "part": "docProps/app.xml",
+      "beforeSha256": "e94689c1ad908efa8052354ee3f9a38d04d8d03cee23ea1b5fef43226bd8a4f3",
+      "afterSha256": "e94689c1ad908efa8052354ee3f9a38d04d8d03cee23ea1b5fef43226bd8a4f3",
+      "beforeBytes": 1368,
+      "afterBytes": 1368,
+      "changedAttributes": 0
+    },
+    {
+      "part": "docProps/core.xml",
+      "beforeSha256": "17140d99a72a213cd3ec5498ece6ee774652c8164dda48e8b5296cec582c7804",
+      "afterSha256": "17140d99a72a213cd3ec5498ece6ee774652c8164dda48e8b5296cec582c7804",
+      "beforeBytes": 738,
+      "afterBytes": 738,
+      "changedAttributes": 0
+    },
+    {
+      "part": "ppt/",
+      "beforeSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "afterSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "beforeBytes": 0,
+      "afterBytes": 0,
+      "changedAttributes": 0
+    },
+    {
+      "part": "ppt/_rels/",
+      "beforeSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "afterSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "beforeBytes": 0,
+      "afterBytes": 0,
+      "changedAttributes": 0
+    },
+    {
+      "part": "ppt/_rels/presentation.xml.rels",
+      "beforeSha256": "e2117ec87aff7c513da0a36181e57816777473446f284b8b564ace2725a81e9e",
+      "afterSha256": "e2117ec87aff7c513da0a36181e57816777473446f284b8b564ace2725a81e9e",
+      "beforeBytes": 1127,
+      "afterBytes": 1127,
+      "changedAttributes": 0
+    },
+    {
+      "part": "ppt/charts/",
+      "beforeSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "afterSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "beforeBytes": 0,
+      "afterBytes": 0,
+      "changedAttributes": 0
+    },
+    {
+      "part": "ppt/charts/_rels/",
+      "beforeSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "afterSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "beforeBytes": 0,
+      "afterBytes": 0,
+      "changedAttributes": 0
+    },
+    {
+      "part": "ppt/embeddings/",
+      "beforeSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "afterSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "beforeBytes": 0,
+      "afterBytes": 0,
+      "changedAttributes": 0
+    },
+    {
+      "part": "ppt/media/",
+      "beforeSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "afterSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "beforeBytes": 0,
+      "afterBytes": 0,
+      "changedAttributes": 0
+    },
+    {
+      "part": "ppt/notesMasters/",
+      "beforeSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "afterSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "beforeBytes": 0,
+      "afterBytes": 0,
+      "changedAttributes": 0
+    },
+    {
+      "part": "ppt/notesMasters/_rels/",
+      "beforeSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "afterSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "beforeBytes": 0,
+      "afterBytes": 0,
+      "changedAttributes": 0
+    },
+    {
+      "part": "ppt/notesMasters/_rels/notesMaster1.xml.rels",
+      "beforeSha256": "92eb9005ae03705d1db0f1da37f89e4c77f61b2026efa66bdbf610d01116f2b9",
+      "afterSha256": "92eb9005ae03705d1db0f1da37f89e4c77f61b2026efa66bdbf610d01116f2b9",
+      "beforeBytes": 298,
+      "afterBytes": 298,
+      "changedAttributes": 0
+    },
+    {
+      "part": "ppt/notesMasters/notesMaster1.xml",
+      "beforeSha256": "c2c0255a24d45ef3ad633078fd8a2dca43fc6db1b3eb36244a934eb0b9d97c57",
+      "afterSha256": "c2c0255a24d45ef3ad633078fd8a2dca43fc6db1b3eb36244a934eb0b9d97c57",
+      "beforeBytes": 7508,
+      "afterBytes": 7508,
+      "changedAttributes": 0
+    },
+    {
+      "part": "ppt/notesSlides/",
+      "beforeSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "afterSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "beforeBytes": 0,
+      "afterBytes": 0,
+      "changedAttributes": 0
+    },
+    {
+      "part": "ppt/notesSlides/_rels/",
+      "beforeSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "afterSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "beforeBytes": 0,
+      "afterBytes": 0,
+      "changedAttributes": 0
+    },
+    {
+      "part": "ppt/notesSlides/_rels/notesSlide1.xml.rels",
+      "beforeSha256": "4e7f04378558285258df490583e9ed0e8039b27df83bcdc2e5b4992cf47090f2",
+      "afterSha256": "4e7f04378558285258df490583e9ed0e8039b27df83bcdc2e5b4992cf47090f2",
+      "beforeBytes": 459,
+      "afterBytes": 459,
+      "changedAttributes": 0
+    },
+    {
+      "part": "ppt/notesSlides/notesSlide1.xml",
+      "beforeSha256": "a559bf003438191a2723e887544acb00d550c7a9d8a4fd36a41bd877d46e2be6",
+      "afterSha256": "a559bf003438191a2723e887544acb00d550c7a9d8a4fd36a41bd877d46e2be6",
+      "beforeBytes": 1680,
+      "afterBytes": 1680,
+      "changedAttributes": 0
+    },
+    {
+      "part": "ppt/presProps.xml",
+      "beforeSha256": "4446069208ff4cd22879cccdfb0a2a302cb7e572e2c48d00b64066d25f026df1",
+      "afterSha256": "4446069208ff4cd22879cccdfb0a2a302cb7e572e2c48d00b64066d25f026df1",
+      "beforeBytes": 287,
+      "afterBytes": 287,
+      "changedAttributes": 0
+    },
+    {
+      "part": "ppt/presentation.xml",
+      "beforeSha256": "fa6e1f507fb0e0cb37bb66ed94f1dc84898406f03d32ac3f2e00eb3bc72efafd",
+      "afterSha256": "fa6e1f507fb0e0cb37bb66ed94f1dc84898406f03d32ac3f2e00eb3bc72efafd",
+      "beforeBytes": 3265,
+      "afterBytes": 3265,
+      "changedAttributes": 0
+    },
+    {
+      "part": "ppt/slideLayouts/",
+      "beforeSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "afterSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "beforeBytes": 0,
+      "afterBytes": 0,
+      "changedAttributes": 0
+    },
+    {
+      "part": "ppt/slideLayouts/_rels/",
+      "beforeSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "afterSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "beforeBytes": 0,
+      "afterBytes": 0,
+      "changedAttributes": 0
+    },
+    {
+      "part": "ppt/slideLayouts/_rels/slideLayout1.xml.rels",
+      "beforeSha256": "8246d333bf3764cd35563e3df1828c26bbc28890815a2987caf3e592791ba60d",
+      "afterSha256": "8246d333bf3764cd35563e3df1828c26bbc28890815a2987caf3e592791ba60d",
+      "beforeBytes": 311,
+      "afterBytes": 311,
+      "changedAttributes": 0
+    },
+    {
+      "part": "ppt/slideLayouts/slideLayout1.xml",
+      "beforeSha256": "5015c0989d7672a610fc41c3f7f4a468fc0da42198f06e6c5f20a0921090e1c9",
+      "afterSha256": "5015c0989d7672a610fc41c3f7f4a468fc0da42198f06e6c5f20a0921090e1c9",
+      "beforeBytes": 687,
+      "afterBytes": 687,
+      "changedAttributes": 0
+    },
+    {
+      "part": "ppt/slideMasters/",
+      "beforeSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "afterSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "beforeBytes": 0,
+      "afterBytes": 0,
+      "changedAttributes": 0
+    },
+    {
+      "part": "ppt/slideMasters/_rels/",
+      "beforeSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "afterSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "beforeBytes": 0,
+      "afterBytes": 0,
+      "changedAttributes": 0
+    },
+    {
+      "part": "ppt/slideMasters/_rels/slideMaster1.xml.rels",
+      "beforeSha256": "066fd8f2e94608804160631c736d82e4c0b0784a1646489030092cc04888839a",
+      "afterSha256": "066fd8f2e94608804160631c736d82e4c0b0784a1646489030092cc04888839a",
+      "beforeBytes": 446,
+      "afterBytes": 446,
+      "changedAttributes": 0
+    },
+    {
+      "part": "ppt/slideMasters/slideMaster1.xml",
+      "beforeSha256": "852694bee05108c5e1edfd941bb41bf7f1b0c278d82c8661df03b853ed5b782f",
+      "afterSha256": "ea76f6480270ed57920eb8b6c7e5a4662527bc543607760acc30011db3ec0211",
+      "beforeBytes": 7849,
+      "afterBytes": 7849,
+      "changedAttributes": 9
+    },
+    {
+      "part": "ppt/slides/",
+      "beforeSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "afterSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "beforeBytes": 0,
+      "afterBytes": 0,
+      "changedAttributes": 0
+    },
+    {
+      "part": "ppt/slides/_rels/",
+      "beforeSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "afterSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "beforeBytes": 0,
+      "afterBytes": 0,
+      "changedAttributes": 0
+    },
+    {
+      "part": "ppt/slides/_rels/slide1.xml.rels",
+      "beforeSha256": "019b1141c2928f4e1aa453566e41842f2d303593b0026bd23e2ac710476f2f3a",
+      "afterSha256": "019b1141c2928f4e1aa453566e41842f2d303593b0026bd23e2ac710476f2f3a",
+      "beforeBytes": 752,
+      "afterBytes": 752,
+      "changedAttributes": 0
+    },
+    {
+      "part": "ppt/slides/slide1.xml",
+      "beforeSha256": "c68476f21aea425b6125d46db8815d65675bb885ed37720f197808cc05f102d2",
+      "afterSha256": "a3f0089d241fca0cda39b3414d5f6b84079786e6932800b26ebc4dbca00fd669",
+      "beforeBytes": 2661,
+      "afterBytes": 2661,
+      "changedAttributes": 6
+    },
+    {
+      "part": "ppt/tableStyles.xml",
+      "beforeSha256": "0e7ac03251337ecbaf6c8ca13619db1caeda5c90c4e3210d45d6c3f5df4de103",
+      "afterSha256": "0e7ac03251337ecbaf6c8ca13619db1caeda5c90c4e3210d45d6c3f5df4de103",
+      "beforeBytes": 182,
+      "afterBytes": 182,
+      "changedAttributes": 0
+    },
+    {
+      "part": "ppt/tags/opfHeading1.xml",
+      "beforeSha256": "a2c7c73c06624edc13cc7434e6758a412b7848bff62b7bf24ddd8ae91326e0bc",
+      "afterSha256": "a2c7c73c06624edc13cc7434e6758a412b7848bff62b7bf24ddd8ae91326e0bc",
+      "beforeBytes": 380,
+      "afterBytes": 380,
+      "changedAttributes": 0
+    },
+    {
+      "part": "ppt/tags/opfText1.xml",
+      "beforeSha256": "a83b5b0f68e0fd39129ae43fb60ff96c62892c810422db4e2ae1d31665f27074",
+      "afterSha256": "a83b5b0f68e0fd39129ae43fb60ff96c62892c810422db4e2ae1d31665f27074",
+      "beforeBytes": 343,
+      "afterBytes": 343,
+      "changedAttributes": 0
+    },
+    {
+      "part": "ppt/theme/",
+      "beforeSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "afterSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "beforeBytes": 0,
+      "afterBytes": 0,
+      "changedAttributes": 0
+    },
+    {
+      "part": "ppt/theme/theme1.xml",
+      "beforeSha256": "ee94e6cf5afe02edb1599deb16b25da89b5229b398f3366f6cb1ebf50b5b106e",
+      "afterSha256": "26141620c25550d557022185eb4af6fa1c261c46d7ebf7a3be35697b50b9d6f0",
+      "beforeBytes": 8331,
+      "afterBytes": 8331,
+      "changedAttributes": 2
+    },
+    {
+      "part": "ppt/viewProps.xml",
+      "beforeSha256": "4cc12863620049069daeb39b14b4aba98a5e3048318be16a5af5879f6e4b2ac8",
+      "afterSha256": "4cc12863620049069daeb39b14b4aba98a5e3048318be16a5af5879f6e4b2ac8",
+      "beforeBytes": 816,
+      "afterBytes": 816,
+      "changedAttributes": 0
+    }
+  ],
+  "emptyScriptSlots": [
+    {
+      "part": "ppt/theme/theme1.xml",
+      "path": "/a:theme[1]/a:themeElements[1]/a:fontScheme[1]/a:majorFont[1]/a:ea[1]",
+      "attribute": "typeface=\"\"",
+      "openingTag": "<a:ea typeface=\"\"/>"
+    },
+    {
+      "part": "ppt/theme/theme1.xml",
+      "path": "/a:theme[1]/a:themeElements[1]/a:fontScheme[1]/a:majorFont[1]/a:cs[1]",
+      "attribute": "typeface=\"\"",
+      "openingTag": "<a:cs typeface=\"\"/>"
+    },
+    {
+      "part": "ppt/theme/theme1.xml",
+      "path": "/a:theme[1]/a:themeElements[1]/a:fontScheme[1]/a:minorFont[1]/a:ea[1]",
+      "attribute": "typeface=\"\"",
+      "openingTag": "<a:ea typeface=\"\"/>"
+    },
+    {
+      "part": "ppt/theme/theme1.xml",
+      "path": "/a:theme[1]/a:themeElements[1]/a:fontScheme[1]/a:minorFont[1]/a:cs[1]",
+      "attribute": "typeface=\"\"",
+      "openingTag": "<a:cs typeface=\"\"/>"
+    }
+  ],
+  "originalLiteralInventory": [
+    {
+      "part": "ppt/slideMasters/slideMaster1.xml",
+      "byteOffset": 1411,
+      "context": "pcBef><a:spcPct val=\"20000\"/></a:spcBef><a:buFont typeface=\"Carlito\" pitchFamily=\"34\" charset=\"0\"/><a:buChar char=\"•\"/><a:def",
+      "classification": "changed-typeface-attribute"
+    },
+    {
+      "part": "ppt/slideMasters/slideMaster1.xml",
+      "byteOffset": 1843,
+      "context": "pcBef><a:spcPct val=\"20000\"/></a:spcBef><a:buFont typeface=\"Carlito\" pitchFamily=\"34\" charset=\"0\"/><a:buChar char=\"–\"/><a:def",
+      "classification": "changed-typeface-attribute"
+    },
+    {
+      "part": "ppt/slideMasters/slideMaster1.xml",
+      "byteOffset": 2276,
+      "context": "pcBef><a:spcPct val=\"20000\"/></a:spcBef><a:buFont typeface=\"Carlito\" pitchFamily=\"34\" charset=\"0\"/><a:buChar char=\"•\"/><a:def",
+      "classification": "changed-typeface-attribute"
+    },
+    {
+      "part": "ppt/slideMasters/slideMaster1.xml",
+      "byteOffset": 2709,
+      "context": "pcBef><a:spcPct val=\"20000\"/></a:spcBef><a:buFont typeface=\"Carlito\" pitchFamily=\"34\" charset=\"0\"/><a:buChar char=\"–\"/><a:def",
+      "classification": "changed-typeface-attribute"
+    },
+    {
+      "part": "ppt/slideMasters/slideMaster1.xml",
+      "byteOffset": 3142,
+      "context": "pcBef><a:spcPct val=\"20000\"/></a:spcBef><a:buFont typeface=\"Carlito\" pitchFamily=\"34\" charset=\"0\"/><a:buChar char=\"»\"/><a:defR",
+      "classification": "changed-typeface-attribute"
+    },
+    {
+      "part": "ppt/slideMasters/slideMaster1.xml",
+      "byteOffset": 3574,
+      "context": "pcBef><a:spcPct val=\"20000\"/></a:spcBef><a:buFont typeface=\"Carlito\" pitchFamily=\"34\" charset=\"0\"/><a:buChar char=\"•\"/><a:def",
+      "classification": "changed-typeface-attribute"
+    },
+    {
+      "part": "ppt/slideMasters/slideMaster1.xml",
+      "byteOffset": 4007,
+      "context": "pcBef><a:spcPct val=\"20000\"/></a:spcBef><a:buFont typeface=\"Carlito\" pitchFamily=\"34\" charset=\"0\"/><a:buChar char=\"•\"/><a:def",
+      "classification": "changed-typeface-attribute"
+    },
+    {
+      "part": "ppt/slideMasters/slideMaster1.xml",
+      "byteOffset": 4440,
+      "context": "pcBef><a:spcPct val=\"20000\"/></a:spcBef><a:buFont typeface=\"Carlito\" pitchFamily=\"34\" charset=\"0\"/><a:buChar char=\"•\"/><a:def",
+      "classification": "changed-typeface-attribute"
+    },
+    {
+      "part": "ppt/slideMasters/slideMaster1.xml",
+      "byteOffset": 4873,
+      "context": "pcBef><a:spcPct val=\"20000\"/></a:spcBef><a:buFont typeface=\"Carlito\" pitchFamily=\"34\" charset=\"0\"/><a:buChar char=\"•\"/><a:def",
+      "classification": "changed-typeface-attribute"
+    },
+    {
+      "part": "ppt/slides/slide1.xml",
+      "byteOffset": 1342,
+      "context": "l><a:srgbClr val=\"FFFFFF\"/></a:solidFill><a:latin typeface=\"Carlito\" pitchFamily=\"34\" charset=\"0\"/><a:ea typeface=\"Carlito\" pit",
+      "classification": "changed-typeface-attribute"
+    },
+    {
+      "part": "ppt/slides/slide1.xml",
+      "byteOffset": 1397,
+      "context": "ace=\"Carlito\" pitchFamily=\"34\" charset=\"0\"/><a:ea typeface=\"Carlito\" pitchFamily=\"34\" charset=\"-122\"/><a:cs typeface=\"Carlito\" ",
+      "classification": "changed-typeface-attribute"
+    },
+    {
+      "part": "ppt/slides/slide1.xml",
+      "byteOffset": 1455,
+      "context": "=\"Carlito\" pitchFamily=\"34\" charset=\"-122\"/><a:cs typeface=\"Carlito\" pitchFamily=\"34\" charset=\"-120\"/></a:rPr><a:t>Plain contro",
+      "classification": "changed-typeface-attribute"
+    },
+    {
+      "part": "ppt/slides/slide1.xml",
+      "byteOffset": 2318,
+      "context": "l><a:srgbClr val=\"FFFFFF\"/></a:solidFill><a:latin typeface=\"Carlito\" pitchFamily=\"34\" charset=\"0\"/><a:ea typeface=\"Carlito\" pit",
+      "classification": "changed-typeface-attribute"
+    },
+    {
+      "part": "ppt/slides/slide1.xml",
+      "byteOffset": 2373,
+      "context": "ace=\"Carlito\" pitchFamily=\"34\" charset=\"0\"/><a:ea typeface=\"Carlito\" pitchFamily=\"34\" charset=\"-122\"/><a:cs typeface=\"Carlito\" ",
+      "classification": "changed-typeface-attribute"
+    },
+    {
+      "part": "ppt/slides/slide1.xml",
+      "byteOffset": 2431,
+      "context": "=\"Carlito\" pitchFamily=\"34\" charset=\"-122\"/><a:cs typeface=\"Carlito\" pitchFamily=\"34\" charset=\"-120\"/></a:rPr><a:t>Current cont",
+      "classification": "changed-typeface-attribute"
+    },
+    {
+      "part": "ppt/theme/theme1.xml",
+      "byteOffset": 844,
+      "context": "<a:fontScheme name=\"Office\"><a:majorFont><a:latin typeface=\"Carlito\"/><a:ea typeface=\"\"/><a:cs typeface=\"\"/><a:font script=\"Jpa",
+      "classification": "changed-typeface-attribute"
+    },
+    {
+      "part": "ppt/theme/theme1.xml",
+      "byteOffset": 3114,
+      "context": "ace=\"Ebrima\"/></a:majorFont><a:minorFont><a:latin typeface=\"Carlito\"/><a:ea typeface=\"\"/><a:cs typeface=\"\"/><a:font script=\"Jpa",
+      "classification": "changed-typeface-attribute"
+    }
+  ],
+  "nonAttributeOccurrencesBefore": [],
+  "remainingLiteralInventory": [],
+  "embeddedFonts": {
+    "entries": [],
+    "relationships": [],
+    "contentTypes": []
+  }
+}

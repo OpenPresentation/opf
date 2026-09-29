@@ -13,8 +13,8 @@ Every item's criteria must all hold before it is `done`. Dates are UTC.
 | Status | Count |
 | --- | --- |
 | done | 19 |
-| review / in-progress | 16 |
-| todo | 9 |
+| review / in-progress | 17 |
+| todo | 8 |
 
 **Headline progress: 5 of 900 gallery values perfect by parity** (accepted
 merged source graph, 2026-09-29: opf `a85facf`, opf-render `6c7d781`, opf-pptx
@@ -29,11 +29,15 @@ first. See the
 [scoreboard](gallery-support.md#parity-scoreboard) and its
 [universal blockers](gallery-support.md#universal-blockers).
 
-PPTX78 at `7cc779129323af6123ef5e194226a545e743f195` is a separate candidate
+PPTX78 at `7cc779129323af6123ef5e194226a545e743f195` was a separate candidate
 measurement: also 5/900 perfect, text 798 to 799 and fills 790 to 791, with no
-classification change. Its exact-head CI is pending at this checkpoint.
-It is not the accepted headline. These source/package audits use no Office;
-FF-29 remains in review and FF-05 remains open.
+classification change. It subsequently passed exact-head Linux/Windows CI
+and merged as `bf3f78f`; the final merged-source audit retained those counts
+([receipt](https://github.com/OpenPresentation/opf/pull/147)). The committed
+headline above remains the explicitly dated pre-PPTX78 baseline. These
+source/package audits use no Office; FF-29 remains in review. FF-05 is now
+in progress: its Calibri control still reports Aptos, without identifying the
+precise cause.
 
 ## Items
 
@@ -44,7 +48,7 @@ FF-29 remains in review and FF-05 remains open.
 | FF-02 | Embed harness records pre-edit, post-text and post-edit font observations | opf-pptx | none | done | [opf-pptx#58](https://github.com/OpenPresentation/opf-pptx/pull/58) `b6eb3bfd`; hardening [opf-pptx#62](https://github.com/OpenPresentation/opf-pptx/pull/62) `83a41b9a` |
 | FF-03 | Read-only native font inventory worker | opf-pptx | none | done | [opf-pptx#59](https://github.com/OpenPresentation/opf-pptx/pull/59) `ef8a1583` |
 | FF-04 | Native inventory of the unedited fixture, with and without temporary fonts | opf-pptx / opf | FF-03 | done | [opf#145](https://github.com/OpenPresentation/opf/pull/145) merged `a85facf`, [September 29 evidence](../../evidence/windows-native-font-inventory-20260929/README.md): both fixture conditions and exporter control audited; Aptos present before edits; portable staged-blob verification and independent review passed |
-| FF-05 | Aptos root cause determined | opf | FF-02, FF-04 | todo | [brief](aptos-origin-brief.md) |
+| FF-05 | Aptos root cause determined | opf | FF-02, FF-04 | in-progress | [brief](aptos-origin-brief.md), [September 29 Calibri control](../../evidence/windows-native-calibri-control-20260929/README.md): Aptos persists without Carlito references or temporary registration; exact style/part or native-resolution cause remains open |
 | FF-06 | Font-flow map across all 14 dimensions and environments | opf | none | done | [font-flow-map.md](font-flow-map.md), [opf#116](https://github.com/OpenPresentation/opf/pull/116) |
 | FF-07 | Exporter writes chosen fonts into theme and run East Asian/complex-script slots, with `lang`/RTL | opf-pptx | FF-05, FF-06, FF-18 | review | merged: [opf-pptx#70](https://github.com/OpenPresentation/opf-pptx/pull/70) `0e886f30`, [opf#134](https://github.com/OpenPresentation/opf/pull/134) `9695bf37`, [opf#135](https://github.com/OpenPresentation/opf/pull/135) `3512af0b`; pending FF-05 native root-cause evidence (criteria are subject to FF-05) |
 | FF-08 | Exporter leaks no hard-coded or default font in any part | opf-pptx | FF-05, FF-06, FF-17 | review | merged: [opf-pptx#69](https://github.com/OpenPresentation/opf-pptx/pull/69) `405963ce`; pending FF-05 native root-cause evidence (empty values must be allowed by FF-05) |
@@ -691,3 +695,23 @@ Append one dated line per state change. Newest last.
     stays in review, FF-05 stays open, and counts remain 19 done, 16
     review/in-progress, 9 todo. September 23 presence values and dates are
     retained independently.
+
+- 2026-09-29 09:01 UTC: FF-05 E6 ran once on the independently reviewed
+  Calibri control, using PPTX `bf3f78f` and core `061499d`. All 17 explicit
+  Carlito typeface attributes changed to Calibri; the other 38 ZIP entry contents,
+  relationships and four empty theme ea/cs slots were unchanged. One owned
+  read-only open/close completed under the 45-second deadline without
+  temporary font registration. The current audit passed with zero failures,
+  all input hashes unchanged; UI preflight/postflight showed Home without an
+  open deck or dialog. `Presentation.Fonts` still reported an empty-name entry
+  and Aptos while the nonempty inspected slide font names and theme Latin
+  reported Calibri (`NameOther` remained empty).
+  [Evidence](../../evidence/windows-native-calibri-control-20260929/README.md).
+  This narrows Carlito-specific explanations, without proving a source,
+  physical glyph identity, font allowlist or embedding. FF-05 moves from todo
+  to in-progress: 19 done, 17 review/in-progress, 8 todo. Next: offline-reviewed
+  style/part isolation before another bounded native control.
+  - Wrap-up receipts: PPTX79 `0424d561`, PPTX81 `c749c35`, PPTX78 `bf3f78f`,
+    core145 `a85facf` and core147 `061499d` merged after independent review and
+    green CI. PPTX80 closed as superseded with its findings reconciled in78;
+    its branch was preserved. No release, deployment or tolerance change.

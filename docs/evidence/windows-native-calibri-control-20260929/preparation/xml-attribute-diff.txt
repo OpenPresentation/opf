@@ -1,0 +1,67 @@
+ppt/slideMasters/slideMaster1.xml /p:sldMaster[1]/p:txStyles[1]/p:bodyStyle[1]/a:lvl1pPr[1]/a:buFont[1]/@typeface (byte 1411)
+- typeface="Carlito"
++ typeface="Calibri"
+
+ppt/slideMasters/slideMaster1.xml /p:sldMaster[1]/p:txStyles[1]/p:bodyStyle[1]/a:lvl2pPr[1]/a:buFont[1]/@typeface (byte 1843)
+- typeface="Carlito"
++ typeface="Calibri"
+
+ppt/slideMasters/slideMaster1.xml /p:sldMaster[1]/p:txStyles[1]/p:bodyStyle[1]/a:lvl3pPr[1]/a:buFont[1]/@typeface (byte 2276)
+- typeface="Carlito"
++ typeface="Calibri"
+
+ppt/slideMasters/slideMaster1.xml /p:sldMaster[1]/p:txStyles[1]/p:bodyStyle[1]/a:lvl4pPr[1]/a:buFont[1]/@typeface (byte 2709)
+- typeface="Carlito"
++ typeface="Calibri"
+
+ppt/slideMasters/slideMaster1.xml /p:sldMaster[1]/p:txStyles[1]/p:bodyStyle[1]/a:lvl5pPr[1]/a:buFont[1]/@typeface (byte 3142)
+- typeface="Carlito"
++ typeface="Calibri"
+
+ppt/slideMasters/slideMaster1.xml /p:sldMaster[1]/p:txStyles[1]/p:bodyStyle[1]/a:lvl6pPr[1]/a:buFont[1]/@typeface (byte 3574)
+- typeface="Carlito"
++ typeface="Calibri"
+
+ppt/slideMasters/slideMaster1.xml /p:sldMaster[1]/p:txStyles[1]/p:bodyStyle[1]/a:lvl7pPr[1]/a:buFont[1]/@typeface (byte 4007)
+- typeface="Carlito"
++ typeface="Calibri"
+
+ppt/slideMasters/slideMaster1.xml /p:sldMaster[1]/p:txStyles[1]/p:bodyStyle[1]/a:lvl8pPr[1]/a:buFont[1]/@typeface (byte 4440)
+- typeface="Carlito"
++ typeface="Calibri"
+
+ppt/slideMasters/slideMaster1.xml /p:sldMaster[1]/p:txStyles[1]/p:bodyStyle[1]/a:lvl9pPr[1]/a:buFont[1]/@typeface (byte 4873)
+- typeface="Carlito"
++ typeface="Calibri"
+
+ppt/slides/slide1.xml /p:sld[1]/p:cSld[1]/p:spTree[1]/p:sp[1]/p:txBody[1]/a:p[1]/a:r[1]/a:rPr[1]/a:latin[1]/@typeface (byte 1342)
+- typeface="Carlito"
++ typeface="Calibri"
+
+ppt/slides/slide1.xml /p:sld[1]/p:cSld[1]/p:spTree[1]/p:sp[1]/p:txBody[1]/a:p[1]/a:r[1]/a:rPr[1]/a:ea[1]/@typeface (byte 1397)
+- typeface="Carlito"
++ typeface="Calibri"
+
+ppt/slides/slide1.xml /p:sld[1]/p:cSld[1]/p:spTree[1]/p:sp[1]/p:txBody[1]/a:p[1]/a:r[1]/a:rPr[1]/a:cs[1]/@typeface (byte 1455)
+- typeface="Carlito"
++ typeface="Calibri"
+
+ppt/slides/slide1.xml /p:sld[1]/p:cSld[1]/p:spTree[1]/p:sp[2]/p:txBody[1]/a:p[1]/a:r[1]/a:rPr[1]/a:latin[1]/@typeface (byte 2318)
+- typeface="Carlito"
++ typeface="Calibri"
+
+ppt/slides/slide1.xml /p:sld[1]/p:cSld[1]/p:spTree[1]/p:sp[2]/p:txBody[1]/a:p[1]/a:r[1]/a:rPr[1]/a:ea[1]/@typeface (byte 2373)
+- typeface="Carlito"
++ typeface="Calibri"
+
+ppt/slides/slide1.xml /p:sld[1]/p:cSld[1]/p:spTree[1]/p:sp[2]/p:txBody[1]/a:p[1]/a:r[1]/a:rPr[1]/a:cs[1]/@typeface (byte 2431)
+- typeface="Carlito"
++ typeface="Calibri"
+
+ppt/theme/theme1.xml /a:theme[1]/a:themeElements[1]/a:fontScheme[1]/a:majorFont[1]/a:latin[1]/@typeface (byte 844)
+- typeface="Carlito"
++ typeface="Calibri"
+
+ppt/theme/theme1.xml /a:theme[1]/a:themeElements[1]/a:fontScheme[1]/a:minorFont[1]/a:latin[1]/@typeface (byte 3114)
+- typeface="Carlito"
++ typeface="Calibri"

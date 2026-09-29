@@ -20,15 +20,40 @@ responsible style or prove that a visible glyph uses Aptos. The conditions ran
 on different dates and PowerPoint sessions; this is not a simultaneous test of
 every host variable. **FF-05 remains open.**
 
-The next discriminating experiment is an offline-reviewed control that replaces
-the fixture's explicit Carlito references with Calibri while preserving its
-structure (E6 below), followed by one bounded read-only inventory without
-temporary fonts. Record every changed XML attribute and the resulting source
-hash before the native run. An unchanged Aptos observation would further narrow
-the Carlito-specific branch of H3; it would still not identify a precise source.
-Any subsequent style/part isolation needs its own reviewed fixture and fresh
-output directory. Do not change the allowlist or resume embedding on the basis
-of the inventory alone.
+**E6 completed at 09:01 UTC.** The independently reviewed
+[Calibri control](../../evidence/windows-native-calibri-control-20260929/README.md)
+replaces all 17 explicit Carlito typeface attributes with Calibri across three
+parts, preserving the other 38 ZIP entry contents, every relationship and the four
+empty theme ea/cs slots. Source SHA-256:
+`776147ddfd2a35ceca4480b66d58c82c9255609b5abe245a2b3bb342651ebce5`.
+The deterministic repack changes ZIP container metadata, not those entry contents.
+One read-only `-ControlDeck` inventory, without temporary font registration,
+completed under the 45-second deadline. The current audit passed with zero
+failures, unchanged inputs, one owned open and one confirmed owned close.
+PowerPoint Home had no open presentation or dialog before and after the run.
+
+**F.** `Presentation.Fonts`, read before other presentation content, again
+contained an empty-name entry (`Embedded=0`, `Embeddable=0`) and Aptos
+(`Embedded=0`, `Embeddable=-1`). The six inspected slide range/paragraph/run
+records reported Calibri for `Name`, `NameAscii`, `NameFarEast` and
+`NameComplexScript`, with `NameOther` empty. Theme Latin reported Calibri;
+the four theme ea/cs slots remained empty.
+**I.** This observation does not require Carlito-specific references or
+temporary registration. It does not distinguish remaining style/part defaults
+from native collection/resolution behavior, or prove that empty theme slots
+caused the Aptos entry. H3's broader native-resolution branch remains open.
+The earlier Carlito and this Calibri control ran sequentially in the same
+PowerPoint process; neither controls every host variable or glyph identity.
+
+The next proposed control (E7) starts from the exact E6 hash and changes only
+the four empty theme major/minor ea/cs attributes to Calibri, preserving every
+other part and relationship. Review its offline diff before one bounded
+`-ControlDeck` inventory in a fresh directory. Persistence would show that
+empty theme ea/cs values are not necessary in this control; disappearance
+would associate the observation with the joint four-slot change, without
+identifying one slot or physical font. This uses the existing harness and
+does not require broader native queries. FF-05 remains in progress. Do not
+change the allowlist or resume embedding on the basis of the inventory alone.
 
 The expressibility statements in the historical research below describe the
 September 22 source. FF-18 and FF-07 subsequently added language/script font
@@ -72,7 +97,7 @@ intentionally not regenerated with those changes.
 4. **E3: no-.Text control.** Apply only the Font2 sets, so the original explicit-Carlito runs survive. No Aptos here means `.Text` is implicated.
 5. **E4: explicit-slot control (harness, COM).** After `.Text`, also set `NameFarEast` and `NameComplexScript` to "Carlito". Aptos disappearing supports H1.
 6. **E5: theme-slot fixture variant.** Byte-patch `theme1.xml` so the major and minor `<a:ea>`/`<a:cs>` are `typeface="Carlito"` (4 attributes), and optionally add explicit latin/ea/cs to both `endParaRPr`. Run E0 and E1 on it. If Aptos is gone both before and after the edits, H1 holds via the theme path.
-7. **E6: Calibri control.** Use the same fixture with Calibri as the latin font and empty ea/cs. If Aptos still appears, the effect is default-slot behaviour and not Carlito-specific, which rules out H3.
+7. **E6: Calibri control (completed September 29).** Replace all explicit Carlito typeface attributes with Calibri and preserve the four empty theme ea/cs slots. Aptos still appears. This narrows the Carlito-specific branch of H3, but neither proves default-slot behavior nor rules out other native resolution behavior; see the measured result above.
 8. (Optional, needs separate approval.) SaveCopyAs the edited copy without embedding into a fresh directory, then diff the `rPr` offline to see where Aptos, `+mn-ea` or empty slots were written.
 
 ## Proposed fixture change if H1 holds, and OPF expressibility
