@@ -1,5 +1,62 @@
 # Windows native compatibility weekly handoff
 
+## September 29 continuation
+
+Resume from fetched `origin/main`. The active goal, acceptance criteria and
+progress log are now in
+[font-fidelity-everywhere](programs/font-fidelity-everywhere/README.md) and its
+[burndown](programs/font-fidelity-everywhere/burndown.md). The dated sections
+below are historical receipts; their pending-work and open-PR statements apply
+only to their checkpoint date.
+
+Fresh source heads at this continuation were core `d3397502`, PPTX `90929546`,
+renderer `6c7d7818`, editor `214ae695`, and gallery `f17e9ae5`. Use Node
+24.21.0, core pnpm 10.33.2 and locked sibling installs. Existing local branches
+were preserved, and no old evidence branch was reused as a working base.
+
+**Native progress.** Mixed-table edit/save/reopen already passed on September
+22. The first embed attempt remains a preserved failure before `SaveAs`.
+The missing FF-04 read-only inventory without temporary font registration has
+now completed on the canonical unedited fixture in a fresh PowerPoint session.
+It reports Aptos and an empty-name entry before any edit, as did the historical
+with-temp and exporter-control runs. The current audits pass; original audit
+failures remain preserved. The owned source was unchanged, the owned
+presentation closed once, and postflight showed PowerPoint Home without an
+open presentation or dialog. See the
+[portable inventory evidence](evidence/windows-native-font-inventory-20260929/README.md).
+This does not prove the font allowlist, physical font identity or embedding.
+FF-05 still needs a discriminating experiment; the
+[Aptos brief](programs/font-fidelity-everywhere/aptos-origin-brief.md) records
+the narrowed hypotheses and next control.
+
+**PR review.** [PPTX78](https://github.com/OpenPresentation/opf-pptx/pull/78)
+and [PPTX79](https://github.com/OpenPresentation/opf-pptx/pull/79) had green CI
+but independent review found media privacy/current-content bugs and malformed
+layout recovery that could crash rendering. Independently reviewed fixes and
+end-to-end regressions pass the current-source package tests. PPTX79 passed
+Linux and Windows CI at `ab0fc1d` and merged as `0424d561`. PPTX78 integrates
+that fix; its unchanged tested tree passed the full suite and six browser
+suites, with final-head CI running at `ede5ca7` at this checkpoint. Its PR
+records the eventual merge receipt. Core132/renderer43 alignment and
+core133/renderer44 font policy work have already merged.
+
+| Remaining work | State / next gate |
+| --- | --- |
+| FF-04 evidence | Native conditions complete; bundle, verifier and documentation under review |
+| FF-05 root cause | Open; Aptos at open does not identify its exact source |
+| PPTX78/79 | PPTX79 merged `0424d561`; PPTX78 independently reviewed, final-head CI pending at this checkpoint |
+| PPTX76 and renderer42 | Draft chart coverage; reconcile conflicts and acceptance criteria |
+| PPTX77 | Draft theme-color follow-up; per-reference measurement incomplete |
+| core128 / gallery46 | Catalog dependency chain; gallery first, then reconcile core snapshot |
+| gallery40-47 | Open; Actions billing prevents a clean verification result; some also depend on a future release |
+| Old geometry drafts core94/PPTX42/renderer27/editor25 | Deferred; do not merge as part of this work |
+
+The headline remains the last committed FF-38 result, **4/900 perfect**, until
+the unchanged audit is rerun on the final merged source graph. PR-level package
+tests and native inventory validity do not establish whole-program parity.
+No package publication, deployment, shared CI-pin update, native `p:hf`, or
+relaxation of the 0.02 pt / 0.1 reference-pixel gates is authorized here.
+
 Original checkpoint: September 21, 2026. The September 22 continuation below
 records harness hardening without replacing the reviewed September 21 native
 evidence. Verification uses Node **24.21.0** and core's declared pnpm
