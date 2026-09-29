@@ -4,9 +4,11 @@
 //   node scripts/build-font-tracker.mjs --check    fail when either file differs from a fresh build (drift)
 //   node scripts/build-font-tracker.mjs --snapshot-manifest <opf-render>/src/font-manifest.js --commit <sha>
 //                                                  refresh the pinned render-manifest snapshot, then rebuild
+//   node scripts/build-font-tracker.mjs --snapshot-gallery-fonts <pptx-gallery>/data/preview-fonts.json --commit <sha>
+//                                                  refresh the pinned gallery preview-font (cards) snapshot, then rebuild
 //
 // Derived data (never hand edited): spec/reference/font-policy.json, the measurement report, the pinned
-// opf-render font manifest snapshot and the committed parity results. Authored data:
+// opf-render font manifest snapshot, the pinned pptx.gallery preview-font snapshot and the committed parity results. Authored data:
 // docs/programs/font-fidelity-everywhere/font-tracker.overrides.json (owner plan text, reconciled next
 // actions, evidence keys, classes, scripts, style rules and in-flight candidates).
 import { readFileSync, writeFileSync } from "node:fs";
@@ -32,9 +34,9 @@ export const STATUSES = [
   "visual-gap",
   "script-gap",
   "baseline-needed",
-  "metric-verified",
+  "metric-measured",
 ];
-const HOSTS = ["node", "browser", "editor", "gallery"];
+const HOSTS = ["node", "browser", "editor", "galleryEditor", "galleryCards"];
 const FOUR = ["400", "400i", "700", "700i"];
 const TWO = ["400", "700"];
 
@@ -63,6 +65,25 @@ export function snapshotFromManifest(manifest, { commit, capturedAt }) {
       licenseSha256: pkg.licenseSha256,
       reservedFontNames: pkg.reservedFontNames,
       faces: pkg.faces.map((face) => ({ file: face.file, family: face.family, weight: face.weight, italic: face.italic, sha256: face.sha256 })),
+    })),
+  };
+}
+
+/** Reduce pptx.gallery's data/preview-fonts.json (the self-hosted webfonts behind gallery cards) to what the tracker reads. */
+export function gallerySnapshotFromPreviewFonts(previewFonts, { commit, capturedAt }) {
+  return {
+    description:
+      `Pinned snapshot of pptx.gallery's self-hosted preview webfonts (data/preview-fonts.json, contract ${previewFonts.contract}), reduced to the fields the font tracker reads. These serve gallery cards, not the gallery editor (a vendored opf-editor bundle). Refresh with: node scripts/build-font-tracker.mjs --snapshot-gallery-fonts <pptx-gallery>/data/preview-fonts.json --commit <sha>.`,
+    source: { repository: "Data-Advantage/pptx-gallery", commit, path: "data/preview-fonts.json", capturedAt, contract: previewFonts.contract },
+    families: previewFonts.families.map((family) => ({
+      family: family.family,
+      package: family.package ?? family.repository ?? null,
+      version: family.version,
+      kind: family.kind,
+      license: family.license,
+      weights: family.weights,
+      faces: family.faces.length,
+      coverageGaps: family.coverageGaps || null,
     })),
   };
 }
@@ -145,6 +166,14 @@ function parityUsage(parity) {
   return usage;
 }
 
+// Mirror of the host verification defaults, so priority can be computed before the record is assembled.
+function hostVerificationOf(family, host, target, cards, overrides) {
+  const set = overrides.hostVerification[family]?.[host];
+  if (set) return set;
+  if (host === "galleryCards") return cards ? "unverified" : "NA";
+  return target.yes ? "unverified" : "NA";
+}
+
 function expectedStatus(route, targetBundled) {
   if (route.tier === "none") return "missing";
   if (route.kind === "self") return targetBundled ? "real" : "missing";
@@ -172,6 +201,8 @@ export function buildTracker({ root = ROOT } = {}) {
   const overrides = readJson(root, FILES.overrides);
   const snapshot = readJson(root, overrides.manifestSnapshot);
   const report = readJson(root, overrides.measurementReport);
+  const galleryFonts = readJson(root, overrides.galleryFontsSnapshot);
+  const galleryCardsByFamily = new Map(galleryFonts.families.map((entry) => [entry.family, entry]));
   const parity = readJson(root, overrides.paritySource);
   const decisions = policy.provisionalDecisions?.decisions ?? {};
   const index = bundleIndex(snapshot);
@@ -182,6 +213,7 @@ export function buildTracker({ root = ROOT } = {}) {
   for (const list of [overrides.classes.proprietaryScript, overrides.classes.special]) {
     for (const name of list) if (!policyNames.has(name)) throw new Error(`overrides.classes names ${name}, which is not a policy family`);
   }
+  for (const name of Object.keys(overrides.acceptance)) if (!policyNames.has(name) && !overrides.extras.some((extra) => extra.family === name)) throw new Error(`overrides.acceptance names ${name}, which has no record`);
   for (const name of Object.keys(overrides.families)) if (!policyNames.has(name)) throw new Error(`overrides.families names ${name}, which is not a policy family`);
   for (const extra of overrides.extras) {
     if (policyNames.has(extra.family)) throw new Error(`${extra.family} is in the policy; remove it from overrides.extras`);
@@ -224,6 +256,7 @@ export function buildTracker({ root = ROOT } = {}) {
           maxAbsWidthDelta: entry.maxAbs,
         }))
       : null;
+    for (const name of Object.keys(overrides.measurementSources)) if (!policyNames.has(name)) throw new Error(`overrides.measurementSources names ${name}, which is not a policy family`);
     const bar = overrides.metricBar;
     const widthBarMet = measured
       ? (perStyle ? perStyle.length : measured.styles) >= bar.styles &&
@@ -240,7 +273,8 @@ export function buildTracker({ root = ROOT } = {}) {
           perStyle,
           corpus: { strings: report.corpus.strings, sha256: report.corpus.sha256, script: "Latin", scriptSpecific: false },
           date: overrides.measurementDates[family] ?? overrides.measurementDates.default,
-          source: "docs/evidence/font-replacements-20260923/README.md",
+          source: overrides.measurementSources[family]?.source ?? "docs/evidence/font-replacements-20260923/README.md",
+          sourceNote: overrides.measurementSources[family]?.note ?? null,
           verticalMetricsMatch: null,
           lineBreaksMatch: null,
           widthBarMet,
@@ -330,12 +364,12 @@ export function buildTracker({ root = ROOT } = {}) {
       statusReason = `missing ${stylesMissing.join(", ")} in ${route.family}`;
     } else if (lazyPending) {
       status = "loading-gap";
-      statusReason = `${route.family} is in the ${target.pack} pack, which the shipped browser hosts do not load until opf-render#54 and opf-editor#42`;
+      statusReason = `${route.family} is in the ${target.pack} pack, which the shipped browser, editor and gallery-editor hosts do not load until opf-render#54 and opf-editor#42`;
     } else if (cls === "open") {
       status = "baseline-needed";
       statusReason = "bundled with required styles; fresh per-host verification outstanding";
     } else if (route.tier === "metric" && rec.measurements?.widthBarMet) {
-      status = "metric-verified";
+      status = "metric-measured";
       statusReason = "metric tier; width bar met in four styles; vertical metrics, line breaks and hosts not yet recorded";
     } else if (cls === "proprietary-script") {
       status = "script-gap";
@@ -345,7 +379,7 @@ export function buildTracker({ root = ROOT } = {}) {
       statusReason = "visual route; metric or appearance qualification outstanding";
     }
 
-    const phaseByStatus = { "candidate-qualified-landing": 3, "loading-gap": 2, "style-gap": 2, "policy-gap": 1, "needs-special-path": 4, "visual-gap": 4, "script-gap": 4, "baseline-needed": 1, "metric-verified": 1 };
+    const phaseByStatus = { "candidate-qualified-landing": 3, "loading-gap": 2, "style-gap": 2, "policy-gap": 1, "needs-special-path": 4, "visual-gap": 4, "script-gap": 4, "baseline-needed": 1, "metric-measured": 1 };
     const phase = overrides.phaseOverrides[family]?.phase ?? phaseByStatus[status];
 
     // Parity.
@@ -367,11 +401,17 @@ export function buildTracker({ root = ROOT } = {}) {
     };
 
     // Priority.
+    const cards = route.family ? galleryCardsByFamily.get(route.family) ?? null : null;
     const def = overrides.statusDefs[status];
     const drift = rec.measurements?.maxAbsWidthDelta ?? 0;
     const driftBonus = route.tier === "visual" && cls === "proprietary-latin" && drift > 0.05 ? 0.5 : 0;
     const severity = def.severity + driftBonus;
-    const score = round(severity * (paritySignals.valuesAffected + 1), 1);
+    // Only values that are not already real or pass count, and hosts with per-family verification discount the rest.
+    const valuesOpen = paritySignals.valuesAffected - paritySignals.fontResolution.pass;
+    const applicable = HOSTS.filter((host) => hostVerificationOf(family, host, target, cards, overrides) !== "NA");
+    const verifiedHosts = applicable.filter((host) => hostVerificationOf(family, host, target, cards, overrides) === "verified").length;
+    const hostFactor = applicable.length ? Math.max(0.25, (applicable.length - verifiedHosts) / applicable.length) : 1;
+    const score = round(severity * (valuesOpen * hostFactor + 1), 1);
 
     // Hosts.
     const packModel = target.yes ? hostModel.packs[target.pack] : null;
@@ -379,6 +419,13 @@ export function buildTracker({ root = ROOT } = {}) {
     const hostVerification = {};
     const hostLoading = {};
     for (const host of HOSTS) {
+      if (host === "galleryCards") {
+        hostVerification[host] = verified?.[host] ?? (cards ? "unverified" : "NA");
+        hostLoading[host] = cards
+          ? `self-hosted preview webfont: ${cards.package} ${cards.version} (${cards.kind}, weights ${cards.weights.join(" ")}, upright only)`
+          : cls === "special" ? "no route" : "no self-hosted card preview";
+        continue;
+      }
       hostVerification[host] = verified?.[host] ?? (target.yes ? "unverified" : "NA");
       hostLoading[host] = packModel ? packModel[host] : cls === "special" ? "no route" : "not bundled";
     }
@@ -389,6 +436,11 @@ export function buildTracker({ root = ROOT } = {}) {
     if (paritySignals.valuesAffected > 0) evidenceKeys.push("parity");
     const native = overrides.nativeVerification[family];
     if (native?.evidence) evidenceKeys.push(...native.evidence);
+    const accepted = overrides.acceptance[family];
+    if (accepted?.accepted && !(accepted.date && accepted.fixture && accepted.evidence?.length)) throw new Error(`acceptance for ${family} needs fixture, date and evidence`);
+    const acceptance = accepted
+      ? { fixture: accepted.fixture ?? "pending", accepted: accepted.accepted === true, date: accepted.date ?? null, evidence: resolveEvidence(accepted.evidence ?? [], overrides.evidence), note: accepted.note ?? "" }
+      : { fixture: "pending", accepted: false, date: null, evidence: [], note: "Own fixture and acceptance record required; grouped work does not transfer acceptance." };
     const nextAction = item.extra ? item.extra.nextAction : overrides.families[family]?.nextAction;
     if (!nextAction) throw new Error(`no nextAction for ${family}`);
     const candidates = overrides.candidates[family] ?? [];
@@ -428,21 +480,21 @@ export function buildTracker({ root = ROOT } = {}) {
       hostVerification,
       hostLoading,
       nativeVerification: native ? { status: native.status, note: native.note } : { status: "unverified", note: "No per-family native PowerPoint acceptance (phase 5)." },
-      acceptance: { fixture: "pending", accepted: false, note: "Own fixture and acceptance record required; grouped work does not transfer acceptance." },
+      acceptance,
       paritySignals,
       phase,
       status,
       statusReason,
       nextAction,
       evidence: resolveEvidence(evidenceKeys, overrides.evidence),
-      priority: { score, severity, valuesAffected: paritySignals.valuesAffected, rank: 0 },
+      priority: { score, severity, valuesAffected: paritySignals.valuesAffected, valuesOpen, hostFactor: round(hostFactor, 2), rank: 0 },
     };
     if (record.stylesRequiredByRole === undefined) delete record.stylesRequiredByRole;
     return record;
   });
 
   out.sort((a, b) => a.family.localeCompare(b.family, "en"));
-  const ranked = [...out].sort((a, b) => b.priority.score - a.priority.score || b.priority.valuesAffected - a.priority.valuesAffected || a.family.localeCompare(b.family, "en"));
+  const ranked = [...out].sort((a, b) => b.priority.score - a.priority.score || b.priority.valuesOpen - a.priority.valuesOpen || a.family.localeCompare(b.family, "en"));
   ranked.forEach((rec, i) => {
     rec.priority.rank = i + 1;
   });
@@ -455,6 +507,7 @@ export function buildTracker({ root = ROOT } = {}) {
     description:
       "One record per font family the owner reviewed on 2026-09-29: every font-policy family plus the shipped script-font dependencies missing from the policy. Derived fields come from the policy, the measurement report, the pinned opf-render manifest snapshot and the committed parity results; next actions and evidence come from font-tracker.overrides.json.",
     inputs: {
+      galleryPreviewFonts: { file: overrides.galleryFontsSnapshot, ...galleryFonts.source, families: galleryFonts.families.length },
       policy: { file: FILES.policy, version: policy.version, families: policy.families.length },
       measurementReport: { file: overrides.measurementReport, corpus: report.corpus },
       renderManifest: { file: overrides.manifestSnapshot, ...snapshot.source, packages: snapshot.packages.length, faces: snapshot.packages.reduce((sum, pkg) => sum + pkg.faces.length, 0) },
@@ -464,7 +517,7 @@ export function buildTracker({ root = ROOT } = {}) {
     ownerPlan: overrides.ownerPlan,
     reconciliation: overrides.reconciliation,
     statusDefinitions: overrides.statusDefs,
-    priorityFormula: "score = severity x (valuesAffected + 1). severity is the status severity, plus 0.5 for a visual Latin route whose measured maximum width delta exceeds 5%. valuesAffected counts parity values whose preview uses the family.",
+    priorityFormula: "score = severity x (valuesOpen x hostFactor + 1). severity is the status severity, plus 0.5 for a visual Latin route whose measured maximum width delta exceeds 5%. valuesOpen counts parity values whose preview uses the family and whose fontResolution is not already pass (real face or metric replacement with the selected name kept). hostFactor is the share of applicable hosts without per-family verification, never below 0.25.",
     summary: {
       records: out.length,
       inPolicy: out.filter((rec) => rec.inPolicy).length,
@@ -546,7 +599,7 @@ export function renderMarkdown(tracker) {
   for (const cls of CLASSES) push(`| ${cls} | ${summary.byClass[cls]} |`);
   push("", "| Host | Verified | Unverified | NA |", "| --- | --- | --- | --- |");
   for (const host of HOSTS) push(`| ${host} | ${summary.hostVerification[host].verified} | ${summary.hostVerification[host].unverified} | ${summary.hostVerification[host].NA} |`);
-  push("", "`verified` means per-family evidence exists in a repository; `unverified` means a face is routed but no per-family acceptance exists; `NA` means no intended face exists to load in that host. Loading routes per host are in each record's `hostLoading`.");
+  push("", "`verified` means per-family evidence exists in a repository; `unverified` means a face is routed but no per-family acceptance exists; `NA` means no intended face exists to load in that host. Hosts: `node` (opf-render registries; the default `prepareNodeFonts` pack is `base`, Roboto only, and the office, open and script packs load only when requested), `browser` (opf-render browser registry), `editor` (the opf-editor playground), `galleryEditor` (the vendored opf-editor bundle inside pptx.gallery, 33 eager faces) and `galleryCards` (pptx.gallery's self-hosted preview webfonts for cards and pages, upright regular and bold only). Loading routes per host are in each record's `hostLoading`.");
 
   push("", "## Priority queue", "", `Priority: ${tracker.priorityFormula} The audited set is ${tracker.inputs.parity.values} gallery values (${tracker.inputs.parity.file.split("/").pop()}).`, "");
   push("| Rank | Family | Class | Phase | Status | Values | Score | Next action |", "| --- | --- | --- | --- | --- | --- | --- | --- |");
@@ -633,6 +686,14 @@ async function main() {
     const snapshot = snapshotFromManifest(BUNDLED_FONT_MANIFEST, { commit, capturedAt: option("--date") ?? new Date().toISOString().slice(0, 10) });
     writeFileSync(path.join(ROOT, overrides.manifestSnapshot), `${JSON.stringify(snapshot, null, 2)}\n`);
     console.log(`Wrote ${overrides.manifestSnapshot} (${snapshot.packages.length} packages at ${commit.slice(0, 7)}).`);
+  }
+  if (args.includes("--snapshot-gallery-fonts")) {
+    const commit = option("--commit");
+    if (!/^[0-9a-f]{40}$/.test(commit ?? "")) throw new Error("--commit must be the full 40-character pptx-gallery commit the file was read from");
+    const previewFonts = JSON.parse(readFileSync(path.resolve(option("--snapshot-gallery-fonts")), "utf8"));
+    const snapshot = gallerySnapshotFromPreviewFonts(previewFonts, { commit, capturedAt: option("--date") ?? new Date().toISOString().slice(0, 10) });
+    writeFileSync(path.join(ROOT, overrides.galleryFontsSnapshot), `${JSON.stringify(snapshot, null, 2)}\n`);
+    console.log(`Wrote ${overrides.galleryFontsSnapshot} (${snapshot.families.length} families at ${commit.slice(0, 7)}).`);
   }
   if (args.includes("--check")) {
     const { drift } = checkTracker();

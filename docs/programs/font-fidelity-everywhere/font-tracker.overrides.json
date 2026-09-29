@@ -52,8 +52,8 @@
     "Open families are now vendored from unmodified upstream or npm packages (opf-render#50): Open Sans, Montserrat (including 900), Poppins, Bebas Neue, PT Serif, Lora, Merriweather Sans, Source Sans 3 (with the Source Sans Pro alias), Red Hat Display (300, 400, 700) and Red Hat Text (400, 700). Raleway and Playfair Display are not bundled because resvg ignores the wght axis. The owner's \"bundle\" rows for the bundled families become verification work; the remaining bundling work is Anton, Archivo Narrow, Barlow, Bitter, EB Garamond, Figtree, Libre Caslon Text, Work Sans, Liberation Mono, Sans and Serif, Playfair Display and Raleway.",
     "Carlito is vendored as unmodified google/fonts files (opf-render#58) because its Reserved Font Name applies. Licenses, Reserved Font Names and no-hotlink rules are guarded in core and the renderer (opf#165, opf-render#53).",
     "Script fonts: previews now load script faces automatically (opf-render#55, opf-editor#40) and fall back per character to Noto Sans (opf-render#57). The parity run records 109 family uses as `missing` because it models a host without the script pack; those readings are stale until the audit is rerun, and loading is not verification per family.",
-    "The shipped browser hosts still load only the 33 eager faces (base and office packs). The vendored open pack reaches the editor and gallery only with opf-render#54 and opf-editor#42, so families served by that pack carry a loading gap until then.",
-    "Gallery previews use the bundled replacement faces (pptx-gallery#53, #54) and replacement data is published (pptx-gallery#51). This covers gallery cards, not per-family editor verification.",
+    "Hosts are recorded separately. The default Node registry (`prepareNodeFonts`) uses the `base` pack (Roboto and Roboto Mono only); the office-pack faces (Carlito, Arimo, Tinos, Cousine, Gelasio, Caladea) and the open pack load only when `pack: 'office'` is requested, and script faces only when the `scripts` option is passed. The browser, the opf-editor playground and the gallery editor (a vendored opf-editor bundle) load the 33 eager base and office faces; the vendored open pack reaches them only with opf-render#54 and opf-editor#42, so families served by that pack carry a loading gap there until then.",
+    "Gallery cards are a different host from the gallery editor. pptx-gallery self-hosts preview webfonts (pptx-gallery#53 and #54; replacement data in #51) for 49 families, including Anton, Barlow, Bitter, EB Garamond, Figtree, Libre Caslon Text, Work Sans, Playfair Display, Raleway, Open Sans and Montserrat, as upright regular and bold faces from pinned @fontsource packages or unmodified upstream files. The tracker reads that list from a pinned snapshot (`galleryCards`). Card previews do not change the editor's bundle, and no per-family card verification exists.",
     "fontResolution treats a policy look-alike as near, not fail, when the PPTX names the selected family (opf#159). Parity harness fixes merged in opf#164 and opf#168. The value set is 850 after pptx-gallery#40 removed 50 unsupported chart types; Aptos and Aptos Display each appear in 704 of them.",
     "Selawik 1.01 was measured and rejected as a Segoe UI replacement (opf#166: regular 0.16% mean and 2.51% max on the standard 300-string corpus, 0.73% and 9.7% on the reviewer's broader corpus); Red Hat Display stays the visual route. Segoe UI Light, Semilight and Semibold were measured separately.",
     "Cover slide centering (opf-pptx#97) is geometry work with no font impact.",
@@ -66,7 +66,7 @@
     },
     "loading-gap": {
       "severity": 3,
-      "meaning": "The family's preview face is not bundled, or is bundled but not yet loaded by the shipped browser hosts, so hosts fall back to another face."
+      "meaning": "The family's preview face is not bundled, or is bundled but not yet loaded by the shipped browser, editor and gallery-editor hosts, so those hosts fall back to another face. Gallery cards (self-hosted webfonts) are tracked separately."
     },
     "style-gap": {
       "severity": 2.5,
@@ -92,37 +92,37 @@
       "severity": 1,
       "meaning": "An open family is bundled with the styles it needs; a fresh per-host verification and acceptance record is the remaining work."
     },
-    "metric-verified": {
+    "metric-measured": {
       "severity": 0.5,
-      "meaning": "A metric-tier route measured against the real font in four styles on the source path; per-host and native verification remain."
+      "meaning": "A metric-tier route measured against the real font in four styles on the source path (width bar met). Vertical metrics and line breaks are not yet recorded, and per-host and native verification remain, so it is not verified."
     }
   },
   "hostLoading": {
-    "note": "Derived from the pack a face ships in and the linked pull requests. It is a source-level model, not a per-family verification.",
+    "note": "Derived from the pack a face ships in, the linked pull requests and the opf-render loaders. It is a source-level model, not a per-family verification. Gallery cards (pptx.gallery self-hosted preview webfonts, pptx-gallery#53 and #54) are recorded separately as galleryCards from the pinned gallery snapshot; the gallery editor is the vendored opf-editor bundle.",
     "packs": {
       "base": {
-        "node": "default registry",
+        "node": "default: prepareNodeFonts pack 'base' (Roboto and Roboto Mono only)",
         "browser": "eager (33-face registry)",
         "editor": "eager (33-face registry)",
-        "gallery": "eager (33-face registry)"
+        "galleryEditor": "eager (33-face registry, vendored opf-editor bundle)"
       },
       "office": {
-        "node": "default registry",
+        "node": "only when pack: 'office' is requested (loadOfficeFontRegistry); not in the default 'base' pack",
         "browser": "eager (33-face registry)",
         "editor": "eager (33-face registry)",
-        "gallery": "eager (33-face registry)"
+        "galleryEditor": "eager (33-face registry, vendored opf-editor bundle)"
       },
       "open": {
-        "node": "default registry (loadOfficeFontRegistry)",
+        "node": "only when pack: 'office' is requested (loadOfficeFontRegistry adds the open pack unless includeOpenFonts is false)",
         "browser": "not loaded until opf-render#54",
         "editor": "not loaded until opf-editor#42",
-        "gallery": "not loaded until opf-editor#42 and a gallery editor ref bump"
+        "galleryEditor": "not loaded until opf-editor#42 and a gallery editor ref bump"
       },
       "scripts": {
-        "node": "auto (scripts: 'auto', opf-render#55)",
-        "browser": "auto (opf-render#55)",
+        "node": "only when the scripts option is passed ('auto' or a script list; opf-render#55)",
+        "browser": "when the host requests scripts (opf-render#55)",
         "editor": "auto (opf-editor#40)",
-        "gallery": "script-font manifest (opf#171)"
+        "galleryEditor": "script-font manifest (opf#171)"
       }
     },
     "lazyPendingPacks": [
@@ -554,7 +554,7 @@
         "baseFonts",
         "variants"
       ],
-      "note": "Nine base faces (Roboto 7, Roboto Mono 2) loaded offline in Chromium and Node with advances matching within 0.1 px; Latin sample, 2026-09-10 (opf-render docs/evidence)."
+      "note": "Nine base faces (Roboto 7, Roboto Mono 2) loaded offline in Chromium and Node with advances matching within 0.1 px; Latin sample, 2026-09-10 (opf-render docs/evidence). Editor, gallery editor and gallery cards are unverified."
     },
     "Roboto Mono": {
       "node": "verified",
@@ -563,7 +563,7 @@
         "baseFonts",
         "variants"
       ],
-      "note": "Nine base faces (Roboto 7, Roboto Mono 2) loaded offline in Chromium and Node with advances matching within 0.1 px; Latin sample, 2026-09-10 (opf-render docs/evidence)."
+      "note": "Nine base faces (Roboto 7, Roboto Mono 2) loaded offline in Chromium and Node with advances matching within 0.1 px; Latin sample, 2026-09-10 (opf-render docs/evidence). Editor, gallery editor and gallery cards are unverified."
     }
   },
   "nativeVerification": {
@@ -1265,14 +1265,14 @@
       ]
     },
     "Roboto": {
-      "nextAction": "Regress four exact faces across shipped hosts (Node and browser exact-face evidence dates from 2026-09-10; editor and gallery are unverified).",
+      "nextAction": "Regress four exact faces across shipped hosts (Node and browser exact-face evidence dates from 2026-09-10; editor, gallery editor and gallery cards are unverified).",
       "evidence": [
         "baseFonts",
         "variants"
       ]
     },
     "Roboto Mono": {
-      "nextAction": "Verify regular and bold in the editor and gallery; italic faces stay explicit gaps (not bundled) until a gallery value needs them. Used by 848 of the 850 parity values as the code font.",
+      "nextAction": "Verify regular and bold in the editor and gallery editor (gallery cards do not self-host it); italic faces stay explicit gaps (not bundled) until a gallery value needs them. Used by 848 of the 850 parity values as the code font, all already real and pass, so it ranks low.",
       "evidence": [
         "baseFonts",
         "variants"
@@ -1316,7 +1316,7 @@
       ]
     },
     "Open Sans": {
-      "nextAction": "Verify the newly bundled faces in actual hosts and rerun the old missing-face failures; the editor and gallery load them only after opf-editor#42.",
+      "nextAction": "Verify the newly bundled faces in actual hosts and rerun the old missing-face failures; the editor and gallery editor load them only after opf-editor#42 (gallery cards already self-host it).",
       "evidence": [
         "openPack",
         "intos"
@@ -2119,5 +2119,13 @@
       "label": "Native Calibri control (FF-05 E6)",
       "url": "docs/evidence/windows-native-calibri-control-20260929/README.md"
     }
-  }
+  },
+  "galleryFontsSnapshot": "docs/programs/font-fidelity-everywhere/font-tracker.gallery-preview-fonts.json",
+  "measurementSources": {
+    "Georgia": {
+      "source": "docs/evidence/font-replacements-20260923/report.json",
+      "note": "The Georgia entry was replaced on 2026-09-29 by the Gelasio re-run with liga and clig off (opf#163); the other rows are the 2026-09-23 host run."
+    }
+  },
+  "acceptance": {}
 }
