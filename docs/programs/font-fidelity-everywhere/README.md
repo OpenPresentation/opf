@@ -129,8 +129,9 @@ linked, and specifically:
   - For previews, SVG, the editor and thumbnails, the replacement should look
     similar and be metric-compatible (same advance widths and line metrics), so
     text occupies the same size on screen and wraps identically to PowerPoint.
-    A metric-compatible look-alike is the goal (Calibri to Carlito).
-  - Where no metric-compatible open replacement exists yet (Aptos today), a
+    A metric-compatible look-alike is the goal (Calibri to Carlito, Aptos to
+    Intos).
+  - Where no metric-compatible open replacement exists yet, a
     visual-only look-alike is a documented fallback and a known layout-fidelity
     gap to close, not the intended end state.
   - PPTX export always writes the selected font name (for example

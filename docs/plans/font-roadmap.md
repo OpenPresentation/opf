@@ -78,7 +78,7 @@ Default new presentations to Roboto (by naming the `roboto` font scheme; the eng
 | Times New Roman | Tinos | Metric substitute; tested locally |
 | Courier New | Cousine | Metric substitute; tested locally |
 | Georgia | Gelasio | Available as an explicit approximate substitute |
-| Aptos / Aptos Display | Roboto / Carlito (FF-31 policy) | Visual-only fallback, a known layout-fidelity gap until a metric-compatible replacement exists; visibly reported; the PPTX names Aptos |
+| Aptos, Aptos Display, Aptos Narrow, Aptos Serif | Intos, Intos Display, Intos Narrow, Intos Serif (FF-31 policy, office pack) | Metric, 0.000% mean and maximum against Aptos 2.01; Roboto and Carlito remain visual fallbacks; the PPTX names Aptos |
 
 The Office pack currently includes regular, bold, italic, and bold italic for six substitute families. The base Roboto pack is included unless disabled. No custom glyphs, OS font installation, or remote font fetch is needed. Preserve exact available fonts before considering substitutions. A font's presence does not imply every language or symbol is supported.
 
@@ -105,7 +105,7 @@ The [Mermaid/diagram and general SVG work](diagrams-svg.md) is sequenced after f
 
 ## Candidate families
 
-- Modern Office: Akasia is an upstream Aptos candidate. Source Sans 3 is an optional visual alternative. Neither establishes Aptos Display or Narrow compatibility by itself.
+- Modern Office: Intos is the metric-compatible Aptos replacement (Akasia, an earlier candidate, is gone). Source Sans 3 is an optional visual alternative. Neither establishes Aptos Display or Narrow compatibility by itself.
 - General Latin sans: Open Sans, Noto Sans, Lato, Libre Franklin, Montserrat, and DejaVu Sans cover different visual needs. Keep them optional instead of shipping every family by default.
 - Serif: EB Garamond, Libre Baskerville, Libre Bodoni, Merriweather, and TeX Gyre Pagella/Bonum/Schola are candidates for corresponding stylistic gaps. Treat as visual until tested otherwise.
 - Mono: Cousine and Roboto Mono cover the starter. Evaluate Inconsolata and Liberation Mono for additional requests.

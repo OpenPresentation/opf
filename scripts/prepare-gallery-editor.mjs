@@ -10,7 +10,10 @@ if(!registry)await rm(new URL('manifest.json',target),{force:true});
 // The script font manifest is committed with the editor files; the faces are not (the gallery build copies them from pinned npm packages).
 const scriptFonts=registry&&existsSync(new URL('../artifacts/registry-gallery-editor/script-fonts.json',import.meta.url));
 if(!scriptFonts)await rm(new URL('script-fonts.json',target),{force:true});
-for(const file of ['index.html','playground.css','playground.js','fonts.json','gallery.json','galleries.json',...(registry?['manifest.json','playground.js.LEGAL.txt','opf-spec.json']:[]),...(scriptFonts?['script-fonts.json']:[])])await copyFile(new URL(`../artifacts/${source}/${file}`,import.meta.url),new URL(file,target));
+// FF-31: the lazy vendored-font manifest is committed too; its faces (Intos, the open families) are not: the gallery build copies them from the pinned renderer package.
+const lazyFonts=existsSync(new URL(`../artifacts/${source}/lazy-fonts.json`,import.meta.url));
+if(!lazyFonts)await rm(new URL('lazy-fonts.json',target),{force:true});
+for(const file of ['index.html','playground.css','playground.js','fonts.json','gallery.json','galleries.json',...(registry?['manifest.json','playground.js.LEGAL.txt','opf-spec.json']:[]),...(scriptFonts?['script-fonts.json']:[]),...(lazyFonts?['lazy-fonts.json']:[])])await copyFile(new URL(`../artifacts/${source}/${file}`,import.meta.url),new URL(file,target));
 const html=await readFile(new URL('index.html',target),'utf8');
 await writeFile(new URL('index.html',target),html.replace('http://localhost:3101/spec','/spec'));
 await copyFile(new URL(`../artifacts/${registry?'registry-gallery-editor':'spec'}/opf-spec.json`,import.meta.url),new URL('../../pptx-gallery/data/opf-spec.json',import.meta.url));
