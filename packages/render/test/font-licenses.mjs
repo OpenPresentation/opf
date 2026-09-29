@@ -118,7 +118,8 @@ for(const pkg of packages){
     }
   }else{
     assert.equal(pkg.source,`https://www.npmjs.com/package/${pkg.name}/v/${pkg.version}`,`${label}: source must be the exact npm package URL`);
-    const pinned=(pkg.pack==='scripts'?rootPackage.devDependencies:rootPackage.dependencies)?.[pkg.name];
+    // Noto Sans (Latn, Cyrl, Grek) is the default glyph-fallback face: a script-pack entry pinned as a runtime dependency.
+    const pinned=rootPackage.dependencies?.[pkg.name]??(pkg.pack==='scripts'?rootPackage.devDependencies:undefined)?.[pkg.name];
     assert.equal(pinned,pkg.version,`${label}: package.json must pin this exact version (no range)`);
     assert.match(pinned,/^\d+\.\d+\.\d+$/,`${label}: pin must be an exact version`);
     directory=path.dirname(require.resolve(`${pkg.name}/package.json`));

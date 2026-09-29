@@ -23,7 +23,7 @@ const han=(withCore,without='Hans')=>hasCore?withCore:without;
 
 // Detection: text decides. Latin, Greek and Cyrillic need no script face.
 for(const title of ['Quarterly review 12%','Café Übersicht, naïve — “quotes” …',''])assert.deepEqual(detectPresentationScripts(deck(title)),[],title);
-for(const title of ['Ελληνικά Τριμηνιαία','Квартальный обзор'])assert.deepEqual(detectPresentationScripts(deck(title)),hasFallback?['Latn']:[],title);
+for(const title of ['Ελληνικά Τριμηνιαία','Квартальный обзор'])assert.deepEqual(detectPresentationScripts(deck(title)),[],title);
 assert.deepEqual(detectPresentationScripts(deck('Review',['Q1','Q2'])),[]);
 // Languages name the script only where text is ambiguous (Han).
 const expected=[
@@ -58,8 +58,9 @@ assert.deepEqual(autoScriptSelection(deck('ᏣᎳᎩ 日本語','Body',{language
 // Kana or Hangul in the text pins Japanese or Korean whatever the language.
 assert.deepEqual(detectPresentationScripts(deck('概要とまとめ','Body',{language:'zh-Hant'})),['Jpan']);
 
-const families=registry=>[...new Set(registry.describeFaces().filter(face=>face.scripts).map(face=>face.family))];
-const scriptFaces=registry=>registry.describeFaces().filter(face=>face.scripts).length;
+// The office registry always carries the fallback-only Noto Sans (glyph fallback); it is not a script pack face loaded on demand.
+const families=registry=>[...new Set(registry.describeFaces().filter(face=>face.scripts&&!face.fallbackOnly).map(face=>face.family))];
+const scriptFaces=registry=>registry.describeFaces().filter(face=>face.scripts&&!face.fallbackOnly).length;
 
 // Latin-only deck: no script face is loaded or read.
 for(const load of [loadBundledFontRegistry,loadOfficeFontRegistry]){
@@ -109,7 +110,7 @@ assert.deepEqual(partial.scriptSelection.scripts,['Hans']);
   assert.deepEqual(prepared.registry.scriptSelection.scripts,['Jpan']);
   assert.equal(prepared.options.fontFiles.filter(file=>/noto-sans-jp/.test(file)).length,2);
   assert.equal(prepared.options.fontFiles.some(file=>/noto-sans-(sc|tc|kr|arabic)/.test(file)),false);
-  assert.equal(prepared.options.embeddedFonts.some(face=>/Noto/.test(face.family)),false);
+  assert.equal(prepared.options.embeddedFonts.some(face=>/Noto/.test(face.family)&&face.family!=='Noto Sans'),false,'only the default Noto Sans fallback (embed used) is offered');
   const [svg]=renderSvgDeck(presentation,prepared.options);
   if(hasCore)assert.match(svg,/lang="ja/);
   assert.ok(svg.includes('Noto Sans JP'),'the SVG names the designated family');

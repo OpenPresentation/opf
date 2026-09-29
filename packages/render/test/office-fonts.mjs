@@ -35,6 +35,16 @@ for(const fontWeight of [400,700]) for(const italic of [false,true]) {
   assert.ok(registry.textMeasurement.measure(String.fromCharCode(0xa0), 20, style) > 0);
 }
 assert.equal(registry.embeddedFonts.length,33);
+{
+  // The default Noto Sans fallback (four styles) is loaded but embed "used": not in the eager list above.
+  const notoSans=registry.describeFaces().filter(face=>face.family==='Noto Sans');
+  assert.deepEqual(notoSans.map(face=>[face.weight,face.italic,face.fallbackOnly,face.scripts.join()]).sort(),[[400,false,true,'Latn,Cyrl,Grek'],[400,true,true,'Latn,Cyrl,Grek'],[700,false,true,'Latn,Cyrl,Grek'],[700,true,true,'Latn,Cyrl,Grek']].sort(),'Noto Sans is loaded by default as a fallback-only face');
+  assert.ok(!registry.embeddedFonts.some(face=>face.family==='Noto Sans'));
+  assert.ok(registry.selectEmbeddedFonts(()=>true).filter(face=>face.family==='Noto Sans').every(face=>face.embed==='used'));
+  // Fallback-only: it never stands in for another family (Ebrima previews as it did before), but is found by its own name.
+  assert.equal(registry.resolveFont({fontFamily:'Ebrima',fontWeight:400}).resolvedFamily,'Arimo');
+  assert.equal(registry.resolveFont({fontFamily:'Noto Sans',fontWeight:400,italic:true}).resolvedFamily,'Noto Sans');
+}
 for(const face of registry.embeddedFonts) assert.ok(face.license?.length>1000);
 const entries=registry.embeddedFonts.map(face=>({...face,data:new Uint8Array(Buffer.from(face.dataUrl.split(',')[1],'base64'))}));
 const alias=createFontRegistry(entries,{aliases:{Carlito:'Arimo'},substitutionPolicy:'visual'});
@@ -139,4 +149,4 @@ assert.throws(()=>missingStyle.resolveFont({fontFamily:'Carlito',fontWeight:400,
 assert.throws(()=>createFontRegistry(entries,{substitutionPolicy:'best'}),{code:'invalid-font-policy'});
 assert.ok(Object.isFrozen(FONT_COMPATIBILITY[0].substitutes));
 registry.clearSubstitutions(); assert.deepEqual(registry.substitutions,[]);
-console.log('Office font policy passed: 24 bundled faces, exact-first lookup, scoped metric claims, theme aliases, explicit approximate fallback, and symbol/math/coverage errors.');
+console.log('Office font policy passed: 24 bundled faces plus the default Noto Sans fallback, exact-first lookup, scoped metric claims, theme aliases, explicit approximate fallback, and symbol/math/coverage errors.');

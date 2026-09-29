@@ -200,11 +200,11 @@ if(!hasFallback){
   console.log('Glyph fallback loading skipped: this renderer has no glyphFallbackFamilies; detection then adds no fallback faces.');
   assert.deepEqual(detectPresentationScripts(deck('Ελληνικά Кириллица')),[]);
 }else{
-  // Greek and Cyrillic take Noto Sans when the chosen face lacks them.
-  for(const title of ['Ελληνικά','Кириллица'])assert.deepEqual(detectPresentationScripts(deck(title)),['Latn'],title);
+  // Greek and Cyrillic add no package: the office registry always carries Noto Sans as the fallback face, and Roboto covers them.
+  for(const title of ['Ελληνικά','Кириллица'])assert.deepEqual(detectPresentationScripts(deck(title)),[],title);
   assert.deepEqual(detectPresentationScripts(deck('Quarterly review')),[]);
   const greek=await loadBundledFontRegistry({scripts:'auto',presentation:deck('Ελληνικά')});
-  assert.deepEqual(greek.scriptSelection.packages.map(short),['noto-sans']);
+  assert.deepEqual(greek.scriptSelection.packages.map(short),[]);
   // A Simplified-only hanzi inside Japanese text is not in Noto Sans JP; the next CJK face of the chain is loaded.
   const japaneseText=deck('これは啰です','Body',{language:'ja'});
   const registry=await loadBundledFontRegistry({scripts:'auto',presentation:japaneseText});

@@ -103,8 +103,7 @@ export function presentationScriptProfile(presentation) {
 const servedScripts = () => new Set(BUNDLED_FONT_MANIFEST.packages.filter(item => item.pack === "scripts").flatMap(item => item.scripts));
 const cjkKeys = ["Jpan", "Hans", "Hant", "Kore"];
 const cjkCharacters = new Set(["Hani", "Hira", "Kana", "Hang", "Bopo"]);
-const greekOrCyrillic = /[Ͱ-Ͽἀ-῿Ѐ-ԯ]/;
-/** True when the renderer has per-character glyph fallback (FF-19 glyphFallbackFamilies): a chosen Latin face that lacks Greek or Cyrillic then draws them with Noto Sans. */
+/** True when the renderer has per-character glyph fallback (FF-19 glyphFallbackFamilies). */
 const hasGlyphFallback = () => typeof scriptFontModule.glyphFallbackFamilies === "function";
 
 /**
@@ -114,14 +113,10 @@ const hasGlyphFallback = () => typeof scriptFontModule.glyphFallbackFamilies ===
  */
 export function analyzePresentationScripts(presentation, profile = presentationScriptProfile(presentation)) {
   const scripts = new Set(), cjk = new Set();
-  let greekCyrillicText = false;
   for (const text of drawnStrings(presentation)) {
     for (const script of scriptsOfText(text, profile)) scripts.add(script);
-    if (greekOrCyrillic.test(text)) greekCyrillicText = true;
     for (const character of text) if (character.codePointAt(0) > 0x2E7F && cjkCharacters.has(scriptOfCharacter(character))) cjk.add(character);
   }
-  // Noto Sans covers Latin, Greek and Cyrillic; the glyph-fallback chain reaches for it when the chosen face lacks a character.
-  if (greekCyrillicText && hasGlyphFallback()) scripts.add("Latn");
   return { profile, detected: [...scripts].sort(), cjk };
 }
 
@@ -130,7 +125,7 @@ export function analyzePresentationScripts(presentation, profile = presentationS
  * Text decides, itemized exactly as drawing does: the document language only tells Han text apart
  * (Japanese, Korean, Simplified or Traditional Chinese) and makes curly quotes, dashes and the ellipsis
  * East Asian. Text the preview never draws (ids, alt text, sources, assets, catalogs, notes) is ignored.
- * With a renderer that has glyph fallback, Greek or Cyrillic text adds `Latn` (Noto Sans).
+ * Greek and Cyrillic add nothing: the office registry always carries Noto Sans (the glyph-fallback face) and Roboto covers them.
  * Pass `profile` to reuse a resolved profile.
  */
 export function detectPresentationScripts(presentation, { profile } = {}) {

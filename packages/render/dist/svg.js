@@ -486,6 +486,28 @@ function reportLanguageDiagnostic(context, diagnostic) {
   context.options.onDiagnostic?.(diagnostic);
 }
 
+/**
+ * Report a glyph fallback once per resolvePresentation call, family pair and path (FF-19).
+ * It is a note, not an error: the face the font scheme resolved to lacks glyphs for the text,
+ * so a bundled face that has them draws those characters. The PPTX still names the chosen font.
+ */
+function reportGlyphFallback(context, note) {
+  context.glyphFallbackDiagnostics ??= new Set();
+  const key = `${note.fontFamily}\u0000${note.fallbackFamily}\u0000${note.path ?? ""}`;
+  if (context.glyphFallbackDiagnostics.has(key)) return;
+  context.glyphFallbackDiagnostics.add(key);
+  context.options.onDiagnostic?.({
+    code: "font-glyph-fallback",
+    ...(note.path ? { path: note.path } : {}),
+    // The note is reported once per family pair and path: it names characters the face lacks, such as these, not every one.
+    message: `'${note.fontFamily}' lacks glyphs for characters such as ${note.characters.slice(0, 8).map(character => `U+${character.codePointAt(0).toString(16).toUpperCase().padStart(4, "0")}`).join(", ")}; the preview draws those with '${note.fallbackFamily}'. The PPTX keeps the chosen font.`,
+    fontFamily: note.fontFamily,
+    fallbackFamily: note.fallbackFamily,
+    scripts: [...note.scripts],
+    characters: [...note.characters]
+  });
+}
+
 function inferLayoutId(slide) {
   if (slide.layout) return slide.layout;
   if (slide.blocks?.length) return "blank";
@@ -610,7 +632,10 @@ function bindSlide(presentation, slide, layout, index, context) {
   const design = resolveDesign(presentation, slide, context, index);
   // Script fonts (FF-19): each text run is measured and drawn with its script
   // slot's face; the latin slot stays the design font scheme's family.
-  const scriptFonts = createScriptFonts(scriptProfile(presentation, index, design, context), context.options.textMeasurement);
+  const scriptFonts = createScriptFonts(scriptProfile(presentation, index, design, context), context.options.textMeasurement, {
+    glyphFallback: context.options.glyphFallback,
+    onFallback: note => reportGlyphFallback(context, note)
+  });
   const textMeasurement = scriptFonts.textMeasurement ?? context.options.textMeasurement;
   for (const role of ["heading","body","code"]) design.fonts[role] = resolveTextStyle({fontFamily:design.fonts[role],fontWeight:role === "heading" ? 700 : 400},textMeasurement).fontFamily;
   const geometry = composeSlide(slide, { ...design.dimensions, layout, presentation, slideIndex: index, fonts: design.fonts, contentAlignment:design.contentAlignment, titleAlignment:design.titleAlignment, textRasterPadding:context.options.textRasterPadding, contentBox:design.contentBox, textMeasurement, date: context.options.date, socialPlatforms: socialPlatformRecords(context) });

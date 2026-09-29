@@ -23,6 +23,8 @@ const cases=[
   ['hi','hindi','mangal','तिमाही समीक्षा'],
   ['th','thai','angsana-new','การทบทวนรายไตรมาส'],
   ['latin-ja','japanese','roboto','Review 四半期 2026'],
+  // Glyph fallback: the chosen CJK face lacks the character, so another loaded CJK face draws it (kanji beside Hangul; Simplified-only hanzi in a Japanese deck).
+  ['kanji-hangul','english','roboto','Revenue 収益 성장 12%'],['hanzi-ja','japanese','meiryo','季度回顾 变 12%'],
   // Further catalog scripts (gallery native names), held to the same gate.
   ['bn','bengali','shonar-bangla','বাংলা'],['pa-Guru','punjabi-gurmukhi','raavi','ਪੰਜਾਬੀ'],['gu','gujarati','shruti','ગુજરાતી'],
   ['or','odia','kalinga','ଓଡ଼ିଆ'],['ta','tamil','latha','தமிழ்'],['te','telugu','gautami','తెలుగు'],['kn','kannada','tunga','ಕನ್ನಡ'],

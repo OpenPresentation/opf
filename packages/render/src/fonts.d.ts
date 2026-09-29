@@ -1,5 +1,5 @@
 import type { TextMeasurement, TextStyle } from "@openpresentation/opf/composition";
-export interface FontFaceInput { data: Uint8Array; family?: string; weight?: number; italic?: boolean; postscriptName?: string; license?: string; /** "used" embeds the face in an SVG only when the slide's text names its family (the open pack, FF-31). Default "always". */ embed?: "always" | "used"; /** ISO 15924 scripts a designated script replacement face serves (FF-19). */ scripts?: string[] }
+export interface FontFaceInput { data: Uint8Array; family?: string; weight?: number; italic?: boolean; postscriptName?: string; license?: string; /** Serves glyph fallback and requests by its own family only; never a replacement for another family. */ fallbackOnly?: boolean; /** "used" embeds the face in an SVG only when the slide's text names its family (the open pack, FF-31). Default "always". */ embed?: "always" | "used"; /** ISO 15924 scripts a designated script replacement face serves (FF-19). */ scripts?: string[] }
 export interface EmbeddedFont { family: string; weight: number; italic?: boolean; dataUrl: string; license?: string; embed?: "used" }
 export type FontCompatibility = "exact" | "metric" | "visual" | "generic";
 export interface FontReplacementMeasurement { replacement:string; meanAbsWidthDelta:number; meanWidthDelta:number; maxAbsWidthDelta:number; styles:number; reference:string }
@@ -70,6 +70,8 @@ export interface PlannedRun { text: string; family: string; own: boolean; stack?
 export interface ScriptFonts {
   readonly profile: ScriptFontProfile;
   readonly rtl: boolean;
+  /** Glyph fallback notes recorded so far. */
+  readonly fallbacks: readonly GlyphFallbackNote[];
   /** Font runs for text drawn in a resolved latin style. */
   plan(text: string, style: TextStyle): PlannedRun[];
   runWidths(runs: PlannedRun[], size: number, style: TextStyle): number[] | undefined;
@@ -85,9 +87,17 @@ export declare function itemizeScripts(text: string, profile?: ScriptFontProfile
 export declare function detectScripts(value: unknown, profile?: ScriptFontProfile, options?: { includeLanguage?: boolean; ignoreKeys?: readonly string[] }): string[];
 export declare function designatedFamilies(script: string, serif?: boolean): string[];
 export declare function scriptFontAliases(families: Iterable<string>): Record<string, string>;
-export declare function createScriptFonts(profile?: ScriptFontProfile, measurement?: TextMeasurement): ScriptFonts;
+export interface GlyphFallbackNote { fontFamily: string; fallbackFamily: string; scripts: string[]; characters: string[]; path?: string }
+export interface ScriptFontsOptions {
+  /** `"chain"` (default) draws and measures a character the face lacks with the first bundled face that has it; `"none"` keeps exact faces and a missing glyph raises `missing-glyph`. */
+  glyphFallback?: "chain" | "none";
+  onFallback?: (note: GlyphFallbackNote) => void;
+}
+export declare function createScriptFonts(profile?: ScriptFontProfile, measurement?: TextMeasurement, options?: ScriptFontsOptions): ScriptFonts;
+/** Designated open families a preview tries, in order, for a character its face lacks (own script, deck script, Noto Sans, other CJK, other Noto scripts). */
+export declare function glyphFallbackFamilies(character: string, profile?: ScriptFontProfile, serif?: boolean): string[];
 /** Wrap a measurement so pagination, the renderer and the editor itemize script runs identically. */
-export declare function createScriptTextMeasurement(measurement: TextMeasurement, profile: ScriptFontProfile): TextMeasurement;
+export declare function createScriptTextMeasurement(measurement: TextMeasurement, profile: ScriptFontProfile, options?: ScriptFontsOptions): TextMeasurement;
 export declare function openTypeLanguage(tag: string | undefined): string | undefined;
 /** Heading or body role of a style from its OPF path; undefined without a slide path. */
 export declare function textRole(style: { path?: string } | undefined): "heading" | "body" | undefined;

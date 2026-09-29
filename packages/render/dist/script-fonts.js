@@ -7,6 +7,14 @@
 // face is missing or lacks glyphs falls back to the designated open (OFL Noto)
 // replacement for that script. Licensed fonts are never bundled: a preview names
 // the designated replacement, while the PPTX keeps the chosen family (FF-07).
+//
+// Glyph fallback: a face that lacks a character (a Latin replacement without
+// Cyrillic or Greek, a CJK face without a kanji or hanzi) never fails a preview.
+// As in a browser or PowerPoint font linking, each such character takes the
+// first bundled face that has it along the deterministic chain of
+// `glyphFallbackFamilies`, in measurement and drawing alike, and the substitution
+// is reported as a note. `glyphFallback: "none"` (strict mode) keeps the exact
+// faces and lets a missing glyph raise `missing-glyph`.
 
 const freeze = value => { if (value && typeof value === "object") { for (const child of Object.values(value)) freeze(child); Object.freeze(value); } return value; };
 
@@ -234,6 +242,35 @@ export function designatedFamilies(script, serif = false) {
   return (serif ? [entry.serif, entry.sans] : [entry.sans, entry.serif]).filter(Boolean);
 }
 
+const hanKeys = ["Jpan", "Hans", "Hant", "Kore"];
+
+/**
+ * Deterministic glyph fallback chain for one character: the designated open
+ * families, in order, that a preview tries when the chosen face lacks the
+ * character (the same order in measurement and drawing).
+ *
+ * 1. the character's own script policy face (`SCRIPT_FONT_FAMILIES`; a Han
+ *    character takes the deck language's face: Japanese, Simplified, Traditional
+ *    or Korean);
+ * 2. the deck language's script face;
+ * 3. Noto Sans, which covers Latin, Cyrillic and Greek;
+ * 4. the other CJK faces (Japanese, Simplified, Traditional, Korean);
+ * 5. every other Noto script face, in `SCRIPT_FONT_FAMILIES` order.
+ *
+ * `profile` is core `resolveScriptFonts` output (or the same shape); serif
+ * profiles prefer the serif face of each script. Families that are not loaded
+ * are skipped by the caller.
+ */
+export function glyphFallbackFamilies(character, profile = {}, serif = profile?.serif === true) {
+  const script = scriptOfCharacter(character);
+  const language = fontKey(profile?.script ?? "Zzzz", "", profile);
+  // A Han character has no script of its own: it takes the deck language's face when that is CJK,
+  // otherwise every CJK face is tried in turn (Japanese, Simplified, Traditional, Korean).
+  const own = script === "Hani" ? (hanKeys.includes(language) ? language : "Zzzz") : fontKey(script, character, profile);
+  const keys = [own, language, "Latn", ...hanKeys, ...Object.keys(SCRIPT_FONT_FAMILIES)];
+  return [...new Set([...new Set(keys)].flatMap(key => designatedFamilies(key, serif)))];
+}
+
 /**
  * Aliases from proprietary script fonts to the first loaded designated
  * replacement. `families` are the loaded script-replacement families.
@@ -301,9 +338,23 @@ const scriptMeasurement = Symbol.for("@openpresentation/opf-render/script-measur
  * plus an optional `serif` flag. `measurement` is an optional font-registry
  * `textMeasurement`; without it the plan names every candidate family in order
  * so the host resolves glyphs per character.
+ *
+ * `options.glyphFallback` is `"chain"` (default: a character its face lacks
+ * takes the first bundled face along `glyphFallbackFamilies`) or `"none"`
+ * (exact faces: a missing glyph raises `missing-glyph`). `options.onFallback`
+ * receives each new substitution note `{fontFamily, fallbackFamily, scripts,
+ * characters, path?}` once; `fallbacks` lists them all.
  */
-export function createScriptFonts(profile = {}, measurement) {
-  const inner = measurement?.[scriptMeasurement]?.inner ?? measurement;
+export function createScriptFonts(profile = {}, measurement, options = {}) {
+  const wrapped = measurement?.[scriptMeasurement];
+  const inner = wrapped?.inner ?? measurement;
+  // Glyph fallback is on unless `glyphFallback: "none"` (strict faces); a wrapped measurement keeps its options.
+  // Only defined keys override: a caller passing `glyphFallback: undefined` must not undo a wrapper's `"none"`.
+  // A renderer-supplied `onFallback` chains with, and does not replace, the wrapper's own.
+  const notifiers = [wrapped?.options?.onFallback, options?.onFallback].filter(notify => typeof notify === "function");
+  options = {...wrapped?.options, ...Object.fromEntries(Object.entries(options ?? {}).filter(([, value]) => value !== undefined)), onFallback: notifiers.length ? note => { for (const notify of notifiers) notify(note); } : undefined};
+  const fallbackEnabled = options.glyphFallback !== "none";
+  const fallbackNotes = new Map();
   const measured = typeof inner?.measure === "function";
   const serif = profile.serif === true;
   // The language the SVG declares (lang) also selects OpenType language systems in measurement.
@@ -348,6 +399,37 @@ export function createScriptFonts(profile = {}, measurement) {
     const supplement = profile.supplement ? {script: profile.supplement.script === "Hang" ? "Kore" : profile.supplement.script, family: useHeading ? profile.supplement.heading : profile.supplement.body} : undefined;
     return {latin: style.fontFamily, eastAsian: slots.eastAsian ?? style.fontFamily, complexScript: slots.complexScript ?? style.fontFamily, supplement};
   };
+  const nonAscii = /[^\u0020-\u007E]/;
+  const cyrillicOrGreek = /[\u0370-\u052F\u1F00-\u1FFF]/;
+  const chains = new Map();
+  const chainFor = character => {
+    const script = scriptOfCharacter(character);
+    let chain = chains.get(script);
+    if (!chain) chains.set(script, chain = glyphFallbackFamilies(character, profile, serif));
+    return chain;
+  };
+  /** Collect that `family` draws characters the chosen `from` face lacks; `flushFallbacks` records them per planned text. */
+  const noteFallback = (pending, from, family, characters) => {
+    if (from === null || from === family) return;
+    const key = `${from}\u0000${family}`;
+    let entry = pending.get(key);
+    if (!entry) pending.set(key, entry = {from, family, characters: new Set()});
+    for (const character of characters) entry.characters.add(character);
+  };
+  const flushFallbacks = (pending, style) => {
+    for (const {from, family, characters} of pending.values()) {
+      const key = `${from}\u0000${family}\u0000${style.path ?? ""}`;
+      let note = fallbackNotes.get(key);
+      const isNew = !note;
+      if (isNew) fallbackNotes.set(key, note = {fontFamily: from, fallbackFamily: family, scripts: [], characters: [], ...(style.path ? {path: style.path} : {})});
+      for (const character of characters) {
+        const script = scriptOfCharacter(character);
+        if (!note.scripts.includes(script)) note.scripts.push(script);
+        if (note.characters.length < 16 && !note.characters.includes(character)) note.characters.push(character);
+      }
+      if (isNew) options.onFallback?.(note);
+    }
+  };
   const candidatesFor = (run, slots) => {
     const list = [run.role === "eastAsian" ? slots.eastAsian : run.role === "complexScript" ? slots.complexScript : slots.latin];
     if (run.script !== "Latn") {
@@ -360,13 +442,22 @@ export function createScriptFonts(profile = {}, measurement) {
   /** Font runs for text drawn in `style` (the resolved latin style). `own` runs use the style's family. */
   const plan = (text, style) => {
     text = String(text ?? "");
-    if (latinOnly.test(text) && !(eastAsianText && eastAsianAmbiguous.test(text))) return [{text, family: style.fontFamily, own: true}];
-    const cacheKey = `${style.fontFamily}\u0000${style.fontWeight ?? 400}\u0000${!!style.italic}\u0000${textRole(style) ?? ""}\u0000${text}`;
+    if (latinOnly.test(text) && !(eastAsianText && eastAsianAmbiguous.test(text))) {
+      // Latin-group text is one run in the latin slot's face, unless that face lacks a character
+      // (Cyrillic or Greek beyond a Latin replacement): then it is planned per character below.
+      if (!fallbackEnabled || !nonAscii.test(text)) return [{text, family: style.fontFamily, own: true}];
+      if (!measured) return cyrillicOrGreek.test(text) ? [{text, family: style.fontFamily, own: false, stack: [style.fontFamily, ...designatedFamilies("Latn", serif)]}] : [{text, family: style.fontFamily, own: true}];
+      const own = resolveName(style.fontFamily, style);
+      if (own === null || covers(own, text, style)) return [{text, family: style.fontFamily, own: true}];
+    }
+    const cacheKey = `${style.fontFamily}\u0000${style.fontWeight ?? 400}\u0000${!!style.italic}\u0000${textRole(style) ?? ""}\u0000${style.path ?? ""}\u0000${text}`;
     const cached = plans.get(cacheKey);
     if (cached) return cached;
     const slots = slotsFor(style);
     const runs = itemizeScripts(text, profile).map(run => ({...run, candidates: candidatesFor(run, slots)}));
+    const pending = new Map();
     const global = [...new Set([...runs.flatMap(run => run.candidates), ...designatedFamilies(fontKey(profile.script ?? "Zzzz", text, profile), serif), ...designatedFamilies("Latn", serif)])];
+    const unique = names => names.map(name => resolveName(name, style)).filter((name, index, all) => name && all.indexOf(name) === index);
     const out = [];
     const push = (text, family, stack) => {
       const own = family === style.fontFamily && (!stack || stack.length === 1);
@@ -376,20 +467,51 @@ export function createScriptFonts(profile = {}, measurement) {
     };
     for (const run of runs) {
       if (!measured) { push(run.text, run.candidates[0], run.candidates); continue; }
+      const chosen = resolveName(run.candidates[0], style);
       const whole = run.candidates.map(family => resolveName(family, style)).find(name => name && covers(name, run.text, style));
-      if (whole) { push(run.text, whole); continue; }
-      // No single candidate covers the run: choose per character, keeping
-      // combining marks and joiners with their base character.
-      const primary = resolveName(run.candidates[0], style) ?? style.fontFamily;
-      let previous = primary;
+      if (whole) {
+        if (whole !== chosen) noteFallback(pending, chosen, whole, [...run.text].filter(character => !covers(chosen ?? whole, character, style)));
+        push(run.text, whole);
+        continue;
+      }
+      // No single candidate covers the run. Split it into grapheme clusters (a base character with
+      // the combining marks and joiners that follow it) and group those into script segments
+      // (common characters stay with their neighbours; white space ends a word). Each segment takes the first face that
+      // covers all of its letters and marks: the chosen face, the previous fallback face, the
+      // other candidates, then the fallback chain. A word is never drawn in two faces when one
+      // face has all of it (Greek beside a Latin serif, a kanji run beside Hangul). A cluster
+      // that face still lacks, mark included, moves whole to the first face that has the cluster,
+      // so a base and its mark are never split across faces.
+      const primary = chosen ?? style.fontFamily;
+      let sticky = null;
+      // The note lists what the chosen face lacks (a mark, not its covered base letter); a cluster it only lacks as a whole lists all.
+      const missingFrom = (face, text) => { const lacking = [...text].filter(character => !covers(face, character, style)); return lacking.length ? lacking : [...text]; };
+      const choose = (subject, sample) => unique([run.candidates[0], ...(sticky ? [sticky] : []), ...run.candidates, ...global, ...(fallbackEnabled ? chainFor(sample) : [])]).find(name => covers(name, subject, style));
+      const segments = [];
       for (const character of run.text) {
-        const script = scriptOfCharacter(character);
-        let family = previous;
-        if (script !== "Zinh") family = [...run.candidates, ...global].map(name => resolveName(name, style)).find(name => name && covers(name, character, style)) ?? primary;
-        push(character, family);
-        previous = family;
+        const script = scriptOfCharacter(character), last = segments.at(-1)?.clusters.at(-1);
+        if (script === "Zinh" && last) { last.text += character; continue; }
+        const weak = script === "Zyyy" || script === "Zinh", segment = segments.at(-1);
+        const cluster = {text: character, base: character, weak};
+        // A segment is one script and one word: white space closes it, so a single lacking mark
+        // moves its word to another face, not the whole sentence.
+        if (segment && !(segment.closed && !weak) && (weak || segment.script === undefined || segment.script === script)) {
+          segment.clusters.push(cluster);
+          if (!weak) segment.script = script; else if (/^\s/.test(character)) segment.closed = true;
+        } else segments.push({script: weak ? undefined : script, clusters: [cluster]});
+      }
+      for (const segment of segments) {
+        const strong = segment.clusters.filter(cluster => !cluster.weak);
+        const face = strong.length ? choose(strong.map(cluster => cluster.text).join(""), strong[0].base) : undefined;
+        for (const cluster of segment.clusters) {
+          const family = face && covers(face, cluster.text, style) ? face : choose(cluster.text, cluster.base) ?? choose(cluster.base, cluster.base) ?? primary;
+          if (family !== primary && family !== chosen) sticky = family;
+          if (chosen !== null && family !== chosen && covers(family, cluster.text, style)) noteFallback(pending, chosen, family, missingFrom(chosen, cluster.text));
+          push(cluster.text, family);
+        }
       }
     }
+    flushFallbacks(pending, style);
     if (plans.size >= 4096) plans.delete(plans.keys().next().value);
     plans.set(cacheKey, out);
     return out;
@@ -407,7 +529,7 @@ export function createScriptFonts(profile = {}, measurement) {
         if (runs.length === 1 && runs[0].own) return inner.measure(text, size, styled(style));
         return runs.reduce((total, run) => total + inner.measure(run.text, size, styleFor(run, style)), 0);
       },
-      [scriptMeasurement]: {inner, profile},
+      [scriptMeasurement]: {inner, profile, options},
     };
     if (typeof inner.outlineBounds === "function") {
       textMeasurement.outlineBounds = (text, size, style) => {
@@ -426,7 +548,7 @@ export function createScriptFonts(profile = {}, measurement) {
       };
     }
   }
-  return {profile, plan, runWidths, textMeasurement, rtl: isRtlProfile(profile)};
+  return {profile, plan, runWidths, textMeasurement, rtl: isRtlProfile(profile), get fallbacks() { return [...fallbackNotes.values()].map(note => ({...note, scripts: [...note.scripts], characters: [...note.characters]})); }};
 }
 
 /**
@@ -435,7 +557,7 @@ export function createScriptFonts(profile = {}, measurement) {
  * replacement). Pass the same wrapper to core pagination, the renderer and the
  * editor so their line breaks agree for non-Latin text.
  */
-export function createScriptTextMeasurement(measurement, profile) {
+export function createScriptTextMeasurement(measurement, profile, options) {
   if (typeof measurement?.measure !== "function") throw new TypeError("createScriptTextMeasurement requires a textMeasurement with measure().");
-  return createScriptFonts(profile, measurement).textMeasurement;
+  return createScriptFonts(profile, measurement, options).textMeasurement;
 }

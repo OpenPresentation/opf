@@ -32,6 +32,15 @@ export declare const engineDefaults: Readonly<{
 }>;
 
 export type RenderDiagnostic = LayoutDiagnostic | {
+  /** A face lacked glyphs for the text; a bundled fallback face draws them in the preview. A note, not an error. */
+  code: "font-glyph-fallback";
+  path?: string;
+  message: string;
+  fontFamily: string;
+  fallbackFamily: string;
+  scripts: string[];
+  characters: string[];
+} | {
   code: "unsupported-pattern" | "date-needs-value" | "language-preview-unavailable" | "language-preview-unresolved" | "paragraph-direction-unavailable";
   path: string;
   message: string;
@@ -55,6 +64,8 @@ export type RenderDiagnostic = LayoutDiagnostic | {
 
 export interface RenderSvgOptions {
   textMeasurement?: TextMeasurement;
+  /** `"chain"` (default): a character the resolved face lacks is drawn with the first bundled face that has it, and reported as `font-glyph-fallback`. `"none"`: exact faces, a missing glyph raises `missing-glyph`. */
+  glyphFallback?: "chain" | "none";
   /** Unscaled reference-pixel clearance around supplied vector text outlines; default 1. */
   textRasterPadding?: number;
   embeddedFonts?: EmbeddedFont[];

@@ -5,7 +5,7 @@ import { fontPolicyFor } from "./font-policy.js";
 import { BUNDLED_FONT_MANIFEST } from "./font-manifest.js";
 export { FONT_COMPATIBILITY, EXPERIMENTAL_FONT_CANDIDATES, disabledFeaturesFor } from "./font-compatibility.js";
 export { FONT_POLICY, FONT_POLICY_DECISIONS, FONT_POLICY_SOURCE, fontPolicyFor } from "./font-policy.js";
-export { SCRIPT_FONT_FAMILIES, SCRIPT_FONT_REPLACEMENTS, createScriptFonts, createScriptTextMeasurement, designatedFamilies, detectScripts, itemizeScripts, openTypeLanguage, scriptFontAliases, scriptFontRole, scriptOfCharacter, textRole } from "./script-fonts.js";
+export { SCRIPT_FONT_FAMILIES, SCRIPT_FONT_REPLACEMENTS, createScriptFonts, createScriptTextMeasurement, designatedFamilies, glyphFallbackFamilies, detectScripts, itemizeScripts, openTypeLanguage, scriptFontAliases, scriptFontRole, scriptOfCharacter, textRole } from "./script-fonts.js";
 
 export class OPFFontError extends Error {
   constructor(code, message, details = {}) { super(message); this.name = "OPFFontError"; this.code = code; this.details = details; }
@@ -71,7 +71,9 @@ export function createFontRegistry(entries, options = {}) {
     const scripts = Array.isArray(entry.scripts) && entry.scripts.length ? Object.freeze(entry.scripts.map(String)) : undefined;
     // "used": a bundled face is embedded in an SVG only when the slide's text names its family.
     if (entry.embed !== undefined && entry.embed !== "always" && entry.embed !== "used") throw new OPFFontError("invalid-font-embed", "Font embed must be 'always' or 'used'.");
-    return {family,familyGroup,fontFace,weight,italic,font,data,format,license:entry.license,embed:entry.embed,scripts,cache:new Map()};
+    // A fallback-only face (the default Noto Sans) serves glyph fallback and explicit requests by its own name,
+    // but never stands in for another family, so loading it does not change what any other font previews with.
+    return {family,familyGroup,fontFace,weight,italic,font,data,format,license:entry.license,embed:entry.embed,scripts,fallbackOnly:entry.fallbackOnly===true,cache:new Map()};
   };
   const faces = [], duplicates = new Set(), familySlots = new Map();
   // Adds faces atomically: every check runs before any face is registered.
@@ -97,7 +99,7 @@ export function createFontRegistry(entries, options = {}) {
   // they replace (Meiryo -> Noto Sans JP). Caller aliases take precedence.
   let aliases = new Map();
   const buildAliases = () => {
-    const scriptAliases = scriptFontAliases(new Set(faces.filter(face=>face.scripts).map(face=>face.family)));
+    const scriptAliases = scriptFontAliases(new Set(faces.filter(face=>face.scripts&&!face.fallbackOnly).map(face=>face.family)));
     aliases = new Map(Object.entries({...scriptAliases,...options.aliases}).map(([from,to])=>[validFamily(from).toLowerCase(),validFamily(to)]));
   };
   buildAliases();
@@ -139,7 +141,7 @@ export function createFontRegistry(entries, options = {}) {
           const substituteTier = index===0 ? tier : "visual";
           if (substituteTier==="visual" && !(policy==="visual" || metricFallback && index===0)) continue;
           const exactWeight = substituteTier==="metric" || policy!=="visual";
-          const faces = findFamily(substitute).filter(face=>!exactWeight || face.weight===weight);
+          const faces = findFamily(substitute).filter(face=>!face.fallbackOnly && (!exactWeight || face.weight===weight));
           let available = faces.filter(face=>face.italic===!!style.italic);
           // Visual replacements without the requested style draw the other one and say so.
           if (!available.length && substituteTier==="visual" && policy==="visual" && faces.length) { available = faces.filter(face=>!face.italic); styleFallback = available.length>0; }
@@ -230,7 +232,7 @@ export function createFontRegistry(entries, options = {}) {
     // prepareNodeFonts().options.embeddedFonts) they are embedded only in SVGs whose text names their family.
     get embeddedFonts() { return embedded(face=>face.embed!=="used"); },
     /** Parsed face metadata in entry order, without encoding font bytes. */
-    describeFaces: ()=>faces.map(face=>({family:face.family,weight:face.weight,italic:face.italic,...(face.scripts?{scripts:[...face.scripts]}:{})})),
+    describeFaces: ()=>faces.map(face=>({family:face.family,weight:face.weight,italic:face.italic,...(face.scripts?{scripts:[...face.scripts]}:{}),...(face.fallbackOnly?{fallbackOnly:true}:{})})),
     /** Embedded faces for which `predicate({family,weight,italic,scripts})` holds; large script faces can be left to raster fontFiles. */
     selectEmbeddedFonts: predicate=>embedded(predicate),
     /** True when a loaded script-pack face has a glyph for the character (FF-19 glyph fallback planning). */
@@ -249,5 +251,5 @@ export function createFontRegistry(entries, options = {}) {
       return made.map(face=>({family:face.family,weight:face.weight,italic:face.italic,...(face.scripts?{scripts:[...face.scripts]}:{})}));
     },
   };
-  function embedded(predicate) { return faces.filter(face=>predicate({family:face.family,weight:face.weight,italic:face.italic,scripts:face.scripts,embed:face.embed})).map(face=>({family:face.family,weight:face.weight,italic:face.italic,...(face.license ? {license:face.license} : {}),...(face.embed==="used" ? {embed:"used"} : {}),dataUrl:`data:font/${face.format};base64,${base64(face.data)}`})); }
+  function embedded(predicate) { return faces.filter(face=>predicate({family:face.family,weight:face.weight,italic:face.italic,scripts:face.scripts,embed:face.embed,fallbackOnly:face.fallbackOnly})).map(face=>({family:face.family,weight:face.weight,italic:face.italic,...(face.license ? {license:face.license} : {}),...(face.embed==="used" ? {embed:"used"} : {}),dataUrl:`data:font/${face.format};base64,${base64(face.data)}`})); }
 }

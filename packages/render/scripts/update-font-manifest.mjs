@@ -95,9 +95,11 @@ for(const [index,pkg] of manifest.packages.entries()){
     const installed=JSON.parse(await readFile(path.join(directory,'package.json'),'utf8'));
     // Base and office packs are runtime dependencies. The script pack (FF-19) is an
     // optional peer that development pins exactly as a devDependency.
-    const pinned=pkg.pack==='scripts'?root.devDependencies?.[pkg.name]:root.dependencies[pkg.name];
+    // Noto Sans (Latn, Cyrl, Grek) is the default glyph-fallback face, so it is a runtime dependency although it sits in the script pack.
+    const runtime=pkg.pack!=='scripts'||root.dependencies?.[pkg.name]!==undefined;
+    const pinned=runtime?root.dependencies[pkg.name]:root.devDependencies?.[pkg.name];
     assert.equal(pinned,installed.version,`Pin ${pkg.name} exactly before reviewing an updated font manifest.`);
-    if(pkg.pack==='scripts'){
+    if(!runtime){
       assert.equal(root.peerDependencies?.[pkg.name],installed.version,`Declare ${pkg.name} as an exact optional peer.`);
       assert.equal(root.peerDependenciesMeta?.[pkg.name]?.optional,true,`Declare ${pkg.name} as an optional peer.`);
     }

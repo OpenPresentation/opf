@@ -14,10 +14,16 @@ const scriptPackages=scriptFontPackages('all');
 assert.ok(scriptPackages.length>=30);
 for(const item of scriptPackages){
   assert.equal(item.license,'OFL-1.1',item.name);
-  assert.equal(pkg.peerDependencies[item.name],item.version,`${item.name} is an exact peer`);
-  assert.equal(pkg.peerDependenciesMeta[item.name].optional,true,`${item.name} is optional`);
-  assert.equal(pkg.devDependencies[item.name],item.version,`${item.name} is pinned for tests`);
-  assert.equal(pkg.dependencies[item.name],undefined,`${item.name} must not bloat the runtime install`);
+  if(item.name==='@expo-google-fonts/noto-sans'){
+    // The default Latin, Cyrillic and Greek glyph-fallback face is a pinned runtime dependency, not an optional peer.
+    assert.equal(pkg.dependencies[item.name],item.version,`${item.name} is an exact runtime dependency`);
+    assert.equal(pkg.peerDependencies[item.name],undefined);assert.equal(pkg.devDependencies[item.name],undefined);
+  }else{
+    assert.equal(pkg.peerDependencies[item.name],item.version,`${item.name} is an exact peer`);
+    assert.equal(pkg.peerDependenciesMeta[item.name].optional,true,`${item.name} is optional`);
+    assert.equal(pkg.devDependencies[item.name],item.version,`${item.name} is pinned for tests`);
+    assert.equal(pkg.dependencies[item.name],undefined,`${item.name} must not bloat the runtime install`);
+  }
   assert.ok(item.faces.length>=1&&item.faces.every(face=>/^[0-9a-f]{64}$/.test(face.sha256)),item.name);
   assert.match(await readFile(new URL(`../node_modules/${item.name}/${item.licenseFile}`,import.meta.url),'utf8'),/SIL Open Font License, Version 1\.1/);
 }

@@ -86,7 +86,7 @@ try{
   await isolated.loadBundledFontRegistry();
   assert.ok((await raster.svgToPng(emptySvg)).length>0,'a repaired installation must recover from a rejected default-font load');
   // FF-31: a vendored entry (fonts/carlito) resolves from the package root and has the same integrity guards.
-  for(const pkg of BUNDLED_FONT_MANIFEST.packages.filter(p=>p.pack==='office'&&!p.vendored)){
+  for(const pkg of BUNDLED_FONT_MANIFEST.packages.filter(p=>(p.pack==='office'&&!p.vendored)||p.name==='@expo-google-fonts/noto-sans')){
     await cp(path.dirname(require.resolve(`${pkg.name}/package.json`)),path.join(temporary,'node_modules',pkg.name),{recursive:true});
   }
   const vendored=BUNDLED_FONT_MANIFEST.packages.find(p=>p.vendored);

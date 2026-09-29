@@ -21,8 +21,12 @@ async function verifiedFile(file, expected, details) {
   return bytes;
 }
 
+// The default Latin, Cyrillic and Greek glyph-fallback face (the office pack always loads it, fallback-only).
+const FALLBACK_PACKAGE = "@expo-google-fonts/noto-sans";
+
 // `skipped`: an optional npm package that is not installed is recorded there instead of failing (scripts: 'auto').
-async function loadPackages(packages, skipped) {
+// `fallbackOnly`: the faces serve glyph fallback and requests by their own name, never a replacement for another family.
+async function loadPackages(packages, skipped, {fallbackOnly = false} = {}) {
   const entries = [], fontFiles = [];
   for (const pkg of packages) {
     if (pkg.vendored) {
@@ -53,10 +57,10 @@ async function loadPackages(packages, skipped) {
       const file = path.join(directory, face.file);
       const data = await verifiedFile(file, face.sha256, {package:pkg.name, file:face.file});
       fontFiles.push(file);
-      entries.push({data:new Uint8Array(data), family:face.family, weight:face.weight, italic:face.italic, license, ...(pkg.scripts ? {scripts:[...pkg.scripts]} : {})});
+      entries.push({data:new Uint8Array(data), family:face.family, weight:face.weight, italic:face.italic, license, ...(pkg.scripts ? {scripts:[...pkg.scripts]} : {}), ...(fallbackOnly ? {fallbackOnly:true, embed:"used"} : {})});
     }
   }
-  return {entries, fontFiles};
+  return {entries, fontFiles, packages:packages.map(pkg => pkg.name)};
 }
 
 // A package that is the renamed successor of a family (Source Sans 3, formerly Source Sans Pro) answers to the
@@ -71,16 +75,18 @@ const loadPack = pack => loadPackages(BUNDLED_FONT_MANIFEST.packages.filter(item
  */
 async function withScripts(loaded, scripts, {presentation, onDiagnostic} = {}) {
   if (scripts === undefined || (Array.isArray(scripts) && !scripts.length)) return loaded;
+  // A package the registry already loaded (the default Noto Sans fallback) is never loaded twice.
+  const notLoaded = list => list.filter(pkg => !loaded.packages?.includes(pkg.name));
   if (scripts !== "auto") {
-    const extra = await loadPackages(scriptFontPackages(scripts));
-    return {entries:[...loaded.entries, ...embedUsed(extra.entries)], fontFiles:[...loaded.fontFiles, ...extra.fontFiles]};
+    const extra = await loadPackages(notLoaded(scriptFontPackages(scripts)));
+    return {...loaded, entries:[...loaded.entries, ...embedUsed(extra.entries)], fontFiles:[...loaded.fontFiles, ...extra.fontFiles], packages:[...(loaded.packages ?? []), ...extra.packages]};
   }
   if (presentation === null || typeof presentation !== "object") throw new OPFFontError("invalid-font-scripts", "scripts: 'auto' needs the presentation whose text decides the scripts.", {scripts});
   const selection = scriptSelectionOf(analyzePresentationScripts(presentation)), skipped = [];
-  const extra = await loadPackages(scriptFontPackages(selection.scripts), skipped);
+  const extra = await loadPackages(notLoaded(scriptFontPackages(selection.scripts)), skipped);
   for (const script of selection.unavailable) onDiagnostic?.({code: "script-font-unavailable", script, message: `No pinned open font serves script '${script}'; that text uses the design font.`});
   for (const item of skipped) onDiagnostic?.({code: "script-font-not-installed", package: item.package, scripts: item.scripts, message: `Install ${item.package}@${item.version} to preview ${item.scripts.join(", ")} text with its designated open font.`});
-  return {entries:[...loaded.entries, ...embedUsed(extra.entries)], fontFiles:[...loaded.fontFiles, ...extra.fontFiles],
+  return {entries:[...loaded.entries, ...embedUsed(extra.entries)], fontFiles:[...loaded.fontFiles, ...extra.fontFiles], packages:[...(loaded.packages ?? []), ...extra.packages],
     selection:{...selection, packages: scriptFontPackages(selection.scripts).map(item => item.name).filter(name => !skipped.some(item => item.package === name)), notInstalled: skipped.map(item => item.package)}};
 }
 
@@ -149,14 +155,24 @@ export async function loadBundledFontRegistry({scripts, faces, presentation, onD
 /** Office substitutes plus the open families that font schemes select (FF-31),
  * optionally alongside the base Roboto pack. `includeOpenFonts: false` leaves the open families out. */
 export async function loadOfficeFontRegistry({scripts, faces, presentation, onDiagnostic, ...options} = {}) {
-  const {entries, fontFiles} = await loadPack("office");
+  const {entries, fontFiles, packages} = await loadPack("office");
   for (const [include, pack] of [[options.includeOpenFonts, "open"], [options.includeBaseFonts, "base"]]) {
     if (include === false) continue;
     const extra = await loadPack(pack);
     fontFiles.push(...extra.fontFiles);
     entries.push(...extra.entries);
+    packages.push(...extra.packages);
   }
-  const loaded = await withFaces(await withScripts({entries, fontFiles}, scripts, {presentation, onDiagnostic}), faces);
+  // Noto Sans (regular, bold, italic, bold italic) is the default Latin, Cyrillic and Greek fallback face
+  // (glyph fallback), so Georgia with Russian text previews without the scripts option. It is embedded in an
+  // SVG only when the slide's text draws it (embed "used"); raster output reads it from fontFiles. Unless the
+  // caller asked for it with scripts it is fallback-only, so no other family's preview changes.
+  const requested = scripts === undefined || scripts === "auto" || (Array.isArray(scripts) && !scripts.length) ? [] : scriptFontPackages(scripts).map(pkg => pkg.name);
+  const fallback = await loadPackages(scriptFontPackages(["Latn"]).filter(pkg => !requested.includes(pkg.name)), undefined, {fallbackOnly:true});
+  fontFiles.push(...fallback.fontFiles);
+  entries.push(...fallback.entries);
+  packages.push(...fallback.packages);
+  const loaded = await withFaces(await withScripts({entries, fontFiles, packages}, scripts, {presentation, onDiagnostic}), faces);
   const aliases = options.includeOpenFonts === false ? options.aliases : {...renamedAliases(), ...options.aliases};
   const registry = Object.assign(createFontRegistry(loaded.entries,{substitutionPolicy:"metric",...options,...(aliases?{aliases}:{})}),{fontFiles:loaded.fontFiles, ...(loaded.selection ? {scriptSelection: loaded.selection} : {})});
   await completeFallback(registry, presentation, loaded, onDiagnostic);
@@ -168,8 +184,9 @@ export async function prepareNodeFonts({pack = "base", embedScriptFonts = false,
   if (pack !== "base" && pack !== "office") throw new OPFFontError("invalid-font-pack", "Choose the base or office font pack.", {pack});
   const registry = await (pack === "base" ? loadBundledFontRegistry(options) : loadOfficeFontRegistry(options));
   // Script faces are large (CJK faces are 5-10 MB each). Raster output reads them
-  // from fontFiles; embed them in standalone SVG only on request.
-  const embeddedFonts = registry.selectEmbeddedFonts(face => embedScriptFonts || !face.scripts);
+  // from fontFiles; embed them in standalone SVG only on request. The default Noto Sans fallback is always offered
+  // (embed "used"), so an SVG carries it exactly when its text draws it.
+  const embeddedFonts = registry.selectEmbeddedFonts(face => embedScriptFonts || !face.scripts || face.fallbackOnly);
   return {
     registry,
     manifest:BUNDLED_FONT_MANIFEST,
