@@ -928,8 +928,8 @@
         "compatibility": "visual",
         "measured": {
           "replacement": "Source Sans 3",
-          "meanAbsWidthDelta": 0.0157,
-          "meanWidthDelta": 0.0151,
+          "meanAbsWidthDelta": 0.0158,
+          "meanWidthDelta": 0.0152,
           "maxAbsWidthDelta": 0.0521,
           "styles": 4,
           "reference": "Corbel 6.01"
@@ -1357,9 +1357,9 @@
         "compatibility": "visual",
         "measured": {
           "replacement": "Source Sans 3",
-          "meanAbsWidthDelta": 0.051,
-          "meanWidthDelta": 0.0038,
-          "maxAbsWidthDelta": 0.1456,
+          "meanAbsWidthDelta": 0.0511,
+          "meanWidthDelta": 0.0039,
+          "maxAbsWidthDelta": 0.1459,
           "styles": 4,
           "reference": "Gill Sans MT 1.65"
         }

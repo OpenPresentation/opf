@@ -15,8 +15,11 @@
 // with --reference-dir <dir> (for example Aptos Serif from Microsoft's Aptos Fonts download). The
 // files are only read; nothing from them is copied or committed.
 //
-// node scripts/measure-font-replacements.mjs [--packages <dir>] [--render <dir>] [--reference-dir <dir>] [--out <report.json>] [--check | --explore]
+// node scripts/measure-font-replacements.mjs [--packages <dir>] [--render <dir>] [--reference-dir <dir>] [--out <report.json>] [--check | --explore | --update --families <a,b>]
 //   --check    compare the measured values with spec/reference/font-policy.json and fail on drift.
+//   --update   re-measure only the named policy families (--families "Century Gothic,Trebuchet MS") on this host and merge the rows into the
+//              committed report.json (rows for families this host cannot measure stay as recorded) and into each policy row's
+//              replacement.measured. The tier (compatibility) is never changed: a row stays visual unless a person edits it after the metric bar is met.
 //   --explore  rank every installed @expo-google-fonts package against each measurable family
 //              (writes candidates.json next to the report); this is how replacements were chosen.
 //              --only a,b limits the packages; --candidates-out names the output file.
@@ -69,15 +72,24 @@ const vendored = new Map();
 if (existsSync(path.join(renderRoot, "src/font-manifest.js"))) {
   const { BUNDLED_FONT_MANIFEST } = await import(pathToFileURL(path.join(renderRoot, "src/font-manifest.js")).href);
   for (const pkg of BUNDLED_FONT_MANIFEST.packages.filter((item) => item.vendored)) for (const face of pkg.faces) {
-    const bytes = readFileSync(path.join(renderRoot, pkg.directory, face.file));
+    // opf-render main vendors a package under `vendored` (fonts/<name>); `version` is the pinned commit (git upstream) or the npm version.
+    const bytes = readFileSync(path.join(renderRoot, pkg.vendored, face.file));
     assert.equal(sha256(bytes), face.sha256, `${pkg.name}/${face.file} differs from the pinned manifest`);
-    vendored.set(`${face.family.toLowerCase()}|${face.weight}|${face.italic}`, { font: fontkit.create(bytes), weight: face.weight, package: `${pkg.name}@${pkg.commit.slice(0, 12)}`, file: face.file, sha256: face.sha256 });
+    const label = /^[0-9a-f]{40}$/.test(pkg.version) ? pkg.version.slice(0, 12) : pkg.version;
+    vendored.set(`${face.family.toLowerCase()}|${face.weight}|${face.italic}`, { font: fontkit.create(bytes), family: face.family, italic: face.italic, weight: face.weight, package: `${pkg.name}@${label}`, file: face.file, sha256: face.sha256 });
   }
 }
 const packageOf = (family) => `@expo-google-fonts/${family.toLowerCase().replace(/\s+/g, "-")}`;
 const faceCache = new Map();
+// A vendored family draws the requested weight when it ships it and otherwise its nearest weight of the same slope, as the renderer does
+// (Libre Caslon Text has no bold italic; its italic draws, reported visual).
+function nearestVendored(family, weight, italic) {
+  const choices = [...vendored.values()].filter((face) => face.family.toLowerCase() === family.toLowerCase() && face.italic === italic);
+  choices.sort((a, b) => Math.abs(a.weight - weight) - Math.abs(b.weight - weight) || a.weight - b.weight);
+  return choices[0] ?? null;
+}
 function replacementFace(family, weight, italic, pkg = packageOf(family)) {
-  const own = vendored.get(`${family.toLowerCase()}|${weight}|${italic}`);
+  const own = vendored.get(`${family.toLowerCase()}|${weight}|${italic}`) ?? nearestVendored(family, weight, italic);
   if (own) return own;
   const id = `${pkg}|${weight}|${italic}`;
   if (!faceCache.has(id)) faceCache.set(id, loadReplacementFace(pkg, weight, italic));
@@ -138,8 +150,11 @@ function measure(family, replacement, pkg) {
 }
 
 const results = [];
+const onlyFamilies = args.includes("--update") ? new Set(option("--families", "").split(",").map((name) => name.trim().toLowerCase()).filter(Boolean)) : null;
+if (args.includes("--update")) assert.ok(onlyFamilies.size > 0, "--update needs --families <a,b>: name the policy families to re-measure");
 for (const row of policy.families) {
   if (!row.replacement || row.licenseClass === "open") continue;
+  if (onlyFamilies && !onlyFamilies.has(row.family.toLowerCase())) continue;
   const result = measure(row.family, row.replacement);
   results.push({ family: row.family, replacement: row.replacement.family, compatibility: row.replacement.compatibility, ...(row.replacement.weight ? { weight: row.replacement.weight } : {}), ...result });
 }
@@ -156,6 +171,22 @@ if (args.includes("--explore")) {
   }
   writeFileSync(path.join(path.dirname(output), option("--candidates-out", "candidates.json")), JSON.stringify({ tool: report.tool, corpus: report.corpus, packages: names.length, ranking }, null, 2) + "\n");
   console.log(`Ranked ${names.length} packages for ${ranking.length} families.`);
+} else if (args.includes("--update")) {
+  const reportFile = path.resolve(option("--report", path.join(root, "docs/evidence/font-replacements-20260923/report.json")));
+  const previous = JSON.parse(readFileSync(reportFile, "utf8")), policyFile = path.join(root, "spec/reference/font-policy.json"), raw = JSON.parse(readFileSync(policyFile, "utf8"));
+  const missing = [...onlyFamilies].filter((name) => !results.some((result) => result.family.toLowerCase() === name && !result.skipped));
+  assert.deepEqual(missing, [], `not measurable on this host (reference font or replacement face missing): ${missing.join(", ")}`);
+  for (const result of results) {
+    const index = previous.results.findIndex((item) => item.family === result.family);
+    if (index >= 0) previous.results[index] = result; else previous.results.push(result);
+    const row = raw.families.find((item) => item.family === result.family);
+    row.replacement.measured = { replacement: result.replacement, meanAbsWidthDelta: result.meanAbsWidthDelta, meanWidthDelta: result.meanWidthDelta, maxAbsWidthDelta: result.maxAbsWidthDelta, styles: result.styles, reference: result.reference };
+  }
+  previous.results.sort((a, b) => a.family.localeCompare(b.family));
+  previous.tool = report.tool;
+  writeFileSync(reportFile, `${JSON.stringify(previous, null, 2)}\n`);
+  writeFileSync(policyFile, `${JSON.stringify(raw, null, 2)}\n`);
+  console.log(`Updated ${results.length} measured rows in ${path.relative(root, reportFile)} and spec/reference/font-policy.json.`);
 } else if (args.includes("--check")) {
   const drift = [];
   for (const result of results) {
