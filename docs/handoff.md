@@ -1,6 +1,6 @@
 # Continue the OPF ecosystem work
 
-Current entrypoint: [September 21 handoff](handoff-2026-09-21.md) and [compatibility matrix](compatibility-matrix.md). The dated checkpoints below are historical; use the current entrypoint for shipped versions and remaining work.
+Current entrypoint: [September 29 review checkpoint](handoff-2026-09-29.md), the [font fidelity program](programs/font-fidelity-everywhere/README.md), and the [compatibility matrix](compatibility-matrix.md). The [September 21 handoff](handoff-2026-09-21.md) and dated checkpoints below are historical. Keep published-package evidence separate from subsequent source merges and unfinished acceptance.
 
 Runtime update (September 10): use **Node 24 only** for new development and verification; see [migration instructions](migrations/node24.md). Historical Node 20/24 results and commands below describe prior checkpoints. Keep distinct browser/OS/native gates and the existing Office recovery prerequisite.
 

@@ -1,0 +1,62 @@
+[
+  {
+    "headRefOid": "b5cb7def927a41bff11c91191216003f73cfc313",
+    "mergeCommit": {
+      "oid": "4b991553f8d9706de1003f8f8f547e46d902da74"
+    },
+    "mergedAt": "2026-09-23T14:13:52Z",
+    "number": 132,
+    "state": "MERGED",
+    "title": "FF-29: resolve one text alignment per composed item",
+    "url": "https://github.com/OpenPresentation/opf/pull/132",
+    "repo": "OpenPresentation/opf"
+  },
+  {
+    "headRefOid": "f229d2589fc78299b06a6ccf805e4301f3f927f4",
+    "mergeCommit": {
+      "oid": "d3397502035639892e03665f8761493a30817621"
+    },
+    "mergedAt": "2026-09-23T14:40:10Z",
+    "number": 133,
+    "state": "MERGED",
+    "title": "FF-31: OPF font policy table, provisional owner decisions and measured replacements",
+    "url": "https://github.com/OpenPresentation/opf/pull/133",
+    "repo": "OpenPresentation/opf"
+  },
+  {
+    "headRefOid": "301b08fbadc116cd4ceee011b37e07f8b1ecd74c",
+    "mergeCommit": {
+      "oid": "0337ce2e8682f8dd3ea320e0614490735f554ed3"
+    },
+    "mergedAt": "2026-09-23T14:39:36Z",
+    "number": 43,
+    "state": "MERGED",
+    "title": "FF-29: anchor preview text to core item alignment; edge-anchored metrics",
+    "url": "https://github.com/OpenPresentation/opf-render/pull/43",
+    "repo": "OpenPresentation/opf-render"
+  },
+  {
+    "headRefOid": "39010510b36e5cd3a4428ea8542e17d018d73f0f",
+    "mergeCommit": {
+      "oid": "6c7d7818e40d0f9c519e4b34f7a24e9150c1787f"
+    },
+    "mergedAt": "2026-09-23T14:50:32Z",
+    "number": 44,
+    "state": "MERGED",
+    "title": "FF-31: font policy replacements in previews, bundled fallback and caller faces",
+    "url": "https://github.com/OpenPresentation/opf-render/pull/44",
+    "repo": "OpenPresentation/opf-render"
+  },
+  {
+    "headRefOid": "ab0fc1db656f2f3aeac9005786ac682a503047c9",
+    "mergeCommit": {
+      "oid": "0424d5617e2ff2454c61a4dc8622e355cae03e17"
+    },
+    "mergedAt": "2026-09-29T07:58:50Z",
+    "number": 79,
+    "state": "MERGED",
+    "title": "FF-29: record slide layout intent in OPF_SLIDE_V1 and recover it on import",
+    "url": "https://github.com/OpenPresentation/opf-pptx/pull/79",
+    "repo": "OpenPresentation/opf-pptx"
+  }
+]

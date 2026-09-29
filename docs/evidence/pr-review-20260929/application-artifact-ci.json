@@ -1,0 +1,28 @@
+{
+  "conclusion": "failure",
+  "headSha": "5f863300392ba4adc17c947e23c9606623b4fc12",
+  "jobs": [
+    {
+      "completedAt": "2026-09-29T07:42:01Z",
+      "conclusion": "failure",
+      "databaseId": 109307040184,
+      "name": "roundtrip (windows-latest)",
+      "startedAt": "2026-09-29T07:41:58Z",
+      "status": "completed",
+      "steps": [],
+      "url": "https://github.com/Data-Advantage/pptx-dev/actions/runs/36538188374/job/109307040184"
+    },
+    {
+      "completedAt": "2026-09-29T07:42:01Z",
+      "conclusion": "failure",
+      "databaseId": 109307040452,
+      "name": "roundtrip (ubuntu-latest)",
+      "startedAt": "2026-09-29T07:41:58Z",
+      "status": "completed",
+      "steps": [],
+      "url": "https://github.com/Data-Advantage/pptx-dev/actions/runs/36538188374/job/109307040452"
+    }
+  ],
+  "status": "completed",
+  "url": "https://github.com/Data-Advantage/pptx-dev/actions/runs/36538188374"
+}
