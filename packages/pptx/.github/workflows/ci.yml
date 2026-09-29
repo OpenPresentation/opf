@@ -36,6 +36,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf
+          # FF-29: merged core (opf#132) with composed item.alignment.
           ref: 4b991553f8d9706de1003f8f8f547e46d902da74
           path: opf
           fetch-depth: 0
@@ -43,6 +44,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-render
+          # FF-29: merged renderer (opf-render#43) that anchors preview text to item.alignment.
           ref: 0337ce2e8682f8dd3ea320e0614490735f554ed3
           path: opf-render
           fetch-depth: 0

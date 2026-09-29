@@ -4,6 +4,7 @@ import {readChartCategoryHeading,writeChartCategoryHeading} from './chart-workbo
 import {attachCodeTags, codeManifest, importCodeGroups, nativeShapeParagraphs, nativeTextShapes} from './code-provenance.js';
 import {attachMetricTags,metricManifest,importMetricGroups} from './metric-provenance.js';
 import {attachCardTags,importCardFrames} from './card-provenance.js';
+import {attachMediaTags,importMediaGroups,mediaCaption,mediaFrameRecord,mediaTextFingerprint} from './media-provenance.js';
 import {attachHeadingTags,importHeadingGroups} from './heading-provenance.js';
 import {attachPlainTextTags,importPlainTextGroups} from './text-provenance.js';
 import {attachTimelineTags,timelineManifest,importTimelineGroups} from './timeline-provenance.js';
@@ -194,6 +195,8 @@ export async function toPptx(input, options = {}) {
   context.slideImages = new Map();
   context.backgroundFills = new Map();
   context.cardTags = new Map();
+  context.mediaTags = new Map();
+  context.provenanceMode = options.provenance ?? "full";
   context.headingTags = new Map();
   context.plainTextTags = new Map();
   context.timelineTags = new Map();
@@ -288,9 +291,13 @@ export async function fromPptx(input, options = {}) {
   if (Object.keys(furniture.design).length) imported.design = {...imported.design, ...furniture.design};
   if (furniture.organization) imported.organization = furniture.organization;
 
+  const mediaRegistry = Object.create(null);
   for (let index = 0; index < slidePaths.length; index += 1) {
+    furnitureContexts[index].mediaRegistry = mediaRegistry;
     imported.slides.push(importSlide(entries, slidePaths[index], index, dimensions, options, furniture.slides[index], furnitureContexts[index]));
   }
+  // Conflicting media asset IDs fall back to their current native URLs during import.
+  for (const context of furnitureContexts) for (const [id, asset] of Object.entries(context.mediaAssets ?? {})) if (!Object.hasOwn(imported.assets ?? {}, id)) imported.assets = {...imported.assets, [id]: asset};
   // Report after the slides so slide diagnostics keep their established order.
   // A theme name FF-24 could not verify is not reported when the stored reference restores the theme.
   for (const diagnostic of themeDesign.diagnostics) if (diagnostic.code !== "theme-unverified") options.onDiagnostic?.(diagnostic);
@@ -518,6 +525,8 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   const code = importCodeGroups(shapes, paragraphs, relationships, entries, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.code`}));
   const metric = importMetricGroups(shapes, paragraphs, relationships, entries, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.metric`}));
   const cards = importCardFrames(shapes, paragraphs, relationships, entries, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}));
+  const media = importMediaGroups(shapes, paragraphs, relationships, entries, slideIndex, diagnostic => options.onDiagnostic?.(diagnostic), nativeContext.mediaRegistry);
+  nativeContext.mediaAssets = media.assets;
   const headings=importHeadingGroups(shapes,paragraphs,relationships,entries,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}));
   const plainText=importPlainTextGroups(shapes,paragraphs,relationships,entries,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}));
   const timelines=importTimelineGroups(shapes,paragraphs,relationships,entries,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}));
@@ -536,13 +545,14 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   }
   for (const item of code.items) items.push({kind:'code',bounds:shapeBounds(item.shape['p:spPr']?.['a:xfrm']),payload:item.payload});
   for (const item of metric.items) items.push({kind:'metric',bounds:shapeBounds(item.shape['p:spPr']?.['a:xfrm']),payload:item.payload});
+  for (const item of media.items) items.push({kind:'media',sourceText:item.payload.type==='text',bounds:shapeBounds(item.shape['p:spPr']?.['a:xfrm']),payload:item.payload});
   for (const [index,shape] of shapes.entries()) {
     if (furniture.text.has(index) || nativeContext.slideImageShapes?.has(index)) continue;
-    if (code.consumed.has(shape)||metric.consumed.has(shape)||cards.has(shape)||headings.consumed.has(shape)||plainText.consumed.has(shape)||timelines.consumed.has(shape)) continue;
-    const item = importShape(shape, dimensions, paragraphs[index], furniture.taggedText.has(index));
+    if (code.consumed.has(shape)||metric.consumed.has(shape)||cards.has(shape)||media.consumed.has(shape)||headings.consumed.has(shape)||plainText.consumed.has(shape)||timelines.consumed.has(shape)) continue;
+    const item = importShape(shape, dimensions, paragraphs[index], furniture.taggedText.has(index) || media.captionShapes.has(shape));
     // A damaged/edited furniture group falls back to current native text,
     // including cleared text boxes, without inventing a title or shape label.
-    if (item && furniture.taggedText.has(index)) item.sourceText = true;
+    if (item && (furniture.taggedText.has(index) || media.captionShapes.has(shape))) item.sourceText = true;
     if (item) items.push(item);
   }
 
@@ -1108,6 +1118,9 @@ async function addSlide(pptx, presentation, opfSlide, slideIndex, context, optio
   const titleAlignment=opfSlide.design?.titleAlignment??presentation.design?.titleAlignment;
   const contentAlignment=opfSlide.design?.contentAlignment??presentation.design?.contentAlignment;
   const fieldAlignment=field=>field==='title'?titleAlignment:contentAlignment;
+  // Core composition resolves one alignment per composed item for every engine
+  // (FF-29); the design fallback keeps cores published before item.alignment working.
+  const alignmentFor=item=>item.alignment??fieldAlignment(item.field);
   const geometry = composeSlide(opfSlide, { width: widthInches * 96, height: heightInches * 96, layout, presentation, slideIndex, fonts: slideContext.fonts, contentAlignment, titleAlignment, textRasterPadding:options.textRasterPadding, contentBox:opfSlide.design?.contentBox??presentation.design?.contentBox, textMeasurement: options.textMeasurement, date: options.date, socialPlatforms: socialPlatformRecords(presentation, options) });
   for (const diagnostic of geometry.diagnostics) options.onDiagnostic?.(diagnostic);
   if (geometry.slideImage) await addSlideImage(slide, presentation, geometry.slideImage, slideIndex, slideContext, options);
@@ -1124,7 +1137,7 @@ async function addSlide(pptx, presentation, opfSlide, slideIndex, context, optio
         fill:paint(surface),line:{...paint(slideContext.colorScheme.accent5??`#${slideContext.colors.border}`),pt:.75},objectName:`OPF card ${item.path}`});
     }
     if(['text','title','subtitle','tag'].includes(item.field)&&(item.text?.placement||item.text?.sourceLines)&&!item.text.richLines) {
-      addMeasuredPayloadText(slide,item.value,item.box,slideContext,options,{path:item.path,fit:item.text,textStyle:item.textStyle,sourceText:item.field==='text'&&!!item.text.sourceLines,align:fieldAlignment(item.field),diagnosticsHandled:true,heading:['title','subtitle','tag'].includes(item.field)?item.field:undefined,color:item.field==='tag'?slideContext.colors.accent:slideContext.colors.text});
+      addMeasuredPayloadText(slide,item.value,item.box,slideContext,options,{path:item.path,fit:item.text,textStyle:item.textStyle,sourceText:item.field==='text'&&!!item.text.sourceLines,align:alignmentFor(item),diagnosticsHandled:true,heading:['title','subtitle','tag'].includes(item.field)?item.field:undefined,color:item.field==='tag'?slideContext.colors.accent:slideContext.colors.text});
     } else if (["title", "subtitle", "tag"].includes(item.field)) {
       // Estimated-font headings use one native text box, which still needs a
       // role tag. Role recovery must not depend on outline measurement support.
@@ -1134,14 +1147,14 @@ async function addSlide(pptx, presentation, opfSlide, slideIndex, context, optio
         ...textBoxOptions(region, slideContext, item.text.fontSize * 0.75),
         ...nativeFontOptions(item.textStyle),
         color: item.field === "tag" ? slideContext.colors.accent : slideContext.colors.text,
-        align: fieldAlignment(item.field),
+        align: alignmentFor(item),
         objectName,
         breakLine: false
       });
     } else if ((item.field === "items" || item.field === "bullets") && item.text?.listEntries) {
       addMeasuredList(slide,item.text,slideContext);
     } else if (item.field === "text" && item.text?.richLines) {
-      const alignment=item.text.placement?.alignment??contentAlignment??'left';
+      const alignment=item.text.placement?.alignment??alignmentFor(item)??'left';
       for(const [index,line] of item.text.richLines.entries()){
         const runs=line.fragments.map(fragment=>{
           const runColor=exportColor(fragment.run.color,slideContext,slideContext.colors.text);
@@ -1153,9 +1166,9 @@ async function addSlide(pptx, presentation, opfSlide, slideIndex, context, optio
         if(runs.length)slide.addText(runs,{...textBoxOptions(area,slideContext,item.text.fontSize*.75),align:alignment,fit:'none',wrap:false,lineSpacingMultiple:1});
       }
     } else if (item.field === "text" && typeof item.value === "string") {
-      slide.addText(item.text.lines.join("\n"), {...textBoxOptions(region, slideContext, item.text.fontSize * 0.75),...nativeFontOptions(item.textStyle),align:contentAlignment});
+      slide.addText(item.text.lines.join("\n"), {...textBoxOptions(region, slideContext, item.text.fontSize * 0.75),...nativeFontOptions(item.textStyle),align:alignmentFor(item)});
     } else {
-      await addPayload(slide, presentation, item.payload, region, item.path, { ...slideContext, composition: item.composition, contentAlignment: contentAlignment ?? "left" }, options, item.quoteLayout, item.codeLayout,item.metricLayout,item.timelineLayout);
+      await addPayload(slide, presentation, item.payload, region, item.path, { ...slideContext, composition: item.composition, contentAlignment: alignmentFor(item) ?? "left" }, options, item.quoteLayout, item.codeLayout,item.metricLayout,item.timelineLayout);
     }
   }
 
@@ -1199,7 +1212,7 @@ async function addPayload(slide, presentation, payload, region, path, context, o
       await addImagePayload(slide, presentation, payload.image, region, path, context, options);
       break;
     case "video":
-      addPlaceholderPayload(slide, "Video", payload.video, region, context);
+      addMediaPayload(slide, presentation, payload.video, region, path, context, options);
       break;
     case "chart":
       addChartPayload(slide, payload.chart, region, context);
@@ -1533,6 +1546,7 @@ function addMeasuredPayloadText(slide, text, box, context, options, config) {
       context.furnitureTags.set(objectName,{v:1,role:'text',...config.furniture,line:index,count:fit.lines.length,...boundary});
       if(config.liveFields?.[index]?.length)context.furnitureFields.set(objectName,{text:line,fields:config.liveFields[index]});
     }
+    else if(config.media&&context.provenanceMode!==false)context.mediaTags.set(objectName,{v:1,role:'caption',path:config.path,line:index,count:fit.lines.length,boundary:sourceLine?.boundary??'end',...(context.provenanceMode==='full'?{fingerprint:mediaTextFingerprint(line)}:{})});
     else if(config.sourceText)context.plainTextTags.set(objectName,{v:1,group:config.path,line:index,count:fit.lines.length,...boundary});
     const area=placed?{x:(placed.x+placed.width*factor-box.width*factor)/96,y:(placed.baseline-fit.fontSize)/96,w:box.width/96,h:placed.height/96}:{x:box.x/96,y:(box.y+index*fit.lineHeight)/96,w:box.width/96,h:fit.lineHeight/96};
     // A run-level link keeps the muted, non-underlined furniture look of the preview (hlinkClr=tx, u=none).
@@ -1541,6 +1555,10 @@ function addMeasuredPayloadText(slide, text, box, context, options, config) {
       ...textBoxOptions(area, context, fit.fontSize * .75),
       ...nativeFontOptions(style),
       color: lineColor, align: alignment,
+      // Reuse the frame's existing relationship to cover blank caption boxes.
+      // PptxGenJS also inherits it into runs; keep their native text styling.
+      hyperlink: config.hyperlink,
+      underline: config.hyperlink ? {style: 'none'} : undefined,
       tabStops:sourceLine?.segments.filter(segment=>segment.kind==='tab').map(segment=>({position:(segment.x+segment.width)/96,alignment:'l'})),
       objectName,
       fit: 'none', wrap: false, lineSpacingMultiple: 1,
@@ -1663,6 +1681,29 @@ function addTimelinePayload(slide, value, layout, context, options, path) {
   for(const [index,part]of layout.parts.entries()){
     addMeasuredPayloadText(slide,part.text,part.box,context,options,{path:part.path,fit:part.fit,textStyle:part.style,align:part.alignment,diagnosticsHandled:true,timeline:{group,part:index,anchor}});
   }
+}
+
+// Mirror the renderer's media placeholder: a bordered surface, a centred 72px
+// play badge and a centred caption (title, then source). Native video embedding
+// is not attempted; the caption keeps the reference editable.
+function addMediaPayload(slide, presentation, value, region, path, context, options) {
+  const box = pixelBox(region);
+  const icon = {x: box.x + (box.width - 72) / 2, y: box.y + (box.height - 72) / 2};
+  // The frame links to a web source (after asset dereferencing), so the
+  // reference stays usable in PowerPoint; OPF_MEDIA_V1 keeps the OPF value.
+  const resolved = dereferenceAsset(value, presentation, path), source = typeof resolved === "string" ? resolved : resolved?.src;
+  const hyperlink = typeof source === "string" && /^https?:\/\//i.test(source) ? {url: source} : undefined;
+  const names = {frame: `OPF media ${path} frame`, badge: `OPF media ${path} badge`, play: `OPF media ${path} play`};
+  if (context.provenanceMode !== false) {
+    context.mediaTags.set(names.frame, mediaFrameRecord(value, path, presentation, context.provenanceMode, options.onDiagnostic));
+    context.mediaTags.set(names.badge, {v: 1, role: "badge", path});
+    context.mediaTags.set(names.play, {v: 1, role: "play", path});
+  }
+  slide.addShape("rect", {x: region.x, y: region.y, w: region.w, h: region.h, fill: {color: context.colors.surface}, line: {color: context.colors.border, pt: 0.75}, hyperlink, objectName: names.frame});
+  slide.addShape("ellipse", {x: icon.x / 96, y: icon.y / 96, w: 72 / 96, h: 72 / 96, fill: {color: context.colors.accent}, line: {transparency: 100}, hyperlink: hyperlink && {url: source}, objectName: names.badge});
+  slide.addShape("triangle", {x: (icon.x + 28) / 96, y: (icon.y + 22) / 96, w: 28 / 96, h: 28 / 96, rotate: 90, fill: {color: "FFFFFF"}, line: {transparency: 100}, hyperlink: hyperlink && {url: source}, objectName: names.play});
+  addMeasuredPayloadText(slide, mediaCaption(value), {...box, y: icon.y + 72 + 20, height: 50}, context, options,
+    {path, fontSize: 18, fontFamily: context.fonts.body, fontWeight: 600, align: "center", color: context.colors.mutedText, objectName: `OPF media ${path} caption`, media: true, keepEmpty: true, hyperlink});
 }
 
 function addPlaceholderPayload(slide, label, value, region, context) {
@@ -2031,6 +2072,7 @@ async function normalizePptxZip(raw, context) {
   attachCodeTags(entries, context.codeTags);
   attachMetricTags(entries,context.metricTags);
   attachCardTags(entries,context.cardTags);
+  attachMediaTags(entries,context.mediaTags);
   attachHeadingTags(entries,context.headingTags);
   attachPlainTextTags(entries,context.plainTextTags);
   attachTimelineTags(entries,context.timelineTags);

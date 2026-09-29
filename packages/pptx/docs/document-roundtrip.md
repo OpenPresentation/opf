@@ -49,6 +49,26 @@ The default stays `'full'` for now; the owner will decide whether it changes. Th
 
 ### No embedded bytes
 
+Video placeholders (`OPF_MEDIA_V1`) follow the same privacy choice. In `full`
+mode, the frame stores the authored video and its referenced asset chain, up to
+256 KiB total. Data URIs have no exported video part and are omitted, with
+`media-provenance-omitted` at export and `invalid-media-provenance` at import.
+In `references-only`, media tags contain only group identity, roles and caption
+line indices; they store no authored URL, file source, title, description or
+asset entry. Import derives a video from the current native web hyperlink and
+caption. With `false`, no media tags are written and placeholders import as
+ordinary shapes and caption text.
+
+A full-mode video restores only while its source hyperlink and caption still
+match. An edited web hyperlink imports the current URL and caption and reports
+`media-source-changed`; old hidden metadata and assets are dropped. Removing a
+web link cannot restore the old tagged source. A non-web source restores only
+when the caption itself shows that source. Media identities follow slides
+through reordering and copying; diagnostics use the current slide index.
+Conflicting asset IDs recover the affected video's native URL and caption with
+`media-asset-conflict`, rather than pointing it at another video's registry
+entry. These are package conversion checks; native Office parity is separate.
+
 A `data:` source is never copied into a tag. When its bytes are identical to an exported media part (for example an asset-backed or inline picture background), the tag stores `{"$opfMedia": "ppt/media/imageN.png", "prefix": "data:image/png;base64,"}`. Import rebuilds the `data:` URI from the current media part.
 
 Any other `data:` source makes its field unstorable. Examples are a logo that is not drawn on any slide, or a WebP converted to PNG. `toPptx` then reports `document-provenance-omitted` at the field path, such as `assets.logo`. A design reference whose asset could not be stored is omitted too, so import never restores a bare `asset:` reference without its registry entry.
