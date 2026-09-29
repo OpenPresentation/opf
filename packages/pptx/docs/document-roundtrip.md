@@ -21,6 +21,11 @@ Alternatives considered:
 - **A `customXml` data-store part** needs its own item-properties part, a GUID and a schema namespace, and it is also deck-wide only. It would be a second provenance mechanism next to the tags the package already uses.
 - **Tags** are not shown anywhere in PowerPoint's UI, and PowerPoint preserves them on save. It copies a slide's tags with the slide. Every other OPF provenance record already uses them, so import has one reader and one threat model.
 
+Inline layout records may omit the standalone `$schema` identifier. Reimport
+supplies that known identifier only to the layout validator, preserving the
+authored record. An explicitly wrong identifier or other invalid record content
+still produces the existing per-record diagnostic and fallback.
+
 ## What is embedded: `toPptx(document, {provenance})`
 
 Only values the document states are stored; engine defaults are not. A document that states none of the values below gets no tags and its bytes are unchanged.

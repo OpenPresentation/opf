@@ -289,7 +289,9 @@ const layoutRecords = catalogs => array(Array.isArray(catalogs?.layouts) ? catal
 // Recovered layouts must also pass their companion schema before composition
 // can use them (for example, a null placeholder otherwise crashes rendering).
 function validLayoutRecord(value) {
-  try { return opfCore.validateCatalogRecord('layouts', value).valid; }
+  // Inline catalogs already identify the kind. Supply only an omitted
+  // standalone identifier for validation; never change the authored record.
+  try { return object(value) && opfCore.validateCatalogRecord('layouts', {$schema: 'https://openpresentation.org/schema/opf-layout/v1', ...value}).valid; }
   catch { return false; }
 }
 

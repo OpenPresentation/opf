@@ -213,6 +213,25 @@ let cases = 0;
   cases++;
 }
 
+// An inline record's catalog kind is known; the standalone schema identifier
+// is optional in valid authored OPF and must not be added or required on import.
+{
+  const record = structuredClone(heroA); delete record.$schema;
+  assert.equal(validateCatalogRecord('layouts', {$schema: heroA.$schema, ...record}).valid, true);
+  const input = {...structuredClone(deckA), catalogs: {layouts: {records: [record]}}};
+  assert.equal(validatePresentation(input).valid, true);
+  assert.equal(renderSvgDeck(input).length, input.slides.length);
+  const bytes = await toPptx(input);
+  for (const withoutDocument of [false, true]) {
+    const result = await read(withoutDocument ? modify(bytes, stripDocument) : bytes);
+    assert.deepEqual(result.provenance, [], 'A valid inline record must not be rejected for its omitted standalone $schema.');
+    assert.deepEqual(result.deck.slides.map(intent), expectedA);
+    assert.deepEqual(result.deck.catalogs, {layouts: {records: [record]}}, 'The authored record stays exact; validation must not insert $schema.');
+    if (!withoutDocument) assert.equal(result.deck.narrative, input.narrative);
+  }
+  cases++;
+}
+
 // Decks exported before FF-29 carry no layoutRecord on their slides.
 {
   const legacy = entries => { for (const index of [1, 2]) text(entries, `ppt/tags/opfSlide${index}.xml`, xml => {
