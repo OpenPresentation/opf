@@ -1225,7 +1225,6 @@ async function addSlide(pptx, presentation, opfSlide, slideIndex, context, optio
   const geometry = composeSlide(opfSlide, { width: widthInches * 96, height: heightInches * 96, layout, presentation, slideIndex, fonts: slideContext.fonts, contentAlignment, titleAlignment, textRasterPadding:options.textRasterPadding, contentBox:opfSlide.design?.contentBox??presentation.design?.contentBox, textMeasurement: options.textMeasurement, date: options.date, socialPlatforms: socialPlatformRecords(presentation, options) });
   for (const diagnostic of geometry.diagnostics) options.onDiagnostic?.(diagnostic);
   if (geometry.slideImage) await addSlideImage(slide, presentation, geometry.slideImage, slideIndex, slideContext, options);
-  await addFurniture(slide,presentation,opfSlide,geometry.furniture,slideContext,options,slideIndex);
   for (const item of geometry.items) {
     const region = { x: item.box.x / 96, y: item.box.y / 96, w: item.box.width / 96, h: item.box.height / 96 };
     if (item.frameBox) {
@@ -1272,6 +1271,10 @@ async function addSlide(pptx, presentation, opfSlide, slideIndex, context, optio
       await addPayload(slide, presentation, item.payload, region, item.path, { ...slideContext, composition: item.composition, contentAlignment: alignmentFor(item) ?? "left" }, options, item.quoteLayout, item.codeLayout,item.metricLayout,item.timelineLayout);
     }
   }
+  // Core composes furniture above all content and opf-render paints it last, so
+  // spTree order (PowerPoint's z-order) matches: header/footer parts come after
+  // every content item, and an overlapping footer stays visible over content.
+  await addFurniture(slide,presentation,opfSlide,geometry.furniture,slideContext,options,slideIndex);
 
   if (opfSlide.notes) {
     const notes = String(opfSlide.notes);
@@ -1612,6 +1615,9 @@ function addTablePayload(slide, table, region, context, options, path) {
     x: region.x,
     y: region.y,
     w: region.w,
+    // PowerPoint derives a table's height from its rows, and the preview draws
+    // the rows (layout.height, never more than the composed box). The declared
+    // frame height is the row total so the XML matches what both engines draw.
     h: layout.height / 96,
     rowH: layout.rows.map(row => row.box.height / 96),
     colW: Array(columnCount).fill(region.w / columnCount),

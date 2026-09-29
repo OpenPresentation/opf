@@ -115,7 +115,7 @@ await test('missing date shape cannot restore old text', async () => {
   assert.ok(!JSON.stringify(document).includes('September'));
 });
 await test('actual current native date field takes precedence over stale static evidence', async () => {
-  const changed = editText(exported.entries, xml => xml.replace(/<a:r>(<a:rPr\b[^>]*>[\s\S]*?<\/a:rPr>)<a:t>September <\/a:t><\/a:r>/,
+  const changed = editText(exported.entries, xml => xml.replace(/<a:r>(<a:rPr\b[^>]*>(?:(?!<\/a:rPr>)[\s\S])*<\/a:rPr>)<a:t>September <\/a:t><\/a:r>/,
     '<a:fld id="{0F0F2700-0000-4000-8000-000000000099}" type="datetime3">$1<a:t>23 April 2027</a:t></a:fld>').replace('<a:t>22, 2026</a:t>', '<a:t></a:t>'));
   const {document} = await read(zipSync(changed));
   assert.deepEqual(footer(document).center, {date: true, dateFormat: 'd MMMM yyyy'});
