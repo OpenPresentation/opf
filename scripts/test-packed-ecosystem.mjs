@@ -115,6 +115,18 @@ if (verifyColorRefs) {
       .replaceAll('  fixture = null;', '  throw new Error("Pinned ColorRef fixture must load; fallback is not registry acceptance");'));
   run(process.execPath, ['color-ref-export.mjs']);
 }
+// These chart corrections are newer than the immutable published train.
+// Run the original public fixtures against the coordinated installed packages.
+if (!registry) {
+  const cacheHarness = (await readHarness('opf-pptx', 'test/chart-cache-import.mjs'))
+    .replace("process.env.OPF_TEST_PPTX_MODULE ?? '../dist/index.js'", "'@openpresentation/opf-pptx'");
+  await writeFile(path.join(consumer, 'chart-cache-import.mjs'), cacheHarness);
+  run(process.execPath, ['chart-cache-import.mjs']);
+  const axisHarness = (await readHarness('opf-render', 'test/chart-axis.mjs'))
+    .replaceAll("'../dist/svg.js'", "'@openpresentation/opf-render/svg'");
+  await writeFile(path.join(consumer, 'chart-axis.mjs'), axisHarness);
+  run(process.execPath, ['chart-axis.mjs']);
+}
 if (verifyFontPreparation) {
   await writeFile(path.join(consumer,'check-font-preparation.mjs'), `
 import assert from 'node:assert/strict';

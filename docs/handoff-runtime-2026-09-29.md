@@ -21,10 +21,48 @@ passed, as did original accepted-main [postmerge CI](https://github.com/OpenPres
 consumer and again in the source suite. All 36 shipped files bind to reviewed
 source; Windows CRLF conversion is recorded explicitly.
 
-This fixes one import boundary. Scientific-notation parsing, exporter/workbook
-missing-value behavior, category disagreement, scatter labels and broader chart
-parity remain open. The renderer scale repair is still only in draft #42; the
-renderer/PPTX chart pair cannot be accepted solely because #82 passed.
+An unedited numeric cache containing `1e21` or `1e-7` still imported as `121` or
+`1` after that fix. [PPTX #85](https://github.com/OpenPresentation/opf-pptx/pull/85),
+accepted as `2fa70d8b71be13d7053b295994c984e6478f761d`, reads complete signed
+decimal exponent tokens without changing the shared exporter parser or workbook.
+Exponent overflow and nonzero underflow refuse with the affected chart, series,
+cache and logical point path. All 44 prior cache controls plus 13 new groups
+passed in fresh installed and source scopes on both platforms in the original
+[CI run](https://github.com/OpenPresentation/opf-pptx/actions/runs/36561675960).
+All 36 shipped files bind to the reviewed tree. Three representative exports
+remain byte-identical, including their embedded workbooks. Original accepted-main
+[CI](https://github.com/OpenPresentation/opf-pptx/actions/runs/36563260194) also
+passed on Linux and Windows at the identical reviewed tree. Both original
+artifacts passed digest and ZIP integrity checks; the 36 shipped files and all
+nine packed fixtures bind to that tree, with Windows line endings recorded
+explicitly. Neither workflow runs desktop Office.
+
+Malformed/non-exponent parsing, exporter/workbook missing-value behavior,
+category disagreement, scatter labels and broader chart parity remain open.
+The broad renderer/PPTX chart drafts cannot be accepted solely because these
+bounded import fixes passed.
+
+Renderer [#47](https://github.com/OpenPresentation/opf-render/pull/47), accepted
+as `c62b3f98a4ac98cdec8ffd28c035a17a04197396`, fixes finite extreme values that
+previously produced infinite coordinates or `NaN` axis labels in column, bar,
+line and area charts. It preserves the ordinary arithmetic path. All 36 public
+axis cases passed against source and a fresh installed package, with all 20
+shipped files bound to reviewed source. The original
+[package CI](https://github.com/OpenPresentation/opf-render/actions/runs/36564292238)
+passed; its 805-slide, 126-deck golden and the six bounded ordinary SVG controls
+are unchanged. Ten local before/after images were reviewed. Very large scientific
+axis labels still wrap or clip, so this is arithmetic acceptance, not completed
+extreme-chart readability work.
+
+The renderer's separate, report-only
+[platform run](https://github.com/OpenPresentation/opf-render/actions/runs/36564292334)
+completed successfully while still measuring five of five Source Serif Linux
+rows above the unchanged 0.1 reference-pixel limit (maximum 0.134625 px).
+The corresponding macOS rows and 18 bundled-font controls per platform were
+within that limit. This diagnostic result does not close renderer issue #24 or
+the native/font compatibility gates. The coordinated installed-package harness
+now runs the original exponent and axis fixtures against accepted #85/#47;
+historical registry checks keep their original published-train scope.
 
 [PPTX #81](https://github.com/OpenPresentation/opf-pptx/pull/81), accepted as
 `c749c356b4fb5a5b5dfa77db8f1f7dd3c7daef63`, also passed its original automatic
@@ -49,8 +87,9 @@ have distinct limits. This does not restore arbitrary native formatting/geometry
 or certify desktop Office. Owner #78 merged earlier; the owner closed #80
 unmerged, and its branch remains preserved.
 
-The [compact receipts](evidence/runtime-pr-review-20260929/README.md) bind accepted
-source and original outcomes. All source fixes above remain unpublished.
+The [compact receipts](evidence/runtime-pr-review-20260929/README.md) bind the
+earlier #81/#82/#83 records; #85 is recorded separately above. All source fixes
+above remain unpublished.
 
 ## Installed furniture checkpoint and wrapped-date follow-up
 
@@ -96,16 +135,25 @@ original package comparison, plus its full portable suite. Original
 and original accepted-main [Linux/Windows CI](https://github.com/OpenPresentation/opf-pptx/actions/runs/36557698682)
 both passed 19 new source cases per platform against that workflow's recorded
 older sibling graph. The accepted commit and all shipped files bind to the
-reviewed tree. These passes are distinct from the current coordinated graph. The follow-up
-candidate uses accepted #84 with the current renderer/editor pins, adds 19
+reviewed tree. These passes are distinct from the current coordinated graph.
+Core [#153](https://github.com/OpenPresentation/opf/pull/153), accepted as
+`7fdd39e39a4712c052b08f56f5a4dd4d9a625ab2`, uses accepted #84 with its recorded
+renderer/editor pins, adds 19
 installed wrapped-date mutation controls and expands the
 [browser fixture](../scripts/test-furniture-fields-browser.mjs) to four workflows.
 The [compact acceptance record](evidence/wrapped-furniture-20260929/README.md)
 binds fresh local package checks, 805-slide goldens, 707 core tests and all four
-passing browser workflows. The wrapped screenshot was reviewed as legible. These
-local results describe the candidate before GitHub acceptance; the associated pull
-request records fresh combined-head CI and review. They are not a published or
-native compatibility claim.
+passing browser workflows. Both original PR workflows
+([core](https://github.com/OpenPresentation/opf/actions/runs/36559866383),
+[ecosystem](https://github.com/OpenPresentation/opf/actions/runs/36559866319))
+and original accepted-main workflows
+([core](https://github.com/OpenPresentation/opf/actions/runs/36561369174),
+[ecosystem](https://github.com/OpenPresentation/opf/actions/runs/36561369076))
+passed every step. The accepted tree matches the reviewed tree; 19 installed
+wrapped controls and all four browser cases passed. All four reviewed screenshots
+and eight exported PPTX files are byte-identical between those original premerge
+and postmerge runs. The wrapped date is legible; the 805-slide golden is unchanged.
+These candidate results are not a published or native compatibility claim.
 
 ## Release holds
 
@@ -119,7 +167,15 @@ a requested `{current} / {total}` yields only the live slide number, without
 ` / 3`. Published core 0.11.0 does not expand the new format; accepted core
 contains that later FF-27 implementation. This is an unreleased capability versus
 dependency-floor mismatch, not evidence that published PPTX 0.9.1 fails its own
-released suite.
+released suite. The current renderer, PPTX and editor still declare core
+`^0.11.0`; PPTX/editor also allow the older renderer `^0.9.0`, which lacks the
+accepted explicit host-date forwarding. The coordinated packer rewrites ranges
+to preview versions, so its passing set does not establish those advertised
+minimum versions. Final release tarballs must be tested with their manifests
+unchanged and declared minima forced explicitly, including the supported
+renderer-absent exporter path. The CLI bundles core and its skills and must be
+rebuilt from the approved source; installing a newer standalone core cannot
+upgrade the existing CLI's embedded implementation.
 
 Before publishing any package in the new contract:
 
@@ -158,7 +214,16 @@ changes, a read-only merge preview found 17 conflict regions, and per-reference
 acceptance remains unfinished. Its old CI pass does not certify current-main
 integration. Broader master/theme writing overlaps deferred scope; do not merge
 it as routine cleanup. Keep the five geometry drafts coordinated: core #94,
-renderer #27, PPTX #42, editor #25 and site #40. Never merge only the site half.
+renderer #27, PPTX #42, editor #25 and site #40. They remain substantive. Four
+repositories conflict with current main; the clean site diff does not make it
+independently ready. Choosing the old draft side of the core conflicts would
+discard accepted image-safe areas, explicit heading alignment and
+replaced-picture-slot removal. Historical
+green checks never tested all five draft heads together. The site's default
+canvas also needs an exact-source Escape/Undo/Redo control: source review shows
+that an edited escaped token can be reconstructed with different JSON spelling.
+That finding is source-derived, not a new browser observation. Never merge only
+the site half or substitute the old geometry golden for current visual review.
 
 [Draft app #58](https://github.com/Data-Advantage/pptx-dev/pull/58) is now at
 `19ad2441ef0fe28365799f4ba1993b0b659040be`, a normal fast-forward from
