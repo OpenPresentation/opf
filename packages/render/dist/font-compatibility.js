@@ -64,6 +64,7 @@ const FROM_POLICY = FONT_POLICY.filter(row => row.replacement).map(row => ({
   compatibility: row.replacement.compatibility,
   ...(row.replacement.compatibility === "metric" ? {weights: [400, 700]} : {}),
   ...(row.replacement.weight ? {weight: row.replacement.weight} : {}),
+  ...(row.replacement.disabledFeatures ? {disabledFeatures: row.replacement.disabledFeatures} : {}),
   ...(row.replacement.source ? {source: row.replacement.source} : {}),
   ...(row.replacement.measured ? {measured: row.replacement.measured} : {}),
   ...(row.replacement.decision ? {decision: row.replacement.decision} : {}),
@@ -75,4 +76,40 @@ const FROM_POLICY = FONT_POLICY.filter(row => row.replacement).map(row => ({
 }));
 const listed = new Set(FROM_POLICY.map(rule => rule.requestedFamily.toLowerCase()));
 export const FONT_COMPATIBILITY = Object.freeze([...FROM_POLICY, ...LEGACY.filter(rule => !listed.has(rule.requestedFamily.toLowerCase()))].map(rule=>Object.freeze({...rule,substitutes:Object.freeze(rule.substitutes),...(rule.weights?{weights:Object.freeze(rule.weights)}:{}),...(rule.measured?{measured:Object.freeze({...rule.measured})}:{})})));
+// FF-31: OpenType features a policy row turns off in its replacement face (Georgia -> Gelasio: liga, clig).
+// The row's metric claim is measured that way, so the renderer must shape (fonts.js) and draw (svg.js)
+// the face that way too. Keyed by the replacement family: a Georgia deck is measured and drawn with
+// Gelasio, and Gelasio requested by name is treated identically, so measurement and drawing never disagree.
+const DISABLED_FEATURES = new Map(FONT_POLICY.filter(row => row.replacement?.disabledFeatures?.length).map(row => [row.replacement.family.toLowerCase(), Object.freeze([...row.replacement.disabledFeatures])]));
+/** OpenType feature tags to turn off for a preview face, from the font policy; undefined when none. */
+export function disabledFeaturesFor(family) {
+  return typeof family === "string" ? DISABLED_FEATURES.get(family.trim().toLowerCase()) : undefined;
+}
+/** CSS for SVG text drawn with a face whose features the policy turns off (`liga` and `clig` map to font-variant-ligatures), or undefined. */
+export function disabledFeaturesStyle(family) {
+  const tags = disabledFeaturesFor(family);
+  if (!tags) return undefined;
+  const ligatures = tags.some(tag => tag === "liga" || tag === "clig") ? "font-variant-ligatures:none;" : "";
+  return `${ligatures}font-feature-settings:${tags.map(tag => `'${tag}' 0`).join(",")}`;
+}
+/**
+ * Raster (resvg) ignores font-variant-ligatures and font-feature-settings, so it would still draw Gelasio's
+ * fi/fl/ffi/ffl ligature glyphs. For SVG about to be rasterized only (never the emitted SVG), put a zero-width
+ * non-joiner after each f that a ligature would join to the next letter, in text drawn with a face whose
+ * policy row turns liga or clig off. ZWNJ has zero advance, so the glyphs follow the unligated measurement.
+ */
+export function separateLigatures(svg) {
+  if (!DISABLED_FEATURES.size || !/<text[\s>]/.test(svg)) return svg;
+  const tokens = /<(\/?)([A-Za-z][\w:.-]*)((?:[^>"']|"[^"]*"|'[^']*')*?)(\/?)>|<!--[\s\S]*?-->|<!\[CDATA\[[\s\S]*?\]\]>|[^<]+/g;
+  const stack = [], ligatureFree = family => DISABLED_FEATURES.get(family)?.some(tag => tag === "liga" || tag === "clig") === true;
+  return svg.replace(tokens, (token, close, name, attributes, selfClose) => {
+    if (name === undefined) return stack.at(-1) ? token.replace(/f(?=[fil])/g, "f\u200C") : token;
+    if (name !== "text" && name !== "tspan") return token;
+    if (close) { stack.pop(); return token; }
+    const declared = /\sfont-family\s*=\s*(?:"([^"]*)"|'([^']*)')/.exec(attributes);
+    const family = declared ? (declared[1] ?? declared[2]).split(",")[0].trim().replace(/^['"]|['"]$/g, "").toLowerCase() : undefined;
+    if (!selfClose) stack.push(family === undefined ? stack.at(-1) ?? false : ligatureFree(family));
+    return token;
+  });
+}
 export const EXPERIMENTAL_FONT_CANDIDATES = Object.freeze([Object.freeze({requestedFamily:"Aptos",substitute:"Akasia",source:"https://codeberg.org/bloudraad/akasia",note:"Upstream claims metric compatibility in twelve styles. Not bundled or automatically selected; OPF conformance testing is pending. No Narrow or Display compatibility is implied."})]);

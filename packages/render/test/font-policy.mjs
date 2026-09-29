@@ -4,7 +4,7 @@
 import assert from 'node:assert/strict';
 import {fileURLToPath} from 'node:url';
 import {BUNDLED_FONT_MANIFEST, prepareNodeFonts} from '../dist/fonts-node.js';
-import {FONT_COMPATIBILITY, FONT_POLICY, FONT_POLICY_DECISIONS, FONT_POLICY_SOURCE, fontPolicyFor} from '../dist/fonts.js';
+import {FONT_COMPATIBILITY, FONT_POLICY, FONT_POLICY_DECISIONS, FONT_POLICY_SOURCE, disabledFeaturesFor, fontPolicyFor} from '../dist/fonts.js';
 
 // Snapshot shape and the provisional owner decisions (provisional, owner may revise).
 assert.ok(FONT_POLICY.length >= 150 && Object.isFrozen(FONT_POLICY) && /^[0-9a-f]{64}$/.test(FONT_POLICY_SOURCE.sha256));
@@ -13,7 +13,14 @@ assert.equal(fontPolicyFor('aptos').replacement.family, 'Roboto');
 assert.equal(fontPolicyFor('Aptos').replacement.decision, 'aptos-preview');
 for (const family of ['Segoe UI', 'Segoe UI Semibold', 'Segoe UI Light', 'Segoe UI Semilight']) assert.equal(fontPolicyFor(family).replacement.family, 'Red Hat Display');
 assert.deepEqual([fontPolicyFor('Cambria').replacement.family, fontPolicyFor('Cambria').replacement.compatibility], ['Caladea', 'visual']);
-assert.equal(fontPolicyFor('Georgia').replacement.compatibility, 'visual');
+// Georgia -> Gelasio is metric only with liga and clig off (FF-31); the row says so and opf-render applies it.
+assert.equal(fontPolicyFor('Georgia').replacement.compatibility, 'metric');
+assert.deepEqual(fontPolicyFor('Georgia').replacement.disabledFeatures, ['liga', 'clig']);
+assert.ok(fontPolicyFor('Georgia').replacement.measured.maxAbsWidthDelta <= 0.003);
+assert.deepEqual(FONT_POLICY.filter(row => row.replacement?.disabledFeatures).map(row => row.family), ['Georgia']);
+assert.deepEqual([...FONT_COMPATIBILITY.find(entry => entry.requestedFamily === 'Georgia').disabledFeatures], ['liga', 'clig']);
+assert.deepEqual([...disabledFeaturesFor('gelasio')], ['liga', 'clig']);
+assert.equal(disabledFeaturesFor('Carlito'), undefined);
 assert.equal(fontPolicyFor('Cambria').replacement.metricModeFallback, true);
 assert.equal(fontPolicyFor('Consolas').replacement.family, 'Cousine');
 for (const row of FONT_POLICY) {
@@ -67,7 +74,8 @@ const strict = await prepareNodeFonts({pack: 'office', substitutionPolicy: 'metr
 assert.throws(() => strict.registry.resolveFont({fontFamily: 'Aptos', fontWeight: 400}), error => error.code === 'font-unavailable' && error.details.replacement === 'Roboto' && error.details.replacementCompatibility === 'visual' && error.details.decision === 'aptos-preview' && /visual only/.test(error.message) && /prepareNodeFonts\(\{faces\}\)/.test(error.message) && /PPTX names 'Aptos'/.test(error.message));
 assert.equal(strict.registry.resolveFont({fontFamily: 'Calibri', fontWeight: 700}).compatibility, 'metric');
 assert.equal(strict.registry.resolveFont({fontFamily: 'Cambria', fontWeight: 400}).compatibility, 'visual');
-assert.throws(() => strict.registry.resolveFont({fontFamily: 'Georgia', fontWeight: 400}), {code: 'font-unavailable'});
+assert.equal(strict.registry.resolveFont({fontFamily: 'Georgia', fontWeight: 400}).compatibility, 'metric');
+assert.throws(() => strict.registry.resolveFont({fontFamily: 'Georgia', fontWeight: 500}), {code: 'font-unavailable'});
 assert.throws(() => strict.registry.resolveFont({fontFamily: 'Montserrat', fontWeight: 400}), error => error.details.licenseClass === 'open' && /no pinned renderer pack ships it yet/.test(error.message));
 assert.throws(() => strict.registry.resolveFont({fontFamily: 'Brand Sans', fontWeight: 400}), error => error.details.licenseClass === 'unknown' && /not in the OPF font policy table/.test(error.message));
 

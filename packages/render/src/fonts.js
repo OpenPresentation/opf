@@ -1,9 +1,9 @@
 import { create } from "fontkit";
-import { FONT_COMPATIBILITY } from "./font-compatibility.js";
+import { FONT_COMPATIBILITY, disabledFeaturesFor } from "./font-compatibility.js";
 import { openTypeLanguage, scriptFontAliases } from "./script-fonts.js";
 import { fontPolicyFor } from "./font-policy.js";
 import { BUNDLED_FONT_MANIFEST } from "./font-manifest.js";
-export { FONT_COMPATIBILITY, EXPERIMENTAL_FONT_CANDIDATES } from "./font-compatibility.js";
+export { FONT_COMPATIBILITY, EXPERIMENTAL_FONT_CANDIDATES, disabledFeaturesFor } from "./font-compatibility.js";
 export { FONT_POLICY, FONT_POLICY_DECISIONS, FONT_POLICY_SOURCE, fontPolicyFor } from "./font-policy.js";
 export { SCRIPT_FONT_FAMILIES, SCRIPT_FONT_REPLACEMENTS, createScriptFonts, createScriptTextMeasurement, designatedFamilies, detectScripts, itemizeScripts, openTypeLanguage, scriptFontAliases, scriptFontRole, scriptOfCharacter, textRole } from "./script-fonts.js";
 
@@ -175,7 +175,10 @@ export function createFontRegistry(entries, options = {}) {
       }
     }
     if(value===undefined||includeOutline&&!Object.hasOwn(value,'outline')) {
-      const shape=features=>language?face.font.layout(text,features,undefined,language):features?face.font.layout(text,features):face.font.layout(text);
+      // FF-31: features a policy row turns off in its replacement (Gelasio for Georgia: liga, clig), the
+      // same ones the SVG output turns off, so measured and drawn advances agree.
+      const off=disabledFeaturesFor(face.family),policyFeatures=off&&Object.fromEntries(off.map(tag=>[tag,false]));
+      const shape=extra=>{const features=policyFeatures||extra?{...policyFeatures,...extra}:undefined;return language?face.font.layout(text,features,undefined,language):features?face.font.layout(text,features):face.font.layout(text);};
       let run;
       try { run=shape(); }
       catch (error) {

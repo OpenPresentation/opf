@@ -8,6 +8,7 @@ import {
 // still loads; resolveScriptFonts ships with core FF-18.
 import * as opfCore from "@openpresentation/opf";
 import { createScriptFonts } from "./script-fonts.js";
+import { disabledFeaturesStyle } from "./font-compatibility.js";
 
 export const packageName = "@openpresentation/opf-render";
 
@@ -1434,6 +1435,13 @@ function paragraphRtl(bound, text) {
  * a textLength spanning differently fonted tspans does not rasterize reliably;
  * the caller then drops its own textLength and anchors at the start.
  */
+// Nested script runs of a line drawn with a flagged face (Gelasio) opt back into default shaping,
+// unless the run itself uses a flagged family (tag() then adds that family's own style).
+function nestedReset(style, run) {
+  const parent = disabledFeaturesStyle(style?.fontFamily);
+  return parent && !disabledFeaturesStyle([run.stack ?? run.family].flat()[0]) ? RESET_POLICY_FEATURES : undefined;
+}
+
 function scriptLine(text, style, bound, type, { rtl = false, placement, trace } = {}) {
   const value = String(text ?? "");
   const scripts = bound.scriptFonts;
@@ -1447,7 +1455,7 @@ function scriptLine(text, style, bound, type, { rtl = false, placement, trace } 
   const widths = placement && placement.width > 0 ? scripts.runWidths(runs, placement.fontSize, style) : undefined;
   if (!widths) {
     return { content: isolate(runs.map(run => run.own ? escapeText(run.text)
-      : tag("tspan", { "font-family": fontStack(run.stack ?? run.family, type) }, escapeText(run.text))).join("")) };
+      : tag("tspan", { "font-family": fontStack(run.stack ?? run.family, type), style: nestedReset(style, run) }, escapeText(run.text))).join("")) };
   }
   const total = widths.reduce((sum, width) => sum + width, 0), factor = total > 0 ? placement.width / total : 1;
   let advance = 0, offset = 0;
@@ -1460,6 +1468,7 @@ function scriptLine(text, style, bound, type, { rtl = false, placement, trace } 
       x: stableNumber(placement.x + left),
       textLength: width > 0 ? stableNumber(width) : undefined, lengthAdjust: width > 0 ? "spacingAndGlyphs" : undefined,
       "font-family": run.own ? undefined : fontStack(run.family, type),
+      style: run.own ? undefined : nestedReset(style, run),
       ...(trace ? trace(start, offset) : {})
     }, isolate(escapeText(run.text)));
   }).join("");
@@ -1541,7 +1550,7 @@ function renderRichLines(value,fit,box,bound,config) {
     if(!flow)return fragments.join('\n');
     const x=alignment==='right'?box.x+box.width:alignment==='center'?box.x+box.width/2:box.x;
     const first=line.fragments[0];
-    return tag('text',{x:stableNumber(x),y:stableNumber(box.y+line.baseline),'text-anchor':alignment==='right'?'end':alignment==='center'?'middle':'start','xml:space':'preserve','font-family':fontStack(first?.style.fontFamily??config.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(first?.fontSize??fit.fontSize),'font-weight':first?.style.fontWeight??config.fontWeight??400,'font-style':first?.style.italic?'italic':undefined},fragments.join(''));
+    return tag('text',{x:stableNumber(x),y:stableNumber(box.y+line.baseline),'text-anchor':alignment==='right'?'end':alignment==='center'?'middle':'start','xml:space':'preserve','font-family':fontStack(first?.style.fontFamily??config.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(first?.fontSize??fit.fontSize),'font-weight':first?.style.fontWeight??config.fontWeight??400,'font-style':first?.style.italic?'italic':undefined,[NO_POLICY_FEATURES]:true},fragments.join(''));
   });
   let cursor=0;
   const whole=value.map(run=>typeof run==='string'?run:run.text).join('');
@@ -1694,7 +1703,22 @@ function escapeAttr(value) {
   return escapeText(value).replaceAll('"', "&quot;");
 }
 
+// FF-31: text drawn with a face whose features the font policy turns off (Gelasio for Georgia) says so, so
+// browsers do not ligate what the measurement did not. Only text or tspan elements that name such a family.
+// A flow line's outer text element, which only carries the first fragment's family, opts out: each of its
+// tspans names its own family and gets its own style, so other faces do not inherit ligatures:none.
+const NO_POLICY_FEATURES = Symbol("noPolicyFeatures");
+// Text in another script nested in a flagged run (scriptLine tspans) goes back to default shaping.
+const RESET_POLICY_FEATURES = "font-variant-ligatures:normal;font-feature-settings:normal";
+function withPolicyFeatures(name, attrs) {
+  if (attrs[NO_POLICY_FEATURES]) return attrs;
+  const family = (name === "text" || name === "tspan") && typeof attrs["font-family"] === "string" ? attrs["font-family"].split(",")[0].trim() : undefined;
+  const features = family && disabledFeaturesStyle(family);
+  return features ? { ...attrs, style: attrs.style ? `${attrs.style};${features}` : features } : attrs;
+}
+
 function tag(name, attrs = {}, children = "") {
+  attrs = withPolicyFeatures(name, attrs);
   const serializedAttrs = Object.keys(attrs)
     .filter((key) => attrs[key] !== undefined && attrs[key] !== null && attrs[key] !== false)
     .sort()

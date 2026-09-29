@@ -23,7 +23,7 @@ const SNAPSHOT=freeze({
  },
  "source": {
   "path": "spec/reference/font-policy.json",
-  "sha256": "7368c1f56b8a93c63b09cabb8aa9c5284dd9c8b1fd811f9387b05c175abbd5ac"
+  "sha256": "fc38d808883e3df1d0476f042e4fafd70d2fede836bef46780cbd2e0e9974f61"
  },
  "families": [
   {
@@ -957,12 +957,16 @@ const SNAPSHOT=freeze({
    "embeddableByOpf": false,
    "replacement": {
     "family": "Gelasio",
-    "compatibility": "visual",
+    "compatibility": "metric",
+    "disabledFeatures": [
+     "liga",
+     "clig"
+    ],
     "measured": {
      "replacement": "Gelasio",
-     "meanAbsWidthDelta": 0.0002,
-     "meanWidthDelta": -0.0002,
-     "maxAbsWidthDelta": 0.0102,
+     "meanAbsWidthDelta": 0,
+     "meanWidthDelta": 0,
+     "maxAbsWidthDelta": 0,
      "styles": 4,
      "reference": "Georgia 5.59"
     },

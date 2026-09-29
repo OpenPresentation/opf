@@ -29,24 +29,25 @@ jobs:
       # match core main's ecosystem-ci. Verify the released graph before using source links.
       # FF-29 pins merged core (opf#132) that adds composed item.alignment.
       # FF-31 pins merged core (opf#133): src/font-policy.js snapshots its spec/reference/font-policy.json.
+      # FF-31 Gelasio metric tier pins merged core opf#163 (Georgia disabledFeatures). opf-pptx and opf-editor move to the coordinated heads core main pins (ecosystem-ci), which pass core#155 and its packed quote test.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf
-          ref: d3397502035639892e03665f8761493a30817621
+          ref: b1fdfa70a15c059dc082ea54e615e761b8153193
           path: opf
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-pptx
-          ref: 7b34f55755fa86c63d6d80f1a76851d7529c5343
+          ref: 373dfa39688e787d861202e7a8069ebff7e8be36
           path: opf-pptx
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-editor
-          ref: 5620230086437165bcf2242cbfe2d781bb38ac87
+          ref: d0c95a16b50eccb3eee695ace44cc6c3a6754f2f
           path: opf-editor
           fetch-depth: 0
           persist-credentials: false

@@ -1,5 +1,6 @@
 import {prepareRasterImages} from './raster-images.js';
 import {OPFRenderError,packageName} from './svg.js';
+import {separateLigatures} from './font-compatibility.js';
 const DEFAULT_DIMENSIONS = { width: 1280, height: 720 };
 const DEFAULT_RASTER_SCALE = 1;
 const DEFAULT_RASTER_BACKGROUND = "#FFFFFF";
@@ -40,7 +41,8 @@ export async function svgToPdf(svgs, options = {}) {
 
 async function rasterizeSvg(svgInput, options) {
   const { Resvg } = await loadResvg();
-  const svg = await prepareRasterImages(normalizeSvgInput(svgInput));
+  // FF-31: resvg ignores the SVG's ligature properties, so separate the letters a Gelasio ligature would join.
+  const svg = separateLigatures(await prepareRasterImages(normalizeSvgInput(svgInput)));
   const scale = positiveNumber(options.scale, "scale", DEFAULT_RASTER_SCALE);
   const fontFiles = [
     ...(options.useBundledFonts === false ? [] : await bundledFontFiles()),
