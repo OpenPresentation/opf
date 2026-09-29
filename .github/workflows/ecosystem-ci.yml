@@ -79,6 +79,7 @@ jobs:
           node scripts/test-readability-browser.mjs artifacts/readability-browser installed
           node scripts/test-timeline-workflow.mjs artifacts/timeline-workflow installed
           node scripts/test-furniture-workflow.mjs artifacts/furniture-workflow installed
+          node scripts/test-furniture-fields-browser.mjs artifacts/furniture-fields-browser
           node ../opf-editor/test/json-editor-browser.mjs artifacts/editor/json-editor-installed.json artifacts/npm/consumer
           node scripts/test-timeline-acceptance.mjs artifacts/timeline-acceptance.json
       - name: Check scalar source whitespace and accepted browser advances
@@ -140,6 +141,7 @@ jobs:
             opf/artifacts/readability-browser/**
             opf/artifacts/timeline-workflow/**
             opf/artifacts/furniture-workflow/**
+            opf/artifacts/furniture-fields-browser/**
             opf/artifacts/timeline-acceptance.json
             opf-render/artifacts/plain-whitespace-browser/**
           retention-days: 7
