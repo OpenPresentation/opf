@@ -1,0 +1,546 @@
+{
+  "refs": {
+    "coreReleased": "b8a1faf24203635bd36b09ea19f44bcd53781f16",
+    "coreAccepted": "061499d53aabefb266dd4f7f5c5bd85f6d24c425",
+    "rendererReleased": "114bf596e9034c0b80a8c92df6a956a04ef18bef",
+    "rendererAccepted": "6c7d7818e40d0f9c519e4b34f7a24e9150c1787f",
+    "pptxReleased": "fcc006a6887c549a96a3bc8bbdb957cc54fe67dd",
+    "pptxCandidate": "1c60887793067d8c830a289d8bf0e3405f9749c2"
+  },
+  "sources": [
+    {
+      "repo": "core",
+      "commit": "b8a1faf24203635bd36b09ea19f44bcd53781f16",
+      "path": "packages/javascript/src/composition.ts",
+      "gitBlob": "ae6e84bea40df7e347f2992e80d40b92ef71b4e8",
+      "bytes": 111285,
+      "sha256": "112439a046d49089c041124dbde027ce286c89cceb19941e4ff56a4e93d9cb89",
+      "selectedSourceLines": [
+        {
+          "line": 308,
+          "text": "      if(content.slideNumber===true)add('slideNumber',String(number),true);"
+        }
+      ]
+    },
+    {
+      "repo": "core",
+      "commit": "b8a1faf24203635bd36b09ea19f44bcd53781f16",
+      "path": "spec/schemas/opf.schema.json",
+      "gitBlob": "19e696bc1acf6d2386cc6eac5958eb81e8adabe3",
+      "bytes": 134486,
+      "sha256": "dbb84e4e55a0d98bb14433d7df8682e1c7ef95af9b49e9d7a256b2b5ac334076",
+      "selectedSourceLines": []
+    },
+    {
+      "repo": "core",
+      "commit": "061499d53aabefb266dd4f7f5c5bd85f6d24c425",
+      "path": "packages/javascript/src/composition.ts",
+      "gitBlob": "b7f2179966d5e00ebebc00102d5ff3a7720f1e94",
+      "bytes": 134757,
+      "sha256": "95f8854a2d15c10ecc4c04c166310cd5f274f8ba0981fc8650234b5f317dee53",
+      "selectedSourceLines": [
+        {
+          "line": 2,
+          "text": "import {DEFAULT_FURNITURE_DATE_FORMAT,DEFAULT_SLIDE_NUMBER_FORMAT,formatFurnitureDate,formatSlideNumber,parseIsoDate,type FurnitureField} from './furniture-fields.js';"
+        },
+        {
+          "line": 3,
+          "text": "export {DEFAULT_FURNITURE_DATE_FORMAT,DEFAULT_SLIDE_NUMBER_FORMAT,formatFurnitureDate,formatSlideNumber,type FurnitureField} from './furniture-fields.js';"
+        },
+        {
+          "line": 288,
+          "text": "  /** Displayed slide count for `{total}` in slideNumberFormat. Defaults to `presentation.slides.length`. */"
+        },
+        {
+          "line": 523,
+          "text": "  const presentationSlides=options.presentation?.slides,slideCount=options.slideCount??(Array.isArray(presentationSlides)&&presentationSlides.length?presentationSlides.length:undefined);"
+        },
+        {
+          "line": 525,
+          "text": "  if(options.date!==undefined&&(typeof options.date!=='string'||!parseIsoDate(options.date)))throw new RangeError('The furniture date option must be an ISO YYYY-MM-DD calendar date.');"
+        },
+        {
+          "line": 575,
+          "text": "      for(const setting of ['slideNumberFormat','dateFormat'])if(content[setting]!==undefined&&typeof content[setting]!=='string')throw new TypeError(`Furniture setting ${path}.${setting} requires a string.`);"
+        },
+        {
+          "line": 577,
+          "text": "        const resolved=formatSlideNumber(content.slideNumberFormat??DEFAULT_SLIDE_NUMBER_FORMAT,number,slideCount);"
+        },
+        {
+          "line": 578,
+          "text": "        if('error' in resolved)error(`${path}.slideNumberFormat`,resolved.error,'unresolved-content');"
+        },
+        {
+          "line": 583,
+          "text": "        const format=content.dateFormat??DEFAULT_FURNITURE_DATE_FORMAT;"
+        },
+        {
+          "line": 584,
+          "text": "        if(options.date===undefined)error(`${path}.date`,'A current date needs a host-supplied ISO date option. For fixed content use a literal date, or an ISO date with dateFormat.','unresolved-content');"
+        },
+        {
+          "line": 585,
+          "text": "        else{const resolved=formatFurnitureDate(options.date,format);if('error' in resolved)error(`${path}.dateFormat`,resolved.error,'unresolved-content');else add('date',resolved.text,true,undefined,{fields:[{type:'date',start:0,end:resolved.text.length,format}]});}"
+        },
+        {
+          "line": 588,
+          "text": "        // Without dateFormat a date string stays literal, editable source text."
+        },
+        {
+          "line": 589,
+          "text": "        if(content.dateFormat===undefined)add('date',content.date);"
+        },
+        {
+          "line": 590,
+          "text": "        else{const resolved=formatFurnitureDate(content.date,content.dateFormat);if('error' in resolved)error(`${path}.${parseIsoDate(content.date)?'dateFormat':'date'}`,resolved.error,'unresolved-content');else add('date',resolved.text,true,`${path}.date`);}"
+        }
+      ]
+    },
+    {
+      "repo": "core",
+      "commit": "061499d53aabefb266dd4f7f5c5bd85f6d24c425",
+      "path": "packages/javascript/src/furniture-fields.ts",
+      "gitBlob": "4f7fb3929ebf3c8228215112f742d0b7724e2cf8",
+      "bytes": 5394,
+      "sha256": "7fd8977effc5a202c4ff090d31efdc70b9af9ebf2847970e2d17b6f39c319ded",
+      "selectedSourceLines": [
+        {
+          "line": 18,
+          "text": "export const DEFAULT_SLIDE_NUMBER_FORMAT = '{current}';"
+        },
+        {
+          "line": 28,
+          "text": "  if (!pattern) return 'dateFormat must not be empty.';"
+        },
+        {
+          "line": 37,
+          "text": "        if (end >= pattern.length) return 'dateFormat has an unterminated quoted literal.';"
+        },
+        {
+          "line": 47,
+          "text": "      if (!tokenWidths[character]?.includes(width)) return `dateFormat token '${pattern.slice(index, end)}' is not supported; use yyyy, yy, MMMM, MMM, MM, M, dd, d, EEEE or EEE, and quote literal letters.`;"
+        },
+        {
+          "line": 87,
+          "text": "export function formatSlideNumber(format: string, current: number, total: number | undefined): {text: string; fields: FurnitureField[]} | {error: string} {"
+        },
+        {
+          "line": 88,
+          "text": "  if (!format.includes('{current}')) return {error: 'slideNumberFormat must contain {current}.'};"
+        },
+        {
+          "line": 89,
+          "text": "  if (format.includes('{total}') && total === undefined) return {error: 'slideNumberFormat uses {total}, which needs the rendered slide count.'};"
+        },
+        {
+          "line": 93,
+          "text": "    if (piece === '{current}') { const value = String(current); fields.push({type:'slideNumber',start:text.length,end:text.length + value.length}); text += value; }"
+        }
+      ]
+    },
+    {
+      "repo": "core",
+      "commit": "061499d53aabefb266dd4f7f5c5bd85f6d24c425",
+      "path": "packages/javascript/src/pagination.ts",
+      "gitBlob": "389cb3dcf38252e87ae9742c21f4db2b7a1b5b75",
+      "bytes": 20501,
+      "sha256": "4c62e8a94e65df7106d7ddaceff5c0307de2eb716ab256bf2c7f877a474dfef3",
+      "selectedSourceLines": [
+        {
+          "line": 258,
+          "text": "    return content?.slideNumber === true && typeof content.slideNumberFormat === 'string' && content.slideNumberFormat.includes('{total}');"
+        },
+        {
+          "line": 289,
+          "text": "      const result = paginateSlide(slide,{...resolveCanvasDimensions(design.dimensions ?? theme.dimensions),layout,fonts,contentAlignment:design.contentAlignment,titleAlignment:design.titleAlignment,contentBox:design.contentBox,textMeasurement:options.textMeasurement,textRasterPadding:options.textRasterPadding,socialPlatforms:catalogs.socialPlatforms,...overrides,presentation,slideIndex:index,slideNumber:output.length+1,slideCount,date:options.date,maxSlides:maxSlides-output.length,minFontSize:options.minFontSize,reservedIds});"
+        }
+      ]
+    },
+    {
+      "repo": "renderer",
+      "commit": "114bf596e9034c0b80a8c92df6a956a04ef18bef",
+      "path": "src/svg.js",
+      "gitBlob": "e221ce6f9e938173b55287cdbd6c1cce8ea60836",
+      "bytes": 69345,
+      "sha256": "5f993b15608fc7e7444529ed0a1a7ebb530f5f5482d59bd025821a17c366dac1",
+      "selectedSourceLines": [
+        {
+          "line": 1,
+          "text": "import { layoutTable, fitList, fitRichText, composeSlide, resolveCanvasDimensions, resolveFontFamilies, resolveTextStyle, textWidthMeasurer, fitText, textColorForFill, chartColorForFill } from \"@openpresentation/opf/composition\";"
+        },
+        {
+          "line": 6,
+          "text": "} from \"@openpresentation/opf\";"
+        },
+        {
+          "line": 8,
+          "text": "export const packageName = \"@openpresentation/opf-render\";"
+        },
+        {
+          "line": 12,
+          "text": "  npmPackage: \"@openpresentation/opf-render\","
+        },
+        {
+          "line": 13,
+          "text": "  compatibilityPackage: \"@openpresentation/opf\""
+        },
+        {
+          "line": 223,
+          "text": "  if (source.startsWith(DEFAULT_SOURCE_PREFIX) || source.startsWith(\"pkg:@openpresentation/opf/\")) {"
+        }
+      ]
+    },
+    {
+      "repo": "renderer",
+      "commit": "6c7d7818e40d0f9c519e4b34f7a24e9150c1787f",
+      "path": "src/svg.js",
+      "gitBlob": "c66d532e2dcf9cd1f6215a5d972442343d579822",
+      "bytes": 90266,
+      "sha256": "80cc742018a52a381ea06863ff53c0a73d91ed1fd03009a7474baf6035d412ca",
+      "selectedSourceLines": [
+        {
+          "line": 1,
+          "text": "import { layoutTable, fitList, fitRichText, composeSlide, resolveCanvasDimensions, resolveFontFamilies, resolveTextStyle, textWidthMeasurer, fitText, textColorForFill, chartColorForFill } from \"@openpresentation/opf/composition\";"
+        },
+        {
+          "line": 6,
+          "text": "} from \"@openpresentation/opf\";"
+        },
+        {
+          "line": 9,
+          "text": "import * as opfCore from \"@openpresentation/opf\";"
+        },
+        {
+          "line": 12,
+          "text": "export const packageName = \"@openpresentation/opf-render\";"
+        },
+        {
+          "line": 16,
+          "text": "  npmPackage: \"@openpresentation/opf-render\","
+        },
+        {
+          "line": 17,
+          "text": "  compatibilityPackage: \"@openpresentation/opf\""
+        },
+        {
+          "line": 59,
+          "text": "// opf-pptx): DEFAULT_FONT_SCHEME in @openpresentation/opf. It applies only when the"
+        },
+        {
+          "line": 233,
+          "text": "  if (source.startsWith(DEFAULT_SOURCE_PREFIX) || source.startsWith(\"pkg:@openpresentation/opf/\")) {"
+        },
+        {
+          "line": 257,
+          "text": "// @openpresentation/opf): an id that matches no record reports one"
+        },
+        {
+          "line": 457,
+          "text": "      message: \"The installed @openpresentation/opf has no resolveScriptFonts (FF-18), so the preview uses the design font for every script, sets no lang and lays out every paragraph left to right. Use a core release with the language model.\" });"
+        },
+        {
+          "line": 461,
+          "text": "      message: \"The installed @openpresentation/opf has no paragraphDirection, so the preview lays out every paragraph of this right-to-left deck left to right, as the PPTX export does. Use a core release that exports it.\" });"
+        },
+        {
+          "line": 615,
+          "text": "  const geometry = composeSlide(slide, { ...design.dimensions, layout, presentation, slideIndex: index, fonts: design.fonts, contentAlignment:design.contentAlignment, titleAlignment:design.titleAlignment, textRasterPadding:context.options.textRasterPadding, contentBox:design.contentBox, textMeasurement, date: context.options.date, socialPlatforms: socialPlatformRecords(context) });"
+        }
+      ]
+    },
+    {
+      "repo": "pptx",
+      "commit": "1c60887793067d8c830a289d8bf0e3405f9749c2",
+      "path": "src/index.js",
+      "gitBlob": "b059071e3026bea9f91593580e5f10e2af7bf71e",
+      "bytes": 132934,
+      "sha256": "fa845f40af2be22cda062cfe452bd594961a3e8bd3e528148f4e34b4564e6200",
+      "selectedSourceLines": [
+        {
+          "line": 13,
+          "text": "import {attachFurnitureFields, furniturePartFields, lineFields, nativeFieldType} from './furniture-fields.js';"
+        },
+        {
+          "line": 22,
+          "text": "import { layoutTable, composeSlide, fitText, fitRichText, textWidthMeasurer, resolveCanvasDimensions, resolveFontFamilies, resolveTextStyle, textColorForFill, chartColorForFill } from \"@openpresentation/opf/composition\";"
+        },
+        {
+          "line": 30,
+          "text": "} from \"@openpresentation/opf\";"
+        },
+        {
+          "line": 34,
+          "text": "export const packageName = \"@openpresentation/opf-pptx\";"
+        },
+        {
+          "line": 38,
+          "text": "  npmPackage: \"@openpresentation/opf-pptx\","
+        },
+        {
+          "line": 39,
+          "text": "  compatibilityPackage: \"@openpresentation/opf\","
+        },
+        {
+          "line": 40,
+          "text": "  rendererPackage: \"@openpresentation/opf-render\""
+        },
+        {
+          "line": 1189,
+          "text": "  const geometry = composeSlide(opfSlide, { width: widthInches * 96, height: heightInches * 96, layout, presentation, slideIndex, fonts: slideContext.fonts, contentAlignment, titleAlignment, textRasterPadding:options.textRasterPadding, contentBox:opfSlide.design?.contentBox??presentation.design?.contentBox, textMeasurement: options.textMeasurement, date: options.date, socialPlatforms: socialPlatformRecords(presentation, options) });"
+        },
+        {
+          "line": 1652,
+          "text": "      for(const field of furniturePartFields(part)){"
+        },
+        {
+          "line": 1654,
+          "text": "        if(nativeType)fields.push({...field,nativeType});"
+        },
+        {
+          "line": 1655,
+          "text": "        else options.onDiagnostic?.({code:'furniture-date-fixed',path:part.path,message:`dateFormat '${field.format}' has no PowerPoint en-US date field; the current date is exported as fixed text that PowerPoint will not update.`});"
+        },
+        {
+          "line": 2049,
+          "text": "    : typeof source === \"string\" && (source.startsWith(DEFAULT_SOURCE_PREFIX) || source.startsWith(\"pkg:@openpresentation/opf/\")) ? defaultCatalog(kind) : [];"
+        }
+      ]
+    },
+    {
+      "repo": "pptx",
+      "commit": "1c60887793067d8c830a289d8bf0e3405f9749c2",
+      "path": "src/furniture-fields.js",
+      "gitBlob": "35846ee21aed5651fbf8ba96ac1d7a9f3be88c67",
+      "bytes": 9488,
+      "sha256": "1fefaef93b55ec1f29d1c6fd824c09e56e2292136b4d3346aa143ddc4c8f5572",
+      "selectedSourceLines": [
+        {
+          "line": 20,
+          "text": "export const DEFAULT_SLIDE_NUMBER_FORMAT = '{current}';"
+        },
+        {
+          "line": 110,
+          "text": "export function formatSlideNumber(format, current, total) {"
+        },
+        {
+          "line": 117,
+          "text": " * `part.fields`; earlier cores only supply a bare generated number, which is"
+        },
+        {
+          "line": 120,
+          "text": "export function furniturePartFields(part) {"
+        },
+        {
+          "line": 121,
+          "text": "  if (Array.isArray(part.fields)) return part.fields;"
+        },
+        {
+          "line": 122,
+          "text": "  return part.field === 'slideNumber' && /^\\d+$/.test(part.text) ? [{type: 'slideNumber', start: 0, end: part.text.length}] : [];"
+        }
+      ]
+    },
+    {
+      "repo": "pptx",
+      "commit": "1c60887793067d8c830a289d8bf0e3405f9749c2",
+      "path": "test/furniture-fields.mjs",
+      "gitBlob": "3bc7be8ac103816161fa2142c8250f05e9dd9766",
+      "bytes": 9574,
+      "sha256": "49ee7feb8854e95acd60ccfd267bae77b1e8a7551ef1dfc97884a447a613b71e",
+      "selectedSourceLines": [
+        {
+          "line": 4,
+          "text": "import {formatDate, parseDate, furniturePartFields, lineFields, nativeFieldType, formatSlideNumber} from '../dist/furniture-fields.js';"
+        },
+        {
+          "line": 5,
+          "text": "import {validatePresentation} from '@openpresentation/opf';"
+        },
+        {
+          "line": 34,
+          "text": "  const footer = {left: {text: 'Prepared for Northstar Health'}, right: {slideNumber: true, slideNumberFormat: '{current} / {total}'}};"
+        },
+        {
+          "line": 38,
+          "text": "  for (const index of [2, 3]) assert.deepEqual(furnitureParagraphs(slideXml(entries, index)).map(runs), ['Prepared for Northstar Health', `[slidenum:${index}] / 3`]);"
+        },
+        {
+          "line": 55,
+          "text": "  const footer = {right: {slideNumber: true, slideNumberFormat: 'A-{current}'}};"
+        },
+        {
+          "line": 66,
+          "text": "  const footer = {left: {date: '2026-04-23', dateFormat: 'MMM d, yyyy'}, center: {text: 'v0.8'}, right: {slideNumber: true}};"
+        },
+        {
+          "line": 74,
+          "text": "  assert.deepEqual(rewritten.imported.slides[1].design.footer.left, {dateFormat: 'MMM d, yyyy', date: '2026-04-24'});"
+        },
+        {
+          "line": 77,
+          "text": "  const month = await exportDeck(deck({center: {date: '2026-04-23', dateFormat: 'MMM yyyy'}}));"
+        },
+        {
+          "line": 85,
+          "text": "  const footer = {left: {date: true, dateFormat: 'MMMM d, yyyy'}, center: {date: true}, right: {slideNumber: true}};"
+        },
+        {
+          "line": 94,
+          "text": "  assert.deepEqual(retyped.imported.slides[1].design.footer.left, {dateFormat: 'd MMMM yyyy', date: true});"
+        },
+        {
+          "line": 102,
+          "text": "  const iso = await exportDeck(deck({left: {date: true, dateFormat: 'yyyy-MM-dd'}}), {date: '2026-09-22'});"
+        },
+        {
+          "line": 112,
+          "text": "assert.deepEqual(furniturePartFields({field: 'slideNumber', text: '12'}), [{type: 'slideNumber', start: 0, end: 2}], 'Earlier cores still get a live number.');"
+        },
+        {
+          "line": 113,
+          "text": "assert.deepEqual(furniturePartFields({field: 'date', text: '2026'}), []);"
+        }
+      ]
+    },
+    {
+      "repo": "pptx",
+      "commit": "1c60887793067d8c830a289d8bf0e3405f9749c2",
+      "path": "test/packed-install.mjs",
+      "gitBlob": "656e60ce2d01a0138afefb88ee0a8ef43a45b458",
+      "bytes": 10060,
+      "sha256": "8c9838511fa39d4929db6530400bbfc03ced5092f218d7d792b9c7a56fa1c2f7",
+      "selectedSourceLines": [
+        {
+          "line": 27,
+          "text": "  const installed=path.join(consumer,'node_modules/@openpresentation/opf-pptx'),files={};"
+        },
+        {
+          "line": 40,
+          "text": "import {toPptx,fromPptx} from '@openpresentation/opf-pptx';"
+        },
+        {
+          "line": 41,
+          "text": "import {validatePresentation} from '@openpresentation/opf';"
+        },
+        {
+          "line": 43,
+          "text": "for(const name of ['image-size','pptxgenjs','@openpresentation/opf-render']) assert.throws(()=>require.resolve(name),{code:'MODULE_NOT_FOUND'});"
+        },
+        {
+          "line": 44,
+          "text": "const pkg = new URL('./', import.meta.resolve('@openpresentation/opf-pptx/package.json'));"
+        },
+        {
+          "line": 70,
+          "text": "  npm(['install','--ignore-scripts','--no-fund','--no-audit',`@openpresentation/opf-render@${manifest.devDependencies['@openpresentation/opf-render']}`],consumer);"
+        },
+        {
+          "line": 72,
+          "text": "  for(const name of ['@openpresentation/opf','@openpresentation/opf-render']){"
+        },
+        {
+          "line": 79,
+          "text": "  for(const file of ['shared-quote.mjs','shared-code.mjs','code-provenance.mjs','shared-timeline.mjs','font-variants.mjs','script-fonts.mjs','chart-cache-import.mjs']){"
+        },
+        {
+          "line": 81,
+          "text": "      .replaceAll(\"'../dist/index.js'\",\"'@openpresentation/opf-pptx'\")"
+        },
+        {
+          "line": 82,
+          "text": "      .replaceAll(\"'../dist/code-provenance.js'\",\"'./node_modules/@openpresentation/opf-pptx/dist/code-provenance.js'\")"
+        },
+        {
+          "line": 83,
+          "text": "      .replaceAll(\"'../vendor/pptxgenjs/pptxgen.es.js'\",\"'./node_modules/@openpresentation/opf-pptx/vendor/pptxgenjs/pptxgen.es.js'\");"
+        },
+        {
+          "line": 100,
+          "text": "    const codeHarness=codeSource.replaceAll(\"'../dist/index.js'\",\"'@openpresentation/opf-pptx'\")"
+        },
+        {
+          "line": 101,
+          "text": "      .replaceAll(\"'vendor/pptxgenjs/pptxgen.es.js'\",\"'node_modules/@openpresentation/opf-pptx/vendor/pptxgenjs/pptxgen.es.js'\");"
+        }
+      ]
+    },
+    {
+      "repo": "pptx",
+      "commit": "1c60887793067d8c830a289d8bf0e3405f9749c2",
+      "path": "package.json",
+      "gitBlob": "a4f62050d81f7673eb0a25fb64ffe6e16b8efe05",
+      "bytes": 7765,
+      "sha256": "c00491040e9d77d890ff5992084117fa470dead0c80e8a73889ec5d4858146e2",
+      "selectedSourceLines": [
+        {
+          "line": 2,
+          "text": "  \"name\": \"@openpresentation/opf-pptx\","
+        },
+        {
+          "line": 41,
+          "text": "    \"test\": \"npm run build && node test/background-fills.mjs && npm run test:furniture && node test/slide-image.mjs && node test/slide-image-treatments.mjs && node test/document-provenance.mjs && node test/layout-intent.mjs && node test/master-bullet-font.mjs && node test/default-font-scheme.mjs && node test/script-fonts.mjs && node test/export-chosen-fonts.mjs && node test/typeface-inventory.mjs && node test/color-ref-export.mjs && node test/theme-colors.mjs && node test/plain-whitespace.mjs && node test/design-alignment.mjs && node test/accepted-text.mjs && node test/heading-provenance.mjs && node test/chart-colors.mjs && node test/content-cards.mjs && node test/chart-workbook.mjs && node --test test/chart-cache-import.mjs && node test/dependency-boundary.mjs && npm run build:browser-check && npm run test:styled-table && node test/content-layout.mjs && node test/layout-parity.mjs && node test/media-placeholder.mjs && node test/shared-quote.mjs && npm run test:timeline\","
+        },
+        {
+          "line": 53,
+          "text": "    \"test:furniture\": \"node test/shared-furniture.mjs && node test/furniture-provenance.mjs && node test/furniture-fields.mjs && node test/socials-furniture.mjs\","
+        },
+        {
+          "line": 60,
+          "text": "    \"@openpresentation/opf\": \"^0.11.0\","
+        },
+        {
+          "line": 67,
+          "text": "    \"@openpresentation/opf-render\": \"^0.9.0\""
+        },
+        {
+          "line": 70,
+          "text": "    \"@openpresentation/opf-render\": {"
+        },
+        {
+          "line": 75,
+          "text": "    \"@openpresentation/opf-render\": \"0.9.0\","
+        }
+      ]
+    },
+    {
+      "repo": "pptx",
+      "commit": "fcc006a6887c549a96a3bc8bbdb957cc54fe67dd",
+      "path": "package.json",
+      "gitBlob": "ffc5b76070a30da8c966a08ad577fd408c85b34b",
+      "bytes": 5075,
+      "sha256": "be4944ae7405ff4d92238118eafebb93af433c53519145785553eecc3a4ef8bd",
+      "selectedSourceLines": [
+        {
+          "line": 2,
+          "text": "  \"name\": \"@openpresentation/opf-pptx\","
+        },
+        {
+          "line": 41,
+          "text": "    \"test\": \"npm run build && npm run test:furniture && node test/color-ref-export.mjs && node test/plain-whitespace.mjs && node test/accepted-text.mjs && node test/heading-provenance.mjs && node test/chart-colors.mjs && node test/content-cards.mjs && node test/chart-workbook.mjs && node test/dependency-boundary.mjs && npm run build:browser-check && npm run test:styled-table && node test/content-layout.mjs && node test/shared-quote.mjs && npm run test:timeline\","
+        },
+        {
+          "line": 53,
+          "text": "    \"test:furniture\": \"node test/shared-furniture.mjs && node test/furniture-provenance.mjs\""
+        },
+        {
+          "line": 56,
+          "text": "    \"@openpresentation/opf\": \"^0.11.0\","
+        },
+        {
+          "line": 63,
+          "text": "    \"@openpresentation/opf-render\": \"^0.9.0\""
+        },
+        {
+          "line": 66,
+          "text": "    \"@openpresentation/opf-render\": {"
+        },
+        {
+          "line": 71,
+          "text": "    \"@openpresentation/opf-render\": \"0.9.0\","
+        }
+      ]
+    }
+  ],
+  "scope": "Immutable local Git source review and retained executed evidence; no fresh installed package inspection or suite rerun."
+}

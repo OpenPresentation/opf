@@ -1,0 +1,82 @@
+{
+  "files": {
+    "full-test-registry.log": {
+      "bytes": 2442,
+      "sha256": "39aabd62151f8bd2bad20bf2b2a2de1d76c2d21a0c8a1242b4dc654c187da187",
+      "retainedBundlePath": "chart-cache-import-repair/full-test-registry.log"
+    },
+    "full-test-registry-receipt.json": {
+      "bytes": 230,
+      "sha256": "014f4ded2a34d5e5e80a0252ee8a580e89e83e7e7bde6d1aed845a91c704ff1f",
+      "retainedBundlePath": "chart-cache-import-repair/full-test-registry-receipt.json"
+    },
+    "full-test-source-receipt.json": {
+      "bytes": 322,
+      "sha256": "4c2c7d98c259854d4d3865717b9ab1ac88541bfbc3af9a26d3662db74b988e9c",
+      "retainedBundlePath": "chart-cache-import-repair/full-test-source-receipt.json"
+    },
+    "full-test-source-final.log": {
+      "bytes": 14966,
+      "sha256": "92578b779c6de73cfc640750eaa2b0da95c18c8e4193ad3d106855257d30d0f9",
+      "retainedBundlePath": "chart-cache-import-repair/full-test-source-final.log"
+    },
+    "packed-registry-final-receipt.json": {
+      "bytes": 244,
+      "sha256": "a4ef9a81622bc8b24801b208167b36b2940828ede0cfd88cc46d17641b505043",
+      "retainedBundlePath": "chart-cache-import-repair/packed-registry-final-receipt.json"
+    },
+    "packed-consumer-final-node24.json": {
+      "bytes": 6194,
+      "sha256": "e80d36cdafed9b92552308a3ed2c32a66b720a3d5b94c79c0ce8e66c0be7d9ba",
+      "retainedBundlePath": "chart-cache-import-repair/packed-consumer-final-node24.json"
+    }
+  },
+  "failure": {
+    "test": "test/furniture-fields.mjs:38",
+    "actual": "[slidenum:2]",
+    "expected": "[slidenum:2] / 3",
+    "commandExit": 1,
+    "node": "24.21.0"
+  },
+  "releaseTests": {
+    "releasedPptxFurnitureFieldsFixtureExists": false
+  },
+  "packedFixtures": [
+    {
+      "file": "shared-quote.mjs",
+      "sha256": "8f0c252e5f4c89a4feafa50738d42ff92be06f32498cf5174546f8240839a08e",
+      "passed": true
+    },
+    {
+      "file": "shared-code.mjs",
+      "sha256": "d2f99717884f7a69e0706128fc734e35c69046fd06ae8536bcc23e246ed93a6f",
+      "passed": true
+    },
+    {
+      "file": "code-provenance.mjs",
+      "sha256": "f551e475119672a211dcaa8806bfcc1be300210ac0c140b49e9f964708bfe172",
+      "passed": true
+    },
+    {
+      "file": "shared-timeline.mjs",
+      "sha256": "f38366e35427cb1ff26bd3bae4a67e6da2add861e8d6cefedfeb7e8f96e74c06",
+      "passed": true
+    },
+    {
+      "file": "font-variants.mjs",
+      "sha256": "01f7c2415187c5ed6bce43a910cfd4f1db470ba5e91a12b9c2df5401355f449b",
+      "passed": true
+    },
+    {
+      "file": "script-fonts.mjs",
+      "sha256": "d536cf5eae2b7b1e4a83058d25212ea9896e993b4d82e371a76b8207d2bd64a8",
+      "passed": true
+    },
+    {
+      "file": "chart-cache-import.mjs",
+      "sha256": "6536c902615f748287571157a1f01c6cd0df754ada1a74d1fed65e12af27d237",
+      "passed": true
+    }
+  ],
+  "receiptBoundary": "Compact derived receipt: private absolute paths removed; original retained-file names, sizes and hashes unchanged. This is the seven-fixture chart82 snapshot, before media83 adds two fixtures."
+}
