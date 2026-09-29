@@ -13,8 +13,8 @@ Every item's criteria must all hold before it is `done`. Dates are UTC.
 | Status | Count |
 | --- | --- |
 | done | 19 |
-| review / in-progress | 18 |
-| todo | 7 |
+| review / in-progress | 19 |
+| todo | 6 |
 
 **Headline progress: 5 of 900 gallery values perfect by parity** (accepted
 merged source graph, 2026-09-29: opf `a85facf`, opf-render `6c7d781`, opf-pptx
@@ -53,7 +53,7 @@ theme font slots explicit, without identifying the precise cause.
 | FF-07 | Exporter writes chosen fonts into theme and run East Asian/complex-script slots, with `lang`/RTL | opf-pptx | FF-05, FF-06, FF-18 | review | merged: [opf-pptx#70](https://github.com/OpenPresentation/opf-pptx/pull/70) `0e886f30`, [opf#134](https://github.com/OpenPresentation/opf/pull/134) `9695bf37`, [opf#135](https://github.com/OpenPresentation/opf/pull/135) `3512af0b`; pending FF-05 native root-cause evidence (criteria are subject to FF-05) |
 | FF-08 | Exporter leaks no hard-coded or default font in any part | opf-pptx | FF-05, FF-06, FF-17 | review | merged: [opf-pptx#69](https://github.com/OpenPresentation/opf-pptx/pull/69) `405963ce`; pending FF-05 native root-cause evidence (empty values must be allowed by FF-05) |
 | FF-09 | Offline pairwise matrix across the 14 gallery dimensions | opf (ecosystem) | FF-07, FF-08, FF-19, FF-20 | todo |  |
-| FF-10 | Matrix in CI on ubuntu, windows, macos via a packed TypeScript consumer | opf | FF-09 | todo |  |
+| FF-10 | Matrix in CI on ubuntu, windows, macos via a packed TypeScript consumer | opf | FF-09 | in-progress | Installed candidate portability foundation under review; FF-09 font switching and installed FF-38 parity remain pending |
 | FF-11 | Export determinism independent of host fonts, OS, locale and timezone | opf-pptx / opf | FF-06 | in-progress | accepted [opf-pptx#86](https://github.com/OpenPresentation/opf-pptx/pull/86) `373dfa39688e787d861202e7a8069ebff7e8be36`: explicit ZIP dates use UTC in PPTX and embedded workbooks; original Linux/Windows source and packed checks passed. [Runtime checkpoint](../../handoff-runtime-2026-09-29.md#utc-zip-dates-and-the-renderer-absent-candidate-gate); coordinated candidate checks run the unchanged public fixture; outcomes are recorded separately. Font, locale/LANG, broader OS/ICU and complete determinism criteria remain open. |
 | FF-12 | Native PowerPoint sample of the matrix, including CJK and RTL | opf-pptx / opf | FF-03, FF-07, FF-09, FF-18 | todo |  |
 | FF-13 | Font-embed attempt from merged main, audited | opf-pptx / opf | FF-02, FF-07, FF-08 | todo |  |
@@ -754,3 +754,12 @@ Append one dated line per state change. Newest last.
     mutation is outside this bounded control. FF-27 remains in review. No Office,
     package publication, deployment or tolerance change; summary becomes
     19 done, 18 review/in-progress, 7 todo. The parity headline is unchanged.
+
+- 2026-09-29: FF-10 foundation adds Windows/macOS installed-candidate jobs beside
+  the existing Linux ecosystem lane. Candidate consumers explicitly install the
+  core-locked test-only Node types and run TypeScript 5.9/7 in NodeNext/Bundler,
+  retaining declaration containment and a real downstream-error control.
+  Existing installed canvas/furniture rerender checks and the explicit
+  no-system-font-discovery path are reused. Fresh original cross-OS CI and visual
+  review are required; this is not the FF-09 font-switch matrix, installed FF-38
+  parity, a physically fontless host, native fidelity or release acceptance.
