@@ -9,7 +9,7 @@ progress log are now in
 below are historical receipts; their pending-work and open-PR statements apply
 only to their checkpoint date.
 
-Fresh source heads at this continuation were core `d3397502`, PPTX `90929546`,
+Initial fetched source heads at this continuation were core `d3397502`, PPTX `90929546`,
 renderer `6c7d7818`, editor `214ae695`, and gallery `f17e9ae5`. Use Node
 24.21.0, core pnpm 10.33.2 and locked sibling installs. Existing local branches
 were preserved, and no old evidence branch was reused as a working base.
@@ -34,26 +34,57 @@ and [PPTX79](https://github.com/OpenPresentation/opf-pptx/pull/79) had green CI
 but independent review found media privacy/current-content bugs and malformed
 layout recovery that could crash rendering. Independently reviewed fixes and
 end-to-end regressions pass the current-source package tests. PPTX79 passed
-Linux and Windows CI at `ab0fc1d` and merged as `0424d561`. PPTX78 integrates
-that fix; its unchanged tested tree passed the full suite and six browser
-suites, with final-head CI running at `ede5ca7` at this checkpoint. Its PR
-records the eventual merge receipt. Core132/renderer43 alignment and
-core133/renderer44 font policy work have already merged.
+Linux and Windows CI at `ab0fc1d` and merged as `0424d561`.
+[PPTX81](https://github.com/OpenPresentation/opf-pptx/pull/81) then passed
+Linux and Windows CI and merged as `c749c35`, preserving valid inline layout
+records that omit the standalone `$schema` field under PPTX79's validation
+gate. PPTX78 integrates both accepted changes, identity-only late omissions,
+all visible native hyperlink surfaces and exact caption/fallback-link fixes.
+The latter reconcile [PPTX80](https://github.com/OpenPresentation/opf-pptx/pull/80)'s
+old-base findings; that branch was not merged as-is. The independently reviewed
+PPTX78 head `7cc779129323af6123ef5e194226a545e743f195` passed the full suite,
+typecheck, validation and six browser suites; exact-head CI
+[36543078806](https://github.com/OpenPresentation/opf-pptx/actions/runs/36543078806)
+is pending at this checkpoint. Its PR records the eventual merge receipt.
+Core132/renderer43 alignment and core133/renderer44 font policy work have
+already merged.
 
 | Remaining work | State / next gate |
 | --- | --- |
-| FF-04 evidence | [core145](https://github.com/OpenPresentation/opf/pull/145) publishes the independently reviewed bundle; its merge completes this item |
+| FF-04 evidence | [core145](https://github.com/OpenPresentation/opf/pull/145) merged `a85facf`, completing this item with the independently reviewed bundle |
 | FF-05 root cause | Open; Aptos at open does not identify its exact source |
-| PPTX78/79 | PPTX79 merged `0424d561`; PPTX78 independently reviewed, final-head CI pending at this checkpoint |
+| PPTX78/79/81 | PPTX79 merged `0424d561`, PPTX81 merged `c749c35`; PPTX78 independently reviewed at `7cc7791`, exact-head CI pending at this checkpoint |
 | PPTX76 and renderer42 | Draft chart coverage; reconcile conflicts and acceptance criteria |
 | PPTX77 | Draft theme-color follow-up; per-reference measurement incomplete |
-| core128 / gallery46 / core144 | Catalog dependency chain; gallery first, then reconcile core snapshot; core144 is a branch-targeted provenance correction requiring coordinated integration |
+| core128 / gallery46 / core144 | Catalog dependency chain; core144 delivered into PR128's `codex/ff-37-gallery-catalog` branch as `f8ca179488ee96c8466303bac06ea2dbf30502a0` at 2026-09-29 08:13:34 UTC, not main; gallery-first/conflict gates remain |
 | gallery40-47 | Open; Actions billing prevents a clean verification result; some also depend on a future release |
 | Old geometry drafts core94/PPTX42/renderer27/editor25 | Deferred; do not merge as part of this work |
 
-The headline remains the last committed FF-38 result, **4/900 perfect**, until
-the unchanged audit is rerun on the final merged source graph. PR-level package
-tests and native inventory validity do not establish whole-program parity.
+**Accepted FF-38 headline: 5/900 perfect, 0 near, 895 mismatch.** The unchanged
+full audit completed at `2026-09-29T08:23:46.429Z` on core
+`a85facf11d7b99102ca801885c5afaa783d1c800`, renderer
+`6c7d7818e40d0f9c519e4b34f7a24e9150c1787f`, PPTX
+`c749c356b4fb5a5b5dfa77db8f1f7dd3c7daef63` and gallery
+`f17e9ae5869669d5fbac3720f285652d0c37551c`. It improves the September 23
+scoreboard from 4 to 5 without a classification regression; text passes for
+798 and fills for 790. Local raw receipts: `baseline81-results.json` and
+`baseline81-report.md`; the committed [results](programs/font-fidelity-everywhere/gallery-support/parity/parity-results.json)
+and [scoreboard](programs/font-fidelity-everywhere/gallery-support/parity/PARITY.md)
+apply the [documented one-slug normalization](programs/font-fidelity-everywhere/gallery-support/README.md#normalized-ids).
+Editor `d0c95a1` was refreshed by a dependency-only merge and was not used by
+parity. The September 23 presence audit remains a distinct historical result.
+
+**Separate candidate measurement.** At `2026-09-29T08:30:22.322Z`, the same
+other heads with PPTX78 `7cc779129323af6123ef5e194226a545e743f195` measured
+5/900 perfect, 0 near and 895 mismatch, text 799 and fills 791, with no
+classification change from the accepted baseline. Local raw receipts:
+`candidate78-results.json` / `candidate78-report.md`. Pending exact-head CI
+and the eventual [PPTX78 merge receipt](https://github.com/OpenPresentation/opf-pptx/pull/78)
+remain separate gates. This candidate does not replace the accepted headline.
+Both audits are source/package checks without Office; neither PR-level tests
+nor native inventory validity establishes whole-program native parity.
+FF-29 stays in review, FF-05 stays open, and the tracker remains 19 done,
+16 review/in-progress and 9 todo.
 No package publication, deployment, shared CI-pin update, native `p:hf`, or
 relaxation of the 0.02 pt / 0.1 reference-pixel gates is authorized here.
 
