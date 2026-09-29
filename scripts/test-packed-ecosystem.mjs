@@ -1,8 +1,8 @@
-import { mkdir, readFile, writeFile, rm, realpath } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, writeFile, rm, realpath, readdir } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { createRequire } from "node:module";
 import { spawnSync } from "node:child_process";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import path from "node:path";
 import {createHash, randomUUID} from 'node:crypto';
 const root = fileURLToPath(new URL("../", import.meta.url)),
@@ -69,7 +69,7 @@ await writeFile(
     2,
   ),
 );
-function run(command, args) {
+function run(command, args, childEnv) {
   // npm's Windows shim is a batch file. Invoke its JS entrypoint without a
   // shell so paths with spaces and package arguments remain literal values.
   if (command==='npm' && process.platform==='win32') {
@@ -82,11 +82,15 @@ function run(command, args) {
     args=[npmEntry,...args];
     command=process.execPath;
   }
-  const result = spawnSync(command, args, { cwd: consumer, stdio: "inherit" });
+  const result = spawnSync(command, args, { cwd: consumer, stdio: "inherit",
+    ...(childEnv ? {env: {...process.env, ...childEnv}} : {}),
+  });
   if (result.error) throw result.error;
   if (result.status !== 0)
     throw new Error(`${command} exited ${result.status}`);
 }
+// New formatted furniture is candidate-only; historical registry fixtures stay unchanged.
+if (!registry) run(process.execPath, [path.join(root, 'scripts/test-packed-furniture-absent.mjs')]);
 run("npm", [
   "install",
   "--ignore-scripts",
@@ -126,6 +130,45 @@ if (!registry) {
     .replaceAll("'../dist/svg.js'", "'@openpresentation/opf-render/svg'");
   await writeFile(path.join(consumer, 'chart-axis.mjs'), axisHarness);
   run(process.execPath, ['chart-axis.mjs']);
+  // Keep the original timezone assertions/workers; both public resolutions must use the installed candidate.
+  const zipDateSource = await readHarness('opf-pptx', 'test/zip-date.mjs');
+  if (zipDateSource.split("'../dist/index.js'").length !== 3) throw new Error('Expected both original ZIP date public import references');
+  const zipDateHarness = zipDateSource.replaceAll("'../dist/index.js'", "'@openpresentation/opf-pptx'");
+  const zipDateRoot = path.join(out, 'zip-date-candidate');
+  await mkdir(zipDateRoot, {recursive: true});
+  const zipDateArtifacts = await mkdtemp(path.join(zipDateRoot, 'installed-'));
+  const zipDateHash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const zipDatePackage = manifest.artifacts.find(item => item.name === '@openpresentation/opf-pptx');
+  if (!zipDatePackage) throw new Error('Missing candidate PPTX archive for ZIP date verification');
+  const zipDateTar = await readFile(path.join(out, zipDatePackage.file));
+  if (zipDateHash(zipDateTar) !== zipDatePackage.sha256) throw new Error('Candidate PPTX ZIP date tarball changed');
+  const zipDateLockBytes = await readFile(path.join(consumer, 'package-lock.json'));
+  const zipDateLocked = JSON.parse(zipDateLockBytes).packages['node_modules/@openpresentation/opf-pptx'];
+  const zipDateIntegrity = 'sha512-' + createHash('sha512').update(zipDateTar).digest('base64');
+  if (zipDateLocked?.integrity !== zipDateIntegrity || !zipDateLocked.resolved?.startsWith('file:') || zipDateLocked.link)
+    throw new Error('ZIP date verification requires the same installed local PPTX archive');
+  const zipDateRef = spawnSync('git', ['rev-parse', 'HEAD'], {cwd: path.resolve(root, '..', 'opf-pptx'), encoding: 'utf8'});
+  if (zipDateRef.status !== 0 || !/^[a-f0-9]{40}$/.test(zipDateRef.stdout.trim())) throw new Error('Cannot bind ZIP date source checkout');
+  const zipDateEntrypoint = await realpath(createRequire(path.join(consumer, 'package.json')).resolve('@openpresentation/opf-pptx'));
+  if (!zipDateEntrypoint.startsWith((await realpath(path.join(consumer, 'node_modules'))) + path.sep)) throw new Error('ZIP date entrypoint must be installed inside this consumer');
+  await writeFile(path.join(consumer, 'zip-date.mjs'), zipDateHarness);
+  await writeFile(path.join(zipDateArtifacts, 'source-fixture.mjs.txt'), zipDateSource);
+  await writeFile(path.join(zipDateArtifacts, 'installed-fixture.mjs.txt'), zipDateHarness);
+  await writeFile(path.join(zipDateArtifacts, 'binding.json'), JSON.stringify({
+    scope: 'Coordinated candidate preview archive; original public fixture with only two import substitutions. Not registry or native acceptance.',
+    source: {repository: 'opf-pptx', head: zipDateRef.stdout.trim(), file: 'test/zip-date.mjs', sha256: zipDateHash(zipDateSource)},
+    installedFixtureSha256: zipDateHash(zipDateHarness), importReplacements: 2, artifact: zipDatePackage,
+    installedIntegrity: zipDateIntegrity, lockSha256: zipDateHash(zipDateLockBytes), expectedEntrypoint: pathToFileURL(zipDateEntrypoint).href,
+    installedEntrypointSha256: zipDateHash(await readFile(zipDateEntrypoint)),
+    childEnv: {OPF_ZIP_DATE_ARTIFACTS: zipDateArtifacts},
+  }, null, 2) + '\n');
+  run(process.execPath, ['zip-date.mjs'], {OPF_ZIP_DATE_ARTIFACTS: zipDateArtifacts});
+  const zipDateResults = (await readdir(zipDateArtifacts, {recursive: true})).filter(file => path.basename(file) === 'result.json');
+  if (zipDateResults.length !== 4) throw new Error('Expected original three-zone and host-mutation ZIP date worker reports');
+  for (const file of zipDateResults) {
+    const result = JSON.parse(await readFile(path.join(zipDateArtifacts, file), 'utf8'));
+    if (result.entrypoint !== pathToFileURL(zipDateEntrypoint).href) throw new Error('ZIP date worker resolved a different package entrypoint');
+  }
 }
 if (verifyFontPreparation) {
   await writeFile(path.join(consumer,'check-font-preparation.mjs'), `
