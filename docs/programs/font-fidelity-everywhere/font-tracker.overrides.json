@@ -1,7 +1,7 @@
 {
   "$comment": "Authored input for scripts/build-font-tracker.mjs. Derived fields (policy, bundle, measurements, parity) are never written here; this file holds owner-plan text, reconciled next actions, evidence keys, classes, scripts, style rules and in-flight candidates. Regenerate with: node scripts/build-font-tracker.mjs",
   "asOf": "2026-09-29",
-  "paritySource": "docs/programs/font-fidelity-everywhere/gallery-support/parity/parity-results-2026-09-29-table-drawn-extent.json",
+  "paritySource": "docs/programs/font-fidelity-everywhere/gallery-support/parity/parity-results-2026-09-29-intos-default.json",
   "manifestSnapshot": "docs/programs/font-fidelity-everywhere/font-tracker.render-manifest.json",
   "measurementReport": "docs/evidence/font-replacements-20260923/report.json",
   "ownerPlan": {
@@ -46,13 +46,13 @@
     "criticalPath": "Aptos and Aptos Display are the critical path: each appears in 704 of the 850 audited gallery values."
   },
   "reconciliation": [
-    "Aptos family (the owner's review predates this). opf#166 is merged (338ddcd4): the policy now routes Aptos, Aptos Display, Aptos Narrow and Aptos Serif to Intos, Intos Display, Intos Narrow and Intos Serif at the metric tier, measured 0.000% mean and maximum width delta in all four styles against Aptos 2.01, with equal vertical metrics and original (Inter-derived; serif Gelasio-derived) outlines under OFL-1.1 with no Reserved Font Name. Independently re-verified for Aptos, Aptos Display and Aptos Narrow; Aptos Serif was measured from Microsoft's Aptos Fonts download. The four Intos rows are new policy families and have records. The faces themselves are not bundled until opf-render#54 lands and browser hosts load them lazily with opf-editor#42, so the Aptos records are `metric-measured` with hosts unverified and the parity run, which still shows Roboto and Carlito substitutes, needs a rerun (the owner's \"no verified compatible replacement\" is superseded).",
-    "Root-reported parity movement, not committed evidence and not used for priorities: mains 25 perfect, 667 near, 158 mismatch; with the Intos pull requests roughly 640 perfect, 32 near, 178 mismatch. The committed run is 5 perfect, 627 near, 218 mismatch (2026-09-29, table drawn extent). Rerun the audit before using either.",
-    "Georgia now has a metric tier: Gelasio with liga and clig disabled (opf#163, opf-render#49, including the raster ZWNJ fix). The committed parity run predates it and still reports Georgia as a visual substitute.",
+    "Aptos family (the owner's review predates this). Intos, Intos Display, Intos Narrow and Intos Serif measured 0.000% mean and maximum width delta in all four styles against Aptos 2.01, with equal vertical metrics and original (Inter-derived; serif Gelasio-derived) outlines under OFL-1.1 with no Reserved Font Name. They are the metric routes in policy (opf#166), vendored in opf-render (#54, `d528be5`, pinned commit `fef9315c`) and loaded lazily by browser hosts (opf-editor#42). Independently re-verified for Aptos, Aptos Display and Aptos Narrow; Aptos Serif was measured from Microsoft's Aptos Fonts download. The parity run on the merged mains passes all 704 Aptos and Aptos Display values, so they no longer lead the priority queue. Node and browser verification is recorded for the family; the editor playground test covers the Aptos scheme (Aptos and Aptos Display); the gallery editor waits for a release. The owner's \"no verified compatible replacement\" is superseded.",
+    "The committed parity run (opf#175, on the merged mains opf `338ddcd4` and opf-render `d528be5`) is 660 perfect, 33 near and 157 mismatch over 850 values, with fontResolution 733 pass, 31 near and 86 fail. Earlier runs (5 perfect, then 25) are history.",
+    "Georgia now has a metric tier: Gelasio with liga and clig disabled (opf#163, opf-render#49, including the raster ZWNJ fix). The parity run on the merged mains reports it as a metric substitute for all 6 values.",
     "Open families are now vendored from unmodified upstream or npm packages (opf-render#50): Open Sans, Montserrat (including 900), Poppins, Bebas Neue, PT Serif, Lora, Merriweather Sans, Source Sans 3 (with the Source Sans Pro alias), Red Hat Display (300, 400, 700) and Red Hat Text (400, 700). Raleway and Playfair Display are not bundled because resvg ignores the wght axis. The owner's \"bundle\" rows for the bundled families become verification work; the remaining bundling work is Anton, Archivo Narrow, Barlow, Bitter, EB Garamond, Figtree, Libre Caslon Text, Work Sans, Liberation Mono, Sans and Serif, Playfair Display and Raleway.",
     "Carlito is vendored as unmodified google/fonts files (opf-render#58) because its Reserved Font Name applies. Licenses, Reserved Font Names and no-hotlink rules are guarded in core and the renderer (opf#165, opf-render#53).",
-    "Script fonts: previews now load script faces automatically (opf-render#55, opf-editor#40) and fall back per character to Noto Sans (opf-render#57). The parity run records 109 family uses as `missing` because it models a host without the script pack; those readings are stale until the audit is rerun, and loading is not verification per family.",
-    "Hosts are recorded separately. The default Node registry (`prepareNodeFonts`) uses the `base` pack (Roboto and Roboto Mono only); the office-pack faces (Carlito, Arimo, Tinos, Cousine, Gelasio, Caladea) and the open pack load only when `pack: 'office'` is requested, and script faces only when the `scripts` option is passed. The browser, the opf-editor playground and the gallery editor (a vendored opf-editor bundle) load the 33 eager base and office faces; the vendored open pack reaches them only with opf-render#54 and opf-editor#42, so families served by that pack carry a loading gap there until then.",
+    "Script fonts: previews load script faces when the `scripts` option is passed (opf-render#55, opf-editor#40) and fall back per character to Noto Sans (opf-render#57). The parity run records 88 family uses as `missing` because it models a host without the script pack; loading is not verification per family.",
+    "Hosts are recorded separately. The default Node registry (`prepareNodeFonts`) uses the `base` pack (Roboto and Roboto Mono only); the office-pack faces (Carlito, Arimo, Tinos, Cousine, Gelasio, Caladea, Intos) and the open pack load only when `pack: 'office'` is requested, and script faces only when the `scripts` option is passed. Browser hosts and the opf-editor playground load the 33 eager base and office faces and now load the vendored open pack and Intos lazily, on demand (opf-render#54, opf-editor#42). The gallery editor (a vendored opf-editor bundle) gets them only with a release that includes opf-editor#42, so it is recorded as pending, not as a gap in the family's status.",
     "Gallery cards are a different host from the gallery editor. pptx-gallery self-hosts preview webfonts (pptx-gallery#53 and #54; replacement data in #51) for 49 families, including Anton, Barlow, Bitter, EB Garamond, Figtree, Libre Caslon Text, Work Sans, Playfair Display, Raleway, Open Sans and Montserrat, as upright regular and bold faces from pinned @fontsource packages or unmodified upstream files. The tracker reads that list from a pinned snapshot (`galleryCards`). Card previews do not change the editor's bundle, and no per-family card verification exists.",
     "fontResolution treats a policy look-alike as near, not fail, when the PPTX names the selected family (opf#159). Parity harness fixes merged in opf#164 and opf#168. The value set is 850 after pptx-gallery#40 removed 50 unsupported chart types; Aptos and Aptos Display each appear in 704 of them.",
     "Selawik 1.01 was measured and rejected as a Segoe UI replacement (opf#166: regular 0.16% mean and 2.51% max on the standard 300-string corpus, 0.73% and 9.7% on the reviewer's broader corpus); Red Hat Display stays the visual route. Segoe UI Light, Semilight and Semibold were measured separately.",
@@ -62,7 +62,7 @@
   "statusDefs": {
     "loading-gap": {
       "severity": 3,
-      "meaning": "The family's preview face is not bundled, or is bundled but not yet loaded by the shipped browser, editor and gallery-editor hosts, so those hosts fall back to another face. Gallery cards (self-hosted webfonts) are tracked separately."
+      "meaning": "The family's preview face is not bundled by opf-render, so every host falls back to another face. A face that is bundled but not yet released to one host (the gallery editor) is noted in hostLoading and the next action, not counted as a gap."
     },
     "style-gap": {
       "severity": 2.5,
@@ -94,7 +94,7 @@
     }
   },
   "hostLoading": {
-    "note": "Derived from the pack a face ships in, the linked pull requests and the opf-render loaders. It is a source-level model, not a per-family verification. Gallery cards (pptx.gallery self-hosted preview webfonts, pptx-gallery#53 and #54) are recorded separately as galleryCards from the pinned gallery snapshot; the gallery editor is the vendored opf-editor bundle.",
+    "note": "Derived from the pack a face ships in, the linked pull requests and the opf-render loaders. It is a source-level model, not a per-family verification. Vendored faces (the open pack and Intos) load lazily in browser hosts since opf-render#54 and opf-editor#42; the gallery editor gets them only with a release that includes opf-editor#42. Gallery cards (pptx.gallery self-hosted preview webfonts, pptx-gallery#53 and #54) are recorded separately as galleryCards from the pinned gallery snapshot.",
     "packs": {
       "base": {
         "node": "default: prepareNodeFonts pack 'base' (Roboto and Roboto Mono only)",
@@ -110,20 +110,27 @@
       },
       "open": {
         "node": "only when pack: 'office' is requested (loadOfficeFontRegistry adds the open pack unless includeOpenFonts is false)",
-        "browser": "not loaded until opf-render#54",
-        "editor": "not loaded until opf-editor#42",
-        "galleryEditor": "not loaded until opf-editor#42 and a gallery editor ref bump"
+        "browser": "lazy: the browser loader fetches hash-verified vendored faces on demand (opf-render#54)",
+        "editor": "lazy: the playground loads them on demand (opf-editor#42)",
+        "galleryEditor": "pending a gallery editor release that includes opf-editor#42 (ref bump); not loaded today"
       },
       "scripts": {
         "node": "only when the scripts option is passed ('auto' or a script list; opf-render#55)",
         "browser": "when the host requests scripts (opf-render#55)",
         "editor": "auto (opf-editor#40)",
         "galleryEditor": "script-font manifest (opf#171)"
+      },
+      "intos": {
+        "node": "default in the office pack: prepareNodeFonts pack 'office' (opf-render#54); not in the default 'base' pack",
+        "browser": "lazy: the browser loader fetches hash-verified vendored faces on demand (opf-render#54)",
+        "editor": "lazy: the playground loads them on demand (opf-editor#42)",
+        "galleryEditor": "pending a gallery editor release that includes opf-editor#42 (ref bump); not loaded today"
       }
     },
-    "lazyPendingPacks": [
-      "open"
-    ]
+    "lazyPendingPacks": [],
+    "packageModels": {
+      "intos": "intos"
+    }
   },
   "classes": {
     "proprietaryScript": [
@@ -580,6 +587,98 @@
         "variants"
       ],
       "note": "Nine base faces (Roboto 7, Roboto Mono 2) loaded offline in Chromium and Node with advances matching within 0.1 px; Latin sample, 2026-09-10 (opf-render docs/evidence). Editor, gallery editor and gallery cards are unverified."
+    },
+    "Aptos": {
+      "node": "verified",
+      "browser": "verified",
+      "editor": "verified",
+      "evidence": [
+        "renderAptosNode",
+        "renderAptosBrowser",
+        "renderLazyBrowser",
+        "editorLazy"
+      ],
+      "note": "Node: opf-render aptos-preview test resolves the Aptos family to Intos as metric with fixed widths (office pack). Browser: aptos-preview-browser loads all sixteen Intos faces in Chromium and matches shaped advances within 0.1 px; lazy-fonts-browser fetches exactly the eight Intos and Intos Display files for an Aptos deck. Editor: opf-editor playground-lazy-fonts (Aptos scheme fetched 8 Intos files; runs painted in Intos at the measured advance). The gallery editor waits for a release that includes opf-editor#42. Scope is the Intos faces; native PowerPoint is separate."
+    },
+    "Aptos Display": {
+      "node": "verified",
+      "browser": "verified",
+      "editor": "verified",
+      "evidence": [
+        "renderAptosNode",
+        "renderAptosBrowser",
+        "renderLazyBrowser",
+        "editorLazy"
+      ],
+      "note": "Node: opf-render aptos-preview test resolves the Aptos family to Intos as metric with fixed widths (office pack). Browser: aptos-preview-browser loads all sixteen Intos faces in Chromium and matches shaped advances within 0.1 px; lazy-fonts-browser fetches exactly the eight Intos and Intos Display files for an Aptos deck. Editor: opf-editor playground-lazy-fonts (Aptos scheme fetched 8 Intos files; runs painted in Intos at the measured advance). The gallery editor waits for a release that includes opf-editor#42. Scope is the Intos faces; native PowerPoint is separate."
+    },
+    "Aptos Narrow": {
+      "node": "verified",
+      "browser": "verified",
+      "editor": "unverified",
+      "evidence": [
+        "renderAptosNode",
+        "renderAptosBrowser",
+        "renderLazyBrowser"
+      ],
+      "note": "Node: opf-render aptos-preview test resolves the Aptos family to Intos as metric with fixed widths (office pack). Browser: aptos-preview-browser loads all sixteen Intos faces in Chromium and matches shaped advances within 0.1 px; lazy-fonts-browser fetches exactly the eight Intos and Intos Display files for an Aptos deck. Editor: the playground test exercises the Aptos scheme (Aptos and Aptos Display) only, so this family is unverified there. The gallery editor waits for a release that includes opf-editor#42. Scope is the Intos faces; native PowerPoint is separate."
+    },
+    "Aptos Serif": {
+      "node": "verified",
+      "browser": "verified",
+      "editor": "unverified",
+      "evidence": [
+        "renderAptosNode",
+        "renderAptosBrowser",
+        "renderLazyBrowser"
+      ],
+      "note": "Node: opf-render aptos-preview test resolves the Aptos family to Intos as metric with fixed widths (office pack). Browser: aptos-preview-browser loads all sixteen Intos faces in Chromium and matches shaped advances within 0.1 px; lazy-fonts-browser fetches exactly the eight Intos and Intos Display files for an Aptos deck. Editor: the playground test exercises the Aptos scheme (Aptos and Aptos Display) only, so this family is unverified there. The gallery editor waits for a release that includes opf-editor#42. Scope is the Intos faces; native PowerPoint is separate."
+    },
+    "Intos": {
+      "node": "verified",
+      "browser": "verified",
+      "editor": "verified",
+      "evidence": [
+        "renderAptosNode",
+        "renderAptosBrowser",
+        "renderLazyBrowser",
+        "editorLazy"
+      ],
+      "note": "Node: opf-render aptos-preview test resolves the Aptos family to Intos as metric with fixed widths (office pack). Browser: aptos-preview-browser loads all sixteen Intos faces in Chromium and matches shaped advances within 0.1 px; lazy-fonts-browser fetches exactly the eight Intos and Intos Display files for an Aptos deck. Editor: opf-editor playground-lazy-fonts (Aptos scheme fetched 8 Intos files; runs painted in Intos at the measured advance). The gallery editor waits for a release that includes opf-editor#42. Scope is the Intos faces; native PowerPoint is separate."
+    },
+    "Intos Display": {
+      "node": "verified",
+      "browser": "verified",
+      "editor": "verified",
+      "evidence": [
+        "renderAptosNode",
+        "renderAptosBrowser",
+        "renderLazyBrowser",
+        "editorLazy"
+      ],
+      "note": "Node: opf-render aptos-preview test resolves the Aptos family to Intos as metric with fixed widths (office pack). Browser: aptos-preview-browser loads all sixteen Intos faces in Chromium and matches shaped advances within 0.1 px; lazy-fonts-browser fetches exactly the eight Intos and Intos Display files for an Aptos deck. Editor: opf-editor playground-lazy-fonts (Aptos scheme fetched 8 Intos files; runs painted in Intos at the measured advance). The gallery editor waits for a release that includes opf-editor#42. Scope is the Intos faces; native PowerPoint is separate."
+    },
+    "Intos Narrow": {
+      "node": "verified",
+      "browser": "verified",
+      "editor": "unverified",
+      "evidence": [
+        "renderAptosNode",
+        "renderAptosBrowser",
+        "renderLazyBrowser"
+      ],
+      "note": "Node: opf-render aptos-preview test resolves the Aptos family to Intos as metric with fixed widths (office pack). Browser: aptos-preview-browser loads all sixteen Intos faces in Chromium and matches shaped advances within 0.1 px; lazy-fonts-browser fetches exactly the eight Intos and Intos Display files for an Aptos deck. Editor: the playground test exercises the Aptos scheme (Aptos and Aptos Display) only, so this family is unverified there. The gallery editor waits for a release that includes opf-editor#42. Scope is the Intos faces; native PowerPoint is separate."
+    },
+    "Intos Serif": {
+      "node": "verified",
+      "browser": "verified",
+      "editor": "unverified",
+      "evidence": [
+        "renderAptosNode",
+        "renderAptosBrowser",
+        "renderLazyBrowser"
+      ],
+      "note": "Node: opf-render aptos-preview test resolves the Aptos family to Intos as metric with fixed widths (office pack). Browser: aptos-preview-browser loads all sixteen Intos faces in Chromium and matches shaped advances within 0.1 px; lazy-fonts-browser fetches exactly the eight Intos and Intos Display files for an Aptos deck. Editor: the playground test exercises the Aptos scheme (Aptos and Aptos Display) only, so this family is unverified there. The gallery editor waits for a release that includes opf-editor#42. Scope is the Intos faces; native PowerPoint is separate."
     }
   },
   "nativeVerification": {
@@ -601,7 +700,7 @@
   },
   "families": {
     "Aptos": {
-      "nextAction": "Metric route Intos is merged in policy (opf#166; 0.000% mean and max in all four styles against Aptos 2.01, vertical metrics equal, original Inter-derived outlines, OFL-1.1, no Reserved Font Name). Land opf-render#54 (faces) and opf-editor#42 (lazy loading), then verify the route in Node (pack office), browser, editor and gallery editor, rerun parity, and confirm the PPTX still names the selected family. Roboto and Carlito stay alternates. The committed parity run still shows Aptos as a Roboto substitute (704 values) until then.",
+      "nextAction": "Intos is the merged metric route (opf#166; 0.000% mean and max in four styles against Aptos 2.01, vertical metrics equal, original Inter-derived outlines, OFL-1.1, no Reserved Font Name), vendored in opf-render#54 and loaded lazily in browser hosts (opf-editor#42). Node, browser and editor evidence exists for the Aptos scheme; the parity run on the merged mains passes all 704 values (metric-substitute). Then verify the gallery editor once a release includes opf-editor#42, rerun parity on the release, and confirm the PPTX still names the selected family in native PowerPoint. Roboto and Carlito stay alternates.",
       "evidence": [
         "intos",
         "metricCandidates",
@@ -610,7 +709,7 @@
       ]
     },
     "Aptos Display": {
-      "nextAction": "Metric route Intos Display is merged in policy (opf#166), measured separately from Aptos: 0.000% in all four styles against Aptos Display 2.01, independently re-verified. Land opf-render#54 and opf-editor#42, then verify the route in Node (pack office), browser, editor and gallery editor, rerun parity, and confirm the PPTX still names the selected family. Do not inherit Aptos results.",
+      "nextAction": "Intos Display is the merged metric route, measured separately from Aptos (0.000% in four styles against Aptos Display 2.01, independently re-verified), vendored in opf-render#54. Node, browser and editor evidence exists via the Aptos scheme; parity passes all 704 values. Then verify the gallery editor once a release includes opf-editor#42, rerun parity on the release, and confirm the PPTX still names the selected family in native PowerPoint. Do not inherit Aptos results.",
       "evidence": [
         "intos",
         "metricCandidates",
@@ -618,14 +717,14 @@
       ]
     },
     "Aptos Narrow": {
-      "nextAction": "Metric route Intos Narrow is merged in policy (opf#166): 0.000% in all four styles against Aptos Narrow 2.01, independently re-verified. Land opf-render#54 and opf-editor#42, then verify the route in Node (pack office), browser, editor and gallery editor, rerun parity, and confirm the PPTX still names the selected family.",
+      "nextAction": "Intos Narrow is the merged metric route (0.000% in four styles against Aptos Narrow 2.01, independently re-verified), vendored in opf-render#54. Node and browser evidence is at the face level; the editor playground test does not exercise it, and no gallery value uses it. Add an editor fixture, then then verify the gallery editor once a release includes opf-editor#42, rerun parity on the release, and confirm the pptx still names the selected family in native powerpoint.",
       "evidence": [
         "intos",
         "metricCandidates"
       ]
     },
     "Aptos Serif": {
-      "nextAction": "Metric route Intos Serif is merged in policy (opf#166): 0.000% in all four styles, measured from Microsoft's Aptos Fonts download (Gelasio-derived outlines share eight plain rectangles with the original). Land opf-render#54 and opf-editor#42, then verify the route in Node (pack office), browser, editor and gallery editor, rerun parity, and confirm the PPTX still names the selected family. Check serif kerning and wrapping.",
+      "nextAction": "Intos Serif is the merged metric route (0.000% in four styles, measured from Microsoft's Aptos Fonts download; Gelasio-derived outlines share eight plain rectangles with the original), vendored in opf-render#54. Node and browser evidence is at the face level; add an editor fixture and check serif kerning and wrapping, then then verify the gallery editor once a release includes opf-editor#42, rerun parity on the release, and confirm the pptx still names the selected family in native powerpoint.",
       "evidence": [
         "intos",
         "metricCandidates"
@@ -664,12 +763,11 @@
       ]
     },
     "Georgia": {
-      "nextAction": "Verify the merged metric fix (Gelasio with liga and clig off) is applied consistently in measurement, SVG, browser and raster paths in every host. The parity run predates it and still reports Georgia as visual.",
+      "nextAction": "Verify the merged metric fix (Gelasio with liga and clig off) is applied consistently in measurement, SVG, browser and raster paths in every host. The parity run on the merged mains reports it as a metric substitute for all 6 values.",
       "evidence": [
         "georgia",
         "measurement"
-      ],
-      "note": "Parity run heads predate opf#163 and opf-render#49."
+      ]
     },
     "Arial Black": {
       "nextAction": "Ensure the bundled Montserrat 900 face actually activates in every host (regular-weight width comparison only: mean 0.75%, max 2.8%). Qualify heavy glyph widths, line breaks and wrapping.",
@@ -1336,7 +1434,7 @@
       ]
     },
     "Open Sans": {
-      "nextAction": "Verify the newly bundled faces in actual hosts and rerun the old missing-face failures; the editor and gallery editor load them only after opf-editor#42 (gallery cards already self-host it).",
+      "nextAction": "Verify the newly bundled faces in actual hosts and rerun the old missing-face failures; the editor and browser load them lazily (opf-render#54, opf-editor#42), the gallery editor after a release, and gallery cards already self-host it.",
       "evidence": [
         "openPack",
         "intos"
@@ -1684,28 +1782,28 @@
       ]
     },
     "Intos": {
-      "nextAction": "Vendor Intos in opf-render (opf-render#54; pinned commit fef9315c14da9e4b23b4c3cac8e718998d4e4736, OFL-1.1, no Reserved Font Name, single-maintainer project so Roboto and Carlito stay as alternates) and load it lazily in the browser hosts (opf-editor#42); then verify four styles in every host and its role as the Aptos replacement independently.",
+      "nextAction": "Bundled (pinned commit fef9315c14da9e4b23b4c3cac8e718998d4e4736, OFL-1.1, no Reserved Font Name, single-maintainer project so Roboto and Carlito stay as alternates) and lazy-loaded in browser hosts. Node and browser evidence exists and the editor playground test covers it. Verify the gallery editor after a release that includes opf-editor#42, and its role as the Aptos replacement independently.",
       "evidence": [
         "intos",
         "licensing"
       ]
     },
     "Intos Display": {
-      "nextAction": "Vendor Intos Display in opf-render (opf-render#54; pinned commit fef9315c14da9e4b23b4c3cac8e718998d4e4736, OFL-1.1, no Reserved Font Name, single-maintainer project so Roboto and Carlito stay as alternates) and load it lazily in the browser hosts (opf-editor#42); then verify four styles in every host and its role as the Aptos Display replacement independently.",
+      "nextAction": "Bundled (pinned commit fef9315c14da9e4b23b4c3cac8e718998d4e4736, OFL-1.1, no Reserved Font Name, single-maintainer project so Roboto and Carlito stay as alternates) and lazy-loaded in browser hosts. Node and browser evidence exists and the editor playground test covers it. Verify the gallery editor after a release that includes opf-editor#42, and its role as the Aptos Display replacement independently.",
       "evidence": [
         "intos",
         "licensing"
       ]
     },
     "Intos Narrow": {
-      "nextAction": "Vendor Intos Narrow in opf-render (opf-render#54; pinned commit fef9315c14da9e4b23b4c3cac8e718998d4e4736, OFL-1.1, no Reserved Font Name, single-maintainer project so Roboto and Carlito stay as alternates) and load it lazily in the browser hosts (opf-editor#42); then verify four styles in every host and its role as the Aptos Narrow replacement independently.",
+      "nextAction": "Bundled (pinned commit fef9315c14da9e4b23b4c3cac8e718998d4e4736, OFL-1.1, no Reserved Font Name, single-maintainer project so Roboto and Carlito stay as alternates) and lazy-loaded in browser hosts. Node and browser evidence exists; add an editor fixture. Verify the gallery editor after a release that includes opf-editor#42, and its role as the Aptos Narrow replacement independently.",
       "evidence": [
         "intos",
         "licensing"
       ]
     },
     "Intos Serif": {
-      "nextAction": "Vendor Intos Serif in opf-render (opf-render#54; pinned commit fef9315c14da9e4b23b4c3cac8e718998d4e4736, OFL-1.1, no Reserved Font Name, single-maintainer project so Roboto and Carlito stay as alternates) and load it lazily in the browser hosts (opf-editor#42); then verify four styles in every host and its role as the Aptos Serif replacement independently.",
+      "nextAction": "Bundled (pinned commit fef9315c14da9e4b23b4c3cac8e718998d4e4736, OFL-1.1, no Reserved Font Name, single-maintainer project so Roboto and Carlito stay as alternates) and lazy-loaded in browser hosts. Node and browser evidence exists; add an editor fixture. Verify the gallery editor after a release that includes opf-editor#42, and its role as the Aptos Serif replacement independently.",
       "evidence": [
         "intos",
         "licensing"
@@ -2025,11 +2123,11 @@
         "url": "https://github.com/OpenPresentation/opf/pull/166"
       },
       {
-        "label": "opf-render#54 (Intos faces, in flight)",
+        "label": "opf-render#54 (Intos faces, merged d528be5)",
         "url": "https://github.com/OpenPresentation/opf-render/pull/54"
       },
       {
-        "label": "opf-editor#42 (lazy loading, in flight)",
+        "label": "opf-editor#42 (lazy loading, merged cfad5cd)",
         "url": "https://github.com/OpenPresentation/opf-editor/pull/42"
       }
     ],
@@ -2124,6 +2222,26 @@
     "metricCandidates": {
       "label": "Intos and Selawik acceptance measurement (2026-09-29)",
       "url": "docs/evidence/font-replacements-20260923/metric-candidates-20260929.json"
+    },
+    "renderAptosNode": {
+      "label": "opf-render aptos-preview test (Node, office pack, four Intos families)",
+      "url": "https://github.com/OpenPresentation/opf-render/blob/d528be52878788bf2ecbdc138b839443ec66dc4e/test/aptos-preview.mjs"
+    },
+    "renderAptosBrowser": {
+      "label": "opf-render aptos-preview-browser test (sixteen Intos faces, Chromium, 0.1 px)",
+      "url": "https://github.com/OpenPresentation/opf-render/blob/d528be52878788bf2ecbdc138b839443ec66dc4e/test/aptos-preview-browser.mjs"
+    },
+    "renderLazyBrowser": {
+      "label": "opf-render lazy-fonts-browser test (Aptos deck fetches eight Intos files)",
+      "url": "https://github.com/OpenPresentation/opf-render/blob/d528be52878788bf2ecbdc138b839443ec66dc4e/test/lazy-fonts-browser.mjs"
+    },
+    "editorLazy": {
+      "label": "opf-editor playground-lazy-fonts test (Aptos scheme: eight Intos files, runs painted in Intos)",
+      "url": "https://github.com/OpenPresentation/opf-editor/blob/cfad5cdba73b58fddfbc9bebd3831d9c34895300/test/playground-lazy-fonts.mjs"
+    },
+    "parityIntos": {
+      "label": "Parity run on the merged Intos mains (opf#175)",
+      "url": "docs/programs/font-fidelity-everywhere/gallery-support/parity/PARITY-2026-09-29-intos-default.md"
     }
   },
   "galleryFontsSnapshot": "docs/programs/font-fidelity-everywhere/font-tracker.gallery-preview-fonts.json",
@@ -2150,64 +2268,7 @@
     }
   },
   "acceptance": {},
-  "pendingBundle": {
-    "Aptos": {
-      "prs": [
-        "opf-render#54",
-        "opf-editor#42"
-      ],
-      "note": "Intos is the metric route in the merged policy (opf#166); its faces are vendored in the open opf-render#54 and lazy-loaded by the open opf-editor#42."
-    },
-    "Intos": {
-      "prs": [
-        "opf-render#54",
-        "opf-editor#42"
-      ],
-      "note": "Intos faces are vendored in the open opf-render#54 and lazy-loaded by the open opf-editor#42."
-    },
-    "Aptos Display": {
-      "prs": [
-        "opf-render#54",
-        "opf-editor#42"
-      ],
-      "note": "Intos Display is the metric route in the merged policy (opf#166); its faces are vendored in the open opf-render#54 and lazy-loaded by the open opf-editor#42."
-    },
-    "Intos Display": {
-      "prs": [
-        "opf-render#54",
-        "opf-editor#42"
-      ],
-      "note": "Intos Display faces are vendored in the open opf-render#54 and lazy-loaded by the open opf-editor#42."
-    },
-    "Aptos Narrow": {
-      "prs": [
-        "opf-render#54",
-        "opf-editor#42"
-      ],
-      "note": "Intos Narrow is the metric route in the merged policy (opf#166); its faces are vendored in the open opf-render#54 and lazy-loaded by the open opf-editor#42."
-    },
-    "Intos Narrow": {
-      "prs": [
-        "opf-render#54",
-        "opf-editor#42"
-      ],
-      "note": "Intos Narrow faces are vendored in the open opf-render#54 and lazy-loaded by the open opf-editor#42."
-    },
-    "Aptos Serif": {
-      "prs": [
-        "opf-render#54",
-        "opf-editor#42"
-      ],
-      "note": "Intos Serif is the metric route in the merged policy (opf#166); its faces are vendored in the open opf-render#54 and lazy-loaded by the open opf-editor#42."
-    },
-    "Intos Serif": {
-      "prs": [
-        "opf-render#54",
-        "opf-editor#42"
-      ],
-      "note": "Intos Serif faces are vendored in the open opf-render#54 and lazy-loaded by the open opf-editor#42."
-    }
-  },
+  "pendingBundle": {},
   "measurementDetails": {
     "Aptos": {
       "verticalMetricsMatch": true,
