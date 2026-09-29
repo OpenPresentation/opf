@@ -10,7 +10,7 @@ packages. It measures the engines, not the schema: a value that validates but
 changes nothing in the preview or the PPTX is not reported as working.
 
 **Headline: 5 of 900 gallery values are perfect by parity** (FF-38, accepted
-merged source graph on 2026-09-29; 0 near, 895 mismatch). The unchanged full
+merged source graph on 2026-09-29; 0 near, 895 mismatch under the old fontResolution definition; 608 near, 287 mismatch under the definition adopted on 2026-09-29, see [below](#fontresolution-definition-change-owner-decision-2026-09-29)). The unchanged full
 audit improves the September 23 result from 4 to 5, with no classification
 regressions. This graph includes PPTX79 and PPTX81 and core145's FF-04 evidence.
 This is the program's progress metric. The 900 values are the 793
@@ -65,7 +65,7 @@ Editor `d0c95a1` was refreshed by a dependency-only merge and was not used by
 parity. A separate local raw candidate receipt, `candidate78-results.json`
 at `2026-09-29T08:30:22.322Z`, uses the same core, renderer and gallery with
 [PPTX78](https://github.com/OpenPresentation/opf-pptx/pull/78) head
-`7cc779129323af6123ef5e194226a545e743f195`: also 5 perfect, 0 near, 895 mismatch,
+`7cc779129323af6123ef5e194226a545e743f195`: also 5 perfect, 0 near, 895 mismatch (old fontResolution definition),
 with text 798 to 799 and fills 790 to 791 and no classification change.
 Candidate CI [36543078806](https://github.com/OpenPresentation/opf-pptx/actions/runs/36543078806)
 is pending at this checkpoint. It does not replace the accepted baseline.
@@ -178,7 +178,7 @@ slideSize, typefaces and theme pass
 everywhere. Re-import passes for 899; the `photography` snippet, which has no
 asset, loses its background with a specific diagnostic (near).
 
-Per dimension (accepted September 29 graph; slideSize, typefaces and theme pass everywhere):
+Per dimension (accepted September 29 graph, old fontResolution definition, so its fontResolution column counts only real or metric-compatible faces; slideSize, typefaces and theme pass everywhere; the new definition's per-dimension near and fail counts are in the [look-alike run's scoreboard](gallery-support/parity/PARITY-2026-09-29-lookalike-fonts.md)):
 
 | Dimension | Values | perfect | geometry | text | fills | zOrder | reimport | fontResolution | mapping |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -197,9 +197,11 @@ Per dimension (accepted September 29 graph; slideSize, typefaces and theme pass 
 | blocks | 32 | 1 | 30 | 28 | 30 | 32 | 32 | 1 | 32 |
 | image-treatments | 15 (+15 withAssets) | 0 (0) | 15 (15) | 0 (15) | 15 (15) | 15 (15) | 15 (15) | 0 (0) | 15 (15) |
 
-Socials, tones, narratives, languages and the other non-layout metadata
-dimensions now fail only font resolution (visual substitutes, including
-Aptos Display to Carlito and Aptos to Roboto).
+Under the old fontResolution definition, socials, tones, narratives, languages
+and the other non-layout metadata dimensions failed only font resolution
+(visual substitutes, including Aptos Display to Carlito and Aptos to Roboto).
+Under the definition adopted on 2026-09-29 those visual substitutes are near,
+so the same run reports 608 near and 287 mismatch in all.
 
 ### Measurement notes (2026-09-23 re-run)
 
@@ -319,7 +321,7 @@ acceptance keep FF-39 in review.
 
 | Blocker | Check (passed) | Values hit | Fix |
 | --- | --- | --- | --- |
-| The preview uses visual substitutes for Aptos Display (Carlito) and Aptos (Roboto), affecting 754 values. 71 families have no face at all (104 values). | fontResolution (5) | 754+ | FF-31 (core133 and renderer44 merged; policy acceptance remains open) |
+| Under the new fontResolution definition (owner decision 2026-09-29), Aptos Display (Carlito) and Aptos (Roboto) are visual-only replacements: 754 values are near (791 in all across 27 families). 104 values fail because the modelled office-pack preview has no face: 85 values need script-pack faces that the `scripts` pack bundles but the preview does not load, and 19 values name open families no pack bundles (Open Sans, Montserrat, Poppins and others). | fontResolution (5 pass, 791 near, 104 fail) | 791 near, 104 fail | FF-31 metric-compatible open replacements (Intos candidate for Aptos); font bundling PR in progress |
 
 Other recurring parity failures:
 

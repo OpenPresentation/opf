@@ -44,14 +44,37 @@ export function legacyStatus(preview) {
 export const legacyPasses = preview => ['real', 'metric-substitute'].includes(legacyStatus(preview));
 
 /**
+ * Where must the PPTX name the selected family, and does it? Pure; the harness supplies the facts.
+ * - Heading and body fonts: theme major latin and theme minor latin. Two independent checks, so a wrong minor
+ *   latin is caught even when heading and body are the same family.
+ * - Every family the preview draws text in: for each script slot (latin/ea/cs) the drawn text uses, the PPTX must
+ *   write the family in that slot (a run without its own ea/cs typeface falls back to latin, an inheriting run takes
+ *   the theme font of the slot). An ea or cs name alone never satisfies a Latin family, and vice versa.
+ * - A family that is neither heading, body nor drawn in any run (a design-only code font): named is null, "not
+ *   applicable". It is reported as such and never counted as named.
+ * @param {{family:string, roles:Record<string,string>, theme:{major:object,minor:object},
+ *          slotsUsed:Set<string>, pptxNamesBySlot:{latin:Set<string>,ea:Set<string>,cs:Set<string>}}} a
+ * @returns {{named:boolean|null, slot?:string}}
+ */
+export function pptxNaming({family, roles, theme, slotsUsed, pptxNamesBySlot}) {
+  const failures = [];
+  if (roles.heading === family && theme.major?.latin !== family) failures.push('theme major latin');
+  if (roles.body === family && theme.minor?.latin !== family) failures.push('theme minor latin');
+  for (const slot of ['latin', 'ea', 'cs']) if (slotsUsed.has(slot) && !pptxNamesBySlot[slot]?.has(family)) failures.push(`run ${slot} slot`);
+  if (failures.length) return {named: false, slot: failures.join(' and ')};
+  const themed = roles.heading === family || roles.body === family;
+  return {named: themed || slotsUsed.size ? true : null};
+}
+
+/**
  * Classify one selected family.
  * @param {object} a
  * @param {string} a.family selected family name (as the design, the preview runs and the PPTX name it)
  * @param {object|undefined} a.policyRow FF-31 row from core `fontPolicyFor(family)`, or undefined
  * @param {{ok:boolean, compatibility?:string, resolvedFamily?:string, code?:string}} a.preview registry resolution of
  *        the family in the preview font configuration (ok:false when the registry has no face)
- * @param {{named:boolean, slot?:string, replacementNames?:string[]}} a.pptx named: the PPTX references `family` in
- *        the relevant theme/run slot(s); slot: where it was expected; replacementNames: replacement or alternate names
+ * @param {{named:boolean|null, slot?:string, replacementNames?:string[]}} a.pptx named: the PPTX references `family` in
+ *        the relevant theme/run slot(s) (see pptxNaming; null = not applicable, reported, not a failure); slot: where it failed; replacementNames: replacement or alternate names
  *        of this family the PPTX writes (and that are not themselves selected families)
  * @param {string[]} [a.bundledIn] font packs that bundle this family (detail only)
  * @returns {{verdict:'pass'|'near'|'fail', tier:string|null, route:string|null, policyTier:string|null,

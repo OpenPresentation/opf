@@ -9,7 +9,7 @@ import {execFileSync} from 'node:child_process';
 import path from 'node:path';
 import {fileURLToPath, pathToFileURL} from 'node:url';
 import {createRequire} from 'node:module';
-import {classifyFontResolution, legacyPasses} from './font-resolution.mjs';
+import {classifyFontResolution, legacyPasses, pptxNaming} from './font-resolution.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(here, '..');
@@ -264,12 +264,14 @@ async function parity(doc) {
   const slideParts = Object.keys(files).filter(n => /^ppt\/slides\/slide\d+\.xml$/.test(n)).sort((a, b) => parseInt(a.match(/\d+/)) - parseInt(b.match(/\d+/)));
   if (slideParts.length !== svgs.length) add('zOrder', 'fail', `slide count ${svgs.length} preview vs ${slideParts.length} pptx`);
   const chosenFamilies = new Set(); const fontRes = {};
-  const previewRunFamilies = new Set(); const pptxSlotNames = new Set(); // families the preview draws / the PPTX writes in run and chart slots
+  // Per family: the script slots (latin/ea/cs) the preview text drawn in it uses, picked as the text check picks them; and per slot the
+  // names the PPTX writes there (a run without its own ea/cs typeface falls back to latin, as in the text check).
+  const previewSlots = new Map(); const pptxNamesBySlot = {latin: new Set(), ea: new Set(), cs: new Set()};
   for (let si = 0; si < Math.min(svgs.length, slideParts.length); si++) {
     const P = parseSvg(svgs[si]); const X = parseSlide(dec.decode(files[slideParts[si]]), relsOf(files, slideParts[si]), files, theme, slideParts[si]);
     const bound = resolved.slides[si];
-    for (const e of P.elements) if (e.kind === 'text') for (const r of e.runs) if (r.family) previewRunFamilies.add(r.family);
-    for (const s of X.shapes) { for (const p of s.paragraphs ?? []) for (const r of p.runs) for (const k of ['latin', 'ea', 'cs']) if (r[k]) pptxSlotNames.add(r[k]); for (const t of s.chart?.typefaces ?? []) pptxSlotNames.add(t); }
+    for (const e of P.elements) if (e.kind === 'text' && e.a['aria-hidden'] !== 'true') for (const r of e.runs) if (r.family && normText(r.text)) { const set = previewSlots.get(r.family) ?? previewSlots.set(r.family, new Set()).get(r.family); for (const c of r.text) set.add(scriptOf(c === ' ' ? r.text : c)); }
+    for (const s of X.shapes) { for (const p of s.paragraphs ?? []) for (const r of p.runs) for (const k of ['latin', 'ea', 'cs']) { const name = r[k] ?? r.latin; if (name) pptxNamesBySlot[k].add(name); } for (const t of s.chart?.typefaces ?? []) pptxNamesBySlot.latin.add(t); }
     for (const f of Object.values(bound.design.fonts ?? {})) if (f) chosenFamilies.add(firstFamily(f));
     // Items: resolved geometry items + SVG boxes not under an item.
     const items = bound.geometry.items.map(it => ({path: it.path, field: it.field, type: it.type, box: {x: it.box.x, y: it.box.y, w: it.box.width, h: it.box.height}, frame: it.frameBox ? {x: it.frameBox.x, y: it.frameBox.y, w: it.frameBox.width, h: it.frameBox.height} : null}));
@@ -417,20 +419,17 @@ async function parity(doc) {
   // replacement; and the preview must draw the real face or the FF-31 policy table's route. Metric-compatible
   // routes pass, visual-only routes are near (reported), everything else fails.
   const roles = Object.fromEntries(Object.entries(d0.fonts ?? {}).filter(([, v]) => v).map(([k, v]) => [k, firstFamily(v)]));
-  const themeNames = [theme.major, theme.minor].flatMap(t => [t.latin, t.ea, t.cs]).filter(Boolean);
+  // A run with no typeface of its own inherits the theme font of its slot (major or minor).
+  for (const k of ['latin', 'ea', 'cs']) for (const t of [theme.major, theme.minor]) if (t[k]) pptxNamesBySlot[k].add(t[k]);
   const packageNames = new Set([...invt.typefaces.map(t => t.typeface), ...invt.appFonts].filter(Boolean).map(x => x.toLowerCase()));
   for (const f of chosenFamilies) {
     if (!f) continue;
     const policyRow = fontPolicyFor(f), preview = resolveFamily(f);
-    let named = true, slot;
-    const heading = roles.heading === f, body = roles.body === f;
-    if (heading && theme.major.latin !== f) { named = false; slot = 'theme major latin'; }
-    else if (body && theme.minor.latin !== f) { named = false; slot = 'theme minor latin'; }
-    else if (!heading && !body && previewRunFamilies.has(f) && !pptxSlotNames.has(f) && !themeNames.includes(f)) { named = false; slot = 'run latin/ea/cs slots'; }
+    const {named, slot} = pptxNaming({family: f, roles, theme, slotsUsed: previewSlots.get(f) ?? new Set(), pptxNamesBySlot});
     const routeNames = policyRow?.replacement ? [policyRow.replacement.family, ...(policyRow.alternates ?? [])] : [];
     const replacementNames = routeNames.filter(r => r.toLowerCase() !== f.toLowerCase() && !chosenFamilies.has(r) && packageNames.has(r.toLowerCase()));
     const cls = classifyFontResolution({family: f, policyRow, preview, pptx: {named, slot, replacementNames}, bundledIn: preview.ok ? [] : [...new Set([f, ...routeNames].flatMap(bundledIn))]});
-    fontRes[f] = {status: cls.legacy, resolved: cls.resolved, verdict: cls.verdict, tier: cls.tier, route: cls.route, policyTier: cls.policyTier, licenseClass: cls.licenseClass, ...(preview.ok ? {} : {error: preview.code}), pptx: {named, ...(slot ? {slot} : {}), replacementNames}};
+    fontRes[f] = {status: cls.legacy, resolved: cls.resolved, verdict: cls.verdict, tier: cls.tier, route: cls.route, policyTier: cls.policyTier, licenseClass: cls.licenseClass, ...(preview.ok ? {} : {error: preview.code}), pptx: {named, ...(slot ? {slot} : {}), slotsUsed: [...(previewSlots.get(f) ?? [])].sort(), replacementNames}};
     for (const r of cls.reasons) add('fontResolution', r.status, r.reason, f);
     if (!legacyPasses(preview)) legacyFontReasons.push(`preview font ${cls.legacy}: ${f}${cls.resolved ? ' -> ' + cls.resolved : ''}`);
   }

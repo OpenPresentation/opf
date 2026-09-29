@@ -1,7 +1,7 @@
 // Controls for the FF-38 fontResolution classifier. Run: node --test font-resolution.test.mjs
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {classifyFontResolution, legacyPasses, legacyStatus, sameFamilyGroup} from './font-resolution.mjs';
+import {classifyFontResolution, legacyPasses, legacyStatus, pptxNaming, sameFamilyGroup} from './font-resolution.mjs';
 
 // Rows shaped like core `fontPolicyFor()` results (spec/reference/font-policy.json).
 const row = {
@@ -91,4 +91,42 @@ test('legacy definition: only the real face or a metric substitute passes', () =
   assert.ok(!legacyPasses(ok('visual', 'Carlito'))); assert.equal(legacyStatus(ok('visual', 'Carlito')), 'visual-substitute');
   assert.ok(!legacyPasses({ok: false})); assert.equal(legacyStatus({ok: false}), 'missing');
   assert.equal(legacyStatus(ok('generic', 'Roboto')), 'missing');
+});
+
+// ---- where the PPTX must name the selected family (pptxNaming) ----
+const th = (major, minor) => ({major: {latin: major}, minor: {latin: minor}});
+const names = ({latin = [], ea = [], cs = []} = {}) => ({latin: new Set(latin), ea: new Set(ea), cs: new Set(cs)});
+const slots = (...s) => new Set(s);
+test('heading and body are the same family: a wrong minor latin is still caught', () => {
+  const r = pptxNaming({family: 'Aptos', roles: {heading: 'Aptos', body: 'Aptos'}, theme: th('Aptos', 'Carlito'), slotsUsed: slots('latin'), pptxNamesBySlot: names({latin: ['Aptos']})});
+  assert.equal(r.named, false); assert.equal(r.slot, 'theme minor latin');
+  const r2 = pptxNaming({family: 'Aptos', roles: {heading: 'Aptos', body: 'Aptos'}, theme: th('Carlito', 'Carlito'), slotsUsed: slots('latin'), pptxNamesBySlot: names({latin: ['Aptos']})});
+  assert.equal(r2.slot, 'theme major latin and theme minor latin');
+});
+test('heading and body both named in the theme passes', () => {
+  assert.deepEqual(pptxNaming({family: 'Aptos', roles: {heading: 'Aptos', body: 'Aptos'}, theme: th('Aptos', 'Aptos'), slotsUsed: slots('latin'), pptxNamesBySlot: names({latin: ['Aptos']})}), {named: true});
+});
+test('a design-only family no preview run draws in is not applicable, never vacuously named', () => {
+  const r = pptxNaming({family: 'Roboto Mono', roles: {heading: 'Aptos', body: 'Aptos', code: 'Roboto Mono'}, theme: th('Aptos', 'Aptos'), slotsUsed: slots(), pptxNamesBySlot: names()});
+  assert.equal(r.named, null);
+  const c = run('Roboto', ok('exact', 'Roboto'), {named: null, replacementNames: []});
+  assert.equal(c.verdict, 'pass'); assert.ok(!c.reasons.some(x => /does not name/.test(x.reason)));
+});
+test('a drawn family the PPTX never writes fails, even with no theme role', () => {
+  const r = pptxNaming({family: 'Consolas', roles: {heading: 'Aptos', body: 'Aptos', code: 'Consolas'}, theme: th('Aptos', 'Aptos'), slotsUsed: slots('latin'), pptxNamesBySlot: names({latin: ['Aptos']})});
+  assert.equal(r.named, false); assert.equal(r.slot, 'run latin slot');
+  assert.equal(run('Consolas', ok('visual', 'Cousine'), {named: false, slot: r.slot, replacementNames: []}).verdict, 'fail');
+});
+test('an ea or cs name alone does not satisfy a Latin family', () => {
+  const r = pptxNaming({family: 'Consolas', roles: {}, theme: th('Aptos', 'Aptos'), slotsUsed: slots('latin'), pptxNamesBySlot: names({latin: ['Aptos'], ea: ['Consolas'], cs: ['Consolas']})});
+  assert.equal(r.named, false); assert.equal(r.slot, 'run latin slot');
+});
+test('text drawn in an ea slot needs the family in the ea slot, not only in latin', () => {
+  const only = pptxNaming({family: 'Meiryo', roles: {}, theme: th('Aptos', 'Aptos'), slotsUsed: slots('ea'), pptxNamesBySlot: names({latin: ['Meiryo']})});
+  assert.equal(only.named, false); assert.equal(only.slot, 'run ea slot');
+  assert.equal(pptxNaming({family: 'Meiryo', roles: {}, theme: th('Aptos', 'Aptos'), slotsUsed: slots('ea'), pptxNamesBySlot: names({ea: ['Meiryo']})}).named, true);
+});
+test('a family drawn in latin and ea text needs both slots', () => {
+  const r = pptxNaming({family: 'Meiryo', roles: {}, theme: th('Aptos', 'Aptos'), slotsUsed: slots('latin', 'ea'), pptxNamesBySlot: names({latin: ['Meiryo']})});
+  assert.equal(r.slot, 'run ea slot');
 });

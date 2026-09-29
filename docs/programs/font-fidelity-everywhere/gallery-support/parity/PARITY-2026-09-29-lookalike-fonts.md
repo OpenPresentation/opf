@@ -1,6 +1,6 @@
 # Preview vs PPTX parity: pptx.gallery values
 
-Generated 2026-09-29T18:30:00.020Z by `dimension-audit/parity/scripts/parity.mjs` (Node v24.21.0, worktree prefix `parity`). No Office was used.
+Generated 2026-09-29T18:40:39.071Z by `dimension-audit/parity/scripts/parity.mjs` (Node v24.21.0, worktree prefix `parity`). No Office was used.
 
 Heads: opf `401f2e3`, opf-render `c62b3f9`, opf-pptx `54f7e4c`, pptx-gallery `4b48e69`.
 
