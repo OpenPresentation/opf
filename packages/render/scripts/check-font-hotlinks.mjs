@@ -16,7 +16,7 @@
 // Host names are assembled from parts so this file does not match its own rules.
 
 import { execFileSync } from "node:child_process";
-import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
+import { existsSync, lstatSync, readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
@@ -106,20 +106,21 @@ function looksBinary(buffer) {
 export function scanFile(file) {
   const base = path.basename(file);
   if (BINARY_EXTENSIONS.has(path.extname(file).toLowerCase()) || LOCKFILES.has(base)) return [];
-  let size;
+  let stats;
   try {
-    size = statSync(file).size;
+    // lstat: tracked symlinks to directories (Linux checkouts) are skipped; only regular files are scanned.
+    stats = lstatSync(file);
   } catch {
     return [];
   }
-  if (size > MAX_BYTES) return [];
+  if (!stats.isFile() || stats.size > MAX_BYTES) return [];
   const buffer = readFileSync(file);
   if (looksBinary(buffer)) return [];
   return scanText(buffer.toString("utf8"));
 }
 
 export function trackedFiles(root) {
-  const out = execFileSync("git", ["-c", "core.quotepath=off", "ls-files", "-z"], { cwd: root, maxBuffer: 256 * 1024 * 1024 });
+  const out = execFileSync("git", ["-c", "core.quotepath=off", "-c", `safe.directory=${root}`, "ls-files", "-z"], { cwd: root, maxBuffer: 256 * 1024 * 1024 });
   return out.toString("utf8").split("\0").filter(Boolean);
 }
 
