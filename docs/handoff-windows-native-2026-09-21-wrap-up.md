@@ -1,5 +1,35 @@
 # Windows native compatibility weekly handoff
 
+## September 29 Calibri control (09:01 UTC)
+
+The [FF-05 E6 evidence](evidence/windows-native-calibri-control-20260929/README.md)
+records one successful read-only inventory after changing exactly 17 explicit
+Carlito typeface attributes to Calibri. Other package contents and relationships
+were preserved, including the four empty theme ea/cs slots. The current audit
+passed with zero failures: no temporary fonts, unchanged input hashes, one owned
+open/close under the 45-second helper deadline. PowerPoint Home showed no open
+presentation or dialog before and after the run.
+
+`Presentation.Fonts` still reported an empty-name entry and Aptos before other
+content was read; nonempty inspected slide font names and theme Latin reported
+Calibri (`NameOther` remained empty). This
+narrows Carlito-specific explanations but does not identify the exact source,
+prove physical glyph identity or clear the font allowlist/embed gate. FF-05 is
+in progress; next is a separately reviewed style/part isolation control, chosen
+offline before further native work. See the updated
+[brief](programs/font-fidelity-everywhere/aptos-origin-brief.md).
+
+All five PRs from the preceding review checkpoint merged after independent
+review and green CI: PPTX79 `0424d561`, PPTX81 `c749c35`, PPTX78 `bf3f78f`,
+core145 `a85facf`, core147 `061499d`. PPTX80 closed as superseded; its findings
+are reconciled in78 and its branch remains preserved. The fresh source graph
+for E6 was core `061499d`, PPTX `bf3f78f`, renderer `6c7d7818`, editor `d0c95a1`;
+gallery remained `f17e9ae5`. The final unchanged merged-source parity audit
+retained 5/900 perfect (text 799, fills 791); [core147](https://github.com/OpenPresentation/opf/pull/147)
+records that receipt. The committed scoreboard is still the explicitly dated
+pre-PPTX78 baseline below. Current tracker: 19 done, 17 review/in-progress,
+8 todo. No publish/deploy or gate change.
+
 ## September 29 continuation
 
 Resume from fetched `origin/main`. The active goal, acceptance criteria and

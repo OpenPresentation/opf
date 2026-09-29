@@ -1,0 +1,190 @@
+{
+  "schemaVersion": 1,
+  "files": [
+    {
+      "path": ".gitattributes",
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "path": "native-inventory-01/request.json",
+      "bytes": 3475,
+      "sha256": "d5b2c3e01e9886700adf1580f4393884b0525ce0bab1b467fbbfd78cd24994d2"
+    },
+    {
+      "path": "native-inventory-01/stages.jsonl",
+      "bytes": 103798,
+      "sha256": "4fd072f213a753f36aa25e8e7a8256bd1b73ef907ff918bdd701bdf73176c1ab"
+    },
+    {
+      "path": "native-inventory-01/supervisor.json",
+      "bytes": 5611,
+      "sha256": "e7af7f8e89f05b8a58950bcc18306928662e970d9fdc2b216530dd57113731f5"
+    },
+    {
+      "path": "native-inventory-01/worker.json",
+      "bytes": 341,
+      "sha256": "db78f5cd8cc89ac2957ef183e1ea0c4da9490894ea8cb009a53946ec66a28e4c"
+    },
+    {
+      "path": "native-inventory-01/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native-inventory-01/worker.stdout.log",
+      "bytes": 99,
+      "sha256": "97fe87c9eb4f110dbd346af22de39dec5fdb50691ac31bea5df1c8e2d8d8c588"
+    },
+    {
+      "path": "native-inventory-01/inputs/native-font-inventory.ps1",
+      "bytes": 99498,
+      "sha256": "f8f24330db965436167758e54f907e1cc9b6bd9eb25e30b5110796823701ae7f"
+    },
+    {
+      "path": "native-inventory-01/inputs/native-process.ps1",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+    },
+    {
+      "path": "native-inventory-01/inputs/native-text-fonts.ps1",
+      "bytes": 2446,
+      "sha256": "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6"
+    },
+    {
+      "path": "native-inventory-01/inputs/source.pptx",
+      "bytes": 15621,
+      "sha256": "776147ddfd2a35ceca4480b66d58c82c9255609b5abe245a2b3bb342651ebce5"
+    },
+    {
+      "path": "preparation/derive.mjs",
+      "bytes": 11388,
+      "sha256": "133ddb1f7c0d8b663ef2727c9447c662a57704bc8d20b011ea9147403b654612"
+    },
+    {
+      "path": "preparation/manifest.json",
+      "bytes": 32630,
+      "sha256": "27e542f4e6a2fcd4473845fff66f2334d2994038735292667fade6d11a17c441"
+    },
+    {
+      "path": "preparation/prepare-calibri-control.mjs",
+      "bytes": 11170,
+      "sha256": "7cb89aa329b9ae4332162503a67a69bbfface2dba35d0f7f95dc2f1d9478eedd"
+    },
+    {
+      "path": "preparation/xml-attribute-diff.txt",
+      "bytes": 2863,
+      "sha256": "d7d65d4fee4f728235aeb8333c0d401fc6757ea80297da10b55d43a07c7ea685"
+    },
+    {
+      "path": "preparation/fflate/index.mjs",
+      "bytes": 91765,
+      "sha256": "8d75534a30a0580608e1271c13d70943ed4cd3589fddff7b1197748036a5116e"
+    },
+    {
+      "path": "native-inventory-01/report.json",
+      "bytes": 18247,
+      "sha256": "394d7f150f7c5da415b8e47fd6544d4e376cd0121688572349a6633353541645"
+    },
+    {
+      "path": "preparation/fflate/LICENSE",
+      "bytes": 1069,
+      "sha256": "0a1df3a083d0c010560aa342e87959c8c1070e6fd54545741f083f22d0c8b551"
+    },
+    {
+      "path": "native-inventory-01/progress.json",
+      "bytes": 273,
+      "sha256": "c0cd7f973baa6f3549b9072df242e1146bbe66595685f81a91ffad8885e7292f"
+    },
+    {
+      "path": "fixture/canonical/source.pptx",
+      "bytes": 15624,
+      "sha256": "f505236ecef4fad838a198449adede1f4afa39d7bac74613626eee2f2a419aeb"
+    },
+    {
+      "path": "README.md",
+      "bytes": 6959,
+      "sha256": "393eb8ec1f8165c3f4970f6820e7941663b6316e2013251cd84bdd76e7fbb9b0"
+    },
+    {
+      "path": "source-copy-ledger.json",
+      "bytes": 12407,
+      "sha256": "8d04fb95301c9d74ab5b480a520ade106a1a8f5be925d6a197a76690f09f30a3"
+    },
+    {
+      "path": "verify.mjs",
+      "bytes": 21011,
+      "sha256": "5314d77c454fa7321a5ce469c05479c95129c200ab924d5d15a54cf82fe39bac"
+    },
+    {
+      "path": "auditor/native-font-embed-audit.mjs",
+      "bytes": 69666,
+      "sha256": "6ad35992b75e1c677194c832289824d588c223a3d25aff029983bf3ba3f4d704"
+    },
+    {
+      "path": "auditor/native-font-inventory-audit.mjs",
+      "bytes": 54641,
+      "sha256": "09277b959c9ca76db40eacd85b89e8ba3e537729713aa1669968f6d438dfe3e7"
+    },
+    {
+      "path": "auditor/native-font-inventory.ps1",
+      "bytes": 99498,
+      "sha256": "f8f24330db965436167758e54f907e1cc9b6bd9eb25e30b5110796823701ae7f"
+    },
+    {
+      "path": "auditor/native-process.ps1",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+    },
+    {
+      "path": "auditor/native-text-fonts.ps1",
+      "bytes": 2446,
+      "sha256": "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6"
+    },
+    {
+      "path": "auditor/powershell-scan.mjs",
+      "bytes": 40899,
+      "sha256": "02df02cdc1ef0ecf9d24358575899a825d58ffada62ad8ac0e0ac47ce2bc41e6"
+    },
+    {
+      "path": "environment/host-postflight.json",
+      "bytes": 617,
+      "sha256": "baed3659db049494a9ff7a6f7127da3dd735dbb1eb48f8d5b84321986df7083f"
+    },
+    {
+      "path": "environment/host-preflight.json",
+      "bytes": 848,
+      "sha256": "509913e14424c4906b60fc94a6001af889d99c586a1fbe7ffa071869b68e4b36"
+    },
+    {
+      "path": "fixture/calibri-control.pptx",
+      "bytes": 15621,
+      "sha256": "776147ddfd2a35ceca4480b66d58c82c9255609b5abe245a2b3bb342651ebce5"
+    },
+    {
+      "path": "fixture/canonical/generation.json",
+      "bytes": 31660,
+      "sha256": "78904db1a1556b80dc8abc8270460cac95ac4868b32219f1ecd06371d0d578db"
+    },
+    {
+      "path": "fixture/canonical/LICENSE_FONT",
+      "bytes": 4424,
+      "sha256": "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00"
+    },
+    {
+      "path": "fixture/canonical/source.opf.json",
+      "bytes": 194,
+      "sha256": "44363cdb3d1ba747c108a9d1741d0b99ba740fd65917f25f9196ab2f26ec1041"
+    },
+    {
+      "path": "native-inventory-01/audit.json",
+      "bytes": 3668,
+      "sha256": "7082240808452570eafb17f00d9c59873c9a37f3949d3a51ea3cdc2478a58db2"
+    },
+    {
+      "path": "preparation/fflate/package.json",
+      "bytes": 3543,
+      "sha256": "5922d8150b307bc0e4e441491c779c45379e9913d348848fca8d5cf02db4d134"
+    }
+  ]
+}

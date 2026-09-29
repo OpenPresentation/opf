@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 2,
+  "kind": "native-font-inventory-audit",
+  "evidenceDirectory": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-native-20260929\\ff05-calibri-control-01\\native-inventory-01",
+  "reviewedVerifierRevision": "current",
+  "passed": true,
+  "failures": [],
+  "rawHashes": {
+    "request.json": "d5b2c3e01e9886700adf1580f4393884b0525ce0bab1b467fbbfd78cd24994d2",
+    "report.json": "394d7f150f7c5da415b8e47fd6544d4e376cd0121688572349a6633353541645",
+    "supervisor.json": "e7af7f8e89f05b8a58950bcc18306928662e970d9fdc2b216530dd57113731f5",
+    "worker.json": "db78f5cd8cc89ac2957ef183e1ea0c4da9490894ea8cb009a53946ec66a28e4c",
+    "progress.json": "c0cd7f973baa6f3549b9072df242e1146bbe66595685f81a91ffad8885e7292f",
+    "stages.jsonl": "4fd072f213a753f36aa25e8e7a8256bd1b73ef907ff918bdd701bdf73176c1ab",
+    "inputs/native-font-inventory.ps1": "f8f24330db965436167758e54f907e1cc9b6bd9eb25e30b5110796823701ae7f",
+    "inputs/source.pptx": "776147ddfd2a35ceca4480b66d58c82c9255609b5abe245a2b3bb342651ebce5",
+    "original:source": "776147ddfd2a35ceca4480b66d58c82c9255609b5abe245a2b3bb342651ebce5",
+    "original:verifier": "f8f24330db965436167758e54f907e1cc9b6bd9eb25e30b5110796823701ae7f",
+    "inputs/native-process.ps1": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+    "original:process-helper": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+    "inputs/native-text-fonts.ps1": "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6",
+    "original:font-helper": "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6",
+    "reviewed/native-font-inventory.ps1": "f8f24330db965436167758e54f907e1cc9b6bd9eb25e30b5110796823701ae7f",
+    "reviewed/native-process.ps1": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+    "reviewed/native-text-fonts.ps1": "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6"
+  },
+  "findings": {
+    "inputMode": "control-deck",
+    "fontRegistrationMode": "none",
+    "powerPointVersion": "16.0",
+    "presentationFonts": [
+      {
+        "index": 1,
+        "name": "",
+        "embedded": 0,
+        "embeddable": 0
+      },
+      {
+        "index": 2,
+        "name": "Aptos",
+        "embedded": 0,
+        "embeddable": -1
+      }
+    ],
+    "theme": {
+      "major": {
+        "latin": "Calibri",
+        "complexScript": "",
+        "eastAsian": ""
+      },
+      "minor": {
+        "latin": "Calibri",
+        "complexScript": "",
+        "eastAsian": ""
+      }
+    },
+    "ledger": {
+      "presentationFontNames": [
+        "Aptos"
+      ],
+      "slideTextSlotNames": [
+        "Calibri"
+      ],
+      "masterTextSlotNames": [],
+      "themeFontNames": [
+        "Calibri"
+      ],
+      "aptosPresentationFontNames": [
+        "Aptos"
+      ],
+      "aptosSlideTextSlotNames": [],
+      "aptosMasterTextSlotNames": [],
+      "aptosThemeFontNames": [],
+      "nonCarlitoPresentationFontNames": [
+        "Aptos"
+      ],
+      "carlitoOnlyPresentationFonts": false,
+      "aptosReported": true,
+      "emptyNamePresentationFontIndexes": [
+        1
+      ],
+      "emptyNameFontReported": true
+    },
+    "failureCleanup": {
+      "applicable": false,
+      "outcome": null,
+      "closeInvocations": 1,
+      "consistent": true,
+      "problems": []
+    },
+    "note": "Findings are evidence only when passed is true. Reported names do not prove physical font-file or per-glyph identity."
+  },
+  "scope": "Offline input, lifecycle, read-only, stage-sequence and font-ledger audit of one native font inventory attempt. No Office, COM or font API is started.",
+  "mode": "audit"
+}

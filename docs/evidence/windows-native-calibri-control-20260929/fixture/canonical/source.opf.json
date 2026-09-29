@@ -1,0 +1,14 @@
+{
+  "design": {
+    "fontScheme": {
+      "major": "Carlito",
+      "minor": "Carlito"
+    }
+  },
+  "slides": [
+    {
+      "title": "Plain control",
+      "text": "Current content"
+    }
+  ]
+}
