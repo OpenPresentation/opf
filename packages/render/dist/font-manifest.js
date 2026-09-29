@@ -11,6 +11,9 @@ export const BUNDLED_FONT_MANIFEST=freeze({
       "license": "OFL-1.1",
       "licenseFile": "LICENSE_FONT",
       "licenseSha256": "061402327a96aadb0bfb694a960ed289ecd38d383e396243831ab81feb109c41",
+      "reservedFontNames": [],
+      "upstream": "https://github.com/googlefonts/roboto-classic",
+      "copyright": "Copyright 2011 The Roboto Project Authors (https://github.com/googlefonts/roboto-classic)",
       "faces": [
         {
           "file": "400Regular/Roboto_400Regular.ttf",
@@ -71,6 +74,9 @@ export const BUNDLED_FONT_MANIFEST=freeze({
       "license": "OFL-1.1",
       "licenseFile": "LICENSE_FONT",
       "licenseSha256": "50ab8dd54680d3473f649c9db86fece88434d097c7834475c1c72d2f8c429215",
+      "reservedFontNames": [],
+      "upstream": "https://github.com/googlefonts/robotomono",
+      "copyright": "Copyright 2015 The Roboto Mono Project Authors (https://github.com/googlefonts/robotomono)",
       "faces": [
         {
           "file": "400Regular/RobotoMono_400Regular.ttf",
@@ -96,6 +102,11 @@ export const BUNDLED_FONT_MANIFEST=freeze({
       "license": "OFL-1.1",
       "licenseFile": "LICENSE_FONT",
       "licenseSha256": "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00",
+      "reservedFontNames": [
+        "Carlito"
+      ],
+      "upstream": "https://github.com/googlefonts/carlito",
+      "copyright": "Copyright 2013 The Carlito Project Authors (https://github.com/googlefonts/carlito), with Reserved Font Name \"Carlito\"",
       "faces": [
         {
           "file": "400Regular/Carlito_400Regular.ttf",
@@ -135,6 +146,9 @@ export const BUNDLED_FONT_MANIFEST=freeze({
       "license": "OFL-1.1",
       "licenseFile": "LICENSE_FONT",
       "licenseSha256": "ccdab61d371d8c8683a128a92cd7d498dbdb1d37689f7cb21f1bf6b16658d213",
+      "reservedFontNames": [],
+      "upstream": "https://github.com/huertatipografica/Caladea",
+      "copyright": "Copyright 2012 The Caladea Project Authors (https://github.com/huertatipografica/Caladea)",
       "faces": [
         {
           "file": "400Regular/Caladea_400Regular.ttf",
@@ -174,6 +188,9 @@ export const BUNDLED_FONT_MANIFEST=freeze({
       "license": "OFL-1.1",
       "licenseFile": "LICENSE_FONT",
       "licenseSha256": "11cce536cd2f3864d767003af5dcd739e2e15818cf2279b6175edeadd3960992",
+      "reservedFontNames": [],
+      "upstream": "https://github.com/googlefonts/arimo",
+      "copyright": "Copyright 2026 The Arimo Project Authors (https://github.com/googlefonts/arimo)",
       "faces": [
         {
           "file": "400Regular/Arimo_400Regular.ttf",
@@ -213,6 +230,9 @@ export const BUNDLED_FONT_MANIFEST=freeze({
       "license": "OFL-1.1",
       "licenseFile": "LICENSE_FONT",
       "licenseSha256": "cb3382d4643e8b02c12e322c220a3c76a5020d667e4fd4e7c75e744cca6caa6b",
+      "reservedFontNames": [],
+      "upstream": "https://github.com/googlefonts/tinos",
+      "copyright": "Copyright 2026 The Tinos Project Authors (https://github.com/googlefonts/tinos)",
       "faces": [
         {
           "file": "400Regular/Tinos_400Regular.ttf",
@@ -252,6 +272,9 @@ export const BUNDLED_FONT_MANIFEST=freeze({
       "license": "OFL-1.1",
       "licenseFile": "LICENSE_FONT",
       "licenseSha256": "b81c4d4dc0a9f72c9155e78187316e016e2012a8102468804173dc61468b906d",
+      "reservedFontNames": [],
+      "upstream": "https://github.com/googlefonts/cousine",
+      "copyright": "Copyright 2026 The Cousine Project Authors (https://github.com/googlefonts/cousine)",
       "faces": [
         {
           "file": "400Regular/Cousine_400Regular.ttf",
@@ -291,6 +314,9 @@ export const BUNDLED_FONT_MANIFEST=freeze({
       "license": "OFL-1.1",
       "licenseFile": "LICENSE_FONT",
       "licenseSha256": "b393cb01867c919b44381512120dc3e4c954c7b47e2035c405f3a324799a4d29",
+      "reservedFontNames": [],
+      "upstream": "https://github.com/SorkinType/Gelasio",
+      "copyright": "Copyright 2022 The Gelasio Project Authors (https://github.com/SorkinType/Gelasio)",
       "faces": [
         {
           "file": "400Regular/Gelasio_400Regular.ttf",
@@ -333,6 +359,11 @@ export const BUNDLED_FONT_MANIFEST=freeze({
       "license": "OFL-1.1",
       "licenseFile": "LICENSE_FONT",
       "licenseSha256": "1c05c68c34f9708415aada51f17e1b0092d2cea709bf4a94cd38114f9e73d7d9",
+      "reservedFontNames": [
+        "Source"
+      ],
+      "upstream": "http://www.adobe.com/",
+      "copyright": "Copyright 2014-2021 Adobe (http://www.adobe.com/), with Reserved Font Name 'Source'",
       "faces": [
         {
           "file": "400Regular/NotoSansJP_400Regular.ttf",
@@ -361,6 +392,11 @@ export const BUNDLED_FONT_MANIFEST=freeze({
       "license": "OFL-1.1",
       "licenseFile": "LICENSE_FONT",
       "licenseSha256": "1c05c68c34f9708415aada51f17e1b0092d2cea709bf4a94cd38114f9e73d7d9",
+      "reservedFontNames": [
+        "Source"
+      ],
+      "upstream": "http://www.adobe.com/",
+      "copyright": "Copyright 2014-2021 Adobe (http://www.adobe.com/), with Reserved Font Name 'Source'",
       "faces": [
         {
           "file": "400Regular/NotoSansSC_400Regular.ttf",
@@ -389,6 +425,11 @@ export const BUNDLED_FONT_MANIFEST=freeze({
       "license": "OFL-1.1",
       "licenseFile": "LICENSE_FONT",
       "licenseSha256": "1c05c68c34f9708415aada51f17e1b0092d2cea709bf4a94cd38114f9e73d7d9",
+      "reservedFontNames": [
+        "Source"
+      ],
+      "upstream": "http://www.adobe.com/",
+      "copyright": "Copyright 2014-2021 Adobe (http://www.adobe.com/), with Reserved Font Name 'Source'",
       "faces": [
         {
           "file": "400Regular/NotoSansTC_400Regular.ttf",
@@ -417,6 +458,11 @@ export const BUNDLED_FONT_MANIFEST=freeze({
       "license": "OFL-1.1",
       "licenseFile": "LICENSE_FONT",
       "licenseSha256": "1c05c68c34f9708415aada51f17e1b0092d2cea709bf4a94cd38114f9e73d7d9",
+      "reservedFontNames": [
+        "Source"
+      ],
+      "upstream": "http://www.adobe.com/",
+      "copyright": "Copyright 2014-2021 Adobe (http://www.adobe.com/), with Reserved Font Name 'Source'",
       "faces": [
         {
           "file": "400Regular/NotoSansKR_400Regular.ttf",
@@ -445,6 +491,9 @@ export const BUNDLED_FONT_MANIFEST=freeze({
       "license": "OFL-1.1",
       "licenseFile": "LICENSE_FONT",
       "licenseSha256": "07fc70bfeb985cc1a87a8587d0a0c80bab11c86c9dc3fd95b6f0cb332f983e96",
+      "reservedFontNames": [],
+      "upstream": "https://github.com/notofonts/arabic",
+      "copyright": "Copyright 2022 The Noto Project Authors (https://github.com/notofonts/arabic)",
       "faces": [
         {
           "file": "400Regular/NotoSansArabic_400Regular.ttf",
@@ -473,6 +522,9 @@ export const BUNDLED_FONT_MANIFEST=freeze({
       "license": "OFL-1.1",
       "licenseFile": "LICENSE_FONT",
       "licenseSha256": "a7a5a25eb188bf1cd96982030d53e23c33485c69b1044a562254226857ee13af",
+      "reservedFontNames": [],
+      "upstream": "https://github.com/notofonts/arabic",
+      "copyright": "Copyright 2022 The Noto Project Authors (https://github.com/notofonts/arabic)",
       "faces": [
         {
           "file": "400Regular/NotoNaskhArabic_400Regular.ttf",
@@ -501,6 +553,9 @@ export const BUNDLED_FONT_MANIFEST=freeze({
       "license": "OFL-1.1",
       "licenseFile": "LICENSE_FONT",
       "licenseSha256": "e90279e3fb2003c4d54f8685e25274bd7838b1b21c891520d71dbdb1d4a98907",
+      "reservedFontNames": [],
+      "upstream": "https://github.com/notofonts/nastaliq",
+      "copyright": "Copyright 2022 The Noto Project Authors (https://github.com/notofonts/nastaliq)",
       "faces": [
         {
           "file": "400Regular/NotoNastaliqUrdu_400Regular.ttf",
@@ -529,6 +584,9 @@ export const BUNDLED_FONT_MANIFEST=freeze({
       "license": "OFL-1.1",
       "licenseFile": "LICENSE_FONT",
       "licenseSha256": "9b9fe028b5ba74d231659a1bbaf0ed09b11e759d1ca6a070999e16d151616b47",
+      "reservedFontNames": [],
+      "upstream": "https://github.com/notofonts/hebrew",
+      "copyright": "Copyright 2022 The Noto Project Authors (https://github.com/notofonts/hebrew)",
       "faces": [
         {
           "file": "400Regular/NotoSansHebrew_400Regular.ttf",
@@ -557,6 +615,9 @@ export const BUNDLED_FONT_MANIFEST=freeze({
       "license": "OFL-1.1",
       "licenseFile": "LICENSE_FONT",
       "licenseSha256": "9b9fe028b5ba74d231659a1bbaf0ed09b11e759d1ca6a070999e16d151616b47",
+      "reservedFontNames": [],
+      "upstream": "https://github.com/notofonts/hebrew",
+      "copyright": "Copyright 2022 The Noto Project Authors (https://github.com/notofonts/hebrew)",
       "faces": [
         {
           "file": "400Regular/NotoSerifHebrew_400Regular.ttf",
@@ -585,6 +646,9 @@ export const BUNDLED_FONT_MANIFEST=freeze({
       "license": "OFL-1.1",
       "licenseFile": "LICENSE_FONT",
       "licenseSha256": "a216f6f8d85c7228093e0ee5e258d9d377e6671f68acb4db1930b29583d0f331",
+      "reservedFontNames": [],
+      "upstream": "https://github.com/notofonts/devanagari",
+      "copyright": "Copyright 2022 The Noto Project Authors (https://github.com/notofonts/devanagari)",
       "faces": [
         {
           "file": "400Regular/NotoSansDevanagari_400Regular.ttf",
@@ -613,6 +677,9 @@ export const BUNDLED_FONT_MANIFEST=freeze({
       "license": "OFL-1.1",
       "licenseFile": "LICENSE_FONT",
       "licenseSha256": "754f0e221aa7d5a915489f3bf1f20fe53ddc35ab2834a4d91656d78f9622de70",
+      "reservedFontNames": [],
+      "upstream": "https://github.com/notofonts/bengali",
+      "copyright": "Copyright 2022 The Noto Project Authors (https://github.com/notofonts/bengali)",
       "faces": [
         {
           "file": "400Regular/NotoSansBengali_400Regular.ttf",
@@ -641,6 +708,9 @@ export const BUNDLED_FONT_MANIFEST=freeze({
       "license": "OFL-1.1",
       "licenseFile": "LICENSE_FONT",
       "licenseSha256": "3f7451b7e2c8381be0c5712f7b0dd5c2d75fe787ae16a99f18b7fa45627a0fde",
+      "reservedFontNames": [],
+      "upstream": "https://github.com/notofonts/gurmukhi",
+      "copyright": "Copyright 2022 The Noto Project Authors (https://github.com/notofonts/gurmukhi)",
       "faces": [
         {
           "file": "400Regular/NotoSansGurmukhi_400Regular.ttf",
@@ -669,6 +739,9 @@ export const BUNDLED_FONT_MANIFEST=freeze({
       "license": "OFL-1.1",
       "licenseFile": "LICENSE_FONT",
       "licenseSha256": "c0b88977aa18b5e4fd05d646d560da89fde61b6581fa4507cb00dd90bd1bf7d4",
+      "reservedFontNames": [],
+      "upstream": "https://github.com/notofonts/gujarati",
+      "copyright": "Copyright 2022 The Noto Project Authors (https://github.com/notofonts/gujarati)",
       "faces": [
         {
           "file": "400Regular/NotoSansGujarati_400Regular.ttf",
@@ -697,6 +770,9 @@ export const BUNDLED_FONT_MANIFEST=freeze({
       "license": "OFL-1.1",
       "licenseFile": "LICENSE_FONT",
       "licenseSha256": "c90ff15ade263a49148e35af34e9c177c6d56881e81260b29f10123e9e227eca",
+      "reservedFontNames": [],
+      "upstream": "https://github.com/notofonts/oriya",
+      "copyright": "Copyright 2022 The Noto Project Authors (https://github.com/notofonts/oriya)",
       "faces": [
         {
           "file": "400Regular/NotoSansOriya_400Regular.ttf",
@@ -725,6 +801,9 @@ export const BUNDLED_FONT_MANIFEST=freeze({
       "license": "OFL-1.1",
       "licenseFile": "LICENSE_FONT",
       "licenseSha256": "f8ff8ce7d0a81bf8d5e121c635ef027250c531f2fd37d5988b8dd6e45f19d7f1",
+      "reservedFontNames": [],
+      "upstream": "https://github.com/notofonts/tamil",
+      "copyright": "Copyright 2022 The Noto Project Authors (https://github.com/notofonts/tamil)",
       "faces": [
         {
           "file": "400Regular/NotoSansTamil_400Regular.ttf",
@@ -753,6 +832,9 @@ export const BUNDLED_FONT_MANIFEST=freeze({
       "license": "OFL-1.1",
       "licenseFile": "LICENSE_FONT",
       "licenseSha256": "481c72a8f1b4f645a7e6b10326be41b2da2c15cb470ff48a07fab773eed00102",
+      "reservedFontNames": [],
+      "upstream": "https://github.com/notofonts/telugu",
+      "copyright": "Copyright 2022 The Noto Project Authors (https://github.com/notofonts/telugu)",
       "faces": [
         {
           "file": "400Regular/NotoSansTelugu_400Regular.ttf",
@@ -781,6 +863,9 @@ export const BUNDLED_FONT_MANIFEST=freeze({
       "license": "OFL-1.1",
       "licenseFile": "LICENSE_FONT",
       "licenseSha256": "9d49a4e56df9b36403b139f48bf07fd87cc5e716cb3203c54b04b674adb16238",
+      "reservedFontNames": [],
+      "upstream": "https://github.com/notofonts/kannada",
+      "copyright": "Copyright 2022 The Noto Project Authors (https://github.com/notofonts/kannada)",
       "faces": [
         {
           "file": "400Regular/NotoSansKannada_400Regular.ttf",
@@ -809,6 +894,9 @@ export const BUNDLED_FONT_MANIFEST=freeze({
       "license": "OFL-1.1",
       "licenseFile": "LICENSE_FONT",
       "licenseSha256": "1df18163a0bf60f02131401ba1609df90051f40c4047684dda1c8a2e9586f7f2",
+      "reservedFontNames": [],
+      "upstream": "https://github.com/notofonts/malayalam",
+      "copyright": "Copyright 2022 The Noto Project Authors (https://github.com/notofonts/malayalam)",
       "faces": [
         {
           "file": "400Regular/NotoSansMalayalam_400Regular.ttf",
@@ -837,6 +925,9 @@ export const BUNDLED_FONT_MANIFEST=freeze({
       "license": "OFL-1.1",
       "licenseFile": "LICENSE_FONT",
       "licenseSha256": "2d6f7c43bce61f4b1919379f901bc613484f5285f520b6d29bb7c1f31b17e841",
+      "reservedFontNames": [],
+      "upstream": "https://github.com/notofonts/sinhala",
+      "copyright": "Copyright 2022 The Noto Project Authors (https://github.com/notofonts/sinhala)",
       "faces": [
         {
           "file": "400Regular/NotoSansSinhala_400Regular.ttf",
@@ -865,6 +956,9 @@ export const BUNDLED_FONT_MANIFEST=freeze({
       "license": "OFL-1.1",
       "licenseFile": "LICENSE_FONT",
       "licenseSha256": "2e98fd23a52d253db8612cd5942c8f2ff4111b21d2367050fdca91d8ccc374a0",
+      "reservedFontNames": [],
+      "upstream": "https://github.com/notofonts/thai",
+      "copyright": "Copyright 2022 The Noto Project Authors (https://github.com/notofonts/thai)",
       "faces": [
         {
           "file": "400Regular/NotoSansThai_400Regular.ttf",
@@ -893,6 +987,9 @@ export const BUNDLED_FONT_MANIFEST=freeze({
       "license": "OFL-1.1",
       "licenseFile": "LICENSE_FONT",
       "licenseSha256": "a42993999944845fb5af693ea678a372a053db1f0981d55e911dcfa9d330f279",
+      "reservedFontNames": [],
+      "upstream": "https://github.com/notofonts/lao",
+      "copyright": "Copyright 2022 The Noto Project Authors (https://github.com/notofonts/lao)",
       "faces": [
         {
           "file": "400Regular/NotoSansLao_400Regular.ttf",
@@ -921,6 +1018,9 @@ export const BUNDLED_FONT_MANIFEST=freeze({
       "license": "OFL-1.1",
       "licenseFile": "LICENSE_FONT",
       "licenseSha256": "be0407f060aea48787ff9e75d8d3aedef70aef113b3ce9aca26fdaacd10b1870",
+      "reservedFontNames": [],
+      "upstream": "https://github.com/notofonts/khmer",
+      "copyright": "Copyright 2022 The Noto Project Authors (https://github.com/notofonts/khmer)",
       "faces": [
         {
           "file": "400Regular/NotoSansKhmer_400Regular.ttf",
@@ -949,6 +1049,9 @@ export const BUNDLED_FONT_MANIFEST=freeze({
       "license": "OFL-1.1",
       "licenseFile": "LICENSE_FONT",
       "licenseSha256": "246a75859267af7da466823969d2e2b407ed8455ee5f74f4c8d63d8783be9b57",
+      "reservedFontNames": [],
+      "upstream": "https://github.com/notofonts/myanmar",
+      "copyright": "Copyright 2022 The Noto Project Authors (https://github.com/notofonts/myanmar)",
       "faces": [
         {
           "file": "400Regular/NotoSansMyanmar_400Regular.ttf",
@@ -977,6 +1080,9 @@ export const BUNDLED_FONT_MANIFEST=freeze({
       "license": "OFL-1.1",
       "licenseFile": "LICENSE_FONT",
       "licenseSha256": "72606b23f312cb25973958f2892d4d2c2012deabadbf0f763232624a9649fc69",
+      "reservedFontNames": [],
+      "upstream": "https://github.com/notofonts/ethiopic",
+      "copyright": "Copyright 2022 The Noto Project Authors (https://github.com/notofonts/ethiopic)",
       "faces": [
         {
           "file": "400Regular/NotoSansEthiopic_400Regular.ttf",
@@ -1005,6 +1111,9 @@ export const BUNDLED_FONT_MANIFEST=freeze({
       "license": "OFL-1.1",
       "licenseFile": "LICENSE_FONT",
       "licenseSha256": "0468358b316f69f405b55cadf8a8314e16e3610b8feaad96772bd5d968112d02",
+      "reservedFontNames": [],
+      "upstream": "https://github.com/notofonts/armenian",
+      "copyright": "Copyright 2022 The Noto Project Authors (https://github.com/notofonts/armenian)",
       "faces": [
         {
           "file": "400Regular/NotoSansArmenian_400Regular.ttf",
@@ -1033,6 +1142,9 @@ export const BUNDLED_FONT_MANIFEST=freeze({
       "license": "OFL-1.1",
       "licenseFile": "LICENSE_FONT",
       "licenseSha256": "8c02263c5d73d40544f9ed91e30c4e947407057a3cc430d7b786189aeceff6df",
+      "reservedFontNames": [],
+      "upstream": "https://github.com/notofonts/georgian",
+      "copyright": "Copyright 2022 The Noto Project Authors (https://github.com/notofonts/georgian)",
       "faces": [
         {
           "file": "400Regular/NotoSansGeorgian_400Regular.ttf",
@@ -1061,6 +1173,9 @@ export const BUNDLED_FONT_MANIFEST=freeze({
       "license": "OFL-1.1",
       "licenseFile": "LICENSE_FONT",
       "licenseSha256": "b0158b3c0b16c20e22ea662850503a7980111c5c704501e942cc1a7ed12dc011",
+      "reservedFontNames": [],
+      "upstream": "https://github.com/notofonts/mongolian",
+      "copyright": "Copyright 2022 The Noto Project Authors (https://github.com/notofonts/mongolian)",
       "faces": [
         {
           "file": "400Regular/NotoSansMongolian_400Regular.ttf",
@@ -1082,6 +1197,9 @@ export const BUNDLED_FONT_MANIFEST=freeze({
       "license": "OFL-1.1",
       "licenseFile": "LICENSE_FONT",
       "licenseSha256": "5de6fbfe9ca25509fd60e47be3fab3cc236abe20bc1b123a5c2bd12f067fd13c",
+      "reservedFontNames": [],
+      "upstream": "https://github.com/notofonts/thaana",
+      "copyright": "Copyright 2022 The Noto Project Authors (https://github.com/notofonts/thaana)",
       "faces": [
         {
           "file": "400Regular/NotoSansThaana_400Regular.ttf",
@@ -1110,6 +1228,9 @@ export const BUNDLED_FONT_MANIFEST=freeze({
       "license": "OFL-1.1",
       "licenseFile": "LICENSE_FONT",
       "licenseSha256": "6442860dad2700aabece2ac7252680b1a5bfc0987cec1ca0c3d605ab8f0b7975",
+      "reservedFontNames": [],
+      "upstream": "https://github.com/notofonts/syriac",
+      "copyright": "Copyright 2022 The Noto Project Authors (https://github.com/notofonts/syriac)",
       "faces": [
         {
           "file": "400Regular/NotoSansSyriac_400Regular.ttf",
@@ -1138,6 +1259,9 @@ export const BUNDLED_FONT_MANIFEST=freeze({
       "license": "OFL-1.1",
       "licenseFile": "LICENSE_FONT",
       "licenseSha256": "0077789fc3cb20f358278ba4c6437eb14ade97d4d3e3281eaa42853efcd9dc8b",
+      "reservedFontNames": [],
+      "upstream": "https://github.com/notofonts/tibetan",
+      "copyright": "Copyright 2022 The Noto Project Authors (https://github.com/notofonts/tibetan)",
       "faces": [
         {
           "file": "400Regular/NotoSerifTibetan_400Regular.ttf",
@@ -1168,6 +1292,9 @@ export const BUNDLED_FONT_MANIFEST=freeze({
       "license": "OFL-1.1",
       "licenseFile": "LICENSE_FONT",
       "licenseSha256": "cee9892f9f0cc8fe882c9e9537ee6a89621d86ee7ceaf70b02e2b2b1c25c061a",
+      "reservedFontNames": [],
+      "upstream": "https://github.com/notofonts/latin-greek-cyrillic",
+      "copyright": "Copyright 2022 The Noto Project Authors (https://github.com/notofonts/latin-greek-cyrillic)",
       "faces": [
         {
           "file": "400Regular/NotoSans_400Regular.ttf",
