@@ -25,18 +25,19 @@ jobs:
           persist-credentials: false
           fetch-depth: 0
           path: opf-editor
+      # FF-31 (Intos): opf and opf-render are pinned to the heads of opf#166 and opf-render#54 so test:playground exercises lazy fonts; repin both to their merge commits once merged (never leave them on unmerged heads).
       # Verify registry dependencies before linking the pinned source graph.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf
-          ref: b8a1faf24203635bd36b09ea19f44bcd53781f16
+          ref: 338ddcd40e0953a0a8d6c02c45622be893b29cb1
           path: opf
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-render
-          ref: 5b0ab8726728667c671f1005c00b8f6eeefdc4e8
+          ref: d528be52878788bf2ecbdc138b839443ec66dc4e
           path: opf-render
           fetch-depth: 0
           persist-credentials: false

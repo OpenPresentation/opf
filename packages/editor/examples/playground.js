@@ -12,10 +12,13 @@ const fontFaces = await fetch('./fonts.json').then(response => {
   if (!response.ok) throw new Error('Bundled fonts are unavailable. Rebuild the editor demo.');
   return response.json();
 });
-const fontRegistry = await loadBrowserFontRegistry(fontFaces.map(face=>({family:face.family,weight:face.weight,italic:face.italic,license:face.license,data:Uint8Array.from(atob(face.dataUrl.split(',')[1]),character=>character.charCodeAt(0))})),{substitutionPolicy:'visual',fallbackFamily:'Roboto',scriptBaseUrl:'./script-fonts/'});
-// Script faces (Japanese, Arabic, Thai, ...) load lazily, once a document draws that script. Older renderers have no
-// pendingScripts/ensureScripts, and the playground then keeps its Latin fonts.
-const pendingScriptFonts = deck => fontRegistry.pendingScripts?.(deck) ?? [];
+const fontRegistry = await loadBrowserFontRegistry(fontFaces.map(face=>({family:face.family,weight:face.weight,italic:face.italic,license:face.license,data:Uint8Array.from(atob(face.dataUrl.split(',')[1]),character=>character.charCodeAt(0))})),{substitutionPolicy:'visual',fallbackFamily:'Roboto',scriptBaseUrl:'./script-fonts/',lazyFontsBaseUrl:new URL('./',document.baseURI).href});
+// Script faces (Japanese, Arabic, Thai, ...) load lazily, once a document draws that script, and so do the vendored preview
+// faces (Intos for the Aptos scheme, the open families): they are not in fonts.json but separate hash-pinned files the
+// registry adds to the document and itself together. Older renderers have no pendingScripts/ensureScripts or
+// pendingLazyFonts/ensureLazyFonts, and the playground then keeps the fonts it has.
+const pendingScriptFonts = deck => [...(fontRegistry.pendingScripts?.(deck) ?? []), ...(fontRegistry.pendingLazyFonts?.(deck) ?? []).map(face => face.file)];
+const ensureFonts = async deck => { await fontRegistry.ensureLazyFonts?.(deck); await fontRegistry.ensureScripts?.(deck); };
 const layoutOptions = {textMeasurement:fontRegistry.textMeasurement};
 const editor = createEditorSession({
   name: 'A presentation you can work on',
@@ -165,7 +168,7 @@ function render() {
   if (!canvas) canvas=createCanvasEditor(element('preview'),{
     editor,slideIndex,renderOptions:layoutOptions,propertiesContainer:element('canvas-properties'),
     onSelect:value=>{select(value.path);showPanel('content');},
-    onDraft:value=>{element('json').value=viewSource(value.document);status('Editing on the slide · Esc to cancel');if(pendingScriptFonts(value.document).length)fontRegistry.ensureScripts(value.document).catch(()=>{});},
+    onDraft:value=>{element('json').value=viewSource(value.document);status('Editing on the slide · Esc to cancel');if(pendingScriptFonts(value.document).length)ensureFonts(value.document).catch(()=>{});},
     onCommit:()=>status('Changes saved in this session'),
     onCancel:()=>{element('json').value=viewSource(editor.document);status('Edit cancelled');},
     onError:error=>status(error.message),
@@ -187,9 +190,9 @@ async function refresh() {
   if (!pendingScriptFonts(editor.document).length) { renderSafely(); return; }
   if (scriptFontsLoading) return;
   scriptFontsLoading = true;
-  status('Loading fonts for this language…');
+  status('Loading fonts for this document…');
   let failure;
-  try { await fontRegistry.ensureScripts(editor.document); } catch (error) { failure = error; }
+  try { await ensureFonts(editor.document); thumbnailCache.clear(); } catch (error) { failure = error; }
   scriptFontsLoading = false;
   if (failure) { renderSafely(); status(`Fonts for this language could not be loaded: ${failure.message}`); return; }
   refresh();
@@ -241,7 +244,7 @@ function previewSource() {
     if(duplicate)throw new Error(duplicate);
     if(pendingScriptFonts(deck).length){
       element('json-error').textContent='Loading fonts for this language…';element('apply-json').disabled=true;
-      fontRegistry.ensureScripts(deck).then(previewSource,error=>{element('json-error').textContent=`Fonts for this language could not be loaded: ${error.message}`;});
+      ensureFonts(deck).then(previewSource,error=>{element('json-error').textContent=`Fonts for this language could not be loaded: ${error.message}`;});
       return;
     }
     const svg=renderSvg(deck,{...layoutOptions,slideIndex:Math.min(slideIndex,(deck.slides?.length ?? 1)-1)});

@@ -1,5 +1,5 @@
 import { build } from 'esbuild';
-import { mkdir, readFile, writeFile, copyFile } from 'node:fs/promises';
+import { mkdir, readdir, readFile, writeFile, copyFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { createRequire } from 'node:module';
 import path from 'node:path';
@@ -16,7 +16,27 @@ await build({
   outfile: fileURLToPath(new URL('playground.js', output)),
   bundle: true, platform: 'browser', format: 'esm', minify: true,
 });
-await writeFile(new URL('fonts.json', output), JSON.stringify((await loadOfficeFontRegistry()).embeddedFonts));
+const officeFonts = await loadOfficeFontRegistry();
+await writeFile(new URL('fonts.json', output), JSON.stringify(officeFonts.embeddedFonts));
+// FF-31: the vendored preview faces (Intos for the Aptos scheme, the open families) are not in fonts.json. They are served next to
+// the page at their package-relative paths (fonts/intos/..., fonts/<family>/...) and fetched on demand, only for the font
+// families a document resolves, hash-verified by the renderer (registry.ensureLazyFonts). Never a font CDN. A renderer without
+// lazyFonts (published 0.10.0 and earlier) has none to copy, and the playground then keeps the fonts it has.
+let lazyFaces = 0;
+if (officeFonts.lazyFonts?.length) {
+  const renderRoot = path.dirname(require.resolve('@openpresentation/opf-render/package.json'));
+  for (const directory of new Set(officeFonts.lazyFonts.map(face => path.posix.dirname(face.file)))) {
+    for (const name of (await readdir(path.join(renderRoot, directory))).sort()) {
+      const target = new URL(`${directory}/${name}`, output);
+      await mkdir(new URL('./', target), { recursive: true });
+      await copyFile(path.join(renderRoot, directory, name), target);
+    }
+  }
+  for (const face of officeFonts.lazyFonts) {
+    if (createHash('sha256').update(await readFile(new URL(face.file, output))).digest('hex') !== face.sha256) throw new Error(`${face.file} differs from the reviewed font manifest.`);
+    lazyFaces++;
+  }
+}
 // FF-19: the pinned script faces (OFL Noto) are served next to the page and fetched lazily, only for the scripts a
 // document draws, hash-verified by the renderer. Never a font CDN. A renderer without the script pack (published
 // 0.9.x) has none to copy, and the playground then keeps its Latin fonts.
@@ -39,4 +59,4 @@ if (typeof renderFonts.scriptFontPackages === 'function') {
 for (const [source, destination] of [['playground.html', 'index.html'], ['playground.css', 'playground.css'], ['galleries.json', 'galleries.json']]) {
   await copyFile(new URL('examples/' + source, root), new URL(destination, output));
 }
-console.log(`Browser editor built in artifacts/playground (${scriptFaces} lazy script faces)`);
+console.log(`Browser editor built in artifacts/playground (${scriptFaces} lazy script faces, ${lazyFaces} lazy preview faces)`);
