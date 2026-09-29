@@ -22,7 +22,11 @@ The current published Node 24 train is core 0.11.0, renderer 0.9.0, PPTX 0.9.1, 
 
 `gap` defaults to 1/30 and `padding` to 0.08, both fractions of the canvas's shorter edge. Large gaps are reduced when necessary to keep cells positive. `minFontSize` defaults to 16 reference pixels at a 720-pixel short edge. The reference coordinate system uses 96 pixels per inch. Explicit inch dimensions override presets independently for each axis.
 
-Headings reserve space according to their wrapped text. Content that exceeds the number of preset placeholders reflows together; it is not drawn over already-bound content. Promoted regions keep the 3×3 vocabulary, including standalone `top`, `middle`, and `bottom`. They ignore flow direction and track weights.
+Headings reserve space according to their wrapped text. Title and subtitle share the padded width of the free area, and a missing tag or subtitle leaves no gap.
+
+Cover slides vertically center the combined tag/title/subtitle group in the free heading area. A cover is a slide with no body payload (no root content field including `image`, no `blocks`, no promoted regions; empty payloads such as `blocks: []`, `text: ""`, empty lists and regions with nothing in them count as no body; whitespace-only text is still body) on a heading-only layout: layout id `title` or `title-subtitle`, or a layout whose placeholders are all headings, or a slide with no layout at all. The free area is the slide minus the image-safe band reserved by a `left`, `right`, `top` or `bottom` slide image, header and footer furniture, and the usual padding; a `background` image reserves nothing. A wrapped heading makes the group taller and the group recenters. A group that already fills the free area is not moved. Accepted line and outline origins move with the boxes. Explicit heading `alignment` positions ink inside the box and never changes the vertical position. A root `image` that is drawn as the slide image still counts as body, so image slides keep the top-aligned content origin. Content slides are not affected: headings stay at the top and the body follows them. This is a reference-engine default, not a schema field.
+
+Content that exceeds the number of preset placeholders reflows together; it is not drawn over already-bound content. Promoted regions keep the 3×3 vocabulary, including standalone `top`, `middle`, and `bottom`. They ignore flow direction and track weights.
 
 ## Shared headers and footers
 
