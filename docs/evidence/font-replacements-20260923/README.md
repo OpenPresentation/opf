@@ -5,12 +5,13 @@ This folder records how each proprietary family's preview replacement in `spec/r
 - Host: Windows 11 with Microsoft 365, including the Aptos, Aptos Display and Aptos Narrow cloud fonts, version 2.01;O365.
 - Reference fonts were read in place from `C:\Windows\Fonts` and the Office cloud-font cache. They were never copied, embedded or committed. The reports keep only the version strings and SHA-256 digests.
 - Replacement faces came from pinned `@expo-google-fonts` packages. Every package used is OFL-1.1, checked from its `LICENSE_FONT`.
-- Shaping used fontkit 2.0.4 with default features (kerning and ligatures), which is how opf-render measures text.
+- Shaping used fontkit 2.0.4 with default features (kerning and ligatures), which is how opf-render measures text. The one exception is a replacement that lists `disabledFeatures` (Gelasio for Georgia: `liga`, `clig`), which is shaped with those features off, as opf-render shapes it.
 
 ## Files
 
 - `corpus.json`: 300 Latin title and body strings sampled evenly from the 126 bundled example decks.
 - `report.json`: the policy replacement for each family, measured per style. Styles are regular, bold, italic and bold italic, or the weight that the family name encodes. Each entry gives the mean |ratio − 1|, the signed mean and the maximum, plus the file digests.
+  - Provenance: the Georgia entry was replaced on 2026-09-29 with a re-run that shapes Gelasio with `liga` and `clig` off (see Findings). The rest of the file is unchanged from the 2026-09-23 host, which had the Microsoft 365 cloud fonts. A full regeneration on a host without them would drop those rows, so this entry was patched from `--out` output rather than regenerating the file.
 - `bundled-candidates.json`: the same ranking restricted to the faces opf-render already ships (Roboto, Roboto Mono, Carlito, Caladea, Arimo, Tinos, Cousine, Gelasio). It chose each row's last, bundled alternate.
 - `candidates.json`: every installed open package ranked against each measurable family, top 10 by mean |ratio − 1|. The ranking ignores category, so it can list a proprietary sans next to a serif. Choices also weighed style coverage, category, and whether the face already ships in a pack.
 
@@ -28,7 +29,7 @@ Families whose real font is not on the host are skipped and recorded as `measure
 ## Findings
 
 - **Metric replacements.** Carlito for Calibri, Arimo for Arial, Tinos for Times New Roman and Cousine for Courier New are metric. The largest difference on any string, in any of the four styles, is 0.26% (Calibri/Carlito).
-- **Georgia and Gelasio are visual.** Gelasio matches every basic-Latin advance of Georgia 5.59. opf-render shapes with default features, though, and runs where Gelasio applies optional ligatures differ by up to 1.02% in all four styles. That exceeds the 0.3% per-string limit for a metric claim.
+- **Georgia and Gelasio are metric with ligatures off.** Gelasio matches every basic-Latin advance of Georgia 5.59. With default features, though, Gelasio applies `liga` ligatures (fi, fl, ffi, ffl) that Georgia does not, and 33 of the 300 corpus strings differ by up to 1.02% in all four styles: mean 0.02%, maximum 0.82% regular, 1.02% bold, 0.97% italic and 0.87% bold italic. That exceeds the 0.3% per-string limit. Shaping Gelasio with `liga` and `clig` off (the row records them as `disabledFeatures`, and opf-render applies them to measurement and SVG) leaves every string identical to Georgia in regular, bold and italic, and at most 0.0029% off in bold italic ("Major milestones for Kiteframe."). Georgia has no `liga` or `clig` feature, and turning kerning off changes no width in either font, so only the ligatures differ. The metric tier holds only with those features off.
 - **Cambria and Caladea.** Caladea is *not* metric-compatible with Cambria 6.99 (Windows 11). Its advances differ by a mean of 2.7% and up to 6.5%, so the policy classes it as visual. Fontconfig still lists Caladea as a metric alias.
 - **Aptos.** Microsoft 365 cloud font, proprietary, not redistributable.
   - Measured candidates (mean |Δ| / signed):

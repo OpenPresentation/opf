@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- FF-31: two owner-approved font-file rules, documented in `docs/programs/font-fidelity-everywhere/font-licensing.md` (Font files: bundling and licenses) and the `opf-export` skill. Fonts ship as pinned files (exact npm versions or vendored files with sha256) and are never loaded from a font CDN at runtime. Every bundled face records a verified permissive license (OFL-1.1, Apache-2.0, MIT or UFL-1.0), whether it declares a Reserved Font Name, its source URL, package@version and sha256. `pnpm check:font-hotlinks` (`scripts/check-font-hotlinks.mjs`, allowlist `scripts/font-hotlink-allowlist.json`) fails on font CDN references in tracked files and runs in `pnpm test`. Reserved Font Names: OFL only stops a modified version (subset, instance, conversion) from using the reserved name in its name, so a face whose family or file name contains it (Carlito, Raleway, Lora, Playfair Display) must be the unmodified upstream file, while Noto Sans JP/SC/TC/KR (which reserve "Source" but are named "Noto Sans ...") may be subsets. The notice parser fails closed, and the license tests enforce the rule with a shrink-only pending list.
+
 ## 0.11.1
 
 - Release 0.11.1. It is additive: no schema, catalog or exported API is removed, and `pnpm check:breaking` reports no breaking changes against 0.11.0. It ships the shared font-fidelity contract that renderer 0.10.0, PPTX 0.10.0 and editor 0.9.0 require (`FONT_POLICY`, `resolveScriptFonts()`, `resolveFontSchemeReference()`, `paragraphDirection()`, `resolveSocialProfile()`, per-item `alignment`, formatted slide-number/date furniture with `fields`, `design.slideImage` geometry), so those packages raise their core floor to `^0.11.1`. The chart-type records deprecated below still resolve; their removal stays scheduled for 0.12.0 (see [migration notes](docs/migrations/0.12.0.md)). CLI 0.9.0 is unchanged and still bundles core 0.11.0.
@@ -15,7 +17,7 @@
   - Measured findings:
     - Metric: Carlito/Calibri, Arimo/Arial, Tinos/Times New Roman and Cousine/Courier New. Mean width difference below 0.01%, and no string in any of the four styles is more than 0.26% off.
     - The policy test requires this for every metric row: an upstream source, all four styles measured, a mean below 0.1% and a per-string maximum of at most 0.3%.
-    - Georgia → Gelasio stays visual. Every basic-Latin advance matches Georgia 5.59, but opf-render shapes with default features, and runs where Gelasio applies optional ligatures differ by up to 1.02%.
+    - Georgia → Gelasio is metric only with ligatures off. Every basic-Latin advance matches Georgia 5.59, but with default features Gelasio ligates fi/fl/ffi/ffl and 33 corpus strings differ by up to 1.02%. The row now sets `disabledFeatures: ["liga", "clig"]` (new optional field on a policy replacement, in the schema and `FontReplacement` type), the measurement is taken with them off (mean and maximum below 0.01% in all four styles), and renderers must shape and draw Gelasio that way.
     - Visual: Caladea against Cambria 6.99, with a 2.7% mean and a 6.5% maximum.
     - Aptos → Roboto: 2.15% mean, +0.1% signed, 7.4% maximum.
     - Consolas and Aptos Mono keep Cousine, which has all four styles, with Roboto Mono as an alternate. Roboto Mono measures slightly closer against Consolas (7.95% vs 9.15%), but the bundled Roboto Mono has no italics.

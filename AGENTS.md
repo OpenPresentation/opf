@@ -20,3 +20,7 @@ The owner authorized agents to publish npm packages on 2026-09-29 ("yes, prepare
 Cross-repository work is tracked in `docs/programs/`. Before starting program work, read the program's `README.md` (goal, definition of done, invariants, resume protocol) and `burndown.md` (item IDs, acceptance criteria, status, progress log). Name branches `codex/ff-<nn>-<slug>` (for example `codex/ff-07-script-slots`), start PR titles with the item ID (`FF-07: `), and update the burndown row and progress log when an item changes state.
 
 - [Font fidelity everywhere](docs/programs/font-fidelity-everywhere/README.md): every pptx.gallery dimension previews and exports with only the developer's chosen fonts, in PowerPoint and on every OS and runtime.
+
+## Fonts
+
+Bundle pinned font files, never hotlink font CDNs; every bundled face records a verified permissive license (OFL-1.1, Apache-2.0, MIT, UFL-1.0 only). See [Font files: bundling and licenses](docs/programs/font-fidelity-everywhere/font-licensing.md#font-files-bundling-and-licenses). `pnpm check:font-hotlinks` enforces the hotlink half in core.
