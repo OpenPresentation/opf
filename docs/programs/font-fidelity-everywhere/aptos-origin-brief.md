@@ -1,6 +1,39 @@
 # Why does Presentation.Fonts report "Aptos"? Research brief (2026-09-22)
 
-Scope: read-only research. No Office or COM was started. **F** = sourced or locally observed fact. **I** = inference or hypothesis.
+The September 22 research below was read-only and started no Office or COM.
+**F** = sourced or locally observed fact. **I** = inference or hypothesis.
+
+## September 29 native evidence update
+
+The [FF-04 inventory bundle](../../evidence/windows-native-font-inventory-20260929/README.md)
+records the unedited fixture with temporary Carlito fonts, the same fixture
+without temporary registration in a fresh PowerPoint session, and an exporter
+control. All three report `Aptos` and an empty-name entry in
+`Presentation.Fonts` before any edit. The current observational audits pass;
+the original historical audit failures remain in the bundle. A passing
+inventory audit validates the recorded lifecycle and inputs, not the font
+allowlist, glyph identity or embedding.
+
+This rules out H1 as the sole explanation for the initial Aptos entry and shows
+that temporary registration is not required for it. It does not locate the
+responsible style or prove that a visible glyph uses Aptos. The conditions ran
+on different dates and PowerPoint sessions; this is not a simultaneous test of
+every host variable. **FF-05 remains open.**
+
+The next discriminating experiment is an offline-reviewed control that replaces
+the fixture's explicit Carlito references with Calibri while preserving its
+structure (E6 below), followed by one bounded read-only inventory without
+temporary fonts. Record every changed XML attribute and the resulting source
+hash before the native run. An unchanged Aptos observation would further narrow
+the Carlito-specific branch of H3; it would still not identify a precise source.
+Any subsequent style/part isolation needs its own reviewed fixture and fresh
+output directory. Do not change the allowlist or resume embedding on the basis
+of the inventory alone.
+
+The expressibility statements in the historical research below describe the
+September 22 source. FF-18 and FF-07 subsequently added language/script font
+resolution and exporter script-slot handling; the preserved FF-04 fixture was
+intentionally not regenerated with those changes.
 
 ## Local facts (fixture-carlito-02, from opf origin/main)
 - F1. In `source.pptx`, both slide runs carry explicit `<a:latin/ea/cs typeface="Carlito">`. The two `endParaRPr` carry no typeface. The master, notes master and `defaultTextStyle` use `+mn-lt/+mn-ea/+mn-cs` (and `+mj-*`). The theme's major and minor `ea` and `cs` are `""`. The notes master shares `theme1.xml`. There is no handout master. `lang="en-US"` is used everywhere.

@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 2,
+  "kind": "native-font-inventory-audit",
+  "evidenceDirectory": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-native-20260929\\native-font-inventory-no-temp-01",
+  "reviewedVerifierRevision": "current",
+  "passed": true,
+  "failures": [],
+  "rawHashes": {
+    "request.json": "d72cb199b904151fc4d1f5cf66e52a2831027954f94e4545bfd08113de4ef934",
+    "report.json": "9d5614e6421ab7a676e60b00d90e22fb383f7837b613d97a79db841a75e248d0",
+    "supervisor.json": "9eb7af94ddeb2896369e55efe7a5fb3e60e107e1d0affab2677e9f245dc24e7b",
+    "worker.json": "317c16cb053f7a99376b64ee453a4d0421428621bc242a4edfa04c4951a53fdf",
+    "progress.json": "54169afd53149533dd5169f77e5a11527b098baae96b696bb9cc04f9fc42c53f",
+    "stages.jsonl": "9b5730b10483aa72287133003b753d715c6cfe3686359eb6807b3f190330da5f",
+    "inputs/native-font-inventory.ps1": "f8f24330db965436167758e54f907e1cc9b6bd9eb25e30b5110796823701ae7f",
+    "inputs/source.pptx": "f505236ecef4fad838a198449adede1f4afa39d7bac74613626eee2f2a419aeb",
+    "original:source": "f505236ecef4fad838a198449adede1f4afa39d7bac74613626eee2f2a419aeb",
+    "original:verifier": "f8f24330db965436167758e54f907e1cc9b6bd9eb25e30b5110796823701ae7f",
+    "inputs/native-process.ps1": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+    "original:process-helper": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+    "inputs/native-text-fonts.ps1": "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6",
+    "original:font-helper": "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6",
+    "inputs/generation.json": "78904db1a1556b80dc8abc8270460cac95ac4868b32219f1ecd06371d0d578db",
+    "original:generation": "78904db1a1556b80dc8abc8270460cac95ac4868b32219f1ecd06371d0d578db",
+    "inputs/LICENSE_FONT": "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00",
+    "original:license": "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00",
+    "inputs/fonts/Carlito-400-normal.ttf": "ca019755404c45627a8566915df99068949dc32ee2bce48d6aeee7542d2a0a89",
+    "original:font:fonts/Carlito-400-normal.ttf": "ca019755404c45627a8566915df99068949dc32ee2bce48d6aeee7542d2a0a89",
+    "inputs/fonts/Carlito-400-italic.ttf": "074cd1b89d53765d90d0ed3b4bfe49523efaaf4f3f430c006bc3233778b0ebb5",
+    "original:font:fonts/Carlito-400-italic.ttf": "074cd1b89d53765d90d0ed3b4bfe49523efaaf4f3f430c006bc3233778b0ebb5",
+    "inputs/fonts/Carlito-700-normal.ttf": "51edbfa32d8af939913ae1f4ad0a5173e32083499218c133384638090295f0b0",
+    "original:font:fonts/Carlito-700-normal.ttf": "51edbfa32d8af939913ae1f4ad0a5173e32083499218c133384638090295f0b0",
+    "inputs/fonts/Carlito-700-italic.ttf": "25f5672c1985d168d6bc2973864fc5a7e374bb95fe8d0f91cff47ae17fa67691",
+    "original:font:fonts/Carlito-700-italic.ttf": "25f5672c1985d168d6bc2973864fc5a7e374bb95fe8d0f91cff47ae17fa67691",
+    "reviewed/native-font-inventory.ps1": "f8f24330db965436167758e54f907e1cc9b6bd9eb25e30b5110796823701ae7f",
+    "reviewed/native-process.ps1": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+    "reviewed/native-text-fonts.ps1": "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6"
+  },
+  "findings": {
+    "inputMode": "carlito-fixture",
+    "fontRegistrationMode": "none",
+    "powerPointVersion": "16.0",
+    "presentationFonts": [
+      {
+        "index": 1,
+        "name": "",
+        "embedded": 0,
+        "embeddable": 0
+      },
+      {
+        "index": 2,
+        "name": "Aptos",
+        "embedded": 0,
+        "embeddable": -1
+      }
+    ],
+    "theme": {
+      "major": {
+        "latin": "Carlito",
+        "complexScript": "",
+        "eastAsian": ""
+      },
+      "minor": {
+        "latin": "Carlito",
+        "complexScript": "",
+        "eastAsian": ""
+      }
+    },
+    "ledger": {
+      "presentationFontNames": [
+        "Aptos"
+      ],
+      "slideTextSlotNames": [
+        "Carlito"
+      ],
+      "masterTextSlotNames": [],
+      "themeFontNames": [
+        "Carlito"
+      ],
+      "aptosPresentationFontNames": [
+        "Aptos"
+      ],
+      "aptosSlideTextSlotNames": [],
+      "aptosMasterTextSlotNames": [],
+      "aptosThemeFontNames": [],
+      "nonCarlitoPresentationFontNames": [
+        "Aptos"
+      ],
+      "carlitoOnlyPresentationFonts": false,
+      "aptosReported": true,
+      "emptyNamePresentationFontIndexes": [
+        1
+      ],
+      "emptyNameFontReported": true
+    },
+    "failureCleanup": {
+      "applicable": false,
+      "outcome": null,
+      "closeInvocations": 1,
+      "consistent": true,
+      "problems": []
+    },
+    "note": "Findings are evidence only when passed is true. Reported names do not prove physical font-file or per-glyph identity."
+  },
+  "scope": "Offline input, lifecycle, read-only, stage-sequence and font-ledger audit of one native font inventory attempt. No Office, COM or font API is started.",
+  "mode": "audit"
+}

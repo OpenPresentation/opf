@@ -1,0 +1,15 @@
+{
+  "observedAt": "2026-09-29T07:28:53.0432752Z",
+  "officeProcessCount": 1,
+  "currentSessionLaunchedByRoot": true,
+  "beforeLaunchNoOfficeProcessObserved": true,
+  "uiObservation": "PowerPoint Home; no open document or recovery/security/dialog prompt observed",
+  "nativeCallsBeforeThisAttempt": 0,
+  "temporaryFontRegistrationsThisSession": 0,
+  "plannedInputSha256": "f505236ecef4fad838a198449adede1f4afa39d7bac74613626eee2f2a419aeb",
+  "plannedRegistrationMode": "none",
+  "timeoutSeconds": 45,
+  "windowsBuild": "26200.9457",
+  "scope": "Fresh process and direct UI inspection; no Office process was terminated.",
+  "sourceSha256": "b142edd77568f75c75f2375a76c849cc5eb8a294b59fca6e736ca735cb33df2a"
+}

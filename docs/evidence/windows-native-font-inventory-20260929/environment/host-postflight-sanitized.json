@@ -1,0 +1,13 @@
+{
+  "observedAt": "2026-09-29T07:34:45.8943632Z",
+  "uiObservation": "PowerPoint Home; no open presentation, recovery/security prompt, or dialog observed after owned readonly inventory completed",
+  "officeProcessCount": 1,
+  "attemptedNativeRuns": 1,
+  "temporaryFontRegistrations": 0,
+  "auditPassed": true,
+  "cleanupConfirmed": true,
+  "sourceUnchanged": true,
+  "aptosReported": true,
+  "physicalFontIdentityProven": false,
+  "sourceSha256": "00bc8d036588b25c27917a1f40e9e9adccb75a5d42b0d26e057ed24213fef724"
+}
