@@ -1,6 +1,7 @@
 import { readFile } from "node:fs/promises";
 import { createRequire } from "node:module";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { createHash } from "node:crypto";
 import { createFontRegistry, OPFFontError } from "./fonts.js";
 import { BUNDLED_FONT_MANIFEST } from "./font-manifest.js";
@@ -8,6 +9,8 @@ export { BUNDLED_FONT_MANIFEST } from "./font-manifest.js";
 import { scriptFontPackages } from "./script-font-pack.js";
 export { scriptFontPackages } from "./script-font-pack.js";
 const require = createRequire(import.meta.url);
+// dist/ (published) and src/ (checkout) both sit directly below the package root.
+const packageRoot = fileURLToPath(new URL("../", import.meta.url));
 
 async function verifiedFile(file, expected, details) {
   let bytes;
@@ -18,18 +21,25 @@ async function verifiedFile(file, expected, details) {
   return bytes;
 }
 
+// An npm font package, resolved from node_modules and checked against its pinned version.
+async function installedDirectory(pkg) {
+  let manifestPath, installed;
+  try {
+    manifestPath = require.resolve(`${pkg.name}/package.json`);
+    installed = JSON.parse(await readFile(manifestPath, "utf8"));
+  } catch (error) {
+    throw new OPFFontError("font-resource-unavailable", `Install ${pkg.name}@${pkg.version} to use this offline font pack.`, {package:pkg.name, cause:error.code});
+  }
+  if (installed.version !== pkg.version) throw new OPFFontError("font-version-mismatch", `Expected ${pkg.name}@${pkg.version}; reinstall the pinned package.`, {package:pkg.name, expected:pkg.version, actual:installed.version});
+  return path.dirname(manifestPath);
+}
+
+// A `vendored` entry (FF-31) ships inside this package, for example fonts/carlito: the unmodified
+// upstream files, which verifiedFile checks against the same reviewed SHA-256 pins.
 async function loadPackages(packages) {
   const entries = [], fontFiles = [];
   for (const pkg of packages) {
-    let manifestPath, installed;
-    try {
-      manifestPath = require.resolve(`${pkg.name}/package.json`);
-      installed = JSON.parse(await readFile(manifestPath, "utf8"));
-    } catch (error) {
-      throw new OPFFontError("font-resource-unavailable", `Install ${pkg.name}@${pkg.version} to use this offline font pack.`, {package:pkg.name, cause:error.code});
-    }
-    if (installed.version !== pkg.version) throw new OPFFontError("font-version-mismatch", `Expected ${pkg.name}@${pkg.version}; reinstall the pinned package.`, {package:pkg.name, expected:pkg.version, actual:installed.version});
-    const directory = path.dirname(manifestPath);
+    const directory = pkg.vendored ? path.join(packageRoot, pkg.vendored) : await installedDirectory(pkg);
     const license = (await verifiedFile(path.join(directory, pkg.licenseFile), pkg.licenseSha256, {package:pkg.name, file:pkg.licenseFile})).toString("utf8");
     for (const face of pkg.faces) {
       const file = path.join(directory, face.file);

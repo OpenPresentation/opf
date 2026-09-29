@@ -96,12 +96,30 @@ export function isUnmodifiedUpstreamUrl(url) {
   return Boolean(match) && UNMODIFIED_UPSTREAM_REPOSITORIES.includes(match[1]);
 }
 
+/** True when the face proves it is the byte-identical upstream file: a pinned allowlisted URL and the face's own sha256. */
+export function provenUnmodified(face) {
+  return Boolean(face.upstreamFile) && isUnmodifiedUpstreamUrl(face.upstreamFile.url) && face.upstreamFile.sha256 === face.sha256;
+}
+
+/** True when a manifest entry serves a face that is not proven unmodified and whose family or file name contains a Reserved Font Name. */
+export function modifiedFaceUsesReservedName(pkg) {
+  return pkg.reservedFontNames.length > 0 && pkg.faces.some(face => !provenUnmodified(face) && nameContainsReservedName([face.family, face.file.split(/[\\/]/).pop()], pkg.reservedFontNames));
+}
+
+/**
+ * Parts of a pinned raw.githubusercontent.com upstream URL, or null. A vendored manifest entry (FF-31) keeps the
+ * upstream files in one directory of one repository at one commit: `version` is that commit and `source` is
+ * https://github.com/<repository>/tree/<commit>/<directory>.
+ */
+export function pinnedRawUpstream(url) {
+  const match = /^https:\/\/raw\.githubusercontent\.com\/([A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+)\/([0-9a-f]{40})\/(\S+)\/([^/\s]+)$/.exec(url);
+  return match ? {repository: match[1], commit: match[2], directory: match[3], file: match[4]} : null;
+}
+
 /**
  * Packages with a face that is modified and uses a reserved name in its name, and so must switch to unmodified upstream
- * files, each with why. The renderer's Carlito is the Google Fonts API distribution, a subset of the google/fonts file
- * (2532 glyphs against 2783). This list may only shrink: test/font-licenses.mjs fails on a stale entry and on any new
- * package that is not listed.
+ * files, each with why. Empty: Carlito, the only such package, now ships the unmodified google/fonts TTFs from
+ * fonts/carlito (FF-31) instead of the Google Fonts API subset in @expo-google-fonts/carlito (for example 2532 glyphs against 2783 in the regular style).
+ * This list may only shrink: test/font-licenses.mjs fails on a stale entry and on any package that needs to be listed.
  */
-export const RFN_PENDING_UNMODIFIED_UPSTREAM = Object.freeze({
-  '@expo-google-fonts/carlito': 'Google Fonts API subset of the google/fonts Carlito files (fewer glyphs), named Carlito; switch to the google/fonts TTFs.',
-});
+export const RFN_PENDING_UNMODIFIED_UPSTREAM = Object.freeze({});

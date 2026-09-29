@@ -3,9 +3,10 @@ import {readFile,writeFile} from 'node:fs/promises';
 import {createRequire} from 'node:module';
 import {createHash} from 'node:crypto';
 import path from 'node:path';
+import {fileURLToPath} from 'node:url';
 import assert from 'node:assert/strict';
 import {BUNDLED_FONT_MANIFEST} from '../src/font-manifest.js';
-import {ALLOWED_FONT_LICENSES,copyrightLine,detectLicenses,reservedFontNames,upstreamUrl} from './font-license.mjs';
+import {ALLOWED_FONT_LICENSES,copyrightLine,detectLicenses,provenUnmodified,reservedFontNames,upstreamUrl} from './font-license.mjs';
 const require=createRequire(import.meta.url),hash=data=>createHash('sha256').update(data).digest('hex');
 const root=JSON.parse(await readFile(new URL('../package.json',import.meta.url),'utf8'));
 const manifest=structuredClone(BUNDLED_FONT_MANIFEST);
@@ -19,15 +20,23 @@ manifest.packages=manifest.packages.map(entry=>{
   return ordered;
 });
 for(const pkg of manifest.packages){
-  const directory=path.dirname(require.resolve(`${pkg.name}/package.json`));
-  const installed=JSON.parse(await readFile(path.join(directory,'package.json'),'utf8'));
-  // Base and office packs are runtime dependencies. The script pack (FF-19) is an
-  // optional peer that development pins exactly as a devDependency.
-  const pinned=pkg.pack==='scripts'?root.devDependencies?.[pkg.name]:root.dependencies[pkg.name];
-  assert.equal(pinned,installed.version,`Pin ${pkg.name} exactly before reviewing an updated font manifest.`);
-  if(pkg.pack==='scripts'){
-    assert.equal(root.peerDependencies?.[pkg.name],installed.version,`Declare ${pkg.name} as an exact optional peer.`);
-    assert.equal(root.peerDependenciesMeta?.[pkg.name]?.optional,true,`Declare ${pkg.name} as an optional peer.`);
+  // FF-31: a vendored entry is a directory of unmodified upstream files inside this package (for example fonts/carlito).
+  // Its version (the upstream commit), source and upstreamFile URLs are reviewed by hand when the files are replaced;
+  // this command re-hashes the files and fails unless each face still equals its recorded upstream file.
+  const vendored=pkg.vendored!==undefined;
+  const directory=vendored?fileURLToPath(new URL(`../${pkg.vendored}/`,import.meta.url)):path.dirname(require.resolve(`${pkg.name}/package.json`));
+  if(!vendored){
+    const installed=JSON.parse(await readFile(path.join(directory,'package.json'),'utf8'));
+    // Base and office packs are runtime dependencies. The script pack (FF-19) is an
+    // optional peer that development pins exactly as a devDependency.
+    const pinned=pkg.pack==='scripts'?root.devDependencies?.[pkg.name]:root.dependencies[pkg.name];
+    assert.equal(pinned,installed.version,`Pin ${pkg.name} exactly before reviewing an updated font manifest.`);
+    if(pkg.pack==='scripts'){
+      assert.equal(root.peerDependencies?.[pkg.name],installed.version,`Declare ${pkg.name} as an exact optional peer.`);
+      assert.equal(root.peerDependenciesMeta?.[pkg.name]?.optional,true,`Declare ${pkg.name} as an optional peer.`);
+    }
+    pkg.version=installed.version;
+    pkg.source=`https://www.npmjs.com/package/${pkg.name}/v/${pkg.version}`;
   }
   // FF-31: the license is read from the file the package ships, never assumed from the source site.
   const licenseText=await readFile(path.join(directory,pkg.licenseFile),'utf8'),detected=detectLicenses(licenseText);
@@ -36,10 +45,11 @@ for(const pkg of manifest.packages){
   pkg.reservedFontNames=reservedFontNames(licenseText);
   pkg.upstream=upstreamUrl(licenseText);
   pkg.copyright=copyrightLine(licenseText);
-  pkg.version=installed.version;
-  pkg.source=`https://www.npmjs.com/package/${pkg.name}/v/${pkg.version}`;
   pkg.licenseSha256=hash(await readFile(path.join(directory,pkg.licenseFile)));
-  for(const face of pkg.faces)face.sha256=hash(await readFile(path.join(directory,face.file)));
+  for(const face of pkg.faces){
+    face.sha256=hash(await readFile(path.join(directory,face.file)));
+    if(vendored)assert.ok(provenUnmodified(face),`${pkg.vendored}/${face.file} (sha256 ${face.sha256}) is not the recorded unmodified upstream file ${face.upstreamFile?.url} (sha256 ${face.upstreamFile?.sha256}); vendored fonts must be byte-identical upstream files.`);
+  }
 }
 const contents=`// Generated deliberately by scripts/update-font-manifest.mjs; never during build/install.\nconst freeze=value=>{if(value&&typeof value==='object'){for(const child of Object.values(value))freeze(child);Object.freeze(value);}return value;};\nexport const BUNDLED_FONT_MANIFEST=freeze(${JSON.stringify(manifest,null,2)});\n`;
 await writeFile(new URL('../src/font-manifest.js',import.meta.url),contents);

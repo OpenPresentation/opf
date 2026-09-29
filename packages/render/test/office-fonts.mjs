@@ -20,6 +20,20 @@ for(const [fontFamily,substitute] of Object.entries(pairs)) for(const fontWeight
   assert.equal(resolved.path,style.path);
   assert.ok(registry.textMeasurement.measure('AVATAR office 1234',25,style)>0);
 }
+// FF-31: the unmodified upstream Carlito measures U+00A0 like a space in every style. The Google Fonts API subset it
+// replaces (@expo-google-fonts/carlito 0.4.1) failed here with font-shaping-failed: fontkit could not read its no-break space glyph.
+for(const fontWeight of [400,700]) for(const italic of [false,true]) {
+  const style={fontFamily:'Carlito',fontWeight,italic};
+  const withNbsp = 'Price:' + String.fromCharCode(0xa0) + '$5', withSpace = 'Price: $5';
+  assert.equal(withNbsp.charCodeAt(6), 0xa0, 'the probe string really contains U+00A0');
+  assert.equal(withSpace.charCodeAt(6), 0x20);
+  const nbsp = registry.textMeasurement.measure(withNbsp, 20, style), space = registry.textMeasurement.measure(withSpace, 20, style);
+  assert.ok(space > 0);
+  assert.equal(nbsp, space, 'Carlito U+00A0 advance equals a normal space in ' + fontWeight + (italic ? ' italic' : ''));
+  // Alone, a no-break space also measures like a space (not zero, not a shaping failure).
+  assert.equal(registry.textMeasurement.measure(String.fromCharCode(0xa0), 20, style), registry.textMeasurement.measure(' ', 20, style));
+  assert.ok(registry.textMeasurement.measure(String.fromCharCode(0xa0), 20, style) > 0);
+}
 assert.equal(registry.embeddedFonts.length,33);
 for(const face of registry.embeddedFonts) assert.ok(face.license?.length>1000);
 const entries=registry.embeddedFonts.map(face=>({...face,data:new Uint8Array(Buffer.from(face.dataUrl.split(',')[1],'base64'))}));

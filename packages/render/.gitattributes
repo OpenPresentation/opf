@@ -1,0 +1,3 @@
+# Vendored upstream font files are hashed byte for byte (src/font-manifest.js): never convert line endings.
+fonts/**/*.ttf binary
+fonts/**/*.txt -text

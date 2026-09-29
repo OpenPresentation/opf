@@ -21,6 +21,7 @@
   },
   "files": [
     "dist",
+    "fonts",
     "README.md",
     "LICENSE"
   ],
@@ -85,7 +86,6 @@
   "dependencies": {
     "@expo-google-fonts/arimo": "0.4.3",
     "@expo-google-fonts/caladea": "0.4.2",
-    "@expo-google-fonts/carlito": "0.4.1",
     "@expo-google-fonts/cousine": "0.4.3",
     "@expo-google-fonts/gelasio": "0.4.1",
     "@expo-google-fonts/roboto": "0.4.3",

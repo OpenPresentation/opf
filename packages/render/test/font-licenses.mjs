@@ -1,15 +1,16 @@
 // FF-31: every bundled font package must carry a verified, allowed license.
-// The license is read from the LICENSE/OFL file the installed package ships, detected by text, and compared
-// with what src/font-manifest.js declares and with the allowlist. File and license hashes must still match.
-// New manifest entries must include license, licenseFile, licenseSha256, reservedFontNames, upstream and copyright:
-// run `node scripts/update-font-manifest.mjs` to fill them from the installed package.
+// The license is read from the LICENSE/OFL file the installed package ships (or, for a vendored entry, the file in its
+// fonts/<name> directory), detected by text, and compared with what src/font-manifest.js declares and with the allowlist.
+// File and license hashes must still match. New manifest entries must include license, licenseFile, licenseSha256,
+// reservedFontNames, upstream and copyright: run `node scripts/update-font-manifest.mjs` to fill them.
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {createRequire} from 'node:module';
 import path from 'node:path';
+import {fileURLToPath} from 'node:url';
 import {BUNDLED_FONT_MANIFEST} from '../src/font-manifest.js';
-import {ALLOWED_FONT_LICENSES,RFN_PENDING_UNMODIFIED_UPSTREAM,copyrightLine,declaresReservedFontName,detectLicense,detectLicenses,isUnmodifiedUpstreamUrl,nameContainsReservedName,reservedFontNames,upstreamUrl} from '../scripts/font-license.mjs';
+import {ALLOWED_FONT_LICENSES,RFN_PENDING_UNMODIFIED_UPSTREAM,copyrightLine,declaresReservedFontName,detectLicense,detectLicenses,isUnmodifiedUpstreamUrl,modifiedFaceUsesReservedName,nameContainsReservedName,pinnedRawUpstream,provenUnmodified,reservedFontNames,upstreamUrl} from '../scripts/font-license.mjs';
 
 const require=createRequire(import.meta.url),hash=data=>createHash('sha256').update(data).digest('hex');
 const rootPackage=JSON.parse(await readFile(new URL('../package.json',import.meta.url),'utf8'));
@@ -65,27 +66,56 @@ assert.ok(nameContainsReservedName(['Carlito','Carlito_400Regular.ttf'],['Carlit
 assert.ok(nameContainsReservedName(['My CARLITO Pro'],['Carlito']),'case-insensitive');
 assert.ok(!nameContainsReservedName(['Noto Sans JP','NotoSansJP_400Regular.ttf'],['Source']),'a family that does not use the reserved name is fine when modified');
 
-// Manifest checks against the installed packages.
+// The RFN predicate the manifest check uses: a modified face named with the reserved name is caught, proof clears it.
+const upstreamSha='f6418f708baede9789daef5d458c0f53d2a888af9820e8062934e504fedc6595';
+const subsetFace={file:'400Regular/Carlito_400Regular.ttf',family:'Carlito',weight:400,italic:false,sha256:'ca019755404c45627a8566915df99068949dc32ee2bce48d6aeee7542d2a0a89'};
+assert.ok(modifiedFaceUsesReservedName({reservedFontNames:['Carlito'],faces:[subsetFace]}),'a subset named Carlito needs proof');
+assert.ok(modifiedFaceUsesReservedName({reservedFontNames:['Carlito'],faces:[{...subsetFace,upstreamFile:{url:pinnedRaw,sha256:upstreamSha}}]}),'an upstreamFile hash that differs from the face is not proof');
+assert.ok(modifiedFaceUsesReservedName({reservedFontNames:['Carlito'],faces:[{...subsetFace,sha256:upstreamSha,upstreamFile:{url:pinnedRaw.replace('23e54b51ddffbc7713c583748e3bd86f62b1fa4a','main'),sha256:upstreamSha}}]}),'an unpinned URL is not proof');
+assert.ok(!modifiedFaceUsesReservedName({reservedFontNames:['Carlito'],faces:[{...subsetFace,sha256:upstreamSha,upstreamFile:{url:pinnedRaw,sha256:upstreamSha}}]}),'a byte-identical pinned upstream face is fine');
+assert.ok(!modifiedFaceUsesReservedName({reservedFontNames:['Source'],faces:[{...subsetFace,family:'Noto Sans JP',file:'NotoSansJP_400Regular.ttf'}]}),'a modified face that does not use the reserved name is fine');
+assert.deepEqual(pinnedRawUpstream(pinnedRaw),{repository:'google/fonts',commit:'23e54b51ddffbc7713c583748e3bd86f62b1fa4a',directory:'ofl/carlito',file:'Carlito-Regular.ttf'});
+assert.equal(pinnedRawUpstream(pinnedRaw.replace('23e54b51ddffbc7713c583748e3bd86f62b1fa4a','main')),null);
+
+// Manifest checks against the installed npm packages and the vendored directories this package ships.
 const packages=BUNDLED_FONT_MANIFEST.packages;
 assert.ok(packages.length>0,'the manifest bundles at least one font package');
-const rows=[],rfnPackages=[];
+const rows=[],rfnPackages=[],vendoredEntries=[];
 for(const pkg of packages){
-  const label=`${pkg.name}@${pkg.version}`;
+  const label=`${pkg.name}@${pkg.version}`,vendored=pkg.vendored!==undefined;
   for(const field of ['name','version','pack','source','license','licenseFile','licenseSha256','reservedFontNames','upstream','copyright'])
     assert.ok(pkg[field]!==undefined&&pkg[field]!==null&&pkg[field]!=='',`${label}: manifest entry is missing "${field}"; run scripts/update-font-manifest.mjs`);
   assert.ok(Array.isArray(pkg.reservedFontNames)&&pkg.reservedFontNames.every(name=>typeof name==='string'&&name),`${label}: reservedFontNames must be an array of names (empty when none)`);
   assert.match(pkg.upstream,/^https?:\/\//,`${label}: upstream must be a URL`);
-  assert.equal(pkg.source,`https://www.npmjs.com/package/${pkg.name}/v/${pkg.version}`,`${label}: source must be the exact npm package URL`);
   assert.ok(ALLOWED_FONT_LICENSES.includes(pkg.license),`${label}: ${pkg.license} is not an allowed bundled-font license (${ALLOWED_FONT_LICENSES.join(', ')})`);
 
-  const pinned=(pkg.pack==='scripts'?rootPackage.devDependencies:rootPackage.dependencies)?.[pkg.name];
-  assert.equal(pinned,pkg.version,`${label}: package.json must pin this exact version (no range)`);
-  assert.match(pinned,/^\d+\.\d+\.\d+$/,`${label}: pin must be an exact version`);
-
-  const directory=path.dirname(require.resolve(`${pkg.name}/package.json`));
-  const installed=JSON.parse(await readFile(path.join(directory,'package.json'),'utf8'));
-  assert.equal(installed.version,pkg.version,`${label}: installed version differs from the manifest`);
-  assert.ok(String(installed.license??'').split(/\s+(?:AND|OR)\s+|[\s()]+/).includes(pkg.license),`${label}: installed package.json license "${installed.license}" does not mention ${pkg.license}`);
+  let directory;
+  if(vendored){
+    // FF-31 vendored entry: unmodified upstream files inside this package, from one pinned directory of one repository.
+    vendoredEntries.push(pkg.name);
+    assert.match(pkg.vendored,/^fonts\/[a-z0-9-]+$/,`${label}: vendored must be a fonts/<name> directory inside this package`);
+    assert.ok(rootPackage.files.includes('fonts')||rootPackage.files.includes(pkg.vendored),`${label}: package.json "files" must publish ${pkg.vendored}`);
+    for(const field of ['dependencies','devDependencies','peerDependencies'])assert.equal(rootPackage[field]?.[pkg.name],undefined,`${label}: a vendored entry must not also be an npm ${field} entry`);
+    assert.match(pkg.version,/^[0-9a-f]{40}$/,`${label}: a vendored entry's version is the pinned upstream commit`);
+    const parts=pkg.faces.map(face=>pinnedRawUpstream(face.upstreamFile?.url??''));
+    assert.ok(parts.every(Boolean),`${label}: every vendored face needs upstreamFile with a pinned raw URL`);
+    for(const [index,face] of pkg.faces.entries()){
+      assert.ok(provenUnmodified(face),`${label}: vendored ${face.file} must be the byte-identical allowlisted upstream file (upstreamFile.sha256 equal to its own)`);
+      assert.deepEqual([parts[index].repository,parts[index].commit,parts[index].directory],[parts[0].repository,pkg.version,parts[0].directory],`${label}: every face must come from the same upstream directory at commit ${pkg.version}`);
+      assert.equal(parts[index].file,face.file,`${label}: vendored file name must match its upstream name`);
+    }
+    assert.equal(pkg.source,`https://github.com/${parts[0].repository}/tree/${pkg.version}/${parts[0].directory}`,`${label}: source must be the pinned upstream directory`);
+    directory=fileURLToPath(new URL(`../${pkg.vendored}/`,import.meta.url));
+  }else{
+    assert.equal(pkg.source,`https://www.npmjs.com/package/${pkg.name}/v/${pkg.version}`,`${label}: source must be the exact npm package URL`);
+    const pinned=(pkg.pack==='scripts'?rootPackage.devDependencies:rootPackage.dependencies)?.[pkg.name];
+    assert.equal(pinned,pkg.version,`${label}: package.json must pin this exact version (no range)`);
+    assert.match(pinned,/^\d+\.\d+\.\d+$/,`${label}: pin must be an exact version`);
+    directory=path.dirname(require.resolve(`${pkg.name}/package.json`));
+    const installed=JSON.parse(await readFile(path.join(directory,'package.json'),'utf8'));
+    assert.equal(installed.version,pkg.version,`${label}: installed version differs from the manifest`);
+    assert.ok(String(installed.license??'').split(/\s+(?:AND|OR)\s+|[\s()]+/).includes(pkg.license),`${label}: installed package.json license "${installed.license}" does not mention ${pkg.license}`);
+  }
 
   const licenseBytes=await readFile(path.join(directory,pkg.licenseFile)),licenseText=licenseBytes.toString('utf8');
   assert.equal(hash(licenseBytes),pkg.licenseSha256,`${label}: license file sha256 changed`);
@@ -99,11 +129,9 @@ for(const pkg of packages){
   // modified unless it proves it is the byte-identical upstream file (upstreamFile); it is a problem only when its family or
   // file name also contains a reserved name. Such a package must be listed as pending, and the list may only shrink.
   assert.ok(!declaresReservedFontName(licenseText)||pkg.reservedFontNames.length>0,`${label}: the license declares a Reserved Font Name that could not be parsed`);
-  const provenUnmodified=face=>Boolean(face.upstreamFile)&&isUnmodifiedUpstreamUrl(face.upstreamFile.url)&&face.upstreamFile.sha256===face.sha256;
   for(const face of pkg.faces)if(face.upstreamFile)assert.ok(provenUnmodified(face),`${label}: ${face.file} upstreamFile must be a pinned allowlisted URL with a sha256 equal to the face's own`);
   if(pkg.reservedFontNames.length>0)rfnPackages.push(pkg.name);
-  const usesReservedName=pkg.reservedFontNames.length>0&&pkg.faces.some(face=>!provenUnmodified(face)&&nameContainsReservedName([face.family,path.basename(face.file)],pkg.reservedFontNames));
-  if(usesReservedName)assert.ok(pkg.name in RFN_PENDING_UNMODIFIED_UPSTREAM,`${label} serves a modified face whose name contains the Reserved Font Name ${pkg.reservedFontNames.join(', ')}: every face needs upstreamFile { url, sha256 } with a pinned URL from an allowlisted upstream repository and a sha256 equal to the face's own (byte-identical, not subsetted, instanced or converted)`);
+  if(modifiedFaceUsesReservedName(pkg))assert.ok(pkg.name in RFN_PENDING_UNMODIFIED_UPSTREAM,`${label} serves a modified face whose name contains the Reserved Font Name ${pkg.reservedFontNames.join(', ')}: every face needs upstreamFile { url, sha256 } with a pinned URL from an allowlisted upstream repository and a sha256 equal to the face's own (byte-identical, not subsetted, instanced or converted)`);
   else assert.ok(!(pkg.name in RFN_PENDING_UNMODIFIED_UPSTREAM),`${label}: no modified face uses a reserved name (or none is declared); remove it from RFN_PENDING_UNMODIFIED_UPSTREAM`);
 
   assert.ok(pkg.faces.length>0,`${label}: no faces listed`);
@@ -115,5 +143,5 @@ for(const pkg of packages){
 }
 assert.equal(new Set(packages.map(pkg=>pkg.name)).size,packages.length,'each package appears once in the manifest');
 for(const name of Object.keys(RFN_PENDING_UNMODIFIED_UPSTREAM))assert.ok(packages.some(pkg=>pkg.name===name),`${name} is in RFN_PENDING_UNMODIFIED_UPSTREAM but not in the manifest`);
-console.log(`Font licenses verified for ${packages.length} packages, ${rows.length} faces. Reserved Font Names: ${rfnPackages.length} packages (${rfnPackages.map(name=>name.replace('@expo-google-fonts/','')).join(', ')}); pending unmodified upstream files: ${Object.keys(RFN_PENDING_UNMODIFIED_UPSTREAM).map(name=>name.replace('@expo-google-fonts/','')).join(', ')||'none'}.`);
+console.log(`Font licenses verified for ${packages.length} packages, ${rows.length} faces. vendored upstream files: ${vendoredEntries.join(', ')||'none'}. Reserved Font Names: ${rfnPackages.length} packages (${rfnPackages.map(name=>name.replace('@expo-google-fonts/','')).join(', ')}); pending unmodified upstream files: ${Object.keys(RFN_PENDING_UNMODIFIED_UPSTREAM).map(name=>name.replace('@expo-google-fonts/','')).join(', ')||'none'}.`);
 if(process.argv.includes('--table'))for(const row of rows)console.log(`${row.face}\t${row.label}\tdeclared ${row.declared}\tdetected ${row.detected}\tRFN ${row.rfn}`);

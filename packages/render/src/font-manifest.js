@@ -95,12 +95,13 @@ export const BUNDLED_FONT_MANIFEST=freeze({
       ]
     },
     {
-      "name": "@expo-google-fonts/carlito",
-      "version": "0.4.1",
+      "name": "carlito",
+      "vendored": "fonts/carlito",
+      "version": "23e54b51ddffbc7713c583748e3bd86f62b1fa4a",
       "pack": "office",
-      "source": "https://www.npmjs.com/package/@expo-google-fonts/carlito/v/0.4.1",
+      "source": "https://github.com/google/fonts/tree/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/carlito",
       "license": "OFL-1.1",
-      "licenseFile": "LICENSE_FONT",
+      "licenseFile": "OFL.txt",
       "licenseSha256": "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00",
       "reservedFontNames": [
         "Carlito"
@@ -109,32 +110,48 @@ export const BUNDLED_FONT_MANIFEST=freeze({
       "copyright": "Copyright 2013 The Carlito Project Authors (https://github.com/googlefonts/carlito), with Reserved Font Name \"Carlito\"",
       "faces": [
         {
-          "file": "400Regular/Carlito_400Regular.ttf",
+          "file": "Carlito-Regular.ttf",
           "family": "Carlito",
           "weight": 400,
           "italic": false,
-          "sha256": "ca019755404c45627a8566915df99068949dc32ee2bce48d6aeee7542d2a0a89"
+          "sha256": "f6418f708baede9789daef5d458c0f53d2a888af9820e8062934e504fedc6595",
+          "upstreamFile": {
+            "url": "https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/carlito/Carlito-Regular.ttf",
+            "sha256": "f6418f708baede9789daef5d458c0f53d2a888af9820e8062934e504fedc6595"
+          }
         },
         {
-          "file": "400Regular_Italic/Carlito_400Regular_Italic.ttf",
+          "file": "Carlito-Italic.ttf",
           "family": "Carlito",
           "weight": 400,
           "italic": true,
-          "sha256": "074cd1b89d53765d90d0ed3b4bfe49523efaaf4f3f430c006bc3233778b0ebb5"
+          "sha256": "0b019225e58d702bfedcbd35c21696769f8ee115cb6343f84c2f240312450d1c",
+          "upstreamFile": {
+            "url": "https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/carlito/Carlito-Italic.ttf",
+            "sha256": "0b019225e58d702bfedcbd35c21696769f8ee115cb6343f84c2f240312450d1c"
+          }
         },
         {
-          "file": "700Bold/Carlito_700Bold.ttf",
+          "file": "Carlito-Bold.ttf",
           "family": "Carlito",
           "weight": 700,
           "italic": false,
-          "sha256": "51edbfa32d8af939913ae1f4ad0a5173e32083499218c133384638090295f0b0"
+          "sha256": "bb5d20f79b82599ec72983597437373a80f2d2085fa91fc144fd74e876a594db",
+          "upstreamFile": {
+            "url": "https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/carlito/Carlito-Bold.ttf",
+            "sha256": "bb5d20f79b82599ec72983597437373a80f2d2085fa91fc144fd74e876a594db"
+          }
         },
         {
-          "file": "700Bold_Italic/Carlito_700Bold_Italic.ttf",
+          "file": "Carlito-BoldItalic.ttf",
           "family": "Carlito",
           "weight": 700,
           "italic": true,
-          "sha256": "25f5672c1985d168d6bc2973864fc5a7e374bb95fe8d0f91cff47ae17fa67691"
+          "sha256": "b32928186c119599e03ca6a1ffc680fdcb7fac95772f4b95d989cf6cd3861517",
+          "upstreamFile": {
+            "url": "https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/carlito/Carlito-BoldItalic.ttf",
+            "sha256": "b32928186c119599e03ca6a1ffc680fdcb7fac95772f4b95d989cf6cd3861517"
+          }
         }
       ]
     },

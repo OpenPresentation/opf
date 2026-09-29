@@ -80,8 +80,9 @@ assert.throws(() => strict.registry.resolveFont({fontFamily: 'Montserrat', fontW
 assert.throws(() => strict.registry.resolveFont({fontFamily: 'Brand Sans', fontWeight: 400}), error => error.details.licenseClass === 'unknown' && /not in the OPF font policy table/.test(error.message));
 
 // Caller-supplied faces (for example a licensed copy of the real font) win as exact faces.
-const carlito = BUNDLED_FONT_MANIFEST.packages.find(pkg => pkg.name === '@expo-google-fonts/carlito');
-const file = fileURLToPath(new URL(carlito.faces[0].file, import.meta.resolve('@expo-google-fonts/carlito/package.json')));
+// FF-31: Carlito is vendored in this package (fonts/carlito), not an npm dependency.
+const carlito = BUNDLED_FONT_MANIFEST.packages.find(pkg => pkg.vendored && pkg.faces.some(face => face.family === 'Carlito'));
+const file = fileURLToPath(new URL(`../${carlito.vendored}/${carlito.faces[0].file}`, import.meta.url));
 const supplied = await prepareNodeFonts({pack: 'base', substitutionPolicy: 'visual', faces: [{path: file, family: 'Aptos', weight: 400}]});
 const exact = supplied.registry.resolveFont({fontFamily: 'Aptos', fontWeight: 400});
 assert.deepEqual([exact.resolvedFamily, exact.compatibility, exact.substitute], ['Aptos', 'exact', false]);
