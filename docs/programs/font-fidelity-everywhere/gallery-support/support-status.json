@@ -77,13 +77,13 @@
   "parity": {
    "item": "FF-38",
    "heads": {
-    "opf": "b1fdfa7",
-    "opf-render": "762dbb9",
-    "opf-pptx": "874d9e9",
-    "pptx-gallery": "5963702",
+    "opf": "338ddcd",
+    "opf-render": "d528be5",
+    "opf-pptx": "3c44a40",
+    "pptx-gallery": "efb63ac",
     "node": "24.21.0"
    },
-   "generated": "2026-09-29T19:37:51.028Z",
+   "generated": "2026-09-29T22:25:34.841Z",
    "tolerances": {
     "geomPt": 0.02,
     "geomNearPt": 0.5,
@@ -102,7 +102,7 @@
     "theme",
     "mapping"
    ],
-   "results": "parity/parity-results-2026-09-29-table-drawn-extent.json",
+   "results": "parity/parity-results-2026-09-29-intos-default.json",
    "fontResolutionDefinition": "owner decision 2026-09-29: look-alike replacements are intended; the PPTX names the selected family. pass = real face or FF-31 metric-compatible replacement + PPTX names selected family; near = FF-31 visual-only route + PPTX names selected family; fail = no policy route, unrouted preview face, or PPTX writes a replacement name. Old definition kept per value under results[].legacy.",
    "records": 850,
    "withAssetsRecords": 31,
@@ -166,20 +166,20 @@
  },
  "parityCounts": {
   "total": 850,
-  "perfect": 5,
-  "near": 627,
-  "mismatch": 218,
+  "perfect": 660,
+  "near": 33,
+  "mismatch": 157,
   "checksPassed": {
    "geometry": 850,
-   "text": 805,
+   "text": 830,
    "fills": 782,
-   "zOrder": 830,
+   "zOrder": 850,
    "slideSize": 850,
    "typefaces": 850,
    "reimport": 849,
-   "fontResolution": 5,
+   "fontResolution": 733,
    "theme": 850,
-   "mapping": 840
+   "mapping": 850
   }
  },
  "items": [
@@ -206,19 +206,15 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [],
     "variants": {
      "withAssets": {
-      "status": "near",
+      "status": "perfect",
       "failedChecks": [],
-      "nearChecks": [
-       "fontResolution"
-      ],
+      "nearChecks": [],
       "topReasons": []
      }
     }
@@ -259,19 +255,15 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [],
     "variants": {
      "withAssets": {
-      "status": "near",
+      "status": "perfect",
       "failedChecks": [],
-      "nearChecks": [
-       "fontResolution"
-      ],
+      "nearChecks": [],
       "topReasons": []
      }
     }
@@ -306,19 +298,15 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [],
     "variants": {
      "withAssets": {
-      "status": "near",
+      "status": "perfect",
       "failedChecks": [],
-      "nearChecks": [
-       "fontResolution"
-      ],
+      "nearChecks": [],
       "topReasons": []
      }
     }
@@ -361,19 +349,16 @@
      "fills"
     ],
     "nearChecks": [
-     "reimport",
-     "fontResolution"
+     "reimport"
     ],
     "topReasons": [
      "fills | background color F0F0F0 vs FFFFFF"
     ],
     "variants": {
      "withAssets": {
-      "status": "near",
+      "status": "perfect",
       "failedChecks": [],
-      "nearChecks": [
-       "fontResolution"
-      ],
+      "nearChecks": [],
       "topReasons": []
      }
     }
@@ -408,19 +393,15 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [],
     "variants": {
      "withAssets": {
-      "status": "near",
+      "status": "perfect",
       "failedChecks": [],
-      "nearChecks": [
-       "fontResolution"
-      ],
+      "nearChecks": [],
       "topReasons": []
      }
     }
@@ -455,19 +436,15 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [],
     "variants": {
      "withAssets": {
-      "status": "near",
+      "status": "perfect",
       "failedChecks": [],
-      "nearChecks": [
-       "fontResolution"
-      ],
+      "nearChecks": [],
       "topReasons": []
      }
     }
@@ -504,24 +481,15 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "text | preview text line missing in PPTX",
-     "text | PPTX text not in preview"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
+    "nearChecks": [],
+    "topReasons": [],
     "variants": {
      "withAssets": {
-      "status": "near",
+      "status": "perfect",
       "failedChecks": [],
-      "nearChecks": [
-       "fontResolution"
-      ],
+      "nearChecks": [],
       "topReasons": []
      }
     }
@@ -558,24 +526,15 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "text | preview text line missing in PPTX",
-     "text | PPTX text not in preview"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
+    "nearChecks": [],
+    "topReasons": [],
     "variants": {
      "withAssets": {
-      "status": "near",
+      "status": "perfect",
       "failedChecks": [],
-      "nearChecks": [
-       "fontResolution"
-      ],
+      "nearChecks": [],
       "topReasons": []
      }
     }
@@ -611,24 +570,15 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "text | preview text line missing in PPTX",
-     "text | PPTX text not in preview"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
+    "nearChecks": [],
+    "topReasons": [],
     "variants": {
      "withAssets": {
-      "status": "near",
+      "status": "perfect",
       "failedChecks": [],
-      "nearChecks": [
-       "fontResolution"
-      ],
+      "nearChecks": [],
       "topReasons": []
      }
     }
@@ -665,24 +615,15 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "text | preview text line missing in PPTX",
-     "text | PPTX text not in preview"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
+    "nearChecks": [],
+    "topReasons": [],
     "variants": {
      "withAssets": {
-      "status": "near",
+      "status": "perfect",
       "failedChecks": [],
-      "nearChecks": [
-       "fontResolution"
-      ],
+      "nearChecks": [],
       "topReasons": []
      }
     }
@@ -719,24 +660,15 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "text | preview text line missing in PPTX",
-     "text | PPTX text not in preview"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
+    "nearChecks": [],
+    "topReasons": [],
     "variants": {
      "withAssets": {
-      "status": "near",
+      "status": "perfect",
       "failedChecks": [],
-      "nearChecks": [
-       "fontResolution"
-      ],
+      "nearChecks": [],
       "topReasons": []
      }
     }
@@ -773,24 +705,15 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "text | preview text line missing in PPTX",
-     "text | PPTX text not in preview"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
+    "nearChecks": [],
+    "topReasons": [],
     "variants": {
      "withAssets": {
-      "status": "near",
+      "status": "perfect",
       "failedChecks": [],
-      "nearChecks": [
-       "fontResolution"
-      ],
+      "nearChecks": [],
       "topReasons": []
      }
     }
@@ -827,24 +750,15 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "text | preview text line missing in PPTX",
-     "text | PPTX text not in preview"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
+    "nearChecks": [],
+    "topReasons": [],
     "variants": {
      "withAssets": {
-      "status": "near",
+      "status": "perfect",
       "failedChecks": [],
-      "nearChecks": [
-       "fontResolution"
-      ],
+      "nearChecks": [],
       "topReasons": []
      }
     }
@@ -881,24 +795,15 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "text | preview text line missing in PPTX",
-     "text | PPTX text not in preview"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
+    "nearChecks": [],
+    "topReasons": [],
     "variants": {
      "withAssets": {
-      "status": "near",
+      "status": "perfect",
       "failedChecks": [],
-      "nearChecks": [
-       "fontResolution"
-      ],
+      "nearChecks": [],
       "topReasons": []
      }
     }
@@ -935,24 +840,15 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "text | preview text line missing in PPTX",
-     "text | PPTX text not in preview"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
+    "nearChecks": [],
+    "topReasons": [],
     "variants": {
      "withAssets": {
-      "status": "near",
+      "status": "perfect",
       "failedChecks": [],
-      "nearChecks": [
-       "fontResolution"
-      ],
+      "nearChecks": [],
       "topReasons": []
      }
     }
@@ -988,24 +884,15 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "text | preview text line missing in PPTX",
-     "text | PPTX text not in preview"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
+    "nearChecks": [],
+    "topReasons": [],
     "variants": {
      "withAssets": {
-      "status": "near",
+      "status": "perfect",
       "failedChecks": [],
-      "nearChecks": [
-       "fontResolution"
-      ],
+      "nearChecks": [],
       "topReasons": []
      }
     }
@@ -1042,24 +929,15 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "text | preview text line missing in PPTX",
-     "text | PPTX text not in preview"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
+    "nearChecks": [],
+    "topReasons": [],
     "variants": {
      "withAssets": {
-      "status": "near",
+      "status": "perfect",
       "failedChecks": [],
-      "nearChecks": [
-       "fontResolution"
-      ],
+      "nearChecks": [],
       "topReasons": []
      }
     }
@@ -1096,24 +974,15 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "text | preview text line missing in PPTX",
-     "text | PPTX text not in preview"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
+    "nearChecks": [],
+    "topReasons": [],
     "variants": {
      "withAssets": {
-      "status": "near",
+      "status": "perfect",
       "failedChecks": [],
-      "nearChecks": [
-       "fontResolution"
-      ],
+      "nearChecks": [],
       "topReasons": []
      }
     }
@@ -1150,24 +1019,15 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "text | preview text line missing in PPTX",
-     "text | PPTX text not in preview"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
+    "nearChecks": [],
+    "topReasons": [],
     "variants": {
      "withAssets": {
-      "status": "near",
+      "status": "perfect",
       "failedChecks": [],
-      "nearChecks": [
-       "fontResolution"
-      ],
+      "nearChecks": [],
       "topReasons": []
      }
     }
@@ -1204,24 +1064,15 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "text | preview text line missing in PPTX",
-     "text | PPTX text not in preview"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
+    "nearChecks": [],
+    "topReasons": [],
     "variants": {
      "withAssets": {
-      "status": "near",
+      "status": "perfect",
       "failedChecks": [],
-      "nearChecks": [
-       "fontResolution"
-      ],
+      "nearChecks": [],
       "topReasons": []
      }
     }
@@ -1258,24 +1109,15 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "text | preview text line missing in PPTX",
-     "text | PPTX text not in preview"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
+    "nearChecks": [],
+    "topReasons": [],
     "variants": {
      "withAssets": {
-      "status": "near",
+      "status": "perfect",
       "failedChecks": [],
-      "nearChecks": [
-       "fontResolution"
-      ],
+      "nearChecks": [],
       "topReasons": []
      }
     }
@@ -1310,28 +1152,16 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "zOrder"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "zOrder | z-order inversions between element groups (2)"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
+    "nearChecks": [],
+    "topReasons": [],
     "variants": {
      "withAssets": {
-      "status": "mismatch",
-      "failedChecks": [
-       "zOrder"
-      ],
-      "nearChecks": [
-       "fontResolution"
-      ],
-      "topReasons": [
-       "zOrder | z-order inversions between element groups (2)"
-      ]
+      "status": "perfect",
+      "failedChecks": [],
+      "nearChecks": [],
+      "topReasons": []
      }
     }
    }
@@ -1365,28 +1195,16 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "zOrder"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "zOrder | z-order inversions between element groups (2)"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
+    "nearChecks": [],
+    "topReasons": [],
     "variants": {
      "withAssets": {
-      "status": "mismatch",
-      "failedChecks": [
-       "zOrder"
-      ],
-      "nearChecks": [
-       "fontResolution"
-      ],
-      "topReasons": [
-       "zOrder | z-order inversions between element groups (2)"
-      ]
+      "status": "perfect",
+      "failedChecks": [],
+      "nearChecks": [],
+      "topReasons": []
      }
     }
    }
@@ -1424,28 +1242,16 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "zOrder"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "zOrder | z-order inversions between element groups (4)"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
+    "nearChecks": [],
+    "topReasons": [],
     "variants": {
      "withAssets": {
-      "status": "mismatch",
-      "failedChecks": [
-       "zOrder"
-      ],
-      "nearChecks": [
-       "fontResolution"
-      ],
-      "topReasons": [
-       "zOrder | z-order inversions between element groups (4)"
-      ]
+      "status": "perfect",
+      "failedChecks": [],
+      "nearChecks": [],
+      "topReasons": []
      }
     }
    }
@@ -1486,28 +1292,16 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "zOrder"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "zOrder | z-order inversions between element groups (4)"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
+    "nearChecks": [],
+    "topReasons": [],
     "variants": {
      "withAssets": {
-      "status": "mismatch",
-      "failedChecks": [
-       "zOrder"
-      ],
-      "nearChecks": [
-       "fontResolution"
-      ],
-      "topReasons": [
-       "zOrder | z-order inversions between element groups (4)"
-      ]
+      "status": "perfect",
+      "failedChecks": [],
+      "nearChecks": [],
+      "topReasons": []
      }
     }
    }
@@ -1543,28 +1337,16 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "zOrder"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "zOrder | z-order inversions between element groups (4)"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
+    "nearChecks": [],
+    "topReasons": [],
     "variants": {
      "withAssets": {
-      "status": "mismatch",
-      "failedChecks": [
-       "zOrder"
-      ],
-      "nearChecks": [
-       "fontResolution"
-      ],
-      "topReasons": [
-       "zOrder | z-order inversions between element groups (4)"
-      ]
+      "status": "perfect",
+      "failedChecks": [],
+      "nearChecks": [],
+      "topReasons": []
      }
     }
    }
@@ -1605,28 +1387,16 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "zOrder"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "zOrder | z-order inversions between element groups (4)"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
+    "nearChecks": [],
+    "topReasons": [],
     "variants": {
      "withAssets": {
-      "status": "mismatch",
-      "failedChecks": [
-       "zOrder"
-      ],
-      "nearChecks": [
-       "fontResolution"
-      ],
-      "topReasons": [
-       "zOrder | z-order inversions between element groups (4)"
-      ]
+      "status": "perfect",
+      "failedChecks": [],
+      "nearChecks": [],
+      "topReasons": []
      }
     }
    }
@@ -1663,28 +1433,16 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "zOrder"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "zOrder | z-order inversions between element groups (6)"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
+    "nearChecks": [],
+    "topReasons": [],
     "variants": {
      "withAssets": {
-      "status": "mismatch",
-      "failedChecks": [
-       "zOrder"
-      ],
-      "nearChecks": [
-       "fontResolution"
-      ],
-      "topReasons": [
-       "zOrder | z-order inversions between element groups (6)"
-      ]
+      "status": "perfect",
+      "failedChecks": [],
+      "nearChecks": [],
+      "topReasons": []
      }
     }
    }
@@ -1728,28 +1486,16 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "zOrder"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "zOrder | z-order inversions between element groups (8)"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
+    "nearChecks": [],
+    "topReasons": [],
     "variants": {
      "withAssets": {
-      "status": "mismatch",
-      "failedChecks": [
-       "zOrder"
-      ],
-      "nearChecks": [
-       "fontResolution"
-      ],
-      "topReasons": [
-       "zOrder | z-order inversions between element groups (8)"
-      ]
+      "status": "perfect",
+      "failedChecks": [],
+      "nearChecks": [],
+      "topReasons": []
      }
     }
    }
@@ -1790,28 +1536,16 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "zOrder"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "zOrder | z-order inversions between element groups (4)"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
+    "nearChecks": [],
+    "topReasons": [],
     "variants": {
      "withAssets": {
-      "status": "mismatch",
-      "failedChecks": [
-       "zOrder"
-      ],
-      "nearChecks": [
-       "fontResolution"
-      ],
-      "topReasons": [
-       "zOrder | z-order inversions between element groups (4)"
-      ]
+      "status": "perfect",
+      "failedChecks": [],
+      "nearChecks": [],
+      "topReasons": []
      }
     }
    }
@@ -1849,28 +1583,16 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "zOrder"
-    ],
-    "nearChecks": [
-     "fontResolution"
-    ],
-    "topReasons": [
-     "zOrder | z-order inversions between element groups (4)"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
+    "nearChecks": [],
+    "topReasons": [],
     "variants": {
      "withAssets": {
-      "status": "mismatch",
-      "failedChecks": [
-       "zOrder"
-      ],
-      "nearChecks": [
-       "fontResolution"
-      ],
-      "topReasons": [
-       "zOrder | z-order inversions between element groups (4)"
-      ]
+      "status": "perfect",
+      "failedChecks": [],
+      "nearChecks": [],
+      "topReasons": []
      }
     }
    }
@@ -1916,9 +1638,7 @@
     "failedChecks": [
      "text"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "text | text color 000000 vs 2874A6"
     ]
@@ -2020,9 +1740,7 @@
     "failedChecks": [
      "text"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "text | text color 000000 vs F77F00"
     ]
@@ -2065,11 +1783,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -2110,14 +1826,10 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "fontResolution"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
     "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for open family Montserrat"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -2161,14 +1873,10 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "fontResolution"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
     "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for open family Poppins"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -2260,14 +1968,10 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "fontResolution"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
     "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for open family Open Sans"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -2307,11 +2011,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -2453,9 +2155,7 @@
     "failedChecks": [
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (3)"
     ]
@@ -2510,14 +2210,10 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "fontResolution"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
     "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for open family Montserrat"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -2560,13 +2256,11 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "fills",
-     "fontResolution"
+     "fills"
     ],
     "nearChecks": [],
     "topReasons": [
-     "fills | chart series colors not in preview (3)",
-     "fontResolution | preview has no face for open family Open Sans"
+     "fills | chart series colors not in preview (3)"
     ]
    }
   },
@@ -2664,14 +2358,10 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "fontResolution"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
     "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for open family Poppins"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -2711,11 +2401,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -2756,14 +2444,10 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "fontResolution"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
     "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for open family Open Sans"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -2897,14 +2581,10 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "fontResolution"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
     "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for open family Open Sans"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -2948,11 +2628,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -2993,11 +2671,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -3089,11 +2765,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -3134,14 +2808,10 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "fontResolution"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
     "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for open family Open Sans"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -3181,11 +2851,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -3226,11 +2894,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -3285,13 +2951,11 @@
    "parity": {
     "status": "mismatch",
     "failedChecks": [
-     "text",
-     "fontResolution"
+     "text"
     ],
     "nearChecks": [],
     "topReasons": [
-     "text | text color 000000 vs A41410",
-     "fontResolution | preview has no face for open family Montserrat"
+     "text | text color 000000 vs A41410"
     ]
    }
   },
@@ -3381,11 +3045,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -3426,11 +3088,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -3457,11 +3117,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -3488,11 +3146,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -3519,11 +3175,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -3554,9 +3208,7 @@
     "failedChecks": [
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (1)"
     ]
@@ -3586,11 +3238,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -3617,11 +3267,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -3648,11 +3296,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -3679,11 +3325,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -3710,11 +3354,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -3741,11 +3383,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -3772,11 +3412,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -3803,11 +3441,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -3834,11 +3470,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -3864,11 +3498,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -3894,11 +3526,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -3924,11 +3554,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -3955,11 +3583,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -3986,11 +3612,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -4017,11 +3641,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -4047,11 +3669,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -4078,11 +3698,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -4109,11 +3727,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -4140,11 +3756,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -4170,11 +3784,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -4201,11 +3813,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -4232,11 +3842,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -4263,11 +3871,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -4294,11 +3900,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -4325,11 +3929,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -4356,11 +3958,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -4387,11 +3987,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -4418,11 +4016,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -4449,11 +4045,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -4480,11 +4074,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -4510,11 +4102,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -4541,11 +4131,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -4572,11 +4160,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -4602,11 +4188,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -4636,9 +4220,7 @@
     "failedChecks": [
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (1)"
     ]
@@ -4671,9 +4253,7 @@
     "failedChecks": [
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (1)"
     ]
@@ -4701,11 +4281,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -4736,9 +4314,7 @@
     "failedChecks": [
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (1)"
     ]
@@ -4770,9 +4346,7 @@
     "failedChecks": [
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (1)"
     ]
@@ -4805,9 +4379,7 @@
     "failedChecks": [
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (1)"
     ]
@@ -4836,11 +4408,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -4867,11 +4437,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -4898,11 +4466,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -4929,11 +4495,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -4964,9 +4528,7 @@
     "failedChecks": [
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (1)"
     ]
@@ -4995,11 +4557,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -5025,11 +4585,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -5056,11 +4614,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -5087,11 +4643,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -5118,11 +4672,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -5152,9 +4704,7 @@
     "failedChecks": [
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (1)"
     ]
@@ -5183,11 +4733,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -5217,9 +4765,7 @@
     "failedChecks": [
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (1)"
     ]
@@ -5248,11 +4794,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -5278,11 +4822,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -5309,11 +4851,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -5340,11 +4880,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -5370,11 +4908,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -5401,11 +4937,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -5432,11 +4966,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -5463,11 +4995,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -5493,11 +5023,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -5527,9 +5055,7 @@
     "failedChecks": [
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (1)"
     ]
@@ -5558,11 +5084,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -5589,11 +5113,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -5623,9 +5145,7 @@
     "failedChecks": [
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (1)"
     ]
@@ -5657,9 +5177,7 @@
     "failedChecks": [
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (1)"
     ]
@@ -5689,9 +5207,7 @@
     "failedChecks": [
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (1)"
     ]
@@ -5723,9 +5239,7 @@
     "failedChecks": [
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (1)"
     ]
@@ -5755,9 +5269,7 @@
     "failedChecks": [
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (1)"
     ]
@@ -5789,9 +5301,7 @@
     "failedChecks": [
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (1)"
     ]
@@ -5821,9 +5331,7 @@
     "failedChecks": [
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (1)"
     ]
@@ -5855,9 +5363,7 @@
     "failedChecks": [
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (1)"
     ]
@@ -5887,9 +5393,7 @@
     "failedChecks": [
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (1)"
     ]
@@ -5921,9 +5425,7 @@
     "failedChecks": [
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (1)"
     ]
@@ -5953,9 +5455,7 @@
     "failedChecks": [
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (1)"
     ]
@@ -5985,9 +5485,7 @@
     "failedChecks": [
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (1)"
     ]
@@ -6017,9 +5515,7 @@
     "failedChecks": [
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (1)"
     ]
@@ -6051,9 +5547,7 @@
     "failedChecks": [
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (1)"
     ]
@@ -6083,9 +5577,7 @@
     "failedChecks": [
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (1)"
     ]
@@ -6115,9 +5607,7 @@
     "failedChecks": [
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (1)"
     ]
@@ -6147,9 +5637,7 @@
     "failedChecks": [
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (1)"
     ]
@@ -6179,9 +5667,7 @@
     "failedChecks": [
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (1)"
     ]
@@ -6211,9 +5697,7 @@
     "failedChecks": [
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (1)"
     ]
@@ -6243,9 +5727,7 @@
     "failedChecks": [
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (1)"
     ]
@@ -6275,9 +5757,7 @@
     "failedChecks": [
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (1)"
     ]
@@ -6307,9 +5787,7 @@
     "failedChecks": [
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (1)"
     ]
@@ -6339,9 +5817,7 @@
     "failedChecks": [
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (1)"
     ]
@@ -6371,9 +5847,7 @@
     "failedChecks": [
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (1)"
     ]
@@ -6403,9 +5877,7 @@
     "failedChecks": [
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (1)"
     ]
@@ -6437,9 +5909,7 @@
     "failedChecks": [
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (1)"
     ]
@@ -6469,9 +5939,7 @@
     "failedChecks": [
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (1)"
     ]
@@ -6501,9 +5969,7 @@
     "failedChecks": [
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (1)"
     ]
@@ -6533,9 +5999,7 @@
     "failedChecks": [
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (1)"
     ]
@@ -6561,11 +6025,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -6591,11 +6053,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -6619,11 +6079,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -6649,11 +6107,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -6677,11 +6133,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -6707,11 +6161,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -6737,11 +6189,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -6767,11 +6217,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -6797,11 +6245,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -6827,11 +6273,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -6857,11 +6301,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -6887,11 +6329,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -6915,11 +6355,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -6943,11 +6381,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -6971,11 +6407,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -6999,11 +6433,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -7027,11 +6459,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -7055,11 +6485,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -7083,11 +6511,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -7111,11 +6537,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -7141,11 +6565,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -7169,11 +6591,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -7199,11 +6619,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -7227,11 +6645,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -7255,11 +6671,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -7283,11 +6697,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -7311,11 +6723,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -7339,11 +6749,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -7367,11 +6775,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -7395,11 +6801,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -7423,11 +6827,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -7451,11 +6853,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -7479,11 +6879,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -7507,11 +6905,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -7535,11 +6931,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -7563,11 +6957,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -7591,11 +6983,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -7619,11 +7009,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -7649,11 +7037,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -7677,11 +7063,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -7705,11 +7089,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -7733,11 +7115,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -7761,11 +7141,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -7789,11 +7167,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -7819,11 +7195,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -7849,11 +7223,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -7879,11 +7251,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -7909,11 +7279,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -7939,11 +7307,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -7969,11 +7335,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -7999,11 +7363,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -8029,11 +7391,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -8059,11 +7419,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -8089,11 +7447,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -8119,11 +7475,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -8149,11 +7503,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -8179,11 +7531,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -8207,11 +7557,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -8237,11 +7585,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -8265,11 +7611,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -8293,11 +7637,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -8321,11 +7663,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -8349,11 +7689,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -8377,11 +7715,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -8407,11 +7743,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -8435,11 +7769,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -8465,11 +7797,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -8493,11 +7823,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -8521,11 +7849,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -8549,11 +7875,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -8577,11 +7901,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -8605,11 +7927,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -8633,11 +7953,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -8661,11 +7979,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -8691,11 +8007,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -8719,11 +8033,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -8747,11 +8059,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -8775,11 +8085,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -8803,11 +8111,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -8831,11 +8137,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -8859,11 +8163,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -8887,11 +8189,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -8917,11 +8217,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -8945,11 +8243,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -8973,11 +8269,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -9001,11 +8295,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -9029,11 +8321,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -9057,11 +8347,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -9087,11 +8375,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -9115,11 +8401,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -9143,11 +8427,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -9171,11 +8453,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -9199,11 +8479,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -9227,11 +8505,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -9255,11 +8531,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -9283,11 +8557,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -9311,11 +8583,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -9339,11 +8609,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -9367,11 +8635,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -9397,11 +8663,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -9425,11 +8689,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -9455,11 +8717,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -9483,11 +8743,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -9513,11 +8771,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -9541,11 +8797,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -9571,11 +8825,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -9599,11 +8851,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -9629,11 +8879,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -9657,11 +8905,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -9685,11 +8931,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -9715,11 +8959,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -9743,11 +8985,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -9773,11 +9013,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -9801,11 +9039,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -9831,11 +9067,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -9859,11 +9093,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -9889,11 +9121,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -9917,11 +9147,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -9947,11 +9175,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -9975,11 +9201,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -10003,11 +9227,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -10031,11 +9253,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -10059,11 +9279,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -10087,11 +9305,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -10115,11 +9331,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -10143,11 +9357,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -10171,11 +9383,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -10199,11 +9409,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -10227,11 +9435,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -10257,11 +9463,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -10285,11 +9489,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -10315,11 +9517,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -10343,11 +9543,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -10371,11 +9569,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -10399,11 +9595,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -10427,11 +9621,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -10455,11 +9647,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -10483,11 +9673,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -10511,11 +9699,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -10539,11 +9725,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -10569,11 +9753,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -10597,11 +9779,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -10625,11 +9805,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -10653,11 +9831,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -10681,11 +9857,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -10709,11 +9883,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -10737,11 +9909,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -10765,11 +9935,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -10795,11 +9963,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -10823,11 +9989,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -10851,11 +10015,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -10879,11 +10041,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -10907,11 +10067,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -10935,11 +10093,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -10963,11 +10119,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -10991,11 +10145,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -11019,11 +10171,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -11047,11 +10197,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -11075,11 +10223,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -11103,11 +10249,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -11131,11 +10275,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -11161,11 +10303,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -11189,11 +10329,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -11217,11 +10355,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -11245,11 +10381,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -11273,11 +10407,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -11301,11 +10433,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -11329,11 +10459,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -11357,11 +10485,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -11385,11 +10511,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -11415,11 +10539,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -11443,11 +10565,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -11471,11 +10591,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -11499,11 +10617,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -11527,11 +10643,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -11555,11 +10669,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -11583,11 +10695,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -11611,11 +10721,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -11641,11 +10749,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -11669,11 +10775,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -11697,11 +10801,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -11725,11 +10827,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -11753,11 +10853,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -11781,11 +10879,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -11809,11 +10905,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -11837,11 +10931,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -11865,11 +10957,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -11893,11 +10983,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -11921,11 +11009,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -11951,11 +11037,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -11979,11 +11063,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -12009,11 +11091,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -12037,11 +11117,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -12065,11 +11143,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -12093,11 +11169,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -12121,11 +11195,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -12149,11 +11221,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -12177,11 +11247,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -12205,11 +11273,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -12233,11 +11299,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -12263,11 +11327,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -12291,11 +11353,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -12319,11 +11379,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -12347,11 +11405,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -12375,11 +11431,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -12403,11 +11457,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -12431,11 +11483,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -12459,11 +11509,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -12489,11 +11537,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -12517,11 +11563,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -12545,11 +11589,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -12573,11 +11615,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -12601,11 +11641,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -12629,11 +11667,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -12657,11 +11693,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -12688,11 +11722,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -12719,18 +11751,10 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text"
-    ],
-    "nearChecks": [
-     "fontResolution",
-     "mapping"
-    ],
-    "topReasons": [
-     "text | list markers differ",
-     "text | preview text line missing in PPTX"
-    ]
+    "status": "perfect",
+    "failedChecks": [],
+    "nearChecks": [],
+    "topReasons": []
    }
   },
   {
@@ -12756,11 +11780,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -12787,18 +11809,10 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text"
-    ],
-    "nearChecks": [
-     "fontResolution",
-     "mapping"
-    ],
-    "topReasons": [
-     "text | list markers differ",
-     "text | preview text line missing in PPTX"
-    ]
+    "status": "perfect",
+    "failedChecks": [],
+    "nearChecks": [],
+    "topReasons": []
    }
   },
   {
@@ -12823,11 +11837,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -12851,11 +11863,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -12881,11 +11891,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -12909,11 +11917,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -12937,11 +11943,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -12965,11 +11969,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -12993,11 +11995,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -13021,11 +12021,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -13049,11 +12047,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -13077,11 +12073,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -13105,11 +12099,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -13135,11 +12127,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -13163,11 +12153,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -13191,11 +12179,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -13219,11 +12205,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -13247,11 +12231,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -13275,11 +12257,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -13303,11 +12283,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -13331,11 +12309,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -13361,11 +12337,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -13389,11 +12363,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -13417,11 +12389,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -13445,11 +12415,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -13473,11 +12441,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -13504,18 +12470,10 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text"
-    ],
-    "nearChecks": [
-     "fontResolution",
-     "mapping"
-    ],
-    "topReasons": [
-     "text | list markers differ",
-     "text | preview text line missing in PPTX"
-    ]
+    "status": "perfect",
+    "failedChecks": [],
+    "nearChecks": [],
+    "topReasons": []
    }
   },
   {
@@ -13541,18 +12499,10 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text"
-    ],
-    "nearChecks": [
-     "fontResolution",
-     "mapping"
-    ],
-    "topReasons": [
-     "text | list markers differ",
-     "text | preview text line missing in PPTX"
-    ]
+    "status": "perfect",
+    "failedChecks": [],
+    "nearChecks": [],
+    "topReasons": []
    }
   },
   {
@@ -13578,18 +12528,10 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text"
-    ],
-    "nearChecks": [
-     "fontResolution",
-     "mapping"
-    ],
-    "topReasons": [
-     "text | list markers differ",
-     "text | preview text line missing in PPTX"
-    ]
+    "status": "perfect",
+    "failedChecks": [],
+    "nearChecks": [],
+    "topReasons": []
    }
   },
   {
@@ -13615,18 +12557,10 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text"
-    ],
-    "nearChecks": [
-     "fontResolution",
-     "mapping"
-    ],
-    "topReasons": [
-     "text | preview text line missing in PPTX",
-     "text | list markers differ"
-    ]
+    "status": "perfect",
+    "failedChecks": [],
+    "nearChecks": [],
+    "topReasons": []
    }
   },
   {
@@ -13652,18 +12586,10 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text"
-    ],
-    "nearChecks": [
-     "fontResolution",
-     "mapping"
-    ],
-    "topReasons": [
-     "text | list markers differ",
-     "text | preview text line missing in PPTX"
-    ]
+    "status": "perfect",
+    "failedChecks": [],
+    "nearChecks": [],
+    "topReasons": []
    }
   },
   {
@@ -13689,18 +12615,10 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text"
-    ],
-    "nearChecks": [
-     "fontResolution",
-     "mapping"
-    ],
-    "topReasons": [
-     "text | preview text line missing in PPTX",
-     "text | list markers differ"
-    ]
+    "status": "perfect",
+    "failedChecks": [],
+    "nearChecks": [],
+    "topReasons": []
    }
   },
   {
@@ -13726,8 +12644,7 @@
     "status": "near",
     "failedChecks": [],
     "nearChecks": [
-     "text",
-     "fontResolution"
+     "text"
     ],
     "topReasons": []
    }
@@ -13755,8 +12672,7 @@
     "status": "near",
     "failedChecks": [],
     "nearChecks": [
-     "text",
-     "fontResolution"
+     "text"
     ],
     "topReasons": []
    }
@@ -13783,11 +12699,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -13811,11 +12725,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -13841,11 +12753,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -13869,11 +12779,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -13897,11 +12805,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -13925,11 +12831,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -13956,11 +12860,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -13987,18 +12889,10 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text"
-    ],
-    "nearChecks": [
-     "fontResolution",
-     "mapping"
-    ],
-    "topReasons": [
-     "text | list markers differ",
-     "text | preview text line missing in PPTX"
-    ]
+    "status": "perfect",
+    "failedChecks": [],
+    "nearChecks": [],
+    "topReasons": []
    }
   },
   {
@@ -14024,11 +12918,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -14055,18 +12947,10 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "text"
-    ],
-    "nearChecks": [
-     "fontResolution",
-     "mapping"
-    ],
-    "topReasons": [
-     "text | list markers differ",
-     "text | preview text line missing in PPTX"
-    ]
+    "status": "perfect",
+    "failedChecks": [],
+    "nearChecks": [],
+    "topReasons": []
    }
   },
   {
@@ -14089,11 +12973,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -14119,11 +13001,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -14147,11 +13027,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -14175,11 +13053,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -14203,11 +13079,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -14234,11 +13108,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -14265,11 +13137,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -14296,11 +13166,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -14327,11 +13195,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -14357,11 +13223,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -14385,11 +13249,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -14413,11 +13275,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -14441,11 +13301,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -14469,11 +13327,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -14499,11 +13355,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -14529,11 +13383,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -14557,11 +13409,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -14585,11 +13435,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -14613,11 +13461,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -14641,11 +13487,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -14671,11 +13515,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -14701,11 +13543,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -14729,11 +13569,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -14757,11 +13595,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -14785,11 +13621,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -14813,11 +13647,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -14843,11 +13675,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -14873,11 +13703,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -14901,11 +13729,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -14929,11 +13755,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -14957,11 +13781,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -14985,11 +13807,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -15015,11 +13835,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -15045,11 +13863,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -15073,11 +13889,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -15101,11 +13915,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -15129,11 +13941,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -15157,11 +13967,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -15187,11 +13995,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -15217,11 +14023,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -15245,11 +14049,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -15273,11 +14075,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -15301,11 +14101,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -15329,11 +14127,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -15359,11 +14155,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -15387,11 +14181,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -15415,11 +14207,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -15445,11 +14235,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -15473,11 +14261,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -15501,11 +14287,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -15529,11 +14313,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -15557,11 +14339,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -15587,11 +14367,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -15615,11 +14393,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -15645,11 +14421,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -15673,11 +14447,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -15703,11 +14475,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -15731,11 +14501,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -15759,11 +14527,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -15789,11 +14555,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -15817,11 +14581,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -15847,11 +14609,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -15875,11 +14635,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -15903,11 +14661,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -15931,11 +14687,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -15961,11 +14715,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -15989,11 +14741,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -16017,11 +14767,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -16045,11 +14793,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -16073,11 +14819,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -16103,11 +14847,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -16131,11 +14873,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -16159,11 +14899,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -16187,11 +14925,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -16217,11 +14953,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -16245,11 +14979,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -16273,11 +15005,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -16303,11 +15033,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -16331,11 +15059,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -16359,11 +15085,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -16387,11 +15111,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -16415,11 +15137,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -16443,11 +15163,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -16471,11 +15189,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -16499,11 +15215,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -16527,11 +15241,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -16555,11 +15267,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -16583,11 +15293,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -16613,11 +15321,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -16641,11 +15347,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -16669,11 +15373,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -16697,11 +15399,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -16725,11 +15425,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -16753,11 +15451,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -16781,11 +15477,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -16811,11 +15505,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -16839,11 +15531,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -16867,11 +15557,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -16895,11 +15583,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -16925,11 +15611,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -16955,11 +15639,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -16983,11 +15665,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -17011,11 +15691,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -17039,11 +15717,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -17069,11 +15745,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -17099,11 +15773,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -17127,11 +15799,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -17155,11 +15825,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -17183,11 +15851,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -17211,11 +15877,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -17239,11 +15903,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -17269,11 +15931,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -17299,11 +15959,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -17329,11 +15987,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -17359,11 +16015,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -17389,11 +16043,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -17417,11 +16069,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -17447,11 +16097,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -17478,11 +16126,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -17508,11 +16154,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -17538,11 +16182,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -17568,11 +16210,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -17598,11 +16238,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -17628,11 +16266,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -17658,11 +16294,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -17688,11 +16322,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -17719,11 +16351,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -17750,11 +16380,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -17781,11 +16409,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -17812,11 +16438,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -17843,11 +16467,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -17874,11 +16496,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -17905,11 +16525,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -17936,11 +16554,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -17967,11 +16583,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -17998,11 +16612,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -18029,11 +16641,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -18060,11 +16670,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -18091,11 +16699,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -18122,11 +16728,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -18692,11 +17296,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -18852,11 +17454,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -20041,14 +18641,10 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "fontResolution"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
     "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for open family Montserrat"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -20075,14 +18671,10 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "fontResolution"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
     "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for open family Open Sans"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -20109,14 +18701,10 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "fontResolution"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
     "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for open family Poppins"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -20143,14 +18731,10 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "fontResolution"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
     "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for open family PT Serif"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -20871,14 +19455,10 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "fontResolution"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
     "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for open family Noto Sans; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -21192,8 +19772,7 @@
     ],
     "nearChecks": [],
     "topReasons": [
-     "fontResolution | preview has no face for open family Playfair Display",
-     "fontResolution | preview has no face for Source Sans Pro; policy route Source Sans 3 is not loaded"
+     "fontResolution | preview has no face for open family Playfair Display"
     ]
    }
   },
@@ -21222,15 +19801,10 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "fontResolution"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
     "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for open family Montserrat",
-     "fontResolution | preview has no face for open family Open Sans"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -21258,14 +19832,10 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "fontResolution"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
     "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for open family Bebas Neue"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -21293,15 +19863,10 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "fontResolution"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
     "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for open family Lora",
-     "fontResolution | preview has no face for open family Merriweather Sans"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -21328,11 +19893,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -21360,11 +19923,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -21498,11 +20059,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -21530,11 +20089,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -21597,11 +20154,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -21629,11 +20184,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -21661,11 +20214,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -21693,11 +20244,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -21725,11 +20274,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -21861,11 +20408,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -21893,11 +20438,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -21925,11 +20468,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -21957,11 +20498,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -21989,11 +20528,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -22021,11 +20558,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -22053,11 +20588,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -22085,11 +20618,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -22117,11 +20648,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -22149,11 +20678,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -22181,11 +20708,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -22213,11 +20738,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -22245,11 +20768,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -22277,11 +20798,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -22309,11 +20828,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -22341,11 +20858,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -22409,11 +20924,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -22441,11 +20954,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -22508,11 +21019,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -22610,11 +21119,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -22642,11 +21149,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -22674,11 +21179,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -22706,11 +21209,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -22808,11 +21309,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -22875,11 +21374,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -22942,11 +21439,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -22974,11 +21469,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -23006,11 +21499,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -23038,11 +21529,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -23070,11 +21559,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -23102,11 +21589,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -23169,11 +21654,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -23236,11 +21719,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -23303,11 +21784,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -23370,11 +21849,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -23470,11 +21947,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -23502,11 +21977,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -23602,11 +22075,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -23634,11 +22105,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -23666,11 +22135,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -23698,11 +22165,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -23730,11 +22195,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -23762,11 +22225,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -23794,11 +22255,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -23826,11 +22285,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -23858,11 +22315,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -23890,11 +22345,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -23922,11 +22375,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -23954,11 +22405,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -23986,11 +22435,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -24123,11 +22570,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -24155,11 +22600,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -24222,11 +22665,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -24254,11 +22695,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -24286,11 +22725,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -24318,11 +22755,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -24350,11 +22785,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -24382,11 +22815,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -24507,11 +22938,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -24536,11 +22965,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -24565,11 +22992,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -24594,11 +23019,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -24623,11 +23046,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -24652,11 +23073,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -24681,11 +23100,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -24710,11 +23127,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -24739,11 +23154,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -24768,11 +23181,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -24797,11 +23208,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -24826,11 +23235,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -24855,11 +23262,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -24884,11 +23289,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -24913,11 +23316,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -24942,11 +23343,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -24971,11 +23370,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -25000,11 +23397,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -25029,11 +23424,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -25058,11 +23451,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -25087,11 +23478,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -25116,11 +23505,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -25145,11 +23532,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -25174,11 +23559,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -25203,11 +23586,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -25232,11 +23613,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -25261,11 +23640,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -25290,11 +23667,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -25319,11 +23694,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -25348,11 +23721,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -25377,11 +23748,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -25409,11 +23778,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -25441,11 +23808,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -25473,11 +23838,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -25505,11 +23868,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -25537,11 +23898,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -25569,11 +23928,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -25601,11 +23958,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -25633,11 +23988,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -25665,11 +24018,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   },
@@ -25697,11 +24048,9 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "near",
+    "status": "perfect",
     "failedChecks": [],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": []
    }
   }
@@ -25716,8 +24065,7 @@
      "fills"
     ],
     "nearChecks": [
-     "text",
-     "fontResolution"
+     "text"
     ],
     "topReasons": [
      "fills | chart series colors not in preview (6)"
@@ -25733,9 +24081,7 @@
      "text",
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "text | chart preview text not in native chart cache",
      "fills | chart series colors not in preview (6)"
@@ -25751,9 +24097,7 @@
      "text",
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "text | chart preview text not in native chart cache",
      "fills | chart series colors not in preview (6)"
@@ -25769,8 +24113,7 @@
      "fills"
     ],
     "nearChecks": [
-     "text",
-     "fontResolution"
+     "text"
     ],
     "topReasons": [
      "fills | chart series colors not in preview (10)"
@@ -25785,9 +24128,7 @@
     "failedChecks": [
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (11)"
     ]
@@ -25802,9 +24143,7 @@
      "text",
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "text | chart preview text not in native chart cache",
      "fills | chart series colors not in preview (11)"
@@ -25820,9 +24159,7 @@
      "text",
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "text | chart preview text not in native chart cache",
      "fills | chart series colors not in preview (11)"
@@ -25838,9 +24175,7 @@
      "text",
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "text | chart preview text not in native chart cache",
      "fills | chart series colors not in preview (1)"
@@ -25856,9 +24191,7 @@
      "text",
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "text | chart preview text not in native chart cache",
      "fills | chart series colors not in preview (1)"
@@ -25874,8 +24207,7 @@
      "fills"
     ],
     "nearChecks": [
-     "text",
-     "fontResolution"
+     "text"
     ],
     "topReasons": [
      "fills | chart series colors not in preview (4)"
@@ -25891,9 +24223,7 @@
      "text",
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "text | chart preview text not in native chart cache",
      "fills | chart series colors not in preview (4)"
@@ -25909,9 +24239,7 @@
      "text",
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "text | chart preview text not in native chart cache",
      "fills | chart series colors not in preview (4)"
@@ -25927,8 +24255,7 @@
      "fills"
     ],
     "nearChecks": [
-     "text",
-     "fontResolution"
+     "text"
     ],
     "topReasons": [
      "fills | chart series colors not in preview (10)"
@@ -25944,9 +24271,7 @@
      "text",
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "text | chart preview text not in native chart cache",
      "fills | chart series colors not in preview (11)"
@@ -25962,9 +24287,7 @@
      "text",
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "text | chart preview text not in native chart cache",
      "fills | chart series colors not in preview (11)"
@@ -25980,9 +24303,7 @@
      "text",
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "text | chart preview text not in native chart cache",
      "fills | chart series colors not in preview (6)"
@@ -25997,9 +24318,7 @@
     "failedChecks": [
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (7)"
     ]
@@ -26013,9 +24332,7 @@
     "failedChecks": [
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (7)"
     ]
@@ -26029,9 +24346,7 @@
     "failedChecks": [
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (7)"
     ]
@@ -26045,9 +24360,7 @@
     "failedChecks": [
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (5)"
     ]
@@ -26061,9 +24374,7 @@
     "failedChecks": [
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (11)"
     ]
@@ -26077,9 +24388,7 @@
     "failedChecks": [
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (11)"
     ]
@@ -26093,9 +24402,7 @@
     "failedChecks": [
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (11)"
     ]
@@ -26109,9 +24416,7 @@
     "failedChecks": [
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (11)"
     ]
@@ -26125,9 +24430,7 @@
     "failedChecks": [
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (7)"
     ]
@@ -26141,9 +24444,7 @@
     "failedChecks": [
      "fills"
     ],
-    "nearChecks": [
-     "fontResolution"
-    ],
+    "nearChecks": [],
     "topReasons": [
      "fills | chart series colors not in preview (4)"
     ]
