@@ -46,6 +46,14 @@ the registry, a follow-up docs change updates `release-plan.json`, the
 compatibility matrix and the quickstart to the published set, and the gallery
 consumer dependencies are bumped.
 
+## Geometry-moving core releases: lockstep floors
+
+Core composition changes that move geometry (for example opf#169 cover centering) make the preview and the PPTX export drift when `@openpresentation/opf-render` and `@openpresentation/opf-pptx` resolve different core versions (measured: 186-300 pt title offsets on covers).
+
+Rule: when a core release contains composition or geometry changes, the same release train must raise BOTH the renderer's and PPTX's core floor (`dependencies` and, where present, `peerDependencies`) to that core version, publish them together, and raise the editor's floor too. Do not release core alone and leave a sibling on the older floor.
+
+The parity harness must always run with `--import <opf>/scripts/register-local-opf.mjs` (as `run.ps1` does) so every engine shares one core.
+
 ## Release Preconditions
 
 Before tagging, confirm that the release commit on `main` already contains:
