@@ -3,6 +3,7 @@ import {createHash} from 'node:crypto';
 import {mkdtemp,writeFile,readFile,rm} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
+import {tar} from './archive-tar.mjs';
 import {spawnSync} from 'node:child_process';
 const origin=process.env.OPF_SITE_ORIGIN??'http://localhost:3103';
 async function get(url){const response=await fetch(new URL(url,origin));assert.equal(response.status,200,url);return response;}
@@ -21,7 +22,7 @@ const schema=await (await get('/schema/opf/v1')).json();assert.ok(schema.$defs.C
 const directory=await mkdtemp(path.join(tmpdir(),'opf-agent-download-'));
 try{
  const archive=path.join(directory,'skills.tgz');await writeFile(archive,new Uint8Array(await (await get('/opf-agent-skills.tar.gz')).arrayBuffer()));
- const unpack=spawnSync('tar',['-xzf',archive,'-C',directory],{encoding:'utf8'});assert.equal(unpack.status,0,unpack.stderr);
+ tar(archive,'-xzf',['-C',directory]);
  for(const skill of manifest.skills)for(const file of skill.files)assert.equal(createHash('sha256').update(await readFile(path.join(directory,file.path))).digest('hex'),file.sha256);
  const helper=spawnSync(process.execPath,[path.join(directory,'skills/opf-inspect/scripts/opf-inspect.mjs'),'version'],{cwd:directory,env:{...process.env,OPF_ROOT:path.resolve('.')},encoding:'utf8'});assert.equal(helper.status,0,helper.stderr);assert.equal(JSON.parse(helper.stdout).package,'@openpresentation/opf');
 }finally{await rm(directory,{recursive:true,force:true});}
