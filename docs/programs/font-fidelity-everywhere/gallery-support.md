@@ -9,6 +9,10 @@ pptx.gallery value's "OPF Config" snippet and run it through the OpenPresentatio
 packages. It measures the engines, not the schema: a value that validates but
 changes nothing in the preview or the PPTX is not reported as working.
 
+**Latest measurement (2026-09-29, Intos as the default Aptos preview): 660 of 850 values are perfect by parity, 33 near, 157 mismatch**
+(opf `338ddcd`, opf-render `d528be5`, opf-pptx `3c44a40`, pptx-gallery `efb63ac`; the previous mains scored 25 perfect, 667 near, 158 mismatch). See
+["Aptos previews with Intos"](#aptos-previews-with-intos-2026-09-29-measurement) below. The accepted-graph headline that follows is the earlier 900-value measurement.
+
 **Headline: 5 of 900 gallery values are perfect by parity** (FF-38, accepted
 merged source graph on 2026-09-29; 0 near, 895 mismatch under the old fontResolution definition; 608 near, 287 mismatch under the definition adopted on 2026-09-29, see [below](#fontresolution-definition-change-owner-decision-2026-09-29)). The unchanged full
 audit improves the September 23 result from 4 to 5, with no classification
@@ -126,6 +130,8 @@ comparison:
 
 | Run | perfect | geometry | text | fills | zOrder | slideSize | typefaces | reimport | fontResolution | theme | mapping |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Intos previews Aptos (September 29, first run on the merged FF-31 mains; opf `338ddcd`, opf-render `d528be5`, opf-pptx `3c44a40`, pptx-gallery `efb63ac`) | 660 (33 near, 157 mismatch) | 850 | 830 | 782 | 850 | 850 | 850 | 849 | 733 pass, 31 near, 86 fail | 850 | 850 |
+| Same harness, previous mains (before opf-render#54; opf `89eb735`, opf-render `e016f4e`, opf-pptx `06e4843`, pptx-gallery `a08718e`) | 25 (667 near, 158 mismatch) | 850 | 830 | 782 | 850 | 850 | 850 | 849 | 28 pass, 735 near, 87 fail | 850 | 850 |
 | Table frames compared with the drawn table (September 29, harness change; opf `b1fdfa7`, opf-render `762dbb9`, opf-pptx `874d9e9`, pptx-gallery `5963702`) | 5 (627 near, 218 mismatch) | 850 | 805 | 782 | 830 | 850 | 850 | 849 | 5 pass, 741 near, 104 fail | 850 | 840 |
 | Same heads, old table check (composed box) | 5 (608 near, 237 mismatch) | 830 | 805 | 782 | 830 | 850 | 850 | 849 | 5 pass, 741 near, 104 fail | 850 | 840 |
 | New table check with opf-pptx#93 (`844e9e6`, furniture paints last; other heads as above) | 5 (647 near, 198 mismatch) | 850 | 805 | 782 | 850 | 850 | 850 | 849 | 5 pass, 741 near, 104 fail | 850 | 840 |
@@ -217,6 +223,19 @@ Results:
 [scoreboard](gallery-support/parity/PARITY-2026-09-29-field-text.md) (the
 before/after in it compares against the old harness at the same heads; that
 baseline run is not committed). `support-status.json` is rebuilt from this run.
+
+#### Aptos previews with Intos (2026-09-29 measurement)
+
+opf-render#54 makes Intos (metric-compatible with Aptos, Aptos Display, Aptos Narrow and Aptos Serif) the default Aptos preview, and core#166 records that in the policy table. The instrument is unchanged: the same harness (`parity/scripts`), all engines on one local core through `register-local-opf`, the 850-value set, current mains for core, renderer, exporter and gallery. Same harness, before and after the two merges:
+
+| | perfect | near | mismatch | fontResolution pass | near | fail |
+| --- | --- | --- | --- | --- | --- | --- |
+| Previous mains (opf-render `e016f4e`) | 25 | 667 | 158 | 28 | 735 | 87 |
+| Current mains (opf-render `d528be5`) | 660 | 33 | 157 | 733 | 31 | 86 |
+
+Checks passed of 850 (pass/near/fail where not all pass): geometry 850, text 830 (6 near, 14 fail), fills 782 (68 fail), zOrder 850, slideSize 850, typefaces 850, reimport 849 (1 near), fontResolution 733 (31 near, 86 fail), theme 850, mapping 850. Only fontResolution changed between the two runs: 705 values move from near (Aptos Display to Carlito, Aptos to Roboto, visual look-alikes) to pass (Intos, metric), and one value's failure clears. No other check and no value regresses. The remaining near values are visual-only replacements (Segoe UI, Grandview, Arial Black, Impact) and native chart labels; the 157 mismatches are unchanged causes (chart series colours and caches, families whose script faces the preview does not load (Arabic and East Asian among them), one Playfair Display legacy value).
+
+Results: [parity-results-2026-09-29-intos-default.json](gallery-support/parity/parity-results-2026-09-29-intos-default.json), [scoreboard](gallery-support/parity/PARITY-2026-09-29-intos-default.md) (before/after against the previous-mains run, which is not committed). `support-status.json` is rebuilt from this run.
 
 #### Table frames and the drawn table (2026-09-29 instrument change)
 
