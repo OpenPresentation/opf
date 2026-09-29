@@ -53,6 +53,10 @@ export interface FontReplacement {
   /** Weight to select in the replacement when the requested family encodes weight in its name
    * (for example Segoe UI Semibold -> 600, Arial Black -> 900). */
   weight?: number;
+  /** OpenType feature tags (for example `liga`, `clig`) that a renderer turns off when it shapes and
+   * draws this replacement. `measured` is taken with them off, and a metric claim holds only with them
+   * off (Georgia -> Gelasio: Gelasio ligates fi/fl where Georgia does not). */
+  disabledFeatures?: string[];
   /** Null when the reference font was not available to the measuring host. */
   measured: FontReplacementMeasurement | null;
   /** Upstream statement of compatibility, when one exists. */

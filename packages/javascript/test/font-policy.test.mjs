@@ -107,9 +107,18 @@ describe("font policy table", () => {
     }
   });
 
+  test("disabledFeatures are OpenType tags on rows that need them, and only Georgia needs them", () => {
+    for (const row of rows) {
+      const tags = row.replacement?.disabledFeatures;
+      if (tags === undefined) continue;
+      assert.ok(tags.length > 0 && new Set(tags).size === tags.length && tags.every((tag) => /^[A-Za-z0-9 ]{4}$/.test(tag)), row.family);
+    }
+    assert.deepEqual(rows.filter((row) => row.replacement?.disabledFeatures).map((row) => row.family), ["Georgia"]);
+  });
+
   test("the documented metric replacements", () => {
     const metric = rows.filter((row) => row.replacement?.compatibility === "metric").map((row) => `${row.family}->${row.replacement.family}`);
-    assert.deepEqual(metric.sort(), ["Arial->Arimo", "Aptos Display->Intos Display", "Aptos Narrow->Intos Narrow", "Aptos Serif->Intos Serif", "Aptos->Intos", "Calibri->Carlito", "Courier New->Cousine", "Times New Roman->Tinos"].sort());
+    assert.deepEqual(metric.sort(), ["Arial->Arimo", "Aptos Display->Intos Display", "Aptos Narrow->Intos Narrow", "Aptos Serif->Intos Serif", "Aptos->Intos", "Calibri->Carlito", "Courier New->Cousine", "Georgia->Gelasio", "Times New Roman->Tinos"].sort());
     // Owner policy 2026-09-29: the Aptos family previews with Intos, which measures identical to Aptos 2.01.
     for (const family of ["Aptos", "Aptos Display", "Aptos Narrow", "Aptos Serif"]) {
       const row = fontPolicyFor(family);
@@ -119,9 +128,12 @@ describe("font policy table", () => {
     }
     // Selawik was measured for Segoe UI and rejected; Segoe UI stays visual.
     assert.equal(fontPolicyFor("Segoe UI").replacement.compatibility, "visual");
-    // Georgia: every basic-Latin advance matches, but ligature runs differ by up to 1.02% as the renderer shapes them.
-    assert.equal(fontPolicyFor("Georgia").replacement.compatibility, "visual");
-    assert.ok(fontPolicyFor("Georgia").replacement.measured.maxAbsWidthDelta > 0.003);
+    // Georgia: Gelasio matches every basic-Latin advance. Its default fi/fl ligatures moved runs by up to 1.02%,
+    // so the row is metric only because renderers shape Gelasio with liga and clig off (measured that way).
+    const georgia = fontPolicyFor("Georgia").replacement;
+    assert.equal(georgia.compatibility, "metric");
+    assert.deepEqual(georgia.disabledFeatures, ["liga", "clig"]);
+    assert.ok(georgia.measured.maxAbsWidthDelta <= 0.003);
     // Consolas keeps Cousine, which has all four styles; Roboto Mono is an alternate.
     assert.equal(fontPolicyFor("Consolas").replacement.family, "Cousine");
     assert.equal(fontPolicyFor("Aptos Mono").replacement.family, "Cousine");

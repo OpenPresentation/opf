@@ -4,6 +4,9 @@
 // Microsoft 365 cloud fonts). They are never copied, embedded or committed; the report keeps
 // only their version strings and SHA-256 digests. Replacement faces come from the pinned
 // @expo-google-fonts packages installed next to opf-render (or --packages <node_modules>).
+// Shaping uses fontkit default features. A row whose replacement lists disabledFeatures (Georgia ->
+// Gelasio: liga, clig) has its replacement shaped with those features off, exactly as opf-render
+// shapes and draws it; the reference font always uses default features.
 //
 // Vendored replacement families (opf-render fonts/<name>/, for example Intos) are read from the
 // opf-render checkout that holds the packages (the parent of --packages, or --render <dir>), through
@@ -91,18 +94,20 @@ function loadReplacementFace(pkg, weight, italic) {
   return { font: fontkit.create(bytes), weight: Number(choices[0].match[1]), package: `${pkg}@${JSON.parse(readFileSync(path.join(dir, "package.json"), "utf8")).version}`, file: `${choices[0].name}/${file}`, sha256: sha256(bytes) };
 }
 const cache = new WeakMap();
-function width(font, text) {
+function width(font, text, disabled = []) {
   let map = cache.get(font);
   if (!map) {
     map = new Map();
     cache.set(font, map);
   }
-  if (!map.has(text)) {
+  const key = `${disabled.join(",")}|${text}`;
+  if (!map.has(key)) {
     let value = NaN;
-    try { if ([...text].every((c) => font.hasGlyphForCodePoint(c.codePointAt(0)))) value = font.layout(text).positions.reduce((sum, p) => sum + p.xAdvance, 0) / font.unitsPerEm; } catch { value = NaN; }
-    map.set(text, value);
+    const features = disabled.length ? Object.fromEntries(disabled.map((tag) => [tag, false])) : undefined;
+    try { if ([...text].every((c) => font.hasGlyphForCodePoint(c.codePointAt(0)))) value = (features ? font.layout(text, features) : font.layout(text)).positions.reduce((sum, p) => sum + p.xAdvance, 0) / font.unitsPerEm; } catch { value = NaN; }
+    map.set(key, value);
   }
-  return map.get(text);
+  return map.get(key);
 }
 const STYLES = [[400, false], [700, false], [400, true], [700, true]];
 function measure(family, replacement, pkg) {
@@ -116,7 +121,7 @@ function measure(family, replacement, pkg) {
     const target = replacement.weight ?? (weight >= 600 ? 700 : 400);
     const face = replacementFace(replacement.family, target, italic, pkg);
     if (!face) continue;
-    const deltas = corpus.map((text) => { const a = width(ref.font, text), b = width(face.font, text); return Number.isFinite(a) && Number.isFinite(b) && a > 0 ? b / a - 1 : null; }).filter((value) => value !== null);
+    const deltas = corpus.map((text) => { const a = width(ref.font, text), b = width(face.font, text, replacement.disabledFeatures); return Number.isFinite(a) && Number.isFinite(b) && a > 0 ? b / a - 1 : null; }).filter((value) => value !== null);
     if (!deltas.length) continue;
     styles.push({ weight, italic, replacementWeight: face.weight, strings: deltas.length, meanAbs: deltas.reduce((s, d) => s + Math.abs(d), 0) / deltas.length, mean: deltas.reduce((s, d) => s + d, 0) / deltas.length, maxAbs: Math.max(...deltas.map(Math.abs)), reference: { file: ref.file, version: ref.version, sha256: ref.sha256 }, replacement: { package: face.package, file: face.file, sha256: face.sha256 } });
   }

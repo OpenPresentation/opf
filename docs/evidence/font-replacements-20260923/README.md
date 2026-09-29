@@ -5,7 +5,7 @@ This folder records how each proprietary family's preview replacement in `spec/r
 - Host: Windows 11 with Microsoft 365, including the Aptos, Aptos Display and Aptos Narrow cloud fonts, version 2.01;O365.
 - Reference fonts were read in place from `C:\Windows\Fonts` and the Office cloud-font cache. They were never copied, embedded or committed. The reports keep only the version strings and SHA-256 digests.
 - Replacement faces came from pinned `@expo-google-fonts` packages. Every package used is OFL-1.1, checked from its `LICENSE_FONT`.
-- Shaping used fontkit 2.0.4 with default features (kerning and ligatures), which is how opf-render measures text.
+- Shaping used fontkit 2.0.4 with default features (kerning and ligatures), which is how opf-render measures text. The one exception is a replacement that lists `disabledFeatures` (Gelasio for Georgia: `liga`, `clig`), which is shaped with those features off, as opf-render shapes it.
 
 ## Files
 
@@ -31,7 +31,7 @@ Families whose real font is not on the host are skipped and recorded as `measure
 ## Findings
 
 - **Metric replacements.** Carlito for Calibri, Arimo for Arial, Tinos for Times New Roman and Cousine for Courier New are metric. The largest difference on any string, in any of the four styles, is 0.26% (Calibri/Carlito).
-- **Georgia and Gelasio are visual.** Gelasio matches every basic-Latin advance of Georgia 5.59. opf-render shapes with default features, though, and runs where Gelasio applies optional ligatures differ by up to 1.02% in all four styles. That exceeds the 0.3% per-string limit for a metric claim.
+- **Georgia and Gelasio are metric with ligatures off.** Gelasio matches every basic-Latin advance of Georgia 5.59. With default features, though, Gelasio applies `liga` ligatures (fi, fl, ffi, ffl) that Georgia does not, and 33 of the 300 corpus strings differ by up to 1.02% in all four styles: mean 0.02%, maximum 0.82% regular, 1.02% bold, 0.97% italic and 0.87% bold italic. That exceeds the 0.3% per-string limit. Shaping Gelasio with `liga` and `clig` off (the row records them as `disabledFeatures`, and opf-render applies them to measurement and SVG) leaves every string identical to Georgia in regular, bold and italic, and at most 0.0029% off in bold italic ("Major milestones for Kiteframe."). Georgia has no `liga` or `clig` feature, and turning kerning off changes no width in either font, so only the ligatures differ. The metric tier holds only with those features off.
 - **Cambria and Caladea.** Caladea is *not* metric-compatible with Cambria 6.99 (Windows 11). Its advances differ by a mean of 2.7% and up to 6.5%, so the policy classes it as visual. Fontconfig still lists Caladea as a metric alias.
 - **Aptos.** Microsoft 365 cloud font, proprietary, not redistributable. Superseded on 2026-09-29: the policy previews the Aptos family with Intos (OFL-1.1, commit `fef9315c14da9e4b23b4c3cac8e718998d4e4736`), which is metric.
   - Intos, Intos Display, Intos Narrow and Intos Serif match Aptos 2.01 to 0.000% mean and 0.000% maximum on all 300 strings in all four styles. hhea, OS/2 typo and win values, x-height and cap-height fields are equal, and painted x-height and cap-height boxes agree (x-height glyph 0.000 to 0.476 em in both).

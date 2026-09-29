@@ -64,7 +64,7 @@ Width delta = mean |replacement/real - 1| over 300 example-deck strings (signed 
 | Garamond | proprietary-standard | proprietary (Monotype, licensed to Microsoft) | office-cloud | EB Garamond | visual | 4.9% (+2.8%) / 18.8% | Tinos | never |
 | Gautami | proprietary-standard | proprietary (Microsoft) | windows-optional, office-cloud | Noto Sans Telugu | visual | n/m | — | never |
 | Gelasio | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
-| Georgia | proprietary-standard | proprietary (Microsoft) | windows, macos, office-cloud | Gelasio | visual | 0.0% (-0.0%) / 1.0% | — | never |
+| Georgia | proprietary-standard | proprietary (Microsoft) | windows, macos, office-cloud | Gelasio | metric (liga, clig off) | 0.0% (+0.0%) / 0.0% | — | never |
 | Gill Sans MT | proprietary-standard | proprietary (Monotype, licensed to Microsoft) | office-cloud | Source Sans 3 | visual | 5.1% (+0.4%) / 14.6% | Carlito | never |
 | Gisha | proprietary-standard | proprietary (Microsoft) | windows-optional, office-cloud | Noto Sans Hebrew | visual | n/m | — | never |
 | Grandview | proprietary-standard | proprietary (Microsoft) | office-cloud | Barlow | visual | n/m | Roboto | never |
