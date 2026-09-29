@@ -2,7 +2,7 @@
 
 Generated from [`spec/reference/font-policy.json`](../../../spec/reference/font-policy.json); edit the JSON, not this table. Schema: [`font-policy.schema.json`](../../../spec/reference/font-policy.schema.json). Guide: [docs/font-fidelity.md](../../font-fidelity.md). Measurement method and raw data: [evidence](../../evidence/font-replacements-20260923/README.md).
 
-**Policy (owner decisions, 2026-09-29):** the user's selected font is the source of truth. The replacement column is an open look-alike used for previews, SVG, the editor and thumbnails, because licensed fonts are never bundled or embedded. A metric-compatible replacement is the goal; a visual-only one is a documented fallback and a known layout-fidelity gap. PPTX export always writes the selected name, never the replacement. See [docs/font-fidelity.md](../../font-fidelity.md#font-policy-ff-31).
+**Policy (owner decisions, 2026-09-29):** the user's selected font is the source of truth. The replacement column is an open look-alike used for previews, SVG, the editor and thumbnails, because license-restricted (proprietary) fonts are never bundled or embedded. A metric-compatible replacement is the goal; a visual-only one is a documented fallback and a known layout-fidelity gap. PPTX export always writes the selected name, never the replacement. See [docs/font-fidelity.md](../../font-fidelity.md#font-policy-ff-31).
 
 **Provisional owner decisions (replacement picks; owner may revise):** `aptos-preview` → Roboto (visual); `segoe-ui-preview` → Red Hat Display (visual); `cambria-tier` → Caladea (visual, metric-mode fallback). They live in one block, `provisionalDecisions`, at the top of the JSON. Rows marked † below follow a decision.
 

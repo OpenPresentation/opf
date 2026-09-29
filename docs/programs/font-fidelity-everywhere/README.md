@@ -124,8 +124,8 @@ linked, and specifically:
   in pixels on the screen for rendering live previews of SVG. When we export to
   PPTX we should have PowerPoint open that file and display actual Aptos."
   Consequences:
-  - The user's selected font is the source of truth. Licensed fonts are never
-    bundled or embedded.
+  - The user's selected font is the source of truth. License-restricted
+    (proprietary) fonts are never bundled or embedded.
   - For previews, SVG, the editor and thumbnails, the replacement should look
     similar and be metric-compatible (same advance widths and line metrics), so
     text occupies the same size on screen and wraps identically to PowerPoint.
@@ -138,11 +138,12 @@ linked, and specifically:
     PowerPoint opens the file and shows the actual font (installed or Office
     cloud font). Only open fonts may be embedded, through FF-13.
   - The FF-38 `fontResolution` check must accept the
-    [policy table](font-licensing.md)'s replacements for licensed fonts,
+    [policy table](font-licensing.md)'s replacements for license-restricted fonts,
     provided the PPTX keeps the selected name: a metric-compatible replacement
     is perfect, and a visual-only replacement is classified near, not perfect.
-    A separate PR updates the harness and scoreboard; this entry changes no
-    gate.
+    The harness and scoreboard change merged in
+    [opf#159](https://github.com/OpenPresentation/opf/pull/159); this entry
+    changes no gate.
   - The canonical statement is in [font-fidelity.md](../../font-fidelity.md#font-policy-ff-31).
     The sibling repositories link to it.
 

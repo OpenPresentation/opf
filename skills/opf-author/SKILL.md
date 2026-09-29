@@ -29,7 +29,7 @@ Use `opf import-data source.csv --as table` or `--as chart` to ingest local CSV/
 - Prefer a clear assertion in each title and enough evidence to support it. Preserve uncertainty and citations; never fill example metrics with invented business results.
 - Use stable slide IDs when revisions or integrations need them. Resolve IDs to current indices before later edits.
 - Select existing catalog IDs or embed valid custom records. Gallery slugs can differ from bundled IDs; a copied example may need its inline catalogs.
-- Preserve the user's design and fonts unless changing them is part of the request. Choosing a font scheme alone does not load font files. The selected font name stays in the document and in PPTX export; previews may draw an open look-alike when the licensed font is not bundled.
+- Preserve the user's design and fonts unless changing them is part of the request. Choosing a font scheme alone does not load font files. The selected font name stays in the document and in PPTX export; previews may draw an open look-alike when the license-restricted font is not bundled.
 
 Validate the complete document with `validatePresentation(document)`. Distinguish invalid structure from warnings about unresolved references. When preview tools are available, inspect the rendered slides and repair overflow without losing facts, notes, or trailing text. If rendering is unavailable, report schema validation as such; do not label it visual verification.
 
