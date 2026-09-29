@@ -800,18 +800,30 @@ function chartFromRelationship(entries, slidePath, relationships, relId) {
   if (!chartNode) return null;
   const series = asArray(chartNode.node["c:ser"]);
   if (series.length === 0) return null;
+  if (series.length > MAX_CHART_CACHE_POINTS) {
+    throw new OPFPptxError('invalid-chart-cache', 'Chart cache exceeds the 100,000-series import limit; reduce its series before importing.', {path: relationship.path});
+  }
 
-  const labels = cachedValues(series[0]?.["c:cat"]);
-  const names = series.map((entry, index) => firstCachedValue(entry?.["c:tx"]) || `Series ${index + 1}`);
-  const values = series.map((entry) => cachedValues(entry?.["c:val"] ?? entry?.["c:yVal"]).map(numericValue));
-  const rowCount = Math.max(labels.length, ...values.map((row) => row.length));
+  const budget = { cells: 0 };
+  const cachePath = (index, role) => `${relationship.path}#c:ser[${index}]/${role}`;
+  const labels = cachedValues(series[0]?.["c:cat"], cachePath(0, 'c:cat'), budget);
+  const names = series.map((entry, index) => firstCachedValue(entry?.["c:tx"], cachePath(index, 'c:tx'), budget) ?? `Series ${index + 1}`);
+  const values = series.map((entry, index) => {
+    const role = entry?.["c:val"] !== undefined ? 'c:val' : 'c:yVal';
+    return cachedValues(entry?.[role], cachePath(index, role), budget)
+      .map(value => value === null || value.trim() === '' ? null : numericValue(value));
+  });
+  const rowCount = values.reduce((count, row) => Math.max(count, row.length), labels.length);
   if (rowCount === 0) return null;
+  if (rowCount * (series.length + 1) > MAX_CHART_CACHE_CELLS) {
+    throw new OPFPptxError('invalid-chart-cache', 'Chart cache exceeds the 1,000,000-cell import limit; reduce its rows or series before importing.', {path: relationship.path});
+  }
 
   const rows = [];
   for (let index = 0; index < rowCount; index += 1) {
     rows.push([
-      labels[index] ?? `Item ${index + 1}`,
-      ...values.map((row) => row[index] ?? 0)
+      labels[index] ?? null,
+      ...values.map((row) => row[index] ?? null)
     ]);
   }
 
@@ -841,22 +853,75 @@ function firstChartNode(plotArea) {
   return null;
 }
 
-function cachedValues(node) {
-  const cache = node?.["c:strRef"]?.["c:strCache"]
-    ?? node?.["c:numRef"]?.["c:numCache"]
-    ?? node?.["c:multiLvlStrRef"]?.["c:multiLvlStrCache"]?.["c:lvl"]
-    ?? node?.["c:numLit"]
-    ?? node?.["c:strLit"];
-  const points = asArray(cache?.["c:pt"]);
-  if (points.length > 0) return points.map((point) => scalarText(point?.["c:v"]));
-  const nestedPoints = asArray(cache)
-    .flatMap((level) => asArray(level?.["c:pt"]))
-    .map((point) => scalarText(point?.["c:v"]));
-  return nestedPoints;
+const MAX_CHART_CACHE_POINTS = 100_000;
+const MAX_CHART_CACHE_CELLS = 1_000_000;
+
+// c:pt is sparse and its XML order does not determine the data row. Keep
+// explicit empty strings distinct from missing points, and bound native
+// metadata before allocating a dense OPF table. This does not parse numbers.
+function cachedValues(node, path, budget) {
+  const invalid = (message, suffix = '') => {
+    throw new OPFPptxError('invalid-chart-cache', `Invalid chart cache: ${message}. Repair the chart data before importing.`, {path: path + suffix});
+  };
+  const single = (value, location) => {
+    if (value !== undefined && value !== '' && (!value || typeof value !== 'object' || Array.isArray(value))) {
+      invalid('cache container must be a single element', location);
+    }
+  };
+  single(node, '');
+  for (const reference of ['c:strRef', 'c:numRef', 'c:multiLvlStrRef']) single(node?.[reference], `/${reference}`);
+  const candidates = [
+    ['c:strRef/c:strCache', node?.['c:strRef']?.['c:strCache']],
+    ['c:numRef/c:numCache', node?.['c:numRef']?.['c:numCache']],
+    ['c:multiLvlStrRef/c:multiLvlStrCache', node?.['c:multiLvlStrRef']?.['c:multiLvlStrCache']],
+    ['c:numLit', node?.['c:numLit']],
+    ['c:strLit', node?.['c:strLit']],
+  ].filter(([, cache]) => cache !== undefined);
+  if (candidates.length === 0) return [];
+  if (candidates.length > 1) invalid('multiple competing cache sources');
+  const [kind, cache] = candidates[0];
+  path += `/${kind}`;
+  if (cache !== '' && (!cache || typeof cache !== 'object' || Array.isArray(cache))) invalid('cache must be a single element');
+  const integer = (raw, limit, location) => {
+    // XML Schema unsigned integers allow an optional sign and whitespace;
+    // their value must still be nonnegative, integral and bounded.
+    if (typeof raw !== 'string' || !/^[+-]?\d+$/.test(raw.trim())) invalid('expected an unsigned integer', location);
+    const value = Number(raw.trim());
+    if (!Number.isSafeInteger(value) || value < 0 || value > limit) invalid(`integer exceeds the supported range 0–${limit}`, location);
+    return value;
+  };
+  const count = cache?.['c:ptCount'] === undefined ? undefined
+    : integer(cache['c:ptCount']?.val, MAX_CHART_CACHE_POINTS, '/c:ptCount@val');
+  let data = cache;
+  if (kind.startsWith('c:multiLvlStrRef')) {
+    const levels = asArray(cache?.['c:lvl']);
+    if (levels.length > 1) {
+      throw new OPFPptxError('unsupported-chart-cache', 'Hierarchical chart category caches cannot be flattened without losing labels; use a single category level before importing.', {path});
+    }
+    data = levels[0];
+  }
+  const points = asArray(data?.['c:pt']);
+  if (points.length > MAX_CHART_CACHE_POINTS) invalid('too many points');
+  const indexed = new Map();
+  let extent = count ?? 0;
+  for (const [position, point] of points.entries()) {
+    const location = `/c:pt[${position}]@idx`;
+    const index = integer(point?.idx, MAX_CHART_CACHE_POINTS - 1, location);
+    if (count !== undefined && index >= count) invalid('point index is outside its declared count', location);
+    if (indexed.has(index)) invalid('duplicate point index', location);
+    if (Array.isArray(point?.['c:v'])) invalid('point has multiple values', `/c:pt[${position}]/c:v`);
+    indexed.set(index, point?.['c:v'] === undefined ? null : scalarText(point['c:v']));
+    extent = Math.max(extent, index + 1);
+  }
+  if (budget.cells + extent > MAX_CHART_CACHE_CELLS) invalid('combined caches exceed the 1,000,000-cell import limit');
+  budget.cells += extent;
+  const result = new Array(extent).fill(null);
+  for (const [index, value] of indexed) result[index] = value;
+  return result;
 }
 
-function firstCachedValue(node) {
-  return cachedValues(node).find(Boolean) ?? "";
+function firstCachedValue(node, path, budget) {
+  return cachedValues(node, path, budget).find(value => value !== null);
 }
 
 function readSlideNotes(entries, relationships) {
