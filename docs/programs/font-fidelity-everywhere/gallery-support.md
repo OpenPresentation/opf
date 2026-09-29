@@ -109,7 +109,7 @@ checks are:
 
 | Check | Passes when |
 | --- | --- |
-| geometry | Text-line anchors and baselines are within 0.02 pt; chart, table, picture and card frames equal the composed box within 0.02 pt; a picture's crop places the image content where the preview does, within 0.02 pt at the visible edges. Deltas up to 0.5 pt are near; a non-finite delta fails. |
+| geometry | Text-line anchors and baselines are within 0.02 pt; chart, picture and card frames equal the composed box within 0.02 pt; a table frame equals the preview's drawn table, the union of its cell rectangles, within 0.02 pt (since 2026-09-29; see "Table frames and the drawn table" below); a picture's crop places the image content where the preview does, within 0.02 pt at the visible edges. Deltas up to 0.5 pt are near; a non-finite delta fails. |
 | text | Same line text and run segmentation. Per run: the same family in the script slot the text uses (`latin`/`ea`/`cs`), size within 0.005 pt, bold, italic and resolved colour. Also the same paragraph alignment and list markers. Native charts: preview labels are in the chart caches, and the chart XML names the preview font. |
 | fills | Same background kind and colour; per element group, the same solid fill colours and the same images (sha256); chart series colours appear in the preview. |
 | zOrder | The order of mapped element groups in `spTree` matches the SVG paint order, and the slide count matches. |
@@ -126,6 +126,9 @@ comparison:
 
 | Run | perfect | geometry | text | fills | zOrder | slideSize | typefaces | reimport | fontResolution | theme | mapping |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Table frames compared with the drawn table (September 29, harness change; opf `b1fdfa7`, opf-render `762dbb9`, opf-pptx `874d9e9`, pptx-gallery `5963702`) | 5 (627 near, 218 mismatch) | 850 | 805 | 782 | 830 | 850 | 850 | 849 | 5 pass, 741 near, 104 fail | 850 | 840 |
+| Same heads, old table check (composed box) | 5 (608 near, 237 mismatch) | 830 | 805 | 782 | 830 | 850 | 850 | 849 | 5 pass, 741 near, 104 fail | 850 | 840 |
+| New table check with opf-pptx#93 (`844e9e6`, furniture paints last; other heads as above) | 5 (647 near, 198 mismatch) | 850 | 805 | 782 | 850 | 850 | 850 | 849 | 5 pass, 741 near, 104 fail | 850 | 840 |
 | Field text counted, 850-value set (September 29, after pptx-gallery#40 and a harness fix; opf `03a55ae`, opf-render `aa7e898`, opf-pptx `ca34da7`, pptx-gallery `23f9216`) | 5 (608 near, 237 mismatch) | 830 | 805 | 782 | 830 | 850 | 850 | 849 | 5 pass, 741 near, 104 fail | 850 | 840 |
 | Look-alike fonts accepted, new fontResolution definition (September 29, owner decision 2026-09-29; opf `401f2e3`, opf-render `c62b3f9`, opf-pptx `54f7e4c`, pptx-gallery `4b48e69`) | 5 (608 near, 287 mismatch) | 880 | 800 | 791 | 880 | 900 | 900 | 899 | 5 pass, 791 near, 104 fail | 900 | 890 |
 | Same run, old fontResolution definition | 5 (0 near, 895 mismatch) | 880 | 800 | 791 | 880 | 900 | 900 | 899 | 5 | 900 | 890 |
@@ -214,6 +217,50 @@ Results:
 [scoreboard](gallery-support/parity/PARITY-2026-09-29-field-text.md) (the
 before/after in it compares against the old harness at the same heads; that
 baseline run is not committed). `support-status.json` is rebuilt from this run.
+
+#### Table frames and the drawn table (2026-09-29 instrument change)
+
+The geometry check used to compare a PPTX table frame with the box composed for
+the table (`composeSlide` `item.box`). It now compares it with the table the
+preview draws: the union of the table's cell rectangles in the traced SVG
+(`scripts/table-box.mjs`, unit-tested in `table-box.test.mjs`), within the same
+0.02 pt tolerance. Chart, picture and card frames still equal the composed box.
+
+Why: FF-39's criterion "table frames equal the composed box" is read as "table
+frames equal the drawn table box". Rows are only as tall as their text needs
+(short rows keep 54 px; the composed box is the space allocated to the table), so
+a table is usually shorter than its allocation: 162 pt of rows in a 514.92 pt
+box in the color-scheme gallery decks. PowerPoint derives a table's height from
+its rows, so a frame that declares more than the rows sum to is inconsistent XML
+that PowerPoint ignores or rewrites: a parity pass on it would describe the XML,
+not what a user sees. opf-pptx already writes the frame as the row total, which
+is exactly the drawn table; the old check flagged 20 values (14 color-schemes, 2
+blocks, 4 layouts, all "table frame delta >50pt") for a preview/PPTX agreement
+that was never wrong. Only the reference box changed; no tolerance changed. The
+new check is not vacuous: an exporter that writes the frame at the composed
+height instead (the first version of opf-pptx#93) still fails the same 20 values.
+
+Same four heads, harness before and after (exporter opf-pptx `874d9e9`):
+
+| | geometry | zOrder | perfect | near | mismatch |
+| --- | --- | --- | --- | --- | --- |
+| Old table check (composed box) | 830 | 830 | 5 | 608 | 237 |
+| New table check (drawn table) | 850 | 830 | 5 | 627 | 218 |
+| New check, opf-pptx#93 (`844e9e6`) | 850 | 850 | 5 | 647 | 198 |
+
+The improved checks are geometry for color-schemes (0 to 14 of 14), blocks (30 to
+32 of 32) and layouts (481 to 485 of 485), and, with opf-pptx#93 only, zOrder for
+the 20 header/footer values (0 to 20). No check regresses for any value, and no
+value changes class except mismatch to near (19 for the check change alone, a
+further 20 with #93). None becomes perfect, because fontResolution near or fail
+remains for every value except the five perfect ones.
+
+Results:
+[parity-results-2026-09-29-table-drawn-extent.json](gallery-support/parity/parity-results-2026-09-29-table-drawn-extent.json)
+(new check, current mains),
+[scoreboard](gallery-support/parity/PARITY-2026-09-29-table-drawn-extent.md) (its
+before/after compares with the old check at the same heads; those baseline runs
+are not committed). `support-status.json` is rebuilt from this run.
 
 The five perfect values are the font schemes `calibri`, `courier-new`,
 `times-new-roman` and `roboto`, plus the content block `kpi-dashboard`.
