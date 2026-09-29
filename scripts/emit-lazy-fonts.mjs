@@ -6,9 +6,10 @@
 // same package-relative paths (`fonts/intos/...`, `fonts/open/...`), and the browser loader fetches them on demand, verified
 // against the sha256 the renderer's manifest pins, when a document's font families need them:
 //   loadBrowserFontRegistry(eagerFaces, {lazyFontsBaseUrl: './'}) then `await registry.ensureLazyFonts(presentation)`.
-// `lazy-fonts.json` next to the files lists them (family, style, file, sha256, size) for hosts and audits.
+// The committed half is `lazy-fonts.json` (gallery-lazy-fonts.mjs): the pinned manifest, no bytes. This local copy of the files is
+// for the editor demo served from artifacts/editor; the gallery copies the faces from the pinned renderer package at build time.
 import { createHash } from "node:crypto";
-import { copyFile, mkdir, readdir, readFile, stat, writeFile } from "node:fs/promises";
+import { copyFile, mkdir, readdir, readFile, stat } from "node:fs/promises";
 import path from "node:path";
 
 const sha256 = (bytes) => createHash("sha256").update(bytes).digest("hex");
@@ -36,10 +37,5 @@ export async function emitLazyFonts({ registry, packageRoot, out }) {
     sizes.set(face.file, (await stat(path.join(out, face.file))).size);
   }
   const bytes = [...sizes.values()].reduce((sum, size) => sum + size, 0);
-  await writeFile(path.join(out, "lazy-fonts.json"), JSON.stringify({
-    version: 1,
-    note: "Vendored faces the browser loader fetches on demand (registry.ensureLazyFonts), from these package-relative paths, verified against sha256.",
-    faces: lazy.map((face) => ({ package: face.package, family: face.family, weight: face.weight, italic: face.italic, file: face.file, sha256: face.sha256, bytes: sizes.get(face.file) })),
-  }, null, 2) + "\n");
-  return { files: [...files, "lazy-fonts.json"], faces: lazy.length, bytes };
+  return { files, faces: lazy.length, bytes };
 }

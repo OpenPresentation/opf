@@ -23,5 +23,8 @@ editor.undo();assert.deepEqual(editor.document,before);
 editor.redo();assert.deepEqual(editor.document,accepted);
 const imported=await fromPptx(await toPptx(accepted,options));
 assert.equal(imported.slides.length,1);
-assert.deepEqual(imported.slides[0].blocks.map(block=>block.text),['"Retain the selected source."','Reviewer - Recorded interview']);
+// opf-pptx imports current native body lines as schema-valid TextRun[] (FF-32 keeps their font, size and
+// color). Compare the exact visible characters and block order, not the run formatting.
+const visible=text=>Array.isArray(text)?text.map(run=>typeof run==='string'?run:run.text).join(''):text;
+assert.deepEqual(imported.slides[0].blocks.map(block=>visible(block.text)),['"Retain the selected source."','Reviewer - Recorded interview']);
 console.log('Packed quote editor passed: accepted one-page policy, source preservation, actual fonts, SVG/PPTX, undo/redo and editable native text reimport. Quote semantics are not reconstructed on import.');
