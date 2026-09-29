@@ -2,7 +2,9 @@
 
 Unfinished prepared shaping work is preserved in the [September 15 roadmap](docs/roadmap-shaping-20260915.md); it is not part of the published runtime.
 
-Version 0.8.0 requires `@openpresentation/opf` ^0.11.0, renderer ^0.9.0, and PPTX ^0.9.0. Named ColorRefs (scheme slots, roles, and `var:<id>`) paint through the published renderer and hex-resolve on export. Payload ids share the slide id namespace for pagination and transfer. Native `schemeClr`, theme write, and `p:hf` remain out of scope.
+Version 0.9.0 requires `@openpresentation/opf` ^0.11.1, renderer ^0.10.0, and PPTX ^0.10.0. Composition and slide transfer fall back to the shared `aptos` font scheme and report unknown scheme ids through `onDiagnostic`; gallery apply keeps every font-scheme role.
+
+Version 0.8.0 required `@openpresentation/opf` ^0.11.0, renderer ^0.9.0, and PPTX ^0.9.0. Named ColorRefs (scheme slots, roles, and `var:<id>`) paint through the published renderer and hex-resolve on export. Payload ids share the slide id namespace for pagination and transfer. Native `schemeClr`, theme write, and `p:hf` remain out of scope.
 
 Version 0.7.0 and this checkout require Node 24 (`24.x`). Use `.nvmrc` for local development. Earlier published versions retain their original engine declarations. Browser entrypoints remain browser-safe; native application compatibility is verified separately.
 
@@ -235,21 +237,17 @@ Svelte bindings are isolated under `@openpresentation/opf-editor/svelte` as acti
 
 ## Release Lane
 
-Public npm package publication is handled by `.github/workflows/release.yml` with npm provenance.
+Public npm package publication is handled by `.github/workflows/release.yml` through npm Trusted Publishing (GitHub Actions OIDC) with npm provenance; no npm token is stored. The owner authorized agents to prepare and publish npm releases whenever a release is required (2026-09-29). This authorization does not waive any gate.
 
-Required first-publish setup:
-
-1. An npm owner for the `@openpresentation` scope must run the first publish or reserve/grant the `@openpresentation/opf-editor` package.
-2. Configure npm Trusted Publishing for GitHub repository `OpenPresentation/opf-editor` and workflow `.github/workflows/release.yml`.
-3. Publish by creating a GitHub Release or manually running the Release workflow after CI passes.
-
-This repo does not require an npm automation token when Trusted Publishing is configured.
+1. Open a release-prep PR containing only the version bump, `CHANGELOG.md`, dependency ranges, lockfile and current-instruction docs. Publish in dependency order (core, then renderer, then PPTX, then editor): refresh this repo's lockfile only after the required `@openpresentation/opf`, `@openpresentation/opf-render` and `@openpresentation/opf-pptx` versions are on the registry (`npm install --package-lock-only`), then run `npm run test:packed` against them.
+2. Merge after CI is green, then publish by pushing the git tag `opf-editor-v<version>` (or `@openpresentation/opf-editor@v<version>`) at the merge commit. The workflow verifies that the tag matches `package.json` and reruns audit, typecheck, validate, tests, playground, code/JSON browser and packed checks before `npm publish --access public --provenance`. A manual `workflow_dispatch` runs the same job without the tag check and is a fallback only.
+3. Verify with `npm view @openpresentation/opf-editor@<version> version gitHead dist.attestations` and, from the core repo, `node scripts/test-editor-publication.mjs <version> <release-commit> <this-checkout>`. Never republish an existing version.
 
 ## Shared dynamic composition
 
 The current checkout uses `@openpresentation/opf/composition` for portable geometry. Slides can select `auto`, `row`, `column`, or `grid`, set weighted tracks, and request path-specific overflow diagnostics. See the sibling OPF repo's `docs/dynamic-composition.md` for the complete contract.
 
-Version 0.8.0 requires `@openpresentation/opf@^0.11.0`. The optional renderer peer requires `@openpresentation/opf-render@^0.9.0`. Coordinated playground export uses `@openpresentation/opf-pptx@^0.9.0`. Clean registry installs support the composition APIs without sibling checkouts. For coordinated source development, build OPF and run `node scripts/link-ecosystem.mjs` there; `pnpm test:ecosystem` verifies shared geometry and import/export behavior.
+Version 0.9.0 requires `@openpresentation/opf@^0.11.1`. The optional renderer peer requires `@openpresentation/opf-render@^0.10.0`. Coordinated playground export uses `@openpresentation/opf-pptx@^0.10.0`. Clean registry installs support the composition APIs without sibling checkouts. For coordinated source development, build OPF and run `node scripts/link-ecosystem.mjs` there; `pnpm test:ecosystem` verifies shared geometry and import/export behavior.
 
 ## Local interactive demo
 

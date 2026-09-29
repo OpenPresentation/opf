@@ -7,7 +7,7 @@
 - Node `24.x` (`engines`, `.nvmrc`). This repo uses npm with `package-lock.json`; install with `npm ci`. Core uses pnpm.
 - Commands (all in `package.json`): `npm run build`, `npm run typecheck`, `npm test`, `npm run validate`, `npm run test:packed`, `npm run test:json`, `npm run test:json-browser`, `npm run test:rich-input-browser`, `npm run test:code-browser`, `npm run test:selection-browser`, `npm run test:metric-browser`, `npm run build:playground`, `npm run test:playground`.
 - CI (`.github/workflows/ci.yml`) runs one job on `ubuntu-latest` in the pinned Playwright container. It checks out core, opf-render and opf-pptx at pinned SHAs, runs `test:packed` against published dependencies, links sources with core's `scripts/link-ecosystem.mjs --packages-only`, then runs audit, typecheck, validate, test, playground, code-browser, selection-browser, json-browser, selection-browser, rich-input-browser (measured and estimated) and core's coordinated packed-tarball checks.
-- `release.yml` publishes on `opf-editor-v*` tags with npm provenance.
+- `release.yml` publishes on `opf-editor-v*` tags (or manual dispatch) with npm provenance, after rerunning the full check set.
 
 ### Windows notes
 
@@ -29,7 +29,7 @@ The cross-repo program tracker lives in core at [docs/programs/font-fidelity-eve
 - Canvas rendering and export must use the same `textMeasurement` (and `textRasterPadding`) as preview; load the same font bytes via the renderer's font registry.
 - `test/native-playground.ps1` opens desktop PowerPoint. Only the root session runs it, on the Windows host; agents do not. Never kill Office or retry a native attempt in place.
 - Browser playground results are browser behavior evidence, not native PowerPoint raster equivalence. The PPTX download does not embed font binaries.
-- No package publish or version bump outside the release process.
+- Publishing npm packages is authorized by the owner (2026-09-29) whenever a release is required, but only through the release process in `README.md` (Release Lane): a release-prep PR, merge, then the tag-triggered `release.yml` with provenance. No ad hoc publish or version bump outside it.
 - Fonts: bundle pinned files, never hotlink font CDNs; every bundled face records a verified permissive license (OFL-1.1, Apache-2.0, MIT or UFL-1.0 only), see [Font files: bundling and licenses](https://github.com/OpenPresentation/opf/blob/main/docs/programs/font-fidelity-everywhere/font-licensing.md#font-files-bundling-and-licenses). The editor ships no font files of its own: it loads the renderer's verified registry, and the playground embeds those bytes. `npm run check:font-hotlinks` fails on any font CDN reference in tracked files (allowlist: `scripts/font-hotlink-allowlist.json`); `npm run check:font-hotlinks:built` scans `dist` and the built playground and runs in `test:playground`.
 
 ## Fidelity and scope
