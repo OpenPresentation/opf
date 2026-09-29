@@ -1,0 +1,1996 @@
+{
+  "tool": "fontkit 2.0.4",
+  "corpus": {
+    "strings": 300,
+    "bar": "mean < 0.1% and max <= 0.3% in every style"
+  },
+  "host": {
+    "platform": "win32",
+    "node": "v24.21.0"
+  },
+  "results": [
+    {
+      "reference": "Aptos",
+      "candidate": "Intos",
+      "styles": [
+        {
+          "style": "Regular",
+          "strings": 300,
+          "meanAbs": 0,
+          "mean": 0,
+          "maxAbs": 0,
+          "meetsMetricBar": true,
+          "reference": {
+            "file": "30153066857.ttf",
+            "version": "Version 2.01;O365",
+            "sha256": "95980114fcfd42f2f9c446dae429b70582bf2f03097d68433ea9e7d85a49da0b"
+          },
+          "candidateFile": {
+            "name": "Intos-Regular.ttf",
+            "sha256": "4de204b6414d30f9f49b9375dc9b71ccea1683e55ac37de6c8d541abbc760eea"
+          },
+          "referenceVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "typo": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "win": [
+              1.0098,
+              0.2749
+            ],
+            "xHeight": 0.4756,
+            "capHeight": 0.6572,
+            "useTypoMetrics": true
+          },
+          "candidateVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "typo": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "win": [
+              1.0098,
+              0.2749
+            ],
+            "xHeight": 0.4756,
+            "capHeight": 0.6572,
+            "useTypoMetrics": true
+          },
+          "verticalMetricsEqual": true,
+          "outlines": {
+            "referenceCodepoints": 1087,
+            "candidateCodepoints": 2866,
+            "sharedNonemptyGlyphs": 975,
+            "identicalOutlines": 0,
+            "identicalBeyondPlainRectangles": 0,
+            "glyphBoxDeviationEm": {
+              "median": 0.0112,
+              "p90": 0.0513
+            },
+            "glyphBoxYRange": {
+              "x": {
+                "reference": [
+                  0,
+                  0.476
+                ],
+                "candidate": [
+                  0,
+                  0.476
+                ]
+              },
+              "H": {
+                "reference": [
+                  0,
+                  0.657
+                ],
+                "candidate": [
+                  0,
+                  0.657
+                ]
+              },
+              "o": {
+                "reference": [
+                  -0.008,
+                  0.485
+                ],
+                "candidate": [
+                  -0.01,
+                  0.482
+                ]
+              },
+              "p": {
+                "reference": [
+                  -0.175,
+                  0.484
+                ],
+                "candidate": [
+                  -0.175,
+                  0.482
+                ]
+              }
+            }
+          }
+        },
+        {
+          "style": "Bold",
+          "strings": 300,
+          "meanAbs": 0,
+          "mean": 0,
+          "maxAbs": 0,
+          "meetsMetricBar": true,
+          "reference": {
+            "file": "32483553004.ttf",
+            "version": "Version 2.01;O365",
+            "sha256": "cf4b35ac6d81e0eb42ffa44c3829b710c058de6fa3cf2c7cdad0407e22538877"
+          },
+          "candidateFile": {
+            "name": "Intos-Bold.ttf",
+            "sha256": "8afd148fff67d6426d0d6906d4c6232886aedc81a7832544806e6c93c44340ab"
+          },
+          "referenceVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "typo": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "win": [
+              1.0098,
+              0.2749
+            ],
+            "xHeight": 0.4766,
+            "capHeight": 0.6572,
+            "useTypoMetrics": true
+          },
+          "candidateVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "typo": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "win": [
+              1.0098,
+              0.2749
+            ],
+            "xHeight": 0.4766,
+            "capHeight": 0.6572,
+            "useTypoMetrics": true
+          },
+          "verticalMetricsEqual": true
+        },
+        {
+          "style": "Italic",
+          "strings": 300,
+          "meanAbs": 0,
+          "mean": 0,
+          "maxAbs": 0,
+          "meetsMetricBar": true,
+          "reference": {
+            "file": "26395700251.ttf",
+            "version": "Version 2.01;O365",
+            "sha256": "888909eceb9acd84157078cc097c11f8a94a34ff3bd3fe08194ce7866f5998d1"
+          },
+          "candidateFile": {
+            "name": "Intos-Italic.ttf",
+            "sha256": "8ca602e312af876190610b0416fdfc67f58ee38bcf9e01ce2f0fcc1094d8fbe4"
+          },
+          "referenceVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "typo": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "win": [
+              1.0098,
+              0.2749
+            ],
+            "xHeight": 0.4756,
+            "capHeight": 0.6572,
+            "useTypoMetrics": true
+          },
+          "candidateVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "typo": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "win": [
+              1.0098,
+              0.2749
+            ],
+            "xHeight": 0.4756,
+            "capHeight": 0.6572,
+            "useTypoMetrics": true
+          },
+          "verticalMetricsEqual": true
+        },
+        {
+          "style": "BoldItalic",
+          "strings": 300,
+          "meanAbs": 0,
+          "mean": 0,
+          "maxAbs": 0,
+          "meetsMetricBar": true,
+          "reference": {
+            "file": "26205970649.ttf",
+            "version": "Version 2.01;O365",
+            "sha256": "7d7ba35b867c5873274466c743a9812c7bca1a0828f137f7697ae311664f41b9"
+          },
+          "candidateFile": {
+            "name": "Intos-BoldItalic.ttf",
+            "sha256": "dec13afb35718df39f5a422d7ecb2f69bd719c9ae3196508c17021a428578a11"
+          },
+          "referenceVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "typo": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "win": [
+              1.0098,
+              0.2749
+            ],
+            "xHeight": 0.4766,
+            "capHeight": 0.6572,
+            "useTypoMetrics": true
+          },
+          "candidateVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "typo": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "win": [
+              1.0098,
+              0.2749
+            ],
+            "xHeight": 0.4766,
+            "capHeight": 0.6572,
+            "useTypoMetrics": true
+          },
+          "verticalMetricsEqual": true
+        }
+      ]
+    },
+    {
+      "reference": "Aptos Display",
+      "candidate": "Intos Display",
+      "styles": [
+        {
+          "style": "Regular",
+          "strings": 300,
+          "meanAbs": 0,
+          "mean": 0,
+          "maxAbs": 0,
+          "meetsMetricBar": true,
+          "reference": {
+            "file": "30169865670.ttf",
+            "version": "Version 2.01;O365",
+            "sha256": "af7a83e6f1d18b62535a8ee97939ab8653d5ac1fe1861cdb8fce829d3878d901"
+          },
+          "candidateFile": {
+            "name": "IntosDisplay-Regular.ttf",
+            "sha256": "b652fdab5e8939540f084529a507ddd158629985b8eee1b553ef05c46d131877"
+          },
+          "referenceVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "typo": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "win": [
+              1.0098,
+              0.2749
+            ],
+            "xHeight": 0.4756,
+            "capHeight": 0.6572,
+            "useTypoMetrics": true
+          },
+          "candidateVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "typo": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "win": [
+              1.0098,
+              0.2749
+            ],
+            "xHeight": 0.4756,
+            "capHeight": 0.6572,
+            "useTypoMetrics": true
+          },
+          "verticalMetricsEqual": true,
+          "outlines": {
+            "referenceCodepoints": 1087,
+            "candidateCodepoints": 2866,
+            "sharedNonemptyGlyphs": 975,
+            "identicalOutlines": 0,
+            "identicalBeyondPlainRectangles": 0,
+            "glyphBoxDeviationEm": {
+              "median": 0.0117,
+              "p90": 0.0513
+            },
+            "glyphBoxYRange": {
+              "x": {
+                "reference": [
+                  0,
+                  0.476
+                ],
+                "candidate": [
+                  0,
+                  0.476
+                ]
+              },
+              "H": {
+                "reference": [
+                  0,
+                  0.657
+                ],
+                "candidate": [
+                  0,
+                  0.657
+                ]
+              },
+              "o": {
+                "reference": [
+                  -0.008,
+                  0.484
+                ],
+                "candidate": [
+                  -0.01,
+                  0.482
+                ]
+              },
+              "p": {
+                "reference": [
+                  -0.176,
+                  0.484
+                ],
+                "candidate": [
+                  -0.175,
+                  0.482
+                ]
+              }
+            }
+          }
+        },
+        {
+          "style": "Bold",
+          "strings": 300,
+          "meanAbs": 0,
+          "mean": 0,
+          "maxAbs": 0,
+          "meetsMetricBar": true,
+          "reference": {
+            "file": "32677218994.ttf",
+            "version": "Version 2.01;O365",
+            "sha256": "e66a3774f5c9f2799f1a7f4734f5d1ad942cc9aeb173eb2c94bc09a5f1bf1142"
+          },
+          "candidateFile": {
+            "name": "IntosDisplay-Bold.ttf",
+            "sha256": "5055714a7215331b7786b10538138baa4dc969a8afe018bbf459f8b5395026d8"
+          },
+          "referenceVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "typo": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "win": [
+              1.0098,
+              0.2749
+            ],
+            "xHeight": 0.4766,
+            "capHeight": 0.6572,
+            "useTypoMetrics": true
+          },
+          "candidateVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "typo": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "win": [
+              1.0098,
+              0.2749
+            ],
+            "xHeight": 0.4766,
+            "capHeight": 0.6572,
+            "useTypoMetrics": true
+          },
+          "verticalMetricsEqual": true
+        },
+        {
+          "style": "Italic",
+          "strings": 300,
+          "meanAbs": 0,
+          "mean": 0,
+          "maxAbs": 0,
+          "meetsMetricBar": true,
+          "reference": {
+            "file": "31638818185.ttf",
+            "version": "Version 2.01;O365",
+            "sha256": "a47bafebfe957f26bd59cfd2d063950c547cb505ce0c8e0951f496dc5eaae432"
+          },
+          "candidateFile": {
+            "name": "IntosDisplay-Italic.ttf",
+            "sha256": "2741bd21a8904acf3ce28aff7a896c0c87777e3d459e1e10ffe085057471bc28"
+          },
+          "referenceVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "typo": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "win": [
+              1.0098,
+              0.2749
+            ],
+            "xHeight": 0.4756,
+            "capHeight": 0.6572,
+            "useTypoMetrics": true
+          },
+          "candidateVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "typo": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "win": [
+              1.0098,
+              0.2749
+            ],
+            "xHeight": 0.4756,
+            "capHeight": 0.6572,
+            "useTypoMetrics": true
+          },
+          "verticalMetricsEqual": true
+        },
+        {
+          "style": "BoldItalic",
+          "strings": 300,
+          "meanAbs": 0,
+          "mean": 0,
+          "maxAbs": 0,
+          "meetsMetricBar": true,
+          "reference": {
+            "file": "25576969643.ttf",
+            "version": "Version 2.01;O365",
+            "sha256": "67efa2915e860d32365f01fae22400a0ab5a36d7942dd2024dd210910894f0f2"
+          },
+          "candidateFile": {
+            "name": "IntosDisplay-BoldItalic.ttf",
+            "sha256": "1d9e18845be66b00793b8142581898b70ca72425f4d9f498fe4c35f88c39014d"
+          },
+          "referenceVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "typo": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "win": [
+              1.0098,
+              0.2749
+            ],
+            "xHeight": 0.4766,
+            "capHeight": 0.6572,
+            "useTypoMetrics": true
+          },
+          "candidateVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "typo": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "win": [
+              1.0098,
+              0.2749
+            ],
+            "xHeight": 0.4766,
+            "capHeight": 0.6572,
+            "useTypoMetrics": true
+          },
+          "verticalMetricsEqual": true
+        }
+      ]
+    },
+    {
+      "reference": "Aptos Narrow",
+      "candidate": "Intos Narrow",
+      "styles": [
+        {
+          "style": "Regular",
+          "strings": 300,
+          "meanAbs": 0,
+          "mean": 0,
+          "maxAbs": 0,
+          "meetsMetricBar": true,
+          "reference": {
+            "file": "27970306811.ttf",
+            "version": "Version 2.01;O365",
+            "sha256": "ded7515aa064578485a09c11a798a05d0303bdacdd7f2de92d0521f3bc7793ba"
+          },
+          "candidateFile": {
+            "name": "IntosNarrow-Regular.ttf",
+            "sha256": "ea91acdb933f2f1919df688f154140b851191adf4ecb77f7d931724198ea23c1"
+          },
+          "referenceVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "typo": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "win": [
+              1.0098,
+              0.2749
+            ],
+            "xHeight": 0.4961,
+            "capHeight": 0.6572,
+            "useTypoMetrics": true
+          },
+          "candidateVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "typo": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "win": [
+              1.0098,
+              0.2749
+            ],
+            "xHeight": 0.4961,
+            "capHeight": 0.6572,
+            "useTypoMetrics": true
+          },
+          "verticalMetricsEqual": true,
+          "outlines": {
+            "referenceCodepoints": 1087,
+            "candidateCodepoints": 2866,
+            "sharedNonemptyGlyphs": 975,
+            "identicalOutlines": 0,
+            "identicalBeyondPlainRectangles": 0,
+            "glyphBoxDeviationEm": {
+              "median": 0.0103,
+              "p90": 0.0513
+            },
+            "glyphBoxYRange": {
+              "x": {
+                "reference": [
+                  0,
+                  0.496
+                ],
+                "candidate": [
+                  0,
+                  0.496
+                ]
+              },
+              "H": {
+                "reference": [
+                  0,
+                  0.657
+                ],
+                "candidate": [
+                  0,
+                  0.657
+                ]
+              },
+              "o": {
+                "reference": [
+                  -0.007,
+                  0.504
+                ],
+                "candidate": [
+                  -0.009,
+                  0.501
+                ]
+              },
+              "p": {
+                "reference": [
+                  -0.175,
+                  0.504
+                ],
+                "candidate": [
+                  -0.175,
+                  0.502
+                ]
+              }
+            }
+          }
+        },
+        {
+          "style": "Bold",
+          "strings": 300,
+          "meanAbs": 0,
+          "mean": 0,
+          "maxAbs": 0,
+          "meetsMetricBar": true,
+          "reference": {
+            "file": "25065980124.ttf",
+            "version": "Version 2.01;O365",
+            "sha256": "217defe9a60387f83f2544d36815c7e86a9abf3fbff5aa0388f04ff3bd1a3fca"
+          },
+          "candidateFile": {
+            "name": "IntosNarrow-Bold.ttf",
+            "sha256": "59fd6e53b61ae483809ce1d8fc396357ec33d7beedef2e81f87da11551a99e51"
+          },
+          "referenceVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "typo": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "win": [
+              1.0098,
+              0.2749
+            ],
+            "xHeight": 0.501,
+            "capHeight": 0.6572,
+            "useTypoMetrics": true
+          },
+          "candidateVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "typo": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "win": [
+              1.0098,
+              0.2749
+            ],
+            "xHeight": 0.501,
+            "capHeight": 0.6572,
+            "useTypoMetrics": true
+          },
+          "verticalMetricsEqual": true
+        },
+        {
+          "style": "Italic",
+          "strings": 300,
+          "meanAbs": 0,
+          "mean": 0,
+          "maxAbs": 0,
+          "meetsMetricBar": true,
+          "reference": {
+            "file": "28903934312.ttf",
+            "version": "Version 2.01;O365",
+            "sha256": "20f9138ae3e5204e76e966577ed1d66e60dc66e6e39f59aafcef4579111c9c1f"
+          },
+          "candidateFile": {
+            "name": "IntosNarrow-Italic.ttf",
+            "sha256": "f2b4745a51b0c0c13d9768caf14017014c299e11a19031f83c1d8c77f4e23c6b"
+          },
+          "referenceVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "typo": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "win": [
+              1.0098,
+              0.2749
+            ],
+            "xHeight": 0.4961,
+            "capHeight": 0.6572,
+            "useTypoMetrics": true
+          },
+          "candidateVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "typo": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "win": [
+              1.0098,
+              0.2749
+            ],
+            "xHeight": 0.4961,
+            "capHeight": 0.6572,
+            "useTypoMetrics": true
+          },
+          "verticalMetricsEqual": true
+        },
+        {
+          "style": "BoldItalic",
+          "strings": 300,
+          "meanAbs": 0,
+          "mean": 0,
+          "maxAbs": 0,
+          "meetsMetricBar": true,
+          "reference": {
+            "file": "29867269125.ttf",
+            "version": "Version 2.01;O365",
+            "sha256": "4fedf90c05d024730d52a49093ca455efcd26b7ad3465c13c10970609bc06fd9"
+          },
+          "candidateFile": {
+            "name": "IntosNarrow-BoldItalic.ttf",
+            "sha256": "6e1cb55b955539301ffc51b1a602a3fb9c8411b9082383fd29f555492eb9d079"
+          },
+          "referenceVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "typo": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "win": [
+              1.0098,
+              0.2749
+            ],
+            "xHeight": 0.501,
+            "capHeight": 0.6572,
+            "useTypoMetrics": true
+          },
+          "candidateVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "typo": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "win": [
+              1.0098,
+              0.2749
+            ],
+            "xHeight": 0.501,
+            "capHeight": 0.6572,
+            "useTypoMetrics": true
+          },
+          "verticalMetricsEqual": true
+        }
+      ]
+    },
+    {
+      "reference": "Aptos Serif",
+      "candidate": "Intos Serif",
+      "styles": [
+        {
+          "style": "Regular",
+          "strings": 300,
+          "meanAbs": 0,
+          "mean": 0,
+          "maxAbs": 0,
+          "meetsMetricBar": true,
+          "reference": {
+            "file": "Aptos-Serif.ttf",
+            "version": "Version 2.01;240513210638;O365",
+            "sha256": "387b6b619117c1ad1449c8cb802a16b17eb92c41f3550f6f7574ed6e9fc7d3e5"
+          },
+          "candidateFile": {
+            "name": "IntosSerif-Regular.ttf",
+            "sha256": "56351ac7a9d0b66a5d9a0b6c656cefa6fa5cf9fb5e3ee7e44bd1e4e327828d35"
+          },
+          "referenceVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "typo": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "win": [
+              1.0098,
+              0.2749
+            ],
+            "xHeight": 0.4678,
+            "capHeight": 0.6572,
+            "useTypoMetrics": true
+          },
+          "candidateVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "typo": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "win": [
+              1.0098,
+              0.2749
+            ],
+            "xHeight": 0.4678,
+            "capHeight": 0.6572,
+            "useTypoMetrics": true
+          },
+          "verticalMetricsEqual": true,
+          "outlines": {
+            "referenceCodepoints": 1079,
+            "candidateCodepoints": 1136,
+            "sharedNonemptyGlyphs": 779,
+            "identicalOutlines": 8,
+            "identicalBeyondPlainRectangles": 0,
+            "glyphBoxDeviationEm": {
+              "median": 0.0166,
+              "p90": 0.0679
+            },
+            "glyphBoxYRange": {
+              "x": {
+                "reference": [
+                  0,
+                  0.468
+                ],
+                "candidate": [
+                  0,
+                  0.468
+                ]
+              },
+              "H": {
+                "reference": [
+                  0,
+                  0.657
+                ],
+                "candidate": [
+                  0,
+                  0.657
+                ]
+              },
+              "o": {
+                "reference": [
+                  -0.008,
+                  0.478
+                ],
+                "candidate": [
+                  -0.011,
+                  0.479
+                ]
+              },
+              "p": {
+                "reference": [
+                  -0.175,
+                  0.476
+                ],
+                "candidate": [
+                  -0.175,
+                  0.479
+                ]
+              }
+            }
+          }
+        },
+        {
+          "style": "Bold",
+          "strings": 300,
+          "meanAbs": 0,
+          "mean": 0,
+          "maxAbs": 0,
+          "meetsMetricBar": true,
+          "reference": {
+            "file": "Aptos-Serif-Bold.ttf",
+            "version": "Version 2.01;240513210638;O365",
+            "sha256": "c52b80075eb3c429640192f11c4ee780ea33b62f8af3c400671b6155d6f44954"
+          },
+          "candidateFile": {
+            "name": "IntosSerif-Bold.ttf",
+            "sha256": "ad994397ce37c29f8881e9fe6e7fcdc743b643465a96ab4d1e2a02d95784a79f"
+          },
+          "referenceVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "typo": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "win": [
+              1.0098,
+              0.2749
+            ],
+            "xHeight": 0.4702,
+            "capHeight": 0.6572,
+            "useTypoMetrics": true
+          },
+          "candidateVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "typo": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "win": [
+              1.0098,
+              0.2749
+            ],
+            "xHeight": 0.4702,
+            "capHeight": 0.6572,
+            "useTypoMetrics": true
+          },
+          "verticalMetricsEqual": true
+        },
+        {
+          "style": "Italic",
+          "strings": 300,
+          "meanAbs": 0,
+          "mean": 0,
+          "maxAbs": 0,
+          "meetsMetricBar": true,
+          "reference": {
+            "file": "Aptos-Serif-Italic.ttf",
+            "version": "Version 2.01;240513210638;O365",
+            "sha256": "bcb5de1b7f43f7d67ee6975b33d092d3472f32ff156da147dc6e8c601c3e3d3b"
+          },
+          "candidateFile": {
+            "name": "IntosSerif-Italic.ttf",
+            "sha256": "eed3fa7449ce0fc31fe51569ce056ce483e25ce8f6e2fdda16d6cd36ff231327"
+          },
+          "referenceVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "typo": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "win": [
+              1.0098,
+              0.2749
+            ],
+            "xHeight": 0.4678,
+            "capHeight": 0.6572,
+            "useTypoMetrics": true
+          },
+          "candidateVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "typo": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "win": [
+              1.0098,
+              0.2749
+            ],
+            "xHeight": 0.4678,
+            "capHeight": 0.6572,
+            "useTypoMetrics": true
+          },
+          "verticalMetricsEqual": true
+        },
+        {
+          "style": "BoldItalic",
+          "strings": 300,
+          "meanAbs": 0,
+          "mean": 0,
+          "maxAbs": 0,
+          "meetsMetricBar": true,
+          "reference": {
+            "file": "Aptos-Serif-Bold-Italic.ttf",
+            "version": "Version 2.01;240513210638;O365",
+            "sha256": "dc961989dcfdbf6cf8940b0912aaf6bdc1acb42483db6a537e569aa2a9d1db59"
+          },
+          "candidateFile": {
+            "name": "IntosSerif-BoldItalic.ttf",
+            "sha256": "f99eb0845ab26e305ffe58f3baa9c920d676d2204a222d925d4fa001573f53f2"
+          },
+          "referenceVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "typo": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "win": [
+              1.0098,
+              0.2749
+            ],
+            "xHeight": 0.4702,
+            "capHeight": 0.6572,
+            "useTypoMetrics": true
+          },
+          "candidateVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "typo": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "win": [
+              1.0098,
+              0.2749
+            ],
+            "xHeight": 0.4702,
+            "capHeight": 0.6572,
+            "useTypoMetrics": true
+          },
+          "verticalMetricsEqual": true
+        }
+      ]
+    },
+    {
+      "reference": "Aptos SemiBold",
+      "candidate": "Intos Semibold",
+      "note": "Not bundled: OPF maps Aptos at 400 and 700.",
+      "styles": [
+        {
+          "style": "Regular",
+          "strings": 300,
+          "meanAbs": 0,
+          "mean": 0,
+          "maxAbs": 0.0012,
+          "meetsMetricBar": true,
+          "reference": {
+            "file": "Aptos-SemiBold.ttf",
+            "version": "Version 2.01;240513210638;O365",
+            "sha256": "3bd631a7ecb762df8aa7bca31b147db54d441babc83d91b96ba4a69d438880d9"
+          },
+          "candidateFile": {
+            "name": "Intos-Semibold.ttf",
+            "sha256": "d39f69f11395ea416509fc8ea0804d8328ce95defabf267bca6254a99e407f16"
+          },
+          "referenceVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "typo": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "win": [
+              1.0098,
+              0.2749
+            ],
+            "xHeight": 0.4761,
+            "capHeight": 0.6572,
+            "useTypoMetrics": true
+          },
+          "candidateVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "typo": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "win": [
+              1.0098,
+              0.2749
+            ],
+            "xHeight": 0.4761,
+            "capHeight": 0.6572,
+            "useTypoMetrics": true
+          },
+          "verticalMetricsEqual": true,
+          "outlines": {
+            "referenceCodepoints": 1087,
+            "candidateCodepoints": 2866,
+            "sharedNonemptyGlyphs": 975,
+            "identicalOutlines": 0,
+            "identicalBeyondPlainRectangles": 0,
+            "glyphBoxDeviationEm": {
+              "median": 0.0156,
+              "p90": 0.0483
+            },
+            "glyphBoxYRange": {
+              "x": {
+                "reference": [
+                  0,
+                  0.476
+                ],
+                "candidate": [
+                  0,
+                  0.476
+                ]
+              },
+              "H": {
+                "reference": [
+                  0,
+                  0.657
+                ],
+                "candidate": [
+                  0,
+                  0.657
+                ]
+              },
+              "o": {
+                "reference": [
+                  -0.008,
+                  0.485
+                ],
+                "candidate": [
+                  -0.009,
+                  0.482
+                ]
+              },
+              "p": {
+                "reference": [
+                  -0.175,
+                  0.484
+                ],
+                "candidate": [
+                  -0.175,
+                  0.482
+                ]
+              }
+            }
+          }
+        },
+        {
+          "style": "Italic",
+          "strings": 300,
+          "meanAbs": 0,
+          "mean": 0,
+          "maxAbs": 0.0013,
+          "meetsMetricBar": true,
+          "reference": {
+            "file": "Aptos-SemiBold-Italic.ttf",
+            "version": "Version 2.01;240513210638;O365",
+            "sha256": "054d97515b85fc0c8e4ff8af37c04ef238c48a2c3956e40425f57dec4903191d"
+          },
+          "candidateFile": {
+            "name": "Intos-SemiboldItalic.ttf",
+            "sha256": "82825e86a4da6ad119b10b11668f2016bd8d5a2b4159d49b9f518b71ac3fd557"
+          },
+          "referenceVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "typo": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "win": [
+              1.0098,
+              0.2749
+            ],
+            "xHeight": 0.4761,
+            "capHeight": 0.6572,
+            "useTypoMetrics": true
+          },
+          "candidateVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "typo": [
+              0.939,
+              -0.2817,
+              0
+            ],
+            "win": [
+              1.0098,
+              0.2749
+            ],
+            "xHeight": 0.4761,
+            "capHeight": 0.6572,
+            "useTypoMetrics": true
+          },
+          "verticalMetricsEqual": true
+        }
+      ]
+    },
+    {
+      "reference": "Segoe UI",
+      "candidate": "Selawik",
+      "note": "Selawik has no italic faces; the upright faces stand in.",
+      "styles": [
+        {
+          "style": "Regular",
+          "strings": 300,
+          "meanAbs": 0.0016,
+          "mean": 0.0016,
+          "maxAbs": 0.0251,
+          "meetsMetricBar": false,
+          "reference": {
+            "file": "segoeui.ttf",
+            "version": "Version 5.71",
+            "sha256": "8134dbcd09e7b123c9a7f229d49cffbcb01352cc72ea5e1076b65d0dca9f73cd"
+          },
+          "candidateFile": {
+            "name": "selawk.ttf",
+            "sha256": "e9d98518d8ac2817782a9a382430463a2e0793ea68350b695bb727d9a830ee1c"
+          },
+          "referenceVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              1.0791,
+              -0.251,
+              0
+            ],
+            "typo": [
+              0.728,
+              -0.2104,
+              0.1313
+            ],
+            "win": [
+              1.0791,
+              0.251
+            ],
+            "xHeight": 0.5,
+            "capHeight": 0.7002,
+            "useTypoMetrics": false
+          },
+          "candidateVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              0.9897,
+              -0.2104,
+              0
+            ],
+            "typo": [
+              0.728,
+              -0.2104,
+              0.1313
+            ],
+            "win": [
+              1.0791,
+              0.251
+            ],
+            "xHeight": 0.5,
+            "capHeight": 0.7002,
+            "useTypoMetrics": false
+          },
+          "verticalMetricsEqual": false,
+          "outlines": {
+            "referenceCodepoints": 3997,
+            "candidateCodepoints": 349,
+            "sharedNonemptyGlyphs": 346,
+            "identicalOutlines": 0,
+            "identicalBeyondPlainRectangles": 0,
+            "glyphBoxDeviationEm": {
+              "median": 0.0215,
+              "p90": 0.0684
+            },
+            "glyphBoxYRange": {
+              "x": {
+                "reference": [
+                  0,
+                  0.5
+                ],
+                "candidate": [
+                  0,
+                  0.476
+                ]
+              },
+              "H": {
+                "reference": [
+                  0,
+                  0.7
+                ],
+                "candidate": [
+                  0,
+                  0.7
+                ]
+              },
+              "o": {
+                "reference": [
+                  -0.012,
+                  0.512
+                ],
+                "candidate": [
+                  -0.012,
+                  0.487
+                ]
+              },
+              "p": {
+                "reference": [
+                  -0.23,
+                  0.512
+                ],
+                "candidate": [
+                  -0.229,
+                  0.488
+                ]
+              }
+            }
+          }
+        },
+        {
+          "style": "Bold",
+          "strings": 300,
+          "meanAbs": 0.002,
+          "mean": 0.0016,
+          "maxAbs": 0.021,
+          "meetsMetricBar": false,
+          "reference": {
+            "file": "segoeuib.ttf",
+            "version": "Version 5.71",
+            "sha256": "aeb9e4a6ec5cc59f4d72df8189032d7dbb28f45161cf1552174818b5465dac4e"
+          },
+          "candidateFile": {
+            "name": "selawkb.ttf",
+            "sha256": "f0db5e174a90e0956ad7d2844bdca1d5e6da92ec65b2c04e57ba9b180668c904"
+          },
+          "referenceVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              1.0791,
+              -0.251,
+              0
+            ],
+            "typo": [
+              0.728,
+              -0.2104,
+              0.1313
+            ],
+            "win": [
+              1.0791,
+              0.251
+            ],
+            "xHeight": 0.5,
+            "capHeight": 0.7002,
+            "useTypoMetrics": false
+          },
+          "candidateVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              0.9897,
+              -0.2104,
+              0
+            ],
+            "typo": [
+              0.728,
+              -0.2104,
+              0.1313
+            ],
+            "win": [
+              1.0791,
+              0.251
+            ],
+            "xHeight": 0.5,
+            "capHeight": 0.7002,
+            "useTypoMetrics": false
+          },
+          "verticalMetricsEqual": false
+        },
+        {
+          "style": "Italic",
+          "strings": 300,
+          "meanAbs": 0.0265,
+          "mean": 0.0264,
+          "maxAbs": 0.0516,
+          "meetsMetricBar": false,
+          "reference": {
+            "file": "segoeuii.ttf",
+            "version": "Version 5.71",
+            "sha256": "be525b9a6d307d73c23908cd269be9be754210a9d93c0c1eaaa126d2a174290a"
+          },
+          "candidateFile": {
+            "name": "selawk.ttf",
+            "sha256": "e9d98518d8ac2817782a9a382430463a2e0793ea68350b695bb727d9a830ee1c"
+          },
+          "referenceVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              1.0791,
+              -0.251,
+              0
+            ],
+            "typo": [
+              0.728,
+              -0.2104,
+              0.1313
+            ],
+            "win": [
+              1.0791,
+              0.251
+            ],
+            "xHeight": 0.5,
+            "capHeight": 0.7002,
+            "useTypoMetrics": false
+          },
+          "candidateVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              0.9897,
+              -0.2104,
+              0
+            ],
+            "typo": [
+              0.728,
+              -0.2104,
+              0.1313
+            ],
+            "win": [
+              1.0791,
+              0.251
+            ],
+            "xHeight": 0.5,
+            "capHeight": 0.7002,
+            "useTypoMetrics": false
+          },
+          "verticalMetricsEqual": false
+        },
+        {
+          "style": "BoldItalic",
+          "strings": 300,
+          "meanAbs": 0.0109,
+          "mean": 0.0089,
+          "maxAbs": 0.0438,
+          "meetsMetricBar": false,
+          "reference": {
+            "file": "segoeuiz.ttf",
+            "version": "Version 5.71",
+            "sha256": "c886161fa6d102090ff992519b6fdc73057a0e838e9d40b27e187e9e61300a92"
+          },
+          "candidateFile": {
+            "name": "selawkb.ttf",
+            "sha256": "f0db5e174a90e0956ad7d2844bdca1d5e6da92ec65b2c04e57ba9b180668c904"
+          },
+          "referenceVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              1.0791,
+              -0.251,
+              0
+            ],
+            "typo": [
+              0.728,
+              -0.2104,
+              0.1313
+            ],
+            "win": [
+              1.0791,
+              0.251
+            ],
+            "xHeight": 0.5,
+            "capHeight": 0.7002,
+            "useTypoMetrics": false
+          },
+          "candidateVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              0.9897,
+              -0.2104,
+              0
+            ],
+            "typo": [
+              0.728,
+              -0.2104,
+              0.1313
+            ],
+            "win": [
+              1.0791,
+              0.251
+            ],
+            "xHeight": 0.5,
+            "capHeight": 0.7002,
+            "useTypoMetrics": false
+          },
+          "verticalMetricsEqual": false
+        }
+      ]
+    },
+    {
+      "reference": "Segoe UI Light",
+      "candidate": "Selawik Light",
+      "styles": [
+        {
+          "style": "Regular",
+          "strings": 300,
+          "meanAbs": 0.0031,
+          "mean": 0.0021,
+          "maxAbs": 0.0438,
+          "meetsMetricBar": false,
+          "reference": {
+            "file": "segoeuil.ttf",
+            "version": "Version 5.71",
+            "sha256": "866557576dfc772395301b581eccef4c0daf1dbb75f9667f26784b260bce7da1"
+          },
+          "candidateFile": {
+            "name": "selawkl.ttf",
+            "sha256": "8e19d073091a1e869b5b0d48b925e605c0a4c6ece7df7b22a364fb065314c4c5"
+          },
+          "referenceVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              1.0791,
+              -0.251,
+              0
+            ],
+            "typo": [
+              0.728,
+              -0.2104,
+              0.1313
+            ],
+            "win": [
+              1.0791,
+              0.251
+            ],
+            "xHeight": 0.5,
+            "capHeight": 0.7002,
+            "useTypoMetrics": false
+          },
+          "candidateVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              0.9897,
+              -0.2104,
+              0
+            ],
+            "typo": [
+              0.728,
+              -0.2104,
+              0.1313
+            ],
+            "win": [
+              1.0791,
+              0.251
+            ],
+            "xHeight": 0.5,
+            "capHeight": 0.7002,
+            "useTypoMetrics": false
+          },
+          "verticalMetricsEqual": false,
+          "outlines": {
+            "referenceCodepoints": 3996,
+            "candidateCodepoints": 349,
+            "sharedNonemptyGlyphs": 346,
+            "identicalOutlines": 0,
+            "identicalBeyondPlainRectangles": 0,
+            "glyphBoxDeviationEm": {
+              "median": 0.0195,
+              "p90": 0.0586
+            },
+            "glyphBoxYRange": {
+              "x": {
+                "reference": [
+                  0,
+                  0.5
+                ],
+                "candidate": [
+                  0,
+                  0.476
+                ]
+              },
+              "H": {
+                "reference": [
+                  0,
+                  0.7
+                ],
+                "candidate": [
+                  0,
+                  0.7
+                ]
+              },
+              "o": {
+                "reference": [
+                  -0.012,
+                  0.512
+                ],
+                "candidate": [
+                  -0.012,
+                  0.487
+                ]
+              },
+              "p": {
+                "reference": [
+                  -0.23,
+                  0.512
+                ],
+                "candidate": [
+                  -0.229,
+                  0.488
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "reference": "Segoe UI Semilight",
+      "candidate": "Selawik Semilight",
+      "styles": [
+        {
+          "style": "Regular",
+          "strings": 300,
+          "meanAbs": 0.0034,
+          "mean": 0.0032,
+          "maxAbs": 0.0276,
+          "meetsMetricBar": false,
+          "reference": {
+            "file": "segoeuisl.ttf",
+            "version": "Version 5.71",
+            "sha256": "3432de66f335c7e3058154f7cbb13ef051195653a544b49b1992267e558b33ef"
+          },
+          "candidateFile": {
+            "name": "selawksl.ttf",
+            "sha256": "8620960344f12093482cded984a1aafa5a57d24cbf7e9299da125ccf0e9d4102"
+          },
+          "referenceVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              1.0791,
+              -0.251,
+              0
+            ],
+            "typo": [
+              0.728,
+              -0.2104,
+              0.1313
+            ],
+            "win": [
+              1.0791,
+              0.251
+            ],
+            "xHeight": 0.5,
+            "capHeight": 0.7002,
+            "useTypoMetrics": false
+          },
+          "candidateVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              0.9897,
+              -0.2104,
+              0
+            ],
+            "typo": [
+              0.728,
+              -0.2104,
+              0.1313
+            ],
+            "win": [
+              1.0791,
+              0.251
+            ],
+            "xHeight": 0.5,
+            "capHeight": 0.7002,
+            "useTypoMetrics": false
+          },
+          "verticalMetricsEqual": false,
+          "outlines": {
+            "referenceCodepoints": 3995,
+            "candidateCodepoints": 349,
+            "sharedNonemptyGlyphs": 346,
+            "identicalOutlines": 0,
+            "identicalBeyondPlainRectangles": 0,
+            "glyphBoxDeviationEm": {
+              "median": 0.0225,
+              "p90": 0.0635
+            },
+            "glyphBoxYRange": {
+              "x": {
+                "reference": [
+                  0,
+                  0.5
+                ],
+                "candidate": [
+                  0,
+                  0.476
+                ]
+              },
+              "H": {
+                "reference": [
+                  0,
+                  0.7
+                ],
+                "candidate": [
+                  0,
+                  0.7
+                ]
+              },
+              "o": {
+                "reference": [
+                  -0.012,
+                  0.512
+                ],
+                "candidate": [
+                  -0.012,
+                  0.487
+                ]
+              },
+              "p": {
+                "reference": [
+                  -0.23,
+                  0.512
+                ],
+                "candidate": [
+                  -0.229,
+                  0.488
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "reference": "Segoe UI Semibold",
+      "candidate": "Selawik Semibold",
+      "styles": [
+        {
+          "style": "Regular",
+          "strings": 300,
+          "meanAbs": 0.0175,
+          "mean": 0.0175,
+          "maxAbs": 0.0441,
+          "meetsMetricBar": false,
+          "reference": {
+            "file": "seguisb.ttf",
+            "version": "Version 5.71",
+            "sha256": "2d9b22d71f72de2823fee5d9c8bc1b0fc32b2577c4c27b9ec6abdbb8df0e1731"
+          },
+          "candidateFile": {
+            "name": "selawksb.ttf",
+            "sha256": "0a9e9d0549a10f24bef9b3a29e06fe6e0b5c21e7a784c503b048a307841a7783"
+          },
+          "referenceVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              1.0791,
+              -0.251,
+              0
+            ],
+            "typo": [
+              0.728,
+              -0.2104,
+              0.1313
+            ],
+            "win": [
+              1.0791,
+              0.251
+            ],
+            "xHeight": 0.5,
+            "capHeight": 0.7002,
+            "useTypoMetrics": false
+          },
+          "candidateVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              0.9897,
+              -0.2104,
+              0
+            ],
+            "typo": [
+              0.728,
+              -0.2104,
+              0.1313
+            ],
+            "win": [
+              1.0791,
+              0.251
+            ],
+            "xHeight": 0.5,
+            "capHeight": 0.7002,
+            "useTypoMetrics": false
+          },
+          "verticalMetricsEqual": false,
+          "outlines": {
+            "referenceCodepoints": 3993,
+            "candidateCodepoints": 349,
+            "sharedNonemptyGlyphs": 346,
+            "identicalOutlines": 0,
+            "identicalBeyondPlainRectangles": 0,
+            "glyphBoxDeviationEm": {
+              "median": 0.0244,
+              "p90": 0.0801
+            },
+            "glyphBoxYRange": {
+              "x": {
+                "reference": [
+                  0,
+                  0.5
+                ],
+                "candidate": [
+                  0,
+                  0.476
+                ]
+              },
+              "H": {
+                "reference": [
+                  0,
+                  0.7
+                ],
+                "candidate": [
+                  0,
+                  0.7
+                ]
+              },
+              "o": {
+                "reference": [
+                  -0.012,
+                  0.512
+                ],
+                "candidate": [
+                  -0.012,
+                  0.487
+                ]
+              },
+              "p": {
+                "reference": [
+                  -0.23,
+                  0.512
+                ],
+                "candidate": [
+                  -0.229,
+                  0.488
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

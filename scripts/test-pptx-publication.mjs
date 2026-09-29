@@ -6,6 +6,7 @@ import {mkdtemp,mkdir,readFile,writeFile,realpath,symlink,rm} from 'node:fs/prom
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {packageManagerInvocation} from './package-manager.mjs';
+import {tar} from './archive-tar.mjs';
 const root=fileURLToPath(new URL('../',import.meta.url));
 assert.ok(!process.env.NODE_OPTIONS&&!process.execArgv.some(arg=>/^(--import|--loader|--experimental-loader|--require|-r)(=|$)/.test(arg)),'Registry verification must not use source loaders or module aliases');
 const [version,ref,checkout=path.resolve(root,'../opf-pptx')]=process.argv.slice(2).filter(value=>value!=='--native');
@@ -41,7 +42,7 @@ try{
  const archive=path.join(temporary,packed.filename);
  assert.equal(`sha512-${createHash('sha512').update(await readFile(archive)).digest('base64')}`,entry.integrity);
  const files={};
- for(const name of execute('tar',['-tzf',archive],temporary).trim().split(/\r?\n/)){
+ for(const name of tar(archive,'-tzf').trim().split(/\r?\n/)){
   assert.ok(name.startsWith('package/')&&!name.split('/').includes('..'));
   const file=name.slice('package/'.length);if(!file||file.endsWith('/'))continue;
   const bytes=await readFile(path.join(installed,file)),source=execute('git',['show',`${ref}:${file}`],checkout,null);
@@ -58,7 +59,7 @@ try{
  const signatures=npm(['audit','signatures']);process.stdout.write(signatures);
  const fixture=path.join(temporary,'verification');await mkdir(fixture);
  const testsArchive=path.join(temporary,'tests.tar');git(['archive',ref,'test','scripts','--output',testsArchive]);
- execute('tar',['-xf',testsArchive,'-C',fixture],temporary);
+ tar(testsArchive,'-xf',['-C',fixture]);
  await writeFile(path.join(fixture,'package-lock.json'),lockBytes);
  for(const part of ['dist','vendor']){
   await symlink(path.join(installed,part),path.join(fixture,part),process.platform==='win32'?'junction':'dir');

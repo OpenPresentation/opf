@@ -6,6 +6,7 @@ import {spawnSync, execFileSync} from 'node:child_process';
 import {tmpdir} from 'node:os';
 import {fileURLToPath} from 'node:url';
 import path from 'node:path';
+import {tar} from './archive-tar.mjs';
 import {packageManagerInvocation} from './package-manager.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
@@ -84,10 +85,10 @@ try {
     assert.equal(hash(bytes), item.sha256);
     assert.equal(locked.integrity, 'sha512-' + createHash('sha512').update(bytes).digest('base64'));
     // Same archive comparison mechanism as test-installed-code; only our verified local tarballs are extracted.
-    const entries = execFileSync('tar', ['-tzf', archive], {encoding: 'utf8', maxBuffer: 16 * 1024 * 1024}).trim().split(/\r?\n/);
+    const entries = tar(archive, '-tzf').trim().split(/\r?\n/);
     assert.ok(entries.every(file => file.startsWith('package/') && !file.split(/[\\/]/).includes('..')));
     const extracted = await mkdtemp(path.join(isolated, 'archive-'));
-    execFileSync('tar', ['-xzf', archive, '-C', extracted]);
+    tar(archive, '-xzf', ['-C', extracted]);
     const expectedRoot = path.join(extracted, 'package'), files = [];
     for (const file of entries.map(name => name.slice('package/'.length)).filter(name => name && !name.endsWith('/')).sort()) {
       const actual = await realpath(path.join(installed, file)), expected = await realpath(path.join(expectedRoot, file));

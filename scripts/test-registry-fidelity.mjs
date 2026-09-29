@@ -4,6 +4,7 @@ import {readFile,mkdir,writeFile,symlink,rm,realpath} from 'node:fs/promises';
 import {createRequire} from 'node:module';
 import {execFileSync} from 'node:child_process';
 import path from 'node:path';
+import {tar} from './archive-tar.mjs';
 const root=process.cwd();
 const plan=JSON.parse(await readFile(path.join(root,'release-plan.json'),'utf8'));
 const consumer=path.resolve(process.argv[2]??'artifacts/npm/registry-consumer');
@@ -39,7 +40,7 @@ for(const [repo,tests] of suites){
  const directory=path.join(consumer,'fidelity',repo);await mkdir(directory,{recursive:true});
  const archive=path.join(directory,'tests.tar');
  execFileSync('git',['archive',ref,'test','--output',archive],{cwd:path.resolve(root,'..',repo)});
- execFileSync('tar',['-xf',archive,'-C',directory]);
+ tar(archive,'-xf',['-C',directory]);
  const installed=path.dirname(require.resolve('@openpresentation/'+repo+'/package.json'));
  const shipped=JSON.parse(await readFile(path.join(installed,'package.json'),'utf8'));
  // Newer PPTX smoke fixtures reference the shipped, hash-verified vendor code.

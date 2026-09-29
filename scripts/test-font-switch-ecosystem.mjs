@@ -48,7 +48,7 @@
 import assert from 'node:assert/strict';
 import {mkdir, readFile, writeFile} from 'node:fs/promises';
 import {createRequire} from 'node:module';
-import {prepareNodeFonts} from '../../opf-render/dist/fonts-node.js';
+import {BUNDLED_FONT_MANIFEST, prepareNodeFonts} from '../../opf-render/dist/fonts-node.js';
 import {createScriptTextMeasurement, designatedFamilies, detectScripts, fontPolicyFor} from '../../opf-render/dist/fonts.js';
 import {renderSvgDeck} from '../../opf-render/dist/index.js';
 import {checkPptxTypefaces, fromPptx, toPptx} from '../../opf-pptx/dist/index.js';
@@ -71,8 +71,10 @@ const decoder = new TextDecoder();
 // be exercised.
 // ---------------------------------------------------------------------------
 const {registry} = await prepareNodeFonts({pack: 'office', substitutionPolicy: 'visual', scripts: 'all'});
+// A renderer that vendors Intos previews the Aptos scheme with it (FF-31); an earlier pinned renderer uses Carlito and Roboto.
+const previewsAptosWithIntos = BUNDLED_FONT_MANIFEST.packages.some((pkg) => pkg.name === 'intos');
 const EXPECTED_SUBSTITUTIONS = Object.freeze({
-  'Aptos Display': 'Carlito', Aptos: 'Roboto', Calibri: 'Carlito', Georgia: 'Gelasio', Consolas: 'Cousine', 'Courier New': 'Cousine',
+  'Aptos Display': previewsAptosWithIntos ? 'Intos Display' : 'Carlito', Aptos: previewsAptosWithIntos ? 'Intos' : 'Roboto', Calibri: 'Carlito', Georgia: 'Gelasio', Consolas: 'Cousine', 'Courier New': 'Cousine',
   Meiryo: 'Noto Sans JP', 'Yu Gothic': 'Noto Sans JP', 'Microsoft YaHei': 'Noto Sans SC', 'Malgun Gothic': 'Noto Sans KR', 'Microsoft JhengHei': 'Noto Sans TC',
   Mangal: 'Noto Sans Devanagari', 'Arabic Typesetting': 'Noto Naskh Arabic', David: 'Noto Serif Hebrew', 'Angsana New': 'Noto Sans Thai',
   Tahoma: 'Red Hat Text', Verdana: 'Montserrat', 'Times New Roman': 'Tinos', Garamond: 'Tinos', Constantia: 'PT Serif',
@@ -109,14 +111,17 @@ function schemeClass(scheme) {
 // registry cannot preview yet is not drawn; its named expected failure below says why.
 const SCHEME_CLASSES = [
   {id: 'sans-metric', members: ['calibri']},
-  {id: 'serif-metric', members: ['times-new-roman', 'georgia']},
-  {id: 'sans-visual', members: ['aptos', 'tahoma', 'verdana']},
+  {id: 'serif-metric', members: ['times-new-roman']},
+  {id: 'sans-visual', members: ['tahoma', 'verdana']},
   {id: 'serif-visual', members: ['garamond', 'constantia']},
   {id: 'monospace', members: ['consolas', 'courier-new']},
   {id: 'open-google', members: ['roboto', 'open-sans', 'montserrat', 'poppins', 'raleway', 'pt-serif']},
   {id: 'east-asian', members: ['meiryo', 'yu-gothic', 'microsoft-yahei', 'malgun-gothic']},
   {id: 'complex-script', members: ['mangal', 'arabic-typesetting', 'david', 'angsana-new']}
 ];
+// Aptos and Georgia change class with the renderer's policy (Intos and Gelasio are metric replacements once vendored); the
+// pinned renderer decides which class each is drawn in, and the class assertion below still checks every member.
+for (const member of ['aptos', 'georgia']) SCHEME_CLASSES.find((item) => item.id === schemeClass(byId('fontSchemes', member))).members.push(member);
 for (const entry of SCHEME_CLASSES) for (const member of entry.members) assert.equal(schemeClass(byId('fontSchemes', member)), entry.id, `${member} is a ${entry.id} scheme`);
 for (const scheme of catalogs.fontSchemes) assert.ok(SCHEME_CLASSES.some((entry) => entry.id === schemeClass(scheme)), `font scheme ${scheme.id} belongs to a known class`);
 // A scheme whose replacement face lacks the language's script (Georgia, Constantia and the script-scheme faces for

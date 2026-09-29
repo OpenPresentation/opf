@@ -1,6 +1,6 @@
 # Program: font fidelity everywhere
 
-Status: **active** (opened 2026-09-23). Tracker: [burndown.md](burndown.md).
+Status: **active** (opened 2026-09-23). Tracker: [burndown.md](burndown.md); per-font tracker: [font-tracker.md](font-tracker.md).
 This is the single source of truth for the cross-repository program. Agents and
 people resuming work start here, not from chat history or local scratch files.
 
@@ -129,8 +129,9 @@ linked, and specifically:
   - For previews, SVG, the editor and thumbnails, the replacement should look
     similar and be metric-compatible (same advance widths and line metrics), so
     text occupies the same size on screen and wraps identically to PowerPoint.
-    A metric-compatible look-alike is the goal (Calibri to Carlito).
-  - Where no metric-compatible open replacement exists yet (Aptos today), a
+    A metric-compatible look-alike is the goal (Calibri to Carlito, Aptos to
+    Intos).
+  - Where no metric-compatible open replacement exists yet, a
     visual-only look-alike is a documented fallback and a known layout-fidelity
     gap to close, not the intended end state.
   - PPTX export always writes the selected font name (for example
@@ -231,6 +232,9 @@ implement offline items and open PRs. A separate reviewer agent reviews each PR.
 
 ## Related
 
+- [Per-font fidelity tracker (FF-40)](font-tracker.md): one record per font family with route, bundled face, styles,
+  measurements, host and native status, parity signals, phase, status and next action, sorted by priority
+  (machine-readable: [font-tracker.json](font-tracker.json))
 - [Windows native handoff](../../handoff-windows-native-2026-09-21-wrap-up.md)
 - [Font fidelity](../../font-fidelity.md)
 - [pptx.gallery support by dimension](gallery-support.md) and its
