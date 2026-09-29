@@ -1,0 +1,19 @@
+ppt/theme/theme1.xml /a:theme[1]/a:themeElements[1]/a:fontScheme[1]/a:majorFont[1]/a:ea[1]/@typeface
+(before byte 870; after byte 870)
+- typeface=""
++ typeface="Calibri"
+
+ppt/theme/theme1.xml /a:theme[1]/a:themeElements[1]/a:fontScheme[1]/a:majorFont[1]/a:cs[1]/@typeface
+(before byte 889; after byte 896)
+- typeface=""
++ typeface="Calibri"
+
+ppt/theme/theme1.xml /a:theme[1]/a:themeElements[1]/a:fontScheme[1]/a:minorFont[1]/a:ea[1]/@typeface
+(before byte 3140; after byte 3154)
+- typeface=""
++ typeface="Calibri"
+
+ppt/theme/theme1.xml /a:theme[1]/a:themeElements[1]/a:fontScheme[1]/a:minorFont[1]/a:cs[1]/@typeface
+(before byte 3159; after byte 3180)
+- typeface=""
++ typeface="Calibri"

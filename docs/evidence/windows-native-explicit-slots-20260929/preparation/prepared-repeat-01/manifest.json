@@ -1,0 +1,482 @@
+{
+  "purpose": "FF-05 E7 offline four-slot Calibri input preparation only; no native result or root-cause claim.",
+  "finiteControlGuard": {
+    "expectedSourceSha256": "776147ddfd2a35ceca4480b66d58c82c9255609b5abe245a2b3bb342651ebce5",
+    "expectedDependencySha256": "8d75534a30a0580608e1271c13d70943ed4cd3589fddff7b1197748036a5116e",
+    "expectedEntries": 41,
+    "expectedChangedAttributes": 4,
+    "expectedChangedEntries": 1,
+    "expectedRemainingEmptyThemeScriptSlots": 0,
+    "expectedLiteralCarlitoOccurrences": 0,
+    "expectedLiteralAptosOccurrences": 0
+  },
+  "source": {
+    "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-native-20260929\\sources\\opf\\docs\\evidence\\windows-native-calibri-control-20260929\\fixture\\calibri-control.pptx",
+    "sha256": "776147ddfd2a35ceca4480b66d58c82c9255609b5abe245a2b3bb342651ebce5",
+    "bytes": 15621,
+    "provenance": "Accepted FF-05 E6 public evidence fixture; canonical ancestor SHA256 f505236ecef4fad838a198449adede1f4afa39d7bac74613626eee2f2a419aeb."
+  },
+  "output": {
+    "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-native-20260929\\ff05-calibri-explicit-slots-01\\prepared-repeat-01\\calibri-explicit-slots-control.pptx",
+    "sha256": "4e2bab2a4f5a0f09350d2edc2463bcb29302fa7db34a8c621e39fcd5c9a16cd7",
+    "bytes": 15616
+  },
+  "generator": {
+    "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-native-20260929\\ff05-calibri-explicit-slots-01\\prepare-explicit-slots.mjs",
+    "sha256": "0a94df58d8cf58695d3f9b178ff98d8aa2558130a170a37f15148facbc2d3bd1"
+  },
+  "dependency": {
+    "name": "fflate",
+    "version": "0.8.3",
+    "path": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-native-20260929\\sources\\opf-pptx\\node_modules\\fflate\\esm\\index.mjs",
+    "sha256": "8d75534a30a0580608e1271c13d70943ed4cd3589fddff7b1197748036a5116e",
+    "packagePath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-native-20260929\\sources\\opf-pptx\\node_modules\\fflate\\package.json",
+    "packageSha256": "5922d8150b307bc0e4e441491c779c45379e9913d348848fca8d5cf02db4d134"
+  },
+  "sourceGraph": {
+    "core": "0e81a407f57e5106ad607a9617c571d86b5428da",
+    "pptx": "7fca9a2eb5088ee2325fb686d1ff84332af2b8d9",
+    "render": "6c7d7818e40d0f9c519e4b34f7a24e9150c1787f",
+    "editor": "d0c95a16b50eccb3eee695ace44cc6c3a6754f2f",
+    "editorScope": "Dependency-only; not used to derive this control."
+  },
+  "zipPolicy": {
+    "entryOrder": "lexicographic",
+    "compressionLevel": 9,
+    "localCalendarTimestamp": "2000-01-01 00:00:00",
+    "os": 0,
+    "note": "Container metadata normalized like E6; unmodified entry contents remain byte-identical."
+  },
+  "counts": {
+    "entries": 41,
+    "changedEntries": 1,
+    "changedTypefaceAttributes": 4,
+    "unchangedEntryContents": 40,
+    "remainingEmptyThemeScriptSlots": 0
+  },
+  "verified": {
+    "sourceUnchanged": true,
+    "deterministicRepeatedOutput": true,
+    "exactEntrySet": true,
+    "onlyListedAttributesChanged": true,
+    "allOtherEntryContentsUnchanged": true,
+    "allRelationshipsUnchanged": true,
+    "noEmbeddedFonts": true,
+    "noLiteralCarlitoOrAptos": true
+  },
+  "changes": [
+    {
+      "part": "ppt/theme/theme1.xml",
+      "path": "/a:theme[1]/a:themeElements[1]/a:fontScheme[1]/a:majorFont[1]/a:ea[1]",
+      "attribute": "typeface",
+      "beforeValue": "",
+      "afterValue": "Calibri",
+      "beforeValueCharacterOffset": 870,
+      "afterValueCharacterOffset": 870,
+      "beforeValueByteOffset": 870,
+      "afterValueByteOffset": 870,
+      "beforeAttribute": "typeface=\"\"",
+      "afterAttribute": "typeface=\"Calibri\"",
+      "beforeOpeningTag": "<a:ea typeface=\"\"/>",
+      "afterOpeningTag": "<a:ea typeface=\"Calibri\"/>"
+    },
+    {
+      "part": "ppt/theme/theme1.xml",
+      "path": "/a:theme[1]/a:themeElements[1]/a:fontScheme[1]/a:majorFont[1]/a:cs[1]",
+      "attribute": "typeface",
+      "beforeValue": "",
+      "afterValue": "Calibri",
+      "beforeValueCharacterOffset": 889,
+      "afterValueCharacterOffset": 896,
+      "beforeValueByteOffset": 889,
+      "afterValueByteOffset": 896,
+      "beforeAttribute": "typeface=\"\"",
+      "afterAttribute": "typeface=\"Calibri\"",
+      "beforeOpeningTag": "<a:cs typeface=\"\"/>",
+      "afterOpeningTag": "<a:cs typeface=\"Calibri\"/>"
+    },
+    {
+      "part": "ppt/theme/theme1.xml",
+      "path": "/a:theme[1]/a:themeElements[1]/a:fontScheme[1]/a:minorFont[1]/a:ea[1]",
+      "attribute": "typeface",
+      "beforeValue": "",
+      "afterValue": "Calibri",
+      "beforeValueCharacterOffset": 3110,
+      "afterValueCharacterOffset": 3124,
+      "beforeValueByteOffset": 3140,
+      "afterValueByteOffset": 3154,
+      "beforeAttribute": "typeface=\"\"",
+      "afterAttribute": "typeface=\"Calibri\"",
+      "beforeOpeningTag": "<a:ea typeface=\"\"/>",
+      "afterOpeningTag": "<a:ea typeface=\"Calibri\"/>"
+    },
+    {
+      "part": "ppt/theme/theme1.xml",
+      "path": "/a:theme[1]/a:themeElements[1]/a:fontScheme[1]/a:minorFont[1]/a:cs[1]",
+      "attribute": "typeface",
+      "beforeValue": "",
+      "afterValue": "Calibri",
+      "beforeValueCharacterOffset": 3129,
+      "afterValueCharacterOffset": 3150,
+      "beforeValueByteOffset": 3159,
+      "afterValueByteOffset": 3180,
+      "beforeAttribute": "typeface=\"\"",
+      "afterAttribute": "typeface=\"Calibri\"",
+      "beforeOpeningTag": "<a:cs typeface=\"\"/>",
+      "afterOpeningTag": "<a:cs typeface=\"Calibri\"/>"
+    }
+  ],
+  "changedEntries": [
+    {
+      "entry": "ppt/theme/theme1.xml",
+      "beforeSha256": "26141620c25550d557022185eb4af6fa1c261c46d7ebf7a3be35697b50b9d6f0",
+      "afterSha256": "b6bdf21081fd629b0902914aa8c6ddaca6e4f76c7f1faf57304e6c47e6a014e3",
+      "beforeBytes": 8331,
+      "afterBytes": 8359,
+      "changedAttributes": 4
+    }
+  ],
+  "entries": [
+    {
+      "entry": "[Content_Types].xml",
+      "beforeSha256": "6d711539db4ce6b458a352b3c2528c5a925ab310f9a4c8a7b1830fcec8e6a312",
+      "afterSha256": "6d711539db4ce6b458a352b3c2528c5a925ab310f9a4c8a7b1830fcec8e6a312",
+      "beforeBytes": 2724,
+      "afterBytes": 2724,
+      "changedAttributes": 0
+    },
+    {
+      "entry": "_rels/",
+      "beforeSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "afterSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "beforeBytes": 0,
+      "afterBytes": 0,
+      "changedAttributes": 0
+    },
+    {
+      "entry": "_rels/.rels",
+      "beforeSha256": "a73dc65f1cb1959ca09044852c3697385e6124853bf5a0fa3f0215f608e86b47",
+      "afterSha256": "a73dc65f1cb1959ca09044852c3697385e6124853bf5a0fa3f0215f608e86b47",
+      "beforeBytes": 605,
+      "afterBytes": 605,
+      "changedAttributes": 0
+    },
+    {
+      "entry": "docProps/",
+      "beforeSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "afterSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "beforeBytes": 0,
+      "afterBytes": 0,
+      "changedAttributes": 0
+    },
+    {
+      "entry": "docProps/app.xml",
+      "beforeSha256": "e94689c1ad908efa8052354ee3f9a38d04d8d03cee23ea1b5fef43226bd8a4f3",
+      "afterSha256": "e94689c1ad908efa8052354ee3f9a38d04d8d03cee23ea1b5fef43226bd8a4f3",
+      "beforeBytes": 1368,
+      "afterBytes": 1368,
+      "changedAttributes": 0
+    },
+    {
+      "entry": "docProps/core.xml",
+      "beforeSha256": "17140d99a72a213cd3ec5498ece6ee774652c8164dda48e8b5296cec582c7804",
+      "afterSha256": "17140d99a72a213cd3ec5498ece6ee774652c8164dda48e8b5296cec582c7804",
+      "beforeBytes": 738,
+      "afterBytes": 738,
+      "changedAttributes": 0
+    },
+    {
+      "entry": "ppt/",
+      "beforeSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "afterSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "beforeBytes": 0,
+      "afterBytes": 0,
+      "changedAttributes": 0
+    },
+    {
+      "entry": "ppt/_rels/",
+      "beforeSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "afterSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "beforeBytes": 0,
+      "afterBytes": 0,
+      "changedAttributes": 0
+    },
+    {
+      "entry": "ppt/_rels/presentation.xml.rels",
+      "beforeSha256": "e2117ec87aff7c513da0a36181e57816777473446f284b8b564ace2725a81e9e",
+      "afterSha256": "e2117ec87aff7c513da0a36181e57816777473446f284b8b564ace2725a81e9e",
+      "beforeBytes": 1127,
+      "afterBytes": 1127,
+      "changedAttributes": 0
+    },
+    {
+      "entry": "ppt/charts/",
+      "beforeSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "afterSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "beforeBytes": 0,
+      "afterBytes": 0,
+      "changedAttributes": 0
+    },
+    {
+      "entry": "ppt/charts/_rels/",
+      "beforeSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "afterSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "beforeBytes": 0,
+      "afterBytes": 0,
+      "changedAttributes": 0
+    },
+    {
+      "entry": "ppt/embeddings/",
+      "beforeSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "afterSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "beforeBytes": 0,
+      "afterBytes": 0,
+      "changedAttributes": 0
+    },
+    {
+      "entry": "ppt/media/",
+      "beforeSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "afterSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "beforeBytes": 0,
+      "afterBytes": 0,
+      "changedAttributes": 0
+    },
+    {
+      "entry": "ppt/notesMasters/",
+      "beforeSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "afterSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "beforeBytes": 0,
+      "afterBytes": 0,
+      "changedAttributes": 0
+    },
+    {
+      "entry": "ppt/notesMasters/_rels/",
+      "beforeSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "afterSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "beforeBytes": 0,
+      "afterBytes": 0,
+      "changedAttributes": 0
+    },
+    {
+      "entry": "ppt/notesMasters/_rels/notesMaster1.xml.rels",
+      "beforeSha256": "92eb9005ae03705d1db0f1da37f89e4c77f61b2026efa66bdbf610d01116f2b9",
+      "afterSha256": "92eb9005ae03705d1db0f1da37f89e4c77f61b2026efa66bdbf610d01116f2b9",
+      "beforeBytes": 298,
+      "afterBytes": 298,
+      "changedAttributes": 0
+    },
+    {
+      "entry": "ppt/notesMasters/notesMaster1.xml",
+      "beforeSha256": "c2c0255a24d45ef3ad633078fd8a2dca43fc6db1b3eb36244a934eb0b9d97c57",
+      "afterSha256": "c2c0255a24d45ef3ad633078fd8a2dca43fc6db1b3eb36244a934eb0b9d97c57",
+      "beforeBytes": 7508,
+      "afterBytes": 7508,
+      "changedAttributes": 0
+    },
+    {
+      "entry": "ppt/notesSlides/",
+      "beforeSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "afterSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "beforeBytes": 0,
+      "afterBytes": 0,
+      "changedAttributes": 0
+    },
+    {
+      "entry": "ppt/notesSlides/_rels/",
+      "beforeSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "afterSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "beforeBytes": 0,
+      "afterBytes": 0,
+      "changedAttributes": 0
+    },
+    {
+      "entry": "ppt/notesSlides/_rels/notesSlide1.xml.rels",
+      "beforeSha256": "4e7f04378558285258df490583e9ed0e8039b27df83bcdc2e5b4992cf47090f2",
+      "afterSha256": "4e7f04378558285258df490583e9ed0e8039b27df83bcdc2e5b4992cf47090f2",
+      "beforeBytes": 459,
+      "afterBytes": 459,
+      "changedAttributes": 0
+    },
+    {
+      "entry": "ppt/notesSlides/notesSlide1.xml",
+      "beforeSha256": "a559bf003438191a2723e887544acb00d550c7a9d8a4fd36a41bd877d46e2be6",
+      "afterSha256": "a559bf003438191a2723e887544acb00d550c7a9d8a4fd36a41bd877d46e2be6",
+      "beforeBytes": 1680,
+      "afterBytes": 1680,
+      "changedAttributes": 0
+    },
+    {
+      "entry": "ppt/presProps.xml",
+      "beforeSha256": "4446069208ff4cd22879cccdfb0a2a302cb7e572e2c48d00b64066d25f026df1",
+      "afterSha256": "4446069208ff4cd22879cccdfb0a2a302cb7e572e2c48d00b64066d25f026df1",
+      "beforeBytes": 287,
+      "afterBytes": 287,
+      "changedAttributes": 0
+    },
+    {
+      "entry": "ppt/presentation.xml",
+      "beforeSha256": "fa6e1f507fb0e0cb37bb66ed94f1dc84898406f03d32ac3f2e00eb3bc72efafd",
+      "afterSha256": "fa6e1f507fb0e0cb37bb66ed94f1dc84898406f03d32ac3f2e00eb3bc72efafd",
+      "beforeBytes": 3265,
+      "afterBytes": 3265,
+      "changedAttributes": 0
+    },
+    {
+      "entry": "ppt/slideLayouts/",
+      "beforeSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "afterSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "beforeBytes": 0,
+      "afterBytes": 0,
+      "changedAttributes": 0
+    },
+    {
+      "entry": "ppt/slideLayouts/_rels/",
+      "beforeSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "afterSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "beforeBytes": 0,
+      "afterBytes": 0,
+      "changedAttributes": 0
+    },
+    {
+      "entry": "ppt/slideLayouts/_rels/slideLayout1.xml.rels",
+      "beforeSha256": "8246d333bf3764cd35563e3df1828c26bbc28890815a2987caf3e592791ba60d",
+      "afterSha256": "8246d333bf3764cd35563e3df1828c26bbc28890815a2987caf3e592791ba60d",
+      "beforeBytes": 311,
+      "afterBytes": 311,
+      "changedAttributes": 0
+    },
+    {
+      "entry": "ppt/slideLayouts/slideLayout1.xml",
+      "beforeSha256": "5015c0989d7672a610fc41c3f7f4a468fc0da42198f06e6c5f20a0921090e1c9",
+      "afterSha256": "5015c0989d7672a610fc41c3f7f4a468fc0da42198f06e6c5f20a0921090e1c9",
+      "beforeBytes": 687,
+      "afterBytes": 687,
+      "changedAttributes": 0
+    },
+    {
+      "entry": "ppt/slideMasters/",
+      "beforeSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "afterSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "beforeBytes": 0,
+      "afterBytes": 0,
+      "changedAttributes": 0
+    },
+    {
+      "entry": "ppt/slideMasters/_rels/",
+      "beforeSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "afterSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "beforeBytes": 0,
+      "afterBytes": 0,
+      "changedAttributes": 0
+    },
+    {
+      "entry": "ppt/slideMasters/_rels/slideMaster1.xml.rels",
+      "beforeSha256": "066fd8f2e94608804160631c736d82e4c0b0784a1646489030092cc04888839a",
+      "afterSha256": "066fd8f2e94608804160631c736d82e4c0b0784a1646489030092cc04888839a",
+      "beforeBytes": 446,
+      "afterBytes": 446,
+      "changedAttributes": 0
+    },
+    {
+      "entry": "ppt/slideMasters/slideMaster1.xml",
+      "beforeSha256": "ea76f6480270ed57920eb8b6c7e5a4662527bc543607760acc30011db3ec0211",
+      "afterSha256": "ea76f6480270ed57920eb8b6c7e5a4662527bc543607760acc30011db3ec0211",
+      "beforeBytes": 7849,
+      "afterBytes": 7849,
+      "changedAttributes": 0
+    },
+    {
+      "entry": "ppt/slides/",
+      "beforeSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "afterSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "beforeBytes": 0,
+      "afterBytes": 0,
+      "changedAttributes": 0
+    },
+    {
+      "entry": "ppt/slides/_rels/",
+      "beforeSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "afterSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "beforeBytes": 0,
+      "afterBytes": 0,
+      "changedAttributes": 0
+    },
+    {
+      "entry": "ppt/slides/_rels/slide1.xml.rels",
+      "beforeSha256": "019b1141c2928f4e1aa453566e41842f2d303593b0026bd23e2ac710476f2f3a",
+      "afterSha256": "019b1141c2928f4e1aa453566e41842f2d303593b0026bd23e2ac710476f2f3a",
+      "beforeBytes": 752,
+      "afterBytes": 752,
+      "changedAttributes": 0
+    },
+    {
+      "entry": "ppt/slides/slide1.xml",
+      "beforeSha256": "a3f0089d241fca0cda39b3414d5f6b84079786e6932800b26ebc4dbca00fd669",
+      "afterSha256": "a3f0089d241fca0cda39b3414d5f6b84079786e6932800b26ebc4dbca00fd669",
+      "beforeBytes": 2661,
+      "afterBytes": 2661,
+      "changedAttributes": 0
+    },
+    {
+      "entry": "ppt/tableStyles.xml",
+      "beforeSha256": "0e7ac03251337ecbaf6c8ca13619db1caeda5c90c4e3210d45d6c3f5df4de103",
+      "afterSha256": "0e7ac03251337ecbaf6c8ca13619db1caeda5c90c4e3210d45d6c3f5df4de103",
+      "beforeBytes": 182,
+      "afterBytes": 182,
+      "changedAttributes": 0
+    },
+    {
+      "entry": "ppt/tags/opfHeading1.xml",
+      "beforeSha256": "a2c7c73c06624edc13cc7434e6758a412b7848bff62b7bf24ddd8ae91326e0bc",
+      "afterSha256": "a2c7c73c06624edc13cc7434e6758a412b7848bff62b7bf24ddd8ae91326e0bc",
+      "beforeBytes": 380,
+      "afterBytes": 380,
+      "changedAttributes": 0
+    },
+    {
+      "entry": "ppt/tags/opfText1.xml",
+      "beforeSha256": "a83b5b0f68e0fd39129ae43fb60ff96c62892c810422db4e2ae1d31665f27074",
+      "afterSha256": "a83b5b0f68e0fd39129ae43fb60ff96c62892c810422db4e2ae1d31665f27074",
+      "beforeBytes": 343,
+      "afterBytes": 343,
+      "changedAttributes": 0
+    },
+    {
+      "entry": "ppt/theme/",
+      "beforeSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "afterSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "beforeBytes": 0,
+      "afterBytes": 0,
+      "changedAttributes": 0
+    },
+    {
+      "entry": "ppt/theme/theme1.xml",
+      "beforeSha256": "26141620c25550d557022185eb4af6fa1c261c46d7ebf7a3be35697b50b9d6f0",
+      "afterSha256": "b6bdf21081fd629b0902914aa8c6ddaca6e4f76c7f1faf57304e6c47e6a014e3",
+      "beforeBytes": 8331,
+      "afterBytes": 8359,
+      "changedAttributes": 4
+    },
+    {
+      "entry": "ppt/viewProps.xml",
+      "beforeSha256": "4cc12863620049069daeb39b14b4aba98a5e3048318be16a5af5879f6e4b2ac8",
+      "afterSha256": "4cc12863620049069daeb39b14b4aba98a5e3048318be16a5af5879f6e4b2ac8",
+      "beforeBytes": 816,
+      "afterBytes": 816,
+      "changedAttributes": 0
+    }
+  ],
+  "beforeInventory": {
+    "literalOccurrences": [],
+    "fontEntries": [],
+    "fontRelationships": [],
+    "fontContentTypes": []
+  },
+  "afterInventory": {
+    "literalOccurrences": [],
+    "fontEntries": [],
+    "fontRelationships": [],
+    "fontContentTypes": []
+  },
+  "nativeResult": null
+}

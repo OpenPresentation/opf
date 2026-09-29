@@ -45,15 +45,38 @@ caused the Aptos entry. H3's broader native-resolution branch remains open.
 The earlier Carlito and this Calibri control ran sequentially in the same
 PowerPoint process; neither controls every host variable or glyph identity.
 
-The next proposed control (E7) starts from the exact E6 hash and changes only
-the four empty theme major/minor ea/cs attributes to Calibri, preserving every
-other part and relationship. Review its offline diff before one bounded
-`-ControlDeck` inventory in a fresh directory. Persistence would show that
-empty theme ea/cs values are not necessary in this control; disappearance
-would associate the observation with the joint four-slot change, without
-identifying one slot or physical font. This uses the existing harness and
-does not require broader native queries. FF-05 remains in progress. Do not
-change the allowlist or resume embedding on the basis of the inventory alone.
+**E7 completed at 09:38 UTC.** The [explicit-slot control](../../evidence/windows-native-explicit-slots-20260929/README.md)
+starts from the exact E6 hash and changes only the four empty theme major/minor
+ea/cs attributes to Calibri. The other 40 ZIP entry contents, relationships,
+authored text and supplemental font mappings remain unchanged. Source SHA-256:
+`4e2bab2a4f5a0f09350d2edc2463bcb29302fa7db34a8c621e39fcd5c9a16cd7`.
+One read-only `-ControlDeck` inventory completed without temporary fonts in
+1,227 ms under the 45-second helper deadline. Its audit passed with zero
+failures, unchanged inputs and one owned open/close. UI preflight and postflight
+showed Home without an open presentation or dialog. The running PowerPoint
+executable reported file/product version `16.0.20430.20092`.
+
+**F.** All six theme names now report Calibri, while `Presentation.Fonts`
+still reports the same empty-name and Aptos entries and flags. The six inspected
+slide range/paragraph/run records remain Calibri for `Name`, `NameAscii`,
+`NameFarEast` and `NameComplexScript`, with `NameOther` empty.
+**I.** Empty theme ea/cs values are not necessary for this recorded observation;
+filling them is insufficient to remove it. This does not identify another
+responsible style, prove native collection behavior is a defect, or establish
+glyph identity. E6 and E7 were sequential runs in the same PowerPoint process;
+they do not control every host variable.
+
+The next proposed discriminator is a separately reviewed harness that retains
+the initial `Presentation.Fonts` snapshot and reads it once more after the
+existing bounded content queries, before closing the same owned presentation.
+Compare raw names (including empty entries), `Embedded` and `Embeddable` flags.
+A changed collection would indicate dependence on query order or elapsed
+initialization; it would not separate those factors or locate a style. An
+unchanged collection would leave those explanations unresolved. Preserve the
+first snapshot and all failure latches; do not add saves, edits, new presentation
+opens or retries. This harness is not implemented or run in the E7 evidence.
+FF-05 remains in progress. Do not change the allowlist or resume embedding on
+the basis of these inventories alone.
 
 The expressibility statements in the historical research below describe the
 September 22 source. FF-18 and FF-07 subsequently added language/script font

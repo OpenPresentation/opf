@@ -1,0 +1,14 @@
+node:internal/fs/promises:1564
+  return await PromisePrototypeThen(
+         ^
+
+Error: EEXIST: file already exists, mkdir 'C:\Users\micha\.codex\worktrees\fd3f\opf\artifacts\windows-native-20260929\ff05-calibri-explicit-slots-01\prepared-01'
+    at async mkdir (node:internal/fs/promises:1564:10)
+    at async file:///C:/Users/micha/.codex/worktrees/fd3f/opf/artifacts/windows-native-20260929/ff05-calibri-explicit-slots-01/prepare-explicit-slots.mjs:117:1 {
+  errno: -4075,
+  code: 'EEXIST',
+  syscall: 'mkdir',
+  path: 'C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-native-20260929\\ff05-calibri-explicit-slots-01\\prepared-01'
+}
+
+Node.js v24.21.0

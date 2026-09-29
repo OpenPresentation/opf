@@ -36,8 +36,8 @@ and merged as `bf3f78f`; the final merged-source audit retained those counts
 ([receipt](https://github.com/OpenPresentation/opf/pull/147)). The committed
 headline above remains the explicitly dated pre-PPTX78 baseline. These
 source/package audits use no Office; FF-29 remains in review. FF-05 is now
-in progress: its Calibri control still reports Aptos, without identifying the
-precise cause.
+in progress: its Calibri controls still report Aptos, including with all six
+theme font slots explicit, without identifying the precise cause.
 
 ## Items
 
@@ -48,7 +48,7 @@ precise cause.
 | FF-02 | Embed harness records pre-edit, post-text and post-edit font observations | opf-pptx | none | done | [opf-pptx#58](https://github.com/OpenPresentation/opf-pptx/pull/58) `b6eb3bfd`; hardening [opf-pptx#62](https://github.com/OpenPresentation/opf-pptx/pull/62) `83a41b9a` |
 | FF-03 | Read-only native font inventory worker | opf-pptx | none | done | [opf-pptx#59](https://github.com/OpenPresentation/opf-pptx/pull/59) `ef8a1583` |
 | FF-04 | Native inventory of the unedited fixture, with and without temporary fonts | opf-pptx / opf | FF-03 | done | [opf#145](https://github.com/OpenPresentation/opf/pull/145) merged `a85facf`, [September 29 evidence](../../evidence/windows-native-font-inventory-20260929/README.md): both fixture conditions and exporter control audited; Aptos present before edits; portable staged-blob verification and independent review passed |
-| FF-05 | Aptos root cause determined | opf | FF-02, FF-04 | in-progress | [brief](aptos-origin-brief.md), [September 29 Calibri control](../../evidence/windows-native-calibri-control-20260929/README.md): Aptos persists without Carlito references or temporary registration; exact style/part or native-resolution cause remains open |
+| FF-05 | Aptos root cause determined | opf | FF-02, FF-04 | in-progress | [brief](aptos-origin-brief.md), [E6 Calibri control](../../evidence/windows-native-calibri-control-20260929/README.md), [E7 explicit theme slots](../../evidence/windows-native-explicit-slots-20260929/README.md): Aptos persists without Carlito references, empty theme ea/cs slots or temporary registration; exact style/part or native-resolution cause remains open |
 | FF-06 | Font-flow map across all 14 dimensions and environments | opf | none | done | [font-flow-map.md](font-flow-map.md), [opf#116](https://github.com/OpenPresentation/opf/pull/116) |
 | FF-07 | Exporter writes chosen fonts into theme and run East Asian/complex-script slots, with `lang`/RTL | opf-pptx | FF-05, FF-06, FF-18 | review | merged: [opf-pptx#70](https://github.com/OpenPresentation/opf-pptx/pull/70) `0e886f30`, [opf#134](https://github.com/OpenPresentation/opf/pull/134) `9695bf37`, [opf#135](https://github.com/OpenPresentation/opf/pull/135) `3512af0b`; pending FF-05 native root-cause evidence (criteria are subject to FF-05) |
 | FF-08 | Exporter leaks no hard-coded or default font in any part | opf-pptx | FF-05, FF-06, FF-17 | review | merged: [opf-pptx#69](https://github.com/OpenPresentation/opf-pptx/pull/69) `405963ce`; pending FF-05 native root-cause evidence (empty values must be allowed by FF-05) |
@@ -715,3 +715,21 @@ Append one dated line per state change. Newest last.
     core145 `a85facf` and core147 `061499d` merged after independent review and
     green CI. PPTX80 closed as superseded with its findings reconciled in78;
     its branch was preserved. No release, deployment or tolerance change.
+
+- 2026-09-29 09:38 UTC: FF-05 E7 completed once on the independently reviewed
+  [four-slot Calibri control](../../evidence/windows-native-explicit-slots-20260929/README.md),
+  source `4e2bab2a4f5a0f09350d2edc2463bcb29302fa7db34a8c621e39fcd5c9a16cd7`.
+  Only the four empty theme major/minor ea/cs attributes changed from E6;
+  the other 40 ZIP entry contents and all relationships were preserved.
+  The native audit passed with zero failures, one owned read-only open/close,
+  unchanged inputs and no temporary registration. Helper time 1,227 ms under
+  the 45-second deadline. All six theme names reported Calibri; the initial
+  Fonts collection still contained the empty-name entry and Aptos. Empty theme
+  slots are therefore unnecessary for this observation, without identifying a
+  cause or proving glyph identity. UI preflight/postflight showed Home without
+  an open presentation or dialog; running PowerPoint file/product version was
+  `16.0.20430.20092`. Actual source graph: core `0e81a407`, PPTX `7fca9a2`,
+  renderer `6c7d7818`, editor `d0c95a1`. FF-05 stays in progress and counts
+  remain 19 done, 17 review/in-progress, 8 todo. Next: separately reviewed
+  dual Fonts snapshots before/after the existing bounded content queries;
+  no such harness or native run is part of this evidence.

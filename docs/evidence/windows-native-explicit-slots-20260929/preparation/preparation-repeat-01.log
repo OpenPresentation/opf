@@ -1,0 +1,23 @@
+{
+  "sourceSha256": "776147ddfd2a35ceca4480b66d58c82c9255609b5abe245a2b3bb342651ebce5",
+  "outputSha256": "4e2bab2a4f5a0f09350d2edc2463bcb29302fa7db34a8c621e39fcd5c9a16cd7",
+  "generatorSha256": "0a94df58d8cf58695d3f9b178ff98d8aa2558130a170a37f15148facbc2d3bd1",
+  "counts": {
+    "entries": 41,
+    "changedEntries": 1,
+    "changedTypefaceAttributes": 4,
+    "unchangedEntryContents": 40,
+    "remainingEmptyThemeScriptSlots": 0
+  },
+  "verified": {
+    "sourceUnchanged": true,
+    "deterministicRepeatedOutput": true,
+    "exactEntrySet": true,
+    "onlyListedAttributesChanged": true,
+    "allOtherEntryContentsUnchanged": true,
+    "allRelationshipsUnchanged": true,
+    "noEmbeddedFonts": true,
+    "noLiteralCarlitoOrAptos": true
+  },
+  "nativeResult": null
+}

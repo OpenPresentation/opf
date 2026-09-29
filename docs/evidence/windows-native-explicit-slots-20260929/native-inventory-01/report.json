@@ -1,0 +1,257 @@
+﻿{
+    "schemaVersion":  1,
+    "kind":  "native-font-inventory",
+    "inputMode":  "control-deck",
+    "source":  {
+                   "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-native-20260929\\ff05-calibri-explicit-slots-01\\prepared-01\\calibri-explicit-slots-control.pptx",
+                   "sha256":  "4e2bab2a4f5a0f09350d2edc2463bcb29302fa7db34a8c621e39fcd5c9a16cd7",
+                   "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-native-20260929\\ff05-calibri-explicit-slots-01\\native-inventory-01\\inputs\\source.pptx",
+                   "snapshotSha256":  "4e2bab2a4f5a0f09350d2edc2463bcb29302fa7db34a8c621e39fcd5c9a16cd7",
+                   "fullName":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-native-20260929\\ff05-calibri-explicit-slots-01\\native-inventory-01\\inputs\\source.pptx",
+                   "openedPathMatches":  true,
+                   "readOnly":  -1,
+                   "snapshotUnchangedAfterClose":  true
+               },
+    "fontRegistration":  {
+                             "mode":  "none",
+                             "flags":  null
+                         },
+    "bounds":  {
+                   "maxPresentationFonts":  64,
+                   "maxSlides":  2,
+                   "maxShapesPerSlide":  10,
+                   "maxParagraphsPerShape":  12,
+                   "maxParagraphsTotal":  24,
+                   "maxRunsPerShape":  24,
+                   "maxRunsTotal":  40,
+                   "maxTextCharacters":  1024
+               },
+    "presentationFonts":  {
+                              "count":  2,
+                              "entries":  [
+                                              {
+                                                  "index":  1,
+                                                  "name":  "",
+                                                  "embedded":  0,
+                                                  "embeddable":  0
+                                              },
+                                              {
+                                                  "index":  2,
+                                                  "name":  "Aptos",
+                                                  "embedded":  0,
+                                                  "embeddable":  -1
+                                              }
+                                          ]
+                          },
+    "theme":  {
+                  "major":  {
+                                "latin":  "Calibri",
+                                "complexScript":  "Calibri",
+                                "eastAsian":  "Calibri"
+                            },
+                  "minor":  {
+                                "latin":  "Calibri",
+                                "complexScript":  "Calibri",
+                                "eastAsian":  "Calibri"
+                            }
+              },
+    "slides":  {
+                   "count":  1,
+                   "entries":  [
+                                   {
+                                       "index":  1,
+                                       "shapeCount":  2,
+                                       "shapes":  [
+                                                      {
+                                                          "index":  1,
+                                                          "name":  "OPF heading slides.0.title line 0",
+                                                          "type":  1,
+                                                          "hasTextFrame":  -1,
+                                                          "hasText":  -1,
+                                                          "text":  "Plain control",
+                                                          "textLength":  13,
+                                                          "textTruncated":  false,
+                                                          "rangeFont":  {
+                                                                            "name":  "Calibri",
+                                                                            "nameAscii":  "Calibri",
+                                                                            "nameOther":  "",
+                                                                            "nameFarEast":  "Calibri",
+                                                                            "nameComplexScript":  "Calibri",
+                                                                            "size":  40.5,
+                                                                            "bold":  -1,
+                                                                            "italic":  0
+                                                                        },
+                                                          "paragraphCount":  1,
+                                                          "paragraphs":  [
+                                                                             {
+                                                                                 "index":  1,
+                                                                                 "start":  1,
+                                                                                 "length":  13,
+                                                                                 "text":  "Plain control",
+                                                                                 "textTruncated":  false,
+                                                                                 "font":  {
+                                                                                              "name":  "Calibri",
+                                                                                              "nameAscii":  "Calibri",
+                                                                                              "nameOther":  "",
+                                                                                              "nameFarEast":  "Calibri",
+                                                                                              "nameComplexScript":  "Calibri",
+                                                                                              "size":  40.5,
+                                                                                              "bold":  -1,
+                                                                                              "italic":  0
+                                                                                          }
+                                                                             }
+                                                                         ],
+                                                          "runCount":  1,
+                                                          "runs":  [
+                                                                       {
+                                                                           "index":  1,
+                                                                           "start":  1,
+                                                                           "length":  13,
+                                                                           "text":  "Plain control",
+                                                                           "textTruncated":  false,
+                                                                           "font":  {
+                                                                                        "name":  "Calibri",
+                                                                                        "nameAscii":  "Calibri",
+                                                                                        "nameOther":  "",
+                                                                                        "nameFarEast":  "Calibri",
+                                                                                        "nameComplexScript":  "Calibri",
+                                                                                        "size":  40.5,
+                                                                                        "bold":  -1,
+                                                                                        "italic":  0
+                                                                                    }
+                                                                       }
+                                                                   ]
+                                                      },
+                                                      {
+                                                          "index":  2,
+                                                          "name":  "OPF text slides.0.text line 0",
+                                                          "type":  1,
+                                                          "hasTextFrame":  -1,
+                                                          "hasText":  -1,
+                                                          "text":  "Current content",
+                                                          "textLength":  15,
+                                                          "textTruncated":  false,
+                                                          "rangeFont":  {
+                                                                            "name":  "Calibri",
+                                                                            "nameAscii":  "Calibri",
+                                                                            "nameOther":  "",
+                                                                            "nameFarEast":  "Calibri",
+                                                                            "nameComplexScript":  "Calibri",
+                                                                            "size":  18.75,
+                                                                            "bold":  0,
+                                                                            "italic":  0
+                                                                        },
+                                                          "paragraphCount":  1,
+                                                          "paragraphs":  [
+                                                                             {
+                                                                                 "index":  1,
+                                                                                 "start":  1,
+                                                                                 "length":  15,
+                                                                                 "text":  "Current content",
+                                                                                 "textTruncated":  false,
+                                                                                 "font":  {
+                                                                                              "name":  "Calibri",
+                                                                                              "nameAscii":  "Calibri",
+                                                                                              "nameOther":  "",
+                                                                                              "nameFarEast":  "Calibri",
+                                                                                              "nameComplexScript":  "Calibri",
+                                                                                              "size":  18.75,
+                                                                                              "bold":  0,
+                                                                                              "italic":  0
+                                                                                          }
+                                                                             }
+                                                                         ],
+                                                          "runCount":  1,
+                                                          "runs":  [
+                                                                       {
+                                                                           "index":  1,
+                                                                           "start":  1,
+                                                                           "length":  15,
+                                                                           "text":  "Current content",
+                                                                           "textTruncated":  false,
+                                                                           "font":  {
+                                                                                        "name":  "Calibri",
+                                                                                        "nameAscii":  "Calibri",
+                                                                                        "nameOther":  "",
+                                                                                        "nameFarEast":  "Calibri",
+                                                                                        "nameComplexScript":  "Calibri",
+                                                                                        "size":  18.75,
+                                                                                        "bold":  0,
+                                                                                        "italic":  0
+                                                                                    }
+                                                                       }
+                                                                   ]
+                                                      }
+                                                  ]
+                                   }
+                               ]
+               },
+    "slideMaster":  {
+                        "shapeCount":  0,
+                        "shapes":  [
+
+                                   ]
+                    },
+    "boundsExceeded":  [
+
+                       ],
+    "semanticFailures":  [
+
+                         ],
+    "fontLedger":  {
+                       "presentationFontNames":  [
+                                                     "Aptos"
+                                                 ],
+                       "slideTextSlotNames":  [
+                                                  "Calibri"
+                                              ],
+                       "masterTextSlotNames":  [
+
+                                               ],
+                       "themeFontNames":  [
+                                              "Calibri"
+                                          ],
+                       "aptosPresentationFontNames":  [
+                                                          "Aptos"
+                                                      ],
+                       "aptosSlideTextSlotNames":  [
+
+                                                   ],
+                       "aptosMasterTextSlotNames":  [
+
+                                                    ],
+                       "aptosThemeFontNames":  [
+
+                                               ],
+                       "aptosReported":  true,
+                       "nonCarlitoPresentationFontNames":  [
+                                                               "Aptos"
+                                                           ],
+                       "carlitoOnlyPresentationFonts":  false,
+                       "scope":  "Names reported by PowerPoint for Presentation.Fonts, theme font slots and Font2 slots of whole text ranges, paragraphs and runs. Aptos detection is a case-insensitive name prefix. These values do not prove physical font-file or per-glyph identity."
+                   },
+    "preflightPresentationCount":  0,
+    "ownedOpenCount":  1,
+    "ownedCloseCount":  1,
+    "failureCleanup":  null,
+    "environment":  {
+                        "hostVersion":  "5.1.26100.9444",
+                        "windowsProductName":  "Windows 10 Home",
+                        "windowsDisplayVersion":  "25H2",
+                        "windowsBuild":  "26200.9457",
+                        "powerPointVersion":  "16.0"
+                    },
+    "cleanupConfirmed":  true,
+    "officeOperationsStopped":  false,
+    "lastStage":  "worker.complete",
+    "lastStatus":  "success",
+    "error":  null,
+    "scope":  "Read-only native observation of one unedited input snapshot. Presentation.Fonts, theme font slots and Font2 slots are names reported by PowerPoint; they do not prove physical font-file or per-glyph identity.",
+    "limitations":  [
+                        "Presentation.Fonts is enumerated before any other presentation content is read.",
+                        "Slide layouts, notes pages, the notes master, group members and table cells are not enumerated. Only the first slide master shapes and its theme font slots are read.",
+                        "endParaRPr is not exposed as a COM object. For a text frame with no text, the whole-range Font2 read is the closest observation; a paragraph range covers its characters, not its end-of-paragraph properties.",
+                        "A reported name does not prove which physical font file drew a glyph or why PowerPoint listed it.",
+                        "This worker performs no edit, save, embedding, export or reopen."
+                    ]
+}
