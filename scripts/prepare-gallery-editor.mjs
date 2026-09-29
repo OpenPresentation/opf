@@ -1,4 +1,4 @@
-import {copyFile,mkdir,readFile,writeFile,rm} from 'node:fs/promises';
+import {copyFile,cp,mkdir,readFile,writeFile,rm} from 'node:fs/promises';
 const registry=process.argv.includes('--registry');
 if(registry)await import('./build-registry-gallery-editor.mjs');
 else{await import('./build-editor-demo.mjs');await import('./build-spec-reference.mjs');}
@@ -7,6 +7,10 @@ const target=new URL('../../pptx-gallery/public/opf-editor/',import.meta.url);
 await mkdir(target,{recursive:true});
 if(!registry)await rm(new URL('manifest.json',target),{force:true});
 for(const file of ['index.html','playground.css','playground.js','fonts.json','gallery.json','galleries.json',...(registry?['manifest.json','playground.js.LEGAL.txt','opf-spec.json']:[])])await copyFile(new URL(`../artifacts/${source}/${file}`,import.meta.url),new URL(file,target));
+// Vendored faces load on demand from these package-relative paths (fonts/intos, fonts/open); lazy-fonts.json lists them.
+await rm(new URL('fonts/',target),{recursive:true,force:true});
+await cp(new URL(`../artifacts/${source}/fonts/`,import.meta.url),new URL('fonts/',target),{recursive:true}).catch(error=>{if(error.code!=='ENOENT')throw error;});
+await copyFile(new URL(`../artifacts/${source}/lazy-fonts.json`,import.meta.url),new URL('lazy-fonts.json',target)).catch(error=>{if(error.code!=='ENOENT')throw error;});
 const html=await readFile(new URL('index.html',target),'utf8');
 await writeFile(new URL('index.html',target),html.replace('http://localhost:3101/spec','/spec'));
 await copyFile(new URL(`../artifacts/${registry?'registry-gallery-editor':'spec'}/opf-spec.json`,import.meta.url),new URL('../../pptx-gallery/data/opf-spec.json',import.meta.url));

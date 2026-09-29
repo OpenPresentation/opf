@@ -16,6 +16,12 @@ Resolve design, dimensions, catalog records, assets, and required font faces. Co
 
 Pass the same text measurement provider to preview and PPTX export. Use identical pinned font files in the browser and measurement engine. Rendering a named family without loading its bytes can silently substitute fonts and change line breaks.
 
+## Ship fonts as pinned, licensed files
+
+Font bytes come from pinned packages or vendored files with a recorded hash, never from a font CDN at runtime. A stylesheet, import or preconnect hint that points at Google Fonts, Typekit, Bunny Fonts or a similar service hands every viewer's IP address to a third party (a German court treated that as a privacy violation in 2022), and it ties previews and audits to the network and to whatever the CDN serves that day. A build step that downloads a font once and then serves it from your own origin is fine; confirm the built output makes no font requests.
+
+Before bundling a family, open the license file that ships with the font files and confirm it grants exactly one of OFL-1.1, Apache-2.0, MIT or UFL-1.0. Refuse GPL-family, proprietary and unclear-provenance fonts, and do not trust the source site's label. For each bundled face record the SPDX id, any Reserved Font Name, the source URL, the package and exact version, and the sha256. A Reserved Font Name only stops a modified version (subset, instance, converted copy) from using the reserved name in its name. If the family or file name you would serve contains the reserved name, ship only the copyright holder's own unmodified file and record the pinned upstream URL and matching hash; if it does not (a subset named differently from the reserved name), a modified copy is fine. Read the font's upstream license file, since a package can omit the line, and treat a notice you cannot parse as a failure rather than as no reserved name.
+
 ## Verify what the user will receive
 
 Collect path-specific diagnostics, inspect rendered slides, and check requested exports. Use explicit pagination before preview/export when needed, and export those exact pages. Shared geometry does not guarantee identical pixels in browsers and PowerPoint.

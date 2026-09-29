@@ -1,6 +1,6 @@
 # Font licensing and replacements (FF-31)
 
-Generated from [`spec/reference/font-policy.json`](../../../spec/reference/font-policy.json); edit the JSON, not this table. Schema: [`font-policy.schema.json`](../../../spec/reference/font-policy.schema.json). Guide: [docs/font-fidelity.md](../../font-fidelity.md). Measurement method and raw data: [evidence](../../evidence/font-replacements-20260923/README.md).
+Generated from [`spec/reference/font-policy.json`](../../../spec/reference/font-policy.json); edit the JSON, not this table. Schema: [`font-policy.schema.json`](../../../spec/reference/font-policy.schema.json). Guide: [docs/font-fidelity.md](../../font-fidelity.md). Measurement method and raw data: [evidence](../../evidence/font-replacements-20260923/README.md). Rules for the font files themselves (bundle pinned files, never hotlink; verified permissive licenses): [Font files: bundling and licenses](#font-files-bundling-and-licenses).
 
 **Policy (owner decisions, 2026-09-29):** the user's selected font is the source of truth. The replacement column is an open look-alike used for previews, SVG, the editor and thumbnails, because license-restricted (proprietary) fonts are never bundled or embedded. A metric-compatible replacement is the goal; a visual-only one is a documented fallback and a known layout-fidelity gap. PPTX export always writes the selected name, never the replacement. See [docs/font-fidelity.md](../../font-fidelity.md#font-policy-ff-31).
 
@@ -172,12 +172,65 @@ Width delta = mean |replacement/real - 1| over 300 example-deck strings (signed 
 | Work Sans | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
 | Yu Gothic | proprietary-standard | proprietary (JIYUKOBO, licensed to Microsoft) | windows, office-cloud | Noto Sans JP | visual | 0.9% (+0.3%) / 5.3% | — | never |
 
+## Font files: bundling and licenses
+
+Owner decisions, 2026-09-29: bundle font files instead of hotlinking them, and check each family's license before bundling. This section is hand-written policy; the table above is the per-family record. It applies to every repository in the ecosystem: core, opf-render, opf-editor, opf-pptx, the pptx.gallery site and the OpenPresentation site.
+
+### Rule 1: bundle, don't hotlink
+
+Fonts, Google Fonts included, ship as pinned files. The pin is an exact npm version (`@fontsource/*`, `@expo-google-fonts/*`) or a vendored file whose sha256 is recorded. Nothing loads a font at runtime from fonts.googleapis.com, fonts.gstatic.com, use.typekit.net, fonts.bunny.net, cdnjs font CSS or any other font CDN. That covers `<link rel="stylesheet">`, `@import url(...)`, `preconnect` hints, remote `@font-face` sources and SVG previews that embed remote font URLs.
+
+Why:
+
+- **Privacy.** A page that pulls fonts from the Google Fonts CDN sends each visitor's IP address to Google. In 2022 the Munich Regional Court (LG München I) held that a GDPR violation.
+- **Determinism and offline previews.** Output must not depend on the network, or on what a CDN serves today.
+- **Reproducible audits.** Parity and fidelity audits can only be repeated when the exact font bytes are pinned.
+
+Build-time download that ends as self-hosted files is not hotlinking, but it is not pinned either. `next/font/google` is the example: Next downloads whatever the font host serves during the build and serves it from the site's own origin, so the bytes can change between builds. Use `next/font/local` with vendored or package-pinned files instead, and keep the record (license, sha256) next to them. Either way, the build-output check below verifies that the built output makes no request to a font host.
+
+### Rule 2: check each family's license
+
+Every bundled font face records these fields:
+
+| Field | Meaning |
+| --- | --- |
+| License | SPDX id |
+| Reserved Font Name | Whether the copyright block declares one, and its name |
+| Source URL | Where the file came from (npm page, upstream repository) |
+| Package and version | `package@version`, pinned exactly |
+| sha256 | Of each face file and of the license file |
+
+Allowed for bundling: exactly `OFL-1.1`, `Apache-2.0`, `MIT` and `UFL-1.0` (Ubuntu Font Licence), and nothing else. Not allowed: GPL, LGPL and AGPL fonts, proprietary fonts, and public-domain fonts of unclear provenance.
+
+Verify the license from the LICENSE or OFL file that ships with the font files. Do not assume it from the source site, the package's `license` field or a catalog entry. A wrapper package can carry a different license for its own code than for the fonts inside (the `@expo-google-fonts/*` packages are `MIT AND OFL-1.1`, and their `LICENSE_FONT` file is the font license).
+
+**Reserved Font Names (owner decision, 2026-09-29).** OFL's Reserved Font Name restricts only a *modified* version, and only from using the reserved name in its name. A subset, instance, format conversion (including woff2) or edit is a modified version. So the rule is "modified and its name contains the Reserved Font Name", not "a Reserved Font Name is declared":
+
+- A face whose family and file names do not contain the reserved name may be a subset, instance or conversion. Noto Sans JP, SC, TC and KR reserve `Source` (Adobe) but are named "Noto Sans ...", so subsets and static instances are fine.
+- A face whose family or file name does contain it must be the unmodified file its copyright holder released: the TTF or variable file from the google/fonts repository at a pinned commit, or an upstream project release asset. This applies to Carlito (`Carlito`), Raleway (`Raleway`), Lora (`Lora`) and Playfair Display (`Playfair Display`). Serve the file byte for byte. Only the CSS may add `font-display`, `unicode-range` and weight ranges.
+- Decide from the family's upstream `OFL.txt`, not only from the copy a package ships: a distributor's copy can omit the line (the `@fontsource` licenses for Carlito and Noto Sans CJK do). The notice parser fails closed: a notice that mentions a Reserved Font Name but yields no readable name is an error, not "none".
+- The per-face proof is the pinned upstream URL and a sha256 equal to the served file's own hash. The license tests check "modified and name contains a reserved name". A family that fails stays on a reviewed "pending" list that may only shrink.
+
+Reserved Font Names found (upstream `OFL.txt`, google/fonts commit 23e54b51ddff): Carlito `Carlito`; Noto Sans JP, SC, TC and KR `Source`; Raleway `Raleway`; Lora `Lora`; Playfair Display `Playfair Display`. In opf-render, the Carlito copy from `@expo-google-fonts` is a Google Fonts API subset (2532 glyphs against 2783 in the google/fonts file) named Carlito, so it must be replaced by the unmodified upstream TTFs. The four Noto Sans CJK packages (eight faces) are static instances named "Noto Sans ...", so they stay. In the gallery, Carlito, Raleway, Lora and Playfair Display were served as `@fontsource` woff2 subsets under their own names, so they must switch to the unmodified upstream files; the Noto Sans CJK families there may stay subsets.
+
+### Enforcement
+
+| Repository | Hotlink guard | License verification |
+| --- | --- | --- |
+| opf (core) | `pnpm check:font-hotlinks`, part of `pnpm test` | Font rows in `spec/reference/font-policy.json`; core bundles no font files |
+| opf-render | `npm run check:font-hotlinks`, part of `npm test` | `test/font-licenses.mjs` (`npm run check:fonts`): manifest vs the license each installed package ships, allowlist, sha256 pins, and the RFN rule (`upstreamFile` per face, or an entry in `RFN_PENDING_UNMODIFIED_UPSTREAM`) |
+| opf-editor | `npm run check:font-hotlinks`, part of `npm test`; `check:font-hotlinks:built` scans `dist` and the built playground | Uses the renderer's verified registry; ships no font files |
+| pptx-gallery | `pnpm test` (`tests/font-hotlinks.test.ts`), plus a `postbuild` scan of `.next/static` and `.next/server` | Bundling: `data/preview-fonts.json` and `tests/preview-fonts.test.ts` (PR #53); RFN rule: `tests/font-rfn.test.ts` |
+| openpresentation-site | `pnpm test`, plus a `postbuild` scan of `.next/static` and `.next/server` | Inter and Geist Mono are vendored pinned files in `app/fonts` loaded with `next/font/local` (not `next/font/google`); `data/bundled-fonts.json` and `scripts/verify-bundled-fonts.mjs` check license (OFL-1.1, no Reserved Font Name) and sha256 |
+
+Each guard reads `git ls-files`, so untracked scratch files are ignored, and fails on any font CDN host (Google Fonts, Typekit, Bunny, Adobe, Fontshare, Font Awesome kits, the webfontloader script), font CSS or any font file on jsDelivr (`npm/` and `gh/`), unpkg or cdnjs, `@import` of remote font CSS, a remote font file in CSS `url(...)`, a `fetch()`, `import()`, XHR or `FontFace` load of a remote font file, and a `WebFont.load({ google | typekit })` configuration. Files that mention a host in prose are listed with a reason, by exact path, in `scripts/font-hotlink-allowlist.json`. An allowlist entry that no longer matches fails too, and build output is never allowlisted. New manifest entries must include the license fields; `node scripts/update-font-manifest.mjs` in opf-render fills them from the installed package.
+
 ## Replacement font acceptance rules
 
 Owner policy, 2026-09-29: for a licensed font the user selects (for example Aptos), previews use an open replacement that looks similar and has the same size on screen (metric-compatible). The PPTX keeps the selected name, so PowerPoint shows the real font. Licensed fonts are never bundled or embedded. Root decisions on which replacements qualify:
 
 1. **Metric matching to a proprietary font is acceptable when the outlines are original.** A font whose advance widths, kerning and vertical metrics were matched to a proprietary font is accepted, as Carlito is for Calibri and Liberation or Croscore fonts are for Arial, Times New Roman and Courier New. Metrics are functional layout data. A font whose outlines are copied from a proprietary font is never accepted. No proprietary font file is committed, and none of its tables is dumped into the repository; aggregate delta numbers are fine. `scripts/measure-font-candidates.mjs` counts identical outlines against the installed real font as part of every acceptance measurement.
-2. **Bundle only permissive font licenses:** SIL OFL 1.1, Apache 2.0, MIT, the Ubuntu Font Licence, and Bitstream Vera-style licenses. GPL, LGPL and AGPL fonts and public-domain fonts with unclear provenance are not bundled. The license is read from the license file that ships with the downloaded files. The renderer's font manifest records the SPDX license, whether the license declares a Reserved Font Name, the source URL, the exact commit or version, and a SHA-256 for every file. Files are bundled pinned and are never hotlinked from a font CDN. A font with a Reserved Font Name is bundled unmodified only, and is never modified under that name.
+2. **Bundling and licenses follow [Font files: bundling and licenses](#font-files-bundling-and-licenses) above:** only `OFL-1.1`, `Apache-2.0`, `MIT` and `UFL-1.0`, verified from the license file that ships with the files, with the SPDX id, Reserved Font Name, source URL, exact commit or version and sha256 recorded in the renderer's manifest, and no hotlinking. A font with a Reserved Font Name is bundled as the unmodified upstream files only.
 3. **Young or single-maintainer projects are acceptable** when they are pinned by exact commit or version plus SHA-256 in the font manifest, and the previous replacement stays as a fallback or alternate.
 4. **The replacement's family name must not be a trademark of the original.** "Intos" is fine; "Aptos Open" would not be.
 5. **The metric bar is unchanged:** a mean below 0.1% and a maximum of at most 0.3% on any corpus string, in every style of all four (regular, bold, italic, bold italic). A family where only some styles qualify is not claimed metric. The candidate's vertical metrics (hhea ascent, descent and line gap, OS/2 typo and win values, x-height and cap-height) and painted glyph heights are compared as well, because the owner cares about on-screen size.

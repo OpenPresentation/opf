@@ -5,6 +5,7 @@ import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { registryToolchain } from './registry-toolchain.mjs';
+import { emitLazyFonts } from './emit-lazy-fonts.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const registry = await registryToolchain();
@@ -95,7 +96,10 @@ for (const file of Object.keys(bundle.metafile.inputs)) {
   }
 }
 const { loadOfficeFontRegistry } = await registry.import('@openpresentation/opf-render/fonts-node');
-await writeFile(path.join(out, 'fonts.json'), JSON.stringify((await loadOfficeFontRegistry()).embeddedFonts));
+const officeFonts = await loadOfficeFontRegistry();
+await writeFile(path.join(out, 'fonts.json'), JSON.stringify(officeFonts.embeddedFonts));
+// Vendored faces (renderers that publish them) load on demand from separate hash-pinned files, never from fonts.json.
+const lazyFonts = await emitLazyFonts({ registry: officeFonts, packageRoot: path.join(registry.consumer, 'node_modules/@openpresentation/opf-render'), out });
 await copyFile(path.join(source, 'playground.css'), path.join(out, 'playground.css'));
 await copyFile(path.join(source, 'galleries.json'), path.join(out, 'galleries.json'));
 const revision = sha256(Buffer.concat(await Promise.all(['playground.js', 'playground.css'].map(file => readFile(path.join(out, file)))))).slice(0, 12);
@@ -121,7 +125,7 @@ await writeFile(path.join(out, 'opf-spec.json'), JSON.stringify({
   schemaDigest: sha256(JSON.stringify(opfSchemas)), fieldCount: fields.length, schemas: opfSchemas, fields,
 }));
 const files = {};
-for (const file of ['index.html', 'playground.js', 'playground.js.LEGAL.txt', 'playground.css', 'fonts.json', 'galleries.json', 'gallery.json', 'opf-spec.json']) {
+for (const file of ['index.html', 'playground.js', 'playground.js.LEGAL.txt', 'playground.css', 'fonts.json', 'galleries.json', 'gallery.json', 'opf-spec.json', ...lazyFonts.files]) {
   files[file] = sha256(await readFile(path.join(out, file)));
 }
 await writeFile(path.join(out, 'manifest.json'), JSON.stringify({

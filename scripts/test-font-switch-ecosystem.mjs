@@ -109,9 +109,9 @@ function schemeClass(scheme) {
 // registry cannot preview yet is not drawn; its named expected failure below says why.
 const SCHEME_CLASSES = [
   {id: 'sans-metric', members: ['calibri', 'aptos']},
-  {id: 'serif-metric', members: ['times-new-roman']},
+  {id: 'serif-metric', members: ['times-new-roman', 'georgia']},
   {id: 'sans-visual', members: ['tahoma', 'verdana']},
-  {id: 'serif-visual', members: ['georgia', 'garamond', 'constantia']},
+  {id: 'serif-visual', members: ['garamond', 'constantia']},
   {id: 'monospace', members: ['consolas', 'courier-new']},
   {id: 'open-google', members: ['roboto', 'open-sans', 'montserrat', 'poppins', 'raleway', 'pt-serif']},
   {id: 'east-asian', members: ['meiryo', 'yu-gothic', 'microsoft-yahei', 'malgun-gothic']},

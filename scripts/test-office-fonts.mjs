@@ -80,5 +80,5 @@ if(process.argv.includes('--system')) {
   }
 }
 await writeFile(new URL('report.json',output),JSON.stringify(report,null,2));
-console.log(`Office fonts passed: ${presentation.slides.length} pages, matching editor/SVG geometry, substitute-measured previews and chosen native PPTX families; 40 substitute faces with license notices.`);
+console.log(`Office fonts passed: ${presentation.slides.length} pages, matching editor/SVG geometry, substitute-measured previews and chosen native PPTX families; 24 substitute faces with license notices.`);
 for(const result of report.comparisons) console.log(`${result.fontFamily} ${result.fontWeight}${result.italic?' italic':''}: ${result.skipped ?? `${(result.maxRelativeDelta*100).toFixed(4)}% maximum shaped-width difference`}`);

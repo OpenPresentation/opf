@@ -4,6 +4,7 @@ import { createRequire } from "node:module";
 import { mkdir, copyFile, writeFile, readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
+import { emitLazyFonts } from "./emit-lazy-fonts.mjs";
 const root = fileURLToPath(new URL("../", import.meta.url));
 const require = createRequire(
   new URL("../packages/javascript/package.json", import.meta.url),
@@ -18,6 +19,9 @@ await writeFile(
   path.join(out, "fonts.json"),
   JSON.stringify(fontRegistry.embeddedFonts),
 );
+// Vendored faces (Intos for the default Aptos scheme, the open families) stay out of fonts.json and load on demand.
+const lazy = await emitLazyFonts({ registry: fontRegistry, packageRoot: path.resolve(root, "../opf-render"), out });
+console.log(`Editor fonts: ${fontRegistry.embeddedFonts.length} eager faces in fonts.json; ${lazy.faces} lazy faces (${lazy.bytes} bytes) as separate hash-pinned files.`);
 await build({
   entryPoints: [path.resolve(root, "../opf-editor/examples/playground.js")],
   outfile: path.join(out, "playground.js"),
