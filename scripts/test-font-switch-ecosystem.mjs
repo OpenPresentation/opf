@@ -75,8 +75,8 @@ const EXPECTED_SUBSTITUTIONS = Object.freeze({
   'Aptos Display': 'Carlito', Aptos: 'Roboto', Calibri: 'Carlito', Georgia: 'Gelasio', Consolas: 'Cousine', 'Courier New': 'Cousine',
   Meiryo: 'Noto Sans JP', 'Yu Gothic': 'Noto Sans JP', 'Microsoft YaHei': 'Noto Sans SC', 'Malgun Gothic': 'Noto Sans KR', 'Microsoft JhengHei': 'Noto Sans TC',
   Mangal: 'Noto Sans Devanagari', 'Arabic Typesetting': 'Noto Naskh Arabic', David: 'Noto Serif Hebrew', 'Angsana New': 'Noto Sans Thai',
-  Tahoma: 'Arimo', Verdana: 'Arimo', 'Times New Roman': 'Tinos', Garamond: 'Tinos', Constantia: 'Caladea',
-  'Tenorite Display': 'Roboto', Tenorite: 'Roboto', 'Seaford Display': 'Carlito', Seaford: 'Carlito', Impact: 'Carlito', Grandview: 'Roboto',
+  Tahoma: 'Red Hat Text', Verdana: 'Montserrat', 'Times New Roman': 'Tinos', Garamond: 'Tinos', Constantia: 'PT Serif',
+  'Tenorite Display': 'Roboto', Tenorite: 'Roboto', 'Seaford Display': 'Source Sans 3', Seaford: 'Source Sans 3', Impact: 'Carlito', Grandview: 'Roboto',
   'Shonar Bangla': 'Noto Sans Bengali', Latha: 'Noto Sans Tamil', DaunPenh: 'Noto Sans Khmer', Nyala: 'Noto Sans Ethiopic', Sylfaen: 'Noto Sans',
   Tunga: 'Noto Sans Kannada', Shruti: 'Noto Sans Gujarati', Raavi: 'Noto Sans Gurmukhi', Kartika: 'Noto Sans Malayalam', Kalinga: 'Noto Sans Oriya', Gautami: 'Noto Sans Telugu'
 });
@@ -905,7 +905,7 @@ async function expectLimitation(id, what, run, code) {
   assert.equal(error.code, code, `${id}: ${what} now fails with ${error.code}, not the pinned ${code}. Update or delete the ${id} entry.`);
 }
 const providedSample = (scheme) => byId('fontSchemes', scheme).textSample;
-const GOOGLE_PENDING = ['open-sans', 'montserrat', 'poppins', 'raleway', 'pt-serif'];
+const GOOGLE_PENDING = ['raleway'];
 assert.ok(pendingSchemes.every((scheme) => GOOGLE_PENDING.includes(scheme)), `schemes the registry cannot preview need an expected-failure entry: ${pendingSchemes}`);
 const EXPECTED_FAILURES = [
   ...GOOGLE_PENDING.map((scheme) => ({
@@ -934,8 +934,9 @@ for (const failure of EXPECTED_FAILURES) {
 }
 // Formerly named expected failures, now positive: the preview falls back per character to a bundled face that has the
 // glyph and reports a font-glyph-fallback note; the measured export succeeds and still names only the chosen fonts.
+// Constantia previews with the open PT Serif, which has Cyrillic, so only its Greek text falls back (the matrix draws both).
 const GLYPH_FALLBACK_CASES = [
-  ...['georgia', 'constantia', 'mangal', 'arabic-typesetting', 'david', 'angsana-new'].flatMap((scheme) => ['russian', 'greek'].map((language) => ({id: `${scheme}+${language}`, language, scheme, title: TEXT[language].title, body: TEXT[language].body, from: previewFaces(byId('fontSchemes', scheme).major), to: ['Noto Sans']}))),
+  ...['georgia', 'constantia', 'mangal', 'arabic-typesetting', 'david', 'angsana-new'].flatMap((scheme) => ['russian', 'greek'].filter((language) => !(scheme === 'constantia' && language === 'russian')).map((language) => ({id: `${scheme}+${language}`, language, scheme, title: TEXT[language].title, body: TEXT[language].body, from: previewFaces(byId('fontSchemes', scheme).major), to: ['Noto Sans']}))),
   ...['meiryo', 'yu-gothic', 'microsoft-yahei', 'malgun-gothic'].map((scheme) => ({id: `${scheme}+greek`, language: 'greek', scheme, title: TEXT.greek.title, body: TEXT.greek.body, from: previewFaces(byId('fontSchemes', scheme).major), to: ['Noto Sans']})),
   {id: 'japanese-kanji-and-hangul-in-one-latin-deck-string', language: 'english', scheme: 'calibri', title: 'Revenue 収益 성장', body: 'Revenue grew', from: previewFaces('Calibri'), to: ['Noto Sans JP'], allowed: ['Noto Sans JP', 'Noto Sans SC', 'Noto Sans KR'], characters: ['収']},
   {id: 'simplified-hanzi-in-a-japanese-deck', language: 'japanese', scheme: 'meiryo', title: TEXT['chinese-simplified'].title, body: TEXT['chinese-simplified'].body, from: previewFaces('Meiryo'), to: ['Noto Sans SC'], characters: ['变']}
