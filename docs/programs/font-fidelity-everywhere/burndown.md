@@ -12,8 +12,8 @@ Every item's criteria must all hold before it is `done`. Dates are UTC.
 
 | Status | Count |
 | --- | --- |
-| done | 18 |
-| review / in-progress | 17 |
+| done | 19 |
+| review / in-progress | 16 |
 | todo | 9 |
 
 **Headline progress: 4 of 900 gallery values perfect by parity** (last merged
@@ -36,7 +36,7 @@ first. See the
 | FF-01 | Exporter master bullets follow the theme body font | opf-pptx | none | done | [opf-pptx#57](https://github.com/OpenPresentation/opf-pptx/pull/57), `7b34f557` |
 | FF-02 | Embed harness records pre-edit, post-text and post-edit font observations | opf-pptx | none | done | [opf-pptx#58](https://github.com/OpenPresentation/opf-pptx/pull/58) `b6eb3bfd`; hardening [opf-pptx#62](https://github.com/OpenPresentation/opf-pptx/pull/62) `83a41b9a` |
 | FF-03 | Read-only native font inventory worker | opf-pptx | none | done | [opf-pptx#59](https://github.com/OpenPresentation/opf-pptx/pull/59) `ef8a1583` |
-| FF-04 | Native inventory of the unedited fixture, with and without temporary fonts | opf-pptx / opf | FF-03 | review | [September 29 evidence](../../evidence/windows-native-font-inventory-20260929/README.md): both fixture conditions and exporter control audited; Aptos present before edits; evidence publication pending |
+| FF-04 | Native inventory of the unedited fixture, with and without temporary fonts | opf-pptx / opf | FF-03 | done | [opf#145](https://github.com/OpenPresentation/opf/pull/145), [September 29 evidence](../../evidence/windows-native-font-inventory-20260929/README.md): both fixture conditions and exporter control audited; Aptos present before edits; portable staged-blob verification and independent review passed; completion takes effect with the evidence PR merge |
 | FF-05 | Aptos root cause determined | opf | FF-02, FF-04 | todo | [brief](aptos-origin-brief.md) |
 | FF-06 | Font-flow map across all 14 dimensions and environments | opf | none | done | [font-flow-map.md](font-flow-map.md), [opf#116](https://github.com/OpenPresentation/opf/pull/116) |
 | FF-07 | Exporter writes chosen fonts into theme and run East Asian/complex-script slots, with `lang`/RTL | opf-pptx | FF-05, FF-06, FF-18 | review | merged: [opf-pptx#70](https://github.com/OpenPresentation/opf-pptx/pull/70) `0e886f30`, [opf#134](https://github.com/OpenPresentation/opf/pull/134) `9695bf37`, [opf#135](https://github.com/OpenPresentation/opf/pull/135) `3512af0b`; pending FF-05 native root-cause evidence (criteria are subject to FF-05) |
@@ -72,7 +72,7 @@ first. See the
 | FF-35 | Shared default font scheme `aptos` across every engine | opf, opf-render, opf-editor, opf-pptx | FF-17 | done | [opf#124](https://github.com/OpenPresentation/opf/pull/124) `3ba21ff4`, [opf-render#33](https://github.com/OpenPresentation/opf-render/pull/33) `47d19b25`, [opf-editor#31](https://github.com/OpenPresentation/opf-editor/pull/31) `4e47bf95`, [opf-pptx#64](https://github.com/OpenPresentation/opf-pptx/pull/64) `e1627898` |
 | FF-35b | Follow-up: unknown font-scheme ids fall back to `aptos`, not a Roboto literal | engines with the literal | FF-35 | done | [opf#131](https://github.com/OpenPresentation/opf/pull/131) `27d0ac14`, [opf-render#40](https://github.com/OpenPresentation/opf-render/pull/40) `0fa35b63`, [opf-pptx#75](https://github.com/OpenPresentation/opf-pptx/pull/75) `c606780f`, [opf-editor#32](https://github.com/OpenPresentation/opf-editor/pull/32) `214ae695` |
 | FF-36 | pptx.gallery items show their measured support status | pptx-gallery, opf | FF-23 | review | [pptx-gallery#41](https://github.com/Data-Advantage/pptx-gallery/pull/41) |
-| FF-37 | pptx.gallery as a first-class OPF catalog: spec URLs serve schema-valid records; core bundles a pinned, drift-checked snapshot | opf, pptx-gallery | none | review | [opf#128](https://github.com/OpenPresentation/opf/pull/128), [pptx-gallery#46](https://github.com/Data-Advantage/pptx-gallery/pull/46) |
+| FF-37 | pptx.gallery as a first-class OPF catalog: spec URLs serve schema-valid records; core bundles a pinned, drift-checked snapshot | opf, pptx-gallery | none | review | [opf#128](https://github.com/OpenPresentation/opf/pull/128), [pptx-gallery#46](https://github.com/Data-Advantage/pptx-gallery/pull/46); branch-targeted provenance correction [opf#144](https://github.com/OpenPresentation/opf/pull/144) requires coordinated integration and does not remove gallery-first/conflict gates |
 | FF-38 | Parity audit harness and progress scoreboard (defines "perfect") | opf | FF-23 | done | [opf#122](https://github.com/OpenPresentation/opf/pull/122) `e18df26b`, [PARITY.md](gallery-support/parity/PARITY.md) |
 | FF-39 | Alignment parity: preview and PPTX text alignment and anchors agree | opf-pptx, opf-render | FF-38 | review | merged: [opf-render#37](https://github.com/OpenPresentation/opf-render/pull/37) `3f34448e`, [opf-pptx#72](https://github.com/OpenPresentation/opf-pptx/pull/72) `0330e6d0`; 39 values still report "alignment l (preview) vs ctr (pptx)" (reverse mismatches; see FF-29, [opf#132](https://github.com/OpenPresentation/opf/pull/132)) |
 | FF-R0 | Prior: mixed-size table edit/save/reopen and first embed attempt | opf, opf-pptx | none | done | [opf#114](https://github.com/OpenPresentation/opf/pull/114), [opf#115](https://github.com/OpenPresentation/opf/pull/115) |
@@ -633,6 +633,8 @@ Append one dated line per state change. Newest last.
     confirmed owned close. Aptos and an empty-name font entry were present
     before editing. Historical with-temp and exporter-control audits now have
     passing v2 sidecars; original failed audits remain preserved.
+    The independently reviewed portable bundle is published by opf#145;
+    its merge completes FF-04 (19 done, 16 review/in-progress, 9 todo).
   - FF-05 remains open: the inventory narrows the hypotheses, without locating
     the exact style/part or identifying which physical font drew a glyph.
   - FF-29: independent review reproduced hidden media in privacy modes, stale

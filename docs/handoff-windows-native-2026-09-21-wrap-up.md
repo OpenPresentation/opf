@@ -42,12 +42,12 @@ core133/renderer44 font policy work have already merged.
 
 | Remaining work | State / next gate |
 | --- | --- |
-| FF-04 evidence | Native conditions complete; bundle, verifier and documentation under review |
+| FF-04 evidence | [core145](https://github.com/OpenPresentation/opf/pull/145) publishes the independently reviewed bundle; its merge completes this item |
 | FF-05 root cause | Open; Aptos at open does not identify its exact source |
 | PPTX78/79 | PPTX79 merged `0424d561`; PPTX78 independently reviewed, final-head CI pending at this checkpoint |
 | PPTX76 and renderer42 | Draft chart coverage; reconcile conflicts and acceptance criteria |
 | PPTX77 | Draft theme-color follow-up; per-reference measurement incomplete |
-| core128 / gallery46 | Catalog dependency chain; gallery first, then reconcile core snapshot |
+| core128 / gallery46 / core144 | Catalog dependency chain; gallery first, then reconcile core snapshot; core144 is a branch-targeted provenance correction requiring coordinated integration |
 | gallery40-47 | Open; Actions billing prevents a clean verification result; some also depend on a future release |
 | Old geometry drafts core94/PPTX42/renderer27/editor25 | Deferred; do not merge as part of this work |
 
