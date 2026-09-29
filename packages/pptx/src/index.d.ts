@@ -35,6 +35,12 @@ export interface ImageResolverContext {
 
 export interface FontSchemeDiagnostic { code: "unresolved-font-scheme"; path: string; message: string; id: string; fallback: string }
 export interface MediaProvenanceDiagnostic { code: "media-provenance-omitted"; path: string; message: string }
+/** The chart data cannot be plotted, so a placeholder frame stands in for the chart. */
+export interface ChartDataUnplottableDiagnostic { code: "chart-data-unplottable"; path: string; message: string; reason: "data-not-inline" | "no-rows" | "no-columns" | "single-column-not-numeric" }
+/** Content with no PowerPoint export (an empty table, an unsupported payload) is replaced by a plain-language placeholder frame. */
+export interface ContentPlaceholderDiagnostic { code: "content-placeholder"; path: string; message: string; reason: "table-has-no-rows" | "unsupported-payload" }
+/** The chart data was reshaped to export a native chart: a histogram's values were binned, or a single value column was plotted against row numbers. */
+export interface ChartDataAdaptedDiagnostic { code: "chart-data-adapted"; path: string; message: string; adaptation: "histogram-binned" | "row-numbers" }
 
 export interface ToPptxOptions {
   /** Default compatible converts WebP to a static PNG. Preserve embeds original WebP bytes. */
@@ -51,7 +57,7 @@ export interface ToPptxOptions {
   /** Match preview/pagination clearance around supplied vector text outlines; default 1. */
   textRasterPadding?: number;
   /** Layout diagnostics, `media-provenance-omitted` when video data cannot be stored, plus `unresolved-font-scheme` (once per reference path) when a font-scheme id matches no record and the default `aptos` scheme is used as the base. */
-  onDiagnostic?: (diagnostic: LayoutDiagnostic | FontSchemeDiagnostic | MediaProvenanceDiagnostic) => void;
+  onDiagnostic?: (diagnostic: LayoutDiagnostic | FontSchemeDiagnostic | MediaProvenanceDiagnostic | ChartDataUnplottableDiagnostic | ChartDataAdaptedDiagnostic | ContentPlaceholderDiagnostic) => void;
   baseDir?: string;
   compressionLevel?: number;
   imageResolver?: (src: string, context: ImageResolverContext) => ImageResolverResult | Promise<ImageResolverResult | null | undefined> | null | undefined;
