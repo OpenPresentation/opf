@@ -15,7 +15,7 @@
   - Measured findings:
     - Metric: Carlito/Calibri, Arimo/Arial, Tinos/Times New Roman and Cousine/Courier New. Mean width difference below 0.01%, and no string in any of the four styles is more than 0.26% off.
     - The policy test requires this for every metric row: an upstream source, all four styles measured, a mean below 0.1% and a per-string maximum of at most 0.3%.
-    - Georgia → Gelasio stays visual. Every basic-Latin advance matches Georgia 5.59, but opf-render shapes with default features, and runs where Gelasio applies optional ligatures differ by up to 1.02%.
+    - Georgia → Gelasio is metric only with ligatures off. Every basic-Latin advance matches Georgia 5.59, but with default features Gelasio ligates fi/fl/ffi/ffl and 33 corpus strings differ by up to 1.02%. The row now sets `disabledFeatures: ["liga", "clig"]` (new optional field on a policy replacement, in the schema and `FontReplacement` type), the measurement is taken with them off (mean and maximum below 0.01% in all four styles), and renderers must shape and draw Gelasio that way.
     - Visual: Caladea against Cambria 6.99, with a 2.7% mean and a 6.5% maximum.
     - Aptos → Roboto: 2.15% mean, +0.1% signed, 7.4% maximum.
     - Consolas and Aptos Mono keep Cousine, which has all four styles, with Roboto Mono as an alternate. Roboto Mono measures slightly closer against Consolas (7.95% vs 9.15%), but the bundled Roboto Mono has no italics.
