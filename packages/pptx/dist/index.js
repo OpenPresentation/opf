@@ -810,8 +810,7 @@ function chartFromRelationship(entries, slidePath, relationships, relId) {
   const names = series.map((entry, index) => firstCachedValue(entry?.["c:tx"], cachePath(index, 'c:tx'), budget) ?? `Series ${index + 1}`);
   const values = series.map((entry, index) => {
     const role = entry?.["c:val"] !== undefined ? 'c:val' : 'c:yVal';
-    return cachedValues(entry?.[role], cachePath(index, role), budget)
-      .map(value => value === null || value.trim() === '' ? null : numericValue(value));
+    return cachedValues(entry?.[role], cachePath(index, role), budget, numericCacheValue);
   });
   const rowCount = values.reduce((count, row) => Math.max(count, row.length), labels.length);
   if (rowCount === 0) return null;
@@ -856,10 +855,25 @@ function firstChartNode(plotArea) {
 const MAX_CHART_CACHE_POINTS = 100_000;
 const MAX_CHART_CACHE_CELLS = 1_000_000;
 
+// Import complete decimal exponent tokens without the exporter's legacy
+// character stripping. Other numeric strings deliberately retain that policy.
+function numericCacheValue(value, path) {
+  if (value === null || value.trim() === '') return null;
+  const token = value.trim();
+  const exponent = /^([+-]?(?:\d+(?:\.\d*)?|\.\d+))[eE][+-]?\d+$/.exec(token);
+  if (!exponent) return numericValue(value);
+  const parsed = Number(token);
+  if (!Number.isFinite(parsed) || (parsed === 0 && /[1-9]/.test(exponent[1]))) {
+    const reason = Number.isFinite(parsed) ? 'underflows to zero' : 'overflows';
+    throw new OPFPptxError('unsupported-chart-cache', `Scientific-notation chart value is outside the supported finite numeric range (${reason}); use a representable value before importing.`, {path});
+  }
+  return parsed;
+}
+
 // c:pt is sparse and its XML order does not determine the data row. Keep
 // explicit empty strings distinct from missing points, and bound native
-// metadata before allocating a dense OPF table. This does not parse numbers.
-function cachedValues(node, path, budget) {
+// metadata before allocating a dense OPF table. Only numeric roles convert values.
+function cachedValues(node, path, budget, readValue) {
   const invalid = (message, suffix = '') => {
     throw new OPFPptxError('invalid-chart-cache', `Invalid chart cache: ${message}. Repair the chart data before importing.`, {path: path + suffix});
   };
@@ -916,7 +930,9 @@ function cachedValues(node, path, budget) {
   if (budget.cells + extent > MAX_CHART_CACHE_CELLS) invalid('combined caches exceed the 1,000,000-cell import limit');
   budget.cells += extent;
   const result = new Array(extent).fill(null);
-  for (const [index, value] of indexed) result[index] = value;
+  for (const [index, value] of indexed) {
+    result[index] = readValue ? readValue(value, `${path}/c:pt[@idx="${index}"]/c:v`) : value;
+  }
   return result;
 }
 

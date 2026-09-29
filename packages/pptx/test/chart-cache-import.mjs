@@ -153,3 +153,84 @@ for (const container of ['c:numRef', 'c:strRef', 'c:multiLvlStrRef', 'c:val', 'c
       && /single element/.test(error.message));
   });
 }
+
+test('ordinary numeric export/import/re-export retains scientific-notation cells', async () => {
+  const input = {slides: [{chart: {type: 'column', data: {
+    columns: ['Category', 'Native values'],
+    rows: [['1e3', 1e21], ['1e-7', 1e-7], ['ordinary', 12.5], ['zero', 0]],
+  }}}]};
+  const before = structuredClone(input);
+  const bytes = await toPptx(input, {provenance: false});
+  assert.deepEqual(input, before, 'export must not change authored numeric input');
+  assert.deepEqual(await toPptx(input, {provenance: false}), bytes, 'repeat exports are deterministic');
+  const entries = unzipSync(bytes);
+  const xml = strFromU8(entries[Object.keys(entries).find(path => /^ppt\/charts\/chart\d+\.xml$/.test(path))]);
+  assert.match(xml, /<c:v>1e\+21<\/c:v>/, 'baseline exporter actually uses exponent notation');
+  assert.match(xml, /<c:v>1e-7<\/c:v>/);
+  const originalBytes = bytes.slice();
+  const restored = await fromPptx(bytes);
+  assert.deepEqual(bytes, originalBytes, 'import must not change the package');
+  assert.equal(validatePresentation(restored).valid, true);
+  const chart = restored.slides[0].chart ?? restored.slides[0].blocks?.find(block => block.chart)?.chart;
+  assert.deepEqual(chart.data, input.slides[0].chart.data);
+  const restoredBefore = structuredClone(restored);
+  const again = await fromPptx(await toPptx(restored, {provenance: false}));
+  assert.deepEqual(restored, restoredBefore, 're-export must not change imported values');
+  const againChart = again.slides[0].chart ?? again.slides[0].blocks?.find(block => block.chart)?.chart;
+  assert.deepEqual(againChart.data, chart.data);
+});
+
+// yVal probes only the existing value-role reader, not scatter X/label fidelity.
+for (const element of ['barChart', 'scatterChart']) {
+  for (const kind of ['numRef', 'numLit']) {
+    const role = element === 'scatterChart' ? 'yVal' : 'val';
+    test(`${role}/${kind}: complete exponents preserve finite values, zeros and sparse labels`, async () => {
+      const pairs = [
+        ['1e3', 1000], ['1e-3', 0.001], ['-2.5E+2', -250], ['+4E-2', 0.04],
+        [' 6.02e23 ', 6.02e23], ['.5E+1', 5], ['2.e2', 200], ['001.20e+002', 120],
+        ['5e-324', Number.MIN_VALUE], ['1.7976931348623157e308', Number.MAX_VALUE],
+        ['0e99999', 0], ['-0.000E-99999', -0], ['+.0e+99999', 0], ['-0', -0],
+      ];
+      const count = pairs.length + 3;
+      const chart = await imported({element,
+        labels: cache([point(2, ''), point(0, '1e3')], count, 'strRef'),
+        names: [' 1E+3 '],
+        values: [cache([
+          ...pairs.map(([token], index) => point(index, token)).reverse(),
+          point(pairs.length, ''), point(pairs.length + 1, undefined),
+        ], count, kind)],
+      });
+      assert.deepEqual(chart.data.columns, ['Category', ' 1E+3 ']);
+      assert.deepEqual(chart.data.rows, [
+        ...pairs.map(([, value], index) => [index === 0 ? '1e3' : index === 2 ? '' : null, value]),
+        [null, null], [null, null], [null, null],
+      ]);
+    });
+    test(`${role}/${kind}: exponent overflow and nonzero underflow refuse the exact logical point`, async () => {
+      for (const [token, reason] of [
+        ['1e309', 'overflows'], ['-1E9999', 'overflows'],
+        ['1e-324', 'underflows to zero'], ['-2E-9999', 'underflows to zero'],
+      ]) {
+        const bytes = fixture({element, values: [cache([point(0, 4)]), cache([point(2, token), point(0, 2)], 3, kind)]});
+        const before = bytes.slice();
+        await assert.rejects(fromPptx(bytes), error => {
+          assert.equal(error.code, 'unsupported-chart-cache');
+          const nested = kind === 'numRef' ? 'c:numRef/c:numCache' : 'c:numLit';
+          assert.equal(error.path, `${chartPart}#c:ser[1]/c:${role}/${nested}/c:pt[@idx="2"]/c:v`);
+          assert.ok(error.message.includes(reason), error.message);
+          assert.match(error.message, /use a representable value before importing/);
+          return true;
+        });
+        assert.deepEqual(bytes, before, 'failed import must not alter the package');
+      }
+    });
+    test(`${role}/${kind}: malformed exponents and non-exponent text retain the separate legacy policy`, async () => {
+      const pairs = [['1e', 1], ['1e+', 1], ['1e2tail', 12], ['1.2.3e4', 1.2],
+        ['1,200', 1200], ['$2.50', 2.5], ['text', 0], ['Infinity', 0], ['NaN', 0], ['  ', null]];
+      const chart = await imported({element, labels: cache([], pairs.length, 'strRef'),
+        values: [cache(pairs.map(([token], index) => point(index, token)), pairs.length, kind)],
+      });
+      assert.deepEqual(chart.data.rows, pairs.map(([, value]) => [null, value]));
+    });
+  }
+}
