@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- FF-31: two owner-approved font-file rules, documented in `docs/programs/font-fidelity-everywhere/font-licensing.md` (Font files: bundling and licenses) and the `opf-export` skill. Fonts ship as pinned files (exact npm versions or vendored files with sha256) and are never loaded from a font CDN at runtime. Every bundled face records a verified permissive license (OFL-1.1, Apache-2.0, MIT, UFL-1.0 or Bitstream-Vera-style), whether it declares a Reserved Font Name, its source URL, package@version and sha256. `pnpm check:font-hotlinks` (`scripts/check-font-hotlinks.mjs`, allowlist `scripts/font-hotlink-allowlist.json`) fails on font CDN references in tracked files and runs in `pnpm test`.
+- FF-31: two owner-approved font-file rules, documented in `docs/programs/font-fidelity-everywhere/font-licensing.md` (Font files: bundling and licenses) and the `opf-export` skill. Fonts ship as pinned files (exact npm versions or vendored files with sha256) and are never loaded from a font CDN at runtime. Every bundled face records a verified permissive license (OFL-1.1, Apache-2.0, MIT, UFL-1.0 or Bitstream-Vera-style), whether it declares a Reserved Font Name, its source URL, package@version and sha256. `pnpm check:font-hotlinks` (`scripts/check-font-hotlinks.mjs`, allowlist `scripts/font-hotlink-allowlist.json`) fails on font CDN references in tracked files and runs in `pnpm test`. A family whose license declares a Reserved Font Name must be bundled as the unmodified upstream files, not subsets or conversions.
 
 ## 0.11.1
 
