@@ -32,10 +32,10 @@ for (const row of FONT_POLICY) {
   if (row.replacement.measured) assert.equal(row.replacement.measured.replacement, row.replacement.family, `${row.family}: measurement is of the current replacement`);
 }
 
-// With only the bundled base+office packs, every proprietary Latin text family resolves: to its
+// With only the bundled base, office and open-family packs, every proprietary Latin text family resolves: to its
 // declared replacement when bundled, otherwise to its bundled alternate. Script families use the
 // FF-19 script pack and are covered by test/script-fonts.mjs.
-const bundled = new Set(BUNDLED_FONT_MANIFEST.packages.filter(pkg => pkg.pack === 'base' || pkg.pack === 'office').flatMap(pkg => pkg.faces.map(face => face.family.toLowerCase())));
+const bundled = new Set(BUNDLED_FONT_MANIFEST.packages.filter(pkg => ['base', 'office', 'open'].includes(pkg.pack)).flatMap(pkg => pkg.faces.map(face => face.family.toLowerCase())));
 const isBundled = family => bundled.has(family.toLowerCase());
 const {registry} = await prepareNodeFonts({pack: 'office', substitutionPolicy: 'visual'});
 const counts = {latin: 0, declared: 0, alternate: 0, unavailable: []};
@@ -66,7 +66,10 @@ assert.ok(aptos.measured.meanAbsWidthDelta > 0.015 && aptos.measured.meanAbsWidt
 assert.equal(registry.textMeasurement.resolveFont({fontFamily: 'Roboto', fontWeight: 700}).substitute, false);
 
 // A weight-named family selects its encoded weight in the replacement; bold still selects bold.
-assert.equal(registry.resolveFont({fontFamily: 'Segoe UI Semibold', fontWeight: 400}).resolvedWeight, 600);
+// Red Hat Display is bundled (FF-31) without a 600 face (upstream's SemiBold has OS/2 weight 707, which resvg would rank above Bold), so
+// Semibold snaps to its Bold face, reported visual. The weight-named row still selects an encoded weight where a face exists.
+assert.deepEqual(['Red Hat Display', 700], (({resolvedFamily, resolvedWeight}) => [resolvedFamily, resolvedWeight])(registry.resolveFont({fontFamily: 'Segoe UI Semibold', fontWeight: 400})));
+assert.equal(registry.resolveFont({fontFamily: 'Segoe UI Light', fontWeight: 400}).resolvedWeight, 300);
 assert.equal(registry.resolveFont({fontFamily: 'Segoe UI Semibold', fontWeight: 700}).resolvedWeight, 700);
 
 // Strict mode never falls back silently: the error names the replacement, its tier and the hook.
@@ -76,7 +79,11 @@ assert.equal(strict.registry.resolveFont({fontFamily: 'Calibri', fontWeight: 700
 assert.equal(strict.registry.resolveFont({fontFamily: 'Cambria', fontWeight: 400}).compatibility, 'visual');
 assert.equal(strict.registry.resolveFont({fontFamily: 'Georgia', fontWeight: 400}).compatibility, 'metric');
 assert.throws(() => strict.registry.resolveFont({fontFamily: 'Georgia', fontWeight: 500}), {code: 'font-unavailable'});
-assert.throws(() => strict.registry.resolveFont({fontFamily: 'Montserrat', fontWeight: 400}), error => error.details.licenseClass === 'open' && /no pinned renderer pack ships it yet/.test(error.message));
+// An open family that no pack ships yet (Work Sans) says so; one the office pack ships (Montserrat, FF-31) points at that pack when only the base pack is loaded.
+assert.throws(() => strict.registry.resolveFont({fontFamily: 'Work Sans', fontWeight: 400}), error => error.details.licenseClass === 'open' && /no pinned renderer pack ships it yet/.test(error.message));
+assert.equal(strict.registry.resolveFont({fontFamily: 'Montserrat', fontWeight: 400}).compatibility, 'exact');
+const baseOnly = await prepareNodeFonts({pack: 'base'});
+assert.throws(() => baseOnly.registry.resolveFont({fontFamily: 'Montserrat', fontWeight: 400}), error => error.code === 'font-unavailable' && error.details.pack === 'office' && /load the 'office' font pack/.test(error.message));
 assert.throws(() => strict.registry.resolveFont({fontFamily: 'Brand Sans', fontWeight: 400}), error => error.details.licenseClass === 'unknown' && /not in the OPF font policy table/.test(error.message));
 
 // Caller-supplied faces (for example a licensed copy of the real font) win as exact faces.

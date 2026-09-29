@@ -32,6 +32,13 @@ try{
   const vendored=BUNDLED_FONT_MANIFEST.packages.filter(pkg=>pkg.vendored);
   assert.ok(vendored.length>0,'the manifest vendors at least one font directory');
   for(const pkg of vendored)for(const file of [pkg.licenseFile,...pkg.faces.map(face=>face.file)])assert.ok(files[`${pkg.vendored}/${file}`],`Missing vendored font file: ${pkg.vendored}/${file}`);
+  // The packed copies byte-match the manifest pins; the open pack also ships its PROVENANCE.json (FF-31).
+  for(const pkg of vendored){
+    for(const face of pkg.faces)assert.equal(files[`${pkg.vendored}/${face.file}`],face.sha256,`Packed vendored face differs from its manifest pin: ${pkg.vendored}/${face.file}`);
+    assert.equal(files[`${pkg.vendored}/${pkg.licenseFile}`],pkg.licenseSha256,`Packed license notice differs from its pin: ${pkg.vendored}`);
+    if(pkg.pack==='open')assert.ok(files[`${pkg.vendored}/PROVENANCE.json`],`Missing provenance: ${pkg.vendored}`);
+  }
+  assert.equal(Object.keys(files).filter(file=>file.startsWith('fonts/')&&file.endsWith('.ttf')).length,vendored.reduce((total,pkg)=>total+pkg.faces.length,0),'Only the listed vendored faces are packed');
   await writeFile(path.join(consumer,'vendored-fonts.mjs'),`import assert from 'node:assert/strict';
 import {realpathSync} from 'node:fs';
 import path from 'node:path';

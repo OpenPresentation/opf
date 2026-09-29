@@ -1,0 +1,30 @@
+{
+  "upstream": {
+    "source": "https://github.com/RedHatOfficial/RedHatFont/tree/6bb1048a6402b0076ea04f42951ec66263cd1437/fonts/Proportional/RedHatText/ttf",
+    "commit": "6bb1048a6402b0076ea04f42951ec66263cd1437",
+    "licenseUrl": "https://raw.githubusercontent.com/RedHatOfficial/RedHatFont/6bb1048a6402b0076ea04f42951ec66263cd1437/OFL.txt"
+  },
+  "license": "OFL-1.1",
+  "licenseFile": "OFL.txt",
+  "licenseSha256": "4f1417e27511207cd217656c964f1b0d8b0c4a30156a1a699cf16dc5eba0dff6",
+  "reservedFontNames": [],
+  "copyright": "Copyright 2021 The Red Hat Project Authors (https://github.com/RedHatOfficial/RedHatFont)",
+  "faces": [
+    {
+      "file": "RedHatText-Regular.ttf",
+      "family": "Red Hat Text",
+      "weight": 400,
+      "italic": false,
+      "sha256": "c0989952929fb6427d7b16999678418d52977aea764e66e51b76f9ca221b71b7",
+      "upstreamUrl": "https://raw.githubusercontent.com/RedHatOfficial/RedHatFont/6bb1048a6402b0076ea04f42951ec66263cd1437/fonts/Proportional/RedHatText/ttf/RedHatText-Regular.ttf"
+    },
+    {
+      "file": "RedHatText-Bold.ttf",
+      "family": "Red Hat Text",
+      "weight": 700,
+      "italic": false,
+      "sha256": "a44ef4b6cfefb2e90d489247cdf3e269744673ebb68b48c89ce9e37041feccb4",
+      "upstreamUrl": "https://raw.githubusercontent.com/RedHatOfficial/RedHatFont/6bb1048a6402b0076ea04f42951ec66263cd1437/fonts/Proportional/RedHatText/ttf/RedHatText-Bold.ttf"
+    }
+  ]
+}

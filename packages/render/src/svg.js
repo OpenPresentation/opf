@@ -675,8 +675,7 @@ function renderResolvedSlide(resolved, slideIndex, options) {
   const lang = script?.languageSource === "document" || script?.languageSource === "option" ? script.bcp47 : undefined;
   const { width, height } = bound.design.dimensions;
   const title = bound.slide.title ?? resolved.presentation.name ?? `Slide ${slideIndex + 1}`;
-  const children = [
-    renderEmbeddedFonts(options.embeddedFonts),
+  const content = [
     renderBackground(bound, width, height, options),
     renderSlideImage(bound, options),
     renderBranding(bound, resolved.presentation, width, height, options),
@@ -684,6 +683,7 @@ function renderResolvedSlide(resolved, slideIndex, options) {
     renderFurniture(bound, resolved.presentation, width, height, options, "header"),
     renderFurniture(bound, resolved.presentation, width, height, options, "footer")
   ].filter(Boolean);
+  const children = [renderEmbeddedFonts(embeddedFontsFor(options.embeddedFonts, content)), ...content].filter(Boolean);
 
   return tag(
     "svg",
@@ -1479,6 +1479,15 @@ function scriptLine(text, style, bound, type, { rtl = false, placement, trace } 
 function segmentSpan(attrs, segment, text, style, bound, type, options) {
   const scripted = segment.kind === "tab" ? { content: escapeText(text) } : scriptLine(text, style, bound, type, options);
   return tag("tspan", { ...attrs, "font-family": scripted.family }, scripted.content);
+}
+
+// Faces flagged embed:"used" (only the vendored open-pack faces load with it) are embedded only when the
+// slide's own markup names the family in a font-family list. Every other face is embedded as before.
+function embeddedFontsFor(fonts = [], content) {
+  if (!fonts.some(font => font?.embed === "used")) return fonts;
+  const used = new Set();
+  for (const match of content.join("\n").matchAll(/font-family="([^"]*)"/g)) for (const family of match[1].split(",")) used.add(family.trim().replace(/^&quot;|&quot;$|^["']|["']$/g, "").toLowerCase());
+  return fonts.filter(font => font?.embed !== "used" || used.has(String(font.family).toLowerCase()));
 }
 
 function renderEmbeddedFonts(fonts = []) {

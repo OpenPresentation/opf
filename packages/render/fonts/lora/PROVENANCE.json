@@ -1,0 +1,48 @@
+{
+  "upstream": {
+    "source": "https://github.com/cyrealtype/Lora-Cyrillic/tree/0caf2e6389163dd49e5f973d7ed8bf42e60d83a2/fonts/ttf",
+    "commit": "0caf2e6389163dd49e5f973d7ed8bf42e60d83a2",
+    "licenseUrl": "https://raw.githubusercontent.com/cyrealtype/Lora-Cyrillic/0caf2e6389163dd49e5f973d7ed8bf42e60d83a2/OFL.txt"
+  },
+  "license": "OFL-1.1",
+  "licenseFile": "OFL.txt",
+  "licenseSha256": "1d9a970809ac804b582a6ce7f0ebc4e7fefcbfd7ff6299cad35ee656a21be716",
+  "reservedFontNames": [
+    "Lora"
+  ],
+  "copyright": "Copyright 2011 The Lora Project Authors (https://github.com/cyrealtype/Lora-Cyrillic), with Reserved Font Name \"Lora\".",
+  "faces": [
+    {
+      "file": "Lora-Regular.ttf",
+      "family": "Lora",
+      "weight": 400,
+      "italic": false,
+      "sha256": "c72a925082ba55885e7b4ead25d34a3c91fa44edda72a16a3a2983fc7fa7cef3",
+      "upstreamUrl": "https://raw.githubusercontent.com/cyrealtype/Lora-Cyrillic/0caf2e6389163dd49e5f973d7ed8bf42e60d83a2/fonts/ttf/Lora-Regular.ttf"
+    },
+    {
+      "file": "Lora-Italic.ttf",
+      "family": "Lora",
+      "weight": 400,
+      "italic": true,
+      "sha256": "1985f2fa49d675c3d88ca6a0b9161be38f955bec7efb025d2a5b68bc03e471fe",
+      "upstreamUrl": "https://raw.githubusercontent.com/cyrealtype/Lora-Cyrillic/0caf2e6389163dd49e5f973d7ed8bf42e60d83a2/fonts/ttf/Lora-Italic.ttf"
+    },
+    {
+      "file": "Lora-Bold.ttf",
+      "family": "Lora",
+      "weight": 700,
+      "italic": false,
+      "sha256": "32baf740eac1bf3f257904a6cf89e4e067ca1566b375bf22f743a26fc88b3791",
+      "upstreamUrl": "https://raw.githubusercontent.com/cyrealtype/Lora-Cyrillic/0caf2e6389163dd49e5f973d7ed8bf42e60d83a2/fonts/ttf/Lora-Bold.ttf"
+    },
+    {
+      "file": "Lora-BoldItalic.ttf",
+      "family": "Lora",
+      "weight": 700,
+      "italic": true,
+      "sha256": "f448e41ab0bf529ec7bd4f8aef843eb4d33b5608c7ed0a53128ead588e6ea9e5",
+      "upstreamUrl": "https://raw.githubusercontent.com/cyrealtype/Lora-Cyrillic/0caf2e6389163dd49e5f973d7ed8bf42e60d83a2/fonts/ttf/Lora-BoldItalic.ttf"
+    }
+  ]
+}

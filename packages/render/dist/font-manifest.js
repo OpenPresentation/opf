@@ -366,6 +366,524 @@ export const BUNDLED_FONT_MANIFEST=freeze({
       ]
     },
     {
+      "name": "@expo-google-fonts/open-sans",
+      "vendored": "fonts/open-sans",
+      "version": "0.4.2",
+      "pack": "open",
+      "source": "https://www.npmjs.com/package/@expo-google-fonts/open-sans/v/0.4.2",
+      "license": "OFL-1.1",
+      "licenseFile": "OFL.txt",
+      "licenseSha256": "fbbbcfef55318de350562559b671360de6d597112ecc5c73881b05092db89602",
+      "npmLicenseFile": "LICENSE_FONT",
+      "integrity": "sha512-gvhPqLXYnltWgll3iBwRGUwf5yN2HCh4mgQmFoQ8oU66LTs23oX4N7T3t0BDsKfP/1Z8F8+4c7wSkA11Nnk4kA==",
+      "reservedFontNames": [],
+      "upstream": "https://github.com/googlefonts/opensans",
+      "copyright": "Copyright 2020 The Open Sans Project Authors (https://github.com/googlefonts/opensans)",
+      "faces": [
+        {
+          "file": "OpenSans_400Regular.ttf",
+          "family": "Open Sans",
+          "weight": 400,
+          "italic": false,
+          "sha256": "33e93bec67d91c396876db50694213802a39e43a911bb5c22322f0dbdf4d5e43",
+          "npmFile": "400Regular/OpenSans_400Regular.ttf"
+        },
+        {
+          "file": "OpenSans_400Regular_Italic.ttf",
+          "family": "Open Sans",
+          "weight": 400,
+          "italic": true,
+          "sha256": "dd74eb2d271b57ef5c382a97403818715bfb6b1d53d7fa6da9c88336763651fb",
+          "npmFile": "400Regular_Italic/OpenSans_400Regular_Italic.ttf"
+        },
+        {
+          "file": "OpenSans_700Bold.ttf",
+          "family": "Open Sans",
+          "weight": 700,
+          "italic": false,
+          "sha256": "5f4c6f0c6beae94863a099a7a538059c480f91587f1abffc06552e9fa3a44f40",
+          "npmFile": "700Bold/OpenSans_700Bold.ttf"
+        },
+        {
+          "file": "OpenSans_700Bold_Italic.ttf",
+          "family": "Open Sans",
+          "weight": 700,
+          "italic": true,
+          "sha256": "c7e0a936ff0f08b6726cf205126a5e6dd6ae1340111325f7e86cbba1408e82d7",
+          "npmFile": "700Bold_Italic/OpenSans_700Bold_Italic.ttf"
+        }
+      ]
+    },
+    {
+      "name": "@expo-google-fonts/montserrat",
+      "vendored": "fonts/montserrat",
+      "version": "0.4.2",
+      "pack": "open",
+      "source": "https://www.npmjs.com/package/@expo-google-fonts/montserrat/v/0.4.2",
+      "license": "OFL-1.1",
+      "licenseFile": "OFL.txt",
+      "licenseSha256": "8b7141c03fa4f8d44e6345d5d4931709290f0f67875e452e95ac1fd3a027802e",
+      "npmLicenseFile": "LICENSE_FONT",
+      "integrity": "sha512-Xyq7rKJhhZOE1Xk4wKSSVoUeOkFmQEMhtZ3pdFrgYckGZMs115Apmld1AI8Ju+yrl5GzDdfRCCqRr33dvEDYUA==",
+      "reservedFontNames": [],
+      "upstream": "https://github.com/JulietaUla/Montserrat.git",
+      "copyright": "Copyright 2024 The Montserrat.Git Project Authors (https://github.com/JulietaUla/Montserrat.git)",
+      "faces": [
+        {
+          "file": "Montserrat_400Regular.ttf",
+          "family": "Montserrat",
+          "weight": 400,
+          "italic": false,
+          "sha256": "ef9cf99f0175bef530b88934bd904fcf56f773cec6fd4dfb8ccaf7ce2bbd395e",
+          "npmFile": "400Regular/Montserrat_400Regular.ttf"
+        },
+        {
+          "file": "Montserrat_400Regular_Italic.ttf",
+          "family": "Montserrat",
+          "weight": 400,
+          "italic": true,
+          "sha256": "7e87c0f96b39fbb919b30aef8991323d0b257649f391e6456bcf03c231448f49",
+          "npmFile": "400Regular_Italic/Montserrat_400Regular_Italic.ttf"
+        },
+        {
+          "file": "Montserrat_700Bold.ttf",
+          "family": "Montserrat",
+          "weight": 700,
+          "italic": false,
+          "sha256": "7fa93d7daa5c2f881a6727229c211782de6b76008fbd6346b3d7664e8fc83f43",
+          "npmFile": "700Bold/Montserrat_700Bold.ttf"
+        },
+        {
+          "file": "Montserrat_700Bold_Italic.ttf",
+          "family": "Montserrat",
+          "weight": 700,
+          "italic": true,
+          "sha256": "001a59b0f2c541080033b83ca6dfacce03095d99caa3594835f51b7c6d9ce758",
+          "npmFile": "700Bold_Italic/Montserrat_700Bold_Italic.ttf"
+        },
+        {
+          "file": "Montserrat_900Black.ttf",
+          "family": "Montserrat",
+          "weight": 900,
+          "italic": false,
+          "sha256": "b48e6741b9889ede4ffe3d8acfda3e6917c62127537b19fe7206cba04e6ebb63",
+          "npmFile": "900Black/Montserrat_900Black.ttf"
+        }
+      ]
+    },
+    {
+      "name": "@expo-google-fonts/poppins",
+      "vendored": "fonts/poppins",
+      "version": "0.4.1",
+      "pack": "open",
+      "source": "https://www.npmjs.com/package/@expo-google-fonts/poppins/v/0.4.1",
+      "license": "OFL-1.1",
+      "licenseFile": "OFL.txt",
+      "licenseSha256": "6be04893d770899a015649c7aa3b582f871b272f8747a92b78b17c3e5c8b2573",
+      "npmLicenseFile": "LICENSE_FONT",
+      "integrity": "sha512-LiX5oEryJqDt3UmWwr4oqf11hGMz/JEffkkNcZ3UtGwyoMFzXmBmTwcrAWrEttxypxmLNmPykDg+CY2VjKve9A==",
+      "reservedFontNames": [],
+      "upstream": "https://github.com/itfoundry/Poppins",
+      "copyright": "Copyright 2020 The Poppins Project Authors (https://github.com/itfoundry/Poppins)",
+      "faces": [
+        {
+          "file": "Poppins_400Regular.ttf",
+          "family": "Poppins",
+          "weight": 400,
+          "italic": false,
+          "sha256": "707fdc5c8bab57a90061c6a8ed7b70d5ffb82fc810e994e79f90bace890c255a",
+          "npmFile": "400Regular/Poppins_400Regular.ttf"
+        },
+        {
+          "file": "Poppins_400Regular_Italic.ttf",
+          "family": "Poppins",
+          "weight": 400,
+          "italic": true,
+          "sha256": "3225cec6a018310497ea9ee116aa43b2a833464fed6156dceb9a3a4424bb8613",
+          "npmFile": "400Regular_Italic/Poppins_400Regular_Italic.ttf"
+        },
+        {
+          "file": "Poppins_700Bold.ttf",
+          "family": "Poppins",
+          "weight": 700,
+          "italic": false,
+          "sha256": "7219547ee25334cbac0fe4b3acf0bf631e48ebb622c71af038edaaa652c60875",
+          "npmFile": "700Bold/Poppins_700Bold.ttf"
+        },
+        {
+          "file": "Poppins_700Bold_Italic.ttf",
+          "family": "Poppins",
+          "weight": 700,
+          "italic": true,
+          "sha256": "9d4d9f3c2c289eaec403660ec215bdc45e62b49f978807714bfc31ca7916c8fe",
+          "npmFile": "700Bold_Italic/Poppins_700Bold_Italic.ttf"
+        }
+      ]
+    },
+    {
+      "name": "@expo-google-fonts/bebas-neue",
+      "vendored": "fonts/bebas-neue",
+      "version": "0.4.1",
+      "pack": "open",
+      "source": "https://www.npmjs.com/package/@expo-google-fonts/bebas-neue/v/0.4.1",
+      "license": "OFL-1.1",
+      "licenseFile": "OFL.txt",
+      "licenseSha256": "72082f6cb4d04be2ecf7cc7d9e1e7d73787f0af8a5a278a47cade70c16b78341",
+      "npmLicenseFile": "LICENSE_FONT",
+      "integrity": "sha512-Ibnf0EQgMUj01tT/ws64RlsMQmOvDP+UDFW93bld0C/WwaOaCGWKgNnqxNkKxmL73y2kpT8EB4dkSNUOyAOEJA==",
+      "reservedFontNames": [],
+      "upstream": "http://scripts.sil.org/OFL",
+      "copyright": "Copyright © 2010 by Dharma Type.",
+      "faces": [
+        {
+          "file": "BebasNeue_400Regular.ttf",
+          "family": "Bebas Neue",
+          "weight": 400,
+          "italic": false,
+          "sha256": "830ea186acffc2316ed1a4e42319246ba3b46b04e33a211079249bf901193f04",
+          "npmFile": "400Regular/BebasNeue_400Regular.ttf"
+        }
+      ]
+    },
+    {
+      "name": "pt-serif",
+      "vendored": "fonts/pt-serif",
+      "version": "23e54b51ddffbc7713c583748e3bd86f62b1fa4a",
+      "pack": "open",
+      "source": "https://github.com/google/fonts/tree/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/ptserif",
+      "license": "OFL-1.1",
+      "licenseFile": "OFL.txt",
+      "licenseSha256": "ddf311c28ddf5a5ad9747649837346b67bed9d356789c3072bb27dbce49e514d",
+      "upstreamLicenseUrl": "https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/ptserif/OFL.txt",
+      "reservedFontNames": [
+        "PT Sans",
+        "PT Serif",
+        "ParaType"
+      ],
+      "upstream": "http://www.paratype.com/public",
+      "copyright": "Copyright (c) 2010, ParaType Ltd. (http://www.paratype.com/public),",
+      "faces": [
+        {
+          "file": "PT_Serif-Web-Regular.ttf",
+          "family": "PT Serif",
+          "weight": 400,
+          "italic": false,
+          "sha256": "a4951fade06ff8f09b7673aa81ffb65a8cd409e24d3289a6dc670bc4dda2557a",
+          "upstreamFile": {
+            "url": "https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/ptserif/PT_Serif-Web-Regular.ttf",
+            "sha256": "a4951fade06ff8f09b7673aa81ffb65a8cd409e24d3289a6dc670bc4dda2557a"
+          }
+        },
+        {
+          "file": "PT_Serif-Web-Italic.ttf",
+          "family": "PT Serif",
+          "weight": 400,
+          "italic": true,
+          "sha256": "f57e95ff9dc85691a3b2e193f2028db36f6663939a46c0fc4f286d618b80b7ce",
+          "upstreamFile": {
+            "url": "https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/ptserif/PT_Serif-Web-Italic.ttf",
+            "sha256": "f57e95ff9dc85691a3b2e193f2028db36f6663939a46c0fc4f286d618b80b7ce"
+          }
+        },
+        {
+          "file": "PT_Serif-Web-Bold.ttf",
+          "family": "PT Serif",
+          "weight": 700,
+          "italic": false,
+          "sha256": "038ba7336bd7ea14f12ad155bed51a4345cac5153275d521dec3ba04021c526e",
+          "upstreamFile": {
+            "url": "https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/ptserif/PT_Serif-Web-Bold.ttf",
+            "sha256": "038ba7336bd7ea14f12ad155bed51a4345cac5153275d521dec3ba04021c526e"
+          }
+        },
+        {
+          "file": "PT_Serif-Web-BoldItalic.ttf",
+          "family": "PT Serif",
+          "weight": 700,
+          "italic": true,
+          "sha256": "f003788ba08981eb0988b3557a6f224a53dab49c20e283e8b74d5af3c466f8be",
+          "upstreamFile": {
+            "url": "https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/ptserif/PT_Serif-Web-BoldItalic.ttf",
+            "sha256": "f003788ba08981eb0988b3557a6f224a53dab49c20e283e8b74d5af3c466f8be"
+          }
+        }
+      ]
+    },
+    {
+      "name": "lora",
+      "vendored": "fonts/lora",
+      "version": "0caf2e6389163dd49e5f973d7ed8bf42e60d83a2",
+      "pack": "open",
+      "source": "https://github.com/cyrealtype/Lora-Cyrillic/tree/0caf2e6389163dd49e5f973d7ed8bf42e60d83a2/fonts/ttf",
+      "license": "OFL-1.1",
+      "licenseFile": "OFL.txt",
+      "licenseSha256": "1d9a970809ac804b582a6ce7f0ebc4e7fefcbfd7ff6299cad35ee656a21be716",
+      "upstreamLicenseUrl": "https://raw.githubusercontent.com/cyrealtype/Lora-Cyrillic/0caf2e6389163dd49e5f973d7ed8bf42e60d83a2/OFL.txt",
+      "reservedFontNames": [
+        "Lora"
+      ],
+      "upstream": "https://github.com/cyrealtype/Lora-Cyrillic",
+      "copyright": "Copyright 2011 The Lora Project Authors (https://github.com/cyrealtype/Lora-Cyrillic), with Reserved Font Name \"Lora\".",
+      "faces": [
+        {
+          "file": "Lora-Regular.ttf",
+          "family": "Lora",
+          "weight": 400,
+          "italic": false,
+          "sha256": "c72a925082ba55885e7b4ead25d34a3c91fa44edda72a16a3a2983fc7fa7cef3",
+          "upstreamFile": {
+            "url": "https://raw.githubusercontent.com/cyrealtype/Lora-Cyrillic/0caf2e6389163dd49e5f973d7ed8bf42e60d83a2/fonts/ttf/Lora-Regular.ttf",
+            "sha256": "c72a925082ba55885e7b4ead25d34a3c91fa44edda72a16a3a2983fc7fa7cef3"
+          }
+        },
+        {
+          "file": "Lora-Italic.ttf",
+          "family": "Lora",
+          "weight": 400,
+          "italic": true,
+          "sha256": "1985f2fa49d675c3d88ca6a0b9161be38f955bec7efb025d2a5b68bc03e471fe",
+          "upstreamFile": {
+            "url": "https://raw.githubusercontent.com/cyrealtype/Lora-Cyrillic/0caf2e6389163dd49e5f973d7ed8bf42e60d83a2/fonts/ttf/Lora-Italic.ttf",
+            "sha256": "1985f2fa49d675c3d88ca6a0b9161be38f955bec7efb025d2a5b68bc03e471fe"
+          }
+        },
+        {
+          "file": "Lora-Bold.ttf",
+          "family": "Lora",
+          "weight": 700,
+          "italic": false,
+          "sha256": "32baf740eac1bf3f257904a6cf89e4e067ca1566b375bf22f743a26fc88b3791",
+          "upstreamFile": {
+            "url": "https://raw.githubusercontent.com/cyrealtype/Lora-Cyrillic/0caf2e6389163dd49e5f973d7ed8bf42e60d83a2/fonts/ttf/Lora-Bold.ttf",
+            "sha256": "32baf740eac1bf3f257904a6cf89e4e067ca1566b375bf22f743a26fc88b3791"
+          }
+        },
+        {
+          "file": "Lora-BoldItalic.ttf",
+          "family": "Lora",
+          "weight": 700,
+          "italic": true,
+          "sha256": "f448e41ab0bf529ec7bd4f8aef843eb4d33b5608c7ed0a53128ead588e6ea9e5",
+          "upstreamFile": {
+            "url": "https://raw.githubusercontent.com/cyrealtype/Lora-Cyrillic/0caf2e6389163dd49e5f973d7ed8bf42e60d83a2/fonts/ttf/Lora-BoldItalic.ttf",
+            "sha256": "f448e41ab0bf529ec7bd4f8aef843eb4d33b5608c7ed0a53128ead588e6ea9e5"
+          }
+        }
+      ]
+    },
+    {
+      "name": "merriweather-sans",
+      "vendored": "fonts/merriweather-sans",
+      "version": "bb6bd99bf9eb756723f2428629659a638702d335",
+      "pack": "open",
+      "source": "https://github.com/SorkinType/Merriweather-Sans/tree/bb6bd99bf9eb756723f2428629659a638702d335/fonts/ttf",
+      "license": "OFL-1.1",
+      "licenseFile": "OFL.txt",
+      "licenseSha256": "c487138e4ea4688386abfaf72ab2cbc72a7c8c358cca19bd70095e0d07d8d9f2",
+      "upstreamLicenseUrl": "https://raw.githubusercontent.com/SorkinType/Merriweather-Sans/bb6bd99bf9eb756723f2428629659a638702d335/OFL.txt",
+      "reservedFontNames": [
+        "Merriweather"
+      ],
+      "upstream": "https://github.com/SorkinType/Merriweather-Sans",
+      "copyright": "Copyright 2019 The Merriweather Project Authors (https://github.com/SorkinType/Merriweather-Sans)",
+      "faces": [
+        {
+          "file": "MerriweatherSans-Regular.ttf",
+          "family": "Merriweather Sans",
+          "weight": 400,
+          "italic": false,
+          "sha256": "aef68ceec429f644df7e35e57667a5f37df42d231210ecc456ef4abe4b1e3595",
+          "upstreamFile": {
+            "url": "https://raw.githubusercontent.com/SorkinType/Merriweather-Sans/bb6bd99bf9eb756723f2428629659a638702d335/fonts/ttf/MerriweatherSans-Regular.ttf",
+            "sha256": "aef68ceec429f644df7e35e57667a5f37df42d231210ecc456ef4abe4b1e3595"
+          }
+        },
+        {
+          "file": "MerriweatherSans-Italic.ttf",
+          "family": "Merriweather Sans",
+          "weight": 400,
+          "italic": true,
+          "sha256": "977d0588a2da17b6a773b8f34492ef0b368e32350463b8ac8bb15741ca17e072",
+          "upstreamFile": {
+            "url": "https://raw.githubusercontent.com/SorkinType/Merriweather-Sans/bb6bd99bf9eb756723f2428629659a638702d335/fonts/ttf/MerriweatherSans-Italic.ttf",
+            "sha256": "977d0588a2da17b6a773b8f34492ef0b368e32350463b8ac8bb15741ca17e072"
+          }
+        },
+        {
+          "file": "MerriweatherSans-Bold.ttf",
+          "family": "Merriweather Sans",
+          "weight": 700,
+          "italic": false,
+          "sha256": "94ac9ad8fc7decbf9108b2fd532dafc34747c3fb0a43adc96d0182ff9242b2be",
+          "upstreamFile": {
+            "url": "https://raw.githubusercontent.com/SorkinType/Merriweather-Sans/bb6bd99bf9eb756723f2428629659a638702d335/fonts/ttf/MerriweatherSans-Bold.ttf",
+            "sha256": "94ac9ad8fc7decbf9108b2fd532dafc34747c3fb0a43adc96d0182ff9242b2be"
+          }
+        },
+        {
+          "file": "MerriweatherSans-BoldItalic.ttf",
+          "family": "Merriweather Sans",
+          "weight": 700,
+          "italic": true,
+          "sha256": "cb77e6a773760f24c84e8388eb0226fe4b58af4e1d91bc402e1087e64038415c",
+          "upstreamFile": {
+            "url": "https://raw.githubusercontent.com/SorkinType/Merriweather-Sans/bb6bd99bf9eb756723f2428629659a638702d335/fonts/ttf/MerriweatherSans-BoldItalic.ttf",
+            "sha256": "cb77e6a773760f24c84e8388eb0226fe4b58af4e1d91bc402e1087e64038415c"
+          }
+        }
+      ]
+    },
+    {
+      "name": "source-sans-3",
+      "vendored": "fonts/source-sans-3",
+      "version": "ed1808970eb3c7301c9a523bee26473ba0bb62fa",
+      "pack": "open",
+      "source": "https://github.com/adobe-fonts/source-sans/tree/ed1808970eb3c7301c9a523bee26473ba0bb62fa/TTF",
+      "license": "OFL-1.1",
+      "licenseFile": "OFL.txt",
+      "licenseSha256": "89ad2c4f66dd29127527493e729c31e731f111cf10faf5774c3db9275ed0c22c",
+      "upstreamLicenseUrl": "https://raw.githubusercontent.com/adobe-fonts/source-sans/ed1808970eb3c7301c9a523bee26473ba0bb62fa/LICENSE.md",
+      "renamedFrom": "Source Sans Pro",
+      "reservedFontNames": [
+        "Source"
+      ],
+      "upstream": "http://www.adobe.com/",
+      "copyright": "Copyright 2010-2022 Adobe (http://www.adobe.com/), with Reserved Font Name 'Source'. All Rights Reserved. Source is a trademark of Adobe in the United States and/or other countries.",
+      "faces": [
+        {
+          "file": "SourceSans3-Regular.ttf",
+          "family": "Source Sans 3",
+          "weight": 400,
+          "italic": false,
+          "sha256": "4644c81b86ec9caaa76b634889968ed3c4f4f52f054855933acc7c2b21e53b0f",
+          "upstreamFile": {
+            "url": "https://raw.githubusercontent.com/adobe-fonts/source-sans/ed1808970eb3c7301c9a523bee26473ba0bb62fa/TTF/SourceSans3-Regular.ttf",
+            "sha256": "4644c81b86ec9caaa76b634889968ed3c4f4f52f054855933acc7c2b21e53b0f"
+          }
+        },
+        {
+          "file": "SourceSans3-It.ttf",
+          "family": "Source Sans 3",
+          "weight": 400,
+          "italic": true,
+          "sha256": "192afd78f0f54a3c69eaf02d43f4d9a821e9d6110e41d3d25d61a7385cd580e4",
+          "upstreamFile": {
+            "url": "https://raw.githubusercontent.com/adobe-fonts/source-sans/ed1808970eb3c7301c9a523bee26473ba0bb62fa/TTF/SourceSans3-It.ttf",
+            "sha256": "192afd78f0f54a3c69eaf02d43f4d9a821e9d6110e41d3d25d61a7385cd580e4"
+          }
+        },
+        {
+          "file": "SourceSans3-Bold.ttf",
+          "family": "Source Sans 3",
+          "weight": 700,
+          "italic": false,
+          "sha256": "9214b9d95e4231c609802815c2646c98174e2102d0d37f88978a7f8e71006e6a",
+          "upstreamFile": {
+            "url": "https://raw.githubusercontent.com/adobe-fonts/source-sans/ed1808970eb3c7301c9a523bee26473ba0bb62fa/TTF/SourceSans3-Bold.ttf",
+            "sha256": "9214b9d95e4231c609802815c2646c98174e2102d0d37f88978a7f8e71006e6a"
+          }
+        },
+        {
+          "file": "SourceSans3-BoldIt.ttf",
+          "family": "Source Sans 3",
+          "weight": 700,
+          "italic": true,
+          "sha256": "7978291fc1bf314db887e0366853b33c5cf2e964c7b95cfb9ce403a6ec46a842",
+          "upstreamFile": {
+            "url": "https://raw.githubusercontent.com/adobe-fonts/source-sans/ed1808970eb3c7301c9a523bee26473ba0bb62fa/TTF/SourceSans3-BoldIt.ttf",
+            "sha256": "7978291fc1bf314db887e0366853b33c5cf2e964c7b95cfb9ce403a6ec46a842"
+          }
+        }
+      ]
+    },
+    {
+      "name": "red-hat-display",
+      "vendored": "fonts/red-hat-display",
+      "version": "6bb1048a6402b0076ea04f42951ec66263cd1437",
+      "pack": "open",
+      "source": "https://github.com/RedHatOfficial/RedHatFont/tree/6bb1048a6402b0076ea04f42951ec66263cd1437/fonts/Proportional/RedHatDisplay/ttf",
+      "license": "OFL-1.1",
+      "licenseFile": "OFL.txt",
+      "licenseSha256": "4f1417e27511207cd217656c964f1b0d8b0c4a30156a1a699cf16dc5eba0dff6",
+      "upstreamLicenseUrl": "https://raw.githubusercontent.com/RedHatOfficial/RedHatFont/6bb1048a6402b0076ea04f42951ec66263cd1437/OFL.txt",
+      "reservedFontNames": [],
+      "upstream": "https://github.com/RedHatOfficial/RedHatFont",
+      "copyright": "Copyright 2021 The Red Hat Project Authors (https://github.com/RedHatOfficial/RedHatFont)",
+      "faces": [
+        {
+          "file": "RedHatDisplay-Regular.ttf",
+          "family": "Red Hat Display",
+          "weight": 400,
+          "italic": false,
+          "sha256": "ab007b2a5b1590027cb049c3946de67870f6de9fa2420f8ef6e968392219aecd",
+          "upstreamFile": {
+            "url": "https://raw.githubusercontent.com/RedHatOfficial/RedHatFont/6bb1048a6402b0076ea04f42951ec66263cd1437/fonts/Proportional/RedHatDisplay/ttf/RedHatDisplay-Regular.ttf",
+            "sha256": "ab007b2a5b1590027cb049c3946de67870f6de9fa2420f8ef6e968392219aecd"
+          }
+        },
+        {
+          "file": "RedHatDisplay-Bold.ttf",
+          "family": "Red Hat Display",
+          "weight": 700,
+          "italic": false,
+          "sha256": "bac4990e2845c796ad0cfc47c3121b09df9285858ba841f7eab8bcdea87b74f1",
+          "upstreamFile": {
+            "url": "https://raw.githubusercontent.com/RedHatOfficial/RedHatFont/6bb1048a6402b0076ea04f42951ec66263cd1437/fonts/Proportional/RedHatDisplay/ttf/RedHatDisplay-Bold.ttf",
+            "sha256": "bac4990e2845c796ad0cfc47c3121b09df9285858ba841f7eab8bcdea87b74f1"
+          }
+        },
+        {
+          "file": "RedHatDisplay-Light.ttf",
+          "family": "Red Hat Display",
+          "weight": 300,
+          "italic": false,
+          "sha256": "99ed6ddec6954941f708b23d3ab6873cba9f3067a4d1153d98be31ff2472dcb5",
+          "upstreamFile": {
+            "url": "https://raw.githubusercontent.com/RedHatOfficial/RedHatFont/6bb1048a6402b0076ea04f42951ec66263cd1437/fonts/Proportional/RedHatDisplay/ttf/RedHatDisplay-Light.ttf",
+            "sha256": "99ed6ddec6954941f708b23d3ab6873cba9f3067a4d1153d98be31ff2472dcb5"
+          }
+        }
+      ]
+    },
+    {
+      "name": "red-hat-text",
+      "vendored": "fonts/red-hat-text",
+      "version": "6bb1048a6402b0076ea04f42951ec66263cd1437",
+      "pack": "open",
+      "source": "https://github.com/RedHatOfficial/RedHatFont/tree/6bb1048a6402b0076ea04f42951ec66263cd1437/fonts/Proportional/RedHatText/ttf",
+      "license": "OFL-1.1",
+      "licenseFile": "OFL.txt",
+      "licenseSha256": "4f1417e27511207cd217656c964f1b0d8b0c4a30156a1a699cf16dc5eba0dff6",
+      "upstreamLicenseUrl": "https://raw.githubusercontent.com/RedHatOfficial/RedHatFont/6bb1048a6402b0076ea04f42951ec66263cd1437/OFL.txt",
+      "reservedFontNames": [],
+      "upstream": "https://github.com/RedHatOfficial/RedHatFont",
+      "copyright": "Copyright 2021 The Red Hat Project Authors (https://github.com/RedHatOfficial/RedHatFont)",
+      "faces": [
+        {
+          "file": "RedHatText-Regular.ttf",
+          "family": "Red Hat Text",
+          "weight": 400,
+          "italic": false,
+          "sha256": "c0989952929fb6427d7b16999678418d52977aea764e66e51b76f9ca221b71b7",
+          "upstreamFile": {
+            "url": "https://raw.githubusercontent.com/RedHatOfficial/RedHatFont/6bb1048a6402b0076ea04f42951ec66263cd1437/fonts/Proportional/RedHatText/ttf/RedHatText-Regular.ttf",
+            "sha256": "c0989952929fb6427d7b16999678418d52977aea764e66e51b76f9ca221b71b7"
+          }
+        },
+        {
+          "file": "RedHatText-Bold.ttf",
+          "family": "Red Hat Text",
+          "weight": 700,
+          "italic": false,
+          "sha256": "a44ef4b6cfefb2e90d489247cdf3e269744673ebb68b48c89ce9e37041feccb4",
+          "upstreamFile": {
+            "url": "https://raw.githubusercontent.com/RedHatOfficial/RedHatFont/6bb1048a6402b0076ea04f42951ec66263cd1437/fonts/Proportional/RedHatText/ttf/RedHatText-Bold.ttf",
+            "sha256": "a44ef4b6cfefb2e90d489247cdf3e269744673ebb68b48c89ce9e37041feccb4"
+          }
+        }
+      ]
+    },
+    {
       "name": "@expo-google-fonts/noto-sans-jp",
       "version": "0.4.3",
       "pack": "scripts",

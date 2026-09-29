@@ -1,0 +1,38 @@
+{
+  "upstream": {
+    "source": "https://github.com/RedHatOfficial/RedHatFont/tree/6bb1048a6402b0076ea04f42951ec66263cd1437/fonts/Proportional/RedHatDisplay/ttf",
+    "commit": "6bb1048a6402b0076ea04f42951ec66263cd1437",
+    "licenseUrl": "https://raw.githubusercontent.com/RedHatOfficial/RedHatFont/6bb1048a6402b0076ea04f42951ec66263cd1437/OFL.txt"
+  },
+  "license": "OFL-1.1",
+  "licenseFile": "OFL.txt",
+  "licenseSha256": "4f1417e27511207cd217656c964f1b0d8b0c4a30156a1a699cf16dc5eba0dff6",
+  "reservedFontNames": [],
+  "copyright": "Copyright 2021 The Red Hat Project Authors (https://github.com/RedHatOfficial/RedHatFont)",
+  "faces": [
+    {
+      "file": "RedHatDisplay-Regular.ttf",
+      "family": "Red Hat Display",
+      "weight": 400,
+      "italic": false,
+      "sha256": "ab007b2a5b1590027cb049c3946de67870f6de9fa2420f8ef6e968392219aecd",
+      "upstreamUrl": "https://raw.githubusercontent.com/RedHatOfficial/RedHatFont/6bb1048a6402b0076ea04f42951ec66263cd1437/fonts/Proportional/RedHatDisplay/ttf/RedHatDisplay-Regular.ttf"
+    },
+    {
+      "file": "RedHatDisplay-Bold.ttf",
+      "family": "Red Hat Display",
+      "weight": 700,
+      "italic": false,
+      "sha256": "bac4990e2845c796ad0cfc47c3121b09df9285858ba841f7eab8bcdea87b74f1",
+      "upstreamUrl": "https://raw.githubusercontent.com/RedHatOfficial/RedHatFont/6bb1048a6402b0076ea04f42951ec66263cd1437/fonts/Proportional/RedHatDisplay/ttf/RedHatDisplay-Bold.ttf"
+    },
+    {
+      "file": "RedHatDisplay-Light.ttf",
+      "family": "Red Hat Display",
+      "weight": 300,
+      "italic": false,
+      "sha256": "99ed6ddec6954941f708b23d3ab6873cba9f3067a4d1153d98be31ff2472dcb5",
+      "upstreamUrl": "https://raw.githubusercontent.com/RedHatOfficial/RedHatFont/6bb1048a6402b0076ea04f42951ec66263cd1437/fonts/Proportional/RedHatDisplay/ttf/RedHatDisplay-Light.ttf"
+    }
+  ]
+}

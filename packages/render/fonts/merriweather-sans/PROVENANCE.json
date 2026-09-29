@@ -1,0 +1,48 @@
+{
+  "upstream": {
+    "source": "https://github.com/SorkinType/Merriweather-Sans/tree/bb6bd99bf9eb756723f2428629659a638702d335/fonts/ttf",
+    "commit": "bb6bd99bf9eb756723f2428629659a638702d335",
+    "licenseUrl": "https://raw.githubusercontent.com/SorkinType/Merriweather-Sans/bb6bd99bf9eb756723f2428629659a638702d335/OFL.txt"
+  },
+  "license": "OFL-1.1",
+  "licenseFile": "OFL.txt",
+  "licenseSha256": "c487138e4ea4688386abfaf72ab2cbc72a7c8c358cca19bd70095e0d07d8d9f2",
+  "reservedFontNames": [
+    "Merriweather"
+  ],
+  "copyright": "Copyright 2019 The Merriweather Project Authors (https://github.com/SorkinType/Merriweather-Sans)",
+  "faces": [
+    {
+      "file": "MerriweatherSans-Regular.ttf",
+      "family": "Merriweather Sans",
+      "weight": 400,
+      "italic": false,
+      "sha256": "aef68ceec429f644df7e35e57667a5f37df42d231210ecc456ef4abe4b1e3595",
+      "upstreamUrl": "https://raw.githubusercontent.com/SorkinType/Merriweather-Sans/bb6bd99bf9eb756723f2428629659a638702d335/fonts/ttf/MerriweatherSans-Regular.ttf"
+    },
+    {
+      "file": "MerriweatherSans-Italic.ttf",
+      "family": "Merriweather Sans",
+      "weight": 400,
+      "italic": true,
+      "sha256": "977d0588a2da17b6a773b8f34492ef0b368e32350463b8ac8bb15741ca17e072",
+      "upstreamUrl": "https://raw.githubusercontent.com/SorkinType/Merriweather-Sans/bb6bd99bf9eb756723f2428629659a638702d335/fonts/ttf/MerriweatherSans-Italic.ttf"
+    },
+    {
+      "file": "MerriweatherSans-Bold.ttf",
+      "family": "Merriweather Sans",
+      "weight": 700,
+      "italic": false,
+      "sha256": "94ac9ad8fc7decbf9108b2fd532dafc34747c3fb0a43adc96d0182ff9242b2be",
+      "upstreamUrl": "https://raw.githubusercontent.com/SorkinType/Merriweather-Sans/bb6bd99bf9eb756723f2428629659a638702d335/fonts/ttf/MerriweatherSans-Bold.ttf"
+    },
+    {
+      "file": "MerriweatherSans-BoldItalic.ttf",
+      "family": "Merriweather Sans",
+      "weight": 700,
+      "italic": true,
+      "sha256": "cb77e6a773760f24c84e8388eb0226fe4b58af4e1d91bc402e1087e64038415c",
+      "upstreamUrl": "https://raw.githubusercontent.com/SorkinType/Merriweather-Sans/bb6bd99bf9eb756723f2428629659a638702d335/fonts/ttf/MerriweatherSans-BoldItalic.ttf"
+    }
+  ]
+}

@@ -91,12 +91,21 @@ for(const pkg of packages){
 
   let directory;
   if(vendored){
-    // FF-31 vendored entry: unmodified upstream files inside this package, from one pinned directory of one repository.
+    // FF-31 vendored entry inside this package. Two kinds: unmodified upstream files from one pinned directory of one repository
+    // (required for a family with a Reserved Font Name), or instanced statics copied from a recorded npm version (a family with none).
+    const fromGit=pkg.faces.every(face=>face.upstreamFile);
     vendoredEntries.push(pkg.name);
     assert.match(pkg.vendored,/^fonts\/[a-z0-9-]+$/,`${label}: vendored must be a fonts/<name> directory inside this package`);
     assert.ok(rootPackage.files.includes('fonts')||rootPackage.files.includes(pkg.vendored),`${label}: package.json "files" must publish ${pkg.vendored}`);
     for(const field of ['dependencies','devDependencies','peerDependencies'])assert.equal(rootPackage[field]?.[pkg.name],undefined,`${label}: a vendored entry must not also be an npm ${field} entry`);
-    assert.match(pkg.version,/^[0-9a-f]{40}$/,`${label}: a vendored entry's version is the pinned upstream commit`);
+    if(!fromGit){
+      assert.match(pkg.version,/^\d+\.\d+\.\d+$/,`${label}: an npm-derived vendored entry records the exact npm version it was copied from`);
+      assert.equal(pkg.source,`https://www.npmjs.com/package/${pkg.name}/v/${pkg.version}`,`${label}: source must be the exact npm package URL`);
+      assert.ok(pkg.faces.every(face=>typeof face.npmFile==='string'&&!face.upstreamFile),`${label}: npm-derived faces record npmFile and no upstreamFile`);
+      assert.deepEqual(pkg.reservedFontNames,[],`${label}: instanced (modified) faces are only allowed for a family with no Reserved Font Name`);
+      directory=fileURLToPath(new URL(`../${pkg.vendored}/`,import.meta.url));
+    }else{
+    assert.match(pkg.version,/^[0-9a-f]{40}$/,`${label}: a vendored git entry's version is the pinned upstream commit`);
     const parts=pkg.faces.map(face=>pinnedRawUpstream(face.upstreamFile?.url??''));
     assert.ok(parts.every(Boolean),`${label}: every vendored face needs upstreamFile with a pinned raw URL`);
     for(const [index,face] of pkg.faces.entries()){
@@ -106,6 +115,7 @@ for(const pkg of packages){
     }
     assert.equal(pkg.source,`https://github.com/${parts[0].repository}/tree/${pkg.version}/${parts[0].directory}`,`${label}: source must be the pinned upstream directory`);
     directory=fileURLToPath(new URL(`../${pkg.vendored}/`,import.meta.url));
+    }
   }else{
     assert.equal(pkg.source,`https://www.npmjs.com/package/${pkg.name}/v/${pkg.version}`,`${label}: source must be the exact npm package URL`);
     const pinned=(pkg.pack==='scripts'?rootPackage.devDependencies:rootPackage.dependencies)?.[pkg.name];
