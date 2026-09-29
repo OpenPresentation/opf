@@ -19,6 +19,22 @@
     "bytes": 1076,
     "sha256": "715270ff21444993263ce8e79cf051eb016c5e5e850cd0678837eebde8321cc2"
   },
+  "catalog-repair-accepted-tree.json": {
+    "bytes": 156,
+    "sha256": "e1c454cd060e5f501168d1ddc0f03f5e765cb4938de1785af6f27614b998034d"
+  },
+  "catalog-repair-merge.json": {
+    "bytes": 288,
+    "sha256": "cd9279c9482bd9d8e4791342a7246bbe8944f54bb9092f86f295cae9dab5a562"
+  },
+  "chart-scale-accepted-tree.json": {
+    "bytes": 156,
+    "sha256": "8a5c21c9a96e8d3c02cfc73891056fade16807ef3317ac82ac759763736eb43e"
+  },
+  "chart-scale-merge.json": {
+    "bytes": 293,
+    "sha256": "ba41576514f005c490118e42589f7e07c5d30e89a3c9b8b80fcf4fe499721e4f"
+  },
   "dependency-ci.json": {
     "bytes": 19290,
     "sha256": "86a2dec57de7c0bd5bc32c7baa3b0b092a8307b17285161946107c9f92354336"
@@ -26,6 +42,18 @@
   "dependency-source-binding.json": {
     "bytes": 1500,
     "sha256": "9a2cdfc1eeb9cf02cb579b0d91f15f360738c56bff6d1e02ee37ba4f6f05fac8"
+  },
+  "pptx81-accepted-tree.json": {
+    "bytes": 156,
+    "sha256": "673bd9a3dc306c1fe58ad1392bbd582a81af92fd380670198f13e9af1d1e5af8"
+  },
+  "pptx81-final-ci-before-merge.json": {
+    "bytes": 13403,
+    "sha256": "1333e90109b3c77a4ceb575f0afc1f4f13268a7e7c207f3b6e777332ba505bd7"
+  },
+  "pptx81-merge.json": {
+    "bytes": 268,
+    "sha256": "fc5667df8678295f48ecc7c404174413cb8b0d5bf9ba638394fb3292720f21be"
   },
   "program-reconciliation.json": {
     "bytes": 2153,

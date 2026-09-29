@@ -28,6 +28,19 @@ merging an advancing branch.
   open-PR references and the newly accepted PPTX #79 are merged source. FF-29
   and FF-31 remain in review because wider acceptance is unfinished. The Windows
   owner maintains the overlapping program-tracker update in core #145.
+- [Catalog correction merge](catalog-repair-merge.json) and its [accepted tree](catalog-repair-accepted-tree.json)
+  bind #144's integration into the pending #128 feature branch, not main.
+- [Chart scale correction merge](chart-scale-merge.json) and its [accepted tree](chart-scale-accepted-tree.json)
+  bind renderer #46's integration into draft #42, not main. Original package
+  [CI 36541221123](https://github.com/OpenPresentation/opf-render/actions/runs/36541221123)
+  passed. The separately nonblocking platform residual workflow does not clear
+  native/font tolerances or the chart pair's remaining semantic/visual gates.
+- [Inline-layout correction merge](pptx81-merge.json) and [accepted tree](pptx81-accepted-tree.json)
+  match reviewed `a0d2779`. Its first [explicit dispatch](pptx81-final-ci-before-merge.json)
+  passed on Linux and Windows after retargeting had left no automatic PR run.
+  The public layout regression ran in the source suite; the separate packed
+  harness verifies shipped bytes and its existing installed fixtures. This is
+  not a new native Office or release acceptance claim.
 
 [SHA-256 manifest](SHA256SUMS.json) binds the JSON receipts. Original raw CI
 logs and artifact archives are retained separately; they are not republished
