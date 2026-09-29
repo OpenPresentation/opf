@@ -5,6 +5,7 @@ import { spawnSync } from "node:child_process";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import path from "node:path";
 import {createHash, randomUUID} from 'node:crypto';
+import {checkPackedTypes} from './check-packed-types.mjs';
 const root = fileURLToPath(new URL("../", import.meta.url)),
   out = path.join(root, "artifacts/npm");
 const librariesOnly = process.argv.includes('--registry-libraries');
@@ -61,6 +62,7 @@ await writeFile(
       name: "opf-packed-consumer",
       private: true,
       type: "module",
+      ...(!registry ? {devDependencies: {'@types/node': createRequire(new URL('../packages/javascript/package.json', import.meta.url))('@types/node/package.json').version}} : {}),
       dependencies: Object.fromEntries(
         manifest.artifacts.map((item) => [item.name, registry ? item.version : `file:../${item.file}`]),
       ),
@@ -179,6 +181,11 @@ import {paginatePresentation} from '@openpresentation/opf/pagination';
 import {createEditorSession} from '@openpresentation/opf-editor';
 import {toPptx,fromPptx} from '@openpresentation/opf-pptx';
 const {registry,options}=await prepareNodeFonts({pack:'office',substitutionPolicy:'visual'});
+${!registry ? `assert.equal(options.loadSystemFonts,false);assert.equal(options.useBundledFonts,false);
+const {mkdir,readFile,writeFile}=await import('node:fs/promises');
+const {createHash}=await import('node:crypto');
+await mkdir('artifacts',{recursive:true});
+await writeFile('artifacts/font-preparation.json',JSON.stringify({systemFontDiscovery:false,bundledFallback:false,fonts:await Promise.all(options.fontFiles.map(async file=>({file,sha256:createHash('sha256').update(await readFile(file)).digest('hex')})))},null,2)+'\\n');` : ''}
 const source={design:{fontScheme:'roboto'},slides:[{id:'fonts',title:'Prepared installed fonts',text:'A measured local document preserves its content.'}]};
 const original=JSON.stringify(source);
 const {presentation}=paginatePresentation(source,options);
@@ -510,4 +517,5 @@ await writeFile(path.join(browserOut,'packed-browser-manifest.json'),JSON.string
   suites:browserSuites,
   files:Object.fromEntries(await Promise.all(['fonts.json',...browserSuites.flatMap(suite=>[`packed-${suite}-tests.html`,`packed-${suite}-tests.js`])].map(async file=>[file,await hashFile(path.join(browserOut,file))]))),
 },null,2)+'\n');
+if (!registry) await checkPackedTypes(consumer, {downstream: true});
 console.log(librariesOnly ? 'Registry library consumer passed for four exact versions; CLI and complete release verification remain separate.' : registry ? 'Registry consumer passed for all five exact release-plan versions (no local package overrides).' : 'Local tarball consumer passed; this is not a registry verification.');
