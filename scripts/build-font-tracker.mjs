@@ -26,7 +26,6 @@ export const FILES = {
 export const SCHEMA = "opf-font-tracker/v1";
 export const CLASSES = ["proprietary-latin", "proprietary-script", "open", "special"];
 export const STATUSES = [
-  "candidate-qualified-landing",
   "loading-gap",
   "style-gap",
   "policy-gap",
@@ -171,7 +170,7 @@ function hostVerificationOf(family, host, target, cards, overrides) {
   const set = overrides.hostVerification[family]?.[host];
   if (set) return set;
   if (host === "galleryCards") return cards ? "unverified" : "NA";
-  return target.yes ? "unverified" : "NA";
+  return target.yes || overrides.pendingBundle[family] ? "unverified" : "NA";
 }
 
 function expectedStatus(route, targetBundled) {
@@ -213,6 +212,7 @@ export function buildTracker({ root = ROOT } = {}) {
   for (const list of [overrides.classes.proprietaryScript, overrides.classes.special]) {
     for (const name of list) if (!policyNames.has(name)) throw new Error(`overrides.classes names ${name}, which is not a policy family`);
   }
+  for (const name of Object.keys(overrides.pendingBundle)) if (!policyNames.has(name)) throw new Error(`overrides.pendingBundle names ${name}, which is not a policy family`);
   for (const name of Object.keys(overrides.acceptance)) if (!policyNames.has(name) && !overrides.extras.some((extra) => extra.family === name)) throw new Error(`overrides.acceptance names ${name}, which has no record`);
   for (const name of Object.keys(overrides.families)) if (!policyNames.has(name)) throw new Error(`overrides.families names ${name}, which is not a policy family`);
   for (const extra of overrides.extras) {
@@ -275,7 +275,8 @@ export function buildTracker({ root = ROOT } = {}) {
           date: overrides.measurementDates[family] ?? overrides.measurementDates.default,
           source: overrides.measurementSources[family]?.source ?? "docs/evidence/font-replacements-20260923/README.md",
           sourceNote: overrides.measurementSources[family]?.note ?? null,
-          verticalMetricsMatch: null,
+          verticalMetricsMatch: overrides.measurementDetails[family]?.verticalMetricsMatch ?? null,
+          verticalMetricsNote: overrides.measurementDetails[family]?.note ?? null,
           lineBreaksMatch: null,
           widthBarMet,
         }
@@ -335,7 +336,8 @@ export function buildTracker({ root = ROOT } = {}) {
   const out = records.map((rec) => {
     const { item, family, cls, inPolicy, route, bundled } = rec;
     const row = item.row;
-    const target = bundled;
+    const pending0 = overrides.pendingBundle[family] ?? null;
+    const target = pending0 ? { ...bundled, pending: pending0 } : bundled;
     const roleEntry = cls === "open" ? roles.get(family) ?? {} : {};
     const requiredWithRoles = cls === "open" ? sortStyles([...rec.stylesRequired, ...Object.keys(roleEntry)]) : rec.stylesRequired;
     const availableStyles = target.stylesAvailable;
@@ -344,21 +346,22 @@ export function buildTracker({ root = ROOT } = {}) {
 
     // Status.
     const lazyPending = target.yes && hostModel.lazyPendingPacks.includes(target.pack);
-    const override = overrides.inFlight[family] ?? null;
+    const pending = overrides.pendingBundle[family] ?? null;
+    if (pending && target.yes) throw new Error(`overrides.pendingBundle for ${family} is stale: ${route.family} is now bundled in the pinned manifest snapshot`);
     let status;
     let statusReason;
-    if (override) {
-      status = override.status;
-      statusReason = `unmerged candidate ${override.route} (${override.tier}) in ${override.prs.join(", ")}`;
-    } else if (cls === "special") {
+    if (cls === "special") {
       status = "needs-special-path";
       statusReason = "no look-alike route in the policy; dedicated path required";
     } else if (!inPolicy) {
       status = "policy-gap";
       statusReason = "face ships in the renderer but has no policy row";
+    } else if (pending && route.tier === "metric" && rec.measurements?.widthBarMet && cls !== "open") {
+      status = "metric-measured";
+      statusReason = `metric route ${route.family} (width bar met in four styles); its faces are not in the pinned opf-render manifest until ${pending.prs.join(" and ")} land`;
     } else if (!target.yes) {
       status = "loading-gap";
-      statusReason = `route face ${route.family} is not bundled by opf-render`;
+      statusReason = pending ? `${route.family} is not in the pinned opf-render manifest until ${pending.prs.join(" and ")} land` : `route face ${route.family} is not bundled by opf-render`;
     } else if (stylesMissing.length) {
       status = "style-gap";
       statusReason = `missing ${stylesMissing.join(", ")} in ${route.family}`;
@@ -379,7 +382,7 @@ export function buildTracker({ root = ROOT } = {}) {
       statusReason = "visual route; metric or appearance qualification outstanding";
     }
 
-    const phaseByStatus = { "candidate-qualified-landing": 3, "loading-gap": 2, "style-gap": 2, "policy-gap": 1, "needs-special-path": 4, "visual-gap": 4, "script-gap": 4, "baseline-needed": 1, "metric-measured": 1 };
+    const phaseByStatus = { "loading-gap": 2, "style-gap": 2, "policy-gap": 1, "needs-special-path": 4, "visual-gap": 4, "script-gap": 4, "baseline-needed": 1, "metric-measured": 1 };
     const phase = overrides.phaseOverrides[family]?.phase ?? phaseByStatus[status];
 
     // Parity.
@@ -426,8 +429,8 @@ export function buildTracker({ root = ROOT } = {}) {
           : cls === "special" ? "no route" : "no self-hosted card preview";
         continue;
       }
-      hostVerification[host] = verified?.[host] ?? (target.yes ? "unverified" : "NA");
-      hostLoading[host] = packModel ? packModel[host] : cls === "special" ? "no route" : "not bundled";
+      hostVerification[host] = verified?.[host] ?? (target.yes || pending ? "unverified" : "NA");
+      hostLoading[host] = packModel ? packModel[host] : cls === "special" ? "no route" : pending ? `pending ${pending.prs.join(" and ")}: not in the pinned manifest` : "not bundled";
     }
 
     const evidenceKeys = [...(overrides.families[family]?.evidence ?? [])];
@@ -464,7 +467,7 @@ export function buildTracker({ root = ROOT } = {}) {
         disabledFeatures: route.disabledFeatures,
         decision: route.decision,
         source: route.source,
-        inFlight: override ? { route: override.route, tier: override.tier, prs: override.prs } : null,
+        pendingBundle: pending ? { prs: pending.prs, note: pending.note } : null,
       },
       bundled: target,
       stylesRequired: rec.stylesRequired,
@@ -505,7 +508,7 @@ export function buildTracker({ root = ROOT } = {}) {
     asOf: overrides.asOf,
     generatedBy: "scripts/build-font-tracker.mjs",
     description:
-      "One record per font family the owner reviewed on 2026-09-29: every font-policy family plus the shipped script-font dependencies missing from the policy. Derived fields come from the policy, the measurement report, the pinned opf-render manifest snapshot and the committed parity results; next actions and evidence come from font-tracker.overrides.json.",
+      "One record per font family: every font-policy family (the 153 the owner reviewed on 2026-09-29 plus the four Intos rows added by opf#166) plus the seven shipped script-font dependencies the policy still lacks. Derived fields come from the policy, the measurement report, the pinned opf-render manifest snapshot and the committed parity results; next actions and evidence come from font-tracker.overrides.json.",
     inputs: {
       galleryPreviewFonts: { file: overrides.galleryFontsSnapshot, ...galleryFonts.source, families: galleryFonts.families.length },
       policy: { file: FILES.policy, version: policy.version, families: policy.families.length },
@@ -553,7 +556,7 @@ function routeCell(rec) {
   const route = rec.previewRoute;
   if (!route.family) return "none";
   const base = route.kind === "self" ? `self (${route.tier})` : `${route.family} (${route.tier})`;
-  return route.inFlight ? `${base}; ${route.inFlight.route} (${route.inFlight.tier}) in flight` : base;
+  return route.pendingBundle ? `${base}; faces pending ${route.pendingBundle.prs.join(" and ")}` : base;
 }
 
 function bundledCell(rec) {

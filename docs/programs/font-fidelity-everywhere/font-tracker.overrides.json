@@ -46,7 +46,7 @@
     "criticalPath": "Aptos and Aptos Display are the critical path: each appears in 704 of the 850 audited gallery values."
   },
   "reconciliation": [
-    "Aptos family (owner review predates this). Intos, Intos Display, Intos Narrow and Intos Serif measured 0.000% mean and maximum width delta in all four styles against Aptos 2.01, with identical vertical metrics and original (Inter-derived; serif Gelasio-derived) outlines under OFL-1.1 with no Reserved Font Name. Independently re-verified for Aptos, Aptos Display and Aptos Narrow; Aptos Serif was measured from Microsoft's Aptos Fonts download. They land in opf#166, opf-render#54 and opf-editor#42, none merged yet. Until they merge, main still routes Aptos to Roboto and Aptos Display and Narrow to Carlito, so the tracker records those routes and marks the four families candidate-qualified-landing (the owner's \"no verified compatible replacement\" is superseded).",
+    "Aptos family (the owner's review predates this). opf#166 is merged (338ddcd4): the policy now routes Aptos, Aptos Display, Aptos Narrow and Aptos Serif to Intos, Intos Display, Intos Narrow and Intos Serif at the metric tier, measured 0.000% mean and maximum width delta in all four styles against Aptos 2.01, with equal vertical metrics and original (Inter-derived; serif Gelasio-derived) outlines under OFL-1.1 with no Reserved Font Name. Independently re-verified for Aptos, Aptos Display and Aptos Narrow; Aptos Serif was measured from Microsoft's Aptos Fonts download. The four Intos rows are new policy families and have records. The faces themselves are not bundled until opf-render#54 lands and browser hosts load them lazily with opf-editor#42, so the Aptos records are `metric-measured` with hosts unverified and the parity run, which still shows Roboto and Carlito substitutes, needs a rerun (the owner's \"no verified compatible replacement\" is superseded).",
     "Root-reported parity movement, not committed evidence and not used for priorities: mains 25 perfect, 667 near, 158 mismatch; with the Intos pull requests roughly 640 perfect, 32 near, 178 mismatch. The committed run is 5 perfect, 627 near, 218 mismatch (2026-09-29, table drawn extent). Rerun the audit before using either.",
     "Georgia now has a metric tier: Gelasio with liga and clig disabled (opf#163, opf-render#49, including the raster ZWNJ fix). The committed parity run predates it and still reports Georgia as a visual substitute.",
     "Open families are now vendored from unmodified upstream or npm packages (opf-render#50): Open Sans, Montserrat (including 900), Poppins, Bebas Neue, PT Serif, Lora, Merriweather Sans, Source Sans 3 (with the Source Sans Pro alias), Red Hat Display (300, 400, 700) and Red Hat Text (400, 700). Raleway and Playfair Display are not bundled because resvg ignores the wght axis. The owner's \"bundle\" rows for the bundled families become verification work; the remaining bundling work is Anton, Archivo Narrow, Barlow, Bitter, EB Garamond, Figtree, Libre Caslon Text, Work Sans, Liberation Mono, Sans and Serif, Playfair Display and Raleway.",
@@ -60,10 +60,6 @@
     "The seven shipped script-font dependencies missing from the registry (Noto Sans Arabic, Sinhala, Lao, Myanmar, Thaana, Syriac and Noto Serif Tibetan) are tracked as policy-gap records. Adding their policy rows is follow-up work: this change does not edit font-policy.json."
   ],
   "statusDefs": {
-    "candidate-qualified-landing": {
-      "severity": 2,
-      "meaning": "A metric-compatible candidate is measured and qualified in unmerged pull requests; main still routes the family to the older visual replacement."
-    },
     "loading-gap": {
       "severity": 3,
       "meaning": "The family's preview face is not bundled, or is bundled but not yet loaded by the shipped browser, editor and gallery-editor hosts, so those hosts fall back to another face. Gallery cards (self-hosted webfonts) are tracked separately."
@@ -538,12 +534,32 @@
   },
   "measurementDates": {
     "default": "2026-09-23",
-    "Georgia": "2026-09-29"
+    "Georgia": "2026-09-29",
+    "Aptos": "2026-09-29",
+    "Aptos Display": "2026-09-29",
+    "Aptos Narrow": "2026-09-29",
+    "Aptos Serif": "2026-09-29"
   },
   "phaseOverrides": {
     "Aptos Mono": {
       "phase": 3,
       "reason": "Member of the Aptos family; Intos has no mono face, so it needs its own reference measurement alongside the family work."
+    },
+    "Aptos": {
+      "phase": 3,
+      "reason": "Aptos family: critical path (owner phase 3). Measured metric in policy; host loading and verification wait on opf-render#54 and opf-editor#42, then a parity rerun."
+    },
+    "Aptos Display": {
+      "phase": 3,
+      "reason": "Aptos family: critical path (owner phase 3). Measured metric in policy; host loading and verification wait on opf-render#54 and opf-editor#42, then a parity rerun."
+    },
+    "Aptos Narrow": {
+      "phase": 3,
+      "reason": "Aptos family: critical path (owner phase 3). Measured metric in policy; host loading and verification wait on opf-render#54 and opf-editor#42, then a parity rerun."
+    },
+    "Aptos Serif": {
+      "phase": 3,
+      "reason": "Aptos family: critical path (owner phase 3). Measured metric in policy; host loading and verification wait on opf-render#54 and opf-editor#42, then a parity rerun."
     }
   },
   "hostVerification": {
@@ -585,30 +601,34 @@
   },
   "families": {
     "Aptos": {
-      "nextAction": "Land the Intos candidate (opf#166, opf-render#54, opf-editor#42; original Inter-derived outlines, OFL-1.1, no Reserved Font Name): measured 0.000% mean and max in all four styles against Aptos 2.01 with identical vertical metrics. Then verify Intos loads in Node, browser, editor and gallery, rerun parity, and confirm the PPTX still names Aptos. Roboto and Carlito remain alternates. Replaces the owner's \"find and qualify a candidate\" (maximum drift was 7.4%).",
+      "nextAction": "Metric route Intos is merged in policy (opf#166; 0.000% mean and max in all four styles against Aptos 2.01, vertical metrics equal, original Inter-derived outlines, OFL-1.1, no Reserved Font Name). Land opf-render#54 (faces) and opf-editor#42 (lazy loading), then verify the route in Node (pack office), browser, editor and gallery editor, rerun parity, and confirm the PPTX still names the selected family. Roboto and Carlito stay alternates. The committed parity run still shows Aptos as a Roboto substitute (704 values) until then.",
       "evidence": [
         "intos",
+        "metricCandidates",
         "aptosBrief",
         "measurement"
       ]
     },
     "Aptos Display": {
-      "nextAction": "Land Intos Display, measured separately from Aptos: 0.000% mean and max in all four styles against Aptos Display 2.01, vertical metrics identical, independently re-verified. Verify all four styles in every shipped host; do not inherit Aptos results. Replaces the owner's Carlito-based plan.",
+      "nextAction": "Metric route Intos Display is merged in policy (opf#166), measured separately from Aptos: 0.000% in all four styles against Aptos Display 2.01, independently re-verified. Land opf-render#54 and opf-editor#42, then verify the route in Node (pack office), browser, editor and gallery editor, rerun parity, and confirm the PPTX still names the selected family. Do not inherit Aptos results.",
       "evidence": [
         "intos",
+        "metricCandidates",
         "aptosBrief"
       ]
     },
     "Aptos Narrow": {
-      "nextAction": "Land Intos Narrow: 0.000% mean and max in all four styles against Aptos Narrow 2.01, independently re-verified (Carlito drifted up to 7.9%). Verify loading in shipped hosts and native wrapping of narrow text.",
+      "nextAction": "Metric route Intos Narrow is merged in policy (opf#166): 0.000% in all four styles against Aptos Narrow 2.01, independently re-verified. Land opf-render#54 and opf-editor#42, then verify the route in Node (pack office), browser, editor and gallery editor, rerun parity, and confirm the PPTX still names the selected family.",
       "evidence": [
-        "intos"
+        "intos",
+        "metricCandidates"
       ]
     },
     "Aptos Serif": {
-      "nextAction": "Land Intos Serif: 0.000% mean and max in all four styles, measured from Microsoft's Aptos Fonts download because Aptos Serif is not installed on the measuring host. Gelasio-derived outlines share eight plain rectangles with the original. Verify serif kerning and wrapping in shipped hosts.",
+      "nextAction": "Metric route Intos Serif is merged in policy (opf#166): 0.000% in all four styles, measured from Microsoft's Aptos Fonts download (Gelasio-derived outlines share eight plain rectangles with the original). Land opf-render#54 and opf-editor#42, then verify the route in Node (pack office), browser, editor and gallery editor, rerun parity, and confirm the PPTX still names the selected family. Check serif kerning and wrapping.",
       "evidence": [
-        "intos"
+        "intos",
+        "metricCandidates"
       ]
     },
     "Aptos Mono": {
@@ -1662,14 +1682,41 @@
       "evidence": [
         "licensing"
       ]
+    },
+    "Intos": {
+      "nextAction": "Vendor Intos in opf-render (opf-render#54; pinned commit fef9315c14da9e4b23b4c3cac8e718998d4e4736, OFL-1.1, no Reserved Font Name, single-maintainer project so Roboto and Carlito stay as alternates) and load it lazily in the browser hosts (opf-editor#42); then verify four styles in every host and its role as the Aptos replacement independently.",
+      "evidence": [
+        "intos",
+        "licensing"
+      ]
+    },
+    "Intos Display": {
+      "nextAction": "Vendor Intos Display in opf-render (opf-render#54; pinned commit fef9315c14da9e4b23b4c3cac8e718998d4e4736, OFL-1.1, no Reserved Font Name, single-maintainer project so Roboto and Carlito stay as alternates) and load it lazily in the browser hosts (opf-editor#42); then verify four styles in every host and its role as the Aptos Display replacement independently.",
+      "evidence": [
+        "intos",
+        "licensing"
+      ]
+    },
+    "Intos Narrow": {
+      "nextAction": "Vendor Intos Narrow in opf-render (opf-render#54; pinned commit fef9315c14da9e4b23b4c3cac8e718998d4e4736, OFL-1.1, no Reserved Font Name, single-maintainer project so Roboto and Carlito stay as alternates) and load it lazily in the browser hosts (opf-editor#42); then verify four styles in every host and its role as the Aptos Narrow replacement independently.",
+      "evidence": [
+        "intos",
+        "licensing"
+      ]
+    },
+    "Intos Serif": {
+      "nextAction": "Vendor Intos Serif in opf-render (opf-render#54; pinned commit fef9315c14da9e4b23b4c3cac8e718998d4e4736, OFL-1.1, no Reserved Font Name, single-maintainer project so Roboto and Carlito stay as alternates) and load it lazily in the browser hosts (opf-editor#42); then verify four styles in every host and its role as the Aptos Serif replacement independently.",
+      "evidence": [
+        "intos",
+        "licensing"
+      ]
     }
   },
   "candidates": {
     "Aptos": [
       {
         "name": "Intos",
-        "verdict": "qualified-in-flight",
-        "tier": "metric",
+        "verdict": "accepted-metric (policy, opf#166 merged as 338ddcd4)",
         "license": "OFL-1.1",
         "reservedFontName": null,
         "source": "https://github.com/muglug/intos/tree/fef9315c14da9e4b23b4c3cac8e718998d4e4736",
@@ -1704,9 +1751,9 @@
         "verifiedBy": "independently re-verified for this family",
         "date": "2026-09-29",
         "prs": [
-          "opf#166",
-          "opf-render#54",
-          "opf-editor#42"
+          "opf#166 (merged)",
+          "opf-render#54 (open)",
+          "opf-editor#42 (open)"
         ],
         "corpus": "Latin, 300 strings (script-specific text not applicable to Latin Aptos)"
       }
@@ -1714,8 +1761,7 @@
     "Aptos Display": [
       {
         "name": "Intos Display",
-        "verdict": "qualified-in-flight",
-        "tier": "metric",
+        "verdict": "accepted-metric (policy, opf#166 merged as 338ddcd4)",
         "license": "OFL-1.1",
         "reservedFontName": null,
         "source": "https://github.com/muglug/intos/tree/fef9315c14da9e4b23b4c3cac8e718998d4e4736",
@@ -1750,9 +1796,9 @@
         "verifiedBy": "independently re-verified for this family",
         "date": "2026-09-29",
         "prs": [
-          "opf#166",
-          "opf-render#54",
-          "opf-editor#42"
+          "opf#166 (merged)",
+          "opf-render#54 (open)",
+          "opf-editor#42 (open)"
         ],
         "corpus": "Latin, 300 strings (script-specific text not applicable to Latin Aptos)"
       }
@@ -1760,8 +1806,7 @@
     "Aptos Narrow": [
       {
         "name": "Intos Narrow",
-        "verdict": "qualified-in-flight",
-        "tier": "metric",
+        "verdict": "accepted-metric (policy, opf#166 merged as 338ddcd4)",
         "license": "OFL-1.1",
         "reservedFontName": null,
         "source": "https://github.com/muglug/intos/tree/fef9315c14da9e4b23b4c3cac8e718998d4e4736",
@@ -1796,9 +1841,9 @@
         "verifiedBy": "independently re-verified for this family",
         "date": "2026-09-29",
         "prs": [
-          "opf#166",
-          "opf-render#54",
-          "opf-editor#42"
+          "opf#166 (merged)",
+          "opf-render#54 (open)",
+          "opf-editor#42 (open)"
         ],
         "corpus": "Latin, 300 strings (script-specific text not applicable to Latin Aptos)"
       }
@@ -1806,8 +1851,7 @@
     "Aptos Serif": [
       {
         "name": "Intos Serif",
-        "verdict": "qualified-in-flight",
-        "tier": "metric",
+        "verdict": "accepted-metric (policy, opf#166 merged as 338ddcd4)",
         "license": "OFL-1.1",
         "reservedFontName": null,
         "source": "https://github.com/muglug/intos/tree/fef9315c14da9e4b23b4c3cac8e718998d4e4736",
@@ -1842,9 +1886,9 @@
         "verifiedBy": "measured from the Microsoft Aptos Fonts download (not independently re-measured)",
         "date": "2026-09-29",
         "prs": [
-          "opf#166",
-          "opf-render#54",
-          "opf-editor#42"
+          "opf#166 (merged)",
+          "opf-render#54 (open)",
+          "opf-editor#42 (open)"
         ],
         "corpus": "Latin, 300 strings (script-specific text not applicable to Latin Aptos)"
       }
@@ -1966,48 +2010,6 @@
       }
     ]
   },
-  "inFlight": {
-    "Aptos": {
-      "route": "Intos",
-      "tier": "metric",
-      "prs": [
-        "opf#166",
-        "opf-render#54",
-        "opf-editor#42"
-      ],
-      "status": "candidate-qualified-landing"
-    },
-    "Aptos Display": {
-      "route": "Intos Display",
-      "tier": "metric",
-      "prs": [
-        "opf#166",
-        "opf-render#54",
-        "opf-editor#42"
-      ],
-      "status": "candidate-qualified-landing"
-    },
-    "Aptos Narrow": {
-      "route": "Intos Narrow",
-      "tier": "metric",
-      "prs": [
-        "opf#166",
-        "opf-render#54",
-        "opf-editor#42"
-      ],
-      "status": "candidate-qualified-landing"
-    },
-    "Aptos Serif": {
-      "route": "Intos Serif",
-      "tier": "metric",
-      "prs": [
-        "opf#166",
-        "opf-render#54",
-        "opf-editor#42"
-      ],
-      "status": "candidate-qualified-landing"
-    }
-  },
   "evidence": {
     "measurement": {
       "label": "Font replacement measurements (2026-09-23)",
@@ -2019,7 +2021,7 @@
     },
     "intos": [
       {
-        "label": "opf#166 (Intos policy, in flight)",
+        "label": "opf#166 (Intos policy, merged 338ddcd4)",
         "url": "https://github.com/OpenPresentation/opf/pull/166"
       },
       {
@@ -2118,6 +2120,10 @@
     "calibriControl": {
       "label": "Native Calibri control (FF-05 E6)",
       "url": "docs/evidence/windows-native-calibri-control-20260929/README.md"
+    },
+    "metricCandidates": {
+      "label": "Intos and Selawik acceptance measurement (2026-09-29)",
+      "url": "docs/evidence/font-replacements-20260923/metric-candidates-20260929.json"
     }
   },
   "galleryFontsSnapshot": "docs/programs/font-fidelity-everywhere/font-tracker.gallery-preview-fonts.json",
@@ -2125,7 +2131,99 @@
     "Georgia": {
       "source": "docs/evidence/font-replacements-20260923/report.json",
       "note": "The Georgia entry was replaced on 2026-09-29 by the Gelasio re-run with liga and clig off (opf#163); the other rows are the 2026-09-23 host run."
+    },
+    "Aptos": {
+      "source": "docs/evidence/font-replacements-20260923/metric-candidates-20260929.json",
+      "note": "Measured on 2026-09-29 (opf#166) against the Microsoft 365 cloud fonts, Aptos 2.01."
+    },
+    "Aptos Display": {
+      "source": "docs/evidence/font-replacements-20260923/metric-candidates-20260929.json",
+      "note": "Measured on 2026-09-29 (opf#166) against the Microsoft 365 cloud fonts, Aptos 2.01."
+    },
+    "Aptos Narrow": {
+      "source": "docs/evidence/font-replacements-20260923/metric-candidates-20260929.json",
+      "note": "Measured on 2026-09-29 (opf#166) against the Microsoft 365 cloud fonts, Aptos 2.01."
+    },
+    "Aptos Serif": {
+      "source": "docs/evidence/font-replacements-20260923/metric-candidates-20260929.json",
+      "note": "Measured on 2026-09-29 (opf#166) from the files in Microsoft's Aptos Fonts download, because Aptos Serif is not installed on the measuring host."
     }
   },
-  "acceptance": {}
+  "acceptance": {},
+  "pendingBundle": {
+    "Aptos": {
+      "prs": [
+        "opf-render#54",
+        "opf-editor#42"
+      ],
+      "note": "Intos is the metric route in the merged policy (opf#166); its faces are vendored in the open opf-render#54 and lazy-loaded by the open opf-editor#42."
+    },
+    "Intos": {
+      "prs": [
+        "opf-render#54",
+        "opf-editor#42"
+      ],
+      "note": "Intos faces are vendored in the open opf-render#54 and lazy-loaded by the open opf-editor#42."
+    },
+    "Aptos Display": {
+      "prs": [
+        "opf-render#54",
+        "opf-editor#42"
+      ],
+      "note": "Intos Display is the metric route in the merged policy (opf#166); its faces are vendored in the open opf-render#54 and lazy-loaded by the open opf-editor#42."
+    },
+    "Intos Display": {
+      "prs": [
+        "opf-render#54",
+        "opf-editor#42"
+      ],
+      "note": "Intos Display faces are vendored in the open opf-render#54 and lazy-loaded by the open opf-editor#42."
+    },
+    "Aptos Narrow": {
+      "prs": [
+        "opf-render#54",
+        "opf-editor#42"
+      ],
+      "note": "Intos Narrow is the metric route in the merged policy (opf#166); its faces are vendored in the open opf-render#54 and lazy-loaded by the open opf-editor#42."
+    },
+    "Intos Narrow": {
+      "prs": [
+        "opf-render#54",
+        "opf-editor#42"
+      ],
+      "note": "Intos Narrow faces are vendored in the open opf-render#54 and lazy-loaded by the open opf-editor#42."
+    },
+    "Aptos Serif": {
+      "prs": [
+        "opf-render#54",
+        "opf-editor#42"
+      ],
+      "note": "Intos Serif is the metric route in the merged policy (opf#166); its faces are vendored in the open opf-render#54 and lazy-loaded by the open opf-editor#42."
+    },
+    "Intos Serif": {
+      "prs": [
+        "opf-render#54",
+        "opf-editor#42"
+      ],
+      "note": "Intos Serif faces are vendored in the open opf-render#54 and lazy-loaded by the open opf-editor#42."
+    }
+  },
+  "measurementDetails": {
+    "Aptos": {
+      "verticalMetricsMatch": true,
+      "note": "hhea, OS/2 typo and win, x-height and cap-height equal in all 16 styles; painted x-height and cap-height boxes agree (opf#166). Line breaks are not recorded."
+    },
+    "Aptos Display": {
+      "verticalMetricsMatch": true,
+      "note": "hhea, OS/2 typo and win, x-height and cap-height equal in all 16 styles; painted x-height and cap-height boxes agree (opf#166). Line breaks are not recorded."
+    },
+    "Aptos Narrow": {
+      "verticalMetricsMatch": true,
+      "note": "hhea, OS/2 typo and win, x-height and cap-height equal in all 16 styles; painted x-height and cap-height boxes agree (opf#166). Line breaks are not recorded."
+    },
+    "Aptos Serif": {
+      "verticalMetricsMatch": true,
+      "note": "hhea, OS/2 typo and win, x-height and cap-height equal in all 16 styles; painted x-height and cap-height boxes agree (opf#166). Line breaks are not recorded."
+    }
+  }
 }

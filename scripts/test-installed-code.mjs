@@ -7,6 +7,7 @@ import {createRequire} from 'node:module';
 import {spawnSync,execFileSync} from 'node:child_process';
 import {fileURLToPath,pathToFileURL} from 'node:url';
 import path from 'node:path';
+import {tar} from './archive-tar.mjs';
 import {packageManagerInvocation} from './package-manager.mjs';
 const root=fileURLToPath(new URL('../',import.meta.url));
 assert.ok(!process.env.NODE_OPTIONS&&!process.execArgv.some(arg=>/^(--import|--loader|--experimental-loader|--require|-r)(=|$)/.test(arg)),'Installed verification must not alias packages with a loader.');
@@ -44,10 +45,10 @@ for(const item of manifest.artifacts) {
     assert.equal(path.basename(packed.filename),packed.filename);
     const archive=path.join(consumer,packed.filename),tarball=await readFile(archive);
     assert.equal('sha512-'+createHash('sha512').update(tarball).digest('base64'),entry.integrity);
-    const entries=execFileSync('tar',['-tzf',archive],{encoding:'utf8'}).trim().split(/\r?\n/);
+    const entries=tar(archive,'-tzf').trim().split(/\r?\n/);
     assert.ok(entries.every(file=>file.startsWith('package/')&&!file.split(/[\\/]/).includes('..')));
     const extracted=await mkdtemp(path.join(consumer,'registry-code-archive-'));assert.ok(within(consumer,await realpath(extracted)));
-    execFileSync('tar',['-xzf',archive,'-C',extracted]);expectedDirectory=path.join(extracted,'package');
+    tar(archive,'-xzf',['-C',extracted]);expectedDirectory=path.join(extracted,'package');
     const files={};
     for(const file of entries.map(name=>name.slice('package/'.length)).filter(name=>name&&!name.endsWith('/'))){
       const actual=await realpath(path.join(installed,file));assert.ok(within(installed,actual));

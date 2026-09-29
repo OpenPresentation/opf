@@ -2,7 +2,7 @@
   "schema": "opf-font-tracker/v1",
   "asOf": "2026-09-29",
   "generatedBy": "scripts/build-font-tracker.mjs",
-  "description": "One record per font family the owner reviewed on 2026-09-29: every font-policy family plus the shipped script-font dependencies missing from the policy. Derived fields come from the policy, the measurement report, the pinned opf-render manifest snapshot and the committed parity results; next actions and evidence come from font-tracker.overrides.json.",
+  "description": "One record per font family: every font-policy family (the 153 the owner reviewed on 2026-09-29 plus the four Intos rows added by opf#166) plus the seven shipped script-font dependencies the policy still lacks. Derived fields come from the policy, the measurement report, the pinned opf-render manifest snapshot and the committed parity results; next actions and evidence come from font-tracker.overrides.json.",
   "inputs": {
     "galleryPreviewFonts": {
       "file": "docs/programs/font-fidelity-everywhere/font-tracker.gallery-preview-fonts.json",
@@ -16,7 +16,7 @@
     "policy": {
       "file": "spec/reference/font-policy.json",
       "version": 1,
-      "families": 153
+      "families": 157
     },
     "measurementReport": {
       "file": "docs/evidence/font-replacements-20260923/report.json",
@@ -92,7 +92,7 @@
     "criticalPath": "Aptos and Aptos Display are the critical path: each appears in 704 of the 850 audited gallery values."
   },
   "reconciliation": [
-    "Aptos family (owner review predates this). Intos, Intos Display, Intos Narrow and Intos Serif measured 0.000% mean and maximum width delta in all four styles against Aptos 2.01, with identical vertical metrics and original (Inter-derived; serif Gelasio-derived) outlines under OFL-1.1 with no Reserved Font Name. Independently re-verified for Aptos, Aptos Display and Aptos Narrow; Aptos Serif was measured from Microsoft's Aptos Fonts download. They land in opf#166, opf-render#54 and opf-editor#42, none merged yet. Until they merge, main still routes Aptos to Roboto and Aptos Display and Narrow to Carlito, so the tracker records those routes and marks the four families candidate-qualified-landing (the owner's \"no verified compatible replacement\" is superseded).",
+    "Aptos family (the owner's review predates this). opf#166 is merged (338ddcd4): the policy now routes Aptos, Aptos Display, Aptos Narrow and Aptos Serif to Intos, Intos Display, Intos Narrow and Intos Serif at the metric tier, measured 0.000% mean and maximum width delta in all four styles against Aptos 2.01, with equal vertical metrics and original (Inter-derived; serif Gelasio-derived) outlines under OFL-1.1 with no Reserved Font Name. Independently re-verified for Aptos, Aptos Display and Aptos Narrow; Aptos Serif was measured from Microsoft's Aptos Fonts download. The four Intos rows are new policy families and have records. The faces themselves are not bundled until opf-render#54 lands and browser hosts load them lazily with opf-editor#42, so the Aptos records are `metric-measured` with hosts unverified and the parity run, which still shows Roboto and Carlito substitutes, needs a rerun (the owner's \"no verified compatible replacement\" is superseded).",
     "Root-reported parity movement, not committed evidence and not used for priorities: mains 25 perfect, 667 near, 158 mismatch; with the Intos pull requests roughly 640 perfect, 32 near, 178 mismatch. The committed run is 5 perfect, 627 near, 218 mismatch (2026-09-29, table drawn extent). Rerun the audit before using either.",
     "Georgia now has a metric tier: Gelasio with liga and clig disabled (opf#163, opf-render#49, including the raster ZWNJ fix). The committed parity run predates it and still reports Georgia as a visual substitute.",
     "Open families are now vendored from unmodified upstream or npm packages (opf-render#50): Open Sans, Montserrat (including 900), Poppins, Bebas Neue, PT Serif, Lora, Merriweather Sans, Source Sans 3 (with the Source Sans Pro alias), Red Hat Display (300, 400, 700) and Red Hat Text (400, 700). Raleway and Playfair Display are not bundled because resvg ignores the wght axis. The owner's \"bundle\" rows for the bundled families become verification work; the remaining bundling work is Anton, Archivo Narrow, Barlow, Bitter, EB Garamond, Figtree, Libre Caslon Text, Work Sans, Liberation Mono, Sans and Serif, Playfair Display and Raleway.",
@@ -106,10 +106,6 @@
     "The seven shipped script-font dependencies missing from the registry (Noto Sans Arabic, Sinhala, Lao, Myanmar, Thaana, Syriac and Noto Serif Tibetan) are tracked as policy-gap records. Adding their policy rows is follow-up work: this change does not edit font-policy.json."
   ],
   "statusDefinitions": {
-    "candidate-qualified-landing": {
-      "severity": 2,
-      "meaning": "A metric-compatible candidate is measured and qualified in unmerged pull requests; main still routes the family to the older visual replacement."
-    },
     "loading-gap": {
       "severity": 3,
       "meaning": "The family's preview face is not bundled, or is bundled but not yet loaded by the shipped browser, editor and gallery-editor hosts, so those hosts fall back to another face. Gallery cards (self-hosted webfonts) are tracked separately."
@@ -145,28 +141,27 @@
   },
   "priorityFormula": "score = severity x (valuesOpen x hostFactor + 1). severity is the status severity, plus 0.5 for a visual Latin route whose measured maximum width delta exceeds 5%. valuesOpen counts parity values whose preview uses the family and whose fontResolution is not already pass (real face or metric replacement with the selected name kept). hostFactor is the share of applicable hosts without per-family verification, never below 0.25.",
   "summary": {
-    "records": 160,
-    "inPolicy": 153,
+    "records": 164,
+    "inPolicy": 157,
     "byClass": {
       "proprietary-latin": 51,
       "proprietary-script": 41,
-      "open": 63,
+      "open": 67,
       "special": 5
     },
     "byStatus": {
-      "candidate-qualified-landing": 4,
-      "loading-gap": 53,
+      "loading-gap": 57,
       "style-gap": 7,
       "policy-gap": 7,
       "needs-special-path": 5,
       "visual-gap": 7,
       "script-gap": 41,
       "baseline-needed": 31,
-      "metric-measured": 5
+      "metric-measured": 9
     },
     "byPhase": {
       "1": 43,
-      "2": 60,
+      "2": 64,
       "3": 5,
       "4": 52,
       "5": 0
@@ -174,39 +169,39 @@
     "hostVerification": {
       "node": {
         "verified": 2,
-        "unverified": 122,
+        "unverified": 126,
         "NA": 36
       },
       "browser": {
         "verified": 2,
-        "unverified": 122,
+        "unverified": 126,
         "NA": 36
       },
       "editor": {
         "verified": 0,
-        "unverified": 124,
+        "unverified": 128,
         "NA": 36
       },
       "galleryEditor": {
         "verified": 0,
-        "unverified": 124,
+        "unverified": 128,
         "NA": 36
       },
       "galleryCards": {
         "verified": 0,
-        "unverified": 140,
-        "NA": 20
+        "unverified": 136,
+        "NA": 28
       }
     },
     "nativeVerification": {
       "verified": 0,
       "partial": 1,
-      "unverified": 159,
+      "unverified": 163,
       "NA": 0
     },
     "bundled": {
-      "yes": 124,
-      "no": 36
+      "yes": 120,
+      "no": 44
     },
     "parityRerunNeeded": 70
   },
@@ -228,7 +223,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -314,6 +309,7 @@
         "source": "docs/evidence/font-replacements-20260923/README.md",
         "sourceNote": null,
         "verticalMetricsMatch": null,
+        "verticalMetricsNote": null,
         "lineBreaksMatch": null,
         "widthBarMet": false
       },
@@ -416,7 +412,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": false,
@@ -524,7 +520,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -666,90 +662,43 @@
       "selectedNamePreservedInPptx": true,
       "pptxNameBasis": "Policy invariant: exporters write the selected family and never a replacement name; the parity typefaces and fontResolution checks read it back",
       "previewRoute": {
-        "family": "Roboto",
-        "tier": "visual",
+        "family": "Intos",
+        "tier": "metric",
         "kind": "replacement",
         "alternates": [
+          "Roboto",
           "Carlito"
         ],
         "alternatesBundled": {
+          "Roboto": true,
           "Carlito": true
         },
         "disabledFeatures": [],
         "decision": "aptos-preview",
-        "source": null,
-        "inFlight": {
-          "route": "Intos",
-          "tier": "metric",
+        "source": "https://github.com/muglug/intos/tree/fef9315c14da9e4b23b4c3cac8e718998d4e4736",
+        "pendingBundle": {
           "prs": [
-            "opf#166",
             "opf-render#54",
             "opf-editor#42"
-          ]
+          ],
+          "note": "Intos is the metric route in the merged policy (opf#166); its faces are vendored in the open opf-render#54 and lazy-loaded by the open opf-editor#42."
         }
       },
       "bundled": {
-        "yes": true,
+        "yes": false,
         "applies": "route-target",
-        "family": "Roboto",
-        "pack": "base",
-        "packages": [
-          {
-            "name": "@expo-google-fonts/roboto",
-            "version": "0.4.3",
-            "pack": "base",
-            "source": "https://www.npmjs.com/package/@expo-google-fonts/roboto/v/0.4.3",
-            "vendored": null,
-            "license": "OFL-1.1",
-            "reservedFontNames": []
-          }
-        ],
-        "faces": [
-          {
-            "style": "400",
-            "file": "400Regular/Roboto_400Regular.ttf",
-            "sha256": "15256405ecb0d880678833a582760efad538ab2932318b52c8105b267d159459"
-          },
-          {
-            "style": "400i",
-            "file": "400Regular_Italic/Roboto_400Regular_Italic.ttf",
-            "sha256": "6a372c348dc20c246b92d60b9bda3c0a9ffedc129790ed3f31faf89daa99d793"
-          },
-          {
-            "style": "500",
-            "file": "500Medium/Roboto_500Medium.ttf",
-            "sha256": "79343dc641a2e8d48a703a4667b71fc8dc6565cc8ce47dfc34fc52c12aadbf38"
-          },
-          {
-            "style": "600",
-            "file": "600SemiBold/Roboto_600SemiBold.ttf",
-            "sha256": "32fe2086b0e54eca85a68eb74e3d89bb16a7ffe59085d6dc7d079f5b3c26d6ab"
-          },
-          {
-            "style": "700",
-            "file": "700Bold/Roboto_700Bold.ttf",
-            "sha256": "4aaf8c5b661a386998c2e70cf2b87e2440f5404e0b8fd81164f0413fb3435ec6"
-          },
-          {
-            "style": "700i",
-            "file": "700Bold_Italic/Roboto_700Bold_Italic.ttf",
-            "sha256": "c6a5e7c224d3bf6698e5d3c124f0f0220cad20d5d413920447a96f033a0292ee"
-          },
-          {
-            "style": "800",
-            "file": "800ExtraBold/Roboto_800ExtraBold.ttf",
-            "sha256": "43d5ce98c58336045220fa1dac2bd22281b1aab3eca66785cb34eb3ad1dfe1a5"
-          }
-        ],
-        "stylesAvailable": [
-          "400",
-          "400i",
-          "500",
-          "600",
-          "700",
-          "700i",
-          "800"
-        ]
+        "family": "Intos",
+        "packages": [],
+        "faces": [],
+        "stylesAvailable": [],
+        "pack": null,
+        "pending": {
+          "prs": [
+            "opf-render#54",
+            "opf-editor#42"
+          ],
+          "note": "Intos is the metric route in the merged policy (opf#166); its faces are vendored in the open opf-render#54 and lazy-loaded by the open opf-editor#42."
+        }
       },
       "stylesRequired": [
         "400",
@@ -763,7 +712,12 @@
         "700",
         "700i"
       ],
-      "stylesMissing": [],
+      "stylesMissing": [
+        "400",
+        "400i",
+        "700",
+        "700i"
+      ],
       "stylesExplicitGaps": [],
       "approximateStyles": [],
       "stylesBasis": "measured: styles the real font has on the measuring host",
@@ -771,44 +725,44 @@
         "Latin"
       ],
       "measurements": {
-        "replacement": "Roboto",
+        "replacement": "Intos",
         "reference": "Aptos 2.01;O365",
-        "meanAbsWidthDelta": 0.0215,
-        "meanWidthDelta": 0.0008,
-        "maxAbsWidthDelta": 0.0739,
+        "meanAbsWidthDelta": 0,
+        "meanWidthDelta": 0,
+        "maxAbsWidthDelta": 0,
         "stylesMeasured": 4,
         "perStyle": [
           {
             "style": "400",
             "replacementStyle": "400",
             "strings": 300,
-            "meanAbsWidthDelta": 0.0351,
-            "meanWidthDelta": 0.035,
-            "maxAbsWidthDelta": 0.0739
+            "meanAbsWidthDelta": 0,
+            "meanWidthDelta": 0,
+            "maxAbsWidthDelta": 0
           },
           {
             "style": "700",
             "replacementStyle": "700",
             "strings": 300,
-            "meanAbsWidthDelta": 0.0078,
-            "meanWidthDelta": -0.0052,
-            "maxAbsWidthDelta": 0.0334
+            "meanAbsWidthDelta": 0,
+            "meanWidthDelta": 0,
+            "maxAbsWidthDelta": 0
           },
           {
             "style": "400i",
             "replacementStyle": "400i",
             "strings": 300,
-            "meanAbsWidthDelta": 0.0092,
-            "meanWidthDelta": 0.0073,
-            "maxAbsWidthDelta": 0.0458
+            "meanAbsWidthDelta": 0,
+            "meanWidthDelta": 0,
+            "maxAbsWidthDelta": 0
           },
           {
             "style": "700i",
             "replacementStyle": "700i",
             "strings": 300,
-            "meanAbsWidthDelta": 0.0341,
-            "meanWidthDelta": -0.0341,
-            "maxAbsWidthDelta": 0.0551
+            "meanAbsWidthDelta": 0,
+            "meanWidthDelta": 0,
+            "maxAbsWidthDelta": 0
           }
         ],
         "corpus": {
@@ -817,18 +771,18 @@
           "script": "Latin",
           "scriptSpecific": false
         },
-        "date": "2026-09-23",
-        "source": "docs/evidence/font-replacements-20260923/README.md",
-        "sourceNote": null,
-        "verticalMetricsMatch": null,
+        "date": "2026-09-29",
+        "source": "docs/evidence/font-replacements-20260923/metric-candidates-20260929.json",
+        "sourceNote": "Measured on 2026-09-29 (opf#166) against the Microsoft 365 cloud fonts, Aptos 2.01.",
+        "verticalMetricsMatch": true,
+        "verticalMetricsNote": "hhea, OS/2 typo and win, x-height and cap-height equal in all 16 styles; painted x-height and cap-height boxes agree (opf#166). Line breaks are not recorded.",
         "lineBreaksMatch": null,
-        "widthBarMet": false
+        "widthBarMet": true
       },
       "candidates": [
         {
           "name": "Intos",
-          "verdict": "qualified-in-flight",
-          "tier": "metric",
+          "verdict": "accepted-metric (policy, opf#166 merged as 338ddcd4)",
           "license": "OFL-1.1",
           "reservedFontName": null,
           "source": "https://github.com/muglug/intos/tree/fef9315c14da9e4b23b4c3cac8e718998d4e4736",
@@ -863,9 +817,9 @@
           "verifiedBy": "independently re-verified for this family",
           "date": "2026-09-29",
           "prs": [
-            "opf#166",
-            "opf-render#54",
-            "opf-editor#42"
+            "opf#166 (merged)",
+            "opf-render#54 (open)",
+            "opf-editor#42 (open)"
           ],
           "corpus": "Latin, 300 strings (script-specific text not applicable to Latin Aptos)"
         }
@@ -875,14 +829,14 @@
         "browser": "unverified",
         "editor": "unverified",
         "galleryEditor": "unverified",
-        "galleryCards": "unverified"
+        "galleryCards": "NA"
       },
       "hostLoading": {
-        "node": "default: prepareNodeFonts pack 'base' (Roboto and Roboto Mono only)",
-        "browser": "eager (33-face registry)",
-        "editor": "eager (33-face registry)",
-        "galleryEditor": "eager (33-face registry, vendored opf-editor bundle)",
-        "galleryCards": "self-hosted preview webfont: @fontsource-variable/roboto 5.3.0 (variable, weights 400 700, upright only)"
+        "node": "pending opf-render#54 and opf-editor#42: not in the pinned manifest",
+        "browser": "pending opf-render#54 and opf-editor#42: not in the pinned manifest",
+        "editor": "pending opf-render#54 and opf-editor#42: not in the pinned manifest",
+        "galleryEditor": "pending opf-render#54 and opf-editor#42: not in the pinned manifest",
+        "galleryCards": "no self-hosted card preview"
       },
       "nativeVerification": {
         "status": "partial",
@@ -931,12 +885,12 @@
         "rerunNeeded": false
       },
       "phase": 3,
-      "status": "candidate-qualified-landing",
-      "statusReason": "unmerged candidate Intos (metric) in opf#166, opf-render#54, opf-editor#42",
-      "nextAction": "Land the Intos candidate (opf#166, opf-render#54, opf-editor#42; original Inter-derived outlines, OFL-1.1, no Reserved Font Name): measured 0.000% mean and max in all four styles against Aptos 2.01 with identical vertical metrics. Then verify Intos loads in Node, browser, editor and gallery, rerun parity, and confirm the PPTX still names Aptos. Roboto and Carlito remain alternates. Replaces the owner's \"find and qualify a candidate\" (maximum drift was 7.4%).",
+      "status": "metric-measured",
+      "statusReason": "metric route Intos (width bar met in four styles); its faces are not in the pinned opf-render manifest until opf-render#54 and opf-editor#42 land",
+      "nextAction": "Metric route Intos is merged in policy (opf#166; 0.000% mean and max in all four styles against Aptos 2.01, vertical metrics equal, original Inter-derived outlines, OFL-1.1, no Reserved Font Name). Land opf-render#54 (faces) and opf-editor#42 (lazy loading), then verify the route in Node (pack office), browser, editor and gallery editor, rerun parity, and confirm the PPTX still names the selected family. Roboto and Carlito stay alternates. The committed parity run still shows Aptos as a Roboto substitute (704 values) until then.",
       "evidence": [
         {
-          "label": "opf#166 (Intos policy, in flight)",
+          "label": "opf#166 (Intos policy, merged 338ddcd4)",
           "url": "https://github.com/OpenPresentation/opf/pull/166"
         },
         {
@@ -946,6 +900,10 @@
         {
           "label": "opf-editor#42 (lazy loading, in flight)",
           "url": "https://github.com/OpenPresentation/opf-editor/pull/42"
+        },
+        {
+          "label": "Intos and Selawik acceptance measurement (2026-09-29)",
+          "url": "docs/evidence/font-replacements-20260923/metric-candidates-20260929.json"
         },
         {
           "label": "Aptos origin brief (FF-05)",
@@ -965,8 +923,8 @@
         }
       ],
       "priority": {
-        "score": 1762.5,
-        "severity": 2.5,
+        "score": 352.5,
+        "severity": 0.5,
         "valuesAffected": 704,
         "valuesOpen": 704,
         "hostFactor": 1,
@@ -982,74 +940,43 @@
       "selectedNamePreservedInPptx": true,
       "pptxNameBasis": "Policy invariant: exporters write the selected family and never a replacement name; the parity typefaces and fontResolution checks read it back",
       "previewRoute": {
-        "family": "Carlito",
-        "tier": "visual",
+        "family": "Intos Display",
+        "tier": "metric",
         "kind": "replacement",
         "alternates": [
+          "Carlito",
           "Roboto"
         ],
         "alternatesBundled": {
+          "Carlito": true,
           "Roboto": true
         },
         "disabledFeatures": [],
         "decision": null,
-        "source": null,
-        "inFlight": {
-          "route": "Intos Display",
-          "tier": "metric",
+        "source": "https://github.com/muglug/intos/tree/fef9315c14da9e4b23b4c3cac8e718998d4e4736",
+        "pendingBundle": {
           "prs": [
-            "opf#166",
             "opf-render#54",
             "opf-editor#42"
-          ]
+          ],
+          "note": "Intos Display is the metric route in the merged policy (opf#166); its faces are vendored in the open opf-render#54 and lazy-loaded by the open opf-editor#42."
         }
       },
       "bundled": {
-        "yes": true,
+        "yes": false,
         "applies": "route-target",
-        "family": "Carlito",
-        "pack": "office",
-        "packages": [
-          {
-            "name": "carlito",
-            "version": "23e54b51ddffbc7713c583748e3bd86f62b1fa4a",
-            "pack": "office",
-            "source": "https://github.com/google/fonts/tree/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/carlito",
-            "vendored": "fonts/carlito",
-            "license": "OFL-1.1",
-            "reservedFontNames": [
-              "Carlito"
-            ]
-          }
-        ],
-        "faces": [
-          {
-            "style": "400",
-            "file": "Carlito-Regular.ttf",
-            "sha256": "f6418f708baede9789daef5d458c0f53d2a888af9820e8062934e504fedc6595"
-          },
-          {
-            "style": "400i",
-            "file": "Carlito-Italic.ttf",
-            "sha256": "0b019225e58d702bfedcbd35c21696769f8ee115cb6343f84c2f240312450d1c"
-          },
-          {
-            "style": "700",
-            "file": "Carlito-Bold.ttf",
-            "sha256": "bb5d20f79b82599ec72983597437373a80f2d2085fa91fc144fd74e876a594db"
-          },
-          {
-            "style": "700i",
-            "file": "Carlito-BoldItalic.ttf",
-            "sha256": "b32928186c119599e03ca6a1ffc680fdcb7fac95772f4b95d989cf6cd3861517"
-          }
-        ],
-        "stylesAvailable": [
-          "400",
-          "400i",
-          "700",
-          "700i"
-        ]
+        "family": "Intos Display",
+        "packages": [],
+        "faces": [],
+        "stylesAvailable": [],
+        "pack": null,
+        "pending": {
+          "prs": [
+            "opf-render#54",
+            "opf-editor#42"
+          ],
+          "note": "Intos Display is the metric route in the merged policy (opf#166); its faces are vendored in the open opf-render#54 and lazy-loaded by the open opf-editor#42."
+        }
       },
       "stylesRequired": [
         "400",
@@ -1063,7 +990,12 @@
         "700",
         "700i"
       ],
-      "stylesMissing": [],
+      "stylesMissing": [
+        "400",
+        "400i",
+        "700",
+        "700i"
+      ],
       "stylesExplicitGaps": [],
       "approximateStyles": [],
       "stylesBasis": "measured: styles the real font has on the measuring host",
@@ -1071,44 +1003,44 @@
         "Latin"
       ],
       "measurements": {
-        "replacement": "Carlito",
+        "replacement": "Intos Display",
         "reference": "Aptos Display 2.01;O365",
-        "meanAbsWidthDelta": 0.0184,
-        "meanWidthDelta": -0.0057,
-        "maxAbsWidthDelta": 0.0691,
+        "meanAbsWidthDelta": 0,
+        "meanWidthDelta": 0,
+        "maxAbsWidthDelta": 0,
         "stylesMeasured": 4,
         "perStyle": [
           {
             "style": "400",
             "replacementStyle": "400",
             "strings": 300,
-            "meanAbsWidthDelta": 0.0148,
-            "meanWidthDelta": 0.011,
-            "maxAbsWidthDelta": 0.0493
+            "meanAbsWidthDelta": 0,
+            "meanWidthDelta": 0,
+            "maxAbsWidthDelta": 0
           },
           {
             "style": "700",
             "replacementStyle": "700",
             "strings": 300,
-            "meanAbsWidthDelta": 0.0207,
-            "meanWidthDelta": -0.0203,
-            "maxAbsWidthDelta": 0.063
+            "meanAbsWidthDelta": 0,
+            "meanWidthDelta": 0,
+            "maxAbsWidthDelta": 0
           },
           {
             "style": "400i",
             "replacementStyle": "400i",
             "strings": 300,
-            "meanAbsWidthDelta": 0.0147,
-            "meanWidthDelta": 0.0085,
-            "maxAbsWidthDelta": 0.0601
+            "meanAbsWidthDelta": 0,
+            "meanWidthDelta": 0,
+            "maxAbsWidthDelta": 0
           },
           {
             "style": "700i",
             "replacementStyle": "700i",
             "strings": 300,
-            "meanAbsWidthDelta": 0.0233,
-            "meanWidthDelta": -0.0221,
-            "maxAbsWidthDelta": 0.0691
+            "meanAbsWidthDelta": 0,
+            "meanWidthDelta": 0,
+            "maxAbsWidthDelta": 0
           }
         ],
         "corpus": {
@@ -1117,18 +1049,18 @@
           "script": "Latin",
           "scriptSpecific": false
         },
-        "date": "2026-09-23",
-        "source": "docs/evidence/font-replacements-20260923/README.md",
-        "sourceNote": null,
-        "verticalMetricsMatch": null,
+        "date": "2026-09-29",
+        "source": "docs/evidence/font-replacements-20260923/metric-candidates-20260929.json",
+        "sourceNote": "Measured on 2026-09-29 (opf#166) against the Microsoft 365 cloud fonts, Aptos 2.01.",
+        "verticalMetricsMatch": true,
+        "verticalMetricsNote": "hhea, OS/2 typo and win, x-height and cap-height equal in all 16 styles; painted x-height and cap-height boxes agree (opf#166). Line breaks are not recorded.",
         "lineBreaksMatch": null,
-        "widthBarMet": false
+        "widthBarMet": true
       },
       "candidates": [
         {
           "name": "Intos Display",
-          "verdict": "qualified-in-flight",
-          "tier": "metric",
+          "verdict": "accepted-metric (policy, opf#166 merged as 338ddcd4)",
           "license": "OFL-1.1",
           "reservedFontName": null,
           "source": "https://github.com/muglug/intos/tree/fef9315c14da9e4b23b4c3cac8e718998d4e4736",
@@ -1163,9 +1095,9 @@
           "verifiedBy": "independently re-verified for this family",
           "date": "2026-09-29",
           "prs": [
-            "opf#166",
-            "opf-render#54",
-            "opf-editor#42"
+            "opf#166 (merged)",
+            "opf-render#54 (open)",
+            "opf-editor#42 (open)"
           ],
           "corpus": "Latin, 300 strings (script-specific text not applicable to Latin Aptos)"
         }
@@ -1175,14 +1107,14 @@
         "browser": "unverified",
         "editor": "unverified",
         "galleryEditor": "unverified",
-        "galleryCards": "unverified"
+        "galleryCards": "NA"
       },
       "hostLoading": {
-        "node": "only when pack: 'office' is requested (loadOfficeFontRegistry); not in the default 'base' pack",
-        "browser": "eager (33-face registry)",
-        "editor": "eager (33-face registry)",
-        "galleryEditor": "eager (33-face registry, vendored opf-editor bundle)",
-        "galleryCards": "self-hosted preview webfont: google/fonts 1.104 (upstream, weights 400 700, upright only)"
+        "node": "pending opf-render#54 and opf-editor#42: not in the pinned manifest",
+        "browser": "pending opf-render#54 and opf-editor#42: not in the pinned manifest",
+        "editor": "pending opf-render#54 and opf-editor#42: not in the pinned manifest",
+        "galleryEditor": "pending opf-render#54 and opf-editor#42: not in the pinned manifest",
+        "galleryCards": "no self-hosted card preview"
       },
       "nativeVerification": {
         "status": "unverified",
@@ -1231,12 +1163,12 @@
         "rerunNeeded": false
       },
       "phase": 3,
-      "status": "candidate-qualified-landing",
-      "statusReason": "unmerged candidate Intos Display (metric) in opf#166, opf-render#54, opf-editor#42",
-      "nextAction": "Land Intos Display, measured separately from Aptos: 0.000% mean and max in all four styles against Aptos Display 2.01, vertical metrics identical, independently re-verified. Verify all four styles in every shipped host; do not inherit Aptos results. Replaces the owner's Carlito-based plan.",
+      "status": "metric-measured",
+      "statusReason": "metric route Intos Display (width bar met in four styles); its faces are not in the pinned opf-render manifest until opf-render#54 and opf-editor#42 land",
+      "nextAction": "Metric route Intos Display is merged in policy (opf#166), measured separately from Aptos: 0.000% in all four styles against Aptos Display 2.01, independently re-verified. Land opf-render#54 and opf-editor#42, then verify the route in Node (pack office), browser, editor and gallery editor, rerun parity, and confirm the PPTX still names the selected family. Do not inherit Aptos results.",
       "evidence": [
         {
-          "label": "opf#166 (Intos policy, in flight)",
+          "label": "opf#166 (Intos policy, merged 338ddcd4)",
           "url": "https://github.com/OpenPresentation/opf/pull/166"
         },
         {
@@ -1248,6 +1180,10 @@
           "url": "https://github.com/OpenPresentation/opf-editor/pull/42"
         },
         {
+          "label": "Intos and Selawik acceptance measurement (2026-09-29)",
+          "url": "docs/evidence/font-replacements-20260923/metric-candidates-20260929.json"
+        },
+        {
           "label": "Aptos origin brief (FF-05)",
           "url": "docs/programs/font-fidelity-everywhere/aptos-origin-brief.md"
         },
@@ -1257,8 +1193,8 @@
         }
       ],
       "priority": {
-        "score": 1762.5,
-        "severity": 2.5,
+        "score": 352.5,
+        "severity": 0.5,
         "valuesAffected": 704,
         "valuesOpen": 704,
         "hostFactor": 1,
@@ -1286,7 +1222,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -1411,7 +1347,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 133
+        "rank": 136
       }
     },
     {
@@ -1423,70 +1359,41 @@
       "selectedNamePreservedInPptx": true,
       "pptxNameBasis": "Policy invariant: exporters write the selected family and never a replacement name; the parity typefaces and fontResolution checks read it back",
       "previewRoute": {
-        "family": "Carlito",
-        "tier": "visual",
+        "family": "Intos Narrow",
+        "tier": "metric",
         "kind": "replacement",
-        "alternates": [],
-        "alternatesBundled": {},
+        "alternates": [
+          "Carlito"
+        ],
+        "alternatesBundled": {
+          "Carlito": true
+        },
         "disabledFeatures": [],
         "decision": null,
-        "source": null,
-        "inFlight": {
-          "route": "Intos Narrow",
-          "tier": "metric",
+        "source": "https://github.com/muglug/intos/tree/fef9315c14da9e4b23b4c3cac8e718998d4e4736",
+        "pendingBundle": {
           "prs": [
-            "opf#166",
             "opf-render#54",
             "opf-editor#42"
-          ]
+          ],
+          "note": "Intos Narrow is the metric route in the merged policy (opf#166); its faces are vendored in the open opf-render#54 and lazy-loaded by the open opf-editor#42."
         }
       },
       "bundled": {
-        "yes": true,
+        "yes": false,
         "applies": "route-target",
-        "family": "Carlito",
-        "pack": "office",
-        "packages": [
-          {
-            "name": "carlito",
-            "version": "23e54b51ddffbc7713c583748e3bd86f62b1fa4a",
-            "pack": "office",
-            "source": "https://github.com/google/fonts/tree/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/carlito",
-            "vendored": "fonts/carlito",
-            "license": "OFL-1.1",
-            "reservedFontNames": [
-              "Carlito"
-            ]
-          }
-        ],
-        "faces": [
-          {
-            "style": "400",
-            "file": "Carlito-Regular.ttf",
-            "sha256": "f6418f708baede9789daef5d458c0f53d2a888af9820e8062934e504fedc6595"
-          },
-          {
-            "style": "400i",
-            "file": "Carlito-Italic.ttf",
-            "sha256": "0b019225e58d702bfedcbd35c21696769f8ee115cb6343f84c2f240312450d1c"
-          },
-          {
-            "style": "700",
-            "file": "Carlito-Bold.ttf",
-            "sha256": "bb5d20f79b82599ec72983597437373a80f2d2085fa91fc144fd74e876a594db"
-          },
-          {
-            "style": "700i",
-            "file": "Carlito-BoldItalic.ttf",
-            "sha256": "b32928186c119599e03ca6a1ffc680fdcb7fac95772f4b95d989cf6cd3861517"
-          }
-        ],
-        "stylesAvailable": [
-          "400",
-          "400i",
-          "700",
-          "700i"
-        ]
+        "family": "Intos Narrow",
+        "packages": [],
+        "faces": [],
+        "stylesAvailable": [],
+        "pack": null,
+        "pending": {
+          "prs": [
+            "opf-render#54",
+            "opf-editor#42"
+          ],
+          "note": "Intos Narrow is the metric route in the merged policy (opf#166); its faces are vendored in the open opf-render#54 and lazy-loaded by the open opf-editor#42."
+        }
       },
       "stylesRequired": [
         "400",
@@ -1500,7 +1407,12 @@
         "700",
         "700i"
       ],
-      "stylesMissing": [],
+      "stylesMissing": [
+        "400",
+        "400i",
+        "700",
+        "700i"
+      ],
       "stylesExplicitGaps": [],
       "approximateStyles": [],
       "stylesBasis": "measured: styles the real font has on the measuring host",
@@ -1508,44 +1420,44 @@
         "Latin"
       ],
       "measurements": {
-        "replacement": "Carlito",
+        "replacement": "Intos Narrow",
         "reference": "Aptos Narrow 2.01;O365",
-        "meanAbsWidthDelta": 0.0233,
-        "meanWidthDelta": 0.0222,
-        "maxAbsWidthDelta": 0.0786,
+        "meanAbsWidthDelta": 0,
+        "meanWidthDelta": 0,
+        "maxAbsWidthDelta": 0,
         "stylesMeasured": 4,
         "perStyle": [
           {
             "style": "400",
             "replacementStyle": "400",
             "strings": 300,
-            "meanAbsWidthDelta": 0.028,
-            "meanWidthDelta": 0.0277,
-            "maxAbsWidthDelta": 0.0628
+            "meanAbsWidthDelta": 0,
+            "meanWidthDelta": 0,
+            "maxAbsWidthDelta": 0
           },
           {
             "style": "700",
             "replacementStyle": "700",
             "strings": 300,
-            "meanAbsWidthDelta": 0.0133,
-            "meanWidthDelta": 0.011,
-            "maxAbsWidthDelta": 0.0445
+            "meanAbsWidthDelta": 0,
+            "meanWidthDelta": 0,
+            "maxAbsWidthDelta": 0
           },
           {
             "style": "400i",
             "replacementStyle": "400i",
             "strings": 300,
-            "meanAbsWidthDelta": 0.0296,
-            "meanWidthDelta": 0.0291,
-            "maxAbsWidthDelta": 0.0786
+            "meanAbsWidthDelta": 0,
+            "meanWidthDelta": 0,
+            "maxAbsWidthDelta": 0
           },
           {
             "style": "700i",
             "replacementStyle": "700i",
             "strings": 300,
-            "meanAbsWidthDelta": 0.0224,
-            "meanWidthDelta": 0.0212,
-            "maxAbsWidthDelta": 0.069
+            "meanAbsWidthDelta": 0,
+            "meanWidthDelta": 0,
+            "maxAbsWidthDelta": 0
           }
         ],
         "corpus": {
@@ -1554,18 +1466,18 @@
           "script": "Latin",
           "scriptSpecific": false
         },
-        "date": "2026-09-23",
-        "source": "docs/evidence/font-replacements-20260923/README.md",
-        "sourceNote": null,
-        "verticalMetricsMatch": null,
+        "date": "2026-09-29",
+        "source": "docs/evidence/font-replacements-20260923/metric-candidates-20260929.json",
+        "sourceNote": "Measured on 2026-09-29 (opf#166) against the Microsoft 365 cloud fonts, Aptos 2.01.",
+        "verticalMetricsMatch": true,
+        "verticalMetricsNote": "hhea, OS/2 typo and win, x-height and cap-height equal in all 16 styles; painted x-height and cap-height boxes agree (opf#166). Line breaks are not recorded.",
         "lineBreaksMatch": null,
-        "widthBarMet": false
+        "widthBarMet": true
       },
       "candidates": [
         {
           "name": "Intos Narrow",
-          "verdict": "qualified-in-flight",
-          "tier": "metric",
+          "verdict": "accepted-metric (policy, opf#166 merged as 338ddcd4)",
           "license": "OFL-1.1",
           "reservedFontName": null,
           "source": "https://github.com/muglug/intos/tree/fef9315c14da9e4b23b4c3cac8e718998d4e4736",
@@ -1600,9 +1512,9 @@
           "verifiedBy": "independently re-verified for this family",
           "date": "2026-09-29",
           "prs": [
-            "opf#166",
-            "opf-render#54",
-            "opf-editor#42"
+            "opf#166 (merged)",
+            "opf-render#54 (open)",
+            "opf-editor#42 (open)"
           ],
           "corpus": "Latin, 300 strings (script-specific text not applicable to Latin Aptos)"
         }
@@ -1612,14 +1524,14 @@
         "browser": "unverified",
         "editor": "unverified",
         "galleryEditor": "unverified",
-        "galleryCards": "unverified"
+        "galleryCards": "NA"
       },
       "hostLoading": {
-        "node": "only when pack: 'office' is requested (loadOfficeFontRegistry); not in the default 'base' pack",
-        "browser": "eager (33-face registry)",
-        "editor": "eager (33-face registry)",
-        "galleryEditor": "eager (33-face registry, vendored opf-editor bundle)",
-        "galleryCards": "self-hosted preview webfont: google/fonts 1.104 (upstream, weights 400 700, upright only)"
+        "node": "pending opf-render#54 and opf-editor#42: not in the pinned manifest",
+        "browser": "pending opf-render#54 and opf-editor#42: not in the pinned manifest",
+        "editor": "pending opf-render#54 and opf-editor#42: not in the pinned manifest",
+        "galleryEditor": "pending opf-render#54 and opf-editor#42: not in the pinned manifest",
+        "galleryCards": "no self-hosted card preview"
       },
       "nativeVerification": {
         "status": "unverified",
@@ -1649,12 +1561,12 @@
         "rerunNeeded": false
       },
       "phase": 3,
-      "status": "candidate-qualified-landing",
-      "statusReason": "unmerged candidate Intos Narrow (metric) in opf#166, opf-render#54, opf-editor#42",
-      "nextAction": "Land Intos Narrow: 0.000% mean and max in all four styles against Aptos Narrow 2.01, independently re-verified (Carlito drifted up to 7.9%). Verify loading in shipped hosts and native wrapping of narrow text.",
+      "status": "metric-measured",
+      "statusReason": "metric route Intos Narrow (width bar met in four styles); its faces are not in the pinned opf-render manifest until opf-render#54 and opf-editor#42 land",
+      "nextAction": "Metric route Intos Narrow is merged in policy (opf#166): 0.000% in all four styles against Aptos Narrow 2.01, independently re-verified. Land opf-render#54 and opf-editor#42, then verify the route in Node (pack office), browser, editor and gallery editor, rerun parity, and confirm the PPTX still names the selected family.",
       "evidence": [
         {
-          "label": "opf#166 (Intos policy, in flight)",
+          "label": "opf#166 (Intos policy, merged 338ddcd4)",
           "url": "https://github.com/OpenPresentation/opf/pull/166"
         },
         {
@@ -1664,15 +1576,19 @@
         {
           "label": "opf-editor#42 (lazy loading, in flight)",
           "url": "https://github.com/OpenPresentation/opf-editor/pull/42"
+        },
+        {
+          "label": "Intos and Selawik acceptance measurement (2026-09-29)",
+          "url": "docs/evidence/font-replacements-20260923/metric-candidates-20260929.json"
         }
       ],
       "priority": {
-        "score": 2.5,
-        "severity": 2.5,
+        "score": 0.5,
+        "severity": 0.5,
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 108
+        "rank": 159
       }
     },
     {
@@ -1684,68 +1600,41 @@
       "selectedNamePreservedInPptx": true,
       "pptxNameBasis": "Policy invariant: exporters write the selected family and never a replacement name; the parity typefaces and fontResolution checks read it back",
       "previewRoute": {
-        "family": "Tinos",
-        "tier": "visual",
+        "family": "Intos Serif",
+        "tier": "metric",
         "kind": "replacement",
-        "alternates": [],
-        "alternatesBundled": {},
+        "alternates": [
+          "Tinos"
+        ],
+        "alternatesBundled": {
+          "Tinos": true
+        },
         "disabledFeatures": [],
         "decision": null,
-        "source": null,
-        "inFlight": {
-          "route": "Intos Serif",
-          "tier": "metric",
+        "source": "https://github.com/muglug/intos/tree/fef9315c14da9e4b23b4c3cac8e718998d4e4736",
+        "pendingBundle": {
           "prs": [
-            "opf#166",
             "opf-render#54",
             "opf-editor#42"
-          ]
+          ],
+          "note": "Intos Serif is the metric route in the merged policy (opf#166); its faces are vendored in the open opf-render#54 and lazy-loaded by the open opf-editor#42."
         }
       },
       "bundled": {
-        "yes": true,
+        "yes": false,
         "applies": "route-target",
-        "family": "Tinos",
-        "pack": "office",
-        "packages": [
-          {
-            "name": "@expo-google-fonts/tinos",
-            "version": "0.4.2",
-            "pack": "office",
-            "source": "https://www.npmjs.com/package/@expo-google-fonts/tinos/v/0.4.2",
-            "vendored": null,
-            "license": "OFL-1.1",
-            "reservedFontNames": []
-          }
-        ],
-        "faces": [
-          {
-            "style": "400",
-            "file": "400Regular/Tinos_400Regular.ttf",
-            "sha256": "924ef269e73da94c1803ff68877f5d998dd16605c5ffad82ee181034f8a1fffe"
-          },
-          {
-            "style": "400i",
-            "file": "400Regular_Italic/Tinos_400Regular_Italic.ttf",
-            "sha256": "4a52de5bcf70e37bd71949f8a85302b75795a1943aedffbbee4f2db7744e1c81"
-          },
-          {
-            "style": "700",
-            "file": "700Bold/Tinos_700Bold.ttf",
-            "sha256": "576a19b5dc026cafe6ae8fde4c849588dae6475cf5d912cebdf2827388c43ad9"
-          },
-          {
-            "style": "700i",
-            "file": "700Bold_Italic/Tinos_700Bold_Italic.ttf",
-            "sha256": "10c90ef7896d758923c06a1485d7824cdb457466da0bf7d42f81c5228931281b"
-          }
-        ],
-        "stylesAvailable": [
-          "400",
-          "400i",
-          "700",
-          "700i"
-        ]
+        "family": "Intos Serif",
+        "packages": [],
+        "faces": [],
+        "stylesAvailable": [],
+        "pack": null,
+        "pending": {
+          "prs": [
+            "opf-render#54",
+            "opf-editor#42"
+          ],
+          "note": "Intos Serif is the metric route in the merged policy (opf#166); its faces are vendored in the open opf-render#54 and lazy-loaded by the open opf-editor#42."
+        }
       },
       "stylesRequired": [
         "400",
@@ -1759,19 +1648,77 @@
         "700",
         "700i"
       ],
-      "stylesMissing": [],
+      "stylesMissing": [
+        "400",
+        "400i",
+        "700",
+        "700i"
+      ],
       "stylesExplicitGaps": [],
       "approximateStyles": [],
-      "stylesBasis": "assumed: real font not measured; four styles for Latin, regular and bold for script families",
+      "stylesBasis": "measured: styles the real font has on the measuring host",
       "scripts": [
         "Latin"
       ],
-      "measurements": null,
+      "measurements": {
+        "replacement": "Intos Serif",
+        "reference": "Aptos Serif 2.01;240513210638;O365",
+        "meanAbsWidthDelta": 0,
+        "meanWidthDelta": 0,
+        "maxAbsWidthDelta": 0,
+        "stylesMeasured": 4,
+        "perStyle": [
+          {
+            "style": "400",
+            "replacementStyle": "400",
+            "strings": 300,
+            "meanAbsWidthDelta": 0,
+            "meanWidthDelta": 0,
+            "maxAbsWidthDelta": 0
+          },
+          {
+            "style": "700",
+            "replacementStyle": "700",
+            "strings": 300,
+            "meanAbsWidthDelta": 0,
+            "meanWidthDelta": 0,
+            "maxAbsWidthDelta": 0
+          },
+          {
+            "style": "400i",
+            "replacementStyle": "400i",
+            "strings": 300,
+            "meanAbsWidthDelta": 0,
+            "meanWidthDelta": 0,
+            "maxAbsWidthDelta": 0
+          },
+          {
+            "style": "700i",
+            "replacementStyle": "700i",
+            "strings": 300,
+            "meanAbsWidthDelta": 0,
+            "meanWidthDelta": 0,
+            "maxAbsWidthDelta": 0
+          }
+        ],
+        "corpus": {
+          "strings": 300,
+          "sha256": "611eec19400a21c0985813606e1c97dc3e2ccfc183f463e2626bae066b0972ca",
+          "script": "Latin",
+          "scriptSpecific": false
+        },
+        "date": "2026-09-29",
+        "source": "docs/evidence/font-replacements-20260923/metric-candidates-20260929.json",
+        "sourceNote": "Measured on 2026-09-29 (opf#166) from the files in Microsoft's Aptos Fonts download, because Aptos Serif is not installed on the measuring host.",
+        "verticalMetricsMatch": true,
+        "verticalMetricsNote": "hhea, OS/2 typo and win, x-height and cap-height equal in all 16 styles; painted x-height and cap-height boxes agree (opf#166). Line breaks are not recorded.",
+        "lineBreaksMatch": null,
+        "widthBarMet": true
+      },
       "candidates": [
         {
           "name": "Intos Serif",
-          "verdict": "qualified-in-flight",
-          "tier": "metric",
+          "verdict": "accepted-metric (policy, opf#166 merged as 338ddcd4)",
           "license": "OFL-1.1",
           "reservedFontName": null,
           "source": "https://github.com/muglug/intos/tree/fef9315c14da9e4b23b4c3cac8e718998d4e4736",
@@ -1806,9 +1753,9 @@
           "verifiedBy": "measured from the Microsoft Aptos Fonts download (not independently re-measured)",
           "date": "2026-09-29",
           "prs": [
-            "opf#166",
-            "opf-render#54",
-            "opf-editor#42"
+            "opf#166 (merged)",
+            "opf-render#54 (open)",
+            "opf-editor#42 (open)"
           ],
           "corpus": "Latin, 300 strings (script-specific text not applicable to Latin Aptos)"
         }
@@ -1818,14 +1765,14 @@
         "browser": "unverified",
         "editor": "unverified",
         "galleryEditor": "unverified",
-        "galleryCards": "unverified"
+        "galleryCards": "NA"
       },
       "hostLoading": {
-        "node": "only when pack: 'office' is requested (loadOfficeFontRegistry); not in the default 'base' pack",
-        "browser": "eager (33-face registry)",
-        "editor": "eager (33-face registry)",
-        "galleryEditor": "eager (33-face registry, vendored opf-editor bundle)",
-        "galleryCards": "self-hosted preview webfont: @fontsource/tinos 5.3.0 (static, weights 400 700, upright only)"
+        "node": "pending opf-render#54 and opf-editor#42: not in the pinned manifest",
+        "browser": "pending opf-render#54 and opf-editor#42: not in the pinned manifest",
+        "editor": "pending opf-render#54 and opf-editor#42: not in the pinned manifest",
+        "galleryEditor": "pending opf-render#54 and opf-editor#42: not in the pinned manifest",
+        "galleryCards": "no self-hosted card preview"
       },
       "nativeVerification": {
         "status": "unverified",
@@ -1855,12 +1802,12 @@
         "rerunNeeded": false
       },
       "phase": 3,
-      "status": "candidate-qualified-landing",
-      "statusReason": "unmerged candidate Intos Serif (metric) in opf#166, opf-render#54, opf-editor#42",
-      "nextAction": "Land Intos Serif: 0.000% mean and max in all four styles, measured from Microsoft's Aptos Fonts download because Aptos Serif is not installed on the measuring host. Gelasio-derived outlines share eight plain rectangles with the original. Verify serif kerning and wrapping in shipped hosts.",
+      "status": "metric-measured",
+      "statusReason": "metric route Intos Serif (width bar met in four styles); its faces are not in the pinned opf-render manifest until opf-render#54 and opf-editor#42 land",
+      "nextAction": "Metric route Intos Serif is merged in policy (opf#166): 0.000% in all four styles, measured from Microsoft's Aptos Fonts download (Gelasio-derived outlines share eight plain rectangles with the original). Land opf-render#54 and opf-editor#42, then verify the route in Node (pack office), browser, editor and gallery editor, rerun parity, and confirm the PPTX still names the selected family. Check serif kerning and wrapping.",
       "evidence": [
         {
-          "label": "opf#166 (Intos policy, in flight)",
+          "label": "opf#166 (Intos policy, merged 338ddcd4)",
           "url": "https://github.com/OpenPresentation/opf/pull/166"
         },
         {
@@ -1870,15 +1817,19 @@
         {
           "label": "opf-editor#42 (lazy loading, in flight)",
           "url": "https://github.com/OpenPresentation/opf-editor/pull/42"
+        },
+        {
+          "label": "Intos and Selawik acceptance measurement (2026-09-29)",
+          "url": "docs/evidence/font-replacements-20260923/metric-candidates-20260929.json"
         }
       ],
       "priority": {
-        "score": 2,
-        "severity": 2,
+        "score": 0.5,
+        "severity": 0.5,
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 134
+        "rank": 160
       }
     },
     {
@@ -1898,7 +1849,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -1974,6 +1925,7 @@
         "source": "docs/evidence/font-replacements-20260923/README.md",
         "sourceNote": null,
         "verticalMetricsMatch": null,
+        "verticalMetricsNote": null,
         "lineBreaksMatch": null,
         "widthBarMet": false
       },
@@ -2076,7 +2028,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": false,
@@ -2203,7 +2155,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": "https://github.com/google/fonts/blob/main/ofl/arimo/METADATA.pb",
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -2320,6 +2272,7 @@
         "source": "docs/evidence/font-replacements-20260923/README.md",
         "sourceNote": null,
         "verticalMetricsMatch": null,
+        "verticalMetricsNote": null,
         "lineBreaksMatch": null,
         "widthBarMet": true
       },
@@ -2392,7 +2345,7 @@
         "valuesAffected": 3,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 157
+        "rank": 161
       }
     },
     {
@@ -2416,7 +2369,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -2509,6 +2462,7 @@
         "source": "docs/evidence/font-replacements-20260923/README.md",
         "sourceNote": null,
         "verticalMetricsMatch": null,
+        "verticalMetricsNote": null,
         "lineBreaksMatch": null,
         "widthBarMet": false
       },
@@ -2609,7 +2563,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": false,
@@ -2695,6 +2649,7 @@
         "source": "docs/evidence/font-replacements-20260923/README.md",
         "sourceNote": null,
         "verticalMetricsMatch": null,
+        "verticalMetricsNote": null,
         "lineBreaksMatch": null,
         "widthBarMet": false
       },
@@ -2776,7 +2731,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -2911,7 +2866,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 148
+        "rank": 150
       }
     },
     {
@@ -2931,7 +2886,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": false,
@@ -3066,7 +3021,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": false,
@@ -3119,6 +3074,7 @@
         "source": "docs/evidence/font-replacements-20260923/README.md",
         "sourceNote": null,
         "verticalMetricsMatch": null,
+        "verticalMetricsNote": null,
         "lineBreaksMatch": null,
         "widthBarMet": false
       },
@@ -3200,7 +3156,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -3356,7 +3312,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -3512,7 +3468,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -3640,7 +3596,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": false,
@@ -3767,7 +3723,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": false,
@@ -3853,6 +3809,7 @@
         "source": "docs/evidence/font-replacements-20260923/README.md",
         "sourceNote": null,
         "verticalMetricsMatch": null,
+        "verticalMetricsNote": null,
         "lineBreaksMatch": null,
         "widthBarMet": false
       },
@@ -3938,7 +3895,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -4059,6 +4016,7 @@
         "source": "docs/evidence/font-replacements-20260923/README.md",
         "sourceNote": null,
         "verticalMetricsMatch": null,
+        "verticalMetricsNote": null,
         "lineBreaksMatch": null,
         "widthBarMet": false
       },
@@ -4148,7 +4106,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": false,
@@ -4237,6 +4195,7 @@
         "source": "docs/evidence/font-replacements-20260923/README.md",
         "sourceNote": null,
         "verticalMetricsMatch": null,
+        "verticalMetricsNote": null,
         "lineBreaksMatch": null,
         "widthBarMet": false
       },
@@ -4328,7 +4287,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -4462,7 +4421,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 149
+        "rank": 151
       }
     },
     {
@@ -4482,7 +4441,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": "https://github.com/googlefonts/carlito",
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -4601,6 +4560,7 @@
         "source": "docs/evidence/font-replacements-20260923/README.md",
         "sourceNote": null,
         "verticalMetricsMatch": null,
+        "verticalMetricsNote": null,
         "lineBreaksMatch": null,
         "widthBarMet": true
       },
@@ -4680,7 +4640,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 158
+        "rank": 162
       }
     },
     {
@@ -4700,7 +4660,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -4802,6 +4762,7 @@
         "source": "docs/evidence/font-replacements-20260923/README.md",
         "sourceNote": null,
         "verticalMetricsMatch": null,
+        "verticalMetricsNote": null,
         "lineBreaksMatch": null,
         "widthBarMet": false
       },
@@ -4863,7 +4824,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 135
+        "rank": 137
       }
     },
     {
@@ -4883,7 +4844,7 @@
         "disabledFeatures": [],
         "decision": "cambria-tier",
         "source": "https://chromium.googlesource.com/external/fontconfig/+/refs/heads/main/conf.d/30-metric-aliases.conf",
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -5000,6 +4961,7 @@
         "source": "docs/evidence/font-replacements-20260923/README.md",
         "sourceNote": null,
         "verticalMetricsMatch": null,
+        "verticalMetricsNote": null,
         "lineBreaksMatch": null,
         "widthBarMet": false
       },
@@ -5065,7 +5027,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 109
+        "rank": 112
       }
     },
     {
@@ -5085,7 +5047,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": false,
@@ -5188,7 +5150,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -5307,6 +5269,7 @@
         "source": "docs/evidence/font-replacements-20260923/README.md",
         "sourceNote": null,
         "verticalMetricsMatch": null,
+        "verticalMetricsNote": null,
         "lineBreaksMatch": null,
         "widthBarMet": false
       },
@@ -5392,7 +5355,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -5450,25 +5413,17 @@
       "replacementStylesRequired": null,
       "stylesRequiredByRole": {
         "400": [
-          "Aptos Display",
-          "Aptos Narrow",
           "Calibri",
           "Calibri Light"
         ],
         "700": [
-          "Aptos Display",
-          "Aptos Narrow",
           "Calibri"
         ],
         "400i": [
-          "Aptos Display",
-          "Aptos Narrow",
           "Calibri",
           "Calibri Light"
         ],
         "700i": [
-          "Aptos Display",
-          "Aptos Narrow",
           "Calibri"
         ]
       },
@@ -5546,7 +5501,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 150
+        "rank": 152
       }
     },
     {
@@ -5570,7 +5525,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": false,
@@ -5656,6 +5611,7 @@
         "source": "docs/evidence/font-replacements-20260923/README.md",
         "sourceNote": null,
         "verticalMetricsMatch": null,
+        "verticalMetricsNote": null,
         "lineBreaksMatch": null,
         "widthBarMet": false
       },
@@ -5737,7 +5693,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -5854,6 +5810,7 @@
         "source": "docs/evidence/font-replacements-20260923/README.md",
         "sourceNote": null,
         "verticalMetricsMatch": null,
+        "verticalMetricsNote": null,
         "lineBreaksMatch": null,
         "widthBarMet": false
       },
@@ -5949,7 +5906,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -6066,6 +6023,7 @@
         "source": "docs/evidence/font-replacements-20260923/README.md",
         "sourceNote": null,
         "verticalMetricsMatch": null,
+        "verticalMetricsNote": null,
         "lineBreaksMatch": null,
         "widthBarMet": false
       },
@@ -6161,7 +6119,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -6282,6 +6240,7 @@
         "source": "docs/evidence/font-replacements-20260923/README.md",
         "sourceNote": null,
         "verticalMetricsMatch": null,
+        "verticalMetricsNote": null,
         "lineBreaksMatch": null,
         "widthBarMet": false
       },
@@ -6381,7 +6340,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -6500,6 +6459,7 @@
         "source": "docs/evidence/font-replacements-20260923/README.md",
         "sourceNote": null,
         "verticalMetricsMatch": null,
+        "verticalMetricsNote": null,
         "lineBreaksMatch": null,
         "widthBarMet": false
       },
@@ -6589,7 +6549,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": "https://github.com/google/fonts/blob/main/ofl/cousine/METADATA.pb",
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -6706,6 +6666,7 @@
         "source": "docs/evidence/font-replacements-20260923/README.md",
         "sourceNote": null,
         "verticalMetricsMatch": null,
+        "verticalMetricsNote": null,
         "lineBreaksMatch": null,
         "widthBarMet": true
       },
@@ -6777,7 +6738,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 159
+        "rank": 163
       }
     },
     {
@@ -6797,7 +6758,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -6940,7 +6901,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 151
+        "rank": 153
       }
     },
     {
@@ -6960,7 +6921,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -7115,7 +7076,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -7270,7 +7231,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": false,
@@ -7384,7 +7345,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -7470,6 +7431,7 @@
         "source": "docs/evidence/font-replacements-20260923/README.md",
         "sourceNote": null,
         "verticalMetricsMatch": null,
+        "verticalMetricsNote": null,
         "lineBreaksMatch": null,
         "widthBarMet": false
       },
@@ -7571,7 +7533,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": false,
@@ -7695,7 +7657,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -7795,6 +7757,7 @@
         "source": "docs/evidence/font-replacements-20260923/README.md",
         "sourceNote": null,
         "verticalMetricsMatch": null,
+        "verticalMetricsNote": null,
         "lineBreaksMatch": null,
         "widthBarMet": false
       },
@@ -7868,7 +7831,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 136
+        "rank": 138
       }
     },
     {
@@ -7888,7 +7851,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -8044,7 +8007,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": false,
@@ -8179,7 +8142,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": false,
@@ -8243,6 +8206,7 @@
         "source": "docs/evidence/font-replacements-20260923/README.md",
         "sourceNote": null,
         "verticalMetricsMatch": null,
+        "verticalMetricsNote": null,
         "lineBreaksMatch": null,
         "widthBarMet": false
       },
@@ -8328,7 +8292,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": false,
@@ -8392,6 +8356,7 @@
         "source": "docs/evidence/font-replacements-20260923/README.md",
         "sourceNote": null,
         "verticalMetricsMatch": null,
+        "verticalMetricsNote": null,
         "lineBreaksMatch": null,
         "widthBarMet": false
       },
@@ -8477,7 +8442,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": false,
@@ -8552,6 +8517,7 @@
         "source": "docs/evidence/font-replacements-20260923/README.md",
         "sourceNote": null,
         "verticalMetricsMatch": null,
+        "verticalMetricsNote": null,
         "lineBreaksMatch": null,
         "widthBarMet": false
       },
@@ -8643,7 +8609,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -8794,7 +8760,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -8936,7 +8902,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 152
+        "rank": 154
       }
     },
     {
@@ -8959,7 +8925,7 @@
         ],
         "decision": null,
         "source": "https://github.com/SorkinType/Gelasio",
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -9076,6 +9042,7 @@
         "source": "docs/evidence/font-replacements-20260923/report.json",
         "sourceNote": "The Georgia entry was replaced on 2026-09-29 by the Gelasio re-run with liga and clig off (opf#163); the other rows are the 2026-09-23 host run.",
         "verticalMetricsMatch": null,
+        "verticalMetricsNote": null,
         "lineBreaksMatch": null,
         "widthBarMet": true
       },
@@ -9180,7 +9147,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -9299,6 +9266,7 @@
         "source": "docs/evidence/font-replacements-20260923/README.md",
         "sourceNote": null,
         "verticalMetricsMatch": null,
+        "verticalMetricsNote": null,
         "lineBreaksMatch": null,
         "widthBarMet": false
       },
@@ -9384,7 +9352,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -9538,7 +9506,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": false,
@@ -9668,7 +9636,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": false,
@@ -9793,7 +9761,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -9949,7 +9917,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -10109,7 +10077,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": false,
@@ -10162,6 +10130,7 @@
         "source": "docs/evidence/font-replacements-20260923/README.md",
         "sourceNote": null,
         "verticalMetricsMatch": null,
+        "verticalMetricsNote": null,
         "lineBreaksMatch": null,
         "widthBarMet": false
       },
@@ -10238,6 +10207,598 @@
       }
     },
     {
+      "family": "Intos",
+      "class": "open",
+      "inPolicy": true,
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "selectedNamePreservedInPptx": true,
+      "pptxNameBasis": "Policy invariant: exporters write the selected family and never a replacement name; the parity typefaces and fontResolution checks read it back",
+      "previewRoute": {
+        "family": "Intos",
+        "tier": "real",
+        "kind": "self",
+        "alternates": [],
+        "alternatesBundled": {},
+        "disabledFeatures": [],
+        "decision": null,
+        "source": null,
+        "pendingBundle": {
+          "prs": [
+            "opf-render#54",
+            "opf-editor#42"
+          ],
+          "note": "Intos faces are vendored in the open opf-render#54 and lazy-loaded by the open opf-editor#42."
+        }
+      },
+      "bundled": {
+        "yes": false,
+        "applies": "self",
+        "family": "Intos",
+        "packages": [],
+        "faces": [],
+        "stylesAvailable": [],
+        "pack": null,
+        "pending": {
+          "prs": [
+            "opf-render#54",
+            "opf-editor#42"
+          ],
+          "note": "Intos faces are vendored in the open opf-render#54 and lazy-loaded by the open opf-editor#42."
+        }
+      },
+      "stylesRequired": [
+        "400",
+        "400i",
+        "700",
+        "700i"
+      ],
+      "replacementStylesRequired": null,
+      "stylesRequiredByRole": {
+        "400": [
+          "Aptos"
+        ],
+        "700": [
+          "Aptos"
+        ],
+        "400i": [
+          "Aptos"
+        ],
+        "700i": [
+          "Aptos"
+        ]
+      },
+      "stylesMissing": [
+        "400",
+        "400i",
+        "700",
+        "700i"
+      ],
+      "stylesExplicitGaps": [],
+      "approximateStyles": [],
+      "stylesBasis": "assumed: four styles for Latin faces, regular and bold for script faces",
+      "scripts": [
+        "Latin"
+      ],
+      "measurements": null,
+      "candidates": [],
+      "hostVerification": {
+        "node": "unverified",
+        "browser": "unverified",
+        "editor": "unverified",
+        "galleryEditor": "unverified",
+        "galleryCards": "NA"
+      },
+      "hostLoading": {
+        "node": "pending opf-render#54 and opf-editor#42: not in the pinned manifest",
+        "browser": "pending opf-render#54 and opf-editor#42: not in the pinned manifest",
+        "editor": "pending opf-render#54 and opf-editor#42: not in the pinned manifest",
+        "galleryEditor": "pending opf-render#54 and opf-editor#42: not in the pinned manifest",
+        "galleryCards": "no self-hosted card preview"
+      },
+      "nativeVerification": {
+        "status": "unverified",
+        "note": "No per-family native PowerPoint acceptance (phase 5)."
+      },
+      "acceptance": {
+        "fixture": "pending",
+        "accepted": false,
+        "date": null,
+        "evidence": [],
+        "note": "Own fixture and acceptance record required; grouped work does not transfer acceptance."
+      },
+      "paritySignals": {
+        "source": "parity-results-2026-09-29-table-drawn-extent.json",
+        "totalValues": 850,
+        "valuesAffected": 0,
+        "fontResolution": {
+          "pass": 0,
+          "near": 0,
+          "fail": 0
+        },
+        "statusAtRun": {},
+        "resolvedAtRun": [],
+        "pptxNamedValues": 0,
+        "byDimension": {},
+        "expectedStatusOnMain": "missing",
+        "rerunNeeded": false
+      },
+      "phase": 2,
+      "status": "loading-gap",
+      "statusReason": "Intos is not in the pinned opf-render manifest until opf-render#54 and opf-editor#42 land",
+      "nextAction": "Vendor Intos in opf-render (opf-render#54; pinned commit fef9315c14da9e4b23b4c3cac8e718998d4e4736, OFL-1.1, no Reserved Font Name, single-maintainer project so Roboto and Carlito stay as alternates) and load it lazily in the browser hosts (opf-editor#42); then verify four styles in every host and its role as the Aptos replacement independently.",
+      "evidence": [
+        {
+          "label": "opf#166 (Intos policy, merged 338ddcd4)",
+          "url": "https://github.com/OpenPresentation/opf/pull/166"
+        },
+        {
+          "label": "opf-render#54 (Intos faces, in flight)",
+          "url": "https://github.com/OpenPresentation/opf-render/pull/54"
+        },
+        {
+          "label": "opf-editor#42 (lazy loading, in flight)",
+          "url": "https://github.com/OpenPresentation/opf-editor/pull/42"
+        },
+        {
+          "label": "Font licensing and policy table",
+          "url": "docs/programs/font-fidelity-everywhere/font-licensing.md"
+        }
+      ],
+      "priority": {
+        "score": 3,
+        "severity": 3,
+        "valuesAffected": 0,
+        "valuesOpen": 0,
+        "hostFactor": 1,
+        "rank": 97
+      }
+    },
+    {
+      "family": "Intos Display",
+      "class": "open",
+      "inPolicy": true,
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "selectedNamePreservedInPptx": true,
+      "pptxNameBasis": "Policy invariant: exporters write the selected family and never a replacement name; the parity typefaces and fontResolution checks read it back",
+      "previewRoute": {
+        "family": "Intos Display",
+        "tier": "real",
+        "kind": "self",
+        "alternates": [],
+        "alternatesBundled": {},
+        "disabledFeatures": [],
+        "decision": null,
+        "source": null,
+        "pendingBundle": {
+          "prs": [
+            "opf-render#54",
+            "opf-editor#42"
+          ],
+          "note": "Intos Display faces are vendored in the open opf-render#54 and lazy-loaded by the open opf-editor#42."
+        }
+      },
+      "bundled": {
+        "yes": false,
+        "applies": "self",
+        "family": "Intos Display",
+        "packages": [],
+        "faces": [],
+        "stylesAvailable": [],
+        "pack": null,
+        "pending": {
+          "prs": [
+            "opf-render#54",
+            "opf-editor#42"
+          ],
+          "note": "Intos Display faces are vendored in the open opf-render#54 and lazy-loaded by the open opf-editor#42."
+        }
+      },
+      "stylesRequired": [
+        "400",
+        "400i",
+        "700",
+        "700i"
+      ],
+      "replacementStylesRequired": null,
+      "stylesRequiredByRole": {
+        "400": [
+          "Aptos Display"
+        ],
+        "700": [
+          "Aptos Display"
+        ],
+        "400i": [
+          "Aptos Display"
+        ],
+        "700i": [
+          "Aptos Display"
+        ]
+      },
+      "stylesMissing": [
+        "400",
+        "400i",
+        "700",
+        "700i"
+      ],
+      "stylesExplicitGaps": [],
+      "approximateStyles": [],
+      "stylesBasis": "assumed: four styles for Latin faces, regular and bold for script faces",
+      "scripts": [
+        "Latin"
+      ],
+      "measurements": null,
+      "candidates": [],
+      "hostVerification": {
+        "node": "unverified",
+        "browser": "unverified",
+        "editor": "unverified",
+        "galleryEditor": "unverified",
+        "galleryCards": "NA"
+      },
+      "hostLoading": {
+        "node": "pending opf-render#54 and opf-editor#42: not in the pinned manifest",
+        "browser": "pending opf-render#54 and opf-editor#42: not in the pinned manifest",
+        "editor": "pending opf-render#54 and opf-editor#42: not in the pinned manifest",
+        "galleryEditor": "pending opf-render#54 and opf-editor#42: not in the pinned manifest",
+        "galleryCards": "no self-hosted card preview"
+      },
+      "nativeVerification": {
+        "status": "unverified",
+        "note": "No per-family native PowerPoint acceptance (phase 5)."
+      },
+      "acceptance": {
+        "fixture": "pending",
+        "accepted": false,
+        "date": null,
+        "evidence": [],
+        "note": "Own fixture and acceptance record required; grouped work does not transfer acceptance."
+      },
+      "paritySignals": {
+        "source": "parity-results-2026-09-29-table-drawn-extent.json",
+        "totalValues": 850,
+        "valuesAffected": 0,
+        "fontResolution": {
+          "pass": 0,
+          "near": 0,
+          "fail": 0
+        },
+        "statusAtRun": {},
+        "resolvedAtRun": [],
+        "pptxNamedValues": 0,
+        "byDimension": {},
+        "expectedStatusOnMain": "missing",
+        "rerunNeeded": false
+      },
+      "phase": 2,
+      "status": "loading-gap",
+      "statusReason": "Intos Display is not in the pinned opf-render manifest until opf-render#54 and opf-editor#42 land",
+      "nextAction": "Vendor Intos Display in opf-render (opf-render#54; pinned commit fef9315c14da9e4b23b4c3cac8e718998d4e4736, OFL-1.1, no Reserved Font Name, single-maintainer project so Roboto and Carlito stay as alternates) and load it lazily in the browser hosts (opf-editor#42); then verify four styles in every host and its role as the Aptos Display replacement independently.",
+      "evidence": [
+        {
+          "label": "opf#166 (Intos policy, merged 338ddcd4)",
+          "url": "https://github.com/OpenPresentation/opf/pull/166"
+        },
+        {
+          "label": "opf-render#54 (Intos faces, in flight)",
+          "url": "https://github.com/OpenPresentation/opf-render/pull/54"
+        },
+        {
+          "label": "opf-editor#42 (lazy loading, in flight)",
+          "url": "https://github.com/OpenPresentation/opf-editor/pull/42"
+        },
+        {
+          "label": "Font licensing and policy table",
+          "url": "docs/programs/font-fidelity-everywhere/font-licensing.md"
+        }
+      ],
+      "priority": {
+        "score": 3,
+        "severity": 3,
+        "valuesAffected": 0,
+        "valuesOpen": 0,
+        "hostFactor": 1,
+        "rank": 98
+      }
+    },
+    {
+      "family": "Intos Narrow",
+      "class": "open",
+      "inPolicy": true,
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "selectedNamePreservedInPptx": true,
+      "pptxNameBasis": "Policy invariant: exporters write the selected family and never a replacement name; the parity typefaces and fontResolution checks read it back",
+      "previewRoute": {
+        "family": "Intos Narrow",
+        "tier": "real",
+        "kind": "self",
+        "alternates": [],
+        "alternatesBundled": {},
+        "disabledFeatures": [],
+        "decision": null,
+        "source": null,
+        "pendingBundle": {
+          "prs": [
+            "opf-render#54",
+            "opf-editor#42"
+          ],
+          "note": "Intos Narrow faces are vendored in the open opf-render#54 and lazy-loaded by the open opf-editor#42."
+        }
+      },
+      "bundled": {
+        "yes": false,
+        "applies": "self",
+        "family": "Intos Narrow",
+        "packages": [],
+        "faces": [],
+        "stylesAvailable": [],
+        "pack": null,
+        "pending": {
+          "prs": [
+            "opf-render#54",
+            "opf-editor#42"
+          ],
+          "note": "Intos Narrow faces are vendored in the open opf-render#54 and lazy-loaded by the open opf-editor#42."
+        }
+      },
+      "stylesRequired": [
+        "400",
+        "400i",
+        "700",
+        "700i"
+      ],
+      "replacementStylesRequired": null,
+      "stylesRequiredByRole": {
+        "400": [
+          "Aptos Narrow"
+        ],
+        "700": [
+          "Aptos Narrow"
+        ],
+        "400i": [
+          "Aptos Narrow"
+        ],
+        "700i": [
+          "Aptos Narrow"
+        ]
+      },
+      "stylesMissing": [
+        "400",
+        "400i",
+        "700",
+        "700i"
+      ],
+      "stylesExplicitGaps": [],
+      "approximateStyles": [],
+      "stylesBasis": "assumed: four styles for Latin faces, regular and bold for script faces",
+      "scripts": [
+        "Latin"
+      ],
+      "measurements": null,
+      "candidates": [],
+      "hostVerification": {
+        "node": "unverified",
+        "browser": "unverified",
+        "editor": "unverified",
+        "galleryEditor": "unverified",
+        "galleryCards": "NA"
+      },
+      "hostLoading": {
+        "node": "pending opf-render#54 and opf-editor#42: not in the pinned manifest",
+        "browser": "pending opf-render#54 and opf-editor#42: not in the pinned manifest",
+        "editor": "pending opf-render#54 and opf-editor#42: not in the pinned manifest",
+        "galleryEditor": "pending opf-render#54 and opf-editor#42: not in the pinned manifest",
+        "galleryCards": "no self-hosted card preview"
+      },
+      "nativeVerification": {
+        "status": "unverified",
+        "note": "No per-family native PowerPoint acceptance (phase 5)."
+      },
+      "acceptance": {
+        "fixture": "pending",
+        "accepted": false,
+        "date": null,
+        "evidence": [],
+        "note": "Own fixture and acceptance record required; grouped work does not transfer acceptance."
+      },
+      "paritySignals": {
+        "source": "parity-results-2026-09-29-table-drawn-extent.json",
+        "totalValues": 850,
+        "valuesAffected": 0,
+        "fontResolution": {
+          "pass": 0,
+          "near": 0,
+          "fail": 0
+        },
+        "statusAtRun": {},
+        "resolvedAtRun": [],
+        "pptxNamedValues": 0,
+        "byDimension": {},
+        "expectedStatusOnMain": "missing",
+        "rerunNeeded": false
+      },
+      "phase": 2,
+      "status": "loading-gap",
+      "statusReason": "Intos Narrow is not in the pinned opf-render manifest until opf-render#54 and opf-editor#42 land",
+      "nextAction": "Vendor Intos Narrow in opf-render (opf-render#54; pinned commit fef9315c14da9e4b23b4c3cac8e718998d4e4736, OFL-1.1, no Reserved Font Name, single-maintainer project so Roboto and Carlito stay as alternates) and load it lazily in the browser hosts (opf-editor#42); then verify four styles in every host and its role as the Aptos Narrow replacement independently.",
+      "evidence": [
+        {
+          "label": "opf#166 (Intos policy, merged 338ddcd4)",
+          "url": "https://github.com/OpenPresentation/opf/pull/166"
+        },
+        {
+          "label": "opf-render#54 (Intos faces, in flight)",
+          "url": "https://github.com/OpenPresentation/opf-render/pull/54"
+        },
+        {
+          "label": "opf-editor#42 (lazy loading, in flight)",
+          "url": "https://github.com/OpenPresentation/opf-editor/pull/42"
+        },
+        {
+          "label": "Font licensing and policy table",
+          "url": "docs/programs/font-fidelity-everywhere/font-licensing.md"
+        }
+      ],
+      "priority": {
+        "score": 3,
+        "severity": 3,
+        "valuesAffected": 0,
+        "valuesOpen": 0,
+        "hostFactor": 1,
+        "rank": 99
+      }
+    },
+    {
+      "family": "Intos Serif",
+      "class": "open",
+      "inPolicy": true,
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "selectedNamePreservedInPptx": true,
+      "pptxNameBasis": "Policy invariant: exporters write the selected family and never a replacement name; the parity typefaces and fontResolution checks read it back",
+      "previewRoute": {
+        "family": "Intos Serif",
+        "tier": "real",
+        "kind": "self",
+        "alternates": [],
+        "alternatesBundled": {},
+        "disabledFeatures": [],
+        "decision": null,
+        "source": null,
+        "pendingBundle": {
+          "prs": [
+            "opf-render#54",
+            "opf-editor#42"
+          ],
+          "note": "Intos Serif faces are vendored in the open opf-render#54 and lazy-loaded by the open opf-editor#42."
+        }
+      },
+      "bundled": {
+        "yes": false,
+        "applies": "self",
+        "family": "Intos Serif",
+        "packages": [],
+        "faces": [],
+        "stylesAvailable": [],
+        "pack": null,
+        "pending": {
+          "prs": [
+            "opf-render#54",
+            "opf-editor#42"
+          ],
+          "note": "Intos Serif faces are vendored in the open opf-render#54 and lazy-loaded by the open opf-editor#42."
+        }
+      },
+      "stylesRequired": [
+        "400",
+        "400i",
+        "700",
+        "700i"
+      ],
+      "replacementStylesRequired": null,
+      "stylesRequiredByRole": {
+        "400": [
+          "Aptos Serif"
+        ],
+        "700": [
+          "Aptos Serif"
+        ],
+        "400i": [
+          "Aptos Serif"
+        ],
+        "700i": [
+          "Aptos Serif"
+        ]
+      },
+      "stylesMissing": [
+        "400",
+        "400i",
+        "700",
+        "700i"
+      ],
+      "stylesExplicitGaps": [],
+      "approximateStyles": [],
+      "stylesBasis": "assumed: four styles for Latin faces, regular and bold for script faces",
+      "scripts": [
+        "Latin"
+      ],
+      "measurements": null,
+      "candidates": [],
+      "hostVerification": {
+        "node": "unverified",
+        "browser": "unverified",
+        "editor": "unverified",
+        "galleryEditor": "unverified",
+        "galleryCards": "NA"
+      },
+      "hostLoading": {
+        "node": "pending opf-render#54 and opf-editor#42: not in the pinned manifest",
+        "browser": "pending opf-render#54 and opf-editor#42: not in the pinned manifest",
+        "editor": "pending opf-render#54 and opf-editor#42: not in the pinned manifest",
+        "galleryEditor": "pending opf-render#54 and opf-editor#42: not in the pinned manifest",
+        "galleryCards": "no self-hosted card preview"
+      },
+      "nativeVerification": {
+        "status": "unverified",
+        "note": "No per-family native PowerPoint acceptance (phase 5)."
+      },
+      "acceptance": {
+        "fixture": "pending",
+        "accepted": false,
+        "date": null,
+        "evidence": [],
+        "note": "Own fixture and acceptance record required; grouped work does not transfer acceptance."
+      },
+      "paritySignals": {
+        "source": "parity-results-2026-09-29-table-drawn-extent.json",
+        "totalValues": 850,
+        "valuesAffected": 0,
+        "fontResolution": {
+          "pass": 0,
+          "near": 0,
+          "fail": 0
+        },
+        "statusAtRun": {},
+        "resolvedAtRun": [],
+        "pptxNamedValues": 0,
+        "byDimension": {},
+        "expectedStatusOnMain": "missing",
+        "rerunNeeded": false
+      },
+      "phase": 2,
+      "status": "loading-gap",
+      "statusReason": "Intos Serif is not in the pinned opf-render manifest until opf-render#54 and opf-editor#42 land",
+      "nextAction": "Vendor Intos Serif in opf-render (opf-render#54; pinned commit fef9315c14da9e4b23b4c3cac8e718998d4e4736, OFL-1.1, no Reserved Font Name, single-maintainer project so Roboto and Carlito stay as alternates) and load it lazily in the browser hosts (opf-editor#42); then verify four styles in every host and its role as the Aptos Serif replacement independently.",
+      "evidence": [
+        {
+          "label": "opf#166 (Intos policy, merged 338ddcd4)",
+          "url": "https://github.com/OpenPresentation/opf/pull/166"
+        },
+        {
+          "label": "opf-render#54 (Intos faces, in flight)",
+          "url": "https://github.com/OpenPresentation/opf-render/pull/54"
+        },
+        {
+          "label": "opf-editor#42 (lazy loading, in flight)",
+          "url": "https://github.com/OpenPresentation/opf-editor/pull/42"
+        },
+        {
+          "label": "Font licensing and policy table",
+          "url": "docs/programs/font-fidelity-everywhere/font-licensing.md"
+        }
+      ],
+      "priority": {
+        "score": 3,
+        "severity": 3,
+        "valuesAffected": 0,
+        "valuesOpen": 0,
+        "hostFactor": 1,
+        "rank": 100
+      }
+    },
+    {
       "family": "Kalinga",
       "class": "proprietary-script",
       "inPolicy": true,
@@ -10254,7 +10815,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -10405,7 +10966,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -10556,7 +11117,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -10706,7 +11267,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -10857,7 +11418,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": false,
@@ -10955,7 +11516,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 97
+        "rank": 101
       }
     },
     {
@@ -10975,7 +11536,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": false,
@@ -11073,7 +11634,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 98
+        "rank": 102
       }
     },
     {
@@ -11093,7 +11654,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": false,
@@ -11191,7 +11752,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 99
+        "rank": 103
       }
     },
     {
@@ -11211,7 +11772,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": false,
@@ -11312,7 +11873,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 100
+        "rank": 104
       }
     },
     {
@@ -11332,7 +11893,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -11483,7 +12044,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -11570,6 +12131,7 @@
         "source": "docs/evidence/font-replacements-20260923/README.md",
         "sourceNote": null,
         "verticalMetricsMatch": null,
+        "verticalMetricsNote": null,
         "lineBreaksMatch": null,
         "widthBarMet": false
       },
@@ -11631,7 +12193,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 137
+        "rank": 139
       }
     },
     {
@@ -11655,7 +12217,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": false,
@@ -11719,6 +12281,7 @@
         "source": "docs/evidence/font-replacements-20260923/README.md",
         "sourceNote": null,
         "verticalMetricsMatch": null,
+        "verticalMetricsNote": null,
         "lineBreaksMatch": null,
         "widthBarMet": false
       },
@@ -11814,7 +12377,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": false,
@@ -11867,6 +12430,7 @@
         "source": "docs/evidence/font-replacements-20260923/README.md",
         "sourceNote": null,
         "verticalMetricsMatch": null,
+        "verticalMetricsNote": null,
         "lineBreaksMatch": null,
         "widthBarMet": false
       },
@@ -11928,7 +12492,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 101
+        "rank": 105
       }
     },
     {
@@ -11948,7 +12512,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -12036,6 +12600,7 @@
         "source": "docs/evidence/font-replacements-20260923/README.md",
         "sourceNote": null,
         "verticalMetricsMatch": null,
+        "verticalMetricsNote": null,
         "lineBreaksMatch": null,
         "widthBarMet": false
       },
@@ -12142,7 +12707,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -12293,7 +12858,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -12450,7 +13015,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -12601,7 +13166,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -12689,6 +13254,7 @@
         "source": "docs/evidence/font-replacements-20260923/README.md",
         "sourceNote": null,
         "verticalMetricsMatch": null,
+        "verticalMetricsNote": null,
         "lineBreaksMatch": null,
         "widthBarMet": false
       },
@@ -12795,7 +13361,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -12882,6 +13448,7 @@
         "source": "docs/evidence/font-replacements-20260923/README.md",
         "sourceNote": null,
         "verticalMetricsMatch": null,
+        "verticalMetricsNote": null,
         "lineBreaksMatch": null,
         "widthBarMet": false
       },
@@ -12943,7 +13510,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 138
+        "rank": 140
       }
     },
     {
@@ -12963,7 +13530,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -13051,6 +13618,7 @@
         "source": "docs/evidence/font-replacements-20260923/README.md",
         "sourceNote": null,
         "verticalMetricsMatch": null,
+        "verticalMetricsNote": null,
         "lineBreaksMatch": null,
         "widthBarMet": false
       },
@@ -13157,7 +13725,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -13313,7 +13881,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -13463,7 +14031,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -13636,7 +14204,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -13714,6 +14282,7 @@
         "source": "docs/evidence/font-replacements-20260923/README.md",
         "sourceNote": null,
         "verticalMetricsMatch": null,
+        "verticalMetricsNote": null,
         "lineBreaksMatch": null,
         "widthBarMet": false
       },
@@ -13791,7 +14360,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 139
+        "rank": 141
       }
     },
     {
@@ -13811,7 +14380,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -13967,7 +14536,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -14062,6 +14631,7 @@
         "source": "docs/evidence/font-replacements-20260923/README.md",
         "sourceNote": null,
         "verticalMetricsMatch": null,
+        "verticalMetricsNote": null,
         "lineBreaksMatch": null,
         "widthBarMet": false
       },
@@ -14163,7 +14733,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -14316,7 +14886,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -14439,7 +15009,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 112
+        "rank": 115
       }
     },
     {
@@ -14459,7 +15029,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -14606,7 +15176,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 113
+        "rank": 116
       }
     },
     {
@@ -14626,7 +15196,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -14741,7 +15311,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 140
+        "rank": 142
       }
     },
     {
@@ -14761,7 +15331,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -14884,7 +15454,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 114
+        "rank": 117
       }
     },
     {
@@ -14904,7 +15474,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -15036,7 +15606,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 115
+        "rank": 118
       }
     },
     {
@@ -15056,7 +15626,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -15190,7 +15760,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 116
+        "rank": 119
       }
     },
     {
@@ -15210,7 +15780,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -15340,7 +15910,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 117
+        "rank": 120
       }
     },
     {
@@ -15360,7 +15930,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -15483,7 +16053,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 118
+        "rank": 121
       }
     },
     {
@@ -15503,7 +16073,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -15633,7 +16203,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 119
+        "rank": 122
       }
     },
     {
@@ -15653,7 +16223,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -15783,7 +16353,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 120
+        "rank": 123
       }
     },
     {
@@ -15803,7 +16373,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -15935,7 +16505,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 121
+        "rank": 124
       }
     },
     {
@@ -15955,7 +16525,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -16092,7 +16662,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 122
+        "rank": 125
       }
     },
     {
@@ -16112,7 +16682,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -16242,7 +16812,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 123
+        "rank": 126
       }
     },
     {
@@ -16262,7 +16832,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -16394,7 +16964,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 124
+        "rank": 127
       }
     },
     {
@@ -16414,7 +16984,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -16554,7 +17124,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 125
+        "rank": 128
       }
     },
     {
@@ -16574,7 +17144,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -16689,7 +17259,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 141
+        "rank": 143
       }
     },
     {
@@ -16709,7 +17279,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -16839,7 +17409,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 126
+        "rank": 129
       }
     },
     {
@@ -16859,7 +17429,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -16998,7 +17568,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -17113,7 +17683,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 142
+        "rank": 144
       }
     },
     {
@@ -17133,7 +17703,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -17263,7 +17833,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 127
+        "rank": 130
       }
     },
     {
@@ -17283,7 +17853,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -17420,7 +17990,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 128
+        "rank": 131
       }
     },
     {
@@ -17440,7 +18010,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -17555,7 +18125,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 143
+        "rank": 145
       }
     },
     {
@@ -17575,7 +18145,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -17690,7 +18260,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 144
+        "rank": 146
       }
     },
     {
@@ -17710,7 +18280,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -17840,7 +18410,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 129
+        "rank": 132
       }
     },
     {
@@ -17860,7 +18430,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -17996,7 +18566,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 130
+        "rank": 133
       }
     },
     {
@@ -18016,7 +18586,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -18146,7 +18716,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 131
+        "rank": 134
       }
     },
     {
@@ -18166,7 +18736,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -18281,7 +18851,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 145
+        "rank": 147
       }
     },
     {
@@ -18301,7 +18871,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -18433,7 +19003,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 132
+        "rank": 135
       }
     },
     {
@@ -18453,7 +19023,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -18575,7 +19145,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 153
+        "rank": 155
       }
     },
     {
@@ -18595,7 +19165,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -18710,7 +19280,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 146
+        "rank": 148
       }
     },
     {
@@ -18730,7 +19300,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -18881,7 +19451,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -19019,7 +19589,7 @@
           "url": "https://github.com/OpenPresentation/opf-render/pull/50"
         },
         {
-          "label": "opf#166 (Intos policy, in flight)",
+          "label": "opf#166 (Intos policy, merged 338ddcd4)",
           "url": "https://github.com/OpenPresentation/opf/pull/166"
         },
         {
@@ -19065,7 +19635,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -19186,6 +19756,7 @@
         "source": "docs/evidence/font-replacements-20260923/README.md",
         "sourceNote": null,
         "verticalMetricsMatch": null,
+        "verticalMetricsNote": null,
         "lineBreaksMatch": null,
         "widthBarMet": false
       },
@@ -19271,7 +19842,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": false,
@@ -19406,7 +19977,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -19562,7 +20133,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -19712,7 +20283,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -19894,7 +20465,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -20045,7 +20616,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": false,
@@ -20171,7 +20742,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -20319,7 +20890,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 110
+        "rank": 113
       }
     },
     {
@@ -20339,7 +20910,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -20458,7 +21029,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 111
+        "rank": 114
       }
     },
     {
@@ -20478,7 +21049,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -20550,20 +21121,7 @@
         "700i"
       ],
       "replacementStylesRequired": null,
-      "stylesRequiredByRole": {
-        "400": [
-          "Aptos"
-        ],
-        "700": [
-          "Aptos"
-        ],
-        "400i": [
-          "Aptos"
-        ],
-        "700i": [
-          "Aptos"
-        ]
-      },
+      "stylesRequiredByRole": {},
       "stylesMissing": [],
       "stylesExplicitGaps": [],
       "approximateStyles": [],
@@ -20646,7 +21204,7 @@
         "valuesAffected": 3,
         "valuesOpen": 0,
         "hostFactor": 0.6,
-        "rank": 154
+        "rank": 156
       }
     },
     {
@@ -20666,7 +21224,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -20804,7 +21362,7 @@
         "valuesAffected": 848,
         "valuesOpen": 0,
         "hostFactor": 0.5,
-        "rank": 155
+        "rank": 157
       }
     },
     {
@@ -20828,7 +21386,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": false,
@@ -20914,6 +21472,7 @@
         "source": "docs/evidence/font-replacements-20260923/README.md",
         "sourceNote": null,
         "verticalMetricsMatch": null,
+        "verticalMetricsNote": null,
         "lineBreaksMatch": null,
         "widthBarMet": false
       },
@@ -21005,7 +21564,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -21091,6 +21650,7 @@
         "source": "docs/evidence/font-replacements-20260923/README.md",
         "sourceNote": null,
         "verticalMetricsMatch": null,
+        "verticalMetricsNote": null,
         "lineBreaksMatch": null,
         "widthBarMet": false
       },
@@ -21196,7 +21756,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -21362,7 +21922,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -21530,7 +22090,7 @@
         "disabledFeatures": [],
         "decision": "segoe-ui-preview",
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -21644,6 +22204,7 @@
         "source": "docs/evidence/font-replacements-20260923/README.md",
         "sourceNote": null,
         "verticalMetricsMatch": null,
+        "verticalMetricsNote": null,
         "lineBreaksMatch": null,
         "widthBarMet": false
       },
@@ -21793,7 +22354,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": false,
@@ -21872,7 +22433,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 102
+        "rank": 106
       }
     },
     {
@@ -21896,7 +22457,7 @@
         "disabledFeatures": [],
         "decision": "segoe-ui-preview",
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -21989,6 +22550,7 @@
         "source": "docs/evidence/font-replacements-20260923/README.md",
         "sourceNote": null,
         "verticalMetricsMatch": null,
+        "verticalMetricsNote": null,
         "lineBreaksMatch": null,
         "widthBarMet": false
       },
@@ -22113,7 +22675,7 @@
         "disabledFeatures": [],
         "decision": "segoe-ui-preview",
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -22207,6 +22769,7 @@
         "source": "docs/evidence/font-replacements-20260923/README.md",
         "sourceNote": null,
         "verticalMetricsMatch": null,
+        "verticalMetricsNote": null,
         "lineBreaksMatch": null,
         "widthBarMet": false
       },
@@ -22332,7 +22895,7 @@
         "disabledFeatures": [],
         "decision": "segoe-ui-preview",
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -22428,6 +22991,7 @@
         "source": "docs/evidence/font-replacements-20260923/README.md",
         "sourceNote": null,
         "verticalMetricsMatch": null,
+        "verticalMetricsNote": null,
         "lineBreaksMatch": null,
         "widthBarMet": false
       },
@@ -22548,7 +23112,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -22699,7 +23263,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -22850,7 +23414,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -22978,7 +23542,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 147
+        "rank": 149
       }
     },
     {
@@ -22998,7 +23562,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -23076,6 +23640,7 @@
         "source": "docs/evidence/font-replacements-20260923/README.md",
         "sourceNote": null,
         "verticalMetricsMatch": null,
+        "verticalMetricsNote": null,
         "lineBreaksMatch": null,
         "widthBarMet": false
       },
@@ -23185,7 +23750,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -23348,7 +23913,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -23507,7 +24072,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -23663,7 +24228,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 103
+        "rank": 107
       }
     },
     {
@@ -23683,7 +24248,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -23840,7 +24405,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -23929,6 +24494,7 @@
         "source": "docs/evidence/font-replacements-20260923/README.md",
         "sourceNote": null,
         "verticalMetricsMatch": null,
+        "verticalMetricsNote": null,
         "lineBreaksMatch": null,
         "widthBarMet": false
       },
@@ -24031,7 +24597,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": false,
@@ -24110,7 +24676,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 104
+        "rank": 108
       }
     },
     {
@@ -24136,7 +24702,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -24221,6 +24787,7 @@
         "source": "docs/evidence/font-replacements-20260923/README.md",
         "sourceNote": null,
         "verticalMetricsMatch": null,
+        "verticalMetricsNote": null,
         "lineBreaksMatch": null,
         "widthBarMet": false
       },
@@ -24324,7 +24891,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": false,
@@ -24453,7 +25020,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": false,
@@ -24582,7 +25149,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": "https://github.com/google/fonts/blob/main/ofl/tinos/METADATA.pb",
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -24699,6 +25266,7 @@
         "source": "docs/evidence/font-replacements-20260923/README.md",
         "sourceNote": null,
         "verticalMetricsMatch": null,
+        "verticalMetricsNote": null,
         "lineBreaksMatch": null,
         "widthBarMet": true
       },
@@ -24770,7 +25338,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 160
+        "rank": 164
       }
     },
     {
@@ -24790,7 +25358,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -24846,19 +25414,15 @@
       "replacementStylesRequired": null,
       "stylesRequiredByRole": {
         "400": [
-          "Aptos Serif",
           "Times New Roman"
         ],
         "700": [
-          "Aptos Serif",
           "Times New Roman"
         ],
         "400i": [
-          "Aptos Serif",
           "Times New Roman"
         ],
         "700i": [
-          "Aptos Serif",
           "Times New Roman"
         ]
       },
@@ -24928,7 +25492,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 156
+        "rank": 158
       }
     },
     {
@@ -24948,7 +25512,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -25034,6 +25598,7 @@
         "source": "docs/evidence/font-replacements-20260923/README.md",
         "sourceNote": null,
         "verticalMetricsMatch": null,
+        "verticalMetricsNote": null,
         "lineBreaksMatch": null,
         "widthBarMet": false
       },
@@ -25139,7 +25704,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": false,
@@ -25225,6 +25790,7 @@
         "source": "docs/evidence/font-replacements-20260923/README.md",
         "sourceNote": null,
         "verticalMetricsMatch": null,
+        "verticalMetricsNote": null,
         "lineBreaksMatch": null,
         "widthBarMet": false
       },
@@ -25316,7 +25882,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -25471,7 +26037,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -25594,6 +26160,7 @@
         "source": "docs/evidence/font-replacements-20260923/README.md",
         "sourceNote": null,
         "verticalMetricsMatch": null,
+        "verticalMetricsNote": null,
         "lineBreaksMatch": null,
         "widthBarMet": false
       },
@@ -25689,7 +26256,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -25840,7 +26407,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": false,
@@ -25919,7 +26486,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 105
+        "rank": 109
       }
     },
     {
@@ -25939,7 +26506,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": false,
@@ -26018,7 +26585,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 106
+        "rank": 110
       }
     },
     {
@@ -26038,7 +26605,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": false,
@@ -26144,7 +26711,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 107
+        "rank": 111
       }
     },
     {
@@ -26164,7 +26731,7 @@
         "disabledFeatures": [],
         "decision": null,
         "source": null,
-        "inFlight": null
+        "pendingBundle": null
       },
       "bundled": {
         "yes": true,
@@ -26252,6 +26819,7 @@
         "source": "docs/evidence/font-replacements-20260923/README.md",
         "sourceNote": null,
         "verticalMetricsMatch": null,
+        "verticalMetricsNote": null,
         "lineBreaksMatch": null,
         "widthBarMet": false
       },

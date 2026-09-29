@@ -47,12 +47,16 @@ test("no record references a family that is neither in the policy nor a declared
   for (const name of [...overrides.classes.proprietaryScript, ...overrides.classes.special]) assert.ok(policyNames.includes(name), `class list names ${name}`);
 });
 
-test("the 160 reviewed families split into the owner's four classes", () => {
-  assert.equal(committed.summary.records, 160);
-  assert.equal(policy.families.length + overrides.extras.length, 160);
+const INTOS = ["Intos", "Intos Display", "Intos Narrow", "Intos Serif"];
+
+test("the reviewed families split into the owner's four classes", () => {
+  // 153 policy families and 7 shipped dependencies were reviewed; opf#166 added the four Intos rows.
+  assert.equal(committed.summary.records, policy.families.length + overrides.extras.length);
+  assert.equal(committed.summary.records - INTOS.length, 160, "the owner's 160 reviewed families plus the four Intos rows");
+  for (const name of INTOS) assert.equal(committed.records.find((record) => record.family === name)?.class, "open", name);
   assert.equal(overrides.extras.length, 7);
   const counts = Object.fromEntries(CLASSES.map((cls) => [cls, committed.records.filter((record) => record.class === cls).length]));
-  assert.equal(CLASSES.reduce((sum, cls) => sum + counts[cls], 0), 160);
+  assert.equal(CLASSES.reduce((sum, cls) => sum + counts[cls], 0), committed.summary.records);
   assert.deepEqual(committed.records.filter((record) => record.class === "special").map((record) => record.family).sort(), ["Cambria Math", "Segoe UI Emoji", "Symbol", "Webdings", "Wingdings"]);
   for (const record of committed.records.filter((item) => item.class === "special")) assert.equal(record.status, "needs-special-path");
   for (const record of committed.records.filter((item) => item.class === "open")) assert.equal(record.licenseClass, "open");
@@ -111,17 +115,27 @@ test("records agree with the policy table and the pinned manifest", () => {
   assert.equal(committed.inputs.renderManifest.commit, snapshot.source.commit);
 });
 
-// EXPECTED TO CHANGE: once the Intos pull requests (opf#166, opf-render#54, opf-editor#42) merge, Aptos and Aptos
-// Display become metric routes with fontResolution pass, their open value count drops, and they no longer rank
-// 1 and 2. Update this test (and drop the inFlight overrides) in the rebase that adds the Intos rows.
-test("Aptos and Aptos Display lead the priority queue with their 704 audited values", () => {
+// EXPECTED TO CHANGE: the committed parity run predates the Intos policy. Once opf-render#54 lands (Intos bundled), the
+// pinned manifest snapshot is refreshed and the audit is rerun, Aptos and Aptos Display become pass values and no longer
+// rank 1 and 2. Update this test, and drop overrides.pendingBundle, in that change.
+test("Aptos and Aptos Display rank by their remaining 704 non-pass values while the Intos faces are pending", () => {
   const top = [...committed.records].sort((a, b) => a.priority.rank - b.priority.rank).slice(0, 2).map((record) => record.family);
   assert.deepEqual(top.sort(), ["Aptos", "Aptos Display"]);
   for (const name of top) {
     const record = committed.records.find((item) => item.family === name);
     assert.equal(record.paritySignals.valuesAffected, 704, name);
+    assert.equal(record.priority.valuesOpen, 704, name);
     assert.equal(record.phase, 3, name);
+    assert.equal(record.status, "metric-measured", name);
+    assert.equal(record.previewRoute.tier, "metric", name);
+    assert.match(record.previewRoute.family, /^Intos/, name);
+    assert.equal(record.bundled.yes, false, `${name}: the Intos faces are not in the pinned manifest until opf-render#54`);
+    assert.ok(record.previewRoute.pendingBundle.prs.includes("opf-render#54"), name);
+    assert.equal(record.hostVerification.node, "unverified", name);
   }
+  for (const name of ["Aptos Narrow", "Aptos Serif"]) assert.equal(committed.records.find((item) => item.family === name).status, "metric-measured", name);
+  assert.equal(committed.records.find((item) => item.family === "Aptos Mono").status, "visual-gap", "Aptos Mono has no measurement or candidate");
+  for (const name of INTOS) assert.equal(committed.records.find((item) => item.family === name).status, "loading-gap", name);
 });
 
 test("the committed tracker matches a fresh build", () => {
@@ -237,11 +251,13 @@ test("gallery cards are recorded separately from the gallery editor, and Node na
 
 test("metric routes are measured, not verified, until vertical metrics and line breaks are recorded", () => {
   assert.ok(!STATUSES.includes("metric-verified"));
+  assert.ok(!STATUSES.includes("candidate-qualified-landing"), "the Intos policy is merged");
   const measured = committed.records.filter((record) => record.status === "metric-measured").map((record) => record.family).sort();
-  assert.deepEqual(measured, ["Arial", "Calibri", "Courier New", "Georgia", "Times New Roman"]);
+  assert.deepEqual(measured, ["Aptos", "Aptos Display", "Aptos Narrow", "Aptos Serif", "Arial", "Calibri", "Courier New", "Georgia", "Times New Roman"]);
   for (const record of committed.records.filter((item) => item.status === "metric-measured")) {
-    assert.equal(record.measurements.verticalMetricsMatch, null, record.family);
     assert.equal(record.measurements.lineBreaksMatch, null, record.family);
+    // Only the Aptos family has recorded vertical metrics (opf#166); the established routes do not.
+    assert.equal(record.measurements.verticalMetricsMatch, record.family.startsWith("Aptos") ? true : null, record.family);
   }
 });
 
