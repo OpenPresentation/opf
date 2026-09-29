@@ -1,6 +1,8 @@
 # OPF Render
 
-Version 0.9.0 requires `@openpresentation/opf` ^0.11.0 and resolves content ColorRef / `variables` through core `resolveColorRef()`. Authored `#RRGGBB` paint stays authored. It retains the existing rendering APIs.
+Version 0.10.0 requires `@openpresentation/opf` ^0.11.1 (font policy table, script fonts and right-to-left paragraphs, socials, slide-image treatments, formatted slide-number and date furniture with the host `date` option, per-item alignment). See the changelog for the intentional preview-output changes.
+
+Version 0.9.0 required `@openpresentation/opf` ^0.11.0 and resolved content ColorRef / `variables` through core `resolveColorRef()`. Authored `#RRGGBB` paint stays authored. It retains the existing rendering APIs.
 
 Version 0.8.1 required core 0.10.1, including metric, quote and timeline layout placeholders and the corrected text-bullet contract.
 
@@ -139,7 +141,7 @@ The renderer measures and paints with the same runs. A line whose runs use diffe
 
 The SVG root carries `lang` and `xml:lang` from the document's `language`. Measurement applies the same OpenType language system that a browser selects for that `lang`; Noto Sans KR spacing, for example, differs under `KOR`. Direction is set per paragraph, meaning the text between hard line breaks. The rule is core's `paragraphDirection(text, deckDirection)`, the same function the exporter uses for `a:pPr rtl`. A paragraph is right to left when the deck language is right to left and its first strong character is right to left, or it has none. Strong characters follow UAX #9 P2: isolates are skipped, LRM/RLM/ALM count, and the letters of every right-to-left script, historic ones included, are right to left. The renderer does not keep its own copy of the rule. With a core that lacks the function, every paragraph is left to right, as in export, and a right-to-left deck reports `paragraph-direction-unavailable`. Every wrapped line of a right-to-left paragraph is laid out as a right-to-left isolate (U+2067 ... U+2069), so lines of one paragraph never differ. Measured rich-text fragments are placed from the right edge.
 
-When the installed core has no `resolveScriptFonts` (published core 0.11.0 and earlier) and the document names a `language`, the renderer reports `language-preview-unavailable` once through `onDiagnostic`. The preview then uses the design font for every script, sets no `lang` and lays out every paragraph left to right. If the resolver throws, the renderer falls back the same way and reports `language-preview-unresolved`.
+When the installed core has no `resolveScriptFonts` (core 0.11.0 and earlier, which this release no longer accepts by default) and the document names a `language`, the renderer reports `language-preview-unavailable` once through `onDiagnostic`. The preview then uses the design font for every script, sets no `lang` and lays out every paragraph left to right. If the resolver throws, the renderer falls back the same way and reports `language-preview-unresolved`.
 
 Characters are assigned to slots following PowerPoint where its rules are known:
 
@@ -202,15 +204,11 @@ npm run golden:update
 
 ## Release Lane
 
-Public npm package publication is handled by `.github/workflows/npm-publish.yml` with npm provenance.
+Public npm package publication is handled by `.github/workflows/npm-publish.yml` through npm Trusted Publishing (GitHub Actions OIDC) with npm provenance; no npm token is stored. The owner authorized agents to prepare and publish npm releases whenever a release is required (2026-09-29). This authorization does not waive any gate.
 
-Required first-publish setup:
-
-1. An npm owner for the `@openpresentation` scope must run the first publish or reserve/grant the `@openpresentation/opf-render` package.
-2. Configure npm Trusted Publishing for GitHub repository `OpenPresentation/opf-render` and workflow `.github/workflows/npm-publish.yml`.
-3. Publish by pushing a git tag matching `opf-render-v<version>` or `@openpresentation/opf-render@v<version>` (the tag must match the `package.json` version), or by manually running the workflow after CI passes.
-
-This repo does not require an npm automation token when Trusted Publishing is configured.
+1. Open a release-prep PR containing only the version bump, `CHANGELOG.md`, dependency ranges, lockfile and current-instruction docs. Publish in dependency order (core, then renderer and PPTX, then editor): refresh this repo's lockfile only after the required `@openpresentation/opf` version is on the registry (`npm install --package-lock-only`), then run `npm run test:packed` against it.
+2. Merge after CI is green, then publish by pushing the git tag `opf-render-v<version>` (or `@openpresentation/opf-render@v<version>`) at the merge commit. The workflow verifies that the tag matches `package.json` and reruns audit, typecheck, validate, tests, packed and browser checks before `npm publish --access public --provenance`. A manual `workflow_dispatch` runs the same job without the tag check and is a fallback only.
+3. Verify with `npm view @openpresentation/opf-render@<version> version gitHead dist.attestations` and, from the core repo, `node scripts/test-renderer-publication.mjs <version> <release-commit> <this-checkout>`. Never republish an existing version.
 
 ## Shared dynamic composition (local development)
 

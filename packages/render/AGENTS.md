@@ -7,7 +7,7 @@
 - Node `24.x` (`engines`, `.nvmrc`). This repo uses npm with `package-lock.json`; install with `npm ci`. Core uses pnpm.
 - Commands (all in `package.json`): `npm run build`, `npm run typecheck`, `npm test`, `npm run validate`, `npm run test:packed`, `npm run test:golden`, `npm run test:browser`, `npm run test:code`, `npm run test:code-browser`, `npm run test:text`, `npm run test:font-preparation`, `npm run test:font-variants`, and the browser suites `npm run test:font-preparation-browser`, `npm run test:font-variants-browser`, `npm run test:script-fonts-browser`, `npm run test:plain-whitespace-browser`, `npm run test:rich-flow-browser`, `npm run test:rich-spacing-browser`, `npm run test:text-browser`, `npm run test:images-browser`.
 - CI (`.github/workflows/ci.yml`) runs one job on `ubuntu-latest` in the pinned Playwright container. It checks out core, opf-pptx and opf-editor at pinned SHAs, runs `test:packed` against published core, links sources with core's `scripts/link-ecosystem.mjs --packages-only`, then runs audit, typecheck, validate, font-preparation, font-variants, test, code, the browser suites (`browser`, `code-browser`, `font-preparation-browser`, `font-variants-browser`, `script-fonts-browser`, `plain-whitespace-browser`, `rich-flow-browser`, `rich-spacing-browser`) and core's coordinated packed-tarball checks.
-- `npm-publish.yml` publishes on `opf-render-v*` tags with npm provenance.
+- `npm-publish.yml` publishes on `opf-render-v*` tags (or manual dispatch) with npm provenance, after rerunning the full check set.
 
 ### Windows notes
 
@@ -27,7 +27,7 @@ The cross-repo program tracker lives in core at [docs/programs/font-fidelity-eve
 - The preview/browser 0.1 reference-pixel tolerance stays unchanged. `test/accepted-text-browser.mjs` applies it to advance/origin and to painted-ink containment (nonzero mask pixel centers within cells plus 0.1 px); `test/rich-tab-browser.mjs` and `test/rich-tab-estimated-browser.mjs` apply it only to tab and following-text positions. Never relax it or any other gate to make a run pass.
 - `npm test` checks golden PNG drift against the approved manifests in `test/golden/`. `npm run golden:update` only writes a review candidate under `artifacts/golden/`; it never overwrites the baseline. Any change to a golden manifest must be deliberate and explained in the PR: which slides changed, why, and how they were reviewed (see `test/golden/README.md`). Matching hashes do not establish readability or native pixel equivalence.
 - Keep bundled-font output deterministic: system-font loading stays opt-in.
-- No package publish or version bump outside the release process.
+- Publishing npm packages is authorized by the owner (2026-09-29) whenever a release is required, but only through the release process in `README.md` (Release Lane): a release-prep PR, merge, then the tag-triggered `npm-publish.yml` with provenance. No ad hoc publish or version bump outside it.
 
 ## Fidelity and scope
 

@@ -12,11 +12,11 @@ A deck-level slide image applies only where the layout declares `slideImage: tru
 
 CI pins the FF-26 core, which also contains the opf#127 `wdUpDiag` examples, so `OPF_GOLDEN_BASELINE` selects the FF-25 manifest there.
 
-## FF-25 `wdUpDiag` example corpus (pending core release)
+## FF-25 `wdUpDiag` example corpus (default baseline from core 0.11.1)
 
 `opf-examples-png.ff25-wdupdiag.sha256.json` is the baseline for the core example corpus from [OpenPresentation/opf#127](https://github.com/OpenPresentation/opf/pull/127). That PR changes the pattern-background preset in 11 example decks from the preview-only `diagStripe` to the DrawingML preset `wdUpDiag`. Since #35, `wdUpDiag` draws exactly like `diagStripe`. The manifest was generated with `OPF_EXAMPLES_DIR=<opf#127>/examples node test/golden.mjs --update`. All 805 slide entries are identical to `opf-examples-png.furniture.sha256.json`; only the corpus digest changes, to `d089278ffc10c44d3504f9e53b3369f37178fdb55e8941ccec2b2bb7704a69d4`.
 
-The core ecosystem CI selects this file through `OPF_GOLDEN_BASELINE`. `npm test` here keeps `opf-examples-png.furniture.sha256.json`, because the installed and pinned core still use `diagStripe`. Once a core release containing opf#127 is pinned here, this file becomes the default baseline, and the furniture manifest is retained for history.
+This file is the default baseline since renderer 0.10.0, which requires core `^0.11.1` (the first core release containing opf#127). The publish workflow, which does not set `OPF_GOLDEN_BASELINE`, therefore checks the installed registry core's corpus against it, and the core ecosystem CI still selects it explicitly. `opf-examples-png.furniture.sha256.json` is retained for history and for runs against core 0.11.0 or earlier (`OPF_GOLDEN_BASELINE=test/golden/opf-examples-png.furniture.sha256.json`).
 
 ## Unreleased shared code review
 
