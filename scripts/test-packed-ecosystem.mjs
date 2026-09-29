@@ -199,8 +199,10 @@ const imported=await fromPptx(await toPptx(editor.document,options));
 assert.equal(imported.slides[0].title,source.slides[0].title);
 assert.equal(JSON.stringify(source),original);
 assert.equal(registry.embeddedFonts.length,33);// the eager npm faces; the vendored (embed used) faces are the lazy set: 35 open families and 16 Intos
+if(registry.lazyFonts){// renderers that vendor Intos and the open families (after 0.10.0) list them here; the pinned earlier renderer has none
 assert.equal(registry.lazyFonts.length,51);
 assert.ok(options.embeddedFonts.filter(face=>face.embed==="used").length===51);
+}
 console.log('Installed font preparation passed layout, edit/undo, SVG/PNG, editable PPTX export and heading reimport.');
 `);
   run(process.execPath,['check-font-preparation.mjs']);
