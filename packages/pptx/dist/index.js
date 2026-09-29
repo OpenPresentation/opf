@@ -81,6 +81,12 @@ const xmlParser = new XMLParser({
   parseTagValue: false,
   trimValues: false
 });
+// Keep numeric character references (notably CR) in native core text. This is
+// scoped to properties; the ordinary slide/relationship parser is unchanged.
+const coreTextParser = new XMLParser({
+  ignoreAttributes: false, attributeNamePrefix: "", textNodeName: "#text",
+  parseAttributeValue: false, parseTagValue: false, trimValues: false, htmlEntities: true
+});
 
 const ROOT_PAYLOAD_FIELDS = [
   "text",
@@ -197,6 +203,7 @@ export async function toPptx(input, options = {}) {
   context.imagePlacements = new Map();
   context.slideImages = new Map();
   context.backgroundFills = new Map();
+  context.notesWithCarriageReturns = new Map();
   context.cardTags = new Map();
   context.mediaTags = new Map();
   context.provenanceMode = options.provenance ?? "full";
@@ -449,12 +456,12 @@ function slideNumber(path) {
 }
 
 function readCoreProperties(entries) {
-  const doc = parseOptionalXml(entries, "docProps/core.xml");
+  const doc = entries["docProps/core.xml"] ? parseRequiredXml(entries, "docProps/core.xml", coreTextParser) : null;
   const core = doc?.["cp:coreProperties"] ?? {};
   return {
-    title: scalarText(core["dc:title"]).trim(),
-    description: scalarText(core["dc:description"] ?? core["dc:subject"]).trim(),
-    author: scalarText(core["dc:creator"]).trim()
+    title: scalarText(core["dc:title"]),
+    description: scalarText(core["dc:description"] ?? core["dc:subject"]),
+    author: scalarText(core["dc:creator"])
   };
 }
 
@@ -947,17 +954,10 @@ function readSlideNotes(entries, relationships) {
   const notesRel = [...relationships.values()].find((relationship) => relationship.type.endsWith("/notesSlide"));
   if (!notesRel?.path || !entries[notesRel.path]) return "";
   const doc = parseRequiredXml(entries, notesRel.path);
-  const shapes = asArray(doc["p:notes"]?.["p:cSld"]?.["p:spTree"]?.["p:sp"]);
-  const bodyNotes = shapes
-    .filter((shape) => shapePlaceholderType(shape) === "body")
-    .map((shape) => textFromTextBody(shape["p:txBody"]))
-    .filter(Boolean);
-  return bodyNotes.join("\n").trim();
-}
-
-
-function textFromTextBody(txBody) {
-  return readParagraphs(txBody).map((paragraph) => paragraph.text).filter(Boolean).join("\n").trim();
+  const shapes = nativeTextShapes(doc["p:notes"]?.["p:cSld"]?.["p:spTree"]);
+  const paragraphs = nativeShapeParagraphs(decodeText(entries[notesRel.path]), 'p:notes');
+  return shapes.flatMap((shape, index) => shapePlaceholderType(shape) === "body"
+    ? paragraphs[index].map(paragraph => paragraph.text) : []).join("\n");
 }
 
 function comparePositionedItems(left, right) {
@@ -1257,7 +1257,11 @@ async function addSlide(pptx, presentation, opfSlide, slideIndex, context, optio
     }
   }
 
-  if (opfSlide.notes) slide.addNotes(String(opfSlide.notes));
+  if (opfSlide.notes) {
+    const notes = String(opfSlide.notes);
+    slide.addNotes(notes);
+    if (notes.includes('\r')) context.notesWithCarriageReturns.set(`ppt/notesSlides/notesSlide${slideIndex + 1}.xml`, notes);
+  }
 }
 
 function resolveSlideContext(presentation, slide, baseContext, options, slideIndex = 0) {
@@ -2277,8 +2281,35 @@ async function normalizePptxZip(raw, context) {
   }), context.zipDateStamp);
 }
 
+function preserveCarriageReturns(xml, textElements) {
+  // Only our generated text content is rewritten. Escaped literal entity text
+  // remains escaped, and XML formatting outside these elements is untouched.
+  return xml.replace(/(<([\w:]+)\b[^>]*>)([^<]*)(<\/\2>)/g, (element, open, name, text, close) =>
+    textElements.has(name) ? open + text.replace(/\r/g, '&#13;') + close : element);
+}
+
+const CORE_TEXT_ELEMENTS = new Set(['dc:title', 'dc:subject', 'dc:description', 'dc:creator']);
+
+function preserveGeneratedNotes(xml, notes, path) {
+  // PptxGenJS changes LF to CRLF. For authored CR, write the original text into
+  // its one generated native notes body; nothing is retained in hidden tags.
+  const text = notes.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&apos;').replace(/\r/g, '&#13;');
+  let bodies = 0, texts = 0;
+  const output = xml.replace(/<p:sp\b[^>]*>[\s\S]*?<\/p:sp>/g, shape => {
+    if (!/<p:ph\b[^>]*\btype="body"/.test(shape)) return shape;
+    bodies++;
+    return shape.replace(/(<a:t\b[^>]*>)[^<]*(<\/a:t>)/g, (_, open, close) => {
+      texts++;
+      return open + text + close;
+    });
+  });
+  if (bodies !== 1 || texts !== 1) throw new OPFPptxError('packaging-failed', 'Generated notes must have one body text element.', {path});
+  return output;
+}
+
 function normalizeCoreProperties(xml, timestamp) {
-  return xml
+  return preserveCarriageReturns(xml, CORE_TEXT_ELEMENTS)
     .replace(/<dcterms:created xsi:type="dcterms:W3CDTF">[^<]*<\/dcterms:created>/g, `<dcterms:created xsi:type="dcterms:W3CDTF">${timestamp}</dcterms:created>`)
     .replace(/<dcterms:modified xsi:type="dcterms:W3CDTF">[^<]*<\/dcterms:modified>/g, `<dcterms:modified xsi:type="dcterms:W3CDTF">${timestamp}</dcterms:modified>`);
 }
@@ -2293,6 +2324,7 @@ function normalizePartBytes(path, bytes, context, renameMaps, entries, imageMeta
   }
   if (isXmlPart(path)) {
     let xml=decodeText(bytes);
+    if (context.notesWithCarriageReturns.has(path)) xml = preserveGeneratedNotes(xml, context.notesWithCarriageReturns.get(path), path);
     if (path === '[Content_Types].xml') {
       // PptxGenJS 4.0.1 emits one slide-master override per slide even
       // though it creates only the actual master parts. Omit phantom master

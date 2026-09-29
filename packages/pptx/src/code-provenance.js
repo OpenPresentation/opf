@@ -8,6 +8,9 @@ const NS = 'http://schemas.openxmlformats.org/presentationml/2006/main';
 const enc = new TextEncoder(), dec = new TextDecoder('utf-8', {fatal:true});
 const parser = new XMLParser({ignoreAttributes:false, attributeNamePrefix:'', parseTagValue:false, trimValues:false});
 const ordered = new XMLParser({ignoreAttributes:false, attributeNamePrefix:'', parseTagValue:false, trimValues:false, preserveOrder:true});
+// Numeric XML character references carry native CR without XML line-ending
+// normalization. Decode once while parsing notes, never again on parsed text.
+const orderedNotes = new XMLParser({ignoreAttributes:false, attributeNamePrefix:'', parseTagValue:false, trimValues:false, preserveOrder:true, htmlEntities:true});
 const array = value => value === undefined ? [] : Array.isArray(value) ? value : [value];
 const hex = value => [...enc.encode(JSON.stringify(value))].map(byte=>byte.toString(16).padStart(2,'0')).join('').toUpperCase();
 function unhex(value) {
@@ -64,8 +67,9 @@ export const nativeTextShapes = tree => [...array(tree?.['p:sp']),...array(tree?
 const orderedShapes = tree => [...children(tree,'p:sp'),...children(tree,'p:grpSp').flatMap(orderedShapes)];
 // Preserve the order of runs, fields and explicit line breaks. A keyed XML
 // object groups all a:r before a:fld and cannot represent their original order.
-export function nativeShapeParagraphs(xml) {
-  const root = children(ordered.parse(xml),'p:sld')[0];
+export function nativeShapeParagraphs(xml, rootElement = 'p:sld') {
+  const reader = rootElement === 'p:notes' ? orderedNotes : ordered;
+  const root = children(reader.parse(xml),rootElement)[0];
   const tree = children(children(root,'p:cSld')[0],'p:spTree')[0];
   return orderedShapes(tree).map(shape=>children(children(shape,'p:txBody')[0],'a:p').map(paragraph=>{
     let text = '', maxFontSize = 0, bullet = false, level = 0;

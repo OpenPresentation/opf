@@ -148,6 +148,7 @@ jobs:
             opf-render/artifacts/golden/**
             opf-pptx/artifacts/packed-consumer-node24.json
             opf-pptx/artifacts/zip-date/**
+            opf-pptx/artifacts/native-text-whitespace/**
             opf-pptx/artifacts/native-picture-harness/**
           retention-days: 7
           if-no-files-found: ignore

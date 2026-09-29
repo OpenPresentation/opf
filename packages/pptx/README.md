@@ -66,6 +66,12 @@ await fs.promises.writeFile("round-trip.pptx", roundTripBytes);
 
 The importer reads core properties, slide order, text boxes, speaker notes, embedded images, tables, and basic cached chart data from the OOXML parts. Slides or objects that do not map cleanly fall back to editable `blocks[]` payloads; OOXML positions are used for deterministic ordering and title/subtitle detection while keeping the emitted OPF schema-valid.
 
+### Unreleased: native notes and property whitespace
+
+Current source preserves spaces, tabs, NBSP and authored CR/LF/CRLF in speaker notes and scalar presentation `name`, `description` and `author`; published npm `0.9.1` does not contain this repair. Import reads current native notes body paragraphs in run/field/line-break order, retaining blank paragraphs. Explicit paragraph and line-break boundaries import as LF. XML character references decode once, so literal text such as `&#13;` remains literal. Export writes authored CR as character references in native text, without adding source-recovery tags; ordinary exports with no authored CR remain byte-identical.
+
+Native edits, cleared/deleted note bodies or parts, core-property edits/deletions and slide relationship order remain authoritative in all provenance modes. Empty notes and absent notes still both import absent; an empty or absent title uses the existing fallback, and empty description/author import absent. Author arrays still export as a joined scalar. External literal XML line endings follow XML normalization; exact CR requires character references. These are portable XML conversion controls, not native Office or visual acceptance.
+
 ## v1 Placeholder and OOXML Mapping
 
 The first exporter keeps the public API stable while using `pptxgenjs` internally:
