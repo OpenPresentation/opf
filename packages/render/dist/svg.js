@@ -1223,10 +1223,23 @@ function renderImportedChart(item, box, bound, options) {
     const horizontal=kind==='bar',legendHeight=series.length>1?34:8;
     const plot={x:box.x+(horizontal?100:64),y:box.y+legendHeight+14,width:Math.max(1,box.width-(horizontal?124:84)),height:Math.max(1,box.height-legendHeight-62)};
     const values=series.flatMap(s=>s.values).filter(v=>v!==null),min=Math.min(0,...values),rawMax=Math.max(0,...values),max=rawMax===min?min+1:rawMax,range=max-min;
-    const xValue=v=>plot.x+(v-min)/range*plot.width,yValue=v=>plot.y+(max-v)/range*plot.height;
+    const fraction=(v,reverse=false)=>{
+      const distance=reverse?max-v:v-min;
+      if(Number.isFinite(range)&&Number.isFinite(distance))return distance/range;
+      // Finite endpoints can overflow during subtraction. Keep ordinary
+      // arithmetic unchanged and normalize only that exceptional range.
+      const unit=Math.max(Math.abs(min),Math.abs(max)),low=min/unit,high=max/unit,position=v/unit;
+      return (reverse?high-position:position-low)/(high-low);
+    };
+    const xValue=v=>plot.x+fraction(v)*plot.width,yValue=v=>plot.y+fraction(v,true)*plot.height;
     const zero=horizontal?xValue(0):yValue(0);
     for(let tick=0;tick<=4;tick++){
-      const value=min+range*tick/4,at=horizontal?xValue(value):yValue(value),label=Number(value.toPrecision(4));
+      const direct=min+range*tick/4;
+      const value=Number.isFinite(direct)?direct:min*(1-tick/4)+max*(tick/4);
+      const at=horizontal?xValue(value):yValue(value),rounded=Number(value.toPrecision(4));
+      // Rounding MAX_VALUE to four digits can overflow although the tick is
+      // finite. Its exact shortest decimal remains truthful and parseable.
+      const label=Number.isFinite(rounded)?rounded:String(value);
       children.push(tag('line',{x1:horizontal?at:plot.x,x2:horizontal?at:plot.x+plot.width,y1:horizontal?plot.y:at,y2:horizontal?plot.y+plot.height:at,stroke:bound.design.colors.border,'stroke-width':1}));
       children.push(text(label,horizontal?{x:at-32,y:plot.y+plot.height+6,width:64,height:26}:{x:box.x+4,y:at-12,width:52,height:24},item.path,13,horizontal?'center':'right'));
     }
