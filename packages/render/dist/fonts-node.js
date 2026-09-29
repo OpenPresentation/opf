@@ -5,6 +5,7 @@ import path from "node:path";
 import { createHash } from "node:crypto";
 import { createFontRegistry, OPFFontError } from "./fonts.js";
 import { BUNDLED_FONT_MANIFEST } from "./font-manifest.js";
+import { lazyFontList } from "./lazy-font-list.js";
 export { BUNDLED_FONT_MANIFEST } from "./font-manifest.js";
 import { analyzePresentationScripts, nextFallbackPackage, scriptFontPackages, scriptSelectionOf, uncoveredCjkCharacters } from "./script-font-pack.js";
 export { autoScriptSelection, detectPresentationScripts, scriptFontPackages } from "./script-font-pack.js";
@@ -33,12 +34,16 @@ async function loadPackages(packages, skipped, {fallbackOnly = false} = {}) {
       // FF-31: vendored faces ship inside this package (pkg.vendored, for example fonts/carlito), hash-pinned like the npm packs. The open pack is
       // embedded in an SVG only when the slide's text names the family (embed "used"); raster output reads the files.
       const directory = fileURLToPath(new URL(`../${pkg.vendored}/`, import.meta.url));
-      const license = (await verifiedFile(path.join(directory, pkg.licenseFile), pkg.licenseSha256, {package:pkg.name, file:pkg.licenseFile})).toString("utf8");
+      let license = (await verifiedFile(path.join(directory, pkg.licenseFile), pkg.licenseSha256, {package:pkg.name, file:pkg.licenseFile})).toString("utf8");
+      // A notice file carries provenance and upstream copyright lines that the upstream license file omits.
+      if (pkg.noticeFile) license += "\n\n" + (await verifiedFile(path.join(directory, pkg.noticeFile), pkg.noticeSha256, {package:pkg.name, file:pkg.noticeFile})).toString("utf8");
+      // One rule for the vendored faces the SVG embeds only when its text names them: the open pack and any package flagged embed "used" (Intos).
+      const lazy = pkg.pack === "open" || pkg.embed === "used";
       for (const face of pkg.faces) {
         const file = path.join(directory, face.file);
         const data = await verifiedFile(file, face.sha256, {package:pkg.name, file:face.file});
         fontFiles.push(file);
-        entries.push({data:new Uint8Array(data), family:face.family, weight:face.weight, italic:face.italic, license, ...(pkg.pack === "open" ? {embed:"used"} : {})});
+        entries.push({data:new Uint8Array(data), family:face.family, weight:face.weight, italic:face.italic, license, ...(lazy ? {embed:"used"} : {})});
       }
       continue;
     }
@@ -66,6 +71,8 @@ async function loadPackages(packages, skipped, {fallbackOnly = false} = {}) {
 // A package that is the renamed successor of a family (Source Sans 3, formerly Source Sans Pro) answers to the
 // old name through a built-in alias, reported visual like other aliases; it is not a claim of the old face.
 const renamedAliases = () => Object.fromEntries(BUNDLED_FONT_MANIFEST.packages.filter(item => item.pack === "open" && item.renamedFrom).map(item => [item.renamedFrom, item.faces[0].family]));
+// The vendored faces this registry holds that are embed "used": a host that serves fonts itself lists them to copy their files.
+const lazyOf = registry => lazyFontList().filter(face => registry.describeFaces().some(held => held.family === face.family && held.weight === face.weight && held.italic === face.italic));
 const loadPack = pack => loadPackages(BUNDLED_FONT_MANIFEST.packages.filter(item => item.pack === pack));
 
 /**
@@ -148,6 +155,7 @@ async function withFaces(loaded, faces) {
 export async function loadBundledFontRegistry({scripts, faces, presentation, onDiagnostic, ...options} = {}) {
   const {entries, fontFiles, selection} = await withFaces(await withScripts(await loadPack("base"), scripts, {presentation, onDiagnostic}), faces);
   const registry = Object.assign(createFontRegistry(entries,options),{fontFiles, ...(selection ? {scriptSelection: selection} : {})});
+  registry.lazyFonts = lazyOf(registry);
   await completeFallback(registry, presentation, {fontFiles, selection}, onDiagnostic);
   return registry;
 }
@@ -175,6 +183,7 @@ export async function loadOfficeFontRegistry({scripts, faces, presentation, onDi
   const loaded = await withFaces(await withScripts({entries, fontFiles, packages}, scripts, {presentation, onDiagnostic}), faces);
   const aliases = options.includeOpenFonts === false ? options.aliases : {...renamedAliases(), ...options.aliases};
   const registry = Object.assign(createFontRegistry(loaded.entries,{substitutionPolicy:"metric",...options,...(aliases?{aliases}:{})}),{fontFiles:loaded.fontFiles, ...(loaded.selection ? {scriptSelection: loaded.selection} : {})});
+  registry.lazyFonts = lazyOf(registry);
   await completeFallback(registry, presentation, loaded, onDiagnostic);
   return registry;
 }

@@ -88,11 +88,11 @@ export function nameContainsReservedName(names, reserved) {
 }
 
 /** Repositories whose files count as the copyright holder's release. Adding one is a reviewed change. */
-export const UNMODIFIED_UPSTREAM_REPOSITORIES = Object.freeze(['google/fonts', 'cyrealtype/Lora-Cyrillic', 'SorkinType/Merriweather-Sans', 'adobe-fonts/source-sans', 'RedHatOfficial/RedHatFont']);
+export const UNMODIFIED_UPSTREAM_REPOSITORIES = Object.freeze(['google/fonts', 'cyrealtype/Lora-Cyrillic', 'SorkinType/Merriweather-Sans', 'adobe-fonts/source-sans', 'RedHatOfficial/RedHatFont', 'muglug/intos']);
 
-/** A pinned raw file (commit sha in the URL) or a release asset of an allowlisted repository. */
+/** A pinned raw file (commit sha in the URL), a pinned Git LFS media file, or a release asset of an allowlisted repository. */
 export function isUnmodifiedUpstreamUrl(url) {
-  const match = /^https:\/\/raw\.githubusercontent\.com\/([A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+)\/[0-9a-f]{40}\/\S+\.(?:ttf|otf)$/.exec(url) ?? /^https:\/\/github\.com\/([A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+)\/releases\/download\/\S+\.(?:ttf|otf)$/.exec(url);
+  const match = /^https:\/\/raw\.githubusercontent\.com\/([A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+)\/[0-9a-f]{40}\/\S+\.(?:ttf|otf)$/.exec(url) ?? /^https:\/\/media\.githubusercontent\.com\/media\/([A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+)\/[0-9a-f]{40}\/\S+\.(?:ttf|otf)$/.exec(url) ?? /^https:\/\/github\.com\/([A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+)\/releases\/download\/\S+\.(?:ttf|otf)$/.exec(url);
   return Boolean(match) && UNMODIFIED_UPSTREAM_REPOSITORIES.includes(match[1]);
 }
 
@@ -112,7 +112,8 @@ export function modifiedFaceUsesReservedName(pkg) {
  * https://github.com/<repository>/tree/<commit>/<directory>.
  */
 export function pinnedRawUpstream(url) {
-  const match = /^https:\/\/raw\.githubusercontent\.com\/([A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+)\/([0-9a-f]{40})\/(\S+)\/([^/\s]+)$/.exec(url);
+  // Files under Git LFS (Intos) are served as bytes by media.githubusercontent.com/media/<repository>/<commit>/<path>; raw returns a pointer.
+  const match = /^https:\/\/(?:raw|media)\.githubusercontent\.com\/(?:media\/)?([A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+)\/([0-9a-f]{40})\/(\S+)\/([^/\s]+)$/.exec(url);
   return match ? {repository: match[1], commit: match[2], directory: match[3], file: match[4]} : null;
 }
 

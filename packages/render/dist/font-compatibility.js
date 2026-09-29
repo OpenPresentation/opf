@@ -112,4 +112,6 @@ export function separateLigatures(svg) {
     return token;
   });
 }
-export const EXPERIMENTAL_FONT_CANDIDATES = Object.freeze([Object.freeze({requestedFamily:"Aptos",substitute:"Akasia",source:"https://codeberg.org/bloudraad/akasia",note:"Upstream claims metric compatibility in twelve styles. Not bundled or automatically selected; OPF conformance testing is pending. No Narrow or Display compatibility is implied."})]);
+// Candidates that were measured and did not qualify. Never bundled or selected automatically.
+// Akasia (Aptos) was dropped: its repository is gone and Intos, pinned and measured identical to Aptos 2.01, replaces it.
+export const EXPERIMENTAL_FONT_CANDIDATES = Object.freeze([Object.freeze({requestedFamily:"Segoe UI",substitute:"Selawik",source:"https://github.com/microsoft/Selawik/releases/tag/1.01",note:"Microsoft's OFL Segoe UI fallback, measured 2026-09-29 against Segoe UI 5.71: mean width difference 0.16% and up to 2.5% in regular, 2.65% in italic (no italic faces), 1.75% in Semibold, 349 code points, lowercase 5% shorter, hhea ascent 8% smaller. Fails the metric bar; not bundled. See docs/evidence/font-replacements-20260923/metric-candidates-20260929.json in core."})]);

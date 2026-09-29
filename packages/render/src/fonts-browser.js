@@ -1,6 +1,10 @@
 import { createFontRegistry, OPFFontError } from "./fonts.js";
+import { lazyFontEntries, lazyFontList } from "./lazy-font-list.js";
+import { lazyFontsFor, presentationFamilies } from "./lazy-fonts.js";
 import { analyzePresentationScripts, nextFallbackPackage, scriptFontPackages, scriptPackageEntries, scriptSelectionOf, uncoveredCjkCharacters } from "./script-font-pack.js";
 export { autoScriptSelection, detectPresentationScripts, scriptFontEntries, scriptFontPackages } from "./script-font-pack.js";
+export { lazyFontEntries, lazyFontList } from "./lazy-font-list.js";
+export { lazyFontsFor, presentationFamilies } from "./lazy-fonts.js";
 
 async function verifyDigest(entry, data, subtle) {
   if (entry.sha256 === undefined) return;
@@ -170,6 +174,63 @@ export async function loadBrowserFontRegistry(entries, options = {}) {
       const next = nextFallbackPackage(analysis, { covers, loaded: scriptPackages });
       return next ? [next.name] : [];
     },
+  });
+  // FF-31: vendored faces (the open families and Intos) load on demand, once a document needs them. They share the
+  // script loader's queue and disposed state, and the same all-or-nothing order: fetch and verify, load every FontFace,
+  // then add them to the document and the registry together.
+  const lazy = lazyFontList(), lazyLoaded = new Set();
+  const policy = options.substitutionPolicy ?? "none";
+  const aliasTargets = new Map(Object.entries(options.aliases ?? {}).map(([from, to]) => [from.toLowerCase(), to]));
+  const hasFamily = (family) => registry.describeFaces().some((face) => face.family.toLowerCase() === String(family).toLowerCase());
+  const neededLazy = (presentation) => lazyFontsFor(presentationFamilies(presentation), { lazy, hasFamily, loaded: lazyLoaded, policy, aliases: aliasTargets });
+  const lazyBaseUrl = () => {
+    if (typeof options.lazyFontsBaseUrl !== "string" || !options.lazyFontsBaseUrl)
+      throw new OPFFontError("invalid-font-source", "Loading vendored fonts requires lazyFontsBaseUrl, where the host serves the package's fonts directory.");
+    return options.lazyFontsBaseUrl;
+  };
+  Object.assign(registry, {
+    /** Every vendored face a host can load on demand: family, style, package-relative file and pinned sha256. */
+    lazyFonts: lazy,
+    /**
+     * Load the vendored faces the presentation's font families resolve to under the registry's substitution policy (nothing
+     * is downloaded for a family the policy would not resolve), once each. All or nothing: on any failure (fetch, hash,
+     * FontFace.load, registry) the document and registry are unchanged and the call can be retried. Cheap when nothing is
+     * needed. Call it before measuring a document, and again after edits that change fonts. Resolves with the faces added.
+     */
+    ensureLazyFonts(presentation, callOptions = {}) {
+      const result = queue.then(async () => {
+        if (disposed) throw gone();
+        callOptions.signal?.throwIfAborted?.();
+        const pending = neededLazy(presentation);
+        if (!pending.length) return [];
+        const fetched = (await fetchFaces(lazyFontEntries({ baseUrl: lazyBaseUrl() }, pending), callOptions.signal)).map((entry) => ({ ...entry, embed: "used" }));
+        let browserFaces;
+        try {
+          browserFaces = await Promise.all(fetched.map(async (entry) => {
+            const face = new FontFaceRef(entry.family, entry.data.slice().buffer, { weight: String(entry.weight), style: entry.italic ? "italic" : "normal" });
+            await face.load();
+            return face;
+          }));
+        } catch (error) { throw new OPFFontError("font-load-failed", error.message); }
+        if (disposed) throw gone();
+        const shown = [];
+        try {
+          for (const face of browserFaces) { documentRef.fonts.add(face); shown.push(face); }
+          registry.addFaces(fetched);
+        } catch (error) {
+          for (const face of shown) documentRef.fonts.delete(face);
+          throw error;
+        }
+        loaded.push(...browserFaces);
+        for (const item of pending) lazyLoaded.add(item.file);
+        try { await documentRef.fonts.ready; } catch { /* the faces are loaded and registered */ }
+        return pending;
+      });
+      queue = result.catch(() => {});
+      return result;
+    },
+    /** Synchronous: the vendored faces the presentation needs under the registry's policy that are not loaded yet. Empty means `ensureLazyFonts` fetches nothing. */
+    pendingLazyFonts: (presentation) => neededLazy(presentation),
   });
   /** Names of the script-pack packages loaded so far. */
   Object.defineProperty(registry, "loadedScriptPackages", { get: () => [...scriptPackages], enumerable: true });

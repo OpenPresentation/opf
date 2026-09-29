@@ -28,22 +28,24 @@ assert.deepEqual(families(renderSvg({ ...custom, design: { theme: 'bare', fontSc
 // unavailable family with its bundled sans-serif fallback.
 assert.ok((await svgToPng(renderSvg(custom), { scale: 0.25 })).byteLength > 0);
 
-// Measured layout takes the FF-31 font policy path (provisional, owner may revise): Aptos previews
-// with Roboto and Aptos Display with Carlito, both visual.
+// Measured layout takes the FF-31 font policy path (owner policy 2026-09-29): Aptos previews with
+// Intos and Aptos Display with Intos Display, both metric.
 const visual = await prepareNodeFonts({ pack: 'office', substitutionPolicy: 'visual' });
 const measured = renderSvg(custom, visual.options);
-assert.deepEqual(families(measured), ['Carlito, sans-serif', 'Roboto, sans-serif']);
+assert.deepEqual(families(measured), ['Intos Display, sans-serif', 'Intos, sans-serif']);
 assert.deepEqual(
   visual.registry.substitutions.map(entry => `${entry.requestedFamily}->${entry.resolvedFamily}:${entry.compatibility}`).sort(),
-  ['Aptos Display->Carlito:visual', 'Aptos->Roboto:visual'],
+  ['Aptos Display->Intos Display:metric', 'Aptos->Intos:metric'],
 );
 visual.registry.clearSubstitutions();
 assert.deepEqual(families(renderSvg(noDesign, visual.options)), families(measured));
 assert.deepEqual(visual.registry.substitutions.map(entry => entry.requestedFamily).sort(), ['Aptos', 'Aptos Display']);
-// Without a visual substitution policy there is no metric Aptos substitute, so measured
-// preview fails explicitly, exactly as it already does for a document with no design.
+// The metric office registry previews the default scheme with Intos, and the same measured SVG comes out.
 const metric = await prepareNodeFonts({ pack: 'office' });
-for (const deck of [custom, noDesign]) assert.throws(() => renderSvg(deck, metric.options), { code: 'font-unavailable' });
+for (const deck of [custom, noDesign]) assert.deepEqual(families(renderSvg(deck, metric.options)), families(measured));
+// With only the base pack there is no Aptos substitute, so measured preview fails explicitly.
+const baseMetric = await prepareNodeFonts({ pack: 'base', substitutionPolicy: 'metric' });
+for (const deck of [custom, noDesign]) assert.throws(() => renderSvg(deck, baseMetric.options), { code: 'font-unavailable' });
 
 console.log('shared default font scheme (aptos): estimated and measured previews match the default theme path');
 

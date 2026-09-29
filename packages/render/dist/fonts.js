@@ -42,7 +42,7 @@ function unavailableFontError(family, style, policy) {
     return new OPFFontError("font-unavailable", `No local font face for '${family}'. ${owner} Its declared replacement ${replacement} is visual only${delta}, which substitutionPolicy '${policy}' does not allow. Pass substitutionPolicy: 'visual' to preview with ${candidates.join(" or ")}, or ${hook}. The PPTX names '${family}' either way.`, details);
   if (policy === "none")
     return new OPFFontError("font-unavailable", `No local font face for '${family}'. ${owner} Its declared ${compatibility} replacement is ${replacement}${delta}; substitutionPolicy 'none' does not allow it. Pass substitutionPolicy: '${compatibility}', or ${hook}.`, details);
-  return new OPFFontError("font-unavailable", `No local font face for '${family}'. ${owner} None of its replacements (${candidates.join(", ")}) is loaded${packs.length ? `; load the ${packs.map(pack=>"'"+pack+"'").join(" or ")} font pack` : ""}, or ${hook}.`, details);
+  return new OPFFontError("font-unavailable", `No local font face for '${family}'. ${owner} None of its replacements (${candidates.join(", ")}) is loaded${packs.length ? `; load the ${packs.map(pack=>"'"+pack+"'").join(" or ")} font pack` : ""}, or ${hook}. The PPTX names '${family}' either way.`, details);
 }
 /** Local font files only. The caller explicitly chooses aliases and fallback. */
 export function createFontRegistry(entries, options = {}) {

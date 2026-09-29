@@ -14,8 +14,8 @@ const root=fileURLToPath(new URL('../',import.meta.url)),report={node:process.ve
 const {registry,options}=await prepareNodeFonts();
 // Base, office and open-family (FF-31) packs are runtime dependencies; the FF-19 script pack is an optional peer.
 const runtimePacks=BUNDLED_FONT_MANIFEST.packages.filter(p=>p.pack!=='scripts'),scriptPack=BUNDLED_FONT_MANIFEST.packages.filter(p=>p.pack==='scripts');
-assert.equal(runtimePacks.length,18);
-assert.equal(runtimePacks.reduce((n,p)=>n+p.faces.length,0),68);
+assert.equal(runtimePacks.length,19);
+assert.equal(runtimePacks.reduce((n,p)=>n+p.faces.length,0),84);
 assert.equal(scriptPack.length,31);
 assert.equal(scriptPack.reduce((n,p)=>n+p.faces.length,0),63);
 assert.throws(()=>{BUNDLED_FONT_MANIFEST.packages[0].faces[0].sha256='changed';},TypeError);
@@ -44,10 +44,13 @@ const aptosDeck={slides:[{title:'Explicit Office substitute',text:'The source fo
 const aptosSource=JSON.stringify(aptosDeck);
 renderSvg(aptosDeck,office.options);
 assert.equal(JSON.stringify(aptosDeck),aptosSource);
-// FF-31 (provisional, owner may revise): the font policy previews Aptos with Roboto.
-assert.ok(office.registry.substitutions.some(item=>item.requestedFamily==='Aptos'&&item.resolvedFamily==='Roboto'&&item.compatibility==='visual'&&item.substitute));
+// FF-31 (owner policy 2026-09-29): the font policy previews Aptos with the metric-compatible Intos.
+assert.ok(office.registry.substitutions.some(item=>item.requestedFamily==='Aptos'&&item.resolvedFamily==='Intos'&&item.compatibility==='metric'&&item.substitute));
 const metric=await prepareNodeFonts({pack:'office'});
-assert.throws(()=>renderSvg(aptosDeck,metric.options),{code:'font-unavailable'});
+assert.doesNotThrow(()=>renderSvg(aptosDeck,metric.options));
+assert.ok(metric.registry.substitutions.some(item=>item.requestedFamily==='Aptos'&&item.resolvedFamily==='Intos'&&item.compatibility==='metric'));
+const baseMetric=await prepareNodeFonts({pack:'base',substitutionPolicy:'metric'});
+assert.throws(()=>renderSvg(aptosDeck,baseMetric.options),{code:'font-unavailable'});
 await assert.rejects(prepareNodeFonts({pack:'unknown'}),{code:'invalid-font-pack'});
 assert.throws(()=>renderSvg({design:{fontScheme:'roboto'},slides:[{text:'你好'}]},options),{code:'missing-glyph'});
 
@@ -103,4 +106,4 @@ try{
   await assert.rejects(isolated.loadOfficeFontRegistry(),{code:'font-integrity-mismatch'});report.guards.push('modified vendored license');
 }finally{await rm(temporary,{recursive:true,force:true});}
 if(process.argv[2]){await mkdir(path.dirname(path.resolve(process.argv[2])),{recursive:true});await writeFile(process.argv[2],JSON.stringify(report,null,2)+'\n');}
-console.log('Prepared fonts: 68 pinned faces/notices, nine exact raster styles, deterministic document workflow, explicit substitutions and integrity failure/recovery passed.');
+console.log('Prepared fonts: 84 pinned faces/notices, nine exact raster styles, deterministic document workflow, explicit substitutions and integrity failure/recovery passed.');

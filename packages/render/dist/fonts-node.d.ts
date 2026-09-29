@@ -31,10 +31,13 @@ export interface ScriptPackOptions {
   /** Receives `script-font-unavailable` and `script-font-not-installed` for `scripts: "auto"`. */
   onDiagnostic?: (diagnostic: {code: string; message: string; script?: string; package?: string; scripts?: string[]}) => void;
 }
+/** A vendored face that an SVG embeds only when its text names the family (the open families and Intos), and that browser hosts load on demand from a separate hash-pinned file. */
+export interface LazyFont { readonly package: string; readonly family: string; readonly weight: number; readonly italic: boolean; /** Path relative to the package root, for example fonts/intos/Intos-Regular.ttf. */ readonly file: string; readonly sha256: string; readonly license: string; readonly renamedFrom?: string }
 export type ScriptFontRegistry = FontRegistry & {fontFiles:string[]; /** Set for `scripts: "auto"`. */ scriptSelection?: AppliedScriptSelection};
-export declare function loadBundledFontRegistry(options?: FontRegistryOptions & ScriptPackOptions): Promise<ScriptFontRegistry>;
+export type NodeFontRegistry = ScriptFontRegistry & {/** The embed "used" faces this registry holds, with the files a host copies to serve them itself. */ lazyFonts: readonly LazyFont[]};
+export declare function loadBundledFontRegistry(options?: FontRegistryOptions & ScriptPackOptions): Promise<NodeFontRegistry>;
 
-export declare function loadOfficeFontRegistry(options?: FontRegistryOptions & ScriptPackOptions & {includeBaseFonts?:boolean; /** Leave out the open families font schemes select (FF-31); default true. */ includeOpenFonts?:boolean}): Promise<ScriptFontRegistry>;
+export declare function loadOfficeFontRegistry(options?: FontRegistryOptions & ScriptPackOptions & {includeBaseFonts?:boolean; /** Leave out the open families font schemes select (FF-31); default true. */ includeOpenFonts?:boolean}): Promise<NodeFontRegistry>;
 
 export type BundledFontPackage = Readonly<{
   /** An npm package name, or a plain id for a vendored entry of a git upstream. */
@@ -43,6 +46,10 @@ export type BundledFontPackage = Readonly<{
   version:string; pack:"base"|"office"|"open"|"scripts"; source:string;
   /** FF-31: directory inside this package (for example `fonts/carlito`) that holds the vendored faces and notice (`file` and `licenseFile` are relative to it); absent for npm packages. */
   vendored?: string;
+  /** "used": the package's faces are embedded in an SVG only when its text names the family, and browsers load them on demand (the open pack always does). */
+  embed?: "used";
+  /** An authored provenance and copyright notice in `vendored`, hash-pinned beside the license and appended to it. */
+  noticeFile?: string; noticeSha256?: string;
   /** ISO 15924 scripts served by a script-pack package. */
   scripts?: readonly string[];
   license:string; licenseFile:string; licenseSha256:string;
@@ -64,7 +71,7 @@ export interface BundledFontManifest {
 export declare const BUNDLED_FONT_MANIFEST: BundledFontManifest;
 export declare function scriptFontPackages(scripts: ScriptSelection): BundledFontPackage[];
 export interface PreparedNodeFonts {
-  registry: FontRegistry & {fontFiles:string[]};
+  registry: NodeFontRegistry;
   manifest: BundledFontManifest;
   options: {
     textMeasurement: FontRegistry["textMeasurement"];

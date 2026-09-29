@@ -31,7 +31,7 @@ try{
   const {BUNDLED_FONT_MANIFEST}=await import(pathToFileURL(path.join(root,'dist/font-manifest.js')));
   const vendored=BUNDLED_FONT_MANIFEST.packages.filter(pkg=>pkg.vendored);
   assert.ok(vendored.length>0,'the manifest vendors at least one font directory');
-  for(const pkg of vendored)for(const file of [pkg.licenseFile,...pkg.faces.map(face=>face.file)])assert.ok(files[`${pkg.vendored}/${file}`],`Missing vendored font file: ${pkg.vendored}/${file}`);
+  for(const pkg of vendored)for(const file of [pkg.licenseFile,...(pkg.noticeFile?[pkg.noticeFile]:[]),...pkg.faces.map(face=>face.file)])assert.ok(files[`${pkg.vendored}/${file}`],`Missing vendored font file: ${pkg.vendored}/${file}`);
   // The packed copies byte-match the manifest pins; the open pack also ships its PROVENANCE.json (FF-31).
   for(const pkg of vendored){
     for(const face of pkg.faces)assert.equal(files[`${pkg.vendored}/${face.file}`],face.sha256,`Packed vendored face differs from its manifest pin: ${pkg.vendored}/${face.file}`);
@@ -58,10 +58,11 @@ console.log('Vendored fonts load from the installed package.');
   assert.ok(core.resolved.startsWith('https://registry.npmjs.org/')&&core.integrity.startsWith('sha512-')&&!core.link);
   const actualCore=await realpath(path.join(consumer,'node_modules/@openpresentation/opf'));
   assert.ok(actualCore.startsWith((await realpath(path.join(consumer,'node_modules')))+path.sep),'Core must be installed inside the clean consumer');
-  for(const file of ['shared-quote.mjs','quote-footer.mjs','shared-code.mjs','chart-axis.mjs']){
+  for(const file of ['shared-quote.mjs','quote-footer.mjs','shared-code.mjs','chart-axis.mjs','aptos-preview.mjs']){
     const source=(await readFile(path.join(root,'test',file),'utf8'))
       .replaceAll("'../dist/svg.js'","'@openpresentation/opf-render/svg'")
-      .replaceAll("'../dist/fonts-node.js'","'@openpresentation/opf-render/fonts-node'");
+      .replaceAll("'../dist/fonts-node.js'","'@openpresentation/opf-render/fonts-node'")
+      .replaceAll("'../dist/index.js'","'@openpresentation/opf-render'");
     await writeFile(path.join(consumer,file),source);
     process.stdout.write(execFileSync(process.execPath,[file],{cwd:consumer,encoding:'utf8'}));
   }

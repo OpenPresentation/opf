@@ -136,7 +136,7 @@ assert.throws(() => base.resolveFont({fontFamily: 'Open Sans', fontWeight: 400})
 assert.throws(() => base.resolveFont({fontFamily: 'Source Sans Pro', fontWeight: 400}), error => error.code === 'font-unavailable' && error.details.packs.includes('office'));
 const without = await loadOfficeFontRegistry({includeOpenFonts: false});
 // 33 office and base faces, plus the four default Noto Sans glyph-fallback faces (fallback-only, embed "used").
-assert.equal(without.describeFaces().filter(face => !face.fallbackOnly).length, 33);
+assert.equal(without.describeFaces().filter(face => !face.fallbackOnly).length, 33 + 16, 'plus the 16 Intos faces, which are part of the office pack');
 assert.equal(without.describeFaces().filter(face => face.fallbackOnly).length, 4);
 assert.throws(() => without.resolveFont({fontFamily: 'Montserrat', fontWeight: 400}), {code: 'font-unavailable'});
 assert.throws(() => without.resolveFont({fontFamily: 'Source Sans Pro', fontWeight: 400}), {code: 'font-unavailable'});
@@ -146,9 +146,9 @@ assert.throws(() => without.resolveFont({fontFamily: 'Source Sans Pro', fontWeig
 assert.equal(strict.embeddedFonts.length, 33);
 assert.ok(strict.embeddedFonts.every(font => font.embed === undefined));
 const defaults = await prepareNodeFonts({pack: 'office'});
-assert.equal(defaults.options.embeddedFonts.length, 72, 'prepareNodeFonts supplies every face (68 office, base and open faces, plus the four Noto Sans fallback faces); the SVG picks the ones its text uses');
-assert.equal(defaults.options.embeddedFonts.filter(font => font.embed === 'used').length, 39, '35 open faces and the 4 Noto Sans fallback faces');
-assert.equal(defaults.options.fontFiles.length, 72);
+assert.equal(defaults.options.embeddedFonts.length, 88, 'prepareNodeFonts supplies every face (68 office, base, open and Intos faces, plus the four Noto Sans fallback faces); the SVG picks the ones its text uses');
+assert.equal(defaults.options.embeddedFonts.filter(font => font.embed === 'used').length, 35 + 16 + 4, 'the 35 open faces, the 16 Intos faces and the 4 Noto Sans fallback faces');
+assert.equal(defaults.options.fontFiles.length, 88);
 assert.equal((await prepareNodeFonts({pack: 'base'})).options.embeddedFonts.length, 9);
 const schemeDocument = family => ({
   design: {fontScheme: 'x-open'},

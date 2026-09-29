@@ -49,8 +49,11 @@ async function fetchGit(pkg,target){
   assert.ok(parts&&parts.commit===pkg.version,`${pkg.name}: faces must be pinned to the entry's commit (version).`);
   const licenseUrl=pkg.upstreamLicenseUrl??`https://raw.githubusercontent.com/${parts.repository}/${parts.commit}/${parts.directory}/${pkg.licenseFile}`;
   assert.ok(licenseUrl.includes(pkg.version),`${pkg.name}: the notice URL must name the pinned commit.`);
+  // An authored provenance and copyright notice (noticeFile) is not fetched from upstream: keep it across a re-fetch.
+  const notice=pkg.noticeFile?await readFile(path.join(target,pkg.noticeFile)):undefined;
   await rm(target,{recursive:true,force:true});
   await mkdir(target,{recursive:true});
+  if(notice)await writeFile(path.join(target,pkg.noticeFile),notice);
   await writeFile(path.join(target,pkg.licenseFile),await download(licenseUrl));
   for(const face of pkg.faces){
     assert.ok(face.upstreamFile.url.includes(pkg.version),`${pkg.name}: ${face.file} URL must name the pinned commit.`);
@@ -114,6 +117,7 @@ for(const [index,pkg] of manifest.packages.entries()){
   pkg.upstream=upstreamUrl(licenseText);
   pkg.copyright=copyrightLine(licenseText);
   pkg.licenseSha256=hash(licenseBytes);
+  if(pkg.noticeFile)pkg.noticeSha256=hash(await readFile(path.join(directory,pkg.noticeFile)));
   for(const face of pkg.faces){
     face.sha256=hash(await readFile(path.join(directory,face.file)));
     if(fromGit){

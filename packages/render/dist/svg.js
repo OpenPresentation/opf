@@ -1506,13 +1506,47 @@ function segmentSpan(attrs, segment, text, style, bound, type, options) {
   return tag("tspan", { ...attrs, "font-family": scripted.family }, scripted.content);
 }
 
-// Faces flagged embed:"used" (the vendored open-pack faces and the script-pack faces load with it) are embedded only when the
-// slide's own markup names the family in a font-family list. Every other face is embedded as before.
+// Faces flagged embed:"used" (the vendored open, Intos and script-pack faces) are embedded only when the slide's own markup draws
+// them: the family in a font-family list, at a font-weight and font-style some text of the slide takes (attributes are
+// inherited down the element tree, as in SVG). A used family none of whose faces matches a drawn weight and style keeps all
+// its faces, so the browser can always choose. Every other face (the npm packs) is embedded as before.
 function embeddedFontsFor(fonts = [], content) {
   if (!fonts.some(font => font?.embed === "used")) return fonts;
-  const used = new Set();
-  for (const match of content.join("\n").matchAll(/font-family="([^"]*)"/g)) for (const family of match[1].split(",")) used.add(family.trim().replace(/^&quot;|&quot;$|^["']|["']$/g, "").toLowerCase());
-  return fonts.filter(font => font?.embed !== "used" || used.has(String(font.family).toLowerCase()));
+  const drawn = drawnFaces(content.join("\n"));
+  const wanted = font => {
+    const triples = drawn.get(String(font.family).toLowerCase());
+    if (!triples) return false;
+    const family = fonts.filter(other => other?.embed === "used" && String(other.family).toLowerCase() === String(font.family).toLowerCase());
+    const matching = family.filter(other => triples.has(`${other.weight}|${other.italic ? "italic" : "normal"}`));
+    return matching.length ? matching.includes(font) : true;
+  };
+  return fonts.filter(font => font?.embed !== "used" || wanted(font));
+}
+
+const FONT_WEIGHT_KEYWORDS = { normal: "400", bold: "700" };
+/** family (lowercase) to the set of "weight|style" pairs the markup draws text in. */
+function drawnFaces(markup) {
+  const drawn = new Map();
+  const tokens = /<(\/?)([A-Za-z][\w:.-]*)((?:[^>"']|"[^"]*"|'[^']*')*?)(\/?)>|<!--[\s\S]*?-->|<!\[CDATA\[[\s\S]*?\]\]>|[^<]+/g;
+  const stack = [{ families: [], weight: "400", style: "normal", text: false }];
+  const attribute = (attributes, name) => { const found = new RegExp(`\\s${name}\\s*=\\s*(?:"([^"]*)"|'([^']*)')`).exec(attributes); return found ? found[1] ?? found[2] : undefined; };
+  for (const [token, close, name, attributes, selfClose] of markup.matchAll(tokens)) {
+    const top = stack.at(-1);
+    if (name === undefined) {
+      if (top.text && /\S/.test(token)) for (const family of top.families) { const set = drawn.get(family) ?? new Set(); set.add(`${top.weight}|${top.style}`); drawn.set(family, set); }
+      continue;
+    }
+    if (close) { if (stack.length > 1) stack.pop(); continue; }
+    const family = attribute(attributes, "font-family"), weight = attribute(attributes, "font-weight"), style = attribute(attributes, "font-style");
+    const next = {
+      families: family === undefined ? top.families : family.split(",").map(item => item.trim().replace(/^&quot;|&quot;$|^["']|["']$/g, "").toLowerCase()).filter(Boolean),
+      weight: weight === undefined ? top.weight : FONT_WEIGHT_KEYWORDS[weight.trim()] ?? weight.trim(),
+      style: style === undefined ? top.style : /italic|oblique/.test(style) ? "italic" : "normal",
+      text: top.text || name === "text",
+    };
+    if (!selfClose) stack.push(next);
+  }
+  return drawn;
 }
 
 function renderEmbeddedFonts(fonts = []) {
