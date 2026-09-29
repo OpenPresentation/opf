@@ -8,7 +8,7 @@ import {attachMediaTags,importMediaGroups,mediaCaption,mediaFrameRecord,mediaTex
 import {attachHeadingTags,importHeadingGroups} from './heading-provenance.js';
 import {attachPlainTextTags,importPlainTextGroups} from './text-provenance.js';
 import {attachTimelineTags,timelineManifest,importTimelineGroups} from './timeline-provenance.js';
-import {attachFurnitureTags, furnitureManifest, importFurniture} from './furniture-provenance.js';
+import {attachFurnitureTags, furnitureManifest, importFurniture, staticDateFallback} from './furniture-provenance.js';
 import {applyDocumentProvenance, attachDocumentProvenance, documentProvenance, restoreDocumentProvenance} from './document-provenance.js';
 import {attachFurnitureFields, furniturePartFields, lineFields, nativeFieldType} from './furniture-fields.js';
 import {importImageOrientation} from './image-import.js';
@@ -1638,6 +1638,7 @@ async function addFurniture(slide,presentation,source,layout,context,options,sli
     if (manifest) context.furnitureManifests.set(`ppt/slides/slide${slideIndex + 1}.xml`, manifest);
     return;
   }
+  const staticDates = new Map();
   for(const [index,part]of layout.parts.entries()){
     if(part.type==='image'){
       const region={x:part.box.x/96,y:part.box.y/96,w:part.box.width/96,h:part.box.height/96};
@@ -1655,10 +1656,17 @@ async function addFurniture(slide,presentation,source,layout,context,options,sli
         else options.onDiagnostic?.({code:'furniture-date-fixed',path:part.path,message:`dateFormat '${field.format}' has no PowerPoint en-US date field; the current date is exported as fixed text that PowerPoint will not update.`});
       }
       const liveFields=fields.length?lineFields(part.text,fields,part.fit.sourceLines,part.fit.lines):undefined;
+      for(const field of fields.filter(field => !lineFields(part.text,[field],part.fit.sourceLines,part.fit.lines).some(line => line.length))) {
+        options.onDiagnostic?.({code:'furniture-field-fixed',path:part.path,message:`The ${field.type} field range ${field.start}..${field.end} does not fit one accepted text line. It is exported as static text that PowerPoint will not update; native compatibility remains a separate gate.`});
+        if(context.provenanceMode === 'full') {
+          const marker = staticDateFallback(part,field);
+          if(marker) staticDates.set(index,marker);
+        }
+      }
       addMeasuredPayloadText(slide,part.text,part.box,context,options,{path:part.path,fit:part.fit,textStyle:part.style,align:part.alignment,diagnosticsHandled:true,color:context.colors.mutedText,keepEmpty:true,objectName:`OPF furniture ${slideIndex} part ${index}`,furniture:{group:String(slideIndex),part:index},liveFields,links:part.links});
     }
   }
-  const manifest = furnitureManifest(presentation, source, layout, slideIndex);
+  const manifest = furnitureManifest(presentation, source, layout, slideIndex, staticDates);
   if (manifest) context.furnitureManifests.set(`ppt/slides/slide${slideIndex + 1}.xml`, manifest);
 }
 

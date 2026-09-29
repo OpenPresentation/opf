@@ -28,11 +28,51 @@ const key = part => `${part.kind}.${part.zone}.${part.field}`;
 const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 const check = (condition, message) => { if (!condition) throw Error(message); };
 
+// Change detection, not authentication: editable tags store no cached date words.
+function dateLineFingerprint(text) {
+  let a = 0xdeadbeef, b = 0x41c6ce57;
+  for (let index = 0; index < text.length; index++) {
+    a = Math.imul(a ^ text.charCodeAt(index), 2654435761);
+    b = Math.imul(b ^ text.charCodeAt(index), 1597334677);
+  }
+  return `${text.length}:${(a >>> 0).toString(16).padStart(8, '0')}${(b >>> 0).toString(16).padStart(8, '0')}`;
+}
+
+// Only the exporter may mark its own supported, whole-date field flattened by
+// an accepted soft wrap. Literal dates and unsupported patterns stay ordinary.
+export function staticDateFallback(part, field) {
+  const format = field.format ?? DEFAULT_DATE_FORMAT;
+  if (part.field !== 'date' || field.type !== 'date' || !NATIVE_DATE_FIELDS[format] ||
+      field.start !== 0 || field.end !== part.text.length || part.fit.lines.length < 2) return undefined;
+  const records = part.fit.sourceLines.map((line, index) => ({index, data: {
+    boundary: line.boundary, separator: part.text.slice(line.end, line.nextStart),
+  }}));
+  if (records.some((record, index) => record.data.boundary !== (index === records.length - 1 ? 'end' : 'soft'))) return undefined;
+  try {
+    if (sourceLineParagraphs(records, part.fit.lines.map(text => [{text}]))[0].text !== part.text) return undefined;
+  } catch { return undefined; }
+  return {v: 1, reason: 'wrapped-native-date', format, fingerprints: part.fit.lines.map(dateLineFingerprint)};
+}
+
+function unchangedStaticDate(marker, format, ordered, paragraphs) {
+  check(object(marker) && Object.keys(marker).sort().join(',') === 'fingerprints,format,reason,v' &&
+    marker.v === 1 && marker.reason === 'wrapped-native-date' && typeof marker.format === 'string' &&
+    Object.hasOwn(NATIVE_DATE_FIELDS, marker.format) && marker.format === (format.dateFormat ?? DEFAULT_DATE_FORMAT) &&
+    ordered.length > 1 && Array.isArray(marker.fingerprints) && marker.fingerprints.length === ordered.length,
+  'Invalid static date fallback evidence.');
+  check(ordered.every((record, index) => {
+    const current = paragraphs[record.index] ?? [];
+    return record.data.boundary === (index === ordered.length - 1 ? 'end' : 'soft') && record.data.separator === '' &&
+      typeof marker.fingerprints[index] === 'string' && /^\d+:[0-9a-f]{16}$/.test(marker.fingerprints[index]) &&
+      current.length === 1 && !current[0].bullet && dateLineFingerprint(current[0].text) === marker.fingerprints[index];
+  }), 'Current static date text or boundaries differ from the exported lines.');
+}
+
 // This manifest contains topology, identities, inactive flags and format
 // settings only. Current native shapes supply all words, image bytes and alt
 // text, even after edits; a recorded format is kept only while the current text
 // still matches it exactly.
-export function furnitureManifest(presentation, slide, layout, slideIndex) {
+export function furnitureManifest(presentation, slide, layout, slideIndex, staticDates = new Map()) {
   const definitions = {}, formats = {};
   for (const kind of kinds) {
     const local = slide.design?.[kind] !== undefined;
@@ -55,9 +95,10 @@ export function furnitureManifest(presentation, slide, layout, slideIndex) {
   const organization = organizations.find(item => item.role === 'primary') ?? organizations[0];
   return {v: 1, role: 'slide', group: String(slideIndex), definitions, ...(Object.keys(formats).length ? {formats} : {}),
     ...(layout.parts.some(part => part.field === 'organization' || part.field === 'socials') ? {organizationId: organization?.id} : {}),
-    parts: layout.parts.map(part => ({kind: part.kind, zone: part.zone, field: part.field,
+    parts: layout.parts.map((part, index) => ({kind: part.kind, zone: part.zone, field: part.field,
       type: part.type, count: part.type === 'image' ? 1 : part.fit.lines.length,
-      ...(part.field === 'socials' ? {socials: socialLines(part)} : {})}))};
+      ...(part.field === 'socials' ? {socials: socialLines(part)} : {}),
+      ...(staticDates.has(index) ? {staticDate: staticDates.get(index)} : {})}))};
 }
 
 export function attachFurnitureTags(entries, records, manifests) {
@@ -205,7 +246,7 @@ function readSlide(context, entries, slideIndex, slideCount, report, taggedText)
             check(lines.length === part.socials.length && lines.every(line => line.trim()), 'Current social profile lines no longer match their platforms.');
             candidate.socials.push({id: manifest.organizationId, socials: Object.fromEntries(part.socials.map((line, index) => [line.platform, line.scheme + lines[index]]))});
           }
-          value[part.zone][part.field] = part.field === 'text' ? text : part.field === 'date' ? importedDate(definition.value[part.zone].date, format, text, ordered.flatMap(record => (paragraphs[record.index] ?? []).flatMap(paragraph => paragraph.fields ?? [])), value[part.zone]) : true;
+          value[part.zone][part.field] = part.field === 'text' ? text : part.field === 'date' ? importedDate(definition.value[part.zone].date, format, text, ordered.flatMap(record => (paragraphs[record.index] ?? []).flatMap(paragraph => paragraph.fields ?? [])), value[part.zone], part.staticDate, ordered, paragraphs, message => report(slideIndex, `${kind}.${part.zone}.date: ${message}`)) : true;
           candidate.text.push(...ordered.map(record => record.index));
         }
       }
@@ -216,17 +257,23 @@ function readSlide(context, entries, slideIndex, slideCount, report, taggedText)
   return candidates;
 }
 
-// A current date stays live only while its shape still holds exactly one
-// PowerPoint date field; the field's current type selects the pattern. A fixed
+// A current native date field wins. Full-mode static-wrap evidence can recover
+// generated OPF intent without turning the existing PPTX text into a live field. A fixed
 // date keeps its ISO value and pattern only when the current text round-trips.
 // Otherwise the current words import as a literal date.
-function importedDate(flag, format, text, nativeFields, zone) {
+function importedDate(flag, format, text, nativeFields, zone, marker, ordered, paragraphs, report) {
   if (flag === true) {
     const pattern = nativeFields.length === 1 && nativeFields[0].text === text ? dateFormatForField[nativeFields[0].type] : undefined;
     if (pattern) {
       if (format.dateFormat !== undefined || pattern !== DEFAULT_DATE_FORMAT) zone.dateFormat = pattern;
       return true;
     }
+    if (marker !== undefined) try {
+      check(nativeFields.length === 0, 'A current native field no longer matches the static date evidence.');
+      unchangedStaticDate(marker, format, ordered, paragraphs);
+      if (format.dateFormat !== undefined) zone.dateFormat = format.dateFormat;
+      return true;
+    } catch (error) { report(`${error.message} Keep the current date as literal text.`); }
     return text;
   }
   const iso = format.dateFormat === undefined ? null : parseDate(text, format.dateFormat);
