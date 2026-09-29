@@ -7,7 +7,7 @@
       "aptos-preview": {
         "replacement": "Intos",
         "compatibility": "metric",
-        "note": "Owner policy 2026-09-29: a licensed font the user selects previews with an open replacement that looks similar and has the same size on screen; the PPTX keeps the selected name. Aptos previews with Intos (metric, OFL-1.1, vendored in opf-render); Roboto and Carlito are alternates when the aptos pack is not loaded."
+        "note": "Owner policy 2026-09-29: a licensed font the user selects previews with an open replacement that looks similar and has the same size on screen; the PPTX keeps the selected name. Aptos previews with Intos (metric, OFL-1.1, vendored in opf-render); Roboto and Carlito are alternates for registries built without the Intos faces (they are in the opf-render office pack)."
       },
       "segoe-ui-preview": {
         "replacement": "Red Hat Display",
@@ -128,7 +128,7 @@
         "https://microsoft.design/articles/a-change-of-typeface-microsoft-s-new-default-font-has-arrived/",
         "https://www.microsoft.com/en-us/download/details.aspx?id=106087"
       ],
-      "note": "Microsoft 365 cloud font; not redistributable. Intos is metric-compatible (OFL, Inter-derived outlines with Aptos advances, kerning and vertical metrics) and previews it in the opf-render aptos pack; Roboto and Carlito are the visual fallbacks when that pack is not loaded. Not in the Windows 10/11 font lists; delivered as a Microsoft 365 cloud font. Microsoft also offers a standalone download (Download Center id=106087) under Microsoft terms, not an open license."
+      "note": "Microsoft 365 cloud font; not redistributable. Intos is metric-compatible (OFL, Inter-derived outlines with Aptos advances, kerning and vertical metrics) and previews it in the default opf-render office pack; Roboto and Carlito are the visual fallbacks for registries built without the Intos faces. Not in the Windows 10/11 font lists; delivered as a Microsoft 365 cloud font. Microsoft also offers a standalone download (Download Center id=106087) under Microsoft terms, not an open license."
     },
     {
       "family": "Aptos Display",

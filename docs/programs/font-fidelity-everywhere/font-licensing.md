@@ -2,6 +2,8 @@
 
 Generated from [`spec/reference/font-policy.json`](../../../spec/reference/font-policy.json); edit the JSON, not this table. Schema: [`font-policy.schema.json`](../../../spec/reference/font-policy.schema.json). Guide: [docs/font-fidelity.md](../../font-fidelity.md). Measurement method and raw data: [evidence](../../evidence/font-replacements-20260923/README.md).
 
+**Policy (owner decisions, 2026-09-29):** the user's selected font is the source of truth. The replacement column is an open look-alike used for previews, SVG, the editor and thumbnails, because license-restricted (proprietary) fonts are never bundled or embedded. A metric-compatible replacement is the goal; a visual-only one is a documented fallback and a known layout-fidelity gap. PPTX export always writes the selected name, never the replacement. See [docs/font-fidelity.md](../../font-fidelity.md#font-policy-ff-31).
+
 **Provisional owner decisions (owner may revise):** `aptos-preview` → Intos (metric; owner policy 2026-09-29, Roboto and Carlito remain alternates); `segoe-ui-preview` → Red Hat Display (visual); `cambria-tier` → Caladea (visual, metric-mode fallback). They live in one block, `provisionalDecisions`, at the top of the JSON. Rows marked † below follow a decision.
 
 Availability: `windows` = Windows 10/11 default; `windows-optional` = a language Supplemental Fonts feature; `macos` = installed or downloadable on current macOS; `office` = Office desktop; `office-cloud` = Microsoft 365 cloud font.
@@ -185,7 +187,7 @@ Owner policy, 2026-09-29: for a licensed font the user selects (for example Apto
 
 | Candidate | For | Verdict | Basis |
 |---|---|---|---|
-| Intos, Intos Display, Intos Narrow, Intos Serif (commit `fef9315c14da9e4b23b4c3cac8e718998d4e4736`, OFL-1.1, no Reserved Font Name) | Aptos, Aptos Display, Aptos Narrow, Aptos Serif | **Accepted, metric** | 0.000% mean and 0.000% maximum in all four styles of each family against Aptos 2.01. hhea, OS/2 and x-height/cap-height values equal. No identical outline in the sans faces (0 of 975 shared glyphs); the serif shares eight plain rectangles such as the hyphen. Sans outlines derive from Inter and the serif from Gelasio, both OFL. Vendored in opf-render's `aptos` pack. |
+| Intos, Intos Display, Intos Narrow, Intos Serif (commit `fef9315c14da9e4b23b4c3cac8e718998d4e4736`, OFL-1.1, no Reserved Font Name) | Aptos, Aptos Display, Aptos Narrow, Aptos Serif | **Accepted, metric** | 0.000% mean and 0.000% maximum in all four styles of each family against Aptos 2.01. hhea, OS/2 and x-height/cap-height values equal. No identical outline in the sans faces (0 of 975 shared glyphs); the serif shares eight plain rectangles such as the hyphen. Sans outlines derive from Inter and the serif from Gelasio, both OFL. Vendored in opf-render's office pack. |
 | Selawik 1.01 (OFL-1.1, Reserved Font Name "Selawik") | Segoe UI and its Light, Semilight, Semibold styles | **Rejected** | Regular 0.16% mean and 2.5% maximum; bold 0.20% and 2.1%; no italic faces, so the upright face is 2.65% off in italic; Semibold 1.75%; Light 0.31%. Advances of basic Latin are identical, the differences are missing kerning and only 349 code points. Lowercase is 4.8% shorter than Segoe UI and hhea ascent 8% smaller. Red Hat Display stays the visual replacement. |
 | Akasia | Aptos | **Dropped** | The repository is no longer available. Intos replaces it. The earlier [assessment](../../evidence/akasia-assessment/README.md) remains as history. |
 

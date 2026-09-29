@@ -12,7 +12,7 @@ The reproducible audits behind [gallery-support.md](../gallery-support.md):
 | --- | --- |
 | `audit-a/` | Layouts, content blocks, image treatments, backgrounds, headers/footers. `scripts/`, `results.json`, generated `SUMMARY.md`. |
 | `audit-b/` | Color schemes, font schemes, languages, themes, narratives, audiences, tones, socials. `scripts/`, `results.json`, the audit's own `README.md` and generated per-dimension tables (`*.md`). |
-| `parity/` | Parity scoreboard (FF-38): `scripts/`, `run.ps1`, `build.ps1`, `parity-results.json` and the generated `PARITY.md`. |
+| `parity/` | Parity scoreboard (FF-38): `scripts/`, `run.ps1`, `build.ps1`, `parity-results.json` and the generated `PARITY.md`, plus dated later runs (`parity-results-<date>-<topic>.json` and `PARITY-<date>-<topic>.md`; never overwritten). |
 | `support-status.json` | One record per gallery value, built from the presence and parity results. |
 | `build-support-status.mjs` | Regenerates `support-status.json`. |
 
@@ -169,6 +169,28 @@ merged fix, copy `parity-results.json` and `PARITY.md` back into `parity/`,
 regenerate `support-status.json`, and update the headline in
 [gallery-support.md](../gallery-support.md) and [burndown.md](../burndown.md).
 
+### Instrument notes (2026-09-29)
+
+- **Field text.** PPTX text runs come from `scripts/pptx-runs.mjs`. It matches both
+  `a:r` and `a:fld` (slide-number and date fields carry `id`/`type` attributes, so
+  `<a:fld>` never appeared in the file). `node --test scripts/pptx-runs.test.mjs`
+  covers it. A change to an instrument gets a before/after run on the same
+  heads of all four repositories; only the fixed run is committed, as a new dated
+  results file (`parity-results-2026-09-29-field-text.json`), and
+  `build-support-status.mjs` reads that file by default.
+- **Preview font host.** `parity.mjs` builds the font-resolution registry with
+  `prepareNodeFonts({pack: 'office', substitutionPolicy: 'visual'})` and no
+  `scripts`, because that is what the shipped previews load: the opf-editor
+  playground bundle builds its registry with `loadOfficeFontRegistry()`, the
+  gallery layout thumbnails use no registry, and opf-render loads the optional
+  Noto script pack only when a host passes `scripts`. Values whose fonts route to
+  a Noto script face therefore fail fontResolution ("preview has no face"); that
+  is a product gap, not an instrument error. To see what loading it would give,
+  add `scripts: 'all'` to that call in a scratch copy (the packages are
+  devDependencies of opf-render, so `npm ci` installs them); the same 850 values
+  then score 29 perfect, 669 near, 152 mismatch. Do not commit such a run as the
+  scoreboard until a shipped host loads the pack.
+
 ### Slide-image mapping (FF-26)
 
 opf-pptx exports `design.slideImage` as one native picture named
@@ -227,7 +249,7 @@ Schema version 1. Top level:
 | `notMeasured` | Dimensions without a presence status (charts, FF-22). |
 | `sharedExportGaps` | Gaps that apply to every exported value. |
 | `counts` | Presence: `{dimension: {status: n}}`. |
-| `parityCounts` | Parity: `{total, perfect, near, mismatch, checksPassed: {check: n}}` over all 900 parity records. |
+| `parityCounts` | Parity: `{total, perfect, near, mismatch, checksPassed: {check: n}}` over all parity records (850 since the 2026-09-29 re-measure). |
 | `items` | One record per presence-audited gallery value (793), below. |
 | `parityOnly` | Values measured only by parity: the 76 charts, as `{dimension, galleryId, galleryIdNormalized?, parity}`; `galleryIdNormalized` is `{fromParts, joiner, to, reason}`. |
 
