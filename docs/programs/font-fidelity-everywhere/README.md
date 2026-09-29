@@ -117,7 +117,7 @@ linked, and specifically:
 
 | In scope | Out of scope |
 | --- | --- |
-| opf core spec/catalog docs, evidence, ecosystem tests | Package publication, version bumps, site deploys (separate release task) |
+| opf core spec/catalog docs, evidence, ecosystem tests | Package publication, version bumps, site deploys (separate release task; the owner authorized agents to publish on 2026-09-29, see [release-process.md](../../release-process.md)) |
 | opf-pptx export, importer compatibility, native harnesses | Native PowerPoint header/footer objects (`p:hf`); OPF furniture export is in scope |
 | opf-render preview font resolution and re-render checks | Deferred geometry drafts (core94, PPTX42, renderer27, editor25) |
 | opf-editor switch operations and preview refresh | Archived shaping work |
@@ -128,8 +128,9 @@ openpresentation-site only consume released packages; they change after a
 release that includes this work.
 
 **Release dependency.** A perfect, badge-accurate *live* pptx.gallery needs
-published packages, and publishing belongs to a release owner. Nothing is
-published in this program. The in-program proof is therefore the FF-38 parity
+published packages. The owner authorized agents to publish npm packages on
+2026-09-29 through the documented release task ([release-process.md](../../release-process.md)),
+separate from program work items, which do not publish. The in-program proof is therefore the FF-38 parity
 audit on merged heads, together with the FF-36 badge data derived from it.
 FF-15 delivers release-readiness notes for each checkpoint, listing what a
 release would ship and what the live gallery would then show.
@@ -145,8 +146,10 @@ release would ship and what the live gallery would then show.
   `Application.Quit`, close unrelated presentations, change Office security, or
   retry a native attempt in place; a new attempt uses a fresh directory.
 - Preserve failures as evidence. Font programs are never committed.
-- No package publication or deploy (packages, pptx.gallery, site) from this
-  program.
+- No package publication or deploy (packages, pptx.gallery, site) from program
+  work items. Publishing is a separate release task that the owner authorized on
+  2026-09-29 (see [release-process.md](../../release-process.md)); site and
+  gallery deploys still follow their own repositories' rules.
 - Native PowerPoint `p:hf` stays deferred; headers and footers are OPF
   furniture.
 - Keep source, packed and registry claims separate, and schema support separate
