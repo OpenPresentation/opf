@@ -28,12 +28,12 @@
     "renderManifest": {
       "file": "docs/programs/font-fidelity-everywhere/font-tracker.render-manifest.json",
       "repository": "OpenPresentation/opf-render",
-      "commit": "d528be52878788bf2ecbdc138b839443ec66dc4e",
+      "commit": "3026287a5619a820f1ebdbaff60c781e9cff0a75",
       "path": "src/font-manifest.js",
-      "capturedAt": "2026-09-29",
+      "capturedAt": "2026-09-30",
       "manifestVersion": 1,
-      "packages": 50,
-      "faces": 147
+      "packages": 58,
+      "faces": 182
     },
     "parity": {
       "file": "docs/programs/font-fidelity-everywhere/gallery-support/parity/parity-results-2026-09-29-intos-default.json",
@@ -95,7 +95,7 @@
     "Aptos family (the owner's review predates this). Intos, Intos Display, Intos Narrow and Intos Serif measured 0.000% mean and maximum width delta in all four styles against Aptos 2.01, with equal vertical metrics and original (Inter-derived; serif Gelasio-derived) outlines under OFL-1.1 with no Reserved Font Name. They are the metric routes in policy (opf#166), vendored in opf-render (#54, `d528be5`, pinned commit `fef9315c`) and loaded lazily by browser hosts (opf-editor#42). Independently re-verified for Aptos, Aptos Display and Aptos Narrow; Aptos Serif was measured from Microsoft's Aptos Fonts download. The parity run on the merged mains passes all 704 Aptos and Aptos Display values, so they no longer lead the priority queue. Node and browser verification is recorded for the family; the editor playground test covers the Aptos scheme (Aptos and Aptos Display); the gallery editor waits for a release. The owner's \"no verified compatible replacement\" is superseded.",
     "The committed parity run (opf#175, on the merged mains opf `338ddcd4` and opf-render `d528be5`) is 660 perfect, 33 near and 157 mismatch over 850 values, with fontResolution 733 pass, 31 near and 86 fail. Earlier runs (5 perfect, then 25) are history.",
     "Georgia now has a metric tier: Gelasio with liga and clig disabled (opf#163, opf-render#49, including the raster ZWNJ fix). The parity run on the merged mains reports it as a metric substitute for all 6 values.",
-    "Open families are now vendored from unmodified upstream or npm packages (opf-render#50): Open Sans, Montserrat (including 900), Poppins, Bebas Neue, PT Serif, Lora, Merriweather Sans, Source Sans 3 (with the Source Sans Pro alias), Red Hat Display (300, 400, 700) and Red Hat Text (400, 700). Raleway and Playfair Display are not bundled because resvg ignores the wght axis. The owner's \"bundle\" rows for the bundled families become verification work; the remaining bundling work is Anton, Archivo Narrow, Barlow, Bitter, EB Garamond, Figtree, Libre Caslon Text, Work Sans, Liberation Mono, Sans and Serif, Playfair Display and Raleway.",
+    "Open families are now vendored from unmodified upstream or npm packages (opf-render#50): Open Sans, Montserrat (including 900), Poppins, Bebas Neue, PT Serif, Lora, Merriweather Sans, Source Sans 3 (with the Source Sans Pro alias), Red Hat Display (300, 400, 700) and Red Hat Text (400, 700). Raleway and Playfair Display are not bundled because resvg ignores the wght axis. The owner's \"bundle\" rows for the bundled families become verification work; FF-43 then bundled Anton, Archivo Narrow, Barlow, Bitter, EB Garamond, Figtree, Libre Caslon Text and Work Sans and completed Red Hat (see the FF-43 note below). The remaining bundling work is Liberation Mono, Sans and Serif, Playfair Display and Raleway.",
     "Carlito is vendored as unmodified google/fonts files (opf-render#58) because its Reserved Font Name applies. Licenses, Reserved Font Names and no-hotlink rules are guarded in core and the renderer (opf#165, opf-render#53).",
     "Script fonts: previews load script faces when the `scripts` option is passed (opf-render#55, opf-editor#40) and fall back per character to Noto Sans (opf-render#57). The parity run records 88 family uses as `missing` because it models a host without the script pack; loading is not verification per family.",
     "Hosts are recorded separately. The default Node registry (`prepareNodeFonts`) uses the `base` pack (Roboto and Roboto Mono only); the office-pack faces (Carlito, Arimo, Tinos, Cousine, Gelasio, Caladea, Intos) and the open pack load only when `pack: 'office'` is requested, and script faces only when the `scripts` option is passed. Browser hosts and the opf-editor playground load the 33 eager base and office faces and now load the vendored open pack and Intos lazily, on demand (opf-render#54, opf-editor#42). The gallery editor (a vendored opf-editor bundle) gets them only with a release that includes opf-editor#42, so it is recorded as pending, not as a gap in the family's status.",
@@ -103,7 +103,8 @@
     "fontResolution treats a policy look-alike as near, not fail, when the PPTX names the selected family (opf#159). Parity harness fixes merged in opf#164 and opf#168. The value set is 850 after pptx-gallery#40 removed 50 unsupported chart types; Aptos and Aptos Display each appear in 704 of them.",
     "Selawik 1.01 was measured and rejected as a Segoe UI replacement (opf#166: regular 0.16% mean and 2.51% max on the standard 300-string corpus, 0.73% and 9.7% on the reviewer's broader corpus); Red Hat Display stays the visual route. Segoe UI Light, Semilight and Semibold were measured separately.",
     "Cover slide centering (opf-pptx#97) is geometry work with no font impact.",
-    "The seven shipped script-font dependencies missing from the registry (Noto Sans Arabic, Sinhala, Lao, Myanmar, Thaana, Syriac and Noto Serif Tibetan) are tracked as policy-gap records. Adding their policy rows is follow-up work: this change does not edit font-policy.json."
+    "The seven shipped script-font dependencies missing from the registry (Noto Sans Arabic, Sinhala, Lao, Myanmar, Thaana, Syriac and Noto Serif Tibetan) are tracked as policy-gap records. Adding their policy rows is follow-up work: this change does not edit font-policy.json.",
+    "FF-43 (open replacement faces, opf-render branch claude/ff-43-bundle-open-candidates with this companion change): Barlow and Anton (google/fonts statics, byte-identical at commit 23e54b51ddff), Figtree, Work Sans, EB Garamond, Archivo Narrow, Libre Caslon Text and Bitter (npm-derived @expo-google-fonts statics, exact versions; no Reserved Font Name except Bitter, whose reserved name \"Bitter Pro\" is in no face name) are bundled with only the styles the policy needs, lazy in browser hosts; the eager list stays 33 faces. Red Hat Display now ships 300, 400, 600 and 700 with italics and Red Hat Text 400 and 700 with italics: the RedHatFont repository statics were unusable (italics lack the OS/2 italic bit, SemiBold and Bold declare 707 and 799, so a 600 request paints as Bold and every italic as one face in resvg, probed), and Red Hat has no Reserved Font Name, so the correctly labelled @expo-google-fonts instances replace them. Libre Caslon Text has no bold italic upstream (explicit gap). The 19 rows whose route face was measured are re-measured (Rockwell on Bitter: 1.1% to 4.4% mean, up to 8.5% max) on 2026-09-29 against the installed Windows originals; the widths are unchanged (except Corbel and Gill Sans MT, which now follow the vendored Source Sans 3) and every row stays visual: none meets the metric bar. Grandview, Grandview Display, Tenorite and Tenorite Display are not installed on the measuring host and stay unmeasured."
   ],
   "statusDefinitions": {
     "loading-gap": {
@@ -150,42 +151,42 @@
       "special": 5
     },
     "byStatus": {
-      "loading-gap": 31,
-      "style-gap": 7,
+      "loading-gap": 7,
+      "style-gap": 1,
       "policy-gap": 7,
       "needs-special-path": 5,
-      "visual-gap": 20,
+      "visual-gap": 40,
       "script-gap": 41,
-      "baseline-needed": 44,
+      "baseline-needed": 54,
       "metric-measured": 9
     },
     "byPhase": {
-      "1": 56,
-      "2": 38,
+      "1": 66,
+      "2": 8,
       "3": 5,
-      "4": 65,
+      "4": 85,
       "5": 0
     },
     "hostVerification": {
       "node": {
-        "verified": 10,
-        "unverified": 118,
-        "NA": 36
+        "verified": 20,
+        "unverified": 132,
+        "NA": 12
       },
       "browser": {
-        "verified": 10,
-        "unverified": 118,
-        "NA": 36
+        "verified": 20,
+        "unverified": 132,
+        "NA": 12
       },
       "editor": {
         "verified": 4,
-        "unverified": 124,
-        "NA": 36
+        "unverified": 148,
+        "NA": 12
       },
       "galleryEditor": {
         "verified": 0,
-        "unverified": 128,
-        "NA": 36
+        "unverified": 152,
+        "NA": 12
       },
       "galleryCards": {
         "verified": 0,
@@ -200,8 +201,8 @@
       "NA": 0
     },
     "bundled": {
-      "yes": 128,
-      "no": 36
+      "yes": 152,
+      "no": 12
     },
     "parityRerunNeeded": 60
   },
@@ -392,7 +393,7 @@
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 1,
-        "rank": 16
+        "rank": 10
       }
     },
     {
@@ -415,13 +416,31 @@
         "pendingBundle": null
       },
       "bundled": {
-        "yes": false,
+        "yes": true,
         "applies": "self",
         "family": "Anton",
-        "packages": [],
-        "faces": [],
-        "stylesAvailable": [],
-        "pack": null
+        "pack": "open",
+        "packages": [
+          {
+            "name": "anton",
+            "version": "23e54b51ddffbc7713c583748e3bd86f62b1fa4a",
+            "pack": "open",
+            "source": "https://github.com/google/fonts/tree/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/anton",
+            "vendored": "fonts/anton",
+            "license": "OFL-1.1",
+            "reservedFontNames": []
+          }
+        ],
+        "faces": [
+          {
+            "style": "400",
+            "file": "Anton-Regular.ttf",
+            "sha256": "a4ba3a92350ebb031da0cb47630ac49eb265082ca1bc0450442f4a83ab947cab"
+          }
+        ],
+        "stylesAvailable": [
+          "400"
+        ]
       },
       "stylesRequired": [
         "400"
@@ -432,9 +451,7 @@
           "Impact"
         ]
       },
-      "stylesMissing": [
-        "400"
-      ],
+      "stylesMissing": [],
       "stylesExplicitGaps": [],
       "approximateStyles": [],
       "stylesBasis": "declared: Upstream ships a single upright face; unavailable styles must stay explicit rather than be synthesized.",
@@ -444,17 +461,17 @@
       "measurements": null,
       "candidates": [],
       "hostVerification": {
-        "node": "NA",
-        "browser": "NA",
-        "editor": "NA",
-        "galleryEditor": "NA",
+        "node": "verified",
+        "browser": "verified",
+        "editor": "unverified",
+        "galleryEditor": "unverified",
         "galleryCards": "unverified"
       },
       "hostLoading": {
-        "node": "not bundled",
-        "browser": "not bundled",
-        "editor": "not bundled",
-        "galleryEditor": "not bundled",
+        "node": "only when pack: 'office' is requested (loadOfficeFontRegistry adds the open pack unless includeOpenFonts is false)",
+        "browser": "lazy: the browser loader fetches hash-verified vendored faces on demand (opf-render#54)",
+        "editor": "lazy: the playground loads them on demand (opf-editor#42)",
+        "galleryEditor": "pending a gallery editor release that includes opf-editor#42 (ref bump); not loaded today",
         "galleryCards": "self-hosted preview webfont: @fontsource/anton 5.3.0 (static, weights 800, upright only)"
       },
       "nativeVerification": {
@@ -481,26 +498,38 @@
         "resolvedAtRun": [],
         "pptxNamedValues": 0,
         "byDimension": {},
-        "expectedStatusOnMain": "missing",
+        "expectedStatusOnMain": "real",
         "rerunNeeded": false
       },
-      "phase": 2,
-      "status": "loading-gap",
-      "statusReason": "route face Anton is not bundled by opf-render",
-      "nextAction": "Add a permitted, pinned renderer bundle; verify exact-face behavior and its Impact role separately.",
+      "phase": 1,
+      "status": "baseline-needed",
+      "statusReason": "bundled with required styles; fresh per-host verification outstanding",
+      "nextAction": "Bundled (FF-43): 400, byte-identical google/fonts file. Verify exact-face behavior and its Impact role separately.",
       "evidence": [
         {
           "label": "Font replacement measurements (2026-09-23)",
           "url": "docs/evidence/font-replacements-20260923/README.md"
+        },
+        {
+          "label": "FF-43 bundled replacement measurements (widths, vertical metrics, outline identity, 2026-09-29)",
+          "url": "docs/evidence/font-replacements-20260923/bundled-replacements-ff43-20260929.json"
+        },
+        {
+          "label": "opf-render#60 (FF-43: open replacement faces bundled; open-fonts and lazy-fonts-browser tests)",
+          "url": "https://github.com/OpenPresentation/opf-render/pull/60"
+        },
+        {
+          "label": "opf#178 (FF-43: measurements, tracker, burndown)",
+          "url": "https://github.com/OpenPresentation/opf/pull/178"
         }
       ],
       "priority": {
-        "score": 3,
-        "severity": 3,
+        "score": 1,
+        "severity": 1,
         "valuesAffected": 0,
         "valuesOpen": 0,
-        "hostFactor": 1,
-        "rank": 72
+        "hostFactor": 0.6,
+        "rank": 124
       }
     },
     {
@@ -650,7 +679,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 46
+        "rank": 45
       }
     },
     {
@@ -1415,7 +1444,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 120
+        "rank": 108
       }
     },
     {
@@ -2136,7 +2165,7 @@
         "valuesAffected": 4,
         "valuesOpen": 4,
         "hostFactor": 1,
-        "rank": 6
+        "rank": 4
       }
     },
     {
@@ -2159,13 +2188,49 @@
         "pendingBundle": null
       },
       "bundled": {
-        "yes": false,
+        "yes": true,
         "applies": "self",
         "family": "Archivo Narrow",
-        "packages": [],
-        "faces": [],
-        "stylesAvailable": [],
-        "pack": null
+        "pack": "open",
+        "packages": [
+          {
+            "name": "@expo-google-fonts/archivo-narrow",
+            "version": "0.4.2",
+            "pack": "open",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/archivo-narrow/v/0.4.2",
+            "vendored": "fonts/archivo-narrow",
+            "license": "OFL-1.1",
+            "reservedFontNames": []
+          }
+        ],
+        "faces": [
+          {
+            "style": "400",
+            "file": "ArchivoNarrow_400Regular.ttf",
+            "sha256": "a6f42674111326d8a14897d87de4ce667090560941afc3e190709021982abf5a"
+          },
+          {
+            "style": "400i",
+            "file": "ArchivoNarrow_400Regular_Italic.ttf",
+            "sha256": "61653c68a59fc5f0a660f2cfec0bad7344a626b8177649370e94cb732eabbb37"
+          },
+          {
+            "style": "700",
+            "file": "ArchivoNarrow_700Bold.ttf",
+            "sha256": "bc2698008c4fa878f17b9ffb64c6fd2f0c83ca1f69cda591253221efb357a78d"
+          },
+          {
+            "style": "700i",
+            "file": "ArchivoNarrow_700Bold_Italic.ttf",
+            "sha256": "dd588c564e4dec669335f6fea01b1f229f7629c3e836178e3ad9db8d6e9d6228"
+          }
+        ],
+        "stylesAvailable": [
+          "400",
+          "400i",
+          "700",
+          "700i"
+        ]
       },
       "stylesRequired": [
         "400",
@@ -2188,12 +2253,7 @@
           "Arial Narrow"
         ]
       },
-      "stylesMissing": [
-        "400",
-        "400i",
-        "700",
-        "700i"
-      ],
+      "stylesMissing": [],
       "stylesExplicitGaps": [],
       "approximateStyles": [],
       "stylesBasis": "assumed: four styles for Latin faces, regular and bold for script faces",
@@ -2203,17 +2263,17 @@
       "measurements": null,
       "candidates": [],
       "hostVerification": {
-        "node": "NA",
-        "browser": "NA",
-        "editor": "NA",
-        "galleryEditor": "NA",
+        "node": "verified",
+        "browser": "verified",
+        "editor": "unverified",
+        "galleryEditor": "unverified",
         "galleryCards": "NA"
       },
       "hostLoading": {
-        "node": "not bundled",
-        "browser": "not bundled",
-        "editor": "not bundled",
-        "galleryEditor": "not bundled",
+        "node": "only when pack: 'office' is requested (loadOfficeFontRegistry adds the open pack unless includeOpenFonts is false)",
+        "browser": "lazy: the browser loader fetches hash-verified vendored faces on demand (opf-render#54)",
+        "editor": "lazy: the playground loads them on demand (opf-editor#42)",
+        "galleryEditor": "pending a gallery editor release that includes opf-editor#42 (ref bump); not loaded today",
         "galleryCards": "no self-hosted card preview"
       },
       "nativeVerification": {
@@ -2240,26 +2300,38 @@
         "resolvedAtRun": [],
         "pptxNamedValues": 0,
         "byDimension": {},
-        "expectedStatusOnMain": "missing",
+        "expectedStatusOnMain": "real",
         "rerunNeeded": false
       },
-      "phase": 2,
-      "status": "loading-gap",
-      "statusReason": "route face Archivo Narrow is not bundled by opf-render",
-      "nextAction": "Add a permitted, pinned renderer bundle with all required styles; verify its Arial Narrow role separately.",
+      "phase": 1,
+      "status": "baseline-needed",
+      "statusReason": "bundled with required styles; fresh per-host verification outstanding",
+      "nextAction": "Bundled (FF-43): 400, 700, italics, @expo-google-fonts@0.4.2 instances (no Reserved Font Name). Verify its Arial Narrow role separately.",
       "evidence": [
         {
           "label": "Font replacement measurements (2026-09-23)",
           "url": "docs/evidence/font-replacements-20260923/README.md"
+        },
+        {
+          "label": "FF-43 bundled replacement measurements (widths, vertical metrics, outline identity, 2026-09-29)",
+          "url": "docs/evidence/font-replacements-20260923/bundled-replacements-ff43-20260929.json"
+        },
+        {
+          "label": "opf-render#60 (FF-43: open replacement faces bundled; open-fonts and lazy-fonts-browser tests)",
+          "url": "https://github.com/OpenPresentation/opf-render/pull/60"
+        },
+        {
+          "label": "opf#178 (FF-43: measurements, tracker, burndown)",
+          "url": "https://github.com/OpenPresentation/opf/pull/178"
         }
       ],
       "priority": {
-        "score": 3,
-        "severity": 3,
+        "score": 1,
+        "severity": 1,
         "valuesAffected": 0,
         "valuesOpen": 0,
-        "hostFactor": 1,
-        "rank": 73
+        "hostFactor": 0.5,
+        "rank": 125
       }
     },
     {
@@ -2667,7 +2739,7 @@
         "valuesAffected": 3,
         "valuesOpen": 3,
         "hostFactor": 1,
-        "rank": 10
+        "rank": 6
       }
     },
     {
@@ -2694,13 +2766,49 @@
         "pendingBundle": null
       },
       "bundled": {
-        "yes": false,
+        "yes": true,
         "applies": "route-target",
         "family": "Archivo Narrow",
-        "packages": [],
-        "faces": [],
-        "stylesAvailable": [],
-        "pack": null
+        "pack": "open",
+        "packages": [
+          {
+            "name": "@expo-google-fonts/archivo-narrow",
+            "version": "0.4.2",
+            "pack": "open",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/archivo-narrow/v/0.4.2",
+            "vendored": "fonts/archivo-narrow",
+            "license": "OFL-1.1",
+            "reservedFontNames": []
+          }
+        ],
+        "faces": [
+          {
+            "style": "400",
+            "file": "ArchivoNarrow_400Regular.ttf",
+            "sha256": "a6f42674111326d8a14897d87de4ce667090560941afc3e190709021982abf5a"
+          },
+          {
+            "style": "400i",
+            "file": "ArchivoNarrow_400Regular_Italic.ttf",
+            "sha256": "61653c68a59fc5f0a660f2cfec0bad7344a626b8177649370e94cb732eabbb37"
+          },
+          {
+            "style": "700",
+            "file": "ArchivoNarrow_700Bold.ttf",
+            "sha256": "bc2698008c4fa878f17b9ffb64c6fd2f0c83ca1f69cda591253221efb357a78d"
+          },
+          {
+            "style": "700i",
+            "file": "ArchivoNarrow_700Bold_Italic.ttf",
+            "sha256": "dd588c564e4dec669335f6fea01b1f229f7629c3e836178e3ad9db8d6e9d6228"
+          }
+        ],
+        "stylesAvailable": [
+          "400",
+          "400i",
+          "700",
+          "700i"
+        ]
       },
       "stylesRequired": [
         "400",
@@ -2714,12 +2822,7 @@
         "700",
         "700i"
       ],
-      "stylesMissing": [
-        "400",
-        "400i",
-        "700",
-        "700i"
-      ],
+      "stylesMissing": [],
       "stylesExplicitGaps": [],
       "approximateStyles": [],
       "stylesBasis": "measured: styles the real font has on the measuring host",
@@ -2773,9 +2876,9 @@
           "script": "Latin",
           "scriptSpecific": false
         },
-        "date": "2026-09-23",
-        "source": "docs/evidence/font-replacements-20260923/README.md",
-        "sourceNote": null,
+        "date": "2026-09-29",
+        "source": "docs/evidence/font-replacements-20260923/report.json",
+        "sourceNote": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json.",
         "verticalMetricsMatch": null,
         "verticalMetricsNote": null,
         "lineBreaksMatch": null,
@@ -2783,17 +2886,17 @@
       },
       "candidates": [],
       "hostVerification": {
-        "node": "NA",
-        "browser": "NA",
-        "editor": "NA",
-        "galleryEditor": "NA",
+        "node": "unverified",
+        "browser": "unverified",
+        "editor": "unverified",
+        "galleryEditor": "unverified",
         "galleryCards": "NA"
       },
       "hostLoading": {
-        "node": "not bundled",
-        "browser": "not bundled",
-        "editor": "not bundled",
-        "galleryEditor": "not bundled",
+        "node": "only when pack: 'office' is requested (loadOfficeFontRegistry adds the open pack unless includeOpenFonts is false)",
+        "browser": "lazy: the browser loader fetches hash-verified vendored faces on demand (opf-render#54)",
+        "editor": "lazy: the playground loads them on demand (opf-editor#42)",
+        "galleryEditor": "pending a gallery editor release that includes opf-editor#42 (ref bump); not loaded today",
         "galleryCards": "no self-hosted card preview"
       },
       "nativeVerification": {
@@ -2823,23 +2926,27 @@
         "expectedStatusOnMain": "visual-substitute",
         "rerunNeeded": false
       },
-      "phase": 2,
-      "status": "loading-gap",
-      "statusReason": "route face Archivo Narrow is not bundled by opf-render",
-      "nextAction": "Bundle Archivo Narrow and improve condensed metrics; mean 0.38% and max 4.3% do not qualify it as metric.",
+      "phase": 4,
+      "status": "visual-gap",
+      "statusReason": "visual route; metric or appearance qualification outstanding",
+      "nextAction": "Archivo Narrow is bundled (FF-43: 400, 700, italics). Measured against Arial Narrow 2.40: regular and italic 0.73% mean and 4.3% max, bold and bold italic 0.02% and 0.6%; outlines differ and vertical metrics differ, so it is not metric.",
       "evidence": [
         {
           "label": "Font replacement measurements (2026-09-23)",
           "url": "docs/evidence/font-replacements-20260923/README.md"
+        },
+        {
+          "label": "FF-43 bundled replacement measurements (widths, vertical metrics, outline identity, 2026-09-29)",
+          "url": "docs/evidence/font-replacements-20260923/bundled-replacements-ff43-20260929.json"
         }
       ],
       "priority": {
-        "score": 3,
-        "severity": 3,
+        "score": 2,
+        "severity": 2,
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 74
+        "rank": 109
       }
     },
     {
@@ -2994,7 +3101,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 134
+        "rank": 126
       }
     },
     {
@@ -3017,13 +3124,49 @@
         "pendingBundle": null
       },
       "bundled": {
-        "yes": false,
+        "yes": true,
         "applies": "self",
         "family": "Barlow",
-        "packages": [],
-        "faces": [],
-        "stylesAvailable": [],
-        "pack": null
+        "pack": "open",
+        "packages": [
+          {
+            "name": "barlow",
+            "version": "23e54b51ddffbc7713c583748e3bd86f62b1fa4a",
+            "pack": "open",
+            "source": "https://github.com/google/fonts/tree/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/barlow",
+            "vendored": "fonts/barlow",
+            "license": "OFL-1.1",
+            "reservedFontNames": []
+          }
+        ],
+        "faces": [
+          {
+            "style": "400",
+            "file": "Barlow-Regular.ttf",
+            "sha256": "95aa02c7c43096e0dd44d787ba6216864a67157e402adab59b35572e0c1577ea"
+          },
+          {
+            "style": "400i",
+            "file": "Barlow-Italic.ttf",
+            "sha256": "70cf45c354af39e55082fd506e748cc6a0a1812949875f99ded3f76bf691e4ca"
+          },
+          {
+            "style": "700",
+            "file": "Barlow-Bold.ttf",
+            "sha256": "84e6a4d61e7c3e21f3c50ea6a4f7e5303a3467864c038be6ea3759bab8d547f9"
+          },
+          {
+            "style": "700i",
+            "file": "Barlow-BoldItalic.ttf",
+            "sha256": "079dcee4a53544177f3b16354b27b40b521e22861a40084ab4d052f0289ed9e8"
+          }
+        ],
+        "stylesAvailable": [
+          "400",
+          "400i",
+          "700",
+          "700i"
+        ]
       },
       "stylesRequired": [
         "400",
@@ -3054,12 +3197,7 @@
           "Grandview Display"
         ]
       },
-      "stylesMissing": [
-        "400",
-        "400i",
-        "700",
-        "700i"
-      ],
+      "stylesMissing": [],
       "stylesExplicitGaps": [],
       "approximateStyles": [],
       "stylesBasis": "assumed: four styles for Latin faces, regular and bold for script faces",
@@ -3069,17 +3207,17 @@
       "measurements": null,
       "candidates": [],
       "hostVerification": {
-        "node": "NA",
-        "browser": "NA",
-        "editor": "NA",
-        "galleryEditor": "NA",
+        "node": "verified",
+        "browser": "verified",
+        "editor": "unverified",
+        "galleryEditor": "unverified",
         "galleryCards": "unverified"
       },
       "hostLoading": {
-        "node": "not bundled",
-        "browser": "not bundled",
-        "editor": "not bundled",
-        "galleryEditor": "not bundled",
+        "node": "only when pack: 'office' is requested (loadOfficeFontRegistry adds the open pack unless includeOpenFonts is false)",
+        "browser": "lazy: the browser loader fetches hash-verified vendored faces on demand (opf-render#54)",
+        "editor": "lazy: the playground loads them on demand (opf-editor#42)",
+        "galleryEditor": "pending a gallery editor release that includes opf-editor#42 (ref bump); not loaded today",
         "galleryCards": "self-hosted preview webfont: @fontsource/barlow 5.3.0 (static, weights 400 700, upright only)"
       },
       "nativeVerification": {
@@ -3106,26 +3244,38 @@
         "resolvedAtRun": [],
         "pptxNamedValues": 0,
         "byDimension": {},
-        "expectedStatusOnMain": "missing",
+        "expectedStatusOnMain": "real",
         "rerunNeeded": false
       },
-      "phase": 2,
-      "status": "loading-gap",
-      "statusReason": "route face Barlow is not bundled by opf-render",
-      "nextAction": "Add a permitted, pinned renderer bundle with all required styles; verify its Franklin Gothic and Grandview roles separately.",
+      "phase": 1,
+      "status": "baseline-needed",
+      "statusReason": "bundled with required styles; fresh per-host verification outstanding",
+      "nextAction": "Bundled (FF-43): 400, 700, italics as google/fonts statics, byte-identical at commit 23e54b51. Verify its Franklin Gothic and Grandview roles separately.",
       "evidence": [
         {
           "label": "Font replacement measurements (2026-09-23)",
           "url": "docs/evidence/font-replacements-20260923/README.md"
+        },
+        {
+          "label": "FF-43 bundled replacement measurements (widths, vertical metrics, outline identity, 2026-09-29)",
+          "url": "docs/evidence/font-replacements-20260923/bundled-replacements-ff43-20260929.json"
+        },
+        {
+          "label": "opf-render#60 (FF-43: open replacement faces bundled; open-fonts and lazy-fonts-browser tests)",
+          "url": "https://github.com/OpenPresentation/opf-render/pull/60"
+        },
+        {
+          "label": "opf#178 (FF-43: measurements, tracker, burndown)",
+          "url": "https://github.com/OpenPresentation/opf/pull/178"
         }
       ],
       "priority": {
-        "score": 3,
-        "severity": 3,
+        "score": 1,
+        "severity": 1,
         "valuesAffected": 0,
         "valuesOpen": 0,
-        "hostFactor": 1,
-        "rank": 75
+        "hostFactor": 0.6,
+        "rank": 127
       }
     },
     {
@@ -3152,13 +3302,43 @@
         "pendingBundle": null
       },
       "bundled": {
-        "yes": false,
+        "yes": true,
         "applies": "route-target",
         "family": "Libre Caslon Text",
-        "packages": [],
-        "faces": [],
-        "stylesAvailable": [],
-        "pack": null
+        "pack": "open",
+        "packages": [
+          {
+            "name": "@expo-google-fonts/libre-caslon-text",
+            "version": "0.4.0",
+            "pack": "open",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/libre-caslon-text/v/0.4.0",
+            "vendored": "fonts/libre-caslon-text",
+            "license": "OFL-1.1",
+            "reservedFontNames": []
+          }
+        ],
+        "faces": [
+          {
+            "style": "400",
+            "file": "LibreCaslonText_400Regular.ttf",
+            "sha256": "912cda295d683d283f65944563ef2204413ef85bf49748482a5e263c4d56afd4"
+          },
+          {
+            "style": "400i",
+            "file": "LibreCaslonText_400Regular_Italic.ttf",
+            "sha256": "a32b7d8314e5f7e6dd919d1df2334ecc7b92e54173c8cc421ef8e9e4bae97061"
+          },
+          {
+            "style": "700",
+            "file": "LibreCaslonText_700Bold.ttf",
+            "sha256": "ddff46045846dfc35f20db138117a2bf249bb75b9336c4ee823b162d22ac82e6"
+          }
+        ],
+        "stylesAvailable": [
+          "400",
+          "400i",
+          "700"
+        ]
       },
       "stylesRequired": [
         "400"
@@ -3166,9 +3346,7 @@
       "replacementStylesRequired": [
         "400"
       ],
-      "stylesMissing": [
-        "400"
-      ],
+      "stylesMissing": [],
       "stylesExplicitGaps": [],
       "approximateStyles": [],
       "stylesBasis": "measured: styles the real font has on the measuring host",
@@ -3198,9 +3376,9 @@
           "script": "Latin",
           "scriptSpecific": false
         },
-        "date": "2026-09-23",
-        "source": "docs/evidence/font-replacements-20260923/README.md",
-        "sourceNote": null,
+        "date": "2026-09-29",
+        "source": "docs/evidence/font-replacements-20260923/report.json",
+        "sourceNote": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json.",
         "verticalMetricsMatch": null,
         "verticalMetricsNote": null,
         "lineBreaksMatch": null,
@@ -3208,17 +3386,17 @@
       },
       "candidates": [],
       "hostVerification": {
-        "node": "NA",
-        "browser": "NA",
-        "editor": "NA",
-        "galleryEditor": "NA",
+        "node": "unverified",
+        "browser": "unverified",
+        "editor": "unverified",
+        "galleryEditor": "unverified",
         "galleryCards": "unverified"
       },
       "hostLoading": {
-        "node": "not bundled",
-        "browser": "not bundled",
-        "editor": "not bundled",
-        "galleryEditor": "not bundled",
+        "node": "only when pack: 'office' is requested (loadOfficeFontRegistry adds the open pack unless includeOpenFonts is false)",
+        "browser": "lazy: the browser loader fetches hash-verified vendored faces on demand (opf-render#54)",
+        "editor": "lazy: the playground loads them on demand (opf-editor#42)",
+        "galleryEditor": "pending a gallery editor release that includes opf-editor#42 (ref bump); not loaded today",
         "galleryCards": "self-hosted preview webfont: @fontsource/libre-caslon-text 5.3.0 (static, weights 400 700, upright only)"
       },
       "nativeVerification": {
@@ -3248,23 +3426,27 @@
         "expectedStatusOnMain": "visual-substitute",
         "rerunNeeded": false
       },
-      "phase": 2,
-      "status": "loading-gap",
-      "statusReason": "route face Libre Caslon Text is not bundled by opf-render",
-      "nextAction": "Bundle Libre Caslon Text and reconsider compatibility: measured maximum drift is 23.7% and mean 19.2%, regular only.",
+      "phase": 4,
+      "status": "visual-gap",
+      "statusReason": "visual route; metric or appearance qualification outstanding",
+      "nextAction": "Libre Caslon Text is bundled (FF-43: 400, 400 italic, 700). Measured against Baskerville Old Face 1.51, regular only: 19.2% mean and 23.7% max. Reconsider the route: the widths are far from the original.",
       "evidence": [
         {
           "label": "Font replacement measurements (2026-09-23)",
           "url": "docs/evidence/font-replacements-20260923/README.md"
+        },
+        {
+          "label": "FF-43 bundled replacement measurements (widths, vertical metrics, outline identity, 2026-09-29)",
+          "url": "docs/evidence/font-replacements-20260923/bundled-replacements-ff43-20260929.json"
         }
       ],
       "priority": {
-        "score": 3.5,
-        "severity": 3.5,
+        "score": 2.5,
+        "severity": 2.5,
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 66
+        "rank": 77
       }
     },
     {
@@ -3420,7 +3602,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 47
+        "rank": 46
       }
     },
     {
@@ -3576,7 +3758,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 48
+        "rank": 47
       }
     },
     {
@@ -3706,7 +3888,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 135
+        "rank": 128
       }
     },
     {
@@ -3729,13 +3911,51 @@
         "pendingBundle": null
       },
       "bundled": {
-        "yes": false,
+        "yes": true,
         "applies": "self",
         "family": "Bitter",
-        "packages": [],
-        "faces": [],
-        "stylesAvailable": [],
-        "pack": null
+        "pack": "open",
+        "packages": [
+          {
+            "name": "@expo-google-fonts/bitter",
+            "version": "0.4.2",
+            "pack": "open",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/bitter/v/0.4.2",
+            "vendored": "fonts/bitter",
+            "license": "OFL-1.1",
+            "reservedFontNames": [
+              "Bitter Pro"
+            ]
+          }
+        ],
+        "faces": [
+          {
+            "style": "400",
+            "file": "Bitter_400Regular.ttf",
+            "sha256": "46a52a6b4e3202563bac5134c02e4d9db63685c439104a803a0b4fbf9e8ceaf4"
+          },
+          {
+            "style": "400i",
+            "file": "Bitter_400Regular_Italic.ttf",
+            "sha256": "4eda5cb005b1af2d5a733e0dcd727f65e2bddd0ea0466893f6d9259929ef20b2"
+          },
+          {
+            "style": "700",
+            "file": "Bitter_700Bold.ttf",
+            "sha256": "391582a3004c7600b7234123c3c810b8c2c5ed3c90af7f087fe55f003cc075bf"
+          },
+          {
+            "style": "700i",
+            "file": "Bitter_700Bold_Italic.ttf",
+            "sha256": "65fad0650e416aebb4a7f6893633907f0e10ea153974b0c69f9074b611c259c4"
+          }
+        ],
+        "stylesAvailable": [
+          "400",
+          "400i",
+          "700",
+          "700i"
+        ]
       },
       "stylesRequired": [
         "400",
@@ -3758,12 +3978,7 @@
           "Rockwell"
         ]
       },
-      "stylesMissing": [
-        "400",
-        "400i",
-        "700",
-        "700i"
-      ],
+      "stylesMissing": [],
       "stylesExplicitGaps": [],
       "approximateStyles": [],
       "stylesBasis": "assumed: four styles for Latin faces, regular and bold for script faces",
@@ -3773,17 +3988,17 @@
       "measurements": null,
       "candidates": [],
       "hostVerification": {
-        "node": "NA",
-        "browser": "NA",
-        "editor": "NA",
-        "galleryEditor": "NA",
+        "node": "verified",
+        "browser": "verified",
+        "editor": "unverified",
+        "galleryEditor": "unverified",
         "galleryCards": "unverified"
       },
       "hostLoading": {
-        "node": "not bundled",
-        "browser": "not bundled",
-        "editor": "not bundled",
-        "galleryEditor": "not bundled",
+        "node": "only when pack: 'office' is requested (loadOfficeFontRegistry adds the open pack unless includeOpenFonts is false)",
+        "browser": "lazy: the browser loader fetches hash-verified vendored faces on demand (opf-render#54)",
+        "editor": "lazy: the playground loads them on demand (opf-editor#42)",
+        "galleryEditor": "pending a gallery editor release that includes opf-editor#42 (ref bump); not loaded today",
         "galleryCards": "self-hosted preview webfont: @fontsource-variable/bitter 5.3.0 (variable, weights 400 700, upright only)"
       },
       "nativeVerification": {
@@ -3810,26 +4025,38 @@
         "resolvedAtRun": [],
         "pptxNamedValues": 0,
         "byDimension": {},
-        "expectedStatusOnMain": "missing",
+        "expectedStatusOnMain": "real",
         "rerunNeeded": false
       },
-      "phase": 2,
-      "status": "loading-gap",
-      "statusReason": "route face Bitter is not bundled by opf-render",
-      "nextAction": "Add a permitted, pinned renderer bundle with all required styles; verify its Rockwell role separately.",
+      "phase": 1,
+      "status": "baseline-needed",
+      "statusReason": "bundled with required styles; fresh per-host verification outstanding",
+      "nextAction": "Bundled (FF-43): 400, 700, italics, @expo-google-fonts@0.4.2 instances named \"Bitter\". The OFL reserves \"Bitter Pro\", which no face carries in its family or file name, so instanced statics are allowed. Verify its Rockwell role separately.",
       "evidence": [
         {
           "label": "Font replacement measurements (2026-09-23)",
           "url": "docs/evidence/font-replacements-20260923/README.md"
+        },
+        {
+          "label": "FF-43 bundled replacement measurements (widths, vertical metrics, outline identity, 2026-09-29)",
+          "url": "docs/evidence/font-replacements-20260923/bundled-replacements-ff43-20260929.json"
+        },
+        {
+          "label": "opf-render#60 (FF-43: open replacement faces bundled; open-fonts and lazy-fonts-browser tests)",
+          "url": "https://github.com/OpenPresentation/opf-render/pull/60"
+        },
+        {
+          "label": "opf#178 (FF-43: measurements, tracker, burndown)",
+          "url": "https://github.com/OpenPresentation/opf/pull/178"
         }
       ],
       "priority": {
-        "score": 3,
-        "severity": 3,
+        "score": 1,
+        "severity": 1,
         "valuesAffected": 0,
         "valuesOpen": 0,
-        "hostFactor": 1,
-        "rank": 76
+        "hostFactor": 0.6,
+        "rank": 129
       }
     },
     {
@@ -4001,7 +4228,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 67
+        "rank": 66
       }
     },
     {
@@ -4212,7 +4439,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 91
+        "rank": 78
       }
     },
     {
@@ -4239,13 +4466,43 @@
         "pendingBundle": null
       },
       "bundled": {
-        "yes": false,
+        "yes": true,
         "applies": "route-target",
         "family": "Libre Caslon Text",
-        "packages": [],
-        "faces": [],
-        "stylesAvailable": [],
-        "pack": null
+        "pack": "open",
+        "packages": [
+          {
+            "name": "@expo-google-fonts/libre-caslon-text",
+            "version": "0.4.0",
+            "pack": "open",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/libre-caslon-text/v/0.4.0",
+            "vendored": "fonts/libre-caslon-text",
+            "license": "OFL-1.1",
+            "reservedFontNames": []
+          }
+        ],
+        "faces": [
+          {
+            "style": "400",
+            "file": "LibreCaslonText_400Regular.ttf",
+            "sha256": "912cda295d683d283f65944563ef2204413ef85bf49748482a5e263c4d56afd4"
+          },
+          {
+            "style": "400i",
+            "file": "LibreCaslonText_400Regular_Italic.ttf",
+            "sha256": "a32b7d8314e5f7e6dd919d1df2334ecc7b92e54173c8cc421ef8e9e4bae97061"
+          },
+          {
+            "style": "700",
+            "file": "LibreCaslonText_700Bold.ttf",
+            "sha256": "ddff46045846dfc35f20db138117a2bf249bb75b9336c4ee823b162d22ac82e6"
+          }
+        ],
+        "stylesAvailable": [
+          "400",
+          "400i",
+          "700"
+        ]
       },
       "stylesRequired": [
         "300",
@@ -4258,11 +4515,7 @@
         "400i",
         "700"
       ],
-      "stylesMissing": [
-        "400",
-        "400i",
-        "700"
-      ],
+      "stylesMissing": [],
       "stylesExplicitGaps": [],
       "approximateStyles": [
         "300",
@@ -4321,9 +4574,9 @@
           "script": "Latin",
           "scriptSpecific": false
         },
-        "date": "2026-09-23",
-        "source": "docs/evidence/font-replacements-20260923/README.md",
-        "sourceNote": null,
+        "date": "2026-09-29",
+        "source": "docs/evidence/font-replacements-20260923/report.json",
+        "sourceNote": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json.",
         "verticalMetricsMatch": null,
         "verticalMetricsNote": null,
         "lineBreaksMatch": null,
@@ -4331,17 +4584,17 @@
       },
       "candidates": [],
       "hostVerification": {
-        "node": "NA",
-        "browser": "NA",
-        "editor": "NA",
-        "galleryEditor": "NA",
+        "node": "unverified",
+        "browser": "unverified",
+        "editor": "unverified",
+        "galleryEditor": "unverified",
         "galleryCards": "unverified"
       },
       "hostLoading": {
-        "node": "not bundled",
-        "browser": "not bundled",
-        "editor": "not bundled",
-        "galleryEditor": "not bundled",
+        "node": "only when pack: 'office' is requested (loadOfficeFontRegistry adds the open pack unless includeOpenFonts is false)",
+        "browser": "lazy: the browser loader fetches hash-verified vendored faces on demand (opf-render#54)",
+        "editor": "lazy: the playground loads them on demand (opf-editor#42)",
+        "galleryEditor": "pending a gallery editor release that includes opf-editor#42 (ref bump); not loaded today",
         "galleryCards": "self-hosted preview webfont: @fontsource/libre-caslon-text 5.3.0 (static, weights 400 700, upright only)"
       },
       "nativeVerification": {
@@ -4377,14 +4630,18 @@
         "expectedStatusOnMain": "visual-substitute",
         "rerunNeeded": false
       },
-      "phase": 2,
-      "status": "loading-gap",
-      "statusReason": "route face Libre Caslon Text is not bundled by opf-render",
-      "nextAction": "Bundle permitted Libre Caslon Text files; improve the substantial width differences (max 14.0%).",
+      "phase": 4,
+      "status": "visual-gap",
+      "statusReason": "visual route; metric or appearance qualification outstanding",
+      "nextAction": "Libre Caslon Text is bundled (FF-43: 400, 400 italic, 700; no bold italic upstream). Measured against Bookman Old Style 2.35 (host styles 300 and 600): 3.1% mean and 6.2% max regular, 1.1% and 4.0% bold; the bold italic draws the real italic (weight 400, reported visual): 11.0% and 14.0%. Improve the substantial width differences.",
       "evidence": [
         {
           "label": "Font replacement measurements (2026-09-23)",
           "url": "docs/evidence/font-replacements-20260923/README.md"
+        },
+        {
+          "label": "FF-43 bundled replacement measurements (widths, vertical metrics, outline identity, 2026-09-29)",
+          "url": "docs/evidence/font-replacements-20260923/bundled-replacements-ff43-20260929.json"
         },
         {
           "label": "Parity run 2026-09-29 (table drawn extent)",
@@ -4392,12 +4649,12 @@
         }
       ],
       "priority": {
-        "score": 7,
-        "severity": 3.5,
+        "score": 5,
+        "severity": 2.5,
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 12
+        "rank": 33
       }
     },
     {
@@ -4551,7 +4808,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 136
+        "rank": 130
       }
     },
     {
@@ -4954,7 +5211,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 121
+        "rank": 110
       }
     },
     {
@@ -5157,7 +5414,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 92
+        "rank": 79
       }
     },
     {
@@ -5256,7 +5513,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 77
+        "rank": 68
       }
     },
     {
@@ -5465,7 +5722,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 93
+        "rank": 80
       }
     },
     {
@@ -5631,7 +5888,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 137
+        "rank": 131
       }
     },
     {
@@ -5658,13 +5915,49 @@
         "pendingBundle": null
       },
       "bundled": {
-        "yes": false,
+        "yes": true,
         "applies": "route-target",
         "family": "Work Sans",
-        "packages": [],
-        "faces": [],
-        "stylesAvailable": [],
-        "pack": null
+        "pack": "open",
+        "packages": [
+          {
+            "name": "@expo-google-fonts/work-sans",
+            "version": "0.4.2",
+            "pack": "open",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/work-sans/v/0.4.2",
+            "vendored": "fonts/work-sans",
+            "license": "OFL-1.1",
+            "reservedFontNames": []
+          }
+        ],
+        "faces": [
+          {
+            "style": "400",
+            "file": "WorkSans_400Regular.ttf",
+            "sha256": "e67985a843df0d3cdee51a3d0f329eb1774a344ad9ff0c9ab923751f1577e2a4"
+          },
+          {
+            "style": "400i",
+            "file": "WorkSans_400Regular_Italic.ttf",
+            "sha256": "6b7f7002e0b0c8b261fe878658ef5551e3e59d9f6b609b04efb90dde1e2c1ada"
+          },
+          {
+            "style": "700",
+            "file": "WorkSans_700Bold.ttf",
+            "sha256": "240d125fc9f8561363dc1ea3f513501253bd70942f41468f48f0b0cafb0c82e2"
+          },
+          {
+            "style": "700i",
+            "file": "WorkSans_700Bold_Italic.ttf",
+            "sha256": "a5b2cad813df0aaa7d16621f2e93b5117c25e9bc788bc9a3ad218e9d6348ce34"
+          }
+        ],
+        "stylesAvailable": [
+          "400",
+          "400i",
+          "700",
+          "700i"
+        ]
       },
       "stylesRequired": [
         "400",
@@ -5678,12 +5971,7 @@
         "700",
         "700i"
       ],
-      "stylesMissing": [
-        "400",
-        "400i",
-        "700",
-        "700i"
-      ],
+      "stylesMissing": [],
       "stylesExplicitGaps": [],
       "approximateStyles": [],
       "stylesBasis": "measured: styles the real font has on the measuring host",
@@ -5737,9 +6025,9 @@
           "script": "Latin",
           "scriptSpecific": false
         },
-        "date": "2026-09-23",
-        "source": "docs/evidence/font-replacements-20260923/README.md",
-        "sourceNote": null,
+        "date": "2026-09-29",
+        "source": "docs/evidence/font-replacements-20260923/report.json",
+        "sourceNote": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json.",
         "verticalMetricsMatch": null,
         "verticalMetricsNote": null,
         "lineBreaksMatch": null,
@@ -5747,17 +6035,17 @@
       },
       "candidates": [],
       "hostVerification": {
-        "node": "NA",
-        "browser": "NA",
-        "editor": "NA",
-        "galleryEditor": "NA",
+        "node": "unverified",
+        "browser": "unverified",
+        "editor": "unverified",
+        "galleryEditor": "unverified",
         "galleryCards": "unverified"
       },
       "hostLoading": {
-        "node": "not bundled",
-        "browser": "not bundled",
-        "editor": "not bundled",
-        "galleryEditor": "not bundled",
+        "node": "only when pack: 'office' is requested (loadOfficeFontRegistry adds the open pack unless includeOpenFonts is false)",
+        "browser": "lazy: the browser loader fetches hash-verified vendored faces on demand (opf-render#54)",
+        "editor": "lazy: the playground loads them on demand (opf-editor#42)",
+        "galleryEditor": "pending a gallery editor release that includes opf-editor#42 (ref bump); not loaded today",
         "galleryCards": "self-hosted preview webfont: @fontsource/work-sans 5.3.0 (static, weights 400 700, upright only)"
       },
       "nativeVerification": {
@@ -5787,23 +6075,27 @@
         "expectedStatusOnMain": "visual-substitute",
         "rerunNeeded": false
       },
-      "phase": 2,
-      "status": "loading-gap",
-      "statusReason": "route face Work Sans is not bundled by opf-render",
-      "nextAction": "Bundle Work Sans; qualify geometric appearance, widths and ink bounds (max 15.5%).",
+      "phase": 4,
+      "status": "visual-gap",
+      "statusReason": "visual route; metric or appearance qualification outstanding",
+      "nextAction": "Work Sans is bundled (FF-43: 400, 700, italics). Measured against Century Gothic 2.35: regular 2.2% mean and 13.6% max, bold 3.2% and 15.5%, italic 1.6% and 10.9%, bold italic 3.2% and 14.6%. Qualify geometric appearance, widths and ink bounds.",
       "evidence": [
         {
           "label": "Font replacement measurements (2026-09-23)",
           "url": "docs/evidence/font-replacements-20260923/README.md"
+        },
+        {
+          "label": "FF-43 bundled replacement measurements (widths, vertical metrics, outline identity, 2026-09-29)",
+          "url": "docs/evidence/font-replacements-20260923/bundled-replacements-ff43-20260929.json"
         }
       ],
       "priority": {
-        "score": 3.5,
-        "severity": 3.5,
+        "score": 2.5,
+        "severity": 2.5,
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 68
+        "rank": 81
       }
     },
     {
@@ -6012,7 +6304,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 40
+        "rank": 34
       }
     },
     {
@@ -6225,7 +6517,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 41
+        "rank": 35
       }
     },
     {
@@ -6446,7 +6738,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 42
+        "rank": 36
       }
     },
     {
@@ -6541,8 +6833,8 @@
       "measurements": {
         "replacement": "Source Sans 3",
         "reference": "Corbel 6.01",
-        "meanAbsWidthDelta": 0.0157,
-        "meanWidthDelta": 0.0151,
+        "meanAbsWidthDelta": 0.0158,
+        "meanWidthDelta": 0.0152,
         "maxAbsWidthDelta": 0.0521,
         "stylesMeasured": 4,
         "perStyle": [
@@ -6550,7 +6842,7 @@
             "style": "400",
             "replacementStyle": "400",
             "strings": 300,
-            "meanAbsWidthDelta": 0.0079,
+            "meanAbsWidthDelta": 0.008,
             "meanWidthDelta": 0.0064,
             "maxAbsWidthDelta": 0.0276
           },
@@ -6558,17 +6850,17 @@
             "style": "700",
             "replacementStyle": "700",
             "strings": 300,
-            "meanAbsWidthDelta": 0.0195,
-            "meanWidthDelta": 0.0192,
+            "meanAbsWidthDelta": 0.0194,
+            "meanWidthDelta": 0.0191,
             "maxAbsWidthDelta": 0.0521
           },
           {
             "style": "400i",
             "replacementStyle": "400i",
             "strings": 300,
-            "meanAbsWidthDelta": 0.0196,
-            "meanWidthDelta": 0.0193,
-            "maxAbsWidthDelta": 0.0416
+            "meanAbsWidthDelta": 0.02,
+            "meanWidthDelta": 0.0197,
+            "maxAbsWidthDelta": 0.0419
           },
           {
             "style": "700i",
@@ -6585,9 +6877,9 @@
           "script": "Latin",
           "scriptSpecific": false
         },
-        "date": "2026-09-23",
-        "source": "docs/evidence/font-replacements-20260923/README.md",
-        "sourceNote": null,
+        "date": "2026-09-29",
+        "source": "docs/evidence/font-replacements-20260923/report.json",
+        "sourceNote": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json.",
         "verticalMetricsMatch": null,
         "verticalMetricsNote": null,
         "lineBreaksMatch": null,
@@ -6647,6 +6939,10 @@
         {
           "label": "Font replacement measurements (2026-09-23)",
           "url": "docs/evidence/font-replacements-20260923/README.md"
+        },
+        {
+          "label": "FF-43 bundled replacement measurements (widths, vertical metrics, outline identity, 2026-09-29)",
+          "url": "docs/evidence/font-replacements-20260923/bundled-replacements-ff43-20260929.json"
         }
       ],
       "priority": {
@@ -6655,7 +6951,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 94
+        "rank": 82
       }
     },
     {
@@ -7031,7 +7327,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 138
+        "rank": 132
       }
     },
     {
@@ -7182,7 +7478,7 @@
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 1,
-        "rank": 17
+        "rank": 11
       }
     },
     {
@@ -7337,7 +7633,7 @@
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 1,
-        "rank": 18
+        "rank": 12
       }
     },
     {
@@ -7455,7 +7751,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 78
+        "rank": 69
       }
     },
     {
@@ -7643,7 +7939,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 49
+        "rank": 48
       }
     },
     {
@@ -7666,13 +7962,49 @@
         "pendingBundle": null
       },
       "bundled": {
-        "yes": false,
+        "yes": true,
         "applies": "self",
         "family": "EB Garamond",
-        "packages": [],
-        "faces": [],
-        "stylesAvailable": [],
-        "pack": null
+        "pack": "open",
+        "packages": [
+          {
+            "name": "@expo-google-fonts/eb-garamond",
+            "version": "0.4.3",
+            "pack": "open",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/eb-garamond/v/0.4.3",
+            "vendored": "fonts/eb-garamond",
+            "license": "OFL-1.1",
+            "reservedFontNames": []
+          }
+        ],
+        "faces": [
+          {
+            "style": "400",
+            "file": "EBGaramond_400Regular.ttf",
+            "sha256": "d5baed6e48bf4c99a770e6edc86ddaf67942bb1850491ed54f94d5c2c213531e"
+          },
+          {
+            "style": "400i",
+            "file": "EBGaramond_400Regular_Italic.ttf",
+            "sha256": "228da33df456ec4e0a149f33cfc2264d5bd500bdfcf55ee36710ca8df923cbd6"
+          },
+          {
+            "style": "700",
+            "file": "EBGaramond_700Bold.ttf",
+            "sha256": "8bb7f13020d522de1c441da0a76f05843b74d788c1b16a933af3be4880782d17"
+          },
+          {
+            "style": "700i",
+            "file": "EBGaramond_700Bold_Italic.ttf",
+            "sha256": "0030bda44f15b85f5adee17dc25cb5948c547ecf7f6d06e10723b406cd15a472"
+          }
+        ],
+        "stylesAvailable": [
+          "400",
+          "400i",
+          "700",
+          "700i"
+        ]
       },
       "stylesRequired": [
         "400",
@@ -7692,12 +8024,7 @@
           "Garamond"
         ]
       },
-      "stylesMissing": [
-        "400",
-        "400i",
-        "700",
-        "700i"
-      ],
+      "stylesMissing": [],
       "stylesExplicitGaps": [],
       "approximateStyles": [],
       "stylesBasis": "assumed: four styles for Latin faces, regular and bold for script faces",
@@ -7707,17 +8034,17 @@
       "measurements": null,
       "candidates": [],
       "hostVerification": {
-        "node": "NA",
-        "browser": "NA",
-        "editor": "NA",
-        "galleryEditor": "NA",
+        "node": "verified",
+        "browser": "verified",
+        "editor": "unverified",
+        "galleryEditor": "unverified",
         "galleryCards": "unverified"
       },
       "hostLoading": {
-        "node": "not bundled",
-        "browser": "not bundled",
-        "editor": "not bundled",
-        "galleryEditor": "not bundled",
+        "node": "only when pack: 'office' is requested (loadOfficeFontRegistry adds the open pack unless includeOpenFonts is false)",
+        "browser": "lazy: the browser loader fetches hash-verified vendored faces on demand (opf-render#54)",
+        "editor": "lazy: the playground loads them on demand (opf-editor#42)",
+        "galleryEditor": "pending a gallery editor release that includes opf-editor#42 (ref bump); not loaded today",
         "galleryCards": "self-hosted preview webfont: @fontsource-variable/eb-garamond 5.3.0 (variable, weights 400 700, upright only)"
       },
       "nativeVerification": {
@@ -7744,26 +8071,38 @@
         "resolvedAtRun": [],
         "pptxNamedValues": 0,
         "byDimension": {},
-        "expectedStatusOnMain": "missing",
+        "expectedStatusOnMain": "real",
         "rerunNeeded": false
       },
-      "phase": 2,
-      "status": "loading-gap",
-      "statusReason": "route face EB Garamond is not bundled by opf-render",
-      "nextAction": "Add a permitted, pinned renderer bundle with all required styles; verify its Garamond role separately.",
+      "phase": 1,
+      "status": "baseline-needed",
+      "statusReason": "bundled with required styles; fresh per-host verification outstanding",
+      "nextAction": "Bundled (FF-43): 400, 700, italics, @expo-google-fonts@0.4.3 instances (no Reserved Font Name). Verify its Garamond role separately.",
       "evidence": [
         {
           "label": "Font replacement measurements (2026-09-23)",
           "url": "docs/evidence/font-replacements-20260923/README.md"
+        },
+        {
+          "label": "FF-43 bundled replacement measurements (widths, vertical metrics, outline identity, 2026-09-29)",
+          "url": "docs/evidence/font-replacements-20260923/bundled-replacements-ff43-20260929.json"
+        },
+        {
+          "label": "opf-render#60 (FF-43: open replacement faces bundled; open-fonts and lazy-fonts-browser tests)",
+          "url": "https://github.com/OpenPresentation/opf-render/pull/60"
+        },
+        {
+          "label": "opf#178 (FF-43: measurements, tracker, burndown)",
+          "url": "https://github.com/OpenPresentation/opf/pull/178"
         }
       ],
       "priority": {
-        "score": 3,
-        "severity": 3,
+        "score": 1,
+        "severity": 1,
         "valuesAffected": 0,
         "valuesOpen": 0,
-        "hostFactor": 1,
-        "rank": 79
+        "hostFactor": 0.6,
+        "rank": 133
       }
     },
     {
@@ -7961,7 +8300,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 122
+        "rank": 111
       }
     },
     {
@@ -8117,7 +8456,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 50
+        "rank": 49
       }
     },
     {
@@ -8140,13 +8479,49 @@
         "pendingBundle": null
       },
       "bundled": {
-        "yes": false,
+        "yes": true,
         "applies": "self",
         "family": "Figtree",
-        "packages": [],
-        "faces": [],
-        "stylesAvailable": [],
-        "pack": null
+        "pack": "open",
+        "packages": [
+          {
+            "name": "@expo-google-fonts/figtree",
+            "version": "0.4.1",
+            "pack": "open",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/figtree/v/0.4.1",
+            "vendored": "fonts/figtree",
+            "license": "OFL-1.1",
+            "reservedFontNames": []
+          }
+        ],
+        "faces": [
+          {
+            "style": "400",
+            "file": "Figtree_400Regular.ttf",
+            "sha256": "4e2e9876c4a908c2cbe410ceb648e4724464a84492bd49cb2d6e7b0d3f769a66"
+          },
+          {
+            "style": "400i",
+            "file": "Figtree_400Regular_Italic.ttf",
+            "sha256": "9e77e88c4713c641faa7385d8c367a52542969fcb24022fc649c06422ad721f5"
+          },
+          {
+            "style": "700",
+            "file": "Figtree_700Bold.ttf",
+            "sha256": "183bf1a8523731738c72be9aa8236453a21d6a3ed70bd8e5266723b212331dc4"
+          },
+          {
+            "style": "700i",
+            "file": "Figtree_700Bold_Italic.ttf",
+            "sha256": "eccf9cafb8a6112216b040112ce783553e30b30b1eb2649b9f2913e34d7ecbd2"
+          }
+        ],
+        "stylesAvailable": [
+          "400",
+          "400i",
+          "700",
+          "700i"
+        ]
       },
       "stylesRequired": [
         "400",
@@ -8177,12 +8552,7 @@
           "Trebuchet MS"
         ]
       },
-      "stylesMissing": [
-        "400",
-        "400i",
-        "700",
-        "700i"
-      ],
+      "stylesMissing": [],
       "stylesExplicitGaps": [],
       "approximateStyles": [],
       "stylesBasis": "assumed: four styles for Latin faces, regular and bold for script faces",
@@ -8192,17 +8562,17 @@
       "measurements": null,
       "candidates": [],
       "hostVerification": {
-        "node": "NA",
-        "browser": "NA",
-        "editor": "NA",
-        "galleryEditor": "NA",
+        "node": "verified",
+        "browser": "verified",
+        "editor": "unverified",
+        "galleryEditor": "unverified",
         "galleryCards": "unverified"
       },
       "hostLoading": {
-        "node": "not bundled",
-        "browser": "not bundled",
-        "editor": "not bundled",
-        "galleryEditor": "not bundled",
+        "node": "only when pack: 'office' is requested (loadOfficeFontRegistry adds the open pack unless includeOpenFonts is false)",
+        "browser": "lazy: the browser loader fetches hash-verified vendored faces on demand (opf-render#54)",
+        "editor": "lazy: the playground loads them on demand (opf-editor#42)",
+        "galleryEditor": "pending a gallery editor release that includes opf-editor#42 (ref bump); not loaded today",
         "galleryCards": "self-hosted preview webfont: @fontsource-variable/figtree 5.3.0 (variable, weights 400 700, upright only)"
       },
       "nativeVerification": {
@@ -8229,26 +8599,38 @@
         "resolvedAtRun": [],
         "pptxNamedValues": 0,
         "byDimension": {},
-        "expectedStatusOnMain": "missing",
+        "expectedStatusOnMain": "real",
         "rerunNeeded": false
       },
-      "phase": 2,
-      "status": "loading-gap",
-      "statusReason": "route face Figtree is not bundled by opf-render",
-      "nextAction": "Add a permitted, pinned renderer bundle with all required styles; verify its Tenorite and Trebuchet roles separately.",
+      "phase": 1,
+      "status": "baseline-needed",
+      "statusReason": "bundled with required styles; fresh per-host verification outstanding",
+      "nextAction": "Bundled (FF-43): 400, 700, italics, @expo-google-fonts@0.4.1 instances (no Reserved Font Name). Verify its Tenorite and Trebuchet roles separately.",
       "evidence": [
         {
           "label": "Font replacement measurements (2026-09-23)",
           "url": "docs/evidence/font-replacements-20260923/README.md"
+        },
+        {
+          "label": "FF-43 bundled replacement measurements (widths, vertical metrics, outline identity, 2026-09-29)",
+          "url": "docs/evidence/font-replacements-20260923/bundled-replacements-ff43-20260929.json"
+        },
+        {
+          "label": "opf-render#60 (FF-43: open replacement faces bundled; open-fonts and lazy-fonts-browser tests)",
+          "url": "https://github.com/OpenPresentation/opf-render/pull/60"
+        },
+        {
+          "label": "opf#178 (FF-43: measurements, tracker, burndown)",
+          "url": "https://github.com/OpenPresentation/opf/pull/178"
         }
       ],
       "priority": {
-        "score": 3,
-        "severity": 3,
+        "score": 1,
+        "severity": 1,
         "valuesAffected": 0,
         "valuesOpen": 0,
-        "hostFactor": 1,
-        "rank": 80
+        "hostFactor": 0.6,
+        "rank": 134
       }
     },
     {
@@ -8275,13 +8657,49 @@
         "pendingBundle": null
       },
       "bundled": {
-        "yes": false,
+        "yes": true,
         "applies": "route-target",
         "family": "Barlow",
-        "packages": [],
-        "faces": [],
-        "stylesAvailable": [],
-        "pack": null
+        "pack": "open",
+        "packages": [
+          {
+            "name": "barlow",
+            "version": "23e54b51ddffbc7713c583748e3bd86f62b1fa4a",
+            "pack": "open",
+            "source": "https://github.com/google/fonts/tree/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/barlow",
+            "vendored": "fonts/barlow",
+            "license": "OFL-1.1",
+            "reservedFontNames": []
+          }
+        ],
+        "faces": [
+          {
+            "style": "400",
+            "file": "Barlow-Regular.ttf",
+            "sha256": "95aa02c7c43096e0dd44d787ba6216864a67157e402adab59b35572e0c1577ea"
+          },
+          {
+            "style": "400i",
+            "file": "Barlow-Italic.ttf",
+            "sha256": "70cf45c354af39e55082fd506e748cc6a0a1812949875f99ded3f76bf691e4ca"
+          },
+          {
+            "style": "700",
+            "file": "Barlow-Bold.ttf",
+            "sha256": "84e6a4d61e7c3e21f3c50ea6a4f7e5303a3467864c038be6ea3759bab8d547f9"
+          },
+          {
+            "style": "700i",
+            "file": "Barlow-BoldItalic.ttf",
+            "sha256": "079dcee4a53544177f3b16354b27b40b521e22861a40084ab4d052f0289ed9e8"
+          }
+        ],
+        "stylesAvailable": [
+          "400",
+          "400i",
+          "700",
+          "700i"
+        ]
       },
       "stylesRequired": [
         "400",
@@ -8291,10 +8709,7 @@
         "400",
         "400i"
       ],
-      "stylesMissing": [
-        "400",
-        "400i"
-      ],
+      "stylesMissing": [],
       "stylesExplicitGaps": [],
       "approximateStyles": [],
       "stylesBasis": "measured: styles the real font has on the measuring host",
@@ -8332,9 +8747,9 @@
           "script": "Latin",
           "scriptSpecific": false
         },
-        "date": "2026-09-23",
-        "source": "docs/evidence/font-replacements-20260923/README.md",
-        "sourceNote": null,
+        "date": "2026-09-29",
+        "source": "docs/evidence/font-replacements-20260923/report.json",
+        "sourceNote": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json.",
         "verticalMetricsMatch": null,
         "verticalMetricsNote": null,
         "lineBreaksMatch": null,
@@ -8342,17 +8757,17 @@
       },
       "candidates": [],
       "hostVerification": {
-        "node": "NA",
-        "browser": "NA",
-        "editor": "NA",
-        "galleryEditor": "NA",
+        "node": "unverified",
+        "browser": "unverified",
+        "editor": "unverified",
+        "galleryEditor": "unverified",
         "galleryCards": "unverified"
       },
       "hostLoading": {
-        "node": "not bundled",
-        "browser": "not bundled",
-        "editor": "not bundled",
-        "galleryEditor": "not bundled",
+        "node": "only when pack: 'office' is requested (loadOfficeFontRegistry adds the open pack unless includeOpenFonts is false)",
+        "browser": "lazy: the browser loader fetches hash-verified vendored faces on demand (opf-render#54)",
+        "editor": "lazy: the playground loads them on demand (opf-editor#42)",
+        "galleryEditor": "pending a gallery editor release that includes opf-editor#42 (ref bump); not loaded today",
         "galleryCards": "self-hosted preview webfont: @fontsource/barlow 5.3.0 (static, weights 400 700, upright only)"
       },
       "nativeVerification": {
@@ -8382,23 +8797,27 @@
         "expectedStatusOnMain": "visual-substitute",
         "rerunNeeded": false
       },
-      "phase": 2,
-      "status": "loading-gap",
-      "statusReason": "route face Barlow is not bundled by opf-render",
-      "nextAction": "Bundle Barlow; verify Book and Italic weight linking and independent metrics (max 7.6%).",
+      "phase": 4,
+      "status": "visual-gap",
+      "statusReason": "visual route; metric or appearance qualification outstanding",
+      "nextAction": "Barlow is bundled (FF-43: 400, 700, italics). Measured against Franklin Gothic Book 2.01: regular 2.8% mean and 7.6% max, italic 0.8% and 4.0%; vertical metrics differ. Verify Book and Italic weight linking, wrapping and native behavior.",
       "evidence": [
         {
           "label": "Font replacement measurements (2026-09-23)",
           "url": "docs/evidence/font-replacements-20260923/README.md"
+        },
+        {
+          "label": "FF-43 bundled replacement measurements (widths, vertical metrics, outline identity, 2026-09-29)",
+          "url": "docs/evidence/font-replacements-20260923/bundled-replacements-ff43-20260929.json"
         }
       ],
       "priority": {
-        "score": 3.5,
-        "severity": 3.5,
+        "score": 2.5,
+        "severity": 2.5,
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 69
+        "rank": 83
       }
     },
     {
@@ -8425,13 +8844,49 @@
         "pendingBundle": null
       },
       "bundled": {
-        "yes": false,
+        "yes": true,
         "applies": "route-target",
         "family": "Barlow",
-        "packages": [],
-        "faces": [],
-        "stylesAvailable": [],
-        "pack": null
+        "pack": "open",
+        "packages": [
+          {
+            "name": "barlow",
+            "version": "23e54b51ddffbc7713c583748e3bd86f62b1fa4a",
+            "pack": "open",
+            "source": "https://github.com/google/fonts/tree/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/barlow",
+            "vendored": "fonts/barlow",
+            "license": "OFL-1.1",
+            "reservedFontNames": []
+          }
+        ],
+        "faces": [
+          {
+            "style": "400",
+            "file": "Barlow-Regular.ttf",
+            "sha256": "95aa02c7c43096e0dd44d787ba6216864a67157e402adab59b35572e0c1577ea"
+          },
+          {
+            "style": "400i",
+            "file": "Barlow-Italic.ttf",
+            "sha256": "70cf45c354af39e55082fd506e748cc6a0a1812949875f99ded3f76bf691e4ca"
+          },
+          {
+            "style": "700",
+            "file": "Barlow-Bold.ttf",
+            "sha256": "84e6a4d61e7c3e21f3c50ea6a4f7e5303a3467864c038be6ea3759bab8d547f9"
+          },
+          {
+            "style": "700i",
+            "file": "Barlow-BoldItalic.ttf",
+            "sha256": "079dcee4a53544177f3b16354b27b40b521e22861a40084ab4d052f0289ed9e8"
+          }
+        ],
+        "stylesAvailable": [
+          "400",
+          "400i",
+          "700",
+          "700i"
+        ]
       },
       "stylesRequired": [
         "400",
@@ -8441,10 +8896,7 @@
         "400",
         "400i"
       ],
-      "stylesMissing": [
-        "400",
-        "400i"
-      ],
+      "stylesMissing": [],
       "stylesExplicitGaps": [],
       "approximateStyles": [],
       "stylesBasis": "measured: styles the real font has on the measuring host",
@@ -8482,9 +8934,9 @@
           "script": "Latin",
           "scriptSpecific": false
         },
-        "date": "2026-09-23",
-        "source": "docs/evidence/font-replacements-20260923/README.md",
-        "sourceNote": null,
+        "date": "2026-09-29",
+        "source": "docs/evidence/font-replacements-20260923/report.json",
+        "sourceNote": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json.",
         "verticalMetricsMatch": null,
         "verticalMetricsNote": null,
         "lineBreaksMatch": null,
@@ -8492,17 +8944,17 @@
       },
       "candidates": [],
       "hostVerification": {
-        "node": "NA",
-        "browser": "NA",
-        "editor": "NA",
-        "galleryEditor": "NA",
+        "node": "unverified",
+        "browser": "unverified",
+        "editor": "unverified",
+        "galleryEditor": "unverified",
         "galleryCards": "unverified"
       },
       "hostLoading": {
-        "node": "not bundled",
-        "browser": "not bundled",
-        "editor": "not bundled",
-        "galleryEditor": "not bundled",
+        "node": "only when pack: 'office' is requested (loadOfficeFontRegistry adds the open pack unless includeOpenFonts is false)",
+        "browser": "lazy: the browser loader fetches hash-verified vendored faces on demand (opf-render#54)",
+        "editor": "lazy: the playground loads them on demand (opf-editor#42)",
+        "galleryEditor": "pending a gallery editor release that includes opf-editor#42 (ref bump); not loaded today",
         "galleryCards": "self-hosted preview webfont: @fontsource/barlow 5.3.0 (static, weights 400 700, upright only)"
       },
       "nativeVerification": {
@@ -8532,23 +8984,27 @@
         "expectedStatusOnMain": "visual-substitute",
         "rerunNeeded": false
       },
-      "phase": 2,
-      "status": "loading-gap",
-      "statusReason": "route face Barlow is not bundled by opf-render",
-      "nextAction": "Qualify Medium-specific weight and italic mapping separately from Book (max 6.5%).",
+      "phase": 4,
+      "status": "visual-gap",
+      "statusReason": "visual route; metric or appearance qualification outstanding",
+      "nextAction": "Barlow is bundled (FF-43: 400, 700, italics). Measured against Franklin Gothic Medium 5.02: regular 1.1% mean and 6.5% max, italic 1.8% and 4.7%. Qualify Medium-specific weight and italic mapping separately from Book (Barlow Medium is not bundled).",
       "evidence": [
         {
           "label": "Font replacement measurements (2026-09-23)",
           "url": "docs/evidence/font-replacements-20260923/README.md"
+        },
+        {
+          "label": "FF-43 bundled replacement measurements (widths, vertical metrics, outline identity, 2026-09-29)",
+          "url": "docs/evidence/font-replacements-20260923/bundled-replacements-ff43-20260929.json"
         }
       ],
       "priority": {
-        "score": 3.5,
-        "severity": 3.5,
+        "score": 2.5,
+        "severity": 2.5,
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 70
+        "rank": 84
       }
     },
     {
@@ -8575,13 +9031,49 @@
         "pendingBundle": null
       },
       "bundled": {
-        "yes": false,
+        "yes": true,
         "applies": "route-target",
         "family": "EB Garamond",
-        "packages": [],
-        "faces": [],
-        "stylesAvailable": [],
-        "pack": null
+        "pack": "open",
+        "packages": [
+          {
+            "name": "@expo-google-fonts/eb-garamond",
+            "version": "0.4.3",
+            "pack": "open",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/eb-garamond/v/0.4.3",
+            "vendored": "fonts/eb-garamond",
+            "license": "OFL-1.1",
+            "reservedFontNames": []
+          }
+        ],
+        "faces": [
+          {
+            "style": "400",
+            "file": "EBGaramond_400Regular.ttf",
+            "sha256": "d5baed6e48bf4c99a770e6edc86ddaf67942bb1850491ed54f94d5c2c213531e"
+          },
+          {
+            "style": "400i",
+            "file": "EBGaramond_400Regular_Italic.ttf",
+            "sha256": "228da33df456ec4e0a149f33cfc2264d5bd500bdfcf55ee36710ca8df923cbd6"
+          },
+          {
+            "style": "700",
+            "file": "EBGaramond_700Bold.ttf",
+            "sha256": "8bb7f13020d522de1c441da0a76f05843b74d788c1b16a933af3be4880782d17"
+          },
+          {
+            "style": "700i",
+            "file": "EBGaramond_700Bold_Italic.ttf",
+            "sha256": "0030bda44f15b85f5adee17dc25cb5948c547ecf7f6d06e10723b406cd15a472"
+          }
+        ],
+        "stylesAvailable": [
+          "400",
+          "400i",
+          "700",
+          "700i"
+        ]
       },
       "stylesRequired": [
         "400",
@@ -8593,11 +9085,7 @@
         "400i",
         "700"
       ],
-      "stylesMissing": [
-        "400",
-        "400i",
-        "700"
-      ],
+      "stylesMissing": [],
       "stylesExplicitGaps": [],
       "approximateStyles": [],
       "stylesBasis": "measured: styles the real font has on the measuring host",
@@ -8643,9 +9131,9 @@
           "script": "Latin",
           "scriptSpecific": false
         },
-        "date": "2026-09-23",
-        "source": "docs/evidence/font-replacements-20260923/README.md",
-        "sourceNote": null,
+        "date": "2026-09-29",
+        "source": "docs/evidence/font-replacements-20260923/report.json",
+        "sourceNote": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json.",
         "verticalMetricsMatch": null,
         "verticalMetricsNote": null,
         "lineBreaksMatch": null,
@@ -8653,17 +9141,17 @@
       },
       "candidates": [],
       "hostVerification": {
-        "node": "NA",
-        "browser": "NA",
-        "editor": "NA",
-        "galleryEditor": "NA",
+        "node": "unverified",
+        "browser": "unverified",
+        "editor": "unverified",
+        "galleryEditor": "unverified",
         "galleryCards": "unverified"
       },
       "hostLoading": {
-        "node": "not bundled",
-        "browser": "not bundled",
-        "editor": "not bundled",
-        "galleryEditor": "not bundled",
+        "node": "only when pack: 'office' is requested (loadOfficeFontRegistry adds the open pack unless includeOpenFonts is false)",
+        "browser": "lazy: the browser loader fetches hash-verified vendored faces on demand (opf-render#54)",
+        "editor": "lazy: the playground loads them on demand (opf-editor#42)",
+        "galleryEditor": "pending a gallery editor release that includes opf-editor#42 (ref bump); not loaded today",
         "galleryCards": "self-hosted preview webfont: @fontsource-variable/eb-garamond 5.3.0 (variable, weights 400 700, upright only)"
       },
       "nativeVerification": {
@@ -8699,14 +9187,18 @@
         "expectedStatusOnMain": "visual-substitute",
         "rerunNeeded": false
       },
-      "phase": 2,
-      "status": "loading-gap",
-      "statusReason": "route face EB Garamond is not bundled by opf-render",
-      "nextAction": "Bundle complete EB Garamond styles and fill the missing reference-style measurements (three styles measured; italic drifts up to 18.8%).",
+      "phase": 4,
+      "status": "visual-gap",
+      "statusReason": "visual route; metric or appearance qualification outstanding",
+      "nextAction": "EB Garamond is bundled (FF-43: 400, 700, italics). Measured against Garamond 2.40: regular 1.8% mean and 4.2% max, bold 1.6% and 5.3%, italic 11.3% and 18.8% (three styles; the host font has no bold italic). Qualify italic widths before any wrapping claim.",
       "evidence": [
         {
           "label": "Font replacement measurements (2026-09-23)",
           "url": "docs/evidence/font-replacements-20260923/README.md"
+        },
+        {
+          "label": "FF-43 bundled replacement measurements (widths, vertical metrics, outline identity, 2026-09-29)",
+          "url": "docs/evidence/font-replacements-20260923/bundled-replacements-ff43-20260929.json"
         },
         {
           "label": "Parity run 2026-09-29 (table drawn extent)",
@@ -8714,12 +9206,12 @@
         }
       ],
       "priority": {
-        "score": 7,
-        "severity": 3.5,
+        "score": 5,
+        "severity": 2.5,
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 13
+        "rank": 37
       }
     },
     {
@@ -8870,7 +9362,7 @@
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 1,
-        "rank": 19
+        "rank": 13
       }
     },
     {
@@ -9032,7 +9524,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 139
+        "rank": 135
       }
     },
     {
@@ -9348,9 +9840,9 @@
       "measurements": {
         "replacement": "Source Sans 3",
         "reference": "Gill Sans MT 1.65",
-        "meanAbsWidthDelta": 0.051,
-        "meanWidthDelta": 0.0038,
-        "maxAbsWidthDelta": 0.1456,
+        "meanAbsWidthDelta": 0.0511,
+        "meanWidthDelta": 0.0039,
+        "maxAbsWidthDelta": 0.1459,
         "stylesMeasured": 4,
         "perStyle": [
           {
@@ -9365,17 +9857,17 @@
             "style": "700",
             "replacementStyle": "700",
             "strings": 300,
-            "meanAbsWidthDelta": 0.0645,
-            "meanWidthDelta": -0.0645,
+            "meanAbsWidthDelta": 0.0646,
+            "meanWidthDelta": -0.0646,
             "maxAbsWidthDelta": 0.103
           },
           {
             "style": "400i",
             "replacementStyle": "400i",
             "strings": 300,
-            "meanAbsWidthDelta": 0.0898,
-            "meanWidthDelta": 0.0898,
-            "maxAbsWidthDelta": 0.1456
+            "meanAbsWidthDelta": 0.0902,
+            "meanWidthDelta": 0.0902,
+            "maxAbsWidthDelta": 0.1459
           },
           {
             "style": "700i",
@@ -9392,9 +9884,9 @@
           "script": "Latin",
           "scriptSpecific": false
         },
-        "date": "2026-09-23",
-        "source": "docs/evidence/font-replacements-20260923/README.md",
-        "sourceNote": null,
+        "date": "2026-09-29",
+        "source": "docs/evidence/font-replacements-20260923/report.json",
+        "sourceNote": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json.",
         "verticalMetricsMatch": null,
         "verticalMetricsNote": null,
         "lineBreaksMatch": null,
@@ -9454,6 +9946,10 @@
         {
           "label": "Font replacement measurements (2026-09-23)",
           "url": "docs/evidence/font-replacements-20260923/README.md"
+        },
+        {
+          "label": "FF-43 bundled replacement measurements (widths, vertical metrics, outline identity, 2026-09-29)",
+          "url": "docs/evidence/font-replacements-20260923/bundled-replacements-ff43-20260929.json"
         }
       ],
       "priority": {
@@ -9462,7 +9958,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 95
+        "rank": 85
       }
     },
     {
@@ -9612,7 +10108,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 51
+        "rank": 50
       }
     },
     {
@@ -9639,13 +10135,49 @@
         "pendingBundle": null
       },
       "bundled": {
-        "yes": false,
+        "yes": true,
         "applies": "route-target",
         "family": "Barlow",
-        "packages": [],
-        "faces": [],
-        "stylesAvailable": [],
-        "pack": null
+        "pack": "open",
+        "packages": [
+          {
+            "name": "barlow",
+            "version": "23e54b51ddffbc7713c583748e3bd86f62b1fa4a",
+            "pack": "open",
+            "source": "https://github.com/google/fonts/tree/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/barlow",
+            "vendored": "fonts/barlow",
+            "license": "OFL-1.1",
+            "reservedFontNames": []
+          }
+        ],
+        "faces": [
+          {
+            "style": "400",
+            "file": "Barlow-Regular.ttf",
+            "sha256": "95aa02c7c43096e0dd44d787ba6216864a67157e402adab59b35572e0c1577ea"
+          },
+          {
+            "style": "400i",
+            "file": "Barlow-Italic.ttf",
+            "sha256": "70cf45c354af39e55082fd506e748cc6a0a1812949875f99ded3f76bf691e4ca"
+          },
+          {
+            "style": "700",
+            "file": "Barlow-Bold.ttf",
+            "sha256": "84e6a4d61e7c3e21f3c50ea6a4f7e5303a3467864c038be6ea3759bab8d547f9"
+          },
+          {
+            "style": "700i",
+            "file": "Barlow-BoldItalic.ttf",
+            "sha256": "079dcee4a53544177f3b16354b27b40b521e22861a40084ab4d052f0289ed9e8"
+          }
+        ],
+        "stylesAvailable": [
+          "400",
+          "400i",
+          "700",
+          "700i"
+        ]
       },
       "stylesRequired": [
         "400",
@@ -9659,12 +10191,7 @@
         "700",
         "700i"
       ],
-      "stylesMissing": [
-        "400",
-        "400i",
-        "700",
-        "700i"
-      ],
+      "stylesMissing": [],
       "stylesExplicitGaps": [],
       "approximateStyles": [],
       "stylesBasis": "assumed: real font not measured; four styles for Latin, regular and bold for script families",
@@ -9674,17 +10201,17 @@
       "measurements": null,
       "candidates": [],
       "hostVerification": {
-        "node": "NA",
-        "browser": "NA",
-        "editor": "NA",
-        "galleryEditor": "NA",
+        "node": "unverified",
+        "browser": "unverified",
+        "editor": "unverified",
+        "galleryEditor": "unverified",
         "galleryCards": "unverified"
       },
       "hostLoading": {
-        "node": "not bundled",
-        "browser": "not bundled",
-        "editor": "not bundled",
-        "galleryEditor": "not bundled",
+        "node": "only when pack: 'office' is requested (loadOfficeFontRegistry adds the open pack unless includeOpenFonts is false)",
+        "browser": "lazy: the browser loader fetches hash-verified vendored faces on demand (opf-render#54)",
+        "editor": "lazy: the playground loads them on demand (opf-editor#42)",
+        "galleryEditor": "pending a gallery editor release that includes opf-editor#42 (ref bump); not loaded today",
         "galleryCards": "self-hosted preview webfont: @fontsource/barlow 5.3.0 (static, weights 400 700, upright only)"
       },
       "nativeVerification": {
@@ -9722,14 +10249,18 @@
         "expectedStatusOnMain": "visual-substitute",
         "rerunNeeded": false
       },
-      "phase": 2,
-      "status": "loading-gap",
-      "statusReason": "route face Barlow is not bundled by opf-render",
-      "nextAction": "Bundle Barlow and obtain a separate reference measurement for Grandview (unmeasured).",
+      "phase": 4,
+      "status": "visual-gap",
+      "statusReason": "visual route; metric or appearance qualification outstanding",
+      "nextAction": "Barlow is bundled (FF-43: 400, 700 and italics, google/fonts statics byte-identical at a pinned commit). Grandview is not installed on the measuring host, so it is still unmeasured: obtain a separate reference measurement before any width or appearance claim.",
       "evidence": [
         {
           "label": "Font replacement measurements (2026-09-23)",
           "url": "docs/evidence/font-replacements-20260923/README.md"
+        },
+        {
+          "label": "FF-43 bundled replacement measurements (widths, vertical metrics, outline identity, 2026-09-29)",
+          "url": "docs/evidence/font-replacements-20260923/bundled-replacements-ff43-20260929.json"
         },
         {
           "label": "Parity run 2026-09-29 (table drawn extent)",
@@ -9737,8 +10268,8 @@
         }
       ],
       "priority": {
-        "score": 18,
-        "severity": 3,
+        "score": 12,
+        "severity": 2,
         "valuesAffected": 5,
         "valuesOpen": 5,
         "hostFactor": 1,
@@ -9769,13 +10300,49 @@
         "pendingBundle": null
       },
       "bundled": {
-        "yes": false,
+        "yes": true,
         "applies": "route-target",
         "family": "Barlow",
-        "packages": [],
-        "faces": [],
-        "stylesAvailable": [],
-        "pack": null
+        "pack": "open",
+        "packages": [
+          {
+            "name": "barlow",
+            "version": "23e54b51ddffbc7713c583748e3bd86f62b1fa4a",
+            "pack": "open",
+            "source": "https://github.com/google/fonts/tree/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/barlow",
+            "vendored": "fonts/barlow",
+            "license": "OFL-1.1",
+            "reservedFontNames": []
+          }
+        ],
+        "faces": [
+          {
+            "style": "400",
+            "file": "Barlow-Regular.ttf",
+            "sha256": "95aa02c7c43096e0dd44d787ba6216864a67157e402adab59b35572e0c1577ea"
+          },
+          {
+            "style": "400i",
+            "file": "Barlow-Italic.ttf",
+            "sha256": "70cf45c354af39e55082fd506e748cc6a0a1812949875f99ded3f76bf691e4ca"
+          },
+          {
+            "style": "700",
+            "file": "Barlow-Bold.ttf",
+            "sha256": "84e6a4d61e7c3e21f3c50ea6a4f7e5303a3467864c038be6ea3759bab8d547f9"
+          },
+          {
+            "style": "700i",
+            "file": "Barlow-BoldItalic.ttf",
+            "sha256": "079dcee4a53544177f3b16354b27b40b521e22861a40084ab4d052f0289ed9e8"
+          }
+        ],
+        "stylesAvailable": [
+          "400",
+          "400i",
+          "700",
+          "700i"
+        ]
       },
       "stylesRequired": [
         "400",
@@ -9789,12 +10356,7 @@
         "700",
         "700i"
       ],
-      "stylesMissing": [
-        "400",
-        "400i",
-        "700",
-        "700i"
-      ],
+      "stylesMissing": [],
       "stylesExplicitGaps": [],
       "approximateStyles": [],
       "stylesBasis": "assumed: real font not measured; four styles for Latin, regular and bold for script families",
@@ -9804,17 +10366,17 @@
       "measurements": null,
       "candidates": [],
       "hostVerification": {
-        "node": "NA",
-        "browser": "NA",
-        "editor": "NA",
-        "galleryEditor": "NA",
+        "node": "unverified",
+        "browser": "unverified",
+        "editor": "unverified",
+        "galleryEditor": "unverified",
         "galleryCards": "unverified"
       },
       "hostLoading": {
-        "node": "not bundled",
-        "browser": "not bundled",
-        "editor": "not bundled",
-        "galleryEditor": "not bundled",
+        "node": "only when pack: 'office' is requested (loadOfficeFontRegistry adds the open pack unless includeOpenFonts is false)",
+        "browser": "lazy: the browser loader fetches hash-verified vendored faces on demand (opf-render#54)",
+        "editor": "lazy: the playground loads them on demand (opf-editor#42)",
+        "galleryEditor": "pending a gallery editor release that includes opf-editor#42 (ref bump); not loaded today",
         "galleryCards": "self-hosted preview webfont: @fontsource/barlow 5.3.0 (static, weights 400 700, upright only)"
       },
       "nativeVerification": {
@@ -9851,14 +10413,18 @@
         "expectedStatusOnMain": "visual-substitute",
         "rerunNeeded": false
       },
-      "phase": 2,
-      "status": "loading-gap",
-      "statusReason": "route face Barlow is not bundled by opf-render",
-      "nextAction": "Bundle Barlow and obtain a separate reference measurement for Grandview Display (unmeasured).",
+      "phase": 4,
+      "status": "visual-gap",
+      "statusReason": "visual route; metric or appearance qualification outstanding",
+      "nextAction": "Barlow is bundled (FF-43). Grandview Display is not installed on the measuring host, so it is still unmeasured: obtain a separate reference measurement before any width or appearance claim.",
       "evidence": [
         {
           "label": "Font replacement measurements (2026-09-23)",
           "url": "docs/evidence/font-replacements-20260923/README.md"
+        },
+        {
+          "label": "FF-43 bundled replacement measurements (widths, vertical metrics, outline identity, 2026-09-29)",
+          "url": "docs/evidence/font-replacements-20260923/bundled-replacements-ff43-20260929.json"
         },
         {
           "label": "Parity run 2026-09-29 (table drawn extent)",
@@ -9866,12 +10432,12 @@
         }
       ],
       "priority": {
-        "score": 12,
-        "severity": 3,
+        "score": 8,
+        "severity": 2,
         "valuesAffected": 3,
         "valuesOpen": 3,
         "hostFactor": 1,
-        "rank": 4
+        "rank": 7
       }
     },
     {
@@ -10027,7 +10593,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 52
+        "rank": 51
       }
     },
     {
@@ -10183,7 +10749,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 53
+        "rank": 52
       }
     },
     {
@@ -10210,13 +10776,31 @@
         "pendingBundle": null
       },
       "bundled": {
-        "yes": false,
+        "yes": true,
         "applies": "route-target",
         "family": "Anton",
-        "packages": [],
-        "faces": [],
-        "stylesAvailable": [],
-        "pack": null
+        "pack": "open",
+        "packages": [
+          {
+            "name": "anton",
+            "version": "23e54b51ddffbc7713c583748e3bd86f62b1fa4a",
+            "pack": "open",
+            "source": "https://github.com/google/fonts/tree/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/anton",
+            "vendored": "fonts/anton",
+            "license": "OFL-1.1",
+            "reservedFontNames": []
+          }
+        ],
+        "faces": [
+          {
+            "style": "400",
+            "file": "Anton-Regular.ttf",
+            "sha256": "a4ba3a92350ebb031da0cb47630ac49eb265082ca1bc0450442f4a83ab947cab"
+          }
+        ],
+        "stylesAvailable": [
+          "400"
+        ]
       },
       "stylesRequired": [
         "400"
@@ -10224,9 +10808,7 @@
       "replacementStylesRequired": [
         "400"
       ],
-      "stylesMissing": [
-        "400"
-      ],
+      "stylesMissing": [],
       "stylesExplicitGaps": [],
       "approximateStyles": [],
       "stylesBasis": "measured: styles the real font has on the measuring host",
@@ -10256,9 +10838,9 @@
           "script": "Latin",
           "scriptSpecific": false
         },
-        "date": "2026-09-23",
-        "source": "docs/evidence/font-replacements-20260923/README.md",
-        "sourceNote": null,
+        "date": "2026-09-29",
+        "source": "docs/evidence/font-replacements-20260923/report.json",
+        "sourceNote": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json.",
         "verticalMetricsMatch": null,
         "verticalMetricsNote": null,
         "lineBreaksMatch": null,
@@ -10266,17 +10848,17 @@
       },
       "candidates": [],
       "hostVerification": {
-        "node": "NA",
-        "browser": "NA",
-        "editor": "NA",
-        "galleryEditor": "NA",
+        "node": "unverified",
+        "browser": "unverified",
+        "editor": "unverified",
+        "galleryEditor": "unverified",
         "galleryCards": "unverified"
       },
       "hostLoading": {
-        "node": "not bundled",
-        "browser": "not bundled",
-        "editor": "not bundled",
-        "galleryEditor": "not bundled",
+        "node": "only when pack: 'office' is requested (loadOfficeFontRegistry adds the open pack unless includeOpenFonts is false)",
+        "browser": "lazy: the browser loader fetches hash-verified vendored faces on demand (opf-render#54)",
+        "editor": "lazy: the playground loads them on demand (opf-editor#42)",
+        "galleryEditor": "pending a gallery editor release that includes opf-editor#42 (ref bump); not loaded today",
         "galleryCards": "self-hosted preview webfont: @fontsource/anton 5.3.0 (static, weights 800, upright only)"
       },
       "nativeVerification": {
@@ -10313,14 +10895,18 @@
         "expectedStatusOnMain": "visual-substitute",
         "rerunNeeded": false
       },
-      "phase": 2,
-      "status": "loading-gap",
-      "statusReason": "route face Anton is not bundled by opf-render",
-      "nextAction": "Bundle Anton; qualify condensed-heavy appearance, widths and line breaks (max 5.1%).",
+      "phase": 4,
+      "status": "visual-gap",
+      "statusReason": "visual route; metric or appearance qualification outstanding",
+      "nextAction": "Anton is bundled (FF-43: 400, the only style upstream ships; byte-identical google/fonts file). Measured against Impact 5.11: 1.9% mean and 5.1% max; vertical metrics differ. Qualify condensed-heavy appearance, widths and line breaks.",
       "evidence": [
         {
           "label": "Font replacement measurements (2026-09-23)",
           "url": "docs/evidence/font-replacements-20260923/README.md"
+        },
+        {
+          "label": "FF-43 bundled replacement measurements (widths, vertical metrics, outline identity, 2026-09-29)",
+          "url": "docs/evidence/font-replacements-20260923/bundled-replacements-ff43-20260929.json"
         },
         {
           "label": "Parity run 2026-09-29 (table drawn extent)",
@@ -10328,12 +10914,12 @@
         }
       ],
       "priority": {
-        "score": 10.5,
-        "severity": 3.5,
+        "score": 7.5,
+        "severity": 2.5,
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 1,
-        "rank": 5
+        "rank": 9
       }
     },
     {
@@ -10515,7 +11101,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 140
+        "rank": 136
       }
     },
     {
@@ -10697,7 +11283,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 141
+        "rank": 137
       }
     },
     {
@@ -10875,7 +11461,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.5,
-        "rank": 142
+        "rank": 138
       }
     },
     {
@@ -11053,7 +11639,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.5,
-        "rank": 143
+        "rank": 139
       }
     },
     {
@@ -11204,7 +11790,7 @@
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 1,
-        "rank": 20
+        "rank": 14
       }
     },
     {
@@ -11355,7 +11941,7 @@
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 1,
-        "rank": 21
+        "rank": 15
       }
     },
     {
@@ -11505,7 +12091,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 54
+        "rank": 53
       }
     },
     {
@@ -11656,7 +12242,7 @@
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 1,
-        "rank": 22
+        "rank": 16
       }
     },
     {
@@ -11774,7 +12360,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 81
+        "rank": 70
       }
     },
     {
@@ -11892,7 +12478,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 82
+        "rank": 71
       }
     },
     {
@@ -12010,7 +12596,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 83
+        "rank": 72
       }
     },
     {
@@ -12033,19 +12619,48 @@
         "pendingBundle": null
       },
       "bundled": {
-        "yes": false,
+        "yes": true,
         "applies": "self",
         "family": "Libre Caslon Text",
-        "packages": [],
-        "faces": [],
-        "stylesAvailable": [],
-        "pack": null
+        "pack": "open",
+        "packages": [
+          {
+            "name": "@expo-google-fonts/libre-caslon-text",
+            "version": "0.4.0",
+            "pack": "open",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/libre-caslon-text/v/0.4.0",
+            "vendored": "fonts/libre-caslon-text",
+            "license": "OFL-1.1",
+            "reservedFontNames": []
+          }
+        ],
+        "faces": [
+          {
+            "style": "400",
+            "file": "LibreCaslonText_400Regular.ttf",
+            "sha256": "912cda295d683d283f65944563ef2204413ef85bf49748482a5e263c4d56afd4"
+          },
+          {
+            "style": "400i",
+            "file": "LibreCaslonText_400Regular_Italic.ttf",
+            "sha256": "a32b7d8314e5f7e6dd919d1df2334ecc7b92e54173c8cc421ef8e9e4bae97061"
+          },
+          {
+            "style": "700",
+            "file": "LibreCaslonText_700Bold.ttf",
+            "sha256": "ddff46045846dfc35f20db138117a2bf249bb75b9336c4ee823b162d22ac82e6"
+          }
+        ],
+        "stylesAvailable": [
+          "400",
+          "400i",
+          "700"
+        ]
       },
       "stylesRequired": [
         "400",
         "400i",
-        "700",
-        "700i"
+        "700"
       ],
       "replacementStylesRequired": null,
       "stylesRequiredByRole": {
@@ -12060,32 +12675,29 @@
           "Bookman Old Style"
         ]
       },
-      "stylesMissing": [
-        "400",
-        "400i",
-        "700",
+      "stylesMissing": [],
+      "stylesExplicitGaps": [
         "700i"
       ],
-      "stylesExplicitGaps": [],
       "approximateStyles": [],
-      "stylesBasis": "assumed: four styles for Latin faces, regular and bold for script faces",
+      "stylesBasis": "declared: Upstream ships Regular, Italic and Bold only (no bold italic in the static releases or the Google Fonts instances); a bold italic request draws the real italic, reported visual, and bold is never synthesized.",
       "scripts": [
         "Latin"
       ],
       "measurements": null,
       "candidates": [],
       "hostVerification": {
-        "node": "NA",
-        "browser": "NA",
-        "editor": "NA",
-        "galleryEditor": "NA",
+        "node": "verified",
+        "browser": "verified",
+        "editor": "unverified",
+        "galleryEditor": "unverified",
         "galleryCards": "unverified"
       },
       "hostLoading": {
-        "node": "not bundled",
-        "browser": "not bundled",
-        "editor": "not bundled",
-        "galleryEditor": "not bundled",
+        "node": "only when pack: 'office' is requested (loadOfficeFontRegistry adds the open pack unless includeOpenFonts is false)",
+        "browser": "lazy: the browser loader fetches hash-verified vendored faces on demand (opf-render#54)",
+        "editor": "lazy: the playground loads them on demand (opf-editor#42)",
+        "galleryEditor": "pending a gallery editor release that includes opf-editor#42 (ref bump); not loaded today",
         "galleryCards": "self-hosted preview webfont: @fontsource/libre-caslon-text 5.3.0 (static, weights 400 700, upright only)"
       },
       "nativeVerification": {
@@ -12112,26 +12724,38 @@
         "resolvedAtRun": [],
         "pptxNamedValues": 0,
         "byDimension": {},
-        "expectedStatusOnMain": "missing",
+        "expectedStatusOnMain": "real",
         "rerunNeeded": false
       },
-      "phase": 2,
-      "status": "loading-gap",
-      "statusReason": "route face Libre Caslon Text is not bundled by opf-render",
-      "nextAction": "Add a permitted, pinned renderer bundle with all required styles; verify its Baskerville and Bookman roles separately.",
+      "phase": 1,
+      "status": "baseline-needed",
+      "statusReason": "bundled with required styles; fresh per-host verification outstanding",
+      "nextAction": "Bundled (FF-43): 400, 400 italic and 700, @expo-google-fonts@0.4.0 instances (no Reserved Font Name). Upstream ships no bold italic, so 700i stays an explicit gap (the real italic draws, reported visual). Verify its Baskerville and Bookman roles separately.",
       "evidence": [
         {
           "label": "Font replacement measurements (2026-09-23)",
           "url": "docs/evidence/font-replacements-20260923/README.md"
+        },
+        {
+          "label": "FF-43 bundled replacement measurements (widths, vertical metrics, outline identity, 2026-09-29)",
+          "url": "docs/evidence/font-replacements-20260923/bundled-replacements-ff43-20260929.json"
+        },
+        {
+          "label": "opf-render#60 (FF-43: open replacement faces bundled; open-fonts and lazy-fonts-browser tests)",
+          "url": "https://github.com/OpenPresentation/opf-render/pull/60"
+        },
+        {
+          "label": "opf#178 (FF-43: measurements, tracker, burndown)",
+          "url": "https://github.com/OpenPresentation/opf/pull/178"
         }
       ],
       "priority": {
-        "score": 3,
-        "severity": 3,
+        "score": 1,
+        "severity": 1,
         "valuesAffected": 0,
         "valuesOpen": 0,
-        "hostFactor": 1,
-        "rank": 84
+        "hostFactor": 0.6,
+        "rank": 140
       }
     },
     {
@@ -12284,7 +12908,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 144
+        "rank": 141
       }
     },
     {
@@ -12453,7 +13077,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 123
+        "rank": 112
       }
     },
     {
@@ -12480,13 +13104,49 @@
         "pendingBundle": null
       },
       "bundled": {
-        "yes": false,
+        "yes": true,
         "applies": "route-target",
         "family": "Work Sans",
-        "packages": [],
-        "faces": [],
-        "stylesAvailable": [],
-        "pack": null
+        "pack": "open",
+        "packages": [
+          {
+            "name": "@expo-google-fonts/work-sans",
+            "version": "0.4.2",
+            "pack": "open",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/work-sans/v/0.4.2",
+            "vendored": "fonts/work-sans",
+            "license": "OFL-1.1",
+            "reservedFontNames": []
+          }
+        ],
+        "faces": [
+          {
+            "style": "400",
+            "file": "WorkSans_400Regular.ttf",
+            "sha256": "e67985a843df0d3cdee51a3d0f329eb1774a344ad9ff0c9ab923751f1577e2a4"
+          },
+          {
+            "style": "400i",
+            "file": "WorkSans_400Regular_Italic.ttf",
+            "sha256": "6b7f7002e0b0c8b261fe878658ef5551e3e59d9f6b609b04efb90dde1e2c1ada"
+          },
+          {
+            "style": "700",
+            "file": "WorkSans_700Bold.ttf",
+            "sha256": "240d125fc9f8561363dc1ea3f513501253bd70942f41468f48f0b0cafb0c82e2"
+          },
+          {
+            "style": "700i",
+            "file": "WorkSans_700Bold_Italic.ttf",
+            "sha256": "a5b2cad813df0aaa7d16621f2e93b5117c25e9bc788bc9a3ad218e9d6348ce34"
+          }
+        ],
+        "stylesAvailable": [
+          "400",
+          "400i",
+          "700",
+          "700i"
+        ]
       },
       "stylesRequired": [
         "400",
@@ -12496,10 +13156,7 @@
         "400",
         "400i"
       ],
-      "stylesMissing": [
-        "400",
-        "400i"
-      ],
+      "stylesMissing": [],
       "stylesExplicitGaps": [],
       "approximateStyles": [],
       "stylesBasis": "measured: styles the real font has on the measuring host",
@@ -12537,9 +13194,9 @@
           "script": "Latin",
           "scriptSpecific": false
         },
-        "date": "2026-09-23",
-        "source": "docs/evidence/font-replacements-20260923/README.md",
-        "sourceNote": null,
+        "date": "2026-09-29",
+        "source": "docs/evidence/font-replacements-20260923/report.json",
+        "sourceNote": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json.",
         "verticalMetricsMatch": null,
         "verticalMetricsNote": null,
         "lineBreaksMatch": null,
@@ -12547,17 +13204,17 @@
       },
       "candidates": [],
       "hostVerification": {
-        "node": "NA",
-        "browser": "NA",
-        "editor": "NA",
-        "galleryEditor": "NA",
+        "node": "unverified",
+        "browser": "unverified",
+        "editor": "unverified",
+        "galleryEditor": "unverified",
         "galleryCards": "unverified"
       },
       "hostLoading": {
-        "node": "not bundled",
-        "browser": "not bundled",
-        "editor": "not bundled",
-        "galleryEditor": "not bundled",
+        "node": "only when pack: 'office' is requested (loadOfficeFontRegistry adds the open pack unless includeOpenFonts is false)",
+        "browser": "lazy: the browser loader fetches hash-verified vendored faces on demand (opf-render#54)",
+        "editor": "lazy: the playground loads them on demand (opf-editor#42)",
+        "galleryEditor": "pending a gallery editor release that includes opf-editor#42 (ref bump); not loaded today",
         "galleryCards": "self-hosted preview webfont: @fontsource/work-sans 5.3.0 (static, weights 400 700, upright only)"
       },
       "nativeVerification": {
@@ -12593,14 +13250,18 @@
         "expectedStatusOnMain": "visual-substitute",
         "rerunNeeded": false
       },
-      "phase": 2,
-      "status": "loading-gap",
-      "statusReason": "route face Work Sans is not bundled by opf-render",
-      "nextAction": "Bundle Work Sans; measure Lucida Sans separately from Lucida Sans Unicode (max 5.0%).",
+      "phase": 4,
+      "status": "visual-gap",
+      "statusReason": "visual route; metric or appearance qualification outstanding",
+      "nextAction": "Work Sans is bundled (FF-43). Measured against Lucida Sans 1.67: regular 1.4% mean and 5.0% max, italic 1.1% and 4.4% (the host font pairs its Demi style at weight 600; not measured against bold). Measure separately from Lucida Sans Unicode.",
       "evidence": [
         {
           "label": "Font replacement measurements (2026-09-23)",
           "url": "docs/evidence/font-replacements-20260923/README.md"
+        },
+        {
+          "label": "FF-43 bundled replacement measurements (widths, vertical metrics, outline identity, 2026-09-29)",
+          "url": "docs/evidence/font-replacements-20260923/bundled-replacements-ff43-20260929.json"
         },
         {
           "label": "Parity run 2026-09-29 (table drawn extent)",
@@ -12608,12 +13269,12 @@
         }
       ],
       "priority": {
-        "score": 6,
-        "severity": 3,
+        "score": 4,
+        "severity": 2,
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 35
+        "rank": 54
       }
     },
     {
@@ -12640,13 +13301,49 @@
         "pendingBundle": null
       },
       "bundled": {
-        "yes": false,
+        "yes": true,
         "applies": "route-target",
         "family": "Work Sans",
-        "packages": [],
-        "faces": [],
-        "stylesAvailable": [],
-        "pack": null
+        "pack": "open",
+        "packages": [
+          {
+            "name": "@expo-google-fonts/work-sans",
+            "version": "0.4.2",
+            "pack": "open",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/work-sans/v/0.4.2",
+            "vendored": "fonts/work-sans",
+            "license": "OFL-1.1",
+            "reservedFontNames": []
+          }
+        ],
+        "faces": [
+          {
+            "style": "400",
+            "file": "WorkSans_400Regular.ttf",
+            "sha256": "e67985a843df0d3cdee51a3d0f329eb1774a344ad9ff0c9ab923751f1577e2a4"
+          },
+          {
+            "style": "400i",
+            "file": "WorkSans_400Regular_Italic.ttf",
+            "sha256": "6b7f7002e0b0c8b261fe878658ef5551e3e59d9f6b609b04efb90dde1e2c1ada"
+          },
+          {
+            "style": "700",
+            "file": "WorkSans_700Bold.ttf",
+            "sha256": "240d125fc9f8561363dc1ea3f513501253bd70942f41468f48f0b0cafb0c82e2"
+          },
+          {
+            "style": "700i",
+            "file": "WorkSans_700Bold_Italic.ttf",
+            "sha256": "a5b2cad813df0aaa7d16621f2e93b5117c25e9bc788bc9a3ad218e9d6348ce34"
+          }
+        ],
+        "stylesAvailable": [
+          "400",
+          "400i",
+          "700",
+          "700i"
+        ]
       },
       "stylesRequired": [
         "400"
@@ -12654,9 +13351,7 @@
       "replacementStylesRequired": [
         "400"
       ],
-      "stylesMissing": [
-        "400"
-      ],
+      "stylesMissing": [],
       "stylesExplicitGaps": [],
       "approximateStyles": [],
       "stylesBasis": "measured: styles the real font has on the measuring host",
@@ -12686,9 +13381,9 @@
           "script": "Latin",
           "scriptSpecific": false
         },
-        "date": "2026-09-23",
-        "source": "docs/evidence/font-replacements-20260923/README.md",
-        "sourceNote": null,
+        "date": "2026-09-29",
+        "source": "docs/evidence/font-replacements-20260923/report.json",
+        "sourceNote": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json.",
         "verticalMetricsMatch": null,
         "verticalMetricsNote": null,
         "lineBreaksMatch": null,
@@ -12696,17 +13391,17 @@
       },
       "candidates": [],
       "hostVerification": {
-        "node": "NA",
-        "browser": "NA",
-        "editor": "NA",
-        "galleryEditor": "NA",
+        "node": "unverified",
+        "browser": "unverified",
+        "editor": "unverified",
+        "galleryEditor": "unverified",
         "galleryCards": "unverified"
       },
       "hostLoading": {
-        "node": "not bundled",
-        "browser": "not bundled",
-        "editor": "not bundled",
-        "galleryEditor": "not bundled",
+        "node": "only when pack: 'office' is requested (loadOfficeFontRegistry adds the open pack unless includeOpenFonts is false)",
+        "browser": "lazy: the browser loader fetches hash-verified vendored faces on demand (opf-render#54)",
+        "editor": "lazy: the playground loads them on demand (opf-editor#42)",
+        "galleryEditor": "pending a gallery editor release that includes opf-editor#42 (ref bump); not loaded today",
         "galleryCards": "self-hosted preview webfont: @fontsource/work-sans 5.3.0 (static, weights 400 700, upright only)"
       },
       "nativeVerification": {
@@ -12736,23 +13431,27 @@
         "expectedStatusOnMain": "visual-substitute",
         "rerunNeeded": false
       },
-      "phase": 2,
-      "status": "loading-gap",
-      "statusReason": "route face Work Sans is not bundled by opf-render",
-      "nextAction": "Bundle Work Sans; measure separately from Lucida Sans and verify Unicode coverage (max 5.0%).",
+      "phase": 4,
+      "status": "visual-gap",
+      "statusReason": "visual route; metric or appearance qualification outstanding",
+      "nextAction": "Work Sans is bundled (FF-43). Measured against Lucida Sans Unicode 5.01: 1.3% mean and 5.0% max, regular only. Measure separately from Lucida Sans and verify Unicode coverage.",
       "evidence": [
         {
           "label": "Font replacement measurements (2026-09-23)",
           "url": "docs/evidence/font-replacements-20260923/README.md"
+        },
+        {
+          "label": "FF-43 bundled replacement measurements (widths, vertical metrics, outline identity, 2026-09-29)",
+          "url": "docs/evidence/font-replacements-20260923/bundled-replacements-ff43-20260929.json"
         }
       ],
       "priority": {
-        "score": 3,
-        "severity": 3,
+        "score": 2,
+        "severity": 2,
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 85
+        "rank": 113
       }
     },
     {
@@ -12947,7 +13646,7 @@
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 1,
-        "rank": 23
+        "rank": 17
       }
     },
     {
@@ -13098,7 +13797,7 @@
         "valuesAffected": 4,
         "valuesOpen": 4,
         "hostFactor": 1,
-        "rank": 7
+        "rank": 5
       }
     },
     {
@@ -13255,7 +13954,7 @@
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 1,
-        "rank": 24
+        "rank": 18
       }
     },
     {
@@ -13408,7 +14107,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 145
+        "rank": 142
       }
     },
     {
@@ -13603,7 +14302,7 @@
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 1,
-        "rank": 25
+        "rank": 19
       }
     },
     {
@@ -13772,7 +14471,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 124
+        "rank": 114
       }
     },
     {
@@ -13967,7 +14666,7 @@
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 1,
-        "rank": 26
+        "rank": 20
       }
     },
     {
@@ -14448,7 +15147,7 @@
         "valuesAffected": 5,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 146
+        "rank": 143
       }
     },
     {
@@ -14624,7 +15323,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 125
+        "rank": 115
       }
     },
     {
@@ -15130,7 +15829,7 @@
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 1,
-        "rank": 71
+        "rank": 67
       }
     },
     {
@@ -15273,7 +15972,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 99
+        "rank": 87
       }
     },
     {
@@ -15442,7 +16141,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 147
+        "rank": 144
       }
     },
     {
@@ -15577,7 +16276,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 126
+        "rank": 116
       }
     },
     {
@@ -15720,7 +16419,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 100
+        "rank": 88
       }
     },
     {
@@ -15872,7 +16571,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 101
+        "rank": 89
       }
     },
     {
@@ -16026,7 +16725,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 102
+        "rank": 90
       }
     },
     {
@@ -16176,7 +16875,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 103
+        "rank": 91
       }
     },
     {
@@ -16319,7 +17018,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 104
+        "rank": 92
       }
     },
     {
@@ -16469,7 +17168,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 105
+        "rank": 93
       }
     },
     {
@@ -16619,7 +17318,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 106
+        "rank": 94
       }
     },
     {
@@ -16771,7 +17470,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 107
+        "rank": 95
       }
     },
     {
@@ -16928,7 +17627,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 108
+        "rank": 96
       }
     },
     {
@@ -17078,7 +17777,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 109
+        "rank": 97
       }
     },
     {
@@ -17230,7 +17929,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 110
+        "rank": 98
       }
     },
     {
@@ -17390,7 +18089,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 111
+        "rank": 99
       }
     },
     {
@@ -17525,7 +18224,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 127
+        "rank": 117
       }
     },
     {
@@ -17675,7 +18374,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 112
+        "rank": 100
       }
     },
     {
@@ -17814,7 +18513,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 43
+        "rank": 38
       }
     },
     {
@@ -17949,7 +18648,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 128
+        "rank": 118
       }
     },
     {
@@ -18099,7 +18798,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 113
+        "rank": 101
       }
     },
     {
@@ -18256,7 +18955,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 114
+        "rank": 102
       }
     },
     {
@@ -18391,7 +19090,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 129
+        "rank": 119
       }
     },
     {
@@ -18526,7 +19225,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 130
+        "rank": 120
       }
     },
     {
@@ -18676,7 +19375,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 115
+        "rank": 103
       }
     },
     {
@@ -18832,7 +19531,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 116
+        "rank": 104
       }
     },
     {
@@ -18982,7 +19681,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 117
+        "rank": 105
       }
     },
     {
@@ -19117,7 +19816,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 131
+        "rank": 121
       }
     },
     {
@@ -19269,7 +19968,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 118
+        "rank": 106
       }
     },
     {
@@ -19411,7 +20110,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 148
+        "rank": 145
       }
     },
     {
@@ -19546,7 +20245,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 132
+        "rank": 122
       }
     },
     {
@@ -19697,7 +20396,7 @@
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 1,
-        "rank": 27
+        "rank": 21
       }
     },
     {
@@ -19879,7 +20578,7 @@
         "valuesAffected": 7,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 149
+        "rank": 146
       }
     },
     {
@@ -20090,7 +20789,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 96
+        "rank": 86
       }
     },
     {
@@ -20225,7 +20924,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 36
+        "rank": 31
       }
     },
     {
@@ -20533,7 +21232,7 @@
         "valuesAffected": 3,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 150
+        "rank": 147
       }
     },
     {
@@ -20717,7 +21416,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 151
+        "rank": 148
       }
     },
     {
@@ -20868,7 +21567,7 @@
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 1,
-        "rank": 28
+        "rank": 22
       }
     },
     {
@@ -20994,7 +21693,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 37
+        "rank": 32
       }
     },
     {
@@ -21023,10 +21722,10 @@
         "pack": "open",
         "packages": [
           {
-            "name": "red-hat-display",
-            "version": "6bb1048a6402b0076ea04f42951ec66263cd1437",
+            "name": "@expo-google-fonts/red-hat-display",
+            "version": "0.4.1",
             "pack": "open",
-            "source": "https://github.com/RedHatOfficial/RedHatFont/tree/6bb1048a6402b0076ea04f42951ec66263cd1437/fonts/Proportional/RedHatDisplay/ttf",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/red-hat-display/v/0.4.1",
             "vendored": "fonts/red-hat-display",
             "license": "OFL-1.1",
             "reservedFontNames": []
@@ -21035,24 +21734,54 @@
         "faces": [
           {
             "style": "300",
-            "file": "RedHatDisplay-Light.ttf",
-            "sha256": "99ed6ddec6954941f708b23d3ab6873cba9f3067a4d1153d98be31ff2472dcb5"
+            "file": "RedHatDisplay_300Light.ttf",
+            "sha256": "77eae6c6360c8a8445268dac09c32b6915f658aed2613408d7e118436a0c3eef"
+          },
+          {
+            "style": "300i",
+            "file": "RedHatDisplay_300Light_Italic.ttf",
+            "sha256": "b76f8742593b53a466c99c61522f494aed59a3e4485f94fcdb2d2600bab0d6fb"
           },
           {
             "style": "400",
-            "file": "RedHatDisplay-Regular.ttf",
-            "sha256": "ab007b2a5b1590027cb049c3946de67870f6de9fa2420f8ef6e968392219aecd"
+            "file": "RedHatDisplay_400Regular.ttf",
+            "sha256": "b3c6289677cb95107738025b86cba835f0283b46dc60d6ace3bff9b9700bfbd0"
+          },
+          {
+            "style": "400i",
+            "file": "RedHatDisplay_400Regular_Italic.ttf",
+            "sha256": "947a7431db8083115e2aa2db5265a1abcb5a80a56c6d46e2c7862b9fab406b90"
+          },
+          {
+            "style": "600",
+            "file": "RedHatDisplay_600SemiBold.ttf",
+            "sha256": "d8a250cf848e2b52e505776ec15c078dd022d920846d83f21bdb7a56e43c5ad8"
+          },
+          {
+            "style": "600i",
+            "file": "RedHatDisplay_600SemiBold_Italic.ttf",
+            "sha256": "d39a86c7334a400505a068b1c1a824c91b3ebae37563e36836c19bf889bfcd3a"
           },
           {
             "style": "700",
-            "file": "RedHatDisplay-Bold.ttf",
-            "sha256": "bac4990e2845c796ad0cfc47c3121b09df9285858ba841f7eab8bcdea87b74f1"
+            "file": "RedHatDisplay_700Bold.ttf",
+            "sha256": "861c7d8c0ebe239611dddce4f017d6a5c3389aea28bb31d9ee5bf8cded0826d0"
+          },
+          {
+            "style": "700i",
+            "file": "RedHatDisplay_700Bold_Italic.ttf",
+            "sha256": "6af3f3c0ce2b4aa5cee332cc5f075e3cab7707ce02db8a4dc241ab8104cb21cc"
           }
         ],
         "stylesAvailable": [
           "300",
+          "300i",
           "400",
-          "700"
+          "400i",
+          "600",
+          "600i",
+          "700",
+          "700i"
         ]
       },
       "stylesRequired": [
@@ -21090,13 +21819,7 @@
           "Segoe UI Semibold"
         ]
       },
-      "stylesMissing": [
-        "300i",
-        "400i",
-        "600",
-        "600i",
-        "700i"
-      ],
+      "stylesMissing": [],
       "stylesExplicitGaps": [],
       "approximateStyles": [],
       "stylesBasis": "assumed: four styles for Latin faces, regular and bold for script faces",
@@ -21106,8 +21829,8 @@
       "measurements": null,
       "candidates": [],
       "hostVerification": {
-        "node": "unverified",
-        "browser": "unverified",
+        "node": "verified",
+        "browser": "verified",
         "editor": "unverified",
         "galleryEditor": "unverified",
         "galleryCards": "unverified"
@@ -21146,23 +21869,35 @@
         "expectedStatusOnMain": "real",
         "rerunNeeded": false
       },
-      "phase": 2,
-      "status": "style-gap",
-      "statusReason": "missing 300i, 400i, 600, 600i, 700i in Red Hat Display",
-      "nextAction": "Complete the required 600 and italic faces (bundled: 300, 400, 700 upright) needed by Segoe UI, Semibold, Light and Semilight.",
+      "phase": 1,
+      "status": "baseline-needed",
+      "statusReason": "bundled with required styles; fresh per-host verification outstanding",
+      "nextAction": "Complete for the required styles (FF-43): 300, 400, 600 and 700, each with italics (8 faces, @expo-google-fonts@0.4.1 instances; no Reserved Font Name). Every face paints as itself and distinctly in resvg. Remaining: per-host acceptance for the Segoe UI rows that route here.",
       "evidence": [
         {
           "label": "opf-render#50 (open families bundled)",
           "url": "https://github.com/OpenPresentation/opf-render/pull/50"
+        },
+        {
+          "label": "FF-43 bundled replacement measurements (widths, vertical metrics, outline identity, 2026-09-29)",
+          "url": "docs/evidence/font-replacements-20260923/bundled-replacements-ff43-20260929.json"
+        },
+        {
+          "label": "opf-render#60 (FF-43: open replacement faces bundled; open-fonts and lazy-fonts-browser tests)",
+          "url": "https://github.com/OpenPresentation/opf-render/pull/60"
+        },
+        {
+          "label": "opf#178 (FF-43: measurements, tracker, burndown)",
+          "url": "https://github.com/OpenPresentation/opf/pull/178"
         }
       ],
       "priority": {
-        "score": 2.5,
-        "severity": 2.5,
+        "score": 1,
+        "severity": 1,
         "valuesAffected": 0,
         "valuesOpen": 0,
-        "hostFactor": 1,
-        "rank": 97
+        "hostFactor": 0.6,
+        "rank": 149
       }
     },
     {
@@ -21191,10 +21926,10 @@
         "pack": "open",
         "packages": [
           {
-            "name": "red-hat-text",
-            "version": "6bb1048a6402b0076ea04f42951ec66263cd1437",
+            "name": "@expo-google-fonts/red-hat-text",
+            "version": "0.4.1",
             "pack": "open",
-            "source": "https://github.com/RedHatOfficial/RedHatFont/tree/6bb1048a6402b0076ea04f42951ec66263cd1437/fonts/Proportional/RedHatText/ttf",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/red-hat-text/v/0.4.1",
             "vendored": "fonts/red-hat-text",
             "license": "OFL-1.1",
             "reservedFontNames": []
@@ -21203,18 +21938,30 @@
         "faces": [
           {
             "style": "400",
-            "file": "RedHatText-Regular.ttf",
-            "sha256": "c0989952929fb6427d7b16999678418d52977aea764e66e51b76f9ca221b71b7"
+            "file": "RedHatText_400Regular.ttf",
+            "sha256": "65bce50e2d904363a2ade7dac0b381c72638c43fd690a65a35aad1cc874f75cf"
+          },
+          {
+            "style": "400i",
+            "file": "RedHatText_400Regular_Italic.ttf",
+            "sha256": "6da9408ce2ad47d8f4b2881853d92aee45ca52af39b4c28ddedaab1fb91f57c5"
           },
           {
             "style": "700",
-            "file": "RedHatText-Bold.ttf",
-            "sha256": "a44ef4b6cfefb2e90d489247cdf3e269744673ebb68b48c89ce9e37041feccb4"
+            "file": "RedHatText_700Bold.ttf",
+            "sha256": "a82d498bd5314be56ccb79fb5c2244513a41a5c2b04be56a45751c26a2132a03"
+          },
+          {
+            "style": "700i",
+            "file": "RedHatText_700Bold_Italic.ttf",
+            "sha256": "1f2b2ed57f70ea28bacc1bd3ce3f0b740c5b16a262c61925400f1da5d1045a7c"
           }
         ],
         "stylesAvailable": [
           "400",
-          "700"
+          "400i",
+          "700",
+          "700i"
         ]
       },
       "stylesRequired": [
@@ -21232,10 +21979,7 @@
           "Tahoma"
         ]
       },
-      "stylesMissing": [
-        "400i",
-        "700i"
-      ],
+      "stylesMissing": [],
       "stylesExplicitGaps": [],
       "approximateStyles": [],
       "stylesBasis": "assumed: four styles for Latin faces, regular and bold for script faces",
@@ -21245,8 +21989,8 @@
       "measurements": null,
       "candidates": [],
       "hostVerification": {
-        "node": "unverified",
-        "browser": "unverified",
+        "node": "verified",
+        "browser": "verified",
         "editor": "unverified",
         "galleryEditor": "unverified",
         "galleryCards": "unverified"
@@ -21285,23 +22029,35 @@
         "expectedStatusOnMain": "real",
         "rerunNeeded": false
       },
-      "phase": 2,
-      "status": "style-gap",
-      "statusReason": "missing 400i, 700i in Red Hat Text",
-      "nextAction": "Complete required style coverage beyond upright regular and bold (italics), needed by Tahoma.",
+      "phase": 1,
+      "status": "baseline-needed",
+      "statusReason": "bundled with required styles; fresh per-host verification outstanding",
+      "nextAction": "Complete for the required styles (FF-43): 400 and 700 with italics (4 faces, @expo-google-fonts@0.4.1 instances). Every face paints as itself and distinctly in resvg. Remaining: per-host acceptance for Tahoma.",
       "evidence": [
         {
           "label": "opf-render#50 (open families bundled)",
           "url": "https://github.com/OpenPresentation/opf-render/pull/50"
+        },
+        {
+          "label": "FF-43 bundled replacement measurements (widths, vertical metrics, outline identity, 2026-09-29)",
+          "url": "docs/evidence/font-replacements-20260923/bundled-replacements-ff43-20260929.json"
+        },
+        {
+          "label": "opf-render#60 (FF-43: open replacement faces bundled; open-fonts and lazy-fonts-browser tests)",
+          "url": "https://github.com/OpenPresentation/opf-render/pull/60"
+        },
+        {
+          "label": "opf#178 (FF-43: measurements, tracker, burndown)",
+          "url": "https://github.com/OpenPresentation/opf/pull/178"
         }
       ],
       "priority": {
-        "score": 2.5,
-        "severity": 2.5,
+        "score": 1,
+        "severity": 1,
         "valuesAffected": 0,
         "valuesOpen": 0,
-        "hostFactor": 1,
-        "rank": 98
+        "hostFactor": 0.6,
+        "rank": 150
       }
     },
     {
@@ -21476,7 +22232,7 @@
         "valuesAffected": 3,
         "valuesOpen": 0,
         "hostFactor": 0.6,
-        "rank": 152
+        "rank": 151
       }
     },
     {
@@ -21634,7 +22390,7 @@
         "valuesAffected": 848,
         "valuesOpen": 0,
         "hostFactor": 0.5,
-        "rank": 153
+        "rank": 152
       }
     },
     {
@@ -21661,13 +22417,51 @@
         "pendingBundle": null
       },
       "bundled": {
-        "yes": false,
+        "yes": true,
         "applies": "route-target",
         "family": "Bitter",
-        "packages": [],
-        "faces": [],
-        "stylesAvailable": [],
-        "pack": null
+        "pack": "open",
+        "packages": [
+          {
+            "name": "@expo-google-fonts/bitter",
+            "version": "0.4.2",
+            "pack": "open",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/bitter/v/0.4.2",
+            "vendored": "fonts/bitter",
+            "license": "OFL-1.1",
+            "reservedFontNames": [
+              "Bitter Pro"
+            ]
+          }
+        ],
+        "faces": [
+          {
+            "style": "400",
+            "file": "Bitter_400Regular.ttf",
+            "sha256": "46a52a6b4e3202563bac5134c02e4d9db63685c439104a803a0b4fbf9e8ceaf4"
+          },
+          {
+            "style": "400i",
+            "file": "Bitter_400Regular_Italic.ttf",
+            "sha256": "4eda5cb005b1af2d5a733e0dcd727f65e2bddd0ea0466893f6d9259929ef20b2"
+          },
+          {
+            "style": "700",
+            "file": "Bitter_700Bold.ttf",
+            "sha256": "391582a3004c7600b7234123c3c810b8c2c5ed3c90af7f087fe55f003cc075bf"
+          },
+          {
+            "style": "700i",
+            "file": "Bitter_700Bold_Italic.ttf",
+            "sha256": "65fad0650e416aebb4a7f6893633907f0e10ea153974b0c69f9074b611c259c4"
+          }
+        ],
+        "stylesAvailable": [
+          "400",
+          "400i",
+          "700",
+          "700i"
+        ]
       },
       "stylesRequired": [
         "400",
@@ -21681,12 +22475,7 @@
         "700",
         "700i"
       ],
-      "stylesMissing": [
-        "400",
-        "400i",
-        "700",
-        "700i"
-      ],
+      "stylesMissing": [],
       "stylesExplicitGaps": [],
       "approximateStyles": [],
       "stylesBasis": "measured: styles the real font has on the measuring host",
@@ -21740,9 +22529,9 @@
           "script": "Latin",
           "scriptSpecific": false
         },
-        "date": "2026-09-23",
-        "source": "docs/evidence/font-replacements-20260923/README.md",
-        "sourceNote": null,
+        "date": "2026-09-29",
+        "source": "docs/evidence/font-replacements-20260923/report.json",
+        "sourceNote": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json.",
         "verticalMetricsMatch": null,
         "verticalMetricsNote": null,
         "lineBreaksMatch": null,
@@ -21750,17 +22539,17 @@
       },
       "candidates": [],
       "hostVerification": {
-        "node": "NA",
-        "browser": "NA",
-        "editor": "NA",
-        "galleryEditor": "NA",
+        "node": "unverified",
+        "browser": "unverified",
+        "editor": "unverified",
+        "galleryEditor": "unverified",
         "galleryCards": "unverified"
       },
       "hostLoading": {
-        "node": "not bundled",
-        "browser": "not bundled",
-        "editor": "not bundled",
-        "galleryEditor": "not bundled",
+        "node": "only when pack: 'office' is requested (loadOfficeFontRegistry adds the open pack unless includeOpenFonts is false)",
+        "browser": "lazy: the browser loader fetches hash-verified vendored faces on demand (opf-render#54)",
+        "editor": "lazy: the playground loads them on demand (opf-editor#42)",
+        "galleryEditor": "pending a gallery editor release that includes opf-editor#42 (ref bump); not loaded today",
         "galleryCards": "self-hosted preview webfont: @fontsource-variable/bitter 5.3.0 (variable, weights 400 700, upright only)"
       },
       "nativeVerification": {
@@ -21796,14 +22585,18 @@
         "expectedStatusOnMain": "visual-substitute",
         "rerunNeeded": false
       },
-      "phase": 2,
-      "status": "loading-gap",
-      "statusReason": "route face Bitter is not bundled by opf-render",
-      "nextAction": "Bundle Bitter; qualify slab-serif appearance, kerning and wrapping (max 8.5%).",
+      "phase": 4,
+      "status": "visual-gap",
+      "statusReason": "visual route; metric or appearance qualification outstanding",
+      "nextAction": "Bitter is bundled (FF-43: 400, 700, italics; instanced statics named \"Bitter\", allowed because the reserved name is \"Bitter Pro\"). Measured against Rockwell 1.65: regular 1.1% mean and 6.6% max, bold 4.4% and 8.5%, italic 1.5% and 6.9%, bold italic 3.3% and 6.8%; outlines differ and vertical metrics differ, so it is not metric. Qualify slab-serif appearance, kerning and wrapping.",
       "evidence": [
         {
           "label": "Font replacement measurements (2026-09-23)",
           "url": "docs/evidence/font-replacements-20260923/README.md"
+        },
+        {
+          "label": "FF-43 bundled replacement measurements (widths, vertical metrics, outline identity, 2026-09-29)",
+          "url": "docs/evidence/font-replacements-20260923/bundled-replacements-ff43-20260929.json"
         },
         {
           "label": "Parity run 2026-09-29 (table drawn extent)",
@@ -21811,12 +22604,12 @@
         }
       ],
       "priority": {
-        "score": 7,
-        "severity": 3.5,
+        "score": 5,
+        "severity": 2.5,
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 14
+        "rank": 39
       }
     },
     {
@@ -22170,7 +22963,7 @@
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 1,
-        "rank": 29
+        "rank": 23
       }
     },
     {
@@ -22336,7 +23129,7 @@
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 1,
-        "rank": 30
+        "rank": 24
       }
     },
     {
@@ -22371,10 +23164,10 @@
         "pack": "open",
         "packages": [
           {
-            "name": "red-hat-display",
-            "version": "6bb1048a6402b0076ea04f42951ec66263cd1437",
+            "name": "@expo-google-fonts/red-hat-display",
+            "version": "0.4.1",
             "pack": "open",
-            "source": "https://github.com/RedHatOfficial/RedHatFont/tree/6bb1048a6402b0076ea04f42951ec66263cd1437/fonts/Proportional/RedHatDisplay/ttf",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/red-hat-display/v/0.4.1",
             "vendored": "fonts/red-hat-display",
             "license": "OFL-1.1",
             "reservedFontNames": []
@@ -22383,24 +23176,54 @@
         "faces": [
           {
             "style": "300",
-            "file": "RedHatDisplay-Light.ttf",
-            "sha256": "99ed6ddec6954941f708b23d3ab6873cba9f3067a4d1153d98be31ff2472dcb5"
+            "file": "RedHatDisplay_300Light.ttf",
+            "sha256": "77eae6c6360c8a8445268dac09c32b6915f658aed2613408d7e118436a0c3eef"
+          },
+          {
+            "style": "300i",
+            "file": "RedHatDisplay_300Light_Italic.ttf",
+            "sha256": "b76f8742593b53a466c99c61522f494aed59a3e4485f94fcdb2d2600bab0d6fb"
           },
           {
             "style": "400",
-            "file": "RedHatDisplay-Regular.ttf",
-            "sha256": "ab007b2a5b1590027cb049c3946de67870f6de9fa2420f8ef6e968392219aecd"
+            "file": "RedHatDisplay_400Regular.ttf",
+            "sha256": "b3c6289677cb95107738025b86cba835f0283b46dc60d6ace3bff9b9700bfbd0"
+          },
+          {
+            "style": "400i",
+            "file": "RedHatDisplay_400Regular_Italic.ttf",
+            "sha256": "947a7431db8083115e2aa2db5265a1abcb5a80a56c6d46e2c7862b9fab406b90"
+          },
+          {
+            "style": "600",
+            "file": "RedHatDisplay_600SemiBold.ttf",
+            "sha256": "d8a250cf848e2b52e505776ec15c078dd022d920846d83f21bdb7a56e43c5ad8"
+          },
+          {
+            "style": "600i",
+            "file": "RedHatDisplay_600SemiBold_Italic.ttf",
+            "sha256": "d39a86c7334a400505a068b1c1a824c91b3ebae37563e36836c19bf889bfcd3a"
           },
           {
             "style": "700",
-            "file": "RedHatDisplay-Bold.ttf",
-            "sha256": "bac4990e2845c796ad0cfc47c3121b09df9285858ba841f7eab8bcdea87b74f1"
+            "file": "RedHatDisplay_700Bold.ttf",
+            "sha256": "861c7d8c0ebe239611dddce4f017d6a5c3389aea28bb31d9ee5bf8cded0826d0"
+          },
+          {
+            "style": "700i",
+            "file": "RedHatDisplay_700Bold_Italic.ttf",
+            "sha256": "6af3f3c0ce2b4aa5cee332cc5f075e3cab7707ce02db8a4dc241ab8104cb21cc"
           }
         ],
         "stylesAvailable": [
           "300",
+          "300i",
           "400",
-          "700"
+          "400i",
+          "600",
+          "600i",
+          "700",
+          "700i"
         ]
       },
       "stylesRequired": [
@@ -22415,10 +23238,7 @@
         "700",
         "700i"
       ],
-      "stylesMissing": [
-        "400i",
-        "700i"
-      ],
+      "stylesMissing": [],
       "stylesExplicitGaps": [],
       "approximateStyles": [],
       "stylesBasis": "measured: styles the real font has on the measuring host",
@@ -22472,9 +23292,9 @@
           "script": "Latin",
           "scriptSpecific": false
         },
-        "date": "2026-09-23",
-        "source": "docs/evidence/font-replacements-20260923/README.md",
-        "sourceNote": null,
+        "date": "2026-09-29",
+        "source": "docs/evidence/font-replacements-20260923/report.json",
+        "sourceNote": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json.",
         "verticalMetricsMatch": null,
         "verticalMetricsNote": null,
         "lineBreaksMatch": null,
@@ -22578,10 +23398,10 @@
         "expectedStatusOnMain": "visual-substitute",
         "rerunNeeded": false
       },
-      "phase": 2,
-      "status": "style-gap",
-      "statusReason": "missing 400i, 700i in Red Hat Display",
-      "nextAction": "Complete Red Hat Display italic coverage and qualify metrics (mean 1.7%, max 7.1%). Selawik was measured and rejected in opf#166 (regular 0.16% mean and 2.5% max on the FF-31 corpus, 0.73% and 9.7% on the reviewer's broader corpus; no italic faces); Red Hat Display stays the visual route.",
+      "phase": 4,
+      "status": "visual-gap",
+      "statusReason": "visual route; metric or appearance qualification outstanding",
+      "nextAction": "Red Hat Display italics are bundled (FF-43: real 400 and 700 italic faces from @expo-google-fonts; the RedHatFont repository italics lack the OS/2 italic bit). Qualify metrics (mean 1.7%, max 7.1%). Selawik was measured and rejected in opf#166 (regular 0.16% mean and 2.5% max on the FF-31 corpus, 0.73% and 9.7% on the reviewer's broader corpus; no italic faces); Red Hat Display stays the visual route.",
       "evidence": [
         {
           "label": "opf-render#50 (open families bundled)",
@@ -22596,13 +23416,17 @@
           "url": "https://github.com/OpenPresentation/opf/pull/166"
         },
         {
+          "label": "FF-43 bundled replacement measurements (widths, vertical metrics, outline identity, 2026-09-29)",
+          "url": "docs/evidence/font-replacements-20260923/bundled-replacements-ff43-20260929.json"
+        },
+        {
           "label": "Parity run 2026-09-29 (table drawn extent)",
           "url": "docs/programs/font-fidelity-everywhere/gallery-support/parity/PARITY-2026-09-29-table-drawn-extent.md"
         }
       ],
       "priority": {
-        "score": 24,
-        "severity": 3,
+        "score": 20,
+        "severity": 2.5,
         "valuesAffected": 7,
         "valuesOpen": 7,
         "hostFactor": 1,
@@ -22705,7 +23529,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 86
+        "rank": 73
       }
     },
     {
@@ -22738,10 +23562,10 @@
         "pack": "open",
         "packages": [
           {
-            "name": "red-hat-display",
-            "version": "6bb1048a6402b0076ea04f42951ec66263cd1437",
+            "name": "@expo-google-fonts/red-hat-display",
+            "version": "0.4.1",
             "pack": "open",
-            "source": "https://github.com/RedHatOfficial/RedHatFont/tree/6bb1048a6402b0076ea04f42951ec66263cd1437/fonts/Proportional/RedHatDisplay/ttf",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/red-hat-display/v/0.4.1",
             "vendored": "fonts/red-hat-display",
             "license": "OFL-1.1",
             "reservedFontNames": []
@@ -22750,24 +23574,54 @@
         "faces": [
           {
             "style": "300",
-            "file": "RedHatDisplay-Light.ttf",
-            "sha256": "99ed6ddec6954941f708b23d3ab6873cba9f3067a4d1153d98be31ff2472dcb5"
+            "file": "RedHatDisplay_300Light.ttf",
+            "sha256": "77eae6c6360c8a8445268dac09c32b6915f658aed2613408d7e118436a0c3eef"
+          },
+          {
+            "style": "300i",
+            "file": "RedHatDisplay_300Light_Italic.ttf",
+            "sha256": "b76f8742593b53a466c99c61522f494aed59a3e4485f94fcdb2d2600bab0d6fb"
           },
           {
             "style": "400",
-            "file": "RedHatDisplay-Regular.ttf",
-            "sha256": "ab007b2a5b1590027cb049c3946de67870f6de9fa2420f8ef6e968392219aecd"
+            "file": "RedHatDisplay_400Regular.ttf",
+            "sha256": "b3c6289677cb95107738025b86cba835f0283b46dc60d6ace3bff9b9700bfbd0"
+          },
+          {
+            "style": "400i",
+            "file": "RedHatDisplay_400Regular_Italic.ttf",
+            "sha256": "947a7431db8083115e2aa2db5265a1abcb5a80a56c6d46e2c7862b9fab406b90"
+          },
+          {
+            "style": "600",
+            "file": "RedHatDisplay_600SemiBold.ttf",
+            "sha256": "d8a250cf848e2b52e505776ec15c078dd022d920846d83f21bdb7a56e43c5ad8"
+          },
+          {
+            "style": "600i",
+            "file": "RedHatDisplay_600SemiBold_Italic.ttf",
+            "sha256": "d39a86c7334a400505a068b1c1a824c91b3ebae37563e36836c19bf889bfcd3a"
           },
           {
             "style": "700",
-            "file": "RedHatDisplay-Bold.ttf",
-            "sha256": "bac4990e2845c796ad0cfc47c3121b09df9285858ba841f7eab8bcdea87b74f1"
+            "file": "RedHatDisplay_700Bold.ttf",
+            "sha256": "861c7d8c0ebe239611dddce4f017d6a5c3389aea28bb31d9ee5bf8cded0826d0"
+          },
+          {
+            "style": "700i",
+            "file": "RedHatDisplay_700Bold_Italic.ttf",
+            "sha256": "6af3f3c0ce2b4aa5cee332cc5f075e3cab7707ce02db8a4dc241ab8104cb21cc"
           }
         ],
         "stylesAvailable": [
           "300",
+          "300i",
           "400",
-          "700"
+          "400i",
+          "600",
+          "600i",
+          "700",
+          "700i"
         ]
       },
       "stylesRequired": [
@@ -22778,9 +23632,7 @@
         "300",
         "300i"
       ],
-      "stylesMissing": [
-        "300i"
-      ],
+      "stylesMissing": [],
       "stylesExplicitGaps": [],
       "approximateStyles": [],
       "stylesBasis": "measured: styles the real font has on the measuring host",
@@ -22818,9 +23670,9 @@
           "script": "Latin",
           "scriptSpecific": false
         },
-        "date": "2026-09-23",
-        "source": "docs/evidence/font-replacements-20260923/README.md",
-        "sourceNote": null,
+        "date": "2026-09-29",
+        "source": "docs/evidence/font-replacements-20260923/report.json",
+        "sourceNote": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json.",
         "verticalMetricsMatch": null,
         "verticalMetricsNote": null,
         "lineBreaksMatch": null,
@@ -22895,10 +23747,10 @@
         "expectedStatusOnMain": "visual-substitute",
         "rerunNeeded": false
       },
-      "phase": 2,
-      "status": "style-gap",
-      "statusReason": "missing 300i in Red Hat Display",
-      "nextAction": "Complete required Red Hat Display 300 italic coverage and qualify light metrics (mean 1.9%, max 6.6%).",
+      "phase": 4,
+      "status": "visual-gap",
+      "statusReason": "visual route; metric or appearance qualification outstanding",
+      "nextAction": "Red Hat Display 300 italic is bundled (FF-43). Measured against Segoe UI Light 5.71: 1.7% mean and 5.4% max upright, 2.0% and 6.6% italic. Qualify light metrics.",
       "evidence": [
         {
           "label": "opf-render#50 (open families bundled)",
@@ -22913,17 +23765,21 @@
           "url": "https://github.com/OpenPresentation/opf/pull/166"
         },
         {
+          "label": "FF-43 bundled replacement measurements (widths, vertical metrics, outline identity, 2026-09-29)",
+          "url": "docs/evidence/font-replacements-20260923/bundled-replacements-ff43-20260929.json"
+        },
+        {
           "label": "Parity run 2026-09-29 (table drawn extent)",
           "url": "docs/programs/font-fidelity-everywhere/gallery-support/parity/PARITY-2026-09-29-table-drawn-extent.md"
         }
       ],
       "priority": {
-        "score": 6,
-        "severity": 3,
+        "score": 5,
+        "severity": 2.5,
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 38
+        "rank": 40
       }
     },
     {
@@ -22956,10 +23812,10 @@
         "pack": "open",
         "packages": [
           {
-            "name": "red-hat-display",
-            "version": "6bb1048a6402b0076ea04f42951ec66263cd1437",
+            "name": "@expo-google-fonts/red-hat-display",
+            "version": "0.4.1",
             "pack": "open",
-            "source": "https://github.com/RedHatOfficial/RedHatFont/tree/6bb1048a6402b0076ea04f42951ec66263cd1437/fonts/Proportional/RedHatDisplay/ttf",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/red-hat-display/v/0.4.1",
             "vendored": "fonts/red-hat-display",
             "license": "OFL-1.1",
             "reservedFontNames": []
@@ -22968,24 +23824,54 @@
         "faces": [
           {
             "style": "300",
-            "file": "RedHatDisplay-Light.ttf",
-            "sha256": "99ed6ddec6954941f708b23d3ab6873cba9f3067a4d1153d98be31ff2472dcb5"
+            "file": "RedHatDisplay_300Light.ttf",
+            "sha256": "77eae6c6360c8a8445268dac09c32b6915f658aed2613408d7e118436a0c3eef"
+          },
+          {
+            "style": "300i",
+            "file": "RedHatDisplay_300Light_Italic.ttf",
+            "sha256": "b76f8742593b53a466c99c61522f494aed59a3e4485f94fcdb2d2600bab0d6fb"
           },
           {
             "style": "400",
-            "file": "RedHatDisplay-Regular.ttf",
-            "sha256": "ab007b2a5b1590027cb049c3946de67870f6de9fa2420f8ef6e968392219aecd"
+            "file": "RedHatDisplay_400Regular.ttf",
+            "sha256": "b3c6289677cb95107738025b86cba835f0283b46dc60d6ace3bff9b9700bfbd0"
+          },
+          {
+            "style": "400i",
+            "file": "RedHatDisplay_400Regular_Italic.ttf",
+            "sha256": "947a7431db8083115e2aa2db5265a1abcb5a80a56c6d46e2c7862b9fab406b90"
+          },
+          {
+            "style": "600",
+            "file": "RedHatDisplay_600SemiBold.ttf",
+            "sha256": "d8a250cf848e2b52e505776ec15c078dd022d920846d83f21bdb7a56e43c5ad8"
+          },
+          {
+            "style": "600i",
+            "file": "RedHatDisplay_600SemiBold_Italic.ttf",
+            "sha256": "d39a86c7334a400505a068b1c1a824c91b3ebae37563e36836c19bf889bfcd3a"
           },
           {
             "style": "700",
-            "file": "RedHatDisplay-Bold.ttf",
-            "sha256": "bac4990e2845c796ad0cfc47c3121b09df9285858ba841f7eab8bcdea87b74f1"
+            "file": "RedHatDisplay_700Bold.ttf",
+            "sha256": "861c7d8c0ebe239611dddce4f017d6a5c3389aea28bb31d9ee5bf8cded0826d0"
+          },
+          {
+            "style": "700i",
+            "file": "RedHatDisplay_700Bold_Italic.ttf",
+            "sha256": "6af3f3c0ce2b4aa5cee332cc5f075e3cab7707ce02db8a4dc241ab8104cb21cc"
           }
         ],
         "stylesAvailable": [
           "300",
+          "300i",
           "400",
-          "700"
+          "400i",
+          "600",
+          "600i",
+          "700",
+          "700i"
         ]
       },
       "stylesRequired": [
@@ -22996,10 +23882,7 @@
         "600",
         "600i"
       ],
-      "stylesMissing": [
-        "600",
-        "600i"
-      ],
+      "stylesMissing": [],
       "stylesExplicitGaps": [],
       "approximateStyles": [],
       "stylesBasis": "measured: styles the real font has on the measuring host",
@@ -23037,9 +23920,9 @@
           "script": "Latin",
           "scriptSpecific": false
         },
-        "date": "2026-09-23",
-        "source": "docs/evidence/font-replacements-20260923/README.md",
-        "sourceNote": null,
+        "date": "2026-09-29",
+        "source": "docs/evidence/font-replacements-20260923/report.json",
+        "sourceNote": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json.",
         "verticalMetricsMatch": null,
         "verticalMetricsNote": null,
         "lineBreaksMatch": null,
@@ -23115,10 +23998,10 @@
         "expectedStatusOnMain": "visual-substitute",
         "rerunNeeded": false
       },
-      "phase": 2,
-      "status": "style-gap",
-      "statusReason": "missing 600, 600i in Red Hat Display",
-      "nextAction": "Add the missing Red Hat Display 600 faces (upright and italic) and qualify the named style independently (Semibold 600 and 600 italic, mean 1.0%).",
+      "phase": 4,
+      "status": "visual-gap",
+      "statusReason": "visual route; metric or appearance qualification outstanding",
+      "nextAction": "Red Hat Display 600 and 600 italic are bundled (FF-43: real weight-600 faces; the RedHatFont SemiBold declares 707 and paints as Bold). Measured against Segoe UI Semibold 5.71: 0.9% mean and 5.1% max upright, 1.1% and 6.5% italic. Qualify the named style independently.",
       "evidence": [
         {
           "label": "opf-render#50 (open families bundled)",
@@ -23133,13 +24016,17 @@
           "url": "https://github.com/OpenPresentation/opf/pull/166"
         },
         {
+          "label": "FF-43 bundled replacement measurements (widths, vertical metrics, outline identity, 2026-09-29)",
+          "url": "docs/evidence/font-replacements-20260923/bundled-replacements-ff43-20260929.json"
+        },
+        {
           "label": "Parity run 2026-09-29 (table drawn extent)",
           "url": "docs/programs/font-fidelity-everywhere/gallery-support/parity/PARITY-2026-09-29-table-drawn-extent.md"
         }
       ],
       "priority": {
-        "score": 24,
-        "severity": 3,
+        "score": 20,
+        "severity": 2.5,
         "valuesAffected": 7,
         "valuesOpen": 7,
         "hostFactor": 1,
@@ -23176,10 +24063,10 @@
         "pack": "open",
         "packages": [
           {
-            "name": "red-hat-display",
-            "version": "6bb1048a6402b0076ea04f42951ec66263cd1437",
+            "name": "@expo-google-fonts/red-hat-display",
+            "version": "0.4.1",
             "pack": "open",
-            "source": "https://github.com/RedHatOfficial/RedHatFont/tree/6bb1048a6402b0076ea04f42951ec66263cd1437/fonts/Proportional/RedHatDisplay/ttf",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/red-hat-display/v/0.4.1",
             "vendored": "fonts/red-hat-display",
             "license": "OFL-1.1",
             "reservedFontNames": []
@@ -23188,24 +24075,54 @@
         "faces": [
           {
             "style": "300",
-            "file": "RedHatDisplay-Light.ttf",
-            "sha256": "99ed6ddec6954941f708b23d3ab6873cba9f3067a4d1153d98be31ff2472dcb5"
+            "file": "RedHatDisplay_300Light.ttf",
+            "sha256": "77eae6c6360c8a8445268dac09c32b6915f658aed2613408d7e118436a0c3eef"
+          },
+          {
+            "style": "300i",
+            "file": "RedHatDisplay_300Light_Italic.ttf",
+            "sha256": "b76f8742593b53a466c99c61522f494aed59a3e4485f94fcdb2d2600bab0d6fb"
           },
           {
             "style": "400",
-            "file": "RedHatDisplay-Regular.ttf",
-            "sha256": "ab007b2a5b1590027cb049c3946de67870f6de9fa2420f8ef6e968392219aecd"
+            "file": "RedHatDisplay_400Regular.ttf",
+            "sha256": "b3c6289677cb95107738025b86cba835f0283b46dc60d6ace3bff9b9700bfbd0"
+          },
+          {
+            "style": "400i",
+            "file": "RedHatDisplay_400Regular_Italic.ttf",
+            "sha256": "947a7431db8083115e2aa2db5265a1abcb5a80a56c6d46e2c7862b9fab406b90"
+          },
+          {
+            "style": "600",
+            "file": "RedHatDisplay_600SemiBold.ttf",
+            "sha256": "d8a250cf848e2b52e505776ec15c078dd022d920846d83f21bdb7a56e43c5ad8"
+          },
+          {
+            "style": "600i",
+            "file": "RedHatDisplay_600SemiBold_Italic.ttf",
+            "sha256": "d39a86c7334a400505a068b1c1a824c91b3ebae37563e36836c19bf889bfcd3a"
           },
           {
             "style": "700",
-            "file": "RedHatDisplay-Bold.ttf",
-            "sha256": "bac4990e2845c796ad0cfc47c3121b09df9285858ba841f7eab8bcdea87b74f1"
+            "file": "RedHatDisplay_700Bold.ttf",
+            "sha256": "861c7d8c0ebe239611dddce4f017d6a5c3389aea28bb31d9ee5bf8cded0826d0"
+          },
+          {
+            "style": "700i",
+            "file": "RedHatDisplay_700Bold_Italic.ttf",
+            "sha256": "6af3f3c0ce2b4aa5cee332cc5f075e3cab7707ce02db8a4dc241ab8104cb21cc"
           }
         ],
         "stylesAvailable": [
           "300",
+          "300i",
           "400",
-          "700"
+          "400i",
+          "600",
+          "600i",
+          "700",
+          "700i"
         ]
       },
       "stylesRequired": [
@@ -23216,9 +24133,7 @@
         "400",
         "400i"
       ],
-      "stylesMissing": [
-        "400i"
-      ],
+      "stylesMissing": [],
       "stylesExplicitGaps": [],
       "approximateStyles": [
         "350",
@@ -23259,9 +24174,9 @@
           "script": "Latin",
           "scriptSpecific": false
         },
-        "date": "2026-09-23",
-        "source": "docs/evidence/font-replacements-20260923/README.md",
-        "sourceNote": null,
+        "date": "2026-09-29",
+        "source": "docs/evidence/font-replacements-20260923/report.json",
+        "sourceNote": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json.",
         "verticalMetricsMatch": null,
         "verticalMetricsNote": null,
         "lineBreaksMatch": null,
@@ -23336,9 +24251,9 @@
         "expectedStatusOnMain": "visual-substitute",
         "rerunNeeded": false
       },
-      "phase": 2,
-      "status": "style-gap",
-      "statusReason": "missing 400i in Red Hat Display",
+      "phase": 4,
+      "status": "visual-gap",
+      "statusReason": "visual route; metric or appearance qualification outstanding",
       "nextAction": "Define an explicit matching Red Hat Display weight for weight 350 (measured against 400) and qualify Semilight independently (max 9.1%).",
       "evidence": [
         {
@@ -23359,12 +24274,12 @@
         }
       ],
       "priority": {
-        "score": 6,
-        "severity": 3,
+        "score": 5,
+        "severity": 2.5,
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 39
+        "rank": 41
       }
     },
     {
@@ -23515,7 +24430,7 @@
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 1,
-        "rank": 31
+        "rank": 25
       }
     },
     {
@@ -23666,7 +24581,7 @@
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 1,
-        "rank": 32
+        "rank": 26
       }
     },
     {
@@ -23814,7 +24729,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 133
+        "rank": 123
       }
     },
     {
@@ -24500,7 +25415,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 154
+        "rank": 153
       }
     },
     {
@@ -24653,7 +25568,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 119
+        "rank": 107
       }
     },
     {
@@ -24851,7 +25766,7 @@
         "valuesAffected": 3,
         "valuesOpen": 3,
         "hostFactor": 1,
-        "rank": 11
+        "rank": 8
       }
     },
     {
@@ -24950,7 +25865,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 87
+        "rank": 74
       }
     },
     {
@@ -24985,10 +25900,10 @@
         "pack": "open",
         "packages": [
           {
-            "name": "red-hat-text",
-            "version": "6bb1048a6402b0076ea04f42951ec66263cd1437",
+            "name": "@expo-google-fonts/red-hat-text",
+            "version": "0.4.1",
             "pack": "open",
-            "source": "https://github.com/RedHatOfficial/RedHatFont/tree/6bb1048a6402b0076ea04f42951ec66263cd1437/fonts/Proportional/RedHatText/ttf",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/red-hat-text/v/0.4.1",
             "vendored": "fonts/red-hat-text",
             "license": "OFL-1.1",
             "reservedFontNames": []
@@ -24997,18 +25912,30 @@
         "faces": [
           {
             "style": "400",
-            "file": "RedHatText-Regular.ttf",
-            "sha256": "c0989952929fb6427d7b16999678418d52977aea764e66e51b76f9ca221b71b7"
+            "file": "RedHatText_400Regular.ttf",
+            "sha256": "65bce50e2d904363a2ade7dac0b381c72638c43fd690a65a35aad1cc874f75cf"
+          },
+          {
+            "style": "400i",
+            "file": "RedHatText_400Regular_Italic.ttf",
+            "sha256": "6da9408ce2ad47d8f4b2881853d92aee45ca52af39b4c28ddedaab1fb91f57c5"
           },
           {
             "style": "700",
-            "file": "RedHatText-Bold.ttf",
-            "sha256": "a44ef4b6cfefb2e90d489247cdf3e269744673ebb68b48c89ce9e37041feccb4"
+            "file": "RedHatText_700Bold.ttf",
+            "sha256": "a82d498bd5314be56ccb79fb5c2244513a41a5c2b04be56a45751c26a2132a03"
+          },
+          {
+            "style": "700i",
+            "file": "RedHatText_700Bold_Italic.ttf",
+            "sha256": "1f2b2ed57f70ea28bacc1bd3ce3f0b740c5b16a262c61925400f1da5d1045a7c"
           }
         ],
         "stylesAvailable": [
           "400",
-          "700"
+          "400i",
+          "700",
+          "700i"
         ]
       },
       "stylesRequired": [
@@ -25057,9 +25984,9 @@
           "script": "Latin",
           "scriptSpecific": false
         },
-        "date": "2026-09-23",
-        "source": "docs/evidence/font-replacements-20260923/README.md",
-        "sourceNote": null,
+        "date": "2026-09-29",
+        "source": "docs/evidence/font-replacements-20260923/report.json",
+        "sourceNote": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json.",
         "verticalMetricsMatch": null,
         "verticalMetricsNote": null,
         "lineBreaksMatch": null,
@@ -25141,7 +26068,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 44
+        "rank": 42
       }
     },
     {
@@ -25168,13 +26095,49 @@
         "pendingBundle": null
       },
       "bundled": {
-        "yes": false,
+        "yes": true,
         "applies": "route-target",
         "family": "Figtree",
-        "packages": [],
-        "faces": [],
-        "stylesAvailable": [],
-        "pack": null
+        "pack": "open",
+        "packages": [
+          {
+            "name": "@expo-google-fonts/figtree",
+            "version": "0.4.1",
+            "pack": "open",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/figtree/v/0.4.1",
+            "vendored": "fonts/figtree",
+            "license": "OFL-1.1",
+            "reservedFontNames": []
+          }
+        ],
+        "faces": [
+          {
+            "style": "400",
+            "file": "Figtree_400Regular.ttf",
+            "sha256": "4e2e9876c4a908c2cbe410ceb648e4724464a84492bd49cb2d6e7b0d3f769a66"
+          },
+          {
+            "style": "400i",
+            "file": "Figtree_400Regular_Italic.ttf",
+            "sha256": "9e77e88c4713c641faa7385d8c367a52542969fcb24022fc649c06422ad721f5"
+          },
+          {
+            "style": "700",
+            "file": "Figtree_700Bold.ttf",
+            "sha256": "183bf1a8523731738c72be9aa8236453a21d6a3ed70bd8e5266723b212331dc4"
+          },
+          {
+            "style": "700i",
+            "file": "Figtree_700Bold_Italic.ttf",
+            "sha256": "eccf9cafb8a6112216b040112ce783553e30b30b1eb2649b9f2913e34d7ecbd2"
+          }
+        ],
+        "stylesAvailable": [
+          "400",
+          "400i",
+          "700",
+          "700i"
+        ]
       },
       "stylesRequired": [
         "400",
@@ -25188,12 +26151,7 @@
         "700",
         "700i"
       ],
-      "stylesMissing": [
-        "400",
-        "400i",
-        "700",
-        "700i"
-      ],
+      "stylesMissing": [],
       "stylesExplicitGaps": [],
       "approximateStyles": [],
       "stylesBasis": "assumed: real font not measured; four styles for Latin, regular and bold for script families",
@@ -25203,17 +26161,17 @@
       "measurements": null,
       "candidates": [],
       "hostVerification": {
-        "node": "NA",
-        "browser": "NA",
-        "editor": "NA",
-        "galleryEditor": "NA",
+        "node": "unverified",
+        "browser": "unverified",
+        "editor": "unverified",
+        "galleryEditor": "unverified",
         "galleryCards": "unverified"
       },
       "hostLoading": {
-        "node": "not bundled",
-        "browser": "not bundled",
-        "editor": "not bundled",
-        "galleryEditor": "not bundled",
+        "node": "only when pack: 'office' is requested (loadOfficeFontRegistry adds the open pack unless includeOpenFonts is false)",
+        "browser": "lazy: the browser loader fetches hash-verified vendored faces on demand (opf-render#54)",
+        "editor": "lazy: the playground loads them on demand (opf-editor#42)",
+        "galleryEditor": "pending a gallery editor release that includes opf-editor#42 (ref bump); not loaded today",
         "galleryCards": "self-hosted preview webfont: @fontsource-variable/figtree 5.3.0 (variable, weights 400 700, upright only)"
       },
       "nativeVerification": {
@@ -25250,14 +26208,18 @@
         "expectedStatusOnMain": "visual-substitute",
         "rerunNeeded": false
       },
-      "phase": 2,
-      "status": "loading-gap",
-      "statusReason": "route face Figtree is not bundled by opf-render",
-      "nextAction": "Bundle Figtree and obtain a separate reference for Tenorite (unmeasured).",
+      "phase": 4,
+      "status": "visual-gap",
+      "statusReason": "visual route; metric or appearance qualification outstanding",
+      "nextAction": "Figtree is bundled (FF-43: 400, 700, italics). Tenorite is not installed on the measuring host, so it is still unmeasured: obtain a separate reference before any claim.",
       "evidence": [
         {
           "label": "Font replacement measurements (2026-09-23)",
           "url": "docs/evidence/font-replacements-20260923/README.md"
+        },
+        {
+          "label": "FF-43 bundled replacement measurements (widths, vertical metrics, outline identity, 2026-09-29)",
+          "url": "docs/evidence/font-replacements-20260923/bundled-replacements-ff43-20260929.json"
         },
         {
           "label": "Parity run 2026-09-29 (table drawn extent)",
@@ -25265,12 +26227,12 @@
         }
       ],
       "priority": {
-        "score": 9,
-        "severity": 3,
+        "score": 6,
+        "severity": 2,
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 1,
-        "rank": 8
+        "rank": 27
       }
     },
     {
@@ -25297,13 +26259,49 @@
         "pendingBundle": null
       },
       "bundled": {
-        "yes": false,
+        "yes": true,
         "applies": "route-target",
         "family": "Figtree",
-        "packages": [],
-        "faces": [],
-        "stylesAvailable": [],
-        "pack": null
+        "pack": "open",
+        "packages": [
+          {
+            "name": "@expo-google-fonts/figtree",
+            "version": "0.4.1",
+            "pack": "open",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/figtree/v/0.4.1",
+            "vendored": "fonts/figtree",
+            "license": "OFL-1.1",
+            "reservedFontNames": []
+          }
+        ],
+        "faces": [
+          {
+            "style": "400",
+            "file": "Figtree_400Regular.ttf",
+            "sha256": "4e2e9876c4a908c2cbe410ceb648e4724464a84492bd49cb2d6e7b0d3f769a66"
+          },
+          {
+            "style": "400i",
+            "file": "Figtree_400Regular_Italic.ttf",
+            "sha256": "9e77e88c4713c641faa7385d8c367a52542969fcb24022fc649c06422ad721f5"
+          },
+          {
+            "style": "700",
+            "file": "Figtree_700Bold.ttf",
+            "sha256": "183bf1a8523731738c72be9aa8236453a21d6a3ed70bd8e5266723b212331dc4"
+          },
+          {
+            "style": "700i",
+            "file": "Figtree_700Bold_Italic.ttf",
+            "sha256": "eccf9cafb8a6112216b040112ce783553e30b30b1eb2649b9f2913e34d7ecbd2"
+          }
+        ],
+        "stylesAvailable": [
+          "400",
+          "400i",
+          "700",
+          "700i"
+        ]
       },
       "stylesRequired": [
         "400",
@@ -25317,12 +26315,7 @@
         "700",
         "700i"
       ],
-      "stylesMissing": [
-        "400",
-        "400i",
-        "700",
-        "700i"
-      ],
+      "stylesMissing": [],
       "stylesExplicitGaps": [],
       "approximateStyles": [],
       "stylesBasis": "assumed: real font not measured; four styles for Latin, regular and bold for script families",
@@ -25332,17 +26325,17 @@
       "measurements": null,
       "candidates": [],
       "hostVerification": {
-        "node": "NA",
-        "browser": "NA",
-        "editor": "NA",
-        "galleryEditor": "NA",
+        "node": "unverified",
+        "browser": "unverified",
+        "editor": "unverified",
+        "galleryEditor": "unverified",
         "galleryCards": "unverified"
       },
       "hostLoading": {
-        "node": "not bundled",
-        "browser": "not bundled",
-        "editor": "not bundled",
-        "galleryEditor": "not bundled",
+        "node": "only when pack: 'office' is requested (loadOfficeFontRegistry adds the open pack unless includeOpenFonts is false)",
+        "browser": "lazy: the browser loader fetches hash-verified vendored faces on demand (opf-render#54)",
+        "editor": "lazy: the playground loads them on demand (opf-editor#42)",
+        "galleryEditor": "pending a gallery editor release that includes opf-editor#42 (ref bump); not loaded today",
         "galleryCards": "self-hosted preview webfont: @fontsource-variable/figtree 5.3.0 (variable, weights 400 700, upright only)"
       },
       "nativeVerification": {
@@ -25379,14 +26372,18 @@
         "expectedStatusOnMain": "visual-substitute",
         "rerunNeeded": false
       },
-      "phase": 2,
-      "status": "loading-gap",
-      "statusReason": "route face Figtree is not bundled by opf-render",
-      "nextAction": "Bundle Figtree and obtain a separate reference for Tenorite Display (unmeasured).",
+      "phase": 4,
+      "status": "visual-gap",
+      "statusReason": "visual route; metric or appearance qualification outstanding",
+      "nextAction": "Figtree is bundled (FF-43). Tenorite Display is not installed on the measuring host, so it is still unmeasured: obtain a separate reference before any claim.",
       "evidence": [
         {
           "label": "Font replacement measurements (2026-09-23)",
           "url": "docs/evidence/font-replacements-20260923/README.md"
+        },
+        {
+          "label": "FF-43 bundled replacement measurements (widths, vertical metrics, outline identity, 2026-09-29)",
+          "url": "docs/evidence/font-replacements-20260923/bundled-replacements-ff43-20260929.json"
         },
         {
           "label": "Parity run 2026-09-29 (table drawn extent)",
@@ -25394,12 +26391,12 @@
         }
       ],
       "priority": {
-        "score": 9,
-        "severity": 3,
+        "score": 6,
+        "severity": 2,
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 1,
-        "rank": 9
+        "rank": 28
       }
     },
     {
@@ -25766,7 +26763,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 155
+        "rank": 154
       }
     },
     {
@@ -25981,13 +26978,49 @@
         "pendingBundle": null
       },
       "bundled": {
-        "yes": false,
+        "yes": true,
         "applies": "route-target",
         "family": "Figtree",
-        "packages": [],
-        "faces": [],
-        "stylesAvailable": [],
-        "pack": null
+        "pack": "open",
+        "packages": [
+          {
+            "name": "@expo-google-fonts/figtree",
+            "version": "0.4.1",
+            "pack": "open",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/figtree/v/0.4.1",
+            "vendored": "fonts/figtree",
+            "license": "OFL-1.1",
+            "reservedFontNames": []
+          }
+        ],
+        "faces": [
+          {
+            "style": "400",
+            "file": "Figtree_400Regular.ttf",
+            "sha256": "4e2e9876c4a908c2cbe410ceb648e4724464a84492bd49cb2d6e7b0d3f769a66"
+          },
+          {
+            "style": "400i",
+            "file": "Figtree_400Regular_Italic.ttf",
+            "sha256": "9e77e88c4713c641faa7385d8c367a52542969fcb24022fc649c06422ad721f5"
+          },
+          {
+            "style": "700",
+            "file": "Figtree_700Bold.ttf",
+            "sha256": "183bf1a8523731738c72be9aa8236453a21d6a3ed70bd8e5266723b212331dc4"
+          },
+          {
+            "style": "700i",
+            "file": "Figtree_700Bold_Italic.ttf",
+            "sha256": "eccf9cafb8a6112216b040112ce783553e30b30b1eb2649b9f2913e34d7ecbd2"
+          }
+        ],
+        "stylesAvailable": [
+          "400",
+          "400i",
+          "700",
+          "700i"
+        ]
       },
       "stylesRequired": [
         "400",
@@ -26001,12 +27034,7 @@
         "700",
         "700i"
       ],
-      "stylesMissing": [
-        "400",
-        "400i",
-        "700",
-        "700i"
-      ],
+      "stylesMissing": [],
       "stylesExplicitGaps": [],
       "approximateStyles": [],
       "stylesBasis": "measured: styles the real font has on the measuring host",
@@ -26060,9 +27088,9 @@
           "script": "Latin",
           "scriptSpecific": false
         },
-        "date": "2026-09-23",
-        "source": "docs/evidence/font-replacements-20260923/README.md",
-        "sourceNote": null,
+        "date": "2026-09-29",
+        "source": "docs/evidence/font-replacements-20260923/report.json",
+        "sourceNote": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json.",
         "verticalMetricsMatch": null,
         "verticalMetricsNote": null,
         "lineBreaksMatch": null,
@@ -26070,17 +27098,17 @@
       },
       "candidates": [],
       "hostVerification": {
-        "node": "NA",
-        "browser": "NA",
-        "editor": "NA",
-        "galleryEditor": "NA",
+        "node": "unverified",
+        "browser": "unverified",
+        "editor": "unverified",
+        "galleryEditor": "unverified",
         "galleryCards": "unverified"
       },
       "hostLoading": {
-        "node": "not bundled",
-        "browser": "not bundled",
-        "editor": "not bundled",
-        "galleryEditor": "not bundled",
+        "node": "only when pack: 'office' is requested (loadOfficeFontRegistry adds the open pack unless includeOpenFonts is false)",
+        "browser": "lazy: the browser loader fetches hash-verified vendored faces on demand (opf-render#54)",
+        "editor": "lazy: the playground loads them on demand (opf-editor#42)",
+        "galleryEditor": "pending a gallery editor release that includes opf-editor#42 (ref bump); not loaded today",
         "galleryCards": "self-hosted preview webfont: @fontsource-variable/figtree 5.3.0 (variable, weights 400 700, upright only)"
       },
       "nativeVerification": {
@@ -26116,14 +27144,18 @@
         "expectedStatusOnMain": "visual-substitute",
         "rerunNeeded": false
       },
-      "phase": 2,
-      "status": "loading-gap",
-      "statusReason": "route face Figtree is not bundled by opf-render",
-      "nextAction": "Bundle Figtree; improve metrics (max 6.7%) and verify native wrapping.",
+      "phase": 4,
+      "status": "visual-gap",
+      "statusReason": "visual route; metric or appearance qualification outstanding",
+      "nextAction": "Figtree is bundled (FF-43: 400, 700, italics). Measured against Trebuchet MS 5.15: 1.1% to 2.0% mean and up to 6.7% max across the four styles. Improve metrics and verify native wrapping.",
       "evidence": [
         {
           "label": "Font replacement measurements (2026-09-23)",
           "url": "docs/evidence/font-replacements-20260923/README.md"
+        },
+        {
+          "label": "FF-43 bundled replacement measurements (widths, vertical metrics, outline identity, 2026-09-29)",
+          "url": "docs/evidence/font-replacements-20260923/bundled-replacements-ff43-20260929.json"
         },
         {
           "label": "Parity run 2026-09-29 (table drawn extent)",
@@ -26131,12 +27163,12 @@
         }
       ],
       "priority": {
-        "score": 7,
-        "severity": 3.5,
+        "score": 5,
+        "severity": 2.5,
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 15
+        "rank": 43
       }
     },
     {
@@ -26287,7 +27319,7 @@
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 1,
-        "rank": 33
+        "rank": 29
       }
     },
     {
@@ -26510,7 +27542,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 45
+        "rank": 44
       }
     },
     {
@@ -26661,7 +27693,7 @@
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 1,
-        "rank": 34
+        "rank": 30
       }
     },
     {
@@ -26760,7 +27792,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 88
+        "rank": 75
       }
     },
     {
@@ -26859,7 +27891,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 89
+        "rank": 76
       }
     },
     {
@@ -26882,13 +27914,49 @@
         "pendingBundle": null
       },
       "bundled": {
-        "yes": false,
+        "yes": true,
         "applies": "self",
         "family": "Work Sans",
-        "packages": [],
-        "faces": [],
-        "stylesAvailable": [],
-        "pack": null
+        "pack": "open",
+        "packages": [
+          {
+            "name": "@expo-google-fonts/work-sans",
+            "version": "0.4.2",
+            "pack": "open",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/work-sans/v/0.4.2",
+            "vendored": "fonts/work-sans",
+            "license": "OFL-1.1",
+            "reservedFontNames": []
+          }
+        ],
+        "faces": [
+          {
+            "style": "400",
+            "file": "WorkSans_400Regular.ttf",
+            "sha256": "e67985a843df0d3cdee51a3d0f329eb1774a344ad9ff0c9ab923751f1577e2a4"
+          },
+          {
+            "style": "400i",
+            "file": "WorkSans_400Regular_Italic.ttf",
+            "sha256": "6b7f7002e0b0c8b261fe878658ef5551e3e59d9f6b609b04efb90dde1e2c1ada"
+          },
+          {
+            "style": "700",
+            "file": "WorkSans_700Bold.ttf",
+            "sha256": "240d125fc9f8561363dc1ea3f513501253bd70942f41468f48f0b0cafb0c82e2"
+          },
+          {
+            "style": "700i",
+            "file": "WorkSans_700Bold_Italic.ttf",
+            "sha256": "a5b2cad813df0aaa7d16621f2e93b5117c25e9bc788bc9a3ad218e9d6348ce34"
+          }
+        ],
+        "stylesAvailable": [
+          "400",
+          "400i",
+          "700",
+          "700i"
+        ]
       },
       "stylesRequired": [
         "400",
@@ -26914,12 +27982,7 @@
           "Century Gothic"
         ]
       },
-      "stylesMissing": [
-        "400",
-        "400i",
-        "700",
-        "700i"
-      ],
+      "stylesMissing": [],
       "stylesExplicitGaps": [],
       "approximateStyles": [],
       "stylesBasis": "assumed: four styles for Latin faces, regular and bold for script faces",
@@ -26929,17 +27992,17 @@
       "measurements": null,
       "candidates": [],
       "hostVerification": {
-        "node": "NA",
-        "browser": "NA",
-        "editor": "NA",
-        "galleryEditor": "NA",
+        "node": "verified",
+        "browser": "verified",
+        "editor": "unverified",
+        "galleryEditor": "unverified",
         "galleryCards": "unverified"
       },
       "hostLoading": {
-        "node": "not bundled",
-        "browser": "not bundled",
-        "editor": "not bundled",
-        "galleryEditor": "not bundled",
+        "node": "only when pack: 'office' is requested (loadOfficeFontRegistry adds the open pack unless includeOpenFonts is false)",
+        "browser": "lazy: the browser loader fetches hash-verified vendored faces on demand (opf-render#54)",
+        "editor": "lazy: the playground loads them on demand (opf-editor#42)",
+        "galleryEditor": "pending a gallery editor release that includes opf-editor#42 (ref bump); not loaded today",
         "galleryCards": "self-hosted preview webfont: @fontsource/work-sans 5.3.0 (static, weights 400 700, upright only)"
       },
       "nativeVerification": {
@@ -26966,26 +28029,38 @@
         "resolvedAtRun": [],
         "pptxNamedValues": 0,
         "byDimension": {},
-        "expectedStatusOnMain": "missing",
+        "expectedStatusOnMain": "real",
         "rerunNeeded": false
       },
-      "phase": 2,
-      "status": "loading-gap",
-      "statusReason": "route face Work Sans is not bundled by opf-render",
-      "nextAction": "Add a permitted, pinned renderer bundle with all required styles; verify its Century Gothic and Lucida Sans roles separately.",
+      "phase": 1,
+      "status": "baseline-needed",
+      "statusReason": "bundled with required styles; fresh per-host verification outstanding",
+      "nextAction": "Bundled (FF-43): 400, 700, italics, @expo-google-fonts@0.4.2 instances (no Reserved Font Name). Verify its Century Gothic and Lucida Sans roles separately.",
       "evidence": [
         {
           "label": "Font replacement measurements (2026-09-23)",
           "url": "docs/evidence/font-replacements-20260923/README.md"
+        },
+        {
+          "label": "FF-43 bundled replacement measurements (widths, vertical metrics, outline identity, 2026-09-29)",
+          "url": "docs/evidence/font-replacements-20260923/bundled-replacements-ff43-20260929.json"
+        },
+        {
+          "label": "opf-render#60 (FF-43: open replacement faces bundled; open-fonts and lazy-fonts-browser tests)",
+          "url": "https://github.com/OpenPresentation/opf-render/pull/60"
+        },
+        {
+          "label": "opf#178 (FF-43: measurements, tracker, burndown)",
+          "url": "https://github.com/OpenPresentation/opf/pull/178"
         }
       ],
       "priority": {
-        "score": 3,
-        "severity": 3,
+        "score": 1,
+        "severity": 1,
         "valuesAffected": 0,
         "valuesOpen": 0,
-        "hostFactor": 1,
-        "rank": 90
+        "hostFactor": 0.6,
+        "rank": 155
       }
     },
     {

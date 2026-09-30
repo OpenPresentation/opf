@@ -2,9 +2,9 @@
   "description": "Pinned snapshot of the opf-render bundled font manifest (src/font-manifest.js, BUNDLED_FONT_MANIFEST), reduced to the fields the font tracker reads. Refresh with: node scripts/build-font-tracker.mjs --snapshot-manifest <opf-render>/src/font-manifest.js --commit <sha>. Core tests read this file so they never need the sibling repository.",
   "source": {
     "repository": "OpenPresentation/opf-render",
-    "commit": "d528be52878788bf2ecbdc138b839443ec66dc4e",
+    "commit": "3026287a5619a820f1ebdbaff60c781e9cff0a75",
     "path": "src/font-manifest.js",
-    "capturedAt": "2026-09-29",
+    "capturedAt": "2026-09-30",
     "manifestVersion": 1
   },
   "packages": [
@@ -778,61 +778,404 @@
       ]
     },
     {
-      "name": "red-hat-display",
-      "version": "6bb1048a6402b0076ea04f42951ec66263cd1437",
+      "name": "@expo-google-fonts/red-hat-display",
+      "version": "0.4.1",
       "pack": "open",
       "vendored": "fonts/red-hat-display",
-      "source": "https://github.com/RedHatOfficial/RedHatFont/tree/6bb1048a6402b0076ea04f42951ec66263cd1437/fonts/Proportional/RedHatDisplay/ttf",
+      "source": "https://www.npmjs.com/package/@expo-google-fonts/red-hat-display/v/0.4.1",
       "license": "OFL-1.1",
-      "licenseSha256": "4f1417e27511207cd217656c964f1b0d8b0c4a30156a1a699cf16dc5eba0dff6",
+      "licenseSha256": "435fbfb7e66988b2a06686a4cb966faec733f35d8fe100a1601573c27f3e0bb8",
       "reservedFontNames": [],
       "faces": [
         {
-          "file": "RedHatDisplay-Regular.ttf",
-          "family": "Red Hat Display",
-          "weight": 400,
-          "italic": false,
-          "sha256": "ab007b2a5b1590027cb049c3946de67870f6de9fa2420f8ef6e968392219aecd"
-        },
-        {
-          "file": "RedHatDisplay-Bold.ttf",
-          "family": "Red Hat Display",
-          "weight": 700,
-          "italic": false,
-          "sha256": "bac4990e2845c796ad0cfc47c3121b09df9285858ba841f7eab8bcdea87b74f1"
-        },
-        {
-          "file": "RedHatDisplay-Light.ttf",
+          "file": "RedHatDisplay_300Light.ttf",
           "family": "Red Hat Display",
           "weight": 300,
           "italic": false,
-          "sha256": "99ed6ddec6954941f708b23d3ab6873cba9f3067a4d1153d98be31ff2472dcb5"
+          "sha256": "77eae6c6360c8a8445268dac09c32b6915f658aed2613408d7e118436a0c3eef"
+        },
+        {
+          "file": "RedHatDisplay_300Light_Italic.ttf",
+          "family": "Red Hat Display",
+          "weight": 300,
+          "italic": true,
+          "sha256": "b76f8742593b53a466c99c61522f494aed59a3e4485f94fcdb2d2600bab0d6fb"
+        },
+        {
+          "file": "RedHatDisplay_400Regular.ttf",
+          "family": "Red Hat Display",
+          "weight": 400,
+          "italic": false,
+          "sha256": "b3c6289677cb95107738025b86cba835f0283b46dc60d6ace3bff9b9700bfbd0"
+        },
+        {
+          "file": "RedHatDisplay_400Regular_Italic.ttf",
+          "family": "Red Hat Display",
+          "weight": 400,
+          "italic": true,
+          "sha256": "947a7431db8083115e2aa2db5265a1abcb5a80a56c6d46e2c7862b9fab406b90"
+        },
+        {
+          "file": "RedHatDisplay_600SemiBold.ttf",
+          "family": "Red Hat Display",
+          "weight": 600,
+          "italic": false,
+          "sha256": "d8a250cf848e2b52e505776ec15c078dd022d920846d83f21bdb7a56e43c5ad8"
+        },
+        {
+          "file": "RedHatDisplay_600SemiBold_Italic.ttf",
+          "family": "Red Hat Display",
+          "weight": 600,
+          "italic": true,
+          "sha256": "d39a86c7334a400505a068b1c1a824c91b3ebae37563e36836c19bf889bfcd3a"
+        },
+        {
+          "file": "RedHatDisplay_700Bold.ttf",
+          "family": "Red Hat Display",
+          "weight": 700,
+          "italic": false,
+          "sha256": "861c7d8c0ebe239611dddce4f017d6a5c3389aea28bb31d9ee5bf8cded0826d0"
+        },
+        {
+          "file": "RedHatDisplay_700Bold_Italic.ttf",
+          "family": "Red Hat Display",
+          "weight": 700,
+          "italic": true,
+          "sha256": "6af3f3c0ce2b4aa5cee332cc5f075e3cab7707ce02db8a4dc241ab8104cb21cc"
         }
       ]
     },
     {
-      "name": "red-hat-text",
-      "version": "6bb1048a6402b0076ea04f42951ec66263cd1437",
+      "name": "@expo-google-fonts/red-hat-text",
+      "version": "0.4.1",
       "pack": "open",
       "vendored": "fonts/red-hat-text",
-      "source": "https://github.com/RedHatOfficial/RedHatFont/tree/6bb1048a6402b0076ea04f42951ec66263cd1437/fonts/Proportional/RedHatText/ttf",
+      "source": "https://www.npmjs.com/package/@expo-google-fonts/red-hat-text/v/0.4.1",
       "license": "OFL-1.1",
-      "licenseSha256": "4f1417e27511207cd217656c964f1b0d8b0c4a30156a1a699cf16dc5eba0dff6",
+      "licenseSha256": "435fbfb7e66988b2a06686a4cb966faec733f35d8fe100a1601573c27f3e0bb8",
       "reservedFontNames": [],
       "faces": [
         {
-          "file": "RedHatText-Regular.ttf",
+          "file": "RedHatText_400Regular.ttf",
           "family": "Red Hat Text",
           "weight": 400,
           "italic": false,
-          "sha256": "c0989952929fb6427d7b16999678418d52977aea764e66e51b76f9ca221b71b7"
+          "sha256": "65bce50e2d904363a2ade7dac0b381c72638c43fd690a65a35aad1cc874f75cf"
         },
         {
-          "file": "RedHatText-Bold.ttf",
+          "file": "RedHatText_400Regular_Italic.ttf",
+          "family": "Red Hat Text",
+          "weight": 400,
+          "italic": true,
+          "sha256": "6da9408ce2ad47d8f4b2881853d92aee45ca52af39b4c28ddedaab1fb91f57c5"
+        },
+        {
+          "file": "RedHatText_700Bold.ttf",
           "family": "Red Hat Text",
           "weight": 700,
           "italic": false,
-          "sha256": "a44ef4b6cfefb2e90d489247cdf3e269744673ebb68b48c89ce9e37041feccb4"
+          "sha256": "a82d498bd5314be56ccb79fb5c2244513a41a5c2b04be56a45751c26a2132a03"
+        },
+        {
+          "file": "RedHatText_700Bold_Italic.ttf",
+          "family": "Red Hat Text",
+          "weight": 700,
+          "italic": true,
+          "sha256": "1f2b2ed57f70ea28bacc1bd3ce3f0b740c5b16a262c61925400f1da5d1045a7c"
+        }
+      ]
+    },
+    {
+      "name": "barlow",
+      "version": "23e54b51ddffbc7713c583748e3bd86f62b1fa4a",
+      "pack": "open",
+      "vendored": "fonts/barlow",
+      "source": "https://github.com/google/fonts/tree/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/barlow",
+      "license": "OFL-1.1",
+      "licenseSha256": "186d750eb496a4c17a76385f82be6aea2ac1cf2de074a811d63786cf374ea73f",
+      "reservedFontNames": [],
+      "faces": [
+        {
+          "file": "Barlow-Regular.ttf",
+          "family": "Barlow",
+          "weight": 400,
+          "italic": false,
+          "sha256": "95aa02c7c43096e0dd44d787ba6216864a67157e402adab59b35572e0c1577ea"
+        },
+        {
+          "file": "Barlow-Italic.ttf",
+          "family": "Barlow",
+          "weight": 400,
+          "italic": true,
+          "sha256": "70cf45c354af39e55082fd506e748cc6a0a1812949875f99ded3f76bf691e4ca"
+        },
+        {
+          "file": "Barlow-Bold.ttf",
+          "family": "Barlow",
+          "weight": 700,
+          "italic": false,
+          "sha256": "84e6a4d61e7c3e21f3c50ea6a4f7e5303a3467864c038be6ea3759bab8d547f9"
+        },
+        {
+          "file": "Barlow-BoldItalic.ttf",
+          "family": "Barlow",
+          "weight": 700,
+          "italic": true,
+          "sha256": "079dcee4a53544177f3b16354b27b40b521e22861a40084ab4d052f0289ed9e8"
+        }
+      ]
+    },
+    {
+      "name": "anton",
+      "version": "23e54b51ddffbc7713c583748e3bd86f62b1fa4a",
+      "pack": "open",
+      "vendored": "fonts/anton",
+      "source": "https://github.com/google/fonts/tree/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/anton",
+      "license": "OFL-1.1",
+      "licenseSha256": "ee67e6ee22790b7929f1a3769ca2801d565c64b5a9096942c1adf5596de9c9e4",
+      "reservedFontNames": [],
+      "faces": [
+        {
+          "file": "Anton-Regular.ttf",
+          "family": "Anton",
+          "weight": 400,
+          "italic": false,
+          "sha256": "a4ba3a92350ebb031da0cb47630ac49eb265082ca1bc0450442f4a83ab947cab"
+        }
+      ]
+    },
+    {
+      "name": "@expo-google-fonts/figtree",
+      "version": "0.4.1",
+      "pack": "open",
+      "vendored": "fonts/figtree",
+      "source": "https://www.npmjs.com/package/@expo-google-fonts/figtree/v/0.4.1",
+      "license": "OFL-1.1",
+      "licenseSha256": "140d37233e7f3ce7313798befa9600893bcceaf41a55fa0fa5ad52f7f657a268",
+      "reservedFontNames": [],
+      "faces": [
+        {
+          "file": "Figtree_400Regular.ttf",
+          "family": "Figtree",
+          "weight": 400,
+          "italic": false,
+          "sha256": "4e2e9876c4a908c2cbe410ceb648e4724464a84492bd49cb2d6e7b0d3f769a66"
+        },
+        {
+          "file": "Figtree_400Regular_Italic.ttf",
+          "family": "Figtree",
+          "weight": 400,
+          "italic": true,
+          "sha256": "9e77e88c4713c641faa7385d8c367a52542969fcb24022fc649c06422ad721f5"
+        },
+        {
+          "file": "Figtree_700Bold.ttf",
+          "family": "Figtree",
+          "weight": 700,
+          "italic": false,
+          "sha256": "183bf1a8523731738c72be9aa8236453a21d6a3ed70bd8e5266723b212331dc4"
+        },
+        {
+          "file": "Figtree_700Bold_Italic.ttf",
+          "family": "Figtree",
+          "weight": 700,
+          "italic": true,
+          "sha256": "eccf9cafb8a6112216b040112ce783553e30b30b1eb2649b9f2913e34d7ecbd2"
+        }
+      ]
+    },
+    {
+      "name": "@expo-google-fonts/work-sans",
+      "version": "0.4.2",
+      "pack": "open",
+      "vendored": "fonts/work-sans",
+      "source": "https://www.npmjs.com/package/@expo-google-fonts/work-sans/v/0.4.2",
+      "license": "OFL-1.1",
+      "licenseSha256": "749aca05078664ce682dce1b1b10096ac397cb088c1a6df4e1bb56f0092a9272",
+      "reservedFontNames": [],
+      "faces": [
+        {
+          "file": "WorkSans_400Regular.ttf",
+          "family": "Work Sans",
+          "weight": 400,
+          "italic": false,
+          "sha256": "e67985a843df0d3cdee51a3d0f329eb1774a344ad9ff0c9ab923751f1577e2a4"
+        },
+        {
+          "file": "WorkSans_400Regular_Italic.ttf",
+          "family": "Work Sans",
+          "weight": 400,
+          "italic": true,
+          "sha256": "6b7f7002e0b0c8b261fe878658ef5551e3e59d9f6b609b04efb90dde1e2c1ada"
+        },
+        {
+          "file": "WorkSans_700Bold.ttf",
+          "family": "Work Sans",
+          "weight": 700,
+          "italic": false,
+          "sha256": "240d125fc9f8561363dc1ea3f513501253bd70942f41468f48f0b0cafb0c82e2"
+        },
+        {
+          "file": "WorkSans_700Bold_Italic.ttf",
+          "family": "Work Sans",
+          "weight": 700,
+          "italic": true,
+          "sha256": "a5b2cad813df0aaa7d16621f2e93b5117c25e9bc788bc9a3ad218e9d6348ce34"
+        }
+      ]
+    },
+    {
+      "name": "@expo-google-fonts/eb-garamond",
+      "version": "0.4.3",
+      "pack": "open",
+      "vendored": "fonts/eb-garamond",
+      "source": "https://www.npmjs.com/package/@expo-google-fonts/eb-garamond/v/0.4.3",
+      "license": "OFL-1.1",
+      "licenseSha256": "0985066662eb755ed3683ae5482a81a9195b49ce3f7e165cc2388b3dbece7dd7",
+      "reservedFontNames": [],
+      "faces": [
+        {
+          "file": "EBGaramond_400Regular.ttf",
+          "family": "EB Garamond",
+          "weight": 400,
+          "italic": false,
+          "sha256": "d5baed6e48bf4c99a770e6edc86ddaf67942bb1850491ed54f94d5c2c213531e"
+        },
+        {
+          "file": "EBGaramond_400Regular_Italic.ttf",
+          "family": "EB Garamond",
+          "weight": 400,
+          "italic": true,
+          "sha256": "228da33df456ec4e0a149f33cfc2264d5bd500bdfcf55ee36710ca8df923cbd6"
+        },
+        {
+          "file": "EBGaramond_700Bold.ttf",
+          "family": "EB Garamond",
+          "weight": 700,
+          "italic": false,
+          "sha256": "8bb7f13020d522de1c441da0a76f05843b74d788c1b16a933af3be4880782d17"
+        },
+        {
+          "file": "EBGaramond_700Bold_Italic.ttf",
+          "family": "EB Garamond",
+          "weight": 700,
+          "italic": true,
+          "sha256": "0030bda44f15b85f5adee17dc25cb5948c547ecf7f6d06e10723b406cd15a472"
+        }
+      ]
+    },
+    {
+      "name": "@expo-google-fonts/archivo-narrow",
+      "version": "0.4.2",
+      "pack": "open",
+      "vendored": "fonts/archivo-narrow",
+      "source": "https://www.npmjs.com/package/@expo-google-fonts/archivo-narrow/v/0.4.2",
+      "license": "OFL-1.1",
+      "licenseSha256": "b2087ef3fb91248e346600d19021249152a9688efea72905aa1996bb16a4c8de",
+      "reservedFontNames": [],
+      "faces": [
+        {
+          "file": "ArchivoNarrow_400Regular.ttf",
+          "family": "Archivo Narrow",
+          "weight": 400,
+          "italic": false,
+          "sha256": "a6f42674111326d8a14897d87de4ce667090560941afc3e190709021982abf5a"
+        },
+        {
+          "file": "ArchivoNarrow_400Regular_Italic.ttf",
+          "family": "Archivo Narrow",
+          "weight": 400,
+          "italic": true,
+          "sha256": "61653c68a59fc5f0a660f2cfec0bad7344a626b8177649370e94cb732eabbb37"
+        },
+        {
+          "file": "ArchivoNarrow_700Bold.ttf",
+          "family": "Archivo Narrow",
+          "weight": 700,
+          "italic": false,
+          "sha256": "bc2698008c4fa878f17b9ffb64c6fd2f0c83ca1f69cda591253221efb357a78d"
+        },
+        {
+          "file": "ArchivoNarrow_700Bold_Italic.ttf",
+          "family": "Archivo Narrow",
+          "weight": 700,
+          "italic": true,
+          "sha256": "dd588c564e4dec669335f6fea01b1f229f7629c3e836178e3ad9db8d6e9d6228"
+        }
+      ]
+    },
+    {
+      "name": "@expo-google-fonts/libre-caslon-text",
+      "version": "0.4.0",
+      "pack": "open",
+      "vendored": "fonts/libre-caslon-text",
+      "source": "https://www.npmjs.com/package/@expo-google-fonts/libre-caslon-text/v/0.4.0",
+      "license": "OFL-1.1",
+      "licenseSha256": "a294245c822c5aa9fd9a9f3189418e99415428be5fecadf797793d5d8f6a3ad3",
+      "reservedFontNames": [],
+      "faces": [
+        {
+          "file": "LibreCaslonText_400Regular.ttf",
+          "family": "Libre Caslon Text",
+          "weight": 400,
+          "italic": false,
+          "sha256": "912cda295d683d283f65944563ef2204413ef85bf49748482a5e263c4d56afd4"
+        },
+        {
+          "file": "LibreCaslonText_400Regular_Italic.ttf",
+          "family": "Libre Caslon Text",
+          "weight": 400,
+          "italic": true,
+          "sha256": "a32b7d8314e5f7e6dd919d1df2334ecc7b92e54173c8cc421ef8e9e4bae97061"
+        },
+        {
+          "file": "LibreCaslonText_700Bold.ttf",
+          "family": "Libre Caslon Text",
+          "weight": 700,
+          "italic": false,
+          "sha256": "ddff46045846dfc35f20db138117a2bf249bb75b9336c4ee823b162d22ac82e6"
+        }
+      ]
+    },
+    {
+      "name": "@expo-google-fonts/bitter",
+      "version": "0.4.2",
+      "pack": "open",
+      "vendored": "fonts/bitter",
+      "source": "https://www.npmjs.com/package/@expo-google-fonts/bitter/v/0.4.2",
+      "license": "OFL-1.1",
+      "licenseSha256": "152a1e283e23b42c4940da4c72f2f5bebaa17969cb77c76d7af05903846006f1",
+      "reservedFontNames": [
+        "Bitter Pro"
+      ],
+      "faces": [
+        {
+          "file": "Bitter_400Regular.ttf",
+          "family": "Bitter",
+          "weight": 400,
+          "italic": false,
+          "sha256": "46a52a6b4e3202563bac5134c02e4d9db63685c439104a803a0b4fbf9e8ceaf4"
+        },
+        {
+          "file": "Bitter_400Regular_Italic.ttf",
+          "family": "Bitter",
+          "weight": 400,
+          "italic": true,
+          "sha256": "4eda5cb005b1af2d5a733e0dcd727f65e2bddd0ea0466893f6d9259929ef20b2"
+        },
+        {
+          "file": "Bitter_700Bold.ttf",
+          "family": "Bitter",
+          "weight": 700,
+          "italic": false,
+          "sha256": "391582a3004c7600b7234123c3c810b8c2c5ed3c90af7f087fe55f003cc075bf"
+        },
+        {
+          "file": "Bitter_700Bold_Italic.ttf",
+          "family": "Bitter",
+          "weight": 700,
+          "italic": true,
+          "sha256": "65fad0650e416aebb4a7f6893633907f0e10ea153974b0c69f9074b611c259c4"
         }
       ]
     },

@@ -50,10 +50,14 @@ assert.throws(() => galleryLazyFontManifestForExample({}, version, 'await regist
 // The renderer checked out beside this repository (when built) yields a manifest that passes the same checks.
 const sibling = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../opf-render/dist/fonts-node.js');
 if (existsSync(sibling)) {
-  const real = galleryLazyFontManifest(await import(pathToFileURL(sibling).href), '0.11.0');
+  const siblingFonts = await import(pathToFileURL(sibling).href);
+  const real = galleryLazyFontManifest(siblingFonts, '0.11.0');
   if (real) {
     const faces = real.packages.reduce((total, item) => total + item.faces.length, 0);
-    assert.equal(faces, 51, 'the 35 open faces and the 16 Intos faces');
+    // Every vendored open-pack or embed:"used" face of the sibling renderer (the count grows as open families are bundled: 51 with 35 open faces and the 16 Intos faces, 82 with FF-43).
+    const expected = siblingFonts.BUNDLED_FONT_MANIFEST.packages.filter(item => item.vendored && (item.pack === 'open' || item.embed === 'used')).reduce((total, item) => total + item.faces.length, 0);
+    assert.equal(faces, expected, 'the vendored open and Intos faces of the renderer');
+    assert.ok(faces >= 51);
     assert.ok(real.packages.some(item => item.name === 'intos' && item.noticeFile === 'NOTICE.md'));
     assert.equal(real.packages.some(item => item.name === 'carlito'), false, 'Carlito is eager, not lazy');
     console.log(`Gallery lazy fonts: fake and sibling-renderer manifests verified (${real.packages.length} packages, ${faces} faces).`);

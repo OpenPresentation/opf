@@ -49,7 +49,7 @@
     "Aptos family (the owner's review predates this). Intos, Intos Display, Intos Narrow and Intos Serif measured 0.000% mean and maximum width delta in all four styles against Aptos 2.01, with equal vertical metrics and original (Inter-derived; serif Gelasio-derived) outlines under OFL-1.1 with no Reserved Font Name. They are the metric routes in policy (opf#166), vendored in opf-render (#54, `d528be5`, pinned commit `fef9315c`) and loaded lazily by browser hosts (opf-editor#42). Independently re-verified for Aptos, Aptos Display and Aptos Narrow; Aptos Serif was measured from Microsoft's Aptos Fonts download. The parity run on the merged mains passes all 704 Aptos and Aptos Display values, so they no longer lead the priority queue. Node and browser verification is recorded for the family; the editor playground test covers the Aptos scheme (Aptos and Aptos Display); the gallery editor waits for a release. The owner's \"no verified compatible replacement\" is superseded.",
     "The committed parity run (opf#175, on the merged mains opf `338ddcd4` and opf-render `d528be5`) is 660 perfect, 33 near and 157 mismatch over 850 values, with fontResolution 733 pass, 31 near and 86 fail. Earlier runs (5 perfect, then 25) are history.",
     "Georgia now has a metric tier: Gelasio with liga and clig disabled (opf#163, opf-render#49, including the raster ZWNJ fix). The parity run on the merged mains reports it as a metric substitute for all 6 values.",
-    "Open families are now vendored from unmodified upstream or npm packages (opf-render#50): Open Sans, Montserrat (including 900), Poppins, Bebas Neue, PT Serif, Lora, Merriweather Sans, Source Sans 3 (with the Source Sans Pro alias), Red Hat Display (300, 400, 700) and Red Hat Text (400, 700). Raleway and Playfair Display are not bundled because resvg ignores the wght axis. The owner's \"bundle\" rows for the bundled families become verification work; the remaining bundling work is Anton, Archivo Narrow, Barlow, Bitter, EB Garamond, Figtree, Libre Caslon Text, Work Sans, Liberation Mono, Sans and Serif, Playfair Display and Raleway.",
+    "Open families are now vendored from unmodified upstream or npm packages (opf-render#50): Open Sans, Montserrat (including 900), Poppins, Bebas Neue, PT Serif, Lora, Merriweather Sans, Source Sans 3 (with the Source Sans Pro alias), Red Hat Display (300, 400, 700) and Red Hat Text (400, 700). Raleway and Playfair Display are not bundled because resvg ignores the wght axis. The owner's \"bundle\" rows for the bundled families become verification work; FF-43 then bundled Anton, Archivo Narrow, Barlow, Bitter, EB Garamond, Figtree, Libre Caslon Text and Work Sans and completed Red Hat (see the FF-43 note below). The remaining bundling work is Liberation Mono, Sans and Serif, Playfair Display and Raleway.",
     "Carlito is vendored as unmodified google/fonts files (opf-render#58) because its Reserved Font Name applies. Licenses, Reserved Font Names and no-hotlink rules are guarded in core and the renderer (opf#165, opf-render#53).",
     "Script fonts: previews load script faces when the `scripts` option is passed (opf-render#55, opf-editor#40) and fall back per character to Noto Sans (opf-render#57). The parity run records 88 family uses as `missing` because it models a host without the script pack; loading is not verification per family.",
     "Hosts are recorded separately. The default Node registry (`prepareNodeFonts`) uses the `base` pack (Roboto and Roboto Mono only); the office-pack faces (Carlito, Arimo, Tinos, Cousine, Gelasio, Caladea, Intos) and the open pack load only when `pack: 'office'` is requested, and script faces only when the `scripts` option is passed. Browser hosts and the opf-editor playground load the 33 eager base and office faces and now load the vendored open pack and Intos lazily, on demand (opf-render#54, opf-editor#42). The gallery editor (a vendored opf-editor bundle) gets them only with a release that includes opf-editor#42, so it is recorded as pending, not as a gap in the family's status.",
@@ -57,7 +57,8 @@
     "fontResolution treats a policy look-alike as near, not fail, when the PPTX names the selected family (opf#159). Parity harness fixes merged in opf#164 and opf#168. The value set is 850 after pptx-gallery#40 removed 50 unsupported chart types; Aptos and Aptos Display each appear in 704 of them.",
     "Selawik 1.01 was measured and rejected as a Segoe UI replacement (opf#166: regular 0.16% mean and 2.51% max on the standard 300-string corpus, 0.73% and 9.7% on the reviewer's broader corpus); Red Hat Display stays the visual route. Segoe UI Light, Semilight and Semibold were measured separately.",
     "Cover slide centering (opf-pptx#97) is geometry work with no font impact.",
-    "The seven shipped script-font dependencies missing from the registry (Noto Sans Arabic, Sinhala, Lao, Myanmar, Thaana, Syriac and Noto Serif Tibetan) are tracked as policy-gap records. Adding their policy rows is follow-up work: this change does not edit font-policy.json."
+    "The seven shipped script-font dependencies missing from the registry (Noto Sans Arabic, Sinhala, Lao, Myanmar, Thaana, Syriac and Noto Serif Tibetan) are tracked as policy-gap records. Adding their policy rows is follow-up work: this change does not edit font-policy.json.",
+    "FF-43 (open replacement faces, opf-render branch claude/ff-43-bundle-open-candidates with this companion change): Barlow and Anton (google/fonts statics, byte-identical at commit 23e54b51ddff), Figtree, Work Sans, EB Garamond, Archivo Narrow, Libre Caslon Text and Bitter (npm-derived @expo-google-fonts statics, exact versions; no Reserved Font Name except Bitter, whose reserved name \"Bitter Pro\" is in no face name) are bundled with only the styles the policy needs, lazy in browser hosts; the eager list stays 33 faces. Red Hat Display now ships 300, 400, 600 and 700 with italics and Red Hat Text 400 and 700 with italics: the RedHatFont repository statics were unusable (italics lack the OS/2 italic bit, SemiBold and Bold declare 707 and 799, so a 600 request paints as Bold and every italic as one face in resvg, probed), and Red Hat has no Reserved Font Name, so the correctly labelled @expo-google-fonts instances replace them. Libre Caslon Text has no bold italic upstream (explicit gap). The 19 rows whose route face was measured are re-measured (Rockwell on Bitter: 1.1% to 4.4% mean, up to 8.5% max) on 2026-09-29 against the installed Windows originals; the widths are unchanged (except Corbel and Gill Sans MT, which now follow the vendored Source Sans 3) and every row stays visual: none meets the metric bar. Grandview, Grandview Display, Tenorite and Tenorite Display are not installed on the measuring host and stay unmeasured."
   ],
   "statusDefs": {
     "loading-gap": {
@@ -532,6 +533,17 @@
         "700"
       ],
       "reason": "Bold is required for parity with the other script packs; the pinned package ships regular only (owner: resolve the regular-only coverage)."
+    },
+    "Libre Caslon Text": {
+      "styles": [
+        "400",
+        "400i",
+        "700"
+      ],
+      "explicitGaps": [
+        "700i"
+      ],
+      "reason": "Upstream ships Regular, Italic and Bold only (no bold italic in the static releases or the Google Fonts instances); a bold italic request draws the real italic, reported visual, and bold is never synthesized."
     }
   },
   "metricBar": {
@@ -545,7 +557,26 @@
     "Aptos": "2026-09-29",
     "Aptos Display": "2026-09-29",
     "Aptos Narrow": "2026-09-29",
-    "Aptos Serif": "2026-09-29"
+    "Aptos Serif": "2026-09-29",
+    "Franklin Gothic Book": "2026-09-29",
+    "Franklin Gothic Medium": "2026-09-29",
+    "Impact": "2026-09-29",
+    "Century Gothic": "2026-09-29",
+    "Lucida Sans": "2026-09-29",
+    "Lucida Sans Unicode": "2026-09-29",
+    "Trebuchet MS": "2026-09-29",
+    "Garamond": "2026-09-29",
+    "Arial Narrow": "2026-09-29",
+    "Baskerville Old Face": "2026-09-29",
+    "Bookman Old Style": "2026-09-29",
+    "Segoe UI": "2026-09-29",
+    "Segoe UI Light": "2026-09-29",
+    "Segoe UI Semilight": "2026-09-29",
+    "Segoe UI Semibold": "2026-09-29",
+    "Tahoma": "2026-09-29",
+    "Corbel": "2026-09-29",
+    "Gill Sans MT": "2026-09-29",
+    "Rockwell": "2026-09-29"
   },
   "phaseOverrides": {
     "Aptos Mono": {
@@ -679,6 +710,86 @@
         "renderLazyBrowser"
       ],
       "note": "Node: opf-render aptos-preview test resolves the Aptos family to Intos as metric with fixed widths (office pack). Browser: aptos-preview-browser loads all sixteen Intos faces in Chromium and matches shaped advances within 0.1 px; lazy-fonts-browser fetches exactly the eight Intos and Intos Display files for an Aptos deck. Editor: the playground test exercises the Aptos scheme (Aptos and Aptos Display) only, so this family is unverified there. The gallery editor waits for a release that includes opf-editor#42. Scope is the Intos faces; native PowerPoint is separate."
+    },
+    "Barlow": {
+      "node": "verified",
+      "browser": "verified",
+      "evidence": [
+        "ff43Render"
+      ],
+      "note": "Node: opf-render open-fonts test resolves Barlow exact in a strict office registry and paints every one of its faces as itself and distinctly in resvg (per-face pixel check). Browser: lazy-fonts-browser fetches exactly its hash-verified vendored files on demand, and the document paints the measured advances within 0.1 px (FF-43 scheme pairs). Editor, gallery editor and gallery cards are unverified; native PowerPoint is separate."
+    },
+    "Anton": {
+      "node": "verified",
+      "browser": "verified",
+      "evidence": [
+        "ff43Render"
+      ],
+      "note": "Node: opf-render open-fonts test resolves Anton exact in a strict office registry and paints every one of its faces as itself and distinctly in resvg (per-face pixel check). Browser: lazy-fonts-browser fetches exactly its hash-verified vendored files on demand, and the document paints the measured advances within 0.1 px (FF-43 scheme pairs). Editor, gallery editor and gallery cards are unverified; native PowerPoint is separate."
+    },
+    "Figtree": {
+      "node": "verified",
+      "browser": "verified",
+      "evidence": [
+        "ff43Render"
+      ],
+      "note": "Node: opf-render open-fonts test resolves Figtree exact in a strict office registry and paints every one of its faces as itself and distinctly in resvg (per-face pixel check). Browser: lazy-fonts-browser fetches exactly its hash-verified vendored files on demand, and the document paints the measured advances within 0.1 px (FF-43 scheme pairs). Editor, gallery editor and gallery cards are unverified; native PowerPoint is separate."
+    },
+    "Work Sans": {
+      "node": "verified",
+      "browser": "verified",
+      "evidence": [
+        "ff43Render"
+      ],
+      "note": "Node: opf-render open-fonts test resolves Work Sans exact in a strict office registry and paints every one of its faces as itself and distinctly in resvg (per-face pixel check). Browser: lazy-fonts-browser fetches exactly its hash-verified vendored files on demand, and the document paints the measured advances within 0.1 px (FF-43 scheme pairs). Editor, gallery editor and gallery cards are unverified; native PowerPoint is separate."
+    },
+    "EB Garamond": {
+      "node": "verified",
+      "browser": "verified",
+      "evidence": [
+        "ff43Render"
+      ],
+      "note": "Node: opf-render open-fonts test resolves EB Garamond exact in a strict office registry and paints every one of its faces as itself and distinctly in resvg (per-face pixel check). Browser: lazy-fonts-browser fetches exactly its hash-verified vendored files on demand, and the document paints the measured advances within 0.1 px (FF-43 scheme pairs). Editor, gallery editor and gallery cards are unverified; native PowerPoint is separate."
+    },
+    "Archivo Narrow": {
+      "node": "verified",
+      "browser": "verified",
+      "evidence": [
+        "ff43Render"
+      ],
+      "note": "Node: opf-render open-fonts test resolves Archivo Narrow exact in a strict office registry and paints every one of its faces as itself and distinctly in resvg (per-face pixel check). Browser: lazy-fonts-browser fetches exactly its hash-verified vendored files on demand, and the document paints the measured advances within 0.1 px (FF-43 scheme pairs). Editor, gallery editor and gallery cards are unverified; native PowerPoint is separate."
+    },
+    "Libre Caslon Text": {
+      "node": "verified",
+      "browser": "verified",
+      "evidence": [
+        "ff43Render"
+      ],
+      "note": "Node: opf-render open-fonts test resolves Libre Caslon Text exact in a strict office registry and paints every one of its faces as itself and distinctly in resvg (per-face pixel check). Browser: lazy-fonts-browser fetches exactly its hash-verified vendored files on demand, and the document paints the measured advances within 0.1 px (FF-43 scheme pairs). Editor, gallery editor and gallery cards are unverified; native PowerPoint is separate."
+    },
+    "Red Hat Display": {
+      "node": "verified",
+      "browser": "verified",
+      "evidence": [
+        "ff43Render"
+      ],
+      "note": "Node: opf-render open-fonts test resolves Red Hat Display exact in a strict office registry and paints every one of its faces as itself and distinctly in resvg (per-face pixel check). Browser: lazy-fonts-browser fetches exactly its hash-verified vendored files on demand, and the document paints the measured advances within 0.1 px (FF-43 scheme pairs). Editor, gallery editor and gallery cards are unverified; native PowerPoint is separate."
+    },
+    "Red Hat Text": {
+      "node": "verified",
+      "browser": "verified",
+      "evidence": [
+        "ff43Render"
+      ],
+      "note": "Node: opf-render open-fonts test resolves Red Hat Text exact in a strict office registry and paints every one of its faces as itself and distinctly in resvg (per-face pixel check). Browser: lazy-fonts-browser fetches exactly its hash-verified vendored files on demand, and the document paints the measured advances within 0.1 px (FF-43 scheme pairs). Editor, gallery editor and gallery cards are unverified; native PowerPoint is separate."
+    },
+    "Bitter": {
+      "node": "verified",
+      "browser": "verified",
+      "evidence": [
+        "ff43Render"
+      ],
+      "note": "Node: opf-render open-fonts test resolves Bitter exact in a strict office registry and paints every one of its faces as itself and distinctly in resvg (per-face pixel check). Browser: lazy-fonts-browser fetches exactly its hash-verified vendored files on demand, and the document paints the measured advances within 0.1 px (FF-43 scheme pairs). Editor, gallery editor and gallery cards are unverified; native PowerPoint is separate."
     }
   },
   "nativeVerification": {
@@ -777,15 +888,17 @@
       ]
     },
     "Arial Narrow": {
-      "nextAction": "Bundle Archivo Narrow and improve condensed metrics; mean 0.38% and max 4.3% do not qualify it as metric.",
+      "nextAction": "Archivo Narrow is bundled (FF-43: 400, 700, italics). Measured against Arial Narrow 2.40: regular and italic 0.73% mean and 4.3% max, bold and bold italic 0.02% and 0.6%; outlines differ and vertical metrics differ, so it is not metric.",
       "evidence": [
-        "measurement"
+        "measurement",
+        "ff43Measure"
       ]
     },
     "Baskerville Old Face": {
-      "nextAction": "Bundle Libre Caslon Text and reconsider compatibility: measured maximum drift is 23.7% and mean 19.2%, regular only.",
+      "nextAction": "Libre Caslon Text is bundled (FF-43: 400, 400 italic, 700). Measured against Baskerville Old Face 1.51, regular only: 19.2% mean and 23.7% max. Reconsider the route: the widths are far from the original.",
       "evidence": [
-        "measurement"
+        "measurement",
+        "ff43Measure"
       ]
     },
     "Bodoni MT": {
@@ -802,9 +915,10 @@
       ]
     },
     "Bookman Old Style": {
-      "nextAction": "Bundle permitted Libre Caslon Text files; improve the substantial width differences (max 14.0%).",
+      "nextAction": "Libre Caslon Text is bundled (FF-43: 400, 400 italic, 700; no bold italic upstream). Measured against Bookman Old Style 2.35 (host styles 300 and 600): 3.1% mean and 6.2% max regular, 1.1% and 4.0% bold; the bold italic draws the real italic (weight 400, reported visual): 11.0% and 14.0%. Improve the substantial width differences.",
       "evidence": [
-        "measurement"
+        "measurement",
+        "ff43Measure"
       ]
     },
     "Calibri Light": {
@@ -828,9 +942,10 @@
       ]
     },
     "Century Gothic": {
-      "nextAction": "Bundle Work Sans; qualify geometric appearance, widths and ink bounds (max 15.5%).",
+      "nextAction": "Work Sans is bundled (FF-43: 400, 700, italics). Measured against Century Gothic 2.35: regular 2.2% mean and 13.6% max, bold 3.2% and 15.5%, italic 1.6% and 10.9%, bold italic 3.2% and 14.6%. Qualify geometric appearance, widths and ink bounds.",
       "evidence": [
-        "measurement"
+        "measurement",
+        "ff43Measure"
       ]
     },
     "Century Schoolbook": {
@@ -856,7 +971,8 @@
       "nextAction": "Qualify each style's widths, kerning, line height and wrapping against bundled Source Sans 3 (max 5.2%).",
       "evidence": [
         "openPack",
-        "measurement"
+        "measurement",
+        "ff43Measure"
       ]
     },
     "Didot": {
@@ -866,46 +982,53 @@
       ]
     },
     "Franklin Gothic Book": {
-      "nextAction": "Bundle Barlow; verify Book and Italic weight linking and independent metrics (max 7.6%).",
+      "nextAction": "Barlow is bundled (FF-43: 400, 700, italics). Measured against Franklin Gothic Book 2.01: regular 2.8% mean and 7.6% max, italic 0.8% and 4.0%; vertical metrics differ. Verify Book and Italic weight linking, wrapping and native behavior.",
       "evidence": [
-        "measurement"
+        "measurement",
+        "ff43Measure"
       ]
     },
     "Franklin Gothic Medium": {
-      "nextAction": "Qualify Medium-specific weight and italic mapping separately from Book (max 6.5%).",
+      "nextAction": "Barlow is bundled (FF-43: 400, 700, italics). Measured against Franklin Gothic Medium 5.02: regular 1.1% mean and 6.5% max, italic 1.8% and 4.7%. Qualify Medium-specific weight and italic mapping separately from Book (Barlow Medium is not bundled).",
       "evidence": [
-        "measurement"
+        "measurement",
+        "ff43Measure"
       ]
     },
     "Garamond": {
-      "nextAction": "Bundle complete EB Garamond styles and fill the missing reference-style measurements (three styles measured; italic drifts up to 18.8%).",
+      "nextAction": "EB Garamond is bundled (FF-43: 400, 700, italics). Measured against Garamond 2.40: regular 1.8% mean and 4.2% max, bold 1.6% and 5.3%, italic 11.3% and 18.8% (three styles; the host font has no bold italic). Qualify italic widths before any wrapping claim.",
       "evidence": [
-        "measurement"
+        "measurement",
+        "ff43Measure"
       ]
     },
     "Gill Sans MT": {
       "nextAction": "Qualify humanist appearance and improve the substantial maximum width drift (14.6%) against Source Sans 3.",
       "evidence": [
         "openPack",
-        "measurement"
+        "measurement",
+        "ff43Measure"
       ]
     },
     "Grandview": {
-      "nextAction": "Bundle Barlow and obtain a separate reference measurement for Grandview (unmeasured).",
+      "nextAction": "Barlow is bundled (FF-43: 400, 700 and italics, google/fonts statics byte-identical at a pinned commit). Grandview is not installed on the measuring host, so it is still unmeasured: obtain a separate reference measurement before any width or appearance claim.",
       "evidence": [
-        "measurement"
+        "measurement",
+        "ff43Measure"
       ]
     },
     "Grandview Display": {
-      "nextAction": "Bundle Barlow and obtain a separate reference measurement for Grandview Display (unmeasured).",
+      "nextAction": "Barlow is bundled (FF-43). Grandview Display is not installed on the measuring host, so it is still unmeasured: obtain a separate reference measurement before any width or appearance claim.",
       "evidence": [
-        "measurement"
+        "measurement",
+        "ff43Measure"
       ]
     },
     "Impact": {
-      "nextAction": "Bundle Anton; qualify condensed-heavy appearance, widths and line breaks (max 5.1%).",
+      "nextAction": "Anton is bundled (FF-43: 400, the only style upstream ships; byte-identical google/fonts file). Measured against Impact 5.11: 1.9% mean and 5.1% max; vertical metrics differ. Qualify condensed-heavy appearance, widths and line breaks.",
       "evidence": [
-        "measurement"
+        "measurement",
+        "ff43Measure"
       ]
     },
     "Lucida Console": {
@@ -915,15 +1038,17 @@
       ]
     },
     "Lucida Sans": {
-      "nextAction": "Bundle Work Sans; measure Lucida Sans separately from Lucida Sans Unicode (max 5.0%).",
+      "nextAction": "Work Sans is bundled (FF-43). Measured against Lucida Sans 1.67: regular 1.4% mean and 5.0% max, italic 1.1% and 4.4% (the host font pairs its Demi style at weight 600; not measured against bold). Measure separately from Lucida Sans Unicode.",
       "evidence": [
-        "measurement"
+        "measurement",
+        "ff43Measure"
       ]
     },
     "Lucida Sans Unicode": {
-      "nextAction": "Bundle Work Sans; measure separately from Lucida Sans and verify Unicode coverage (max 5.0%).",
+      "nextAction": "Work Sans is bundled (FF-43). Measured against Lucida Sans Unicode 5.01: 1.3% mean and 5.0% max, regular only. Measure separately from Lucida Sans and verify Unicode coverage.",
       "evidence": [
-        "measurement"
+        "measurement",
+        "ff43Measure"
       ]
     },
     "Microsoft Sans Serif": {
@@ -940,9 +1065,10 @@
       ]
     },
     "Rockwell": {
-      "nextAction": "Bundle Bitter; qualify slab-serif appearance, kerning and wrapping (max 8.5%).",
+      "nextAction": "Bitter is bundled (FF-43: 400, 700, italics; instanced statics named \"Bitter\", allowed because the reserved name is \"Bitter Pro\"). Measured against Rockwell 1.65: regular 1.1% mean and 6.6% max, bold 4.4% and 8.5%, italic 1.5% and 6.9%, bold italic 3.3% and 6.8%; outlines differ and vertical metrics differ, so it is not metric. Qualify slab-serif appearance, kerning and wrapping.",
       "evidence": [
-        "measurement"
+        "measurement",
+        "ff43Measure"
       ]
     },
     "Seaford": {
@@ -960,27 +1086,30 @@
       ]
     },
     "Segoe UI": {
-      "nextAction": "Complete Red Hat Display italic coverage and qualify metrics (mean 1.7%, max 7.1%). Selawik was measured and rejected in opf#166 (regular 0.16% mean and 2.5% max on the FF-31 corpus, 0.73% and 9.7% on the reviewer's broader corpus; no italic faces); Red Hat Display stays the visual route.",
+      "nextAction": "Red Hat Display italics are bundled (FF-43: real 400 and 700 italic faces from @expo-google-fonts; the RedHatFont repository italics lack the OS/2 italic bit). Qualify metrics (mean 1.7%, max 7.1%). Selawik was measured and rejected in opf#166 (regular 0.16% mean and 2.5% max on the FF-31 corpus, 0.73% and 9.7% on the reviewer's broader corpus; no italic faces); Red Hat Display stays the visual route.",
       "evidence": [
         "openPack",
         "measurement",
-        "selawik"
+        "selawik",
+        "ff43Measure"
       ]
     },
     "Segoe UI Semibold": {
-      "nextAction": "Add the missing Red Hat Display 600 faces (upright and italic) and qualify the named style independently (Semibold 600 and 600 italic, mean 1.0%).",
+      "nextAction": "Red Hat Display 600 and 600 italic are bundled (FF-43: real weight-600 faces; the RedHatFont SemiBold declares 707 and paints as Bold). Measured against Segoe UI Semibold 5.71: 0.9% mean and 5.1% max upright, 1.1% and 6.5% italic. Qualify the named style independently.",
       "evidence": [
         "openPack",
         "measurement",
-        "selawik"
+        "selawik",
+        "ff43Measure"
       ]
     },
     "Segoe UI Light": {
-      "nextAction": "Complete required Red Hat Display 300 italic coverage and qualify light metrics (mean 1.9%, max 6.6%).",
+      "nextAction": "Red Hat Display 300 italic is bundled (FF-43). Measured against Segoe UI Light 5.71: 1.7% mean and 5.4% max upright, 2.0% and 6.6% italic. Qualify light metrics.",
       "evidence": [
         "openPack",
         "measurement",
-        "selawik"
+        "selawik",
+        "ff43Measure"
       ]
     },
     "Segoe UI Semilight": {
@@ -1014,21 +1143,24 @@
       ]
     },
     "Tenorite": {
-      "nextAction": "Bundle Figtree and obtain a separate reference for Tenorite (unmeasured).",
+      "nextAction": "Figtree is bundled (FF-43: 400, 700, italics). Tenorite is not installed on the measuring host, so it is still unmeasured: obtain a separate reference before any claim.",
       "evidence": [
-        "measurement"
+        "measurement",
+        "ff43Measure"
       ]
     },
     "Tenorite Display": {
-      "nextAction": "Bundle Figtree and obtain a separate reference for Tenorite Display (unmeasured).",
+      "nextAction": "Figtree is bundled (FF-43). Tenorite Display is not installed on the measuring host, so it is still unmeasured: obtain a separate reference before any claim.",
       "evidence": [
-        "measurement"
+        "measurement",
+        "ff43Measure"
       ]
     },
     "Trebuchet MS": {
-      "nextAction": "Bundle Figtree; improve metrics (max 6.7%) and verify native wrapping.",
+      "nextAction": "Figtree is bundled (FF-43: 400, 700, italics). Measured against Trebuchet MS 5.15: 1.1% to 2.0% mean and up to 6.7% max across the four styles. Improve metrics and verify native wrapping.",
       "evidence": [
-        "measurement"
+        "measurement",
+        "ff43Measure"
       ]
     },
     "Verdana": {
@@ -1490,63 +1622,73 @@
       ]
     },
     "Red Hat Display": {
-      "nextAction": "Complete the required 600 and italic faces (bundled: 300, 400, 700 upright) needed by Segoe UI, Semibold, Light and Semilight.",
+      "nextAction": "Complete for the required styles (FF-43): 300, 400, 600 and 700, each with italics (8 faces, @expo-google-fonts@0.4.1 instances; no Reserved Font Name). Every face paints as itself and distinctly in resvg. Remaining: per-host acceptance for the Segoe UI rows that route here.",
       "evidence": [
-        "openPack"
+        "openPack",
+        "ff43Measure"
       ]
     },
     "Red Hat Text": {
-      "nextAction": "Complete required style coverage beyond upright regular and bold (italics), needed by Tahoma.",
+      "nextAction": "Complete for the required styles (FF-43): 400 and 700 with italics (4 faces, @expo-google-fonts@0.4.1 instances). Every face paints as itself and distinctly in resvg. Remaining: per-host acceptance for Tahoma.",
       "evidence": [
-        "openPack"
+        "openPack",
+        "ff43Measure"
       ]
     },
     "Anton": {
-      "nextAction": "Add a permitted, pinned renderer bundle; verify exact-face behavior and its Impact role separately.",
+      "nextAction": "Bundled (FF-43): 400, byte-identical google/fonts file. Verify exact-face behavior and its Impact role separately.",
       "evidence": [
-        "measurement"
+        "measurement",
+        "ff43Measure"
       ]
     },
     "Archivo Narrow": {
-      "nextAction": "Add a permitted, pinned renderer bundle with all required styles; verify its Arial Narrow role separately.",
+      "nextAction": "Bundled (FF-43): 400, 700, italics, @expo-google-fonts@0.4.2 instances (no Reserved Font Name). Verify its Arial Narrow role separately.",
       "evidence": [
-        "measurement"
+        "measurement",
+        "ff43Measure"
       ]
     },
     "Barlow": {
-      "nextAction": "Add a permitted, pinned renderer bundle with all required styles; verify its Franklin Gothic and Grandview roles separately.",
+      "nextAction": "Bundled (FF-43): 400, 700, italics as google/fonts statics, byte-identical at commit 23e54b51. Verify its Franklin Gothic and Grandview roles separately.",
       "evidence": [
-        "measurement"
+        "measurement",
+        "ff43Measure"
       ]
     },
     "Bitter": {
-      "nextAction": "Add a permitted, pinned renderer bundle with all required styles; verify its Rockwell role separately.",
+      "nextAction": "Bundled (FF-43): 400, 700, italics, @expo-google-fonts@0.4.2 instances named \"Bitter\". The OFL reserves \"Bitter Pro\", which no face carries in its family or file name, so instanced statics are allowed. Verify its Rockwell role separately.",
       "evidence": [
-        "measurement"
+        "measurement",
+        "ff43Measure"
       ]
     },
     "EB Garamond": {
-      "nextAction": "Add a permitted, pinned renderer bundle with all required styles; verify its Garamond role separately.",
+      "nextAction": "Bundled (FF-43): 400, 700, italics, @expo-google-fonts@0.4.3 instances (no Reserved Font Name). Verify its Garamond role separately.",
       "evidence": [
-        "measurement"
+        "measurement",
+        "ff43Measure"
       ]
     },
     "Figtree": {
-      "nextAction": "Add a permitted, pinned renderer bundle with all required styles; verify its Tenorite and Trebuchet roles separately.",
+      "nextAction": "Bundled (FF-43): 400, 700, italics, @expo-google-fonts@0.4.1 instances (no Reserved Font Name). Verify its Tenorite and Trebuchet roles separately.",
       "evidence": [
-        "measurement"
+        "measurement",
+        "ff43Measure"
       ]
     },
     "Libre Caslon Text": {
-      "nextAction": "Add a permitted, pinned renderer bundle with all required styles; verify its Baskerville and Bookman roles separately.",
+      "nextAction": "Bundled (FF-43): 400, 400 italic and 700, @expo-google-fonts@0.4.0 instances (no Reserved Font Name). Upstream ships no bold italic, so 700i stays an explicit gap (the real italic draws, reported visual). Verify its Baskerville and Bookman roles separately.",
       "evidence": [
-        "measurement"
+        "measurement",
+        "ff43Measure"
       ]
     },
     "Work Sans": {
-      "nextAction": "Add a permitted, pinned renderer bundle with all required styles; verify its Century Gothic and Lucida Sans roles separately.",
+      "nextAction": "Bundled (FF-43): 400, 700, italics, @expo-google-fonts@0.4.2 instances (no Reserved Font Name). Verify its Century Gothic and Lucida Sans roles separately.",
       "evidence": [
-        "measurement"
+        "measurement",
+        "ff43Measure"
       ]
     },
     "Liberation Mono": {
@@ -2242,7 +2384,21 @@
     "parityIntos": {
       "label": "Parity run on the merged Intos mains (opf#175)",
       "url": "docs/programs/font-fidelity-everywhere/gallery-support/parity/PARITY-2026-09-29-intos-default.md"
-    }
+    },
+    "ff43Measure": {
+      "label": "FF-43 bundled replacement measurements (widths, vertical metrics, outline identity, 2026-09-29)",
+      "url": "docs/evidence/font-replacements-20260923/bundled-replacements-ff43-20260929.json"
+    },
+    "ff43Render": [
+      {
+        "label": "opf-render#60 (FF-43: open replacement faces bundled; open-fonts and lazy-fonts-browser tests)",
+        "url": "https://github.com/OpenPresentation/opf-render/pull/60"
+      },
+      {
+        "label": "opf#178 (FF-43: measurements, tracker, burndown)",
+        "url": "https://github.com/OpenPresentation/opf/pull/178"
+      }
+    ]
   },
   "galleryFontsSnapshot": "docs/programs/font-fidelity-everywhere/font-tracker.gallery-preview-fonts.json",
   "measurementSources": {
@@ -2265,6 +2421,82 @@
     "Aptos Serif": {
       "source": "docs/evidence/font-replacements-20260923/metric-candidates-20260929.json",
       "note": "Measured on 2026-09-29 (opf#166) from the files in Microsoft's Aptos Fonts download, because Aptos Serif is not installed on the measuring host."
+    },
+    "Franklin Gothic Book": {
+      "source": "docs/evidence/font-replacements-20260923/report.json",
+      "note": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json."
+    },
+    "Franklin Gothic Medium": {
+      "source": "docs/evidence/font-replacements-20260923/report.json",
+      "note": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json."
+    },
+    "Impact": {
+      "source": "docs/evidence/font-replacements-20260923/report.json",
+      "note": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json."
+    },
+    "Century Gothic": {
+      "source": "docs/evidence/font-replacements-20260923/report.json",
+      "note": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json."
+    },
+    "Lucida Sans": {
+      "source": "docs/evidence/font-replacements-20260923/report.json",
+      "note": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json."
+    },
+    "Lucida Sans Unicode": {
+      "source": "docs/evidence/font-replacements-20260923/report.json",
+      "note": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json."
+    },
+    "Trebuchet MS": {
+      "source": "docs/evidence/font-replacements-20260923/report.json",
+      "note": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json."
+    },
+    "Garamond": {
+      "source": "docs/evidence/font-replacements-20260923/report.json",
+      "note": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json."
+    },
+    "Arial Narrow": {
+      "source": "docs/evidence/font-replacements-20260923/report.json",
+      "note": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json."
+    },
+    "Baskerville Old Face": {
+      "source": "docs/evidence/font-replacements-20260923/report.json",
+      "note": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json."
+    },
+    "Bookman Old Style": {
+      "source": "docs/evidence/font-replacements-20260923/report.json",
+      "note": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json."
+    },
+    "Segoe UI": {
+      "source": "docs/evidence/font-replacements-20260923/report.json",
+      "note": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json."
+    },
+    "Segoe UI Light": {
+      "source": "docs/evidence/font-replacements-20260923/report.json",
+      "note": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json."
+    },
+    "Segoe UI Semilight": {
+      "source": "docs/evidence/font-replacements-20260923/report.json",
+      "note": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json."
+    },
+    "Segoe UI Semibold": {
+      "source": "docs/evidence/font-replacements-20260923/report.json",
+      "note": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json."
+    },
+    "Tahoma": {
+      "source": "docs/evidence/font-replacements-20260923/report.json",
+      "note": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json."
+    },
+    "Corbel": {
+      "source": "docs/evidence/font-replacements-20260923/report.json",
+      "note": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json."
+    },
+    "Gill Sans MT": {
+      "source": "docs/evidence/font-replacements-20260923/report.json",
+      "note": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json."
+    },
+    "Rockwell": {
+      "source": "docs/evidence/font-replacements-20260923/report.json",
+      "note": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json."
     }
   },
   "acceptance": {},
