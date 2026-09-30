@@ -513,7 +513,8 @@ for (const r of results) {
   if (r.previewExportDisagreement?.length) s.disagreements++;
   for (const reason of r.reasons ?? []) { const key = reason.replace(/\(e\.g\..*?\)|"[^"]*"|identical OPF to .*|same OPF background as .*|\d+:[^,)]+|\d+/g, '#').slice(0, 140); s.reasons[key] = (s.reasons[key] ?? 0) + 1; }
 }
-const head = (repo) => { try { return preq('child_process').execSync('git rev-parse HEAD', { cwd: repo }).toString().trim(); } catch { return null; } };
+// A published package is not a git checkout: its npm gitHead names the commit it was built from.
+const head = (repo) => { try { return preq('child_process').execSync('git rev-parse HEAD', { cwd: repo, stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim(); } catch { try { return JSON.parse(preq('fs').readFileSync(path.join(repo, 'package.json'), 'utf8')).gitHead ?? null; } catch { return null; } } };
 const meta = { generatedBy: 'dimension-audit/A/scripts/audit.mjs', node: process.version, commits: { opf: head(CORE), 'opf-render': head(RENDER), 'opf-pptx': head(PPTX), 'pptx-gallery': head(GALLERY) }, coreBundledLayouts: coreLayoutIds.size, method: 'gallery lib/opf-snippets.ts builders bundled with esbuild; @openpresentation/opf linked to local core dist; opf-render/opf-pptx from source; engine default text measurement for geometry and text; font availability against the ' + (FONT_HOST === 'strict' ? 'strict loadOfficeFontRegistry() probe (diagnostic)' : FONT_HOST + ' preview host model (parity/scripts/font-host.mjs)') + '; no Office/COM.', fontHost: FONT_HOST };
 await writeFile(path.join(OUT, ONLY ? `results.${ONLY.join('_')}.json` : 'results.json'), JSON.stringify({ meta, summary, results }, null, 1));
 console.log(JSON.stringify({ meta: meta.commits, summary: Object.fromEntries(Object.entries(summary).map(([k, v]) => [k, { total: v.total, counts: v.counts, withAssets: v.withAssetsCounts, disagreements: v.disagreements }])) }, null, 1));

@@ -1,7 +1,7 @@
 // Controls for the shared font availability helpers (FF-48). Run: node --test font-availability.test.mjs
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {classifyChosenFamilies, hostRenderOutcome, hostRenderReason, resolveFamily, slotsByFamily, svgTextRuns} from './font-availability.mjs';
+import {classifyChosenFamilies, hostRenderOutcome, hostRenderReason, resolveDrawnFamily, resolveFamily, slotsByFamily, svgTextRuns} from './font-availability.mjs';
 
 // Rows shaped like core `fontPolicyFor()` results (spec/reference/font-policy.json).
 const policy = {
@@ -77,4 +77,25 @@ test('svgTextRuns and slotsByFamily read the families and scripts the preview dr
   assert.deepEqual(runs.map(r => [r.family, r.text]), [['Aptos', 'Hello'], ['Noto Sans JP', '日本語'], ['Roboto Mono', 'code']]);
   const slots = slotsByFamily(runs);
   assert.deepEqual([...slots.get('Aptos')], ['latin']); assert.deepEqual([...slots.get('Noto Sans JP')], ['ea']);
+});
+
+test('resolveDrawnFamily resolves the faces the document draws (face-level lazy loading), not an unloaded Regular', () => {
+  const held = new Set(['Intos Display|700|false']);
+  const host = {resolutions: new Map(), drawn: new Map([['aptos display', [{weight: 700, italic: false}]]]), registry: {resolveFont: ({fontFamily, fontWeight, italic}) => held.has(`${fontFamily}|${fontWeight}|${italic}`) || fontFamily === 'Aptos Display' && fontWeight === 700
+    ? {compatibility: 'metric', resolvedFamily: 'Intos Display'} : {compatibility: 'visual', resolvedFamily: 'Carlito'}}};
+  assert.equal(resolveFamily(host, 'Aptos Display').compatibility, 'visual', 'Regular is not loaded: the alternate');
+  assert.deepEqual(resolveDrawnFamily(host, 'Aptos Display'), {ok: true, compatibility: 'metric', resolvedFamily: 'Intos Display'});
+  assert.equal(resolveDrawnFamily(host, 'Roboto').compatibility, 'visual', 'no drawn face: Regular, as before');
+  host.drawn.set('mixed', [{weight: 700, italic: false}, {weight: 400, italic: false}]);
+  assert.equal(resolveDrawnFamily(host, 'Mixed').compatibility, 'visual', 'the weakest drawn face decides');
+  host.resolutions.clear(); host.registry.resolveFont = () => { throw Object.assign(new Error('x'), {code: 'font-unavailable'}); };
+  assert.deepEqual(resolveDrawnFamily(host, 'Mixed'), {ok: false, code: 'font-unavailable'});
+});
+
+test('resolveDrawnFamily: a family the document draws nothing in resolves through the registry that holds every vendored face', () => {
+  const host = {resolutions: new Map(), drawn: new Map([['aptos display', [{weight: 700, italic: false}]]]),
+    registry: {resolveFont: () => ({compatibility: 'visual', resolvedFamily: 'Roboto'})},
+    unloaded: {resolutions: new Map(), registry: {resolveFont: ({fontFamily}) => ({compatibility: 'metric', resolvedFamily: fontFamily === 'Aptos' ? 'Intos' : fontFamily})}}};
+  assert.deepEqual(resolveDrawnFamily(host, 'Aptos'), {ok: true, compatibility: 'metric', resolvedFamily: 'Intos'});
+  assert.equal(resolveDrawnFamily({...host, drawn: undefined}, 'Aptos').compatibility, 'visual', 'a host that tracks no faces keeps the Regular resolution');
 });

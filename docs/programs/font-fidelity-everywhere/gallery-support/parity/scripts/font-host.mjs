@@ -54,6 +54,19 @@ export async function createFontHosts({renderDir, model = 'gallery'}) {
     catch { return {ok: false, status: 404}; }
   };
 
+  // opf-render 0.11.5 loads vendored faces by face (FF-41): the editor's gate fetches only the faces a document draws. The host therefore
+  // resolves a family through the faces the document draws in it (family -> [{weight, italic}]), not through an unloaded Regular.
+  // Older renderers have no presentationFaces and load whole families, so the default Regular face is what they hold.
+  function drawnFaces(doc) {
+    const out = new Map();
+    if (typeof browserFonts.presentationFaces !== 'function') return out;
+    for (const f of browserFonts.presentationFaces(structuredClone(doc), {})) { const k = f.family.toLowerCase(); (out.get(k) ?? out.set(k, []).get(k)).push({weight: f.weight, italic: !!f.italic}); }
+    return out;
+  }
+  const faceKey = doc => typeof browserFonts.presentationFaces === 'function'
+    ? [...browserFonts.presentationFaces(structuredClone(doc), {})].map(f => [f.family, f.weight, !!f.italic]).sort((a, b) => JSON.stringify(a) < JSON.stringify(b) ? -1 : 1)
+    : [...browserFonts.presentationFamilies(structuredClone(doc))].sort();
+
   async function galleryHost(doc) {
     const registry = await browserFonts.loadBrowserFontRegistry(eager, {document: fakeFontLoading(), fetch: served, substitutionPolicy: 'visual', fallbackFamily: 'Roboto',
       scriptBaseUrl: 'https://fonts.example/script-fonts/', lazyFontsBaseUrl: 'https://fonts.example/'});
@@ -65,7 +78,22 @@ export async function createFontHosts({renderDir, model = 'gallery'}) {
       if (pending().length) gate = {ok: false, code: 'fonts-unavailable', message: `${pending().join(', ')} did not finish loading`};
     } catch (e) { gate = {ok: false, code: 'fonts-unavailable', message: String(e.cause?.message ?? e.message).slice(0, 160)}; }
     const sel = browserFonts.autoScriptSelection(doc);
-    return {registry, options: {textMeasurement: registry.textMeasurement}, gate, diagnostics: [], selection: {...sel, packages: registry.loadedScriptPackages}};
+    const drawn = drawnFaces(doc);
+    // A role family the document draws no text in (a title-only layout has no body text) loads nothing, but it would load its vendored face the
+    // moment an edit draws it (the gate runs before every render). Its preview is what a registry holding every vendored face resolves it to.
+    const undrawn = [...browserFonts.presentationFamilies(structuredClone(doc))].filter(f => !drawn.has(f.toLowerCase()));
+    let unloaded = null;
+    if (undrawn.length) {
+      // A second registry, given what the gate would load once an edit draws text in each such family (heading and body of a probe slide).
+      const probe = await browserFonts.loadBrowserFontRegistry(eager, {document: fakeFontLoading(), fetch: served, substitutionPolicy: 'visual', fallbackFamily: 'Roboto',
+        scriptBaseUrl: 'https://fonts.example/script-fonts/', lazyFontsBaseUrl: 'https://fonts.example/'});
+      for (const family of undrawn) {
+        const probeDoc = {name: 'probe', design: {fontScheme: {id: 'probe', name: 'probe', major: family, minor: family}}, slides: [{title: 'Probe', text: 'Probe'}]};
+        try { await probe.ensureLazyFonts(probeDoc); } catch { /* the family keeps whatever the registry resolves without it */ }
+      }
+      unloaded = {registry: probe, resolutions: new Map()};
+    }
+    return {registry, options: {textMeasurement: registry.textMeasurement}, gate, diagnostics: [], selection: {...sel, packages: registry.loadedScriptPackages}, drawn, unloaded};
   }
 
   async function nodeHost(doc, withScripts) {
@@ -81,7 +109,7 @@ export async function createFontHosts({renderDir, model = 'gallery'}) {
     model,
     async hostFor(doc) {
       const key = model === 'office-only' ? 'office-only'
-        : JSON.stringify([browserFonts.autoScriptSelection(doc), otherNonLatin(doc), ...(model === 'gallery' ? [[...browserFonts.presentationFamilies(structuredClone(doc))].sort()] : [])]);
+        : JSON.stringify([browserFonts.autoScriptSelection(doc), otherNonLatin(doc), ...(model === 'gallery' ? [faceKey(doc)] : [])]);
       if (!cache.has(key)) cache.set(key, (async () => ({...(model === 'gallery' ? await galleryHost(doc) : await nodeHost(doc, model === 'node-auto')), resolutions: new Map()}))());
       return cache.get(key);
     },

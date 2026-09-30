@@ -12,10 +12,10 @@ Schema-valid 26/26. Catalog id resolves in core 26/26.
 | 2 | export writes barChart, barDir col, grouping clustered; core catalog mappings.openxml histogramChart |
 | 1 | export writes barChart, barDir col, grouping clustered; core catalog mappings.openxml treemapChart |
 | 1 | re-import returns chart type "column", expected "treemap" (..) |
+| 1 | export chart cache: .. |
 | 1 | re-import returns chart type "column", expected "histogram" (..) |
+| 1 | re-import chart data: .. |
 | 1 | re-import returns chart type "column", expected "pareto" (..) |
-| 1 | export writes barChart, barDir col, grouping clustered; core catalog mappings.openxml mapChart |
-| 1 | re-import returns chart type "column", expected "world" (..) |
 
 | id | valid | catalog | engine effect | reasons | class |
 |---|---|---|---|---|---|
@@ -39,7 +39,7 @@ Schema-valid 26/26. Catalog id resolves in core 26/26.
 | radar-with-markers | true | true | preview radar-with-markers marks {"series":1,"markers":8}; export radarChart, radarStyle marker, markers; re-import radar-with-markers |  | works |
 | filled-radar | true | true | preview filled-radar marks {"series":1,"markers":0}; export radarChart, radarStyle filled, no markers; re-import filled-radar |  | works |
 | treemap | true | true | preview treemap marks null; export barChart, barDir col, grouping clustered (chart-data-adapted: chartex-fallback); re-import column | export writes barChart, barDir col, grouping clustered; core catalog mappings.openxml treemapChart; export reports chart-data-adapted (chartex-fallback); re-import returns chart type "column", expected "treemap" (diagnostics: heading-import-reflow) | partial |
-| histogram | true | true | preview histogram marks null; export barChart, barDir col, grouping clustered (chart-data-adapted: chartex-fallback); re-import column | export writes barChart, barDir col, grouping clustered; core catalog mappings.openxml histogramChart; export reports chart-data-adapted (chartex-fallback); re-import returns chart type "column", expected "histogram" (diagnostics: heading-import-reflow) | partial |
+| histogram | true | true | preview histogram marks null; export barChart, barDir col, grouping clustered (chart-data-adapted: histogram-binned); re-import column | export writes barChart, barDir col, grouping clustered; core catalog mappings.openxml histogramChart; export reports chart-data-adapted (histogram-binned); export chart cache: 1 series in the chart, 0 in the data; re-import returns chart type "column", expected "histogram" (diagnostics: heading-import-reflow); re-import chart data: 7 rows, expected 60 | partial |
 | pareto | true | true | preview pareto marks null; export barChart, barDir col, grouping clustered (chart-data-adapted: chartex-fallback); re-import column | export writes barChart, barDir col, grouping clustered; core catalog mappings.openxml histogramChart; export reports chart-data-adapted (chartex-fallback); re-import returns chart type "column", expected "pareto" (diagnostics: heading-import-reflow) | partial |
 | world | true | true | preview world marks null; export barChart, barDir col, grouping clustered (chart-data-adapted: chartex-fallback); re-import column | export writes barChart, barDir col, grouping clustered; core catalog mappings.openxml mapChart; export reports chart-data-adapted (chartex-fallback); re-import returns chart type "column", expected "world" (diagnostics: heading-import-reflow) | partial |
 | box-and-whisker | true | true | preview box-and-whisker marks null; export barChart, barDir col, grouping clustered (chart-data-adapted: chartex-fallback); re-import column | export writes barChart, barDir col, grouping clustered; core catalog mappings.openxml boxWhiskerChart; export reports chart-data-adapted (chartex-fallback); re-import returns chart type "column", expected "box-and-whisker" (diagnostics: heading-import-reflow) | partial |

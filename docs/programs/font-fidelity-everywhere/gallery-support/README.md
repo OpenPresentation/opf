@@ -65,6 +65,12 @@ drift is removed by FF-22 and FF-37.
 
 - FF-52 (2026-09-30): audit A's layout check no longer reports "geometry identical to the no-layout default" for two exact cases. A core layout named in `DEFAULT_BASELINE_LAYOUTS` (the 20 layouts that are the engine default for their content) is its own baseline. A record with `deprecation.replacedBy` is measured against its replacement instead: the same slide with only the layout id swapped must draw the same SVG and the same export placement signature (`checks.alias`), and the replacement must be bundled and not deprecated, otherwise the reason is "layout is deprecated in favour of X but ...". Everything else, including a layout with a real effect that the export ignores, is reported as before. FF-55: with the 70 legacy ids bundled, `origin` is `core-catalog` for them and no layout is `gallery-only`.
 
+- FF-58 (2026-09-30): the parity host model follows face-level lazy loading (opf-render 0.11.5). `parity/scripts/font-host.mjs` records the faces a document draws and keys its cache on them; `font-availability.mjs` `resolveDrawnFamily` resolves a family through those faces, and through a probe registry when the document draws no text in it. Audits A and B use it through `classifyChosenFamilies`. No tolerance changed. `head()` of audit A and of the parity harness reads the package `gitHead` when the engine is a published package rather than a checkout.
+
+## Re-running on published packages
+
+To measure what npm serves, use the tarballs instead of worktrees (FF-58): `npm pack @openpresentation/opf@X @openpresentation/opf-render@Y @openpresentation/opf-pptx@Z @openpresentation/opf-editor@V`, unpack each into `sources/pub-<name>`, copy `dist/` to `src/` for opf-render and opf-pptx (audit A imports `src/`), run `npm install --omit=dev` in each, install the optional script-font peers of opf-render and `esbuild` (audit B and parity bundle the snippets with it), and stamp the registry `gitHead` (`npm view <pkg>@<version> gitHead`) into each `package.json`. The core is a worktree of its release tag (`pnpm install && pnpm -r build`), and its `packages/javascript` files should be byte-compared with the unpacked tarball. Point `audit-A-*`, `audit-B-*` and `parity-*` at those directories (Windows: junctions). Pass the register loader to Node as a `file:///` URL.
+
 ## Re-running against new heads
 
 The scripts locate their inputs relative to their own folder, so copy them into
