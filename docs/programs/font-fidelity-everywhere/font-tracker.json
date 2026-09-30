@@ -826,7 +826,7 @@
         "source": "docs/evidence/font-replacements-20260923/metric-candidates-20260929.json",
         "sourceNote": "Measured on 2026-09-29 (opf#166) against the Microsoft 365 cloud fonts, Aptos 2.01.",
         "verticalMetricsMatch": true,
-        "verticalMetricsNote": "hhea, OS/2 typo and win, x-height and cap-height equal in all 16 styles; painted x-height and cap-height boxes agree (opf#166). Line breaks are not recorded.",
+        "verticalMetricsNote": "hhea, OS/2 typo and win, x-height and cap-height equal in all 16 styles; painted x-height and cap-height boxes agree (opf#166). Line breaks are not recorded. Weights 500, 600 and 800 resolve to Regular and Bold (FF-60: no upstream Medium or ExtraBold; the PPTX writes bold from 600, so PowerPoint draws the same two faces).",
         "lineBreaksMatch": null,
         "widthBarMet": true
       },
@@ -1138,7 +1138,7 @@
         "source": "docs/evidence/font-replacements-20260923/metric-candidates-20260929.json",
         "sourceNote": "Measured on 2026-09-29 (opf#166) against the Microsoft 365 cloud fonts, Aptos 2.01.",
         "verticalMetricsMatch": true,
-        "verticalMetricsNote": "hhea, OS/2 typo and win, x-height and cap-height equal in all 16 styles; painted x-height and cap-height boxes agree (opf#166). Line breaks are not recorded.",
+        "verticalMetricsNote": "hhea, OS/2 typo and win, x-height and cap-height equal in all 16 styles; painted x-height and cap-height boxes agree (opf#166). Line breaks are not recorded. Weights 500, 600 and 800 resolve to Regular and Bold (FF-60: no upstream Medium or ExtraBold; the PPTX writes bold from 600, so PowerPoint draws the same two faces).",
         "lineBreaksMatch": null,
         "widthBarMet": true
       },
