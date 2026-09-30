@@ -143,6 +143,9 @@ linked, and specifically:
 
 ## Decisions
 
+- 2026-09-30 (agent decision, vetoable; FF-54): a gallery example that overflows its layout is fixed where it comes from. When the diagnostic depends on the content (`text-overflow`), the example is shortened to what the zone holds at the readability floor (dense stacks of five or more zones use two-item lists and a one-line title). When it does not depend on the content (`small-cell`: the card is under 100 x 60 px whatever it holds), the layout record's own region size changes (compact stack `padding 0.04`, `gap 0.02` for boxed 5x/6x column layouts, written by `sync-layout-contracts.mjs`). Tolerances, the `small-cell` limit, the 16 px floor and lint or diagnostic suppression never change. The owner can veto by asking for the previous margin and gap; the 12 records are the only data change.
+- 2026-09-30 (agent decision, vetoable; FF-57): quote provenance follows the timeline pattern: `OPF_QUOTE_V1` tags hold topology only, never quote words, so re-import reads every word from the current native text, an edited quote imports as the edited quote, and a damaged or untagged one degrades to text blocks with `invalid-quote-provenance`. The `quote-import-reflow` diagnostic is reported on every restored quote, like the timeline, metric and code ones.
+
 - 2026-09-23 (owner): the goal above replaces the earlier font-only goal. The
   program measures progress as gallery items that pass the parity audit
   (FF-38).

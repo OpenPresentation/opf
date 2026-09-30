@@ -64,7 +64,9 @@ const wrapped={name:'Wrapped generated date boundary',design:{fontScheme:'roboto
 await group('01','Existing basic renderer-absent contract',async()=>{
  const source={name:'Installed package',slides:[{title:'Editable output',table:{columns:['Item','Value'],rows:[['Quality',42]]}},{title:'Metric',metric:{value:'42%',label:'Measured outcome'}},{title:'Quote',quote:{text:'Keep the source.',attribution:'Reviewer',source:'Interview'}},{title:'Code',code:{language:'python',source:'approve(change)'}},{title:'Timeline',timeline:{events:[{when:'Q1',what:'Pilot'},{when:'Q2',what:'Rollout'}]}}]};
  const exported=await emit('basic',source),{document}=await read('basic',exported.bytes);assert.ok(exported.bytes.length>1000);assert.equal(document.slides.length,5);
- for(const text of ['Quality','42%','Reviewer - Interview','approve(change)','Pilot','Rollout'])assert.ok(JSON.stringify(document).includes(text),text);
+ // FF-57: an unchanged quote re-imports as a quote payload (separate attribution and source fields); an older opf-pptx returns the joined footer text.
+ const retained=text=>JSON.stringify(document).includes(text)||(text==='Reviewer - Interview'&&['"attribution":"Reviewer"','"source":"Interview"'].every(part=>JSON.stringify(document).includes(part)));
+ for(const text of ['Quality','42%','Reviewer - Interview','approve(change)','Pilot','Rollout'])assert.ok(retained(text),text);
  return {slides:5,retainedText:['Quality','42%','Reviewer - Interview','approve(change)','Pilot','Rollout']};
 });
 await group('02','Inherited and local furniture, authored whitespace and metadata',async()=>{
