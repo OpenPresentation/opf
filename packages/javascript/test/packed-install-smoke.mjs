@@ -56,7 +56,7 @@ try {
   assert.ok(tgzName?.endsWith(".tgz"), `npm pack did not return a tarball name: ${packResult.stdout}`);
 
   const tgzPath = path.join(packDir, tgzName);
-  const tarResult = await run("tar", ["-tzf", tgzPath]);
+  const tarResult = await run("tar", ["-tzf", path.basename(tgzPath)], { cwd: path.dirname(tgzPath) }); // GNU tar reads C:... after -f as host:path
   const files = tarResult.stdout.trim().split(/\r?\n/).filter(Boolean).sort();
 
   for (const entry of [

@@ -1,0 +1,461 @@
+{
+  "schemaVersion": 1,
+  "files": [
+    {
+      "bundlePath": "attempts/unedited-fixture-no-temp/audit.json",
+      "sourceArtifactPath": "windows-native-20260929/native-font-inventory-no-temp-01/audit.json",
+      "kind": "byte-copy",
+      "sourceSha256": "e89bfcaf5f2e11a64eabc33aba8c429ebbb9a0b47288aaef1858eec8740ba7f9",
+      "bundleSha256": "e89bfcaf5f2e11a64eabc33aba8c429ebbb9a0b47288aaef1858eec8740ba7f9",
+      "bytes": 4955
+    },
+    {
+      "bundlePath": "attempts/unedited-fixture-no-temp/inputs/LICENSE_FONT",
+      "sourceArtifactPath": "windows-native-20260929/native-font-inventory-no-temp-01/inputs/LICENSE_FONT",
+      "kind": "byte-copy",
+      "sourceSha256": "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00",
+      "bundleSha256": "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00",
+      "bytes": 4424
+    },
+    {
+      "bundlePath": "attempts/unedited-fixture-no-temp/inputs/generation.json",
+      "sourceArtifactPath": "windows-native-20260929/native-font-inventory-no-temp-01/inputs/generation.json",
+      "kind": "byte-copy",
+      "sourceSha256": "78904db1a1556b80dc8abc8270460cac95ac4868b32219f1ecd06371d0d578db",
+      "bundleSha256": "78904db1a1556b80dc8abc8270460cac95ac4868b32219f1ecd06371d0d578db",
+      "bytes": 31660
+    },
+    {
+      "bundlePath": "attempts/unedited-fixture-no-temp/inputs/native-font-inventory.ps1",
+      "sourceArtifactPath": "windows-native-20260929/native-font-inventory-no-temp-01/inputs/native-font-inventory.ps1",
+      "kind": "byte-copy",
+      "sourceSha256": "f8f24330db965436167758e54f907e1cc9b6bd9eb25e30b5110796823701ae7f",
+      "bundleSha256": "f8f24330db965436167758e54f907e1cc9b6bd9eb25e30b5110796823701ae7f",
+      "bytes": 99498
+    },
+    {
+      "bundlePath": "attempts/unedited-fixture-no-temp/inputs/native-process.ps1",
+      "sourceArtifactPath": "windows-native-20260929/native-font-inventory-no-temp-01/inputs/native-process.ps1",
+      "kind": "byte-copy",
+      "sourceSha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+      "bundleSha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+      "bytes": 2372
+    },
+    {
+      "bundlePath": "attempts/unedited-fixture-no-temp/inputs/native-text-fonts.ps1",
+      "sourceArtifactPath": "windows-native-20260929/native-font-inventory-no-temp-01/inputs/native-text-fonts.ps1",
+      "kind": "byte-copy",
+      "sourceSha256": "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6",
+      "bundleSha256": "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6",
+      "bytes": 2446
+    },
+    {
+      "bundlePath": "attempts/unedited-fixture-no-temp/inputs/source.pptx",
+      "sourceArtifactPath": "windows-native-20260929/native-font-inventory-no-temp-01/inputs/source.pptx",
+      "kind": "byte-copy",
+      "sourceSha256": "f505236ecef4fad838a198449adede1f4afa39d7bac74613626eee2f2a419aeb",
+      "bundleSha256": "f505236ecef4fad838a198449adede1f4afa39d7bac74613626eee2f2a419aeb",
+      "bytes": 15624
+    },
+    {
+      "bundlePath": "attempts/unedited-fixture-no-temp/progress.json",
+      "sourceArtifactPath": "windows-native-20260929/native-font-inventory-no-temp-01/progress.json",
+      "kind": "byte-copy",
+      "sourceSha256": "54169afd53149533dd5169f77e5a11527b098baae96b696bb9cc04f9fc42c53f",
+      "bundleSha256": "54169afd53149533dd5169f77e5a11527b098baae96b696bb9cc04f9fc42c53f",
+      "bytes": 273
+    },
+    {
+      "bundlePath": "attempts/unedited-fixture-no-temp/report.json",
+      "sourceArtifactPath": "windows-native-20260929/native-font-inventory-no-temp-01/report.json",
+      "kind": "byte-copy",
+      "sourceSha256": "9d5614e6421ab7a676e60b00d90e22fb383f7837b613d97a79db841a75e248d0",
+      "bundleSha256": "9d5614e6421ab7a676e60b00d90e22fb383f7837b613d97a79db841a75e248d0",
+      "bytes": 18216
+    },
+    {
+      "bundlePath": "attempts/unedited-fixture-no-temp/request.json",
+      "sourceArtifactPath": "windows-native-20260929/native-font-inventory-no-temp-01/request.json",
+      "kind": "byte-copy",
+      "sourceSha256": "d72cb199b904151fc4d1f5cf66e52a2831027954f94e4545bfd08113de4ef934",
+      "bundleSha256": "d72cb199b904151fc4d1f5cf66e52a2831027954f94e4545bfd08113de4ef934",
+      "bytes": 8282
+    },
+    {
+      "bundlePath": "attempts/unedited-fixture-no-temp/stages.jsonl",
+      "sourceArtifactPath": "windows-native-20260929/native-font-inventory-no-temp-01/stages.jsonl",
+      "kind": "byte-copy",
+      "sourceSha256": "9b5730b10483aa72287133003b753d715c6cfe3686359eb6807b3f190330da5f",
+      "bundleSha256": "9b5730b10483aa72287133003b753d715c6cfe3686359eb6807b3f190330da5f",
+      "bytes": 100558
+    },
+    {
+      "bundlePath": "attempts/unedited-fixture-no-temp/supervisor.json",
+      "sourceArtifactPath": "windows-native-20260929/native-font-inventory-no-temp-01/supervisor.json",
+      "kind": "byte-copy",
+      "sourceSha256": "9eb7af94ddeb2896369e55efe7a5fb3e60e107e1d0affab2677e9f245dc24e7b",
+      "bundleSha256": "9eb7af94ddeb2896369e55efe7a5fb3e60e107e1d0affab2677e9f245dc24e7b",
+      "bytes": 12980
+    },
+    {
+      "bundlePath": "attempts/unedited-fixture-no-temp/worker.json",
+      "sourceArtifactPath": "windows-native-20260929/native-font-inventory-no-temp-01/worker.json",
+      "kind": "byte-copy",
+      "sourceSha256": "317c16cb053f7a99376b64ee453a4d0421428621bc242a4edfa04c4951a53fdf",
+      "bundleSha256": "317c16cb053f7a99376b64ee453a4d0421428621bc242a4edfa04c4951a53fdf",
+      "bytes": 341
+    },
+    {
+      "bundlePath": "attempts/unedited-fixture-no-temp/worker.stderr.log",
+      "sourceArtifactPath": "windows-native-20260929/native-font-inventory-no-temp-01/worker.stderr.log",
+      "kind": "byte-copy",
+      "sourceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bundleSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "bundlePath": "attempts/unedited-fixture-no-temp/worker.stdout.log",
+      "sourceArtifactPath": "windows-native-20260929/native-font-inventory-no-temp-01/worker.stdout.log",
+      "kind": "byte-copy",
+      "sourceSha256": "97fe87c9eb4f110dbd346af22de39dec5fdb50691ac31bea5df1c8e2d8d8c588",
+      "bundleSha256": "97fe87c9eb4f110dbd346af22de39dec5fdb50691ac31bea5df1c8e2d8d8c588",
+      "bytes": 99
+    },
+    {
+      "bundlePath": "attempts/unedited-fixture-with-temp/audit-original.json",
+      "sourceArtifactPath": "windows-aptos-20260923/native-font-inventory-01/audit.json",
+      "kind": "byte-copy",
+      "sourceSha256": "a75e752bd4dd7fd9a0a16d9f510b5a6b096e76414a823e3e5821a66a030f89cb",
+      "bundleSha256": "a75e752bd4dd7fd9a0a16d9f510b5a6b096e76414a823e3e5821a66a030f89cb",
+      "bytes": 5009
+    },
+    {
+      "bundlePath": "attempts/unedited-fixture-with-temp/audit-reaudit-v2.json",
+      "sourceArtifactPath": "windows-aptos-20260923/native-font-inventory-01/audit-v2.json",
+      "kind": "byte-copy",
+      "sourceSha256": "a6040c0ee16052562a905f30b96965876affaacdbbe388b2a56910242d533614",
+      "bundleSha256": "a6040c0ee16052562a905f30b96965876affaacdbbe388b2a56910242d533614",
+      "bytes": 5073
+    },
+    {
+      "bundlePath": "attempts/unedited-fixture-with-temp/font-registration.json",
+      "sourceArtifactPath": "windows-aptos-20260923/native-font-inventory-01/font-registration.json",
+      "kind": "byte-copy",
+      "sourceSha256": "d3c8a31ef44b436ffc6ebf82f5738f01cd849312534a4945382f48137795348a",
+      "bundleSha256": "d3c8a31ef44b436ffc6ebf82f5738f01cd849312534a4945382f48137795348a",
+      "bytes": 812
+    },
+    {
+      "bundlePath": "attempts/unedited-fixture-with-temp/inputs/LICENSE_FONT",
+      "sourceArtifactPath": "windows-aptos-20260923/native-font-inventory-01/inputs/LICENSE_FONT",
+      "kind": "byte-copy",
+      "sourceSha256": "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00",
+      "bundleSha256": "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00",
+      "bytes": 4424
+    },
+    {
+      "bundlePath": "attempts/unedited-fixture-with-temp/inputs/generation.json",
+      "sourceArtifactPath": "windows-aptos-20260923/native-font-inventory-01/inputs/generation.json",
+      "kind": "byte-copy",
+      "sourceSha256": "78904db1a1556b80dc8abc8270460cac95ac4868b32219f1ecd06371d0d578db",
+      "bundleSha256": "78904db1a1556b80dc8abc8270460cac95ac4868b32219f1ecd06371d0d578db",
+      "bytes": 31660
+    },
+    {
+      "bundlePath": "attempts/unedited-fixture-with-temp/inputs/native-font-inventory.ps1",
+      "sourceArtifactPath": "windows-aptos-20260923/native-font-inventory-01/inputs/native-font-inventory.ps1",
+      "kind": "byte-copy",
+      "sourceSha256": "067e96dd14ed89bd98036569af0bf85593ca4fad1447bb8bce5802d00ac9a401",
+      "bundleSha256": "067e96dd14ed89bd98036569af0bf85593ca4fad1447bb8bce5802d00ac9a401",
+      "bytes": 69901
+    },
+    {
+      "bundlePath": "attempts/unedited-fixture-with-temp/inputs/native-process.ps1",
+      "sourceArtifactPath": "windows-aptos-20260923/native-font-inventory-01/inputs/native-process.ps1",
+      "kind": "byte-copy",
+      "sourceSha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+      "bundleSha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+      "bytes": 2372
+    },
+    {
+      "bundlePath": "attempts/unedited-fixture-with-temp/inputs/native-text-fonts.ps1",
+      "sourceArtifactPath": "windows-aptos-20260923/native-font-inventory-01/inputs/native-text-fonts.ps1",
+      "kind": "byte-copy",
+      "sourceSha256": "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6",
+      "bundleSha256": "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6",
+      "bytes": 2446
+    },
+    {
+      "bundlePath": "attempts/unedited-fixture-with-temp/inputs/source.pptx",
+      "sourceArtifactPath": "windows-aptos-20260923/native-font-inventory-01/inputs/source.pptx",
+      "kind": "byte-copy",
+      "sourceSha256": "f505236ecef4fad838a198449adede1f4afa39d7bac74613626eee2f2a419aeb",
+      "bundleSha256": "f505236ecef4fad838a198449adede1f4afa39d7bac74613626eee2f2a419aeb",
+      "bytes": 15624
+    },
+    {
+      "bundlePath": "attempts/unedited-fixture-with-temp/progress.json",
+      "sourceArtifactPath": "windows-aptos-20260923/native-font-inventory-01/progress.json",
+      "kind": "byte-copy",
+      "sourceSha256": "a6d1e1ff6abe9c96b8da2f60eb1fbac403df6e54fd2d92710aaf91b614a87237",
+      "bundleSha256": "a6d1e1ff6abe9c96b8da2f60eb1fbac403df6e54fd2d92710aaf91b614a87237",
+      "bytes": 273
+    },
+    {
+      "bundlePath": "attempts/unedited-fixture-with-temp/report.json",
+      "sourceArtifactPath": "windows-aptos-20260923/native-font-inventory-01/report.json",
+      "kind": "byte-copy",
+      "sourceSha256": "d9037a86ef6658550d8a76dd0702581853be059d701a22a6921b67fa9f15ecb8",
+      "bundleSha256": "d9037a86ef6658550d8a76dd0702581853be059d701a22a6921b67fa9f15ecb8",
+      "bytes": 18208
+    },
+    {
+      "bundlePath": "attempts/unedited-fixture-with-temp/request.json",
+      "sourceArtifactPath": "windows-aptos-20260923/native-font-inventory-01/request.json",
+      "kind": "byte-copy",
+      "sourceSha256": "2cff43bcaab7a9575fb5e4827045f0fe06bba96b30293c936f06b860674cc291",
+      "bundleSha256": "2cff43bcaab7a9575fb5e4827045f0fe06bba96b30293c936f06b860674cc291",
+      "bytes": 8214
+    },
+    {
+      "bundlePath": "attempts/unedited-fixture-with-temp/stages.jsonl",
+      "sourceArtifactPath": "windows-aptos-20260923/native-font-inventory-01/stages.jsonl",
+      "kind": "byte-copy",
+      "sourceSha256": "1977c4a2b10168840013780f3dc3a941dfbb5f3592dc1bdf838279ef2eebea8a",
+      "bundleSha256": "1977c4a2b10168840013780f3dc3a941dfbb5f3592dc1bdf838279ef2eebea8a",
+      "bytes": 98128
+    },
+    {
+      "bundlePath": "attempts/unedited-fixture-with-temp/supervisor.json",
+      "sourceArtifactPath": "windows-aptos-20260923/native-font-inventory-01/supervisor.json",
+      "kind": "byte-copy",
+      "sourceSha256": "397625ff8444cb3da45315807e82728cf638c6257f8c753202aef255221757a4",
+      "bundleSha256": "397625ff8444cb3da45315807e82728cf638c6257f8c753202aef255221757a4",
+      "bytes": 12914
+    },
+    {
+      "bundlePath": "attempts/unedited-fixture-with-temp/worker.json",
+      "sourceArtifactPath": "windows-aptos-20260923/native-font-inventory-01/worker.json",
+      "kind": "byte-copy",
+      "sourceSha256": "b8eb5a76481578c6cb755b0a7a1bbc02a2f0bc29c64ee9d2fe4202efdd0368a7",
+      "bundleSha256": "b8eb5a76481578c6cb755b0a7a1bbc02a2f0bc29c64ee9d2fe4202efdd0368a7",
+      "bytes": 341
+    },
+    {
+      "bundlePath": "attempts/unedited-fixture-with-temp/worker.stderr.log",
+      "sourceArtifactPath": "windows-aptos-20260923/native-font-inventory-01/worker.stderr.log",
+      "kind": "byte-copy",
+      "sourceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bundleSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "bundlePath": "attempts/unedited-fixture-with-temp/worker.stdout.log",
+      "sourceArtifactPath": "windows-aptos-20260923/native-font-inventory-01/worker.stdout.log",
+      "kind": "byte-copy",
+      "sourceSha256": "97fe87c9eb4f110dbd346af22de39dec5fdb50691ac31bea5df1c8e2d8d8c588",
+      "bundleSha256": "97fe87c9eb4f110dbd346af22de39dec5fdb50691ac31bea5df1c8e2d8d8c588",
+      "bytes": 99
+    },
+    {
+      "bundlePath": "controls/exporter-output-no-temp/audit-original.json",
+      "sourceArtifactPath": "windows-aptos-20260923/native-font-inventory-control-01/audit.json",
+      "kind": "byte-copy",
+      "sourceSha256": "e80774d3c235f008b57f58a467014c014136206beecab7db7e61cd0218f0817e",
+      "bundleSha256": "e80774d3c235f008b57f58a467014c014136206beecab7db7e61cd0218f0817e",
+      "bytes": 3607
+    },
+    {
+      "bundlePath": "controls/exporter-output-no-temp/audit-reaudit-v2.json",
+      "sourceArtifactPath": "windows-aptos-20260923/native-font-inventory-control-01/audit-v2.json",
+      "kind": "byte-copy",
+      "sourceSha256": "0027785ca4924fe15bb3aa2ae00e8fafcdd7b1fee66e65114a273e9416b16cbb",
+      "bundleSha256": "0027785ca4924fe15bb3aa2ae00e8fafcdd7b1fee66e65114a273e9416b16cbb",
+      "bytes": 3671
+    },
+    {
+      "bundlePath": "controls/exporter-output-no-temp/inputs/native-font-inventory.ps1",
+      "sourceArtifactPath": "windows-aptos-20260923/native-font-inventory-control-01/inputs/native-font-inventory.ps1",
+      "kind": "byte-copy",
+      "sourceSha256": "067e96dd14ed89bd98036569af0bf85593ca4fad1447bb8bce5802d00ac9a401",
+      "bundleSha256": "067e96dd14ed89bd98036569af0bf85593ca4fad1447bb8bce5802d00ac9a401",
+      "bytes": 69901
+    },
+    {
+      "bundlePath": "controls/exporter-output-no-temp/inputs/native-process.ps1",
+      "sourceArtifactPath": "windows-aptos-20260923/native-font-inventory-control-01/inputs/native-process.ps1",
+      "kind": "byte-copy",
+      "sourceSha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+      "bundleSha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+      "bytes": 2372
+    },
+    {
+      "bundlePath": "controls/exporter-output-no-temp/inputs/native-text-fonts.ps1",
+      "sourceArtifactPath": "windows-aptos-20260923/native-font-inventory-control-01/inputs/native-text-fonts.ps1",
+      "kind": "byte-copy",
+      "sourceSha256": "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6",
+      "bundleSha256": "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6",
+      "bytes": 2446
+    },
+    {
+      "bundlePath": "controls/exporter-output-no-temp/inputs/source.pptx",
+      "sourceArtifactPath": "windows-aptos-20260923/native-font-inventory-control-01/inputs/source.pptx",
+      "kind": "byte-copy",
+      "sourceSha256": "14229e8ce663511fadf7c1aa035bd18e33a513d97a1825174c6171c7c605c0d2",
+      "bundleSha256": "14229e8ce663511fadf7c1aa035bd18e33a513d97a1825174c6171c7c605c0d2",
+      "bytes": 15623
+    },
+    {
+      "bundlePath": "controls/exporter-output-no-temp/progress.json",
+      "sourceArtifactPath": "windows-aptos-20260923/native-font-inventory-control-01/progress.json",
+      "kind": "byte-copy",
+      "sourceSha256": "ef984bbf8d36008543b91c8371ba3dd593e17ca5c3b8c937ba325d73c6a3bd5b",
+      "bundleSha256": "ef984bbf8d36008543b91c8371ba3dd593e17ca5c3b8c937ba325d73c6a3bd5b",
+      "bytes": 273
+    },
+    {
+      "bundlePath": "controls/exporter-output-no-temp/report.json",
+      "sourceArtifactPath": "windows-aptos-20260923/native-font-inventory-control-01/report.json",
+      "kind": "byte-copy",
+      "sourceSha256": "96eadd0514a8dbbef3e01d5e154d3b8f59e4f19354717e3da1e58181c1d0203a",
+      "bundleSha256": "96eadd0514a8dbbef3e01d5e154d3b8f59e4f19354717e3da1e58181c1d0203a",
+      "bytes": 18220
+    },
+    {
+      "bundlePath": "controls/exporter-output-no-temp/request.json",
+      "sourceArtifactPath": "windows-aptos-20260923/native-font-inventory-control-01/request.json",
+      "kind": "byte-copy",
+      "sourceSha256": "a6ebd020a1b40f7d6a6f84b5bc3d4d94463a4f6fe46486f587fcb87225bbc56e",
+      "bundleSha256": "a6ebd020a1b40f7d6a6f84b5bc3d4d94463a4f6fe46486f587fcb87225bbc56e",
+      "bytes": 3434
+    },
+    {
+      "bundlePath": "controls/exporter-output-no-temp/stages.jsonl",
+      "sourceArtifactPath": "windows-aptos-20260923/native-font-inventory-control-01/stages.jsonl",
+      "kind": "byte-copy",
+      "sourceSha256": "d576ff98ad9ed16f8619d42f32772a82faa07cecc4358a85631d0d3c7c7ec53f",
+      "bundleSha256": "d576ff98ad9ed16f8619d42f32772a82faa07cecc4358a85631d0d3c7c7ec53f",
+      "bytes": 100288
+    },
+    {
+      "bundlePath": "controls/exporter-output-no-temp/supervisor.json",
+      "sourceArtifactPath": "windows-aptos-20260923/native-font-inventory-control-01/supervisor.json",
+      "kind": "byte-copy",
+      "sourceSha256": "228a6cfa8ad02e7d5d95a0639413151baa9569e3291338140a5af903b771194c",
+      "bundleSha256": "228a6cfa8ad02e7d5d95a0639413151baa9569e3291338140a5af903b771194c",
+      "bytes": 5570
+    },
+    {
+      "bundlePath": "controls/exporter-output-no-temp/worker.json",
+      "sourceArtifactPath": "windows-aptos-20260923/native-font-inventory-control-01/worker.json",
+      "kind": "byte-copy",
+      "sourceSha256": "dfe2aead024303f4c6fc76cdd689cbf88837d64f3a10196d942aa51d96cb4faa",
+      "bundleSha256": "dfe2aead024303f4c6fc76cdd689cbf88837d64f3a10196d942aa51d96cb4faa",
+      "bytes": 340
+    },
+    {
+      "bundlePath": "controls/exporter-output-no-temp/worker.stderr.log",
+      "sourceArtifactPath": "windows-aptos-20260923/native-font-inventory-control-01/worker.stderr.log",
+      "kind": "byte-copy",
+      "sourceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bundleSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "bundlePath": "controls/exporter-output-no-temp/worker.stdout.log",
+      "sourceArtifactPath": "windows-aptos-20260923/native-font-inventory-control-01/worker.stdout.log",
+      "kind": "byte-copy",
+      "sourceSha256": "97fe87c9eb4f110dbd346af22de39dec5fdb50691ac31bea5df1c8e2d8d8c588",
+      "bundleSha256": "97fe87c9eb4f110dbd346af22de39dec5fdb50691ac31bea5df1c8e2d8d8c588",
+      "bytes": 99
+    },
+    {
+      "bundlePath": "environment/host-postflight-sanitized.json",
+      "sourceArtifactPath": "windows-native-20260929/host-postflight-no-temp-01.json",
+      "kind": "redacted-copy",
+      "sourceSha256": "00bc8d036588b25c27917a1f40e9e9adccb75a5d42b0d26e057ed24213fef724",
+      "bundleSha256": "bea18ecdd87abb2d4797bdc2e5b0913aef8b6811f49993905a9d05731bfffed2",
+      "bytes": 516
+    },
+    {
+      "bundlePath": "environment/host-preflight-sanitized.json",
+      "sourceArtifactPath": "windows-native-20260929/host-preflight-no-temp-01.json",
+      "kind": "redacted-copy",
+      "sourceSha256": "b142edd77568f75c75f2375a76c849cc5eb8a294b59fca6e736ca735cb33df2a",
+      "bundleSha256": "941f166cf1326221ab8192e40b2c7955f2bcd5231ef0fbfbb6ff611cffb0fdd3",
+      "bytes": 707
+    },
+    {
+      "bundlePath": "environment/inventory-controls-winps51.log",
+      "sourceArtifactPath": "windows-native-20260929/inventory-controls-winps51.log",
+      "kind": "byte-copy",
+      "sourceSha256": "77d642289dce0752d1ddbf4713571cf93abbf2d6a2827407df75cb28338db344",
+      "bundleSha256": "77d642289dce0752d1ddbf4713571cf93abbf2d6a2827407df75cb28338db344",
+      "bytes": 194
+    },
+    {
+      "bundlePath": "environment/inventory-controls.log",
+      "sourceArtifactPath": "windows-native-20260929/inventory-controls.log",
+      "kind": "byte-copy",
+      "sourceSha256": "b81955997d7d19c9d956aa82b40369444abd292a050301b4757b709a36cd5619",
+      "bundleSha256": "b81955997d7d19c9d956aa82b40369444abd292a050301b4757b709a36cd5619",
+      "bytes": 1151
+    },
+    {
+      "bundlePath": "environment/native-font-inventory-no-temp-01.parent.log",
+      "sourceArtifactPath": "windows-native-20260929/native-font-inventory-no-temp-01.parent.log",
+      "kind": "byte-copy",
+      "sourceSha256": "680b4f229116b2efdbf433a69d1b018948e89c34edce0dd57aad90223cdfcb5d",
+      "bundleSha256": "680b4f229116b2efdbf433a69d1b018948e89c34edce0dd57aad90223cdfcb5d",
+      "bytes": 368
+    },
+    {
+      "bundlePath": "environment/ps51-environment-probe.log",
+      "sourceArtifactPath": "windows-native-20260929/ps51-environment-probe.log",
+      "kind": "byte-copy",
+      "sourceSha256": "30256fe50b4c48641235d2364c12a8897a7a59784ff67f3f867524d6fa7b0da2",
+      "bundleSha256": "30256fe50b4c48641235d2364c12a8897a7a59784ff67f3f867524d6fa7b0da2",
+      "bytes": 1018
+    },
+    {
+      "bundlePath": "fixture/LICENSE_FONT",
+      "sourceArtifactPath": "windows-mixed-edit-20260922/fixture-carlito-02/LICENSE_FONT",
+      "kind": "byte-copy",
+      "sourceSha256": "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00",
+      "bundleSha256": "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00",
+      "bytes": 4424
+    },
+    {
+      "bundlePath": "fixture/exporter-output.pptx",
+      "sourceArtifactPath": "windows-mixed-edit-20260922/fixture-carlito-02/exporter-output.pptx",
+      "kind": "byte-copy",
+      "sourceSha256": "14229e8ce663511fadf7c1aa035bd18e33a513d97a1825174c6171c7c605c0d2",
+      "bundleSha256": "14229e8ce663511fadf7c1aa035bd18e33a513d97a1825174c6171c7c605c0d2",
+      "bytes": 15623
+    },
+    {
+      "bundlePath": "fixture/generation.json",
+      "sourceArtifactPath": "windows-mixed-edit-20260922/fixture-carlito-02/generation.json",
+      "kind": "byte-copy",
+      "sourceSha256": "78904db1a1556b80dc8abc8270460cac95ac4868b32219f1ecd06371d0d578db",
+      "bundleSha256": "78904db1a1556b80dc8abc8270460cac95ac4868b32219f1ecd06371d0d578db",
+      "bytes": 31660
+    },
+    {
+      "bundlePath": "fixture/source.opf.json",
+      "sourceArtifactPath": "windows-mixed-edit-20260922/fixture-carlito-02/source.opf.json",
+      "kind": "byte-copy",
+      "sourceSha256": "44363cdb3d1ba747c108a9d1741d0b99ba740fd65917f25f9196ab2f26ec1041",
+      "bundleSha256": "44363cdb3d1ba747c108a9d1741d0b99ba740fd65917f25f9196ab2f26ec1041",
+      "bytes": 194
+    },
+    {
+      "bundlePath": "fixture/source.pptx",
+      "sourceArtifactPath": "windows-mixed-edit-20260922/fixture-carlito-02/source.pptx",
+      "kind": "byte-copy",
+      "sourceSha256": "f505236ecef4fad838a198449adede1f4afa39d7bac74613626eee2f2a419aeb",
+      "bundleSha256": "f505236ecef4fad838a198449adede1f4afa39d7bac74613626eee2f2a419aeb",
+      "bytes": 15624
+    }
+  ]
+}

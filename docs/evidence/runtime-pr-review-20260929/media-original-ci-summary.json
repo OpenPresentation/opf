@@ -1,0 +1,37 @@
+{
+  "capturedAt": "2026-09-29T09:39:16.470654+00:00",
+  "run": 36548912840,
+  "attempt": 1,
+  "head": "08815c76ab9494cfad98e18149c003385306882b",
+  "tree": "dd340476cf97b72feb51004fb851656a90a0c87d",
+  "testedSyntheticMerge": "9e294f4afd7732f5daa57c1c66d16e6a01804b7f",
+  "conclusion": "success",
+  "url": "https://github.com/OpenPresentation/opf-pptx/actions/runs/36548912840",
+  "jobs": [
+    {
+      "id": 109341972004,
+      "name": "package (ubuntu-latest)",
+      "conclusion": "success",
+      "started_at": "2026-09-29T09:24:04Z",
+      "completed_at": "2026-09-29T09:30:08Z",
+      "html_url": "https://github.com/OpenPresentation/opf-pptx/actions/runs/36548912840/job/109341972004"
+    },
+    {
+      "id": 109341972136,
+      "name": "package (windows-latest)",
+      "conclusion": "success",
+      "started_at": "2026-09-29T09:24:02Z",
+      "completed_at": "2026-09-29T09:35:34Z",
+      "html_url": "https://github.com/OpenPresentation/opf-pptx/actions/runs/36548912840/job/109341972136"
+    }
+  ],
+  "allShippedFilesAndFixturesBound": true,
+  "artifactsDigestAndCrcPass": true,
+  "artifactIntegrity": "artifact-integrity.json",
+  "sourceBinding": "tested-source-binding.json",
+  "prState": "OPEN",
+  "mergeable": "MERGEABLE",
+  "mergeStateStatus": "CLEAN",
+  "nativeOfficeAcceptance": false,
+  "reruns": 0
+}

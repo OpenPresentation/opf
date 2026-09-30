@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "kind": "native-font-inventory-audit",
+  "evidenceDirectory": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-aptos-20260923\\native-font-inventory-control-01",
+  "passed": false,
+  "failures": [
+    {
+      "code": "observation-font-entry",
+      "message": "Presentation.Fonts item 1 is invalid"
+    }
+  ],
+  "rawHashes": {
+    "request.json": "a6ebd020a1b40f7d6a6f84b5bc3d4d94463a4f6fe46486f587fcb87225bbc56e",
+    "report.json": "96eadd0514a8dbbef3e01d5e154d3b8f59e4f19354717e3da1e58181c1d0203a",
+    "supervisor.json": "228a6cfa8ad02e7d5d95a0639413151baa9569e3291338140a5af903b771194c",
+    "worker.json": "dfe2aead024303f4c6fc76cdd689cbf88837d64f3a10196d942aa51d96cb4faa",
+    "progress.json": "ef984bbf8d36008543b91c8371ba3dd593e17ca5c3b8c937ba325d73c6a3bd5b",
+    "stages.jsonl": "d576ff98ad9ed16f8619d42f32772a82faa07cecc4358a85631d0d3c7c7ec53f",
+    "inputs/native-font-inventory.ps1": "067e96dd14ed89bd98036569af0bf85593ca4fad1447bb8bce5802d00ac9a401",
+    "inputs/source.pptx": "14229e8ce663511fadf7c1aa035bd18e33a513d97a1825174c6171c7c605c0d2",
+    "original:source": "14229e8ce663511fadf7c1aa035bd18e33a513d97a1825174c6171c7c605c0d2",
+    "original:verifier": "067e96dd14ed89bd98036569af0bf85593ca4fad1447bb8bce5802d00ac9a401",
+    "inputs/native-process.ps1": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+    "original:process-helper": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+    "inputs/native-text-fonts.ps1": "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6",
+    "original:font-helper": "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6",
+    "reviewed/native-font-inventory.ps1": "067e96dd14ed89bd98036569af0bf85593ca4fad1447bb8bce5802d00ac9a401",
+    "reviewed/native-process.ps1": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+    "reviewed/native-text-fonts.ps1": "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6"
+  },
+  "findings": {
+    "inputMode": "control-deck",
+    "fontRegistrationMode": "none",
+    "powerPointVersion": "16.0",
+    "presentationFonts": [
+      {
+        "index": 1,
+        "name": "",
+        "embedded": 0,
+        "embeddable": 0
+      },
+      {
+        "index": 2,
+        "name": "Aptos",
+        "embedded": 0,
+        "embeddable": -1
+      }
+    ],
+    "theme": {
+      "major": {
+        "latin": "Carlito",
+        "complexScript": "",
+        "eastAsian": ""
+      },
+      "minor": {
+        "latin": "Carlito",
+        "complexScript": "",
+        "eastAsian": ""
+      }
+    },
+    "ledger": {
+      "presentationFontNames": [
+        "Aptos"
+      ],
+      "slideTextSlotNames": [
+        "Carlito"
+      ],
+      "masterTextSlotNames": [],
+      "themeFontNames": [
+        "Carlito"
+      ],
+      "aptosPresentationFontNames": [
+        "Aptos"
+      ],
+      "aptosSlideTextSlotNames": [],
+      "aptosMasterTextSlotNames": [],
+      "aptosThemeFontNames": [],
+      "nonCarlitoPresentationFontNames": [
+        "Aptos"
+      ],
+      "carlitoOnlyPresentationFonts": false,
+      "aptosReported": true
+    },
+    "failureCleanup": {
+      "applicable": false,
+      "outcome": null,
+      "closeInvocations": 1,
+      "consistent": true,
+      "problems": []
+    },
+    "note": "Findings are evidence only when passed is true. Reported names do not prove physical font-file or per-glyph identity."
+  },
+  "scope": "Offline input, lifecycle, read-only, stage-sequence and font-ledger audit of one native font inventory attempt. No Office, COM or font API is started."
+}

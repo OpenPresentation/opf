@@ -1,0 +1,306 @@
+{
+  "scope": "Read-only public npm metadata. Metadata does not prove a fresh install, source-main equivalence or native/browser acceptance. Null fields are not supplied in registry metadata, not inferred values.",
+  "packages": [
+    {
+      "name": "@openpresentation/opf",
+      "registryUrl": "https://registry.npmjs.org/@openpresentation%2fopf",
+      "retrievedAt": "2026-09-29T08:02:47.335504+00:00",
+      "responseHeaders": {
+        "Date": "Tue, 29 Sep 2026 08:02:47 GMT",
+        "Content-Type": "application/json",
+        "ETag": "\"601563412a33e3ba2e4bc7ae8d92f0cb\"",
+        "Last-Modified": "Thu, 17 Sep 2026 19:13:57 GMT"
+      },
+      "rawResponseSha256": "b1b12cfa13a90f366716998ffa96ca6f83af7e05c59549bb30fc7cb1dc8cbe19",
+      "distTags": {
+        "latest": "0.11.0"
+      },
+      "allVersions": [
+        "0.1.0",
+        "0.2.1",
+        "0.2.2",
+        "0.3.0",
+        "0.4.0",
+        "0.4.1",
+        "0.5.0",
+        "0.6.0",
+        "0.7.0",
+        "0.8.0",
+        "0.9.0",
+        "0.10.0",
+        "0.10.1",
+        "0.11.0"
+      ],
+      "priorShippedVersion": "0.11.0",
+      "selectedVersions": {
+        "0.11.0": {
+          "name": "@openpresentation/opf",
+          "version": "0.11.0",
+          "gitHead": "b8a1faf24203635bd36b09ea19f44bcd53781f16",
+          "engines": {
+            "node": "24.x"
+          },
+          "peerDependencies": null,
+          "dependencies": {
+            "ajv": "^8.17.1",
+            "ajv-formats": "^3.0.1",
+            "jsonc-parser": "3.3.1"
+          },
+          "deprecated": null,
+          "dist": {
+            "integrity": "sha512-7Gm/FSyiGngHRkDG0SPL8V6FEC5nC8UpoffNWf8CqkyjXsqQ2BUIzVAEwHwKjEsEZ04FR2DT+Ohh8PJofNPFiw==",
+            "shasum": "300d7fc700273e033a35984791ac5aca35367d67",
+            "tarball": "https://registry.npmjs.org/@openpresentation/opf/-/opf-0.11.0.tgz",
+            "unpackedSize": 6515599,
+            "fileCount": 525
+          },
+          "publishedAt": "2026-09-17T19:13:55.775Z"
+        }
+      }
+    },
+    {
+      "name": "@openpresentation/cli",
+      "registryUrl": "https://registry.npmjs.org/@openpresentation%2fcli",
+      "retrievedAt": "2026-09-29T08:02:47.472813+00:00",
+      "responseHeaders": {
+        "Date": "Tue, 29 Sep 2026 08:02:47 GMT",
+        "Content-Type": "application/json",
+        "ETag": "\"21172c9446981b229f02adbb20bb1356\"",
+        "Last-Modified": "Thu, 17 Sep 2026 19:14:00 GMT"
+      },
+      "rawResponseSha256": "e3e581274dadaa9f89a1321b0e4bdc4a939f8f7ef2e55c5bf517f3a6d3d7eaeb",
+      "distTags": {
+        "latest": "0.9.0"
+      },
+      "allVersions": [
+        "0.1.0",
+        "0.1.1",
+        "0.2.0",
+        "0.3.0",
+        "0.4.0",
+        "0.5.0",
+        "0.6.0",
+        "0.7.0",
+        "0.8.0",
+        "0.8.1",
+        "0.9.0"
+      ],
+      "priorShippedVersion": "0.9.0",
+      "selectedVersions": {
+        "0.9.0": {
+          "name": "@openpresentation/cli",
+          "version": "0.9.0",
+          "gitHead": "b8a1faf24203635bd36b09ea19f44bcd53781f16",
+          "engines": {
+            "node": "24.x"
+          },
+          "peerDependencies": null,
+          "dependencies": null,
+          "deprecated": null,
+          "dist": {
+            "integrity": "sha512-YR0zhGe0fpcKp617Aqjz6ZIql0fsNrMVcSW84tEkMBc/9DLxLFAyxJLkExorOrfFYanhvWmhoRG94x3AuMTvpQ==",
+            "shasum": "41246fec0bd6d0785a9ce5c352e946c7df2f5f72",
+            "tarball": "https://registry.npmjs.org/@openpresentation/cli/-/cli-0.9.0.tgz",
+            "unpackedSize": 3550941,
+            "fileCount": 5
+          },
+          "publishedAt": "2026-09-17T19:13:58.908Z"
+        }
+      }
+    },
+    {
+      "name": "@openpresentation/opf-render",
+      "registryUrl": "https://registry.npmjs.org/@openpresentation%2fopf-render",
+      "retrievedAt": "2026-09-29T08:02:47.303318+00:00",
+      "responseHeaders": {
+        "Date": "Tue, 29 Sep 2026 08:02:47 GMT",
+        "Content-Type": "application/json",
+        "ETag": "\"29f1a53a52aba2ea3fa7c4850e072851\"",
+        "Last-Modified": "Thu, 17 Sep 2026 19:26:55 GMT"
+      },
+      "rawResponseSha256": "714d20dc3ac525d440fcccc856c147d4f17a705a85e86a5b4675e59e2f93c321",
+      "distTags": {
+        "latest": "0.9.0"
+      },
+      "allVersions": [
+        "0.0.1",
+        "0.0.2",
+        "0.1.0",
+        "0.1.1",
+        "0.2.0",
+        "0.3.0",
+        "0.4.0",
+        "0.5.0",
+        "0.5.1",
+        "0.6.0",
+        "0.7.0",
+        "0.8.0",
+        "0.8.1",
+        "0.9.0"
+      ],
+      "priorShippedVersion": "0.9.0",
+      "selectedVersions": {
+        "0.9.0": {
+          "name": "@openpresentation/opf-render",
+          "version": "0.9.0",
+          "gitHead": "114bf596e9034c0b80a8c92df6a956a04ef18bef",
+          "engines": {
+            "node": "24.x"
+          },
+          "peerDependencies": null,
+          "dependencies": {
+            "sharp": "0.35.4",
+            "fontkit": "^2.0.4",
+            "pdf-lib": "^1.17.1",
+            "@resvg/resvg-js": "^2.6.2",
+            "@openpresentation/opf": "^0.11.0",
+            "@expo-google-fonts/arimo": "0.4.3",
+            "@expo-google-fonts/tinos": "0.4.2",
+            "@expo-google-fonts/roboto": "0.4.3",
+            "@expo-google-fonts/caladea": "0.4.2",
+            "@expo-google-fonts/carlito": "0.4.1",
+            "@expo-google-fonts/cousine": "0.4.3",
+            "@expo-google-fonts/gelasio": "0.4.1",
+            "@expo-google-fonts/roboto-mono": "0.4.2"
+          },
+          "deprecated": null,
+          "dist": {
+            "integrity": "sha512-uHWABof7cuLmTAglctvcjuV5dRyIa2qmeGdwONIuKCAnNQXjAOQKXido9OcyGtk6xFjzBFtLtvD3sZOwPEJIJA==",
+            "shasum": "62ddfc6a76a77df9e3395eef1edf49c043540789",
+            "tarball": "https://registry.npmjs.org/@openpresentation/opf-render/-/opf-render-0.9.0.tgz",
+            "unpackedSize": 150598,
+            "fileCount": 17
+          },
+          "publishedAt": "2026-09-17T19:26:53.606Z"
+        }
+      }
+    },
+    {
+      "name": "@openpresentation/opf-pptx",
+      "registryUrl": "https://registry.npmjs.org/@openpresentation%2fopf-pptx",
+      "retrievedAt": "2026-09-29T08:02:47.471197+00:00",
+      "responseHeaders": {
+        "Date": "Tue, 29 Sep 2026 08:02:47 GMT",
+        "Content-Type": "application/json",
+        "ETag": "\"ca2e3fa1f9b91fb3d2d9b0254e5aac8e\"",
+        "Last-Modified": "Thu, 17 Sep 2026 20:02:48 GMT"
+      },
+      "rawResponseSha256": "076eb4b3e36c4f654706d8c3354ed90fd2c6f94e53b3cde72b907fd850f863a3",
+      "distTags": {
+        "latest": "0.9.1"
+      },
+      "allVersions": [
+        "0.0.1",
+        "0.1.0",
+        "0.2.0",
+        "0.2.1",
+        "0.3.0",
+        "0.4.0",
+        "0.5.0",
+        "0.5.1",
+        "0.5.2",
+        "0.6.0",
+        "0.7.0",
+        "0.8.0",
+        "0.8.1",
+        "0.9.0",
+        "0.9.1"
+      ],
+      "priorShippedVersion": "0.9.1",
+      "selectedVersions": {
+        "0.9.1": {
+          "name": "@openpresentation/opf-pptx",
+          "version": "0.9.1",
+          "gitHead": "fcc006a6887c549a96a3bc8bbdb957cc54fe67dd",
+          "engines": {
+            "node": "24.x"
+          },
+          "peerDependencies": {
+            "@openpresentation/opf-render": "^0.9.0"
+          },
+          "dependencies": {
+            "jszip": "3.10.2",
+            "sharp": "0.35.4",
+            "fflate": "^0.8.3",
+            "fast-xml-parser": "^5.8.0",
+            "@openpresentation/opf": "^0.11.0"
+          },
+          "deprecated": null,
+          "dist": {
+            "integrity": "sha512-krzDAKjDByP2zsoR4VeyyIwU7uhcVbxpeBYEIw7vlkoRWWiFq170rhQzQZx5lbMD7u2magYEkdUt3rUgByCKjw==",
+            "shasum": "32ec7602fe08dd094ed20fb753fed763d1221406",
+            "tarball": "https://registry.npmjs.org/@openpresentation/opf-pptx/-/opf-pptx-0.9.1.tgz",
+            "unpackedSize": 781305,
+            "fileCount": 28
+          },
+          "publishedAt": "2026-09-17T20:02:47.053Z"
+        }
+      }
+    },
+    {
+      "name": "@openpresentation/opf-editor",
+      "registryUrl": "https://registry.npmjs.org/@openpresentation%2fopf-editor",
+      "retrievedAt": "2026-09-29T08:02:47.492708+00:00",
+      "responseHeaders": {
+        "Date": "Tue, 29 Sep 2026 08:02:47 GMT",
+        "Content-Type": "application/json",
+        "ETag": "\"82b09e3efabc5ae7697e4fc244bafd1b\"",
+        "Last-Modified": "Thu, 17 Sep 2026 20:14:43 GMT"
+      },
+      "rawResponseSha256": "f22dba8ac20173eba10d99789b0cdaee3745c1dc6db0d80736340bb692d85671",
+      "distTags": {
+        "latest": "0.8.0"
+      },
+      "allVersions": [
+        "0.0.1",
+        "0.1.0",
+        "0.1.1",
+        "0.1.2",
+        "0.2.0",
+        "0.3.0",
+        "0.4.0",
+        "0.5.0",
+        "0.6.0",
+        "0.7.0",
+        "0.7.1",
+        "0.8.0"
+      ],
+      "priorShippedVersion": "0.8.0",
+      "selectedVersions": {
+        "0.8.0": {
+          "name": "@openpresentation/opf-editor",
+          "version": "0.8.0",
+          "gitHead": "476191e28e6f5f5ec32146aeb416f5286b4d0570",
+          "engines": {
+            "node": "24.x"
+          },
+          "peerDependencies": {
+            "@openpresentation/opf-render": "^0.9.0"
+          },
+          "dependencies": {
+            "jsonc-parser": "3.3.1",
+            "@codemirror/lint": "6.9.7",
+            "@codemirror/view": "6.43.11",
+            "@lezer/highlight": "1.2.3",
+            "@codemirror/state": "6.7.4",
+            "@codemirror/search": "6.7.2",
+            "@codemirror/commands": "6.11.0",
+            "@codemirror/language": "6.12.4",
+            "@codemirror/lang-json": "6.0.2",
+            "@openpresentation/opf": "^0.11.0",
+            "@codemirror/autocomplete": "6.20.3"
+          },
+          "deprecated": null,
+          "dist": {
+            "integrity": "sha512-cSx6DkfK4N95Zk3lvCBxhQePWIIgBDvON4hcKLvELulpbKiYnvmoAb07LJE4pbXGE0npUdmU/r25TShdtOcR4A==",
+            "shasum": "6093cc2bfb438488886c23c20e141c377d3071fd",
+            "tarball": "https://registry.npmjs.org/@openpresentation/opf-editor/-/opf-editor-0.8.0.tgz",
+            "unpackedSize": 259836,
+            "fileCount": 42
+          },
+          "publishedAt": "2026-09-17T20:14:41.738Z"
+        }
+      }
+    }
+  ]
+}

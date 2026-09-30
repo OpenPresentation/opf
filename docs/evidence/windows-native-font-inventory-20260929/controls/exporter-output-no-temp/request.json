@@ -1,0 +1,45 @@
+﻿{
+    "schemaVersion":  1,
+    "kind":  "native-font-inventory",
+    "inputMode":  "control-deck",
+    "source":  {
+                   "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-mixed-edit-20260922\\fixture-carlito-02\\exporter-output.pptx",
+                   "sha256":  "14229e8ce663511fadf7c1aa035bd18e33a513d97a1825174c6171c7c605c0d2",
+                   "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-aptos-20260923\\native-font-inventory-control-01\\inputs\\source.pptx",
+                   "snapshotSha256":  "14229e8ce663511fadf7c1aa035bd18e33a513d97a1825174c6171c7c605c0d2"
+               },
+    "fixture":  null,
+    "verifier":  {
+                     "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-aptos-20260923\\sources\\opf-pptx-ff04\\test\\native-font-inventory.ps1",
+                     "sha256":  "067e96dd14ed89bd98036569af0bf85593ca4fad1447bb8bce5802d00ac9a401",
+                     "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-aptos-20260923\\native-font-inventory-control-01\\inputs\\native-font-inventory.ps1",
+                     "snapshotSha256":  "067e96dd14ed89bd98036569af0bf85593ca4fad1447bb8bce5802d00ac9a401"
+                 },
+    "processHelper":  {
+                          "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-aptos-20260923\\sources\\opf-pptx-ff04\\test\\native-process.ps1",
+                          "sha256":  "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+                          "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-aptos-20260923\\native-font-inventory-control-01\\inputs\\native-process.ps1",
+                          "snapshotSha256":  "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+                      },
+    "fontHelper":  {
+                       "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-aptos-20260923\\sources\\opf-pptx-ff04\\test\\native-text-fonts.ps1",
+                       "sha256":  "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6",
+                       "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-aptos-20260923\\native-font-inventory-control-01\\inputs\\native-text-fonts.ps1",
+                       "snapshotSha256":  "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6"
+                   },
+    "fontRegistration":  {
+                             "mode":  "none",
+                             "flags":  null
+                         },
+    "bounds":  {
+                   "maxPresentationFonts":  64,
+                   "maxSlides":  2,
+                   "maxShapesPerSlide":  10,
+                   "maxParagraphsPerShape":  12,
+                   "maxParagraphsTotal":  24,
+                   "maxRunsPerShape":  24,
+                   "maxRunsTotal":  40,
+                   "maxTextCharacters":  1024
+               },
+    "scope":  "Open one owned input snapshot read-only, enumerate Presentation.Fonts first, then theme font slots and bounded whole-range, paragraph and run Font2 slots on slides and the first slide master, then close that exact presentation. No edit, save, export, reopen, embedding or application quit."
+}

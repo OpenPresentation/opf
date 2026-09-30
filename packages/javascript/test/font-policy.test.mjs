@@ -107,17 +107,38 @@ describe("font policy table", () => {
     }
   });
 
+  test("disabledFeatures are OpenType tags on rows that need them, and only Georgia needs them", () => {
+    for (const row of rows) {
+      const tags = row.replacement?.disabledFeatures;
+      if (tags === undefined) continue;
+      assert.ok(tags.length > 0 && new Set(tags).size === tags.length && tags.every((tag) => /^[A-Za-z0-9 ]{4}$/.test(tag)), row.family);
+    }
+    assert.deepEqual(rows.filter((row) => row.replacement?.disabledFeatures).map((row) => row.family), ["Georgia"]);
+  });
+
   test("the documented metric replacements", () => {
     const metric = rows.filter((row) => row.replacement?.compatibility === "metric").map((row) => `${row.family}->${row.replacement.family}`);
-    assert.deepEqual(metric.sort(), ["Arial->Arimo", "Calibri->Carlito", "Courier New->Cousine", "Times New Roman->Tinos"]);
-    // Georgia: every basic-Latin advance matches, but ligature runs differ by up to 1.02% as the renderer shapes them.
-    assert.equal(fontPolicyFor("Georgia").replacement.compatibility, "visual");
-    assert.ok(fontPolicyFor("Georgia").replacement.measured.maxAbsWidthDelta > 0.003);
+    assert.deepEqual(metric.sort(), ["Arial->Arimo", "Aptos Display->Intos Display", "Aptos Narrow->Intos Narrow", "Aptos Serif->Intos Serif", "Aptos->Intos", "Calibri->Carlito", "Courier New->Cousine", "Georgia->Gelasio", "Times New Roman->Tinos"].sort());
+    // Owner policy 2026-09-29: the Aptos family previews with Intos, which measures identical to Aptos 2.01.
+    for (const family of ["Aptos", "Aptos Display", "Aptos Narrow", "Aptos Serif"]) {
+      const row = fontPolicyFor(family);
+      assert.match(row.replacement.source, /^https:\/\/github\.com\/muglug\/intos\/tree\/[0-9a-f]{40}$/, family);
+      assert.equal(row.replacement.measured.maxAbsWidthDelta, 0, family);
+      assert.ok(row.alternates.every((alternate) => ["Roboto", "Carlito", "Tinos"].includes(alternate)), family);
+    }
+    // Selawik was measured for Segoe UI and rejected; Segoe UI stays visual.
+    assert.equal(fontPolicyFor("Segoe UI").replacement.compatibility, "visual");
+    // Georgia: Gelasio matches every basic-Latin advance. Its default fi/fl ligatures moved runs by up to 1.02%,
+    // so the row is metric only because renderers shape Gelasio with liga and clig off (measured that way).
+    const georgia = fontPolicyFor("Georgia").replacement;
+    assert.equal(georgia.compatibility, "metric");
+    assert.deepEqual(georgia.disabledFeatures, ["liga", "clig"]);
+    assert.ok(georgia.measured.maxAbsWidthDelta <= 0.003);
     // Consolas keeps Cousine, which has all four styles; Roboto Mono is an alternate.
     assert.equal(fontPolicyFor("Consolas").replacement.family, "Cousine");
     assert.equal(fontPolicyFor("Aptos Mono").replacement.family, "Cousine");
-    assert.equal(fontPolicyFor("Aptos").replacement.family, "Roboto");
-    assert.equal(fontPolicyFor("Aptos").replacement.compatibility, "visual");
+    assert.equal(fontPolicyFor("Aptos").replacement.family, "Intos");
+    assert.equal(fontPolicyFor("Aptos").replacement.compatibility, "metric");
     assert.equal(fontPolicyFor("Cambria").replacement.compatibility, "visual", "Caladea advances differ from Cambria 6.99");
   });
 });
@@ -134,7 +155,7 @@ describe("provisional owner decisions", () => {
   });
 
   test("the recommended defaults are applied", () => {
-    assert.equal(fontPolicyFor("Aptos").replacement.family, "Roboto");
+    assert.equal(fontPolicyFor("Aptos").replacement.family, "Intos");
     assert.equal(fontPolicyFor("Aptos").replacement.decision, "aptos-preview");
     for (const family of ["Segoe UI", "Segoe UI Semibold", "Segoe UI Light", "Segoe UI Semilight"]) assert.equal(fontPolicyFor(family).replacement.family, "Red Hat Display");
     assert.deepEqual([fontPolicyFor("Cambria").replacement.family, fontPolicyFor("Cambria").replacement.compatibility], ["Caladea", "visual"]);
@@ -148,7 +169,7 @@ describe("provisional owner decisions", () => {
     const applied = applyFontPolicyDecisions(edited);
     const aptos = applied.families.find((row) => row.family === "Aptos");
     assert.equal(aptos.replacement.family, "Carlito");
-    assert.equal(aptos.replacement.measured, null, "the Roboto measurement no longer applies");
+    assert.equal(aptos.replacement.measured, null, "the Intos measurement no longer applies");
     assert.throws(() => applyFontPolicyDecisions({ ...edited, provisionalDecisions: { ...edited.provisionalDecisions, decisions: {} } }), /unknown decision/);
   });
 

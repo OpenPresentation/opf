@@ -3,30 +3,46 @@
 Goal and resume protocol: [README.md](README.md). Research:
 [font-flow map (FF-06)](font-flow-map.md), [Aptos origin brief](aptos-origin-brief.md).
 Measured per-dimension status: [gallery support table (FF-23)](gallery-support.md).
+Per-font status, priorities and next actions (FF-40 to FF-46): [font tracker](font-tracker.md).
 
 Status values: `todo`, `in-progress`, `review` (PR open), `done` (merged after
-independent review and green CI, evidence linked), `blocked` (reason in notes).
+independent review and applicable acceptance, evidence linked), `blocked` (reason in notes).
 Every item's criteria must all hold before it is `done`. Dates are UTC.
+On September 29 the owner authorized reviewed local-test merges during the
+Actions credit shortage; this does not waive native/font, functional fidelity or
+release-specific gates. Original CI denials and failed observations remain intact.
 
 ## Summary
 
 | Status | Count |
 | --- | --- |
-| done | 18 |
-| review / in-progress | 16 |
+| done | 20 |
+| review / in-progress | 21 |
 | todo | 10 |
 
-**Headline progress: 4 of 900 gallery values perfect by parity** (FF-38 on
-current mains, 2026-09-23: opf `a74f3f6`, opf-render `bc436f3`, opf-pptx
-`9092954`, pptx-gallery `f17e9ae`; the previous run at opf `c278532` /
-opf-pptx `5b657c9` and the first baseline at `53be042` / `cf0bc0c` were
-0 of 900). The 900 values are the 793 presence items plus 76 charts and 31
-`withAssets` variants. The FF-23 presence audits (re-run at opf `33d636d`
-with the FF-36 audit probes) find 352 of 793 `works` (baseline 7); read the
+**Headline progress: 5 of 900 gallery values perfect by parity** (accepted
+merged source graph, 2026-09-29: opf `a85facf`, opf-render `6c7d781`, opf-pptx
+`c749c35`, pptx-gallery `f17e9ae`; 0 near, 895 mismatch). The unchanged audit
+improves the September 23 scoreboard at opf `6263985` / opf-pptx `9092954`
+from 4 to 5 with no classification regressions; the first baseline at
+`53be042` / `cf0bc0c` was 0 of 900. The 900 values are the 793 presence items
+plus 76 charts and 31 `withAssets` variants. FF-23 presence results retain
+their September 23 heads: 352 of 793 `works` (baseline 7); read the
 [measurement notes](gallery-support.md#measurement-notes-2026-09-23-re-run)
 first. See the
 [scoreboard](gallery-support.md#parity-scoreboard) and its
 [universal blockers](gallery-support.md#universal-blockers).
+
+PPTX78 at `7cc779129323af6123ef5e194226a545e743f195` was a separate candidate
+measurement: also 5/900 perfect, text 798 to 799 and fills 790 to 791, with no
+classification change. It subsequently passed exact-head Linux/Windows CI
+and merged as `bf3f78f`; the final merged-source audit retained those counts
+([receipt](https://github.com/OpenPresentation/opf/pull/147)). The committed
+headline above remains the explicitly dated pre-PPTX78 baseline. These
+source/package audits use no Office; FF-29 remains in review. FF-05 is now
+in progress: its Calibri controls still report Aptos, including with all six
+theme font slots explicit and unchanged before/after bounded content reads,
+without identifying the precise cause.
 
 ## Items
 
@@ -36,14 +52,14 @@ first. See the
 | FF-01 | Exporter master bullets follow the theme body font | opf-pptx | none | done | [opf-pptx#57](https://github.com/OpenPresentation/opf-pptx/pull/57), `7b34f557` |
 | FF-02 | Embed harness records pre-edit, post-text and post-edit font observations | opf-pptx | none | done | [opf-pptx#58](https://github.com/OpenPresentation/opf-pptx/pull/58) `b6eb3bfd`; hardening [opf-pptx#62](https://github.com/OpenPresentation/opf-pptx/pull/62) `83a41b9a` |
 | FF-03 | Read-only native font inventory worker | opf-pptx | none | done | [opf-pptx#59](https://github.com/OpenPresentation/opf-pptx/pull/59) `ef8a1583` |
-| FF-04 | Native inventory of the unedited fixture, with and without temporary fonts | opf-pptx / opf | FF-03 | todo |  |
-| FF-05 | Aptos root cause determined | opf | FF-02, FF-04 | todo | [brief](aptos-origin-brief.md) |
+| FF-04 | Native inventory of the unedited fixture, with and without temporary fonts | opf-pptx / opf | FF-03 | done | [opf#145](https://github.com/OpenPresentation/opf/pull/145) merged `a85facf`, [September 29 evidence](../../evidence/windows-native-font-inventory-20260929/README.md): both fixture conditions and exporter control audited; Aptos present before edits; portable staged-blob verification and independent review passed |
+| FF-05 | Aptos root cause determined | opf | FF-02, FF-04 | in-progress | [brief](aptos-origin-brief.md), [E6 Calibri control](../../evidence/windows-native-calibri-control-20260929/README.md), [E7 explicit theme slots](../../evidence/windows-native-explicit-slots-20260929/README.md), [E8 before/after content reads](../../evidence/windows-native-font-query-order-20260929/README.md): the collection stays empty-name + Aptos across the bounded query interval; exact style/part or native-resolution cause remains open |
 | FF-06 | Font-flow map across all 14 dimensions and environments | opf | none | done | [font-flow-map.md](font-flow-map.md), [opf#116](https://github.com/OpenPresentation/opf/pull/116) |
 | FF-07 | Exporter writes chosen fonts into theme and run East Asian/complex-script slots, with `lang`/RTL | opf-pptx | FF-05, FF-06, FF-18 | review | merged: [opf-pptx#70](https://github.com/OpenPresentation/opf-pptx/pull/70) `0e886f30`, [opf#134](https://github.com/OpenPresentation/opf/pull/134) `9695bf37`, [opf#135](https://github.com/OpenPresentation/opf/pull/135) `3512af0b`; pending FF-05 native root-cause evidence (criteria are subject to FF-05) |
 | FF-08 | Exporter leaks no hard-coded or default font in any part | opf-pptx | FF-05, FF-06, FF-17 | review | merged: [opf-pptx#69](https://github.com/OpenPresentation/opf-pptx/pull/69) `405963ce`; pending FF-05 native root-cause evidence (empty values must be allowed by FF-05) |
 | FF-09 | Offline pairwise matrix across the 14 gallery dimensions | opf (ecosystem) | FF-07, FF-08, FF-19, FF-20 | todo |  |
-| FF-10 | Matrix in CI on ubuntu, windows, macos via a packed TypeScript consumer | opf | FF-09 | todo |  |
-| FF-11 | Export determinism independent of host fonts, OS, locale and timezone | opf-pptx / opf | FF-06 | todo |  |
+| FF-10 | Matrix in CI on ubuntu, windows, macos via a packed TypeScript consumer | opf | FF-09 | in-progress | accepted [opf#156](https://github.com/OpenPresentation/opf/pull/156) `b3c8fbf`: installed portability foundation with original Linux/macOS/Windows checks; FF-09 font switching and installed FF-38 parity remain pending |
+| FF-11 | Export determinism independent of host fonts, OS, locale and timezone | opf-pptx / opf | FF-06 | in-progress | accepted [opf-pptx#86](https://github.com/OpenPresentation/opf-pptx/pull/86) `373dfa39688e787d861202e7a8069ebff7e8be36`: explicit ZIP dates use UTC in PPTX and embedded workbooks; original Linux/Windows source and packed checks passed. [Runtime checkpoint](../../handoff-runtime-2026-09-29.md#utc-zip-dates-and-the-renderer-absent-candidate-gate); coordinated candidate checks run the unchanged public fixture; outcomes are recorded separately. Font, locale/LANG, broader OS/ICU and complete determinism criteria remain open. |
 | FF-12 | Native PowerPoint sample of the matrix, including CJK and RTL | opf-pptx / opf | FF-03, FF-07, FF-09, FF-18 | todo |  |
 | FF-13 | Font-embed attempt from merged main, audited | opf-pptx / opf | FF-02, FF-07, FF-08 | todo |  |
 | FF-14 | Evidence bundles, compatibility matrix and handoff merged | opf | FF-10, FF-11, FF-12, FF-13, FF-16, FF-19 | todo |  |
@@ -60,21 +76,28 @@ first. See the
 | FF-24 | Color schemes export as theme colors and re-import | opf-pptx | none | done | [opf-pptx#67](https://github.com/OpenPresentation/opf-pptx/pull/67) `5b657c9b` |
 | FF-24b | Follow-up to FF-24 (remaining theme-colour items from the opf-pptx#67 review) | opf-pptx | FF-24 | review | [opf-pptx#77](https://github.com/OpenPresentation/opf-pptx/pull/77) open |
 | FF-25 | Pattern and photo backgrounds export natively and stay distinct | opf, opf-pptx, opf-render, pptx-gallery | none | review | engine halves merged: [opf-pptx#66](https://github.com/OpenPresentation/opf-pptx/pull/66) `2d206b3a`, [opf-render#35](https://github.com/OpenPresentation/opf-render/pull/35) `527f46d1`, [opf#127](https://github.com/OpenPresentation/opf/pull/127) `1e4cc880`, [opf-render#45](https://github.com/OpenPresentation/opf-render/pull/45) `d7d0b686`; gallery half [pptx-gallery#43](https://github.com/Data-Advantage/pptx-gallery/pull/43) open (blocked on release) |
-| FF-26 | Image treatments export as native pictures with distinct values | opf, opf-render, opf-pptx, pptx-gallery | none | review | engine PRs merged: [opf#126](https://github.com/OpenPresentation/opf/pull/126) `57679388`, [opf#129](https://github.com/OpenPresentation/opf/pull/129) `bb72349f`, [opf-render#36](https://github.com/OpenPresentation/opf-render/pull/36) `37572f50`, [opf-render#38](https://github.com/OpenPresentation/opf-render/pull/38) `410e5145`, [opf-pptx#68](https://github.com/OpenPresentation/opf-pptx/pull/68) `8e315610`, [opf-pptx#73](https://github.com/OpenPresentation/opf-pptx/pull/73) `29e35ac5`; gallery snippets (asset, distinct treatments) in [pptx-gallery#44](https://github.com/Data-Advantage/pptx-gallery/pull/44) and [pptx-gallery#45](https://github.com/Data-Advantage/pptx-gallery/pull/45) open; audit A still 15/15 `partial` |
-| FF-27 | Headers/footers as OPF furniture with PowerPoint slide-number and date fields | opf-pptx, pptx-gallery | none | review | engine PRs merged: [opf#130](https://github.com/OpenPresentation/opf/pull/130) `f2dcdbd4`, [opf-render#39](https://github.com/OpenPresentation/opf-render/pull/39) `5f6bc7e8`, [opf-pptx#74](https://github.com/OpenPresentation/opf-pptx/pull/74) `23e2dfc2`; gallery snippet options in [pptx-gallery#45](https://github.com/Data-Advantage/pptx-gallery/pull/45) open; audit A headers-footers 1/10 `works` |
+| FF-26 | Image treatments export as native pictures with distinct values | opf, opf-render, opf-pptx, pptx-gallery | none | review | engine PRs merged: [opf#126](https://github.com/OpenPresentation/opf/pull/126) `57679388`, [opf#129](https://github.com/OpenPresentation/opf/pull/129) `bb72349f`, [opf-render#36](https://github.com/OpenPresentation/opf-render/pull/36) `37572f50`, [opf-render#38](https://github.com/OpenPresentation/opf-render/pull/38) `410e5145`, [opf-pptx#68](https://github.com/OpenPresentation/opf-pptx/pull/68) `8e315610`, [opf-pptx#73](https://github.com/OpenPresentation/opf-pptx/pull/73) `29e35ac5`; gallery image snippets in [pptx-gallery#44](https://github.com/Data-Advantage/pptx-gallery/pull/44) held: five published-graph cases newly succeed with silent image loss; selected-item handoff separately accepted in [#48](https://github.com/Data-Advantage/pptx-gallery/pull/48); dated audit A remains 15/15 `partial` |
+| FF-27 | Headers/footers as OPF furniture with PowerPoint slide-number and date fields | opf-pptx, pptx-gallery | none | review | engine PRs merged: [opf#130](https://github.com/OpenPresentation/opf/pull/130) `f2dcdbd4`, [opf-render#39](https://github.com/OpenPresentation/opf-render/pull/39) `5f6bc7e8`, [opf-pptx#74](https://github.com/OpenPresentation/opf-pptx/pull/74) `23e2dfc2`; gallery snippet options in [pptx-gallery#47](https://github.com/Data-Advantage/pptx-gallery/pull/47) open and require the next published contract; dated audit A headers-footers 1/10 `works` |
 | FF-28 | Narrative and audience catalog parity | opf, pptx-gallery | none | done | [opf#123](https://github.com/OpenPresentation/opf/pull/123) `c2785324` (content blocks 5 to 29 `works` by audit A) |
-| FF-29 | Layout catalog parity and export fidelity | opf, opf-pptx, pptx-gallery | none | review | [opf#132](https://github.com/OpenPresentation/opf/pull/132), [opf-render#43](https://github.com/OpenPresentation/opf-render/pull/43), [opf-pptx#78](https://github.com/OpenPresentation/opf-pptx/pull/78), [opf-pptx#79](https://github.com/OpenPresentation/opf-pptx/pull/79) open |
-| FF-30 | Content blocks keep metric text in preview and export | opf, opf-render, opf-pptx, pptx-gallery | none | review | [pptx-gallery#44](https://github.com/Data-Advantage/pptx-gallery/pull/44) (with #45 and a modified harness: blocks 31/32, image treatments 6/15; gallery CI blocked by Actions billing) |
-| FF-31 | Font provisioning per the owner font policy: licensed fonts never bundled or embedded (shipped open replacements render, PPTX keeps the real name); open fonts bundled, embeddable only via FF-13; policy table in core | opf, opf-render, opf-pptx | FF-35 | review | [opf-pptx#63](https://github.com/OpenPresentation/opf-pptx/pull/63) `f2a7e14e` merged; [opf#133](https://github.com/OpenPresentation/opf/pull/133), [opf-render#44](https://github.com/OpenPresentation/opf-render/pull/44) open |
+| FF-29 | Layout catalog parity and export fidelity | opf, opf-pptx, pptx-gallery | none | review | merged: [opf#132](https://github.com/OpenPresentation/opf/pull/132) `4b991553`, [opf-render#43](https://github.com/OpenPresentation/opf-render/pull/43) `0337ce2e`, [opf-pptx#79](https://github.com/OpenPresentation/opf-pptx/pull/79) `0424d561`, [opf-pptx#81](https://github.com/OpenPresentation/opf-pptx/pull/81) `c749c35`; accepted full audit 5/900 perfect. [opf-pptx#78](https://github.com/OpenPresentation/opf-pptx/pull/78) independently reviewed at `7cc779129323af6123ef5e194226a545e743f195`, full suite and six browser suites pass; separate candidate audit 5/900, exact-head CI pending at this checkpoint |
+| FF-30 | Content blocks keep metric text in preview and export | opf, opf-render, opf-pptx, pptx-gallery | none | review | metric-only [pptx-gallery#49](https://github.com/Data-Advantage/pptx-gallery/pull/49) accepted `4b48e693`; [pptx-gallery#44](https://github.com/Data-Advantage/pptx-gallery/pull/44) remains held on newly silent image loss, and quote reimport remains open. [Local checkpoint](../../handoff-runtime-2026-09-29.md#local-acceptance-during-the-actions-credit-shortage) distinguishes exact selected-source acceptance from metric/image fidelity |
+| FF-31 | Font provisioning per the owner font policy: licensed fonts never bundled or embedded (shipped open replacements render, PPTX keeps the real name); open fonts bundled, embeddable only via FF-13; policy table in core | opf, opf-render, opf-pptx | FF-35 | review | merged: [opf-pptx#63](https://github.com/OpenPresentation/opf-pptx/pull/63) `f2a7e14e`, [opf#133](https://github.com/OpenPresentation/opf/pull/133) `d3397502`, [opf-render#44](https://github.com/OpenPresentation/opf-render/pull/44) `6c7d7818`; accepted September 29 source-graph audit passes fontResolution for 5/900; final policy acceptance remains open |
 | FF-32 | Re-import retains design or emits specific diagnostics | opf-pptx | FF-07, FF-24 | done | [opf-pptx#71](https://github.com/OpenPresentation/opf-pptx/pull/71) `810ee419` |
-| FF-33 | Gallery snippet and "open in editor" emit every dimension's selected value | pptx-gallery | FF-26, FF-27 | review | [pptx-gallery#45](https://github.com/Data-Advantage/pptx-gallery/pull/45) (gallery CI blocked by Actions billing) |
+| FF-33 | Gallery snippet and "open in editor" emit every dimension's selected value | pptx-gallery | FF-26, FF-27 | review | selected-record parity accepted in [pptx-gallery#48](https://github.com/Data-Advantage/pptx-gallery/pull/48) `ca8fbf0`, superseding closed #45; 135 units and 12 browser cases pass. Field-option and image capability criteria remain with #47/#44; no full parity or release completion |
 | FF-34 | Socials produce the platform size/aspect ratio or are documented as authoring-only | opf, opf-pptx, opf-render, pptx-gallery | none | review | engine PRs merged: [opf#125](https://github.com/OpenPresentation/opf/pull/125) `a74f3f62`, [opf-render#34](https://github.com/OpenPresentation/opf-render/pull/34) `bc436f3b`, [opf-pptx#65](https://github.com/OpenPresentation/opf-pptx/pull/65) `90929546`; gallery half [pptx-gallery#42](https://github.com/Data-Advantage/pptx-gallery/pull/42) open; audit B socials 10/10 `works` (re-import keeps socials; no handle rendered by the pre-program snippet) |
 | FF-35 | Shared default font scheme `aptos` across every engine | opf, opf-render, opf-editor, opf-pptx | FF-17 | done | [opf#124](https://github.com/OpenPresentation/opf/pull/124) `3ba21ff4`, [opf-render#33](https://github.com/OpenPresentation/opf-render/pull/33) `47d19b25`, [opf-editor#31](https://github.com/OpenPresentation/opf-editor/pull/31) `4e47bf95`, [opf-pptx#64](https://github.com/OpenPresentation/opf-pptx/pull/64) `e1627898` |
 | FF-35b | Follow-up: unknown font-scheme ids fall back to `aptos`, not a Roboto literal | engines with the literal | FF-35 | done | [opf#131](https://github.com/OpenPresentation/opf/pull/131) `27d0ac14`, [opf-render#40](https://github.com/OpenPresentation/opf-render/pull/40) `0fa35b63`, [opf-pptx#75](https://github.com/OpenPresentation/opf-pptx/pull/75) `c606780f`, [opf-editor#32](https://github.com/OpenPresentation/opf-editor/pull/32) `214ae695` |
 | FF-36 | pptx.gallery items show their measured support status | pptx-gallery, opf | FF-23 | review | [pptx-gallery#41](https://github.com/Data-Advantage/pptx-gallery/pull/41) |
-| FF-37 | pptx.gallery as a first-class OPF catalog: spec URLs serve schema-valid records; core bundles a pinned, drift-checked snapshot | opf, pptx-gallery | none | review | [opf#128](https://github.com/OpenPresentation/opf/pull/128), [pptx-gallery#46](https://github.com/Data-Advantage/pptx-gallery/pull/46) |
+| FF-37 | pptx.gallery as a first-class OPF catalog: spec URLs serve schema-valid records; core bundles a pinned, drift-checked snapshot | opf, pptx-gallery | none | review | [opf#128](https://github.com/OpenPresentation/opf/pull/128), [pptx-gallery#46](https://github.com/Data-Advantage/pptx-gallery/pull/46); [opf#144](https://github.com/OpenPresentation/opf/pull/144) delivered into the PR128 branch `codex/ff-37-gallery-catalog` as `f8ca179488ee96c8466303bac06ea2dbf30502a0` at 2026-09-29 08:13:34 UTC, not main; gallery-first/conflict gates remain |
 | FF-38 | Parity audit harness and progress scoreboard (defines "perfect") | opf | FF-23 | done | [opf#122](https://github.com/OpenPresentation/opf/pull/122) `e18df26b`, [PARITY.md](gallery-support/parity/PARITY.md) |
-| FF-39 | Alignment parity: preview and PPTX text alignment and anchors agree | opf-pptx, opf-render | FF-38 | review | merged: [opf-render#37](https://github.com/OpenPresentation/opf-render/pull/37) `3f34448e`, [opf-pptx#72](https://github.com/OpenPresentation/opf-pptx/pull/72) `0330e6d0`; 39 values still report "alignment l (preview) vs ctr (pptx)" (reverse mismatches; see FF-29, [opf#132](https://github.com/OpenPresentation/opf/pull/132)) |
+| FF-39 | Alignment parity: preview and PPTX text alignment and anchors agree | opf-pptx, opf-render | FF-38 | review | merged: [opf-render#37](https://github.com/OpenPresentation/opf-render/pull/37) `3f34448e`, [opf-pptx#72](https://github.com/OpenPresentation/opf-pptx/pull/72) `0330e6d0`; the September 23 reverse-alignment mismatches no longer occur in the accepted September 29 audit; geometry 880/900 and text 798/900, with remaining failures and native acceptance open |
+| FF-40 | Per-font fidelity tracker and prioritized plan: baseline for every font family (the 160 reviewed plus the four Intos policy rows) | opf | FF-31, FF-38 | done | [font-tracker.md](font-tracker.md), [font-tracker.json](font-tracker.json), `scripts/build-font-tracker.mjs` (drift-checked in `pnpm test`); [opf#174](https://github.com/OpenPresentation/opf/pull/174) `0b8e6de2` (approved review; refreshed after opf-render#54 in the FF-40 refresh PR). The tracker stays live: later font PRs update the overrides file, the manifest snapshot or the parity source and regenerate |
+| FF-41 | Host loading and style coverage: shipped editor, gallery, browser and Node hosts load the intended faces | opf-render, opf-editor, pptx-gallery, opf | FF-40, FF-19, FF-31 | todo | Lazy loading of the vendored open pack and Intos is merged ([opf-render#54](https://github.com/OpenPresentation/opf-render/pull/54) `d528be5`, [opf-editor#42](https://github.com/OpenPresentation/opf-editor/pull/42) `cfad5cd`); the gallery editor gets it only with a release that includes opf-editor#42; merged groundwork: [opf-render#50](https://github.com/OpenPresentation/opf-render/pull/50), [opf-render#55](https://github.com/OpenPresentation/opf-render/pull/55), [opf-editor#40](https://github.com/OpenPresentation/opf-editor/pull/40), [opf-render#57](https://github.com/OpenPresentation/opf-render/pull/57). In review (FF-43, opf-render#60, opf#178): Barlow, Anton, Figtree, Work Sans, EB Garamond, Archivo Narrow, Libre Caslon Text and Bitter bundled lazily, Red Hat Display 600 and italics and Red Hat Text italics completed with correctly labelled faces; still open: Liberation Mono, Sans and Serif, Playfair Display and Raleway, the gallery editor release and per-host acceptance |
+| FF-42 | Aptos family compatibility: Aptos, Aptos Display, Aptos Narrow, Aptos Serif and Aptos Mono qualified separately | opf, opf-render, opf-editor | FF-40, FF-31 | in-progress | Merged: Intos metric policy [opf#166](https://github.com/OpenPresentation/opf/pull/166) `338ddcd4` (0.000% in four styles, Selawik rejected for Segoe UI), Intos faces [opf-render#54](https://github.com/OpenPresentation/opf-render/pull/54) `d528be5`, lazy loading [opf-editor#42](https://github.com/OpenPresentation/opf-editor/pull/42) `cfad5cd`; parity on the merged mains passes all 704 Aptos and Aptos Display values ([opf#175](https://github.com/OpenPresentation/opf/pull/175)). Open: Aptos Mono unmeasured, gallery editor waits for a release, no native verification, editor fixtures for Aptos Narrow and Serif |
+| FF-43 | Remaining Latin replacements: packaging, metric qualification and appearance, per family | opf, opf-render | FF-41 | in-progress | Packaging in review ([opf-render#60](https://github.com/OpenPresentation/opf-render/pull/60), [opf#178](https://github.com/OpenPresentation/opf/pull/178)): eight open replacement families (28 faces) bundled, Red Hat completed; the 19 route faces re-measured against the installed originals (all stay visual: none meets the metric bar); Grandview, Tenorite and their Display styles unmeasured (not installed); Bitter bundled after the license test was fixed to the OFL name rule (instanced statics named "Bitter" do not carry the reserved "Bitter Pro"). Metric qualification, line breaks and appearance per family remain open |
+| FF-44 | Script replacements and shaping corpora: script-specific corpora and per-family qualification | opf, opf-render, opf-editor | FF-41, FF-18, FF-19 | todo |  |
+| FF-45 | Special families: Cambria Math, Segoe UI Emoji, Symbol, Webdings, Wingdings | opf, opf-render, opf-pptx | FF-40 | todo |  |
+| FF-46 | Native font verification per family and full parity rerun | opf, opf-pptx | FF-41, FF-42, FF-43, FF-44, FF-45, FF-12, FF-05 | todo |  |
 | FF-R0 | Prior: mixed-size table edit/save/reopen and first embed attempt | opf, opf-pptx | none | done | [opf#114](https://github.com/OpenPresentation/opf/pull/114), [opf#115](https://github.com/OpenPresentation/opf/pull/115) |
 
 ## Acceptance criteria
@@ -488,6 +511,20 @@ preview anchor), without relaxing a tolerance. Audit evidence: the FF-38
 before/after table shows no alignment or anchor-x reasons, and the geometry
 and text pass counts rise accordingly.
 
+**FF-40 Per-font tracker.** `font-tracker.json` has one record per family: the 157 font-policy families (the 153 the owner reviewed plus the four Intos rows added by opf#166) plus the seven shipped script-font dependencies that the policy lacks, with the five special families (Cambria Math, Segoe UI Emoji, Symbol, Webdings, Wingdings) flagged. Each record carries the selected name and its PPTX retention, the preview route and tier with alternates, the bundled face (package, version or commit, license, SHA-256 per face, available styles), the styles required and missing, scripts, per-style measurements with corpus, date and source (or `null`), host verification (Node, browser, editor, gallery editor and gallery cards, recorded separately), acceptance records with evidence and date, native verification, parity signals (values affected, current fontResolution status), phase, status, next action, evidence links and a priority score. Aptos and Aptos Display rank first (704 of the 850 audited values each); priority counts only values that are not already real or pass and discounts hosts with per-family verification. `font-tracker.md` is generated, grouped by phase and class and sorted by priority, and quotes the owner's five-phase plan and rules and a "reconciled with current state" note. `scripts/build-font-tracker.mjs --check` runs in `pnpm test` and fails on drift, on a policy family without a record and on a record for a missing family. The render manifest input is a committed pinned snapshot with its source commit, so core tests never need the sibling repository. No record claims acceptance without per-family evidence, and source, installed-package and live-site claims stay separate. The tracker stays live: later font PRs update the overrides file, the manifest snapshot or the parity source and regenerate.
+
+**FF-41 Host loading and style coverage.** For every family with a bundled route face, the shipped editor, gallery editor, browser and Node hosts load the intended face, with no unintended fallback, and the required styles. Proof is a per-family fixture that renders the family in each host and compares the drawn face and shaped advances (within 0.1 px, as the base-face evidence does); the tracker's host verification moves from `unverified` to `verified` only with that evidence. Missing styles (for example Red Hat Display 600 and italics, Red Hat Text italics) come from pinned, permitted files (OFL-1.1, Apache-2.0, MIT or UFL-1.0, unmodified upstream where a Reserved Font Name applies) or stay recorded explicit gaps with a diagnostic; a synthesized style never counts. Families without a bundle (Anton, Archivo Narrow, Barlow, Bitter, EB Garamond, Figtree, Libre Caslon Text, Work Sans, Liberation Mono, Sans and Serif) are bundled or their fallback stays explicit. Playfair Display and Raleway are resolved with upstream static files, supported variable rendering or permitted renamed instances, with distinct weights proven, or stay explicit gaps. The seven script dependencies get policy rows. The unchanged parity audit is rerun so stale `missing` readings are replaced.
+
+**FF-42 Aptos family compatibility.** Aptos and Aptos Display are measured and qualified separately, as are Aptos Narrow, Aptos Serif and Aptos Mono. A candidate is adopted only when it has per-style measurements in all four styles (mean below 0.1% and maximum at most 0.3% on the corpus), matching line breaks and line metrics (hhea, OS/2, x-height and cap-height), unchanged geometry tolerances, original outlines, a permitted pinned license with no unmodified-name conflict, and a family name that is not the original's trademark. It loads in Node, browser, editor and gallery and never changes the PPTX name. The previous replacement stays as an alternate. Rejected candidates (Selawik for Segoe UI) are recorded with their measurements. The unchanged parity audit is rerun on the merged heads and the values affected (704 each for Aptos and Aptos Display) are reported.
+
+**FF-43 Remaining Latin replacements.** Each of the 46 proprietary Latin families outside the Aptos family (the 51 proprietary Latin families less the five that FF-42 covers) has its own fixture and acceptance record; grouped work does not transfer acceptance. Metric qualification needs per-style measurements, matching line breaks and line metrics and unchanged geometry tolerances, not a favourable average width. The established metric routes (Arial, Calibri, Courier New, Times New Roman, Georgia) get fresh four-style regressions in each host. Every other family is either qualified against its actual reference version or documented as a visual look-alike with its measured gaps. Packaging (FF-41), metric compatibility and appearance are separate deliverables.
+
+**FF-44 Script replacements and shaping corpora.** The Latin-only corpus is extended with script-specific text per script (joining and marks, RTL and punctuation, conjuncts and vowel placement, stacked marks and line breaks, mixed Latin text). Each of the 41 proprietary script families, the 23 open Noto script families and the seven shipped dependencies has its own fixture, host-loading proof and native-script measurements, and a native PowerPoint comparison through FF-46. Most script packs ship regular and bold only; required italics or other styles need genuine qualified faces, and diagnostics preserve honesty but do not complete a fidelity requirement. Serif-styled originals (MS Mincho, SimSun, FangSong, MingLiU, PMingLiU, Batang, Gungsuh and others) get a qualified serif candidate or a documented visual gap.
+
+**FF-45 Special families.** Each of Cambria Math, Segoe UI Emoji, Symbol, Webdings and Wingdings has its own path with permitted fonts: math-aware layout and export for Cambria Math, a color-emoji path with ZWJ sequences, variation selectors and skin tones, and reversible version-specific character-to-glyph mappings for Symbol, Webdings and Wingdings with exhaustive code, advance, bounds, export and round-trip tests. The PPTX retains the original font names and codes. Each has browser, raster and native evidence.
+
+**FF-46 Native font verification.** For every family a bounded native PowerPoint sample confirms the selected name in the file and the drawn behaviour, kept separate from source, installed-package and live-site claims. It runs after FF-41 to FF-45 and includes CJK and right-to-left samples (FF-12). The full parity audit is rerun on the merged heads and the tracker is regenerated. Root alone owns Office; no in-place native retries; original failed observations stay intact.
+
 ## Progress log
 
 Append one dated line per state change. Newest last.
@@ -623,3 +660,186 @@ Append one dated line per state change. Newest last.
   `1ad25df`, opf-render `bc436f3`, opf-pptx `9092954`, pptx-gallery
   `f17e9ae`: no class changed (352 of 793 `works`); only the socials reason
   text changed.
+
+- 2026-09-29: Resumed from fresh fetched main worktrees: opf `d3397502`,
+  opf-pptx `90929546`, opf-render `6c7d7818`, opf-editor `214ae695`, and
+  pptx-gallery `f17e9ae5`. Existing worktrees and historical evidence preserved.
+  - FF-04: the missing no-temporary-font inventory ran once in a freshly
+    inspected PowerPoint session, on the canonical unedited fixture. Its
+    observational audit passed with zero failures, source unchanged and one
+    confirmed owned close. Aptos and an empty-name font entry were present
+    before editing. Historical with-temp and exporter-control audits now have
+    passing v2 sidecars; original failed audits remain preserved.
+    The independently reviewed portable bundle is published by opf#145;
+    its merge completes FF-04 (19 done, 16 review/in-progress, 9 todo).
+  - FF-05 remains open: the inventory narrows the hypotheses, without locating
+    the exact style/part or identifying which physical font drew a glyph.
+  - FF-29: independent review reproduced hidden media in privacy modes, stale
+    hyperlinks, slide-reorder loss (#78), and malformed recovered layouts
+    crashing rendering (#79). Isolated fixes and regression tests are under
+    review; previous green CI alone was insufficient to merge these heads.
+    PPTX79 subsequently passed Linux/Windows CI at `ab0fc1d` and merged as
+    `0424d561`. PPTX78's combined fixes passed full local and six browser
+    suites; final-head CI is required after reconciling the squash-merge
+    ancestry (`ede5ca7`, unchanged tested tree `d3ddb6d`).
+  - FF-31 and FF-29 rows now identify engine PRs that had already merged.
+    At this initial continuation checkpoint, no fresh FF-38 scoreboard was
+    claimed; the later September 29 audit receipt follows below.
+  - Node 24.21.0 and pnpm 10.33.2 used. Initial PowerShell module-path and
+    nested pnpm PATH failures are preserved with successful process-local
+    corrections; no global security or tooling settings changed. No publish,
+    deployment, native p:hf work, or tolerance changes.
+
+- 2026-09-29: FF-38 unchanged full 900-value audit on the accepted merged graph
+  completed at `2026-09-29T08:23:46.429Z`: core
+  `a85facf11d7b99102ca801885c5afaa783d1c800`, renderer
+  `6c7d7818e40d0f9c519e4b34f7a24e9150c1787f`, PPTX
+  `c749c356b4fb5a5b5dfa77db8f1f7dd3c7daef63`, gallery
+  `f17e9ae5869669d5fbac3720f285652d0c37551c`. Local raw receipt
+  `baseline81-results.json` SHA-256
+  `f2b427a0e1a2a835a404e73631963daaff60cee3996893f05008a318881dd6ee`;
+  committed [results](gallery-support/parity/parity-results.json) SHA-256
+  `c8896904457c582054ff588df7f77719e49c9d8dd55fcb58685777a6a886ca56`
+  differs only by the [documented one-slug normalization](gallery-support/README.md#normalized-ids).
+  The [scoreboard](gallery-support/parity/PARITY.md) records 5 perfect, 0 near, 895
+  mismatch, up from 4 with no classification regressions. Text 798, fills
+  790; `blocks/kpi-dashboard` is the fifth perfect value. PPTX79 and PPTX81
+  are accepted; core145 merged as `a85facf`, completing FF-04. Editor
+  `d0c95a1` was refreshed by a dependency-only merge and is not used by parity.
+  - Candidate PPTX78 `7cc779129323af6123ef5e194226a545e743f195`, with the same
+    other heads, completed at `2026-09-29T08:30:22.322Z`:
+    local raw `candidate78-results.json` SHA-256
+    `316e21129d57ec198de4f9e390f6962b96715b6cf8e4c361cb5dd2cfe30022fa`.
+    It also measures 5 perfect, 0 near, 895 mismatch; text 799 and fills 791,
+    with no classification change from the accepted baseline. Independent
+    review, package tests and six browser suites pass; exact-head CI
+    [36543078806](https://github.com/OpenPresentation/opf-pptx/actions/runs/36543078806)
+    is pending at this checkpoint. PPTX80's old-base exact-caption and
+    fallback-link findings were reconciled in PPTX78, not merged as-is.
+  - Accepted headline excludes this candidate. No Office was used in either
+    parity run; no native parity or new font acceptance is claimed. FF-29
+    stays in review, FF-05 stays open, and counts remain 19 done, 16
+    review/in-progress, 9 todo. September 23 presence values and dates are
+    retained independently.
+
+- 2026-09-29 09:01 UTC: FF-05 E6 ran once on the independently reviewed
+  Calibri control, using PPTX `bf3f78f` and core `061499d`. All 17 explicit
+  Carlito typeface attributes changed to Calibri; the other 38 ZIP entry contents,
+  relationships and four empty theme ea/cs slots were unchanged. One owned
+  read-only open/close completed under the 45-second deadline without
+  temporary font registration. The current audit passed with zero failures,
+  all input hashes unchanged; UI preflight/postflight showed Home without an
+  open deck or dialog. `Presentation.Fonts` still reported an empty-name entry
+  and Aptos while the nonempty inspected slide font names and theme Latin
+  reported Calibri (`NameOther` remained empty).
+  [Evidence](../../evidence/windows-native-calibri-control-20260929/README.md).
+  This narrows Carlito-specific explanations, without proving a source,
+  physical glyph identity, font allowlist or embedding. FF-05 moves from todo
+  to in-progress: 19 done, 17 review/in-progress, 8 todo. Next: offline-reviewed
+  style/part isolation before another bounded native control.
+  - Wrap-up receipts: PPTX79 `0424d561`, PPTX81 `c749c35`, PPTX78 `bf3f78f`,
+    core145 `a85facf` and core147 `061499d` merged after independent review and
+    green CI. PPTX80 closed as superseded with its findings reconciled in78;
+    its branch was preserved. No release, deployment or tolerance change.
+
+- 2026-09-29 09:38 UTC: FF-05 E7 completed once on the independently reviewed
+  [four-slot Calibri control](../../evidence/windows-native-explicit-slots-20260929/README.md),
+  source `4e2bab2a4f5a0f09350d2edc2463bcb29302fa7db34a8c621e39fcd5c9a16cd7`.
+  Only the four empty theme major/minor ea/cs attributes changed from E6;
+  the other 40 ZIP entry contents and all relationships were preserved.
+  The native audit passed with zero failures, one owned read-only open/close,
+  unchanged inputs and no temporary registration. Helper time 1,227 ms under
+  the 45-second deadline. All six theme names reported Calibri; the initial
+  Fonts collection still contained the empty-name entry and Aptos. Empty theme
+  slots are therefore unnecessary for this observation, without identifying a
+  cause or proving glyph identity. UI preflight/postflight showed Home without
+  an open presentation or dialog; running PowerPoint file/product version was
+  `16.0.20430.20092`. Actual source graph: core `0e81a407`, PPTX `7fca9a2`,
+  renderer `6c7d7818`, editor `d0c95a1`. FF-05 stays in progress and counts
+  remain 19 done, 17 review/in-progress, 8 todo. Next: separately reviewed
+  dual Fonts snapshots before/after the existing bounded content queries;
+  no such harness or native run is part of this evidence.
+
+- 2026-09-29: FF-11 moves from todo to in-progress for the bounded explicit ZIP
+  timestamp repair in [opf-pptx#86](https://github.com/OpenPresentation/opf-pptx/pull/86),
+  accepted `373dfa39688e787d861202e7a8069ebff7e8be36` with reviewed tree
+  `2405fa1b86ac1abc034f14ab47e01bd8d38a56c2`. Original
+  [Linux/Windows CI](https://github.com/OpenPresentation/opf-pptx/actions/runs/36570457498)
+  passed source and fresh packed timezone controls; those dependency graphs
+  remain distinct. Explicit `zipDate` uses UTC calendar fields in PPTX and nested
+  workbooks, while omitted/undefined input preserves the established fixed
+  output. Ambiguous/invalid explicit values reject at `options.zipDate`.
+  - The combined core candidate pins that accepted source and runs the unchanged
+    public timezone fixture against coordinated installed packages, alongside
+    six renderer-absent furniture groups. Acceptance requires the full 41-stage
+    protocol and comparison of eight local furniture PPTX files against frozen
+    core154 Linux outputs; outcomes are recorded separately. Original
+    accepted-main PPTX CI is audited independently.
+  - Font availability/substitution, LANG/locale, broader OS/runtime/ICU and
+    complete export determinism remain open; default behavior after a host TZ
+    mutation is outside this bounded control. FF-27 remains in review. No Office,
+    package publication, deployment or tolerance change; summary becomes
+    19 done, 18 review/in-progress, 7 todo. The parity headline is unchanged.
+
+- 2026-09-29: FF-10 foundation adds Windows/macOS installed-candidate jobs beside
+  the existing Linux ecosystem lane. Candidate consumers explicitly install the
+  core-locked test-only Node types and run TypeScript 5.9/7 in NodeNext/Bundler,
+  retaining declaration containment and a real downstream-error control.
+  Existing installed canvas/furniture rerender checks and the explicit
+  no-system-font-discovery path are reused. Fresh original cross-OS CI and visual
+  review are required; this is not the FF-09 font-switch matrix, installed FF-38
+  parity, a physically fontless host, native fidelity or release acceptance.
+
+- 2026-09-29 15:07 UTC: FF-05 E8 used the exact E7 input with
+  [PPTX88](https://github.com/OpenPresentation/opf-pptx/pull/88) merged
+  `9a7f3c1513c5875b4ac9d5974c04151a4ac26cbe`. One owned read-only open/close,
+  303 stages, about 1,405 ms under the 45-second helper deadline, unchanged
+  inputs and zero temporary registrations passed the observational audit.
+  Both ordered Fonts collections and flags remained empty-name + Aptos before
+  and after existing content reads. This proves stability only over that
+  sequence/interval, not root cause, physical font identity, allowlist or
+  embedding. [Evidence](../../evidence/windows-native-font-query-order-20260929/README.md).
+  PowerPoint was freshly launched after sleep; its process differs from E7.
+  Actual native source graph: core `9261eac5`, PPTX `9a7f3c1`, renderer
+  `c62b3f9`, editor `d0c95a1`, gallery `f17e9ae5`.
+  - The owner explicitly authorized independently reviewed merges after local
+    tests during the Actions credit shortage. PPTX88 passed 22 focused groups,
+    29 independent audit cases, source build/typecheck/validate/full tests,
+    six browser suites and a fresh packed consumer. Registry and source
+    dependency results remain separate; no remote CI pass is claimed here.
+    Fidelity and native safety gates remain unchanged.
+  - FF-05 remains in progress. Preserve the concurrently merged FF-10/FF-11
+    work: summary stays 19 done, 19 review/in-progress, 6 todo and the dated
+    parity headline stays 5/900. Next is offline style/part isolation review,
+    not another unmodified inventory or an embed retry. No publish/deploy.
+
+- 2026-09-29 16:14 UTC: Owner-authorized local-test merge batch accepted app52,
+  app57, app58, app51, PPTX89, gallery37, site48 and gallery48 after independent
+  source/evidence/visual review. [Runtime checkpoint](../../handoff-runtime-2026-09-29.md#local-acceptance-during-the-actions-credit-shortage)
+  records exact acceptance scopes and [merge receipts](../../evidence/local-acceptance-merges-20260929/README.md).
+  Original gallery45 closed as superseded, branch unchanged. Gallery44 stays
+  held for five newly silent image losses; current-public socials/field options,
+  geometry, native/font and release gates remain open. This is not a fresh full
+  parity audit or completion of FF-09/FF-10/FF-14/FF-15/FF-26/FF-27/FF-33.
+  The 19/19/6 item counts and dated 5/900 headline are unchanged.
+
+- 2026-09-29 16:32 UTC: App56 dependency update accepted after fresh local
+  737-unit, 13-standalone and 49-browser checks, build/type/audit and bounded
+  MCP limit controls with independent visual and source review. The exact
+  reviewed tree is retained in the same local merge receipts. This changes
+  no program item status, native/font or release gate; counts remain 19/19/6.
+
+- 2026-09-29 16:41 UTC: PPTX90 accepts supported current native body/list rich
+  formatting after source, registry-backed, installed and browser checks with
+  six reviewed previews. Original cross-shape authoring boundaries and FF-09
+  remain open. Gallery49 accepts only the metric readability slice after 144
+  units and 12 browser cases; original chart data and image refusals remain
+  unchanged. Gallery44 image loss and quote reimport stay open. Exact merge
+  receipts are linked above. No item status changes: counts stay 19/19/6 and
+  the dated 5/900 parity headline is unchanged. No native/release completion.
+
+- 2026-09-29: FF-40 in review: [font-tracker.md](font-tracker.md) records every font family (157 policy families, of which 153 were reviewed and four are the Intos rows from opf#166, and the seven shipped script-font dependencies missing from the policy) with route, bundled face, styles, measurements, host and native status, parity signals, phase, status and next action, sorted by priority (Aptos and Aptos Display first). FF-41 to FF-46 added from the owner's five-phase plan (todo, except FF-42 in progress: opf#166 merged, opf-render#54 and opf-editor#42 open). Summary is now 19 done, 21 review/in-progress, 11 todo; the dated 5/900 parity headline and all gates are unchanged. No native or release completion.
+
+- 2026-09-29: FF-40 done (opf#174 merged `0b8e6de2`). The tracker is refreshed after the Intos merges: manifest snapshot at opf-render `d528be5` (50 packages, Intos bundled) and the parity run on the merged mains ([opf#175](https://github.com/OpenPresentation/opf/pull/175): 660 of 850 perfect, fontResolution 733 pass, 31 near, 86 fail). The Aptos family is `metric-measured` and passes all 704 values each for Aptos and Aptos Display, so it no longer leads the priority queue; Node and browser hosts are recorded verified for the Intos faces (opf-render aptos-preview and lazy-fonts-browser tests) and the editor for Aptos and Aptos Display (opf-editor playground-lazy-fonts), while the gallery editor waits for a release. FF-42 stays in progress (Aptos Mono unmeasured, no native verification). Summary is now 20 done, 20 review/in-progress, 11 todo. No native or release completion.
+
+- 2026-09-29: FF-43 in review (opf-render#60, opf#178): the open replacement faces that policy routes to are bundled and the missing Red Hat styles completed. Barlow (400, 700, italics) and Anton (400) are google/fonts statics byte-identical at commit `23e54b51ddff`; Figtree, Work Sans, EB Garamond, Archivo Narrow, Bitter (400, 700, italics) and Libre Caslon Text (400, 400 italic, 700) are npm-derived `@expo-google-fonts` statics at exact versions (no Reserved Font Name); all OFL-1.1 from the shipped notice, `embed: "used"`, lazy in browser hosts, the eager list unchanged at 33 faces (28 new faces, 4.6 MiB uncompressed with the Red Hat additions, about 2.4 MB in the tarball). Red Hat Display now has 300, 400, 600, 700 with italics and Red Hat Text 400 and 700 with italics: the RedHatFont statics cannot be used (the Regular, Light and SemiBold italics (and Red Hat Text Italic) do not set the OS/2 italic bit (only the Bold Italic files do), Red Hat Display SemiBold declares weight 707 and Bold 799 (Red Hat Text Bold declares 700); a per-face resvg paint probe showed 600 painting as Bold and the regular and bold italics as one face), Red Hat has no Reserved Font Name, so the correctly labelled `@expo-google-fonts` instances replace them; the new per-face paint test proves all 70 open faces paint as themselves and distinctly. The 19 route faces are re-measured against the installed Windows originals (widths unchanged except Corbel and Gill Sans MT, which now follow the vendored Source Sans 3; vertical metrics and outline identity in `bundled-replacements-ff43-20260929.json`, 0 identical outlines): every row stays visual, none meets the metric bar. Bitter (Rockwell) is bundled as instanced statics: its Reserved Font Name is "Bitter Pro", the coordinator ruled that the OFL only bars a modified font from carrying the reserved name in its family or file name, and opf-render's license test now implements that rule (instanced faces named Carlito, Raleway, Lora or Playfair Display still fail). Libre Caslon Text has no bold italic upstream (explicit gap). Grandview, Grandview Display, Tenorite and Tenorite Display are not installed on the measuring host and stay unmeasured. The tracker is regenerated (manifest snapshot at the opf-render branch). FF-43 is in-progress, FF-41 stays todo. Summary is now 20 done, 21 review/in-progress, 10 todo. No native or release completion.

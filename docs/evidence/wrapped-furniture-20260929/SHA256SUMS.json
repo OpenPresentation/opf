@@ -1,0 +1,12 @@
+[
+  {
+    "path": "README.md",
+    "sha256": "a3f132a2b674c72a1a3d492240cfddf3e9124a4bfe1492918e84bb48071152b9",
+    "bytes": 2296
+  },
+  {
+    "path": "acceptance.json",
+    "sha256": "9a1054fd7d90e2d46480bd127b83e8ac569242e8b202991391c99e6fb1158773",
+    "bytes": 9300
+  }
+]

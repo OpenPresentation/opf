@@ -1,15 +1,15 @@
 # Browser preview and live editing
 
-Published editor 0.8.0 provides an embeddable SVG canvas in `@openpresentation/opf-editor/canvas`. OPF JSON remains the document; the canvas writes validated JSON Patch operations through an `EditorSession`. Draft edits render with the same SVG engine used for standalone previews. Completed edits produce one undoable change.
+Published editor 0.10.1 provides an embeddable SVG canvas in `@openpresentation/opf-editor/canvas`. OPF JSON remains the document; the canvas writes validated JSON Patch operations through an `EditorSession`. Draft edits render with the same SVG engine used for standalone previews. Completed edits produce one undoable change.
 
 The published canvas covers the interactions below; complete PowerPoint feature coverage remains separate work. “Pixel perfect” is a fidelity target with specific prerequisites and remaining gaps described below.
 
 ## Install the published packages
 
-Use Node 24 with core 0.11.0, renderer 0.9.0, editor 0.8.0 and PPTX 0.9.1:
+Use Node 24 with core 0.11.2, renderer 0.11.2, editor 0.10.1 and PPTX 0.11.1:
 
 ```sh
-npm install --save-exact @openpresentation/opf@0.11.0 @openpresentation/opf-render@0.9.0 @openpresentation/opf-editor@0.8.0 @openpresentation/opf-pptx@0.9.1
+npm install --save-exact @openpresentation/opf@0.11.2 @openpresentation/opf-render@0.11.2 @openpresentation/opf-editor@0.10.1 @openpresentation/opf-pptx@0.11.1
 ```
 
 No paid service or provider account is required. The six agent skills install with `npx @openpresentation/cli@0.9.0 skills install`. See the [quickstart](quickstart.md) for an installed-package workflow and the [compatibility matrix](compatibility-matrix.md) for separately scoped browser and native evidence.
@@ -28,6 +28,10 @@ The packed consumer installs actual tarballs without workspace aliases, exercise
 The gallery host example also offers local PPTX file import with preview/diagnostics and editable PowerPoint download. It commits active canvas text before export, shares preview text measurements and applies imports as a single undoable change. Save OPF to preserve the original source; native PowerPoint positions, fonts and unsupported features can change during conversion. The browser E2E checks run offline after loading and inspect the downloaded native merged table, then reimport and undo/redo. Native edit/save/reopen is a separate targeted check, not a pixel-equivalence claim.
 
 `pnpm prepare:gallery:registry` builds host controls from the immutable `exampleRefs.opf-editor` in `release-plan.json` while resolving libraries only from the fresh npm consumer. Package `verificationRefs` continue to point at actual published releases. The gallery manifest records both the example source hashes and registry package integrities. Updating example controls does not imply a new editor library release.
+
+Script fonts: when the pinned editor example loads faces from `./script-fonts/` and the pinned renderer has the script pack (0.10.0 and later), the registry build also writes `script-fonts.json` and lists its hash in `manifest.json`. The manifest is the reviewable half: every `@expo-google-fonts/noto-*` package, exact version, SPDX license, license-file hash and each face's SHA-256, taken from the published renderer. The faces are binaries (63 files, 66.9 MiB), so they are never committed to the gallery repository. The gallery build copies them from its own pinned npm dependencies into the untracked `public/opf-editor/script-fonts/` directory, verifying every hash, and writes the license notices beside them; nothing is fetched from a font CDN. See `scripts/gallery-script-fonts.mjs` and the gallery's `scripts/prepare-editor-script-fonts.mjs`.
+
+Lazy fonts: when the pinned editor example calls `ensureLazyFonts` and the pinned renderer vendors faces (Intos for the default Aptos scheme and the open families, renderer 0.11.0 and later), the registry build also writes `lazy-fonts.json` and lists its hash in `manifest.json`. It pins every vendored package (exact version, SPDX license, license-file and notice hashes) and each face SHA-256, taken from the published renderer. The faces are binaries, so they are not committed either: the gallery build copies them from its pinned `@openpresentation/opf-render` package (`fonts/<name>/`) into the untracked `public/opf-editor/fonts/` directory, verifying every hash, and the editor fetches only the families a document uses, same-origin. See `scripts/gallery-lazy-fonts.mjs` and the gallery's `scripts/prepare-editor-lazy-fonts.mjs`.
 
 The browser bundle links `playground.js.LEGAL.txt`, included in the hashed resources. It contains bundled license notices and package license files, including the vendored PptxGenJS MIT license. For dependencies that publish only an explicit MIT declaration in their README, the build retains that declaration/attribution and the standard terms; omitted upstream notices use a version-specific source URL and verified supplement hash. License collection runs offline from the verified installation and committed supplement. Runtime JavaScript is not rewritten to normalize comment whitespace.
 

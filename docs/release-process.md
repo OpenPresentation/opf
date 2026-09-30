@@ -14,6 +14,46 @@ The canonical release path is:
 3. Let GitHub Actions publish to npm through npm trusted publishing.
 4. Verify npm and the automatically generated GitHub release notes.
 
+## Agent authorization and coordinated release order
+
+The owner authorized agents to prepare and publish npm releases on 2026-09-29
+and for future releases whenever a release is required. This does not waive any
+gate: a release still needs a merged release-prep PR, green required checks and
+the verification below. Agents keep publishing on the trusted-publishing
+workflows (GitHub Actions OIDC with `--provenance`); a local `npm publish` is a
+fallback only when a workflow cannot run, and it loses the provenance
+attestation that every previous version carries.
+
+The engine packages depend on each other, so publish in this order and wait for
+each version to appear on the registry before starting the next:
+
+1. `@openpresentation/opf` (this repository, `opf-vX.Y.Z` tag).
+2. `@openpresentation/opf-render` (`opf-render-vX.Y.Z` tag) and
+   `@openpresentation/opf-pptx` (`opf-pptx-vX.Y.Z` tag). Both depend on core; PPTX
+   also devDepends on the renderer, so publish the renderer first.
+3. `@openpresentation/opf-editor` (`opf-editor-vX.Y.Z` tag), which depends on core
+   and peers/devDepends on the renderer and PPTX.
+
+Each sibling's release-prep PR raises its dependency floors to the just-published
+versions. Its lockfile can only be refreshed after the upstream version exists on
+npm (`npm install --package-lock-only`), so merge sibling release PRs only after
+the upstream publish. `@openpresentation/cli` bundles core and is released
+separately by `cli-publish.yml` (`cli-vX.Y.Z`) when a fresh bundle is needed.
+
+Release-prep PRs contain only version bumps, changelog entries, dependency ranges
+and lockfile changes (plus current-instruction docs). After the whole set is on
+the registry, a follow-up docs change updates `release-plan.json`, the
+compatibility matrix and the quickstart to the published set, and the gallery
+consumer dependencies are bumped.
+
+## Geometry-moving core releases: lockstep floors
+
+Core composition changes that move geometry (for example opf#169 cover centering) make the preview and the PPTX export drift when `@openpresentation/opf-render` and `@openpresentation/opf-pptx` resolve different core versions (measured: 186-300 pt title offsets on covers).
+
+Rule: when a core release contains composition or geometry changes, the same release train must raise BOTH the renderer's and PPTX's core floor (`dependencies` and, where present, `peerDependencies`) to that core version, publish them together, and raise the editor's floor too. Do not release core alone and leave a sibling on the older floor.
+
+The parity harness must always run with `--import <opf>/scripts/register-local-opf.mjs` (as `run.ps1` does) so every engine shares one core.
+
 ## Release Preconditions
 
 Before tagging, confirm that the release commit on `main` already contains:
@@ -51,7 +91,7 @@ Pushing the tag triggers `.github/workflows/npm-publish.yml`. The workflow:
 - verifies the tag matches `packages/javascript/package.json`
 - runs typecheck and tests
 - runs the npm package dry-run check
-- publishes from `packages/javascript` with `npm publish --access public`
+- publishes from `packages/javascript` with `npm publish --access public --provenance`
 
 Do not rerun a successful publish for the same version. npm package versions are
 immutable; a second publish for an already-published version should fail.

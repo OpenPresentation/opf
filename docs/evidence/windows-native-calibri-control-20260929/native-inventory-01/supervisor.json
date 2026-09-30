@@ -1,0 +1,89 @@
+﻿{
+    "timestamp":  "2026-09-29T09:01:39.7016020Z",
+    "passed":  true,
+    "timedOut":  false,
+    "exitCode":  0,
+    "inputMode":  "control-deck",
+    "fontRegistrationMode":  "none",
+    "officeLifecycleComplete":  true,
+    "readOnlyConfirmed":  true,
+    "inventoryComplete":  true,
+    "fontCleanupConfirmed":  null,
+    "registrationFilePresent":  false,
+    "inputsUnchanged":  true,
+    "ownedOpenCount":  1,
+    "ownedCloseCount":  1,
+    "lastDurableStage":  "worker.complete",
+    "lastDurableStatus":  "success",
+    "parentError":  null,
+    "aptosReported":  true,
+    "presentationFontNames":  [
+                                  "Aptos"
+                              ],
+    "inputChecks":  [
+                        {
+                            "role":  "source",
+                            "copy":  "snapshot",
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-native-20260929\\ff05-calibri-control-01\\native-inventory-01\\inputs\\source.pptx",
+                            "expected":  "776147ddfd2a35ceca4480b66d58c82c9255609b5abe245a2b3bb342651ebce5",
+                            "actual":  "776147ddfd2a35ceca4480b66d58c82c9255609b5abe245a2b3bb342651ebce5",
+                            "matched":  true
+                        },
+                        {
+                            "role":  "source",
+                            "copy":  "original",
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-native-20260929\\ff05-calibri-control-01\\calibri-control.pptx",
+                            "expected":  "776147ddfd2a35ceca4480b66d58c82c9255609b5abe245a2b3bb342651ebce5",
+                            "actual":  "776147ddfd2a35ceca4480b66d58c82c9255609b5abe245a2b3bb342651ebce5",
+                            "matched":  true
+                        },
+                        {
+                            "role":  "verifier",
+                            "copy":  "snapshot",
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-native-20260929\\ff05-calibri-control-01\\native-inventory-01\\inputs\\native-font-inventory.ps1",
+                            "expected":  "f8f24330db965436167758e54f907e1cc9b6bd9eb25e30b5110796823701ae7f",
+                            "actual":  "f8f24330db965436167758e54f907e1cc9b6bd9eb25e30b5110796823701ae7f",
+                            "matched":  true
+                        },
+                        {
+                            "role":  "verifier",
+                            "copy":  "original",
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-native-20260929\\sources\\opf-pptx\\test\\native-font-inventory.ps1",
+                            "expected":  "f8f24330db965436167758e54f907e1cc9b6bd9eb25e30b5110796823701ae7f",
+                            "actual":  "f8f24330db965436167758e54f907e1cc9b6bd9eb25e30b5110796823701ae7f",
+                            "matched":  true
+                        },
+                        {
+                            "role":  "process-helper",
+                            "copy":  "snapshot",
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-native-20260929\\ff05-calibri-control-01\\native-inventory-01\\inputs\\native-process.ps1",
+                            "expected":  "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+                            "actual":  "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+                            "matched":  true
+                        },
+                        {
+                            "role":  "process-helper",
+                            "copy":  "original",
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-native-20260929\\sources\\opf-pptx\\test\\native-process.ps1",
+                            "expected":  "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+                            "actual":  "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+                            "matched":  true
+                        },
+                        {
+                            "role":  "font-helper",
+                            "copy":  "snapshot",
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-native-20260929\\ff05-calibri-control-01\\native-inventory-01\\inputs\\native-text-fonts.ps1",
+                            "expected":  "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6",
+                            "actual":  "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6",
+                            "matched":  true
+                        },
+                        {
+                            "role":  "font-helper",
+                            "copy":  "original",
+                            "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-native-20260929\\sources\\opf-pptx\\test\\native-text-fonts.ps1",
+                            "expected":  "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6",
+                            "actual":  "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6",
+                            "matched":  true
+                        }
+                    ]
+}

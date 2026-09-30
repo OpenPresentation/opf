@@ -66,7 +66,7 @@ a verified variable metric/paint contract, wider axis-mapping coverage, paragrap
 shared editing/export and native acceptance are still required. The study above
 remains the historical probe checkpoint.
 
-Default new presentations to Roboto (by naming the `roboto` font scheme; the engine last resort for a theme without a font scheme is `aptos`, see [design resolution](../design-resolution.md#engine-default-font-scheme)), with Roboto Mono for code unless the chosen font scheme defines `code` (the consolas and courier-new schemes do; see [design resolution](../design-resolution.md#code-font)). Use the same supplied font bytes for measurement, browser previews, and raster exports. Native PowerPoint exports name the resolved open font; recipients currently need that font installed.
+Default new presentations to Roboto (by naming the `roboto` font scheme; the engine last resort for a theme without a font scheme is `aptos`, see [design resolution](../design-resolution.md#engine-default-font-scheme)), with Roboto Mono for code unless the chosen font scheme defines `code` (the consolas and courier-new schemes do; see [design resolution](../design-resolution.md#code-font)). Use the same supplied font bytes for measurement, browser previews, and raster exports. Native PowerPoint exports always name the font the user selected, never the open replacement used for previews, so PowerPoint opens the file and shows the actual font (installed, or as a Microsoft 365 cloud font). Replacements exist because license-restricted (proprietary) fonts are never bundled; a metric-compatible one is the goal and a visual-only one is a documented fallback and known gap. See [font fidelity](../font-fidelity.md#font-policy-ff-31).
 
 | Presentation requests | Starter face | Handling |
 | --- | --- | --- |
@@ -78,11 +78,11 @@ Default new presentations to Roboto (by naming the `roboto` font scheme; the eng
 | Times New Roman | Tinos | Metric substitute; tested locally |
 | Courier New | Cousine | Metric substitute; tested locally |
 | Georgia | Gelasio | Available as an explicit approximate substitute |
-| Aptos / Aptos Display | Carlito | Temporary approximate fallback, visibly reported |
+| Aptos, Aptos Display, Aptos Narrow, Aptos Serif | Intos, Intos Display, Intos Narrow, Intos Serif (FF-31 policy, office pack) | Metric, 0.000% mean and maximum against Aptos 2.01; Roboto and Carlito remain visual fallbacks; the PPTX names Aptos |
 
 The Office pack currently includes regular, bold, italic, and bold italic for six substitute families. The base Roboto pack is included unless disabled. No custom glyphs, OS font installation, or remote font fetch is needed. Preserve exact available fonts before considering substitutions. A font's presence does not imply every language or symbol is supported.
 
-Entry point: `loadOfficeFontRegistry` in `@openpresentation/opf-render/fonts-node`. Use `substitutionPolicy: 'metric'` for strict established mappings; choose `'visual'` explicitly for approximate fallbacks. The editor uses the visual policy and shows substitution notices. The lower-level registry has no automatic substitution by default.
+Entry point: `loadOfficeFontRegistry` in `@openpresentation/opf-render/fonts-node`. Use `substitutionPolicy: 'metric'` for strict established mappings; choose `'visual'` explicitly for documented visual-only fallbacks, which are known layout-fidelity gaps rather than the end state. The editor uses the visual policy and shows substitution notices. The lower-level registry has no automatic substitution by default.
 
 Existing checks: `pnpm test:fonts`, renderer font-policy tests, matching editor/SVG/native PPTX box coordinates and line breaks, license notices, and strict missing-glyph errors. A local reference comparison matched Arimo, Tinos, and Cousine on 48 shaped-text samples across their four styles. Gelasio ligatures differed from Georgia by up to 2.0125%, so it is not in the strict metric tier. See [font fidelity](../font-fidelity.md) for evidence and limitations.
 
@@ -105,7 +105,7 @@ The [Mermaid/diagram and general SVG work](diagrams-svg.md) is sequenced after f
 
 ## Candidate families
 
-- Modern Office: Akasia is an upstream Aptos candidate. Source Sans 3 is an optional visual alternative. Neither establishes Aptos Display or Narrow compatibility by itself.
+- Modern Office: Intos is the metric-compatible Aptos replacement (Akasia, an earlier candidate, is gone). Source Sans 3 is an optional visual alternative. Neither establishes Aptos Display or Narrow compatibility by itself.
 - General Latin sans: Open Sans, Noto Sans, Lato, Libre Franklin, Montserrat, and DejaVu Sans cover different visual needs. Keep them optional instead of shipping every family by default.
 - Serif: EB Garamond, Libre Baskerville, Libre Bodoni, Merriweather, and TeX Gyre Pagella/Bonum/Schola are candidates for corresponding stylistic gaps. Treat as visual until tested otherwise.
 - Mono: Cousine and Roboto Mono cover the starter. Evaluate Inconsolata and Liberation Mono for additional requests.

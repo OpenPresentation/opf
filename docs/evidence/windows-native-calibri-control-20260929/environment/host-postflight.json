@@ -1,0 +1,17 @@
+{
+  "observedAt": "2026-09-29T09:02:15.8928477Z",
+  "uiObservation": "PowerPoint Home; no open presentation, recovery/security prompt or dialog observed after the owned readonly Calibri control completed.",
+  "officeProcesses": [
+    {
+      "processId": 30776,
+      "name": "POWERPNT",
+      "startedAt": "2026-09-29T07:20:37.2151144Z"
+    }
+  ],
+  "attemptedNativeRunsThisExperiment": 1,
+  "temporaryFontRegistrations": 0,
+  "auditPassed": true,
+  "sourceSha256": "776147ddfd2a35ceca4480b66d58c82c9255609b5abe245a2b3bb342651ebce5",
+  "aptosReported": true,
+  "physicalFontIdentityProven": false
+}

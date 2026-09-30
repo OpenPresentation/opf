@@ -1,0 +1,646 @@
+{
+  "description": "Pinned snapshot of pptx.gallery's self-hosted preview webfonts (data/preview-fonts.json, contract opf-gallery-preview-fonts/v1), reduced to the fields the font tracker reads. These serve gallery cards, not the gallery editor (a vendored opf-editor bundle). Refresh with: node scripts/build-font-tracker.mjs --snapshot-gallery-fonts <pptx-gallery>/data/preview-fonts.json --commit <sha>.",
+  "source": {
+    "repository": "Data-Advantage/pptx-gallery",
+    "commit": "efb63ac36999b77f8d73e1e4e004041e79b0c291",
+    "path": "data/preview-fonts.json",
+    "capturedAt": "2026-09-29",
+    "contract": "opf-gallery-preview-fonts/v1"
+  },
+  "families": [
+    {
+      "family": "Anton",
+      "package": "@fontsource/anton",
+      "version": "5.3.0",
+      "kind": "static",
+      "license": "OFL-1.1",
+      "weights": [
+        800
+      ],
+      "faces": 1,
+      "coverageGaps": null
+    },
+    {
+      "family": "Arimo",
+      "package": "@fontsource/arimo",
+      "version": "5.3.0",
+      "kind": "static",
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700
+      ],
+      "faces": 2,
+      "coverageGaps": null
+    },
+    {
+      "family": "Barlow",
+      "package": "@fontsource/barlow",
+      "version": "5.3.0",
+      "kind": "static",
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700
+      ],
+      "faces": 2,
+      "coverageGaps": null
+    },
+    {
+      "family": "Bebas Neue",
+      "package": "@fontsource/bebas-neue",
+      "version": "5.3.0",
+      "kind": "static",
+      "license": "OFL-1.1",
+      "weights": [
+        800
+      ],
+      "faces": 1,
+      "coverageGaps": null
+    },
+    {
+      "family": "Bitter",
+      "package": "@fontsource-variable/bitter",
+      "version": "5.3.0",
+      "kind": "variable",
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700
+      ],
+      "faces": 1,
+      "coverageGaps": null
+    },
+    {
+      "family": "Carlito",
+      "package": "google/fonts",
+      "version": "1.104",
+      "kind": "upstream",
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700
+      ],
+      "faces": 2,
+      "coverageGaps": null
+    },
+    {
+      "family": "Cousine",
+      "package": "@fontsource/cousine",
+      "version": "5.3.0",
+      "kind": "static",
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        600
+      ],
+      "faces": 2,
+      "coverageGaps": null
+    },
+    {
+      "family": "EB Garamond",
+      "package": "@fontsource-variable/eb-garamond",
+      "version": "5.3.0",
+      "kind": "variable",
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700
+      ],
+      "faces": 1,
+      "coverageGaps": null
+    },
+    {
+      "family": "Figtree",
+      "package": "@fontsource-variable/figtree",
+      "version": "5.3.0",
+      "kind": "variable",
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700
+      ],
+      "faces": 1,
+      "coverageGaps": null
+    },
+    {
+      "family": "Gelasio",
+      "package": "@fontsource-variable/gelasio",
+      "version": "5.3.0",
+      "kind": "variable",
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700
+      ],
+      "faces": 1,
+      "coverageGaps": null
+    },
+    {
+      "family": "Libre Caslon Text",
+      "package": "@fontsource/libre-caslon-text",
+      "version": "5.3.0",
+      "kind": "static",
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700
+      ],
+      "faces": 2,
+      "coverageGaps": null
+    },
+    {
+      "family": "Lora",
+      "package": "google/fonts",
+      "version": "3.008",
+      "kind": "upstream",
+      "license": "OFL-1.1",
+      "weights": [
+        700
+      ],
+      "faces": 1,
+      "coverageGaps": null
+    },
+    {
+      "family": "Merriweather Sans",
+      "package": "@fontsource/merriweather-sans",
+      "version": "5.3.0",
+      "kind": "static",
+      "license": "OFL-1.1",
+      "weights": [
+        400
+      ],
+      "faces": 1,
+      "coverageGaps": null
+    },
+    {
+      "family": "Montserrat",
+      "package": "@fontsource-variable/montserrat",
+      "version": "5.3.0",
+      "kind": "variable",
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700,
+        800
+      ],
+      "faces": 1,
+      "coverageGaps": null
+    },
+    {
+      "family": "Noto Naskh Arabic",
+      "package": "@fontsource-variable/noto-naskh-arabic",
+      "version": "5.3.0",
+      "kind": "variable",
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700
+      ],
+      "faces": 2,
+      "coverageGaps": null
+    },
+    {
+      "family": "Noto Nastaliq Urdu",
+      "package": "@fontsource-variable/noto-nastaliq-urdu",
+      "version": "5.3.0",
+      "kind": "variable",
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700
+      ],
+      "faces": 2,
+      "coverageGaps": null
+    },
+    {
+      "family": "Noto Sans",
+      "package": "@fontsource/noto-sans",
+      "version": "5.3.0",
+      "kind": "static",
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700
+      ],
+      "faces": 2,
+      "coverageGaps": "ესჩმიახლ"
+    },
+    {
+      "family": "Noto Sans Armenian",
+      "package": "@fontsource/noto-sans-armenian",
+      "version": "5.3.0",
+      "kind": "static",
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700
+      ],
+      "faces": 4,
+      "coverageGaps": null
+    },
+    {
+      "family": "Noto Sans Bengali",
+      "package": "@fontsource/noto-sans-bengali",
+      "version": "5.3.0",
+      "kind": "static",
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700
+      ],
+      "faces": 4,
+      "coverageGaps": null
+    },
+    {
+      "family": "Noto Sans Devanagari",
+      "package": "@fontsource/noto-sans-devanagari",
+      "version": "5.3.0",
+      "kind": "static",
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700
+      ],
+      "faces": 4,
+      "coverageGaps": null
+    },
+    {
+      "family": "Noto Sans Ethiopic",
+      "package": "@fontsource/noto-sans-ethiopic",
+      "version": "5.3.0",
+      "kind": "static",
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700
+      ],
+      "faces": 4,
+      "coverageGaps": null
+    },
+    {
+      "family": "Noto Sans Georgian",
+      "package": "@fontsource/noto-sans-georgian",
+      "version": "5.3.0",
+      "kind": "static",
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700
+      ],
+      "faces": 4,
+      "coverageGaps": null
+    },
+    {
+      "family": "Noto Sans Gujarati",
+      "package": "@fontsource/noto-sans-gujarati",
+      "version": "5.3.0",
+      "kind": "static",
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700
+      ],
+      "faces": 4,
+      "coverageGaps": null
+    },
+    {
+      "family": "Noto Sans Gurmukhi",
+      "package": "@fontsource/noto-sans-gurmukhi",
+      "version": "5.3.0",
+      "kind": "static",
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700
+      ],
+      "faces": 4,
+      "coverageGaps": null
+    },
+    {
+      "family": "Noto Sans Hebrew",
+      "package": "@fontsource-variable/noto-sans-hebrew",
+      "version": "5.3.0",
+      "kind": "variable",
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700
+      ],
+      "faces": 2,
+      "coverageGaps": null
+    },
+    {
+      "family": "Noto Sans JP",
+      "package": "@fontsource-variable/noto-sans-jp",
+      "version": "5.3.0",
+      "kind": "variable",
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700
+      ],
+      "faces": 5,
+      "coverageGaps": null
+    },
+    {
+      "family": "Noto Sans KR",
+      "package": "@fontsource-variable/noto-sans-kr",
+      "version": "5.3.0",
+      "kind": "variable",
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700
+      ],
+      "faces": 11,
+      "coverageGaps": null
+    },
+    {
+      "family": "Noto Sans Kannada",
+      "package": "@fontsource/noto-sans-kannada",
+      "version": "5.3.0",
+      "kind": "static",
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700
+      ],
+      "faces": 4,
+      "coverageGaps": null
+    },
+    {
+      "family": "Noto Sans Khmer",
+      "package": "@fontsource/noto-sans-khmer",
+      "version": "5.3.0",
+      "kind": "static",
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700
+      ],
+      "faces": 4,
+      "coverageGaps": null
+    },
+    {
+      "family": "Noto Sans Malayalam",
+      "package": "@fontsource/noto-sans-malayalam",
+      "version": "5.3.0",
+      "kind": "static",
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700
+      ],
+      "faces": 4,
+      "coverageGaps": null
+    },
+    {
+      "family": "Noto Sans Mongolian",
+      "package": "@fontsource/noto-sans-mongolian",
+      "version": "5.3.0",
+      "kind": "static",
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700
+      ],
+      "faces": 1,
+      "coverageGaps": "Энэмашсйх"
+    },
+    {
+      "family": "Noto Sans Oriya",
+      "package": "@fontsource/noto-sans-oriya",
+      "version": "5.3.0",
+      "kind": "static",
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700
+      ],
+      "faces": 4,
+      "coverageGaps": null
+    },
+    {
+      "family": "Noto Sans SC",
+      "package": "@fontsource-variable/noto-sans-sc",
+      "version": "5.3.0",
+      "kind": "variable",
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700
+      ],
+      "faces": 8,
+      "coverageGaps": null
+    },
+    {
+      "family": "Noto Sans TC",
+      "package": "@fontsource-variable/noto-sans-tc",
+      "version": "5.3.0",
+      "kind": "variable",
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700
+      ],
+      "faces": 7,
+      "coverageGaps": null
+    },
+    {
+      "family": "Noto Sans Tamil",
+      "package": "@fontsource/noto-sans-tamil",
+      "version": "5.3.0",
+      "kind": "static",
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700
+      ],
+      "faces": 4,
+      "coverageGaps": null
+    },
+    {
+      "family": "Noto Sans Telugu",
+      "package": "@fontsource/noto-sans-telugu",
+      "version": "5.3.0",
+      "kind": "static",
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700
+      ],
+      "faces": 4,
+      "coverageGaps": null
+    },
+    {
+      "family": "Noto Sans Thai",
+      "package": "@fontsource/noto-sans-thai",
+      "version": "5.3.0",
+      "kind": "static",
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700
+      ],
+      "faces": 4,
+      "coverageGaps": null
+    },
+    {
+      "family": "Noto Serif Hebrew",
+      "package": "@fontsource/noto-serif-hebrew",
+      "version": "5.3.0",
+      "kind": "static",
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700
+      ],
+      "faces": 4,
+      "coverageGaps": null
+    },
+    {
+      "family": "Open Sans",
+      "package": "@fontsource/open-sans",
+      "version": "5.3.0",
+      "kind": "static",
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700
+      ],
+      "faces": 2,
+      "coverageGaps": null
+    },
+    {
+      "family": "PT Serif",
+      "package": "@fontsource/pt-serif",
+      "version": "5.3.0",
+      "kind": "static",
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700
+      ],
+      "faces": 2,
+      "coverageGaps": null
+    },
+    {
+      "family": "Playfair Display",
+      "package": "google/fonts",
+      "version": "1.203",
+      "kind": "upstream",
+      "license": "OFL-1.1",
+      "weights": [
+        700
+      ],
+      "faces": 1,
+      "coverageGaps": null
+    },
+    {
+      "family": "Poppins",
+      "package": "@fontsource/poppins",
+      "version": "5.3.0",
+      "kind": "static",
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700
+      ],
+      "faces": 2,
+      "coverageGaps": null
+    },
+    {
+      "family": "Raleway",
+      "package": "google/fonts",
+      "version": "4.026",
+      "kind": "upstream",
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700
+      ],
+      "faces": 1,
+      "coverageGaps": null
+    },
+    {
+      "family": "Red Hat Display",
+      "package": "@fontsource-variable/red-hat-display",
+      "version": "5.3.0",
+      "kind": "variable",
+      "license": "OFL-1.1",
+      "weights": [
+        300,
+        400,
+        700
+      ],
+      "faces": 1,
+      "coverageGaps": null
+    },
+    {
+      "family": "Red Hat Text",
+      "package": "@fontsource/red-hat-text",
+      "version": "5.3.0",
+      "kind": "static",
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700
+      ],
+      "faces": 2,
+      "coverageGaps": null
+    },
+    {
+      "family": "Roboto",
+      "package": "@fontsource-variable/roboto",
+      "version": "5.3.0",
+      "kind": "variable",
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700
+      ],
+      "faces": 1,
+      "coverageGaps": null
+    },
+    {
+      "family": "Source Sans 3",
+      "package": "@fontsource-variable/source-sans-3",
+      "version": "5.3.0",
+      "kind": "variable",
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700
+      ],
+      "faces": 1,
+      "coverageGaps": null
+    },
+    {
+      "family": "Tinos",
+      "package": "@fontsource/tinos",
+      "version": "5.3.0",
+      "kind": "static",
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700
+      ],
+      "faces": 2,
+      "coverageGaps": null
+    },
+    {
+      "family": "Work Sans",
+      "package": "@fontsource/work-sans",
+      "version": "5.3.0",
+      "kind": "static",
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700
+      ],
+      "faces": 2,
+      "coverageGaps": null
+    }
+  ]
+}

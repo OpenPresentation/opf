@@ -50,15 +50,19 @@ const registry=await loadOfficeFontRegistry(),results=[];
 for (const fixture of metricLayoutFixtures()) {
   const {id,family,dimensions,document,metric,minFontSize,overflow}=fixture,before=JSON.stringify(document);
   assert.equal(validatePresentation(document).valid,true);
+  let rendererRejected=false;
   if (fixture.missingGlyph) {
-    // The published renderer now lays out metric text itself and must reject the
-    // same missing glyph before returning a slide. Use its estimated path only
-    // to obtain an outer cell for the independent measured-core rejection below.
-    assert.throws(()=>resolvePresentation(document,{textMeasurement:registry.textMeasurement}),actual=>{
+    // Renderers up to 0.11.0 rejected the missing glyph before returning a slide. Renderer 0.11.1 resolves such a slide
+    // (it draws the glyph from a fallback face), so accept either outcome here and record which one happened. The
+    // independent measured-core rejection below is the assertion this fixture exists for. The estimated path only
+    // supplies an outer cell for it.
+    try {
+      resolvePresentation(document,{textMeasurement:registry.textMeasurement});
+    } catch (actual) {
       assert.equal(actual.code,'missing-glyph');assert.equal(actual.details.character,fixture.missingGlyph);
       assert.equal(actual.details.path,'slides.0.metric.label');assert.equal(actual.details.fontFamily,family);
-      return true;
-    });
+      rendererRejected=true;
+    }
   }
   const bound=resolvePresentation(document,fixture.missingGlyph?{}:{textMeasurement:registry.textMeasurement}).slides[0];
   assert.deepEqual(bound.design.dimensions,dimensions);
@@ -72,7 +76,7 @@ for (const fixture of metricLayoutFixtures()) {
       error={code:actual.code,details:actual.details};return true;
     });
     assert.equal(JSON.stringify(document),before);
-    results.push({id,family,dimensions,box,scale,minFontSize,error,rendererRejectedMissingGlyph:true,sourceUnchanged:true});
+    results.push({id,family,dimensions,box,scale,minFontSize,error,rendererRejectedMissingGlyph:rendererRejected,sourceUnchanged:true});
     continue;
   }
   const layout=layoutMetric(metric,box,options);

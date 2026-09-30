@@ -1,0 +1,261 @@
+{
+  "schemaVersion": 1,
+  "files": [
+    {
+      "bundlePath": "auditor/native-font-embed-audit.mjs",
+      "sourceArtifactPath": "sources/opf-pptx/test/native-font-embed-audit.mjs",
+      "kind": "byte-copy",
+      "sourceSha256": "6ad35992b75e1c677194c832289824d588c223a3d25aff029983bf3ba3f4d704",
+      "bundleSha256": "6ad35992b75e1c677194c832289824d588c223a3d25aff029983bf3ba3f4d704",
+      "bytes": 69666
+    },
+    {
+      "bundlePath": "auditor/native-font-inventory-audit.mjs",
+      "sourceArtifactPath": "sources/opf-pptx/test/native-font-inventory-audit.mjs",
+      "kind": "byte-copy",
+      "sourceSha256": "09277b959c9ca76db40eacd85b89e8ba3e537729713aa1669968f6d438dfe3e7",
+      "bundleSha256": "09277b959c9ca76db40eacd85b89e8ba3e537729713aa1669968f6d438dfe3e7",
+      "bytes": 54641
+    },
+    {
+      "bundlePath": "auditor/native-font-inventory.ps1",
+      "sourceArtifactPath": "sources/opf-pptx/test/native-font-inventory.ps1",
+      "kind": "byte-copy",
+      "sourceSha256": "f8f24330db965436167758e54f907e1cc9b6bd9eb25e30b5110796823701ae7f",
+      "bundleSha256": "f8f24330db965436167758e54f907e1cc9b6bd9eb25e30b5110796823701ae7f",
+      "bytes": 99498
+    },
+    {
+      "bundlePath": "auditor/native-process.ps1",
+      "sourceArtifactPath": "sources/opf-pptx/test/native-process.ps1",
+      "kind": "byte-copy",
+      "sourceSha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+      "bundleSha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+      "bytes": 2372
+    },
+    {
+      "bundlePath": "auditor/native-text-fonts.ps1",
+      "sourceArtifactPath": "sources/opf-pptx/test/native-text-fonts.ps1",
+      "kind": "byte-copy",
+      "sourceSha256": "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6",
+      "bundleSha256": "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6",
+      "bytes": 2446
+    },
+    {
+      "bundlePath": "auditor/powershell-scan.mjs",
+      "sourceArtifactPath": "sources/opf-pptx/test/powershell-scan.mjs",
+      "kind": "byte-copy",
+      "sourceSha256": "02df02cdc1ef0ecf9d24358575899a825d58ffada62ad8ac0e0ac47ce2bc41e6",
+      "bundleSha256": "02df02cdc1ef0ecf9d24358575899a825d58ffada62ad8ac0e0ac47ce2bc41e6",
+      "bytes": 40899
+    },
+    {
+      "bundlePath": "environment/host-postflight.json",
+      "sourceArtifactPath": "ff05-calibri-control-01/host-postflight.json",
+      "kind": "byte-copy",
+      "sourceSha256": "baed3659db049494a9ff7a6f7127da3dd735dbb1eb48f8d5b84321986df7083f",
+      "bundleSha256": "baed3659db049494a9ff7a6f7127da3dd735dbb1eb48f8d5b84321986df7083f",
+      "bytes": 617
+    },
+    {
+      "bundlePath": "environment/host-preflight.json",
+      "sourceArtifactPath": "ff05-calibri-control-01/host-preflight.json",
+      "kind": "byte-copy",
+      "sourceSha256": "509913e14424c4906b60fc94a6001af889d99c586a1fbe7ffa071869b68e4b36",
+      "bundleSha256": "509913e14424c4906b60fc94a6001af889d99c586a1fbe7ffa071869b68e4b36",
+      "bytes": 848
+    },
+    {
+      "bundlePath": "fixture/calibri-control.pptx",
+      "sourceArtifactPath": "ff05-calibri-control-01/calibri-control.pptx",
+      "kind": "byte-copy",
+      "sourceSha256": "776147ddfd2a35ceca4480b66d58c82c9255609b5abe245a2b3bb342651ebce5",
+      "bundleSha256": "776147ddfd2a35ceca4480b66d58c82c9255609b5abe245a2b3bb342651ebce5",
+      "bytes": 15621
+    },
+    {
+      "bundlePath": "fixture/canonical/generation.json",
+      "sourceArtifactPath": "sources/opf/docs/evidence/windows-native-font-inventory-20260929/fixture/generation.json",
+      "kind": "byte-copy",
+      "sourceSha256": "78904db1a1556b80dc8abc8270460cac95ac4868b32219f1ecd06371d0d578db",
+      "bundleSha256": "78904db1a1556b80dc8abc8270460cac95ac4868b32219f1ecd06371d0d578db",
+      "bytes": 31660
+    },
+    {
+      "bundlePath": "fixture/canonical/LICENSE_FONT",
+      "sourceArtifactPath": "sources/opf/docs/evidence/windows-native-font-inventory-20260929/fixture/LICENSE_FONT",
+      "kind": "byte-copy",
+      "sourceSha256": "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00",
+      "bundleSha256": "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00",
+      "bytes": 4424
+    },
+    {
+      "bundlePath": "fixture/canonical/source.opf.json",
+      "sourceArtifactPath": "sources/opf/docs/evidence/windows-native-font-inventory-20260929/fixture/source.opf.json",
+      "kind": "byte-copy",
+      "sourceSha256": "44363cdb3d1ba747c108a9d1741d0b99ba740fd65917f25f9196ab2f26ec1041",
+      "bundleSha256": "44363cdb3d1ba747c108a9d1741d0b99ba740fd65917f25f9196ab2f26ec1041",
+      "bytes": 194
+    },
+    {
+      "bundlePath": "fixture/canonical/source.pptx",
+      "sourceArtifactPath": "sources/opf/docs/evidence/windows-native-font-inventory-20260929/fixture/source.pptx",
+      "kind": "byte-copy",
+      "sourceSha256": "f505236ecef4fad838a198449adede1f4afa39d7bac74613626eee2f2a419aeb",
+      "bundleSha256": "f505236ecef4fad838a198449adede1f4afa39d7bac74613626eee2f2a419aeb",
+      "bytes": 15624
+    },
+    {
+      "bundlePath": "native-inventory-01/audit.json",
+      "sourceArtifactPath": "ff05-calibri-control-01/native-inventory-01/audit.json",
+      "kind": "byte-copy",
+      "sourceSha256": "7082240808452570eafb17f00d9c59873c9a37f3949d3a51ea3cdc2478a58db2",
+      "bundleSha256": "7082240808452570eafb17f00d9c59873c9a37f3949d3a51ea3cdc2478a58db2",
+      "bytes": 3668
+    },
+    {
+      "bundlePath": "native-inventory-01/inputs/native-font-inventory.ps1",
+      "sourceArtifactPath": "ff05-calibri-control-01/native-inventory-01/inputs/native-font-inventory.ps1",
+      "kind": "byte-copy",
+      "sourceSha256": "f8f24330db965436167758e54f907e1cc9b6bd9eb25e30b5110796823701ae7f",
+      "bundleSha256": "f8f24330db965436167758e54f907e1cc9b6bd9eb25e30b5110796823701ae7f",
+      "bytes": 99498
+    },
+    {
+      "bundlePath": "native-inventory-01/inputs/native-process.ps1",
+      "sourceArtifactPath": "ff05-calibri-control-01/native-inventory-01/inputs/native-process.ps1",
+      "kind": "byte-copy",
+      "sourceSha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+      "bundleSha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+      "bytes": 2372
+    },
+    {
+      "bundlePath": "native-inventory-01/inputs/native-text-fonts.ps1",
+      "sourceArtifactPath": "ff05-calibri-control-01/native-inventory-01/inputs/native-text-fonts.ps1",
+      "kind": "byte-copy",
+      "sourceSha256": "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6",
+      "bundleSha256": "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6",
+      "bytes": 2446
+    },
+    {
+      "bundlePath": "native-inventory-01/inputs/source.pptx",
+      "sourceArtifactPath": "ff05-calibri-control-01/native-inventory-01/inputs/source.pptx",
+      "kind": "byte-copy",
+      "sourceSha256": "776147ddfd2a35ceca4480b66d58c82c9255609b5abe245a2b3bb342651ebce5",
+      "bundleSha256": "776147ddfd2a35ceca4480b66d58c82c9255609b5abe245a2b3bb342651ebce5",
+      "bytes": 15621
+    },
+    {
+      "bundlePath": "native-inventory-01/progress.json",
+      "sourceArtifactPath": "ff05-calibri-control-01/native-inventory-01/progress.json",
+      "kind": "byte-copy",
+      "sourceSha256": "c0cd7f973baa6f3549b9072df242e1146bbe66595685f81a91ffad8885e7292f",
+      "bundleSha256": "c0cd7f973baa6f3549b9072df242e1146bbe66595685f81a91ffad8885e7292f",
+      "bytes": 273
+    },
+    {
+      "bundlePath": "native-inventory-01/report.json",
+      "sourceArtifactPath": "ff05-calibri-control-01/native-inventory-01/report.json",
+      "kind": "byte-copy",
+      "sourceSha256": "394d7f150f7c5da415b8e47fd6544d4e376cd0121688572349a6633353541645",
+      "bundleSha256": "394d7f150f7c5da415b8e47fd6544d4e376cd0121688572349a6633353541645",
+      "bytes": 18247
+    },
+    {
+      "bundlePath": "native-inventory-01/request.json",
+      "sourceArtifactPath": "ff05-calibri-control-01/native-inventory-01/request.json",
+      "kind": "byte-copy",
+      "sourceSha256": "d5b2c3e01e9886700adf1580f4393884b0525ce0bab1b467fbbfd78cd24994d2",
+      "bundleSha256": "d5b2c3e01e9886700adf1580f4393884b0525ce0bab1b467fbbfd78cd24994d2",
+      "bytes": 3475
+    },
+    {
+      "bundlePath": "native-inventory-01/stages.jsonl",
+      "sourceArtifactPath": "ff05-calibri-control-01/native-inventory-01/stages.jsonl",
+      "kind": "byte-copy",
+      "sourceSha256": "4fd072f213a753f36aa25e8e7a8256bd1b73ef907ff918bdd701bdf73176c1ab",
+      "bundleSha256": "4fd072f213a753f36aa25e8e7a8256bd1b73ef907ff918bdd701bdf73176c1ab",
+      "bytes": 103798
+    },
+    {
+      "bundlePath": "native-inventory-01/supervisor.json",
+      "sourceArtifactPath": "ff05-calibri-control-01/native-inventory-01/supervisor.json",
+      "kind": "byte-copy",
+      "sourceSha256": "e7af7f8e89f05b8a58950bcc18306928662e970d9fdc2b216530dd57113731f5",
+      "bundleSha256": "e7af7f8e89f05b8a58950bcc18306928662e970d9fdc2b216530dd57113731f5",
+      "bytes": 5611
+    },
+    {
+      "bundlePath": "native-inventory-01/worker.json",
+      "sourceArtifactPath": "ff05-calibri-control-01/native-inventory-01/worker.json",
+      "kind": "byte-copy",
+      "sourceSha256": "db78f5cd8cc89ac2957ef183e1ea0c4da9490894ea8cb009a53946ec66a28e4c",
+      "bundleSha256": "db78f5cd8cc89ac2957ef183e1ea0c4da9490894ea8cb009a53946ec66a28e4c",
+      "bytes": 341
+    },
+    {
+      "bundlePath": "native-inventory-01/worker.stderr.log",
+      "sourceArtifactPath": "ff05-calibri-control-01/native-inventory-01/worker.stderr.log",
+      "kind": "byte-copy",
+      "sourceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bundleSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "bundlePath": "native-inventory-01/worker.stdout.log",
+      "sourceArtifactPath": "ff05-calibri-control-01/native-inventory-01/worker.stdout.log",
+      "kind": "byte-copy",
+      "sourceSha256": "97fe87c9eb4f110dbd346af22de39dec5fdb50691ac31bea5df1c8e2d8d8c588",
+      "bundleSha256": "97fe87c9eb4f110dbd346af22de39dec5fdb50691ac31bea5df1c8e2d8d8c588",
+      "bytes": 99
+    },
+    {
+      "bundlePath": "preparation/fflate/index.mjs",
+      "sourceArtifactPath": "sources/opf-pptx/node_modules/fflate/esm/index.mjs",
+      "kind": "byte-copy",
+      "sourceSha256": "8d75534a30a0580608e1271c13d70943ed4cd3589fddff7b1197748036a5116e",
+      "bundleSha256": "8d75534a30a0580608e1271c13d70943ed4cd3589fddff7b1197748036a5116e",
+      "bytes": 91765
+    },
+    {
+      "bundlePath": "preparation/fflate/LICENSE",
+      "sourceArtifactPath": "sources/opf-pptx/node_modules/fflate/LICENSE",
+      "kind": "byte-copy",
+      "sourceSha256": "0a1df3a083d0c010560aa342e87959c8c1070e6fd54545741f083f22d0c8b551",
+      "bundleSha256": "0a1df3a083d0c010560aa342e87959c8c1070e6fd54545741f083f22d0c8b551",
+      "bytes": 1069
+    },
+    {
+      "bundlePath": "preparation/fflate/package.json",
+      "sourceArtifactPath": "sources/opf-pptx/node_modules/fflate/package.json",
+      "kind": "byte-copy",
+      "sourceSha256": "5922d8150b307bc0e4e441491c779c45379e9913d348848fca8d5cf02db4d134",
+      "bundleSha256": "5922d8150b307bc0e4e441491c779c45379e9913d348848fca8d5cf02db4d134",
+      "bytes": 3543
+    },
+    {
+      "bundlePath": "preparation/manifest.json",
+      "sourceArtifactPath": "ff05-calibri-control-01/manifest.json",
+      "kind": "byte-copy",
+      "sourceSha256": "27e542f4e6a2fcd4473845fff66f2334d2994038735292667fade6d11a17c441",
+      "bundleSha256": "27e542f4e6a2fcd4473845fff66f2334d2994038735292667fade6d11a17c441",
+      "bytes": 32630
+    },
+    {
+      "bundlePath": "preparation/prepare-calibri-control.mjs",
+      "sourceArtifactPath": "ff05-calibri-control-01/prepare-calibri-control.mjs",
+      "kind": "byte-copy",
+      "sourceSha256": "7cb89aa329b9ae4332162503a67a69bbfface2dba35d0f7f95dc2f1d9478eedd",
+      "bundleSha256": "7cb89aa329b9ae4332162503a67a69bbfface2dba35d0f7f95dc2f1d9478eedd",
+      "bytes": 11170
+    },
+    {
+      "bundlePath": "preparation/xml-attribute-diff.txt",
+      "sourceArtifactPath": "ff05-calibri-control-01/xml-attribute-diff.txt",
+      "kind": "byte-copy",
+      "sourceSha256": "d7d65d4fee4f728235aeb8333c0d401fc6757ea80297da10b55d43a07c7ea685",
+      "bundleSha256": "d7d65d4fee4f728235aeb8333c0d401fc6757ea80297da10b55d43a07c7ea685",
+      "bytes": 2863
+    }
+  ]
+}

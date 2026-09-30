@@ -1,0 +1,43 @@
+{
+  "sources": [
+    {
+      "repo": "opf",
+      "accepted": "96fbd69ac1aee1fd3dfbc9f3e27013e11c0921f6",
+      "acceptedTree": "873cdc8bc3df14116c8e7c0f47bbd1bd1c3515d6",
+      "reviewed": "974f41eb1fc292d67ab15be7d8612153b6b41ba1",
+      "reviewedTree": "873cdc8bc3df14116c8e7c0f47bbd1bd1c3515d6",
+      "files": [
+        {
+          "path": "pnpm-lock.yaml",
+          "acceptedBlob": "62c15e987560a79b8593ab69ca559a74c38062e6",
+          "reviewedBlob": "62c15e987560a79b8593ab69ca559a74c38062e6"
+        }
+      ],
+      "treeEqualsReviewed": true,
+      "allDeltaBlobsEqual": true
+    },
+    {
+      "repo": "opf-editor",
+      "accepted": "d0c95a16b50eccb3eee695ace44cc6c3a6754f2f",
+      "acceptedTree": "433e0c2c2820d2b6b81c321017c17d58238184f3",
+      "reviewed": "e2e8489b188f615d8a2aeb19f457c8ed68de7b55",
+      "reviewedTree": "433e0c2c2820d2b6b81c321017c17d58238184f3",
+      "files": [
+        {
+          "path": "package-lock.json",
+          "acceptedBlob": "de52fb1b4cdbddfbdcea9b596e773f2781f5bed5",
+          "reviewedBlob": "de52fb1b4cdbddfbdcea9b596e773f2781f5bed5"
+        },
+        {
+          "path": "package.json",
+          "acceptedBlob": "3a175d78cd28f248766520bee89cd3e6b7bf2b5b",
+          "reviewedBlob": "3a175d78cd28f248766520bee89cd3e6b7bf2b5b"
+        }
+      ],
+      "treeEqualsReviewed": true,
+      "allDeltaBlobsEqual": true
+    }
+  ],
+  "reviewManifestSha256": "398b68602e7375a7274c3e1549ec5ddae833cb85a543f7964f4b8c28a709c534",
+  "reviewIntact": true
+}

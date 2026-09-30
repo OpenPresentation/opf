@@ -1,6 +1,103 @@
 # Why does Presentation.Fonts report "Aptos"? Research brief (2026-09-22)
 
-Scope: read-only research. No Office or COM was started. **F** = sourced or locally observed fact. **I** = inference or hypothesis.
+The September 22 research below was read-only and started no Office or COM.
+**F** = sourced or locally observed fact. **I** = inference or hypothesis.
+
+## September 29 native evidence update
+
+The [FF-04 inventory bundle](../../evidence/windows-native-font-inventory-20260929/README.md)
+records the unedited fixture with temporary Carlito fonts, the same fixture
+without temporary registration in a fresh PowerPoint session, and an exporter
+control. All three report `Aptos` and an empty-name entry in
+`Presentation.Fonts` before any edit. The current observational audits pass;
+the original historical audit failures remain in the bundle. A passing
+inventory audit validates the recorded lifecycle and inputs, not the font
+allowlist, glyph identity or embedding.
+
+This rules out H1 as the sole explanation for the initial Aptos entry and shows
+that temporary registration is not required for it. It does not locate the
+responsible style or prove that a visible glyph uses Aptos. The conditions ran
+on different dates and PowerPoint sessions; this is not a simultaneous test of
+every host variable. **FF-05 remains open.**
+
+**E6 completed at 09:01 UTC.** The independently reviewed
+[Calibri control](../../evidence/windows-native-calibri-control-20260929/README.md)
+replaces all 17 explicit Carlito typeface attributes with Calibri across three
+parts, preserving the other 38 ZIP entry contents, every relationship and the four
+empty theme ea/cs slots. Source SHA-256:
+`776147ddfd2a35ceca4480b66d58c82c9255609b5abe245a2b3bb342651ebce5`.
+The deterministic repack changes ZIP container metadata, not those entry contents.
+One read-only `-ControlDeck` inventory, without temporary font registration,
+completed under the 45-second deadline. The current audit passed with zero
+failures, unchanged inputs, one owned open and one confirmed owned close.
+PowerPoint Home had no open presentation or dialog before and after the run.
+
+**F.** `Presentation.Fonts`, read before other presentation content, again
+contained an empty-name entry (`Embedded=0`, `Embeddable=0`) and Aptos
+(`Embedded=0`, `Embeddable=-1`). The six inspected slide range/paragraph/run
+records reported Calibri for `Name`, `NameAscii`, `NameFarEast` and
+`NameComplexScript`, with `NameOther` empty. Theme Latin reported Calibri;
+the four theme ea/cs slots remained empty.
+**I.** This observation does not require Carlito-specific references or
+temporary registration. It does not distinguish remaining style/part defaults
+from native collection/resolution behavior, or prove that empty theme slots
+caused the Aptos entry. H3's broader native-resolution branch remains open.
+The earlier Carlito and this Calibri control ran sequentially in the same
+PowerPoint process; neither controls every host variable or glyph identity.
+
+**E7 completed at 09:38 UTC.** The [explicit-slot control](../../evidence/windows-native-explicit-slots-20260929/README.md)
+starts from the exact E6 hash and changes only the four empty theme major/minor
+ea/cs attributes to Calibri. The other 40 ZIP entry contents, relationships,
+authored text and supplemental font mappings remain unchanged. Source SHA-256:
+`4e2bab2a4f5a0f09350d2edc2463bcb29302fa7db34a8c621e39fcd5c9a16cd7`.
+One read-only `-ControlDeck` inventory completed without temporary fonts in
+1,227 ms under the 45-second helper deadline. Its audit passed with zero
+failures, unchanged inputs and one owned open/close. UI preflight and postflight
+showed Home without an open presentation or dialog. The running PowerPoint
+executable reported file/product version `16.0.20430.20092`.
+
+**F.** All six theme names now report Calibri, while `Presentation.Fonts`
+still reports the same empty-name and Aptos entries and flags. The six inspected
+slide range/paragraph/run records remain Calibri for `Name`, `NameAscii`,
+`NameFarEast` and `NameComplexScript`, with `NameOther` empty.
+**I.** Empty theme ea/cs values are not necessary for this recorded observation;
+filling them is insufficient to remove it. This does not identify another
+responsible style, prove native collection behavior is a defect, or establish
+glyph identity. E6 and E7 were sequential runs in the same PowerPoint process;
+they do not control every host variable.
+
+**E8 completed at 15:07 UTC.** The [dual-snapshot evidence](../../evidence/windows-native-font-query-order-20260929/README.md)
+uses the exact E7 input above and the separately reviewed opt-in harness from
+[PPTX88](https://github.com/OpenPresentation/opf-pptx/pull/88), merged as
+`9a7f3c1`. It reads `Presentation.Fonts` first and once more after the existing
+bounded theme/slide/master queries, before closing the same owned presentation.
+One read-only open/close completed in about 1,405 ms under the 45-second helper
+deadline, with 303 stages, unchanged inputs, no temporary registration and zero
+audit failures. The first snapshot and its ledger are preserved separately.
+
+**F.** Both collections contain exactly the same ordered entries and flags:
+empty name (`Embedded=0`, `Embeddable=0`), then Aptos (`Embedded=0`,
+`Embeddable=-1`). All six theme names report Calibri; the six inspected slide
+Font2 records retain Calibri in their nonempty names and empty `NameOther`.
+PowerPoint Home was observed before and after the attempt. After the computer
+slept, PowerPoint was absent and was launched through supported computer use;
+E8 used process 5288, distinct from E7's process 30776. Its measured executable
+file/product version was `16.0.20430.20092`.
+
+**I.** This collection was stable over this exact query sequence and elapsed
+interval. It does not rule out all initialization behavior, distinguish the
+effect of reads from elapsed time, or locate a remaining style/part reference.
+E7 and E8 do not form a same-process comparison. FF-05 remains in progress;
+root cause, physical font identity, allowlist and embedding remain unresolved.
+Next, inspect the remaining style/part references offline and independently
+review a minimal fixture change before any later bounded native attempt.
+Do not repeat accepted inventories or change a gate to make this observation
+pass the font allowlist.
+
+The expressibility statements in the historical research below describe the
+September 22 source. FF-18 and FF-07 subsequently added language/script font
+resolution and exporter script-slot handling; the preserved FF-04 fixture was
+intentionally not regenerated with those changes.
 
 ## Local facts (fixture-carlito-02, from opf origin/main)
 - F1. In `source.pptx`, both slide runs carry explicit `<a:latin/ea/cs typeface="Carlito">`. The two `endParaRPr` carry no typeface. The master, notes master and `defaultTextStyle` use `+mn-lt/+mn-ea/+mn-cs` (and `+mj-*`). The theme's major and minor `ea` and `cs` are `""`. The notes master shares `theme1.xml`. There is no handout master. `lang="en-US"` is used everywhere.
@@ -39,7 +136,7 @@ Scope: read-only research. No Office or COM was started. **F** = sourced or loca
 4. **E3: no-.Text control.** Apply only the Font2 sets, so the original explicit-Carlito runs survive. No Aptos here means `.Text` is implicated.
 5. **E4: explicit-slot control (harness, COM).** After `.Text`, also set `NameFarEast` and `NameComplexScript` to "Carlito". Aptos disappearing supports H1.
 6. **E5: theme-slot fixture variant.** Byte-patch `theme1.xml` so the major and minor `<a:ea>`/`<a:cs>` are `typeface="Carlito"` (4 attributes), and optionally add explicit latin/ea/cs to both `endParaRPr`. Run E0 and E1 on it. If Aptos is gone both before and after the edits, H1 holds via the theme path.
-7. **E6: Calibri control.** Use the same fixture with Calibri as the latin font and empty ea/cs. If Aptos still appears, the effect is default-slot behaviour and not Carlito-specific, which rules out H3.
+7. **E6: Calibri control (completed September 29).** Replace all explicit Carlito typeface attributes with Calibri and preserve the four empty theme ea/cs slots. Aptos still appears. This narrows the Carlito-specific branch of H3, but neither proves default-slot behavior nor rules out other native resolution behavior; see the measured result above.
 8. (Optional, needs separate approval.) SaveCopyAs the edited copy without embedding into a fresh directory, then diff the `rPr` offline to see where Aptos, `+mn-ea` or empty slots were written.
 
 ## Proposed fixture change if H1 holds, and OPF expressibility

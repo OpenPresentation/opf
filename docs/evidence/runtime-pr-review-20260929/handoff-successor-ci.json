@@ -1,0 +1,236 @@
+[
+  {
+    "id": 36545440166,
+    "name": "OPF CI",
+    "head_sha": "061499d53aabefb266dd4f7f5c5bd85f6d24c425",
+    "event": "push",
+    "run_attempt": 1,
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-09-29T08:52:02Z",
+    "updated_at": "2026-09-29T08:55:23Z",
+    "html_url": "https://github.com/OpenPresentation/opf/actions/runs/36545440166",
+    "jobs": [
+      {
+        "id": 109330593773,
+        "name": "Verify OPF packages",
+        "conclusion": "success",
+        "steps": [
+          {
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "name": "Setup pnpm",
+            "conclusion": "success"
+          },
+          {
+            "name": "Setup Node.js",
+            "conclusion": "success"
+          },
+          {
+            "name": "Install dependencies",
+            "conclusion": "success"
+          },
+          {
+            "name": "Audit dependencies",
+            "conclusion": "success"
+          },
+          {
+            "name": "Lint",
+            "conclusion": "success"
+          },
+          {
+            "name": "Typecheck",
+            "conclusion": "success"
+          },
+          {
+            "name": "Build",
+            "conclusion": "success"
+          },
+          {
+            "name": "Test",
+            "conclusion": "success"
+          },
+          {
+            "name": "Validate examples",
+            "conclusion": "success"
+          },
+          {
+            "name": "Check for unacknowledged breaking changes",
+            "conclusion": "success"
+          },
+          {
+            "name": "Verify npm package contents",
+            "conclusion": "success"
+          },
+          {
+            "name": "Verify packed package install",
+            "conclusion": "success"
+          },
+          {
+            "name": "Verify packed CLI install",
+            "conclusion": "success"
+          },
+          {
+            "name": "Verify developer quickstart from the npm registry",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Setup Node.js",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Setup pnpm",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 36545440163,
+    "name": "Coordinated public packages",
+    "head_sha": "061499d53aabefb266dd4f7f5c5bd85f6d24c425",
+    "event": "push",
+    "run_attempt": 1,
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-09-29T08:52:02Z",
+    "updated_at": "2026-09-29T09:04:15Z",
+    "html_url": "https://github.com/OpenPresentation/opf/actions/runs/36545440163",
+    "jobs": [
+      {
+        "id": 109330669410,
+        "name": "packages",
+        "conclusion": "success",
+        "steps": [
+          {
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "name": "Initialize containers",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020",
+            "conclusion": "success"
+          },
+          {
+            "name": "Install locked dependencies",
+            "conclusion": "success"
+          },
+          {
+            "name": "Build and link coordinated sources",
+            "conclusion": "success"
+          },
+          {
+            "name": "Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks",
+            "conclusion": "success"
+          },
+          {
+            "name": "Execute installed tarball browser interactions",
+            "conclusion": "success"
+          },
+          {
+            "name": "Check scalar source whitespace and accepted browser advances",
+            "conclusion": "success"
+          },
+          {
+            "name": "Check physical font selections in an offline browser",
+            "conclusion": "success"
+          },
+          {
+            "name": "Check accepted metric outlines and actual offline SVG ink",
+            "conclusion": "success"
+          },
+          {
+            "name": "Verify exact published registry packages and fidelity fixtures",
+            "conclusion": "success"
+          },
+          {
+            "name": "Measure current checkout code internals with registry fonts",
+            "conclusion": "success"
+          },
+          {
+            "name": "Measure current checkout metric internals with registry fonts",
+            "conclusion": "success"
+          },
+          {
+            "name": "Preserve installed-browser evidence",
+            "conclusion": "success"
+          },
+          {
+            "name": "Report the verification boundary",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "name": "Stop containers",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,36 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: fixture-without-fonts: Get-FileHash : The term 'Get-FileHash' is not recognized as the name of a cmdlet, function, script file, or operable 
+
+program. Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+
+At C:\Users\micha\AppData\Local\Temp\opf-font-inventory-controls-0LL7zX\mock-harness\native-font-inventory.ps1:20 
+
+char:55
+
++ ... ion Get-InventorySha256([string]$Path) { return (Get-FileHash -Litera ...
+
++                                                      ~~~~~~~~~~~~
+
+    + CategoryInfo          : ObjectNotFound: (Get-FileHash:String) [], ParentContainsErrorRecordException
+
+    + FullyQualifiedErrorId : CommandNotFoundException
+
+ 
+
+
+
+1 !== 0
+
+    at file:///C:/Users/micha/.codex/worktrees/fd3f/opf/artifacts/windows-native-20260929/sources/opf-pptx/test/native-font-inventory-controls.mjs:411:14 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

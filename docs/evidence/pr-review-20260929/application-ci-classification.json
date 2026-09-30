@@ -1,0 +1,41 @@
+{
+  "head": "5f863300392ba4adc17c947e23c9606623b4fc12",
+  "classification": [
+    {
+      "workflow": "application",
+      "head": "5f863300392ba4adc17c947e23c9606623b4fc12",
+      "job": "verify (ubuntu-latest)",
+      "conclusion": "failure",
+      "steps": 0,
+      "reason": "GitHub account failed payments/spending limit; job never started",
+      "url": "https://github.com/Data-Advantage/pptx-dev/actions/runs/36538188391/job/109307040497"
+    },
+    {
+      "workflow": "application",
+      "head": "5f863300392ba4adc17c947e23c9606623b4fc12",
+      "job": "verify (windows-latest)",
+      "conclusion": "failure",
+      "steps": 0,
+      "reason": "GitHub account failed payments/spending limit; job never started",
+      "url": "https://github.com/Data-Advantage/pptx-dev/actions/runs/36538188391/job/109307040734"
+    },
+    {
+      "workflow": "artifact",
+      "head": "5f863300392ba4adc17c947e23c9606623b4fc12",
+      "job": "roundtrip (windows-latest)",
+      "conclusion": "failure",
+      "steps": 0,
+      "reason": "GitHub account failed payments/spending limit; job never started",
+      "url": "https://github.com/Data-Advantage/pptx-dev/actions/runs/36538188374/job/109307040184"
+    },
+    {
+      "workflow": "artifact",
+      "head": "5f863300392ba4adc17c947e23c9606623b4fc12",
+      "job": "roundtrip (ubuntu-latest)",
+      "conclusion": "failure",
+      "steps": 0,
+      "reason": "GitHub account failed payments/spending limit; job never started",
+      "url": "https://github.com/Data-Advantage/pptx-dev/actions/runs/36538188374/job/109307040452"
+    }
+  ]
+}

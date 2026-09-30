@@ -203,7 +203,8 @@ The renderer calls the same resolver:
 - `app: "Google Slides"` yields Noto families for every non-Latin catalog
   language, all openly licensed.
 - PowerPoint names can instead go through the caller's font registry
-  substitution.
+  substitution. This applies to preview drawing and measurement only; the PPTX
+  keeps the selected names (FF-31).
 - `lang` and `direction` become SVG/HTML `lang` and `direction`/`dir`.
 - Registry theme tokens (`majorEastAsia`, `minorComplexScript`, …) map to the
   matching `heading`/`body` slots.

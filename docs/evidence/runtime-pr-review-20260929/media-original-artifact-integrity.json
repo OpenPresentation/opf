@@ -1,0 +1,360 @@
+{
+  "head": "08815c76ab9494cfad98e18149c003385306882b",
+  "run": 36548912840,
+  "attempt": 1,
+  "artifacts": [
+    {
+      "id": 11023888992,
+      "name": "candidate-opf-pptx-Windows-node24",
+      "zip": "11023888992.zip",
+      "bytes": 571805,
+      "sha256": "29a6aa53134f3e64833e48d1aa7e1c794d64c1628f1833f055bc6d8e83c63eb0",
+      "githubDigestMatches": true,
+      "crcPass": true,
+      "members": 100,
+      "packedReceiptPath": "packed-candidate-opf-pptx-Windows-node24.json",
+      "packedReceiptMember": "opf-pptx/artifacts/packed-consumer-node24.json",
+      "packedReceiptSha256": "986cc90e28f10512fb907b4984d3e5ff861a84f61f11bd418dd751a2ebb6a565",
+      "node": "v24.21.0",
+      "shippedFilesBoundToHead": 36,
+      "bindings": {
+        "DEPENDENCY-NOTES.md": {
+          "sha256": "711114e9fde0ca30bb18a19bf391baefdc262acc07492cc6c5f67695b26da2a8",
+          "binding": "explicit LF-to-CRLF bytes"
+        },
+        "LICENSE": {
+          "sha256": "e8c5cecaad448c0cab00af38f7ed8b6bb647c77ba79f3c50d20a9ea92e256cd3",
+          "binding": "explicit LF-to-CRLF bytes"
+        },
+        "README.md": {
+          "sha256": "e9d3df7ef61328e3baa0dcd038b24a8812de5e561628015d1883ba067a6b55f2",
+          "binding": "explicit LF-to-CRLF bytes"
+        },
+        "dist/background-import.js": {
+          "sha256": "93475ddd7f720e2c5a4c2e0989c5b5f0675e991659ae64949efa9677bf74f103",
+          "binding": "explicit LF-to-CRLF bytes"
+        },
+        "dist/background.js": {
+          "sha256": "ff2ee791ec92024c888302d4ee22bf5103933cd67781fa1957ff987ed420a9f0",
+          "binding": "explicit LF-to-CRLF bytes"
+        },
+        "dist/card-provenance.js": {
+          "sha256": "ff1ca09b88500993abb4bb293162e5064f1f7fc38edfd999f8ca8eedce8b94b0",
+          "binding": "explicit LF-to-CRLF bytes"
+        },
+        "dist/chart-workbook.js": {
+          "sha256": "39db820e6f3a512779943a13e5e78c63ff866c2a0074e1e9c807fcfc7a9aa1e2",
+          "binding": "explicit LF-to-CRLF bytes"
+        },
+        "dist/code-provenance.js": {
+          "sha256": "2ee79078e10ecebbc05f0405c6d03bd74b420bb9f6b36604cd20215e16d0141f",
+          "binding": "explicit LF-to-CRLF bytes"
+        },
+        "dist/color-ref.js": {
+          "sha256": "82c4ea0c7177af91088be3701bbdf152373017d1e55a7665f8b572e408d837e0",
+          "binding": "explicit LF-to-CRLF bytes"
+        },
+        "dist/document-provenance.js": {
+          "sha256": "927580d9067eb5d6398ff5c559115a3a5c4afac61998f8228de8512582c1ec16",
+          "binding": "explicit LF-to-CRLF bytes"
+        },
+        "dist/furniture-fields.js": {
+          "sha256": "220dcffa7443385d77f5ecd401ded9936775a4d8d8b5eda35279d2eab4bc6897",
+          "binding": "explicit LF-to-CRLF bytes"
+        },
+        "dist/furniture-provenance.js": {
+          "sha256": "ded160f78c0caa49261b2a2048455beaebf225b8748547ae2da2effccafa2979",
+          "binding": "explicit LF-to-CRLF bytes"
+        },
+        "dist/heading-provenance.js": {
+          "sha256": "1b446a4ea4c467c19956bc0ee1fc55fa7f331eb1c2bfd6369ea0fd8f098c66c1",
+          "binding": "explicit LF-to-CRLF bytes"
+        },
+        "dist/image-fallback-browser.js": {
+          "sha256": "3c7f81d5677dd9a78a0a13fe5a94bbb14cef465031caaeda2c87e8451e9ff491",
+          "binding": "explicit LF-to-CRLF bytes"
+        },
+        "dist/image-fallback-node.js": {
+          "sha256": "5ee323d3320420664b5d2c1714e246b04dd0806f459164f9696668552df87565",
+          "binding": "explicit LF-to-CRLF bytes"
+        },
+        "dist/image-geometry.js": {
+          "sha256": "e2d0d272a472b8c4a634d7fd3970b104c0a65e7c06c6646018c9199d2fe89121",
+          "binding": "explicit LF-to-CRLF bytes"
+        },
+        "dist/image-import.js": {
+          "sha256": "cffccecc223e27d62b6e1aba0cdbe2c1c9aa94874ef898f76906b22e001bbd41",
+          "binding": "explicit LF-to-CRLF bytes"
+        },
+        "dist/index.d.ts": {
+          "sha256": "bbe65fdb13f0c9351135cc8666731779cf96a4acb50365a3a49d294f03def744",
+          "binding": "explicit LF-to-CRLF bytes"
+        },
+        "dist/index.js": {
+          "sha256": "e3a460f0e63028e36a7fe5cc4e7f01b70df3ed4b25bb0dcbcee587416d32ab72",
+          "binding": "explicit LF-to-CRLF bytes"
+        },
+        "dist/media-provenance.js": {
+          "sha256": "45d18ac692f22547ad53b523f0352cb5c2e642934b0dd2e43f4c6da6dacb7644",
+          "binding": "explicit LF-to-CRLF bytes"
+        },
+        "dist/metric-provenance.js": {
+          "sha256": "a058bfd8e84cf393476aa64c925bff31430d11e341c32b5e2f5b0d141922f0af",
+          "binding": "explicit LF-to-CRLF bytes"
+        },
+        "dist/package-fonts.js": {
+          "sha256": "082cd6c30ee9b267c8f1bdf7bbb1d1ebb6e5125816887991db407c02c1a9598d",
+          "binding": "explicit LF-to-CRLF bytes"
+        },
+        "dist/script-fonts.js": {
+          "sha256": "e7441650942f81c86d6e54d4ef045976d5a01b32443bfeed2b994896098734de",
+          "binding": "explicit LF-to-CRLF bytes"
+        },
+        "dist/slide-image-provenance.js": {
+          "sha256": "865582747a6c1e3c1d06af55d50bd30432e92d56d9170c9ba92eeacc73c22631",
+          "binding": "explicit LF-to-CRLF bytes"
+        },
+        "dist/table-border-import.js": {
+          "sha256": "16678e0d93e63474d39daac268016a59517cc36d85dbd8751131f143db01ace5",
+          "binding": "explicit LF-to-CRLF bytes"
+        },
+        "dist/table-cell-import.js": {
+          "sha256": "fa17507763a2240564401d7977f4f39bc180e3e6da9d4aa9c36202908e9126d1",
+          "binding": "explicit LF-to-CRLF bytes"
+        },
+        "dist/table-import.js": {
+          "sha256": "9ae40bb38dd34c9fc0ae4a3f5a257068ae92bb651ed5d96641c2629ef7106cf1",
+          "binding": "explicit LF-to-CRLF bytes"
+        },
+        "dist/text-provenance.js": {
+          "sha256": "5e158d07c59e90576a1f2c28ce8ae73700c383628ff688aeaac4b11a44c30d61",
+          "binding": "explicit LF-to-CRLF bytes"
+        },
+        "dist/theme-colors.js": {
+          "sha256": "3c4fad74c0d99ebd30834a2a8082dc810dd9705ab6e058814345b9950bae5b78",
+          "binding": "explicit LF-to-CRLF bytes"
+        },
+        "dist/timeline-provenance.js": {
+          "sha256": "2caeded2c36596cccda61f479f45ec974dc7c23c14967df82df193d4d19a17a9",
+          "binding": "explicit LF-to-CRLF bytes"
+        },
+        "dist/typeface-inventory.js": {
+          "sha256": "6103b5572b262ed9925aae1fe2f3d6caae4b4e71d043c1a2bc786a71028af11e",
+          "binding": "explicit LF-to-CRLF bytes"
+        },
+        "package.json": {
+          "sha256": "8e37c9a662e65b3c0e1d69c9f21b7e385d00eb4c05ff2e34051183bd3f17e769",
+          "binding": "explicit LF-to-CRLF bytes"
+        },
+        "vendor/pptxgenjs/LICENSE": {
+          "sha256": "7a2bfe96150786ed1908b8e63f98ebab88875c1e79e28faff6649e0f11f77e52",
+          "binding": "exact committed bytes"
+        },
+        "vendor/pptxgenjs/package.json": {
+          "sha256": "15ec5ec45f1001afef85aeacbc2098a05140f5a3e92f1502792c9575694dabc4",
+          "binding": "explicit LF-to-CRLF bytes"
+        },
+        "vendor/pptxgenjs/pptxgen.es.js": {
+          "sha256": "05844c5625e2cda3b449eb967c2246dd57ca57341886a7c28eeebca263b29bd4",
+          "binding": "exact committed bytes"
+        },
+        "vendor/pptxgenjs/UPSTREAM.json": {
+          "sha256": "319b973f4a71bb31cb355ad37e428848c26db57ab4c5e3e0c2f48939242c9270",
+          "binding": "explicit LF-to-CRLF bytes"
+        }
+      },
+      "allNineInstalledFixtureSourcesMatchHead": true,
+      "dependencies": {
+        "@openpresentation/opf": {
+          "version": "0.11.0",
+          "resolved": "https://registry.npmjs.org/@openpresentation/opf/-/opf-0.11.0.tgz",
+          "integrity": "sha512-7Gm/FSyiGngHRkDG0SPL8V6FEC5nC8UpoffNWf8CqkyjXsqQ2BUIzVAEwHwKjEsEZ04FR2DT+Ohh8PJofNPFiw=="
+        },
+        "@openpresentation/opf-render": {
+          "version": "0.9.0",
+          "resolved": "https://registry.npmjs.org/@openpresentation/opf-render/-/opf-render-0.9.0.tgz",
+          "integrity": "sha512-uHWABof7cuLmTAglctvcjuV5dRyIa2qmeGdwONIuKCAnNQXjAOQKXido9OcyGtk6xFjzBFtLtvD3sZOwPEJIJA=="
+        }
+      },
+      "knownVulnerabilities": 0,
+      "nativeEvidencePresent": false
+    },
+    {
+      "id": 11023288744,
+      "name": "candidate-opf-pptx-Linux-node24",
+      "zip": "11023288744.zip",
+      "bytes": 646109,
+      "sha256": "7380811f30940d02225135d59dd6d03f5af47a09ba041b71cc17ab55430b9ffd",
+      "githubDigestMatches": true,
+      "crcPass": true,
+      "members": 68,
+      "packedReceiptPath": "packed-candidate-opf-pptx-Linux-node24.json",
+      "packedReceiptMember": "opf-pptx/artifacts/packed-consumer-node24.json",
+      "packedReceiptSha256": "4568dfe253d8bf568bb0e1dbf75ff342ba3de00a0895de9f3eeedc95b14bc046",
+      "node": "v24.21.0",
+      "shippedFilesBoundToHead": 36,
+      "bindings": {
+        "DEPENDENCY-NOTES.md": {
+          "sha256": "a74605ed2be3849447f6dfe5ef9cc6dd4ceee7098625dd051783bcb32f170701",
+          "binding": "exact committed bytes"
+        },
+        "LICENSE": {
+          "sha256": "c977d11e7e9de5bd31ab787b9a302475c0487837c66f665c174d9f92b18937d2",
+          "binding": "exact committed bytes"
+        },
+        "README.md": {
+          "sha256": "0eda20de501c968db1cea5a5d9201cf8cf80cacaa62eecdadcda5ad02676493d",
+          "binding": "exact committed bytes"
+        },
+        "dist/background-import.js": {
+          "sha256": "010fa647682418a8ea219ea0d3b064f0a938651e5e22f639d3d52ec596a3fd15",
+          "binding": "exact committed bytes"
+        },
+        "dist/background.js": {
+          "sha256": "71a1e3d0a7bf0d50630240b0e385ebf02fb5f7802450d69666f84dd0bfad5fcd",
+          "binding": "exact committed bytes"
+        },
+        "dist/card-provenance.js": {
+          "sha256": "41b78472f0d8363b98341d9d66529c48f9f821d39bc110b8e43b610205d535fb",
+          "binding": "exact committed bytes"
+        },
+        "dist/chart-workbook.js": {
+          "sha256": "92dedb19ef41f02a221057c3a0d5e9e7992bbc2d373f02a32326a6741d4630dc",
+          "binding": "exact committed bytes"
+        },
+        "dist/code-provenance.js": {
+          "sha256": "c4c6fe990ee5bea6260b376e98df451be4a85c969c78d0d505f4a7b3e27f8f55",
+          "binding": "exact committed bytes"
+        },
+        "dist/color-ref.js": {
+          "sha256": "8242ddedfd3a60408535dc139235a1bcb4efc0d40dab327ef3f020400e052276",
+          "binding": "exact committed bytes"
+        },
+        "dist/document-provenance.js": {
+          "sha256": "7c046a3638006a14c55d8efce304fcc16906b24ef9e958ae59c45fea688a96fd",
+          "binding": "exact committed bytes"
+        },
+        "dist/furniture-fields.js": {
+          "sha256": "1fefaef93b55ec1f29d1c6fd824c09e56e2292136b4d3346aa143ddc4c8f5572",
+          "binding": "exact committed bytes"
+        },
+        "dist/furniture-provenance.js": {
+          "sha256": "c896937076d22dc821e54858f5d9b2072e7fd3669c86ca8ed9ea38ccafc015d3",
+          "binding": "exact committed bytes"
+        },
+        "dist/heading-provenance.js": {
+          "sha256": "edbe08567ebe62e00f761c78244c39b563d004d360c4394566f1c21e62cb7f14",
+          "binding": "exact committed bytes"
+        },
+        "dist/image-fallback-browser.js": {
+          "sha256": "b2cd7aa15c3952abf324e6474e7bbdebbd6445dde84f145e068c94c43f9c0de8",
+          "binding": "exact committed bytes"
+        },
+        "dist/image-fallback-node.js": {
+          "sha256": "72c4efba8ef521e7fdce15b09c57ce6039ba9394ae25a8437a2cb6e26b1b420d",
+          "binding": "exact committed bytes"
+        },
+        "dist/image-geometry.js": {
+          "sha256": "64d3470d36b70184527a06d0f66ec5e81eae264101cb52dde07fbf2ad180474e",
+          "binding": "exact committed bytes"
+        },
+        "dist/image-import.js": {
+          "sha256": "898704890944137909c5d48c7d1b3b16e4f06403bd745240d0f6b21f7c8c444a",
+          "binding": "exact committed bytes"
+        },
+        "dist/index.d.ts": {
+          "sha256": "ccdc7f7ad3a5faec2b793b7d12f17383a5f268afd4a4a86920f481401501d58d",
+          "binding": "exact committed bytes"
+        },
+        "dist/index.js": {
+          "sha256": "cf584335054207b6e1360af6f0609ab5b538511c9b51c92a77c148ab904a9825",
+          "binding": "exact committed bytes"
+        },
+        "dist/media-provenance.js": {
+          "sha256": "d44afa06c1333f1c8f95fa5c2ac9ebbdd08f7f79651fa530c94c1ffc8dc10b1c",
+          "binding": "exact committed bytes"
+        },
+        "dist/metric-provenance.js": {
+          "sha256": "a330abb76e5bb6723a37e64f1e809e4832a8a768402af64fb56155fdb3f194e0",
+          "binding": "exact committed bytes"
+        },
+        "dist/package-fonts.js": {
+          "sha256": "d12aa7bdf4399ca60cc4e4a4f13da32001eb9dfe195be3de7bc03605b1c856e3",
+          "binding": "exact committed bytes"
+        },
+        "dist/script-fonts.js": {
+          "sha256": "ac184235f7b33fe0f0ec91ddafdb74441d58ae850fc17ffe3b147ea140f1370f",
+          "binding": "exact committed bytes"
+        },
+        "dist/slide-image-provenance.js": {
+          "sha256": "fdc6686e47d6669ced578853091c262ad086a42011be8b10fcd2e2fd1f001c69",
+          "binding": "exact committed bytes"
+        },
+        "dist/table-border-import.js": {
+          "sha256": "10dc23b93881d691be62bb5f171678d61cdf77675a628f86f58a58ee962e7093",
+          "binding": "exact committed bytes"
+        },
+        "dist/table-cell-import.js": {
+          "sha256": "d268a14eecf54fe12bab31246680807cf1c90407b9807b49d32c3c71d93a643b",
+          "binding": "exact committed bytes"
+        },
+        "dist/table-import.js": {
+          "sha256": "b545fff80415d085f76c82b88ce0c72e1bcfd6947c621a0fbedcc08e5a9ea227",
+          "binding": "exact committed bytes"
+        },
+        "dist/text-provenance.js": {
+          "sha256": "8f8c7f14ffbb568eadac9f010215cb619d48c2ab8515172b059dd51f2a816b46",
+          "binding": "exact committed bytes"
+        },
+        "dist/theme-colors.js": {
+          "sha256": "80bf6b52fa2290875c43ddc8f2af09638e62fe05c95627ccc4ca838f459c38cc",
+          "binding": "exact committed bytes"
+        },
+        "dist/timeline-provenance.js": {
+          "sha256": "4745965ae18f6625b6f14326b8bc9cbf7af16a6deb7e0649107c5bb9e913a1c3",
+          "binding": "exact committed bytes"
+        },
+        "dist/typeface-inventory.js": {
+          "sha256": "bf59691e077690e07464c9d23ad50d6733403103bc3e1a6fbd196bce8d059979",
+          "binding": "exact committed bytes"
+        },
+        "package.json": {
+          "sha256": "c00491040e9d77d890ff5992084117fa470dead0c80e8a73889ec5d4858146e2",
+          "binding": "exact committed bytes"
+        },
+        "vendor/pptxgenjs/LICENSE": {
+          "sha256": "7a2bfe96150786ed1908b8e63f98ebab88875c1e79e28faff6649e0f11f77e52",
+          "binding": "exact committed bytes"
+        },
+        "vendor/pptxgenjs/package.json": {
+          "sha256": "17fce7ff4b8f6d3fab96bdf31bb1162c31bdc6b60ef456e3a119ba1ccd50909e",
+          "binding": "exact committed bytes"
+        },
+        "vendor/pptxgenjs/pptxgen.es.js": {
+          "sha256": "05844c5625e2cda3b449eb967c2246dd57ca57341886a7c28eeebca263b29bd4",
+          "binding": "exact committed bytes"
+        },
+        "vendor/pptxgenjs/UPSTREAM.json": {
+          "sha256": "00e2131269f673c739fb9be04477273bd3edbea0a8c2b225884ab0e7bc13808e",
+          "binding": "exact committed bytes"
+        }
+      },
+      "allNineInstalledFixtureSourcesMatchHead": true,
+      "dependencies": {
+        "@openpresentation/opf": {
+          "version": "0.11.0",
+          "resolved": "https://registry.npmjs.org/@openpresentation/opf/-/opf-0.11.0.tgz",
+          "integrity": "sha512-7Gm/FSyiGngHRkDG0SPL8V6FEC5nC8UpoffNWf8CqkyjXsqQ2BUIzVAEwHwKjEsEZ04FR2DT+Ohh8PJofNPFiw=="
+        },
+        "@openpresentation/opf-render": {
+          "version": "0.9.0",
+          "resolved": "https://registry.npmjs.org/@openpresentation/opf-render/-/opf-render-0.9.0.tgz",
+          "integrity": "sha512-uHWABof7cuLmTAglctvcjuV5dRyIa2qmeGdwONIuKCAnNQXjAOQKXido9OcyGtk6xFjzBFtLtvD3sZOwPEJIJA=="
+        }
+      },
+      "knownVulnerabilities": 0,
+      "nativeEvidencePresent": false
+    }
+  ],
+  "boundary": "Passing archives retained privately. CRC/digests and installed package/fixture source binding verified; no Office operations or general native compatibility acceptance."
+}

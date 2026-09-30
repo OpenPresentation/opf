@@ -1,5 +1,190 @@
 # Windows native compatibility weekly handoff
 
+## September 29 resumed query-order control (15:07 UTC)
+
+[PPTX88](https://github.com/OpenPresentation/opf-pptx/pull/88) merged as
+`9a7f3c1513c5875b4ac9d5974c04151a4ac26cbe`; its entire tree matches reviewed
+head `2822107`. The owner authorized local tests in place of Actions during
+the credit shortage. The final head passed 22 inventory-control groups,
+29 independent audit cases, source build/typecheck/validate/full tests,
+six browser suites (138 reported checks) and a fresh packed consumer.
+The initial full suite against published core 0.11.0 failed a known furniture
+expectation; the coordinated source graph passed without changing tests.
+Source linking completed renderer/PPTX and stopped at the editor's missing
+installed dependencies, so no editor validation is claimed. No remote CI pass
+is claimed by this receipt and no workflow or tolerance was changed.
+
+The [E8 evidence](evidence/windows-native-font-query-order-20260929/README.md)
+records one native run using the exact E7 input, SHA-256
+`4e2bab2a4f5a0f09350d2edc2463bcb29302fa7db34a8c621e39fcd5c9a16cd7`.
+The opt-in comparison retains the initial `Presentation.Fonts` collection and
+reads it once more after the existing bounded content queries, before the
+same owned close. It completed in about 1,405 ms with 303 stages, one owned
+read-only open/close, unchanged inputs, no temporary fonts and zero audit
+failures. Both collections and their flags were identical: empty-name entry,
+then Aptos. All six theme names remained Calibri.
+
+PowerPoint was absent after sleep and launched through supported computer use.
+Fresh preflight/postflight showed Home without an open presentation or dialog.
+E8 process 5288 differs from E7 process 30776; executable file/product version
+was `16.0.20430.20092`. The actual native graph was core `9261eac5`, PPTX
+`9a7f3c1`, renderer `c62b3f9`, editor `d0c95a1`, gallery `f17e9ae5`. The later
+evidence branch also incorporates core156's FF-10 foundation from main, without
+rewriting those historical native inputs or source commits.
+
+FF-05 remains in progress: unchanged means stable only over this query
+sequence/elapsed interval. Root cause, physical glyph identity, font allowlist
+and embedding remain open. The tracker is 19 done, 19 review/in-progress,
+6 todo; the dated parity headline remains 5/900. Next: inspect remaining
+style/part references offline and review a minimal fixture change before any
+later native run. Keep existing failures, the 0.02 pt and 0.1 reference-pixel
+gates, and all Office ownership rules. Do not redo accepted proofs, publish,
+deploy, retry embedding, implement native `p:hf` or merge deferred geometry.
+
+## September 29 explicit theme-slot control (09:38 UTC)
+
+The [FF-05 E7 evidence](evidence/windows-native-explicit-slots-20260929/README.md)
+records one bounded read-only inventory after changing only four empty theme
+major/minor ea/cs attributes in the accepted E6 Calibri control to Calibri.
+The other 40 ZIP entry contents and all relationships remained unchanged.
+The audit passed with zero failures: one owned open/close, unchanged inputs,
+no temporary fonts, 1,227 ms under the 45-second helper deadline. PowerPoint
+Home showed no open presentation or dialog before and after the run; the
+running executable reported version `16.0.20430.20092`.
+
+All six theme names reported Calibri, but the initial `Presentation.Fonts`
+collection still contained an empty-name entry and Aptos. The nonempty inspected
+slide Font2 names remained Calibri; `NameOther` stayed empty. Empty theme ea/cs
+slots are not necessary for this observation, and their removal does not clear
+the font allowlist. Root cause, physical glyph identity and embedding remain
+unproven. The [brief](programs/font-fidelity-everywhere/aptos-origin-brief.md)
+proposes a separately reviewed second Fonts snapshot after the existing content
+queries; that harness has not been implemented or run in this evidence.
+
+E6 evidence merged in [core148](https://github.com/OpenPresentation/opf/pull/148)
+as `0e81a407` after independent review and green CI. E7's actual source graph
+was core `0e81a407`, PPTX `7fca9a2`, renderer `6c7d7818`, editor `d0c95a1`.
+FF-05 remains in progress; tracker counts and the dated parity scoreboard are
+unchanged. No native retry, tolerance change, package publication or deployment.
+
+## September 29 Calibri control (09:01 UTC)
+
+The [FF-05 E6 evidence](evidence/windows-native-calibri-control-20260929/README.md)
+records one successful read-only inventory after changing exactly 17 explicit
+Carlito typeface attributes to Calibri. Other package contents and relationships
+were preserved, including the four empty theme ea/cs slots. The current audit
+passed with zero failures: no temporary fonts, unchanged input hashes, one owned
+open/close under the 45-second helper deadline. PowerPoint Home showed no open
+presentation or dialog before and after the run.
+
+`Presentation.Fonts` still reported an empty-name entry and Aptos before other
+content was read; nonempty inspected slide font names and theme Latin reported
+Calibri (`NameOther` remained empty). This
+narrows Carlito-specific explanations but does not identify the exact source,
+prove physical glyph identity or clear the font allowlist/embed gate. FF-05 is
+in progress; next is a separately reviewed style/part isolation control, chosen
+offline before further native work. See the updated
+[brief](programs/font-fidelity-everywhere/aptos-origin-brief.md).
+
+All five PRs from the preceding review checkpoint merged after independent
+review and green CI: PPTX79 `0424d561`, PPTX81 `c749c35`, PPTX78 `bf3f78f`,
+core145 `a85facf`, core147 `061499d`. PPTX80 closed as superseded; its findings
+are reconciled in78 and its branch remains preserved. The fresh source graph
+for E6 was core `061499d`, PPTX `bf3f78f`, renderer `6c7d7818`, editor `d0c95a1`;
+gallery remained `f17e9ae5`. The final unchanged merged-source parity audit
+retained 5/900 perfect (text 799, fills 791); [core147](https://github.com/OpenPresentation/opf/pull/147)
+records that receipt. The committed scoreboard is still the explicitly dated
+pre-PPTX78 baseline below. Current tracker: 19 done, 17 review/in-progress,
+8 todo. No publish/deploy or gate change.
+
+## September 29 continuation
+
+Resume from fetched `origin/main`. The active goal, acceptance criteria and
+progress log are now in
+[font-fidelity-everywhere](programs/font-fidelity-everywhere/README.md) and its
+[burndown](programs/font-fidelity-everywhere/burndown.md). The dated sections
+below are historical receipts; their pending-work and open-PR statements apply
+only to their checkpoint date.
+
+Initial fetched source heads at this continuation were core `d3397502`, PPTX `90929546`,
+renderer `6c7d7818`, editor `214ae695`, and gallery `f17e9ae5`. Use Node
+24.21.0, core pnpm 10.33.2 and locked sibling installs. Existing local branches
+were preserved, and no old evidence branch was reused as a working base.
+
+**Native progress.** Mixed-table edit/save/reopen already passed on September
+22. The first embed attempt remains a preserved failure before `SaveAs`.
+The missing FF-04 read-only inventory without temporary font registration has
+now completed on the canonical unedited fixture in a fresh PowerPoint session.
+It reports Aptos and an empty-name entry before any edit, as did the historical
+with-temp and exporter-control runs. The current audits pass; original audit
+failures remain preserved. The owned source was unchanged, the owned
+presentation closed once, and postflight showed PowerPoint Home without an
+open presentation or dialog. See the
+[portable inventory evidence](evidence/windows-native-font-inventory-20260929/README.md).
+This does not prove the font allowlist, physical font identity or embedding.
+FF-05 still needs a discriminating experiment; the
+[Aptos brief](programs/font-fidelity-everywhere/aptos-origin-brief.md) records
+the narrowed hypotheses and next control.
+
+**PR review.** [PPTX78](https://github.com/OpenPresentation/opf-pptx/pull/78)
+and [PPTX79](https://github.com/OpenPresentation/opf-pptx/pull/79) had green CI
+but independent review found media privacy/current-content bugs and malformed
+layout recovery that could crash rendering. Independently reviewed fixes and
+end-to-end regressions pass the current-source package tests. PPTX79 passed
+Linux and Windows CI at `ab0fc1d` and merged as `0424d561`.
+[PPTX81](https://github.com/OpenPresentation/opf-pptx/pull/81) then passed
+Linux and Windows CI and merged as `c749c35`, preserving valid inline layout
+records that omit the standalone `$schema` field under PPTX79's validation
+gate. PPTX78 integrates both accepted changes, identity-only late omissions,
+all visible native hyperlink surfaces and exact caption/fallback-link fixes.
+The latter reconcile [PPTX80](https://github.com/OpenPresentation/opf-pptx/pull/80)'s
+old-base findings; that branch was not merged as-is. The independently reviewed
+PPTX78 head `7cc779129323af6123ef5e194226a545e743f195` passed the full suite,
+typecheck, validation and six browser suites; exact-head CI
+[36543078806](https://github.com/OpenPresentation/opf-pptx/actions/runs/36543078806)
+is pending at this checkpoint. Its PR records the eventual merge receipt.
+Core132/renderer43 alignment and core133/renderer44 font policy work have
+already merged.
+
+| Remaining work | State / next gate |
+| --- | --- |
+| FF-04 evidence | [core145](https://github.com/OpenPresentation/opf/pull/145) merged `a85facf`, completing this item with the independently reviewed bundle |
+| FF-05 root cause | Open; Aptos at open does not identify its exact source |
+| PPTX78/79/81 | PPTX79 merged `0424d561`, PPTX81 merged `c749c35`; PPTX78 independently reviewed at `7cc7791`, exact-head CI pending at this checkpoint |
+| PPTX76 and renderer42 | Draft chart coverage; reconcile conflicts and acceptance criteria |
+| PPTX77 | Draft theme-color follow-up; per-reference measurement incomplete |
+| core128 / gallery46 / core144 | Catalog dependency chain; core144 delivered into PR128's `codex/ff-37-gallery-catalog` branch as `f8ca179488ee96c8466303bac06ea2dbf30502a0` at 2026-09-29 08:13:34 UTC, not main; gallery-first/conflict gates remain |
+| gallery40-47 | Open; Actions billing prevents a clean verification result; some also depend on a future release |
+| Old geometry drafts core94/PPTX42/renderer27/editor25 | Deferred; do not merge as part of this work |
+
+**Accepted FF-38 headline: 5/900 perfect, 0 near, 895 mismatch.** The unchanged
+full audit completed at `2026-09-29T08:23:46.429Z` on core
+`a85facf11d7b99102ca801885c5afaa783d1c800`, renderer
+`6c7d7818e40d0f9c519e4b34f7a24e9150c1787f`, PPTX
+`c749c356b4fb5a5b5dfa77db8f1f7dd3c7daef63` and gallery
+`f17e9ae5869669d5fbac3720f285652d0c37551c`. It improves the September 23
+scoreboard from 4 to 5 without a classification regression; text passes for
+798 and fills for 790. Local raw receipts: `baseline81-results.json` and
+`baseline81-report.md`; the committed [results](programs/font-fidelity-everywhere/gallery-support/parity/parity-results.json)
+and [scoreboard](programs/font-fidelity-everywhere/gallery-support/parity/PARITY.md)
+apply the [documented one-slug normalization](programs/font-fidelity-everywhere/gallery-support/README.md#normalized-ids).
+Editor `d0c95a1` was refreshed by a dependency-only merge and was not used by
+parity. The September 23 presence audit remains a distinct historical result.
+
+**Separate candidate measurement.** At `2026-09-29T08:30:22.322Z`, the same
+other heads with PPTX78 `7cc779129323af6123ef5e194226a545e743f195` measured
+5/900 perfect, 0 near and 895 mismatch, text 799 and fills 791, with no
+classification change from the accepted baseline. Local raw receipts:
+`candidate78-results.json` / `candidate78-report.md`. Pending exact-head CI
+and the eventual [PPTX78 merge receipt](https://github.com/OpenPresentation/opf-pptx/pull/78)
+remain separate gates. This candidate does not replace the accepted headline.
+Both audits are source/package checks without Office; neither PR-level tests
+nor native inventory validity establishes whole-program native parity.
+FF-29 stays in review, FF-05 stays open, and the tracker remains 19 done,
+16 review/in-progress and 9 todo.
+No package publication, deployment, shared CI-pin update, native `p:hf`, or
+relaxation of the 0.02 pt / 0.1 reference-pixel gates is authorized here.
+
 Original checkpoint: September 21, 2026. The September 22 continuation below
 records harness hardening without replacing the reviewed September 21 native
 evidence. Verification uses Node **24.21.0** and core's declared pnpm

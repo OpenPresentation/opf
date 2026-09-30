@@ -1,0 +1,215 @@
+{
+  "schemaVersion": 1,
+  "files": [
+    {
+      "path": ".gitattributes",
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "path": "README.md",
+      "bytes": 7629,
+      "sha256": "3b0522abb625b180eeacde5917a8f163877161bc4fe235cbaee54e12fbce9a3f"
+    },
+    {
+      "path": "auditor/native-font-embed-audit.mjs",
+      "bytes": 69666,
+      "sha256": "6ad35992b75e1c677194c832289824d588c223a3d25aff029983bf3ba3f4d704"
+    },
+    {
+      "path": "auditor/native-font-inventory-audit.mjs",
+      "bytes": 54641,
+      "sha256": "09277b959c9ca76db40eacd85b89e8ba3e537729713aa1669968f6d438dfe3e7"
+    },
+    {
+      "path": "auditor/native-font-inventory.ps1",
+      "bytes": 99498,
+      "sha256": "f8f24330db965436167758e54f907e1cc9b6bd9eb25e30b5110796823701ae7f"
+    },
+    {
+      "path": "auditor/native-process.ps1",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+    },
+    {
+      "path": "auditor/native-text-fonts.ps1",
+      "bytes": 2446,
+      "sha256": "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6"
+    },
+    {
+      "path": "auditor/powershell-scan.mjs",
+      "bytes": 40899,
+      "sha256": "02df02cdc1ef0ecf9d24358575899a825d58ffada62ad8ac0e0ac47ce2bc41e6"
+    },
+    {
+      "path": "environment/host-postflight.json",
+      "bytes": 693,
+      "sha256": "3f3130f03f4e0f8a657259dc78f0f5535d48b9dcc64c242cafb15ccc51f3b932"
+    },
+    {
+      "path": "environment/host-preflight.json",
+      "bytes": 912,
+      "sha256": "307a9795983b3af4a3354a47829079783b374704dd6c411214f242c1beee8ff4"
+    },
+    {
+      "path": "fixture/calibri-explicit-slots-control.pptx",
+      "bytes": 15616,
+      "sha256": "4e2bab2a4f5a0f09350d2edc2463bcb29302fa7db34a8c621e39fcd5c9a16cd7"
+    },
+    {
+      "path": "fixture/parent/source.pptx",
+      "bytes": 15621,
+      "sha256": "776147ddfd2a35ceca4480b66d58c82c9255609b5abe245a2b3bb342651ebce5"
+    },
+    {
+      "path": "native-inventory-01/audit.json",
+      "bytes": 3703,
+      "sha256": "a68a8fbbcbd3ccd162879d1015a3c920a25eaab143086b8d1eb509c8f350732b"
+    },
+    {
+      "path": "native-inventory-01/inputs/native-font-inventory.ps1",
+      "bytes": 99498,
+      "sha256": "f8f24330db965436167758e54f907e1cc9b6bd9eb25e30b5110796823701ae7f"
+    },
+    {
+      "path": "native-inventory-01/inputs/native-process.ps1",
+      "bytes": 2372,
+      "sha256": "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+    },
+    {
+      "path": "native-inventory-01/inputs/native-text-fonts.ps1",
+      "bytes": 2446,
+      "sha256": "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6"
+    },
+    {
+      "path": "native-inventory-01/inputs/source.pptx",
+      "bytes": 15616,
+      "sha256": "4e2bab2a4f5a0f09350d2edc2463bcb29302fa7db34a8c621e39fcd5c9a16cd7"
+    },
+    {
+      "path": "native-inventory-01/progress.json",
+      "bytes": 273,
+      "sha256": "88438c0816bb89a75fb2e561b96ca0b817bc9bf6f684bdfa522253b08cbc0108"
+    },
+    {
+      "path": "native-inventory-01/report.json",
+      "bytes": 18324,
+      "sha256": "134aea6a96af5707410f66829f263a86565cadc06b07033d5fd732cba8772216"
+    },
+    {
+      "path": "native-inventory-01/request.json",
+      "bytes": 3538,
+      "sha256": "2dc917c4007ac127d08901364b95948e1dd1a764c3f642c85ee95a1df18cb409"
+    },
+    {
+      "path": "native-inventory-01/stages.jsonl",
+      "bytes": 105688,
+      "sha256": "ca0afe508d251b80779ce7834dcf6331e18501e06e8c335177917743182d1b4b"
+    },
+    {
+      "path": "native-inventory-01/supervisor.json",
+      "bytes": 5674,
+      "sha256": "b85dab16417c05f0c336f4468369e740208ef22051c3adf948584a2ad0bf2c63"
+    },
+    {
+      "path": "native-inventory-01/worker.json",
+      "bytes": 341,
+      "sha256": "dfade2a3078140453073c891d0c49f650e03b409b016a8d21a0d5356a8563644"
+    },
+    {
+      "path": "native-inventory-01/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native-inventory-01/worker.stdout.log",
+      "bytes": 99,
+      "sha256": "97fe87c9eb4f110dbd346af22de39dec5fdb50691ac31bea5df1c8e2d8d8c588"
+    },
+    {
+      "path": "preparation/README.md",
+      "bytes": 4314,
+      "sha256": "724095b3b0c803433a49314afc6475db9f29e9f25bc66608740b5537e17fc337"
+    },
+    {
+      "path": "preparation/derive.mjs",
+      "bytes": 10684,
+      "sha256": "c92b1eb6aa228043c964e35999c6ffd560a5c70e6bee13dd26334eecb837383f"
+    },
+    {
+      "path": "preparation/existing-output-rejected.log",
+      "bytes": 685,
+      "sha256": "57f83c1c5c328e8965c388a0fffa937b3d1ff0d3a5d60f06d7b796e6d9ffaede"
+    },
+    {
+      "path": "preparation/fflate/LICENSE",
+      "bytes": 1069,
+      "sha256": "0a1df3a083d0c010560aa342e87959c8c1070e6fd54545741f083f22d0c8b551"
+    },
+    {
+      "path": "preparation/fflate/index.mjs",
+      "bytes": 91765,
+      "sha256": "8d75534a30a0580608e1271c13d70943ed4cd3589fddff7b1197748036a5116e"
+    },
+    {
+      "path": "preparation/fflate/package.json",
+      "bytes": 3543,
+      "sha256": "5922d8150b307bc0e4e441491c779c45379e9913d348848fca8d5cf02db4d134"
+    },
+    {
+      "path": "preparation/preparation-01.log",
+      "bytes": 791,
+      "sha256": "ac591254c11ea3335d2cbb192c133f84aa61f08590bd6d50f72705de97bb1652"
+    },
+    {
+      "path": "preparation/preparation-repeat-01.log",
+      "bytes": 791,
+      "sha256": "ac591254c11ea3335d2cbb192c133f84aa61f08590bd6d50f72705de97bb1652"
+    },
+    {
+      "path": "preparation/prepare-explicit-slots.mjs",
+      "bytes": 10941,
+      "sha256": "0a94df58d8cf58695d3f9b178ff98d8aa2558130a170a37f15148facbc2d3bd1"
+    },
+    {
+      "path": "preparation/prepared-01/manifest.json",
+      "bytes": 18937,
+      "sha256": "23c10c7d5dfd6a2022647f519d30360eb9959dd3c3466cbdc57fd85df5af4f53"
+    },
+    {
+      "path": "preparation/prepared-01/xml-attribute-diff.txt",
+      "bytes": 687,
+      "sha256": "4ad0f704c1d1d09e23927874bb4d1717bd6a0b317ffe9413ca9ce1f14b4f5b69"
+    },
+    {
+      "path": "preparation/prepared-repeat-01/calibri-explicit-slots-control.pptx",
+      "bytes": 15616,
+      "sha256": "4e2bab2a4f5a0f09350d2edc2463bcb29302fa7db34a8c621e39fcd5c9a16cd7"
+    },
+    {
+      "path": "preparation/prepared-repeat-01/manifest.json",
+      "bytes": 18944,
+      "sha256": "3c7e8316ce3fd9c1248c96c0bfe419183c2ce47a8f09468ff4fdb6b088d86e19"
+    },
+    {
+      "path": "preparation/prepared-repeat-01/xml-attribute-diff.txt",
+      "bytes": 687,
+      "sha256": "4ad0f704c1d1d09e23927874bb4d1717bd6a0b317ffe9413ca9ce1f14b4f5b69"
+    },
+    {
+      "path": "preparation/verification-receipt.json",
+      "bytes": 764,
+      "sha256": "a6b831640e2a4946867ff00aaf134197a43add21721a280cd332353d1606b7e0"
+    },
+    {
+      "path": "source-copy-ledger.json",
+      "bytes": 14562,
+      "sha256": "4a3953ac6d9bec840c85c9c53e85bbcd403864fc01a3186496f62a8ba6588bbf"
+    },
+    {
+      "path": "verify.mjs",
+      "bytes": 24873,
+      "sha256": "63cba16224a69269e271870b81289b948d23a4958f0990e7e16f4b362fab31b5"
+    }
+  ]
+}

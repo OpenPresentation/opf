@@ -1,0 +1,126 @@
+{
+  "policy": "Owner authorized reviewed local-test merges during Actions credit shortage; release/native/font gates unchanged.",
+  "records": [
+    {
+      "repo": "Data-Advantage/pptx-dev",
+      "number": 52,
+      "url": "https://github.com/Data-Advantage/pptx-dev/pull/52",
+      "head": "e8cd795dd0abf388194ae20d73996385632ee61f",
+      "base": "166b62c20732bbf93430cfdf27a1a7f2af54eb55",
+      "tree": "ea5e903b798e80bebec9cbe0a6c0bc4eb1791606",
+      "accepted": "42e5443313d9263ba9869be6021fe758b6797308",
+      "acceptedAt": "2026-09-29T15:11:22.503288+00:00",
+      "localAcceptance": "14 sequential Node24 stages; audit0,704 unit/13 standalone/43 browser, app/SDK/CLI builds; unchanged2026 inputs and independent source review."
+    },
+    {
+      "repo": "Data-Advantage/pptx-dev",
+      "number": 57,
+      "url": "https://github.com/Data-Advantage/pptx-dev/pull/57",
+      "head": "5f863300392ba4adc17c947e23c9606623b4fc12",
+      "base": "42e5443313d9263ba9869be6021fe758b6797308",
+      "tree": "1bee5eae9b8f402e1fb3f5fb2ee845f698bb5aa1",
+      "accepted": "2ca3ccaceb74b11e321def9a6910881b20aefa23",
+      "acceptedAt": "2026-09-29T15:18:08.085234+00:00",
+      "localAcceptance": "Fresh Node24 YAML/static positive and 10 negative controls; unchanged six required commands each passed separately in app52 local acceptance. Current union differs from accepted app52 only by reviewed workflow blob. Historical Windows masked failure retained; no fresh Windows claim. GitHub stale synthetic pre-52 is preserved separately."
+    },
+    {
+      "repo": "OpenPresentation/opf-pptx",
+      "number": 89,
+      "url": "https://github.com/OpenPresentation/opf-pptx/pull/89",
+      "head": "b06b8777a8168700c00629034f62a7aa9f83e765",
+      "base": "9a7f3c1513c5875b4ac9d5974c04151a4ac26cbe",
+      "tree": "c229a580caa661d26b8368c4d9652b83a299a67f",
+      "accepted": "11f7fb0bb0ba2ac35afe859916ba936262eed748",
+      "acceptedAt": "2026-09-29T15:19:27.849497+00:00",
+      "localAcceptance": "32 Node24 stages passed on prior current graph; unchanged six product/test blobs and exact accepted PR88 five-file union. Affected Office-free controls pass18 groups/62 probes; Windows-only groups skipped explicitly. No Office or native compatibility completion."
+    },
+    {
+      "repo": "Data-Advantage/pptx-gallery",
+      "number": 37,
+      "url": "https://github.com/Data-Advantage/pptx-gallery/pull/37",
+      "head": "b61298a6a96fdb845e88de9ab2767e20973b5961",
+      "base": "f17e9ae5869669d5fbac3720f285652d0c37551c",
+      "tree": "39a468dbfd0f384a73275c843afad064a3abb429",
+      "accepted": "5f245513dd7faba453938d8c292433fc6202f4b1",
+      "acceptedAt": "2026-09-29T15:23:39.912951+00:00",
+      "localAcceptance": "Fresh Node24 install, typecheck, audit0,117unit,catalog parity,production build and7 unchanged zero-retry browser cases pass. Published editor integrity and814 tracked regular files+27symlink targets bound. Four screenshots root-reviewed; original audit failure/scroll-placement visual observation retained."
+    },
+    {
+      "repo": "Data-Advantage/pptx-dev",
+      "number": 58,
+      "url": "https://github.com/Data-Advantage/pptx-dev/pull/58",
+      "head": "19ad2441ef0fe28365799f4ba1993b0b659040be",
+      "base": "2ca3ccaceb74b11e321def9a6910881b20aefa23",
+      "tree": "4098c15f29d902617de41863a30480c4c4dcbab1",
+      "accepted": "4613656add2ed810eb70a7dc3a8a995dd6618255",
+      "acceptedAt": "2026-09-29T15:33:06.866907+00:00",
+      "localAcceptance": "Current Node24 frozeninstall/audit/737unit+13standalone/type/build/nonincrementaltype/49browser pass, zero retries. 205-entry evidence rehashed;2frames independently viewed. Four accepted-publication guards and local preset history accepted; signed-in response-ordering/effects and old center/rail selection mismatch excluded."
+    },
+    {
+      "repo": "Data-Advantage/openpresentation-site",
+      "number": 48,
+      "url": "https://github.com/Data-Advantage/openpresentation-site/pull/48",
+      "head": "3345aa95e2cef5f48c05524b5355103b633ae51b",
+      "base": "a85bcc77d899ce9ba1df659548be564142c16120",
+      "tree": "af689dada5d681e964db02917e2d6a4c2e70250c",
+      "accepted": "aa2a66eabac4a0628b462d961b3cc6e0ba954ba2",
+      "acceptedAt": "2026-09-29T15:34:03.830024+00:00",
+      "localAcceptance": "Node24 frozeninstall/audit0/build/type/regression/registry and27browser pass. Ten visualframes reviewed;9byteexact,26pixels in expected CircleCheck stroke independently inspected. Original audit and syntax-color failures retained; scoped fast-uri3.1.7 andLezercommon1.5.3 corrections with genuine failing-before/passing-after public highlight control. 183-entry evidence independently rehashed."
+    },
+    {
+      "repo": "Data-Advantage/pptx-dev",
+      "number": 51,
+      "url": "https://github.com/Data-Advantage/pptx-dev/pull/51",
+      "head": "083cd26a9b05f956b35fc5dd98c35da494180048",
+      "base": "4613656add2ed810eb70a7dc3a8a995dd6618255",
+      "tree": "7a958f4f21bd1fc4396786a616e84af217b8380c",
+      "accepted": "03255b3e81dc04223936bbf30bbba2eb3d45dcbf",
+      "acceptedAt": "2026-09-29T15:50:58.492838+00:00",
+      "localAcceptance": "Node24 frozeninstall/audit0,737unit+13standalone, appSDKCLItype/declaration/build/bundle/help,49browser pass. 456-entry independentproof; all9sourceblobs and22packageartifacts bound;13callbackexpressions matchTS5.9/21positive/8expectednegative preserved. Visual43comparison33exact+boundedtransientdifferences reviewed. Preexisting standaloneCLItypepackaging gate retained; no native/auth/releaseclaim."
+    },
+    {
+      "repo": "Data-Advantage/pptx-gallery",
+      "number": 48,
+      "url": "https://github.com/Data-Advantage/pptx-gallery/pull/48",
+      "head": "515e4405383495b53dfdc678382dc2cab4c74f20",
+      "base": "5f245513dd7faba453938d8c292433fc6202f4b1",
+      "tree": "4e1e13edb51d74ab98db1b0463ec2939032db526",
+      "accepted": "ca8fbf0babf4e2c80ba25873da35add8d1f49df7",
+      "acceptedAt": "2026-09-29T16:13:19.864445+00:00",
+      "localAcceptance": "135 units; 7 original and 5 scoped browser cases, once/zero retries; Node24 frozen install/audit/type/registry/editor integrity/build; root reviewed exact 5 files, 89 evidence entries, 843 source inputs and visible export refusal. Existing metric wrapping and unsupported images remain separate."
+    },
+    {
+      "repo": "Data-Advantage/pptx-dev",
+      "number": 56,
+      "url": "https://github.com/Data-Advantage/pptx-dev/pull/56",
+      "head": "6e9d866f64fcc2a1fdd827122a1a55e10f901e75",
+      "base": "03255b3e81dc04223936bbf30bbba2eb3d45dcbf",
+      "tree": "147184d552da6f2a46e64fe955574c66269e1a2a",
+      "accepted": "c490ac70e06bf07b1efc2845f146d822ffca6973",
+      "acceptedAt": "2026-09-29T16:32:20.578501+00:00",
+      "localAcceptance": "Fresh Node 24: frozen install, audit 0, 737 unit cases, 13 standalone checks, app/SDK/CLI type and build, 49 browser cases, eight HTTP MCP limit controls via CJS and public ESM. Source and bundle integrity, scoped visual review, final evidence manifest ed11b784b6e554c546700f3ece901ebc14e952706b04ae356985b5e90b99578e. No native/font, live-provider, standalone CLI package release or production acceptance claim."
+    },
+    {
+      "repo": "OpenPresentation/opf-pptx",
+      "number": 90,
+      "url": "https://github.com/OpenPresentation/opf-pptx/pull/90",
+      "head": "1855f86a83ca8440d0d743d2a0e2a0d64df4c0f9",
+      "base": "11f7fb0bb0ba2ac35afe859916ba936262eed748",
+      "tree": "f5129231e04f0812e0b7d8a1a68a3bc9d393eb2c",
+      "accepted": "54f7e4c02710d22a41fcb1a4cafd08676023b9be",
+      "acceptedAt": "2026-09-29T16:41:02.543185+00:00",
+      "localAcceptance": "Node24 full16-stage portable acceptance; 42body/123notes source, registry-packed and fresh installed; seven source browser suites and108 installed body checks. Root reviewed144 proof entries/441inputs andsix previewframes,609installed files bound. Two subsequent EOF-only newline removals independently verified with syntax/parity checks. No exact cross-shape/source-run recovery, native/font or release completion."
+    },
+    {
+      "repo": "Data-Advantage/pptx-gallery",
+      "number": 49,
+      "url": "https://github.com/Data-Advantage/pptx-gallery/pull/49",
+      "head": "dcd80c0e0d6ca4a2e7531bc159a1860a3a006060",
+      "base": "ca8fbf0babf4e2c80ba25873da35add8d1f49df7",
+      "tree": "edfe02518cdcae61e174a7f0601a811d9a7b7ec8",
+      "accepted": "4b48e6930cd1d698beab088bb9e22c801f3e1ab8",
+      "acceptedAt": "2026-09-29T16:41:10.380067+00:00",
+      "localAcceptance": "Fresh Node24 frozeninstall/audit0/type/editorintegrity/offline684registry/build;144units and7original+5scopedbrowsercases,once0retry. Exact15metricvalue/labelpairs preview/editundo/PPTX; unchanged chartdata/imagefailclosed; rootreviewed2files/129proofentries/844inputs andall4metricframes. Original44imagechanges remain held. No fullFF30/native/font/production/releaseclaim."
+    }
+  ]
+}

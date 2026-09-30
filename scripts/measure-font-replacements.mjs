@@ -4,9 +4,22 @@
 // Microsoft 365 cloud fonts). They are never copied, embedded or committed; the report keeps
 // only their version strings and SHA-256 digests. Replacement faces come from the pinned
 // @expo-google-fonts packages installed next to opf-render (or --packages <node_modules>).
+// Shaping uses fontkit default features. A row whose replacement lists disabledFeatures (Georgia ->
+// Gelasio: liga, clig) has its replacement shaped with those features off, exactly as opf-render
+// shapes and draws it; the reference font always uses default features.
 //
-// node scripts/measure-font-replacements.mjs [--packages <dir>] [--out <report.json>] [--check | --explore]
+// Vendored replacement families (opf-render fonts/<name>/, for example Intos) are read from the
+// opf-render checkout that holds the packages (the parent of --packages, or --render <dir>), through
+// its pinned src/font-manifest.js.
+// A reference font that is not installed on the host can be measured from a directory of font files
+// with --reference-dir <dir> (for example Aptos Serif from Microsoft's Aptos Fonts download). The
+// files are only read; nothing from them is copied or committed.
+//
+// node scripts/measure-font-replacements.mjs [--packages <dir>] [--render <dir>] [--reference-dir <dir>] [--out <report.json>] [--check | --explore | --update --families <a,b>]
 //   --check    compare the measured values with spec/reference/font-policy.json and fail on drift.
+//   --update   re-measure only the named policy families (--families "Century Gothic,Trebuchet MS") on this host and merge the rows into the
+//              committed report.json (rows for families this host cannot measure stay as recorded) and into each policy row's
+//              replacement.measured. The tier (compatibility) is never changed: a row stays visual unless a person edits it after the metric bar is met.
 //   --explore  rank every installed @expo-google-fonts package against each measurable family
 //              (writes candidates.json next to the report); this is how replacements were chosen.
 //              --only a,b limits the packages; --candidates-out names the output file.
@@ -15,7 +28,7 @@ import { createHash } from "node:crypto";
 import { readFileSync, readdirSync, statSync, writeFileSync, existsSync } from "node:fs";
 import { createRequire } from "node:module";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const args = process.argv.slice(2);
@@ -32,7 +45,7 @@ const corpus = JSON.parse(readFileSync(corpusFile, "utf8"));
 const sha256 = (bytes) => createHash("sha256").update(bytes).digest("hex");
 
 // Reference faces, indexed by preferred and legacy family name, weight and italic.
-const referenceDirs = [process.env.WINDIR && path.join(process.env.WINDIR, "Fonts"), process.env.LOCALAPPDATA && path.join(process.env.LOCALAPPDATA, "Microsoft/FontCache/4/CloudFonts"), "/Library/Fonts", "/System/Library/Fonts/Supplemental"].filter((dir) => dir && existsSync(dir));
+const referenceDirs = [...args.flatMap((arg, index) => arg === "--reference-dir" ? [path.resolve(args[index + 1])] : []), process.env.WINDIR && path.join(process.env.WINDIR, "Fonts"), process.env.LOCALAPPDATA && path.join(process.env.LOCALAPPDATA, "Microsoft/FontCache/4/CloudFonts"), "/Library/Fonts", "/System/Library/Fonts/Supplemental"].filter((dir) => dir && existsSync(dir));
 const walk = (dir) => readdirSync(dir).flatMap((name) => { const file = path.join(dir, name); return statSync(file).isDirectory() ? walk(file) : /\.(ttf|otf|ttc)$/i.test(name) ? [file] : []; });
 const faceInfo = (font) => ({ preferred: font.getName?.("preferredFamily", "en") ?? font.familyName, legacy: font.familyName, weight: font["OS/2"]?.usWeightClass ?? 400, italic: Boolean(font["OS/2"]?.fsSelection?.italic || font.italicAngle) });
 const references = new Map();
@@ -44,16 +57,40 @@ for (const file of referenceDirs.flatMap(walk)) {
     const info = faceInfo(font);
     for (const family of new Set([info.preferred, info.legacy])) {
       const key = `${family.toLowerCase()}|${info.weight}|${info.italic}`;
-      // Prefer the normal-width face when a preferred family also has condensed/expanded faces.
-      const width = font["OS/2"]?.usWidthClass ?? 5, previous = references.get(key);
-      if (!previous || (previous.width !== 5 && width === 5)) references.set(key, { font, width, file: path.basename(file), sha256: sha256(bytes), version: String(font.version ?? "") });
+      // Prefer the normal-width face when a preferred family also has condensed/expanded faces, and a
+      // face whose own family name matches over one that only shares the preferred name (Aptos Display
+      // has the preferred family Aptos in Microsoft's download).
+      const width = font["OS/2"]?.usWidthClass ?? 5, exact = family === info.legacy, previous = references.get(key);
+      if (!previous || (previous.width !== 5 && width === 5) || (previous.width === width && !previous.exact && exact)) references.set(key, { font, width, exact, file: path.basename(file), sha256: sha256(bytes), version: String(font.version ?? "") });
     }
   }
 }
 // Replacement faces from the pinned packages: <package>/<weight><Style>[_Italic]/<file>.ttf.
+// Vendored families come from the pinned opf-render manifest: <render>/fonts/<name>/<file>.ttf.
+const renderRoot = path.resolve(option("--render", path.dirname(packages)));
+const vendored = new Map();
+if (existsSync(path.join(renderRoot, "src/font-manifest.js"))) {
+  const { BUNDLED_FONT_MANIFEST } = await import(pathToFileURL(path.join(renderRoot, "src/font-manifest.js")).href);
+  for (const pkg of BUNDLED_FONT_MANIFEST.packages.filter((item) => item.vendored)) for (const face of pkg.faces) {
+    // opf-render main vendors a package under `vendored` (fonts/<name>); `version` is the pinned commit (git upstream) or the npm version.
+    const bytes = readFileSync(path.join(renderRoot, pkg.vendored, face.file));
+    assert.equal(sha256(bytes), face.sha256, `${pkg.name}/${face.file} differs from the pinned manifest`);
+    const label = /^[0-9a-f]{40}$/.test(pkg.version) ? pkg.version.slice(0, 12) : pkg.version;
+    vendored.set(`${face.family.toLowerCase()}|${face.weight}|${face.italic}`, { font: fontkit.create(bytes), family: face.family, italic: face.italic, weight: face.weight, package: `${pkg.name}@${label}`, file: face.file, sha256: face.sha256 });
+  }
+}
 const packageOf = (family) => `@expo-google-fonts/${family.toLowerCase().replace(/\s+/g, "-")}`;
 const faceCache = new Map();
+// A vendored family draws the requested weight when it ships it and otherwise its nearest weight of the same slope, as the renderer does
+// (Libre Caslon Text has no bold italic; its italic draws, reported visual).
+function nearestVendored(family, weight, italic) {
+  const choices = [...vendored.values()].filter((face) => face.family.toLowerCase() === family.toLowerCase() && face.italic === italic);
+  choices.sort((a, b) => Math.abs(a.weight - weight) - Math.abs(b.weight - weight) || a.weight - b.weight);
+  return choices[0] ?? null;
+}
 function replacementFace(family, weight, italic, pkg = packageOf(family)) {
+  const own = vendored.get(`${family.toLowerCase()}|${weight}|${italic}`) ?? nearestVendored(family, weight, italic);
+  if (own) return own;
   const id = `${pkg}|${weight}|${italic}`;
   if (!faceCache.has(id)) faceCache.set(id, loadReplacementFace(pkg, weight, italic));
   return faceCache.get(id);
@@ -69,18 +106,20 @@ function loadReplacementFace(pkg, weight, italic) {
   return { font: fontkit.create(bytes), weight: Number(choices[0].match[1]), package: `${pkg}@${JSON.parse(readFileSync(path.join(dir, "package.json"), "utf8")).version}`, file: `${choices[0].name}/${file}`, sha256: sha256(bytes) };
 }
 const cache = new WeakMap();
-function width(font, text) {
+function width(font, text, disabled = []) {
   let map = cache.get(font);
   if (!map) {
     map = new Map();
     cache.set(font, map);
   }
-  if (!map.has(text)) {
+  const key = `${disabled.join(",")}|${text}`;
+  if (!map.has(key)) {
     let value = NaN;
-    try { if ([...text].every((c) => font.hasGlyphForCodePoint(c.codePointAt(0)))) value = font.layout(text).positions.reduce((sum, p) => sum + p.xAdvance, 0) / font.unitsPerEm; } catch { value = NaN; }
-    map.set(text, value);
+    const features = disabled.length ? Object.fromEntries(disabled.map((tag) => [tag, false])) : undefined;
+    try { if ([...text].every((c) => font.hasGlyphForCodePoint(c.codePointAt(0)))) value = (features ? font.layout(text, features) : font.layout(text)).positions.reduce((sum, p) => sum + p.xAdvance, 0) / font.unitsPerEm; } catch { value = NaN; }
+    map.set(key, value);
   }
-  return map.get(text);
+  return map.get(key);
 }
 const STYLES = [[400, false], [700, false], [400, true], [700, true]];
 function measure(family, replacement, pkg) {
@@ -94,7 +133,7 @@ function measure(family, replacement, pkg) {
     const target = replacement.weight ?? (weight >= 600 ? 700 : 400);
     const face = replacementFace(replacement.family, target, italic, pkg);
     if (!face) continue;
-    const deltas = corpus.map((text) => { const a = width(ref.font, text), b = width(face.font, text); return Number.isFinite(a) && Number.isFinite(b) && a > 0 ? b / a - 1 : null; }).filter((value) => value !== null);
+    const deltas = corpus.map((text) => { const a = width(ref.font, text), b = width(face.font, text, replacement.disabledFeatures); return Number.isFinite(a) && Number.isFinite(b) && a > 0 ? b / a - 1 : null; }).filter((value) => value !== null);
     if (!deltas.length) continue;
     styles.push({ weight, italic, replacementWeight: face.weight, strings: deltas.length, meanAbs: deltas.reduce((s, d) => s + Math.abs(d), 0) / deltas.length, mean: deltas.reduce((s, d) => s + d, 0) / deltas.length, maxAbs: Math.max(...deltas.map(Math.abs)), reference: { file: ref.file, version: ref.version, sha256: ref.sha256 }, replacement: { package: face.package, file: face.file, sha256: face.sha256 } });
   }
@@ -111,8 +150,11 @@ function measure(family, replacement, pkg) {
 }
 
 const results = [];
+const onlyFamilies = args.includes("--update") ? new Set(option("--families", "").split(",").map((name) => name.trim().toLowerCase()).filter(Boolean)) : null;
+if (args.includes("--update")) assert.ok(onlyFamilies.size > 0, "--update needs --families <a,b>: name the policy families to re-measure");
 for (const row of policy.families) {
   if (!row.replacement || row.licenseClass === "open") continue;
+  if (onlyFamilies && !onlyFamilies.has(row.family.toLowerCase())) continue;
   const result = measure(row.family, row.replacement);
   results.push({ family: row.family, replacement: row.replacement.family, compatibility: row.replacement.compatibility, ...(row.replacement.weight ? { weight: row.replacement.weight } : {}), ...result });
 }
@@ -129,6 +171,22 @@ if (args.includes("--explore")) {
   }
   writeFileSync(path.join(path.dirname(output), option("--candidates-out", "candidates.json")), JSON.stringify({ tool: report.tool, corpus: report.corpus, packages: names.length, ranking }, null, 2) + "\n");
   console.log(`Ranked ${names.length} packages for ${ranking.length} families.`);
+} else if (args.includes("--update")) {
+  const reportFile = path.resolve(option("--report", path.join(root, "docs/evidence/font-replacements-20260923/report.json")));
+  const previous = JSON.parse(readFileSync(reportFile, "utf8")), policyFile = path.join(root, "spec/reference/font-policy.json"), raw = JSON.parse(readFileSync(policyFile, "utf8"));
+  const missing = [...onlyFamilies].filter((name) => !results.some((result) => result.family.toLowerCase() === name && !result.skipped));
+  assert.deepEqual(missing, [], `not measurable on this host (reference font or replacement face missing): ${missing.join(", ")}`);
+  for (const result of results) {
+    const index = previous.results.findIndex((item) => item.family === result.family);
+    if (index >= 0) previous.results[index] = result; else previous.results.push(result);
+    const row = raw.families.find((item) => item.family === result.family);
+    row.replacement.measured = { replacement: result.replacement, meanAbsWidthDelta: result.meanAbsWidthDelta, meanWidthDelta: result.meanWidthDelta, maxAbsWidthDelta: result.maxAbsWidthDelta, styles: result.styles, reference: result.reference };
+  }
+  previous.results.sort((a, b) => a.family.localeCompare(b.family));
+  previous.tool = report.tool;
+  writeFileSync(reportFile, `${JSON.stringify(previous, null, 2)}\n`);
+  writeFileSync(policyFile, `${JSON.stringify(raw, null, 2)}\n`);
+  console.log(`Updated ${results.length} measured rows in ${path.relative(root, reportFile)} and spec/reference/font-policy.json.`);
 } else if (args.includes("--check")) {
   const drift = [];
   for (const result of results) {

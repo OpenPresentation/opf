@@ -134,7 +134,8 @@ console.log(JSON.stringify({
   const opfVersion = plan.packages.find((item) => item.name === '@openpresentation/opf')?.version;
   const cliVersion = plan.packages.find((item) => item.name === '@openpresentation/cli')?.version;
   assert.equal(versionReport.cli, cliVersion);
-  assert.equal(versionReport.opf, opfVersion);
+  // The CLI bundles its own core: an unreleased CLI keeps the core it shipped with (release-plan bundledCore).
+  assert.equal(versionReport.opf, plan.bundledCore?.['@openpresentation/cli'] ?? opfVersion);
   const validated = await run(process.execPath, [cli, 'validate', 'deck.opf.json'], {cwd: projectDir});
   assert.equal(JSON.parse(validated.stdout).valid, true);
   const linted = await run(process.execPath, [cli, 'lint', 'deck.opf.json'], {cwd: projectDir});

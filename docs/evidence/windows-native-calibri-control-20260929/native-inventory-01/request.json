@@ -1,0 +1,45 @@
+﻿{
+    "schemaVersion":  1,
+    "kind":  "native-font-inventory",
+    "inputMode":  "control-deck",
+    "source":  {
+                   "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-native-20260929\\ff05-calibri-control-01\\calibri-control.pptx",
+                   "sha256":  "776147ddfd2a35ceca4480b66d58c82c9255609b5abe245a2b3bb342651ebce5",
+                   "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-native-20260929\\ff05-calibri-control-01\\native-inventory-01\\inputs\\source.pptx",
+                   "snapshotSha256":  "776147ddfd2a35ceca4480b66d58c82c9255609b5abe245a2b3bb342651ebce5"
+               },
+    "fixture":  null,
+    "verifier":  {
+                     "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-native-20260929\\sources\\opf-pptx\\test\\native-font-inventory.ps1",
+                     "sha256":  "f8f24330db965436167758e54f907e1cc9b6bd9eb25e30b5110796823701ae7f",
+                     "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-native-20260929\\ff05-calibri-control-01\\native-inventory-01\\inputs\\native-font-inventory.ps1",
+                     "snapshotSha256":  "f8f24330db965436167758e54f907e1cc9b6bd9eb25e30b5110796823701ae7f"
+                 },
+    "processHelper":  {
+                          "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-native-20260929\\sources\\opf-pptx\\test\\native-process.ps1",
+                          "sha256":  "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+                          "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-native-20260929\\ff05-calibri-control-01\\native-inventory-01\\inputs\\native-process.ps1",
+                          "snapshotSha256":  "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+                      },
+    "fontHelper":  {
+                       "path":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-native-20260929\\sources\\opf-pptx\\test\\native-text-fonts.ps1",
+                       "sha256":  "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6",
+                       "snapshotPath":  "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-native-20260929\\ff05-calibri-control-01\\native-inventory-01\\inputs\\native-text-fonts.ps1",
+                       "snapshotSha256":  "853d51c68d123c354748e948dbcb8c31aaa923dc6319734dfb393010e8cb3ba6"
+                   },
+    "fontRegistration":  {
+                             "mode":  "none",
+                             "flags":  null
+                         },
+    "bounds":  {
+                   "maxPresentationFonts":  64,
+                   "maxSlides":  2,
+                   "maxShapesPerSlide":  10,
+                   "maxParagraphsPerShape":  12,
+                   "maxParagraphsTotal":  24,
+                   "maxRunsPerShape":  24,
+                   "maxRunsTotal":  40,
+                   "maxTextCharacters":  1024
+               },
+    "scope":  "Open one owned input snapshot read-only, enumerate Presentation.Fonts first, then theme font slots and bounded whole-range, paragraph and run Font2 slots on slides and the first slide master, then close that exact presentation. No edit, save, export, reopen, embedding or application quit."
+}

@@ -5,6 +5,8 @@ import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { registryToolchain } from './registry-toolchain.mjs';
+import { galleryScriptFontManifestForExample } from './gallery-script-fonts.mjs';
+import { galleryLazyFontManifestForExample } from './gallery-lazy-fonts.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const registry = await registryToolchain();
@@ -96,6 +98,19 @@ for (const file of Object.keys(bundle.metafile.inputs)) {
 }
 const { loadOfficeFontRegistry } = await registry.import('@openpresentation/opf-render/fonts-node');
 await writeFile(path.join(out, 'fonts.json'), JSON.stringify((await loadOfficeFontRegistry()).embeddedFonts));
+// FF-19 script fonts: when the pinned editor example fetches faces from ./script-fonts/, ship the hash-pinned manifest
+// (the build fails if the pinned renderer has no script pack). The faces themselves are binaries: the gallery build copies them from
+// the pinned npm packages into an untracked path, verifying every hash (see gallery-script-fonts.mjs).
+const scriptFontManifest = galleryScriptFontManifestForExample(await registry.import('@openpresentation/opf-render/fonts-node'), await readFile(path.join(source, 'playground.js'), 'utf8'));
+if (scriptFontManifest) await writeFile(path.join(out, 'script-fonts.json'), JSON.stringify(scriptFontManifest, null, 2) + '\n');
+else await rm(path.join(out, 'script-fonts.json'), { force: true });
+// FF-31 vendored faces (Intos for the Aptos scheme, the open families): when the pinned editor example calls ensureLazyFonts, ship
+// the hash-pinned manifest only. The faces are binaries the gallery build copies from the pinned renderer package's fonts/ directory
+// into an untracked path, verifying every hash (see gallery-lazy-fonts.mjs); fonts.json stays the renderer's eager faces.
+const rendererVersion = registry.packages.find(item => item.name === '@openpresentation/opf-render')?.version;
+const lazyFontManifest = galleryLazyFontManifestForExample(await registry.import('@openpresentation/opf-render/fonts-node'), rendererVersion, await readFile(path.join(source, 'playground.js'), 'utf8'));
+if (lazyFontManifest) await writeFile(path.join(out, 'lazy-fonts.json'), `${JSON.stringify(lazyFontManifest, null, 2)}\n`);
+else await rm(path.join(out, 'lazy-fonts.json'), { force: true });
 await copyFile(path.join(source, 'playground.css'), path.join(out, 'playground.css'));
 await copyFile(path.join(source, 'galleries.json'), path.join(out, 'galleries.json'));
 const revision = sha256(Buffer.concat(await Promise.all(['playground.js', 'playground.css'].map(file => readFile(path.join(out, file)))))).slice(0, 12);
@@ -121,13 +136,16 @@ await writeFile(path.join(out, 'opf-spec.json'), JSON.stringify({
   schemaDigest: sha256(JSON.stringify(opfSchemas)), fieldCount: fields.length, schemas: opfSchemas, fields,
 }));
 const files = {};
-for (const file of ['index.html', 'playground.js', 'playground.js.LEGAL.txt', 'playground.css', 'fonts.json', 'galleries.json', 'gallery.json', 'opf-spec.json']) {
+for (const file of ['index.html', 'playground.js', 'playground.js.LEGAL.txt', 'playground.css', 'fonts.json', 'galleries.json', 'gallery.json', 'opf-spec.json', ...(scriptFontManifest ? ['script-fonts.json'] : []), ...(lazyFontManifest ? ['lazy-fonts.json'] : [])]) {
   files[file] = sha256(await readFile(path.join(out, file)));
 }
 await writeFile(path.join(out, 'manifest.json'), JSON.stringify({
   source: 'npm', packages: registry.packages,
   editorExamples: { commit: ref, files: exampleSources },
-  galleryDocuments: gallery.items.length, files,
+  galleryDocuments: gallery.items.length,
+  ...(scriptFontManifest ? { scriptFonts: { packages: scriptFontManifest.packages.length, faces: scriptFontManifest.packages.reduce((total, item) => total + item.faces.length, 0) } } : {}),
+  ...(lazyFontManifest ? { lazyFonts: { packages: lazyFontManifest.packages.length, faces: lazyFontManifest.packages.reduce((total, item) => total + item.faces.length, 0) } } : {}),
+  files,
 }, null, 2) + '\n');
 if (await realpath(source) !== actualSource || await realpath(out) !== actualOut) throw new Error('Gallery staging location changed during build');
 await rm(source, { recursive: true });

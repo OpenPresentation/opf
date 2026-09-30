@@ -1,0 +1,34 @@
+{
+  "capturedAt": "2026-09-29T09:53:02.727786+00:00",
+  "run": 36550576333,
+  "attempt": 1,
+  "event": "push",
+  "head": "357171a5ceb798ccd550207ec365b08a694c5d6d",
+  "tree": "dd340476cf97b72feb51004fb851656a90a0c87d",
+  "conclusion": "success",
+  "url": "https://github.com/OpenPresentation/opf-pptx/actions/runs/36550576333",
+  "jobs": [
+    {
+      "id": 109347473818,
+      "name": "package (ubuntu-latest)",
+      "conclusion": "success",
+      "started_at": "2026-09-29T09:39:34Z",
+      "completed_at": "2026-09-29T09:45:32Z",
+      "html_url": "https://github.com/OpenPresentation/opf-pptx/actions/runs/36550576333/job/109347473818"
+    },
+    {
+      "id": 109347474167,
+      "name": "package (windows-latest)",
+      "conclusion": "success",
+      "started_at": "2026-09-29T09:39:35Z",
+      "completed_at": "2026-09-29T09:51:29Z",
+      "html_url": "https://github.com/OpenPresentation/opf-pptx/actions/runs/36550576333/job/109347474167"
+    }
+  ],
+  "allShippedFilesAndFixturesBound": true,
+  "artifactsDigestAndCrcPass": true,
+  "artifactIntegrity": "artifact-integrity.json",
+  "sourceBinding": "tested-source-binding.json",
+  "nativeOfficeAcceptance": false,
+  "reruns": 0
+}

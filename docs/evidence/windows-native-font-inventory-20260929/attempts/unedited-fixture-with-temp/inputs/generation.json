@@ -1,0 +1,1251 @@
+{
+  "schemaVersion": 1,
+  "kind": "native-font-edit-fixture",
+  "node": "v24.21.0",
+  "generatorSha256": "be87ab6bec058de193bfad8de457e751d0dda7a77775508f59f77ce2e2ba6886",
+  "generatorSha256Lf": "c7e4c545003e85961326bfcb7e3116f66e2c1d5c54d5e4b8ff6836e77b308d38",
+  "registryLockSha256": "4868f13254e3e681566164da8427d3716ceaa025435e4606e5e15fc8a87bc305",
+  "bindings": {
+    "@openpresentation/opf": {
+      "version": "0.11.0",
+      "manifestPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf\\package.json",
+      "manifestSha256": "86364f07f30f5106539a936b4eb84cf5a00c53524599b222f823b2460efb3a0f",
+      "entry": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf\\dist\\index.js",
+      "entrySha256": "568ca647007962a3046094bb3d8e6d2dcfed0c9f463c91e4a9839c86a81b381f",
+      "resolved": "https://registry.npmjs.org/@openpresentation/opf/-/opf-0.11.0.tgz",
+      "integrity": "sha512-7Gm/FSyiGngHRkDG0SPL8V6FEC5nC8UpoffNWf8CqkyjXsqQ2BUIzVAEwHwKjEsEZ04FR2DT+Ohh8PJofNPFiw=="
+    },
+    "@openpresentation/opf-render": {
+      "version": "0.9.0",
+      "manifestPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf-render\\package.json",
+      "manifestSha256": "ab5cac6fc9588b3ba694fd17a0d1bde952ebabb60977a13089626b2ec146d84f",
+      "entry": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf-render\\dist\\index.js",
+      "entrySha256": "1fdb45740a09bb6f48eb5dc79def3ffe692acdf0a5c319727edf4e19c0020d78",
+      "resolved": "https://registry.npmjs.org/@openpresentation/opf-render/-/opf-render-0.9.0.tgz",
+      "integrity": "sha512-uHWABof7cuLmTAglctvcjuV5dRyIa2qmeGdwONIuKCAnNQXjAOQKXido9OcyGtk6xFjzBFtLtvD3sZOwPEJIJA=="
+    },
+    "@openpresentation/opf-pptx": {
+      "version": "0.9.1",
+      "manifestPath": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf-pptx\\package.json",
+      "manifestSha256": "be4944ae7405ff4d92238118eafebb93af433c53519145785553eecc3a4ef8bd",
+      "entry": "C:\\Users\\micha\\.codex\\worktrees\\fd3f\\opf\\artifacts\\windows-resume-20260921\\registry-consumer\\node_modules\\@openpresentation\\opf-pptx\\dist\\index.js",
+      "entrySha256": "ba8fa87cebb32db9675f71bec91cc257e8d02a9d0977ca133666c6257eb07716",
+      "resolved": "https://registry.npmjs.org/@openpresentation/opf-pptx/-/opf-pptx-0.9.1.tgz",
+      "integrity": "sha512-krzDAKjDByP2zsoR4VeyyIwU7uhcVbxpeBYEIw7vlkoRWWiFq170rhQzQZx5lbMD7u2magYEkdUt3rUgByCKjw=="
+    }
+  },
+  "bindingScope": "Manifest and resolved public entry hashes plus registry lock. This does not bind every transitive installed byte.",
+  "source": {
+    "file": "source.pptx",
+    "sha256": "f505236ecef4fad838a198449adede1f4afa39d7bac74613626eee2f2a419aeb"
+  },
+  "package": {
+    "name": "@expo-google-fonts/carlito",
+    "version": "0.4.1",
+    "manifestSha256": "cada00d32e296a97db384203c837750567583d16dd3e66b6f7337bd8e6bb80d6",
+    "resolved": "https://registry.npmjs.org/@expo-google-fonts/carlito/-/carlito-0.4.1.tgz",
+    "integrity": "sha512-S4vhxWiS1mKp6AAx44VvNt7edQhnoXJU3obKcBZRjMkvQn0MJlm+Sz3O2bhcXy3h01CMi/soREOjDcZYFDzL/Q==",
+    "link": false
+  },
+  "license": {
+    "file": "LICENSE_FONT",
+    "spdx": "OFL-1.1",
+    "sha256": "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00"
+  },
+  "registration": {
+    "flags": 0,
+    "ownership": "Surviving parent removes only its successful session additions in finally."
+  },
+  "fonts": [
+    {
+      "file": "fonts/Carlito-400-normal.ttf",
+      "sha256": "ca019755404c45627a8566915df99068949dc32ee2bce48d6aeee7542d2a0a89"
+    },
+    {
+      "file": "fonts/Carlito-400-italic.ttf",
+      "sha256": "074cd1b89d53765d90d0ed3b4bfe49523efaaf4f3f430c006bc3233778b0ebb5"
+    },
+    {
+      "file": "fonts/Carlito-700-normal.ttf",
+      "sha256": "51edbfa32d8af939913ae1f4ad0a5173e32083499218c133384638090295f0b0"
+    },
+    {
+      "file": "fonts/Carlito-700-italic.ttf",
+      "sha256": "25f5672c1985d168d6bc2973864fc5a7e374bb95fe8d0f91cff47ae17fa67691"
+    }
+  ],
+  "edit": {
+    "title": "Gate E - Carlito",
+    "titleFont": "Carlito",
+    "titleSizePoints": 30,
+    "titleBold": true,
+    "body": "Regular 18 | Bold 20 | Italic 22 | BoldItalic 24",
+    "spans": [
+      {
+        "start": 1,
+        "length": 10,
+        "size": 18,
+        "bold": false,
+        "italic": false
+      },
+      {
+        "start": 14,
+        "length": 7,
+        "size": 20,
+        "bold": true,
+        "italic": false
+      },
+      {
+        "start": 24,
+        "length": 9,
+        "size": 22,
+        "bold": false,
+        "italic": true
+      },
+      {
+        "start": 36,
+        "length": 13,
+        "size": 24,
+        "bold": true,
+        "italic": true
+      }
+    ]
+  },
+  "scope": "Fixture generation only; no font registration, Office call, PDF, embedding or native acceptance.",
+  "carlitoOnly": {
+    "variant": "carlito-only+harness-master-bullet-font",
+    "helper": {
+      "file": "test/native-font-embed-fixture-source.mjs",
+      "sha256Lf": "90205bec36a5405c41105eabe349dc2a657ba326769e251aede9a9e4d409b750"
+    },
+    "exporterOutput": {
+      "file": "exporter-output.pptx",
+      "sha256": "14229e8ce663511fadf7c1aa035bd18e33a513d97a1825174c6171c7c605c0d2"
+    },
+    "harnessTransforms": [
+      {
+        "id": "master-bullet-font-carlito",
+        "owner": "test/native-font-edit-fixture.mjs (harness-owned; not exporter output)",
+        "part": "ppt/slideMasters/slideMaster1.xml",
+        "from": "<a:buFont typeface=\"Arial\" pitchFamily=\"34\" charset=\"0\"/>",
+        "to": "<a:buFont typeface=\"Carlito\" pitchFamily=\"34\" charset=\"0\"/>",
+        "expectedCount": 9,
+        "reason": "Vendored PptxGenJS master bodyStyle hard-codes Arial bullets; OPF input cannot express the master bullet font, and Presentation.Fonts may report it.",
+        "replacements": 9,
+        "inputSha256": "14229e8ce663511fadf7c1aa035bd18e33a513d97a1825174c6171c7c605c0d2",
+        "outputSha256": "f505236ecef4fad838a198449adede1f4afa39d7bac74613626eee2f2a419aeb"
+      }
+    ],
+    "themeFontSlots": {
+      "majorFont": {
+        "latin": "Carlito",
+        "ea": "",
+        "cs": ""
+      },
+      "minorFont": {
+        "latin": "Carlito",
+        "ea": "",
+        "cs": ""
+      }
+    },
+    "typefaceInventory": [
+      {
+        "element": "a:buFont",
+        "script": null,
+        "typeface": "Carlito",
+        "occurrences": 9,
+        "parts": [
+          "ppt/slideMasters/slideMaster1.xml"
+        ]
+      },
+      {
+        "element": "a:cs",
+        "script": null,
+        "typeface": "",
+        "occurrences": 2,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:cs",
+        "script": null,
+        "typeface": "+mj-cs",
+        "occurrences": 1,
+        "parts": [
+          "ppt/slideMasters/slideMaster1.xml"
+        ]
+      },
+      {
+        "element": "a:cs",
+        "script": null,
+        "typeface": "+mn-cs",
+        "occurrences": 36,
+        "parts": [
+          "ppt/notesMasters/notesMaster1.xml",
+          "ppt/presentation.xml",
+          "ppt/slideMasters/slideMaster1.xml"
+        ]
+      },
+      {
+        "element": "a:cs",
+        "script": null,
+        "typeface": "Carlito",
+        "occurrences": 2,
+        "parts": [
+          "ppt/slides/slide1.xml"
+        ]
+      },
+      {
+        "element": "a:ea",
+        "script": null,
+        "typeface": "",
+        "occurrences": 2,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:ea",
+        "script": null,
+        "typeface": "+mj-ea",
+        "occurrences": 1,
+        "parts": [
+          "ppt/slideMasters/slideMaster1.xml"
+        ]
+      },
+      {
+        "element": "a:ea",
+        "script": null,
+        "typeface": "+mn-ea",
+        "occurrences": 36,
+        "parts": [
+          "ppt/notesMasters/notesMaster1.xml",
+          "ppt/presentation.xml",
+          "ppt/slideMasters/slideMaster1.xml"
+        ]
+      },
+      {
+        "element": "a:ea",
+        "script": null,
+        "typeface": "Carlito",
+        "occurrences": 2,
+        "parts": [
+          "ppt/slides/slide1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Arab",
+        "typeface": "Arial",
+        "occurrences": 1,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Arab",
+        "typeface": "Times New Roman",
+        "occurrences": 1,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Armn",
+        "typeface": "Arial",
+        "occurrences": 2,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Beng",
+        "typeface": "Vrinda",
+        "occurrences": 2,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Bopo",
+        "typeface": "Microsoft JhengHei",
+        "occurrences": 2,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Bugi",
+        "typeface": "Leelawadee UI",
+        "occurrences": 2,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Cans",
+        "typeface": "Euphemia",
+        "occurrences": 2,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Cher",
+        "typeface": "Plantagenet Cherokee",
+        "occurrences": 2,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Deva",
+        "typeface": "Mangal",
+        "occurrences": 2,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Ethi",
+        "typeface": "Nyala",
+        "occurrences": 2,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Geor",
+        "typeface": "Sylfaen",
+        "occurrences": 2,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Gujr",
+        "typeface": "Shruti",
+        "occurrences": 2,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Guru",
+        "typeface": "Raavi",
+        "occurrences": 2,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Hang",
+        "typeface": "맑은 고딕",
+        "occurrences": 2,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Hans",
+        "typeface": "等线",
+        "occurrences": 1,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Hans",
+        "typeface": "等线 Light",
+        "occurrences": 1,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Hant",
+        "typeface": "新細明體",
+        "occurrences": 2,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Hebr",
+        "typeface": "Arial",
+        "occurrences": 1,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Hebr",
+        "typeface": "Times New Roman",
+        "occurrences": 1,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Java",
+        "typeface": "Javanese Text",
+        "occurrences": 2,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Jpan",
+        "typeface": "游ゴシック",
+        "occurrences": 1,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Jpan",
+        "typeface": "游ゴシック Light",
+        "occurrences": 1,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Khmr",
+        "typeface": "DaunPenh",
+        "occurrences": 1,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Khmr",
+        "typeface": "MoolBoran",
+        "occurrences": 1,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Knda",
+        "typeface": "Tunga",
+        "occurrences": 2,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Laoo",
+        "typeface": "DokChampa",
+        "occurrences": 2,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Lisu",
+        "typeface": "Segoe UI",
+        "occurrences": 2,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Mlym",
+        "typeface": "Kartika",
+        "occurrences": 2,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Mong",
+        "typeface": "Mongolian Baiti",
+        "occurrences": 2,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Mymr",
+        "typeface": "Myanmar Text",
+        "occurrences": 2,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Nkoo",
+        "typeface": "Ebrima",
+        "occurrences": 2,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Olck",
+        "typeface": "Nirmala UI",
+        "occurrences": 2,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Orya",
+        "typeface": "Kalinga",
+        "occurrences": 2,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Osma",
+        "typeface": "Ebrima",
+        "occurrences": 2,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Phag",
+        "typeface": "Phagspa",
+        "occurrences": 2,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Sinh",
+        "typeface": "Iskoola Pota",
+        "occurrences": 2,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Sora",
+        "typeface": "Nirmala UI",
+        "occurrences": 2,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Syrc",
+        "typeface": "Estrangelo Edessa",
+        "occurrences": 2,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Syre",
+        "typeface": "Estrangelo Edessa",
+        "occurrences": 2,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Syrj",
+        "typeface": "Estrangelo Edessa",
+        "occurrences": 2,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Syrn",
+        "typeface": "Estrangelo Edessa",
+        "occurrences": 2,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Tale",
+        "typeface": "Microsoft Tai Le",
+        "occurrences": 2,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Talu",
+        "typeface": "Microsoft New Tai Lue",
+        "occurrences": 2,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Taml",
+        "typeface": "Latha",
+        "occurrences": 2,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Telu",
+        "typeface": "Gautami",
+        "occurrences": 2,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Tfng",
+        "typeface": "Ebrima",
+        "occurrences": 2,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Thaa",
+        "typeface": "MV Boli",
+        "occurrences": 2,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Thai",
+        "typeface": "Angsana New",
+        "occurrences": 1,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Thai",
+        "typeface": "Cordia New",
+        "occurrences": 1,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Tibt",
+        "typeface": "Microsoft Himalaya",
+        "occurrences": 2,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Uigh",
+        "typeface": "Microsoft Uighur",
+        "occurrences": 2,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Viet",
+        "typeface": "Arial",
+        "occurrences": 1,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Viet",
+        "typeface": "Times New Roman",
+        "occurrences": 1,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:font",
+        "script": "Yiii",
+        "typeface": "Microsoft Yi Baiti",
+        "occurrences": 2,
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "element": "a:latin",
+        "script": null,
+        "typeface": "+mj-lt",
+        "occurrences": 1,
+        "parts": [
+          "ppt/slideMasters/slideMaster1.xml"
+        ]
+      },
+      {
+        "element": "a:latin",
+        "script": null,
+        "typeface": "+mn-lt",
+        "occurrences": 36,
+        "parts": [
+          "ppt/notesMasters/notesMaster1.xml",
+          "ppt/presentation.xml",
+          "ppt/slideMasters/slideMaster1.xml"
+        ]
+      },
+      {
+        "element": "a:latin",
+        "script": null,
+        "typeface": "Carlito",
+        "occurrences": 4,
+        "parts": [
+          "ppt/slides/slide1.xml",
+          "ppt/theme/theme1.xml"
+        ]
+      }
+    ],
+    "residualNonCarlito": [
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Arab",
+        "typeface": "Arial",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Arab",
+        "typeface": "Times New Roman",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Armn",
+        "typeface": "Arial",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Beng",
+        "typeface": "Vrinda",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Bopo",
+        "typeface": "Microsoft JhengHei",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Bugi",
+        "typeface": "Leelawadee UI",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Cans",
+        "typeface": "Euphemia",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Cher",
+        "typeface": "Plantagenet Cherokee",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Deva",
+        "typeface": "Mangal",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Ethi",
+        "typeface": "Nyala",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Geor",
+        "typeface": "Sylfaen",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Gujr",
+        "typeface": "Shruti",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Guru",
+        "typeface": "Raavi",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Hang",
+        "typeface": "맑은 고딕",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Hans",
+        "typeface": "等线",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Hans",
+        "typeface": "等线 Light",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Hant",
+        "typeface": "新細明體",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Hebr",
+        "typeface": "Arial",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Hebr",
+        "typeface": "Times New Roman",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Java",
+        "typeface": "Javanese Text",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Jpan",
+        "typeface": "游ゴシック",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Jpan",
+        "typeface": "游ゴシック Light",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Khmr",
+        "typeface": "DaunPenh",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Khmr",
+        "typeface": "MoolBoran",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Knda",
+        "typeface": "Tunga",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Laoo",
+        "typeface": "DokChampa",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Lisu",
+        "typeface": "Segoe UI",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Mlym",
+        "typeface": "Kartika",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Mong",
+        "typeface": "Mongolian Baiti",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Mymr",
+        "typeface": "Myanmar Text",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Nkoo",
+        "typeface": "Ebrima",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Olck",
+        "typeface": "Nirmala UI",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Orya",
+        "typeface": "Kalinga",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Osma",
+        "typeface": "Ebrima",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Phag",
+        "typeface": "Phagspa",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Sinh",
+        "typeface": "Iskoola Pota",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Sora",
+        "typeface": "Nirmala UI",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Syrc",
+        "typeface": "Estrangelo Edessa",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Syre",
+        "typeface": "Estrangelo Edessa",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Syrj",
+        "typeface": "Estrangelo Edessa",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Syrn",
+        "typeface": "Estrangelo Edessa",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Tale",
+        "typeface": "Microsoft Tai Le",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Talu",
+        "typeface": "Microsoft New Tai Lue",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Taml",
+        "typeface": "Latha",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Telu",
+        "typeface": "Gautami",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Tfng",
+        "typeface": "Ebrima",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Thaa",
+        "typeface": "MV Boli",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Thai",
+        "typeface": "Angsana New",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Thai",
+        "typeface": "Cordia New",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Tibt",
+        "typeface": "Microsoft Himalaya",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Uigh",
+        "typeface": "Microsoft Uighur",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Viet",
+        "typeface": "Arial",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Viet",
+        "typeface": "Times New Roman",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      },
+      {
+        "code": "theme-script-supplement",
+        "element": "a:font",
+        "script": "Yiii",
+        "typeface": "Microsoft Yi Baiti",
+        "parts": [
+          "ppt/theme/theme1.xml"
+        ]
+      }
+    ],
+    "docPropsFontsUsed": {
+      "values": [
+        "Arial",
+        "Calibri"
+      ],
+      "note": "Static PptxGenJS docProps/app.xml metadata; not a text/theme slot and not transformed. PowerPoint rewrites it on save."
+    },
+    "scope": "Static XML inventory of source.pptx. PowerPoint Presentation.Fonts is decided natively and may still report names this inventory cannot predict."
+  }
+}

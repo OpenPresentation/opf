@@ -1,6 +1,6 @@
 # Program: font fidelity everywhere
 
-Status: **active** (opened 2026-09-23). Tracker: [burndown.md](burndown.md).
+Status: **active** (opened 2026-09-23). Tracker: [burndown.md](burndown.md); per-font tracker: [font-tracker.md](font-tracker.md).
 This is the single source of truth for the cross-repository program. Agents and
 people resuming work start here, not from chat history or local scratch files.
 
@@ -107,11 +107,52 @@ linked, and specifically:
 - 2026-09-23 (owner): charts are reduced to the chart types Aspose.Slides
   documents as supported. Tracked as FF-22.
 
+- 2026-09-29 (owner): during the Actions credit shortage, run appropriate local
+  tests and merge reviewed PRs when those tests pass. Preserve original CI
+  denials/failures and separate local, cross-platform, native and release claims.
+  This merge policy does not complete criteria that still need platform/native
+  evidence, lower tolerances or authorize skipping release-specific gates.
+
+- 2026-09-29 (owner): look-alike fonts and the PPTX font name. First message,
+  verbatim: "look-alike fonts are to get around any font licensing
+  restrictions. They are desirable for open source but if we export to
+  PowerPoint the pptx file should include references to the font they selected
+  and want to see in PowerPoint. If this isn't clear in docs/markdown
+  everywhere then it should be." Later message, verbatim: "so a scenario... if
+  the user wants Aptos... if Aptos is license restricted we can substitute a
+  font (Aptos2 or whatever it's named) that looks similar and has the same size
+  in pixels on the screen for rendering live previews of SVG. When we export to
+  PPTX we should have PowerPoint open that file and display actual Aptos."
+  Consequences:
+  - The user's selected font is the source of truth. License-restricted
+    (proprietary) fonts are never bundled or embedded.
+  - For previews, SVG, the editor and thumbnails, the replacement should look
+    similar and be metric-compatible (same advance widths and line metrics), so
+    text occupies the same size on screen and wraps identically to PowerPoint.
+    A metric-compatible look-alike is the goal (Calibri to Carlito, Aptos to
+    Intos).
+  - Where no metric-compatible open replacement exists yet, a
+    visual-only look-alike is a documented fallback and a known layout-fidelity
+    gap to close, not the intended end state.
+  - PPTX export always writes the selected font name (for example
+    `typeface="Aptos"` in the theme and in runs), never the replacement, so
+    PowerPoint opens the file and shows the actual font (installed or Office
+    cloud font). Only open fonts may be embedded, through FF-13.
+  - The FF-38 `fontResolution` check must accept the
+    [policy table](font-licensing.md)'s replacements for license-restricted fonts,
+    provided the PPTX keeps the selected name: a metric-compatible replacement
+    is perfect, and a visual-only replacement is classified near, not perfect.
+    The harness and scoreboard change merged in
+    [opf#159](https://github.com/OpenPresentation/opf/pull/159); this entry
+    changes no gate.
+  - The canonical statement is in [font-fidelity.md](../../font-fidelity.md#font-policy-ff-31).
+    The sibling repositories link to it.
+
 ## Scope
 
 | In scope | Out of scope |
 | --- | --- |
-| opf core spec/catalog docs, evidence, ecosystem tests | Package publication, version bumps, site deploys (separate release task) |
+| opf core spec/catalog docs, evidence, ecosystem tests | Package publication, version bumps, site deploys (separate release task; the owner authorized agents to publish on 2026-09-29, see [release-process.md](../../release-process.md)) |
 | opf-pptx export, importer compatibility, native harnesses | Native PowerPoint header/footer objects (`p:hf`); OPF furniture export is in scope |
 | opf-render preview font resolution and re-render checks | Deferred geometry drafts (core94, PPTX42, renderer27, editor25) |
 | opf-editor switch operations and preview refresh | Archived shaping work |
@@ -122,8 +163,9 @@ openpresentation-site only consume released packages; they change after a
 release that includes this work.
 
 **Release dependency.** A perfect, badge-accurate *live* pptx.gallery needs
-published packages, and publishing belongs to a release owner. Nothing is
-published in this program. The in-program proof is therefore the FF-38 parity
+published packages. The owner authorized agents to publish npm packages on
+2026-09-29 through the documented release task ([release-process.md](../../release-process.md)),
+separate from program work items, which do not publish. The in-program proof is therefore the FF-38 parity
 audit on merged heads, together with the FF-36 badge data derived from it.
 FF-15 delivers release-readiness notes for each checkpoint, listing what a
 release would ship and what the live gallery would then show.
@@ -139,8 +181,10 @@ release would ship and what the live gallery would then show.
   `Application.Quit`, close unrelated presentations, change Office security, or
   retry a native attempt in place; a new attempt uses a fresh directory.
 - Preserve failures as evidence. Font programs are never committed.
-- No package publication or deploy (packages, pptx.gallery, site) from this
-  program.
+- No package publication or deploy (packages, pptx.gallery, site) from program
+  work items. Publishing is a separate release task that the owner authorized on
+  2026-09-29 (see [release-process.md](../../release-process.md)); site and
+  gallery deploys still follow their own repositories' rules.
 - Native PowerPoint `p:hf` stays deferred; headers and footers are OPF
   furniture.
 - Keep source, packed and registry claims separate, and schema support separate
@@ -163,16 +207,18 @@ Any session (root or subagent) resuming this program:
    `codex/ff-07-script-slots`) and start the PR title with the ID (`FF-07: `).
    Branches opened before this tracker are grandfathered.
 5. Each item has explicit acceptance criteria. An item is `done` only when its
-   PR is merged after independent review and green CI on the exact head, and
-   its evidence link is recorded.
+   criteria hold, its PR is merged after independent review under the applicable
+   merge policy, and its evidence link is recorded. The September 29 local-test
+   exception permits PR merges; it does not establish unrun cross-platform,
+   native, physical-font or final release acceptance.
 6. When an item changes state, update its row and append one dated line to the
    progress log in the same PR, or in a small follow-up tracker PR.
 7. Native PowerPoint items are root-only on the Windows host. Inspect the host
    first and record preflight and postflight evidence.
 
-Roles: the root session plans, reviews, merges (reviewed and CI-green only)
-and runs native attempts. Parallel subagents implement offline items and open
-PRs. A separate reviewer agent reviews each PR.
+Roles: the root session plans, reviews and merges exact reviewed heads under
+this policy. Only the Windows root owner runs native attempts. Parallel subagents
+implement offline items and open PRs. A separate reviewer agent reviews each PR.
 
 ## Environments
 
@@ -186,6 +232,9 @@ PRs. A separate reviewer agent reviews each PR.
 
 ## Related
 
+- [Per-font fidelity tracker (FF-40)](font-tracker.md): one record per font family with route, bundled face, styles,
+  measurements, host and native status, parity signals, phase, status and next action, sorted by priority
+  (machine-readable: [font-tracker.json](font-tracker.json))
 - [Windows native handoff](../../handoff-windows-native-2026-09-21-wrap-up.md)
 - [Font fidelity](../../font-fidelity.md)
 - [pptx.gallery support by dimension](gallery-support.md) and its

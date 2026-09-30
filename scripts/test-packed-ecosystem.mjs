@@ -1,10 +1,12 @@
-import { mkdir, readFile, writeFile, rm, realpath } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, writeFile, rm, realpath, readdir } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { createRequire } from "node:module";
 import { spawnSync } from "node:child_process";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import path from "node:path";
 import {createHash, randomUUID} from 'node:crypto';
+import {checkPackedTypes} from './check-packed-types.mjs';
+import {LAZY_FONT_COUNTS} from './lazy-font-counts.mjs';
 const root = fileURLToPath(new URL("../", import.meta.url)),
   out = path.join(root, "artifacts/npm");
 const librariesOnly = process.argv.includes('--registry-libraries');
@@ -45,6 +47,7 @@ const manifest = registry
   ? { artifacts: releasePlan.packages }
   : JSON.parse(await readFile(path.join(out, "manifest.json"), "utf8"));
 if (librariesOnly) manifest.artifacts = manifest.artifacts.filter(item => item.name !== '@openpresentation/cli');
+const renderSourceVersion = registry ? releasePlan.packages.find(item => item.name === '@openpresentation/opf-render')?.version : manifest.artifacts.find(item => item.name === '@openpresentation/opf-render')?.sourceVersion;
 await mkdir(out,{recursive:true});
 const actualRoot=await realpath(root), actualOut=await realpath(out);
 if (!actualOut.startsWith(actualRoot+path.sep)) throw new Error('Consumer artifacts must remain inside this checkout');
@@ -61,6 +64,7 @@ await writeFile(
       name: "opf-packed-consumer",
       private: true,
       type: "module",
+      ...(!registry ? {devDependencies: {'@types/node': createRequire(new URL('../packages/javascript/package.json', import.meta.url))('@types/node/package.json').version}} : {}),
       dependencies: Object.fromEntries(
         manifest.artifacts.map((item) => [item.name, registry ? item.version : `file:../${item.file}`]),
       ),
@@ -69,7 +73,7 @@ await writeFile(
     2,
   ),
 );
-function run(command, args) {
+function run(command, args, childEnv) {
   // npm's Windows shim is a batch file. Invoke its JS entrypoint without a
   // shell so paths with spaces and package arguments remain literal values.
   if (command==='npm' && process.platform==='win32') {
@@ -82,11 +86,15 @@ function run(command, args) {
     args=[npmEntry,...args];
     command=process.execPath;
   }
-  const result = spawnSync(command, args, { cwd: consumer, stdio: "inherit" });
+  const result = spawnSync(command, args, { cwd: consumer, stdio: "inherit",
+    ...(childEnv ? {env: {...process.env, ...childEnv}} : {}),
+  });
   if (result.error) throw result.error;
   if (result.status !== 0)
     throw new Error(`${command} exited ${result.status}`);
 }
+// New formatted furniture is candidate-only; historical registry fixtures stay unchanged.
+if (!registry) run(process.execPath, [path.join(root, 'scripts/test-packed-furniture-absent.mjs')]);
 run("npm", [
   "install",
   "--ignore-scripts",
@@ -115,15 +123,72 @@ if (verifyColorRefs) {
       .replaceAll('  fixture = null;', '  throw new Error("Pinned ColorRef fixture must load; fallback is not registry acceptance");'));
   run(process.execPath, ['color-ref-export.mjs']);
 }
+// These chart corrections are newer than the immutable published train.
+// Run the original public fixtures against the coordinated installed packages.
+if (!registry) {
+  const cacheHarness = (await readHarness('opf-pptx', 'test/chart-cache-import.mjs'))
+    .replace("process.env.OPF_TEST_PPTX_MODULE ?? '../dist/index.js'", "'@openpresentation/opf-pptx'");
+  await writeFile(path.join(consumer, 'chart-cache-import.mjs'), cacheHarness);
+  run(process.execPath, ['chart-cache-import.mjs']);
+  const axisHarness = (await readHarness('opf-render', 'test/chart-axis.mjs'))
+    .replaceAll("'../dist/svg.js'", "'@openpresentation/opf-render/svg'");
+  await writeFile(path.join(consumer, 'chart-axis.mjs'), axisHarness);
+  run(process.execPath, ['chart-axis.mjs']);
+  // Keep the original timezone assertions/workers; both public resolutions must use the installed candidate.
+  const zipDateSource = await readHarness('opf-pptx', 'test/zip-date.mjs');
+  if (zipDateSource.split("'../dist/index.js'").length !== 3) throw new Error('Expected both original ZIP date public import references');
+  const zipDateHarness = zipDateSource.replaceAll("'../dist/index.js'", "'@openpresentation/opf-pptx'");
+  const zipDateRoot = path.join(out, 'zip-date-candidate');
+  await mkdir(zipDateRoot, {recursive: true});
+  const zipDateArtifacts = await mkdtemp(path.join(zipDateRoot, 'installed-'));
+  const zipDateHash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const zipDatePackage = manifest.artifacts.find(item => item.name === '@openpresentation/opf-pptx');
+  if (!zipDatePackage) throw new Error('Missing candidate PPTX archive for ZIP date verification');
+  const zipDateTar = await readFile(path.join(out, zipDatePackage.file));
+  if (zipDateHash(zipDateTar) !== zipDatePackage.sha256) throw new Error('Candidate PPTX ZIP date tarball changed');
+  const zipDateLockBytes = await readFile(path.join(consumer, 'package-lock.json'));
+  const zipDateLocked = JSON.parse(zipDateLockBytes).packages['node_modules/@openpresentation/opf-pptx'];
+  const zipDateIntegrity = 'sha512-' + createHash('sha512').update(zipDateTar).digest('base64');
+  if (zipDateLocked?.integrity !== zipDateIntegrity || !zipDateLocked.resolved?.startsWith('file:') || zipDateLocked.link)
+    throw new Error('ZIP date verification requires the same installed local PPTX archive');
+  const zipDateRef = spawnSync('git', ['rev-parse', 'HEAD'], {cwd: path.resolve(root, '..', 'opf-pptx'), encoding: 'utf8'});
+  if (zipDateRef.status !== 0 || !/^[a-f0-9]{40}$/.test(zipDateRef.stdout.trim())) throw new Error('Cannot bind ZIP date source checkout');
+  const zipDateEntrypoint = await realpath(createRequire(path.join(consumer, 'package.json')).resolve('@openpresentation/opf-pptx'));
+  if (!zipDateEntrypoint.startsWith((await realpath(path.join(consumer, 'node_modules'))) + path.sep)) throw new Error('ZIP date entrypoint must be installed inside this consumer');
+  await writeFile(path.join(consumer, 'zip-date.mjs'), zipDateHarness);
+  await writeFile(path.join(zipDateArtifacts, 'source-fixture.mjs.txt'), zipDateSource);
+  await writeFile(path.join(zipDateArtifacts, 'installed-fixture.mjs.txt'), zipDateHarness);
+  await writeFile(path.join(zipDateArtifacts, 'binding.json'), JSON.stringify({
+    scope: 'Coordinated candidate preview archive; original public fixture with only two import substitutions. Not registry or native acceptance.',
+    source: {repository: 'opf-pptx', head: zipDateRef.stdout.trim(), file: 'test/zip-date.mjs', sha256: zipDateHash(zipDateSource)},
+    installedFixtureSha256: zipDateHash(zipDateHarness), importReplacements: 2, artifact: zipDatePackage,
+    installedIntegrity: zipDateIntegrity, lockSha256: zipDateHash(zipDateLockBytes), expectedEntrypoint: pathToFileURL(zipDateEntrypoint).href,
+    installedEntrypointSha256: zipDateHash(await readFile(zipDateEntrypoint)),
+    childEnv: {OPF_ZIP_DATE_ARTIFACTS: zipDateArtifacts},
+  }, null, 2) + '\n');
+  run(process.execPath, ['zip-date.mjs'], {OPF_ZIP_DATE_ARTIFACTS: zipDateArtifacts});
+  const zipDateResults = (await readdir(zipDateArtifacts, {recursive: true})).filter(file => path.basename(file) === 'result.json');
+  if (zipDateResults.length !== 4) throw new Error('Expected original three-zone and host-mutation ZIP date worker reports');
+  for (const file of zipDateResults) {
+    const result = JSON.parse(await readFile(path.join(zipDateArtifacts, file), 'utf8'));
+    if (result.entrypoint !== pathToFileURL(zipDateEntrypoint).href) throw new Error('ZIP date worker resolved a different package entrypoint');
+  }
+}
 if (verifyFontPreparation) {
   await writeFile(path.join(consumer,'check-font-preparation.mjs'), `
 import assert from 'node:assert/strict';
 import {prepareNodeFonts} from '@openpresentation/opf-render/fonts-node';
+const LAZY_FONT_COUNTS=${JSON.stringify(LAZY_FONT_COUNTS)};
 import {renderSvgDeck,resolvePresentation,svgToPng} from '@openpresentation/opf-render';
 import {paginatePresentation} from '@openpresentation/opf/pagination';
 import {createEditorSession} from '@openpresentation/opf-editor';
 import {toPptx,fromPptx} from '@openpresentation/opf-pptx';
 const {registry,options}=await prepareNodeFonts({pack:'office',substitutionPolicy:'visual'});
+${!registry ? `assert.equal(options.loadSystemFonts,false);assert.equal(options.useBundledFonts,false);
+const {mkdir,readFile,writeFile}=await import('node:fs/promises');
+const {createHash}=await import('node:crypto');
+await mkdir('artifacts',{recursive:true});
+await writeFile('artifacts/font-preparation.json',JSON.stringify({systemFontDiscovery:false,bundledFallback:false,fonts:await Promise.all(options.fontFiles.map(async file=>({file,sha256:createHash('sha256').update(await readFile(file)).digest('hex')})))},null,2)+'\\n');` : ''}
 const source={design:{fontScheme:'roboto'},slides:[{id:'fonts',title:'Prepared installed fonts',text:'A measured local document preserves its content.'}]};
 const original=JSON.stringify(source);
 const {presentation}=paginatePresentation(source,options);
@@ -136,7 +201,15 @@ assert.ok((await svgToPng(svgs[0],options)).length>1000);
 const imported=await fromPptx(await toPptx(editor.document,options));
 assert.equal(imported.slides[0].title,source.slides[0].title);
 assert.equal(JSON.stringify(source),original);
-assert.equal(registry.embeddedFonts.length,33);
+assert.equal(registry.embeddedFonts.length,33);// the eager npm faces; the vendored (embed used) faces are the lazy set: the open families and Intos
+if(registry.lazyFonts){// renderers that vendor Intos and the open families (after 0.10.0) list them here; the pinned earlier renderer has none
+// the vendored open and Intos faces, exact per renderer version (scripts/lazy-font-counts.mjs)
+const renderVersion=${JSON.stringify(renderSourceVersion)};// the renderer's own version (release plan, or the source version behind a preview tarball)
+const expectedLazy=LAZY_FONT_COUNTS[renderVersion];
+assert.ok(expectedLazy&&expectedLazy.includes(registry.lazyFonts.length),'the lazy face count of renderer '+renderVersion+' is '+registry.lazyFonts.length+'; expected '+(expectedLazy??['a recorded count']).join(' or '));
+// the four Noto Sans glyph-fallback faces (opf-render#57) are npm files, also embed used; every other embed-used face is a lazy one
+assert.equal(options.embeddedFonts.filter(face=>face.embed==="used"&&face.family!=="Noto Sans").length,registry.lazyFonts.length);
+}
 console.log('Installed font preparation passed layout, edit/undo, SVG/PNG, editable PPTX export and heading reimport.');
 `);
   run(process.execPath,['check-font-preparation.mjs']);
@@ -149,6 +222,19 @@ console.log('Installed font preparation passed layout, edit/undo, SVG/PNG, edita
       await readHarnessBytes('opf-pptx', `test/fixtures/images/${name}`));
     await writeFile(path.join(consumer, 'furniture-provenance.mjs'), furnitureHarness);
     run(process.execPath, ['furniture-provenance.mjs']);
+    // Formatted furniture fields are newer than the immutable registry train.
+    // Exercise the complete existing fixture only against candidate tarballs.
+    if (!registry) {
+      const fieldsHarness = (await readHarness('opf-pptx', 'test/furniture-fields.mjs'))
+        .replaceAll("'../dist/index.js'", "'@openpresentation/opf-pptx'")
+        .replaceAll("'../dist/furniture-fields.js'", "'./node_modules/@openpresentation/opf-pptx/dist/furniture-fields.js'");
+      await writeFile(path.join(consumer, 'furniture-fields.mjs'), fieldsHarness);
+      run(process.execPath, ['furniture-fields.mjs']);
+      const wrappedFieldsHarness = (await readHarness('opf-pptx', 'test/furniture-wrapped-date.mjs'))
+        .replaceAll("'../dist/index.js'", "'@openpresentation/opf-pptx'");
+      await writeFile(path.join(consumer, 'furniture-wrapped-date.mjs'), wrappedFieldsHarness);
+      run(process.execPath, ['furniture-wrapped-date.mjs']);
+    }
   }
   for (const repo of ['opf-render','opf-pptx']) {
     const source=(await readHarness(repo,'test/font-variants.mjs'))
@@ -442,4 +528,5 @@ await writeFile(path.join(browserOut,'packed-browser-manifest.json'),JSON.string
   suites:browserSuites,
   files:Object.fromEntries(await Promise.all(['fonts.json',...browserSuites.flatMap(suite=>[`packed-${suite}-tests.html`,`packed-${suite}-tests.js`])].map(async file=>[file,await hashFile(path.join(browserOut,file))]))),
 },null,2)+'\n');
+if (!registry) await checkPackedTypes(consumer, {downstream: true});
 console.log(librariesOnly ? 'Registry library consumer passed for four exact versions; CLI and complete release verification remain separate.' : registry ? 'Registry consumer passed for all five exact release-plan versions (no local package overrides).' : 'Local tarball consumer passed; this is not a registry verification.');

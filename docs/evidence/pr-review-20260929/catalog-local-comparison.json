@@ -1,0 +1,23 @@
+{
+  "capturedAt": "2026-09-29T08:07:14.347680+00:00",
+  "command": "fnm exec --using=24 node scripts/sync-gallery-catalog.mjs --gallery <clean-pinned-gallery-checkout> --check",
+  "node": "24.21.0",
+  "exitCode": 0,
+  "stdout": "spec/catalogs matches the gallery catalog at 58aa122690489a9206e1b583e5d9eea5e8cfd84e.\n",
+  "core": {
+    "head": "fd3d6534dbc784554abba1b55c511df70a3ad8d5",
+    "tree": "25c47bcc05b04ad60fa2eddf1567c39d167e3152",
+    "status": "",
+    "scriptSha256": "86b2a34f9e309167983d9ac47b3f2bc4d5f9ab9801a2936d42add965a7b391cc"
+  },
+  "gallery": {
+    "head": "58aa122690489a9206e1b583e5d9eea5e8cfd84e",
+    "tree": "8e3393bebf6be44519ac860d7ef6e56be22e3a89",
+    "status": ""
+  },
+  "limits": [
+    "Read-only comparison against committed public catalog files; no generator or network fetch during the comparison.",
+    "Uses existing AJV installation in the review environment; this is not a fresh installed-package or CI execution.",
+    "Does not establish integration with current main, publisher merge, deployment, native or font acceptance."
+  ]
+}

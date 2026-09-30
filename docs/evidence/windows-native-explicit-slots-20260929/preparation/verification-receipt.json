@@ -1,0 +1,15 @@
+{
+  "scope": "Offline input preparation only; no native result.",
+  "sameOutputBytes": true,
+  "sameChanges": true,
+  "sameEntryHashes": true,
+  "existingOutputRejected": true,
+  "existingOutputUnchanged": true,
+  "sourceSha256": "776147ddfd2a35ceca4480b66d58c82c9255609b5abe245a2b3bb342651ebce5",
+  "outputSha256": "4e2bab2a4f5a0f09350d2edc2463bcb29302fa7db34a8c621e39fcd5c9a16cd7",
+  "outputBytes": 15616,
+  "generatorSha256": "0a94df58d8cf58695d3f9b178ff98d8aa2558130a170a37f15148facbc2d3bd1",
+  "manifestSha256": "23c10c7d5dfd6a2022647f519d30360eb9959dd3c3466cbdc57fd85df5af4f53",
+  "repeatManifestSha256": "3c7e8316ce3fd9c1248c96c0bfe419183c2ce47a8f09468ff4fdb6b088d86e19",
+  "diffSha256": "4ad0f704c1d1d09e23927874bb4d1717bd6a0b317ffe9413ca9ce1f14b4f5b69"
+}

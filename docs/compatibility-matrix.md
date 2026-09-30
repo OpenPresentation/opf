@@ -6,9 +6,12 @@ It is not universal Office parity and does not describe archived prototypes as
 shipped.
 
 Verify live versions with `npm view <package> version` before treating a
-dated handoff as current. The pin set below matches `release-plan.json` at the
-time this file was updated (21 September 2026). Immutable tag commits pin
-the verification harnesses; see [current evidence](evidence/shipped-train-20260921/README.md).
+dated handoff as current. The pin set below matches the 21 September 2026 published verification
+checkpoint in `release-plan.json`. Immutable tag commits pin
+the verification harnesses; see [published evidence](evidence/shipped-train-20260921/README.md).
+The [September 29 source checkpoint](handoff-runtime-2026-09-29.md) records later
+accepted fixes and release prerequisites. Those source changes have not updated
+the versions below or established complete native compatibility.
 
 ## Runtime
 
@@ -23,15 +26,17 @@ the verification harnesses; see [current evidence](evidence/shipped-train-202609
 
 | Package | Version | Depends on |
 | --- | --- | --- |
-| `@openpresentation/opf` | 0.11.0 | — |
+| `@openpresentation/opf` | 0.11.2 | — |
 | `@openpresentation/cli` | 0.9.0 | Bundles core 0.11.0; registry metadata has no runtime `dependencies` |
-| `@openpresentation/opf-render` | 0.9.0 | `@openpresentation/opf@^0.11.0` |
-| `@openpresentation/opf-editor` | 0.8.0 | `@openpresentation/opf@^0.11.0`; optional peer `@openpresentation/opf-render@^0.9.0` |
-| `@openpresentation/opf-pptx` | 0.9.1 | `@openpresentation/opf@^0.11.0`; optional peer `@openpresentation/opf-render@^0.9.0` |
+| `@openpresentation/opf-render` | 0.11.2 | `@openpresentation/opf@^0.11.2` |
+| `@openpresentation/opf-editor` | 0.10.1 | `@openpresentation/opf@^0.11.2`; optional peer `@openpresentation/opf-render@^0.11.0` |
+| `@openpresentation/opf-pptx` | 0.11.1 | `@openpresentation/opf@^0.11.2`; optional peer `@openpresentation/opf-render@^0.11.0` |
 
 Install the complete pinned set. A caret range starting at 0.10.1 does not
-include 0.11.0; old consumers can install a second core and do not establish
-ColorRef preview/export support. PPTX 0.9.1 corrects its renderer peer to 0.9.x.
+include 0.11.x; old consumers can install a second core and do not establish
+ColorRef preview/export support. The renderer, PPTX and editor floors move with
+core in lockstep (core 0.11.2 with renderer 0.11.2, PPTX 0.11.1 and editor 0.10.1), so
+preview and export resolve one composition.
 
 Shared header/footer geometry (`furniture-flow-v2`) is published. PPTX exports
 editable slide shapes tagged `OPF_FURNITURE_V1` with provenance for controlled
@@ -297,13 +302,17 @@ passing on each. Windows fails initial gallery-rail title visibility after 5,000
 with correct source, clean schema and Loading slide fonts; later editing/export/
 reimport checks were not reached. The [final audit](evidence/font-readiness-acceptance-20260921/app54/merged8f/postmerge-ci/REPORT.md.txt)
 preserves this separate failed gate without cause inference or a retry. No canonical
-pass or general native/font acceptance is claimed. Work is paused until user resumption.
+pass or general native/font acceptance is claimed. That September 21 checkpoint was paused; the user resumed work on September 29. See the [current source checkpoint](handoff-runtime-2026-09-29.md) for ongoing repairs and release holds.
 
-Separate local negative controls confirm that preset Undo all discards New run
-and imported replacement documents; ordinary-edit Undo remains untested after a
-raw-buffer precondition failure. The proposed guarded preset correction remains
-unapplied pending its separately requested approval. Local author/filename/gallery/preset writers
-still serialize source. These unresolved local findings and raw imported-file/account/agent/metadata boundaries remain outside
+Separate local negative controls confirmed that preset Undo all discarded New run
+and imported replacement documents. The guarded correction is now preserved in
+[draft app #58](https://github.com/Data-Advantage/pptx-dev/pull/58): independent
+review and local Node 24 checks passed (716 units, 13 standalone controls and
+49 browsers without retries). Original Linux/Windows CI could not start because
+of the account payment/spending-limit restriction; no application CI or production
+acceptance is claimed. Unbusy asynchronous account replacements still need a
+synchronous invalidation guard and held-response control.
+Other local source writers still require their separate preservation checks. These unresolved local findings and raw imported-file/account/agent/metadata boundaries remain outside
 App53 and App54. See the [App53 ledger](evidence/author-source-acceptance-20260921/README.md)
 and its immutable application evidence links. Issue88 remains OPEN. Native/font
 compatibility, required repair and release gates remain separate; geometry is
@@ -331,6 +340,8 @@ not available; those are Node APIs.
 
 | Older set | Relationship |
 | --- | --- |
+| core 0.11.2, CLI 0.9.0, renderer 0.11.1, PPTX 0.11.0, editor 0.10.0 | Previous coordinated set (lockstep floors, Intos and the open families, selected-name export). Renderer 0.11.2 adds script-face loading (`scripts: 'auto'`); PPTX 0.11.1 adds `design.watermark` export; editor 0.10.1 loads the fonts a document needs before every render (FF-41). |
+| core 0.11.0, CLI 0.9.0, renderer 0.9.0, PPTX 0.9.1, editor 0.8.0 | Previous coordinated Node 24 set (ColorRef, shared furniture). Renderer and PPTX had different core floors from 0.10.x. |
 | core 0.10.0, renderer/PPTX/CLI 0.8.0, editor 0.7.0 | Previous coordinated Node 24 baseline. Lint and furniture landed across 0.10.0/0.8.0 then layout-placeholder fixes in 0.10.1/0.8.1/0.7.1. |
 | Node 20 / 22 | Not valid for these packages |
 

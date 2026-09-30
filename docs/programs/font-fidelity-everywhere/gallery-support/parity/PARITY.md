@@ -1,8 +1,10 @@
 # Preview vs PPTX parity: pptx.gallery values
 
-Generated 2026-09-23T13:03:28.289Z by `dimension-audit/parity/scripts/parity.mjs` (Node v24.21.0, worktree prefix `parity`). No Office was used.
+> **Definition change, 2026-09-29.** This file and `parity-results.json` record the accepted run under the original fontResolution definition (real face or metric-compatible substitute only) and are kept unchanged as history. By owner decision (look-alike fonts are intended; the PPTX must name the selected family), fontResolution is now judged against core's FF-31 policy table: metric-compatible replacement or real face passes, visual-only look-alike is near, no route or a replacement name in the PPTX fails. The run under the new definition, with the old definition computed from the same run for comparison, is [PARITY-2026-09-29-lookalike-fonts.md](PARITY-2026-09-29-lookalike-fonts.md) (results: `parity-results-2026-09-29-lookalike-fonts.json`). The classifier is `scripts/font-resolution.mjs`; its controls run with `node --test scripts/font-resolution.test.mjs`.
 
-Heads: opf `6263985`, opf-render `bc436f3`, opf-pptx `9092954`, pptx-gallery `f17e9ae`.
+Generated 2026-09-29T08:23:46.429Z by `dimension-audit/parity/scripts/parity.mjs` (Node v24.21.0, worktree prefix `baseline81`). No Office was used.
+
+Heads: opf `a85facf`, opf-render `6c7d781`, opf-pptx `c749c35`, pptx-gallery `f17e9ae`.
 
 ## What "perfect" means
 
@@ -42,10 +44,10 @@ Classification: **perfect** means every check passes; **near** means only near d
 | image-treatments (withAssets) | 15 | 0 | 0 | 15 | 15/15 | 15/15 | 15/15 | 15/15 | 15/15 | 15/15 | 15/15 | 0/15 | 15/15 | 15/15 |
 | headers-footers | 10 | 0 | 0 | 10 | 10/10 | 0/10 | 10/10 | 0/10 | 10/10 | 10/10 | 10/10 | 0/10 | 10/10 | 10/10 |
 | headers-footers (withAssets) | 10 | 0 | 0 | 10 | 10/10 | 0/10 | 10/10 | 0/10 | 10/10 | 10/10 | 10/10 | 0/10 | 10/10 | 10/10 |
-| blocks | 32 | 0 | 0 | 32 | 30/32 | 25/32 | 30/32 | 32/32 | 32/32 | 32/32 | 32/32 | 1/32 | 32/32 | 32/32 |
-| layouts | 485 | 0 | 0 | 485 | 481/485 | 436/485 | 421/485 | 485/485 | 485/485 | 485/485 | 485/485 | 0/485 | 485/485 | 475/485 |
+| blocks | 32 | 1 | 0 | 31 | 30/32 | 28/32 | 30/32 | 32/32 | 32/32 | 32/32 | 32/32 | 1/32 | 32/32 | 32/32 |
+| layouts | 485 | 0 | 0 | 485 | 481/485 | 472/485 | 445/485 | 485/485 | 485/485 | 485/485 | 485/485 | 0/485 | 485/485 | 475/485 |
 | charts | 76 | 0 | 0 | 76 | 76/76 | 26/76 | 9/76 | 76/76 | 76/76 | 76/76 | 76/76 | 0/76 | 76/76 | 76/76 |
-| **all** | 900 | 4 | 0 | 896 | 880/900 | 759/900 | 766/900 | 880/900 | 900/900 | 900/900 | 899/900 | 5/900 | 900/900 | 890/900 |
+| **all** | 900 | 5 | 0 | 895 | 880/900 | 798/900 | 790/900 | 880/900 | 900/900 | 900/900 | 899/900 | 5/900 | 900/900 | 890/900 |
 
 The check columns count values that pass that check. A value is perfect only when every check passes.
 
@@ -53,7 +55,7 @@ Picture crop-position check: 408 of 408 pictures measured; 0 unmeasured (preview
 
 ## Before / after
 
-Baseline heads: opf `b1753ef`, opf-render `bc436f3`, opf-pptx `9092954`, pptx-gallery `f17e9ae`.
+Baseline heads: opf `6263985`, opf-render `bc436f3`, opf-pptx `9092954`, pptx-gallery `f17e9ae`.
 
 | dimension | perfect before | perfect after | near before | near after | improved | regressed |
 |---|---|---|---|---|---|---|
@@ -72,56 +74,56 @@ Baseline heads: opf `b1753ef`, opf-render `bc436f3`, opf-pptx `9092954`, pptx-ga
 | image-treatments (withAssets) | 0 | 0 | 0 | 0 | 0 | 0 |
 | headers-footers | 0 | 0 | 0 | 0 | 0 | 0 |
 | headers-footers (withAssets) | 0 | 0 | 0 | 0 | 0 | 0 |
-| blocks | 0 | 0 | 0 | 0 | 0 | 0 |
+| blocks | 0 | 1 | 0 | 0 | 1 | 0 |
 | layouts | 0 | 0 | 0 | 0 | 0 | 0 |
 | charts | 0 | 0 | 0 | 0 | 0 | 0 |
-| **all** | 4 | 4 | 0 | 0 | 0 | 0 |
+| **all** | 4 | 5 | 0 | 0 | 1 | 0 |
 
 ## Top mismatch reasons per dimension
 
-- **color-schemes** (14): geometry | table frame delta >50pt (14); fontResolution | preview font visual-substitute: Aptos Display -> Carlito (14); fontResolution | preview font visual-substitute: Aptos -> Carlito (14)
-- **font-schemes** (89): fontResolution | preview font missing: Grandview (2); fontResolution | preview font missing: Noto Naskh Arabic (2); fontResolution | preview font visual-substitute: Consolas -> Cousine (1); fontResolution | preview font missing: Arial Black (1); fontResolution | preview font missing: Impact (1)
+- **color-schemes** (14): geometry | table frame delta >50pt (14); fontResolution | preview font visual-substitute: Aptos Display -> Carlito (14); fontResolution | preview font visual-substitute: Aptos -> Roboto (14)
+- **font-schemes** (89): fontResolution | preview font visual-substitute: Grandview -> Roboto (2); fontResolution | preview font missing: Noto Naskh Arabic (2); fontResolution | preview font visual-substitute: Consolas -> Cousine (1); fontResolution | preview font visual-substitute: Arial Black -> Arimo (1); fontResolution | preview font visual-substitute: Impact -> Carlito (1)
 - **font-schemes-legacy** (4): fontResolution | preview font missing: Playfair Display (1); fontResolution | preview font missing: Source Sans Pro (1); fontResolution | preview font missing: Montserrat (1); fontResolution | preview font missing: Open Sans (1); fontResolution | preview font missing: Bebas Neue (1)
-- **languages** (93): fontResolution | preview font visual-substitute: Aptos Display -> Carlito (66); fontResolution | preview font visual-substitute: Aptos -> Carlito (66); fontResolution | preview font missing: Arabic Typesetting (3); fontResolution | preview font missing: Mangal (3); fontResolution | preview font missing: Sylfaen (2)
-- **themes** (4): fontResolution | preview font visual-substitute: Aptos Display -> Carlito (1); fontResolution | preview font visual-substitute: Aptos -> Carlito (1); fontResolution | preview font missing: Tenorite Display (1); fontResolution | preview font missing: Tenorite (1); fontResolution | preview font missing: Seaford Display (1)
-- **narratives** (10): fontResolution | preview font visual-substitute: Aptos Display -> Carlito (10); fontResolution | preview font visual-substitute: Aptos -> Carlito (10)
-- **audiences** (14): fontResolution | preview font visual-substitute: Aptos Display -> Carlito (14); fontResolution | preview font visual-substitute: Aptos -> Carlito (14)
-- **tones** (7): fontResolution | preview font visual-substitute: Aptos Display -> Carlito (7); fontResolution | preview font visual-substitute: Aptos -> Carlito (7)
-- **socials** (10): fontResolution | preview font visual-substitute: Aptos Display -> Carlito (10); fontResolution | preview font visual-substitute: Aptos -> Carlito (10)
-- **backgrounds** (6): fontResolution | preview font visual-substitute: Aptos Display -> Carlito (6); fontResolution | preview font visual-substitute: Aptos -> Carlito (6); fills | background color F0F0F0 vs FFFFFF (1)
-- **backgrounds (withAssets)** (6): fontResolution | preview font visual-substitute: Aptos Display -> Carlito (6); fontResolution | preview font visual-substitute: Aptos -> Carlito (6)
-- **image-treatments** (15): text | preview text line missing in PPTX (15); text | PPTX text not in preview (15); fontResolution | preview font visual-substitute: Aptos Display -> Carlito (15); fontResolution | preview font visual-substitute: Aptos -> Carlito (15)
-- **image-treatments (withAssets)** (15): fontResolution | preview font visual-substitute: Aptos Display -> Carlito (15); fontResolution | preview font visual-substitute: Aptos -> Carlito (15)
-- **headers-footers** (10): text | preview text line missing in PPTX (10); fontResolution | preview font visual-substitute: Aptos Display -> Carlito (10); fontResolution | preview font visual-substitute: Aptos -> Carlito (10); zOrder | z-order inversions between element groups (4) (6); zOrder | z-order inversions between element groups (2) (2)
-- **headers-footers (withAssets)** (10): text | preview text line missing in PPTX (10); fontResolution | preview font visual-substitute: Aptos Display -> Carlito (10); fontResolution | preview font visual-substitute: Aptos -> Carlito (10); zOrder | z-order inversions between element groups (4) (6); zOrder | z-order inversions between element groups (2) (2)
-- **blocks** (32): fontResolution | preview font visual-substitute: Aptos Display -> Carlito (8); fontResolution | preview font visual-substitute: Aptos -> Carlito (8); fontResolution | preview font missing: Segoe UI Semibold (6); fontResolution | preview font missing: Segoe UI (6); fontResolution | preview font visual-substitute: Georgia -> Gelasio (5)
-- **layouts** (485): fontResolution | preview font visual-substitute: Aptos Display -> Carlito (485); fontResolution | preview font visual-substitute: Aptos -> Carlito (485); fills | chart series colors not in preview (1) (39); text | alignment l (preview) vs ctr (pptx) (36); fills | PPTX fill color(s) absent in preview (24)
-- **charts** (76): fontResolution | preview font visual-substitute: Aptos Display -> Carlito (76); fontResolution | preview font visual-substitute: Aptos -> Carlito (76); text | chart preview text not in native chart cache (46); fills | chart series colors not in preview (11) (26); fills | chart series colors not in preview (6) (12)
+- **languages** (93): fontResolution | preview font visual-substitute: Aptos Display -> Carlito (66); fontResolution | preview font visual-substitute: Aptos -> Roboto (66); fontResolution | preview font missing: Arabic Typesetting (3); fontResolution | preview font missing: Mangal (3); fontResolution | preview font missing: Sylfaen (2)
+- **themes** (4): fontResolution | preview font visual-substitute: Aptos Display -> Carlito (1); fontResolution | preview font visual-substitute: Aptos -> Roboto (1); fontResolution | preview font visual-substitute: Tenorite Display -> Roboto (1); fontResolution | preview font visual-substitute: Tenorite -> Roboto (1); fontResolution | preview font visual-substitute: Seaford Display -> Carlito (1)
+- **narratives** (10): fontResolution | preview font visual-substitute: Aptos Display -> Carlito (10); fontResolution | preview font visual-substitute: Aptos -> Roboto (10)
+- **audiences** (14): fontResolution | preview font visual-substitute: Aptos Display -> Carlito (14); fontResolution | preview font visual-substitute: Aptos -> Roboto (14)
+- **tones** (7): fontResolution | preview font visual-substitute: Aptos Display -> Carlito (7); fontResolution | preview font visual-substitute: Aptos -> Roboto (7)
+- **socials** (10): fontResolution | preview font visual-substitute: Aptos Display -> Carlito (10); fontResolution | preview font visual-substitute: Aptos -> Roboto (10)
+- **backgrounds** (6): fontResolution | preview font visual-substitute: Aptos Display -> Carlito (6); fontResolution | preview font visual-substitute: Aptos -> Roboto (6); fills | background color F0F0F0 vs FFFFFF (1)
+- **backgrounds (withAssets)** (6): fontResolution | preview font visual-substitute: Aptos Display -> Carlito (6); fontResolution | preview font visual-substitute: Aptos -> Roboto (6)
+- **image-treatments** (15): text | preview text line missing in PPTX (15); text | PPTX text not in preview (15); fontResolution | preview font visual-substitute: Aptos Display -> Carlito (15); fontResolution | preview font visual-substitute: Aptos -> Roboto (15)
+- **image-treatments (withAssets)** (15): fontResolution | preview font visual-substitute: Aptos Display -> Carlito (15); fontResolution | preview font visual-substitute: Aptos -> Roboto (15)
+- **headers-footers** (10): text | preview text line missing in PPTX (10); fontResolution | preview font visual-substitute: Aptos Display -> Carlito (10); fontResolution | preview font visual-substitute: Aptos -> Roboto (10); zOrder | z-order inversions between element groups (4) (6); zOrder | z-order inversions between element groups (2) (2)
+- **headers-footers (withAssets)** (10): text | preview text line missing in PPTX (10); fontResolution | preview font visual-substitute: Aptos Display -> Carlito (10); fontResolution | preview font visual-substitute: Aptos -> Roboto (10); zOrder | z-order inversions between element groups (4) (6); zOrder | z-order inversions between element groups (2) (2)
+- **blocks** (32): fontResolution | preview font visual-substitute: Aptos Display -> Carlito (8); fontResolution | preview font visual-substitute: Aptos -> Roboto (8); fontResolution | preview font visual-substitute: Segoe UI Semibold -> Roboto SemiBold (6); fontResolution | preview font visual-substitute: Segoe UI -> Arimo (6); fontResolution | preview font visual-substitute: Georgia -> Gelasio (5)
+- **layouts** (485): fontResolution | preview font visual-substitute: Aptos Display -> Carlito (485); fontResolution | preview font visual-substitute: Aptos -> Roboto (485); fills | chart series colors not in preview (1) (39); text | list markers differ (10); text | preview text line missing in PPTX (10)
+- **charts** (76): fontResolution | preview font visual-substitute: Aptos Display -> Carlito (76); fontResolution | preview font visual-substitute: Aptos -> Roboto (76); text | chart preview text not in native chart cache (46); fills | chart series colors not in preview (11) (26); fills | chart series colors not in preview (6) (12)
 
 ## 20 most common mismatch patterns
 
 | # | pattern (check \| reason) | severity | values | occurrences | example ids | sample |
 |---|---|---|---|---|---|---|
 | 1 | fontResolution \| preview font visual-substitute: Aptos Display -> Carlito | fail | 754 | 754 | color-schemes/black-and-white [Aptos Display]<br>color-schemes/bold-red [Aptos Display]<br>color-schemes/boost [Aptos Display] |  |
-| 2 | fontResolution \| preview font visual-substitute: Aptos -> Carlito | fail | 754 | 754 | color-schemes/black-and-white [Aptos]<br>color-schemes/bold-red [Aptos]<br>color-schemes/boost [Aptos] |  |
+| 2 | fontResolution \| preview font visual-substitute: Aptos -> Roboto | fail | 754 | 754 | color-schemes/black-and-white [Aptos]<br>color-schemes/bold-red [Aptos]<br>color-schemes/boost [Aptos] |  |
 | 3 | fills \| chart series colors not in preview (1) | fail | 46 | 87 | layouts/data-visualization [slides.0.blocks.0.chart]<br>layouts/dashboard [slides.0.blocks.0.chart]<br>layouts/waterfall-bridge [slides.0.blocks.0.chart] |  |
 | 4 | text \| chart preview text not in native chart cache | fail | 46 | 46 | charts/clustered-column [slides.0.chart]<br>charts/stacked-column-2x [slides.0.chart]<br>charts/stacked-column-3x [slides.0.chart] | Value 1  Value 2 |
 | 5 | text \| preview text line missing in PPTX | fail | 45 | 105 | image-treatments/full-bleed [slides.0.image]<br>image-treatments/text-overlay [slides.0.image]<br>image-treatments/side-by-side [slides.0.image] | Image unavailable |
-| 6 | text \| alignment l (preview) vs ctr (pptx) | fail | 39 | 264 | blocks/market-opportunity [slides.0.blocks.0.metric]<br>blocks/kpi-dashboard [slides.0.blocks.0.metric]<br>blocks/traction-metrics [slides.0.blocks.0.metric] | $48B TAM |
-| 7 | fills \| chart series colors not in preview (11) | fail | 26 | 26 | charts/line-with-high-low [slides.0.chart]<br>charts/line-with-high-low-and-markers [slides.0.chart]<br>charts/line-with-markers [slides.0.chart] |  |
-| 8 | fills \| PPTX fill color(s) absent in preview | fail | 24 | 24 | layouts/list-1x-box [slides.0.items]<br>layouts/list-1x-box-vertical [slides.0.items]<br>layouts/list-2x-box [slides.0.blocks.0.items] | 011842 not in [] |
-| 9 | geometry \| table frame delta >50pt | fail | 20 | 20 | color-schemes/black-and-white [slides.3.table]<br>color-schemes/bold-red [slides.3.table]<br>color-schemes/boost [slides.3.table] | {"x":57.6,"y":147.48,"w":1164.8,"h":162} vs {"x":57.6,"y":147.48,"w":1164.8,"h": |
-| 10 | text \| PPTX text not in preview | fail | 16 | 16 | image-treatments/full-bleed [slides.0.image]<br>image-treatments/text-overlay [slides.0.image]<br>image-treatments/side-by-side [slides.0.image] | Image |
-| 11 | zOrder \| z-order inversions between element groups (4) | fail | 12 | 12 | headers-footers/section-marker-header [slide 0]<br>headers-footers/section-marker-header@withAssets [slide 0]<br>headers-footers/dated-footer [slide 0] |  |
-| 12 | fills \| chart series colors not in preview (6) | fail | 12 | 12 | charts/column [slides.0.chart]<br>charts/clustered-column [slides.0.chart]<br>charts/stacked-column-2x [slides.0.chart] |  |
-| 13 | text \| list markers differ | fail | 10 | 58 | layouts/list-5x-box-vertical-title-center-slideimage [slides.0.blocks.0.items]<br>layouts/list-5x-box-vertical-title-left-slideimage [slides.0.blocks.0.items]<br>layouts/list-6x-box-vertical [slides.0.blocks.0.items] | 3 preview [•••] vs 2 pptx [••] |
-| 14 | fills \| chart series colors not in preview (4) | fail | 9 | 9 | charts/bar [slides.0.chart]<br>charts/clustered-bar-2x [slides.0.chart]<br>charts/stacked-bar-2x [slides.0.chart] |  |
-| 15 | fontResolution \| preview font missing: Segoe UI Semibold | fail | 7 | 7 | font-schemes/segoe-ui [Segoe UI Semibold]<br>blocks/agenda-overview [Segoe UI Semibold]<br>blocks/decision-brief [Segoe UI Semibold] |  |
-| 16 | fontResolution \| preview font missing: Segoe UI | fail | 7 | 7 | font-schemes/segoe-ui [Segoe UI]<br>blocks/agenda-overview [Segoe UI]<br>blocks/decision-brief [Segoe UI] |  |
-| 17 | fontResolution \| preview font missing: Open Sans | fail | 7 | 7 | font-schemes/open-sans [Open Sans]<br>font-schemes-legacy/modern-professional [Open Sans]<br>blocks/value-proposition [Open Sans] |  |
-| 18 | fontResolution \| preview font visual-substitute: Georgia -> Gelasio | fail | 6 | 6 | font-schemes/georgia [Georgia]<br>blocks/section-break [Georgia]<br>blocks/customer-journey [Georgia] |  |
-| 19 | fills \| chart series colors not in preview (7) | fail | 6 | 6 | charts/dot-plot [slides.0.chart]<br>charts/radar [slides.0.chart]<br>charts/radar-with-markers [slides.0.chart] |  |
-| 20 | fontResolution \| preview font missing: Grandview | fail | 5 | 5 | font-schemes/impact [Grandview]<br>font-schemes/grandview [Grandview]<br>themes/bold [Grandview] |  |
+| 6 | fills \| chart series colors not in preview (11) | fail | 26 | 26 | charts/line-with-high-low [slides.0.chart]<br>charts/line-with-high-low-and-markers [slides.0.chart]<br>charts/line-with-markers [slides.0.chart] |  |
+| 7 | geometry \| table frame delta >50pt | fail | 20 | 20 | color-schemes/black-and-white [slides.3.table]<br>color-schemes/bold-red [slides.3.table]<br>color-schemes/boost [slides.3.table] | {"x":57.6,"y":147.48,"w":1164.8,"h":162} vs {"x":57.6,"y":147.48,"w":1164.8,"h": |
+| 8 | text \| PPTX text not in preview | fail | 16 | 16 | image-treatments/full-bleed [slides.0.image]<br>image-treatments/text-overlay [slides.0.image]<br>image-treatments/side-by-side [slides.0.image] | Image |
+| 9 | zOrder \| z-order inversions between element groups (4) | fail | 12 | 12 | headers-footers/section-marker-header [slide 0]<br>headers-footers/section-marker-header@withAssets [slide 0]<br>headers-footers/dated-footer [slide 0] |  |
+| 10 | fills \| chart series colors not in preview (6) | fail | 12 | 12 | charts/column [slides.0.chart]<br>charts/clustered-column [slides.0.chart]<br>charts/stacked-column-2x [slides.0.chart] |  |
+| 11 | text \| list markers differ | fail | 10 | 58 | layouts/list-5x-box-vertical-title-center-slideimage [slides.0.blocks.0.items]<br>layouts/list-5x-box-vertical-title-left-slideimage [slides.0.blocks.0.items]<br>layouts/list-6x-box-vertical [slides.0.blocks.0.items] | 3 preview [•••] vs 2 pptx [••] |
+| 12 | fills \| chart series colors not in preview (4) | fail | 9 | 9 | charts/bar [slides.0.chart]<br>charts/clustered-bar-2x [slides.0.chart]<br>charts/stacked-bar-2x [slides.0.chart] |  |
+| 13 | fontResolution \| preview font visual-substitute: Segoe UI Semibold -> Roboto SemiBold | fail | 7 | 7 | font-schemes/segoe-ui [Segoe UI Semibold]<br>blocks/agenda-overview [Segoe UI Semibold]<br>blocks/decision-brief [Segoe UI Semibold] |  |
+| 14 | fontResolution \| preview font visual-substitute: Segoe UI -> Arimo | fail | 7 | 7 | font-schemes/segoe-ui [Segoe UI]<br>blocks/agenda-overview [Segoe UI]<br>blocks/decision-brief [Segoe UI] |  |
+| 15 | fontResolution \| preview font missing: Open Sans | fail | 7 | 7 | font-schemes/open-sans [Open Sans]<br>font-schemes-legacy/modern-professional [Open Sans]<br>blocks/value-proposition [Open Sans] |  |
+| 16 | fontResolution \| preview font visual-substitute: Georgia -> Gelasio | fail | 6 | 6 | font-schemes/georgia [Georgia]<br>blocks/section-break [Georgia]<br>blocks/customer-journey [Georgia] |  |
+| 17 | fills \| chart series colors not in preview (7) | fail | 6 | 6 | charts/dot-plot [slides.0.chart]<br>charts/radar [slides.0.chart]<br>charts/radar-with-markers [slides.0.chart] |  |
+| 18 | fontResolution \| preview font visual-substitute: Grandview -> Roboto | fail | 5 | 5 | font-schemes/impact [Grandview]<br>font-schemes/grandview [Grandview]<br>themes/bold [Grandview] |  |
+| 19 | fontResolution \| preview font missing: Montserrat | fail | 5 | 5 | font-schemes/montserrat [Montserrat]<br>font-schemes-legacy/modern-professional [Montserrat]<br>blocks/problem-statement [Montserrat] |  |
+| 20 | fills \| chart series colors not in preview (10) | fail | 5 | 5 | charts/line [slides.0.chart]<br>charts/area [slides.0.chart]<br>charts/united-states [slides.0.chart] |  |
 
 ## Near-only patterns (tolerable deltas)
 
@@ -142,8 +144,8 @@ Families the traced preview uses plus the resolved design heading/body/code font
 |---|---|---|---|
 | real | 2 | 898 | Roboto Mono (898), Roboto (3) |
 | metric-substitute | 4 | 6 | Arial→Arimo (3), Courier New→Cousine (1), Calibri→Carlito (1), Times New Roman→Tinos (1) |
-| visual-substitute | 5 | 762 | Aptos Display→Carlito (754), Aptos→Carlito (754), Georgia→Gelasio (6), Consolas→Cousine (1), Tahoma→Arimo (1) |
-| missing | 93 | 133 | Segoe UI Semibold (7), Segoe UI (7), Open Sans (7), Grandview (5), Montserrat (5), Mangal (4), Arabic Typesetting (4), Arial Black (3), Grandview Display (3), Sylfaen (3), Poppins (3), Impact (2), Seaford Display (2), Seaford (2), Tenorite Display (2), Tenorite (2), Microsoft YaHei (2), Malgun Gothic (2), Latha (2), David (2), Vrinda (2), Shruti (2), Tunga (2), Kartika (2), Kalinga (2), Raavi (2), Gautami (2), Microsoft JhengHei (2), Meiryo (2), Angsana New (2), Shonar Bangla (2), Noto Naskh Arabic (2), Nyala (2), DaunPenh (2), Lucida Sans (1), Segoe UI Semilight (1), Segoe UI Light (1), Trebuchet MS (1), Verdana (1), Bookman Old Style (1), … |
+| visual-substitute | 27 | 791 | Aptos Display→Carlito (754), Aptos→Roboto (754), Segoe UI Semibold→Roboto SemiBold (7), Segoe UI→Arimo (7), Georgia→Gelasio (6), Grandview→Roboto (5), Arial Black→Arimo (3), Grandview Display→Roboto (3), Impact→Carlito (2), Seaford Display→Carlito (2), Seaford→Carlito (2), Tenorite Display→Roboto (2), Tenorite→Roboto (2), Consolas→Cousine (1), Lucida Sans→Arimo (1), Segoe UI Semilight→Roboto (1), Segoe UI Light→Carlito (1), Tahoma→Arimo (1), Trebuchet MS→Arimo (1), Verdana→Arimo (1), Bookman Old Style→Gelasio (1), Century Schoolbook→Gelasio (1), Constantia→Caladea (1), Garamond→Tinos (1), Rockwell→Gelasio (1), Skeena Display→Carlito (1), Skeena→Carlito (1) |
+| missing | 71 | 104 | Open Sans (7), Montserrat (5), Mangal (4), Arabic Typesetting (4), Sylfaen (3), Poppins (3), Microsoft YaHei (2), Malgun Gothic (2), Latha (2), David (2), Vrinda (2), Shruti (2), Tunga (2), Kartika (2), Kalinga (2), Raavi (2), Gautami (2), Microsoft JhengHei (2), Meiryo (2), Angsana New (2), Shonar Bangla (2), Noto Naskh Arabic (2), Nyala (2), DaunPenh (2), SimSun (1), FangSong (1), Yu Gothic (1), PMingLiU (1), MingLiU (1), MS Mincho (1), BatangChe (1), Batang (1), GungsuhChe (1), Gungsuh (1), Nirmala UI (1), Miriam (1), Gisha (1), Aparajita (1), DilleniaUPC (1), Sakkal Majalla (1), … |
 
 5/900 values render only with the chosen font or a metric-compatible substitute.
 

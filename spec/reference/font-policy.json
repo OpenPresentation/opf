@@ -5,9 +5,9 @@
     "note": "Owner decisions resolved provisionally with the recommended defaults. Changing a decision here is the whole edit: every row whose replacement names this decision takes its family and compatibility from it. A recorded measurement for a different family is ignored (treated as unmeasured) until scripts/measure-font-replacements.mjs is re-run.",
     "decisions": {
       "aptos-preview": {
-        "replacement": "Roboto",
-        "compatibility": "visual",
-        "note": "Default scheme aptos previews with Roboto; the PPTX still names Aptos."
+        "replacement": "Intos",
+        "compatibility": "metric",
+        "note": "Owner policy 2026-09-29: a licensed font the user selects previews with an open replacement that looks similar and has the same size on screen; the PPTX keeps the selected name. Aptos previews with Intos (metric, OFL-1.1, vendored in opf-render); Roboto and Carlito are alternates for registries built without the Intos faces (they are in the opf-render office pack)."
       },
       "segoe-ui-preview": {
         "replacement": "Red Hat Display",
@@ -25,7 +25,7 @@
   "description": "OPF font policy (font-fidelity-everywhere FF-31). One row per font family that OPF catalogs, defaults or renderer rules name. Renderers preview a proprietary family with its openly licensed replacement for measurement and drawing only. Exporters always write the chosen family, never write a replacement, and never embed a proprietary family. Open families may be bundled for rendering and reach a PPTX only through an explicit embed path. See docs/font-fidelity.md.",
   "version": 1,
   "measurement": {
-    "tool": "fontkit 2.0.4 shaping with default features (kerning, ligatures), as opf-render measures text",
+    "tool": "fontkit 2.0.4 shaping with default features (kerning, ligatures), as opf-render measures text; a replacement that lists disabledFeatures (Georgia -> Gelasio) is shaped with those features off",
     "corpus": "300 Latin title/body strings sampled from the 126 bundled example decks",
     "evidence": "docs/evidence/font-replacements-20260923/README.md",
     "definition": "For each style both fonts have (regular, bold, italic, bold italic, or the weight the family name encodes), the shaped advance width of every corpus string in the replacement is divided by the width in the real font. meanAbsWidthDelta averages |ratio - 1| over strings and styles; meanWidthDelta averages the signed value; maxAbsWidthDelta is the largest single-string |ratio - 1|. Reference fonts were read in place from a licensed Windows 11 + Microsoft 365 host and never copied."
@@ -106,16 +106,18 @@
       "embeddableByOpf": false,
       "replacement": {
         "decision": "aptos-preview",
+        "source": "https://github.com/muglug/intos/tree/fef9315c14da9e4b23b4c3cac8e718998d4e4736",
         "measured": {
-          "replacement": "Roboto",
-          "meanAbsWidthDelta": 0.0215,
-          "meanWidthDelta": 0.0008,
-          "maxAbsWidthDelta": 0.0739,
+          "replacement": "Intos",
+          "meanAbsWidthDelta": 0,
+          "meanWidthDelta": 0,
+          "maxAbsWidthDelta": 0,
           "styles": 4,
           "reference": "Aptos 2.01;O365"
         }
       },
       "alternates": [
+        "Roboto",
         "Carlito"
       ],
       "sources": [
@@ -126,7 +128,7 @@
         "https://microsoft.design/articles/a-change-of-typeface-microsoft-s-new-default-font-has-arrived/",
         "https://www.microsoft.com/en-us/download/details.aspx?id=106087"
       ],
-      "note": "Microsoft 365 cloud font; not redistributable. Roboto is the closest measured open face with all four styles already in the base pack. Carlito (the previous substitute) measured 7.1% narrower. Not in the Windows 10/11 font lists; delivered as a Microsoft 365 cloud font. Microsoft also offers a standalone download (Download Center id=106087) under Microsoft terms, not an open license."
+      "note": "Microsoft 365 cloud font; not redistributable. Intos is metric-compatible (OFL, Inter-derived outlines with Aptos advances, kerning and vertical metrics) and previews it in the default opf-render office pack; Roboto and Carlito are the visual fallbacks for registries built without the Intos faces. Not in the Windows 10/11 font lists; delivered as a Microsoft 365 cloud font. Microsoft also offers a standalone download (Download Center id=106087) under Microsoft terms, not an open license."
     },
     {
       "family": "Aptos Display",
@@ -137,18 +139,20 @@
       ],
       "embeddableByOpf": false,
       "replacement": {
-        "family": "Carlito",
-        "compatibility": "visual",
+        "family": "Intos Display",
+        "compatibility": "metric",
+        "source": "https://github.com/muglug/intos/tree/fef9315c14da9e4b23b4c3cac8e718998d4e4736",
         "measured": {
-          "replacement": "Carlito",
-          "meanAbsWidthDelta": 0.0184,
-          "meanWidthDelta": -0.0057,
-          "maxAbsWidthDelta": 0.0691,
+          "replacement": "Intos Display",
+          "meanAbsWidthDelta": 0,
+          "meanWidthDelta": 0,
+          "maxAbsWidthDelta": 0,
           "styles": 4,
           "reference": "Aptos Display 2.01;O365"
         }
       },
       "alternates": [
+        "Carlito",
         "Roboto"
       ],
       "sources": [
@@ -158,7 +162,7 @@
         "https://support.apple.com/en-us/122869",
         "https://microsoft.design/articles/a-change-of-typeface-microsoft-s-new-default-font-has-arrived/"
       ],
-      "note": "Part of the Aptos family; cloud font list has Aptos Display (+Bold/Italic/Bold Italic)."
+      "note": "Part of the Aptos family; cloud font list has Aptos Display (+Bold/Italic/Bold Italic). Intos Display is its metric-compatible preview replacement."
     },
     {
       "family": "Aptos Mono",
@@ -194,13 +198,14 @@
       ],
       "embeddableByOpf": false,
       "replacement": {
-        "family": "Carlito",
-        "compatibility": "visual",
+        "family": "Intos Narrow",
+        "compatibility": "metric",
+        "source": "https://github.com/muglug/intos/tree/fef9315c14da9e4b23b4c3cac8e718998d4e4736",
         "measured": {
-          "replacement": "Carlito",
-          "meanAbsWidthDelta": 0.0233,
-          "meanWidthDelta": 0.0222,
-          "maxAbsWidthDelta": 0.0786,
+          "replacement": "Intos Narrow",
+          "meanAbsWidthDelta": 0,
+          "meanWidthDelta": 0,
+          "maxAbsWidthDelta": 0,
           "styles": 4,
           "reference": "Aptos Narrow 2.01;O365"
         }
@@ -212,7 +217,10 @@
         "https://support.apple.com/en-us/122869",
         "https://microsoft.design/articles/a-change-of-typeface-microsoft-s-new-default-font-has-arrived/"
       ],
-      "note": "Part of the Aptos family; cloud font list has Aptos Narrow (+Bold/Italic/Bold Italic)."
+      "note": "Part of the Aptos family; cloud font list has Aptos Narrow (+Bold/Italic/Bold Italic). Intos Narrow is its metric-compatible preview replacement.",
+      "alternates": [
+        "Carlito"
+      ]
     },
     {
       "family": "Aptos Serif",
@@ -223,9 +231,17 @@
       ],
       "embeddableByOpf": false,
       "replacement": {
-        "family": "Tinos",
-        "compatibility": "visual",
-        "measured": null
+        "family": "Intos Serif",
+        "compatibility": "metric",
+        "source": "https://github.com/muglug/intos/tree/fef9315c14da9e4b23b4c3cac8e718998d4e4736",
+        "measured": {
+          "replacement": "Intos Serif",
+          "meanAbsWidthDelta": 0,
+          "meanWidthDelta": 0,
+          "maxAbsWidthDelta": 0,
+          "styles": 4,
+          "reference": "Aptos Serif 2.01;240513210638;O365"
+        }
       },
       "sources": [
         "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
@@ -233,7 +249,10 @@
         "https://learn.microsoft.com/en-us/typography/font-list/aptos",
         "https://support.apple.com/en-us/122869"
       ],
-      "note": "Reference not available to the measuring host. Aptos family member; cloud list has Aptos Serif, Bold, Italic and Bold Italic."
+      "note": "Part of the Aptos family; cloud list has Aptos Serif, Bold, Italic and Bold Italic. Intos Serif (Gelasio-derived outlines, Aptos Serif metrics) is its metric-compatible preview replacement. Not installed on the measuring host: measured from the files in Microsoft's Aptos Fonts download (Download Center id=106087).",
+      "alternates": [
+        "Tinos"
+      ]
     },
     {
       "family": "Arabic Typesetting",
@@ -909,8 +928,8 @@
         "compatibility": "visual",
         "measured": {
           "replacement": "Source Sans 3",
-          "meanAbsWidthDelta": 0.0157,
-          "meanWidthDelta": 0.0151,
+          "meanAbsWidthDelta": 0.0158,
+          "meanWidthDelta": 0.0152,
           "maxAbsWidthDelta": 0.0521,
           "styles": 4,
           "reference": "Corbel 6.01"
@@ -1301,12 +1320,16 @@
       "embeddableByOpf": false,
       "replacement": {
         "family": "Gelasio",
-        "compatibility": "visual",
+        "compatibility": "metric",
+        "disabledFeatures": [
+          "liga",
+          "clig"
+        ],
         "measured": {
           "replacement": "Gelasio",
-          "meanAbsWidthDelta": 0.0002,
-          "meanWidthDelta": -0.0002,
-          "maxAbsWidthDelta": 0.0102,
+          "meanAbsWidthDelta": 0,
+          "meanWidthDelta": 0,
+          "maxAbsWidthDelta": 0,
           "styles": 4,
           "reference": "Georgia 5.59"
         },
@@ -1319,7 +1342,7 @@
         "https://learn.microsoft.com/en-us/typography/font-list/georgia",
         "https://support.apple.com/en-us/122869"
       ],
-      "note": "Gelasio is designed to Georgia metrics and every basic-Latin advance matches Georgia 5.59, but opf-render shapes with default features, and runs where Gelasio applies optional ligatures differ by up to 1.02%. OPF classes it as visual."
+      "note": "Gelasio is designed to Georgia metrics and every basic-Latin advance matches Georgia 5.59. With default features Gelasio applies fi/fl/ffi/ffl ligatures that Georgia does not, which changes runs by up to 1.02%. Renderers therefore turn liga and clig off in Gelasio (disabledFeatures); the measurement below shapes Gelasio that way. Georgia has no liga or clig feature, so its default shaping is unchanged. The metric claim holds only with those features off."
     },
     {
       "family": "Gill Sans MT",
@@ -1334,9 +1357,9 @@
         "compatibility": "visual",
         "measured": {
           "replacement": "Source Sans 3",
-          "meanAbsWidthDelta": 0.051,
-          "meanWidthDelta": 0.0038,
-          "maxAbsWidthDelta": 0.1456,
+          "meanAbsWidthDelta": 0.0511,
+          "meanWidthDelta": 0.0039,
+          "maxAbsWidthDelta": 0.1459,
           "styles": 4,
           "reference": "Gill Sans MT 1.65"
         }
@@ -1501,6 +1524,58 @@
         "https://learn.microsoft.com/en-us/typography/font-list/impact",
         "https://support.apple.com/en-us/122869"
       ]
+    },
+    {
+      "family": "Intos",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/muglug/intos/tree/fef9315c14da9e4b23b4c3cac8e718998d4e4736",
+        "https://github.com/muglug/intos/blob/fef9315c14da9e4b23b4c3cac8e718998d4e4736/LICENSE.txt"
+      ],
+      "note": "Metric-compatible with Aptos (Aptos advance widths, kerning and vertical metrics on Inter-derived outlines). Vendored in opf-render at the pinned commit; single-maintainer project created September 2026, so Roboto and Carlito stay as fallbacks."
+    },
+    {
+      "family": "Intos Display",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/muglug/intos/tree/fef9315c14da9e4b23b4c3cac8e718998d4e4736",
+        "https://github.com/muglug/intos/blob/fef9315c14da9e4b23b4c3cac8e718998d4e4736/LICENSE.txt"
+      ],
+      "note": "Metric-compatible with Aptos Display (Aptos advance widths, kerning and vertical metrics on Inter-derived outlines). Vendored in opf-render at the pinned commit; single-maintainer project created September 2026, so Roboto and Carlito stay as fallbacks."
+    },
+    {
+      "family": "Intos Narrow",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/muglug/intos/tree/fef9315c14da9e4b23b4c3cac8e718998d4e4736",
+        "https://github.com/muglug/intos/blob/fef9315c14da9e4b23b4c3cac8e718998d4e4736/LICENSE.txt"
+      ],
+      "note": "Metric-compatible with Aptos Narrow (Aptos advance widths, kerning and vertical metrics on Inter-derived outlines). Vendored in opf-render at the pinned commit; single-maintainer project created September 2026, so Roboto and Carlito stay as fallbacks."
+    },
+    {
+      "family": "Intos Serif",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/muglug/intos/tree/fef9315c14da9e4b23b4c3cac8e718998d4e4736",
+        "https://github.com/muglug/intos/blob/fef9315c14da9e4b23b4c3cac8e718998d4e4736/LICENSE.txt"
+      ],
+      "note": "Metric-compatible with Aptos Serif (Aptos Serif advance widths, kerning and vertical metrics on Gelasio-derived outlines). Vendored in opf-render at the pinned commit; Tinos stays as the visual fallback."
     },
     {
       "family": "Kalinga",
@@ -2721,7 +2796,7 @@
         "https://learn.microsoft.com/en-us/typography/font-list/segoe-ui",
         "https://support.apple.com/en-us/122869"
       ],
-      "note": "Microsoft's OFL Selawik is the documented Segoe UI fallback but is not published as a pinned package; Red Hat Display is the closest measured shipped face. MS Learn lists vendor as Agfa Monotype but copyright Microsoft."
+      "note": "Microsoft's OFL Selawik 1.01 was measured and rejected as a metric replacement: 0.16% mean and 2.5% maximum in regular, no italic faces (2.65% mean), and Semibold is 1.75% off. Red Hat Display remains the closest shipped face with all four styles; see docs/programs/font-fidelity-everywhere/font-licensing.md."
     },
     {
       "family": "Segoe UI Emoji",

@@ -1,0 +1,23 @@
+[
+  {
+    "id": 109334865292,
+    "name": "package (ubuntu-latest)",
+    "conclusion": "success",
+    "startedAt": "2026-09-29T09:04:14Z",
+    "completedAt": "2026-09-29T09:10:00Z",
+    "successfulSteps": 34,
+    "skippedSteps": [
+      "Verify bounded native harness without Office",
+      "Run npx playwright install chromium"
+    ]
+  },
+  {
+    "id": 109334865409,
+    "name": "package (windows-latest)",
+    "conclusion": "success",
+    "startedAt": "2026-09-29T09:04:14Z",
+    "completedAt": "2026-09-29T09:14:45Z",
+    "successfulSteps": 34,
+    "skippedSteps": []
+  }
+]

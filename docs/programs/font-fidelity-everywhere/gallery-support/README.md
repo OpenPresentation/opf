@@ -12,7 +12,7 @@ The reproducible audits behind [gallery-support.md](../gallery-support.md):
 | --- | --- |
 | `audit-a/` | Layouts, content blocks, image treatments, backgrounds, headers/footers. `scripts/`, `results.json`, generated `SUMMARY.md`. |
 | `audit-b/` | Color schemes, font schemes, languages, themes, narratives, audiences, tones, socials. `scripts/`, `results.json`, the audit's own `README.md` and generated per-dimension tables (`*.md`). |
-| `parity/` | Parity scoreboard (FF-38): `scripts/`, `run.ps1`, `build.ps1`, `parity-results.json` and the generated `PARITY.md`. |
+| `parity/` | Parity scoreboard (FF-38): `scripts/`, `run.ps1`, `build.ps1`, `parity-results.json` and the generated `PARITY.md`, plus dated later runs (`parity-results-<date>-<topic>.json` and `PARITY-<date>-<topic>.md`; never overwritten). |
 | `support-status.json` | One record per gallery value, built from the presence and parity results. |
 | `build-support-status.mjs` | Regenerates `support-status.json`. |
 
@@ -169,6 +169,39 @@ merged fix, copy `parity-results.json` and `PARITY.md` back into `parity/`,
 regenerate `support-status.json`, and update the headline in
 [gallery-support.md](../gallery-support.md) and [burndown.md](../burndown.md).
 
+### Instrument notes (2026-09-29)
+
+- **Field text.** PPTX text runs come from `scripts/pptx-runs.mjs`. It matches both
+  `a:r` and `a:fld` (slide-number and date fields carry `id`/`type` attributes, so
+  `<a:fld>` never appeared in the file). `node --test scripts/pptx-runs.test.mjs`
+  covers it. A change to an instrument gets a before/after run on the same
+  heads of all four repositories; only the fixed run is committed, as a new dated
+  results file (`parity-results-2026-09-29-field-text.json`), and
+  `build-support-status.mjs` reads that file by default.
+- **Preview font host.** `parity.mjs` builds the font-resolution registry with
+  `prepareNodeFonts({pack: 'office', substitutionPolicy: 'visual'})` and no
+  `scripts`, because that is what the shipped previews load: the opf-editor
+  playground bundle builds its registry with `loadOfficeFontRegistry()`, the
+  gallery layout thumbnails use no registry, and opf-render loads the optional
+  Noto script pack only when a host passes `scripts`. Values whose fonts route to
+  a Noto script face therefore fail fontResolution ("preview has no face"); that
+  is a product gap, not an instrument error. To see what loading it would give,
+  add `scripts: 'all'` to that call in a scratch copy (the packages are
+  devDependencies of opf-render, so `npm ci` installs them); the same 850 values
+  then score 29 perfect, 669 near, 152 mismatch. Do not commit such a run as the
+  scoreboard until a shipped host loads the pack.
+- **Table frames (FF-39, 2026-09-29).** A PPTX table frame is compared with the
+  preview's drawn table (`scripts/table-box.mjs`: the union of the table's cell
+  rectangles), not with the composed allocation box, because PowerPoint derives a
+  table's height from its rows and a table can be shorter than its allocation.
+  Chart, picture and card frames still use the composed box. The tolerance is
+  unchanged. `node --test scripts/table-box.test.mjs` covers it. The run is
+  `parity-results-2026-09-29-table-drawn-extent.json`, and
+  `build-support-status.mjs` reads it by default; the rationale and the
+  before/after are in [gallery-support.md](../gallery-support.md).
+
+- **Intos default (FF-31, 2026-09-29).** `parity-results-2026-09-29-intos-default.json` is the run on the merged mains after opf-render#54 (Intos previews Aptos as metric): 660 perfect, 33 near, 157 mismatch of 850. The instrument is unchanged. `build-support-status.mjs` reads it by default; the before/after is in [gallery-support.md](../gallery-support.md).
+
 ### Slide-image mapping (FF-26)
 
 opf-pptx exports `design.slideImage` as one native picture named
@@ -227,7 +260,7 @@ Schema version 1. Top level:
 | `notMeasured` | Dimensions without a presence status (charts, FF-22). |
 | `sharedExportGaps` | Gaps that apply to every exported value. |
 | `counts` | Presence: `{dimension: {status: n}}`. |
-| `parityCounts` | Parity: `{total, perfect, near, mismatch, checksPassed: {check: n}}` over all 900 parity records. |
+| `parityCounts` | Parity: `{total, perfect, near, mismatch, checksPassed: {check: n}}` over all parity records (850 since the 2026-09-29 re-measure). |
 | `items` | One record per presence-audited gallery value (793), below. |
 | `parityOnly` | Values measured only by parity: the 76 charts, as `{dimension, galleryId, galleryIdNormalized?, parity}`; `galleryIdNormalized` is `{fromParts, joiner, to, reason}`. |
 

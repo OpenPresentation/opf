@@ -1,6 +1,6 @@
 # pptx.gallery support by dimension (FF-23)
 
-Measured 2026-09-23 (UTC). Program: [README.md](README.md). Tracker:
+Parity measured 2026-09-29; presence measured 2026-09-23 (UTC). Program: [README.md](README.md). Tracker:
 [burndown.md](burndown.md). Audit scripts, raw results and the per-item
 machine-readable file: [gallery-support/](gallery-support/README.md).
 
@@ -9,8 +9,14 @@ pptx.gallery value's "OPF Config" snippet and run it through the OpenPresentatio
 packages. It measures the engines, not the schema: a value that validates but
 changes nothing in the preview or the PPTX is not reported as working.
 
-**Headline: 4 of 900 gallery values are perfect by parity** (FF-38, current
-mains on 2026-09-23, after the FF-20, FF-25, FF-26, FF-27 and FF-34 merges).
+**Latest measurement (2026-09-29, Intos as the default Aptos preview): 660 of 850 values are perfect by parity, 33 near, 157 mismatch**
+(opf `338ddcd`, opf-render `d528be5`, opf-pptx `3c44a40`, pptx-gallery `efb63ac`; the previous mains scored 25 perfect, 667 near, 158 mismatch). See
+["Aptos previews with Intos"](#aptos-previews-with-intos-2026-09-29-measurement) below. The accepted-graph headline that follows is the earlier 900-value measurement.
+
+**Headline: 5 of 900 gallery values are perfect by parity** (FF-38, accepted
+merged source graph on 2026-09-29; 0 near, 895 mismatch under the old fontResolution definition; 608 near, 287 mismatch under the definition adopted on 2026-09-29, see [below](#fontresolution-definition-change-owner-decision-2026-09-29)). The unchanged full
+audit improves the September 23 result from 4 to 5, with no classification
+regressions. This graph includes PPTX79 and PPTX81 and core145's FF-04 evidence.
 This is the program's progress metric. The 900 values are the 793
 presence-audited values plus 107 parity-only records: 76 charts and 31
 `withAssets` variants. The presence audits below find 352 of 793 values
@@ -26,20 +32,21 @@ Two measurements are recorded here:
 - **Parity (FF-38).** Do the preview and the exported PPTX agree element by
   element?
 
-| Repository | Presence audits A and B | Parity scoreboard (FF-38) | Previous parity run (opf#122) | Parity baseline (history) |
+| Repository | Presence audits A and B (September 23) | Accepted parity (September 29) | Previous parity run (opf#122) | Parity baseline (history) |
 | --- | --- | --- | --- | --- |
-| opf (core) | `1ad25df` | `6263985` | `c278532` | `53be042` |
-| opf-render | `bc436f3` | `bc436f3` | `47d19b2` | `e500ed9` |
-| opf-pptx | `9092954` | `9092954` | `5b657c9` | `cf0bc0c` |
+| opf (core) | `1ad25df` | `a85facf` | `c278532` | `53be042` |
+| opf-render | `bc436f3` | `6c7d781` | `47d19b2` | `e500ed9` |
+| opf-pptx | `9092954` | `c749c35` | `5b657c9` | `cf0bc0c` |
 | opf-editor | `214ae69` (audit B) | not used | not used | not used |
 | pptx-gallery | `f17e9ae` | `f17e9ae` | `f17e9ae` | `f17e9ae` |
 
 Node 24.21.0. No Office or COM was used; native PowerPoint behaviour is
-recorded separately (FF-04, FF-12). All three measurements now run on the same
-merged mains. They include FF-07, FF-08, FF-17, FF-18, FF-19, FF-24, FF-28,
+recorded separately (FF-04, FF-12). Presence audits retain their September 23
+heads and results; they were not rerun at the September 29 parity heads.
+The accepted source graph includes FF-07, FF-08, FF-17, FF-18, FF-19, FF-24, FF-28,
 FF-32, FF-35, FF-35b and FF-39, the merged engine halves of FF-25, FF-26,
 FF-27 and FF-34 (opf-pptx#65 included), FF-31's exporter half
-(opf-pptx#63) and FF-22's core half. The parity scoreboard was re-run at opf
+(opf-pptx#63) and FF-22's core half. The September 23 parity scoreboard was re-run at opf
 `6263985` (opf#139; documentation and harness only since `a74f3f6`) after
 the harness learned to map the FF-26 slide-image picture and, since, to fail
 non-finite geometry and check crop position; the run before the mapping is
@@ -53,6 +60,22 @@ hardening, with no class change. pptx-gallery is still `f17e9ae`: none
 of its program PRs (#40 to #46) has merged, so every snippet is the
 pre-program snippet. The per-dimension prose below the summary
 table describes the first measurement unless a paragraph says otherwise.
+
+The accepted local raw receipt is `baseline81-results.json`, generated at
+`2026-09-29T08:23:46.429Z`; the committed [results](gallery-support/parity/parity-results.json)
+and [scoreboard](gallery-support/parity/PARITY.md) record that run with the
+[documented one-slug normalization](gallery-support/README.md#normalized-ids).
+Editor `d0c95a1` was refreshed by a dependency-only merge and was not used by
+parity. A separate local raw candidate receipt, `candidate78-results.json`
+at `2026-09-29T08:30:22.322Z`, uses the same core, renderer and gallery with
+[PPTX78](https://github.com/OpenPresentation/opf-pptx/pull/78) head
+`7cc779129323af6123ef5e194226a545e743f195`: also 5 perfect, 0 near, 895 mismatch (old fontResolution definition),
+with text 798 to 799 and fills 790 to 791 and no classification change.
+Candidate CI [36543078806](https://github.com/OpenPresentation/opf-pptx/actions/runs/36543078806)
+is pending at this checkpoint. It does not replace the accepted baseline.
+PPTX80's old-base caption/fallback findings were reconciled into PPTX78;
+PPTX80 was not merged as-is. These are source/package measurements, without
+new Office acceptance; FF-29 remains in review and FF-05 remains open.
 
 ## Method
 
@@ -90,37 +113,185 @@ checks are:
 
 | Check | Passes when |
 | --- | --- |
-| geometry | Text-line anchors and baselines are within 0.02 pt; chart, table, picture and card frames equal the composed box within 0.02 pt; a picture's crop places the image content where the preview does, within 0.02 pt at the visible edges. Deltas up to 0.5 pt are near; a non-finite delta fails. |
+| geometry | Text-line anchors and baselines are within 0.02 pt; chart, picture and card frames equal the composed box within 0.02 pt; a table frame equals the preview's drawn table, the union of its cell rectangles, within 0.02 pt (since 2026-09-29; see "Table frames and the drawn table" below); a picture's crop places the image content where the preview does, within 0.02 pt at the visible edges. Deltas up to 0.5 pt are near; a non-finite delta fails. |
 | text | Same line text and run segmentation. Per run: the same family in the script slot the text uses (`latin`/`ea`/`cs`), size within 0.005 pt, bold, italic and resolved colour. Also the same paragraph alignment and list markers. Native charts: preview labels are in the chart caches, and the chart XML names the preview font. |
 | fills | Same background kind and colour; per element group, the same solid fill colours and the same images (sha256); chart series colours appear in the preview. |
 | zOrder | The order of mapped element groups in `spTree` matches the SVG paint order, and the slide count matches. |
 | slideSize | `p:sldSz` equals the SVG viewBox within 0.02 pt. |
 | typefaces | Every `typeface=` in every part, charts and embedded workbooks included, and every font in `app.xml` is a family the preview uses. Theme per-script supplements are reported but not gated. |
 | reimport | `fromPptx` preserves color scheme, font scheme, theme, background, dimensions, language, narrative, tone, audience and slide layout ids. A loss with a specific diagnostic is near; a silent loss fails. |
-| fontResolution | Every family the preview uses resolves, in the office pack with visual substitution, to the real face or a metric-compatible substitute. |
+| fontResolution | Since the owner decision of 2026-09-29, for every family the selected design uses: **pass** when the PPTX names the selected family (theme major/minor for the heading and body fonts, run or chart slots otherwise) and the preview draws the real face (an open bundled family) or the FF-31 policy table's metric-compatible replacement; **near** when the PPTX names the selected family and the preview draws the policy table's route for it at the visual look-alike tier only ("visual-only replacement"); **fail** when the family has no row in the policy table, the preview has no face for it, the preview draws a face that is not the table's route, or the PPTX writes a replacement name instead of the selected one. Before that decision: every family the preview uses resolved, in the office pack with visual substitution, to the real face or a metric-compatible substitute (the September 23 and earlier rows below use this). |
 | theme | Theme major/minor `latin` equal the preview heading/body fonts, and the theme `clrScheme` equals the document color scheme. |
 | mapping | Every preview element group has PPTX shapes and the reverse; an unmapped PPTX shape is near. |
 
-Checks passed, all 900 values (current mains, 2026-09-23 re-run), with the
+Checks passed, all 900 values (accepted merged graph, 2026-09-29), with the
 run before the slide-image mapping (opf#137) and the opf#122 run for
 comparison:
 
 | Run | perfect | geometry | text | fills | zOrder | slideSize | typefaces | reimport | fontResolution | theme | mapping |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Current mains | 4 | 880 | 759 | 766 | 880 | 900 | 900 | 899 | 5 | 900 | 890 |
+| Intos previews Aptos (September 29, first run on the merged FF-31 mains; opf `338ddcd`, opf-render `d528be5`, opf-pptx `3c44a40`, pptx-gallery `efb63ac`) | 660 (33 near, 157 mismatch) | 850 | 830 | 782 | 850 | 850 | 850 | 849 | 733 pass, 31 near, 86 fail | 850 | 850 |
+| Same harness, previous mains (before opf-render#54; opf `89eb735`, opf-render `e016f4e`, opf-pptx `06e4843`, pptx-gallery `a08718e`) | 25 (667 near, 158 mismatch) | 850 | 830 | 782 | 850 | 850 | 850 | 849 | 28 pass, 735 near, 87 fail | 850 | 850 |
+| Table frames compared with the drawn table (September 29, harness change; opf `b1fdfa7`, opf-render `762dbb9`, opf-pptx `874d9e9`, pptx-gallery `5963702`) | 5 (627 near, 218 mismatch) | 850 | 805 | 782 | 830 | 850 | 850 | 849 | 5 pass, 741 near, 104 fail | 850 | 840 |
+| Same heads, old table check (composed box) | 5 (608 near, 237 mismatch) | 830 | 805 | 782 | 830 | 850 | 850 | 849 | 5 pass, 741 near, 104 fail | 850 | 840 |
+| New table check with opf-pptx#93 (`844e9e6`, furniture paints last; other heads as above) | 5 (647 near, 198 mismatch) | 850 | 805 | 782 | 850 | 850 | 850 | 849 | 5 pass, 741 near, 104 fail | 850 | 840 |
+| Field text counted, 850-value set (September 29, after pptx-gallery#40 and a harness fix; opf `03a55ae`, opf-render `aa7e898`, opf-pptx `ca34da7`, pptx-gallery `23f9216`) | 5 (608 near, 237 mismatch) | 830 | 805 | 782 | 830 | 850 | 850 | 849 | 5 pass, 741 near, 104 fail | 850 | 840 |
+| Look-alike fonts accepted, new fontResolution definition (September 29, owner decision 2026-09-29; opf `401f2e3`, opf-render `c62b3f9`, opf-pptx `54f7e4c`, pptx-gallery `4b48e69`) | 5 (608 near, 287 mismatch) | 880 | 800 | 791 | 880 | 900 | 900 | 899 | 5 pass, 791 near, 104 fail | 900 | 890 |
+| Same run, old fontResolution definition | 5 (0 near, 895 mismatch) | 880 | 800 | 791 | 880 | 900 | 900 | 899 | 5 | 900 | 890 |
+| Accepted merged graph (September 29) | 5 | 880 | 798 | 790 | 880 | 900 | 900 | 899 | 5 | 900 | 890 |
+| Previous scoreboard (September 23) | 4 | 880 | 759 | 766 | 880 | 900 | 900 | 899 | 5 | 900 | 890 |
 | Before slide-image mapping (opf#137) | 4 | 774 | 759 | 674 | 784 | 900 | 900 | 899 | 5 | 900 | 672 |
 | Previous (opf#122) | 0 | 390 | 326 | 734 | 880 | 900 | 0 | 0 | 5 | 900 | 890 |
 
-The four perfect values are the font schemes `calibri`, `courier-new`,
-`times-new-roman` and `roboto`. slideSize, typefaces and theme pass
+#### fontResolution definition change (owner decision, 2026-09-29)
+
+The first two rows above are one run, measured on the merged heads listed in
+the row, and differ only in how fontResolution is judged. The owner decided on
+2026-09-29 (verbatim): "look-alike fonts are to get around any font licensing
+restrictions. They are desirable for open source but if we export to PowerPoint
+the pptx file should include references to the font they selected and want to
+see in PowerPoint." Later the same day (verbatim): "if the user wants Aptos...
+if Aptos is license restricted we can substitute a font (Aptos2 or whatever
+it's named) that looks similar and has the same size in pixels on the screen
+for rendering live previews of SVG. When we export to PPTX we should have
+PowerPoint open that file and display actual Aptos." So a look-alike preview
+font is intended, the PPTX must name the selected family and never the
+replacement, and the target look-alike is metric-compatible. The check now
+takes its routes from core's FF-31 font policy table (the listed replacement,
+or a listed alternate when the replacement is not loaded in the preview):
+metric-compatible passes, visual-only is near, and a family with no route, a
+face that is not the table's route, or a PPTX that writes a replacement name
+fails. No tolerance and no other check changed; the same run under the old
+definition is stored per value (`results[].legacy`), and every other check
+count is identical under both.
+
+Under the new definition 791 values are near only because of visual-only
+replacements (Aptos to Roboto and Aptos Display to Carlito for 754 values, then
+27 families in all; the list is in [the run's scoreboard](gallery-support/parity/PARITY-2026-09-29-lookalike-fonts.md#selected-families-with-only-a-visual-only-replacement-near)),
+and the 104 fontResolution failures are all faces the modelled preview does
+not load (the office pack without script packs): Noto and other script
+replacements that the `scripts` pack bundles (85 values), and open families no
+pack bundles (Open Sans, Montserrat, Poppins, Raleway, PT Serif, Playfair
+Display, Bebas Neue, Lora, Merriweather Sans, Source Sans Pro: 19 values, some
+with a script-pack family as well). No value fails because the PPTX names a
+replacement. Head drift since the earlier accepted run (opf-pptx, opf-render,
+core) moves text 798 to 800 and fills 790 to 791; that is not part of this
+change. pptx-gallery `origin/main` moved to `23f9216` (FF-22, reduced charts)
+after the audited `4b48e69` and is not measured here. Results:
+[parity-results-2026-09-29-lookalike-fonts.json](gallery-support/parity/parity-results-2026-09-29-lookalike-fonts.json),
+[scoreboard](gallery-support/parity/PARITY-2026-09-29-lookalike-fonts.md).
+The earlier accepted results and scoreboard are kept unchanged.
+
+#### Field text and the 850-value set (2026-09-29 re-measure)
+
+The first row of the table above is a later run on the current mains of all four
+repositories (opf `03a55ae`, opf-render `aa7e898`, opf-pptx `ca34da7`,
+pptx-gallery `23f9216`). Two things changed against the look-alike row, and a third was checked.
+
+- **Value set: 900 to 850.** pptx-gallery#40 (FF-22) reduced the charts from 76
+  to the 26 Aspose.Slides-supported types, so the 900 values are now 850 (793
+  presence-audited values, 26 charts and 31 `withAssets` variants). The
+  50 removed charts were all mismatches and passed geometry, zOrder, slideSize,
+  typefaces, reimport, theme and mapping (15 passed text, 9 passed fills), so
+  those passing counts fall by 50, 15 and 9: a change of denominator, not a
+  regression. The presence audits A and B still measure the earlier gallery heads.
+- **Instrument fix: field text.** The harness read PPTX text runs with
+  `<a:(r|fld)>`, which never matches `<a:fld id="{...}" type="slidenum">`, so the
+  slide-number and date text ("1") of the 20 header and footer values (10, and 10
+  `withAssets`) was reported missing from the PPTX. It now uses
+  `parity/scripts/pptx-runs.mjs` (`<a:(r|fld)\b[^>]*>`, unit-tested in
+  `pptx-runs.test.mjs`). Run on the same four heads, the old and the fixed harness
+  differ in exactly those 20 values: text fails 20 fewer (785 to 805 passing of
+  850), and every other check and every classification is identical (5 perfect, 608
+  near, 237 mismatch both times). The 20 values stay mismatches: zOrder still
+  fails for all 20 (z-order inversions between element groups) and fontResolution is
+  near.
+- **Script font pack: not modelled, a product gap.** The modelled preview host
+  still loads the office pack with visual substitution and no `scripts` pack, so
+  the 85 fontResolution failures that need Noto script faces stay failures. The
+  shipped previews do the same: the opf-editor playground that pptx.gallery embeds
+  builds its registry with `loadOfficeFontRegistry()` (33 faces of 11 open
+  families, no Noto), the gallery layout thumbnails use no registry, and
+  opf-render never loads the script pack by itself (a host has to pass
+  `scripts`, for example from `detectScripts(presentation)`; no shipped host
+  does). For scale, an exploratory run of the same heads with `scripts: 'all'`
+  gives 29 perfect, 669 near, 152 mismatch (24 fontResolution fail to pass, 61 to
+  near; nothing else changes). It is not on the scoreboard.
+
+Results:
+[parity-results-2026-09-29-field-text.json](gallery-support/parity/parity-results-2026-09-29-field-text.json),
+[scoreboard](gallery-support/parity/PARITY-2026-09-29-field-text.md) (the
+before/after in it compares against the old harness at the same heads; that
+baseline run is not committed). `support-status.json` is rebuilt from this run.
+
+#### Aptos previews with Intos (2026-09-29 measurement)
+
+opf-render#54 makes Intos (metric-compatible with Aptos, Aptos Display, Aptos Narrow and Aptos Serif) the default Aptos preview, and core#166 records that in the policy table. The instrument is unchanged: the same harness (`parity/scripts`), all engines on one local core through `register-local-opf`, the 850-value set, current mains for core, renderer, exporter and gallery. Same harness, before and after the two merges:
+
+| | perfect | near | mismatch | fontResolution pass | near | fail |
+| --- | --- | --- | --- | --- | --- | --- |
+| Previous mains (opf-render `e016f4e`) | 25 | 667 | 158 | 28 | 735 | 87 |
+| Current mains (opf-render `d528be5`) | 660 | 33 | 157 | 733 | 31 | 86 |
+
+Checks passed of 850 (pass/near/fail where not all pass): geometry 850, text 830 (6 near, 14 fail), fills 782 (68 fail), zOrder 850, slideSize 850, typefaces 850, reimport 849 (1 near), fontResolution 733 (31 near, 86 fail), theme 850, mapping 850. Only fontResolution changed between the two runs: 705 values move from near (Aptos Display to Carlito, Aptos to Roboto, visual look-alikes) to pass (Intos, metric), and one value's failure clears. No other check and no value regresses. The remaining near values are visual-only replacements (Segoe UI, Grandview, Arial Black, Impact) and native chart labels; the 157 mismatches are unchanged causes (chart series colours and caches, families whose script faces the preview does not load (Arabic and East Asian among them), one Playfair Display legacy value).
+
+Results: [parity-results-2026-09-29-intos-default.json](gallery-support/parity/parity-results-2026-09-29-intos-default.json), [scoreboard](gallery-support/parity/PARITY-2026-09-29-intos-default.md) (before/after against the previous-mains run, which is not committed). `support-status.json` is rebuilt from this run.
+
+#### Table frames and the drawn table (2026-09-29 instrument change)
+
+The geometry check used to compare a PPTX table frame with the box composed for
+the table (`composeSlide` `item.box`). It now compares it with the table the
+preview draws: the union of the table's cell rectangles in the traced SVG
+(`scripts/table-box.mjs`, unit-tested in `table-box.test.mjs`), within the same
+0.02 pt tolerance. Chart, picture and card frames still equal the composed box.
+
+Why: FF-39's criterion "table frames equal the composed box" is read as "table
+frames equal the drawn table box". Rows are only as tall as their text needs
+(short rows keep 54 px; the composed box is the space allocated to the table), so
+a table is usually shorter than its allocation: 162 pt of rows in a 514.92 pt
+box in the color-scheme gallery decks. PowerPoint derives a table's height from
+its rows, so a frame that declares more than the rows sum to is inconsistent XML
+that PowerPoint ignores or rewrites: a parity pass on it would describe the XML,
+not what a user sees. opf-pptx already writes the frame as the row total, which
+is exactly the drawn table; the old check flagged 20 values (14 color-schemes, 2
+blocks, 4 layouts, all "table frame delta >50pt") for a preview/PPTX agreement
+that was never wrong. Only the reference box changed; no tolerance changed. The
+new check is not vacuous: an exporter that writes the frame at the composed
+height instead (the first version of opf-pptx#93) still fails the same 20 values.
+
+Same four heads, harness before and after (exporter opf-pptx `874d9e9`):
+
+| | geometry | zOrder | perfect | near | mismatch |
+| --- | --- | --- | --- | --- | --- |
+| Old table check (composed box) | 830 | 830 | 5 | 608 | 237 |
+| New table check (drawn table) | 850 | 830 | 5 | 627 | 218 |
+| New check, opf-pptx#93 (`844e9e6`) | 850 | 850 | 5 | 647 | 198 |
+
+The improved checks are geometry for color-schemes (0 to 14 of 14), blocks (30 to
+32 of 32) and layouts (481 to 485 of 485), and, with opf-pptx#93 only, zOrder for
+the 20 header/footer values (0 to 20). No check regresses for any value, and no
+value changes class except mismatch to near (19 for the check change alone, a
+further 20 with #93). None becomes perfect, because fontResolution near or fail
+remains for every value except the five perfect ones.
+
+Results:
+[parity-results-2026-09-29-table-drawn-extent.json](gallery-support/parity/parity-results-2026-09-29-table-drawn-extent.json)
+(new check, current mains),
+[scoreboard](gallery-support/parity/PARITY-2026-09-29-table-drawn-extent.md) (its
+before/after compares with the old check at the same heads; those baseline runs
+are not committed). `support-status.json` is rebuilt from this run.
+
+The five perfect values are the font schemes `calibri`, `courier-new`,
+`times-new-roman` and `roboto`, plus the content block `kpi-dashboard`.
+slideSize, typefaces and theme pass
 everywhere. Re-import passes for 899; the `photography` snippet, which has no
 asset, loses its background with a specific diagnostic (near).
 
-Per dimension (current mains; slideSize, typefaces and theme pass everywhere):
+Per dimension (accepted September 29 graph, old fontResolution definition, so its fontResolution column counts only real or metric-compatible faces; slideSize, typefaces and theme pass everywhere; the new definition's per-dimension near and fail counts are in the [look-alike run's scoreboard](gallery-support/parity/PARITY-2026-09-29-lookalike-fonts.md)):
 
 | Dimension | Values | perfect | geometry | text | fills | zOrder | reimport | fontResolution | mapping |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| layouts | 485 | 0 | 481 | 436 | 421 | 485 | 485 | 0 | 475 |
+| layouts | 485 | 0 | 481 | 472 | 445 | 485 | 485 | 0 | 475 |
 | color-schemes | 14 | 0 | 0 | 14 | 14 | 14 | 14 | 0 | 14 |
 | font-schemes | 89 + 4 legacy | 4 | 93 | 93 | 93 | 93 | 93 | 4 | 93 |
 | languages | 93 | 0 | 93 | 93 | 93 | 93 | 93 | 0 | 93 |
@@ -132,12 +303,14 @@ Per dimension (current mains; slideSize, typefaces and theme pass everywhere):
 | tones | 7 | 0 | 7 | 7 | 7 | 7 | 7 | 0 | 7 |
 | socials | 10 | 0 | 10 | 10 | 10 | 10 | 10 | 0 | 10 |
 | headers-footers | 10 (+10 withAssets) | 0 (0) | 10 (10) | 0 (0) | 10 (10) | 0 (0) | 10 (10) | 0 (0) | 10 (10) |
-| blocks | 32 | 0 | 30 | 25 | 30 | 32 | 32 | 1 | 32 |
+| blocks | 32 | 1 | 30 | 28 | 30 | 32 | 32 | 1 | 32 |
 | image-treatments | 15 (+15 withAssets) | 0 (0) | 15 (15) | 0 (15) | 15 (15) | 15 (15) | 15 (15) | 0 (0) | 15 (15) |
 
-Socials, tones, narratives, languages and the other non-layout metadata
-dimensions now fail only font resolution (the Aptos to Carlito visual
-substitute).
+Under the old fontResolution definition, socials, tones, narratives, languages
+and the other non-layout metadata dimensions failed only font resolution
+(visual substitutes, including Aptos Display to Carlito and Aptos to Roboto).
+Under the definition adopted on 2026-09-29 those visual substitutes are near,
+so the same run reports 608 near and 287 mismatch in all.
 
 ### Measurement notes (2026-09-23 re-run)
 
@@ -245,18 +418,19 @@ substitute).
 ### Universal blockers
 
 One failure still blocks nearly every value. Three earlier universal blockers
-no longer fail on current mains: the theme `clrScheme` (FF-24; theme 900
+no longer fail on the accepted September 29 graph: the theme `clrScheme` (FF-24; theme 900
 pass), re-import (FF-32; 899 pass, and the one other value loses its
 background with a specific diagnostic) and package typefaces (FF-08; 900
 pass). FF-07 and FF-08 stay in review pending FF-05. The fourth, centered
 preview text against left-aligned PPTX text (FF-39), is much reduced but not
-cleared: text passes for 759 and geometry for 880. 39 values still show the
-reverse mismatch, "alignment l (preview) vs ctr (pptx)", so FF-39 stays in
-review.
+cleared across every check: text passes for 798 and geometry for 880. The
+September 23 reverse mismatch, "alignment l (preview) vs ctr (pptx)", no
+longer occurs in this run; remaining text/geometry failures and native
+acceptance keep FF-39 in review.
 
 | Blocker | Check (passed) | Values hit | Fix |
 | --- | --- | --- | --- |
-| The preview renders Aptos and Aptos Display with the visual substitute Carlito (754). 93 families have no face at all (133 values). | fontResolution (5) | 754+ | FF-31 (core and renderer halves open: opf#133, opf-render#44) |
+| Under the new fontResolution definition (owner decision 2026-09-29), Aptos Display (Carlito) and Aptos (Roboto) are visual-only replacements: 754 values are near (791 in all across 27 families). 104 values fail because the modelled office-pack preview has no face: 85 values need script-pack faces that the `scripts` pack bundles but the preview does not load, and 19 values name open families no pack bundles (Open Sans, Montserrat, Poppins and others). | fontResolution (5 pass, 791 near, 104 fail) | 791 near, 104 fail | FF-31 metric-compatible open replacements (Intos candidate for Aptos); font bundling PR in progress |
 
 Other recurring parity failures:
 
@@ -265,8 +439,8 @@ Other recurring parity failures:
 - Charts and chart blocks: series colours are missing from the preview (108
   values), and preview labels are missing from the chart cache (46 values;
   FF-22, FF-22b).
-- Text: 45 values have a preview line missing in the PPTX, and 39 are still
-  left-aligned in the preview but centered in the PPTX (FF-39, FF-29 opf#132).
+- Text: 45 values have a preview line missing in the PPTX; list markers differ
+  for 10 layouts. The previous 39 reverse-alignment mismatches are absent.
 
 The per-item parity status is in `support-status.json` (`parity`, plus
 `parityOnly` for charts). The full report, with a before/after table against
@@ -311,8 +485,9 @@ preview shows the value while the export has no native equivalent.
 Presence: 793 values measured across 13 dimensions; charts have no presence
 status until FF-22. 352 values are `works` (7 at the first measurement; 362
 before the FF-36 audit probe update moved socials to `partial`).
-Parity: 4 of 900 perfect. Counts are for current mains; the "What actually
-works" column keeps the first measurement's wording unless marked "Now".
+Parity: 5 of 900 perfect on the accepted September 29 graph. Presence counts
+retain the September 23 heads above; the "What actually works" column keeps
+the first measurement's wording unless marked "Now".
 
 | Dimension | Values | works | partial | schema-only | authoring-metadata | gallery-only | broken | Parity perfect | What actually works for a developer |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -328,7 +503,7 @@ works" column keeps the first measurement's wording unless marked "Now".
 | [Tones](#tones) | 7 | 7 | 0 | 0 | 0 | 0 | 0 | 0/7 | `works` only because `ppt/tags/opfDocument.xml` changes; the preview is identical. |
 | [Socials](#socials) | 10 | 0 | 10 | 0 | 0 | 0 | 0 | 0/10 | Now: re-import returns the organization and speaker socials for 10/10 (FF-34). The pre-program gallery snippet shows no footer, so no handle is rendered in preview or export, and audit B now classes them `partial` for that. The rendering snippet is pptx-gallery#42. Parity fails only font resolution. |
 | [Headers & footers](#headers-and-footers) | 10 | 1 | 9 | 0 | 0 | 0 | 0 | 0/10 | Now: native slide-number and date fields (FF-27). The snippet still drops gallery options (pptx-gallery#45), and 3 dated values report `unresolved-content`. |
-| [Content blocks](#content-blocks) | 32 | 29 | 3 | 0 | 0 | 0 | 0 | 0/32 | Blocks render and export. `market-opportunity` and `financial-snapshot` still lose metric text (FF-30, pptx-gallery#44). |
+| [Content blocks](#content-blocks) | 32 | 29 | 3 | 0 | 0 | 0 | 0 | 1/32 | Presence: blocks render and export; `market-opportunity` and `financial-snapshot` lose metric text at the September 23 heads (FF-30, pptx-gallery#44). Accepted parity: `kpi-dashboard` is perfect. |
 | [Image treatments](#image-treatments) | 15 | 0 | 15 | 0 | 0 | 0 | 0 | 0/15 | Now: `design.slideImage` renders and exports as a native picture (FF-26); with the asset supplied, all 15 match the preview frame and crop at 0 pt, and `side-by-side` and `image-strip` are `works`. The snippets still omit the asset and collapse 13 treatments to two documents (pptx-gallery#44, #45). |
 
 ### Shared export gaps (every exported value, audit B)
@@ -348,6 +523,10 @@ merged, and the parity theme, typefaces and re-import checks pass for 900,
   (FF-32).
 
 ### Fonts in every environment
+
+Per-font status, priorities and next actions for every family behind these readings are in the
+[font tracker (FF-40)](font-tracker.md); its priority score weighs the values each family affects in the
+parity scoreboard above by the size of its gap.
 
 - **Export.** With no font registry, `toPptx` writes the chosen family names
   and needs no installed fonts, so it behaves the same locally and in
