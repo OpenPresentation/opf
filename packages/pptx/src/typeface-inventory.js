@@ -9,7 +9,7 @@ import {unzipSync} from 'fflate';
 // rich-text `rFont`) and the docProps/app.xml "Fonts Used" list.
 // checkPptxTypefaces() then applies the owner font policy: a package names only
 // the fonts its author chose, plus theme references that resolve to them, empty
-// theme script slots (FF-05) and the documented theme script supplements.
+// theme script slots when no script font was selected (as in Office's themes; FF-49 checks a selected slot through options.themeScripts) and the documented theme script supplements.
 
 const decoder = new TextDecoder();
 const NESTED_PACKAGE = /\.(?:xlsx|xlsm|docx|pptx)$/i;
@@ -96,8 +96,18 @@ export function checkPptxTypefaces(input, options = {}) {
   const violations = [];
   const fail = (entry, reason, details = {}) => violations.push({reason, part: entry.part, element: entry.element, typeface: entry.typeface, ...details});
   const emptyAllowed = entry => allowEmpty && entry.theme && (entry.element === 'ea' || entry.element === 'cs');
+  // FF-49: options.themeScripts names the East Asian / complex-script families the author selected for the
+  // presentation theme, {major: {ea, cs}, minor: {ea, cs}}. A selected slot must carry exactly that family (an
+  // empty or different one is a violation); a slot with nothing selected may stay empty, as in Office's own themes.
+  const themeSlot = entry => entry.theme && !entry.part.includes('!/') && (entry.element === 'ea' || entry.element === 'cs')
+    ? options.themeScripts?.[entry.theme]?.[entry.element] || '' : '';
   const pitches = new Map();
   for (const entry of inventory.typefaces) {
+    const wanted = themeSlot(entry);
+    if (wanted && entry.typeface !== wanted) {
+      fail(entry, 'theme-script-slot', {expected: wanted});
+      continue;
+    }
     const reference = THEME_REFERENCE.exec(entry.typeface);
     if (reference) {
       if (entry.resolved === null) fail(entry, 'unresolved-theme-reference');

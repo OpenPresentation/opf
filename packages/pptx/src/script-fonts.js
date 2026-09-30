@@ -64,23 +64,23 @@ const escapeAttribute = value => String(value).replace(/[&<>"']/g, char => ({"&"
  * language's own per-script supplement. Only the supplement's script entry
  * changes; the rest of the vendored per-script list is FF-08's call.
  *
- * For a language written in the latin slot (Latin, Cyrillic, Greek and others) the
- * vendored empty ea/cs stay empty unless the design font scheme sets that
- * slot explicitly. Filling them with the latin family is gated on FF-05 (core
- * script-font-model.md): it did not remove PowerPoint's nameless/Aptos font
- * entries, and empty slots keep PowerPoint's per-script theme fallback for
- * East Asian or complex-script text typed later. Other languages fill both.
+ * FF-49: a slot is written only when a script font is actually selected for it,
+ * that is when the resolver's source for that slot is not `latin`: the design
+ * font scheme's explicit `eastAsian`/`complexScript`, the scheme's own script
+ * family, or the language's script font (Model C). Every other slot keeps the
+ * vendored empty typeface, exactly as Office's own themes leave it, so PowerPoint
+ * picks its per-language default for script text typed later and the package
+ * names nothing the author did not select (core script-font-model.md, "Theme
+ * slots (FF-49)"). Latin, Cyrillic and Greek decks keep both slots empty, and a
+ * Japanese deck writes `ea` only.
  */
 export function themeScriptFonts(xml, plan) {
   const {heading, body, supplement} = plan.deck;
   for (const [tag, slots, family] of [["majorFont", heading, supplement?.heading], ["minorFont", body, supplement?.body]]) {
     xml = xml.replace(new RegExp(`<a:${tag}>[\\s\\S]*?</a:${tag}>`), block => {
-      // With no script-specific choice the slot repeats the theme's own latin
-      // face exactly as written, as the run slots do.
-      const latin = /<a:latin typeface="([^"]*)"/.exec(block)?.[1];
       for (const [element, slot] of SCRIPT_SLOTS) {
-        if (plan.deck.scriptRole === "latin" && plan.deck.sources[slot] !== "fontScheme") continue;
-        const face = plan.deck.sources[slot] === "latin" && latin ? latin : escapeAttribute(slots[slot]);
+        if (plan.deck.sources[slot] === "latin") continue;
+        const face = escapeAttribute(slots[slot]);
         block = block.replace(new RegExp(`<a:${element}\\b[^>]*/>`), `<a:${element} typeface="${face}"/>`);
       }
       if (supplement && family) {

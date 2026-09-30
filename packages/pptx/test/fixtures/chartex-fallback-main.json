@@ -2,7 +2,7 @@
   "source": {
     "repository": "OpenPresentation/opf-pptx",
     "commit": "6f6122cb7fb8cb89b17c1bea7981397a27ded8ed",
-    "note": "toPptx default output (chartex fallback) for chartex chart types; regenerate only with an owner decision to change the default export"
+    "note": "toPptx default output (chartex fallback) for chartex chart types; regenerate only with an owner decision to change the default export The world-category entry (ja-JP) was regenerated for FF-49: the theme cs slot, which the Japanese language does not use, is now empty instead of repeating the latin face; the chart parts are unchanged."
   },
   "decks": {
     "treemap-category": {
@@ -614,8 +614,8 @@
       ]
     },
     "world-category": {
-      "sha256": "5b46e89f63c0856892e68764beee6976d811f781b87002939e0835f0f15d32b8",
-      "bytes": 24073,
+      "sha256": "f8eab91536a1e56b644d825b8a18f995c8984a2c3457a697f2258630da508ef6",
+      "bytes": 24076,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback"
       ]

@@ -83,17 +83,17 @@ for (const expected of cases) {
   assert.deepEqual([...langs(xml)], [record.ooxmlLang], `${expected.id} lang`);
   assert.ok(!Object.values(xml).some(value => /\saltLang="/.test(value)), `${expected.id} writes no altLang`);
 
-  // Theme: latin is the chosen heading/body family. Languages written in the
-  // latin slot keep the vendored empty ea/cs (gated on FF-05); other languages
-  // fill both with the resolved slots.
+  // Theme: latin is the chosen heading/body family. FF-49: a theme ea/cs is written only for the slot the language
+  // (or the font scheme) supplies a script font for, exactly as Office leaves the others empty; a Japanese deck
+  // writes ea only, an Arabic deck cs only, and Latin-slot languages neither.
   const major = themeFonts(xml, 'majorFont'), minor = themeFonts(xml, 'minorFont');
   assert.deepEqual([major.latin, minor.latin], [latin.heading.latin, latin.body.latin], `${expected.id} theme latin`);
   const own = expected.role === 'latin' ? null : schemeFamilies(record.fontScheme);
-  if (!own) assert.deepEqual([major.ea, major.cs, minor.ea, minor.cs], ['', '', '', ''], `${expected.id} keeps theme ea/cs empty`);
-  else assert.deepEqual([major.ea, major.cs, minor.ea, minor.cs], [resolved.heading.eastAsian, resolved.heading.complexScript, resolved.body.eastAsian, resolved.body.complexScript], `${expected.id} theme ea/cs`);
-  for (const [slot, key] of own ? [['ea', 'eastAsian'], ['cs', 'complexScript']] : []) {
-    const want = key === expected.role ? own : {heading: latin.heading.latin, body: latin.body.latin};
-    assert.deepEqual({heading: major[slot], body: minor[slot]}, want, `${expected.id} theme ${slot} follows ${key === expected.role ? 'the language font scheme' : 'the latin family'}`);
+  const slotKeys = {ea: 'eastAsian', cs: 'complexScript'};
+  for (const [slot, key] of Object.entries(slotKeys)) {
+    const supplied = own && key === expected.role;
+    assert.equal(resolved.sources[key] !== 'latin', Boolean(supplied), `${expected.id} resolver source for ${key}`);
+    assert.deepEqual({heading: major[slot], body: minor[slot]}, supplied ? own : {heading: '', body: ''}, `${expected.id} theme ${slot} ${supplied ? 'names the language font scheme' : 'stays empty (nothing selected)'}`);
   }
 
   // Supplement: the language's own script entry names the language font; every other vendored entry is unchanged.
