@@ -25,26 +25,26 @@ jobs:
           persist-credentials: false
           fetch-depth: 0
           path: opf-editor
-      # The ecosystem is pinned to the versions this package depends on: opf main after #216 (the packed-ecosystem check there knows renderer 0.11.7), opf-render 0.11.7 (extra lazy fonts, face-level lazy fonts and host render options; lazy script and preview faces, incl. Barlow, which test:playground exercises; chart label rotation) and opf-pptx 0.11.4.
+      # The ecosystem is pinned to the versions this package depends on: opf main after #219 (the packed-ecosystem check there knows renderer 0.11.8), opf-render 0.11.8 (tag colour; extra lazy fonts, face-level lazy fonts and host render options; lazy script and preview faces, incl. Barlow, which test:playground exercises; chart label rotation) and opf-pptx 0.11.5.
       # Verify registry dependencies before linking the pinned source graph.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf
-          ref: b8db055668102409ed9dfbe599470909d8b8525d # opf main after #216 (records the 0.11.7 renderer lazy face count)
+          ref: 3ae62f9a01102fd43a9fc301ef59fdbb1cd998c6 # opf main after #219 (records the 0.11.8 renderer lazy face count)
           path: opf
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-render
-          ref: 0f647ca560a7e10ce06b6287cb2f1df84d5847ba # opf-render-v0.11.7
+          ref: 0ce9bb959247fbb706f670240e55fd7a09a2eedd # opf-render-v0.11.8
           path: opf-render
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-pptx
-          ref: c08105f2d3a45375128a69a2116e936a3d1a4a15 # opf-pptx-v0.11.4
+          ref: da6a8799d09401e65e8148becba7ef8f29f0500d # opf-pptx-v0.11.5
           path: opf-pptx
           fetch-depth: 0
           persist-credentials: false

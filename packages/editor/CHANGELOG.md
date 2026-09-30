@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.10.5
+
+- Release 0.10.5 (patch: example only; no change to `src/`, no public export changed, core floor stays `@openpresentation/opf` ^0.11.3 and the optional renderer peer ^0.11.0). Everything since 0.10.4 (`git log 1529f26..main`): only #55 (FF-41): the playground example loads its base faces through the renderer's `extraLazyFonts` (entry below), which needs opf-render 0.11.7 or later; the development renderer moves to ^0.11.8 and PPTX to ^0.11.5. The gallery editor (`public/opf-editor`) is built from this example, so a gallery rebuild picks up the change; first-load bytes are unchanged (a default Roboto deck: 701,692 font bytes).
+
 - FF-41: the playground example loads its base faces through the renderer's `extraLazyFonts` (opf-render 0.11.7) instead of its own wrapper: `examples/base-font-gate.js` (about 75 lines) is gone, `examples/playground.js` passes the faces of `base-fonts.json` (with their urls beside the page) as `extraLazyFonts` and the gate is the plain `createFontGate(registry)`. The registry now selects, fetches, hash-verifies, registers and disposes them together with the vendored and script faces. Behaviour and first-load bytes are unchanged (a default Roboto deck: 701,692 font bytes with the split build). Needs renderer 0.11.7; the gallery editor picks this up with the next editor release and gallery rebuild. `test/playground-base-fonts.mjs` is unchanged apart from its renderer floor; the library itself is unchanged.
 
 ## 0.10.4
