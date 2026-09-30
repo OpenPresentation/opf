@@ -105,8 +105,20 @@ const RENDERERS = {
   pie: renderCircularChart,
   doughnut: renderCircularChart,
   scatter: renderScatterChart,
-  radar: renderRadarChart
+  radar: renderRadarChart,
+  // Chartex constructs (opf-pptx writes them as cx:chartSpace parts, FF-22b).
+  treemap: renderTreemapChart,
+  histogram: renderHistogramChart,
+  pareto: renderHistogramChart,
+  box: renderBoxWhiskerChart,
+  waterfall: renderWaterfallChart,
+  funnel: renderFunnelChart,
+  map: renderRegionMapChart
 };
+
+// Chartex constructs also accept a lone value column (the exporter plots it
+// against row numbers, or bins it for histogram and pareto).
+const CHARTEX_KINDS = new Set(["treemap", "histogram", "pareto", "box", "waterfall", "funnel", "map"]);
 
 /**
  * Render a catalog chart. Returns null when the id is outside the catalog, has
@@ -120,7 +132,7 @@ export function renderCatalogChart(item, box, bound, options, svg) {
   const data = item.value?.data;
   const rows = Array.isArray(data?.rows) ? data.rows.map((row) => Array.isArray(row) ? row : [row]) : [];
   const columns = Array.isArray(data?.columns) ? data.columns : [];
-  if (!render || !rows.length || columns.length < 2) return null;
+  if (!render || !rows.length || columns.length < (CHARTEX_KINDS.has(spec.kind) ? 1 : 2)) return null;
   const c = chartContext(item, box, bound, options, svg, rows, columns);
   c.mark("rect", { x: box.x, y: box.y, width: box.width, height: box.height, fill: c.surface, stroke: bound.design.colors.border, "stroke-width": 1 }, item.path);
   render(c, spec);
@@ -641,4 +653,357 @@ function renderRadarChart(c, spec) {
     const label = formatTick(tick), width = c.width(label) + fontPx * 0.5;
     c.text(label, { x: cx - width - fontPx * 0.2, y: cy - rAt(tick) - c.lineHeight / 2, width, height: c.lineHeight }, c.path, "right");
   }
+}
+
+// ---------------------------------------------------------------------------
+// Chartex constructs (FF-22b). opf-pptx writes these as native Office 2016
+// chartex parts (cx:series layoutId treemap, clusteredColumn with binning or
+// aggregation, paretoLine, boxWhisker, waterfall, funnel, regionMap); the
+// previews below draw the same data with the same colours and defaults.
+
+/**
+ * The plotted column of a chartex chart: [Category, Value, ...] plots the first
+ * value column against its categories; a lone value column is plotted against
+ * the row numbers (histogram and pareto bin the values instead).
+ */
+export function chartexValues(rows, columns) {
+  const hasCategories = columns.length > 1;
+  const column = hasCategories ? 1 : 0;
+  const values = rows.map((row) => chartNumber(row[column]));
+  const categories = rows.map((row, i) => hasCategories ? (row[0] === null || row[0] === undefined ? "" : String(row[0])) : String(i + 1));
+  return { hasCategories, column, values, categories };
+}
+
+// Office's automatic histogram bins: Scott's normal reference rule gives the bin
+// width 3.49 * sd * n^(-1/3) (sample standard deviation) over [min, max]; the
+// exporter writes the same count as cx:binCount.
+export function scottBinCount(values) {
+  const n = values.length;
+  if (n === 0) return 1;
+  let min = Infinity, max = -Infinity, mean = 0;
+  for (const value of values) { if (value < min) min = value; if (value > max) max = value; mean += value / n; }
+  if (!(max > min) || n < 2) return 1;
+  let variance = 0;
+  for (const value of values) variance += (value - mean) * (value - mean) / (n - 1);
+  const width = 3.49 * Math.sqrt(variance) * Math.cbrt(n) ** -1;
+  if (!(width > 0) || !Number.isFinite(width)) return 1;
+  const count = Math.ceil((max - min) / width - 1e-9);
+  return Number.isFinite(count) && count >= 1 ? count : 1;
+}
+
+/**
+ * Equal-width bins from the minimum, closed on the right like PowerPoint's
+ * ("[min, e1]", then "(e1, e2]"): each value falls in the last bin whose upper
+ * edge it does not exceed. Labels carry six significant digits, and more when
+ * two bins would read alike.
+ */
+export function histogramBins(values) {
+  const finite = values.filter((value) => value !== null && Number.isFinite(value));
+  if (!finite.length) return [];
+  const min = finite.reduce((a, b) => Math.min(a, b)), max = finite.reduce((a, b) => Math.max(a, b));
+  const count = scottBinCount(finite);
+  const edge = (index) => index === 0 ? min : index === count ? max : min / count * (count - index) + max / count * index;
+  const bins = Array.from({ length: count }, (_, index) => ({ low: edge(index), high: edge(index + 1), count: 0 }));
+  for (const value of finite) {
+    let index = 0;
+    while (index + 1 < count && value > bins[index].high) index++;
+    bins[index].count++;
+  }
+  for (let precision = 6; ; precision++) {
+    const format = (value) => String(Number(value.toPrecision(precision)));
+    const labels = bins.map((bin, index) => count === 1 && min === max ? format(min) : `${index === 0 ? "[" : "("}${format(bin.low)}, ${format(bin.high)}]`);
+    if (new Set(labels).size === labels.length || precision === 17) return bins.map((bin, index) => ({ ...bin, label: labels[index] }));
+  }
+}
+
+// Vertical layout shared by the axis-bearing constructs: category labels below,
+// value ticks on the left (and a percentage axis on the right for pareto).
+function chartexPlot(c, { categories, legendWidth = 0, tickLabels = [], percentAxis = false }) {
+  const { box, pad, fontPx } = c;
+  const top = box.y + pad + c.lineHeight / 2;
+  const bottom = box.y + box.height - pad - c.lineHeight;
+  const height = Math.max(1, bottom - top);
+  const tickWidth = Math.max(0, ...tickLabels.map((label) => c.width(label))) + fontPx * 0.5;
+  const x = box.x + pad + tickWidth;
+  const right = box.x + box.width - pad - legendWidth - (percentAxis ? c.width("100%") + fontPx : fontPx / 2);
+  const plot = { x, y: top, width: Math.max(1, right - x), height };
+  const band = plot.width / Math.max(1, categories.length);
+  categories.forEach((entry, i) => c.text(entry.name, { x: plot.x + i * band, y: plot.y + plot.height, width: band, height: c.lineHeight }, entry.path));
+  return { plot, band };
+}
+
+function valueAxis(c, plot, scale) {
+  const at = (value) => plot.y + axisFraction(value, scale, true) * plot.height;
+  for (const tick of scale.ticks) {
+    const y = at(tick);
+    gridline(c, plot.x, y, plot.x + plot.width, y);
+    c.text(formatTick(tick), { x: c.box.x + c.pad, y: y - c.lineHeight / 2, width: plot.x - c.box.x - c.pad - c.fontPx * 0.35, height: c.lineHeight }, c.path, "right");
+  }
+  const crossing = at(Math.min(scale.max, Math.max(scale.min, 0)));
+  axisLine(c, plot.x, plot.y, plot.x, plot.y + plot.height);
+  axisLine(c, plot.x, crossing, plot.x + plot.width, crossing);
+  return { at, crossing };
+}
+
+// Histogram (cx:binning or cx:aggregation) and Pareto (sorted columns with the cumulative-percentage line on a percentage axis).
+function renderHistogramChart(c, spec) {
+  const pareto = spec.kind === "pareto";
+  const { hasCategories, column, values, categories } = chartexValues(c.rows, c.columns);
+  let bars;
+  if (hasCategories) {
+    bars = values.map((value, i) => ({ value, name: categories[i], path: `${c.path}.data.rows.${i}.${column}`, labelPath: `${c.path}.data.rows.${i}.0` })).filter((bar) => bar.value !== null);
+  } else {
+    bars = histogramBins(values).map((bin) => ({ value: bin.count, name: bin.label, path: `${c.path}.data.columns.${column}`, labelPath: c.path }));
+  }
+  if (pareto) bars = bars.slice().sort((a, b) => b.value - a.value);
+  const total = bars.reduce((sum, bar) => sum + Math.max(0, bar.value), 0);
+  if (!Number.isFinite(total)) throw chartAggregateError(c.path, "cumulative total");
+  const dataMax = bars.length ? Math.max(...bars.map((bar) => bar.value)) : 1, dataMin = bars.length ? Math.min(0, ...bars.map((bar) => bar.value)) : 0;
+  const probe = niceScale(dataMin, dataMax, 10);
+  const { plot, band } = chartexPlot(c, { categories: bars.map((bar) => ({ name: bar.name, path: bar.labelPath })), tickLabels: probe.ticks.map((tick) => formatTick(tick)), percentAxis: pareto });
+  const scale = niceScale(dataMin, dataMax, maxIntervalsFor(plot.height, c.lineHeight * 1.2));
+  const { at, crossing } = valueAxis(c, plot, scale);
+  const width = band / 1.06, offset = (band - width) / 2;
+  bars.forEach((bar, i) => {
+    const y = at(bar.value);
+    c.mark("rect", { x: plot.x + i * band + offset, y: Math.min(y, crossing), width, height: Math.abs(crossing - y), fill: c.colors[0] }, bar.path);
+  });
+  if (pareto && bars.length) {
+    // Percentage axis on the right, 0-100%, and the cumulative line through the bar centres.
+    const percent = niceScale(0, 1, maxIntervalsFor(plot.height, c.lineHeight * 1.2), { percent: true });
+    const right = plot.x + plot.width;
+    axisLine(c, right, plot.y, right, plot.y + plot.height);
+    for (const tick of percent.ticks) {
+      const y = plot.y + axisFraction(tick, percent, true) * plot.height;
+      c.text(formatTick(tick, true), { x: right + c.fontPx * 0.35, y: y - c.lineHeight / 2, width: c.box.x + c.box.width - c.pad - right - c.fontPx * 0.35, height: c.lineHeight }, c.path, "left");
+    }
+    let running = 0;
+    const points = bars.map((bar, i) => {
+      running += Math.max(0, bar.value);
+      const fraction = total ? running / total : 0;
+      return `${c.num(plot.x + (i + 0.5) * band)},${c.num(plot.y + axisFraction(fraction, percent, true) * plot.height)}`;
+    });
+    c.mark("polyline", { points: points.join(" "), fill: "none", stroke: c.colors[1 % c.colors.length], "stroke-width": 2 * c.pt, "stroke-linejoin": "round", "stroke-linecap": "round" }, `${c.path}.data.columns.${column}`);
+  }
+}
+
+// Waterfall: floating bars from the running total, increases and decreases in the first two palette colours, connector lines between bars.
+function renderWaterfallChart(c) {
+  const { column, values, categories } = chartexValues(c.rows, c.columns);
+  let running = 0;
+  const bars = values.map((value, i) => {
+    if (value === null) return null;
+    const from = running;
+    running += value;
+    if (!Number.isFinite(running)) throw chartAggregateError(c.path, "running total");
+    return { i, value, from, to: running };
+  }).filter(Boolean);
+  const extents = bars.flatMap((bar) => [bar.from, bar.to]);
+  const dataMin = extents.length ? Math.min(0, ...extents) : 0, dataMax = extents.length ? Math.max(0, ...extents) : 1;
+  const probe = niceScale(dataMin, dataMax, 10);
+  const { plot, band } = chartexPlot(c, { categories: categories.map((name, i) => ({ name, path: `${c.path}.data.rows.${i}.0` })), tickLabels: probe.ticks.map((tick) => formatTick(tick)) });
+  const scale = niceScale(dataMin, dataMax, maxIntervalsFor(plot.height, c.lineHeight * 1.2));
+  const { at } = valueAxis(c, plot, scale);
+  const width = band / 1.5, offset = (band - width) / 2;
+  bars.forEach((bar, k) => {
+    const a = at(bar.from), b = at(bar.to);
+    const x = plot.x + bar.i * band + offset;
+    c.mark("rect", { x, y: Math.min(a, b), width, height: Math.abs(b - a), fill: c.colors[bar.value < 0 ? 1 : 0] }, `${c.path}.data.rows.${bar.i}.${column}`);
+    const next = bars[k + 1];
+    if (next) c.mark("line", { x1: x + width, y1: b, x2: plot.x + next.i * band + offset, y2: b, stroke: c.axisColor, "stroke-width": c.pt });
+  });
+}
+
+// Funnel: centred bars from the top, widths proportional to the value, value labels inside and category labels on the left.
+function renderFunnelChart(c) {
+  const { box, pad, fontPx } = c;
+  const { column, values, categories } = chartexValues(c.rows, c.columns);
+  const count = categories.length;
+  const max = Math.max(0, ...values.filter((value) => value !== null));
+  const labelWidth = Math.min(box.width * 0.3, Math.max(0, ...categories.map(c.width)) + fontPx * 0.5);
+  const plot = { x: box.x + pad + labelWidth + pad / 2, y: box.y + pad, width: Math.max(1, box.width - 2 * pad - labelWidth - pad / 2), height: Math.max(1, box.height - 2 * pad) };
+  const band = plot.height / count, height = band / 1.06, offset = (band - height) / 2;
+  categories.forEach((name, i) => {
+    const y = plot.y + i * band;
+    c.text(name, { x: box.x + pad, y, width: labelWidth, height: band }, `${c.path}.data.rows.${i}.0`, "right");
+    const value = values[i];
+    if (value === null || !(max > 0) || value <= 0) return;
+    const width = plot.width * Math.min(1, value / max);
+    const x = plot.x + (plot.width - width) / 2;
+    c.mark("rect", { x, y: y + offset, width, height, fill: c.colors[0] }, `${c.path}.data.rows.${i}.${column}`);
+    c.text(formatTick(value), { x: plot.x, y: y + offset, width: plot.width, height }, `${c.path}.data.rows.${i}.${column}`);
+  });
+}
+
+/**
+ * Squarified treemap layout (Bruls, Huizing and van Wijk): items are laid out
+ * in rows along the shorter side, each row closed when adding the next item
+ * would worsen its worst aspect ratio. Returns one rectangle per item, in the
+ * item order given (null for items without area).
+ */
+export function squarify(items, x, y, width, height) {
+  const total = items.reduce((sum, item) => sum + item.value, 0);
+  const rects = new Array(items.length).fill(null);
+  if (!(total > 0) || !(width > 0) || !(height > 0)) return rects;
+  const scale = width * height / total;
+  const ordered = items.map((item, index) => ({ area: item.value * scale, index })).filter((item) => item.area > 0).sort((a, b) => b.area - a.area || a.index - b.index);
+  let free = { x, y, width, height };
+  let row = [];
+  const worst = (candidates, side) => {
+    const sum = candidates.reduce((s, item) => s + item.area, 0);
+    const min = Math.min(...candidates.map((item) => item.area)), max = Math.max(...candidates.map((item) => item.area));
+    return Math.max(side * side * max / (sum * sum), sum * sum / (side * side * min));
+  };
+  const layoutRow = () => {
+    const sum = row.reduce((s, item) => s + item.area, 0);
+    const horizontal = free.width >= free.height;
+    const side = horizontal ? free.height : free.width;
+    const thickness = side > 0 ? sum / side : 0;
+    let offset = 0;
+    for (const item of row) {
+      const length = thickness > 0 ? item.area / thickness : 0;
+      rects[item.index] = horizontal
+        ? { x: free.x, y: free.y + offset, width: thickness, height: length }
+        : { x: free.x + offset, y: free.y, width: length, height: thickness };
+      offset += length;
+    }
+    free = horizontal
+      ? { x: free.x + thickness, y: free.y, width: Math.max(0, free.width - thickness), height: free.height }
+      : { x: free.x, y: free.y + thickness, width: free.width, height: Math.max(0, free.height - thickness) };
+    row = [];
+  };
+  for (const item of ordered) {
+    const side = Math.min(free.width, free.height);
+    if (row.length && side > 0 && worst([...row, item], side) > worst(row, side)) layoutRow();
+    row.push(item);
+  }
+  if (row.length) layoutRow();
+  return rects;
+}
+
+// Treemap: one tile per category from the first value column (positive values only), one palette colour per tile, category labels inside.
+function renderTreemapChart(c) {
+  const { box, pad, fontPx } = c;
+  const { column, values, categories } = chartexValues(c.rows, c.columns);
+  const items = values.map((value) => ({ value: value !== null && value > 0 ? value : 0 }));
+  const total = items.reduce((sum, item) => sum + item.value, 0);
+  if (!Number.isFinite(total)) throw chartAggregateError(c.path, "tile total");
+  const area = { x: box.x + pad, y: box.y + pad, width: Math.max(1, box.width - 2 * pad), height: Math.max(1, box.height - 2 * pad) };
+  if (!total) {
+    c.text("No positive chart values", area, c.path);
+    return;
+  }
+  const rects = squarify(items, area.x, area.y, area.width, area.height);
+  rects.forEach((rect, i) => {
+    if (!rect || !(rect.width > 0) || !(rect.height > 0)) return;
+    c.mark("rect", { x: rect.x, y: rect.y, width: rect.width, height: rect.height, fill: c.colors[i % c.colors.length], stroke: "#FFFFFF", "stroke-width": c.pt }, `${c.path}.data.rows.${i}.${column}`);
+    if (rect.width >= fontPx * 2 && rect.height >= c.lineHeight) {
+      c.text(categories[i], { x: rect.x + fontPx * 0.25, y: rect.y, width: rect.width - fontPx * 0.5, height: rect.height }, `${c.path}.data.rows.${i}.0`);
+    }
+  });
+}
+
+/**
+ * Box statistics as PowerPoint computes them with the exclusive quartile
+ * method (Excel QUARTILE.EXC): the rank p(n + 1) interpolates between sorted
+ * values and clamps to the extremes, whiskers reach the furthest values within
+ * 1.5 IQR of the box, and values beyond are outliers.
+ */
+export function boxStatistics(values) {
+  const sorted = values.filter((value) => value !== null && Number.isFinite(value)).sort((a, b) => a - b);
+  const n = sorted.length;
+  if (!n) return null;
+  const quantile = (p) => {
+    const rank = p * (n + 1);
+    if (rank <= 1) return sorted[0];
+    if (rank >= n) return sorted[n - 1];
+    const lower = Math.floor(rank), fraction = rank - lower;
+    return sorted[lower - 1] + fraction * (sorted[lower] - sorted[lower - 1]);
+  };
+  const q1 = quantile(0.25), median = quantile(0.5), q3 = quantile(0.75);
+  const iqr = q3 - q1;
+  const inside = sorted.filter((value) => value >= q1 - 1.5 * iqr && value <= q3 + 1.5 * iqr);
+  const mean = sorted.reduce((sum, value) => sum + value, 0) / n;
+  return { q1, median, q3, mean, low: inside[0] ?? q1, high: inside[inside.length - 1] ?? q3, outliers: sorted.filter((value) => value < q1 - 1.5 * iqr || value > q3 + 1.5 * iqr) };
+}
+
+// Box and whisker: rows with the same category form one box per series; median line, mean marker and outliers, gap width 100%.
+function renderBoxWhiskerChart(c) {
+  // A lone value column has no category column: like the exporter, its values plot against their row numbers (one box per row).
+  const lone = c.columns.length === 1;
+  const series = lone ? [{ name: c.label(c.columns[0]), column: 0, index: 0, values: c.rows.map((row) => chartNumber(row[0])) }] : c.series();
+  const groups = [];
+  c.rows.forEach((row, i) => {
+    const name = lone ? String(i + 1) : c.label(row[0]);
+    let group = groups.find((entry) => entry.name === name);
+    if (!group) groups.push(group = { name, first: i, rows: [] });
+    group.rows.push(i);
+  });
+  const boxes = series.map((s) => groups.map((group) => ({ stats: boxStatistics(group.rows.map((i) => s.values[i])), rows: group.rows })));
+  const all = boxes.flat().flatMap((entry) => entry.stats ? [entry.stats.low, entry.stats.high, ...entry.stats.outliers] : []);
+  const dataMin = all.length ? Math.min(...all) : 0, dataMax = all.length ? Math.max(...all) : 1;
+  const legendWidth = seriesLegend(c, series);
+  const probe = niceScale(dataMin, dataMax, 10);
+  const { plot, band } = chartexPlot(c, { categories: groups.map((group) => ({ name: group.name, path: lone ? c.path : `${c.path}.data.rows.${group.first}.0` })), legendWidth, tickLabels: probe.ticks.map((tick) => formatTick(tick)) });
+  const scale = niceScale(dataMin, dataMax, maxIntervalsFor(plot.height, c.lineHeight * 1.2));
+  const { at } = valueAxis(c, plot, scale);
+  const group = band / 2, width = group / series.length, offset = (band - group) / 2;
+  series.forEach((s, j) => {
+    const color = c.colors[j % c.colors.length], path = `${c.path}.data.columns.${s.column}`;
+    boxes[j].forEach((entry, i) => {
+      const stats = entry.stats;
+      if (!stats) return;
+      const x = plot.x + i * band + offset + j * width, mid = x + width / 2;
+      const top = at(stats.q3), bottom = at(stats.q1);
+      c.mark("line", { x1: mid, y1: at(stats.high), x2: mid, y2: top, stroke: color, "stroke-width": c.pt }, path);
+      c.mark("line", { x1: mid, y1: bottom, x2: mid, y2: at(stats.low), stroke: color, "stroke-width": c.pt }, path);
+      c.mark("line", { x1: x + width * 0.25, y1: at(stats.high), x2: x + width * 0.75, y2: at(stats.high), stroke: color, "stroke-width": c.pt }, path);
+      c.mark("line", { x1: x + width * 0.25, y1: at(stats.low), x2: x + width * 0.75, y2: at(stats.low), stroke: color, "stroke-width": c.pt }, path);
+      c.mark("rect", { x, y: top, width, height: Math.max(c.pt, bottom - top), fill: color }, path);
+      c.mark("line", { x1: x, y1: at(stats.median), x2: x + width, y2: at(stats.median), stroke: c.labelColor, "stroke-width": c.pt }, path);
+      const r = 2.5 * c.pt, my = at(stats.mean);
+      c.mark("path", { d: `M ${c.num(mid - r)} ${c.num(my - r)} L ${c.num(mid + r)} ${c.num(my + r)} M ${c.num(mid - r)} ${c.num(my + r)} L ${c.num(mid + r)} ${c.num(my - r)}`, fill: "none", stroke: c.labelColor, "stroke-width": c.pt }, path);
+      for (const value of stats.outliers) {
+        const row = entry.rows.find((k) => s.values[k] === value);
+        c.mark("circle", { cx: mid, cy: at(value), r: 3 * c.pt, fill: color, stroke: color, "stroke-width": 0.75 * c.pt }, `${c.path}.data.rows.${row}.${s.column}`);
+      }
+    });
+  });
+}
+
+/** Mix two hex colours (#RRGGBB) by `t` in [0, 1], rounded per channel. */
+export function mixHex(from, to, t) {
+  const channel = (hex, i) => parseInt(hex.slice(1 + 2 * i, 3 + 2 * i), 16);
+  const clamp = Math.min(1, Math.max(0, t));
+  return `#${[0, 1, 2].map((i) => Math.round(channel(from, i) + (channel(to, i) - channel(from, i)) * clamp).toString(16).toUpperCase().padStart(2, "0")).join("")}`;
+}
+
+// Region map: an honest non-geographic preview. PowerPoint draws the map from
+// Bing geodata it fetches itself; the preview shows one tile per region, shaded
+// from a light tint to the series colour by value, with the region name and
+// its value, so labels and colours are traceable without shipping geography.
+function renderRegionMapChart(c) {
+  const { box, pad, fontPx } = c;
+  const { column, values, categories } = chartexValues(c.rows, c.columns);
+  const count = categories.length;
+  const area = { x: box.x + pad, y: box.y + pad, width: Math.max(1, box.width - 2 * pad), height: Math.max(1, box.height - 2 * pad) };
+  const columns = Math.max(1, Math.min(count, Math.round(Math.sqrt(count * area.width / Math.max(1, area.height)))));
+  const rowsCount = Math.ceil(count / columns);
+  const tileWidth = area.width / columns, tileHeight = area.height / rowsCount;
+  const finite = values.filter((value) => value !== null);
+  const min = finite.length ? Math.min(...finite) : 0, max = finite.length ? Math.max(...finite) : 0;
+  const light = mixHex(/^#[0-9A-Fa-f]{6}$/.test(c.surface) ? c.surface : "#FFFFFF", c.colors[0], 0.15);
+  categories.forEach((name, i) => {
+    const value = values[i];
+    const t = value === null ? 0 : max > min ? (value - min) / (max - min) : 1;
+    const x = area.x + (i % columns) * tileWidth, y = area.y + Math.floor(i / columns) * tileHeight;
+    c.mark("rect", { x, y, width: tileWidth, height: tileHeight, fill: value === null ? c.surface : mixHex(light, c.colors[0], t), stroke: "#FFFFFF", "stroke-width": c.pt }, `${c.path}.data.rows.${i}.${column}`);
+    const inset = { x: x + fontPx * 0.25, width: Math.max(1, tileWidth - fontPx * 0.5) };
+    if (tileHeight >= c.lineHeight * 2) {
+      c.text(name, { ...inset, y: y + tileHeight / 2 - c.lineHeight, height: c.lineHeight }, `${c.path}.data.rows.${i}.0`);
+      if (value !== null) c.text(formatTick(value), { ...inset, y: y + tileHeight / 2, height: c.lineHeight }, `${c.path}.data.rows.${i}.${column}`);
+    } else if (tileHeight >= c.lineHeight) {
+      c.text(name, { ...inset, y: y + (tileHeight - c.lineHeight) / 2, height: c.lineHeight }, `${c.path}.data.rows.${i}.0`);
+    }
+  });
 }

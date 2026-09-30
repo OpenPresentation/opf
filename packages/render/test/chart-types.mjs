@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {renderSvg,resolvePresentation} from '../dist/svg.js';
-import {CHART_TYPES,DEPRECATED_CHART_TYPES,CHART_SERIES_COLORS,resolveChartType,niceScale,stackCategoryValues,barGeometry,scatterSeries} from '../dist/charts.js';
+import {CHART_TYPES,DEPRECATED_CHART_TYPES,CHART_SERIES_COLORS,resolveChartType,niceScale,stackCategoryValues,barGeometry,scatterSeries,squarify,scottBinCount,histogramBins,boxStatistics,mixHex} from '../dist/charts.js';
 import {chartColorForFill} from '@openpresentation/opf/composition';
 
 // FF-22: every kept catalog chart type previews its native construct.
@@ -150,6 +150,127 @@ for(const [id,markers,filled] of [['radar',false,false],['radar-with-markers',tr
 assert.equal(marks(render('column',{columns:['Q','Only'],rows:[['Q1',1],['Q2',2]]}),'rect',series).length,0,'single series has no legend');
 for(const [id,replacement] of Object.entries(DEPRECATED_CHART_TYPES)){assert.equal(render(id),render(replacement),`${id} renders as ${replacement}`);checks++;}
 
+// Chartex constructs (FF-22b): every chartex id takes the catalog path with marks traced to its data.
+for(const id of CHARTEX){
+  const svg=render(id);
+  assert.match(svg,new RegExp(`data-opf-chart="${id}"`),`${id}: catalog renderer`);
+  assert.equal(marks(svg,'rect',/^slides\.0\.chart\.data\.rows\.\d+$/).length,0,`${id}: no legacy bars`);
+  assert.ok(elements(svg,'text').length>0,`${id}: labels are real text`);
+  for(const a of elements(svg,'text'))assert.ok(a['font-family'].startsWith(bound.design.fonts.body),`${id}: body font`);
+  assert.doesNotMatch(svg,/NaN|undefined|Infinity/,`${id}: finite markup`);
+  checks++;
+}
+{
+  // Treemap: one tile per positive value of the first series, squarified areas in proportion, one palette colour per tile, category labels inside.
+  const svg=render('treemap'),tiles=marks(svg,'rect',/rows\.\d+\.1$/);
+  assert.equal(tiles.length,4,'four tiles for the first series');
+  tiles.forEach((t,i)=>assert.equal(t.fill,palette[i],`tile ${i} colour`));
+  const areas=tiles.map(t=>Number(t.width)*Number(t.height)),values=[12,16,21,18];
+  assert.ok(Math.abs(areas[2]/areas[0]-values[2]/values[0])<0.02,'areas follow the values');
+  assert.ok(['Q1','Q2','Q3','Q4'].every(t=>texts(svg).includes(t)),'category labels inside the tiles');
+  assert.deepEqual(marks(svg,'rect',/columns/).length,0,'no legend');
+  const negative=render('treemap',{columns:['A','V'],rows:[['x',-1],['y',0]]});
+  assert.ok(negative.includes('No positive chart values'));
+  const rects=squarify([{value:6},{value:6},{value:4},{value:3},{value:2},{value:2},{value:1}],0,0,6,4);
+  assert.ok(Math.abs(rects.reduce((s,r)=>s+r.width*r.height,0)-24)<1e-9,'squarify fills the area');
+  assert.ok(Math.abs(rects[0].width*rects[0].height-6)<1e-9&&Math.abs(rects[6].width*rects[6].height-1)<1e-9,'areas are proportional');
+  assert.deepEqual(squarify([{value:0},{value:0}],0,0,2,2),[null,null]);
+  checks++;
+}
+{
+  // Histogram: a lone value column is binned like PowerPoint (Scott's rule, right-closed bins from the minimum); a category column bins by category.
+  assert.equal(scottBinCount([3,5,8,13]),2);
+  assert.equal(scottBinCount(Array.from({length:1000},(_,i)=>i)),10);
+  assert.equal(scottBinCount([7,7,7]),1);
+  assert.deepEqual(histogramBins([3,5,8,13]).map(b=>[b.label,b.count]),[['[3, 8]',3],['(8, 13]',1]]);
+  assert.deepEqual(histogramBins([7,7]).map(b=>[b.label,b.count]),[['7',2]]);
+  assert.deepEqual(histogramBins([]),[]);
+  const single=render('histogram',{columns:['Sample'],rows:[[3],[5],[8],[13]]}),bins=marks(single,'rect',/columns\.0$/);
+  assert.equal(bins.length,2,'two bin bars traced to the value column');
+  assert.ok(texts(single).includes('[3, 8]')&&texts(single).includes('(8, 13]'),'bin labels');
+  assert.equal(bins[0].fill,palette[0]);
+  const byCategory=render('histogram'),bars=marks(byCategory,'rect',/rows\.\d+\.1$/);
+  assert.equal(bars.length,4,'one bar per category from the first series');
+  assert.ok(Number(bars[1].x)>Number(bars[0].x)&&Number(bars[0].width)>Number(bars[0].x)*0,'bars in row order');
+  assert.ok(texts(byCategory).includes('Q1'));
+  checks++;
+}
+{
+  // Pareto: columns sorted descending with the cumulative-percentage line on a 0-100% axis.
+  const svg=render('pareto',{columns:['Cause','Count'],rows:[['a',10],['b',40],['c',30],['d',20]]}),bars=marks(svg,'rect',/rows\.\d+\.1$/);
+  assert.deepEqual(bars.map(b=>b['data-opf-path'].split('.').at(-2)),['1','2','3','0'],'bars sorted by value, descending');
+  assert.ok(Number(bars[0].height)>Number(bars[1].height)&&Number(bars[1].height)>Number(bars[3].height));
+  const line=marks(svg,'polyline',/columns\.1$/);
+  assert.equal(line.length,1,'one cumulative line traced to the series');
+  const ys=line[0].points.split(' ').map(p=>Number(p.split(',')[1]));
+  assert.ok(ys[0]>ys[1]&&ys[1]>ys[2]&&ys[2]>ys[3],'cumulative line rises');
+  assert.ok(texts(svg).includes('100%')&&texts(svg).includes('0%'),'percentage axis');
+  assert.equal(line[0].stroke,palette[1]);
+  checks++;
+}
+{
+  // Box and whisker: exclusive quartiles (Excel QUARTILE.EXC), whiskers within 1.5 IQR, outliers as markers, one box per category and series.
+  assert.deepEqual(boxStatistics([5,8,6,30]),{q1:5.25,median:7,q3:24.5,mean:12.25,low:5,high:30,outliers:[]});
+  assert.deepEqual(boxStatistics([1,2,3,4,5,6,7,8,100]),{q1:2.5,median:5,q3:7.5,mean:15.111111111111111,low:1,high:8,outliers:[100]});
+  assert.deepEqual(boxStatistics([4]),{q1:4,median:4,q3:4,mean:4,low:4,high:4,outliers:[]});
+  assert.deepEqual(boxStatistics([2,6]),{q1:2,median:4,q3:6,mean:4,low:2,high:6,outliers:[]});
+  assert.equal(boxStatistics([null,'x']),null);
+  const data={columns:['Team','Cycle','Review'],rows:[['A',1,5],['A',2,6],['A',3,7],['A',4,8],['A',5,9],['A',6,5],['A',7,6],['A',8,7],['A',100,8],['B',5,1],['B',6,2],['B',7,3],['B',8,4]]};
+  const svg=render('box-and-whisker',data);
+  const boxRects=marks(svg,'rect',/columns\.[12]$/),swatches=boxRects.filter(r=>r.width===r.height);
+  assert.equal(boxRects.length-swatches.length,4,'one box per category and series');
+  assert.equal(marks(svg,'circle',point).length,1,'one outlier marker');
+  assert.equal(marks(svg,'circle',point)[0]['data-opf-path'],`${PATH}.data.rows.8.1`,'the outlier is traced to its row');
+  assert.equal(swatches.length,2,'legend for two series');
+  assert.ok(texts(svg).includes('A')&&texts(svg).includes('B'));
+  checks++;
+}
+{
+  // Waterfall: floating bars from the running total, increases and decreases in the first two palette colours, connectors between bars.
+  const svg=render('waterfall',{columns:['Step','Value'],rows:[['Start',100],['Gain',24],['Loss',-8],['End',10]]}),bars=marks(svg,'rect',/rows\.\d+\.1$/);
+  assert.deepEqual(bars.map(b=>b.fill),[palette[0],palette[0],palette[1],palette[0]],'colour by sign');
+  const top=r=>Number(r.y),bottom=r=>Number(r.y)+Number(r.height);
+  assert.ok(Math.abs(bottom(bars[1])-top(bars[0]))<0.01,'the second bar starts where the first ends');
+  assert.ok(Math.abs(top(bars[2])-top(bars[1]))<0.01,'a decrease starts at the previous total');
+  assert.equal(elements(svg,'line').filter(l=>!l['data-opf-path']&&l.stroke==='#888888'&&l.x1!==l.x2&&Number(l.x2)>Number(l.x1)+1).length>=3,true,'connector lines');
+  checks++;
+}
+{
+  // Funnel: centred bars from the top with value labels, category labels on the left.
+  const svg=render('funnel',{columns:['Stage','Accounts'],rows:[['Qualified',120],['Proposal',72],['Commit',31]]}),bars=marks(svg,'rect',/rows\.\d+\.1$/);
+  assert.equal(bars.length,3);
+  const centres=bars.map(b=>Number(b.x)+Number(b.width)/2);
+  assert.ok(centres.every(c=>Math.abs(c-centres[0])<0.01),'bars are centred');
+  assert.ok(Number(bars[0].width)>Number(bars[1].width)&&Number(bars[1].width)>Number(bars[2].width),'widths follow the values');
+  assert.ok(Number(bars[0].y)<Number(bars[1].y),'first stage on top');
+  assert.ok(['120','72','31','Qualified','Commit'].every(t=>texts(svg).includes(t)),'value and category labels');
+  checks++;
+}
+{
+  // Region map: an honest non-geographic tile grid shaded by value, with region names and values.
+  const svg=render('world',{columns:['Country','Value'],rows:[['Brazil',10],['Chile',40],['Peru',25]]}),tiles=marks(svg,'rect',/rows\.\d+\.1$/);
+  assert.equal(tiles.length,3,'one tile per region');
+  assert.equal(tiles[1].fill,palette[0],'the largest value takes the series colour');
+  assert.equal(new Set(tiles.map(t=>t.fill)).size,3,'shades differ by value');
+  assert.ok(['Brazil','Chile','Peru','10','40','25'].every(t=>texts(svg).includes(t)),'names and values');
+  assert.doesNotMatch(svg,/<path/,'no geography is drawn');
+  assert.equal(mixHex('#000000','#FFFFFF',0.5),'#808080');
+  assert.equal(mixHex('#102030','#FFFFFF',0),'#102030');
+  checks++;
+}
+{
+  // A lone value column plots against row numbers for the non-binning constructs, matching the exporter's row-numbers adaptation.
+  const svg=render('funnel',{columns:['V'],rows:[[3],[5]]});
+  assert.equal(marks(svg,'rect',/rows\.\d+\.0$/).length,2,'values from column 0');
+  assert.ok(texts(svg).includes('1')&&texts(svg).includes('2'),'row numbers as categories');
+  assert.match(render('treemap',{columns:['V'],rows:[[3],[5]]}),/data-opf-chart="treemap"/);
+  // A lone-column box chart draws one (degenerate) box per row, traced to the value column, with row numbers as categories.
+  const box=render('box-and-whisker',{columns:['V'],rows:[[3],[5],[8]]});
+  assert.equal(marks(box,'rect',/columns\.0$/).length,3,'one box per row from column 0');
+  assert.ok(texts(box).includes('1')&&texts(box).includes('3'),'row numbers as categories');
+  checks++;
+}
+
 // Ids outside the catalog keep the legacy preview; kept ids without inline rows keep the no-data panel.
 {
   const svg=render('mystery-chart');
@@ -159,4 +280,4 @@ for(const [id,replacement] of Object.entries(DEPRECATED_CHART_TYPES)){assert.equ
   checks++;
 }
 
-console.log(`Chart types passed: ${checks} checks; ${CLASSIC.length} classic ids on the catalog renderer, ${Object.keys(DEPRECATED_CHART_TYPES).length} deprecated ids identical to their replacement, unknown ids on the legacy preview.`);
+console.log(`Chart types passed: ${checks} checks; ${CLASSIC.length} classic and ${CHARTEX.length} chartex ids on the catalog renderer, ${Object.keys(DEPRECATED_CHART_TYPES).length} deprecated ids identical to their replacement, unknown ids on the legacy preview.`);
