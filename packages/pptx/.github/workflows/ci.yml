@@ -36,24 +36,24 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf
-          # Core main with opf#206 (b1d8f58): the renderer-absent furniture and packed quote checks accept the restored quote payload (FF-57).
-          ref: b1d8f58656200514cd7ba11db66ff1868341dff5
+          # Core 0.11.3 release commit (opf#209): the published core this release requires (^0.11.3); the packed quote checks accept the restored quote payload (FF-57).
+          ref: 2e838f56086976b258328d4610179037995435e8
           path: opf
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-render
-          # Renderer 0.11.0 published commit (gitHead): Intos previews Aptos and the open families are bundled.
-          ref: 17f7807e7e687444e7c466bf7edd3227593ba56d
+          # Renderer main after #75 and #72 (the commit renderer 0.11.6 releases, 0.11.5 plus chart label rotation).
+          ref: aa048a1bc672280a916bdc39a7cfe8763b80d6b4
           path: opf-render
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-editor
-          # Editor 0.9.0 release commit.
-          ref: 31efdfe963bd1ac189b984701bfbe4d686acee05
+          # Editor main after #50 (0.10.3 plus the catalog-independent layout ranking tests the 100-layout catalog needs).
+          ref: 8bf5ba0bba5d19f0e80f5c8774f61b7c1da57192
           path: opf-editor
           fetch-depth: 0
           persist-credentials: false
