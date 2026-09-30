@@ -1,6 +1,7 @@
 // Controls for the shared font availability helpers (FF-48). Run: node --test font-availability.test.mjs
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {exportedFaceWeight} from './font-resolution.mjs';
 import {classifyChosenFamilies, hostRenderOutcome, hostRenderReason, resolveDrawnFamily, resolveFamily, slotsByFamily, svgTextRuns} from './font-availability.mjs';
 
 // Rows shaped like core `fontPolicyFor()` results (spec/reference/font-policy.json).
@@ -11,6 +12,7 @@ const policy = {
   Roboto: {family: 'Roboto', licenseClass: 'open', replacement: null},
 };
 const fontPolicyFor = f => policy[f];
+const pick = ({ok, compatibility, resolvedFamily}) => ({ok, compatibility, resolvedFamily});
 const bundledIn = () => [];
 // A host stub: `faces` maps a requested family to what the registry resolves it to (throws when absent), like registry.resolveFont.
 const hostWith = (faces, extra = {}) => ({registry: {resolveFont: ({fontFamily}) => { const f = faces[fontFamily]; if (!f) throw Object.assign(new Error('no face'), {code: 'font-unavailable'}); return f; }}, resolutions: new Map(), gate: {ok: true}, options: {}, ...extra});
@@ -84,7 +86,7 @@ test('resolveDrawnFamily resolves the faces the document draws (face-level lazy 
   const host = {resolutions: new Map(), drawn: new Map([['aptos display', [{weight: 700, italic: false}]]]), registry: {resolveFont: ({fontFamily, fontWeight, italic}) => held.has(`${fontFamily}|${fontWeight}|${italic}`) || fontFamily === 'Aptos Display' && fontWeight === 700
     ? {compatibility: 'metric', resolvedFamily: 'Intos Display'} : {compatibility: 'visual', resolvedFamily: 'Carlito'}}};
   assert.equal(resolveFamily(host, 'Aptos Display').compatibility, 'visual', 'Regular is not loaded: the alternate');
-  assert.deepEqual(resolveDrawnFamily(host, 'Aptos Display'), {ok: true, compatibility: 'metric', resolvedFamily: 'Intos Display'});
+  assert.deepEqual(pick(resolveDrawnFamily(host, 'Aptos Display')), {ok: true, compatibility: 'metric', resolvedFamily: 'Intos Display'});
   assert.equal(resolveDrawnFamily(host, 'Roboto').compatibility, 'visual', 'no drawn face: Regular, as before');
   host.drawn.set('mixed', [{weight: 700, italic: false}, {weight: 400, italic: false}]);
   assert.equal(resolveDrawnFamily(host, 'Mixed').compatibility, 'visual', 'the weakest drawn face decides');
@@ -96,6 +98,40 @@ test('resolveDrawnFamily: a family the document draws nothing in resolves throug
   const host = {resolutions: new Map(), drawn: new Map([['aptos display', [{weight: 700, italic: false}]]]),
     registry: {resolveFont: () => ({compatibility: 'visual', resolvedFamily: 'Roboto'})},
     unloaded: {resolutions: new Map(), registry: {resolveFont: ({fontFamily}) => ({compatibility: 'metric', resolvedFamily: fontFamily === 'Aptos' ? 'Intos' : fontFamily})}}};
-  assert.deepEqual(resolveDrawnFamily(host, 'Aptos'), {ok: true, compatibility: 'metric', resolvedFamily: 'Intos'});
+  assert.deepEqual(pick(resolveDrawnFamily(host, 'Aptos')), {ok: true, compatibility: 'metric', resolvedFamily: 'Intos'});
   assert.equal(resolveDrawnFamily({...host, drawn: undefined}, 'Aptos').compatibility, 'visual', 'a host that tracks no faces keeps the Regular resolution');
+});
+
+// FF-60: a drawn weight the exporter writes as Regular or Bold counts at the compatibility of that exported face.
+// A stub of the real registry: Intos ships 400 and 700 (metric), any other requested weight resolves to the nearest of them and is
+// reported visual (opf-render font-compatibility `weights: [400, 700]`); Figtree is a visual-only route at every weight.
+const weightHost = drawn => ({resolutions: new Map(), drawn: new Map(Object.entries(drawn).map(([k, v]) => [k.toLowerCase(), v])), registry: {resolveFont: ({fontFamily, fontWeight, italic}) => {
+  if (fontFamily === 'Aptos') { const resolvedWeight = fontWeight >= 600 ? 700 : 400; return {compatibility: fontWeight === resolvedWeight ? 'metric' : 'visual', resolvedFamily: 'Intos', requestedWeight: fontWeight, resolvedWeight, italic}; }
+  if (fontFamily === 'Tenorite') return {compatibility: 'visual', resolvedFamily: 'Figtree', requestedWeight: fontWeight, resolvedWeight: fontWeight >= 600 ? 700 : 400, italic};
+  if (fontFamily === 'Mid') return {compatibility: fontWeight === 400 ? 'metric' : 'visual', resolvedFamily: 'Intos', requestedWeight: fontWeight, resolvedWeight: 400, italic}; // no Bold face: 700 draws Regular
+  throw Object.assign(new Error('no face'), {code: 'font-unavailable'});
+}}});
+const face = weight => ({weight, italic: false});
+test('Aptos at 500, 600 and 800 is metric when the preview draws the face the export selects (Regular for 500, Bold for 600 and 800)', () => {
+  for (const weights of [[500], [600], [800], [400, 500, 600, 700, 800]]) {
+    const r = resolveDrawnFamily(weightHost({Aptos: weights.map(face)}), 'Aptos');
+    assert.equal(r.compatibility, 'metric', weights.join());
+    assert.equal(r.resolvedFamily, 'Intos');
+    if (weights.some(w => w !== 400 && w !== 700)) assert.equal(r.rawCompatibility, 'visual', 'the registry value stays available to the legacy definition');
+  }
+  const r = run(weightHost({Aptos: [face(500), face(800)]}), ['Aptos']);
+  assert.equal(r.fontRes.Aptos.verdict, 'pass'); assert.equal(r.fontRes.Aptos.tier, 'metric'); assert.deepEqual(r.reasons, []);
+  assert.equal(r.legacyFontReasons.length, 1, 'the legacy (pre-decision) definition still reports the registry visual tier');
+});
+test('the rule is narrow: a visual-only route stays near at every weight, and a face that is not the exported one does not qualify', () => {
+  const t = run(weightHost({Tenorite: [face(500)]}), ['Tenorite']);
+  assert.equal(t.fontRes.Tenorite.verdict, 'near'); assert.equal(t.fontRes.Tenorite.tier, 'visual');
+  // A host whose Bold request draws Regular (no Bold face) is not the face the export selects for 700: no exemption.
+  const host = weightHost({Mid: [face(800)]});
+  assert.equal(resolveDrawnFamily(host, 'Mid').compatibility, 'visual');
+  // A weight that is already 400 or 700 is never rewritten.
+  assert.equal(resolveDrawnFamily(weightHost({Aptos: [face(400), face(700)]}), 'Aptos').rawCompatibility, undefined);
+});
+test('exportedFaceWeight follows toPptx: bold from 600', () => {
+  assert.deepEqual([100, 300, 400, 500, 599, 600, 700, 800, 900].map(exportedFaceWeight), [400, 400, 400, 400, 400, 700, 700, 700, 700]);
 });

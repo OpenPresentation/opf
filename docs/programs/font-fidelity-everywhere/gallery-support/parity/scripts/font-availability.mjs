@@ -6,7 +6,7 @@
 // selected and PowerPoint draws the real font. So "the preview draws the policy table's replacement and the export writes the selected
 // family" is correct (works, or `near` in the parity tiers for a visual-only route). It is a gap only when the host cannot draw the
 // value at all, the family has no policy route, the preview draws an unrouted fallback, or the export names a replacement.
-import {classifyFontResolution, legacyPasses, pptxNaming} from './font-resolution.mjs';
+import {classifyFontResolution, exportedFaceWeight, legacyPasses, pptxNaming} from './font-resolution.mjs';
 
 const unesc = s => String(s).replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&#(\d+);/g, (_, d) => String.fromCodePoint(+d)).replace(/&#x([0-9a-f]+);/gi, (_, h) => String.fromCodePoint(parseInt(h, 16))).replace(/&amp;/g, '&');
 export const firstFamily = f => String(f ?? '').split(',')[0].trim().replace(/^["']|["']$/g, '');
@@ -16,7 +16,7 @@ export const scriptOf = t => /[　-鿿가-힯豈-﫿＀-￯぀-ヿ]/u.test(t) ? 
 /** Registry resolution of a family in the modelled host, cached on the host. `compatibility` and `resolvedFamily` come from the registry. */
 export function resolveFamily(host, family, weight = 400, italic = false) {
   const k = `${family}|${weight}|${italic}`; if (host.resolutions.has(k)) return host.resolutions.get(k);
-  let v; try { const r = host.registry.resolveFont({fontFamily: family, fontWeight: weight, italic}); v = {ok: true, compatibility: r.compatibility, resolvedFamily: r.resolvedFamily}; }
+  let v; try { const r = host.registry.resolveFont({fontFamily: family, fontWeight: weight, italic}); v = {ok: true, compatibility: r.compatibility, resolvedFamily: r.resolvedFamily, requestedWeight: r.requestedWeight ?? weight, resolvedWeight: r.resolvedWeight ?? weight}; }
   catch (e) { v = {ok: false, code: e.code}; }
   host.resolutions.set(k, v); return v;
 }
@@ -27,18 +27,38 @@ export function resolveFamily(host, family, weight = 400, italic = false) {
  * weakest compatibility (exact, metric, visual, generic, in that order) and the first resolved family are reported. A family with no drawn face (or a
  * host that does not track faces) is resolved at Regular, as before: through `host.unloaded` (a registry holding every vendored face) when the host
  * tracks faces, because the editor would load that face the moment an edit draws text in the family.
+ *
+ * FF-60, weights the exporter cannot write: toPptx sets bold only from weight 600 and names the same family, so PowerPoint draws Regular for
+ * 500 and Bold for 600 and 800. A drawn face whose registry compatibility is weaker than metric only because the requested weight is not one
+ * the metric claim covers (Aptos 500, 600, 800 against Intos, which ships 400 and 700) counts at the compatibility of the face the export
+ * selects, when the preview draws exactly that face: the same resolved family and weight as the exported weight resolves to. Nothing else
+ * changes: no width tolerance is touched, a route whose own tier is visual stays visual, and the raw registry value is kept as
+ * `rawCompatibility` (the legacy definition reads it).
  */
 const TIER = {exact: 0, metric: 1, visual: 2, generic: 3};
+/** The resolution of a drawn face at the compatibility of the face toPptx selects for it (FF-60), or `r` itself. */
+export function asExportedFace(host, family, face, r) {
+  if ((TIER[r.compatibility] ?? 3) <= TIER.metric || r.compatibility === 'generic') return r;
+  const weight = exportedFaceWeight(face.weight);
+  if (weight === face.weight) return r;
+  const e = resolveFamily(host, family, weight, face.italic);
+  if (!e.ok || (TIER[e.compatibility] ?? 3) > TIER.metric) return r;
+  if (e.resolvedFamily !== r.resolvedFamily || e.resolvedWeight !== r.resolvedWeight) return r;
+  return {...r, compatibility: e.compatibility, rawCompatibility: r.compatibility, exportedWeight: weight};
+}
 export function resolveDrawnFamily(host, family) {
   const faces = host.drawn?.get(String(family).toLowerCase());
   if (!faces?.length) return host.unloaded && host.drawn ? resolveFamily(host.unloaded, family) : resolveFamily(host, family);
-  let worst = null;
+  let worst = null, rawWorst = null;
   for (const f of faces) {
-    const r = resolveFamily(host, family, f.weight, f.italic);
-    if (!r.ok) return r;
+    const raw = resolveFamily(host, family, f.weight, f.italic);
+    if (!raw.ok) return raw;
+    const r = asExportedFace(host, family, f, raw);
     if (!worst || (TIER[r.compatibility] ?? 3) > (TIER[worst.compatibility] ?? 3)) worst = r;
+    if (!rawWorst || (TIER[raw.compatibility] ?? 3) > (TIER[rawWorst] ?? 3)) rawWorst = raw.compatibility;
   }
-  return worst;
+  // The legacy definition reads the weakest raw registry value over all drawn faces.
+  return rawWorst === worst.compatibility ? worst : {...worst, rawCompatibility: rawWorst};
 }
 
 /**

@@ -34,10 +34,17 @@ export function sameFamilyGroup(resolved, candidate) {
   return r.startsWith(c + ' ') && WEIGHT_NAMES.test(r.slice(c.length + 1));
 }
 
+/**
+ * FF-60: the weight toPptx writes for a requested weight. The exporter sets `b="1"` from weight 600 and nothing below, and names the
+ * selected family either way, so PowerPoint draws that family's Regular (weights below 600) or Bold (600 and above). The parity text check
+ * compares the same bit (bold = weight >= 600).
+ */
+export const exportedFaceWeight = weight => Number(weight) >= 600 ? 700 : 400;
+
 /** The old (pre-decision) statuses, kept so a run can report both definitions. */
 export function legacyStatus(preview) {
   if (!preview?.ok) return 'missing';
-  const c = preview.compatibility;
+  const c = preview.rawCompatibility ?? preview.compatibility;
   return c === 'exact' ? 'real' : c === 'metric' ? 'metric-substitute' : c === 'generic' ? 'missing' : 'visual-substitute';
 }
 /** Old definition: pass only for the real face or a metric-compatible substitute. */
