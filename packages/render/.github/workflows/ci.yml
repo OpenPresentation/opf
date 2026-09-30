@@ -32,25 +32,26 @@ jobs:
       # FF-31 Gelasio metric tier pins merged core opf#163 (Georgia disabledFeatures). opf-pptx and opf-editor move to the coordinated heads core main pins (ecosystem-ci), which pass core#155 and its packed quote test.
       # FF-31 (Intos) pins core PR opf#166 (core main plus the Intos policy, skills, docs and build scripts); repin to its merge commit once merged (never leave it on an unmerged head).
       # Cover centering pins merged core opf#169 (ce3c779): 103 golden slides move, selected through OPF_GOLDEN_BASELINE.
+      # Release 0.11.6 pins core main b266190 (0.11.3 plus the 0.11.6 lazy font count, opf#211), the opf-pptx 0.11.4 release commit c08105f and opf-editor main 8bf5ba0 (both pass with the 100-layout catalog).
       # FF-43 pins core PR opf#178 (font policy measured values for the vendored Source Sans 3 rows, the measurement tools and the tracker); merged as 72d337bf5778cc7d9048d236debc10ba0d37fb4c.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf
-          ref: 72d337bf5778cc7d9048d236debc10ba0d37fb4c
+          ref: b266190554cf407b5f842a0913d6b0fe9f22c821
           path: opf
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-pptx
-          ref: 373dfa39688e787d861202e7a8069ebff7e8be36
+          ref: c08105f2d3a45375128a69a2116e936a3d1a4a15
           path: opf-pptx
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-editor
-          ref: d0c95a16b50eccb3eee695ace44cc6c3a6754f2f
+          ref: 8bf5ba0bba5d19f0e80f5c8774f61b7c1da57192
           path: opf-editor
           fetch-depth: 0
           persist-credentials: false
