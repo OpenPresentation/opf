@@ -7,7 +7,7 @@ import { createFontRegistry, OPFFontError } from "./fonts.js";
 import { BUNDLED_FONT_MANIFEST } from "./font-manifest.js";
 import { lazyFontList } from "./lazy-font-list.js";
 export { BUNDLED_FONT_MANIFEST } from "./font-manifest.js";
-import { analyzePresentationScripts, nextFallbackPackage, scriptFontPackages, scriptSelectionOf, uncoveredCjkCharacters } from "./script-font-pack.js";
+import { analyzePresentationScripts, autoScriptSelection, nextFallbackPackage, scriptFontPackages, scriptSelectionOf, uncoveredCjkCharacters } from "./script-font-pack.js";
 export { autoScriptSelection, detectPresentationScripts, scriptFontPackages } from "./script-font-pack.js";
 // Script faces are embedded in a standalone SVG only when the slide's text uses their family.
 const embedUsed = entries => entries.map(entry => ({...entry, embed: "used"}));
@@ -174,8 +174,11 @@ export async function loadOfficeFontRegistry({scripts, faces, presentation, onDi
   // Noto Sans (regular, bold, italic, bold italic) is the default Latin, Cyrillic and Greek fallback face
   // (glyph fallback), so Georgia with Russian text previews without the scripts option. It is embedded in an
   // SVG only when the slide's text draws it (embed "used"); raster output reads it from fontFiles. Unless the
-  // caller asked for it with scripts it is fallback-only, so no other family's preview changes.
-  const requested = scripts === undefined || scripts === "auto" || (Array.isArray(scripts) && !scripts.length) ? [] : scriptFontPackages(scripts).map(pkg => pkg.name);
+  // caller asked for it with scripts it is fallback-only, so no other family's preview changes. "auto" counts as asking for it when the
+  // presentation itself selects Latn (a Sylfaen scheme: Noto Sans is its designated replacement, which a fallback-only face never is), as
+  // an explicit list does; a presentation that does not select Latn keeps it fallback-only.
+  const requested = scripts === "auto" && presentation !== null && typeof presentation === "object" ? scriptFontPackages(autoScriptSelection(presentation).scripts).map(pkg => pkg.name)
+    : scripts === undefined || scripts === "auto" || (Array.isArray(scripts) && !scripts.length) ? [] : scriptFontPackages(scripts).map(pkg => pkg.name);
   const fallback = await loadPackages(scriptFontPackages(["Latn"]).filter(pkg => !requested.includes(pkg.name)), undefined, {fallbackOnly:true});
   fontFiles.push(...fallback.fontFiles);
   entries.push(...fallback.entries);

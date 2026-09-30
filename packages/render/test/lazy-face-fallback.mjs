@@ -138,6 +138,26 @@ for (const [scheme, expected] of [['yu-gothic', 'noto-sans-jp'], ['meiryo', 'not
     assert.deepEqual(result.packages, ['noto-sans-jp']);
   }
 }
+// Sylfaen (Latin, Greek, Cyrillic, Armenian, Georgian) is replaced by the Latin Noto Sans, which the office registry always loads as a
+// fallback-only face (it answers to its own name and to glyph fallback, never as another family's replacement). A Sylfaen scheme selects
+// the Latn script, so `auto` must load Noto Sans as a designated replacement, or the deck raises font-unavailable for Sylfaen in Node
+// while the browser registry (ensureScripts loads the package itself) draws it. Visual substitution only: the policy row is visual.
+for (const [label, document] of [
+  ['sylfaen + latin', deck({title: 'Quarterly review', text: 'Revenue grew 12%', scheme: 'sylfaen'})],
+  ['sylfaen + armenian', deck({title: 'Եռամսյակային ակնարկ', text: 'Revenue grew 12%', scheme: 'sylfaen', language: 'hy'})],
+  ['sylfaen + georgian', deck({title: 'კვარტალური მიმოხილვა', text: 'Revenue grew 12%', scheme: 'sylfaen', language: 'ka'})],
+]) {
+  const result = await render(label, document, {policy: 'visual'});
+  assert.ok(result.packages.includes('noto-sans'), `${label}: Noto Sans loads as Sylfaen's replacement (${result.packages})`);
+  assert.equal(result.fonts.registry.resolveFont({fontFamily: 'Sylfaen', fontWeight: 400, italic: false}).resolvedFamily, 'Noto Sans', `${label}: Sylfaen resolves`);
+}
+assert.deepEqual(autoScriptSelection(deck({title: 'Quarterly review', scheme: 'sylfaen'})), {detected: [], scripts: ['Latn'], unavailable: []});
+// Every other deck keeps Noto Sans fallback-only (glyph fallback and its own name, no replacement for another family).
+{
+  const fonts = await prepareNodeFonts({pack: 'office', substitutionPolicy: 'visual', scripts: 'auto', presentation: deck({title: 'Quarterly review', scheme: 'georgia'})});
+  assert.throws(() => fonts.registry.resolveFont({fontFamily: 'Sylfaen', fontWeight: 400, italic: false}), error => error.code === 'font-unavailable', 'a deck that does not select Latn keeps Noto Sans fallback-only');
+  assert.equal(fonts.registry.resolveFont({fontFamily: 'Noto Sans', fontWeight: 400, italic: false}).resolvedFamily, 'Noto Sans', 'and it still answers to its own name');
+}
 // Latin schemes still load nothing for Latin text, and a Latin-scheme deck's own selection is unchanged.
 for (const scheme of [undefined, 'calibri', 'open-sans', 'roboto', 'georgia']) {
   const latin = await render(`${scheme ?? 'aptos'} + latin`, deck({title: 'Quarterly review', text: 'Revenue grew 12%', scheme}));

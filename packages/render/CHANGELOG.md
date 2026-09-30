@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- FF-19: `scripts: 'auto'` in Node keeps the Latin Noto Sans as a designated replacement when the presentation selects `Latn`. A Sylfaen scheme (and the Armenian and Georgian language values that use it) has Noto Sans as its replacement, but the office registry loads Noto Sans as a fallback-only face, which answers to its own name and to glyph fallback and is never another family's replacement, and `auto` skipped the package because it was already loaded. Node raised `font-unavailable` for Sylfaen while the browser registry (`ensureScripts` loads the package itself) drew it. `loadOfficeFontRegistry` now leaves the packages that `autoScriptSelection(presentation).scripts` selects out of the fallback-only load, as an explicit `scripts` list already does; a presentation that does not select `Latn` is unchanged (Noto Sans stays fallback-only). No PPTX, golden or example change. Test: `test/lazy-face-fallback.mjs` (Sylfaen with Latin, Armenian and Georgian text under visual substitution; fails before the change). Found by the FF-38 parity run with the gallery font host modelled (opf#193).
+
 ## 0.11.3
 
 - Release 0.11.3 (patch: classic chart previews; no API change, no option removed, core floor stays `@openpresentation/opf` ^0.11.2). The preview draws every kept classic chart type natively, deprecated chart ids draw as their replacement, and value axes scale like Office, so the SVG, PNG and PDF output of slides with charts changes; other slides are unchanged. The vendored face list is unchanged (`registry.lazyFonts` still lists 86 faces, as in 0.11.2). Details in the FF-22b entry below.
