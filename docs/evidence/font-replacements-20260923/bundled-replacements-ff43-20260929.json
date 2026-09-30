@@ -2026,6 +2026,302 @@
       ]
     },
     {
+      "reference": "Rockwell",
+      "candidate": "Bitter",
+      "note": "Shipped by opf-render (@expo-google-fonts/bitter@0.4.2); tier visual.",
+      "styles": [
+        {
+          "style": "400",
+          "strings": 300,
+          "meanAbs": 0.0112,
+          "mean": 0.0059,
+          "maxAbs": 0.0657,
+          "meetsMetricBar": false,
+          "reference": {
+            "file": "ROCK.TTF",
+            "version": "Version 1.65",
+            "sha256": "0c61e5ce8296a55761cdb9d350d4c990be4cda8890cc70f2abdedfc357f96d00"
+          },
+          "candidateFile": {
+            "name": "Bitter_400Regular.ttf",
+            "sha256": "46a52a6b4e3202563bac5134c02e4d9db63685c439104a803a0b4fbf9e8ceaf4"
+          },
+          "referenceVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              0.9458,
+              -0.2285,
+              0
+            ],
+            "typo": [
+              0.6929,
+              -0.2227,
+              0.1543
+            ],
+            "win": [
+              0.9458,
+              0.2285
+            ],
+            "xHeight": null,
+            "capHeight": null,
+            "useTypoMetrics": false
+          },
+          "candidateVertical": {
+            "unitsPerEm": 1000,
+            "hhea": [
+              0.935,
+              -0.265,
+              0
+            ],
+            "typo": [
+              0.935,
+              -0.265,
+              0
+            ],
+            "win": [
+              1.255,
+              0.376
+            ],
+            "xHeight": 0.528,
+            "capHeight": 0.698,
+            "useTypoMetrics": true
+          },
+          "verticalMetricsEqual": false,
+          "outlines": {
+            "referenceCodepoints": 242,
+            "candidateCodepoints": 978,
+            "sharedNonemptyGlyphs": 236,
+            "identicalOutlines": 0,
+            "identicalBeyondPlainRectangles": 0,
+            "glyphBoxDeviationEm": {
+              "median": 0.3374,
+              "p90": 0.4282
+            },
+            "glyphBoxYRange": {
+              "x": {
+                "reference": [
+                  0,
+                  0.473
+                ],
+                "candidate": [
+                  0,
+                  0.532
+                ]
+              },
+              "H": {
+                "reference": [
+                  0,
+                  0.679
+                ],
+                "candidate": [
+                  0,
+                  0.698
+                ]
+              },
+              "o": {
+                "reference": [
+                  -0.014,
+                  0.486
+                ],
+                "candidate": [
+                  -0.009,
+                  0.537
+                ]
+              },
+              "p": {
+                "reference": [
+                  -0.212,
+                  0.48
+                ],
+                "candidate": [
+                  -0.23,
+                  0.537
+                ]
+              }
+            }
+          },
+          "replacementWeight": 400
+        },
+        {
+          "style": "700",
+          "strings": 300,
+          "meanAbs": 0.0436,
+          "mean": -0.0436,
+          "maxAbs": 0.0845,
+          "meetsMetricBar": false,
+          "reference": {
+            "file": "ROCKB.TTF",
+            "version": "Version 1.65",
+            "sha256": "fc9fd442d2dcd719c88d42121d69f5dd9dda02cc1c8afa025d261ec28795468f"
+          },
+          "candidateFile": {
+            "name": "Bitter_700Bold.ttf",
+            "sha256": "391582a3004c7600b7234123c3c810b8c2c5ed3c90af7f087fe55f003cc075bf"
+          },
+          "referenceVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              0.9458,
+              -0.2285,
+              0
+            ],
+            "typo": [
+              0.6909,
+              -0.2197,
+              0.1592
+            ],
+            "win": [
+              0.9458,
+              0.2285
+            ],
+            "xHeight": null,
+            "capHeight": null,
+            "useTypoMetrics": false
+          },
+          "candidateVertical": {
+            "unitsPerEm": 1000,
+            "hhea": [
+              0.935,
+              -0.265,
+              0
+            ],
+            "typo": [
+              0.935,
+              -0.265,
+              0
+            ],
+            "win": [
+              1.255,
+              0.376
+            ],
+            "xHeight": 0.534,
+            "capHeight": 0.704,
+            "useTypoMetrics": true
+          },
+          "verticalMetricsEqual": false,
+          "replacementWeight": 700
+        },
+        {
+          "style": "400i",
+          "strings": 300,
+          "meanAbs": 0.0145,
+          "mean": 0.0106,
+          "maxAbs": 0.0688,
+          "meetsMetricBar": false,
+          "reference": {
+            "file": "ROCKI.TTF",
+            "version": "Version 1.65",
+            "sha256": "70af64a5bc061505e7a1cb1cd691811768a7cc84e53d48fcb526deb53f8c7a57"
+          },
+          "candidateFile": {
+            "name": "Bitter_400Regular_Italic.ttf",
+            "sha256": "4eda5cb005b1af2d5a733e0dcd727f65e2bddd0ea0466893f6d9259929ef20b2"
+          },
+          "referenceVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              0.9458,
+              -0.2285,
+              0
+            ],
+            "typo": [
+              0.6909,
+              -0.2227,
+              0.1563
+            ],
+            "win": [
+              0.9458,
+              0.2285
+            ],
+            "xHeight": null,
+            "capHeight": null,
+            "useTypoMetrics": false
+          },
+          "candidateVertical": {
+            "unitsPerEm": 1000,
+            "hhea": [
+              0.935,
+              -0.265,
+              0
+            ],
+            "typo": [
+              0.935,
+              -0.265,
+              0
+            ],
+            "win": [
+              1.255,
+              0.376
+            ],
+            "xHeight": 0.528,
+            "capHeight": 0.698,
+            "useTypoMetrics": true
+          },
+          "verticalMetricsEqual": false,
+          "replacementWeight": 400
+        },
+        {
+          "style": "700i",
+          "strings": 300,
+          "meanAbs": 0.0326,
+          "mean": -0.0324,
+          "maxAbs": 0.0679,
+          "meetsMetricBar": false,
+          "reference": {
+            "file": "ROCKBI.TTF",
+            "version": "Version 1.65",
+            "sha256": "c8a0f6976209cc198bc47ee287fd872fd86690f4d2893057e7ee92dd1235fb5f"
+          },
+          "candidateFile": {
+            "name": "Bitter_700Bold_Italic.ttf",
+            "sha256": "65fad0650e416aebb4a7f6893633907f0e10ea153974b0c69f9074b611c259c4"
+          },
+          "referenceVertical": {
+            "unitsPerEm": 2048,
+            "hhea": [
+              0.9458,
+              -0.2285,
+              0
+            ],
+            "typo": [
+              0.6929,
+              -0.2227,
+              0.1543
+            ],
+            "win": [
+              0.9458,
+              0.2285
+            ],
+            "xHeight": null,
+            "capHeight": null,
+            "useTypoMetrics": false
+          },
+          "candidateVertical": {
+            "unitsPerEm": 1000,
+            "hhea": [
+              0.935,
+              -0.265,
+              0
+            ],
+            "typo": [
+              0.935,
+              -0.265,
+              0
+            ],
+            "win": [
+              1.255,
+              0.376
+            ],
+            "xHeight": 0.534,
+            "capHeight": 0.704,
+            "useTypoMetrics": true
+          },
+          "verticalMetricsEqual": false,
+          "replacementWeight": 700
+        }
+      ]
+    },
+    {
       "reference": "Segoe UI",
       "candidate": "Red Hat Display",
       "note": "Shipped by opf-render (@expo-google-fonts/red-hat-display@0.4.1); tier undefined.",

@@ -2,9 +2,9 @@
   "description": "Pinned snapshot of the opf-render bundled font manifest (src/font-manifest.js, BUNDLED_FONT_MANIFEST), reduced to the fields the font tracker reads. Refresh with: node scripts/build-font-tracker.mjs --snapshot-manifest <opf-render>/src/font-manifest.js --commit <sha>. Core tests read this file so they never need the sibling repository.",
   "source": {
     "repository": "OpenPresentation/opf-render",
-    "commit": "0fdb36a824715705da782bd02901f564bbaec407",
+    "commit": "3026287a5619a820f1ebdbaff60c781e9cff0a75",
     "path": "src/font-manifest.js",
-    "capturedAt": "2026-09-29",
+    "capturedAt": "2026-09-30",
     "manifestVersion": 1
   },
   "packages": [
@@ -1134,6 +1134,48 @@
           "weight": 700,
           "italic": false,
           "sha256": "ddff46045846dfc35f20db138117a2bf249bb75b9336c4ee823b162d22ac82e6"
+        }
+      ]
+    },
+    {
+      "name": "@expo-google-fonts/bitter",
+      "version": "0.4.2",
+      "pack": "open",
+      "vendored": "fonts/bitter",
+      "source": "https://www.npmjs.com/package/@expo-google-fonts/bitter/v/0.4.2",
+      "license": "OFL-1.1",
+      "licenseSha256": "152a1e283e23b42c4940da4c72f2f5bebaa17969cb77c76d7af05903846006f1",
+      "reservedFontNames": [
+        "Bitter Pro"
+      ],
+      "faces": [
+        {
+          "file": "Bitter_400Regular.ttf",
+          "family": "Bitter",
+          "weight": 400,
+          "italic": false,
+          "sha256": "46a52a6b4e3202563bac5134c02e4d9db63685c439104a803a0b4fbf9e8ceaf4"
+        },
+        {
+          "file": "Bitter_400Regular_Italic.ttf",
+          "family": "Bitter",
+          "weight": 400,
+          "italic": true,
+          "sha256": "4eda5cb005b1af2d5a733e0dcd727f65e2bddd0ea0466893f6d9259929ef20b2"
+        },
+        {
+          "file": "Bitter_700Bold.ttf",
+          "family": "Bitter",
+          "weight": 700,
+          "italic": false,
+          "sha256": "391582a3004c7600b7234123c3c810b8c2c5ed3c90af7f087fe55f003cc075bf"
+        },
+        {
+          "file": "Bitter_700Bold_Italic.ttf",
+          "family": "Bitter",
+          "weight": 700,
+          "italic": true,
+          "sha256": "65fad0650e416aebb4a7f6893633907f0e10ea153974b0c69f9074b611c259c4"
         }
       ]
     },

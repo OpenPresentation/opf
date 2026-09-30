@@ -275,11 +275,11 @@ test("gallery cards are recorded separately from the gallery editor, and Node na
     assert.equal(record.hostVerification.galleryCards === "NA", !hosted, `${record.family} galleryCards`);
     assert.match(record.hostLoading.galleryCards, hosted ? /self-hosted preview webfont/ : /no self-hosted card preview|no route/, record.family);
   }
-  // Bitter is not bundled by opf-render (Reserved Font Name, variable-only upstream; FF-43) while the gallery cards self-host it.
-  const bitter = committed.records.find((record) => record.family === "Bitter");
-  assert.equal(bitter.bundled.yes, false, "Bitter is not bundled by opf-render");
-  assert.equal(bitter.hostVerification.galleryCards, "unverified", "but gallery cards self-host it");
-  assert.equal(bitter.hostVerification.galleryEditor, "NA");
+  // Raleway is not bundled by opf-render (variable-only upstream, resvg ignores the weight axis) while the gallery cards self-host it.
+  const raleway = committed.records.find((record) => record.family === "Raleway");
+  assert.equal(raleway.bundled.yes, false, "Raleway is not bundled by opf-render");
+  assert.equal(raleway.hostVerification.galleryCards, "unverified", "but gallery cards self-host it");
+  assert.equal(raleway.hostVerification.galleryEditor, "NA");
   // Node: the default prepareNodeFonts pack is base; office faces need pack: 'office'.
   const carlito = committed.records.find((record) => record.family === "Carlito");
   assert.match(carlito.hostLoading.node, /pack: 'office'/);
