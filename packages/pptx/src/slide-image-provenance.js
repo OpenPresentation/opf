@@ -71,6 +71,7 @@ export function placeSlideImages(entries, images, metadataFor, fail) {
       }
       const node = parser.parse(picture)['p:pic'];
       manifests.set(name, {v:1, slide:image.slide, position:image.treatment.position, fill:image.fill, treatment:image.treatment,
+        ...(image.content === true ? {content:true} : {}),
         properties:node['p:spPr'], blipFill:blipFillIdentity(node['p:blipFill'])});
       return picture;
     });
@@ -129,6 +130,7 @@ export function importSlideImage(pictures, shapes, relationships, entries, slide
     if (unreadable || others || own.length !== 1) throw Error('Ambiguous slide image identity.');
     const manifest = decodeTextTag(own[0].val);
     if (manifest?.v !== 1 || manifest.slide !== `slides.${slideIndex}` || !['crop', 'fit'].includes(manifest.fill) || !validTreatment(manifest.treatment, manifest.position)) throw Error('Invalid slide image manifest.');
+    if (manifest.content !== undefined && manifest.content !== true) throw Error('Invalid slide image content flag.');
     if (picture['p:nvPicPr']?.['p:cNvPr']?.name !== slideImageName(manifest.slide)) throw Error('Slide image identity changed.');
     if (canonical(picture['p:spPr']) !== canonical(manifest.properties) || canonical(blipFillIdentity(picture['p:blipFill'])) !== canonical(manifest.blipFill)) throw Error('Slide image geometry or effects changed.');
     const item = readPicture(picture);
@@ -144,7 +146,11 @@ export function importSlideImage(pictures, shapes, relationships, entries, slide
         report({code:'invalid-slide-image-provenance', message:'The tagged OPF slide image overlay is missing, edited or ambiguous. The slide image is recovered without its overlay; any remaining native shape is imported as ordinary content.'});
       } else consumedShapes.add(overlay);
     }
-    return {consumed, consumedShapes, design: {slideImage: {...treatment, src}, ...(manifest.fill === 'fit' ? {imageFill: 'fit'} : {})}};
+    // FF-53: a picture that replaced the slide's root `image` (same source as the slide image) restores that
+    // payload too, so the round trip keeps `slide.image` with its alt text as well as design.slideImage.
+    const alt = item.payload.image.alt;
+    const content = manifest.content === true ? {image: {src, ...(typeof alt === 'string' && alt ? {alt} : {})}} : {};
+    return {consumed, consumedShapes, design: {slideImage: {...treatment, src}, ...(manifest.fill === 'fit' ? {imageFill: 'fit'} : {})}, ...content};
   } catch {
     invalid();
     return {consumed, consumedShapes};

@@ -520,6 +520,7 @@ function importSlide(entries, slidePath, slideIndex, presentationDimensions, opt
     }),
     diagnostic => options.onDiagnostic?.({...diagnostic, path: slideImagePath}));
   if (slideImage.design) slide.design = {...slide.design, ...slideImage.design};
+  if (slideImage.image) slide.image = slideImage.image;
   nativeContext.slideImagePictures = slideImage.consumed;
   nativeContext.slideImageShapes = slideImage.consumedShapes;
   const watermarkPath = `slides.${slideIndex}.design.watermark`;
@@ -1641,7 +1642,9 @@ async function addSlideImage(slide, presentation, image, slideIndex, context, op
       : image.recolor?.type === 'duotone' ? { type: 'duotone', dark: paint(image.recolor.dark, '000000'), light: paint(image.recolor.light, 'FFFFFF') } : null,
     overlay: image.overlay ? { ...paint(image.overlay.color, context.colors.text), opacity: image.overlay.opacity, box: image.overlay.box, shape: image.overlay.shape } : null,
   };
-  context.slideImages.set(objectName, { slide: `slides.${slideIndex}`, box, fill: image.fill, path: image.sourcePath, treatment: { ...treatment, position: image.position }, effects });
+  // FF-53: a root `image` with the slide image's source is the slide image (core `replacesContent`); the
+  // manifest records that so an unchanged picture imports back as both design.slideImage and slide.image.
+  context.slideImages.set(objectName, { slide: `slides.${slideIndex}`, box, fill: image.fill, path: image.sourcePath, treatment: { ...treatment, position: image.position }, effects, content: image.replacesContent === true });
   slide.addImage({ ...resolved, objectName, ...box, altText: image.alt ?? assetAlt(image.value, presentation) });
   // The overlay scrim is a separate native shape directly above the picture.
   if (effects.overlay) {

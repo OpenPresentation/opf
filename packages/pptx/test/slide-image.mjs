@@ -105,6 +105,57 @@ for (const position of ['background', 'left', 'right', 'top', 'bottom']) {
   checked++;
 }
 
+// FF-53: a root `image` with the slide image's source (or one a source-less
+// treatment places) is the slide image, not content (core `replacesContent`).
+// The one native picture imports back as both design.slideImage and slide.image
+// with its alt text; a slide whose content image differs keeps today's import.
+{
+  const cases = [
+    ['same source', { title: 'Same source', image: { src: 'asset:hero', alt: 'Harbor at dusk' }, design: { slideImage: { src: 'asset:hero', position: 'background' } } }, 'background'],
+    ['source-less treatment', { title: 'Placed', image: { src: uri(tall), alt: 'Tall' }, design: { slideImage: { position: 'left' } } }, 'left'],
+  ];
+  for (const [label, slide, position] of cases) {
+    const deck = { assets: { hero: { src: uri(wide), alt: 'Harbor at dusk' } }, design: { theme: 'classic' }, slides: [slide] };
+    assert.equal(composeSlide(slide, { presentation: deck }).slideImage.replacesContent, true, `${label}: core replaces content`);
+    const { pictures, bytes } = await exported(deck);
+    assert.equal(pictures.length, 1, `${label}: one native picture`);
+    const diagnostics = [];
+    const imported = await fromPptx(bytes, { onDiagnostic: d => diagnostics.push(d) });
+    const src = slide.image.src === 'asset:hero' ? uri(wide) : slide.image.src;
+    assert.deepEqual(imported.slides[0].image, { src, alt: slide.image.alt }, `${label}: slide.image restored with its alt text`);
+    assert.equal(imported.slides[0].design.slideImage.position, position, `${label}: design.slideImage restored`);
+    assert.equal(imported.slides[0].design.slideImage.src, src);
+    assert.equal(imported.slides[0].blocks, undefined, `${label}: no content image block`);
+    assert.equal(composeSlide(imported.slides[0], { presentation: imported }).slideImage.replacesContent, true, `${label}: the import composes as the same slide image`);
+    assert.deepEqual(diagnostics.filter(d => /slide-image|image-crop|reference-changed/.test(d.code)), [], label);
+    // Re-export of the import places the same picture; provenance off restores nothing.
+    assert.equal((await exported(imported)).pictures.length, 1, `${label}: re-export keeps one picture`);
+    const tagOnly = await fromPptx(await toPptx(deck, { imageFormat: 'preserve', strictAssets: true, provenance: false }), { onDiagnostic: () => {} });
+    assert.deepEqual(tagOnly.slides[0].image, { src, alt: slide.image.alt }, `${label}: the picture tag alone restores slide.image`);
+    assert.equal(tagOnly.slides[0].design.slideImage.position, position);
+    checked++;
+  }
+  // A content image with another source stays content beside the slide image.
+  const separate = { assets: { hero: { src: uri(wide), alt: 'Harbor at dusk' } }, design: { theme: 'classic' }, slides: [{ title: 'Separate', image: { src: uri(tall), alt: 'Tall' }, design: { slideImage: { src: 'asset:hero', position: 'right' } } }] };
+  assert.equal(composeSlide(separate.slides[0], { presentation: separate }).slideImage.replacesContent, false);
+  const { pictures, bytes, entries } = await exported(separate);
+  assert.equal(pictures.length, 2);
+  const imported = await fromPptx(bytes, { onDiagnostic: () => {} });
+  assert.equal(imported.slides[0].image, undefined, 'a separate content image is not restored as slide.image');
+  assert.equal(imported.slides[0].design.slideImage.position, 'right');
+  assert.ok(JSON.stringify(imported.slides[0].blocks).includes('"type":"image"'), 'the content image stays a content block');
+  // The content flag never rides on an edited picture: it stays an ordinary picture.
+  const path = 'ppt/slides/slide1.xml';
+  const edited = unzipSync(await toPptx({ design: { theme: 'classic' }, slides: [cases[0][1]], assets: separate.assets }, { imageFormat: 'preserve', strictAssets: true }));
+  edited[path] = new TextEncoder().encode(decode(edited[path]).replace(/(<p:pic>[\s\S]*?<a:off x=")(\d+)/, (_, head, x) => `${head}${Number(x) + 9525}`));
+  const moved = await fromPptx(zipSync(edited), { onDiagnostic: () => {} });
+  assert.equal(moved.slides[0].image, undefined);
+  assert.equal(moved.slides[0].design?.slideImage, undefined);
+  assert.ok(JSON.stringify(moved.slides[0].blocks).includes('"type":"image"'));
+  void entries;
+  checked++;
+}
+
 // An edited slide image stays an ordinary picture with a diagnostic.
 {
   const { entries } = await exported(deckFor({ src: 'asset:hero', position: 'left' }));
