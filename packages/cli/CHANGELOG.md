@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.9.1
+
+- Rebuild with core 0.11.3 catalogs and schema (CLI 0.9.0 bundled core 0.11.0). The bundled layouts catalog now holds 100 layouts, including the 70 legacy pptx.gallery layout ids (`title-slide`, `two-column`, `action-plan`, `swot-analysis`, and so on), so `opf validate`, `opf lint`, `opf catalog layouts` and `opf paginate` no longer report an unknown layout id for a gallery document that names one, and the 25 of them that carry a `composition` or `contentBox` contract paginate with that geometry. The bundle also carries the pinned pptx.gallery default catalog (chart-type samples for histogram, pareto and box-and-whisker, `deprecation` warnings and the `opf/deprecated-catalog-id` lint rule) and everything else in core 0.11.1 to 0.11.3 (cover centering, script-font model, font policy table, per-item alignment, formatted furniture). No command, option or output field changes. New CLI test: a document whose slides use every bundled layout id, including the 70 legacy ids, validates with no warning.
+
 ## 0.9.0
 
 - Rebuild with core 0.11.0, including the reference layer (`variables`, `ColorRef`, payload/slide `id`/`extensions`, `bundlePresentation` / `opf bundle`) and corrected stock narrative `layoutHint` values.

@@ -26,6 +26,13 @@ try {
   assert.ok(run(['validate','-'],{input:warning}).json.warnings.length);
   assert.equal(run(['validate','-','--strict'],{input:warning,status:1}).json.valid,true);
   assert.equal(run(['validate','-'],{input:'{"slides":"bad"}',status:1}).json.valid,false);
+  // CLI 0.9.1 bundles core 0.11.3: the 70 legacy gallery layout ids are bundled, so none is an unknown id.
+  {const layouts=run(['catalog','layouts']).json.map(record=>record.id);assert.ok(layouts.length>=100);
+   for(const id of ['title-slide','two-column','action-plan','swot-analysis','data-visualization','executive-summary'])assert.ok(layouts.includes(id),id);
+   const legacy=run(['validate','-'],{input:JSON.stringify({name:'Legacy layouts',slides:layouts.map((layout,index)=>({title:`Slide ${index+1}`,layout}))})}).json;
+   assert.equal(legacy.valid,true);assert.deepEqual(legacy.warnings,[]);
+   assert.equal(run(['validate','-','--strict'],{input:JSON.stringify({slides:[{title:'Gallery layout',layout:'swot-analysis'}]})}).json.valid,true);
+   assert.equal(run(['lint','-','--strict'],{input:JSON.stringify({slides:[{title:'Gallery layout',layout:'two-column'}]})}).json.counts.warning,0);}
   run(['validate','-'],{input:'{',status:2});run(['validate','missing.json'],{status:2});run(['validate','deck.opf.json','extra'],{status:2});run(['create','--oops'],{status:2});
   const lintRaw='\uFEFF{\r\n  "name" : "Keep  spacing",\r  "slides": [{"title":"Lint target","layout":"pratner"}]\n}';
   await writeFile(path.join(temp,'lint.opf.json'),lintRaw);
