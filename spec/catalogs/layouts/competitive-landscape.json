@@ -1,0 +1,35 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "competitive-landscape",
+  "name": "Competitive_Landscape",
+  "summary": "2x2 or ecosystem view of competitors and where you fit. The positioning argument made visual.",
+  "description": "2x2 or ecosystem view of competitors and where you fit. The positioning argument made visual.",
+  "contentType": "Image",
+  "contentMultiple": "1x",
+  "contentAlignment": "Left",
+  "contentBox": false,
+  "contentTypeChartPrimary": "None",
+  "contentTypeImageFill": "Crop",
+  "contentTypeListBullet": "None",
+  "contentTypeListHeading": false,
+  "slideTitle": true,
+  "slideSubtitle": false,
+  "slideTitleAlignment": "Left",
+  "slideImage": true,
+  "slideImageAlignment": "Background",
+  "slideLayoutDirection": "Horizontal",
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "picture"
+    }
+  ],
+  "tags": [
+    "Competitors",
+    "Positioning",
+    "Market"
+  ],
+  "preview": {}
+}

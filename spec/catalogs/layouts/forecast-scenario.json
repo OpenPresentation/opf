@@ -1,0 +1,45 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "forecast-scenario",
+  "name": "Forecast_Scenario",
+  "summary": "Multi-line chart showing base, upside, and downside projections. The honest way to present uncertainty.",
+  "description": "Multi-line chart showing base, upside, and downside projections. The honest way to present uncertainty.",
+  "contentType": "Chart",
+  "contentMultiple": "1x",
+  "contentAlignment": "Left",
+  "contentBox": false,
+  "contentTypeChartPrimary": "None",
+  "contentTypeImageFill": "None",
+  "contentTypeListBullet": "None",
+  "contentTypeListHeading": false,
+  "slideTitle": true,
+  "slideSubtitle": false,
+  "slideTitleAlignment": "Left",
+  "slideImage": false,
+  "slideImageAlignment": "None",
+  "slideLayoutDirection": "Horizontal",
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "chart"
+    },
+    {
+      "type": "text"
+    }
+  ],
+  "tags": [
+    "Forecast",
+    "Scenarios",
+    "Uncertainty"
+  ],
+  "preview": {},
+  "composition": {
+    "mode": "row",
+    "weights": [
+      3,
+      2
+    ]
+  }
+}

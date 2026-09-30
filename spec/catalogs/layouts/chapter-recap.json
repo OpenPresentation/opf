@@ -1,0 +1,35 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "chapter-recap",
+  "name": "Chapter_Recap",
+  "summary": "Mid-deck checkpoint that shows what you've covered and what is next. Keeps long presentations navigable.",
+  "description": "Mid-deck checkpoint that shows what you've covered and what is next. Keeps long presentations navigable.",
+  "contentType": "Title",
+  "contentMultiple": "None",
+  "contentAlignment": "Center",
+  "contentBox": false,
+  "contentTypeChartPrimary": "None",
+  "contentTypeImageFill": "None",
+  "contentTypeListBullet": "None",
+  "contentTypeListHeading": false,
+  "slideTitle": true,
+  "slideSubtitle": true,
+  "slideTitleAlignment": "Center",
+  "slideImage": false,
+  "slideImageAlignment": "None",
+  "slideLayoutDirection": "None",
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "subtitle"
+    }
+  ],
+  "tags": [
+    "Navigation",
+    "Pacing",
+    "Recap"
+  ],
+  "preview": {}
+}

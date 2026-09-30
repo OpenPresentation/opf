@@ -404,6 +404,24 @@ if (want('blocks')) {
 }
 
 // ---------- LAYOUTS ----------
+// FF-52. A layout whose geometry equals the no-layout default is either the default itself or an alias.
+// 1. Baseline: these core layouts ARE the engine default arrangement for their content (one track per block, a row or a fixed grid), so the
+//    no-layout default is the same geometry by definition. The list is exact and by name; adding a layout here needs a review of its contract.
+const DEFAULT_BASELINE_LAYOUTS = new Set(['blank', 'code-1x', 'image-1x', 'image-2x', 'image-3x', 'media-1x', 'quote-1x', 'table-1x', 'text-1x', 'text-2x', 'text-3x', 'timeline-1x', 'title', 'title-subtitle', 'list-1x', 'list-2x', 'list-3x', 'list-4x', 'list-5x', 'list-6x']);
+// 2. Alias: a record with deprecation.replacedBy resolves to its target. The audit measures the target instead of the default: the same slide
+//    with only the layout id swapped must draw the same preview and place the same export geometry. A target that is not bundled, or an alias
+//    that differs from its target, is a reason.
+const layoutRecord = (doc, id) => (doc.catalogs?.layouts?.records ?? []).find((r) => r.id === id) ?? core.layouts.find((r) => r.id === id);
+async function aliasCheck(doc, id, target, m) {
+  const targetRecord = core.layouts.find((r) => r.id === target);
+  const out = { replacedBy: target, targetBundled: !!targetRecord, targetDeprecated: !!targetRecord?.deprecation };
+  if (!targetRecord || targetRecord.deprecation) return { ...out, equivalent: false };
+  const twin = clone(doc); twin.slides[0].layout = target;
+  const t = await measure(twin, null);
+  out.previewEqual = m.r.ok && t.r.ok && t.r.resolvedLayouts[0] === target && m.r.svgs.join('') === t.r.svgs.join('');
+  out.exportEqual = m.x.ok && t.x.ok && geometry(m.x.slides[0]) === geometry(t.x.slides[0]);
+  return { ...out, equivalent: out.previewEqual && out.exportEqual };
+}
 if (want('layouts')) {
   const items = (await data('layouts')).items.slice(0, LIMIT);
   for (const item of items) {
@@ -441,6 +459,19 @@ if (want('layouts')) {
       checks.reimport.pass = checks.reimport.retained || checks.reimport.diagnostics.length > 0;
       if (!checks.reimport.layoutRetained) reasons.push(checks.reimport.diagnostics.length ? `re-import drops layout id (diagnostics: ${checks.reimport.diagnostics.join(',')})` : 're-import drops layout id silently (geometry flattened)');
       if (lostKinds.length) reasons.push(`re-import loses payload kinds ${lostKinds.join(',')}`);
+    }
+    // FF-52: a baseline layout, or an alias whose measured target is identical, is not a "no distinguishable effect" gap.
+    const aliasOf = layoutRecord(doc, item.id)?.deprecation?.replacedBy;
+    const baseline = DEFAULT_BASELINE_LAYOUTS.has(item.id) && coreLayoutIds.has(item.id);
+    if (baseline) checks.baseline = true;
+    if (typeof aliasOf === 'string') {
+      checks.alias = await aliasCheck(doc, item.id, aliasOf, m);
+      if (!checks.alias.equivalent) reasons.push(`layout is deprecated in favour of ${aliasOf} but ${!checks.alias.targetBundled ? 'that layout is not bundled' : checks.alias.targetDeprecated ? 'that layout is itself deprecated' : 'it does not match it in ' + [checks.alias.previewEqual ? null : 'preview', checks.alias.exportEqual ? null : 'export'].filter(Boolean).join(' and ')}`);
+    }
+    if (baseline || checks.alias?.equivalent) {
+      const label = baseline ? 'default-baseline' : 'alias-equivalent';
+      if (checks.render.effect === false) checks.render.effect = label;
+      if (checks.export.native === false) checks.export.native = label;
     }
     if (checks.render.effect === false && checks.export.native === false && checks.render.resolvedLayout === item.id) {
       // Renderer resolved and applied the layout, but its geometry equals the engine default for this content.

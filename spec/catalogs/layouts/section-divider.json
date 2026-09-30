@@ -1,0 +1,35 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "section-divider",
+  "name": "Section_Divider",
+  "summary": "Simple transitional slides that signal a new topic. Help your audience follow the presentation flow.",
+  "description": "Simple transitional slides that signal a new topic. Help your audience follow the presentation flow.",
+  "contentType": "Title",
+  "contentMultiple": "None",
+  "contentAlignment": "Center",
+  "contentBox": false,
+  "contentTypeChartPrimary": "None",
+  "contentTypeImageFill": "None",
+  "contentTypeListBullet": "None",
+  "contentTypeListHeading": false,
+  "slideTitle": true,
+  "slideSubtitle": true,
+  "slideTitleAlignment": "Center",
+  "slideImage": false,
+  "slideImageAlignment": "None",
+  "slideLayoutDirection": "None",
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "subtitle"
+    }
+  ],
+  "tags": [
+    "Transition",
+    "Structure",
+    "Navigation"
+  ],
+  "preview": {}
+}

@@ -1,0 +1,35 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "process-flow",
+  "name": "Process_Flow",
+  "summary": "Step-by-step sequence with arrows or connectors. Shows how something works, from input to output.",
+  "description": "Step-by-step sequence with arrows or connectors. Shows how something works, from input to output.",
+  "contentType": "Timeline",
+  "contentMultiple": "1x",
+  "contentAlignment": "Left",
+  "contentBox": true,
+  "contentTypeChartPrimary": "None",
+  "contentTypeImageFill": "None",
+  "contentTypeListBullet": "None",
+  "contentTypeListHeading": false,
+  "slideTitle": true,
+  "slideSubtitle": false,
+  "slideTitleAlignment": "Left",
+  "slideImage": false,
+  "slideImageAlignment": "None",
+  "slideLayoutDirection": "Horizontal",
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "timeline"
+    }
+  ],
+  "tags": [
+    "Steps",
+    "Workflow",
+    "Sequential"
+  ],
+  "preview": {}
+}

@@ -1,0 +1,41 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "dashboard",
+  "name": "Dashboard",
+  "summary": "Multiple small charts in a grid for an at-a-glance overview. Bird's-eye view of a business or function.",
+  "description": "Multiple small charts in a grid for an at-a-glance overview. Bird's-eye view of a business or function.",
+  "contentType": "Chart",
+  "contentMultiple": "2x",
+  "contentAlignment": "Left",
+  "contentBox": true,
+  "contentTypeChartPrimary": "None",
+  "contentTypeImageFill": "None",
+  "contentTypeListBullet": "None",
+  "contentTypeListHeading": false,
+  "slideTitle": true,
+  "slideSubtitle": false,
+  "slideTitleAlignment": "Left",
+  "slideImage": false,
+  "slideImageAlignment": "None",
+  "slideLayoutDirection": "Horizontal",
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "chart"
+    },
+    {
+      "type": "chart"
+    }
+  ],
+  "tags": [
+    "Overview",
+    "Multi-chart",
+    "Monitoring"
+  ],
+  "preview": {},
+  "composition": {
+    "mode": "row"
+  }
+}

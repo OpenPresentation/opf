@@ -1,0 +1,38 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "funnel-pyramid",
+  "name": "Funnel_Pyramid",
+  "summary": "Tapered shape showing progression, conversion, or hierarchy. Visualizes stages, filtering, or organizational levels.",
+  "description": "Tapered shape showing progression, conversion, or hierarchy. Visualizes stages, filtering, or organizational levels.",
+  "contentType": "List",
+  "contentMultiple": "1x",
+  "contentAlignment": "Left",
+  "contentBox": false,
+  "contentTypeChartPrimary": "None",
+  "contentTypeImageFill": "None",
+  "contentTypeListBullet": "None",
+  "contentTypeListHeading": false,
+  "slideTitle": true,
+  "slideSubtitle": false,
+  "slideTitleAlignment": "Left",
+  "slideImage": false,
+  "slideImageAlignment": "None",
+  "slideLayoutDirection": "Horizontal",
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "list"
+    }
+  ],
+  "tags": [
+    "Process",
+    "Conversion",
+    "Hierarchy"
+  ],
+  "preview": {},
+  "composition": {
+    "padding": 0.12
+  }
+}

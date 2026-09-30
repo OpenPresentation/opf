@@ -1,0 +1,35 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "wheel-radial",
+  "name": "Wheel_Radial",
+  "summary": "Circular frame with segments around a central theme. Good for frameworks with equal-weight components.",
+  "description": "Circular frame with segments around a central theme. Good for frameworks with equal-weight components.",
+  "contentType": "Text",
+  "contentMultiple": "1x",
+  "contentAlignment": "Center",
+  "contentBox": false,
+  "contentTypeChartPrimary": "None",
+  "contentTypeImageFill": "None",
+  "contentTypeListBullet": "None",
+  "contentTypeListHeading": false,
+  "slideTitle": true,
+  "slideSubtitle": false,
+  "slideTitleAlignment": "Center",
+  "slideImage": false,
+  "slideImageAlignment": "None",
+  "slideLayoutDirection": "Horizontal",
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "text"
+    }
+  ],
+  "tags": [
+    "Framework",
+    "Radial",
+    "Segments"
+  ],
+  "preview": {}
+}

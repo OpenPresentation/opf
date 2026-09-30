@@ -1,0 +1,35 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "quote-highlight",
+  "name": "Quote_Highlight",
+  "summary": "Large typography for testimonials or key statements. Add authority and emphasis to your message.",
+  "description": "Large typography for testimonials or key statements. Add authority and emphasis to your message.",
+  "contentType": "Quote",
+  "contentMultiple": "1x",
+  "contentAlignment": "Center",
+  "contentBox": false,
+  "contentTypeChartPrimary": "None",
+  "contentTypeImageFill": "None",
+  "contentTypeListBullet": "None",
+  "contentTypeListHeading": false,
+  "slideTitle": true,
+  "slideSubtitle": false,
+  "slideTitleAlignment": "Center",
+  "slideImage": false,
+  "slideImageAlignment": "None",
+  "slideLayoutDirection": "Horizontal",
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "quote"
+    }
+  ],
+  "tags": [
+    "Testimonial",
+    "Authority",
+    "Focus"
+  ],
+  "preview": {}
+}

@@ -1,0 +1,38 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "bullet-list",
+  "name": "Bullet_List",
+  "summary": "Structured text content with clear hierarchy. The workhorse of business presentations when done right.",
+  "description": "Structured text content with clear hierarchy. The workhorse of business presentations when done right.",
+  "contentType": "List",
+  "contentMultiple": "1x",
+  "contentAlignment": "Left",
+  "contentBox": false,
+  "contentTypeChartPrimary": "None",
+  "contentTypeImageFill": "None",
+  "contentTypeListBullet": "None",
+  "contentTypeListHeading": false,
+  "slideTitle": true,
+  "slideSubtitle": false,
+  "slideTitleAlignment": "Left",
+  "slideImage": false,
+  "slideImageAlignment": "None",
+  "slideLayoutDirection": "Horizontal",
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "list"
+    }
+  ],
+  "tags": [
+    "Content",
+    "Hierarchy",
+    "Text"
+  ],
+  "preview": {},
+  "composition": {
+    "padding": 0.12
+  }
+}

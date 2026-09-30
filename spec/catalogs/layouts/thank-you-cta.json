@@ -1,0 +1,35 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "thank-you-cta",
+  "name": "Thank_You_Cta",
+  "summary": "Closing slide with clear next steps, contact info, or a call to action. End with direction, not a whimper.",
+  "description": "Closing slide with clear next steps, contact info, or a call to action. End with direction, not a whimper.",
+  "contentType": "Title",
+  "contentMultiple": "None",
+  "contentAlignment": "Center",
+  "contentBox": false,
+  "contentTypeChartPrimary": "None",
+  "contentTypeImageFill": "None",
+  "contentTypeListBullet": "None",
+  "contentTypeListHeading": false,
+  "slideTitle": true,
+  "slideSubtitle": true,
+  "slideTitleAlignment": "Center",
+  "slideImage": false,
+  "slideImageAlignment": "None",
+  "slideLayoutDirection": "None",
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "subtitle"
+    }
+  ],
+  "tags": [
+    "Closing",
+    "Action",
+    "Contact"
+  ],
+  "preview": {}
+}

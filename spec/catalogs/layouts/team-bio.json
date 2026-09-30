@@ -1,0 +1,35 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "team-bio",
+  "name": "Team_Bio",
+  "summary": "Grid of team members with photos, names, and roles. Humanizes your organization and builds credibility.",
+  "description": "Grid of team members with photos, names, and roles. Humanizes your organization and builds credibility.",
+  "contentType": "Image",
+  "contentMultiple": "1x",
+  "contentAlignment": "Left",
+  "contentBox": false,
+  "contentTypeChartPrimary": "None",
+  "contentTypeImageFill": "Crop",
+  "contentTypeListBullet": "None",
+  "contentTypeListHeading": false,
+  "slideTitle": true,
+  "slideSubtitle": false,
+  "slideTitleAlignment": "Left",
+  "slideImage": true,
+  "slideImageAlignment": "Background",
+  "slideLayoutDirection": "Horizontal",
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "picture"
+    }
+  ],
+  "tags": [
+    "People",
+    "Organization",
+    "Credibility"
+  ],
+  "preview": {}
+}

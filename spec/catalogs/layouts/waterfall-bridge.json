@@ -1,0 +1,45 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "waterfall-bridge",
+  "name": "Waterfall_Bridge",
+  "summary": "Step chart showing how a starting value becomes an ending value. Makes variances and drivers legible.",
+  "description": "Step chart showing how a starting value becomes an ending value. Makes variances and drivers legible.",
+  "contentType": "Chart",
+  "contentMultiple": "1x",
+  "contentAlignment": "Left",
+  "contentBox": false,
+  "contentTypeChartPrimary": "None",
+  "contentTypeImageFill": "None",
+  "contentTypeListBullet": "None",
+  "contentTypeListHeading": false,
+  "slideTitle": true,
+  "slideSubtitle": false,
+  "slideTitleAlignment": "Left",
+  "slideImage": false,
+  "slideImageAlignment": "None",
+  "slideLayoutDirection": "Horizontal",
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "chart"
+    },
+    {
+      "type": "text"
+    }
+  ],
+  "tags": [
+    "Variance",
+    "Drivers",
+    "Finance"
+  ],
+  "preview": {},
+  "composition": {
+    "mode": "row",
+    "weights": [
+      3,
+      1
+    ]
+  }
+}

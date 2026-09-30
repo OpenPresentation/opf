@@ -1,0 +1,42 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "two-column",
+  "name": "Two_Column",
+  "summary": "Content split into two equal columns for comparing concepts or showing related information side by side.",
+  "description": "Content split into two equal columns for comparing concepts or showing related information side by side.",
+  "contentType": "List",
+  "contentMultiple": "2x",
+  "contentAlignment": "Left",
+  "contentBox": false,
+  "contentTypeChartPrimary": "None",
+  "contentTypeImageFill": "None",
+  "contentTypeListBullet": "None",
+  "contentTypeListHeading": false,
+  "slideTitle": true,
+  "slideSubtitle": false,
+  "slideTitleAlignment": "Left",
+  "slideImage": false,
+  "slideImageAlignment": "None",
+  "slideLayoutDirection": "Horizontal",
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "list"
+    },
+    {
+      "type": "list"
+    }
+  ],
+  "tags": [
+    "Comparison",
+    "Balance",
+    "Content"
+  ],
+  "preview": {},
+  "composition": {
+    "mode": "row",
+    "gap": 0.06
+  }
+}

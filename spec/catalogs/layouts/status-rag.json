@@ -1,0 +1,35 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "status-rag",
+  "name": "Status_Rag",
+  "summary": "Red/Amber/Green health summary across workstreams. The standard project-status slide.",
+  "description": "Red/Amber/Green health summary across workstreams. The standard project-status slide.",
+  "contentType": "Text",
+  "contentMultiple": "1x",
+  "contentAlignment": "Left",
+  "contentBox": true,
+  "contentTypeChartPrimary": "None",
+  "contentTypeImageFill": "None",
+  "contentTypeListBullet": "None",
+  "contentTypeListHeading": false,
+  "slideTitle": true,
+  "slideSubtitle": false,
+  "slideTitleAlignment": "Left",
+  "slideImage": false,
+  "slideImageAlignment": "None",
+  "slideLayoutDirection": "Horizontal",
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "text"
+    }
+  ],
+  "tags": [
+    "Status",
+    "Health",
+    "RAG"
+  ],
+  "preview": {}
+}

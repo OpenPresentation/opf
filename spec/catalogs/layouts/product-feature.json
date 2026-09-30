@@ -1,0 +1,35 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "product-feature",
+  "name": "Product_Feature",
+  "summary": "Showcase a single feature with screenshot or visual plus benefit description. Zoom in on what matters most.",
+  "description": "Showcase a single feature with screenshot or visual plus benefit description. Zoom in on what matters most.",
+  "contentType": "Image",
+  "contentMultiple": "1x",
+  "contentAlignment": "Left",
+  "contentBox": false,
+  "contentTypeChartPrimary": "None",
+  "contentTypeImageFill": "Crop",
+  "contentTypeListBullet": "None",
+  "contentTypeListHeading": false,
+  "slideTitle": true,
+  "slideSubtitle": false,
+  "slideTitleAlignment": "Left",
+  "slideImage": true,
+  "slideImageAlignment": "Background",
+  "slideLayoutDirection": "Horizontal",
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "picture"
+    }
+  ],
+  "tags": [
+    "Product",
+    "Showcase",
+    "Detail"
+  ],
+  "preview": {}
+}

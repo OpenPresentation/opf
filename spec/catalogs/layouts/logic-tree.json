@@ -1,0 +1,35 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "logic-tree",
+  "name": "Logic_Tree",
+  "summary": "Top-down tree that breaks a conclusion into supporting arguments and evidence. The consultant's MECE diagram.",
+  "description": "Top-down tree that breaks a conclusion into supporting arguments and evidence. The consultant's MECE diagram.",
+  "contentType": "Text",
+  "contentMultiple": "1x",
+  "contentAlignment": "Left",
+  "contentBox": true,
+  "contentTypeChartPrimary": "None",
+  "contentTypeImageFill": "None",
+  "contentTypeListBullet": "None",
+  "contentTypeListHeading": false,
+  "slideTitle": true,
+  "slideSubtitle": false,
+  "slideTitleAlignment": "Left",
+  "slideImage": false,
+  "slideImageAlignment": "None",
+  "slideLayoutDirection": "Horizontal",
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "text"
+    }
+  ],
+  "tags": [
+    "MECE",
+    "Structure",
+    "Argument"
+  ],
+  "preview": {}
+}

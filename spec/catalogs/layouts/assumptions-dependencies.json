@@ -1,0 +1,35 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "assumptions-dependencies",
+  "name": "Assumptions_Dependencies",
+  "summary": "Lists the conditions this plan depends on. Makes the fragile parts of a strategy explicit.",
+  "description": "Lists the conditions this plan depends on. Makes the fragile parts of a strategy explicit.",
+  "contentType": "Text",
+  "contentMultiple": "1x",
+  "contentAlignment": "Left",
+  "contentBox": true,
+  "contentTypeChartPrimary": "None",
+  "contentTypeImageFill": "None",
+  "contentTypeListBullet": "None",
+  "contentTypeListHeading": false,
+  "slideTitle": true,
+  "slideSubtitle": false,
+  "slideTitleAlignment": "Left",
+  "slideImage": false,
+  "slideImageAlignment": "None",
+  "slideLayoutDirection": "Horizontal",
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "text"
+    }
+  ],
+  "tags": [
+    "Assumptions",
+    "Dependencies",
+    "Risk"
+  ],
+  "preview": {}
+}

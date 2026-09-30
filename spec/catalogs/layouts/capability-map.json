@@ -1,0 +1,35 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "capability-map",
+  "name": "Capability_Map",
+  "summary": "Nested grid of business capabilities grouped by domain. The \"what the company does\" view, independent of teams.",
+  "description": "Nested grid of business capabilities grouped by domain. The \"what the company does\" view, independent of teams.",
+  "contentType": "Image",
+  "contentMultiple": "1x",
+  "contentAlignment": "Left",
+  "contentBox": true,
+  "contentTypeChartPrimary": "None",
+  "contentTypeImageFill": "Crop",
+  "contentTypeListBullet": "None",
+  "contentTypeListHeading": false,
+  "slideTitle": true,
+  "slideSubtitle": false,
+  "slideTitleAlignment": "Left",
+  "slideImage": true,
+  "slideImageAlignment": "Background",
+  "slideLayoutDirection": "Horizontal",
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "picture"
+    }
+  ],
+  "tags": [
+    "Capabilities",
+    "Domains",
+    "Strategy"
+  ],
+  "preview": {}
+}

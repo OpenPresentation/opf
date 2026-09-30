@@ -1,0 +1,38 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "customer-logos",
+  "name": "Customer_Logos",
+  "summary": "Grid of recognizable customer brand logos. Social proof at a glance.",
+  "description": "Grid of recognizable customer brand logos. Social proof at a glance.",
+  "contentType": "Text",
+  "contentMultiple": "1x",
+  "contentAlignment": "Left",
+  "contentBox": false,
+  "contentTypeChartPrimary": "None",
+  "contentTypeImageFill": "None",
+  "contentTypeListBullet": "None",
+  "contentTypeListHeading": false,
+  "slideTitle": true,
+  "slideSubtitle": false,
+  "slideTitleAlignment": "Left",
+  "slideImage": false,
+  "slideImageAlignment": "None",
+  "slideLayoutDirection": "Horizontal",
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "text"
+    }
+  ],
+  "tags": [
+    "Customers",
+    "Logos",
+    "Proof"
+  ],
+  "preview": {},
+  "composition": {
+    "padding": 0.04
+  }
+}

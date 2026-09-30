@@ -1,0 +1,35 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "faq",
+  "name": "Faq",
+  "summary": "Question-and-answer pairs that preemptively address audience concerns. Builds trust by tackling objections head-on.",
+  "description": "Question-and-answer pairs that preemptively address audience concerns. Builds trust by tackling objections head-on.",
+  "contentType": "List",
+  "contentMultiple": "1x",
+  "contentAlignment": "Left",
+  "contentBox": true,
+  "contentTypeChartPrimary": "None",
+  "contentTypeImageFill": "None",
+  "contentTypeListBullet": "None",
+  "contentTypeListHeading": false,
+  "slideTitle": true,
+  "slideSubtitle": false,
+  "slideTitleAlignment": "Left",
+  "slideImage": false,
+  "slideImageAlignment": "None",
+  "slideLayoutDirection": "Horizontal",
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "list"
+    }
+  ],
+  "tags": [
+    "Questions",
+    "Objections",
+    "Trust"
+  ],
+  "preview": {}
+}

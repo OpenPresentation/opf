@@ -1,0 +1,45 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "org-chart",
+  "name": "Org_Chart",
+  "summary": "Hierarchical tree of reporting relationships. Shows structure, spans of control, and open roles.",
+  "description": "Hierarchical tree of reporting relationships. Shows structure, spans of control, and open roles.",
+  "contentType": "Chart",
+  "contentMultiple": "2x",
+  "contentAlignment": "Left",
+  "contentBox": false,
+  "contentTypeChartPrimary": "None",
+  "contentTypeImageFill": "None",
+  "contentTypeListBullet": "None",
+  "contentTypeListHeading": false,
+  "slideTitle": true,
+  "slideSubtitle": false,
+  "slideTitleAlignment": "Left",
+  "slideImage": false,
+  "slideImageAlignment": "None",
+  "slideLayoutDirection": "Horizontal",
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "chart"
+    },
+    {
+      "type": "chart"
+    }
+  ],
+  "tags": [
+    "Structure",
+    "Reporting",
+    "People"
+  ],
+  "preview": {},
+  "composition": {
+    "mode": "row",
+    "weights": [
+      2,
+      1
+    ]
+  }
+}

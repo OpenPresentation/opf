@@ -1,0 +1,38 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "timeline",
+  "name": "Timeline",
+  "summary": "Horizontal or vertical progression showing events, milestones, or phases in chronological order.",
+  "description": "Horizontal or vertical progression showing events, milestones, or phases in chronological order.",
+  "contentType": "Timeline",
+  "contentMultiple": "1x",
+  "contentAlignment": "Left",
+  "contentBox": false,
+  "contentTypeChartPrimary": "None",
+  "contentTypeImageFill": "None",
+  "contentTypeListBullet": "None",
+  "contentTypeListHeading": false,
+  "slideTitle": true,
+  "slideSubtitle": false,
+  "slideTitleAlignment": "Left",
+  "slideImage": false,
+  "slideImageAlignment": "None",
+  "slideLayoutDirection": "Horizontal",
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "timeline"
+    }
+  ],
+  "tags": [
+    "Chronology",
+    "Progress",
+    "Milestones"
+  ],
+  "preview": {},
+  "composition": {
+    "padding": 0.04
+  }
+}

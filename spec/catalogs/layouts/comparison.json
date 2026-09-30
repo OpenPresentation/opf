@@ -1,0 +1,41 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "comparison",
+  "name": "Comparison",
+  "summary": "Side-by-side evaluation of two options, products, or states. Makes differences and advantages visually obvious.",
+  "description": "Side-by-side evaluation of two options, products, or states. Makes differences and advantages visually obvious.",
+  "contentType": "List",
+  "contentMultiple": "2x",
+  "contentAlignment": "Left",
+  "contentBox": true,
+  "contentTypeChartPrimary": "None",
+  "contentTypeImageFill": "None",
+  "contentTypeListBullet": "None",
+  "contentTypeListHeading": false,
+  "slideTitle": true,
+  "slideSubtitle": false,
+  "slideTitleAlignment": "Left",
+  "slideImage": false,
+  "slideImageAlignment": "None",
+  "slideLayoutDirection": "Horizontal",
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "list"
+    },
+    {
+      "type": "list"
+    }
+  ],
+  "tags": [
+    "Versus",
+    "Evaluation",
+    "Decision"
+  ],
+  "preview": {},
+  "composition": {
+    "mode": "row"
+  }
+}

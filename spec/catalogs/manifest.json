@@ -4,7 +4,7 @@
   "publisher": "https://www.pptx.gallery",
   "source": {
     "repository": "https://github.com/Data-Advantage/pptx-gallery",
-    "commit": "0b2dec834b6bd50b46fe8b49def966ee07c83a35",
+    "commit": "068d37803bf42f187379f481d6e41ded1d1e6852",
     "path": "public"
   },
   "kinds": {
@@ -23,7 +23,7 @@
       "contentSha256": "0181580c76d582f28c6c7f03d60222ce54f7f3f89ba98107038ada9df37a7c67",
       "gallery": {
         "records": 76,
-        "contentSha256": "6fe4f65e3bd45e2833e45521c093cbed05aca960f1e693021df514acc17af235"
+        "contentSha256": "0181580c76d582f28c6c7f03d60222ce54f7f3f89ba98107038ada9df37a7c67"
       }
     },
     "color-schemes": {
@@ -55,11 +55,11 @@
     },
     "layouts": {
       "mode": "subset",
-      "records": 30,
-      "contentSha256": "cb28c113f7949c486d5f897036324118a3d52df5ffc75d485e1fb65c9fbf4663",
+      "records": 100,
+      "contentSha256": "3e58ecdb3fcc2b8db9fc7a974809c16b9a9b06d560d0e8f0316846bc84754a95",
       "gallery": {
         "records": 485,
-        "contentSha256": "9b3f03877f2b67b3adfb6116c67d44f94cea86e5d945ac412309690191fb13e2"
+        "contentSha256": "70c66e0cbfec9a8827eef1aec4f20c8bda6c404cee3029977808e53117afc931"
       }
     },
     "narratives": {

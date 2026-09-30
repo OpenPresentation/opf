@@ -1,0 +1,45 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "three-column",
+  "name": "Three_Column",
+  "summary": "Content organized into three parallel sections. Ideal for three pillars, triads, or step-by-step progressions.",
+  "description": "Content organized into three parallel sections. Ideal for three pillars, triads, or step-by-step progressions.",
+  "contentType": "Text",
+  "contentMultiple": "3x",
+  "contentAlignment": "Left",
+  "contentBox": false,
+  "contentTypeChartPrimary": "None",
+  "contentTypeImageFill": "None",
+  "contentTypeListBullet": "None",
+  "contentTypeListHeading": false,
+  "slideTitle": true,
+  "slideSubtitle": false,
+  "slideTitleAlignment": "Left",
+  "slideImage": false,
+  "slideImageAlignment": "None",
+  "slideLayoutDirection": "Horizontal",
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "text"
+    },
+    {
+      "type": "text"
+    },
+    {
+      "type": "text"
+    }
+  ],
+  "tags": [
+    "Content",
+    "Balance",
+    "Triads"
+  ],
+  "preview": {},
+  "composition": {
+    "mode": "row",
+    "gap": 0.06
+  }
+}
