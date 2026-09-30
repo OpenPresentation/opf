@@ -10,6 +10,8 @@ The owner's goal (2026-09-23), verbatim:
 
 > "Every pptx.gallery configuration is PERFECTLY supported in rendering and PPTX output: for all 14 dimensions (charts limited to Aspose.Slides-supported chart types), the preview and the exported PPTX agree element by element (geometry within existing tolerances, text/runs, fonts in every script slot, colors, fills, backgrounds, images, z-order), the PPTX uses native PowerPoint constructs and re-imports cleanly, and a bounded native PowerPoint sample confirms it — identically for TypeScript developers on Windows/macOS/Linux, local, cloud/serverless without system fonts, and browser. Licensed fonts render with shipped open replacements while the PPTX references the real font name without embedding; one shared default font scheme (aptos). pptx.gallery is a first-class OPF catalog (spec URLs serve schema-valid records; core bundles a pinned, drift-checked snapshot) and shows measured support badges. Progress = count of gallery items passing the parity audit; tracked in docs/programs/font-fidelity-everywhere. Invariants: no gate relaxation, no in-place native retries, root alone owns Office, no publish/deploy, native p:hf deferred."
 
+Owner decision 2026-09-30 amends the last clause of the quote: pptx.gallery does not show measured support badges or any other support or progress status. The measurement stays internal to this program.
+
 Restated:
 
 - **Scope.** Every configuration of the 14 [pptx.gallery](https://pptx.gallery)
@@ -41,7 +43,7 @@ Restated:
   - One shared default font scheme, `aptos` (FF-31, FF-35).
 - **Catalog.** pptx.gallery is a first-class OPF catalog: spec URLs serve
   schema-valid records, and core bundles a pinned, drift-checked snapshot
-  (FF-37). Each gallery item shows its measured support badge (FF-36).
+  (FF-37). Measured support status (FF-36) is internal to this program and is not displayed on pptx.gallery (owner decision 2026-09-30).
 - **Progress.** The headline metric is the number of gallery items that pass
   the parity audit (FF-38), divided by the total. It is tracked in
   [burndown.md](burndown.md). The parity baseline is 0 of 900 perfect
@@ -81,9 +83,9 @@ linked, and specifically:
    - Open fonts are bundled. They may be embedded only through the explicit
      FF-13 embed path.
    - `aptos` is the default everywhere (FF-31, FF-35).
-5. **Catalog and badges.** pptx.gallery is a first-class OPF catalog (FF-37),
-   and its items show measured support badges (FF-36). Nothing is deployed in
-   this program.
+5. **Catalog.** pptx.gallery is a first-class OPF catalog (FF-37). Measured
+   support status (FF-36) stays internal and is not shown on the gallery.
+   Nothing is deployed in this program.
 6. **Published.** Evidence bundles, the
    [compatibility matrix](../../compatibility-matrix.md) and the handoff are
    merged (FF-14).
@@ -156,17 +158,17 @@ linked, and specifically:
 | opf-pptx export, importer compatibility, native harnesses | Native PowerPoint header/footer objects (`p:hf`); OPF furniture export is in scope |
 | opf-render preview font resolution and re-render checks | Deferred geometry drafts (core94, PPTX42, renderer27, editor25) |
 | opf-editor switch operations and preview refresh | Archived shaping work |
-| pptx.gallery data, snippet builders, catalog records and support badges (FF-22, FF-28, FF-33, FF-36, FF-37) | Deploying pptx.gallery |
+| pptx.gallery data, snippet builders and catalog records (FF-22, FF-28, FF-33, FF-37) | Deploying pptx.gallery |
 
 pptx.gallery otherwise consumes released packages. pptx-dev and
 openpresentation-site only consume released packages; they change after a
 release that includes this work.
 
-**Release dependency.** A perfect, badge-accurate *live* pptx.gallery needs
+**Release dependency.** A perfect *live* pptx.gallery needs
 published packages. The owner authorized agents to publish npm packages on
 2026-09-29 through the documented release task ([release-process.md](../../release-process.md)),
 separate from program work items, which do not publish. The in-program proof is therefore the FF-38 parity
-audit on merged heads, together with the FF-36 badge data derived from it.
+audit on merged heads, together with the internal FF-36 support data derived from it.
 FF-15 delivers release-readiness notes for each checkpoint, listing what a
 release would ship and what the live gallery would then show.
 
@@ -175,8 +177,7 @@ opf-render 0.11.2, opf-pptx 0.11.1 and opf-editor 0.10.1 and deployed
 pptx.gallery on them (core `55b7d45` carries the release plan). That happened
 outside the program's own PRs and does not change this program's invariants. It
 delivers the FF-41 gallery-editor font gate and the native watermark export
-(FF-26), but the gallery still shows only what the parity audit measured, and
-the audits have not been re-run on those heads. Completion of FF-14, FF-15,
+(FF-26), but the audits have not been re-run on those heads. Completion of FF-14, FF-15,
 FF-12 and every native gate is not claimed. Per-item state is in
 [burndown.md](burndown.md).
 
@@ -197,6 +198,10 @@ FF-12 and every native gate is not claimed. Per-item state is in
   gallery deploys still follow their own repositories' rules.
 - Native PowerPoint `p:hf` stays deferred; headers and footers are OPF
   furniture.
+- No public support or progress status on pptx.gallery: no badges, legends,
+  panels, API fields or llms.txt lines about measured, pending or parity
+  status (owner decision 2026-09-30). The measurement stays internal to
+  this repository.
 - Keep source, packed and registry claims separate, and schema support separate
   from renderer/editor/export fidelity.
 
