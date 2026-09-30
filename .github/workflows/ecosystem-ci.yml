@@ -10,9 +10,9 @@ concurrency:
   group: ecosystem-${{ github.ref }}
   cancel-in-progress: true
 env:
-  OPF_RENDER_REF: 17f7807e7e687444e7c466bf7edd3227593ba56d
-  OPF_EDITOR_REF: 8bf5ba0bba5d19f0e80f5c8774f61b7c1da57192
-  OPF_PPTX_REF: 08a92a2d903d3be31e5ee97a97204bebe3e7b468
+  OPF_RENDER_REF: b7e62ef6aa5631f1588c36814207905a4c5f521c
+  OPF_EDITOR_REF: 1529f26bbb1fd8767a574fa4cefef7bed8f7006d
+  OPF_PPTX_REF: c08105f2d3a45375128a69a2116e936a3d1a4a15
 jobs:
   packages:
     runs-on: ubuntu-latest
@@ -76,7 +76,9 @@ jobs:
       - name: Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks
         working-directory: opf
         env:
-          OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf/scripts/fixtures/opf-examples-png.cover-centering.sha256.json
+          # The pinned renderer's own cover-centering baseline: it carries the chart and font changes of renderer 0.11.3 to 0.11.6 (140 of 805
+          # slides differ from this repository's older fixture copy, which stays as the record of the cover-centering review).
+          OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf-render/test/golden/opf-examples-png.cover-centering.sha256.json
         run: pnpm test:packages
       - name: Verify installed type failure propagation
         working-directory: opf

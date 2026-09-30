@@ -77,8 +77,9 @@ const EXPECTED_SUBSTITUTIONS = Object.freeze({
   'Aptos Display': previewsAptosWithIntos ? 'Intos Display' : 'Carlito', Aptos: previewsAptosWithIntos ? 'Intos' : 'Roboto', Calibri: 'Carlito', Georgia: 'Gelasio', Consolas: 'Cousine', 'Courier New': 'Cousine',
   Meiryo: 'Noto Sans JP', 'Yu Gothic': 'Noto Sans JP', 'Microsoft YaHei': 'Noto Sans SC', 'Malgun Gothic': 'Noto Sans KR', 'Microsoft JhengHei': 'Noto Sans TC',
   Mangal: 'Noto Sans Devanagari', 'Arabic Typesetting': 'Noto Naskh Arabic', David: 'Noto Serif Hebrew', 'Angsana New': 'Noto Sans Thai',
-  Tahoma: 'Red Hat Text', Verdana: 'Montserrat', 'Times New Roman': 'Tinos', Garamond: 'Tinos', Constantia: 'PT Serif',
-  'Tenorite Display': 'Roboto', Tenorite: 'Roboto', 'Seaford Display': 'Source Sans 3', Seaford: 'Source Sans 3', Impact: 'Carlito', Grandview: 'Roboto',
+  Tahoma: 'Red Hat Text', Verdana: 'Montserrat', 'Times New Roman': 'Tinos', Garamond: 'EB Garamond', Constantia: 'PT Serif',
+  // Renderer 0.11.1 and later vendor the open families the policy table routes to (FF-43): Figtree, Barlow, Anton and EB Garamond.
+  'Tenorite Display': 'Figtree', Tenorite: 'Figtree', 'Seaford Display': 'Source Sans 3', Seaford: 'Source Sans 3', Impact: 'Anton', Grandview: 'Barlow',
   'Shonar Bangla': 'Noto Sans Bengali', Latha: 'Noto Sans Tamil', DaunPenh: 'Noto Sans Khmer', Nyala: 'Noto Sans Ethiopic', Sylfaen: 'Noto Sans',
   Tunga: 'Noto Sans Kannada', Shruti: 'Noto Sans Gujarati', Raavi: 'Noto Sans Gurmukhi', Kartika: 'Noto Sans Malayalam', Kalinga: 'Noto Sans Oriya', Gautami: 'Noto Sans Telugu'
 });
@@ -826,9 +827,9 @@ for (const scheme of [PROPORTIONAL, MONO]) {
 // previewed alone; the tables pin what the coordinated engines do today. A type
 // that gains a native path fails here, so its gap entry gets deleted.
 // ---------------------------------------------------------------------------
-// The preview draws these natively (axes, legend or arcs). Every other type is approximated by a plain row of bars with one
-// category-label line and no axis, so it is the same picture whatever the type.
-const PREVIEW_NATIVE = ['area', 'bar', 'column', 'doughnut', 'line', 'pie'];
+// Renderer 0.11.3 previews every kept classic chart type natively and 0.11.4 the seven chartex types, so every non-deprecated type draws its own
+// construct (axes, legend, arcs or tiles). An older pinned renderer approximates the rest by a plain row of bars.
+const PREVIEW_NATIVE = catalogs.chartTypes.filter((entry) => !entry.deprecation).map((entry) => entry.id);
 // Types whose PPTX is not the element the catalog names (chartex families export as a bar chart).
 const EXPORT_FALLBACK = {'box-and-whisker': 'barChart', funnel: 'barChart', histogram: 'barChart', pareto: 'barChart', treemap: 'barChart', waterfall: 'barChart', world: 'barChart'};
 const marks = (svg) => ({text: (svg.match(/<text\b/g) ?? []).length, shapes: (svg.match(/<(?:path|rect|circle|line|polygon|polyline)\b/g) ?? []).length});
@@ -919,7 +920,8 @@ async function expectLimitation(id, what, run, code) {
   assert.equal(error.code, code, `${id}: ${what} now fails with ${error.code}, not the pinned ${code}. Update or delete the ${id} entry.`);
 }
 const providedSample = (scheme) => byId('fontSchemes', scheme).textSample;
-const GOOGLE_PENDING = ['raleway'];
+// Renderer 0.11.4 bundles Raleway and Playfair Display (FF-43), so no open-google scheme is without a pinned preview face any more.
+const GOOGLE_PENDING = [];
 assert.ok(pendingSchemes.every((scheme) => GOOGLE_PENDING.includes(scheme)), `schemes the registry cannot preview need an expected-failure entry: ${pendingSchemes}`);
 const EXPECTED_FAILURES = [
   ...GOOGLE_PENDING.map((scheme) => ({
@@ -928,14 +930,7 @@ const EXPECTED_FAILURES = [
     deck: {name: scheme, language: 'english', design: {fontScheme: scheme}, slides: [{id: 'a', title: providedSample(scheme), text: providedSample(scheme)}]},
     preview: 'font-unavailable',
     measuredExport: 'font-unavailable'
-  })),
-  {
-    id: 'noto-sans-mongolian-cannot-shape-its-sample',
-    reason: 'The bundled script face cannot shape the Mongolian sample, so the preview and the measured export report font-shaping-failed.',
-    deck: {name: 'mongolian', language: 'mongolian', design: {fontScheme: 'noto-sans-mongolian'}, slides: [{id: 'a', title: providedSample('noto-sans-mongolian'), text: providedSample('noto-sans-mongolian')}]},
-    preview: 'font-shaping-failed',
-    measuredExport: 'font-shaping-failed'
-  }
+  }))
 ];
 for (const failure of EXPECTED_FAILURES) {
   const measured = engineOptions(failure.deck);

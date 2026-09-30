@@ -26,16 +26,16 @@ the versions below or established complete native compatibility.
 
 | Package | Version | Depends on |
 | --- | --- | --- |
-| `@openpresentation/opf` | 0.11.2 | — |
-| `@openpresentation/cli` | 0.9.0 | Bundles core 0.11.0; registry metadata has no runtime `dependencies` |
-| `@openpresentation/opf-render` | 0.11.5 | `@openpresentation/opf@^0.11.2` |
-| `@openpresentation/opf-editor` | 0.10.3 | `@openpresentation/opf@^0.11.2`; optional peer `@openpresentation/opf-render@^0.11.0` |
-| `@openpresentation/opf-pptx` | 0.11.3 | `@openpresentation/opf@^0.11.2`; optional peer `@openpresentation/opf-render@^0.11.0` |
+| `@openpresentation/opf` | 0.11.3 | — |
+| `@openpresentation/cli` | 0.9.1 | Bundles core 0.11.3; registry metadata has no runtime `dependencies` |
+| `@openpresentation/opf-render` | 0.11.6 | `@openpresentation/opf@^0.11.3` |
+| `@openpresentation/opf-editor` | 0.10.4 | `@openpresentation/opf@^0.11.3`; optional peer `@openpresentation/opf-render@^0.11.0` |
+| `@openpresentation/opf-pptx` | 0.11.4 | `@openpresentation/opf@^0.11.3`; optional peer `@openpresentation/opf-render@^0.11.0` |
 
 Install the complete pinned set. A caret range starting at 0.10.1 does not
 include 0.11.x; old consumers can install a second core and do not establish
 ColorRef preview/export support. The renderer, PPTX and editor floors move with
-core in lockstep (core 0.11.2 with renderer 0.11.5, PPTX 0.11.3 and editor 0.10.3), so
+core in lockstep (core 0.11.3 with renderer 0.11.6, PPTX 0.11.4 and editor 0.10.4), so
 preview and export resolve one composition.
 
 Shared header/footer geometry (`furniture-flow-v2`) is published. PPTX exports
@@ -333,13 +333,14 @@ site40) remain unmerged. In particular, site40 is not independently shipped.
 | General SVG diagrams / Mermaid | [diagrams plan](plans/diagrams-svg.md) | Embedded SVG ≠ native editable primitives |
 | Full visual editor / IME / bidi / repair loop | [developer adoption](plans/developer-adoption-20260915.md) | Schema support ≠ WYSIWYG coverage |
 
-CLI 0.9.0 does not render or export PPTX. Browser `svgToPng` / `svgToPdf` are
+CLI 0.9.1 does not render or export PPTX. Browser `svgToPng` / `svgToPdf` are
 not available; those are Node APIs.
 
 ## Predecessor notes
 
 | Older set | Relationship |
 | --- | --- |
+| core 0.11.2, CLI 0.9.0, renderer 0.11.5, PPTX 0.11.3, editor 0.10.3 | Previous coordinated set (native classic and chartex chart previews, opt-in chartex export, face-level lazy fonts and the font gate's render options). Core 0.11.3 adds the pinned pptx.gallery default catalog and the 70 legacy gallery layout ids (layouts 30 to 100; 25 carry a `composition` or `contentBox` contract, which moves geometry, so renderer, PPTX and editor raise their core floor to `^0.11.3` together); renderer 0.11.6 rotates and skips dense category-axis labels; PPTX 0.11.4 re-imports quote and slide-image payloads and writes theme `a:ea`/`a:cs` only where a script font is selected; editor 0.10.4 is a floor bump; CLI 0.9.1 bundles core 0.11.3. |
 | core 0.11.2, CLI 0.9.0, renderer 0.11.1, PPTX 0.11.0, editor 0.10.0 | Previous coordinated set (lockstep floors, Intos and the open families, selected-name export). Renderer 0.11.2 adds script-face loading (`scripts: 'auto'`); PPTX 0.11.1 adds `design.watermark` export; editor 0.10.2 loads the fonts a document needs before every render (FF-41). Renderer 0.11.3 previews every kept classic chart type natively; PPTX 0.11.2 exports the native construct for each kept classic chart type (with `chart-data-adapted` diagnostics where data is adapted) and writes theme colour references for table and text colours. Renderer 0.11.4 previews the seven chartex chart types natively (the world map as a non-geographic tile grid), keeps the Latin Noto Sans replacement for script schemes under `scripts: 'auto'`, shapes Noto Sans Mongolian, and bundles Raleway and Playfair Display (94 lazy faces); PPTX 0.11.3 adds the opt-in `toPptx({chartex: 'native'})` export of the chartex chart types (the default output is unchanged) and always imports chartex charts. |
 | core 0.11.0, CLI 0.9.0, renderer 0.9.0, PPTX 0.9.1, editor 0.8.0 | Previous coordinated Node 24 set (ColorRef, shared furniture). Renderer and PPTX had different core floors from 0.10.x. |
 | core 0.10.0, renderer/PPTX/CLI 0.8.0, editor 0.7.0 | Previous coordinated Node 24 baseline. Lint and furniture landed across 0.10.0/0.8.0 then layout-placeholder fixes in 0.10.1/0.8.1/0.7.1. |
