@@ -102,6 +102,8 @@ if(mode==='generate') {
       let total=0;for(let i=0;i<actual.data.length;i++)total+=Math.abs(actual.data[i]-expected.data[i]);
       comparisons.push({id:record.id,slide:slide.slide,meanAbsoluteChannelDifference:total/actual.data.length});
     }
+    // FF-57: an OPF export tags its quote lines (OPF_QUOTE_V1), so every re-import restores the source quote payload.
+    const source=JSON.parse(await readFile(path.join(output,record.id+'.opf.json'),'utf8'));
     for(const suffix of ['', '-native-saved','-native-edited']) {
       const file=record.id+suffix+'.pptx', bytes=await readFile(path.join(output,file));
       if(suffix)assert.equal(hash(bytes),suffix==='-native-saved'?observed.savedSha256:observed.editedSha256);
@@ -109,9 +111,9 @@ if(mode==='generate') {
       assert.ok(validatePresentation(restored).valid);assert.equal(restored.slides.length,record.slides);
       for(const [index,slide] of restored.slides.entries()) {
         const expectedLines=record.layouts[index].parts.flatMap(part=>part.fit.lines.filter(line=>line!=='').map(text=>text));
-        assertNativeQuoteImport(slide,expectedLines,suffix==='-native-edited'?`Native edit ${record.id} slide ${index+1}`:'A quote and its source');
+        assertNativeQuoteImport(slide,expectedLines,suffix==='-native-edited'?`Native edit ${record.id} slide ${index+1}`:'A quote and its source',source.slides[index].quote);
       }
-      imports.push({file,slides:restored.slides.length,valid:true,bodyAndFooterLinesExact:true,semanticQuoteTypeRecovered:false,editsPreserved:suffix==='-native-edited'});
+      imports.push({file,slides:restored.slides.length,valid:true,bodyAndFooterLinesExact:true,semanticQuoteTypeRecovered:true,editsPreserved:suffix==='-native-edited'});
     }
     const images=[];
     for(let index=1;index<=record.slides;index++) for(const [column,kind] of ['renderer','native'].entries()) images.push({input:await sharp(path.join(output,`${record.id}-${kind}-${index}.png`)).resize(480,360,{fit:'contain',background:'#ffffff'}).png().toBuffer(),left:column*480,top:(index-1)*360});

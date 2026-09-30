@@ -43,7 +43,8 @@ for (const dimensions of [{width:1280,height:720},{width:540,height:960}]) {
     });
     const imported=await fromPptx(bytes);
     assert.equal(imported.slides.length,1);
-    assert.ok(JSON.stringify(imported).includes(typeof quote==='string'?'Shorthand source':'Author - Citation'));
+    // FF-57: the unchanged export restores the quote payload itself (string shorthand stays a string).
+    assert.deepEqual(imported.slides[0].blocks[0],{type:'quote',quote});
     cases++;
   }
 }

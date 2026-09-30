@@ -69,8 +69,15 @@ for(const dimensions of [{widthInches:1280/96,heightInches:720/96},{widthInches:
    fontFamily:'Roboto',
    color:part.role==='body'?'#FFFFFF':'#F0F0F0'
   }]})));
-  const exported=await toPptx(document,{textMeasurement}),copy=new Uint8Array(exported),result=(await fromPptx(exported)).slides[0];
-  assert.deepEqual(document,source);assert.deepEqual(exported,copy);
+  const tagged=await toPptx(document,{textMeasurement}),copy=new Uint8Array(tagged),restored=(await fromPptx(tagged)).slides[0];
+  assert.deepEqual(document,source);assert.deepEqual(tagged,copy);
+  // FF-57: the unchanged export restores the quote payload, and no body line is promoted into an absent heading role.
+  for(const field of ['title','subtitle','tag'])assert.equal(restored[field],headings[field]);
+  assert.deepEqual(restored.blocks,[{type:'quote',quote:source.slides[0].quote}]);
+  // The same quote authored without OPF_QUOTE_V1 tags (as PowerPoint would) keeps the text-line fallback checked below.
+  const untagged=unzipSync(tagged);
+  slide(untagged,xml=>xml.replace(/<p:sp>[\s\S]*?<\/p:sp>/g,shape=>shape.includes('name="OPF quote ')?shape.replace(/<p:custDataLst>[\s\S]*?<\/p:custDataLst>/,''):shape));
+  const exported=zipSync(untagged),result=(await fromPptx(exported)).slides[0];
   for(const field of ['title','subtitle','tag'])assert.equal(result[field],headings[field]);
   assert.deepEqual(result.blocks,expected);roleCases++;
   if(!headings.subtitle&&headings.title) {

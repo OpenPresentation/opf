@@ -35,7 +35,7 @@ try {
   const imported = await fromPptx(bytes);
   check(validatePresentation(imported).valid, 'Browser reimport validates');
   check(imported.slides.length === source.slides.length, 'Slide count survives');
-  check(JSON.stringify(imported).includes('Reviewer - Interview'), 'Quote source survives browser export/reimport');
+  check(JSON.stringify(imported.slides[1].blocks) === JSON.stringify([{type: 'quote', quote: source.slides[1].quote}]), 'Quote text, attribution and source survive browser export/reimport (FF-57)');
   document.querySelector('main').innerHTML = svgs[1];
   check(document.querySelector('main').textContent.includes('Reviewer - Interview'), 'Quote attribution/source appears in actual preview DOM');
   for(const width of [1280,540])for(const heading of ['title','subtitle','tag']) {
@@ -47,7 +47,7 @@ try {
     }]})));
     const restored=(await fromPptx(await toPptx(quote))).slides[0];
     for(const field of ['title','subtitle','tag'])check(restored[field]===(field===heading?'Known heading':undefined),'Absent heading roles stay absent: '+field);
-    check(JSON.stringify(restored.blocks)===JSON.stringify(expected),'Every quote body/footer line retains its order, multiplicity and role');
+    check(JSON.stringify(restored.blocks)===JSON.stringify([{type:'quote',quote:quote.slides[0].quote}]),'The quote payload is restored and no body/footer line is lost or promoted (FF-57)');
   }
   output.textContent = JSON.stringify({passed: true, checks, measurement: 'browser-default; loaded fonts and native rasters verified separately'}, null, 2);
   document.title = 'PASS: native content layout';

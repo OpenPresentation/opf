@@ -24,7 +24,7 @@ Version 0.8.0 also measures `design.contentBox` cards through core's padded inte
 
 ## Scope
 
-Version 0.8.0 requires core 0.10.0 and uses renderer 0.8.0 for coordinated preview/font measurement. Quotes and code export their accepted internal lines and styles without another fitting pass. [Controlled Windows PowerPoint quote evidence](docs/evidence/shared-quote-integration/comparison.json) records glyph containment, separation, save/reopen and text reimport against its exact source/font hashes. Native quote import returns editable text blocks and does not restore the original OPF quote structure, typography or readability policy. Native chart geometry and general scalar-text wrapping also remain different from preview; editability and valid reimport do not establish raster equivalence.
+Version 0.8.0 requires core 0.10.0 and uses renderer 0.8.0 for coordinated preview/font measurement. Quotes and code export their accepted internal lines and styles without another fitting pass. [Controlled Windows PowerPoint quote evidence](docs/evidence/shared-quote-integration/comparison.json) records glyph containment, separation, save/reopen and text reimport against its exact source/font hashes. Native quote import restores the quote payload from an unchanged export (see [Quote provenance](#quote-provenance-ff-57)); it does not restore the original typography or readability policy, and an edited or damaged quote imports as editable text blocks. Native chart geometry and general scalar-text wrapping also remain different from preview; editability and valid reimport do not establish raster equivalence.
 
 - Package: `@openpresentation/opf-pptx`
 - Repository: `OpenPresentation/opf-pptx`
@@ -100,6 +100,12 @@ Accepted values are a valid `Date`, finite epoch milliseconds, `YYYY-MM-DD` (UTC
 This intentionally tightens the previous host-dependent `Date` parsing contract. Datetimes without a timezone, legacy date strings, invalid dates, and values outside that range throw `OPFPptxError` with code `invalid-zip-date` and path `options.zipDate`. Explicit `null`, `''` and `0` no longer silently use the default (`0` is a 1970 epoch date). Existing successful UTC output and default output remain byte-identical; explicit dates on other timezones change to the canonical UTC result.
 
 ## v1 Import Mapping
+
+### Quote provenance (FF-57)
+
+A `quote` payload exports as native text lines: the body (the quoted text wrapped in straight quotation marks) and, when there is an attribution or source, one footer (`attribution - source`). Each line shape carries an `OPF_QUOTE_V1` tag that stores only topology (whether the value was the string shorthand, which footer fields exist, where the separator falls, and how many source lines each part has). No quote word is stored: every value is read back from the current native text, so a cleared or edited quote cannot bring back the words it once held.
+
+An unchanged export re-imports as `{ "type": "quote", "quote": ... }` exactly: the string shorthand stays a string, `text`/`attribution`/`source` come back with their whitespace, hard line breaks and inner quotation marks, and several quotes on one slide keep their order. Native edits to the body or footer text import as the edited quote. The importer reports `quote-import-reflow` (native formatting, position and font theme are not reconstructed) and `quote-footer-merged` when an edited footer no longer separates attribution from source. A missing, duplicated or reordered line, a changed manifest or a native bullet on a tagged line rejects the group: the shapes import as ordinary text blocks with an `invalid-quote-provenance` diagnostic and no old words are restored. A quote authored without tags (for example in PowerPoint) imports as text. The output stays ordinary editable PowerPoint text boxes; the tags are `p:custDataLst` entries that PowerPoint keeps.
 
 ### New in 0.10.0: current native body formatting
 

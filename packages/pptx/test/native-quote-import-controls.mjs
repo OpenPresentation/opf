@@ -31,4 +31,29 @@ for(const [name,change] of Object.entries(corruptions)) {
   const slide=structuredClone(rich);change(slide);
   assert.throws(()=>assertNativeQuoteImport(slide,lines,title),name);negative++;
 }
-console.log(`Native quote import comparator: ${positive} positive and ${negative} corruption controls pass; schema, exact current characters, block order/multiplicity and titles, without native acceptance.`);
+// FF-57: the restored form. The comparator requires the exact source quote payload, in a slide holding nothing else.
+const expectedQuote={text:'Keep the complete source visible.',attribution:'Long attribution',source:'Recorded interview'};
+const restoredSlide={title,blocks:[{type:'quote',quote:structuredClone(expectedQuote)}]};
+assert.equal(assertNativeQuoteImport(restoredSlide,lines,title,expectedQuote),'quote');positive++;
+assert.equal(assertNativeQuoteImport({title,blocks:[{type:'quote',quote:'Shorthand'}]},lines,title,'Shorthand'),'quote');positive++;
+assert.equal(assertNativeQuoteImport(structuredClone(scalar),lines,title),'text');positive++;
+const quoteCorruptions={
+  changedText:slide=>slide.blocks[0].quote.text='Keep the complete source hidden.',
+  changedWhitespace:slide=>slide.blocks[0].quote.text+=' ',
+  droppedAttribution:slide=>delete slide.blocks[0].quote.attribution,
+  droppedSource:slide=>delete slide.blocks[0].quote.source,
+  swappedFields:slide=>[slide.blocks[0].quote.attribution,slide.blocks[0].quote.source]=[slide.blocks[0].quote.source,slide.blocks[0].quote.attribution],
+  extraField:slide=>slide.blocks[0].quote.note='unexpected',
+  shorthand:slide=>slide.blocks[0].quote=slide.blocks[0].quote.text,
+  looseTextBlock:slide=>slide.blocks.push({type:'text',text:'Keep the complete source visible.'}),
+  textBlocksInstead:slide=>slide.blocks=[{type:'text',text:'"Keep the complete source visible."'},{type:'text',text:'Long attribution - Recorded interview'}],
+  duplicateQuote:slide=>slide.blocks.push(structuredClone(slide.blocks[0])),
+  wrongType:slide=>slide.blocks[0].type='text',
+  extraStructuralKey:slide=>slide.blocks[0].id='unexpected-id',
+  wrongTitle:slide=>slide.title='Other title',
+};
+for(const [name,change] of Object.entries(quoteCorruptions)) {
+  const slide=structuredClone(restoredSlide);change(slide);
+  assert.throws(()=>assertNativeQuoteImport(slide,lines,title,expectedQuote),name);negative++;
+}
+console.log(`Native quote import comparator: ${positive} positive and ${negative} corruption controls pass; schema, exact current characters, block order/multiplicity and titles, and the exact restored quote payload (FF-57), without native acceptance.`);

@@ -60,7 +60,9 @@ const restored = await fromPptx(bytes);
 assert.equal(restored.slides.length,input.slides.length);
 assert.equal(validatePresentation(restored).valid,true);
 assert.ok(JSON.stringify(restored).includes('Quality'));
-for(const text of ['42%','Reviewer - Interview','approve(change)','Pilot','Rollout']) assert.ok(JSON.stringify(restored).includes(text), 'Installed payload text: '+text);
+// FF-57: the quote re-imports as a quote payload, so its attribution and source are separate fields.
+assert.ok(JSON.stringify(restored.slides[2].blocks).includes(JSON.stringify(input.slides[2].quote)),'Installed quote payload');
+for(const text of ['42%','approve(change)','Pilot','Rollout']) assert.ok(JSON.stringify(restored).includes(text), 'Installed payload text: '+text);
 console.log('Packed consumer: vendored licenses/hashes, absent unused dependencies, table/metric/quote/code/timeline export/reimport and schema validation pass.');
 `);
   process.stdout.write(execFileSync(process.execPath, ['verify.mjs'], { cwd: consumer, encoding: 'utf8' }));

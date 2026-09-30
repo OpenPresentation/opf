@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {unzipSync, zipSync} from 'fflate';
 import {validatePresentation} from '@openpresentation/opf';
 import {prepareNodeFonts} from '@openpresentation/opf-render/fonts-node';
 import PptxGenJS from '../vendor/pptxgenjs/pptxgen.es.js';
@@ -27,7 +28,11 @@ const {options} = await prepareNodeFonts();
 const source = {design: {fontScheme: 'roboto'}, slides: [{title: 'Weights', quote: {text: 'Retain the selected source.', attribution: 'Reviewer', source: 'Recorded interview'}}]};
 const exported = await toPptx(structuredClone(source), {...options, strictAssets: true});
 const diagnostics = [];
-const round = await fromPptx(exported, {onDiagnostic: item => diagnostics.push(item)});
+// FF-57: an unchanged quote re-imports as a quote payload (no runs). This case tests the native weight-face mapping, so import the
+// quote lines without their OPF_QUOTE_V1 tags, as PowerPoint-authored text would arrive.
+const untagged = unzipSync(exported);
+untagged['ppt/slides/slide1.xml'] = new TextEncoder().encode(new TextDecoder().decode(untagged['ppt/slides/slide1.xml']).replace(/<p:custDataLst>[^]*?<\/p:custDataLst>/g, ''));
+const round = await fromPptx(zipSync(untagged), {onDiagnostic: item => diagnostics.push(item)});
 assert.equal(validatePresentation(round).valid, true);
 assert.ok(!JSON.stringify(round).includes('Roboto SemiBold') && !JSON.stringify(round).includes('Roboto Medium'), 'native weight-face names must not reach OPF');
 const [body, footer] = runs(round);

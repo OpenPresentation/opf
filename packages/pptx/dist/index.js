@@ -12,6 +12,7 @@ import {attachMediaTags,importMediaGroups,mediaCaption,mediaFrameRecord,mediaTex
 import {attachHeadingTags,importHeadingGroups} from './heading-provenance.js';
 import {attachPlainTextTags,importPlainTextGroups} from './text-provenance.js';
 import {attachTimelineTags,timelineManifest,importTimelineGroups} from './timeline-provenance.js';
+import {attachQuoteTags,quoteManifest,importQuoteGroups} from './quote-provenance.js';
 import {attachFurnitureTags, furnitureManifest, importFurniture, staticDateFallback} from './furniture-provenance.js';
 import {applyDocumentProvenance, attachDocumentProvenance, documentProvenance, restoreDocumentProvenance} from './document-provenance.js';
 import {attachFurnitureFields, furniturePartFields, lineFields, nativeFieldType} from './furniture-fields.js';
@@ -218,6 +219,7 @@ export async function toPptx(input, options = {}) {
   context.headingTags = new Map();
   context.plainTextTags = new Map();
   context.timelineTags = new Map();
+  context.quoteTags = new Map();
   context.furnitureTags = new Map();
   context.furnitureFields = new Map();
   context.furnitureManifests = new Map();
@@ -585,6 +587,7 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   const headings=importHeadingGroups(shapes,paragraphs,relationships,entries,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}));
   const plainText=importPlainTextGroups(shapes,paragraphs,relationships,entries,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}));
   const timelines=importTimelineGroups(shapes,paragraphs,relationships,entries,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}));
+  const quotes=importQuoteGroups(shapes,paragraphs,relationships,entries,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.quote`}));
   for(const group of [...headings.items,...plainText.items]) {
     const item=importShape(group.shapes[0],dimensions,group.paragraphs,true);
     if(item){
@@ -598,12 +601,17 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
     let union;for(const bound of bounds){if(!union)union={...bound};else{const x=Math.min(union.x,bound.x),y=Math.min(union.y,bound.y);union={x,y,w:Math.max(union.x+union.w,bound.x+bound.w)-x,h:Math.max(union.y+union.h,bound.y+bound.h)-y};}}
     items.push({kind:'timeline',sourceText:true,bounds:union,payload:group.payload});
   }
+  for(const group of quotes.items){
+    const bounds=group.shapes.map(shape=>shapeBounds(shape['p:spPr']?.['a:xfrm'])).filter(Boolean);
+    let union;for(const bound of bounds){if(!union)union={...bound};else{const x=Math.min(union.x,bound.x),y=Math.min(union.y,bound.y);union={x,y,w:Math.max(union.x+union.w,bound.x+bound.w)-x,h:Math.max(union.y+union.h,bound.y+bound.h)-y};}}
+    items.push({kind:'quote',bounds:union,payload:group.payload});
+  }
   for (const item of code.items) items.push({kind:'code',bounds:shapeBounds(item.shape['p:spPr']?.['a:xfrm']),payload:item.payload});
   for (const item of metric.items) items.push({kind:'metric',bounds:shapeBounds(item.shape['p:spPr']?.['a:xfrm']),payload:item.payload});
   for (const item of media.items) items.push({kind:'media',sourceText:item.payload.type==='text',bounds:shapeBounds(item.shape['p:spPr']?.['a:xfrm']),payload:item.payload});
   for (const [index,shape] of shapes.entries()) {
     if (furniture.text.has(index) || nativeContext.slideImageShapes?.has(index)) continue;
-    if (code.consumed.has(shape)||metric.consumed.has(shape)||cards.has(shape)||media.consumed.has(shape)||headings.consumed.has(shape)||plainText.consumed.has(shape)||timelines.consumed.has(shape)) continue;
+    if (code.consumed.has(shape)||metric.consumed.has(shape)||cards.has(shape)||media.consumed.has(shape)||headings.consumed.has(shape)||plainText.consumed.has(shape)||timelines.consumed.has(shape)||quotes.consumed.has(shape)) continue;
     const ordinaryBody = Object.hasOwn(shape, 'p:txBody') && !shape['p:nvSpPr']?.['p:nvPr']?.['p:custDataLst']?.['p:tags'];
     const item = importShape(shape, dimensions, paragraphs[index], ordinaryBody || furniture.taggedText.has(index) || media.captionShapes.has(shape));
     if (item && ordinaryBody) item.readNativeBody = () => readBody(index);
@@ -1462,7 +1470,7 @@ async function addPayload(slide, presentation, payload, region, path, context, o
       addMetricPayload(slide, payload.metric,metricLayout,context,path);
       break;
     case "quote":
-      addQuotePayload(slide, quoteLayout, context, options, path);
+      addQuotePayload(slide, payload.quote, quoteLayout, context, options, path);
       break;
     case "timeline":
       addTimelinePayload(slide, payload.timeline, timelineLayout, context, options, path);
@@ -1835,12 +1843,13 @@ function addMeasuredPayloadText(slide, text, box, context, options, config) {
   for (const [index, line] of fit.lines.entries()) {
     const link = config.links?.[sourceLineIndex];
     if (fit.sourceLines?.[index]?.boundary === 'hard') sourceLineIndex += 1;
-    if (!line&&!config.heading&&!config.sourceText&&!config.timeline&&!config.keepEmpty) continue;
+    if (!line&&!config.heading&&!config.sourceText&&!config.timeline&&!config.quote&&!config.keepEmpty) continue;
     const alignment=fit.placement?.alignment??config.align??context.contentAlignment??'left',placed=fit.placement?.lines[index],factor=alignment==='right'?1:alignment==='center'?.5:0;
     const sourceLine=fit.sourceLines?.[index],boundary=sourceLine?{boundary:sourceLine.boundary,separator:String(text).slice(sourceLine.end,sourceLine.nextStart)}:{};
-    const objectName=config.heading?`OPF heading ${config.path} line ${index}`:config.timeline?`OPF timeline ${config.timeline.group} part ${config.timeline.part} line ${index}`:config.sourceText?`OPF text ${config.path} line ${index}`:config.objectName?`${config.objectName} line ${index}`:undefined;
+    const objectName=config.heading?`OPF heading ${config.path} line ${index}`:config.timeline?`OPF timeline ${config.timeline.group} part ${config.timeline.part} line ${index}`:config.quote?`OPF quote ${config.quote.group} part ${config.quote.part} line ${index}`:config.sourceText?`OPF text ${config.path} line ${index}`:config.objectName?`${config.objectName} line ${index}`:undefined;
     if(config.heading)context.headingTags.set(objectName,{v:1,group:config.path,field:config.heading,line:index,count:fit.lines.length,...boundary});
     else if(config.timeline)context.timelineTags.set(objectName,{v:1,role:'text',group:config.timeline.group,part:config.timeline.part,line:index,count:fit.lines.length,...boundary,...(config.timeline.part===0&&index===0?{anchor:config.timeline.anchor}:{})});
+    else if(config.quote)context.quoteTags.set(objectName,{v:1,role:'text',group:config.quote.group,part:config.quote.part,line:index,count:fit.lines.length,...boundary,...(config.quote.part===0&&index===0?{anchor:config.quote.anchor}:{})});
     else if(config.furniture){
       context.furnitureTags.set(objectName,{v:1,role:'text',...config.furniture,line:index,count:fit.lines.length,...boundary});
       if(config.liveFields?.[index]?.length)context.furnitureFields.set(objectName,{text:line,fields:config.liveFields[index]});
@@ -1959,13 +1968,16 @@ function addMetricPayload(slide,value,layout,context,path) {
   }
 }
 
-function addQuotePayload(slide, layout, context, options, path) {
+function addQuotePayload(slide, value, layout, context, options, path) {
   if (!layout) throw new OPFPptxError('missing-quote-layout', 'Quote export requires a coordinated core build with shared quote geometry.', {path});
-  for (const part of layout.parts) {
-    if (!part.fit) throw new OPFPptxError('layout-overflow', 'Quote content has no usable internal space; increase its cell size before exporting.', {path:part.path,issues:layout.diagnostics});
+  for (const part of layout.parts) if (!part.fit) throw new OPFPptxError('layout-overflow', 'Quote content has no usable internal space; increase its cell size before exporting.', {path:part.path,issues:layout.diagnostics});
+  // Every line shape is tagged (OPF_QUOTE_V1) so an unchanged export re-imports as a quote payload (FF-57).
+  const group=String(context.quoteTags.size),anchor=quoteManifest(value,layout);
+  for (const [index,part] of layout.parts.entries()) {
     addMeasuredPayloadText(slide,part.text,part.box,context,options,{
       path:part.path,fit:part.fit,textStyle:part.style,diagnosticsHandled:true,
       color:part.role==='footer'?context.mutedColor:context.textColor,
+      quote:{group,part:index,anchor},
     });
   }
 }
@@ -2525,6 +2537,7 @@ async function normalizePptxZip(raw, context) {
   attachHeadingTags(entries,context.headingTags);
   attachPlainTextTags(entries,context.plainTextTags);
   attachTimelineTags(entries,context.timelineTags);
+  attachQuoteTags(entries,context.quoteTags);
   attachFurnitureFields(entries,context.furnitureFields);
   attachFurnitureTags(entries,context.furnitureTags,context.furnitureManifests);
   for(const [part,bytes]of Object.entries(entries)){
