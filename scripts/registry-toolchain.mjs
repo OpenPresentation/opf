@@ -3,6 +3,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import path from 'node:path';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
+const UNEXPORTED_EDITOR_MODULES = ['@openpresentation/opf-editor/exact-source'];
 
 // Consume the clean installation produced by test:registry-ecosystem, with no
 // sibling source aliases or file dependencies. Keep its registry evidence.
@@ -32,10 +33,16 @@ export async function registryToolchain() {
     plugin: (browser = false) => ({
       name: 'published-opf-packages',
       setup(build) {
-        build.onResolve({ filter: /^@openpresentation\// }, ({ path: specifier }) => ({
-          path: fileURLToPath(resolve(browser && specifier === '@openpresentation/opf-render'
-            ? '@openpresentation/opf-render/svg' : specifier)),
-        }));
+        build.onResolve({ filter: /^@openpresentation\// }, ({ path: specifier }) => {
+          // opf-editor 0.10.0 ships dist/exact-source.js (imported by the playground example, which the build rewrites from
+          // ../src/exact-source.js) but does not list it in package.json "exports". Bundle the published file by its path
+          // inside the installed package; the bytes are still the registry's. Remove this when a release exports it.
+          if (UNEXPORTED_EDITOR_MODULES.includes(specifier)) {
+            return { path: path.join(path.dirname(fileURLToPath(resolve('@openpresentation/opf-editor'))), `${specifier.split('/').pop()}.js`) };
+          }
+          return { path: fileURLToPath(resolve(browser && specifier === '@openpresentation/opf-render'
+            ? '@openpresentation/opf-render/svg' : specifier)) };
+        });
       },
     }),
   };
