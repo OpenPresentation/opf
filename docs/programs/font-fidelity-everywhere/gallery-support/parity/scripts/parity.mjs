@@ -12,6 +12,7 @@ import {createRequire} from 'node:module';
 import {classifyFontResolution, legacyPasses, pptxNaming} from './font-resolution.mjs';
 import {runElements, logicalRunCount} from './pptx-runs.mjs';
 import {drawnTableBox} from './table-box.mjs';
+import {createFontHosts} from './font-host.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(here, '..');
@@ -20,7 +21,7 @@ const PFX = process.env.PARITY_PREFIX ?? 'parity';
 const CORE = path.join(SRC, `${PFX}-opf`), RENDER = path.join(SRC, `${PFX}-opf-render`), PPTX = path.join(SRC, `${PFX}-opf-pptx`), GALLERY = process.env.GALLERY_DIR ?? path.join(SRC, `${PFX}-pptx-gallery`);
 const imp = p => import(pathToFileURL(p).href);
 const render = await imp(path.join(RENDER, 'dist/index.js'));
-const {prepareNodeFonts, BUNDLED_FONT_MANIFEST} = await imp(path.join(RENDER, 'dist/fonts-node.js'));
+const {BUNDLED_FONT_MANIFEST} = await imp(path.join(RENDER, 'dist/fonts-node.js'));
 const {toPptx, fromPptx} = await imp(path.join(PPTX, 'dist/index.js'));
 // Core's default text measurement: the same estimate both engines use here (no host registry).
 const {measureText, fontPolicyFor, FONT_POLICY} = await imp(path.join(CORE, 'packages/javascript/dist/index.js'));
@@ -29,7 +30,10 @@ const head = d => { try { return execFileSync('git', ['-C', d, 'rev-parse', 'HEA
 
 const ONLY = process.env.ONLY?.split(','); const LIMIT = Number(process.env.LIMIT ?? Infinity);
 const snippets = JSON.parse(await readFile(path.join(ROOT, 'out/snippets.json'), 'utf8')).filter(s => !ONLY || ONLY.includes(s.dimension));
-const office = await prepareNodeFonts({pack: 'office', substitutionPolicy: 'visual'});
+// Modelled preview font host (FF-38, 2026-09-30; font-host.mjs). PARITY_FONT_HOST: gallery (default, the pptx.gallery editor's browser registry and
+// font gate), node-auto (opf-render in Node with scripts 'auto') or office-only (the earlier model, no script faces).
+const FONT_HOST = process.env.PARITY_FONT_HOST ?? 'gallery';
+const fontHosts = await createFontHosts({renderDir: RENDER, model: FONT_HOST});
 
 // ---------- tolerances ----------
 const TOL = {geomPt: 0.02, geomNearPt: 0.5, sizePt: 0.005, sizeNearPt: 0.5};
@@ -215,12 +219,11 @@ function inventory(files) {
 // Registry resolution of a family in the modelled preview host (office pack, visual substitution). The verdict per
 // family comes from font-resolution.mjs (owner decision 2026-09-29: look-alikes are intended, the PPTX names the
 // selected family); `status` and `resolved` keep the old-definition view (real, metric, visual, missing).
-const fontCache = new Map();
-function resolveFamily(family, weight = 400, italic = false) {
-  const k = `${family}|${weight}|${italic}`; if (fontCache.has(k)) return fontCache.get(k);
-  let v; try { const r = office.registry.resolveFont({fontFamily: family, fontWeight: weight, italic}); v = {ok: true, compatibility: r.compatibility, resolvedFamily: r.resolvedFamily}; }
+function resolveFamily(host, family, weight = 400, italic = false) {
+  const k = `${family}|${weight}|${italic}`; if (host.resolutions.has(k)) return host.resolutions.get(k);
+  let v; try { const r = host.registry.resolveFont({fontFamily: family, fontWeight: weight, italic}); v = {ok: true, compatibility: r.compatibility, resolvedFamily: r.resolvedFamily}; }
   catch (e) { v = {ok: false, code: e.code}; }
-  fontCache.set(k, v); return v;
+  host.resolutions.set(k, v); return v;
 }
 const bundledIn = family => [...new Set(BUNDLED_FONT_MANIFEST.packages.filter(p => p.faces.some(f => f.family.toLowerCase() === family.toLowerCase())).map(p => p.pack))];
 
@@ -283,6 +286,7 @@ async function parity(doc) {
 
   const slideParts = Object.keys(files).filter(n => /^ppt\/slides\/slide\d+\.xml$/.test(n)).sort((a, b) => parseInt(a.match(/\d+/)) - parseInt(b.match(/\d+/)));
   if (slideParts.length !== svgs.length) add('zOrder', 'fail', `slide count ${svgs.length} preview vs ${slideParts.length} pptx`);
+  const fontHost = await fontHosts.hostFor(doc);
   const chosenFamilies = new Set(); const fontRes = {};
   // Per family: the script slots (latin/ea/cs) the preview text drawn in it uses, picked as the text check picks them; and per slot the
   // names the PPTX writes there (a run without its own ea/cs typeface falls back to latin, as in the text check).
@@ -460,7 +464,7 @@ async function parity(doc) {
   const packageNames = new Set([...invt.typefaces.map(t => t.typeface), ...invt.appFonts].filter(Boolean).map(x => x.toLowerCase()));
   for (const f of chosenFamilies) {
     if (!f) continue;
-    const policyRow = fontPolicyFor(f), preview = resolveFamily(f);
+    const policyRow = fontPolicyFor(f), preview = resolveFamily(fontHost, f);
     const {named, slot} = pptxNaming({family: f, roles, theme, slotsUsed: previewSlots.get(f) ?? new Set(), pptxNamesBySlot});
     const routeNames = policyRow?.replacement ? [policyRow.replacement.family, ...(policyRow.alternates ?? [])] : [];
     const replacementNames = routeNames.filter(r => r.toLowerCase() !== f.toLowerCase() && !chosenFamilies.has(r) && packageNames.has(r.toLowerCase()));
@@ -469,6 +473,14 @@ async function parity(doc) {
     for (const r of cls.reasons) add('fontResolution', r.status, r.reason, f);
     if (!legacyPasses(preview)) legacyFontReasons.push(`preview font ${cls.legacy}: ${f}${cls.resolved ? ' -> ' + cls.resolved : ''}`);
   }
+
+  // The host must also draw the value: the strict measured render with the host registry (what the editor's gate hands the canvas)
+  // must not throw. A resolved family is not enough when the face cannot measure or shape the text (font-shaping-failed) or a family
+  // it names still has no face (font-unavailable). One reason per value, and none when a family above already failed for the same cause.
+  let hostRender = fontHost.gate.ok ? {ok: true} : {ok: false, code: fontHost.gate.code, family: null, cause: fontHost.gate.message};
+  if (hostRender.ok) try { render.renderSvgDeck(structuredClone(doc), {...fontHost.options}); }
+  catch (e) { hostRender = {ok: false, code: e.code ?? e.name, family: e.details?.fontFamily ?? null, cause: String(e.details?.cause ?? e.message).slice(0, 120)}; }
+  if (!hostRender.ok && !diffs.some(d => d.check === 'fontResolution' && d.status === 'fail')) add('fontResolution', 'fail', `the modelled host cannot draw this value: ${hostRender.code}${hostRender.family ? ' (' + hostRender.family + ')' : ''}, ${hostRender.cause}`);
 
   // (7) re-import round trip
   const idiag = []; let rt;
@@ -489,7 +501,7 @@ async function parity(doc) {
   const legacy = {class: classOf(legacyChecks), checks: {fontResolution: legacyChecks.fontResolution}, fontResolutionReasons: legacyFontReasons};
   const counted = {}; for (const d of diffs) { const k = `${d.check}|${d.status}|${d.reason}`; counted[k] ??= {check: d.check, status: d.status, reason: d.reason, count: 0, where: [], samples: []}; counted[k].count++; if (d.where && counted[k].where.length < 3 && !counted[k].where.includes(d.where)) counted[k].where.push(d.where); if (d.sample && counted[k].samples.length < 2) counted[k].samples.push(d.sample); }
   const top = Object.values(counted).sort((a, b) => (a.status === 'fail' ? 0 : 1) - (b.status === 'fail' ? 0 : 1) || b.count - a.count);
-  return {class: cls, legacy, checks, stats: {...stats, geomMaxDeltaPt: r3(stats.geomMaxDeltaPt)}, fontResolution: fontRes, typefaces: {distinct: uniq(invt.typefaces.map(t => t.typeface)), foreign, scriptSupplements: uniq(invt.scriptSupplements).length, scriptSupplementFaces: uniq(invt.scriptSupplements.map(s => s.split('=')[1])), emptySlots, appFonts: invt.appFonts}, previewDiagnostics: uniq(pv.pdiag), exportDiagnostics: uniq(ediag), reimportDiagnostics: uniq(idiag.map(d => d.code)), diffs: top.slice(0, 25)};
+  return {class: cls, legacy, checks, stats: {...stats, geomMaxDeltaPt: r3(stats.geomMaxDeltaPt)}, fontResolution: fontRes, fontHost: {model: FONT_HOST, render: hostRender, ...(fontHost.selection ? {selection: fontHost.selection} : {}), ...(fontHost.diagnostics.length ? {diagnostics: fontHost.diagnostics} : {})}, typefaces: {distinct: uniq(invt.typefaces.map(t => t.typeface)), foreign, scriptSupplements: uniq(invt.scriptSupplements).length, scriptSupplementFaces: uniq(invt.scriptSupplements.map(s => s.split('=')[1])), emptySlots, appFonts: invt.appFonts}, previewDiagnostics: uniq(pv.pdiag), exportDiagnostics: uniq(ediag), reimportDiagnostics: uniq(idiag.map(d => d.code)), diffs: top.slice(0, 25)};
 }
 
 const CROP = {pictures: 0, measured: 0, unmeasured: 0};
@@ -505,7 +517,7 @@ for (const s of snippets) {
 }
 const meta = {generatedBy: 'dimension-audit/parity/scripts/parity.mjs', generatedAt: new Date().toISOString(), node: process.version, prefix: PFX,
   heads: {opf: head(CORE), 'opf-render': head(RENDER), 'opf-pptx': head(PPTX), 'pptx-gallery': head(GALLERY)},
-  tolerances: TOL, previewMode: 'engine default measurement (no host registry) for geometry/text; office pack + visual substitution registry (no scripts pack, as in the shipped editor and gallery previews) for font resolution',
+  fontHost: FONT_HOST, tolerances: TOL, previewMode: 'engine default measurement (no host registry) for geometry/text; font resolution: ' + ({gallery: "the gallery host model (font-host.mjs): the browser registry of the office pack's eager faces with visual substitution and fallbackFamily Roboto, then the editor's font gate (ensureLazyFonts and ensureScripts for the value's own document), and the strict measured render must not throw", 'node-auto': "opf-render in Node: office pack, visual substitution, scripts 'auto' for the value's document", 'office-only': 'the model before 2026-09-30: office pack, visual substitution, no script faces'})[FONT_HOST],
   exportMode: 'toPptx default options (no registry)', cropCheck: CROP,
   fontResolution: {definition: 'owner decision 2026-09-29: look-alike replacements are intended; the PPTX names the selected family. pass = real face or FF-31 metric-compatible replacement + PPTX names selected family; near = FF-31 visual-only route + PPTX names selected family; fail = no policy route, unrouted preview face, or PPTX writes a replacement name. Old definition kept per value under results[].legacy.', policy: {version: FONT_POLICY.version, families: FONT_POLICY.families.length}}};
 const OUT = process.env.OUT ?? path.join(ROOT, 'parity-results.json');
