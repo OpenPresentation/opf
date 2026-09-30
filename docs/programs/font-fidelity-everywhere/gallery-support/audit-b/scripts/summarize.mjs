@@ -2,11 +2,17 @@
 import {readFile, writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {hostRenderReason} from '../../parity/scripts/font-availability.mjs';
 const here = path.dirname(fileURLToPath(import.meta.url));
 const B = path.resolve(here, '..');
 const raw = JSON.parse(await readFile(`${B}/out/raw-results.json`, 'utf8'));
 const gallery = JSON.parse(await readFile(`${process.env.GALLERY_DIR ?? '<workspace>/pptx-gallery'}/data/font-schemes.json`, 'utf8'));
 const galleryFont = id => [...gallery.items, ...gallery.legacyItems].find(x => (x.id ?? x.slug) === id);
+// Preview font host (FF-48). AUDIT_FONT_HOST: gallery (default), node-auto, office-only, or strict. Font availability is decided against the
+// modelled host measured by audit.mjs (m.hostFonts, the probes' `host`) and the owner font policy: the preview draws the FF-31 policy
+// table's replacement and the PPTX writes the selected family is `works` (a visual-only route too). `strict` classifies against the strict
+// no-host previews instead (the behaviour before FF-48) and stays available as a diagnostic.
+const FONT_HOST = process.env.AUDIT_FONT_HOST ?? 'gallery', STRICT = FONT_HOST === 'strict';
 // Every reason below is derived from a measured field in out/raw-results.json; nothing is printed unconditionally.
 // A value is `works` only when the audit recorded no reason against it.
 const list = a => (a ?? []).join(', ');
@@ -44,13 +50,34 @@ function colorReasons(m, reasons) {
 const colorsAgree = m => !!m.previewVsExportColorDiff && !m.previewVsExportColorDiff.previewOnly.length && !m.previewVsExportColorDiff.exportOnly.length &&
   Array.isArray(m.colorBySlide) && m.colorBySlide.length === 0 && m.previewSlides === m.exportSlides;
 
-function availabilityReason(m, r) {
+function strictAvailabilityReason(m, r) {
   const a = m.availability ?? {};
   if (a.heading === 'bundled-base' && a.body === 'bundled-base') return null;
   return r.preview.officeVisual.ok
     ? `preview needs office-pack substitution (${list(m.previewOfficeVisual?.substitutions)}); export with that registry writes ${m.exportWithOfficeVisualRegistry?.major ?? m.exportWithOfficeVisualRegistry?.error}/${m.exportWithOfficeVisualRegistry?.minor ?? ''}`
     : `no bundled or substitute face: strict preview throws font-unavailable (${m.previewBase?.family}); host-font preview is unmeasured fallback`;
 }
+// The modelled host's verdict on the selected families (FF-38 fontResolution): only a `fail` is a gap; a policy replacement (metric, or
+// visual-only which the parity tiers call `near`) with the PPTX naming the selected family is `works`.
+function hostAvailabilityReasons(m) {
+  const h = m.hostFonts;
+  if (!h) return ['the modelled host was not measured for this value'];
+  if (h.model !== FONT_HOST) throw new Error(`raw results were measured with the ${h.model} host, not ${FONT_HOST}`);
+  const fails = h.reasons.filter(x => x.status === 'fail').map(x => `host preview (${h.model}): ${x.reason}`);
+  return !h.render.ok && !fails.length ? [hostRenderReason(h.render)] : fails;
+}
+const availabilityReasons = (m, r) => STRICT ? [strictAvailabilityReason(m, r)].filter(Boolean) : hostAvailabilityReasons(m);
+// The worst tier over the selected families: real (the family itself), metric, visual (policy look-alike, PPTX names the selected family) or gap.
+const TIER_RANK = ['real', 'metric', 'visual', 'gap'];
+function hostTier(m) {
+  if (!m.hostFonts) return 'gap';
+  const t = Object.values(m.hostFonts.families ?? {}).map(f => f.verdict === 'fail' ? 'gap' : f.tier ?? 'real').concat(m.hostFonts.render.ok ? [] : ['gap']);
+  return t.sort((x, y) => TIER_RANK.indexOf(y) - TIER_RANK.indexOf(x))[0] ?? 'real';
+}
+// What the host draws for the scheme's heading and body families, for the tables.
+const hostCell = m => [...new Set([m.expected?.heading, m.expected?.body].filter(Boolean))].map(f => { const x = m.hostFonts?.families?.[f]; return x ? (x.verdict === 'fail' ? `${f}: gap` : `${f} -> ${x.resolved} (${x.tier})`) : `${f}: not measured`; }).join('; ') + (m.hostFonts && !m.hostFonts.render.ok ? `; render ${m.hostFonts.render.code}` : '');
+const hostProbeCell = p => !p?.host ? 'not measured' : p.host.ok ? 'ok' : `${p.host.code}:${p.host.family ?? ''}`;
+const hostProbeReason = (what, h) => `${what}: the modelled host cannot draw it: ${h.code}${h.family ? ' (' + h.family + ')' : ''}, ${h.cause}`;
 const emptyEaCs = m => [...(m.exportThemeEaCs?.major ?? []), ...(m.exportThemeEaCs?.minor ?? [])].some(v => v === '');
 
 function classify(r) {
@@ -59,6 +86,7 @@ function classify(r) {
     validatorWarnings: r.validatorWarnings, lintWarnings: r.lintWarnings.filter(w => !/catalog-source/.test(w)),
     preview: {hostFonts: r.preview.none.ok || r.preview.none.error, bundledBase: r.preview.base.ok || `${r.preview.base.error}:${r.preview.base.details?.fontFamily ?? ''}`, officePackVisual: r.preview.officeVisual.ok || `${r.preview.officeVisual.error}:${r.preview.officeVisual.details?.fontFamily ?? ''}`},
     export: {default: r.export.defaultOk || r.export.defaultError?.error, withBundledRegistry: r.export.baseRegistryOk || r.export.baseRegistryError?.error},
+    hostPreview: m.hostFonts ? {model: m.hostFonts.model, gate: m.hostFonts.gate.ok, render: m.hostFonts.render, families: Object.fromEntries(Object.entries(m.hostFonts.families).map(([f, x]) => [f, {verdict: x.verdict, tier: x.tier, route: x.route, resolved: x.resolved, licenseClass: x.licenseClass}]))} : null,
     reimport: r.reimport?.ok ? {retainedDesignKeys: r.reimport.designKeys, diagnostics: r.reimport.diagnostics} : r.reimport, measure: m};
   const d = r.dimension;
   // Anything that failed before a measurement could be taken is broken, whatever the dimension.
@@ -80,16 +108,16 @@ function classify(r) {
     const open = /OFL|Open Font|Apache|SIL/i.test(g?.license ?? '') || g?.scope === 'google';
     base.licensing = {scope: g?.scope, license: g?.license, openlyLicensed: open, webFontUrl: g?.webFontUrl ?? null, bundledForPreview: m.availability?.heading === 'bundled-base' && m.availability?.body === 'bundled-base', availability: m.availability};
     const expOk = m.majorMatches && m.minorMatches && (m.foreignTypefaces ?? []).length === 0;
-    engine = `export ${expOk ? 'writes chosen families' : 'mismatch'}; preview ${base.licensing.bundledForPreview ? 'bundled' : r.preview.officeVisual.ok ? 'office-pack substitute ' + (m.previewOfficeVisual.substitutions ?? []).join(',') : 'host fonts only (strict: font-unavailable)'}`;
-    const avail = availabilityReason(m, r); if (avail) reasons.push(avail);
+    engine = `export ${expOk ? 'writes chosen families' : 'mismatch'}; preview ${STRICT ? (base.licensing.bundledForPreview ? 'bundled' : r.preview.officeVisual.ok ? 'office-pack substitute ' + (m.previewOfficeVisual.substitutions ?? []).join(',') : 'host fonts only (strict: font-unavailable)') : `${FONT_HOST} host: ${hostCell(m)}`}`;
+    reasons.push(...availabilityReasons(m, r));
     if (!r.catalogResolves) reasons.push('id not in core catalog (legacy inlined by gallery)');
-    if (m.textSampleProbe && m.textSampleProbe.base !== 'ok') reasons.push(`non-Latin textSample: strict ${m.textSampleProbe.base}`);
+    if (m.textSampleProbe) { if (STRICT) { if (m.textSampleProbe.base !== 'ok') reasons.push(`non-Latin textSample: strict ${m.textSampleProbe.base}`); } else if (!m.textSampleProbe.host?.ok) reasons.push(m.textSampleProbe.host ? hostProbeReason('non-Latin textSample', m.textSampleProbe.host) : 'non-Latin textSample: the modelled host was not measured'); }
     if (!expOk) reasons.push(`export major/minor or run typefaces differ from scheme (${m.exportThemeMajorLatin}/${m.exportThemeMinorLatin}; foreign: ${list(m.foreignTypefaces) || 'none'})`);
     if (m.previewVsExportFontDiff && !m.previewVsExportFontDiff.agree) reasons.push(`preview ${m.previewVsExportFontDiff.previewHeading}/${m.previewVsExportFontDiff.previewBody} vs export ${m.previewVsExportFontDiff.exportMajor}/${m.previewVsExportFontDiff.exportMinor}`);
     if (emptyEaCs(m)) reasons.push('theme major/minor ea or cs typeface is empty');
     if (m.reimportFontScheme !== m.fontScheme) reasons.push(reimportReason(r, 'fontScheme', m.reimportFontScheme, m.fontScheme));
     cls = hardFail || !expOk ? 'broken' : reasons.length ? 'partial' : 'works';
-    base.previewTier = base.licensing.bundledForPreview ? 'bundled' : r.preview.officeVisual.ok ? 'substitute' : 'host-only';
+    base.previewTier = STRICT ? (base.licensing.bundledForPreview ? 'bundled' : r.preview.officeVisual.ok ? 'substitute' : 'host-only') : hostTier(m);
   } else if (d === 'languages') {
     const p = m.nativeProbe ?? {}, cat = m.catalogLanguage ?? {};
     base.glyph = {nativeText: p.text, nonLatinScript: p.nonLatinScript, strictWithSnippetScheme: p.base, officePack: p.officeVisual, onBundledRoboto: p.robotoBase, onGoogleFontScheme: p.googleSchemeBase};
@@ -119,8 +147,14 @@ function classify(r) {
         if (m.exportThemeEaCs && (m.exportThemeEaCs.major?.[i] === '' || m.exportThemeEaCs.minor?.[i] === '')) reasons.push(`theme major/minor ${p.scriptSlot} is empty for a ${p.scriptSlot}-slot script`);
       }
       if (p.none !== 'ok') reasons.push(`native text preview (host fonts) ${p.none}`);
-      if (p.nonLatinScript && String(p.robotoBase).startsWith('missing-glyph')) reasons.push('bundled Roboto lacks the script (missing-glyph)');
-      if (p.base !== 'ok') reasons.push(`language font scheme ${base.languageFontScheme} not bundled: strict preview ${p.base}`);
+      if (STRICT) {
+        if (p.nonLatinScript && String(p.robotoBase).startsWith('missing-glyph')) reasons.push('bundled Roboto lacks the script (missing-glyph)');
+        if (p.base !== 'ok') reasons.push(`language font scheme ${base.languageFontScheme} not bundled: strict preview ${p.base}`);
+      } else {
+        // The host loads the script faces the native text needs (ensureScripts on the probe's own document); a gap is a glyph or face the host still lacks.
+        if (!p.host?.ok) reasons.push(p.host ? hostProbeReason('native text', p.host) : 'native text: the modelled host was not measured');
+        reasons.push(...hostAvailabilityReasons(m));
+      }
     } else reasons.push('no native-name sample in the gallery; direction and script slot unmeasured');
     if (m.foreignTypefaces?.length) reasons.push(`foreign typefaces in export: ${list(m.foreignTypefaces)}`);
     if (m.engineAppliesLanguageFontScheme !== true) reasons.push(`engines do not derive the font scheme from language alone (${m.engineAppliesLanguageFontScheme === false ? "the snippet's design.fontScheme sets it" : m.engineAppliesLanguageFontScheme})`);
@@ -136,7 +170,7 @@ function classify(r) {
     if (!fontsOk) reasons.push(`theme fonts ${m.exportThemeMajorLatin}/${m.exportThemeMinorLatin}, expected ${m.expected?.heading}/${m.expected?.body}`);
     if (!bundle) reasons.push('a theme-only document does not apply the theme bundle (fonts or background)');
     colorReasons(m, reasons);
-    const avail = availabilityReason(m, r); if (avail) reasons.push(avail);
+    reasons.push(...availabilityReasons(m, r));
     if (m.previewVsExportFontDiff && !m.previewVsExportFontDiff.agree) reasons.push(`preview fonts ${m.previewVsExportFontDiff.previewHeading}/${m.previewVsExportFontDiff.previewBody} vs export ${m.previewVsExportFontDiff.exportMajor}/${m.previewVsExportFontDiff.exportMinor}`);
     if (m.reimportTheme !== r.catalog.value) reasons.push(reimportReason(r, 'theme', m.reimportTheme, r.catalog.value));
     cls = hardFail || !bgOk || !fontsOk || !colorsAgree(m) ? 'broken' : reasons.length ? 'partial' : 'works';
@@ -223,7 +257,7 @@ function sharedExportGaps(rows) {
 }
 
 const results = raw.map(classify);
-await writeFile(`${B}/results.json`, JSON.stringify({generated: new Date().toISOString(), heads: JSON.parse(await readFile(`${B}/out/heads.json`, 'utf8').catch(() => '{}')), sharedExportGaps: sharedExportGaps(raw), results}, null, 1));
+await writeFile(`${B}/results.json`, JSON.stringify({generated: new Date().toISOString(), fontHost: FONT_HOST, heads: JSON.parse(await readFile(`${B}/out/heads.json`, 'utf8').catch(() => '{}')), sharedExportGaps: sharedExportGaps(raw), results}, null, 1));
 
 const dims = [['color-schemes', 'Color schemes'], ['font-schemes', 'Font schemes (89 upstream)'], ['font-schemes-legacy', 'Font schemes (gallery legacy)'], ['languages', 'Languages'], ['themes', 'Themes'], ['narratives', 'Narratives'], ['audiences', 'Audiences'], ['tones', 'Tones'], ['socials', 'Socials'], ['charts', 'Charts']];
 const esc = s => String(s ?? '').replace(/\|/g, '\\|');
@@ -235,12 +269,12 @@ for (const [d, title] of dims) {
   if (d.startsWith('font')) {
     const tiers = rows.reduce((a, r) => (a[r.previewTier] = (a[r.previewTier] ?? 0) + 1, a), {});
     const open = rows.filter(r => r.licensing.openlyLicensed).length;
-    md += `Preview tier: ${Object.entries(tiers).map(([k, v]) => `${k} ${v}`).join(', ')}. Openly licensed (gallery license/scope) ${open}/${rows.length}; bundled for preview ${rows.filter(r => r.licensing.bundledForPreview).length}/${rows.length}.\n\n`;
-    md += `| id | family | script | license scope | open | preview tier | strict preview | office-pack preview | PPTX major/minor | export w/ office registry | class |\n|---|---|---|---|---|---|---|---|---|---|---|\n`;
-    md += rows.map(r => `| ${r.id} | ${esc(r.measure.expected?.heading)} / ${esc(r.measure.expected?.body)} | ${r.measure.textSampleProbe ? 'non-Latin' : 'latin'} | ${esc(r.licensing.scope)} | ${r.licensing.openlyLicensed ? 'yes' : 'no'} | ${r.previewTier} | ${esc(r.preview.bundledBase)} | ${esc(r.preview.officePackVisual === true ? (r.measure.previewOfficeVisual.substitutions ?? []).join(', ') || 'ok' : r.preview.officePackVisual)} | ${esc(r.measure.exportThemeMajorLatin)} / ${esc(r.measure.exportThemeMinorLatin)} | ${esc(r.measure.exportWithOfficeVisualRegistry?.major ?? r.measure.exportWithOfficeVisualRegistry?.error)} | ${r.classification} |`).join('\n');
+    md += `Preview host: ${STRICT ? 'strict (no host, diagnostic)' : `${FONT_HOST} model (parity/scripts/font-host.mjs)`}. Preview tier: ${Object.entries(tiers).map(([k, v]) => `${k} ${v}`).join(', ')}. Openly licensed (gallery license/scope) ${open}/${rows.length}; bundled for preview ${rows.filter(r => r.licensing.bundledForPreview).length}/${rows.length}.\n\n`;
+    md += `| id | family | script | license scope | open | preview tier | ${FONT_HOST} host preview | strict preview | office-pack preview | PPTX major/minor | export w/ office registry | class |\n|---|---|---|---|---|---|---|---|---|---|---|---|\n`;
+    md += rows.map(r => `| ${r.id} | ${esc(r.measure.expected?.heading)} / ${esc(r.measure.expected?.body)} | ${r.measure.textSampleProbe ? 'non-Latin' : 'latin'} | ${esc(r.licensing.scope)} | ${r.licensing.openlyLicensed ? 'yes' : 'no'} | ${r.previewTier} | ${esc(hostCell(r.measure))} | ${esc(r.preview.bundledBase)} | ${esc(r.preview.officePackVisual === true ? (r.measure.previewOfficeVisual.substitutions ?? []).join(', ') || 'ok' : r.preview.officePackVisual)} | ${esc(r.measure.exportThemeMajorLatin)} / ${esc(r.measure.exportThemeMinorLatin)} | ${esc(r.measure.exportWithOfficeVisualRegistry?.major ?? r.measure.exportWithOfficeVisualRegistry?.error)} | ${r.classification} |`).join('\n');
   } else if (d === 'languages') {
-    md += `| id | bcp47 | ooxmlLang | snippet fontScheme | native text | slot | strict preview | office pack | on bundled Roboto | slide lang | rtl paragraphs (export / preview) | re-import | class |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|\n`;
-    md += rows.map(r => `| ${r.id} | ${r.bcp47} | ${r.ooxmlLang} | ${r.languageFontScheme} | ${esc(r.glyph.nativeText)} | ${r.scriptSlot ?? ''} | ${esc(r.glyph.strictWithSnippetScheme)} | ${esc(r.glyph.officePack)} | ${esc(r.glyph.onBundledRoboto)} | ${(r.measure.exportSlideLangs ?? []).join(',')} | ${r.measure.nativeProbe?.exportSlideRtlParagraphs ?? ''} / ${r.measure.nativeProbe?.previewRtlLines ?? ''} | ${r.measure.reimportLanguage ?? 'none'} | ${r.classification} |`).join('\n');
+    md += `| id | bcp47 | ooxmlLang | snippet fontScheme | native text | slot | ${FONT_HOST} host preview | strict preview | office pack | on bundled Roboto | slide lang | rtl paragraphs (export / preview) | re-import | class |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n`;
+    md += rows.map(r => `| ${r.id} | ${r.bcp47} | ${r.ooxmlLang} | ${r.languageFontScheme} | ${esc(r.glyph.nativeText)} | ${r.scriptSlot ?? ''} | ${esc(hostProbeCell(r.measure.nativeProbe))} | ${esc(r.glyph.strictWithSnippetScheme)} | ${esc(r.glyph.officePack)} | ${esc(r.glyph.onBundledRoboto)} | ${(r.measure.exportSlideLangs ?? []).join(',')} | ${r.measure.nativeProbe?.exportSlideRtlParagraphs ?? ''} / ${r.measure.nativeProbe?.previewRtlLines ?? ''} | ${r.measure.reimportLanguage ?? 'none'} | ${r.classification} |`).join('\n');
   } else {
     md += `| id | valid | catalog | engine effect | reasons | class |\n|---|---|---|---|---|---|\n`;
     md += rows.map(r => `| ${r.id} | ${r.schemaValid} | ${r.catalogResolves} | ${esc(r.engineSummary)} | ${esc(r.reasons.join('; '))} | ${r.classification} |`).join('\n');
