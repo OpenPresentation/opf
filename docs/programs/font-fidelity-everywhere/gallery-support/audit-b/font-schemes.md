@@ -9,41 +9,41 @@ Schema-valid 89/89. Catalog id resolves in core 89/89.
 | count | reason |
 |---|---|
 | 89 | theme major/minor ea or cs typeface is empty |
-| 81 | no bundled or substitute face: .. |
+| 60 | no bundled or substitute face: .. |
 | 60 | non-Latin textSample: .. |
 | 1 | preview needs office-pack substitution (..)); export with that registry writes Consolas/Consolas |
 | 1 | preview needs office-pack substitution (..)); export with that registry writes Courier New/Courier New |
+| 1 | preview needs office-pack substitution (..), Arial->Arimo(..)); export with that registry writes Arial Black/Arial |
 | 1 | preview needs office-pack substitution (..)); export with that registry writes Calibri/Calibri |
-| 1 | preview needs office-pack substitution (..)); export with that registry writes Tahoma/Tahoma |
-| 1 | preview needs office-pack substitution (..)); export with that registry writes Times New Roman/Times New Roman |
+| 1 | preview needs office-pack substitution (..), Grandview->Barlow(..), Anton->Anton(..)); export with that registry writes Impact/Grandview |
 
-Preview tier: substitute 7, host-only 81, bundled 1. Openly licensed (gallery license/scope) 30/89; bundled for preview 1/89.
+Preview tier: substitute 28, host-only 60, bundled 1. Openly licensed (gallery license/scope) 30/89; bundled for preview 1/89.
 
 | id | family | script | license scope | open | preview tier | strict preview | office-pack preview | PPTX major/minor | export w/ office registry | class |
 |---|---|---|---|---|---|---|---|---|---|---|
 | consolas | Consolas / Consolas | latin | system | no | substitute | font-unavailable:Consolas | Consolas->Cousine(visual) | Consolas / Consolas | Consolas | partial |
 | courier-new | Courier New / Courier New | latin | system | no | substitute | font-unavailable:Courier New | Courier New->Cousine(metric) | Courier New / Courier New | Courier New | partial |
-| arial | Arial Black / Arial | latin | system | no | host-only | font-unavailable:Arial Black | font-unavailable:Arial Black | Arial Black / Arial | font-unavailable | partial |
+| arial | Arial Black / Arial | latin | system | no | substitute | font-unavailable:Arial Black | Arial Black->Montserrat(visual), Arial->Arimo(metric) | Arial Black / Arial | Arial Black | partial |
 | calibri | Calibri / Calibri | latin | system | no | substitute | font-unavailable:Calibri | Calibri->Carlito(metric) | Calibri / Calibri | Calibri | partial |
-| impact | Impact / Grandview | latin | system | no | host-only | font-unavailable:Impact | font-unavailable:Impact | Impact / Grandview | font-unavailable | partial |
-| lucida-sans | Lucida Sans / Lucida Sans | latin | system | no | host-only | font-unavailable:Lucida Sans | font-unavailable:Lucida Sans | Lucida Sans / Lucida Sans | font-unavailable | partial |
-| segoe-ui | Segoe UI Semibold / Segoe UI | latin | system | no | host-only | font-unavailable:Segoe UI Semibold | font-unavailable:Segoe UI Semibold | Segoe UI Semibold / Segoe UI | font-unavailable | partial |
-| segoe-ui-light | Segoe UI Semilight / Segoe UI Light | latin | system | no | host-only | font-unavailable:Segoe UI Semilight | font-unavailable:Segoe UI Semilight | Segoe UI Semilight / Segoe UI Light | font-unavailable | partial |
-| tahoma | Tahoma / Tahoma | latin | system | no | substitute | font-unavailable:Tahoma | Tahoma->Arimo(visual) | Tahoma / Tahoma | Tahoma | partial |
-| trebuchet-ms | Trebuchet MS / Trebuchet MS | latin | system | no | host-only | font-unavailable:Trebuchet MS | font-unavailable:Trebuchet MS | Trebuchet MS / Trebuchet MS | font-unavailable | partial |
-| verdana | Verdana / Verdana | latin | system | no | host-only | font-unavailable:Verdana | font-unavailable:Verdana | Verdana / Verdana | font-unavailable | partial |
-| bookman | Bookman Old Style / Bookman Old Style | latin | system | no | host-only | font-unavailable:Bookman Old Style | font-unavailable:Bookman Old Style | Bookman Old Style / Bookman Old Style | font-unavailable | partial |
-| century-schoolbook | Century Schoolbook / Century Schoolbook | latin | system | no | host-only | font-unavailable:Century Schoolbook | font-unavailable:Century Schoolbook | Century Schoolbook / Century Schoolbook | font-unavailable | partial |
-| constantia | Constantia / Constantia | latin | system | no | host-only | font-unavailable:Constantia | font-unavailable:Constantia | Constantia / Constantia | font-unavailable | partial |
-| garamond | Garamond / Garamond | latin | system | no | host-only | font-unavailable:Garamond | font-unavailable:Garamond | Garamond / Garamond | font-unavailable | partial |
-| rockwell | Rockwell / Rockwell | latin | system | no | host-only | font-unavailable:Rockwell | font-unavailable:Rockwell | Rockwell / Rockwell | font-unavailable | partial |
+| impact | Impact / Grandview | latin | system | no | substitute | font-unavailable:Impact | Impact->Anton(visual), Grandview->Barlow(visual), Anton->Anton(visual) | Impact / Grandview | Impact | partial |
+| lucida-sans | Lucida Sans / Lucida Sans | latin | system | no | substitute | font-unavailable:Lucida Sans | Lucida Sans->Work Sans(visual) | Lucida Sans / Lucida Sans | Lucida Sans | partial |
+| segoe-ui | Segoe UI Semibold / Segoe UI | latin | system | no | substitute | font-unavailable:Segoe UI Semibold | Segoe UI Semibold->Red Hat Display(visual), Segoe UI->Red Hat Display(visual) | Segoe UI Semibold / Segoe UI | Segoe UI Semibold | partial |
+| segoe-ui-light | Segoe UI Semilight / Segoe UI Light | latin | system | no | substitute | font-unavailable:Segoe UI Semilight | Segoe UI Semilight->Red Hat Display(visual), Segoe UI Light->Red Hat Display(visual) | Segoe UI Semilight / Segoe UI Light | Segoe UI Semilight | partial |
+| tahoma | Tahoma / Tahoma | latin | system | no | substitute | font-unavailable:Tahoma | Tahoma->Red Hat Text(visual) | Tahoma / Tahoma | Tahoma | partial |
+| trebuchet-ms | Trebuchet MS / Trebuchet MS | latin | system | no | substitute | font-unavailable:Trebuchet MS | Trebuchet MS->Figtree(visual) | Trebuchet MS / Trebuchet MS | Trebuchet MS | partial |
+| verdana | Verdana / Verdana | latin | system | no | substitute | font-unavailable:Verdana | Verdana->Montserrat(visual) | Verdana / Verdana | Verdana | partial |
+| bookman | Bookman Old Style / Bookman Old Style | latin | system | no | substitute | font-unavailable:Bookman Old Style | Bookman Old Style->Libre Caslon Text(visual) | Bookman Old Style / Bookman Old Style | Bookman Old Style | partial |
+| century-schoolbook | Century Schoolbook / Century Schoolbook | latin | system | no | substitute | font-unavailable:Century Schoolbook | Century Schoolbook->Gelasio(visual) | Century Schoolbook / Century Schoolbook | Century Schoolbook | partial |
+| constantia | Constantia / Constantia | latin | system | no | substitute | font-unavailable:Constantia | Constantia->PT Serif(visual) | Constantia / Constantia | Constantia | partial |
+| garamond | Garamond / Garamond | latin | system | no | substitute | font-unavailable:Garamond | Garamond->EB Garamond(visual) | Garamond / Garamond | Garamond | partial |
+| rockwell | Rockwell / Rockwell | latin | system | no | substitute | font-unavailable:Rockwell | Rockwell->Bitter(visual) | Rockwell / Rockwell | Rockwell | partial |
 | times-new-roman | Times New Roman / Times New Roman | latin | system | no | substitute | font-unavailable:Times New Roman | Times New Roman->Tinos(metric) | Times New Roman / Times New Roman | Times New Roman | partial |
-| aptos | Aptos Display / Aptos | latin | system | no | substitute | font-unavailable:Aptos Display | Aptos Display->Carlito(visual), Aptos->Carlito(visual) | Aptos Display / Aptos | Aptos Display | partial |
-| grandview | Grandview Display / Grandview | latin | system | no | host-only | font-unavailable:Grandview Display | font-unavailable:Grandview Display | Grandview Display / Grandview | font-unavailable | partial |
-| seaford | Seaford Display / Seaford | latin | system | no | host-only | font-unavailable:Seaford Display | font-unavailable:Seaford Display | Seaford Display / Seaford | font-unavailable | partial |
-| skeena | Skeena Display / Skeena | latin | system | no | host-only | font-unavailable:Skeena Display | font-unavailable:Skeena Display | Skeena Display / Skeena | font-unavailable | partial |
-| tenorite | Tenorite Display / Tenorite | latin | system | no | host-only | font-unavailable:Tenorite Display | font-unavailable:Tenorite Display | Tenorite Display / Tenorite | font-unavailable | partial |
-| georgia | Georgia / Georgia | latin | system | no | substitute | font-unavailable:Georgia | Georgia->Gelasio(visual) | Georgia / Georgia | Georgia | partial |
+| aptos | Aptos Display / Aptos | latin | system | no | substitute | font-unavailable:Aptos Display | Aptos Display->Intos Display(metric), Aptos->Intos(metric) | Aptos Display / Aptos | Aptos Display | partial |
+| grandview | Grandview Display / Grandview | latin | system | no | substitute | font-unavailable:Grandview Display | Grandview Display->Barlow(visual), Grandview->Barlow(visual) | Grandview Display / Grandview | Grandview Display | partial |
+| seaford | Seaford Display / Seaford | latin | system | no | substitute | font-unavailable:Seaford Display | Seaford Display->Source Sans 3(visual), Seaford->Source Sans 3(visual) | Seaford Display / Seaford | Seaford Display | partial |
+| skeena | Skeena Display / Skeena | latin | system | no | substitute | font-unavailable:Skeena Display | Skeena Display->Open Sans(visual), Skeena->Open Sans(visual) | Skeena Display / Skeena | Skeena Display | partial |
+| tenorite | Tenorite Display / Tenorite | latin | system | no | substitute | font-unavailable:Tenorite Display | Tenorite Display->Figtree(visual), Tenorite->Figtree(visual) | Tenorite Display / Tenorite | Tenorite Display | partial |
+| georgia | Georgia / Georgia | latin | system | no | substitute | font-unavailable:Georgia | Georgia->Gelasio(metric) | Georgia / Georgia | Georgia | partial |
 | microsoft-yahei | Microsoft YaHei / Microsoft YaHei | non-Latin | system | no | host-only | font-unavailable:Microsoft YaHei | font-unavailable:Microsoft YaHei | Microsoft YaHei / Microsoft YaHei | font-unavailable | partial |
 | simsun | SimSun / SimSun | non-Latin | system | no | host-only | font-unavailable:SimSun | font-unavailable:SimSun | SimSun / SimSun | font-unavailable | partial |
 | fangsong | FangSong / FangSong | non-Latin | system | no | host-only | font-unavailable:FangSong | font-unavailable:FangSong | FangSong / FangSong | font-unavailable | partial |
@@ -77,10 +77,10 @@ Preview tier: substitute 7, host-only 81, bundled 1. Openly licensed (gallery li
 | shonar-bangla | Shonar Bangla / Shonar Bangla | non-Latin | system | no | host-only | font-unavailable:Shonar Bangla | font-unavailable:Shonar Bangla | Shonar Bangla / Shonar Bangla | font-unavailable | partial |
 | sylfaen | Sylfaen / Sylfaen | non-Latin | system | no | host-only | font-unavailable:Sylfaen | font-unavailable:Sylfaen | Sylfaen / Sylfaen | font-unavailable | partial |
 | traditional-arabic | Traditional Arabic / Traditional Arabic | non-Latin | system | no | host-only | font-unavailable:Traditional Arabic | font-unavailable:Traditional Arabic | Traditional Arabic / Traditional Arabic | font-unavailable | partial |
-| montserrat | Montserrat / Montserrat | latin | system | yes | host-only | font-unavailable:Montserrat | font-unavailable:Montserrat | Montserrat / Montserrat | font-unavailable | partial |
-| open-sans | Open Sans / Open Sans | latin | system | yes | host-only | font-unavailable:Open Sans | font-unavailable:Open Sans | Open Sans / Open Sans | font-unavailable | partial |
-| poppins | Poppins / Poppins | latin | system | yes | host-only | font-unavailable:Poppins | font-unavailable:Poppins | Poppins / Poppins | font-unavailable | partial |
-| pt-serif | PT Serif / PT Serif | latin | system | yes | host-only | font-unavailable:PT Serif | font-unavailable:PT Serif | PT Serif / PT Serif | font-unavailable | partial |
+| montserrat | Montserrat / Montserrat | latin | system | yes | substitute | font-unavailable:Montserrat | ok | Montserrat / Montserrat | Montserrat | partial |
+| open-sans | Open Sans / Open Sans | latin | system | yes | substitute | font-unavailable:Open Sans | ok | Open Sans / Open Sans | Open Sans | partial |
+| poppins | Poppins / Poppins | latin | system | yes | substitute | font-unavailable:Poppins | ok | Poppins / Poppins | Poppins | partial |
+| pt-serif | PT Serif / PT Serif | latin | system | yes | substitute | font-unavailable:PT Serif | ok | PT Serif / PT Serif | PT Serif | partial |
 | raleway | Raleway / Raleway | latin | system | yes | host-only | font-unavailable:Raleway | font-unavailable:Raleway | Raleway / Raleway | font-unavailable | partial |
 | roboto | Roboto / Roboto | latin | system | yes | bundled | true | ok | Roboto / Roboto | Roboto | partial |
 | noto-sans-arabic | Noto Naskh Arabic / Noto Naskh Arabic | non-Latin | system | yes | host-only | font-unavailable:Noto Naskh Arabic | font-unavailable:Noto Naskh Arabic | Noto Naskh Arabic / Noto Naskh Arabic | font-unavailable | partial |
@@ -101,7 +101,7 @@ Preview tier: substitute 7, host-only 81, bundled 1. Openly licensed (gallery li
 | noto-sans-tamil | Noto Sans Tamil / Noto Sans Tamil | non-Latin | system | yes | host-only | font-unavailable:Noto Sans Tamil | font-unavailable:Noto Sans Tamil | Noto Sans Tamil / Noto Sans Tamil | font-unavailable | partial |
 | noto-sans-tc | Noto Sans TC / Noto Sans TC | non-Latin | system | yes | host-only | font-unavailable:Noto Sans TC | font-unavailable:Noto Sans TC | Noto Sans TC / Noto Sans TC | font-unavailable | partial |
 | noto-sans-telugu | Noto Sans Telugu / Noto Sans Telugu | non-Latin | system | yes | host-only | font-unavailable:Noto Sans Telugu | font-unavailable:Noto Sans Telugu | Noto Sans Telugu / Noto Sans Telugu | font-unavailable | partial |
-| noto-sans | Noto Sans / Noto Sans | non-Latin | system | yes | host-only | font-unavailable:Noto Sans | font-unavailable:Noto Sans | Noto Sans / Noto Sans | font-unavailable | partial |
+| noto-sans | Noto Sans / Noto Sans | non-Latin | system | yes | substitute | font-unavailable:Noto Sans | ok | Noto Sans / Noto Sans | Noto Sans | partial |
 | noto-sans-thai | Noto Sans Thai / Noto Sans Thai | non-Latin | system | yes | host-only | font-unavailable:Noto Sans Thai | font-unavailable:Noto Sans Thai | Noto Sans Thai / Noto Sans Thai | font-unavailable | partial |
 | noto-nastaliq-urdu | Noto Nastaliq Urdu / Noto Nastaliq Urdu | non-Latin | system | yes | host-only | font-unavailable:Noto Nastaliq Urdu | font-unavailable:Noto Nastaliq Urdu | Noto Nastaliq Urdu / Noto Nastaliq Urdu | font-unavailable | partial |
 | noto-naksh-arabic | Noto Naskh Arabic / Noto Naskh Arabic | non-Latin | system | yes | host-only | font-unavailable:Noto Naskh Arabic | font-unavailable:Noto Naskh Arabic | Noto Naskh Arabic / Noto Naskh Arabic | font-unavailable | partial |

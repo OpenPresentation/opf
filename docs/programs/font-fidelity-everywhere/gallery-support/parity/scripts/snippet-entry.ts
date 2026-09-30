@@ -2,6 +2,7 @@
 // builders (union of dimension-audit A and B inputs). Bundled by gen-snippets.mjs.
 import * as R from "@/lib/reference-data";
 import * as S from "@/lib/opf-snippets";
+import { buildImageTreatmentOpfSnippet } from "@/lib/image-treatment-snippets";
 import backgrounds from "@/data/backgrounds.json";
 import imageTreatments from "@/data/image-treatments.json";
 import headersFooters from "@/data/headers-footers.json";
@@ -33,8 +34,8 @@ export function allSnippets() {
     add("backgrounds", item.slug, () => withAssets(JSON.parse(S.buildOpfSnippet("backgrounds" as any, item.slug))), item, "withAssets");
   }
   for (const item of (imageTreatments as any).items) {
-    add("image-treatments", item.slug, () => S.buildImageTreatmentOpfSnippet(item), item);
-    add("image-treatments", item.slug, () => withAssets(JSON.parse(S.buildImageTreatmentOpfSnippet(item))), item, "withAssets");
+    add("image-treatments", item.slug, () => buildImageTreatmentOpfSnippet(item), item);
+    add("image-treatments", item.slug, () => withAssets(JSON.parse(buildImageTreatmentOpfSnippet(item))), item, "withAssets");
   }
   for (const item of (headersFooters as any).items) {
     add("headers-footers", item.slug, () => S.buildHeaderFooterOpfSnippet(item), item);

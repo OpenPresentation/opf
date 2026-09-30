@@ -17,8 +17,10 @@ The reproducible audits behind [gallery-support.md](../gallery-support.md):
 | `build-support-status.mjs` | Regenerates `support-status.json`. |
 
 Results are copied byte for byte from the measured runs (heads in
-[gallery-support.md](../gallery-support.md)), except for one normalized id
-(below). The only script edits are local paths:
+[gallery-support.md](../gallery-support.md)), except for the normalized id
+of earlier runs (below). Script edits are local paths (below) and, since the
+2026-09-29 re-run, the updates for the current gallery contract listed under
+"Re-running against new heads". The path edits:
 
 - the author's pptx-gallery path became
   `process.env.GALLERY_DIR ?? '<workspace>/pptx-gallery'`;
@@ -34,7 +36,9 @@ run.
 
 ### Normalized ids
 
-pptx-gallery `f17e9ae` gives the United Kingdom map chart a misspelled slug.
+None in the current run: the reduced gallery (FF-22) no longer has the United
+Kingdom map chart. The earlier 900-value runs record it under a core slug, as
+follows. pptx-gallery `f17e9ae` gives the United Kingdom map chart a misspelled slug.
 Core renamed that slug to `united-kingdom`, and `check-text-integrity` rejects
 the old spelling, so the committed files record that chart under
 `united-kingdom`. This is the only byte change to `parity/parity-results.json`.
@@ -93,9 +97,13 @@ cp -r "$OPF/docs/programs/font-fidelity-everywhere/gallery-support/audit-a" "$W/
 cp -r "$OPF/docs/programs/font-fidelity-everywhere/gallery-support/audit-b" "$W/dimension-audit/B"
 export GALLERY_DIR="$W/pptx-gallery"
 
-# Audit A: writes results.json, then SUMMARY.md. ONLY=layouts,blocks and LIMIT=n narrow a run.
+# Audit A: writes results.json, then SUMMARY.md. ONLY=layouts,blocks and LIMIT=n narrow a run (a narrowed run writes
+# results.<only>.json instead). The image-treatments probe measures design.slideImage, which the gallery snippets no longer
+# use (pptx-gallery#44), so it stops with an error: run the other four dimensions and keep the earlier image-treatments rows.
 cd "$W/dimension-audit/A"
-node --import ./scripts/register.mjs scripts/audit.mjs
+cp results.json results.previous.json          # the committed results of the earlier run
+ONLY=layouts,blocks,backgrounds,headers-footers node --import ./scripts/register.mjs scripts/audit.mjs
+node scripts/merge-retained.mjs results.layouts_blocks_backgrounds_headers-footers.json results.previous.json image-treatments results.json
 node scripts/summary.mjs
 
 # Audit B: snippets, measurement, then classification (results.json, *.md).
@@ -234,7 +242,7 @@ PNG, GIF, JPEG (after EXIF orientation), WebP, or SVG (`width`/`height`, else
 unknown (an external `href` or an unreadable image) the check is not skipped:
 the picture gets a near `picture crop unmeasured (preview image size
 unknown)`, and `meta.cropCheck` in `parity-results.json` counts pictures,
-measured and unmeasured (408, 408 and 0 in the current run). The picture frame
+measured and unmeasured (425, 425 and 0 in the current run). The picture frame
 check uses the same placed image, clipped to the `<image>` viewport, so a
 `meet` image is compared at its `preserveAspectRatio` alignment.
 
@@ -242,7 +250,37 @@ The presence audit A image-treatment probe (`audit-a/scripts/slide-image.mjs`)
 uses the same geometry, copied from `parity.mjs`: it finds the picture by
 name, requires its `r:embed` to resolve to an image part, and fails the
 visible frame or crop beyond 0.02 pt against the traced preview. Keep the two
-copies in sync.
+copies in sync. The gallery snippets no longer express image treatments with
+`design.slideImage` (pptx-gallery#44), so that probe does not apply to them:
+audit A keeps the September 23 image-treatment rows (`meta.retained`; see
+"Re-running against new heads") and the parity audit measures the current
+snippets.
+
+### Watermark and furniture pictures (2026-09-29)
+
+Two more native pictures are mapped to the preview image that carries the same
+design path. `design.watermark` exports as one picture named `OPF watermark`
+(opf-pptx#104); it maps by name to the preview `design.watermark` group, its
+frame and crop are compared at 0.02 pt like any picture, and the harness also
+checks that the preview `<g opacity>` around the watermark equals the picture's
+`a:alphaModFix` amount (within 0.005). A header or footer image exports as
+`OPF image N` inside the furniture slot; it maps to the preview
+`design.header|footer.<slot>.image` whose viewport holds the picture's centre.
+Before this mapping such pictures were unmapped (near) or, with a preview image
+and no mapped shape, a mapping failure, which the merged snippets (which now
+include the watermark and the footer logo) turned into false mismatches.
+
+### Audit A and the gallery contract (2026-09-29)
+
+Audit A's expectations follow the gallery's snippets instead of assuming the
+September 23 builder: asset references are checked against the snippet's own
+`assets` (`missingAssets`), the pattern check compares the exported `prst` with
+the snippet's preset, the headers/footers probe measures the slide that shows
+the furniture (the gallery title slide hides it), checks that a fixed date's formatted text is in the export (only a current date, `date: true`, needs a
+native field) and decides which gallery settings the snippet expresses from
+the snippet itself, and the editor path is
+the gallery's per-item builder (`buildCatalogItemOpfSnippet`, pptx-gallery#48),
+compared with the published snippet (`editorMatchesSnippet`).
 
 ## `support-status.json`
 
@@ -256,15 +294,15 @@ Schema version 1. Top level:
 | `sectionAnchors` | `{dimension: anchor}` for the per-dimension sections of `gallery-support.md`; see the map below. |
 | `statuses` | The allowed `status` values: `works`, `partial`, `schema-only`, `authoring-metadata`, `broken`, `gallery-only`. |
 | `parityStatuses` | The allowed `parity.status` values: `perfect`, `near`, `mismatch`. |
-| `audits` | Per audit (`a`, `b`, `parity`): measured dimensions or checks, `heads` (7-character commits plus Node) and the source results file. `parity` also records tolerances, the record count (900), `withAssetsRecords` (31) and `parityOnlyValues` (76). |
+| `audits` | Per audit (`a`, `b`, `parity`): measured dimensions or checks, `heads` (7-character commits plus Node) and the source results file. `parity` also records tolerances, the record count (850), `withAssetsRecords` (31) and `parityOnlyValues` (26). `a` also has `retained` when audit A rows are kept from an earlier run (below). |
 | `notMeasured` | Dimensions without a presence status (charts, FF-22). |
 | `sharedExportGaps` | Gaps that apply to every exported value. |
 | `counts` | Presence: `{dimension: {status: n}}`. |
 | `parityCounts` | Parity: `{total, perfect, near, mismatch, checksPassed: {check: n}}` over all parity records (850 since the 2026-09-29 re-measure). |
 | `items` | One record per presence-audited gallery value (793), below. |
-| `parityOnly` | Values measured only by parity: the 76 charts, as `{dimension, galleryId, galleryIdNormalized?, parity}`; `galleryIdNormalized` is `{fromParts, joiner, to, reason}`. |
+| `parityOnly` | Values measured only by parity: the 26 charts, as `{dimension, galleryId, galleryIdNormalized?, parity}`; `galleryIdNormalized` is `{fromParts, joiner, to, reason}`. |
 
-The parity audit has 107 records that are not presence items. The 76 charts
+The parity audit has 57 records that are not presence items. The 26 charts
 are in `parityOnly`. The 31 `withAssets` variants (backgrounds 6, image
 treatments 15, headers/footers 10) are attached to their item as
 `parity.variants.withAssets`.

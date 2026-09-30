@@ -1,11 +1,11 @@
 {
- "generated": "2026-09-23T14:08:56.178Z",
+ "generated": "2026-09-30T06:40:14.581Z",
  "heads": {
-  "pptx-gallery": "f17e9ae",
-  "opf": "1ad25df",
-  "opf-render": "bc436f3",
-  "opf-pptx": "9092954",
-  "opf-editor": "214ae69",
+  "pptx-gallery": "0b2dec8",
+  "opf": "930577d",
+  "opf-render": "021cca0",
+  "opf-pptx": "0d15f1c",
+  "opf-editor": "4af6ea6",
   "node": "24.21.0"
  },
  "sharedExportGaps": [
@@ -1545,7 +1545,7 @@
    "preview": {
     "hostFonts": true,
     "bundledBase": "font-unavailable:Arial Black",
-    "officePackVisual": "font-unavailable:Arial Black"
+    "officePackVisual": true
    },
    "export": {
     "default": true,
@@ -1569,7 +1569,7 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
+     "heading": "substitute-visual:Montserrat",
      "body": "substitute-metric:Arimo"
     },
     "previewFonts": {
@@ -1587,9 +1587,16 @@
      "family": "Arial Black"
     },
     "previewOfficeVisual": {
-     "ok": false,
-     "error": "font-unavailable",
-     "family": "Arial Black"
+     "ok": true,
+     "fonts": {
+      "heading": "Montserrat",
+      "body": "Arimo",
+      "code": "Roboto Mono"
+     },
+     "substitutions": [
+      "Arial Black->Montserrat(visual)",
+      "Arial->Arimo(metric)"
+     ]
     },
     "exportThemeMajorLatin": "Arial Black",
     "exportThemeMinorLatin": "Arial",
@@ -1629,7 +1636,12 @@
     },
     "reimportFontScheme": "arial",
     "exportWithOfficeVisualRegistry": {
-     "error": "font-unavailable"
+     "major": "Arial Black",
+     "minor": "Arial",
+     "runFaces": [
+      "Arial Black",
+      "Arial"
+     ]
     }
    },
    "licensing": {
@@ -1639,15 +1651,15 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "not-bundled",
+     "heading": "substitute-visual:Montserrat",
      "body": "substitute-metric:Arimo"
     }
    },
-   "previewTier": "host-only",
+   "previewTier": "substitute",
    "classification": "partial",
-   "engineSummary": "export writes chosen families; preview host fonts only (strict: font-unavailable)",
+   "engineSummary": "export writes chosen families; preview office-pack substitute Arial Black->Montserrat(visual),Arial->Arimo(metric)",
    "reasons": [
-    "no bundled or substitute face: strict preview throws font-unavailable (Arial Black); host-font preview is unmeasured fallback",
+    "preview needs office-pack substitution (Arial Black->Montserrat(visual), Arial->Arimo(metric)); export with that registry writes Arial Black/Arial",
     "theme major/minor ea or cs typeface is empty"
    ]
   },
@@ -1786,7 +1798,7 @@
    "preview": {
     "hostFonts": true,
     "bundledBase": "font-unavailable:Impact",
-    "officePackVisual": "font-unavailable:Impact"
+    "officePackVisual": true
    },
    "export": {
     "default": true,
@@ -1810,8 +1822,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual-not-bundled:Anton|Oswald",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Anton",
+     "body": "substitute-visual:Barlow"
     },
     "previewFonts": {
      "heading": "Impact",
@@ -1828,9 +1840,17 @@
      "family": "Impact"
     },
     "previewOfficeVisual": {
-     "ok": false,
-     "error": "font-unavailable",
-     "family": "Impact"
+     "ok": true,
+     "fonts": {
+      "heading": "Anton",
+      "body": "Barlow",
+      "code": "Roboto Mono"
+     },
+     "substitutions": [
+      "Impact->Anton(visual)",
+      "Grandview->Barlow(visual)",
+      "Anton->Anton(visual)"
+     ]
     },
     "exportThemeMajorLatin": "Impact",
     "exportThemeMinorLatin": "Grandview",
@@ -1870,7 +1890,12 @@
     },
     "reimportFontScheme": "impact",
     "exportWithOfficeVisualRegistry": {
-     "error": "font-unavailable"
+     "major": "Impact",
+     "minor": "Grandview",
+     "runFaces": [
+      "Impact",
+      "Grandview"
+     ]
     }
    },
    "licensing": {
@@ -1880,15 +1905,15 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "substitute-visual-not-bundled:Anton|Oswald",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Anton",
+     "body": "substitute-visual:Barlow"
     }
    },
-   "previewTier": "host-only",
+   "previewTier": "substitute",
    "classification": "partial",
-   "engineSummary": "export writes chosen families; preview host fonts only (strict: font-unavailable)",
+   "engineSummary": "export writes chosen families; preview office-pack substitute Impact->Anton(visual),Grandview->Barlow(visual),Anton->Anton(visual)",
    "reasons": [
-    "no bundled or substitute face: strict preview throws font-unavailable (Impact); host-font preview is unmeasured fallback",
+    "preview needs office-pack substitution (Impact->Anton(visual), Grandview->Barlow(visual), Anton->Anton(visual)); export with that registry writes Impact/Grandview",
     "theme major/minor ea or cs typeface is empty"
    ]
   },
@@ -1903,7 +1928,7 @@
    "preview": {
     "hostFonts": true,
     "bundledBase": "font-unavailable:Lucida Sans",
-    "officePackVisual": "font-unavailable:Lucida Sans"
+    "officePackVisual": true
    },
    "export": {
     "default": true,
@@ -1927,8 +1952,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Work Sans",
+     "body": "substitute-visual:Work Sans"
     },
     "previewFonts": {
      "heading": "Lucida Sans",
@@ -1944,9 +1969,15 @@
      "family": "Lucida Sans"
     },
     "previewOfficeVisual": {
-     "ok": false,
-     "error": "font-unavailable",
-     "family": "Lucida Sans"
+     "ok": true,
+     "fonts": {
+      "heading": "Work Sans",
+      "body": "Work Sans",
+      "code": "Roboto Mono"
+     },
+     "substitutions": [
+      "Lucida Sans->Work Sans(visual)"
+     ]
     },
     "exportThemeMajorLatin": "Lucida Sans",
     "exportThemeMinorLatin": "Lucida Sans",
@@ -1984,7 +2015,11 @@
     },
     "reimportFontScheme": "lucida-sans",
     "exportWithOfficeVisualRegistry": {
-     "error": "font-unavailable"
+     "major": "Lucida Sans",
+     "minor": "Lucida Sans",
+     "runFaces": [
+      "Lucida Sans"
+     ]
     }
    },
    "licensing": {
@@ -1994,15 +2029,15 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Work Sans",
+     "body": "substitute-visual:Work Sans"
     }
    },
-   "previewTier": "host-only",
+   "previewTier": "substitute",
    "classification": "partial",
-   "engineSummary": "export writes chosen families; preview host fonts only (strict: font-unavailable)",
+   "engineSummary": "export writes chosen families; preview office-pack substitute Lucida Sans->Work Sans(visual)",
    "reasons": [
-    "no bundled or substitute face: strict preview throws font-unavailable (Lucida Sans); host-font preview is unmeasured fallback",
+    "preview needs office-pack substitution (Lucida Sans->Work Sans(visual)); export with that registry writes Lucida Sans/Lucida Sans",
     "theme major/minor ea or cs typeface is empty"
    ]
   },
@@ -2017,7 +2052,7 @@
    "preview": {
     "hostFonts": true,
     "bundledBase": "font-unavailable:Segoe UI Semibold",
-    "officePackVisual": "font-unavailable:Segoe UI Semibold"
+    "officePackVisual": true
    },
    "export": {
     "default": true,
@@ -2041,8 +2076,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "substitute-visual:Noto Sans"
+     "heading": "substitute-visual:Red Hat Display",
+     "body": "substitute-visual:Red Hat Display"
     },
     "previewFonts": {
      "heading": "Segoe UI Semibold",
@@ -2059,9 +2094,16 @@
      "family": "Segoe UI Semibold"
     },
     "previewOfficeVisual": {
-     "ok": false,
-     "error": "font-unavailable",
-     "family": "Segoe UI Semibold"
+     "ok": true,
+     "fonts": {
+      "heading": "Red Hat Display",
+      "body": "Red Hat Display",
+      "code": "Roboto Mono"
+     },
+     "substitutions": [
+      "Segoe UI Semibold->Red Hat Display(visual)",
+      "Segoe UI->Red Hat Display(visual)"
+     ]
     },
     "exportThemeMajorLatin": "Segoe UI Semibold",
     "exportThemeMinorLatin": "Segoe UI",
@@ -2101,7 +2143,12 @@
     },
     "reimportFontScheme": "segoe-ui",
     "exportWithOfficeVisualRegistry": {
-     "error": "font-unavailable"
+     "major": "Segoe UI Semibold",
+     "minor": "Segoe UI",
+     "runFaces": [
+      "Segoe UI Semibold",
+      "Segoe UI"
+     ]
     }
    },
    "licensing": {
@@ -2111,15 +2158,15 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "not-bundled",
-     "body": "substitute-visual:Noto Sans"
+     "heading": "substitute-visual:Red Hat Display",
+     "body": "substitute-visual:Red Hat Display"
     }
    },
-   "previewTier": "host-only",
+   "previewTier": "substitute",
    "classification": "partial",
-   "engineSummary": "export writes chosen families; preview host fonts only (strict: font-unavailable)",
+   "engineSummary": "export writes chosen families; preview office-pack substitute Segoe UI Semibold->Red Hat Display(visual),Segoe UI->Red Hat Display(visual)",
    "reasons": [
-    "no bundled or substitute face: strict preview throws font-unavailable (Segoe UI Semibold); host-font preview is unmeasured fallback",
+    "preview needs office-pack substitution (Segoe UI Semibold->Red Hat Display(visual), Segoe UI->Red Hat Display(visual)); export with that registry writes Segoe UI Semibold/Segoe UI",
     "theme major/minor ea or cs typeface is empty"
    ]
   },
@@ -2134,7 +2181,7 @@
    "preview": {
     "hostFonts": true,
     "bundledBase": "font-unavailable:Segoe UI Semilight",
-    "officePackVisual": "font-unavailable:Segoe UI Semilight"
+    "officePackVisual": true
    },
    "export": {
     "default": true,
@@ -2158,8 +2205,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Red Hat Display",
+     "body": "substitute-visual:Red Hat Display"
     },
     "previewFonts": {
      "heading": "Segoe UI Semilight",
@@ -2176,9 +2223,16 @@
      "family": "Segoe UI Semilight"
     },
     "previewOfficeVisual": {
-     "ok": false,
-     "error": "font-unavailable",
-     "family": "Segoe UI Semilight"
+     "ok": true,
+     "fonts": {
+      "heading": "Red Hat Display",
+      "body": "Red Hat Display",
+      "code": "Roboto Mono"
+     },
+     "substitutions": [
+      "Segoe UI Semilight->Red Hat Display(visual)",
+      "Segoe UI Light->Red Hat Display(visual)"
+     ]
     },
     "exportThemeMajorLatin": "Segoe UI Semilight",
     "exportThemeMinorLatin": "Segoe UI Light",
@@ -2218,7 +2272,12 @@
     },
     "reimportFontScheme": "segoe-ui-light",
     "exportWithOfficeVisualRegistry": {
-     "error": "font-unavailable"
+     "major": "Segoe UI Semilight",
+     "minor": "Segoe UI Light",
+     "runFaces": [
+      "Segoe UI Semilight",
+      "Segoe UI Light"
+     ]
     }
    },
    "licensing": {
@@ -2228,15 +2287,15 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Red Hat Display",
+     "body": "substitute-visual:Red Hat Display"
     }
    },
-   "previewTier": "host-only",
+   "previewTier": "substitute",
    "classification": "partial",
-   "engineSummary": "export writes chosen families; preview host fonts only (strict: font-unavailable)",
+   "engineSummary": "export writes chosen families; preview office-pack substitute Segoe UI Semilight->Red Hat Display(visual),Segoe UI Light->Red Hat Display(visual)",
    "reasons": [
-    "no bundled or substitute face: strict preview throws font-unavailable (Segoe UI Semilight); host-font preview is unmeasured fallback",
+    "preview needs office-pack substitution (Segoe UI Semilight->Red Hat Display(visual), Segoe UI Light->Red Hat Display(visual)); export with that registry writes Segoe UI Semilight/Segoe UI Light",
     "theme major/minor ea or cs typeface is empty"
    ]
   },
@@ -2275,8 +2334,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Arimo",
-     "body": "substitute-visual:Arimo"
+     "heading": "substitute-visual:Red Hat Text",
+     "body": "substitute-visual:Red Hat Text"
     },
     "previewFonts": {
      "heading": "Tahoma",
@@ -2294,12 +2353,12 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Arimo",
-      "body": "Arimo",
+      "heading": "Red Hat Text",
+      "body": "Red Hat Text",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Tahoma->Arimo(visual)"
+      "Tahoma->Red Hat Text(visual)"
      ]
     },
     "exportThemeMajorLatin": "Tahoma",
@@ -2352,15 +2411,15 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "substitute-visual:Arimo",
-     "body": "substitute-visual:Arimo"
+     "heading": "substitute-visual:Red Hat Text",
+     "body": "substitute-visual:Red Hat Text"
     }
    },
    "previewTier": "substitute",
    "classification": "partial",
-   "engineSummary": "export writes chosen families; preview office-pack substitute Tahoma->Arimo(visual)",
+   "engineSummary": "export writes chosen families; preview office-pack substitute Tahoma->Red Hat Text(visual)",
    "reasons": [
-    "preview needs office-pack substitution (Tahoma->Arimo(visual)); export with that registry writes Tahoma/Tahoma",
+    "preview needs office-pack substitution (Tahoma->Red Hat Text(visual)); export with that registry writes Tahoma/Tahoma",
     "theme major/minor ea or cs typeface is empty"
    ]
   },
@@ -2375,7 +2434,7 @@
    "preview": {
     "hostFonts": true,
     "bundledBase": "font-unavailable:Trebuchet MS",
-    "officePackVisual": "font-unavailable:Trebuchet MS"
+    "officePackVisual": true
    },
    "export": {
     "default": true,
@@ -2399,8 +2458,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual-not-bundled:Ubuntu|Open Sans",
-     "body": "substitute-visual-not-bundled:Ubuntu|Open Sans"
+     "heading": "substitute-visual:Figtree",
+     "body": "substitute-visual:Figtree"
     },
     "previewFonts": {
      "heading": "Trebuchet MS",
@@ -2416,9 +2475,15 @@
      "family": "Trebuchet MS"
     },
     "previewOfficeVisual": {
-     "ok": false,
-     "error": "font-unavailable",
-     "family": "Trebuchet MS"
+     "ok": true,
+     "fonts": {
+      "heading": "Figtree",
+      "body": "Figtree",
+      "code": "Roboto Mono"
+     },
+     "substitutions": [
+      "Trebuchet MS->Figtree(visual)"
+     ]
     },
     "exportThemeMajorLatin": "Trebuchet MS",
     "exportThemeMinorLatin": "Trebuchet MS",
@@ -2456,7 +2521,11 @@
     },
     "reimportFontScheme": "trebuchet-ms",
     "exportWithOfficeVisualRegistry": {
-     "error": "font-unavailable"
+     "major": "Trebuchet MS",
+     "minor": "Trebuchet MS",
+     "runFaces": [
+      "Trebuchet MS"
+     ]
     }
    },
    "licensing": {
@@ -2466,15 +2535,15 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "substitute-visual-not-bundled:Ubuntu|Open Sans",
-     "body": "substitute-visual-not-bundled:Ubuntu|Open Sans"
+     "heading": "substitute-visual:Figtree",
+     "body": "substitute-visual:Figtree"
     }
    },
-   "previewTier": "host-only",
+   "previewTier": "substitute",
    "classification": "partial",
-   "engineSummary": "export writes chosen families; preview host fonts only (strict: font-unavailable)",
+   "engineSummary": "export writes chosen families; preview office-pack substitute Trebuchet MS->Figtree(visual)",
    "reasons": [
-    "no bundled or substitute face: strict preview throws font-unavailable (Trebuchet MS); host-font preview is unmeasured fallback",
+    "preview needs office-pack substitution (Trebuchet MS->Figtree(visual)); export with that registry writes Trebuchet MS/Trebuchet MS",
     "theme major/minor ea or cs typeface is empty"
    ]
   },
@@ -2489,7 +2558,7 @@
    "preview": {
     "hostFonts": true,
     "bundledBase": "font-unavailable:Verdana",
-    "officePackVisual": "font-unavailable:Verdana"
+    "officePackVisual": true
    },
    "export": {
     "default": true,
@@ -2513,8 +2582,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual-not-bundled:DejaVu Sans",
-     "body": "substitute-visual-not-bundled:DejaVu Sans"
+     "heading": "substitute-visual:Montserrat",
+     "body": "substitute-visual:Montserrat"
     },
     "previewFonts": {
      "heading": "Verdana",
@@ -2530,9 +2599,15 @@
      "family": "Verdana"
     },
     "previewOfficeVisual": {
-     "ok": false,
-     "error": "font-unavailable",
-     "family": "Verdana"
+     "ok": true,
+     "fonts": {
+      "heading": "Montserrat",
+      "body": "Montserrat",
+      "code": "Roboto Mono"
+     },
+     "substitutions": [
+      "Verdana->Montserrat(visual)"
+     ]
     },
     "exportThemeMajorLatin": "Verdana",
     "exportThemeMinorLatin": "Verdana",
@@ -2570,7 +2645,11 @@
     },
     "reimportFontScheme": "verdana",
     "exportWithOfficeVisualRegistry": {
-     "error": "font-unavailable"
+     "major": "Verdana",
+     "minor": "Verdana",
+     "runFaces": [
+      "Verdana"
+     ]
     }
    },
    "licensing": {
@@ -2580,15 +2659,15 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "substitute-visual-not-bundled:DejaVu Sans",
-     "body": "substitute-visual-not-bundled:DejaVu Sans"
+     "heading": "substitute-visual:Montserrat",
+     "body": "substitute-visual:Montserrat"
     }
    },
-   "previewTier": "host-only",
+   "previewTier": "substitute",
    "classification": "partial",
-   "engineSummary": "export writes chosen families; preview host fonts only (strict: font-unavailable)",
+   "engineSummary": "export writes chosen families; preview office-pack substitute Verdana->Montserrat(visual)",
    "reasons": [
-    "no bundled or substitute face: strict preview throws font-unavailable (Verdana); host-font preview is unmeasured fallback",
+    "preview needs office-pack substitution (Verdana->Montserrat(visual)); export with that registry writes Verdana/Verdana",
     "theme major/minor ea or cs typeface is empty"
    ]
   },
@@ -2603,7 +2682,7 @@
    "preview": {
     "hostFonts": true,
     "bundledBase": "font-unavailable:Bookman Old Style",
-    "officePackVisual": "font-unavailable:Bookman Old Style"
+    "officePackVisual": true
    },
    "export": {
     "default": true,
@@ -2627,8 +2706,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual-not-bundled:TeX Gyre Bonum",
-     "body": "substitute-visual-not-bundled:TeX Gyre Bonum"
+     "heading": "substitute-visual:Libre Caslon Text",
+     "body": "substitute-visual:Libre Caslon Text"
     },
     "previewFonts": {
      "heading": "Bookman Old Style",
@@ -2644,9 +2723,15 @@
      "family": "Bookman Old Style"
     },
     "previewOfficeVisual": {
-     "ok": false,
-     "error": "font-unavailable",
-     "family": "Bookman Old Style"
+     "ok": true,
+     "fonts": {
+      "heading": "Libre Caslon Text",
+      "body": "Libre Caslon Text",
+      "code": "Roboto Mono"
+     },
+     "substitutions": [
+      "Bookman Old Style->Libre Caslon Text(visual)"
+     ]
     },
     "exportThemeMajorLatin": "Bookman Old Style",
     "exportThemeMinorLatin": "Bookman Old Style",
@@ -2684,7 +2769,11 @@
     },
     "reimportFontScheme": "bookman",
     "exportWithOfficeVisualRegistry": {
-     "error": "font-unavailable"
+     "major": "Bookman Old Style",
+     "minor": "Bookman Old Style",
+     "runFaces": [
+      "Bookman Old Style"
+     ]
     }
    },
    "licensing": {
@@ -2694,15 +2783,15 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "substitute-visual-not-bundled:TeX Gyre Bonum",
-     "body": "substitute-visual-not-bundled:TeX Gyre Bonum"
+     "heading": "substitute-visual:Libre Caslon Text",
+     "body": "substitute-visual:Libre Caslon Text"
     }
    },
-   "previewTier": "host-only",
+   "previewTier": "substitute",
    "classification": "partial",
-   "engineSummary": "export writes chosen families; preview host fonts only (strict: font-unavailable)",
+   "engineSummary": "export writes chosen families; preview office-pack substitute Bookman Old Style->Libre Caslon Text(visual)",
    "reasons": [
-    "no bundled or substitute face: strict preview throws font-unavailable (Bookman Old Style); host-font preview is unmeasured fallback",
+    "preview needs office-pack substitution (Bookman Old Style->Libre Caslon Text(visual)); export with that registry writes Bookman Old Style/Bookman Old Style",
     "theme major/minor ea or cs typeface is empty"
    ]
   },
@@ -2717,7 +2806,7 @@
    "preview": {
     "hostFonts": true,
     "bundledBase": "font-unavailable:Century Schoolbook",
-    "officePackVisual": "font-unavailable:Century Schoolbook"
+    "officePackVisual": true
    },
    "export": {
     "default": true,
@@ -2741,8 +2830,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual-not-bundled:TeX Gyre Schola",
-     "body": "substitute-visual-not-bundled:TeX Gyre Schola"
+     "heading": "substitute-visual:Gelasio",
+     "body": "substitute-visual:Gelasio"
     },
     "previewFonts": {
      "heading": "Century Schoolbook",
@@ -2758,9 +2847,15 @@
      "family": "Century Schoolbook"
     },
     "previewOfficeVisual": {
-     "ok": false,
-     "error": "font-unavailable",
-     "family": "Century Schoolbook"
+     "ok": true,
+     "fonts": {
+      "heading": "Gelasio",
+      "body": "Gelasio",
+      "code": "Roboto Mono"
+     },
+     "substitutions": [
+      "Century Schoolbook->Gelasio(visual)"
+     ]
     },
     "exportThemeMajorLatin": "Century Schoolbook",
     "exportThemeMinorLatin": "Century Schoolbook",
@@ -2798,7 +2893,11 @@
     },
     "reimportFontScheme": "century-schoolbook",
     "exportWithOfficeVisualRegistry": {
-     "error": "font-unavailable"
+     "major": "Century Schoolbook",
+     "minor": "Century Schoolbook",
+     "runFaces": [
+      "Century Schoolbook"
+     ]
     }
    },
    "licensing": {
@@ -2808,15 +2907,15 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "substitute-visual-not-bundled:TeX Gyre Schola",
-     "body": "substitute-visual-not-bundled:TeX Gyre Schola"
+     "heading": "substitute-visual:Gelasio",
+     "body": "substitute-visual:Gelasio"
     }
    },
-   "previewTier": "host-only",
+   "previewTier": "substitute",
    "classification": "partial",
-   "engineSummary": "export writes chosen families; preview host fonts only (strict: font-unavailable)",
+   "engineSummary": "export writes chosen families; preview office-pack substitute Century Schoolbook->Gelasio(visual)",
    "reasons": [
-    "no bundled or substitute face: strict preview throws font-unavailable (Century Schoolbook); host-font preview is unmeasured fallback",
+    "preview needs office-pack substitution (Century Schoolbook->Gelasio(visual)); export with that registry writes Century Schoolbook/Century Schoolbook",
     "theme major/minor ea or cs typeface is empty"
    ]
   },
@@ -2831,7 +2930,7 @@
    "preview": {
     "hostFonts": true,
     "bundledBase": "font-unavailable:Constantia",
-    "officePackVisual": "font-unavailable:Constantia"
+    "officePackVisual": true
    },
    "export": {
     "default": true,
@@ -2855,8 +2954,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual-not-bundled:Merriweather",
-     "body": "substitute-visual-not-bundled:Merriweather"
+     "heading": "substitute-visual:PT Serif",
+     "body": "substitute-visual:PT Serif"
     },
     "previewFonts": {
      "heading": "Constantia",
@@ -2872,9 +2971,15 @@
      "family": "Constantia"
     },
     "previewOfficeVisual": {
-     "ok": false,
-     "error": "font-unavailable",
-     "family": "Constantia"
+     "ok": true,
+     "fonts": {
+      "heading": "PT Serif",
+      "body": "PT Serif",
+      "code": "Roboto Mono"
+     },
+     "substitutions": [
+      "Constantia->PT Serif(visual)"
+     ]
     },
     "exportThemeMajorLatin": "Constantia",
     "exportThemeMinorLatin": "Constantia",
@@ -2912,7 +3017,11 @@
     },
     "reimportFontScheme": "constantia",
     "exportWithOfficeVisualRegistry": {
-     "error": "font-unavailable"
+     "major": "Constantia",
+     "minor": "Constantia",
+     "runFaces": [
+      "Constantia"
+     ]
     }
    },
    "licensing": {
@@ -2922,15 +3031,15 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "substitute-visual-not-bundled:Merriweather",
-     "body": "substitute-visual-not-bundled:Merriweather"
+     "heading": "substitute-visual:PT Serif",
+     "body": "substitute-visual:PT Serif"
     }
    },
-   "previewTier": "host-only",
+   "previewTier": "substitute",
    "classification": "partial",
-   "engineSummary": "export writes chosen families; preview host fonts only (strict: font-unavailable)",
+   "engineSummary": "export writes chosen families; preview office-pack substitute Constantia->PT Serif(visual)",
    "reasons": [
-    "no bundled or substitute face: strict preview throws font-unavailable (Constantia); host-font preview is unmeasured fallback",
+    "preview needs office-pack substitution (Constantia->PT Serif(visual)); export with that registry writes Constantia/Constantia",
     "theme major/minor ea or cs typeface is empty"
    ]
   },
@@ -2945,7 +3054,7 @@
    "preview": {
     "hostFonts": true,
     "bundledBase": "font-unavailable:Garamond",
-    "officePackVisual": "font-unavailable:Garamond"
+    "officePackVisual": true
    },
    "export": {
     "default": true,
@@ -2969,8 +3078,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual-not-bundled:EB Garamond",
-     "body": "substitute-visual-not-bundled:EB Garamond"
+     "heading": "substitute-visual:EB Garamond",
+     "body": "substitute-visual:EB Garamond"
     },
     "previewFonts": {
      "heading": "Garamond",
@@ -2986,9 +3095,15 @@
      "family": "Garamond"
     },
     "previewOfficeVisual": {
-     "ok": false,
-     "error": "font-unavailable",
-     "family": "Garamond"
+     "ok": true,
+     "fonts": {
+      "heading": "EB Garamond",
+      "body": "EB Garamond",
+      "code": "Roboto Mono"
+     },
+     "substitutions": [
+      "Garamond->EB Garamond(visual)"
+     ]
     },
     "exportThemeMajorLatin": "Garamond",
     "exportThemeMinorLatin": "Garamond",
@@ -3026,7 +3141,11 @@
     },
     "reimportFontScheme": "garamond",
     "exportWithOfficeVisualRegistry": {
-     "error": "font-unavailable"
+     "major": "Garamond",
+     "minor": "Garamond",
+     "runFaces": [
+      "Garamond"
+     ]
     }
    },
    "licensing": {
@@ -3036,15 +3155,15 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "substitute-visual-not-bundled:EB Garamond",
-     "body": "substitute-visual-not-bundled:EB Garamond"
+     "heading": "substitute-visual:EB Garamond",
+     "body": "substitute-visual:EB Garamond"
     }
    },
-   "previewTier": "host-only",
+   "previewTier": "substitute",
    "classification": "partial",
-   "engineSummary": "export writes chosen families; preview host fonts only (strict: font-unavailable)",
+   "engineSummary": "export writes chosen families; preview office-pack substitute Garamond->EB Garamond(visual)",
    "reasons": [
-    "no bundled or substitute face: strict preview throws font-unavailable (Garamond); host-font preview is unmeasured fallback",
+    "preview needs office-pack substitution (Garamond->EB Garamond(visual)); export with that registry writes Garamond/Garamond",
     "theme major/minor ea or cs typeface is empty"
    ]
   },
@@ -3059,7 +3178,7 @@
    "preview": {
     "hostFonts": true,
     "bundledBase": "font-unavailable:Rockwell",
-    "officePackVisual": "font-unavailable:Rockwell"
+    "officePackVisual": true
    },
    "export": {
     "default": true,
@@ -3083,8 +3202,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual-not-bundled:Arvo|Roboto Slab",
-     "body": "substitute-visual-not-bundled:Arvo|Roboto Slab"
+     "heading": "substitute-visual:Bitter",
+     "body": "substitute-visual:Bitter"
     },
     "previewFonts": {
      "heading": "Rockwell",
@@ -3100,9 +3219,15 @@
      "family": "Rockwell"
     },
     "previewOfficeVisual": {
-     "ok": false,
-     "error": "font-unavailable",
-     "family": "Rockwell"
+     "ok": true,
+     "fonts": {
+      "heading": "Bitter",
+      "body": "Bitter",
+      "code": "Roboto Mono"
+     },
+     "substitutions": [
+      "Rockwell->Bitter(visual)"
+     ]
     },
     "exportThemeMajorLatin": "Rockwell",
     "exportThemeMinorLatin": "Rockwell",
@@ -3140,7 +3265,11 @@
     },
     "reimportFontScheme": "rockwell",
     "exportWithOfficeVisualRegistry": {
-     "error": "font-unavailable"
+     "major": "Rockwell",
+     "minor": "Rockwell",
+     "runFaces": [
+      "Rockwell"
+     ]
     }
    },
    "licensing": {
@@ -3150,15 +3279,15 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "substitute-visual-not-bundled:Arvo|Roboto Slab",
-     "body": "substitute-visual-not-bundled:Arvo|Roboto Slab"
+     "heading": "substitute-visual:Bitter",
+     "body": "substitute-visual:Bitter"
     }
    },
-   "previewTier": "host-only",
+   "previewTier": "substitute",
    "classification": "partial",
-   "engineSummary": "export writes chosen families; preview host fonts only (strict: font-unavailable)",
+   "engineSummary": "export writes chosen families; preview office-pack substitute Rockwell->Bitter(visual)",
    "reasons": [
-    "no bundled or substitute face: strict preview throws font-unavailable (Rockwell); host-font preview is unmeasured fallback",
+    "preview needs office-pack substitution (Rockwell->Bitter(visual)); export with that registry writes Rockwell/Rockwell",
     "theme major/minor ea or cs typeface is empty"
    ]
   },
@@ -3321,8 +3450,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -3341,13 +3470,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -3403,15 +3532,15 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     }
    },
    "previewTier": "substitute",
    "classification": "partial",
-   "engineSummary": "export writes chosen families; preview office-pack substitute Aptos Display->Carlito(visual),Aptos->Carlito(visual)",
+   "engineSummary": "export writes chosen families; preview office-pack substitute Aptos Display->Intos Display(metric),Aptos->Intos(metric)",
    "reasons": [
-    "preview needs office-pack substitution (Aptos Display->Carlito(visual), Aptos->Carlito(visual)); export with that registry writes Aptos Display/Aptos",
+    "preview needs office-pack substitution (Aptos Display->Intos Display(metric), Aptos->Intos(metric)); export with that registry writes Aptos Display/Aptos",
     "theme major/minor ea or cs typeface is empty"
    ]
   },
@@ -3426,7 +3555,7 @@
    "preview": {
     "hostFonts": true,
     "bundledBase": "font-unavailable:Grandview Display",
-    "officePackVisual": "font-unavailable:Grandview Display"
+    "officePackVisual": true
    },
    "export": {
     "default": true,
@@ -3450,8 +3579,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Barlow",
+     "body": "substitute-visual:Barlow"
     },
     "previewFonts": {
      "heading": "Grandview Display",
@@ -3468,9 +3597,16 @@
      "family": "Grandview Display"
     },
     "previewOfficeVisual": {
-     "ok": false,
-     "error": "font-unavailable",
-     "family": "Grandview Display"
+     "ok": true,
+     "fonts": {
+      "heading": "Barlow",
+      "body": "Barlow",
+      "code": "Roboto Mono"
+     },
+     "substitutions": [
+      "Grandview Display->Barlow(visual)",
+      "Grandview->Barlow(visual)"
+     ]
     },
     "exportThemeMajorLatin": "Grandview Display",
     "exportThemeMinorLatin": "Grandview",
@@ -3510,7 +3646,12 @@
     },
     "reimportFontScheme": "grandview",
     "exportWithOfficeVisualRegistry": {
-     "error": "font-unavailable"
+     "major": "Grandview Display",
+     "minor": "Grandview",
+     "runFaces": [
+      "Grandview Display",
+      "Grandview"
+     ]
     }
    },
    "licensing": {
@@ -3520,15 +3661,15 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Barlow",
+     "body": "substitute-visual:Barlow"
     }
    },
-   "previewTier": "host-only",
+   "previewTier": "substitute",
    "classification": "partial",
-   "engineSummary": "export writes chosen families; preview host fonts only (strict: font-unavailable)",
+   "engineSummary": "export writes chosen families; preview office-pack substitute Grandview Display->Barlow(visual),Grandview->Barlow(visual)",
    "reasons": [
-    "no bundled or substitute face: strict preview throws font-unavailable (Grandview Display); host-font preview is unmeasured fallback",
+    "preview needs office-pack substitution (Grandview Display->Barlow(visual), Grandview->Barlow(visual)); export with that registry writes Grandview Display/Grandview",
     "theme major/minor ea or cs typeface is empty"
    ]
   },
@@ -3543,7 +3684,7 @@
    "preview": {
     "hostFonts": true,
     "bundledBase": "font-unavailable:Seaford Display",
-    "officePackVisual": "font-unavailable:Seaford Display"
+    "officePackVisual": true
    },
    "export": {
     "default": true,
@@ -3567,8 +3708,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Source Sans 3",
+     "body": "substitute-visual:Source Sans 3"
     },
     "previewFonts": {
      "heading": "Seaford Display",
@@ -3585,9 +3726,16 @@
      "family": "Seaford Display"
     },
     "previewOfficeVisual": {
-     "ok": false,
-     "error": "font-unavailable",
-     "family": "Seaford Display"
+     "ok": true,
+     "fonts": {
+      "heading": "Source Sans 3",
+      "body": "Source Sans 3",
+      "code": "Roboto Mono"
+     },
+     "substitutions": [
+      "Seaford Display->Source Sans 3(visual)",
+      "Seaford->Source Sans 3(visual)"
+     ]
     },
     "exportThemeMajorLatin": "Seaford Display",
     "exportThemeMinorLatin": "Seaford",
@@ -3627,7 +3775,12 @@
     },
     "reimportFontScheme": "seaford",
     "exportWithOfficeVisualRegistry": {
-     "error": "font-unavailable"
+     "major": "Seaford Display",
+     "minor": "Seaford",
+     "runFaces": [
+      "Seaford Display",
+      "Seaford"
+     ]
     }
    },
    "licensing": {
@@ -3637,15 +3790,15 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Source Sans 3",
+     "body": "substitute-visual:Source Sans 3"
     }
    },
-   "previewTier": "host-only",
+   "previewTier": "substitute",
    "classification": "partial",
-   "engineSummary": "export writes chosen families; preview host fonts only (strict: font-unavailable)",
+   "engineSummary": "export writes chosen families; preview office-pack substitute Seaford Display->Source Sans 3(visual),Seaford->Source Sans 3(visual)",
    "reasons": [
-    "no bundled or substitute face: strict preview throws font-unavailable (Seaford Display); host-font preview is unmeasured fallback",
+    "preview needs office-pack substitution (Seaford Display->Source Sans 3(visual), Seaford->Source Sans 3(visual)); export with that registry writes Seaford Display/Seaford",
     "theme major/minor ea or cs typeface is empty"
    ]
   },
@@ -3660,7 +3813,7 @@
    "preview": {
     "hostFonts": true,
     "bundledBase": "font-unavailable:Skeena Display",
-    "officePackVisual": "font-unavailable:Skeena Display"
+    "officePackVisual": true
    },
    "export": {
     "default": true,
@@ -3684,8 +3837,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Open Sans",
+     "body": "substitute-visual:Open Sans"
     },
     "previewFonts": {
      "heading": "Skeena Display",
@@ -3702,9 +3855,16 @@
      "family": "Skeena Display"
     },
     "previewOfficeVisual": {
-     "ok": false,
-     "error": "font-unavailable",
-     "family": "Skeena Display"
+     "ok": true,
+     "fonts": {
+      "heading": "Open Sans",
+      "body": "Open Sans",
+      "code": "Roboto Mono"
+     },
+     "substitutions": [
+      "Skeena Display->Open Sans(visual)",
+      "Skeena->Open Sans(visual)"
+     ]
     },
     "exportThemeMajorLatin": "Skeena Display",
     "exportThemeMinorLatin": "Skeena",
@@ -3744,7 +3904,12 @@
     },
     "reimportFontScheme": "skeena",
     "exportWithOfficeVisualRegistry": {
-     "error": "font-unavailable"
+     "major": "Skeena Display",
+     "minor": "Skeena",
+     "runFaces": [
+      "Skeena Display",
+      "Skeena"
+     ]
     }
    },
    "licensing": {
@@ -3754,15 +3919,15 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Open Sans",
+     "body": "substitute-visual:Open Sans"
     }
    },
-   "previewTier": "host-only",
+   "previewTier": "substitute",
    "classification": "partial",
-   "engineSummary": "export writes chosen families; preview host fonts only (strict: font-unavailable)",
+   "engineSummary": "export writes chosen families; preview office-pack substitute Skeena Display->Open Sans(visual),Skeena->Open Sans(visual)",
    "reasons": [
-    "no bundled or substitute face: strict preview throws font-unavailable (Skeena Display); host-font preview is unmeasured fallback",
+    "preview needs office-pack substitution (Skeena Display->Open Sans(visual), Skeena->Open Sans(visual)); export with that registry writes Skeena Display/Skeena",
     "theme major/minor ea or cs typeface is empty"
    ]
   },
@@ -3777,7 +3942,7 @@
    "preview": {
     "hostFonts": true,
     "bundledBase": "font-unavailable:Tenorite Display",
-    "officePackVisual": "font-unavailable:Tenorite Display"
+    "officePackVisual": true
    },
    "export": {
     "default": true,
@@ -3801,8 +3966,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Figtree",
+     "body": "substitute-visual:Figtree"
     },
     "previewFonts": {
      "heading": "Tenorite Display",
@@ -3819,9 +3984,16 @@
      "family": "Tenorite Display"
     },
     "previewOfficeVisual": {
-     "ok": false,
-     "error": "font-unavailable",
-     "family": "Tenorite Display"
+     "ok": true,
+     "fonts": {
+      "heading": "Figtree",
+      "body": "Figtree",
+      "code": "Roboto Mono"
+     },
+     "substitutions": [
+      "Tenorite Display->Figtree(visual)",
+      "Tenorite->Figtree(visual)"
+     ]
     },
     "exportThemeMajorLatin": "Tenorite Display",
     "exportThemeMinorLatin": "Tenorite",
@@ -3861,7 +4033,12 @@
     },
     "reimportFontScheme": "tenorite",
     "exportWithOfficeVisualRegistry": {
-     "error": "font-unavailable"
+     "major": "Tenorite Display",
+     "minor": "Tenorite",
+     "runFaces": [
+      "Tenorite Display",
+      "Tenorite"
+     ]
     }
    },
    "licensing": {
@@ -3871,15 +4048,15 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Figtree",
+     "body": "substitute-visual:Figtree"
     }
    },
-   "previewTier": "host-only",
+   "previewTier": "substitute",
    "classification": "partial",
-   "engineSummary": "export writes chosen families; preview host fonts only (strict: font-unavailable)",
+   "engineSummary": "export writes chosen families; preview office-pack substitute Tenorite Display->Figtree(visual),Tenorite->Figtree(visual)",
    "reasons": [
-    "no bundled or substitute face: strict preview throws font-unavailable (Tenorite Display); host-font preview is unmeasured fallback",
+    "preview needs office-pack substitution (Tenorite Display->Figtree(visual), Tenorite->Figtree(visual)); export with that registry writes Tenorite Display/Tenorite",
     "theme major/minor ea or cs typeface is empty"
    ]
   },
@@ -3918,8 +4095,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Gelasio",
-     "body": "substitute-visual:Gelasio"
+     "heading": "substitute-metric:Gelasio",
+     "body": "substitute-metric:Gelasio"
     },
     "previewFonts": {
      "heading": "Georgia",
@@ -3942,7 +4119,7 @@
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Georgia->Gelasio(visual)"
+      "Georgia->Gelasio(metric)"
      ]
     },
     "exportThemeMajorLatin": "Georgia",
@@ -3995,15 +4172,15 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "substitute-visual:Gelasio",
-     "body": "substitute-visual:Gelasio"
+     "heading": "substitute-metric:Gelasio",
+     "body": "substitute-metric:Gelasio"
     }
    },
    "previewTier": "substitute",
    "classification": "partial",
-   "engineSummary": "export writes chosen families; preview office-pack substitute Georgia->Gelasio(visual)",
+   "engineSummary": "export writes chosen families; preview office-pack substitute Georgia->Gelasio(metric)",
    "reasons": [
-    "preview needs office-pack substitution (Georgia->Gelasio(visual)); export with that registry writes Georgia/Georgia",
+    "preview needs office-pack substitution (Georgia->Gelasio(metric)); export with that registry writes Georgia/Georgia",
     "theme major/minor ea or cs typeface is empty"
    ]
   },
@@ -4042,8 +4219,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual-not-bundled:Noto Sans CJK SC",
-     "body": "substitute-visual-not-bundled:Noto Sans CJK SC"
+     "heading": "substitute-visual:Noto Sans SC",
+     "body": "substitute-visual:Noto Sans SC"
     },
     "previewFonts": {
      "heading": "Microsoft YaHei",
@@ -4115,8 +4292,8 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "substitute-visual-not-bundled:Noto Sans CJK SC",
-     "body": "substitute-visual-not-bundled:Noto Sans CJK SC"
+     "heading": "substitute-visual:Noto Sans SC",
+     "body": "substitute-visual:Noto Sans SC"
     }
    },
    "previewTier": "host-only",
@@ -4163,8 +4340,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual-not-bundled:Noto Serif CJK SC",
-     "body": "substitute-visual-not-bundled:Noto Serif CJK SC"
+     "heading": "substitute-visual:Noto Sans SC",
+     "body": "substitute-visual:Noto Sans SC"
     },
     "previewFonts": {
      "heading": "SimSun",
@@ -4236,8 +4413,8 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "substitute-visual-not-bundled:Noto Serif CJK SC",
-     "body": "substitute-visual-not-bundled:Noto Serif CJK SC"
+     "heading": "substitute-visual:Noto Sans SC",
+     "body": "substitute-visual:Noto Sans SC"
     }
    },
    "previewTier": "host-only",
@@ -4284,8 +4461,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans SC",
+     "body": "substitute-visual:Noto Sans SC"
     },
     "previewFonts": {
      "heading": "FangSong",
@@ -4357,8 +4534,8 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans SC",
+     "body": "substitute-visual:Noto Sans SC"
     }
    },
    "previewTier": "host-only",
@@ -4405,8 +4582,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual-not-bundled:Noto Sans CJK JP",
-     "body": "substitute-visual-not-bundled:Noto Sans CJK JP"
+     "heading": "substitute-visual:Noto Sans JP",
+     "body": "substitute-visual:Noto Sans JP"
     },
     "previewFonts": {
      "heading": "Yu Gothic",
@@ -4478,8 +4655,8 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "substitute-visual-not-bundled:Noto Sans CJK JP",
-     "body": "substitute-visual-not-bundled:Noto Sans CJK JP"
+     "heading": "substitute-visual:Noto Sans JP",
+     "body": "substitute-visual:Noto Sans JP"
     }
    },
    "previewTier": "host-only",
@@ -4526,8 +4703,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans TC",
+     "body": "substitute-visual:Noto Sans TC"
     },
     "previewFonts": {
      "heading": "PMingLiU",
@@ -4599,8 +4776,8 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans TC",
+     "body": "substitute-visual:Noto Sans TC"
     }
    },
    "previewTier": "host-only",
@@ -4647,8 +4824,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans TC",
+     "body": "substitute-visual:Noto Sans TC"
     },
     "previewFonts": {
      "heading": "MingLiU",
@@ -4720,8 +4897,8 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans TC",
+     "body": "substitute-visual:Noto Sans TC"
     }
    },
    "previewTier": "host-only",
@@ -4768,8 +4945,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans JP",
+     "body": "substitute-visual:Noto Sans JP"
     },
     "previewFonts": {
      "heading": "MS Mincho",
@@ -4841,8 +5018,8 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans JP",
+     "body": "substitute-visual:Noto Sans JP"
     }
    },
    "previewTier": "host-only",
@@ -4889,8 +5066,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual-not-bundled:Noto Sans CJK KR",
-     "body": "substitute-visual-not-bundled:Noto Sans CJK KR"
+     "heading": "substitute-visual:Noto Sans KR",
+     "body": "substitute-visual:Noto Sans KR"
     },
     "previewFonts": {
      "heading": "Malgun Gothic",
@@ -4962,8 +5139,8 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "substitute-visual-not-bundled:Noto Sans CJK KR",
-     "body": "substitute-visual-not-bundled:Noto Sans CJK KR"
+     "heading": "substitute-visual:Noto Sans KR",
+     "body": "substitute-visual:Noto Sans KR"
     }
    },
    "previewTier": "host-only",
@@ -5010,8 +5187,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans KR",
+     "body": "substitute-visual:Noto Sans KR"
     },
     "previewFonts": {
      "heading": "BatangChe",
@@ -5086,8 +5263,8 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans KR",
+     "body": "substitute-visual:Noto Sans KR"
     }
    },
    "previewTier": "host-only",
@@ -5134,8 +5311,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans KR",
+     "body": "substitute-visual:Noto Sans KR"
     },
     "previewFonts": {
      "heading": "GungsuhChe",
@@ -5210,8 +5387,8 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans KR",
+     "body": "substitute-visual:Noto Sans KR"
     }
    },
    "previewTier": "host-only",
@@ -5258,8 +5435,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans Devanagari",
+     "body": "substitute-visual:Noto Sans Devanagari"
     },
     "previewFonts": {
      "heading": "Mangal",
@@ -5331,8 +5508,8 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans Devanagari",
+     "body": "substitute-visual:Noto Sans Devanagari"
     }
    },
    "previewTier": "host-only",
@@ -5379,8 +5556,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans Devanagari",
+     "body": "substitute-visual:Noto Sans Devanagari"
     },
     "previewFonts": {
      "heading": "Nirmala UI",
@@ -5452,8 +5629,8 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans Devanagari",
+     "body": "substitute-visual:Noto Sans Devanagari"
     }
    },
    "previewTier": "host-only",
@@ -5500,8 +5677,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans Tamil",
+     "body": "substitute-visual:Noto Sans Tamil"
     },
     "previewFonts": {
      "heading": "Latha",
@@ -5573,8 +5750,8 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans Tamil",
+     "body": "substitute-visual:Noto Sans Tamil"
     }
    },
    "previewTier": "host-only",
@@ -5621,8 +5798,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Serif Hebrew",
+     "body": "substitute-visual:Noto Serif Hebrew"
     },
     "previewFonts": {
      "heading": "David",
@@ -5694,8 +5871,8 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Serif Hebrew",
+     "body": "substitute-visual:Noto Serif Hebrew"
     }
    },
    "previewTier": "host-only",
@@ -5742,8 +5919,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans Hebrew",
+     "body": "substitute-visual:Noto Sans Hebrew"
     },
     "previewFonts": {
      "heading": "Miriam",
@@ -5815,8 +5992,8 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans Hebrew",
+     "body": "substitute-visual:Noto Sans Hebrew"
     }
    },
    "previewTier": "host-only",
@@ -5863,8 +6040,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans Hebrew",
+     "body": "substitute-visual:Noto Sans Hebrew"
     },
     "previewFonts": {
      "heading": "Gisha",
@@ -5936,8 +6113,8 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans Hebrew",
+     "body": "substitute-visual:Noto Sans Hebrew"
     }
    },
    "previewTier": "host-only",
@@ -5984,8 +6161,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans Bengali",
+     "body": "substitute-visual:Noto Sans Bengali"
     },
     "previewFonts": {
      "heading": "Vrinda",
@@ -6057,8 +6234,8 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans Bengali",
+     "body": "substitute-visual:Noto Sans Bengali"
     }
    },
    "previewTier": "host-only",
@@ -6105,8 +6282,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans Gujarati",
+     "body": "substitute-visual:Noto Sans Gujarati"
     },
     "previewFonts": {
      "heading": "Shruti",
@@ -6178,8 +6355,8 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans Gujarati",
+     "body": "substitute-visual:Noto Sans Gujarati"
     }
    },
    "previewTier": "host-only",
@@ -6226,8 +6403,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans Kannada",
+     "body": "substitute-visual:Noto Sans Kannada"
     },
     "previewFonts": {
      "heading": "Tunga",
@@ -6299,8 +6476,8 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans Kannada",
+     "body": "substitute-visual:Noto Sans Kannada"
     }
    },
    "previewTier": "host-only",
@@ -6347,8 +6524,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans Malayalam",
+     "body": "substitute-visual:Noto Sans Malayalam"
     },
     "previewFonts": {
      "heading": "Kartika",
@@ -6420,8 +6597,8 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans Malayalam",
+     "body": "substitute-visual:Noto Sans Malayalam"
     }
    },
    "previewTier": "host-only",
@@ -6468,8 +6645,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans Oriya",
+     "body": "substitute-visual:Noto Sans Oriya"
     },
     "previewFonts": {
      "heading": "Kalinga",
@@ -6541,8 +6718,8 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans Oriya",
+     "body": "substitute-visual:Noto Sans Oriya"
     }
    },
    "previewTier": "host-only",
@@ -6589,8 +6766,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans Gurmukhi",
+     "body": "substitute-visual:Noto Sans Gurmukhi"
     },
     "previewFonts": {
      "heading": "Raavi",
@@ -6662,8 +6839,8 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans Gurmukhi",
+     "body": "substitute-visual:Noto Sans Gurmukhi"
     }
    },
    "previewTier": "host-only",
@@ -6710,8 +6887,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans Telugu",
+     "body": "substitute-visual:Noto Sans Telugu"
     },
     "previewFonts": {
      "heading": "Gautami",
@@ -6783,8 +6960,8 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans Telugu",
+     "body": "substitute-visual:Noto Sans Telugu"
     }
    },
    "previewTier": "host-only",
@@ -6831,8 +7008,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Naskh Arabic",
+     "body": "substitute-visual:Noto Naskh Arabic"
     },
     "previewFonts": {
      "heading": "Arabic Typesetting",
@@ -6904,8 +7081,8 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Naskh Arabic",
+     "body": "substitute-visual:Noto Naskh Arabic"
     }
    },
    "previewTier": "host-only",
@@ -6952,8 +7129,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual-not-bundled:Noto Sans CJK TC",
-     "body": "substitute-visual-not-bundled:Noto Sans CJK TC"
+     "heading": "substitute-visual:Noto Sans TC",
+     "body": "substitute-visual:Noto Sans TC"
     },
     "previewFonts": {
      "heading": "Microsoft JhengHei",
@@ -7025,8 +7202,8 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "substitute-visual-not-bundled:Noto Sans CJK TC",
-     "body": "substitute-visual-not-bundled:Noto Sans CJK TC"
+     "heading": "substitute-visual:Noto Sans TC",
+     "body": "substitute-visual:Noto Sans TC"
     }
    },
    "previewTier": "host-only",
@@ -7073,8 +7250,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual-not-bundled:Noto Sans CJK JP",
-     "body": "substitute-visual-not-bundled:Noto Sans CJK JP"
+     "heading": "substitute-visual:Noto Sans JP",
+     "body": "substitute-visual:Noto Sans JP"
     },
     "previewFonts": {
      "heading": "Meiryo",
@@ -7146,8 +7323,8 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "substitute-visual-not-bundled:Noto Sans CJK JP",
-     "body": "substitute-visual-not-bundled:Noto Sans CJK JP"
+     "heading": "substitute-visual:Noto Sans JP",
+     "body": "substitute-visual:Noto Sans JP"
     }
    },
    "previewTier": "host-only",
@@ -7194,8 +7371,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans Thai",
+     "body": "substitute-visual:Noto Sans Thai"
     },
     "previewFonts": {
      "heading": "Angsana New",
@@ -7267,8 +7444,8 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans Thai",
+     "body": "substitute-visual:Noto Sans Thai"
     }
    },
    "previewTier": "host-only",
@@ -7315,8 +7492,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans Devanagari",
+     "body": "substitute-visual:Noto Sans Devanagari"
     },
     "previewFonts": {
      "heading": "Aparajita",
@@ -7388,8 +7565,8 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans Devanagari",
+     "body": "substitute-visual:Noto Sans Devanagari"
     }
    },
    "previewTier": "host-only",
@@ -7436,8 +7613,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans Thai",
+     "body": "substitute-visual:Noto Sans Thai"
     },
     "previewFonts": {
      "heading": "DilleniaUPC",
@@ -7509,8 +7686,8 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans Thai",
+     "body": "substitute-visual:Noto Sans Thai"
     }
    },
    "previewTier": "host-only",
@@ -7557,8 +7734,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Naskh Arabic",
+     "body": "substitute-visual:Noto Naskh Arabic"
     },
     "previewFonts": {
      "heading": "Sakkal Majalla",
@@ -7630,8 +7807,8 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Naskh Arabic",
+     "body": "substitute-visual:Noto Naskh Arabic"
     }
    },
    "previewTier": "host-only",
@@ -7678,8 +7855,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans Bengali",
+     "body": "substitute-visual:Noto Sans Bengali"
     },
     "previewFonts": {
      "heading": "Shonar Bangla",
@@ -7751,8 +7928,8 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans Bengali",
+     "body": "substitute-visual:Noto Sans Bengali"
     }
    },
    "previewTier": "host-only",
@@ -7799,8 +7976,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans",
+     "body": "substitute-visual:Noto Sans"
     },
     "previewFonts": {
      "heading": "Sylfaen",
@@ -7872,8 +8049,8 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans",
+     "body": "substitute-visual:Noto Sans"
     }
    },
    "previewTier": "host-only",
@@ -7920,8 +8097,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Naskh Arabic",
+     "body": "substitute-visual:Noto Naskh Arabic"
     },
     "previewFonts": {
      "heading": "Traditional Arabic",
@@ -7993,8 +8170,8 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Naskh Arabic",
+     "body": "substitute-visual:Noto Naskh Arabic"
     }
    },
    "previewTier": "host-only",
@@ -8017,7 +8194,7 @@
    "preview": {
     "hostFonts": true,
     "bundledBase": "font-unavailable:Montserrat",
-    "officePackVisual": "font-unavailable:Montserrat"
+    "officePackVisual": true
    },
    "export": {
     "default": true,
@@ -8041,8 +8218,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "bundled-office-pack",
+     "body": "bundled-office-pack"
     },
     "previewFonts": {
      "heading": "Montserrat",
@@ -8058,9 +8235,13 @@
      "family": "Montserrat"
     },
     "previewOfficeVisual": {
-     "ok": false,
-     "error": "font-unavailable",
-     "family": "Montserrat"
+     "ok": true,
+     "fonts": {
+      "heading": "Montserrat",
+      "body": "Montserrat",
+      "code": "Roboto Mono"
+     },
+     "substitutions": []
     },
     "exportThemeMajorLatin": "Montserrat",
     "exportThemeMinorLatin": "Montserrat",
@@ -8098,25 +8279,29 @@
     },
     "reimportFontScheme": "montserrat",
     "exportWithOfficeVisualRegistry": {
-     "error": "font-unavailable"
+     "major": "Montserrat",
+     "minor": "Montserrat",
+     "runFaces": [
+      "Montserrat"
+     ]
     }
    },
    "licensing": {
     "scope": "system",
     "license": "Open Font License via Google Fonts; system fallback supported in PowerPoint.",
     "openlyLicensed": true,
-    "webFontUrl": "https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap",
+    "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "bundled-office-pack",
+     "body": "bundled-office-pack"
     }
    },
-   "previewTier": "host-only",
+   "previewTier": "substitute",
    "classification": "partial",
-   "engineSummary": "export writes chosen families; preview host fonts only (strict: font-unavailable)",
+   "engineSummary": "export writes chosen families; preview office-pack substitute ",
    "reasons": [
-    "no bundled or substitute face: strict preview throws font-unavailable (Montserrat); host-font preview is unmeasured fallback",
+    "preview needs office-pack substitution (); export with that registry writes Montserrat/Montserrat",
     "theme major/minor ea or cs typeface is empty"
    ]
   },
@@ -8131,7 +8316,7 @@
    "preview": {
     "hostFonts": true,
     "bundledBase": "font-unavailable:Open Sans",
-    "officePackVisual": "font-unavailable:Open Sans"
+    "officePackVisual": true
    },
    "export": {
     "default": true,
@@ -8155,8 +8340,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "bundled-office-pack",
+     "body": "bundled-office-pack"
     },
     "previewFonts": {
      "heading": "Open Sans",
@@ -8172,9 +8357,13 @@
      "family": "Open Sans"
     },
     "previewOfficeVisual": {
-     "ok": false,
-     "error": "font-unavailable",
-     "family": "Open Sans"
+     "ok": true,
+     "fonts": {
+      "heading": "Open Sans",
+      "body": "Open Sans",
+      "code": "Roboto Mono"
+     },
+     "substitutions": []
     },
     "exportThemeMajorLatin": "Open Sans",
     "exportThemeMinorLatin": "Open Sans",
@@ -8212,25 +8401,29 @@
     },
     "reimportFontScheme": "open-sans",
     "exportWithOfficeVisualRegistry": {
-     "error": "font-unavailable"
+     "major": "Open Sans",
+     "minor": "Open Sans",
+     "runFaces": [
+      "Open Sans"
+     ]
     }
    },
    "licensing": {
     "scope": "system",
     "license": "Open Font License via Google Fonts; system fallback supported in PowerPoint.",
     "openlyLicensed": true,
-    "webFontUrl": "https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap",
+    "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "bundled-office-pack",
+     "body": "bundled-office-pack"
     }
    },
-   "previewTier": "host-only",
+   "previewTier": "substitute",
    "classification": "partial",
-   "engineSummary": "export writes chosen families; preview host fonts only (strict: font-unavailable)",
+   "engineSummary": "export writes chosen families; preview office-pack substitute ",
    "reasons": [
-    "no bundled or substitute face: strict preview throws font-unavailable (Open Sans); host-font preview is unmeasured fallback",
+    "preview needs office-pack substitution (); export with that registry writes Open Sans/Open Sans",
     "theme major/minor ea or cs typeface is empty"
    ]
   },
@@ -8245,7 +8438,7 @@
    "preview": {
     "hostFonts": true,
     "bundledBase": "font-unavailable:Poppins",
-    "officePackVisual": "font-unavailable:Poppins"
+    "officePackVisual": true
    },
    "export": {
     "default": true,
@@ -8269,8 +8462,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "bundled-office-pack",
+     "body": "bundled-office-pack"
     },
     "previewFonts": {
      "heading": "Poppins",
@@ -8286,9 +8479,13 @@
      "family": "Poppins"
     },
     "previewOfficeVisual": {
-     "ok": false,
-     "error": "font-unavailable",
-     "family": "Poppins"
+     "ok": true,
+     "fonts": {
+      "heading": "Poppins",
+      "body": "Poppins",
+      "code": "Roboto Mono"
+     },
+     "substitutions": []
     },
     "exportThemeMajorLatin": "Poppins",
     "exportThemeMinorLatin": "Poppins",
@@ -8326,25 +8523,29 @@
     },
     "reimportFontScheme": "poppins",
     "exportWithOfficeVisualRegistry": {
-     "error": "font-unavailable"
+     "major": "Poppins",
+     "minor": "Poppins",
+     "runFaces": [
+      "Poppins"
+     ]
     }
    },
    "licensing": {
     "scope": "system",
     "license": "Open Font License via Google Fonts; system fallback supported in PowerPoint.",
     "openlyLicensed": true,
-    "webFontUrl": "https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap",
+    "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "bundled-office-pack",
+     "body": "bundled-office-pack"
     }
    },
-   "previewTier": "host-only",
+   "previewTier": "substitute",
    "classification": "partial",
-   "engineSummary": "export writes chosen families; preview host fonts only (strict: font-unavailable)",
+   "engineSummary": "export writes chosen families; preview office-pack substitute ",
    "reasons": [
-    "no bundled or substitute face: strict preview throws font-unavailable (Poppins); host-font preview is unmeasured fallback",
+    "preview needs office-pack substitution (); export with that registry writes Poppins/Poppins",
     "theme major/minor ea or cs typeface is empty"
    ]
   },
@@ -8359,7 +8560,7 @@
    "preview": {
     "hostFonts": true,
     "bundledBase": "font-unavailable:PT Serif",
-    "officePackVisual": "font-unavailable:PT Serif"
+    "officePackVisual": true
    },
    "export": {
     "default": true,
@@ -8383,8 +8584,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "bundled-office-pack",
+     "body": "bundled-office-pack"
     },
     "previewFonts": {
      "heading": "PT Serif",
@@ -8400,9 +8601,13 @@
      "family": "PT Serif"
     },
     "previewOfficeVisual": {
-     "ok": false,
-     "error": "font-unavailable",
-     "family": "PT Serif"
+     "ok": true,
+     "fonts": {
+      "heading": "PT Serif",
+      "body": "PT Serif",
+      "code": "Roboto Mono"
+     },
+     "substitutions": []
     },
     "exportThemeMajorLatin": "PT Serif",
     "exportThemeMinorLatin": "PT Serif",
@@ -8440,25 +8645,29 @@
     },
     "reimportFontScheme": "pt-serif",
     "exportWithOfficeVisualRegistry": {
-     "error": "font-unavailable"
+     "major": "PT Serif",
+     "minor": "PT Serif",
+     "runFaces": [
+      "PT Serif"
+     ]
     }
    },
    "licensing": {
     "scope": "system",
     "license": "Open Font License via Google Fonts; system fallback supported in PowerPoint.",
     "openlyLicensed": true,
-    "webFontUrl": "https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;600;700&display=swap",
+    "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "bundled-office-pack",
+     "body": "bundled-office-pack"
     }
    },
-   "previewTier": "host-only",
+   "previewTier": "substitute",
    "classification": "partial",
-   "engineSummary": "export writes chosen families; preview host fonts only (strict: font-unavailable)",
+   "engineSummary": "export writes chosen families; preview office-pack substitute ",
    "reasons": [
-    "no bundled or substitute face: strict preview throws font-unavailable (PT Serif); host-font preview is unmeasured fallback",
+    "preview needs office-pack substitution (); export with that registry writes PT Serif/PT Serif",
     "theme major/minor ea or cs typeface is empty"
    ]
   },
@@ -8561,7 +8770,7 @@
     "scope": "system",
     "license": "Open Font License via Google Fonts; system fallback supported in PowerPoint.",
     "openlyLicensed": true,
-    "webFontUrl": "https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700&display=swap",
+    "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
      "heading": "not-bundled",
@@ -8686,7 +8895,7 @@
     "scope": "system",
     "license": "Open Font License via Google Fonts; system fallback supported in PowerPoint.",
     "openlyLicensed": true,
-    "webFontUrl": "https://fonts.googleapis.com/css2?family=Roboto:wght@400;600;700&display=swap",
+    "webFontUrl": null,
     "bundledForPreview": true,
     "availability": {
      "heading": "bundled-base",
@@ -8805,7 +9014,7 @@
     "scope": "system",
     "license": "Open Font License via Google Fonts; system fallback supported in PowerPoint.",
     "openlyLicensed": true,
-    "webFontUrl": "https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;600;700&display=swap",
+    "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
      "heading": "bundled-office-pack",
@@ -8926,7 +9135,7 @@
     "scope": "system",
     "license": "Open Font License via Google Fonts; system fallback supported in PowerPoint.",
     "openlyLicensed": true,
-    "webFontUrl": "https://fonts.googleapis.com/css2?family=Noto+Sans+Armenian:wght@400;600;700&display=swap",
+    "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
      "heading": "bundled-office-pack",
@@ -9047,7 +9256,7 @@
     "scope": "system",
     "license": "Open Font License via Google Fonts; system fallback supported in PowerPoint.",
     "openlyLicensed": true,
-    "webFontUrl": "https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;600;700&display=swap",
+    "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
      "heading": "bundled-office-pack",
@@ -9168,7 +9377,7 @@
     "scope": "system",
     "license": "Open Font License via Google Fonts; system fallback supported in PowerPoint.",
     "openlyLicensed": true,
-    "webFontUrl": "https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700&display=swap",
+    "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
      "heading": "bundled-office-pack",
@@ -9289,7 +9498,7 @@
     "scope": "system",
     "license": "Open Font License via Google Fonts; system fallback supported in PowerPoint.",
     "openlyLicensed": true,
-    "webFontUrl": "https://fonts.googleapis.com/css2?family=Noto+Sans+Georgian:wght@400;600;700&display=swap",
+    "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
      "heading": "bundled-office-pack",
@@ -9410,7 +9619,7 @@
     "scope": "system",
     "license": "Open Font License via Google Fonts; system fallback supported in PowerPoint.",
     "openlyLicensed": true,
-    "webFontUrl": "https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati:wght@400;600;700&display=swap",
+    "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
      "heading": "bundled-office-pack",
@@ -9531,7 +9740,7 @@
     "scope": "system",
     "license": "Open Font License via Google Fonts; system fallback supported in PowerPoint.",
     "openlyLicensed": true,
-    "webFontUrl": "https://fonts.googleapis.com/css2?family=Noto+Sans+Gurmukhi:wght@400;600;700&display=swap",
+    "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
      "heading": "bundled-office-pack",
@@ -9652,7 +9861,7 @@
     "scope": "system",
     "license": "Open Font License via Google Fonts; system fallback supported in PowerPoint.",
     "openlyLicensed": true,
-    "webFontUrl": "https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@400;600;700&display=swap",
+    "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
      "heading": "bundled-office-pack",
@@ -9773,7 +9982,7 @@
     "scope": "system",
     "license": "Open Font License via Google Fonts; system fallback supported in PowerPoint.",
     "openlyLicensed": true,
-    "webFontUrl": "https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;700&display=swap",
+    "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
      "heading": "bundled-office-pack",
@@ -9894,7 +10103,7 @@
     "scope": "system",
     "license": "Open Font License via Google Fonts; system fallback supported in PowerPoint.",
     "openlyLicensed": true,
-    "webFontUrl": "https://fonts.googleapis.com/css2?family=Noto+Sans+Kannada:wght@400;600;700&display=swap",
+    "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
      "heading": "bundled-office-pack",
@@ -10015,7 +10224,7 @@
     "scope": "system",
     "license": "Open Font License via Google Fonts; system fallback supported in PowerPoint.",
     "openlyLicensed": true,
-    "webFontUrl": "https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700&display=swap",
+    "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
      "heading": "bundled-office-pack",
@@ -10136,7 +10345,7 @@
     "scope": "system",
     "license": "Open Font License via Google Fonts; system fallback supported in PowerPoint.",
     "openlyLicensed": true,
-    "webFontUrl": "https://fonts.googleapis.com/css2?family=Noto+Sans+Malayalam:wght@400;600;700&display=swap",
+    "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
      "heading": "bundled-office-pack",
@@ -10257,7 +10466,7 @@
     "scope": "system",
     "license": "Open Font License via Google Fonts; system fallback supported in PowerPoint.",
     "openlyLicensed": true,
-    "webFontUrl": "https://fonts.googleapis.com/css2?family=Noto+Sans+Mongolian:wght@400;600;700&display=swap",
+    "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
      "heading": "bundled-office-pack",
@@ -10378,7 +10587,7 @@
     "scope": "system",
     "license": "Open Font License via Google Fonts; system fallback supported in PowerPoint.",
     "openlyLicensed": true,
-    "webFontUrl": "https://fonts.googleapis.com/css2?family=Noto+Sans+Oriya:wght@400;600;700&display=swap",
+    "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
      "heading": "bundled-office-pack",
@@ -10499,7 +10708,7 @@
     "scope": "system",
     "license": "Open Font License via Google Fonts; system fallback supported in PowerPoint.",
     "openlyLicensed": true,
-    "webFontUrl": "https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;600;700&display=swap",
+    "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
      "heading": "bundled-office-pack",
@@ -10620,7 +10829,7 @@
     "scope": "system",
     "license": "Open Font License via Google Fonts; system fallback supported in PowerPoint.",
     "openlyLicensed": true,
-    "webFontUrl": "https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@400;600;700&display=swap",
+    "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
      "heading": "bundled-office-pack",
@@ -10741,7 +10950,7 @@
     "scope": "system",
     "license": "Open Font License via Google Fonts; system fallback supported in PowerPoint.",
     "openlyLicensed": true,
-    "webFontUrl": "https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;700&display=swap",
+    "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
      "heading": "bundled-office-pack",
@@ -10862,7 +11071,7 @@
     "scope": "system",
     "license": "Open Font License via Google Fonts; system fallback supported in PowerPoint.",
     "openlyLicensed": true,
-    "webFontUrl": "https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;600;700&display=swap",
+    "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
      "heading": "bundled-office-pack",
@@ -10889,7 +11098,7 @@
    "preview": {
     "hostFonts": true,
     "bundledBase": "font-unavailable:Noto Sans",
-    "officePackVisual": "font-unavailable:Noto Sans"
+    "officePackVisual": true
    },
    "export": {
     "default": true,
@@ -10930,9 +11139,13 @@
      "family": "Noto Sans"
     },
     "previewOfficeVisual": {
-     "ok": false,
-     "error": "font-unavailable",
-     "family": "Noto Sans"
+     "ok": true,
+     "fonts": {
+      "heading": "Noto Sans",
+      "body": "Noto Sans",
+      "code": "Roboto Mono"
+     },
+     "substitutions": []
     },
     "exportThemeMajorLatin": "Noto Sans",
     "exportThemeMinorLatin": "Noto Sans",
@@ -10970,31 +11183,35 @@
     },
     "reimportFontScheme": "noto-sans",
     "exportWithOfficeVisualRegistry": {
-     "error": "font-unavailable"
+     "major": "Noto Sans",
+     "minor": "Noto Sans",
+     "runFaces": [
+      "Noto Sans"
+     ]
     },
     "textSampleProbe": {
      "sample": "Universal and clear",
      "none": "ok",
      "base": "font-unavailable:Noto Sans",
-     "officeVisual": "font-unavailable:Noto Sans"
+     "officeVisual": "ok"
     }
    },
    "licensing": {
     "scope": "system",
     "license": "Open Font License via Google Fonts; system fallback supported in PowerPoint.",
     "openlyLicensed": true,
-    "webFontUrl": "https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&display=swap",
+    "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
      "heading": "bundled-office-pack",
      "body": "bundled-office-pack"
     }
    },
-   "previewTier": "host-only",
+   "previewTier": "substitute",
    "classification": "partial",
-   "engineSummary": "export writes chosen families; preview host fonts only (strict: font-unavailable)",
+   "engineSummary": "export writes chosen families; preview office-pack substitute ",
    "reasons": [
-    "no bundled or substitute face: strict preview throws font-unavailable (Noto Sans); host-font preview is unmeasured fallback",
+    "preview needs office-pack substitution (); export with that registry writes Noto Sans/Noto Sans",
     "non-Latin textSample: strict font-unavailable:Noto Sans",
     "theme major/minor ea or cs typeface is empty"
    ]
@@ -11104,7 +11321,7 @@
     "scope": "system",
     "license": "Open Font License via Google Fonts; system fallback supported in PowerPoint.",
     "openlyLicensed": true,
-    "webFontUrl": "https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600;700&display=swap",
+    "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
      "heading": "bundled-office-pack",
@@ -11225,7 +11442,7 @@
     "scope": "system",
     "license": "Open Font License via Google Fonts; system fallback supported in PowerPoint.",
     "openlyLicensed": true,
-    "webFontUrl": "https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;600;700&display=swap",
+    "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
      "heading": "bundled-office-pack",
@@ -11346,7 +11563,7 @@
     "scope": "system",
     "license": "Open Font License via Google Fonts; system fallback supported in PowerPoint.",
     "openlyLicensed": true,
-    "webFontUrl": "https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;600;700&display=swap",
+    "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
      "heading": "bundled-office-pack",
@@ -11467,7 +11684,7 @@
     "scope": "system",
     "license": "Open Font License via Google Fonts; system fallback supported in PowerPoint.",
     "openlyLicensed": true,
-    "webFontUrl": "https://fonts.googleapis.com/css2?family=Noto+Sans+Ethiopic:wght@400;600;700&display=swap",
+    "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
      "heading": "bundled-office-pack",
@@ -11588,7 +11805,7 @@
     "scope": "system",
     "license": "Open Font License via Google Fonts; system fallback supported in PowerPoint.",
     "openlyLicensed": true,
-    "webFontUrl": "https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@400;600;700&display=swap",
+    "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
      "heading": "bundled-office-pack",
@@ -11639,8 +11856,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans Ethiopic",
+     "body": "substitute-visual:Noto Sans Ethiopic"
     },
     "previewFonts": {
      "heading": "Nyala",
@@ -11712,8 +11929,8 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans Ethiopic",
+     "body": "substitute-visual:Noto Sans Ethiopic"
     }
    },
    "previewTier": "host-only",
@@ -11760,8 +11977,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans Khmer",
+     "body": "substitute-visual:Noto Sans Khmer"
     },
     "previewFonts": {
      "heading": "DaunPenh",
@@ -11833,8 +12050,8 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans Khmer",
+     "body": "substitute-visual:Noto Sans Khmer"
     }
    },
    "previewTier": "host-only",
@@ -11881,8 +12098,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans Khmer",
+     "body": "substitute-visual:Noto Sans Khmer"
     },
     "previewFonts": {
      "heading": "Khmer UI",
@@ -11954,8 +12171,8 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans Khmer",
+     "body": "substitute-visual:Noto Sans Khmer"
     }
    },
    "previewTier": "host-only",
@@ -12003,7 +12220,7 @@
     },
     "availability": {
      "heading": "not-bundled",
-     "body": "not-bundled"
+     "body": "substitute-visual:Source Sans 3"
     },
     "previewFonts": {
      "heading": "Playfair Display",
@@ -12073,7 +12290,7 @@
     "bundledForPreview": false,
     "availability": {
      "heading": "not-bundled",
-     "body": "not-bundled"
+     "body": "substitute-visual:Source Sans 3"
     }
    },
    "previewTier": "host-only",
@@ -12095,7 +12312,7 @@
    "preview": {
     "hostFonts": true,
     "bundledBase": "font-unavailable:Montserrat",
-    "officePackVisual": "font-unavailable:Montserrat"
+    "officePackVisual": true
    },
    "export": {
     "default": true,
@@ -12119,8 +12336,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "bundled-office-pack",
+     "body": "bundled-office-pack"
     },
     "previewFonts": {
      "heading": "Montserrat",
@@ -12137,9 +12354,13 @@
      "family": "Montserrat"
     },
     "previewOfficeVisual": {
-     "ok": false,
-     "error": "font-unavailable",
-     "family": "Montserrat"
+     "ok": true,
+     "fonts": {
+      "heading": "Montserrat",
+      "body": "Open Sans",
+      "code": "Roboto Mono"
+     },
+     "substitutions": []
     },
     "exportThemeMajorLatin": "Montserrat",
     "exportThemeMinorLatin": "Open Sans",
@@ -12179,25 +12400,30 @@
     },
     "reimportFontScheme": "modern-professional",
     "exportWithOfficeVisualRegistry": {
-     "error": "font-unavailable"
+     "major": "Montserrat",
+     "minor": "Open Sans",
+     "runFaces": [
+      "Montserrat",
+      "Open Sans"
+     ]
     }
    },
    "licensing": {
     "scope": "legacy-gallery",
     "license": "Open Font License via Google Fonts; preserved as a legacy PPTX.gallery curated pairing.",
     "openlyLicensed": true,
-    "webFontUrl": "https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600;700&display=swap",
+    "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "bundled-office-pack",
+     "body": "bundled-office-pack"
     }
    },
-   "previewTier": "host-only",
+   "previewTier": "substitute",
    "classification": "partial",
-   "engineSummary": "export writes chosen families; preview host fonts only (strict: font-unavailable)",
+   "engineSummary": "export writes chosen families; preview office-pack substitute ",
    "reasons": [
-    "no bundled or substitute face: strict preview throws font-unavailable (Montserrat); host-font preview is unmeasured fallback",
+    "preview needs office-pack substitution (); export with that registry writes Montserrat/Open Sans",
     "theme major/minor ea or cs typeface is empty"
    ]
   },
@@ -12212,7 +12438,7 @@
    "preview": {
     "hostFonts": true,
     "bundledBase": "font-unavailable:Bebas Neue",
-    "officePackVisual": "font-unavailable:Bebas Neue"
+    "officePackVisual": true
    },
    "export": {
     "default": true,
@@ -12236,7 +12462,7 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
+     "heading": "bundled-office-pack",
      "body": "bundled-base"
     },
     "previewFonts": {
@@ -12254,9 +12480,15 @@
      "family": "Bebas Neue"
     },
     "previewOfficeVisual": {
-     "ok": false,
-     "error": "font-unavailable",
-     "family": "Bebas Neue"
+     "ok": true,
+     "fonts": {
+      "heading": "Bebas Neue",
+      "body": "Roboto",
+      "code": "Roboto Mono"
+     },
+     "substitutions": [
+      "Bebas Neue->Bebas Neue(visual)"
+     ]
     },
     "exportThemeMajorLatin": "Bebas Neue",
     "exportThemeMinorLatin": "Roboto",
@@ -12296,25 +12528,30 @@
     },
     "reimportFontScheme": "bold-impact",
     "exportWithOfficeVisualRegistry": {
-     "error": "font-unavailable"
+     "major": "Bebas Neue",
+     "minor": "Roboto",
+     "runFaces": [
+      "Bebas Neue",
+      "Roboto"
+     ]
     }
    },
    "licensing": {
     "scope": "legacy-gallery",
     "license": "Open Font License via Google Fonts; preserved as a legacy PPTX.gallery curated pairing.",
     "openlyLicensed": true,
-    "webFontUrl": "https://fonts.googleapis.com/css2?family=Roboto:wght@400;600;700&display=swap",
+    "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "not-bundled",
+     "heading": "bundled-office-pack",
      "body": "bundled-base"
     }
    },
-   "previewTier": "host-only",
+   "previewTier": "substitute",
    "classification": "partial",
-   "engineSummary": "export writes chosen families; preview host fonts only (strict: font-unavailable)",
+   "engineSummary": "export writes chosen families; preview office-pack substitute Bebas Neue->Bebas Neue(visual)",
    "reasons": [
-    "no bundled or substitute face: strict preview throws font-unavailable (Bebas Neue); host-font preview is unmeasured fallback",
+    "preview needs office-pack substitution (Bebas Neue->Bebas Neue(visual)); export with that registry writes Bebas Neue/Roboto",
     "theme major/minor ea or cs typeface is empty"
    ]
   },
@@ -12329,7 +12566,7 @@
    "preview": {
     "hostFonts": true,
     "bundledBase": "font-unavailable:Lora",
-    "officePackVisual": "font-unavailable:Lora"
+    "officePackVisual": true
    },
    "export": {
     "default": true,
@@ -12353,8 +12590,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "bundled-office-pack",
+     "body": "bundled-office-pack"
     },
     "previewFonts": {
      "heading": "Lora",
@@ -12371,9 +12608,13 @@
      "family": "Lora"
     },
     "previewOfficeVisual": {
-     "ok": false,
-     "error": "font-unavailable",
-     "family": "Lora"
+     "ok": true,
+     "fonts": {
+      "heading": "Lora",
+      "body": "Merriweather Sans",
+      "code": "Roboto Mono"
+     },
+     "substitutions": []
     },
     "exportThemeMajorLatin": "Lora",
     "exportThemeMinorLatin": "Merriweather Sans",
@@ -12413,7 +12654,12 @@
     },
     "reimportFontScheme": "warm-storytelling",
     "exportWithOfficeVisualRegistry": {
-     "error": "font-unavailable"
+     "major": "Lora",
+     "minor": "Merriweather Sans",
+     "runFaces": [
+      "Lora",
+      "Merriweather Sans"
+     ]
     }
    },
    "licensing": {
@@ -12423,15 +12669,15 @@
     "webFontUrl": null,
     "bundledForPreview": false,
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "bundled-office-pack",
+     "body": "bundled-office-pack"
     }
    },
-   "previewTier": "host-only",
+   "previewTier": "substitute",
    "classification": "partial",
-   "engineSummary": "export writes chosen families; preview host fonts only (strict: font-unavailable)",
+   "engineSummary": "export writes chosen families; preview office-pack substitute ",
    "reasons": [
-    "no bundled or substitute face: strict preview throws font-unavailable (Lora); host-font preview is unmeasured fallback",
+    "preview needs office-pack substitution (); export with that registry writes Lora/Merriweather Sans",
     "theme major/minor ea or cs typeface is empty"
    ]
   },
@@ -12470,8 +12716,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -12490,13 +12736,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -12671,8 +12917,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -12691,13 +12937,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -12872,8 +13118,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans Ethiopic",
+     "body": "substitute-visual:Noto Sans Ethiopic"
     },
     "previewFonts": {
      "heading": "Nyala",
@@ -13062,8 +13308,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Naskh Arabic",
+     "body": "substitute-visual:Noto Naskh Arabic"
     },
     "previewFonts": {
      "heading": "Arabic Typesetting",
@@ -13253,8 +13499,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans",
+     "body": "substitute-visual:Noto Sans"
     },
     "previewFonts": {
      "heading": "Sylfaen",
@@ -13443,8 +13689,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -13463,13 +13709,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -13644,8 +13890,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -13664,13 +13910,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -13846,8 +14092,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans Bengali",
+     "body": "substitute-visual:Noto Sans Bengali"
     },
     "previewFonts": {
      "heading": "Shonar Bangla",
@@ -14036,8 +14282,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -14056,13 +14302,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -14237,8 +14483,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -14257,13 +14503,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -14438,8 +14684,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -14458,13 +14704,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -14639,8 +14885,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -14659,13 +14905,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -14840,8 +15086,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -14860,13 +15106,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -15041,8 +15287,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual-not-bundled:Noto Sans CJK SC",
-     "body": "substitute-visual-not-bundled:Noto Sans CJK SC"
+     "heading": "substitute-visual:Noto Sans SC",
+     "body": "substitute-visual:Noto Sans SC"
     },
     "previewFonts": {
      "heading": "Microsoft YaHei",
@@ -15231,8 +15477,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual-not-bundled:Noto Sans CJK TC",
-     "body": "substitute-visual-not-bundled:Noto Sans CJK TC"
+     "heading": "substitute-visual:Noto Sans TC",
+     "body": "substitute-visual:Noto Sans TC"
     },
     "previewFonts": {
      "heading": "Microsoft JhengHei",
@@ -15421,8 +15667,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans Bengali",
+     "body": "substitute-visual:Noto Sans Bengali"
     },
     "previewFonts": {
      "heading": "Vrinda",
@@ -15610,8 +15856,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -15630,13 +15876,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -15811,8 +16057,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -15831,13 +16077,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -16012,8 +16258,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -16032,13 +16278,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -16213,8 +16459,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -16233,13 +16479,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -16414,8 +16660,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -16434,13 +16680,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -16611,8 +16857,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -16631,13 +16877,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -16812,8 +17058,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -16832,13 +17078,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -17013,8 +17259,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -17033,13 +17279,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -17214,8 +17460,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -17234,13 +17480,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -17415,8 +17661,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -17435,13 +17681,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -17612,8 +17858,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -17632,13 +17878,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -17814,8 +18060,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -17834,13 +18080,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -18015,8 +18261,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -18035,13 +18281,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -18216,8 +18462,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -18236,13 +18482,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -18417,8 +18663,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -18437,13 +18683,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -18618,8 +18864,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -18638,13 +18884,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -18819,8 +19065,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans",
+     "body": "substitute-visual:Noto Sans"
     },
     "previewFonts": {
      "heading": "Sylfaen",
@@ -19009,8 +19255,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -19029,13 +19275,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -19210,8 +19456,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -19230,13 +19476,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -19411,8 +19657,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans Gujarati",
+     "body": "substitute-visual:Noto Sans Gujarati"
     },
     "previewFonts": {
      "heading": "Shruti",
@@ -19601,8 +19847,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -19621,13 +19867,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -19802,8 +20048,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Serif Hebrew",
+     "body": "substitute-visual:Noto Serif Hebrew"
     },
     "previewFonts": {
      "heading": "David",
@@ -19993,8 +20239,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans Devanagari",
+     "body": "substitute-visual:Noto Sans Devanagari"
     },
     "previewFonts": {
      "heading": "Mangal",
@@ -20183,8 +20429,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -20203,13 +20449,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -20384,8 +20630,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -20404,13 +20650,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -20585,8 +20831,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -20605,13 +20851,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -20786,8 +21032,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -20806,13 +21052,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -20987,8 +21233,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual-not-bundled:Noto Sans CJK JP",
-     "body": "substitute-visual-not-bundled:Noto Sans CJK JP"
+     "heading": "substitute-visual:Noto Sans JP",
+     "body": "substitute-visual:Noto Sans JP"
     },
     "previewFonts": {
      "heading": "Meiryo",
@@ -21177,8 +21423,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans Kannada",
+     "body": "substitute-visual:Noto Sans Kannada"
     },
     "previewFonts": {
      "heading": "Tunga",
@@ -21367,8 +21613,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -21387,13 +21633,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -21568,8 +21814,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans Khmer",
+     "body": "substitute-visual:Noto Sans Khmer"
     },
     "previewFonts": {
      "heading": "DaunPenh",
@@ -21758,8 +22004,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -21778,13 +22024,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -21959,8 +22205,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual-not-bundled:Noto Sans CJK KR",
-     "body": "substitute-visual-not-bundled:Noto Sans CJK KR"
+     "heading": "substitute-visual:Noto Sans KR",
+     "body": "substitute-visual:Noto Sans KR"
     },
     "previewFonts": {
      "heading": "Malgun Gothic",
@@ -22149,8 +22395,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -22169,13 +22415,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -22350,8 +22596,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -22370,13 +22616,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -22551,8 +22797,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -22571,13 +22817,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -22752,8 +22998,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -22772,13 +23018,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -22953,8 +23199,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -22973,13 +23219,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -23154,8 +23400,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -23174,13 +23420,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -23355,8 +23601,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans Malayalam",
+     "body": "substitute-visual:Noto Sans Malayalam"
     },
     "previewFonts": {
      "heading": "Kartika",
@@ -23545,8 +23791,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -23565,13 +23811,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -23746,8 +23992,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans Devanagari",
+     "body": "substitute-visual:Noto Sans Devanagari"
     },
     "previewFonts": {
      "heading": "Mangal",
@@ -23936,8 +24182,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -23956,13 +24202,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -24137,8 +24383,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans Devanagari",
+     "body": "substitute-visual:Noto Sans Devanagari"
     },
     "previewFonts": {
      "heading": "Mangal",
@@ -24327,8 +24573,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -24347,13 +24593,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -24528,8 +24774,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans Oriya",
+     "body": "substitute-visual:Noto Sans Oriya"
     },
     "previewFonts": {
      "heading": "Kalinga",
@@ -24718,8 +24964,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -24738,13 +24984,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -24895,7 +25141,7 @@
    "preview": {
     "hostFonts": true,
     "bundledBase": "font-unavailable:Arial Black",
-    "officePackVisual": "font-unavailable:Arial Black"
+    "officePackVisual": true
    },
    "export": {
     "default": true,
@@ -24919,7 +25165,7 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
+     "heading": "substitute-visual:Montserrat",
      "body": "substitute-metric:Arimo"
     },
     "previewFonts": {
@@ -24937,9 +25183,16 @@
      "family": "Arial Black"
     },
     "previewOfficeVisual": {
-     "ok": false,
-     "error": "font-unavailable",
-     "family": "Arial Black"
+     "ok": true,
+     "fonts": {
+      "heading": "Montserrat",
+      "body": "Arimo",
+      "code": "Roboto Mono"
+     },
+     "substitutions": [
+      "Arial Black->Montserrat(visual)",
+      "Arial->Arimo(metric)"
+     ]
     },
     "exportThemeMajorLatin": "Arial Black",
     "exportThemeMinorLatin": "Arial",
@@ -24979,7 +25232,12 @@
     },
     "reimportFontScheme": "arial",
     "exportWithOfficeVisualRegistry": {
-     "error": "font-unavailable"
+     "major": "Arial Black",
+     "minor": "Arial",
+     "runFaces": [
+      "Arial Black",
+      "Arial"
+     ]
     },
     "consumption": {
      "stripped": [
@@ -25027,7 +25285,7 @@
      "nonLatinScript": true,
      "none": "ok",
      "base": "font-unavailable:Arial Black",
-     "officeVisual": "font-unavailable:Arial Black",
+     "officeVisual": "missing-glyph:Montserrat",
      "robotoBase": "missing-glyph:Roboto:U+67E",
      "googleSchemeBase": "noto-sans-arabic:font-unavailable:Noto Naskh Arabic",
      "exportOk": true,
@@ -25059,7 +25317,7 @@
     "nativeText": "پښتو",
     "nonLatinScript": true,
     "strictWithSnippetScheme": "font-unavailable:Arial Black",
-    "officePack": "font-unavailable:Arial Black",
+    "officePack": "missing-glyph:Montserrat",
     "onBundledRoboto": "missing-glyph:Roboto:U+67E",
     "onGoogleFontScheme": "noto-sans-arabic:font-unavailable:Noto Naskh Arabic"
    },
@@ -25111,8 +25369,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Naskh Arabic",
+     "body": "substitute-visual:Noto Naskh Arabic"
     },
     "previewFonts": {
      "heading": "Arabic Typesetting",
@@ -25302,8 +25560,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -25322,13 +25580,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -25503,8 +25761,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -25523,13 +25781,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -25704,8 +25962,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans Gurmukhi",
+     "body": "substitute-visual:Noto Sans Gurmukhi"
     },
     "previewFonts": {
      "heading": "Raavi",
@@ -25870,7 +26128,7 @@
    "preview": {
     "hostFonts": true,
     "bundledBase": "font-unavailable:Arial Black",
-    "officePackVisual": "font-unavailable:Arial Black"
+    "officePackVisual": true
    },
    "export": {
     "default": true,
@@ -25894,7 +26152,7 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
+     "heading": "substitute-visual:Montserrat",
      "body": "substitute-metric:Arimo"
     },
     "previewFonts": {
@@ -25912,9 +26170,16 @@
      "family": "Arial Black"
     },
     "previewOfficeVisual": {
-     "ok": false,
-     "error": "font-unavailable",
-     "family": "Arial Black"
+     "ok": true,
+     "fonts": {
+      "heading": "Montserrat",
+      "body": "Arimo",
+      "code": "Roboto Mono"
+     },
+     "substitutions": [
+      "Arial Black->Montserrat(visual)",
+      "Arial->Arimo(metric)"
+     ]
     },
     "exportThemeMajorLatin": "Arial Black",
     "exportThemeMinorLatin": "Arial",
@@ -25954,7 +26219,12 @@
     },
     "reimportFontScheme": "arial",
     "exportWithOfficeVisualRegistry": {
-     "error": "font-unavailable"
+     "major": "Arial Black",
+     "minor": "Arial",
+     "runFaces": [
+      "Arial Black",
+      "Arial"
+     ]
     },
     "consumption": {
      "stripped": [
@@ -26002,7 +26272,7 @@
      "nonLatinScript": true,
      "none": "ok",
      "base": "font-unavailable:Arial Black",
-     "officeVisual": "font-unavailable:Arial Black",
+     "officeVisual": "missing-glyph:Montserrat",
      "robotoBase": "missing-glyph:Roboto:U+67E",
      "googleSchemeBase": "noto-nastaliq-urdu:font-unavailable:Noto Nastaliq Urdu",
      "exportOk": true,
@@ -26034,7 +26304,7 @@
     "nativeText": "پنجابی",
     "nonLatinScript": true,
     "strictWithSnippetScheme": "font-unavailable:Arial Black",
-    "officePack": "font-unavailable:Arial Black",
+    "officePack": "missing-glyph:Montserrat",
     "onBundledRoboto": "missing-glyph:Roboto:U+67E",
     "onGoogleFontScheme": "noto-nastaliq-urdu:font-unavailable:Noto Nastaliq Urdu"
    },
@@ -26086,8 +26356,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -26106,13 +26376,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -26287,8 +26557,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -26307,13 +26577,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -26488,8 +26758,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -26508,13 +26778,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -26689,8 +26959,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -26709,13 +26979,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -26890,8 +27160,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -26910,13 +27180,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -27091,8 +27361,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -27111,13 +27381,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -27292,8 +27562,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -27312,13 +27582,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -27493,8 +27763,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -27513,13 +27783,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -27694,8 +27964,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -27714,13 +27984,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -27895,8 +28165,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -27915,13 +28185,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -28096,8 +28366,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -28116,13 +28386,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -28297,8 +28567,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -28317,13 +28587,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -28498,8 +28768,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -28518,13 +28788,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -28699,8 +28969,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans Tamil",
+     "body": "substitute-visual:Noto Sans Tamil"
     },
     "previewFonts": {
      "heading": "Latha",
@@ -28889,8 +29159,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans Telugu",
+     "body": "substitute-visual:Noto Sans Telugu"
     },
     "previewFonts": {
      "heading": "Gautami",
@@ -29079,8 +29349,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Sans Thai",
+     "body": "substitute-visual:Noto Sans Thai"
     },
     "previewFonts": {
      "heading": "Angsana New",
@@ -29269,8 +29539,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -29289,13 +29559,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -29470,8 +29740,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -29490,13 +29760,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -29671,8 +29941,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Noto Naskh Arabic",
+     "body": "substitute-visual:Noto Naskh Arabic"
     },
     "previewFonts": {
      "heading": "Arabic Typesetting",
@@ -29862,8 +30132,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -29882,13 +30152,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -30063,8 +30333,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -30083,13 +30353,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -30264,8 +30534,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -30284,13 +30554,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -30465,8 +30735,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -30485,13 +30755,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -30666,8 +30936,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -30686,13 +30956,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -30913,8 +31183,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual:Carlito",
-     "body": "substitute-visual:Carlito"
+     "heading": "substitute-metric:Intos Display",
+     "body": "substitute-metric:Intos"
     },
     "previewFonts": {
      "heading": "Aptos Display",
@@ -30933,13 +31203,13 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Carlito",
-      "body": "Carlito",
+      "heading": "Intos Display",
+      "body": "Intos",
       "code": "Roboto Mono"
      },
      "substitutions": [
-      "Aptos Display->Carlito(visual)",
-      "Aptos->Carlito(visual)"
+      "Aptos Display->Intos Display(metric)",
+      "Aptos->Intos(metric)"
      ]
     },
     "exportThemeMajorLatin": "Aptos Display",
@@ -31040,7 +31310,7 @@
    "engineSummary": "bg preview 011842/export 011842 (expected 011842); fonts Aptos Display/Aptos; theme-only doc applies bundle: true",
    "reasons": [
     "scheme slot colours written as literal srgbClr (2 uses): FFFFFF=light1",
-    "preview needs office-pack substitution (Aptos Display->Carlito(visual), Aptos->Carlito(visual)); export with that registry writes Aptos Display/Aptos"
+    "preview needs office-pack substitution (Aptos Display->Intos Display(metric), Aptos->Intos(metric)); export with that registry writes Aptos Display/Aptos"
    ]
   },
   {
@@ -31054,7 +31324,7 @@
    "preview": {
     "hostFonts": true,
     "bundledBase": "font-unavailable:Tenorite Display",
-    "officePackVisual": "font-unavailable:Tenorite Display"
+    "officePackVisual": true
    },
    "export": {
     "default": true,
@@ -31124,8 +31394,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Figtree",
+     "body": "substitute-visual:Figtree"
     },
     "previewFonts": {
      "heading": "Tenorite Display",
@@ -31142,9 +31412,16 @@
      "family": "Tenorite Display"
     },
     "previewOfficeVisual": {
-     "ok": false,
-     "error": "font-unavailable",
-     "family": "Tenorite Display"
+     "ok": true,
+     "fonts": {
+      "heading": "Figtree",
+      "body": "Figtree",
+      "code": "Roboto Mono"
+     },
+     "substitutions": [
+      "Tenorite Display->Figtree(visual)",
+      "Tenorite->Figtree(visual)"
+     ]
     },
     "exportThemeMajorLatin": "Tenorite Display",
     "exportThemeMinorLatin": "Tenorite",
@@ -31184,7 +31461,12 @@
     },
     "reimportFontScheme": "tenorite",
     "exportWithOfficeVisualRegistry": {
-     "error": "font-unavailable"
+     "major": "Tenorite Display",
+     "minor": "Tenorite",
+     "runFaces": [
+      "Tenorite Display",
+      "Tenorite"
+     ]
     },
     "themeRecord": {
      "colorScheme": "cool-horizon",
@@ -31239,7 +31521,7 @@
    "engineSummary": "bg preview FFFFFF/export FFFFFF (expected FFFFFF); fonts Tenorite Display/Tenorite; theme-only doc applies bundle: true",
    "reasons": [
     "scheme slot colours written as literal srgbClr (2 uses): 000000=dark1",
-    "no bundled or substitute face: strict preview throws font-unavailable (Tenorite Display); host-font preview is unmeasured fallback"
+    "preview needs office-pack substitution (Tenorite Display->Figtree(visual), Tenorite->Figtree(visual)); export with that registry writes Tenorite Display/Tenorite"
    ]
   },
   {
@@ -31253,7 +31535,7 @@
    "preview": {
     "hostFonts": true,
     "bundledBase": "font-unavailable:Seaford Display",
-    "officePackVisual": "font-unavailable:Seaford Display"
+    "officePackVisual": true
    },
    "export": {
     "default": true,
@@ -31323,8 +31605,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "not-bundled",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Source Sans 3",
+     "body": "substitute-visual:Source Sans 3"
     },
     "previewFonts": {
      "heading": "Seaford Display",
@@ -31341,9 +31623,16 @@
      "family": "Seaford Display"
     },
     "previewOfficeVisual": {
-     "ok": false,
-     "error": "font-unavailable",
-     "family": "Seaford Display"
+     "ok": true,
+     "fonts": {
+      "heading": "Source Sans 3",
+      "body": "Source Sans 3",
+      "code": "Roboto Mono"
+     },
+     "substitutions": [
+      "Seaford Display->Source Sans 3(visual)",
+      "Seaford->Source Sans 3(visual)"
+     ]
     },
     "exportThemeMajorLatin": "Seaford Display",
     "exportThemeMinorLatin": "Seaford",
@@ -31383,7 +31672,12 @@
     },
     "reimportFontScheme": "seaford",
     "exportWithOfficeVisualRegistry": {
-     "error": "font-unavailable"
+     "major": "Seaford Display",
+     "minor": "Seaford",
+     "runFaces": [
+      "Seaford Display",
+      "Seaford"
+     ]
     },
     "themeRecord": {
      "colorScheme": "boost",
@@ -31438,7 +31732,7 @@
    "engineSummary": "bg preview 000000/export 000000 (expected 000000); fonts Seaford Display/Seaford; theme-only doc applies bundle: true",
    "reasons": [
     "scheme slot colours written as literal srgbClr (2 uses): FFFFFF=light1",
-    "no bundled or substitute face: strict preview throws font-unavailable (Seaford Display); host-font preview is unmeasured fallback"
+    "preview needs office-pack substitution (Seaford Display->Source Sans 3(visual), Seaford->Source Sans 3(visual)); export with that registry writes Seaford Display/Seaford"
    ]
   },
   {
@@ -31452,7 +31746,7 @@
    "preview": {
     "hostFonts": true,
     "bundledBase": "font-unavailable:Impact",
-    "officePackVisual": "font-unavailable:Impact"
+    "officePackVisual": true
    },
    "export": {
     "default": true,
@@ -31522,8 +31816,8 @@
      "code": "Roboto Mono (core default)"
     },
     "availability": {
-     "heading": "substitute-visual-not-bundled:Anton|Oswald",
-     "body": "not-bundled"
+     "heading": "substitute-visual:Anton",
+     "body": "substitute-visual:Barlow"
     },
     "previewFonts": {
      "heading": "Impact",
@@ -31540,9 +31834,17 @@
      "family": "Impact"
     },
     "previewOfficeVisual": {
-     "ok": false,
-     "error": "font-unavailable",
-     "family": "Impact"
+     "ok": true,
+     "fonts": {
+      "heading": "Anton",
+      "body": "Barlow",
+      "code": "Roboto Mono"
+     },
+     "substitutions": [
+      "Impact->Anton(visual)",
+      "Grandview->Barlow(visual)",
+      "Anton->Anton(visual)"
+     ]
     },
     "exportThemeMajorLatin": "Impact",
     "exportThemeMinorLatin": "Grandview",
@@ -31582,7 +31884,12 @@
     },
     "reimportFontScheme": "impact",
     "exportWithOfficeVisualRegistry": {
-     "error": "font-unavailable"
+     "major": "Impact",
+     "minor": "Grandview",
+     "runFaces": [
+      "Impact",
+      "Grandview"
+     ]
     },
     "themeRecord": {
      "colorScheme": "burnt-orange",
@@ -31637,7 +31944,7 @@
    "engineSummary": "bg preview FFFFFF/export FFFFFF (expected FFFFFF); fonts Impact/Grandview; theme-only doc applies bundle: true",
    "reasons": [
     "scheme slot colours written as literal srgbClr (2 uses): 000000=dark1",
-    "no bundled or substitute face: strict preview throws font-unavailable (Impact); host-font preview is unmeasured fallback"
+    "preview needs office-pack substitution (Impact->Anton(visual), Grandview->Barlow(visual), Anton->Anton(visual)); export with that registry writes Impact/Grandview"
    ]
   },
   {
@@ -33699,9 +34006,11 @@
    "reimport": {
     "retainedDesignKeys": [
      "colorScheme",
-     "dimensions"
+     "dimensions",
+     "footer"
     ],
     "diagnostics": [
+     "furniture-import-reflow",
      "heading-import-reflow"
     ]
    },
@@ -33712,16 +34021,14 @@
       "speaker",
       "catalogs.socialPlatforms"
      ],
-     "previewIdentical": true,
+     "previewIdentical": false,
      "exportIdentical": {
       "equal": false,
-      "diffParts": [
-       "ppt/tags/opfDocument.xml"
-      ]
+      "diff": "part-list"
      }
     },
-    "handleInExport": false,
-    "handleInPreview": false,
+    "handleInExport": true,
+    "handleInPreview": true,
     "reimportSocials": {
      "organization": {
       "linkedin": "alice-chen"
@@ -33731,12 +34038,9 @@
      }
     }
    },
-   "classification": "partial",
-   "engineSummary": "removing the socials changes preview=false, export parts: ppt/tags/opfDocument.xml",
-   "reasons": [
-    "the social handle is not rendered in the preview",
-    "the social handle is not in the exported slide, layout or master XML"
-   ]
+   "classification": "works",
+   "engineSummary": "removing the socials changes preview=true, export parts: ",
+   "reasons": []
   },
   {
    "dimension": "socials",
@@ -33758,9 +34062,11 @@
    "reimport": {
     "retainedDesignKeys": [
      "colorScheme",
-     "dimensions"
+     "dimensions",
+     "footer"
     ],
     "diagnostics": [
+     "furniture-import-reflow",
      "heading-import-reflow"
     ]
    },
@@ -33771,16 +34077,14 @@
       "speaker",
       "catalogs.socialPlatforms"
      ],
-     "previewIdentical": true,
+     "previewIdentical": false,
      "exportIdentical": {
       "equal": false,
-      "diffParts": [
-       "ppt/tags/opfDocument.xml"
-      ]
+      "diff": "part-list"
      }
     },
-    "handleInExport": false,
-    "handleInPreview": false,
+    "handleInExport": true,
+    "handleInPreview": true,
     "reimportSocials": {
      "organization": {
       "x": "alicechen"
@@ -33790,12 +34094,9 @@
      }
     }
    },
-   "classification": "partial",
-   "engineSummary": "removing the socials changes preview=false, export parts: ppt/tags/opfDocument.xml",
-   "reasons": [
-    "the social handle is not rendered in the preview",
-    "the social handle is not in the exported slide, layout or master XML"
-   ]
+   "classification": "works",
+   "engineSummary": "removing the socials changes preview=true, export parts: ",
+   "reasons": []
   },
   {
    "dimension": "socials",
@@ -33817,9 +34118,11 @@
    "reimport": {
     "retainedDesignKeys": [
      "colorScheme",
-     "dimensions"
+     "dimensions",
+     "footer"
     ],
     "diagnostics": [
+     "furniture-import-reflow",
      "heading-import-reflow"
     ]
    },
@@ -33830,16 +34133,14 @@
       "speaker",
       "catalogs.socialPlatforms"
      ],
-     "previewIdentical": true,
+     "previewIdentical": false,
      "exportIdentical": {
       "equal": false,
-      "diffParts": [
-       "ppt/tags/opfDocument.xml"
-      ]
+      "diff": "part-list"
      }
     },
-    "handleInExport": false,
-    "handleInPreview": false,
+    "handleInExport": true,
+    "handleInPreview": true,
     "reimportSocials": {
      "organization": {
       "github": "alicechen"
@@ -33849,12 +34150,9 @@
      }
     }
    },
-   "classification": "partial",
-   "engineSummary": "removing the socials changes preview=false, export parts: ppt/tags/opfDocument.xml",
-   "reasons": [
-    "the social handle is not rendered in the preview",
-    "the social handle is not in the exported slide, layout or master XML"
-   ]
+   "classification": "works",
+   "engineSummary": "removing the socials changes preview=true, export parts: ",
+   "reasons": []
   },
   {
    "dimension": "socials",
@@ -33876,9 +34174,11 @@
    "reimport": {
     "retainedDesignKeys": [
      "colorScheme",
-     "dimensions"
+     "dimensions",
+     "footer"
     ],
     "diagnostics": [
+     "furniture-import-reflow",
      "heading-import-reflow"
     ]
    },
@@ -33889,16 +34189,14 @@
       "speaker",
       "catalogs.socialPlatforms"
      ],
-     "previewIdentical": true,
+     "previewIdentical": false,
      "exportIdentical": {
       "equal": false,
-      "diffParts": [
-       "ppt/tags/opfDocument.xml"
-      ]
+      "diff": "part-list"
      }
     },
-    "handleInExport": false,
-    "handleInPreview": false,
+    "handleInExport": true,
+    "handleInPreview": true,
     "reimportSocials": {
      "organization": {
       "youtube": "acme"
@@ -33908,12 +34206,9 @@
      }
     }
    },
-   "classification": "partial",
-   "engineSummary": "removing the socials changes preview=false, export parts: ppt/tags/opfDocument.xml",
-   "reasons": [
-    "the social handle is not rendered in the preview",
-    "the social handle is not in the exported slide, layout or master XML"
-   ]
+   "classification": "works",
+   "engineSummary": "removing the socials changes preview=true, export parts: ",
+   "reasons": []
   },
   {
    "dimension": "socials",
@@ -33935,9 +34230,11 @@
    "reimport": {
     "retainedDesignKeys": [
      "colorScheme",
-     "dimensions"
+     "dimensions",
+     "footer"
     ],
     "diagnostics": [
+     "furniture-import-reflow",
      "heading-import-reflow"
     ]
    },
@@ -33948,16 +34245,14 @@
       "speaker",
       "catalogs.socialPlatforms"
      ],
-     "previewIdentical": true,
+     "previewIdentical": false,
      "exportIdentical": {
       "equal": false,
-      "diffParts": [
-       "ppt/tags/opfDocument.xml"
-      ]
+      "diff": "part-list"
      }
     },
-    "handleInExport": false,
-    "handleInPreview": false,
+    "handleInExport": true,
+    "handleInPreview": true,
     "reimportSocials": {
      "organization": {
       "instagram": "acme"
@@ -33967,12 +34262,9 @@
      }
     }
    },
-   "classification": "partial",
-   "engineSummary": "removing the socials changes preview=false, export parts: ppt/tags/opfDocument.xml",
-   "reasons": [
-    "the social handle is not rendered in the preview",
-    "the social handle is not in the exported slide, layout or master XML"
-   ]
+   "classification": "works",
+   "engineSummary": "removing the socials changes preview=true, export parts: ",
+   "reasons": []
   },
   {
    "dimension": "socials",
@@ -33994,9 +34286,11 @@
    "reimport": {
     "retainedDesignKeys": [
      "colorScheme",
-     "dimensions"
+     "dimensions",
+     "footer"
     ],
     "diagnostics": [
+     "furniture-import-reflow",
      "heading-import-reflow"
     ]
    },
@@ -34007,16 +34301,14 @@
       "speaker",
       "catalogs.socialPlatforms"
      ],
-     "previewIdentical": true,
+     "previewIdentical": false,
      "exportIdentical": {
       "equal": false,
-      "diffParts": [
-       "ppt/tags/opfDocument.xml"
-      ]
+      "diff": "part-list"
      }
     },
-    "handleInExport": false,
-    "handleInPreview": false,
+    "handleInExport": true,
+    "handleInPreview": true,
     "reimportSocials": {
      "organization": {
       "facebook": "acme"
@@ -34026,12 +34318,9 @@
      }
     }
    },
-   "classification": "partial",
-   "engineSummary": "removing the socials changes preview=false, export parts: ppt/tags/opfDocument.xml",
-   "reasons": [
-    "the social handle is not rendered in the preview",
-    "the social handle is not in the exported slide, layout or master XML"
-   ]
+   "classification": "works",
+   "engineSummary": "removing the socials changes preview=true, export parts: ",
+   "reasons": []
   },
   {
    "dimension": "socials",
@@ -34053,9 +34342,11 @@
    "reimport": {
     "retainedDesignKeys": [
      "colorScheme",
-     "dimensions"
+     "dimensions",
+     "footer"
     ],
     "diagnostics": [
+     "furniture-import-reflow",
      "heading-import-reflow"
     ]
    },
@@ -34066,16 +34357,14 @@
       "speaker",
       "catalogs.socialPlatforms"
      ],
-     "previewIdentical": true,
+     "previewIdentical": false,
      "exportIdentical": {
       "equal": false,
-      "diffParts": [
-       "ppt/tags/opfDocument.xml"
-      ]
+      "diff": "part-list"
      }
     },
-    "handleInExport": false,
-    "handleInPreview": false,
+    "handleInExport": true,
+    "handleInPreview": true,
     "reimportSocials": {
      "organization": {
       "tiktok": "acme"
@@ -34085,12 +34374,9 @@
      }
     }
    },
-   "classification": "partial",
-   "engineSummary": "removing the socials changes preview=false, export parts: ppt/tags/opfDocument.xml",
-   "reasons": [
-    "the social handle is not rendered in the preview",
-    "the social handle is not in the exported slide, layout or master XML"
-   ]
+   "classification": "works",
+   "engineSummary": "removing the socials changes preview=true, export parts: ",
+   "reasons": []
   },
   {
    "dimension": "socials",
@@ -34112,9 +34398,11 @@
    "reimport": {
     "retainedDesignKeys": [
      "colorScheme",
-     "dimensions"
+     "dimensions",
+     "footer"
     ],
     "diagnostics": [
+     "furniture-import-reflow",
      "heading-import-reflow"
     ]
    },
@@ -34125,16 +34413,14 @@
       "speaker",
       "catalogs.socialPlatforms"
      ],
-     "previewIdentical": true,
+     "previewIdentical": false,
      "exportIdentical": {
       "equal": false,
-      "diffParts": [
-       "ppt/tags/opfDocument.xml"
-      ]
+      "diff": "part-list"
      }
     },
-    "handleInExport": false,
-    "handleInPreview": false,
+    "handleInExport": true,
+    "handleInPreview": true,
     "reimportSocials": {
      "organization": {
       "threads": "alicechen"
@@ -34144,12 +34430,9 @@
      }
     }
    },
-   "classification": "partial",
-   "engineSummary": "removing the socials changes preview=false, export parts: ppt/tags/opfDocument.xml",
-   "reasons": [
-    "the social handle is not rendered in the preview",
-    "the social handle is not in the exported slide, layout or master XML"
-   ]
+   "classification": "works",
+   "engineSummary": "removing the socials changes preview=true, export parts: ",
+   "reasons": []
   },
   {
    "dimension": "socials",
@@ -34171,9 +34454,11 @@
    "reimport": {
     "retainedDesignKeys": [
      "colorScheme",
-     "dimensions"
+     "dimensions",
+     "footer"
     ],
     "diagnostics": [
+     "furniture-import-reflow",
      "heading-import-reflow"
     ]
    },
@@ -34184,16 +34469,14 @@
       "speaker",
       "catalogs.socialPlatforms"
      ],
-     "previewIdentical": true,
+     "previewIdentical": false,
      "exportIdentical": {
       "equal": false,
-      "diffParts": [
-       "ppt/tags/opfDocument.xml"
-      ]
+      "diff": "part-list"
      }
     },
-    "handleInExport": false,
-    "handleInPreview": false,
+    "handleInExport": true,
+    "handleInPreview": true,
     "reimportSocials": {
      "organization": {
       "mastodon": "alice@hachyderm.io"
@@ -34203,12 +34486,9 @@
      }
     }
    },
-   "classification": "partial",
-   "engineSummary": "removing the socials changes preview=false, export parts: ppt/tags/opfDocument.xml",
-   "reasons": [
-    "the social handle is not rendered in the preview",
-    "the social handle is not in the exported slide, layout or master XML"
-   ]
+   "classification": "works",
+   "engineSummary": "removing the socials changes preview=true, export parts: ",
+   "reasons": []
   },
   {
    "dimension": "socials",
@@ -34230,9 +34510,11 @@
    "reimport": {
     "retainedDesignKeys": [
      "colorScheme",
-     "dimensions"
+     "dimensions",
+     "footer"
     ],
     "diagnostics": [
+     "furniture-import-reflow",
      "heading-import-reflow"
     ]
    },
@@ -34243,16 +34525,14 @@
       "speaker",
       "catalogs.socialPlatforms"
      ],
-     "previewIdentical": true,
+     "previewIdentical": false,
      "exportIdentical": {
       "equal": false,
-      "diffParts": [
-       "ppt/tags/opfDocument.xml"
-      ]
+      "diff": "part-list"
      }
     },
-    "handleInExport": false,
-    "handleInPreview": false,
+    "handleInExport": true,
+    "handleInPreview": true,
     "reimportSocials": {
      "organization": {
       "bluesky": "alice.bsky.social"
@@ -34262,12 +34542,9 @@
      }
     }
    },
-   "classification": "partial",
-   "engineSummary": "removing the socials changes preview=false, export parts: ppt/tags/opfDocument.xml",
-   "reasons": [
-    "the social handle is not rendered in the preview",
-    "the social handle is not in the exported slide, layout or master XML"
-   ]
+   "classification": "works",
+   "engineSummary": "removing the socials changes preview=true, export parts: ",
+   "reasons": []
   }
  ]
 }

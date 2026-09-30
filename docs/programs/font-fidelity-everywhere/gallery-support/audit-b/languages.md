@@ -78,12 +78,12 @@ Schema-valid 93/93. Catalog id resolves in core 93/93.
 | norwegian | no | nb-NO | aptos | norsk | latin | font-unavailable:Aptos Display | ok | ok | nb-NO | 0 / 0 | norwegian | partial |
 | odia | or | or-IN | kalinga | ଓଡ଼ିଆ | cs | font-unavailable:Kalinga | font-unavailable:Kalinga | missing-glyph:Roboto:U+B13 | or-IN | 0 / 0 | odia | partial |
 | oromo | om | om-ET | aptos | Oromoo | latin | font-unavailable:Aptos Display | ok | ok | om-ET | 0 / 0 | oromo | partial |
-| pashto | ps | ps-AF | arial | پښتو | cs | font-unavailable:Arial Black | font-unavailable:Arial Black | missing-glyph:Roboto:U+67E | ps-AF | 1 / 1 | pashto | partial |
+| pashto | ps | ps-AF | arial | پښتو | cs | font-unavailable:Arial Black | missing-glyph:Montserrat | missing-glyph:Roboto:U+67E | ps-AF | 1 / 1 | pashto | partial |
 | persian | fa | fa-IR | arabic-typesetting | فارسی | cs | font-unavailable:Arabic Typesetting | font-unavailable:Arabic Typesetting | missing-glyph:Roboto:U+641 | fa-IR | 1 / 1 | persian | partial |
 | polish | pl | pl-PL | aptos | polski | latin | font-unavailable:Aptos Display | ok | ok | pl-PL | 0 / 0 | polish | partial |
 | portuguese | pt | pt-BR | aptos | português | latin | font-unavailable:Aptos Display | ok | ok | pt-BR | 0 / 0 | portuguese | partial |
 | punjabi-gurmukhi | pa-Guru | pa-IN | raavi | ਪੰਜਾਬੀ | cs | font-unavailable:Raavi | font-unavailable:Raavi | missing-glyph:Roboto:U+A2A | pa-IN | 0 / 0 | punjabi-gurmukhi | partial |
-| punjabi-shahmukhi | pa-Arab | pa-Arab-PK | arial | پنجابی | cs | font-unavailable:Arial Black | font-unavailable:Arial Black | missing-glyph:Roboto:U+67E | pa-Arab-PK | 1 / 1 | punjabi-shahmukhi | partial |
+| punjabi-shahmukhi | pa-Arab | pa-Arab-PK | arial | پنجابی | cs | font-unavailable:Arial Black | missing-glyph:Montserrat | missing-glyph:Roboto:U+67E | pa-Arab-PK | 1 / 1 | punjabi-shahmukhi | partial |
 | romanian | ro | ro-RO | aptos | română | latin | font-unavailable:Aptos Display | ok | ok | ro-RO | 0 / 0 | romanian | partial |
 | russian | ru | ru-RU | aptos | русский | latin | font-unavailable:Aptos Display | ok | ok | ru-RU | 0 / 0 | russian | partial |
 | serbian-cyrillic | sr-Cyrl | sr-Cyrl-RS | aptos | српски | latin | font-unavailable:Aptos Display | ok | ok | sr-Cyrl-RS | 0 / 0 | serbian-cyrillic | partial |

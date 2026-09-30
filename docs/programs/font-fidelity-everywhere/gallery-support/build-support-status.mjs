@@ -11,9 +11,9 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const read = async (p) => JSON.parse(await readFile(path.join(here, p), 'utf8'));
 const a = await read('audit-a/results.json');
 const b = await read('audit-b/results.json');
-// The parity run to publish. Default: the run on the merged FF-31 mains with Intos as the Aptos preview, 850-value set (2026-09-29); earlier accepted runs stay in parity/.
-// PARITY_RESULTS=parity/parity-results-2026-09-29-table-drawn-extent.json (or an earlier file, or parity/parity-results.json) rebuilds the file from an earlier run.
-const PARITY_RESULTS = process.env.PARITY_RESULTS ?? 'parity/parity-results-2026-09-29-intos-default.json';
+// The parity run to publish. Default: the run on the merged, published heads (core 0.11.2, opf-render 0.11.2, opf-pptx 0.11.1, pptx-gallery 0f6064b), 850-value set (2026-09-29); earlier accepted runs stay in parity/.
+// PARITY_RESULTS=parity/parity-results-2026-09-29-intos-default.json (or an earlier file, or parity/parity-results.json) rebuilds the file from an earlier run.
+const PARITY_RESULTS = process.env.PARITY_RESULTS ?? 'parity/parity-results-2026-09-29-merged-heads.json';
 const p = await read(PARITY_RESULTS);
 
 const short = (sha) => (typeof sha === 'string' ? sha.slice(0, 7) : null);
@@ -23,6 +23,8 @@ const shortHeads = (heads, node) => {
   return out;
 };
 const headsA = shortHeads(a.meta.commits, a.meta.node);
+// Dimensions whose audit A rows are kept from an earlier run (audit-a/scripts/merge-retained.mjs) carry their own heads.
+const retainedA = Object.fromEntries(Object.entries(a.meta.retained ?? {}).map(([d, r]) => [d, { heads: shortHeads(r.commits, a.meta.node), reason: r.reason }]));
 const headsB = { ...b.heads };
 const headsP = shortHeads(p.meta.heads, p.meta.node);
 
@@ -100,7 +102,7 @@ for (const r of a.results) {
     opfValue: layout ? null : (r.opfMapping ?? null),
     reasons: r.reasons ?? [],
     audit: 'a',
-    measuredHeads: headsA,
+    measuredHeads: retainedA[r.dimension]?.heads ?? headsA,
     parity: parityFor(r.dimension, r.id),
   });
 }
@@ -145,7 +147,7 @@ const NORMALIZED_IDS = {
   },
 };
 
-// Values measured only by the parity audit (charts until FF-22 lands).
+// Values measured only by the parity audit (the charts).
 const parityOnly = [...parityByKey.values()]
   .filter((e) => !e.used)
   .map((e) => {
@@ -183,7 +185,7 @@ const out = {
   statuses: STATUSES,
   parityStatuses: PARITY_STATUSES,
   audits: {
-    a: { dimensions: [...new Set(a.results.map((r) => r.dimension))], heads: headsA, results: 'audit-a/results.json' },
+    a: { dimensions: [...new Set(a.results.map((r) => r.dimension))], heads: headsA, ...(Object.keys(retainedA).length ? { retained: retainedA } : {}), results: 'audit-a/results.json' },
     b: { dimensions: [...new Set(b.results.map((r) => r.dimension))], heads: headsB, generated: b.generated, results: 'audit-b/results.json' },
     parity: {
       item: 'FF-38',
@@ -198,7 +200,7 @@ const out = {
       parityOnlyValues: parityOnly.length,
     },
   },
-  notMeasured: [{ dimension: 'charts', reason: 'no presence status: reduction to Aspose.Slides-supported chart types in progress (FF-22); parity measured, see parityOnly' }],
+  notMeasured: [{ dimension: 'charts', reason: 'no presence status: audits A and B do not probe charts (the gallery is reduced to the Aspose.Slides-supported types, FF-22); parity measured, see parityOnly' }],
   sharedExportGaps: b.sharedExportGaps,
   counts,
   parityCounts,
