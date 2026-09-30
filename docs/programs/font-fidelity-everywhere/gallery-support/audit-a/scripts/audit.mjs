@@ -419,7 +419,7 @@ async function aliasCheck(doc, id, target, m) {
   const twin = clone(doc); twin.slides[0].layout = target;
   const t = await measure(twin, null);
   out.previewEqual = m.r.ok && t.r.ok && t.r.resolvedLayouts[0] === target && m.r.svgs.join('') === t.r.svgs.join('');
-  out.exportEqual = m.x.ok && t.x.ok && geometry(m.x.slides[0]) === geometry(t.x.slides[0]);
+  out.exportEqual = m.x.ok && t.x.ok && placementSignature(m.x.slides[0]) === placementSignature(t.x.slides[0]);
   return { ...out, equivalent: out.previewEqual && out.exportEqual };
 }
 if (want('layouts')) {

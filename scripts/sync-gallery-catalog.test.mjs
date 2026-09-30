@@ -12,7 +12,7 @@ import {
   readJson,
   verifySnapshot,
 } from "./catalog-snapshot.mjs";
-import { applySnapshot, diffSnapshot, loadValidators, main, planSnapshot, readCurrentSnapshot } from "./sync-gallery-catalog.mjs";
+import { applySnapshot, diffSnapshot, loadValidators, main, parseIncludes, planSnapshot, readCurrentSnapshot } from "./sync-gallery-catalog.mjs";
 
 const catalogsRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "spec", "catalogs");
 const source = { repository: "https://github.com/Data-Advantage/pptx-gallery", commit: "0".repeat(40), path: "public" };
@@ -88,6 +88,37 @@ describe("planSnapshot", () => {
     assert.deepEqual(plan.kinds.audiences.galleryOnly, ["students"]);
     assert.equal(plan.manifest.kinds.audiences.gallery.records, snapshot.current.audiences.records.length + 1);
     assert.equal(plan.kinds.tones.index.contentSha256, catalogContentSha256(plan.kinds.tones.records));
+  });
+
+  test("--include adds published ids to a subset kind once, and only ids the gallery publishes", () => {
+    const gallery = publishedFromSnapshot();
+    const layout = { $schema: "https://openpresentation.org/schema/opf-layout/v1", id: "included-layout", name: "Included", placeholders: [{ type: "title" }], "x-gallery": {} };
+    const other = { $schema: "https://openpresentation.org/schema/opf-layout/v1", id: "excluded-layout", name: "Excluded", placeholders: [{ type: "title" }] };
+    addRecord(gallery, "layouts", layout, { id: "included-layout", name: "Included", file: "included-layout.json" });
+    addRecord(gallery, "layouts", other, { id: "excluded-layout", name: "Excluded", file: "excluded-layout.json" });
+    const manifest = structuredClone(snapshot.manifest);
+    manifest.kinds.layouts.mode = "subset";
+
+    const plan = planSnapshot({ gallery, current: snapshot.current, manifest, validators, source, include: { layouts: ["included-layout"] } });
+    assert.deepEqual(plan.problems, []);
+    assert.equal(plan.kinds.layouts.records.length, snapshot.current.layouts.records.length + 1);
+    assert.ok(plan.kinds.layouts.records.some((record) => record.id === "included-layout" && !("x-gallery" in record)));
+    assert.deepEqual(plan.kinds.layouts.galleryOnly, ["excluded-layout"]);
+
+    // The included id is in the snapshot afterwards, so the next plan keeps it without the flag.
+    const after = { ...snapshot.current, layouts: { index: plan.kinds.layouts.index, records: plan.kinds.layouts.records } };
+    const again = planSnapshot({ gallery, current: after, manifest, validators, source });
+    assert.equal(again.kinds.layouts.records.length, plan.kinds.layouts.records.length);
+
+    const missing = planSnapshot({ gallery, current: snapshot.current, manifest, validators, source, include: { layouts: ["not-published"] } });
+    assert.ok(missing.problems.some((problem) => /layouts: --include 'not-published' is not published/.test(problem)), missing.problems.join("\n"));
+  });
+
+  test("parseIncludes reads repeatable kind:ids pairs and rejects malformed ones", () => {
+    assert.deepEqual(parseIncludes(["--gallery", "g", "--include", "layouts:a,b", "--include", "layouts:c", "--include", "tones:d"]), { layouts: ["a", "b", "c"], tones: ["d"] });
+    assert.deepEqual(parseIncludes(["--gallery", "g"]), {});
+    for (const bad of ["layouts", "layouts:", ":a", "unknown-kind:a"]) assert.throws(() => parseIncludes(["--include", bad]), /--include needs/, bad);
+    assert.throws(() => parseIncludes(["--include"]), /--include needs/);
   });
 
   test("refuses a gallery that dropped a bundled id, forged a hash, or published an invalid record", () => {

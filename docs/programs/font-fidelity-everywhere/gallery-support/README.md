@@ -63,6 +63,8 @@ drift is removed by FF-22 and FF-37.
   published run; FF-58 regenerates them. `pnpm check:audit-placement` unit-tests
   the helpers.
 
+- FF-52 (2026-09-30): audit A's layout check no longer reports "geometry identical to the no-layout default" for two exact cases. A core layout named in `DEFAULT_BASELINE_LAYOUTS` (the 20 layouts that are the engine default for their content) is its own baseline. A record with `deprecation.replacedBy` is measured against its replacement instead: the same slide with only the layout id swapped must draw the same SVG and the same export placement signature (`checks.alias`), and the replacement must be bundled and not deprecated, otherwise the reason is "layout is deprecated in favour of X but ...". Everything else, including a layout with a real effect that the export ignores, is reported as before. FF-55: with the 70 legacy ids bundled, `origin` is `core-catalog` for them and no layout is `gallery-only`.
+
 ## Re-running against new heads
 
 The scripts locate their inputs relative to their own folder, so copy them into

@@ -876,6 +876,102 @@ slugs with no OPF canonical id (`gallery-only`; all 70 measured `partial`).
 - **Fixes.** FF-29 (catalog parity, export placement, re-import id or specific
   diagnostic); FF-31 (fonts).
 
+### Layout contracts and canonical ids (FF-52, FF-55, 2026-09-30)
+
+Layouts only (audit A, ONLY=layouts), published engines (opf-render 0.11.4 `1a724a6`, opf-pptx 0.11.3 `ecdbb42`), one local core (`register-local-opf.mjs`), no Office:
+
+| Layouts (485) | Core `0f60d3d` (before FF-51) | Core `be4bd221` (main, FF-51 audit) | This change (core PR + [pptx-gallery#70](https://github.com/Data-Advantage/pptx-gallery/pull/70)) |
+| --- | --- | --- | --- |
+| `works` | 291 | 341 | 440 |
+| `partial` | 124 | 74 | 45 |
+| `gallery-only` | 70 | 70 | 0 |
+| reason "legacy gallery slug with no OPF canonical id" | 70 | 70 | 0 |
+| reason "geometry identical to the no-layout default" or "preview identical with and without layout" | 69 | 69 | 0 |
+
+The 45 `partial` layouts carry only reasons other items own: image re-import (24, FF-53), quote re-import (3, FF-57) and text-overflow or small-cell diagnostics (18 with 12 overlaps, FF-54). The FF-38 parity audit on layouts is unchanged before and after (483 of 485 perfect, 2 near, 0 mismatch). `support-status.json` is not regenerated here (FF-58); the numbers come from local audit runs on the heads above.
+
+**FF-55: canonical ids.** The gallery already published the 70 legacy slugs (`master: "Gallery"`) as schema-valid `opf-layout/v1` records under their own id, but the core snapshot bundled only 30 of its 485 layouts, so a snippet carried the rest as inline `catalogs.layouts.records` and the audit classed the 70 as `gallery-only`. `sync-gallery-catalog.mjs` gains `--include <kind>:<id>[,<id>...]`, which adds published ids to a subset kind once (the snapshot then keeps them, as it keeps every id). The layouts snapshot is now 100 records (30 core plus the 70 legacy ids), synced from pptx.gallery `068d378` (pptx-gallery#70, the FF-52 contracts); the other 385 gallery layouts (Dark master) stay gallery-only and portable through inline records. Nothing is retired and no slug changes. The gallery snippet builder already inlines a layout record only when the pinned `@openpresentation/opf` does not bundle the id, so once this snapshot ships in a core release and the gallery pin moves, the 70 snippets name the id directly with no `catalogs`. Until then the gallery's inline record keeps them portable, and the audit, which links the local core, already reports them as core-catalog ids. The 70 ids also become valid narrative `layoutHint` values for `check:spec` rule (e); restoring the hints is not part of this item.
+
+**FF-52: 69 layouts, three outcomes.** Decisions are recorded here and in the README Decisions (owner can veto; nothing was retired or removed from the gallery listing):
+
+- **(a) Fix the contract (25 legacy layouts).** `data/layouts.json` gives each a `composition` or `contentBox` from a small vocabulary that both engines compose: gutter (`{ mode: "row", gap: 0.06 }`), primary (`weights`), narrow (`padding: 0.12`), wide (`padding: 0.04`), cards (`contentBox: true`, the convention 19 legacy layouts already use). The audit sees a different preview and different export placement for every one, with no new diagnostic.
+- **(b) Alias (24 Dark-master variants).** A layout whose placeholders and composition are those of a core layout, differing only by design attributes the engines do not read (title-left where left is the default, itemimage bullets, crop/fit that the default equals), carries `deprecation.replacedBy` and stays resolvable, published and listed. There is no layout-hiding convention (charts were removed with redirects; that is a retirement and needs the owner), so aliases stay in the gallery listing. Audit A measures the replacement instead of the default: the same slide with only the layout id swapped must draw the same SVG and place the same export shapes (`checks.alias`), and the replacement must be bundled and not itself deprecated. All 24 are equivalent. Where an engine later reads one of those attributes (for example `design.listBullet`), the alias must stop being one.
+- **(c) Baseline (20 core layouts).** `blank`, `title`, `title-subtitle`, `text-1x`, `text-2x`, `text-3x`, `list-1x` to `list-6x`, `image-1x`, `image-2x`, `image-3x`, `code-1x`, `media-1x`, `quote-1x`, `table-1x` and `timeline-1x` are the engine default arrangement for their content. Audit A lists them by name (`DEFAULT_BASELINE_LAYOUTS`); the list is exact, and a layout added to it needs a review of its contract.
+
+| Layout | Source | Before | Decision | Contract or target | After (audit A) |
+| --- | --- | --- | --- | --- | --- |
+| `two-column` | legacy | gallery-only (measured partial), geometry identical to default | (a) fix the contract | `{mode:row,gap:0.06}`: two equal columns with a wide gutter | works |
+| `three-column` | legacy | gallery-only (measured partial), geometry identical to default | (a) fix the contract | `{mode:row,gap:0.06}`: three equal columns with a wide gutter | works |
+| `stats-metrics` | legacy | gallery-only (measured partial), geometry identical to default | (a) fix the contract | `{mode:row,gap:0.06}`: three metric tiles with a wide gutter | works |
+| `data-visualization` | legacy | gallery-only (measured partial), geometry identical to default | (a) fix the contract | `{mode:row,weights:[2,1]}`: the chart takes two thirds, supporting text one third | works |
+| `waterfall-bridge` | legacy | gallery-only (measured partial), geometry identical to default | (a) fix the contract | `{mode:row,weights:[3,1]}`: the bridge chart takes three quarters, the walk notes one quarter | works |
+| `forecast-scenario` | legacy | gallery-only (measured partial), geometry identical to default | (a) fix the contract | `{mode:row,weights:[3,2]}`: the forecast chart takes three fifths, the scenario text two fifths | works |
+| `org-chart` | legacy | gallery-only (measured partial), geometry identical to default | (a) fix the contract | `{mode:row,weights:[2,1]}`: the org chart takes two thirds, the secondary chart one third | works |
+| `bullet-list` | legacy | gallery-only (measured partial), geometry identical to default | (a) fix the contract | `{padding:0.12}`: a wider margin keeps the bullet measure short | works |
+| `funnel-pyramid` | legacy | gallery-only (measured partial), geometry identical to default | (a) fix the contract | `{padding:0.12}`: a wider margin narrows the funnel stack | works |
+| `executive-summary` | legacy | gallery-only (measured partial), geometry identical to default | (a) fix the contract | `{padding:0.12}`: a wider margin keeps the summary measure short | works |
+| `executive-decision` | legacy | gallery-only (measured partial), geometry identical to default | (a) fix the contract | `{padding:0.12}`: a wider margin frames one decision statement | works |
+| `qa-discussion` | legacy | gallery-only (measured partial), geometry identical to default | (a) fix the contract | `{padding:0.12}`: a wider margin around the centred question | works |
+| `appendix-index` | legacy | gallery-only (measured partial), geometry identical to default | (a) fix the contract | `{padding:0.12}`: a wider margin around the index heading | works |
+| `timeline` | legacy | gallery-only (measured partial), geometry identical to default | (a) fix the contract | `{padding:0.04}`: a tight margin gives the timeline the full canvas | works |
+| `gantt-project-plan` | legacy | gallery-only (measured partial), geometry identical to default | (a) fix the contract | `{padding:0.04}`: a tight margin gives the plan the full canvas | works |
+| `heatmap-cohort` | legacy | gallery-only (measured partial), geometry identical to default | (a) fix the contract | `{padding:0.04}`: a tight margin gives the cohort grid the full canvas | works |
+| `customer-logos` | legacy | gallery-only (measured partial), geometry identical to default | (a) fix the contract | `{padding:0.04}`: a tight margin gives the logo wall the full canvas | works |
+| `faq` | legacy | gallery-only (measured partial), geometry identical to default | (a) fix the contract | `contentBox: true`: the question and answer block sits on a card | works |
+| `process-flow` | legacy | gallery-only (measured partial), geometry identical to default | (a) fix the contract | `contentBox: true`: the process steps sit on a card | works |
+| `roadmap` | legacy | gallery-only (measured partial), geometry identical to default | (a) fix the contract | `contentBox: true`: the roadmap sits on a card | works |
+| `before-after` | legacy | gallery-only (measured partial), geometry identical to default | (a) fix the contract | `contentBox: true`: before and after sit on two cards | works |
+| `pros-cons` | legacy | gallery-only (measured partial), geometry identical to default | (a) fix the contract | `contentBox: true`: pros and cons sit on two cards | works |
+| `architecture-stack` | legacy | gallery-only (measured partial), geometry identical to default | (a) fix the contract | `contentBox: true`: the layered stack sits on a card | works |
+| `status-rag` | legacy | gallery-only (measured partial), geometry identical to default | (a) fix the contract | `contentBox: true`: the status statement sits on a card | works |
+| `assumptions-dependencies` | legacy | gallery-only (measured partial), geometry identical to default | (a) fix the contract | `contentBox: true`: assumptions and dependencies sit on a card | works |
+| `chart-1x-title-left` | Dark variant | partial, geometry identical to default | (b) alias | `deprecation.replacedBy: chart-1x` | works |
+| `image-1x-fit` | Dark variant | partial, geometry identical to default | (b) alias | `deprecation.replacedBy: image-1x` | works |
+| `image-1x-fit-title-left` | Dark variant | partial, geometry identical to default | (b) alias | `deprecation.replacedBy: image-1x` | works |
+| `image-only-1x-crop` | Dark variant | partial, geometry identical to default | (b) alias | `deprecation.replacedBy: image-1x` | works |
+| `image-only-1x-crop-title-left` | Dark variant | partial, geometry identical to default | (b) alias | `deprecation.replacedBy: image-1x` | works |
+| `image-only-1x-fit` | Dark variant | partial, geometry identical to default | (b) alias | `deprecation.replacedBy: image-1x` | works |
+| `image-only-1x-fit-title-left` | Dark variant | partial, geometry identical to default | (b) alias | `deprecation.replacedBy: image-1x` | works |
+| `image-2x-fit` | Dark variant | partial, geometry identical to default | (b) alias | `deprecation.replacedBy: image-2x` | works |
+| `image-only-2x-crop` | Dark variant | partial, geometry identical to default | (b) alias | `deprecation.replacedBy: image-2x` | works |
+| `image-only-2x-fit` | Dark variant | partial, geometry identical to default | (b) alias | `deprecation.replacedBy: image-2x` | works |
+| `list-1x-itemimage` | Dark variant | partial, geometry identical to default | (b) alias | `deprecation.replacedBy: list-1x` | works |
+| `list-1x-itemimage-vertical` | Dark variant | partial, geometry identical to default | (b) alias | `deprecation.replacedBy: list-1x` | works |
+| `list-1x-itemimage-vertical-title-left` | Dark variant | partial, geometry identical to default | (b) alias | `deprecation.replacedBy: list-1x` | works |
+| `list-1x-vertical` | Dark variant | partial, geometry identical to default | (b) alias | `deprecation.replacedBy: list-1x` | works |
+| `list-1x-vertical-title-left` | Dark variant | partial, geometry identical to default | (b) alias | `deprecation.replacedBy: list-1x` | works |
+| `list-2x-itemimage` | Dark variant | partial, geometry identical to default | (b) alias | `deprecation.replacedBy: list-2x` | works |
+| `list-4x-itemimage` | Dark variant | partial, geometry identical to default | (b) alias | `deprecation.replacedBy: list-4x` | works |
+| `list-5x-itemimage` | Dark variant | partial, geometry identical to default | (b) alias | `deprecation.replacedBy: list-5x` | works |
+| `list-6x-itemimage` | Dark variant | partial, geometry identical to default | (b) alias | `deprecation.replacedBy: list-6x` | works |
+| `text-1x-left` | Dark variant | partial, geometry identical to default | (b) alias | `deprecation.replacedBy: text-1x` | works |
+| `text-1x-title-left` | Dark variant | partial, geometry identical to default | (b) alias | `deprecation.replacedBy: text-1x` | works |
+| `text-2x-left` | Dark variant | partial, geometry identical to default | (b) alias | `deprecation.replacedBy: text-2x` | works |
+| `title-left` | Dark variant | partial, geometry identical to default | (b) alias | `deprecation.replacedBy: title-subtitle` | works |
+| `title-left-box` | Dark variant | partial, geometry identical to default | (b) alias | `deprecation.replacedBy: title-subtitle` | works |
+| `blank` | core | partial, geometry identical to default | (c) baseline | listed by name in audit A: the layout is the engine default for its content | works |
+| `code-1x` | core | partial, geometry identical to default | (c) baseline | listed by name in audit A: the layout is the engine default for its content | works |
+| `image-1x` | core | partial, geometry identical to default | (c) baseline | listed by name in audit A: the layout is the engine default for its content | works |
+| `image-2x` | core | partial, geometry identical to default | (c) baseline | listed by name in audit A: the layout is the engine default for its content | works |
+| `image-3x` | core | partial, geometry identical to default | (c) baseline | listed by name in audit A: the layout is the engine default for its content | works |
+| `media-1x` | core | partial, geometry identical to default | (c) baseline | listed by name in audit A: the layout is the engine default for its content | works |
+| `quote-1x` | core | partial, geometry identical to default | (c) baseline | listed by name in audit A: the layout is the engine default for its content | partial: re-import quote |
+| `table-1x` | core | partial, geometry identical to default | (c) baseline | listed by name in audit A: the layout is the engine default for its content | works |
+| `text-1x` | core | partial, geometry identical to default | (c) baseline | listed by name in audit A: the layout is the engine default for its content | works |
+| `text-2x` | core | partial, geometry identical to default | (c) baseline | listed by name in audit A: the layout is the engine default for its content | works |
+| `text-3x` | core | partial, geometry identical to default | (c) baseline | listed by name in audit A: the layout is the engine default for its content | works |
+| `timeline-1x` | core | partial, geometry identical to default | (c) baseline | listed by name in audit A: the layout is the engine default for its content | works |
+| `title` | core | partial, geometry identical to default | (c) baseline | listed by name in audit A: the layout is the engine default for its content | works |
+| `title-subtitle` | core | partial, geometry identical to default | (c) baseline | listed by name in audit A: the layout is the engine default for its content | works |
+| `list-1x` | core | partial, geometry identical to default | (c) baseline | listed by name in audit A: the layout is the engine default for its content | works |
+| `list-2x` | core | partial, geometry identical to default | (c) baseline | listed by name in audit A: the layout is the engine default for its content | works |
+| `list-3x` | core | partial, geometry identical to default | (c) baseline | listed by name in audit A: the layout is the engine default for its content | works |
+| `list-4x` | core | partial, geometry identical to default | (c) baseline | listed by name in audit A: the layout is the engine default for its content | works |
+| `list-5x` | core | partial, geometry identical to default | (c) baseline | listed by name in audit A: the layout is the engine default for its content | works |
+| `list-6x` | core | partial, geometry identical to default | (c) baseline | listed by name in audit A: the layout is the engine default for its content | works |
+
+A decision can be reversed per row: an (a) contract is a data edit in the gallery, and an (b) alias is removed by deleting its `deprecation`, after which the audit flags it as identical to the default again.
+
 ## Color schemes
 
 14 values, all `works` on the September 30 published set (`partial` before opf-pptx 0.11.2). Every id resolves in core.

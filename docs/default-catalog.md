@@ -157,7 +157,12 @@ Dirty checkout inspection also stays read-only: `--allow-dirty` is accepted only
 with `--check` or `--report` and cannot bypass the write guard.
 
 To bundle more of a subset kind, reconcile it in the gallery first, then change
-its `mode` to `mirror` in the manifest and re-run the sync.
+its `mode` to `mirror` in the manifest and re-run the sync. To bundle only some of
+the published ids, pass them once with `--include <kind>:<id>[,<id>...]`
+(repeatable); the snapshot keeps them from then on, like every bundled id, and
+the sync reports an id the gallery does not publish. The layouts snapshot uses
+this for the 70 legacy gallery slugs (FF-55): it holds 100 of the gallery's 485
+layouts, and the rest stay gallery-only.
 
 ### Checks
 
