@@ -1,6 +1,6 @@
 # Editor and transfer APIs
 
-These entrypoints are published in editor 0.8.0 and later. Use core 0.11.2, renderer 0.11.2, editor 0.10.1 and PPTX 0.11.1 on Node 24 for the coordinated workflow. Check installed package exports when using older releases; repository changes can precede publication.
+These entrypoints are published in editor 0.8.0 and later. Use core 0.11.2, renderer 0.11.2, editor 0.10.2 and PPTX 0.11.1 on Node 24 for the coordinated workflow. Check installed package exports when using older releases; repository changes can precede publication.
 
 ## Atomic patching
 
@@ -55,6 +55,8 @@ Slide copies retain design/catalog/asset context. Insertion namespaces inline ca
 ## Rich text ranges
 
 Use `formatRichTextRange`, `replaceRichTextRange`, and `richTextContent` from `@openpresentation/opf-editor/rich-text` for immutable edits inside rich `text` payloads. Offsets use UTF-16 with whole-grapheme boundaries. Preserve the original array and select only the requested range; avoid flattening runs to plain text. Apply the returned runs with one validated `editor.set` or CLI JSON Patch, and use an expected-value guard for concurrent work. A `null` format value removes that override; `false` explicitly turns a boolean style off. Replacement inherits the first selected run’s style, or the preceding run for an insertion at a boundary.
+
+Text entry (editor 0.10.2): a single click on editable text (plain or rich) enters inline editing with the caret at the clicked character; press-drag selects a range; while editing, double-click selects a word and triple-click a paragraph; clicking another text target commits and enters it in one click; Escape leaves editing with the box still selected. Enter, Space or F2 on a focused target enters with all text selected, as does `beginEdit(path)`. `createCanvasEditor(el, {textEntry: 'dblclick'})` restores the two-step gesture (click selects, double-click enters with the caret at the pointer). Non-text targets keep click-to-select and double-click-for-properties. When driving the canvas from a browser test, enter with the keyboard (focus the target, press Enter) if the test expects all text selected; `dblclick()` on the default canvas places the caret and selects a word.
 
 The canvas toolbar selects and formats the actual SVG glyphs. `beginEdit(path)` selects all text for a rich payload; `editProperties(path)` explicitly opens run fields. Continuous rich-text typing/caret support is still separate work.
 
