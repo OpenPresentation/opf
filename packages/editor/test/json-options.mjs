@@ -33,16 +33,33 @@ const layouts=[
 ];
 const rankedSource=JSON.stringify({slides:[{layout:'title-subtitle',title:'Keep',text:'Keep text'}],catalogs:{layouts:{records:layouts}}});
 const ranked=getJsonFieldContext(rankedSource,rankedSource.indexOf('title-subtitle')+1,{layouts:[{id:'app-list',name:'AAA app list',placeholders:[{type:'list'}]}]});
-assert.deepEqual(ranked.options.slice(0,metricSlots?4:5).map(option=>option.value),metricSlots?['title-subtitle','same-a','same-z','text-1x']:['title-subtitle','same-a','same-z','number-1x','text-1x']);
-assert.equal(ranked.options[1].layoutGroup,'Same placeholders');
-assert.equal(ranked.options[3].layoutGroup,'Compatible placeholders');
-assert.equal(ranked.options[3].placeholders,'Title + Text');
+// The bundled catalog is part of the option list, so expectations are rules over whatever it holds, never a
+// literal list of ids: any bundled layout with the current layout's placeholders (or a compatible set) joins the
+// groups below and sorts among the test records by label.
+const groupOrder=['Current layout','Same placeholders','Compatible placeholders','Different counts','Other layouts','Unspecified placeholders'];
+const values=ranked.options.map(option=>option.value);
+assert.equal(values[0],'title-subtitle');assert.equal(ranked.options[0].layoutGroup,'Current layout');
+const ranks=ranked.options.map(option=>groupOrder.indexOf(option.layoutGroup));
+assert.deepEqual(ranks,[...ranks].sort((a,b)=>a-b),'Groups appear in ranking order');
+for(const group of groupOrder){
+  const labels=ranked.options.filter(option=>option.layoutGroup===group).map(option=>option.label);
+  assert.deepEqual(labels,[...labels].sort((a,b)=>a.localeCompare(b,'en',{numeric:true})),group+' is ordered by label within the group');
+}
+const option=id=>ranked.options.find(entry=>entry.value===id);
+assert.equal(option('same-a').layoutGroup,'Same placeholders');assert.equal(option('same-z').layoutGroup,'Same placeholders');
+assert.ok(values.indexOf('same-a')<values.indexOf('same-z'),'Equal similarity keeps label order');
+assert.equal(option('text-1x').layoutGroup,'Compatible placeholders');assert.equal(option('text-1x').placeholders,'Title + Text');
+assert.ok(values.indexOf('same-z')<values.indexOf('text-1x'),'Same placeholders outrank compatible ones');
+const lastSuggested=Math.max(...ranked.options.filter(entry=>entry.related).map(entry=>values.indexOf(entry.value)));
+assert.ok(values.indexOf('app-list')>lastSuggested,'Placeholder similarity outranks provenance and label order');
+const suggested=['Current layout','Same placeholders','Compatible placeholders'];
+assert.deepEqual(ranked.options.filter(entry=>entry.related).map(entry=>entry.value),ranked.options.filter(entry=>suggested.includes(entry.layoutGroup)).map(entry=>entry.value),'related covers exactly the current, same and compatible groups');
+for(const id of ['same-a','same-z','text-1x'])assert.ok(option(id).related,id);
 assert.equal(ranked.options.find(option=>option.value==='three').layoutGroup,'Different counts');
 assert.equal(ranked.options.find(option=>option.value==='three').placeholders,'Title + Text × 3');
 assert.equal(ranked.options.find(option=>option.value==='wrong').layoutGroup,'Other layouts');
 assert.equal(ranked.options.find(option=>option.value==='unknown-slots').layoutGroup,'Unspecified placeholders');
 assert.equal(ranked.options.find(option=>option.value==='app-list').sourceLabel,'Provided by app');
-assert.deepEqual(ranked.options.filter(option=>option.related).map(option=>option.value),metricSlots?['title-subtitle','same-a','same-z','text-1x']:['title-subtitle','same-a','same-z','number-1x','text-1x']);
 assert.ok(!ranked.options.find(option=>option.value==='text-3x').suggested);
 const inline=JSON.stringify({slides:[{layout:'text-1x'}],catalogs:{layouts:{records:[{id:'text-1x',name:'Override',placeholders:[{type:'title'},{type:'chart'},{type:'text'}]}]}}});
 const inlineOptions=getJsonFieldContext(inline,inline.indexOf('text-1x')+1).options;

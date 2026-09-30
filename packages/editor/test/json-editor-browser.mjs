@@ -41,7 +41,7 @@ try{
   await page.setContent('<style>#editor{width:700px;height:650px}.cm-editor{height:100%}.cm-scroller{overflow:auto}</style><div id="editor"></div><button>After editor</button>');
   if(process.env.OPF_JSON_TEST_PLATFORM)await page.evaluate(platform=>Object.defineProperty(navigator,'platform',{value:platform==='darwin'?'MacIntel':platform==='win32'?'Win32':'Linux x86_64'}),keymapPlatform);
   await page.addScriptTag({content:bundle.outputFiles[0].text});await page.context().setOffline(true);
-  const contracts=await page.evaluate(()=>layoutContracts),similarCount=contracts.metric?3:4,layoutCount=contracts.count+1;
+  const contracts=await page.evaluate(()=>layoutContracts),layoutCount=contracts.count+1;
   const source=page.getByRole('textbox',{name:'OPF JSON',exact:true});
   const read=()=>page.evaluate(()=>control.api.getValue());
   const select=async(from,to=from)=>page.evaluate(([from,to])=>{control.api.focus();control.api.setSelection(from,to);},[from,to]);
@@ -73,18 +73,24 @@ try{
   const deck='{\r\n  "slides": [{"layout":"text-1x","title":"Keep title","text":"Keep  text"}]\n}';
   await page.evaluate(code=>mount(code,{layouts:[{id:'partner-detail',name:'Partner detail',placeholders:[{type:'title'},{type:'text'}]}]}),deck);
   await at('"layout"',1);await source.press('Control+Space');const menu=page.getByRole('dialog',{name:'layout options',exact:true});await menu.waitFor();
-  assert.equal(await menu.getByRole('option').count(),similarCount);
+  // The suggested set is whatever the bundled catalog makes compatible with this deck's layout, so it is read back from the
+  // menu (current, same and compatible groups) rather than hard-coded, then checked against the filtered view.
   assert.ok((await menu.getByRole('option').first().innerText()).includes('Text 1x'));
+  const similarLabel=await menu.getByRole('button',{name:/^Similar \(\d+\)$/}).innerText(),similarCount=Number(similarLabel.match(/\d+/)[0]);
+  assert.equal(await menu.getByRole('option').count(),similarCount);
+  assert.ok(similarCount>=3,'the current layout, the app layout and at least one bundled layout are suggested');
   assert.ok((await menu.getByRole('group',{name:'Same placeholders',exact:true}).innerText()).includes('Partner detail'));
   await menu.getByRole('button',{name:`All layouts (${layoutCount})`,exact:true}).click();
   assert.equal(await menu.getByRole('option').count(),layoutCount);
+  let grouped=0;for(const name of ['Current layout','Same placeholders','Compatible placeholders'])grouped+=await menu.getByRole('group',{name,exact:true}).getByRole('option').count();
+  assert.equal(grouped,similarCount,'Similar holds exactly the current, same and compatible groups');
   assert.ok((await menu.getByRole('group',{name:'Different counts',exact:true}).innerText()).includes('Text × 3'));
   await menu.getByRole('button',{name:`Similar (${similarCount})`,exact:true}).click();
   await menu.getByRole('combobox').fill('chart-1x');assert.equal(await menu.getByRole('option').count(),1);
   await menu.getByRole('combobox').fill('');assert.equal(await menu.getByRole('option').count(),similarCount);
   await menu.getByRole('combobox').press('ArrowDown');
   const active=await menu.getByRole('combobox').getAttribute('aria-activedescendant');
-  assert.ok((await page.locator(`[id="${active}"]`).innerText()).includes(contracts.metric?'Partner detail':'Number 1x'));
+  assert.equal(await page.locator(`[id="${active}"]`).innerText(),await menu.getByRole('option').nth(1).innerText(),'ArrowDown from the first option activates the second');
   await menu.getByRole('combobox').fill('partner-detail');assert.equal(await menu.getByRole('option').count(),1);await menu.getByRole('combobox').press('Enter');assert.equal(await read(),deck.replace('text-1x','partner-detail'));
   await source.press(`${mod}+z`);assert.equal(await read(),deck);
   // A real click on the highlighted key opens the same menu.
