@@ -25,26 +25,26 @@ jobs:
           persist-credentials: false
           fetch-depth: 0
           path: opf-editor
-      # The ecosystem is pinned to the versions this package depends on: opf main after 0.11.2 (the packed-ecosystem check there knows renderer 0.11.1), opf-render 0.11.1 (lazy script and preview faces, incl. Barlow, which test:playground exercises) and opf-pptx 0.11.0.
+      # The ecosystem is pinned to the versions this package depends on: opf main after 0.11.2 (the packed-ecosystem check there knows renderer 0.11.2), opf-render 0.11.2 (lazy script and preview faces, incl. Barlow, which test:playground exercises) and opf-pptx 0.11.1.
       # Verify registry dependencies before linking the pinned source graph.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf
-          ref: a5b588b9bb1191cc4b0c927ddd39dfcda1b998d7 # opf main after opf-v0.11.2 (its packed-ecosystem check records the 0.11.1 renderer's lazy face count)
+          ref: 3971791d043712cc7f6596685b0c6363e749c943 # opf main after #182 (its packed-ecosystem check records the 0.11.2 renderer's lazy face count)
           path: opf
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-render
-          ref: bddb61425fe4ed57eb406c55cb9ffee5ae528928 # opf-render-v0.11.1
+          ref: 021cca013cde053fa0721d7da0ac678b4a9acba1 # opf-render-v0.11.2
           path: opf-render
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-pptx
-          ref: 5e46cf8f04218a1f77205b933f870f4ca5017394 # opf-pptx-v0.11.0
+          ref: 0d15f1cdfbfc6cf0b2d8b7c824ef0fb26285191f # opf-pptx-v0.11.1
           path: opf-pptx
           fetch-depth: 0
           persist-credentials: false

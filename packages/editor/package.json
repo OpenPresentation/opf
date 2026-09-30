@@ -1,6 +1,6 @@
 {
   "name": "@openpresentation/opf-editor",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "description": "Embeddable local OPF editor primitives built on the deterministic renderer.",
   "license": "MIT",
   "type": "module",
@@ -156,8 +156,8 @@
     "@expo-google-fonts/noto-sans-thai": "0.4.2",
     "@expo-google-fonts/noto-serif-hebrew": "0.4.2",
     "@expo-google-fonts/noto-serif-tibetan": "0.4.2",
-    "@openpresentation/opf-pptx": "^0.11.0",
-    "@openpresentation/opf-render": "^0.11.1",
+    "@openpresentation/opf-pptx": "^0.11.1",
+    "@openpresentation/opf-render": "^0.11.2",
     "esbuild": "0.28.2",
     "playwright": "1.63.0"
   }
