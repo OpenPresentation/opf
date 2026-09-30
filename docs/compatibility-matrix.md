@@ -28,14 +28,14 @@ the versions below or established complete native compatibility.
 | --- | --- | --- |
 | `@openpresentation/opf` | 0.11.2 | — |
 | `@openpresentation/cli` | 0.9.0 | Bundles core 0.11.0; registry metadata has no runtime `dependencies` |
-| `@openpresentation/opf-render` | 0.11.2 | `@openpresentation/opf@^0.11.2` |
+| `@openpresentation/opf-render` | 0.11.3 | `@openpresentation/opf@^0.11.2` |
 | `@openpresentation/opf-editor` | 0.10.2 | `@openpresentation/opf@^0.11.2`; optional peer `@openpresentation/opf-render@^0.11.0` |
-| `@openpresentation/opf-pptx` | 0.11.1 | `@openpresentation/opf@^0.11.2`; optional peer `@openpresentation/opf-render@^0.11.0` |
+| `@openpresentation/opf-pptx` | 0.11.2 | `@openpresentation/opf@^0.11.2`; optional peer `@openpresentation/opf-render@^0.11.0` |
 
 Install the complete pinned set. A caret range starting at 0.10.1 does not
 include 0.11.x; old consumers can install a second core and do not establish
 ColorRef preview/export support. The renderer, PPTX and editor floors move with
-core in lockstep (core 0.11.2 with renderer 0.11.2, PPTX 0.11.1 and editor 0.10.2), so
+core in lockstep (core 0.11.2 with renderer 0.11.3, PPTX 0.11.2 and editor 0.10.2), so
 preview and export resolve one composition.
 
 Shared header/footer geometry (`furniture-flow-v2`) is published. PPTX exports
@@ -340,7 +340,7 @@ not available; those are Node APIs.
 
 | Older set | Relationship |
 | --- | --- |
-| core 0.11.2, CLI 0.9.0, renderer 0.11.1, PPTX 0.11.0, editor 0.10.0 | Previous coordinated set (lockstep floors, Intos and the open families, selected-name export). Renderer 0.11.2 adds script-face loading (`scripts: 'auto'`); PPTX 0.11.1 adds `design.watermark` export; editor 0.10.2 loads the fonts a document needs before every render (FF-41). |
+| core 0.11.2, CLI 0.9.0, renderer 0.11.1, PPTX 0.11.0, editor 0.10.0 | Previous coordinated set (lockstep floors, Intos and the open families, selected-name export). Renderer 0.11.2 adds script-face loading (`scripts: 'auto'`); PPTX 0.11.1 adds `design.watermark` export; editor 0.10.2 loads the fonts a document needs before every render (FF-41). Renderer 0.11.3 previews every kept classic chart type natively; PPTX 0.11.2 exports the native construct for each kept classic chart type (with `chart-data-adapted` diagnostics where data is adapted) and writes theme colour references for table and text colours. |
 | core 0.11.0, CLI 0.9.0, renderer 0.9.0, PPTX 0.9.1, editor 0.8.0 | Previous coordinated Node 24 set (ColorRef, shared furniture). Renderer and PPTX had different core floors from 0.10.x. |
 | core 0.10.0, renderer/PPTX/CLI 0.8.0, editor 0.7.0 | Previous coordinated Node 24 baseline. Lint and furniture landed across 0.10.0/0.8.0 then layout-placeholder fixes in 0.10.1/0.8.1/0.7.1. |
 | Node 20 / 22 | Not valid for these packages |
