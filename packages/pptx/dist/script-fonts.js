@@ -158,7 +158,7 @@ export function partScriptFonts(path, xml, plan, slideIndex) {
     xml = xml.replace(/<p:(sp|graphicFrame)>[\s\S]*?<\/p:\1>/g, shape =>
       runScriptFonts(shape, resolved, /<p:cNvPr\b[^>]*\bname="OPF heading /.test(shape)));
     if (plan.rtl) xml = paragraphRtl(xml, plan.deck.direction);
-  } else if (/^ppt\/(?:charts\/chart|notesSlides\/notesSlide)\d+\.xml$/.test(path)) {
+  } else if (/^ppt\/(?:charts\/chart(?:Ex)?|notesSlides\/notesSlide)\d+\.xml$/.test(path)) {
     xml = runScriptFonts(xml, resolved, false);
     if (plan.rtl && path.startsWith("ppt/notesSlides/")) xml = paragraphRtl(xml, plan.deck.direction);
   } else if (plan.rtl && /^ppt\/(?:slideMasters\/slideMaster\d+|slideLayouts\/slideLayout\d+|notesMasters\/notesMaster\d+|presentation)\.xml$/.test(path)) {

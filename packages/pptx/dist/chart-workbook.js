@@ -21,7 +21,8 @@ function relationship(entries,source,id){
 }
 function workbookContext(entries,chartPart){
  const chart=xml(entries,chartPart)?.chartSpace;
- const ref=relationship(entries,chartPart,chart?.externalData?.id);
+ // A classic part keeps c:externalData under c:chartSpace; a chartex part keeps cx:externalData under cx:chartData.
+ const ref=relationship(entries,chartPart,(chart?.externalData??chart?.chartData?.externalData)?.id);
  if(!ref?.type?.endsWith('/package')||!entries[ref.path])return undefined;
  // Read only bounded spreadsheet metadata. Never follow external workbook links.
  let size=0;
@@ -29,7 +30,8 @@ function workbookContext(entries,chartPart){
   if(!/^xl\/(workbook\.xml|_rels\/workbook\.xml\.rels|sharedStrings\.xml|worksheets\/[^/]+\.xml)$/.test(file.name))return false;
   size+=file.originalSize;if(size>16*1024*1024)throw Error('Chart workbook metadata exceeds the limit.');return true;
  }});
- const category=find(chart,'cat')[0]??find(chart,'xVal')[0],formula=category?.strRef?.f??category?.multiLvlStrRef?.f??category?.numRef?.f;
+ // The category range: c:cat/c:xVal references, or the chartex cx:strDim type="cat" formula.
+ const category=find(chart,'cat')[0]??find(chart,'xVal')[0]??find(chart,'strDim').find(dim=>dim?.type==='cat'),formula=category?.strRef?.f??category?.multiLvlStrRef?.f??category?.numRef?.f??(category?.type==='cat'?category?.f:undefined);
  // Infer a heading only for one contiguous vertical category range with a row
  // above it. Other chart/workbook arrangements remain explicitly unrecovered.
  const range=/^(?:'((?:[^']|'')+)'|([^'!]+))!\$?([A-Z]+)\$?(\d+):\$?([A-Z]+)\$?(\d+)$/i.exec(text(formula));

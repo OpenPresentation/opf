@@ -19,6 +19,7 @@ await copyFile(new URL('src/document-provenance.js', root), new URL('document-pr
 await copyFile(new URL('src/furniture-fields.js', root), new URL('furniture-fields.js', dist));
 await copyFile(new URL('src/chart-workbook.js', root), new URL('chart-workbook.js', dist));
 await copyFile(new URL('src/chart-types.js', root), new URL('chart-types.js', dist));
+await copyFile(new URL('src/chartex.js', root), new URL('chartex.js', dist));
 await copyFile(new URL("src/index.d.ts", root), new URL("index.d.ts", dist));
 await copyFile(new URL("src/image-geometry.js", root), new URL("image-geometry.js", dist));
 await copyFile(new URL('src/slide-image-provenance.js', root), new URL('slide-image-provenance.js', dist));

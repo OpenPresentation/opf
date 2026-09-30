@@ -39,13 +39,28 @@ export interface MediaProvenanceDiagnostic { code: "media-provenance-omitted"; p
 export interface ChartDataUnplottableDiagnostic { code: "chart-data-unplottable"; path: string; message: string; reason: "data-not-inline" | "no-rows" | "no-columns" | "single-column-not-numeric" }
 /** Content with no PowerPoint export (an empty table, an unsupported payload) is replaced by a plain-language placeholder frame. */
 export interface ContentPlaceholderDiagnostic { code: "content-placeholder"; path: string; message: string; reason: "table-has-no-rows" | "unsupported-payload" }
-/** The chart data was reshaped to export a native chart: a histogram's values were binned, or a single value column was plotted against row numbers. */
 export interface WatermarkNotExportedDiagnostic { code: "watermark-not-exported"; path: string; message: string }
-export interface ChartDataAdaptedDiagnostic { code: "chart-data-adapted"; path: string; message: string; adaptation: "histogram-binned" | "row-numbers" }
+/**
+ * The chart data was reshaped to export a native chart: a single value column was plotted against row numbers; a one-series construct
+ * (pie, doughnut, and with `chartex: "native"` treemap, histogram, pareto, waterfall, funnel, map) kept only its first series; by default
+ * a chartex chart type was written as a clustered column chart (`chartex-fallback`) and a one-column histogram was binned into counts
+ * (`histogram-binned`).
+ */
+export interface ChartDataAdaptedDiagnostic { code: "chart-data-adapted"; path: string; message: string; adaptation: "histogram-binned" | "row-numbers" | "series-dropped" | "chartex-fallback" }
+/** With `chartex: "native"`, a map chart (`world`) is exported as a chartex regionMap without cached geography: PowerPoint fetches the region shapes from Bing Maps online, so the map may show no regions offline. */
+export interface ChartMapGeodataDiagnostic { code: "chart-map-geodata"; path: string; message: string }
 
 export interface ToPptxOptions {
   /** Default compatible converts WebP to a static PNG. Preserve embeds original WebP bytes. */
   imageFormat?: "compatible" | "preserve";
+  /**
+   * How the chartex chart types (treemap, histogram, pareto, box-and-whisker, waterfall, funnel, world) are exported.
+   * "fallback" (default) writes the clustered column chart of the data and reports `chart-data-adapted` (`chartex-fallback`,
+   * `histogram-binned`). "native" writes Office 2016 chartex parts (`cx:chartSpace`, style parts, an `mc:AlternateContent`
+   * frame with the clustered column chart as fallback). Native chartex is opt-in pending native PowerPoint confirmation (FF-22b);
+   * the default flips once that check passes. Import of chartex parts is always on.
+   */
+  chartex?: "native" | "fallback";
   /**
    * OPF_DOCUMENT_V1 / OPF_SLIDE_V1 customer-data tags that let fromPptx restore
    * catalog references, layout ids and authoring metadata (docs/document-roundtrip.md).
@@ -58,7 +73,7 @@ export interface ToPptxOptions {
   /** Match preview/pagination clearance around supplied vector text outlines; default 1. */
   textRasterPadding?: number;
   /** Layout diagnostics, `media-provenance-omitted` when video data cannot be stored, plus `unresolved-font-scheme` (once per reference path) when a font-scheme id matches no record and the default `aptos` scheme is used as the base. */
-  onDiagnostic?: (diagnostic: LayoutDiagnostic | FontSchemeDiagnostic | MediaProvenanceDiagnostic | ChartDataUnplottableDiagnostic | ChartDataAdaptedDiagnostic | ContentPlaceholderDiagnostic | WatermarkNotExportedDiagnostic) => void;
+  onDiagnostic?: (diagnostic: LayoutDiagnostic | FontSchemeDiagnostic | MediaProvenanceDiagnostic | ChartDataUnplottableDiagnostic | ChartDataAdaptedDiagnostic | ChartMapGeodataDiagnostic | ContentPlaceholderDiagnostic | WatermarkNotExportedDiagnostic) => void;
   baseDir?: string;
   compressionLevel?: number;
   imageResolver?: (src: string, context: ImageResolverContext) => ImageResolverResult | Promise<ImageResolverResult | null | undefined> | null | undefined;

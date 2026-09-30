@@ -29,18 +29,47 @@ export const CHART_TYPES = Object.freeze({
   radar: category('radar', { aspose: 'Radar', radarStyle: 'standard', markers: false }),
   'radar-with-markers': category('radar', { aspose: 'RadarWithMarkers', radarStyle: 'marker', markers: true }),
   'filled-radar': category('radar', { aspose: 'FilledRadar', radarStyle: 'filled', markers: false }),
-  treemap: { family: 'chartex', layoutId: 'treemap', aspose: 'Treemap' },
-  histogram: { family: 'chartex', layoutId: 'clusteredColumn', aspose: 'Histogram' },
-  pareto: { family: 'chartex', layoutId: 'clusteredColumn', aspose: 'ParetoLine' },
-  'box-and-whisker': { family: 'chartex', layoutId: 'boxWhisker', aspose: 'BoxAndWhisker' },
-  waterfall: { family: 'chartex', layoutId: 'waterfall', aspose: 'Waterfall' },
-  funnel: { family: 'chartex', layoutId: 'funnel', aspose: 'Funnel' },
-  world: { family: 'chartex', layoutId: 'regionMap', aspose: 'Map' },
+  // Office 2016 chartex constructs (cx:chartSpace, one cx:series per plot,
+  // named by layoutId). `requires` is the markup-compatibility namespace the
+  // slide's mc:Choice names, so older readers take the classic fallback.
+  // `series` is the number of value columns the construct plots.
+  treemap: chartex('treemap', 'Treemap', { requires: 'cx1', dimension: 'size', series: 1 }),
+  histogram: chartex('clusteredColumn', 'Histogram', { requires: 'cx1', binning: true, series: 1, axes: true }),
+  pareto: chartex('paretoLine', 'ParetoLine', { requires: 'cx1', binning: true, owner: 'clusteredColumn', series: 1, axes: true }),
+  'box-and-whisker': chartex('boxWhisker', 'BoxAndWhisker', { requires: 'cx1', series: Infinity, axes: true }),
+  waterfall: chartex('waterfall', 'Waterfall', { requires: 'cx1', series: 1, axes: true }),
+  funnel: chartex('funnel', 'Funnel', { requires: 'cx2', series: 1, axes: true }),
+  world: chartex('regionMap', 'Map', { requires: 'cx5', dimension: 'colorVal', series: 1 }),
 });
 
-// A chartex id (treemap, histogram, ...) has no classic construct; the exporter
-// writes it as a clustered column chart and reports chart-data-adapted.
+function chartex(layoutId, aspose, extra) {
+  return { family: 'chartex', layoutId, aspose, dimension: 'val', ...extra };
+}
+
+// The classic construct written as the mc:Fallback of every chartex chart, so a
+// reader without chartex support shows a clustered column chart of the same
+// workbook data.
 export const CHARTEX_FALLBACK = CHART_TYPES.column;
+
+// Markup-compatibility namespaces for `requires` (MS-ODRAWXML chartex
+// versions). PowerPoint 2016 and later understand all of them.
+export const CHARTEX_NAMESPACES = Object.freeze({
+  cx: 'http://schemas.microsoft.com/office/drawing/2014/chartex',
+  cx1: 'http://schemas.microsoft.com/office/drawing/2015/9/8/chartex',
+  cx2: 'http://schemas.microsoft.com/office/drawing/2015/10/21/chartex',
+  cx3: 'http://schemas.microsoft.com/office/drawing/2016/5/9/chartex',
+  cx4: 'http://schemas.microsoft.com/office/drawing/2016/5/10/chartex',
+  cx5: 'http://schemas.microsoft.com/office/drawing/2016/5/11/chartex',
+});
+
+// cx:series layoutIds of a chartex part (an owned paretoLine marks the Office
+// Pareto chart) -> kept OPF id, for import; null for sunburst and unknown layouts.
+export function chartTypeFromChartex(layoutIds) {
+  const ids = new Set(layoutIds);
+  if (ids.has('paretoLine')) return 'pareto';
+  for (const [id, spec] of Object.entries(CHART_TYPES)) if (spec.family === 'chartex' && ids.has(spec.layoutId)) return id;
+  return null;
+}
 
 const variants = (base, target) => Object.fromEntries([base, `${base}-2x`, `${base}-3x`].map((id) => [id, target]));
 

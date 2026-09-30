@@ -1,0 +1,639 @@
+{
+  "source": {
+    "repository": "OpenPresentation/opf-pptx",
+    "commit": "6f6122cb7fb8cb89b17c1bea7981397a27ded8ed",
+    "note": "toPptx default output (chartex fallback) for chartex chart types; regenerate only with an owner decision to change the default export"
+  },
+  "decks": {
+    "treemap-category": {
+      "slides": [
+        {
+          "title": "treemap",
+          "chart": {
+            "type": "treemap",
+            "data": {
+              "columns": [
+                "Region",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "North",
+                  42
+                ],
+                [
+                  "South",
+                  31
+                ],
+                [
+                  "East",
+                  -8
+                ],
+                [
+                  "West",
+                  19
+                ]
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "histogram-single": {
+      "slides": [
+        {
+          "title": "histogram",
+          "chart": {
+            "type": "histogram",
+            "data": {
+              "columns": [
+                "Sample"
+              ],
+              "rows": [
+                [
+                  3
+                ],
+                [
+                  5
+                ],
+                [
+                  8
+                ],
+                [
+                  13
+                ],
+                [
+                  5.5
+                ],
+                [
+                  9
+                ]
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "histogram-category": {
+      "slides": [
+        {
+          "title": "histogram",
+          "chart": {
+            "type": "histogram",
+            "data": {
+              "columns": [
+                "Region",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "North",
+                  42
+                ],
+                [
+                  "South",
+                  31
+                ],
+                [
+                  "East",
+                  -8
+                ],
+                [
+                  "West",
+                  19
+                ]
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "pareto-multi": {
+      "slides": [
+        {
+          "title": "pareto",
+          "chart": {
+            "type": "pareto",
+            "data": {
+              "columns": [
+                "Quarter",
+                "North",
+                "South",
+                "West"
+              ],
+              "rows": [
+                [
+                  "Q1",
+                  4,
+                  3,
+                  2
+                ],
+                [
+                  "Q2",
+                  5,
+                  2,
+                  3
+                ],
+                [
+                  "Q3",
+                  6,
+                  4,
+                  1
+                ]
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "box-multi": {
+      "slides": [
+        {
+          "title": "box",
+          "chart": {
+            "type": "box-and-whisker",
+            "data": {
+              "columns": [
+                "Quarter",
+                "North",
+                "South",
+                "West"
+              ],
+              "rows": [
+                [
+                  "Q1",
+                  4,
+                  3,
+                  2
+                ],
+                [
+                  "Q2",
+                  5,
+                  2,
+                  3
+                ],
+                [
+                  "Q3",
+                  6,
+                  4,
+                  1
+                ]
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "waterfall-single": {
+      "slides": [
+        {
+          "title": "waterfall",
+          "chart": {
+            "type": "waterfall",
+            "data": {
+              "columns": [
+                "Sample"
+              ],
+              "rows": [
+                [
+                  3
+                ],
+                [
+                  5
+                ],
+                [
+                  8
+                ],
+                [
+                  13
+                ],
+                [
+                  5.5
+                ],
+                [
+                  9
+                ]
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "funnel-category": {
+      "slides": [
+        {
+          "title": "funnel",
+          "chart": {
+            "type": "funnel",
+            "data": {
+              "columns": [
+                "Region",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "North",
+                  42
+                ],
+                [
+                  "South",
+                  31
+                ],
+                [
+                  "East",
+                  -8
+                ],
+                [
+                  "West",
+                  19
+                ]
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "world-category": {
+      "name": "Map deck",
+      "language": "ja-JP",
+      "design": {
+        "fontScheme": "calibri"
+      },
+      "slides": [
+        {
+          "id": "a",
+          "layout": "chart-1x",
+          "title": "地図",
+          "chart": {
+            "type": "world",
+            "data": {
+              "columns": [
+                "国",
+                "値"
+              ],
+              "rows": [
+                [
+                  "日本",
+                  4
+                ],
+                [
+                  "ドイツ",
+                  3
+                ]
+              ]
+            }
+          },
+          "text": "Body"
+        }
+      ]
+    },
+    "all-seven": {
+      "slides": [
+        {
+          "title": "treemap",
+          "chart": {
+            "type": "treemap",
+            "data": {
+              "columns": [
+                "Region",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "North",
+                  42
+                ],
+                [
+                  "South",
+                  31
+                ],
+                [
+                  "East",
+                  -8
+                ],
+                [
+                  "West",
+                  19
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "title": "histogram",
+          "chart": {
+            "type": "histogram",
+            "data": {
+              "columns": [
+                "Region",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "North",
+                  42
+                ],
+                [
+                  "South",
+                  31
+                ],
+                [
+                  "East",
+                  -8
+                ],
+                [
+                  "West",
+                  19
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "title": "pareto",
+          "chart": {
+            "type": "pareto",
+            "data": {
+              "columns": [
+                "Region",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "North",
+                  42
+                ],
+                [
+                  "South",
+                  31
+                ],
+                [
+                  "East",
+                  -8
+                ],
+                [
+                  "West",
+                  19
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "title": "box-and-whisker",
+          "chart": {
+            "type": "box-and-whisker",
+            "data": {
+              "columns": [
+                "Region",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "North",
+                  42
+                ],
+                [
+                  "South",
+                  31
+                ],
+                [
+                  "East",
+                  -8
+                ],
+                [
+                  "West",
+                  19
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "title": "waterfall",
+          "chart": {
+            "type": "waterfall",
+            "data": {
+              "columns": [
+                "Region",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "North",
+                  42
+                ],
+                [
+                  "South",
+                  31
+                ],
+                [
+                  "East",
+                  -8
+                ],
+                [
+                  "West",
+                  19
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "title": "funnel",
+          "chart": {
+            "type": "funnel",
+            "data": {
+              "columns": [
+                "Region",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "North",
+                  42
+                ],
+                [
+                  "South",
+                  31
+                ],
+                [
+                  "East",
+                  -8
+                ],
+                [
+                  "West",
+                  19
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "title": "world",
+          "chart": {
+            "type": "world",
+            "data": {
+              "columns": [
+                "Region",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "North",
+                  42
+                ],
+                [
+                  "South",
+                  31
+                ],
+                [
+                  "East",
+                  -8
+                ],
+                [
+                  "West",
+                  19
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "title": "treemap-2x",
+          "chart": {
+            "type": "treemap-2x",
+            "data": {
+              "columns": [
+                "Region",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "North",
+                  42
+                ],
+                [
+                  "South",
+                  31
+                ],
+                [
+                  "East",
+                  -8
+                ],
+                [
+                  "West",
+                  19
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "title": "australia",
+          "chart": {
+            "type": "australia",
+            "data": {
+              "columns": [
+                "Region",
+                "Value"
+              ],
+              "rows": [
+                [
+                  "North",
+                  42
+                ],
+                [
+                  "South",
+                  31
+                ],
+                [
+                  "East",
+                  -8
+                ],
+                [
+                  "West",
+                  19
+                ]
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "entries": {
+    "treemap-category": {
+      "sha256": "44784f36b89270b5d6198f238515e082e254c15466adfd2293f2841a37cd67b4",
+      "bytes": 22562,
+      "diagnostics": [
+        "chart-data-adapted/chartex-fallback"
+      ]
+    },
+    "histogram-single": {
+      "sha256": "a8f3aa3fc6bcc4bf6e4d0399477cebb4aaccc399390dea327d1c209e539f7248",
+      "bytes": 22576,
+      "diagnostics": [
+        "chart-data-adapted/histogram-binned"
+      ]
+    },
+    "histogram-category": {
+      "sha256": "c1be89a2ac0c8ed0e5dae6eae61c80199a11e458f9e56eaaff765e166eea549d",
+      "bytes": 22564,
+      "diagnostics": [
+        "chart-data-adapted/chartex-fallback"
+      ]
+    },
+    "pareto-multi": {
+      "sha256": "f6c5bebe94fa66ad03f5ea56a66ddeffa005d5eb1ccfb77b01b8e7dc2e7a3d9b",
+      "bytes": 22658,
+      "diagnostics": [
+        "chart-data-adapted/chartex-fallback"
+      ]
+    },
+    "box-multi": {
+      "sha256": "a85ab730de0509c364faf4dac7cf2ff26bccc69b64994f6a7b44e216c1369358",
+      "bytes": 22656,
+      "diagnostics": [
+        "chart-data-adapted/chartex-fallback"
+      ]
+    },
+    "waterfall-single": {
+      "sha256": "cd568176657fd37c9d38a2ab504b5a5a5d4cc718578ae98f623846dd254c7192",
+      "bytes": 22612,
+      "diagnostics": [
+        "chart-data-adapted/chartex-fallback",
+        "chart-data-adapted/row-numbers"
+      ]
+    },
+    "funnel-category": {
+      "sha256": "76902054da35fdf83cffe96b47e03580c5e8a6cc88cb4f0d64aaad77c381785e",
+      "bytes": 22562,
+      "diagnostics": [
+        "chart-data-adapted/chartex-fallback"
+      ]
+    },
+    "world-category": {
+      "sha256": "5b46e89f63c0856892e68764beee6976d811f781b87002939e0835f0f15d32b8",
+      "bytes": 24073,
+      "diagnostics": [
+        "chart-data-adapted/chartex-fallback"
+      ]
+    },
+    "all-seven": {
+      "sha256": "d8692efbac1ebce93db4fb78b78b3810c5de7eca9be767ec561d624def0e0a22",
+      "bytes": 104355,
+      "diagnostics": [
+        "chart-data-adapted/chartex-fallback",
+        "chart-data-adapted/chartex-fallback",
+        "chart-data-adapted/chartex-fallback",
+        "chart-data-adapted/chartex-fallback",
+        "chart-data-adapted/chartex-fallback",
+        "chart-data-adapted/chartex-fallback",
+        "chart-data-adapted/chartex-fallback",
+        "chart-data-adapted/chartex-fallback",
+        "chart-data-adapted/chartex-fallback"
+      ]
+    }
+  }
+}

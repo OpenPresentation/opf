@@ -1,0 +1,28 @@
+// Default-mode (chartex: 'fallback') byte fixture: SHA-256 of toPptx output for chartex decks, generated from main.
+import {createHash} from 'node:crypto';
+import {writeFileSync} from 'node:fs';
+import {execSync} from 'node:child_process';
+import {toPptx} from '../dist/index.js';
+const region = {columns: ['Region', 'Value'], rows: [['North', 42], ['South', 31], ['East', -8], ['West', 19]]};
+const multi = {columns: ['Quarter', 'North', 'South', 'West'], rows: [['Q1', 4, 3, 2], ['Q2', 5, 2, 3], ['Q3', 6, 4, 1]]};
+const single = {columns: ['Sample'], rows: [[3], [5], [8], [13], [5.5], [9]]};
+const decks = {
+  'treemap-category': {slides: [{title: 'treemap', chart: {type: 'treemap', data: region}}]},
+  'histogram-single': {slides: [{title: 'histogram', chart: {type: 'histogram', data: single}}]},
+  'histogram-category': {slides: [{title: 'histogram', chart: {type: 'histogram', data: region}}]},
+  'pareto-multi': {slides: [{title: 'pareto', chart: {type: 'pareto', data: multi}}]},
+  'box-multi': {slides: [{title: 'box', chart: {type: 'box-and-whisker', data: multi}}]},
+  'waterfall-single': {slides: [{title: 'waterfall', chart: {type: 'waterfall', data: single}}]},
+  'funnel-category': {slides: [{title: 'funnel', chart: {type: 'funnel', data: region}}]},
+  'world-category': {name: 'Map deck', language: 'ja-JP', design: {fontScheme: 'calibri'}, slides: [{id: 'a', layout: 'chart-1x', title: '地図', chart: {type: 'world', data: {columns: ['国', '値'], rows: [['日本', 4], ['ドイツ', 3]]}}, text: 'Body'}]},
+  'all-seven': {slides: ['treemap', 'histogram', 'pareto', 'box-and-whisker', 'waterfall', 'funnel', 'world', 'treemap-2x', 'australia'].map((type) => ({title: type, chart: {type, data: region}}))},
+};
+const entries = {};
+for (const [name, deck] of Object.entries(decks)) {
+  const diagnostics = [];
+  const bytes = await toPptx(deck, {onDiagnostic: (d) => diagnostics.push(`${d.code}${d.adaptation ? `/${d.adaptation}` : ''}`)});
+  entries[name] = {sha256: createHash('sha256').update(bytes).digest('hex'), bytes: bytes.length, diagnostics};
+}
+const source = execSync('git rev-parse HEAD', {cwd: new URL('..', import.meta.url)}).toString().trim();
+writeFileSync(process.argv[2], JSON.stringify({source: {repository: 'OpenPresentation/opf-pptx', commit: source, note: 'toPptx default output (chartex fallback) for chartex chart types; regenerate only with an owner decision to change the default export'}, decks, entries}, null, 2) + '\n');
+console.log(Object.entries(entries).map(([k, v]) => `${k} ${v.sha256.slice(0, 12)} ${v.bytes} ${v.diagnostics.join(',')}`).join('\n'));
