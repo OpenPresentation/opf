@@ -156,6 +156,10 @@ function chartContext(item, box, bound, options, svg, rows, columns) {
     pt: u * 4 / 3,
     pad: 10 * u,
     lineHeight: fontPx * 1.5,
+    // One text line as renderTextBox lays it out (fitText line height), and the
+    // clear space kept between neighbouring category labels.
+    textHeight: fontPx * 1.22,
+    labelGap: fontPx * 0.1,
     colors: CHART_SERIES_COLORS.map((color) => chartColorForFill(surface, color)),
     gridColor: bound.design.colors.border,
     axisColor: "#888888",
@@ -168,12 +172,16 @@ function chartContext(item, box, bound, options, svg, rows, columns) {
       for (const [key, value] of Object.entries(attrs)) out[key] = numericAttrs.has(key) && typeof value === "number" ? n(value) : value;
       children.push(svg.tag(name, { ...out, ...(path ? svg.traceAttrs(options, path) : {}) }));
     },
-    text(value, rect, path, align = "center") {
-      if (!(rect.width > 0 && rect.height > 0)) return;
-      children.push(svg.renderTextBox(String(value), rect, bound, {
+    textElement(value, rect, path, align = "center") {
+      if (!(rect.width > 0 && rect.height > 0)) return "";
+      return svg.renderTextBox(String(value), rect, bound, {
         path, fontSize: requested, fontFamily: bound.design.fonts.body, fontWeight: 400,
         fill: labelColor, options, align, verticalAlign: "middle"
-      }));
+      });
+    },
+    text(value, rect, path, align = "center") {
+      const element = c.textElement(value, rect, path, align);
+      if (element) children.push(element);
     },
     series(first = 1) {
       return columns.slice(first).map((name, offset) => ({
@@ -325,6 +333,202 @@ function maxIntervalsFor(length, labelExtent) {
 }
 
 // ---------------------------------------------------------------------------
+// Category-axis labels. PowerPoint labels a category axis automatically: a label
+// stays on one line unless it has spaces and fits two lines in its category
+// band; when the labels do not fit horizontally it rotates them (-45 degrees,
+// then vertical) and shrinks the plot area to make room; when even that does not
+// fit it draws every n-th label (tickLblSkip auto, first label always kept).
+// The helpers below reproduce that policy deterministically:
+//
+//   1. A label is never broken inside a word. It is one line, or (when it has
+//      whitespace) the best two-line split, or an ellipsized single line.
+//   2. Horizontal labels (single, or two-line where a band is too narrow) win
+//      when no two labels collide. Otherwise -45 degree, then -90 degree labels
+//      are tried while their footprint fits `maxReserve` (at most 40% of the
+//      chart height), each drawn with the fewest labels that avoid overlap.
+//   3. When no arrangement shows every label, the arrangement with the smallest
+//      skip interval n wins (ties: horizontal, then -45, then -90); labels
+//      0, n, 2n, ... are drawn, so the first label is always drawn.
+//   4. Only a label wider than the whole chart area (or wider than a horizontal
+//      bar chart's label gutter, which grows to 30% of the chart width) is
+//      ellipsized; that is reported once per chart as `chart-label-truncated`.
+//      No arrangement raises `text-overflow`.
+
+const ELLIPSIS = "…";
+// Whitespace that may split a label; no-break spaces stay inside their word.
+const BREAKABLE = /[^\S  ﻿]+/u;
+
+// Labels lay out as one line of text; authored line breaks read as spaces.
+const flatLabel = (name) => String(name ?? "").replace(/[\r\n]+/g, " ");
+
+function labelCandidates(c, entries) {
+  return entries.map((entry) => {
+    const text = flatLabel(entry.name);
+    return { ...entry, text, width: text ? c.width(text) : 0 };
+  });
+}
+
+// The two-line split with the narrowest widest line, or null for one word.
+function twoLines(c, label) {
+  if (label.two !== undefined) return label.two;
+  const words = label.text.split(BREAKABLE).filter(Boolean);
+  let best = null;
+  for (let split = 1; split < words.length; split++) {
+    const first = words.slice(0, split).join(" "), second = words.slice(split).join(" ");
+    const width = Math.max(c.width(first), c.width(second));
+    if (!best || width < best.width - 1e-9) best = { text: `${first}\n${second}`, width };
+  }
+  return label.two = best;
+}
+
+// Longest prefix that fits `limit` once the ellipsis is appended.
+function ellipsize(c, text, limit) {
+  const chars = Array.from(text);
+  const fits = (length) => c.width(chars.slice(0, length).join("").trimEnd() + ELLIPSIS) <= limit;
+  let low = 0, high = chars.length;
+  while (low < high) {
+    const middle = Math.ceil((low + high) / 2);
+    if (fits(middle)) low = middle; else high = middle - 1;
+  }
+  const out = chars.slice(0, low).join("").trimEnd() + ELLIPSIS;
+  return { text: out, width: c.width(out) };
+}
+
+function reportTruncatedLabels(c, paths) {
+  if (!paths.length) return;
+  const many = paths.length !== 1;
+  c.svg.reportDiagnostic?.({
+    code: "chart-label-truncated", reason: "category-axis", path: c.path, labels: paths,
+    message: `${paths.length} category label${many ? "s are" : " is"} wider than the space the axis can give ${many ? "them" : "it"} and ${many ? "were" : "was"} shortened with an ellipsis; shorten the label or enlarge the chart.`
+  }, c.options);
+}
+
+// A horizontal category axis (labels below the plot). Returns the arrangement
+// with the space it needs under the plot: { angle, n, reserve, labels }.
+function planBottomLabels(c, entries, plot, maxReserve, { minX, maxX, rotatedMinX }) {
+  const labels = labelCandidates(c, entries);
+  const count = labels.length;
+  if (!count) return { angle: 0, n: 1, reserve: c.lineHeight, labels: [] };
+  const band = plot.width / count, gap = c.labelGap, lineH = c.textHeight;
+  const limit = Math.max(1, maxX - minX);
+  const allowTwo = maxReserve >= c.lineHeight + lineH - 0.01;
+
+  const horizontal = (n) => {
+    const slot = n * band - gap, placed = [];
+    let prevRight = -Infinity, rows = 1;
+    for (let i = 0; i < count; i += n) {
+      const label = labels[i];
+      let { text, width } = label, lines = 1, truncated = false;
+      if (width > slot && allowTwo) {
+        const two = twoLines(c, label);
+        if (two && two.width <= slot) ({ text, width } = two), lines = 2;
+      }
+      if (width > limit) ({ text, width } = ellipsize(c, label.text, limit)), lines = 1, truncated = true;
+      const cx = plot.x + (i + 0.5) * band;
+      const left = Math.min(Math.max(cx - width / 2, minX), maxX - width);
+      if (left < prevRight + gap - 1e-6) return null;
+      prevRight = left + width;
+      rows = Math.max(rows, lines);
+      placed.push({ i, text, width, lines, left, cx, truncated });
+    }
+    return { angle: 0, n, reserve: c.lineHeight + (rows - 1) * lineH, labels: placed };
+  };
+  let plain = null;
+  for (let n = 1; n <= count && !plain; n++) plain = horizontal(n);
+  // One label always fits by itself (it is clamped and ellipsized to the chart).
+  plain ??= { angle: 0, n: count, reserve: c.lineHeight, labels: [] };
+
+  const rotated = (angle) => {
+    const sin = angle === 90 ? 1 : Math.SQRT1_2, cos = angle === 90 ? 0 : Math.SQRT1_2;
+    const n = Math.max(1, Math.ceil(lineH / sin / band - 1e-9)), topGap = c.fontPx * 0.25;
+    let extent = 0;
+    const placed = [];
+    for (let i = 0; i < count; i += n) {
+      const { text, width } = labels[i], cx = plot.x + (i + 0.5) * band;
+      if (cx - width * cos - lineH * sin / 2 < rotatedMinX - 1e-6) return null;
+      extent = Math.max(extent, width * sin + lineH * cos);
+      placed.push({ i, text, width, lines: 1, cx, truncated: false });
+    }
+    const reserve = Math.max(c.lineHeight, topGap + extent);
+    return reserve > maxReserve + 1e-6 ? null : { angle, n, reserve, labels: placed, topGap };
+  };
+  const options = [plain, rotated(45), rotated(90)].filter(Boolean);
+  return options.find((option) => option.n === 1) ?? options.reduce((best, option) => option.n < best.n ? option : best);
+}
+
+// Lay out the plot for a horizontal category axis. `geometry(reserve)` returns
+// { plot, ...whatever else depends on the height }, the plot leaving `reserve`
+// under it for the labels; rotated labels shrink the plot as Office does.
+function planCategoryAxis(c, entries, geometry) {
+  const cap = Math.max(c.lineHeight + c.textHeight, c.box.height * 0.4);
+  const bounds = (plot) => ({ minX: plot.x - c.fontPx * 0.5, maxX: plot.x + plot.width + c.fontPx * 0.5, rotatedMinX: c.box.x + c.pad });
+  // The space under the plot only grows (a smaller plot can change the value-tick
+  // width and so the band, and the arrangement with it); it stops once the plan
+  // fits the space that shaped the plot.
+  let reserve = c.lineHeight, axis = geometry(reserve), plan = planBottomLabels(c, entries, axis.plot, cap, bounds(axis.plot));
+  for (let pass = 0; pass < 3 && plan.reserve > reserve + 0.5; pass++) {
+    reserve = plan.reserve;
+    axis = geometry(reserve);
+    plan = planBottomLabels(c, entries, axis.plot, cap, bounds(axis.plot));
+  }
+  if (plan.reserve > reserve + 0.5) plan = planBottomLabels(c, entries, axis.plot, reserve, bounds(axis.plot));
+  return { ...axis, plan };
+}
+
+function drawBottomLabels(c, plan, plot, entries) {
+  const y = plot.y + plot.height, band = plot.width / Math.max(1, entries.length), lineH = c.textHeight;
+  for (const label of plan.labels) {
+    const path = entries[label.i].path;
+    if (plan.angle) {
+      // Rotated labels end at their tick (Office -45 / -90 degree text).
+      const cos = plan.angle === 90 ? 0 : Math.SQRT1_2;
+      const px = label.cx, py = y + plan.topGap + lineH * cos / 2, width = label.width + 2;
+      const text = c.textElement(label.text, { x: px - width, y: py - lineH * 0.55, width, height: lineH * 1.1 }, path, "right");
+      if (text) c.children.push(c.svg.tag("g", { transform: `rotate(${-plan.angle} ${c.num(px)} ${c.num(py)})` }, text));
+      continue;
+    }
+    const centred = Math.abs(label.left - (label.cx - label.width / 2)) < 1e-6;
+    const rect = plan.n === 1 && centred && label.width <= band
+      ? { x: plot.x + label.i * band, y, width: band, height: plan.reserve }
+      : { x: label.left - 1, y, width: label.width + 2, height: plan.reserve };
+    c.text(label.text, rect, path);
+  }
+  reportTruncatedLabels(c, plan.labels.filter((label) => label.truncated).map((label) => entries[label.i].path));
+}
+
+// A vertical category axis (labels to the left of horizontal bars and funnels).
+// Labels stay on one line inside the gutter, wrap at spaces onto two lines when
+// their rows are tall enough, else are ellipsized; every n-th row is labelled
+// when the rows are shorter than a line of text.
+function planRowLabels(c, entries, band, gutter) {
+  const labels = labelCandidates(c, entries);
+  const n = Math.max(1, Math.ceil(c.textHeight / band - 1e-9));
+  const canWrap = n * band >= 2 * c.textHeight - 0.01;
+  const placed = [];
+  for (let i = 0; i < labels.length; i += n) {
+    const label = labels[i];
+    let text = label.text, truncated = false;
+    if (label.width > gutter + 0.01) {
+      const two = canWrap ? twoLines(c, label) : null;
+      if (two && two.width <= gutter + 0.01) text = two.text;
+      else ({ text } = ellipsize(c, label.text, gutter)), truncated = true;
+    }
+    placed.push({ i, text, truncated });
+  }
+  return { n, labels: placed };
+}
+
+// `rowTop(i)` is the top of category i's row; rows are `band` tall.
+function drawRowLabels(c, plan, entries, band, gutter, x, rowTop) {
+  const span = plan.n * band;
+  for (const label of plan.labels) {
+    const middle = rowTop(label.i) + band / 2;
+    c.text(label.text, { x, y: middle - span / 2, width: gutter, height: span }, entries[label.i].path, "right");
+  }
+  reportTruncatedLabels(c, plan.labels.filter((label) => label.truncated).map((label) => entries[label.i].path));
+}
+
+// ---------------------------------------------------------------------------
 // Category charts: column, bar, line and area (standard, stacked, 100%).
 
 /**
@@ -380,26 +584,28 @@ function renderCategoryChart(c, spec) {
   const top = box.y + pad + c.lineHeight / 2;
   let plot, scale;
   if (horizontal) {
-    const categoryWidth = Math.min(box.width * 0.3, Math.max(0, ...categories.map(c.width)) + fontPx * 0.5);
+    const categoryWidth = Math.min(box.width * 0.3, Math.max(0, ...categories.map((name) => c.width(flatLabel(name)))) + fontPx * 0.5);
     const x = box.x + pad + categoryWidth + c.pad / 2;
     const bottom = box.y + box.height - pad - c.lineHeight;
     const width = Math.max(1, right - x - fontPx);
     const tickWidth = Math.max(c.width(formatTick(dataMax, percent)), c.width(formatTick(dataMin, percent)), c.width("100%")) + fontPx;
     scale = niceScale(dataMin, dataMax, maxIntervalsFor(width, tickWidth), { percent });
     plot = { x, y: top, width, height: Math.max(1, bottom - top) };
-    categories.forEach((name, i) => {
-      const band = plot.height / count;
-      c.text(name, { x: box.x + pad, y: plot.y + plot.height - (i + 1) * band, width: categoryWidth, height: band }, `${c.path}.data.rows.${i}.0`, "right");
-    });
+    // Office bar charts draw the first category nearest the origin (bottom).
+    const entries = categories.map((name, i) => ({ name, path: `${c.path}.data.rows.${i}.0` }));
+    const rowBand = plot.height / count;
+    drawRowLabels(c, planRowLabels(c, entries, rowBand, categoryWidth), entries, rowBand, categoryWidth, box.x + pad, (i) => plot.y + plot.height - (i + 1) * rowBand);
   } else {
-    const bottom = box.y + box.height - pad - c.lineHeight;
-    const height = Math.max(1, bottom - top);
-    scale = niceScale(dataMin, dataMax, maxIntervalsFor(height, c.lineHeight * 1.2), { percent });
-    const tickWidth = Math.max(...scale.ticks.map((tick) => c.width(formatTick(tick, percent)))) + fontPx * 0.5;
-    const x = box.x + pad + tickWidth;
-    plot = { x, y: top, width: Math.max(1, right - x - fontPx / 2), height };
-    const band = plot.width / count;
-    categories.forEach((name, i) => c.text(name, { x: plot.x + i * band, y: plot.y + plot.height, width: band, height: c.lineHeight }, `${c.path}.data.rows.${i}.0`));
+    const entries = categories.map((name, i) => ({ name, path: `${c.path}.data.rows.${i}.0` }));
+    const axis = planCategoryAxis(c, entries, (reserve) => {
+      const height = Math.max(1, box.y + box.height - pad - reserve - top);
+      const fitted = niceScale(dataMin, dataMax, maxIntervalsFor(height, c.lineHeight * 1.2), { percent });
+      const tickWidth = Math.max(...fitted.ticks.map((tick) => c.width(formatTick(tick, percent)))) + fontPx * 0.5;
+      const x = box.x + pad + tickWidth;
+      return { scale: fitted, plot: { x, y: top, width: Math.max(1, right - x - fontPx / 2), height } };
+    });
+    ({ plot, scale } = axis);
+    drawBottomLabels(c, axis.plan, plot, entries);
   }
   const at = (value) => horizontal ? plot.x + axisFraction(value, scale) * plot.width : plot.y + axisFraction(value, scale, true) * plot.height;
   // Category axis crosses at zero when zero is on the axis (autoZero).
@@ -600,10 +806,15 @@ function renderRadarChart(c, spec) {
   const count = categories.length;
   const values = series.flatMap((s) => s.values).filter((v) => v !== null);
   const legendWidth = seriesLegend(c, series, spec.style === "filled" ? undefined : "line", spec.markers);
-  const labelWidth = Math.min(box.width * 0.2, Math.max(0, ...categories.map(c.width)) + fontPx * 0.5);
+  const labelWidth = Math.min(box.width * 0.2, Math.max(0, ...categories.map((name) => c.width(flatLabel(name)))) + fontPx * 0.5);
+  // Spoke labels follow the same rules as other category labels (never broken
+  // inside a word; one line, two lines at spaces, or an ellipsis). A chart with
+  // two-line spoke labels keeps room for the second line above and below.
+  const spokeLabels = labelCandidates(c, categories.map((name, i) => ({ name, path: `${c.path}.data.rows.${i}.0` })));
+  const wraps = spokeLabels.some((label) => label.width > labelWidth + 0.01 && (twoLines(c, label)?.width ?? Infinity) <= labelWidth + 0.01);
   const area = { x: box.x + pad, y: box.y + pad, width: Math.max(1, box.width - 2 * pad - legendWidth), height: Math.max(1, box.height - 2 * pad) };
   const cx = area.x + area.width / 2, cy = area.y + area.height / 2;
-  const radius = Math.max(1, Math.min(area.width / 2 - labelWidth, area.height / 2 - c.lineHeight));
+  const radius = Math.max(1, Math.min(area.width / 2 - labelWidth, area.height / 2 - c.lineHeight - (wraps ? c.textHeight : 0)));
   const scale = niceScale(values.length ? Math.min(...values) : 0, values.length ? Math.max(...values) : 1, maxIntervalsFor(radius, c.lineHeight));
   const angle = (i) => -Math.PI / 2 + i / count * Math.PI * 2;
   const rAt = (v) => axisFraction(Math.min(scale.max, Math.max(scale.min, v)), scale) * radius;
@@ -614,19 +825,38 @@ function renderRadarChart(c, spec) {
     const ring = categories.map((_, i) => point(i, tick).map(n).join(" "));
     c.mark("path", { d: `M ${ring.join(" L ")} Z`, fill: "none", stroke: c.gridColor, "stroke-opacity": 0.7, "stroke-width": c.pt });
   }
+  // A spoke label that would collide with one already drawn is left out; the first is always kept.
+  const drawn = [], truncated = [];
   categories.forEach((name, i) => {
     const [x, y] = polar(cx, cy, radius, angle(i));
     axisLine(c, cx, cy, x, y);
     const [lx, ly] = polar(cx, cy, radius + fontPx * 0.4, angle(i));
     const cos = Math.cos(angle(i)), sin = Math.sin(angle(i));
     const align = Math.abs(cos) < 0.2 ? "center" : cos > 0 ? "left" : "right";
+    const label = spokeLabels[i];
+    let { text, width } = label, lines = 1, shortened = false;
+    if (width > labelWidth + 0.01) {
+      const two = twoLines(c, label);
+      if (two && two.width <= labelWidth + 0.01) ({ text, width } = two), lines = 2;
+      else ({ text, width } = ellipsize(c, label.text, labelWidth)), lines = 1, shortened = true;
+    }
+    const height = c.lineHeight + (lines - 1) * c.textHeight;
     const rect = {
       x: align === "center" ? lx - labelWidth / 2 : align === "left" ? lx : lx - labelWidth,
-      y: Math.abs(sin) < 0.2 ? ly - c.lineHeight / 2 : sin < 0 ? ly - c.lineHeight : ly,
-      width: labelWidth, height: c.lineHeight
+      y: Math.abs(sin) < 0.2 ? ly - height / 2 : sin < 0 ? ly - height : ly,
+      width: labelWidth, height
     };
-    c.text(name, rect, `${c.path}.data.rows.${i}.0`, align);
+    const left = align === "center" ? rect.x + (labelWidth - width) / 2 : align === "left" ? rect.x : rect.x + labelWidth - width;
+    const ink = { left, right: left + width, top: rect.y + (height - lines * c.textHeight) / 2, bottom: rect.y + (height + lines * c.textHeight) / 2 };
+    const gap = c.labelGap;
+    if (drawn.some((other) => ink.left < other.right + gap && other.left < ink.right + gap && ink.top < other.bottom && other.top < ink.bottom)) {
+      return;
+    }
+    if (shortened) truncated.push(label.path);
+    drawn.push(ink);
+    c.text(text, rect, label.path, align);
   });
+  reportTruncatedLabels(c, truncated);
   series.forEach((s, j) => {
     const color = c.colors[j % c.colors.length], path = `${c.path}.data.columns.${s.column}`;
     if (spec.style === "filled") {
@@ -721,15 +951,14 @@ export function histogramBins(values) {
 function chartexPlot(c, { categories, legendWidth = 0, tickLabels = [], percentAxis = false }) {
   const { box, pad, fontPx } = c;
   const top = box.y + pad + c.lineHeight / 2;
-  const bottom = box.y + box.height - pad - c.lineHeight;
-  const height = Math.max(1, bottom - top);
   const tickWidth = Math.max(0, ...tickLabels.map((label) => c.width(label))) + fontPx * 0.5;
   const x = box.x + pad + tickWidth;
   const right = box.x + box.width - pad - legendWidth - (percentAxis ? c.width("100%") + fontPx : fontPx / 2);
-  const plot = { x, y: top, width: Math.max(1, right - x), height };
-  const band = plot.width / Math.max(1, categories.length);
-  categories.forEach((entry, i) => c.text(entry.name, { x: plot.x + i * band, y: plot.y + plot.height, width: band, height: c.lineHeight }, entry.path));
-  return { plot, band };
+  const { plot, plan } = planCategoryAxis(c, categories, (reserve) => ({
+    plot: { x, y: top, width: Math.max(1, right - x), height: Math.max(1, box.y + box.height - pad - reserve - top) }
+  }));
+  drawBottomLabels(c, plan, plot, categories);
+  return { plot, band: plot.width / Math.max(1, categories.length) };
 }
 
 function valueAxis(c, plot, scale) {
@@ -820,12 +1049,13 @@ function renderFunnelChart(c) {
   const { column, values, categories } = chartexValues(c.rows, c.columns);
   const count = categories.length;
   const max = Math.max(0, ...values.filter((value) => value !== null));
-  const labelWidth = Math.min(box.width * 0.3, Math.max(0, ...categories.map(c.width)) + fontPx * 0.5);
+  const labelWidth = Math.min(box.width * 0.3, Math.max(0, ...categories.map((name) => c.width(flatLabel(name)))) + fontPx * 0.5);
   const plot = { x: box.x + pad + labelWidth + pad / 2, y: box.y + pad, width: Math.max(1, box.width - 2 * pad - labelWidth - pad / 2), height: Math.max(1, box.height - 2 * pad) };
   const band = plot.height / count, height = band / 1.06, offset = (band - height) / 2;
+  const entries = categories.map((name, i) => ({ name, path: `${c.path}.data.rows.${i}.0` }));
+  drawRowLabels(c, planRowLabels(c, entries, band, labelWidth), entries, band, labelWidth, box.x + pad, (i) => plot.y + i * band);
   categories.forEach((name, i) => {
     const y = plot.y + i * band;
-    c.text(name, { x: box.x + pad, y, width: labelWidth, height: band }, `${c.path}.data.rows.${i}.0`, "right");
     const value = values[i];
     if (value === null || !(max > 0) || value <= 0) return;
     const width = plot.width * Math.min(1, value / max);

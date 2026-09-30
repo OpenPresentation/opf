@@ -1221,7 +1221,7 @@ function renderTableBorders(defaultEdges, explicitEdges, scale, bound, options) 
 function renderChart(item, box, bound, options) {
   // Catalog chart types (kept, deprecated and aliased ids) preview the native
   // construct opf-pptx exports; other ids keep the legacy single-series preview.
-  const rendered = renderCatalogChart(item, box, bound, options, { tag, traceAttrs, stableNumber, renderTextBox });
+  const rendered = renderCatalogChart(item, box, bound, options, { tag, traceAttrs, stableNumber, renderTextBox, reportDiagnostic });
   if (rendered) return rendered;
   const chart = item.value ?? {};
   const chartType = chart.type ?? engineDefaults.chartTypes[0];
