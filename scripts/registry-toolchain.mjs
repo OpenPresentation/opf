@@ -3,7 +3,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import path from 'node:path';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
-const UNEXPORTED_EDITOR_MODULES = ['@openpresentation/opf-editor/exact-source'];
+const UNEXPORTED_EDITOR_MODULES = ['@openpresentation/opf-editor/exact-source', '@openpresentation/opf-editor/font-gate'];
 
 // Consume the clean installation produced by test:registry-ecosystem, with no
 // sibling source aliases or file dependencies. Keep its registry evidence.

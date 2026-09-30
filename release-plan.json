@@ -25,7 +25,7 @@
     "@openpresentation/cli": "0.11.0"
   },
   "exampleRefs": {
-    "opf-editor": "bf17b961a863b376f3b592a4c4d8f87a55c6dd1e"
+    "opf-editor": "4af6ea6b2230da24817ea76239cbbf99d44f5186"
   },
   "verificationRefs": {
     "opf": "b9bb767031aaa5c6c40a6174eef6c0b0481375d1",
