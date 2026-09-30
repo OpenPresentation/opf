@@ -107,7 +107,7 @@ async function reimport(bytes) {
   try { const doc = await fromPptx(bytes, { onDiagnostic: (d) => diagnostics.push(d) }); return { ok: true, doc, diagnostics: diagnostics.map((d) => ({ code: d.code, path: d.path })) }; }
   catch (e) { return { ok: false, error: errInfo(e), diagnostics }; }
 }
-const geometry = (xml) => [...xml.matchAll(/<a:off x="(-?\d+)" y="(-?\d+)"\/><a:ext cx="(\d+)" cy="(\d+)"/g)].map((m) => m.slice(1).join(',')).join(';');
+const { geometry, placementSignature, alignmentAgreement } = await import(pathToFileURL(path.join(HERE, 'placement.mjs')));
 const count = (xml, re) => (xml.match(re) ?? []).length;
 const codes = (d) => uniq((d ?? []).map((x) => x.code));
 const svgHas = (svg, s) => svg.includes(esc(s)) || svg.includes(s);
@@ -424,13 +424,17 @@ if (want('layouts')) {
     }
     const wanted = out.placeholders.filter((t) => !['title', 'subtitle', 'tag'].includes(t));
     if (m.x.ok && m.xb?.ok) {
-      const s = m.x.slides[0];
-      const g = geometry(s), gb = geometry(m.xb.slides[0]);
+      const s = m.x.slides[0], sb = m.xb.slides[0];
+      // FF-51: placement is every shape's box plus where text sits inside it (body anchor, paragraph algn),
+      // the native form of the preview's text-anchor that the SVG comparison already sees.
+      const g = placementSignature(s), gb = placementSignature(sb);
       const natives = { chart: m.x.names.some((n) => /^ppt\/charts\//.test(n)), table: s.includes('<a:tbl>'), picture: s.includes('<p:pic>'), diagram: s.includes('<p:pic>') };
       const missing = uniq(wanted.filter((t) => natives[t] === false));
-      checks.export.nativeDetail = { placementDiffers: g !== gb, shapes: count(s, /<p:sp>/g), pics: count(s, /<p:pic>/g), graphicFrames: count(s, /<p:graphicFrame>/g), missingNativePayloads: missing };
+      const alignment = m.r.ok ? alignmentAgreement(m.r.svgs[0] ?? '', s) : null;
+      checks.export.nativeDetail = { placementDiffers: g !== gb, geometryDiffers: geometry(s) !== geometry(sb), alignment, shapes: count(s, /<p:sp>/g), pics: count(s, /<p:pic>/g), graphicFrames: count(s, /<p:graphicFrame>/g), missingNativePayloads: missing };
       checks.export.native = g !== gb;
       if (missing.length) reasons.push(`export lacks native ${missing.join('/')} for placeholders`);
+      if (alignment?.mismatches.length) reasons.push(`export paragraph alignment differs from preview for ${alignment.mismatches.length} of ${alignment.compared} texts (e.g. ${JSON.stringify(alignment.mismatches[0].text)}: preview ${alignment.mismatches[0].preview}, native ${alignment.mismatches[0].native})`);
     } else checks.export.native = null;
     if (m.im.ok) {
       const s0 = m.im.doc.slides?.[0] ?? {};
