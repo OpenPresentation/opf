@@ -4,7 +4,7 @@
   "publisher": "https://www.pptx.gallery",
   "source": {
     "repository": "https://github.com/Data-Advantage/pptx-gallery",
-    "commit": "068d37803bf42f187379f481d6e41ded1d1e6852",
+    "commit": "2c7cc73ee4cfe98d275695977fccd19e027ed5cd",
     "path": "public"
   },
   "kinds": {
