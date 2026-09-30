@@ -2,7 +2,7 @@
 
 OPF keeps authoring intent in JSON. Use `blocks` when content can reflow; use promoted regions when relative placement is meaningful. `composition` on a slide overrides fields in the resolved layout's `composition`. Existing documents remain valid.
 
-The current published Node 24 train is core 0.11.0, renderer 0.9.0, PPTX 0.9.1, editor 0.8.0 and CLI 0.9.0. Use the exact pins in [release-plan.json](../release-plan.json); the [compatibility matrix](compatibility-matrix.md) separates package support from native Office and font gates. Older version references below identify when individual contracts were introduced.
+The current published Node 24 train is core 0.11.2, renderer 0.11.1, PPTX 0.11.0, editor 0.10.0 and CLI 0.9.0. Use the exact pins in [release-plan.json](../release-plan.json); the [compatibility matrix](compatibility-matrix.md) separates package support from native Office and font gates. Older version references below identify when individual contracts were introduced.
 
 ```json
 {
@@ -42,7 +42,7 @@ Slide numbers and dates carry formats. `slideNumberFormat` is a template such as
 
 Pagination repeats these fields without putting them among body slices. An optional `page.repeatedMappings` records repeated heading/furniture and metadata paths while the existing `page.mappings` retains its body-fragment contract. Whole-deck pagination evaluates final output numbers, including preceding continuation pages, and rejects unresolved repeated content atomically. Renderer and editor reuse the accepted parts; literal text/date fields, including empty values, support direct canvas editing and undo. Generated labels remain tied to metadata.
 
-Published PPTX 0.9.1 draws the accepted editable text boxes and fitted images and records furniture provenance in tagged slide shapes. Reimport uses current native text and images; damaged or ambiguous provenance retains visible content with diagnostics. The [fresh installed-package evidence](evidence/shipped-train-20260921/installed/acceptance-summary.json) includes deterministic export, current-content reimport controls and offline canvas editing/undo. Native PowerPoint acceptance, font compatibility and full visual review remain separate gates; this is not native `p:hf` Header/Footer support. Bounds/readability checks do not certify whole-slide design quality: long labels can wrap heavily in portrait zones, and outline agreement does not establish native font identity.
+Published PPTX (0.9.1 and later, current 0.11.0) draws the accepted editable text boxes and fitted images and records furniture provenance in tagged slide shapes. Reimport uses current native text and images; damaged or ambiguous provenance retains visible content with diagnostics. The [fresh installed-package evidence](evidence/shipped-train-20260921/installed/acceptance-summary.json) includes deterministic export, current-content reimport controls and offline canvas editing/undo. Native PowerPoint acceptance, font compatibility and full visual review remain separate gates; this is not native `p:hf` Header/Footer support. Bounds/readability checks do not certify whole-slide design quality: long labels can wrap heavily in portrait zones, and outline agreement does not establish native font identity.
 
 ## Slide-level images
 
