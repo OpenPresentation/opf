@@ -1205,6 +1205,12 @@ function nativeColor(reference, hex, context, fallback) {
   return (link && context.linkSentinels?.[link]) ?? normalizeHex(hex);
 }
 
+// FF-59: the slide tag is the eyebrow label. It is written in the deck primary color, the scheme accent1 slot the
+// preview draws it from: a:schemeClr accent1 where the deck theme holds that exact color, the literal otherwise.
+function tagColor(context) {
+  return nativeColor('primary', context.colors.accent, context);
+}
+
 // FF-24c: two literals no document color uses stand in for hlink and folHlink
 // (see nativeColor). When the document uses every candidate, those colors stay literal.
 const LINK_SENTINELS = [['FE01A0', 'FE01A1'], ['FE02B0', 'FE02B1'], ['FE03C0', 'FE03C1']];
@@ -1225,7 +1231,7 @@ function writeLinkSentinels(xml, sentinels) {
 
 // PptxGenJS color option: a scheme value it can emit (tx1, bg2, ...) or RRGGBB.
 function pptxColor(value) {
-  return /^(?:tx[12]|bg[12])$/.test(value) ? value : normalizeHex(value);
+  return /^(?:tx[12]|bg[12]|accent[1-6])$/.test(value) ? value : normalizeHex(value);
 }
 
 // Deck-level theme background for the slide master, so slides added in
@@ -1362,7 +1368,7 @@ async function addSlide(pptx, presentation, opfSlide, slideIndex, context, optio
         fill:paint(surface),line:{...paint(itemContext.colorScheme.accent5??`#${itemContext.colors.border}`),width:.75},objectName:`OPF card ${item.path}`});
     }
     if(['text','title','subtitle','tag'].includes(item.field)&&(item.text?.placement||item.text?.sourceLines)&&!item.text.richLines) {
-      addMeasuredPayloadText(slide,item.value,item.box,itemContext,options,{path:item.path,fit:item.text,textStyle:item.textStyle,sourceText:item.field==='text'&&!!item.text.sourceLines,align:alignmentFor(item),diagnosticsHandled:true,heading:['title','subtitle','tag'].includes(item.field)?item.field:undefined,color:item.field==='tag'?itemContext.colors.accent:itemContext.textColor});
+      addMeasuredPayloadText(slide,item.value,item.box,itemContext,options,{path:item.path,fit:item.text,textStyle:item.textStyle,sourceText:item.field==='text'&&!!item.text.sourceLines,align:alignmentFor(item),diagnosticsHandled:true,heading:['title','subtitle','tag'].includes(item.field)?item.field:undefined,color:item.field==='tag'?tagColor(itemContext):itemContext.textColor});
     } else if (["title", "subtitle", "tag"].includes(item.field)) {
       // Estimated-font headings use one native text box, which still needs a
       // role tag. Role recovery must not depend on outline measurement support.
@@ -1371,7 +1377,7 @@ async function addSlide(pptx, presentation, opfSlide, slideIndex, context, optio
       slide.addText(item.text.lines.join("\n"), {
         ...textBoxOptions(region, itemContext, item.text.fontSize * 0.75),
         ...nativeFontOptions(item.textStyle),
-        color: item.field === "tag" ? itemContext.colors.accent : itemContext.textColor,
+        color: item.field === "tag" ? tagColor(itemContext) : itemContext.textColor,
         align: alignmentFor(item),
         objectName,
         breakLine: false
