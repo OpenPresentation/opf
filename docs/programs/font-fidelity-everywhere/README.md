@@ -101,6 +101,8 @@ they are, and the FF-38 perfect/near tiers stay a separate measure (a visual-onl
 replacement is still `near` there). Anything the policy does not excuse (an
 empty `ea`/`cs` theme slot, a layout the export ignores, a lost payload) remains
 a real gap and is fixed in the engines.
+FF-48 implements this ([measurement](gallery-support.md#audits-model-the-shipped-font-host-ff-48-2026-09-30)): audits A and B use the parity harness's
+host model (`AUDIT_FONT_HOST=gallery` by default, `strict` as the diagnostic), and the themes become `works`.
 
 **Owner decisions this goal may need.** Retiring or merging gallery layouts
 instead of publishing canonical ids (FF-52, FF-55) changes the denominator and
