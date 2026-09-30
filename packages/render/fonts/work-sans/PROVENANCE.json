@@ -1,0 +1,47 @@
+{
+  "upstream": {
+    "package": "@expo-google-fonts/work-sans",
+    "version": "0.4.2",
+    "source": "https://www.npmjs.com/package/@expo-google-fonts/work-sans/v/0.4.2",
+    "integrity": "sha512-v+I8jQgoOAmI77v1V0EXvgKA4NGg8Agy2BCHAI6sswAKTub2sKsi6PXT4vLBn95dbbTqelSlcT79YRDTlCBrRg=="
+  },
+  "license": "OFL-1.1",
+  "licenseFile": "OFL.txt",
+  "licenseSha256": "749aca05078664ce682dce1b1b10096ac397cb088c1a6df4e1bb56f0092a9272",
+  "reservedFontNames": [],
+  "copyright": "Copyright 2019 The Work Sans Project Authors (https://github.com/weiweihuanghuang/Work-Sans)",
+  "faces": [
+    {
+      "file": "WorkSans_400Regular.ttf",
+      "family": "Work Sans",
+      "weight": 400,
+      "italic": false,
+      "sha256": "e67985a843df0d3cdee51a3d0f329eb1774a344ad9ff0c9ab923751f1577e2a4",
+      "npmFile": "400Regular/WorkSans_400Regular.ttf"
+    },
+    {
+      "file": "WorkSans_400Regular_Italic.ttf",
+      "family": "Work Sans",
+      "weight": 400,
+      "italic": true,
+      "sha256": "6b7f7002e0b0c8b261fe878658ef5551e3e59d9f6b609b04efb90dde1e2c1ada",
+      "npmFile": "400Regular_Italic/WorkSans_400Regular_Italic.ttf"
+    },
+    {
+      "file": "WorkSans_700Bold.ttf",
+      "family": "Work Sans",
+      "weight": 700,
+      "italic": false,
+      "sha256": "240d125fc9f8561363dc1ea3f513501253bd70942f41468f48f0b0cafb0c82e2",
+      "npmFile": "700Bold/WorkSans_700Bold.ttf"
+    },
+    {
+      "file": "WorkSans_700Bold_Italic.ttf",
+      "family": "Work Sans",
+      "weight": 700,
+      "italic": true,
+      "sha256": "a5b2cad813df0aaa7d16621f2e93b5117c25e9bc788bc9a3ad218e9d6348ce34",
+      "npmFile": "700Bold_Italic/WorkSans_700Bold_Italic.ttf"
+    }
+  ]
+}

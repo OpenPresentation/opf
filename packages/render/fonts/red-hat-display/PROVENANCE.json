@@ -1,38 +1,79 @@
 {
   "upstream": {
-    "source": "https://github.com/RedHatOfficial/RedHatFont/tree/6bb1048a6402b0076ea04f42951ec66263cd1437/fonts/Proportional/RedHatDisplay/ttf",
-    "commit": "6bb1048a6402b0076ea04f42951ec66263cd1437",
-    "licenseUrl": "https://raw.githubusercontent.com/RedHatOfficial/RedHatFont/6bb1048a6402b0076ea04f42951ec66263cd1437/OFL.txt"
+    "package": "@expo-google-fonts/red-hat-display",
+    "version": "0.4.1",
+    "source": "https://www.npmjs.com/package/@expo-google-fonts/red-hat-display/v/0.4.1",
+    "integrity": "sha512-sfJgaWo+DVLR9Xgq2Q0dEJlOwoXVscUzmuLJg4vL56sPg7MtfOUG34B3ezouwn4Ww1vc4C3A1xCKhTOf9167jQ=="
   },
   "license": "OFL-1.1",
   "licenseFile": "OFL.txt",
-  "licenseSha256": "4f1417e27511207cd217656c964f1b0d8b0c4a30156a1a699cf16dc5eba0dff6",
+  "licenseSha256": "435fbfb7e66988b2a06686a4cb966faec733f35d8fe100a1601573c27f3e0bb8",
   "reservedFontNames": [],
-  "copyright": "Copyright 2021 The Red Hat Project Authors (https://github.com/RedHatOfficial/RedHatFont)",
+  "copyright": "Copyright 2024 The Red Hat Project Authors (https://github.com/RedHatOfficial/RedHatFont)",
   "faces": [
     {
-      "file": "RedHatDisplay-Regular.ttf",
-      "family": "Red Hat Display",
-      "weight": 400,
-      "italic": false,
-      "sha256": "ab007b2a5b1590027cb049c3946de67870f6de9fa2420f8ef6e968392219aecd",
-      "upstreamUrl": "https://raw.githubusercontent.com/RedHatOfficial/RedHatFont/6bb1048a6402b0076ea04f42951ec66263cd1437/fonts/Proportional/RedHatDisplay/ttf/RedHatDisplay-Regular.ttf"
-    },
-    {
-      "file": "RedHatDisplay-Bold.ttf",
-      "family": "Red Hat Display",
-      "weight": 700,
-      "italic": false,
-      "sha256": "bac4990e2845c796ad0cfc47c3121b09df9285858ba841f7eab8bcdea87b74f1",
-      "upstreamUrl": "https://raw.githubusercontent.com/RedHatOfficial/RedHatFont/6bb1048a6402b0076ea04f42951ec66263cd1437/fonts/Proportional/RedHatDisplay/ttf/RedHatDisplay-Bold.ttf"
-    },
-    {
-      "file": "RedHatDisplay-Light.ttf",
+      "file": "RedHatDisplay_300Light.ttf",
       "family": "Red Hat Display",
       "weight": 300,
       "italic": false,
-      "sha256": "99ed6ddec6954941f708b23d3ab6873cba9f3067a4d1153d98be31ff2472dcb5",
-      "upstreamUrl": "https://raw.githubusercontent.com/RedHatOfficial/RedHatFont/6bb1048a6402b0076ea04f42951ec66263cd1437/fonts/Proportional/RedHatDisplay/ttf/RedHatDisplay-Light.ttf"
+      "sha256": "77eae6c6360c8a8445268dac09c32b6915f658aed2613408d7e118436a0c3eef",
+      "npmFile": "300Light/RedHatDisplay_300Light.ttf"
+    },
+    {
+      "file": "RedHatDisplay_300Light_Italic.ttf",
+      "family": "Red Hat Display",
+      "weight": 300,
+      "italic": true,
+      "sha256": "b76f8742593b53a466c99c61522f494aed59a3e4485f94fcdb2d2600bab0d6fb",
+      "npmFile": "300Light_Italic/RedHatDisplay_300Light_Italic.ttf"
+    },
+    {
+      "file": "RedHatDisplay_400Regular.ttf",
+      "family": "Red Hat Display",
+      "weight": 400,
+      "italic": false,
+      "sha256": "b3c6289677cb95107738025b86cba835f0283b46dc60d6ace3bff9b9700bfbd0",
+      "npmFile": "400Regular/RedHatDisplay_400Regular.ttf"
+    },
+    {
+      "file": "RedHatDisplay_400Regular_Italic.ttf",
+      "family": "Red Hat Display",
+      "weight": 400,
+      "italic": true,
+      "sha256": "947a7431db8083115e2aa2db5265a1abcb5a80a56c6d46e2c7862b9fab406b90",
+      "npmFile": "400Regular_Italic/RedHatDisplay_400Regular_Italic.ttf"
+    },
+    {
+      "file": "RedHatDisplay_600SemiBold.ttf",
+      "family": "Red Hat Display",
+      "weight": 600,
+      "italic": false,
+      "sha256": "d8a250cf848e2b52e505776ec15c078dd022d920846d83f21bdb7a56e43c5ad8",
+      "npmFile": "600SemiBold/RedHatDisplay_600SemiBold.ttf"
+    },
+    {
+      "file": "RedHatDisplay_600SemiBold_Italic.ttf",
+      "family": "Red Hat Display",
+      "weight": 600,
+      "italic": true,
+      "sha256": "d39a86c7334a400505a068b1c1a824c91b3ebae37563e36836c19bf889bfcd3a",
+      "npmFile": "600SemiBold_Italic/RedHatDisplay_600SemiBold_Italic.ttf"
+    },
+    {
+      "file": "RedHatDisplay_700Bold.ttf",
+      "family": "Red Hat Display",
+      "weight": 700,
+      "italic": false,
+      "sha256": "861c7d8c0ebe239611dddce4f017d6a5c3389aea28bb31d9ee5bf8cded0826d0",
+      "npmFile": "700Bold/RedHatDisplay_700Bold.ttf"
+    },
+    {
+      "file": "RedHatDisplay_700Bold_Italic.ttf",
+      "family": "Red Hat Display",
+      "weight": 700,
+      "italic": true,
+      "sha256": "6af3f3c0ce2b4aa5cee332cc5f075e3cab7707ce02db8a4dc241ab8104cb21cc",
+      "npmFile": "700Bold_Italic/RedHatDisplay_700Bold_Italic.ttf"
     }
   ]
 }

@@ -7,8 +7,9 @@
 //   - git upstream (every face has upstreamFile { url, sha256 }): the copyright holder's byte-identical files at one commit
 //     (`version`), from one repository directory. Required for a family with an OFL Reserved Font Name. The notice comes from
 //     `upstreamLicenseUrl`, or from OFL.txt next to the faces when that is absent.
-//   - npm-derived (faces have npmFile; entry name and version are the npm package): instanced statics of a family with no
-//     Reserved Font Name. `npm pack` needs network and a `tar` on PATH.
+//   - npm-derived (faces have npmFile; entry name and version are the npm package): instanced statics. OFL stops a modified font from
+//     carrying its Reserved Font Name in its family or file name, so the family may declare one only if no face is named with it
+//     (Bitter reserves "Bitter Pro" and is named "Bitter"). `npm pack` needs network and a `tar` on PATH.
 // --vendor downloads the recorded URLs or npm version, reads the SPDX id from the notice that ships, refuses a package
 // without a permissive font license (OFL-1.1, Apache-2.0, MIT, UFL-1.0), copies only the listed faces and rewrites the
 // hashes. Without --vendor the files are only re-hashed, and a git-upstream face must still equal its recorded upstream file.

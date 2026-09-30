@@ -12,7 +12,7 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {build} from 'esbuild';
 import {chromium} from 'playwright';
-import {loadBundledFontRegistry} from '../dist/fonts-node.js';
+import {BUNDLED_FONT_MANIFEST, loadBundledFontRegistry} from '../dist/fonts-node.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const outputDirectory = path.resolve(root, process.argv[2] ?? 'artifacts/lazy-fonts');
@@ -27,7 +27,24 @@ assert.ok(!Object.keys(bundle.metafile.inputs).some(input => /sharp|raster|resvg
 const eager = (await loadBundledFontRegistry()).embeddedFonts.map((face, index) => ({index, family: face.family, weight: face.weight, italic: !!face.italic, bytes: Buffer.from(face.dataUrl.split(',')[1], 'base64')}));
 const ORIGIN = 'https://app.test';
 const fontRequests = [];
+// FF-43: the open replacement families that policy rows route to. Each pair is a font scheme (heading, body); the browser loads the
+// replacement family's whole vendored family on demand, from hash-pinned files, and paints exactly what it measured.
+const REPLACEMENT_PAIRS = [
+  {name: 'segoe-franklin', major: 'Segoe UI Semibold', minor: 'Franklin Gothic Book', families: ['Red Hat Display', 'Barlow']},
+  {name: 'trebuchet-century', major: 'Trebuchet MS', minor: 'Century Gothic', families: ['Figtree', 'Work Sans']},
+  {name: 'garamond-narrow', major: 'Garamond', minor: 'Arial Narrow', families: ['EB Garamond', 'Archivo Narrow']},
+  {name: 'bookman-impact', major: 'Bookman Old Style', minor: 'Impact', families: ['Libre Caslon Text', 'Anton']},
+  {name: 'rockwell-tahoma', major: 'Rockwell', minor: 'Tahoma', families: ['Bitter', 'Red Hat Text']},
+];
+const vendoredFaces = family => BUNDLED_FONT_MANIFEST.packages.filter(pkg => pkg.vendored).flatMap(pkg => pkg.faces.filter(face => face.family === family).map(face => ({file: `${pkg.vendored}/${face.file}`, weight: face.weight, italic: face.italic})));
+const pairDeck = pair => ({
+  design: {fontScheme: pair.name},
+  catalogs: {fontSchemes: {records: [{$schema: 'https://openpresentation.org/schema/opf-font-scheme/v1', id: pair.name, name: pair.name, app: 'PowerPoint', languageFamily: 'latin', languages: [], major: pair.major, minor: pair.minor, textSample: 'x', type: 'sans-serif'}]}},
+  name: pair.name,
+  slides: [{id: 'a', title: 'Quarterly operating review', text: 'Revenue grew in every region, led by the enterprise segment.'}],
+});
 const decks = {
+  ...Object.fromEntries(REPLACEMENT_PAIRS.map(pair => [pair.name, pairDeck(pair)])),
   aptos: {name: 'Aptos deck', slides: [{id: 'a', title: 'Quarterly operating review', text: 'Revenue grew in every region, led by the enterprise segment.'}]},
   roboto: {name: 'Roboto deck', design: {fontScheme: 'roboto'}, slides: [{id: 'a', title: 'Quarterly operating review', text: 'Revenue grew in every region.'}]},
 };
@@ -75,6 +92,7 @@ try {
       documentFaces: [...document.fonts].map(face => `${face.family.replace(/^"|"$/g, '')}|${Number(face.weight)}|${face.style === 'italic'}`).sort(),
       drawn: [...new Set(runs.map(run => run.family))], runs,
       resolved: registry.resolveFont({fontFamily: 'Aptos', fontWeight: 400}).resolvedFamily,
+      ...(window.decks[name].catalogs ? (() => { const record = window.decks[name].catalogs.fontSchemes.records[0]; return {resolvedMajor: registry.resolveFont({fontFamily: record.major, fontWeight: 400}).resolvedFamily, resolvedMinor: registry.resolveFont({fontFamily: record.minor, fontWeight: 400}).resolvedFamily}; })() : {}),
     };
   }, name);
 
@@ -106,11 +124,35 @@ try {
   await page.evaluate(async () => window.registry.ensureLazyFonts(window.decks.aptos));
   assert.equal(fontRequests.length, count, 'a second call fetches nothing');
   await page.locator('main svg').screenshot({path: path.join(outputDirectory, 'aptos-intos.png')});
+  // FF-43: each replacement pair loads exactly its vendored families' files, and the document paints what the registry measured.
+  const pairReport = [];
+  for (const pair of REPLACEMENT_PAIRS) {
+    const expected = pair.families.flatMap(vendoredFaces).map(face => face.file).sort();
+    // The base-only registry of this page cannot draw these families before loading (their alternates are office-pack faces), so
+    // only what is pending is checked here; painting is checked once the vendored family is loaded.
+    const pending = await page.evaluate(name => window.registry.pendingLazyFonts(window.decks[name]).map(face => face.file), pair.name);
+    assert.deepEqual([...pending].sort(), expected, `${pair.name}: pending files are exactly the vendored families ${pair.families.join(' and ')}`);
+    const before = fontRequests.length;
+    const loaded = await page.evaluate(async name => (await window.registry.ensureLazyFonts(window.decks[name])).map(face => face.file), pair.name);
+    assert.deepEqual([...loaded].sort(), expected, `${pair.name}: ensureLazyFonts loads those files`);
+    assert.deepEqual(fontRequests.slice(before).sort(), expected, `${pair.name}: exactly those files are fetched`);
+    const drawn = await observe(pair.name);
+    assert.deepEqual(drawn.pending, [], pair.name);
+    assert.deepEqual(drawn.registryFaces, drawn.documentFaces, `${pair.name}: the registry and the document hold the same faces`);
+    for (const family of pair.families) assert.ok(drawn.drawn.includes(family), `${pair.name}: drawn in ${family}, got ${drawn.drawn}`);
+    for (const family of pair.families) for (const face of vendoredFaces(family)) assert.ok(drawn.documentFaces.includes(`${family}|${face.weight}|${face.italic}`), `${face.file} is a loaded document face`);
+    assert.ok(drawn.runs.length > 0);
+    for (const run of drawn.runs) { assert.ok(run.painted, `${pair.name}: ${run.family} is loaded`); assert.ok(Math.abs(run.natural - run.accepted) < 0.1, `${pair.name}: ${run.family} advance ${run.natural} differs from accepted ${run.accepted}`); }
+    assert.equal(drawn.resolvedMajor, pair.families[0], `${pair.name}: ${pair.major} resolves to ${pair.families[0]}`);
+    assert.equal(drawn.resolvedMinor, pair.families[1], `${pair.name}: ${pair.minor} resolves to ${pair.families[1]}`);
+    pairReport.push({pair: pair.name, files: loaded.length, drawn: drawn.drawn, runs: drawn.runs.length});
+    await page.locator('main svg').screenshot({path: path.join(outputDirectory, `${pair.name}.png`)});
+  }
   assert.deepEqual(unexpected, [], 'no request may leave the local routes');
   assert.deepEqual(errors, []);
 
   let bytes = 0;
   for (const file of added) bytes += (await readFile(path.join(root, file))).length;
-  await writeFile(path.join(outputDirectory, 'report.json'), JSON.stringify({node: process.version, browser: browser.version(), bundleBytes: script.length, lazyFiles: added, lazyBytes: bytes, runsBefore: before.runs.length, runsAfter: after.runs.length, drawnAfter: after.drawn, unexpected, errors}, null, 2) + '\n');
-  console.log(`Lazy fonts browser: an Aptos deck fetched ${added.length} files (${bytes} bytes) on demand; registry and document hold the same faces; ${after.runs.length} runs drawn in ${after.drawn.join(', ')} within 0.1 px of the measured advances.`);
+  await writeFile(path.join(outputDirectory, 'report.json'), JSON.stringify({node: process.version, browser: browser.version(), bundleBytes: script.length, lazyFiles: added, lazyBytes: bytes, replacementPairs: pairReport, runsBefore: before.runs.length, runsAfter: after.runs.length, drawnAfter: after.drawn, unexpected, errors}, null, 2) + '\n');
+  console.log(`Lazy fonts browser: an Aptos deck fetched ${added.length} files (${bytes} bytes) on demand; registry and document hold the same faces; ${after.runs.length} runs drawn in ${after.drawn.join(', ')} within 0.1 px of the measured advances. Replacement pairs: ${pairReport.map(item => `${item.pair} ${item.files} files`).join(', ')}.`);
 } finally { await browser.close(); }

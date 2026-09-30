@@ -1,0 +1,47 @@
+{
+  "upstream": {
+    "package": "@expo-google-fonts/figtree",
+    "version": "0.4.1",
+    "source": "https://www.npmjs.com/package/@expo-google-fonts/figtree/v/0.4.1",
+    "integrity": "sha512-6IQQddGeR3yZBSwiIjy2kd1gA+5s2esF8JAFw6M1qqU4RUlj4Zxkw9J+gixAtZFgd+QIS875EPHqeYlpaRcCRw=="
+  },
+  "license": "OFL-1.1",
+  "licenseFile": "OFL.txt",
+  "licenseSha256": "140d37233e7f3ce7313798befa9600893bcceaf41a55fa0fa5ad52f7f657a268",
+  "reservedFontNames": [],
+  "copyright": "Copyright 2022 The Figtree Project Authors (https://github.com/erikdkennedy/figtree)",
+  "faces": [
+    {
+      "file": "Figtree_400Regular.ttf",
+      "family": "Figtree",
+      "weight": 400,
+      "italic": false,
+      "sha256": "4e2e9876c4a908c2cbe410ceb648e4724464a84492bd49cb2d6e7b0d3f769a66",
+      "npmFile": "400Regular/Figtree_400Regular.ttf"
+    },
+    {
+      "file": "Figtree_400Regular_Italic.ttf",
+      "family": "Figtree",
+      "weight": 400,
+      "italic": true,
+      "sha256": "9e77e88c4713c641faa7385d8c367a52542969fcb24022fc649c06422ad721f5",
+      "npmFile": "400Regular_Italic/Figtree_400Regular_Italic.ttf"
+    },
+    {
+      "file": "Figtree_700Bold.ttf",
+      "family": "Figtree",
+      "weight": 700,
+      "italic": false,
+      "sha256": "183bf1a8523731738c72be9aa8236453a21d6a3ed70bd8e5266723b212331dc4",
+      "npmFile": "700Bold/Figtree_700Bold.ttf"
+    },
+    {
+      "file": "Figtree_700Bold_Italic.ttf",
+      "family": "Figtree",
+      "weight": 700,
+      "italic": true,
+      "sha256": "eccf9cafb8a6112216b040112ce783553e30b30b1eb2649b9f2913e34d7ecbd2",
+      "npmFile": "700Bold_Italic/Figtree_700Bold_Italic.ttf"
+    }
+  ]
+}

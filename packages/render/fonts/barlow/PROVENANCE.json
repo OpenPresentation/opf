@@ -1,0 +1,45 @@
+{
+  "upstream": {
+    "source": "https://github.com/google/fonts/tree/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/barlow",
+    "commit": "23e54b51ddffbc7713c583748e3bd86f62b1fa4a"
+  },
+  "license": "OFL-1.1",
+  "licenseFile": "OFL.txt",
+  "licenseSha256": "186d750eb496a4c17a76385f82be6aea2ac1cf2de074a811d63786cf374ea73f",
+  "reservedFontNames": [],
+  "copyright": "Copyright 2017 The Barlow Project Authors (https://github.com/jpt/barlow)",
+  "faces": [
+    {
+      "file": "Barlow-Regular.ttf",
+      "family": "Barlow",
+      "weight": 400,
+      "italic": false,
+      "sha256": "95aa02c7c43096e0dd44d787ba6216864a67157e402adab59b35572e0c1577ea",
+      "upstreamUrl": "https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/barlow/Barlow-Regular.ttf"
+    },
+    {
+      "file": "Barlow-Italic.ttf",
+      "family": "Barlow",
+      "weight": 400,
+      "italic": true,
+      "sha256": "70cf45c354af39e55082fd506e748cc6a0a1812949875f99ded3f76bf691e4ca",
+      "upstreamUrl": "https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/barlow/Barlow-Italic.ttf"
+    },
+    {
+      "file": "Barlow-Bold.ttf",
+      "family": "Barlow",
+      "weight": 700,
+      "italic": false,
+      "sha256": "84e6a4d61e7c3e21f3c50ea6a4f7e5303a3467864c038be6ea3759bab8d547f9",
+      "upstreamUrl": "https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/barlow/Barlow-Bold.ttf"
+    },
+    {
+      "file": "Barlow-BoldItalic.ttf",
+      "family": "Barlow",
+      "weight": 700,
+      "italic": true,
+      "sha256": "079dcee4a53544177f3b16354b27b40b521e22861a40084ab4d052f0289ed9e8",
+      "upstreamUrl": "https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/barlow/Barlow-BoldItalic.ttf"
+    }
+  ]
+}

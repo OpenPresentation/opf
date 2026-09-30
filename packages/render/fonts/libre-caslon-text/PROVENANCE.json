@@ -1,0 +1,39 @@
+{
+  "upstream": {
+    "package": "@expo-google-fonts/libre-caslon-text",
+    "version": "0.4.0",
+    "source": "https://www.npmjs.com/package/@expo-google-fonts/libre-caslon-text/v/0.4.0",
+    "integrity": "sha512-UVjmtqkwdazHHMUg47IqucrBMou/sUTEdTBddnteWy6bXY295z/rJYXaXYKuu9knXbLqw4Wg1JT8mBPb1+cuEQ=="
+  },
+  "license": "OFL-1.1",
+  "licenseFile": "OFL.txt",
+  "licenseSha256": "a294245c822c5aa9fd9a9f3189418e99415428be5fecadf797793d5d8f6a3ad3",
+  "reservedFontNames": [],
+  "copyright": "Copyright 2018 The Libre Caslon Text Project Authors (https://github.com/thundernixon/Libre-Caslon)",
+  "faces": [
+    {
+      "file": "LibreCaslonText_400Regular.ttf",
+      "family": "Libre Caslon Text",
+      "weight": 400,
+      "italic": false,
+      "sha256": "912cda295d683d283f65944563ef2204413ef85bf49748482a5e263c4d56afd4",
+      "npmFile": "400Regular/LibreCaslonText_400Regular.ttf"
+    },
+    {
+      "file": "LibreCaslonText_400Regular_Italic.ttf",
+      "family": "Libre Caslon Text",
+      "weight": 400,
+      "italic": true,
+      "sha256": "a32b7d8314e5f7e6dd919d1df2334ecc7b92e54173c8cc421ef8e9e4bae97061",
+      "npmFile": "400Regular_Italic/LibreCaslonText_400Regular_Italic.ttf"
+    },
+    {
+      "file": "LibreCaslonText_700Bold.ttf",
+      "family": "Libre Caslon Text",
+      "weight": 700,
+      "italic": false,
+      "sha256": "ddff46045846dfc35f20db138117a2bf249bb75b9336c4ee823b162d22ac82e6",
+      "npmFile": "700Bold/LibreCaslonText_700Bold.ttf"
+    }
+  ]
+}

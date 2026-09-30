@@ -74,6 +74,12 @@ assert.ok(modifiedFaceUsesReservedName({reservedFontNames:['Carlito'],faces:[{..
 assert.ok(modifiedFaceUsesReservedName({reservedFontNames:['Carlito'],faces:[{...subsetFace,sha256:upstreamSha,upstreamFile:{url:pinnedRaw.replace('23e54b51ddffbc7713c583748e3bd86f62b1fa4a','main'),sha256:upstreamSha}}]}),'an unpinned URL is not proof');
 assert.ok(!modifiedFaceUsesReservedName({reservedFontNames:['Carlito'],faces:[{...subsetFace,sha256:upstreamSha,upstreamFile:{url:pinnedRaw,sha256:upstreamSha}}]}),'a byte-identical pinned upstream face is fine');
 assert.ok(!modifiedFaceUsesReservedName({reservedFontNames:['Source'],faces:[{...subsetFace,family:'Noto Sans JP',file:'NotoSansJP_400Regular.ttf'}]}),'a modified face that does not use the reserved name is fine');
+// Instanced (npm-derived) faces: the name-contains rule rejects a modified face named with its reserved name (Carlito, Raleway, Lora, Playfair
+// Display) and allows one that does not (Bitter reserves "Bitter Pro" but is named "Bitter"; Noto Sans JP reserves "Source").
+for(const [family,file,reserved] of [['Carlito','Carlito_400Regular.ttf','Carlito'],['Raleway','Raleway_400Regular.ttf','Raleway'],['Lora','Lora_400Regular.ttf','Lora'],['Playfair Display','PlayfairDisplay_400Regular.ttf','Playfair Display'],['Bitter Pro','Bitter_400Regular.ttf','Bitter Pro'],['Bitter Pro','Bitter_Pro_400Regular.ttf','Bitter Pro']])
+  assert.ok(modifiedFaceUsesReservedName({reservedFontNames:[reserved],faces:[{file:`400Regular/${file}`,family,weight:400,italic:false,sha256:'0'.repeat(64),npmFile:`400Regular/${file}`}]}),`an instanced ${family} (${file}) is named with its Reserved Font Name`);
+for(const [family,file,reserved] of [['Bitter','Bitter_400Regular.ttf','Bitter Pro'],['Noto Sans JP','NotoSansJP_400Regular.ttf','Source']])
+  assert.ok(!modifiedFaceUsesReservedName({reservedFontNames:[reserved],faces:[{file:`400Regular/${file}`,family,weight:400,italic:false,sha256:'0'.repeat(64),npmFile:`400Regular/${file}`}]}),`an instanced ${family} does not carry the Reserved Font Name ${reserved}`);
 assert.deepEqual(pinnedRawUpstream(pinnedRaw),{repository:'google/fonts',commit:'23e54b51ddffbc7713c583748e3bd86f62b1fa4a',directory:'ofl/carlito',file:'Carlito-Regular.ttf'});
 assert.equal(pinnedRawUpstream(pinnedRaw.replace('23e54b51ddffbc7713c583748e3bd86f62b1fa4a','main')),null);
 
@@ -102,7 +108,8 @@ for(const pkg of packages){
       assert.match(pkg.version,/^\d+\.\d+\.\d+$/,`${label}: an npm-derived vendored entry records the exact npm version it was copied from`);
       assert.equal(pkg.source,`https://www.npmjs.com/package/${pkg.name}/v/${pkg.version}`,`${label}: source must be the exact npm package URL`);
       assert.ok(pkg.faces.every(face=>typeof face.npmFile==='string'&&!face.upstreamFile),`${label}: npm-derived faces record npmFile and no upstreamFile`);
-      assert.deepEqual(pkg.reservedFontNames,[],`${label}: instanced (modified) faces are only allowed for a family with no Reserved Font Name`);
+      // OFL stops a MODIFIED font from carrying its Reserved Font Name in its name; an instance named otherwise (Bitter reserves "Bitter Pro") is fine.
+      assert.ok(!modifiedFaceUsesReservedName(pkg),`${label}: instanced (modified) faces must not carry the Reserved Font Name ${pkg.reservedFontNames.join(', ')} in their family or file name; ship the copyright holder's unmodified files (upstreamFile) instead`);
       directory=fileURLToPath(new URL(`../${pkg.vendored}/`,import.meta.url));
     }else{
     assert.match(pkg.version,/^[0-9a-f]{40}$/,`${label}: a vendored git entry's version is the pinned upstream commit`);

@@ -23,7 +23,7 @@ const SNAPSHOT=freeze({
  },
  "source": {
   "path": "spec/reference/font-policy.json",
-  "sha256": "a0ad438b94143e9ea162b56875a58d032dca3bb2a2fd5046029ab1ec99efd4b5"
+  "sha256": "2616392b58bcaaffef5182c612ad7b562f9187cd099f919ca3abee225a5411a3"
  },
  "families": [
   {
@@ -694,8 +694,8 @@ const SNAPSHOT=freeze({
     "compatibility": "visual",
     "measured": {
      "replacement": "Source Sans 3",
-     "meanAbsWidthDelta": 0.0157,
-     "meanWidthDelta": 0.0151,
+     "meanAbsWidthDelta": 0.0158,
+     "meanWidthDelta": 0.0152,
      "maxAbsWidthDelta": 0.0521,
      "styles": 4,
      "reference": "Corbel 6.01"
@@ -1005,9 +1005,9 @@ const SNAPSHOT=freeze({
     "compatibility": "visual",
     "measured": {
      "replacement": "Source Sans 3",
-     "meanAbsWidthDelta": 0.051,
-     "meanWidthDelta": 0.0038,
-     "maxAbsWidthDelta": 0.1456,
+     "meanAbsWidthDelta": 0.0511,
+     "meanWidthDelta": 0.0039,
+     "maxAbsWidthDelta": 0.1459,
      "styles": 4,
      "reference": "Gill Sans MT 1.65"
     }

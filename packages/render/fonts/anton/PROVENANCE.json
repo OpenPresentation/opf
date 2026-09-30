@@ -1,0 +1,21 @@
+{
+  "upstream": {
+    "source": "https://github.com/google/fonts/tree/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/anton",
+    "commit": "23e54b51ddffbc7713c583748e3bd86f62b1fa4a"
+  },
+  "license": "OFL-1.1",
+  "licenseFile": "OFL.txt",
+  "licenseSha256": "ee67e6ee22790b7929f1a3769ca2801d565c64b5a9096942c1adf5596de9c9e4",
+  "reservedFontNames": [],
+  "copyright": "Copyright 2020 The Anton Project Authors (https://github.com/googlefonts/AntonFont.git)",
+  "faces": [
+    {
+      "file": "Anton-Regular.ttf",
+      "family": "Anton",
+      "weight": 400,
+      "italic": false,
+      "sha256": "a4ba3a92350ebb031da0cb47630ac49eb265082ca1bc0450442f4a83ab947cab",
+      "upstreamUrl": "https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/anton/Anton-Regular.ttf"
+    }
+  ]
+}

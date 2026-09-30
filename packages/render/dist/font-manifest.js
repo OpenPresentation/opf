@@ -992,89 +992,505 @@ export const BUNDLED_FONT_MANIFEST=freeze({
       ]
     },
     {
-      "name": "red-hat-display",
+      "name": "@expo-google-fonts/red-hat-display",
       "vendored": "fonts/red-hat-display",
-      "version": "6bb1048a6402b0076ea04f42951ec66263cd1437",
+      "version": "0.4.1",
       "pack": "open",
-      "source": "https://github.com/RedHatOfficial/RedHatFont/tree/6bb1048a6402b0076ea04f42951ec66263cd1437/fonts/Proportional/RedHatDisplay/ttf",
+      "source": "https://www.npmjs.com/package/@expo-google-fonts/red-hat-display/v/0.4.1",
       "license": "OFL-1.1",
       "licenseFile": "OFL.txt",
-      "licenseSha256": "4f1417e27511207cd217656c964f1b0d8b0c4a30156a1a699cf16dc5eba0dff6",
-      "upstreamLicenseUrl": "https://raw.githubusercontent.com/RedHatOfficial/RedHatFont/6bb1048a6402b0076ea04f42951ec66263cd1437/OFL.txt",
+      "licenseSha256": "435fbfb7e66988b2a06686a4cb966faec733f35d8fe100a1601573c27f3e0bb8",
+      "npmLicenseFile": "LICENSE_FONT",
+      "integrity": "sha512-sfJgaWo+DVLR9Xgq2Q0dEJlOwoXVscUzmuLJg4vL56sPg7MtfOUG34B3ezouwn4Ww1vc4C3A1xCKhTOf9167jQ==",
       "reservedFontNames": [],
       "upstream": "https://github.com/RedHatOfficial/RedHatFont",
-      "copyright": "Copyright 2021 The Red Hat Project Authors (https://github.com/RedHatOfficial/RedHatFont)",
+      "copyright": "Copyright 2024 The Red Hat Project Authors (https://github.com/RedHatOfficial/RedHatFont)",
       "faces": [
         {
-          "file": "RedHatDisplay-Regular.ttf",
-          "family": "Red Hat Display",
-          "weight": 400,
-          "italic": false,
-          "sha256": "ab007b2a5b1590027cb049c3946de67870f6de9fa2420f8ef6e968392219aecd",
-          "upstreamFile": {
-            "url": "https://raw.githubusercontent.com/RedHatOfficial/RedHatFont/6bb1048a6402b0076ea04f42951ec66263cd1437/fonts/Proportional/RedHatDisplay/ttf/RedHatDisplay-Regular.ttf",
-            "sha256": "ab007b2a5b1590027cb049c3946de67870f6de9fa2420f8ef6e968392219aecd"
-          }
-        },
-        {
-          "file": "RedHatDisplay-Bold.ttf",
-          "family": "Red Hat Display",
-          "weight": 700,
-          "italic": false,
-          "sha256": "bac4990e2845c796ad0cfc47c3121b09df9285858ba841f7eab8bcdea87b74f1",
-          "upstreamFile": {
-            "url": "https://raw.githubusercontent.com/RedHatOfficial/RedHatFont/6bb1048a6402b0076ea04f42951ec66263cd1437/fonts/Proportional/RedHatDisplay/ttf/RedHatDisplay-Bold.ttf",
-            "sha256": "bac4990e2845c796ad0cfc47c3121b09df9285858ba841f7eab8bcdea87b74f1"
-          }
-        },
-        {
-          "file": "RedHatDisplay-Light.ttf",
+          "file": "RedHatDisplay_300Light.ttf",
           "family": "Red Hat Display",
           "weight": 300,
           "italic": false,
-          "sha256": "99ed6ddec6954941f708b23d3ab6873cba9f3067a4d1153d98be31ff2472dcb5",
+          "sha256": "77eae6c6360c8a8445268dac09c32b6915f658aed2613408d7e118436a0c3eef",
+          "npmFile": "300Light/RedHatDisplay_300Light.ttf"
+        },
+        {
+          "file": "RedHatDisplay_300Light_Italic.ttf",
+          "family": "Red Hat Display",
+          "weight": 300,
+          "italic": true,
+          "sha256": "b76f8742593b53a466c99c61522f494aed59a3e4485f94fcdb2d2600bab0d6fb",
+          "npmFile": "300Light_Italic/RedHatDisplay_300Light_Italic.ttf"
+        },
+        {
+          "file": "RedHatDisplay_400Regular.ttf",
+          "family": "Red Hat Display",
+          "weight": 400,
+          "italic": false,
+          "sha256": "b3c6289677cb95107738025b86cba835f0283b46dc60d6ace3bff9b9700bfbd0",
+          "npmFile": "400Regular/RedHatDisplay_400Regular.ttf"
+        },
+        {
+          "file": "RedHatDisplay_400Regular_Italic.ttf",
+          "family": "Red Hat Display",
+          "weight": 400,
+          "italic": true,
+          "sha256": "947a7431db8083115e2aa2db5265a1abcb5a80a56c6d46e2c7862b9fab406b90",
+          "npmFile": "400Regular_Italic/RedHatDisplay_400Regular_Italic.ttf"
+        },
+        {
+          "file": "RedHatDisplay_600SemiBold.ttf",
+          "family": "Red Hat Display",
+          "weight": 600,
+          "italic": false,
+          "sha256": "d8a250cf848e2b52e505776ec15c078dd022d920846d83f21bdb7a56e43c5ad8",
+          "npmFile": "600SemiBold/RedHatDisplay_600SemiBold.ttf"
+        },
+        {
+          "file": "RedHatDisplay_600SemiBold_Italic.ttf",
+          "family": "Red Hat Display",
+          "weight": 600,
+          "italic": true,
+          "sha256": "d39a86c7334a400505a068b1c1a824c91b3ebae37563e36836c19bf889bfcd3a",
+          "npmFile": "600SemiBold_Italic/RedHatDisplay_600SemiBold_Italic.ttf"
+        },
+        {
+          "file": "RedHatDisplay_700Bold.ttf",
+          "family": "Red Hat Display",
+          "weight": 700,
+          "italic": false,
+          "sha256": "861c7d8c0ebe239611dddce4f017d6a5c3389aea28bb31d9ee5bf8cded0826d0",
+          "npmFile": "700Bold/RedHatDisplay_700Bold.ttf"
+        },
+        {
+          "file": "RedHatDisplay_700Bold_Italic.ttf",
+          "family": "Red Hat Display",
+          "weight": 700,
+          "italic": true,
+          "sha256": "6af3f3c0ce2b4aa5cee332cc5f075e3cab7707ce02db8a4dc241ab8104cb21cc",
+          "npmFile": "700Bold_Italic/RedHatDisplay_700Bold_Italic.ttf"
+        }
+      ]
+    },
+    {
+      "name": "@expo-google-fonts/red-hat-text",
+      "vendored": "fonts/red-hat-text",
+      "version": "0.4.1",
+      "pack": "open",
+      "source": "https://www.npmjs.com/package/@expo-google-fonts/red-hat-text/v/0.4.1",
+      "license": "OFL-1.1",
+      "licenseFile": "OFL.txt",
+      "licenseSha256": "435fbfb7e66988b2a06686a4cb966faec733f35d8fe100a1601573c27f3e0bb8",
+      "npmLicenseFile": "LICENSE_FONT",
+      "integrity": "sha512-PELzskSfcsA/u8T+IeC3cC32mcGJs6dQRl59YqkNRkmzObILVk6uMoZ3Lvj9//q3XhLhZs8ikjUbzBfjO7bmcQ==",
+      "reservedFontNames": [],
+      "upstream": "https://github.com/RedHatOfficial/RedHatFont",
+      "copyright": "Copyright 2024 The Red Hat Project Authors (https://github.com/RedHatOfficial/RedHatFont)",
+      "faces": [
+        {
+          "file": "RedHatText_400Regular.ttf",
+          "family": "Red Hat Text",
+          "weight": 400,
+          "italic": false,
+          "sha256": "65bce50e2d904363a2ade7dac0b381c72638c43fd690a65a35aad1cc874f75cf",
+          "npmFile": "400Regular/RedHatText_400Regular.ttf"
+        },
+        {
+          "file": "RedHatText_400Regular_Italic.ttf",
+          "family": "Red Hat Text",
+          "weight": 400,
+          "italic": true,
+          "sha256": "6da9408ce2ad47d8f4b2881853d92aee45ca52af39b4c28ddedaab1fb91f57c5",
+          "npmFile": "400Regular_Italic/RedHatText_400Regular_Italic.ttf"
+        },
+        {
+          "file": "RedHatText_700Bold.ttf",
+          "family": "Red Hat Text",
+          "weight": 700,
+          "italic": false,
+          "sha256": "a82d498bd5314be56ccb79fb5c2244513a41a5c2b04be56a45751c26a2132a03",
+          "npmFile": "700Bold/RedHatText_700Bold.ttf"
+        },
+        {
+          "file": "RedHatText_700Bold_Italic.ttf",
+          "family": "Red Hat Text",
+          "weight": 700,
+          "italic": true,
+          "sha256": "1f2b2ed57f70ea28bacc1bd3ce3f0b740c5b16a262c61925400f1da5d1045a7c",
+          "npmFile": "700Bold_Italic/RedHatText_700Bold_Italic.ttf"
+        }
+      ]
+    },
+    {
+      "name": "barlow",
+      "vendored": "fonts/barlow",
+      "version": "23e54b51ddffbc7713c583748e3bd86f62b1fa4a",
+      "pack": "open",
+      "source": "https://github.com/google/fonts/tree/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/barlow",
+      "license": "OFL-1.1",
+      "licenseFile": "OFL.txt",
+      "licenseSha256": "186d750eb496a4c17a76385f82be6aea2ac1cf2de074a811d63786cf374ea73f",
+      "reservedFontNames": [],
+      "upstream": "https://github.com/jpt/barlow",
+      "copyright": "Copyright 2017 The Barlow Project Authors (https://github.com/jpt/barlow)",
+      "faces": [
+        {
+          "file": "Barlow-Regular.ttf",
+          "family": "Barlow",
+          "weight": 400,
+          "italic": false,
+          "sha256": "95aa02c7c43096e0dd44d787ba6216864a67157e402adab59b35572e0c1577ea",
           "upstreamFile": {
-            "url": "https://raw.githubusercontent.com/RedHatOfficial/RedHatFont/6bb1048a6402b0076ea04f42951ec66263cd1437/fonts/Proportional/RedHatDisplay/ttf/RedHatDisplay-Light.ttf",
-            "sha256": "99ed6ddec6954941f708b23d3ab6873cba9f3067a4d1153d98be31ff2472dcb5"
+            "url": "https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/barlow/Barlow-Regular.ttf",
+            "sha256": "95aa02c7c43096e0dd44d787ba6216864a67157e402adab59b35572e0c1577ea"
+          }
+        },
+        {
+          "file": "Barlow-Italic.ttf",
+          "family": "Barlow",
+          "weight": 400,
+          "italic": true,
+          "sha256": "70cf45c354af39e55082fd506e748cc6a0a1812949875f99ded3f76bf691e4ca",
+          "upstreamFile": {
+            "url": "https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/barlow/Barlow-Italic.ttf",
+            "sha256": "70cf45c354af39e55082fd506e748cc6a0a1812949875f99ded3f76bf691e4ca"
+          }
+        },
+        {
+          "file": "Barlow-Bold.ttf",
+          "family": "Barlow",
+          "weight": 700,
+          "italic": false,
+          "sha256": "84e6a4d61e7c3e21f3c50ea6a4f7e5303a3467864c038be6ea3759bab8d547f9",
+          "upstreamFile": {
+            "url": "https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/barlow/Barlow-Bold.ttf",
+            "sha256": "84e6a4d61e7c3e21f3c50ea6a4f7e5303a3467864c038be6ea3759bab8d547f9"
+          }
+        },
+        {
+          "file": "Barlow-BoldItalic.ttf",
+          "family": "Barlow",
+          "weight": 700,
+          "italic": true,
+          "sha256": "079dcee4a53544177f3b16354b27b40b521e22861a40084ab4d052f0289ed9e8",
+          "upstreamFile": {
+            "url": "https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/barlow/Barlow-BoldItalic.ttf",
+            "sha256": "079dcee4a53544177f3b16354b27b40b521e22861a40084ab4d052f0289ed9e8"
           }
         }
       ]
     },
     {
-      "name": "red-hat-text",
-      "vendored": "fonts/red-hat-text",
-      "version": "6bb1048a6402b0076ea04f42951ec66263cd1437",
+      "name": "anton",
+      "vendored": "fonts/anton",
+      "version": "23e54b51ddffbc7713c583748e3bd86f62b1fa4a",
       "pack": "open",
-      "source": "https://github.com/RedHatOfficial/RedHatFont/tree/6bb1048a6402b0076ea04f42951ec66263cd1437/fonts/Proportional/RedHatText/ttf",
+      "source": "https://github.com/google/fonts/tree/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/anton",
       "license": "OFL-1.1",
       "licenseFile": "OFL.txt",
-      "licenseSha256": "4f1417e27511207cd217656c964f1b0d8b0c4a30156a1a699cf16dc5eba0dff6",
-      "upstreamLicenseUrl": "https://raw.githubusercontent.com/RedHatOfficial/RedHatFont/6bb1048a6402b0076ea04f42951ec66263cd1437/OFL.txt",
+      "licenseSha256": "ee67e6ee22790b7929f1a3769ca2801d565c64b5a9096942c1adf5596de9c9e4",
       "reservedFontNames": [],
-      "upstream": "https://github.com/RedHatOfficial/RedHatFont",
-      "copyright": "Copyright 2021 The Red Hat Project Authors (https://github.com/RedHatOfficial/RedHatFont)",
+      "upstream": "https://github.com/googlefonts/AntonFont.git",
+      "copyright": "Copyright 2020 The Anton Project Authors (https://github.com/googlefonts/AntonFont.git)",
       "faces": [
         {
-          "file": "RedHatText-Regular.ttf",
-          "family": "Red Hat Text",
+          "file": "Anton-Regular.ttf",
+          "family": "Anton",
           "weight": 400,
           "italic": false,
-          "sha256": "c0989952929fb6427d7b16999678418d52977aea764e66e51b76f9ca221b71b7",
+          "sha256": "a4ba3a92350ebb031da0cb47630ac49eb265082ca1bc0450442f4a83ab947cab",
           "upstreamFile": {
-            "url": "https://raw.githubusercontent.com/RedHatOfficial/RedHatFont/6bb1048a6402b0076ea04f42951ec66263cd1437/fonts/Proportional/RedHatText/ttf/RedHatText-Regular.ttf",
-            "sha256": "c0989952929fb6427d7b16999678418d52977aea764e66e51b76f9ca221b71b7"
+            "url": "https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/anton/Anton-Regular.ttf",
+            "sha256": "a4ba3a92350ebb031da0cb47630ac49eb265082ca1bc0450442f4a83ab947cab"
           }
+        }
+      ]
+    },
+    {
+      "name": "@expo-google-fonts/figtree",
+      "vendored": "fonts/figtree",
+      "version": "0.4.1",
+      "pack": "open",
+      "source": "https://www.npmjs.com/package/@expo-google-fonts/figtree/v/0.4.1",
+      "license": "OFL-1.1",
+      "licenseFile": "OFL.txt",
+      "licenseSha256": "140d37233e7f3ce7313798befa9600893bcceaf41a55fa0fa5ad52f7f657a268",
+      "npmLicenseFile": "LICENSE_FONT",
+      "integrity": "sha512-6IQQddGeR3yZBSwiIjy2kd1gA+5s2esF8JAFw6M1qqU4RUlj4Zxkw9J+gixAtZFgd+QIS875EPHqeYlpaRcCRw==",
+      "reservedFontNames": [],
+      "upstream": "https://github.com/erikdkennedy/figtree",
+      "copyright": "Copyright 2022 The Figtree Project Authors (https://github.com/erikdkennedy/figtree)",
+      "faces": [
+        {
+          "file": "Figtree_400Regular.ttf",
+          "family": "Figtree",
+          "weight": 400,
+          "italic": false,
+          "sha256": "4e2e9876c4a908c2cbe410ceb648e4724464a84492bd49cb2d6e7b0d3f769a66",
+          "npmFile": "400Regular/Figtree_400Regular.ttf"
         },
         {
-          "file": "RedHatText-Bold.ttf",
-          "family": "Red Hat Text",
+          "file": "Figtree_400Regular_Italic.ttf",
+          "family": "Figtree",
+          "weight": 400,
+          "italic": true,
+          "sha256": "9e77e88c4713c641faa7385d8c367a52542969fcb24022fc649c06422ad721f5",
+          "npmFile": "400Regular_Italic/Figtree_400Regular_Italic.ttf"
+        },
+        {
+          "file": "Figtree_700Bold.ttf",
+          "family": "Figtree",
           "weight": 700,
           "italic": false,
-          "sha256": "a44ef4b6cfefb2e90d489247cdf3e269744673ebb68b48c89ce9e37041feccb4",
-          "upstreamFile": {
-            "url": "https://raw.githubusercontent.com/RedHatOfficial/RedHatFont/6bb1048a6402b0076ea04f42951ec66263cd1437/fonts/Proportional/RedHatText/ttf/RedHatText-Bold.ttf",
-            "sha256": "a44ef4b6cfefb2e90d489247cdf3e269744673ebb68b48c89ce9e37041feccb4"
-          }
+          "sha256": "183bf1a8523731738c72be9aa8236453a21d6a3ed70bd8e5266723b212331dc4",
+          "npmFile": "700Bold/Figtree_700Bold.ttf"
+        },
+        {
+          "file": "Figtree_700Bold_Italic.ttf",
+          "family": "Figtree",
+          "weight": 700,
+          "italic": true,
+          "sha256": "eccf9cafb8a6112216b040112ce783553e30b30b1eb2649b9f2913e34d7ecbd2",
+          "npmFile": "700Bold_Italic/Figtree_700Bold_Italic.ttf"
+        }
+      ]
+    },
+    {
+      "name": "@expo-google-fonts/work-sans",
+      "vendored": "fonts/work-sans",
+      "version": "0.4.2",
+      "pack": "open",
+      "source": "https://www.npmjs.com/package/@expo-google-fonts/work-sans/v/0.4.2",
+      "license": "OFL-1.1",
+      "licenseFile": "OFL.txt",
+      "licenseSha256": "749aca05078664ce682dce1b1b10096ac397cb088c1a6df4e1bb56f0092a9272",
+      "npmLicenseFile": "LICENSE_FONT",
+      "integrity": "sha512-v+I8jQgoOAmI77v1V0EXvgKA4NGg8Agy2BCHAI6sswAKTub2sKsi6PXT4vLBn95dbbTqelSlcT79YRDTlCBrRg==",
+      "reservedFontNames": [],
+      "upstream": "https://github.com/weiweihuanghuang/Work-Sans",
+      "copyright": "Copyright 2019 The Work Sans Project Authors (https://github.com/weiweihuanghuang/Work-Sans)",
+      "faces": [
+        {
+          "file": "WorkSans_400Regular.ttf",
+          "family": "Work Sans",
+          "weight": 400,
+          "italic": false,
+          "sha256": "e67985a843df0d3cdee51a3d0f329eb1774a344ad9ff0c9ab923751f1577e2a4",
+          "npmFile": "400Regular/WorkSans_400Regular.ttf"
+        },
+        {
+          "file": "WorkSans_400Regular_Italic.ttf",
+          "family": "Work Sans",
+          "weight": 400,
+          "italic": true,
+          "sha256": "6b7f7002e0b0c8b261fe878658ef5551e3e59d9f6b609b04efb90dde1e2c1ada",
+          "npmFile": "400Regular_Italic/WorkSans_400Regular_Italic.ttf"
+        },
+        {
+          "file": "WorkSans_700Bold.ttf",
+          "family": "Work Sans",
+          "weight": 700,
+          "italic": false,
+          "sha256": "240d125fc9f8561363dc1ea3f513501253bd70942f41468f48f0b0cafb0c82e2",
+          "npmFile": "700Bold/WorkSans_700Bold.ttf"
+        },
+        {
+          "file": "WorkSans_700Bold_Italic.ttf",
+          "family": "Work Sans",
+          "weight": 700,
+          "italic": true,
+          "sha256": "a5b2cad813df0aaa7d16621f2e93b5117c25e9bc788bc9a3ad218e9d6348ce34",
+          "npmFile": "700Bold_Italic/WorkSans_700Bold_Italic.ttf"
+        }
+      ]
+    },
+    {
+      "name": "@expo-google-fonts/eb-garamond",
+      "vendored": "fonts/eb-garamond",
+      "version": "0.4.3",
+      "pack": "open",
+      "source": "https://www.npmjs.com/package/@expo-google-fonts/eb-garamond/v/0.4.3",
+      "license": "OFL-1.1",
+      "licenseFile": "OFL.txt",
+      "licenseSha256": "0985066662eb755ed3683ae5482a81a9195b49ce3f7e165cc2388b3dbece7dd7",
+      "npmLicenseFile": "LICENSE_FONT",
+      "integrity": "sha512-8HsDPKN6vDlzxZLgo3UFcyr4uvtY33TBpM65owySnF8cy8hq0ss8AWmBvT/lMRJ/wfcoaPP8gFQsizPRvr0nqg==",
+      "reservedFontNames": [],
+      "upstream": "https://github.com/octaviopardo/EBGaramond12",
+      "copyright": "Copyright 2017 The EB Garamond Project Authors (https://github.com/octaviopardo/EBGaramond12)",
+      "faces": [
+        {
+          "file": "EBGaramond_400Regular.ttf",
+          "family": "EB Garamond",
+          "weight": 400,
+          "italic": false,
+          "sha256": "d5baed6e48bf4c99a770e6edc86ddaf67942bb1850491ed54f94d5c2c213531e",
+          "npmFile": "400Regular/EBGaramond_400Regular.ttf"
+        },
+        {
+          "file": "EBGaramond_400Regular_Italic.ttf",
+          "family": "EB Garamond",
+          "weight": 400,
+          "italic": true,
+          "sha256": "228da33df456ec4e0a149f33cfc2264d5bd500bdfcf55ee36710ca8df923cbd6",
+          "npmFile": "400Regular_Italic/EBGaramond_400Regular_Italic.ttf"
+        },
+        {
+          "file": "EBGaramond_700Bold.ttf",
+          "family": "EB Garamond",
+          "weight": 700,
+          "italic": false,
+          "sha256": "8bb7f13020d522de1c441da0a76f05843b74d788c1b16a933af3be4880782d17",
+          "npmFile": "700Bold/EBGaramond_700Bold.ttf"
+        },
+        {
+          "file": "EBGaramond_700Bold_Italic.ttf",
+          "family": "EB Garamond",
+          "weight": 700,
+          "italic": true,
+          "sha256": "0030bda44f15b85f5adee17dc25cb5948c547ecf7f6d06e10723b406cd15a472",
+          "npmFile": "700Bold_Italic/EBGaramond_700Bold_Italic.ttf"
+        }
+      ]
+    },
+    {
+      "name": "@expo-google-fonts/archivo-narrow",
+      "vendored": "fonts/archivo-narrow",
+      "version": "0.4.2",
+      "pack": "open",
+      "source": "https://www.npmjs.com/package/@expo-google-fonts/archivo-narrow/v/0.4.2",
+      "license": "OFL-1.1",
+      "licenseFile": "OFL.txt",
+      "licenseSha256": "b2087ef3fb91248e346600d19021249152a9688efea72905aa1996bb16a4c8de",
+      "npmLicenseFile": "LICENSE_FONT",
+      "integrity": "sha512-uD54ZIwnpiAKH2Bjj1awgfIMkVwDTKHICGa4y8n6oXdIXNwDPjk8EYWz8CIY3l9x3wVoSSRkd85rmueckJmZbA==",
+      "reservedFontNames": [],
+      "upstream": "https://github.com/Omnibus-Type/ArchivoNarrow",
+      "copyright": "Copyright 2019 The Archivo Narrow Project Authors (https://github.com/Omnibus-Type/ArchivoNarrow)",
+      "faces": [
+        {
+          "file": "ArchivoNarrow_400Regular.ttf",
+          "family": "Archivo Narrow",
+          "weight": 400,
+          "italic": false,
+          "sha256": "a6f42674111326d8a14897d87de4ce667090560941afc3e190709021982abf5a",
+          "npmFile": "400Regular/ArchivoNarrow_400Regular.ttf"
+        },
+        {
+          "file": "ArchivoNarrow_400Regular_Italic.ttf",
+          "family": "Archivo Narrow",
+          "weight": 400,
+          "italic": true,
+          "sha256": "61653c68a59fc5f0a660f2cfec0bad7344a626b8177649370e94cb732eabbb37",
+          "npmFile": "400Regular_Italic/ArchivoNarrow_400Regular_Italic.ttf"
+        },
+        {
+          "file": "ArchivoNarrow_700Bold.ttf",
+          "family": "Archivo Narrow",
+          "weight": 700,
+          "italic": false,
+          "sha256": "bc2698008c4fa878f17b9ffb64c6fd2f0c83ca1f69cda591253221efb357a78d",
+          "npmFile": "700Bold/ArchivoNarrow_700Bold.ttf"
+        },
+        {
+          "file": "ArchivoNarrow_700Bold_Italic.ttf",
+          "family": "Archivo Narrow",
+          "weight": 700,
+          "italic": true,
+          "sha256": "dd588c564e4dec669335f6fea01b1f229f7629c3e836178e3ad9db8d6e9d6228",
+          "npmFile": "700Bold_Italic/ArchivoNarrow_700Bold_Italic.ttf"
+        }
+      ]
+    },
+    {
+      "name": "@expo-google-fonts/libre-caslon-text",
+      "vendored": "fonts/libre-caslon-text",
+      "version": "0.4.0",
+      "pack": "open",
+      "source": "https://www.npmjs.com/package/@expo-google-fonts/libre-caslon-text/v/0.4.0",
+      "license": "OFL-1.1",
+      "licenseFile": "OFL.txt",
+      "licenseSha256": "a294245c822c5aa9fd9a9f3189418e99415428be5fecadf797793d5d8f6a3ad3",
+      "npmLicenseFile": "LICENSE_FONT",
+      "integrity": "sha512-UVjmtqkwdazHHMUg47IqucrBMou/sUTEdTBddnteWy6bXY295z/rJYXaXYKuu9knXbLqw4Wg1JT8mBPb1+cuEQ==",
+      "reservedFontNames": [],
+      "upstream": "https://github.com/thundernixon/Libre-Caslon",
+      "copyright": "Copyright 2018 The Libre Caslon Text Project Authors (https://github.com/thundernixon/Libre-Caslon)",
+      "faces": [
+        {
+          "file": "LibreCaslonText_400Regular.ttf",
+          "family": "Libre Caslon Text",
+          "weight": 400,
+          "italic": false,
+          "sha256": "912cda295d683d283f65944563ef2204413ef85bf49748482a5e263c4d56afd4",
+          "npmFile": "400Regular/LibreCaslonText_400Regular.ttf"
+        },
+        {
+          "file": "LibreCaslonText_400Regular_Italic.ttf",
+          "family": "Libre Caslon Text",
+          "weight": 400,
+          "italic": true,
+          "sha256": "a32b7d8314e5f7e6dd919d1df2334ecc7b92e54173c8cc421ef8e9e4bae97061",
+          "npmFile": "400Regular_Italic/LibreCaslonText_400Regular_Italic.ttf"
+        },
+        {
+          "file": "LibreCaslonText_700Bold.ttf",
+          "family": "Libre Caslon Text",
+          "weight": 700,
+          "italic": false,
+          "sha256": "ddff46045846dfc35f20db138117a2bf249bb75b9336c4ee823b162d22ac82e6",
+          "npmFile": "700Bold/LibreCaslonText_700Bold.ttf"
+        }
+      ]
+    },
+    {
+      "name": "@expo-google-fonts/bitter",
+      "vendored": "fonts/bitter",
+      "version": "0.4.2",
+      "pack": "open",
+      "source": "https://www.npmjs.com/package/@expo-google-fonts/bitter/v/0.4.2",
+      "license": "OFL-1.1",
+      "licenseFile": "OFL.txt",
+      "licenseSha256": "152a1e283e23b42c4940da4c72f2f5bebaa17969cb77c76d7af05903846006f1",
+      "npmLicenseFile": "LICENSE_FONT",
+      "integrity": "sha512-7nAQQhj1k7CTn77ivgRnR39HqrVbzezJ3d8N9EWeDIfFDpZ9ACUNzHI7sg++JmvDnx1wuXwmfpjagTPTg2ZgWw==",
+      "reservedFontNames": [
+        "Bitter Pro"
+      ],
+      "upstream": "https://github.com/solmatas/BitterPro",
+      "copyright": "Copyright 2011 The Bitter Project Authors (https://github.com/solmatas/BitterPro)",
+      "faces": [
+        {
+          "file": "Bitter_400Regular.ttf",
+          "family": "Bitter",
+          "weight": 400,
+          "italic": false,
+          "sha256": "46a52a6b4e3202563bac5134c02e4d9db63685c439104a803a0b4fbf9e8ceaf4",
+          "npmFile": "400Regular/Bitter_400Regular.ttf"
+        },
+        {
+          "file": "Bitter_400Regular_Italic.ttf",
+          "family": "Bitter",
+          "weight": 400,
+          "italic": true,
+          "sha256": "4eda5cb005b1af2d5a733e0dcd727f65e2bddd0ea0466893f6d9259929ef20b2",
+          "npmFile": "400Regular_Italic/Bitter_400Regular_Italic.ttf"
+        },
+        {
+          "file": "Bitter_700Bold.ttf",
+          "family": "Bitter",
+          "weight": 700,
+          "italic": false,
+          "sha256": "391582a3004c7600b7234123c3c810b8c2c5ed3c90af7f087fe55f003cc075bf",
+          "npmFile": "700Bold/Bitter_700Bold.ttf"
+        },
+        {
+          "file": "Bitter_700Bold_Italic.ttf",
+          "family": "Bitter",
+          "weight": 700,
+          "italic": true,
+          "sha256": "65fad0650e416aebb4a7f6893633907f0e10ea153974b0c69f9074b611c259c4",
+          "npmFile": "700Bold_Italic/Bitter_700Bold_Italic.ttf"
         }
       ]
     },

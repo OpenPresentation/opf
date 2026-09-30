@@ -82,9 +82,9 @@ assert.deepEqual(['Aptos', 'Aptos Display', 'Aptos Narrow', 'Aptos Serif'].map(f
 assert.equal(registry.textMeasurement.resolveFont({fontFamily: 'Roboto', fontWeight: 700}).substitute, false);
 
 // A weight-named family selects its encoded weight in the replacement; bold still selects bold.
-// Red Hat Display is bundled (FF-31) without a 600 face (upstream's SemiBold has OS/2 weight 707, which resvg would rank above Bold), so
-// Semibold snaps to its Bold face, reported visual. The weight-named row still selects an encoded weight where a face exists.
-assert.deepEqual(['Red Hat Display', 700], (({resolvedFamily, resolvedWeight}) => [resolvedFamily, resolvedWeight])(registry.resolveFont({fontFamily: 'Segoe UI Semibold', fontWeight: 400})));
+// Red Hat Display ships a real 600 face (FF-43: static instances with OS/2 weight 600 from @expo-google-fonts; the upstream SemiBold declares 707, which
+// would out-rank Bold in resvg), so Segoe UI Semibold selects it at its encoded weight. Bold still selects the Bold face through the style link.
+assert.deepEqual(['Red Hat Display', 600], (({resolvedFamily, resolvedWeight}) => [resolvedFamily, resolvedWeight])(registry.resolveFont({fontFamily: 'Segoe UI Semibold', fontWeight: 400})));
 assert.equal(registry.resolveFont({fontFamily: 'Segoe UI Light', fontWeight: 400}).resolvedWeight, 300);
 assert.equal(registry.resolveFont({fontFamily: 'Segoe UI Semibold', fontWeight: 700}).resolvedWeight, 700);
 
@@ -107,8 +107,8 @@ assert.equal(strict.registry.resolveFont({fontFamily: 'Calibri', fontWeight: 700
 assert.equal(strict.registry.resolveFont({fontFamily: 'Cambria', fontWeight: 400}).compatibility, 'visual');
 assert.equal(strict.registry.resolveFont({fontFamily: 'Georgia', fontWeight: 400}).compatibility, 'metric');
 assert.throws(() => strict.registry.resolveFont({fontFamily: 'Georgia', fontWeight: 500}), {code: 'font-unavailable'});
-// An open family that no pack ships yet (Work Sans) says so; one the office pack ships (Montserrat, FF-31) points at that pack when only the base pack is loaded.
-assert.throws(() => strict.registry.resolveFont({fontFamily: 'Work Sans', fontWeight: 400}), error => error.details.licenseClass === 'open' && /no pinned renderer pack ships it yet/.test(error.message));
+// An open family that no pack ships yet (Raleway and Playfair Display: variable-only upstream, resvg ignores the weight axis) says so; one the office pack ships (Montserrat, FF-31) points at that pack when only the base pack is loaded.
+assert.throws(() => strict.registry.resolveFont({fontFamily: 'Raleway', fontWeight: 400}), error => error.details.licenseClass === 'open' && /no pinned renderer pack ships it yet/.test(error.message));
 assert.equal(strict.registry.resolveFont({fontFamily: 'Montserrat', fontWeight: 400}).compatibility, 'exact');
 const baseOnly = await prepareNodeFonts({pack: 'base'});
 assert.throws(() => baseOnly.registry.resolveFont({fontFamily: 'Montserrat', fontWeight: 400}), error => error.code === 'font-unavailable' && error.details.pack === 'office' && /load the 'office' font pack/.test(error.message));

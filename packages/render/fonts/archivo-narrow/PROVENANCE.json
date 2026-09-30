@@ -1,0 +1,47 @@
+{
+  "upstream": {
+    "package": "@expo-google-fonts/archivo-narrow",
+    "version": "0.4.2",
+    "source": "https://www.npmjs.com/package/@expo-google-fonts/archivo-narrow/v/0.4.2",
+    "integrity": "sha512-uD54ZIwnpiAKH2Bjj1awgfIMkVwDTKHICGa4y8n6oXdIXNwDPjk8EYWz8CIY3l9x3wVoSSRkd85rmueckJmZbA=="
+  },
+  "license": "OFL-1.1",
+  "licenseFile": "OFL.txt",
+  "licenseSha256": "b2087ef3fb91248e346600d19021249152a9688efea72905aa1996bb16a4c8de",
+  "reservedFontNames": [],
+  "copyright": "Copyright 2019 The Archivo Narrow Project Authors (https://github.com/Omnibus-Type/ArchivoNarrow)",
+  "faces": [
+    {
+      "file": "ArchivoNarrow_400Regular.ttf",
+      "family": "Archivo Narrow",
+      "weight": 400,
+      "italic": false,
+      "sha256": "a6f42674111326d8a14897d87de4ce667090560941afc3e190709021982abf5a",
+      "npmFile": "400Regular/ArchivoNarrow_400Regular.ttf"
+    },
+    {
+      "file": "ArchivoNarrow_400Regular_Italic.ttf",
+      "family": "Archivo Narrow",
+      "weight": 400,
+      "italic": true,
+      "sha256": "61653c68a59fc5f0a660f2cfec0bad7344a626b8177649370e94cb732eabbb37",
+      "npmFile": "400Regular_Italic/ArchivoNarrow_400Regular_Italic.ttf"
+    },
+    {
+      "file": "ArchivoNarrow_700Bold.ttf",
+      "family": "Archivo Narrow",
+      "weight": 700,
+      "italic": false,
+      "sha256": "bc2698008c4fa878f17b9ffb64c6fd2f0c83ca1f69cda591253221efb357a78d",
+      "npmFile": "700Bold/ArchivoNarrow_700Bold.ttf"
+    },
+    {
+      "file": "ArchivoNarrow_700Bold_Italic.ttf",
+      "family": "Archivo Narrow",
+      "weight": 700,
+      "italic": true,
+      "sha256": "dd588c564e4dec669335f6fea01b1f229f7629c3e836178e3ad9db8d6e9d6228",
+      "npmFile": "700Bold_Italic/ArchivoNarrow_700Bold_Italic.ttf"
+    }
+  ]
+}
