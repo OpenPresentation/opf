@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- FF-59: the slide `tag` (the eyebrow label) draws in the scheme primary colour (accent1 unless the scheme names a `primary`), not the text colour, as opf-pptx has always written it (the PPTX run was accent, the preview was text: the last three content-block parity mismatches). Title, subtitle and body keep the text colour. 95 of the 805 corpus slides change, each only in the fill of its tag text; raster baselines regenerated.
+
 ## 0.11.7
 
 - Release 0.11.7 (minor-sized additive API on a patch number, as 0.11.5 was: new `loadBrowserFontRegistry` option `extraLazyFonts`, new `/fonts-browser` export `splitStartupFaces`, `lazyFontEntries` keeps a face's own `url`; no option removed, core floor stays `@openpresentation/opf` ^0.11.2, rendered output and golden manifests unchanged). Everything since 0.11.6 (`git log b7e62ef..main`): only FF-41 (#77). A browser host can start its font registry with Roboto Regular and load its other eager faces (Roboto's weights, Roboto Mono, the Office substitutes) on demand from its own urls, hash-verified (`sha256` mandatory), face by face in the same pass as the vendored faces, all or nothing, removed by `dispose()`; the openpresentation.org site, the editor playground example and pptx.dev carried their own wrappers for this and can now drop them. Host faces are `embed: "used"` like the vendored ones: not in `registry.embeddedFonts`, embedded in a standalone SVG only when passed through `selectEmbeddedFonts` and the slide's text uses their family. `registry.lazyFonts` lists the 94 vendored faces (core's `scripts/lazy-font-counts.mjs` needs `0.11.7: [94]`) plus the host's. Details in the FF-41 entry below.

@@ -897,7 +897,9 @@ function renderTextPayload(item, box, bound, options) {
     fontSize: item.field === "title" ? 54 : item.field === "tag" ? 16 : 25,
     fontFamily: item.field === "title" ? bound.design.fonts.heading : bound.design.fonts.body,
     fontWeight: item.field === "title" ? 700 : 400,
-    fill: bound.design.colors.text,
+    // The slide tag is the eyebrow label: it draws in the primary colour (scheme accent1), as the
+    // PPTX export writes it. Every other text payload here uses the text colour.
+    fill: item.field === "tag" ? bound.design.colors.primary : bound.design.colors.text,
     fit: item.text,
     textStyle: item.textStyle,
     diagnosticsHandled: Boolean(item.text),
