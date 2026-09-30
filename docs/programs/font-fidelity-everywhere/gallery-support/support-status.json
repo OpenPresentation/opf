@@ -78,13 +78,13 @@
   "parity": {
    "item": "FF-38",
    "heads": {
-    "opf": "aedd364",
+    "opf": "26a1d82",
     "opf-render": "a66caa3",
-    "opf-pptx": "0400434",
-    "pptx-gallery": "b2238ac",
+    "opf-pptx": "6f6122c",
+    "pptx-gallery": "1f0e382",
     "node": "24.21.0"
    },
-   "generated": "2026-09-30T09:48:36.938Z",
+   "generated": "2026-09-30T11:41:27.906Z",
    "tolerances": {
     "geomPt": 0.02,
     "geomNearPt": 0.5,
@@ -103,7 +103,7 @@
     "theme",
     "mapping"
    ],
-   "results": "parity/parity-results-2026-09-30-charts-measured.json",
+   "results": "parity/parity-results-2026-09-30-gallery-font-host.json",
    "fontResolutionDefinition": "owner decision 2026-09-29: look-alike replacements are intended; the PPTX names the selected family. pass = real face or FF-31 metric-compatible replacement + PPTX names selected family; near = FF-31 visual-only route + PPTX names selected family; fail = no policy route, unrouted preview face, or PPTX writes a replacement name. Old definition kept per value under results[].legacy.",
    "records": 850,
    "withAssetsRecords": 31,
@@ -164,9 +164,9 @@
  },
  "parityCounts": {
   "total": 850,
-  "perfect": 707,
-  "near": 47,
-  "mismatch": 96,
+  "perfect": 729,
+  "near": 108,
+  "mismatch": 13,
   "checksPassed": {
    "geometry": 850,
    "text": 824,
@@ -175,7 +175,7 @@
    "slideSize": 850,
    "typefaces": 850,
    "reimport": 850,
-   "fontResolution": 733,
+   "fontResolution": 755,
    "theme": 850,
    "mapping": 850
   }
@@ -17215,14 +17215,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for Microsoft YaHei; policy route Noto Sans SC is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -17250,14 +17248,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for SimSun; policy route Noto Sans SC is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -17285,14 +17281,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for FangSong; policy route Noto Sans SC is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -17320,14 +17314,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for Yu Gothic; policy route Noto Sans JP is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -17355,14 +17347,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for PMingLiU; policy route Noto Sans TC is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -17390,14 +17380,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for MingLiU; policy route Noto Sans TC is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -17425,14 +17413,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for MS Mincho; policy route Noto Sans JP is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -17460,14 +17446,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for Malgun Gothic; policy route Noto Sans KR is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -17495,15 +17479,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for BatangChe; policy route Noto Sans KR is not loaded; bundled in the scripts pack, not loaded in this preview",
-     "fontResolution | preview has no face for Batang; policy route Noto Sans KR is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -17531,15 +17512,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for GungsuhChe; policy route Noto Sans KR is not loaded; bundled in the scripts pack, not loaded in this preview",
-     "fontResolution | preview has no face for Gungsuh; policy route Noto Sans KR is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -17567,14 +17545,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for Mangal; policy route Noto Sans Devanagari is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -17602,14 +17578,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for Nirmala UI; policy route Noto Sans Devanagari is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -17637,14 +17611,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for Latha; policy route Noto Sans Tamil is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -17672,14 +17644,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for David; policy route Noto Serif Hebrew | Noto Sans Hebrew is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -17707,14 +17677,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for Miriam; policy route Noto Sans Hebrew is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -17742,14 +17710,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for Gisha; policy route Noto Sans Hebrew is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -17777,14 +17743,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for Vrinda; policy route Noto Sans Bengali is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -17812,14 +17776,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for Shruti; policy route Noto Sans Gujarati is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -17847,14 +17809,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for Tunga; policy route Noto Sans Kannada is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -17882,14 +17842,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for Kartika; policy route Noto Sans Malayalam is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -17917,14 +17875,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for Kalinga; policy route Noto Sans Oriya is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -17952,14 +17908,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for Raavi; policy route Noto Sans Gurmukhi is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -17987,14 +17941,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for Gautami; policy route Noto Sans Telugu is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -18022,14 +17974,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for Arabic Typesetting; policy route Noto Naskh Arabic is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -18057,14 +18007,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for Microsoft JhengHei; policy route Noto Sans TC is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -18092,14 +18040,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for Meiryo; policy route Noto Sans JP is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -18127,14 +18073,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for Angsana New; policy route Noto Sans Thai is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -18162,14 +18106,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for Aparajita; policy route Noto Sans Devanagari is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -18197,14 +18139,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for DilleniaUPC; policy route Noto Sans Thai is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -18232,14 +18172,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for Sakkal Majalla; policy route Noto Naskh Arabic is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -18267,14 +18205,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for Shonar Bangla; policy route Noto Sans Bengali is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -18302,14 +18238,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for Sylfaen; policy route Noto Sans | Noto Sans Georgian | Noto Sans Armenian is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -18337,14 +18271,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for Traditional Arabic; policy route Noto Naskh Arabic is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -18497,7 +18429,7 @@
     ],
     "nearChecks": [],
     "topReasons": [
-     "fontResolution | preview has no face for open family Raleway"
+     "fontResolution | preview uses an unexpected fallback face for Raleway: Roboto (not the policy route)"
     ]
    }
   },
@@ -18555,14 +18487,10 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "fontResolution"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
     "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for open family Noto Naskh Arabic; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -18590,14 +18518,10 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "fontResolution"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
     "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for open family Noto Sans Armenian; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -18625,14 +18549,10 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "fontResolution"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
     "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for open family Noto Sans Bengali; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -18660,14 +18580,10 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "fontResolution"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
     "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for open family Noto Sans Devanagari; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -18695,14 +18611,10 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "fontResolution"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
     "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for open family Noto Sans Georgian; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -18730,14 +18642,10 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "fontResolution"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
     "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for open family Noto Sans Gujarati; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -18765,14 +18673,10 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "fontResolution"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
     "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for open family Noto Sans Gurmukhi; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -18800,14 +18704,10 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "fontResolution"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
     "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for open family Noto Sans Hebrew; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -18835,14 +18735,10 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "fontResolution"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
     "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for open family Noto Sans JP; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -18870,14 +18766,10 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "fontResolution"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
     "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for open family Noto Sans Kannada; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -18905,14 +18797,10 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "fontResolution"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
     "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for open family Noto Sans KR; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -18940,14 +18828,10 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "fontResolution"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
     "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for open family Noto Sans Malayalam; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -18981,7 +18865,7 @@
     ],
     "nearChecks": [],
     "topReasons": [
-     "fontResolution | preview has no face for open family Noto Sans Mongolian; bundled in the scripts pack, not loaded in this preview"
+     "fontResolution | the modelled host cannot draw this value: font-shaping-failed (Noto Sans Mongolian), Not a fixed size"
     ]
    }
   },
@@ -19010,14 +18894,10 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "fontResolution"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
     "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for open family Noto Sans Oriya; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -19045,14 +18925,10 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "fontResolution"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
     "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for open family Noto Sans SC; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -19080,14 +18956,10 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "fontResolution"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
     "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for open family Noto Sans Tamil; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -19115,14 +18987,10 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "fontResolution"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
     "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for open family Noto Sans TC; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -19150,14 +19018,10 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "fontResolution"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
     "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for open family Noto Sans Telugu; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -19216,14 +19080,10 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "fontResolution"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
     "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for open family Noto Sans Thai; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -19251,14 +19111,10 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "fontResolution"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
     "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for open family Noto Nastaliq Urdu; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -19286,14 +19142,10 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "fontResolution"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
     "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for open family Noto Naskh Arabic; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -19321,14 +19173,10 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "fontResolution"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
     "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for open family Noto Sans Ethiopic; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -19356,14 +19204,10 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
-     "fontResolution"
-    ],
+    "status": "perfect",
+    "failedChecks": [],
     "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for open family Noto Sans Khmer; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -19391,14 +19235,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for Nyala; policy route Noto Sans Ethiopic is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -19426,14 +19268,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for DaunPenh; policy route Noto Sans Khmer is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -19461,14 +19301,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for Khmer UI; policy route Noto Sans Khmer is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -19502,7 +19340,7 @@
     ],
     "nearChecks": [],
     "topReasons": [
-     "fontResolution | preview has no face for open family Playfair Display"
+     "fontResolution | preview uses an unexpected fallback face for Playfair Display: Roboto (not the policy route)"
     ]
    }
   },
@@ -19685,14 +19523,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for Nyala; policy route Noto Sans Ethiopic is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -19720,14 +19556,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for Arabic Typesetting; policy route Noto Naskh Arabic is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -19755,14 +19589,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for Sylfaen; policy route Noto Sans | Noto Sans Georgian | Noto Sans Armenian is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -19850,14 +19682,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for Shonar Bangla; policy route Noto Sans Bengali is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -20035,14 +19865,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for Microsoft YaHei; policy route Noto Sans SC is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -20070,14 +19898,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for Microsoft JhengHei; policy route Noto Sans TC is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -20104,14 +19930,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for Vrinda; policy route Noto Sans Bengali is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -20620,14 +20444,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for Sylfaen; policy route Noto Sans | Noto Sans Georgian | Noto Sans Armenian is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -20715,14 +20537,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for Shruti; policy route Noto Sans Gujarati is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -20780,14 +20600,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for David; policy route Noto Serif Hebrew | Noto Sans Hebrew is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -20815,14 +20633,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for Mangal; policy route Noto Sans Devanagari is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -20970,14 +20786,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for Meiryo; policy route Noto Sans JP is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -21005,14 +20819,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for Tunga; policy route Noto Sans Kannada is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -21070,14 +20882,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for DaunPenh; policy route Noto Sans Khmer is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -21135,14 +20945,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for Malgun Gothic; policy route Noto Sans KR is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -21350,14 +21158,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for Kartika; policy route Noto Sans Malayalam is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -21415,14 +21221,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for Mangal; policy route Noto Sans Devanagari is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -21480,14 +21284,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for Mangal; policy route Noto Sans Devanagari is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -21545,14 +21347,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for Kalinga; policy route Noto Sans Oriya is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -21643,14 +21443,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for Arabic Typesetting; policy route Noto Naskh Arabic is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -21738,14 +21536,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for Raavi; policy route Noto Sans Gurmukhi is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -22196,14 +21992,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for Latha; policy route Noto Sans Tamil is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -22231,14 +22025,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for Gautami; policy route Noto Sans Telugu is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -22266,14 +22058,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for Angsana New; policy route Noto Sans Thai is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
@@ -22361,14 +22151,12 @@
     "node": "24.21.0"
    },
    "parity": {
-    "status": "mismatch",
-    "failedChecks": [
+    "status": "near",
+    "failedChecks": [],
+    "nearChecks": [
      "fontResolution"
     ],
-    "nearChecks": [],
-    "topReasons": [
-     "fontResolution | preview has no face for Arabic Typesetting; policy route Noto Naskh Arabic is not loaded; bundled in the scripts pack, not loaded in this preview"
-    ]
+    "topReasons": []
    }
   },
   {
