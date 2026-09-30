@@ -1,6 +1,6 @@
 // FF-31: the browser playground loads vendored preview fonts (Intos for the Aptos scheme) on demand, never through fonts.json.
 // It serves the built playground locally: a Roboto document fetches no vendored font; choosing the Aptos font scheme fetches
-// exactly the Intos and Intos Display files (hash-verified by the renderer's loader) while the preview keeps rendering with
+// exactly the Intos faces the deck draws (hash-verified by the renderer's loader) while the preview keeps rendering with
 // the same faces in the registry and the document; afterwards every measured text run is painted in Intos at the measured
 // advance. Offline apart from the local server.
 import assert from 'node:assert/strict';
@@ -52,7 +52,9 @@ try {
   await page.waitForFunction(() => !/Loading fonts/.test(document.querySelector('#status').textContent), undefined, { timeout: 60000 });
   await page.waitForTimeout(400);
   const fetched = lazyRequests.filter(url => url.endsWith('.ttf'));
-  assert.equal(fetched.length, 8, `the Aptos scheme fetched ${fetched.join(', ')}`);
+  // FF-41 (renderer 0.11.5): only the faces the sample deck draws, not all eight of Intos and Intos Display: its title (Display Bold),
+  // body (Regular) and a bold run (Bold).
+  assert.deepEqual([...fetched].sort(), ['/fonts/intos/Intos-Bold.ttf', '/fonts/intos/Intos-Regular.ttf', '/fonts/intos/IntosDisplay-Bold.ttf'], `the Aptos scheme fetched ${fetched.join(', ')}`);
   assert.ok(fetched.every(url => /^\/fonts\/intos\/Intos(Display)?-/.test(url)));
   const painted = await page.evaluate(async () => {
     await document.fonts.ready;

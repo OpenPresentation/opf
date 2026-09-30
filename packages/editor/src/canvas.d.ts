@@ -3,10 +3,10 @@ import type { RenderSvgOptions } from "@openpresentation/opf-render";
 import type { SlideComposition } from "@openpresentation/opf/composition";
 /** Faces a document needs (script packages and vendored files) that are not loaded yet, and the way to load them. */
 export interface FontGate {
-  /** Synchronous. Empty means the document can render now. Never throws. */
-  pending(document: unknown): string[];
+  /** Synchronous. Empty means the document can render now. Never throws. `renderOptions` are the options the host renders with (`catalogs`, ...); the canvas passes its current ones. */
+  pending(document: unknown, renderOptions?: RenderSvgOptions): string[];
   /** Load every pending face (vendored faces first, then script faces). Rejects with a `fonts-unavailable` error; never retries by itself. */
-  ensure(document: unknown, options?: { signal?: AbortSignal }): Promise<void>;
+  ensure(document: unknown, options?: { signal?: AbortSignal; renderOptions?: RenderSvgOptions }): Promise<void>;
   /** `whenFontsReady` on this gate. */
   run(document: unknown, handlers?: FontGateHandlers): Promise<void>;
 }
@@ -16,11 +16,17 @@ export interface FontGateHandlers {
   loading?: (pending: string[]) => void;
   ready?: () => void;
   failed?: (error: Error) => void;
+  /** The options the host renders with (`catalogs`, ...), passed to the gate. */
+  renderOptions?: RenderSvgOptions;
 }
 export declare const FONTS_PENDING: "fonts-pending";
 export declare const FONTS_UNAVAILABLE: "fonts-unavailable";
 /** Wrap a browser font registry (`loadBrowserFontRegistry`). Registries without the lazy loaders gate nothing. */
-export declare function createFontGate(registry: object): FontGate;
+/**
+ * `options.renderOptions` (an object, or a function called on every use) are the default render options passed to the registry
+ * (`catalogs`, ...), under a call's own; the canvas passes its current `renderOptions` itself, so a gate needs none.
+ */
+export declare function createFontGate(registry: object, options?: { renderOptions?: RenderSvgOptions | (() => RenderSvgOptions | undefined) }): FontGate;
 /**
  * Ensure fonts for a document, then run `ready` (synchronously when nothing is pending). The one
  * "ensure fonts, then render" helper: load failures and exceptions from `ready` go to `failed`.

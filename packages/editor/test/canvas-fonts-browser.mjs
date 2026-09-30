@@ -24,6 +24,7 @@ import { createEditorSession } from ${JSON.stringify(path.join(repo, 'src/index.
 import { createCanvasEditor, createFontGate } from ${JSON.stringify(path.join(repo, 'src/canvas.js').replace(/\\/g, '/'))};
 import { switchDimension } from ${JSON.stringify(path.join(repo, 'src/switches.js').replace(/\\/g, '/'))};
 import { loadBrowserFontRegistry } from '@openpresentation/opf-render/fonts-browser';
+import { layouts } from '@openpresentation/opf/catalogs';
 const faces = await fetch('./fonts.json').then(response => response.json());
 const registry = await loadBrowserFontRegistry(faces.map(face => ({ family: face.family, weight: face.weight, italic: face.italic, license: face.license, data: Uint8Array.from(atob(face.dataUrl.split(',')[1]), character => character.charCodeAt(0)) })), { substitutionPolicy: 'visual', fallbackFamily: 'Roboto', scriptBaseUrl: './script-fonts/', lazyFontsBaseUrl: new URL('./', document.baseURI).href });
 const gate = createFontGate(registry);
@@ -32,9 +33,13 @@ const editor = createEditorSession({ name: 'Canvas fonts', design: { theme: 'cla
   { id: 'two', title: 'Second slide', text: 'More detail follows.' },
 ] }, { rejectInvalid: true });
 const events = [], errors = [];
-const canvas = createCanvasEditor(document.getElementById('canvas'), { editor, fonts: gate, renderOptions: { textMeasurement: registry.textMeasurement },
+// FF-41: a layout id that only the host's catalogs know. The canvas hands its renderOptions (catalogs included) to the gate.
+const catalogs = { layouts: [{ ...layouts.find(entry => entry.id === 'list-1x'), id: 'host-bullets', name: 'Host bullets' }] };
+const renderOptions = { textMeasurement: registry.textMeasurement, catalogs };
+const pending = document => gate.pending(document, renderOptions);
+const canvas = createCanvasEditor(document.getElementById('canvas'), { editor, fonts: gate, renderOptions,
   onFonts: event => events.push(event.state), onError: error => errors.push(error.message) });
-window.harness = { editor, canvas, switchDimension, gate, events, errors };
+window.harness = { editor, canvas, switchDimension, gate, pending, events, errors };
 `;
 await build({ stdin: { contents: source, resolveDir: repo, loader: 'js' }, outfile: path.join(output, 'harness.js'), bundle: true, platform: 'browser', format: 'esm', minify: false, logLevel: 'error' });
 const page = (script) => `<!doctype html><meta charset="utf-8"><title>Canvas fonts</title><div id="canvas" style="width:960px"></div><script type="module" src="./harness.js"></script>`;
@@ -86,19 +91,37 @@ try {
   await tab.goto(`${base}/index.html`);
   await tab.locator('#canvas svg').waitFor();
   const run = (fn, arg) => tab.evaluate(fn, arg);
-  const settle = () => tab.waitForFunction(() => document.querySelector('#canvas svg') && !document.querySelector('.opf-canvas-fonts') && window.harness.gate.pending(window.harness.editor.document).length === 0, undefined, { timeout: 60000 });
+  const settle = () => tab.waitForFunction(() => document.querySelector('#canvas svg') && !document.querySelector('.opf-canvas-fonts') && window.harness.pending(window.harness.editor.document).length === 0, undefined, { timeout: 60000 });
   const state = () => run(() => ({
     runs: [...document.querySelectorAll('#canvas svg text')].map(node => ({ text: node.textContent, family: (node.getAttribute('font-family') ?? node.closest('[font-family]')?.getAttribute('font-family') ?? '').split(',').map(part => part.trim().replace(/^"|"$/g, '')) })),
     loaded: [...document.fonts].filter(face => face.status === 'loaded').map(face => face.family.replace(/^"|"$/g, '')),
     seen: window.__seen, events: [...window.harness.events], errors: [...window.harness.errors],
   }));
+  let now0;
   const clean = async (name) => {
     const now = await state();
     assert.deepEqual(now.seen.bad, [], `${name}: the canvas never showed an unavailable or cannot-display state`);
     assert.deepEqual(now.errors, [], `${name}: the canvas reported no error`);
     return now;
   };
-  assert.deepEqual(await run(() => window.harness.gate.pending(window.harness.editor.document)), [], 'a Roboto document has nothing pending');
+  assert.deepEqual(await run(() => window.harness.pending(window.harness.editor.document)), [], 'a Roboto document has nothing pending');
+
+  // FF-41: a deck whose layout exists only in the host's catalogs (the canvas's renderOptions) loads exactly the faces it draws:
+  // Raleway Regular for the body and Raleway Bold for the title, not the four Raleway files, and nothing is drawn before they load.
+  const catalogBefore = faceRequests.length;
+  const catalogPending = await run(() => { window.harness.editor.applyPatch([{ op: 'replace', path: '', value: { name: 'Host layout', design: { theme: 'classic', fontScheme: 'raleway' }, slides: [{ id: 'a', layout: 'host-bullets', title: 'Quarterly review', items: ['Sales grew twelve percent.'] }] } }]); return window.harness.pending(window.harness.editor.document); });
+  assert.deepEqual(catalogPending.map(file => file.split('/').pop()).sort(), ['Raleway-Bold.ttf', 'Raleway-Regular.ttf'], `the catalog-only layout resolves and needs two Raleway faces: ${catalogPending}`);
+  assert.equal(await tab.locator('#canvas svg').count(), 0, 'the host-layout deck is not drawn before its faces load');
+  await settle();
+  now0 = await clean('catalog-only layout');
+  assert.deepEqual(faceRequests.slice(catalogBefore).map(url => url.split('/').pop()).sort(), ['Raleway-Bold.ttf', 'Raleway-Regular.ttf'], 'face level: only the drawn Raleway faces are fetched');
+  assert.ok(now0.runs.length > 0 && now0.runs.every(run => run.family[0] === 'Raleway'), JSON.stringify(now0.runs.map(run => run.family[0])));
+  // An italic run added by an edit fetches just the italic face.
+  const italicBefore = faceRequests.length;
+  await run(() => { window.harness.editor.applyPatch([{ op: 'replace', path: '', value: { name: 'Host layout', design: { theme: 'classic', fontScheme: 'raleway' }, slides: [{ id: 'a', layout: 'host-bullets', title: 'Quarterly review', text: ['Sales grew ', { text: 'twelve', italic: true }, ' percent.'] }] } }]); });
+  await settle();
+  await clean('italic edit');
+  assert.deepEqual(faceRequests.slice(italicBefore).map(url => url.split('/').pop()), ['Raleway-Italic.ttf'], 'the italic edit fetched just the italic face');
 
   // Han-only text draws with the face of the deck's language (Korean here). A language switch (a dimension switch) to Japanese
   // then needs another face: it loads before the canvas draws.

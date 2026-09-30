@@ -16,39 +16,56 @@ const MAX_ROUNDS = 4;
  * Wrap a browser font registry (`loadBrowserFontRegistry` from `@openpresentation/opf-render/fonts-browser`).
  * Registries without the lazy loaders (renderer 0.10.0 and older) gate nothing and keep the fonts they have.
  *
- * - `pending(document)` lists the faces (script packages and vendored files) the document needs that are not loaded.
- *   Synchronous; empty means the document can render now. Never throws: a document the renderer rejects for other
- *   reasons reports nothing pending and fails with its own validation message when rendered.
- * - `ensure(document, { signal })` loads vendored faces first (script fallback depends on them), then script faces,
+ * - `pending(document, renderOptions?)` lists the faces (script packages and vendored files) the document needs that are
+ *   not loaded. Synchronous; empty means the document can render now. Never throws: a document the renderer rejects for
+ *   other reasons reports nothing pending and fails with its own validation message when rendered. Script faces and
+ *   vendored faces are asked separately, so one that cannot be answered does not hide the other.
+ * - `ensure(document, { signal, renderOptions })` loads vendored faces first (script fallback depends on them), then script faces,
  *   and repeats until nothing is pending. It makes a bounded number of rounds and rejects with a `fonts-unavailable`
  *   error (the registry's error is its `cause`); it never retries by itself, a later call is a new attempt.
  * - `run(document, handlers)` is `whenFontsReady` on this gate.
+ * - `renderOptions` (per call, or `createFontGate(registry, { renderOptions })` as an object or a getter) are the options the
+ *   host renders with (`catalogs`, ...). They are passed to the registry, so a layout or font scheme that only the host's
+ *   catalogs know resolves the same way there (renderer 0.11.5 and newer; older renderers ignore them).
  */
-export function createFontGate(registry) {
-  const pending = (document) => {
-    try {
-      const scripts = registry?.pendingScripts?.(document) ?? [];
-      const lazy = (registry?.pendingLazyFonts?.(document) ?? []).map((face) => face?.file ?? String(face));
-      return [...lazy, ...scripts];
-    } catch {
-      return [];
-    }
+export function createFontGate(registry, gateOptions = {}) {
+  // FF-41: the render options (`catalogs` above all) the document resolves with. The registry resolves a document the way the
+  // host renders it only when it gets the same options, so every call passes them: the gate's defaults (an object, or a
+  // function called each time, for options that change like `canvas.setRenderOptions`) under the call's own.
+  const defaults = () => (typeof gateOptions.renderOptions === "function" ? gateOptions.renderOptions() : gateOptions.renderOptions) ?? {};
+  const optionsFor = (renderOptions) => ({ ...defaults(), ...renderOptions });
+  // Each source answers on its own: a document one loader cannot resolve (an unresolvable layout throws in the renderer's
+  // lazy font loader) must not hide what the other still reports pending.
+  const sources = (document, renderOptions) => {
+    const options = optionsFor(renderOptions);
+    let scripts = [], lazy = [];
+    try { scripts = registry?.pendingScripts?.(document, options) ?? []; } catch { /* the renderer reports the document itself when it renders */ }
+    try { lazy = (registry?.pendingLazyFonts?.(document, options) ?? []).map((face) => face?.file ?? String(face)); } catch { /* likewise */ }
+    return { lazy, scripts };
+  };
+  const pending = (document, renderOptions) => {
+    const { lazy, scripts } = sources(document, renderOptions);
+    return [...lazy, ...scripts];
   };
   const gate = {
     pending,
     async ensure(document, options = {}) {
-      const { signal } = options;
+      const { signal, renderOptions } = options;
+      const call = { ...optionsFor(renderOptions), signal };
       try {
-        for (let round = 0; round < MAX_ROUNDS && pending(document).length; round++) {
+        for (let round = 0; round < MAX_ROUNDS; round++) {
+          const { lazy, scripts } = sources(document, renderOptions);
+          if (!lazy.length && !scripts.length) break;
           signal?.throwIfAborted?.();
-          await registry.ensureLazyFonts?.(document, { signal });
-          await registry.ensureScripts?.(document, { signal });
+          // Vendored faces first (script fallback depends on them). A source with nothing pending is not asked to load.
+          if (lazy.length) await registry.ensureLazyFonts?.(document, call);
+          if (scripts.length) await registry.ensureScripts?.(document, call);
         }
       } catch (cause) {
         if (signal?.aborted) throw cause;
         throw fontsUnavailable(cause?.message ?? String(cause), cause);
       }
-      const left = pending(document);
+      const left = pending(document, renderOptions);
       if (left.length) throw fontsUnavailable(`${left.join(", ")} did not finish loading.`);
     },
   };
@@ -75,10 +92,11 @@ export function fontsPendingError(pending) {
  * With nothing pending, `ready` runs synchronously, so documents in already-loaded fonts render at once. Otherwise
  * `loading(pending)` runs, the faces load and `ready` runs after them. `isCurrent()` is checked after the wait, so a
  * result for a superseded document is dropped. A load failure, and an exception thrown by `ready`, go to `failed(error)`
- * (they are rethrown when there is no `failed`). `gate` is any object with `pending(document)` and `ensure(document)`;
+ * (they are rethrown when there is no `failed`). `renderOptions` are passed to the gate. `gate` is any object with
+ * `pending(document, renderOptions)` and `ensure(document, { renderOptions })`;
  * without one the document is treated as ready. Resolves once `ready` or `failed` has run.
  */
-export function whenFontsReady(gate, document, { isCurrent = () => true, loading, ready, failed } = {}) {
+export function whenFontsReady(gate, document, { isCurrent = () => true, loading, ready, failed, renderOptions } = {}) {
   const finish = () => {
     try {
       ready?.();
@@ -87,13 +105,13 @@ export function whenFontsReady(gate, document, { isCurrent = () => true, loading
       failed(error);
     }
   };
-  const left = gate?.pending?.(document) ?? [];
+  const left = gate?.pending?.(document, renderOptions) ?? [];
   if (!left.length) {
     finish();
     return Promise.resolve();
   }
   loading?.(left);
-  return Promise.resolve(gate.ensure(document)).then(
+  return Promise.resolve(gate.ensure(document, { renderOptions })).then(
     () => {
       if (isCurrent()) finish();
     },

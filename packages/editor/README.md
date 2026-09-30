@@ -80,6 +80,9 @@ Fonts load before pixels (FF-41). A document can need faces the browser registry
 import { createCanvasEditor, createFontGate } from '@openpresentation/opf-editor/canvas';
 
 const fonts = createFontGate(fontRegistry); // a registry without the lazy loaders gates nothing
+// The canvas gives the gate its current renderOptions (catalogs, ...), so layouts and font schemes only your catalogs know
+// resolve in the registry too (renderer 0.11.5+). For your own gate calls: fonts.pending(document, renderOptions), or
+// createFontGate(fontRegistry, { renderOptions: () => currentRenderOptions }).
 const canvas = createCanvasEditor(container, { document, fonts, renderOptions: { textMeasurement: fontRegistry.textMeasurement } });
 // Other renders of your own: fonts.run(document, { ready: draw, failed: showError, loading: showSpinner })
 ```

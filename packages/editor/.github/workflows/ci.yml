@@ -25,19 +25,19 @@ jobs:
           persist-credentials: false
           fetch-depth: 0
           path: opf-editor
-      # The ecosystem is pinned to the versions this package depends on: opf main after 0.11.2 (the packed-ecosystem check there knows renderer 0.11.2), opf-render 0.11.2 (lazy script and preview faces, incl. Barlow, which test:playground exercises) and opf-pptx 0.11.1.
+      # The ecosystem is pinned to the versions this package depends on: opf main after #204 (the packed-ecosystem check there knows renderer 0.11.5), opf-render 0.11.5 (face-level lazy fonts and host render options; lazy script and preview faces, incl. Barlow, which test:playground exercises) and opf-pptx 0.11.1.
       # Verify registry dependencies before linking the pinned source graph.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf
-          ref: 3971791d043712cc7f6596685b0c6363e749c943 # opf main after #182 (its packed-ecosystem check records the 0.11.2 renderer's lazy face count)
+          ref: d185a2e2f9bad733a247d80fdb706da07f3acbef # opf main after #204 (its packed-ecosystem check records the 0.11.5 renderer's lazy face count)
           path: opf
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-render
-          ref: 021cca013cde053fa0721d7da0ac678b4a9acba1 # opf-render-v0.11.2
+          ref: 20495bab72571c9bd83f591496b2c59f0bc35029 # opf-render-v0.11.5
           path: opf-render
           fetch-depth: 0
           persist-credentials: false

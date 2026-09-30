@@ -48,7 +48,67 @@ assert.deepEqual(createFontGate({ pendingScripts() { throw new Error("not a docu
   const fake = registry({ scripts: ["@expo-google-fonts/noto-sans-jp"], failScripts: true });
   const gate = createFontGate(fake);
   await assert.rejects(gate.ensure(deck), (error) => error.code === FONTS_UNAVAILABLE && /could not be loaded: Could not load font \(503\)/.test(error.message) && error.cause.code === "font-load-failed");
-  assert.deepEqual(fake.calls, ["lazy", "scripts"], "one attempt per ensure call");
+  assert.deepEqual(fake.calls, ["scripts"], "one attempt per ensure call, and only the source with something pending is asked");
+}
+
+// FF-41: the render options (catalogs) reach every registry call: the canvas passes its current ones, the gate may hold defaults
+// (an object, or a getter for options that change), and a call's own options win.
+{
+  const seen = [];
+  let scriptsDone = false;
+  const fake = {
+    pendingLazyFonts: (_document, options) => { seen.push(["pendingLazyFonts", options]); return []; },
+    pendingScripts: (_document, options) => { seen.push(["pendingScripts", options]); return scriptsDone ? [] : ["p"]; },
+    ensureLazyFonts: async (_document, options) => { seen.push(["ensureLazyFonts", options]); },
+    ensureScripts: async (_document, options) => { seen.push(["ensureScripts", options]); scriptsDone = true; },
+  };
+  const catalogs = { layouts: [{ id: "host-layout" }] };
+  const gate = createFontGate(fake);
+  gate.pending(deck, { catalogs });
+  assert.deepEqual(seen.splice(0), [["pendingScripts", { catalogs }], ["pendingLazyFonts", { catalogs }]], "pending passes the render options to both loaders");
+  const controller = new AbortController();
+  await gate.ensure(deck, { signal: controller.signal, renderOptions: { catalogs } });
+  const ensured = seen.find(([name]) => name === "ensureScripts");
+  assert.equal(ensured[1].catalogs, catalogs, "ensure passes the render options to the loader");
+  assert.equal(ensured[1].signal, controller.signal, "and the signal");
+  seen.length = 0;
+  let current = { catalogs: { layouts: [{ id: "first" }] }, date: "2026-09-30" };
+  scriptsDone = false;
+  const withGetter = createFontGate(fake, { renderOptions: () => current });
+  withGetter.pending(deck);
+  assert.equal(seen[0][1].catalogs.layouts[0].id, "first");
+  current = { catalogs: { layouts: [{ id: "second" }] } };
+  seen.length = 0;
+  withGetter.pending(deck);
+  assert.equal(seen[0][1].catalogs.layouts[0].id, "second", "a getter gives the options current at each call");
+  seen.length = 0;
+  createFontGate(fake, { renderOptions: { date: "2026-09-30", catalogs } }).pending(deck, { catalogs: { layouts: [] } });
+  assert.equal(seen[0][1].date, "2026-09-30", "gate defaults stay");
+  assert.deepEqual(seen[0][1].catalogs, { layouts: [] }, "the call's own options win");
+  // whenFontsReady hands its renderOptions to the gate.
+  const gateCalls = [];
+  const stub = { pending: (document, options) => { gateCalls.push(["pending", options]); return []; }, ensure: async () => {} };
+  whenFontsReady(stub, deck, { renderOptions: { catalogs }, ready: () => {} });
+  assert.deepEqual(gateCalls, [["pending", { catalogs }]]);
+}
+
+// FF-41: each source answers on its own. A document the lazy font loader cannot resolve (it throws what renderSvg throws) still
+// reports its pending script faces, and only the loader with something pending is asked to load.
+{
+  const calls = [];
+  let scriptsPending = ["@expo-google-fonts/noto-sans-jp"];
+  const fake = {
+    pendingLazyFonts() { throw Object.assign(new Error("Could not resolve layouts reference 'x'."), { code: "catalog-resolution-failed" }); },
+    pendingScripts: () => scriptsPending,
+    async ensureLazyFonts() { calls.push("lazy"); throw new Error("must not be asked"); },
+    async ensureScripts() { calls.push("scripts"); scriptsPending = []; },
+  };
+  const gate = createFontGate(fake);
+  assert.deepEqual(gate.pending(deck), ["@expo-google-fonts/noto-sans-jp"], "a lazy loader that throws does not hide pending scripts");
+  await gate.ensure(deck);
+  assert.deepEqual(calls, ["scripts"], "the throwing loader is not asked to load");
+  const both = createFontGate({ pendingScripts() { throw new Error("no"); }, pendingLazyFonts: () => [{ file: "fonts/intos/Intos-Regular.ttf" }] });
+  assert.deepEqual(both.pending(deck), ["fonts/intos/Intos-Regular.ttf"], "and the other way round");
 }
 
 // A load that never finishes stops after a few rounds instead of looping.

@@ -163,11 +163,11 @@ export function createCanvasEditor(container, options = {}) {
   // A synchronous render or validation of a document whose faces are still loading fails with a clear "fonts-pending"
   // error and starts the load, so the next attempt succeeds. It never draws glyphs the registry cannot provide.
   function requireFonts(document) {
-    const pending = fonts?.pending(document) ?? [];
+    const pending = fonts?.pending(document, renderOptions) ?? [];
     if (!pending.length) return;
     notice.hidden = false;
     notice.textContent = pendingMessage;
-    fonts.ensure(document).then(
+    fonts.ensure(document, { renderOptions }).then(
       () => { if (!disposed && notice.textContent === pendingMessage) clearNotice(); },
       (error) => { if (!disposed) report(error); },
     );
@@ -206,6 +206,7 @@ export function createCanvasEditor(container, options = {}) {
     if (disposed) return;
     const token = ++showToken;
     return whenFontsReady(fonts, target ?? editor.document, {
+      renderOptions,
       isCurrent: () => !disposed && token === showToken,
       loading: (pending) => fontsState("loading", pending),
       ready: () => {
@@ -221,7 +222,7 @@ export function createCanvasEditor(container, options = {}) {
   }
   // Renders now when the document's fonts are loaded (errors throw to the caller), otherwise after loading them.
   function renderFor(document) {
-    if (fonts?.pending(document ?? editor.document).length) show(document);
+    if (fonts?.pending(document ?? editor.document, renderOptions).length) show(document);
     else render(document);
   }
   function render(document = editor.document) {
@@ -341,11 +342,11 @@ export function createCanvasEditor(container, options = {}) {
   }
   // An in-progress edit whose text needs faces that are not loaded yet waits for them, then draws again.
   function deferDraft(draft) {
-    if (!fonts?.pending(draft).length) return false;
+    if (!fonts?.pending(draft, renderOptions).length) return false;
     active.valid = false;
     notice.hidden = false;
     notice.textContent = pendingMessage;
-    fonts.ensure(draft).then(
+    fonts.ensure(draft, { renderOptions }).then(
       () => {
         if (disposed) return;
         if (notice.textContent === pendingMessage) clearNotice();
