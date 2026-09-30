@@ -7,6 +7,7 @@ import * as scriptFontModule from "./script-fonts.js";
 import { scriptOfCharacter, scriptsOfText } from "./script-fonts.js";
 // Optional core exports are read from the namespace so an older published core still loads.
 import * as opfCore from "@openpresentation/opf";
+import { presentationFamilies } from "./lazy-fonts.js";
 
 const SCRIPT_ALIASES = Object.freeze({Hira: "Jpan", Kana: "Jpan", Hrkt: "Jpan", Hang: "Kore", Hani: "Hans", Zyyy: "Latn"});
 
@@ -121,8 +122,12 @@ function scriptOfFamily(family) {
  * open replacement, so the face is needed even when no drawn character has the script. A slide may override the
  * scheme (`slide.design`), so each such slide is resolved too. `han` is the CJK script the scheme names, which tells
  * Han-only text apart when the language does not (a Yu Gothic deck whose language is English).
+ *
+ * `renderOptions` are the host's `renderSvg` options. Core resolves a font scheme id from the document and its bundled catalogs
+ * only, while the renderer also reads `renderOptions.catalogs`; when a host passes catalogs the families the renderer resolves
+ * per slide count too, so a scheme that exists only in the host's catalogs and names a script font still loads that font.
  */
-function designScripts(presentation, profile) {
+function designScripts(presentation, profile, renderOptions) {
   const scripts = new Set();
   let han;
   const note = resolved => {
@@ -140,6 +145,9 @@ function designScripts(presentation, profile) {
       try { note(opfCore.resolveScriptFonts(presentation, { slideIndex })); } catch { /* the renderer reports it when it draws the slide */ }
     });
   }
+  if (renderOptions?.catalogs) {
+    for (const family of presentationFamilies(presentation, renderOptions)) note({ heading: { latin: family }, body: { latin: family } });
+  }
   return { scripts: [...scripts].sort(), han };
 }
 
@@ -147,10 +155,13 @@ function designScripts(presentation, profile) {
  * What a preview of the presentation draws: its script profile, the scripts of its text (the renderer's own
  * itemization, so language-dependent punctuation counts), the scripts its font schemes need (`design`, for example
  * Jpan for a Yu Gothic scheme) and the CJK characters that a glyph fallback might have to draw with another CJK face.
+ * The text decides, so a document is analyzed without resolving its layouts and catalogs; `renderOptions` (the host's
+ * `renderSvg` options) matter only for font schemes the host supplies in `renderOptions.catalogs`, which then resolve
+ * like the renderer resolves them; a document that then does not resolve throws what `renderSvg` throws for it.
  */
-export function analyzePresentationScripts(presentation, profile = presentationScriptProfile(presentation)) {
+export function analyzePresentationScripts(presentation, profile = presentationScriptProfile(presentation), renderOptions) {
   const scripts = new Set(), cjk = new Set();
-  const design = designScripts(presentation, profile);
+  const design = designScripts(presentation, profile, renderOptions);
   // Han-only text in a deck whose language is not CJK draws with the scheme's own CJK face when the scheme names one.
   const itemizing = design.han && !cjkKeys.includes(profile?.script) ? { ...profile, script: design.han } : profile;
   for (const text of drawnStrings(presentation)) {
@@ -166,10 +177,10 @@ export function analyzePresentationScripts(presentation, profile = presentationS
  * (Japanese, Korean, Simplified or Traditional Chinese) and makes curly quotes, dashes and the ellipsis
  * East Asian. Text the preview never draws (ids, alt text, sources, assets, catalogs, notes) is ignored.
  * Greek and Cyrillic add nothing: the office registry always carries Noto Sans (the glyph-fallback face) and Roboto covers them.
- * Pass `profile` to reuse a resolved profile.
+ * Pass `profile` to reuse a resolved profile. Other options are the host's `renderSvg` options (`catalogs`, see `analyzePresentationScripts`).
  */
-export function detectPresentationScripts(presentation, { profile } = {}) {
-  return analyzePresentationScripts(presentation, profile).detected;
+export function detectPresentationScripts(presentation, { profile, ...renderOptions } = {}) {
+  return analyzePresentationScripts(presentation, profile, renderOptions).detected;
 }
 
 /** The scripts of an analysis that a pinned pack serves (`scripts`, the input for `scriptFontPackages`) and those it does not. */
@@ -186,7 +197,8 @@ export function scriptSelectionOf(analysis) {
  * Cherokee or Tifinagh, which draw with whatever the design font covers).
  */
 export function autoScriptSelection(presentation, options) {
-  return scriptSelectionOf(analyzePresentationScripts(presentation, options?.profile));
+  const { profile, ...renderOptions } = options ?? {};
+  return scriptSelectionOf(analyzePresentationScripts(presentation, profile, renderOptions));
 }
 
 /**

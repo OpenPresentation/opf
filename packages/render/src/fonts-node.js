@@ -78,9 +78,10 @@ const loadPack = pack => loadPackages(BUNDLED_FONT_MANIFEST.packages.filter(item
 /**
  * Adds the script pack. `scripts` is 'all', ISO 15924 codes, or 'auto' (FF-19): detect the scripts the
  * `presentation` draws and load only their faces. Auto never fails on a missing optional package or a
- * script no pinned font serves; it reports them through `onDiagnostic` and `selection`.
+ * script no pinned font serves; it reports them through `onDiagnostic` and `selection`. `renderOptions` are the host's `renderSvg`
+ * options (see `analyzePresentationScripts`).
  */
-async function withScripts(loaded, scripts, {presentation, onDiagnostic} = {}) {
+async function withScripts(loaded, scripts, {presentation, onDiagnostic, renderOptions} = {}) {
   if (scripts === undefined || (Array.isArray(scripts) && !scripts.length)) return loaded;
   // A package the registry already loaded (the default Noto Sans fallback) is never loaded twice.
   const notLoaded = list => list.filter(pkg => !loaded.packages?.includes(pkg.name));
@@ -89,7 +90,7 @@ async function withScripts(loaded, scripts, {presentation, onDiagnostic} = {}) {
     return {...loaded, entries:[...loaded.entries, ...embedUsed(extra.entries)], fontFiles:[...loaded.fontFiles, ...extra.fontFiles], packages:[...(loaded.packages ?? []), ...extra.packages]};
   }
   if (presentation === null || typeof presentation !== "object") throw new OPFFontError("invalid-font-scripts", "scripts: 'auto' needs the presentation whose text decides the scripts.", {scripts});
-  const selection = scriptSelectionOf(analyzePresentationScripts(presentation)), skipped = [];
+  const selection = scriptSelectionOf(analyzePresentationScripts(presentation, undefined, renderOptions)), skipped = [];
   const extra = await loadPackages(notLoaded(scriptFontPackages(selection.scripts)), skipped);
   for (const script of selection.unavailable) onDiagnostic?.({code: "script-font-unavailable", script, message: `No pinned open font serves script '${script}'; that text uses the design font.`});
   for (const item of skipped) onDiagnostic?.({code: "script-font-not-installed", package: item.package, scripts: item.scripts, message: `Install ${item.package}@${item.version} to preview ${item.scripts.join(", ")} text with its designated open font.`});
@@ -102,12 +103,12 @@ async function withScripts(loaded, scripts, {presentation, onDiagnostic} = {}) {
  * has (Japanese-only kanji in a Simplified Chinese run, hanja) needs the next CJK face along the fallback chain.
  * Adds those packages to the registry and its fontFiles until every such character is covered or the chain ends.
  */
-async function completeFallback(registry, presentation, loaded, onDiagnostic) {
+async function completeFallback(registry, presentation, loaded, onDiagnostic, renderOptions) {
   const selection = loaded.selection;
   if (!selection) return;
   const seen = new Set([...selection.packages, ...selection.notInstalled]);
   for (;;) {
-    const analysis = analyzePresentationScripts(presentation), covers = character => registry.scriptFacesCover(character);
+    const analysis = analyzePresentationScripts(presentation, undefined, renderOptions), covers = character => registry.scriptFacesCover(character);
     const next = nextFallbackPackage(analysis, {covers, loaded: seen});
     if (!next) {
       const uncovered = uncoveredCjkCharacters(analysis, {covers, limit: 8});
@@ -152,17 +153,17 @@ async function withFaces(loaded, faces) {
 }
 
 /** Bundled, openly licensed faces. No system font discovery or network requests. */
-export async function loadBundledFontRegistry({scripts, faces, presentation, onDiagnostic, ...options} = {}) {
-  const {entries, fontFiles, selection} = await withFaces(await withScripts(await loadPack("base"), scripts, {presentation, onDiagnostic}), faces);
+export async function loadBundledFontRegistry({scripts, faces, presentation, onDiagnostic, renderOptions, ...options} = {}) {
+  const {entries, fontFiles, selection} = await withFaces(await withScripts(await loadPack("base"), scripts, {presentation, onDiagnostic, renderOptions}), faces);
   const registry = Object.assign(createFontRegistry(entries,options),{fontFiles, ...(selection ? {scriptSelection: selection} : {})});
   registry.lazyFonts = lazyOf(registry);
-  await completeFallback(registry, presentation, {fontFiles, selection}, onDiagnostic);
+  await completeFallback(registry, presentation, {fontFiles, selection}, onDiagnostic, renderOptions);
   return registry;
 }
 
 /** Office substitutes plus the open families that font schemes select (FF-31),
  * optionally alongside the base Roboto pack. `includeOpenFonts: false` leaves the open families out. */
-export async function loadOfficeFontRegistry({scripts, faces, presentation, onDiagnostic, ...options} = {}) {
+export async function loadOfficeFontRegistry({scripts, faces, presentation, onDiagnostic, renderOptions, ...options} = {}) {
   const {entries, fontFiles, packages} = await loadPack("office");
   for (const [include, pack] of [[options.includeOpenFonts, "open"], [options.includeBaseFonts, "base"]]) {
     if (include === false) continue;
@@ -177,17 +178,17 @@ export async function loadOfficeFontRegistry({scripts, faces, presentation, onDi
   // caller asked for it with scripts it is fallback-only, so no other family's preview changes. "auto" counts as asking for it when the
   // presentation itself selects Latn (a Sylfaen scheme: Noto Sans is its designated replacement, which a fallback-only face never is), as
   // an explicit list does; a presentation that does not select Latn keeps it fallback-only.
-  const requested = scripts === "auto" && presentation !== null && typeof presentation === "object" ? scriptFontPackages(autoScriptSelection(presentation).scripts).map(pkg => pkg.name)
+  const requested = scripts === "auto" && presentation !== null && typeof presentation === "object" ? scriptFontPackages(autoScriptSelection(presentation, renderOptions).scripts).map(pkg => pkg.name)
     : scripts === undefined || scripts === "auto" || (Array.isArray(scripts) && !scripts.length) ? [] : scriptFontPackages(scripts).map(pkg => pkg.name);
   const fallback = await loadPackages(scriptFontPackages(["Latn"]).filter(pkg => !requested.includes(pkg.name)), undefined, {fallbackOnly:true});
   fontFiles.push(...fallback.fontFiles);
   entries.push(...fallback.entries);
   packages.push(...fallback.packages);
-  const loaded = await withFaces(await withScripts({entries, fontFiles, packages}, scripts, {presentation, onDiagnostic}), faces);
+  const loaded = await withFaces(await withScripts({entries, fontFiles, packages}, scripts, {presentation, onDiagnostic, renderOptions}), faces);
   const aliases = options.includeOpenFonts === false ? options.aliases : {...renamedAliases(), ...options.aliases};
   const registry = Object.assign(createFontRegistry(loaded.entries,{substitutionPolicy:"metric",...options,...(aliases?{aliases}:{})}),{fontFiles:loaded.fontFiles, ...(loaded.selection ? {scriptSelection: loaded.selection} : {})});
   registry.lazyFonts = lazyOf(registry);
-  await completeFallback(registry, presentation, loaded, onDiagnostic);
+  await completeFallback(registry, presentation, loaded, onDiagnostic, renderOptions);
   return registry;
 }
 

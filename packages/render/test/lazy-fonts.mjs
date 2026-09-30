@@ -63,7 +63,7 @@ assert.deepEqual([...new Set(aptosNeeds.map(face => face.family))].sort(), ['Int
 assert.equal(aptosNeeds.length, 8);
 assert.deepEqual(needFor(eagerOnly(), deckWith('roboto')), [], 'a Roboto deck needs nothing');
 assert.deepEqual(needFor(eagerOnly(), deckWith('calibri')), [], 'Calibri resolves to the eager Carlito');
-assert.deepEqual(needFor(eagerOnly(), {name: 'invalid', slides: 'not slides'}), [], 'a document that does not resolve needs nothing');
+assert.throws(() => needFor(eagerOnly(), {name: 'invalid', slides: 'not slides'}), {code: 'invalid-opf'}, 'a document that does not resolve throws what renderSvg throws (FF-41: it is no longer reported as needing nothing)');
 assert.ok(needFor(eagerOnly(), deckWith('open-sans')).every(face => face.family === 'Open Sans'));
 
 // Nothing is downloaded for a family the substitution policy would not resolve.
@@ -109,7 +109,7 @@ const browser = await loadBrowserFontRegistry(eager.map(face => ({...face})), {d
 const eagerFaces = fonts.size;
 assert.equal(browser.lazyFonts.length, lazyCount);
 const aptosDeck = deckWith();
-assert.equal(browser.pendingLazyFonts(aptosDeck).length, 8);
+assert.equal(browser.pendingLazyFonts(aptosDeck).length, 2, 'FF-41: the title (Intos Display 700) and the text (Intos 400), not the eight Intos faces of the two families');
 const none = await loadBrowserFontRegistry(eager.map(face => ({...face})), {document, fetch: fetchLazy, lazyFontsBaseUrl: 'https://fonts.example/'});
 assert.deepEqual(none.pendingLazyFonts(aptosDeck), [], 'the default policy (none) would not resolve Aptos, so Intos is not downloaded');
 served.length = 0;
@@ -122,13 +122,13 @@ corrupt.add('fonts/intos/IntosDisplay-Bold.ttf');
 await assert.rejects(browser.ensureLazyFonts(aptosDeck), {code: 'font-integrity-mismatch'});
 assert.equal(fonts.size, eagerFaces);
 assert.equal(browser.describeFaces().some(face => /^Intos/.test(face.family)), false);
-assert.equal(browser.pendingLazyFonts(aptosDeck).length, 8);
+assert.equal(browser.pendingLazyFonts(aptosDeck).length, 2);
 corrupt.clear();
 served.length = 0;
 const added = await browser.ensureLazyFonts(aptosDeck);
-assert.equal(added.length, 8);
-assert.equal(served.length, 8);
-assert.equal(fonts.size, eagerFaces + 8, 'the document gained exactly the registry faces');
+assert.equal(added.length, 2);
+assert.equal(served.length, 2);
+assert.equal(fonts.size, eagerFaces + 2, 'the document gained exactly the registry faces');
 for (const face of browser.describeFaces().filter(face => /^Intos/.test(face.family))) assert.ok([...fonts].some(item => item.family === face.family && item.descriptors.weight === String(face.weight) && item.descriptors.style === (face.italic ? 'italic' : 'normal')), `${face.family} is registered with the document`);
 assert.equal(browser.resolveFont({fontFamily: 'Aptos', fontWeight: 400}).resolvedFamily, 'Intos');
 assert.equal(browser.resolveFont({fontFamily: 'Aptos Display', fontWeight: 700}).resolvedFamily, 'Intos Display');

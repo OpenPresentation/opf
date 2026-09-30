@@ -1,4 +1,5 @@
 import type {FontRegistry,FontRegistryOptions,EmbeddedFont,FontFaceInput,ScriptFontProfile} from "./fonts.js";
+import type {RenderSvgOptions} from "./svg.js";
 /** A caller-supplied face (FF-31), for example a licensed copy of the real font. Node callers may pass a file path. */
 export type CallerFontFace = FontFaceInput | (Omit<FontFaceInput, "data"> & {path: string});
 /** "all" or ISO 15924 codes (`Jpan`, `Hans`, `Hant`, `Kore`, `Arab`, `Hebr`, `Deva`, `Thai`, ...). */
@@ -15,8 +16,9 @@ export interface AutoScriptSelection {
 /** Script-pack packages that `scripts: "auto"` loaded or found not installed. */
 export interface AppliedScriptSelection extends AutoScriptSelection { packages: string[]; notInstalled: string[]; /** Drawn CJK characters no loaded face covers (glyph fallback stopped at its cap). */ uncovered?: string[] }
 /** Script keys whose faces a preview of the presentation needs: text decides, the document language only tells Han scripts apart. */
-export declare function detectPresentationScripts(presentation: unknown, options?: { profile?: ScriptFontProfile }): string[];
-export declare function autoScriptSelection(presentation: unknown, options?: { profile?: ScriptFontProfile }): AutoScriptSelection;
+/** `options` may also carry the `renderSvg` options the document resolves with (`catalogs`): a font scheme that exists only in the host's catalogs and names a script font selects that font's script (FF-41). */
+export declare function detectPresentationScripts(presentation: unknown, options?: { profile?: ScriptFontProfile } & Partial<RenderSvgOptions>): string[];
+export declare function autoScriptSelection(presentation: unknown, options?: { profile?: ScriptFontProfile } & Partial<RenderSvgOptions>): AutoScriptSelection;
 export interface ScriptPackOptions {
   /** Caller-supplied faces, loaded first so a licensed real font resolves as an exact face (FF-31). */
   faces?: readonly CallerFontFace[];
@@ -28,6 +30,8 @@ export interface ScriptPackOptions {
   scripts?: ScriptSelection | "auto";
   /** The presentation whose text decides `scripts: "auto"`. */
   presentation?: unknown;
+  /** The `renderSvg` options the presentation resolves with (`catalogs`, ...), for the font schemes `scripts: "auto"` reads (FF-41). */
+  renderOptions?: Partial<RenderSvgOptions>;
   /** Receives `script-font-unavailable` and `script-font-not-installed` for `scripts: "auto"`. */
   onDiagnostic?: (diagnostic: {code: string; message: string; script?: string; package?: string; scripts?: string[]}) => void;
 }

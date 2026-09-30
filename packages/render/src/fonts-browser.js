@@ -1,10 +1,10 @@
 import { createFontRegistry, OPFFontError } from "./fonts.js";
 import { lazyFontEntries, lazyFontList } from "./lazy-font-list.js";
-import { lazyFontsFor, presentationFamilies } from "./lazy-fonts.js";
+import { lazyFacesNeeded } from "./lazy-fonts.js";
 import { analyzePresentationScripts, nextFallbackPackage, scriptFontPackages, scriptPackageEntries, scriptSelectionOf, uncoveredCjkCharacters } from "./script-font-pack.js";
 export { autoScriptSelection, detectPresentationScripts, scriptFontEntries, scriptFontPackages } from "./script-font-pack.js";
 export { lazyFontEntries, lazyFontList } from "./lazy-font-list.js";
-export { lazyFontsFor, presentationFamilies } from "./lazy-fonts.js";
+export { lazyFacesNeeded, lazyFontsFor, presentationFaces, presentationFamilies } from "./lazy-fonts.js";
 
 async function verifyDigest(entry, data, subtle) {
   if (entry.sha256 === undefined) return;
@@ -91,6 +91,9 @@ export async function loadBrowserFontRegistry(entries, options = {}) {
   // Script faces (FF-19) are loaded lazily, once a document needs them, and only for the scripts it uses.
   const scriptPackages = new Set();
   let queue = Promise.resolve(), disposed = false;
+  // FF-41: the `renderSvg` options a document resolves with (`catalogs`, ...). `options.renderOptions` are the defaults; a call's own
+  // options (everything but `signal`) are added over them, so a host that passes its canvas options gets the same resolution here.
+  const renderOptionsFor = (callOptions) => { const { signal: _signal, ...own } = callOptions ?? {}; return { ...options.renderOptions, ...own }; };
   const gone = () => new OPFFontError("font-registry-disposed", "The font registry was disposed.");
   const baseUrl = () => {
     if (typeof options.scriptBaseUrl !== "string" || !options.scriptBaseUrl)
@@ -142,14 +145,15 @@ export async function loadBrowserFontRegistry(entries, options = {}) {
      * fallback needs for characters the loaded faces lack. Cheap when nothing new is needed; call it after edits and
      * render again afterwards. Resolves with the detected scripts, the packages loaded by this call, the scripts no
      * pinned font serves and `uncovered`, drawn CJK characters no loaded face covers (the renderer reports
-     * `missing-glyph` for them). Each package loads all or nothing. If some package fails, the others still load: the
+     * `missing-glyph` for them). Besides `signal`, the call takes the `renderSvg` options the document resolves with
+     * (`catalogs`, ...) over the loader's `renderOptions`. Each package loads all or nothing. If some package fails, the others still load: the
      * call then rejects with an OPFFontError (the first failure's code) whose `details` hold `loaded` (packages this
      * call did load) and `failed` (`{package, code, message}` per failed package); nothing is lost and a later call
      * retries only the failures. `signal` aborts this call's fetches.
      */
     async ensureScripts(presentation, callOptions) {
       if (disposed) throw gone();
-      const analysis = analyzePresentationScripts(presentation), selection = scriptSelectionOf(analysis);
+      const analysis = analyzePresentationScripts(presentation, undefined, renderOptionsFor(callOptions)), selection = scriptSelectionOf(analysis);
       const loadedNow = [], failed = [];
       const attempt = async (item) => {
         try { loadedNow.push(...(await loadPackageList([item], callOptions))); }
@@ -166,9 +170,9 @@ export async function loadBrowserFontRegistry(entries, options = {}) {
       }
       return { ...selection, loaded: loadedNow, uncovered: uncoveredCjkCharacters(analysis, { covers }) };
     },
-    /** Synchronous: script-pack packages the presentation needs that are not loaded yet. Empty means `ensureScripts` would fetch nothing. */
-    pendingScripts(presentation) {
-      const analysis = analyzePresentationScripts(presentation);
+    /** Synchronous: script-pack packages the presentation needs that are not loaded yet. Empty means `ensureScripts` would fetch nothing. `renderOptions` are the `renderSvg` options the document resolves with (`catalogs`, ...). */
+    pendingScripts(presentation, renderOptions) {
+      const analysis = analyzePresentationScripts(presentation, undefined, renderOptionsFor(renderOptions));
       const primary = scriptFontPackages(scriptSelectionOf(analysis).scripts).map((item) => item.name).filter((name) => !scriptPackages.has(name));
       if (primary.length) return primary;
       const next = nextFallbackPackage(analysis, { covers, loaded: scriptPackages });
@@ -181,8 +185,9 @@ export async function loadBrowserFontRegistry(entries, options = {}) {
   const lazy = lazyFontList(), lazyLoaded = new Set();
   const policy = options.substitutionPolicy ?? "none";
   const aliasTargets = new Map(Object.entries(options.aliases ?? {}).map(([from, to]) => [from.toLowerCase(), to]));
-  const hasFamily = (family) => registry.describeFaces().some((face) => face.family.toLowerCase() === String(family).toLowerCase());
-  const neededLazy = (presentation) => lazyFontsFor(presentationFamilies(presentation), { lazy, hasFamily, loaded: lazyLoaded, policy, aliases: aliasTargets });
+  // Face level (FF-41): the faces the document draws, resolved as the registry resolves them with every vendored face loaded.
+  // A document that does not resolve throws what `renderSvg` throws for it.
+  const neededLazy = (presentation, callOptions) => lazyFacesNeeded(presentation, renderOptionsFor(callOptions), { lazy, held: registry.describeFaces(), loaded: lazyLoaded, policy, aliases: aliasTargets, fallbackFamily: options.fallbackFamily });
   const lazyBaseUrl = () => {
     if (typeof options.lazyFontsBaseUrl !== "string" || !options.lazyFontsBaseUrl)
       throw new OPFFontError("invalid-font-source", "Loading vendored fonts requires lazyFontsBaseUrl, where the host serves the package's fonts directory.");
@@ -192,16 +197,19 @@ export async function loadBrowserFontRegistry(entries, options = {}) {
     /** Every vendored face a host can load on demand: family, style, package-relative file and pinned sha256. */
     lazyFonts: lazy,
     /**
-     * Load the vendored faces the presentation's font families resolve to under the registry's substitution policy (nothing
-     * is downloaded for a family the policy would not resolve), once each. All or nothing: on any failure (fetch, hash,
-     * FontFace.load, registry) the document and registry are unchanged and the call can be retried. Cheap when nothing is
-     * needed. Call it before measuring a document, and again after edits that change fonts. Resolves with the faces added.
+     * Load the vendored faces the presentation draws (FF-41: only the faces, by family, weight and style, that the renderer
+     * draws; a bold or italic run added by an edit adds just that face) as the registry resolves them under its substitution
+     * policy (nothing is downloaded for a family the policy would not resolve), once each. All or nothing: on any failure
+     * (fetch, hash, FontFace.load, registry) the document and registry are unchanged and the call can be retried. Cheap when
+     * nothing is needed. Call it before measuring a document, and again after edits that change fonts. Resolves with the faces
+     * added. Besides `signal`, the call takes the `renderSvg` options the document resolves with (`catalogs`, ...) over the
+     * loader's `renderOptions`; a document that does not resolve rejects with what `renderSvg` throws for it.
      */
     ensureLazyFonts(presentation, callOptions = {}) {
       const result = queue.then(async () => {
         if (disposed) throw gone();
         callOptions.signal?.throwIfAborted?.();
-        const pending = neededLazy(presentation);
+        const pending = neededLazy(presentation, callOptions);
         if (!pending.length) return [];
         const fetched = (await fetchFaces(lazyFontEntries({ baseUrl: lazyBaseUrl() }, pending), callOptions.signal)).map((entry) => ({ ...entry, embed: "used" }));
         let browserFaces;
@@ -229,8 +237,8 @@ export async function loadBrowserFontRegistry(entries, options = {}) {
       queue = result.catch(() => {});
       return result;
     },
-    /** Synchronous: the vendored faces the presentation needs under the registry's policy that are not loaded yet. Empty means `ensureLazyFonts` fetches nothing. */
-    pendingLazyFonts: (presentation) => neededLazy(presentation),
+    /** Synchronous: the vendored faces the presentation draws under the registry's policy that are not loaded yet. Empty means `ensureLazyFonts` fetches nothing. `renderOptions` are the `renderSvg` options the document resolves with (`catalogs`, ...). */
+    pendingLazyFonts: (presentation, renderOptions) => neededLazy(presentation, renderOptions),
   });
   /** Names of the script-pack packages loaded so far. */
   Object.defineProperty(registry, "loadedScriptPackages", { get: () => [...scriptPackages], enumerable: true });

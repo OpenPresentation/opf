@@ -2,7 +2,9 @@
 // never disagree. A page bundles the browser font loader and the SVG renderer, serves the eager base faces and the
 // pinned vendored files from local routes and nothing else, and checks, for an Aptos deck, that
 //   - before loading, the registry and the document both hold only Roboto for Aptos (the visual alternate),
-//   - ensureLazyFonts fetches exactly the eight Intos and Intos Display files, hash-verified,
+//   - ensureLazyFonts fetches exactly the faces the deck draws, Intos Display 700 and Intos 400 (FF-41: two files, about
+//     1.5 MB, not the eight files of the two families), hash-verified, and an edit adding an italic run fetches just Intos Italic,
+//   - a layout that only the host's catalogs know resolves through the loader's renderOptions (FF-41),
 //   - afterwards the registry and the document hold the same faces, the drawn family is Intos, and every drawn run's
 //     natural advance equals the registry's accepted (measured) advance within 0.1 px.
 // Offline: every other request is aborted.
@@ -12,6 +14,7 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {build} from 'esbuild';
 import {chromium} from 'playwright';
+import {layouts} from '@openpresentation/opf/catalogs';
 import {BUNDLED_FONT_MANIFEST, loadBundledFontRegistry} from '../dist/fonts-node.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -36,6 +39,8 @@ const REPLACEMENT_PAIRS = [
   {name: 'bookman-impact', major: 'Bookman Old Style', minor: 'Impact', families: ['Libre Caslon Text', 'Anton']},
   {name: 'rockwell-tahoma', major: 'Rockwell', minor: 'Tahoma', families: ['Bitter', 'Red Hat Text']},
 ];
+// FF-41: the face a family draws at a weight (upright), the nearest one, ties to the lighter, as the registry picks it.
+const nearestFile = (family, weight) => vendoredFaces(family).filter(face => !face.italic).sort((a, b) => Math.abs(a.weight - weight) - Math.abs(b.weight - weight) || a.weight - b.weight)[0].file;
 const vendoredFaces = family => BUNDLED_FONT_MANIFEST.packages.filter(pkg => pkg.vendored).flatMap(pkg => pkg.faces.filter(face => face.family === family).map(face => ({file: `${pkg.vendored}/${face.file}`, weight: face.weight, italic: face.italic})));
 const pairDeck = pair => ({
   design: {fontScheme: pair.name},
@@ -46,9 +51,12 @@ const pairDeck = pair => ({
 const decks = {
   ...Object.fromEntries(REPLACEMENT_PAIRS.map(pair => [pair.name, pairDeck(pair)])),
   aptos: {name: 'Aptos deck', slides: [{id: 'a', title: 'Quarterly operating review', text: 'Revenue grew in every region, led by the enterprise segment.'}]},
+  aptosItalic: {name: 'Aptos italic deck', slides: [{id: 'a', title: 'Quarterly operating review', text: ['Revenue grew in ', {text: 'every', italic: true}, ' region, led by the enterprise segment.']}]},
+  hostLayout: {name: 'Host layout deck', slides: [{id: 'a', layout: 'host-bullets', title: 'Quarterly operating review', items: ['Revenue grew in every region.']}]},
   roboto: {name: 'Roboto deck', design: {fontScheme: 'roboto'}, slides: [{id: 'a', title: 'Quarterly operating review', text: 'Revenue grew in every region.'}]},
 };
 
+const hostCatalogs = {layouts: [{...layouts.find(entry => entry.id === 'list-1x'), id: 'host-bullets', name: 'Host bullets'}]};
 const browser = await chromium.launch({channel: process.platform === 'win32' && !process.env.CI ? 'msedge' : undefined});
 const errors = [], unexpected = [];
 try {
@@ -68,15 +76,17 @@ try {
   });
   await page.goto(`${ORIGIN}/`);
   await page.addScriptTag({content: script});
-  await page.evaluate(async ({eager, decks}) => {
+  await page.evaluate(async ({eager, decks, catalogs}) => {
     const {loadBrowserFontRegistry} = window.opf;
     window.decks = decks;
-    window.registry = await loadBrowserFontRegistry(eager.map(face => ({url: `/eager/${face.index}.ttf`, family: face.family, weight: face.weight, italic: face.italic})), {substitutionPolicy: 'visual', lazyFontsBaseUrl: `${location.origin}/`});
-  }, {eager: eager.map(({bytes, ...rest}) => rest), decks});
+    // The host's catalogs (a layout id the bundled catalogs do not have) reach the loader as its default render options.
+    window.registry = await loadBrowserFontRegistry(eager.map(face => ({url: `/eager/${face.index}.ttf`, family: face.family, weight: face.weight, italic: face.italic})), {substitutionPolicy: 'visual', lazyFontsBaseUrl: `${location.origin}/`, renderOptions: {catalogs}});
+    window.catalogs = catalogs;
+  }, {eager: eager.map(({bytes, ...rest}) => rest), decks, catalogs: hostCatalogs});
 
   const observe = async name => page.evaluate(async name => {
     const registry = window.registry, {renderSvg} = window.opf;
-    const svg = renderSvg(window.decks[name], {textMeasurement: registry.textMeasurement});
+    const svg = renderSvg(window.decks[name], {textMeasurement: registry.textMeasurement, catalogs: window.catalogs});
     const host = document.querySelector('main'); host.innerHTML = svg;
     await document.fonts.ready;
     const family = value => value.split(',')[0].trim().replace(/^"|"$/g, '');
@@ -97,7 +107,7 @@ try {
   }, name);
 
   const before = await observe('aptos');
-  assert.equal(before.pending.length, 8, 'the default Aptos scheme needs Intos and Intos Display');
+  assert.deepEqual([...before.pending].sort(), ['fonts/intos/Intos-Regular.ttf', 'fonts/intos/IntosDisplay-Bold.ttf'], 'the default Aptos deck draws Intos Display 700 and Intos 400, and needs those two files (FF-41), not all eight of the two families');
   assert.deepEqual(before.drawn.filter(family => /^Intos/.test(family)), [], 'nothing paints with Intos before it is loaded');
   assert.equal(before.resolved, 'Roboto');
   assert.deepEqual(before.registryFaces, before.documentFaces, 'before loading, the registry and the document hold the same faces');
@@ -109,8 +119,8 @@ try {
   assert.deepEqual(fontRequests, []);
 
   const added = await page.evaluate(async () => (await window.registry.ensureLazyFonts(window.decks.aptos)).map(face => face.file));
-  assert.equal(added.length, 8);
-  assert.deepEqual([...fontRequests].sort(), [...added].sort(), 'exactly the Intos and Intos Display files are fetched');
+  assert.deepEqual([...added].sort(), ['fonts/intos/Intos-Regular.ttf', 'fonts/intos/IntosDisplay-Bold.ttf']);
+  assert.deepEqual([...fontRequests].sort(), [...added].sort(), 'exactly the drawn Intos Display 700 and Intos 400 files are fetched');
   assert.ok(added.every(file => /^fonts\/intos\/Intos(Display)?-/.test(file)));
 
   const after = await observe('aptos');
@@ -124,14 +134,29 @@ try {
   await page.evaluate(async () => window.registry.ensureLazyFonts(window.decks.aptos));
   assert.equal(fontRequests.length, count, 'a second call fetches nothing');
   await page.locator('main svg').screenshot({path: path.join(outputDirectory, 'aptos-intos.png')});
+  // FF-41: an edit that adds an italic run needs one more face, and only that one is fetched.
+  const italicPending = await page.evaluate(name => window.registry.pendingLazyFonts(window.decks[name]).map(face => face.file), 'aptosItalic');
+  assert.deepEqual(italicPending, ['fonts/intos/Intos-Italic.ttf'], 'pendingLazyFonts reports just the new italic face');
+  const beforeItalic = fontRequests.length;
+  await page.evaluate(async name => window.registry.ensureLazyFonts(window.decks[name]), 'aptosItalic');
+  assert.deepEqual(fontRequests.slice(beforeItalic), ['fonts/intos/Intos-Italic.ttf'], 'exactly the italic face is fetched');
+  const italic = await observe('aptosItalic');
+  assert.deepEqual(italic.pending, []);
+  assert.deepEqual(italic.registryFaces, italic.documentFaces, 'the registry and the document hold the same faces after the edit');
+  for (const run of italic.runs) { assert.ok(run.painted, `${run.family} is loaded`); assert.ok(Math.abs(run.natural - run.accepted) < 0.1, `italic: ${run.family} advance ${run.natural} differs from accepted ${run.accepted}`); }
+  // FF-41: a layout id that only the host's catalogs know resolves through renderOptions, and without them the loader throws what renderSvg throws.
+  assert.deepEqual(await page.evaluate(name => window.registry.pendingLazyFonts(window.decks[name]).map(face => face.file), 'hostLayout'), [], 'the Intos faces the host-layout deck draws are already loaded');
+  const withoutCatalogs = await page.evaluate(name => { try { window.registry.pendingLazyFonts(window.decks[name], {catalogs: {}}); return 'no error'; } catch (error) { return error.code; } }, 'hostLayout');
+  assert.equal(withoutCatalogs, 'catalog-resolution-failed', 'without the host catalogs the document does not resolve, and the loader says so instead of reporting nothing');
   // FF-43: each replacement pair loads exactly its vendored families' files, and the document paints what the registry measured.
   const pairReport = [];
   for (const pair of REPLACEMENT_PAIRS) {
-    const expected = pair.families.flatMap(vendoredFaces).map(face => face.file).sort();
+    // Face level (FF-41): the heading family at 700 and the body family at 400, the two faces the deck draws.
+    const expected = [nearestFile(pair.families[0], 700), nearestFile(pair.families[1], 400)].sort();
     // The base-only registry of this page cannot draw these families before loading (their alternates are office-pack faces), so
     // only what is pending is checked here; painting is checked once the vendored family is loaded.
     const pending = await page.evaluate(name => window.registry.pendingLazyFonts(window.decks[name]).map(face => face.file), pair.name);
-    assert.deepEqual([...pending].sort(), expected, `${pair.name}: pending files are exactly the vendored families ${pair.families.join(' and ')}`);
+    assert.deepEqual([...pending].sort(), expected, `${pair.name}: pending files are exactly the drawn faces of ${pair.families.join(' and ')}`);
     const before = fontRequests.length;
     const loaded = await page.evaluate(async name => (await window.registry.ensureLazyFonts(window.decks[name])).map(face => face.file), pair.name);
     assert.deepEqual([...loaded].sort(), expected, `${pair.name}: ensureLazyFonts loads those files`);
@@ -140,7 +165,7 @@ try {
     assert.deepEqual(drawn.pending, [], pair.name);
     assert.deepEqual(drawn.registryFaces, drawn.documentFaces, `${pair.name}: the registry and the document hold the same faces`);
     for (const family of pair.families) assert.ok(drawn.drawn.includes(family), `${pair.name}: drawn in ${family}, got ${drawn.drawn}`);
-    for (const family of pair.families) for (const face of vendoredFaces(family)) assert.ok(drawn.documentFaces.includes(`${family}|${face.weight}|${face.italic}`), `${face.file} is a loaded document face`);
+    for (const file of expected) { const face = pair.families.flatMap(vendoredFaces).find(item => item.file === file); const family = pair.families.find(name => vendoredFaces(name).some(item => item.file === file)); assert.ok(drawn.documentFaces.includes(`${family}|${face.weight}|${face.italic}`), `${file} is a loaded document face`); }
     assert.ok(drawn.runs.length > 0);
     for (const run of drawn.runs) { assert.ok(run.painted, `${pair.name}: ${run.family} is loaded`); assert.ok(Math.abs(run.natural - run.accepted) < 0.1, `${pair.name}: ${run.family} advance ${run.natural} differs from accepted ${run.accepted}`); }
     assert.equal(drawn.resolvedMajor, pair.families[0], `${pair.name}: ${pair.major} resolves to ${pair.families[0]}`);
