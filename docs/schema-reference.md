@@ -182,7 +182,7 @@ _No named properties._
 
 - Type: `object`
 - Required fields: none
-- Purpose: Social media handles or URLs, keyed by platform id from the 'socialPlatforms' catalog. Each value is a string either a full URL or a platform handle (e.g., '@acme'). The catalog record for each platform carries the URL pattern, handle prefix, brand color, and themed icons used by renderers. Keys resolve to the 'id' of a 'socialPlatforms' catalog record. Resolution order: inline catalogs.socialPlatforms.records[] catalogs.socialPlatforms.source default catalog at https://www.pptx.gallery/socia...
+- Purpose: Social media handles or URLs, keyed by platform id from the 'socialPlatforms' catalog. Each value is a string either a full URL or a platform handle (e.g., '@acme'). The catalog record for each platform carries the URL pattern and handle prefix that engines use to render and link the profile URL, plus brand color and themed icons as catalog metadata for authoring UIs (engines render the profile URL, not icons or brand colors). Keys resolve to the 'id' of a 'socialPlatforms' catalog record. Re...
 
 _No named properties._
 
@@ -543,9 +543,9 @@ _No named properties._
 | --- | --- | --- | --- |
 | `text` | no | `string` | Literal text rendered in this zone. |
 | `image` | no | `ref:Asset` | Generic image rendered in this zone, such as a logo, partner mark, certification badge, or icon. |
-| `slideNumber` | no | `boolean` | Whether to render the current slide number in this zone. PPTX export writes it as a live slide-number field. |
-| `slideNumberFormat` | no | `string` | Template for the slide number when slideNumber is true. {current} is the displayed slide number (a live field in PPTX); {total} is the number of slides in the rendered or exported deck, written as fixed text because P... |
-| `date` | no | `oneOf:boolean / string` | true renders the current date: the renderer or exporter must be given today's ISO date by its host (core never reads a clock), and PPTX export writes a live date field that PowerPoint updates. A string is fixed: with... |
+| `slideNumber` | no | `boolean` | Whether to render the current slide number in this zone. PPTX export writes a native slide-number field when its value fits within one accepted text line; a value split across lines exports as static text with a diagn... |
+| `slideNumberFormat` | no | `string` | Template for the slide number when slideNumber is true. {current} is the displayed slide number (a native PPTX field when its value fits within one accepted text line); {total} is the number of slides in the rendered... |
+| `date` | no | `oneOf:boolean / string` | true renders the current date: the renderer or exporter must be given an explicit ISO date by its host (core never reads a clock). PPTX export writes a native date field only for a supported dateFormat whose complete... |
 | `dateFormat` | no | `string` | Date pattern for date. Tokens: yyyy (2026), yy (26), MMMM (April), MMM (Apr), MM (04), M (4), dd (09), d (9), EEEE (Thursday), EEE (Thu). Text in single quotes and other non-letter characters are literal. Month and we... |
 | `organization` | no | `boolean` | Whether to render the primary organization name from organization. |
 | `section` | no | `boolean` | Whether to render the current slide section label. |

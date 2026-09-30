@@ -440,7 +440,7 @@ OPF documents usually reference these records with string ids such as `design.th
 - Schema id: `https://openpresentation.org/schema/opf-social-platform/v1`
 - Type: `object`
 - Required fields: `$schema`, `id`, `name`
-- Purpose: Schema for social-platform records in the pptx.gallery library. Each record describes a single social-media platform its base URL, profile-URL pattern, handle prefix, brand color, and themed icons. Records are referenced from OPF documents indirectly: the property keys of any Socials object (Organization.socials, Speaker.socials) match record ids, and renderers use the catalog record to format URLs and pick icons. The engine resolves references against catalogs.socialPlatforms (inline) catalo...
+- Purpose: Schema for social-platform records in the pptx.gallery library. Each record describes a single social-media platform its base URL, profile-URL pattern, handle prefix, brand color, and themed icons. Records are referenced from OPF documents indirectly: the property keys of any Socials object (Organization.socials, Speaker.socials) match record ids, and engines use the catalog record's URL patterns and handle prefix to format and link the profile URL. The brand color and the themed icons are ca...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -455,10 +455,10 @@ OPF documents usually reference these records with string ids such as `design.th
 | `companyUrlPattern` | no | `string` | Optional URL pattern for organization / company pages, when the platform distinguishes them from member profiles. Use '{handle}' as the placeholder. |
 | `handlePrefix` | no | `string` | Conventional prefix character displayed before the handle (e.g. '@' for X / Mastodon / Threads / TikTok). Empty string when no prefix is used. Renderers strip it before substituting into URL patterns. |
 | `handleExample` | no | `string` | Example handle in its conventional rendered form, used by picker UIs and validation hints. |
-| `brandColor` | no | `string` | Brand color (hex) used for branded icon chips, link styling, or section accents. |
-| `icon` | no | `string` | Default icon source. Accepts an HTTPS URL, data URI, relative path, or asset reference. Used as the fallback when a themed (Light/Dark) variant isn't set. |
-| `iconLight` | no | `string` | Light-colored icon variant intended for rendering on dark backgrounds. |
-| `iconDark` | no | `string` | Dark-colored icon variant intended for rendering on light backgrounds. |
+| `brandColor` | no | `string` | Brand color (hex) for branded icon chips, link styling, or section accents in authoring UIs. Catalog metadata: engines do not draw it. |
+| `icon` | no | `string` | Default icon source. Accepts an HTTPS URL, data URI, relative path, or asset reference. Used as the fallback when a themed (Light/Dark) variant isn't set. Catalog metadata for authoring UIs: engines do not draw icons. |
+| `iconLight` | no | `string` | Light-colored icon variant intended for authoring UIs that draw the icon on dark backgrounds (engines do not draw icons). |
+| `iconDark` | no | `string` | Dark-colored icon variant intended for authoring UIs that draw the icon on light backgrounds (engines do not draw icons). |
 | `tags` | no | `array<string>` | Free-form labels for filtering and search. |
 | `preview` | no | `object` | Visual previews of the record, used by picker UIs and inline rendering. All sub-fields are optional; engines fall back gracefully when previews aren't available. |
 
