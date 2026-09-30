@@ -32,26 +32,30 @@ const slides = [
   {id: 'chart', title: 'Chart', chart: {type: 'column', data: {columns: ['Quarter', 'Current'], rows: [['Q1', 2], ['Q2', 3]]}}},
 ];
 const cases = [
-  {fontScheme: 'aptos', substitute: 'Carlito', expected: {major: 'Aptos Display', minor: 'Aptos'}},
-  {fontScheme: 'calibri', substitute: 'Carlito', expected: {major: 'Calibri', minor: 'Calibri'}},
-  {fontScheme: 'georgia', substitute: 'Gelasio', expected: {major: 'Georgia', minor: 'Georgia'}},
-  {fontScheme: 'times-new-roman', substitute: 'Tinos', expected: {major: 'Times New Roman', minor: 'Times New Roman'}},
-  {fontScheme: 'tahoma', substitute: 'Arimo', expected: {major: 'Tahoma', minor: 'Tahoma'}},
-  {fontScheme: 'consolas', substitute: 'Cousine', expected: {major: 'Consolas', minor: 'Consolas'}},
-  {fontScheme: 'courier-new', substitute: 'Cousine', expected: {major: 'Courier New', minor: 'Courier New'}},
+  {fontScheme: 'aptos', expected: {major: 'Aptos Display', minor: 'Aptos'}},
+  {fontScheme: 'calibri', expected: {major: 'Calibri', minor: 'Calibri'}},
+  {fontScheme: 'georgia', expected: {major: 'Georgia', minor: 'Georgia'}},
+  {fontScheme: 'times-new-roman', expected: {major: 'Times New Roman', minor: 'Times New Roman'}},
+  {fontScheme: 'tahoma', expected: {major: 'Tahoma', minor: 'Tahoma'}},
+  {fontScheme: 'consolas', expected: {major: 'Consolas', minor: 'Consolas'}},
+  {fontScheme: 'courier-new', expected: {major: 'Courier New', minor: 'Courier New'}},
 ];
-const substitutes = ['Carlito', 'Caladea', 'Arimo', 'Tinos', 'Cousine', 'Gelasio'];
+// The preview replacement of each chosen family comes from the registry's own resolution record, not a
+// hard-coded name: font policy changes it between renderer releases (Tahoma: Arimo, then Red Hat Text;
+// Aptos: Carlito, then Intos). The known names below are an extra guard for leaks the record would miss.
+const known = ['Carlito', 'Caladea', 'Arimo', 'Tinos', 'Cousine', 'Gelasio', 'Red Hat Text', 'Red Hat Display', 'Intos', 'Intos Display', 'Intos Narrow', 'Intos Serif', 'PT Serif', 'Montserrat', 'Source Sans 3', 'Open Sans', 'Noto Sans'];
 const {options: visual, registry} = await prepareNodeFonts({pack: 'office', substitutionPolicy: 'visual'});
 const reference = new Map();
-for (const {fontScheme, substitute, expected} of cases) {
+for (const {fontScheme, expected} of cases) {
   const presentation = {name: fontScheme, design: {fontScheme}, slides};
   const plain = unzipSync(new Uint8Array(await toPptx(structuredClone(presentation), {strictAssets: true})));
   registry.clearSubstitutions();
   const measured = unzipSync(new Uint8Array(await toPptx(structuredClone(presentation), {...visual, strictAssets: true})));
-  assert.ok(registry.substitutions.some(entry => entry.resolvedFamily === substitute), `${fontScheme}: the preview measured with ${substitute}`);
+  const resolved = new Set(registry.substitutions.filter(entry => entry.substitute && entry.resolvedFamily !== entry.requestedFamily).map(entry => entry.resolvedFamily));
+  assert.ok(resolved.size, `${fontScheme}: the preview measured with a replacement family`);
   assert.deepEqual(themePair(measured), expected, `${fontScheme}: theme keeps the chosen families`);
   const faces = allTypefaces(measured);
-  for (const name of substitutes) assert.ok(!faces.has(name), `${fontScheme}: substitute ${name} must never reach the PPTX (${[...faces]})`);
+  for (const name of new Set([...known, ...resolved])) assert.ok(!faces.has(name), `${fontScheme}: substitute ${name} must never reach the PPTX (${[...faces]})`);
   assert.deepEqual([...faces].sort(), [...allTypefaces(plain)].sort(), `${fontScheme}: measured export names the same typefaces as an unmeasured export`);
   reference.set(fontScheme, themePair(measured));
 }

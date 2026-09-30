@@ -36,23 +36,24 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf
-          # FF-29: merged core (opf#132) with composed item.alignment.
-          ref: e00038c1fc96a5cba66140f4b3256ede0fe1bae2
+          # Core 0.11.2 (b9bb767): includes the visible-text quote-editor check (opf#172).
+          ref: b9bb767031aaa5c6c40a6174eef6c0b0481375d1
           path: opf
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-render
-          # FF-29: merged renderer (opf-render#43) that anchors preview text to item.alignment.
-          ref: c62b3f98a4ac98cdec8ffd28c035a17a04197396
+          # Renderer 0.11.0 published commit (gitHead): Intos previews Aptos and the open families are bundled.
+          ref: 17f7807e7e687444e7c466bf7edd3227593ba56d
           path: opf-render
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-editor
-          ref: 2622d6be718abd52a7241e098cfecf5eaa3bb8c1
+          # Editor 0.9.0 release commit.
+          ref: 31efdfe963bd1ac189b984701bfbe4d686acee05
           path: opf-editor
           fetch-depth: 0
           persist-credentials: false

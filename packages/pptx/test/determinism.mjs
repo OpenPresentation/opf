@@ -81,7 +81,17 @@ const CLOCKS = ['1980-06-15T12:34:56.789Z', '2038-01-19T03:14:07Z', '2026-02-28T
 // ---------------------------------------------------------------------------
 // Child process
 // ---------------------------------------------------------------------------
+// The renderer ships its own vendored faces (fonts/carlito, fonts/open: hash-pinned, opf-render#50) in a `fonts` directory
+// of its package. Reading them is bundled-font loading, not host fonts, so they do not count as font-directory reads.
+function rendererFontsDirectory() {
+  try {
+    const manifest = realpathSync(createRequire(import.meta.url).resolve('@openpresentation/opf-render/package.json'));
+    return path.join(path.dirname(manifest), 'fonts') + path.sep;
+  } catch { return undefined; }
+}
+
 async function worker(config) {
+  const bundledFonts = rendererFontsDirectory();
   const audit = [];
   const auditedNames = ['readFile', 'readFileSync', 'readdir', 'readdirSync', 'opendir', 'opendirSync', 'stat', 'statSync',
     'lstat', 'lstatSync', 'access', 'accessSync', 'existsSync', 'open', 'openSync', 'createReadStream', 'realpath', 'realpathSync'];
@@ -161,8 +171,11 @@ async function worker(config) {
   const {suites} = await import(pathToFileURL(path.join(root, 'test', 'determinism-fixtures.mjs')).href);
   const cases = await suites[config.suite](config);
   const inside = file => config.roots.some(base => contains(base, file));
-  const outsideRoot = [...new Set(audit)].filter(file => !inside(file));
-  process.stdout.write(JSON.stringify({probe, cases, audit: {total: audit.length, outsideRoot, fontDirectoryReads: audit.filter(file => FONT_DIRECTORY.test(file) && !/(?:^|[\\/])node_modules[\\/]/.test(file))}}));
+  // sharp's libc detection (detect-libc) reads the running node binary, or ldd when that read is denied, when the renderer
+  // loads sharp. That is process introspection, identical for every run, and not a host font, clock or locale read.
+  const LIBC_DETECTION = new Set(['/proc/self/exe', '/usr/bin/ldd']);
+  const outsideRoot = [...new Set(audit)].filter(file => !inside(file) && !LIBC_DETECTION.has(file));
+  process.stdout.write(JSON.stringify({probe, cases, audit: {total: audit.length, outsideRoot, fontDirectoryReads: audit.filter(file => FONT_DIRECTORY.test(file) && !/(?:^|[\\/])node_modules[\\/]/.test(file) && !(bundledFonts && file.startsWith(bundledFonts)))}}));
 }
 
 // ---------------------------------------------------------------------------
@@ -287,7 +300,7 @@ async function parent() {
     const stressed = results.filter(item => item.label.includes('stress='));
     assert.ok(stressed.every(item => item.probe.numberSample !== baselines.plain.probe.numberSample), 'hostile locale changed number formatting');
     assert.ok(stressed.every(item => item.probe.icuDefaultLocale !== baselines.plain.probe.icuDefaultLocale), 'hostile locale changed the ICU default locale');
-    assert.ok(stressed.some(item => item.probe.turkishCollationDiffers), 'hostile Turkish locale changed collation');
+    assert.ok(stressed.some(item => item.probe.turkishCollationDiffers), 'hostile Turkish locale changed collation: ' + JSON.stringify(stressed.map(item => ({label: item.label, lang: item.probe.lang, lcAll: item.probe.lcAll, icu: item.probe.icuDefaultLocale, differs: item.probe.turkishCollationDiffers}))));
     assert.deepEqual(failures, [], 'Exports differ across the determinism grid:\n' + failures.join('\n'));
     const localeEffective = new Set(results.filter(item => !item.label.includes('stress=')).map(item => item.probe.icuDefaultLocale));
     const manifest = {
