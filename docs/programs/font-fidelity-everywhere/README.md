@@ -210,6 +210,26 @@ linked, and specifically:
   - The canonical statement is in [font-fidelity.md](../../font-fidelity.md#font-policy-ff-31).
     The sibling repositories link to it.
 
+- 2026-09-30 (FF-49, FF-50; agent decision under the owner's every-config-`works`
+  goal, the owner can veto it before merge): theme script slots and the
+  language contract, recorded in [script-font-model.md](script-font-model.md#language-contract-ff-50-model-c).
+  - Theme `a:ea` and `a:cs` follow Office's convention and the owner font policy
+    (the PPTX names what the user selected and nothing else): a slot is written
+    only where a script font is selected (the design font scheme's
+    `eastAsian`/`complexScript`, the scheme's own script family, or the
+    language's script font); every other slot stays empty, as in Office's own
+    themes, so PowerPoint picks its per-language default (for example Yu Gothic
+    for Japanese text typed later). A first version filled the empty slots with
+    the theme's latin face; review rejected it because it degrades that
+    behaviour, touches the theme fonts FF-05 investigates and writes a font
+    nobody selected. The audit's "theme `ea`/`cs` is empty" reason is a gap
+    only when a selected script font was not written.
+  - Model C is the language contract: `language` sets `lang`, direction, the
+    script slot fonts and mixed-script layout, never the Latin scheme; only
+    `design.fontScheme` sets the Latin fonts. Armenian, Georgian and Ethiopic
+    keep their font in the per-script entry, not `cs`, until the FF-12 native
+    sample confirms PowerPoint's classification. No schema field changes.
+
 ## Scope
 
 | In scope | Out of scope |

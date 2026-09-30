@@ -78,7 +78,20 @@ function hostTier(m) {
 const hostCell = m => [...new Set([m.expected?.heading, m.expected?.body].filter(Boolean))].map(f => { const x = m.hostFonts?.families?.[f]; return x ? (x.verdict === 'fail' ? `${f}: gap` : `${f} -> ${x.resolved} (${x.tier})`) : `${f}: not measured`; }).join('; ') + (m.hostFonts && !m.hostFonts.render.ok ? `; render ${m.hostFonts.render.code}` : '');
 const hostProbeCell = p => !p?.host ? 'not measured' : p.host.ok ? 'ok' : `${p.host.code}:${p.host.family ?? ''}`;
 const hostProbeReason = (what, h) => `${what}: the modelled host cannot draw it: ${h.code}${h.family ? ' (' + h.family + ')' : ''}, ${h.cause}`;
-const emptyEaCs = m => [...(m.exportThemeEaCs?.major ?? []), ...(m.exportThemeEaCs?.minor ?? [])].some(v => v === '');
+// FF-49 (script-font-model.md, "Theme slots"): a theme ea/cs typeface is empty in Office's own themes, and the PPTX names what
+// the author selected and nothing else. An empty slot is therefore only a gap when the scheme or the language selected a
+// script font for it (the core resolver's source for that slot is not "latin") and the export wrote nothing or another
+// name (including a replacement). `expectedThemeEaCs` is the selected family per slot, '' when nothing was selected;
+// results measured before it existed carry no expectation, so they report no theme-slot gap.
+const themeScriptGaps = m => {
+  const want = m.expectedThemeEaCs, got = m.exportThemeEaCs;
+  if (!want || !got) return [];
+  const gaps = [];
+  for (const role of ['major', 'minor']) ['ea', 'cs'].forEach((slot, i) => {
+    if (want[role]?.[i] && got[role]?.[i] !== want[role][i]) gaps.push(`theme ${role} ${slot} is "${got[role]?.[i] ?? ''}", the selected script font is "${want[role][i]}"`);
+  });
+  return gaps;
+};
 
 function classify(r) {
   const m = r.measure ?? {}, reasons = [];
@@ -114,7 +127,7 @@ function classify(r) {
     if (m.textSampleProbe) { if (STRICT) { if (m.textSampleProbe.base !== 'ok') reasons.push(`non-Latin textSample: strict ${m.textSampleProbe.base}`); } else if (!m.textSampleProbe.host?.ok) reasons.push(m.textSampleProbe.host ? hostProbeReason('non-Latin textSample', m.textSampleProbe.host) : 'non-Latin textSample: the modelled host was not measured'); }
     if (!expOk) reasons.push(`export major/minor or run typefaces differ from scheme (${m.exportThemeMajorLatin}/${m.exportThemeMinorLatin}; foreign: ${list(m.foreignTypefaces) || 'none'})`);
     if (m.previewVsExportFontDiff && !m.previewVsExportFontDiff.agree) reasons.push(`preview ${m.previewVsExportFontDiff.previewHeading}/${m.previewVsExportFontDiff.previewBody} vs export ${m.previewVsExportFontDiff.exportMajor}/${m.previewVsExportFontDiff.exportMinor}`);
-    if (emptyEaCs(m)) reasons.push('theme major/minor ea or cs typeface is empty');
+    for (const gap of themeScriptGaps(m)) reasons.push(gap);
     if (m.reimportFontScheme !== m.fontScheme) reasons.push(reimportReason(r, 'fontScheme', m.reimportFontScheme, m.fontScheme));
     cls = hardFail || !expOk ? 'broken' : reasons.length ? 'partial' : 'works';
     base.previewTier = STRICT ? (base.licensing.bundledForPreview ? 'bundled' : r.preview.officeVisual.ok ? 'substitute' : 'host-only') : hostTier(m);
@@ -139,13 +152,13 @@ function classify(r) {
       if (cat.direction === 'rtl' && xr > 0 && pr > 0 && xr !== pr) reasons.push(`rtl paragraphs ${xr} (export) vs ${pr} (preview)`);
       if (!p.exportOk) reasons.push('native-text probe export failed');
       else if ((p.exportSlideLangs ?? []).some(l => l !== want)) reasons.push(`native text exports lang ${list(p.exportSlideLangs)}, catalog ooxmlLang ${want}`);
-      // Script slot (ea or cs): the runs must name the language's font there, and the theme must not leave it empty.
+      // Script slot (ea or cs): the runs must name the language's font there.
       if (p.scriptSlot === 'ea' || p.scriptSlot === 'cs') {
         const fam = [m.expected?.heading, m.expected?.body].filter(Boolean);
         if (!(p.slotFaces ?? []).some(f => fam.includes(f))) reasons.push(`native text uses the ${p.scriptSlot} slot but runs name ${list(p.slotFaces) || 'no face'} there (scheme ${list(fam)})`);
-        const i = p.scriptSlot === 'ea' ? 0 : 1;
-        if (m.exportThemeEaCs && (m.exportThemeEaCs.major?.[i] === '' || m.exportThemeEaCs.minor?.[i] === '')) reasons.push(`theme major/minor ${p.scriptSlot} is empty for a ${p.scriptSlot}-slot script`);
       }
+      // The theme names the script font the language (or the scheme) selected for its slot; an unselected slot stays empty (FF-49).
+      for (const gap of themeScriptGaps(m)) reasons.push(gap);
       if (p.none !== 'ok') reasons.push(`native text preview (host fonts) ${p.none}`);
       if (STRICT) {
         if (p.nonLatinScript && String(p.robotoBase).startsWith('missing-glyph')) reasons.push('bundled Roboto lacks the script (missing-glyph)');
@@ -157,7 +170,11 @@ function classify(r) {
       }
     } else reasons.push('no native-name sample in the gallery; direction and script slot unmeasured');
     if (m.foreignTypefaces?.length) reasons.push(`foreign typefaces in export: ${list(m.foreignTypefaces)}`);
-    if (m.engineAppliesLanguageFontScheme !== true) reasons.push(`engines do not derive the font scheme from language alone (${m.engineAppliesLanguageFontScheme === false ? "the snippet's design.fontScheme sets it" : m.engineAppliesLanguageFontScheme})`);
+    // FF-50, Model C (script-font-model.md): a language sets lang, direction and the script slots, never the Latin scheme,
+    // so the preview's design fonts must be the same with and without the language. `engineAppliesLanguageFontScheme` is
+    // the measurement name kept for results.json compatibility: true means the language changed the Latin fonts (a gap).
+    if (m.engineAppliesLanguageFontScheme === true) reasons.push('the language changes the Latin font scheme (Model C: a language sets lang, direction and the script slots only)');
+    else if (m.engineAppliesLanguageFontScheme !== false) reasons.push(`Latin-scheme probe failed (${m.engineAppliesLanguageFontScheme})`);
     if (m.reimportLanguage !== r.id) reasons.push(reimportReason(r, 'language', m.reimportLanguage, r.id));
     cls = hardFail || !r.catalogResolves ? 'broken' : inert ? 'schema-only' : reasons.length ? 'partial' : 'works';
   } else if (d === 'themes') {

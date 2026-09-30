@@ -21,7 +21,7 @@ const render = await imp(`${SRC}/audit-B-opf-render/dist/index.js`);
 const {prepareNodeFonts, BUNDLED_FONT_MANIFEST} = await imp(`${SRC}/audit-B-opf-render/dist/fonts-node.js`);
 const {FONT_COMPATIBILITY} = await imp(`${SRC}/audit-B-opf-render/dist/fonts.js`).catch(() => ({}));
 const {toPptx, fromPptx} = await imp(`${SRC}/audit-B-opf-pptx/dist/index.js`);
-const {fontPolicyFor} = await imp(`${core}/index.js`);
+const {fontPolicyFor, resolveScriptFonts} = await imp(`${core}/index.js`);
 const req = createRequire(`${SRC}/audit-B-opf-pptx/package.json`);
 const {unzipSync} = req('fflate');
 
@@ -485,6 +485,11 @@ for (const s of snippets) {
       const explicit = inv.typefaces.filter(t => !t.typeface.startsWith('+'));
       m.exportThemeMajorLatin = inv.theme?.major?.[0]; m.exportThemeMinorLatin = inv.theme?.minor?.[0];
       m.exportThemeEaCs = {major: inv.theme?.major?.slice(1), minor: inv.theme?.minor?.slice(1)};
+      // FF-49: the script font the scheme or language selected for each theme ea/cs slot, '' when nothing was (Office leaves it empty).
+      try {
+        const r = resolveScriptFonts(doc), pick = (role, key) => r.sources[key] === 'latin' ? '' : r[role][key];
+        m.expectedThemeEaCs = {major: [pick('heading', 'eastAsian'), pick('heading', 'complexScript')], minor: [pick('body', 'eastAsian'), pick('body', 'complexScript')]};
+      } catch (e) { m.expectedThemeEaCs = null; }
       m.exportRunTypefaces = [...new Set(inv.typefaces.filter(t => /slides\/slide\d/.test(t.part)).map(t => t.typeface))];
       m.foreignTypefaces = [...new Set(explicit.filter(t => t.typeface && !chosen.has(t.typeface)).map(t => `${t.typeface}@${t.part.replace(/\d+/g, 'N')}:${t.tag}`))];
       m.emptyTypefaceSlots = explicit.filter(t => t.typeface === '').length;
