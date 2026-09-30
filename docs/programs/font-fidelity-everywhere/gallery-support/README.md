@@ -10,10 +10,10 @@ The reproducible audits behind [gallery-support.md](../gallery-support.md):
 
 | Path | Contents |
 | --- | --- |
-| `audit-a/` | Layouts, content blocks, image treatments, backgrounds, headers/footers. `scripts/`, `results.json`, generated `SUMMARY.md`. |
-| `audit-b/` | Color schemes, font schemes, languages, themes, narratives, audiences, tones, socials. `scripts/`, `results.json`, the audit's own `README.md` and generated per-dimension tables (`*.md`). |
+| `audit-a/` | Layouts, content blocks, image treatments, backgrounds, headers/footers. `scripts/` (with controls for the image-treatment probe), `results.json`, generated `SUMMARY.md`. |
+| `audit-b/` | Color schemes, font schemes, languages, themes, narratives, audiences, tones, socials and, since 2026-09-30, the 26 charts. `scripts/`, `results.json`, the audit's own `README.md` and generated per-dimension tables (`*.md`). |
 | `parity/` | Parity scoreboard (FF-38): `scripts/`, `run.ps1`, `build.ps1`, `parity-results.json` and the generated `PARITY.md`, plus dated later runs (`parity-results-<date>-<topic>.json` and `PARITY-<date>-<topic>.md`; never overwritten). |
-| `support-status.json` | One record per gallery value, built from the presence and parity results. |
+| `support-status.json` | One record per gallery value (819 presence items, the 26 charts among them), built from the presence and parity results. |
 | `build-support-status.mjs` | Regenerates `support-status.json`. |
 
 Results are copied byte for byte from the measured runs (heads in
@@ -98,15 +98,14 @@ cp -r "$OPF/docs/programs/font-fidelity-everywhere/gallery-support/audit-b" "$W/
 export GALLERY_DIR="$W/pptx-gallery"
 
 # Audit A: writes results.json, then SUMMARY.md. ONLY=layouts,blocks and LIMIT=n narrow a run (a narrowed run writes
-# results.<only>.json instead). The image-treatments probe measures design.slideImage, which the gallery snippets no longer
-# use (pptx-gallery#44), so it stops with an error: run the other four dimensions and keep the earlier image-treatments rows.
+# results.<only>.json instead). All five dimensions are measured, including the image treatments (image-treatment.mjs).
 cd "$W/dimension-audit/A"
 cp results.json results.previous.json          # the committed results of the earlier run
-ONLY=layouts,blocks,backgrounds,headers-footers node --import ./scripts/register.mjs scripts/audit.mjs
-node scripts/merge-retained.mjs results.layouts_blocks_backgrounds_headers-footers.json results.previous.json image-treatments results.json
+node --import ./scripts/register.mjs scripts/audit.mjs
 node scripts/summary.mjs
 
-# Audit B: snippets, measurement, then classification (results.json, *.md).
+# Audit B (26 charts included): snippets, measurement, then classification (results.json, *.md). The measurement holds every
+# raw result in memory: give node --max-old-space-size=12000 if it runs out of heap.
 cd "$W/dimension-audit/B"
 mkdir -p out
 h() { git -C "$1" rev-parse --short=7 HEAD; }
@@ -210,6 +209,21 @@ regenerate `support-status.json`, and update the headline in
 
 - **Intos default (FF-31, 2026-09-29).** `parity-results-2026-09-29-intos-default.json` is the run on the merged mains after opf-render#54 (Intos previews Aptos as metric): 660 perfect, 33 near, 157 mismatch of 850. The instrument is unchanged. `build-support-status.mjs` reads it by default; the before/after is in [gallery-support.md](../gallery-support.md).
 
+- **Chart series colours (FF-38, 2026-09-30).** A native chart series is compared as its construct paints it, not as its first
+  `srgbClr`. A line-kind series (`c:lineChart`, and `c:radarChart` except `radarStyle` filled) is a stroke: the series `a:ln` fill
+  against the strokes of the preview's series polylines and paths (traced to `data.columns`; axes, rings and gridlines are not
+  series). A pie or doughnut series has one colour per slice: the `c:dPt` fills, not the 0.75 pt `F9F9F9` line PptxGenJS writes on
+  the series, which is the slice border. Every other series is still its first fill. No tolerance changed. On the same heads of all
+  four repositories the harness as merged scored 700 perfect, 48 near, 102 mismatch, and with this change 703, 51, 96 (charts 3 to 5
+  perfect, 12 to 7 mismatch, blocks 20 to 21 perfect). Only the fixed run is committed
+  (`parity-results-2026-09-30-charts-measured.json`).
+- **Slide-number fields (owner default 2026-09-30).** A native slide-number field plus its adjacent literal text runs counts as one
+  run when the combined line text equals the preview text (`{current} / {total}` is `<a:fld>2</a:fld><a:r> / 2</a:r>`, `A-{current}` is
+  a literal run then the field), so `slide-number-progress` and `appendix-numbering` are perfect instead of near. Per-character
+  family, size, bold, italic and colour were already compared, so only the run count is folded (`logicalRunCount` in
+  `scripts/pptx-runs.mjs`, covered by `pptx-runs.test.mjs`). Date fields are not folded. With this change 703, 51, 96 becomes 707,
+  47, 96.
+
 ### Slide-image mapping (FF-26)
 
 opf-pptx exports `design.slideImage` as one native picture named
@@ -246,15 +260,12 @@ measured and unmeasured (425, 425 and 0 in the current run). The picture frame
 check uses the same placed image, clipped to the `<image>` viewport, so a
 `meet` image is compared at its `preserveAspectRatio` alignment.
 
-The presence audit A image-treatment probe (`audit-a/scripts/slide-image.mjs`)
-uses the same geometry, copied from `parity.mjs`: it finds the picture by
-name, requires its `r:embed` to resolve to an image part, and fails the
-visible frame or crop beyond 0.02 pt against the traced preview. Keep the two
-copies in sync. The gallery snippets no longer express image treatments with
-`design.slideImage` (pptx-gallery#44), so that probe does not apply to them:
-audit A keeps the September 23 image-treatment rows (`meta.retained`; see
-"Re-running against new heads") and the parity audit measures the current
-snippets.
+The gallery snippets no longer express image treatments with `design.slideImage`
+(pptx-gallery#44). Until 2026-09-30 audit A's image-treatment probe measured
+only that field, could not classify the merged snippets, and kept the September 23
+rows. It now measures the snippet's actual design output
+(`audit-a/scripts/image-treatment.mjs`, below); the slide-image geometry and
+crop stay parity checks (the frame and crop of every picture at 0.02 pt).
 
 ### Watermark and furniture pictures (2026-09-29)
 
@@ -282,6 +293,42 @@ the snippet itself, and the editor path is
 the gallery's per-item builder (`buildCatalogItemOpfSnippet`, pptx-gallery#48),
 compared with the published snippet (`editorMatchesSnippet`).
 
+### Audit A image treatments (owner default 2026-09-30)
+
+`works` for a composed image treatment means: the treatment's actual design output, as the gallery snippet emits it
+(a layout image, image blocks, an image slide background, `design.watermark`, `imageFill`), is written natively into the PPTX
+and re-imports. `audit-a/scripts/image-treatment.mjs` starts from what the snippet emits:
+
+1. the snippet declares N image references (an `image` object, an `asset:` string or the watermark, resolved to its bytes) and
+   the traced preview draws N images;
+2. the slide has N native image references (`p:pic`, the `a:blipFill` of the slide background, or of the layout or master
+   background it inherits), each resolving to an image part, with the preview's image bytes (hash multiset);
+3. `design.watermark` is the picture named `OPF watermark` with `a:alphaModFix` equal to its opacity, and an image background's
+   opacity is the `a:alphaModFix` of its blip;
+4. `fromPptx` returns the same number of images with the same bytes and keeps `design.watermark`, the image background (with its
+   opacity) and `design.imageFill` where the snippet set them. A re-import diagnostic is recorded (`checks.reimport.diagnostics`,
+   for example `unsupported-image-crop`) but does not make a retained treatment partial; a lost item does, diagnostic or not.
+
+Frames and crops are the parity audit's checks. A treatment OPF v1 cannot express (mask, blur, duotone, device frame) is
+still `works` when its emitted composition is native: the gallery's own label (`native`, `composed`, `gap`) and gap note stay in
+the item's `gallery` block in `audit-a/results.json` and on the gallery page, and the support table lists it. The
+snippet-distinctness check compares whole documents (not only `design`), the editor check compares the per-item editor builder
+with the snippet (`editorMatchesSnippet`), and `image-treatment.test.mjs` holds negative controls (a missing picture, other
+bytes, an unresolved relationship, a wrong opacity, a lost image, background or watermark).
+
+### Audit B charts (2026-09-30)
+
+Audit B measures the gallery's published chart snippet for every kept chart id (`audit-b/scripts/audit.mjs`, "Charts"). Preview:
+the traced SVG has a group whose `data-opf-chart` equals the id, no "No chart data" and no legacy single-series sketch, and its
+marks match the data (bars: rows x series; lines: one polyline per series and one circle per point with markers; areas and
+radar: one path per series; pie and doughnut: one slice per positive value; scatter: one circle per point). Export: exactly one
+chart part whose element, `barDir`, `grouping`, marker, `radarStyle` and `scatterStyle` equal the core catalog record's
+`mappings.openxml`, with the data in its caches, an embedded workbook and no `chart-data-adapted` diagnostic. Re-import: the same
+chart id and data. A chartex id (treemap, histogram, pareto, world, box-and-whisker, waterfall, funnel) has no classic construct
+in the exporter or the renderer: the audit records the legacy preview, the clustered-column fallback with its `chart-data-adapted`
+(`chartex-fallback`) diagnostic and the `column` that re-import returns, and classifies it `partial`. It is not `preview-only`
+(the preview draws no chartex construct either).
+
 ## `support-status.json`
 
 Schema version 1. Top level:
@@ -294,18 +341,19 @@ Schema version 1. Top level:
 | `sectionAnchors` | `{dimension: anchor}` for the per-dimension sections of `gallery-support.md`; see the map below. |
 | `statuses` | The allowed `status` values: `works`, `partial`, `schema-only`, `authoring-metadata`, `broken`, `gallery-only`. |
 | `parityStatuses` | The allowed `parity.status` values: `perfect`, `near`, `mismatch`. |
-| `audits` | Per audit (`a`, `b`, `parity`): measured dimensions or checks, `heads` (7-character commits plus Node) and the source results file. `parity` also records tolerances, the record count (850), `withAssetsRecords` (31) and `parityOnlyValues` (26). `a` also has `retained` when audit A rows are kept from an earlier run (below). |
-| `notMeasured` | Dimensions without a presence status (charts, FF-22). |
+| `audits` | Per audit (`a`, `b`, `parity`): measured dimensions or checks, `heads` (7-character commits plus Node) and the source results file. `parity` also records tolerances, the record count (850), `withAssetsRecords` (31) and `parityOnlyValues` (0). |
+| `notMeasured` | Dimensions without a presence status. Empty since 2026-09-30 (audit B probes the charts); the field stays for consumers. |
 | `sharedExportGaps` | Gaps that apply to every exported value. |
 | `counts` | Presence: `{dimension: {status: n}}`. |
 | `parityCounts` | Parity: `{total, perfect, near, mismatch, checksPassed: {check: n}}` over all parity records (850 since the 2026-09-29 re-measure). |
-| `items` | One record per presence-audited gallery value (793), below. |
-| `parityOnly` | Values measured only by parity: the 26 charts, as `{dimension, galleryId, galleryIdNormalized?, parity}`; `galleryIdNormalized` is `{fromParts, joiner, to, reason}`. |
+| `items` | One record per presence-audited gallery value (819: 793 and the 26 charts), below. |
+| `parityOnly` | Values measured only by parity, as `{dimension, galleryId, galleryIdNormalized?, parity}`; `galleryIdNormalized` is `{fromParts, joiner, to, reason}`. Empty since 2026-09-30: the 26 charts are items. |
 
-The parity audit has 57 records that are not presence items. The 26 charts
-are in `parityOnly`. The 31 `withAssets` variants (backgrounds 6, image
-treatments 15, headers/footers 10) are attached to their item as
-`parity.variants.withAssets`.
+The parity audit has 31 records that are not presence items: the `withAssets`
+variants (backgrounds 6, image treatments 15, headers/footers 10), attached to
+their item as `parity.variants.withAssets`. Before 2026-09-30 the 26 charts
+were a further 26 records in `parityOnly`; they are now items with a presence
+status.
 
 Each item:
 
