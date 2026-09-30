@@ -1,6 +1,7 @@
-// Emits the exact gallery "OPF Config" snippets for dimension audit B, using pptx-gallery's own builders.
+// Emits the exact gallery "OPF Config" snippets for dimension audit B (including the chart snippets), using pptx-gallery's own builders.
 import * as R from "@/lib/reference-data";
 import * as S from "@/lib/opf-snippets";
+import charts from "@/data/charts.json";
 export function allSnippets() {
   const out: any[] = [];
   const add = (dimension: string, id: string, build: () => string, record: any) => {
@@ -17,5 +18,7 @@ export function allSnippets() {
   for (const a of R.audienceItems) add("audiences", (a as any).id, () => S.buildAudienceOpfSnippet(a as any), a);
   for (const t of R.toneItems) add("tones", t.id, () => S.buildToneOpfSnippet(t), t);
   for (const s of R.socialPlatformItems) add("socials", s.id, () => S.buildSocialPlatformOpfSnippet(s), s);
+  // Charts (FF-36, 2026-09-30): the gallery's published chart snippet for every kept chart type.
+  for (const c of (charts as any).items) add("charts", c.id ?? c.slug, () => S.buildChartOpfSnippet(c), c);
   return out;
 }

@@ -10,7 +10,7 @@ import path from 'node:path';
 import {fileURLToPath, pathToFileURL} from 'node:url';
 import {createRequire} from 'node:module';
 import {classifyFontResolution, legacyPasses, pptxNaming} from './font-resolution.mjs';
-import {runElements} from './pptx-runs.mjs';
+import {runElements, logicalRunCount} from './pptx-runs.mjs';
 import {drawnTableBox} from './table-box.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
@@ -142,10 +142,27 @@ function parseParagraphs(txXml, theme, defaults = {}) {
       const rPr = rm.inner.match(/<a:rPr\b([^>]*?)(?:\/>|>(.*?)<\/a:rPr>)/s); const ra = attrs(rPr?.[1] ?? ''), inner = rPr?.[2] ?? '';
       const text = unesc(rm.inner.match(/<a:t>(.*?)<\/a:t>/s)?.[1] ?? '');
       const tf = k => inner.match(new RegExp(`<a:${k} typeface="([^"]*)"`))?.[1];
-      return {text, latin: tf('latin'), ea: tf('ea'), cs: tf('cs'), sizePt: ra.sz ? +ra.sz / 100 : defaults.sizePt ?? null, bold: ra.b === '1', italic: ra.i === '1', fill: fillOf(inner, theme), lang: ra.lang ?? null};
+      return {text, field: rm.tag === 'fld' && /type="slidenum"/.test(rm.attrs), latin: tf('latin'), ea: tf('ea'), cs: tf('cs'), sizePt: ra.sz ? +ra.sz / 100 : defaults.sizePt ?? null, bold: ra.b === '1', italic: ra.i === '1', fill: fillOf(inner, theme), lang: ra.lang ?? null};
     });
     return {algn, marL: +(pa.marL ?? 0) / 9525, indent: +(pa.indent ?? 0) / 9525, bullet: bu, runs, text: runs.map(r => r.text).join('')};
   }).filter(p => p.runs.length);
+}
+// Series colours of a native chart, as each construct paints them (FF-38, 2026-09-30):
+//  - a line-kind series (c:lineChart, and c:radarChart except radarStyle filled) is a stroke: its colour is the series a:ln fill;
+//  - a pie or doughnut series has one colour per slice (its c:dPt fills); the 0.75 pt F9F9F9 a:ln that PptxGenJS writes on the
+//    series is the slice border, not a series colour;
+//  - every other series is a fill: the first srgbClr of its c:spPr, as before.
+function chartSeriesColors(cx) {
+  const kind = cx.match(/<c:(lineChart|radarChart|pieChart|doughnutChart)>/)?.[1] ?? null;
+  const strokeSeries = kind === 'lineChart' || (kind === 'radarChart' && !/<c:radarStyle val="filled"\/>/.test(cx));
+  const sers = [...cx.matchAll(/<c:ser>([\s\S]*?)<\/c:ser>/g)].map(m => m[1]);
+  const srgb = xml => xml?.match(/<a:srgbClr val="([0-9A-Fa-f]{6})"/)?.[1]?.toUpperCase() ?? null;
+  const spPr = ser => ser.match(/<c:spPr>([\s\S]*?)<\/c:spPr>/)?.[1] ?? '';
+  let colors;
+  if (strokeSeries) colors = sers.map(ser => srgb(spPr(ser).match(/<a:ln\b[^>]*>([\s\S]*?)<\/a:ln>/)?.[1]) ?? srgb(spPr(ser)));
+  else if (kind === 'pieChart' || kind === 'doughnutChart') colors = sers.flatMap(ser => { const slices = [...ser.matchAll(/<c:dPt>[\s\S]*?<c:spPr>([\s\S]*?)<\/c:spPr>/g)].map(m => srgb(m[1])); return slices.length ? slices : [srgb(spPr(ser).replace(/<a:ln\b[\s\S]*?<\/a:ln>/g, ''))]; });
+  else colors = [...cx.matchAll(/<c:ser>.*?<c:spPr>.*?<a:srgbClr val="([0-9A-Fa-f]{6})"/gs)].map(x => x[1].toUpperCase());
+  return {colors: uniq(colors.filter(Boolean)), strokeSeries};
 }
 // OPC part-name resolution: an absolute Target ("/ppt/charts/chart1.xml") is
 // relative to the package root; a relative Target is relative to the folder of
@@ -170,7 +187,7 @@ function parseSlide(xml, rels, files, theme, slidePart) {
     if (body.includes('<a:tbl>')) { s.table = true; s.cellFills = uniq([...body.matchAll(/<a:tcPr\b[^>]*>(.*?)<\/a:tcPr>/gs)].map(t => fillOf(t[1].replace(/<a:ln\w\b.*?<\/a:ln\w>/gs, ''), theme)?.rgb).filter(Boolean)); }
     const blip = body.match(/<a:blip r:embed="([^"]+)"/)?.[1]; if (blip) { const target = rels[blip]; const part = resolveTarget(slidePart, target); s.image = {part, hash: files[part] ? sha(files[part]) : null, srcRect: attrs(body.match(/<a:srcRect\b([^>]*)\/>/)?.[1] ?? '')}; }
     const chartRid = body.match(/<c:chart\b[^>]*r:id="([^"]+)"/)?.[1];
-    if (chartRid) { const part = resolveTarget(slidePart, rels[chartRid]); const cx = files[part] ? dec.decode(files[part]) : ''; s.chart = {part, colors: uniq([...cx.matchAll(/<c:ser>.*?<c:spPr>.*?<a:srgbClr val="([0-9A-Fa-f]{6})"/gs)].map(x => x[1].toUpperCase())), typefaces: uniq([...cx.matchAll(/<a:latin typeface="([^"]*)"/g)].map(x => x[1])), sizes: uniq([...cx.matchAll(/<a:defRPr\b[^>]*\bsz="(\d+)"/g)].map(x => +x[1] / 100)), strings: [...cx.matchAll(/<c:v>([^<]*)<\/c:v>/g)].map(x => unesc(x[1]))}; }
+    if (chartRid) { const part = resolveTarget(slidePart, rels[chartRid]); const cx = files[part] ? dec.decode(files[part]) : ''; s.chart = {part, ...chartSeriesColors(cx), typefaces: uniq([...cx.matchAll(/<a:latin typeface="([^"]*)"/g)].map(x => x[1])), sizes: uniq([...cx.matchAll(/<a:defRPr\b[^>]*\bsz="(\d+)"/g)].map(x => +x[1] / 100)), strings: [...cx.matchAll(/<c:v>([^<]*)<\/c:v>/g)].map(x => unesc(x[1]))}; }
     shapes.push(s);
   }
   return {bg: bg ? fillOf(bg, theme) ?? {kind: 'ref'} : null, shapes};
@@ -331,7 +348,10 @@ async function parity(doc) {
         if (!chFams.length) add('text', 'fail', 'native chart has no explicit typeface (inherits theme/Office default)', key);
         else for (const f of pvFams) if (!chFams.includes(f)) add('text', 'fail', `chart font ${f} (preview) not in chart XML [${chFams.join('|')}]`, key);
         const pvSizes = uniq(pvLines.flatMap(l => l.runs.map(r => r.sizePt))); if (ch.sizes.length && pvSizes.some(s => !ch.sizes.some(c => Math.abs(c - s) <= TOL.sizePt))) add('text', 'near', `chart text sizes preview [${pvSizes}] vs chart [${ch.sizes}]`, key);
-        const pvColors = uniq(G.pv.filter(e => e.kind === 'shape' && e.tag !== 'line' && e.fill && e.fill !== 'none').map(e => hex(e.fill)));
+        // A line-kind series is compared on its stroke (the series polylines and paths, traced to data.columns; axes, rings and gridlines are not series), every other series on its fills.
+        const pvColors = ch.strokeSeries
+          ? uniq(G.pv.filter(e => e.kind === 'shape' && (e.tag === 'polyline' || e.tag === 'path') && e.fill === 'none' && e.stroke && /\.data\.columns\./.test(e.path ?? '')).map(e => hex(e.stroke)))
+          : uniq(G.pv.filter(e => e.kind === 'shape' && e.tag !== 'line' && e.fill && e.fill !== 'none').map(e => hex(e.fill)));
         const extra = ch.colors.filter(c => !pvColors.includes(c)); if (extra.length) add('fills', 'fail', `chart series colors not in preview (${extra.length})`, key);
       } else {
         const used = new Set();
@@ -341,7 +361,9 @@ async function parity(doc) {
           used.add(idx); stats.textLinesMatched++; const p = pxParas[idx];
           // run segmentation
           const pvRuns = l.runs, xr = p.runs.filter(r => r.text.length); stats.runs += pvRuns.length;
-          if (pvRuns.length !== xr.length) add('text', 'near', `run segmentation ${pvRuns.length} preview vs ${xr.length} pptx`, key);
+          // Owner default 2026-09-30: a native slide-number field and its adjacent literal runs are one logical run (the combined text is already equal here).
+          const xrLogical = logicalRunCount(xr);
+          if (pvRuns.length !== xrLogical) add('text', 'near', `run segmentation ${pvRuns.length} preview vs ${xrLogical} pptx${xrLogical !== xr.length ? ` (${xr.length} elements, a slide-number field and its neighbours counted as one)` : ''}`, key);
           // per-character style comparison
           const pvChars = pvRuns.flatMap(r => [...r.text].map(c => ({c, r}))), xChars = xr.flatMap(r => [...r.text].map(c => ({c, r})));
           const seen = new Set();

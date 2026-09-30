@@ -1,6 +1,6 @@
 # pptx.gallery support by dimension (FF-23)
 
-Parity and presence re-measured 2026-09-29 (local date; UTC 2026-09-30) on the merged and published heads, except the image-treatment presence rows, which keep their 2026-09-23 measurement (see [below](#merged-and-published-heads-2026-09-29-audit)). Program: [README.md](README.md). Tracker:
+Parity and presence re-measured 2026-09-30 on the published set, with the charts measured and three owner defaults applied ([below](#charts-measured-and-owner-defaults-2026-09-30)); the 2026-09-29 measurement stays below as history. Program: [README.md](README.md). Tracker:
 [burndown.md](burndown.md). Audit scripts, raw results and the per-item
 machine-readable file: [gallery-support/](gallery-support/README.md).
 
@@ -9,7 +9,11 @@ pptx.gallery value's "OPF Config" snippet and run it through the OpenPresentatio
 packages. It measures the engines, not the schema: a value that validates but
 changes nothing in the preview or the PPTX is not reported as working.
 
-**Latest measurement (2026-09-29, merged and published heads): 657 of 850 values are perfect by parity, 37 near, 156 mismatch**
+**Latest measurement (2026-09-30, published set, charts measured): 707 of 850 values are perfect by parity, 47 near, 96 mismatch**
+(core `aedd364`, package 0.11.2; opf-render 0.11.3 `a66caa3`; opf-pptx 0.11.2 `0400434`; pptx-gallery `b2238ac`; opf#186 scored 657, 37 and 156). Presence: 427 of 819 values `works` (379 of 793 before; the 26 charts are now presence items: 19 `works`, 7 `partial`). See
+["Charts measured and owner defaults"](#charts-measured-and-owner-defaults-2026-09-30) below.
+
+Earlier (2026-09-29, merged and published heads): 657 of 850 values are perfect by parity, 37 near, 156 mismatch
 (core `930577d`, package 0.11.2; opf-render 0.11.2 `021cca0`; opf-pptx 0.11.1 `0d15f1c`; pptx-gallery `0b2dec8`; opf#175 scored 660, 33 and 157). Presence: 379 of 793 values `works` (352 before). See
 ["Merged and published heads"](#merged-and-published-heads-2026-09-29-audit) below, with the regressions investigated to their causes (all four in the harness or by construction, none in an engine).
 
@@ -96,13 +100,15 @@ Two audits split the 14 dimensions.
   `fromPptx` re-import; docs/evidence hits. Values whose snippet references an
   undeclared `asset:*` id are re-run with a real raster (`withAssets`).
 - **Audit B** (color schemes, font schemes, languages, themes, narratives,
-  audiences, tones, socials): core validate and lint; catalog lookup;
+  audiences, tones, socials and, since 2026-09-30, the 26 charts): core validate and lint; catalog lookup;
   opf-render in three font modes (no registry, the strict bundled base pack,
   and the office pack with visual substitution); opf-pptx export with a
   full-package inventory (every `typeface=`, script fonts, `lang`/`rtl`, theme
   `clrScheme`, slide colours, `app.xml`); re-import; and for metadata
   dimensions a consumption diff (field removed, SVG and every PPTX part compared
-  byte for byte).
+  byte for byte). Charts: a traced preview (the chart id and its marks against
+  the data), the native chart part against the core catalog's `mappings.openxml`,
+  and a same-id re-import.
 - **Parity (FF-38)** covers every dimension, charts included. It renders the
   traced preview (`renderSvgDeck` with `trace: true`, plus
   `resolvePresentation` geometry) and exports with `toPptx` (default options,
@@ -136,6 +142,7 @@ comparison:
 
 | Run | perfect | geometry | text | fills | zOrder | slideSize | typefaces | reimport | fontResolution | theme | mapping |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Published set, charts measured (September 30, chart series colours and slide-number fields; core `aedd364`, opf-render `a66caa3`, opf-pptx `0400434`, pptx-gallery `b2238ac`) | 707 (47 near, 96 mismatch) | 850 | 824 | 850 | 850 | 850 | 850 | 850 | 733 pass, 31 near, 86 fail | 850 | 850 |
 | Merged and published heads (September 29, watermark and furniture-picture mapping; core `930577d`, opf-render `021cca0`, opf-pptx `0d15f1c`, pptx-gallery `0b2dec8`) | 657 (37 near, 156 mismatch) | 850 | 826 | 783 | 850 | 850 | 850 | 850 | 733 pass, 31 near, 86 fail | 850 | 850 |
 | Same heads, harness as merged before this run | 653 (37 near, 160 mismatch) | 848 | 826 | 781 | 848 | 850 | 850 | 850 | 733 pass, 31 near, 86 fail | 850 | 846 |
 | Intos previews Aptos (September 29, first run on the merged FF-31 mains; opf `338ddcd`, opf-render `d528be5`, opf-pptx `3c44a40`, pptx-gallery `efb63ac`) | 660 (33 near, 157 mismatch) | 850 | 830 | 782 | 850 | 850 | 850 | 849 | 733 pass, 31 near, 86 fail | 850 | 850 |
@@ -245,6 +252,98 @@ Checks passed of 850 (pass/near/fail where not all pass): geometry 850, text 830
 
 Results: [parity-results-2026-09-29-intos-default.json](gallery-support/parity/parity-results-2026-09-29-intos-default.json), [scoreboard](gallery-support/parity/PARITY-2026-09-29-intos-default.md) (before/after against the previous-mains run, which is not committed). `support-status.json` is rebuilt from this run.
 
+#### Charts measured and owner defaults (2026-09-30)
+
+Audits A and B and the parity audit re-run on the published set (FF-36): core `aedd364` (package 0.11.2), opf-render 0.11.3 `a66caa3`
+(classic charts render natively), opf-pptx 0.11.2 `0400434` (native classic chart constructs, `chart-data-adapted` diagnostics, theme colour
+references), pptx-gallery `b2238ac` (category-major chart snippets; 26 kept chart ids), audit B also opf-editor 0.10.2 `c7995ed`. Node 24.21.0, no
+Office, one local core (`register-local-opf.mjs` for the parity and audit B runs, the audit A loader for audit A). Full report, with the before and
+after tables against opf#186:
+[PARITY-2026-09-30-charts-measured.md](gallery-support/parity/PARITY-2026-09-30-charts-measured.md); results
+[parity-results-2026-09-30-charts-measured.json](gallery-support/parity/parity-results-2026-09-30-charts-measured.json). `support-status.json` is rebuilt
+from this run and the presence audits.
+
+**Parity: 707 perfect, 47 near, 96 mismatch of 850** (opf#186: 657, 37, 156). On the same heads the harness as merged scores 700, 48 and 102; the
+chart series-colour comparison makes it 703, 51 and 96; the slide-number field folding 707, 47 and 96.
+
+| Dimension | Values | perfect | near | mismatch | opf#186 |
+| --- | --- | --- | --- | --- | --- |
+| layouts | 485 | 483 | 2 | 0 | 444 / 2 / 39 |
+| color-schemes | 14 | 14 | 0 | 0 | same |
+| font-schemes | 89 + 4 legacy | 14 (11 + 3) | 18 | 61 (60 + 1) | same |
+| languages | 93 | 66 | 2 | 25 | same |
+| backgrounds | 6 (+6 withAssets) | 6 (6) | 0 (0) | 0 (0) | same |
+| narratives | 10 | 10 | 0 | 0 | same |
+| charts | 26 | 5 | 14 | 7 | 0 / 0 / 26 |
+| themes | 4 | 1 | 3 | 0 | same |
+| audiences | 14 | 14 | 0 | 0 | same |
+| tones | 7 | 7 | 0 | 0 | same |
+| socials | 10 | 10 | 0 | 0 | same |
+| headers-footers | 10 (+10 withAssets) | 10 (10) | 0 (0) | 0 (0) | 8 (8) perfect, 2 (2) near |
+| blocks | 32 | 21 | 8 | 3 | 19 / 8 / 5 |
+| image-treatments | 15 (+15 withAssets) | 15 (15) | 0 (0) | 0 (0) | same |
+| **all** | 850 | 707 | 47 | 96 | 657 / 37 / 156 |
+
+The 96 mismatches are the 86 font-resolution failures (unchanged: 60 font schemes, 1 legacy scheme, 25 languages whose script faces the modelled preview does not
+load), 7 chartex charts whose preview labels are not in the exported chart cache, and 3 blocks with a text colour mismatch.
+Attribution of the +50 perfect: the engine releases account for 43 (39 layouts that embed a native chart, 1 block, 3 charts), the chart series-colour
+comparison for 3 (2 charts, 1 block), the slide-number folding for 4 (two values, published and withAssets).
+
+**Presence (audits A and B): 427 of 819 `works`** (379 of 793 at opf#186; the 26 charts are new presence items). Every changed row:
+
+| Dimension | 2026-09-29 | Now | Why |
+| --- | --- | --- | --- |
+| charts | not measured | 19 `works`, 7 `partial` | audit B probes the 26 kept ids (below); the seven chartex ids are `partial` |
+| image-treatments | 15 `partial` (retained from 2026-09-23) | 15 `works` | the probe is redefined (owner default) and measures the merged snippets; the retained rows are dropped |
+| color-schemes | 14 `partial` | 14 `works` | opf-pptx 0.11.2 writes `a:schemeClr` references (FF-24b): no slide colour is a literal scheme slot colour any more |
+| themes | 4 `partial` | 4 `partial` | the colour reason is gone; the font availability reasons remain |
+| every other dimension | as before | as before | layouts 291 `works`, 124 `partial`, 70 `gallery-only`; blocks 31 `works`, 1 `partial`; backgrounds 6, headers-footers 10, socials 10, narratives 10, audiences 14, tones 7 `works`; font schemes and languages `partial` |
+
+**Charts.** Audit B classifies a chart id `works` when the traced preview draws that id (`data-opf-chart`) with marks matching the data, the export writes exactly the
+construct core's `mappings.openxml` records for it with the data in its caches and no `chart-data-adapted` diagnostic, and `fromPptx` returns the same
+id and data. The 19 classic ids meet all of it. The seven chartex ids do not: the preview keeps the legacy single-series sketch, the
+export writes a clustered column chart and reports `chart-data-adapted` (`chartex-fallback`), and re-import returns `column`. They are `partial`, not
+`preview-only` (the preview draws no chartex construct either). A native PowerPoint check of the classic constructs and native chartex export remain
+FF-22b.
+
+| Gallery chart | Pipeline | Preview | Export | Re-import | Parity | text | fills |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| `column` | works | column (marks match) | barChart, barDir col, grouping clustered | column | near | near | pass |
+| `stacked-column-3x` | works | stacked-column-3x (marks match) | barChart, barDir col, grouping stacked | stacked-column-3x | near | near | pass |
+| `100pct-stacked-column-3x` | works | 100pct-stacked-column-3x (marks match) | barChart, barDir col, grouping percentStacked | 100pct-stacked-column-3x | perfect | pass | pass |
+| `line` | works | line (marks match) | lineChart, grouping standard, no markers | line | near | near | pass |
+| `line-with-markers` | works | line-with-markers (marks match) | lineChart, grouping standard, markers | line-with-markers | near | near | pass |
+| `stacked-line-3x` | works | stacked-line-3x (marks match) | lineChart, grouping stacked, no markers | stacked-line-3x | near | near | pass |
+| `stacked-line-with-markers-3x` | works | stacked-line-with-markers-3x (marks match) | lineChart, grouping stacked, markers | stacked-line-with-markers-3x | near | near | pass |
+| `pie` | works | pie (marks match) | pieChart | pie | perfect | pass | pass |
+| `doughnut` | works | doughnut (marks match) | doughnutChart | doughnut | perfect | pass | pass |
+| `bar` | works | bar (marks match) | barChart, barDir bar, grouping clustered | bar | near | near | pass |
+| `stacked-bar-3x` | works | stacked-bar-3x (marks match) | barChart, barDir bar, grouping stacked | stacked-bar-3x | near | near | pass |
+| `100pct-stacked-bar-3x` | works | 100pct-stacked-bar-3x (marks match) | barChart, barDir bar, grouping percentStacked | 100pct-stacked-bar-3x | perfect | pass | pass |
+| `area` | works | area (marks match) | areaChart, grouping standard | area | near | near | pass |
+| `stacked-area-3x` | works | stacked-area-3x (marks match) | areaChart, grouping stacked | stacked-area-3x | near | near | pass |
+| `100pct-stacked-area-3x` | works | 100pct-stacked-area-3x (marks match) | areaChart, grouping percentStacked | 100pct-stacked-area-3x | perfect | pass | pass |
+| `scatter` | works | scatter (marks match) | scatterChart, scatterStyle marker | scatter | near | near | pass |
+| `radar` | works | radar (marks match) | radarChart, radarStyle standard, no markers | radar | near | near | pass |
+| `radar-with-markers` | works | radar-with-markers (marks match) | radarChart, radarStyle marker, markers | radar-with-markers | near | near | pass |
+| `filled-radar` | works | filled-radar (marks match) | radarChart, radarStyle filled, no markers | filled-radar | near | near | pass |
+| `treemap` | partial | legacy sketch | barChart, barDir col, grouping clustered (chartex-fallback) | column | mismatch | fail | pass |
+| `histogram` | partial | legacy sketch | barChart, barDir col, grouping clustered (chartex-fallback) | column | mismatch | fail | pass |
+| `pareto` | partial | legacy sketch | barChart, barDir col, grouping clustered (chartex-fallback) | column | mismatch | fail | pass |
+| `world` | partial | legacy sketch | barChart, barDir col, grouping clustered (chartex-fallback) | column | mismatch | fail | pass |
+| `box-and-whisker` | partial | legacy sketch | barChart, barDir col, grouping clustered (chartex-fallback) | column | mismatch | fail | pass |
+| `waterfall` | partial | legacy sketch | barChart, barDir col, grouping clustered (chartex-fallback) | column | mismatch | fail | pass |
+| `funnel` | partial | legacy sketch | barChart, barDir col, grouping clustered (chartex-fallback) | column | mismatch | fail | pass |
+
+**Owner defaults, recorded as "owner default 2026-09-30".**
+
+1. *Slide-number formats.* A native slide-number field plus adjacent literal text runs counts as matching when the combined text equals the preview text. `slide-number-progress`
+   (`{current} / {total}`) and `appendix-numbering` (`A-{current}`) are perfect instead of near (the harness folds the run count; per-character styles were already compared).
+2. *Image treatments.* `works` for a composed treatment means the treatment's actual design output, as the gallery snippet emits it (layout image, image blocks, image
+   background, `design.watermark`, `imageFill`), is written natively into the PPTX and re-imports. Audit A's probe now measures that (see
+   [Image treatments](#image-treatments)); frames and crops stay parity checks, and the gallery's own `native`, `composed`, `gap` labels still say what OPF v1 cannot express.
+3. *Socials.* Icons are catalog metadata only (authoring); the profile URLs render in the preview and the export and link. See [Socials](#socials).
+
 #### Merged and published heads (2026-09-29 audit)
 
 All four audits re-run on the merged mains after the 2026-09-29 merges and releases (FF-37 core#128 and pptx-gallery#46 landed during the run; the audits ran on both graphs, first on core `a386d4f` with gallery `0f6064b` and then on the heads below, with identical per-value results): core `930577d` (package 0.11.2), opf-render 0.11.2
@@ -303,13 +402,13 @@ failures (60 font schemes, 1 legacy scheme and 25 languages whose script faces t
 | socials | 10 partial | 10 works | the organization profile URL renders in the preview and the export (pptx-gallery#42, FF-34) |
 | color-schemes, font-schemes, languages, themes | partial | partial | unchanged: theme `ea`/`cs` typefaces are empty and scripts the preview does not load (FF-05, FF-19, FF-41); font-schemes moves from 7 to 28 `substitute` preview tiers because more replacement faces are now bundled |
 | narratives, audiences, tones | works | works | unchanged |
-| image-treatments | 15 partial | 15 partial (retained) | not re-measured, see below |
+| image-treatments | 15 partial | 15 partial (retained) | not re-measured then; re-measured 2026-09-30, see [above](#charts-measured-and-owner-defaults-2026-09-30) |
 
 For the editor path, audit A now compares the gallery's per-item editor builder with the published snippet: headers/footers (10 of 10) and
 blocks (32 of 32) are identical to the snippet and no longer the same document for every slug. The image-treatment, background and layout editor paths are
 not probed by audit A.
 
-**Audit A image treatments are retained, not re-measured.** The probe classifies a treatment by whether the export adds a native picture for
+**Audit A image treatments are retained, not re-measured (superseded 2026-09-30: re-measured, 15 of 15 `works`, see [above](#charts-measured-and-owner-defaults-2026-09-30)).** The probe classifies a treatment by whether the export adds a native picture for
 `design.slideImage`. The merged snippets (pptx-gallery#44) express the 15 treatments with image backgrounds, image blocks, `imageFill` and `design.watermark`, and
 carry their own image assets, so the probe would report all 15 as "no native picture" for a reason that no longer applies, and it now stops
 with an error instead. The 15 rows, and their heads (`1ad25df`, `bc436f3`, `9092954`, `f17e9ae`), are kept from the September 23 run
@@ -559,34 +658,36 @@ The definitions are the audits' own classifiers
 | `broken` | Schema-invalid, or preview, export or re-import throws; or the export contradicts the value, for example typefaces that differ from the scheme, or slide colours (`a:schemeClr` resolved through the exported theme) or backgrounds that differ from the preview (audit B). No value is `broken` on current mains. |
 | `gallery-only` | The gallery id has no core equivalent: a legacy gallery layout slug with no OPF canonical id, portable only through inline `catalogs.layouts.records` (audit A; its measured class is kept as `measuredStatus`); or a narrative/audience id missing from the core catalog (audit B). |
 
+Two dimensions read `works` with their own measured fields. Charts (audit B): the traced preview draws the id with marks matching the data, the export writes the construct
+core's `mappings.openxml` records with the data in its caches and no `chart-data-adapted` diagnostic, and re-import returns the same id and data. Image treatments
+(audit A, owner default 2026-09-30): the design output the snippet emits is written natively into the PPTX and re-imports.
+
 `support-status.json` also flags `previewOnly` for audit A values whose
 preview shows the value while the export has no native equivalent.
 
 ## Summary
 
-Presence: 793 values measured across 13 dimensions; charts have no presence
-status (the audits do not probe them; parity measures all 26). 379 values are
-`works` on the September 29 merged heads (352 at the September 23 heads, 7 at
-the first measurement); the 15 image-treatment rows keep their September 23
-measurement. Parity: 657 of 850 perfect on the same heads. The "What actually works" column keeps the first
+Presence: 819 values measured across 14 dimensions (the 26 charts joined the presence audits on 2026-09-30). 427 values are
+`works` on the September 30 published set (379 of 793 on September 29, 352 at the September 23 heads, 7 at the first measurement). Parity: 707 of 850
+perfect on the same heads. The "What actually works" column keeps the first
 measurement's wording unless marked "Now".
 
 | Dimension | Values | works | partial | schema-only | authoring-metadata | gallery-only | broken | Parity perfect | What actually works for a developer |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [Layouts](#layouts) | 485 | 291 | 124 | 0 | 0 | 70 | 0 | 444/485 | Snippets validate, preview and export. Only 30 layouts are in the core catalog. Now: re-import keeps design and emits specific diagnostics (FF-32), and `title-center` and `title-center-box` now agree between preview and export, so 291 are `works`. |
-| [Color schemes](#color-schemes) | 14 | 0 | 14 | 0 | 0 | 0 | 0 | 14/14 | Now: theme `clrScheme` 12/12 and `schemeClr` references (FF-24); preview and export colours agree slide by slide. `partial` because 42 of 55 slide colour uses still write scheme slot colours as literal `srgbClr`. |
+| [Layouts](#layouts) | 485 | 291 | 124 | 0 | 0 | 70 | 0 | 483/485 (+2 near) | Snippets validate, preview and export. Only 30 layouts are in the core catalog. Now: re-import keeps design and emits specific diagnostics (FF-32), and `title-center` and `title-center-box` now agree between preview and export, so 291 are `works`. |
+| [Color schemes](#color-schemes) | 14 | 14 | 0 | 0 | 0 | 0 | 0 | 14/14 | Now (2026-09-30): all 14 are `works`. The theme `clrScheme` matches 12/12 and slide colours are `a:schemeClr` references (opf-pptx 0.11.2, FF-24b); preview and export colours agree slide by slide. |
 | [Font schemes](#font-schemes) | 93 | 0 | 93 | 0 | 0 | 0 | 0 | 14/93 | Export without a font registry writes the chosen heading/body families for all 93. Now: 14 are perfect by parity (11 of 89 upstream and 3 of 4 legacy); the rest are near (visual-only look-alikes) or fail font resolution for script faces the modelled preview does not load. |
 | [Languages](#languages) | 93 | 0 | 93 | 0 | 0 | 0 | 0 | 66/93 | Now: slide runs carry the catalog `ooxmlLang` (93/93), right-to-left text exports `rtl` and previews right-to-left (6/6), and re-import keeps the language (93/93). `partial` on font availability and engine font-scheme derivation. Parity: 66 perfect, 2 near and 25 that fail only font resolution. |
 | [Backgrounds](#backgrounds) | 6 | 6 | 0 | 0 | 0 | 0 | 0 | 6/6 | Solid and gradient work end to end. Now: all 6 are `works`: the three pattern slugs are distinct native `pattFill` presets and `photography` carries its own asset (pptx-gallery#43). |
 | [Narratives](#narratives) | 10 | 10 | 0 | 0 | 0 | 0 | 0 | 10/10 | Now: every id resolves in core (FF-28). `works` only because the exporter-written `ppt/tags/opfDocument.xml` part changes; the preview is identical when the field is removed. |
-| [Charts](#charts) | 26 | | | | | | | 0/26 | Core catalog and gallery reduced to the 26 Aspose.Slides-supported types (FF-22, opf#121 and pptx-gallery#40). No presence status (not probed). Parity: geometry, z-order, typefaces and mapping pass for all 26; text passes for 11, fills for none (native series colours are not in the preview). Measured per type in [Charts](#charts). |
+| [Charts](#charts) | 26 | 19 | 7 | 0 | 0 | 0 | 0 | 5/26 (+14 near) | Now (2026-09-30): the 19 classic types preview the catalog construct, export the native construct core records and re-import to the same id (`works`); the 7 chartex types (treemap, histogram, pareto, world, box-and-whisker, waterfall, funnel) preview a legacy sketch and export a clustered column chart with `chart-data-adapted` (`partial`). Parity: 5 perfect, 14 near (native chart labels), 7 mismatch (chartex). Per type in [Charts](#charts). |
 | [Themes](#themes) | 4 | 0 | 4 | 0 | 0 | 0 | 0 | 1/4 | Background and fonts apply in preview and export. Now: background and colours resolve through the theme and agree with the preview; `partial` on literal scheme colours and font availability. |
 | [Audiences](#audiences) | 14 | 14 | 0 | 0 | 0 | 0 | 0 | 14/14 | Now: every id resolves in core (FF-28). `works` only because `ppt/tags/opfDocument.xml` changes; the preview is identical. |
 | [Tones](#tones) | 7 | 7 | 0 | 0 | 0 | 0 | 0 | 7/7 | `works` only because `ppt/tags/opfDocument.xml` changes; the preview is identical. |
-| [Socials](#socials) | 10 | 10 | 0 | 0 | 0 | 0 | 0 | 10/10 | Now: all 10 are `works`. The snippet adds a footer with the organization and its profile URL (pptx-gallery#42), which renders in the preview, exports as a linked native run and re-imports (FF-34). Icons are not rendered. |
-| [Headers & footers](#headers-and-footers) | 10 | 10 | 0 | 0 | 0 | 0 | 0 | 8/10 (+2 near) | Now: all 10 are `works`: native slide-number fields, the gallery options the snippet now expresses (`hideOnTitleSlide`, number and date formats, legal line; pptx-gallery#47), and the footer logo. The snippets use fixed dates, which export as static text; no gallery snippet exercises a native `datetime` field. |
-| [Content blocks](#content-blocks) | 32 | 31 | 1 | 0 | 0 | 0 | 0 | 19/32 (+8 near) | Now: `market-opportunity` and `financial-snapshot` keep their metric text in preview and export (FF-30, pptx-gallery#44 and #49); `quote-slide` still loses its `quote` payload kind on re-import. Parity: 19 perfect, 8 near (visual-only fonts), 5 mismatch (3 text colours, 2 native chart series colours). |
-| [Image treatments](#image-treatments) | 15 | 0 | 15 | 0 | 0 | 0 | 0 | 14/15 | Presence rows retained from September 23 (the probe measures `design.slideImage`, which the current snippets no longer use). Parity on the current snippets: 15 of 15 perfect, with and without a supplied image (the images are in the snippets, pptx-gallery#44); perfect means preview and export agree, and the masks, blur, duotone and device frames stay documented gaps. |
+| [Socials](#socials) | 10 | 10 | 0 | 0 | 0 | 0 | 0 | 10/10 | Now: all 10 are `works`. The snippet adds a footer with the organization and its profile URL (pptx-gallery#42), which renders in the preview, exports as a linked native run and re-imports (FF-34). Owner default 2026-09-30: icons are catalog metadata only (authoring); URLs render and link. |
+| [Headers & footers](#headers-and-footers) | 10 | 10 | 0 | 0 | 0 | 0 | 0 | 10/10 | Now: all 10 are `works` and, since the 2026-09-30 owner default, all 10 are perfect: a native slide-number field plus its adjacent literal runs is one run (`{current} / {total}`, `A-{current}`). Native slide-number fields, the gallery options the snippet expresses (`hideOnTitleSlide`, number and date formats, legal line; pptx-gallery#47), and the footer logo. The snippets use fixed dates, which export as static text; no gallery snippet exercises a native `datetime` field. |
+| [Content blocks](#content-blocks) | 32 | 31 | 1 | 0 | 0 | 0 | 0 | 21/32 (+8 near) | Now: `market-opportunity` and `financial-snapshot` keep their metric text in preview and export (FF-30, pptx-gallery#44 and #49); `quote-slide` still loses its `quote` payload kind on re-import. Parity: 21 perfect, 8 near (visual-only fonts), 3 mismatch (text colours). |
+| [Image treatments](#image-treatments) | 15 | 15 | 0 | 0 | 0 | 0 | 0 | 15/15 | Now (2026-09-30, owner default): re-measured with a probe of the snippet's actual design output; all 15 are `works` (the emitted layout image, image blocks, image background, watermark and `imageFill` are written natively and re-import). Perfect parity means preview and export agree; the masks, blur, duotone and device frames stay documented gaps (gallery labels 7 `native`, 2 `composed`, 6 `gap`). |
 
 ### Shared export gaps (every exported value, audit B)
 
@@ -661,17 +762,21 @@ slugs with no OPF canonical id (`gallery-only`; all 70 measured `partial`).
   shape placement.
 - **Fonts.** Layout snippets use the default scheme; see the registry probe
   above.
-- **Parity (FF-38).** On the September 29 merged heads, 444 of 485 perfect,
-  2 near and 39 mismatch. All 39 mismatches are layouts that embed a native
-  chart whose series colours the preview does not paint; geometry, text,
-  z-order and mapping pass for every layout.
+- **Parity (FF-38).** On the September 30 published set, 483 of 485 perfect,
+  2 near and 0 mismatch (September 29: 444, 2 and 39). The 39 that failed
+  embedded a native chart whose series colours the preview did not paint;
+  opf-render 0.11.3 draws the classic charts, so they agree now. Geometry,
+  text, z-order and mapping pass for every layout.
 - **Fixes.** FF-29 (catalog parity, export placement, re-import id or specific
   diagnostic); FF-31 (fonts).
 
 ## Color schemes
 
-14 values, all `partial`. Every id resolves in core.
+14 values, all `works` on the September 30 published set (`partial` before opf-pptx 0.11.2). Every id resolves in core.
 
+- **Now (audit B, 2026-09-30).** `works` 14: no reason is left. opf-pptx 0.11.2 writes `a:schemeClr` references, so no slide colour is a
+  literal scheme slot colour; the theme `clrScheme` matches 12/12; preview and export colours agree on every slide, backgrounds included; re-import
+  returns the colour scheme id for 14 of 14. The bullets below are the history.
 - **Works.** Preview and export apply the scheme colours and agree slot for
   slot (at least five scheme colours used per deck).
 - **Doesn't.** Colours are exported as literal `srgbClr`, not `schemeClr`, and
@@ -685,9 +790,7 @@ slugs with no OPF canonical id (`gallery-only`; all 70 measured `partial`).
   backgrounds included. 42 uses still write a scheme slot colour as literal
   `srgbClr` (for example text in `light1`), which FF-24 asks to be
   `schemeClr`. Re-import returns the colour scheme id for 14 of 14.
-- **Parity (FF-38).** 0 of 14 perfect. Fills, z-order, mapping and, since
-  FF-24, the theme check pass. Text and geometry fail on the centered-text
-  blocker.
+- **Parity (FF-38).** 14 of 14 perfect on the September 30 published set.
 - **Fixes.** FF-24 (theme colours and scheme references), FF-32 (re-import).
 
 ## Font schemes
@@ -824,50 +927,68 @@ supports:
   named replacement rather than deleting them. See
   [aspose-chart-types.md](aspose-chart-types.md).
 - **Gallery half, merged.** [pptx-gallery#40](https://github.com/Data-Advantage/pptx-gallery/pull/40) (`23f9216`) reduces
-  `data/charts.json` from 76 to the same 26 types.
-- **Follow-up.** FF-22b covers native `chartex` export and full renderer
-  coverage for the kept types.
+  `data/charts.json` from 76 to the same 26 types; `b2238ac` (pptx-gallery#63) gives the snippets category-major data.
+- **Engines.** opf-render 0.11.3 previews the 19 classic constructs natively
+  (`data-opf-chart` on the chart group); opf-pptx 0.11.2 exports them as native
+  constructs and reports the seven chartex ids as a `chart-data-adapted`
+  fallback.
+- **Follow-up.** FF-22b covers native `chartex` export and renderer coverage for
+  the seven chartex types, and a native PowerPoint check of the classic constructs.
 
-The presence audits do not probe charts; parity measures all 26 (published
-snippet, no assets). Measured on the September 29 merged heads (core `930577d`, opf-render `021cca0`, opf-pptx `0d15f1c`, pptx-gallery `0b2dec8`), per type:
+Measured on the September 30 published set (core `aedd364`, opf-render `a66caa3`, opf-pptx `0400434`, pptx-gallery `b2238ac`) by audit B (pipeline)
+and the parity audit, per type:
 
-| Gallery chart | Parity | text | fills |
-| --- | --- | --- | --- |
-| `column` | mismatch | near (labels wrapped in preview) | fail (series colours not in preview (6)) |
-| `stacked-column-3x` | mismatch | fail (preview labels not in the chart cache) | fail (series colours not in preview (6)) |
-| `100pct-stacked-column-3x` | mismatch | fail (preview labels not in the chart cache) | fail (series colours not in preview (6)) |
-| `line` | mismatch | near (labels wrapped in preview) | fail (series colours not in preview (10)) |
-| `line-with-markers` | mismatch | pass | fail (series colours not in preview (11)) |
-| `stacked-line-3x` | mismatch | fail (preview labels not in the chart cache) | fail (series colours not in preview (11)) |
-| `stacked-line-with-markers-3x` | mismatch | fail (preview labels not in the chart cache) | fail (series colours not in preview (11)) |
-| `pie` | mismatch | fail (preview labels not in the chart cache) | fail (series colours not in preview (1)) |
-| `doughnut` | mismatch | fail (preview labels not in the chart cache) | fail (series colours not in preview (1)) |
-| `bar` | mismatch | near (labels wrapped in preview) | fail (series colours not in preview (4)) |
-| `stacked-bar-3x` | mismatch | fail (preview labels not in the chart cache) | fail (series colours not in preview (4)) |
-| `100pct-stacked-bar-3x` | mismatch | fail (preview labels not in the chart cache) | fail (series colours not in preview (4)) |
-| `area` | mismatch | near (labels wrapped in preview) | fail (series colours not in preview (10)) |
-| `stacked-area-3x` | mismatch | fail (preview labels not in the chart cache) | fail (series colours not in preview (11)) |
-| `100pct-stacked-area-3x` | mismatch | fail (preview labels not in the chart cache) | fail (series colours not in preview (11)) |
-| `scatter` | mismatch | fail (preview labels not in the chart cache) | fail (series colours not in preview (6)) |
-| `radar` | mismatch | pass | fail (series colours not in preview (7)) |
-| `radar-with-markers` | mismatch | pass | fail (series colours not in preview (7)) |
-| `filled-radar` | mismatch | pass | fail (series colours not in preview (7)) |
-| `treemap` | mismatch | pass | fail (series colours not in preview (5)) |
-| `histogram` | mismatch | pass | fail (series colours not in preview (11)) |
-| `pareto` | mismatch | pass | fail (series colours not in preview (11)) |
-| `world` | mismatch | pass | fail (series colours not in preview (11)) |
-| `box-and-whisker` | mismatch | pass | fail (series colours not in preview (11)) |
-| `waterfall` | mismatch | pass | fail (series colours not in preview (7)) |
-| `funnel` | mismatch | pass | fail (series colours not in preview (4)) |
+| Gallery chart | Pipeline | Preview | Export | Re-import | Parity | text | fills |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| `column` | works | column (marks match) | barChart, barDir col, grouping clustered | column | near | near | pass |
+| `stacked-column-3x` | works | stacked-column-3x (marks match) | barChart, barDir col, grouping stacked | stacked-column-3x | near | near | pass |
+| `100pct-stacked-column-3x` | works | 100pct-stacked-column-3x (marks match) | barChart, barDir col, grouping percentStacked | 100pct-stacked-column-3x | perfect | pass | pass |
+| `line` | works | line (marks match) | lineChart, grouping standard, no markers | line | near | near | pass |
+| `line-with-markers` | works | line-with-markers (marks match) | lineChart, grouping standard, markers | line-with-markers | near | near | pass |
+| `stacked-line-3x` | works | stacked-line-3x (marks match) | lineChart, grouping stacked, no markers | stacked-line-3x | near | near | pass |
+| `stacked-line-with-markers-3x` | works | stacked-line-with-markers-3x (marks match) | lineChart, grouping stacked, markers | stacked-line-with-markers-3x | near | near | pass |
+| `pie` | works | pie (marks match) | pieChart | pie | perfect | pass | pass |
+| `doughnut` | works | doughnut (marks match) | doughnutChart | doughnut | perfect | pass | pass |
+| `bar` | works | bar (marks match) | barChart, barDir bar, grouping clustered | bar | near | near | pass |
+| `stacked-bar-3x` | works | stacked-bar-3x (marks match) | barChart, barDir bar, grouping stacked | stacked-bar-3x | near | near | pass |
+| `100pct-stacked-bar-3x` | works | 100pct-stacked-bar-3x (marks match) | barChart, barDir bar, grouping percentStacked | 100pct-stacked-bar-3x | perfect | pass | pass |
+| `area` | works | area (marks match) | areaChart, grouping standard | area | near | near | pass |
+| `stacked-area-3x` | works | stacked-area-3x (marks match) | areaChart, grouping stacked | stacked-area-3x | near | near | pass |
+| `100pct-stacked-area-3x` | works | 100pct-stacked-area-3x (marks match) | areaChart, grouping percentStacked | 100pct-stacked-area-3x | perfect | pass | pass |
+| `scatter` | works | scatter (marks match) | scatterChart, scatterStyle marker | scatter | near | near | pass |
+| `radar` | works | radar (marks match) | radarChart, radarStyle standard, no markers | radar | near | near | pass |
+| `radar-with-markers` | works | radar-with-markers (marks match) | radarChart, radarStyle marker, markers | radar-with-markers | near | near | pass |
+| `filled-radar` | works | filled-radar (marks match) | radarChart, radarStyle filled, no markers | filled-radar | near | near | pass |
+| `treemap` | partial | legacy sketch | barChart, barDir col, grouping clustered (chartex-fallback) | column | mismatch | fail | pass |
+| `histogram` | partial | legacy sketch | barChart, barDir col, grouping clustered (chartex-fallback) | column | mismatch | fail | pass |
+| `pareto` | partial | legacy sketch | barChart, barDir col, grouping clustered (chartex-fallback) | column | mismatch | fail | pass |
+| `world` | partial | legacy sketch | barChart, barDir col, grouping clustered (chartex-fallback) | column | mismatch | fail | pass |
+| `box-and-whisker` | partial | legacy sketch | barChart, barDir col, grouping clustered (chartex-fallback) | column | mismatch | fail | pass |
+| `waterfall` | partial | legacy sketch | barChart, barDir col, grouping clustered (chartex-fallback) | column | mismatch | fail | pass |
+| `funnel` | partial | legacy sketch | barChart, barDir col, grouping clustered (chartex-fallback) | column | mismatch | fail | pass |
 
-0 of 26 are perfect. Geometry, z-order, slide size, typefaces (FF-08), re-import,
-theme, font resolution and mapping pass for all 26. Text passes for 11, is near for
-4 (a native chart lays out its own labels, so a label the preview wraps is one line in the
-cache) and fails for the 11 stacked, pie, doughnut and scatter types whose
-preview labels ("Value 1", "Value 2", ...) are not in the chart caches. Fills fail for all 26: the native chart
-writes series colours that the preview does not paint, the same cause as the
-39 layouts and 2 blocks that embed a chart. Per-chart parity is also in `support-status.json`
-`parityOnly`. Earlier readings (76 charts, typefaces failing) predate the reduction and FF-08.
+**Pipeline (audit B, 2026-09-30): 19 `works`, 7 `partial`.**
+
+- **Works (19).** The traced preview draws the id (`data-opf-chart` equals the id, no "No chart data", no legacy sketch) and its marks match the data (bars: rows x series;
+  one polyline per line series and one circle per point with markers; one area or radar path per series; one slice per positive pie or doughnut value; one circle per scatter
+  point). The export has one chart part whose element, `barDir`, `grouping`, marker, `radarStyle` and `scatterStyle` equal core's `mappings.openxml` for the id, the
+  series values and labels equal the source data, the workbook is embedded and no diagnostic is reported. `fromPptx` returns the same id and data.
+- **Partial (7): the chartex ids** `treemap`, `histogram`, `pareto`, `world`, `box-and-whisker`, `waterfall`, `funnel`. The preview keeps the legacy single-series
+  sketch (opf-render draws no chartex construct), the export writes a clustered column chart of the data and reports `chart-data-adapted` (`chartex-fallback`), and
+  re-import returns `column`. The data is not lost, but the chart the id names is neither previewed nor exported. Not `preview-only`: the preview does not draw the
+  construct either.
+
+**Parity (FF-38): 5 perfect, 14 near, 7 mismatch of 26** (September 29: 0, 0, 26). Geometry, fills, z-order, slide size, typefaces (FF-08), re-import, theme, font
+resolution and mapping pass for all 26. The five perfect charts are `100pct-stacked-column-3x`, `100pct-stacked-bar-3x`, `100pct-stacked-area-3x`, `pie` and `doughnut`. The other 14
+classic charts are near for one reason: a native chart lays out its own labels, so a label the preview wraps is one line in the chart cache. The 7 chartex charts
+fail text: the legacy sketch's labels ("Q1 2024", ...) are not in the exported column chart's caches.
+
+**The harness change (2026-09-30).** Series colours are compared as each construct paints them: a line-kind series (line, stacked line, radar, radar with markers) on its
+stroke, a pie or doughnut on its slice fills with the 0.75 pt `F9F9F9` slice border that PptxGenJS writes not counted as a series colour, every other series on its
+fill. No tolerance changed. With the harness as merged, the 26 charts score 3 perfect, 11 near and 12 mismatch on these heads; with the change, 5, 14 and 7. The 39 layouts
+and 2 blocks that embed a native chart moved from series-colour failures to perfect with the engines (opf-render 0.11.3), not with the harness. Per-chart parity is also in
+`support-status.json` (charts are items since 2026-09-30, no longer `parityOnly`). Earlier readings (76 charts, typefaces failing, series colours failing for all 26) predate the
+reduction, FF-08 and the native classic constructs.
 
 ## Themes
 
@@ -889,7 +1010,8 @@ writes series colours that the preview does not paint, the same cause as the
   scheme slot colour as literal `srgbClr` (2 uses each), and fonts that are
   not bundled (`minimal` previews through Carlito). Re-import returns the
   theme id for 4 of 4.
-- **Parity (FF-38).** 0 of 4 perfect. Geometry and text pass for 3 of 4.
+- **Now (audit B, 2026-09-30).** Still `partial` 4, and the colour reasons are gone (opf-pptx 0.11.2 writes `a:schemeClr`); the fonts that are not bundled remain.
+- **Parity (FF-38).** 1 of 4 perfect and 3 near (visual-only fonts) on the September 30 published set.
 - **Fixes.** FF-24, FF-31, FF-32.
 
 ## Audiences
@@ -921,7 +1043,7 @@ writes series colours that the preview does not paint, the same cause as the
 
 ## Socials
 
-10 values, all `works` on the September 29 merged heads (audit B; `authoring-metadata`
+10 values, all `works` on the September 30 published set (audit B; `authoring-metadata`
 at the first measurement, `partial` before pptx-gallery#42). Every id resolves in core.
 
 - **Role.** Decision recorded for FF-34 (pptx-gallery#42): platform records are URL
@@ -932,7 +1054,10 @@ at the first measurement, `partial` before pptx-gallery#42). Every id resolves i
   the export, is linked in the PPTX and re-imports. Removing the socials changes both
   the preview and the exported slide XML (audit B, `handleInPreview` and
   `handleInExport` true for 10 of 10).
-- **Not done.** Icons are not rendered.
+- **Icons (owner default 2026-09-30).** Icons are catalog metadata only: the
+  social-platform records keep glyphs and brand colours for authoring, and no
+  engine draws them. What renders and links is the profile URL. This is the
+  recorded FF-34 decision.
 - **Parity (FF-38).** 10 of 10 perfect.
 - **Fixes.** FF-34.
 
@@ -960,11 +1085,13 @@ of scope.
   FF-12, not measured here.
 - **Editor.** `/editor?config=headers-footers:<slug>` builds the same document as
   the snippet (pptx-gallery#48; 10 of 10 identical, and the slugs differ).
-- **Parity (FF-38).** 8 of 10 perfect and 2 near, with or without assets. The two
-  near values (`slide-number-progress`, `appendix-numbering`) have a slide number
-  that is a native field followed by literal text, which is two runs where the
-  preview draws one. Z-order, which failed for all 10 at the first measurement,
-  passes.
+- **Parity (FF-38).** 10 of 10 perfect, with or without assets (owner default
+  2026-09-30). `slide-number-progress` (`{current} / {total}`) and
+  `appendix-numbering` (`A-{current}`) write the slide number as a native field
+  next to literal text, which is two elements where the preview draws one run;
+  a native slide-number field plus adjacent literal runs now counts as one run
+  when the combined text equals the preview text (they were near on September 29).
+  Z-order, which failed for all 10 at the first measurement, passes.
 - **Fixes.** FF-27, FF-33.
 
 ## Content blocks
@@ -979,19 +1106,23 @@ of scope.
   diagnostic.
 - **Editor.** `/editor?config=blocks:<slug>` builds the same document as the
   snippet (pptx-gallery#48; 32 of 32 identical, and the slugs differ).
-- **Parity (FF-38).** 19 of 32 perfect, 8 near (visual-only fonts), 5 mismatch:
-  `pitch-deck-intro`, `section-break` and `closing-cta` differ in a text colour;
-  `financial-snapshot` and `data-story-insight` embed a native chart whose series
-  colours the preview does not paint.
+- **Parity (FF-38).** 21 of 32 perfect, 8 near (visual-only fonts), 3 mismatch:
+  `pitch-deck-intro`, `section-break` and `closing-cta` differ in a text colour.
+  `financial-snapshot` and `data-story-insight`, which embed a native chart (a
+  line and a bar series), were mismatches on September 29 and are perfect now.
 - **Fixes.** FF-28, FF-30, FF-33.
 
 ## Image treatments
 
-15 values. **Presence rows are retained from the September 23 measurement** (all
-`schema-only`, or `partial` with a real image supplied); audit A cannot classify
-the merged snippets, see
-[Merged and published heads](#merged-and-published-heads-2026-09-29-audit).
+15 values, all `works` on the September 30 published set (owner default 2026-09-30; `schema-only` or `partial` on the retained September 23 rows).
 
+- **What `works` means (owner default 2026-09-30).** The treatment's actual design output, as the gallery snippet emits it (a layout image, image blocks, an
+  image slide background, `design.watermark`, `imageFill`), is written natively into the PPTX and re-imports. Audit A's probe
+  ([`image-treatment.mjs`](gallery-support/audit-a/scripts/image-treatment.mjs), with negative controls) checks that the snippet's declared images equal the
+  images the traced preview draws; that the slide has that many native image references (`p:pic`, or the `a:blipFill` of the slide, layout or master background), each
+  resolving to an image part with the preview's bytes; that a watermark is the picture `OPF watermark` with `a:alphaModFix` equal to its opacity and an image background's
+  opacity is its blip's `a:alphaModFix`; and that `fromPptx` returns the same images and bytes and keeps the watermark, the image background with its opacity and
+  `imageFill`. Frames and crops are parity checks (0.02 pt).
 - **What the merged snippets do (pptx-gallery#44).** The treatments no longer
   reference a missing `asset:hero`: each snippet carries its image (`hero`, plus
   `cutout` for `cutout-subject`) and expresses the treatment with the closest OPF v1
@@ -1004,15 +1135,28 @@ the merged snippets, see
   (`masked-shape`, `circular-crop`, `rounded-card`, `duotone`, `background-blur`,
   `device-frame`), because OPF v1 has no image masks, corner radii, filters or device
   frames; the gap items keep the nearest composition and say so in `opfGapNote`.
+  Under the owner's definition a gap item is `works` when that nearest composition is
+  native: `works` does not mean the mask, blur, duotone or device frame is applied. The
+  gallery label and `opfGapNote` are the statement of that gap (they are kept in
+  [`audit-a/results.json`](gallery-support/audit-a/results.json) under `gallery`).
+- **Measured (audit A, 2026-09-30).** 15 of 15 `works`, with and without a supplied
+  image (the snippets carry their own images): the preview draws the declared images,
+  the export has the same number of native pictures or background blips with the same
+  bytes (the watermark at `alphaModFix` 12000, `duotone` and `background-blur`
+  backgrounds at 55000 and 35000), and re-import returns the images, the
+  backgrounds with their opacity, the watermark and `imageFill`. Seven re-import a crop
+  with the `unsupported-image-crop` diagnostic (`side-by-side`, `masked-shape`,
+  `circular-crop`, `rounded-card`, `image-strip`, `collage-grid`, `cinematic-crop`): the
+  image and `imageFill` come back, and the crop rectangle is not a block property. The 15
+  snippets are 15 distinct OPF documents, and the editor route
+  (`/editor?config=image-treatments:<slug>`, the per-item builder) equals the snippet for 15 of 15.
 - **Export.** Pictures export natively (`p:pic`, `a:blipFill` backgrounds), and the
   watermark exports as one `OPF watermark` picture with `alphaModFix` opacity
   (opf-pptx#104, released as 0.11.1).
 - **Parity (FF-38).** 15 of 15 perfect, with and without a supplied image, on the
-  September 29 merged heads: the preview images, their frames and crops, the
+  September 30 published set: the preview images, their frames and crops, the
   bytes and the z-order agree with the export. Perfect does not mean the effect is
   supported: masks, blur, duotone and frames are the documented gaps above.
-- **Editor.** `/editor?config=image-treatments:<slug>` builds the same document as
-  the snippet (pptx-gallery#48, per its tests); audit A did not re-probe it.
 - **Fixes.** FF-26, FF-33.
 
 ## Re-running

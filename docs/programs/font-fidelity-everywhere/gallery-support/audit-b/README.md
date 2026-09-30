@@ -73,3 +73,19 @@ FF-36 audit update (heads in `results.json`):
 - Every reason is conditional on a measured field. `works` needs an empty
   reason list in every dimension. `sharedExportGaps` lists only the gaps that
   every export in the run shares.
+
+## Charts (FF-36, 2026-09-30)
+
+Audit B now also measures the 26 kept gallery chart ids (`charts.md`), using the gallery's own `buildChartOpfSnippet` (added to
+`scripts/snippet-entry.ts`). `scripts/audit.mjs` (Charts) probes each snippet three ways, and `scripts/summarize.mjs` classifies:
+
+- **Preview.** A traced render (`trace: true`): the chart group's `data-opf-chart` equals the id, the text is not "No chart data", the
+  legacy single-series sketch is not what was drawn, and the marks match the data (bars, polylines, markers, areas, slices, points).
+- **Export.** One chart part on slide 1 whose element, `barDir`, `grouping`, marker, `radarStyle` and `scatterStyle` equal the core
+  catalog record's `mappings.openxml`; series values and category labels (an XY chart's X values) equal the source data; an embedded
+  workbook; no `chart-data-adapted` diagnostic.
+- **Re-import.** `fromPptx` returns one chart block with the same id and data.
+
+A classic id with no reason is `works`; a chartex id (treemap, histogram, pareto, world, box-and-whisker, waterfall, funnel) is
+`partial`: the preview keeps the legacy sketch, the export writes a clustered column chart and reports `chart-data-adapted`
+(`chartex-fallback`), and re-import returns `column`. Parity (series colours, label text) is measured separately by the FF-38 harness.

@@ -21,7 +21,7 @@ const { loadOfficeFontRegistry } = await import(pathToFileURL(path.join(RENDER, 
 const { toPptx, fromPptx } = await import(pathToFileURL(path.join(PPTX, 'src/index.js')));
 const preq = createRequire(path.join(PPTX, 'package.json'));
 const { unzipSync } = preq('fflate');
-const { probeSlideImages } = await import(pathToFileURL(path.join(HERE, 'slide-image.mjs')));
+const { probeTreatmentImages, declaredImages } = await import(pathToFileURL(path.join(HERE, 'image-treatment.mjs')));
 
 // 1. Bundle the gallery's own snippet builders (same approach as core scripts/test-gallery-snippets.mjs).
 const creq = createRequire(path.join(CORE, 'packages/javascript/package.json'));
@@ -97,7 +97,7 @@ const codes = (d) => uniq((d ?? []).map((x) => x.code));
 const svgHas = (svg, s) => svg.includes(esc(s)) || svg.includes(s);
 // Asset references ("asset:<id>") that the snippet does not define under assets. The published snippets became self-contained
 // in pptx-gallery#43/#44/#47, so this is measured per snippet instead of assumed.
-const missingAssets = (doc) => uniq([...JSON.stringify(doc).matchAll(/"asset:([w-]+)"/g)].map((m) => m[1])).filter((id) => !doc.assets?.[id]);
+const missingAssets = (doc) => uniq([...JSON.stringify(doc).matchAll(/"asset:([\w-]+)"/g)].map((m) => m[1])).filter((id) => !doc.assets?.[id]);
 
 // Evidence index (check 6): native PowerPoint evidence directories + compatibility matrix.
 const evidence = [];
@@ -188,51 +188,47 @@ if (want('backgrounds')) {
 function pick(out) { const v = out.variants.published; return { class: v.class, reasons: v.reasons, checks: v.checks, withAssetsClass: out.variants.withAssets?.class ?? null }; }
 
 // ---------- IMAGE TREATMENTS ----------
+// Owner default 2026-09-30: "works" for a treatment means the design output the gallery snippet emits (layout image, image blocks,
+// image background, design.watermark, imageFill, ...) is written natively into the PPTX and re-imports (image-treatment.mjs).
 if (want('image-treatments')) {
   const items = (await data('image-treatments')).items.slice(0, LIMIT);
-  // The probe below measures design.slideImage. pptx-gallery#44 builds the treatments from other structures (image backgrounds,
-  // image blocks, watermark), so it would report every treatment as having no native picture. It is not measured here: run with
-  // ONLY=layouts,blocks,backgrounds,headers-footers and merge the retained rows (README).
-  if (items.some((i) => !JSON.parse(snippets.buildImageTreatmentOpfSnippet(i)).design?.slideImage)) throw new Error('audit A image-treatments probe assumes design.slideImage, which the gallery snippets no longer use; see README (retained rows)');
-  const designs = {};
-  for (const item of items) designs[item.slug] = JSON.stringify(JSON.parse(snippets.buildImageTreatmentOpfSnippet(item)).design);
-  const editorSame = uniq(items.map((i) => JSON.stringify(JSON.parse(snippets.buildOpfSnippet('image-treatments', i.slug)).design))).length === 1;
+  const bare = (doc) => { const d = clone(doc); delete d.name; delete d.description; delete d.tags; delete d.extras; return JSON.stringify(d); };
+  const docs = Object.fromEntries(items.map((i) => [i.slug, JSON.parse(snippets.buildImageTreatmentOpfSnippet(i))]));
+  const editorDocs = Object.fromEntries(items.map((i) => [i.slug, snippets.buildCatalogItemOpfSnippet('image-treatments', i.slug)]));
+  const editorSame = uniq(items.map((i) => JSON.stringify(JSON.parse(editorDocs[i.slug]).design))).length === 1;
   for (const item of items) {
-    const doc = JSON.parse(snippets.buildImageTreatmentOpfSnippet(item));
-    const out = { dimension: 'image-treatments', id: item.slug, opfMapping: doc.design, gallery: { opfSupport: item.opfSupport ?? null, opfGapNote: item.opfGapNote ?? null }, variants: {} };
-    for (const [vn, vdoc] of Object.entries({ published: doc, withAssets: withAssets(doc) })) {
-      const base = clone(vdoc); delete base.design.slideImage; delete base.design.imageFill;
+    const doc = docs[item.slug];
+    const out = { dimension: 'image-treatments', id: item.slug, opfMapping: { design: doc.design ?? null, images: declaredImages(doc).map((i) => i.where) }, gallery: { opfSupport: item.opfSupport ?? null, opfGapNote: item.opfGapNote ?? null }, variants: {} };
+    for (const [vn, vdoc] of Object.entries({ published: doc, withAssets: { ...withAssets(doc), assets: { ...withAssets(doc).assets, ...(doc.assets ?? {}) } } })) {
+      // withAssets keeps the snippet's own assets and adds the sample raster for hero, cover and logo where the snippet has none.
+      const base = clone(vdoc); if (base.design) { delete base.design.background; delete base.design.watermark; delete base.design.imageFill; }
       const m = await measure(vdoc, base), checks = commonChecks(m), reasons = [];
-      checks.catalog = { pass: true, note: 'no OPF catalog kind; treatment maps to design.slideImage.position + design.imageFill enums' };
-      if (m.x.ok && m.xb?.ok) {
-        const s = m.x.slides[0], b = m.xb.slides[0];
-        // FF-26 exports design.slideImage as one picture named "OPF slide image slides.N". Detect it by name and
-        // image relationship (the baseline keeps the slide's own image as a picture, so a picture count proves
-        // nothing), then compare its visible frame and crop with the traced preview at 0.02 pt (as parity.mjs).
+      checks.catalog = { pass: true, note: 'no OPF catalog kind; the treatment is the design output the snippet emits' };
+      if (m.x.ok) {
         const traced = render(clone(vdoc), { trace: true });
-        const probe = traced.ok ? probeSlideImages({ svgs: traced.svgs, resolved: traced.resolved, files: unzipSync(m.x.bytes) }) : { native: false, expected: 0, found: 0, slides: [], reasons: [`traced preview threw ${traced.error?.code}`] };
+        const probe = traced.ok ? probeTreatmentImages({ doc: vdoc, svgs: traced.svgs, files: unzipSync(m.x.bytes), imported: m.im.ok ? m.im.doc : null })
+          : { native: false, expected: 0, declared: 0, found: 0, slides: [], reasons: [`traced preview threw ${traced.error?.code}`], reimport: { ok: false, missing: ['no traced preview'] } };
+        checks.render.effect = probe.expected > 0;
         checks.export.native = probe.native;
-        checks.export.nativeDetail = { pics: count(s, /<p:pic>/g), basePics: count(b, /<p:pic>/g), srcRect: count(s, /<a:srcRect/g), bgBlip: /<p:bg>[\s\S]*a:blipFill/.test(s), slideImagePictures: probe.found, previewSlideImages: probe.expected, slides: probe.slides };
+        checks.export.nativeDetail = { previewImages: probe.expected, declaredImages: probe.declared, nativeMatched: probe.found, slides: probe.slides };
         reasons.push(...probe.reasons);
-      } else checks.export.native = null;
+        checks.reimport.images = probe.reimport.images;
+        checks.reimport.retained = probe.reimport.ok && probe.reimport.missing.length === 0;
+        checks.reimport.pass = m.im.ok && checks.reimport.retained;
+        for (const x of probe.reimport.missing) reasons.push(checks.reimport.diagnostics.length ? `${x} (diagnostics: ${checks.reimport.diagnostics.join(',')})` : `${x} (no diagnostic)`);
+      } else { checks.export.native = null; checks.reimport.retained = false; checks.reimport.pass = false; }
       // A probe that did not run proves nothing: classify() lets native === null through, so it must carry a reason.
-      if (checks.export.native === null) reasons.push(`slide-image probe not run (value export ${m.x.ok ? 'ok' : 'failed'}, baseline export ${m.xb?.ok ? 'ok' : 'failed'})`);
-      const impStr = m.im.ok ? JSON.stringify(m.im.doc) : '';
-      checks.reimport.retained = m.im.ok ? /slideImage/.test(impStr) : false;
-      checks.reimport.imagesImported = m.im.ok ? count(impStr, /"image"/g) : 0;
-      checks.reimport.pass = m.im.ok && (checks.reimport.retained || checks.reimport.diagnostics.length > 0);
-      checks.evidence = nativeEvidence(/slideImage|imageFill|native-picture/);
-      if (checks.render.effect === false) reasons.push('preview identical with and without design.slideImage/imageFill');
-      if (checks.export.native === false) reasons.push('export adds no native picture for design.slideImage');
-      if (!checks.reimport.retained) reasons.push(checks.reimport.diagnostics.length ? `re-import drops design.slideImage (diagnostics: ${checks.reimport.diagnostics.join(',')})` : 're-import drops design.slideImage silently');
+      if (checks.export.native === null) reasons.push(`image probe not run (export ${m.x.ok ? 'ok' : 'failed'})`);
+      checks.evidence = nativeEvidence(/imageFill|native-picture|OPF watermark|alphaModFix/);
       if (checks.render.diagnostics.length) reasons.push(`preview diagnostics: ${checks.render.diagnostics.join(',')}`);
       if (checks.export.diagnostics.length) reasons.push(`export diagnostics: ${checks.export.diagnostics.join(',')}`);
-      const twins = Object.entries(designs).filter(([s, v]) => s !== item.slug && v === designs[item.slug]).map(([s]) => s);
-      if (twins.length) reasons.push(`treatment collapses to ${JSON.stringify({ position: doc.design.slideImage.position, fill: doc.design.imageFill })}, identical OPF to ${twins.join(', ')}`);
-      if (vn === 'published') reasons.push('gallery snippet references asset:hero without an assets entry');
+      const twins = items.filter((i) => i.slug !== item.slug && bare(docs[i.slug]) === bare(doc)).map((i) => i.slug);
+      if (twins.length) reasons.push(`the snippet is the same OPF document as ${twins.join(', ')}`);
+      if (vn === 'published') for (const id of missingAssets(doc)) reasons.push(`gallery snippet references asset:${id} without an assets entry`);
       out.variants[vn] = { checks, ...classify({ checks, reasons }) };
     }
     out.editorPathSlugAgnostic = editorSame;
+    out.editorMatchesSnippet = JSON.stringify(JSON.parse(editorDocs[item.slug])) === JSON.stringify(doc);
     Object.assign(out, pick(out));
     results.push(out);
   }
