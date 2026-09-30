@@ -1,7 +1,7 @@
 {
   "$comment": "Authored input for scripts/build-font-tracker.mjs. Derived fields (policy, bundle, measurements, parity) are never written here; this file holds owner-plan text, reconciled next actions, evidence keys, classes, scripts, style rules and in-flight candidates. Regenerate with: node scripts/build-font-tracker.mjs",
   "asOf": "2026-09-29",
-  "paritySource": "docs/programs/font-fidelity-everywhere/gallery-support/parity/parity-results-2026-09-29-intos-default.json",
+  "paritySource": "docs/programs/font-fidelity-everywhere/gallery-support/parity/parity-results-2026-09-30-gallery-font-host.json",
   "manifestSnapshot": "docs/programs/font-fidelity-everywhere/font-tracker.render-manifest.json",
   "measurementReport": "docs/evidence/font-replacements-20260923/report.json",
   "ownerPlan": {
@@ -47,11 +47,11 @@
   },
   "reconciliation": [
     "Aptos family (the owner's review predates this). Intos, Intos Display, Intos Narrow and Intos Serif measured 0.000% mean and maximum width delta in all four styles against Aptos 2.01, with equal vertical metrics and original (Inter-derived; serif Gelasio-derived) outlines under OFL-1.1 with no Reserved Font Name. They are the metric routes in policy (opf#166), vendored in opf-render (#54, `d528be5`, pinned commit `fef9315c`) and loaded lazily by browser hosts (opf-editor#42). Independently re-verified for Aptos, Aptos Display and Aptos Narrow; Aptos Serif was measured from Microsoft's Aptos Fonts download. The parity run on the merged mains passes all 704 Aptos and Aptos Display values, so they no longer lead the priority queue. Node and browser verification is recorded for the family; the editor playground test covers the Aptos scheme (Aptos and Aptos Display); the gallery editor waits for a release. The owner's \"no verified compatible replacement\" is superseded.",
-    "The committed parity run (opf#175, on the merged mains opf `338ddcd4` and opf-render `d528be5`) is 660 perfect, 33 near and 157 mismatch over 850 values, with fontResolution 733 pass, 31 near and 86 fail. Earlier runs (5 perfect, then 25) are history.",
+    "The committed parity run (opf#175 first, on the merged mains opf `338ddcd4` and opf-render `d528be5`: 660 perfect, 33 near and 157 mismatch, with fontResolution 733 pass, 31 near and 86 fail) is now the 2026-09-30 run on the published engines with the gallery editor font host modelled: 729 perfect, 108 near and 13 mismatch over 850 values, with fontResolution 755 pass, 92 near and 3 fail. Earlier runs are history.",
     "Georgia now has a metric tier: Gelasio with liga and clig disabled (opf#163, opf-render#49, including the raster ZWNJ fix). The parity run on the merged mains reports it as a metric substitute for all 6 values.",
     "Open families are now vendored from unmodified upstream or npm packages (opf-render#50): Open Sans, Montserrat (including 900), Poppins, Bebas Neue, PT Serif, Lora, Merriweather Sans, Source Sans 3 (with the Source Sans Pro alias), Red Hat Display (300, 400, 700) and Red Hat Text (400, 700). Raleway and Playfair Display are not bundled because resvg ignores the wght axis. The owner's \"bundle\" rows for the bundled families become verification work; FF-43 then bundled Anton, Archivo Narrow, Barlow, Bitter, EB Garamond, Figtree, Libre Caslon Text and Work Sans and completed Red Hat (see the FF-43 note below). The remaining bundling work is Liberation Mono, Sans and Serif, Playfair Display and Raleway.",
     "Carlito is vendored as unmodified google/fonts files (opf-render#58) because its Reserved Font Name applies. Licenses, Reserved Font Names and no-hotlink rules are guarded in core and the renderer (opf#165, opf-render#53).",
-    "Script fonts: previews load script faces when the `scripts` option is passed (opf-render#55, opf-editor#40) and fall back per character to Noto Sans (opf-render#57). The parity run records 88 family uses as `missing` because it models a host without the script pack; loading is not verification per family.",
+    "Script fonts: previews load script faces when the `scripts` option is passed (opf-render#55, opf-editor#40) and fall back per character to Noto Sans (opf-render#57). The parity run of 2026-09-30 models the gallery editor host (its font gate loads the script and vendored faces a document needs), so the 88 family uses it used to record as `missing` now resolve to their Noto route; loading is not verification per family. Still failing there: Raleway and Playfair Display (not bundled; the editor draws Roboto) and the Noto Sans Mongolian face, which cannot shape any text.",
     "Hosts are recorded separately. The default Node registry (`prepareNodeFonts`) uses the `base` pack (Roboto and Roboto Mono only); the office-pack faces (Carlito, Arimo, Tinos, Cousine, Gelasio, Caladea, Intos) and the open pack load only when `pack: 'office'` is requested, and script faces only when the `scripts` option is passed. Browser hosts and the opf-editor playground load the 33 eager base and office faces and now load the vendored open pack and Intos lazily, on demand (opf-render#54, opf-editor#42). The gallery editor (a vendored opf-editor bundle) gets them only with a release that includes opf-editor#42, so it is recorded as pending, not as a gap in the family's status.",
     "Gallery cards are a different host from the gallery editor. pptx-gallery self-hosts preview webfonts (pptx-gallery#53 and #54; replacement data in #51) for 49 families, including Anton, Barlow, Bitter, EB Garamond, Figtree, Libre Caslon Text, Work Sans, Playfair Display, Raleway, Open Sans and Montserrat, as upright regular and bold faces from pinned @fontsource packages or unmodified upstream files. The tracker reads that list from a pinned snapshot (`galleryCards`). Card previews do not change the editor's bundle, and no per-family card verification exists.",
     "fontResolution treats a policy look-alike as near, not fail, when the PPTX names the selected family (opf#159). Parity harness fixes merged in opf#164 and opf#168. The value set is 850 after pptx-gallery#40 removed 50 unsupported chart types; Aptos and Aptos Display each appear in 704 of them.",
@@ -1355,7 +1355,7 @@
       ]
     },
     "Sylfaen": {
-      "nextAction": "Load all required scripts (Latin, Armenian, Georgian) and qualify each script independently; the route is Noto Sans (Latin delta 11%). Requires host loading proof, native-script measurements (the current corpus is Latin only), mixed Latin text, and a native PowerPoint comparison.",
+      "nextAction": "Load all required scripts (Latin, Armenian, Georgian) and qualify each script independently; the route is Noto Sans (Latin delta 11%). The gallery editor's font gate loads Noto Sans for the scheme and the three Sylfaen values are near there; Node scripts: 'auto' loads Noto Sans as a fallback-only face, which is not a replacement for Sylfaen, so those values still throw font-unavailable in Node (fix recorded in PARITY-2026-09-30-gallery-font-host.md). Requires host loading proof, native-script measurements (the current corpus is Latin only), mixed Latin text, and a native PowerPoint comparison.",
       "evidence": [
         "scriptAuto",
         "scriptModel",
@@ -1713,13 +1713,13 @@
       ]
     },
     "Playfair Display": {
-      "nextAction": "Resolve the raster variable-axis limitation (resvg ignores wght, so it is not bundled) with upstream static files, supported variable rendering, or properly renamed permitted instances; prove distinct weights.",
+      "nextAction": "Not bundled: the gallery editor draws it in Roboto (fallbackFamily) and Node throws font-unavailable (parity 2026-09-30, the classic-editorial legacy scheme). Resolve the raster variable-axis limitation (resvg ignores wght, so it is not bundled) with upstream static files, supported variable rendering, or properly renamed permitted instances; prove distinct weights.",
       "evidence": [
         "openPack"
       ]
     },
     "Raleway": {
-      "nextAction": "Resolve the raster variable-axis limitation (resvg ignores wght, so it is not bundled); the Reserved Font Name forbids renamed instances, so use unmodified upstream static files; prove distinct weights.",
+      "nextAction": "Not bundled: the gallery editor draws it in Roboto (fallbackFamily) and Node throws font-unavailable (parity 2026-09-30, the raleway font scheme). Resolve the raster variable-axis limitation (resvg ignores wght, so it is not bundled); the Reserved Font Name forbids renamed instances, so use unmodified upstream static files; prove distinct weights.",
       "evidence": [
         "openPack",
         "guards"
@@ -1887,7 +1887,7 @@
       ]
     },
     "Noto Sans Mongolian": {
-      "nextAction": "Verify joining and vertical-writing boundaries; resolve the regular-only style coverage.",
+      "nextAction": "Fix shaping first: the pinned face (@expo-google-fonts/noto-sans-mongolian 400, Version 3.002) fails in fontkit with \"Not a fixed size\" for every string, Latin, digits and Mongolian alike, so the renderer throws font-shaping-failed and the Noto Sans Mongolian font scheme cannot be drawn in any host (parity 2026-09-30). Then verify joining and vertical-writing boundaries and resolve the regular-only style coverage.",
       "evidence": [
         "scriptAuto",
         "scriptModel"
@@ -2334,8 +2334,8 @@
       "url": "https://github.com/OpenPresentation/opf/pull/159"
     },
     "parity": {
-      "label": "Parity run 2026-09-29 (table drawn extent)",
-      "url": "docs/programs/font-fidelity-everywhere/gallery-support/parity/PARITY-2026-09-29-table-drawn-extent.md"
+      "label": "Parity run 2026-09-30 (gallery font host)",
+      "url": "docs/programs/font-fidelity-everywhere/gallery-support/parity/PARITY-2026-09-30-gallery-font-host.md"
     },
     "scriptModel": {
       "label": "Script font model",

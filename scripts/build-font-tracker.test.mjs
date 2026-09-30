@@ -157,7 +157,7 @@ test("the Aptos family is metric-measured with Intos bundled, and no longer lead
   // The queue now follows values that are still not pass.
   const top = [...committed.records].sort((a, b) => a.priority.rank - b.priority.rank).slice(0, 10);
   for (const record of top) assert.ok(record.priority.valuesOpen > 0, `${record.family} leads the queue with open values`);
-  assert.equal(committed.inputs.parity.file.split("/").pop(), "parity-results-2026-09-29-intos-default.json");
+  assert.equal(committed.inputs.parity.file.split("/").pop(), "parity-results-2026-09-30-gallery-font-host.json");
 });
 
 test("a pendingBundle override for a family whose route face is bundled is stale and fails the build", () => {

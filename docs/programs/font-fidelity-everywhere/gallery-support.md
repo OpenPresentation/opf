@@ -1,6 +1,6 @@
 # pptx.gallery support by dimension (FF-23)
 
-Parity and presence re-measured 2026-09-30 on the published set, with the charts measured and three owner defaults applied ([below](#charts-measured-and-owner-defaults-2026-09-30)); the 2026-09-29 measurement stays below as history. Program: [README.md](README.md). Tracker:
+Parity re-measured 2026-09-30 with the harness modelling the gallery editor's font host ([below](#gallery-font-host-model-2026-09-30)); presence and the other parity dimensions as measured the same day with the charts measured and three owner defaults applied ([below](#charts-measured-and-owner-defaults-2026-09-30)); the 2026-09-29 measurement stays below as history. Program: [README.md](README.md). Tracker:
 [burndown.md](burndown.md). Audit scripts, raw results and the per-item
 machine-readable file: [gallery-support/](gallery-support/README.md).
 
@@ -9,8 +9,13 @@ pptx.gallery value's "OPF Config" snippet and run it through the OpenPresentatio
 packages. It measures the engines, not the schema: a value that validates but
 changes nothing in the preview or the PPTX is not reported as working.
 
-**Latest measurement (2026-09-30, published set, charts measured): 707 of 850 values are perfect by parity, 47 near, 96 mismatch**
-(core `aedd364`, package 0.11.2; opf-render 0.11.3 `a66caa3`; opf-pptx 0.11.2 `0400434`; pptx-gallery `b2238ac`; opf#186 scored 657, 37 and 156). Presence: 427 of 819 values `works` (379 of 793 before; the 26 charts are now presence items: 19 `works`, 7 `partial`). See
+**Latest measurement (2026-09-30, published set, gallery font host modelled): 729 of 850 values are perfect by parity, 108 near, 13 mismatch**
+(core `3d51ba1` plus the harness change `26a1d82`; opf-render 0.11.3 `a66caa3`; opf-pptx `6f6122c`; pptx-gallery `1f0e382`; the run before it scored 707, 47 and 96; opf#186 scored 657, 37 and 156).
+The 86 font-resolution mismatches were a modelling artifact for 83 values: the harness loaded no script faces, and the gallery editor does. Three real gaps remain
+([below](#gallery-font-host-model-2026-09-30)).
+
+Before that, the same day (published set, charts measured): 707 of 850 perfect, 47 near, 96 mismatch
+(core `aedd364`, package 0.11.2; opf-render 0.11.3 `a66caa3`; opf-pptx 0.11.2 `0400434`; pptx-gallery `b2238ac`). Presence: 427 of 819 values `works` (379 of 793 before; the 26 charts are now presence items: 19 `works`, 7 `partial`). See
 ["Charts measured and owner defaults"](#charts-measured-and-owner-defaults-2026-09-30) below.
 
 Earlier (2026-09-29, merged and published heads): 657 of 850 values are perfect by parity, 37 near, 156 mismatch
@@ -142,6 +147,7 @@ comparison:
 
 | Run | perfect | geometry | text | fills | zOrder | slideSize | typefaces | reimport | fontResolution | theme | mapping |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Gallery font host modelled (September 30, harness change; core `3d51ba1` plus `26a1d82`, opf-render `a66caa3`, opf-pptx `6f6122c`, pptx-gallery `1f0e382`) | 729 (108 near, 13 mismatch) | 850 | 824 | 850 | 850 | 850 | 850 | 850 | 755 pass, 92 near, 3 fail | 850 | 850 |
 | Published set, charts measured (September 30, chart series colours and slide-number fields; core `aedd364`, opf-render `a66caa3`, opf-pptx `0400434`, pptx-gallery `b2238ac`) | 707 (47 near, 96 mismatch) | 850 | 824 | 850 | 850 | 850 | 850 | 850 | 733 pass, 31 near, 86 fail | 850 | 850 |
 | Merged and published heads (September 29, watermark and furniture-picture mapping; core `930577d`, opf-render `021cca0`, opf-pptx `0d15f1c`, pptx-gallery `0b2dec8`) | 657 (37 near, 156 mismatch) | 850 | 826 | 783 | 850 | 850 | 850 | 850 | 733 pass, 31 near, 86 fail | 850 | 850 |
 | Same heads, harness as merged before this run | 653 (37 near, 160 mismatch) | 848 | 826 | 781 | 848 | 850 | 850 | 850 | 733 pass, 31 near, 86 fail | 850 | 846 |
@@ -251,6 +257,29 @@ opf-render#54 makes Intos (metric-compatible with Aptos, Aptos Display, Aptos Na
 Checks passed of 850 (pass/near/fail where not all pass): geometry 850, text 830 (6 near, 14 fail), fills 782 (68 fail), zOrder 850, slideSize 850, typefaces 850, reimport 849 (1 near), fontResolution 733 (31 near, 86 fail), theme 850, mapping 850. Only fontResolution changed between the two runs: 705 values move from near (Aptos Display to Carlito, Aptos to Roboto, visual look-alikes) to pass (Intos, metric), and one value's failure clears. No other check and no value regresses. The remaining near values are visual-only replacements (Segoe UI, Grandview, Arial Black, Impact) and native chart labels; the 157 mismatches are unchanged causes (chart series colours and caches, families whose script faces the preview does not load (Arabic and East Asian among them), one Playfair Display legacy value).
 
 Results: [parity-results-2026-09-29-intos-default.json](gallery-support/parity/parity-results-2026-09-29-intos-default.json), [scoreboard](gallery-support/parity/PARITY-2026-09-29-intos-default.md) (before/after against the previous-mains run, which is not committed). `support-status.json` is rebuilt from this run.
+
+#### Gallery font host model (2026-09-30)
+
+The 86 fontResolution failures of the previous run ("the script faces the modelled preview does not load": 60 font schemes, 1 legacy scheme, 25 languages) came from the
+harness, not from the hosts. It resolved every family in one office-pack registry with no script faces, on the reading that no shipped host loads them. The pptx.gallery
+editor does: opf-editor 0.10.x builds a browser registry from the office pack's eager faces and its font gate (`createFontGate`, FF-41) runs
+`ensureLazyFonts(document)` and `ensureScripts(document)` before every render, and opf-render 0.11.2 (FF-19) makes those load the script faces a font scheme itself names.
+`parity/scripts/font-host.mjs` now runs the same calls per value against the same package files (a model of the browser host in Node; no browser draws anything), and
+the value must also pass the strict measured render with that registry. No tolerance changed; every other check is identical in every value. `PARITY_FONT_HOST=office-only` reproduces the
+previous run exactly (707, 47, 96). Full report, with the per-family table and the before and after by dimension:
+[PARITY-2026-09-30-gallery-font-host.md](gallery-support/parity/PARITY-2026-09-30-gallery-font-host.md); results
+[parity-results-2026-09-30-gallery-font-host.json](gallery-support/parity/parity-results-2026-09-30-gallery-font-host.json). `support-status.json` is rebuilt from this run (only
+the parity fields of 83 values change; presence is untouched), so the pptx.gallery badges need the re-import that follows this change.
+
+| | perfect | near | mismatch | fontResolution pass | near | fail |
+| --- | --- | --- | --- | --- | --- | --- |
+| Before (office pack, no script faces) | 707 | 47 | 96 | 733 | 31 | 86 |
+| Node loader (`scripts: 'auto'`) | 729 | 105 | 16 | 755 | 89 | 6 |
+| Gallery editor host (committed) | 729 | 108 | 13 | 755 | 92 | 3 |
+
+Of the 86: 22 values (font schemes whose family is itself a pinned Noto face) are perfect, 61 (proprietary script fonts routed to their Noto replacement, a visual tier) are near, and 3 remain mismatches, all real:
+Raleway and Playfair Display are not bundled (the editor draws Roboto; tracker `loading-gap`, FF-43 and FF-41), and the Noto Sans Mongolian face cannot shape any text in fontkit (`font-shaping-failed`; FF-44).
+The three Sylfaen values pass in the editor model and fail in Node, where `scripts: 'auto'` leaves Noto Sans fallback-only; the small opf-render change that fixes it is recorded in the report (FF-19, FF-44).
 
 #### Charts measured and owner defaults (2026-09-30)
 
@@ -815,9 +844,12 @@ gallery inlines, not in the core catalog), all `partial`.
   chosen names.
 - **Re-import.** `fontScheme` is dropped silently.
 - **Fonts and licensing.** See [Fonts in every environment](#fonts-in-every-environment).
-- **Parity (FF-38).** 0 of 93 perfect. Font resolution passes for 4 of 89
-  upstream schemes (real face or metric substitute) and none of the legacy
-  four.
+- **Parity (FF-38).** 36 of 93 perfect, 54 near and 3 mismatch on the 2026-09-30
+  gallery-font-host run (was 14 perfect, 18 near, 61 mismatch). Font resolution:
+  the 22 schemes whose family is a pinned Noto face became perfect, 54 are near (36 of them newly: a
+  proprietary script font drawn with its Noto replacement; the other 18 were near before), and 3 fail: `raleway` and the legacy
+  `classic-editorial` (Playfair Display), which are not bundled, and `noto-sans-mongolian`, whose
+  face cannot shape text.
 - **Fixes.** FF-31 (availability, substitution never rewrites export), FF-35
   (shared default), FF-07 and FF-08 (script slots, no leaked defaults), FF-17
   (code role), FF-32 (re-import).
@@ -871,9 +903,11 @@ resolves in core.
   `Aptos` at open. Filling theme major/minor `ea`/`cs` (Carlito) did not change
   that list, so the empty script slots are not the source of the at-open
   `Aptos` (FF-05 continues).
-- **Parity (FF-38).** 0 of 93 perfect. Geometry, text, fills, z-order,
-  typefaces, re-import, theme and mapping pass for all 93; only font
-  resolution fails.
+- **Parity (FF-38).** 66 of 93 perfect, 27 near and none mismatched on the 2026-09-30
+  gallery-font-host run (was 66, 2, 25). Geometry, text, fills, z-order,
+  typefaces, re-import, theme and mapping pass for all 93. The 25 languages whose
+  scheme is a proprietary script font are near: the editor's font gate loads the
+  Noto replacement, a visual tier.
 - **Fixes.** FF-31 (font availability), FF-19 (script fonts), FF-05 (empty
   `ea`/`cs` policy).
 
