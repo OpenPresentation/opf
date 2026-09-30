@@ -8,7 +8,8 @@
 //   0.11.4: the FF-43 release adds Raleway and Playfair Display (2 open packs, 8 faces: Regular, Italic, Bold, Bold Italic each) and lists 94, 8 more than 0.11.3.
 //   0.11.5: the FF-41 release (face-level lazy loading) adds no faces and lists the same 94 as 0.11.4.
 //   0.11.6: the chart category-axis label release adds no faces and lists the same 94 as 0.11.5.
-export const LAZY_FONT_COUNTS = Object.freeze({ '0.11.0': Object.freeze([51]), '0.11.1': Object.freeze([86]), '0.11.2': Object.freeze([86]), '0.11.3': Object.freeze([86]), '0.11.4': Object.freeze([94]), '0.11.5': Object.freeze([94]), '0.11.6': Object.freeze([94]) });
+//   0.11.7: the FF-41 release (extraLazyFonts, splitStartupFaces) adds no vendored faces and lists the same 94 as 0.11.6 (registry.lazyFonts of a registry without extraLazyFonts).
+export const LAZY_FONT_COUNTS = Object.freeze({ '0.11.0': Object.freeze([51]), '0.11.1': Object.freeze([86]), '0.11.2': Object.freeze([86]), '0.11.3': Object.freeze([86]), '0.11.4': Object.freeze([94]), '0.11.5': Object.freeze([94]), '0.11.6': Object.freeze([94]), '0.11.7': Object.freeze([94]) });
 
 /** Throws unless `count` is an expected lazy face count for the renderer `version`. */
 export function assertLazyFontCount(version, count, label = 'renderer') {
