@@ -123,7 +123,11 @@ function classify(r) {
       if (p.base !== 'ok') reasons.push(`language font scheme ${base.languageFontScheme} not bundled: strict preview ${p.base}`);
     } else reasons.push('no native-name sample in the gallery; direction and script slot unmeasured');
     if (m.foreignTypefaces?.length) reasons.push(`foreign typefaces in export: ${list(m.foreignTypefaces)}`);
-    if (m.engineAppliesLanguageFontScheme !== true) reasons.push(`engines do not derive the font scheme from language alone (${m.engineAppliesLanguageFontScheme === false ? "the snippet's design.fontScheme sets it" : m.engineAppliesLanguageFontScheme})`);
+    // FF-50, Model C (script-font-model.md): a language sets lang, direction and the script slots, never the Latin scheme,
+    // so the preview's design fonts must be the same with and without the language. `engineAppliesLanguageFontScheme` is
+    // the measurement name kept for results.json compatibility: true means the language changed the Latin fonts (a gap).
+    if (m.engineAppliesLanguageFontScheme === true) reasons.push('the language changes the Latin font scheme (Model C: a language sets lang, direction and the script slots only)');
+    else if (m.engineAppliesLanguageFontScheme !== false) reasons.push(`Latin-scheme probe failed (${m.engineAppliesLanguageFontScheme})`);
     if (m.reimportLanguage !== r.id) reasons.push(reimportReason(r, 'language', m.reimportLanguage, r.id));
     cls = hardFail || !r.catalogResolves ? 'broken' : inert ? 'schema-only' : reasons.length ? 'partial' : 'works';
   } else if (d === 'themes') {
