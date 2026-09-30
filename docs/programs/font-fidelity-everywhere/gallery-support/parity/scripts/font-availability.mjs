@@ -22,6 +22,26 @@ export function resolveFamily(host, family, weight = 400, italic = false) {
 }
 
 /**
+ * The family as the document draws it: with face-level lazy loading (opf-render 0.11.5, FF-41) a host holds only the faces the document draws,
+ * so the verdict is that of every drawn face of the family (host.drawn: lower-case family -> [{weight, italic}]). Every face must resolve; the
+ * weakest compatibility (exact, metric, visual, generic, in that order) and the first resolved family are reported. A family with no drawn face (or a
+ * host that does not track faces) is resolved at Regular, as before: through `host.unloaded` (a registry holding every vendored face) when the host
+ * tracks faces, because the editor would load that face the moment an edit draws text in the family.
+ */
+const TIER = {exact: 0, metric: 1, visual: 2, generic: 3};
+export function resolveDrawnFamily(host, family) {
+  const faces = host.drawn?.get(String(family).toLowerCase());
+  if (!faces?.length) return host.unloaded && host.drawn ? resolveFamily(host.unloaded, family) : resolveFamily(host, family);
+  let worst = null;
+  for (const f of faces) {
+    const r = resolveFamily(host, family, f.weight, f.italic);
+    if (!r.ok) return r;
+    if (!worst || (TIER[r.compatibility] ?? 3) > (TIER[worst.compatibility] ?? 3)) worst = r;
+  }
+  return worst;
+}
+
+/**
  * The host must draw the value: its font gate finished, and the strict measured render with the host registry (what the editor's gate
  * hands the canvas) does not throw. A resolved family is not enough when the face cannot measure or shape its text (font-shaping-failed),
  * lacks a glyph the text needs (missing-glyph) or a family the value names still has no face (font-unavailable).
@@ -55,7 +75,7 @@ export function classifyChosenFamilies({host, chosenFamilies, roles, theme, prev
   const fontRes = {}, reasons = [], legacyFontReasons = [];
   for (const f of chosenFamilies) {
     if (!f) continue;
-    const policyRow = fontPolicyFor(f), preview = resolveFamily(host, f);
+    const policyRow = fontPolicyFor(f), preview = resolveDrawnFamily(host, f);
     const {named, slot} = pptxNaming({family: f, roles, theme, slotsUsed: previewSlots.get(f) ?? new Set(), pptxNamesBySlot});
     const routeNames = policyRow?.replacement ? [policyRow.replacement.family, ...(policyRow.alternates ?? [])] : [];
     const replacementNames = routeNames.filter(r => r.toLowerCase() !== f.toLowerCase() && !chosenFamilies.has(r) && packageNames.has(r.toLowerCase()));

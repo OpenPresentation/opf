@@ -73,6 +73,8 @@ of 819 `works` (52.1%), 322 `partial`, 70 `gallery-only`. Gaps by dimension:
 layouts 194 (124 partial, 70 gallery-only), font schemes 93, languages 93,
 charts 7, themes 4, content blocks 1; the other eight dimensions are 100%.
 
+**Status (2026-09-30, FF-58).** Measured on the published packages (core 0.11.3, renderer 0.11.6, PPTX 0.11.4, editor 0.10.4, pptx-gallery `edb77b2`): **812 of 819 `works` (99.1%)**. Every dimension is 100% except charts (19 of 26); the 7 chartex charts need the native PowerPoint check (FF-56) before the native export can be the default. The goal is not closed until then. See [gallery-support.md](gallery-support.md#goal-closure-on-the-published-set-ff-58-2026-09-30).
+
 **Internal only.** This metric is tracked in this repository and never shown on
 pptx.gallery. It falls under the invariant "No public support or progress status
 on pptx.gallery" (owner decision 2026-09-30; FF-36 was re-scoped to an internal
@@ -142,6 +144,9 @@ linked, and specifically:
    merged (FF-14).
 
 ## Decisions
+
+- 2026-09-30 (agent decision, vetoable; FF-58): the closure audits run on the npm tarballs of the published packages, not on source worktrees, with one local core (the published core tarball was byte-compared with a build of its tag). The audit harness treats lazy vendored faces the way the shipped host loads them since opf-render 0.11.5: a family resolves through the faces the document draws, and a family with no drawn text resolves through a probe registry. That instrument change lowered no standard and raised no value: the first run on 0.11.6 scored 51 perfect because the harness asked for faces the host does not load. The goal is reported at 812 of 819 and left open for FF-56 instead of being closed by flipping the chartex default or relaxing the chart checks; the owner can veto that reading (for example by accepting the chartex fallback as `works`).
+- 2026-09-30 (agent decision, vetoable; FF-58): FF-47 to FF-55 and FF-57 are done on the strength of the published-set audits (their acceptance criteria are the reasons they named, and all of those reasons are gone). Native PowerPoint confirmation of the written theme slots and of the other exports stays with FF-12/FF-46, which this goal does not claim.
 
 - 2026-09-30 (agent decision, vetoable; FF-54): a gallery example that overflows its layout is fixed where it comes from. When the diagnostic depends on the content (`text-overflow`), the example is shortened to what the zone holds at the readability floor (dense stacks of five or more zones use two-item lists and a one-line title). When it does not depend on the content (`small-cell`: the card is under 100 x 60 px whatever it holds), the layout record's own region size changes (compact stack `padding 0.04`, `gap 0.02` for boxed 5x/6x column layouts, written by `sync-layout-contracts.mjs`). Tolerances, the `small-cell` limit, the 16 px floor and lint or diagnostic suppression never change. The owner can veto by asking for the previous margin and gap; the 12 records are the only data change.
 - 2026-09-30 (agent decision, vetoable; FF-57): quote provenance follows the timeline pattern: `OPF_QUOTE_V1` tags hold topology only, never quote words, so re-import reads every word from the current native text, an edited quote imports as the edited quote, and a damaged or untagged one degrades to text blocks with `invalid-quote-provenance`. The `quote-import-reflow` diagnostic is reported on every restored quote, like the timeline, metric and code ones.

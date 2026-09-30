@@ -5,6 +5,7 @@
 //   ONLY=dim1,dim2  LIMIT=n  OUT=<results path>
 import {readFile, writeFile, mkdir} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
+import fs from 'node:fs';
 import {execFileSync} from 'node:child_process';
 import path from 'node:path';
 import {fileURLToPath, pathToFileURL} from 'node:url';
@@ -26,7 +27,8 @@ const {toPptx, fromPptx} = await imp(path.join(PPTX, 'dist/index.js'));
 // Core's default text measurement: the same estimate both engines use here (no host registry).
 const {measureText, fontPolicyFor, FONT_POLICY} = await imp(path.join(CORE, 'packages/javascript/dist/index.js'));
 const {unzipSync} = createRequire(path.join(PPTX, 'package.json'))('fflate');
-const head = d => { try { return execFileSync('git', ['-C', d, 'rev-parse', 'HEAD'], {encoding: 'utf8'}).trim(); } catch { return null; } };
+// A published package is not a git checkout: its npm gitHead names the commit it was built from.
+const head = d => { try { return execFileSync('git', ['-C', d, 'rev-parse', 'HEAD'], {encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore']}).trim(); } catch { try { return JSON.parse(fs.readFileSync(path.join(d, 'package.json'), 'utf8')).gitHead ?? null; } catch { return null; } } };
 
 const ONLY = process.env.ONLY?.split(','); const LIMIT = Number(process.env.LIMIT ?? Infinity);
 const snippets = JSON.parse(await readFile(path.join(ROOT, 'out/snippets.json'), 'utf8')).filter(s => !ONLY || ONLY.includes(s.dimension));
