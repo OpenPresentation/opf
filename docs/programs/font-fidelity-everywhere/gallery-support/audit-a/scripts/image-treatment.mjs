@@ -15,13 +15,19 @@
 // (`native`, `composed`, `gap`) travels in `gallery.opfSupport` and the gap note explains what the export does not do.
 import { createHash } from 'node:crypto';
 import path from 'node:path';
-import { hrefBytes } from './slide-image.mjs';
 
 const dec = new TextDecoder();
 const sha = (b) => createHash('sha256').update(b).digest('hex').slice(0, 16);
 const unesc = (s) => String(s).replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&amp;/g, '&');
 const attrs = (s) => Object.fromEntries([...String(s).matchAll(/([\w:-]+)="([^"]*)"/g)].map((m) => [m[1], unesc(m[2])]));
 const sorted = (a) => [...a].sort();
+
+// The bytes of a data: URI (base64 or percent-encoded), or null for an external or unreadable href.
+function hrefBytes(href) {
+  const m = String(href).match(/^data:([^;,]+)((?:;[^;,]*)*),(.*)$/s);
+  if (!m) return null;
+  try { return { mime: m[1], bytes: /;base64/.test(m[2]) ? Buffer.from(m[3], 'base64') : Buffer.from(decodeURIComponent(m[3]), 'utf8') }; } catch { return null; }
+}
 
 function relsOf(files, part) {
   const r = files[part.replace(/([^/]+)$/, '_rels/$1.rels')];

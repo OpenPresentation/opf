@@ -1,15 +1,15 @@
 {
- "generated": "2026-09-30T06:40:14.581Z",
+ "generated": "2026-09-30T09:49:27.000Z",
  "heads": {
-  "pptx-gallery": "0b2dec8",
-  "opf": "930577d",
-  "opf-render": "021cca0",
-  "opf-pptx": "0d15f1c",
-  "opf-editor": "4af6ea6",
+  "pptx-gallery": "b2238ac",
+  "opf": "aedd364",
+  "opf-render": "a66caa3",
+  "opf-pptx": "0400434",
+  "opf-editor": "c7995ed",
   "node": "24.21.0"
  },
  "sharedExportGaps": [
-  "re-import emits heading-import-reflow (245/245 exports)"
+  "re-import emits heading-import-reflow (271/271 exports)"
  ],
  "results": [
   {
@@ -51,8 +51,8 @@
     ],
     "exportColorUses": {
      "total": 55,
-     "literal": 44,
-     "scheme": 11,
+     "literal": 2,
+     "scheme": 53,
      "transformed": [],
      "unresolved": []
     },
@@ -88,19 +88,13 @@
     "previewSlides": 4,
     "exportSlides": 4,
     "colorBySlide": [],
-    "literalSchemeHexes": [
-     "FFFFFF=light1/light2",
-     "000000=dark1/dark2",
-     "9E9E9E=accent1/accent5"
-    ],
-    "literalSchemeUses": 42,
+    "literalSchemeHexes": [],
+    "literalSchemeUses": 0,
     "reimportColorScheme": "black-and-white"
    },
-   "classification": "partial",
-   "engineSummary": "preview accent1, accent3, accent5, dark1, dark2, light1, light2; export accent1, accent3, accent5, dark1, dark2, light1, light2 (11 schemeClr, 44 srgbClr); theme 12/12",
-   "reasons": [
-    "scheme slot colours written as literal srgbClr (42 uses): FFFFFF=light1/light2, 000000=dark1/dark2, 9E9E9E=accent1/accent5"
-   ]
+   "classification": "works",
+   "engineSummary": "preview accent1, accent3, accent5, dark1, dark2, light1, light2; export accent1, accent3, accent5, dark1, dark2, light1, light2 (53 schemeClr, 2 srgbClr); theme 12/12",
+   "reasons": []
   },
   {
    "dimension": "color-schemes",
@@ -141,8 +135,8 @@
     ],
     "exportColorUses": {
      "total": 55,
-     "literal": 44,
-     "scheme": 11,
+     "literal": 2,
+     "scheme": 53,
      "transformed": [],
      "unresolved": []
     },
@@ -178,20 +172,13 @@
     "previewSlides": 4,
     "exportSlides": 4,
     "colorBySlide": [],
-    "literalSchemeHexes": [
-     "FFFFFF=light1",
-     "324472=accent5/hyperlink",
-     "A41410=accent1",
-     "232323=dark2"
-    ],
-    "literalSchemeUses": 42,
+    "literalSchemeHexes": [],
+    "literalSchemeUses": 0,
     "reimportColorScheme": "bold-red"
    },
-   "classification": "partial",
-   "engineSummary": "preview accent1, accent3, accent5, dark2, hyperlink, light1, light2; export accent1, accent3, accent5, dark2, hyperlink, light1, light2 (11 schemeClr, 44 srgbClr); theme 12/12",
-   "reasons": [
-    "scheme slot colours written as literal srgbClr (42 uses): FFFFFF=light1, 324472=accent5/hyperlink, A41410=accent1, 232323=dark2"
-   ]
+   "classification": "works",
+   "engineSummary": "preview accent1, accent3, accent5, dark2, hyperlink, light1, light2; export accent1, accent3, accent5, dark2, hyperlink, light1, light2 (53 schemeClr, 2 srgbClr); theme 12/12",
+   "reasons": []
   },
   {
    "dimension": "color-schemes",
@@ -232,8 +219,8 @@
     ],
     "exportColorUses": {
      "total": 55,
-     "literal": 44,
-     "scheme": 11,
+     "literal": 2,
+     "scheme": 53,
      "transformed": [],
      "unresolved": []
     },
@@ -269,21 +256,13 @@
     "previewSlides": 4,
     "exportSlides": 4,
     "colorBySlide": [],
-    "literalSchemeHexes": [
-     "FFFFFF=light1",
-     "000000=dark1",
-     "0682FE=accent5",
-     "FD3223=accent1",
-     "2C2C2C=dark2"
-    ],
-    "literalSchemeUses": 42,
+    "literalSchemeHexes": [],
+    "literalSchemeUses": 0,
     "reimportColorScheme": "boost"
    },
-   "classification": "partial",
-   "engineSummary": "preview accent1, accent3, accent5, dark1, dark2, light1, light2; export accent1, accent3, accent5, dark1, dark2, light1, light2 (11 schemeClr, 44 srgbClr); theme 12/12",
-   "reasons": [
-    "scheme slot colours written as literal srgbClr (42 uses): FFFFFF=light1, 000000=dark1, 0682FE=accent5, FD3223=accent1, 2C2C2C=dark2"
-   ]
+   "classification": "works",
+   "engineSummary": "preview accent1, accent3, accent5, dark1, dark2, light1, light2; export accent1, accent3, accent5, dark1, dark2, light1, light2 (53 schemeClr, 2 srgbClr); theme 12/12",
+   "reasons": []
   },
   {
    "dimension": "color-schemes",
@@ -325,8 +304,8 @@
     ],
     "exportColorUses": {
      "total": 55,
-     "literal": 44,
-     "scheme": 11,
+     "literal": 2,
+     "scheme": 53,
      "transformed": [],
      "unresolved": []
     },
@@ -363,21 +342,13 @@
     "previewSlides": 4,
     "exportSlides": 4,
     "colorBySlide": [],
-    "literalSchemeHexes": [
-     "FFFFFF=light1",
-     "000000=dark1",
-     "EAE2B7=accent5",
-     "F77F00=accent1",
-     "341B00=dark2"
-    ],
-    "literalSchemeUses": 42,
+    "literalSchemeHexes": [],
+    "literalSchemeUses": 0,
     "reimportColorScheme": "burnt-orange"
    },
-   "classification": "partial",
-   "engineSummary": "preview accent1, accent3, accent5, dark1, dark2, hyperlink, light1, light2; export accent1, accent3, accent5, dark1, dark2, hyperlink, light1, light2 (11 schemeClr, 44 srgbClr); theme 12/12",
-   "reasons": [
-    "scheme slot colours written as literal srgbClr (42 uses): FFFFFF=light1, 000000=dark1, EAE2B7=accent5, F77F00=accent1, 341B00=dark2"
-   ]
+   "classification": "works",
+   "engineSummary": "preview accent1, accent3, accent5, dark1, dark2, hyperlink, light1, light2; export accent1, accent3, accent5, dark1, dark2, hyperlink, light1, light2 (53 schemeClr, 2 srgbClr); theme 12/12",
+   "reasons": []
   },
   {
    "dimension": "color-schemes",
@@ -417,8 +388,8 @@
     ],
     "exportColorUses": {
      "total": 55,
-     "literal": 44,
-     "scheme": 11,
+     "literal": 2,
+     "scheme": 53,
      "transformed": [],
      "unresolved": []
     },
@@ -453,20 +424,13 @@
     "previewSlides": 4,
     "exportSlides": 4,
     "colorBySlide": [],
-    "literalSchemeHexes": [
-     "FFFFFF=light1",
-     "3AC67A=accent5",
-     "2874A6=accent1",
-     "011842=dark2"
-    ],
-    "literalSchemeUses": 42,
+    "literalSchemeHexes": [],
+    "literalSchemeUses": 0,
     "reimportColorScheme": "cool-horizon"
    },
-   "classification": "partial",
-   "engineSummary": "preview accent1, accent3, accent5, dark2, light1, light2; export accent1, accent3, accent5, dark2, light1, light2 (11 schemeClr, 44 srgbClr); theme 12/12",
-   "reasons": [
-    "scheme slot colours written as literal srgbClr (42 uses): FFFFFF=light1, 3AC67A=accent5, 2874A6=accent1, 011842=dark2"
-   ]
+   "classification": "works",
+   "engineSummary": "preview accent1, accent3, accent5, dark2, light1, light2; export accent1, accent3, accent5, dark2, light1, light2 (53 schemeClr, 2 srgbClr); theme 12/12",
+   "reasons": []
   },
   {
    "dimension": "color-schemes",
@@ -506,8 +470,8 @@
     ],
     "exportColorUses": {
      "total": 55,
-     "literal": 44,
-     "scheme": 11,
+     "literal": 2,
+     "scheme": 53,
      "transformed": [],
      "unresolved": []
     },
@@ -542,20 +506,13 @@
     "previewSlides": 4,
     "exportSlides": 4,
     "colorBySlide": [],
-    "literalSchemeHexes": [
-     "FFFFFF=light1",
-     "E3ECF3=accent5",
-     "015DFE=accent1",
-     "011842=dark2"
-    ],
-    "literalSchemeUses": 42,
+    "literalSchemeHexes": [],
+    "literalSchemeUses": 0,
     "reimportColorScheme": "corporate-blue"
    },
-   "classification": "partial",
-   "engineSummary": "preview accent1, accent3, accent5, dark2, light1, light2; export accent1, accent3, accent5, dark2, light1, light2 (11 schemeClr, 44 srgbClr); theme 12/12",
-   "reasons": [
-    "scheme slot colours written as literal srgbClr (42 uses): FFFFFF=light1, E3ECF3=accent5, 015DFE=accent1, 011842=dark2"
-   ]
+   "classification": "works",
+   "engineSummary": "preview accent1, accent3, accent5, dark2, light1, light2; export accent1, accent3, accent5, dark2, light1, light2 (53 schemeClr, 2 srgbClr); theme 12/12",
+   "reasons": []
   },
   {
    "dimension": "color-schemes",
@@ -596,8 +553,8 @@
     ],
     "exportColorUses": {
      "total": 55,
-     "literal": 44,
-     "scheme": 11,
+     "literal": 2,
+     "scheme": 53,
      "transformed": [],
      "unresolved": []
     },
@@ -633,20 +590,13 @@
     "previewSlides": 4,
     "exportSlides": 4,
     "colorBySlide": [],
-    "literalSchemeHexes": [
-     "FFFFFF=light1",
-     "AB47BC=accent5",
-     "6A1B9A=accent1/followedHyperlink",
-     "2B0B3E=dark2"
-    ],
-    "literalSchemeUses": 42,
+    "literalSchemeHexes": [],
+    "literalSchemeUses": 0,
     "reimportColorScheme": "deep-purple"
    },
-   "classification": "partial",
-   "engineSummary": "preview accent1, accent3, accent5, dark2, followedHyperlink, light1, light2; export accent1, accent3, accent5, dark2, followedHyperlink, light1, light2 (11 schemeClr, 44 srgbClr); theme 12/12",
-   "reasons": [
-    "scheme slot colours written as literal srgbClr (42 uses): FFFFFF=light1, AB47BC=accent5, 6A1B9A=accent1/followedHyperlink, 2B0B3E=dark2"
-   ]
+   "classification": "works",
+   "engineSummary": "preview accent1, accent3, accent5, dark2, followedHyperlink, light1, light2; export accent1, accent3, accent5, dark2, followedHyperlink, light1, light2 (53 schemeClr, 2 srgbClr); theme 12/12",
+   "reasons": []
   },
   {
    "dimension": "color-schemes",
@@ -687,8 +637,8 @@
     ],
     "exportColorUses": {
      "total": 55,
-     "literal": 44,
-     "scheme": 11,
+     "literal": 2,
+     "scheme": 53,
      "transformed": [],
      "unresolved": []
     },
@@ -724,20 +674,13 @@
     "previewSlides": 4,
     "exportSlides": 4,
     "colorBySlide": [],
-    "literalSchemeHexes": [
-     "FFFFFF=light1",
-     "FAF3DD=accent5",
-     "4A7C59=accent1/hyperlink",
-     "263F2E=dark2"
-    ],
-    "literalSchemeUses": 42,
+    "literalSchemeHexes": [],
+    "literalSchemeUses": 0,
     "reimportColorScheme": "forest-green"
    },
-   "classification": "partial",
-   "engineSummary": "preview accent1, accent3, accent5, dark2, hyperlink, light1, light2; export accent1, accent3, accent5, dark2, hyperlink, light1, light2 (11 schemeClr, 44 srgbClr); theme 12/12",
-   "reasons": [
-    "scheme slot colours written as literal srgbClr (42 uses): FFFFFF=light1, FAF3DD=accent5, 4A7C59=accent1/hyperlink, 263F2E=dark2"
-   ]
+   "classification": "works",
+   "engineSummary": "preview accent1, accent3, accent5, dark2, hyperlink, light1, light2; export accent1, accent3, accent5, dark2, hyperlink, light1, light2 (53 schemeClr, 2 srgbClr); theme 12/12",
+   "reasons": []
   },
   {
    "dimension": "color-schemes",
@@ -778,8 +721,8 @@
     ],
     "exportColorUses": {
      "total": 55,
-     "literal": 44,
-     "scheme": 11,
+     "literal": 2,
+     "scheme": 53,
      "transformed": [],
      "unresolved": []
     },
@@ -815,21 +758,13 @@
     "previewSlides": 4,
     "exportSlides": 4,
     "colorBySlide": [],
-    "literalSchemeHexes": [
-     "FFFFFF=light1",
-     "000000=dark1",
-     "0F5E8C=accent5",
-     "FCC82B=accent1",
-     "3D2E02=dark2"
-    ],
-    "literalSchemeUses": 42,
+    "literalSchemeHexes": [],
+    "literalSchemeUses": 0,
     "reimportColorScheme": "golden-yellow"
    },
-   "classification": "partial",
-   "engineSummary": "preview accent1, accent3, accent5, dark1, dark2, light1, light2; export accent1, accent3, accent5, dark1, dark2, light1, light2 (11 schemeClr, 44 srgbClr); theme 12/12",
-   "reasons": [
-    "scheme slot colours written as literal srgbClr (42 uses): FFFFFF=light1, 000000=dark1, 0F5E8C=accent5, FCC82B=accent1, 3D2E02=dark2"
-   ]
+   "classification": "works",
+   "engineSummary": "preview accent1, accent3, accent5, dark1, dark2, light1, light2; export accent1, accent3, accent5, dark1, dark2, light1, light2 (53 schemeClr, 2 srgbClr); theme 12/12",
+   "reasons": []
   },
   {
    "dimension": "color-schemes",
@@ -870,8 +805,8 @@
     ],
     "exportColorUses": {
      "total": 55,
-     "literal": 44,
-     "scheme": 11,
+     "literal": 2,
+     "scheme": 53,
      "transformed": [],
      "unresolved": []
     },
@@ -907,21 +842,13 @@
     "previewSlides": 4,
     "exportSlides": 4,
     "colorBySlide": [],
-    "literalSchemeHexes": [
-     "FFFFFF=light1",
-     "000000=dark1",
-     "4B6977=accent5",
-     "997929=accent1",
-     "2C2C2C=dark2"
-    ],
-    "literalSchemeUses": 42,
+    "literalSchemeHexes": [],
+    "literalSchemeUses": 0,
     "reimportColorScheme": "luxury"
    },
-   "classification": "partial",
-   "engineSummary": "preview accent1, accent3, accent5, dark1, dark2, light1, light2; export accent1, accent3, accent5, dark1, dark2, light1, light2 (11 schemeClr, 44 srgbClr); theme 12/12",
-   "reasons": [
-    "scheme slot colours written as literal srgbClr (42 uses): FFFFFF=light1, 000000=dark1, 4B6977=accent5, 997929=accent1, 2C2C2C=dark2"
-   ]
+   "classification": "works",
+   "engineSummary": "preview accent1, accent3, accent5, dark1, dark2, light1, light2; export accent1, accent3, accent5, dark1, dark2, light1, light2 (53 schemeClr, 2 srgbClr); theme 12/12",
+   "reasons": []
   },
   {
    "dimension": "color-schemes",
@@ -963,8 +890,8 @@
     ],
     "exportColorUses": {
      "total": 55,
-     "literal": 44,
-     "scheme": 11,
+     "literal": 2,
+     "scheme": 53,
      "transformed": [],
      "unresolved": []
     },
@@ -1001,21 +928,13 @@
     "previewSlides": 4,
     "exportSlides": 4,
     "colorBySlide": [],
-    "literalSchemeHexes": [
-     "FFFFFF=light1",
-     "000000=dark1",
-     "4281A4=accent5",
-     "FE938C=accent1/hyperlink",
-     "0C6268=dark2"
-    ],
-    "literalSchemeUses": 42,
+    "literalSchemeHexes": [],
+    "literalSchemeUses": 0,
     "reimportColorScheme": "pastel-red"
    },
-   "classification": "partial",
-   "engineSummary": "preview accent1, accent3, accent5, dark1, dark2, hyperlink, light1, light2; export accent1, accent3, accent5, dark1, dark2, hyperlink, light1, light2 (11 schemeClr, 44 srgbClr); theme 12/12",
-   "reasons": [
-    "scheme slot colours written as literal srgbClr (42 uses): FFFFFF=light1, 000000=dark1, 4281A4=accent5, FE938C=accent1/hyperlink, 0C6268=dark2"
-   ]
+   "classification": "works",
+   "engineSummary": "preview accent1, accent3, accent5, dark1, dark2, hyperlink, light1, light2; export accent1, accent3, accent5, dark1, dark2, hyperlink, light1, light2 (53 schemeClr, 2 srgbClr); theme 12/12",
+   "reasons": []
   },
   {
    "dimension": "color-schemes",
@@ -1056,8 +975,8 @@
     ],
     "exportColorUses": {
      "total": 55,
-     "literal": 44,
-     "scheme": 11,
+     "literal": 2,
+     "scheme": 53,
      "transformed": [],
      "unresolved": []
     },
@@ -1093,20 +1012,13 @@
     "previewSlides": 4,
     "exportSlides": 4,
     "colorBySlide": [],
-    "literalSchemeHexes": [
-     "FFFFFF=light1",
-     "000000=dark1",
-     "9E9E9E=accent1/accent5",
-     "1B1B1B=dark2"
-    ],
-    "literalSchemeUses": 42,
+    "literalSchemeHexes": [],
+    "literalSchemeUses": 0,
     "reimportColorScheme": "slate-gray"
    },
-   "classification": "partial",
-   "engineSummary": "preview accent1, accent3, accent5, dark1, dark2, light1, light2; export accent1, accent3, accent5, dark1, dark2, light1, light2 (11 schemeClr, 44 srgbClr); theme 12/12",
-   "reasons": [
-    "scheme slot colours written as literal srgbClr (42 uses): FFFFFF=light1, 000000=dark1, 9E9E9E=accent1/accent5, 1B1B1B=dark2"
-   ]
+   "classification": "works",
+   "engineSummary": "preview accent1, accent3, accent5, dark1, dark2, light1, light2; export accent1, accent3, accent5, dark1, dark2, light1, light2 (53 schemeClr, 2 srgbClr); theme 12/12",
+   "reasons": []
   },
   {
    "dimension": "color-schemes",
@@ -1146,8 +1058,8 @@
     ],
     "exportColorUses": {
      "total": 55,
-     "literal": 44,
-     "scheme": 11,
+     "literal": 2,
+     "scheme": 53,
      "transformed": [],
      "unresolved": []
     },
@@ -1182,20 +1094,13 @@
     "previewSlides": 4,
     "exportSlides": 4,
     "colorBySlide": [],
-    "literalSchemeHexes": [
-     "FFFFFF=light1",
-     "5AA2AE=accent5",
-     "4A66AC=accent1",
-     "182238=dark2"
-    ],
-    "literalSchemeUses": 42,
+    "literalSchemeHexes": [],
+    "literalSchemeUses": 0,
     "reimportColorScheme": "steel-blue"
    },
-   "classification": "partial",
-   "engineSummary": "preview accent1, accent3, accent5, dark2, light1, light2; export accent1, accent3, accent5, dark2, light1, light2 (11 schemeClr, 44 srgbClr); theme 12/12",
-   "reasons": [
-    "scheme slot colours written as literal srgbClr (42 uses): FFFFFF=light1, 5AA2AE=accent5, 4A66AC=accent1, 182238=dark2"
-   ]
+   "classification": "works",
+   "engineSummary": "preview accent1, accent3, accent5, dark2, light1, light2; export accent1, accent3, accent5, dark2, light1, light2 (53 schemeClr, 2 srgbClr); theme 12/12",
+   "reasons": []
   },
   {
    "dimension": "color-schemes",
@@ -1235,8 +1140,8 @@
     ],
     "exportColorUses": {
      "total": 55,
-     "literal": 44,
-     "scheme": 11,
+     "literal": 2,
+     "scheme": 53,
      "transformed": [],
      "unresolved": []
     },
@@ -1271,20 +1176,13 @@
     "previewSlides": 4,
     "exportSlides": 4,
     "colorBySlide": [],
-    "literalSchemeHexes": [
-     "FFFFFF=light1",
-     "9E1BE4=accent5",
-     "4A1BE4=accent1",
-     "2C2C2C=dark2"
-    ],
-    "literalSchemeUses": 42,
+    "literalSchemeHexes": [],
+    "literalSchemeUses": 0,
     "reimportColorScheme": "vibes"
    },
-   "classification": "partial",
-   "engineSummary": "preview accent1, accent3, accent5, dark2, light1, light2; export accent1, accent3, accent5, dark2, light1, light2 (11 schemeClr, 44 srgbClr); theme 12/12",
-   "reasons": [
-    "scheme slot colours written as literal srgbClr (42 uses): FFFFFF=light1, 9E1BE4=accent5, 4A1BE4=accent1, 2C2C2C=dark2"
-   ]
+   "classification": "works",
+   "engineSummary": "preview accent1, accent3, accent5, dark2, light1, light2; export accent1, accent3, accent5, dark2, light1, light2 (53 schemeClr, 2 srgbClr); theme 12/12",
+   "reasons": []
   },
   {
    "dimension": "font-schemes",
@@ -31139,8 +31037,8 @@
     ],
     "exportColorUses": {
      "total": 3,
-     "literal": 2,
-     "scheme": 1,
+     "literal": 0,
+     "scheme": 3,
      "transformed": [],
      "unresolved": []
     },
@@ -31171,10 +31069,8 @@
     "previewSlides": 1,
     "exportSlides": 1,
     "colorBySlide": [],
-    "literalSchemeHexes": [
-     "FFFFFF=light1"
-    ],
-    "literalSchemeUses": 2,
+    "literalSchemeHexes": [],
+    "literalSchemeUses": 0,
     "reimportColorScheme": "cool-horizon",
     "fontScheme": "aptos",
     "expected": {
@@ -31309,7 +31205,6 @@
    "classification": "partial",
    "engineSummary": "bg preview 011842/export 011842 (expected 011842); fonts Aptos Display/Aptos; theme-only doc applies bundle: true",
    "reasons": [
-    "scheme slot colours written as literal srgbClr (2 uses): FFFFFF=light1",
     "preview needs office-pack substitution (Aptos Display->Intos Display(metric), Aptos->Intos(metric)); export with that registry writes Aptos Display/Aptos"
    ]
   },
@@ -31350,8 +31245,8 @@
     ],
     "exportColorUses": {
      "total": 3,
-     "literal": 2,
-     "scheme": 1,
+     "literal": 0,
+     "scheme": 3,
      "transformed": [],
      "unresolved": []
     },
@@ -31382,10 +31277,8 @@
     "previewSlides": 1,
     "exportSlides": 1,
     "colorBySlide": [],
-    "literalSchemeHexes": [
-     "000000=dark1"
-    ],
-    "literalSchemeUses": 2,
+    "literalSchemeHexes": [],
+    "literalSchemeUses": 0,
     "reimportColorScheme": "cool-horizon",
     "fontScheme": "tenorite",
     "expected": {
@@ -31520,7 +31413,6 @@
    "classification": "partial",
    "engineSummary": "bg preview FFFFFF/export FFFFFF (expected FFFFFF); fonts Tenorite Display/Tenorite; theme-only doc applies bundle: true",
    "reasons": [
-    "scheme slot colours written as literal srgbClr (2 uses): 000000=dark1",
     "preview needs office-pack substitution (Tenorite Display->Figtree(visual), Tenorite->Figtree(visual)); export with that registry writes Tenorite Display/Tenorite"
    ]
   },
@@ -31561,8 +31453,8 @@
     ],
     "exportColorUses": {
      "total": 3,
-     "literal": 2,
-     "scheme": 1,
+     "literal": 0,
+     "scheme": 3,
      "transformed": [],
      "unresolved": []
     },
@@ -31593,10 +31485,8 @@
     "previewSlides": 1,
     "exportSlides": 1,
     "colorBySlide": [],
-    "literalSchemeHexes": [
-     "FFFFFF=light1"
-    ],
-    "literalSchemeUses": 2,
+    "literalSchemeHexes": [],
+    "literalSchemeUses": 0,
     "reimportColorScheme": "boost",
     "fontScheme": "seaford",
     "expected": {
@@ -31731,7 +31621,6 @@
    "classification": "partial",
    "engineSummary": "bg preview 000000/export 000000 (expected 000000); fonts Seaford Display/Seaford; theme-only doc applies bundle: true",
    "reasons": [
-    "scheme slot colours written as literal srgbClr (2 uses): FFFFFF=light1",
     "preview needs office-pack substitution (Seaford Display->Source Sans 3(visual), Seaford->Source Sans 3(visual)); export with that registry writes Seaford Display/Seaford"
    ]
   },
@@ -31772,8 +31661,8 @@
     ],
     "exportColorUses": {
      "total": 3,
-     "literal": 2,
-     "scheme": 1,
+     "literal": 0,
+     "scheme": 3,
      "transformed": [],
      "unresolved": []
     },
@@ -31804,10 +31693,8 @@
     "previewSlides": 1,
     "exportSlides": 1,
     "colorBySlide": [],
-    "literalSchemeHexes": [
-     "000000=dark1"
-    ],
-    "literalSchemeUses": 2,
+    "literalSchemeHexes": [],
+    "literalSchemeUses": 0,
     "reimportColorScheme": "burnt-orange",
     "fontScheme": "impact",
     "expected": {
@@ -31943,7 +31830,6 @@
    "classification": "partial",
    "engineSummary": "bg preview FFFFFF/export FFFFFF (expected FFFFFF); fonts Impact/Grandview; theme-only doc applies bundle: true",
    "reasons": [
-    "scheme slot colours written as literal srgbClr (2 uses): 000000=dark1",
     "preview needs office-pack substitution (Impact->Anton(visual), Grandview->Barlow(visual), Anton->Anton(visual)); export with that registry writes Impact/Grandview"
    ]
   },
@@ -32431,8 +32317,8 @@
     ],
     "exportColorUses": {
      "total": 4,
-     "literal": 3,
-     "scheme": 1,
+     "literal": 0,
+     "scheme": 4,
      "transformed": [],
      "unresolved": []
     },
@@ -32463,10 +32349,8 @@
     "previewSlides": 1,
     "exportSlides": 1,
     "colorBySlide": [],
-    "literalSchemeHexes": [
-     "FFFFFF=light1"
-    ],
-    "literalSchemeUses": 3,
+    "literalSchemeHexes": [],
+    "literalSchemeUses": 0,
     "reimportColorScheme": "slate-gray",
     "consumption": {
      "stripped": [
@@ -32522,8 +32406,8 @@
     ],
     "exportColorUses": {
      "total": 4,
-     "literal": 3,
-     "scheme": 1,
+     "literal": 0,
+     "scheme": 4,
      "transformed": [],
      "unresolved": []
     },
@@ -32554,10 +32438,8 @@
     "previewSlides": 1,
     "exportSlides": 1,
     "colorBySlide": [],
-    "literalSchemeHexes": [
-     "FFFFFF=light1"
-    ],
-    "literalSchemeUses": 3,
+    "literalSchemeHexes": [],
+    "literalSchemeUses": 0,
     "reimportColorScheme": "deep-purple",
     "consumption": {
      "stripped": [
@@ -32613,8 +32495,8 @@
     ],
     "exportColorUses": {
      "total": 4,
-     "literal": 3,
-     "scheme": 1,
+     "literal": 0,
+     "scheme": 4,
      "transformed": [],
      "unresolved": []
     },
@@ -32645,10 +32527,8 @@
     "previewSlides": 1,
     "exportSlides": 1,
     "colorBySlide": [],
-    "literalSchemeHexes": [
-     "FFFFFF=light1"
-    ],
-    "literalSchemeUses": 3,
+    "literalSchemeHexes": [],
+    "literalSchemeUses": 0,
     "reimportColorScheme": "slate-gray",
     "consumption": {
      "stripped": [
@@ -32704,8 +32584,8 @@
     ],
     "exportColorUses": {
      "total": 4,
-     "literal": 3,
-     "scheme": 1,
+     "literal": 0,
+     "scheme": 4,
      "transformed": [],
      "unresolved": []
     },
@@ -32736,10 +32616,8 @@
     "previewSlides": 1,
     "exportSlides": 1,
     "colorBySlide": [],
-    "literalSchemeHexes": [
-     "FFFFFF=light1"
-    ],
-    "literalSchemeUses": 3,
+    "literalSchemeHexes": [],
+    "literalSchemeUses": 0,
     "reimportColorScheme": "steel-blue",
     "consumption": {
      "stripped": [
@@ -32795,8 +32673,8 @@
     ],
     "exportColorUses": {
      "total": 4,
-     "literal": 3,
-     "scheme": 1,
+     "literal": 0,
+     "scheme": 4,
      "transformed": [],
      "unresolved": []
     },
@@ -32827,10 +32705,8 @@
     "previewSlides": 1,
     "exportSlides": 1,
     "colorBySlide": [],
-    "literalSchemeHexes": [
-     "FFFFFF=light1"
-    ],
-    "literalSchemeUses": 3,
+    "literalSchemeHexes": [],
+    "literalSchemeUses": 0,
     "reimportColorScheme": "deep-purple",
     "consumption": {
      "stripped": [
@@ -32886,8 +32762,8 @@
     ],
     "exportColorUses": {
      "total": 4,
-     "literal": 3,
-     "scheme": 1,
+     "literal": 0,
+     "scheme": 4,
      "transformed": [],
      "unresolved": []
     },
@@ -32918,10 +32794,8 @@
     "previewSlides": 1,
     "exportSlides": 1,
     "colorBySlide": [],
-    "literalSchemeHexes": [
-     "FFFFFF=light1"
-    ],
-    "literalSchemeUses": 3,
+    "literalSchemeHexes": [],
+    "literalSchemeUses": 0,
     "reimportColorScheme": "burnt-orange",
     "consumption": {
      "stripped": [
@@ -32977,8 +32851,8 @@
     ],
     "exportColorUses": {
      "total": 4,
-     "literal": 3,
-     "scheme": 1,
+     "literal": 0,
+     "scheme": 4,
      "transformed": [],
      "unresolved": []
     },
@@ -33009,10 +32883,8 @@
     "previewSlides": 1,
     "exportSlides": 1,
     "colorBySlide": [],
-    "literalSchemeHexes": [
-     "FFFFFF=light1"
-    ],
-    "literalSchemeUses": 3,
+    "literalSchemeHexes": [],
+    "literalSchemeUses": 0,
     "reimportColorScheme": "slate-gray",
     "consumption": {
      "stripped": [
@@ -33068,8 +32940,8 @@
     ],
     "exportColorUses": {
      "total": 4,
-     "literal": 3,
-     "scheme": 1,
+     "literal": 0,
+     "scheme": 4,
      "transformed": [],
      "unresolved": []
     },
@@ -33100,10 +32972,8 @@
     "previewSlides": 1,
     "exportSlides": 1,
     "colorBySlide": [],
-    "literalSchemeHexes": [
-     "FFFFFF=light1"
-    ],
-    "literalSchemeUses": 3,
+    "literalSchemeHexes": [],
+    "literalSchemeUses": 0,
     "reimportColorScheme": "cool-horizon",
     "consumption": {
      "stripped": [
@@ -33159,8 +33029,8 @@
     ],
     "exportColorUses": {
      "total": 3,
-     "literal": 2,
-     "scheme": 1,
+     "literal": 0,
+     "scheme": 3,
      "transformed": [],
      "unresolved": []
     },
@@ -33191,10 +33061,8 @@
     "previewSlides": 1,
     "exportSlides": 1,
     "colorBySlide": [],
-    "literalSchemeHexes": [
-     "FFFFFF=light1"
-    ],
-    "literalSchemeUses": 2,
+    "literalSchemeHexes": [],
+    "literalSchemeUses": 0,
     "reimportColorScheme": "deep-purple",
     "consumption": {
      "stripped": [
@@ -33250,8 +33118,8 @@
     ],
     "exportColorUses": {
      "total": 3,
-     "literal": 2,
-     "scheme": 1,
+     "literal": 0,
+     "scheme": 3,
      "transformed": [],
      "unresolved": []
     },
@@ -33282,10 +33150,8 @@
     "previewSlides": 1,
     "exportSlides": 1,
     "colorBySlide": [],
-    "literalSchemeHexes": [
-     "FFFFFF=light1"
-    ],
-    "literalSchemeUses": 2,
+    "literalSchemeHexes": [],
+    "literalSchemeUses": 0,
     "reimportColorScheme": "burnt-orange",
     "consumption": {
      "stripped": [
@@ -33341,8 +33207,8 @@
     ],
     "exportColorUses": {
      "total": 4,
-     "literal": 3,
-     "scheme": 1,
+     "literal": 0,
+     "scheme": 4,
      "transformed": [],
      "unresolved": []
     },
@@ -33373,10 +33239,8 @@
     "previewSlides": 1,
     "exportSlides": 1,
     "colorBySlide": [],
-    "literalSchemeHexes": [
-     "FFFFFF=light1"
-    ],
-    "literalSchemeUses": 3,
+    "literalSchemeHexes": [],
+    "literalSchemeUses": 0,
     "reimportColorScheme": "slate-gray",
     "consumption": {
      "stripped": [
@@ -33432,8 +33296,8 @@
     ],
     "exportColorUses": {
      "total": 4,
-     "literal": 3,
-     "scheme": 1,
+     "literal": 0,
+     "scheme": 4,
      "transformed": [],
      "unresolved": []
     },
@@ -33464,10 +33328,8 @@
     "previewSlides": 1,
     "exportSlides": 1,
     "colorBySlide": [],
-    "literalSchemeHexes": [
-     "FFFFFF=light1"
-    ],
-    "literalSchemeUses": 3,
+    "literalSchemeHexes": [],
+    "literalSchemeUses": 0,
     "reimportColorScheme": "cool-horizon",
     "consumption": {
      "stripped": [
@@ -33523,8 +33385,8 @@
     ],
     "exportColorUses": {
      "total": 4,
-     "literal": 3,
-     "scheme": 1,
+     "literal": 0,
+     "scheme": 4,
      "transformed": [],
      "unresolved": []
     },
@@ -33555,10 +33417,8 @@
     "previewSlides": 1,
     "exportSlides": 1,
     "colorBySlide": [],
-    "literalSchemeHexes": [
-     "FFFFFF=light1"
-    ],
-    "literalSchemeUses": 3,
+    "literalSchemeHexes": [],
+    "literalSchemeUses": 0,
     "reimportColorScheme": "slate-gray",
     "consumption": {
      "stripped": [
@@ -33614,8 +33474,8 @@
     ],
     "exportColorUses": {
      "total": 4,
-     "literal": 3,
-     "scheme": 1,
+     "literal": 0,
+     "scheme": 4,
      "transformed": [],
      "unresolved": []
     },
@@ -33646,10 +33506,8 @@
     "previewSlides": 1,
     "exportSlides": 1,
     "colorBySlide": [],
-    "literalSchemeHexes": [
-     "FFFFFF=light1"
-    ],
-    "literalSchemeUses": 3,
+    "literalSchemeHexes": [],
+    "literalSchemeUses": 0,
     "reimportColorScheme": "burnt-orange",
     "consumption": {
      "stripped": [
@@ -34545,6 +34403,4848 @@
    "classification": "works",
    "engineSummary": "removing the socials changes preview=true, export parts: ",
    "reasons": []
+  },
+  {
+   "dimension": "charts",
+   "id": "column",
+   "name": "COLUMN",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "expected": {
+     "element": "barChart",
+     "composition": "single",
+     "kind": "bar",
+     "barDir": "col",
+     "grouping": "clustered",
+     "markers": false,
+     "rows": 8,
+     "series": 1,
+     "seriesColumns": [
+      {
+       "name": "Value",
+       "column": 1
+      }
+     ]
+    },
+    "snippetChart": {
+     "type": "column",
+     "columns": 2,
+     "rows": 8,
+     "slides": 1
+    },
+    "preview": {
+     "ok": true,
+     "chartAttr": "column",
+     "noChartData": false,
+     "legacy": false,
+     "diagnostics": [],
+     "marks": {
+      "kind": "bar",
+      "expected": {
+       "marks": 8
+      },
+      "actual": {
+       "marks": 8
+      },
+      "equal": true
+     }
+    },
+    "export": {
+     "adaptations": [],
+     "diagnostics": [],
+     "chartParts": [
+      "ppt/charts/chart1.xml"
+     ],
+     "embeddedWorkbooks": 1,
+     "elements": [
+      "barChart"
+     ],
+     "construct": {
+      "element": "barChart",
+      "barDir": "col",
+      "grouping": "clustered",
+      "radarStyle": null,
+      "scatterStyle": null,
+      "seriesSymbols": [
+       null
+      ],
+      "markers": false
+     },
+     "series": 1,
+     "data": [
+      {
+       "name": "Value",
+       "categories": [
+        "Q1 2024",
+        "Q2 2024",
+        "Q3 2024",
+        "Q4 2024",
+        "Q1 2025",
+        "Q2 2025",
+        "Q3 2025",
+        "Q4 2025"
+       ],
+       "values": [
+        93810,
+        24592,
+        13278,
+        46048,
+        42098,
+        39256,
+        28289,
+        23434
+       ]
+      }
+     ],
+     "dataMismatches": []
+    },
+    "reimport": {
+     "charts": 1,
+     "type": "column",
+     "dataMismatches": []
+    }
+   },
+   "chart": {
+    "catalogElement": "barChart",
+    "catalogComposition": "single",
+    "preview": {
+     "construct": "column",
+     "legacy": false,
+     "noChartData": false,
+     "marks": {
+      "kind": "bar",
+      "expected": {
+       "marks": 8
+      },
+      "actual": {
+       "marks": 8
+      },
+      "equal": true
+     },
+     "legacyBars": null
+    },
+    "export": {
+     "element": "barChart",
+     "construct": "barChart, barDir col, grouping clustered",
+     "nativeConstruct": true,
+     "adaptations": [],
+     "diagnostics": [],
+     "series": 1,
+     "embeddedWorkbooks": 1,
+     "dataMismatches": []
+    },
+    "reimport": {
+     "type": "column",
+     "sameId": true,
+     "dataMismatches": []
+    }
+   },
+   "classification": "works",
+   "engineSummary": "preview column marks {\"marks\":8}; export barChart, barDir col, grouping clustered; re-import column",
+   "reasons": []
+  },
+  {
+   "dimension": "charts",
+   "id": "stacked-column-3x",
+   "name": "STACKED_COLUMN_3X",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "expected": {
+     "element": "barChart",
+     "composition": "single",
+     "kind": "bar",
+     "barDir": "col",
+     "grouping": "stacked",
+     "markers": false,
+     "rows": 8,
+     "series": 3,
+     "seriesColumns": [
+      {
+       "name": "Value 1",
+       "column": 1
+      },
+      {
+       "name": "Value 2",
+       "column": 2
+      },
+      {
+       "name": "Value 3",
+       "column": 3
+      }
+     ]
+    },
+    "snippetChart": {
+     "type": "stacked-column-3x",
+     "columns": 4,
+     "rows": 8,
+     "slides": 1
+    },
+    "preview": {
+     "ok": true,
+     "chartAttr": "stacked-column-3x",
+     "noChartData": false,
+     "legacy": false,
+     "diagnostics": [],
+     "marks": {
+      "kind": "bar",
+      "expected": {
+       "marks": 24
+      },
+      "actual": {
+       "marks": 24
+      },
+      "equal": true
+     }
+    },
+    "export": {
+     "adaptations": [],
+     "diagnostics": [],
+     "chartParts": [
+      "ppt/charts/chart1.xml"
+     ],
+     "embeddedWorkbooks": 1,
+     "elements": [
+      "barChart"
+     ],
+     "construct": {
+      "element": "barChart",
+      "barDir": "col",
+      "grouping": "stacked",
+      "radarStyle": null,
+      "scatterStyle": null,
+      "seriesSymbols": [
+       null,
+       null,
+       null
+      ],
+      "markers": false
+     },
+     "series": 3,
+     "data": [
+      {
+       "name": "Value 1",
+       "categories": [
+        "Q1 2024",
+        "Q2 2024",
+        "Q3 2024",
+        "Q4 2024",
+        "Q1 2025",
+        "Q2 2025",
+        "Q3 2025",
+        "Q4 2025"
+       ],
+       "values": [
+        59797,
+        22676,
+        57052,
+        55082,
+        89131,
+        44671,
+        15695,
+        70217
+       ]
+      },
+      {
+       "name": "Value 2",
+       "categories": [
+        "Q1 2024",
+        "Q2 2024",
+        "Q3 2024",
+        "Q4 2024",
+        "Q1 2025",
+        "Q2 2025",
+        "Q3 2025",
+        "Q4 2025"
+       ],
+       "values": [
+        80284,
+        26361,
+        59615,
+        20328,
+        82357,
+        48427,
+        92397,
+        91070
+       ]
+      },
+      {
+       "name": "Value 3",
+       "categories": [
+        "Q1 2024",
+        "Q2 2024",
+        "Q3 2024",
+        "Q4 2024",
+        "Q1 2025",
+        "Q2 2025",
+        "Q3 2025",
+        "Q4 2025"
+       ],
+       "values": [
+        57400,
+        85674,
+        35203,
+        19116,
+        16006,
+        96673,
+        39871,
+        47930
+       ]
+      }
+     ],
+     "dataMismatches": []
+    },
+    "reimport": {
+     "charts": 1,
+     "type": "stacked-column-3x",
+     "dataMismatches": []
+    }
+   },
+   "chart": {
+    "catalogElement": "barChart",
+    "catalogComposition": "single",
+    "preview": {
+     "construct": "stacked-column-3x",
+     "legacy": false,
+     "noChartData": false,
+     "marks": {
+      "kind": "bar",
+      "expected": {
+       "marks": 24
+      },
+      "actual": {
+       "marks": 24
+      },
+      "equal": true
+     },
+     "legacyBars": null
+    },
+    "export": {
+     "element": "barChart",
+     "construct": "barChart, barDir col, grouping stacked",
+     "nativeConstruct": true,
+     "adaptations": [],
+     "diagnostics": [],
+     "series": 3,
+     "embeddedWorkbooks": 1,
+     "dataMismatches": []
+    },
+    "reimport": {
+     "type": "stacked-column-3x",
+     "sameId": true,
+     "dataMismatches": []
+    }
+   },
+   "classification": "works",
+   "engineSummary": "preview stacked-column-3x marks {\"marks\":24}; export barChart, barDir col, grouping stacked; re-import stacked-column-3x",
+   "reasons": []
+  },
+  {
+   "dimension": "charts",
+   "id": "100pct-stacked-column-3x",
+   "name": "100PCT_STACKED_COLUMN_3X",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "expected": {
+     "element": "barChart",
+     "composition": "single",
+     "kind": "bar",
+     "barDir": "col",
+     "grouping": "percentStacked",
+     "markers": false,
+     "rows": 8,
+     "series": 3,
+     "seriesColumns": [
+      {
+       "name": "Value 1",
+       "column": 1
+      },
+      {
+       "name": "Value 2",
+       "column": 2
+      },
+      {
+       "name": "Value 3",
+       "column": 3
+      }
+     ]
+    },
+    "snippetChart": {
+     "type": "100pct-stacked-column-3x",
+     "columns": 4,
+     "rows": 8,
+     "slides": 1
+    },
+    "preview": {
+     "ok": true,
+     "chartAttr": "100pct-stacked-column-3x",
+     "noChartData": false,
+     "legacy": false,
+     "diagnostics": [],
+     "marks": {
+      "kind": "bar",
+      "expected": {
+       "marks": 24
+      },
+      "actual": {
+       "marks": 24
+      },
+      "equal": true
+     }
+    },
+    "export": {
+     "adaptations": [],
+     "diagnostics": [],
+     "chartParts": [
+      "ppt/charts/chart1.xml"
+     ],
+     "embeddedWorkbooks": 1,
+     "elements": [
+      "barChart"
+     ],
+     "construct": {
+      "element": "barChart",
+      "barDir": "col",
+      "grouping": "percentStacked",
+      "radarStyle": null,
+      "scatterStyle": null,
+      "seriesSymbols": [
+       null,
+       null,
+       null
+      ],
+      "markers": false
+     },
+     "series": 3,
+     "data": [
+      {
+       "name": "Value 1",
+       "categories": [
+        "Q1 2024",
+        "Q2 2024",
+        "Q3 2024",
+        "Q4 2024",
+        "Q1 2025",
+        "Q2 2025",
+        "Q3 2025",
+        "Q4 2025"
+       ],
+       "values": [
+        19358,
+        89840,
+        93227,
+        32431,
+        80010,
+        42087,
+        31417,
+        70589
+       ]
+      },
+      {
+       "name": "Value 2",
+       "categories": [
+        "Q1 2024",
+        "Q2 2024",
+        "Q3 2024",
+        "Q4 2024",
+        "Q1 2025",
+        "Q2 2025",
+        "Q3 2025",
+        "Q4 2025"
+       ],
+       "values": [
+        59735,
+        45382,
+        93886,
+        83000,
+        38785,
+        99733,
+        52504,
+        17331
+       ]
+      },
+      {
+       "name": "Value 3",
+       "categories": [
+        "Q1 2024",
+        "Q2 2024",
+        "Q3 2024",
+        "Q4 2024",
+        "Q1 2025",
+        "Q2 2025",
+        "Q3 2025",
+        "Q4 2025"
+       ],
+       "values": [
+        40021,
+        14207,
+        51347,
+        62581,
+        45093,
+        18675,
+        37653,
+        84341
+       ]
+      }
+     ],
+     "dataMismatches": []
+    },
+    "reimport": {
+     "charts": 1,
+     "type": "100pct-stacked-column-3x",
+     "dataMismatches": []
+    }
+   },
+   "chart": {
+    "catalogElement": "barChart",
+    "catalogComposition": "single",
+    "preview": {
+     "construct": "100pct-stacked-column-3x",
+     "legacy": false,
+     "noChartData": false,
+     "marks": {
+      "kind": "bar",
+      "expected": {
+       "marks": 24
+      },
+      "actual": {
+       "marks": 24
+      },
+      "equal": true
+     },
+     "legacyBars": null
+    },
+    "export": {
+     "element": "barChart",
+     "construct": "barChart, barDir col, grouping percentStacked",
+     "nativeConstruct": true,
+     "adaptations": [],
+     "diagnostics": [],
+     "series": 3,
+     "embeddedWorkbooks": 1,
+     "dataMismatches": []
+    },
+    "reimport": {
+     "type": "100pct-stacked-column-3x",
+     "sameId": true,
+     "dataMismatches": []
+    }
+   },
+   "classification": "works",
+   "engineSummary": "preview 100pct-stacked-column-3x marks {\"marks\":24}; export barChart, barDir col, grouping percentStacked; re-import 100pct-stacked-column-3x",
+   "reasons": []
+  },
+  {
+   "dimension": "charts",
+   "id": "line",
+   "name": "LINE",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "expected": {
+     "element": "lineChart",
+     "composition": "single",
+     "kind": "line",
+     "grouping": "standard",
+     "markers": false,
+     "rows": 12,
+     "series": 1,
+     "seriesColumns": [
+      {
+       "name": "Value",
+       "column": 1
+      }
+     ]
+    },
+    "snippetChart": {
+     "type": "line",
+     "columns": 2,
+     "rows": 12,
+     "slides": 1
+    },
+    "preview": {
+     "ok": true,
+     "chartAttr": "line",
+     "noChartData": false,
+     "legacy": false,
+     "diagnostics": [],
+     "marks": {
+      "kind": "line",
+      "expected": {
+       "lines": 1,
+       "markers": 0
+      },
+      "actual": {
+       "lines": 1,
+       "markers": 0
+      },
+      "equal": true
+     }
+    },
+    "export": {
+     "adaptations": [],
+     "diagnostics": [],
+     "chartParts": [
+      "ppt/charts/chart1.xml"
+     ],
+     "embeddedWorkbooks": 1,
+     "elements": [
+      "lineChart"
+     ],
+     "construct": {
+      "element": "lineChart",
+      "barDir": null,
+      "grouping": "standard",
+      "radarStyle": null,
+      "scatterStyle": null,
+      "seriesSymbols": [
+       "none"
+      ],
+      "markers": false
+     },
+     "series": 1,
+     "data": [
+      {
+       "name": "Value",
+       "categories": [
+        "Q1 2024",
+        "Q2 2024",
+        "Q3 2024",
+        "Q4 2024",
+        "Q1 2025",
+        "Q2 2025",
+        "Q3 2025",
+        "Q4 2025",
+        "Q1 2026",
+        "Q2 2026",
+        "Q3 2026",
+        "Q4 2026"
+       ],
+       "values": [
+        74042,
+        12552,
+        24662,
+        57576,
+        50306,
+        41385,
+        17592,
+        41571,
+        84364,
+        20322,
+        21226,
+        73699
+       ]
+      }
+     ],
+     "dataMismatches": []
+    },
+    "reimport": {
+     "charts": 1,
+     "type": "line",
+     "dataMismatches": []
+    }
+   },
+   "chart": {
+    "catalogElement": "lineChart",
+    "catalogComposition": "single",
+    "preview": {
+     "construct": "line",
+     "legacy": false,
+     "noChartData": false,
+     "marks": {
+      "kind": "line",
+      "expected": {
+       "lines": 1,
+       "markers": 0
+      },
+      "actual": {
+       "lines": 1,
+       "markers": 0
+      },
+      "equal": true
+     },
+     "legacyBars": null
+    },
+    "export": {
+     "element": "lineChart",
+     "construct": "lineChart, grouping standard, no markers",
+     "nativeConstruct": true,
+     "adaptations": [],
+     "diagnostics": [],
+     "series": 1,
+     "embeddedWorkbooks": 1,
+     "dataMismatches": []
+    },
+    "reimport": {
+     "type": "line",
+     "sameId": true,
+     "dataMismatches": []
+    }
+   },
+   "classification": "works",
+   "engineSummary": "preview line marks {\"lines\":1,\"markers\":0}; export lineChart, grouping standard, no markers; re-import line",
+   "reasons": []
+  },
+  {
+   "dimension": "charts",
+   "id": "line-with-markers",
+   "name": "LINE_WITH_MARKERS",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "expected": {
+     "element": "lineChart",
+     "composition": "single",
+     "kind": "line",
+     "grouping": "standard",
+     "markers": true,
+     "rows": 12,
+     "series": 1,
+     "seriesColumns": [
+      {
+       "name": "Value",
+       "column": 1
+      }
+     ]
+    },
+    "snippetChart": {
+     "type": "line-with-markers",
+     "columns": 2,
+     "rows": 12,
+     "slides": 1
+    },
+    "preview": {
+     "ok": true,
+     "chartAttr": "line-with-markers",
+     "noChartData": false,
+     "legacy": false,
+     "diagnostics": [],
+     "marks": {
+      "kind": "line",
+      "expected": {
+       "lines": 1,
+       "markers": 12
+      },
+      "actual": {
+       "lines": 1,
+       "markers": 12
+      },
+      "equal": true
+     }
+    },
+    "export": {
+     "adaptations": [],
+     "diagnostics": [],
+     "chartParts": [
+      "ppt/charts/chart1.xml"
+     ],
+     "embeddedWorkbooks": 1,
+     "elements": [
+      "lineChart"
+     ],
+     "construct": {
+      "element": "lineChart",
+      "barDir": null,
+      "grouping": "standard",
+      "radarStyle": null,
+      "scatterStyle": null,
+      "seriesSymbols": [
+       "circle"
+      ],
+      "markers": true
+     },
+     "series": 1,
+     "data": [
+      {
+       "name": "Value",
+       "categories": [
+        "Q1 2024",
+        "Q2 2024",
+        "Q3 2024",
+        "Q4 2024",
+        "Q1 2025",
+        "Q2 2025",
+        "Q3 2025",
+        "Q4 2025",
+        "Q1 2026",
+        "Q2 2026",
+        "Q3 2026",
+        "Q4 2026"
+       ],
+       "values": [
+        19071,
+        79822,
+        26483,
+        26828,
+        96474,
+        72296,
+        82063,
+        31643,
+        44741,
+        79163,
+        89507,
+        65461
+       ]
+      }
+     ],
+     "dataMismatches": []
+    },
+    "reimport": {
+     "charts": 1,
+     "type": "line-with-markers",
+     "dataMismatches": []
+    }
+   },
+   "chart": {
+    "catalogElement": "lineChart",
+    "catalogComposition": "single",
+    "preview": {
+     "construct": "line-with-markers",
+     "legacy": false,
+     "noChartData": false,
+     "marks": {
+      "kind": "line",
+      "expected": {
+       "lines": 1,
+       "markers": 12
+      },
+      "actual": {
+       "lines": 1,
+       "markers": 12
+      },
+      "equal": true
+     },
+     "legacyBars": null
+    },
+    "export": {
+     "element": "lineChart",
+     "construct": "lineChart, grouping standard, markers",
+     "nativeConstruct": true,
+     "adaptations": [],
+     "diagnostics": [],
+     "series": 1,
+     "embeddedWorkbooks": 1,
+     "dataMismatches": []
+    },
+    "reimport": {
+     "type": "line-with-markers",
+     "sameId": true,
+     "dataMismatches": []
+    }
+   },
+   "classification": "works",
+   "engineSummary": "preview line-with-markers marks {\"lines\":1,\"markers\":12}; export lineChart, grouping standard, markers; re-import line-with-markers",
+   "reasons": []
+  },
+  {
+   "dimension": "charts",
+   "id": "stacked-line-3x",
+   "name": "STACKED_LINE_3X",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "expected": {
+     "element": "lineChart",
+     "composition": "single",
+     "kind": "line",
+     "grouping": "stacked",
+     "markers": false,
+     "rows": 12,
+     "series": 3,
+     "seriesColumns": [
+      {
+       "name": "Value 1",
+       "column": 1
+      },
+      {
+       "name": "Value 2",
+       "column": 2
+      },
+      {
+       "name": "Value 3",
+       "column": 3
+      }
+     ]
+    },
+    "snippetChart": {
+     "type": "stacked-line-3x",
+     "columns": 4,
+     "rows": 12,
+     "slides": 1
+    },
+    "preview": {
+     "ok": true,
+     "chartAttr": "stacked-line-3x",
+     "noChartData": false,
+     "legacy": false,
+     "diagnostics": [],
+     "marks": {
+      "kind": "line",
+      "expected": {
+       "lines": 3,
+       "markers": 0
+      },
+      "actual": {
+       "lines": 3,
+       "markers": 0
+      },
+      "equal": true
+     }
+    },
+    "export": {
+     "adaptations": [],
+     "diagnostics": [],
+     "chartParts": [
+      "ppt/charts/chart1.xml"
+     ],
+     "embeddedWorkbooks": 1,
+     "elements": [
+      "lineChart"
+     ],
+     "construct": {
+      "element": "lineChart",
+      "barDir": null,
+      "grouping": "stacked",
+      "radarStyle": null,
+      "scatterStyle": null,
+      "seriesSymbols": [
+       "none",
+       "none",
+       "none"
+      ],
+      "markers": false
+     },
+     "series": 3,
+     "data": [
+      {
+       "name": "Value 1",
+       "categories": [
+        "Q1 2024",
+        "Q2 2024",
+        "Q3 2024",
+        "Q4 2024",
+        "Q1 2025",
+        "Q2 2025",
+        "Q3 2025",
+        "Q4 2025",
+        "Q1 2026",
+        "Q2 2026",
+        "Q3 2026",
+        "Q4 2026"
+       ],
+       "values": [
+        19016,
+        42018,
+        58434,
+        47353,
+        30676,
+        67433,
+        81200,
+        49651,
+        90173,
+        95717,
+        79329,
+        11025
+       ]
+      },
+      {
+       "name": "Value 2",
+       "categories": [
+        "Q1 2024",
+        "Q2 2024",
+        "Q3 2024",
+        "Q4 2024",
+        "Q1 2025",
+        "Q2 2025",
+        "Q3 2025",
+        "Q4 2025",
+        "Q1 2026",
+        "Q2 2026",
+        "Q3 2026",
+        "Q4 2026"
+       ],
+       "values": [
+        97538,
+        82692,
+        49240,
+        96951,
+        23577,
+        27601,
+        44664,
+        25129,
+        24029,
+        82512,
+        30374,
+        45697
+       ]
+      },
+      {
+       "name": "Value 3",
+       "categories": [
+        "Q1 2024",
+        "Q2 2024",
+        "Q3 2024",
+        "Q4 2024",
+        "Q1 2025",
+        "Q2 2025",
+        "Q3 2025",
+        "Q4 2025",
+        "Q1 2026",
+        "Q2 2026",
+        "Q3 2026",
+        "Q4 2026"
+       ],
+       "values": [
+        46930,
+        89276,
+        37607,
+        54942,
+        36685,
+        93130,
+        44600,
+        76244,
+        74032,
+        42914,
+        16658,
+        22097
+       ]
+      }
+     ],
+     "dataMismatches": []
+    },
+    "reimport": {
+     "charts": 1,
+     "type": "stacked-line-3x",
+     "dataMismatches": []
+    }
+   },
+   "chart": {
+    "catalogElement": "lineChart",
+    "catalogComposition": "single",
+    "preview": {
+     "construct": "stacked-line-3x",
+     "legacy": false,
+     "noChartData": false,
+     "marks": {
+      "kind": "line",
+      "expected": {
+       "lines": 3,
+       "markers": 0
+      },
+      "actual": {
+       "lines": 3,
+       "markers": 0
+      },
+      "equal": true
+     },
+     "legacyBars": null
+    },
+    "export": {
+     "element": "lineChart",
+     "construct": "lineChart, grouping stacked, no markers",
+     "nativeConstruct": true,
+     "adaptations": [],
+     "diagnostics": [],
+     "series": 3,
+     "embeddedWorkbooks": 1,
+     "dataMismatches": []
+    },
+    "reimport": {
+     "type": "stacked-line-3x",
+     "sameId": true,
+     "dataMismatches": []
+    }
+   },
+   "classification": "works",
+   "engineSummary": "preview stacked-line-3x marks {\"lines\":3,\"markers\":0}; export lineChart, grouping stacked, no markers; re-import stacked-line-3x",
+   "reasons": []
+  },
+  {
+   "dimension": "charts",
+   "id": "stacked-line-with-markers-3x",
+   "name": "STACKED_LINE_WITH_MARKERS_3X",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "expected": {
+     "element": "lineChart",
+     "composition": "single",
+     "kind": "line",
+     "grouping": "stacked",
+     "markers": true,
+     "rows": 12,
+     "series": 3,
+     "seriesColumns": [
+      {
+       "name": "Value 1",
+       "column": 1
+      },
+      {
+       "name": "Value 2",
+       "column": 2
+      },
+      {
+       "name": "Value 3",
+       "column": 3
+      }
+     ]
+    },
+    "snippetChart": {
+     "type": "stacked-line-with-markers-3x",
+     "columns": 4,
+     "rows": 12,
+     "slides": 1
+    },
+    "preview": {
+     "ok": true,
+     "chartAttr": "stacked-line-with-markers-3x",
+     "noChartData": false,
+     "legacy": false,
+     "diagnostics": [],
+     "marks": {
+      "kind": "line",
+      "expected": {
+       "lines": 3,
+       "markers": 36
+      },
+      "actual": {
+       "lines": 3,
+       "markers": 36
+      },
+      "equal": true
+     }
+    },
+    "export": {
+     "adaptations": [],
+     "diagnostics": [],
+     "chartParts": [
+      "ppt/charts/chart1.xml"
+     ],
+     "embeddedWorkbooks": 1,
+     "elements": [
+      "lineChart"
+     ],
+     "construct": {
+      "element": "lineChart",
+      "barDir": null,
+      "grouping": "stacked",
+      "radarStyle": null,
+      "scatterStyle": null,
+      "seriesSymbols": [
+       "circle",
+       "circle",
+       "circle"
+      ],
+      "markers": true
+     },
+     "series": 3,
+     "data": [
+      {
+       "name": "Value 1",
+       "categories": [
+        "Q1 2024",
+        "Q2 2024",
+        "Q3 2024",
+        "Q4 2024",
+        "Q1 2025",
+        "Q2 2025",
+        "Q3 2025",
+        "Q4 2025",
+        "Q1 2026",
+        "Q2 2026",
+        "Q3 2026",
+        "Q4 2026"
+       ],
+       "values": [
+        93136,
+        65518,
+        46265,
+        15778,
+        10464,
+        53719,
+        27146,
+        93507,
+        44335,
+        31178,
+        67912,
+        82309
+       ]
+      },
+      {
+       "name": "Value 2",
+       "categories": [
+        "Q1 2024",
+        "Q2 2024",
+        "Q3 2024",
+        "Q4 2024",
+        "Q1 2025",
+        "Q2 2025",
+        "Q3 2025",
+        "Q4 2025",
+        "Q1 2026",
+        "Q2 2026",
+        "Q3 2026",
+        "Q4 2026"
+       ],
+       "values": [
+        66057,
+        83519,
+        11267,
+        24663,
+        19862,
+        29536,
+        81511,
+        14722,
+        58393,
+        86350,
+        82420,
+        29410
+       ]
+      },
+      {
+       "name": "Value 3",
+       "categories": [
+        "Q1 2024",
+        "Q2 2024",
+        "Q3 2024",
+        "Q4 2024",
+        "Q1 2025",
+        "Q2 2025",
+        "Q3 2025",
+        "Q4 2025",
+        "Q1 2026",
+        "Q2 2026",
+        "Q3 2026",
+        "Q4 2026"
+       ],
+       "values": [
+        66333,
+        26704,
+        15482,
+        50404,
+        57795,
+        15229,
+        56898,
+        37535,
+        99399,
+        42706,
+        97416,
+        23473
+       ]
+      }
+     ],
+     "dataMismatches": []
+    },
+    "reimport": {
+     "charts": 1,
+     "type": "stacked-line-with-markers-3x",
+     "dataMismatches": []
+    }
+   },
+   "chart": {
+    "catalogElement": "lineChart",
+    "catalogComposition": "single",
+    "preview": {
+     "construct": "stacked-line-with-markers-3x",
+     "legacy": false,
+     "noChartData": false,
+     "marks": {
+      "kind": "line",
+      "expected": {
+       "lines": 3,
+       "markers": 36
+      },
+      "actual": {
+       "lines": 3,
+       "markers": 36
+      },
+      "equal": true
+     },
+     "legacyBars": null
+    },
+    "export": {
+     "element": "lineChart",
+     "construct": "lineChart, grouping stacked, markers",
+     "nativeConstruct": true,
+     "adaptations": [],
+     "diagnostics": [],
+     "series": 3,
+     "embeddedWorkbooks": 1,
+     "dataMismatches": []
+    },
+    "reimport": {
+     "type": "stacked-line-with-markers-3x",
+     "sameId": true,
+     "dataMismatches": []
+    }
+   },
+   "classification": "works",
+   "engineSummary": "preview stacked-line-with-markers-3x marks {\"lines\":3,\"markers\":36}; export lineChart, grouping stacked, markers; re-import stacked-line-with-markers-3x",
+   "reasons": []
+  },
+  {
+   "dimension": "charts",
+   "id": "pie",
+   "name": "PIE",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "expected": {
+     "element": "pieChart",
+     "composition": "single",
+     "kind": "circular",
+     "markers": false,
+     "rows": 2,
+     "series": 1,
+     "seriesColumns": [
+      {
+       "name": "Value 1",
+       "column": 1
+      }
+     ]
+    },
+    "snippetChart": {
+     "type": "pie",
+     "columns": 2,
+     "rows": 2,
+     "slides": 1
+    },
+    "preview": {
+     "ok": true,
+     "chartAttr": "pie",
+     "noChartData": false,
+     "legacy": false,
+     "diagnostics": [],
+     "marks": {
+      "kind": "circular",
+      "expected": {
+       "slices": 2
+      },
+      "actual": {
+       "slices": 2
+      },
+      "equal": true
+     }
+    },
+    "export": {
+     "adaptations": [],
+     "diagnostics": [],
+     "chartParts": [
+      "ppt/charts/chart1.xml"
+     ],
+     "embeddedWorkbooks": 1,
+     "elements": [
+      "pieChart"
+     ],
+     "construct": {
+      "element": "pieChart",
+      "barDir": null,
+      "grouping": null,
+      "radarStyle": null,
+      "scatterStyle": null,
+      "seriesSymbols": [
+       null
+      ],
+      "markers": false
+     },
+     "series": 1,
+     "data": [
+      {
+       "name": "Value 1",
+       "categories": [
+        "Q1 2024",
+        "Q2 2024"
+       ],
+       "values": [
+        56357,
+        83385
+       ]
+      }
+     ],
+     "dataMismatches": []
+    },
+    "reimport": {
+     "charts": 1,
+     "type": "pie",
+     "dataMismatches": []
+    }
+   },
+   "chart": {
+    "catalogElement": "pieChart",
+    "catalogComposition": "single",
+    "preview": {
+     "construct": "pie",
+     "legacy": false,
+     "noChartData": false,
+     "marks": {
+      "kind": "circular",
+      "expected": {
+       "slices": 2
+      },
+      "actual": {
+       "slices": 2
+      },
+      "equal": true
+     },
+     "legacyBars": null
+    },
+    "export": {
+     "element": "pieChart",
+     "construct": "pieChart",
+     "nativeConstruct": true,
+     "adaptations": [],
+     "diagnostics": [],
+     "series": 1,
+     "embeddedWorkbooks": 1,
+     "dataMismatches": []
+    },
+    "reimport": {
+     "type": "pie",
+     "sameId": true,
+     "dataMismatches": []
+    }
+   },
+   "classification": "works",
+   "engineSummary": "preview pie marks {\"slices\":2}; export pieChart; re-import pie",
+   "reasons": []
+  },
+  {
+   "dimension": "charts",
+   "id": "doughnut",
+   "name": "DOUGHNUT",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "expected": {
+     "element": "doughnutChart",
+     "composition": "single",
+     "kind": "circular",
+     "markers": false,
+     "rows": 2,
+     "series": 1,
+     "seriesColumns": [
+      {
+       "name": "Value 1",
+       "column": 1
+      }
+     ]
+    },
+    "snippetChart": {
+     "type": "doughnut",
+     "columns": 2,
+     "rows": 2,
+     "slides": 1
+    },
+    "preview": {
+     "ok": true,
+     "chartAttr": "doughnut",
+     "noChartData": false,
+     "legacy": false,
+     "diagnostics": [],
+     "marks": {
+      "kind": "circular",
+      "expected": {
+       "slices": 2
+      },
+      "actual": {
+       "slices": 2
+      },
+      "equal": true
+     }
+    },
+    "export": {
+     "adaptations": [],
+     "diagnostics": [],
+     "chartParts": [
+      "ppt/charts/chart1.xml"
+     ],
+     "embeddedWorkbooks": 1,
+     "elements": [
+      "doughnutChart"
+     ],
+     "construct": {
+      "element": "doughnutChart",
+      "barDir": null,
+      "grouping": null,
+      "radarStyle": null,
+      "scatterStyle": null,
+      "seriesSymbols": [
+       null
+      ],
+      "markers": false
+     },
+     "series": 1,
+     "data": [
+      {
+       "name": "Value 1",
+       "categories": [
+        "Q1 2024",
+        "Q2 2024"
+       ],
+       "values": [
+        63264,
+        91351
+       ]
+      }
+     ],
+     "dataMismatches": []
+    },
+    "reimport": {
+     "charts": 1,
+     "type": "doughnut",
+     "dataMismatches": []
+    }
+   },
+   "chart": {
+    "catalogElement": "doughnutChart",
+    "catalogComposition": "single",
+    "preview": {
+     "construct": "doughnut",
+     "legacy": false,
+     "noChartData": false,
+     "marks": {
+      "kind": "circular",
+      "expected": {
+       "slices": 2
+      },
+      "actual": {
+       "slices": 2
+      },
+      "equal": true
+     },
+     "legacyBars": null
+    },
+    "export": {
+     "element": "doughnutChart",
+     "construct": "doughnutChart",
+     "nativeConstruct": true,
+     "adaptations": [],
+     "diagnostics": [],
+     "series": 1,
+     "embeddedWorkbooks": 1,
+     "dataMismatches": []
+    },
+    "reimport": {
+     "type": "doughnut",
+     "sameId": true,
+     "dataMismatches": []
+    }
+   },
+   "classification": "works",
+   "engineSummary": "preview doughnut marks {\"slices\":2}; export doughnutChart; re-import doughnut",
+   "reasons": []
+  },
+  {
+   "dimension": "charts",
+   "id": "bar",
+   "name": "BAR",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "expected": {
+     "element": "barChart",
+     "composition": "single",
+     "kind": "bar",
+     "barDir": "bar",
+     "grouping": "clustered",
+     "markers": false,
+     "rows": 6,
+     "series": 1,
+     "seriesColumns": [
+      {
+       "name": "Value",
+       "column": 1
+      }
+     ]
+    },
+    "snippetChart": {
+     "type": "bar",
+     "columns": 2,
+     "rows": 6,
+     "slides": 1
+    },
+    "preview": {
+     "ok": true,
+     "chartAttr": "bar",
+     "noChartData": false,
+     "legacy": false,
+     "diagnostics": [],
+     "marks": {
+      "kind": "bar",
+      "expected": {
+       "marks": 6
+      },
+      "actual": {
+       "marks": 6
+      },
+      "equal": true
+     }
+    },
+    "export": {
+     "adaptations": [],
+     "diagnostics": [],
+     "chartParts": [
+      "ppt/charts/chart1.xml"
+     ],
+     "embeddedWorkbooks": 1,
+     "elements": [
+      "barChart"
+     ],
+     "construct": {
+      "element": "barChart",
+      "barDir": "bar",
+      "grouping": "clustered",
+      "radarStyle": null,
+      "scatterStyle": null,
+      "seriesSymbols": [
+       null
+      ],
+      "markers": false
+     },
+     "series": 1,
+     "data": [
+      {
+       "name": "Value",
+       "categories": [
+        "Q1 2024",
+        "Q2 2024",
+        "Q3 2024",
+        "Q4 2024",
+        "Q1 2025",
+        "Q2 2025"
+       ],
+       "values": [
+        30257,
+        41029,
+        31299,
+        33206,
+        64040,
+        13248
+       ]
+      }
+     ],
+     "dataMismatches": []
+    },
+    "reimport": {
+     "charts": 1,
+     "type": "bar",
+     "dataMismatches": []
+    }
+   },
+   "chart": {
+    "catalogElement": "barChart",
+    "catalogComposition": "single",
+    "preview": {
+     "construct": "bar",
+     "legacy": false,
+     "noChartData": false,
+     "marks": {
+      "kind": "bar",
+      "expected": {
+       "marks": 6
+      },
+      "actual": {
+       "marks": 6
+      },
+      "equal": true
+     },
+     "legacyBars": null
+    },
+    "export": {
+     "element": "barChart",
+     "construct": "barChart, barDir bar, grouping clustered",
+     "nativeConstruct": true,
+     "adaptations": [],
+     "diagnostics": [],
+     "series": 1,
+     "embeddedWorkbooks": 1,
+     "dataMismatches": []
+    },
+    "reimport": {
+     "type": "bar",
+     "sameId": true,
+     "dataMismatches": []
+    }
+   },
+   "classification": "works",
+   "engineSummary": "preview bar marks {\"marks\":6}; export barChart, barDir bar, grouping clustered; re-import bar",
+   "reasons": []
+  },
+  {
+   "dimension": "charts",
+   "id": "stacked-bar-3x",
+   "name": "STACKED_BAR_3X",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "expected": {
+     "element": "barChart",
+     "composition": "single",
+     "kind": "bar",
+     "barDir": "bar",
+     "grouping": "stacked",
+     "markers": false,
+     "rows": 6,
+     "series": 3,
+     "seriesColumns": [
+      {
+       "name": "Value 1",
+       "column": 1
+      },
+      {
+       "name": "Value 2",
+       "column": 2
+      },
+      {
+       "name": "Value 3",
+       "column": 3
+      }
+     ]
+    },
+    "snippetChart": {
+     "type": "stacked-bar-3x",
+     "columns": 4,
+     "rows": 6,
+     "slides": 1
+    },
+    "preview": {
+     "ok": true,
+     "chartAttr": "stacked-bar-3x",
+     "noChartData": false,
+     "legacy": false,
+     "diagnostics": [],
+     "marks": {
+      "kind": "bar",
+      "expected": {
+       "marks": 18
+      },
+      "actual": {
+       "marks": 18
+      },
+      "equal": true
+     }
+    },
+    "export": {
+     "adaptations": [],
+     "diagnostics": [],
+     "chartParts": [
+      "ppt/charts/chart1.xml"
+     ],
+     "embeddedWorkbooks": 1,
+     "elements": [
+      "barChart"
+     ],
+     "construct": {
+      "element": "barChart",
+      "barDir": "bar",
+      "grouping": "stacked",
+      "radarStyle": null,
+      "scatterStyle": null,
+      "seriesSymbols": [
+       null,
+       null,
+       null
+      ],
+      "markers": false
+     },
+     "series": 3,
+     "data": [
+      {
+       "name": "Value 1",
+       "categories": [
+        "Q1 2024",
+        "Q2 2024",
+        "Q3 2024",
+        "Q4 2024",
+        "Q1 2025",
+        "Q2 2025"
+       ],
+       "values": [
+        19099,
+        46585,
+        56025,
+        94080,
+        76768,
+        62386
+       ]
+      },
+      {
+       "name": "Value 2",
+       "categories": [
+        "Q1 2024",
+        "Q2 2024",
+        "Q3 2024",
+        "Q4 2024",
+        "Q1 2025",
+        "Q2 2025"
+       ],
+       "values": [
+        99065,
+        80282,
+        53404,
+        13617,
+        25118,
+        44237
+       ]
+      },
+      {
+       "name": "Value 3",
+       "categories": [
+        "Q1 2024",
+        "Q2 2024",
+        "Q3 2024",
+        "Q4 2024",
+        "Q1 2025",
+        "Q2 2025"
+       ],
+       "values": [
+        33405,
+        86099,
+        44795,
+        15014,
+        24208,
+        88193
+       ]
+      }
+     ],
+     "dataMismatches": []
+    },
+    "reimport": {
+     "charts": 1,
+     "type": "stacked-bar-3x",
+     "dataMismatches": []
+    }
+   },
+   "chart": {
+    "catalogElement": "barChart",
+    "catalogComposition": "single",
+    "preview": {
+     "construct": "stacked-bar-3x",
+     "legacy": false,
+     "noChartData": false,
+     "marks": {
+      "kind": "bar",
+      "expected": {
+       "marks": 18
+      },
+      "actual": {
+       "marks": 18
+      },
+      "equal": true
+     },
+     "legacyBars": null
+    },
+    "export": {
+     "element": "barChart",
+     "construct": "barChart, barDir bar, grouping stacked",
+     "nativeConstruct": true,
+     "adaptations": [],
+     "diagnostics": [],
+     "series": 3,
+     "embeddedWorkbooks": 1,
+     "dataMismatches": []
+    },
+    "reimport": {
+     "type": "stacked-bar-3x",
+     "sameId": true,
+     "dataMismatches": []
+    }
+   },
+   "classification": "works",
+   "engineSummary": "preview stacked-bar-3x marks {\"marks\":18}; export barChart, barDir bar, grouping stacked; re-import stacked-bar-3x",
+   "reasons": []
+  },
+  {
+   "dimension": "charts",
+   "id": "100pct-stacked-bar-3x",
+   "name": "100PCT_STACKED_BAR_3X",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "expected": {
+     "element": "barChart",
+     "composition": "single",
+     "kind": "bar",
+     "barDir": "bar",
+     "grouping": "percentStacked",
+     "markers": false,
+     "rows": 6,
+     "series": 3,
+     "seriesColumns": [
+      {
+       "name": "Value 1",
+       "column": 1
+      },
+      {
+       "name": "Value 2",
+       "column": 2
+      },
+      {
+       "name": "Value 3",
+       "column": 3
+      }
+     ]
+    },
+    "snippetChart": {
+     "type": "100pct-stacked-bar-3x",
+     "columns": 4,
+     "rows": 6,
+     "slides": 1
+    },
+    "preview": {
+     "ok": true,
+     "chartAttr": "100pct-stacked-bar-3x",
+     "noChartData": false,
+     "legacy": false,
+     "diagnostics": [],
+     "marks": {
+      "kind": "bar",
+      "expected": {
+       "marks": 18
+      },
+      "actual": {
+       "marks": 18
+      },
+      "equal": true
+     }
+    },
+    "export": {
+     "adaptations": [],
+     "diagnostics": [],
+     "chartParts": [
+      "ppt/charts/chart1.xml"
+     ],
+     "embeddedWorkbooks": 1,
+     "elements": [
+      "barChart"
+     ],
+     "construct": {
+      "element": "barChart",
+      "barDir": "bar",
+      "grouping": "percentStacked",
+      "radarStyle": null,
+      "scatterStyle": null,
+      "seriesSymbols": [
+       null,
+       null,
+       null
+      ],
+      "markers": false
+     },
+     "series": 3,
+     "data": [
+      {
+       "name": "Value 1",
+       "categories": [
+        "Q1 2024",
+        "Q2 2024",
+        "Q3 2024",
+        "Q4 2024",
+        "Q1 2025",
+        "Q2 2025"
+       ],
+       "values": [
+        67154,
+        10221,
+        78146,
+        80575,
+        97900,
+        35825
+       ]
+      },
+      {
+       "name": "Value 2",
+       "categories": [
+        "Q1 2024",
+        "Q2 2024",
+        "Q3 2024",
+        "Q4 2024",
+        "Q1 2025",
+        "Q2 2025"
+       ],
+       "values": [
+        57739,
+        66531,
+        19171,
+        97062,
+        53279,
+        91678
+       ]
+      },
+      {
+       "name": "Value 3",
+       "categories": [
+        "Q1 2024",
+        "Q2 2024",
+        "Q3 2024",
+        "Q4 2024",
+        "Q1 2025",
+        "Q2 2025"
+       ],
+       "values": [
+        51145,
+        96951,
+        26334,
+        49363,
+        76469,
+        50538
+       ]
+      }
+     ],
+     "dataMismatches": []
+    },
+    "reimport": {
+     "charts": 1,
+     "type": "100pct-stacked-bar-3x",
+     "dataMismatches": []
+    }
+   },
+   "chart": {
+    "catalogElement": "barChart",
+    "catalogComposition": "single",
+    "preview": {
+     "construct": "100pct-stacked-bar-3x",
+     "legacy": false,
+     "noChartData": false,
+     "marks": {
+      "kind": "bar",
+      "expected": {
+       "marks": 18
+      },
+      "actual": {
+       "marks": 18
+      },
+      "equal": true
+     },
+     "legacyBars": null
+    },
+    "export": {
+     "element": "barChart",
+     "construct": "barChart, barDir bar, grouping percentStacked",
+     "nativeConstruct": true,
+     "adaptations": [],
+     "diagnostics": [],
+     "series": 3,
+     "embeddedWorkbooks": 1,
+     "dataMismatches": []
+    },
+    "reimport": {
+     "type": "100pct-stacked-bar-3x",
+     "sameId": true,
+     "dataMismatches": []
+    }
+   },
+   "classification": "works",
+   "engineSummary": "preview 100pct-stacked-bar-3x marks {\"marks\":18}; export barChart, barDir bar, grouping percentStacked; re-import 100pct-stacked-bar-3x",
+   "reasons": []
+  },
+  {
+   "dimension": "charts",
+   "id": "area",
+   "name": "AREA",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "expected": {
+     "element": "areaChart",
+     "composition": "single",
+     "kind": "area",
+     "grouping": "standard",
+     "markers": false,
+     "rows": 12,
+     "series": 1,
+     "seriesColumns": [
+      {
+       "name": "Value",
+       "column": 1
+      }
+     ]
+    },
+    "snippetChart": {
+     "type": "area",
+     "columns": 2,
+     "rows": 12,
+     "slides": 1
+    },
+    "preview": {
+     "ok": true,
+     "chartAttr": "area",
+     "noChartData": false,
+     "legacy": false,
+     "diagnostics": [],
+     "marks": {
+      "kind": "area",
+      "expected": {
+       "areas": 1
+      },
+      "actual": {
+       "areas": 1
+      },
+      "equal": true
+     }
+    },
+    "export": {
+     "adaptations": [],
+     "diagnostics": [],
+     "chartParts": [
+      "ppt/charts/chart1.xml"
+     ],
+     "embeddedWorkbooks": 1,
+     "elements": [
+      "areaChart"
+     ],
+     "construct": {
+      "element": "areaChart",
+      "barDir": null,
+      "grouping": "standard",
+      "radarStyle": null,
+      "scatterStyle": null,
+      "seriesSymbols": [
+       null
+      ],
+      "markers": false
+     },
+     "series": 1,
+     "data": [
+      {
+       "name": "Value",
+       "categories": [
+        "Q1 2024",
+        "Q2 2024",
+        "Q3 2024",
+        "Q4 2024",
+        "Q1 2025",
+        "Q2 2025",
+        "Q3 2025",
+        "Q4 2025",
+        "Q1 2026",
+        "Q2 2026",
+        "Q3 2026",
+        "Q4 2026"
+       ],
+       "values": [
+        90676,
+        84593,
+        49446,
+        63225,
+        81819,
+        10053,
+        49829,
+        47606,
+        37549,
+        66346,
+        86019,
+        89516
+       ]
+      }
+     ],
+     "dataMismatches": []
+    },
+    "reimport": {
+     "charts": 1,
+     "type": "area",
+     "dataMismatches": []
+    }
+   },
+   "chart": {
+    "catalogElement": "areaChart",
+    "catalogComposition": "single",
+    "preview": {
+     "construct": "area",
+     "legacy": false,
+     "noChartData": false,
+     "marks": {
+      "kind": "area",
+      "expected": {
+       "areas": 1
+      },
+      "actual": {
+       "areas": 1
+      },
+      "equal": true
+     },
+     "legacyBars": null
+    },
+    "export": {
+     "element": "areaChart",
+     "construct": "areaChart, grouping standard",
+     "nativeConstruct": true,
+     "adaptations": [],
+     "diagnostics": [],
+     "series": 1,
+     "embeddedWorkbooks": 1,
+     "dataMismatches": []
+    },
+    "reimport": {
+     "type": "area",
+     "sameId": true,
+     "dataMismatches": []
+    }
+   },
+   "classification": "works",
+   "engineSummary": "preview area marks {\"areas\":1}; export areaChart, grouping standard; re-import area",
+   "reasons": []
+  },
+  {
+   "dimension": "charts",
+   "id": "stacked-area-3x",
+   "name": "STACKED_AREA_3X",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "expected": {
+     "element": "areaChart",
+     "composition": "single",
+     "kind": "area",
+     "grouping": "stacked",
+     "markers": false,
+     "rows": 12,
+     "series": 3,
+     "seriesColumns": [
+      {
+       "name": "Value 1",
+       "column": 1
+      },
+      {
+       "name": "Value 2",
+       "column": 2
+      },
+      {
+       "name": "Value 3",
+       "column": 3
+      }
+     ]
+    },
+    "snippetChart": {
+     "type": "stacked-area-3x",
+     "columns": 4,
+     "rows": 12,
+     "slides": 1
+    },
+    "preview": {
+     "ok": true,
+     "chartAttr": "stacked-area-3x",
+     "noChartData": false,
+     "legacy": false,
+     "diagnostics": [],
+     "marks": {
+      "kind": "area",
+      "expected": {
+       "areas": 3
+      },
+      "actual": {
+       "areas": 3
+      },
+      "equal": true
+     }
+    },
+    "export": {
+     "adaptations": [],
+     "diagnostics": [],
+     "chartParts": [
+      "ppt/charts/chart1.xml"
+     ],
+     "embeddedWorkbooks": 1,
+     "elements": [
+      "areaChart"
+     ],
+     "construct": {
+      "element": "areaChart",
+      "barDir": null,
+      "grouping": "stacked",
+      "radarStyle": null,
+      "scatterStyle": null,
+      "seriesSymbols": [
+       null,
+       null,
+       null
+      ],
+      "markers": false
+     },
+     "series": 3,
+     "data": [
+      {
+       "name": "Value 1",
+       "categories": [
+        "Q1 2024",
+        "Q2 2024",
+        "Q3 2024",
+        "Q4 2024",
+        "Q1 2025",
+        "Q2 2025",
+        "Q3 2025",
+        "Q4 2025",
+        "Q1 2026",
+        "Q2 2026",
+        "Q3 2026",
+        "Q4 2026"
+       ],
+       "values": [
+        29313,
+        13201,
+        16057,
+        42092,
+        72277,
+        90120,
+        19545,
+        69692,
+        64321,
+        92544,
+        85454,
+        35485
+       ]
+      },
+      {
+       "name": "Value 2",
+       "categories": [
+        "Q1 2024",
+        "Q2 2024",
+        "Q3 2024",
+        "Q4 2024",
+        "Q1 2025",
+        "Q2 2025",
+        "Q3 2025",
+        "Q4 2025",
+        "Q1 2026",
+        "Q2 2026",
+        "Q3 2026",
+        "Q4 2026"
+       ],
+       "values": [
+        60328,
+        74799,
+        62383,
+        41979,
+        29342,
+        95990,
+        10726,
+        23970,
+        65724,
+        38683,
+        33053,
+        77889
+       ]
+      },
+      {
+       "name": "Value 3",
+       "categories": [
+        "Q1 2024",
+        "Q2 2024",
+        "Q3 2024",
+        "Q4 2024",
+        "Q1 2025",
+        "Q2 2025",
+        "Q3 2025",
+        "Q4 2025",
+        "Q1 2026",
+        "Q2 2026",
+        "Q3 2026",
+        "Q4 2026"
+       ],
+       "values": [
+        70889,
+        16582,
+        83060,
+        42662,
+        25906,
+        69829,
+        27477,
+        70901,
+        97500,
+        79616,
+        83259,
+        88047
+       ]
+      }
+     ],
+     "dataMismatches": []
+    },
+    "reimport": {
+     "charts": 1,
+     "type": "stacked-area-3x",
+     "dataMismatches": []
+    }
+   },
+   "chart": {
+    "catalogElement": "areaChart",
+    "catalogComposition": "single",
+    "preview": {
+     "construct": "stacked-area-3x",
+     "legacy": false,
+     "noChartData": false,
+     "marks": {
+      "kind": "area",
+      "expected": {
+       "areas": 3
+      },
+      "actual": {
+       "areas": 3
+      },
+      "equal": true
+     },
+     "legacyBars": null
+    },
+    "export": {
+     "element": "areaChart",
+     "construct": "areaChart, grouping stacked",
+     "nativeConstruct": true,
+     "adaptations": [],
+     "diagnostics": [],
+     "series": 3,
+     "embeddedWorkbooks": 1,
+     "dataMismatches": []
+    },
+    "reimport": {
+     "type": "stacked-area-3x",
+     "sameId": true,
+     "dataMismatches": []
+    }
+   },
+   "classification": "works",
+   "engineSummary": "preview stacked-area-3x marks {\"areas\":3}; export areaChart, grouping stacked; re-import stacked-area-3x",
+   "reasons": []
+  },
+  {
+   "dimension": "charts",
+   "id": "100pct-stacked-area-3x",
+   "name": "100PCT_STACKED_AREA_3X",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "expected": {
+     "element": "areaChart",
+     "composition": "single",
+     "kind": "area",
+     "grouping": "percentStacked",
+     "markers": false,
+     "rows": 12,
+     "series": 3,
+     "seriesColumns": [
+      {
+       "name": "Value 1",
+       "column": 1
+      },
+      {
+       "name": "Value 2",
+       "column": 2
+      },
+      {
+       "name": "Value 3",
+       "column": 3
+      }
+     ]
+    },
+    "snippetChart": {
+     "type": "100pct-stacked-area-3x",
+     "columns": 4,
+     "rows": 12,
+     "slides": 1
+    },
+    "preview": {
+     "ok": true,
+     "chartAttr": "100pct-stacked-area-3x",
+     "noChartData": false,
+     "legacy": false,
+     "diagnostics": [],
+     "marks": {
+      "kind": "area",
+      "expected": {
+       "areas": 3
+      },
+      "actual": {
+       "areas": 3
+      },
+      "equal": true
+     }
+    },
+    "export": {
+     "adaptations": [],
+     "diagnostics": [],
+     "chartParts": [
+      "ppt/charts/chart1.xml"
+     ],
+     "embeddedWorkbooks": 1,
+     "elements": [
+      "areaChart"
+     ],
+     "construct": {
+      "element": "areaChart",
+      "barDir": null,
+      "grouping": "percentStacked",
+      "radarStyle": null,
+      "scatterStyle": null,
+      "seriesSymbols": [
+       null,
+       null,
+       null
+      ],
+      "markers": false
+     },
+     "series": 3,
+     "data": [
+      {
+       "name": "Value 1",
+       "categories": [
+        "Q1 2024",
+        "Q2 2024",
+        "Q3 2024",
+        "Q4 2024",
+        "Q1 2025",
+        "Q2 2025",
+        "Q3 2025",
+        "Q4 2025",
+        "Q1 2026",
+        "Q2 2026",
+        "Q3 2026",
+        "Q4 2026"
+       ],
+       "values": [
+        54020,
+        51904,
+        80798,
+        20561,
+        28136,
+        29769,
+        40311,
+        60205,
+        30028,
+        38043,
+        18418,
+        64377
+       ]
+      },
+      {
+       "name": "Value 2",
+       "categories": [
+        "Q1 2024",
+        "Q2 2024",
+        "Q3 2024",
+        "Q4 2024",
+        "Q1 2025",
+        "Q2 2025",
+        "Q3 2025",
+        "Q4 2025",
+        "Q1 2026",
+        "Q2 2026",
+        "Q3 2026",
+        "Q4 2026"
+       ],
+       "values": [
+        63424,
+        53369,
+        81121,
+        71069,
+        64496,
+        18161,
+        37110,
+        65069,
+        61049,
+        86556,
+        12560,
+        85456
+       ]
+      },
+      {
+       "name": "Value 3",
+       "categories": [
+        "Q1 2024",
+        "Q2 2024",
+        "Q3 2024",
+        "Q4 2024",
+        "Q1 2025",
+        "Q2 2025",
+        "Q3 2025",
+        "Q4 2025",
+        "Q1 2026",
+        "Q2 2026",
+        "Q3 2026",
+        "Q4 2026"
+       ],
+       "values": [
+        59857,
+        72518,
+        10772,
+        56105,
+        49139,
+        61116,
+        64921,
+        80545,
+        81582,
+        89069,
+        38906,
+        73993
+       ]
+      }
+     ],
+     "dataMismatches": []
+    },
+    "reimport": {
+     "charts": 1,
+     "type": "100pct-stacked-area-3x",
+     "dataMismatches": []
+    }
+   },
+   "chart": {
+    "catalogElement": "areaChart",
+    "catalogComposition": "single",
+    "preview": {
+     "construct": "100pct-stacked-area-3x",
+     "legacy": false,
+     "noChartData": false,
+     "marks": {
+      "kind": "area",
+      "expected": {
+       "areas": 3
+      },
+      "actual": {
+       "areas": 3
+      },
+      "equal": true
+     },
+     "legacyBars": null
+    },
+    "export": {
+     "element": "areaChart",
+     "construct": "areaChart, grouping percentStacked",
+     "nativeConstruct": true,
+     "adaptations": [],
+     "diagnostics": [],
+     "series": 3,
+     "embeddedWorkbooks": 1,
+     "dataMismatches": []
+    },
+    "reimport": {
+     "type": "100pct-stacked-area-3x",
+     "sameId": true,
+     "dataMismatches": []
+    }
+   },
+   "classification": "works",
+   "engineSummary": "preview 100pct-stacked-area-3x marks {\"areas\":3}; export areaChart, grouping percentStacked; re-import 100pct-stacked-area-3x",
+   "reasons": []
+  },
+  {
+   "dimension": "charts",
+   "id": "scatter",
+   "name": "SCATTER",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "expected": {
+     "element": "scatterChart",
+     "composition": "single",
+     "kind": "scatter",
+     "markers": false,
+     "scatterStyle": "marker",
+     "rows": 9,
+     "series": 1,
+     "seriesColumns": [
+      {
+       "name": "Y-Values",
+       "column": 2
+      }
+     ]
+    },
+    "snippetChart": {
+     "type": "scatter",
+     "columns": 3,
+     "rows": 9,
+     "slides": 1
+    },
+    "preview": {
+     "ok": true,
+     "chartAttr": "scatter",
+     "noChartData": false,
+     "legacy": false,
+     "diagnostics": [],
+     "marks": {
+      "kind": "scatter",
+      "expected": {
+       "points": 9
+      },
+      "actual": {
+       "points": 9
+      },
+      "equal": true
+     }
+    },
+    "export": {
+     "adaptations": [],
+     "diagnostics": [],
+     "chartParts": [
+      "ppt/charts/chart1.xml"
+     ],
+     "embeddedWorkbooks": 1,
+     "elements": [
+      "scatterChart"
+     ],
+     "construct": {
+      "element": "scatterChart",
+      "barDir": null,
+      "grouping": null,
+      "radarStyle": null,
+      "scatterStyle": "marker",
+      "seriesSymbols": [
+       "circle"
+      ],
+      "markers": true
+     },
+     "series": 1,
+     "data": [
+      {
+       "name": "Y-Values",
+       "categories": [
+        "38760",
+        "45774",
+        "67125",
+        "73654",
+        "13804",
+        "60968",
+        "54057",
+        "97670",
+        "99016"
+       ],
+       "values": [
+        62994,
+        31632,
+        71261,
+        26728,
+        91560,
+        80008,
+        13534,
+        61645,
+        87580
+       ]
+      }
+     ],
+     "dataMismatches": []
+    },
+    "reimport": {
+     "charts": 1,
+     "type": "scatter",
+     "dataMismatches": []
+    }
+   },
+   "chart": {
+    "catalogElement": "scatterChart",
+    "catalogComposition": "single",
+    "preview": {
+     "construct": "scatter",
+     "legacy": false,
+     "noChartData": false,
+     "marks": {
+      "kind": "scatter",
+      "expected": {
+       "points": 9
+      },
+      "actual": {
+       "points": 9
+      },
+      "equal": true
+     },
+     "legacyBars": null
+    },
+    "export": {
+     "element": "scatterChart",
+     "construct": "scatterChart, scatterStyle marker",
+     "nativeConstruct": true,
+     "adaptations": [],
+     "diagnostics": [],
+     "series": 1,
+     "embeddedWorkbooks": 1,
+     "dataMismatches": []
+    },
+    "reimport": {
+     "type": "scatter",
+     "sameId": true,
+     "dataMismatches": []
+    }
+   },
+   "classification": "works",
+   "engineSummary": "preview scatter marks {\"points\":9}; export scatterChart, scatterStyle marker; re-import scatter",
+   "reasons": []
+  },
+  {
+   "dimension": "charts",
+   "id": "radar",
+   "name": "RADAR",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "expected": {
+     "element": "radarChart",
+     "composition": "single",
+     "kind": "radar",
+     "markers": false,
+     "radarStyle": "standard",
+     "rows": 8,
+     "series": 1,
+     "seriesColumns": [
+      {
+       "name": "Value",
+       "column": 1
+      }
+     ]
+    },
+    "snippetChart": {
+     "type": "radar",
+     "columns": 2,
+     "rows": 8,
+     "slides": 1
+    },
+    "preview": {
+     "ok": true,
+     "chartAttr": "radar",
+     "noChartData": false,
+     "legacy": false,
+     "diagnostics": [],
+     "marks": {
+      "kind": "radar",
+      "expected": {
+       "series": 1,
+       "markers": 0
+      },
+      "actual": {
+       "series": 1,
+       "markers": 0
+      },
+      "equal": true
+     }
+    },
+    "export": {
+     "adaptations": [],
+     "diagnostics": [],
+     "chartParts": [
+      "ppt/charts/chart1.xml"
+     ],
+     "embeddedWorkbooks": 1,
+     "elements": [
+      "radarChart"
+     ],
+     "construct": {
+      "element": "radarChart",
+      "barDir": null,
+      "grouping": null,
+      "radarStyle": "standard",
+      "scatterStyle": null,
+      "seriesSymbols": [
+       "none"
+      ],
+      "markers": false
+     },
+     "series": 1,
+     "data": [
+      {
+       "name": "Value",
+       "categories": [
+        "Q1 2024",
+        "Q2 2024",
+        "Q3 2024",
+        "Q4 2024",
+        "Q1 2025",
+        "Q2 2025",
+        "Q3 2025",
+        "Q4 2025"
+       ],
+       "values": [
+        11607,
+        85243,
+        47268,
+        71524,
+        72746,
+        67733,
+        54657,
+        34164
+       ]
+      }
+     ],
+     "dataMismatches": []
+    },
+    "reimport": {
+     "charts": 1,
+     "type": "radar",
+     "dataMismatches": []
+    }
+   },
+   "chart": {
+    "catalogElement": "radarChart",
+    "catalogComposition": "single",
+    "preview": {
+     "construct": "radar",
+     "legacy": false,
+     "noChartData": false,
+     "marks": {
+      "kind": "radar",
+      "expected": {
+       "series": 1,
+       "markers": 0
+      },
+      "actual": {
+       "series": 1,
+       "markers": 0
+      },
+      "equal": true
+     },
+     "legacyBars": null
+    },
+    "export": {
+     "element": "radarChart",
+     "construct": "radarChart, radarStyle standard, no markers",
+     "nativeConstruct": true,
+     "adaptations": [],
+     "diagnostics": [],
+     "series": 1,
+     "embeddedWorkbooks": 1,
+     "dataMismatches": []
+    },
+    "reimport": {
+     "type": "radar",
+     "sameId": true,
+     "dataMismatches": []
+    }
+   },
+   "classification": "works",
+   "engineSummary": "preview radar marks {\"series\":1,\"markers\":0}; export radarChart, radarStyle standard, no markers; re-import radar",
+   "reasons": []
+  },
+  {
+   "dimension": "charts",
+   "id": "radar-with-markers",
+   "name": "RADAR_WITH_MARKERS",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "expected": {
+     "element": "radarChart",
+     "composition": "single",
+     "kind": "radar",
+     "markers": true,
+     "radarStyle": "marker",
+     "rows": 8,
+     "series": 1,
+     "seriesColumns": [
+      {
+       "name": "Value",
+       "column": 1
+      }
+     ]
+    },
+    "snippetChart": {
+     "type": "radar-with-markers",
+     "columns": 2,
+     "rows": 8,
+     "slides": 1
+    },
+    "preview": {
+     "ok": true,
+     "chartAttr": "radar-with-markers",
+     "noChartData": false,
+     "legacy": false,
+     "diagnostics": [],
+     "marks": {
+      "kind": "radar",
+      "expected": {
+       "series": 1,
+       "markers": 8
+      },
+      "actual": {
+       "series": 1,
+       "markers": 8
+      },
+      "equal": true
+     }
+    },
+    "export": {
+     "adaptations": [],
+     "diagnostics": [],
+     "chartParts": [
+      "ppt/charts/chart1.xml"
+     ],
+     "embeddedWorkbooks": 1,
+     "elements": [
+      "radarChart"
+     ],
+     "construct": {
+      "element": "radarChart",
+      "barDir": null,
+      "grouping": null,
+      "radarStyle": "marker",
+      "scatterStyle": null,
+      "seriesSymbols": [
+       "circle"
+      ],
+      "markers": true
+     },
+     "series": 1,
+     "data": [
+      {
+       "name": "Value",
+       "categories": [
+        "Q1 2024",
+        "Q2 2024",
+        "Q3 2024",
+        "Q4 2024",
+        "Q1 2025",
+        "Q2 2025",
+        "Q3 2025",
+        "Q4 2025"
+       ],
+       "values": [
+        16734,
+        43092,
+        72616,
+        24953,
+        18564,
+        62521,
+        74454,
+        19710
+       ]
+      }
+     ],
+     "dataMismatches": []
+    },
+    "reimport": {
+     "charts": 1,
+     "type": "radar-with-markers",
+     "dataMismatches": []
+    }
+   },
+   "chart": {
+    "catalogElement": "radarChart",
+    "catalogComposition": "single",
+    "preview": {
+     "construct": "radar-with-markers",
+     "legacy": false,
+     "noChartData": false,
+     "marks": {
+      "kind": "radar",
+      "expected": {
+       "series": 1,
+       "markers": 8
+      },
+      "actual": {
+       "series": 1,
+       "markers": 8
+      },
+      "equal": true
+     },
+     "legacyBars": null
+    },
+    "export": {
+     "element": "radarChart",
+     "construct": "radarChart, radarStyle marker, markers",
+     "nativeConstruct": true,
+     "adaptations": [],
+     "diagnostics": [],
+     "series": 1,
+     "embeddedWorkbooks": 1,
+     "dataMismatches": []
+    },
+    "reimport": {
+     "type": "radar-with-markers",
+     "sameId": true,
+     "dataMismatches": []
+    }
+   },
+   "classification": "works",
+   "engineSummary": "preview radar-with-markers marks {\"series\":1,\"markers\":8}; export radarChart, radarStyle marker, markers; re-import radar-with-markers",
+   "reasons": []
+  },
+  {
+   "dimension": "charts",
+   "id": "filled-radar",
+   "name": "FILLED_RADAR",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "expected": {
+     "element": "radarChart",
+     "composition": "single",
+     "kind": "radar",
+     "markers": false,
+     "radarStyle": "filled",
+     "rows": 8,
+     "series": 1,
+     "seriesColumns": [
+      {
+       "name": "Value",
+       "column": 1
+      }
+     ]
+    },
+    "snippetChart": {
+     "type": "filled-radar",
+     "columns": 2,
+     "rows": 8,
+     "slides": 1
+    },
+    "preview": {
+     "ok": true,
+     "chartAttr": "filled-radar",
+     "noChartData": false,
+     "legacy": false,
+     "diagnostics": [],
+     "marks": {
+      "kind": "radar",
+      "expected": {
+       "series": 1,
+       "markers": 0
+      },
+      "actual": {
+       "series": 1,
+       "markers": 0
+      },
+      "equal": true
+     }
+    },
+    "export": {
+     "adaptations": [],
+     "diagnostics": [],
+     "chartParts": [
+      "ppt/charts/chart1.xml"
+     ],
+     "embeddedWorkbooks": 1,
+     "elements": [
+      "radarChart"
+     ],
+     "construct": {
+      "element": "radarChart",
+      "barDir": null,
+      "grouping": null,
+      "radarStyle": "filled",
+      "scatterStyle": null,
+      "seriesSymbols": [
+       "none"
+      ],
+      "markers": false
+     },
+     "series": 1,
+     "data": [
+      {
+       "name": "Value",
+       "categories": [
+        "Q1 2024",
+        "Q2 2024",
+        "Q3 2024",
+        "Q4 2024",
+        "Q1 2025",
+        "Q2 2025",
+        "Q3 2025",
+        "Q4 2025"
+       ],
+       "values": [
+        85631,
+        92502,
+        99974,
+        17026,
+        29887,
+        29555,
+        83772,
+        49824
+       ]
+      }
+     ],
+     "dataMismatches": []
+    },
+    "reimport": {
+     "charts": 1,
+     "type": "filled-radar",
+     "dataMismatches": []
+    }
+   },
+   "chart": {
+    "catalogElement": "radarChart",
+    "catalogComposition": "single",
+    "preview": {
+     "construct": "filled-radar",
+     "legacy": false,
+     "noChartData": false,
+     "marks": {
+      "kind": "radar",
+      "expected": {
+       "series": 1,
+       "markers": 0
+      },
+      "actual": {
+       "series": 1,
+       "markers": 0
+      },
+      "equal": true
+     },
+     "legacyBars": null
+    },
+    "export": {
+     "element": "radarChart",
+     "construct": "radarChart, radarStyle filled, no markers",
+     "nativeConstruct": true,
+     "adaptations": [],
+     "diagnostics": [],
+     "series": 1,
+     "embeddedWorkbooks": 1,
+     "dataMismatches": []
+    },
+    "reimport": {
+     "type": "filled-radar",
+     "sameId": true,
+     "dataMismatches": []
+    }
+   },
+   "classification": "works",
+   "engineSummary": "preview filled-radar marks {\"series\":1,\"markers\":0}; export radarChart, radarStyle filled, no markers; re-import filled-radar",
+   "reasons": []
+  },
+  {
+   "dimension": "charts",
+   "id": "treemap",
+   "name": "TREEMAP",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "expected": {
+     "element": "treemapChart",
+     "composition": "extension",
+     "kind": null,
+     "markers": false,
+     "rows": 6,
+     "series": 1,
+     "seriesColumns": [
+      {
+       "name": "Series1",
+       "column": 1
+      }
+     ]
+    },
+    "snippetChart": {
+     "type": "treemap",
+     "columns": 2,
+     "rows": 6,
+     "slides": 1
+    },
+    "preview": {
+     "ok": true,
+     "chartAttr": null,
+     "noChartData": false,
+     "legacy": true,
+     "diagnostics": [],
+     "legacyBars": 6
+    },
+    "export": {
+     "adaptations": [
+      "chartex-fallback"
+     ],
+     "diagnostics": [
+      "chart-data-adapted"
+     ],
+     "chartParts": [
+      "ppt/charts/chart1.xml"
+     ],
+     "embeddedWorkbooks": 1,
+     "elements": [
+      "barChart"
+     ],
+     "construct": {
+      "element": "barChart",
+      "barDir": "col",
+      "grouping": "clustered",
+      "radarStyle": null,
+      "scatterStyle": null,
+      "seriesSymbols": [
+       null
+      ],
+      "markers": false
+     },
+     "series": 1,
+     "data": [
+      {
+       "name": "Series1",
+       "categories": [
+        "Q1 2024",
+        "Q2 2024",
+        "Q3 2024",
+        "Q4 2024",
+        "Q1 2025",
+        "Q2 2025"
+       ],
+       "values": [
+        21164,
+        42530,
+        25525,
+        83147,
+        64548,
+        89471
+       ]
+      }
+     ],
+     "dataMismatches": []
+    },
+    "reimport": {
+     "charts": 1,
+     "type": "column",
+     "dataMismatches": []
+    }
+   },
+   "chart": {
+    "catalogElement": "treemapChart",
+    "catalogComposition": "extension",
+    "preview": {
+     "construct": null,
+     "legacy": true,
+     "noChartData": false,
+     "marks": null,
+     "legacyBars": 6
+    },
+    "export": {
+     "element": "barChart",
+     "construct": "barChart, barDir col, grouping clustered",
+     "nativeConstruct": false,
+     "adaptations": [
+      "chartex-fallback"
+     ],
+     "diagnostics": [
+      "chart-data-adapted"
+     ],
+     "series": 1,
+     "embeddedWorkbooks": 1,
+     "dataMismatches": []
+    },
+    "reimport": {
+     "type": "column",
+     "sameId": false,
+     "dataMismatches": []
+    }
+   },
+   "classification": "partial",
+   "engineSummary": "preview legacy single-series sketch; export barChart, barDir col, grouping clustered (chart-data-adapted: chartex-fallback); re-import column",
+   "reasons": [
+    "preview keeps the legacy single-series sketch (no data-opf-chart; opf-render draws no treemap construct)",
+    "export writes barChart, barDir col, grouping clustered; core catalog mappings.openxml treemapChart",
+    "export reports chart-data-adapted (chartex-fallback)",
+    "re-import returns chart type \"column\", expected \"treemap\" (diagnostics: heading-import-reflow)"
+   ]
+  },
+  {
+   "dimension": "charts",
+   "id": "histogram",
+   "name": "HISTOGRAM",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "expected": {
+     "element": "histogramChart",
+     "composition": "extension",
+     "kind": null,
+     "markers": false,
+     "rows": 49,
+     "series": 1,
+     "seriesColumns": [
+      {
+       "name": "Value",
+       "column": 1
+      }
+     ]
+    },
+    "snippetChart": {
+     "type": "histogram",
+     "columns": 2,
+     "rows": 49,
+     "slides": 1
+    },
+    "preview": {
+     "ok": true,
+     "chartAttr": null,
+     "noChartData": false,
+     "legacy": true,
+     "diagnostics": [
+      "text-overflow"
+     ],
+     "legacyBars": 49
+    },
+    "export": {
+     "adaptations": [
+      "chartex-fallback"
+     ],
+     "diagnostics": [
+      "chart-data-adapted"
+     ],
+     "chartParts": [
+      "ppt/charts/chart1.xml"
+     ],
+     "embeddedWorkbooks": 1,
+     "elements": [
+      "barChart"
+     ],
+     "construct": {
+      "element": "barChart",
+      "barDir": "col",
+      "grouping": "clustered",
+      "radarStyle": null,
+      "scatterStyle": null,
+      "seriesSymbols": [
+       null
+      ],
+      "markers": false
+     },
+     "series": 1,
+     "data": [
+      {
+       "name": "Value",
+       "categories": [
+        "Cat 1",
+        "Cat 2",
+        "Cat 3",
+        "Cat 4",
+        "Cat 5",
+        "Cat 6",
+        "Cat 7",
+        "Cat 8",
+        "Cat 9",
+        "Cat 10",
+        "Cat 11",
+        "Cat 12",
+        "Cat 13",
+        "Cat 14",
+        "Cat 15",
+        "Cat 16",
+        "Cat 17",
+        "Cat 18",
+        "Cat 19",
+        "Cat 20",
+        "Cat 21",
+        "Cat 22",
+        "Cat 23",
+        "Cat 24",
+        "Cat 25",
+        "Cat 26",
+        "Cat 27",
+        "Cat 28",
+        "Cat 29",
+        "Cat 30",
+        "Cat 31",
+        "Cat 32",
+        "Cat 33",
+        "Cat 34",
+        "Cat 35",
+        "Cat 36",
+        "Cat 37",
+        "Cat 38",
+        "Cat 39",
+        "Cat 40",
+        "Cat 41",
+        "Cat 42",
+        "Cat 43",
+        "Cat 44",
+        "Cat 45",
+        "Cat 46",
+        "Cat 47",
+        "Cat 48",
+        "Cat 49"
+       ],
+       "values": [
+        23006,
+        37235,
+        91987,
+        37659,
+        44687,
+        96563,
+        20641,
+        30585,
+        41439,
+        32782,
+        82350,
+        19838,
+        30517,
+        10350,
+        63545,
+        69048,
+        87832,
+        71592,
+        48175,
+        14278,
+        40340,
+        47762,
+        47056,
+        69510,
+        19329,
+        40595,
+        44675,
+        91927,
+        87304,
+        96662,
+        35928,
+        65723,
+        25043,
+        81376,
+        39466,
+        94886,
+        29528,
+        44816,
+        28643,
+        19359,
+        17816,
+        31747,
+        50319,
+        87993,
+        84607,
+        47828,
+        67560,
+        26299,
+        71433
+       ]
+      }
+     ],
+     "dataMismatches": []
+    },
+    "reimport": {
+     "charts": 1,
+     "type": "column",
+     "dataMismatches": []
+    }
+   },
+   "chart": {
+    "catalogElement": "histogramChart",
+    "catalogComposition": "extension",
+    "preview": {
+     "construct": null,
+     "legacy": true,
+     "noChartData": false,
+     "marks": null,
+     "legacyBars": 49
+    },
+    "export": {
+     "element": "barChart",
+     "construct": "barChart, barDir col, grouping clustered",
+     "nativeConstruct": false,
+     "adaptations": [
+      "chartex-fallback"
+     ],
+     "diagnostics": [
+      "chart-data-adapted"
+     ],
+     "series": 1,
+     "embeddedWorkbooks": 1,
+     "dataMismatches": []
+    },
+    "reimport": {
+     "type": "column",
+     "sameId": false,
+     "dataMismatches": []
+    }
+   },
+   "classification": "partial",
+   "engineSummary": "preview legacy single-series sketch; export barChart, barDir col, grouping clustered (chart-data-adapted: chartex-fallback); re-import column",
+   "reasons": [
+    "preview keeps the legacy single-series sketch (no data-opf-chart; opf-render draws no histogram construct)",
+    "export writes barChart, barDir col, grouping clustered; core catalog mappings.openxml histogramChart",
+    "export reports chart-data-adapted (chartex-fallback)",
+    "re-import returns chart type \"column\", expected \"histogram\" (diagnostics: heading-import-reflow)"
+   ]
+  },
+  {
+   "dimension": "charts",
+   "id": "pareto",
+   "name": "PARETO",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "expected": {
+     "element": "histogramChart",
+     "composition": "extension",
+     "kind": null,
+     "markers": false,
+     "rows": 49,
+     "series": 1,
+     "seriesColumns": [
+      {
+       "name": "Series1",
+       "column": 1
+      }
+     ]
+    },
+    "snippetChart": {
+     "type": "pareto",
+     "columns": 2,
+     "rows": 49,
+     "slides": 1
+    },
+    "preview": {
+     "ok": true,
+     "chartAttr": null,
+     "noChartData": false,
+     "legacy": true,
+     "diagnostics": [
+      "text-overflow"
+     ],
+     "legacyBars": 49
+    },
+    "export": {
+     "adaptations": [
+      "chartex-fallback"
+     ],
+     "diagnostics": [
+      "chart-data-adapted"
+     ],
+     "chartParts": [
+      "ppt/charts/chart1.xml"
+     ],
+     "embeddedWorkbooks": 1,
+     "elements": [
+      "barChart"
+     ],
+     "construct": {
+      "element": "barChart",
+      "barDir": "col",
+      "grouping": "clustered",
+      "radarStyle": null,
+      "scatterStyle": null,
+      "seriesSymbols": [
+       null
+      ],
+      "markers": false
+     },
+     "series": 1,
+     "data": [
+      {
+       "name": "Series1",
+       "categories": [
+        "Cat 1",
+        "Cat 2",
+        "Cat 3",
+        "Cat 4",
+        "Cat 5",
+        "Cat 6",
+        "Cat 7",
+        "Cat 8",
+        "Cat 9",
+        "Cat 10",
+        "Cat 11",
+        "Cat 12",
+        "Cat 13",
+        "Cat 14",
+        "Cat 15",
+        "Cat 16",
+        "Cat 17",
+        "Cat 18",
+        "Cat 19",
+        "Cat 20",
+        "Cat 21",
+        "Cat 22",
+        "Cat 23",
+        "Cat 24",
+        "Cat 25",
+        "Cat 26",
+        "Cat 27",
+        "Cat 28",
+        "Cat 29",
+        "Cat 30",
+        "Cat 31",
+        "Cat 32",
+        "Cat 33",
+        "Cat 34",
+        "Cat 35",
+        "Cat 36",
+        "Cat 37",
+        "Cat 38",
+        "Cat 39",
+        "Cat 40",
+        "Cat 41",
+        "Cat 42",
+        "Cat 43",
+        "Cat 44",
+        "Cat 45",
+        "Cat 46",
+        "Cat 47",
+        "Cat 48",
+        "Cat 49"
+       ],
+       "values": [
+        49857,
+        62757,
+        45683,
+        75597,
+        80776,
+        74722,
+        67377,
+        20543,
+        88385,
+        15224,
+        66626,
+        52247,
+        89129,
+        42816,
+        13390,
+        21970,
+        40005,
+        98381,
+        85392,
+        86955,
+        12719,
+        98117,
+        45325,
+        85529,
+        15273,
+        32962,
+        71669,
+        78021,
+        95394,
+        67963,
+        46458,
+        33788,
+        86720,
+        67132,
+        93202,
+        74451,
+        21959,
+        71605,
+        55607,
+        63523,
+        53687,
+        52081,
+        97835,
+        23710,
+        31079,
+        53228,
+        63955,
+        74942,
+        47777
+       ]
+      }
+     ],
+     "dataMismatches": []
+    },
+    "reimport": {
+     "charts": 1,
+     "type": "column",
+     "dataMismatches": []
+    }
+   },
+   "chart": {
+    "catalogElement": "histogramChart",
+    "catalogComposition": "extension",
+    "preview": {
+     "construct": null,
+     "legacy": true,
+     "noChartData": false,
+     "marks": null,
+     "legacyBars": 49
+    },
+    "export": {
+     "element": "barChart",
+     "construct": "barChart, barDir col, grouping clustered",
+     "nativeConstruct": false,
+     "adaptations": [
+      "chartex-fallback"
+     ],
+     "diagnostics": [
+      "chart-data-adapted"
+     ],
+     "series": 1,
+     "embeddedWorkbooks": 1,
+     "dataMismatches": []
+    },
+    "reimport": {
+     "type": "column",
+     "sameId": false,
+     "dataMismatches": []
+    }
+   },
+   "classification": "partial",
+   "engineSummary": "preview legacy single-series sketch; export barChart, barDir col, grouping clustered (chart-data-adapted: chartex-fallback); re-import column",
+   "reasons": [
+    "preview keeps the legacy single-series sketch (no data-opf-chart; opf-render draws no pareto construct)",
+    "export writes barChart, barDir col, grouping clustered; core catalog mappings.openxml histogramChart",
+    "export reports chart-data-adapted (chartex-fallback)",
+    "re-import returns chart type \"column\", expected \"pareto\" (diagnostics: heading-import-reflow)"
+   ]
+  },
+  {
+   "dimension": "charts",
+   "id": "world",
+   "name": "WORLD",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "expected": {
+     "element": "mapChart",
+     "composition": "extension",
+     "kind": null,
+     "markers": false,
+     "rows": 14,
+     "series": 1,
+     "seriesColumns": [
+      {
+       "name": "Value",
+       "column": 1
+      }
+     ]
+    },
+    "snippetChart": {
+     "type": "world",
+     "columns": 2,
+     "rows": 14,
+     "slides": 1
+    },
+    "preview": {
+     "ok": true,
+     "chartAttr": null,
+     "noChartData": false,
+     "legacy": true,
+     "diagnostics": [],
+     "legacyBars": 14
+    },
+    "export": {
+     "adaptations": [
+      "chartex-fallback"
+     ],
+     "diagnostics": [
+      "chart-data-adapted"
+     ],
+     "chartParts": [
+      "ppt/charts/chart1.xml"
+     ],
+     "embeddedWorkbooks": 1,
+     "elements": [
+      "barChart"
+     ],
+     "construct": {
+      "element": "barChart",
+      "barDir": "col",
+      "grouping": "clustered",
+      "radarStyle": null,
+      "scatterStyle": null,
+      "seriesSymbols": [
+       null
+      ],
+      "markers": false
+     },
+     "series": 1,
+     "data": [
+      {
+       "name": "Value",
+       "categories": [
+        "Cat 1",
+        "Cat 2",
+        "Cat 3",
+        "Cat 4",
+        "Cat 5",
+        "Cat 6",
+        "Cat 7",
+        "Cat 8",
+        "Cat 9",
+        "Cat 10",
+        "Cat 11",
+        "Cat 12",
+        "Cat 13",
+        "Cat 14"
+       ],
+       "values": [
+        70305,
+        57428,
+        21551,
+        67240,
+        23875,
+        41891,
+        67104,
+        87184,
+        62487,
+        78676,
+        20308,
+        61873,
+        50668,
+        54500
+       ]
+      }
+     ],
+     "dataMismatches": []
+    },
+    "reimport": {
+     "charts": 1,
+     "type": "column",
+     "dataMismatches": []
+    }
+   },
+   "chart": {
+    "catalogElement": "mapChart",
+    "catalogComposition": "extension",
+    "preview": {
+     "construct": null,
+     "legacy": true,
+     "noChartData": false,
+     "marks": null,
+     "legacyBars": 14
+    },
+    "export": {
+     "element": "barChart",
+     "construct": "barChart, barDir col, grouping clustered",
+     "nativeConstruct": false,
+     "adaptations": [
+      "chartex-fallback"
+     ],
+     "diagnostics": [
+      "chart-data-adapted"
+     ],
+     "series": 1,
+     "embeddedWorkbooks": 1,
+     "dataMismatches": []
+    },
+    "reimport": {
+     "type": "column",
+     "sameId": false,
+     "dataMismatches": []
+    }
+   },
+   "classification": "partial",
+   "engineSummary": "preview legacy single-series sketch; export barChart, barDir col, grouping clustered (chart-data-adapted: chartex-fallback); re-import column",
+   "reasons": [
+    "preview keeps the legacy single-series sketch (no data-opf-chart; opf-render draws no world construct)",
+    "export writes barChart, barDir col, grouping clustered; core catalog mappings.openxml mapChart",
+    "export reports chart-data-adapted (chartex-fallback)",
+    "re-import returns chart type \"column\", expected \"world\" (diagnostics: heading-import-reflow)"
+   ]
+  },
+  {
+   "dimension": "charts",
+   "id": "box-and-whisker",
+   "name": "BOX_AND_WHISKER",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "expected": {
+     "element": "boxWhiskerChart",
+     "composition": "extension",
+     "kind": null,
+     "markers": false,
+     "rows": 22,
+     "series": 1,
+     "seriesColumns": [
+      {
+       "name": "Series1",
+       "column": 1
+      }
+     ]
+    },
+    "snippetChart": {
+     "type": "box-and-whisker",
+     "columns": 2,
+     "rows": 22,
+     "slides": 1
+    },
+    "preview": {
+     "ok": true,
+     "chartAttr": null,
+     "noChartData": false,
+     "legacy": true,
+     "diagnostics": [
+      "text-overflow"
+     ],
+     "legacyBars": 22
+    },
+    "export": {
+     "adaptations": [
+      "chartex-fallback"
+     ],
+     "diagnostics": [
+      "chart-data-adapted"
+     ],
+     "chartParts": [
+      "ppt/charts/chart1.xml"
+     ],
+     "embeddedWorkbooks": 1,
+     "elements": [
+      "barChart"
+     ],
+     "construct": {
+      "element": "barChart",
+      "barDir": "col",
+      "grouping": "clustered",
+      "radarStyle": null,
+      "scatterStyle": null,
+      "seriesSymbols": [
+       null
+      ],
+      "markers": false
+     },
+     "series": 1,
+     "data": [
+      {
+       "name": "Series1",
+       "categories": [
+        "Cat 1",
+        "Cat 2",
+        "Cat 3",
+        "Cat 4",
+        "Cat 5",
+        "Cat 6",
+        "Cat 7",
+        "Cat 8",
+        "Cat 9",
+        "Cat 10",
+        "Cat 11",
+        "Cat 12",
+        "Cat 13",
+        "Cat 14",
+        "Cat 15",
+        "Cat 16",
+        "Cat 17",
+        "Cat 18",
+        "Cat 19",
+        "Cat 20",
+        "Cat 21",
+        "Cat 22"
+       ],
+       "values": [
+        52363,
+        92210,
+        51436,
+        29786,
+        67640,
+        18950,
+        71462,
+        67961,
+        92756,
+        49691,
+        46002,
+        87518,
+        17362,
+        56129,
+        76497,
+        19724,
+        50685,
+        70521,
+        69233,
+        14929,
+        17456,
+        58331
+       ]
+      }
+     ],
+     "dataMismatches": []
+    },
+    "reimport": {
+     "charts": 1,
+     "type": "column",
+     "dataMismatches": []
+    }
+   },
+   "chart": {
+    "catalogElement": "boxWhiskerChart",
+    "catalogComposition": "extension",
+    "preview": {
+     "construct": null,
+     "legacy": true,
+     "noChartData": false,
+     "marks": null,
+     "legacyBars": 22
+    },
+    "export": {
+     "element": "barChart",
+     "construct": "barChart, barDir col, grouping clustered",
+     "nativeConstruct": false,
+     "adaptations": [
+      "chartex-fallback"
+     ],
+     "diagnostics": [
+      "chart-data-adapted"
+     ],
+     "series": 1,
+     "embeddedWorkbooks": 1,
+     "dataMismatches": []
+    },
+    "reimport": {
+     "type": "column",
+     "sameId": false,
+     "dataMismatches": []
+    }
+   },
+   "classification": "partial",
+   "engineSummary": "preview legacy single-series sketch; export barChart, barDir col, grouping clustered (chart-data-adapted: chartex-fallback); re-import column",
+   "reasons": [
+    "preview keeps the legacy single-series sketch (no data-opf-chart; opf-render draws no box-and-whisker construct)",
+    "export writes barChart, barDir col, grouping clustered; core catalog mappings.openxml boxWhiskerChart",
+    "export reports chart-data-adapted (chartex-fallback)",
+    "re-import returns chart type \"column\", expected \"box-and-whisker\" (diagnostics: heading-import-reflow)"
+   ]
+  },
+  {
+   "dimension": "charts",
+   "id": "waterfall",
+   "name": "WATERFALL",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "expected": {
+     "element": "waterfallChart",
+     "composition": "extension",
+     "kind": null,
+     "markers": false,
+     "rows": 8,
+     "series": 1,
+     "seriesColumns": [
+      {
+       "name": "Series1",
+       "column": 1
+      }
+     ]
+    },
+    "snippetChart": {
+     "type": "waterfall",
+     "columns": 2,
+     "rows": 8,
+     "slides": 1
+    },
+    "preview": {
+     "ok": true,
+     "chartAttr": null,
+     "noChartData": false,
+     "legacy": true,
+     "diagnostics": [],
+     "legacyBars": 8
+    },
+    "export": {
+     "adaptations": [
+      "chartex-fallback"
+     ],
+     "diagnostics": [
+      "chart-data-adapted"
+     ],
+     "chartParts": [
+      "ppt/charts/chart1.xml"
+     ],
+     "embeddedWorkbooks": 1,
+     "elements": [
+      "barChart"
+     ],
+     "construct": {
+      "element": "barChart",
+      "barDir": "col",
+      "grouping": "clustered",
+      "radarStyle": null,
+      "scatterStyle": null,
+      "seriesSymbols": [
+       null
+      ],
+      "markers": false
+     },
+     "series": 1,
+     "data": [
+      {
+       "name": "Series1",
+       "categories": [
+        "Q1 2024",
+        "Q2 2024",
+        "Q3 2024",
+        "Q4 2024",
+        "Q1 2025",
+        "Q2 2025",
+        "Q3 2025",
+        "Q4 2025"
+       ],
+       "values": [
+        88282,
+        59377,
+        30218,
+        31266,
+        33703,
+        91885,
+        31697,
+        67366
+       ]
+      }
+     ],
+     "dataMismatches": []
+    },
+    "reimport": {
+     "charts": 1,
+     "type": "column",
+     "dataMismatches": []
+    }
+   },
+   "chart": {
+    "catalogElement": "waterfallChart",
+    "catalogComposition": "extension",
+    "preview": {
+     "construct": null,
+     "legacy": true,
+     "noChartData": false,
+     "marks": null,
+     "legacyBars": 8
+    },
+    "export": {
+     "element": "barChart",
+     "construct": "barChart, barDir col, grouping clustered",
+     "nativeConstruct": false,
+     "adaptations": [
+      "chartex-fallback"
+     ],
+     "diagnostics": [
+      "chart-data-adapted"
+     ],
+     "series": 1,
+     "embeddedWorkbooks": 1,
+     "dataMismatches": []
+    },
+    "reimport": {
+     "type": "column",
+     "sameId": false,
+     "dataMismatches": []
+    }
+   },
+   "classification": "partial",
+   "engineSummary": "preview legacy single-series sketch; export barChart, barDir col, grouping clustered (chart-data-adapted: chartex-fallback); re-import column",
+   "reasons": [
+    "preview keeps the legacy single-series sketch (no data-opf-chart; opf-render draws no waterfall construct)",
+    "export writes barChart, barDir col, grouping clustered; core catalog mappings.openxml waterfallChart",
+    "export reports chart-data-adapted (chartex-fallback)",
+    "re-import returns chart type \"column\", expected \"waterfall\" (diagnostics: heading-import-reflow)"
+   ]
+  },
+  {
+   "dimension": "charts",
+   "id": "funnel",
+   "name": "FUNNEL",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "expected": {
+     "element": "funnelChart",
+     "composition": "extension",
+     "kind": null,
+     "markers": false,
+     "rows": 5,
+     "series": 1,
+     "seriesColumns": [
+      {
+       "name": "Series1",
+       "column": 1
+      }
+     ]
+    },
+    "snippetChart": {
+     "type": "funnel",
+     "columns": 2,
+     "rows": 5,
+     "slides": 1
+    },
+    "preview": {
+     "ok": true,
+     "chartAttr": null,
+     "noChartData": false,
+     "legacy": true,
+     "diagnostics": [],
+     "legacyBars": 5
+    },
+    "export": {
+     "adaptations": [
+      "chartex-fallback"
+     ],
+     "diagnostics": [
+      "chart-data-adapted"
+     ],
+     "chartParts": [
+      "ppt/charts/chart1.xml"
+     ],
+     "embeddedWorkbooks": 1,
+     "elements": [
+      "barChart"
+     ],
+     "construct": {
+      "element": "barChart",
+      "barDir": "col",
+      "grouping": "clustered",
+      "radarStyle": null,
+      "scatterStyle": null,
+      "seriesSymbols": [
+       null
+      ],
+      "markers": false
+     },
+     "series": 1,
+     "data": [
+      {
+       "name": "Series1",
+       "categories": [
+        "Q1 2024",
+        "Q2 2024",
+        "Q3 2024",
+        "Q4 2024",
+        "Q1 2025"
+       ],
+       "values": [
+        15726,
+        63852,
+        57749,
+        98652,
+        41133
+       ]
+      }
+     ],
+     "dataMismatches": []
+    },
+    "reimport": {
+     "charts": 1,
+     "type": "column",
+     "dataMismatches": []
+    }
+   },
+   "chart": {
+    "catalogElement": "funnelChart",
+    "catalogComposition": "extension",
+    "preview": {
+     "construct": null,
+     "legacy": true,
+     "noChartData": false,
+     "marks": null,
+     "legacyBars": 5
+    },
+    "export": {
+     "element": "barChart",
+     "construct": "barChart, barDir col, grouping clustered",
+     "nativeConstruct": false,
+     "adaptations": [
+      "chartex-fallback"
+     ],
+     "diagnostics": [
+      "chart-data-adapted"
+     ],
+     "series": 1,
+     "embeddedWorkbooks": 1,
+     "dataMismatches": []
+    },
+    "reimport": {
+     "type": "column",
+     "sameId": false,
+     "dataMismatches": []
+    }
+   },
+   "classification": "partial",
+   "engineSummary": "preview legacy single-series sketch; export barChart, barDir col, grouping clustered (chart-data-adapted: chartex-fallback); re-import column",
+   "reasons": [
+    "preview keeps the legacy single-series sketch (no data-opf-chart; opf-render draws no funnel construct)",
+    "export writes barChart, barDir col, grouping clustered; core catalog mappings.openxml funnelChart",
+    "export reports chart-data-adapted (chartex-fallback)",
+    "re-import returns chart type \"column\", expected \"funnel\" (diagnostics: heading-import-reflow)"
+   ]
   }
  ]
 }

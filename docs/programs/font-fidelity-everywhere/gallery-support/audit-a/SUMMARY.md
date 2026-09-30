@@ -1,22 +1,20 @@
 # Dimension audit A: layouts, content blocks, image treatments, backgrounds, headers & footers
 
-Commits: opf `930577d`, opf-render `021cca0`, opf-pptx `0d15f1c`, pptx-gallery `0b2dec8`. Node v24.21.0. Core bundled layout catalog: 30 records.
-
-Retained: `image-treatments` rows are kept from opf `1ad25df`, opf-render `bc436f3`, opf-pptx `9092954`, pptx-gallery `f17e9ae`. image-treatments: the audit A probe measures design.slideImage; the gallery snippets (pptx-gallery#44) express the treatments with image backgrounds, image blocks and design.watermark instead, so the probe cannot classify them. Rows and heads are kept from the earlier run; the FF-38 parity audit measures the current snippets.
+Commits: opf `aedd364`, opf-render `a66caa3`, opf-pptx `0400434`, pptx-gallery `b2238ac`. Node v24.21.0. Core bundled layout catalog: 30 records.
 
 Method: gallery lib/opf-snippets.ts builders bundled with esbuild; @openpresentation/opf linked to local core dist; opf-render/opf-pptx from source; engine default text measurement (Office font registry probed separately); no Office/COM. Each value's OPF is the exact document the gallery page emits (lib/opf-snippets.ts). Checks: (1) core validatePresentation, (2) catalog/reference resolution, (3) opf-render SVG vs a baseline document without the dimension, (4) opf-pptx export + OPC parts + dimension-specific native XML, (5) opf-pptx fromPptx re-import, (6) docs/evidence + compatibility-matrix hits. "withAssets" re-runs values whose gallery snippet references undeclared `asset:*` ids with a real raster supplied.
 
 | Dimension | Total | works | partial | schema-only | broken | gallery-only | withAssets variant | preview/export disagree |
 |---|---|---|---|---|---|---|---|---|
 | backgrounds | 6 | 6 | 0 | 0 | 0 | 0 | works 1 | 0 |
-| image-treatments | 15 | 0 | 15 | 0 | 0 | 0 | partial 13, works 2 | 15 |
+| image-treatments | 15 | 15 | 0 | 0 | 0 | 0 | works 15 | 0 |
 | headers-footers | 10 | 10 | 0 | 0 | 0 | 0 | works 1 | 0 |
 | blocks | 32 | 31 | 1 | 0 | 0 | 0 | n/a | 0 |
 | layouts | 485 | 291 | 124 | 0 | 0 | 70 | n/a | 63 |
 
-Font registry probe: 23/548 values throw `font-unavailable: No local font face for 'Aptos Display'.; font-unavailable: No local font face for 'Segoe UI Semibold'. 'Segoe UI Semibold' is proprietary (Microsoft) and OPF never bundles or embeds it. Its declared replacement Red Hat Display is visual only (measured mean width difference 1.0%, max 6.5%), which substitutionPolicy 'metric' does not allow. Pass substitutionPolicy: 'visual' to preview with Red Hat Display or Roboto, or supply licensed 'Segoe UI Semibold' fo; font-unavailable: No local font face for 'Grandview Display'. 'Grandview Display' is proprietary (Microsoft) and OPF never bundles or embeds it. Its declared replacement Barlow is visual only (not measured against the real font), which substitutionPolicy 'metric' does not allow. Pass substitutionPolicy: 'visual' to preview with Barlow or Roboto, or supply licensed 'Grandview Display' font files (prepareNodeFonts({f` when rendered with opf-render's `loadOfficeFontRegistry()` text measurement (the ecosystem-test configuration), because the default Aptos / Aptos Display scheme has no local face in that registry. All classifications below use the engine's default measurement.
+Font registry probe: 8/548 values throw `font-unavailable: No local font face for 'Segoe UI Semibold'. 'Segoe UI Semibold' is proprietary (Microsoft) and OPF never bundles or embeds it. Its declared replacement Red Hat Display is visual only (measured mean width difference 1.0%, max 6.5%), which substitutionPolicy 'metric' does not allow. Pass substitutionPolicy: 'visual' to preview with Red Hat Display or Roboto, or supply licensed 'Segoe UI Semibold' fo; font-unavailable: No local font face for 'Grandview Display'. 'Grandview Display' is proprietary (Microsoft) and OPF never bundles or embeds it. Its declared replacement Barlow is visual only (not measured against the real font), which substitutionPolicy 'metric' does not allow. Pass substitutionPolicy: 'visual' to preview with Barlow or Roboto, or supply licensed 'Grandview Display' font files (prepareNodeFonts({f` when rendered with opf-render's `loadOfficeFontRegistry()` text measurement (the ecosystem-test configuration), because the default Aptos / Aptos Display scheme has no local face in that registry. All classifications below use the engine's default measurement.
 
-Sensitivity: values that would be `works` if (a) a re-import that drops the layout id but emits any diagnostic counted as a pass and (b) gallery narrative slugs absent from the core narrative catalog were ignored: backgrounds 6/6, image-treatments 0/15, headers-footers 10/10, blocks 31/32, layouts 316/485.
+Sensitivity: values that would be `works` if (a) a re-import that drops the layout id but emits any diagnostic counted as a pass and (b) gallery narrative slugs absent from the core narrative catalog were ignored: backgrounds 6/6, image-treatments 15/15, headers-footers 10/10, blocks 31/32, layouts 316/485.
 
 ## backgrounds
 
@@ -36,35 +34,24 @@ Top reasons (count):
 
 Top reasons (count):
 
-- 15 x export adds no native picture for design.slideImage
-- 15 x gallery snippet references asset:hero without an assets entry
-- 15 x preview diagnostics: unresolved-asset
-- 13 x treatment collapses to {#:#,#:#}, #
 
 | Value | Class | withAssets | Reasons |
 |---|---|---|---|
-| full-bleed | partial | partial | export adds no native picture for design.slideImage; preview diagnostics: unresolved-asset; treatment collapses to {"position":"background","fill":"crop"}, identical OPF to text-overlay, caption-overlay, duotone, background-blur, watermark, cinematic-crop; gallery snippet references asset:hero without an assets entry |
-| text-overlay | partial | partial | export adds no native picture for design.slideImage; preview diagnostics: unresolved-asset; treatment collapses to {"position":"background","fill":"crop"}, identical OPF to full-bleed, caption-overlay, duotone, background-blur, watermark, cinematic-crop; gallery snippet references asset:hero without an assets entry |
-| side-by-side | partial | works | export adds no native picture for design.slideImage; preview diagnostics: unresolved-asset; gallery snippet references asset:hero without an assets entry |
-| caption-overlay | partial | partial | export adds no native picture for design.slideImage; preview diagnostics: unresolved-asset; treatment collapses to {"position":"background","fill":"crop"}, identical OPF to full-bleed, text-overlay, duotone, background-blur, watermark, cinematic-crop; gallery snippet references asset:hero without an assets entry |
-| masked-shape | partial | partial | export adds no native picture for design.slideImage; preview diagnostics: unresolved-asset; treatment collapses to {"position":"right","fill":"fit"}, identical OPF to circular-crop, rounded-card, collage-grid, device-frame, cutout-subject; gallery snippet references asset:hero without an assets entry |
-| circular-crop | partial | partial | export adds no native picture for design.slideImage; preview diagnostics: unresolved-asset; treatment collapses to {"position":"right","fill":"fit"}, identical OPF to masked-shape, rounded-card, collage-grid, device-frame, cutout-subject; gallery snippet references asset:hero without an assets entry |
-| rounded-card | partial | partial | export adds no native picture for design.slideImage; preview diagnostics: unresolved-asset; treatment collapses to {"position":"right","fill":"fit"}, identical OPF to masked-shape, circular-crop, collage-grid, device-frame, cutout-subject; gallery snippet references asset:hero without an assets entry |
-| duotone | partial | partial | export adds no native picture for design.slideImage; preview diagnostics: unresolved-asset; treatment collapses to {"position":"background","fill":"crop"}, identical OPF to full-bleed, text-overlay, caption-overlay, background-blur, watermark, cinematic-crop; gallery snippet references asset:hero without an assets entry |
-| background-blur | partial | partial | export adds no native picture for design.slideImage; preview diagnostics: unresolved-asset; treatment collapses to {"position":"background","fill":"crop"}, identical OPF to full-bleed, text-overlay, caption-overlay, duotone, watermark, cinematic-crop; gallery snippet references asset:hero without an assets entry |
-| image-strip | partial | works | export adds no native picture for design.slideImage; preview diagnostics: unresolved-asset; gallery snippet references asset:hero without an assets entry |
-| collage-grid | partial | partial | export adds no native picture for design.slideImage; preview diagnostics: unresolved-asset; treatment collapses to {"position":"right","fill":"fit"}, identical OPF to masked-shape, circular-crop, rounded-card, device-frame, cutout-subject; gallery snippet references asset:hero without an assets entry |
-| device-frame | partial | partial | export adds no native picture for design.slideImage; preview diagnostics: unresolved-asset; treatment collapses to {"position":"right","fill":"fit"}, identical OPF to masked-shape, circular-crop, rounded-card, collage-grid, cutout-subject; gallery snippet references asset:hero without an assets entry |
-| cutout-subject | partial | partial | export adds no native picture for design.slideImage; preview diagnostics: unresolved-asset; treatment collapses to {"position":"right","fill":"fit"}, identical OPF to masked-shape, circular-crop, rounded-card, collage-grid, device-frame; gallery snippet references asset:hero without an assets entry |
-| watermark | partial | partial | export adds no native picture for design.slideImage; preview diagnostics: unresolved-asset; treatment collapses to {"position":"background","fill":"crop"}, identical OPF to full-bleed, text-overlay, caption-overlay, duotone, background-blur, cinematic-crop; gallery snippet references asset:hero without an assets entry |
-| cinematic-crop | partial | partial | export adds no native picture for design.slideImage; preview diagnostics: unresolved-asset; treatment collapses to {"position":"background","fill":"crop"}, identical OPF to full-bleed, text-overlay, caption-overlay, duotone, background-blur, watermark; gallery snippet references asset:hero without an assets entry |
-
-Preview/export disagreements (15):
-
-- 15 x preview effect=true but export native=false
-- 15 x diagnostics differ: preview[unresolved-asset] export[]
-
-Note: the gallery `/editor?config=image-treatments:<slug>` path emits the same design for every slug in this dimension.
+| full-bleed | works | works |  |
+| text-overlay | works | works |  |
+| side-by-side | works | works |  |
+| caption-overlay | works | works |  |
+| masked-shape | works | works |  |
+| circular-crop | works | works |  |
+| rounded-card | works | works |  |
+| duotone | works | works |  |
+| background-blur | works | works |  |
+| image-strip | works | works |  |
+| collage-grid | works | works |  |
+| device-frame | works | works |  |
+| cutout-subject | works | works |  |
+| watermark | works | works |  |
+| cinematic-crop | works | works |  |
 
 ## headers-footers
 
