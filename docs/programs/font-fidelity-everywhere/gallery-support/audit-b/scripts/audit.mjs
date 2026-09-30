@@ -1,5 +1,5 @@
 // Dimension audit B: measure every gallery value (color schemes, font schemes, languages, themes,
-// narratives, audiences, tones, socials) through core validate -> catalog -> opf-render preview ->
+// narratives, audiences, tones, socials, and the gallery charts) through core validate -> catalog -> opf-render preview ->
 // opf-pptx export (typeface/lang/clrScheme inventory) -> fromPptx re-import.
 // Run: node --import <audit-B-opf>/scripts/register-local-opf.mjs audit.mjs   (after gen-snippets.mjs)
 import {readFile, writeFile, mkdir} from 'node:fs/promises';
@@ -223,6 +223,131 @@ function familyAvailability(family) {
 
 function strip(doc, keys) { const d = structuredClone(doc); for (const k of keys) { const [a, b] = k.split('.'); if (b) { if (d[a]) { delete d[a][b]; if (!Object.keys(d[a]).length) delete d[a]; } } else delete d[k]; } return d; }
 
+// ---- Charts (FF-36, 2026-09-30) ----------------------------------------------------------------------------------
+// The presence probe for the gallery chart snippets. Preview: the traced SVG has a chart group whose data-opf-chart is
+// the chart id (opf-render draws the catalog construct; otherwise it keeps the legacy single-series sketch, or
+// "No chart data") and the marks match the data. Export: the slide's chart part uses the construct the core catalog
+// records in mappings.openxml, with the data in its caches. Re-import: fromPptx returns the same chart id and data.
+const CHART_ELEMENTS = ['barChart', 'bar3DChart', 'lineChart', 'line3DChart', 'pieChart', 'pie3DChart', 'ofPieChart', 'doughnutChart', 'areaChart', 'area3DChart', 'scatterChart', 'radarChart'];
+const CHART_KIND = {barChart: 'bar', lineChart: 'line', areaChart: 'area', pieChart: 'circular', doughnutChart: 'circular', scatterChart: 'scatter', radarChart: 'radar'};
+const svgAttrs = s => Object.fromEntries([...s.matchAll(/([\w:-]+)="([^"]*)"/g)].map(m => [m[1], m[2]]));
+// The markup of the <g> that starts at `start` (balanced).
+function balancedGroup(svg, start) {
+  let depth = 0;
+  for (const m of svg.slice(start).matchAll(/<(\/?)g\b[^>]*?(\/?)>/g)) {
+    if (m[1]) depth--; else if (!m[2]) depth++;
+    if (depth === 0) return svg.slice(start, start + m.index + m[0].length);
+  }
+  return svg.slice(start);
+}
+const chartCells = (rows, col) => rows.map(r => Array.isArray(r) ? r[col] : undefined);
+const chartNum = v => typeof v === 'number' ? v : (typeof v === 'string' && v.trim() !== '' && Number.isFinite(Number(v)) ? Number(v) : null);
+// Series columns of an inline chart: [Category, S1, S2...]; a scatter with more than two columns is [Label, X, Y1, Y2...].
+function chartSeriesColumns(kind, columns) { const first = kind === 'scatter' && columns.length > 2 ? 2 : 1; return columns.slice(first).map((name, i) => ({name, column: first + i})); }
+
+function chartExpected(record, chart) {
+  const ox = record?.mappings?.openxml ?? {};
+  const kind = CHART_KIND[ox.element] ?? null;
+  const columns = chart?.data?.columns ?? [], rows = chart?.data?.rows ?? [];
+  const series = chartSeriesColumns(kind, columns);
+  const style = ox.radarStyle;
+  const markers = ox.marker === true || style === 'marker';
+  const grouping = ox.grouping ?? (['bar', 'line', 'area'].includes(kind) ? 'standard' : undefined);
+  return {element: ox.element ?? null, composition: ox.composition ?? null, kind, barDir: ox.barDir, grouping, markers, radarStyle: style, scatterStyle: ox.scatterStyle, rows: rows.length, series: series.length, seriesColumns: series};
+}
+
+function chartPreviewProbe(doc, chart, exp) {
+  const diagnostics = [];
+  let svg;
+  try { svg = render.renderSvgDeck(structuredClone(doc), {trace: true, onDiagnostic: d => diagnostics.push(d.code ?? d.message)}).join('\n'); }
+  catch (e) { return {ok: false, error: e.code ?? e.name, message: String(e.message).slice(0, 200)}; }
+  const open = svg.match(/<g\b[^>]*\bdata-opf-chart="([^"]*)"[^>]*>/);
+  const noChartData = /No chart data/.test(svg);
+  const out = {ok: true, chartAttr: open?.[1] ?? null, noChartData, legacy: !open, diagnostics};
+  if (!open) {
+    out.legacyBars = [...svg.matchAll(/data-opf-path="[^"]*\.chart\.data\.rows\.\d+"/g)].length;
+    return out;
+  }
+  const grp = balancedGroup(svg, open.index);
+  const marks = [...grp.matchAll(/<(rect|circle|polyline|path|line|ellipse)\b([^>]*?)\/?>/g)].map(m => ({tag: m[1], ...svgAttrs(m[2])}));
+  const pathOf = m => m['data-opf-path'] ?? '';
+  const rowsRe = /\.data\.rows\.(\d+)\.(\d+)$/, colsRe = /\.data\.columns\.(\d+)$/;
+  const rows = chart.data.rows, n = rows.length;
+  let actual = null, expected = null;
+  const k = exp.kind;
+  if (k === 'bar') { expected = {marks: n * exp.series}; actual = {marks: marks.filter(m => m.tag === 'rect' && rowsRe.test(pathOf(m)) && +pathOf(m).match(rowsRe)[2] >= 1).length}; }
+  else if (k === 'line') {
+    expected = {lines: exp.series, markers: exp.markers ? n * exp.series : 0};
+    actual = {lines: marks.filter(m => m.tag === 'polyline' && (m.points ?? '').trim().split(/\s+/).length === n).length, markers: marks.filter(m => m.tag === 'circle' && rowsRe.test(pathOf(m))).length};
+  } else if (k === 'area') { expected = {areas: exp.series}; actual = {areas: marks.filter(m => m.tag === 'path' && colsRe.test(pathOf(m)) && /^M[\s\S]*Z$/.test((m.d ?? '').trim())).length}; }
+  else if (k === 'circular') {
+    const positive = chartCells(rows, 1).filter(v => (chartNum(v) ?? 0) !== 0).length;
+    expected = {slices: positive}; actual = {slices: marks.filter(m => (m.tag === 'path' || m.tag === 'circle') && /\.data\.rows\.\d+\.1$/.test(pathOf(m))).length};
+  } else if (k === 'scatter') {
+    const numericX = chart.data.columns.length > 2;
+    const pts = exp.seriesColumns.reduce((sum, s) => sum + rows.filter(r => (!numericX || chartNum(r[1]) !== null) && chartNum(r[s.column]) !== null).length, 0);
+    expected = {points: pts}; actual = {points: marks.filter(m => m.tag === 'circle' && rowsRe.test(pathOf(m))).length};
+  } else if (k === 'radar') {
+    expected = {series: exp.series, markers: exp.markers ? n * exp.series : 0};
+    actual = {series: marks.filter(m => m.tag === 'path' && colsRe.test(pathOf(m))).length, markers: marks.filter(m => m.tag === 'circle' && rowsRe.test(pathOf(m))).length};
+  }
+  out.marks = {kind: k, expected, actual, equal: JSON.stringify(expected) === JSON.stringify(actual)};
+  return out;
+}
+
+async function chartExportProbe(doc, bytes, exp, chart) {
+  const diagnostics = [];
+  await toPptx(structuredClone(doc), {onDiagnostic: d => diagnostics.push({code: d.code, adaptation: d.adaptation ?? null})});
+  const zip = unzipSync(bytes);
+  const chartParts = relTargets(zip, 'ppt/slides/slide1.xml', 'chart');
+  const out = {adaptations: diagnostics.filter(d => d.code === 'chart-data-adapted').map(d => d.adaptation), diagnostics: [...new Set(diagnostics.map(d => d.code))], chartParts, embeddedWorkbooks: Object.keys(zip).filter(n => /^ppt\/embeddings\/.+\.xlsx$/i.test(n)).length};
+  if (chartParts.length !== 1 || !zip[chartParts[0]]) return out;
+  const xml = dec.decode(zip[chartParts[0]]);
+  const elements = CHART_ELEMENTS.filter(e => xml.includes(`<c:${e}>`));
+  out.elements = elements;
+  const el = elements[0];
+  const body = el ? xml.slice(xml.indexOf(`<c:${el}>`), xml.indexOf(`</c:${el}>`)) : '';
+  const val = re => body.match(re)?.[1] ?? null;
+  const sers = [...body.matchAll(/<c:ser>([\s\S]*?)<\/c:ser>/g)].map(m => m[1]);
+  const symbols = sers.map(s => s.match(/<c:marker>\s*<c:symbol val="(\w+)"/)?.[1] ?? null);
+  const pts = (blk, tag) => { const b = blk.match(new RegExp(`<c:${tag}>([\\s\\S]*?)</c:${tag}>`))?.[1] ?? ''; return [...b.matchAll(/<c:pt idx="(\d+)">\s*<c:v>([^<]*)<\/c:v>/g)].map(m => m[2]); };
+  out.construct = {element: el ?? null, barDir: val(/<c:barDir val="(\w+)"/), grouping: val(/<c:grouping val="(\w+)"/), radarStyle: val(/<c:radarStyle val="(\w+)"/), scatterStyle: val(/<c:scatterStyle val="(\w+)"/), seriesSymbols: symbols, markers: symbols.length > 0 && symbols.every(s => s && s !== 'none')};
+  out.series = sers.length;
+  const isXy = el === 'scatterChart';
+  out.data = sers.map(s => ({name: pts(s, 'tx')[0] ?? null, categories: isXy ? pts(s, 'xVal') : pts(s, 'cat'), values: pts(s, isXy ? 'yVal' : 'val').map(Number)}));
+  // Source data against the caches: the values of every series (an XY chart also its X values) and, for category charts, the labels.
+  const rows = chart.data.rows, mismatches = [];
+  const circular = el === 'pieChart' || el === 'doughnutChart';
+  const want = circular ? exp.seriesColumns.slice(0, 1) : exp.seriesColumns;
+  if (sers.length !== want.length) mismatches.push(`${sers.length} series in the chart, ${want.length} in the data`);
+  out.data.forEach((d, i) => {
+    const src = want[i]; if (!src) return;
+    if (JSON.stringify(chartCells(rows, src.column).map(chartNum)) !== JSON.stringify(d.values)) mismatches.push(`series ${i + 1} values differ from column ${src.column}`);
+    if (!isXy) { if (JSON.stringify(chartCells(rows, 0).map(String)) !== JSON.stringify(d.categories)) mismatches.push(`series ${i + 1} category labels differ from the first column`); }
+    else if (JSON.stringify(chartCells(rows, 1).map(chartNum)) !== JSON.stringify(d.categories.map(Number))) mismatches.push(`series ${i + 1} X values differ from column 1`);
+  });
+  out.dataMismatches = mismatches;
+  return out;
+}
+
+function chartReimportProbe(rd, chart, exp) {
+  const blocks = (rd?.slides ?? []).flatMap(s => s.blocks ?? []).filter(b => b.type === 'chart');
+  const c = blocks[0]?.chart;
+  const out = {charts: blocks.length, type: c?.type ?? null};
+  if (!c) return out;
+  const rows = chart.data.rows, got = c.data?.rows ?? [], mismatches = [];
+  if (got.length !== rows.length) mismatches.push(`${got.length} rows, expected ${rows.length}`);
+  else {
+    for (const s of exp.seriesColumns) {
+      if (JSON.stringify(chartCells(rows, s.column).map(chartNum)) !== JSON.stringify(chartCells(got, s.column).map(chartNum))) { mismatches.push(`column ${s.column} values differ`); break; }
+    }
+    if (exp.kind === 'scatter') { if (JSON.stringify(chartCells(rows, 1).map(chartNum)) !== JSON.stringify(chartCells(got, 1).map(chartNum))) mismatches.push('X values differ'); }
+    else if (JSON.stringify(chartCells(rows, 0).map(String)) !== JSON.stringify(chartCells(got, 0).map(String))) mismatches.push('category labels differ');
+  }
+  out.dataMismatches = mismatches;
+  return out;
+}
+
 const results = [];
 const artifactDir = `${OUT}/pptx`; await mkdir(artifactDir, {recursive: true});
 for (const s of snippets) {
@@ -243,6 +368,7 @@ for (const s of snippets) {
   if (dim === 'narratives') { cat.kind = 'narratives'; cat.value = doc.narrative; cat.record = byId('narratives', doc.narrative); }
   if (dim === 'audiences') { cat.kind = 'audiences'; cat.value = doc.audience?.[0]; cat.record = byId('audiences', doc.audience?.[0]); cat.narrativeResolves = doc.narrative ? !!byId('narratives', doc.narrative) : null; cat.toneResolves = doc.tone ? !!byId('tones', doc.tone) : null; cat.colorSchemeResolves = design.colorScheme ? !!byId('colorSchemes', design.colorScheme) : null; }
   if (dim === 'tones') { cat.kind = 'tones'; cat.value = doc.tone; cat.record = byId('tones', doc.tone); }
+  if (dim === 'charts') { cat.kind = 'chartTypes'; cat.value = doc.slides?.[0]?.chart?.type; cat.record = byId('chartTypes', cat.value); }
   if (dim === 'socials') { cat.kind = 'socialPlatforms'; cat.value = s.id; cat.record = byId('socialPlatforms', s.id); }
   r.catalogResolves = !!cat.record; r.catalog = {...cat, record: cat.record ? {id: cat.record.id, ...(cat.kind === 'fontSchemes' ? {major: cat.record.major, minor: cat.record.minor, languageFamily: cat.record.languageFamily, type: cat.record.type} : {})} : null,
     fontSchemeRecord: cat.fontSchemeRecord ? {id: cat.fontSchemeRecord.id, major: cat.fontSchemeRecord.major, minor: cat.fontSchemeRecord.minor, languageFamily: cat.fontSchemeRecord.languageFamily} : cat.fontSchemeRecord, googleFontSchemeRecord: cat.googleFontSchemeRecord ? cat.googleFontSchemeRecord.id : cat.googleFontSchemeRecord};
@@ -404,6 +530,18 @@ for (const s of snippets) {
         // The run font slot the native text uses (same script test as parity.mjs) and the faces the slides name in it.
         scriptSlot: scriptOf(native), slotFaces: pi ? [...new Set(pi.typefaces.filter(t => /slides\/slide\d/.test(t.part) && t.tag === scriptOf(native)).map(t => t.typeface))] : null};
     }
+  }
+  if (dim === 'charts') {
+    const chart = doc.slides?.[0]?.chart;
+    const rec = cat.record;
+    // A deprecated chart type does not count as resolving: the gallery must publish only kept catalog ids.
+    r.catalogResolves = !!rec && !rec.deprecation;
+    r.catalog.record = rec ? {id: rec.id, deprecated: !!rec.deprecation, openxml: rec.mappings?.openxml ?? null} : null;
+    const exp = chartExpected(rec, chart);
+    m.expected = exp; m.snippetChart = {type: chart?.type, columns: chart?.data?.columns?.length, rows: chart?.data?.rows?.length, slides: doc.slides?.length};
+    m.preview = chart?.data ? chartPreviewProbe(doc, chart, exp) : null;
+    m.export = ex.ok && chart?.data ? await chartExportProbe(doc, ex.bytes, exp, chart) : null;
+    m.reimport = rd && chart?.data ? chartReimportProbe(rd, chart, exp) : null;
   }
   r.measure = m;
   results.push(r);

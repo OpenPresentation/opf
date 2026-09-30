@@ -159,6 +159,51 @@ function classify(r) {
     const soc = r.snippet?.speaker?.socials?.[r.id], got = m.reimportSocials ?? {};
     if (got.speaker?.[r.id] !== soc || (r.snippet?.organization?.socials && got.organization?.[r.id] !== r.snippet.organization.socials[r.id])) reasons.push(reimportReason(r, 'socials', got, {organization: r.snippet?.organization?.socials ?? null, speaker: r.snippet?.speaker?.socials ?? null}));
     cls = hardFail ? 'broken' : !r.catalogResolves ? 'gallery-only' : inert ? 'authoring-metadata' : reasons.length ? 'partial' : 'works';
+  } else if (d === 'charts') {
+    // FF-36 (2026-09-30): the chart presence probe (audit.mjs, "Charts"). A classic id is `works` only when the preview draws
+    // the catalog construct with the data's marks, the export writes the construct that core's mappings.openxml records with
+    // the data in its caches and no chart-data-adapted diagnostic, and fromPptx returns the same id and data.
+    const exp = m.expected ?? {}, pv = m.preview, ex = m.export, ri = m.reimport, id = r.id;
+    const describe = c => [c?.element, c?.barDir && `barDir ${c.barDir}`, c?.grouping && `grouping ${c.grouping}`, c?.radarStyle && `radarStyle ${c.radarStyle}`, c?.scatterStyle && `scatterStyle ${c.scatterStyle}`, ['lineChart', 'radarChart'].includes(c?.element) && (c.markers ? 'markers' : 'no markers')].filter(Boolean).join(', ');
+    const want = describe({...exp, markers: exp.markers});
+    const got = ex?.construct ? describe(ex.construct) : 'no chart part';
+    const c = ex?.construct;
+    const constructOk = !!c && c.element === exp.element && (exp.barDir === undefined || c.barDir === exp.barDir) && (exp.grouping === undefined || c.grouping === exp.grouping) && (exp.radarStyle === undefined || c.radarStyle === exp.radarStyle) && (exp.scatterStyle === undefined || c.scatterStyle === exp.scatterStyle) && (!['lineChart', 'radarChart'].includes(exp.element) || c.markers === exp.markers);
+    base.chart = {
+      catalogElement: exp.element, catalogComposition: exp.composition,
+      preview: pv ? {construct: pv.ok && !pv.legacy ? pv.chartAttr : null, legacy: pv.legacy ?? null, noChartData: pv.noChartData ?? null, marks: pv.marks ?? null, legacyBars: pv.legacyBars ?? null} : null,
+      export: ex ? {element: c?.element ?? null, construct: got, nativeConstruct: constructOk, adaptations: ex.adaptations, diagnostics: ex.diagnostics, series: ex.series ?? null, embeddedWorkbooks: ex.embeddedWorkbooks, dataMismatches: ex.dataMismatches ?? null} : null,
+      reimport: ri ? {type: ri.type, sameId: ri.type === id, dataMismatches: ri.dataMismatches ?? null} : null,
+    };
+    engine = `preview ${pv?.ok ? (pv.legacy ? 'legacy single-series sketch' : `${pv.chartAttr} marks ${JSON.stringify(pv.marks?.actual)}`) : pv?.error ?? 'none'}; export ${got}${ex?.adaptations?.length ? ` (chart-data-adapted: ${list(ex.adaptations)})` : ''}; re-import ${ri?.type ?? 'none'}`;
+    if (!r.catalogResolves) reasons.push('chart type id not a kept record in the core chart-type catalog');
+    if (!pv) reasons.push('the snippet has no inline chart data to preview');
+    else if (!pv.ok) reasons.push(`preview threw ${pv.error}`);
+    else {
+      if (pv.legacy) reasons.push(`preview keeps the legacy single-series sketch (no data-opf-chart; opf-render draws no ${id} construct)${pv.noChartData ? ' and shows "No chart data"' : ''}`);
+      else {
+        if (pv.chartAttr !== id) reasons.push(`preview draws ${pv.chartAttr}, expected ${id}`);
+        if (pv.noChartData) reasons.push('preview shows "No chart data"');
+        if (pv.marks && !pv.marks.equal) reasons.push(`preview marks ${JSON.stringify(pv.marks.actual)} do not match the data (${JSON.stringify(pv.marks.expected)})`);
+      }
+    }
+    if (ex) {
+      if (ex.chartParts.length !== 1) reasons.push(`export has ${ex.chartParts.length} chart parts on slide 1, expected 1`);
+      else {
+        if (!constructOk) reasons.push(`export writes ${got}; core catalog mappings.openxml ${want}`);
+        if (ex.adaptations.length) reasons.push(`export reports chart-data-adapted (${list(ex.adaptations)})`);
+        for (const x of ex.dataMismatches ?? []) reasons.push(`export chart cache: ${x}`);
+        if (!ex.embeddedWorkbooks) reasons.push('export embeds no workbook for the chart data');
+      }
+    }
+    if (ri) {
+      if (ri.charts !== 1) reasons.push(`re-import returns ${ri.charts} chart blocks, expected 1 (${diag(r)})`);
+      else {
+        if (ri.type !== id) reasons.push(`re-import returns chart type ${JSON.stringify(ri.type)}, expected ${JSON.stringify(id)} (${diag(r)})`);
+        for (const x of ri.dataMismatches ?? []) reasons.push(`re-import chart data: ${x}`);
+      }
+    }
+    cls = hardFail ? 'broken' : !r.catalogResolves ? 'gallery-only' : reasons.length ? 'partial' : 'works';
   }
   return {...base, classification: cls, engineSummary: engine, reasons};
 }
@@ -180,7 +225,7 @@ function sharedExportGaps(rows) {
 const results = raw.map(classify);
 await writeFile(`${B}/results.json`, JSON.stringify({generated: new Date().toISOString(), heads: JSON.parse(await readFile(`${B}/out/heads.json`, 'utf8').catch(() => '{}')), sharedExportGaps: sharedExportGaps(raw), results}, null, 1));
 
-const dims = [['color-schemes', 'Color schemes'], ['font-schemes', 'Font schemes (89 upstream)'], ['font-schemes-legacy', 'Font schemes (gallery legacy)'], ['languages', 'Languages'], ['themes', 'Themes'], ['narratives', 'Narratives'], ['audiences', 'Audiences'], ['tones', 'Tones'], ['socials', 'Socials']];
+const dims = [['color-schemes', 'Color schemes'], ['font-schemes', 'Font schemes (89 upstream)'], ['font-schemes-legacy', 'Font schemes (gallery legacy)'], ['languages', 'Languages'], ['themes', 'Themes'], ['narratives', 'Narratives'], ['audiences', 'Audiences'], ['tones', 'Tones'], ['socials', 'Socials'], ['charts', 'Charts']];
 const esc = s => String(s ?? '').replace(/\|/g, '\\|');
 for (const [d, title] of dims) {
   const rows = results.filter(r => r.dimension === d);
