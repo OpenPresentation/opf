@@ -94,6 +94,7 @@ jobs:
       - run: npm run test:font-variants-browser
       - run: npm run test:aptos-preview-browser
       - run: npm run test:lazy-fonts-browser
+      - run: npm run test:lazy-face-fallback-browser
       - run: npm run test:script-fonts-browser
       - run: npm run test:script-fonts-auto-browser
       - run: npm run test:plain-whitespace-browser

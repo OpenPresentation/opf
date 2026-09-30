@@ -187,7 +187,12 @@ export function createFontRegistry(entries, options = {}) {
     if (value===undefined) {
       if (options.strictGlyphs!==false) for(const character of text) {
         if (/\p{Default_Ignorable_Code_Point}/u.test(character)) continue;
-        if (!face.font.hasGlyphForCodePoint(character.codePointAt(0))) throw new OPFFontError("missing-glyph", `Font '${face.family}' cannot display U+${character.codePointAt(0).toString(16).toUpperCase()}.`, {path:style.path,fontFamily:face.family,character});
+        const code=character.codePointAt(0);
+        if (!face.font.hasGlyphForCodePoint(code)) {
+          // No loaded face has it: the script faces for this text are not loaded (glyph fallback needs a face to fall back to).
+          const loadedElsewhere=faces.some(other=>other!==face&&other.font.hasGlyphForCodePoint(code));
+          throw new OPFFontError("missing-glyph", `Font '${face.family}' cannot display U+${code.toString(16).toUpperCase()}.${loadedElsewhere?"":" No loaded font has it, so glyph fallback has no face to fall back to; if it is a script character, load that script's font (prepareNodeFonts scripts: 'auto' with the presentation, or registry.ensureScripts(presentation) in a browser)."}`, {path:style.path,fontFamily:face.family,character,...(loadedElsewhere?{}:{loadedFaceHasGlyph:false})});
+        }
       }
     }
     if(value===undefined||includeOutline&&!Object.hasOwn(value,'outline')) {

@@ -106,18 +106,58 @@ const cjkCharacters = new Set(["Hani", "Hira", "Kana", "Hang", "Bopo"]);
 /** True when the renderer has per-character glyph fallback (FF-19 glyphFallbackFamilies). */
 const hasGlyphFallback = () => typeof scriptFontModule.glyphFallbackFamilies === "function";
 
+/** ISO 15924 script whose pinned face a family resolves to: a proprietary script font (Yu Gothic: Jpan) or a pinned face itself (Noto Sans JP: Jpan). */
+function scriptOfFamily(family) {
+  const name = String(family ?? "").toLowerCase();
+  if (!name) return undefined;
+  const rule = scriptFontModule.SCRIPT_FONT_REPLACEMENTS.find(item => item.requestedFamily.toLowerCase() === name);
+  if (rule) return rule.script;
+  return BUNDLED_FONT_MANIFEST.packages.find(item => item.pack === "scripts" && item.faces.some(face => face.family.toLowerCase() === name))?.scripts[0];
+}
+
+/**
+ * The scripts whose faces the deck's font schemes need in order to resolve at all. A scheme that names a script font
+ * (Yu Gothic, Malgun Gothic, Arabic Typesetting or a pinned Noto family) previews its Latin text with that font's
+ * open replacement, so the face is needed even when no drawn character has the script. A slide may override the
+ * scheme (`slide.design`), so each such slide is resolved too. `han` is the CJK script the scheme names, which tells
+ * Han-only text apart when the language does not (a Yu Gothic deck whose language is English).
+ */
+function designScripts(presentation, profile) {
+  const scripts = new Set();
+  let han;
+  const note = resolved => {
+    for (const family of [resolved?.heading?.latin, resolved?.body?.latin]) {
+      const script = scriptOfFamily(family);
+      if (!script) continue;
+      scripts.add(script);
+      if (!han && cjkKeys.includes(script)) han = script;
+    }
+  };
+  note(profile);
+  if (typeof opfCore.resolveScriptFonts === "function" && Array.isArray(presentation?.slides)) {
+    presentation.slides.forEach((slide, slideIndex) => {
+      if (!slide || typeof slide !== "object" || !slide.design || typeof slide.design !== "object") return;
+      try { note(opfCore.resolveScriptFonts(presentation, { slideIndex })); } catch { /* the renderer reports it when it draws the slide */ }
+    });
+  }
+  return { scripts: [...scripts].sort(), han };
+}
+
 /**
  * What a preview of the presentation draws: its script profile, the scripts of its text (the renderer's own
- * itemization, so language-dependent punctuation counts), and the CJK characters that a glyph fallback might
- * have to draw with another CJK face.
+ * itemization, so language-dependent punctuation counts), the scripts its font schemes need (`design`, for example
+ * Jpan for a Yu Gothic scheme) and the CJK characters that a glyph fallback might have to draw with another CJK face.
  */
 export function analyzePresentationScripts(presentation, profile = presentationScriptProfile(presentation)) {
   const scripts = new Set(), cjk = new Set();
+  const design = designScripts(presentation, profile);
+  // Han-only text in a deck whose language is not CJK draws with the scheme's own CJK face when the scheme names one.
+  const itemizing = design.han && !cjkKeys.includes(profile?.script) ? { ...profile, script: design.han } : profile;
   for (const text of drawnStrings(presentation)) {
-    for (const script of scriptsOfText(text, profile)) scripts.add(script);
+    for (const script of scriptsOfText(text, itemizing)) scripts.add(script);
     for (const character of text) if (character.codePointAt(0) > 0x2E7F && cjkCharacters.has(scriptOfCharacter(character))) cjk.add(character);
   }
-  return { profile, detected: [...scripts].sort(), cjk };
+  return { profile, detected: [...scripts].sort(), design: design.scripts, cjk };
 }
 
 /**
@@ -135,7 +175,9 @@ export function detectPresentationScripts(presentation, { profile } = {}) {
 /** The scripts of an analysis that a pinned pack serves (`scripts`, the input for `scriptFontPackages`) and those it does not. */
 export function scriptSelectionOf(analysis) {
   const served = servedScripts();
-  return { detected: analysis.detected, scripts: analysis.detected.filter(script => served.has(script)), unavailable: analysis.detected.filter(script => !served.has(script)) };
+  // `scripts` are the faces to load: the text's scripts and the ones its font schemes need; `detected` stays what the text draws.
+  const needed = [...new Set([...analysis.detected, ...(analysis.design ?? [])])].sort();
+  return { detected: analysis.detected, scripts: needed.filter(script => served.has(script)), unavailable: analysis.detected.filter(script => !served.has(script)) };
 }
 
 /**
@@ -160,7 +202,7 @@ export function autoScriptSelection(presentation, options) {
 export function nextFallbackPackage(analysis, { covers, loaded }) {
   if (!hasGlyphFallback()) return undefined;
   const packages = BUNDLED_FONT_MANIFEST.packages.filter(item => item.pack === "scripts" && item.scripts.some(script => cjkKeys.includes(script)));
-  const primary = analysis.detected.filter(script => cjkKeys.includes(script)).length;
+  const primary = new Set([...analysis.detected, ...(analysis.design ?? [])].filter(script => cjkKeys.includes(script))).size;
   if (packages.filter(item => loaded.has(item.name)).length >= primary + 1) return undefined;
   for (const character of analysis.cjk) {
     if (covers(character)) continue;
