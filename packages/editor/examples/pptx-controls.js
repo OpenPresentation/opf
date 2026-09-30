@@ -17,7 +17,7 @@ export function showConversionDiagnostics(container, diagnostics) {
   }));
 }
 
-export function installPptxExport({ editor, getCanvas, renderOptions, status }) {
+export function installPptxExport({ editor, getCanvas, renderOptions, status, fonts, measurementFor }) {
   const $ = id => document.getElementById(id);
   const dialog = $('export-dialog');
   let request = 0, bytes, filename;
@@ -37,8 +37,16 @@ export function installPptxExport({ editor, getCanvas, renderOptions, status }) 
     dialog.showModal();
     const diagnostics = [];
     try {
+      // Text is measured with the loaded faces, so the faces the deck needs load before conversion measures anything.
+      if (fonts?.pending(deck).length) {
+        $('export-summary').textContent = 'Loading fonts…';
+        await fonts.ensure(deck);
+        if (id !== request || !dialog.open) return;
+        $('export-summary').textContent = `Preparing ${deck.slides.length} slides…`;
+      }
       const result = await toPptx(deck, {
-        textMeasurement: renderOptions.textMeasurement,
+        // A script-aware measurement for this deck (Japanese under Aptos measures with Noto Sans JP), when the host supplies one.
+        textMeasurement: measurementFor?.(deck) ?? renderOptions.textMeasurement,
         strictAssets: true,
         onDiagnostic: issue => diagnostics.push(issue),
       });

@@ -12,6 +12,7 @@ import {
   normalizeGalleryUrl,
 } from "../src/galleries.js";
 import { renderSvg } from "@openpresentation/opf-render/svg";
+import { whenFontsReady } from "../src/font-gate.js";
 import { readPptxFile, showConversionDiagnostics } from './pptx-controls.js';
 
 export function installTransferControls({
@@ -23,6 +24,7 @@ export function installTransferControls({
   status,
   renderOptions,
   galleries,
+  fonts,
 }) {
   const $ = (id) => document.getElementById(id),
     importDialog = $("import-dialog"),
@@ -30,6 +32,7 @@ export function installTransferControls({
   let transfer = null,
     prepared = null,
     requestId = 0,
+    previewRun = 0,
     controller,
     loadedGallery,
     custom = [],
@@ -59,6 +62,7 @@ export function installTransferControls({
     if (message) $("import-summary").textContent = "Review the message below";
   };
   const busy = (message) => {
+    previewRun++;
     error("");
     $("import-conversion").hidden = true;
     $("import-diagnostics").replaceChildren();
@@ -84,6 +88,12 @@ export function installTransferControls({
     $("import-apply").disabled = true;
     $("import-copy").disabled = !transfer;
     if (!transfer) return;
+    const run = ++previewRun;
+    const failed = (cause) => {
+      $("import-preview").replaceChildren();
+      $("import-summary").textContent = "Review the source before importing";
+      error(cause.message);
+    };
     try {
       const mode = $("import-action").value;
       const result = prepareOpfImport(editor.document, transfer, {
@@ -91,29 +101,38 @@ export function installTransferControls({
         slideIndex: getSlideIndex(),
         path: getSelectedPath(),
       });
-      const svg = renderSvg(result.document, {
-        ...renderOptions,
-        slideIndex: result.slideIndex,
+      // FF-41: the preview draws only once the faces the imported document needs (an Arabic .pptx, a Japanese deck) are loaded.
+      whenFontsReady(fonts, result.document, {
+        isCurrent: () => run === previewRun && importDialog.open,
+        loading: () => {
+          $("import-preview").replaceChildren();
+          $("import-summary").textContent = "Loading fonts for this document…";
+        },
+        ready: () => {
+          const svg = renderSvg(result.document, {
+            ...renderOptions,
+            slideIndex: result.slideIndex,
+          });
+          $("import-preview").innerHTML = svg;
+          prepared = result;
+          error("");
+          $("import-apply").disabled = false;
+          const count = transfer.document?.slides.length;
+          $("import-summary").textContent =
+            mode === "selection"
+              ? "Replace selected content"
+              : `${count} ${count === 1 ? "slide" : "slides"} · ${mode === "insert" ? `insert after slide ${getSlideIndex() + 1}` : "open as presentation (undoable)"}`;
+          $("import-apply").textContent =
+            mode === "insert"
+              ? "Insert slides"
+              : mode === "replace"
+                ? "Open presentation"
+                : "Replace content";
+        },
+        failed,
       });
-      $("import-preview").innerHTML = svg;
-      prepared = result;
-      error("");
-      $("import-apply").disabled = false;
-      const count = transfer.document?.slides.length;
-      $("import-summary").textContent =
-        mode === "selection"
-          ? "Replace selected content"
-          : `${count} ${count === 1 ? "slide" : "slides"} · ${mode === "insert" ? `insert after slide ${getSlideIndex() + 1}` : "open as presentation (undoable)"}`;
-      $("import-apply").textContent =
-        mode === "insert"
-          ? "Insert slides"
-          : mode === "replace"
-            ? "Open presentation"
-            : "Replace content";
     } catch (cause) {
-      $("import-preview").replaceChildren();
-      $("import-summary").textContent = "Review the source before importing";
-      error(cause.message);
+      failed(cause);
     }
   }
   function receive(value) {
@@ -456,17 +475,31 @@ export function installTransferControls({
         slideIndex: getSlideIndex(),
         path: getSelectedPath(),
       });
-      renderSvg(result.document, {
-        ...renderOptions,
-        slideIndex: result.slideIndex,
+      // The imported document becomes the document only after its faces are loaded (at once when they already are).
+      whenFontsReady(fonts, result.document, {
+        isCurrent: () => importDialog.open,
+        loading: () => {
+          $("import-apply").disabled = true;
+          $("import-summary").textContent = "Loading fonts for this document…";
+        },
+        ready: () => {
+          renderSvg(result.document, {
+            ...renderOptions,
+            slideIndex: result.slideIndex,
+          });
+          setSlideIndex(result.slideIndex);
+          editor.applyPatch([{ op: "replace", path: "", value: result.document }], {
+            source: "import",
+            rejectInvalid: true,
+          });
+          closeImport();
+          status("OPF imported · Undo restores the previous document");
+        },
+        failed: (cause) => {
+          $("import-apply").disabled = !prepared;
+          error(cause.message);
+        },
       });
-      setSlideIndex(result.slideIndex);
-      editor.applyPatch([{ op: "replace", path: "", value: result.document }], {
-        source: "import",
-        rejectInvalid: true,
-      });
-      closeImport();
-      status("OPF imported · Undo restores the previous document");
     } catch (cause) {
       error(cause.message);
     }

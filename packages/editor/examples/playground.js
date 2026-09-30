@@ -2,9 +2,11 @@ import {installDataControls} from './data-controls.js';
 import {createSchemaInspector} from '../src/schema-inspector.js';
 import {installTransferControls} from './transfer-controls.js';
 import { createEditorSession } from '../src/index.js';
-import {createCanvasEditor} from '../src/canvas.js';
+import {createCanvasEditor,createFontGate} from '../src/canvas.js';
 import {loadBrowserFontRegistry} from '@openpresentation/opf-render/fonts-browser';
 import { renderSvg } from '@openpresentation/opf-render/svg';
+import * as renderFontCore from '@openpresentation/opf-render/fonts';
+import { resolveScriptFonts } from '@openpresentation/opf';
 import { installPptxExport } from './pptx-controls.js';
 import { MAX_EXACT_SOURCE_LENGTH, createSourceMemory, findDuplicateKey, updateJsonSource } from '../src/exact-source.js';
 
@@ -17,9 +19,19 @@ const fontRegistry = await loadBrowserFontRegistry(fontFaces.map(face=>({family:
 // faces (Intos for the Aptos scheme, the open families): they are not in fonts.json but separate hash-pinned files the
 // registry adds to the document and itself together. Older renderers have no pendingScripts/ensureScripts or
 // pendingLazyFonts/ensureLazyFonts, and the playground then keeps the fonts it has.
-const pendingScriptFonts = deck => [...(fontRegistry.pendingScripts?.(deck) ?? []), ...(fontRegistry.pendingLazyFonts?.(deck) ?? []).map(face => face.file)];
-const ensureFonts = async deck => { await fontRegistry.ensureLazyFonts?.(deck); await fontRegistry.ensureScripts?.(deck); };
+// FF-41: nothing renders or measures a document before this gate has loaded the faces it needs. Every path that sets a new
+// document or draws a slide (initial load, Source Apply and the gallery handoff, import, undo and redo, font and language
+// switches, slide navigation, thumbnails, previews and export) goes through fontGate.run or the canvas's own gate.
+const fontGate = createFontGate(fontRegistry);
 const layoutOptions = {textMeasurement:fontRegistry.textMeasurement};
+// renderSvg measures each script with its own face and falls back per glyph (Japanese under Aptos draws with Noto Sans JP where
+// Intos Display has no glyph), but the session's composeSlide and paginateSlide take a plain measurement, and that one is strict:
+// it throws "Font 'Intos Display' cannot display U+65E5" even with every face loaded. Give them the same per-document, script-aware
+// measurement (opf-render README: createScriptTextMeasurement(registry.textMeasurement, resolveScriptFonts(presentation))).
+const layoutFor = (deck,index) => {
+  try { return {...layoutOptions,textMeasurement:renderFontCore.createScriptTextMeasurement(fontRegistry.textMeasurement,resolveScriptFonts(deck,{slideIndex:index}))}; }
+  catch { return layoutOptions; }
+};
 const editor = createEditorSession({
   name: 'A presentation you can work on',
   catalogs: {fontSchemes: {records: [{'$schema':'https://openpresentation.org/schema/opf-font-scheme/v1',id:'cambria',name:'Cambria',major:'Cambria',minor:'Cambria'}]}},
@@ -46,7 +58,7 @@ const editor = createEditorSession({
   ],
 }, { rejectInvalid: true });
 const element = id => document.getElementById(id);
-let slideIndex = 0, selectedPath = 'slides.0.title', selectedValue, canvas, renderError;
+let slideIndex = 0, selectedPath = 'slides.0.title', selectedValue, canvas, renderError, fontsFailure;
 function status(message) { element('status').textContent = message; }
 let activePanel = 'content';
 const thumbnailCache = new Map();
@@ -111,12 +123,12 @@ function renderNavigator(deck) {
     thumbnail.querySelectorAll('[tabindex]').forEach(node => node.removeAttribute('tabindex'));
     const label = document.createElement('span'); label.className = 'thumbnail-title'; label.textContent = slide.title ?? 'Untitled slide';
     content.append(thumbnail, label); button.append(number, content);
-    button.onclick = () => { slideIndex = index; render(); };
+    button.onclick = () => { slideIndex = index; refresh(); };
     button.onkeydown = event => {
       if (!['ArrowUp','ArrowDown','Home','End'].includes(event.key)) return;
       event.preventDefault();
       slideIndex = event.key === 'Home' ? 0 : event.key === 'End' ? deck.slides.length - 1 : Math.max(0, Math.min(deck.slides.length - 1, index + (event.key === 'ArrowDown' ? 1 : -1)));
-      render(); element('slide-list').children[slideIndex]?.focus();
+      refresh(); element('slide-list').children[slideIndex]?.focus();
     };
     return button;
   }));
@@ -155,7 +167,7 @@ function render() {
   element('mode').value = deck.slides[slideIndex].composition?.mode ?? 'auto';
   const groupSelect = element('group');
   const previousGroup = groupSelect.value;
-  const geometry = editor.composeSlide(slideIndex,layoutOptions);
+  const geometry = editor.composeSlide(slideIndex,layoutFor(deck,slideIndex));
   groupSelect.replaceChildren(...geometry.groups.map(group => {
     const option = document.createElement('option'); option.value = group.path; option.textContent = group.path.replace(`slides.${slideIndex}.`, ''); return option;
   }));
@@ -166,9 +178,15 @@ function render() {
   element('json').value = viewSource(deck);
   const diagnostics = [];
   if (!canvas) canvas=createCanvasEditor(element('preview'),{
-    editor,slideIndex,renderOptions:layoutOptions,propertiesContainer:element('canvas-properties'),
+    editor,slideIndex,renderOptions:layoutOptions,propertiesContainer:element('canvas-properties'),fonts:fontGate,
+    onFonts:event=>{
+      if(event.state==='loading')status('Loading fonts…');
+      else if(event.state==='error'){fontsFailure=event.error;status(event.error.message);}
+      // The canvas drew a document after a failed load (its Retry button): bring the rest of the page up to date too.
+      else if(fontsFailure){fontsFailure=undefined;refresh();}
+    },
     onSelect:value=>{select(value.path);showPanel('content');},
-    onDraft:value=>{element('json').value=viewSource(value.document);status('Editing on the slide · Esc to cancel');if(pendingScriptFonts(value.document).length)ensureFonts(value.document).catch(()=>{});},
+    onDraft:value=>{element('json').value=viewSource(value.document);status('Editing on the slide · Esc to cancel');},
     onCommit:()=>status('Changes saved in this session'),
     onCancel:()=>{element('json').value=viewSource(editor.document);status('Edit cancelled');},
     onError:error=>status(error.message),
@@ -184,18 +202,21 @@ function render() {
   select(selectedPath);
 }
 function renderSafely() { try { render(); } catch (error) { renderError = error.message; canvas?.destroy(); canvas=undefined; element('preview').textContent = 'Preview unavailable for this document. Use Undo or revise the JSON.'; status(renderError); } }
-let scriptFontsLoading = false;
-// Render at once unless the document draws a script whose fonts are not loaded yet; then fetch them (once) and render.
-async function refresh() {
-  if (!pendingScriptFonts(editor.document).length) { renderSafely(); return; }
-  if (scriptFontsLoading) return;
-  scriptFontsLoading = true;
-  status('Loading fonts for this document…');
-  let failure;
-  try { await ensureFonts(editor.document); thumbnailCache.clear(); } catch (error) { failure = error; }
-  scriptFontsLoading = false;
-  if (failure) { renderSafely(); status(`Fonts for this language could not be loaded: ${failure.message}`); return; }
-  refresh();
+let refreshToken = 0;
+// The one "ensure fonts, then render" path for the page: initial load, every document change (Source Apply and the gallery
+// handoff, import, undo and redo, font and language switches, edits), slide navigation and thumbnails. The document renders at
+// once when the faces it needs are loaded; otherwise "Loading fonts…" shows, the faces load, and only then it renders. A document
+// whose faces cannot be loaded is not rendered (not even to an error): the failure is reported and nothing retries by itself.
+// The canvas gates its own renders with the same fontGate, so it cannot draw ahead of this.
+function refresh() {
+  const token = ++refreshToken;
+  let loaded = false;
+  return fontGate.run(editor.document, {
+    isCurrent: () => token === refreshToken,
+    loading: () => { loaded = true; status('Loading fonts…'); if (!canvas) element('preview').textContent = 'Loading fonts…'; element('undo').disabled = !editor.canUndo; element('redo').disabled = !editor.canRedo; },
+    ready: () => { fontsFailure = undefined; if (loaded) thumbnailCache.clear(); renderSafely(); },
+    failed: error => { fontsFailure = error; status(error.message); element('undo').disabled = !editor.canUndo; element('redo').disabled = !editor.canRedo; if (!canvas) element('preview').textContent = error.message; },
+  });
 }
 editor.subscribe(refresh);
 element('apply').onclick = () => act(() => editor.set(selectedPath, typeof selectedValue === 'string' ? element('value').value : JSON.parse(element('value').value)));
@@ -212,7 +233,7 @@ element('arrange').onclick = () => {
 element('mode').onchange = () => act(() => editor.setComposition(slideIndex, { ...editor.get(`slides.${slideIndex}.composition`, {}), mode: element('mode').value }));
 element('group').onchange = () => { element('group-mode').value = editor.get(`${element('group').value}.composition.mode`, 'auto'); };
 element('group-mode').onchange = () => act(() => editor.setGroupComposition(element('group').value, { ...editor.get(`${element('group').value}.composition`, {}), mode: element('group-mode').value }));
-element('paginate').onclick = () => act(() => editor.paginateSlide(slideIndex,layoutOptions));
+element('paginate').onclick = () => act(() => editor.paginateSlide(slideIndex,layoutFor(editor.document,slideIndex)));
 element('add').onclick = () => act(() => {
   const deck = editor.document;
   let index = deck.slides.length + 1;
@@ -220,13 +241,30 @@ element('add').onclick = () => act(() => {
   slideIndex = deck.slides.length;
   editor.applyPatch([{ op: 'add', path: '/slides/-', value: { id: `slide-${index}`, title: 'New slide', text: 'Write your next idea here.' } }]);
 });
-element('apply-json').onclick = () => {
-  const applied = element('json').value, prior = sourceText;
+let applying = false;
+// Also the gallery handoff: it fills #json and clicks this button in the same tick, without waiting for the source preview.
+element('apply-json').onclick = async () => {
+  if (applying) return;
+  const applied = element('json').value;
+  let deck;
   try {
-    const deck = JSON.parse(applied);
-    // Remember the spelling of the document being replaced so Undo restores it exactly, then keep the applied bytes.
+    deck = JSON.parse(applied);
     const duplicate = duplicateKeyMessage(applied);
     if (duplicate) { element('json-error').textContent = duplicate; return; }
+  } catch(error) { element('json-error').textContent = error.issues?.[0]?.message ?? error.message; return; }
+  // The faces the source needs load before it becomes the document, so the canvas, the thumbnails and the layout never see it early.
+  if (fontGate.pending(deck).length) {
+    applying = true;
+    element('json-error').textContent = 'Loading fonts for this document…';
+    try { await fontGate.ensure(deck); }
+    catch (error) { element('json-error').textContent = error.message; return; }
+    finally { applying = false; }
+    if (!element('source-dialog').open || element('json').value !== applied) return;
+    element('json-error').textContent = '';
+  }
+  const prior = sourceText;
+  try {
+    // Remember the spelling of the document being replaced so Undo restores it exactly, then keep the applied bytes.
     updateJsonSource(sourceText ?? prettySource(editor.document), editor.document, sourceMemory);
     sourceText = applied;
     editor.applyPatch([{op:'replace',path:'',value:deck}]);
@@ -236,20 +274,24 @@ element('apply-json').onclick = () => {
 };
 element('open-json').onclick = () => { if(canvas && !canvas.commit())return; element('json').value = viewSource(editor.document); element('json-error').textContent = ''; element('source-dialog').showModal();previewSource(); };
 element('close-json').onclick = () => element('source-dialog').close();
-let sourceFrame=0;
+let sourceFrame=0,previewToken=0;
 function previewSource() {
+  const token=++previewToken,fail=error=>{element('json-error').textContent=error.issues?.[0]?.message ?? error.message;element('apply-json').disabled=true;};
+  let deck;
   try {
-    const deck=JSON.parse(element('json').value);
+    deck=JSON.parse(element('json').value);
     const duplicate=duplicateKeyMessage(element('json').value);
     if(duplicate)throw new Error(duplicate);
-    if(pendingScriptFonts(deck).length){
-      element('json-error').textContent='Loading fonts for this language…';element('apply-json').disabled=true;
-      ensureFonts(deck).then(previewSource,error=>{element('json-error').textContent=`Fonts for this language could not be loaded: ${error.message}`;});
-      return;
-    }
-    const svg=renderSvg(deck,{...layoutOptions,slideIndex:Math.min(slideIndex,(deck.slides?.length ?? 1)-1)});
-    element('source-preview').innerHTML=svg;element('json-error').textContent='';element('apply-json').disabled=false;
-  } catch(error) {element('json-error').textContent=error.issues?.[0]?.message ?? error.message;element('apply-json').disabled=true;}
+  } catch(error) {fail(error);return;}
+  fontGate.run(deck,{
+    isCurrent:()=>token===previewToken,
+    loading:()=>{element('json-error').textContent='Loading fonts for this document…';element('apply-json').disabled=true;},
+    ready:()=>{
+      const svg=renderSvg(deck,{...layoutOptions,slideIndex:Math.min(slideIndex,(deck.slides?.length ?? 1)-1)});
+      element('source-preview').innerHTML=svg;element('json-error').textContent='';element('apply-json').disabled=false;
+    },
+    failed:fail,
+  });
 }
 element('json').addEventListener('input',()=>{cancelAnimationFrame(sourceFrame);sourceFrame=requestAnimationFrame(previewSource);});
 
@@ -276,20 +318,20 @@ document.addEventListener('keydown',event=>{
     event.preventDefault(); act(()=>event.shiftKey ? editor.redo() : editor.undo());
   }
 });
-render();
+refresh();
 
 const galleryConfig=await fetch('./galleries.json').then(response=>{if(!response.ok)throw new Error('Gallery configuration unavailable');return response.json();}).catch(()=>[{name:'PPTX.gallery',url:'https://www.pptx.gallery/registry.json'}]);
-installTransferControls({editor,getCanvas:()=>canvas,getSlideIndex:()=>slideIndex,getSelectedPath:()=>selectedPath,setSlideIndex:value=>{slideIndex=value;},status,renderOptions:layoutOptions,galleries:galleryConfig});
-installPptxExport({editor,getCanvas:()=>canvas,renderOptions:layoutOptions,status});
+installTransferControls({editor,getCanvas:()=>canvas,getSlideIndex:()=>slideIndex,getSelectedPath:()=>selectedPath,setSlideIndex:value=>{slideIndex=value;},status,renderOptions:layoutOptions,galleries:galleryConfig,fonts:fontGate});
+installPptxExport({editor,getCanvas:()=>canvas,renderOptions:layoutOptions,status,fonts:fontGate,measurementFor:deck=>layoutFor(deck,0).textMeasurement});
 
-let propertiesInspector;
+let propertiesInspector,propertiesPreviewToken=0;
 const propertiesDialog=element('properties-dialog');
 element('open-properties').onclick=()=>{
  if(canvas&&!canvas.commit())return;
  propertiesDialog.showModal();
  propertiesInspector?.destroy();
  propertiesInspector=createSchemaInspector(element('schema-properties'),{editor,path:`/slides/${slideIndex}`,
-  onDraft:({document:deck})=>{try{element('properties-preview').innerHTML=renderSvg(deck,{...layoutOptions,trace:true,slideIndex:Math.min(slideIndex,deck.slides.length-1)});element('properties-preview-status').textContent='Click slide content to find its field. Metadata is stored with the deck.';}catch(error){element('properties-preview-status').textContent='Preview unavailable: '+error.message;}},
+  onDraft:({document:deck})=>{const token=++propertiesPreviewToken;fontGate.run(deck,{isCurrent:()=>token===propertiesPreviewToken,loading:()=>{element('properties-preview-status').textContent='Loading fonts for this document…';},ready:()=>{element('properties-preview').innerHTML=renderSvg(deck,{...layoutOptions,trace:true,slideIndex:Math.min(slideIndex,deck.slides.length-1)});element('properties-preview-status').textContent='Click slide content to find its field. Metadata is stored with the deck.';},failed:error=>{element('properties-preview-status').textContent='Preview unavailable: '+error.message;}});},
   onCommit:()=>status('Presentation properties updated'),onError:error=>status(error.message)
  });
 };
@@ -302,4 +344,4 @@ for(const [id,path]of [['deck',''],['slide',()=>`/slides/${slideIndex}`],['selec
 };
 element('properties-preview').onclick=event=>{const target=event.target.closest('[data-opf-path]');if(target)propertiesInspector?.navigate(target.getAttribute('data-opf-path'));};
 
-installDataControls({editor,getCanvas:()=>canvas,getSlideIndex:()=>slideIndex,getSelectedPath:()=>selectedPath,setSlideIndex:value=>{slideIndex=value;},status,renderOptions:layoutOptions});
+installDataControls({editor,getCanvas:()=>canvas,getSlideIndex:()=>slideIndex,getSelectedPath:()=>selectedPath,setSlideIndex:value=>{slideIndex=value;},status,renderOptions:layoutOptions,fonts:fontGate});

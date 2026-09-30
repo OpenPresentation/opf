@@ -19,7 +19,9 @@ import { createBlockControls } from "./block-controls.js";
 import { createLayoutHandles } from "./layout-handles.js";
 import { createRichTextInput } from "./rich-text-input.js";
 import { createRichTextToolbar } from "./rich-text-toolbar.js";
+import { FONTS_PENDING, fontsPendingError, whenFontsReady } from "./font-gate.js";
 export { getEditableFields } from "./canvas-fields.js";
+export { createFontGate, whenFontsReady, FONTS_PENDING, FONTS_UNAVAILABLE } from "./font-gate.js";
 
 /** Allocated placeholder or internal-part bounds for the selection outline, not glyph ink. */
 export function allocatedSelectionBox(node, item) {
@@ -62,8 +64,13 @@ export function createCanvasEditor(container, options = {}) {
   const editor =
     options.editor ??
     createEditorSession(options.document, { rejectInvalid: true });
+  // `options.fonts` is a font gate (createFontGate): a document whose faces are not loaded yet is never rendered. The canvas
+  // loads them first and shows "Loading fonts…" meanwhile; without a gate every document renders at once, as before.
+  const fonts = options.fonts;
   let slideIndex = options.slideIndex ?? 0,
     renderOptions = options.renderOptions ?? {},
+    showToken = 0,
+    fontsShown = false,
     active = null,
     selectedPath = null,
     disposed = false,
@@ -100,12 +107,12 @@ export function createCanvasEditor(container, options = {}) {
     onTyping: beginEdit,
     onProperties(path) { if (commit()) openProperties(path, editor.get(path)); },
     validateChange(path, value) {
-      renderSvg(createCanvasDraft(editor.document, path, value), {...renderOptions, slideIndex});
+      validateRender(createCanvasDraft(editor.document, path, value));
     },
     onChange(path) { clearNotice(); options.onCommit?.({path, editor}); }
   });
   const layoutHandles = createLayoutHandles(root, {
-    editor, enabled: options.layoutEditing, render, beforeEdit: commit,
+    editor, enabled: options.layoutEditing, render: renderFor, beforeEdit: commit,
     isTextEditing: () => !!active,
     clearError: clearNotice, onError: report,
     onDraft: value => options.onDraft?.(value),
@@ -113,9 +120,9 @@ export function createCanvasEditor(container, options = {}) {
     onCancel: value => { clearNotice(); options.onCancel?.(value); },
   });
   const blockControls = createBlockControls(root, {
-    editor, render, beforeEdit: () => {if(!commit())return false;richToolbar.hide();return true;}, enabled: () => layoutHandles.enabled,
+    editor, render: renderFor, beforeEdit: () => {if(!commit())return false;richToolbar.hide();return true;}, enabled: () => layoutHandles.enabled,
     isEditing: () => !!active || !!layoutHandles.editingPath, slideIndex: () => slideIndex,
-    validate: document => renderSvg(document, {...renderOptions, slideIndex}),
+    validate: document => validateRender(document),
     clearError: clearNotice, onError: report,
     onMove: path => choose(splitOpfPath(path).join(".")),
     onCommit: value => options.onCommit?.(value),
@@ -142,8 +149,75 @@ export function createCanvasEditor(container, options = {}) {
       editor,
     });
   }
+  const pendingMessage = "Loading fonts for this document…";
+  // A synchronous render or validation of a document whose faces are still loading fails with a clear "fonts-pending"
+  // error and starts the load, so the next attempt succeeds. It never draws glyphs the registry cannot provide.
+  function requireFonts(document) {
+    const pending = fonts?.pending(document) ?? [];
+    if (!pending.length) return;
+    notice.hidden = false;
+    notice.textContent = pendingMessage;
+    fonts.ensure(document).then(
+      () => { if (!disposed && notice.textContent === pendingMessage) clearNotice(); },
+      (error) => { if (!disposed) report(error); },
+    );
+    throw fontsPendingError(pending);
+  }
+  function validateRender(document) {
+    requireFonts(document);
+    return renderSvg(document, {...renderOptions, slideIndex});
+  }
+  function fontsState(kind, detail) {
+    fontsShown = true;
+    const size = preview.firstElementChild?.getBoundingClientRect?.().height || 0;
+    layoutHandles.hide();
+    blockControls.hide();
+    richToolbar.hide();
+    const box = doc.createElement("div");
+    box.className = "opf-canvas-fonts";
+    box.setAttribute("role", kind === "error" ? "alert" : "status");
+    box.style.cssText = `box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;min-height:${Math.max(160, Math.round(size))}px;padding:16px;text-align:center;font:14px/1.4 system-ui;background:rgba(127,127,127,.12);border-radius:4px`;
+    const message = doc.createElement("span");
+    message.textContent = kind === "error" ? detail.message : "Loading fonts…";
+    box.append(message);
+    if (kind === "error") {
+      const retry = doc.createElement("button");
+      retry.type = "button";
+      retry.textContent = "Retry loading fonts";
+      retry.addEventListener("click", () => show());
+      box.append(retry);
+    }
+    preview.replaceChildren(box);
+    if (kind === "error") options.onError?.(detail);
+    options.onFonts?.(kind === "error" ? { state: "error", error: detail } : { state: "loading", pending: detail });
+  }
+  // Render a document the canvas did not draw itself (an editor change, a slide or option change) once its fonts are loaded.
+  function show(target) {
+    if (disposed) return;
+    const token = ++showToken;
+    return whenFontsReady(fonts, target ?? editor.document, {
+      isCurrent: () => !disposed && token === showToken,
+      loading: (pending) => fontsState("loading", pending),
+      ready: () => {
+        try {
+          render(target);
+        } catch (error) {
+          if (error?.code === FONTS_PENDING) show(target);
+          else report(error);
+        }
+      },
+      failed: (error) => fontsState("error", error),
+    });
+  }
+  // Renders now when the document's fonts are loaded (errors throw to the caller), otherwise after loading them.
+  function renderFor(document) {
+    if (fonts?.pending(document ?? editor.document).length) show(document);
+    else render(document);
+  }
   function render(document = editor.document) {
     if (disposed) return;
+    requireFonts(document);
+    showToken++;
     const slides = document.slides ?? [];
     slideIndex = Math.max(0, Math.min(slideIndex, slides.length - 1));
     const svgText = renderSvg(document, {
@@ -233,6 +307,10 @@ export function createCanvasEditor(container, options = {}) {
     blockControls.update(document, geometry);
     if (active?.kind === "text") positionInput();
     if (active?.kind === "rich-text") active.rich?.update();
+    if (fontsShown) {
+      fontsShown = false;
+      options.onFonts?.({ state: "ready" });
+    }
     options.onRender?.({
       document,
       slideIndex,
@@ -240,6 +318,22 @@ export function createCanvasEditor(container, options = {}) {
       geometry,
       draft: !!active || !!layoutHandles.editingPath,
     });
+  }
+  // An in-progress edit whose text needs faces that are not loaded yet waits for them, then draws again.
+  function deferDraft(draft) {
+    if (!fonts?.pending(draft).length) return false;
+    active.valid = false;
+    notice.hidden = false;
+    notice.textContent = pendingMessage;
+    fonts.ensure(draft).then(
+      () => {
+        if (disposed) return;
+        if (notice.textContent === pendingMessage) clearNotice();
+        if (active) queueDraft();
+      },
+      (error) => { if (!disposed) report(error); },
+    );
+    return true;
   }
   function queueDraft() {
     if (frame) win.cancelAnimationFrame(frame);
@@ -249,6 +343,7 @@ export function createCanvasEditor(container, options = {}) {
       if (active.kind === "properties") {
         try {
           const draft = propertyDraft(active);
+          if (deferDraft(draft)) return;
           clearNotice();
           render(draft);
           options.onDraft?.({
@@ -264,6 +359,7 @@ export function createCanvasEditor(container, options = {}) {
       try {
         const value = active.kind === "rich-text" ? active.rich.value : parseCanvasValue(active.input.value, active.type, active.originalValue);
         const draft = createCanvasDraft(editor.document, active.path, value);
+        if (deferDraft(draft)) return;
         clearNotice();
         active.valid = true;
         active.draft = draft;
@@ -659,7 +755,7 @@ export function createCanvasEditor(container, options = {}) {
         value = parseCanvasValue(edit.input.value, edit.type, edit.originalValue);
       else value = propertyDraft(edit);
       if (edit.kind === "text" || edit.kind === "rich-text")
-        renderSvg(createCanvasDraft(editor.document, edit.path, value), {...renderOptions,slideIndex});
+        validateRender(createCanvasDraft(editor.document, edit.path, value));
       committing = true;
       if ((edit.kind === "text" || edit.kind === "rich-text") && JSON.stringify(value) !== edit.base)
         editor.set(edit.path, value, { source: "canvas", rejectInvalid: true });
@@ -725,11 +821,7 @@ export function createCanvasEditor(container, options = {}) {
       queueDraft();
       return;
     }
-    try {
-      render();
-    } catch (error) {
-      report(error);
-    }
+    show();
   });
   const resize = new win.ResizeObserver(() => {
     if (active?.kind === "text") positionInput();
@@ -748,7 +840,7 @@ export function createCanvasEditor(container, options = {}) {
     }
   });
   try {
-    render();
+    renderFor();
   } catch (error) {
     unsubscribe();
     resize.disconnect();
@@ -759,7 +851,7 @@ export function createCanvasEditor(container, options = {}) {
     throw error;
   }
   const ready = Promise.resolve(doc.fonts?.ready).then(() => {
-    if (!disposed && !active) render();
+    if (!disposed && !active) show();
   });
   return {
     editor,
@@ -795,21 +887,21 @@ export function createCanvasEditor(container, options = {}) {
       if (!Number.isInteger(index) || !editor.document.slides?.[index])
         throw new RangeError("Slide index is out of range.");
       if (index === slideIndex) {
-        if (!active) render();
+        if (!active) renderFor();
         return true;
       }
       if (!commit()) return false;
       richToolbar.hide();
       slideIndex = index;
       selectedPath = null;
-      render();
+      renderFor();
       return true;
     },
     setRenderOptions(next) {
       if (!commit()) return false;
       richToolbar.hide();
       renderOptions = next;
-      render();
+      renderFor();
       return true;
     },
     destroy() {

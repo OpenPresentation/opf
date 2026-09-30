@@ -1,7 +1,7 @@
 import {createDataContent,parseTabularData} from '@openpresentation/opf/data';
 import {renderSvg} from '@openpresentation/opf-render/svg';
 
-export function installDataControls({editor,getCanvas,getSlideIndex,getSelectedPath,setSlideIndex,status,renderOptions}) {
+export function installDataControls({editor,getCanvas,getSlideIndex,getSelectedPath,setSlideIndex,status,renderOptions,fonts}) {
  const button=document.createElement('button');button.id='import-data';button.textContent='Import data';button.className='quiet';
  document.querySelector('.header-actions').prepend(button);
  const dialog=document.createElement('dialog');dialog.id='data-dialog';dialog.setAttribute('aria-labelledby','data-title');
@@ -17,7 +17,7 @@ export function installDataControls({editor,getCanvas,getSlideIndex,getSelectedP
  </div><div class="data-review"><div id="data-preview" aria-label="Data slide preview"></div><p id="data-summary" role="status"></p><p id="data-error" role="alert"></p><div id="data-grid"></div></div></div>
  <div class="dialog-footer"><span>Imports are embedded in OPF and can be undone.</span><button id="data-apply" class="primary" disabled>Import data</button></div>`;
  document.body.append(dialog); const $=id=>dialog.querySelector('#'+id);
- let content,revision=0,columnsKey='';
+ let content,revision=0,columnsKey='',previewRun=0;
  const options=()=>({format:$('data-format').value,header:$('data-header').checked});
  function selectedTarget() {
    const parts=String(getSelectedPath()).replace(/^\//,'').split(/[./]/),at=parts.findIndex(p=>p==='table'||p==='chart');
@@ -36,6 +36,7 @@ export function installDataControls({editor,getCanvas,getSlideIndex,getSelectedP
    return {slideIndex:index,patch:[{op:'add',path:`/slides/${index}`,value:{id:`data-${crypto.randomUUID()}`,title:$('data-slide-title').value,...content}}]};
  }
  function update() {
+  const run=++previewRun;
   content=undefined;$('data-apply').disabled=true;$('data-error').textContent='';$('data-preview').replaceChildren();$('data-grid').replaceChildren();$('data-summary').textContent='';
   $('data-chart-options').hidden=$('data-as').value!=='chart';
   try {
@@ -45,11 +46,17 @@ export function installDataControls({editor,getCanvas,getSlideIndex,getSelectedP
    content=createDataContent($('data-text').value,{...options(),as:$('data-as').value,chartType:$('data-chart-type').value,category:$('data-category').value,series:[...$('data-series').querySelectorAll('input:checked')].map(input=>input.value)});
    // A one-slide draft inherits deck design/assets for an accurate content preview.
    const deck=editor.document, preview={...deck,slides:[{title:$('data-slide-title').value,...content}]};
-   $('data-preview').innerHTML=renderSvg(preview,{...renderOptions,slideIndex:0,trace:false});
-   const table=document.createElement('table');
-   for(const [i,row]of [data.columns,...data.rows.slice(0,8)].entries()){const tr=document.createElement('tr');for(const value of row){const td=document.createElement(i?'td':'th');td.textContent=value===null?'—':String(value);tr.append(td);}table.append(tr);}
-   $('data-grid').append(table);$('data-summary').textContent=`${data.rows.length} rows · ${data.columns.length} columns${data.rows.length>8?' · first 8 rows shown below':''}`;
-   prepare();$('data-apply').disabled=false;
+   // FF-41: the preview draws only once the faces the data needs (a CSV in Japanese or Arabic, an Aptos deck) are loaded.
+   const show=()=>{
+    $('data-preview').innerHTML=renderSvg(preview,{...renderOptions,slideIndex:0,trace:false});
+    const table=document.createElement('table');
+    for(const [i,row]of [data.columns,...data.rows.slice(0,8)].entries()){const tr=document.createElement('tr');for(const value of row){const td=document.createElement(i?'td':'th');td.textContent=value===null?'—':String(value);tr.append(td);}table.append(tr);}
+    $('data-grid').append(table);$('data-summary').textContent=`${data.rows.length} rows · ${data.columns.length} columns${data.rows.length>8?' · first 8 rows shown below':''}`;
+    prepare();$('data-apply').disabled=false;
+   };
+   const failed=error=>{content=undefined;$('data-apply').disabled=true;$('data-error').textContent=error.message;};
+   if(fonts)fonts.run(preview,{isCurrent:()=>run===previewRun,loading:()=>{$('data-summary').textContent='Loading fonts for this document…';},ready:show,failed});
+   else show();
   }catch(error){content=undefined;$('data-error').textContent=error.message;}
  }
  button.onclick=()=>{if(getCanvas()&&!getCanvas().commit())return;dialog.showModal();update();$('data-text').focus();};

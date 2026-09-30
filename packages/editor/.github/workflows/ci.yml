@@ -25,26 +25,26 @@ jobs:
           persist-credentials: false
           fetch-depth: 0
           path: opf-editor
-      # FF-31 (Intos): opf and opf-render are pinned to the heads of opf#166 and opf-render#54 so test:playground exercises lazy fonts; repin both to their merge commits once merged (never leave them on unmerged heads).
+      # The ecosystem is pinned to the versions this package depends on: opf main after 0.11.2 (the packed-ecosystem check there knows renderer 0.11.1), opf-render 0.11.1 (lazy script and preview faces, incl. Barlow, which test:playground exercises) and opf-pptx 0.11.0.
       # Verify registry dependencies before linking the pinned source graph.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf
-          ref: 338ddcd40e0953a0a8d6c02c45622be893b29cb1
+          ref: a5b588b9bb1191cc4b0c927ddd39dfcda1b998d7 # opf main after opf-v0.11.2 (its packed-ecosystem check records the 0.11.1 renderer's lazy face count)
           path: opf
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-render
-          ref: d528be52878788bf2ecbdc138b839443ec66dc4e
+          ref: bddb61425fe4ed57eb406c55cb9ffee5ae528928 # opf-render-v0.11.1
           path: opf-render
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-pptx
-          ref: 11f7fb0bb0ba2ac35afe859916ba936262eed748
+          ref: 5e46cf8f04218a1f77205b933f870f4ca5017394 # opf-pptx-v0.11.0
           path: opf-pptx
           fetch-depth: 0
           persist-credentials: false
