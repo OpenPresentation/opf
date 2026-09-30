@@ -36,24 +36,24 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf
-          # Core 0.11.3 release commit (opf#209): the published core this release requires (^0.11.3); the packed quote checks accept the restored quote payload (FF-57).
-          ref: 2e838f56086976b258328d4610179037995435e8
+          # Core main 3ae62f9 (core 0.11.3 plus the recorded renderer 0.11.8 lazy font count, opf#219); the published core this release requires is ^0.11.3.
+          ref: 3ae62f9a01102fd43a9fc301ef59fdbb1cd998c6
           path: opf
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-render
-          # Renderer main after #75 and #72 (the commit renderer 0.11.6 releases, 0.11.5 plus chart label rotation).
-          ref: aa048a1bc672280a916bdc39a7cfe8763b80d6b4
+          # Renderer main after #79 (FF-59: the tag draws in the primary colour, as this release writes it).
+          ref: d84f2340edf3c91eb35b1f2fe3bac26880065e1b
           path: opf-render
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-editor
-          # Editor main after #50 (0.10.3 plus the catalog-independent layout ranking tests the 100-layout catalog needs).
-          ref: 8bf5ba0bba5d19f0e80f5c8774f61b7c1da57192
+          # Editor main after #55 (playground example only).
+          ref: 159c08b3e45d6d0cb9bd7d2938618e1bc3550baa
           path: opf-editor
           fetch-depth: 0
           persist-credentials: false

@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.11.5
+
+- Release 0.11.5 (patch: the slide tag run is a theme colour reference; no API change, no option removed, core floor stays `@openpresentation/opf` ^0.11.3 and the optional renderer peer ^0.11.0). Everything since 0.11.4 (`git log c08105f..main`): only FF-59 (#115). The slide `tag` run is written as `a:schemeClr accent1` where the deck theme's accent1 holds the scheme primary (every catalog color scheme), and as the literal primary otherwise; PowerPoint looks the same and the tag now follows a theme color edit. Corpus: 952 of 976 exports (126 examples and 850 gallery documents) are byte-identical; in the other 24 only the tag run fill and the style-signature hash in `opfSlide1.xml` change. opf-render 0.11.8 draws the tag in the same color. Details in the entry below.
+
 - FF-59: the slide `tag` run is written as `a:schemeClr accent1` where the deck theme holds the scheme primary in accent1 (every catalog color scheme), and as the literal primary otherwise (a scheme that names a separate `primary`, or a slide with its own color scheme). The color itself is unchanged, so PowerPoint looks as before; what changed is that the tag now follows a theme color edit, and that opf-render (next release) draws the tag in the same color instead of the text color (the parity mismatch of `pitch-deck-intro`, `section-break` and `closing-cta`).
 
 ## 0.11.4
