@@ -1,0 +1,44 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "testimonial-grid",
+  "name": "Testimonial_Grid",
+  "summary": "Multiple customer or stakeholder quotes in a grid. Builds social proof through volume and diversity.",
+  "description": "Multiple customer or stakeholder quotes in a grid. Builds social proof through volume and diversity.",
+  "contentType": "Quote",
+  "contentMultiple": "3x",
+  "contentAlignment": "Center",
+  "contentBox": true,
+  "contentTypeChartPrimary": "None",
+  "contentTypeImageFill": "None",
+  "contentTypeListBullet": "None",
+  "contentTypeListHeading": false,
+  "slideTitle": true,
+  "slideSubtitle": false,
+  "slideTitleAlignment": "Center",
+  "slideImage": false,
+  "slideImageAlignment": "None",
+  "slideLayoutDirection": "Horizontal",
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "quote"
+    },
+    {
+      "type": "quote"
+    },
+    {
+      "type": "quote"
+    }
+  ],
+  "tags": [
+    "Social Proof",
+    "Customers",
+    "Trust"
+  ],
+  "preview": {},
+  "composition": {
+    "mode": "row"
+  }
+}

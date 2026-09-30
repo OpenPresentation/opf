@@ -1,0 +1,35 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "business-model-canvas",
+  "name": "Business_Model_Canvas",
+  "summary": "9-box canvas covering customers, value, channels, and economics. Strategy on one page.",
+  "description": "9-box canvas covering customers, value, channels, and economics. Strategy on one page.",
+  "contentType": "Text",
+  "contentMultiple": "1x",
+  "contentAlignment": "Center",
+  "contentBox": true,
+  "contentTypeChartPrimary": "None",
+  "contentTypeImageFill": "None",
+  "contentTypeListBullet": "None",
+  "contentTypeListHeading": false,
+  "slideTitle": true,
+  "slideSubtitle": false,
+  "slideTitleAlignment": "Center",
+  "slideImage": false,
+  "slideImageAlignment": "None",
+  "slideLayoutDirection": "Horizontal",
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "text"
+    }
+  ],
+  "tags": [
+    "Business Model",
+    "Canvas",
+    "Strategy"
+  ],
+  "preview": {}
+}

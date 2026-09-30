@@ -1,0 +1,35 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "raci-matrix",
+  "name": "Raci_Matrix",
+  "summary": "Grid showing who is Responsible, Accountable, Consulted, and Informed for each task. Ends ownership ambiguity.",
+  "description": "Grid showing who is Responsible, Accountable, Consulted, and Informed for each task. Ends ownership ambiguity.",
+  "contentType": "List",
+  "contentMultiple": "1x",
+  "contentAlignment": "Left",
+  "contentBox": true,
+  "contentTypeChartPrimary": "None",
+  "contentTypeImageFill": "None",
+  "contentTypeListBullet": "None",
+  "contentTypeListHeading": false,
+  "slideTitle": true,
+  "slideSubtitle": false,
+  "slideTitleAlignment": "Left",
+  "slideImage": false,
+  "slideImageAlignment": "None",
+  "slideLayoutDirection": "Horizontal",
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "list"
+    }
+  ],
+  "tags": [
+    "Responsibility",
+    "Ownership",
+    "RACI"
+  ],
+  "preview": {}
+}

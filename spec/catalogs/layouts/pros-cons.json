@@ -1,0 +1,41 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "pros-cons",
+  "name": "Pros_Cons",
+  "summary": "Two-column trade-off analysis. Transparent way to present an option without pretending it has no downsides.",
+  "description": "Two-column trade-off analysis. Transparent way to present an option without pretending it has no downsides.",
+  "contentType": "List",
+  "contentMultiple": "2x",
+  "contentAlignment": "Left",
+  "contentBox": true,
+  "contentTypeChartPrimary": "None",
+  "contentTypeImageFill": "None",
+  "contentTypeListBullet": "None",
+  "contentTypeListHeading": false,
+  "slideTitle": true,
+  "slideSubtitle": false,
+  "slideTitleAlignment": "Left",
+  "slideImage": false,
+  "slideImageAlignment": "None",
+  "slideLayoutDirection": "Horizontal",
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "list"
+    },
+    {
+      "type": "list"
+    }
+  ],
+  "tags": [
+    "Trade-offs",
+    "Balance",
+    "Honest"
+  ],
+  "preview": {},
+  "composition": {
+    "mode": "row"
+  }
+}

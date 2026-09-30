@@ -1,0 +1,41 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "detailed-data-table",
+  "name": "Detailed_Data_Table",
+  "summary": "Full-slide data table for reference and Q&A. Dense on purpose, lives in the appendix.",
+  "description": "Full-slide data table for reference and Q&A. Dense on purpose, lives in the appendix.",
+  "contentType": "Chart",
+  "contentMultiple": "2x",
+  "contentAlignment": "Left",
+  "contentBox": true,
+  "contentTypeChartPrimary": "None",
+  "contentTypeImageFill": "None",
+  "contentTypeListBullet": "None",
+  "contentTypeListHeading": false,
+  "slideTitle": true,
+  "slideSubtitle": false,
+  "slideTitleAlignment": "Left",
+  "slideImage": false,
+  "slideImageAlignment": "None",
+  "slideLayoutDirection": "Horizontal",
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "chart"
+    },
+    {
+      "type": "chart"
+    }
+  ],
+  "tags": [
+    "Data",
+    "Table",
+    "Reference"
+  ],
+  "preview": {},
+  "composition": {
+    "mode": "row"
+  }
+}

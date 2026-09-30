@@ -8,12 +8,15 @@
 //                                                                       compare against the live site
 //   node scripts/sync-gallery-catalog.mjs --verify                     offline: snapshot matches its manifest
 //   node scripts/sync-gallery-catalog.mjs --gallery <dir> --report     per-kind divergence summary
+//   node scripts/sync-gallery-catalog.mjs --gallery <dir> --include layouts:<id>[,<id>...]
+//                                                                       add published ids to a subset kind (repeatable)
 //
 // Every gallery record is validated against the companion schemas in
 // spec/schemas/ before anything is written. Publisher `x-*` members are
 // dropped. A mirrored kind takes every gallery record; a subset kind keeps the
 // ids already in the snapshot (the gallery may publish more). The snapshot
-// never loses an id: removing a record is a breaking change.
+// never loses an id: removing a record is a breaking change. `--include` adds
+// published ids to a subset kind once; the snapshot keeps them from then on.
 
 import { execFileSync } from "node:child_process";
 import { existsSync } from "node:fs";
@@ -160,8 +163,10 @@ export function checkGalleryKind(kind, galleryKind, validators) {
  * @param {object | undefined} input.manifest Current manifest, if any.
  * @param {object} input.validators Compiled validators.
  * @param {object} input.source Manifest `source` block.
+ * @param {Record<string, string[]>} [input.include] Published ids to add to a subset kind (`--include`). A mirror kind
+ *   already takes every published record, and an id the gallery does not publish is a problem.
  */
-export function planSnapshot({ gallery, current, manifest, validators, source }) {
+export function planSnapshot({ gallery, current, manifest, validators, source, include = {} }) {
   const problems = [];
   const kinds = {};
   for (const { kind } of SNAPSHOT_KINDS) {
@@ -178,7 +183,10 @@ export function planSnapshot({ gallery, current, manifest, validators, source })
       }
     }
 
-    const keep = mode === "mirror" ? galleryIdSet : currentIds;
+    for (const id of include[kind] ?? []) {
+      if (!galleryIdSet.has(id)) problems.push(`${kind}: --include '${id}' is not published by the gallery`);
+    }
+    const keep = mode === "mirror" ? galleryIdSet : new Set([...currentIds, ...(include[kind] ?? [])]);
     const selected = [];
     published.index.records.forEach((entry, position) => {
       if (keep.has(entry.id)) selected.push({ entry, record: stripExtensions(published.records[position]) });
@@ -314,6 +322,23 @@ function option(argv, name) {
   return at === -1 ? undefined : argv[at + 1];
 }
 
+/** Parses every `--include <kind>:<id>[,<id>...]` into { kind: [ids] }. */
+export function parseIncludes(argv) {
+  const include = {};
+  argv.forEach((arg, at) => {
+    if (arg !== "--include") return;
+    const value = argv[at + 1] ?? "";
+    const split = value.indexOf(":");
+    const kind = value.slice(0, split);
+    const ids = value.slice(split + 1).split(",").filter(Boolean);
+    if (split < 1 || ids.length === 0 || !SNAPSHOT_KINDS.some((entry) => entry.kind === kind)) {
+      throw new Error("--include needs <kind>:<id>[,<id>...] with a snapshot kind, for example --include layouts:two-column,faq.");
+    }
+    include[kind] = [...(include[kind] ?? []), ...ids];
+  });
+  return include;
+}
+
 export async function main(argv = process.argv.slice(2)) {
   const catalogsRoot = path.resolve(option(argv, "--catalogs") ?? defaultCatalogsRoot);
 
@@ -349,7 +374,7 @@ export async function main(argv = process.argv.slice(2)) {
     source = manifest?.source ?? { repository: GALLERY_REPOSITORY, commit: "unpinned", path: GALLERY_PUBLISHED_PATH };
   }
 
-  const plan = planSnapshot({ gallery, current, manifest, validators: await loadValidators(), source });
+  const plan = planSnapshot({ gallery, current, manifest, validators: await loadValidators(), source, include: parseIncludes(argv) });
   if (plan.problems.length > 0) throw new Error(`Gallery catalog cannot be snapshotted:\n${plan.problems.join("\n")}`);
 
   if (argv.includes("--report")) {

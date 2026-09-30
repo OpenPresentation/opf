@@ -1,0 +1,38 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "executive-decision",
+  "name": "Executive_Decision",
+  "summary": "The \"ask\" slide. States the decision requested, the recommendation, and why.",
+  "description": "The \"ask\" slide. States the decision requested, the recommendation, and why.",
+  "contentType": "Text",
+  "contentMultiple": "1x",
+  "contentAlignment": "Left",
+  "contentBox": false,
+  "contentTypeChartPrimary": "None",
+  "contentTypeImageFill": "None",
+  "contentTypeListBullet": "None",
+  "contentTypeListHeading": false,
+  "slideTitle": true,
+  "slideSubtitle": false,
+  "slideTitleAlignment": "Left",
+  "slideImage": false,
+  "slideImageAlignment": "None",
+  "slideLayoutDirection": "Horizontal",
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "text"
+    }
+  ],
+  "tags": [
+    "Decision",
+    "Recommendation",
+    "Ask"
+  ],
+  "preview": {},
+  "composition": {
+    "padding": 0.12
+  }
+}

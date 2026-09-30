@@ -1,0 +1,44 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "kpi-scorecard",
+  "name": "Kpi_Scorecard",
+  "summary": "Row of KPIs with current value, target, and RAG status. The health check at a glance.",
+  "description": "Row of KPIs with current value, target, and RAG status. The health check at a glance.",
+  "contentType": "Metric",
+  "contentMultiple": "3x",
+  "contentAlignment": "Left",
+  "contentBox": true,
+  "contentTypeChartPrimary": "None",
+  "contentTypeImageFill": "None",
+  "contentTypeListBullet": "None",
+  "contentTypeListHeading": false,
+  "slideTitle": true,
+  "slideSubtitle": false,
+  "slideTitleAlignment": "Left",
+  "slideImage": false,
+  "slideImageAlignment": "None",
+  "slideLayoutDirection": "Horizontal",
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "metric"
+    },
+    {
+      "type": "metric"
+    },
+    {
+      "type": "metric"
+    }
+  ],
+  "tags": [
+    "KPIs",
+    "Tracking",
+    "Status"
+  ],
+  "preview": {},
+  "composition": {
+    "mode": "row"
+  }
+}

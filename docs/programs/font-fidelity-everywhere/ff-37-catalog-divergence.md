@@ -152,6 +152,8 @@ Not published at all:
 
 ### layouts (follow-up, largest)
 
+- **Update (FF-55, 2026-09-30).** The snapshot now holds 100 of the 485 gallery layouts: the 30 core layouts plus the 70 legacy gallery slugs (`master: "Gallery"`), added with `sync-gallery-catalog.mjs --include`. The mode stays `subset`: the other 385 layouts (Dark master, 24 of them deprecated aliases from FF-52) are still not bundled. Bundling the 70 makes them valid narrative `layoutHint` values for `check:spec` rule (e); restoring the hints is still open.
+
 - **Current state.** Core bundles 30 structural layouts; the gallery publishes
   485. All 30 overlap.
   - For those 30, the gallery sets all 16 layout classification fields

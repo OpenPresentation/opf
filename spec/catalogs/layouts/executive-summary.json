@@ -1,0 +1,38 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "executive-summary",
+  "name": "Executive_Summary",
+  "summary": "One-page overview of situation, findings, and recommendation. The slide busy executives read first and sometimes only.",
+  "description": "One-page overview of situation, findings, and recommendation. The slide busy executives read first and sometimes only.",
+  "contentType": "Text",
+  "contentMultiple": "1x",
+  "contentAlignment": "Left",
+  "contentBox": false,
+  "contentTypeChartPrimary": "None",
+  "contentTypeImageFill": "None",
+  "contentTypeListBullet": "None",
+  "contentTypeListHeading": false,
+  "slideTitle": true,
+  "slideSubtitle": false,
+  "slideTitleAlignment": "Left",
+  "slideImage": false,
+  "slideImageAlignment": "None",
+  "slideLayoutDirection": "Horizontal",
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "text"
+    }
+  ],
+  "tags": [
+    "Overview",
+    "Leadership",
+    "Brief"
+  ],
+  "preview": {},
+  "composition": {
+    "padding": 0.12
+  }
+}

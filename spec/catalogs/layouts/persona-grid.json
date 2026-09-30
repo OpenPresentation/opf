@@ -1,0 +1,35 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "persona-grid",
+  "name": "Persona_Grid",
+  "summary": "Grid of customer personas with attributes, needs, and priorities. Grounds strategy in real users.",
+  "description": "Grid of customer personas with attributes, needs, and priorities. Grounds strategy in real users.",
+  "contentType": "Image",
+  "contentMultiple": "1x",
+  "contentAlignment": "Center",
+  "contentBox": true,
+  "contentTypeChartPrimary": "None",
+  "contentTypeImageFill": "Crop",
+  "contentTypeListBullet": "None",
+  "contentTypeListHeading": false,
+  "slideTitle": true,
+  "slideSubtitle": false,
+  "slideTitleAlignment": "Center",
+  "slideImage": true,
+  "slideImageAlignment": "Background",
+  "slideLayoutDirection": "Horizontal",
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "picture"
+    }
+  ],
+  "tags": [
+    "Personas",
+    "Segments",
+    "Customers"
+  ],
+  "preview": {}
+}

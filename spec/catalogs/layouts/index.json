@@ -3,7 +3,7 @@
   "kind": "layouts",
   "version": "1",
   "description": "Catalog of slide layouts available in the openpresentation.org catalog. Each entry is a lightweight summary; full layout records live in the per-id JSON files alongside this index.",
-  "contentSha256": "cb28c113f7949c486d5f897036324118a3d52df5ffc75d485e1fb65c9fbf4663",
+  "contentSha256": "3e58ecdb3fcc2b8db9fc7a974809c16b9a9b06d560d0e8f0316846bc84754a95",
   "records": [
     {
       "id": "blank",
@@ -154,6 +154,356 @@
       "id": "title-subtitle",
       "name": "Title Subtitle",
       "file": "title-subtitle.json"
+    },
+    {
+      "id": "title-slide",
+      "name": "Title_Slide",
+      "file": "title-slide.json"
+    },
+    {
+      "id": "two-column",
+      "name": "Two_Column",
+      "file": "two-column.json"
+    },
+    {
+      "id": "image-focus",
+      "name": "Image_Focus",
+      "file": "image-focus.json"
+    },
+    {
+      "id": "data-visualization",
+      "name": "Data_Visualization",
+      "file": "data-visualization.json"
+    },
+    {
+      "id": "quote-highlight",
+      "name": "Quote_Highlight",
+      "file": "quote-highlight.json"
+    },
+    {
+      "id": "section-divider",
+      "name": "Section_Divider",
+      "file": "section-divider.json"
+    },
+    {
+      "id": "agenda",
+      "name": "Agenda",
+      "file": "agenda.json"
+    },
+    {
+      "id": "thank-you-cta",
+      "name": "Thank_You_Cta",
+      "file": "thank-you-cta.json"
+    },
+    {
+      "id": "bullet-list",
+      "name": "Bullet_List",
+      "file": "bullet-list.json"
+    },
+    {
+      "id": "three-column",
+      "name": "Three_Column",
+      "file": "three-column.json"
+    },
+    {
+      "id": "icon-grid",
+      "name": "Icon_Grid",
+      "file": "icon-grid.json"
+    },
+    {
+      "id": "faq",
+      "name": "Faq",
+      "file": "faq.json"
+    },
+    {
+      "id": "stats-metrics",
+      "name": "Stats_Metrics",
+      "file": "stats-metrics.json"
+    },
+    {
+      "id": "comparison",
+      "name": "Comparison",
+      "file": "comparison.json"
+    },
+    {
+      "id": "swot-analysis",
+      "name": "Swot_Analysis",
+      "file": "swot-analysis.json"
+    },
+    {
+      "id": "matrix-quadrant",
+      "name": "Matrix_Quadrant",
+      "file": "matrix-quadrant.json"
+    },
+    {
+      "id": "funnel-pyramid",
+      "name": "Funnel_Pyramid",
+      "file": "funnel-pyramid.json"
+    },
+    {
+      "id": "timeline",
+      "name": "Timeline",
+      "file": "timeline.json"
+    },
+    {
+      "id": "process-flow",
+      "name": "Process_Flow",
+      "file": "process-flow.json"
+    },
+    {
+      "id": "photo-grid",
+      "name": "Photo_Grid",
+      "file": "photo-grid.json"
+    },
+    {
+      "id": "before-after",
+      "name": "Before_After",
+      "file": "before-after.json"
+    },
+    {
+      "id": "testimonial-grid",
+      "name": "Testimonial_Grid",
+      "file": "testimonial-grid.json"
+    },
+    {
+      "id": "team-bio",
+      "name": "Team_Bio",
+      "file": "team-bio.json"
+    },
+    {
+      "id": "pricing-table",
+      "name": "Pricing_Table",
+      "file": "pricing-table.json"
+    },
+    {
+      "id": "roadmap",
+      "name": "Roadmap",
+      "file": "roadmap.json"
+    },
+    {
+      "id": "product-feature",
+      "name": "Product_Feature",
+      "file": "product-feature.json"
+    },
+    {
+      "id": "executive-summary",
+      "name": "Executive_Summary",
+      "file": "executive-summary.json"
+    },
+    {
+      "id": "key-takeaway",
+      "name": "Key_Takeaway",
+      "file": "key-takeaway.json"
+    },
+    {
+      "id": "chapter-recap",
+      "name": "Chapter_Recap",
+      "file": "chapter-recap.json"
+    },
+    {
+      "id": "qa-discussion",
+      "name": "Qa_Discussion",
+      "file": "qa-discussion.json"
+    },
+    {
+      "id": "single-message-statement",
+      "name": "Single_Message_Statement",
+      "file": "single-message-statement.json"
+    },
+    {
+      "id": "one-column-explainer",
+      "name": "One_Column_Explainer",
+      "file": "one-column-explainer.json"
+    },
+    {
+      "id": "case-study",
+      "name": "Case_Study",
+      "file": "case-study.json"
+    },
+    {
+      "id": "pros-cons",
+      "name": "Pros_Cons",
+      "file": "pros-cons.json"
+    },
+    {
+      "id": "feature-comparison-matrix",
+      "name": "Feature_Comparison_Matrix",
+      "file": "feature-comparison-matrix.json"
+    },
+    {
+      "id": "venn-overlap",
+      "name": "Venn_Overlap",
+      "file": "venn-overlap.json"
+    },
+    {
+      "id": "decision-tree",
+      "name": "Decision_Tree",
+      "file": "decision-tree.json"
+    },
+    {
+      "id": "kpi-scorecard",
+      "name": "Kpi_Scorecard",
+      "file": "kpi-scorecard.json"
+    },
+    {
+      "id": "dashboard",
+      "name": "Dashboard",
+      "file": "dashboard.json"
+    },
+    {
+      "id": "waterfall-bridge",
+      "name": "Waterfall_Bridge",
+      "file": "waterfall-bridge.json"
+    },
+    {
+      "id": "benchmark-target-table",
+      "name": "Benchmark_Target_Table",
+      "file": "benchmark-target-table.json"
+    },
+    {
+      "id": "heatmap-cohort",
+      "name": "Heatmap_Cohort",
+      "file": "heatmap-cohort.json"
+    },
+    {
+      "id": "risk-heatmap",
+      "name": "Risk_Heatmap",
+      "file": "risk-heatmap.json"
+    },
+    {
+      "id": "forecast-scenario",
+      "name": "Forecast_Scenario",
+      "file": "forecast-scenario.json"
+    },
+    {
+      "id": "swimlane-process",
+      "name": "Swimlane_Process",
+      "file": "swimlane-process.json"
+    },
+    {
+      "id": "gantt-project-plan",
+      "name": "Gantt_Project_Plan",
+      "file": "gantt-project-plan.json"
+    },
+    {
+      "id": "circular-lifecycle",
+      "name": "Circular_Lifecycle",
+      "file": "circular-lifecycle.json"
+    },
+    {
+      "id": "customer-journey",
+      "name": "Customer_Journey",
+      "file": "customer-journey.json"
+    },
+    {
+      "id": "org-chart",
+      "name": "Org_Chart",
+      "file": "org-chart.json"
+    },
+    {
+      "id": "capability-map",
+      "name": "Capability_Map",
+      "file": "capability-map.json"
+    },
+    {
+      "id": "logic-tree",
+      "name": "Logic_Tree",
+      "file": "logic-tree.json"
+    },
+    {
+      "id": "hub-and-spoke",
+      "name": "Hub_And_Spoke",
+      "file": "hub-and-spoke.json"
+    },
+    {
+      "id": "architecture-stack",
+      "name": "Architecture_Stack",
+      "file": "architecture-stack.json"
+    },
+    {
+      "id": "ecosystem-map",
+      "name": "Ecosystem_Map",
+      "file": "ecosystem-map.json"
+    },
+    {
+      "id": "network-dependency-map",
+      "name": "Network_Dependency_Map",
+      "file": "network-dependency-map.json"
+    },
+    {
+      "id": "wheel-radial",
+      "name": "Wheel_Radial",
+      "file": "wheel-radial.json"
+    },
+    {
+      "id": "geographic-map",
+      "name": "Geographic_Map",
+      "file": "geographic-map.json"
+    },
+    {
+      "id": "screenshot-walkthrough",
+      "name": "Screenshot_Walkthrough",
+      "file": "screenshot-walkthrough.json"
+    },
+    {
+      "id": "market-size",
+      "name": "Market_Size",
+      "file": "market-size.json"
+    },
+    {
+      "id": "persona-grid",
+      "name": "Persona_Grid",
+      "file": "persona-grid.json"
+    },
+    {
+      "id": "competitive-landscape",
+      "name": "Competitive_Landscape",
+      "file": "competitive-landscape.json"
+    },
+    {
+      "id": "business-model-canvas",
+      "name": "Business_Model_Canvas",
+      "file": "business-model-canvas.json"
+    },
+    {
+      "id": "customer-logos",
+      "name": "Customer_Logos",
+      "file": "customer-logos.json"
+    },
+    {
+      "id": "executive-decision",
+      "name": "Executive_Decision",
+      "file": "executive-decision.json"
+    },
+    {
+      "id": "status-rag",
+      "name": "Status_Rag",
+      "file": "status-rag.json"
+    },
+    {
+      "id": "raci-matrix",
+      "name": "Raci_Matrix",
+      "file": "raci-matrix.json"
+    },
+    {
+      "id": "action-plan",
+      "name": "Action_Plan",
+      "file": "action-plan.json"
+    },
+    {
+      "id": "assumptions-dependencies",
+      "name": "Assumptions_Dependencies",
+      "file": "assumptions-dependencies.json"
+    },
+    {
+      "id": "appendix-index",
+      "name": "Appendix_Index",
+      "file": "appendix-index.json"
+    },
+    {
+      "id": "detailed-data-table",
+      "name": "Detailed_Data_Table",
+      "file": "detailed-data-table.json"
     }
   ]
 }

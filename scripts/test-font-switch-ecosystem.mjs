@@ -203,7 +203,16 @@ const contentBlocks = {
   text: (text) => ({layout: 'text-1x', text: [text.body, text.body].join(' ')})
 };
 // Layout families and one slide builder that fills a layout record's placeholders.
-const layoutFamily = (record) => record.id.replace(/-(?:\d+x|bleed|subtitle)$/, '');
+// A layout's family is its primary content kind, read from its placeholders, so the family list does not change when the
+// bundled catalog gains layouts (FF-55 bundles the 70 legacy gallery ids next to the structural ones): the first
+// placeholder that is not a heading names the family, a heading-only layout is a title, and no placeholder is blank.
+const FAMILY_OF_KIND = {text: 'text', list: 'list', metric: 'number', chart: 'chart', picture: 'image', diagram: 'image', media: 'media', quote: 'quote', table: 'table', code: 'code', timeline: 'timeline'};
+const layoutFamily = (record) => {
+  const types = (record.placeholders ?? []).map((placeholder) => placeholder.type);
+  const body = types.find((type) => !['title', 'subtitle', 'tag'].includes(type));
+  if (body !== undefined) return FAMILY_OF_KIND[body] ?? assert.fail(`layout ${record.id} has a placeholder kind with no family: ${body}`);
+  return types.length ? 'title' : 'blank';
+};
 const LAYOUT_FAMILIES = [...new Set(catalogs.layouts.map(layoutFamily))].sort();
 const layoutMembers = (family) => catalogs.layouts.filter((record) => layoutFamily(record) === family).map((record) => record.id);
 const placeholderBlock = {

@@ -1,0 +1,45 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "stats-metrics",
+  "name": "Stats_Metrics",
+  "summary": "Large numbers with context. Highlight 2-4 key performance indicators that tell your story in seconds.",
+  "description": "Large numbers with context. Highlight 2-4 key performance indicators that tell your story in seconds.",
+  "contentType": "Metric",
+  "contentMultiple": "3x",
+  "contentAlignment": "Left",
+  "contentBox": false,
+  "contentTypeChartPrimary": "None",
+  "contentTypeImageFill": "None",
+  "contentTypeListBullet": "None",
+  "contentTypeListHeading": false,
+  "slideTitle": true,
+  "slideSubtitle": false,
+  "slideTitleAlignment": "Left",
+  "slideImage": false,
+  "slideImageAlignment": "None",
+  "slideLayoutDirection": "Horizontal",
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "metric"
+    },
+    {
+      "type": "metric"
+    },
+    {
+      "type": "metric"
+    }
+  ],
+  "tags": [
+    "Numbers",
+    "KPIs",
+    "Impact"
+  ],
+  "preview": {},
+  "composition": {
+    "mode": "row",
+    "gap": 0.06
+  }
+}

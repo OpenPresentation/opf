@@ -1,0 +1,48 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "matrix-quadrant",
+  "name": "Matrix_Quadrant",
+  "summary": "2x2 framework with labeled axes. Plot items in quadrants to reveal patterns and priorities.",
+  "description": "2x2 framework with labeled axes. Plot items in quadrants to reveal patterns and priorities.",
+  "contentType": "Text",
+  "contentMultiple": "4x",
+  "contentAlignment": "Left",
+  "contentBox": true,
+  "contentTypeChartPrimary": "None",
+  "contentTypeImageFill": "None",
+  "contentTypeListBullet": "None",
+  "contentTypeListHeading": false,
+  "slideTitle": true,
+  "slideSubtitle": false,
+  "slideTitleAlignment": "Left",
+  "slideImage": false,
+  "slideImageAlignment": "None",
+  "slideLayoutDirection": "Horizontal",
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "text"
+    },
+    {
+      "type": "text"
+    },
+    {
+      "type": "text"
+    },
+    {
+      "type": "text"
+    }
+  ],
+  "tags": [
+    "Framework",
+    "Analysis",
+    "Positioning"
+  ],
+  "preview": {},
+  "composition": {
+    "mode": "grid",
+    "columns": 2
+  }
+}

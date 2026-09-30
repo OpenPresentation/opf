@@ -11,7 +11,7 @@ concurrency:
   cancel-in-progress: true
 env:
   OPF_RENDER_REF: 17f7807e7e687444e7c466bf7edd3227593ba56d
-  OPF_EDITOR_REF: d0c95a16b50eccb3eee695ace44cc6c3a6754f2f
+  OPF_EDITOR_REF: 32fe70a64ca4f12a6320f47802d7ea2a751456e1
   OPF_PPTX_REF: 08a92a2d903d3be31e5ee97a97204bebe3e7b468
 jobs:
   packages:

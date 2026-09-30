@@ -1,0 +1,35 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v1",
+  "id": "ecosystem-map",
+  "name": "Ecosystem_Map",
+  "summary": "Network of players around a central business, industry, or product. Shows who matters and how they connect.",
+  "description": "Network of players around a central business, industry, or product. Shows who matters and how they connect.",
+  "contentType": "Image",
+  "contentMultiple": "1x",
+  "contentAlignment": "Center",
+  "contentBox": false,
+  "contentTypeChartPrimary": "None",
+  "contentTypeImageFill": "Crop",
+  "contentTypeListBullet": "None",
+  "contentTypeListHeading": false,
+  "slideTitle": true,
+  "slideSubtitle": false,
+  "slideTitleAlignment": "Center",
+  "slideImage": true,
+  "slideImageAlignment": "Background",
+  "slideLayoutDirection": "Horizontal",
+  "placeholders": [
+    {
+      "type": "title"
+    },
+    {
+      "type": "picture"
+    }
+  ],
+  "tags": [
+    "Stakeholders",
+    "Network",
+    "Ecosystem"
+  ],
+  "preview": {}
+}
