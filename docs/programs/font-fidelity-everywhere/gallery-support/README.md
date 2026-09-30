@@ -185,18 +185,28 @@ regenerate `support-status.json`, and update the headline in
   heads of all four repositories; only the fixed run is committed, as a new dated
   results file (`parity-results-2026-09-29-field-text.json`), and
   `build-support-status.mjs` reads that file by default.
-- **Preview font host.** `parity.mjs` builds the font-resolution registry with
-  `prepareNodeFonts({pack: 'office', substitutionPolicy: 'visual'})` and no
-  `scripts`, because that is what the shipped previews load: the opf-editor
-  playground bundle builds its registry with `loadOfficeFontRegistry()`, the
-  gallery layout thumbnails use no registry, and opf-render loads the optional
-  Noto script pack only when a host passes `scripts`. Values whose fonts route to
-  a Noto script face therefore fail fontResolution ("preview has no face"); that
-  is a product gap, not an instrument error. To see what loading it would give,
-  add `scripts: 'all'` to that call in a scratch copy (the packages are
-  devDependencies of opf-render, so `npm ci` installs them); the same 850 values
-  then score 29 perfect, 669 near, 152 mismatch. Do not commit such a run as the
-  scoreboard until a shipped host loads the pack.
+- **Preview font host (2026-09-29 model, superseded 2026-09-30).** `parity.mjs` built the font-resolution registry with
+  `prepareNodeFonts({pack: 'office', substitutionPolicy: 'visual'})` and no `scripts`, on the reading that the shipped previews
+  load no script faces. Values whose fonts route to a Noto script face failed fontResolution ("preview has no face"). The
+  shipped hosts do load them (next entry), so that model is kept only as `PARITY_FONT_HOST=office-only`, which reproduces the
+  707 / 47 / 96 run of 2026-09-30 exactly.
+- **Preview font host (FF-38, 2026-09-30): the gallery model.** `scripts/font-host.mjs` models the host that pptx.gallery
+  ships. opf-editor 0.10.x builds a browser registry with `loadBrowserFontRegistry` from the office pack's eager faces
+  (`substitutionPolicy: 'visual'`, `fallbackFamily: 'Roboto'`) and its font gate (`createFontGate`) calls
+  `registry.ensureLazyFonts(document)` and `registry.ensureScripts(document)` before anything is rendered or measured.
+  Those load the vendored preview faces (Intos, the open pack) and the script (Noto) faces the document's text and font
+  schemes need (opf-render 0.11.2: `scripts: 'auto'` and `ensureScripts` include the faces a font scheme itself names).
+  The harness runs the same calls per value, on the value's own document, against the same package files, with a stand-in for
+  the Font Loading API and for `fetch` (the renderer still hash-verifies every file). One registry is built per distinct load
+  (scripts, CJK characters, vendored families), so the large script faces load once. The value must also pass the strict
+  measured render with that registry (`renderSvgDeck` with the registry's text measurement): a family that resolves but cannot
+  measure or shape its text (`font-shaping-failed`) fails fontResolution as "the modelled host cannot draw this value". This
+  is a model of the browser host in Node, not a browser. `PARITY_FONT_HOST` selects the model: `gallery` (default),
+  `node-auto` (`prepareNodeFonts({scripts: 'auto', presentation})`, the Node loader) or `office-only` (the earlier model).
+  `meta.fontHost` and `results[].fontHost` record the model, the scripts and packages loaded, and the render outcome. No
+  tolerance changed and every check other than fontResolution is identical under all three models. The run is
+  `parity-results-2026-09-30-gallery-font-host.json` (report: [PARITY-2026-09-30-gallery-font-host.md](parity/PARITY-2026-09-30-gallery-font-host.md)).
+  `node --test scripts/font-host.test.mjs` covers the model names.
 - **Table frames (FF-39, 2026-09-29).** A PPTX table frame is compared with the
   preview's drawn table (`scripts/table-box.mjs`: the union of the table's cell
   rectangles), not with the composed allocation box, because PowerPoint derives a

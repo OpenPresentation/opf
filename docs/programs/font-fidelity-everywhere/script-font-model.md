@@ -209,6 +209,19 @@ The renderer calls the same resolver:
 - Registry theme tokens (`majorEastAsia`, `minorComplexScript`, …) map to the
   matching `heading`/`body` slots.
 
+### Which host loads the script faces (measured 2026-09-30)
+
+The script pack is optional, and the shipped hosts load it per document rather than up front:
+
+- The pptx.gallery editor (opf-editor 0.10.x) builds its browser registry from the office pack's eager faces and runs its font gate before every render:
+  `registry.ensureLazyFonts(document)` and `registry.ensureScripts(document)` fetch the vendored faces and the script faces the document needs (its text, and, since
+  opf-render 0.11.2, the faces its font schemes name, so a Latin sample in a Meiryo scheme loads Noto Sans JP).
+- Node uses `prepareNodeFonts({scripts: 'auto', presentation})` for the same selection. It differs in one case: the Latin Noto Sans is loaded as a glyph-fallback face and `auto`
+  does not reload it as a designated replacement, so Sylfaen (replacement Noto Sans) with Latin text is `font-unavailable` in Node and works in the editor.
+- The parity harness models the editor (`gallery-support/parity/scripts/font-host.mjs`); see [the run](gallery-support/parity/PARITY-2026-09-30-gallery-font-host.md).
+  Loading a face is not qualifying it: the 61 gallery values whose scheme is a proprietary script font are `near` (a visual Noto replacement), and the pinned Noto Sans Mongolian face
+  loads but cannot shape any text in fontkit.
+
 ## Licensing
 
 The resolver returns family names only. It loads, bundles and downloads no
