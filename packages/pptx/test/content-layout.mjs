@@ -25,6 +25,10 @@ for (const dimensions of [{widthInches: 1280 / 96, heightInches: 720 / 96}, {wid
   const svgSlides = renderSvgDeck(deck, options);
   const pptx = await toPptx(deck, options), entries = unzipSync(pptx);
   const imported = await fromPptx(pptx);
+  // FF-24b: default text on a theme background is a scheme reference. Resolve it
+  // through the master color map and exported theme before comparing with SVG.
+  const themeXml = new TextDecoder().decode(entries['ppt/theme/theme1.xml']);
+  const schemeHex = value => themeXml.match(new RegExp(`<a:${({tx1: 'dk1', bg1: 'lt1', tx2: 'dk2', bg2: 'lt2'})[value] ?? value}><a:srgbClr val="([0-9A-F]{6})"/>`))?.[1];
   assert.deepEqual(imported.slides[2].blocks,[{type:'code',code:deck.slides[2].code}],'Code source and metadata survive export/import');
   assert.ok(JSON.stringify(imported).includes('A reviewer - Interview'), 'Quote attribution and source must survive export/import');
   for (let index = 0; index < deck.slides.length; index++) {
@@ -44,7 +48,8 @@ for (const dimensions of [{widthInches: 1280 / 96, heightInches: 720 / 96}, {wid
       assert.equal(properties.b === '1', face.bold, `Physical bold style: ${value}`);
       assert.equal(properties.i === '1', face.italic, `Physical italic style: ${value}`);
       assert.equal(properties['a:latin'].typeface,face.family,`Physical family: ${value}`);
-      const color = all(properties, 'a:srgbClr')[0]?.val;
+      const scheme = all(properties, 'a:schemeClr')[0]?.val;
+      const color = scheme ? schemeHex(scheme) : all(properties, 'a:srgbClr')[0]?.val;
       assert.equal(color?.toUpperCase(), text.fill.replace('#', '').toUpperCase(), `Color: ${value}`);
       const transform = all(shape, 'a:xfrm')[0], offset = transform['a:off'], extent = transform['a:ext'];
       const anchor = text['text-anchor'];

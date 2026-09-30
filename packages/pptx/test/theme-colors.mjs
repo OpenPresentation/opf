@@ -103,15 +103,89 @@ assert.equal(runFill(first, 'role'), '<a:schemeClr val="accent1"/>', 'primary ma
 assert.equal(runFill(first, 'secondary'), '<a:schemeClr val="tx2"/>', 'textSecondary on a light background is dark2');
 assert.equal(runFill(first, 'literal'), '<a:srgbClr val="4A7C59"/>', 'literal hex stays literal even when it equals accent1');
 assert.equal(runFill(first, 'variable'), '<a:srgbClr val="B42318"/>');
-// PptxGenJS 4.0.1 cannot emit hlink/folHlink run colors, so those stay literal.
-assert.equal(runFill(first, 'link'), `<a:srgbClr val="${hex(forest.hyperlink)}"/>`);
+// FF-24c: PptxGenJS 4.0.1 cannot emit hlink/folHlink, so a reserved literal is rewritten in the slide part.
+assert.equal(runFill(first, 'link'), '<a:schemeClr val="hlink"/>');
+assert.equal(resolve(runFill(first, 'link'), colors), hex(forest.hyperlink));
 for (const text of ['slot', 'role', 'secondary']) assert.equal(resolve(runFill(first, text), colors), {slot: hex(forest.accent2), role: hex(forest.accent1), secondary: hex(forest.dark2)}[text]);
 assert.match(first, /<p:bg><p:bgPr><a:solidFill><a:schemeClr val="bg1"\/><\/a:solidFill>/, 'classic background slot light1');
-// A slide-level scheme differs from the deck theme: its colors stay literal and correct.
+// Default text on a theme background follows the theme: tx1 on the light1 (bg1) background.
+assert.equal(runFill(first, 'Runs'), '<a:schemeClr val="tx1"/>', 'default heading text pairs with the bg1 background');
+assert.equal(resolve(runFill(first, 'Runs'), colors), hex(forest.dark1));
+// FF-24b: a slide with its own color scheme is pinned to literal colors, even
+// where a value coincides with the deck theme (boost and forest-green share dark1
+// and light1), so a PowerPoint theme edit never partially recolors it.
 const second = slideXml(refs, 2);
 assert.equal(runFill(second, 'other'), `<a:srgbClr val="${hex(boost.accent2)}"/>`);
-assert.equal(runFill(second, 'shared'), '<a:schemeClr val="tx1"/>', 'a slot equal in both schemes is still the deck theme color');
-assert.match(slideXml(refs, 3), /<p:bg><p:bgPr><a:solidFill><a:srgbClr val="FFFFFF"(?:\/>|><\/a:srgbClr>)<\/a:solidFill>/, 'explicit solid backgrounds stay literal');
+assert.equal(runFill(second, 'shared'), `<a:srgbClr val="${hex(boost.dark1)}"/>`, 'a coinciding slot stays literal on an override slide');
+assert.equal(runFill(second, 'Override'), `<a:srgbClr val="${hex(boost.dark1)}"/>`, 'default text stays literal on an override slide');
+assert.match(second, /<p:bg><p:bgPr><a:solidFill><a:srgbClr val="FFFFFF"(?:\/>|><\/a:srgbClr>)<\/a:solidFill>/, 'override slide background stays literal');
+assert.doesNotMatch(second, /<a:schemeClr/, 'no scheme reference at all on an override slide');
+// A literal background keeps literal default text.
+const third = slideXml(refs, 3);
+assert.match(third, /<p:bg><p:bgPr><a:solidFill><a:srgbClr val="FFFFFF"(?:\/>|><\/a:srgbClr>)<\/a:solidFill>/, 'explicit solid backgrounds stay literal');
+assert.equal(runFill(third, 'Solid'), `<a:srgbClr val="${hex(forest.dark1)}"/>`, 'text on a literal background stays literal');
+// Even an override slide whose scheme equals the deck scheme stays literal.
+const sameOverride = slideXml(parts(await toPptx({design: {colorScheme: 'forest-green'}, slides: [{title: 'Same', design: {colorScheme: 'forest-green'}, text: [{text: 'pinned', color: 'accent2'}]}]})));
+assert.doesNotMatch(sameOverride, /<a:schemeClr/);
+
+// FF-24b: default text pairs only with an opaque light/dark theme background, and
+// only where the resolved default color is exactly the paired deck slot.
+const pairing = async (design, slide = {title: 'Pair', text: 'Body', items: [{text: 'Item', description: 'Muted'}]}) => {
+  const entries = parts(await toPptx({design, slides: [slide]}));
+  return {xml: slideXml(entries), colors: themeOf(entries).colors, entries};
+};
+const cool = catalogs.colorSchemes.find(record => record.id === 'cool-horizon');
+const minimal = await pairing({theme: 'minimal'});
+assert.match(minimal.xml, /<p:bg><p:bgPr><a:solidFill><a:schemeClr val="tx2"\/>/, 'minimal background is dark2 (tx2)');
+assert.equal(runFill(minimal.xml, 'Pair'), '<a:schemeClr val="bg1"/>', 'light1 text on a dark2 background');
+assert.equal(runFill(minimal.xml, 'Body'), '<a:schemeClr val="bg1"/>');
+assert.equal(runFill(minimal.xml, 'Muted'), '<a:schemeClr val="bg2"/>', 'muted text is light2 on a dark background');
+assert.equal(resolve(runFill(minimal.xml, 'Muted'), minimal.colors), hex(cool.light2));
+assert.match(minimal.xml, /<a:buClr><a:schemeClr val="bg1"\/><\/a:buClr>/, 'list markers follow the default text');
+const dark = await pairing({theme: 'dark'});
+assert.match(dark.xml, /<p:bg><p:bgPr><a:solidFill><a:schemeClr val="tx1"\/>/);
+assert.equal(runFill(dark.xml, 'Pair'), '<a:schemeClr val="bg1"/>');
+const classic = await pairing({theme: 'classic'});
+assert.equal(runFill(classic.xml, 'Pair'), '<a:schemeClr val="tx1"/>');
+assert.equal(runFill(classic.xml, 'Muted'), '<a:schemeClr val="tx2"/>');
+// A text role that differs from dark1 is not the paired slot: literal.
+const role = await pairing({theme: 'classic', colorScheme: {id: 'cool-horizon', text: '#333333'}});
+assert.equal(runFill(role.xml, 'Pair'), '<a:srgbClr val="333333"/>');
+// Translucent theme background: the backdrop is not the theme slot alone.
+const translucent = await pairing({theme: 'classic', background: {type: 'theme', slot: 'light1', opacity: .5}});
+assert.equal(runFill(translucent.xml, 'Pair'), `<a:srgbClr val="${hex(cool.dark1)}"/>`);
+// Theme backgrounds are limited to light1/light2/dark1/dark2 by the schema, so every
+// theme background has a semantic text pair.
+// Card text sits on a literal card fill and stays literal.
+const card = await pairing({theme: 'minimal', contentBox: true}, {title: 'Cards', composition: {mode: 'row'}, blocks: [{text: 'Inside card'}, {text: 'Second'}]});
+assert.ok(card.xml.includes('name="OPF card'), 'cards exported');
+assert.equal(runFill(card.xml, 'Cards'), '<a:schemeClr val="bg1"/>', 'the heading outside the card still pairs');
+assert.equal(runFill(card.xml, 'Inside card'), `<a:srgbClr val="${hex(cool.light1)}"/>`, 'card text stays literal');
+// Table cell text follows the theme with its theme-referenced fill (FF-24c); see test/table-theme-colors.mjs.
+const table = await pairing({theme: 'classic'}, {title: 'Table', table: {columns: ['A'], rows: [['cell']]}});
+assert.equal(runFill(table.xml, 'cell'), '<a:schemeClr val="tx1"/>', 'default cell text pairs with the bg2 surface fill');
+
+// FF-24b: the slide master follows a non-bg1 theme background, with paired
+// default text, so slides added in PowerPoint match. The layout inherits it.
+const masterOf = entries => strFromU8(entries['ppt/slideMasters/slideMaster1.xml']);
+const layoutOf = entries => strFromU8(entries['ppt/slideLayouts/slideLayout1.xml']);
+for (const [result, background, text] of [[dark, 'tx1', 'bg1'], [minimal, 'tx2', 'bg1']]) {
+  const master = masterOf(result.entries);
+  assert.equal(XMLValidator.validate(master), true);
+  assert.match(master, new RegExp(`<p:cSld><p:bg><p:bgPr><a:solidFill><a:schemeClr val="${background}"/></a:solidFill><a:effectLst/></p:bgPr></p:bg><p:spTree>`));
+  const styles = master.match(/<p:txStyles>[\s\S]*<\/p:txStyles>/)[0];
+  assert.doesNotMatch(styles, /schemeClr val="tx1"/);
+  const vendorStyles = masterOf(classic.entries).match(/<p:txStyles>[\s\S]*<\/p:txStyles>/)[0];
+  assert.equal(styles, vendorStyles.split('<a:schemeClr val="tx1"/>').join(`<a:schemeClr val="${text}"/>`), 'every title, body and other level uses the paired text; nothing else changes');
+  assert.doesNotMatch(layoutOf(result.entries), /<p:bg>/, 'layout inherits the master background');
+}
+const vendorMaster = masterOf(classic.entries);
+assert.doesNotMatch(vendorMaster, /<p:bg>/, 'a light1 deck keeps the vendored master');
+assert.match(layoutOf(classic.entries), /<p:bg><p:bgRef idx="1001"><a:schemeClr val="bg1"\/><\/p:bgRef><\/p:bg>/);
+// Imported slides keep their own backgrounds; the master background does not leak.
+const darkImport = await importWith(zipSync(dark.entries));
+assert.equal(darkImport.document.design.theme, 'dark');
+assert.equal((darkImport.document.slides[0].design ?? darkImport.document.design).background, undefined, "the master background does not leak into the import");
 
 // 4. Inline overrides come back relative to the named catalog scheme.
 const override = await importWith(await toPptx({design: {colorScheme: {id: 'boost', accent1: '#123456'}}, slides: [{title: 'Override'}]}));

@@ -14,6 +14,8 @@ function find(value, key) {
   if (Array.isArray(value)) return value.flatMap(item => find(item, key));
   return Object.entries(value).flatMap(([name, child]) => name === key ? array(child) : find(child, key));
 }
+// FF-24c: default table chrome is a theme reference; resolve it through the exported clrScheme and the vendored master map.
+const themeColor = (theme, value) => theme.match(new RegExp('<a:' + ({tx1: 'dk1', bg1: 'lt1', tx2: 'dk2', bg2: 'lt2', hlink: 'hlink'}[value] ?? value) + '><a:srgbClr val="([0-9A-F]{6})"'))[1];
 let checked = 0, shrunk = 0, grown = 0;
 for (const scale of [1, 0.5]) {
 for (const [fontScheme, family, chosen] of [['roboto', 'Roboto', 'Roboto'], [{major:'Calibri',minor:'Calibri'}, 'Carlito', 'Calibri']]) {
@@ -35,6 +37,7 @@ for (const align of ['left', 'center', 'right']) {
     const item = geometry.items.find(item => item.field === 'table');
     const svg = parser.parse(renderSvg(deck, { trace: true, textMeasurement: fonts.textMeasurement }));
     const bytes = await toPptx(deck, { textMeasurement: fonts.textMeasurement });
+    const themeXml = new TextDecoder().decode(unzipSync(bytes)['ppt/theme/theme1.xml']);
     const xml = parser.parse(new TextDecoder().decode(unzipSync(bytes)['ppt/slides/slide1.xml']));
     const frame = find(xml, 'p:graphicFrame').find(frame => find(frame, 'a:tbl').length);
     const transform = frame['p:xfrm'];
@@ -62,7 +65,7 @@ for (const align of ['left', 'center', 'right']) {
         const path = withHeaders && r === 0 ? `${item.path}.columns.${c}` : `${item.path}.rows.${r - Number(withHeaders)}.${c}`;
         const text = find(svg, 'text').filter(text => text['@_data-opf-path'] === path);
         const rectangle = find(svg, 'rect').find(rect => rect['@_data-opf-path'] === path);
-        const nativeColor = fill => fill['a:srgbClr']['@_val'];
+        const nativeColor = fill => fill['a:srgbClr']?.['@_val'] ?? themeColor(themeXml, fill['a:schemeClr']['@_val']);
         assert.equal(nativeColor(cell['a:tcPr']['a:solidFill']), rectangle['@_fill'].slice(1), 'Native cell fill matches the theme preview');
         assert.equal(nativeColor(cell['a:tcPr']['a:lnL']['a:solidFill']), rectangle['@_stroke'].slice(1), 'Native cell border matches the theme preview');
         const value = expectedRows[r][c];
