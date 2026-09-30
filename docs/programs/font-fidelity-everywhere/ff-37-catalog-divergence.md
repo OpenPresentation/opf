@@ -29,7 +29,7 @@ only core sets it, and `≠` means both set it with different values.
 | purposes | 9 | 0 | 0 | 9 | 0 | – | 9 records moved into gallery `data/purposes.json` | mirror |
 | audiences | 10 | 14 | 2 | 8 | 12 | 2 (`board`, `all-hands`: ≠ summary, description, recommendedNarratives; `all-hands` ≠ name) | FF-28 bundled the 12 gallery ids; the gallery publishes all 22 core records | subset (22 of 22) |
 | narratives | 39 | 10 | 1 | 38 | 9 | 1 (`problem-solution`: ≠ name, summary, audienceFit, tags, beats) | FF-28 bundled the 9 gallery ids; the gallery publishes all 48 core records | subset (48 of 48) |
-| chart-types | 76 | 76 | 75 | 1 (`united-kingdom`) | 1 (misspelled `united-kingdom` duplicate) | 75 (+core `mappings`; +gallery `description`, `preview`) | FF-22 records (26 current, 50 deprecated) published verbatim | subset (76 of 76) |
+| chart-types | 76 | 26 (76 before pptx-gallery #40) | 26 | 50 (deprecated) | 0 | 26 (+core `mappings`; +gallery `description`, `preview`) | FF-22 records (26 current, 50 deprecated) published verbatim; gallery #40 has landed, so the gallery lists only the 26 current ids | subset (76 of 76) |
 | layouts | 30 | 485 | 30 | 0 | 455 | 30 (+gallery structural fields and preview; 15 ≠ `name`) | follow-up | subset (30 of 485) |
 
 Snapshot changes in this PR are additive and change no OPF semantics:
@@ -64,7 +64,7 @@ Not published at all:
 - the four `legacyItems` font pairings (`classic-editorial`,
   `modern-professional`, `bold-impact`, `warm-storytelling`). They have no OPF
   id and an `app` value the schema rejects.
-- the gallery chart whose slug misspells `united-kingdom` (it drops the `g`).
+- nothing else. The gallery chart whose slug misspelled `united-kingdom` (it dropped the `g`) was removed by pptx-gallery #40 and now redirects.
 
 ## Plan per pending kind
 
@@ -139,13 +139,16 @@ Not published at all:
 
 ### chart-types
 
-- FF-22 is in core. The gallery half (pptx-gallery #40) is open, and the
-  gallery pages still list the pre-FF-22 set.
-- When #40 lands, the gallery chart data needs the core `mappings` and
-  `deprecation` objects, so the kind can publish projections instead of
-  vendored records. Then switch to `mirror`.
-- The misspelled gallery slug redirects to `united-kingdom` through #40's
-  `chart-redirects.json`.
+- FF-22 is in core, and its gallery half (pptx-gallery #40) has landed on
+  gallery main: the gallery data lists the 26 current chart ids, and the 50
+  removed ids redirect through `chart-redirects.json`.
+- The published catalog still serves all 76 core records verbatim, so no id
+  is removed. The 50 deprecated records no longer carry an `x-gallery` member,
+  because the gallery has no page for them, and the gallery publishes no
+  gallery-only chart type.
+- The gallery chart data still needs the core `mappings` and `deprecation`
+  objects, so the kind can publish projections instead of vendored records.
+  Then switch to `mirror`.
 
 ### layouts (follow-up, largest)
 
