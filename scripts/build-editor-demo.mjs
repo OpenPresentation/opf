@@ -20,6 +20,8 @@ await writeFile(
   path.join(out, "fonts.json"),
   JSON.stringify(fontRegistry.embeddedFonts),
 );
+// The local demo keeps every eager face in fonts.json; an empty base-fonts.json tells the playground (FF-41) there is nothing to load on demand.
+await writeFile(path.join(out, "base-fonts.json"), "[]");
 // Vendored faces (Intos for the default Aptos scheme, the open families) stay out of fonts.json and load on demand.
 const lazy = await emitLazyFonts({ registry: fontRegistry, packageRoot: path.resolve(root, "../opf-render"), out });
 // The same pinned manifest the gallery commits (contract opf-gallery-editor-lazy-fonts/v1), for the renderer built beside this checkout.

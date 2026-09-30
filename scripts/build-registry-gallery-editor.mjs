@@ -7,6 +7,7 @@ import path from 'node:path';
 import { registryToolchain } from './registry-toolchain.mjs';
 import { galleryScriptFontManifestForExample } from './gallery-script-fonts.mjs';
 import { galleryLazyFontManifestForExample } from './gallery-lazy-fonts.mjs';
+import { exampleUsesBaseFonts, splitBaseFonts, verifyBaseFonts } from './gallery-base-fonts.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const registry = await registryToolchain();
@@ -30,8 +31,11 @@ if (!contained(actualRoot, actualOut)) throw new Error('Gallery output must stay
 await mkdir(source, { recursive: true });
 const actualSource = await realpath(source);
 if (!contained(actualOut, actualSource)) throw new Error('Gallery staging must stay inside the output directory');
-for (const file of ['playground.js', 'data-controls.js', 'transfer-controls.js', 'pptx-controls.js', 'playground.html', 'playground.css', 'galleries.json']) {
+// base-font-gate.js (FF-41) exists only at editor examples that load base-fonts.json; an older pinned example has none.
+const optionalExampleFiles = new Set(['base-font-gate.js']);
+for (const file of ['playground.js', 'data-controls.js', 'transfer-controls.js', 'pptx-controls.js', 'playground.html', 'playground.css', 'galleries.json', 'base-font-gate.js']) {
   const result = spawnSync('git', ['show', `${ref}:examples/${file}`], { cwd: editor, encoding: 'utf8' });
+  if (result.status !== 0 && optionalExampleFiles.has(file)) continue;
   if (result.status !== 0) throw new Error(`Cannot read editor example ${ref}:${file}: ${result.stderr}`);
   exampleSources[file] = sha256(result.stdout);
   const content = file.endsWith('.js') ? result.stdout.replace(/(['"])\.\.\/src\/([^'"/]+)\.js\1/g,
@@ -97,7 +101,16 @@ for (const file of Object.keys(bundle.metafile.inputs)) {
   }
 }
 const { loadOfficeFontRegistry } = await registry.import('@openpresentation/opf-render/fonts-node');
-await writeFile(path.join(out, 'fonts.json'), JSON.stringify((await loadOfficeFontRegistry()).embeddedFonts));
+// FF-41: an example that loads base-fonts.json starts with Roboto Regular and loads the other eager faces on demand from separate
+// hash-named files; an older example keeps every eager face in fonts.json.
+const eagerFonts = (await loadOfficeFontRegistry()).embeddedFonts;
+const baseFonts = exampleUsesBaseFonts(await readFile(path.join(source, 'playground.js'), 'utf8')) ? splitBaseFonts(eagerFonts) : undefined;
+if (baseFonts) {
+  for (const { file, bytes } of baseFonts.files) await writeFile(path.join(out, file), bytes);
+  verifyBaseFonts(baseFonts.base, file => baseFonts.files.find(item => item.file === file).bytes);
+  await writeFile(path.join(out, 'base-fonts.json'), JSON.stringify(baseFonts.base));
+}
+await writeFile(path.join(out, 'fonts.json'), JSON.stringify(baseFonts ? baseFonts.startup : eagerFonts));
 // FF-19 script fonts: when the pinned editor example fetches faces from ./script-fonts/, ship the hash-pinned manifest
 // (the build fails if the pinned renderer has no script pack). The faces themselves are binaries: the gallery build copies them from
 // the pinned npm packages into an untracked path, verifying every hash (see gallery-script-fonts.mjs).
@@ -136,7 +149,7 @@ await writeFile(path.join(out, 'opf-spec.json'), JSON.stringify({
   schemaDigest: sha256(JSON.stringify(opfSchemas)), fieldCount: fields.length, schemas: opfSchemas, fields,
 }));
 const files = {};
-for (const file of ['index.html', 'playground.js', 'playground.js.LEGAL.txt', 'playground.css', 'fonts.json', 'galleries.json', 'gallery.json', 'opf-spec.json', ...(scriptFontManifest ? ['script-fonts.json'] : []), ...(lazyFontManifest ? ['lazy-fonts.json'] : [])]) {
+for (const file of ['index.html', 'playground.js', 'playground.js.LEGAL.txt', 'playground.css', 'fonts.json', 'galleries.json', 'gallery.json', 'opf-spec.json', ...(scriptFontManifest ? ['script-fonts.json'] : []), ...(lazyFontManifest ? ['lazy-fonts.json'] : []), ...(baseFonts ? ['base-fonts.json', ...baseFonts.base.map(face => face.file)] : [])]) {
   files[file] = sha256(await readFile(path.join(out, file)));
 }
 await writeFile(path.join(out, 'manifest.json'), JSON.stringify({
@@ -145,6 +158,7 @@ await writeFile(path.join(out, 'manifest.json'), JSON.stringify({
   galleryDocuments: gallery.items.length,
   ...(scriptFontManifest ? { scriptFonts: { packages: scriptFontManifest.packages.length, faces: scriptFontManifest.packages.reduce((total, item) => total + item.faces.length, 0) } } : {}),
   ...(lazyFontManifest ? { lazyFonts: { packages: lazyFontManifest.packages.length, faces: lazyFontManifest.packages.reduce((total, item) => total + item.faces.length, 0) } } : {}),
+  ...(baseFonts ? { baseFonts: { startup: baseFonts.startup.length, faces: baseFonts.base.length } } : {}),
   files,
 }, null, 2) + '\n');
 if (await realpath(source) !== actualSource || await realpath(out) !== actualOut) throw new Error('Gallery staging location changed during build');
