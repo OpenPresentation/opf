@@ -2504,11 +2504,11 @@
   "measurementDetails": {
     "Aptos": {
       "verticalMetricsMatch": true,
-      "note": "hhea, OS/2 typo and win, x-height and cap-height equal in all 16 styles; painted x-height and cap-height boxes agree (opf#166). Line breaks are not recorded."
+      "note": "hhea, OS/2 typo and win, x-height and cap-height equal in all 16 styles; painted x-height and cap-height boxes agree (opf#166). Line breaks are not recorded. Weights 500, 600 and 800 resolve to Regular and Bold (FF-60: no upstream Medium or ExtraBold; the PPTX writes bold from 600, so PowerPoint draws the same two faces)."
     },
     "Aptos Display": {
       "verticalMetricsMatch": true,
-      "note": "hhea, OS/2 typo and win, x-height and cap-height equal in all 16 styles; painted x-height and cap-height boxes agree (opf#166). Line breaks are not recorded."
+      "note": "hhea, OS/2 typo and win, x-height and cap-height equal in all 16 styles; painted x-height and cap-height boxes agree (opf#166). Line breaks are not recorded. Weights 500, 600 and 800 resolve to Regular and Bold (FF-60: no upstream Medium or ExtraBold; the PPTX writes bold from 600, so PowerPoint draws the same two faces)."
     },
     "Aptos Narrow": {
       "verticalMetricsMatch": true,
