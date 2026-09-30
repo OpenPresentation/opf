@@ -3,7 +3,7 @@
 // a release that vendors more faces adds its entry here.
 //   0.11.0: the published release lists 51 (35 open faces and 16 Intos faces).
 //   0.11.1: the FF-43 release lists 86 (18 open packs, 70 faces, plus 16 Intos faces).
-//   0.11.2: FF-19 script-face loading; the vendored set is unchanged, 86.
+//   0.11.2: the FF-19 release adds no faces and lists the same 86 as 0.11.1.
 export const LAZY_FONT_COUNTS = Object.freeze({ '0.11.0': Object.freeze([51]), '0.11.1': Object.freeze([86]), '0.11.2': Object.freeze([86]) });
 
 /** Throws unless `count` is an expected lazy face count for the renderer `version`. */
