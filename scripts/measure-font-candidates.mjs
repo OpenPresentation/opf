@@ -11,11 +11,15 @@
 //
 // node scripts/measure-font-candidates.mjs --intos <dir with the Intos TTFs> [--selawik <dir with selawk*.ttf>]
 //   [--reference-dir <dir with Aptos Serif files>] [--packages <node_modules with fontkit>] [--out <file>]
+// node scripts/measure-font-candidates.mjs --vendored <opf-render checkout> --families "Century Gothic,Trebuchet MS" [--out <file>]
+//   FF-43: the faces opf-render actually ships (its pinned manifest, fonts/<name>) for the named policy rows, against the installed
+//   originals: every reference style on the host, the shipped face drawn for it (nearest weight of the same slope, as the renderer picks),
+//   with vertical metrics, painted glyph heights and outline identity counts. It never changes a tier: only the metric bar does.
 import { createHash } from "node:crypto";
 import { existsSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const args = process.argv.slice(2);
@@ -85,8 +89,8 @@ const STYLES = [[400, false, "Regular"], [700, false, "Bold"], [400, true, "Ital
 const results = [];
 function compare({ reference, candidate, styles, candidateNote }) {
   const entry = { reference, candidate, ...(candidateNote ? { note: candidateNote } : {}), styles: [] };
-  for (const { weight, italic, label, file } of styles) {
-    const ref = references.get(`${reference.toLowerCase()}|${weight}|${italic}`);
+  for (const { weight, italic, label, file, refWeight = weight, outline = label === "Regular", replacementWeight } of styles) {
+    const ref = references.get(`${reference.toLowerCase()}|${refWeight}|${italic}`);
     if (!ref) { entry.styles.push({ style: label, skipped: "reference font not available on this host" }); continue; }
     if (!file || !existsSync(file)) { entry.styles.push({ style: label, skipped: "no candidate face for this style" }); continue; }
     const bytes = readFileSync(file), face = fontkit.create(bytes);
@@ -94,7 +98,8 @@ function compare({ reference, candidate, styles, candidateNote }) {
     const meanAbs = deltas.reduce((s, d) => s + Math.abs(d), 0) / deltas.length, maxAbs = Math.max(...deltas.map(Math.abs));
     const row = { style: label, strings: deltas.length, meanAbs: round(meanAbs), mean: round(deltas.reduce((s, d) => s + d, 0) / deltas.length), maxAbs: round(maxAbs), meetsMetricBar: meanAbs < 0.001 && maxAbs <= 0.003, reference: { file: ref.file, version: ref.version, sha256: ref.sha256 }, candidateFile: { name: path.basename(file), sha256: sha256(bytes) }, referenceVertical: vertical(ref.font), candidateVertical: vertical(face) };
     row.verticalMetricsEqual = JSON.stringify(row.referenceVertical) === JSON.stringify(row.candidateVertical);
-    if (label === "Regular") row.outlines = outlines(ref.font, face);
+    if (outline) row.outlines = outlines(ref.font, face);
+    if (replacementWeight !== undefined) row.replacementWeight = replacementWeight;
     entry.styles.push(row);
   }
   results.push(entry);
@@ -106,6 +111,30 @@ if (intosDir) {
     compare({ reference, candidate: prefix.replace(/([a-z])([A-Z])/g, "$1 $2"), styles: STYLES.map(([weight, italic, label]) => ({ weight, italic, label, file: path.join(intosDir, `${prefix}-${label}.ttf`) })) });
   // Semibold is not bundled; measured to say whether it could be.
   compare({ reference: "Aptos SemiBold", candidate: "Intos Semibold", candidateNote: "Not bundled: OPF maps Aptos at 400 and 700.", styles: [{ weight: 600, italic: false, label: "Regular", file: path.join(intosDir, "Intos-Semibold.ttf") }, { weight: 600, italic: true, label: "Italic", file: path.join(intosDir, "Intos-SemiboldItalic.ttf") }] });
+}
+const vendoredDir = option("--vendored");
+if (vendoredDir) {
+  const renderRoot = path.resolve(vendoredDir), { BUNDLED_FONT_MANIFEST } = await import(pathToFileURL(path.join(renderRoot, "src/font-manifest.js")).href);
+  const faces = BUNDLED_FONT_MANIFEST.packages.filter((pkg) => pkg.vendored).flatMap((pkg) => pkg.faces.map((face) => ({ ...face, file: path.join(renderRoot, pkg.vendored, face.file), package: pkg.name, version: pkg.version })));
+  const policy = JSON.parse(readFileSync(path.join(root, "spec/reference/font-policy.json"), "utf8")), decisions = policy.provisionalDecisions?.decisions ?? {};
+  const wanted = new Set(option("--families", "").split(",").map((name) => name.trim().toLowerCase()).filter(Boolean));
+  for (const row of policy.families) {
+    if (!wanted.has(row.family.toLowerCase())) continue;
+    const replacement = row.replacement?.decision ? { ...row.replacement, family: decisions[row.replacement.decision].replacement } : row.replacement;
+    // Reference styles the host has: the four standard ones, or whatever a weight-named family provides (Semibold, Light, Bookman 300/600).
+    let refs = [[400, false], [700, false], [400, true], [700, true]].filter(([weight, italic]) => references.has(`${row.family.toLowerCase()}|${weight}|${italic}`)).map(([weight, italic]) => ({ weight, italic }));
+    if (!refs.length) refs = [...references.keys()].filter((key) => key.startsWith(`${row.family.toLowerCase()}|`)).map((key) => { const [, weight, italic] = key.split("|"); return { weight: Number(weight), italic: italic === "true" }; });
+    let first = true;
+    const styles = refs.flatMap(({ weight, italic }) => {
+      // The renderer requests 400 or 700 (the style link); a weight-named row draws its encoded weight.
+      const target = replacement.weight ?? (weight >= 600 ? 700 : 400);
+      const choices = faces.filter((face) => face.family === replacement.family && face.italic === italic).sort((a, b) => Math.abs(a.weight - target) - Math.abs(b.weight - target) || a.weight - b.weight);
+      if (!choices.length) return [];
+      const outline = first && !italic; if (outline) first = false;
+      return [{ weight, refWeight: weight, italic, label: `${weight}${italic ? "i" : ""}`, file: choices[0].file, outline, replacementWeight: choices[0].weight }];
+    });
+    compare({ reference: row.family, candidate: replacement.family, candidateNote: `Shipped by opf-render (${[...new Set(faces.filter((face) => face.family === replacement.family).map((face) => `${face.package}@${/^[0-9a-f]{40}$/.test(face.version) ? face.version.slice(0, 12) : face.version}`))].join(", ")}); tier ${replacement.compatibility}.`, styles });
+  }
 }
 const selawikDir = option("--selawik");
 if (selawikDir) {

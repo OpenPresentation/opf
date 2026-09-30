@@ -115,27 +115,65 @@ test("records agree with the policy table and the pinned manifest", () => {
   assert.equal(committed.inputs.renderManifest.commit, snapshot.source.commit);
 });
 
-// EXPECTED TO CHANGE: the committed parity run predates the Intos policy. Once opf-render#54 lands (Intos bundled), the
-// pinned manifest snapshot is refreshed and the audit is rerun, Aptos and Aptos Display become pass values and no longer
-// rank 1 and 2. Update this test, and drop overrides.pendingBundle, in that change.
-test("Aptos and Aptos Display rank by their remaining 704 non-pass values while the Intos faces are pending", () => {
-  const top = [...committed.records].sort((a, b) => a.priority.rank - b.priority.rank).slice(0, 2).map((record) => record.family);
-  assert.deepEqual(top.sort(), ["Aptos", "Aptos Display"]);
-  for (const name of top) {
+// The parity run on the merged Intos mains (opf#175) passes all 704 Aptos and Aptos Display values, so the Aptos
+// family no longer leads the priority queue; the queue follows the values that are still not pass.
+test("the Aptos family is metric-measured with Intos bundled, and no longer leads the priority queue", () => {
+  const intosOf = { Aptos: "Intos", "Aptos Display": "Intos Display", "Aptos Narrow": "Intos Narrow", "Aptos Serif": "Intos Serif" };
+  for (const [name, intos] of Object.entries(intosOf)) {
     const record = committed.records.find((item) => item.family === name);
-    assert.equal(record.paritySignals.valuesAffected, 704, name);
-    assert.equal(record.priority.valuesOpen, 704, name);
-    assert.equal(record.phase, 3, name);
     assert.equal(record.status, "metric-measured", name);
     assert.equal(record.previewRoute.tier, "metric", name);
-    assert.match(record.previewRoute.family, /^Intos/, name);
-    assert.equal(record.bundled.yes, false, `${name}: the Intos faces are not in the pinned manifest until opf-render#54`);
-    assert.ok(record.previewRoute.pendingBundle.prs.includes("opf-render#54"), name);
-    assert.equal(record.hostVerification.node, "unverified", name);
+    assert.equal(record.previewRoute.family, intos, name);
+    assert.equal(record.previewRoute.pendingBundle, null, name);
+    assert.equal(record.bundled.yes, true, `${name}: ${intos} is in the pinned manifest`);
+    assert.equal(record.bundled.packages[0].name, "intos", name);
+    assert.deepEqual(record.bundled.stylesAvailable, ["400", "400i", "700", "700i"], name);
+    assert.equal(record.stylesMissing.length, 0, name);
+    assert.equal(record.hostVerification.node, "verified", name);
+    assert.equal(record.hostVerification.browser, "verified", name);
+    assert.equal(record.hostVerification.galleryEditor, "unverified", `${name}: the gallery editor waits for a release`);
+    assert.match(record.hostLoading.galleryEditor, /pending a gallery editor release/, name);
+    assert.match(record.hostLoading.browser, /lazy/, name);
+    assert.equal(record.measurements.verticalMetricsMatch, true, name);
   }
-  for (const name of ["Aptos Narrow", "Aptos Serif"]) assert.equal(committed.records.find((item) => item.family === name).status, "metric-measured", name);
+  // The editor playground test exercises the Aptos scheme only: Aptos and Aptos Display.
+  for (const name of ["Aptos", "Aptos Display", "Intos", "Intos Display"]) assert.equal(committed.records.find((item) => item.family === name).hostVerification.editor, "verified", name);
+  for (const name of ["Aptos Narrow", "Aptos Serif", "Intos Narrow", "Intos Serif"]) assert.equal(committed.records.find((item) => item.family === name).hostVerification.editor, "unverified", name);
+  for (const name of ["Aptos", "Aptos Display"]) {
+    const record = committed.records.find((item) => item.family === name);
+    assert.equal(record.paritySignals.valuesAffected, 704, name);
+    assert.equal(record.paritySignals.fontResolution.pass, 704, name);
+    assert.equal(record.priority.valuesOpen, 0, name);
+    assert.equal(record.phase, 3, name);
+    assert.ok(record.priority.rank > 100, `${name} passes every audited value, so it ranks low (rank ${record.priority.rank})`);
+  }
+  for (const name of INTOS) {
+    const record = committed.records.find((item) => item.family === name);
+    assert.equal(record.class, "open", name);
+    assert.equal(record.bundled.yes, true, name);
+    assert.equal(record.status, "baseline-needed", name);
+  }
   assert.equal(committed.records.find((item) => item.family === "Aptos Mono").status, "visual-gap", "Aptos Mono has no measurement or candidate");
-  for (const name of INTOS) assert.equal(committed.records.find((item) => item.family === name).status, "loading-gap", name);
+  // The queue now follows values that are still not pass.
+  const top = [...committed.records].sort((a, b) => a.priority.rank - b.priority.rank).slice(0, 10);
+  for (const record of top) assert.ok(record.priority.valuesOpen > 0, `${record.family} leads the queue with open values`);
+  assert.equal(committed.inputs.parity.file.split("/").pop(), "parity-results-2026-09-29-intos-default.json");
+});
+
+test("a pendingBundle override for a family whose route face is bundled is stale and fails the build", () => {
+  const dir = scratchCopy();
+  try {
+    const file = path.join(dir, FILES.overrides);
+    const edited = JSON.parse(readFileSync(file, "utf8"));
+    edited.pendingBundle = { Aptos: { prs: ["opf-render#54"], note: "stale" } };
+    writeFileSync(file, JSON.stringify(edited));
+    assert.throws(() => buildTracker({ root: dir }), /pendingBundle for Aptos is stale/);
+    edited.pendingBundle = { "No Such Family": { prs: ["opf-render#1"], note: "x" } };
+    writeFileSync(file, JSON.stringify(edited));
+    assert.throws(() => buildTracker({ root: dir }), /No Such Family/);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
 });
 
 test("the committed tracker matches a fresh build", () => {
@@ -237,10 +275,11 @@ test("gallery cards are recorded separately from the gallery editor, and Node na
     assert.equal(record.hostVerification.galleryCards === "NA", !hosted, `${record.family} galleryCards`);
     assert.match(record.hostLoading.galleryCards, hosted ? /self-hosted preview webfont/ : /no self-hosted card preview|no route/, record.family);
   }
-  const anton = committed.records.find((record) => record.family === "Anton");
-  assert.equal(anton.bundled.yes, false, "Anton is not bundled by opf-render");
-  assert.equal(anton.hostVerification.galleryCards, "unverified", "but gallery cards self-host it");
-  assert.equal(anton.hostVerification.galleryEditor, "NA");
+  // Raleway is not bundled by opf-render (variable-only upstream, resvg ignores the weight axis) while the gallery cards self-host it.
+  const raleway = committed.records.find((record) => record.family === "Raleway");
+  assert.equal(raleway.bundled.yes, false, "Raleway is not bundled by opf-render");
+  assert.equal(raleway.hostVerification.galleryCards, "unverified", "but gallery cards self-host it");
+  assert.equal(raleway.hostVerification.galleryEditor, "NA");
   // Node: the default prepareNodeFonts pack is base; office faces need pack: 'office'.
   const carlito = committed.records.find((record) => record.family === "Carlito");
   assert.match(carlito.hostLoading.node, /pack: 'office'/);

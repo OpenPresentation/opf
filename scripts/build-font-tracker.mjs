@@ -87,13 +87,16 @@ export function gallerySnapshotFromPreviewFonts(previewFonts, { commit, captured
   };
 }
 
+const WEIGHT_NAMES = /^(Thin|ExtraLight|Light|Medium|SemiBold|Bold|ExtraBold|Black)$/;
+
 function bundleIndex(snapshot) {
   const byFamily = new Map();
   for (const pkg of snapshot.packages) {
     const base = pkg.faces.find((face) => face.weight === 400 && !face.italic)?.family ?? pkg.faces[0].family;
     for (const face of pkg.faces) {
       // Weight-named faces of one package (Roboto Medium, Roboto SemiBold) belong to the package's family.
-      const family = face.family === base || face.family.startsWith(`${base} `) ? base : face.family;
+      const suffix = face.family.startsWith(`${base} `) ? face.family.slice(base.length + 1) : null;
+      const family = face.family === base || (suffix && WEIGHT_NAMES.test(suffix)) ? base : face.family;
       const entry = byFamily.get(family) ?? { family, packages: new Map(), faces: [] };
       entry.packages.set(pkg.name, pkg);
       entry.faces.push({ style: styleKey(face.weight, face.italic), file: face.file, sha256: face.sha256, package: pkg.name });
@@ -373,7 +376,7 @@ export function buildTracker({ root = ROOT } = {}) {
       statusReason = "bundled with required styles; fresh per-host verification outstanding";
     } else if (route.tier === "metric" && rec.measurements?.widthBarMet) {
       status = "metric-measured";
-      statusReason = "metric tier; width bar met in four styles; vertical metrics, line breaks and hosts not yet recorded";
+      statusReason = "metric tier; width bar met in four styles; line breaks not recorded; see hostVerification and the measurement details";
     } else if (cls === "proprietary-script") {
       status = "script-gap";
       statusReason = "visual script route; native-script measurement and appearance outstanding";
@@ -417,7 +420,9 @@ export function buildTracker({ root = ROOT } = {}) {
     const score = round(severity * (valuesOpen * hostFactor + 1), 1);
 
     // Hosts.
-    const packModel = target.yes ? hostModel.packs[target.pack] : null;
+    // A vendored package can load differently from the rest of its pack (Intos is an office-pack package that browser hosts load lazily).
+    const packKey = target.yes ? (hostModel.packageModels?.[target.packages[0].name] ?? target.pack) : null;
+    const packModel = packKey ? hostModel.packs[packKey] : null;
     const verified = overrides.hostVerification[family];
     const hostVerification = {};
     const hostLoading = {};

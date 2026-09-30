@@ -200,6 +200,8 @@ regenerate `support-status.json`, and update the headline in
   `build-support-status.mjs` reads it by default; the rationale and the
   before/after are in [gallery-support.md](../gallery-support.md).
 
+- **Intos default (FF-31, 2026-09-29).** `parity-results-2026-09-29-intos-default.json` is the run on the merged mains after opf-render#54 (Intos previews Aptos as metric): 660 perfect, 33 near, 157 mismatch of 850. The instrument is unchanged. `build-support-status.mjs` reads it by default; the before/after is in [gallery-support.md](../gallery-support.md).
+
 ### Slide-image mapping (FF-26)
 
 opf-pptx exports `design.slideImage` as one native picture named

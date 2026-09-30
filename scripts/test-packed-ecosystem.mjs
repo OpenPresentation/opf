@@ -198,11 +198,12 @@ assert.ok((await svgToPng(svgs[0],options)).length>1000);
 const imported=await fromPptx(await toPptx(editor.document,options));
 assert.equal(imported.slides[0].title,source.slides[0].title);
 assert.equal(JSON.stringify(source),original);
-assert.equal(registry.embeddedFonts.length,33);// the eager npm faces; the vendored (embed used) faces are the lazy set: 35 open families and 16 Intos
+assert.equal(registry.embeddedFonts.length,33);// the eager npm faces; the vendored (embed used) faces are the lazy set: the open families and Intos
 if(registry.lazyFonts){// renderers that vendor Intos and the open families (after 0.10.0) list them here; the pinned earlier renderer has none
-assert.equal(registry.lazyFonts.length,51);
-// the 35 open and 16 Intos faces; the four Noto Sans glyph-fallback faces (opf-render#57) are npm files, also embed used
-assert.equal(options.embeddedFonts.filter(face=>face.embed==="used"&&face.family!=="Noto Sans").length,51);
+// the vendored open and Intos faces: 51 up to renderer 0.11.0 (35 open and 16 Intos), more once further open families are vendored (FF-43: 82)
+assert.ok(registry.lazyFonts.length>=51);
+// the four Noto Sans glyph-fallback faces (opf-render#57) are npm files, also embed used; every other embed-used face is a lazy one
+assert.equal(options.embeddedFonts.filter(face=>face.embed==="used"&&face.family!=="Noto Sans").length,registry.lazyFonts.length);
 }
 console.log('Installed font preparation passed layout, edit/undo, SVG/PNG, editable PPTX export and heading reimport.');
 `);
