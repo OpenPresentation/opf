@@ -176,14 +176,14 @@ The options are `app` (`"PowerPoint"` or `"Google Slides"`), `slideIndex`,
 | `altLang` | omitted. It names the editing-UI language, which OPF does not model. Readers use `lang` when it is absent. |
 | `rtl` + `paragraphDirection(text, direction)` | paragraph `a:pPr@rtl="1"` only for paragraphs that `paragraphDirection()` makes right-to-left, and master default levels only when the deck is right-to-left. Alignment stays the composed absolute alignment (FF-07). |
 
-**Latin-only decks.** `ea` and `cs` repeat the chosen heading/body family
-instead of staying empty, so `+mn-ea`/`+mn-cs` references in masters, notes
-and `endParaRPr` resolve to a chosen font rather than to `""`. FF-07 gated
-writing that fill on FF-05 (the Aptos origin): native evidence showed that
-`Presentation.Fonts` reports a nameless font plus Aptos at open for the Carlito
-deck, and filling theme `ea`/`cs` with Carlito did not change that. FF-49
-writes the fill for every deck: the fill is not the Aptos fix and does not need
-to be. See [Theme slots (FF-49)](#theme-slots-ff-49).
+**Latin-only decks.** The resolver reports the chosen heading/body family for `ea` and
+`cs` (`sources` is `"latin"`), so run-level `a:ea`/`a:cs` and the preview have a face
+for every slot. The theme is different: its `a:ea`/`a:cs` stay empty, as in Office's
+own themes, unless a script font is selected for that slot. FF-07 gated any fill on
+FF-05 (the Aptos origin: filling theme `ea`/`cs` with Carlito did not change
+PowerPoint's nameless-font-plus-Aptos list at open), and FF-49 keeps the theme
+empty for an unselected slot for a second reason, the owner font policy and
+Office's per-language default. See [Theme slots (FF-49)](#theme-slots-ff-49).
 
 **CJK inside a Latin deck.** The author sets
 `design.fontScheme.eastAsian` (for example Noto Sans JP), which fills the slot
@@ -218,29 +218,31 @@ four things, and no others:
 **A language never sets the Latin scheme.** `latin` is the design font
 scheme's heading/body (slide, then deck, then theme, then the shared default
 `aptos`) whatever the language is. A Japanese deck with `design.fontScheme:
-"calibri"` has Calibri in `latin` and Meiryo in `ea`. The language's font
+"calibri"` has Calibri in `latin` and Meiryo in `ea` (its `cs` stays empty). The language's font
 scheme is a source for the language's own script slot, never for `latin`. A
 record's `fontScheme` is therefore a *script* default, not a deck font: it
 does not change how Latin text in that deck looks. An engine that changed the
 Latin fonts when a language was set would violate this contract, and the gallery
 audit measures that as a gap.
 
-| Language | Script role | Direction | `lang` | Latin (`aptos` deck) | `ea` | `cs` | Own-script entry |
+| Language | Script role | Direction | `lang` | Theme `a:latin` (`aptos` deck) | Theme `a:ea` | Theme `a:cs` | Own-script entry |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| English, French, Russian, Greek | `latin` | ltr | `en-US`, `fr-FR`, `ru-RU`, `el-GR` | Aptos Display / Aptos | Aptos Display / Aptos | Aptos Display / Aptos | none |
-| Japanese | `eastAsian` | ltr | `ja-JP` | Aptos Display / Aptos | Meiryo | Aptos Display / Aptos | `Jpan`: Meiryo |
-| Chinese (simplified) | `eastAsian` | ltr | `zh-CN` | Aptos Display / Aptos | Microsoft YaHei | Aptos Display / Aptos | `Hans`: Microsoft YaHei |
-| Chinese (traditional) | `eastAsian` | ltr | `zh-TW` | Aptos Display / Aptos | Microsoft JhengHei | Aptos Display / Aptos | `Hant`: Microsoft JhengHei |
-| Korean | `eastAsian` | ltr | `ko-KR` | Aptos Display / Aptos | Malgun Gothic | Aptos Display / Aptos | `Hang`: Malgun Gothic |
-| Arabic | `complexScript` | rtl | `ar-SA` | Aptos Display / Aptos | Aptos Display / Aptos | Arabic Typesetting | `Arab`: Arabic Typesetting |
-| Hebrew | `complexScript` | rtl | `he-IL` | Aptos Display / Aptos | Aptos Display / Aptos | David | `Hebr`: David |
-| Hindi | `complexScript` | ltr | `hi-IN` | Aptos Display / Aptos | Aptos Display / Aptos | Mangal | `Deva`: Mangal |
-| Thai | `complexScript` | ltr | `th-TH` | Aptos Display / Aptos | Aptos Display / Aptos | Angsana New | `Thai`: Angsana New |
-| Amharic | `latin` | ltr | `am-ET` | Aptos Display / Aptos | Aptos Display / Aptos | Aptos Display / Aptos | `Ethi`: Nyala |
-| Armenian, Georgian | `latin` | ltr | `hy-AM`, `ka-GE` | Aptos Display / Aptos | Aptos Display / Aptos | Aptos Display / Aptos | `Armn`, `Geor`: Sylfaen |
+| English, French, Russian, Greek | `latin` | ltr | `en-US`, `fr-FR`, `ru-RU`, `el-GR` | Aptos Display / Aptos | empty | empty | none |
+| Japanese | `eastAsian` | ltr | `ja-JP` | Aptos Display / Aptos | Meiryo | empty | `Jpan`: Meiryo |
+| Chinese (simplified) | `eastAsian` | ltr | `zh-CN` | Aptos Display / Aptos | Microsoft YaHei | empty | `Hans`: Microsoft YaHei |
+| Chinese (traditional) | `eastAsian` | ltr | `zh-TW` | Aptos Display / Aptos | Microsoft JhengHei | empty | `Hant`: Microsoft JhengHei |
+| Korean | `eastAsian` | ltr | `ko-KR` | Aptos Display / Aptos | Malgun Gothic | empty | `Hang`: Malgun Gothic |
+| Arabic | `complexScript` | rtl | `ar-SA` | Aptos Display / Aptos | empty | Arabic Typesetting | `Arab`: Arabic Typesetting |
+| Hebrew | `complexScript` | rtl | `he-IL` | Aptos Display / Aptos | empty | David | `Hebr`: David |
+| Hindi | `complexScript` | ltr | `hi-IN` | Aptos Display / Aptos | empty | Mangal | `Deva`: Mangal |
+| Thai | `complexScript` | ltr | `th-TH` | Aptos Display / Aptos | empty | Angsana New | `Thai`: Angsana New |
+| Amharic | `latin` | ltr | `am-ET` | Aptos Display / Aptos | empty | empty | `Ethi`: Nyala |
+| Armenian, Georgian | `latin` | ltr | `hy-AM`, `ka-GE` | Aptos Display / Aptos | empty | empty | `Armn`, `Geor`: Sylfaen |
 
-(Heading / body; the values are `resolveScriptFonts` output for an `aptos`
-deck. Every family named is a scheme family in the font catalog.)
+(Heading and body take the same value in these bundled records. The script fonts are
+`resolveScriptFonts` output for an `aptos` deck; "empty" is the theme's typeface,
+where the preview and the run-level slots use the latin family. Every family named is a
+scheme family in the font catalog.)
 
 Armenian, Georgian and Ethiopic keep their script font in the per-script entry,
 not in `cs`. PowerPoint classifies those scripts with the latin slot (see the
@@ -256,7 +258,7 @@ classification natively.
 | Export | opf-pptx `src/script-fonts.js`: `lang`, `rtl`, theme and run `ea`/`cs`, own-script entry |
 | Preview | opf-render `src/script-fonts.js` and `svg.js`: per-script itemization, slots, `lang`, `direction`, open replacement faces loaded through the shipped host |
 | Re-import | opf-pptx: the run `lang` maps back to the catalog id (an FF-32 stored id wins); a theme `ea`/`cs` that repeats latin or matches what the imported language resolves to raises no `script-font-not-imported` |
-| Audit | audit B's language classifier measures the contract: the run `lang`, the direction of a native-name sample, the script slot named in runs and in the theme (never empty), the language's script face present under the modelled host (FF-48), re-import keeps the language, and the Latin scheme unchanged by the language. It no longer expects an engine to derive the Latin font scheme from `language` alone |
+| Audit | audit B's language classifier measures the contract: the run `lang`, the direction of a native-name sample, the script slot named in runs, and in the theme where the language or scheme selected a script font (an empty slot is a gap only then), the language's script face present under the modelled host (FF-48), re-import keeps the language, and the Latin scheme unchanged by the language. It no longer expects an engine to derive the Latin font scheme from `language` alone |
 
 No schema field changes. The `language` and font scheme descriptions already
 say this (`language.schema.json` `fontScheme`: "the latin slot always follows
@@ -264,79 +266,63 @@ the design font scheme").
 
 ## Theme slots (FF-49)
 
-The presentation theme's major and minor `a:ea` and `a:cs` typefaces are
-**never empty**. Each of the four is resolved like the run slots:
+The presentation theme's major and minor `a:ea` and `a:cs` typefaces follow **Office's convention and the owner font
+policy: the PPTX names what the author selected, and nothing they did not select.** A slot is written only when a
+script font is actually selected for it; every other slot stays empty (`typeface=""`), exactly as Office's own themes
+leave it. Each of the four is resolved like the run slots, and the resolver's `sources` says which case applies:
 
-| Situation | `a:ea` / `a:cs` value |
+| Situation (`sources[slot]`) | Theme `a:ea` / `a:cs` |
 | --- | --- |
-| The design font scheme sets the slot (`eastAsian` / `complexScript`, record or inline) | that explicit family |
-| The scheme's own `languageFamily` is that slot and its `languages` list is empty or names the language | the scheme's own major/minor (the slot's family) |
-| The language's script uses the slot | the language's font scheme (its script font) |
-| Anything else | **the theme's own `a:latin` face, exactly as written** |
+| The design font scheme sets the slot (`fontScheme`: `eastAsian` / `complexScript`, record or inline) | that explicit family |
+| The scheme's own `languageFamily` is that slot and its `languages` list is empty or names the language (`schemeFamily`) | the scheme's family for the slot |
+| The language's script uses the slot (`language`) | the language's font scheme (its script font) |
+| Nothing selects a script font for the slot (`latin`) | **empty, as Office leaves it** |
 
-The last row is the default. It applies to every slot of every deck that has
-no script font for it: all 89 catalog font schemes with a Latin, Cyrillic,
-Greek, Armenian, Georgian or Ethiopic language, and the other slot of a CJK or
-complex-script language (Arabic's `ea`, Japanese's `cs`). No bundled font
-scheme record sets `eastAsian` or `complexScript`, so for all 89 records the
-value comes from this rule. The theme names only families the author selected,
-never an open preview replacement (FF-31), and never a font nobody chose.
+So a Latin, Cyrillic or Greek deck writes neither slot (89 of 89 catalog font schemes in the default language: both
+empty, since no bundled record sets `eastAsian` or `complexScript`), a Japanese deck writes `ea` only, and an Arabic
+deck `cs` only. The other slot of a CJK or complex-script deck stays empty too (Arabic's `ea`, Japanese's `cs`).
 
-**Why the latin family and not a script default.**
+**Why empty, not the latin family.** An earlier draft of FF-49 filled every empty slot with the theme's own latin
+face so that no slot was empty. That was rejected in review:
 
-- The alternatives are the per-script defaults the exporter's vendored Office
-  theme and `spec/reference/engine-defaults.json` know (Microsoft YaHei, Nirmala
-  UI, Times New Roman for Arabic and so on). Those are fonts the author did not
-  select. FF-08 and the font policy (FF-31) require a package to name only
-  selected families. They are also arbitrary: the right `ea` face differs for
-  Japanese, Chinese and Korean, and only the language knows which.
-- The latin family is by construction in the policy table
-  (`spec/reference/font-policy.json` covers every family of the 89 records:
-  open, or licensed with a shipped replacement). No new family enters the
-  package, so no new licensing or replacement question arises.
-- It is what the resolver already reports for these slots (`sources` is
-  `"latin"`) and what the run-level `a:ea`/`a:cs` and the preview use, so
-  `+mn-ea`/`+mn-cs` references, the preview and the export agree.
+- In Office an empty `ea`/`cs` means "use the per-language default": PowerPoint picks Yu Gothic (or the language's
+  face from the theme's `a:font script=…` list) for Japanese text typed later into the deck. Writing Aptos there
+  degrades that behaviour, and it changes the theme fonts FF-05 is investigating, only to satisfy an audit rule.
+- It writes a font into a slot the author never selected. The owner's font policy is that the PPTX names what the
+  user selected and nothing else (FF-08, FF-31): the same class of mistake as measuring the audit against a strict
+  no-fonts host, which FF-48 corrected.
 
-**What Office does.** Office's own themes leave `a:ea` and `a:cs` empty
-(`typeface=""`) and pick a face per script from the `a:font script="…"` list. OPF
-keeps that per-script list (only the language's own script entry changes,
-above) and fills the two slots as well, because a chosen font in every slot is
-a program requirement (FF-49); an empty slot is what the audit reports as
-"theme major/minor ea or cs typeface is empty". The cost: East Asian or
-complex-script text typed later into a Latin deck is no longer assigned a face
-by the theme list alone. The slot names the Latin family, and PowerPoint falls
-back by font linking for glyphs that family lacks, as it does for any missing
-glyph. An author who wants a specific CJK or complex-script face in a Latin deck
-sets `design.fontScheme.eastAsian` / `.complexScript`. The embedded chart
-workbooks' themes are a separate package and keep their empty slots, as Office
-does.
+Per-script Office defaults (Microsoft YaHei, Nirmala UI, Times New Roman for Arabic, `spec/reference/engine-defaults.json`)
+are likewise not written: nobody selected them. The vendored `a:font script=…` list is unchanged except for the
+language's own script entry (see the OOXML mapping).
 
-**FF-05.** The origin of the unexpected `Aptos` is still open. Filling the slots
-does not fix it (a Carlito deck with filled slots still lists Aptos and a
-nameless font at open,
-[E7](../../evidence/windows-native-explicit-slots-20260929/README.md)), and it
-does not need to: no run or theme part gains a font the user did not select, and
-the filled slot equals the slot's own latin family. Native confirmation of the
+**The preview needs a face for every slot, the theme does not.** The preview draws text of a script with the slot for
+that script, so its slot is the selected script font where one is selected and the latin family where nothing is (the
+same fallback a browser or PowerPoint's font linking applies). opf-render's per-slide script profile therefore equals
+the exported theme where the theme names a family, and equals the latin family where the theme is empty. The rule is
+checked for every catalog font scheme times every catalog language (89 × 93 = 8277 combinations, 41385 slot
+comparisons, on 2026-09-30 with opf-pptx and opf-render 0.11.4), and by `test/theme-script-slots.mjs` in opf-pptx and
+`test/theme-slots.mjs` in opf-render in CI. A preview draws a slot's family through the policy table's open replacement
+and the script pack (FF-19, FF-31); the PPTX keeps the selected name.
+
+**Audit.** "Theme major/minor `ea` or `cs` typeface is empty" is a gap only when a script font was selected for the
+slot (a `sources` value other than `latin`) and the export wrote nothing or a different name, including a preview
+replacement. Empty because nothing was selected is `works`. The audit measures the expectation with the core
+resolver (`expectedThemeEaCs`), so the reason follows the rule above instead of counting empty slots. It applies to the
+font-scheme, language and theme dimensions alike.
+
+**FF-05.** Unchanged. Nothing here touches the theme fonts FF-05 investigates beyond what FF-07 already wrote for a
+selected script font, and no run or theme part gains a font the user did not select. Native confirmation of the
 written slots is a root-only FF-12/FF-46 gate, not claimed by FF-49.
 
-**Re-import.** With FF-32 provenance the stored `design.fontScheme` and
-`language` are restored (the stored theme snapshot records the filled slots, so
-an unedited theme matches). Without provenance the importer reads no font
-scheme from a theme (unchanged). Theme `ea`/`cs` that repeat latin or match
-what the imported language resolves to raise no `script-font-not-imported`.
+**Re-import.** With FF-32 provenance the stored `design.fontScheme` and `language` are restored (the stored theme
+snapshot records the written slots, so an unedited theme matches). Without provenance the importer reads no font scheme
+from a theme (unchanged). A theme `ea`/`cs` that is empty, repeats latin or matches what the imported language resolves
+to raises no `script-font-not-imported`.
 
-**Preview and export agree.** opf-render's per-slide script profile (`heading`
-and `body` slots) equals the exported theme's six values for every catalog font
-scheme times every catalog language (89 × 93 = 8277 combinations, checked on
-2026-09-30 with opf-pptx and opf-render 0.11.4), and `test/theme-script-slots.mjs`
-in opf-pptx checks every font scheme and a language matrix in CI. The preview
-draws a slot's family through the policy table's open replacement and the script
-pack (FF-19, FF-31); the PPTX keeps the selected name.
-
-**Fallback without the resolver.** With a core that has no `resolveScriptFonts`
-the exporter still fills the theme's empty slots from the theme's own latin
-face, so the theme is never empty.
+**`checkPptxTypefaces`.** An empty theme `ea`/`cs` is accepted when nothing was selected. Passing
+`themeScripts: {major: {ea, cs}, minor: {ea, cs}}` (the families the author selected) makes it report a selected slot
+that is empty or different (`theme-script-slot`).
 
 ## Paragraph direction (FF-07, FF-19)
 
@@ -437,14 +423,17 @@ All changes are additive:
    renderer and the editor to it (done). Reconciling `engine-defaults.json` (`english`, `en`)
    with `en-US` remains an FF-17 follow-up.
 4. **Filled `ea`/`cs` in Latin decks.** The resolver reports the chosen
-   heading/body family for these slots. FF-07 kept writing them gated on
-   FF-05; FF-49 (owner goal 2026-09-30) writes them for every deck, see
-   [Theme slots](#theme-slots-ff-49). Native evidence shows that filling theme `ea`/`cs` with Carlito did
-   not remove the nameless font or Aptos that `Presentation.Fonts` lists at
-   open, so the fill is not by itself the Aptos fix.
+   heading/body family for these slots, and the run-level slots and the preview
+   use it. The theme's `a:ea`/`a:cs` are not filled: FF-07 gated a fill on FF-05
+   (native evidence: filling theme `ea`/`cs` with Carlito did not remove the
+   nameless font or Aptos that `Presentation.Fonts` lists at open), and FF-49
+   (review, 2026-09-30) rejected filling them with the latin family because
+   Office leaves them empty so PowerPoint picks its per-language default, and the
+   owner font policy names only what the author selected. A slot is written only
+   where a script font is selected; see [Theme slots](#theme-slots-ff-49).
 5. **Per-run language.** Deferred. The explicit `eastAsian`/`complexScript`
    slots cover CJK or Arabic text inside a Latin deck until then.
-6. **Curated slots.** Bundled schemes stay uncurated (still true for all 89 in FF-49; the theme fill is by rule, not by curation). Imported PPTX themes
+6. **Curated slots.** Bundled schemes stay uncurated (still true for all 89 in FF-49: no record selects a script font by itself, so the theme slots follow the language). Imported PPTX themes
    should populate explicit `eastAsian`/`complexScript` slots from their
    `a:ea`/`a:cs` typefaces so they round-trip. This is an FF-07/import
    follow-up.

@@ -101,6 +101,8 @@ they are, and the FF-38 perfect/near tiers stay a separate measure (a visual-onl
 replacement is still `near` there). Anything the policy does not excuse (an
 empty `ea`/`cs` theme slot, a layout the export ignores, a lost payload) remains
 a real gap and is fixed in the engines.
+FF-48 implements this ([measurement](gallery-support.md#audits-model-the-shipped-font-host-ff-48-2026-09-30)): audits A and B use the parity harness's
+host model (`AUDIT_FONT_HOST=gallery` by default, `strict` as the diagnostic), and the themes become `works`.
 
 **Owner decisions this goal may need.** Retiring or merging gallery layouts
 instead of publishing canonical ids (FF-52, FF-55) changes the denominator and
@@ -208,16 +210,17 @@ linked, and specifically:
 - 2026-09-30 (FF-49, FF-50; agent decision under the owner's every-config-`works`
   goal, the owner can veto it before merge): theme script slots and the
   language contract, recorded in [script-font-model.md](script-font-model.md#language-contract-ff-50-model-c).
-  - Theme `a:ea` and `a:cs` are never empty. A slot the design font scheme
-    (`eastAsian`/`complexScript`) or the language's script font supplies names
-    that family; every other slot repeats the theme's own latin face. The
-    per-script Office defaults (Microsoft YaHei, Nirmala UI and so on) were
-    rejected because the author did not select them; leaving the slots empty
-    as Office's themes do was rejected because the goal needs a chosen font in
-    every slot. The trade-off (PowerPoint no longer assigns a face from the
-    theme's per-script list to East Asian or complex-script text typed later
-    into a Latin deck) is documented; `design.fontScheme.eastAsian` and
-    `.complexScript` set a face explicitly.
+  - Theme `a:ea` and `a:cs` follow Office's convention and the owner font policy
+    (the PPTX names what the user selected and nothing else): a slot is written
+    only where a script font is selected (the design font scheme's
+    `eastAsian`/`complexScript`, the scheme's own script family, or the
+    language's script font); every other slot stays empty, as in Office's own
+    themes, so PowerPoint picks its per-language default (for example Yu Gothic
+    for Japanese text typed later). A first version filled the empty slots with
+    the theme's latin face; review rejected it because it degrades that
+    behaviour, touches the theme fonts FF-05 investigates and writes a font
+    nobody selected. The audit's "theme `ea`/`cs` is empty" reason is a gap
+    only when a selected script font was not written.
   - Model C is the language contract: `language` sets `lang`, direction, the
     script slot fonts and mixed-script layout, never the Latin scheme; only
     `design.fontScheme` sets the Latin fonts. Armenian, Georgian and Ethiopic

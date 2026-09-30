@@ -1,6 +1,6 @@
 # pptx.gallery support by dimension (FF-23)
 
-Parity re-measured 2026-09-30 with the harness modelling the gallery editor's font host ([below](#gallery-font-host-model-2026-09-30)); presence and the other parity dimensions as measured the same day with the charts measured and three owner defaults applied ([below](#charts-measured-and-owner-defaults-2026-09-30)); the 2026-09-29 measurement stays below as history. Program: [README.md](README.md). Tracker:
+Presence and parity re-measured 2026-09-30 on the published set with opf-render 0.11.4, and with both presence audits modelling the gallery editor's font host and the owner font policy ([below](#audits-model-the-shipped-font-host-ff-48-2026-09-30)); parity with the harness modelling that host ([below](#gallery-font-host-model-2026-09-30)); the charts measured and three owner defaults applied ([below](#charts-measured-and-owner-defaults-2026-09-30)); the 2026-09-29 measurement stays below as history. Program: [README.md](README.md). Tracker:
 [burndown.md](burndown.md). Audit scripts, raw results and the per-item
 machine-readable file: [gallery-support/](gallery-support/README.md).
 
@@ -11,7 +11,12 @@ pptx.gallery value's "OPF Config" snippet and run it through the OpenPresentatio
 packages. It measures the engines, not the schema: a value that validates but
 changes nothing in the preview or the PPTX is not reported as working.
 
-**Latest measurement (2026-09-30, published set, gallery font host modelled): 729 of 850 values are perfect by parity, 108 near, 13 mismatch**
+**Latest measurement (2026-09-30, FF-48, published set with opf-render 0.11.4): 431 of 819 values `works` by presence (427 on the same heads with the strict no-host font model), 734 of 850 perfect by parity, 113 near, 3 mismatch**
+(core `3e1cbf0` package 0.11.2; opf-render 0.11.4 `1a724a6`; opf-pptx 0.11.3 `ecdbb42`; opf-editor 0.10.2 `c7995ed`; pptx-gallery `59ff36c`). The presence audits now judge font availability against the host that ships and the owner
+font policy instead of strict no-host previews: the four themes become `works`, and every font-availability reason of the 93 font schemes and 93 languages clears (92, 93 and 4 values carried one), leaving the reasons FF-49 and FF-50 own
+([below](#audits-model-the-shipped-font-host-ff-48-2026-09-30)). Renderer 0.11.4 clears the three parity font mismatches and moves 7 chartex charts from mismatch to 3 perfect and 4 near. No presence or parity value regressed.
+
+Before that (2026-09-30, published set, gallery font host modelled): 729 of 850 values are perfect by parity, 108 near, 13 mismatch
 (core `3d51ba1` plus the harness change `26a1d82`; opf-render 0.11.3 `a66caa3`; opf-pptx `6f6122c`; pptx-gallery `1f0e382`; the run before it scored 707, 47 and 96; opf#186 scored 657, 37 and 156).
 The 86 font-resolution mismatches were a modelling artifact for 83 values: the harness loaded no script faces, and the gallery editor does. Three real gaps remain
 ([below](#gallery-font-host-model-2026-09-30)).
@@ -108,8 +113,9 @@ Two audits split the 14 dimensions.
   undeclared `asset:*` id are re-run with a real raster (`withAssets`).
 - **Audit B** (color schemes, font schemes, languages, themes, narratives,
   audiences, tones, socials and, since 2026-09-30, the 26 charts): core validate and lint; catalog lookup;
-  opf-render in three font modes (no registry, the strict bundled base pack,
-  and the office pack with visual substitution); opf-pptx export with a
+  opf-render in three strict font modes (no registry, the strict bundled base pack,
+  and the office pack with visual substitution; diagnostics since FF-48) and against the modelled gallery font host (`gallery`, the
+  parity harness's host, which decides font availability; [below](#audits-model-the-shipped-font-host-ff-48-2026-09-30)); opf-pptx export with a
   full-package inventory (every `typeface=`, script fonts, `lang`/`rtl`, theme
   `clrScheme`, slide colours, `app.xml`); re-import; and for metadata
   dimensions a consumption diff (field removed, SVG and every PPTX part compared
@@ -260,6 +266,73 @@ Checks passed of 850 (pass/near/fail where not all pass): geometry 850, text 830
 
 Results: [parity-results-2026-09-29-intos-default.json](gallery-support/parity/parity-results-2026-09-29-intos-default.json), [scoreboard](gallery-support/parity/PARITY-2026-09-29-intos-default.md) (before/after against the previous-mains run, which is not committed). `support-status.json` is rebuilt from this run.
 
+#### Audits model the shipped font host (FF-48, 2026-09-30)
+
+**The problem.** Audits A and B judged preview font availability with strict no-host previews: audit B rendered every value with no registry, with the strict bundled base
+pack and with the office pack, and called a value `partial` when the base pack could not draw it or when the office pack drew a replacement ("preview needs
+office-pack substitution ... export writes <selected>"). No shipped host renders that way, and the owner font policy (2026-09-29; [README](README.md#next-goal-every-gallery-config-works-100))
+says a preview that draws the FF-31 policy table's look-alike while the PPTX names the family the user selected is correct. The parity harness already models the
+host (`PARITY_FONT_HOST=gallery`, FF-38); the presence audits did not.
+
+**The change (instrument only).** Both audits use the parity harness's host model, unchanged: the gallery editor's browser registry and its font gate
+(`ensureLazyFonts` and `ensureScripts` on the value's own document, the same package files) from `parity/scripts/font-host.mjs`, then the FF-38 fontResolution
+verdict per selected family and the strict measured render with that registry, now in `parity/scripts/font-availability.mjs` (shared with `parity.mjs`, whose results are
+byte-identical before and after the extraction). Audit B classifies font schemes, themes and languages from that verdict, and adds a host probe to the non-Latin
+text sample and to each language's native name. A family that resolves to its policy route (metric or visual-only) while the PPTX names the selected family is not a
+reason. A reason remains only when the family has no policy row, the host has no face or draws an unrouted fallback (Roboto for Raleway), the PPTX writes the
+replacement name or does not name the selected family, or the host cannot draw the value (missing glyph or face, `font-shaping-failed`). Audit A's font probe asks the same
+host and, for the first time, makes a value `partial` when the host cannot draw it (none is). No tolerance, export, re-import, geometry, text, colour or `ea`/`cs` check
+changes, and audit A's primary render is still the engine default measurement. `AUDIT_FONT_HOST=strict` classifies from the strict measurements instead and reproduces
+the earlier classes and reasons exactly on the same heads (271 audit B and 548 audit A values, no difference); `office-only` (no script faces) is a negative control.
+See [gallery-support/README.md](gallery-support/README.md) for the run commands and `font-availability.test.mjs` for the rules.
+
+**Measured four ways** (audit B, published packages; `works` and the value counts carrying a font-availability reason):
+
+| | before: committed results (strict; core `aedd364`, opf-render 0.11.3, opf-pptx 0.11.2, pptx-gallery `b2238ac`) | strict, on the new heads (core `3e1cbf0`, opf-render 0.11.4, opf-pptx 0.11.3, pptx-gallery `59ff36c`) | gallery host, on the old heads | gallery host, on the new heads (committed) |
+| --- | --- | --- | --- | --- |
+| **Themes `works`** | 0 of 4 | 0 of 4 | 4 of 4 | **4 of 4** |
+| themes with a font reason (office-pack substitution) | 4 | 4 | 0 | 0 |
+| **Font schemes `works`** (93) | 0 | 0 | 0 | **0** (the ea/cs reason of FF-49 remains for all 93) |
+| font schemes with a font-availability reason | 92 | 92 | 3 | 0 |
+| ... "no bundled or substitute face: strict preview throws font-unavailable" | 61 | 59 | 0 | 0 |
+| ... "non-Latin textSample: strict font-unavailable" | 60 | 60 | 1 (host: font-shaping-failed, Noto Sans Mongolian) | 0 |
+| ... "preview needs office-pack substitution ... export writes <selected>" | 31 | 33 | 0 | 0 |
+| ... host reasons (a real gap; see below) | 0 | 0 | 3 (one also in the row above) | 0 |
+| **Languages `works`** (93) | 0 | 0 | 0 | **0** (the reason of FF-50 remains for all 93) |
+| languages with a font-availability reason | 93 | 93 | 0 | 0 |
+| ... "language font scheme X not bundled: strict preview" | 93 | 93 | 0 | 0 |
+| ... "bundled Roboto lacks the script (missing-glyph)" | 26 | 26 | 0 | 0 |
+| **Presence `works` overall** (819) | 427 | 427 | 431 | **431** |
+
+The renderer and exporter bump alone (second column) moves no presence class: it is FF-48 that moves the themes. What is left in font schemes and languages is exactly the work of
+FF-49 ("theme major/minor ea or cs typeface is empty": 93 font schemes, and the empty `cs` slot of 2 languages) and FF-50 ("engines do not derive the font scheme from language alone":
+93 languages). `pnpm report:works --reasons` shows no other reason in those dimensions.
+
+**Real failures stay real.** On the old heads the gallery host model still reported three gaps, each with its exact reason: `font-schemes/raleway` (host preview: "preview uses an unexpected
+fallback face for Raleway: Roboto (not the policy route)"), `font-schemes-legacy/classic-editorial` (the same for Playfair Display) and `font-schemes/noto-sans-mongolian` ("the modelled
+host cannot draw this value: font-shaping-failed (Noto Sans Mongolian), Not a fixed size", and the same for its non-Latin text sample). They are the three parity mismatches of the
+gallery-font-host run, and opf-render 0.11.4 (#68 bundles Raleway and Playfair Display, #69 lets Noto Sans Mongolian shape) clears them: on the new heads no value has a font-availability
+reason. With the `office-only` model (no script faces) 59 font schemes and 27 languages carry one again, so the host probes discriminate.
+
+**Policy-table rows behind the reasons removed.** The four themes (host preview under the gallery model; every one names the selected families in the PPTX):
+
+| theme | selected families | preview draws | policy row (`spec/reference/font-policy.json`) |
+| --- | --- | --- | --- |
+| `minimal` | Aptos Display, Aptos | Intos Display, Intos | `proprietary-standard`, replacement Intos Display and Intos, `metric` |
+| `classic` | Tenorite Display, Tenorite | Figtree | `proprietary-standard`, replacement Figtree, `visual` |
+| `dark` | Seaford Display, Seaford | Source Sans 3 | `proprietary-standard`, replacement Source Sans 3, `visual` |
+| `bold` | Impact, Grandview | Anton, Barlow | `proprietary-standard`, replacements Anton and Barlow, `visual` |
+
+Across the 93 font schemes the host tier (the worst over a scheme's selected families) is real for 33 (open or Noto families drawn as themselves), metric for 5 and visual-only for 55; each scheme's route is in the `gallery host preview` column
+of [audit-b/font-schemes.md](gallery-support/audit-b/font-schemes.md), and the languages' native-name verdicts are in the same column of [audit-b/languages.md](gallery-support/audit-b/languages.md). A visual-only route is `near` in the
+FF-38 perfect/near tiers (a separate measure) and `works` here.
+
+**Audit A.** The host draws all 548 values; no class changes (layouts 291 `works`, 124 `partial`, 70 `gallery-only`; the other four dimensions as before). The strict `loadOfficeFontRegistry()`
+probe that failed 8 values is now a diagnostic (`AUDIT_FONT_HOST=strict`); it never made a value `partial`.
+
+**Parity.** The same run scores 734 perfect, 113 near, 3 mismatch of 850 (was 729, 108, 13); see [PARITY-2026-09-30-renderer-0.11.4.md](gallery-support/parity/PARITY-2026-09-30-renderer-0.11.4.md).
+The audit B chart probe has no mark rule for the chartex kinds, so its "marks match" is vacuous for them; FF-56 defines the chartex checks.
+
 #### Gallery font host model (2026-09-30)
 
 The 86 fontResolution failures of the previous run ("the script faces the modelled preview does not load": 60 font schemes, 1 legacy scheme, 25 languages) came from the
@@ -358,13 +431,13 @@ FF-22b.
 | `radar` | works | radar (marks match) | radarChart, radarStyle standard, no markers | radar | near | near | pass |
 | `radar-with-markers` | works | radar-with-markers (marks match) | radarChart, radarStyle marker, markers | radar-with-markers | near | near | pass |
 | `filled-radar` | works | filled-radar (marks match) | radarChart, radarStyle filled, no markers | filled-radar | near | near | pass |
-| `treemap` | partial | legacy sketch | barChart, barDir col, grouping clustered (chartex-fallback) | column | mismatch | fail | pass |
-| `histogram` | partial | legacy sketch | barChart, barDir col, grouping clustered (chartex-fallback) | column | mismatch | fail | pass |
-| `pareto` | partial | legacy sketch | barChart, barDir col, grouping clustered (chartex-fallback) | column | mismatch | fail | pass |
-| `world` | partial | legacy sketch | barChart, barDir col, grouping clustered (chartex-fallback) | column | mismatch | fail | pass |
-| `box-and-whisker` | partial | legacy sketch | barChart, barDir col, grouping clustered (chartex-fallback) | column | mismatch | fail | pass |
-| `waterfall` | partial | legacy sketch | barChart, barDir col, grouping clustered (chartex-fallback) | column | mismatch | fail | pass |
-| `funnel` | partial | legacy sketch | barChart, barDir col, grouping clustered (chartex-fallback) | column | mismatch | fail | pass |
+| `treemap` | partial | treemap (chartex preview; marks not counted) | barChart, barDir col, grouping clustered (chartex-fallback) | column | perfect | pass | pass |
+| `histogram` | partial | histogram (chartex preview; marks not counted) | barChart, barDir col, grouping clustered (chartex-fallback) | column | near | near | pass |
+| `pareto` | partial | pareto (chartex preview; marks not counted) | barChart, barDir col, grouping clustered (chartex-fallback) | column | near | near | pass |
+| `world` | partial | world (chartex preview; marks not counted) | barChart, barDir col, grouping clustered (chartex-fallback) | column | perfect | pass | pass |
+| `box-and-whisker` | partial | box-and-whisker (chartex preview; marks not counted) | barChart, barDir col, grouping clustered (chartex-fallback) | column | near | near | pass |
+| `waterfall` | partial | waterfall (chartex preview; marks not counted) | barChart, barDir col, grouping clustered (chartex-fallback) | column | near | near | pass |
+| `funnel` | partial | funnel (chartex preview; marks not counted) | barChart, barDir col, grouping clustered (chartex-fallback) | column | perfect | pass | pass |
 
 **Owner defaults, recorded as "owner default 2026-09-30".**
 
@@ -698,8 +771,8 @@ preview shows the value while the export has no native equivalent.
 
 ## Summary
 
-Presence: 819 values measured across 14 dimensions (the 26 charts joined the presence audits on 2026-09-30). 427 values are
-`works` on the September 30 published set (379 of 793 on September 29, 352 at the September 23 heads, 7 at the first measurement). Parity: 707 of 850
+Presence: 819 values measured across 14 dimensions (the 26 charts joined the presence audits on 2026-09-30). 431 values are
+`works` on the September 30 published set with opf-render 0.11.4 (427 on the same heads under the strict no-host font model, 427 on the earlier September 30 heads, 379 of 793 on September 29, 352 at the September 23 heads, 7 at the first measurement). Parity: 734 of 850
 perfect on the same heads. The "What actually works" column keeps the first
 measurement's wording unless marked "Now".
 
@@ -707,12 +780,12 @@ measurement's wording unless marked "Now".
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [Layouts](#layouts) | 485 | 291 | 124 | 0 | 0 | 70 | 0 | 483/485 (+2 near) | Snippets validate, preview and export. Only 30 layouts are in the core catalog. Now: re-import keeps design and emits specific diagnostics (FF-32), and `title-center` and `title-center-box` now agree between preview and export, so 291 are `works`. |
 | [Color schemes](#color-schemes) | 14 | 14 | 0 | 0 | 0 | 0 | 0 | 14/14 | Now (2026-09-30): all 14 are `works`. The theme `clrScheme` matches 12/12 and slide colours are `a:schemeClr` references (opf-pptx 0.11.2, FF-24b); preview and export colours agree slide by slide. |
-| [Font schemes](#font-schemes) | 93 | 0 | 93 | 0 | 0 | 0 | 0 | 14/93 | Export without a font registry writes the chosen heading/body families for all 93. Now: 14 are perfect by parity (11 of 89 upstream and 3 of 4 legacy); the rest are near (visual-only look-alikes) or fail font resolution for script faces the modelled preview does not load. |
-| [Languages](#languages) | 93 | 0 | 93 | 0 | 0 | 0 | 0 | 66/93 | Now: slide runs carry the catalog `ooxmlLang` (93/93), right-to-left text exports `rtl` and previews right-to-left (6/6), and re-import keeps the language (93/93). `partial` on font availability and engine font-scheme derivation. Parity: 66 perfect, 2 near and 25 that fail only font resolution. |
+| [Font schemes](#font-schemes) | 93 | 0 | 93 | 0 | 0 | 0 | 0 | 38/93 (+55 near) | Export without a font registry writes the chosen heading/body families for all 93. Now (FF-48, 2026-09-30): the modelled gallery host draws every one (the family itself, or a policy look-alike with the PPTX naming the selected family), so no font-availability reason remains; all 93 are `partial` on one reason, the empty theme `ea`/`cs` typefaces (FF-49). Parity: 38 perfect (35 of 89 upstream and 3 of 4 legacy), 55 near (visual-only look-alikes), none mismatched. |
+| [Languages](#languages) | 93 | 0 | 93 | 0 | 0 | 0 | 0 | 66/93 | Now: slide runs carry the catalog `ooxmlLang` (93/93), right-to-left text exports `rtl` and previews right-to-left (6/6), and re-import keeps the language (93/93). `partial` on engine font-scheme derivation (FF-50) and, for two languages, the empty `cs` theme typeface (FF-49); since FF-48 the modelled gallery host draws all 93 native names, so no font-availability reason remains. Parity: 66 perfect and 27 near (a proprietary script font drawn with its Noto replacement). |
 | [Backgrounds](#backgrounds) | 6 | 6 | 0 | 0 | 0 | 0 | 0 | 6/6 | Solid and gradient work end to end. Now: all 6 are `works`: the three pattern slugs are distinct native `pattFill` presets and `photography` carries its own asset (pptx-gallery#43). |
 | [Narratives](#narratives) | 10 | 10 | 0 | 0 | 0 | 0 | 0 | 10/10 | Now: every id resolves in core (FF-28). `works` only because the exporter-written `ppt/tags/opfDocument.xml` part changes; the preview is identical when the field is removed. |
-| [Charts](#charts) | 26 | 19 | 7 | 0 | 0 | 0 | 0 | 5/26 (+14 near) | Now (2026-09-30): the 19 classic types preview the catalog construct, export the native construct core records and re-import to the same id (`works`); the 7 chartex types (treemap, histogram, pareto, world, box-and-whisker, waterfall, funnel) preview a legacy sketch and export a clustered column chart with `chart-data-adapted` (`partial`). Parity: 5 perfect, 14 near (native chart labels), 7 mismatch (chartex). Per type in [Charts](#charts). |
-| [Themes](#themes) | 4 | 0 | 4 | 0 | 0 | 0 | 0 | 1/4 | Background and fonts apply in preview and export. Now: background and colours resolve through the theme and agree with the preview; `partial` on literal scheme colours and font availability. |
+| [Charts](#charts) | 26 | 19 | 7 | 0 | 0 | 0 | 0 | 8/26 (+18 near) | Now (2026-09-30): the 19 classic types preview the catalog construct, export the native construct core records and re-import to the same id (`works`); the 7 chartex types (treemap, histogram, pareto, world, box-and-whisker, waterfall, funnel) preview natively since opf-render 0.11.4 but still export a clustered column chart with `chart-data-adapted` and re-import as `column` (`partial`, FF-56). Parity: 8 perfect, 18 near (native chart labels), none mismatched. Per type in [Charts](#charts). |
+| [Themes](#themes) | 4 | 4 | 0 | 0 | 0 | 0 | 0 | 1/4 (+3 near) | Background and fonts apply in preview and export. Now: background and colours resolve through the theme and agree with the preview, and (FF-48, 2026-09-30) the modelled gallery host draws the fonts (Intos, Figtree, Source Sans 3, Barlow and Anton replace the licensed families in the preview, the PPTX names the selected ones), so all 4 are `works`. Parity: 1 perfect, 3 near (visual-only look-alikes). |
 | [Audiences](#audiences) | 14 | 14 | 0 | 0 | 0 | 0 | 0 | 14/14 | Now: every id resolves in core (FF-28). `works` only because `ppt/tags/opfDocument.xml` changes; the preview is identical. |
 | [Tones](#tones) | 7 | 7 | 0 | 0 | 0 | 0 | 0 | 7/7 | `works` only because `ppt/tags/opfDocument.xml` changes; the preview is identical. |
 | [Socials](#socials) | 10 | 10 | 0 | 0 | 0 | 0 | 0 | 10/10 | Now: all 10 are `works`. The snippet adds a footer with the organization and its profile URL (pptx-gallery#42), which renders in the preview, exports as a linked native run and re-imports (FF-34). Owner default 2026-09-30: icons are catalog metadata only (authoring); URLs render and link. |
@@ -751,7 +824,9 @@ parity scoreboard above by the size of its gap.
   registry to export until FF-31 lands.
 - **Preview.** Without a registry the SVG names the family and the host
   resolves it; in a browser that is the installed or web font, and on a
-  fontless server it is an unmeasured fallback. The strict bundled pack throws
+  fontless server it is an unmeasured fallback. The shipped host is the gallery editor's font gate, not a strict pack (FF-48): it draws all 93 font
+  schemes, all 93 languages' native names and the four themes, with a policy look-alike where the family is licensed. The strict readings that follow are diagnostics
+  (`AUDIT_FONT_HOST=strict`), not how any shipped host renders. The strict bundled pack throws
   `font-unavailable` for 92 of 93 font schemes (only `roboto` passes). Under
   `loadOfficeFontRegistry()`, 547 of the 548 audit A values throw
   `font-unavailable`, mostly because the default `aptos` scheme's
@@ -832,26 +907,27 @@ gallery inlines, not in the core catalog), all `partial`.
 - **Works.** Export without a registry writes the chosen major/minor families
   into the theme and runs, with no foreign typeface, for all 93.
 - **Doesn't.**
-  - Theme `ea`/`cs` are empty for all 93 (FF-07).
-  - Preview tier: bundled 1 (`roboto`); office-pack substitute 7 (`aptos`,
-    `calibri` to Carlito; `consolas`, `courier-new` to Cousine; `georgia` to
-    Gelasio; `tahoma` to Arimo; `times-new-roman` to Tinos); host-only 85
-    (strict preview throws `font-unavailable`; host-font preview is an
-    unmeasured fallback).
-  - 5 non-Latin schemes also fail their sample text under the strict pack.
-- **Preview vs export.** With the office pack and visual substitution, the
+  - Theme `ea`/`cs` are empty for all 93 (FF-07, FF-49). This is the only reason left (2026-09-30, FF-48).
+- **Preview (FF-48, 2026-09-30).** Font availability is decided against the modelled gallery host and the owner font policy
+  ([below](#audits-model-the-shipped-font-host-ff-48-2026-09-30)), not strict no-host previews. The host draws all 93 (opf-render 0.11.4):
+  33 with the families themselves (open or Noto families, including Raleway and Noto Sans Mongolian), 5 with a metric-compatible policy replacement
+  (`aptos` with Intos, `calibri` with Carlito, `courier-new` with Cousine, `georgia` with Gelasio, `times-new-roman` with Tinos) and 55 with a visual-only replacement, in each case
+  with the PPTX naming the selected family. Each scheme's route is in [audit-b/font-schemes.md](gallery-support/audit-b/font-schemes.md).
+  The strict readings (base pack throws `font-unavailable` for 92 of 93; 5 non-Latin schemes fail their sample text under it) are kept as diagnostics.
+- **Preview vs export.** With the office pack and visual substitution passed to `toPptx`, the
   preview renders the substitute and the export then writes it, so the chosen
-  family is lost (7 schemes plus the `minimal` theme). With the strict pack
-  both throw for 92 of 93. Without a registry, export always succeeds with the
-  chosen names.
+  family is lost (a diagnostic, not the shipped path; 7 schemes plus the `minimal` theme). Without a registry, export always succeeds with the
+  chosen names, and that is what the audit classifies.
 - **Re-import.** `fontScheme` is dropped silently.
 - **Fonts and licensing.** See [Fonts in every environment](#fonts-in-every-environment).
-- **Parity (FF-38).** 36 of 93 perfect, 54 near and 3 mismatch on the 2026-09-30
-  gallery-font-host run (was 14 perfect, 18 near, 61 mismatch). Font resolution:
+- **Parity (FF-38).** 38 of 93 perfect, 55 near and none mismatched on the 2026-09-30
+  renderer 0.11.4 run (36, 54 and 3 on the gallery-font-host run before it; 14, 18 and 61 before that).
+  The gallery-font-host run: Font resolution:
   the 22 schemes whose family is a pinned Noto face became perfect, 54 are near (36 of them newly: a
   proprietary script font drawn with its Noto replacement; the other 18 were near before), and 3 fail: `raleway` and the legacy
   `classic-editorial` (Playfair Display), which are not bundled, and `noto-sans-mongolian`, whose
-  face cannot shape text.
+  face cannot shape text. opf-render 0.11.4 bundles the first two and shapes the third: `raleway` and `noto-sans-mongolian` are perfect, and
+  `classic-editorial` is near (its Source Sans Pro body is a visual-only replacement).
 - **Fixes.** FF-31 (availability, substitution never rewrites export), FF-35
   (shared default), FF-07 and FF-08 (script slots, no leaked defaults), FF-17
   (code role), FF-32 (re-import).
@@ -886,27 +962,25 @@ resolves in core.
     appears in any export.
   - Re-import returns the language id for 93 of 93, and the font scheme with
     it.
+- **Font availability (FF-48, 2026-09-30).** Not a gap. Under the strict no-host previews the language's font scheme was "not bundled" for all 93 and 26 hit `missing-glyph`
+    on bundled Roboto (Amharic, Arabic, Armenian, the Indic scripts, CJK, Georgian, Hebrew, Khmer, Persian, Pashto, Thai, Urdu and others). The modelled gallery host loads the script
+    faces the native name needs (`ensureScripts` on the probe's own document) and draws all 93 native names; the 66 languages on `aptos` preview with Intos and the PPTX names Aptos
+    ([audit-b/languages.md](gallery-support/audit-b/languages.md), column `gallery host preview`). This was FF-31 and FF-19; the strict readings are diagnostics.
 - **Remaining gaps.**
-  - The language's font scheme is not bundled for any of the 93, so the strict
-    preview reports `font-unavailable`. The 66 languages on `aptos` preview
-    through the office pack (Aptos to Carlito). The other 27 fail both packs;
-    26 of them also hit `missing-glyph` on bundled Roboto (Amharic, Arabic,
-    Armenian, the Indic scripts, CJK, Georgian, Hebrew, Khmer, Persian, Pashto,
-    Thai, Urdu and others). This is FF-31 and FF-19.
   - Theme `ea`/`cs` stay empty for 69 languages: the 66 on `aptos`, plus
     Amharic (Nyala), Armenian and Georgian (Sylfaen). Whether those empty
     values are allowed depends on FF-05. Amharic and Georgian native text uses
     the `cs` slot, so audit B records it as a reason for those two.
   - The engines do not yet derive the font scheme from `language` alone
     (`engineAppliesLanguageFontScheme` false for all 93). The visible font
-    comes from the `design.fontScheme` that the gallery snippet injects.
+    comes from the `design.fontScheme` that the gallery snippet injects (FF-50).
 - **Native finding (FF-04, not yet a merged evidence bundle).** PowerPoint's
   `Presentation.Fonts` for an unedited exporter deck lists a nameless font and
   `Aptos` at open. Filling theme major/minor `ea`/`cs` (Carlito) did not change
   that list, so the empty script slots are not the source of the at-open
   `Aptos` (FF-05 continues).
 - **Parity (FF-38).** 66 of 93 perfect, 27 near and none mismatched on the 2026-09-30
-  gallery-font-host run (was 66, 2, 25). Geometry, text, fills, z-order,
+  gallery-font-host run and again on the renderer 0.11.4 run (was 66, 2, 25). Geometry, text, fills, z-order,
   typefaces, re-import, theme and mapping pass for all 93. The 25 languages whose
   scheme is a proprietary script font are near: the editor's font gate loads the
   Noto replacement, a visual tier.
@@ -965,14 +1039,14 @@ supports:
 - **Gallery half, merged.** [pptx-gallery#40](https://github.com/Data-Advantage/pptx-gallery/pull/40) (`23f9216`) reduces
   `data/charts.json` from 76 to the same 26 types; `b2238ac` (pptx-gallery#63) gives the snippets category-major data.
 - **Engines.** opf-render 0.11.3 previews the 19 classic constructs natively
-  (`data-opf-chart` on the chart group); opf-pptx 0.11.2 exports them as native
+  (`data-opf-chart` on the chart group); opf-render 0.11.4 also previews the seven chartex ids natively (#66); opf-pptx 0.11.2 exports the classic ones as native
   constructs and reports the seven chartex ids as a `chart-data-adapted`
-  fallback.
+  fallback (opf-pptx 0.11.3 adds an opt-in native chartex export, FF-22b; the default is unchanged, FF-56).
 - **Follow-up.** FF-22b covers native `chartex` export and renderer coverage for
   the seven chartex types, and a native PowerPoint check of the classic constructs.
 
-Measured on the September 30 published set (core `aedd364`, opf-render `a66caa3`, opf-pptx `0400434`, pptx-gallery `b2238ac`) by audit B (pipeline)
-and the parity audit, per type:
+Measured on the September 30 published set with opf-render 0.11.4 (core `3e1cbf0`, opf-render `1a724a6`, opf-pptx `ecdbb42`, pptx-gallery `59ff36c`) by audit B (pipeline)
+and the parity audit, per type (the seven chartex rows are the only ones that changed from the earlier September 30 run on opf-render 0.11.3, `a66caa3`: their preview and parity):
 
 | Gallery chart | Pipeline | Preview | Export | Re-import | Parity | text | fills |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -1009,15 +1083,15 @@ and the parity audit, per type:
   one polyline per line series and one circle per point with markers; one area or radar path per series; one slice per positive pie or doughnut value; one circle per scatter
   point). The export has one chart part whose element, `barDir`, `grouping`, marker, `radarStyle` and `scatterStyle` equal core's `mappings.openxml` for the id, the
   series values and labels equal the source data, the workbook is embedded and no diagnostic is reported. `fromPptx` returns the same id and data.
-- **Partial (7): the chartex ids** `treemap`, `histogram`, `pareto`, `world`, `box-and-whisker`, `waterfall`, `funnel`. The preview keeps the legacy single-series
-  sketch (opf-render draws no chartex construct), the export writes a clustered column chart of the data and reports `chart-data-adapted` (`chartex-fallback`), and
-  re-import returns `column`. The data is not lost, but the chart the id names is neither previewed nor exported. Not `preview-only`: the preview does not draw the
-  construct either.
+- **Partial (7): the chartex ids** `treemap`, `histogram`, `pareto`, `world`, `box-and-whisker`, `waterfall`, `funnel`. Since opf-render 0.11.4 (#66) the preview draws each natively (`data-opf-chart` equals the id; the audit's mark-count rule has no chartex kind, so
+  the marks are not counted for these seven). The export still writes a clustered column chart of the data and reports `chart-data-adapted` (`chartex-fallback`), and
+  re-import returns `column`. The data is not lost, but the chart the id names is not exported (FF-56 flips the default to the native chartex export after the native PowerPoint check).
 
-**Parity (FF-38): 5 perfect, 14 near, 7 mismatch of 26** (September 29: 0, 0, 26). Geometry, fills, z-order, slide size, typefaces (FF-08), re-import, theme, font
+**Parity (FF-38): 8 perfect, 18 near, none mismatched of 26** (the earlier September 30 run on opf-render 0.11.3: 5, 14, 7; September 29: 0, 0, 26). Geometry, fills, z-order, slide size, typefaces (FF-08), re-import, theme, font
 resolution and mapping pass for all 26. The five perfect charts are `100pct-stacked-column-3x`, `100pct-stacked-bar-3x`, `100pct-stacked-area-3x`, `pie` and `doughnut`. The other 14
-classic charts are near for one reason: a native chart lays out its own labels, so a label the preview wraps is one line in the chart cache. The 7 chartex charts
-fail text: the legacy sketch's labels ("Q1 2024", ...) are not in the exported column chart's caches.
+classic charts are near for one reason: a native chart lays out its own labels, so a label the preview wraps is one line in the chart cache. The chartex charts
+failed text on opf-render 0.11.3 (the legacy sketch's labels, "Q1 2024", ..., were not in the exported column chart's caches). With the native chartex preview `treemap`, `world` and `funnel` are perfect, and
+`histogram`, `pareto`, `box-and-whisker` and `waterfall` are near for the same native-label wrapping as the classic charts.
 
 **The harness change (2026-09-30).** Series colours are compared as each construct paints them: a line-kind series (line, stacked line, radar, radar with markers) on its
 stroke, a pie or doughnut on its slice fills with the 0.75 pt `F9F9F9` slice border that PptxGenJS writes not counted as a series colour, every other series on its
@@ -1028,7 +1102,7 @@ reduction, FF-08 and the native classic constructs.
 
 ## Themes
 
-4 values, all `partial`. Every id resolves in core.
+4 values, all `works` since FF-48 (2026-09-30; `partial` before, on font availability under the strict model). Every id resolves in core.
 
 - **Works.** Background and fonts apply in preview and export, and a
   theme-only document applies the bundle: `minimal` `011842` with Aptos
@@ -1047,6 +1121,8 @@ reduction, FF-08 and the native classic constructs.
   not bundled (`minimal` previews through Carlito). Re-import returns the
   theme id for 4 of 4.
 - **Now (audit B, 2026-09-30).** Still `partial` 4, and the colour reasons are gone (opf-pptx 0.11.2 writes `a:schemeClr`); the fonts that are not bundled remain.
+- **Now (audit B, FF-48, 2026-09-30).** `works` 4. The fonts are not a gap: the modelled gallery host draws the policy replacements (Intos, Figtree, Source Sans 3, Anton and Barlow) and the PPTX
+  names the selected families; the policy rows are in [the FF-48 section](#audits-model-the-shipped-font-host-ff-48-2026-09-30).
 - **Parity (FF-38).** 1 of 4 perfect and 3 near (visual-only fonts) on the September 30 published set.
 - **Fixes.** FF-24, FF-31, FF-32.
 

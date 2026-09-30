@@ -68,6 +68,7 @@ this layout (any `<workspace>` directory):
   sources/audit-B-opf-editor/
   dimension-audit/A/               copy of audit-a/
   dimension-audit/B/               copy of audit-b/
+  dimension-audit/parity/          copy of parity/ (audits A and B import its font-host.mjs and font-availability.mjs)
 ```
 
 Node 24 and pnpm (for core) are required. No Office or COM is used. From a
@@ -96,6 +97,7 @@ done
 mkdir -p "$W/dimension-audit"
 cp -r "$OPF/docs/programs/font-fidelity-everywhere/gallery-support/audit-a" "$W/dimension-audit/A"
 cp -r "$OPF/docs/programs/font-fidelity-everywhere/gallery-support/audit-b" "$W/dimension-audit/B"
+cp -r "$OPF/docs/programs/font-fidelity-everywhere/gallery-support/parity" "$W/dimension-audit/parity"
 export GALLERY_DIR="$W/pptx-gallery"
 
 # Audit A: writes results.json, then SUMMARY.md. ONLY=layouts,blocks and LIMIT=n narrow a run (a narrowed run writes
@@ -208,6 +210,31 @@ regenerate `support-status.json`, and update the headline in
   tolerance changed and every check other than fontResolution is identical under all three models. The run is
   `parity-results-2026-09-30-gallery-font-host.json` (report: [PARITY-2026-09-30-gallery-font-host.md](parity/PARITY-2026-09-30-gallery-font-host.md)).
   `node --test scripts/font-host.test.mjs` covers the model names.
+- **Audits A and B model the shipped font host (FF-48, 2026-09-30).** Before this change the presence audits classified font
+  availability against strict no-host previews: audit B rendered each value with no registry, with the strict bundled base pack
+  and with the office pack, and called a value `partial` when the base pack could not draw it ("no bundled or substitute face:
+  strict preview throws font-unavailable", "non-Latin textSample: strict font-unavailable", "language font scheme X not bundled",
+  "bundled Roboto lacks the script") or when the office pack drew a replacement ("preview needs office-pack substitution ...
+  export writes <selected>"). No shipped host renders like that, and under the owner font policy (2026-09-29, README
+  "The font policy defines `works`") a preview that draws the FF-31 policy table's look-alike while the PPTX names the family
+  the user selected is correct. The audits now use the parity harness's host model, unchanged: `parity/scripts/font-host.mjs`
+  (`gallery` by default: the editor's browser registry and font gate, `ensureLazyFonts` and `ensureScripts` on the value's own
+  document, the same package files) and `parity/scripts/font-availability.mjs` (the per-family verdict of
+  `font-resolution.mjs`, the strict measured render with the host registry, the preview's script slots; `parity.mjs` uses the
+  same functions and its results are byte-identical before and after the extraction). Audit B records the host's verdict per
+  value (`measure.hostFonts`, the `host` field of the non-Latin text sample and of the native-name probe of each language) and
+  classifies from it: a family that resolves to its policy route (metric or visual-only) with the PPTX naming the selected family
+  is `works`; only a `fail` verdict is a reason (no policy row, no face, an unrouted fallback such as Roboto for Raleway, a PPTX
+  that writes the replacement or does not name the selected family) or a host that cannot draw the value (a missing glyph or
+  face, `font-shaping-failed`). Audit A's font probe (`checks.fontRegistry`, which never made a value `partial`) now
+  asks the same host and, for the first time, makes a value `partial` when the host cannot draw it; no value did. The
+  export, re-import, geometry, text, colour and `ea`/`cs` checks and every tolerance are unchanged, and audit A's primary render
+  is still the engine default measurement. `AUDIT_FONT_HOST` selects the model (`gallery` default, `node-auto`, `office-only`,
+  or `strict`, the pre-FF-48 behaviour, kept as a diagnostic: it reproduces the earlier classes and reasons exactly on the same
+  heads). `results.json` records the model (`fontHost`) and `support-status.json` carries it as `audits.<a|b|parity>.fontHost`.
+  `node --test scripts/font-availability.test.mjs` (in `parity/`) covers the policy rules: a replacement with the selected name
+  passes, and an unrouted fallback, a missing face, a written replacement name and a family with no policy row still fail.
+
 - **Table frames (FF-39, 2026-09-29).** A PPTX table frame is compared with the
   preview's drawn table (`scripts/table-box.mjs`: the union of the table's cell
   rectangles), not with the composed allocation box, because PowerPoint derives a
@@ -352,7 +379,7 @@ Schema version 1. Top level:
 | `sectionAnchors` | `{dimension: anchor}` for the per-dimension sections of `gallery-support.md`; see the map below. |
 | `statuses` | The allowed `status` values: `works`, `partial`, `schema-only`, `authoring-metadata`, `broken`, `gallery-only`. |
 | `parityStatuses` | The allowed `parity.status` values: `perfect`, `near`, `mismatch`. |
-| `audits` | Per audit (`a`, `b`, `parity`): measured dimensions or checks, `heads` (7-character commits plus Node) and the source results file. `parity` also records tolerances, the record count (850), `withAssetsRecords` (31) and `parityOnlyValues` (0). |
+| `audits` | Per audit (`a`, `b`, `parity`): measured dimensions or checks, `heads` (7-character commits plus Node), the source results file and `fontHost` (the preview font host model the audit classified against: `gallery`, or `strict` for the results before FF-48). `parity` also records tolerances, the record count (850), `withAssetsRecords` (31) and `parityOnlyValues` (0). |
 | `notMeasured` | Dimensions without a presence status. Empty since 2026-09-30 (audit B probes the charts); the field stays for consumers. |
 | `sharedExportGaps` | Gaps that apply to every exported value. |
 | `counts` | Presence: `{dimension: {status: n}}`. |
