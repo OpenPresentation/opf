@@ -1,15 +1,15 @@
 # Browser preview and live editing
 
-Published editor 0.10.1 provides an embeddable SVG canvas in `@openpresentation/opf-editor/canvas`. OPF JSON remains the document; the canvas writes validated JSON Patch operations through an `EditorSession`. Draft edits render with the same SVG engine used for standalone previews. Completed edits produce one undoable change.
+Published editor 0.10.2 provides an embeddable SVG canvas in `@openpresentation/opf-editor/canvas`. OPF JSON remains the document; the canvas writes validated JSON Patch operations through an `EditorSession`. Draft edits render with the same SVG engine used for standalone previews. Completed edits produce one undoable change.
 
 The published canvas covers the interactions below; complete PowerPoint feature coverage remains separate work. “Pixel perfect” is a fidelity target with specific prerequisites and remaining gaps described below.
 
 ## Install the published packages
 
-Use Node 24 with core 0.11.2, renderer 0.11.2, editor 0.10.1 and PPTX 0.11.1:
+Use Node 24 with core 0.11.2, renderer 0.11.2, editor 0.10.2 and PPTX 0.11.1:
 
 ```sh
-npm install --save-exact @openpresentation/opf@0.11.2 @openpresentation/opf-render@0.11.2 @openpresentation/opf-editor@0.10.1 @openpresentation/opf-pptx@0.11.1
+npm install --save-exact @openpresentation/opf@0.11.2 @openpresentation/opf-render@0.11.2 @openpresentation/opf-editor@0.10.2 @openpresentation/opf-pptx@0.11.1
 ```
 
 No paid service or provider account is required. The six agent skills install with `npx @openpresentation/cli@0.9.0 skills install`. See the [quickstart](quickstart.md) for an installed-package workflow and the [compatibility matrix](compatibility-matrix.md) for separately scoped browser and native evidence.
@@ -54,7 +54,7 @@ const fonts = await loadBrowserFontRegistry([
 const canvas = createCanvasEditor(document.querySelector('#slide'), {
   document: {
     design: { theme: 'classic', fontScheme: 'roboto' },
-    slides: [{ title: 'An editable presentation', text: 'Double-click to edit.' }],
+    slides: [{ title: 'An editable presentation', text: 'Click to edit.' }],
   },
   renderOptions: { textMeasurement: fonts.textMeasurement },
   onCommit: ({ editor }) => {
@@ -92,7 +92,7 @@ The explicit `/svg` entry is browser safe. Browser-aware bundlers also select it
 
 | Content or action | Current behavior |
 | --- | --- |
-| Titles, subtitles, plain text, simple numeric values | Double-click or focus and press Enter/Space to edit on the slide. |
+| Titles, subtitles, plain text, simple numeric values | One click enters editing with the caret at the clicked character (editor 0.10.2); press-drag selects a range; while editing, double-click selects a word and triple-click a paragraph. Focus a target and press Enter, Space or F2 to edit with all text selected. See *Text entry gestures* below. |
 | Table headers and string/number cells | Inline editing; numeric cells keep their numeric type. |
 | Lists, charts, metrics, quotes, code, timelines, rich text payloads | Select the object and edit its existing scalar fields in a floating form; valid drafts render immediately. |
 | Images | Edit source/alt fields; replace with a local PNG/JPEG/GIF/WebP file up to 20 MB. External sources still require a host image resolver. |
@@ -102,7 +102,15 @@ The explicit `/svg` entry is browser safe. Browser-aware bundlers also select it
 | Changes elsewhere | Unrelated edits are preserved; a changed selected payload cancels the stale local draft instead of overwriting it. This is conflict protection, not a distributed collaboration protocol. |
 | JSON editing | The demo Source view previews valid JSON beside the source; Apply records the document replacement. Invalid drafts retain the last valid preview. |
 
-`createCanvasEditor` accepts an existing `editor` session or a `document`, plus `slideIndex`, `renderOptions`, an optional empty `propertiesContainer` to dock forms outside the slide, and callbacks `onSelect`, `onDraft`, `onCommit`, `onCancel`, `onRender`, and `onError`. The returned object exposes `editor`, `ready`, `select`, `beginEdit`, `editProperties`, `commit`, `cancel`, `setSlide`, `setRenderOptions`, `setLayoutEditing`, `render`, and `destroy`. `commit()` and setters return false if a draft cannot be committed. Avoid using public `render(document)` as a second source of truth; normal document changes should flow through the session.
+`createCanvasEditor` accepts an existing `editor` session or a `document`, plus `slideIndex`, `renderOptions`, `textEntry` (`'click'` by default, or `'dblclick'`), an optional empty `propertiesContainer` to dock forms outside the slide, and callbacks `onSelect`, `onDraft`, `onCommit`, `onCancel`, `onRender`, and `onError`. The returned object exposes `editor`, `ready`, `select`, `beginEdit`, `editProperties`, `commit`, `cancel`, `setSlide`, `setRenderOptions`, `setLayoutEditing`, `render`, and `destroy`. `commit()` and setters return false if a draft cannot be committed. Avoid using public `render(document)` as a second source of truth; normal document changes should flow through the session.
+
+## Text entry gestures
+
+Editor 0.10.2 follows the PowerPoint and Google Slides convention. Hover outlines a text target. A single press (mouse, pen, or a touch tap) on editable text selects the box, starts inline editing and puts the caret at the nearest character boundary to the pointer, including in wrapped, multi-line, centered, right-aligned, right-to-left and CJK text. Press and drag selects the range from the press point to the release point and never moves the box. While editing, a native double-click selects a word, a triple-click a line or paragraph, and a click elsewhere moves the caret. Clicking a different text target commits the current edit (an invalid edit still refuses) and enters the new target in the same click. Rich text uses the same gestures through its own pointer mapping.
+
+Keyboard entry keeps the replace convention: focus a target and press Enter, Space or F2 to edit with **all** text selected; `canvas.beginEdit(path)` does the same. Escape leaves editing and keeps the box selected. Images, video, charts and other non-text targets are unchanged: a click selects and a double-click opens their properties. Layout handles and block controls keep their own pointer handling.
+
+`createCanvasEditor(container, { textEntry: 'dblclick' })` keeps the older two-step gesture (a click selects, a double-click enters), but the double-click now places the caret at the pointer instead of selecting everything. Tests and hosts that used `dblclick()` and then relied on all text being selected should enter with the keyboard (focus the target, press Enter) or select explicitly; on the default canvas `dblclick()` now places the caret and selects the word under it. Carets are resolved from the traced SVG glyphs (each rendered line carries its source range) and converted to offsets in the input value, so CRLF sources, tabs and wrapped whitespace map exactly; real operating-system IME and bidi caret behavior are not verified.
 
 ## Fidelity contract and remaining work
 
