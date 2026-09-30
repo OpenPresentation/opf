@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.11.8
+
+- Release 0.11.8 (patch: the slide tag's colour; no API change, no option removed, core floor stays `@openpresentation/opf` ^0.11.3). Everything since 0.11.7 (`git log 0f647ca..main`): only FF-59 (#79). The slide `tag` (the eyebrow label) now draws in the scheme primary colour, as opf-pptx writes it (PPTX 0.11.5 writes it as `a:schemeClr accent1`), instead of the text colour: 95 of the 805 corpus slides change, each only in the fill of its tag text. SVG, PNG and PDF output of slides with a tag changes; the raster baselines are regenerated. No vendored face is added (`registry.lazyFonts` lists 94). Details in the entry below.
+
 - FF-59: the slide `tag` (the eyebrow label) draws in the scheme primary colour (accent1 unless the scheme names a `primary`), not the text colour, as opf-pptx has always written it (the PPTX run was accent, the preview was text: the last three content-block parity mismatches). Title, subtitle and body keep the text colour. 95 of the 805 corpus slides change, each only in the fill of its tag text; raster baselines regenerated.
 
 ## 0.11.7
