@@ -69,6 +69,15 @@ export declare function loadBrowserFontRegistry(
     /** Where the host serves this package's `fonts` directory, so vendored faces (Intos, the open families) load on demand from `<base>/<package-relative file>` (fonts/intos/..., fonts/<family>/...). */
     lazyFontsBaseUrl?: string;
     /**
+     * FF-41: faces the host serves itself, loaded on demand like the vendored ones: hash-verified, all or nothing, in the same
+     * `lazyFacesNeeded` pass (a document that draws a vendored and an extra face fetches both in one `ensureLazyFonts`), removed
+     * by `dispose()`. They appear in `registry.lazyFonts` with `package: "host"`. Typically the faces of a manifest that
+     * `splitStartupFaces` left out of the startup set. Like the vendored faces they are `embed: "used"`: not in `registry.embeddedFonts` (only the startup faces are);
+     * pass `registry.selectEmbeddedFonts(...)` to embed them in a standalone SVG, and then only when a slide's text uses their family.
+     * A missing or malformed `sha256`, a duplicate `url` or an invalid family throws `invalid-font-source`.
+     */
+    extraLazyFonts?: readonly ExtraLazyFont[];
+    /**
      * FF-41: the `renderSvg` options the documents resolve with (`catalogs` above all), the default for `pendingLazyFonts`,
      * `ensureLazyFonts`, `pendingScripts` and `ensureScripts`. A layout or font scheme id that only the host's catalogs have
      * resolves the same way here as it does when the host renders. A call's own options win.
@@ -85,7 +94,15 @@ export declare function scriptFontEntries(
 /** Every vendored face of this package: family, style, package-relative file, sha256. */
 export declare function lazyFontList(): readonly LazyFont[];
 /** Hash-pinned browser entries for the vendored faces, served by the host from `baseUrl` at their package-relative paths. */
-export declare function lazyFontEntries(options: { baseUrl: string }, list?: readonly LazyFont[]): (BrowserFontInput & { url: string; family: string; weight: number; italic: boolean; sha256: string; package: string })[];
+export declare function lazyFontEntries(options: { baseUrl?: string }, list?: readonly LazyFont[]): (BrowserFontInput & { url: string; family: string; weight: number; italic: boolean; sha256: string; package: string })[];
+/** A face the host serves itself and loads on demand (FF-41): `sha256` is mandatory, the registry verifies the bytes before use. */
+export interface ExtraLazyFont { family: string; weight: number; italic?: boolean; url: string; sha256: string; license?: string }
+/**
+ * Split faces (a host's manifest, `registry.embeddedFonts`) into the ones a registry starts with and the rest, to pass as
+ * `extraLazyFonts`. The default startup set is Roboto Regular (the renderer's fallback family); `startup` chooses other faces, for
+ * example the ones `presentationFaces` says the first deck draws. Order is kept.
+ */
+export declare function splitStartupFaces<T extends { family: string; weight: number; italic?: boolean }>(faces: readonly T[], options?: { startup?: (face: T) => boolean }): { startup: T[]; rest: T[] };
 /**
  * The font families a presentation's slides resolve (heading, body and code roles of every slide). `options` are the
  * `renderSvg` options the document resolves with (`catalogs`, ...). A document that does not resolve throws what `renderSvg`

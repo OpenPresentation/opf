@@ -1,9 +1,9 @@
 import { createFontRegistry, OPFFontError } from "./fonts.js";
-import { lazyFontEntries, lazyFontList } from "./lazy-font-list.js";
+import { lazyFontEntries, lazyFontList, normalizeExtraLazyFonts } from "./lazy-font-list.js";
 import { lazyFacesNeeded } from "./lazy-fonts.js";
 import { analyzePresentationScripts, nextFallbackPackage, scriptFontPackages, scriptPackageEntries, scriptSelectionOf, uncoveredCjkCharacters } from "./script-font-pack.js";
 export { autoScriptSelection, detectPresentationScripts, scriptFontEntries, scriptFontPackages } from "./script-font-pack.js";
-export { lazyFontEntries, lazyFontList } from "./lazy-font-list.js";
+export { lazyFontEntries, lazyFontList, splitStartupFaces } from "./lazy-font-list.js";
 export { lazyFacesNeeded, lazyFontsFor, presentationFaces, presentationFamilies } from "./lazy-fonts.js";
 
 async function verifyDigest(entry, data, subtle) {
@@ -22,6 +22,8 @@ async function verifyDigest(entry, data, subtle) {
 
 /** Fetch only host-selected font files, then use those exact bytes for shaping and CSS. */
 export async function loadBrowserFontRegistry(entries, options = {}) {
+  // Validate the host's extra faces first: a bad list must not leave startup faces registered in the document with no registry to dispose.
+  const extraLazy = normalizeExtraLazyFonts(options.extraLazyFonts);
   const documentRef = options.document ?? globalThis.document;
   const FontFaceRef = documentRef?.defaultView?.FontFace ?? globalThis.FontFace;
   if (!documentRef?.fonts || !FontFaceRef)
@@ -182,7 +184,9 @@ export async function loadBrowserFontRegistry(entries, options = {}) {
   // FF-31: vendored faces (the open families and Intos) load on demand, once a document needs them. They share the
   // script loader's queue and disposed state, and the same all-or-nothing order: fetch and verify, load every FontFace,
   // then add them to the document and the registry together.
-  const lazy = lazyFontList(), lazyLoaded = new Set();
+  // FF-41: the host's extra lazy faces (`options.extraLazyFonts`, validated above) load like the vendored ones, from their own urls,
+  // hash-verified, in the same `lazyFacesNeeded` pass, so a document that draws both fetches both in one call.
+  const lazy = Object.freeze([...lazyFontList(), ...extraLazy]), lazyLoaded = new Set();
   const policy = options.substitutionPolicy ?? "none";
   const aliasTargets = new Map(Object.entries(options.aliases ?? {}).map(([from, to]) => [from.toLowerCase(), to]));
   // Face level (FF-41): the faces the document draws, resolved as the registry resolves them with every vendored face loaded.
@@ -194,7 +198,7 @@ export async function loadBrowserFontRegistry(entries, options = {}) {
     return options.lazyFontsBaseUrl;
   };
   Object.assign(registry, {
-    /** Every vendored face a host can load on demand: family, style, package-relative file and pinned sha256. */
+    /** Every face a host can load on demand: the vendored ones (family, style, package-relative file, pinned sha256) and the host's `extraLazyFonts` (`package: "host"`, `file` and `url` the url it serves them from). */
     lazyFonts: lazy,
     /**
      * Load the vendored faces the presentation draws (FF-41: only the faces, by family, weight and style, that the renderer
@@ -211,7 +215,9 @@ export async function loadBrowserFontRegistry(entries, options = {}) {
         callOptions.signal?.throwIfAborted?.();
         const pending = neededLazy(presentation, callOptions);
         if (!pending.length) return [];
-        const fetched = (await fetchFaces(lazyFontEntries({ baseUrl: lazyBaseUrl() }, pending), callOptions.signal)).map((entry) => ({ ...entry, embed: "used" }));
+        // The vendored faces need lazyFontsBaseUrl; the host's own faces carry their url. Both are embed "used": not in registry.embeddedFonts.
+        const entries = lazyFontEntries({ baseUrl: pending.some((face) => face.package !== "host") ? lazyBaseUrl() : undefined }, pending);
+        const fetched = (await fetchFaces(entries, callOptions.signal)).map((entry) => ({ ...entry, embed: "used" }));
         let browserFaces;
         try {
           browserFaces = await Promise.all(fetched.map(async (entry) => {
