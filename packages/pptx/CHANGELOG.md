@@ -2,11 +2,18 @@
 
 ## Unreleased
 
+## 0.11.0
+
+- Release 0.11.0 (minor: new core floor and a visible layout change; two exporter/importer fixes since 0.10.0 (#100 weight faces, #101 border widths), no public export removed). Require `@openpresentation/opf` ^0.11.2 and raise the optional `@openpresentation/opf-render` peer (and dev dependency) to ^0.11.0. Core 0.11.2 centers cover slides between the header and footer furniture, so exported covers move (103 of the 805 bundled example slides, 184 to 269 reference pixels in y); the export matches the preview only when the renderer and this package resolve the same core, so install PPTX 0.11.0 with renderer 0.11.0, editor 0.10.0 and core 0.11.2 or later.
+
 - Cover slides export where core centers them: `test/cover-centering.mjs` checks that every native heading line's `a:off` y equals the composed accepted line origin (with and without host text measurement), stays inside the composed heading box, and that the recentered group is centered between header and footer furniture on covers while content slides keep their top-aligned headings. No exporter source changes. Supersedes opf-pptx#42 (its title/subtitle width assertion already holds on main).
 
 - Fix: importing a native weight face of a bundled family no longer leaks the face name into OPF runs. A run typed `Roboto SemiBold` now imports as `fontFamily: 'Roboto'` with `bold: true` (also `ExtraBold`, `Black` and `Bold`); `Medium`, `Light` and the other lighter weights import as the plain family. OPF runs carry a boolean `bold`, not a numeric weight, so **Medium (500) imports as regular and a round trip re-exports Medium as Regular**; every weight other than regular and bold is reported as `approximate-body-font-weight` (`approximate-table-font-weight` in tables). Only faces the exporter itself writes under style-link names are split, today Roboto. Authored families are never touched: `Arial Black`, `Calibri Light`, `Aptos Light`, `Aptos SemiBold`, `Roboto Mono`, other families' weight names, and a theme font that is itself `Roboto Light`. The exporter and importer share one weight-word table (`src/font-weights.js`), matched in linear time because typeface names come from untrusted files. New test: `test/font-weight-import.mjs`. Since FF-32 the installed quote workflow imported `Roboto SemiBold` and `Roboto Medium` into `fontFamily`.
 
 - Fix: shape borders now export at their declared widths. PptxGenJS ignores `pt` in a shape's `line` options and writes its 1 pt default (`a:ln w="12700"`), so the OPF card panels, `OPF code N panel`, `OPF media <path> frame`, the generic chart/table/unsupported-payload placeholder rectangle and the timeline connector were 1 pt (the connector always 1 pt instead of `3 * scale * .75` pt) although the preview strokes them at 1 px (0.75 pt, 9525 EMU; the connector at `3 * scale` px). They now pass `width`, as the image placeholder already did, and emit `w="9525"` (connector `w="28575"` on the 13.33 x 7.5 in canvas). Table borders keep the table API's `pt` and are unchanged. New test: `test/shape-border-widths.mjs` asserts every named shape's `a:ln w` against the intended width and the preview's stroke width at two canvas sizes. Exported PPTX bytes change for every deck with content cards, code, media, timeline or placeholder shapes; text, geometry and provenance are unchanged.
+
+- Tests (#102): the export and determinism tests follow the renderer's routes for font replacements (open families such as Red Hat Text for Tahoma, and the Intos faces for Aptos): any of them may be the preview substitute, and none may reach the PPTX. No export change.
+
 
 ## 0.10.0
 
