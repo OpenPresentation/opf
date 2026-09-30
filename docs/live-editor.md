@@ -1,15 +1,15 @@
 # Browser preview and live editing
 
-Published editor 0.10.0 provides an embeddable SVG canvas in `@openpresentation/opf-editor/canvas`. OPF JSON remains the document; the canvas writes validated JSON Patch operations through an `EditorSession`. Draft edits render with the same SVG engine used for standalone previews. Completed edits produce one undoable change.
+Published editor 0.10.1 provides an embeddable SVG canvas in `@openpresentation/opf-editor/canvas`. OPF JSON remains the document; the canvas writes validated JSON Patch operations through an `EditorSession`. Draft edits render with the same SVG engine used for standalone previews. Completed edits produce one undoable change.
 
 The published canvas covers the interactions below; complete PowerPoint feature coverage remains separate work. “Pixel perfect” is a fidelity target with specific prerequisites and remaining gaps described below.
 
 ## Install the published packages
 
-Use Node 24 with core 0.11.2, renderer 0.11.1, editor 0.10.0 and PPTX 0.11.0:
+Use Node 24 with core 0.11.2, renderer 0.11.2, editor 0.10.1 and PPTX 0.11.1:
 
 ```sh
-npm install --save-exact @openpresentation/opf@0.11.2 @openpresentation/opf-render@0.11.1 @openpresentation/opf-editor@0.10.0 @openpresentation/opf-pptx@0.11.0
+npm install --save-exact @openpresentation/opf@0.11.2 @openpresentation/opf-render@0.11.2 @openpresentation/opf-editor@0.10.1 @openpresentation/opf-pptx@0.11.1
 ```
 
 No paid service or provider account is required. The six agent skills install with `npx @openpresentation/cli@0.9.0 skills install`. See the [quickstart](quickstart.md) for an installed-package workflow and the [compatibility matrix](compatibility-matrix.md) for separately scoped browser and native evidence.

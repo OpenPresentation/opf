@@ -18,6 +18,13 @@ const bundle=path.join(out,'gallery-builder.cjs');
 await build({entryPoints:[path.join(gallery,'lib/opf-snippets.ts')],outfile:bundle,bundle:true,platform:'node',format:'cjs',tsconfig:path.join(gallery,'tsconfig.json'),plugins:registry?[registry.plugin()]:[]});
 const snippets=require(bundle),items=[];
 await rm(bundle);
+// Newer galleries build image-treatment snippets in a server-only module (lib/image-treatment-snippets.ts) so the sample image stays out of client chunks.
+if (!snippets.buildImageTreatmentOpfSnippet && existsSync(path.join(gallery,'lib/image-treatment-snippets.ts'))) {
+ const treatmentBundle=path.join(out,'gallery-image-treatments.cjs');
+ await build({entryPoints:[path.join(gallery,'lib/image-treatment-snippets.ts')],outfile:treatmentBundle,bundle:true,platform:'node',format:'cjs',tsconfig:path.join(gallery,'tsconfig.json'),plugins:registry?[registry.plugin()]:[]});
+ snippets.buildImageTreatmentOpfSnippet=require(treatmentBundle).buildImageTreatmentOpfSnippet;
+ await rm(treatmentBundle);
+}
 for(const [category,builder]of [
  ['layouts',item=>snippets.buildOpfSnippet('layouts',item.id)],['color-schemes',item=>snippets.buildOpfSnippet('color-schemes',item.id??item.slug)],['font-schemes',item=>snippets.buildOpfSnippet('font-schemes',item.id??item.slug)],['backgrounds',item=>snippets.buildOpfSnippet('backgrounds',item.slug)],['narratives',item=>snippets.buildOpfSnippet('narratives',item.id??item.slug)],['charts',snippets.buildChartOpfSnippet],['themes',snippets.buildThemeOpfSnippet],['audiences',snippets.buildAudienceOpfSnippet],['tones',snippets.buildToneOpfSnippet],['languages',snippets.buildLanguageOpfSnippet],['socials',snippets.buildSocialPlatformOpfSnippet],['headers-footers',snippets.buildHeaderFooterOpfSnippet],['blocks',snippets.buildContentBlockOpfSnippet],['image-treatments',snippets.buildImageTreatmentOpfSnippet]]){
  const data=JSON.parse(await readFile(path.join(gallery,'data',category+'.json'),'utf8'));
