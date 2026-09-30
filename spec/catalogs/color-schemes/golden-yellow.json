@@ -13,5 +13,14 @@
   "followedHyperlink": "#44ADAD",
   "hyperlink": "#E23A59",
   "light1": "#FFFFFF",
-  "light2": "#FEFCF0"
+  "light2": "#FEFCF0",
+  "summary": "Bright yellow and teal accents for optimistic, high-visibility decks.",
+  "description": "A warm yellow palette balanced by teal and navy. It is expressive, optimistic, and useful for bright public-facing stories.",
+  "tags": [
+    "optimistic",
+    "bright",
+    "friendly",
+    "creative",
+    "visible"
+  ]
 }

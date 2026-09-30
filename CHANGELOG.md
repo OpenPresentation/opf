@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+- FF-37: pptx.gallery is the canonical publisher of the default OPF catalog, and `spec/catalogs/` is a pinned snapshot of it. The snapshot is recorded in the new `spec/catalogs/manifest.json`: the gallery commit plus a mode, record count and content hash per kind. `scripts/sync-gallery-catalog.mjs` validates the published catalog against the companion schemas and writes the snapshot. `check:spec` and `check:catalog` reject hand edits, and a CI job compares the snapshot with the gallery at the pinned commit. Engines still never fetch catalogs at run time. See [the default catalog](docs/default-catalog.md) for the endpoints (`GET https://www.pptx.gallery/<kind>/index.json`, content negotiation on `/<kind>`, and `/<kind>/<id>.json`) and [the divergence report](docs/programs/font-fidelity-everywhere/ff-37-catalog-divergence.md) for per-kind status. All changes are additive:
+  - Catalog indexes gain `kind` and `contentSha256`, allow publisher `x-*` members, and accept digit-leading chart-type ids.
+  - Chart-type records allow publisher `x-*` members.
+  - FF-22's chart-type `deprecation` object (`replacedBy`, `reason`, `removal`) is now optional on every catalog record schema, with the matching `deprecated`/`replacedBy` index flags, for backward-compatible aliases. A deprecated id still resolves to its own record. `validatePresentation` warns, including for inline `catalogs.<kind>.records`. `lintPresentation` reports `opf/deprecated-catalog-id` and suggests the replacement. `check:spec` rule (h) requires a bundled, non-deprecated replacement.
+  - Color schemes gain the gallery's `summary`, `description` and `tags`, and font schemes its `description`.
+  - The font-scheme and theme indexes follow the gallery's order.
+  - No id is added or removed.
+  - No package version or rendering baseline changes.
+
 ## 0.11.2
 
 - Release 0.11.2. Additive: no schema, catalog or exported API is removed, and `pnpm check:breaking` reports no breaking changes against 0.11.1. **Visible layout change:** cover slides (a heading-only slide with no body payload) are now vertically centered between the header and footer furniture, so 103 of the 805 bundled example slides (the first slide of each deck with a cover layout) move by 184 to 269 reference pixels in y (see the cover-centering entry below). Preview and export only agree when the renderer and the PPTX exporter resolve the same core: **renderer 0.11.0, PPTX 0.11.0 and editor 0.10.0 raise their core floor to `^0.11.2` and must be installed together with it.** Also in this release: Aptos previews use the metric-compatible Intos replacement, Georgia gains a metric Gelasio tier, the font-file bundling and license rules with `pnpm check:font-hotlinks`, and test/tooling changes (offline pairwise font-switch matrix in `test:fonts`, PPTX table-frame parity comparison, the gallery editor ships the script-font manifest and never the binaries, quote-editor import check compares visible text, Git-for-Windows tar fix, per-font fidelity tracker). Descriptions follow.

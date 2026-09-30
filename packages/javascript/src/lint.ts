@@ -736,7 +736,21 @@ export function lintPresentation(
 	// Retain any existing reference warning not covered by the schema walk.
 	for (const issue of validation.warnings) {
 		const kind = issue.params.kind as CatalogKind,
-			id = issue.params.id;
+			id = issue.params.id,
+			replacedBy = issue.params.replacedBy;
+		if (typeof replacedBy === 'string' && typeof id === 'string') {
+			const target = catalogs.get(kind)?.get(replacedBy);
+			diagnostics.push({
+				...schemaDiagnostic(issue),
+				ruleId: 'opf/deprecated-catalog-id',
+				severity: 'warning',
+				message: `Deprecated ${kind} catalog id ${JSON.stringify(id)}; use ${JSON.stringify(replacedBy)} instead.`,
+				help: 'The deprecated id still resolves to its original record, so nothing breaks. Switch to the replacement when you next edit this reference.',
+				lookup: ['opf', 'catalog', kind],
+				...(target ? { suggestions: [target] } : {}),
+			});
+			continue;
+		}
 		if (
 			seen.has(issue.path) ||
 			(typeof id === 'string' && catalogs.get(kind)?.has(id))

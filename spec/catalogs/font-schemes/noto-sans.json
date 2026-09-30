@@ -13,5 +13,6 @@
   "major": "Noto Sans",
   "minor": "Noto Sans",
   "textSample": "Universal and clear",
-  "type": "sans-serif"
+  "type": "sans-serif",
+  "description": "Noto Sans is a sans serif OPF font scheme for complex script presentations, using Noto Sans for both headings and body text."
 }

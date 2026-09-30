@@ -1,7 +1,9 @@
 {
   "$schema": "https://openpresentation.org/schema/opf-catalog-index/v1",
+  "kind": "purposes",
   "version": "1",
   "description": "Catalog of presentation purposes available in the openpresentation.org catalog. Each entry is a lightweight summary; full purpose records live in the per-id JSON files alongside this index. Purposes are referenced from OPF documents via purpose.",
+  "contentSha256": "43d9ba617491fe1d98b527d24032d5da9bc6763a01b0ea41da421c5ec27e649c",
   "records": [
     {
       "id": "inform",

@@ -10,5 +10,6 @@
   "major": "Noto Sans Thai",
   "minor": "Noto Sans Thai",
   "textSample": "นี่คือสวยงาม",
-  "type": "sans-serif"
+  "type": "sans-serif",
+  "description": "Noto Sans Thai is a sans serif OPF font scheme for complex script presentations, using Noto Sans Thai for both headings and body text."
 }

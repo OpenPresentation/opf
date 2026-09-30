@@ -10,5 +10,6 @@
   "major": "Meiryo",
   "minor": "Meiryo",
   "textSample": "これはメイリオフォントで書かれています",
-  "type": "sans-serif"
+  "type": "sans-serif",
+  "description": "Meiryo is a sans serif OPF font scheme for East Asian presentations, using Meiryo for both headings and body text."
 }

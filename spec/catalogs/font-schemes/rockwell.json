@@ -8,5 +8,6 @@
   "major": "Rockwell",
   "minor": "Rockwell",
   "textSample": "Solid slab serif",
-  "type": "serif"
+  "type": "serif",
+  "description": "Rockwell is a serif OPF font scheme for Latin presentations, using Rockwell for both headings and body text."
 }

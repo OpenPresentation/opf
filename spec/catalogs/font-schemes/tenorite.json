@@ -8,5 +8,6 @@
   "major": "Tenorite Display",
   "minor": "Tenorite",
   "textSample": "Rounded modern tone",
-  "type": "sans-serif"
+  "type": "sans-serif",
+  "description": "Tenorite is a sans serif OPF font scheme for Latin presentations, using Tenorite Display for headings with Tenorite for body text."
 }

@@ -1,13 +1,15 @@
 {
   "$schema": "https://openpresentation.org/schema/opf-catalog-index/v1",
+  "kind": "themes",
   "version": "1",
   "description": "Catalog of themes available in the openpresentation.org catalog. Each entry is a lightweight summary; full theme records live in the per-id JSON files alongside this index.",
+  "contentSha256": "5af95e3e353857bb49a2c303e66b99d74d884210070baac0b68291aad90fa8d5",
   "records": [
     {
-      "id": "bold",
-      "name": "Bold",
-      "description": "A vibrant, high-energy theme with bold colors and a dynamic, attention-grabbing style. Great for presentations that need to stand out.",
-      "file": "bold.json"
+      "id": "minimal",
+      "name": "Minimal",
+      "description": "A clean, minimalistic theme with a focus on simplicity and readability. Ideal for professional, straightforward presentations.",
+      "file": "minimal.json"
     },
     {
       "id": "classic",
@@ -22,10 +24,10 @@
       "file": "dark.json"
     },
     {
-      "id": "minimal",
-      "name": "Minimal",
-      "description": "A clean, minimalistic theme with a focus on simplicity and readability. Ideal for professional, straightforward presentations.",
-      "file": "minimal.json"
+      "id": "bold",
+      "name": "Bold",
+      "description": "A vibrant, high-energy theme with bold colors and a dynamic, attention-grabbing style. Great for presentations that need to stand out.",
+      "file": "bold.json"
     }
   ]
 }

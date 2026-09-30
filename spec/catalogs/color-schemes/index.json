@@ -1,7 +1,9 @@
 {
   "$schema": "https://openpresentation.org/schema/opf-catalog-index/v1",
+  "kind": "color-schemes",
   "version": "1",
   "description": "Catalog of color schemes available in the openpresentation.org catalog. Each entry is a lightweight summary; full color-scheme records live in the per-id JSON files alongside this index.",
+  "contentSha256": "ee641dfe0091c15a443d5b75e0d8f2573aed93003a18ba0cc51aab115b38a826",
   "records": [
     {
       "id": "black-and-white",

@@ -10,5 +10,6 @@
   "major": "Raavi",
   "minor": "Raavi",
   "textSample": "ਇਹ ਰਾਵੀ ਫੌਂਟ ਵਿੱਚ ਲਿਖਿਆ ਗਿਆ ਹੈ",
-  "type": "sans-serif"
+  "type": "sans-serif",
+  "description": "Raavi is a sans serif OPF font scheme for complex script presentations, using Raavi for both headings and body text."
 }

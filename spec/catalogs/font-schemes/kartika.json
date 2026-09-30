@@ -10,5 +10,6 @@
   "major": "Kartika",
   "minor": "Kartika",
   "textSample": "ഇത് കാർത്തിക ഫോണ്ടിൽ എഴുതിയിരിക്കുന്നു",
-  "type": "sans-serif"
+  "type": "sans-serif",
+  "description": "Kartika is a sans serif OPF font scheme for complex script presentations, using Kartika for both headings and body text."
 }

@@ -10,5 +10,6 @@
   "major": "Arabic Typesetting",
   "minor": "Arabic Typesetting",
   "textSample": "هذا مكتوب بخط الأنواع العربية",
-  "type": "serif"
+  "type": "serif",
+  "description": "Arabic Typesetting is a serif OPF font scheme for complex script presentations, using Arabic Typesetting for both headings and body text."
 }

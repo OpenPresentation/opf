@@ -10,5 +10,6 @@
   "major": "Nirmala UI",
   "minor": "Nirmala UI",
   "textSample": "यह निर्मला यूआई फ़ॉन्ट में लिखा गया है",
-  "type": "sans-serif"
+  "type": "sans-serif",
+  "description": "Nirmala UI is a sans serif OPF font scheme for complex script presentations, using Nirmala UI for both headings and body text."
 }

@@ -11,5 +11,6 @@
     "family": "Consolas"
   },
   "textSample": "Code block view",
-  "type": "monospace"
+  "type": "monospace",
+  "description": "Consolas is a monospace OPF font scheme for Latin presentations, using Consolas for both headings and body text."
 }

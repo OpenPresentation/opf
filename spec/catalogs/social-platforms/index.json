@@ -1,7 +1,9 @@
 {
   "$schema": "https://openpresentation.org/schema/opf-catalog-index/v1",
+  "kind": "social-platforms",
   "version": "1",
   "description": "Catalog of social-media platforms available in the openpresentation.org catalog. Each entry is a lightweight summary; full platform records live in the per-id JSON files alongside this index. The property keys of any Socials object on Organization or Speaker resolve to ids in this catalog.",
+  "contentSha256": "22292ed144ac3caf37a86c9e644f9b648cda51ed670cbc3c0ed64915d251b375",
   "records": [
     {
       "id": "linkedin",
@@ -65,4 +67,3 @@
     }
   ]
 }
-

@@ -10,5 +10,6 @@
   "major": "MS Mincho",
   "minor": "MS Mincho",
   "textSample": "これはMS明朝フォントで書かれています",
-  "type": "serif"
+  "type": "serif",
+  "description": "MS Mincho is a serif OPF font scheme for East Asian presentations, using MS Mincho for both headings and body text."
 }

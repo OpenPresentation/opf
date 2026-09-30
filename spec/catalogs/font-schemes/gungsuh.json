@@ -10,5 +10,6 @@
   "major": "GungsuhChe",
   "minor": "Gungsuh",
   "textSample": "이것은 궁서 폰트로 쓰여졌습니다",
-  "type": "serif"
+  "type": "serif",
+  "description": "Gungsuh is a serif OPF font scheme for East Asian presentations, using GungsuhChe for headings with Gungsuh for body text."
 }

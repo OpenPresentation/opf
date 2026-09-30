@@ -1,7 +1,9 @@
 {
   "$schema": "https://openpresentation.org/schema/opf-catalog-index/v1",
+  "kind": "layouts",
   "version": "1",
   "description": "Catalog of slide layouts available in the openpresentation.org catalog. Each entry is a lightweight summary; full layout records live in the per-id JSON files alongside this index.",
+  "contentSha256": "cb28c113f7949c486d5f897036324118a3d52df5ffc75d485e1fb65c9fbf4663",
   "records": [
     {
       "id": "blank",

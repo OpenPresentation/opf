@@ -10,5 +10,6 @@
   "major": "David",
   "minor": "David",
   "textSample": "זה כתוב בגופן דוד",
-  "type": "serif"
+  "type": "serif",
+  "description": "David is a serif OPF font scheme for complex script presentations, using David for both headings and body text."
 }

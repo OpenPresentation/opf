@@ -8,5 +8,6 @@
   "major": "Arial Black",
   "minor": "Arial",
   "textSample": "Simple and clear",
-  "type": "sans-serif"
+  "type": "sans-serif",
+  "description": "Arial is a sans serif OPF font scheme for Latin presentations, using Arial Black for headings with Arial for body text."
 }

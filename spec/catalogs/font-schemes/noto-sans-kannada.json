@@ -10,5 +10,6 @@
   "major": "Noto Sans Kannada",
   "minor": "Noto Sans Kannada",
   "textSample": "ಇದು ಸುಂದರ ಪುಸ್ತಕ",
-  "type": "sans-serif"
+  "type": "sans-serif",
+  "description": "Noto Sans Kannada is a sans serif OPF font scheme for complex script presentations, using Noto Sans Kannada for both headings and body text."
 }

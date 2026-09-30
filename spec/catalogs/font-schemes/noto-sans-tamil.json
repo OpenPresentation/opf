@@ -10,5 +10,6 @@
   "major": "Noto Sans Tamil",
   "minor": "Noto Sans Tamil",
   "textSample": "இது அழகாக இருக்கிறது",
-  "type": "sans-serif"
+  "type": "sans-serif",
+  "description": "Noto Sans Tamil is a sans serif OPF font scheme for complex script presentations, using Noto Sans Tamil for both headings and body text."
 }

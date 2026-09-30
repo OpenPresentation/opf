@@ -69,3 +69,69 @@ jobs:
 
       - name: Verify developer quickstart from the npm registry
         run: pnpm test:developer-quickstart
+
+  catalog-snapshot:
+    name: Default catalog snapshot
+    runs-on: ubuntu-latest
+    # spec/catalogs is a pinned snapshot of the default catalog published by
+    # pptx.gallery (docs/default-catalog.md). Compare it with the gallery's
+    # committed public/<kind>/ files at the commit spec/catalogs/manifest.json
+    # pins, not with the live site. pptx-gallery is private: this needs a
+    # read-only PPTX_GALLERY_READ_TOKEN secret and warns without it. The offline
+    # hash check runs in `pnpm test` either way.
+    env:
+      GALLERY_TOKEN: ${{ secrets.PPTX_GALLERY_READ_TOKEN }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Read the pinned gallery commit
+        id: pin
+        run: echo "commit=$(jq -r .source.commit spec/catalogs/manifest.json)" >> "$GITHUB_OUTPUT"
+
+      - name: Report a missing gallery token
+        if: env.GALLERY_TOKEN == ''
+        run: echo "::warning title=Default catalog snapshot::PPTX_GALLERY_READ_TOKEN is not configured, so spec/catalogs was not compared with pptx-gallery@${{ steps.pin.outputs.commit }}. The offline manifest hash check still runs in pnpm test."
+
+      - name: Checkout pptx-gallery at the pinned commit
+        if: env.GALLERY_TOKEN != ''
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: Data-Advantage/pptx-gallery
+          ref: ${{ steps.pin.outputs.commit }}
+          token: ${{ env.GALLERY_TOKEN }}
+          path: pptx-gallery
+          persist-credentials: false
+          sparse-checkout: |
+            public/audiences
+            public/chart-types
+            public/color-schemes
+            public/font-schemes
+            public/languages
+            public/layouts
+            public/narratives
+            public/purposes
+            public/social-platforms
+            public/themes
+            public/tones
+            data
+
+      - name: Setup pnpm
+        if: env.GALLERY_TOKEN != ''
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+
+      - name: Setup Node.js
+        if: env.GALLERY_TOKEN != ''
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        if: env.GALLERY_TOKEN != ''
+        run: pnpm install --frozen-lockfile
+
+      - name: Compare spec/catalogs with the pinned gallery catalog
+        if: env.GALLERY_TOKEN != ''
+        run: node scripts/sync-gallery-catalog.mjs --gallery pptx-gallery --check

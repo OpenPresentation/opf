@@ -10,5 +10,6 @@
   "major": "DaunPenh",
   "minor": "DaunPenh",
   "textSample": "ភាសាខ្មែរពិតជាស្រស់ស្អាត",
-  "type": "sans-serif"
+  "type": "sans-serif",
+  "description": "DaunPenh is a sans serif OPF font scheme for complex script presentations, using DaunPenh for both headings and body text."
 }

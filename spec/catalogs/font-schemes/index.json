@@ -1,8 +1,255 @@
 {
   "$schema": "https://openpresentation.org/schema/opf-catalog-index/v1",
+  "kind": "font-schemes",
   "version": "1",
   "description": "Catalog of font schemes available in the openpresentation.org catalog. Each entry is a lightweight summary; full font-scheme records live in the per-id JSON files alongside this index.",
+  "contentSha256": "7c05145c1d3150c642277ce370d673bc58b99cbfdd2df943781a7e49be14bf8c",
   "records": [
+    {
+      "id": "consolas",
+      "name": "Consolas",
+      "file": "consolas.json"
+    },
+    {
+      "id": "courier-new",
+      "name": "Courier New",
+      "file": "courier-new.json"
+    },
+    {
+      "id": "arial",
+      "name": "Arial",
+      "file": "arial.json"
+    },
+    {
+      "id": "calibri",
+      "name": "Calibri",
+      "file": "calibri.json"
+    },
+    {
+      "id": "impact",
+      "name": "Impact",
+      "file": "impact.json"
+    },
+    {
+      "id": "lucida-sans",
+      "name": "Lucida Sans",
+      "file": "lucida-sans.json"
+    },
+    {
+      "id": "segoe-ui",
+      "name": "Segoe UI",
+      "file": "segoe-ui.json"
+    },
+    {
+      "id": "segoe-ui-light",
+      "name": "Segoe UI Light",
+      "file": "segoe-ui-light.json"
+    },
+    {
+      "id": "tahoma",
+      "name": "Tahoma",
+      "file": "tahoma.json"
+    },
+    {
+      "id": "trebuchet-ms",
+      "name": "Trebuchet MS",
+      "file": "trebuchet-ms.json"
+    },
+    {
+      "id": "verdana",
+      "name": "Verdana",
+      "file": "verdana.json"
+    },
+    {
+      "id": "bookman",
+      "name": "Bookman",
+      "file": "bookman.json"
+    },
+    {
+      "id": "century-schoolbook",
+      "name": "Century Schoolbook",
+      "file": "century-schoolbook.json"
+    },
+    {
+      "id": "constantia",
+      "name": "Constantia",
+      "file": "constantia.json"
+    },
+    {
+      "id": "garamond",
+      "name": "Garamond",
+      "file": "garamond.json"
+    },
+    {
+      "id": "rockwell",
+      "name": "Rockwell",
+      "file": "rockwell.json"
+    },
+    {
+      "id": "times-new-roman",
+      "name": "Times New Roman",
+      "file": "times-new-roman.json"
+    },
+    {
+      "id": "aptos",
+      "name": "Aptos",
+      "file": "aptos.json"
+    },
+    {
+      "id": "grandview",
+      "name": "Grandview",
+      "file": "grandview.json"
+    },
+    {
+      "id": "seaford",
+      "name": "Seaford",
+      "file": "seaford.json"
+    },
+    {
+      "id": "skeena",
+      "name": "Skeena",
+      "file": "skeena.json"
+    },
+    {
+      "id": "tenorite",
+      "name": "Tenorite",
+      "file": "tenorite.json"
+    },
+    {
+      "id": "georgia",
+      "name": "Georgia",
+      "file": "georgia.json"
+    },
+    {
+      "id": "microsoft-yahei",
+      "name": "Microsoft Yahei",
+      "file": "microsoft-yahei.json"
+    },
+    {
+      "id": "simsun",
+      "name": "SimSun",
+      "file": "simsun.json"
+    },
+    {
+      "id": "fangsong",
+      "name": "FangSong",
+      "file": "fangsong.json"
+    },
+    {
+      "id": "yu-gothic",
+      "name": "Yu Gothic",
+      "file": "yu-gothic.json"
+    },
+    {
+      "id": "pmingliu",
+      "name": "PMingLiU",
+      "file": "pmingliu.json"
+    },
+    {
+      "id": "mingliu",
+      "name": "MingLiU",
+      "file": "mingliu.json"
+    },
+    {
+      "id": "ms-mincho",
+      "name": "MS Mincho",
+      "file": "ms-mincho.json"
+    },
+    {
+      "id": "malgun-gothic",
+      "name": "Malgun Gothic",
+      "file": "malgun-gothic.json"
+    },
+    {
+      "id": "batang",
+      "name": "Batang",
+      "file": "batang.json"
+    },
+    {
+      "id": "gungsuh",
+      "name": "Gungsuh",
+      "file": "gungsuh.json"
+    },
+    {
+      "id": "mangal",
+      "name": "Mangal",
+      "file": "mangal.json"
+    },
+    {
+      "id": "nirmala-ui",
+      "name": "Nirmala UI",
+      "file": "nirmala-ui.json"
+    },
+    {
+      "id": "latha",
+      "name": "Latha",
+      "file": "latha.json"
+    },
+    {
+      "id": "david",
+      "name": "David",
+      "file": "david.json"
+    },
+    {
+      "id": "miriam",
+      "name": "Miriam",
+      "file": "miriam.json"
+    },
+    {
+      "id": "gisha",
+      "name": "Gisha",
+      "file": "gisha.json"
+    },
+    {
+      "id": "vrinda",
+      "name": "Vrinda",
+      "file": "vrinda.json"
+    },
+    {
+      "id": "shruti",
+      "name": "Shruti",
+      "file": "shruti.json"
+    },
+    {
+      "id": "tunga",
+      "name": "Tunga",
+      "file": "tunga.json"
+    },
+    {
+      "id": "kartika",
+      "name": "Kartika",
+      "file": "kartika.json"
+    },
+    {
+      "id": "kalinga",
+      "name": "Kalinga",
+      "file": "kalinga.json"
+    },
+    {
+      "id": "raavi",
+      "name": "Raavi",
+      "file": "raavi.json"
+    },
+    {
+      "id": "gautami",
+      "name": "Gautami",
+      "file": "gautami.json"
+    },
+    {
+      "id": "arabic-typesetting",
+      "name": "Arabic Typesetting",
+      "file": "arabic-typesetting.json"
+    },
+    {
+      "id": "microsoft-jhenghei",
+      "name": "Microsoft JhengHei",
+      "file": "microsoft-jhenghei.json"
+    },
+    {
+      "id": "meiryo",
+      "name": "Meiryo",
+      "file": "meiryo.json"
+    },
     {
       "id": "angsana-new",
       "name": "Angsana New",
@@ -14,169 +261,29 @@
       "file": "aparajita.json"
     },
     {
-      "id": "aptos",
-      "name": "Aptos",
-      "file": "aptos.json"
-    },
-    {
-      "id": "arabic-typesetting",
-      "name": "Arabic Typesetting",
-      "file": "arabic-typesetting.json"
-    },
-    {
-      "id": "arial",
-      "name": "Arial",
-      "file": "arial.json"
-    },
-    {
-      "id": "batang",
-      "name": "Batang",
-      "file": "batang.json"
-    },
-    {
-      "id": "bookman",
-      "name": "Bookman",
-      "file": "bookman.json"
-    },
-    {
-      "id": "calibri",
-      "name": "Calibri",
-      "file": "calibri.json"
-    },
-    {
-      "id": "century-schoolbook",
-      "name": "Century Schoolbook",
-      "file": "century-schoolbook.json"
-    },
-    {
-      "id": "consolas",
-      "name": "Consolas",
-      "file": "consolas.json"
-    },
-    {
-      "id": "constantia",
-      "name": "Constantia",
-      "file": "constantia.json"
-    },
-    {
-      "id": "courier-new",
-      "name": "Courier New",
-      "file": "courier-new.json"
-    },
-    {
-      "id": "daunpenh",
-      "name": "DaunPenh",
-      "file": "daunpenh.json"
-    },
-    {
-      "id": "david",
-      "name": "David",
-      "file": "david.json"
-    },
-    {
       "id": "dilleniaupc",
       "name": "DilleniaUPC",
       "file": "dilleniaupc.json"
     },
     {
-      "id": "fangsong",
-      "name": "FangSong",
-      "file": "fangsong.json"
+      "id": "sakkal-majalla",
+      "name": "Sakkal Majalla",
+      "file": "sakkal-majalla.json"
     },
     {
-      "id": "garamond",
-      "name": "Garamond",
-      "file": "garamond.json"
+      "id": "shonar-bangla",
+      "name": "Shonar Bangla",
+      "file": "shonar-bangla.json"
     },
     {
-      "id": "gautami",
-      "name": "Gautami",
-      "file": "gautami.json"
+      "id": "sylfaen",
+      "name": "Sylfaen",
+      "file": "sylfaen.json"
     },
     {
-      "id": "georgia",
-      "name": "Georgia",
-      "file": "georgia.json"
-    },
-    {
-      "id": "gisha",
-      "name": "Gisha",
-      "file": "gisha.json"
-    },
-    {
-      "id": "grandview",
-      "name": "Grandview",
-      "file": "grandview.json"
-    },
-    {
-      "id": "gungsuh",
-      "name": "Gungsuh",
-      "file": "gungsuh.json"
-    },
-    {
-      "id": "impact",
-      "name": "Impact",
-      "file": "impact.json"
-    },
-    {
-      "id": "kalinga",
-      "name": "Kalinga",
-      "file": "kalinga.json"
-    },
-    {
-      "id": "kartika",
-      "name": "Kartika",
-      "file": "kartika.json"
-    },
-    {
-      "id": "khmer-ui",
-      "name": "Khmer UI",
-      "file": "khmer-ui.json"
-    },
-    {
-      "id": "latha",
-      "name": "Latha",
-      "file": "latha.json"
-    },
-    {
-      "id": "lucida-sans",
-      "name": "Lucida Sans",
-      "file": "lucida-sans.json"
-    },
-    {
-      "id": "malgun-gothic",
-      "name": "Malgun Gothic",
-      "file": "malgun-gothic.json"
-    },
-    {
-      "id": "mangal",
-      "name": "Mangal",
-      "file": "mangal.json"
-    },
-    {
-      "id": "meiryo",
-      "name": "Meiryo",
-      "file": "meiryo.json"
-    },
-    {
-      "id": "microsoft-jhenghei",
-      "name": "Microsoft JhengHei",
-      "file": "microsoft-jhenghei.json"
-    },
-    {
-      "id": "microsoft-yahei",
-      "name": "Microsoft Yahei",
-      "file": "microsoft-yahei.json"
-    },
-    {
-      "id": "mingliu",
-      "name": "MingLiU",
-      "file": "mingliu.json"
-    },
-    {
-      "id": "miriam",
-      "name": "Miriam",
-      "file": "miriam.json"
+      "id": "traditional-arabic",
+      "name": "Traditional Arabic",
+      "file": "traditional-arabic.json"
     },
     {
       "id": "montserrat",
@@ -184,29 +291,29 @@
       "file": "montserrat.json"
     },
     {
-      "id": "ms-mincho",
-      "name": "MS Mincho",
-      "file": "ms-mincho.json"
+      "id": "open-sans",
+      "name": "Open Sans",
+      "file": "open-sans.json"
     },
     {
-      "id": "nirmala-ui",
-      "name": "Nirmala UI",
-      "file": "nirmala-ui.json"
+      "id": "poppins",
+      "name": "Poppins",
+      "file": "poppins.json"
     },
     {
-      "id": "noto-naksh-arabic",
-      "name": "Noto Naskh Arabic",
-      "file": "noto-naksh-arabic.json"
+      "id": "pt-serif",
+      "name": "PT Serif",
+      "file": "pt-serif.json"
     },
     {
-      "id": "noto-nastaliq-urdu",
-      "name": "Noto Nastaliq Urdu",
-      "file": "noto-nastaliq-urdu.json"
+      "id": "raleway",
+      "name": "Raleway",
+      "file": "raleway.json"
     },
     {
-      "id": "noto-sans",
-      "name": "Noto Sans",
-      "file": "noto-sans.json"
+      "id": "roboto",
+      "name": "Roboto",
+      "file": "roboto.json"
     },
     {
       "id": "noto-sans-arabic",
@@ -227,11 +334,6 @@
       "id": "noto-sans-devangari",
       "name": "Noto Sans Devanagari",
       "file": "noto-sans-devangari.json"
-    },
-    {
-      "id": "noto-sans-ethiopic",
-      "name": "Noto Sans Ethiopic",
-      "file": "noto-sans-ethiopic.json"
     },
     {
       "id": "noto-sans-georgian",
@@ -262,11 +364,6 @@
       "id": "noto-sans-kannada",
       "name": "Noto Sans Kannada",
       "file": "noto-sans-kannada.json"
-    },
-    {
-      "id": "noto-sans-khmer",
-      "name": "Noto Sans Khmer",
-      "file": "noto-sans-khmer.json"
     },
     {
       "id": "noto-sans-kr",
@@ -309,9 +406,34 @@
       "file": "noto-sans-telugu.json"
     },
     {
+      "id": "noto-sans",
+      "name": "Noto Sans",
+      "file": "noto-sans.json"
+    },
+    {
       "id": "noto-sans-thai",
       "name": "Noto Sans Thai",
       "file": "noto-sans-thai.json"
+    },
+    {
+      "id": "noto-nastaliq-urdu",
+      "name": "Noto Nastaliq Urdu",
+      "file": "noto-nastaliq-urdu.json"
+    },
+    {
+      "id": "noto-naksh-arabic",
+      "name": "Noto Naskh Arabic",
+      "file": "noto-naksh-arabic.json"
+    },
+    {
+      "id": "noto-sans-ethiopic",
+      "name": "Noto Sans Ethiopic",
+      "file": "noto-sans-ethiopic.json"
+    },
+    {
+      "id": "noto-sans-khmer",
+      "name": "Noto Sans Khmer",
+      "file": "noto-sans-khmer.json"
     },
     {
       "id": "nyala",
@@ -319,134 +441,14 @@
       "file": "nyala.json"
     },
     {
-      "id": "open-sans",
-      "name": "Open Sans",
-      "file": "open-sans.json"
+      "id": "daunpenh",
+      "name": "DaunPenh",
+      "file": "daunpenh.json"
     },
     {
-      "id": "pmingliu",
-      "name": "PMingLiU",
-      "file": "pmingliu.json"
-    },
-    {
-      "id": "poppins",
-      "name": "Poppins",
-      "file": "poppins.json"
-    },
-    {
-      "id": "pt-serif",
-      "name": "PT Serif",
-      "file": "pt-serif.json"
-    },
-    {
-      "id": "raavi",
-      "name": "Raavi",
-      "file": "raavi.json"
-    },
-    {
-      "id": "raleway",
-      "name": "Raleway",
-      "file": "raleway.json"
-    },
-    {
-      "id": "roboto",
-      "name": "Roboto",
-      "file": "roboto.json"
-    },
-    {
-      "id": "rockwell",
-      "name": "Rockwell",
-      "file": "rockwell.json"
-    },
-    {
-      "id": "sakkal-majalla",
-      "name": "Sakkal Majalla",
-      "file": "sakkal-majalla.json"
-    },
-    {
-      "id": "seaford",
-      "name": "Seaford",
-      "file": "seaford.json"
-    },
-    {
-      "id": "segoe-ui",
-      "name": "Segoe UI",
-      "file": "segoe-ui.json"
-    },
-    {
-      "id": "segoe-ui-light",
-      "name": "Segoe UI Light",
-      "file": "segoe-ui-light.json"
-    },
-    {
-      "id": "shonar-bangla",
-      "name": "Shonar Bangla",
-      "file": "shonar-bangla.json"
-    },
-    {
-      "id": "shruti",
-      "name": "Shruti",
-      "file": "shruti.json"
-    },
-    {
-      "id": "simsun",
-      "name": "SimSun",
-      "file": "simsun.json"
-    },
-    {
-      "id": "skeena",
-      "name": "Skeena",
-      "file": "skeena.json"
-    },
-    {
-      "id": "sylfaen",
-      "name": "Sylfaen",
-      "file": "sylfaen.json"
-    },
-    {
-      "id": "tahoma",
-      "name": "Tahoma",
-      "file": "tahoma.json"
-    },
-    {
-      "id": "tenorite",
-      "name": "Tenorite",
-      "file": "tenorite.json"
-    },
-    {
-      "id": "times-new-roman",
-      "name": "Times New Roman",
-      "file": "times-new-roman.json"
-    },
-    {
-      "id": "traditional-arabic",
-      "name": "Traditional Arabic",
-      "file": "traditional-arabic.json"
-    },
-    {
-      "id": "trebuchet-ms",
-      "name": "Trebuchet MS",
-      "file": "trebuchet-ms.json"
-    },
-    {
-      "id": "tunga",
-      "name": "Tunga",
-      "file": "tunga.json"
-    },
-    {
-      "id": "verdana",
-      "name": "Verdana",
-      "file": "verdana.json"
-    },
-    {
-      "id": "vrinda",
-      "name": "Vrinda",
-      "file": "vrinda.json"
-    },
-    {
-      "id": "yu-gothic",
-      "name": "Yu Gothic",
-      "file": "yu-gothic.json"
+      "id": "khmer-ui",
+      "name": "Khmer UI",
+      "file": "khmer-ui.json"
     }
   ]
 }

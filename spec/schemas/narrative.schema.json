@@ -24,6 +24,27 @@
       "type": "string",
       "description": "Human-readable template name, e.g. 'Problem → Solution'."
     },
+    "deprecation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["replacedBy"],
+      "description": "Present when this narrative is deprecated, for example an alias kept for backward compatibility. Deprecated records stay resolvable so existing documents keep validating and rendering unchanged, but pickers and default listings exclude them and validators warn when a document references them. Same shape as the chart-type deprecation.",
+      "properties": {
+        "replacedBy": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$",
+          "description": "Id of the non-deprecated narrative record that documents should reference instead."
+        },
+        "reason": {
+          "type": "string",
+          "description": "Why the record is deprecated."
+        },
+        "removal": {
+          "type": "string",
+          "description": "Package version in which the record is scheduled for removal from the bundled catalog, if any."
+        }
+      }
+    },
     "summary": {
       "type": "string",
       "description": "One-sentence description of when and why to use this narrative."

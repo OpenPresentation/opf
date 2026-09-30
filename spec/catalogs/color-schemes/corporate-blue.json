@@ -13,5 +13,14 @@
   "followedHyperlink": "#954F72",
   "hyperlink": "#0563C1",
   "light1": "#FFFFFF",
-  "light2": "#F3F7FF"
+  "light2": "#F3F7FF",
+  "summary": "Legacy corporate blue palette for conservative business contexts.",
+  "description": "A classic corporate blue scheme with strong contrast and familiar PowerPoint-era business cues.",
+  "tags": [
+    "corporate",
+    "stable",
+    "trustworthy",
+    "conservative",
+    "professional"
+  ]
 }

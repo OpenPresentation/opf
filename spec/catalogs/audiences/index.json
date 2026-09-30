@@ -1,7 +1,9 @@
 {
   "$schema": "https://openpresentation.org/schema/opf-catalog-index/v1",
+  "kind": "audiences",
   "version": "1",
   "description": "Catalog of presentation audiences available in the openpresentation.org catalog. Each entry is a lightweight summary; full audience records (seniority, technical fluency, decision power, attention budget, recommended narratives and tones) live in the per-id JSON files alongside this index. Audiences are referenced from OPF documents via audience. The singular ids from executive onward match the audience pages on pptx.gallery and carry its recommendations; they coexist with the older team-shaped archetypes (executives, investors, customers, and so on), and both sets stay valid.",
+  "contentSha256": "90ab1b5a3c55ff36ec8c05595a2b0f90a18c108af82c959b33f204f077ee4e51",
   "records": [
     {
       "id": "executives",

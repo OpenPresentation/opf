@@ -11,5 +11,6 @@
   "major": "Sylfaen",
   "minor": "Sylfaen",
   "textSample": "ეს ჩემი სახლი",
-  "type": "sans-serif"
+  "type": "sans-serif",
+  "description": "Sylfaen is a sans serif OPF font scheme for complex script presentations, using Sylfaen for both headings and body text."
 }

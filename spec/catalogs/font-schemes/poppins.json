@@ -8,5 +8,6 @@
   "major": "Poppins",
   "minor": "Poppins",
   "textSample": "Clean and readable",
-  "type": "sans-serif"
+  "type": "sans-serif",
+  "description": "Poppins is a sans serif OPF font scheme for Latin presentations, using Poppins for both headings and body text."
 }

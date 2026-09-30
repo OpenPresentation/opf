@@ -10,5 +10,6 @@
   "major": "FangSong",
   "minor": "FangSong",
   "textSample": "这是用仿宋字体写的",
-  "type": "serif"
+  "type": "serif",
+  "description": "FangSong is a serif OPF font scheme for East Asian presentations, using FangSong for both headings and body text."
 }

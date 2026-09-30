@@ -8,5 +8,6 @@
   "major": "Seaford Display",
   "minor": "Seaford",
   "textSample": "Humanist gentle tone",
-  "type": "sans-serif"
+  "type": "sans-serif",
+  "description": "Seaford is a sans serif OPF font scheme for Latin presentations, using Seaford Display for headings with Seaford for body text."
 }

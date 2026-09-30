@@ -11,5 +11,6 @@
   "major": "Noto Sans Bengali",
   "minor": "Noto Sans Bengali",
   "textSample": "এটা সুন্দর বই",
-  "type": "sans-serif"
+  "type": "sans-serif",
+  "description": "Noto Sans Bengali is a sans serif OPF font scheme for complex script presentations, using Noto Sans Bengali for both headings and body text."
 }

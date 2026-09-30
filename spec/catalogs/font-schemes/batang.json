@@ -10,5 +10,6 @@
   "major": "BatangChe",
   "minor": "Batang",
   "textSample": "이것은 바탕 폰트로 쓰여졌습니다",
-  "type": "serif"
+  "type": "serif",
+  "description": "Batang is a serif OPF font scheme for East Asian presentations, using BatangChe for headings with Batang for body text."
 }

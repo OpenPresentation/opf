@@ -8,5 +8,6 @@
   "major": "Skeena Display",
   "minor": "Skeena",
   "textSample": "Balanced contemporary style",
-  "type": "sans-serif"
+  "type": "sans-serif",
+  "description": "Skeena is a sans serif OPF font scheme for Latin presentations, using Skeena Display for headings with Skeena for body text."
 }

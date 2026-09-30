@@ -10,5 +10,6 @@
   "major": "Noto Sans Telugu",
   "minor": "Noto Sans Telugu",
   "textSample": "ఇది చక్కనిది",
-  "type": "sans-serif"
+  "type": "sans-serif",
+  "description": "Noto Sans Telugu is a sans serif OPF font scheme for complex script presentations, using Noto Sans Telugu for both headings and body text."
 }

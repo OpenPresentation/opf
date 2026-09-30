@@ -13,5 +13,6 @@
   "major": "Microsoft YaHei",
   "minor": "Microsoft YaHei",
   "textSample": "这是用微软雅黑字体写的",
-  "type": "sans-serif"
+  "type": "sans-serif",
+  "description": "Microsoft Yahei is a sans serif OPF font scheme for East Asian presentations, using Microsoft YaHei for both headings and body text."
 }

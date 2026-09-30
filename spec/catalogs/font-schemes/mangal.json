@@ -13,5 +13,6 @@
   "major": "Mangal",
   "minor": "Mangal",
   "textSample": "यह मंगल फ़ॉन्ट में लिखा गया है",
-  "type": "sans-serif"
+  "type": "sans-serif",
+  "description": "Mangal is a sans serif OPF font scheme for complex script presentations, using Mangal for both headings and body text."
 }

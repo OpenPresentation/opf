@@ -8,5 +8,6 @@
   "major": "PT Serif",
   "minor": "PT Serif",
   "textSample": "Elegant and timeless",
-  "type": "sans-serif"
+  "type": "sans-serif",
+  "description": "PT Serif is a sans serif OPF font scheme for Latin presentations, using PT Serif for both headings and body text."
 }

@@ -13,5 +13,14 @@
   "followedHyperlink": "#3EBBF0",
   "hyperlink": "#9454C3",
   "light1": "#FFFFFF",
-  "light2": "#EAEDF6"
+  "light2": "#EAEDF6",
+  "summary": "Cool steel blues for credible, data-forward presentations.",
+  "description": "A steel-blue palette that combines credibility, precision, and calm. Useful for analysis-heavy decks.",
+  "tags": [
+    "calm",
+    "precise",
+    "measured",
+    "professional",
+    "analytical"
+  ]
 }

@@ -10,5 +10,6 @@
   "major": "Noto Sans Khmer",
   "minor": "Noto Sans Khmer",
   "textSample": "ភាសាខ្មែរពិតជាស្រស់ស្អាត",
-  "type": "sans-serif"
+  "type": "sans-serif",
+  "description": "Noto Sans Khmer is a sans serif OPF font scheme for complex script presentations, using Noto Sans Khmer for both headings and body text."
 }

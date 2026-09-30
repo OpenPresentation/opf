@@ -8,5 +8,6 @@
   "major": "Garamond",
   "minor": "Garamond",
   "textSample": "Timeless book feel",
-  "type": "serif"
+  "type": "serif",
+  "description": "Garamond is a serif OPF font scheme for Latin presentations, using Garamond for both headings and body text."
 }

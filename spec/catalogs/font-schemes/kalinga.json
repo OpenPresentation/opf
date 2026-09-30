@@ -10,5 +10,6 @@
   "major": "Kalinga",
   "minor": "Kalinga",
   "textSample": "ଏହା କଳିଙ୍ଗ ଫଣ୍ଟରେ ଲେଖାଯାଇଛି",
-  "type": "sans-serif"
+  "type": "sans-serif",
+  "description": "Kalinga is a sans serif OPF font scheme for complex script presentations, using Kalinga for both headings and body text."
 }

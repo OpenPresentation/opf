@@ -1,7 +1,9 @@
 {
   "$schema": "https://openpresentation.org/schema/opf-catalog-index/v1",
+  "kind": "tones",
   "version": "1",
   "description": "Catalog of presentation tones available in the openpresentation.org catalog. Each entry is a lightweight summary; full tone records (voice cues, anti-patterns, sample phrases) live in the per-id JSON files alongside this index. Tones are referenced from OPF documents via tone.",
+  "contentSha256": "b5a8d0933f494d09cd3b9a399c8de2032c43d253fcf432974135e841fcc9e703",
   "records": [
     {
       "id": "formal",
