@@ -77,8 +77,8 @@ const EXPECTED_SUBSTITUTIONS = Object.freeze({
   'Aptos Display': previewsAptosWithIntos ? 'Intos Display' : 'Carlito', Aptos: previewsAptosWithIntos ? 'Intos' : 'Roboto', Calibri: 'Carlito', Georgia: 'Gelasio', Consolas: 'Cousine', 'Courier New': 'Cousine',
   Meiryo: 'Noto Sans JP', 'Yu Gothic': 'Noto Sans JP', 'Microsoft YaHei': 'Noto Sans SC', 'Malgun Gothic': 'Noto Sans KR', 'Microsoft JhengHei': 'Noto Sans TC',
   Mangal: 'Noto Sans Devanagari', 'Arabic Typesetting': 'Noto Naskh Arabic', David: 'Noto Serif Hebrew', 'Angsana New': 'Noto Sans Thai',
-  Tahoma: 'Arimo', Verdana: 'Arimo', 'Times New Roman': 'Tinos', Garamond: 'Tinos', Constantia: 'Caladea',
-  'Tenorite Display': 'Roboto', Tenorite: 'Roboto', 'Seaford Display': 'Carlito', Seaford: 'Carlito', Impact: 'Carlito', Grandview: 'Roboto',
+  Tahoma: 'Red Hat Text', Verdana: 'Montserrat', 'Times New Roman': 'Tinos', Garamond: 'Tinos', Constantia: 'PT Serif',
+  'Tenorite Display': 'Roboto', Tenorite: 'Roboto', 'Seaford Display': 'Source Sans 3', Seaford: 'Source Sans 3', Impact: 'Carlito', Grandview: 'Roboto',
   'Shonar Bangla': 'Noto Sans Bengali', Latha: 'Noto Sans Tamil', DaunPenh: 'Noto Sans Khmer', Nyala: 'Noto Sans Ethiopic', Sylfaen: 'Noto Sans',
   Tunga: 'Noto Sans Kannada', Shruti: 'Noto Sans Gujarati', Raavi: 'Noto Sans Gurmukhi', Kartika: 'Noto Sans Malayalam', Kalinga: 'Noto Sans Oriya', Gautami: 'Noto Sans Telugu'
 });
@@ -124,15 +124,10 @@ const SCHEME_CLASSES = [
 for (const member of ['aptos', 'georgia']) SCHEME_CLASSES.find((item) => item.id === schemeClass(byId('fontSchemes', member))).members.push(member);
 for (const entry of SCHEME_CLASSES) for (const member of entry.members) assert.equal(schemeClass(byId('fontSchemes', member)), entry.id, `${member} is a ${entry.id} scheme`);
 for (const scheme of catalogs.fontSchemes) assert.ok(SCHEME_CLASSES.some((entry) => entry.id === schemeClass(scheme)), `font scheme ${scheme.id} belongs to a known class`);
-// Preview faces that lack Cyrillic or Greek glyphs cannot draw Latin-slot text in those scripts (see the expected
-// failures below). A scheme is not drawn with a language it cannot show, and a class none of whose members can show a
-// language is left out of the array for that language; the expected failures cover the pair instead.
-const SCHEME_LANGUAGE_GAPS = {
-  georgia: ['russian', 'greek'], constantia: ['russian', 'greek'],
-  meiryo: ['greek'], 'yu-gothic': ['greek'], 'microsoft-yahei': ['greek'], 'malgun-gothic': ['greek'],
-  mangal: ['russian', 'greek'], 'arabic-typesetting': ['russian', 'greek'], david: ['russian', 'greek'], 'angsana-new': ['russian', 'greek']
-};
-const classMembers = (entry, language) => entry.members.filter((member) => schemeAvailable(member) && !SCHEME_LANGUAGE_GAPS[member]?.includes(language));
+// A scheme whose replacement face lacks the language's script (Georgia, Constantia and the script-scheme faces for
+// Cyrillic and Greek, the East Asian faces for Greek) is drawn like any other: the preview falls back per character
+// (opf-render glyphFallbackFamilies) and reports a font-glyph-fallback note, and the export still names the chosen font.
+const classMembers = (entry) => entry.members.filter((member) => schemeAvailable(member));
 const forbiddenClassLanguage = (entry, language) => classMembers(entry, language).length === 0;
 const pendingSchemes = SCHEME_CLASSES.flatMap((entry) => entry.members.filter((member) => !schemeAvailable(member)));
 
@@ -415,7 +410,7 @@ function generateMatrix() {
 function buildDeck(name, row, index) {
   const text = TEXT[row.language];
   const rotate = (list, slot) => list[(index + slot) % list.length];
-  const schemes = row.fontScheme.map((level, slot) => rotate(classMembers(SCHEME_CLASSES.find((entry) => entry.id === level), row.language), slot));
+  const schemes = row.fontScheme.map((level, slot) => rotate(classMembers(SCHEME_CLASSES.find((entry) => entry.id === level)), slot));
   const slides = [
     ...row.layout.map((family, slot) => layoutSlide(`layout-${slot + 1}`, rotate(layoutMembers(family), slot), text)),
     ...row.block.map((type, slot) => ({id: `block-${slot + 1}`, title: text.title, ...(slot === 0 ? {notes: text.body} : {}), ...contentBlocks[type](text)})),
@@ -592,7 +587,10 @@ async function verifyState(label, presentation) {
   registry.clearSubstitutions();
   const diagnostics = [];
   const svgs = renderSvgDeck(document, {...measured, onDiagnostic: (diagnostic) => diagnostics.push(diagnostic)});
-  assert.deepEqual(diagnostics, [], `${label}: preview diagnostics`);
+  // A face that lacks the text's glyphs is drawn per character with a bundled fallback face and reported as a note.
+  const fallbackNotes = diagnostics.filter((diagnostic) => diagnostic.code === 'font-glyph-fallback');
+  assert.deepEqual(diagnostics.filter((diagnostic) => diagnostic.code !== 'font-glyph-fallback'), [], `${label}: preview diagnostics`);
+  for (const note of fallbackNotes) assert.ok(note.fontFamily && note.fallbackFamily && note.path && note.characters.length > 0, `${label}: a glyph fallback note names the faces, the path and the characters`);
   assert.equal(svgs.length, document.slides.length, `${label}: one preview per slide`);
   const bytes = await toPptx(document, measured);
   // A replacement face is recorded under its weight selector name (Aptos -> Roboto Medium); the table names the family.
@@ -615,7 +613,7 @@ async function verifyState(label, presentation) {
   const scripts = detectScripts(textOf(document.slides), profile);
   // Han text can draw with any CJK face: the deck language, not the text, decides between Simplified, Japanese and the others.
   const drawnScripts = scripts.some((script) => CJK.includes(script)) ? [...new Set([...scripts, ...CJK])] : scripts;
-  const scriptFaces = new Set(drawnScripts.flatMap((script) => [...designatedFamilies(script, false), ...designatedFamilies(script, true)]));
+  const scriptFaces = new Set([...drawnScripts.flatMap((script) => [...designatedFamilies(script, false), ...designatedFamilies(script, true)]), ...fallbackNotes.map((note) => note.fallbackFamily)]);
   const chosenFaces = new Set(fonts.chosen.flatMap((family) => [...previewFaces(family)]));
   for (const family of drawn) assert.ok(chosenFaces.has(family) || scriptFaces.has(family), `${label}: preview drew ${family}, which no chosen font resolves to`);
   const roles = fonts.roles[0].families;
@@ -912,7 +910,7 @@ async function expectLimitation(id, what, run, code) {
   assert.equal(error.code, code, `${id}: ${what} now fails with ${error.code}, not the pinned ${code}. Update or delete the ${id} entry.`);
 }
 const providedSample = (scheme) => byId('fontSchemes', scheme).textSample;
-const GOOGLE_PENDING = ['open-sans', 'montserrat', 'poppins', 'raleway', 'pt-serif'];
+const GOOGLE_PENDING = ['raleway'];
 assert.ok(pendingSchemes.every((scheme) => GOOGLE_PENDING.includes(scheme)), `schemes the registry cannot preview need an expected-failure entry: ${pendingSchemes}`);
 const EXPECTED_FAILURES = [
   ...GOOGLE_PENDING.map((scheme) => ({
@@ -922,33 +920,12 @@ const EXPECTED_FAILURES = [
     preview: 'font-unavailable',
     measuredExport: 'font-unavailable'
   })),
-  ...Object.entries(SCHEME_LANGUAGE_GAPS).flatMap(([scheme, languages]) => languages.map((language) => ({
-    id: `preview-face-lacks-${language === 'russian' ? 'cyrillic' : 'greek'}-glyphs:${scheme}+${language}`,
-    reason: `The preview face that ${scheme} resolves to (${byId('fontSchemes', scheme).major}) has no ${language === 'russian' ? 'Cyrillic' : 'Greek'} glyphs, and Latin-slot ${language} text is drawn and measured with the scheme's face without a fallback, so the preview and the measured export report missing-glyph. Latin, and the schemes whose face covers the script, are unaffected.`,
-    deck: {name: `${scheme} ${language}`, language, design: {fontScheme: scheme}, slides: [{id: 'a', title: TEXT[language].title, text: TEXT[language].body}]},
-    preview: 'missing-glyph',
-    measuredExport: 'missing-glyph'
-  }))),
   {
     id: 'noto-sans-mongolian-cannot-shape-its-sample',
     reason: 'The bundled script face cannot shape the Mongolian sample, so the preview and the measured export report font-shaping-failed.',
     deck: {name: 'mongolian', language: 'mongolian', design: {fontScheme: 'noto-sans-mongolian'}, slides: [{id: 'a', title: providedSample('noto-sans-mongolian'), text: providedSample('noto-sans-mongolian')}]},
     preview: 'font-shaping-failed',
     measuredExport: 'font-shaping-failed'
-  },
-  {
-    id: 'japanese-kanji-and-hangul-in-one-latin-deck-string',
-    reason: 'In a Latin-language deck the renderer picks one CJK face per Han run. Japanese-only kanji (U+53CE) beside Hangul in the same string are drawn with a face that lacks the kanji, then fall back to the Latin face, so the preview and the measured export report missing-glyph. Each script on its own, or the same string in a Japanese deck, works.',
-    deck: {name: 'kanji and hangul', language: 'english', design: {fontScheme: 'calibri'}, slides: [{id: 'a', title: 'Revenue 収益 성장', text: 'Revenue grew'}]},
-    preview: 'missing-glyph',
-    measuredExport: 'missing-glyph'
-  },
-  {
-    id: 'simplified-hanzi-in-a-japanese-deck',
-    reason: 'A Japanese deck draws Han text with the Japanese face only. A Simplified-only character (U+53D8) has no glyph there and no other CJK face is tried, so the preview and the measured export report missing-glyph.',
-    deck: {name: 'hanzi in japanese', language: 'japanese', design: {fontScheme: 'meiryo'}, slides: [{id: 'a', title: TEXT['chinese-simplified'].title, text: TEXT['chinese-simplified'].body}]},
-    preview: 'missing-glyph',
-    measuredExport: 'missing-glyph'
   }
 ];
 for (const failure of EXPECTED_FAILURES) {
@@ -960,17 +937,45 @@ for (const failure of EXPECTED_FAILURES) {
   const check = checkPptxTypefaces(bytes, {fonts: fonts.chosen, monospace: fonts.monospace});
   assert.deepEqual(check.violations, [], `${failure.id}: an unmeasured export still names only the chosen fonts`);
 }
-// A one-column histogram loses its chart silently: no chart part, no graphic frame and no diagnostic.
+// Formerly named expected failures, now positive: the preview falls back per character to a bundled face that has the
+// glyph and reports a font-glyph-fallback note; the measured export succeeds and still names only the chosen fonts.
+// Constantia previews with the open PT Serif, which has Cyrillic, so only its Greek text falls back (the matrix draws both).
+const GLYPH_FALLBACK_CASES = [
+  ...['georgia', 'constantia', 'mangal', 'arabic-typesetting', 'david', 'angsana-new'].flatMap((scheme) => ['russian', 'greek'].filter((language) => !(scheme === 'constantia' && language === 'russian')).map((language) => ({id: `${scheme}+${language}`, language, scheme, title: TEXT[language].title, body: TEXT[language].body, from: previewFaces(byId('fontSchemes', scheme).major), to: ['Noto Sans']}))),
+  ...['meiryo', 'yu-gothic', 'microsoft-yahei', 'malgun-gothic'].map((scheme) => ({id: `${scheme}+greek`, language: 'greek', scheme, title: TEXT.greek.title, body: TEXT.greek.body, from: previewFaces(byId('fontSchemes', scheme).major), to: ['Noto Sans']})),
+  {id: 'japanese-kanji-and-hangul-in-one-latin-deck-string', language: 'english', scheme: 'calibri', title: 'Revenue 収益 성장', body: 'Revenue grew', from: previewFaces('Calibri'), to: ['Noto Sans JP'], allowed: ['Noto Sans JP', 'Noto Sans SC', 'Noto Sans KR'], characters: ['収']},
+  {id: 'simplified-hanzi-in-a-japanese-deck', language: 'japanese', scheme: 'meiryo', title: TEXT['chinese-simplified'].title, body: TEXT['chinese-simplified'].body, from: previewFaces('Meiryo'), to: ['Noto Sans SC'], characters: ['变']}
+];
+for (const fallback of GLYPH_FALLBACK_CASES) {
+  const deck = {name: fallback.id, language: fallback.language, design: {fontScheme: fallback.scheme}, slides: [{id: 'a', title: fallback.title, text: fallback.body}]};
+  const measured = engineOptions(deck);
+  const notes = [];
+  const svgs = renderSvgDeck(deck, {...measured, onDiagnostic: (diagnostic) => notes.push(diagnostic)});
+  assert.ok(notes.length > 0 && notes.every((note) => note.code === 'font-glyph-fallback'), `${fallback.id}: the preview reports only glyph fallback notes: ${JSON.stringify(notes.map((note) => note.code))}`);
+  assert.ok(notes.every((note) => fallback.from.has(note.fontFamily) && (fallback.allowed ?? fallback.to).includes(note.fallbackFamily)), `${fallback.id}: falls back from the scheme face to ${fallback.allowed ?? fallback.to}: ${JSON.stringify(notes.map((note) => [note.fontFamily, note.fallbackFamily]))}`);
+  for (const character of fallback.characters ?? []) assert.ok(notes.some((note) => note.characters.includes(character)), `${fallback.id}: reports U+${character.codePointAt(0).toString(16)}`);
+  assert.ok(fallback.to.every((family) => svgFamilies(svgs).includes(family)), `${fallback.id}: draws ${fallback.to}`);
+  assert.deepEqual(renderSvgDeck(deck, measured), svgs, `${fallback.id}: deterministic`);
+  const exportBytes = await toPptx(deck, measured);
+  const fonts = chosenFonts(deck);
+  assert.deepEqual(checkPptxTypefaces(exportBytes, {fonts: fonts.chosen, monospace: fonts.monospace}).violations, [], `${fallback.id}: the measured export names only the chosen fonts`);
+}
+// A one-column histogram used to lose its chart silently: no chart part, no graphic frame and no diagnostic.
 {
-  const id = 'single-series-histogram-chart-silently-dropped';
+  const id = 'single-series-histogram-chart';
   const histogram = byId('chartTypes', 'histogram');
   assert.equal(histogram.columns.length, 1, 'the catalog histogram has one data column');
   const deck = {name: id, language: 'english', design: {fontScheme: 'calibri'}, slides: [{id: 'a', layout: 'chart-1x', title: 'Histogram', chart: {type: 'histogram', data: {columns: ['Value'], rows: [[3], [5], [8], [13]]}}, text: 'Body'}]};
   const exportDiagnostics = [];
-  const exported = unzipSync(await toPptx(deck, {...engineOptions(deck), onDiagnostic: (diagnostic) => exportDiagnostics.push(diagnostic)}));
-  const dropped = !Object.keys(exported).some((name) => /^ppt\/charts\/chart\d+\.xml$/.test(name)) && !decoder.decode(exported['ppt/slides/slide1.xml']).includes('graphicFrame');
-  assert.ok(dropped, `${id}: the chart is now exported. Limitation resolved: delete this entry.`);
-  assert.deepEqual(exportDiagnostics, [], `${id}: the export now reports something. Update or delete this entry.`);
+  const bytes = await toPptx(deck, {...engineOptions(deck), onDiagnostic: (diagnostic) => exportDiagnostics.push(diagnostic)});
+  const exported = unzipSync(bytes);
+  assert.ok(Object.keys(exported).some((name) => /^ppt\/charts\/chart\d+\.xml$/.test(name)), `${id}: a chart part is exported`);
+  assert.ok(decoder.decode(exported['ppt/slides/slide1.xml']).includes('graphicFrame'), `${id}: the slide has a graphic frame`);
+  assert.deepEqual(exportDiagnostics.map((diagnostic) => [diagnostic.code, diagnostic.adaptation, diagnostic.path]), [['chart-data-adapted', 'histogram-binned', 'slides.0.chart']], `${id}: the binning is reported`);
+  assert.deepEqual(packageProblems(exported), [], `${id}: package structure, nested workbook included`);
+  const fonts = chosenFonts(deck);
+  assert.deepEqual(checkPptxTypefaces(bytes, {fonts: fonts.chosen, monospace: fonts.monospace}).violations, [], `${id}: the chart and its workbook name only the chosen fonts`);
+  assert.equal((await fromPptx(bytes)).slides.length, 1, `${id}: re-imports`);
 }
 
 // ---------------------------------------------------------------------------
@@ -983,4 +988,4 @@ const seconds = (Date.now() - started) / 1000;
 assert.ok(seconds < MAX_SECONDS, `the matrix took ${seconds} s; its CI budget is ${MAX_SECONDS} s`);
 await mkdir(new URL('../artifacts/font-switch-matrix/', import.meta.url), {recursive: true});
 await writeFile(new URL('../artifacts/font-switch-matrix/report.json', import.meta.url), `${JSON.stringify({seed: matrix.seed, decks: matrix.rows.length, factors: FACTORS, rows: matrix.rows, chainLanguages: CHAIN_LANGUAGES, pendingSchemes, chartPaths, previewApproximatedCharts: chartPaths.filter((path) => !path.previewNative).map((path) => path.id), exportFallbackCharts: Object.keys(EXPORT_FALLBACK), expectedFailures: EXPECTED_FAILURES.map(({id, reason, preview, measuredExport}) => ({id, reason, preview, measuredExport})), substitutions: substitutionsSeen, unusedExpectations, states: stateReports}, null, 1)}\n`);
-console.log(`Font switch matrix passed: ${matrix.rows.length} pairwise decks and ${switches - matrix.rows.length} fixed switches, ${stateReports.length} verified states, ${chartPaths.length} chart paths, ${Object.keys(substitutionsSeen).length} recorded substitutions, ${EXPECTED_FAILURES.length + 1} named expected failures, ${seconds.toFixed(1)} s.`);
+console.log(`Font switch matrix passed: ${matrix.rows.length} pairwise decks and ${switches - matrix.rows.length} fixed switches, ${stateReports.length} verified states, ${chartPaths.length} chart paths, ${Object.keys(substitutionsSeen).length} recorded substitutions, ${EXPECTED_FAILURES.length} named expected failures, ${seconds.toFixed(1)} s.`);
