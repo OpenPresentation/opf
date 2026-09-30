@@ -634,7 +634,7 @@
     },
     "Socials": {
       "type": "object",
-      "description": "Social media handles or URLs, keyed by platform id from the 'socialPlatforms' catalog. Each value is a string — either a full URL or a platform handle (e.g., '@acme'). The catalog record for each platform carries the URL pattern, handle prefix, brand color, and themed icons used by renderers.\n\nKeys resolve to the 'id' of a 'socialPlatforms' catalog record. Resolution order: inline catalogs.socialPlatforms.records[] → catalogs.socialPlatforms.source → default catalog at https://www.pptx.gallery/social-platforms. Unknown platform keys render with engine fallbacks (the raw value as text). Used both for organization and speaker records.",
+      "description": "Social media handles or URLs, keyed by platform id from the 'socialPlatforms' catalog. Each value is a string — either a full URL or a platform handle (e.g., '@acme'). The catalog record for each platform carries the URL pattern and handle prefix that engines use to render and link the profile URL, plus brand color and themed icons as catalog metadata for authoring UIs (engines render the profile URL, not icons or brand colors).\n\nKeys resolve to the 'id' of a 'socialPlatforms' catalog record. Resolution order: inline catalogs.socialPlatforms.records[] → catalogs.socialPlatforms.source → default catalog at https://www.pptx.gallery/social-platforms. Unknown platform keys render with engine fallbacks (the raw value as text). Used both for organization and speaker records.",
       "additionalProperties": {
         "type": "string",
         "description": "Handle or URL for the platform identified by the property key."

@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://openpresentation.org/schema/opf-social-platform/v1",
   "title": "Social Platform",
-  "description": "Schema for social-platform records in the pptx.gallery library. Each record describes a single social-media platform — its base URL, profile-URL pattern, handle prefix, brand color, and themed icons. Records are referenced from OPF documents indirectly: the property keys of any Socials object (Organization.socials, Speaker.socials) match record ids, and renderers use the catalog record to format URLs and pick icons. The engine resolves references against catalogs.socialPlatforms (inline) → catalogs.socialPlatforms.source → the default catalog at https://www.pptx.gallery/social-platforms.",
+  "description": "Schema for social-platform records in the pptx.gallery library. Each record describes a single social-media platform — its base URL, profile-URL pattern, handle prefix, brand color, and themed icons. Records are referenced from OPF documents indirectly: the property keys of any Socials object (Organization.socials, Speaker.socials) match record ids, and engines use the catalog record's URL patterns and handle prefix to format and link the profile URL. The brand color and the themed icons are catalog metadata for authoring UIs: engines (opf-render, opf-pptx) render the profile URL, not icons or brand colors. The engine resolves references against catalogs.socialPlatforms (inline) → catalogs.socialPlatforms.source → the default catalog at https://www.pptx.gallery/social-platforms.",
   "type": "object",
   "required": [
     "$schema",
@@ -132,7 +132,7 @@
     },
     "brandColor": {
       "type": "string",
-      "description": "Brand color (hex) used for branded icon chips, link styling, or section accents.",
+      "description": "Brand color (hex) for branded icon chips, link styling, or section accents in authoring UIs. Catalog metadata: engines do not draw it.",
       "examples": [
         "#0A66C2",
         "#000000",
@@ -142,7 +142,7 @@
     },
     "icon": {
       "type": "string",
-      "description": "Default icon source. Accepts an HTTPS URL, data URI, relative path, or asset reference. Used as the fallback when a themed (Light/Dark) variant isn't set.",
+      "description": "Default icon source. Accepts an HTTPS URL, data URI, relative path, or asset reference. Used as the fallback when a themed (Light/Dark) variant isn't set. Catalog metadata for authoring UIs: engines do not draw icons.",
       "examples": [
         "https://www.pptx.gallery/social-platforms/linkedin.svg",
         "./assets/social-platforms/linkedin.svg",
@@ -151,7 +151,7 @@
     },
     "iconLight": {
       "type": "string",
-      "description": "Light-colored icon variant intended for rendering on dark backgrounds.",
+      "description": "Light-colored icon variant intended for authoring UIs that draw the icon on dark backgrounds (engines do not draw icons).",
       "examples": [
         "https://www.pptx.gallery/social-platforms/linkedin-light.svg",
         "./assets/social-platforms/linkedin-light.svg"
@@ -159,7 +159,7 @@
     },
     "iconDark": {
       "type": "string",
-      "description": "Dark-colored icon variant intended for rendering on light backgrounds.",
+      "description": "Dark-colored icon variant intended for authoring UIs that draw the icon on light backgrounds (engines do not draw icons).",
       "examples": [
         "https://www.pptx.gallery/social-platforms/linkedin-dark.svg",
         "./assets/social-platforms/linkedin-dark.svg"
