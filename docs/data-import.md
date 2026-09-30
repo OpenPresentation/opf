@@ -52,7 +52,7 @@ The functions also accept already-parsed JSON and are re-exported by `@openprese
 
 This is an embedded data snapshot, not a live file link. OPF's existing `ChartDataSource` can declare a source reference, but source loading/refresh is a separate host responsibility. Tables use inline `columns`/`rows`; there is no new unsupported `table.src` field. Re-import after a source changes.
 
-These APIs are published in core 0.11.0 and re-exported by editor 0.8.0; CLI 0.9.0 includes `import-data`. Use the coordinated Node 24 train with renderer 0.9.0 and PPTX 0.9.1 for preview/export. Exact pins and compatibility boundaries are in the [compatibility matrix](compatibility-matrix.md) and [release plan](../release-plan.json).
+These APIs are published in core 0.11.0 and re-exported by editor 0.8.0; CLI 0.9.0 includes `import-data`. Use the coordinated Node 24 train with core 0.11.2, renderer 0.11.1, editor 0.10.0 and PPTX 0.11.0 for preview/export. Exact pins and compatibility boundaries are in the [compatibility matrix](compatibility-matrix.md) and [release plan](../release-plan.json).
 
 ## Verification
 
