@@ -1057,7 +1057,9 @@ at the first measurement, `partial` before pptx-gallery#42). Every id resolves i
 - **Icons (owner default 2026-09-30).** Icons are catalog metadata only: the
   social-platform records keep glyphs and brand colours for authoring, and no
   engine draws them. What renders and links is the profile URL. This is the
-  recorded FF-34 decision.
+  recorded FF-34 decision; the social-platform schema description and the gallery
+  `/socials` copy now say so ([opf#191](https://github.com/OpenPresentation/opf/pull/191),
+  [pptx-gallery#64](https://github.com/Data-Advantage/pptx-gallery/pull/64)).
 - **Parity (FF-38).** 10 of 10 perfect.
 - **Fixes.** FF-34.
 
