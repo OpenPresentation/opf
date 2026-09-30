@@ -6,6 +6,8 @@ import {readFile, writeFile, mkdir} from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath, pathToFileURL} from 'node:url';
 import {createRequire} from 'node:module';
+import {createFontHosts, FONT_HOST_MODELS} from '../../parity/scripts/font-host.mjs';
+import {classifyChosenFamilies, firstFamily, hostRenderOutcome, slotsByFamily, svgTextRuns} from '../../parity/scripts/font-availability.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const SRC = path.resolve(here, '../../../sources');
@@ -19,6 +21,7 @@ const render = await imp(`${SRC}/audit-B-opf-render/dist/index.js`);
 const {prepareNodeFonts, BUNDLED_FONT_MANIFEST} = await imp(`${SRC}/audit-B-opf-render/dist/fonts-node.js`);
 const {FONT_COMPATIBILITY} = await imp(`${SRC}/audit-B-opf-render/dist/fonts.js`).catch(() => ({}));
 const {toPptx, fromPptx} = await imp(`${SRC}/audit-B-opf-pptx/dist/index.js`);
+const {fontPolicyFor} = await imp(`${core}/index.js`);
 const req = createRequire(`${SRC}/audit-B-opf-pptx/package.json`);
 const {unzipSync} = req('fflate');
 
@@ -30,6 +33,19 @@ const recs = kind => Array.isArray(C[kind]) ? C[kind] : (C.catalogs?.[kind] ?? [
 const byId = (kind, id) => recs(kind).find(r => r.id === id) ?? null;
 const bundledFamilies = new Set(BUNDLED_FONT_MANIFEST.packages.flatMap(p => p.faces.map(f => f.family)));
 const basePackFamilies = new Set(BUNDLED_FONT_MANIFEST.packages.filter(p => p.pack === 'base').flatMap(p => p.faces.map(f => f.family)));
+
+// Preview font host (FF-48). The presence audits classify font availability against the host that ships, as the parity harness does
+// (parity/scripts/font-host.mjs, README "Preview font host (FF-38, 2026-09-30): the gallery model"): the gallery editor's browser registry
+// and font gate (ensureLazyFonts + ensureScripts on the value's own document, the same package files), then the owner font policy
+// (font-resolution.mjs): the preview draws the policy table's replacement and the PPTX writes the selected family is `works`.
+// AUDIT_FONT_HOST selects the model: gallery (default), node-auto, office-only (the parity harness's models) or strict (diagnostic:
+// classify against the strict no-host previews measured below, the pre-FF-48 behaviour). Every strict measurement is recorded in every
+// mode; the host measurement is taken with the modelled host (gallery when strict is asked for).
+const FONT_HOST = process.env.AUDIT_FONT_HOST ?? 'gallery';
+if (FONT_HOST !== 'strict' && !FONT_HOST_MODELS.includes(FONT_HOST)) throw new Error(`AUDIT_FONT_HOST must be one of ${[...FONT_HOST_MODELS, 'strict'].join(', ')}, not ${FONT_HOST}`);
+const HOST_MODEL = FONT_HOST === 'strict' ? 'gallery' : FONT_HOST;
+const fontHosts = await createFontHosts({renderDir: `${SRC}/audit-B-opf-render`, model: HOST_MODEL});
+const bundledIn = family => [...new Set(BUNDLED_FONT_MANIFEST.packages.filter(p => p.faces.some(f => f.family.toLowerCase() === family.toLowerCase())).map(p => p.pack))];
 
 const base = await prepareNodeFonts({pack: 'base'});
 const officeVisual = await prepareNodeFonts({pack: 'office', substitutionPolicy: 'visual'});
@@ -220,6 +236,28 @@ function familyAvailability(family) {
   if (compat) { const bundledSub = compat.substitutes.find(s => bundledFamilies.has(s)); return bundledSub ? `substitute-${compat.compatibility}:${bundledSub}` : `substitute-${compat.compatibility}-not-bundled:${compat.substitutes.join('|')}`; }
   return 'not-bundled';
 }
+
+// FF-48: what the modelled host does with a value. `render` is the strict measured render with the host registry after its font gate;
+// `families` the FF-38 fontResolution verdict per family the design selects (the PPTX must name it, the preview must draw it or its
+// policy-table route); `reasons` the failing or near verdicts, verbatim from the classifier.
+async function hostMeasure(doc, pvNone, inv) {
+  const host = await fontHosts.hostFor(doc), fonts = pvNone.fonts ?? {};
+  const chosenFamilies = new Set(Object.values(fonts).filter(Boolean).map(firstFamily));
+  const roles = Object.fromEntries(Object.entries(fonts).filter(([, v]) => v).map(([k, v]) => [k, firstFamily(v)]));
+  const th = inv.theme, slot = a => ({latin: a?.[0], ea: a?.[1], cs: a?.[2]});
+  const theme = {major: slot(th?.major), minor: slot(th?.minor)};
+  const previewSlots = slotsByFamily(svgTextRuns(pvNone.svg));
+  // The names the slides write per script slot; a run without its own ea or cs typeface takes its Latin name, and inherits the theme font of its slot.
+  const slideFaces = tag => new Set(inv.typefaces.filter(t => /slides\/slide\d/.test(t.part) && t.tag === tag && t.typeface).map(t => t.typeface));
+  const pptxNamesBySlot = {latin: slideFaces('latin'), ea: slideFaces('ea'), cs: slideFaces('cs')};
+  for (const k of ['ea', 'cs']) if (!pptxNamesBySlot[k].size) for (const n of pptxNamesBySlot.latin) pptxNamesBySlot[k].add(n);
+  for (const k of ['latin', 'ea', 'cs']) for (const t of [theme.major, theme.minor]) if (t[k]) pptxNamesBySlot[k].add(t[k]);
+  const packageNames = new Set([...inv.typefaces.map(t => t.typeface), ...inv.appFonts].filter(Boolean).map(x => x.toLowerCase()));
+  const c = classifyChosenFamilies({host, chosenFamilies, roles, theme, previewSlots, pptxNamesBySlot, packageNames, fontPolicyFor, bundledIn});
+  return {model: HOST_MODEL, gate: host.gate, render: hostRenderOutcome(host, render, doc), selection: host.selection ? {scripts: host.selection.scripts, packages: host.selection.packages} : null, families: c.fontRes, reasons: c.reasons};
+}
+// The host's verdict on a probe document (a non-Latin text sample or a language's native name): its font gate finished and the strict measured render does not throw.
+async function hostProbe(probeDoc) { return hostRenderOutcome(await fontHosts.hostFor(probeDoc), render, probeDoc); }
 
 function strip(doc, keys) { const d = structuredClone(doc); for (const k of keys) { const [a, b] = k.split('.'); if (b) { if (d[a]) { delete d[a][b]; if (!Object.keys(d[a]).length) delete d[a]; } } else delete d[k]; } return d; }
 
@@ -454,13 +492,14 @@ for (const s of snippets) {
       m.majorMatches = inv.theme?.major?.[0] === fam.heading; m.minorMatches = inv.theme?.minor?.[0] === fam.body;
       m.previewVsExportFontDiff = pv.none.ok ? {previewHeading: pv.none.fonts?.heading, exportMajor: inv.theme?.major?.[0], previewBody: pv.none.fonts?.body, exportMinor: inv.theme?.minor?.[0], agree: pv.none.fonts?.heading === inv.theme?.major?.[0] && pv.none.fonts?.body === inv.theme?.minor?.[0]} : null;
     }
+    m.hostFonts = inv && pv.none.ok ? await hostMeasure(doc, pv.none, inv) : null;
     m.reimportFontScheme = rd?.design?.fontScheme ?? null;
     { const eo = await doExport(doc, "office-visual"); const io = eo.ok ? inventory(eo.bytes) : null; m.exportWithOfficeVisualRegistry = eo.ok ? {major: io.theme?.major?.[0], minor: io.theme?.minor?.[0], runFaces: [...new Set(io.typefaces.filter(t => /slides\/slide\d/.test(t.part)).map(t => t.typeface))]} : {error: eo.error}; }
     // Non-Latin textSample glyph probe for the scheme itself.
     if (rec?.textSample && rec.languageFamily && rec.languageFamily !== 'latin') {
       const probe = structuredClone(doc); probe.slides = [{...probe.slides[0], title: rec.textSample}];
       const pb = doRender(probe, 'base'), po = doRender(probe, 'office-visual'), pn = doRender(probe, 'none');
-      m.textSampleProbe = {sample: rec.textSample, none: pn.ok ? 'ok' : pn.error, base: pb.ok ? 'ok' : `${pb.error}:${pb.details?.fontFamily ?? ''}`, officeVisual: po.ok ? 'ok' : `${po.error}:${po.details?.fontFamily ?? ''}`};
+      m.textSampleProbe = {sample: rec.textSample, host: await hostProbe(probe), none: pn.ok ? 'ok' : pn.error, base: pb.ok ? 'ok' : `${pb.error}:${pb.details?.fontFamily ?? ''}`, officeVisual: po.ok ? 'ok' : `${po.error}:${po.details?.fontFamily ?? ''}`};
     }
   }
   if (dim === 'themes') {
@@ -519,7 +558,7 @@ for (const s of snippets) {
       const pn = doRender(probe, 'none'), pb = doRender(probe, 'base'), po = doRender(probe, 'office-visual');
       const pe = await doExport(probe, 'none'); const pi = pe.ok ? inventory(pe.bytes) : null;
       const nonAscii = /[^\u0000-\u024F\u1E00-\u1EFF]/.test(native);
-      m.nativeProbe = {text: native, nonLatinScript: nonAscii, none: pn.ok ? 'ok' : pn.error, base: pb.ok ? 'ok' : `${pb.error}:${pb.details?.fontFamily ?? ''}`, officeVisual: po.ok ? 'ok' : `${po.error}:${po.details?.fontFamily ?? ''}`,
+      m.nativeProbe = {text: native, nonLatinScript: nonAscii, host: await hostProbe(probe), none: pn.ok ? 'ok' : pn.error, base: pb.ok ? 'ok' : `${pb.error}:${pb.details?.fontFamily ?? ''}`, officeVisual: po.ok ? 'ok' : `${po.error}:${po.details?.fontFamily ?? ''}`,
         // Same native text on the only fully bundled scheme (Roboto) and on the record's googleFontScheme, strict base pack:
         robotoBase: (() => { const q = structuredClone(probe); q.design = {...(q.design ?? {}), fontScheme: 'roboto'}; const x = doRender(q, 'base'); return x.ok ? 'ok' : `${x.error}:${x.details?.fontFamily ?? ''}:${x.details?.character ? 'U+' + x.details.character.codePointAt(0).toString(16).toUpperCase() : ''}`; })(),
         googleSchemeBase: lang?.googleFontScheme ? (() => { const q = structuredClone(probe); q.design = {...(q.design ?? {}), fontScheme: lang.googleFontScheme}; const x = doRender(q, 'base'); return `${lang.googleFontScheme}:` + (x.ok ? 'ok' : `${x.error}:${x.details?.fontFamily ?? ''}`); })() : null,

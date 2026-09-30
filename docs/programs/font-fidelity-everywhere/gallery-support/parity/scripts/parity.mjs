@@ -9,7 +9,7 @@ import {execFileSync} from 'node:child_process';
 import path from 'node:path';
 import {fileURLToPath, pathToFileURL} from 'node:url';
 import {createRequire} from 'node:module';
-import {classifyFontResolution, legacyPasses, pptxNaming} from './font-resolution.mjs';
+import {classifyChosenFamilies, hostRenderOutcome, hostRenderReason, resolveFamily} from './font-availability.mjs';
 import {runElements, logicalRunCount} from './pptx-runs.mjs';
 import {drawnTableBox} from './table-box.mjs';
 import {createFontHosts} from './font-host.mjs';
@@ -216,15 +216,8 @@ function inventory(files) {
 }
 
 // ---------- font resolution (preview) ----------
-// Registry resolution of a family in the modelled preview host (office pack, visual substitution). The verdict per
-// family comes from font-resolution.mjs (owner decision 2026-09-29: look-alikes are intended, the PPTX names the
-// selected family); `status` and `resolved` keep the old-definition view (real, metric, visual, missing).
-function resolveFamily(host, family, weight = 400, italic = false) {
-  const k = `${family}|${weight}|${italic}`; if (host.resolutions.has(k)) return host.resolutions.get(k);
-  let v; try { const r = host.registry.resolveFont({fontFamily: family, fontWeight: weight, italic}); v = {ok: true, compatibility: r.compatibility, resolvedFamily: r.resolvedFamily}; }
-  catch (e) { v = {ok: false, code: e.code}; }
-  host.resolutions.set(k, v); return v;
-}
+// The per-family verdict and the host render check live in font-availability.mjs (shared with the presence audits, FF-48); the
+// classifier rules are in font-resolution.mjs (owner decision 2026-09-29: look-alikes are intended, the PPTX names the selected family).
 const bundledIn = family => [...new Set(BUNDLED_FONT_MANIFEST.packages.filter(p => p.faces.some(f => f.family.toLowerCase() === family.toLowerCase())).map(p => p.pack))];
 
 // ---------- helpers ----------
@@ -462,25 +455,15 @@ async function parity(doc) {
   // A run with no typeface of its own inherits the theme font of its slot (major or minor).
   for (const k of ['latin', 'ea', 'cs']) for (const t of [theme.major, theme.minor]) if (t[k]) pptxNamesBySlot[k].add(t[k]);
   const packageNames = new Set([...invt.typefaces.map(t => t.typeface), ...invt.appFonts].filter(Boolean).map(x => x.toLowerCase()));
-  for (const f of chosenFamilies) {
-    if (!f) continue;
-    const policyRow = fontPolicyFor(f), preview = resolveFamily(fontHost, f);
-    const {named, slot} = pptxNaming({family: f, roles, theme, slotsUsed: previewSlots.get(f) ?? new Set(), pptxNamesBySlot});
-    const routeNames = policyRow?.replacement ? [policyRow.replacement.family, ...(policyRow.alternates ?? [])] : [];
-    const replacementNames = routeNames.filter(r => r.toLowerCase() !== f.toLowerCase() && !chosenFamilies.has(r) && packageNames.has(r.toLowerCase()));
-    const cls = classifyFontResolution({family: f, policyRow, preview, pptx: {named, slot, replacementNames}, bundledIn: preview.ok ? [] : [...new Set([f, ...routeNames].flatMap(bundledIn))]});
-    fontRes[f] = {status: cls.legacy, resolved: cls.resolved, verdict: cls.verdict, tier: cls.tier, route: cls.route, policyTier: cls.policyTier, licenseClass: cls.licenseClass, ...(preview.ok ? {} : {error: preview.code}), pptx: {named, ...(slot ? {slot} : {}), slotsUsed: [...(previewSlots.get(f) ?? [])].sort(), replacementNames}};
-    for (const r of cls.reasons) add('fontResolution', r.status, r.reason, f);
-    if (!legacyPasses(preview)) legacyFontReasons.push(`preview font ${cls.legacy}: ${f}${cls.resolved ? ' -> ' + cls.resolved : ''}`);
-  }
+  const fontClass = classifyChosenFamilies({host: fontHost, chosenFamilies, roles, theme, previewSlots, pptxNamesBySlot, packageNames, fontPolicyFor, bundledIn});
+  Object.assign(fontRes, fontClass.fontRes); legacyFontReasons.push(...fontClass.legacyFontReasons);
+  for (const r of fontClass.reasons) add('fontResolution', r.status, r.reason, r.family);
 
   // The host must also draw the value: the strict measured render with the host registry (what the editor's gate hands the canvas)
   // must not throw. A resolved family is not enough when the face cannot measure or shape the text (font-shaping-failed) or a family
   // it names still has no face (font-unavailable). One reason per value, and none when a family above already failed for the same cause.
-  let hostRender = fontHost.gate.ok ? {ok: true} : {ok: false, code: fontHost.gate.code, family: null, cause: fontHost.gate.message};
-  if (hostRender.ok) try { render.renderSvgDeck(structuredClone(doc), {...fontHost.options}); }
-  catch (e) { hostRender = {ok: false, code: e.code ?? e.name, family: e.details?.fontFamily ?? null, cause: String(e.details?.cause ?? e.message).slice(0, 120)}; }
-  if (!hostRender.ok && !diffs.some(d => d.check === 'fontResolution' && d.status === 'fail')) add('fontResolution', 'fail', `the modelled host cannot draw this value: ${hostRender.code}${hostRender.family ? ' (' + hostRender.family + ')' : ''}, ${hostRender.cause}`);
+  const hostRender = hostRenderOutcome(fontHost, render, doc);
+  if (!hostRender.ok && !diffs.some(d => d.check === 'fontResolution' && d.status === 'fail')) add('fontResolution', 'fail', hostRenderReason(hostRender));
 
   // (7) re-import round trip
   const idiag = []; let rt;

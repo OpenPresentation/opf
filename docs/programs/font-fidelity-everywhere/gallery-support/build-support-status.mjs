@@ -183,11 +183,12 @@ const out = {
   statuses: STATUSES,
   parityStatuses: PARITY_STATUSES,
   audits: {
-    a: { dimensions: [...new Set(a.results.map((r) => r.dimension))], heads: headsA, results: 'audit-a/results.json' },
-    b: { dimensions: [...new Set(b.results.map((r) => r.dimension))], heads: headsB, generated: b.generated, results: 'audit-b/results.json' },
+    a: { dimensions: [...new Set(a.results.map((r) => r.dimension))], heads: headsA, fontHost: a.meta.fontHost ?? 'strict', results: 'audit-a/results.json' },
+    b: { dimensions: [...new Set(b.results.map((r) => r.dimension))], heads: headsB, fontHost: b.fontHost ?? 'strict', generated: b.generated, results: 'audit-b/results.json' },
     parity: {
       item: 'FF-38',
       heads: headsP,
+      fontHost: p.meta.fontHost ?? null,
       generated: p.meta.generatedAt,
       tolerances: p.meta.tolerances,
       checks: PARITY_CHECKS,
