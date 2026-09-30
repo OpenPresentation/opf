@@ -30,6 +30,8 @@ const cases=[
   ['or','odia','kalinga','ଓଡ଼ିଆ'],['ta','tamil','latha','தமிழ்'],['te','telugu','gautami','తెలుగు'],['kn','kannada','tunga','ಕನ್ನಡ'],
   ['ml','malayalam','kartika','മലയാളം'],['km','khmer','daunpenh','ខ្មែរ'],['am','amharic','nyala','አማርኛ'],['hy','armenian','sylfaen','հայերեն'],
   ['ka','georgian','sylfaen','ქართული'],['fa','persian','arabic-typesetting','فارسی'],['ur','urdu','arabic-typesetting','اردو'],['mr','marathi','mangal','मराठी'],
+  // Noto Sans Mongolian: fontkit cannot decode its GSUB type 8 lookup; the skipped lookup keeps Node advances equal to the browser's (FF-44).
+  ['mn-Mong','mongolian','noto-sans-mongolian','ᠮᠣᠩᠭᠣᠯ ᠤᠯᠤᠰ'],
 ].map(([id,language,scheme,title])=>({id,language,title,svg:renderSvg(deck(language,scheme,title),options)}));
 
 // Serve every loaded face from a local route; nothing else may load.

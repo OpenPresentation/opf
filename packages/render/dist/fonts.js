@@ -45,6 +45,27 @@ function unavailableFontError(family, style, policy) {
   return new OPFFontError("font-unavailable", `No local font face for '${family}'. ${owner} None of its replacements (${candidates.join(", ")}) is loaded${packs.length ? `; load the ${packs.map(pack=>"'"+pack+"'").join(" or ")} font pack` : ""}, or ${hook}. The PPTX names '${family}' either way.`, details);
 }
 /** Local font files only. The caller explicitly chooses aliases and fallback. */
+// fontkit 2.0.4 cannot decode every OpenType lookup: its GSUB type 8 (reverse chaining contextual single substitution) struct lacks the
+// backtrackGlyphCount field, so the lookup fails with "Not a fixed size" when a feature that references it is applied, and it has no processor
+// for the type anyway. Noto Sans Mongolian 3.x has such a lookup under calt and rclt in every script, so every shaping of the face threw (FF-44).
+// A lookup that cannot be decoded is treated as one that applies nothing (no subtables), so the rest of the feature still runs: advances equal
+// a browser's for the face's Latin and Mongolian samples (test/mongolian-shaping.mjs). Applied only after shaping failed, once per font.
+const lookupsGuarded = new WeakSet();
+function skipUndecodableLookups(font) {
+  if (lookupsGuarded.has(font)) return false;
+  lookupsGuarded.add(font);
+  let guarded = false;
+  for (const tag of ["GSUB", "GPOS"]) {
+    let list;
+    try { list = font[tag]?.lookupList; } catch { continue; }
+    if (typeof list?.get !== "function") continue;
+    const get = list.get.bind(list);
+    list.get = index => { try { return get(index); } catch { return { lookupType: 1, flags: {}, subTables: [] }; } };
+    guarded = true;
+  }
+  return guarded;
+}
+
 export function createFontRegistry(entries, options = {}) {
   if (!Array.isArray(entries) || !entries.length) throw new OPFFontError("empty-font-registry", "Supply at least one font file.");
   const makeFace = entry => {
@@ -203,11 +224,15 @@ export function createFontRegistry(entries, options = {}) {
       let run;
       try { run=shape(); }
       catch (error) {
+        // A lookup fontkit cannot decode (GSUB type 8 in Noto Sans Mongolian) applies nothing; shape again with the rest (FF-44).
+        if (skipUndecodableLookups(face.font)) { try { run=shape(); } catch { /* the mark retry below */ } }
         // fontkit rejects some mark-attachment lookups (null anchors, for example
         // Gurmukhi tippi in Noto Sans Gurmukhi). Mark positioning moves marks
         // without changing advances, so measure again without it (FF-19).
-        try { run=shape({abvm:false,blwm:false,mark:false,mkmk:false}); }
-        catch { throw new OPFFontError("font-shaping-failed", `Font '${face.family}' cannot shape this text.`, {path:style.path,fontFamily:face.family,cause:error?.message}); }
+        if (!run) {
+          try { run=shape({abvm:false,blwm:false,mark:false,mkmk:false}); }
+          catch { throw new OPFFontError("font-shaping-failed", `Font '${face.family}' cannot shape this text.`, {path:style.path,fontFamily:face.family,cause:error?.message}); }
+        }
       }
       value={width:run.positions.reduce((total,position)=>total+position.xAdvance,0)/face.font.unitsPerEm,...value};
       if(includeOutline) {
