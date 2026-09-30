@@ -203,9 +203,17 @@ try {
   // Both shapes are valid OPF text; the contract here is the exact visible text and
   // block order, so project each value to its concatenated run text.
   const visible=text=>Array.isArray(text)?text.map(run=>typeof run==='string'?run:run.text).join(''):text;
-  assert.deepEqual(quoteImport.slides[0].blocks.map(block=>visible(block.text)),['"Edited quote body"','Reviewer - Recorded interview']);
-  // Current OOXML import retains editable lines, not the original OPF quote,
-  // font scheme or pagination policy. Keep this boundary explicit in evidence.
+  if(quoteImport.slides[0].blocks[0].type==='quote'){
+    // opf-pptx 0.11.4 and later (FF-57) tag each native quote line, so an unchanged export
+    // re-imports as the quote payload with its attribution and source kept apart.
+    assert.equal(quoteImport.slides[0].blocks.length,1);
+    const restored=quoteImport.slides[0].blocks[0].quote;
+    assert.deepEqual([visible(restored.text),restored.attribution,restored.source],['Edited quote body','Reviewer','Recorded interview']);
+  } else {
+    // Earlier opf-pptx releases imported the native lines as text blocks.
+    assert.deepEqual(quoteImport.slides[0].blocks.map(block=>visible(block.text)),['"Edited quote body"','Reviewer - Recorded interview']);
+  }
+  // The font scheme and pagination policy are not part of the quote provenance. Keep this boundary explicit in evidence.
   assert.equal(quoteImport.slides[0].quote,undefined);
   const quoteXml=await (await JSZip.loadAsync(quoteBytes)).file('ppt/slides/slide1.xml').async('string');
   assert.match(quoteXml,/Reviewer - Recorded interview/);
