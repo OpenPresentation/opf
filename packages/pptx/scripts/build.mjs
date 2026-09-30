@@ -21,6 +21,8 @@ await copyFile(new URL('src/chart-workbook.js', root), new URL('chart-workbook.j
 await copyFile(new URL("src/index.d.ts", root), new URL("index.d.ts", dist));
 await copyFile(new URL("src/image-geometry.js", root), new URL("image-geometry.js", dist));
 await copyFile(new URL('src/slide-image-provenance.js', root), new URL('slide-image-provenance.js', dist));
+await copyFile(new URL('src/media-dedupe.js', root), new URL('media-dedupe.js', dist));
+await copyFile(new URL('src/watermark-provenance.js', root), new URL('watermark-provenance.js', dist));
 for (const name of ['image-fallback-node.js', 'image-fallback-browser.js']) {
   await copyFile(new URL(`src/${name}`, root), new URL(name, dist));
 }
