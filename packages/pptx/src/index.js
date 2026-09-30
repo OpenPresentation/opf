@@ -1,4 +1,5 @@
 import {nativeBodyReader, joinNativeParagraphs} from './body-text-import.js';
+import {isFaceStyleSuffix} from './font-weights.js';
 import {importTableFrames} from './table-import.js';
 import {applyChartFonts, applyPitchFamilies, finalizeFontsUsed, fontPitchFamilies} from './package-fonts.js';
 import {readChartCategoryHeading,writeChartCategoryHeading} from './chart-workbook.js';
@@ -1937,12 +1938,11 @@ function addPlaceholderPayload(slide, label, description, region, context) {
 // always names the developer's chosen family. Measurement still uses the
 // substitute, because the provider resolves the chosen family again on every
 // measure/outline call, so layout is unchanged.
-const FACE_STYLE_WORDS = /^(?:(?:thin|hairline|extra ?light|ultra ?light|light|semi ?light|demi ?light|book|regular|normal|medium|semi ?bold|demi ?bold|bold|extra ?bold|ultra ?bold|black|heavy|extra ?black|ultra ?black|italic|oblique)\s*)+$/i;
 function sameTypeface(requested, resolved) {
   if (typeof resolved !== 'string') return false;
   const want = requested.trim().toLowerCase(), got = resolved.trim().toLowerCase();
   // A legacy four-style family such as "Roboto Medium" is the chosen typeface.
-  return got === want || got.startsWith(`${want} `) && FACE_STYLE_WORDS.test(got.slice(want.length + 1));
+  return got === want || got.startsWith(`${want} `) && isFaceStyleSuffix(got.slice(want.length + 1));
 }
 function chosenFamilyMeasurement(measurement) {
   if (!measurement || typeof measurement.resolveStyle !== 'function') return measurement;

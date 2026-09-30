@@ -62,9 +62,11 @@ for(const dimensions of [{widthInches:1280/96,heightInches:720/96},{widthInches:
   const quoteParts=bound.geometry.items.find(item=>item.quoteLayout).quoteLayout.parts;
   const expectedLines=quoteParts.flatMap(part=>part.fit.lines.filter(Boolean));
   const expected=quoteParts.flatMap(part=>part.fit.lines.filter(Boolean).map(text=>({type:'text',text:[{
-   text,...(!textMeasurement&&part.role==='body'?{bold:true}:{}),
+   // The measured export names the native weight faces (Roboto SemiBold body, Roboto Medium footer);
+   // import maps them back to the family, with bold for the SemiBold body.
+   text,...(part.role==='body'?{bold:true}:{}),
    fontSize:Math.round(part.fit.fontSize*75)/100,
-   fontFamily:textMeasurement?(part.role==='body'?'Roboto SemiBold':'Roboto Medium'):'Roboto',
+   fontFamily:'Roboto',
    color:part.role==='body'?'#FFFFFF':'#F0F0F0'
   }]})));
   const exported=await toPptx(document,{textMeasurement}),copy=new Uint8Array(exported),result=(await fromPptx(exported)).slides[0];

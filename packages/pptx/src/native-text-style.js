@@ -1,6 +1,9 @@
 import {readBackgroundColor} from './background.js';
+import {splitWeightFace} from './font-weights.js';
 
 const boolean = value => ['1','true','on'].includes(value) ? true : ['0','false','off'].includes(value) ? false : undefined;
+
+const themeFamilies = context => ['a:majorFont', 'a:minorFont'].map(key => context.fonts?.[key]?.['a:latin']?.typeface?.trim().toLowerCase()).filter(Boolean);
 
 export function nativeRunStyle(properties, context, relationships, report, kind = 'table') {
   const result = {};
@@ -23,8 +26,19 @@ export function nativeRunStyle(properties, context, relationships, report, kind 
   if (font) {
     const match = font.match(/^\+(mj|mn)-(lt|ea|cs)$/);
     const family = match ? context.fonts?.[match[1] === 'mj' ? 'a:majorFont' : 'a:minorFont']?.[{lt:'a:latin',ea:'a:ea',cs:'a:cs'}[match[2]]]?.typeface : font;
-    if (family) result.fontFamily = family;
-    else report(`unsupported-${kind}-font`, 'The theme font reference could not be resolved from this archive.');
+    if (family) {
+      result.fontFamily = family;
+      // The exporter writes a bundled family's weight faces (Roboto SemiBold) under their
+      // native style-link names. OPF runs carry the family plus bold, never the face name.
+      // A typeface that is itself a theme font was authored as a family; leave it as is.
+      const face = themeFamilies(context).includes(family.trim().toLowerCase()) ? undefined : splitWeightFace(family);
+      if (face) {
+        result.fontFamily = face.family;
+        if (face.weight >= 600) result.bold = true;
+        if (face.italic) result.italic = true;
+        if (face.weight !== 400 && face.weight !== 700) report(`approximate-${kind}-font-weight`, 'OPF text runs represent regular or bold only; the native weight face was imported as its family, with bold for weights of 600 and above.');
+      }
+    } else report(`unsupported-${kind}-font`, 'The theme font reference could not be resolved from this archive.');
   }
   if (properties['a:solidFill']) {
     const color = readBackgroundColor(properties['a:solidFill'], context);
