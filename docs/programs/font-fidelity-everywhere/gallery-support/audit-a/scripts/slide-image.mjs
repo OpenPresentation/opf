@@ -46,7 +46,7 @@ function svgSize(text) {
   const w = num(a.width), h = num(a.height); if (w > 0 && h > 0) return { w, h };
   const vb = a.viewBox?.trim().split(/[\s,]+/).map(Number); return vb?.length === 4 && vb[2] > 0 && vb[3] > 0 ? { w: vb[2], h: vb[3] } : null;
 }
-function hrefBytes(href) {
+export function hrefBytes(href) {
   const m = String(href).match(/^data:([^;,]+)((?:;[^;,]*)*),(.*)$/s); if (!m) return null;
   try { return { mime: m[1], bytes: /;base64/.test(m[2]) ? Buffer.from(m[3], 'base64') : Buffer.from(decodeURIComponent(m[3]), 'utf8') }; } catch { return null; }
 }
