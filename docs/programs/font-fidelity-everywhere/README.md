@@ -170,6 +170,16 @@ audit on merged heads, together with the FF-36 badge data derived from it.
 FF-15 delivers release-readiness notes for each checkpoint, listing what a
 release would ship and what the live gallery would then show.
 
+**Release state (2026-09-29).** The release owner has since published
+opf-render 0.11.2, opf-pptx 0.11.1 and opf-editor 0.10.1 and deployed
+pptx.gallery on them (core `55b7d45` carries the release plan). That happened
+outside the program's own PRs and does not change this program's invariants. It
+delivers the FF-41 gallery-editor font gate and the native watermark export
+(FF-26), but the gallery still shows only what the parity audit measured, and
+the audits have not been re-run on those heads. Completion of FF-14, FF-15,
+FF-12 and every native gate is not claimed. Per-item state is in
+[burndown.md](burndown.md).
+
 ## Invariants
 
 - Never relax a gate or tolerance: native 0.02 pt, renderer 0.1 reference px,
