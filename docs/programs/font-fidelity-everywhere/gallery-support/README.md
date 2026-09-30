@@ -51,6 +51,18 @@ script itself spells the slug the same way. Consumers join the parts and map
 them back to the gallery slug. The
 drift is removed by FF-22 and FF-37.
 
+### Classifier changes
+
+- FF-51 (2026-09-30): audit A's layout export check compares a placement
+  signature (`audit-a/scripts/placement.mjs`: every shape's `a:off`/`a:ext`
+  box plus its body anchor and each paragraph's `algn`) instead of the boxes
+  alone, because the preview check compares the whole SVG including the text
+  anchor. It also compares every preview text with its native paragraph and
+  reports "export paragraph alignment differs from preview" on a mismatch.
+  `results.json`, `SUMMARY.md` and `support-status.json` still record the
+  published run; FF-58 regenerates them. `pnpm check:audit-placement` unit-tests
+  the helpers.
+
 ## Re-running against new heads
 
 The scripts locate their inputs relative to their own folder, so copy them into
