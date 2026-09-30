@@ -31,6 +31,7 @@ for (const [name, source, version] of packages) {
   const manifest = JSON.parse(
     await readFile(path.join(directory, "package.json"), "utf8"),
   );
+  const sourceVersion = manifest.version;
   manifest.version = version;
   for (const section of [
     "dependencies",
@@ -83,6 +84,7 @@ for (const [name, source, version] of packages) {
   artifacts.push({
     name: manifest.name,
     version,
+    sourceVersion,
     file: packed.filename,
     sha256: createHash("sha256").update(bytes).digest("hex"),
     bytes: bytes.length,

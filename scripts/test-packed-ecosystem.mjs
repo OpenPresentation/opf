@@ -6,6 +6,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 import path from "node:path";
 import {createHash, randomUUID} from 'node:crypto';
 import {checkPackedTypes} from './check-packed-types.mjs';
+import {LAZY_FONT_COUNTS} from './lazy-font-counts.mjs';
 const root = fileURLToPath(new URL("../", import.meta.url)),
   out = path.join(root, "artifacts/npm");
 const librariesOnly = process.argv.includes('--registry-libraries');
@@ -46,6 +47,7 @@ const manifest = registry
   ? { artifacts: releasePlan.packages }
   : JSON.parse(await readFile(path.join(out, "manifest.json"), "utf8"));
 if (librariesOnly) manifest.artifacts = manifest.artifacts.filter(item => item.name !== '@openpresentation/cli');
+const renderSourceVersion = registry ? releasePlan.packages.find(item => item.name === '@openpresentation/opf-render')?.version : manifest.artifacts.find(item => item.name === '@openpresentation/opf-render')?.sourceVersion;
 await mkdir(out,{recursive:true});
 const actualRoot=await realpath(root), actualOut=await realpath(out);
 if (!actualOut.startsWith(actualRoot+path.sep)) throw new Error('Consumer artifacts must remain inside this checkout');
@@ -176,6 +178,7 @@ if (verifyFontPreparation) {
   await writeFile(path.join(consumer,'check-font-preparation.mjs'), `
 import assert from 'node:assert/strict';
 import {prepareNodeFonts} from '@openpresentation/opf-render/fonts-node';
+const LAZY_FONT_COUNTS=${JSON.stringify(LAZY_FONT_COUNTS)};
 import {renderSvgDeck,resolvePresentation,svgToPng} from '@openpresentation/opf-render';
 import {paginatePresentation} from '@openpresentation/opf/pagination';
 import {createEditorSession} from '@openpresentation/opf-editor';
@@ -200,8 +203,10 @@ assert.equal(imported.slides[0].title,source.slides[0].title);
 assert.equal(JSON.stringify(source),original);
 assert.equal(registry.embeddedFonts.length,33);// the eager npm faces; the vendored (embed used) faces are the lazy set: the open families and Intos
 if(registry.lazyFonts){// renderers that vendor Intos and the open families (after 0.10.0) list them here; the pinned earlier renderer has none
-// the vendored open and Intos faces: 51 up to renderer 0.11.0 (35 open and 16 Intos), more once further open families are vendored (FF-43: 82)
-assert.ok(registry.lazyFonts.length>=51);
+// the vendored open and Intos faces, exact per renderer version (scripts/lazy-font-counts.mjs)
+const renderVersion=${JSON.stringify(renderSourceVersion)};// the renderer's own version (release plan, or the source version behind a preview tarball)
+const expectedLazy=LAZY_FONT_COUNTS[renderVersion];
+assert.ok(expectedLazy&&expectedLazy.includes(registry.lazyFonts.length),'the lazy face count of renderer '+renderVersion+' is '+registry.lazyFonts.length+'; expected '+(expectedLazy??['a recorded count']).join(' or '));
 // the four Noto Sans glyph-fallback faces (opf-render#57) are npm files, also embed used; every other embed-used face is a lazy one
 assert.equal(options.embeddedFonts.filter(face=>face.embed==="used"&&face.family!=="Noto Sans").length,registry.lazyFonts.length);
 }

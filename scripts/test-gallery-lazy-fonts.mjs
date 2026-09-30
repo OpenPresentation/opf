@@ -1,9 +1,10 @@
 // FF-31: the gallery editor's lazy-font manifest (Intos and the open families) is exact, hash-pinned and license-checked, and
 // the gallery commits only that manifest, never the faces.
 import assert from 'node:assert/strict';
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { pathToFileURL, fileURLToPath } from 'node:url';
 import path from 'node:path';
+import { assertLazyFontCount } from './lazy-font-counts.mjs';
 import { galleryLazyFontManifest, galleryLazyFontManifestForExample, verifyGalleryLazyFontManifest, LAZY_FONTS_CONTRACT } from './gallery-lazy-fonts.mjs';
 
 const hash = seed => seed.repeat(64).slice(0, 64);
@@ -54,10 +55,10 @@ if (existsSync(sibling)) {
   const real = galleryLazyFontManifest(siblingFonts, '0.11.0');
   if (real) {
     const faces = real.packages.reduce((total, item) => total + item.faces.length, 0);
-    // Every vendored open-pack or embed:"used" face of the sibling renderer (the count grows as open families are bundled: 51 with 35 open faces and the 16 Intos faces, 82 with FF-43).
+    // Every vendored open-pack or embed:"used" face of the sibling renderer, and the exact count its version is expected to list.
     const expected = siblingFonts.BUNDLED_FONT_MANIFEST.packages.filter(item => item.vendored && (item.pack === 'open' || item.embed === 'used')).reduce((total, item) => total + item.faces.length, 0);
     assert.equal(faces, expected, 'the vendored open and Intos faces of the renderer');
-    assert.ok(faces >= 51);
+    assertLazyFontCount(JSON.parse(readFileSync(path.resolve(path.dirname(sibling), '../package.json'), 'utf8')).version, faces, 'sibling opf-render');
     assert.ok(real.packages.some(item => item.name === 'intos' && item.noticeFile === 'NOTICE.md'));
     assert.equal(real.packages.some(item => item.name === 'carlito'), false, 'Carlito is eager, not lazy');
     console.log(`Gallery lazy fonts: fake and sibling-renderer manifests verified (${real.packages.length} packages, ${faces} faces).`);
