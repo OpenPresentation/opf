@@ -56,6 +56,55 @@ per-dimension view of the gaps. Its
 [parity scoreboard](gallery-support.md#parity-scoreboard) (FF-38) is the
 progress metric.
 
+## Next goal: every gallery config works (100%)
+
+The owner's next goal (2026-09-30), verbatim: "for our progress table, set the
+next goal to get everything to 100% 'works'". It follows the parity goal above
+and is tracked as FF-47 to FF-58 in [burndown.md](burndown.md).
+
+**Definition of done.** Every pptx.gallery config has pipeline status `works`
+in [support-status.json](gallery-support/support-status.json) (the FF-23 audits
+A and B), measured on published packages: the published opf-render, opf-pptx
+and opf-editor releases plus the pptx-gallery main that consumes them, not
+source worktrees. Baseline (core `60e73d4`, whose `support-status.json` was measured on the published set of 2026-09-30): 427
+of 819 `works` (52.1%), 322 `partial`, 70 `gallery-only`. Gaps by dimension:
+layouts 194 (124 partial, 70 gallery-only), font schemes 93, languages 93,
+charts 7, themes 4, content blocks 1; the other eight dimensions are 100%.
+
+**Internal only.** This metric is tracked in this program and never shown on
+pptx.gallery: the owner forbids public support or progress status there. Nothing
+in this goal adds or requires a public surface, and no item below may publish the
+percentage, a badge or a status table to the site. FF-36 records the state of the
+gallery's existing status data.
+
+**One command.** `pnpm report:works` (or
+`node docs/programs/font-fidelity-everywhere/gallery-support/works-percent.mjs`)
+prints `works` overall and per dimension from `support-status.json`; add
+`--reasons` for the top reasons behind each non-`works` dimension and
+`--json` for the numbers. Regenerate `support-status.json` first
+(`build-support-status.mjs`, see the [audit README](gallery-support/README.md)).
+
+**The font policy defines `works`.** The audits' `works` must follow the
+owner's font policy (2026-09-29, see Decisions and
+[font-fidelity.md](../../font-fidelity.md#font-policy-ff-31)): a preview that
+draws the FF-31 policy table's look-alike replacement, with the PPTX writing the
+family the user selected, is `works`. It is not a gap that the licensed family
+itself is absent from the preview host. The audits must model the shipped hosts
+the way FF-38 does with `PARITY_FONT_HOST=gallery` (the gallery editor's font
+gate, opf-editor 0.10.1 with opf-render 0.11.2 or later), not a strict host
+with no fonts. Strict no-host previews are a diagnostic, not the model. This
+changes only what the audits measure as a gap (FF-48). It relaxes no gate or
+tolerance: geometry, text, colours, export naming and re-import checks stay as
+they are, and the FF-38 perfect/near tiers stay a separate measure (a visual-only
+replacement is still `near` there). Anything the policy does not excuse (an
+empty `ea`/`cs` theme slot, a layout the export ignores, a lost payload) remains
+a real gap and is fixed in the engines.
+
+**Owner decisions this goal may need.** Retiring or merging gallery layouts
+instead of publishing canonical ids (FF-52, FF-55) changes the denominator and
+ids people may use, so it needs an owner decision before it lands. Everything else
+is engine work.
+
 ## Definition of done
 
 The program is done when every burndown item is `done` with its evidence
@@ -106,6 +155,12 @@ linked, and specifically:
   program.
 - 2026-09-23 (owner): charts are reduced to the chart types Aspose.Slides
   documents as supported. Tracked as FF-22.
+
+- 2026-09-30 (owner): the next goal after parity is 100% `works` for every
+  gallery config, verbatim: "for our progress table, set the next goal to get
+  everything to 100% 'works'". Tracked internally as FF-47 to FF-58; never shown
+  on pptx.gallery. The audits follow the font policy (look-alike preview plus the
+  selected family in the PPTX is `works`) and model the shipped font hosts.
 
 - 2026-09-29 (owner): during the Actions credit shortage, run appropriate local
   tests and merge reviewed PRs when those tests pass. Preserve original CI
@@ -242,6 +297,7 @@ implement offline items and open PRs. A separate reviewer agent reviews each PR.
 
 ## Related
 
+- [Works percent report](gallery-support/works-percent.mjs) (FF-47): `pnpm report:works`, the 100% `works` progress measure
 - [Per-font fidelity tracker (FF-40)](font-tracker.md): one record per font family with route, bundled face, styles,
   measurements, host and native status, parity signals, phase, status and next action, sorted by priority
   (machine-readable: [font-tracker.json](font-tracker.json))

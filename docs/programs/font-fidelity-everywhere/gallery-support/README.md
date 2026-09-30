@@ -15,6 +15,7 @@ The reproducible audits behind [gallery-support.md](../gallery-support.md):
 | `parity/` | Parity scoreboard (FF-38): `scripts/`, `run.ps1`, `build.ps1`, `parity-results.json` and the generated `PARITY.md`, plus dated later runs (`parity-results-<date>-<topic>.json` and `PARITY-<date>-<topic>.md`; never overwritten). |
 | `support-status.json` | One record per gallery value (819 presence items, the 26 charts among them), built from the presence and parity results. |
 | `build-support-status.mjs` | Regenerates `support-status.json`. |
+| `works-percent.mjs` | Prints how many gallery configs are `works`, overall and per dimension (`pnpm report:works`, `--reasons`, `--json`); the internal 100% `works` progress measure (FF-47), never shown on pptx.gallery. Unit test: `works-percent.test.mjs`. |
 
 Results are copied byte for byte from the measured runs (heads in
 [gallery-support.md](../gallery-support.md)), except for the normalized id
