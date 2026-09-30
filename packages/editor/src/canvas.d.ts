@@ -43,6 +43,13 @@ export interface CanvasEditorOptions {
    * imports, dimension switches, slide changes, drafts). Without one every document renders at once.
    */
   fonts?: Pick<FontGate, "pending" | "ensure">;
+  /**
+   * How a pointer enters text editing. "click" (default): a single press on editable text starts editing with the caret at the
+   * pressed character, and a press-drag selects a range. "dblclick": a click selects, a double-click enters with the caret at the
+   * pointer. Keyboard entry (Enter, Space, F2) and `beginEdit(path)` always select all text. Non-text targets always open
+   * their properties on double-click.
+   */
+  textEntry?: "click" | "dblclick";
   /** Optional empty host for property forms; defaults to a floating canvas panel. */
   propertiesContainer?: HTMLElement;
   onSelect?: (selection: {
@@ -81,6 +88,7 @@ export interface CanvasEditor {
   /** Add starter content to a slide/group/region, converting implicit content when needed. */
   openInsertMenu(containerPath?: string,index?: number): void;
   select(path: string): void;
+  /** Start editing with all text selected (keyboard entry). Pointer entry places the caret at the pointer instead. */
   beginEdit(path: string): void;
   /** Open structured controls, including rich run fields. */
   editProperties(path: string): boolean;

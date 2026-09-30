@@ -79,7 +79,8 @@ try{
   const text=()=>page.evaluate(()=>editor.get('slides.0.text'));
   const input=()=>page.getByRole('textbox',{name:'Edit rich text inline',exact:true});
   const mount=async value=>{await page.evaluate(args=>mountRich(args),{deck:value,faces});await paint();};
-  const begin=async()=>{await page.locator('[data-canvas-target][data-opf-path="slides.0.text"]').dblclick();await paint();assert.equal(await input().count(),1);};
+  // Keyboard entry selects all text (a pointer press places the caret instead; see click-entry-browser.mjs).
+  const begin=async()=>{const node=page.locator('[data-canvas-target][data-opf-path="slides.0.text"]');await node.focus();await page.keyboard.press('Enter');await paint();assert.equal(await input().count(),1);};
   const select=async(start,end=start)=>{await input().evaluate((node,{start,end})=>{node.setSelectionRange(start,end);node.dispatchEvent(new Event('select'));},{start,end});await paint();};
   const commit=async()=>{await input().press('Control+Enter');await paint();assert.equal(await input().count(),0);};
   const passed=async(name,details={})=>{assert.deepEqual(await page.evaluate(()=>failures),[],name);report.checks.push({name,...details});};
@@ -121,6 +122,7 @@ try{
   await page.mouse.click(start.x,start.y);assert.equal(await input().evaluate(node=>node.selectionStart),6);
   const third=await point(16);await page.keyboard.down('Shift');await page.mouse.click(third.x,third.y);await page.keyboard.up('Shift');
   assert.deepEqual(await input().evaluate(node=>[node.selectionStart,node.selectionEnd]),[6,15]);
+  await page.waitForTimeout(600);// a faster second press at the same spot is a double click (word selection)
   await page.mouse.move(third.x,third.y);await page.mouse.down();await page.mouse.move(start.x,start.y,{steps:8});await page.mouse.up();
   assert.deepEqual(await input().evaluate(node=>[node.selectionStart,node.selectionEnd,node.selectionDirection]),[6,15,'backward']);
   await passed('Forward and reverse pointer selection maps original source to native offsets',{carets});

@@ -2,7 +2,7 @@ import {richTextContent, updateRichTextInput} from './rich-text.js';
 import {textInputMap} from './text-input.js';
 
 /** Native input owns keyboard/IME; caret and selection use the canonical SVG glyphs. */
-export function createRichTextInput(root, overlay, {path, value, getTarget, onInput, onCommit, onCancel, onFormat, onError}) {
+export function createRichTextInput(root, overlay, {path, value, getTarget, onInput, onCommit, onCancel, onFormat, onError, selectAll=true}) {
   const doc=root.ownerDocument, win=doc.defaultView;
   const input=doc.createElement('textarea'), marks=doc.createElement('div'), actions=doc.createElement('div');
   input.className='opf-rich-input';input.value=richTextContent(value);
@@ -16,7 +16,7 @@ export function createRichTextInput(root, overlay, {path, value, getTarget, onIn
     button.onmousedown=event=>event.preventDefault();button.onclick=action;actions.append(button);
   }
   overlay.append(marks,input,actions);
-  let current=structuredClone(value), composing=false, change=null, anchor=null, disposed=false, emptyAnchor=null;
+  let current=structuredClone(value), composing=false, change=null, anchor=null, disposed=false, emptyAnchor=null, lastDown=null;
   let history=[{value:structuredClone(current),start:0,end:input.value.length}], historyIndex=0, compositionBase=null;
   const currentMap=()=>textInputMap(richTextContent(current));
   function remember() {
@@ -77,12 +77,29 @@ export function createRichTextInput(root, overlay, {path, value, getTarget, onIn
       return !best||distance<best.distance?{...p,distance}:best;
     },null)?.offset??0;
   }
-  function pointerDown(event) {
-    if(event.button!==0||!getTarget(path)?.contains(event.target))return;
+  // The pointer never reaches the hidden input, so double/triple click (word/paragraph) are counted here.
+  function selectUnit(offset,count) {
+    const text=input.value,at=Math.max(0,Math.min(text.length,offset));
+    let a=at,b=at;
+    if(count>=3){a=at>0?text.lastIndexOf('\n',at-1)+1:0;b=text.indexOf('\n',at);if(b<0)b=text.length;}
+    else {
+      const parts=[...new Intl.Segmenter(undefined,{granularity:'word'}).segment(text)],hit=parts.find(p=>p.index<=at&&at<p.index+p.segment.length)??parts.at(-1);
+      if(hit){a=hit.index;b=hit.index+hit.segment.length;}
+    }
+    input.setSelectionRange(a,b,'forward');
+  }
+  function pointerDown(event,entry=false) {
+    if(!entry&&(event.button!==0||!getTarget(path)?.contains(event.target)))return;
     event.preventDefault();event.stopPropagation();
-    const map=currentMap();anchor=event.shiftKey?map.toSource(input.selectionStart):nearest(event);input.focus({preventScroll:true});
-    const end=nearest(event);input.setSelectionRange(map.toInput(Math.min(anchor,end)),map.toInput(Math.max(anchor,end)),end<anchor?'backward':'forward');
-    root.setPointerCapture(event.pointerId);update();
+    const map=currentMap(),repeat=!entry&&!event.shiftKey&&lastDown&&event.timeStamp-lastDown.time<500&&Math.hypot(event.clientX-lastDown.x,event.clientY-lastDown.y)<5;
+    const count=repeat?lastDown.count+1:1;lastDown={time:event.timeStamp,x:event.clientX,y:event.clientY,count};
+    anchor=event.shiftKey&&!entry?map.toSource(input.selectionStart):nearest(event);input.focus({preventScroll:true});
+    const end=nearest(event);
+    if(count>1){anchor=null;selectUnit(map.toInput(end),count);update();return;}
+    input.setSelectionRange(map.toInput(Math.min(anchor,end)),map.toInput(Math.max(anchor,end)),end<anchor?'backward':'forward');
+    // A press keeps extending the range while it moves; a completed click (entry from a tap or double-click) does not.
+    if(event.buttons&&Number.isInteger(event.pointerId))root.setPointerCapture(event.pointerId);else anchor=null;
+    update();
   }
   function pointerMove(event) {
     if(anchor===null)return;event.preventDefault();const end=nearest(event),map=currentMap();
@@ -114,6 +131,6 @@ export function createRichTextInput(root, overlay, {path, value, getTarget, onIn
   input.addEventListener('select',update);input.addEventListener('keyup',update);
   input.addEventListener('blur',()=>{if(!disposed&&!composing)onCommit();});
   root.addEventListener('pointerdown',pointerDown,true);root.addEventListener('pointermove',pointerMove);root.addEventListener('pointerup',pointerUp);root.addEventListener('pointercancel',pointerUp);
-  input.focus({preventScroll:true});input.select();update();
-  return {input,update,get value(){return structuredClone(current);},get composing(){return composing;},destroy(){disposed=true;root.removeEventListener('pointerdown',pointerDown,true);root.removeEventListener('pointermove',pointerMove);root.removeEventListener('pointerup',pointerUp);root.removeEventListener('pointercancel',pointerUp);marks.remove();input.remove();actions.remove();}};
+  input.focus({preventScroll:true});if(selectAll)input.select();update();
+  return {input,update,pointerStart:event=>pointerDown(event,true),get value(){return structuredClone(current);},get composing(){return composing;},destroy(){disposed=true;root.removeEventListener('pointerdown',pointerDown,true);root.removeEventListener('pointermove',pointerMove);root.removeEventListener('pointerup',pointerUp);root.removeEventListener('pointercancel',pointerUp);marks.remove();input.remove();actions.remove();}};
 }

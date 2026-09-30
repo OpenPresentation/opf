@@ -84,6 +84,7 @@ jobs:
       - run: npm run test:playground
       - run: npm run test:code-browser
       - run: npm run test:selection-browser
+      - run: npm run test:click-entry-browser
       - run: npm run test:json-browser -- artifacts/json-editor-browser.json
       - run: npm run test:rich-input-browser -- artifacts/rich-input-browser.json measured
       - run: npm run test:rich-input-browser -- artifacts/rich-input-browser-estimated.json estimated

@@ -7,6 +7,8 @@ import {build} from 'esbuild';
 import {chromium} from 'playwright';
 import {loadOfficeFontRegistry} from '@openpresentation/opf-render/fonts-node';
 
+// Keyboard entry (Enter) selects all text; a pointer press places the caret instead (see test/click-entry-browser.mjs).
+const enter=async locator=>{await locator.focus();await locator.page().keyboard.press('Enter');};
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 const cards=process.argv.includes('--cards');
 const fingerprint=async()=>{
@@ -50,7 +52,7 @@ try {
   const document=()=>page.evaluate(()=>editor.document);
   const target=path=>page.locator(`[data-canvas-target][data-opf-path="${path}"]`);
   const edit=async(path,value)=>{
-    await target(path).dblclick();
+    await enter(target(path));
     const input=page.getByRole('textbox',{name:`Edit ${path.split('.').at(-1)} inline`,exact:true});
     if(value!==undefined)await input.fill(value);
     await input.press('Control+Enter');
@@ -79,7 +81,7 @@ try {
       await edit(part.path);assert.deepEqual(await document(),deck);
       assert.equal(await page.evaluate(()=>editor.canUndo),false,'Opening any metric field must preserve source and scalar types');
     }
-    await target('slides.0.metric.description').dblclick();
+    await enter(target('slides.0.metric.description'));
     const input=page.getByRole('textbox',{name:'Edit description inline',exact:true});
     const selection=await input.evaluate(node=>{
       const style=getComputedStyle(node),svg=document.querySelector('#canvas svg');
@@ -130,7 +132,7 @@ try {
   for(const [field,value,invalid] of [['value',42,'not a number'],['trend','flat','sideways']]){
     const deck={design:{fontScheme:'roboto'},slides:[{metric:{value:42,trend:'flat'}}]};
     await page.evaluate(args=>mountMetric(args),{deck,faces});
-    await target(`slides.0.metric.${field}`).dblclick();const input=page.getByRole('textbox',{name:`Edit ${field} inline`,exact:true});
+    await enter(target(`slides.0.metric.${field}`));const input=page.getByRole('textbox',{name:`Edit ${field} inline`,exact:true});
     await input.fill(invalid);await input.press('Control+Enter');assert.deepEqual(await document(),deck);
     assert.ok(await input.isVisible());assert.equal(await page.evaluate(()=>editor.canUndo),false);
     assert.ok((await page.evaluate(()=>failures)).length>0);await input.press('Escape');assert.deepEqual(await document(),deck);

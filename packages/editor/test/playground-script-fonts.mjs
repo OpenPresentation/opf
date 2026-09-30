@@ -71,6 +71,26 @@ try {
     unavailable: document.querySelector('#preview')?.textContent.includes('Preview unavailable') ?? false,
   }));
   const files = () => [...new Set(scriptRequests)];
+  // One press on a character half puts a collapsed caret at that boundary of the input value (left-to-right and right-to-left).
+  const pressCaret = async (path, index, side, rtl) => {
+    const at = await page.evaluate(({ path, index, side }) => {
+      const node = [...document.querySelectorAll('#preview [data-canvas-target][data-opf-path="' + path + '"] text, #preview [data-canvas-target][data-opf-path="' + path + '"] tspan')].find(n => n.firstChild?.nodeType === 3 && n.textContent.length > index);
+      // Right-to-left lines carry directional isolate marks that are not source characters: index counts source characters.
+      let dom = -1, seen = 0;
+      for (let i = 0; i < node.textContent.length && dom < 0; i++) { if (/[\u2066-\u2069]/.test(node.textContent[i])) continue; if (seen++ === index) dom = i; }
+      const range = document.createRange();
+      range.setStart(node.firstChild, dom); range.setEnd(node.firstChild, dom + 1);
+      const box = range.getBoundingClientRect();
+      return { x: box.left + box.width * (side === 'left' ? 0.25 : 0.75), y: box.top + box.height / 2 };
+    }, { path, index, side });
+    await page.mouse.click(at.x, at.y);
+    const caret = await page.evaluate(() => ({ kind: document.activeElement.className, start: document.activeElement.selectionStart, end: document.activeElement.selectionEnd }));
+    assert.equal(caret.kind, 'opf-inline-input');
+    assert.equal(caret.start, caret.end, 'a press must not select a range');
+    const startSide = rtl ? 'right' : 'left';
+    assert.equal(caret.start, index + (side === startSide ? 0 : 1), `${path} character ${index} ${side} half`);
+    await page.keyboard.press('Escape');
+  };
 
   // Latin: the page loads and nothing from script-fonts is requested.
   assert.deepEqual(scriptRequests, []);
@@ -84,6 +104,7 @@ try {
   assert.equal(state.unavailable, false);
   assert.ok(state.families.includes('Noto Sans JP'), 'Noto Sans JP is loaded');
   assert.match(state.text, /四半期レビュー/);
+  for (const [index, side] of [[0, 'left'], [2, 'left'], [2, 'right'], [5, 'right']]) await pressCaret('slides.0.title', index, side, false);
   await page.locator('#preview').screenshot({ path: path.join(output, 'ja.png') });
 
   // Arabic: only the Arabic packages are added.
@@ -94,6 +115,7 @@ try {
   state = await painted();
   assert.equal(state.unavailable, false);
   assert.ok(state.families.includes('Noto Naskh Arabic'));
+  for (const [index, side] of [[0, 'right'], [3, 'right'], [3, 'left'], [7, 'left']]) await pressCaret('slides.0.title', index, side, true);
   await page.locator('#preview').screenshot({ path: path.join(output, 'ar.png') });
 
   // Undo and redo across scripts fetch nothing new; a Latin edit fetches nothing either.

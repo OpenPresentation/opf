@@ -31,7 +31,7 @@
   <div class="editing-shell">
     <section class="canvas-column" aria-label="Slide workspace">
       <div class="canvas-toolbar"><div class="slide-heading"><span id="slide-number" class="slide-number">01</span><span id="slide-title">Start with a clear recommendation</span></div><div class="history-actions"><button id="insert-content" class="secondary" title="Add text, data, images or groups">Add content</button><button id="arrange" class="secondary" aria-pressed="false" title="Resize and reorder content on the slide">Arrange</button><button id="copy-slide" class="icon-button" aria-label="Copy current slide as OPF" title="Copy current slide"><svg class="icon"><use href="#i-copy"/></svg></button><button id="undo" class="icon-button" aria-label="Undo" title="Undo · ⌘/Ctrl Z" aria-keyshortcuts="Meta+Z Control+Z"><svg class="icon"><use href="#i-undo"/></svg></button><button id="redo" class="icon-button" aria-label="Redo" title="Redo · ⌘/Ctrl Shift Z" aria-keyshortcuts="Meta+Shift+Z Control+Shift+Z"><svg class="icon"><use href="#i-redo"/></svg></button></div></div>
-      <div class="canvas-scroll"><div class="canvas-stage"><div id="preview" aria-label="Slide preview"><div class="loading">Loading your presentation…</div></div><div class="canvas-caption"><svg class="icon"><use href="#i-pointer"/></svg><span>Double-click to edit · Esc to cancel</span></div></div></div>
+      <div class="canvas-scroll"><div class="canvas-stage"><div id="preview" aria-label="Slide preview"><div class="loading">Loading your presentation…</div></div><div class="canvas-caption"><svg class="icon"><use href="#i-pointer"/></svg><span>Click to edit · Esc to cancel</span></div></div></div>
       <div class="canvas-footer"><span id="page-position">Slide 1 of 4</span><p id="status" role="status">Ready to edit</p><label class="zoom-label">Zoom<select id="zoom" aria-label="Canvas zoom"><option value="fit">Fit</option><option value="100">100%</option><option value="125">125%</option></select></label></div>
     </section>
     <aside class="inspector" aria-label="Slide inspector">
@@ -40,7 +40,7 @@
         <div class="section-heading"><h2>Selection</h2><span id="selection-kind" class="small-badge">Title</span></div>
         <button id="copy-selection" class="quiet full-width" style="margin-bottom:12px">Copy selected content</button><div id="canvas-properties"></div><div id="content-fields"><label for="value" id="value-label">Text content</label><textarea id="value" rows="8" spellcheck="true"></textarea>
         <div class="apply-row"><span class="shortcut">⌘ / Ctrl ↵</span><button id="apply" class="primary">Apply edit</button></div>
-        <p class="field-help">Double-click text to edit on the slide, or use this panel.</p>
+        <p class="field-help">Click text to edit on the slide, or use this panel.</p>
         <details class="source-path"><summary>Source location</summary><p id="path"></p></details></div>
         <div class="inspector-section"><div class="section-heading"><h2>Slide notes</h2><span class="optional">Optional</span></div><label class="sr-only" for="notes">Speaker notes</label><textarea id="notes" rows="4" placeholder="What would you like to say?"></textarea><button id="apply-notes" class="quiet full-width">Save notes</button></div>
       </div>

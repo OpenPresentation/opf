@@ -39,7 +39,7 @@ const editor = createEditorSession({
   slides: [{ id: 'recommendation', title: 'Start with a clear recommendation',
     composition: { mode: 'row', weights: [2, 1] },
     blocks: [
-      { text: 'Double-click this text to edit it. The document remains plain JSON, and each change can be undone.' },
+      { text: 'Click this text to edit it. The document remains plain JSON, and each change can be undone.' },
       { text: 'Try a column layout, add a slide, or edit the complete document.' },
     ] },
     { id: 'nested', title: 'Give related content its own layout', composition: {mode:'row',weights:[2,1]}, blocks: [{composition:{mode:'column'},blocks:[{text:'This column keeps related ideas together.'},{text:'Change this group to a row using the group controls.'}]},{text:'This supporting point keeps its own space.'}] },

@@ -18,6 +18,7 @@ import {
 import { createBlockControls } from "./block-controls.js";
 import { createLayoutHandles } from "./layout-handles.js";
 import { createRichTextInput } from "./rich-text-input.js";
+import { textInputOffsetAtPoint } from "./text-pointer.js";
 import { createRichTextToolbar } from "./rich-text-toolbar.js";
 import { FONTS_PENDING, fontsPendingError, whenFontsReady } from "./font-gate.js";
 export { getEditableFields } from "./canvas-fields.js";
@@ -75,7 +76,16 @@ export function createCanvasEditor(container, options = {}) {
     selectedPath = null,
     disposed = false,
     frame = 0,
-    committing = false;
+    committing = false,
+    pointerTaken = null,
+    handledPointer = null,
+    stopDrag = null;
+  // How a pointer enters text editing: "click" (default; PowerPoint / Google Slides) puts the caret at the pressed
+  // character on a single press and lets a press-drag select a range; "dblclick" keeps the older double-click gesture
+  // but still places the caret at the pointer. Keyboard entry (Enter, Space, F2) always selects all text.
+  const textEntry = options.textEntry ?? "click";
+  if (textEntry !== "click" && textEntry !== "dblclick")
+    throw new RangeError('textEntry must be "click" or "dblclick".');
   const root = doc.createElement("div"),
     preview = doc.createElement("div"),
     overlay = doc.createElement("div"),
@@ -283,19 +293,29 @@ export function createCanvasEditor(container, options = {}) {
         rect.classList.add("opf-selection");
         node.prepend(rect);
       }
+      node.addEventListener("pointerdown", (event) => pointerDown(event, path));
+      // Some browsers still run mousedown's focus and text-selection defaults after a handled pointerdown.
+      node.addEventListener("mousedown", (event) => { if (pointerTaken === path) event.preventDefault(); });
       node.addEventListener("click", (event) => {
         event.stopPropagation();
         if (event.target.closest("a")) event.preventDefault();
+        // A mouse or pen press already entered editing on pointerdown; this click only completes that gesture.
+        if (pointerTaken === path) { pointerTaken = null; return; }
         if (active && active.path !== path && !commit()) return;
-        choose(path);
+        // A touch tap has no pointerdown entry (a touch press may start a scroll): it enters on the click itself.
+        const kind = editKind(path);
+        if (textEntry === "click" && event.detail > 0 && (kind === "text" || kind === "rich-text")) startEdit(path, { point: event });
+        else choose(path);
       });
       node.addEventListener("dblclick", (event) => {
         event.preventDefault();
         event.stopPropagation();
-        beginEdit(path);
+        const kind = editKind(path);
+        startEdit(path, kind === "text" || kind === "rich-text" ? { point: event } : undefined);
       });
       node.addEventListener("keydown", (event) => {
-        if (event.key === "Enter" || event.key === " ") {
+        // Keyboard entry replaces: all text is selected.
+        if (event.key === "Enter" || event.key === " " || event.key === "F2") {
           event.preventDefault();
           event.stopPropagation();
           beginEdit(path);
@@ -434,7 +454,78 @@ export function createCanvasEditor(container, options = {}) {
     // Other text keeps the canonical SVG visible beneath the transparent input.
     target.style.opacity = visibleText ? "0" : "1";
   }
+  // What editing a target opens: inline text ("text"), the rich-text input ("rich-text"), or the properties form.
+  function editKind(path) {
+    const value = editor.get(path), target = getTarget(path);
+    if (value === undefined || !target) return null;
+    if ((typeof value === "string" || typeof value === "number") && target.querySelector("text") && !/\.(image|video)$/.test(path))
+      return "text";
+    if (Array.isArray(value) && target.hasAttribute("data-opf-rich-text")) return "rich-text";
+    return "properties";
+  }
+  // Textarea offset nearest to a client point, from the traced SVG glyphs (see text-pointer.js).
+  function textOffsetAt(edit, clientX, clientY) {
+    let source = edit.input.value;
+    try {
+      if (edit.type === "string") source = parseCanvasValue(edit.input.value, "string", edit.originalValue);
+    } catch { /* fall back to the raw input text */ }
+    return textInputOffsetAtPoint({
+      doc, win, target: getTarget(edit.path), path: edit.path, source, input: edit.input, clientX, clientY,
+    });
+  }
+  function setRange(input, anchor, focus) {
+    input.setSelectionRange(Math.min(anchor, focus), Math.max(anchor, focus), focus < anchor ? "backward" : "forward");
+  }
+  // Press-drag in plain text selects from the press point to the pointer, like PowerPoint. The textarea is not under the
+  // pointer when the press lands on the SVG glyphs, so the range is tracked here.
+  function trackDrag(edit, anchor, event) {
+    stopDrag?.();
+    const id = event.pointerId;
+    const move = (next) => {
+      if (next.pointerId !== id) return;
+      if (active !== edit || !next.buttons) return stop();
+      setRange(edit.input, anchor, textOffsetAt(edit, next.clientX, next.clientY));
+    };
+    const end = (next) => { if (next.pointerId === id) stop(); };
+    const stop = () => {
+      win.removeEventListener("pointermove", move);
+      win.removeEventListener("pointerup", end);
+      win.removeEventListener("pointercancel", end);
+      if (stopDrag === stop) stopDrag = null;
+      if (active === edit) edit.input.focus({ preventScroll: true });
+    };
+    win.addEventListener("pointermove", move);
+    win.addEventListener("pointerup", end);
+    win.addEventListener("pointercancel", end);
+    stopDrag = stop;
+  }
+  // A mouse or pen press on editable text enters editing at that character (touch enters from its click instead).
+  function pointerDown(event, path) {
+    if (handledPointer === event) return;
+    handledPointer = event;
+    if (textEntry !== "click" || disposed || event.button !== 0 || event.pointerType === "touch") return;
+    const edit = active?.path === path ? active : null;
+    if (edit ? edit.kind !== "text" : !["text", "rich-text"].includes(editKind(path))) return;
+    // Own the gesture: no native focus change, text selection or drag while the caret is placed.
+    event.preventDefault();
+    event.stopPropagation();
+    pointerTaken = path;
+    if (edit) {
+      const at = textOffsetAt(edit, event.clientX, event.clientY);
+      setRange(edit.input, at, at);
+      edit.input.focus({ preventScroll: true });
+      trackDrag(edit, at, event);
+      return;
+    }
+    if (active && !commit()) return;
+    startEdit(path, { point: event, drag: true });
+  }
   function beginEdit(path) {
+    startEdit(path);
+  }
+  // entry: undefined selects all text (keyboard and programmatic entry); {point} places the caret at a client point;
+  // {point, drag} also selects while the pressed pointer moves.
+  function startEdit(path, entry) {
     if (disposed) return;
     if (active && active.path === path) return;
     if (active && !commit()) return;
@@ -535,12 +626,16 @@ export function createCanvasEditor(container, options = {}) {
       input.addEventListener("blur", () => {
         if (active?.input === input && !active.composing) commit();
       });
-      input.focus();
-      input.select();
+      input.focus({ preventScroll: !!entry?.point });
+      if (entry?.point) {
+        const at = textOffsetAt(active, entry.point.clientX, entry.point.clientY);
+        setRange(input, at, at);
+        if (entry.drag) trackDrag(active, at, entry.point);
+      } else input.select();
     } else if (Array.isArray(value) && target?.hasAttribute("data-opf-rich-text")) {
       active = {kind:"rich-text",path,base:JSON.stringify(value),valid:true};
       active.rich = createRichTextInput(root, overlay, {
-        path, value, getTarget,
+        path, value, getTarget, selectAll: !entry?.point,
         onInput: queueDraft, onCommit: commit, onCancel: cancel, onError: report,
         onFormat(start,end) {
           if (!commit()) return;
@@ -548,6 +643,7 @@ export function createCanvasEditor(container, options = {}) {
         },
       });
       active.input = active.rich.input;
+      if (entry?.point) active.rich.pointerStart(entry.point);
     } else openProperties(path, value);
   }
   function propertyPatches(edit) {
@@ -828,6 +924,7 @@ export function createCanvasEditor(container, options = {}) {
     active?.rich?.update();
   });
   resize.observe(root);
+  root.addEventListener("pointerdown", () => { pointerTaken = null; }, true);
   root.addEventListener("keydown", (event) => {
     if (
       (event.metaKey || event.ctrlKey) &&
@@ -906,6 +1003,7 @@ export function createCanvasEditor(container, options = {}) {
     },
     destroy() {
       disposed = true;
+      stopDrag?.();
       active?.rich?.destroy();
       richToolbar.destroy();
       layoutHandles.destroy();

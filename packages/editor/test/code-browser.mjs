@@ -5,6 +5,8 @@ import {fileURLToPath} from 'node:url';
 import {build} from 'esbuild';
 import {chromium} from 'playwright';
 import {loadOfficeFontRegistry} from '@openpresentation/opf-render/fonts-node';
+// Keyboard entry (Enter) selects all text; a pointer press places the caret instead (see test/click-entry-browser.mjs).
+const enter=async locator=>{await locator.focus();await locator.page().keyboard.press('Enter');};
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 const faces=(await loadOfficeFontRegistry()).embeddedFonts.filter(face=>['Roboto','Roboto Mono'].includes(face.family)&&[400,700].includes(face.weight)&&!face.italic);
 const bundled=await build({stdin:{resolveDir:fileURLToPath(new URL('../',import.meta.url)),contents:`
@@ -44,19 +46,19 @@ try {
     const deck={design:{fontScheme:'roboto',dimensions:{widthInches:dimensions.width/96,heightInches:dimensions.height/96}},slides:[{code:{source,filename:'src/CaseSensitive.ts',language:'TypeScript'}}]};
     await page.evaluate(args=>mountCode(args),{deck,faces});
     const body=page.locator('[data-canvas-target][data-opf-path="slides.0.code.source"]');
-    await body.dblclick();let input=page.getByRole('textbox',{name:'Edit source inline',exact:true});
+    await enter(body);let input=page.getByRole('textbox',{name:'Edit source inline',exact:true});
     const sourceSelection=await visibleSelection(input);
     await input.press('Control+Enter');assert.deepEqual(await document(),deck);assert.equal(await page.evaluate(()=>editor.canUndo),false,'Opening CRLF source must not create an edit');
-    await body.dblclick();input=page.getByRole('textbox',{name:'Edit source inline',exact:true});
+    await enter(body);input=page.getByRole('textbox',{name:'Edit source inline',exact:true});
     const editedSource=source.replace('const value','const renamed');
     await input.fill(editedSource);await input.press('Control+Enter');assert.equal((await document()).slides[0].code.source,editedSource);
     await page.getByRole('button',{name:'Undo',exact:true}).click();assert.deepEqual(await document(),deck);
     await page.getByRole('button',{name:'Redo',exact:true}).click();assert.equal((await document()).slides[0].code.source,editedSource);
-    const filename=page.locator('[data-canvas-target][data-opf-path="slides.0.code.filename"]');await filename.dblclick();
+    const filename=page.locator('[data-canvas-target][data-opf-path="slides.0.code.filename"]');await enter(filename);
     const filenameSelection=await visibleSelection(page.getByRole('textbox',{name:'Edit filename inline',exact:true}));
     await page.getByRole('textbox',{name:'Edit filename inline',exact:true}).fill('src/Renamed.ts');await page.getByRole('textbox',{name:'Edit filename inline',exact:true}).press('Control+Enter');
     assert.equal((await document()).slides[0].code.filename,'src/Renamed.ts');
-    await body.dblclick();input=page.getByRole('textbox',{name:'Edit source inline',exact:true});await input.press('ArrowRight');await input.press('Tab');
+    await enter(body);input=page.getByRole('textbox',{name:'Edit source inline',exact:true});await input.press('ArrowRight');await input.press('Tab');
     assert.ok((await input.inputValue()).endsWith('\t'),'Tab inserts a literal source tab');await input.press('Escape');assert.equal((await document()).slides[0].code.source,editedSource);
     const beforePagination=await document();await page.getByRole('button',{name:'Paginate',exact:true}).click();assert.equal((await document()).slides[0].composition.minFontSize,24);
     await page.getByRole('button',{name:'Undo',exact:true}).click();assert.deepEqual(await document(),beforePagination);
@@ -80,7 +82,7 @@ try {
   // A shorthand value targets its body; the generated "code" label is not an editable source line.
   await page.evaluate(args=>mountCode(args),{faces,deck:{design:{fontScheme:'roboto'},slides:[{code:'\tshorthand\r\n'}]}});
   const target=page.locator('[data-canvas-target][data-opf-path="slides.0.code"]');assert.equal(await target.count(),1);assert.equal(await target.getAttribute('data-opf-code-role'),'body');
-  await target.dblclick();await page.getByRole('textbox',{name:'Edit code inline',exact:true}).press('Control+Enter');assert.equal(await page.evaluate(()=>editor.get('slides.0.code')),'\tshorthand\r\n');assert.equal(await page.evaluate(()=>editor.canUndo),false);
+  await enter(target);await page.getByRole('textbox',{name:'Edit code inline',exact:true}).press('Control+Enter');assert.equal(await page.evaluate(()=>editor.get('slides.0.code')),'\tshorthand\r\n');assert.equal(await page.evaluate(()=>editor.canUndo),false);
   for(const dimensions of [{width:1280,height:720},{width:540,height:960}]){
     const blank='\r\n\r\n\n',deck={design:{fontScheme:'roboto',dimensions:{widthInches:dimensions.width/96,heightInches:dimensions.height/96}},slides:[{code:blank}]};
     await page.evaluate(args=>mountCode(args),{faces,deck});
@@ -88,9 +90,9 @@ try {
     const accepted=await page.evaluate(()=>editor.composeSlide(0,{textMeasurement:fonts.textMeasurement}).items[0].codeLayout.parts.find(part=>part.role==='body'));
     const selection=body.locator(':scope > rect.opf-selection');
     assert.equal(Number(await selection.getAttribute('height')),accepted.box.height+8,'Entire blank code part must remain selectable');
-    await body.dblclick();let input=page.getByRole('textbox',{name:'Edit code inline',exact:true});
+    await enter(body);let input=page.getByRole('textbox',{name:'Edit code inline',exact:true});
     await input.press('Control+Enter');assert.deepEqual(await document(),deck);assert.equal(await page.evaluate(()=>editor.canUndo),false);
-    await body.dblclick();input=page.getByRole('textbox',{name:'Edit code inline',exact:true});
+    await enter(body);input=page.getByRole('textbox',{name:'Edit code inline',exact:true});
     await input.fill('Visible code');await input.press('Control+Enter');assert.equal((await document()).slides[0].code,'Visible code');
     await page.getByRole('button',{name:'Undo',exact:true}).click();assert.deepEqual(await document(),deck);
     blankTargets.push({dimensions,acceptedHeight:accepted.box.height,selectableHeight:accepted.box.height+8,noOpPreserved:true,editUndoPreserved:true});
