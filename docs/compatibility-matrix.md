@@ -28,14 +28,14 @@ the versions below or established complete native compatibility.
 | --- | --- | --- |
 | `@openpresentation/opf` | 0.11.2 | — |
 | `@openpresentation/cli` | 0.9.0 | Bundles core 0.11.0; registry metadata has no runtime `dependencies` |
-| `@openpresentation/opf-render` | 0.11.4 | `@openpresentation/opf@^0.11.2` |
-| `@openpresentation/opf-editor` | 0.10.2 | `@openpresentation/opf@^0.11.2`; optional peer `@openpresentation/opf-render@^0.11.0` |
+| `@openpresentation/opf-render` | 0.11.5 | `@openpresentation/opf@^0.11.2` |
+| `@openpresentation/opf-editor` | 0.10.3 | `@openpresentation/opf@^0.11.2`; optional peer `@openpresentation/opf-render@^0.11.0` |
 | `@openpresentation/opf-pptx` | 0.11.3 | `@openpresentation/opf@^0.11.2`; optional peer `@openpresentation/opf-render@^0.11.0` |
 
 Install the complete pinned set. A caret range starting at 0.10.1 does not
 include 0.11.x; old consumers can install a second core and do not establish
 ColorRef preview/export support. The renderer, PPTX and editor floors move with
-core in lockstep (core 0.11.2 with renderer 0.11.4, PPTX 0.11.3 and editor 0.10.2), so
+core in lockstep (core 0.11.2 with renderer 0.11.5, PPTX 0.11.3 and editor 0.10.3), so
 preview and export resolve one composition.
 
 Shared header/footer geometry (`furniture-flow-v2`) is published. PPTX exports
