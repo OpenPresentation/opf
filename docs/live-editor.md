@@ -1,15 +1,15 @@
 # Browser preview and live editing
 
-Published editor 0.10.4 provides an embeddable SVG canvas in `@openpresentation/opf-editor/canvas`. OPF JSON remains the document; the canvas writes validated JSON Patch operations through an `EditorSession`. Draft edits render with the same SVG engine used for standalone previews. Completed edits produce one undoable change.
+Published editor 0.10.5 provides an embeddable SVG canvas in `@openpresentation/opf-editor/canvas`. OPF JSON remains the document; the canvas writes validated JSON Patch operations through an `EditorSession`. Draft edits render with the same SVG engine used for standalone previews. Completed edits produce one undoable change.
 
 The published canvas covers the interactions below; complete PowerPoint feature coverage remains separate work. “Pixel perfect” is a fidelity target with specific prerequisites and remaining gaps described below.
 
 ## Install the published packages
 
-Use Node 24 with core 0.11.3, renderer 0.11.6, editor 0.10.4 and PPTX 0.11.4:
+Use Node 24 with core 0.11.3, renderer 0.11.8, editor 0.10.5 and PPTX 0.11.5:
 
 ```sh
-npm install --save-exact @openpresentation/opf@0.11.3 @openpresentation/opf-render@0.11.6 @openpresentation/opf-editor@0.10.4 @openpresentation/opf-pptx@0.11.4
+npm install --save-exact @openpresentation/opf@0.11.3 @openpresentation/opf-render@0.11.8 @openpresentation/opf-editor@0.10.5 @openpresentation/opf-pptx@0.11.5
 ```
 
 No paid service or provider account is required. The six agent skills install with `npx @openpresentation/cli@0.9.1 skills install`. See the [quickstart](quickstart.md) for an installed-package workflow and the [compatibility matrix](compatibility-matrix.md) for separately scoped browser and native evidence.
@@ -31,7 +31,7 @@ The gallery host example also offers local PPTX file import with preview/diagnos
 
 Script fonts: when the pinned editor example loads faces from `./script-fonts/` and the pinned renderer has the script pack (0.10.0 and later), the registry build also writes `script-fonts.json` and lists its hash in `manifest.json`. The manifest is the reviewable half: every `@expo-google-fonts/noto-*` package, exact version, SPDX license, license-file hash and each face's SHA-256, taken from the published renderer. The faces are binaries (63 files, 66.9 MiB), so they are never committed to the gallery repository. The gallery build copies them from its own pinned npm dependencies into the untracked `public/opf-editor/script-fonts/` directory, verifying every hash, and writes the license notices beside them; nothing is fetched from a font CDN. See `scripts/gallery-script-fonts.mjs` and the gallery's `scripts/prepare-editor-script-fonts.mjs`.
 
-Base fonts (FF-41): when the pinned editor example loads `base-fonts.json` (opf-editor `examples/base-font-gate.js`, renderer 0.11.6 and later), the registry build starts the editor with Roboto Regular alone in `fonts.json` (217 KB instead of 12.8 MB) and writes every other eager face (Roboto in six more styles, Roboto Mono, the Office substitutes) as a separate file named after its hash beside it, listed with its SHA-256 in `base-fonts.json` and in `manifest.json`; the editor fetches only the faces a document draws, verified, through its font gate (`scripts/gallery-base-fonts.mjs`). An older pinned example keeps every eager face in `fonts.json`. A default Roboto deck loads about 0.7 MB of fonts instead of 12.8 MB.
+Base fonts (FF-41): when the pinned editor example loads `base-fonts.json` (opf-editor 0.10.5: the example passes the faces as the renderer's `extraLazyFonts`, renderer 0.11.7 and later; 0.10.4's example used its own `examples/base-font-gate.js`), the registry build starts the editor with Roboto Regular alone in `fonts.json` (217 KB instead of 12.8 MB) and writes every other eager face (Roboto in six more styles, Roboto Mono, the Office substitutes) as a separate file named after its hash beside it, listed with its SHA-256 in `base-fonts.json` and in `manifest.json`; the editor fetches only the faces a document draws, verified, through its font gate (`scripts/gallery-base-fonts.mjs`). An older pinned example keeps every eager face in `fonts.json`. A default Roboto deck loads about 0.7 MB of fonts instead of 12.8 MB.
 
 Lazy fonts: when the pinned editor example calls `ensureLazyFonts` and the pinned renderer vendors faces (Intos for the default Aptos scheme and the open families, renderer 0.11.0 and later), the registry build also writes `lazy-fonts.json` and lists its hash in `manifest.json`. It pins every vendored package (exact version, SPDX license, license-file and notice hashes) and each face SHA-256, taken from the published renderer. The faces are binaries, so they are not committed either: the gallery build copies them from its pinned `@openpresentation/opf-render` package (`fonts/<name>/`) into the untracked `public/opf-editor/fonts/` directory, verifying every hash, and the editor fetches only the families a document uses, same-origin. See `scripts/gallery-lazy-fonts.mjs` and the gallery's `scripts/prepare-editor-lazy-fonts.mjs`.
 
