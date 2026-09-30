@@ -21,7 +21,7 @@ const cache = (points, count = 3, kind = 'numRef') => {
 };
 const categories = () => cache([point(0, 'A'), point(1, 'B'), point(2, 'C')], 3, 'strRef');
 function fixture({element = 'barChart', labels = categories(), values = [cache([point(0, 2), point(1, 3), point(2, 4)]), cache([point(0, 5), point(1, 6), point(2, 7)])], names = ['First', 'Second'], rawName, extra = ''} = {}) {
-  const series = values.map((value, index) => `<c:ser><c:idx val="${index}"/><c:order val="${index}"/><c:tx>${rawName ?? cache([point(0, names[index])], 1, 'strRef')}</c:tx><c:cat>${labels}</c:cat><c:${element === 'scatterChart' ? 'yVal' : 'val'}>${value}</c:${element === 'scatterChart' ? 'yVal' : 'val'}></c:ser>`).join('');
+  const series = values.map((value, index) => `<c:ser><c:idx val="${index}"/><c:order val="${index}"/><c:tx>${rawName ?? cache([point(0, names[index])], 1, 'strRef')}</c:tx>${element === 'scatterChart' ? `<c:xVal>${labels}</c:xVal><c:yVal>${value}</c:yVal>` : `<c:cat>${labels}</c:cat><c:val>${value}</c:val>`}</c:ser>`).join('');
   const entries = {...original};
   const xml = strFromU8(entries[chartPart]).replace(/<c:barChart>[\s\S]*?<\/c:barChart>/, `<c:${element}>${element === 'barChart' ? '<c:barDir val="col"/>' : ''}${series}${extra}</c:${element}>`);
   entries[chartPart] = strToU8(xml);
@@ -37,7 +37,7 @@ async function imported(options) {
   return chart;
 }
 
-for (const element of ['barChart', 'lineChart', 'areaChart', 'pieChart', 'doughnutChart', 'radarChart', 'scatterChart']) {
+for (const element of ['barChart', 'lineChart', 'areaChart', 'pieChart', 'doughnutChart', 'radarChart']) {
   test(`${element}: reordered sparse caches keep holes, zero and empty labels aligned`, async () => {
     const chart = await imported({element,
       labels: cache([point(2, ' C \tΩ '), point(0, '')], 4, 'strRef'),
@@ -47,6 +47,23 @@ for (const element of ['barChart', 'lineChart', 'areaChart', 'pieChart', 'doughn
     assert.deepEqual(chart.data.rows, [['', 0, null], [null, null, 6], [' C \tΩ ', 4, null], [null, null, null]]);
   });
 }
+// A native scatter chart has no category labels: c:xVal is its numeric X and imports as [Point, X, ...series] with numbered points.
+test('scatterChart: reordered sparse xVal/yVal caches keep holes, zero and empty X values aligned', async () => {
+  const chart = await imported({element: 'scatterChart',
+    labels: cache([point(2, ' 30 '), point(0, '')], 4),
+    values: [cache([point(2, 4), point(0, 0)], 4), cache([point(1, 6)], 2)],
+  });
+  assert.equal(chart.type, 'scatter');
+  assert.deepEqual(chart.data.columns, ['Point', 'Category', 'First', 'Second'], 'the X heading is the workbook category heading');
+  assert.deepEqual(chart.data.rows, [['1', null, 0, null], ['2', null, null, 6], ['3', 30, 4, null], ['4', null, null, null]], 'X and Y gaps stay null and a zero stays zero');
+});
+test('scatterChart: a chart without c:xVal is plotted against 1..n', async () => {
+  const entries = unzipSync(fixture({element: 'scatterChart', values: [cache([point(0, 2), point(1, 3), point(2, 4)])]}));
+  entries[chartPart] = strToU8(strFromU8(entries[chartPart]).replace(/<c:xVal>[\s\S]*?<\/c:xVal>/, ''));
+  const document = await fromPptx(zipSync(entries));
+  const chart = document.slides[0].chart ?? document.slides[0].blocks?.find(block => block.chart)?.chart;
+  assert.deepEqual(chart.data.rows, [['1', 1, 2], ['2', 2, 3], ['3', 3, 4]]);
+});
 for (const kind of ['strRef', 'strLit', 'numRef', 'numLit', 'multiLvlStrRef']) {
   test(`${kind}: label indices retain explicit empty and absent values`, async () => {
     const chart = await imported({labels: cache([point(2, 'third'), point(0, '')], 3, kind)});
@@ -180,7 +197,8 @@ test('ordinary numeric export/import/re-export retains scientific-notation cells
   assert.deepEqual(againChart.data, chart.data);
 });
 
-// yVal probes only the existing value-role reader, not scatter X/label fidelity.
+// Native scatter charts read c:xVal as X and c:yVal as the value role: [Point, X, Y].
+const shape = (element, rows) => element === 'scatterChart' ? rows.map(([label, ...rest], index) => [String(index + 1), label === '1e3' ? 1000 : null, ...rest]) : rows;
 for (const element of ['barChart', 'scatterChart']) {
   for (const kind of ['numRef', 'numLit']) {
     const role = element === 'scatterChart' ? 'yVal' : 'val';
@@ -200,11 +218,11 @@ for (const element of ['barChart', 'scatterChart']) {
           point(pairs.length, ''), point(pairs.length + 1, undefined),
         ], count, kind)],
       });
-      assert.deepEqual(chart.data.columns, ['Category', ' 1E+3 ']);
-      assert.deepEqual(chart.data.rows, [
+      assert.deepEqual(chart.data.columns.slice(-1), [' 1E+3 ']);
+      assert.deepEqual(chart.data.rows, shape(element, [
         ...pairs.map(([, value], index) => [index === 0 ? '1e3' : index === 2 ? '' : null, value]),
         [null, null], [null, null], [null, null],
-      ]);
+      ]));
     });
     test(`${role}/${kind}: exponent overflow and nonzero underflow refuse the exact logical point`, async () => {
       for (const [token, reason] of [
@@ -230,7 +248,7 @@ for (const element of ['barChart', 'scatterChart']) {
       const chart = await imported({element, labels: cache([], pairs.length, 'strRef'),
         values: [cache(pairs.map(([token], index) => point(index, token)), pairs.length, kind)],
       });
-      assert.deepEqual(chart.data.rows, pairs.map(([, value]) => [null, value]));
+      assert.deepEqual(chart.data.rows, shape(element, pairs.map(([, value]) => [null, value])));
     });
   }
 }

@@ -3,6 +3,7 @@ import {isFaceStyleSuffix} from './font-weights.js';
 import {importTableFrames} from './table-import.js';
 import {applyChartFonts, applyPitchFamilies, finalizeFontsUsed, fontPitchFamilies} from './package-fonts.js';
 import {readChartCategoryHeading,writeChartCategoryHeading} from './chart-workbook.js';
+import {CHARTEX_FALLBACK,resolveChartType,chartTypeFromNative,applyChartConstruct,NATIVE_CHART_ELEMENTS} from './chart-types.js';
 import {attachCodeTags, codeManifest, importCodeGroups, nativeShapeParagraphs, nativeTextShapes} from './code-provenance.js';
 import {attachMetricTags,metricManifest,importMetricGroups} from './metric-provenance.js';
 import {attachCardTags,importCardFrames} from './card-provenance.js';
@@ -851,6 +852,7 @@ function chartFromRelationship(entries, slidePath, relationships, relId) {
 
   const budget = { cells: 0 };
   const cachePath = (index, role) => `${relationship.path}#c:ser[${index}]/${role}`;
+  if (chartNode.type === 'scatter') return scatterFromSeries(entries, relationship.path, series, budget, cachePath);
   const labels = cachedValues(series[0]?.["c:cat"], cachePath(0, 'c:cat'), budget);
   const names = series.map((entry, index) => firstCachedValue(entry?.["c:tx"], cachePath(index, 'c:tx'), budget) ?? `Series ${index + 1}`);
   const values = series.map((entry, index) => {
@@ -880,19 +882,31 @@ function chartFromRelationship(entries, slidePath, relationships, relId) {
   };
 }
 
+// Scatter charts share X values (c:xVal) across Y series (c:yVal). OPF keeps
+// them category-major: [point label, X, Y1, Y2, ...]; native charts carry no
+// point labels, so points are numbered.
+function scatterFromSeries(entries, chartPart, series, budget, cachePath) {
+  // The same cache helpers as every other chart: bounded, indexed by c:pt@idx, with gaps kept as null (never plotted as 0).
+  const xRole = series[0]?.["c:xVal"];
+  const xs = cachedValues(xRole, cachePath(0, "c:xVal"), budget, numericCacheValue);
+  const names = series.map((entry, index) => firstCachedValue(entry?.["c:tx"], cachePath(index, "c:tx"), budget) ?? `Series ${index + 1}`);
+  const values = series.map((entry, index) => cachedValues(entry?.["c:yVal"], cachePath(index, "c:yVal"), budget, numericCacheValue));
+  const rowCount = values.reduce((count, row) => Math.max(count, row.length), xs.length);
+  if (rowCount === 0) return null;
+  if (rowCount * (series.length + 2) > MAX_CHART_CACHE_CELLS) {
+    throw new OPFPptxError('invalid-chart-cache', 'Chart cache exceeds the 1,000,000-cell import limit; reduce its rows or series before importing.', {path: chartPart});
+  }
+  const rows = [];
+  // A chart without c:xVal plots against 1..n natively; a c:xVal gap stays a gap.
+  for (let index = 0; index < rowCount; index += 1) rows.push([String(index + 1), xRole === undefined ? index + 1 : xs[index] ?? null, ...values.map((row) => row[index] ?? null)]);
+  return { type: "scatter", data: { columns: ["Point", readChartCategoryHeading(entries, chartPart) ?? "X", ...names], rows } };
+}
+
 function firstChartNode(plotArea) {
-  const candidates = [
-    ["c:barChart", (node) => node?.["c:barDir"]?.val === "bar" ? "bar" : "column"],
-    ["c:lineChart", () => "line"],
-    ["c:pieChart", () => "pie"],
-    ["c:doughnutChart", () => "doughnut"],
-    ["c:areaChart", () => "area"],
-    ["c:scatterChart", () => "scatter"],
-    ["c:radarChart", () => "radar"]
-  ];
-  for (const [key, type] of candidates) {
-    const node = asArray(plotArea[key])[0];
-    if (node) return { node, type: type(node) };
+  // Map the native construct back to the kept OPF chart type id (FF-22).
+  for (const element of NATIVE_CHART_ELEMENTS) {
+    const node = asArray(plotArea[`c:${element}`])[0];
+    if (node) return { node, type: chartTypeFromNative(element, node) };
   }
   return null;
 }
@@ -1553,7 +1567,7 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     addPlaceholderPayload(slide, "Chart", chartData.summary, region, context);
     return;
   }
-  if (chartData.adapted) options.onDiagnostic?.({code: "chart-data-adapted", path, message: chartData.message, adaptation: chartData.adapted});
+  for (const {adaptation, message} of chartData.adaptations ?? []) options.onDiagnostic?.({code: "chart-data-adapted", path, message, adaptation});
 
   // Keep the resolved palette surface (including alpha) explicit in native
   // chart/plot areas, so inherited labels are assessed against their own panel.
@@ -1563,15 +1577,16 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   const fill = {color:normalizeHex(panelFill),transparency};
   const objectName = `OPF chart ${context.chartHeadings.size + 1}`;
   const circular = chartData.type === 'pie' || chartData.type === 'doughnut';
-  context.chartHeadings.set(objectName,{heading:chartData.type === 'scatter' ? undefined : chartData.heading ?? chart.data.columns[0],labelColor});
+  context.chartHeadings.set(objectName,{heading:chartData.type === 'scatter' ? undefined : chartData.heading ?? chart.data.columns[0],labelColor,spec:chartData.spec});
   context.chartFonts.set(objectName,{heading:context.fonts.heading,body:context.fonts.body});
+  const percent = chartData.spec.grouping === 'percentStacked';
   slide.addChart(chartData.type, chartData.series, {
     objectName,
     x: region.x,
     y: region.y,
     w: region.w,
     h: region.h,
-    showLegend: circular || chartData.series.length > 1,
+    showLegend: circular || chartData.series.length > (chartData.type === 'scatter' ? 2 : 1),
     showTitle: false,
     chartColors: CHART_COLORS.map(color=>normalizeHex(chartColorForFill(panelFill,`#${color}`))),
     chartArea: {fill:{...fill},roundedCorners:false},
@@ -1589,7 +1604,12 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     showValue: false,
     valGridLine: { color: context.colors.border, transparency: 30, size: 1 },
     barDir: chartData.barDir,
-    barGrouping: chartData.barGrouping
+    barGrouping: chartData.barGrouping,
+    ...(percent ? { valAxisLabelFormatCode: '0%' } : {}),
+    ...(chartData.spec.markers === undefined ? {} : { lineDataSymbol: chartData.spec.markers ? 'circle' : 'none' }),
+    ...(chartData.spec.radarStyle ? { radarStyle: chartData.spec.radarStyle } : {}),
+    // ScatterWithMarkers: markers only, no connecting line.
+    ...(chartData.type === 'scatter' ? { lineSize: 0, lineDataSymbol: 'circle' } : {})
   });
 }
 
@@ -2093,7 +2113,16 @@ function toPptxChartData(chart) {
   }
   if (data.rows.length === 0) return unplottable("no-rows", "The chart has no data rows.", "The chart data has no rows.");
   if (data.columns.length === 0) return unplottable("no-columns", "The chart has no data columns.", "The chart data has no columns.");
-  const mapped = mapChartType(chart.type);
+  const resolved = resolveChartType(chart.type).spec;
+  // Chartex types (treemap, box & whisker, waterfall, ...) have no classic construct here: they export as a clustered column chart, never silently.
+  const chartex = resolved.family === 'chartex';
+  const spec = chartex ? CHARTEX_FALLBACK : resolved;
+  const typeName = stringifyText(chart.type);
+  const adaptations = [];
+  if (chartex) {
+    adaptations.push({adaptation: "chartex-fallback", message: `The '${typeName}' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.`});
+  }
+  const mapped = {type: spec.pptx, spec, barDir: spec.barDir, barGrouping: spec.pptx === 'bar' || spec.pptx === 'area' ? spec.grouping : undefined};
   if (data.columns.length === 1) {
     const heading = stringifyText(data.columns[0]);
     const cell = (row) => Array.isArray(row) ? row[0] : row;
@@ -2107,10 +2136,12 @@ function toPptxChartData(chart) {
     if (String(chart.type ?? "").toLowerCase() === "histogram") {
       const bins = histogramBins(points.map((point) => point.value));
       return {
-        type: "bar", barDir: "col", barGrouping: "clustered", heading: "Bin",
+        type: "bar", spec: CHARTEX_FALLBACK, barDir: "col", barGrouping: "clustered", heading: "Bin",
         series: [{name: "Frequency", labels: bins.map((bin) => bin.label), values: bins.map((bin) => bin.count)}],
-        adapted: "histogram-binned",
-        message: `The histogram's single data column '${heading}' (${points.length} values${skippedNote}) was binned into ${bins.length} equal-width bins and exported as a column chart of the counts; PowerPoint's own histogram chart is not exported, and the binned counts do not restore the raw values on re-import.`
+        adaptations: [{
+          adaptation: "histogram-binned",
+          message: `The histogram's single data column '${heading}' (${points.length} values${skippedNote}) was binned into ${bins.length} equal-width bins and exported as a column chart of the counts; PowerPoint's own histogram chart is not exported, and the binned counts do not restore the raw values on re-import.`
+        }]
       };
     }
     // Rows keep their own row numbers, so a skipped cell leaves a gap in the numbering.
@@ -2119,21 +2150,30 @@ function toPptxChartData(chart) {
     const series = mapped.type === "scatter"
       ? [{name: "Row", labels, values: points.map((point) => point.row)}, {name: heading, labels, values: numbers}]
       : [{name: heading, labels, values: numbers}];
-    return {
-      ...mapped, series, heading: "Row", adapted: "row-numbers",
-      message: `The chart's single data column '${heading}' has no category column, so its ${points.length} values${skippedNote} are plotted against their row numbers.`
-    };
+    adaptations.push({adaptation: "row-numbers", message: `The chart's single data column '${heading}' has no category column, so its ${points.length} values${skippedNote} are plotted against their row numbers.`});
+    return {...mapped, series, heading: "Row", adaptations};
   }
 
   const labels = data.rows.map((row) => stringifyText(row?.[0]));
-  const series = data.columns.slice(1).map((name, seriesIndex) => ({
+  let series = data.columns.slice(1).map((name, seriesIndex) => ({
     name: stringifyText(name),
     labels,
     values: data.rows.map((row) => numericValue(row?.[seriesIndex + 1]))
   }));
-
-  return { ...mapped, series };
+  if (spec.family === 'circular' && series.length > 1) {
+    // A pie or doughnut plots one series; name the ones left out instead of dropping them silently.
+    const dropped = series.slice(1).map((entry) => `'${entry.name}'`);
+    adaptations.push({adaptation: "series-dropped", message: `The ${typeName} chart plots one series, so its first series '${series[0].name}' is exported and the other ${dropped.length} (${dropped.join(", ")}) ${dropped.length === 1 ? "is" : "are"} not.`});
+    series = series.slice(0, 1);
+  }
+  if (spec.family === 'xy' && series.length === 1) {
+    // [Point, X, Y...] carries its own X column; a lone value column is plotted against the row numbers.
+    series = [{name: 'X', labels, values: data.rows.map((_, index) => index + 1)}, ...series];
+    adaptations.push({adaptation: "row-numbers", message: `The scatter chart has no X column (a point label column and one value column), so its ${data.rows.length} values are plotted against their row numbers.`});
+  }
+  return {type: spec.pptx, spec, series, barDir: spec.barDir, barGrouping: spec.pptx === 'bar' || spec.pptx === 'area' ? spec.grouping : undefined, adaptations};
 }
+
 
 /**
  * Equal-width bins (Sturges' count, at most 50) from the minimum to the maximum; every bin but the last is [low, high).
@@ -2158,28 +2198,6 @@ function histogramBins(values) {
     if (new Set(labels).size === labels.length) return bins.map((bin, index) => ({...bin, label: labels[index]}));
     if (precision === 17) return bins.map((bin, index) => ({...bin, label: `${labels[index]} (bin ${index + 1})`}));
   }
-}
-
-function mapChartType(type) {
-  const normalized = String(type ?? "").toLowerCase();
-  if (normalized.includes("pie")) return { type: "pie" };
-  if (normalized.includes("doughnut") || normalized.includes("donut")) return { type: "doughnut" };
-  if (normalized.includes("area")) return { type: "area" };
-  if (normalized.includes("line") || normalized.includes("sparkline")) return { type: "line" };
-  if (normalized.includes("scatter")) return { type: "scatter" };
-  if (normalized.includes("radar")) return { type: "radar" };
-  if (normalized.includes("bar")) {
-    return {
-      type: "bar",
-      barDir: "bar",
-      barGrouping: normalized.includes("stacked") ? "stacked" : "clustered"
-    };
-  }
-  return {
-    type: "bar",
-    barDir: "col",
-    barGrouping: normalized.includes("stacked") ? "stacked" : "clustered"
-  };
 }
 
 async function resolveImage(asset, presentation, options, path) {
@@ -2400,8 +2418,9 @@ async function normalizePptxZip(raw, context) {
       if(!context.chartHeadings.has(name))continue;
       const id=frame.match(/<c:chart\b[^>]*\br:id="([^"]+)"/)?.[1],chartPart=relationships.get(id)?.path;
       if(!chartPart)throw new OPFPptxError('packaging-failed','Generated chart relationship is missing.');
-      const {heading,labelColor}=context.chartHeadings.get(name);
+      const {heading,labelColor,spec}=context.chartHeadings.get(name);
       if(heading!==undefined)writeChartCategoryHeading(entries,chartPart,heading);
+      entries[chartPart]=encodeText(applyChartConstruct(decodeText(entries[chartPart]),spec));
       // PptxGenJS hardcodes a black fallback in pie/doughnut label properties.
       // Normalize only our generated chart text styles; point/series fills stay intact.
       entries[chartPart]=encodeText(decodeText(entries[chartPart]).replace(/<c:txPr>[\s\S]*?<\/c:txPr>/g,properties=>properties.replace(/<a:solidFill>[\s\S]*?<\/a:solidFill>/g,()=>`<a:solidFill><a:srgbClr val="${labelColor}"/></a:solidFill>`)));

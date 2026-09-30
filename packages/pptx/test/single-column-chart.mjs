@@ -5,6 +5,7 @@ import assert from 'node:assert/strict';
 import {strFromU8, unzipSync} from 'fflate';
 import {catalogs} from '@openpresentation/opf';
 import {fromPptx, toPptx} from '../dist/index.js';
+import {resolveChartType} from '../dist/chart-types.js';
 
 const deck = (type, data) => ({name: 'single column chart', language: 'english', design: {fontScheme: 'calibri'}, slides: [{id: 'a', layout: 'chart-1x', title: 'Chart', chart: {type, data}, text: 'Body'}]});
 async function exported(type, data) {
@@ -59,12 +60,15 @@ for (const type of types) {
   const result = await exported(type, {columns: ['Value'], rows: [[3], [5], [8]]});
   assert.equal(result.charts.length, 1, `${type}: a chart part is exported`);
   assert.ok(result.frame, `${type}: the slide has a graphic frame`);
-  assert.deepEqual(result.chartDiagnostics.map((diagnostic) => diagnostic.code), ['chart-data-adapted'], `${type}: the adaptation is reported`);
-  assert.equal(result.chartDiagnostics[0].adaptation, type === 'histogram' ? 'histogram-binned' : 'row-numbers', type);
+  // Chartex types also report that they export as a clustered column chart (a histogram's binning message already says so).
+  const chartex = resolveChartType(type).spec.family === 'chartex' && type !== 'histogram';
+  assert.deepEqual(result.chartDiagnostics.map((diagnostic) => diagnostic.code), chartex ? ['chart-data-adapted', 'chart-data-adapted'] : ['chart-data-adapted'], `${type}: the adaptation is reported`);
+  assert.deepEqual(result.chartDiagnostics.map((diagnostic) => diagnostic.adaptation), type === 'histogram' ? ['histogram-binned'] : [...(chartex ? ['chartex-fallback'] : []), 'row-numbers'], type);
 }
 const dots = await exported('dot-plot', {columns: ['2023'], rows: [[3], [5], [8]]});
-assert.deepEqual(numbers(dots.chart, 'cat'), [['1', '2', '3']], 'rows are numbered');
-assert.deepEqual(numbers(dots.chart, 'val'), [['3', '5', '8']]);
+// A dot plot is a scatter chart (core replaces dot-plot with scatter): X is the row number, Y the value.
+assert.deepEqual(numbers(dots.chart, 'xVal'), [['1', '2', '3']], 'rows are numbered');
+assert.deepEqual(numbers(dots.chart, 'yVal'), [['3', '5', '8']]);
 assert.match(dots.chartDiagnostics[0].message, /'2023'.*row numbers/);
 const scatter = await exported('scatter', {columns: ['Y'], rows: [[3], [5], [8]]});
 assert.deepEqual(numbers(scatter.chart, 'yVal'), [['3', '5', '8']]);
@@ -86,7 +90,8 @@ for (const [label, data, reason] of [
 for (const type of ['column', 'bar', 'line', 'area', 'pie', 'doughnut', 'radar', 'histogram', 'waterfall']) {
   const result = await exported(type, {columns: ['Category', 'Value'], rows: [['a', 3], ['b', 4]]});
   assert.equal(result.charts.length, 1, type);
-  assert.deepEqual(result.chartDiagnostics, [], `${type}: no diagnostic for ordinary data`);
+  // Only a chartex type (waterfall) reports its fallback to a clustered column chart; a histogram with a category column is not binned, it is exported as its columns.
+  assert.deepEqual(result.chartDiagnostics.map((diagnostic) => diagnostic.adaptation), type === 'waterfall' || type === 'histogram' ? ['chartex-fallback'] : [], `${type}: no diagnostic for ordinary data`);
   assert.deepEqual(numbers(result.chart, 'cat'), [['a', 'b']], type);
 }
 // Extremes: finite arithmetic for any finite input, every value counted once.
@@ -112,8 +117,8 @@ for (const rows of [[[-1e308], [1e308]], [[-1e308], [0], [1e308]], [[1.797693134
   assert.equal(numbers(histogram.chart, 'val')[0].reduce((total, count) => total + Number(count), 0), 4, 'four cells hold numbers');
   assert.match(histogram.chartDiagnostics[0].message, /4 values \(3 non-numeric cells were skipped\)/);
   const dots = await exported('dot-plot', {columns: ['V'], rows});
-  assert.deepEqual(numbers(dots.chart, 'cat'), [['1', '2', '3', '7']], 'skipped rows leave gaps in the row numbers');
-  assert.deepEqual(numbers(dots.chart, 'val'), [['12', '5', '1234', '7']], 'skipped cells are not plotted as 0');
+  assert.deepEqual(numbers(dots.chart, 'xVal'), [['1', '2', '3', '7']], 'skipped rows leave gaps in the row numbers');
+  assert.deepEqual(numbers(dots.chart, 'yVal'), [['12', '5', '1234', '7']], 'skipped cells are not plotted as 0');
   assert.match(dots.chartDiagnostics[0].message, /its 4 values \(3 non-numeric cells were skipped\)/);
   const multi = await exported('column', {columns: ['Cat', 'V'], rows: [['a', '12%'], ['b', '$5'], ['c', '1,234']]});
   assert.deepEqual(numbers(multi.chart, 'val'), [['12', '5', '1234']], 'multi-column charts parse the same way');
