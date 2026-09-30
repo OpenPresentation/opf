@@ -3,13 +3,16 @@ import { mkdir, readdir, readFile, writeFile, copyFile } from 'node:fs/promises'
 import { createHash } from 'node:crypto';
 import { createRequire } from 'node:module';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import * as renderFonts from '@openpresentation/opf-render/fonts-node';
 const { loadOfficeFontRegistry } = renderFonts;
 const require = createRequire(import.meta.url);
 
 const root = new URL('../', import.meta.url);
-const output = new URL('artifacts/playground/', root);
+// OPF_PLAYGROUND_OUT builds somewhere else (the tests build a second copy); OPF_PLAYGROUND_SPLIT_FONTS=1 (or --split-fonts) starts the page
+// with Roboto Regular only and serves the other eager faces as separate hash-pinned files listed in base-fonts.json (FF-41).
+const output = process.env.OPF_PLAYGROUND_OUT ? pathToFileURL(path.resolve(process.env.OPF_PLAYGROUND_OUT) + path.sep) : new URL('artifacts/playground/', root);
+const splitFonts = process.env.OPF_PLAYGROUND_SPLIT_FONTS === '1' || process.argv.includes('--split-fonts');
 await mkdir(output, { recursive: true });
 await build({
   entryPoints: [fileURLToPath(new URL('examples/playground.js', root))],
@@ -17,7 +20,18 @@ await build({
   bundle: true, platform: 'browser', format: 'esm', minify: true,
 });
 const officeFonts = await loadOfficeFontRegistry();
-await writeFile(new URL('fonts.json', output), JSON.stringify(officeFonts.embeddedFonts));
+const isStartup = face => face.family === 'Roboto' && face.weight === 400 && !face.italic;
+if (splitFonts) {
+  const base = [];
+  for (const face of officeFonts.embeddedFonts.filter(face => !isStartup(face))) {
+    const bytes = Buffer.from(face.dataUrl.split(',')[1], 'base64'), sha256 = createHash('sha256').update(bytes).digest('hex');
+    const file = `${face.family.replace(/[^a-z0-9]+/gi, '-')}-${face.weight}-${face.italic ? 'italic' : 'normal'}-${sha256.slice(0, 12)}.ttf`;
+    await writeFile(new URL(file, output), bytes);
+    base.push({ family: face.family, weight: face.weight, italic: Boolean(face.italic), license: face.license, file, sha256 });
+  }
+  await writeFile(new URL('base-fonts.json', output), JSON.stringify(base));
+} else await writeFile(new URL('base-fonts.json', output), '[]');
+await writeFile(new URL('fonts.json', output), JSON.stringify(splitFonts ? officeFonts.embeddedFonts.filter(isStartup) : officeFonts.embeddedFonts));
 // FF-31: the vendored preview faces (Intos for the Aptos scheme, the open families) are not in fonts.json. They are served next to
 // the page at their package-relative paths (fonts/intos/..., fonts/<family>/...) and fetched on demand, only for the font
 // families a document resolves, hash-verified by the renderer (registry.ensureLazyFonts). Never a font CDN. A renderer without
@@ -59,4 +73,4 @@ if (typeof renderFonts.scriptFontPackages === 'function') {
 for (const [source, destination] of [['playground.html', 'index.html'], ['playground.css', 'playground.css'], ['galleries.json', 'galleries.json']]) {
   await copyFile(new URL('examples/' + source, root), new URL(destination, output));
 }
-console.log(`Browser editor built in artifacts/playground (${scriptFaces} lazy script faces, ${lazyFaces} lazy preview faces)`);
+console.log(`Browser editor built in ${fileURLToPath(output)} (${splitFonts ? 'eager faces split: Roboto Regular at start, the rest on demand; ' : ''}${scriptFaces} lazy script faces, ${lazyFaces} lazy preview faces)`);

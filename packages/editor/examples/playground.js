@@ -3,18 +3,22 @@ import {createSchemaInspector} from '../src/schema-inspector.js';
 import {installTransferControls} from './transfer-controls.js';
 import { createEditorSession } from '../src/index.js';
 import {createCanvasEditor,createFontGate} from '../src/canvas.js';
-import {loadBrowserFontRegistry} from '@openpresentation/opf-render/fonts-browser';
+import * as browserFonts from '@openpresentation/opf-render/fonts-browser';
+import {withBaseFaces} from './base-font-gate.js';
 import { renderSvg } from '@openpresentation/opf-render/svg';
 import * as renderFontCore from '@openpresentation/opf-render/fonts';
 import { resolveScriptFonts } from '@openpresentation/opf';
 import { installPptxExport } from './pptx-controls.js';
 import { MAX_EXACT_SOURCE_LENGTH, createSourceMemory, findDuplicateKey, updateJsonSource } from '../src/exact-source.js';
 
+// fonts.json holds the faces the page starts with. A build that splits the eager faces (the gallery editor) adds base-fonts.json: the
+// rest of them, as separate hash-pinned files loaded on demand (FF-41). Without it fonts.json carries every eager face.
+const baseFaces = await fetch('./base-fonts.json').then(response => response.ok ? response.json() : []).catch(() => []);
 const fontFaces = await fetch('./fonts.json').then(response => {
   if (!response.ok) throw new Error('Bundled fonts are unavailable. Rebuild the editor demo.');
   return response.json();
 });
-const fontRegistry = await loadBrowserFontRegistry(fontFaces.map(face=>({family:face.family,weight:face.weight,italic:face.italic,license:face.license,data:Uint8Array.from(atob(face.dataUrl.split(',')[1]),character=>character.charCodeAt(0))})),{substitutionPolicy:'visual',fallbackFamily:'Roboto',scriptBaseUrl:'./script-fonts/',lazyFontsBaseUrl:new URL('./',document.baseURI).href});
+const fontRegistry = await browserFonts.loadBrowserFontRegistry(fontFaces.map(face=>({family:face.family,weight:face.weight,italic:face.italic,license:face.license,data:Uint8Array.from(atob(face.dataUrl.split(',')[1]),character=>character.charCodeAt(0))})),{substitutionPolicy:'visual',fallbackFamily:'Roboto',scriptBaseUrl:'./script-fonts/',lazyFontsBaseUrl:new URL('./',document.baseURI).href});
 // Script faces (Japanese, Arabic, Thai, ...) load lazily, once a document draws that script, and so do the vendored preview
 // faces (Intos for the Aptos scheme, the open families): they are not in fonts.json but separate hash-pinned files the
 // registry adds to the document and itself together. Older renderers have no pendingScripts/ensureScripts or
@@ -22,7 +26,7 @@ const fontRegistry = await loadBrowserFontRegistry(fontFaces.map(face=>({family:
 // FF-41: nothing renders or measures a document before this gate has loaded the faces it needs. Every path that sets a new
 // document or draws a slide (initial load, Source Apply and the gallery handoff, import, undo and redo, font and language
 // switches, slide navigation, thumbnails, previews and export) goes through fontGate.run or the canvas's own gate.
-const fontGate = createFontGate(fontRegistry);
+const fontGate = withBaseFaces({registry:fontRegistry,gate:createFontGate(fontRegistry),faces:baseFaces,renderFonts:browserFonts});
 const layoutOptions = {textMeasurement:fontRegistry.textMeasurement};
 // renderSvg measures each script with its own face and falls back per glyph (Japanese under Aptos draws with Noto Sans JP where
 // Intos Display has no glyph), but the session's composeSlide and paginateSlide take a plain measurement, and that one is strict:
@@ -175,7 +179,9 @@ function render() {
   element('group-controls').hidden = !groupSelect.options.length;
   element('group-mode').value = editor.get(`${groupSelect.value}.composition.mode`, 'auto');
   element('undo').disabled = !editor.canUndo; element('redo').disabled = !editor.canRedo;
-  element('json').value = viewSource(deck);
+  // A render that finishes while the source dialog is open (the starting deck's faces loading when a host hands a document over) must not
+  // overwrite the source being edited or applied: Apply checks that the text is still what it parsed.
+  if (!element('source-dialog').open) element('json').value = viewSource(deck);
   const diagnostics = [];
   if (!canvas) canvas=createCanvasEditor(element('preview'),{
     editor,slideIndex,renderOptions:layoutOptions,propertiesContainer:element('canvas-properties'),fonts:fontGate,
@@ -285,7 +291,9 @@ function previewSource() {
   } catch(error) {fail(error);return;}
   fontGate.run(deck,{
     isCurrent:()=>token===previewToken,
-    loading:()=>{element('json-error').textContent='Loading fonts for this document…';element('apply-json').disabled=true;},
+    // Apply stays enabled while the preview's faces load: it loads what the source needs itself before applying it, and a host that
+    // clicks it the moment the page is ready (the gallery handoff) must not hit a disabled button because the starting deck's faces are still loading.
+    loading:()=>{element('json-error').textContent='Loading fonts for this document…';},
     ready:()=>{
       const svg=renderSvg(deck,{...layoutOptions,slideIndex:Math.min(slideIndex,(deck.slides?.length ?? 1)-1)});
       element('source-preview').innerHTML=svg;element('json-error').textContent='';element('apply-json').disabled=false;
