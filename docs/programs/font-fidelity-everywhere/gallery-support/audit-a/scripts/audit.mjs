@@ -29,7 +29,9 @@ const { build } = createRequire(creq.resolve('tsup'))('esbuild');
 await mkdir(path.join(OUT, 'out'), { recursive: true });
 const bundle = path.join(OUT, 'out/snippets.mjs');
 await build({
-  entryPoints: [path.join(GALLERY, 'lib/opf-snippets.ts')], outfile: bundle, bundle: true, platform: 'node', format: 'esm',
+  // pptx-gallery#44 moved buildImageTreatmentOpfSnippet to lib/image-treatment-snippets.ts, and pptx-gallery#48 routes the editor
+  // through buildCatalogItemOpfSnippet (lib/opf-item-snippets.ts); re-export all three.
+  stdin: { contents: "export * from './lib/opf-snippets.ts';\nexport { buildImageTreatmentOpfSnippet } from './lib/image-treatment-snippets.ts';\nexport { buildCatalogItemOpfSnippet } from './lib/opf-item-snippets.ts';\n", resolveDir: GALLERY, sourcefile: 'audit-a-snippets-entry.ts', loader: 'ts' }, outfile: bundle, bundle: true, platform: 'node', format: 'esm',
   packages: 'external', tsconfig: path.join(GALLERY, 'tsconfig.json'), logLevel: 'error',
   plugins: [{ name: 'core-pkg-json', setup(b) { b.onResolve({ filter: /^@openpresentation\/opf\/package\.json$/ }, () => ({ path: path.join(CORE, 'packages/javascript/package.json') })); } }],
 });
@@ -93,6 +95,9 @@ const geometry = (xml) => [...xml.matchAll(/<a:off x="(-?\d+)" y="(-?\d+)"\/><a:
 const count = (xml, re) => (xml.match(re) ?? []).length;
 const codes = (d) => uniq((d ?? []).map((x) => x.code));
 const svgHas = (svg, s) => svg.includes(esc(s)) || svg.includes(s);
+// Asset references ("asset:<id>") that the snippet does not define under assets. The published snippets became self-contained
+// in pptx-gallery#43/#44/#47, so this is measured per snippet instead of assumed.
+const missingAssets = (doc) => uniq([...JSON.stringify(doc).matchAll(/"asset:([w-]+)"/g)].map((m) => m[1])).filter((id) => !doc.assets?.[id]);
 
 // Evidence index (check 6): native PowerPoint evidence directories + compatibility matrix.
 const evidence = [];
@@ -161,7 +166,7 @@ if (want('backgrounds')) {
       const fillTag = { solid: 'a:solidFill', gradient: 'a:gradFill', pattern: 'a:pattFill', image: 'a:blipFill' }[type];
       const bgXml = m.x.ok ? [...m.x.slides[0].matchAll(/<p:bg>[\s\S]*?<\/p:bg>/g), ...m.x.layoutsXml.matchAll(/<p:bg>[\s\S]*?<\/p:bg>/g)].map((a) => a[0]).join('') : '';
       checks.catalog = { pass: true, note: 'no OPF catalog kind for backgrounds; gallery slug maps to inline design.background' };
-      checks.export.native = m.x.ok ? bgXml.includes(`<${fillTag}`) && (type !== 'pattern' || bgXml.includes('prst="pct5"')) : null;
+      checks.export.native = m.x.ok ? bgXml.includes(`<${fillTag}`) && (type !== 'pattern' || bgXml.includes(`prst="${bg.pattern?.preset}"`)) : null;
       checks.export.nativeDetail = bgXml.slice(0, 300);
       const imp = m.im.ok ? (m.im.doc.slides?.[0]?.design?.background ?? m.im.doc.design?.background) : null;
       checks.reimport.retained = imp?.type === type; checks.reimport.imported = imp ?? null;
@@ -173,7 +178,7 @@ if (want('backgrounds')) {
       if (checks.export.diagnostics.length) reasons.push(`export diagnostics: ${checks.export.diagnostics.join(',')}`);
       const twins = Object.entries(shapes).filter(([s, v]) => s !== item.slug && v === shapes[item.slug]).map(([s]) => s);
       if (twins.length) reasons.push(`gallery slug collapses to the same OPF background as ${twins.join(', ')} (treatment identity not representable)`);
-      if (vn === 'published' && type === 'image') reasons.push('gallery snippet references asset:cover without an assets entry');
+      if (vn === 'published') for (const id of missingAssets(doc)) reasons.push(`gallery snippet references asset:${id} without an assets entry`);
       out.variants[vn] = { checks, ...classify({ checks, reasons }) };
     }
     Object.assign(out, pick(out));
@@ -185,6 +190,10 @@ function pick(out) { const v = out.variants.published; return { class: v.class, 
 // ---------- IMAGE TREATMENTS ----------
 if (want('image-treatments')) {
   const items = (await data('image-treatments')).items.slice(0, LIMIT);
+  // The probe below measures design.slideImage. pptx-gallery#44 builds the treatments from other structures (image backgrounds,
+  // image blocks, watermark), so it would report every treatment as having no native picture. It is not measured here: run with
+  // ONLY=layouts,blocks,backgrounds,headers-footers and merge the retained rows (README).
+  if (items.some((i) => !JSON.parse(snippets.buildImageTreatmentOpfSnippet(i)).design?.slideImage)) throw new Error('audit A image-treatments probe assumes design.slideImage, which the gallery snippets no longer use; see README (retained rows)');
   const designs = {};
   for (const item of items) designs[item.slug] = JSON.stringify(JSON.parse(snippets.buildImageTreatmentOpfSnippet(item)).design);
   const editorSame = uniq(items.map((i) => JSON.stringify(JSON.parse(snippets.buildOpfSnippet('image-treatments', i.slug)).design))).length === 1;
@@ -232,17 +241,23 @@ if (want('image-treatments')) {
 // ---------- HEADERS & FOOTERS ----------
 if (want('headers-footers')) {
   const items = (await data('headers-footers')).items.slice(0, LIMIT);
-  const editorSame = uniq(items.map((i) => JSON.stringify(JSON.parse(snippets.buildOpfSnippet('headers-footers', i.slug)).design))).length === 1;
+  // The editor path is the gallery's per-item builder (pptx-gallery#48), not the slug-only buildOpfSnippet.
+  const editorDocs = Object.fromEntries(items.map((i) => [i.slug, snippets.buildCatalogItemOpfSnippet('headers-footers', i.slug)]));
+  const editorSame = uniq(items.map((i) => JSON.stringify(JSON.parse(editorDocs[i.slug]).design))).length === 1;
   const designs = {};
   for (const item of items) designs[item.slug] = JSON.stringify(JSON.parse(snippets.buildHeaderFooterOpfSnippet(item)).design ?? null);
   for (const item of items) {
     const doc = JSON.parse(snippets.buildHeaderFooterOpfSnippet(item));
     const cfg = item.config, dropped = [];
-    if (cfg.hideOnTitleSlide) dropped.push('hideOnTitleSlide (no slide-level header/footer:false emitted)');
-    if (cfg.slideNumbers && cfg.slideNumberFormat && cfg.slideNumberFormat !== '{current}') dropped.push(`slideNumberFormat "${cfg.slideNumberFormat}"`);
-    if (cfg.dateFormat) dropped.push(`dateFormat "${cfg.dateFormat}" (only date:true emitted)`);
-    if (cfg.legalLine && cfg.classificationLine) dropped.push('legalLine (classificationLine wins footer.center)');
-    if (cfg.dateFormat && cfg.slideNumbers) dropped.push('date and slideNumber merged into one footer.right slot');
+    // Measured against the snippet (pptx-gallery#47 expresses these settings), not assumed from the pre-#47 builder.
+    const slots = ['header', 'footer'].flatMap((k) => Object.values(doc.design?.[k] ?? {}));
+    const titleHides = doc.slides?.[0]?.design?.footer === false && (!doc.design?.header || doc.slides[0].design.header === false);
+    if (cfg.hideOnTitleSlide && !titleHides) dropped.push('hideOnTitleSlide (no slide-level header/footer:false emitted)');
+    if (cfg.slideNumbers && cfg.slideNumberFormat && cfg.slideNumberFormat !== '{current}' && !slots.some((v) => v.slideNumberFormat === cfg.slideNumberFormat)) dropped.push(`slideNumberFormat "${cfg.slideNumberFormat}"`);
+    if (cfg.dateFormat && !slots.some((v) => v.dateFormat === cfg.dateFormat)) dropped.push(`dateFormat "${cfg.dateFormat}" (only date:true emitted)`);
+    if (cfg.legalLine && !slots.some((v) => v.text === cfg.legalLine)) dropped.push('legalLine (not emitted as furniture text)');
+    if (cfg.classificationLine && !slots.some((v) => v.text === cfg.classificationLine)) dropped.push('classificationLine (not emitted as furniture text)');
+    if (slots.some((v) => v.date && v.slideNumber)) dropped.push('date and slideNumber merged into one footer.right slot');
     if (cfg.logoPosition === 'footer' && cfg.footerContent) dropped.push('footer logo and footerContent share footer.left');
     const out = { dimension: 'headers-footers', id: item.slug, opfMapping: doc.design ?? null, gallery: { opfStatus: item.opfStatus ?? null, opfGapNote: item.opfGapNote ?? null }, configDropped: dropped, variants: {} };
     const hasLogo = /asset:logo/.test(JSON.stringify(doc));
@@ -250,15 +265,20 @@ if (want('headers-footers')) {
       const base = clone(vdoc); if (base.design) { delete base.design.header; delete base.design.footer; if (!Object.keys(base.design).length) delete base.design; }
       const m = await measure(vdoc, base), checks = commonChecks(m), reasons = [];
       checks.catalog = { pass: true, note: 'no OPF catalog kind; pattern maps to design.header/footer furniture' };
-      const texts = [], slots = [];
-      for (const k of ['header', 'footer']) for (const [pos, v] of Object.entries(doc.design?.[k] ?? {})) { if (v.text) texts.push(v.text); slots.push(`${k}.${pos}:${Object.keys(v).join('+')}`); }
+      const texts = [], fixedDates = [], slotNames = [];
+      for (const k of ['header', 'footer']) for (const [pos, v] of Object.entries(doc.design?.[k] ?? {})) { if (v.text) texts.push(v.text);
+        // A fixed date is static content (only a current date, `date: true`, is a live field): its formatted text must be in the export.
+        if (typeof v.date === 'string') { const f = v.dateFormat === undefined ? { text: v.date } : core.formatFurnitureDate(v.date, v.dateFormat); if ('text' in f) fixedDates.push(f.text); }
+        slotNames.push(`${k}.${pos}:${Object.keys(v).join('+')}`); }
+      // The slide the furniture is measured on: the first slide that does not switch it off (the gallery title slide hides it).
+      const shownAt = Math.max(0, (doc.slides ?? []).findIndex((sl) => sl.design?.footer !== false && sl.design?.header !== false));
       const wantsNum = /"slideNumber":true/.test(JSON.stringify(doc.design ?? {})), wantsDate = /"date":true/.test(JSON.stringify(doc.design ?? {}));
       if (m.x.ok && m.xb?.ok) {
-        const s = m.x.slides[0], b = m.xb.slides[0];
-        const missingText = texts.filter((t) => !s.includes(esc(t)));
+        const s = m.x.slides[shownAt], b = m.xb.slides[shownAt];
+        const missingText = [...texts, ...fixedDates].filter((t) => !s.includes(esc(t)));
         const num = !wantsNum || /type="slidenum"/.test(s), date = !wantsDate || /type="datetime/.test(s) || /\d{4}|\d{1,2}\/\d{1,2}/.test(s.replace(b, ''));
         const logo = !hasLogo || count(s, /<p:pic>/g) > count(b, /<p:pic>/g);
-        checks.export.native = slots.length === 0 ? false : missingText.length === 0 && num && date && (vn === 'published' || logo);
+        checks.export.native = slotNames.length === 0 ? false : missingText.length === 0 && num && date && (vn === 'published' || logo);
         checks.export.nativeDetail = { missingText, slideNumberField: /type="slidenum"/.test(s), dateField: /type="datetime/.test(s), logoPic: count(s, /<p:pic>/g) - count(b, /<p:pic>/g), furnitureTag: /OPF_FURNITURE/.test(s) || m.x.names.some((n) => /tags/.test(n)), shapesAdded: count(s, /<p:sp>/g) - count(b, /<p:sp>/g) };
         if (!num) reasons.push('slide number exported as static text run, not an a:fld type="slidenum" field (does not renumber in PowerPoint)');
         if (wantsDate && !/type="datetime/.test(s)) reasons.push('date requested but no native datetime field in export');
@@ -266,7 +286,7 @@ if (want('headers-footers')) {
         if (hasLogo && vn === 'withAssets' && !logo) reasons.push('logo image not exported as picture');
       } else checks.export.native = null;
       if (m.r.ok && m.rb?.ok && checks.render.effect) {
-        const svg = m.r.svgs[0]; checks.render.textsVisible = texts.filter((t) => svgHas(svg, t)).length + '/' + texts.length;
+        const svg = m.r.svgs[shownAt]; checks.render.textsVisible = texts.filter((t) => svgHas(svg, t)).length + '/' + texts.length;
       }
       const imp = m.im.ok ? m.im.doc : null, impStr = imp ? JSON.stringify(imp) : '';
       const retainedSlots = imp ? ['header', 'footer'].filter((k) => imp.design?.[k] || imp.slides?.some((sl) => sl.design?.[k])) : [];
@@ -274,18 +294,19 @@ if (want('headers-footers')) {
       checks.reimport.retained = wantSlots.length > 0 && wantSlots.every((k) => retainedSlots.includes(k)) && texts.every((t) => impStr.includes(t)) && (!wantsNum || impStr.includes('slideNumber'));
       checks.reimport.pass = m.im.ok && (checks.reimport.retained || checks.reimport.diagnostics.length > 0);
       checks.evidence = nativeEvidence(/OPF_FURNITURE|furniture/i);
-      if (!slots.length) reasons.push('snippet emits no header/footer (config maps to nothing)');
+      if (!slotNames.length) reasons.push('snippet emits no header/footer (config maps to nothing)');
       if (checks.render.effect === false) reasons.push('preview identical with and without header/footer');
       if (!checks.reimport.retained) reasons.push(checks.reimport.diagnostics.length ? `re-import loses furniture (diagnostics: ${checks.reimport.diagnostics.join(',')})` : 're-import loses furniture silently');
       if (checks.render.diagnostics.length) reasons.push(`preview diagnostics: ${checks.render.diagnostics.join(',')}`);
       if (checks.export.diagnostics.length) reasons.push(`export diagnostics: ${checks.export.diagnostics.join(',')}`);
       if (dropped.length) reasons.push(`gallery config not expressed in snippet: ${dropped.join('; ')}`);
-      if (vn === 'published' && hasLogo) reasons.push('gallery snippet references asset:logo without an assets entry');
+      if (vn === 'published') for (const id of missingAssets(doc)) reasons.push(`gallery snippet references asset:${id} without an assets entry`);
       const twins = Object.entries(designs).filter(([s, v]) => s !== item.slug && v === designs[item.slug]).map(([s]) => s);
       if (twins.length) reasons.push(`identical OPF to ${twins.join(', ')}`);
       out.variants[vn] = { checks, ...classify({ checks, reasons }) };
     }
     out.editorPathSlugAgnostic = editorSame;
+    out.editorMatchesSnippet = editorDocs[item.slug] === snippets.buildHeaderFooterOpfSnippet(item);
     Object.assign(out, pick(out));
     results.push(out);
   }
@@ -308,7 +329,8 @@ function expectedStrings(slide) {
 const kinds = (slide) => uniq([slide, ...(slide.blocks ?? [])].flatMap((p) => ['items', 'metric', 'quote', 'timeline', 'table', 'chart', 'image'].filter((k) => p[k] !== undefined)));
 if (want('blocks')) {
   const items = (await data('blocks')).items.slice(0, LIMIT);
-  const editorSame = uniq(items.map((i) => { const d = JSON.parse(snippets.buildOpfSnippet('blocks', i.slug)); delete d.name; delete d.tags; d.slides.forEach((s) => delete s.subtitle); return JSON.stringify(d); })).length === 1;
+  const editorDocs = Object.fromEntries(items.map((i) => [i.slug, snippets.buildCatalogItemOpfSnippet('blocks', i.slug)]));
+  const editorSame = uniq(items.map((i) => { const d = JSON.parse(editorDocs[i.slug]); delete d.name; delete d.tags; d.slides.forEach((s) => delete s.subtitle); return JSON.stringify(d); })).length === 1;
   for (const item of items) {
     let doc;
     const out = { dimension: 'blocks', id: item.slug, variants: {} };
@@ -360,6 +382,7 @@ if (want('blocks')) {
     checks.evidence = nativeEvidence(new RegExp(`gallery:blocks/${item.slug}|"${item.slug}"`));
     out.variants.published = { checks, ...classify({ checks, reasons }) };
     out.editorPathSlugAgnostic = editorSame;
+    out.editorMatchesSnippet = JSON.stringify(JSON.parse(editorDocs[item.slug])) === JSON.stringify(doc);
     Object.assign(out, pick(out));
     results.push(out);
   }

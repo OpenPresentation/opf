@@ -6,6 +6,7 @@ const CLASSES = ['works', 'partial', 'schema-only', 'broken', 'gallery-only'];
 const L = [];
 L.push('# Dimension audit A: layouts, content blocks, image treatments, backgrounds, headers & footers', '');
 L.push(`Commits: opf \`${meta.commits.opf?.slice(0, 7)}\`, opf-render \`${meta.commits['opf-render']?.slice(0, 7)}\`, opf-pptx \`${meta.commits['opf-pptx']?.slice(0, 7)}\`, pptx-gallery \`${meta.commits['pptx-gallery']?.slice(0, 7)}\`. Node ${meta.node}. Core bundled layout catalog: ${meta.coreBundledLayouts} records.`, '');
+for (const [d, r] of Object.entries(meta.retained ?? {})) L.push(`Retained: \`${d}\` rows are kept from opf \`${r.commits.opf?.slice(0, 7)}\`, opf-render \`${r.commits['opf-render']?.slice(0, 7)}\`, opf-pptx \`${r.commits['opf-pptx']?.slice(0, 7)}\`, pptx-gallery \`${r.commits['pptx-gallery']?.slice(0, 7)}\`. ${r.reason}`, '');
 L.push(`Method: ${meta.method} Each value's OPF is the exact document the gallery page emits (lib/opf-snippets.ts). Checks: (1) core validatePresentation, (2) catalog/reference resolution, (3) opf-render SVG vs a baseline document without the dimension, (4) opf-pptx export + OPC parts + dimension-specific native XML, (5) opf-pptx fromPptx re-import, (6) docs/evidence + compatibility-matrix hits. "withAssets" re-runs values whose gallery snippet references undeclared \`asset:*\` ids with a real raster supplied.`, '');
 L.push('| Dimension | Total | ' + CLASSES.join(' | ') + ' | withAssets variant | preview/export disagree |', '|---|---|' + CLASSES.map(() => '---').join('|') + '|---|---|');
 for (const [d, s] of Object.entries(summary)) L.push(`| ${d} | ${s.total} | ${CLASSES.map((c) => s.counts[c] ?? 0).join(' | ')} | ${Object.entries(s.withAssetsCounts).map(([k, v]) => `${k} ${v}`).join(', ') || 'n/a'} | ${s.disagreements} |`);
@@ -35,7 +36,7 @@ for (const [d, s] of Object.entries(summary)) {
   }
   const dis = rs.filter((r) => r.previewExportDisagreement?.length);
   if (dis.length) { L.push(`Preview/export disagreements (${dis.length}):`, ''); const c = {}; for (const r of dis) for (const x of r.previewExportDisagreement) c[x] = (c[x] ?? 0) + 1; for (const [k, v] of Object.entries(c).sort((a, b) => b[1] - a[1])) L.push(`- ${v} x ${k}`); L.push(''); }
-  if (rs.some((r) => r.editorPathSlugAgnostic)) L.push('Note: the gallery `/editor?config=' + d + ':<slug>` path uses the generic `buildOpfSnippet`, which emits the same design for every slug in this dimension.', '');
+  if (rs.some((r) => r.editorPathSlugAgnostic)) L.push('Note: the gallery `/editor?config=' + d + ':<slug>` path emits the same design for every slug in this dimension.', '');
 }
 await writeFile(new URL('SUMMARY.md', OUT), L.join('\n') + '\n');
 console.log('SUMMARY.md written');

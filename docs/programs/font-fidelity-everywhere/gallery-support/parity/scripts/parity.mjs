@@ -285,13 +285,24 @@ async function parity(doc) {
     // slide-image group (keyed by the image's source path); with no preview slide image the group has no preview
     // element and mapping fails.
     const siKey = bound.geometry.slideImage ? keyOfPreview(bound.geometry.slideImage.sourcePath) : `slides.${si}.design.slideImage`;
-    const keyOfShape = s => { if (s.name === `OPF slide image slides.${si}`) return siKey; const byName = pathFromName(s.name); if (byName) { const it = items.find(i => byName === i.path || byName.startsWith(i.path + '.')); return it?.path ?? byName; }
+    // design.watermark exports as one picture named "OPF watermark" (opf-pptx#104), and header/footer furniture images as
+    // "OPF image N" pictures inside the furniture slot. Both map to the preview <image> that carries the same design path:
+    // the watermark by name, a furniture picture by its centre lying in a preview furniture image's viewport. With no such
+    // preview image the picture stays unmapped (near) or maps to a group with no preview element (fail), as for slide images.
+    const wmKey = keyOfPreview('design.watermark'); const isFurnitureImage = e => e.kind === 'image' && /^design\.(header|footer)\./.test(e.path ?? '');
+    const keyOfShape = s => { if (s.name === `OPF slide image slides.${si}`) return siKey; if (s.name === 'OPF watermark') return wmKey;
+      if (s.image && s.box) { const fe = P.elements.find(e => isFurnitureImage(e) && inside(center(s.box), e)); if (fe) return keyOfPreview(fe.path); }
+      const byName = pathFromName(s.name); if (byName) { const it = items.find(i => byName === i.path || byName.startsWith(i.path + '.')); return it?.path ?? byName; }
       if (s.name.startsWith('OPF card ')) return s.name.slice(9);
       if (!s.box) return 'unmapped'; const c = center(s.box); const cand = items.filter(i => inside(c, i.frame && s.name.startsWith('OPF card') ? i.frame : i.box)).sort((a, b) => a.box.w * a.box.h - b.box.w * b.box.h)[0]; return cand?.path ?? 'unmapped'; };
     const groups = new Map(); const g = k => { if (!groups.has(k)) groups.set(k, {pv: [], px: [], firstPv: Infinity, firstPx: Infinity}); return groups.get(k); };
     const firstDeep = P.elements.findIndex(e => e.path && e.path !== `slides.${si}` && !e.path.includes('design.background')); const isBg = (e, i) => e.path?.includes('design.background') || (e.path === `slides.${si}` && (firstDeep < 0 || i < firstDeep));
     P.elements.forEach((e, i) => { if (isBg(e, i)) return; if (e.path === `slides.${si}` && Number.isFinite(e.x) && Number.isFinite(e.w)) { const c = {x: e.x + e.w / 2, y: e.y + e.h / 2}; const it = items.filter(i => inside(c, i.frame ?? i.box)).sort((x, y) => x.box.w * x.box.h - y.box.w * y.box.h)[0]; if (it) { const G = g(it.path); G.pv.push(e); G.firstPv = Math.min(G.firstPv, i); return; } } if (e.path?.endsWith('.design.background') || (e.path === `slides.${si}` && e.tag === 'rect' && e.x === 0 && e.y === 0 && e.w === pvb[2])) return; const k = keyOfPreview(e.path); const G = g(k); G.pv.push(e); G.firstPv = Math.min(G.firstPv, i); });
     X.shapes.forEach(s => { const k = keyOfShape(s); if (k === 'unmapped') stats.shapesUnmapped++; else stats.shapesMapped++; const G = g(k); G.px.push(s); G.firstPx = Math.min(G.firstPx, s.order); });
+    // design.watermark opacity: preview <g opacity> around the watermark image vs the picture's a:alphaModFix (per cent of 100000).
+    { const wmSvg = svgs[si].match(/<g opacity="([\d.]+)"[^>]*>\s*<image\b[^>]*data-opf-path="design\.watermark"/); const slideXml = dec.decode(files[slideParts[si]]);
+      const wmPic = slideXml.match(/<p:pic>(?:(?!<\/p:pic>)[\s\S])*?name="OPF watermark"(?:(?!<\/p:pic>)[\s\S])*?<\/p:pic>/); const amt = wmPic?.[0].match(/<a:alphaModFix amt="(\d+)"/);
+      if (wmSvg && wmPic) { const pv = +wmSvg[1], px = amt ? +amt[1] / 100000 : 1; if (!(Math.abs(pv - px) <= 0.005)) add('fills', 'fail', `watermark opacity ${pv} preview vs ${amt ? px : 'none (opaque)'} pptx`, wmKey); } }
     // (3) background
     const bgEls = P.elements.filter(isBg); const pbg = bgEls.find(e => e.kind === 'image') ?? bgEls.find(e => String(e.fill ?? '').startsWith('url(')) ?? bgEls[0];
     const pbgKind = pbg ? (pbg.kind === 'image' ? 'image' : /^url\(/.test(pbg.fill ?? '') ? 'gradient-or-pattern' : 'solid') : P.elements.some(e => e.path?.includes('design.background.image')) ? 'image' : 'none';
@@ -365,7 +376,7 @@ async function parity(doc) {
       }
       // (1) geometry of non-text frames (charts, tables, pictures, cards)
       for (const s of G.px.filter(s => s.box && (s.chart || s.table || s.image || s.name.startsWith('OPF card')))) {
-        const it = items.find(i => i.path === key) ?? (key === siKey && s.image ? {box: null} : null); if (!it) continue;
+        const it = items.find(i => i.path === key) ?? ((key === siKey || key === wmKey || /^design\.(header|footer)\./.test(key)) && s.image ? {box: null} : null); if (!it) continue;
         const pvImage = s.image ? G.pv.find(e => e.kind === 'image') : null;
         let ref = s.name.startsWith('OPF card') ? it.frame : s.image ? (pvImage ?? it.box) : s.table ? (drawnTableBox(G.pv, key) ?? it.box) : it.box; if (!ref) continue;
         if (s.image && ref === pvImage && (pvImage.intrinsic || /^none/.test(pvImage.par))) { const p = placedImage(pvImage), x = Math.max(ref.x, p.x), y = Math.max(ref.y, p.y); ref = {x, y, w: Math.min(ref.x + ref.w, p.x + p.w) - x, h: Math.min(ref.y + ref.h, p.y + p.h) - y}; }
