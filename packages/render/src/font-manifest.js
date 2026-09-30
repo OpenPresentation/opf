@@ -1122,6 +1122,130 @@ export const BUNDLED_FONT_MANIFEST=freeze({
       ]
     },
     {
+      "name": "raleway",
+      "vendored": "fonts/raleway",
+      "version": "7e0be846a3097743b9bf442eb8e65bc1fd96c934",
+      "pack": "open",
+      "source": "https://github.com/googlefonts/Raleway/tree/7e0be846a3097743b9bf442eb8e65bc1fd96c934/fonts/TTF",
+      "license": "OFL-1.1",
+      "licenseFile": "OFL.txt",
+      "licenseSha256": "7e946cf1171784d1015279e7dc35f827957a6b5d1f1f659ae0c98e5f5e37ed9b",
+      "upstreamLicenseUrl": "https://raw.githubusercontent.com/googlefonts/Raleway/7e0be846a3097743b9bf442eb8e65bc1fd96c934/OFL.txt",
+      "reservedFontNames": [
+        "Raleway"
+      ],
+      "upstream": "http://scripts.sil.org/OFL",
+      "copyright": "Copyright 2010 The Raleway Project Authors (impallari@gmail.com), with Reserved Font Name \"Raleway\".",
+      "faces": [
+        {
+          "file": "Raleway-Regular.ttf",
+          "family": "Raleway",
+          "weight": 400,
+          "italic": false,
+          "sha256": "cb70f8815eecd850263d54fa59286377b1d7362bec612e981155a00039d8b513",
+          "upstreamFile": {
+            "url": "https://raw.githubusercontent.com/googlefonts/Raleway/7e0be846a3097743b9bf442eb8e65bc1fd96c934/fonts/TTF/Raleway-Regular.ttf",
+            "sha256": "cb70f8815eecd850263d54fa59286377b1d7362bec612e981155a00039d8b513"
+          }
+        },
+        {
+          "file": "Raleway-Italic.ttf",
+          "family": "Raleway",
+          "weight": 400,
+          "italic": true,
+          "sha256": "63f52b6d8e88afa43d94162147ff55846f28af630d834018de5cb7ccc75a8ee8",
+          "upstreamFile": {
+            "url": "https://raw.githubusercontent.com/googlefonts/Raleway/7e0be846a3097743b9bf442eb8e65bc1fd96c934/fonts/TTF/Raleway-Italic.ttf",
+            "sha256": "63f52b6d8e88afa43d94162147ff55846f28af630d834018de5cb7ccc75a8ee8"
+          }
+        },
+        {
+          "file": "Raleway-Bold.ttf",
+          "family": "Raleway",
+          "weight": 700,
+          "italic": false,
+          "sha256": "6894481ab1c298e9c66f23455ecf05ccb25393d719a6b2d63428358c0409d2d0",
+          "upstreamFile": {
+            "url": "https://raw.githubusercontent.com/googlefonts/Raleway/7e0be846a3097743b9bf442eb8e65bc1fd96c934/fonts/TTF/Raleway-Bold.ttf",
+            "sha256": "6894481ab1c298e9c66f23455ecf05ccb25393d719a6b2d63428358c0409d2d0"
+          }
+        },
+        {
+          "file": "Raleway-BoldItalic.ttf",
+          "family": "Raleway",
+          "weight": 700,
+          "italic": true,
+          "sha256": "57eb1a701136eca30b52a4847edcec93daa53f0b5597dd98dbc0b07f475ce44a",
+          "upstreamFile": {
+            "url": "https://raw.githubusercontent.com/googlefonts/Raleway/7e0be846a3097743b9bf442eb8e65bc1fd96c934/fonts/TTF/Raleway-BoldItalic.ttf",
+            "sha256": "57eb1a701136eca30b52a4847edcec93daa53f0b5597dd98dbc0b07f475ce44a"
+          }
+        }
+      ]
+    },
+    {
+      "name": "playfair-display",
+      "vendored": "fonts/playfair-display",
+      "version": "6e115d70ee7ff6ed887babf3829ccd1de65fd2bd",
+      "pack": "open",
+      "source": "https://github.com/clauseggers/Playfair/tree/6e115d70ee7ff6ed887babf3829ccd1de65fd2bd/fonts/TTF",
+      "license": "OFL-1.1",
+      "licenseFile": "OFL.txt",
+      "licenseSha256": "e414e07f7a4da16ed47ebec80d52dd79f21d3ca42bc92385a755d8078a038814",
+      "upstreamLicenseUrl": "https://raw.githubusercontent.com/clauseggers/Playfair/6e115d70ee7ff6ed887babf3829ccd1de65fd2bd/OFL.txt",
+      "reservedFontNames": [
+        "Playfair Display"
+      ],
+      "upstream": "https://github.com/clauseggers/Playfair-Display",
+      "copyright": "Copyright 2017 The Playfair Display Project Authors (https://github.com/clauseggers/Playfair-Display), with Reserved Font Name \"Playfair Display\".",
+      "faces": [
+        {
+          "file": "PlayfairDisplay-Regular.ttf",
+          "family": "Playfair Display",
+          "weight": 400,
+          "italic": false,
+          "sha256": "70ef3ee8de32dc81c39f2733a4a2a050c7e6ba78a2f1632f9d5c6cfd482c3abb",
+          "upstreamFile": {
+            "url": "https://raw.githubusercontent.com/clauseggers/Playfair/6e115d70ee7ff6ed887babf3829ccd1de65fd2bd/fonts/TTF/PlayfairDisplay-Regular.ttf",
+            "sha256": "70ef3ee8de32dc81c39f2733a4a2a050c7e6ba78a2f1632f9d5c6cfd482c3abb"
+          }
+        },
+        {
+          "file": "PlayfairDisplay-Italic.ttf",
+          "family": "Playfair Display",
+          "weight": 400,
+          "italic": true,
+          "sha256": "30a7eb5a9309754d4b3e205e6435ef07d80e1b86735774b2ace427f6ed61f991",
+          "upstreamFile": {
+            "url": "https://raw.githubusercontent.com/clauseggers/Playfair/6e115d70ee7ff6ed887babf3829ccd1de65fd2bd/fonts/TTF/PlayfairDisplay-Italic.ttf",
+            "sha256": "30a7eb5a9309754d4b3e205e6435ef07d80e1b86735774b2ace427f6ed61f991"
+          }
+        },
+        {
+          "file": "PlayfairDisplay-Bold.ttf",
+          "family": "Playfair Display",
+          "weight": 700,
+          "italic": false,
+          "sha256": "898a01a59214578e72012131ef4c346844c1fd35613f4ee113a37d61a094a2d0",
+          "upstreamFile": {
+            "url": "https://raw.githubusercontent.com/clauseggers/Playfair/6e115d70ee7ff6ed887babf3829ccd1de65fd2bd/fonts/TTF/PlayfairDisplay-Bold.ttf",
+            "sha256": "898a01a59214578e72012131ef4c346844c1fd35613f4ee113a37d61a094a2d0"
+          }
+        },
+        {
+          "file": "PlayfairDisplay-BoldItalic.ttf",
+          "family": "Playfair Display",
+          "weight": 700,
+          "italic": true,
+          "sha256": "bd3b48ca605438de4337d05ece1ecb9e4149a975d3207174f28e02098bbec3ff",
+          "upstreamFile": {
+            "url": "https://raw.githubusercontent.com/clauseggers/Playfair/6e115d70ee7ff6ed887babf3829ccd1de65fd2bd/fonts/TTF/PlayfairDisplay-BoldItalic.ttf",
+            "sha256": "bd3b48ca605438de4337d05ece1ecb9e4149a975d3207174f28e02098bbec3ff"
+          }
+        }
+      ]
+    },
+    {
       "name": "barlow",
       "vendored": "fonts/barlow",
       "version": "23e54b51ddffbc7713c583748e3bd86f62b1fa4a",

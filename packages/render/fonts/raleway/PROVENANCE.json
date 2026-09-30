@@ -1,0 +1,48 @@
+{
+  "upstream": {
+    "source": "https://github.com/googlefonts/Raleway/tree/7e0be846a3097743b9bf442eb8e65bc1fd96c934/fonts/TTF",
+    "commit": "7e0be846a3097743b9bf442eb8e65bc1fd96c934",
+    "licenseUrl": "https://raw.githubusercontent.com/googlefonts/Raleway/7e0be846a3097743b9bf442eb8e65bc1fd96c934/OFL.txt"
+  },
+  "license": "OFL-1.1",
+  "licenseFile": "OFL.txt",
+  "licenseSha256": "7e946cf1171784d1015279e7dc35f827957a6b5d1f1f659ae0c98e5f5e37ed9b",
+  "reservedFontNames": [
+    "Raleway"
+  ],
+  "copyright": "Copyright 2010 The Raleway Project Authors (impallari@gmail.com), with Reserved Font Name \"Raleway\".",
+  "faces": [
+    {
+      "file": "Raleway-Regular.ttf",
+      "family": "Raleway",
+      "weight": 400,
+      "italic": false,
+      "sha256": "cb70f8815eecd850263d54fa59286377b1d7362bec612e981155a00039d8b513",
+      "upstreamUrl": "https://raw.githubusercontent.com/googlefonts/Raleway/7e0be846a3097743b9bf442eb8e65bc1fd96c934/fonts/TTF/Raleway-Regular.ttf"
+    },
+    {
+      "file": "Raleway-Italic.ttf",
+      "family": "Raleway",
+      "weight": 400,
+      "italic": true,
+      "sha256": "63f52b6d8e88afa43d94162147ff55846f28af630d834018de5cb7ccc75a8ee8",
+      "upstreamUrl": "https://raw.githubusercontent.com/googlefonts/Raleway/7e0be846a3097743b9bf442eb8e65bc1fd96c934/fonts/TTF/Raleway-Italic.ttf"
+    },
+    {
+      "file": "Raleway-Bold.ttf",
+      "family": "Raleway",
+      "weight": 700,
+      "italic": false,
+      "sha256": "6894481ab1c298e9c66f23455ecf05ccb25393d719a6b2d63428358c0409d2d0",
+      "upstreamUrl": "https://raw.githubusercontent.com/googlefonts/Raleway/7e0be846a3097743b9bf442eb8e65bc1fd96c934/fonts/TTF/Raleway-Bold.ttf"
+    },
+    {
+      "file": "Raleway-BoldItalic.ttf",
+      "family": "Raleway",
+      "weight": 700,
+      "italic": true,
+      "sha256": "57eb1a701136eca30b52a4847edcec93daa53f0b5597dd98dbc0b07f475ce44a",
+      "upstreamUrl": "https://raw.githubusercontent.com/googlefonts/Raleway/7e0be846a3097743b9bf442eb8e65bc1fd96c934/fonts/TTF/Raleway-BoldItalic.ttf"
+    }
+  ]
+}

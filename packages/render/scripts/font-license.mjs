@@ -88,7 +88,7 @@ export function nameContainsReservedName(names, reserved) {
 }
 
 /** Repositories whose files count as the copyright holder's release. Adding one is a reviewed change. */
-export const UNMODIFIED_UPSTREAM_REPOSITORIES = Object.freeze(['google/fonts', 'cyrealtype/Lora-Cyrillic', 'SorkinType/Merriweather-Sans', 'adobe-fonts/source-sans', 'RedHatOfficial/RedHatFont', 'muglug/intos']);
+export const UNMODIFIED_UPSTREAM_REPOSITORIES = Object.freeze(['google/fonts', 'cyrealtype/Lora-Cyrillic', 'SorkinType/Merriweather-Sans', 'adobe-fonts/source-sans', 'RedHatOfficial/RedHatFont', 'muglug/intos', 'googlefonts/Raleway', 'clauseggers/Playfair']);
 
 /** A pinned raw file (commit sha in the URL), a pinned Git LFS media file, or a release asset of an allowlisted repository. */
 export function isUnmodifiedUpstreamUrl(url) {
