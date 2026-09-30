@@ -1,6 +1,6 @@
 // FF-41: a playground built with split eager fonts (OPF_PLAYGROUND_SPLIT_FONTS=1, what the gallery editor ships) starts with Roboto Regular
 // only and loads the rest of the renderer's eager faces (Roboto's other weights, Roboto Mono, the Office substitutes) on demand, face by
-// face, hash-verified, through the font gate (examples/base-font-gate.js):
+// face, hash-verified, as the registry's own extra lazy faces (extraLazyFonts, renderer 0.11.7) asked through the font gate:
 //   - fonts.json holds Roboto Regular alone, base-fonts.json lists every other eager face with its SHA-256 and each is a separate file,
 //   - the default Roboto deck fetches only the Roboto faces it draws (no Office face, none for the faces of other decks),
 //   - choosing Calibri fetches Carlito Regular and Bold (the faces the deck draws, not Carlito's italics) and the preview paints Carlito at
@@ -8,7 +8,7 @@
 //   - a host that hands a document over the moment the page is ready (the gallery does: it opens the source dialog, fills it and clicks Apply)
 //     while the starting deck's faces are still loading gets that document applied, with slow font responses too,
 //   - nothing leaves the local server, no page errors.
-// Skipped with a renderer older than 0.11.5 (no lazyFacesNeeded).
+// Skipped with a renderer older than 0.11.7 (no extraLazyFonts).
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { createServer } from 'node:http';
@@ -19,8 +19,8 @@ import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
 import * as browserFonts from '@openpresentation/opf-render/fonts-browser';
 
-if (typeof browserFonts.lazyFacesNeeded !== 'function') {
-  console.log('Playground base fonts skipped: the installed renderer predates face-level lazy fonts (0.11.5).');
+if (typeof browserFonts.splitStartupFaces !== 'function') {
+  console.log('Playground base fonts skipped: the installed renderer predates extraLazyFonts (0.11.7).');
   process.exit(0);
 }
 const repo = fileURLToPath(new URL('../', import.meta.url));

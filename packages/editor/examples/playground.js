@@ -4,7 +4,6 @@ import {installTransferControls} from './transfer-controls.js';
 import { createEditorSession } from '../src/index.js';
 import {createCanvasEditor,createFontGate} from '../src/canvas.js';
 import * as browserFonts from '@openpresentation/opf-render/fonts-browser';
-import {withBaseFaces} from './base-font-gate.js';
 import { renderSvg } from '@openpresentation/opf-render/svg';
 import * as renderFontCore from '@openpresentation/opf-render/fonts';
 import { resolveScriptFonts } from '@openpresentation/opf';
@@ -12,13 +11,14 @@ import { installPptxExport } from './pptx-controls.js';
 import { MAX_EXACT_SOURCE_LENGTH, createSourceMemory, findDuplicateKey, updateJsonSource } from '../src/exact-source.js';
 
 // fonts.json holds the faces the page starts with. A build that splits the eager faces (the gallery editor) adds base-fonts.json: the
-// rest of them, as separate hash-pinned files loaded on demand (FF-41). Without it fonts.json carries every eager face.
+// rest of them, as separate hash-pinned files the registry loads on demand as its extra lazy faces (FF-41, renderer 0.11.7). Without it
+// fonts.json carries every eager face.
 const baseFaces = await fetch('./base-fonts.json').then(response => response.ok ? response.json() : []).catch(() => []);
 const fontFaces = await fetch('./fonts.json').then(response => {
   if (!response.ok) throw new Error('Bundled fonts are unavailable. Rebuild the editor demo.');
   return response.json();
 });
-const fontRegistry = await browserFonts.loadBrowserFontRegistry(fontFaces.map(face=>({family:face.family,weight:face.weight,italic:face.italic,license:face.license,data:Uint8Array.from(atob(face.dataUrl.split(',')[1]),character=>character.charCodeAt(0))})),{substitutionPolicy:'visual',fallbackFamily:'Roboto',scriptBaseUrl:'./script-fonts/',lazyFontsBaseUrl:new URL('./',document.baseURI).href});
+const fontRegistry = await browserFonts.loadBrowserFontRegistry(fontFaces.map(face=>({family:face.family,weight:face.weight,italic:face.italic,license:face.license,data:Uint8Array.from(atob(face.dataUrl.split(',')[1]),character=>character.charCodeAt(0))})),{substitutionPolicy:'visual',fallbackFamily:'Roboto',scriptBaseUrl:'./script-fonts/',lazyFontsBaseUrl:new URL('./',document.baseURI).href,extraLazyFonts:baseFaces.map(face=>({family:face.family,weight:face.weight,italic:face.italic,license:face.license,sha256:face.sha256,url:new URL(face.file,document.baseURI).href}))});
 // Script faces (Japanese, Arabic, Thai, ...) load lazily, once a document draws that script, and so do the vendored preview
 // faces (Intos for the Aptos scheme, the open families): they are not in fonts.json but separate hash-pinned files the
 // registry adds to the document and itself together. Older renderers have no pendingScripts/ensureScripts or
@@ -26,7 +26,7 @@ const fontRegistry = await browserFonts.loadBrowserFontRegistry(fontFaces.map(fa
 // FF-41: nothing renders or measures a document before this gate has loaded the faces it needs. Every path that sets a new
 // document or draws a slide (initial load, Source Apply and the gallery handoff, import, undo and redo, font and language
 // switches, slide navigation, thumbnails, previews and export) goes through fontGate.run or the canvas's own gate.
-const fontGate = withBaseFaces({registry:fontRegistry,gate:createFontGate(fontRegistry),faces:baseFaces,renderFonts:browserFonts});
+const fontGate = createFontGate(fontRegistry);
 const layoutOptions = {textMeasurement:fontRegistry.textMeasurement};
 // renderSvg measures each script with its own face and falls back per glyph (Japanese under Aptos draws with Noto Sans JP where
 // Intos Display has no glyph), but the session's composeSlide and paginateSlide take a plain measurement, and that one is strict:
