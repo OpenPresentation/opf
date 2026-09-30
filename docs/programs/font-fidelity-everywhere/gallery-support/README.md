@@ -385,7 +385,7 @@ Each item:
 | `measuredHeads` | object | Commits the presence record was measured at. |
 | `parity` | object | FF-38 result for the published snippet: `status` (`perfect`, `near` or `mismatch`), `failedChecks[]`, `nearChecks[]`, and `topReasons[]` (up to five failing `check \| reason` strings, most frequent first). It has an optional `variants.withAssets` with the same shape. Heads are in `audits.parity.heads`. |
 
-Consumers such as pptx.gallery badges (FF-36) must key on
+This file is internal (owner decision 2026-09-30): pptx.gallery does not display it, and no public site may show measured, pending or parity status. Internal consumers must key on
 `dimension` + `galleryId`, read `status` (and `previewOnly` if they show a
 preview-only badge) and `parity.status`, and link the definitions rather than
 restating them.

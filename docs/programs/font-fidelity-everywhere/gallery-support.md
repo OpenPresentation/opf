@@ -4,6 +4,8 @@ Parity re-measured 2026-09-30 with the harness modelling the gallery editor's fo
 [burndown.md](burndown.md). Audit scripts, raw results and the per-item
 machine-readable file: [gallery-support/](gallery-support/README.md).
 
+Internal record (owner decision 2026-09-30): this measurement is not shown on pptx.gallery, and the gallery displays no support or progress status.
+
 This page records what a developer actually gets today when they take a
 pptx.gallery value's "OPF Config" snippet and run it through the OpenPresentation
 packages. It measures the engines, not the schema: a value that validates but
