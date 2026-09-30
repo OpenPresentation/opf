@@ -4,6 +4,8 @@ import { createRequire } from 'node:module';
 import { readFile, writeFile, mkdir, readdir, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { createFontHosts, FONT_HOST_MODELS } from '../../parity/scripts/font-host.mjs';
+import { hostRenderOutcome, hostRenderReason } from '../../parity/scripts/font-availability.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const OUT = path.resolve(HERE, '..');
@@ -40,11 +42,25 @@ const data = async (n) => JSON.parse(await readFile(path.join(GALLERY, `data/${n
 const sampleImage = JSON.parse(await readFile(path.join(GALLERY, 'data/layout-example-image.json'), 'utf8'));
 
 const fonts = await loadOfficeFontRegistry();
-// Primary mode: engine default measurement (no host font registry). The Office font registry used by core's
-// ecosystem tests is probed separately per value (checks.fontRegistry): the default Aptos scheme is not in it.
+// Primary mode: engine default measurement (no host font registry), unchanged: geometry, text and diagnostics do not depend on the host model.
 const OPTS = {};
+// Font availability (FF-48) is probed against the preview host that ships, as the parity harness does (parity/scripts/font-host.mjs): the
+// gallery editor's browser registry and font gate (ensureLazyFonts + ensureScripts on the value's own document, the same package files),
+// then a strict measured render with that registry. Under the owner font policy a preview that draws the FF-31 policy table's replacement
+// is not a gap, so only a value the modelled host cannot draw at all (a missing face or glyph, font-shaping-failed) is a reason.
+// AUDIT_FONT_HOST: gallery (default), node-auto, office-only, or strict (diagnostic: the earlier probe with opf-render's
+// loadOfficeFontRegistry() text measurement, which is a no-script-face metric-policy registry that fails on every proprietary family
+// without a metric replacement; it never made a value partial and still does not).
+const FONT_HOST = process.env.AUDIT_FONT_HOST ?? 'gallery';
+if (FONT_HOST !== 'strict' && !FONT_HOST_MODELS.includes(FONT_HOST)) throw new Error(`AUDIT_FONT_HOST must be one of ${[...FONT_HOST_MODELS, 'strict'].join(', ')}, not ${FONT_HOST}`);
 const REG = { textMeasurement: fonts.textMeasurement };
-function fontProbe(doc) { try { renderSvgDeck(doc, REG); return { pass: true }; } catch (e) { return { pass: false, ...errInfo(e) }; } }
+const fontHosts = FONT_HOST === 'strict' ? null : await createFontHosts({ renderDir: RENDER, model: FONT_HOST });
+const renderDist = fontHosts ? await import(pathToFileURL(path.join(RENDER, 'dist/index.js'))) : null;
+async function fontProbe(doc) {
+  if (!fontHosts) { try { renderSvgDeck(doc, REG); return { model: 'strict', pass: true }; } catch (e) { return { model: 'strict', pass: false, ...errInfo(e) }; } }
+  const o = hostRenderOutcome(await fontHosts.hostFor(doc), renderDist, doc);
+  return { model: FONT_HOST, pass: o.ok, ...(o.ok ? {} : { code: o.code, family: o.family, message: o.cause }) };
+}
 const PPTX_OPTS = { ...OPTS, seed: 1, timestamp: '2026-01-01T00:00:00Z', zipDate: '2026-01-01T00:00:00Z' };
 
 // ---------- helpers ----------
@@ -121,6 +137,9 @@ function classify(r) {
   if (!c.export.pass) return { class: 'broken', reasons: [`export threw ${c.export.error?.code}`, ...reasons] };
   if (c.render.effect === false && c.export.native === false) return { class: 'schema-only', reasons: ['no visible effect in preview or export', ...reasons] };
   const all = c.catalog.pass && c.render.effect !== false && c.export.opc && c.export.native !== false && c.reimport.pass !== false;
+  // A value the modelled preview host cannot draw is a real gap (FF-48). The strict diagnostic probe never was one.
+  const fr = c.fontRegistry;
+  if (fr && !fr.pass && fr.model !== 'strict') reasons.push(hostRenderReason({ code: fr.code, family: fr.family, cause: fr.message }));
   return { class: all && reasons.length === 0 ? 'works' : 'partial', reasons };
 }
 function baseChecks(doc, base, extra = {}) { return { doc, base, ...extra }; }
@@ -132,7 +151,7 @@ async function measure(doc, baseDoc) {
   const x = schema.pass ? await exportPptx(doc) : { ok: false, error: { code: 'skipped-invalid' } };
   const xb = baseDoc ? await exportPptx(baseDoc) : null;
   const im = x.ok ? await reimport(x.bytes) : { ok: false, error: { code: 'skipped' } };
-  return { schema, lint: schema.pass ? lint(doc) : [], r, rb, x, xb, im, font: schema.pass ? fontProbe(doc) : null };
+  return { schema, lint: schema.pass ? lint(doc) : [], r, rb, x, xb, im, font: schema.pass ? await fontProbe(doc) : null };
 }
 function commonChecks(m) {
   const { schema, r, rb, x, xb, im } = m;
@@ -464,6 +483,6 @@ for (const r of results) {
   for (const reason of r.reasons ?? []) { const key = reason.replace(/\(e\.g\..*?\)|"[^"]*"|identical OPF to .*|same OPF background as .*|\d+:[^,)]+|\d+/g, '#').slice(0, 140); s.reasons[key] = (s.reasons[key] ?? 0) + 1; }
 }
 const head = (repo) => { try { return preq('child_process').execSync('git rev-parse HEAD', { cwd: repo }).toString().trim(); } catch { return null; } };
-const meta = { generatedBy: 'dimension-audit/A/scripts/audit.mjs', node: process.version, commits: { opf: head(CORE), 'opf-render': head(RENDER), 'opf-pptx': head(PPTX), 'pptx-gallery': head(GALLERY) }, coreBundledLayouts: coreLayoutIds.size, method: 'gallery lib/opf-snippets.ts builders bundled with esbuild; @openpresentation/opf linked to local core dist; opf-render/opf-pptx from source; engine default text measurement (Office font registry probed separately); no Office/COM.' };
+const meta = { generatedBy: 'dimension-audit/A/scripts/audit.mjs', node: process.version, commits: { opf: head(CORE), 'opf-render': head(RENDER), 'opf-pptx': head(PPTX), 'pptx-gallery': head(GALLERY) }, coreBundledLayouts: coreLayoutIds.size, method: 'gallery lib/opf-snippets.ts builders bundled with esbuild; @openpresentation/opf linked to local core dist; opf-render/opf-pptx from source; engine default text measurement for geometry and text; font availability against the ' + (FONT_HOST === 'strict' ? 'strict loadOfficeFontRegistry() probe (diagnostic)' : FONT_HOST + ' preview host model (parity/scripts/font-host.mjs)') + '; no Office/COM.', fontHost: FONT_HOST };
 await writeFile(path.join(OUT, ONLY ? `results.${ONLY.join('_')}.json` : 'results.json'), JSON.stringify({ meta, summary, results }, null, 1));
 console.log(JSON.stringify({ meta: meta.commits, summary: Object.fromEntries(Object.entries(summary).map(([k, v]) => [k, { total: v.total, counts: v.counts, withAssets: v.withAssetsCounts, disagreements: v.disagreements }])) }, null, 1));

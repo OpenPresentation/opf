@@ -89,3 +89,14 @@ Audit B now also measures the 26 kept gallery chart ids (`charts.md`), using the
 A classic id with no reason is `works`; a chartex id (treemap, histogram, pareto, world, box-and-whisker, waterfall, funnel) is
 `partial`: the preview keeps the legacy sketch, the export writes a clustered column chart and reports `chart-data-adapted`
 (`chartex-fallback`), and re-import returns `column`. Parity (series colours, label text) is measured separately by the FF-38 harness.
+
+## Preview font host (FF-48, 2026-09-30)
+
+The three font modes in step 3 above are kept and recorded, but they are not how any shipped host renders. Audit B now classifies
+font availability against the host model of the parity harness (`../parity/scripts/font-host.mjs`, `gallery` by default: the gallery
+editor's browser registry and font gate on the value's own document) and the owner font policy (`../parity/scripts/font-availability.mjs`):
+the preview draws a policy-table look-alike and the PPTX names the family the user selected is `works`. `scripts/audit.mjs` adds
+`measure.hostFonts` (the host's gate and strict measured render, the FF-38 verdict per selected family, its reasons) to font schemes,
+themes and languages, and a `host` verdict to the non-Latin text sample and to each language's native-name probe. `scripts/summarize.mjs`
+turns only a `fail` verdict or an undrawable value into a reason. `AUDIT_FONT_HOST=strict` classifies from the strict measurements
+instead (the earlier behaviour). It needs `dimension-audit/parity/` next to `B/`. Details: [../README.md](../README.md).
