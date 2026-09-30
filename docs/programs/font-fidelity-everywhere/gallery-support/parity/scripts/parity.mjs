@@ -10,7 +10,7 @@ import path from 'node:path';
 import {fileURLToPath, pathToFileURL} from 'node:url';
 import {createRequire} from 'node:module';
 import {classifyFontResolution, legacyPasses, pptxNaming} from './font-resolution.mjs';
-import {runElements} from './pptx-runs.mjs';
+import {runElements, logicalRunCount} from './pptx-runs.mjs';
 import {drawnTableBox} from './table-box.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
@@ -142,7 +142,7 @@ function parseParagraphs(txXml, theme, defaults = {}) {
       const rPr = rm.inner.match(/<a:rPr\b([^>]*?)(?:\/>|>(.*?)<\/a:rPr>)/s); const ra = attrs(rPr?.[1] ?? ''), inner = rPr?.[2] ?? '';
       const text = unesc(rm.inner.match(/<a:t>(.*?)<\/a:t>/s)?.[1] ?? '');
       const tf = k => inner.match(new RegExp(`<a:${k} typeface="([^"]*)"`))?.[1];
-      return {text, latin: tf('latin'), ea: tf('ea'), cs: tf('cs'), sizePt: ra.sz ? +ra.sz / 100 : defaults.sizePt ?? null, bold: ra.b === '1', italic: ra.i === '1', fill: fillOf(inner, theme), lang: ra.lang ?? null};
+      return {text, field: rm.tag === 'fld' && /type="slidenum"/.test(rm.attrs), latin: tf('latin'), ea: tf('ea'), cs: tf('cs'), sizePt: ra.sz ? +ra.sz / 100 : defaults.sizePt ?? null, bold: ra.b === '1', italic: ra.i === '1', fill: fillOf(inner, theme), lang: ra.lang ?? null};
     });
     return {algn, marL: +(pa.marL ?? 0) / 9525, indent: +(pa.indent ?? 0) / 9525, bullet: bu, runs, text: runs.map(r => r.text).join('')};
   }).filter(p => p.runs.length);
@@ -361,7 +361,9 @@ async function parity(doc) {
           used.add(idx); stats.textLinesMatched++; const p = pxParas[idx];
           // run segmentation
           const pvRuns = l.runs, xr = p.runs.filter(r => r.text.length); stats.runs += pvRuns.length;
-          if (pvRuns.length !== xr.length) add('text', 'near', `run segmentation ${pvRuns.length} preview vs ${xr.length} pptx`, key);
+          // Owner default 2026-09-30: a native slide-number field and its adjacent literal runs are one logical run (the combined text is already equal here).
+          const xrLogical = logicalRunCount(xr);
+          if (pvRuns.length !== xrLogical) add('text', 'near', `run segmentation ${pvRuns.length} preview vs ${xrLogical} pptx${xrLogical !== xr.length ? ` (${xr.length} elements, a slide-number field and its neighbours counted as one)` : ''}`, key);
           // per-character style comparison
           const pvChars = pvRuns.flatMap(r => [...r.text].map(c => ({c, r}))), xChars = xr.flatMap(r => [...r.text].map(c => ({c, r})));
           const seen = new Set();

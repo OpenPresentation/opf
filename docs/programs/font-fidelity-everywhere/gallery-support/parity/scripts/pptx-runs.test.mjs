@@ -1,7 +1,7 @@
 // Controls for the PPTX run extraction (FF-38). Run: node --test pptx-runs.test.mjs
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {runElements} from './pptx-runs.mjs';
+import {runElements, logicalRunCount} from './pptx-runs.mjs';
 
 test('a plain a:r run is extracted', () => {
   const r = runElements('<a:r><a:rPr lang="en-US" sz="1200"/><a:t>Hello</a:t></a:r>');
@@ -33,4 +33,15 @@ test('a self-closed a:fld has no text and does not swallow the next run', () => 
 test('a field inside a table cell body and multi-line XML are extracted', () => {
   const r = runElements('<a:fld id="{X}"\n type="slidenum">\n<a:rPr/>\n<a:t>12</a:t>\n</a:fld>');
   assert.equal(r.length, 1); assert.match(r[0].inner, /12/);
+});
+
+test('a field and its adjacent literal runs are one logical run (owner default 2026-09-30)', () => {
+  const r = (...f) => f.map(field => ({field}));
+  assert.equal(logicalRunCount(r(true, false)), 1, '{current} / {total}: field then literal');
+  assert.equal(logicalRunCount(r(false, true)), 1, 'A-{current}: literal then field');
+  assert.equal(logicalRunCount(r(false, true, false)), 1, 'Slide {current} of 9');
+  assert.equal(logicalRunCount(r(false, false)), 2, 'two literal runs stay two');
+  assert.equal(logicalRunCount(r(false, false, true)), 2, 'a literal run before a literal that touches the field stays separate');
+  assert.equal(logicalRunCount(r(true)), 1);
+  assert.equal(logicalRunCount([]), 0);
 });
