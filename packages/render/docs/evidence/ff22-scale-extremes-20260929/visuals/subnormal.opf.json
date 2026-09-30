@@ -1,0 +1,30 @@
+{
+  "slides": [
+    {
+      "title": "subnormal",
+      "chart": {
+        "type": "column",
+        "data": {
+          "columns": [
+            "Category",
+            "Value"
+          ],
+          "rows": [
+            [
+              "First",
+              5e-324
+            ],
+            [
+              "Second",
+              1e-323
+            ],
+            [
+              "Third",
+              2e-323
+            ]
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -9,6 +9,7 @@ import {
 import * as opfCore from "@openpresentation/opf";
 import { createScriptFonts } from "./script-fonts.js";
 import { disabledFeaturesStyle } from "./font-compatibility.js";
+import { renderCatalogChart } from "./charts.js";
 
 export const packageName = "@openpresentation/opf-render";
 
@@ -1217,88 +1218,11 @@ function renderTableBorders(defaultEdges, explicitEdges, scale, bound, options) 
   });
 }
 
-function renderImportedChart(item, box, bound, options) {
-  const chart=item.value, rows=chart.data?.rows??[], columns=chart.data?.columns??[];
-  if(!rows.length||columns.length<2)return null;
-  const kind=chart.type, circular=['pie','donut','doughnut'].includes(kind);
-  const colors=[bound.design.colors.primary,bound.design.colors.secondary,'#9B6BCC','#D98944','#429B85','#CB5D79'].map(color=>chartColorForFill(bound.design.colors.surface,color));
-  const children=[];
-  const labelColor=textColorForFill(bound.design.colors.surface,bound.design.colors.text);
-  const text=(value,rect,path,size=16,align='center')=>renderTextBox(String(value),rect,bound,{path,fontSize:size,fontFamily:bound.design.fonts.body,fontWeight:400,fill:labelColor,options,align,verticalAlign:'middle'});
-  const number=value=>typeof value==='number'&&Number.isFinite(value)?value:typeof value==='string'&&value.trim()&&Number.isFinite(Number(value))?Number(value):null;
-  const series=columns.slice(1).map((name,j)=>({name,values:rows.map(row=>number(row[j+1]))}));
-  children.push(tag('rect',{x:box.x,y:box.y,width:box.width,height:box.height,fill:bound.design.colors.surface,stroke:bound.design.colors.border,...traceAttrs(options,item.path)}));
-  if(circular){
-    if(series.length!==1||series[0].values.some(v=>v!==null&&v<0)){
-      children.push(text('Pie charts need one nonnegative series',box,item.path,18));return tag('g',traceAttrs(options,item.path),children.join('\n'));
-    }
-    const values=series[0].values,total=values.reduce((sum,v)=>sum+(v??0),0),cx=box.x+box.width*.35,cy=box.y+box.height*.5,r=Math.max(1,Math.min(box.width*.3,box.height*.42));
-    if(!total){children.push(text('No positive chart values',box,item.path,18));return tag('g',traceAttrs(options,item.path),children.join('\n'));}
-    let angle=-Math.PI/2;
-    values.forEach((v,i)=>{
-      const delta=(v??0)/total*Math.PI*2,end=angle+delta,color=colors[i%colors.length];
-      if(delta>=Math.PI*2-1e-8)children.push(tag('circle',{cx,cy,r,fill:color,...traceAttrs(options,`${item.path}.data.rows.${i}.1`)}));
-      else if(delta>0)children.push(tag('path',{d:`M ${cx} ${cy} L ${cx+r*Math.cos(angle)} ${cy+r*Math.sin(angle)} A ${r} ${r} 0 ${delta>Math.PI?1:0} 1 ${cx+r*Math.cos(end)} ${cy+r*Math.sin(end)} Z`,fill:color,...traceAttrs(options,`${item.path}.data.rows.${i}.1`)}));
-      angle=end;
-      const y=box.y+15+i*Math.min(30,(box.height-30)/rows.length);
-      children.push(tag('rect',{x:box.x+box.width*.69,y:y+6,width:12,height:12,fill:color}));
-      children.push(text(`${rows[i][0]}: ${v??'—'}`,{x:box.x+box.width*.69+20,y,width:box.width*.29-20,height:28},`${item.path}.data.rows.${i}`,14,'left'));
-    });
-    if(kind!=='pie')children.push(tag('circle',{cx,cy,r:r*.57,fill:bound.design.colors.surface}));
-  }else{
-    const horizontal=kind==='bar',legendHeight=series.length>1?34:8;
-    const plot={x:box.x+(horizontal?100:64),y:box.y+legendHeight+14,width:Math.max(1,box.width-(horizontal?124:84)),height:Math.max(1,box.height-legendHeight-62)};
-    const values=series.flatMap(s=>s.values).filter(v=>v!==null),min=Math.min(0,...values),rawMax=Math.max(0,...values),max=rawMax===min?min+1:rawMax,range=max-min;
-    const fraction=(v,reverse=false)=>{
-      const distance=reverse?max-v:v-min;
-      if(Number.isFinite(range)&&Number.isFinite(distance))return distance/range;
-      // Finite endpoints can overflow during subtraction. Keep ordinary
-      // arithmetic unchanged and normalize only that exceptional range.
-      const unit=Math.max(Math.abs(min),Math.abs(max)),low=min/unit,high=max/unit,position=v/unit;
-      return (reverse?high-position:position-low)/(high-low);
-    };
-    const xValue=v=>plot.x+fraction(v)*plot.width,yValue=v=>plot.y+fraction(v,true)*plot.height;
-    const zero=horizontal?xValue(0):yValue(0);
-    for(let tick=0;tick<=4;tick++){
-      const direct=min+range*tick/4;
-      const value=Number.isFinite(direct)?direct:min*(1-tick/4)+max*(tick/4);
-      const at=horizontal?xValue(value):yValue(value),rounded=Number(value.toPrecision(4));
-      // Rounding MAX_VALUE to four digits can overflow although the tick is
-      // finite. Its exact shortest decimal remains truthful and parseable.
-      const label=Number.isFinite(rounded)?rounded:String(value);
-      children.push(tag('line',{x1:horizontal?at:plot.x,x2:horizontal?at:plot.x+plot.width,y1:horizontal?plot.y:at,y2:horizontal?plot.y+plot.height:at,stroke:bound.design.colors.border,'stroke-width':1}));
-      children.push(text(label,horizontal?{x:at-32,y:plot.y+plot.height+6,width:64,height:26}:{x:box.x+4,y:at-12,width:52,height:24},item.path,13,horizontal?'center':'right'));
-    }
-    if(series.length>1)series.forEach((s,j)=>{
-      const width=(box.width-24)/series.length,x=box.x+12+j*width;
-      children.push(tag('rect',{x,y:box.y+12,width:12,height:12,fill:colors[j%colors.length]}));
-      children.push(text(s.name,{x:x+18,y:box.y+5,width:Math.max(1,width-22),height:28},`${item.path}.data.columns.${j+1}`,14,'left'));
-    });
-    const categorySize=(horizontal?plot.height:plot.width)/rows.length;
-    rows.forEach((row,i)=>children.push(text(row[0],horizontal?{x:box.x+4,y:plot.y+i*categorySize,width:88,height:categorySize}:{x:plot.x+i*categorySize,y:plot.y+plot.height+7,width:categorySize,height:30},`${item.path}.data.rows.${i}.0`,14,horizontal?'right':'center')));
-    series.forEach((s,j)=>{
-      const color=colors[j%colors.length];
-      if(kind==='line'||kind==='area'){
-        let points=[];
-        const flush=()=>{if(!points.length)return;const pairs=points.map(p=>p.join(',')).join(' ');if(kind==='area')children.push(tag('polygon',{points:`${points[0][0]},${zero} ${pairs} ${points.at(-1)[0]},${zero}`,fill:color,'fill-opacity':.18}));children.push(tag('polyline',{points:pairs,fill:'none',stroke:color,'stroke-width':3,...traceAttrs(options,`${item.path}.data`)}));points=[];};
-        s.values.forEach((v,i)=>{if(v===null){flush();return;}const x=plot.x+(i+.5)*categorySize,y=yValue(v);points.push([x,y]);children.push(tag('circle',{cx:x,cy:y,r:4,fill:color,...traceAttrs(options,`${item.path}.data.rows.${i}.${j+1}`)}));});flush();
-      }else{
-        const bar=categorySize*.8/series.length;
-        s.values.forEach((v,i)=>{if(v===null)return;const at=(horizontal?plot.y:plot.x)+i*categorySize+categorySize*.1+j*bar;
-          children.push(tag('rect',horizontal?{x:Math.min(zero,xValue(v)),y:at,width:Math.abs(xValue(v)-zero),height:Math.max(.1,bar*.9),fill:color,...traceAttrs(options,`${item.path}.data.rows.${i}.${j+1}`)}:{x:at,y:Math.min(zero,yValue(v)),width:Math.max(.1,bar*.9),height:Math.abs(yValue(v)-zero),fill:color,...traceAttrs(options,`${item.path}.data.rows.${i}.${j+1}`)}));
-        });
-      }
-    });
-    children.push(tag('line',{x1:horizontal?zero:plot.x,x2:horizontal?zero:plot.x+plot.width,y1:horizontal?plot.y:zero,y2:horizontal?plot.y+plot.height:zero,stroke:labelColor,'stroke-width':1}));
-  }
-  return tag('g',traceAttrs(options,item.path),children.join('\n'));
-}
-
 function renderChart(item, box, bound, options) {
-  if (["column","bar","line","area","pie","donut","doughnut"].includes(item.value?.type)) {
-    const rendered = renderImportedChart(item, box, bound, options);
-    if (rendered) return rendered;
-  }
+  // Catalog chart types (kept, deprecated and aliased ids) preview the native
+  // construct opf-pptx exports; other ids keep the legacy single-series preview.
+  const rendered = renderCatalogChart(item, box, bound, options, { tag, traceAttrs, stableNumber, renderTextBox });
+  if (rendered) return rendered;
   const chart = item.value ?? {};
   const chartType = chart.type ?? engineDefaults.chartTypes[0];
   const data = inlineChartRows(chart.data);

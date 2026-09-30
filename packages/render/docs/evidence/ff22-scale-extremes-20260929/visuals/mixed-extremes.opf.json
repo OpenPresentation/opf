@@ -1,0 +1,30 @@
+{
+  "slides": [
+    {
+      "title": "mixed-extremes",
+      "chart": {
+        "type": "column",
+        "data": {
+          "columns": [
+            "Category",
+            "Value"
+          ],
+          "rows": [
+            [
+              "First",
+              -1.7976931348623157e+308
+            ],
+            [
+              "Second",
+              0
+            ],
+            [
+              "Third",
+              1.7976931348623157e+308
+            ]
+          ]
+        }
+      }
+    }
+  ]
+}

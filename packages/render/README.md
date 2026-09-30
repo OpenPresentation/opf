@@ -244,6 +244,8 @@ Dependency policy:
 
 Browser support boundary: `renderSvg`, `renderSvgDeck`, and `resolvePresentation` are browser-importable pure JavaScript APIs. `svgToPng` and `svgToPdf` are Node APIs in this package version because they depend on the Node build of resvg.
 
+Classic chart previews keep finite axis coordinates for subnormal values and values up to `Number.MAX_VALUE`, including mixed positive/negative ranges. At these limits, available numeric precision can merge adjacent axis ticks or prevent extra headroom. Authored values are unchanged. Stacked, percentage or pie/doughnut totals that overflow the finite numeric range are still unsupported: rendering throws a `RangeError` naming the chart path and asking the caller to rescale the values. It does not substitute an empty chart or silently discard the overflowing values.
+
 ## Development
 
 ```sh

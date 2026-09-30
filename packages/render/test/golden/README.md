@@ -1,5 +1,9 @@
 # Raster regression baseline
 
+## FF-22b classic chart previews
+
+Kept classic chart types now preview their native construct (`src/charts.js`); deprecated ids draw as their replacement. 115 of 805 slides change in `opf-examples-png.cover-centering.sha256.json` (the CI and default baseline), with an unchanged source digest. Every one of the 115 contains a chart, checked by walking each changed slide for `chart` items (none without) and by review-sheet inspection; the other 690 hashes are unchanged. Chart slides that do not move are the ones with no inline rows (asset-sourced data still shows "No chart data") and the chartex types. The candidate was generated on Windows with Node 24.21.0 against installed core 0.11.2. The pre-change baseline also passes there byte-for-byte, so the resvg/bundled-font hashes do not depend on the platform; CI (Linux Playwright container) confirms this on the PR. `opf-examples-png.furniture.sha256.json` is the retained history manifest and is not changed. Chartex types keep the legacy preview. Chart labels respect the readability floor (`minFontSize`), so they are larger than PowerPoint's 9 pt axis text.
+
 ## Cover centering review
 
 Since renderer 0.11.0, which requires core `^0.11.2`, `opf-examples-png.cover-centering.sha256.json` is the default baseline in `test/golden.mjs`, so the publish workflow (which sets no `OPF_GOLDEN_BASELINE`) checks the installed registry core against it. The ff25-wdupdiag manifest is retained for runs against core 0.11.1 (`OPF_GOLDEN_BASELINE=test/golden/opf-examples-png.ff25-wdupdiag.sha256.json`).
