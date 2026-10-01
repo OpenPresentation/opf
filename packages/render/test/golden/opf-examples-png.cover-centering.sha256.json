@@ -283,8 +283,8 @@
       "bytes": 20916
     },
     "gallery/business-functions/fy27-budget-tradeoff-deck.opf.json#0": {
-      "sha256": "464db65377ef8c298426ebc09399c1d62428b1c2f019333d6e4106fd49c08a7a",
-      "bytes": 3556
+      "sha256": "5f4c55555b930965ad881ccd387be336cd0b6c40c092c7fd77bd5bf8a7d1fce8",
+      "bytes": 3484
     },
     "gallery/business-functions/fy27-budget-tradeoff-deck.opf.json#1": {
       "sha256": "5a97e6c8dde67e65ce25e6e3e4405df11810d11342cd0aaba154d9ae7179203f",
@@ -403,8 +403,8 @@
       "bytes": 13542
     },
     "gallery/business-functions/onboarding-experience-redesign.opf.json#0": {
-      "sha256": "f0491ffb831e28b340169702bf60691c208433b338af3cefcbb88813dc6ba8a1",
-      "bytes": 4350
+      "sha256": "e7c3aab71a3d61e5811de67299883dd14e1bf55701164d6eae9561278829a2df",
+      "bytes": 4323
     },
     "gallery/business-functions/onboarding-experience-redesign.opf.json#1": {
       "sha256": "a17e5e32b20ead8f26cf01de0e04883a8ad474c18c4f277788b323ba06b56265",
@@ -419,8 +419,8 @@
       "bytes": 4190
     },
     "gallery/business-functions/partner-ecosystem-launch-kit.opf.json#0": {
-      "sha256": "0bd33a1e60b25c7eb058976fc46344dfa84a9b402dc06d282590be05298bb301",
-      "bytes": 4571
+      "sha256": "12e127fd0406c729d39a5922b100dda6dc388382243e10df92635c01cb8f46eb",
+      "bytes": 4450
     },
     "gallery/business-functions/partner-ecosystem-launch-kit.opf.json#1": {
       "sha256": "f80faa5785186c01aa27f3a2c5a6634170a09925f0274ea990b0abe8b1fbb702",
@@ -1267,8 +1267,8 @@
       "bytes": 4219
     },
     "gallery/education/stem-lab-funding-proposal.opf.json#0": {
-      "sha256": "25059a8e6c489ca8c6651632d154507e53f79972b5b37845237258622dd9edb6",
-      "bytes": 3328
+      "sha256": "69dfcacae64521953b399c2e75a3a4b15e86fdb86d0b82720ddfa367ce069ef2",
+      "bytes": 3227
     },
     "gallery/education/stem-lab-funding-proposal.opf.json#1": {
       "sha256": "53686de5e12364ce472605fe7cb5a64db741d2b6bb3887aa94df887f49dd1cb0",
@@ -1411,8 +1411,8 @@
       "bytes": 6647
     },
     "gallery/government/digital-services-modernization.opf.json#0": {
-      "sha256": "4d7f126a7c6967af089a201924c39806cf62bbabc005fc7409652f14501941d0",
-      "bytes": 5231
+      "sha256": "c4a0c8d00e575493d691bed82ba23ebbb9ab4d2d6ee2b2cb7ffc9c4f8a6892df",
+      "bytes": 5174
     },
     "gallery/government/digital-services-modernization.opf.json#1": {
       "sha256": "ca1c05b7fc3de1c9586ddcccd7b91401737d8fb2c37fa7ce5177070863b39756",
@@ -1427,8 +1427,8 @@
       "bytes": 5160
     },
     "gallery/government/grant-equity-review.opf.json#0": {
-      "sha256": "028997af60eaf47cfeb45b59ab03d2507c4703553f01d1e7e192e87b883f1ec1",
-      "bytes": 3963
+      "sha256": "466ecd167082394caae19951b9dd162356dfb54af833338ee7e931fef3235acb",
+      "bytes": 3904
     },
     "gallery/government/grant-equity-review.opf.json#1": {
       "sha256": "454d20378594bda437237a4481a48d85428e4d3f85f1a0a62a73b307d6f39d41",
@@ -1859,8 +1859,8 @@
       "bytes": 11833
     },
     "gallery/industries/ambulatory-access-recovery-plan.opf.json#0": {
-      "sha256": "87299c93fe886d34074de4a32bf0deab461dd9f4aba015723af1af1355a422b7",
-      "bytes": 5372
+      "sha256": "51a9eb2f2d65ba0672a86e79b912ba7c989b1b3826385cf64bc85fb70f30d41c",
+      "bytes": 5295
     },
     "gallery/industries/ambulatory-access-recovery-plan.opf.json#1": {
       "sha256": "60c277422881afa4c84be37505be02e900eddbddef48b829faccf8f1acb9df70",
@@ -2123,8 +2123,8 @@
       "bytes": 7660
     },
     "gallery/industries/food-bank-distribution-capacity-plan.opf.json#0": {
-      "sha256": "48924578e54f8c938bd8b05f44f0ea2a375c99b9b33dd5978e39d1bd33e25720",
-      "bytes": 5012
+      "sha256": "f821ff587b87ecec927a2cc3086866a9f1d15d2f06adaf7c0846f66e4a2e965d",
+      "bytes": 4851
     },
     "gallery/industries/food-bank-distribution-capacity-plan.opf.json#1": {
       "sha256": "1f4a013eb805a9bf850b0971aafd7eee3c96563f115f21e7864c1fe53b374930",
@@ -2307,8 +2307,8 @@
       "bytes": 5815
     },
     "gallery/industries/rural-broadband-expansion-proposal.opf.json#0": {
-      "sha256": "79dc8e7db79a1e191c9e767cdd900d9485297a67a7d03761a22d678b34c0872a",
-      "bytes": 5445
+      "sha256": "71f9fd3eac90283da62ddeaa9e69707b34cdbc331af8f82f58580a636d9e27fd",
+      "bytes": 5370
     },
     "gallery/industries/rural-broadband-expansion-proposal.opf.json#1": {
       "sha256": "7a596c010ce780e442ac8f080219fd66d35f07e22fea5b32988b9d681b1972b9",
@@ -2739,8 +2739,8 @@
       "bytes": 10413
     },
     "gallery/presentation-types/monthly-board-update.opf.json#0": {
-      "sha256": "52f42fa75f98f6c5a5ba9316b5859063f4e99f317789d6fc8bd7151e0612fbea",
-      "bytes": 4164
+      "sha256": "14798556ea7ea8162ce802aaf6a058962ed7fae4793dc53739540c4fbb28987d",
+      "bytes": 4098
     },
     "gallery/presentation-types/monthly-board-update.opf.json#1": {
       "sha256": "77df1ae9cf304ce90e447228db24b0c33e0c07dbec2b929ca456234738d3f8fe",

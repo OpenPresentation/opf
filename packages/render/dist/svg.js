@@ -409,6 +409,21 @@ function colorLuminance(color) {
   return channels[0] * 0.2126 + channels[1] * 0.7152 + channels[2] * 0.0722;
 }
 
+// FF-61: WCAG 2.x contrast ratio, (L1 + 0.05) / (L2 + 0.05) with L1 the lighter relative luminance. The slide tag
+// draws in the primary colour unless that is under 4.5:1 against the slide background; opf-pptx applies the same
+// rule with the same arithmetic (test/tag-colour.mjs in both repositories pins the same colour pairs).
+const TAG_MIN_CONTRAST = 4.5;
+function contrastRatio(first, second) {
+  const a = colorLuminance(first), b = colorLuminance(second);
+  return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+}
+// The slide background the tag sits on: the resolved solid or pattern colour, else (gradient) the scheme light1,
+// the colour the background rect also falls back to and opf-pptx uses for a background that is not one colour.
+function tagFill(design) {
+  const background = design.backgroundColor ?? design.colors.background;
+  return contrastRatio(design.colors.primary, background) < TAG_MIN_CONTRAST ? design.colors.text : design.colors.primary;
+}
+
 function resolveDesign(presentation, slide, context, index) {
   const deckDesign = presentation.design ?? {};
   const slideDesign = slide.design ?? {};
@@ -927,8 +942,9 @@ function renderTextPayload(item, box, bound, options) {
     fontFamily: item.field === "title" ? bound.design.fonts.heading : bound.design.fonts.body,
     fontWeight: item.field === "title" ? 700 : 400,
     // The slide tag is the eyebrow label: it draws in the primary colour (scheme accent1), as the
-    // PPTX export writes it. Every other text payload here uses the text colour.
-    fill: item.field === "tag" ? bound.design.colors.primary : bound.design.colors.text,
+    // PPTX export writes it, or in the text colour when the primary is under 4.5:1 against the
+    // slide background (FF-61). Every other text payload here uses the text colour.
+    fill: item.field === "tag" ? tagFill(bound.design) : bound.design.colors.text,
     fit: item.text,
     textStyle: item.textStyle,
     diagnosticsHandled: Boolean(item.text),
