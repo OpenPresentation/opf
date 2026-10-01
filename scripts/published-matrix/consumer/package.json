@@ -40,7 +40,7 @@
     "@expo-google-fonts/noto-serif-tibetan": "0.4.2",
     "@openpresentation/opf": "0.11.4",
     "@openpresentation/opf-editor": "0.10.6",
-    "@openpresentation/opf-pptx": "0.11.7",
+    "@openpresentation/opf-pptx": "0.11.8",
     "@openpresentation/opf-render": "0.11.9",
     "fast-xml-parser": "5.11.2",
     "fflate": "0.8.3"
