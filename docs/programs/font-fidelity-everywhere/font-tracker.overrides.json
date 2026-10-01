@@ -2717,14 +2717,13 @@
       "caveat": "Individual strings differ by up to 15% either way (mean absolute 5%): wrapping differs."
     },
     "Grandview": {
-      "original": "Grandview: Microsoft 365 cloud sans (no reference on this host).",
+      "original": "Grandview: Microsoft 365 cloud sans.",
       "replacement": "Barlow: a slightly condensed grotesque.",
-      "caveat": "Unmeasured: Grandview is not cached on this host."
+      "caveat": "About 5% off on average (up to 10%) with glyph-size differences: expect different wrapping."
     },
     "Grandview Display": {
-      "original": "Grandview Display: the display cut (no reference on this host).",
-      "replacement": "Barlow: a slightly condensed grotesque.",
-      "caveat": "Unmeasured."
+      "original": "Grandview Display: the display cut.",
+      "replacement": "Barlow: a slightly condensed grotesque."
     },
     "Impact": {
       "original": "Impact: heavy condensed grotesque.",
@@ -2756,14 +2755,12 @@
       "replacement": "Bitter: a contemporary slab serif for text."
     },
     "Seaford": {
-      "original": "Seaford: Microsoft 365 cloud sans (no reference on this host).",
-      "replacement": "Source Sans 3: a humanist sans.",
-      "caveat": "Unmeasured."
+      "original": "Seaford: Microsoft 365 cloud sans.",
+      "replacement": "Source Sans 3: a humanist sans."
     },
     "Seaford Display": {
-      "original": "Seaford Display: the display cut (no reference on this host).",
-      "replacement": "Source Sans 3: a humanist sans.",
-      "caveat": "Unmeasured."
+      "original": "Seaford Display: the display cut.",
+      "replacement": "Source Sans 3: a humanist sans."
     },
     "Segoe UI": {
       "original": "Segoe UI: humanist UI sans.",
@@ -2782,14 +2779,14 @@
       "replacement": "Red Hat Display 400: there is no 350 face."
     },
     "Skeena": {
-      "original": "Skeena: Microsoft 365 cloud sans (no reference on this host).",
+      "original": "Skeena: Microsoft 365 cloud sans.",
       "replacement": "Open Sans: a humanist sans.",
-      "caveat": "Unmeasured."
+      "caveat": "About 9% off on average (up to 16%): expect different wrapping."
     },
     "Skeena Display": {
-      "original": "Skeena Display: the display cut (no reference on this host).",
+      "original": "Skeena Display: the display cut.",
       "replacement": "Open Sans: a humanist sans.",
-      "caveat": "Unmeasured."
+      "caveat": "About 13% off on average (up to 20%): expect different wrapping."
     },
     "Tahoma": {
       "original": "Tahoma: narrow humanist UI sans.",

@@ -1416,7 +1416,14 @@
       "replacement": {
         "family": "Barlow",
         "compatibility": "visual",
-        "measured": null
+        "measured": {
+          "replacement": "Barlow",
+          "meanAbsWidthDelta": 0.0467,
+          "meanWidthDelta": -0.0467,
+          "maxAbsWidthDelta": 0.0976,
+          "styles": 4,
+          "reference": "Grandview 1.04;O365"
+        }
       },
       "alternates": [
         "Roboto"
@@ -1440,7 +1447,14 @@
       "replacement": {
         "family": "Barlow",
         "compatibility": "visual",
-        "measured": null
+        "measured": {
+          "replacement": "Barlow",
+          "meanAbsWidthDelta": 0.0249,
+          "meanWidthDelta": -0.0242,
+          "maxAbsWidthDelta": 0.0599,
+          "styles": 2,
+          "reference": "Grandview Display 0.90;O365"
+        }
       },
       "alternates": [
         "Roboto"
@@ -1451,7 +1465,7 @@
         "https://support.apple.com/en-us/122869",
         "https://microsoft.design/articles/a-change-of-typeface-microsoft-s-new-default-font-has-arrived/"
       ],
-      "note": "Reference not available to the measuring host. Cloud list has Grandview Display and Grandview Display Italic only."
+      "note": "RR-17: measured against the Microsoft 365 cloud font Grandview Display 0.90;O365, cached by Office on the measuring host and read in place. Cloud list has Grandview Display and Grandview Display Italic only."
     },
     {
       "family": "Gungsuh",
@@ -2771,7 +2785,14 @@
       "replacement": {
         "family": "Source Sans 3",
         "compatibility": "visual",
-        "measured": null
+        "measured": {
+          "replacement": "Source Sans 3",
+          "meanAbsWidthDelta": 0.0483,
+          "meanWidthDelta": -0.0483,
+          "maxAbsWidthDelta": 0.0965,
+          "styles": 4,
+          "reference": "Seaford 1.04;O365"
+        }
       },
       "alternates": [
         "Carlito"
@@ -2782,7 +2803,7 @@
         "https://support.apple.com/en-us/122869",
         "https://microsoft.design/articles/a-change-of-typeface-microsoft-s-new-default-font-has-arrived/"
       ],
-      "note": "Reference not available to the measuring host. One of the five fonts Microsoft commissioned in 2021; no MS Learn font-list page found."
+      "note": "RR-17: measured against the Microsoft 365 cloud font Seaford 1.04;O365, cached by Office on the measuring host and read in place. One of the five fonts Microsoft commissioned in 2021; no MS Learn font-list page found."
     },
     {
       "family": "Seaford Display",
@@ -2795,7 +2816,14 @@
       "replacement": {
         "family": "Source Sans 3",
         "compatibility": "visual",
-        "measured": null
+        "measured": {
+          "replacement": "Source Sans 3",
+          "meanAbsWidthDelta": 0.0389,
+          "meanWidthDelta": 0.0388,
+          "maxAbsWidthDelta": 0.0667,
+          "styles": 2,
+          "reference": "Seaford Display 1.04;O365"
+        }
       },
       "alternates": [
         "Carlito"
@@ -2806,7 +2834,7 @@
         "https://support.apple.com/en-us/122869",
         "https://microsoft.design/articles/a-change-of-typeface-microsoft-s-new-default-font-has-arrived/"
       ],
-      "note": "Reference not available to the measuring host. Cloud list has Seaford Display and Seaford Display Italic."
+      "note": "RR-17: measured against the Microsoft 365 cloud font Seaford Display 1.04;O365, cached by Office on the measuring host and read in place. Cloud list has Seaford Display and Seaford Display Italic."
     },
     {
       "family": "Segoe UI",
@@ -3068,7 +3096,14 @@
       "replacement": {
         "family": "Open Sans",
         "compatibility": "visual",
-        "measured": null
+        "measured": {
+          "replacement": "Open Sans",
+          "meanAbsWidthDelta": 0.0926,
+          "meanWidthDelta": 0.0926,
+          "maxAbsWidthDelta": 0.1593,
+          "styles": 4,
+          "reference": "Skeena 1.04;O365"
+        }
       },
       "alternates": [
         "Carlito"
@@ -3079,7 +3114,7 @@
         "https://support.apple.com/en-us/122869",
         "https://microsoft.design/articles/a-change-of-typeface-microsoft-s-new-default-font-has-arrived/"
       ],
-      "note": "Reference not available to the measuring host. One of the five fonts Microsoft commissioned in 2021; no MS Learn font-list page found."
+      "note": "RR-17: measured against the Microsoft 365 cloud font Skeena 1.04;O365, cached by Office on the measuring host and read in place. One of the five fonts Microsoft commissioned in 2021; no MS Learn font-list page found."
     },
     {
       "family": "Skeena Display",
@@ -3092,7 +3127,14 @@
       "replacement": {
         "family": "Open Sans",
         "compatibility": "visual",
-        "measured": null
+        "measured": {
+          "replacement": "Open Sans",
+          "meanAbsWidthDelta": 0.1306,
+          "meanWidthDelta": 0.1306,
+          "maxAbsWidthDelta": 0.2001,
+          "styles": 4,
+          "reference": "Skeena Display 1.04;O365"
+        }
       },
       "alternates": [
         "Carlito"
@@ -3103,7 +3145,7 @@
         "https://support.apple.com/en-us/122869",
         "https://microsoft.design/articles/a-change-of-typeface-microsoft-s-new-default-font-has-arrived/"
       ],
-      "note": "Reference not available to the measuring host. Cloud list has Skeena Display (+Bold/Italic/Bold Italic)."
+      "note": "RR-17: measured against the Microsoft 365 cloud font Skeena Display 1.04;O365, cached by Office on the measuring host and read in place. Cloud list has Skeena Display (+Bold/Italic/Bold Italic)."
     },
     {
       "family": "Source Sans 3",
