@@ -15,7 +15,7 @@ const Ajv2020 = require("ajv/dist/2020.js").default;
 const addFormats = require("ajv-formats").default;
 const rows = FONT_POLICY.families;
 const AVAILABILITY = new Set(["windows", "windows-optional", "macos", "office", "office-cloud"]);
-const NO_TEXT_REPLACEMENT = new Set(["cambria math", "wingdings", "webdings", "symbol", "segoe ui emoji"]);
+const NO_TEXT_REPLACEMENT = new Set(["wingdings", "webdings", "symbol"]);
 
 describe("font policy table", () => {
   test("font-policy.json is valid against its JSON Schema", () => {

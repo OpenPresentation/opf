@@ -48,16 +48,18 @@ test("no record references a family that is neither in the policy nor a declared
 });
 
 const INTOS = ["Intos", "Intos Display", "Intos Narrow", "Intos Serif"];
+const FF45_FACES = ["Noto Color Emoji", "Noto Emoji", "STIX Two Math", "Noto Sans Math"];
 
 test("the reviewed families split into the owner's four classes", () => {
-  // 153 policy families and 7 shipped dependencies were reviewed; opf#166 added the four Intos rows.
+  // 153 policy families and 7 shipped dependencies were reviewed; opf#166 added the four Intos rows and FF-45 the four emoji and math faces
+  // (Noto Color Emoji, Noto Emoji, STIX Two Math, Noto Sans Math).
   assert.equal(committed.summary.records, policy.families.length + overrides.extras.length);
-  assert.equal(committed.summary.records - INTOS.length, 160, "the owner's 160 reviewed families plus the four Intos rows");
+  assert.equal(committed.summary.records - INTOS.length - FF45_FACES.length, 160, "the owner's 160 reviewed families plus the Intos and FF-45 rows");
   for (const name of INTOS) assert.equal(committed.records.find((record) => record.family === name)?.class, "open", name);
   assert.equal(overrides.extras.length, 7);
   const counts = Object.fromEntries(CLASSES.map((cls) => [cls, committed.records.filter((record) => record.class === cls).length]));
   assert.equal(CLASSES.reduce((sum, cls) => sum + counts[cls], 0), committed.summary.records);
-  assert.deepEqual(committed.records.filter((record) => record.class === "special").map((record) => record.family).sort(), ["Cambria Math", "Segoe UI Emoji", "Symbol", "Webdings", "Wingdings"]);
+  assert.deepEqual(committed.records.filter((record) => record.class === "special").map((record) => record.family).sort(), ["Symbol", "Webdings", "Wingdings"]);
   for (const record of committed.records.filter((item) => item.class === "special")) assert.equal(record.status, "needs-special-path");
   for (const record of committed.records.filter((item) => item.class === "open")) assert.equal(record.licenseClass, "open");
   for (const record of committed.records.filter((item) => item.class.startsWith("proprietary"))) assert.notEqual(record.licenseClass, "open");
