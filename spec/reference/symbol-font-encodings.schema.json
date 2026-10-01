@@ -1,0 +1,156 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openpresentation.org/schema/opf-symbol-font-encodings/v1",
+  "title": "OPF symbol font encodings",
+  "description": "Schema for spec/reference/symbol-font-encodings.json (font-fidelity-everywhere FF-45): per symbol-encoded family (Symbol, Wingdings, Wingdings 2, Wingdings 3, Webdings), the reversible code-to-Unicode table for codes 0x20..0xFF of the Microsoft Symbol cmap, verified against a named version of the installed Windows font. Reference data for engines, not part of the OPF document contract.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["description", "version", "codeRange", "inputForms", "families"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "description": { "type": "string", "minLength": 1 },
+    "version": { "type": "integer", "minimum": 1 },
+    "codeRange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["first", "last"],
+      "properties": { "first": { "const": 32 }, "last": { "const": 255 } }
+    },
+    "inputForms": {
+      "description": "How text in a symbol font reaches a renderer and how each form becomes a code.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["privateUse", "codePage", "other"],
+      "properties": {
+        "privateUse": { "type": "string", "minLength": 1 },
+        "codePage": { "type": "string", "minLength": 1 },
+        "other": { "type": "string", "minLength": 1 }
+      }
+    },
+    "families": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/family" }
+    }
+  },
+  "$defs": {
+    "hex4": { "type": "string", "pattern": "^[0-9A-F]{4,5}$" },
+    "codePoints": {
+      "description": "One Unicode scalar value, or a sequence joined with '+' (for example a base character and a variation selector).",
+      "type": "string",
+      "pattern": "^[0-9A-F]{4,5}(\\+[0-9A-F]{4,5})*$"
+    },
+    "family": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["family", "charset", "sources", "verifiedAgainst", "platformNotes", "summary", "codes"],
+      "properties": {
+        "family": { "enum": ["Symbol", "Wingdings", "Wingdings 2", "Wingdings 3", "Webdings"] },
+        "charset": { "description": "The OOXML/GDI charset of a symbol font (CT_TextFont charset=\"2\").", "const": 2 },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["url", "note"],
+            "properties": {
+              "url": { "type": "string", "format": "uri", "pattern": "^https://" },
+              "note": { "type": "string", "minLength": 1 }
+            }
+          }
+        },
+        "verifiedAgainst": {
+          "description": "The installed font the table was checked against, read in place: identity and metrics only, never outlines or bytes.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["platform", "file", "version", "familyName", "postscriptName", "copyright", "unitsPerEm", "ascent", "descent", "lineGap", "numGlyphs", "cmap", "date"],
+          "properties": {
+            "platform": { "enum": ["windows", "macos"] },
+            "file": { "type": "string", "minLength": 1 },
+            "version": { "type": "string", "pattern": "^Version [0-9]+\\.[0-9]+" },
+            "familyName": { "type": "string", "minLength": 1 },
+            "postscriptName": { "type": "string", "minLength": 1 },
+            "copyright": { "type": "string", "minLength": 1 },
+            "unitsPerEm": { "type": "integer", "minimum": 16 },
+            "ascent": { "type": "integer" },
+            "descent": { "type": "integer" },
+            "lineGap": { "type": "integer" },
+            "numGlyphs": { "type": "integer", "minimum": 1 },
+            "cmap": { "type": "string", "minLength": 1 },
+            "date": { "type": "string", "format": "date" }
+          }
+        },
+        "platformNotes": { "type": "string", "minLength": 1 },
+        "summary": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["codes", "mapped", "verified", "unmapped"],
+          "properties": {
+            "codes": { "const": 224 },
+            "mapped": { "type": "integer", "minimum": 0, "maximum": 224 },
+            "verified": { "type": "integer", "minimum": 0, "maximum": 224 },
+            "unmapped": { "type": "integer", "minimum": 0, "maximum": 224 }
+          }
+        },
+        "codes": {
+          "type": "array",
+          "minItems": 224,
+          "maxItems": 224,
+          "items": { "$ref": "#/$defs/code" }
+        }
+      }
+    },
+    "code": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "hex", "unicode", "installed"],
+      "properties": {
+        "code": { "type": "integer", "minimum": 32, "maximum": 255 },
+        "hex": { "type": "string", "pattern": "^[2-9A-F][0-9A-F]$" },
+        "unicode": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/codePoints" }] },
+        "name": { "description": "The Unicode character name of the equivalent.", "type": "string", "minLength": 1 },
+        "reason": { "description": "Why the code has no Unicode equivalent (required when unicode is null).", "type": "string", "minLength": 1 },
+        "note": { "type": "string", "minLength": 1 },
+        "duplicateOf": { "description": "Another code of this family carries the same code point and owns the inverse mapping.", "type": "integer", "minimum": 32, "maximum": 255 },
+        "adobeGlyph": { "description": "Symbol only: the PostScript glyph name from Adobe's table ('(CUS)' marks a custom-encoding name).", "type": "string", "minLength": 1 },
+        "macos": {
+          "description": "Symbol only: Apple's value where it differs from the table.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["unicode", "note"],
+          "properties": {
+            "unicode": { "$ref": "#/$defs/codePoints" },
+            "note": { "type": "string" }
+          }
+        },
+        "installed": {
+          "description": "The glyph the verified font maps the code to, or null when the font has no glyph at U+F0xx.",
+          "oneOf": [
+            { "type": "null" },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["glyph", "advance", "bounds"],
+              "properties": {
+                "glyph": { "type": "integer", "minimum": 1 },
+                "glyphName": { "type": "string", "minLength": 1 },
+                "advance": { "type": "integer", "minimum": 0 },
+                "bounds": {
+                  "description": "[xMin, yMin, xMax, yMax] in font units, or null for an empty glyph (space).",
+                  "oneOf": [
+                    { "type": "null" },
+                    { "type": "array", "minItems": 4, "maxItems": 4, "items": { "type": "integer" } }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      },
+      "if": { "properties": { "unicode": { "type": "null" } } },
+      "then": { "required": ["reason"], "properties": { "reason": { "type": "string", "minLength": 1 } } },
+      "else": { "required": ["name"], "properties": { "name": { "type": "string", "minLength": 1 } } }
+    }
+  }
+}

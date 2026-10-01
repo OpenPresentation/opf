@@ -3,7 +3,7 @@
 ## Prepared font inputs
 
 Published renderer 0.8.0 and later provides `prepareNodeFonts` in `/fonts-node`
-(current coordinated set: core 0.11.4, renderer 0.11.9, PPTX 0.11.8, editor 0.10.6):
+(current coordinated set: core 0.11.4, renderer 0.11.9, PPTX 0.11.9, editor 0.10.6):
 
 ```js
 const {registry, options} = await prepareNodeFonts({
