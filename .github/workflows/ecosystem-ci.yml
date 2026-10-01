@@ -10,7 +10,7 @@ concurrency:
   group: ecosystem-${{ github.ref }}
   cancel-in-progress: true
 env:
-  OPF_RENDER_REF: dbddd8f565bfc2550723a77ef82e1f63dffb23ea
+  OPF_RENDER_REF: 7086afb0e1f2c44f2a1590b54855f9e963a0ef4f
   OPF_EDITOR_REF: cb1a52646cbccc4ca25171886992ff9c6dcd1a75
   OPF_PPTX_REF: f8a0576e8be96b8b330a2a53fbcdf0634b90a331
 jobs:
@@ -76,10 +76,9 @@ jobs:
       - name: Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks
         working-directory: opf
         env:
-          # This repository's design-fields candidate: the cover-alignment renderer (OPF_RENDER_REF) against this core combined with the cover
-          # alignment change (121 of 805 slides differ from that renderer's own baseline, 141 from the 0.11.8 baseline; see scripts/fixtures/README.md).
-          # The renderer PR that consumes this core moves its own baseline, after which this selection returns to the pinned renderer's file.
-          OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf/scripts/fixtures/opf-examples-png.design-fields.sha256.json
+          # The pinned renderer's own baseline (opf-render#83, which draws these fields): core 0.11.4 combines the design fields with the cover
+          # alignment change, 181 of 805 slides differ from the renderer 0.11.8 baseline. scripts/fixtures/README.md keeps the review record.
+          OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf-render/test/golden/opf-examples-png.cover-centering.sha256.json
         run: pnpm test:packages
       - name: Verify installed type failure propagation
         working-directory: opf
