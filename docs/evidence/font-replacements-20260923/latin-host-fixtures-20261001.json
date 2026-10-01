@@ -7,7 +7,7 @@
    "source": {
     "repository": "OpenPresentation/opf-render",
     "test": "test/latin-family-hosts.mjs",
-    "commit": "497403824bdf8f764e6a9712440ae0520c68a034",
+    "commit": "1a7945f0e8570828a87739b26d4d9a6447e50452",
     "runtime": "Node v26.4.0"
    },
    "families": {
@@ -904,7 +904,7 @@
    "source": {
     "repository": "OpenPresentation/opf-render",
     "test": "test/latin-family-hosts-browser.mjs",
-    "commit": "497403824bdf8f764e6a9712440ae0520c68a034",
+    "commit": "1a7945f0e8570828a87739b26d4d9a6447e50452",
     "runtime": "Node v26.4.0, Chromium-based browser 154.0.4258.37, offline"
    },
    "filesFetchedInTotal": 94,
@@ -1674,7 +1674,7 @@
    "source": {
     "repository": "OpenPresentation/opf-editor",
     "test": "test/font-gate-latin-families.mjs",
-    "commit": "c745f5483a32784b4a73e85eb1f55727627011c2",
+    "commit": "e78fcbf44bd46d293e928e8e7bb23764f6fd884c",
     "runtime": "Node v26.4.0, renderer 0.11.9, the editor's createFontGate"
    },
    "families": {
