@@ -1,12 +1,12 @@
 {
- "generated": "2026-10-01T04:28:40.520Z",
+ "generated": "2026-10-01T13:22:56.006Z",
  "fontHost": "gallery",
  "heads": {
   "pptx-gallery": "9e8d59a",
-  "opf": "2e838f5",
-  "opf-render": "0ce9bb9",
-  "opf-pptx": "e4c0c4b",
-  "opf-editor": "cb1a526",
+  "opf": "e414bca",
+  "opf-render": "2fbc0ab",
+  "opf-pptx": "a9bcbd7",
+  "opf-editor": "313774a",
   "node": "24.21.0"
  },
  "sharedExportGaps": [
@@ -38,7 +38,8 @@
      "dimensions"
     ],
     "diagnostics": [
-     "heading-import-reflow"
+     "heading-import-reflow",
+     "content-structure-changed"
     ]
    },
    "measure": {
@@ -123,7 +124,8 @@
      "dimensions"
     ],
     "diagnostics": [
-     "heading-import-reflow"
+     "heading-import-reflow",
+     "content-structure-changed"
     ]
    },
    "measure": {
@@ -208,7 +210,8 @@
      "dimensions"
     ],
     "diagnostics": [
-     "heading-import-reflow"
+     "heading-import-reflow",
+     "content-structure-changed"
     ]
    },
    "measure": {
@@ -293,7 +296,8 @@
      "dimensions"
     ],
     "diagnostics": [
-     "heading-import-reflow"
+     "heading-import-reflow",
+     "content-structure-changed"
     ]
    },
    "measure": {
@@ -380,7 +384,8 @@
      "dimensions"
     ],
     "diagnostics": [
-     "heading-import-reflow"
+     "heading-import-reflow",
+     "content-structure-changed"
     ]
    },
    "measure": {
@@ -463,7 +468,8 @@
      "dimensions"
     ],
     "diagnostics": [
-     "heading-import-reflow"
+     "heading-import-reflow",
+     "content-structure-changed"
     ]
    },
    "measure": {
@@ -546,7 +552,8 @@
      "dimensions"
     ],
     "diagnostics": [
-     "heading-import-reflow"
+     "heading-import-reflow",
+     "content-structure-changed"
     ]
    },
    "measure": {
@@ -631,7 +638,8 @@
      "dimensions"
     ],
     "diagnostics": [
-     "heading-import-reflow"
+     "heading-import-reflow",
+     "content-structure-changed"
     ]
    },
    "measure": {
@@ -716,7 +724,8 @@
      "dimensions"
     ],
     "diagnostics": [
-     "heading-import-reflow"
+     "heading-import-reflow",
+     "content-structure-changed"
     ]
    },
    "measure": {
@@ -801,7 +810,8 @@
      "dimensions"
     ],
     "diagnostics": [
-     "heading-import-reflow"
+     "heading-import-reflow",
+     "content-structure-changed"
     ]
    },
    "measure": {
@@ -886,7 +896,8 @@
      "dimensions"
     ],
     "diagnostics": [
-     "heading-import-reflow"
+     "heading-import-reflow",
+     "content-structure-changed"
     ]
    },
    "measure": {
@@ -973,7 +984,8 @@
      "dimensions"
     ],
     "diagnostics": [
-     "heading-import-reflow"
+     "heading-import-reflow",
+     "content-structure-changed"
     ]
    },
    "measure": {
@@ -1058,7 +1070,8 @@
      "dimensions"
     ],
     "diagnostics": [
-     "heading-import-reflow"
+     "heading-import-reflow",
+     "content-structure-changed"
     ]
    },
    "measure": {
@@ -1141,7 +1154,8 @@
      "dimensions"
     ],
     "diagnostics": [
-     "heading-import-reflow"
+     "heading-import-reflow",
+     "content-structure-changed"
     ]
    },
    "measure": {

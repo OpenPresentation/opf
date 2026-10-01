@@ -11,9 +11,9 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const read = async (p) => JSON.parse(await readFile(path.join(here, p), 'utf8'));
 const a = await read('audit-a/results.json');
 const b = await read('audit-b/results.json');
-// The parity run to publish. Default: the 850-value run on the published engines (opf-render 0.11.4, opf-pptx 0.11.3) with the gallery font host model (FF-38, FF-48, 2026-09-30); earlier accepted runs stay in parity/.
+// The parity run to publish. Default: the 850-value run on the published set (core 0.11.4, opf-render 0.11.9, opf-pptx 0.11.7) with the gallery font host model (FF-38, FF-48, 2026-10-01); earlier accepted runs stay in parity/.
 // PARITY_RESULTS=parity/parity-results-2026-09-30-charts-measured.json (or an earlier file, or parity/parity-results.json) rebuilds the file from an earlier run.
-const PARITY_RESULTS = process.env.PARITY_RESULTS ?? 'parity/parity-results-2026-09-30-published-pptx-0.11.6.json';
+const PARITY_RESULTS = process.env.PARITY_RESULTS ?? 'parity/parity-results-2026-10-01-published-0.11.9.json';
 const p = await read(PARITY_RESULTS);
 
 const short = (sha) => (typeof sha === 'string' ? sha.slice(0, 7) : null);

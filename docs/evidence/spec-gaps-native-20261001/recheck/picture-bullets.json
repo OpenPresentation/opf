@@ -1,0 +1,188 @@
+{
+  "deck": "picture-bullets.pptx",
+  "slides": [
+    {
+      "index": 1,
+      "shapes": [
+        {
+          "name": "OPF heading slides.0.title line 0",
+          "type": 1,
+          "alt": "",
+          "l": 43.2,
+          "t": 43.2,
+          "w": 873.6,
+          "h": 49.4,
+          "text": "Picture bullets",
+          "font": "Arial Black",
+          "bulletType": 0
+        },
+        {
+          "name": "OPF list slides.0.items line 0",
+          "type": 1,
+          "alt": "",
+          "l": 43.2,
+          "t": 110.6,
+          "w": 873.6,
+          "h": 22.9,
+          "text": "First entry with a picture bullet",
+          "font": "Arial",
+          "bulletType": 3
+        },
+        {
+          "name": "OPF list slides.0.items line 1",
+          "type": 1,
+          "alt": "",
+          "l": 43.2,
+          "t": 138.7,
+          "w": 873.6,
+          "h": 22.9,
+          "text": "Second entry that is long enough to wrap",
+          "font": "Arial",
+          "bulletType": 3
+        },
+        {
+          "name": "OPF list slides.0.items line 2",
+          "type": 1,
+          "alt": "",
+          "l": 63.8,
+          "t": 161.6,
+          "w": 853,
+          "h": 22.9,
+          "text": "bullet picture can be checked together",
+          "font": "Arial",
+          "bulletType": 0
+        },
+        {
+          "name": "OPF list slides.0.items line 3",
+          "type": 1,
+          "alt": "",
+          "l": 43.2,
+          "t": 189.7,
+          "w": 873.6,
+          "h": 22.9,
+          "text": "Third entry with a description",
+          "font": "Arial",
+          "bulletType": 3
+        },
+        {
+          "name": "OPF list slides.0.items line 4",
+          "type": 1,
+          "alt": "",
+          "l": 63.8,
+          "t": 214.9,
+          "w": 853,
+          "h": 18.8,
+          "text": "The description line has no bullet",
+          "font": "Arial",
+          "bulletType": 0
+        },
+        {
+          "name": "OPF list slides.0.items line 5",
+          "type": 1,
+          "alt": "",
+          "l": 43.2,
+          "t": 238.9,
+          "w": 873.6,
+          "h": 22.9,
+          "text": "Nested entry",
+          "font": "Arial",
+          "bulletType": 3
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "shapes": [
+        {
+          "name": "OPF heading slides.1.title line 0",
+          "type": 1,
+          "alt": "",
+          "l": 43.2,
+          "t": 43.2,
+          "w": 873.6,
+          "h": 49.4,
+          "text": "Character bullets (slide override)",
+          "font": "Arial Black",
+          "bulletType": 0
+        },
+        {
+          "name": "OPF list slides.1.items line 0",
+          "type": 1,
+          "alt": "",
+          "l": 43.2,
+          "t": 110.6,
+          "w": 873.6,
+          "h": 22.9,
+          "text": "Control slide",
+          "font": "Arial",
+          "bulletType": 1
+        },
+        {
+          "name": "OPF list slides.1.items line 1",
+          "type": 1,
+          "alt": "",
+          "l": 43.2,
+          "t": 138.7,
+          "w": 873.6,
+          "h": 22.9,
+          "text": "listBullet: character",
+          "font": "Arial",
+          "bulletType": 1
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "shapes": [
+        {
+          "name": "OPF heading slides.2.title line 0",
+          "type": 1,
+          "alt": "",
+          "l": 43.2,
+          "t": 43.2,
+          "w": 873.6,
+          "h": 49.4,
+          "text": "Picture bullets again",
+          "font": "Arial Black",
+          "bulletType": 0
+        },
+        {
+          "name": "OPF list slides.2.bullets line 0",
+          "type": 1,
+          "alt": "",
+          "l": 43.2,
+          "t": 110.7,
+          "w": 873.6,
+          "h": 22.9,
+          "text": "One",
+          "font": "Arial",
+          "bulletType": 3
+        },
+        {
+          "name": "OPF list slides.2.bullets line 1",
+          "type": 1,
+          "alt": "",
+          "l": 43.2,
+          "t": 138.8,
+          "w": 873.6,
+          "h": 22.9,
+          "text": "Two",
+          "font": "Arial",
+          "bulletType": 3
+        },
+        {
+          "name": "OPF list slides.2.bullets line 2",
+          "type": 1,
+          "alt": "",
+          "l": 43.2,
+          "t": 167,
+          "w": 873.6,
+          "h": 22.9,
+          "text": "Three",
+          "font": "Arial",
+          "bulletType": 3
+        }
+      ]
+    }
+  ]
+}

@@ -341,7 +341,9 @@ function expectedStrings(slide) {
   walkP(slide); for (const b of slide.blocks ?? []) walkP(b);
   return uniq(s.filter((t) => t && t.length > 2));
 }
-const kinds = (slide) => uniq([slide, ...(slide.blocks ?? [])].flatMap((p) => ['items', 'metric', 'quote', 'timeline', 'table', 'chart', 'image'].filter((k) => p[k] !== undefined)));
+// A restored slide may nest content in groups (opf-pptx 0.11.7 restores the authored form), so the blocks are walked recursively.
+const contentNodes = (p) => [p, ...(p.blocks ?? []).flatMap(contentNodes)];
+const kinds = (slide) => uniq(contentNodes(slide).flatMap((p) => ['items', 'metric', 'quote', 'timeline', 'table', 'chart', 'image'].filter((k) => p[k] !== undefined)));
 if (want('blocks')) {
   const items = (await data('blocks')).items.slice(0, LIMIT);
   const editorDocs = Object.fromEntries(items.map((i) => [i.slug, snippets.buildCatalogItemOpfSnippet('blocks', i.slug)]));

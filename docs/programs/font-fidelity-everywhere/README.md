@@ -73,6 +73,8 @@ of 819 `works` (52.1%), 322 `partial`, 70 `gallery-only`. Gaps by dimension:
 layouts 194 (124 partial, 70 gallery-only), font schemes 93, languages 93,
 charts 7, themes 4, content blocks 1; the other eight dimensions are 100%.
 
+**Status (2026-10-01, the core 0.11.4 train).** Measured on the published packages (core 0.11.4 `e414bca`, opf-render 0.11.9 `2fbc0ab`, opf-pptx 0.11.7 `a9bcbd7`, opf-editor 0.10.6 `313774a`, pptx-gallery `9e8d59a`): **758 of 819 `works` (92.6%)**, 739 of 850 perfect by parity, 111 near, 0 mismatch. 60 gallery layouts (the `itemimage` family) are `partial` because their examples set `design.listBullet: "image"` with no logo, which core 0.11.4 now reports as `unresolved-content`; a gallery change that gives those examples a logo restores 818 of 819 (verified on audit A, not yet merged and not yet re-measured). See [gallery-support.md](gallery-support.md#post-0114-re-run-on-the-published-set-2026-10-01).
+
 **Status (2026-09-30, FF-56).** Measured on the published packages (core 0.11.3, renderer 0.11.8, PPTX 0.11.6, pptx-gallery `9e8d59a`): **818 of 819 `works` (99.9%)** (812 before opf-pptx 0.11.6 made the native chartex export the default after the native PowerPoint check). Every dimension is 100% except charts (25 of 26): the one that is not `works` is the `world` map, an accepted limitation (see Decisions, vetoable). See [gallery-support.md](gallery-support.md#goal-closure-on-the-published-set-ff-58-2026-09-30).
 
 **Internal only.** This metric is tracked in this repository and never shown on

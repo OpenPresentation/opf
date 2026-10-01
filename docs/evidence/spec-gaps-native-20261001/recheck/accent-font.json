@@ -1,0 +1,128 @@
+{
+  "deck": "accent-font.pptx",
+  "slides": [
+    {
+      "index": 1,
+      "shapes": [
+        {
+          "name": "OPF heading slides.0.tag line 0",
+          "type": 1,
+          "alt": "",
+          "l": 43.4,
+          "t": 43.2,
+          "w": 873.6,
+          "h": 14.6,
+          "text": "EYEBROW IN ACCENT",
+          "font": "Georgia",
+          "bulletType": 0
+        },
+        {
+          "name": "OPF heading slides.0.title line 0",
+          "type": 1,
+          "alt": "",
+          "l": 43.2,
+          "t": 66.8,
+          "w": 873.6,
+          "h": 49.4,
+          "text": "Headings use the scheme heading",
+          "font": "Aptos Display",
+          "bulletType": 0
+        },
+        {
+          "name": "OPF text slides.0.text line 0",
+          "type": 1,
+          "alt": "",
+          "l": 43.2,
+          "t": 134.2,
+          "w": 873.6,
+          "h": 22.9,
+          "text": "Body copy stays in the body font (Aptos)",
+          "font": "Aptos",
+          "bulletType": 0
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "shapes": [
+        {
+          "name": "OPF heading slides.1.title line 0",
+          "type": 1,
+          "alt": "",
+          "l": 44.1,
+          "t": 43.2,
+          "w": 873.6,
+          "h": 49.4,
+          "text": "A quote",
+          "font": "Aptos Display",
+          "bulletType": 0
+        },
+        {
+          "name": "OPF quote 0 part 0 line 0",
+          "type": 1,
+          "alt": "",
+          "l": 56.7,
+          "t": 124.1,
+          "w": 846.6,
+          "h": 25.6,
+          "text": "\"Design is how it works.\"",
+          "font": "Georgia",
+          "bulletType": 0
+        },
+        {
+          "name": "OPF quote 0 part 1 line 0",
+          "type": 1,
+          "alt": "",
+          "l": 56.7,
+          "t": 453.3,
+          "w": 846.6,
+          "h": 15.6,
+          "text": "Someone Famous",
+          "font": "Aptos",
+          "bulletType": 0
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "shapes": [
+        {
+          "name": "OPF heading slides.2.title line 0",
+          "type": 1,
+          "alt": "",
+          "l": 43.2,
+          "t": 43.2,
+          "w": 873.6,
+          "h": 49.4,
+          "text": "No accent on later text",
+          "font": "Aptos Display",
+          "bulletType": 0
+        },
+        {
+          "name": "OPF list slides.2.items line 0",
+          "type": 1,
+          "alt": "",
+          "l": 43.2,
+          "t": 110.6,
+          "w": 873.6,
+          "h": 22.9,
+          "text": "List in body font",
+          "font": "Aptos",
+          "bulletType": 1
+        },
+        {
+          "name": "OPF list slides.2.items line 1",
+          "type": 1,
+          "alt": "",
+          "l": 43.2,
+          "t": 138.7,
+          "w": 873.6,
+          "h": 22.9,
+          "text": "Tables and charts too",
+          "font": "Aptos",
+          "bulletType": 1
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,258 @@
+{
+  "deck": "logo-cover-section.pptx",
+  "slides": [
+    {
+      "index": 1,
+      "shapes": [
+        {
+          "name": "OPF logo",
+          "type": 13,
+          "alt": "Logo",
+          "l": 43.2,
+          "t": 43.2,
+          "w": 168,
+          "h": 42
+        },
+        {
+          "name": "OPF heading slides.0.tag line 0",
+          "type": 1,
+          "alt": "",
+          "l": 43.2,
+          "t": 246.2,
+          "w": 873.6,
+          "h": 14.6,
+          "text": "LIGHT BACKGROUND",
+          "font": "Arial",
+          "bulletType": 0
+        },
+        {
+          "name": "OPF heading slides.0.title line 0",
+          "type": 1,
+          "alt": "",
+          "l": 43.2,
+          "t": 269.8,
+          "w": 873.6,
+          "h": 49.4,
+          "text": "Cover on a light slide",
+          "font": "Arial Black",
+          "bulletType": 0
+        },
+        {
+          "name": "OPF heading slides.0.subtitle line 0",
+          "type": 1,
+          "alt": "",
+          "l": 43.5,
+          "t": 328.4,
+          "w": 873.6,
+          "h": 22.9,
+          "text": "The dark ACME lockup sits top-left above",
+          "font": "Arial",
+          "bulletType": 0
+        },
+        {
+          "name": "OPF furniture 0 part 0 line 0",
+          "type": 1,
+          "alt": "",
+          "l": 642.3,
+          "t": 503.8,
+          "w": 249.6,
+          "h": 14.6,
+          "text": "1",
+          "font": "Arial",
+          "bulletType": 0
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "shapes": [
+        {
+          "name": "OPF logo",
+          "type": 13,
+          "alt": "Logo",
+          "l": 43.2,
+          "t": 43.2,
+          "w": 168,
+          "h": 42
+        },
+        {
+          "name": "OPF heading slides.1.tag line 0",
+          "type": 1,
+          "alt": "",
+          "l": 43.2,
+          "t": 246.3,
+          "w": 873.6,
+          "h": 14.6,
+          "text": "DARK BACKGROUND",
+          "font": "Arial",
+          "bulletType": 0
+        },
+        {
+          "name": "OPF heading slides.1.title line 0",
+          "type": 1,
+          "alt": "",
+          "l": 43.2,
+          "t": 269.9,
+          "w": 873.6,
+          "h": 49.4,
+          "text": "Cover on a dark slide",
+          "font": "Arial Black",
+          "bulletType": 0
+        },
+        {
+          "name": "OPF heading slides.1.subtitle line 0",
+          "type": 1,
+          "alt": "",
+          "l": 43.5,
+          "t": 328.3,
+          "w": 873.6,
+          "h": 22.9,
+          "text": "The light ACME lockup is chosen",
+          "font": "Arial",
+          "bulletType": 0
+        },
+        {
+          "name": "OPF furniture 1 part 0 line 0",
+          "type": 1,
+          "alt": "",
+          "l": 642.3,
+          "t": 503.8,
+          "w": 249.6,
+          "h": 14.6,
+          "text": "2",
+          "font": "Arial",
+          "bulletType": 0
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "shapes": [
+        {
+          "name": "OPF logo",
+          "type": 13,
+          "alt": "Logo",
+          "l": 43.2,
+          "t": 43.2,
+          "w": 168,
+          "h": 42
+        },
+        {
+          "name": "OPF heading slides.2.title line 0",
+          "type": 1,
+          "alt": "",
+          "l": 43.4,
+          "t": 274.3,
+          "w": 873.6,
+          "h": 49.4,
+          "text": "Section divider",
+          "font": "Arial Black",
+          "bulletType": 0
+        },
+        {
+          "name": "OPF furniture 2 part 0 line 0",
+          "type": 1,
+          "alt": "",
+          "l": 642.2,
+          "t": 503.8,
+          "w": 249.6,
+          "h": 14.6,
+          "text": "3",
+          "font": "Arial",
+          "bulletType": 0
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "shapes": [
+        {
+          "name": "OPF heading slides.3.title line 0",
+          "type": 1,
+          "alt": "",
+          "l": 43.2,
+          "t": 43.2,
+          "w": 873.6,
+          "h": 49.4,
+          "text": "Content slide",
+          "font": "Arial Black",
+          "bulletType": 0
+        },
+        {
+          "name": "OPF text slides.3.text line 0",
+          "type": 1,
+          "alt": "",
+          "l": 43.2,
+          "t": 110.6,
+          "w": 873.6,
+          "h": 22.9,
+          "text": "Content slides never get an automatic lo",
+          "font": "Arial",
+          "bulletType": 0
+        },
+        {
+          "name": "OPF furniture 3 part 0 line 0",
+          "type": 1,
+          "alt": "",
+          "l": 642.1,
+          "t": 503.8,
+          "w": 249.6,
+          "h": 14.6,
+          "text": "4",
+          "font": "Arial",
+          "bulletType": 0
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "shapes": [
+        {
+          "name": "OPF logo",
+          "type": 13,
+          "alt": "Logo",
+          "l": 43.2,
+          "t": 43.2,
+          "w": 168,
+          "h": 42
+        },
+        {
+          "name": "OPF heading slides.4.tag line 0",
+          "type": 1,
+          "alt": "",
+          "l": 43.4,
+          "t": 262.4,
+          "w": 873.6,
+          "h": 14.6,
+          "text": "SLIDE LOGO",
+          "font": "Arial",
+          "bulletType": 0
+        },
+        {
+          "name": "OPF heading slides.4.title line 0",
+          "type": 1,
+          "alt": "",
+          "l": 44.7,
+          "t": 286,
+          "w": 873.6,
+          "h": 49.4,
+          "text": "A slide with its own logo",
+          "font": "Arial Black",
+          "bulletType": 0
+        },
+        {
+          "name": "OPF furniture 4 part 0 line 0",
+          "type": 1,
+          "alt": "",
+          "l": 642.2,
+          "t": 503.8,
+          "w": 249.6,
+          "h": 14.6,
+          "text": "5",
+          "font": "Arial",
+          "bulletType": 0
+        }
+      ]
+    }
+  ]
+}

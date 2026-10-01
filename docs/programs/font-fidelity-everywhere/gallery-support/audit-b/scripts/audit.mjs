@@ -9,6 +9,7 @@ import {createRequire} from 'node:module';
 import {createFontHosts, FONT_HOST_MODELS} from '../../parity/scripts/font-host.mjs';
 import {classifyChosenFamilies, firstFamily, hostRenderOutcome, slotsByFamily, svgTextRuns} from '../../parity/scripts/font-availability.mjs';
 import {chartexExpectations, chartIdFromLayouts, chartexPreviewMarks, chartexDataMismatches, parseChartex} from '../../parity/scripts/chartex.mjs';
+import {restoredCharts} from '../../parity/scripts/restored-content.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const SRC = path.resolve(here, '../../../sources');
@@ -393,9 +394,10 @@ async function chartExportProbe(doc, bytes, exp, chart) {
 }
 
 function chartReimportProbe(rd, chart, exp) {
-  const blocks = (rd?.slides ?? []).flatMap(s => s.blocks ?? []).filter(b => b.type === 'chart');
-  const c = blocks[0]?.chart;
-  const out = {charts: blocks.length, type: c?.type ?? null};
+  // opf-pptx 0.11.7 restores a root chart as slides[N].chart; older imports returned a chart block (restored-content.mjs reads both).
+  const charts = (rd?.slides ?? []).flatMap(s => restoredCharts(s));
+  const c = charts[0];
+  const out = {charts: charts.length, type: c?.type ?? null};
   if (!c) return out;
   const rows = chart.data.rows, got = c.data?.rows ?? [], mismatches = [];
   if (got.length !== rows.length) mismatches.push(`${got.length} rows, expected ${rows.length}`);

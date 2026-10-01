@@ -16,6 +16,7 @@ import {drawnTableBox} from './table-box.mjs';
 import {createFontHosts} from './font-host.mjs';
 import {chartexExpectations, chartIdFromLayouts, chartexDataMismatches, chartexPreviewMarks, chooseAlternateContent, parseChartex} from './chartex.mjs';
 import {chartPartTextSizes, chartTextSizeMismatches, previewTextSizes} from './chart-text.mjs';
+import {restoredCharts} from './restored-content.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(here, '..');
@@ -509,7 +510,7 @@ async function parity(doc) {
     doc.slides.forEach((sl, i) => {
       // The data columns as audit B compares them: every column, except the point-label column of a scatter (the XY chart keeps X and Y).
       const normRows = (rows, type) => (rows ?? []).map(r => (Array.isArray(r) ? r : [r]).slice(type === 'scatter' ? 1 : 0).map(v => typeof v === 'number' ? v : (v !== '' && v !== null && Number.isFinite(Number(v)) ? Number(v) : String(v))));
-      const a = sl.chart; if (!a?.type || !a.data?.rows) return; const b = (rt.slides?.[i]?.blocks ?? []).find(x => x.type === 'chart')?.chart; const adapted = ediag.includes('chart-data-adapted');
+      const a = sl.chart; if (!a?.type || !a.data?.rows) return; const b = restoredCharts(rt.slides?.[i])[0]; const adapted = ediag.includes('chart-data-adapted');
       if (b?.type !== a.type) add('reimport', adapted ? 'near' : 'fail', `slides.${i} chart re-imports as ${b?.type ?? 'nothing'}, expected ${a.type}${adapted ? ' (chart-data-adapted reported)' : ''}`);
       else if (JSON.stringify(normRows(b.data?.rows, a.type)) !== JSON.stringify(normRows(a.data.rows, a.type))) add('reimport', adapted ? 'near' : 'fail', `slides.${i} chart data rows differ after re-import${adapted ? ' (chart-data-adapted reported)' : ''}`);
     });
