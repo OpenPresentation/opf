@@ -1,0 +1,8 @@
+{
+  "client": "Globex",
+  "headline": [{ "text": "Renewal is ", "bold": true }, "signed"],
+  "revenue": 1234567,
+  "kickoff": "2026-10-01",
+  "wins": ["Shipped v2", "Won the renewal"],
+  "site": "https://globex.example"
+}

@@ -51,6 +51,33 @@ export {
   validateCatalogRecord,
   validatePresentation,
 } from "./validator.js";
+export type { ValidateOptions } from "./validator.js";
+
+export {
+  VARIABLE_KINDS,
+  DEFAULT_VARIABLE_DATE_FORMAT,
+  OPFVariableError,
+  coerceVariableValue,
+  formatVariableNumber,
+  hasContentVariables,
+  isTemplate,
+  listVariables,
+  resolveVariables,
+  variableDeclarations,
+} from "./variables.js";
+export type {
+  ResolveVariablesOptions,
+  ResolveVariablesResult,
+  VariableDeclaration,
+  VariableDiagnostic,
+  VariableDiagnosticCode,
+  VariableDiagnosticSeverity,
+  VariableInfo,
+  VariableKind,
+  VariableUse,
+  VariableUseForm,
+  VariableValues,
+} from "./variables.js";
 
 export {
   specFileEntries,

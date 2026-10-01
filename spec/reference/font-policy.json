@@ -175,7 +175,14 @@
       "replacement": {
         "family": "Cousine",
         "compatibility": "visual",
-        "measured": null
+        "measured": {
+          "replacement": "Cousine",
+          "meanAbsWidthDelta": 0,
+          "meanWidthDelta": 0,
+          "maxAbsWidthDelta": 0,
+          "styles": 4,
+          "reference": "Aptos Mono 2.01;O365"
+        }
       },
       "alternates": [
         "Roboto Mono"
@@ -187,7 +194,7 @@
         "https://support.apple.com/en-us/122869",
         "https://microsoft.design/articles/a-change-of-typeface-microsoft-s-new-default-font-has-arrived/"
       ],
-      "note": "Reference not available to the measuring host. Cousine keeps all four styles. Part of the Aptos family; cloud font list has Aptos Mono (+Bold/Italic/Bold Italic)."
+      "note": "RR-17 (FF-42): measured against Aptos Mono 2.01 (Microsoft's standalone Aptos Fonts download, read in place). Aptos Mono is a 1229/2048 em cell, the Courier New cell, so Cousine matches every corpus string in all four styles at 0.0000% and wraps identically; the tier stays visual because the vertical metrics differ (Cousine hhea ascent 0.833 em against 0.939, x-height 0.528 em against 0.476, cap-height 0.659 against 0.657) and Cousine's outlines are not Aptos Mono's. Part of the Aptos family; cloud font list has Aptos Mono (+Bold/Italic/Bold Italic)."
     },
     {
       "family": "Aptos Narrow",
@@ -1675,11 +1682,23 @@
       "license": "OFL-1.1",
       "availability": [],
       "embeddableByOpf": true,
-      "replacement": null,
+      "replacement": {
+        "family": "Cousine",
+        "compatibility": "metric",
+        "measured": {
+          "replacement": "Cousine",
+          "meanAbsWidthDelta": 0,
+          "meanWidthDelta": 0,
+          "maxAbsWidthDelta": 0,
+          "styles": 4,
+          "reference": "Liberation Mono 2.1.5"
+        },
+        "source": "https://github.com/liberationfonts/liberation-fonts/blob/2.1.5/README.md"
+      },
       "sources": [
         "https://github.com/liberationfonts/liberation-fonts"
       ],
-      "note": "Metric-compatible with Courier New (upstream intent); not shipped by opf-render."
+      "note": "Metric-compatible with Courier New (upstream intent). RR-17: opf-render does not ship the Liberation files (Reserved Font Name Liberation; about 4.4 MB for twelve faces). It previews a Liberation Mono document with Cousine, the Croscore family Liberation 2 is built from: all 300 corpus strings in four styles measure 0.0000% mean and maximum off Liberation Mono 2.1.5, and hhea, glyph boxes and x-height and cap-height match. Evidence: docs/evidence/font-replacements-20260923/latin-qualification-20261001.json."
     },
     {
       "family": "Liberation Sans",
@@ -1687,11 +1706,23 @@
       "license": "OFL-1.1",
       "availability": [],
       "embeddableByOpf": true,
-      "replacement": null,
+      "replacement": {
+        "family": "Arimo",
+        "compatibility": "metric",
+        "measured": {
+          "replacement": "Arimo",
+          "meanAbsWidthDelta": 0,
+          "meanWidthDelta": 0,
+          "maxAbsWidthDelta": 0,
+          "styles": 4,
+          "reference": "Liberation Sans 2.1.5"
+        },
+        "source": "https://github.com/liberationfonts/liberation-fonts/blob/2.1.5/README.md"
+      },
       "sources": [
         "https://github.com/liberationfonts/liberation-fonts"
       ],
-      "note": "Metric-compatible with Arial (upstream intent); not shipped by opf-render."
+      "note": "Metric-compatible with Arial (upstream intent). RR-17: opf-render does not ship the Liberation files (Reserved Font Name Liberation; about 4.4 MB for twelve faces). It previews a Liberation Sans document with Arimo, the Croscore family Liberation 2 is built from: all 300 corpus strings in four styles measure 0.0000% mean and maximum off Liberation Sans 2.1.5, and hhea, glyph boxes and x-height and cap-height match. Evidence: docs/evidence/font-replacements-20260923/latin-qualification-20261001.json."
     },
     {
       "family": "Liberation Serif",
@@ -1699,11 +1730,23 @@
       "license": "OFL-1.1",
       "availability": [],
       "embeddableByOpf": true,
-      "replacement": null,
+      "replacement": {
+        "family": "Tinos",
+        "compatibility": "metric",
+        "measured": {
+          "replacement": "Tinos",
+          "meanAbsWidthDelta": 0,
+          "meanWidthDelta": 0,
+          "maxAbsWidthDelta": 0,
+          "styles": 4,
+          "reference": "Liberation Serif 2.1.5"
+        },
+        "source": "https://github.com/liberationfonts/liberation-fonts/blob/2.1.5/README.md"
+      },
       "sources": [
         "https://github.com/liberationfonts/liberation-fonts"
       ],
-      "note": "Metric-compatible with Times New Roman (upstream intent); not shipped by opf-render."
+      "note": "Metric-compatible with Times New Roman (upstream intent). RR-17: opf-render does not ship the Liberation files (Reserved Font Name Liberation; about 4.4 MB for twelve faces). It previews a Liberation Serif document with Tinos, the Croscore family Liberation 2 is built from: all 300 corpus strings in four styles measure 0.0000% mean and maximum off Liberation Serif 2.1.5, and hhea, glyph boxes and x-height and cap-height match. Evidence: docs/evidence/font-replacements-20260923/latin-qualification-20261001.json."
     },
     {
       "family": "Libre Caslon Text",
@@ -2181,6 +2224,19 @@
       ]
     },
     {
+      "family": "Noto Sans Arabic",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/notosansarabic/METADATA.pb",
+        "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-arabic"
+      ],
+      "note": "Shipped in the opf-render script pack (FF-19) and qualified against the script corpus (FF-44, docs/programs/font-fidelity-everywhere/script-corpora.md); it had no policy row until RR-17."
+    },
+    {
       "family": "Noto Sans Armenian",
       "licenseClass": "open",
       "license": "OFL-1.1",
@@ -2329,6 +2385,19 @@
       ]
     },
     {
+      "family": "Noto Sans Lao",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/notosanslao/METADATA.pb",
+        "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-lao"
+      ],
+      "note": "Shipped in the opf-render script pack (FF-19) and qualified against the script corpus (FF-44, docs/programs/font-fidelity-everywhere/script-corpora.md); it had no policy row until RR-17."
+    },
+    {
       "family": "Noto Sans Malayalam",
       "licenseClass": "open",
       "license": "OFL-1.1",
@@ -2352,6 +2421,19 @@
         "https://support.apple.com/en-us/122869"
       ],
       "note": "macOS Tahoe lists it only as a document-support font, so \"macos\" omitted."
+    },
+    {
+      "family": "Noto Sans Myanmar",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/notosansmyanmar/METADATA.pb",
+        "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-myanmar"
+      ],
+      "note": "Shipped in the opf-render script pack (FF-19) and qualified against the script corpus (FF-44, docs/programs/font-fidelity-everywhere/script-corpora.md); it had no policy row until RR-17."
     },
     {
       "family": "Noto Sans Oriya",
@@ -2379,6 +2461,32 @@
         "https://github.com/google/fonts/blob/main/ofl/notosanssc/METADATA.pb",
         "https://support.apple.com/en-us/122869"
       ]
+    },
+    {
+      "family": "Noto Sans Sinhala",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/notosanssinhala/METADATA.pb",
+        "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-sinhala"
+      ],
+      "note": "Shipped in the opf-render script pack (FF-19) and qualified against the script corpus (FF-44, docs/programs/font-fidelity-everywhere/script-corpora.md); it had no policy row until RR-17."
+    },
+    {
+      "family": "Noto Sans Syriac",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/notosanssyriac/METADATA.pb",
+        "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-syriac"
+      ],
+      "note": "Shipped in the opf-render script pack (FF-19) and qualified against the script corpus (FF-44, docs/programs/font-fidelity-everywhere/script-corpora.md); it had no policy row until RR-17."
     },
     {
       "family": "Noto Sans Tamil",
@@ -2417,6 +2525,19 @@
       ]
     },
     {
+      "family": "Noto Sans Thaana",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/notosansthaana/METADATA.pb",
+        "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-thaana"
+      ],
+      "note": "Shipped in the opf-render script pack (FF-19) and qualified against the script corpus (FF-44, docs/programs/font-fidelity-everywhere/script-corpora.md); it had no policy row until RR-17."
+    },
+    {
       "family": "Noto Sans Thai",
       "licenseClass": "open",
       "license": "OFL-1.1",
@@ -2439,6 +2560,19 @@
         "https://github.com/google/fonts/blob/main/ofl/notoserifhebrew/METADATA.pb",
         "https://www.npmjs.com/package/@expo-google-fonts/noto-serif-hebrew"
       ]
+    },
+    {
+      "family": "Noto Serif Tibetan",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/notoseriftibetan/METADATA.pb",
+        "https://www.npmjs.com/package/@expo-google-fonts/noto-serif-tibetan"
+      ],
+      "note": "Shipped in the opf-render script pack (FF-19) and qualified against the script corpus (FF-44, docs/programs/font-fidelity-everywhere/script-corpora.md); it had no policy row until RR-17."
     },
     {
       "family": "Nyala",
@@ -3089,13 +3223,20 @@
       "replacement": {
         "family": "Source Sans 3",
         "compatibility": "visual",
-        "measured": null
+        "measured": {
+          "replacement": "Source Sans 3",
+          "meanAbsWidthDelta": 0.0003,
+          "meanWidthDelta": -0.0003,
+          "maxAbsWidthDelta": 0.0041,
+          "styles": 4,
+          "reference": "Source Sans Pro 2.045"
+        }
       },
       "sources": [
         "https://github.com/google/fonts/blob/main/ofl/sourcesans3/METADATA.pb",
         "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb"
       ],
-      "note": "Predecessor name of Source Sans 3; the renamed family previews it."
+      "note": "Predecessor name of Source Sans 3; the renamed family previews it. RR-17: measured against the upstream Source Sans Pro 2.045 (roman) and 1.095 (italic) release (adobe-fonts/source-sans, OFL-1.1, read for measurement only): regular and bold are within 0.15% of Source Sans 3 on every corpus string, the italics up to 0.41%, so the alias stays visual."
     },
     {
       "family": "Sylfaen",
@@ -3197,7 +3338,14 @@
       "replacement": {
         "family": "Figtree",
         "compatibility": "visual",
-        "measured": null
+        "measured": {
+          "replacement": "Figtree",
+          "meanAbsWidthDelta": 0.042,
+          "meanWidthDelta": 0.042,
+          "maxAbsWidthDelta": 0.0836,
+          "styles": 1,
+          "reference": "Tenorite 1.04;O365"
+        }
       },
       "alternates": [
         "Roboto"
@@ -3208,7 +3356,7 @@
         "https://support.apple.com/en-us/122869",
         "https://microsoft.design/articles/a-change-of-typeface-microsoft-s-new-default-font-has-arrived/"
       ],
-      "note": "Reference not available to the measuring host. One of the five fonts Microsoft commissioned in 2021; no MS Learn font-list page found."
+      "note": "RR-17: measured against the Microsoft 365 cloud font Tenorite 1.04;O365 (regular only: the host has cached no other style). One of the five fonts Microsoft commissioned in 2021; no MS Learn font-list page found."
     },
     {
       "family": "Tenorite Display",
@@ -3221,7 +3369,14 @@
       "replacement": {
         "family": "Figtree",
         "compatibility": "visual",
-        "measured": null
+        "measured": {
+          "replacement": "Figtree",
+          "meanAbsWidthDelta": 0.1476,
+          "meanWidthDelta": 0.1476,
+          "maxAbsWidthDelta": 0.1975,
+          "styles": 2,
+          "reference": "Tenorite Display 1.04;O365"
+        }
       },
       "alternates": [
         "Roboto"
@@ -3232,7 +3387,7 @@
         "https://support.apple.com/en-us/122869",
         "https://microsoft.design/articles/a-change-of-typeface-microsoft-s-new-default-font-has-arrived/"
       ],
-      "note": "Reference not available to the measuring host. Cloud list has Tenorite Display Regular/Italic/Bold/Bold Italic."
+      "note": "RR-17: measured against the Microsoft 365 cloud font Tenorite Display 1.04;O365 (regular and bold). Cloud list has Tenorite Display Regular/Italic/Bold/Bold Italic."
     },
     {
       "family": "Times New Roman",

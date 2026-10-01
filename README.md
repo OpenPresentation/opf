@@ -141,6 +141,8 @@ node packages/cli/dist/index.js edit deck.opf.json --patch changes.json --in-pla
 
 See [CSV and JSON data import](./docs/data-import.md) for editable tables and charts in the editor, CLI, and package API.
 
+See [Templates and variables](./docs/templates-and-variables.md) for fillable OPF templates: typed variables, `{{id}}` tokens, `opf fill` and `resolveVariables`.
+
 ## Layout
 
 | Path | Contents |
