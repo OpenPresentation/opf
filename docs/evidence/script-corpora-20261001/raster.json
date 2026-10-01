@@ -1,0 +1,1363 @@
+{
+  "rows": [
+    {
+      "family": "Noto Sans JP",
+      "script": "Jpan",
+      "id": "jpan-sentence",
+      "referenceWidth": 1343,
+      "resvgWidth": 1343,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans JP",
+      "script": "Jpan",
+      "id": "jpan-prolonged",
+      "referenceWidth": 1096,
+      "resvgWidth": 1096,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans JP",
+      "script": "Jpan",
+      "id": "jpan-halfwidth",
+      "referenceWidth": 415,
+      "resvgWidth": 415,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans JP",
+      "script": "Jpan",
+      "id": "jpan-punctuation",
+      "referenceWidth": 1026,
+      "resvgWidth": 1026,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans JP",
+      "script": "Jpan",
+      "id": "jpan-combining-dakuten",
+      "referenceWidth": 421,
+      "resvgWidth": 421,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans JP",
+      "script": "Jpan",
+      "id": "jpan-mixed-latin",
+      "referenceWidth": 794,
+      "resvgWidth": 794,
+      "ratio": 1,
+      "meanDiff": 2
+    },
+    {
+      "family": "Noto Sans JP",
+      "script": "Jpan",
+      "id": "jpan-no-spaces",
+      "referenceWidth": 2030,
+      "resvgWidth": 2030,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans SC",
+      "script": "Hans",
+      "id": "hans-sentence",
+      "referenceWidth": 1039,
+      "resvgWidth": 1039,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans SC",
+      "script": "Hans",
+      "id": "hans-punctuation",
+      "referenceWidth": 1093,
+      "resvgWidth": 1093,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans SC",
+      "script": "Hans",
+      "id": "hans-mixed-latin",
+      "referenceWidth": 594,
+      "resvgWidth": 594,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans SC",
+      "script": "Hans",
+      "id": "hans-no-spaces",
+      "referenceWidth": 1456,
+      "resvgWidth": 1456,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans TC",
+      "script": "Hant",
+      "id": "hant-sentence",
+      "referenceWidth": 938,
+      "resvgWidth": 938,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans TC",
+      "script": "Hant",
+      "id": "hant-punctuation",
+      "referenceWidth": 1396,
+      "resvgWidth": 1396,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans TC",
+      "script": "Hant",
+      "id": "hant-bopomofo",
+      "referenceWidth": 887,
+      "resvgWidth": 887,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans TC",
+      "script": "Hant",
+      "id": "hant-mixed-latin",
+      "referenceWidth": 594,
+      "resvgWidth": 594,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans KR",
+      "script": "Kore",
+      "id": "kore-sentence",
+      "referenceWidth": 1353,
+      "resvgWidth": 1333,
+      "ratio": 0.9852,
+      "meanDiff": 65.55
+    },
+    {
+      "family": "Noto Sans KR",
+      "script": "Kore",
+      "id": "kore-jamo",
+      "referenceWidth": 232,
+      "resvgWidth": 229,
+      "ratio": 0.9871,
+      "meanDiff": 19.55
+    },
+    {
+      "family": "Noto Sans KR",
+      "script": "Kore",
+      "id": "kore-hanja",
+      "referenceWidth": 768,
+      "resvgWidth": 761,
+      "ratio": 0.9909,
+      "meanDiff": 81.69
+    },
+    {
+      "family": "Noto Sans KR",
+      "script": "Kore",
+      "id": "kore-mixed-latin",
+      "referenceWidth": 631,
+      "resvgWidth": 621,
+      "ratio": 0.9842,
+      "meanDiff": 69.44
+    },
+    {
+      "family": "Noto Sans Arabic",
+      "script": "Arab",
+      "id": "arab-joining",
+      "referenceWidth": 637,
+      "resvgWidth": 637,
+      "ratio": 1,
+      "meanDiff": 6
+    },
+    {
+      "family": "Noto Sans Arabic",
+      "script": "Arab",
+      "id": "arab-lam-alef",
+      "referenceWidth": 666,
+      "resvgWidth": 665,
+      "ratio": 0.9985,
+      "meanDiff": 10.22
+    },
+    {
+      "family": "Noto Sans Arabic",
+      "script": "Arab",
+      "id": "arab-harakat",
+      "referenceWidth": 482,
+      "resvgWidth": 481,
+      "ratio": 0.9979,
+      "meanDiff": 1.66
+    },
+    {
+      "family": "Noto Sans Arabic",
+      "script": "Arab",
+      "id": "arab-fa-letters",
+      "referenceWidth": 811,
+      "resvgWidth": 810,
+      "ratio": 0.9988,
+      "meanDiff": 1.87
+    },
+    {
+      "family": "Noto Sans Arabic",
+      "script": "Arab",
+      "id": "arab-ur-letters",
+      "referenceWidth": 720,
+      "resvgWidth": 721,
+      "ratio": 1.0014,
+      "meanDiff": 4.49
+    },
+    {
+      "family": "Noto Sans Arabic",
+      "script": "Arab",
+      "id": "arab-ur-title",
+      "referenceWidth": 543,
+      "resvgWidth": 543,
+      "ratio": 1,
+      "meanDiff": 0.93
+    },
+    {
+      "family": "Noto Sans Arabic",
+      "script": "Arab",
+      "id": "arab-ps-letters",
+      "referenceWidth": 647,
+      "resvgWidth": 647,
+      "ratio": 1,
+      "meanDiff": 4.81
+    },
+    {
+      "family": "Noto Sans Arabic",
+      "script": "Arab",
+      "id": "arab-pa-shahmukhi",
+      "referenceWidth": 667,
+      "resvgWidth": 667,
+      "ratio": 1,
+      "meanDiff": 0.92
+    },
+    {
+      "family": "Noto Naskh Arabic",
+      "script": "Arab",
+      "id": "arab-joining",
+      "referenceWidth": 568,
+      "resvgWidth": 569,
+      "ratio": 1.0018,
+      "meanDiff": 5.96
+    },
+    {
+      "family": "Noto Naskh Arabic",
+      "script": "Arab",
+      "id": "arab-lam-alef",
+      "referenceWidth": 602,
+      "resvgWidth": 603,
+      "ratio": 1.0017,
+      "meanDiff": 5.15
+    },
+    {
+      "family": "Noto Naskh Arabic",
+      "script": "Arab",
+      "id": "arab-harakat",
+      "referenceWidth": 440,
+      "resvgWidth": 440,
+      "ratio": 1,
+      "meanDiff": 2.27
+    },
+    {
+      "family": "Noto Naskh Arabic",
+      "script": "Arab",
+      "id": "arab-fa-letters",
+      "referenceWidth": 756,
+      "resvgWidth": 757,
+      "ratio": 1.0013,
+      "meanDiff": 4.48
+    },
+    {
+      "family": "Noto Naskh Arabic",
+      "script": "Arab",
+      "id": "arab-ur-letters",
+      "referenceWidth": 656,
+      "resvgWidth": 656,
+      "ratio": 1,
+      "meanDiff": 3.43
+    },
+    {
+      "family": "Noto Naskh Arabic",
+      "script": "Arab",
+      "id": "arab-ur-title",
+      "referenceWidth": 521,
+      "resvgWidth": 522,
+      "ratio": 1.0019,
+      "meanDiff": 8.09
+    },
+    {
+      "family": "Noto Naskh Arabic",
+      "script": "Arab",
+      "id": "arab-ps-letters",
+      "referenceWidth": 602,
+      "resvgWidth": 602,
+      "ratio": 1,
+      "meanDiff": 1.95
+    },
+    {
+      "family": "Noto Naskh Arabic",
+      "script": "Arab",
+      "id": "arab-pa-shahmukhi",
+      "referenceWidth": 632,
+      "resvgWidth": 632,
+      "ratio": 1,
+      "meanDiff": 6.62
+    },
+    {
+      "family": "Noto Nastaliq Urdu",
+      "script": "Arab",
+      "id": "arab-joining",
+      "referenceWidth": 492,
+      "resvgWidth": 492,
+      "ratio": 1,
+      "meanDiff": 1.6
+    },
+    {
+      "family": "Noto Nastaliq Urdu",
+      "script": "Arab",
+      "id": "arab-lam-alef",
+      "referenceWidth": 523,
+      "resvgWidth": 523,
+      "ratio": 1,
+      "meanDiff": 0.45
+    },
+    {
+      "family": "Noto Nastaliq Urdu",
+      "script": "Arab",
+      "id": "arab-harakat",
+      "referenceWidth": 390,
+      "resvgWidth": 390,
+      "ratio": 1,
+      "meanDiff": 1.51
+    },
+    {
+      "family": "Noto Nastaliq Urdu",
+      "script": "Arab",
+      "id": "arab-fa-letters",
+      "referenceWidth": 692,
+      "resvgWidth": 693,
+      "ratio": 1.0014,
+      "meanDiff": 3.37
+    },
+    {
+      "family": "Noto Nastaliq Urdu",
+      "script": "Arab",
+      "id": "arab-ur-letters",
+      "referenceWidth": 615,
+      "resvgWidth": 615,
+      "ratio": 1,
+      "meanDiff": 0.67
+    },
+    {
+      "family": "Noto Nastaliq Urdu",
+      "script": "Arab",
+      "id": "arab-ur-title",
+      "referenceWidth": 452,
+      "resvgWidth": 451,
+      "ratio": 0.9978,
+      "meanDiff": 6.22
+    },
+    {
+      "family": "Noto Nastaliq Urdu",
+      "script": "Arab",
+      "id": "arab-ps-letters",
+      "referenceWidth": 503,
+      "resvgWidth": 495,
+      "ratio": 0.9841,
+      "meanDiff": 2.09
+    },
+    {
+      "family": "Noto Nastaliq Urdu",
+      "script": "Arab",
+      "id": "arab-pa-shahmukhi",
+      "referenceWidth": 569,
+      "resvgWidth": 568,
+      "ratio": 0.9982,
+      "meanDiff": 6.58
+    },
+    {
+      "family": "Noto Sans Hebrew",
+      "script": "Hebr",
+      "id": "hebr-words",
+      "referenceWidth": 691,
+      "resvgWidth": 691,
+      "ratio": 1,
+      "meanDiff": 2.32
+    },
+    {
+      "family": "Noto Sans Hebrew",
+      "script": "Hebr",
+      "id": "hebr-final-forms",
+      "referenceWidth": 651,
+      "resvgWidth": 651,
+      "ratio": 1,
+      "meanDiff": 5.88
+    },
+    {
+      "family": "Noto Sans Hebrew",
+      "script": "Hebr",
+      "id": "hebr-niqqud",
+      "referenceWidth": 489,
+      "resvgWidth": 492,
+      "ratio": 1.0061,
+      "meanDiff": 32.03
+    },
+    {
+      "family": "Noto Serif Hebrew",
+      "script": "Hebr",
+      "id": "hebr-words",
+      "referenceWidth": 669,
+      "resvgWidth": 669,
+      "ratio": 1,
+      "meanDiff": 1.83
+    },
+    {
+      "family": "Noto Serif Hebrew",
+      "script": "Hebr",
+      "id": "hebr-final-forms",
+      "referenceWidth": 615,
+      "resvgWidth": 616,
+      "ratio": 1.0016,
+      "meanDiff": 6.6
+    },
+    {
+      "family": "Noto Serif Hebrew",
+      "script": "Hebr",
+      "id": "hebr-niqqud",
+      "referenceWidth": 464,
+      "resvgWidth": 465,
+      "ratio": 1.0022,
+      "meanDiff": 8.71
+    },
+    {
+      "family": "Noto Sans Devanagari",
+      "script": "Deva",
+      "id": "deva-title",
+      "referenceWidth": 620,
+      "resvgWidth": 496,
+      "ratio": 0.8,
+      "meanDiff": 64.92
+    },
+    {
+      "family": "Noto Sans Devanagari",
+      "script": "Deva",
+      "id": "deva-conjuncts",
+      "referenceWidth": 770,
+      "resvgWidth": 676,
+      "ratio": 0.8779,
+      "meanDiff": 55.41
+    },
+    {
+      "family": "Noto Sans Devanagari",
+      "script": "Deva",
+      "id": "deva-reph",
+      "referenceWidth": 491,
+      "resvgWidth": 476,
+      "ratio": 0.9695,
+      "meanDiff": 53.06
+    },
+    {
+      "family": "Noto Sans Devanagari",
+      "script": "Deva",
+      "id": "deva-matras",
+      "referenceWidth": 738,
+      "resvgWidth": 664,
+      "ratio": 0.8997,
+      "meanDiff": 50.2
+    },
+    {
+      "family": "Noto Sans Devanagari",
+      "script": "Deva",
+      "id": "deva-nukta",
+      "referenceWidth": 627,
+      "resvgWidth": 549,
+      "ratio": 0.8756,
+      "meanDiff": 47.6
+    },
+    {
+      "family": "Noto Sans Devanagari",
+      "script": "Deva",
+      "id": "deva-mr",
+      "referenceWidth": 491,
+      "resvgWidth": 414,
+      "ratio": 0.8432,
+      "meanDiff": 60.63
+    },
+    {
+      "family": "Noto Sans Devanagari",
+      "script": "Deva",
+      "id": "deva-ne",
+      "referenceWidth": 632,
+      "resvgWidth": 524,
+      "ratio": 0.8291,
+      "meanDiff": 63.85
+    },
+    {
+      "family": "Noto Sans Devanagari",
+      "script": "Deva",
+      "id": "deva-digits",
+      "referenceWidth": 461,
+      "resvgWidth": 482,
+      "ratio": 1.0456,
+      "meanDiff": 13.88
+    },
+    {
+      "family": "Noto Sans Devanagari",
+      "script": "Deva",
+      "id": "deva-mixed-latin",
+      "referenceWidth": 594,
+      "resvgWidth": 563,
+      "ratio": 0.9478,
+      "meanDiff": 59.18
+    },
+    {
+      "family": "Noto Sans Bengali",
+      "script": "Beng",
+      "id": "beng-title",
+      "referenceWidth": 814,
+      "resvgWidth": 617,
+      "ratio": 0.758,
+      "meanDiff": 63.32
+    },
+    {
+      "family": "Noto Sans Bengali",
+      "script": "Beng",
+      "id": "beng-conjuncts",
+      "referenceWidth": 544,
+      "resvgWidth": 512,
+      "ratio": 0.9412,
+      "meanDiff": 39.64
+    },
+    {
+      "family": "Noto Sans Bengali",
+      "script": "Beng",
+      "id": "beng-reph",
+      "referenceWidth": 371,
+      "resvgWidth": 371,
+      "ratio": 1,
+      "meanDiff": 0.01
+    },
+    {
+      "family": "Noto Sans Bengali",
+      "script": "Beng",
+      "id": "beng-vowels",
+      "referenceWidth": 713,
+      "resvgWidth": 600,
+      "ratio": 0.8415,
+      "meanDiff": 57.83
+    },
+    {
+      "family": "Noto Sans Bengali",
+      "script": "Beng",
+      "id": "beng-khanda-ta",
+      "referenceWidth": 400,
+      "resvgWidth": 371,
+      "ratio": 0.9275,
+      "meanDiff": 10.11
+    },
+    {
+      "family": "Noto Sans Bengali",
+      "script": "Beng",
+      "id": "beng-ctg",
+      "referenceWidth": 662,
+      "resvgWidth": 519,
+      "ratio": 0.784,
+      "meanDiff": 55.71
+    },
+    {
+      "family": "Noto Sans Gurmukhi",
+      "script": "Guru",
+      "id": "guru-title",
+      "referenceWidth": 736,
+      "resvgWidth": 586,
+      "ratio": 0.7962,
+      "meanDiff": 66.75
+    },
+    {
+      "family": "Noto Sans Gurmukhi",
+      "script": "Guru",
+      "id": "guru-marks",
+      "referenceWidth": 644,
+      "resvgWidth": 630,
+      "ratio": 0.9783,
+      "meanDiff": 13.54
+    },
+    {
+      "family": "Noto Sans Gurmukhi",
+      "script": "Guru",
+      "id": "guru-subjoined",
+      "referenceWidth": 334,
+      "resvgWidth": 303,
+      "ratio": 0.9072,
+      "meanDiff": 31.53
+    },
+    {
+      "family": "Noto Sans Gujarati",
+      "script": "Gujr",
+      "id": "gujr-title",
+      "referenceWidth": 739,
+      "resvgWidth": 596,
+      "ratio": 0.8065,
+      "meanDiff": 49.92
+    },
+    {
+      "family": "Noto Sans Gujarati",
+      "script": "Gujr",
+      "id": "gujr-conjuncts",
+      "referenceWidth": 528,
+      "resvgWidth": 448,
+      "ratio": 0.8485,
+      "meanDiff": 54.21
+    },
+    {
+      "family": "Noto Sans Gujarati",
+      "script": "Gujr",
+      "id": "gujr-marks",
+      "referenceWidth": 566,
+      "resvgWidth": 488,
+      "ratio": 0.8622,
+      "meanDiff": 60.71
+    },
+    {
+      "family": "Noto Sans Oriya",
+      "script": "Orya",
+      "id": "orya-title",
+      "referenceWidth": 760,
+      "resvgWidth": 640,
+      "ratio": 0.8421,
+      "meanDiff": 50.07
+    },
+    {
+      "family": "Noto Sans Oriya",
+      "script": "Orya",
+      "id": "orya-conjuncts",
+      "referenceWidth": 421,
+      "resvgWidth": 402,
+      "ratio": 0.9549,
+      "meanDiff": 49.13
+    },
+    {
+      "family": "Noto Sans Oriya",
+      "script": "Orya",
+      "id": "orya-nukta",
+      "referenceWidth": 825,
+      "resvgWidth": 698,
+      "ratio": 0.8461,
+      "meanDiff": 45.18
+    },
+    {
+      "family": "Noto Sans Tamil",
+      "script": "Taml",
+      "id": "taml-title",
+      "referenceWidth": 1265,
+      "resvgWidth": 1000,
+      "ratio": 0.7905,
+      "meanDiff": 56.09
+    },
+    {
+      "family": "Noto Sans Tamil",
+      "script": "Taml",
+      "id": "taml-split-vowels",
+      "referenceWidth": 829,
+      "resvgWidth": 463,
+      "ratio": 0.5585,
+      "meanDiff": 72.4
+    },
+    {
+      "family": "Noto Sans Tamil",
+      "script": "Taml",
+      "id": "taml-ligatures",
+      "referenceWidth": 590,
+      "resvgWidth": 590,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans Tamil",
+      "script": "Taml",
+      "id": "taml-pulli",
+      "referenceWidth": 1026,
+      "resvgWidth": 972,
+      "ratio": 0.9474,
+      "meanDiff": 14.03
+    },
+    {
+      "family": "Noto Sans Tamil",
+      "script": "Taml",
+      "id": "taml-ukaram",
+      "referenceWidth": 623,
+      "resvgWidth": 623,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans Telugu",
+      "script": "Telu",
+      "id": "telu-title",
+      "referenceWidth": 748,
+      "resvgWidth": 681,
+      "ratio": 0.9104,
+      "meanDiff": 55.5
+    },
+    {
+      "family": "Noto Sans Telugu",
+      "script": "Telu",
+      "id": "telu-conjuncts",
+      "referenceWidth": 311,
+      "resvgWidth": 311,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans Telugu",
+      "script": "Telu",
+      "id": "telu-vowels",
+      "referenceWidth": 573,
+      "resvgWidth": 521,
+      "ratio": 0.9092,
+      "meanDiff": 40.33
+    },
+    {
+      "family": "Noto Sans Telugu",
+      "script": "Telu",
+      "id": "telu-zwnj",
+      "referenceWidth": 787,
+      "resvgWidth": 726,
+      "ratio": 0.9225,
+      "meanDiff": 39.81
+    },
+    {
+      "family": "Noto Sans Kannada",
+      "script": "Knda",
+      "id": "knda-title",
+      "referenceWidth": 863,
+      "resvgWidth": 770,
+      "ratio": 0.8922,
+      "meanDiff": 56.51
+    },
+    {
+      "family": "Noto Sans Kannada",
+      "script": "Knda",
+      "id": "knda-conjuncts",
+      "referenceWidth": 384,
+      "resvgWidth": 334,
+      "ratio": 0.8698,
+      "meanDiff": 39.72
+    },
+    {
+      "family": "Noto Sans Kannada",
+      "script": "Knda",
+      "id": "knda-vowels",
+      "referenceWidth": 763,
+      "resvgWidth": 553,
+      "ratio": 0.7248,
+      "meanDiff": 53.33
+    },
+    {
+      "family": "Noto Sans Malayalam",
+      "script": "Mlym",
+      "id": "mlym-title",
+      "referenceWidth": 1285,
+      "resvgWidth": 1026,
+      "ratio": 0.7984,
+      "meanDiff": 54.19
+    },
+    {
+      "family": "Noto Sans Malayalam",
+      "script": "Mlym",
+      "id": "mlym-chillu",
+      "referenceWidth": 737,
+      "resvgWidth": 707,
+      "ratio": 0.9593,
+      "meanDiff": 19.41
+    },
+    {
+      "family": "Noto Sans Malayalam",
+      "script": "Mlym",
+      "id": "mlym-conjuncts",
+      "referenceWidth": 772,
+      "resvgWidth": 772,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans Malayalam",
+      "script": "Mlym",
+      "id": "mlym-vowels",
+      "referenceWidth": 1110,
+      "resvgWidth": 745,
+      "ratio": 0.6712,
+      "meanDiff": 67.7
+    },
+    {
+      "family": "Noto Sans Sinhala",
+      "script": "Sinh",
+      "id": "sinh-title",
+      "referenceWidth": 1225,
+      "resvgWidth": 1018,
+      "ratio": 0.831,
+      "meanDiff": 61.34
+    },
+    {
+      "family": "Noto Sans Sinhala",
+      "script": "Sinh",
+      "id": "sinh-conjuncts",
+      "referenceWidth": 445,
+      "resvgWidth": 411,
+      "ratio": 0.9236,
+      "meanDiff": 18.21
+    },
+    {
+      "family": "Noto Sans Sinhala",
+      "script": "Sinh",
+      "id": "sinh-vowels",
+      "referenceWidth": 1038,
+      "resvgWidth": 846,
+      "ratio": 0.815,
+      "meanDiff": 31.29
+    },
+    {
+      "family": "Noto Sans Thai",
+      "script": "Thai",
+      "id": "thai-title",
+      "referenceWidth": 674,
+      "resvgWidth": 650,
+      "ratio": 0.9644,
+      "meanDiff": 17.67
+    },
+    {
+      "family": "Noto Sans Thai",
+      "script": "Thai",
+      "id": "thai-tone-marks",
+      "referenceWidth": 514,
+      "resvgWidth": 490,
+      "ratio": 0.9533,
+      "meanDiff": 22.06
+    },
+    {
+      "family": "Noto Sans Thai",
+      "script": "Thai",
+      "id": "thai-sara-am",
+      "referenceWidth": 486,
+      "resvgWidth": 413,
+      "ratio": 0.8498,
+      "meanDiff": 62.23
+    },
+    {
+      "family": "Noto Sans Thai",
+      "script": "Thai",
+      "id": "thai-pali",
+      "referenceWidth": 460,
+      "resvgWidth": 460,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans Thai",
+      "script": "Thai",
+      "id": "thai-no-spaces",
+      "referenceWidth": 1345,
+      "resvgWidth": 1345,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans Thai",
+      "script": "Thai",
+      "id": "thai-digits",
+      "referenceWidth": 591,
+      "resvgWidth": 591,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans Thai",
+      "script": "Thai",
+      "id": "thai-mixed-latin",
+      "referenceWidth": 674,
+      "resvgWidth": 674,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans Lao",
+      "script": "Laoo",
+      "id": "laoo-words",
+      "referenceWidth": 854,
+      "resvgWidth": 854,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans Lao",
+      "script": "Laoo",
+      "id": "laoo-marks",
+      "referenceWidth": 484,
+      "resvgWidth": 464,
+      "ratio": 0.9587,
+      "meanDiff": 46.21
+    },
+    {
+      "family": "Noto Sans Khmer",
+      "script": "Khmr",
+      "id": "khmr-title",
+      "referenceWidth": 566,
+      "resvgWidth": 531,
+      "ratio": 0.9382,
+      "meanDiff": 37.66
+    },
+    {
+      "family": "Noto Sans Khmer",
+      "script": "Khmr",
+      "id": "khmr-coeng",
+      "referenceWidth": 541,
+      "resvgWidth": 472,
+      "ratio": 0.8725,
+      "meanDiff": 52.94
+    },
+    {
+      "family": "Noto Sans Khmer",
+      "script": "Khmr",
+      "id": "khmr-words",
+      "referenceWidth": 504,
+      "resvgWidth": 486,
+      "ratio": 0.9643,
+      "meanDiff": 3.01
+    },
+    {
+      "family": "Noto Sans Khmer",
+      "script": "Khmr",
+      "id": "khmr-digits",
+      "referenceWidth": 581,
+      "resvgWidth": 581,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans Myanmar",
+      "script": "Mymr",
+      "id": "mymr-words",
+      "referenceWidth": 1102,
+      "resvgWidth": 853,
+      "ratio": 0.774,
+      "meanDiff": 42.88
+    },
+    {
+      "family": "Noto Sans Myanmar",
+      "script": "Mymr",
+      "id": "mymr-medials",
+      "referenceWidth": 812,
+      "resvgWidth": 654,
+      "ratio": 0.8054,
+      "meanDiff": 61.64
+    },
+    {
+      "family": "Noto Sans Myanmar",
+      "script": "Mymr",
+      "id": "mymr-digits",
+      "referenceWidth": 569,
+      "resvgWidth": 569,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans Ethiopic",
+      "script": "Ethi",
+      "id": "ethi-title",
+      "referenceWidth": 629,
+      "resvgWidth": 629,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans Ethiopic",
+      "script": "Ethi",
+      "id": "ethi-words",
+      "referenceWidth": 472,
+      "resvgWidth": 472,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans Ethiopic",
+      "script": "Ethi",
+      "id": "ethi-punctuation",
+      "referenceWidth": 746,
+      "resvgWidth": 746,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans Armenian",
+      "script": "Armn",
+      "id": "armn-title",
+      "referenceWidth": 972,
+      "resvgWidth": 972,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans Armenian",
+      "script": "Armn",
+      "id": "armn-ligature",
+      "referenceWidth": 279,
+      "resvgWidth": 279,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans Armenian",
+      "script": "Armn",
+      "id": "armn-punctuation",
+      "referenceWidth": 1058,
+      "resvgWidth": 1058,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans Georgian",
+      "script": "Geor",
+      "id": "geor-title",
+      "referenceWidth": 1090,
+      "resvgWidth": 1090,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans Georgian",
+      "script": "Geor",
+      "id": "geor-mtavruli",
+      "referenceWidth": 820,
+      "resvgWidth": 820,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans Mongolian",
+      "script": "Mong",
+      "id": "mong-words",
+      "referenceWidth": 453,
+      "resvgWidth": 453,
+      "ratio": 1,
+      "meanDiff": 0.04
+    },
+    {
+      "family": "Noto Sans Mongolian",
+      "script": "Mong",
+      "id": "mong-names",
+      "referenceWidth": 718,
+      "resvgWidth": 718,
+      "ratio": 1,
+      "meanDiff": 0.04
+    },
+    {
+      "family": "Noto Sans Mongolian",
+      "script": "Mong",
+      "id": "mong-latin",
+      "referenceWidth": 740,
+      "resvgWidth": 740,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans Thaana",
+      "script": "Thaa",
+      "id": "thaa-words",
+      "referenceWidth": 343,
+      "resvgWidth": 343,
+      "ratio": 1,
+      "meanDiff": 1.99
+    },
+    {
+      "family": "Noto Sans Syriac",
+      "script": "Syrc",
+      "id": "syrc-words",
+      "referenceWidth": 533,
+      "resvgWidth": 533,
+      "ratio": 1,
+      "meanDiff": 3.74
+    },
+    {
+      "family": "Noto Sans Syriac",
+      "script": "Syrc",
+      "id": "syrc-marks",
+      "referenceWidth": 427,
+      "resvgWidth": 426,
+      "ratio": 0.9977,
+      "meanDiff": 1.46
+    },
+    {
+      "family": "Noto Serif Tibetan",
+      "script": "Tibt",
+      "id": "tibt-words",
+      "referenceWidth": 592,
+      "resvgWidth": 592,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Serif Tibetan",
+      "script": "Tibt",
+      "id": "tibt-stacks",
+      "referenceWidth": 516,
+      "resvgWidth": 516,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans",
+      "script": "Cyrl",
+      "id": "cyrl-ru",
+      "referenceWidth": 1103,
+      "resvgWidth": 1103,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans",
+      "script": "Cyrl",
+      "id": "cyrl-uk",
+      "referenceWidth": 666,
+      "resvgWidth": 666,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans",
+      "script": "Cyrl",
+      "id": "cyrl-sr",
+      "referenceWidth": 703,
+      "resvgWidth": 703,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans",
+      "script": "Cyrl",
+      "id": "cyrl-mk",
+      "referenceWidth": 653,
+      "resvgWidth": 653,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans",
+      "script": "Cyrl",
+      "id": "cyrl-kk",
+      "referenceWidth": 748,
+      "resvgWidth": 748,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans",
+      "script": "Cyrl",
+      "id": "cyrl-tg",
+      "referenceWidth": 753,
+      "resvgWidth": 753,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans",
+      "script": "Cyrl",
+      "id": "cyrl-mn",
+      "referenceWidth": 924,
+      "resvgWidth": 924,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans",
+      "script": "Cyrl",
+      "id": "cyrl-bg",
+      "referenceWidth": 806,
+      "resvgWidth": 806,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans",
+      "script": "Cyrl",
+      "id": "cyrl-stress",
+      "referenceWidth": 449,
+      "resvgWidth": 449,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans",
+      "script": "Grek",
+      "id": "grek-title",
+      "referenceWidth": 985,
+      "resvgWidth": 985,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans",
+      "script": "Grek",
+      "id": "grek-tonos",
+      "referenceWidth": 503,
+      "resvgWidth": 503,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans",
+      "script": "Grek",
+      "id": "grek-sigma",
+      "referenceWidth": 996,
+      "resvgWidth": 996,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans",
+      "script": "Grek",
+      "id": "grek-polytonic",
+      "referenceWidth": 816,
+      "resvgWidth": 816,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans",
+      "script": "Latn",
+      "id": "latn-vi",
+      "referenceWidth": 1244,
+      "resvgWidth": 1244,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans",
+      "script": "Latn",
+      "id": "latn-yo",
+      "referenceWidth": 613,
+      "resvgWidth": 613,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans",
+      "script": "Latn",
+      "id": "latn-ig",
+      "referenceWidth": 564,
+      "resvgWidth": 564,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans",
+      "script": "Latn",
+      "id": "latn-ha-ff",
+      "referenceWidth": 899,
+      "resvgWidth": 899,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans",
+      "script": "Latn",
+      "id": "latn-tr-az",
+      "referenceWidth": 1074,
+      "resvgWidth": 1074,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans",
+      "script": "Latn",
+      "id": "latn-central-europe",
+      "referenceWidth": 1714,
+      "resvgWidth": 1714,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans",
+      "script": "Latn",
+      "id": "latn-ro-sq",
+      "referenceWidth": 946,
+      "resvgWidth": 946,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans",
+      "script": "Latn",
+      "id": "latn-baltic",
+      "referenceWidth": 1404,
+      "resvgWidth": 1404,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans",
+      "script": "Latn",
+      "id": "latn-mi",
+      "referenceWidth": 755,
+      "resvgWidth": 755,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans",
+      "script": "Latn",
+      "id": "latn-uz-ber",
+      "referenceWidth": 940,
+      "resvgWidth": 940,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans",
+      "script": "Latn",
+      "id": "latn-kmr-so",
+      "referenceWidth": 1787,
+      "resvgWidth": 1787,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans",
+      "script": "Latn",
+      "id": "latn-western",
+      "referenceWidth": 2262,
+      "resvgWidth": 2262,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans",
+      "script": "Latn",
+      "id": "latn-ligatures",
+      "referenceWidth": 897,
+      "resvgWidth": 897,
+      "ratio": 1,
+      "meanDiff": 0
+    },
+    {
+      "family": "Noto Sans",
+      "script": "Latn",
+      "id": "latn-numerals",
+      "referenceWidth": 1140,
+      "resvgWidth": 1140,
+      "ratio": 1,
+      "meanDiff": 0
+    }
+  ]
+}

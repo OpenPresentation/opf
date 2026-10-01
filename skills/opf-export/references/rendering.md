@@ -15,7 +15,7 @@ Each prints one JSON report (the `opf lint` shape: `ok`, `diagnostics` with `rul
 ## Prepared font inputs
 
 Published renderer 0.8.0 and later provides `prepareNodeFonts` in `/fonts-node`
-(current coordinated set: core 0.11.4, renderer 0.11.9, PPTX 0.11.8, editor 0.10.6):
+(current coordinated set: core 0.11.4, renderer 0.11.9, PPTX 0.11.9, editor 0.10.6):
 
 ```js
 const {registry, options} = await prepareNodeFonts({
@@ -57,6 +57,10 @@ The current Node `svgToPdf` accepts one SVG or an array, creating one PDF page p
 `loadOfficeFontRegistry()` defaults to metric substitutions, and its pack includes Intos, a metric-compatible replacement for the Aptos family, so default-scheme (Aptos) decks measure and draw with it. Opt into `{substitutionPolicy:'visual'}` only when a visual-only look-alike is acceptable as a documented fallback (a known layout-fidelity gap), for example Roboto or Carlito for Aptos in a registry without the office pack. Inspect `fonts.substitutions`. An SVG embeds only the bundled font families its text names. Replacements affect previews and measurement only; the exported PPTX keeps the selected font name. Synchronous SVG calls without `textMeasurement` estimate widths; loading a named font only at painting time can create gaps or overlaps between rich runs. Supply the registry to both layout and drawing. Current scalar and code layout preserve authored source whitespace through separate source-mapping contracts; general native rich-text round-trip remains a separate limit.
 
 A raster snapshot embedded into PPTX is not equivalent to editable native shapes. The OPF PPTX converter writes supported native content, but visual and import coverage are incomplete. Verify what the requested deck uses.
+
+## Templates and variables
+
+A deck that declares content variables, or a template (`"template": true`), is resolved by core `resolveVariables` before it is composed, so preview and PPTX agree. Pass the values as the `variables` option of `renderSvg`, `renderSvgDeck`, `resolvePresentation` and `toPptx`. A template previews and exports with each variable's `example` (PPTX reports `variable-example-used` through `onDiagnostic`); a normal deck with an unfilled required variable is refused with code `unfilled-variables`. The PPTX holds the resolved text, so re-import returns the filled deck, not the template. Fill a template into a concrete deck first (`opf fill`) when the deliverable is a finished deck.
 
 ## Browser rendering
 
