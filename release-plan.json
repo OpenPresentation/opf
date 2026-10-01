@@ -14,24 +14,24 @@
     },
     {
       "name": "@openpresentation/opf-pptx",
-      "version": "0.11.7"
+      "version": "0.11.8"
     },
     {
       "name": "@openpresentation/cli",
-      "version": "0.9.1"
+      "version": "0.9.2"
     }
   ],
   "bundledCore": {
-    "@openpresentation/cli": "0.11.3"
+    "@openpresentation/cli": "0.11.4"
   },
   "exampleRefs": {
     "opf-editor": "313774a0cbf2bab8cced1a7225dfc95588bdc6e1"
   },
   "verificationRefs": {
     "opf": "e414bca31f12359a1940e1c7e053a3b5fbd43422",
-    "cli": "c1c1d779218635a6334b36db8a8d58221d301802",
+    "cli": "73c7f15d70feaee7d32b22720dd99eaa5f180fb9",
     "opf-render": "2fbc0abf3c327b6e9e9525a52c8ea9e56e84646e",
     "opf-editor": "313774a0cbf2bab8cced1a7225dfc95588bdc6e1",
-    "opf-pptx": "a9bcbd75886bd1ac195b4206cefae83525b1fea4"
+    "opf-pptx": "875c944a53b8a18450eb59573fdef56470ae7d73"
   }
 }
