@@ -178,7 +178,12 @@
     },
     "variables": {
       "$ref": "#/$defs/Variables",
-      "description": "Optional named color variables for values the deck uses in more than one place or wants to name for intent (e.g. a risk red, a brand highlight). Content color fields reference entries as 'var:<id>' strings. Variables complement the color scheme: scheme slots and roles stay the primary vocabulary; variables cover deck-specific named colors that have no scheme slot."
+      "description": "Optional named variables: deck colors referenced as 'var:<id>' (the original use), and typed content variables (text, number, date, image, url, list) referenced inline as '{{<id>}}' or whole as 'var:<id>'. Variables are what makes a deck a fillable template when combined with 'template': true. Color variables complement the color scheme: scheme slots and roles stay the primary vocabulary; variables cover deck-specific named colors that have no scheme slot."
+    },
+    "template": {
+      "type": "boolean",
+      "description": "Marks this document as a template: an incomplete OPF file. A template declares variables (top-level 'variables') and references them from content, and may leave required variables unfilled; validation then reports the unfilled variables instead of failing, and previews and exports use each variable's 'example'. Filling a template (resolveVariables, or 'opf fill') returns a normal deck with this marker removed. Absent or false: a normal deck, where an unfilled required variable is an error. See docs/templates-and-variables.md.",
+      "default": false
     },
     "narrative": {
       "oneOf": [
@@ -1372,38 +1377,387 @@
       "propertyNames": {
         "pattern": "^[a-z][a-z0-9-]*$"
       },
-      "additionalProperties": { "$ref": "#/$defs/Variable" },
-      "description": "Named color variables, keyed by stable kebab-case id. Content color fields reference entries as 'var:<id>' strings. Each value is a hex string shorthand or a Variable object.",
+      "additionalProperties": {
+        "$ref": "#/$defs/Variable"
+      },
+      "description": "Named variables, keyed by stable kebab-case id. A variable is a typed, named value the deck declares once and uses in many places: a color ('var:<id>' in color fields, the original use), or content that fills a template (text, number, date, image, url, list). Content is referenced inline as '{{<id>}}' inside any string, or whole as 'var:<id>' in a field of the matching type; '\\{{' writes a literal '{{'. A hex string is shorthand for a color variable. A variable with no 'value' is unfilled: expected in a template (root 'template': true), an error in a normal deck. Engines resolve variables with resolveVariables() before composing, rendering or exporting, so a template plus its values previews and exports exactly like the equivalent hand-written deck. See docs/templates-and-variables.md.",
       "examples": [
-        { "risk": "#B42318", "highlight": { "type": "color", "value": "#0F4C81", "description": "Brand highlight for emphasized runs." } }
+        {
+          "risk": "#B42318",
+          "highlight": {
+            "type": "color",
+            "value": "#0F4C81",
+            "description": "Brand highlight for emphasized runs."
+          }
+        },
+        {
+          "client-name": {
+            "type": "text",
+            "example": "Acme Corp",
+            "description": "Customer the deck is for."
+          },
+          "revenue": {
+            "type": "number",
+            "example": 1250000,
+            "format": "$#,##0"
+          },
+          "review-date": {
+            "type": "date",
+            "example": "2026-10-01"
+          }
+        }
       ]
     },
     "Variable": {
       "oneOf": [
-        { "$ref": "#/$defs/HexColor" },
         {
-          "type": "object",
-          "required": ["type", "value"],
-          "additionalProperties": false,
-          "properties": {
-            "type": {
-              "type": "string",
-              "enum": ["color"],
-              "description": "Variable kind. Only 'color' is defined today; other kinds may be added when content surfaces exist to consume them."
-            },
-            "value": {
-              "$ref": "#/$defs/HexColor",
-              "description": "Hex color this variable resolves to."
-            },
-            "description": {
-              "type": "string",
-              "description": "Optional prose describing what the variable is for, surfaced by pickers and agents."
-            }
-          }
+          "$ref": "#/$defs/HexColor"
+        },
+        {
+          "$ref": "#/$defs/ColorVariable"
+        },
+        {
+          "$ref": "#/$defs/TextVariable"
+        },
+        {
+          "$ref": "#/$defs/NumberVariable"
+        },
+        {
+          "$ref": "#/$defs/DateVariable"
+        },
+        {
+          "$ref": "#/$defs/ImageVariable"
+        },
+        {
+          "$ref": "#/$defs/UrlVariable"
+        },
+        {
+          "$ref": "#/$defs/ListVariable"
         }
       ],
-      "description": "A single named variable. A hex string is shorthand for { \"type\": \"color\", \"value\": value }.",
-      "examples": ["#B42318", { "type": "color", "value": "#B42318", "description": "Risk emphasis." }]
+      "description": "A single named variable: a hex string (shorthand for a color variable) or an object whose 'type' is color, text, number, date, image, url or list. 'value' is the current value and is optional: a variable with no value is unfilled, which a template allows and a normal deck does not. 'example' only illustrates the slot (fill forms, template previews) and never reaches output.",
+      "examples": [
+        "#B42318",
+        {
+          "type": "color",
+          "value": "#B42318",
+          "description": "Risk emphasis."
+        },
+        {
+          "type": "text",
+          "example": "Acme Corp"
+        },
+        {
+          "type": "list",
+          "value": [
+            "Faster",
+            "Cheaper"
+          ]
+        }
+      ]
+    },
+    "ColorVariable": {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "color",
+          "description": "Variable kind. One of color, text, number, date, image, url or list."
+        },
+        "value": {
+          "$ref": "#/$defs/HexColor",
+          "description": "Hex color this variable resolves to."
+        },
+        "required": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether the variable must be filled. Defaults to true: a variable with no 'value' is unfilled, and an unfilled required variable is an error in a normal deck and expected in a template. Set false for an optional slot: an unfilled optional variable resolves to empty text (inline tokens) or the field that references it is omitted."
+        },
+        "label": {
+          "type": "string",
+          "description": "Optional short human label for forms and fill panels."
+        },
+        "description": {
+          "type": "string",
+          "description": "Optional prose describing what the variable is for, surfaced by pickers, fill forms and agents."
+        },
+        "example": {
+          "$ref": "#/$defs/HexColor",
+          "description": "Illustrative color shown in fill forms and used when a template is previewed with examples. Never written to output."
+        }
+      },
+      "description": "A named color. Content color fields reference it as 'var:<id>'. Colors resolve at render time through the ordinary color-reference path, so a color variable keeps working as before."
+    },
+    "TextVariable": {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "text",
+          "description": "Variable kind. One of color, text, number, date, image, url or list."
+        },
+        "value": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/TextRun"
+              }
+            }
+          ],
+          "description": "Text this variable resolves to: a plain string, or TextRun[] for rich text."
+        },
+        "required": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether the variable must be filled. Defaults to true: a variable with no 'value' is unfilled, and an unfilled required variable is an error in a normal deck and expected in a template. Set false for an optional slot: an unfilled optional variable resolves to empty text (inline tokens) or the field that references it is omitted."
+        },
+        "label": {
+          "type": "string",
+          "description": "Optional short human label for forms and fill panels."
+        },
+        "description": {
+          "type": "string",
+          "description": "Optional prose describing what the variable is for, surfaced by pickers, fill forms and agents."
+        },
+        "example": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/TextRun"
+              }
+            }
+          ],
+          "description": "Illustrative text shown in fill forms and used when a template is previewed with examples. Never written to output."
+        }
+      },
+      "description": "Text content. Plain string or rich TextRun[]. Insert it inline as '{{<id>}}' inside any string (rich text is flattened to plain text there), or reference it whole as 'var:<id>' in a field that accepts string or TextRun[] (the rich runs are kept)."
+    },
+    "NumberVariable": {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "number",
+          "description": "Variable kind. One of color, text, number, date, image, url or list."
+        },
+        "value": {
+          "type": "number",
+          "description": "Number this variable resolves to."
+        },
+        "required": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether the variable must be filled. Defaults to true: a variable with no 'value' is unfilled, and an unfilled required variable is an error in a normal deck and expected in a template. Set false for an optional slot: an unfilled optional variable resolves to empty text (inline tokens) or the field that references it is omitted."
+        },
+        "label": {
+          "type": "string",
+          "description": "Optional short human label for forms and fill panels."
+        },
+        "description": {
+          "type": "string",
+          "description": "Optional prose describing what the variable is for, surfaced by pickers, fill forms and agents."
+        },
+        "example": {
+          "type": "number",
+          "description": "Illustrative number shown in fill forms and used when a template is previewed with examples. Never written to output."
+        },
+        "format": {
+          "type": "string",
+          "description": "Display pattern used by '{{<id>}}'. A literal prefix, a numeric part of '#', '0', ',' and '.', and a literal suffix. '0' pads digits, '#' is optional, ',' groups thousands, digits after '.' fix the decimals ('0' required, '#' optional), and a '%' in the suffix scales by 100. English separators only. Absent: the shortest decimal form.",
+          "examples": [
+            "#,##0",
+            "0.0",
+            "$#,##0.00",
+            "0.#%",
+            "#,##0.0M"
+          ]
+        }
+      },
+      "description": "A number. '{{<id>}}' inserts it as text using 'format'; 'var:<id>' as a whole field supplies the number itself (chart values, font sizes)."
+    },
+    "DateVariable": {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "date",
+          "description": "Variable kind. One of color, text, number, date, image, url or list."
+        },
+        "value": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "description": "ISO calendar date (YYYY-MM-DD) this variable resolves to."
+        },
+        "required": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether the variable must be filled. Defaults to true: a variable with no 'value' is unfilled, and an unfilled required variable is an error in a normal deck and expected in a template. Set false for an optional slot: an unfilled optional variable resolves to empty text (inline tokens) or the field that references it is omitted."
+        },
+        "label": {
+          "type": "string",
+          "description": "Optional short human label for forms and fill panels."
+        },
+        "description": {
+          "type": "string",
+          "description": "Optional prose describing what the variable is for, surfaced by pickers, fill forms and agents."
+        },
+        "example": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "description": "Illustrative ISO date shown in fill forms and used when a template is previewed with examples. Never written to output."
+        },
+        "format": {
+          "type": "string",
+          "description": "Date display pattern, the same LDML-style tokens as header/footer dateFormat: yyyy, yy, MMMM, MMM, MM, M, dd, d, EEEE, EEE and quoted literals. English names. Default 'MMMM d, yyyy'.",
+          "examples": [
+            "MMMM d, yyyy",
+            "dd MMM yyyy",
+            "M/d/yyyy",
+            "EEEE, MMMM d"
+          ]
+        }
+      },
+      "description": "A calendar date as an ISO YYYY-MM-DD string. No time zone and no clock are involved. '{{<id>}}' inserts it formatted with 'format'."
+    },
+    "ImageVariable": {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "image",
+          "description": "Variable kind. One of color, text, number, date, image, url or list."
+        },
+        "value": {
+          "$ref": "#/$defs/Asset",
+          "description": "Image source this variable resolves to."
+        },
+        "required": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether the variable must be filled. Defaults to true: a variable with no 'value' is unfilled, and an unfilled required variable is an error in a normal deck and expected in a template. Set false for an optional slot: an unfilled optional variable resolves to empty text (inline tokens) or the field that references it is omitted."
+        },
+        "label": {
+          "type": "string",
+          "description": "Optional short human label for forms and fill panels."
+        },
+        "description": {
+          "type": "string",
+          "description": "Optional prose describing what the variable is for, surfaced by pickers, fill forms and agents."
+        },
+        "example": {
+          "$ref": "#/$defs/Asset",
+          "description": "Illustrative image source shown in fill forms and used when a template is previewed with examples. Never written to output."
+        }
+      },
+      "description": "An image source: any Asset (an 'asset:<id>' reference, HTTPS URL, data URI, relative or local path, or an object with src, alt and metadata). Reference it whole as 'var:<id>' in an image, asset or src field; '{{<id>}}' inserts the source string."
+    },
+    "UrlVariable": {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "url",
+          "description": "Variable kind. One of color, text, number, date, image, url or list."
+        },
+        "value": {
+          "type": "string",
+          "pattern": "^(?:https?://|mailto:|tel:)\\S+$",
+          "description": "Link target this variable resolves to."
+        },
+        "required": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether the variable must be filled. Defaults to true: a variable with no 'value' is unfilled, and an unfilled required variable is an error in a normal deck and expected in a template. Set false for an optional slot: an unfilled optional variable resolves to empty text (inline tokens) or the field that references it is omitted."
+        },
+        "label": {
+          "type": "string",
+          "description": "Optional short human label for forms and fill panels."
+        },
+        "description": {
+          "type": "string",
+          "description": "Optional prose describing what the variable is for, surfaced by pickers, fill forms and agents."
+        },
+        "example": {
+          "type": "string",
+          "pattern": "^(?:https?://|mailto:|tel:)\\S+$",
+          "description": "Illustrative link shown in fill forms and used when a template is previewed with examples. Never written to output."
+        }
+      },
+      "description": "A link target (http, https, mailto or tel). Use it as '{{<id>}}' inside a link string or reference it whole as 'var:<id>' in a link field."
+    },
+    "ListVariable": {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "list",
+          "description": "Variable kind. One of color, text, number, date, image, url or list."
+        },
+        "value": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Entries this variable resolves to."
+        },
+        "required": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether the variable must be filled. Defaults to true: a variable with no 'value' is unfilled, and an unfilled required variable is an error in a normal deck and expected in a template. Set false for an optional slot: an unfilled optional variable resolves to empty text (inline tokens) or the field that references it is omitted."
+        },
+        "label": {
+          "type": "string",
+          "description": "Optional short human label for forms and fill panels."
+        },
+        "description": {
+          "type": "string",
+          "description": "Optional prose describing what the variable is for, surfaced by pickers, fill forms and agents."
+        },
+        "example": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Illustrative entries shown in fill forms and used when a template is previewed with examples. Never written to output."
+        }
+      },
+      "description": "A list of strings, for bullets and list items. A whole-string array element 'var:<id>' splices every entry into the array in place; a whole field 'var:<id>' becomes the array; '{{<id>}}' joins the entries with ', ' (or the separator after a pipe: '{{<id>|; }}')."
     },
     "BackgroundShortcut": {
       "oneOf": [

@@ -15,7 +15,7 @@ const policyNames = policy.families.map((row) => row.family);
 // A scratch copy of the inputs, outputs and script, so drift and error cases never touch the checkout.
 function scratchCopy() {
   const dir = mkdtempSync(path.join(tmpdir(), "font-tracker-"));
-  const files = [FILES.policy, FILES.overrides, FILES.json, FILES.markdown, overrides.manifestSnapshot, overrides.galleryFontsSnapshot, overrides.measurementReport, overrides.paritySource, overrides.qualificationReport, overrides.hostFixtureEvidence, "scripts/build-font-tracker.mjs"];
+  const files = [FILES.policy, FILES.overrides, FILES.json, FILES.markdown, overrides.manifestSnapshot, overrides.galleryFontsSnapshot, overrides.measurementReport, overrides.paritySource, overrides.qualificationReport, overrides.hostFixtureEvidence, ...Object.values(overrides.scriptCorpus), "scripts/build-font-tracker.mjs"];
   for (const file of files) {
     mkdirSync(path.dirname(path.join(dir, file)), { recursive: true });
     cpSync(path.join(ROOT, file), path.join(dir, file));
@@ -54,7 +54,9 @@ test("the reviewed families split into the owner's four classes", () => {
   assert.equal(committed.summary.records, policy.families.length + overrides.extras.length);
   assert.equal(committed.summary.records - INTOS.length, 160, "the owner's 160 reviewed families plus the four Intos rows");
   for (const name of INTOS) assert.equal(committed.records.find((record) => record.family === name)?.class, "open", name);
-  assert.equal(overrides.extras.length, 7);
+  // The seven shipped script-font dependencies (Noto Sans Arabic, Lao, Myanmar, Sinhala, Syriac, Thaana, Noto Serif Tibetan) got policy rows in RR-17 (FF-44).
+  assert.equal(overrides.extras.length, 0);
+  for (const name of ["Noto Sans Arabic", "Noto Sans Lao", "Noto Sans Myanmar", "Noto Sans Sinhala", "Noto Sans Syriac", "Noto Sans Thaana", "Noto Serif Tibetan"]) assert.equal(committed.records.find((record) => record.family === name)?.inPolicy, true, name);
   const counts = Object.fromEntries(CLASSES.map((cls) => [cls, committed.records.filter((record) => record.class === cls).length]));
   assert.equal(CLASSES.reduce((sum, cls) => sum + counts[cls], 0), committed.summary.records);
   assert.deepEqual(committed.records.filter((record) => record.class === "special").map((record) => record.family).sort(), ["Cambria Math", "Segoe UI Emoji", "Symbol", "Webdings", "Wingdings"]);
@@ -113,6 +115,37 @@ test("records agree with the policy table and the pinned manifest", () => {
   assert.match(snapshot.source.commit, /^[0-9a-f]{40}$/);
   assert.equal(snapshot.source.repository, "OpenPresentation/opf-render");
   assert.equal(committed.inputs.renderManifest.commit, snapshot.source.commit);
+});
+
+test("every proprietary script family and open script face carries its script-corpus qualification (FF-44)", () => {
+  const proprietary = committed.records.filter((record) => record.class === "proprietary-script");
+  assert.equal(proprietary.length, 41);
+  for (const record of proprietary) {
+    const corpus = record.scriptCorpus;
+    assert.ok(corpus, `${record.family} has a script corpus record`);
+    assert.equal(corpus.face, record.previewRoute.family, record.family);
+    assert.ok(corpus.faceSamples >= 8 || corpus.scripts.length > 0, record.family);
+    assert.ok(corpus.equalToHarfBuzz + corpus.recordedFontkitLimits === corpus.faceSamples, record.family);
+    assert.equal(record.status, "script-gap", record.family);
+    assert.match(record.statusReason, /script corpus/, record.family);
+    assert.match(record.nextAction, /Native PowerPoint comparison/, record.family);
+    // The original is either measured in place (numbers) or recorded as not installed; nothing is claimed for an original that was not read.
+    if (Array.isArray(corpus.original)) for (const style of corpus.original) assert.ok(Number.isFinite(style.meanWidthDelta) && Number.isFinite(style.maxAbsWidthDelta) && style.samples > 0, record.family);
+    else assert.ok(corpus.original === null || corpus.original === "not installed on the measuring host", record.family);
+    assert.equal(record.acceptance.accepted, false, `${record.family}: native acceptance is not claimed`);
+    assert.equal(record.nativeVerification.status, "unverified", record.family);
+  }
+  const compact = committed.records.find((record) => record.family === "Arabic Typesetting").scriptCorpus.original[0];
+  assert.ok(compact.meanWidthDelta > 0.5, "the measured Arabic Typesetting gap is recorded");
+  for (const name of ["Noto Sans Thai", "Noto Sans Devanagari", "Noto Naskh Arabic", "Noto Sans JP", "Noto Sans Myanmar", "Noto Sans Mongolian"]) {
+    const record = committed.records.find((item) => item.family === name);
+    assert.ok(record.scriptCorpus, name);
+    assert.equal(record.hostVerification.node, "verified", name);
+    assert.equal(record.hostVerification.browser, "verified", name);
+  }
+  assert.deepEqual(committed.records.find((record) => record.family === "Noto Sans Mongolian").stylesRequired, ["400"]);
+  assert.equal(committed.records.find((record) => record.family === "Noto Sans Mongolian").status, "baseline-needed");
+  assert.ok(renderMarkdown(committed).includes("## Script corpus (FF-44)"));
 });
 
 // The parity run on the merged Intos mains (opf#175) passes all 704 Aptos and Aptos Display values, so the Aptos
@@ -243,13 +276,14 @@ test("a policy family without an override, or an override without a policy famil
   }
 });
 
-test("a declared shipped dependency that the policy later adopts must leave overrides.extras", () => {
+test("a declared shipped dependency that the policy already has must leave overrides.extras", () => {
   const dir = scratchCopy();
   try {
-    const policyFile = path.join(dir, FILES.policy);
-    const adopted = JSON.parse(readFileSync(policyFile, "utf8"));
-    adopted.families.push({ ...adopted.families.find((row) => row.family === "Noto Sans JP"), family: "Noto Sans Arabic" });
-    writeFileSync(policyFile, JSON.stringify(adopted));
+    const file = path.join(dir, FILES.overrides);
+    const edited = JSON.parse(readFileSync(file, "utf8"));
+    // Noto Sans Arabic got its policy row in RR-17 (FF-44): declaring it as an extra again is an error.
+    edited.extras = [{ family: "Noto Sans Arabic", scripts: ["Arabic"], nextAction: "stale" }];
+    writeFileSync(file, JSON.stringify(edited));
     assert.throws(() => buildTracker({ root: dir }), /Noto Sans Arabic is in the policy/);
   } finally {
     rmSync(dir, { recursive: true, force: true });
