@@ -13,7 +13,6 @@
     "check:font-tracker": "node --test scripts/build-font-tracker.test.mjs scripts/qualify-latin-fonts.test.mjs && node scripts/build-font-tracker.mjs --check",
 =======
     "check:published-matrix": "node --test scripts/published-matrix/digests.test.mjs",
-    "check:published-matrix": "node --test scripts/published-matrix/digests.test.mjs",
     "check:font-tracker": "node --test scripts/build-font-tracker.test.mjs && node scripts/build-font-tracker.mjs --check",
 >>>>>>> 0b465298 (RR-04: negative controls for the digest comparison and decoy host fonts)
     "build:font-tracker": "node scripts/build-font-tracker.mjs",
