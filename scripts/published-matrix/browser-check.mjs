@@ -60,10 +60,18 @@ async function observe(browser, scheme, slide) {
   const state = await page.evaluate(async () => {
     // Faces load lazily, when text first needs them: load the faces of every family the text draws in, then wait for the font set.
     const drawn = [...new Set([...document.querySelectorAll('svg text')].map((node) => getComputedStyle(node).fontFamily.split(',')[0].trim().replace(/^["']|["']$/g, '')))].sort();
-    for (const family of drawn) for (const weight of [400, 700]) await document.fonts.load(`${weight} 16px "${family}"`);
+    const failures = [];
+    for (const face of document.fonts) {
+      if (!drawn.includes(face.family.replace(/^["']|["']$/g, ''))) continue;
+      try {
+        await face.load();
+      } catch (error) {
+        failures.push(`${face.family} ${face.weight} ${face.style}: ${error.name} ${error.message}`);
+      }
+    }
     await document.fonts.ready;
     const loaded = [...document.fonts].filter((face) => face.status === 'loaded').map((face) => face.family.replace(/^["']|["']$/g, ''));
-    return {loaded: [...new Set(loaded)].sort(), drawn, text: document.querySelectorAll('svg text').length, statuses: [...document.fonts].map((face) => `${face.family}:${face.status}`)};
+    return {loaded: [...new Set(loaded)].sort(), drawn, text: document.querySelectorAll('svg text').length, statuses: [...document.fonts].map((face) => `${face.family}:${face.weight}:${face.style}:${face.status}`), failures};
   });
   const png = await page.screenshot({type: 'png'});
   await page.close();
@@ -84,6 +92,7 @@ async function pass(label, env) {
     // The preview draws the family its scheme resolves to, and only loaded embedded faces.
     for (const [key, state] of Object.entries(states)) {
       assert.ok(state.text > 0, `${label}: ${key} has text`);
+      assert.deepEqual(state.failures, [], `${label}: ${key} embedded faces failed to load`);
       for (const family of state.drawn) assert.ok(state.loaded.includes(family), `${label}: ${key} draws ${family}, which is not an embedded face (loaded: ${state.loaded}; all faces: ${state.statuses})`);
     }
     assert.ok(states['calibri#0'].drawn.includes('Carlito'), `${label}: Calibri previews with Carlito`);
