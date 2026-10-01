@@ -129,7 +129,7 @@ Blocks are separated by blank lines; a fence, heading, quote, table, image line 
 | `[text]{color=#B42318 size=24 font="Open Sans"}` | `color` (a hex colour, scheme slot or `var:name`), `fontSize`, `fontFamily`; `bold italic underline strike sup sub` work inside the braces too |
 | `\*` and any backslash before ASCII punctuation | The character itself |
 
-Flanking follows CommonMark, so `2*(3+4)*5` and `a * b` are text. There is no inline code (backticks stay literal), no raw HTML beyond the tags above and `<br>`, no entities (`&amp;` is literal) and no setext headings or indented code. Plain-text fields (titles, quotes, cell labels, alt text) drop formatting with a `formatting-dropped` warning.
+Flanking follows CommonMark, so `2*(3+4)*5` and `a * b` are text. There is no inline code (backticks stay literal), no raw HTML beyond the tags above and `<br>`, no entities (`&amp;` is literal) and no setext headings or indented code. Fields that hold plain text (the title, the subtitle, and a quote's text, attribution and source) drop formatting with a `formatting-dropped` warning. Image alt text, code, metric values and timeline lines are read as written, without inline formatting.
 
 ## Writing OPF as Markdown
 

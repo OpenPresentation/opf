@@ -5,6 +5,7 @@ The `examples/` directory has two shipped layers, plus a docs fixture kept outsi
 - `examples/technical/` contains compact fixtures that isolate one or two schema behaviors.
 - `examples/gallery/` contains scenario-oriented decks that show OPF working across industries, functions, education, government, international, presentation-type, and design/media use cases.
 - The representative deck for [the published-package quickstart](quickstart.md) lives at [`docs/quickstart/developer-quickstart.opf.json`](quickstart/developer-quickstart.opf.json), outside the catalog, so `@openpresentation/opf/examples` stays at the published example count (currently 126 decks); the renderer golden corpus tracks that catalog on its own release cadence.
+- `examples/markdown/` holds decks written in the [Markdown dialect](markdown.md) (`.md`, not `.opf.json`, so they are outside the catalog count): `quarterly-review.md` uses every block kind and is canonical, `outline.md` is a plain outline read with `opf from-md --split headings`. The tests convert, validate, compose and round trip them.
 - The examples root is kept as an organizing directory rather than a home for standalone OPF files.
 
 ## Technical Fixtures
