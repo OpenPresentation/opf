@@ -85,6 +85,11 @@ test('tokenizing is deterministic, bounded and never throws on unterminated or h
   const big='let value = "text" // note\n'.repeat(7000);
   const started=Date.now();for(const language of ['typescript','css','yaml','html','python'])tokenizeCode(big.slice(0,CODE_HIGHLIGHT_MAX_LENGTH),language);
   assert.ok(Date.now()-started<5000,'bounded time');
+  // Adversarial 200,000-character lines (long whitespace runs, repeated indicators) stay linear in every scanner.
+  const n=CODE_HIGHLIGHT_MAX_LENGTH,hostileLines=['a'+' '.repeat(n-2),'key'+' '.repeat(n-5)+'x','#'.repeat(n),'"'.repeat(n),'<'.repeat(n),'<a '+'b '.repeat(n/2),'/*'.repeat(n/2),'- '.repeat(n/2),': '.repeat(n/2),'a"'.repeat(n/2)];
+  const adversarial=Date.now();
+  for(const language of CODE_HIGHLIGHT_LANGUAGES)for(const source of hostileLines)tokenizeCode(source,language);
+  assert.ok(Date.now()-adversarial<20000,'linear on adversarial lines');
 });
 
 test('the palette keeps every token colour at >=4.5:1 on the code panel for every catalog colour scheme and extreme theme colours',()=>{

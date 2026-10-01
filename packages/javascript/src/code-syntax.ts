@@ -137,7 +137,12 @@ function scanGeneric(source: string, def: Language): CodeToken[] {
   if (def.ci) for (const list of [keywords, literals, types]) for (const word of [...list]) { list.delete(word); list.add(word.toLowerCase()); }
   const strings = def.strings ?? '', lineComments = def.line ?? [], blocks = def.block ?? [], triples = def.triple ?? [];
   let index = 0, pendingDef: 'function' | 'type' | undefined;
-  const atLineStart = (position: number) => /^[ \t]*$/.test(source.slice(Math.max(source.lastIndexOf('\n', position - 1), source.lastIndexOf('\r', position - 1)) + 1, position));
+  // Only spaces and tabs between the previous line break (or the start) and the position; scans back one run, never the line.
+  const atLineStart = (position: number) => {
+    let at = position - 1;
+    while (at >= 0 && (source[at] === ' ' || source[at] === '\t')) at--;
+    return at < 0 || source[at] === '\n' || source[at] === '\r';
+  };
   while (index < source.length) {
     const character = source[index]!;
     if (/\s/.test(character)) { index++; continue; }
@@ -288,6 +293,34 @@ function lineRanges(source: string) {
   return ranges;
 }
 
+/**
+ * A "key:" at the start of a mapping entry in source[from, to): the end of the key text (trailing space excluded) and the
+ * colon index, or undefined. One forward pass, so long lines stay linear. A key is a quoted string or a plain scalar that
+ * does not start with an indicator, ends at the first colon followed by a space or the line end, and may not cross a comment.
+ */
+function yamlKey(source: string, from: number, to: number): { nameEnd: number; colon: number } | undefined {
+  const first = source[from];
+  if (first === undefined || from >= to) return undefined;
+  let index = from;
+  if (first === '"' || first === "'") {
+    index = Math.min(scanQuoted(source, from, first, first === '"', false), to);
+    let at = index;
+    while (at < to && (source[at] === ' ' || source[at] === '\t')) at++;
+    return source[index - 1] === first && source[at] === ':' && (at + 1 >= to || /\s/.test(source[at + 1]!)) ? { nameEnd: index, colon: at } : undefined;
+  }
+  if (/[\s#:{}[\],&*!|>%@`]/.test(first) || (first === '-' && /[\s#:]/.test(source[from + 1] ?? ' '))) return undefined;
+  for (; index < to; index++) {
+    const character = source[index]!;
+    if (character === '#' && /\s/.test(source[index - 1]!)) return undefined;
+    if (character === ':' && (index + 1 >= to || /\s/.test(source[index + 1]!))) {
+      let nameEnd = index;
+      while (nameEnd > from && /\s/.test(source[nameEnd - 1]!)) nameEnd--;
+      return nameEnd > from ? { nameEnd, colon: index } : undefined;
+    }
+  }
+  return undefined;
+}
+
 function scanYaml(source: string): CodeToken[] {
   const tokens: CodeToken[] = [];
   let blockIndent = -1;
@@ -302,12 +335,11 @@ function scanYaml(source: string): CodeToken[] {
     let cursor = start + indent;
     const dash = /^(?:-\s+)+/.exec(text.slice(indent));
     if (dash) cursor += dash[0].length;
-    const key = /^(?:"(?:[^"\\\n]|\\.)*"|'[^'\n]*'|[^\s#:'"{}[\],&*!|>%@`-][^#\n]*?|-[^\s#:][^#\n]*?)\s*:(?=\s|$)/.exec(source.slice(cursor, end));
     let valueStart = cursor;
+    const key = yamlKey(source, cursor, end);
     if (key) {
-      const name = /^(.*?)(\s*:)$/s.exec(key[0])!;
-      pushToken(tokens, cursor, cursor + name[1]!.length, 'property');
-      valueStart = cursor + key[0].length;
+      pushToken(tokens, cursor, key.nameEnd, 'property');
+      valueStart = key.colon + 1;
     }
     scanYamlValue(source, valueStart, end, tokens, '#');
     if (/(?:^|\s)[|>][+-]?\d?\s*(?:#.*)?$/.test(text.slice(valueStart - start))) blockIndent = indent;
