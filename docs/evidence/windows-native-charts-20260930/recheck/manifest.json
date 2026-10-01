@@ -1,0 +1,221 @@
+{
+  "generated": "FF-56 recheck deck set (FF-22b chartex, theme-aware text, map variants)",
+  "exporter": "opf-pptx codex/ff-22b-chartex-pptx with toPptx chartex: native",
+  "notes": [
+    "Root owner only; open read-only in desktop PowerPoint. Expected Chart.ChartType per deck is in chartType (117 treemap, 118 histogram, 122 pareto, 121 box and whisker, 119 waterfall, 123 funnel, 140 xlRegionMap; 51 = fallback clustered column taken).",
+    "All non-map decks: confirm no repair prompt, the chart type, and that labels and lines are readable on the dark theme (white) instead of the earlier dark grey and black.",
+    "world-* decks are an experiment matrix for the regionMap part PowerPoint rejected on 2026-09-30: each changes one thing against the baseline (variant field). Record the ChartType for each; 140 means the choice was accepted. A map with no regions drawn is still a success for the part (geodata is fetched online)."
+  ],
+  "decks": [
+    {
+      "file": "treemap.pptx",
+      "preview": "treemap.preview.png",
+      "chartType": 117,
+      "sha256": "a796e0e4f5bfb7d279ca82f0d06265204ad06be39fa49de811e7e940fc873ad1",
+      "diagnostics": [],
+      "expected": "Treemap: one tile per region, palette colours, region labels centred in the tiles in the deck label colour (white on this dark theme)."
+    },
+    {
+      "file": "histogram.pptx",
+      "preview": "histogram.preview.png",
+      "chartType": 118,
+      "sha256": "0691b5c5b0d52225d4e84ef0940fe4f539c86d18e77b649d0055d223fed87a87",
+      "diagnostics": [],
+      "expected": "Histogram of 12 raw values, 3 automatic bins ([2, 5.67] 4, (5.67, 9.33] 6, (9.33, 13] 2), axis labels in white."
+    },
+    {
+      "file": "histogram-by-category.pptx",
+      "preview": "histogram-by-category.preview.png",
+      "chartType": 118,
+      "sha256": "83adaa2aef47a12b21896bbcc175079a1e5c192e278468a5aa29155a942eef54",
+      "diagnostics": [],
+      "expected": "Histogram by category: one column per region in row order, white axis labels."
+    },
+    {
+      "file": "pareto.pptx",
+      "preview": "pareto.preview.png",
+      "chartType": 122,
+      "sha256": "3c4b012cad36613c34bdd74e4beaf70248ada4ab613a9d3d301e9cf5447c0470",
+      "diagnostics": [],
+      "expected": "Pareto: columns sorted descending plus cumulative line on a right 0-100% axis; white axis labels on both axes."
+    },
+    {
+      "file": "box-and-whisker.pptx",
+      "preview": "box-and-whisker.preview.png",
+      "chartType": 121,
+      "sha256": "4f77e4e6eafb5eea3c8645ad6c9282fc9321d359fb7901eeb7d954ab3ea435ce",
+      "diagnostics": [],
+      "expected": "Box and whisker: whiskers, median lines and mean markers now in the label colour (white), legend text white, axis labels white."
+    },
+    {
+      "file": "waterfall.pptx",
+      "preview": "waterfall.preview.png",
+      "chartType": 119,
+      "sha256": "adb4ab6b173babd293dbcd94ec398d4743469af627824da9374a27113ca32947",
+      "diagnostics": [],
+      "expected": "Waterfall: floating bars, increases first palette colour, decreases second, connector lines, white axis labels."
+    },
+    {
+      "file": "funnel.pptx",
+      "preview": "funnel.preview.png",
+      "chartType": 123,
+      "sha256": "c6af3ac1f86a912e84c6c6a13aae8c2c736a292e27eca1f6748521dde39caada",
+      "diagnostics": [],
+      "expected": "Funnel: centred narrowing bars, value labels in white centred in the bars, category labels white on the left."
+    },
+    {
+      "file": "world-a-baseline.pptx",
+      "preview": "world.preview.png",
+      "chartType": 140,
+      "fallbackChartType": 51,
+      "variant": "as exported: Requires cx5, cx:geography without geoCache, numDim colorVal, no legend",
+      "sha256": "f6e081265ea9952aab93ad0c4aeea55e4a8a7dc49704481b8e01c5849f5a98e5",
+      "requires": "cx5",
+      "layoutPr": "<cx:layoutPr><cx:geography cultureLanguage=\"en-US\" cultureRegion=\"US\" attribution=\"Powered by Bing\"/></cx:layoutPr>",
+      "diagnostics": [
+        "chart-map-geodata"
+      ],
+      "expected": "Map chart (regionMap) of eight countries; PowerPoint fetches Bing geodata online. 51 means PowerPoint rejected the choice and took the fallback columns."
+    },
+    {
+      "file": "world-b-cx6.pptx",
+      "preview": "world.preview.png",
+      "chartType": 140,
+      "fallbackChartType": 51,
+      "variant": "Requires cx6 (2016/5/12)",
+      "sha256": "af3ef639c0a9792aeb35079b4d6f0e05ccf9011977826d9e37c912f11fa8e7ef",
+      "requires": "cx6",
+      "layoutPr": "<cx:layoutPr><cx:geography cultureLanguage=\"en-US\" cultureRegion=\"US\" attribution=\"Powered by Bing\"/></cx:layoutPr>",
+      "diagnostics": [
+        "chart-map-geodata"
+      ],
+      "expected": "Map chart (regionMap) of eight countries; PowerPoint fetches Bing geodata online. 51 means PowerPoint rejected the choice and took the fallback columns."
+    },
+    {
+      "file": "world-c-cx4.pptx",
+      "preview": "world.preview.png",
+      "chartType": 140,
+      "fallbackChartType": 51,
+      "variant": "Requires cx4 (2016/5/10)",
+      "sha256": "c202ffb35579ab07e36e54dbc206b40c14ef27bfbb7c1e7128b3401369fd75b4",
+      "requires": "cx4",
+      "layoutPr": "<cx:layoutPr><cx:geography cultureLanguage=\"en-US\" cultureRegion=\"US\" attribution=\"Powered by Bing\"/></cx:layoutPr>",
+      "diagnostics": [
+        "chart-map-geodata"
+      ],
+      "expected": "Map chart (regionMap) of eight countries; PowerPoint fetches Bing geodata online. 51 means PowerPoint rejected the choice and took the fallback columns."
+    },
+    {
+      "file": "world-d-cx3.pptx",
+      "preview": "world.preview.png",
+      "chartType": 140,
+      "fallbackChartType": 51,
+      "variant": "Requires cx3 (2016/5/9)",
+      "sha256": "caa84aa5547c97bec0dd63d2101a7a68f9db71dc01c20c2fc5c97af2f6891495",
+      "requires": "cx3",
+      "layoutPr": "<cx:layoutPr><cx:geography cultureLanguage=\"en-US\" cultureRegion=\"US\" attribution=\"Powered by Bing\"/></cx:layoutPr>",
+      "diagnostics": [
+        "chart-map-geodata"
+      ],
+      "expected": "Map chart (regionMap) of eight countries; PowerPoint fetches Bing geodata online. 51 means PowerPoint rejected the choice and took the fallback columns."
+    },
+    {
+      "file": "world-e-cx8.pptx",
+      "preview": "world.preview.png",
+      "chartType": 140,
+      "fallbackChartType": 51,
+      "variant": "Requires cx8 (2016/5/14)",
+      "sha256": "2ab69a2fee7e8e29d6700e5d388066c1fa443c32e063efc6e20bc8d4be3057e5",
+      "requires": "cx8",
+      "layoutPr": "<cx:layoutPr><cx:geography cultureLanguage=\"en-US\" cultureRegion=\"US\" attribution=\"Powered by Bing\"/></cx:layoutPr>",
+      "diagnostics": [
+        "chart-map-geodata"
+      ],
+      "expected": "Map chart (regionMap) of eight countries; PowerPoint fetches Bing geodata online. 51 means PowerPoint rejected the choice and took the fallback columns."
+    },
+    {
+      "file": "world-f-no-layoutPr.pptx",
+      "preview": "world.preview.png",
+      "chartType": 140,
+      "fallbackChartType": 51,
+      "variant": "series without cx:layoutPr (no cx:geography at all)",
+      "sha256": "99e248895a8cc09bc2a07c11e7a4efc2dc3f4b56cddc5a4671817aeb4bc9d0de",
+      "requires": "cx5",
+      "layoutPr": null,
+      "diagnostics": [
+        "chart-map-geodata"
+      ],
+      "expected": "Map chart (regionMap) of eight countries; PowerPoint fetches Bing geodata online. 51 means PowerPoint rejected the choice and took the fallback columns."
+    },
+    {
+      "file": "world-g-projection.pptx",
+      "preview": "world.preview.png",
+      "chartType": 140,
+      "fallbackChartType": 51,
+      "variant": "cx:geography with projectionType=\"mercator\" viewedRegionType=\"world\"",
+      "sha256": "bc498c03f4e33d038403128a30f03ab99cc148cf2dabb606cf6bff89f16e1ac2",
+      "requires": "cx5",
+      "layoutPr": "<cx:layoutPr><cx:geography cultureLanguage=\"en-US\" cultureRegion=\"US\" attribution=\"Powered by Bing\" projectionType=\"mercator\" viewedRegionType=\"world\"/></cx:layoutPr>",
+      "diagnostics": [
+        "chart-map-geodata"
+      ],
+      "expected": "Map chart (regionMap) of eight countries; PowerPoint fetches Bing geodata online. 51 means PowerPoint rejected the choice and took the fallback columns."
+    },
+    {
+      "file": "world-h-empty-geocache.pptx",
+      "preview": "world.preview.png",
+      "chartType": 140,
+      "fallbackChartType": 51,
+      "variant": "cx:geography with an empty cx:geoCache (Bing provider id, empty cx:binary)",
+      "sha256": "91ceb39bff3b0d04a9d0cc33f366daf9504f9ec52f1a2e323a42fb8990b3c10c",
+      "requires": "cx5",
+      "layoutPr": "<cx:layoutPr><cx:geography cultureLanguage=\"en-US\" cultureRegion=\"US\" attribution=\"Powered by Bing\"><cx:geoCache provider=\"{E9337A44-BEBE-4D9F-B70C-FF80F3A8DC14}\"><cx:binary></cx:binary></cx:geoCache></cx:geography></cx:layoutPr>",
+      "diagnostics": [
+        "chart-map-geodata"
+      ],
+      "expected": "Map chart (regionMap) of eight countries; PowerPoint fetches Bing geodata online. 51 means PowerPoint rejected the choice and took the fallback columns."
+    },
+    {
+      "file": "world-i-val-dimension.pptx",
+      "preview": "world.preview.png",
+      "chartType": 140,
+      "fallbackChartType": 51,
+      "variant": "numDim type=\"val\" instead of \"colorVal\"",
+      "sha256": "8904d3e4de1350b3ebdcee62c4b4d7bd92a4a395fd12a7a8905ff63c97096a94",
+      "requires": "cx5",
+      "layoutPr": "<cx:layoutPr><cx:geography cultureLanguage=\"en-US\" cultureRegion=\"US\" attribution=\"Powered by Bing\"/></cx:layoutPr>",
+      "diagnostics": [
+        "chart-map-geodata"
+      ],
+      "expected": "Map chart (regionMap) of eight countries; PowerPoint fetches Bing geodata online. 51 means PowerPoint rejected the choice and took the fallback columns."
+    },
+    {
+      "file": "world-j-legend-labels.pptx",
+      "preview": "world.preview.png",
+      "chartType": 140,
+      "fallbackChartType": 51,
+      "variant": "with cx:legend (right) and value data labels",
+      "sha256": "efb71aca9659c23018ea55bd4c2ba313cb6708b77b79c9527c25ea54fb9b84f5",
+      "requires": "cx5",
+      "layoutPr": "<cx:layoutPr><cx:geography cultureLanguage=\"en-US\" cultureRegion=\"US\" attribution=\"Powered by Bing\"/></cx:layoutPr>",
+      "diagnostics": [
+        "chart-map-geodata"
+      ],
+      "expected": "Map chart (regionMap) of eight countries; PowerPoint fetches Bing geodata online. 51 means PowerPoint rejected the choice and took the fallback columns."
+    },
+    {
+      "file": "world-k-cx6-no-layoutPr.pptx",
+      "preview": "world.preview.png",
+      "chartType": 140,
+      "fallbackChartType": 51,
+      "variant": "Requires cx6 and no cx:layoutPr",
+      "sha256": "a9b07fed1c2e527f4185864f944a1867458e5b9ff124f7d8508dad0cf8f2c704",
+      "requires": "cx6",
+      "layoutPr": null,
+      "diagnostics": [
+        "chart-map-geodata"
+      ],
+      "expected": "Map chart (regionMap) of eight countries; PowerPoint fetches Bing geodata online. 51 means PowerPoint rejected the choice and took the fallback columns."
+    }
+  ]
+}

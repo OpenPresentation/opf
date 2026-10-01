@@ -54,6 +54,28 @@ constructs, clustered column fallback for `world`). A recheck deck set (six cons
 plus eleven regionMap variants: `Requires` cx3/cx4/cx6/cx8, no `cx:layoutPr`, projection attributes, empty
 `geoCache`, `val` dimension, legend and labels) was prepared for the next supervisor run.
 
+## Recheck (same day, `recheck/`)
+
+The recheck deck set (`recheck/manifest.json`: six constructs with the colour fix, histogram by category, and
+eleven regionMap variants exported from opf-pptx branch `codex/ff-56-chartex-auto` with `chartex: 'native'`) was
+run the same way; JSON per deck and PowerPoint-exported PNGs are in `recheck/`.
+
+| Deck | `Chart.ChartType` | Result |
+| --- | ---: | --- |
+| treemap, histogram, histogram-by-category, pareto, box-and-whisker, waterfall, funnel | 117, 118, 118, 122, 121, 119, 123 | native, no repair prompt; labels and box lines now white on the dark navy theme (colour fix confirmed) |
+| world-a-baseline (`Requires="cx5"`) | 51 | fallback taken |
+| world-b-cx6, world-c-cx4, world-d-cx3, world-k-cx6-no-layoutPr | 140 | regionMap accepted (xlRegionMap) |
+| world-e-cx8, world-f-no-layoutPr, world-g-projection, world-h-empty-geocache, world-i-val-dimension, world-j-legend-labels (all `cx5`) | 51 | fallback taken |
+
+Opened interactively, the accepted map decks show the message bar "There was a problem getting the information for
+your map chart. Make sure you're online and try again." and draw nothing (the exported PNG is blank): without a
+populated `cx:geoCache` the chart depends on PowerPoint's online map data service.
+
+Supervisor decision (2026-09-30): the `toPptx` default `chartex: 'auto'` keeps `world` on the clustered column
+fallback, which always renders, with its `chart-data-adapted` diagnostic; `chartex: 'native'` writes the map with
+`Requires="cx4"` (the region-map extension namespace) and the `chart-map-geodata` diagnostic stating that
+PowerPoint must fetch map data online. No provider data is fabricated.
+
 This evidence establishes native behaviour for these decks on this host and PowerPoint build only. It is
 not a validation of the parts against the Open XML SDK schemas, and it says nothing about the live
 pptx.gallery or installed packages.
