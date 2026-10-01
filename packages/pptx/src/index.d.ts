@@ -47,7 +47,7 @@ export interface WatermarkNotExportedDiagnostic { code: "watermark-not-exported"
  * (`histogram-binned`).
  */
 export interface ChartDataAdaptedDiagnostic { code: "chart-data-adapted"; path: string; message: string; adaptation: "histogram-binned" | "row-numbers" | "series-dropped" | "chartex-fallback" }
-/** With `chartex: "native"`, a map chart (`world`) is exported as a chartex regionMap without cached geography: PowerPoint fetches the region shapes from Bing Maps online, so the map may show no regions offline. */
+/** With `chartex: "native"`, a map chart (`world`) is exported as a chartex regionMap (`Requires="cx4"`) without cached geography: PowerPoint must fetch the region shapes from its online map service and shows "There was a problem getting the information for your map chart" with an empty chart until it does. */
 export interface ChartMapGeodataDiagnostic { code: "chart-map-geodata"; path: string; message: string }
 
 export interface ToPptxOptions {
@@ -55,12 +55,15 @@ export interface ToPptxOptions {
   imageFormat?: "compatible" | "preserve";
   /**
    * How the chartex chart types (treemap, histogram, pareto, box-and-whisker, waterfall, funnel, world) are exported.
-   * "fallback" (default) writes the clustered column chart of the data and reports `chart-data-adapted` (`chartex-fallback`,
-   * `histogram-binned`). "native" writes Office 2016 chartex parts (`cx:chartSpace`, style parts, an `mc:AlternateContent`
-   * frame with the clustered column chart as fallback). Native chartex is opt-in pending native PowerPoint confirmation (FF-22b);
-   * the default flips once that check passes. Import of chartex parts is always on.
+   * "auto" (default) writes Office 2016 chartex parts (`cx:chartSpace`, style parts, an `mc:AlternateContent` frame with the
+   * clustered column chart as fallback) for the constructs desktop PowerPoint confirmed natively on 2026-09-30 (treemap,
+   * histogram, pareto, box-and-whisker, waterfall, funnel) and keeps `world` on the clustered column chart with
+   * `chart-data-adapted` (`chartex-fallback`) because the regionMap part, though accepted with `Requires="cx4"`, draws
+   * nothing until PowerPoint fetches map data online. "native" writes every chartex part, the map included (reports
+   * `chart-map-geodata`). "fallback" writes clustered columns only
+   * (`chartex-fallback`, `histogram-binned`), as releases before FF-22b did. Import of chartex parts is always on.
    */
-  chartex?: "native" | "fallback";
+  chartex?: "auto" | "native" | "fallback";
   /**
    * OPF_DOCUMENT_V1 / OPF_SLIDE_V1 customer-data tags that let fromPptx restore
    * catalog references, layout ids and authoring metadata (docs/document-roundtrip.md).

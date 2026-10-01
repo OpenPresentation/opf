@@ -14,43 +14,45 @@ async function exported(type, data) {
   const parts = unzipSync(bytes);
   const slide = strFromU8(parts['ppt/slides/slide1.xml']);
   const charts = Object.keys(parts).filter((name) => /^ppt\/charts\/chart\d+\.xml$/.test(name));
-  return {bytes, parts, slide, charts, diagnostics, chart: charts.length ? strFromU8(parts[charts[0]]) : '', frame: slide.includes('graphicFrame'), chartDiagnostics: diagnostics.filter((diagnostic) => diagnostic.code.startsWith('chart-'))};
+  const chartex = Object.keys(parts).filter((name) => /^ppt\/charts\/chartEx\d+\.xml$/.test(name));
+  return {bytes, parts, slide, charts, diagnostics, chart: charts.length ? strFromU8(parts[charts[0]]) : '', chartex: chartex.length ? strFromU8(parts[chartex[0]]) : '', frame: slide.includes('graphicFrame'), chartDiagnostics: diagnostics.filter((diagnostic) => diagnostic.code.startsWith('chart-'))};
 }
 const numbers = (xml, tag) => [...xml.matchAll(new RegExp(`<c:${tag}>([\\s\\S]*?)</c:${tag}>`, 'g'))].map(([, body]) => [...body.matchAll(/<c:v>([^<]*)<\/c:v>/g)].map(([, value]) => value));
+const chartexValues = (xml) => [...xml.matchAll(/<cx:numDim\b[^>]*>([\s\S]*?)<\/cx:numDim>/g)].map(([, body]) => [...body.matchAll(/<cx:pt idx="\d+">([^<]*)<\/cx:pt>/g)].map(([, value]) => value));
+const binCount = (xml) => Number(xml.match(/<cx:binCount val="(\d+)"\/>/)?.[1]);
 
-// The FF-09 case: a one-column histogram.
+// The FF-09 case: a one-column histogram. It is PowerPoint's own histogram (chartex, FF-22b): the raw values are the
+// data, PowerPoint bins them with the explicit automatic bin count (Scott's rule), and the classic fallback plots them.
 const values = [3, 5, 8, 13];
 const histogram = await exported('histogram', {columns: ['Value'], rows: values.map((value) => [value])});
-assert.equal(histogram.charts.length, 1, 'a chart part is exported');
+assert.equal(histogram.charts.length, 1, 'a fallback chart part is exported');
+assert.ok(histogram.chartex, 'a chartEx part is exported');
 assert.ok(histogram.frame, 'the slide has a graphic frame');
 assert.doesNotMatch(histogram.slide, /&quot;type&quot;/, 'no placeholder dump replaces the chart');
-assert.equal(histogram.chartDiagnostics.length, 1);
-assert.deepEqual({code: histogram.chartDiagnostics[0].code, adaptation: histogram.chartDiagnostics[0].adaptation, path: histogram.chartDiagnostics[0].path}, {code: 'chart-data-adapted', adaptation: 'histogram-binned', path: 'slides.0.chart'});
-assert.match(histogram.chartDiagnostics[0].message, /4 values.*3 equal-width bins/);
-// Sturges: ceil(log2(4)) + 1 = 3 bins over [3, 13]; the maximum falls in the last bin.
+assert.deepEqual(histogram.chartDiagnostics, [], 'a histogram bins its own values: nothing is adapted');
+assert.doesNotMatch(histogram.chartex, /<cx:strDim/, 'no category dimension for a lone value column');
+assert.deepEqual(chartexValues(histogram.chartex), [['3', '5', '8', '13']]);
+assert.equal(binCount(histogram.chartex), 2, 'Scott: 3.49 * sd(4.35) / 4^(1/3) = 9.56 wide over a range of 10');
 assert.match(histogram.chart, /<c:barDir val="col"\/>/);
-assert.deepEqual(numbers(histogram.chart, 'cat'), [['3–6.33333', '6.33333–9.66667', '9.66667–13']]);
-assert.deepEqual(numbers(histogram.chart, 'val'), [['2', '1', '1']]);
-assert.equal(numbers(histogram.chart, 'val')[0].reduce((total, count) => total + Number(count), 0), values.length, 'every value is counted once');
+assert.deepEqual(numbers(histogram.chart, 'cat'), [['1', '2', '3', '4']], 'the fallback plots the values against their row numbers');
+assert.deepEqual(numbers(histogram.chart, 'val'), [['3', '5', '8', '13']]);
 assert.deepEqual(await toPptx(deck('histogram', {columns: ['Value'], rows: values.map((value) => [value])})), histogram.bytes, 'deterministic');
-// The export re-imports as a valid column chart of the binned counts.
+// The export re-imports as the same histogram with its raw values.
 const imported = await fromPptx(histogram.bytes);
 const importedChart = (imported.slides[0].chart ?? imported.slides[0].blocks?.find((block) => block.chart)?.chart);
-assert.equal(importedChart.type, 'column');
-assert.deepEqual(importedChart.data.columns, ['Bin', 'Frequency']);
-assert.deepEqual(importedChart.data.rows.map((row) => row[1]), [2, 1, 1]);
+assert.equal(importedChart.type, 'histogram');
+assert.deepEqual(importedChart.data, {columns: ['Value'], rows: values.map((value) => [value])});
 
-// Numeric strings count, other cells are ignored; a constant column is one bin; one value is one bin.
+// Numeric strings count, other cells are ignored; a constant column and a single value are one bin.
 const strings = await exported('histogram', {columns: ['Value'], rows: [['1'], ['2'], ['x'], [null], [3], ['4.5']]});
-assert.equal(numbers(strings.chart, 'val')[0].reduce((total, count) => total + Number(count), 0), 4, 'non-numeric cells are not counted as zeros');
+assert.deepEqual(chartexValues(strings.chartex), [['1', '2', '3', '4.5']], 'non-numeric cells are not plotted as zeros');
 const constant = await exported('histogram', {columns: ['Value'], rows: [[7], [7], [7]]});
-assert.deepEqual(numbers(constant.chart, 'cat'), [['7']]);
-assert.deepEqual(numbers(constant.chart, 'val'), [['3']]);
+assert.equal(binCount(constant.chartex), 1);
 const one = await exported('histogram', {columns: ['Value'], rows: [[7]]});
-assert.deepEqual(numbers(one.chart, 'val'), [['1']]);
+assert.equal(binCount(one.chartex), 1);
 const wide = await exported('histogram', {columns: ['Value'], rows: Array.from({length: 1000}, (_, index) => [index])});
-assert.equal(numbers(wide.chart, 'val')[0].length, 11, 'Sturges bins for 1000 values');
-assert.equal(numbers(wide.chart, 'val')[0].reduce((total, count) => total + Number(count), 0), 1000);
+assert.equal(binCount(wide.chartex), 10, 'Scott bins for 0..999: 3.49 * 288.8 / 10 = 100.8 wide');
+assert.equal(chartexValues(wide.chartex)[0].length, 1000);
 
 // The same silent drop applied to every chart type with one data column (dot plot is the other catalog one).
 const singleColumn = catalogs.chartTypes.filter((record) => record.columns?.length === 1).map((record) => record.id);
@@ -60,10 +62,17 @@ for (const type of types) {
   const result = await exported(type, {columns: ['Value'], rows: [[3], [5], [8]]});
   assert.equal(result.charts.length, 1, `${type}: a chart part is exported`);
   assert.ok(result.frame, `${type}: the slide has a graphic frame`);
-  // Chartex types also report that they export as a clustered column chart (a histogram's binning message already says so).
-  const chartex = resolveChartType(type).spec.family === 'chartex' && type !== 'histogram';
-  assert.deepEqual(result.chartDiagnostics.map((diagnostic) => diagnostic.code), chartex ? ['chart-data-adapted', 'chart-data-adapted'] : ['chart-data-adapted'], `${type}: the adaptation is reported`);
-  assert.deepEqual(result.chartDiagnostics.map((diagnostic) => diagnostic.adaptation), type === 'histogram' ? ['histogram-binned'] : [...(chartex ? ['chartex-fallback'] : []), 'row-numbers'], type);
+  const spec = resolveChartType(type).spec;
+  // The default ('auto') writes chartex parts for the constructs the native check confirmed; the unconfirmed map keeps the clustered column fallback and says so.
+  const native = spec.family === 'chartex' && !spec.unconfirmed;
+  assert.equal(Boolean(result.chartex), native, `${type}: a chartEx part exactly for confirmed chartex types`);
+  // A histogram or Pareto chart bins the values themselves; every other type plots them against row numbers and says so.
+  const binned = native && spec.binning;
+  const adapted = result.chartDiagnostics.filter((diagnostic) => diagnostic.code === 'chart-data-adapted');
+  assert.deepEqual(adapted.map((diagnostic) => diagnostic.adaptation), binned ? [] : spec.unconfirmed ? ['chartex-fallback', 'row-numbers'] : ['row-numbers'], `${type}: the adaptation is reported`);
+  assert.deepEqual(result.chartDiagnostics.filter((diagnostic) => diagnostic.code !== 'chart-data-adapted'), [], `${type}: no other chart diagnostic by default`);
+  if (binned) assert.doesNotMatch(result.chartex, /<cx:strDim/, `${type}: the values are binned, not categorised`);
+  else if (result.chartex) assert.match(result.chartex, /<cx:strDim type="cat">[\s\S]*<cx:pt idx="0">1<\/cx:pt>/, `${type}: the chartex categories are the row numbers`);
 }
 const dots = await exported('dot-plot', {columns: ['2023'], rows: [[3], [5], [8]]});
 // A dot plot is a scatter chart (core replaces dot-plot with scatter): X is the row number, Y the value.
@@ -86,36 +95,30 @@ for (const [label, data, reason] of [
   assert.ok(result.chartDiagnostics[0].message.length > 20, label);
 }
 
-// Charts with a category column and one or more series are unchanged: same shape, no chart diagnostics.
+// Charts with a category column and one or more series are unchanged: same shape, no chart diagnostics. A histogram
+// with a category column bins by category (cx:aggregation) instead of by value.
 for (const type of ['column', 'bar', 'line', 'area', 'pie', 'doughnut', 'radar', 'histogram', 'waterfall']) {
   const result = await exported(type, {columns: ['Category', 'Value'], rows: [['a', 3], ['b', 4]]});
   assert.equal(result.charts.length, 1, type);
-  // Only a chartex type (waterfall) reports its fallback to a clustered column chart; a histogram with a category column is not binned, it is exported as its columns.
-  assert.deepEqual(result.chartDiagnostics.map((diagnostic) => diagnostic.adaptation), type === 'waterfall' || type === 'histogram' ? ['chartex-fallback'] : [], `${type}: no diagnostic for ordinary data`);
+  assert.deepEqual(result.chartDiagnostics, [], `${type}: no diagnostic for ordinary data`);
   assert.deepEqual(numbers(result.chart, 'cat'), [['a', 'b']], type);
+  if (type === 'histogram') assert.match(result.chartex, /<cx:layoutPr><cx:aggregation\/><\/cx:layoutPr>/, 'a categorised histogram aggregates by category');
 }
-// Extremes: finite arithmetic for any finite input, every value counted once.
+// Extremes: finite arithmetic for any finite input, every value written once and a finite bin count.
 for (const rows of [[[-1e308], [1e308]], [[-1e308], [0], [1e308]], [[1.7976931348623157e308], [-1.7976931348623157e308], [5]], [[Number.MIN_VALUE], [Number.MAX_VALUE]], [[0], [Number.MIN_VALUE]]]) {
   const result = await exported('histogram', {columns: ['Value'], rows});
   assert.equal(result.charts.length, 1, JSON.stringify(rows));
-  const counts = numbers(result.chart, 'val')[0].map(Number);
-  assert.equal(counts.reduce((total, count) => total + count, 0), rows.length, `extremes ${JSON.stringify(rows)}: every value is counted once`);
-  assert.ok(counts.every(Number.isInteger), 'integer counts');
-  assert.ok(numbers(result.chart, 'cat')[0].every((label) => label && !/NaN|Infinity/.test(label)), 'finite labels');
-}
-// Labels stay distinct when six significant digits would make two bins read alike.
-{
-  const result = await exported('histogram', {columns: ['Value'], rows: [[1000000], [1000000.4], [1000000.8], [1000001.2], [1000001.6], [1000002]]});
-  const labels = numbers(result.chart, 'cat')[0];
-  assert.equal(new Set(labels).size, labels.length, `distinct labels: ${labels}`);
-  assert.equal(numbers(result.chart, 'val')[0].reduce((total, count) => total + Number(count), 0), 6);
+  assert.deepEqual(chartexValues(result.chartex)[0].map(Number), rows.map(([value]) => value), `extremes ${JSON.stringify(rows)}: every value is written once`);
+  const count = binCount(result.chartex);
+  assert.ok(Number.isInteger(count) && count >= 1, `finite bin count ${count}`);
+  assert.doesNotMatch(result.chartex, /NaN|Infinity/, 'finite markup');
 }
 // One-column paths parse numbers as multi-column charts do ("12%", "$5", "1,234"), and skip cells that hold none.
 {
   const rows = [['12%'], ['$5'], ['1,234'], ['n/a'], [''], [null], [7]];
   const histogram = await exported('histogram', {columns: ['Value'], rows});
-  assert.equal(numbers(histogram.chart, 'val')[0].reduce((total, count) => total + Number(count), 0), 4, 'four cells hold numbers');
-  assert.match(histogram.chartDiagnostics[0].message, /4 values \(3 non-numeric cells were skipped\)/);
+  assert.deepEqual(chartexValues(histogram.chartex), [['12', '5', '1234', '7']], 'four cells hold numbers');
+  assert.deepEqual(numbers(histogram.chart, 'cat'), [['1', '2', '3', '7']], 'the fallback keeps the row numbers');
   const dots = await exported('dot-plot', {columns: ['V'], rows});
   assert.deepEqual(numbers(dots.chart, 'xVal'), [['1', '2', '3', '7']], 'skipped rows leave gaps in the row numbers');
   assert.deepEqual(numbers(dots.chart, 'yVal'), [['12', '5', '1234', '7']], 'skipped cells are not plotted as 0');
@@ -137,4 +140,4 @@ for (const data of [{columns: ['Category'], rows: [['a'], ['b']]}, {src: 'https:
   const text = [...strFromU8(unzipSync(bytes)['ppt/slides/slide1.xml']).matchAll(/<a:t>([^<]*)<\/a:t>/g)].map(([, value]) => value).join('|');
   assert.doesNotMatch(text, /&quot;|\{/);
 }
-console.log(`Single-column charts passed: histogram binning (${values.length} values to 3 bins, constant, single and 1000 values), ${types.size} chart types exported with a reported adaptation, unplottable data reported, ordinary charts unchanged.`);
+console.log(`Single-column charts passed: native histogram bins (${values.length} values, constant, single, 1000 values and extremes), ${types.size} chart types exported (row numbers reported, histogram and pareto binned natively), unplottable data reported, ordinary charts unchanged.`);

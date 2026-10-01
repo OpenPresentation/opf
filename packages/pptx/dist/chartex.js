@@ -115,9 +115,20 @@ function layoutProperties(spec, series, hasCategories) {
   }
 }
 
-function dataLabels(spec) {
-  if (spec.layoutId === 'treemap') return '<cx:dataLabels pos="inEnd"><cx:visibility seriesName="0" categoryName="1" value="0"/></cx:dataLabels>';
-  if (spec.layoutId === 'funnel') return '<cx:dataLabels pos="ctr"><cx:visibility seriesName="0" categoryName="0" value="1"/></cx:dataLabels>';
+// Text properties for every chartex text element. PowerPoint resolves chartex
+// label colours from the chart style part and each element's own cx:txPr, not
+// from the chartSpace txPr alone (native check 2026-09-30: labels came out in
+// the style's tx1 grey on a dark theme), so every axis, data label set and
+// legend carries the deck's label colour and font explicitly, like the classic
+// chart path writes into every c:txPr.
+function textProperties(labelColor, font) {
+  const face = escapeXml(font);
+  return `<cx:txPr><a:bodyPr/><a:lstStyle/><a:p><a:pPr><a:defRPr sz="900">${solidFill(labelColor)}<a:latin typeface="${face}"/><a:ea typeface="${face}"/><a:cs typeface="${face}"/></a:defRPr></a:pPr><a:endParaRPr lang="en-US"/></a:p></cx:txPr>`;
+}
+
+function dataLabels(spec, text) {
+  if (spec.layoutId === 'treemap') return `<cx:dataLabels pos="ctr">${text}<cx:visibility seriesName="0" categoryName="1" value="0"/></cx:dataLabels>`;
+  if (spec.layoutId === 'funnel') return `<cx:dataLabels pos="ctr">${text}<cx:visibility seriesName="0" categoryName="0" value="1"/></cx:dataLabels>`;
   return '';
 }
 
@@ -129,14 +140,15 @@ export function chartexPointColors(layoutId, values, palette) {
   return values.map(() => null);
 }
 
-function axes(spec, gridColor) {
+function axes(spec, gridColor, text) {
   if (!spec.axes) return '';
   const gridlines = `<cx:majorGridlines><cx:spPr><a:ln w="9525"><a:solidFill><a:srgbClr val="${gridColor}"><a:alpha val="70000"/></a:srgbClr></a:solidFill></a:ln></cx:spPr></cx:majorGridlines>`;
   const gapWidth = {clusteredColumn: '0.06', paretoLine: '0.06', boxWhisker: '1', waterfall: '0.5', funnel: '0.06'}[spec.layoutId] ?? '1';
-  const category = `<cx:axis id="0"><cx:catScaling gapWidth="${gapWidth}"/><cx:tickLabels/></cx:axis>`;
-  if (spec.layoutId === 'funnel') return `${category}<cx:axis id="1" hidden="1"><cx:valScaling/><cx:tickLabels/></cx:axis>`;
-  const value = `<cx:axis id="1"><cx:valScaling/>${gridlines}<cx:tickLabels/></cx:axis>`;
-  const percentage = spec.layoutId === 'paretoLine' ? '<cx:axis id="2"><cx:valScaling max="1" min="0"/><cx:units unit="percentage"/><cx:tickLabels/></cx:axis>' : '';
+  // CT_Axis order: scaling, units, majorGridlines, tickLabels, spPr, txPr.
+  const category = `<cx:axis id="0"><cx:catScaling gapWidth="${gapWidth}"/><cx:tickLabels/>${text}</cx:axis>`;
+  if (spec.layoutId === 'funnel') return `${category}<cx:axis id="1" hidden="1"><cx:valScaling/><cx:tickLabels/>${text}</cx:axis>`;
+  const value = `<cx:axis id="1"><cx:valScaling/>${gridlines}<cx:tickLabels/>${text}</cx:axis>`;
+  const percentage = spec.layoutId === 'paretoLine' ? `<cx:axis id="2"><cx:valScaling max="1" min="0"/><cx:units unit="percentage"/><cx:tickLabels/>${text}</cx:axis>` : '';
   return `${category}${value}${percentage}`;
 }
 
@@ -157,29 +169,30 @@ export function chartexPartXml({spec, series, hasCategories, number, workbookRel
     const points = entry.values.map((value, row) => value === null || !Number.isFinite(value) ? '' : `<cx:pt idx="${row}">${numberText(value)}</cx:pt>`).join('');
     return `<cx:data id="${index}">${categories}<cx:numDim type="${spec.dimension}"><cx:f>${range(columnLetters(index + 2))}</cx:f><cx:lvl ptCount="${rows}" formatCode="General">${points}</cx:lvl></cx:numDim></cx:data>`;
   }).join('');
+  const text = textProperties(labelColor, font);
   const plotted = series.map((entry, index) => {
     const color = palette[index % palette.length];
     const letter = columnLetters(index + 2);
     const pointFills = chartexPointColors(spec.layoutId, entry.values, palette)
       .map((pointColor, row) => pointColor ? `<cx:dataPt idx="${row}"><cx:spPr>${solidFill(pointColor)}</cx:spPr></cx:dataPt>` : '').join('');
+    // Box whiskers, median lines and mean markers are drawn with the series line; without one PowerPoint used black (native check 2026-09-30).
+    const line = spec.layoutId === 'boxWhisker' ? `<a:ln w="9525">${solidFill(labelColor)}</a:ln>` : '';
     return `<cx:series layoutId="${spec.owner ?? spec.layoutId}" uniqueId="${seriesUniqueId(number, index)}">` +
       `<cx:tx><cx:txData><cx:f>Sheet1!$${letter}$1</cx:f><cx:v>${escapeXml(entry.name)}</cx:v></cx:txData></cx:tx>` +
-      `<cx:spPr>${solidFill(color)}</cx:spPr>${pointFills}${dataLabels(spec)}<cx:dataId val="${index}"/>${layoutProperties(spec, entry, hasCategories)}` +
+      `<cx:spPr>${solidFill(color)}${line}</cx:spPr>${pointFills}${dataLabels(spec, text)}<cx:dataId val="${index}"/>${layoutProperties(spec, entry, hasCategories)}` +
       (spec.axes ? '<cx:axisId val="0"/><cx:axisId val="1"/>' : '') + '</cx:series>';
   });
   if (spec.owner) {
     // The Office Pareto chart: the cumulative-percentage line owned by the binned columns, on the percentage axis.
     plotted.push(`<cx:series layoutId="${spec.layoutId}" ownerIdx="0" uniqueId="${seriesUniqueId(number, series.length)}"><cx:spPr><a:ln w="19050"><a:solidFill><a:srgbClr val="${palette[1 % palette.length]}"/></a:solidFill></a:ln></cx:spPr><cx:axisId val="0"/><cx:axisId val="2"/></cx:series>`);
   }
-  const legend = spec.layoutId === 'boxWhisker' && series.length > 1 ? '<cx:legend pos="r" align="ctr" overlay="0"/>' : '';
+  const legend = spec.layoutId === 'boxWhisker' && series.length > 1 ? `<cx:legend pos="r" align="ctr" overlay="0">${text}</cx:legend>` : '';
   const alpha = fill.transparency > 0 ? Math.round((100 - fill.transparency) * 1000) : undefined;
-  const face = escapeXml(font);
   return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
     `<cx:chartSpace xmlns:a="${NS.a}" xmlns:r="${NS.r}" xmlns:cx="${NS.cx}">` +
     `<cx:chartData><cx:externalData r:id="${workbookRelId}" cx:autoUpdate="0"/>${data}</cx:chartData>` +
-    `<cx:chart><cx:plotArea><cx:plotAreaRegion>${plotted.join('')}</cx:plotAreaRegion>${axes(spec, gridColor)}</cx:plotArea>${legend}</cx:chart>` +
-    `<cx:spPr>${solidFill(fill.color, alpha)}<a:ln><a:noFill/></a:ln></cx:spPr>` +
-    `<cx:txPr><a:bodyPr/><a:lstStyle/><a:p><a:pPr><a:defRPr sz="900">${solidFill(labelColor)}<a:latin typeface="${face}"/><a:ea typeface="${face}"/><a:cs typeface="${face}"/></a:defRPr></a:pPr><a:endParaRPr lang="en-US"/></a:p></cx:txPr>` +
+    `<cx:chart><cx:plotArea><cx:plotAreaRegion>${plotted.join('')}</cx:plotAreaRegion>${axes(spec, gridColor, text)}</cx:plotArea>${legend}</cx:chart>` +
+    `<cx:spPr>${solidFill(fill.color, alpha)}<a:ln><a:noFill/></a:ln></cx:spPr>${text}` +
     '</cx:chartSpace>';
 }
 
@@ -201,11 +214,14 @@ const STYLE_ENTRIES = [
   'dataPointMarkerLayout', 'dataPointWireframe', 'dataTable', 'downBar', 'dropLine', 'errorBar', 'floor', 'gridlineMajor', 'gridlineMinor', 'hiLoLine',
   'leaderLine', 'legend', 'plotArea', 'plotArea3D', 'seriesAxis', 'seriesLine', 'title', 'trendline', 'trendlineLabel', 'upBar', 'valueAxis', 'wall',
 ];
-export function chartStyleXml() {
-  const textColor = '<a:schemeClr val="tx1"><a:lumMod val="65000"/><a:lumOff val="35000"/></a:schemeClr>';
-  const faintLine = '<a:ln w="9525" cap="flat" cmpd="sng" algn="ctr"><a:solidFill><a:schemeClr val="tx1"><a:lumMod val="15000"/><a:lumOff val="85000"/></a:schemeClr></a:solidFill><a:round/></a:ln>';
-  const entry = (name, {fillIdx = '0', fillColor = '', fontColor = '<a:schemeClr val="tx1"/>', spPr = '', size = '', mods = ''} = {}) =>
-    `<cs:${name}${mods ? ` mods="${mods}"` : ''}><cs:lnRef idx="0"/><cs:fillRef idx="${fillIdx}">${fillColor}</cs:fillRef><cs:effectRef idx="0"/><cs:fontRef idx="minor">${fontColor}</cs:fontRef>${spPr ? `<cs:spPr>${spPr}</cs:spPr>` : ''}${size ? `<cs:defRPr sz="${size}" kern="1200"/>` : ''}</cs:${name}>`;
+export function chartStyleXml({labelColor = '000000', gridColor = '000000', font = 'Aptos'} = {}) {
+  // Text and chrome colours are the deck's label and border colours (what the classic chart path writes), not the
+  // theme's tx1: PowerPoint applies the style part to chartex labels that carry no cx:txPr of their own.
+  const textColor = `<a:srgbClr val="${labelColor}"/>`;
+  const face = escapeXml(font);
+  const faintLine = `<a:ln w="9525" cap="flat" cmpd="sng" algn="ctr"><a:solidFill><a:srgbClr val="${gridColor}"><a:alpha val="70000"/></a:srgbClr></a:solidFill><a:round/></a:ln>`;
+  const entry = (name, {fillIdx = '0', fillColor = '', fontColor = textColor, spPr = '', size = '', mods = ''} = {}) =>
+    `<cs:${name}${mods ? ` mods="${mods}"` : ''}><cs:lnRef idx="0"/><cs:fillRef idx="${fillIdx}">${fillColor}</cs:fillRef><cs:effectRef idx="0"/><cs:fontRef idx="minor">${fontColor}</cs:fontRef>${spPr ? `<cs:spPr>${spPr}</cs:spPr>` : ''}${size ? `<cs:defRPr sz="${size}" kern="1200">${solidFill(labelColor)}<a:latin typeface="${face}"/><a:ea typeface="${face}"/><a:cs typeface="${face}"/></cs:defRPr>` : ''}</cs:${name}>`;
   const entries = STYLE_ENTRIES.map(name => {
     switch (name) {
       case 'dataPointMarkerLayout': return '<cs:dataPointMarkerLayout symbol="circle" size="5"/>';
@@ -278,7 +294,7 @@ export function attachChartexParts(entries, chartex, parseRelationships) {
       const base = `ppt/charts/chartEx${number}.xml`;
       entries[base] = encoder.encode(chartexPartXml({...chart, number, workbookRelId: 'rId1'}));
       entries[`ppt/charts/_rels/chartEx${number}.xml.rels`] = encoder.encode(chartexRelationshipsXml({workbookTarget: workbook.target, number}));
-      entries[`ppt/charts/style${number}.xml`] = encoder.encode(chartStyleXml());
+      entries[`ppt/charts/style${number}.xml`] = encoder.encode(chartStyleXml({labelColor: chart.labelColor, gridColor: chart.gridColor, font: chart.font}));
       entries[`ppt/charts/colors${number}.xml`] = encoder.encode(chartColorStyleXml());
       overrides.push(`<Override PartName="/${base}" ContentType="${CHARTEX_CONTENT_TYPES.chart}"/>`,
         `<Override PartName="/ppt/charts/style${number}.xml" ContentType="${CHARTEX_CONTENT_TYPES.style}"/>`,

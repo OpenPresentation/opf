@@ -39,7 +39,11 @@ export const CHART_TYPES = Object.freeze({
   'box-and-whisker': chartex('boxWhisker', 'BoxAndWhisker', { requires: 'cx1', series: Infinity, axes: true }),
   waterfall: chartex('waterfall', 'Waterfall', { requires: 'cx1', series: 1, axes: true }),
   funnel: chartex('funnel', 'Funnel', { requires: 'cx2', series: 1, axes: true }),
-  world: chartex('regionMap', 'Map', { requires: 'cx5', dimension: 'colorVal', series: 1 }),
+  // Native check 2026-09-30: PowerPoint accepts the regionMap part only when the choice requires cx4 (2016/5/10, the
+  // region-map extension namespace; cx5 and cx8 fall back), reports ChartType 140, and then draws nothing without a
+  // populated cx:geoCache ("There was a problem getting the information for your map chart"), so the map stays on the
+  // clustered column fallback in 'auto' mode and is written only with `chartex: 'native'`.
+  world: chartex('regionMap', 'Map', { requires: 'cx4', dimension: 'colorVal', series: 1, unconfirmed: true }),
 });
 
 function chartex(layoutId, aspose, extra) {

@@ -41,13 +41,13 @@ let checks = 0;
 // ---------------------------------------------------------------------------
 // Each chartex id: parts, relationships, content types, the alternate-content frame and the cx:chartSpace structure.
 const expectedLayout = {
-  treemap: {layoutIds: ['treemap'], dimension: 'size', requires: 'cx1', layoutPr: /<cx:layoutPr><cx:parentLabelLayout val="none"\/><\/cx:layoutPr>/, axes: 0, dataLabels: /<cx:dataLabels pos="inEnd"><cx:visibility seriesName="0" categoryName="1" value="0"\/><\/cx:dataLabels>/},
+  treemap: {layoutIds: ['treemap'], dimension: 'size', requires: 'cx1', layoutPr: /<cx:layoutPr><cx:parentLabelLayout val="none"\/><\/cx:layoutPr>/, axes: 0, dataLabels: /<cx:dataLabels pos="ctr"><cx:txPr>[\s\S]*?<\/cx:txPr><cx:visibility seriesName="0" categoryName="1" value="0"\/><\/cx:dataLabels>/},
   histogram: {layoutIds: ['clusteredColumn'], dimension: 'val', requires: 'cx1', layoutPr: /<cx:layoutPr><cx:aggregation\/><\/cx:layoutPr>/, axes: 2},
   pareto: {layoutIds: ['clusteredColumn', 'paretoLine'], dimension: 'val', requires: 'cx1', layoutPr: /<cx:layoutPr><cx:aggregation\/><\/cx:layoutPr>/, axes: 3},
   'box-and-whisker': {layoutIds: ['boxWhisker', 'boxWhisker'], dimension: 'val', requires: 'cx1', layoutPr: /<cx:layoutPr><cx:visibility meanLine="0" meanMarker="1" nonoutliers="0" outliers="1"\/><cx:statistics quartileMethod="exclusive"\/><\/cx:layoutPr>/, axes: 2},
   waterfall: {layoutIds: ['waterfall'], dimension: 'val', requires: 'cx1', layoutPr: /<cx:layoutPr><cx:visibility connectorLines="1"\/><\/cx:layoutPr>/, axes: 2},
-  funnel: {layoutIds: ['funnel'], dimension: 'val', requires: 'cx2', layoutPr: null, axes: 2, dataLabels: /<cx:dataLabels pos="ctr"><cx:visibility seriesName="0" categoryName="0" value="1"\/><\/cx:dataLabels>/},
-  world: {layoutIds: ['regionMap'], dimension: 'colorVal', requires: 'cx5', layoutPr: /<cx:layoutPr><cx:geography cultureLanguage="en-US" cultureRegion="US" attribution="Powered by Bing"\/><\/cx:layoutPr>/, axes: 0},
+  funnel: {layoutIds: ['funnel'], dimension: 'val', requires: 'cx2', layoutPr: null, axes: 2, dataLabels: /<cx:dataLabels pos="ctr"><cx:txPr>[\s\S]*?<\/cx:txPr><cx:visibility seriesName="0" categoryName="0" value="1"\/><\/cx:dataLabels>/},
+  world: {layoutIds: ['regionMap'], dimension: 'colorVal', requires: 'cx4', layoutPr: /<cx:layoutPr><cx:geography cultureLanguage="en-US" cultureRegion="US" attribution="Powered by Bing"\/><\/cx:layoutPr>/, axes: 0},
 };
 assert.deepEqual(Object.keys(expectedLayout), chartexIds);
 
@@ -153,8 +153,10 @@ for (const id of chartexIds) {
   assert.equal(axes.length, want.axes, `${id}: axis count`);
   if (want.axes) {
     assert.deepEqual(axes.map(([, axisId]) => axisId), ['0', '1', '2'].slice(0, want.axes));
-    assert.match(axes[0][2], /^<cx:catScaling gapWidth="[0-9.]+"\/><cx:tickLabels\/>$/, `${id}: category axis`);
-    assert.match(axes[1][2], id === 'funnel' ? /^<cx:valScaling\/><cx:tickLabels\/>$/ : /^<cx:valScaling\/><cx:majorGridlines><cx:spPr>[\s\S]*<\/cx:spPr><\/cx:majorGridlines><cx:tickLabels\/>$/, `${id}: value axis`);
+    // CT_Axis order: scaling, gridlines, tickLabels, then the axis's own txPr (PowerPoint does not inherit the chartSpace txPr for axis labels).
+    assert.match(axes[0][2], /^<cx:catScaling gapWidth="[0-9.]+"\/><cx:tickLabels\/><cx:txPr>[\s\S]*<\/cx:txPr>$/, `${id}: category axis`);
+    assert.match(axes[1][2], id === 'funnel' ? /^<cx:valScaling\/><cx:tickLabels\/><cx:txPr>[\s\S]*<\/cx:txPr>$/ : /^<cx:valScaling\/><cx:majorGridlines><cx:spPr>[\s\S]*<\/cx:spPr><\/cx:majorGridlines><cx:tickLabels\/><cx:txPr>[\s\S]*<\/cx:txPr>$/, `${id}: value axis`);
+    for (const [, axisId, body] of axes) assert.equal([...body.matchAll(/<cx:txPr>/g)].length, 1, `${id}: axis ${axisId} carries one txPr`);
     if (id === 'funnel') assert.match(axes[1][0], /<cx:axis id="1" hidden="1">/, 'funnel value axis is hidden');
     assert.match(owner[2], /<cx:axisId val="0"\/><cx:axisId val="1"\/>$/, `${id}: the series names its axes`);
   } else {
@@ -165,11 +167,14 @@ for (const id of chartexIds) {
     assert.equal(attribute(attrs, 'ownerIdx'), '0', 'the Pareto line is owned by the columns');
     assert.doesNotMatch(body, /<cx:dataId|<cx:tx>/, 'the owned line has no data of its own');
     assert.match(body, /<cx:spPr><a:ln w="19050"><a:solidFill><a:srgbClr val="[0-9A-F]{6}"\/><\/a:solidFill><\/a:ln><\/cx:spPr><cx:axisId val="0"\/><cx:axisId val="2"\/>$/, 'the line uses the percentage axis');
-    assert.equal(axes[2][2], '<cx:valScaling max="1" min="0"/><cx:units unit="percentage"/><cx:tickLabels/>', 'percentage axis');
+    assert.match(axes[2][2], /^<cx:valScaling max="1" min="0"\/><cx:units unit="percentage"\/><cx:tickLabels\/><cx:txPr>[\s\S]*<\/cx:txPr>$/, 'percentage axis');
   }
   // Colours and text follow the classic chart: series fill, per-point fills for treemap tiles and waterfall signs, label colour and font.
   const classicSeriesColor = classic.match(/<c:ser>[\s\S]*?<c:spPr><a:solidFill><a:srgbClr val="([0-9A-F]{6})"/)[1];
-  assert.match(owner[2], new RegExp(`<cx:spPr><a:solidFill><a:srgbClr val="${classicSeriesColor}"/></a:solidFill></cx:spPr>`), `${id}: series colour is the classic first series colour`);
+  const labelColor = classic.match(/<c:txPr>[\s\S]*?<a:solidFill><a:srgbClr val="([0-9A-F]{6})"/)[1];
+  // Box whiskers, medians and mean markers are drawn with the series line, in the label colour; other constructs have no series line.
+  const seriesLine = id === 'box-and-whisker' ? `<a:ln w="9525"><a:solidFill><a:srgbClr val="${labelColor}"/></a:solidFill></a:ln>` : '';
+  assert.match(owner[2], new RegExp(`<cx:spPr><a:solidFill><a:srgbClr val="${classicSeriesColor}"/></a:solidFill>${seriesLine}</cx:spPr>`), `${id}: series colour is the classic first series colour`);
   const pointFills = [...owner[2].matchAll(/<cx:dataPt idx="(\d+)"><cx:spPr><a:solidFill><a:srgbClr val="([0-9A-F]{6})"\/><\/a:solidFill><\/cx:spPr><\/cx:dataPt>/g)].map(([, idx, color]) => [Number(idx), color]);
   if (id === 'treemap') {
     assert.equal(pointFills.length, data.rows.length, 'one tile colour per category');
@@ -180,9 +185,13 @@ for (const id of chartexIds) {
   } else {
     assert.deepEqual(pointFills, [], `${id}: series colour only`);
   }
-  const labelColor = classic.match(/<c:txPr>[\s\S]*?<a:solidFill><a:srgbClr val="([0-9A-F]{6})"/)[1];
   const face = classic.match(/<a:latin typeface="([^"]+)"/)[1];
-  assert.equal(cx.match(/<cx:txPr>([\s\S]*)<\/cx:txPr>/)[1], `<a:bodyPr/><a:lstStyle/><a:p><a:pPr><a:defRPr sz="900"><a:solidFill><a:srgbClr val="${labelColor}"/></a:solidFill><a:latin typeface="${face}"/><a:ea typeface="${face}"/><a:cs typeface="${face}"/></a:defRPr></a:pPr><a:endParaRPr lang="en-US"/></a:p>`, `${id}: chart text colour and font`);
+  // Every text element (chart space, each axis, data labels, legend) carries the same explicit label colour and font.
+  const textProperties = `<cx:txPr><a:bodyPr/><a:lstStyle/><a:p><a:pPr><a:defRPr sz="900"><a:solidFill><a:srgbClr val="${labelColor}"/></a:solidFill><a:latin typeface="${face}"/><a:ea typeface="${face}"/><a:cs typeface="${face}"/></a:defRPr></a:pPr><a:endParaRPr lang="en-US"/></a:p></cx:txPr>`;
+  const textBlocks = [...cx.matchAll(/<cx:txPr>[\s\S]*?<\/cx:txPr>/g)].map((match) => match[0]);
+  assert.ok(textBlocks.every((block) => block === textProperties), `${id}: every cx:txPr is the deck's label colour and font`);
+  assert.equal(textBlocks.length, 1 + want.axes + (want.dataLabels ? 1 : 0) + (id === 'box-and-whisker' ? 1 : 0), `${id}: txPr on the chart space, each axis, data labels and legend`);
+  assert.ok(cx.endsWith(`${textProperties}</cx:chartSpace>`), `${id}: chart space txPr`);
   const chartAreaFill = classic.match(/<\/c:chart><c:spPr><a:solidFill><a:srgbClr val="([0-9A-F]{6})"/)[1];
   assert.match(cx, new RegExp(`</cx:chart><cx:spPr><a:solidFill><a:srgbClr val="${chartAreaFill}"(?:/>|><a:alpha val="\\d+"/></a:srgbClr>)</a:solidFill><a:ln><a:noFill/></a:ln></cx:spPr>`), `${id}: chart area fill`);
   assert.equal(cx.includes('<cx:legend'), id === 'box-and-whisker', `${id}: legend only for the multi-series box chart`);
@@ -194,15 +203,18 @@ for (const id of chartexIds) {
   const entries = [...style.matchAll(/<cs:(\w+)\b/g)].map((match) => match[1]).filter((name) => !['chartStyle', 'lnRef', 'fillRef', 'effectRef', 'fontRef', 'spPr', 'defRPr', 'styleClr'].includes(name));
   assert.deepEqual(entries, ['axisTitle', 'categoryAxis', 'chartArea', 'dataLabel', 'dataLabelCallout', 'dataPoint', 'dataPoint3D', 'dataPointLine', 'dataPointMarker', 'dataPointMarkerLayout', 'dataPointWireframe', 'dataTable', 'downBar', 'dropLine', 'errorBar', 'floor', 'gridlineMajor', 'gridlineMinor', 'hiLoLine', 'leaderLine', 'legend', 'plotArea', 'plotArea3D', 'seriesAxis', 'seriesLine', 'title', 'trendline', 'trendlineLabel', 'upBar', 'valueAxis', 'wall'], 'CT_ChartStyle entries in schema order');
   for (const [, name, body] of style.matchAll(/<cs:(\w+)(?: mods="[^"]*")?>(<cs:lnRef[\s\S]*?)<\/cs:\1>/g)) {
-    assert.match(body, /^<cs:lnRef idx="\d+"\/><cs:fillRef idx="\d+">(?:<cs:styleClr val="auto"\/>)?<\/cs:fillRef><cs:effectRef idx="\d+"\/><cs:fontRef idx="minor">/, `style entry ${name}`);
+    // The style part's text references carry the deck's label colour (PowerPoint applies them to chartex labels), never the theme's tx1.
+    assert.match(body, new RegExp(`^<cs:lnRef idx="\\d+"/><cs:fillRef idx="\\d+">(?:<cs:styleClr val="auto"/>)?</cs:fillRef><cs:effectRef idx="\\d+"/><cs:fontRef idx="minor"><a:srgbClr val="${labelColor}"/></cs:fontRef>`), `style entry ${name}`);
+    if (body.includes('<cs:defRPr')) assert.match(body, new RegExp(`<cs:defRPr sz="\\d+" kern="1200"><a:solidFill><a:srgbClr val="${labelColor}"/></a:solidFill><a:latin typeface="${face}"/><a:ea typeface="${face}"/><a:cs typeface="${face}"/></cs:defRPr>`), `style text ${name}`);
   }
+  assert.doesNotMatch(style, /schemeClr val="tx1"/, `${id}: no theme text colour in the style part`);
   const colors = part('ppt/charts/colors1.xml');
   assert.equal(XMLValidator.validate(colors), true);
   assert.match(colors, /<cs:colorStyle [^>]*meth="cycle" id="10">(<a:schemeClr val="accent[1-6]"\/>){6}(<cs:variation\/>|<cs:variation>[\s\S]*?<\/cs:variation>){9}<\/cs:colorStyle>$/);
 
   // Diagnostics: only the map reports its missing geography cache.
   assert.deepEqual(diagnostics.map((diagnostic) => diagnostic.code), id === 'world' ? ['chart-map-geodata'] : [], `${id}: diagnostics`);
-  if (id === 'world') assert.match(diagnostics[0].message, /Bing Maps.*offline/);
+  if (id === 'world') assert.match(diagnostics[0].message, /online map service.*draws nothing/);
   checks++;
 }
 
@@ -364,24 +376,70 @@ const classicNumbers = (xml, tag) => [...xml.matchAll(new RegExp(`<c:${tag}>([\\
 }
 
 // ---------------------------------------------------------------------------
-// Default mode (`chartex: 'fallback'`, the default): the export of the chartex ids is byte-identical to main's, with main's
-// diagnostics, and no chartex part is written. The fixture holds SHA-256 digests generated from main (see its `source`).
+// Modes. `chartex: 'fallback'` keeps the export of every chartex id byte-identical to main's (SHA-256 fixture generated from
+// main, see its `source`) with main's diagnostics and no chartex part. The default ('auto', owner decision after the
+// 2026-09-30 native PowerPoint check) writes the chartex parts for the six confirmed constructs and keeps only the map
+// on the fallback, reporting it; `chartex: 'native'` writes every construct, map included.
 {
   const fixture = JSON.parse(readFileSync(new URL('./fixtures/chartex-fallback-main.json', import.meta.url), 'utf8'));
   assert.equal(fixture.source.repository, 'OpenPresentation/opf-pptx');
   assert.equal(Object.keys(fixture.decks).length, 9);
+  const digest = (bytes) => createHash('sha256').update(bytes).digest('hex');
+  const run = async (deck, mode) => {
+    const diagnostics = [];
+    const bytes = await toPptx(structuredClone(deck), {...(mode ? {chartex: mode} : {}), onDiagnostic: (d) => diagnostics.push(`${d.code}${d.adaptation ? `/${d.adaptation}` : ''}`)});
+    const parts = unzipSync(bytes);
+    return {bytes, diagnostics, chartexParts: Object.keys(parts).filter((part) => /^ppt\/charts\/chartEx\d+\.xml$/.test(part)).length, slides: Object.keys(parts).filter((part) => /^ppt\/slides\/slide\d+\.xml$/.test(part)).map((part) => strFromU8(parts[part]))};
+  };
   for (const [name, deck] of Object.entries(fixture.decks)) {
-    for (const mode of [undefined, 'fallback']) {
-      const diagnostics = [];
-      const bytes = await toPptx(structuredClone(deck), {...(mode ? {chartex: mode} : {}), onDiagnostic: (d) => diagnostics.push(`${d.code}${d.adaptation ? `/${d.adaptation}` : ''}`)});
-      assert.equal(createHash('sha256').update(bytes).digest('hex'), fixture.entries[name].sha256, `${name} (${mode ?? 'default'}): bytes identical to main ${fixture.source.commit.slice(0, 7)}`);
-      assert.deepEqual(diagnostics, fixture.entries[name].diagnostics, `${name}: main's diagnostics`);
-      const parts = unzipSync(bytes);
-      assert.ok(!Object.keys(parts).some((part) => /chartEx|\/style\d+\.xml|\/colors\d+\.xml/.test(part)), `${name}: no chartex parts by default`);
-      assert.doesNotMatch(strFromU8(parts['ppt/slides/slide1.xml']), /AlternateContent/, `${name}: no alternate content by default`);
+    const fallback = await run(deck, 'fallback');
+    assert.equal(digest(fallback.bytes), fixture.entries[name].sha256, `${name} (fallback): bytes identical to main ${fixture.source.commit.slice(0, 7)}`);
+    assert.deepEqual(fallback.diagnostics, fixture.entries[name].diagnostics, `${name} (fallback): main's diagnostics`);
+    assert.equal(fallback.chartexParts, 0, `${name} (fallback): no chartex parts`);
+    assert.ok(fallback.slides.every((slide) => !slide.includes('AlternateContent')), `${name} (fallback): no alternate content`);
+    const maps = deck.slides.filter((slide) => ['world', 'australia'].includes(slide.chart.type)).length;
+    const auto = await run(deck, undefined), explicit = await run(deck, 'auto'), native = await run(deck, 'native');
+    assert.deepEqual(digest(auto.bytes), digest(explicit.bytes), `${name}: the default is 'auto'`);
+    assert.equal(auto.chartexParts, deck.slides.length - maps, `${name} (auto): chartex parts for every confirmed construct`);
+    assert.equal(native.chartexParts, deck.slides.length, `${name} (native): chartex parts for every construct`);
+    if (maps === 0) assert.deepEqual(digest(auto.bytes), digest(native.bytes), `${name}: auto equals native without a map`);
+    else {
+      assert.notEqual(digest(auto.bytes), digest(native.bytes), `${name}: the map differs between auto and native`);
+      assert.deepEqual(auto.diagnostics.filter((d) => d.endsWith('/chartex-fallback')).length, maps, `${name} (auto): the map reports its fallback`);
+      assert.ok(!auto.diagnostics.includes('chart-map-geodata') && native.diagnostics.includes('chart-map-geodata'), `${name}: geodata notice only when the map is native`);
     }
+    if (maps === deck.slides.length) assert.deepEqual(digest(auto.bytes), fixture.entries[name].sha256, `${name} (auto): a map-only deck keeps main's bytes`);
+    else assert.ok(auto.diagnostics.every((d) => d !== 'chart-data-adapted/histogram-binned'), `${name} (auto): histograms bin natively`);
   }
-  await assert.rejects(toPptx({slides: [{title: 't', chart: {type: 'treemap', data: categoryData}}]}, {chartex: 'auto'}), (error) => error.code === 'invalid-chartex-mode' && error.details?.path === 'options.chartex');
+  await assert.rejects(toPptx({slides: [{title: 't', chart: {type: 'treemap', data: categoryData}}]}, {chartex: 'maybe'}), (error) => error.code === 'invalid-chartex-mode' && error.details?.path === 'options.chartex');
+  checks++;
+}
+
+// ---------------------------------------------------------------------------
+// Theme-aware colours: the label colour, series line and style text follow the deck (dark text on the default light
+// surface, light text on a dark theme), as the classic chart path does.
+{
+  const colorsOf = (cx, style) => ({
+    text: [...new Set([...cx.matchAll(/<cx:txPr>[\s\S]*?<a:srgbClr val="([0-9A-F]{6})"/g)].map((m) => m[1]))],
+    style: [...new Set([...style.matchAll(/<cs:fontRef idx="minor"><a:srgbClr val="([0-9A-F]{6})"/g)].map((m) => m[1]))],
+    line: cx.match(/<cx:series[^>]*>[\s\S]*?<cx:spPr><a:solidFill>[\s\S]*?<\/a:solidFill><a:ln w="9525"><a:solidFill><a:srgbClr val="([0-9A-F]{6})"/)?.[1],
+  });
+  // The default scheme is a dark surface; an explicit scheme with dark text on a light surface is the other case (as test/chart-colors.mjs does).
+  const dark = await exportDeck([{title: 'box', chart: {type: 'box-and-whisker', data: boxData}}]);
+  const lightDeck = {design: {background: '#FFFFFF', colorScheme: {id: 'cool-horizon', dark1: '#1F2937', light1: '#1F2937', text: '#1F2937', dark2: '#F3F4F6', light2: '#F3F4F6'}}, slides: [{title: 'box', chart: {type: 'box-and-whisker', data: boxData}}]};
+  const lightParts = unzipSync(await toPptx(lightDeck, {chartex: 'native'}));
+  const darkColors = colorsOf(dark.part('ppt/charts/chartEx1.xml'), dark.part('ppt/charts/style1.xml'));
+  const lightColors = colorsOf(strFromU8(lightParts['ppt/charts/chartEx1.xml']), strFromU8(lightParts['ppt/charts/style1.xml']));
+  for (const [name, colors] of [['light', lightColors], ['dark', darkColors]]) {
+    assert.equal(colors.text.length, 1, `${name}: one label colour`);
+    assert.deepEqual(colors.style, colors.text, `${name}: the style text colour is the label colour`);
+    assert.equal(colors.line, colors.text[0], `${name}: the box series line is the label colour`);
+  }
+  const luminance = (hex) => [0, 2, 4].map((i) => parseInt(hex.slice(i, i + 2), 16)).reduce((sum, v, i) => sum + v * [0.299, 0.587, 0.114][i], 0);
+  assert.ok(luminance(lightColors.text[0]) < 128, `light surface: dark labels (${lightColors.text[0]})`);
+  assert.ok(luminance(darkColors.text[0]) > 128, `dark surface: light labels (${darkColors.text[0]})`);
+  const classicLight = strFromU8(lightParts['ppt/charts/chart1.xml']).match(/<c:txPr>[\s\S]*?<a:srgbClr val="([0-9A-F]{6})"/)[1];
+  assert.equal(lightColors.text[0], classicLight, 'the chartex label colour is the classic chart label colour');
   checks++;
 }
 
@@ -400,4 +458,4 @@ assert.deepEqual(chartexPointColors('funnel', [1, 2], ['A']), [null, null]);
 assert.equal(resolveChartType('treemap-3x').id, 'treemap');
 assert.equal(DEPRECATED_CHART_TYPES['united-states'], 'world');
 
-console.log(`Chartex passed: ${checks} checks; ${chartexIds.length} chartex ids export native cx:chartSpace parts with style parts, content types, relationships and alternate-content frames, agree with core catalogs.chartTypes, round-trip, and are deterministic (opt-in); the default export of those ids is byte-identical to main.`);
+console.log(`Chartex passed: ${checks} checks; ${chartexIds.length} chartex ids export native cx:chartSpace parts with style parts, content types, relationships and alternate-content frames, agree with core catalogs.chartTypes, round-trip and are deterministic; the default writes them for the six confirmed constructs and keeps the map on the fallback (chartex: 'fallback' stays byte-identical to main).`);

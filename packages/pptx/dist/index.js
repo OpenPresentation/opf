@@ -229,12 +229,13 @@ export async function toPptx(input, options = {}) {
   context.chartFonts = new Map();
   context.chartex = new Map();
   context.imageFormat = options.imageFormat ?? "compatible";
-  // Native chartex parts are opt-in until the native PowerPoint check confirms them (FF-22b); the default keeps the
-  // clustered column export of the chartex chart types.
-  if (options.chartex !== undefined && !['native', 'fallback'].includes(options.chartex)) {
-    throw new OPFPptxError('invalid-chartex-mode', 'chartex must be native or fallback.', {path: 'options.chartex'});
+  // Chartex export mode (FF-22b): 'auto' (default) writes native chartex parts for the constructs the native PowerPoint
+  // check confirmed (treemap, histogram, pareto, box-and-whisker, waterfall, funnel) and the clustered column fallback
+  // for the unconfirmed map; 'native' writes every chartex part; 'fallback' writes clustered columns only.
+  if (options.chartex !== undefined && !['auto', 'native', 'fallback'].includes(options.chartex)) {
+    throw new OPFPptxError('invalid-chartex-mode', 'chartex must be auto, native or fallback.', {path: 'options.chartex'});
   }
-  context.chartexMode = options.chartex ?? 'fallback';
+  context.chartexMode = options.chartex ?? 'auto';
   Object.assign(context, exportTheme(presentation, context));
   context.reportedFontSchemes = new Set();
   // Document references and metadata tags (FF-32, docs/document-roundtrip.md).
@@ -1694,7 +1695,7 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     const series = chartData.series.map((entry) => ({name: entry.name, labels: [...entry.labels], values: [...entry.values]}));
     context.chartex.set(objectName, {spec: chartData.chartex, series, hasCategories: chartData.hasCategories, fill, labelColor, gridColor: context.colors.border, font: context.fonts.body, palette});
     if (chartData.chartex.layoutId === 'regionMap') {
-      options.onDiagnostic?.({code: "chart-map-geodata", path, message: `The '${stringifyText(chart.type)}' chart is exported as a native PowerPoint map (chartex regionMap) without cached geography: PowerPoint matches the category names to regions and fetches their shapes from Bing Maps when the deck is opened online, so the map shows no regions offline or where Office map data is disabled. The clustered column fallback shows the same values in other readers.`});
+      options.onDiagnostic?.({code: "chart-map-geodata", path, message: `The '${stringifyText(chart.type)}' chart is exported as a native PowerPoint map (chartex regionMap) without cached geography (no cx:geoCache; provider data is never fabricated): PowerPoint must fetch the region shapes from its online map service when the deck is opened, and until it does it shows "There was a problem getting the information for your map chart" and draws nothing. The clustered column fallback shows the same values in readers without chartex support.`});
     }
   }
   const percent = chartData.spec.grouping === 'percentStacked';
@@ -2232,7 +2233,7 @@ function textRuns(value, context, fallbackFontSize) {
  * into equal-width bins and exported as a column chart of the counts, every other type plots the values against
  * their row numbers. `adapted` names that transformation so it is reported, never silent.
  */
-function toPptxChartData(chart, chartexMode = 'fallback') {
+function toPptxChartData(chart, chartexMode = 'auto') {
   const data = chart?.data;
   const unplottable = (reason, summary, message) => ({reason, summary, message: `${message} No native chart was exported; a placeholder frame stands in for it.`});
   if (!data || !Array.isArray(data.columns) || !Array.isArray(data.rows)) {
@@ -2241,17 +2242,21 @@ function toPptxChartData(chart, chartexMode = 'fallback') {
   if (data.rows.length === 0) return unplottable("no-rows", "The chart has no data rows.", "The chart data has no rows.");
   if (data.columns.length === 0) return unplottable("no-columns", "The chart has no data columns.", "The chart data has no columns.");
   const resolved = resolveChartType(chart.type).spec;
-  // A chartex type (treemap, histogram, pareto, box & whisker, waterfall, funnel, map) has no classic construct. With
-  // `chartex: 'native'` it is written as its cx:chartSpace part and the clustered column chart of the same data is its
-  // mc:Fallback (src/chartex.js); by default (pending the native PowerPoint check, FF-22b) it exports as the clustered
-  // column chart alone and reports chartex-fallback, never silently.
-  const native = chartexMode === 'native';
+  // A chartex type (treemap, histogram, pareto, box & whisker, waterfall, funnel, map) has no classic construct. Natively
+  // it is written as its cx:chartSpace part and the clustered column chart of the same data is its mc:Fallback
+  // (src/chartex.js). 'auto' (the default) does that for the constructs the native PowerPoint check confirmed and keeps
+  // the unconfirmed map on the clustered column chart alone; 'fallback' keeps every chartex id there. The fallback is
+  // reported as chartex-fallback, never silent.
+  const native = chartexMode === 'native' || (chartexMode === 'auto' && resolved.family === 'chartex' && !resolved.unconfirmed);
   const chartex = resolved.family === 'chartex' && native ? resolved : null;
   const spec = resolved.family === 'chartex' ? CHARTEX_FALLBACK : resolved;
   const typeName = stringifyText(chart.type);
   const adaptations = [];
   if (resolved.family === 'chartex' && !native) {
-    adaptations.push({adaptation: "chartex-fallback", message: `The '${typeName}' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.`});
+    const reason = chartexMode === 'fallback'
+      ? 'that this exporter does not write'
+      : 'that PowerPoint has not yet accepted natively from this exporter (pass chartex: \'native\' to write its chartex part)';
+    adaptations.push({adaptation: "chartex-fallback", message: `The '${typeName}' chart is a PowerPoint extension (chartex) chart ${reason}; its data is exported as a native clustered column chart instead.`});
   }
   const mapped = {type: spec.pptx, spec, chartex, barDir: spec.barDir, barGrouping: spec.pptx === 'bar' || spec.pptx === 'area' ? spec.grouping : undefined};
   if (data.columns.length === 1) {
