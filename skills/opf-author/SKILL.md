@@ -25,6 +25,7 @@ Use `opf import-data source.csv --as table` or `--as chart` to ingest local CSV/
 ## Authoring decisions
 
 - Put visible copy in slide `title`, `subtitle`, `tag`, and content fields. Presentation `name`, `description`, `takeaway`, `audience`, `purpose`, `tone`, and `narrative` express identity or intent; they do not automatically create slide content.
+- Number a list with `numbering` on its `items` or `bullets` payload instead of typing "1." into the text; it exports as a native PowerPoint numbered list. The geometry and counting rules are in the core repository's docs/numbered-lists.md.
 - Choose simple root content for a single payload, `blocks` for content that should flow, and nonoverlapping promoted regions for meaningful relative placement. Groups can nest using `blocks` and their own `composition`. Do not mix group children with leaf payloads or mix promoted regions with root content.
 - Prefer a clear assertion in each title and enough evidence to support it. Preserve uncertainty and citations; never fill example metrics with invented business results.
 - Use stable slide IDs when revisions or integrations need them. Resolve IDs to current indices before later edits.
