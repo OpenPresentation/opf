@@ -106,12 +106,20 @@ function tableLines(table: Obj): string[] | undefined {
   return [header, `| ${Array.from({ length: width }, () => "---").join(" | ")} |`, ...(body as string[])];
 }
 
+/** Chart data as JSON with one row per line. */
+function chartJson(data: Obj): string[] {
+  const entries = Object.entries(data).map(([key, value]): string[] =>
+    key === "rows" && Array.isArray(value) ? ['  "rows": [', ...value.map((row, index) => `    ${JSON.stringify(row)}${index < value.length - 1 ? "," : ""}`), "  ]"] : [`  ${JSON.stringify(key)}: ${JSON.stringify(value)}`],
+  );
+  return ["{", ...entries.flatMap((lines, index) => lines.map((line, at) => (at === lines.length - 1 && index < entries.length - 1 ? `${line},` : line))), "}"];
+}
+
 /** CSV when the data reads back from it, then JSON. The first column is category text, so it is not quoted for looking like a number. */
 function chartCandidates(chart: Obj): string[][] {
   if (!/^\S+$/.test(chart.type)) return [];
   const data = chart.data as Obj;
   const info = `chart ${chart.type}`;
-  const json = fenced(info, JSON.stringify(data, null, 2).split("\n"));
+  const json = fenced(info, chartJson(data));
   if (Array.isArray(data.columns) && Array.isArray(data.rows)) {
     const body = [(data.columns as unknown[]).map((column) => csvField(column, true)).join(","), ...(data.rows as unknown[][]).map((row) => row.map((value, index) => csvField(value, index === 0)).join(","))];
     return [fenced(info, body), json];

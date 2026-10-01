@@ -412,6 +412,26 @@ describe("round trips", () => {
     }
   });
 
+  test("fixture: a kitchen-sink input converts to the pinned deck and diagnostics, and writes the pinned canonical Markdown", () => {
+    const fixtures = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "fixtures/markdown");
+    const source = readFileSync(path.join(fixtures, "kitchen-sink.md"), "utf8");
+    const expected = JSON.parse(readFileSync(path.join(fixtures, "kitchen-sink.opf.json"), "utf8"));
+    const canonical = readFileSync(path.join(fixtures, "kitchen-sink.canonical.md"), "utf8");
+    const result = convert(source);
+    assert.deepEqual(result.document, expected);
+    assert.equal(validatePresentation(expected).valid, true);
+    assert.deepEqual(result.diagnostics.map((d) => [d.ruleId, d.severity, d.location.line, d.location.column]), [
+      ["markdown/formatting-dropped", "warning", 11, 1],
+      ["markdown/numbered-list", "warning", 23, 1],
+      ["markdown/heading-demoted", "warning", 70, 1],
+    ]);
+    assert.equal(opfToMarkdown(result.document).markdown, canonical);
+    assert.deepEqual(convert(canonical).document, expected);
+    assert.equal(opfToMarkdown(convert(canonical).document).markdown, canonical);
+    // Line endings do not change the deck, only the offsets.
+    assert.deepEqual(convert(source.replaceAll("\n", "\r\n")).document, expected);
+  });
+
   test("the quarterly review maps to the deck its Markdown says", () => {
     const deck = convert(readFileSync(path.join(markdownExamples, "quarterly-review.md"), "utf8")).document;
     assert.equal(deck.name, "Q3 Business Review");
