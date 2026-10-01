@@ -1,0 +1,3217 @@
+{
+ "schema": "opf-latin-host-fixtures/v1",
+ "date": "2026-10-01",
+ "description": "Per-family host fixtures for the Latin families (FF-41, FF-43). A family appears under a host only when that host's fixture passed for it: the route face resolved for each of the four styles (no unintended fallback), the face's own advances within 0.1 px, the files fetched or served matched what the deck draws, and, where a host draws, the faces painted as themselves. The gallery editor entry covers the files its committed manifest serves; the editor's gate code is the vendored opf-editor bundle, exercised by the editor entry.",
+ "hosts": {
+  "node": {
+   "source": {
+    "repository": "OpenPresentation/opf-render",
+    "test": "test/latin-family-hosts.mjs",
+    "commit": "497403824bdf8f764e6a9712440ae0520c68a034",
+    "runtime": "Node v26.4.0"
+   },
+   "families": {
+    "Anton": {
+     "route": "Anton",
+     "files": [
+      "fonts/anton/Anton-Regular.ttf"
+     ],
+     "lazyBytes": 170812,
+     "styleGaps": [
+      "700",
+      "400i",
+      "700i"
+     ]
+    },
+    "Aptos": {
+     "route": "Intos",
+     "files": [
+      "fonts/intos/Intos-Bold.ttf",
+      "fonts/intos/Intos-Regular.ttf",
+      "fonts/intos/Intos-Italic.ttf",
+      "fonts/intos/Intos-BoldItalic.ttf"
+     ],
+     "lazyBytes": 3101236
+    },
+    "Aptos Display": {
+     "route": "Intos Display",
+     "files": [
+      "fonts/intos/IntosDisplay-Bold.ttf",
+      "fonts/intos/IntosDisplay-Regular.ttf",
+      "fonts/intos/IntosDisplay-Italic.ttf",
+      "fonts/intos/IntosDisplay-BoldItalic.ttf"
+     ],
+     "lazyBytes": 3104632
+    },
+    "Aptos Mono": {
+     "route": "Cousine",
+     "files": [
+      "node_modules/@expo-google-fonts/cousine/700Bold/Cousine_700Bold.ttf",
+      "node_modules/@expo-google-fonts/cousine/400Regular/Cousine_400Regular.ttf",
+      "node_modules/@expo-google-fonts/cousine/400Regular_Italic/Cousine_400Regular_Italic.ttf",
+      "node_modules/@expo-google-fonts/cousine/700Bold_Italic/Cousine_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 0
+    },
+    "Aptos Narrow": {
+     "route": "Intos Narrow",
+     "files": [
+      "fonts/intos/IntosNarrow-Bold.ttf",
+      "fonts/intos/IntosNarrow-Regular.ttf",
+      "fonts/intos/IntosNarrow-Italic.ttf",
+      "fonts/intos/IntosNarrow-BoldItalic.ttf"
+     ],
+     "lazyBytes": 3108120
+    },
+    "Aptos Serif": {
+     "route": "Intos Serif",
+     "files": [
+      "fonts/intos/IntosSerif-Bold.ttf",
+      "fonts/intos/IntosSerif-Regular.ttf",
+      "fonts/intos/IntosSerif-Italic.ttf",
+      "fonts/intos/IntosSerif-BoldItalic.ttf"
+     ],
+     "lazyBytes": 2301580
+    },
+    "Archivo Narrow": {
+     "route": "Archivo Narrow",
+     "files": [
+      "fonts/archivo-narrow/ArchivoNarrow_700Bold.ttf",
+      "fonts/archivo-narrow/ArchivoNarrow_400Regular.ttf",
+      "fonts/archivo-narrow/ArchivoNarrow_400Regular_Italic.ttf",
+      "fonts/archivo-narrow/ArchivoNarrow_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 259972
+    },
+    "Arial": {
+     "route": "Arimo",
+     "files": [
+      "node_modules/@expo-google-fonts/arimo/700Bold/Arimo_700Bold.ttf",
+      "node_modules/@expo-google-fonts/arimo/400Regular/Arimo_400Regular.ttf",
+      "node_modules/@expo-google-fonts/arimo/400Regular_Italic/Arimo_400Regular_Italic.ttf",
+      "node_modules/@expo-google-fonts/arimo/700Bold_Italic/Arimo_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 0
+    },
+    "Arial Black": {
+     "route": "Montserrat",
+     "files": [
+      "fonts/montserrat/Montserrat_900Black.ttf",
+      "fonts/montserrat/Montserrat_700Bold.ttf",
+      "fonts/montserrat/Montserrat_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 1021100,
+     "styleGaps": [
+      "400i",
+      "700i"
+     ]
+    },
+    "Arial Narrow": {
+     "route": "Archivo Narrow",
+     "files": [
+      "fonts/archivo-narrow/ArchivoNarrow_700Bold.ttf",
+      "fonts/archivo-narrow/ArchivoNarrow_400Regular.ttf",
+      "fonts/archivo-narrow/ArchivoNarrow_400Regular_Italic.ttf",
+      "fonts/archivo-narrow/ArchivoNarrow_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 259972
+    },
+    "Arimo": {
+     "route": "Arimo",
+     "files": [
+      "node_modules/@expo-google-fonts/arimo/700Bold/Arimo_700Bold.ttf",
+      "node_modules/@expo-google-fonts/arimo/400Regular/Arimo_400Regular.ttf",
+      "node_modules/@expo-google-fonts/arimo/400Regular_Italic/Arimo_400Regular_Italic.ttf",
+      "node_modules/@expo-google-fonts/arimo/700Bold_Italic/Arimo_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 0
+    },
+    "Barlow": {
+     "route": "Barlow",
+     "files": [
+      "fonts/barlow/Barlow-Bold.ttf",
+      "fonts/barlow/Barlow-Regular.ttf",
+      "fonts/barlow/Barlow-Italic.ttf",
+      "fonts/barlow/Barlow-BoldItalic.ttf"
+     ],
+     "lazyBytes": 433908
+    },
+    "Baskerville Old Face": {
+     "route": "Libre Caslon Text",
+     "files": [
+      "fonts/libre-caslon-text/LibreCaslonText_700Bold.ttf",
+      "fonts/libre-caslon-text/LibreCaslonText_400Regular.ttf",
+      "fonts/libre-caslon-text/LibreCaslonText_400Regular_Italic.ttf"
+     ],
+     "lazyBytes": 282832,
+     "styleGaps": [
+      "700i"
+     ]
+    },
+    "Bebas Neue": {
+     "route": "Bebas Neue",
+     "files": [
+      "fonts/bebas-neue/BebasNeue_400Regular.ttf"
+     ],
+     "lazyBytes": 57676,
+     "styleGaps": [
+      "700",
+      "400i",
+      "700i"
+     ]
+    },
+    "Bitter": {
+     "route": "Bitter",
+     "files": [
+      "fonts/bitter/Bitter_700Bold.ttf",
+      "fonts/bitter/Bitter_400Regular.ttf",
+      "fonts/bitter/Bitter_400Regular_Italic.ttf",
+      "fonts/bitter/Bitter_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 749416
+    },
+    "Bodoni MT": {
+     "route": "Playfair Display",
+     "files": [
+      "fonts/playfair-display/PlayfairDisplay-Bold.ttf",
+      "fonts/playfair-display/PlayfairDisplay-Regular.ttf",
+      "fonts/playfair-display/PlayfairDisplay-Italic.ttf",
+      "fonts/playfair-display/PlayfairDisplay-BoldItalic.ttf"
+     ],
+     "lazyBytes": 896244
+    },
+    "Book Antiqua": {
+     "route": "PT Serif",
+     "files": [
+      "fonts/pt-serif/PT_Serif-Web-Bold.ttf",
+      "fonts/pt-serif/PT_Serif-Web-Regular.ttf",
+      "fonts/pt-serif/PT_Serif-Web-Italic.ttf",
+      "fonts/pt-serif/PT_Serif-Web-BoldItalic.ttf"
+     ],
+     "lazyBytes": 1411980
+    },
+    "Bookman Old Style": {
+     "route": "Libre Caslon Text",
+     "files": [
+      "fonts/libre-caslon-text/LibreCaslonText_700Bold.ttf",
+      "fonts/libre-caslon-text/LibreCaslonText_400Regular.ttf",
+      "fonts/libre-caslon-text/LibreCaslonText_400Regular_Italic.ttf"
+     ],
+     "lazyBytes": 282832,
+     "styleGaps": [
+      "700i"
+     ]
+    },
+    "Caladea": {
+     "route": "Caladea",
+     "files": [
+      "node_modules/@expo-google-fonts/caladea/700Bold/Caladea_700Bold.ttf",
+      "node_modules/@expo-google-fonts/caladea/400Regular/Caladea_400Regular.ttf",
+      "node_modules/@expo-google-fonts/caladea/400Regular_Italic/Caladea_400Regular_Italic.ttf",
+      "node_modules/@expo-google-fonts/caladea/700Bold_Italic/Caladea_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 0
+    },
+    "Calibri": {
+     "route": "Carlito",
+     "files": [
+      "fonts/carlito/Carlito-Bold.ttf",
+      "fonts/carlito/Carlito-Regular.ttf",
+      "fonts/carlito/Carlito-Italic.ttf",
+      "fonts/carlito/Carlito-BoldItalic.ttf"
+     ],
+     "lazyBytes": 0
+    },
+    "Calibri Light": {
+     "route": "Carlito",
+     "files": [
+      "fonts/carlito/Carlito-Bold.ttf",
+      "fonts/carlito/Carlito-Regular.ttf",
+      "fonts/carlito/Carlito-Italic.ttf",
+      "fonts/carlito/Carlito-BoldItalic.ttf"
+     ],
+     "lazyBytes": 0
+    },
+    "Cambria": {
+     "route": "Caladea",
+     "files": [
+      "node_modules/@expo-google-fonts/caladea/700Bold/Caladea_700Bold.ttf",
+      "node_modules/@expo-google-fonts/caladea/400Regular/Caladea_400Regular.ttf",
+      "node_modules/@expo-google-fonts/caladea/400Regular_Italic/Caladea_400Regular_Italic.ttf",
+      "node_modules/@expo-google-fonts/caladea/700Bold_Italic/Caladea_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 0
+    },
+    "Candara": {
+     "route": "Source Sans 3",
+     "files": [
+      "fonts/source-sans-3/SourceSans3-Bold.ttf",
+      "fonts/source-sans-3/SourceSans3-Regular.ttf",
+      "fonts/source-sans-3/SourceSans3-It.ttf",
+      "fonts/source-sans-3/SourceSans3-BoldIt.ttf"
+     ],
+     "lazyBytes": 1493884
+    },
+    "Carlito": {
+     "route": "Carlito",
+     "files": [
+      "fonts/carlito/Carlito-Bold.ttf",
+      "fonts/carlito/Carlito-Regular.ttf",
+      "fonts/carlito/Carlito-Italic.ttf",
+      "fonts/carlito/Carlito-BoldItalic.ttf"
+     ],
+     "lazyBytes": 0
+    },
+    "Century Gothic": {
+     "route": "Work Sans",
+     "files": [
+      "fonts/work-sans/WorkSans_700Bold.ttf",
+      "fonts/work-sans/WorkSans_400Regular.ttf",
+      "fonts/work-sans/WorkSans_400Regular_Italic.ttf",
+      "fonts/work-sans/WorkSans_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 730272
+    },
+    "Century Schoolbook": {
+     "route": "Gelasio",
+     "files": [
+      "node_modules/@expo-google-fonts/gelasio/700Bold/Gelasio_700Bold.ttf",
+      "node_modules/@expo-google-fonts/gelasio/400Regular/Gelasio_400Regular.ttf",
+      "node_modules/@expo-google-fonts/gelasio/400Regular_Italic/Gelasio_400Regular_Italic.ttf",
+      "node_modules/@expo-google-fonts/gelasio/700Bold_Italic/Gelasio_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 0
+    },
+    "Consolas": {
+     "route": "Cousine",
+     "files": [
+      "node_modules/@expo-google-fonts/cousine/700Bold/Cousine_700Bold.ttf",
+      "node_modules/@expo-google-fonts/cousine/400Regular/Cousine_400Regular.ttf",
+      "node_modules/@expo-google-fonts/cousine/400Regular_Italic/Cousine_400Regular_Italic.ttf",
+      "node_modules/@expo-google-fonts/cousine/700Bold_Italic/Cousine_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 0
+    },
+    "Constantia": {
+     "route": "PT Serif",
+     "files": [
+      "fonts/pt-serif/PT_Serif-Web-Bold.ttf",
+      "fonts/pt-serif/PT_Serif-Web-Regular.ttf",
+      "fonts/pt-serif/PT_Serif-Web-Italic.ttf",
+      "fonts/pt-serif/PT_Serif-Web-BoldItalic.ttf"
+     ],
+     "lazyBytes": 1411980
+    },
+    "Corbel": {
+     "route": "Source Sans 3",
+     "files": [
+      "fonts/source-sans-3/SourceSans3-Bold.ttf",
+      "fonts/source-sans-3/SourceSans3-Regular.ttf",
+      "fonts/source-sans-3/SourceSans3-It.ttf",
+      "fonts/source-sans-3/SourceSans3-BoldIt.ttf"
+     ],
+     "lazyBytes": 1493884
+    },
+    "Courier New": {
+     "route": "Cousine",
+     "files": [
+      "node_modules/@expo-google-fonts/cousine/700Bold/Cousine_700Bold.ttf",
+      "node_modules/@expo-google-fonts/cousine/400Regular/Cousine_400Regular.ttf",
+      "node_modules/@expo-google-fonts/cousine/400Regular_Italic/Cousine_400Regular_Italic.ttf",
+      "node_modules/@expo-google-fonts/cousine/700Bold_Italic/Cousine_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 0
+    },
+    "Cousine": {
+     "route": "Cousine",
+     "files": [
+      "node_modules/@expo-google-fonts/cousine/700Bold/Cousine_700Bold.ttf",
+      "node_modules/@expo-google-fonts/cousine/400Regular/Cousine_400Regular.ttf",
+      "node_modules/@expo-google-fonts/cousine/400Regular_Italic/Cousine_400Regular_Italic.ttf",
+      "node_modules/@expo-google-fonts/cousine/700Bold_Italic/Cousine_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 0
+    },
+    "Didot": {
+     "route": "Playfair Display",
+     "files": [
+      "fonts/playfair-display/PlayfairDisplay-Bold.ttf",
+      "fonts/playfair-display/PlayfairDisplay-Regular.ttf",
+      "fonts/playfair-display/PlayfairDisplay-Italic.ttf",
+      "fonts/playfair-display/PlayfairDisplay-BoldItalic.ttf"
+     ],
+     "lazyBytes": 896244
+    },
+    "EB Garamond": {
+     "route": "EB Garamond",
+     "files": [
+      "fonts/eb-garamond/EBGaramond_700Bold.ttf",
+      "fonts/eb-garamond/EBGaramond_400Regular.ttf",
+      "fonts/eb-garamond/EBGaramond_400Regular_Italic.ttf",
+      "fonts/eb-garamond/EBGaramond_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 1865720
+    },
+    "Figtree": {
+     "route": "Figtree",
+     "files": [
+      "fonts/figtree/Figtree_700Bold.ttf",
+      "fonts/figtree/Figtree_400Regular.ttf",
+      "fonts/figtree/Figtree_400Regular_Italic.ttf",
+      "fonts/figtree/Figtree_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 162028
+    },
+    "Franklin Gothic Book": {
+     "route": "Barlow",
+     "files": [
+      "fonts/barlow/Barlow-Bold.ttf",
+      "fonts/barlow/Barlow-Regular.ttf",
+      "fonts/barlow/Barlow-Italic.ttf",
+      "fonts/barlow/Barlow-BoldItalic.ttf"
+     ],
+     "lazyBytes": 433908
+    },
+    "Franklin Gothic Medium": {
+     "route": "Barlow",
+     "files": [
+      "fonts/barlow/Barlow-Bold.ttf",
+      "fonts/barlow/Barlow-Regular.ttf",
+      "fonts/barlow/Barlow-Italic.ttf",
+      "fonts/barlow/Barlow-BoldItalic.ttf"
+     ],
+     "lazyBytes": 433908
+    },
+    "Garamond": {
+     "route": "EB Garamond",
+     "files": [
+      "fonts/eb-garamond/EBGaramond_700Bold.ttf",
+      "fonts/eb-garamond/EBGaramond_400Regular.ttf",
+      "fonts/eb-garamond/EBGaramond_400Regular_Italic.ttf",
+      "fonts/eb-garamond/EBGaramond_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 1865720
+    },
+    "Gelasio": {
+     "route": "Gelasio",
+     "files": [
+      "node_modules/@expo-google-fonts/gelasio/700Bold/Gelasio_700Bold.ttf",
+      "node_modules/@expo-google-fonts/gelasio/400Regular/Gelasio_400Regular.ttf",
+      "node_modules/@expo-google-fonts/gelasio/400Regular_Italic/Gelasio_400Regular_Italic.ttf",
+      "node_modules/@expo-google-fonts/gelasio/700Bold_Italic/Gelasio_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 0
+    },
+    "Georgia": {
+     "route": "Gelasio",
+     "files": [
+      "node_modules/@expo-google-fonts/gelasio/700Bold/Gelasio_700Bold.ttf",
+      "node_modules/@expo-google-fonts/gelasio/400Regular/Gelasio_400Regular.ttf",
+      "node_modules/@expo-google-fonts/gelasio/400Regular_Italic/Gelasio_400Regular_Italic.ttf",
+      "node_modules/@expo-google-fonts/gelasio/700Bold_Italic/Gelasio_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 0
+    },
+    "Gill Sans MT": {
+     "route": "Source Sans 3",
+     "files": [
+      "fonts/source-sans-3/SourceSans3-Bold.ttf",
+      "fonts/source-sans-3/SourceSans3-Regular.ttf",
+      "fonts/source-sans-3/SourceSans3-It.ttf",
+      "fonts/source-sans-3/SourceSans3-BoldIt.ttf"
+     ],
+     "lazyBytes": 1493884
+    },
+    "Grandview": {
+     "route": "Barlow",
+     "files": [
+      "fonts/barlow/Barlow-Bold.ttf",
+      "fonts/barlow/Barlow-Regular.ttf",
+      "fonts/barlow/Barlow-Italic.ttf",
+      "fonts/barlow/Barlow-BoldItalic.ttf"
+     ],
+     "lazyBytes": 433908
+    },
+    "Grandview Display": {
+     "route": "Barlow",
+     "files": [
+      "fonts/barlow/Barlow-Bold.ttf",
+      "fonts/barlow/Barlow-Regular.ttf",
+      "fonts/barlow/Barlow-Italic.ttf",
+      "fonts/barlow/Barlow-BoldItalic.ttf"
+     ],
+     "lazyBytes": 433908
+    },
+    "Impact": {
+     "route": "Anton",
+     "files": [
+      "fonts/anton/Anton-Regular.ttf"
+     ],
+     "lazyBytes": 170812,
+     "styleGaps": [
+      "700",
+      "400i",
+      "700i"
+     ]
+    },
+    "Intos": {
+     "route": "Intos",
+     "files": [
+      "fonts/intos/Intos-Bold.ttf",
+      "fonts/intos/Intos-Regular.ttf",
+      "fonts/intos/Intos-Italic.ttf",
+      "fonts/intos/Intos-BoldItalic.ttf"
+     ],
+     "lazyBytes": 3101236
+    },
+    "Intos Display": {
+     "route": "Intos Display",
+     "files": [
+      "fonts/intos/IntosDisplay-Bold.ttf",
+      "fonts/intos/IntosDisplay-Regular.ttf",
+      "fonts/intos/IntosDisplay-Italic.ttf",
+      "fonts/intos/IntosDisplay-BoldItalic.ttf"
+     ],
+     "lazyBytes": 3104632
+    },
+    "Intos Narrow": {
+     "route": "Intos Narrow",
+     "files": [
+      "fonts/intos/IntosNarrow-Bold.ttf",
+      "fonts/intos/IntosNarrow-Regular.ttf",
+      "fonts/intos/IntosNarrow-Italic.ttf",
+      "fonts/intos/IntosNarrow-BoldItalic.ttf"
+     ],
+     "lazyBytes": 3108120
+    },
+    "Intos Serif": {
+     "route": "Intos Serif",
+     "files": [
+      "fonts/intos/IntosSerif-Bold.ttf",
+      "fonts/intos/IntosSerif-Regular.ttf",
+      "fonts/intos/IntosSerif-Italic.ttf",
+      "fonts/intos/IntosSerif-BoldItalic.ttf"
+     ],
+     "lazyBytes": 2301580
+    },
+    "Liberation Mono": {
+     "route": "Cousine",
+     "files": [
+      "node_modules/@expo-google-fonts/cousine/700Bold/Cousine_700Bold.ttf",
+      "node_modules/@expo-google-fonts/cousine/400Regular/Cousine_400Regular.ttf",
+      "node_modules/@expo-google-fonts/cousine/400Regular_Italic/Cousine_400Regular_Italic.ttf",
+      "node_modules/@expo-google-fonts/cousine/700Bold_Italic/Cousine_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 0
+    },
+    "Liberation Sans": {
+     "route": "Arimo",
+     "files": [
+      "node_modules/@expo-google-fonts/arimo/700Bold/Arimo_700Bold.ttf",
+      "node_modules/@expo-google-fonts/arimo/400Regular/Arimo_400Regular.ttf",
+      "node_modules/@expo-google-fonts/arimo/400Regular_Italic/Arimo_400Regular_Italic.ttf",
+      "node_modules/@expo-google-fonts/arimo/700Bold_Italic/Arimo_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 0
+    },
+    "Liberation Serif": {
+     "route": "Tinos",
+     "files": [
+      "node_modules/@expo-google-fonts/tinos/700Bold/Tinos_700Bold.ttf",
+      "node_modules/@expo-google-fonts/tinos/400Regular/Tinos_400Regular.ttf",
+      "node_modules/@expo-google-fonts/tinos/400Regular_Italic/Tinos_400Regular_Italic.ttf",
+      "node_modules/@expo-google-fonts/tinos/700Bold_Italic/Tinos_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 0
+    },
+    "Libre Caslon Text": {
+     "route": "Libre Caslon Text",
+     "files": [
+      "fonts/libre-caslon-text/LibreCaslonText_700Bold.ttf",
+      "fonts/libre-caslon-text/LibreCaslonText_400Regular.ttf",
+      "fonts/libre-caslon-text/LibreCaslonText_400Regular_Italic.ttf"
+     ],
+     "lazyBytes": 282832,
+     "styleGaps": [
+      "700i"
+     ]
+    },
+    "Lora": {
+     "route": "Lora",
+     "files": [
+      "fonts/lora/Lora-Bold.ttf",
+      "fonts/lora/Lora-Regular.ttf",
+      "fonts/lora/Lora-Italic.ttf",
+      "fonts/lora/Lora-BoldItalic.ttf"
+     ],
+     "lazyBytes": 837492
+    },
+    "Lucida Console": {
+     "route": "Cousine",
+     "files": [
+      "node_modules/@expo-google-fonts/cousine/700Bold/Cousine_700Bold.ttf",
+      "node_modules/@expo-google-fonts/cousine/400Regular/Cousine_400Regular.ttf",
+      "node_modules/@expo-google-fonts/cousine/400Regular_Italic/Cousine_400Regular_Italic.ttf",
+      "node_modules/@expo-google-fonts/cousine/700Bold_Italic/Cousine_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 0
+    },
+    "Lucida Sans": {
+     "route": "Work Sans",
+     "files": [
+      "fonts/work-sans/WorkSans_700Bold.ttf",
+      "fonts/work-sans/WorkSans_400Regular.ttf",
+      "fonts/work-sans/WorkSans_400Regular_Italic.ttf",
+      "fonts/work-sans/WorkSans_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 730272
+    },
+    "Lucida Sans Unicode": {
+     "route": "Work Sans",
+     "files": [
+      "fonts/work-sans/WorkSans_700Bold.ttf",
+      "fonts/work-sans/WorkSans_400Regular.ttf",
+      "fonts/work-sans/WorkSans_400Regular_Italic.ttf",
+      "fonts/work-sans/WorkSans_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 730272
+    },
+    "Merriweather Sans": {
+     "route": "Merriweather Sans",
+     "files": [
+      "fonts/merriweather-sans/MerriweatherSans-Bold.ttf",
+      "fonts/merriweather-sans/MerriweatherSans-Regular.ttf",
+      "fonts/merriweather-sans/MerriweatherSans-Italic.ttf",
+      "fonts/merriweather-sans/MerriweatherSans-BoldItalic.ttf"
+     ],
+     "lazyBytes": 641004
+    },
+    "Microsoft Sans Serif": {
+     "route": "Arimo",
+     "files": [
+      "node_modules/@expo-google-fonts/arimo/700Bold/Arimo_700Bold.ttf",
+      "node_modules/@expo-google-fonts/arimo/400Regular/Arimo_400Regular.ttf",
+      "node_modules/@expo-google-fonts/arimo/400Regular_Italic/Arimo_400Regular_Italic.ttf",
+      "node_modules/@expo-google-fonts/arimo/700Bold_Italic/Arimo_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 0
+    },
+    "Montserrat": {
+     "route": "Montserrat",
+     "files": [
+      "fonts/montserrat/Montserrat_700Bold.ttf",
+      "fonts/montserrat/Montserrat_400Regular.ttf",
+      "fonts/montserrat/Montserrat_400Regular_Italic.ttf",
+      "fonts/montserrat/Montserrat_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 1345884
+    },
+    "Open Sans": {
+     "route": "Open Sans",
+     "files": [
+      "fonts/open-sans/OpenSans_700Bold.ttf",
+      "fonts/open-sans/OpenSans_400Regular.ttf",
+      "fonts/open-sans/OpenSans_400Regular_Italic.ttf",
+      "fonts/open-sans/OpenSans_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 534656
+    },
+    "Palatino Linotype": {
+     "route": "PT Serif",
+     "files": [
+      "fonts/pt-serif/PT_Serif-Web-Bold.ttf",
+      "fonts/pt-serif/PT_Serif-Web-Regular.ttf",
+      "fonts/pt-serif/PT_Serif-Web-Italic.ttf",
+      "fonts/pt-serif/PT_Serif-Web-BoldItalic.ttf"
+     ],
+     "lazyBytes": 1411980
+    },
+    "Playfair Display": {
+     "route": "Playfair Display",
+     "files": [
+      "fonts/playfair-display/PlayfairDisplay-Bold.ttf",
+      "fonts/playfair-display/PlayfairDisplay-Regular.ttf",
+      "fonts/playfair-display/PlayfairDisplay-Italic.ttf",
+      "fonts/playfair-display/PlayfairDisplay-BoldItalic.ttf"
+     ],
+     "lazyBytes": 896244
+    },
+    "Poppins": {
+     "route": "Poppins",
+     "files": [
+      "fonts/poppins/Poppins_700Bold.ttf",
+      "fonts/poppins/Poppins_400Regular.ttf",
+      "fonts/poppins/Poppins_400Regular_Italic.ttf",
+      "fonts/poppins/Poppins_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 670784
+    },
+    "PT Serif": {
+     "route": "PT Serif",
+     "files": [
+      "fonts/pt-serif/PT_Serif-Web-Bold.ttf",
+      "fonts/pt-serif/PT_Serif-Web-Regular.ttf",
+      "fonts/pt-serif/PT_Serif-Web-Italic.ttf",
+      "fonts/pt-serif/PT_Serif-Web-BoldItalic.ttf"
+     ],
+     "lazyBytes": 1411980
+    },
+    "Raleway": {
+     "route": "Raleway",
+     "files": [
+      "fonts/raleway/Raleway-Bold.ttf",
+      "fonts/raleway/Raleway-Regular.ttf",
+      "fonts/raleway/Raleway-Italic.ttf",
+      "fonts/raleway/Raleway-BoldItalic.ttf"
+     ],
+     "lazyBytes": 540344
+    },
+    "Red Hat Display": {
+     "route": "Red Hat Display",
+     "files": [
+      "fonts/red-hat-display/RedHatDisplay_700Bold.ttf",
+      "fonts/red-hat-display/RedHatDisplay_400Regular.ttf",
+      "fonts/red-hat-display/RedHatDisplay_400Regular_Italic.ttf",
+      "fonts/red-hat-display/RedHatDisplay_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 209476
+    },
+    "Red Hat Text": {
+     "route": "Red Hat Text",
+     "files": [
+      "fonts/red-hat-text/RedHatText_700Bold.ttf",
+      "fonts/red-hat-text/RedHatText_400Regular.ttf",
+      "fonts/red-hat-text/RedHatText_400Regular_Italic.ttf",
+      "fonts/red-hat-text/RedHatText_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 212328
+    },
+    "Roboto": {
+     "route": "Roboto",
+     "files": [
+      "node_modules/@expo-google-fonts/roboto/700Bold/Roboto_700Bold.ttf",
+      "node_modules/@expo-google-fonts/roboto/400Regular/Roboto_400Regular.ttf",
+      "node_modules/@expo-google-fonts/roboto/400Regular_Italic/Roboto_400Regular_Italic.ttf",
+      "node_modules/@expo-google-fonts/roboto/700Bold_Italic/Roboto_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 0
+    },
+    "Roboto Mono": {
+     "route": "Roboto Mono",
+     "files": [
+      "node_modules/@expo-google-fonts/roboto-mono/700Bold/RobotoMono_700Bold.ttf",
+      "node_modules/@expo-google-fonts/roboto-mono/400Regular/RobotoMono_400Regular.ttf"
+     ],
+     "lazyBytes": 0,
+     "styleGaps": [
+      "400i",
+      "700i"
+     ]
+    },
+    "Rockwell": {
+     "route": "Bitter",
+     "files": [
+      "fonts/bitter/Bitter_700Bold.ttf",
+      "fonts/bitter/Bitter_400Regular.ttf",
+      "fonts/bitter/Bitter_400Regular_Italic.ttf",
+      "fonts/bitter/Bitter_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 749416
+    },
+    "Seaford": {
+     "route": "Source Sans 3",
+     "files": [
+      "fonts/source-sans-3/SourceSans3-Bold.ttf",
+      "fonts/source-sans-3/SourceSans3-Regular.ttf",
+      "fonts/source-sans-3/SourceSans3-It.ttf",
+      "fonts/source-sans-3/SourceSans3-BoldIt.ttf"
+     ],
+     "lazyBytes": 1493884
+    },
+    "Seaford Display": {
+     "route": "Source Sans 3",
+     "files": [
+      "fonts/source-sans-3/SourceSans3-Bold.ttf",
+      "fonts/source-sans-3/SourceSans3-Regular.ttf",
+      "fonts/source-sans-3/SourceSans3-It.ttf",
+      "fonts/source-sans-3/SourceSans3-BoldIt.ttf"
+     ],
+     "lazyBytes": 1493884
+    },
+    "Segoe UI": {
+     "route": "Red Hat Display",
+     "files": [
+      "fonts/red-hat-display/RedHatDisplay_700Bold.ttf",
+      "fonts/red-hat-display/RedHatDisplay_400Regular.ttf",
+      "fonts/red-hat-display/RedHatDisplay_400Regular_Italic.ttf",
+      "fonts/red-hat-display/RedHatDisplay_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 209476
+    },
+    "Segoe UI Light": {
+     "route": "Red Hat Display",
+     "files": [
+      "fonts/red-hat-display/RedHatDisplay_700Bold.ttf",
+      "fonts/red-hat-display/RedHatDisplay_300Light.ttf",
+      "fonts/red-hat-display/RedHatDisplay_300Light_Italic.ttf",
+      "fonts/red-hat-display/RedHatDisplay_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 209620
+    },
+    "Segoe UI Semibold": {
+     "route": "Red Hat Display",
+     "files": [
+      "fonts/red-hat-display/RedHatDisplay_700Bold.ttf",
+      "fonts/red-hat-display/RedHatDisplay_600SemiBold.ttf",
+      "fonts/red-hat-display/RedHatDisplay_600SemiBold_Italic.ttf",
+      "fonts/red-hat-display/RedHatDisplay_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 209636
+    },
+    "Segoe UI Semilight": {
+     "route": "Red Hat Display",
+     "files": [
+      "fonts/red-hat-display/RedHatDisplay_700Bold.ttf",
+      "fonts/red-hat-display/RedHatDisplay_400Regular.ttf",
+      "fonts/red-hat-display/RedHatDisplay_400Regular_Italic.ttf",
+      "fonts/red-hat-display/RedHatDisplay_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 209476
+    },
+    "Skeena": {
+     "route": "Open Sans",
+     "files": [
+      "fonts/open-sans/OpenSans_700Bold.ttf",
+      "fonts/open-sans/OpenSans_400Regular.ttf",
+      "fonts/open-sans/OpenSans_400Regular_Italic.ttf",
+      "fonts/open-sans/OpenSans_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 534656
+    },
+    "Skeena Display": {
+     "route": "Open Sans",
+     "files": [
+      "fonts/open-sans/OpenSans_700Bold.ttf",
+      "fonts/open-sans/OpenSans_400Regular.ttf",
+      "fonts/open-sans/OpenSans_400Regular_Italic.ttf",
+      "fonts/open-sans/OpenSans_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 534656
+    },
+    "Source Sans 3": {
+     "route": "Source Sans 3",
+     "files": [
+      "fonts/source-sans-3/SourceSans3-Bold.ttf",
+      "fonts/source-sans-3/SourceSans3-Regular.ttf",
+      "fonts/source-sans-3/SourceSans3-It.ttf",
+      "fonts/source-sans-3/SourceSans3-BoldIt.ttf"
+     ],
+     "lazyBytes": 1493884
+    },
+    "Source Sans Pro": {
+     "route": "Source Sans 3",
+     "files": [
+      "fonts/source-sans-3/SourceSans3-Bold.ttf",
+      "fonts/source-sans-3/SourceSans3-Regular.ttf",
+      "fonts/source-sans-3/SourceSans3-It.ttf",
+      "fonts/source-sans-3/SourceSans3-BoldIt.ttf"
+     ],
+     "lazyBytes": 1493884
+    },
+    "Tahoma": {
+     "route": "Red Hat Text",
+     "files": [
+      "fonts/red-hat-text/RedHatText_700Bold.ttf",
+      "fonts/red-hat-text/RedHatText_400Regular.ttf",
+      "fonts/red-hat-text/RedHatText_400Regular_Italic.ttf",
+      "fonts/red-hat-text/RedHatText_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 212328
+    },
+    "Tenorite": {
+     "route": "Figtree",
+     "files": [
+      "fonts/figtree/Figtree_700Bold.ttf",
+      "fonts/figtree/Figtree_400Regular.ttf",
+      "fonts/figtree/Figtree_400Regular_Italic.ttf",
+      "fonts/figtree/Figtree_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 162028
+    },
+    "Tenorite Display": {
+     "route": "Figtree",
+     "files": [
+      "fonts/figtree/Figtree_700Bold.ttf",
+      "fonts/figtree/Figtree_400Regular.ttf",
+      "fonts/figtree/Figtree_400Regular_Italic.ttf",
+      "fonts/figtree/Figtree_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 162028
+    },
+    "Times New Roman": {
+     "route": "Tinos",
+     "files": [
+      "node_modules/@expo-google-fonts/tinos/700Bold/Tinos_700Bold.ttf",
+      "node_modules/@expo-google-fonts/tinos/400Regular/Tinos_400Regular.ttf",
+      "node_modules/@expo-google-fonts/tinos/400Regular_Italic/Tinos_400Regular_Italic.ttf",
+      "node_modules/@expo-google-fonts/tinos/700Bold_Italic/Tinos_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 0
+    },
+    "Tinos": {
+     "route": "Tinos",
+     "files": [
+      "node_modules/@expo-google-fonts/tinos/700Bold/Tinos_700Bold.ttf",
+      "node_modules/@expo-google-fonts/tinos/400Regular/Tinos_400Regular.ttf",
+      "node_modules/@expo-google-fonts/tinos/400Regular_Italic/Tinos_400Regular_Italic.ttf",
+      "node_modules/@expo-google-fonts/tinos/700Bold_Italic/Tinos_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 0
+    },
+    "Trebuchet MS": {
+     "route": "Figtree",
+     "files": [
+      "fonts/figtree/Figtree_700Bold.ttf",
+      "fonts/figtree/Figtree_400Regular.ttf",
+      "fonts/figtree/Figtree_400Regular_Italic.ttf",
+      "fonts/figtree/Figtree_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 162028
+    },
+    "Verdana": {
+     "route": "Montserrat",
+     "files": [
+      "fonts/montserrat/Montserrat_700Bold.ttf",
+      "fonts/montserrat/Montserrat_400Regular.ttf",
+      "fonts/montserrat/Montserrat_400Regular_Italic.ttf",
+      "fonts/montserrat/Montserrat_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 1345884
+    },
+    "Work Sans": {
+     "route": "Work Sans",
+     "files": [
+      "fonts/work-sans/WorkSans_700Bold.ttf",
+      "fonts/work-sans/WorkSans_400Regular.ttf",
+      "fonts/work-sans/WorkSans_400Regular_Italic.ttf",
+      "fonts/work-sans/WorkSans_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 730272
+    }
+   }
+  },
+  "browser": {
+   "source": {
+    "repository": "OpenPresentation/opf-render",
+    "test": "test/latin-family-hosts-browser.mjs",
+    "commit": "497403824bdf8f764e6a9712440ae0520c68a034",
+    "runtime": "Node v26.4.0, Chromium-based browser 154.0.4258.37, offline"
+   },
+   "filesFetchedInTotal": 94,
+   "bytesFetchedInTotal": 25675328,
+   "families": {
+    "Anton": {
+     "route": "Anton",
+     "files": [
+      "fonts/anton/Anton-Regular.ttf"
+     ],
+     "lazyBytes": 170812,
+     "styleGaps": [
+      "400i",
+      "700i"
+     ]
+    },
+    "Aptos": {
+     "route": "Intos",
+     "files": [
+      "fonts/intos/Intos-Bold.ttf",
+      "fonts/intos/Intos-Regular.ttf",
+      "fonts/intos/Intos-Italic.ttf",
+      "fonts/intos/Intos-BoldItalic.ttf"
+     ],
+     "lazyBytes": 3101236
+    },
+    "Aptos Display": {
+     "route": "Intos Display",
+     "files": [
+      "fonts/intos/IntosDisplay-Bold.ttf",
+      "fonts/intos/IntosDisplay-Regular.ttf",
+      "fonts/intos/IntosDisplay-Italic.ttf",
+      "fonts/intos/IntosDisplay-BoldItalic.ttf"
+     ],
+     "lazyBytes": 3104632
+    },
+    "Aptos Mono": {
+     "route": "Cousine",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Aptos Narrow": {
+     "route": "Intos Narrow",
+     "files": [
+      "fonts/intos/IntosNarrow-Bold.ttf",
+      "fonts/intos/IntosNarrow-Regular.ttf",
+      "fonts/intos/IntosNarrow-Italic.ttf",
+      "fonts/intos/IntosNarrow-BoldItalic.ttf"
+     ],
+     "lazyBytes": 3108120
+    },
+    "Aptos Serif": {
+     "route": "Intos Serif",
+     "files": [
+      "fonts/intos/IntosSerif-Bold.ttf",
+      "fonts/intos/IntosSerif-Regular.ttf",
+      "fonts/intos/IntosSerif-Italic.ttf",
+      "fonts/intos/IntosSerif-BoldItalic.ttf"
+     ],
+     "lazyBytes": 2301580
+    },
+    "Archivo Narrow": {
+     "route": "Archivo Narrow",
+     "files": [
+      "fonts/archivo-narrow/ArchivoNarrow_700Bold.ttf",
+      "fonts/archivo-narrow/ArchivoNarrow_400Regular.ttf",
+      "fonts/archivo-narrow/ArchivoNarrow_400Regular_Italic.ttf",
+      "fonts/archivo-narrow/ArchivoNarrow_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 259972
+    },
+    "Arial": {
+     "route": "Arimo",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Arial Black": {
+     "route": "Montserrat",
+     "files": [
+      "fonts/montserrat/Montserrat_900Black.ttf",
+      "fonts/montserrat/Montserrat_700Bold.ttf",
+      "fonts/montserrat/Montserrat_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 1021100
+    },
+    "Arial Narrow": {
+     "route": "Archivo Narrow",
+     "files": [
+      "fonts/archivo-narrow/ArchivoNarrow_700Bold.ttf",
+      "fonts/archivo-narrow/ArchivoNarrow_400Regular.ttf",
+      "fonts/archivo-narrow/ArchivoNarrow_400Regular_Italic.ttf",
+      "fonts/archivo-narrow/ArchivoNarrow_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 259972
+    },
+    "Arimo": {
+     "route": "Arimo",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Barlow": {
+     "route": "Barlow",
+     "files": [
+      "fonts/barlow/Barlow-Bold.ttf",
+      "fonts/barlow/Barlow-Regular.ttf",
+      "fonts/barlow/Barlow-Italic.ttf",
+      "fonts/barlow/Barlow-BoldItalic.ttf"
+     ],
+     "lazyBytes": 433908
+    },
+    "Baskerville Old Face": {
+     "route": "Libre Caslon Text",
+     "files": [
+      "fonts/libre-caslon-text/LibreCaslonText_700Bold.ttf",
+      "fonts/libre-caslon-text/LibreCaslonText_400Regular.ttf",
+      "fonts/libre-caslon-text/LibreCaslonText_400Regular_Italic.ttf"
+     ],
+     "lazyBytes": 282832
+    },
+    "Bebas Neue": {
+     "route": "Bebas Neue",
+     "files": [
+      "fonts/bebas-neue/BebasNeue_400Regular.ttf"
+     ],
+     "lazyBytes": 57676,
+     "styleGaps": [
+      "400i",
+      "700i"
+     ]
+    },
+    "Bitter": {
+     "route": "Bitter",
+     "files": [
+      "fonts/bitter/Bitter_700Bold.ttf",
+      "fonts/bitter/Bitter_400Regular.ttf",
+      "fonts/bitter/Bitter_400Regular_Italic.ttf",
+      "fonts/bitter/Bitter_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 749416
+    },
+    "Bodoni MT": {
+     "route": "Playfair Display",
+     "files": [
+      "fonts/playfair-display/PlayfairDisplay-Bold.ttf",
+      "fonts/playfair-display/PlayfairDisplay-Regular.ttf",
+      "fonts/playfair-display/PlayfairDisplay-Italic.ttf",
+      "fonts/playfair-display/PlayfairDisplay-BoldItalic.ttf"
+     ],
+     "lazyBytes": 896244
+    },
+    "Book Antiqua": {
+     "route": "PT Serif",
+     "files": [
+      "fonts/pt-serif/PT_Serif-Web-Bold.ttf",
+      "fonts/pt-serif/PT_Serif-Web-Regular.ttf",
+      "fonts/pt-serif/PT_Serif-Web-Italic.ttf",
+      "fonts/pt-serif/PT_Serif-Web-BoldItalic.ttf"
+     ],
+     "lazyBytes": 1411980
+    },
+    "Bookman Old Style": {
+     "route": "Libre Caslon Text",
+     "files": [
+      "fonts/libre-caslon-text/LibreCaslonText_700Bold.ttf",
+      "fonts/libre-caslon-text/LibreCaslonText_400Regular.ttf",
+      "fonts/libre-caslon-text/LibreCaslonText_400Regular_Italic.ttf"
+     ],
+     "lazyBytes": 282832
+    },
+    "Caladea": {
+     "route": "Caladea",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Calibri": {
+     "route": "Carlito",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Calibri Light": {
+     "route": "Carlito",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Cambria": {
+     "route": "Caladea",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Candara": {
+     "route": "Source Sans 3",
+     "files": [
+      "fonts/source-sans-3/SourceSans3-Bold.ttf",
+      "fonts/source-sans-3/SourceSans3-Regular.ttf",
+      "fonts/source-sans-3/SourceSans3-It.ttf",
+      "fonts/source-sans-3/SourceSans3-BoldIt.ttf"
+     ],
+     "lazyBytes": 1493884
+    },
+    "Carlito": {
+     "route": "Carlito",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Century Gothic": {
+     "route": "Work Sans",
+     "files": [
+      "fonts/work-sans/WorkSans_700Bold.ttf",
+      "fonts/work-sans/WorkSans_400Regular.ttf",
+      "fonts/work-sans/WorkSans_400Regular_Italic.ttf",
+      "fonts/work-sans/WorkSans_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 730272
+    },
+    "Century Schoolbook": {
+     "route": "Gelasio",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Consolas": {
+     "route": "Cousine",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Constantia": {
+     "route": "PT Serif",
+     "files": [
+      "fonts/pt-serif/PT_Serif-Web-Bold.ttf",
+      "fonts/pt-serif/PT_Serif-Web-Regular.ttf",
+      "fonts/pt-serif/PT_Serif-Web-Italic.ttf",
+      "fonts/pt-serif/PT_Serif-Web-BoldItalic.ttf"
+     ],
+     "lazyBytes": 1411980
+    },
+    "Corbel": {
+     "route": "Source Sans 3",
+     "files": [
+      "fonts/source-sans-3/SourceSans3-Bold.ttf",
+      "fonts/source-sans-3/SourceSans3-Regular.ttf",
+      "fonts/source-sans-3/SourceSans3-It.ttf",
+      "fonts/source-sans-3/SourceSans3-BoldIt.ttf"
+     ],
+     "lazyBytes": 1493884
+    },
+    "Courier New": {
+     "route": "Cousine",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Cousine": {
+     "route": "Cousine",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Didot": {
+     "route": "Playfair Display",
+     "files": [
+      "fonts/playfair-display/PlayfairDisplay-Bold.ttf",
+      "fonts/playfair-display/PlayfairDisplay-Regular.ttf",
+      "fonts/playfair-display/PlayfairDisplay-Italic.ttf",
+      "fonts/playfair-display/PlayfairDisplay-BoldItalic.ttf"
+     ],
+     "lazyBytes": 896244
+    },
+    "EB Garamond": {
+     "route": "EB Garamond",
+     "files": [
+      "fonts/eb-garamond/EBGaramond_700Bold.ttf",
+      "fonts/eb-garamond/EBGaramond_400Regular.ttf",
+      "fonts/eb-garamond/EBGaramond_400Regular_Italic.ttf",
+      "fonts/eb-garamond/EBGaramond_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 1865720
+    },
+    "Figtree": {
+     "route": "Figtree",
+     "files": [
+      "fonts/figtree/Figtree_700Bold.ttf",
+      "fonts/figtree/Figtree_400Regular.ttf",
+      "fonts/figtree/Figtree_400Regular_Italic.ttf",
+      "fonts/figtree/Figtree_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 162028
+    },
+    "Franklin Gothic Book": {
+     "route": "Barlow",
+     "files": [
+      "fonts/barlow/Barlow-Bold.ttf",
+      "fonts/barlow/Barlow-Regular.ttf",
+      "fonts/barlow/Barlow-Italic.ttf",
+      "fonts/barlow/Barlow-BoldItalic.ttf"
+     ],
+     "lazyBytes": 433908
+    },
+    "Franklin Gothic Medium": {
+     "route": "Barlow",
+     "files": [
+      "fonts/barlow/Barlow-Bold.ttf",
+      "fonts/barlow/Barlow-Regular.ttf",
+      "fonts/barlow/Barlow-Italic.ttf",
+      "fonts/barlow/Barlow-BoldItalic.ttf"
+     ],
+     "lazyBytes": 433908
+    },
+    "Garamond": {
+     "route": "EB Garamond",
+     "files": [
+      "fonts/eb-garamond/EBGaramond_700Bold.ttf",
+      "fonts/eb-garamond/EBGaramond_400Regular.ttf",
+      "fonts/eb-garamond/EBGaramond_400Regular_Italic.ttf",
+      "fonts/eb-garamond/EBGaramond_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 1865720
+    },
+    "Gelasio": {
+     "route": "Gelasio",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Georgia": {
+     "route": "Gelasio",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Gill Sans MT": {
+     "route": "Source Sans 3",
+     "files": [
+      "fonts/source-sans-3/SourceSans3-Bold.ttf",
+      "fonts/source-sans-3/SourceSans3-Regular.ttf",
+      "fonts/source-sans-3/SourceSans3-It.ttf",
+      "fonts/source-sans-3/SourceSans3-BoldIt.ttf"
+     ],
+     "lazyBytes": 1493884
+    },
+    "Grandview": {
+     "route": "Barlow",
+     "files": [
+      "fonts/barlow/Barlow-Bold.ttf",
+      "fonts/barlow/Barlow-Regular.ttf",
+      "fonts/barlow/Barlow-Italic.ttf",
+      "fonts/barlow/Barlow-BoldItalic.ttf"
+     ],
+     "lazyBytes": 433908
+    },
+    "Grandview Display": {
+     "route": "Barlow",
+     "files": [
+      "fonts/barlow/Barlow-Bold.ttf",
+      "fonts/barlow/Barlow-Regular.ttf",
+      "fonts/barlow/Barlow-Italic.ttf",
+      "fonts/barlow/Barlow-BoldItalic.ttf"
+     ],
+     "lazyBytes": 433908
+    },
+    "Impact": {
+     "route": "Anton",
+     "files": [
+      "fonts/anton/Anton-Regular.ttf"
+     ],
+     "lazyBytes": 170812,
+     "styleGaps": [
+      "400i",
+      "700i"
+     ]
+    },
+    "Intos": {
+     "route": "Intos",
+     "files": [
+      "fonts/intos/Intos-Bold.ttf",
+      "fonts/intos/Intos-Regular.ttf",
+      "fonts/intos/Intos-Italic.ttf",
+      "fonts/intos/Intos-BoldItalic.ttf"
+     ],
+     "lazyBytes": 3101236
+    },
+    "Intos Display": {
+     "route": "Intos Display",
+     "files": [
+      "fonts/intos/IntosDisplay-Bold.ttf",
+      "fonts/intos/IntosDisplay-Regular.ttf",
+      "fonts/intos/IntosDisplay-Italic.ttf",
+      "fonts/intos/IntosDisplay-BoldItalic.ttf"
+     ],
+     "lazyBytes": 3104632
+    },
+    "Intos Narrow": {
+     "route": "Intos Narrow",
+     "files": [
+      "fonts/intos/IntosNarrow-Bold.ttf",
+      "fonts/intos/IntosNarrow-Regular.ttf",
+      "fonts/intos/IntosNarrow-Italic.ttf",
+      "fonts/intos/IntosNarrow-BoldItalic.ttf"
+     ],
+     "lazyBytes": 3108120
+    },
+    "Intos Serif": {
+     "route": "Intos Serif",
+     "files": [
+      "fonts/intos/IntosSerif-Bold.ttf",
+      "fonts/intos/IntosSerif-Regular.ttf",
+      "fonts/intos/IntosSerif-Italic.ttf",
+      "fonts/intos/IntosSerif-BoldItalic.ttf"
+     ],
+     "lazyBytes": 2301580
+    },
+    "Liberation Mono": {
+     "route": "Cousine",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Liberation Sans": {
+     "route": "Arimo",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Liberation Serif": {
+     "route": "Tinos",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Libre Caslon Text": {
+     "route": "Libre Caslon Text",
+     "files": [
+      "fonts/libre-caslon-text/LibreCaslonText_700Bold.ttf",
+      "fonts/libre-caslon-text/LibreCaslonText_400Regular.ttf",
+      "fonts/libre-caslon-text/LibreCaslonText_400Regular_Italic.ttf"
+     ],
+     "lazyBytes": 282832
+    },
+    "Lora": {
+     "route": "Lora",
+     "files": [
+      "fonts/lora/Lora-Bold.ttf",
+      "fonts/lora/Lora-Regular.ttf",
+      "fonts/lora/Lora-Italic.ttf",
+      "fonts/lora/Lora-BoldItalic.ttf"
+     ],
+     "lazyBytes": 837492
+    },
+    "Lucida Console": {
+     "route": "Cousine",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Lucida Sans": {
+     "route": "Work Sans",
+     "files": [
+      "fonts/work-sans/WorkSans_700Bold.ttf",
+      "fonts/work-sans/WorkSans_400Regular.ttf",
+      "fonts/work-sans/WorkSans_400Regular_Italic.ttf",
+      "fonts/work-sans/WorkSans_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 730272
+    },
+    "Lucida Sans Unicode": {
+     "route": "Work Sans",
+     "files": [
+      "fonts/work-sans/WorkSans_700Bold.ttf",
+      "fonts/work-sans/WorkSans_400Regular.ttf",
+      "fonts/work-sans/WorkSans_400Regular_Italic.ttf",
+      "fonts/work-sans/WorkSans_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 730272
+    },
+    "Merriweather Sans": {
+     "route": "Merriweather Sans",
+     "files": [
+      "fonts/merriweather-sans/MerriweatherSans-Bold.ttf",
+      "fonts/merriweather-sans/MerriweatherSans-Regular.ttf",
+      "fonts/merriweather-sans/MerriweatherSans-Italic.ttf",
+      "fonts/merriweather-sans/MerriweatherSans-BoldItalic.ttf"
+     ],
+     "lazyBytes": 641004
+    },
+    "Microsoft Sans Serif": {
+     "route": "Arimo",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Montserrat": {
+     "route": "Montserrat",
+     "files": [
+      "fonts/montserrat/Montserrat_700Bold.ttf",
+      "fonts/montserrat/Montserrat_400Regular.ttf",
+      "fonts/montserrat/Montserrat_400Regular_Italic.ttf",
+      "fonts/montserrat/Montserrat_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 1345884
+    },
+    "Open Sans": {
+     "route": "Open Sans",
+     "files": [
+      "fonts/open-sans/OpenSans_700Bold.ttf",
+      "fonts/open-sans/OpenSans_400Regular.ttf",
+      "fonts/open-sans/OpenSans_400Regular_Italic.ttf",
+      "fonts/open-sans/OpenSans_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 534656
+    },
+    "Palatino Linotype": {
+     "route": "PT Serif",
+     "files": [
+      "fonts/pt-serif/PT_Serif-Web-Bold.ttf",
+      "fonts/pt-serif/PT_Serif-Web-Regular.ttf",
+      "fonts/pt-serif/PT_Serif-Web-Italic.ttf",
+      "fonts/pt-serif/PT_Serif-Web-BoldItalic.ttf"
+     ],
+     "lazyBytes": 1411980
+    },
+    "Playfair Display": {
+     "route": "Playfair Display",
+     "files": [
+      "fonts/playfair-display/PlayfairDisplay-Bold.ttf",
+      "fonts/playfair-display/PlayfairDisplay-Regular.ttf",
+      "fonts/playfair-display/PlayfairDisplay-Italic.ttf",
+      "fonts/playfair-display/PlayfairDisplay-BoldItalic.ttf"
+     ],
+     "lazyBytes": 896244
+    },
+    "Poppins": {
+     "route": "Poppins",
+     "files": [
+      "fonts/poppins/Poppins_700Bold.ttf",
+      "fonts/poppins/Poppins_400Regular.ttf",
+      "fonts/poppins/Poppins_400Regular_Italic.ttf",
+      "fonts/poppins/Poppins_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 670784
+    },
+    "PT Serif": {
+     "route": "PT Serif",
+     "files": [
+      "fonts/pt-serif/PT_Serif-Web-Bold.ttf",
+      "fonts/pt-serif/PT_Serif-Web-Regular.ttf",
+      "fonts/pt-serif/PT_Serif-Web-Italic.ttf",
+      "fonts/pt-serif/PT_Serif-Web-BoldItalic.ttf"
+     ],
+     "lazyBytes": 1411980
+    },
+    "Raleway": {
+     "route": "Raleway",
+     "files": [
+      "fonts/raleway/Raleway-Bold.ttf",
+      "fonts/raleway/Raleway-Regular.ttf",
+      "fonts/raleway/Raleway-Italic.ttf",
+      "fonts/raleway/Raleway-BoldItalic.ttf"
+     ],
+     "lazyBytes": 540344
+    },
+    "Red Hat Display": {
+     "route": "Red Hat Display",
+     "files": [
+      "fonts/red-hat-display/RedHatDisplay_700Bold.ttf",
+      "fonts/red-hat-display/RedHatDisplay_400Regular.ttf",
+      "fonts/red-hat-display/RedHatDisplay_400Regular_Italic.ttf",
+      "fonts/red-hat-display/RedHatDisplay_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 209476
+    },
+    "Red Hat Text": {
+     "route": "Red Hat Text",
+     "files": [
+      "fonts/red-hat-text/RedHatText_700Bold.ttf",
+      "fonts/red-hat-text/RedHatText_400Regular.ttf",
+      "fonts/red-hat-text/RedHatText_400Regular_Italic.ttf",
+      "fonts/red-hat-text/RedHatText_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 212328
+    },
+    "Roboto": {
+     "route": "Roboto",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Roboto Mono": {
+     "route": "Roboto Mono",
+     "files": [],
+     "lazyBytes": 0,
+     "styleGaps": [
+      "400i",
+      "700i"
+     ]
+    },
+    "Rockwell": {
+     "route": "Bitter",
+     "files": [
+      "fonts/bitter/Bitter_700Bold.ttf",
+      "fonts/bitter/Bitter_400Regular.ttf",
+      "fonts/bitter/Bitter_400Regular_Italic.ttf",
+      "fonts/bitter/Bitter_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 749416
+    },
+    "Seaford": {
+     "route": "Source Sans 3",
+     "files": [
+      "fonts/source-sans-3/SourceSans3-Bold.ttf",
+      "fonts/source-sans-3/SourceSans3-Regular.ttf",
+      "fonts/source-sans-3/SourceSans3-It.ttf",
+      "fonts/source-sans-3/SourceSans3-BoldIt.ttf"
+     ],
+     "lazyBytes": 1493884
+    },
+    "Seaford Display": {
+     "route": "Source Sans 3",
+     "files": [
+      "fonts/source-sans-3/SourceSans3-Bold.ttf",
+      "fonts/source-sans-3/SourceSans3-Regular.ttf",
+      "fonts/source-sans-3/SourceSans3-It.ttf",
+      "fonts/source-sans-3/SourceSans3-BoldIt.ttf"
+     ],
+     "lazyBytes": 1493884
+    },
+    "Segoe UI": {
+     "route": "Red Hat Display",
+     "files": [
+      "fonts/red-hat-display/RedHatDisplay_700Bold.ttf",
+      "fonts/red-hat-display/RedHatDisplay_400Regular.ttf",
+      "fonts/red-hat-display/RedHatDisplay_400Regular_Italic.ttf",
+      "fonts/red-hat-display/RedHatDisplay_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 209476
+    },
+    "Segoe UI Light": {
+     "route": "Red Hat Display",
+     "files": [
+      "fonts/red-hat-display/RedHatDisplay_700Bold.ttf",
+      "fonts/red-hat-display/RedHatDisplay_300Light.ttf",
+      "fonts/red-hat-display/RedHatDisplay_300Light_Italic.ttf",
+      "fonts/red-hat-display/RedHatDisplay_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 209620
+    },
+    "Segoe UI Semibold": {
+     "route": "Red Hat Display",
+     "files": [
+      "fonts/red-hat-display/RedHatDisplay_700Bold.ttf",
+      "fonts/red-hat-display/RedHatDisplay_600SemiBold.ttf",
+      "fonts/red-hat-display/RedHatDisplay_600SemiBold_Italic.ttf",
+      "fonts/red-hat-display/RedHatDisplay_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 209636
+    },
+    "Segoe UI Semilight": {
+     "route": "Red Hat Display",
+     "files": [
+      "fonts/red-hat-display/RedHatDisplay_700Bold.ttf",
+      "fonts/red-hat-display/RedHatDisplay_400Regular.ttf",
+      "fonts/red-hat-display/RedHatDisplay_400Regular_Italic.ttf",
+      "fonts/red-hat-display/RedHatDisplay_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 209476
+    },
+    "Skeena": {
+     "route": "Open Sans",
+     "files": [
+      "fonts/open-sans/OpenSans_700Bold.ttf",
+      "fonts/open-sans/OpenSans_400Regular.ttf",
+      "fonts/open-sans/OpenSans_400Regular_Italic.ttf",
+      "fonts/open-sans/OpenSans_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 534656
+    },
+    "Skeena Display": {
+     "route": "Open Sans",
+     "files": [
+      "fonts/open-sans/OpenSans_700Bold.ttf",
+      "fonts/open-sans/OpenSans_400Regular.ttf",
+      "fonts/open-sans/OpenSans_400Regular_Italic.ttf",
+      "fonts/open-sans/OpenSans_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 534656
+    },
+    "Source Sans 3": {
+     "route": "Source Sans 3",
+     "files": [
+      "fonts/source-sans-3/SourceSans3-Bold.ttf",
+      "fonts/source-sans-3/SourceSans3-Regular.ttf",
+      "fonts/source-sans-3/SourceSans3-It.ttf",
+      "fonts/source-sans-3/SourceSans3-BoldIt.ttf"
+     ],
+     "lazyBytes": 1493884
+    },
+    "Source Sans Pro": {
+     "route": "Source Sans 3",
+     "files": [
+      "fonts/source-sans-3/SourceSans3-Bold.ttf",
+      "fonts/source-sans-3/SourceSans3-Regular.ttf",
+      "fonts/source-sans-3/SourceSans3-It.ttf",
+      "fonts/source-sans-3/SourceSans3-BoldIt.ttf"
+     ],
+     "lazyBytes": 1493884
+    },
+    "Tahoma": {
+     "route": "Red Hat Text",
+     "files": [
+      "fonts/red-hat-text/RedHatText_700Bold.ttf",
+      "fonts/red-hat-text/RedHatText_400Regular.ttf",
+      "fonts/red-hat-text/RedHatText_400Regular_Italic.ttf",
+      "fonts/red-hat-text/RedHatText_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 212328
+    },
+    "Tenorite": {
+     "route": "Figtree",
+     "files": [
+      "fonts/figtree/Figtree_700Bold.ttf",
+      "fonts/figtree/Figtree_400Regular.ttf",
+      "fonts/figtree/Figtree_400Regular_Italic.ttf",
+      "fonts/figtree/Figtree_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 162028
+    },
+    "Tenorite Display": {
+     "route": "Figtree",
+     "files": [
+      "fonts/figtree/Figtree_700Bold.ttf",
+      "fonts/figtree/Figtree_400Regular.ttf",
+      "fonts/figtree/Figtree_400Regular_Italic.ttf",
+      "fonts/figtree/Figtree_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 162028
+    },
+    "Times New Roman": {
+     "route": "Tinos",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Tinos": {
+     "route": "Tinos",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Trebuchet MS": {
+     "route": "Figtree",
+     "files": [
+      "fonts/figtree/Figtree_700Bold.ttf",
+      "fonts/figtree/Figtree_400Regular.ttf",
+      "fonts/figtree/Figtree_400Regular_Italic.ttf",
+      "fonts/figtree/Figtree_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 162028
+    },
+    "Verdana": {
+     "route": "Montserrat",
+     "files": [
+      "fonts/montserrat/Montserrat_700Bold.ttf",
+      "fonts/montserrat/Montserrat_400Regular.ttf",
+      "fonts/montserrat/Montserrat_400Regular_Italic.ttf",
+      "fonts/montserrat/Montserrat_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 1345884
+    },
+    "Work Sans": {
+     "route": "Work Sans",
+     "files": [
+      "fonts/work-sans/WorkSans_700Bold.ttf",
+      "fonts/work-sans/WorkSans_400Regular.ttf",
+      "fonts/work-sans/WorkSans_400Regular_Italic.ttf",
+      "fonts/work-sans/WorkSans_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 730272
+    }
+   }
+  },
+  "editor": {
+   "source": {
+    "repository": "OpenPresentation/opf-editor",
+    "test": "test/font-gate-latin-families.mjs",
+    "commit": "c745f5483a32784b4a73e85eb1f55727627011c2",
+    "runtime": "Node v26.4.0, renderer 0.11.9, the editor's createFontGate"
+   },
+   "families": {
+    "Anton": {
+     "route": "Anton",
+     "files": [
+      "fonts/anton/Anton-Regular.ttf"
+     ],
+     "lazyBytes": 170812
+    },
+    "Aptos": {
+     "route": "Intos",
+     "files": [
+      "fonts/intos/Intos-Bold.ttf",
+      "fonts/intos/Intos-BoldItalic.ttf",
+      "fonts/intos/Intos-Italic.ttf",
+      "fonts/intos/Intos-Regular.ttf"
+     ],
+     "lazyBytes": 3101236
+    },
+    "Aptos Display": {
+     "route": "Intos Display",
+     "files": [
+      "fonts/intos/IntosDisplay-Bold.ttf",
+      "fonts/intos/IntosDisplay-BoldItalic.ttf",
+      "fonts/intos/IntosDisplay-Italic.ttf",
+      "fonts/intos/IntosDisplay-Regular.ttf"
+     ],
+     "lazyBytes": 3104632
+    },
+    "Aptos Mono": {
+     "route": "Cousine",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Aptos Narrow": {
+     "route": "Intos Narrow",
+     "files": [
+      "fonts/intos/IntosNarrow-Bold.ttf",
+      "fonts/intos/IntosNarrow-BoldItalic.ttf",
+      "fonts/intos/IntosNarrow-Italic.ttf",
+      "fonts/intos/IntosNarrow-Regular.ttf"
+     ],
+     "lazyBytes": 3108120
+    },
+    "Aptos Serif": {
+     "route": "Intos Serif",
+     "files": [
+      "fonts/intos/IntosSerif-Bold.ttf",
+      "fonts/intos/IntosSerif-BoldItalic.ttf",
+      "fonts/intos/IntosSerif-Italic.ttf",
+      "fonts/intos/IntosSerif-Regular.ttf"
+     ],
+     "lazyBytes": 2301580
+    },
+    "Archivo Narrow": {
+     "route": "Archivo Narrow",
+     "files": [
+      "fonts/archivo-narrow/ArchivoNarrow_400Regular.ttf",
+      "fonts/archivo-narrow/ArchivoNarrow_400Regular_Italic.ttf",
+      "fonts/archivo-narrow/ArchivoNarrow_700Bold.ttf",
+      "fonts/archivo-narrow/ArchivoNarrow_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 259972
+    },
+    "Arial": {
+     "route": "Arimo",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Arial Black": {
+     "route": "Montserrat",
+     "files": [
+      "fonts/montserrat/Montserrat_700Bold.ttf",
+      "fonts/montserrat/Montserrat_700Bold_Italic.ttf",
+      "fonts/montserrat/Montserrat_900Black.ttf"
+     ],
+     "lazyBytes": 1021100
+    },
+    "Arial Narrow": {
+     "route": "Archivo Narrow",
+     "files": [
+      "fonts/archivo-narrow/ArchivoNarrow_400Regular.ttf",
+      "fonts/archivo-narrow/ArchivoNarrow_400Regular_Italic.ttf",
+      "fonts/archivo-narrow/ArchivoNarrow_700Bold.ttf",
+      "fonts/archivo-narrow/ArchivoNarrow_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 259972
+    },
+    "Arimo": {
+     "route": "Arimo",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Barlow": {
+     "route": "Barlow",
+     "files": [
+      "fonts/barlow/Barlow-Bold.ttf",
+      "fonts/barlow/Barlow-BoldItalic.ttf",
+      "fonts/barlow/Barlow-Italic.ttf",
+      "fonts/barlow/Barlow-Regular.ttf"
+     ],
+     "lazyBytes": 433908
+    },
+    "Baskerville Old Face": {
+     "route": "Libre Caslon Text",
+     "files": [
+      "fonts/libre-caslon-text/LibreCaslonText_400Regular.ttf",
+      "fonts/libre-caslon-text/LibreCaslonText_400Regular_Italic.ttf",
+      "fonts/libre-caslon-text/LibreCaslonText_700Bold.ttf"
+     ],
+     "lazyBytes": 282832
+    },
+    "Bebas Neue": {
+     "route": "Bebas Neue",
+     "files": [
+      "fonts/bebas-neue/BebasNeue_400Regular.ttf"
+     ],
+     "lazyBytes": 57676
+    },
+    "Bitter": {
+     "route": "Bitter",
+     "files": [
+      "fonts/bitter/Bitter_400Regular.ttf",
+      "fonts/bitter/Bitter_400Regular_Italic.ttf",
+      "fonts/bitter/Bitter_700Bold.ttf",
+      "fonts/bitter/Bitter_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 749416
+    },
+    "Bodoni MT": {
+     "route": "Playfair Display",
+     "files": [
+      "fonts/playfair-display/PlayfairDisplay-Bold.ttf",
+      "fonts/playfair-display/PlayfairDisplay-BoldItalic.ttf",
+      "fonts/playfair-display/PlayfairDisplay-Italic.ttf",
+      "fonts/playfair-display/PlayfairDisplay-Regular.ttf"
+     ],
+     "lazyBytes": 896244
+    },
+    "Book Antiqua": {
+     "route": "PT Serif",
+     "files": [
+      "fonts/pt-serif/PT_Serif-Web-Bold.ttf",
+      "fonts/pt-serif/PT_Serif-Web-BoldItalic.ttf",
+      "fonts/pt-serif/PT_Serif-Web-Italic.ttf",
+      "fonts/pt-serif/PT_Serif-Web-Regular.ttf"
+     ],
+     "lazyBytes": 1411980
+    },
+    "Bookman Old Style": {
+     "route": "Libre Caslon Text",
+     "files": [
+      "fonts/libre-caslon-text/LibreCaslonText_400Regular.ttf",
+      "fonts/libre-caslon-text/LibreCaslonText_400Regular_Italic.ttf",
+      "fonts/libre-caslon-text/LibreCaslonText_700Bold.ttf"
+     ],
+     "lazyBytes": 282832
+    },
+    "Caladea": {
+     "route": "Caladea",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Calibri": {
+     "route": "Carlito",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Calibri Light": {
+     "route": "Carlito",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Cambria": {
+     "route": "Caladea",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Candara": {
+     "route": "Source Sans 3",
+     "files": [
+      "fonts/source-sans-3/SourceSans3-Bold.ttf",
+      "fonts/source-sans-3/SourceSans3-BoldIt.ttf",
+      "fonts/source-sans-3/SourceSans3-It.ttf",
+      "fonts/source-sans-3/SourceSans3-Regular.ttf"
+     ],
+     "lazyBytes": 1493884
+    },
+    "Carlito": {
+     "route": "Carlito",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Century Gothic": {
+     "route": "Work Sans",
+     "files": [
+      "fonts/work-sans/WorkSans_400Regular.ttf",
+      "fonts/work-sans/WorkSans_400Regular_Italic.ttf",
+      "fonts/work-sans/WorkSans_700Bold.ttf",
+      "fonts/work-sans/WorkSans_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 730272
+    },
+    "Century Schoolbook": {
+     "route": "Gelasio",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Consolas": {
+     "route": "Cousine",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Constantia": {
+     "route": "PT Serif",
+     "files": [
+      "fonts/pt-serif/PT_Serif-Web-Bold.ttf",
+      "fonts/pt-serif/PT_Serif-Web-BoldItalic.ttf",
+      "fonts/pt-serif/PT_Serif-Web-Italic.ttf",
+      "fonts/pt-serif/PT_Serif-Web-Regular.ttf"
+     ],
+     "lazyBytes": 1411980
+    },
+    "Corbel": {
+     "route": "Source Sans 3",
+     "files": [
+      "fonts/source-sans-3/SourceSans3-Bold.ttf",
+      "fonts/source-sans-3/SourceSans3-BoldIt.ttf",
+      "fonts/source-sans-3/SourceSans3-It.ttf",
+      "fonts/source-sans-3/SourceSans3-Regular.ttf"
+     ],
+     "lazyBytes": 1493884
+    },
+    "Courier New": {
+     "route": "Cousine",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Cousine": {
+     "route": "Cousine",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Didot": {
+     "route": "Playfair Display",
+     "files": [
+      "fonts/playfair-display/PlayfairDisplay-Bold.ttf",
+      "fonts/playfair-display/PlayfairDisplay-BoldItalic.ttf",
+      "fonts/playfair-display/PlayfairDisplay-Italic.ttf",
+      "fonts/playfair-display/PlayfairDisplay-Regular.ttf"
+     ],
+     "lazyBytes": 896244
+    },
+    "EB Garamond": {
+     "route": "EB Garamond",
+     "files": [
+      "fonts/eb-garamond/EBGaramond_400Regular.ttf",
+      "fonts/eb-garamond/EBGaramond_400Regular_Italic.ttf",
+      "fonts/eb-garamond/EBGaramond_700Bold.ttf",
+      "fonts/eb-garamond/EBGaramond_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 1865720
+    },
+    "Figtree": {
+     "route": "Figtree",
+     "files": [
+      "fonts/figtree/Figtree_400Regular.ttf",
+      "fonts/figtree/Figtree_400Regular_Italic.ttf",
+      "fonts/figtree/Figtree_700Bold.ttf",
+      "fonts/figtree/Figtree_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 162028
+    },
+    "Franklin Gothic Book": {
+     "route": "Barlow",
+     "files": [
+      "fonts/barlow/Barlow-Bold.ttf",
+      "fonts/barlow/Barlow-BoldItalic.ttf",
+      "fonts/barlow/Barlow-Italic.ttf",
+      "fonts/barlow/Barlow-Regular.ttf"
+     ],
+     "lazyBytes": 433908
+    },
+    "Franklin Gothic Medium": {
+     "route": "Barlow",
+     "files": [
+      "fonts/barlow/Barlow-Bold.ttf",
+      "fonts/barlow/Barlow-BoldItalic.ttf",
+      "fonts/barlow/Barlow-Italic.ttf",
+      "fonts/barlow/Barlow-Regular.ttf"
+     ],
+     "lazyBytes": 433908
+    },
+    "Garamond": {
+     "route": "EB Garamond",
+     "files": [
+      "fonts/eb-garamond/EBGaramond_400Regular.ttf",
+      "fonts/eb-garamond/EBGaramond_400Regular_Italic.ttf",
+      "fonts/eb-garamond/EBGaramond_700Bold.ttf",
+      "fonts/eb-garamond/EBGaramond_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 1865720
+    },
+    "Gelasio": {
+     "route": "Gelasio",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Georgia": {
+     "route": "Gelasio",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Gill Sans MT": {
+     "route": "Source Sans 3",
+     "files": [
+      "fonts/source-sans-3/SourceSans3-Bold.ttf",
+      "fonts/source-sans-3/SourceSans3-BoldIt.ttf",
+      "fonts/source-sans-3/SourceSans3-It.ttf",
+      "fonts/source-sans-3/SourceSans3-Regular.ttf"
+     ],
+     "lazyBytes": 1493884
+    },
+    "Grandview": {
+     "route": "Barlow",
+     "files": [
+      "fonts/barlow/Barlow-Bold.ttf",
+      "fonts/barlow/Barlow-BoldItalic.ttf",
+      "fonts/barlow/Barlow-Italic.ttf",
+      "fonts/barlow/Barlow-Regular.ttf"
+     ],
+     "lazyBytes": 433908
+    },
+    "Grandview Display": {
+     "route": "Barlow",
+     "files": [
+      "fonts/barlow/Barlow-Bold.ttf",
+      "fonts/barlow/Barlow-BoldItalic.ttf",
+      "fonts/barlow/Barlow-Italic.ttf",
+      "fonts/barlow/Barlow-Regular.ttf"
+     ],
+     "lazyBytes": 433908
+    },
+    "Impact": {
+     "route": "Anton",
+     "files": [
+      "fonts/anton/Anton-Regular.ttf"
+     ],
+     "lazyBytes": 170812
+    },
+    "Intos": {
+     "route": "Intos",
+     "files": [
+      "fonts/intos/Intos-Bold.ttf",
+      "fonts/intos/Intos-BoldItalic.ttf",
+      "fonts/intos/Intos-Italic.ttf",
+      "fonts/intos/Intos-Regular.ttf"
+     ],
+     "lazyBytes": 3101236
+    },
+    "Intos Display": {
+     "route": "Intos Display",
+     "files": [
+      "fonts/intos/IntosDisplay-Bold.ttf",
+      "fonts/intos/IntosDisplay-BoldItalic.ttf",
+      "fonts/intos/IntosDisplay-Italic.ttf",
+      "fonts/intos/IntosDisplay-Regular.ttf"
+     ],
+     "lazyBytes": 3104632
+    },
+    "Intos Narrow": {
+     "route": "Intos Narrow",
+     "files": [
+      "fonts/intos/IntosNarrow-Bold.ttf",
+      "fonts/intos/IntosNarrow-BoldItalic.ttf",
+      "fonts/intos/IntosNarrow-Italic.ttf",
+      "fonts/intos/IntosNarrow-Regular.ttf"
+     ],
+     "lazyBytes": 3108120
+    },
+    "Intos Serif": {
+     "route": "Intos Serif",
+     "files": [
+      "fonts/intos/IntosSerif-Bold.ttf",
+      "fonts/intos/IntosSerif-BoldItalic.ttf",
+      "fonts/intos/IntosSerif-Italic.ttf",
+      "fonts/intos/IntosSerif-Regular.ttf"
+     ],
+     "lazyBytes": 2301580
+    },
+    "Liberation Mono": {
+     "route": "Cousine",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Liberation Sans": {
+     "route": "Arimo",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Liberation Serif": {
+     "route": "Tinos",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Libre Caslon Text": {
+     "route": "Libre Caslon Text",
+     "files": [
+      "fonts/libre-caslon-text/LibreCaslonText_400Regular.ttf",
+      "fonts/libre-caslon-text/LibreCaslonText_400Regular_Italic.ttf",
+      "fonts/libre-caslon-text/LibreCaslonText_700Bold.ttf"
+     ],
+     "lazyBytes": 282832
+    },
+    "Lora": {
+     "route": "Lora",
+     "files": [
+      "fonts/lora/Lora-Bold.ttf",
+      "fonts/lora/Lora-BoldItalic.ttf",
+      "fonts/lora/Lora-Italic.ttf",
+      "fonts/lora/Lora-Regular.ttf"
+     ],
+     "lazyBytes": 837492
+    },
+    "Lucida Console": {
+     "route": "Cousine",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Lucida Sans": {
+     "route": "Work Sans",
+     "files": [
+      "fonts/work-sans/WorkSans_400Regular.ttf",
+      "fonts/work-sans/WorkSans_400Regular_Italic.ttf",
+      "fonts/work-sans/WorkSans_700Bold.ttf",
+      "fonts/work-sans/WorkSans_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 730272
+    },
+    "Lucida Sans Unicode": {
+     "route": "Work Sans",
+     "files": [
+      "fonts/work-sans/WorkSans_400Regular.ttf",
+      "fonts/work-sans/WorkSans_400Regular_Italic.ttf",
+      "fonts/work-sans/WorkSans_700Bold.ttf",
+      "fonts/work-sans/WorkSans_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 730272
+    },
+    "Merriweather Sans": {
+     "route": "Merriweather Sans",
+     "files": [
+      "fonts/merriweather-sans/MerriweatherSans-Bold.ttf",
+      "fonts/merriweather-sans/MerriweatherSans-BoldItalic.ttf",
+      "fonts/merriweather-sans/MerriweatherSans-Italic.ttf",
+      "fonts/merriweather-sans/MerriweatherSans-Regular.ttf"
+     ],
+     "lazyBytes": 641004
+    },
+    "Microsoft Sans Serif": {
+     "route": "Arimo",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Montserrat": {
+     "route": "Montserrat",
+     "files": [
+      "fonts/montserrat/Montserrat_400Regular.ttf",
+      "fonts/montserrat/Montserrat_400Regular_Italic.ttf",
+      "fonts/montserrat/Montserrat_700Bold.ttf",
+      "fonts/montserrat/Montserrat_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 1345884
+    },
+    "Open Sans": {
+     "route": "Open Sans",
+     "files": [
+      "fonts/open-sans/OpenSans_400Regular.ttf",
+      "fonts/open-sans/OpenSans_400Regular_Italic.ttf",
+      "fonts/open-sans/OpenSans_700Bold.ttf",
+      "fonts/open-sans/OpenSans_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 534656
+    },
+    "Palatino Linotype": {
+     "route": "PT Serif",
+     "files": [
+      "fonts/pt-serif/PT_Serif-Web-Bold.ttf",
+      "fonts/pt-serif/PT_Serif-Web-BoldItalic.ttf",
+      "fonts/pt-serif/PT_Serif-Web-Italic.ttf",
+      "fonts/pt-serif/PT_Serif-Web-Regular.ttf"
+     ],
+     "lazyBytes": 1411980
+    },
+    "Playfair Display": {
+     "route": "Playfair Display",
+     "files": [
+      "fonts/playfair-display/PlayfairDisplay-Bold.ttf",
+      "fonts/playfair-display/PlayfairDisplay-BoldItalic.ttf",
+      "fonts/playfair-display/PlayfairDisplay-Italic.ttf",
+      "fonts/playfair-display/PlayfairDisplay-Regular.ttf"
+     ],
+     "lazyBytes": 896244
+    },
+    "Poppins": {
+     "route": "Poppins",
+     "files": [
+      "fonts/poppins/Poppins_400Regular.ttf",
+      "fonts/poppins/Poppins_400Regular_Italic.ttf",
+      "fonts/poppins/Poppins_700Bold.ttf",
+      "fonts/poppins/Poppins_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 670784
+    },
+    "PT Serif": {
+     "route": "PT Serif",
+     "files": [
+      "fonts/pt-serif/PT_Serif-Web-Bold.ttf",
+      "fonts/pt-serif/PT_Serif-Web-BoldItalic.ttf",
+      "fonts/pt-serif/PT_Serif-Web-Italic.ttf",
+      "fonts/pt-serif/PT_Serif-Web-Regular.ttf"
+     ],
+     "lazyBytes": 1411980
+    },
+    "Raleway": {
+     "route": "Raleway",
+     "files": [
+      "fonts/raleway/Raleway-Bold.ttf",
+      "fonts/raleway/Raleway-BoldItalic.ttf",
+      "fonts/raleway/Raleway-Italic.ttf",
+      "fonts/raleway/Raleway-Regular.ttf"
+     ],
+     "lazyBytes": 540344
+    },
+    "Red Hat Display": {
+     "route": "Red Hat Display",
+     "files": [
+      "fonts/red-hat-display/RedHatDisplay_400Regular.ttf",
+      "fonts/red-hat-display/RedHatDisplay_400Regular_Italic.ttf",
+      "fonts/red-hat-display/RedHatDisplay_700Bold.ttf",
+      "fonts/red-hat-display/RedHatDisplay_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 209476
+    },
+    "Red Hat Text": {
+     "route": "Red Hat Text",
+     "files": [
+      "fonts/red-hat-text/RedHatText_400Regular.ttf",
+      "fonts/red-hat-text/RedHatText_400Regular_Italic.ttf",
+      "fonts/red-hat-text/RedHatText_700Bold.ttf",
+      "fonts/red-hat-text/RedHatText_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 212328
+    },
+    "Roboto": {
+     "route": "Roboto",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Roboto Mono": {
+     "route": "Roboto Mono",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Rockwell": {
+     "route": "Bitter",
+     "files": [
+      "fonts/bitter/Bitter_400Regular.ttf",
+      "fonts/bitter/Bitter_400Regular_Italic.ttf",
+      "fonts/bitter/Bitter_700Bold.ttf",
+      "fonts/bitter/Bitter_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 749416
+    },
+    "Seaford": {
+     "route": "Source Sans 3",
+     "files": [
+      "fonts/source-sans-3/SourceSans3-Bold.ttf",
+      "fonts/source-sans-3/SourceSans3-BoldIt.ttf",
+      "fonts/source-sans-3/SourceSans3-It.ttf",
+      "fonts/source-sans-3/SourceSans3-Regular.ttf"
+     ],
+     "lazyBytes": 1493884
+    },
+    "Seaford Display": {
+     "route": "Source Sans 3",
+     "files": [
+      "fonts/source-sans-3/SourceSans3-Bold.ttf",
+      "fonts/source-sans-3/SourceSans3-BoldIt.ttf",
+      "fonts/source-sans-3/SourceSans3-It.ttf",
+      "fonts/source-sans-3/SourceSans3-Regular.ttf"
+     ],
+     "lazyBytes": 1493884
+    },
+    "Segoe UI": {
+     "route": "Red Hat Display",
+     "files": [
+      "fonts/red-hat-display/RedHatDisplay_400Regular.ttf",
+      "fonts/red-hat-display/RedHatDisplay_400Regular_Italic.ttf",
+      "fonts/red-hat-display/RedHatDisplay_700Bold.ttf",
+      "fonts/red-hat-display/RedHatDisplay_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 209476
+    },
+    "Segoe UI Light": {
+     "route": "Red Hat Display",
+     "files": [
+      "fonts/red-hat-display/RedHatDisplay_300Light.ttf",
+      "fonts/red-hat-display/RedHatDisplay_300Light_Italic.ttf",
+      "fonts/red-hat-display/RedHatDisplay_700Bold.ttf",
+      "fonts/red-hat-display/RedHatDisplay_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 209620
+    },
+    "Segoe UI Semibold": {
+     "route": "Red Hat Display",
+     "files": [
+      "fonts/red-hat-display/RedHatDisplay_600SemiBold.ttf",
+      "fonts/red-hat-display/RedHatDisplay_600SemiBold_Italic.ttf",
+      "fonts/red-hat-display/RedHatDisplay_700Bold.ttf",
+      "fonts/red-hat-display/RedHatDisplay_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 209636
+    },
+    "Segoe UI Semilight": {
+     "route": "Red Hat Display",
+     "files": [
+      "fonts/red-hat-display/RedHatDisplay_400Regular.ttf",
+      "fonts/red-hat-display/RedHatDisplay_400Regular_Italic.ttf",
+      "fonts/red-hat-display/RedHatDisplay_700Bold.ttf",
+      "fonts/red-hat-display/RedHatDisplay_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 209476
+    },
+    "Skeena": {
+     "route": "Open Sans",
+     "files": [
+      "fonts/open-sans/OpenSans_400Regular.ttf",
+      "fonts/open-sans/OpenSans_400Regular_Italic.ttf",
+      "fonts/open-sans/OpenSans_700Bold.ttf",
+      "fonts/open-sans/OpenSans_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 534656
+    },
+    "Skeena Display": {
+     "route": "Open Sans",
+     "files": [
+      "fonts/open-sans/OpenSans_400Regular.ttf",
+      "fonts/open-sans/OpenSans_400Regular_Italic.ttf",
+      "fonts/open-sans/OpenSans_700Bold.ttf",
+      "fonts/open-sans/OpenSans_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 534656
+    },
+    "Source Sans 3": {
+     "route": "Source Sans 3",
+     "files": [
+      "fonts/source-sans-3/SourceSans3-Bold.ttf",
+      "fonts/source-sans-3/SourceSans3-BoldIt.ttf",
+      "fonts/source-sans-3/SourceSans3-It.ttf",
+      "fonts/source-sans-3/SourceSans3-Regular.ttf"
+     ],
+     "lazyBytes": 1493884
+    },
+    "Source Sans Pro": {
+     "route": "Source Sans 3",
+     "files": [
+      "fonts/source-sans-3/SourceSans3-Bold.ttf",
+      "fonts/source-sans-3/SourceSans3-BoldIt.ttf",
+      "fonts/source-sans-3/SourceSans3-It.ttf",
+      "fonts/source-sans-3/SourceSans3-Regular.ttf"
+     ],
+     "lazyBytes": 1493884
+    },
+    "Tahoma": {
+     "route": "Red Hat Text",
+     "files": [
+      "fonts/red-hat-text/RedHatText_400Regular.ttf",
+      "fonts/red-hat-text/RedHatText_400Regular_Italic.ttf",
+      "fonts/red-hat-text/RedHatText_700Bold.ttf",
+      "fonts/red-hat-text/RedHatText_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 212328
+    },
+    "Tenorite": {
+     "route": "Figtree",
+     "files": [
+      "fonts/figtree/Figtree_400Regular.ttf",
+      "fonts/figtree/Figtree_400Regular_Italic.ttf",
+      "fonts/figtree/Figtree_700Bold.ttf",
+      "fonts/figtree/Figtree_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 162028
+    },
+    "Tenorite Display": {
+     "route": "Figtree",
+     "files": [
+      "fonts/figtree/Figtree_400Regular.ttf",
+      "fonts/figtree/Figtree_400Regular_Italic.ttf",
+      "fonts/figtree/Figtree_700Bold.ttf",
+      "fonts/figtree/Figtree_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 162028
+    },
+    "Times New Roman": {
+     "route": "Tinos",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Tinos": {
+     "route": "Tinos",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Trebuchet MS": {
+     "route": "Figtree",
+     "files": [
+      "fonts/figtree/Figtree_400Regular.ttf",
+      "fonts/figtree/Figtree_400Regular_Italic.ttf",
+      "fonts/figtree/Figtree_700Bold.ttf",
+      "fonts/figtree/Figtree_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 162028
+    },
+    "Verdana": {
+     "route": "Montserrat",
+     "files": [
+      "fonts/montserrat/Montserrat_400Regular.ttf",
+      "fonts/montserrat/Montserrat_400Regular_Italic.ttf",
+      "fonts/montserrat/Montserrat_700Bold.ttf",
+      "fonts/montserrat/Montserrat_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 1345884
+    },
+    "Work Sans": {
+     "route": "Work Sans",
+     "files": [
+      "fonts/work-sans/WorkSans_400Regular.ttf",
+      "fonts/work-sans/WorkSans_400Regular_Italic.ttf",
+      "fonts/work-sans/WorkSans_700Bold.ttf",
+      "fonts/work-sans/WorkSans_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 730272
+    }
+   }
+  },
+  "galleryEditor": {
+   "source": {
+    "repository": "Data-Advantage/pptx-gallery",
+    "test": "tests/editor-latin-families.test.ts",
+    "commit": "d9a3d0097b5fbb2d6e26b9f6bbf61254b2f4ac24",
+    "runtime": "renderer 0.11.9, manifest public/opf-editor/lazy-fonts.json (renderer 0.11.9)"
+   },
+   "families": {
+    "Anton": {
+     "route": "Anton",
+     "files": [
+      "fonts/anton/Anton-Regular.ttf"
+     ],
+     "lazyBytes": 170812
+    },
+    "Aptos": {
+     "route": "Intos",
+     "files": [
+      "fonts/intos/Intos-Regular.ttf",
+      "fonts/intos/Intos-Italic.ttf",
+      "fonts/intos/Intos-Bold.ttf",
+      "fonts/intos/Intos-BoldItalic.ttf"
+     ],
+     "lazyBytes": 3101236
+    },
+    "Aptos Display": {
+     "route": "Intos Display",
+     "files": [
+      "fonts/intos/IntosDisplay-Regular.ttf",
+      "fonts/intos/IntosDisplay-Italic.ttf",
+      "fonts/intos/IntosDisplay-Bold.ttf",
+      "fonts/intos/IntosDisplay-BoldItalic.ttf"
+     ],
+     "lazyBytes": 3104632
+    },
+    "Aptos Mono": {
+     "route": "Cousine",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Aptos Narrow": {
+     "route": "Intos Narrow",
+     "files": [
+      "fonts/intos/IntosNarrow-Regular.ttf",
+      "fonts/intos/IntosNarrow-Italic.ttf",
+      "fonts/intos/IntosNarrow-Bold.ttf",
+      "fonts/intos/IntosNarrow-BoldItalic.ttf"
+     ],
+     "lazyBytes": 3108120
+    },
+    "Aptos Serif": {
+     "route": "Intos Serif",
+     "files": [
+      "fonts/intos/IntosSerif-Regular.ttf",
+      "fonts/intos/IntosSerif-Italic.ttf",
+      "fonts/intos/IntosSerif-Bold.ttf",
+      "fonts/intos/IntosSerif-BoldItalic.ttf"
+     ],
+     "lazyBytes": 2301580
+    },
+    "Archivo Narrow": {
+     "route": "Archivo Narrow",
+     "files": [
+      "fonts/archivo-narrow/ArchivoNarrow_400Regular.ttf",
+      "fonts/archivo-narrow/ArchivoNarrow_400Regular_Italic.ttf",
+      "fonts/archivo-narrow/ArchivoNarrow_700Bold.ttf",
+      "fonts/archivo-narrow/ArchivoNarrow_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 259972
+    },
+    "Arial": {
+     "route": "Arimo",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Arial Black": {
+     "route": "Montserrat",
+     "files": [
+      "fonts/montserrat/Montserrat_400Regular.ttf",
+      "fonts/montserrat/Montserrat_400Regular_Italic.ttf",
+      "fonts/montserrat/Montserrat_700Bold.ttf",
+      "fonts/montserrat/Montserrat_700Bold_Italic.ttf",
+      "fonts/montserrat/Montserrat_900Black.ttf"
+     ],
+     "lazyBytes": 1689180
+    },
+    "Arial Narrow": {
+     "route": "Archivo Narrow",
+     "files": [
+      "fonts/archivo-narrow/ArchivoNarrow_400Regular.ttf",
+      "fonts/archivo-narrow/ArchivoNarrow_400Regular_Italic.ttf",
+      "fonts/archivo-narrow/ArchivoNarrow_700Bold.ttf",
+      "fonts/archivo-narrow/ArchivoNarrow_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 259972
+    },
+    "Arimo": {
+     "route": "Arimo",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Barlow": {
+     "route": "Barlow",
+     "files": [
+      "fonts/barlow/Barlow-Regular.ttf",
+      "fonts/barlow/Barlow-Italic.ttf",
+      "fonts/barlow/Barlow-Bold.ttf",
+      "fonts/barlow/Barlow-BoldItalic.ttf"
+     ],
+     "lazyBytes": 433908
+    },
+    "Baskerville Old Face": {
+     "route": "Libre Caslon Text",
+     "files": [
+      "fonts/libre-caslon-text/LibreCaslonText_400Regular.ttf",
+      "fonts/libre-caslon-text/LibreCaslonText_400Regular_Italic.ttf",
+      "fonts/libre-caslon-text/LibreCaslonText_700Bold.ttf"
+     ],
+     "lazyBytes": 282832
+    },
+    "Bebas Neue": {
+     "route": "Bebas Neue",
+     "files": [
+      "fonts/bebas-neue/BebasNeue_400Regular.ttf"
+     ],
+     "lazyBytes": 57676
+    },
+    "Bitter": {
+     "route": "Bitter",
+     "files": [
+      "fonts/bitter/Bitter_400Regular.ttf",
+      "fonts/bitter/Bitter_400Regular_Italic.ttf",
+      "fonts/bitter/Bitter_700Bold.ttf",
+      "fonts/bitter/Bitter_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 749416
+    },
+    "Bodoni MT": {
+     "route": "Playfair Display",
+     "files": [
+      "fonts/playfair-display/PlayfairDisplay-Regular.ttf",
+      "fonts/playfair-display/PlayfairDisplay-Italic.ttf",
+      "fonts/playfair-display/PlayfairDisplay-Bold.ttf",
+      "fonts/playfair-display/PlayfairDisplay-BoldItalic.ttf"
+     ],
+     "lazyBytes": 896244
+    },
+    "Book Antiqua": {
+     "route": "PT Serif",
+     "files": [
+      "fonts/pt-serif/PT_Serif-Web-Regular.ttf",
+      "fonts/pt-serif/PT_Serif-Web-Italic.ttf",
+      "fonts/pt-serif/PT_Serif-Web-Bold.ttf",
+      "fonts/pt-serif/PT_Serif-Web-BoldItalic.ttf"
+     ],
+     "lazyBytes": 1411980
+    },
+    "Bookman Old Style": {
+     "route": "Libre Caslon Text",
+     "files": [
+      "fonts/libre-caslon-text/LibreCaslonText_400Regular.ttf",
+      "fonts/libre-caslon-text/LibreCaslonText_400Regular_Italic.ttf",
+      "fonts/libre-caslon-text/LibreCaslonText_700Bold.ttf"
+     ],
+     "lazyBytes": 282832
+    },
+    "Caladea": {
+     "route": "Caladea",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Calibri": {
+     "route": "Carlito",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Calibri Light": {
+     "route": "Carlito",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Cambria": {
+     "route": "Caladea",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Candara": {
+     "route": "Source Sans 3",
+     "files": [
+      "fonts/source-sans-3/SourceSans3-Regular.ttf",
+      "fonts/source-sans-3/SourceSans3-It.ttf",
+      "fonts/source-sans-3/SourceSans3-Bold.ttf",
+      "fonts/source-sans-3/SourceSans3-BoldIt.ttf"
+     ],
+     "lazyBytes": 1493884
+    },
+    "Carlito": {
+     "route": "Carlito",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Century Gothic": {
+     "route": "Work Sans",
+     "files": [
+      "fonts/work-sans/WorkSans_400Regular.ttf",
+      "fonts/work-sans/WorkSans_400Regular_Italic.ttf",
+      "fonts/work-sans/WorkSans_700Bold.ttf",
+      "fonts/work-sans/WorkSans_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 730272
+    },
+    "Century Schoolbook": {
+     "route": "Gelasio",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Consolas": {
+     "route": "Cousine",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Constantia": {
+     "route": "PT Serif",
+     "files": [
+      "fonts/pt-serif/PT_Serif-Web-Regular.ttf",
+      "fonts/pt-serif/PT_Serif-Web-Italic.ttf",
+      "fonts/pt-serif/PT_Serif-Web-Bold.ttf",
+      "fonts/pt-serif/PT_Serif-Web-BoldItalic.ttf"
+     ],
+     "lazyBytes": 1411980
+    },
+    "Corbel": {
+     "route": "Source Sans 3",
+     "files": [
+      "fonts/source-sans-3/SourceSans3-Regular.ttf",
+      "fonts/source-sans-3/SourceSans3-It.ttf",
+      "fonts/source-sans-3/SourceSans3-Bold.ttf",
+      "fonts/source-sans-3/SourceSans3-BoldIt.ttf"
+     ],
+     "lazyBytes": 1493884
+    },
+    "Courier New": {
+     "route": "Cousine",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Cousine": {
+     "route": "Cousine",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Didot": {
+     "route": "Playfair Display",
+     "files": [
+      "fonts/playfair-display/PlayfairDisplay-Regular.ttf",
+      "fonts/playfair-display/PlayfairDisplay-Italic.ttf",
+      "fonts/playfair-display/PlayfairDisplay-Bold.ttf",
+      "fonts/playfair-display/PlayfairDisplay-BoldItalic.ttf"
+     ],
+     "lazyBytes": 896244
+    },
+    "EB Garamond": {
+     "route": "EB Garamond",
+     "files": [
+      "fonts/eb-garamond/EBGaramond_400Regular.ttf",
+      "fonts/eb-garamond/EBGaramond_400Regular_Italic.ttf",
+      "fonts/eb-garamond/EBGaramond_700Bold.ttf",
+      "fonts/eb-garamond/EBGaramond_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 1865720
+    },
+    "Figtree": {
+     "route": "Figtree",
+     "files": [
+      "fonts/figtree/Figtree_400Regular.ttf",
+      "fonts/figtree/Figtree_400Regular_Italic.ttf",
+      "fonts/figtree/Figtree_700Bold.ttf",
+      "fonts/figtree/Figtree_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 162028
+    },
+    "Franklin Gothic Book": {
+     "route": "Barlow",
+     "files": [
+      "fonts/barlow/Barlow-Regular.ttf",
+      "fonts/barlow/Barlow-Italic.ttf",
+      "fonts/barlow/Barlow-Bold.ttf",
+      "fonts/barlow/Barlow-BoldItalic.ttf"
+     ],
+     "lazyBytes": 433908
+    },
+    "Franklin Gothic Medium": {
+     "route": "Barlow",
+     "files": [
+      "fonts/barlow/Barlow-Regular.ttf",
+      "fonts/barlow/Barlow-Italic.ttf",
+      "fonts/barlow/Barlow-Bold.ttf",
+      "fonts/barlow/Barlow-BoldItalic.ttf"
+     ],
+     "lazyBytes": 433908
+    },
+    "Garamond": {
+     "route": "EB Garamond",
+     "files": [
+      "fonts/eb-garamond/EBGaramond_400Regular.ttf",
+      "fonts/eb-garamond/EBGaramond_400Regular_Italic.ttf",
+      "fonts/eb-garamond/EBGaramond_700Bold.ttf",
+      "fonts/eb-garamond/EBGaramond_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 1865720
+    },
+    "Gelasio": {
+     "route": "Gelasio",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Georgia": {
+     "route": "Gelasio",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Gill Sans MT": {
+     "route": "Source Sans 3",
+     "files": [
+      "fonts/source-sans-3/SourceSans3-Regular.ttf",
+      "fonts/source-sans-3/SourceSans3-It.ttf",
+      "fonts/source-sans-3/SourceSans3-Bold.ttf",
+      "fonts/source-sans-3/SourceSans3-BoldIt.ttf"
+     ],
+     "lazyBytes": 1493884
+    },
+    "Grandview": {
+     "route": "Barlow",
+     "files": [
+      "fonts/barlow/Barlow-Regular.ttf",
+      "fonts/barlow/Barlow-Italic.ttf",
+      "fonts/barlow/Barlow-Bold.ttf",
+      "fonts/barlow/Barlow-BoldItalic.ttf"
+     ],
+     "lazyBytes": 433908
+    },
+    "Grandview Display": {
+     "route": "Barlow",
+     "files": [
+      "fonts/barlow/Barlow-Regular.ttf",
+      "fonts/barlow/Barlow-Italic.ttf",
+      "fonts/barlow/Barlow-Bold.ttf",
+      "fonts/barlow/Barlow-BoldItalic.ttf"
+     ],
+     "lazyBytes": 433908
+    },
+    "Impact": {
+     "route": "Anton",
+     "files": [
+      "fonts/anton/Anton-Regular.ttf"
+     ],
+     "lazyBytes": 170812
+    },
+    "Intos": {
+     "route": "Intos",
+     "files": [
+      "fonts/intos/Intos-Regular.ttf",
+      "fonts/intos/Intos-Italic.ttf",
+      "fonts/intos/Intos-Bold.ttf",
+      "fonts/intos/Intos-BoldItalic.ttf"
+     ],
+     "lazyBytes": 3101236
+    },
+    "Intos Display": {
+     "route": "Intos Display",
+     "files": [
+      "fonts/intos/IntosDisplay-Regular.ttf",
+      "fonts/intos/IntosDisplay-Italic.ttf",
+      "fonts/intos/IntosDisplay-Bold.ttf",
+      "fonts/intos/IntosDisplay-BoldItalic.ttf"
+     ],
+     "lazyBytes": 3104632
+    },
+    "Intos Narrow": {
+     "route": "Intos Narrow",
+     "files": [
+      "fonts/intos/IntosNarrow-Regular.ttf",
+      "fonts/intos/IntosNarrow-Italic.ttf",
+      "fonts/intos/IntosNarrow-Bold.ttf",
+      "fonts/intos/IntosNarrow-BoldItalic.ttf"
+     ],
+     "lazyBytes": 3108120
+    },
+    "Intos Serif": {
+     "route": "Intos Serif",
+     "files": [
+      "fonts/intos/IntosSerif-Regular.ttf",
+      "fonts/intos/IntosSerif-Italic.ttf",
+      "fonts/intos/IntosSerif-Bold.ttf",
+      "fonts/intos/IntosSerif-BoldItalic.ttf"
+     ],
+     "lazyBytes": 2301580
+    },
+    "Libre Caslon Text": {
+     "route": "Libre Caslon Text",
+     "files": [
+      "fonts/libre-caslon-text/LibreCaslonText_400Regular.ttf",
+      "fonts/libre-caslon-text/LibreCaslonText_400Regular_Italic.ttf",
+      "fonts/libre-caslon-text/LibreCaslonText_700Bold.ttf"
+     ],
+     "lazyBytes": 282832
+    },
+    "Lora": {
+     "route": "Lora",
+     "files": [
+      "fonts/lora/Lora-Regular.ttf",
+      "fonts/lora/Lora-Italic.ttf",
+      "fonts/lora/Lora-Bold.ttf",
+      "fonts/lora/Lora-BoldItalic.ttf"
+     ],
+     "lazyBytes": 837492
+    },
+    "Lucida Console": {
+     "route": "Cousine",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Lucida Sans": {
+     "route": "Work Sans",
+     "files": [
+      "fonts/work-sans/WorkSans_400Regular.ttf",
+      "fonts/work-sans/WorkSans_400Regular_Italic.ttf",
+      "fonts/work-sans/WorkSans_700Bold.ttf",
+      "fonts/work-sans/WorkSans_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 730272
+    },
+    "Lucida Sans Unicode": {
+     "route": "Work Sans",
+     "files": [
+      "fonts/work-sans/WorkSans_400Regular.ttf",
+      "fonts/work-sans/WorkSans_400Regular_Italic.ttf",
+      "fonts/work-sans/WorkSans_700Bold.ttf",
+      "fonts/work-sans/WorkSans_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 730272
+    },
+    "Merriweather Sans": {
+     "route": "Merriweather Sans",
+     "files": [
+      "fonts/merriweather-sans/MerriweatherSans-Regular.ttf",
+      "fonts/merriweather-sans/MerriweatherSans-Italic.ttf",
+      "fonts/merriweather-sans/MerriweatherSans-Bold.ttf",
+      "fonts/merriweather-sans/MerriweatherSans-BoldItalic.ttf"
+     ],
+     "lazyBytes": 641004
+    },
+    "Microsoft Sans Serif": {
+     "route": "Arimo",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Montserrat": {
+     "route": "Montserrat",
+     "files": [
+      "fonts/montserrat/Montserrat_400Regular.ttf",
+      "fonts/montserrat/Montserrat_400Regular_Italic.ttf",
+      "fonts/montserrat/Montserrat_700Bold.ttf",
+      "fonts/montserrat/Montserrat_700Bold_Italic.ttf",
+      "fonts/montserrat/Montserrat_900Black.ttf"
+     ],
+     "lazyBytes": 1689180
+    },
+    "Open Sans": {
+     "route": "Open Sans",
+     "files": [
+      "fonts/open-sans/OpenSans_400Regular.ttf",
+      "fonts/open-sans/OpenSans_400Regular_Italic.ttf",
+      "fonts/open-sans/OpenSans_700Bold.ttf",
+      "fonts/open-sans/OpenSans_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 534656
+    },
+    "Palatino Linotype": {
+     "route": "PT Serif",
+     "files": [
+      "fonts/pt-serif/PT_Serif-Web-Regular.ttf",
+      "fonts/pt-serif/PT_Serif-Web-Italic.ttf",
+      "fonts/pt-serif/PT_Serif-Web-Bold.ttf",
+      "fonts/pt-serif/PT_Serif-Web-BoldItalic.ttf"
+     ],
+     "lazyBytes": 1411980
+    },
+    "Playfair Display": {
+     "route": "Playfair Display",
+     "files": [
+      "fonts/playfair-display/PlayfairDisplay-Regular.ttf",
+      "fonts/playfair-display/PlayfairDisplay-Italic.ttf",
+      "fonts/playfair-display/PlayfairDisplay-Bold.ttf",
+      "fonts/playfair-display/PlayfairDisplay-BoldItalic.ttf"
+     ],
+     "lazyBytes": 896244
+    },
+    "Poppins": {
+     "route": "Poppins",
+     "files": [
+      "fonts/poppins/Poppins_400Regular.ttf",
+      "fonts/poppins/Poppins_400Regular_Italic.ttf",
+      "fonts/poppins/Poppins_700Bold.ttf",
+      "fonts/poppins/Poppins_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 670784
+    },
+    "PT Serif": {
+     "route": "PT Serif",
+     "files": [
+      "fonts/pt-serif/PT_Serif-Web-Regular.ttf",
+      "fonts/pt-serif/PT_Serif-Web-Italic.ttf",
+      "fonts/pt-serif/PT_Serif-Web-Bold.ttf",
+      "fonts/pt-serif/PT_Serif-Web-BoldItalic.ttf"
+     ],
+     "lazyBytes": 1411980
+    },
+    "Raleway": {
+     "route": "Raleway",
+     "files": [
+      "fonts/raleway/Raleway-Regular.ttf",
+      "fonts/raleway/Raleway-Italic.ttf",
+      "fonts/raleway/Raleway-Bold.ttf",
+      "fonts/raleway/Raleway-BoldItalic.ttf"
+     ],
+     "lazyBytes": 540344
+    },
+    "Red Hat Display": {
+     "route": "Red Hat Display",
+     "files": [
+      "fonts/red-hat-display/RedHatDisplay_300Light.ttf",
+      "fonts/red-hat-display/RedHatDisplay_300Light_Italic.ttf",
+      "fonts/red-hat-display/RedHatDisplay_400Regular.ttf",
+      "fonts/red-hat-display/RedHatDisplay_400Regular_Italic.ttf",
+      "fonts/red-hat-display/RedHatDisplay_600SemiBold.ttf",
+      "fonts/red-hat-display/RedHatDisplay_600SemiBold_Italic.ttf",
+      "fonts/red-hat-display/RedHatDisplay_700Bold.ttf",
+      "fonts/red-hat-display/RedHatDisplay_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 419228
+    },
+    "Red Hat Text": {
+     "route": "Red Hat Text",
+     "files": [
+      "fonts/red-hat-text/RedHatText_400Regular.ttf",
+      "fonts/red-hat-text/RedHatText_400Regular_Italic.ttf",
+      "fonts/red-hat-text/RedHatText_700Bold.ttf",
+      "fonts/red-hat-text/RedHatText_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 212328
+    },
+    "Roboto": {
+     "route": "Roboto",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Roboto Mono": {
+     "route": "Roboto Mono",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Rockwell": {
+     "route": "Bitter",
+     "files": [
+      "fonts/bitter/Bitter_400Regular.ttf",
+      "fonts/bitter/Bitter_400Regular_Italic.ttf",
+      "fonts/bitter/Bitter_700Bold.ttf",
+      "fonts/bitter/Bitter_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 749416
+    },
+    "Seaford": {
+     "route": "Source Sans 3",
+     "files": [
+      "fonts/source-sans-3/SourceSans3-Regular.ttf",
+      "fonts/source-sans-3/SourceSans3-It.ttf",
+      "fonts/source-sans-3/SourceSans3-Bold.ttf",
+      "fonts/source-sans-3/SourceSans3-BoldIt.ttf"
+     ],
+     "lazyBytes": 1493884
+    },
+    "Seaford Display": {
+     "route": "Source Sans 3",
+     "files": [
+      "fonts/source-sans-3/SourceSans3-Regular.ttf",
+      "fonts/source-sans-3/SourceSans3-It.ttf",
+      "fonts/source-sans-3/SourceSans3-Bold.ttf",
+      "fonts/source-sans-3/SourceSans3-BoldIt.ttf"
+     ],
+     "lazyBytes": 1493884
+    },
+    "Segoe UI": {
+     "route": "Red Hat Display",
+     "files": [
+      "fonts/red-hat-display/RedHatDisplay_300Light.ttf",
+      "fonts/red-hat-display/RedHatDisplay_300Light_Italic.ttf",
+      "fonts/red-hat-display/RedHatDisplay_400Regular.ttf",
+      "fonts/red-hat-display/RedHatDisplay_400Regular_Italic.ttf",
+      "fonts/red-hat-display/RedHatDisplay_600SemiBold.ttf",
+      "fonts/red-hat-display/RedHatDisplay_600SemiBold_Italic.ttf",
+      "fonts/red-hat-display/RedHatDisplay_700Bold.ttf",
+      "fonts/red-hat-display/RedHatDisplay_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 419228
+    },
+    "Segoe UI Light": {
+     "route": "Red Hat Display",
+     "files": [
+      "fonts/red-hat-display/RedHatDisplay_300Light.ttf",
+      "fonts/red-hat-display/RedHatDisplay_300Light_Italic.ttf",
+      "fonts/red-hat-display/RedHatDisplay_400Regular.ttf",
+      "fonts/red-hat-display/RedHatDisplay_400Regular_Italic.ttf",
+      "fonts/red-hat-display/RedHatDisplay_600SemiBold.ttf",
+      "fonts/red-hat-display/RedHatDisplay_600SemiBold_Italic.ttf",
+      "fonts/red-hat-display/RedHatDisplay_700Bold.ttf",
+      "fonts/red-hat-display/RedHatDisplay_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 419228
+    },
+    "Segoe UI Semibold": {
+     "route": "Red Hat Display",
+     "files": [
+      "fonts/red-hat-display/RedHatDisplay_300Light.ttf",
+      "fonts/red-hat-display/RedHatDisplay_300Light_Italic.ttf",
+      "fonts/red-hat-display/RedHatDisplay_400Regular.ttf",
+      "fonts/red-hat-display/RedHatDisplay_400Regular_Italic.ttf",
+      "fonts/red-hat-display/RedHatDisplay_600SemiBold.ttf",
+      "fonts/red-hat-display/RedHatDisplay_600SemiBold_Italic.ttf",
+      "fonts/red-hat-display/RedHatDisplay_700Bold.ttf",
+      "fonts/red-hat-display/RedHatDisplay_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 419228
+    },
+    "Segoe UI Semilight": {
+     "route": "Red Hat Display",
+     "files": [
+      "fonts/red-hat-display/RedHatDisplay_300Light.ttf",
+      "fonts/red-hat-display/RedHatDisplay_300Light_Italic.ttf",
+      "fonts/red-hat-display/RedHatDisplay_400Regular.ttf",
+      "fonts/red-hat-display/RedHatDisplay_400Regular_Italic.ttf",
+      "fonts/red-hat-display/RedHatDisplay_600SemiBold.ttf",
+      "fonts/red-hat-display/RedHatDisplay_600SemiBold_Italic.ttf",
+      "fonts/red-hat-display/RedHatDisplay_700Bold.ttf",
+      "fonts/red-hat-display/RedHatDisplay_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 419228
+    },
+    "Skeena": {
+     "route": "Open Sans",
+     "files": [
+      "fonts/open-sans/OpenSans_400Regular.ttf",
+      "fonts/open-sans/OpenSans_400Regular_Italic.ttf",
+      "fonts/open-sans/OpenSans_700Bold.ttf",
+      "fonts/open-sans/OpenSans_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 534656
+    },
+    "Skeena Display": {
+     "route": "Open Sans",
+     "files": [
+      "fonts/open-sans/OpenSans_400Regular.ttf",
+      "fonts/open-sans/OpenSans_400Regular_Italic.ttf",
+      "fonts/open-sans/OpenSans_700Bold.ttf",
+      "fonts/open-sans/OpenSans_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 534656
+    },
+    "Source Sans 3": {
+     "route": "Source Sans 3",
+     "files": [
+      "fonts/source-sans-3/SourceSans3-Regular.ttf",
+      "fonts/source-sans-3/SourceSans3-It.ttf",
+      "fonts/source-sans-3/SourceSans3-Bold.ttf",
+      "fonts/source-sans-3/SourceSans3-BoldIt.ttf"
+     ],
+     "lazyBytes": 1493884
+    },
+    "Source Sans Pro": {
+     "route": "Source Sans 3",
+     "files": [
+      "fonts/source-sans-3/SourceSans3-Regular.ttf",
+      "fonts/source-sans-3/SourceSans3-It.ttf",
+      "fonts/source-sans-3/SourceSans3-Bold.ttf",
+      "fonts/source-sans-3/SourceSans3-BoldIt.ttf"
+     ],
+     "lazyBytes": 1493884
+    },
+    "Tahoma": {
+     "route": "Red Hat Text",
+     "files": [
+      "fonts/red-hat-text/RedHatText_400Regular.ttf",
+      "fonts/red-hat-text/RedHatText_400Regular_Italic.ttf",
+      "fonts/red-hat-text/RedHatText_700Bold.ttf",
+      "fonts/red-hat-text/RedHatText_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 212328
+    },
+    "Tenorite": {
+     "route": "Figtree",
+     "files": [
+      "fonts/figtree/Figtree_400Regular.ttf",
+      "fonts/figtree/Figtree_400Regular_Italic.ttf",
+      "fonts/figtree/Figtree_700Bold.ttf",
+      "fonts/figtree/Figtree_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 162028
+    },
+    "Tenorite Display": {
+     "route": "Figtree",
+     "files": [
+      "fonts/figtree/Figtree_400Regular.ttf",
+      "fonts/figtree/Figtree_400Regular_Italic.ttf",
+      "fonts/figtree/Figtree_700Bold.ttf",
+      "fonts/figtree/Figtree_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 162028
+    },
+    "Times New Roman": {
+     "route": "Tinos",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Tinos": {
+     "route": "Tinos",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Trebuchet MS": {
+     "route": "Figtree",
+     "files": [
+      "fonts/figtree/Figtree_400Regular.ttf",
+      "fonts/figtree/Figtree_400Regular_Italic.ttf",
+      "fonts/figtree/Figtree_700Bold.ttf",
+      "fonts/figtree/Figtree_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 162028
+    },
+    "Verdana": {
+     "route": "Montserrat",
+     "files": [
+      "fonts/montserrat/Montserrat_400Regular.ttf",
+      "fonts/montserrat/Montserrat_400Regular_Italic.ttf",
+      "fonts/montserrat/Montserrat_700Bold.ttf",
+      "fonts/montserrat/Montserrat_700Bold_Italic.ttf",
+      "fonts/montserrat/Montserrat_900Black.ttf"
+     ],
+     "lazyBytes": 1689180
+    },
+    "Work Sans": {
+     "route": "Work Sans",
+     "files": [
+      "fonts/work-sans/WorkSans_400Regular.ttf",
+      "fonts/work-sans/WorkSans_400Regular_Italic.ttf",
+      "fonts/work-sans/WorkSans_700Bold.ttf",
+      "fonts/work-sans/WorkSans_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 730272
+    }
+   }
+  }
+ },
+ "lazyBudget": {
+  "node": {
+   "families": 87,
+   "deckBytesMedianMiB": 0.414,
+   "deckBytesMaxMiB": 2.964,
+   "largestDeck": "Aptos Narrow",
+   "familiesWithoutLazyFiles": 23
+  },
+  "browser": {
+   "families": 87,
+   "deckBytesMedianMiB": 0.414,
+   "deckBytesMaxMiB": 2.964,
+   "largestDeck": "Aptos Narrow",
+   "familiesWithoutLazyFiles": 23
+  },
+  "editor": {
+   "families": 87,
+   "deckBytesMedianMiB": 0.414,
+   "deckBytesMaxMiB": 2.964,
+   "largestDeck": "Aptos Narrow",
+   "familiesWithoutLazyFiles": 23
+  },
+  "galleryEditor": {
+   "families": 84,
+   "deckBytesMedianMiB": 0.414,
+   "deckBytesMaxMiB": 2.964,
+   "largestDeck": "Aptos Narrow",
+   "familiesWithoutLazyFiles": 20
+  }
+ }
+}

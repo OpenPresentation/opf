@@ -25,6 +25,8 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 export const ROOT = path.resolve(here, "..");
 export const BOX_WIDTHS_EM = [8, 11.5, 16, 22, 30];
 export const PARAGRAPH_SIZE = 6;
+// The font-table fields the owner bar names (hhea, OS/2 typo and win, x-height, cap-height); the painted ink heights are reported beside them.
+const TABLE_FIELDS = ["hhea", "typo", "win", "xHeight", "capHeight"];
 const round = (value, digits = 4) => Math.round(value * 10 ** digits) / 10 ** digits;
 const sha256 = (bytes) => createHash("sha256").update(bytes).digest("hex");
 
@@ -157,8 +159,11 @@ async function main() {
       hhea: [font.hhea.ascent, font.hhea.descent, font.hhea.lineGap].map((v) => round(v / unit)),
       typo: [os2.typoAscender, os2.typoDescender, os2.typoLineGap].map((v) => round(v / unit)),
       win: [os2.winAscent, os2.winDescent].map((v) => round(v / unit)),
-      xHeight: round(os2.xHeight / unit),
-      capHeight: round(os2.capHeight / unit),
+      xHeight: os2.xHeight ? round(os2.xHeight / unit) : null,
+      capHeight: os2.capHeight ? round(os2.capHeight / unit) : null,
+      // The painted glyph boxes of "x" and "H" (many older fonts leave the OS/2 fields empty).
+      inkXHeight: round(font.glyphForCodePoint(0x78).bbox.maxY / unit),
+      inkCapHeight: round(font.glyphForCodePoint(0x48).bbox.maxY / unit),
     };
   };
   const signature = (glyph) => glyph.path.commands.map((c) => c.command[0] + c.args.map(Math.round).join(",")).join(";");
@@ -254,10 +259,10 @@ async function main() {
         lineBreaks: breaks,
         referenceVertical: refVertical,
         replacementVertical: repVertical,
-        verticalMetricsEqual: JSON.stringify(refVertical) === JSON.stringify(repVertical),
-        verticalFieldsDiffering: Object.keys(refVertical).filter((key) => JSON.stringify(refVertical[key]) !== JSON.stringify(repVertical[key])),
-        xHeightRatio: refVertical.xHeight ? round(repVertical.xHeight / refVertical.xHeight, 3) : null,
-        capHeightRatio: refVertical.capHeight ? round(repVertical.capHeight / refVertical.capHeight, 3) : null,
+        verticalMetricsEqual: TABLE_FIELDS.every((key) => JSON.stringify(refVertical[key]) === JSON.stringify(repVertical[key])),
+        verticalFieldsDiffering: TABLE_FIELDS.filter((key) => JSON.stringify(refVertical[key]) !== JSON.stringify(repVertical[key])),
+        xHeightRatio: round(repVertical.inkXHeight / refVertical.inkXHeight, 3),
+        capHeightRatio: round(repVertical.inkCapHeight / refVertical.inkCapHeight, 3),
         ascentRatio: round(repVertical.hhea[0] / refVertical.hhea[0], 3),
       };
       if (first) { record.outlines = outlineIdentity(ref.font, rep); record.coverage = coverage(ref.font, rep); first = false; }

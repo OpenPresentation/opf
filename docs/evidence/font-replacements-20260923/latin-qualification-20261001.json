@@ -109,7 +109,9 @@
        0.2749
       ],
       "xHeight": 0.4756,
-      "capHeight": 0.6572
+      "capHeight": 0.6572,
+      "inkXHeight": 0.4756,
+      "inkCapHeight": 0.6572
      },
      "replacementVertical": {
       "hhea": [
@@ -127,7 +129,9 @@
        0.2749
       ],
       "xHeight": 0.4756,
-      "capHeight": 0.6572
+      "capHeight": 0.6572,
+      "inkXHeight": 0.4756,
+      "inkCapHeight": 0.6572
      },
      "verticalMetricsEqual": true,
      "verticalFieldsDiffering": [],
@@ -224,7 +228,9 @@
        0.2749
       ],
       "xHeight": 0.4766,
-      "capHeight": 0.6572
+      "capHeight": 0.6572,
+      "inkXHeight": 0.4766,
+      "inkCapHeight": 0.6572
      },
      "replacementVertical": {
       "hhea": [
@@ -242,7 +248,9 @@
        0.2749
       ],
       "xHeight": 0.4766,
-      "capHeight": 0.6572
+      "capHeight": 0.6572,
+      "inkXHeight": 0.4766,
+      "inkCapHeight": 0.6572
      },
      "verticalMetricsEqual": true,
      "verticalFieldsDiffering": [],
@@ -323,7 +331,9 @@
        0.2749
       ],
       "xHeight": 0.4756,
-      "capHeight": 0.6572
+      "capHeight": 0.6572,
+      "inkXHeight": 0.4756,
+      "inkCapHeight": 0.6572
      },
      "replacementVertical": {
       "hhea": [
@@ -341,7 +351,9 @@
        0.2749
       ],
       "xHeight": 0.4756,
-      "capHeight": 0.6572
+      "capHeight": 0.6572,
+      "inkXHeight": 0.4756,
+      "inkCapHeight": 0.6572
      },
      "verticalMetricsEqual": true,
      "verticalFieldsDiffering": [],
@@ -422,7 +434,9 @@
        0.2749
       ],
       "xHeight": 0.4766,
-      "capHeight": 0.6572
+      "capHeight": 0.6572,
+      "inkXHeight": 0.4766,
+      "inkCapHeight": 0.6572
      },
      "replacementVertical": {
       "hhea": [
@@ -440,7 +454,9 @@
        0.2749
       ],
       "xHeight": 0.4766,
-      "capHeight": 0.6572
+      "capHeight": 0.6572,
+      "inkXHeight": 0.4766,
+      "inkCapHeight": 0.6572
      },
      "verticalMetricsEqual": true,
      "verticalFieldsDiffering": [],
@@ -546,7 +562,9 @@
        0.2749
       ],
       "xHeight": 0.4756,
-      "capHeight": 0.6572
+      "capHeight": 0.6572,
+      "inkXHeight": 0.4756,
+      "inkCapHeight": 0.6572
      },
      "replacementVertical": {
       "hhea": [
@@ -564,7 +582,9 @@
        0.2749
       ],
       "xHeight": 0.4756,
-      "capHeight": 0.6572
+      "capHeight": 0.6572,
+      "inkXHeight": 0.4756,
+      "inkCapHeight": 0.6572
      },
      "verticalMetricsEqual": true,
      "verticalFieldsDiffering": [],
@@ -661,7 +681,9 @@
        0.2749
       ],
       "xHeight": 0.4766,
-      "capHeight": 0.6572
+      "capHeight": 0.6572,
+      "inkXHeight": 0.4766,
+      "inkCapHeight": 0.6572
      },
      "replacementVertical": {
       "hhea": [
@@ -679,7 +701,9 @@
        0.2749
       ],
       "xHeight": 0.4766,
-      "capHeight": 0.6572
+      "capHeight": 0.6572,
+      "inkXHeight": 0.4766,
+      "inkCapHeight": 0.6572
      },
      "verticalMetricsEqual": true,
      "verticalFieldsDiffering": [],
@@ -760,7 +784,9 @@
        0.2749
       ],
       "xHeight": 0.4756,
-      "capHeight": 0.6572
+      "capHeight": 0.6572,
+      "inkXHeight": 0.4756,
+      "inkCapHeight": 0.6572
      },
      "replacementVertical": {
       "hhea": [
@@ -778,7 +804,9 @@
        0.2749
       ],
       "xHeight": 0.4756,
-      "capHeight": 0.6572
+      "capHeight": 0.6572,
+      "inkXHeight": 0.4756,
+      "inkCapHeight": 0.6572
      },
      "verticalMetricsEqual": true,
      "verticalFieldsDiffering": [],
@@ -859,7 +887,9 @@
        0.2749
       ],
       "xHeight": 0.4766,
-      "capHeight": 0.6572
+      "capHeight": 0.6572,
+      "inkXHeight": 0.4766,
+      "inkCapHeight": 0.6572
      },
      "replacementVertical": {
       "hhea": [
@@ -877,7 +907,9 @@
        0.2749
       ],
       "xHeight": 0.4766,
-      "capHeight": 0.6572
+      "capHeight": 0.6572,
+      "inkXHeight": 0.4766,
+      "inkCapHeight": 0.6572
      },
      "verticalMetricsEqual": true,
      "verticalFieldsDiffering": [],
@@ -983,7 +1015,9 @@
        0.2749
       ],
       "xHeight": 0.4756,
-      "capHeight": 0.6572
+      "capHeight": 0.6572,
+      "inkXHeight": 0.4756,
+      "inkCapHeight": 0.6572
      },
      "replacementVertical": {
       "hhea": [
@@ -1001,7 +1035,9 @@
        0.3003
       ],
       "xHeight": 0.5283,
-      "capHeight": 0.6587
+      "capHeight": 0.6587,
+      "inkXHeight": 0.5283,
+      "inkCapHeight": 0.6587
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -1110,7 +1146,9 @@
        0.2749
       ],
       "xHeight": 0.4766,
-      "capHeight": 0.6572
+      "capHeight": 0.6572,
+      "inkXHeight": 0.4766,
+      "inkCapHeight": 0.6572
      },
      "replacementVertical": {
       "hhea": [
@@ -1128,7 +1166,9 @@
        0.3003
       ],
       "xHeight": 0.5283,
-      "capHeight": 0.6587
+      "capHeight": 0.6587,
+      "inkXHeight": 0.5283,
+      "inkCapHeight": 0.6587
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -1215,7 +1255,9 @@
        0.2749
       ],
       "xHeight": 0.4756,
-      "capHeight": 0.6572
+      "capHeight": 0.6572,
+      "inkXHeight": 0.4756,
+      "inkCapHeight": 0.6572
      },
      "replacementVertical": {
       "hhea": [
@@ -1233,7 +1275,9 @@
        0.3003
       ],
       "xHeight": 0.5283,
-      "capHeight": 0.6587
+      "capHeight": 0.6587,
+      "inkXHeight": 0.5283,
+      "inkCapHeight": 0.6587
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -1320,7 +1364,9 @@
        0.2749
       ],
       "xHeight": 0.4766,
-      "capHeight": 0.6572
+      "capHeight": 0.6572,
+      "inkXHeight": 0.4766,
+      "inkCapHeight": 0.6572
      },
      "replacementVertical": {
       "hhea": [
@@ -1338,7 +1384,9 @@
        0.3003
       ],
       "xHeight": 0.5283,
-      "capHeight": 0.6587
+      "capHeight": 0.6587,
+      "inkXHeight": 0.5283,
+      "inkCapHeight": 0.6587
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -1450,7 +1498,9 @@
        0.2749
       ],
       "xHeight": 0.4961,
-      "capHeight": 0.6572
+      "capHeight": 0.6572,
+      "inkXHeight": 0.4961,
+      "inkCapHeight": 0.6572
      },
      "replacementVertical": {
       "hhea": [
@@ -1468,7 +1518,9 @@
        0.2749
       ],
       "xHeight": 0.4961,
-      "capHeight": 0.6572
+      "capHeight": 0.6572,
+      "inkXHeight": 0.4961,
+      "inkCapHeight": 0.6572
      },
      "verticalMetricsEqual": true,
      "verticalFieldsDiffering": [],
@@ -1565,7 +1617,9 @@
        0.2749
       ],
       "xHeight": 0.501,
-      "capHeight": 0.6572
+      "capHeight": 0.6572,
+      "inkXHeight": 0.501,
+      "inkCapHeight": 0.6572
      },
      "replacementVertical": {
       "hhea": [
@@ -1583,7 +1637,9 @@
        0.2749
       ],
       "xHeight": 0.501,
-      "capHeight": 0.6572
+      "capHeight": 0.6572,
+      "inkXHeight": 0.501,
+      "inkCapHeight": 0.6572
      },
      "verticalMetricsEqual": true,
      "verticalFieldsDiffering": [],
@@ -1664,7 +1720,9 @@
        0.2749
       ],
       "xHeight": 0.4961,
-      "capHeight": 0.6572
+      "capHeight": 0.6572,
+      "inkXHeight": 0.4961,
+      "inkCapHeight": 0.6572
      },
      "replacementVertical": {
       "hhea": [
@@ -1682,7 +1740,9 @@
        0.2749
       ],
       "xHeight": 0.4961,
-      "capHeight": 0.6572
+      "capHeight": 0.6572,
+      "inkXHeight": 0.4961,
+      "inkCapHeight": 0.6572
      },
      "verticalMetricsEqual": true,
      "verticalFieldsDiffering": [],
@@ -1763,7 +1823,9 @@
        0.2749
       ],
       "xHeight": 0.501,
-      "capHeight": 0.6572
+      "capHeight": 0.6572,
+      "inkXHeight": 0.501,
+      "inkCapHeight": 0.6572
      },
      "replacementVertical": {
       "hhea": [
@@ -1781,7 +1843,9 @@
        0.2749
       ],
       "xHeight": 0.501,
-      "capHeight": 0.6572
+      "capHeight": 0.6572,
+      "inkXHeight": 0.501,
+      "inkCapHeight": 0.6572
      },
      "verticalMetricsEqual": true,
      "verticalFieldsDiffering": [],
@@ -1887,7 +1951,9 @@
        0.2749
       ],
       "xHeight": 0.4678,
-      "capHeight": 0.6572
+      "capHeight": 0.6572,
+      "inkXHeight": 0.4678,
+      "inkCapHeight": 0.6572
      },
      "replacementVertical": {
       "hhea": [
@@ -1905,7 +1971,9 @@
        0.2749
       ],
       "xHeight": 0.4678,
-      "capHeight": 0.6572
+      "capHeight": 0.6572,
+      "inkXHeight": 0.4678,
+      "inkCapHeight": 0.6572
      },
      "verticalMetricsEqual": true,
      "verticalFieldsDiffering": [],
@@ -2009,7 +2077,9 @@
        0.2749
       ],
       "xHeight": 0.4702,
-      "capHeight": 0.6572
+      "capHeight": 0.6572,
+      "inkXHeight": 0.4702,
+      "inkCapHeight": 0.6572
      },
      "replacementVertical": {
       "hhea": [
@@ -2027,7 +2097,9 @@
        0.2749
       ],
       "xHeight": 0.4702,
-      "capHeight": 0.6572
+      "capHeight": 0.6572,
+      "inkXHeight": 0.4702,
+      "inkCapHeight": 0.6572
      },
      "verticalMetricsEqual": true,
      "verticalFieldsDiffering": [],
@@ -2108,7 +2180,9 @@
        0.2749
       ],
       "xHeight": 0.4678,
-      "capHeight": 0.6572
+      "capHeight": 0.6572,
+      "inkXHeight": 0.4678,
+      "inkCapHeight": 0.6572
      },
      "replacementVertical": {
       "hhea": [
@@ -2126,7 +2200,9 @@
        0.2749
       ],
       "xHeight": 0.4678,
-      "capHeight": 0.6572
+      "capHeight": 0.6572,
+      "inkXHeight": 0.4678,
+      "inkCapHeight": 0.6572
      },
      "verticalMetricsEqual": true,
      "verticalFieldsDiffering": [],
@@ -2207,7 +2283,9 @@
        0.2749
       ],
       "xHeight": 0.4702,
-      "capHeight": 0.6572
+      "capHeight": 0.6572,
+      "inkXHeight": 0.4702,
+      "inkCapHeight": 0.6572
      },
      "replacementVertical": {
       "hhea": [
@@ -2225,7 +2303,9 @@
        0.2749
       ],
       "xHeight": 0.4702,
-      "capHeight": 0.6572
+      "capHeight": 0.6572,
+      "inkXHeight": 0.4702,
+      "inkCapHeight": 0.6572
      },
      "verticalMetricsEqual": true,
      "verticalFieldsDiffering": [],
@@ -2331,7 +2411,9 @@
        0.2119
       ],
       "xHeight": 0.5186,
-      "capHeight": 0.7163
+      "capHeight": 0.7163,
+      "inkXHeight": 0.5186,
+      "inkCapHeight": 0.7158
      },
      "replacementVertical": {
       "hhea": [
@@ -2349,7 +2431,9 @@
        0.3892
       ],
       "xHeight": 0.5283,
-      "capHeight": 0.688
+      "capHeight": 0.688,
+      "inkXHeight": 0.5283,
+      "inkCapHeight": 0.688
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -2359,7 +2443,7 @@
       "capHeight"
      ],
      "xHeightRatio": 1.019,
-     "capHeightRatio": 0.96,
+     "capHeightRatio": 0.961,
      "ascentRatio": 1,
      "outlines": {
       "sharedNonemptyGlyphs": 2553,
@@ -2447,7 +2531,9 @@
        0.2119
       ],
       "xHeight": 0.5186,
-      "capHeight": 0.7158
+      "capHeight": 0.7158,
+      "inkXHeight": 0.5186,
+      "inkCapHeight": 0.7158
      },
      "replacementVertical": {
       "hhea": [
@@ -2465,7 +2551,9 @@
        0.3892
       ],
       "xHeight": 0.5283,
-      "capHeight": 0.688
+      "capHeight": 0.688,
+      "inkXHeight": 0.5283,
+      "inkCapHeight": 0.688
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -2551,7 +2639,9 @@
        0.2119
       ],
       "xHeight": 0.5186,
-      "capHeight": 0.7158
+      "capHeight": 0.7158,
+      "inkXHeight": 0.5186,
+      "inkCapHeight": 0.7158
      },
      "replacementVertical": {
       "hhea": [
@@ -2569,7 +2659,9 @@
        0.3892
       ],
       "xHeight": 0.5283,
-      "capHeight": 0.688
+      "capHeight": 0.688,
+      "inkXHeight": 0.5283,
+      "inkCapHeight": 0.688
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -2655,7 +2747,9 @@
        0.2119
       ],
       "xHeight": 0.5186,
-      "capHeight": 0.7153
+      "capHeight": 0.7153,
+      "inkXHeight": 0.5186,
+      "inkCapHeight": 0.7158
      },
      "replacementVertical": {
       "hhea": [
@@ -2673,7 +2767,9 @@
        0.3892
       ],
       "xHeight": 0.5283,
-      "capHeight": 0.688
+      "capHeight": 0.688,
+      "inkXHeight": 0.5283,
+      "inkCapHeight": 0.688
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -2683,7 +2779,7 @@
       "capHeight"
      ],
      "xHeightRatio": 1.019,
-     "capHeightRatio": 0.962,
+     "capHeightRatio": 0.961,
      "ascentRatio": 1
     }
    ],
@@ -2698,7 +2794,7 @@
     "lineBreaksIdenticalFraction": 1,
     "verticalMetricsEqual": false,
     "xHeightRatio": 1.019,
-    "capHeightRatio": 0.96,
+    "capHeightRatio": 0.961,
     "ascentRatio": 1,
     "identicalOutlinesBeyondPlainRectangles": 0,
     "latinCodepointsMissing": 1
@@ -2784,7 +2880,9 @@
        0.3096
       ],
       "xHeight": 0.5186,
-      "capHeight": 0.7158
+      "capHeight": 0.7158,
+      "inkXHeight": 0.5186,
+      "inkCapHeight": 0.7158
      },
      "replacementVertical": {
       "hhea": [
@@ -2802,7 +2900,9 @@
        0.453
       ],
       "xHeight": 0.547,
-      "capHeight": 0.7
+      "capHeight": 0.7,
+      "inkXHeight": 0.547,
+      "inkCapHeight": 0.7
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -2930,7 +3030,9 @@
        0.2104
       ],
       "xHeight": null,
-      "capHeight": null
+      "capHeight": null,
+      "inkXHeight": 0.5186,
+      "inkCapHeight": 0.7158
      },
      "replacementVertical": {
       "hhea": [
@@ -2948,7 +3050,9 @@
        0.303
       ],
       "xHeight": 0.526,
-      "capHeight": 0.686
+      "capHeight": 0.686,
+      "inkXHeight": 0.526,
+      "inkCapHeight": 0.686
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -2958,8 +3062,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": null,
-     "capHeightRatio": null,
+     "xHeightRatio": 1.014,
+     "capHeightRatio": 0.958,
      "ascentRatio": 1.106,
      "outlines": {
       "sharedNonemptyGlyphs": 416,
@@ -3045,7 +3149,9 @@
        0.2104
       ],
       "xHeight": null,
-      "capHeight": null
+      "capHeight": null,
+      "inkXHeight": 0.5186,
+      "inkCapHeight": 0.7158
      },
      "replacementVertical": {
       "hhea": [
@@ -3063,7 +3169,9 @@
        0.303
       ],
       "xHeight": 0.526,
-      "capHeight": 0.686
+      "capHeight": 0.686,
+      "inkXHeight": 0.526,
+      "inkCapHeight": 0.686
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -3073,8 +3181,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": null,
-     "capHeightRatio": null,
+     "xHeightRatio": 1.014,
+     "capHeightRatio": 0.958,
      "ascentRatio": 1.106
     },
     {
@@ -3150,7 +3258,9 @@
        0.2104
       ],
       "xHeight": null,
-      "capHeight": null
+      "capHeight": null,
+      "inkXHeight": 0.5186,
+      "inkCapHeight": 0.7158
      },
      "replacementVertical": {
       "hhea": [
@@ -3168,7 +3278,9 @@
        0.303
       ],
       "xHeight": 0.526,
-      "capHeight": 0.686
+      "capHeight": 0.686,
+      "inkXHeight": 0.526,
+      "inkCapHeight": 0.686
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -3178,8 +3290,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": null,
-     "capHeightRatio": null,
+     "xHeightRatio": 1.014,
+     "capHeightRatio": 0.958,
      "ascentRatio": 1.106
     },
     {
@@ -3255,7 +3367,9 @@
        0.2119
       ],
       "xHeight": null,
-      "capHeight": null
+      "capHeight": null,
+      "inkXHeight": 0.5186,
+      "inkCapHeight": 0.7158
      },
      "replacementVertical": {
       "hhea": [
@@ -3273,7 +3387,9 @@
        0.303
       ],
       "xHeight": 0.526,
-      "capHeight": 0.686
+      "capHeight": 0.686,
+      "inkXHeight": 0.526,
+      "inkCapHeight": 0.686
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -3283,8 +3399,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": null,
-     "capHeightRatio": null,
+     "xHeightRatio": 1.014,
+     "capHeightRatio": 0.958,
      "ascentRatio": 1.106
     }
    ],
@@ -3298,8 +3414,8 @@
     "widthBarMet": false,
     "lineBreaksIdenticalFraction": 0.816,
     "verticalMetricsEqual": false,
-    "xHeightRatio": null,
-    "capHeightRatio": null,
+    "xHeightRatio": 1.014,
+    "capHeightRatio": 0.958,
     "ascentRatio": 1.106,
     "identicalOutlinesBeyondPlainRectangles": 0,
     "latinCodepointsMissing": 0
@@ -3385,7 +3501,9 @@
        0.2593
       ],
       "xHeight": null,
-      "capHeight": null
+      "capHeight": null,
+      "inkXHeight": 0.415,
+      "inkCapHeight": 0.6665
      },
      "replacementVertical": {
       "hhea": [
@@ -3403,7 +3521,9 @@
        0.26
       ],
       "xHeight": 0.53,
-      "capHeight": 0.77
+      "capHeight": 0.77,
+      "inkXHeight": 0.53,
+      "inkCapHeight": 0.77
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -3413,8 +3533,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": null,
-     "capHeightRatio": null,
+     "xHeightRatio": 1.277,
+     "capHeightRatio": 1.155,
      "ascentRatio": 1.293,
      "outlines": {
       "sharedNonemptyGlyphs": 221,
@@ -3438,8 +3558,8 @@
     "widthBarMet": false,
     "lineBreaksIdenticalFraction": 0,
     "verticalMetricsEqual": false,
-    "xHeightRatio": null,
-    "capHeightRatio": null,
+    "xHeightRatio": 1.277,
+    "capHeightRatio": 1.155,
     "ascentRatio": 1.293,
     "identicalOutlinesBeyondPlainRectangles": 0,
     "latinCodepointsMissing": 0
@@ -3525,7 +3645,9 @@
        0.2822
       ],
       "xHeight": null,
-      "capHeight": null
+      "capHeight": null,
+      "inkXHeight": 0.3838,
+      "inkCapHeight": 0.6548
      },
      "replacementVertical": {
       "hhea": [
@@ -3543,7 +3665,9 @@
        0.1968
       ],
       "xHeight": 0.4145,
-      "capHeight": 0.571
+      "capHeight": 0.571,
+      "inkXHeight": 0.4153,
+      "inkCapHeight": 0.571
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -3553,8 +3677,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": null,
-     "capHeightRatio": null,
+     "xHeightRatio": 1.082,
+     "capHeightRatio": 0.872,
      "ascentRatio": 1.18,
      "outlines": {
       "sharedNonemptyGlyphs": 239,
@@ -3642,7 +3766,9 @@
        0.2822
       ],
       "xHeight": null,
-      "capHeight": null
+      "capHeight": null,
+      "inkXHeight": 0.3931,
+      "inkCapHeight": 0.6548
      },
      "replacementVertical": {
       "hhea": [
@@ -3660,7 +3786,9 @@
        0.1968
       ],
       "xHeight": 0.4169,
-      "capHeight": 0.571
+      "capHeight": 0.571,
+      "inkXHeight": 0.4169,
+      "inkCapHeight": 0.571
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -3670,8 +3798,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": null,
-     "capHeightRatio": null,
+     "xHeightRatio": 1.061,
+     "capHeightRatio": 0.872,
      "ascentRatio": 1.18
     },
     {
@@ -3747,7 +3875,9 @@
        0.2822
       ],
       "xHeight": null,
-      "capHeight": null
+      "capHeight": null,
+      "inkXHeight": 0.396,
+      "inkCapHeight": 0.6548
      },
      "replacementVertical": {
       "hhea": [
@@ -3765,7 +3895,9 @@
        0.2024
       ],
       "xHeight": 0.4145,
-      "capHeight": 0.571
+      "capHeight": 0.571,
+      "inkXHeight": 0.4258,
+      "inkCapHeight": 0.571
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -3775,8 +3907,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": null,
-     "capHeightRatio": null,
+     "xHeightRatio": 1.075,
+     "capHeightRatio": 0.872,
      "ascentRatio": 0.879
     },
     {
@@ -3852,7 +3984,9 @@
        0.2822
       ],
       "xHeight": null,
-      "capHeight": null
+      "capHeight": null,
+      "inkXHeight": 0.395,
+      "inkCapHeight": 0.6548
      },
      "replacementVertical": {
       "hhea": [
@@ -3870,7 +4004,9 @@
        0.2024
       ],
       "xHeight": 0.4169,
-      "capHeight": 0.571
+      "capHeight": 0.571,
+      "inkXHeight": 0.4282,
+      "inkCapHeight": 0.571
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -3880,8 +4016,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": null,
-     "capHeightRatio": null,
+     "xHeightRatio": 1.084,
+     "capHeightRatio": 0.872,
      "ascentRatio": 1.06
     }
    ],
@@ -3895,8 +4031,8 @@
     "widthBarMet": false,
     "lineBreaksIdenticalFraction": 0,
     "verticalMetricsEqual": false,
-    "xHeightRatio": null,
-    "capHeightRatio": null,
+    "xHeightRatio": 1.082,
+    "capHeightRatio": 0.872,
     "ascentRatio": 1.18,
     "identicalOutlinesBeyondPlainRectangles": 0,
     "latinCodepointsMissing": 1
@@ -3982,7 +4118,9 @@
        0.2822
       ],
       "xHeight": null,
-      "capHeight": null
+      "capHeight": null,
+      "inkXHeight": 0.4668,
+      "inkCapHeight": 0.6914
      },
      "replacementVertical": {
       "hhea": [
@@ -4000,7 +4138,9 @@
        0.286
       ],
       "xHeight": 0.5,
-      "capHeight": 0.7
+      "capHeight": 0.7,
+      "inkXHeight": 0.5,
+      "inkCapHeight": 0.7
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -4010,8 +4150,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": null,
-     "capHeightRatio": null,
+     "xHeightRatio": 1.071,
+     "capHeightRatio": 1.012,
      "ascentRatio": 1.125,
      "outlines": {
       "sharedNonemptyGlyphs": 434,
@@ -4110,7 +4250,9 @@
        0.2651
       ],
       "xHeight": null,
-      "capHeight": null
+      "capHeight": null,
+      "inkXHeight": 0.4717,
+      "inkCapHeight": 0.6816
      },
      "replacementVertical": {
       "hhea": [
@@ -4128,7 +4270,9 @@
        0.286
       ],
       "xHeight": 0.5,
-      "capHeight": 0.7
+      "capHeight": 0.7,
+      "inkXHeight": 0.5,
+      "inkCapHeight": 0.7
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -4138,8 +4282,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": null,
-     "capHeightRatio": null,
+     "xHeightRatio": 1.06,
+     "capHeightRatio": 1.027,
      "ascentRatio": 1.125
     },
     {
@@ -4215,7 +4359,9 @@
        0.2798
       ],
       "xHeight": null,
-      "capHeight": null
+      "capHeight": null,
+      "inkXHeight": 0.4731,
+      "inkCapHeight": 0.6914
      },
      "replacementVertical": {
       "hhea": [
@@ -4233,7 +4379,9 @@
        0.286
       ],
       "xHeight": 0.507,
-      "capHeight": 0.7
+      "capHeight": 0.7,
+      "inkXHeight": 0.507,
+      "inkCapHeight": 0.7
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -4243,8 +4391,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": null,
-     "capHeightRatio": null,
+     "xHeightRatio": 1.072,
+     "capHeightRatio": 1.012,
      "ascentRatio": 1.125
     },
     {
@@ -4320,7 +4468,9 @@
        0.2808
       ],
       "xHeight": null,
-      "capHeight": null
+      "capHeight": null,
+      "inkXHeight": 0.4746,
+      "inkCapHeight": 0.6812
      },
      "replacementVertical": {
       "hhea": [
@@ -4338,7 +4488,9 @@
        0.286
       ],
       "xHeight": 0.509,
-      "capHeight": 0.7
+      "capHeight": 0.7,
+      "inkXHeight": 0.509,
+      "inkCapHeight": 0.7
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -4348,8 +4500,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": null,
-     "capHeightRatio": null,
+     "xHeightRatio": 1.072,
+     "capHeightRatio": 1.028,
      "ascentRatio": 1.125
     }
    ],
@@ -4363,8 +4515,8 @@
     "widthBarMet": false,
     "lineBreaksIdenticalFraction": 0.188,
     "verticalMetricsEqual": false,
-    "xHeightRatio": null,
-    "capHeightRatio": null,
+    "xHeightRatio": 1.071,
+    "capHeightRatio": 1.012,
     "ascentRatio": 1.125,
     "identicalOutlinesBeyondPlainRectangles": 0,
     "latinCodepointsMissing": 42
@@ -4450,7 +4602,9 @@
        0.231
       ],
       "xHeight": null,
-      "capHeight": null
+      "capHeight": null,
+      "inkXHeight": 0.4712,
+      "inkCapHeight": 0.6812
      },
      "replacementVertical": {
       "hhea": [
@@ -4468,7 +4622,9 @@
        0.26
       ],
       "xHeight": 0.53,
-      "capHeight": 0.77
+      "capHeight": 0.77,
+      "inkXHeight": 0.53,
+      "inkCapHeight": 0.77
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -4478,8 +4634,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": null,
-     "capHeightRatio": null,
+     "xHeightRatio": 1.125,
+     "capHeightRatio": 1.13,
      "ascentRatio": 1.03,
      "outlines": {
       "sharedNonemptyGlyphs": 367,
@@ -4575,7 +4731,9 @@
        0.231
       ],
       "xHeight": null,
-      "capHeight": null
+      "capHeight": null,
+      "inkXHeight": 0.4873,
+      "inkCapHeight": 0.6812
      },
      "replacementVertical": {
       "hhea": [
@@ -4593,7 +4751,9 @@
        0.26
       ],
       "xHeight": 0.53,
-      "capHeight": 0.77
+      "capHeight": 0.77,
+      "inkXHeight": 0.53,
+      "inkCapHeight": 0.77
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -4603,8 +4763,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": null,
-     "capHeightRatio": null,
+     "xHeightRatio": 1.088,
+     "capHeightRatio": 1.13,
      "ascentRatio": 1.03
     },
     {
@@ -4680,7 +4840,9 @@
        0.231
       ],
       "xHeight": null,
-      "capHeight": null
+      "capHeight": null,
+      "inkXHeight": 0.5117,
+      "inkCapHeight": 0.6812
      },
      "replacementVertical": {
       "hhea": [
@@ -4698,7 +4860,9 @@
        0.26
       ],
       "xHeight": 0.53,
-      "capHeight": 0.77
+      "capHeight": 0.77,
+      "inkXHeight": 0.54,
+      "inkCapHeight": 0.77
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -4708,8 +4872,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": null,
-     "capHeightRatio": null,
+     "xHeightRatio": 1.055,
+     "capHeightRatio": 1.13,
      "ascentRatio": 1.03
     },
     {
@@ -4785,7 +4949,9 @@
        0.2319
       ],
       "xHeight": null,
-      "capHeight": null
+      "capHeight": null,
+      "inkXHeight": 0.4829,
+      "inkCapHeight": 0.6812
      },
      "replacementVertical": {
       "hhea": [
@@ -4803,7 +4969,9 @@
        0.26
       ],
       "xHeight": 0.53,
-      "capHeight": 0.77
+      "capHeight": 0.77,
+      "inkXHeight": 0.54,
+      "inkCapHeight": 0.77
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -4813,8 +4981,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": null,
-     "capHeightRatio": null,
+     "xHeightRatio": 1.118,
+     "capHeightRatio": 1.13,
      "ascentRatio": 1.03
     }
    ],
@@ -4828,8 +4996,8 @@
     "widthBarMet": false,
     "lineBreaksIdenticalFraction": 0.02,
     "verticalMetricsEqual": false,
-    "xHeightRatio": null,
-    "capHeightRatio": null,
+    "xHeightRatio": 1.125,
+    "capHeightRatio": 1.13,
     "ascentRatio": 1.03,
     "identicalOutlinesBeyondPlainRectangles": 0,
     "latinCodepointsMissing": 9
@@ -4915,7 +5083,9 @@
        0.2686
       ],
       "xHeight": 0.4644,
-      "capHeight": 0.6318
+      "capHeight": 0.6318,
+      "inkXHeight": 0.4668,
+      "inkCapHeight": 0.6348
      },
      "replacementVertical": {
       "hhea": [
@@ -4933,7 +5103,9 @@
        0.2686
       ],
       "xHeight": 0.4775,
-      "capHeight": 0.6416
+      "capHeight": 0.6416,
+      "inkXHeight": 0.4775,
+      "inkCapHeight": 0.6416
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -4941,8 +5113,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": 1.028,
-     "capHeightRatio": 1.016,
+     "xHeightRatio": 1.023,
+     "capHeightRatio": 1.011,
      "ascentRatio": 1.269,
      "outlines": {
       "sharedNonemptyGlyphs": 2084,
@@ -5041,7 +5213,9 @@
        0.2686
       ],
       "xHeight": 0.4688,
-      "capHeight": 0.6318
+      "capHeight": 0.6318,
+      "inkXHeight": 0.4717,
+      "inkCapHeight": 0.6348
      },
      "replacementVertical": {
       "hhea": [
@@ -5059,7 +5233,9 @@
        0.2686
       ],
       "xHeight": 0.4849,
-      "capHeight": 0.6484
+      "capHeight": 0.6484,
+      "inkXHeight": 0.4849,
+      "inkCapHeight": 0.6484
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -5067,8 +5243,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": 1.034,
-     "capHeightRatio": 1.026,
+     "xHeightRatio": 1.028,
+     "capHeightRatio": 1.021,
      "ascentRatio": 1.269
     },
     {
@@ -5144,7 +5320,9 @@
        0.2686
       ],
       "xHeight": 0.4673,
-      "capHeight": 0.6333
+      "capHeight": 0.6333,
+      "inkXHeight": 0.4668,
+      "inkCapHeight": 0.6348
      },
      "replacementVertical": {
       "hhea": [
@@ -5162,7 +5340,9 @@
        0.2686
       ],
       "xHeight": 0.48,
-      "capHeight": 0.6416
+      "capHeight": 0.6416,
+      "inkXHeight": 0.4775,
+      "inkCapHeight": 0.6416
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -5170,8 +5350,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": 1.027,
-     "capHeightRatio": 1.013,
+     "xHeightRatio": 1.023,
+     "capHeightRatio": 1.011,
      "ascentRatio": 1.269
     },
     {
@@ -5247,7 +5427,9 @@
        0.2686
       ],
       "xHeight": 0.4688,
-      "capHeight": 0.6318
+      "capHeight": 0.6318,
+      "inkXHeight": 0.4717,
+      "inkCapHeight": 0.6348
      },
      "replacementVertical": {
       "hhea": [
@@ -5265,7 +5447,9 @@
        0.2686
       ],
       "xHeight": 0.4849,
-      "capHeight": 0.6484
+      "capHeight": 0.6484,
+      "inkXHeight": 0.4849,
+      "inkCapHeight": 0.6484
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -5273,8 +5457,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": 1.034,
-     "capHeightRatio": 1.026,
+     "xHeightRatio": 1.028,
+     "capHeightRatio": 1.021,
      "ascentRatio": 1.269
     }
    ],
@@ -5288,8 +5472,8 @@
     "widthBarMet": true,
     "lineBreaksIdenticalFraction": 0.996,
     "verticalMetricsEqual": false,
-    "xHeightRatio": 1.028,
-    "capHeightRatio": 1.016,
+    "xHeightRatio": 1.023,
+    "capHeightRatio": 1.011,
     "ascentRatio": 1.269,
     "identicalOutlinesBeyondPlainRectangles": 0,
     "latinCodepointsMissing": 13
@@ -5375,7 +5559,9 @@
        0.2686
       ],
       "xHeight": 0.4619,
-      "capHeight": 0.6318
+      "capHeight": 0.6318,
+      "inkXHeight": 0.4644,
+      "inkCapHeight": 0.6348
      },
      "replacementVertical": {
       "hhea": [
@@ -5393,7 +5579,9 @@
        0.2686
       ],
       "xHeight": 0.4775,
-      "capHeight": 0.6416
+      "capHeight": 0.6416,
+      "inkXHeight": 0.4775,
+      "inkCapHeight": 0.6416
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -5401,8 +5589,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": 1.034,
-     "capHeightRatio": 1.016,
+     "xHeightRatio": 1.028,
+     "capHeightRatio": 1.011,
      "ascentRatio": 1.269,
      "outlines": {
       "sharedNonemptyGlyphs": 2084,
@@ -5501,7 +5689,9 @@
        0.2686
       ],
       "xHeight": 0.4644,
-      "capHeight": 0.6318
+      "capHeight": 0.6318,
+      "inkXHeight": 0.4644,
+      "inkCapHeight": 0.6348
      },
      "replacementVertical": {
       "hhea": [
@@ -5519,7 +5709,9 @@
        0.2686
       ],
       "xHeight": 0.48,
-      "capHeight": 0.6416
+      "capHeight": 0.6416,
+      "inkXHeight": 0.4775,
+      "inkCapHeight": 0.6416
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -5527,8 +5719,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": 1.034,
-     "capHeightRatio": 1.016,
+     "xHeightRatio": 1.028,
+     "capHeightRatio": 1.011,
      "ascentRatio": 1.269
     }
    ],
@@ -5542,8 +5734,8 @@
     "widthBarMet": false,
     "lineBreaksIdenticalFraction": 0.624,
     "verticalMetricsEqual": false,
-    "xHeightRatio": 1.034,
-    "capHeightRatio": 1.016,
+    "xHeightRatio": 1.028,
+    "capHeightRatio": 1.011,
     "ascentRatio": 1.269,
     "identicalOutlinesBeyondPlainRectangles": 0,
     "latinCodepointsMissing": 13
@@ -5629,7 +5821,9 @@
        0.2222
       ],
       "xHeight": 0.4668,
-      "capHeight": 0.6665
+      "capHeight": 0.6665,
+      "inkXHeight": 0.4668,
+      "inkCapHeight": 0.6665
      },
      "replacementVertical": {
       "hhea": [
@@ -5647,7 +5841,9 @@
        0.25
       ],
       "xHeight": 0.467,
-      "capHeight": 0.667
+      "capHeight": 0.667,
+      "inkXHeight": 0.467,
+      "inkCapHeight": 0.667
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -5757,7 +5953,9 @@
        0.2222
       ],
       "xHeight": 0.4844,
-      "capHeight": 0.6665
+      "capHeight": 0.6665,
+      "inkXHeight": 0.4844,
+      "inkCapHeight": 0.6665
      },
      "replacementVertical": {
       "hhea": [
@@ -5775,7 +5973,9 @@
        0.25
       ],
       "xHeight": 0.484,
-      "capHeight": 0.667
+      "capHeight": 0.667,
+      "inkXHeight": 0.484,
+      "inkCapHeight": 0.667
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -5862,7 +6062,9 @@
        0.2222
       ],
       "xHeight": 0.4668,
-      "capHeight": 0.6665
+      "capHeight": 0.6665,
+      "inkXHeight": 0.4668,
+      "inkCapHeight": 0.6665
      },
      "replacementVertical": {
       "hhea": [
@@ -5880,7 +6082,9 @@
        0.25
       ],
       "xHeight": 0.467,
-      "capHeight": 0.667
+      "capHeight": 0.667,
+      "inkXHeight": 0.476,
+      "inkCapHeight": 0.667
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -5890,7 +6094,7 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": 1,
+     "xHeightRatio": 1.02,
      "capHeightRatio": 1.001,
      "ascentRatio": 0.947
     },
@@ -5967,7 +6171,9 @@
        0.2222
       ],
       "xHeight": 0.4844,
-      "capHeight": 0.6665
+      "capHeight": 0.6665,
+      "inkXHeight": 0.4844,
+      "inkCapHeight": 0.6665
      },
      "replacementVertical": {
       "hhea": [
@@ -5985,7 +6191,9 @@
        0.25
       ],
       "xHeight": 0.484,
-      "capHeight": 0.667
+      "capHeight": 0.667,
+      "inkXHeight": 0.49,
+      "inkCapHeight": 0.667
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -5995,7 +6203,7 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": 0.999,
+     "xHeightRatio": 1.012,
      "capHeightRatio": 1.001,
      "ascentRatio": 0.947
     }
@@ -6097,7 +6305,9 @@
        0.2686
       ],
       "xHeight": 0.4639,
-      "capHeight": 0.6387
+      "capHeight": 0.6387,
+      "inkXHeight": 0.4639,
+      "inkCapHeight": 0.6357
      },
      "replacementVertical": {
       "hhea": [
@@ -6115,7 +6325,9 @@
        0.326
       ],
       "xHeight": 0.486,
-      "capHeight": 0.66
+      "capHeight": 0.66,
+      "inkXHeight": 0.486,
+      "inkCapHeight": 0.656
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -6126,7 +6338,7 @@
       "capHeight"
      ],
      "xHeightRatio": 1.048,
-     "capHeightRatio": 1.033,
+     "capHeightRatio": 1.032,
      "ascentRatio": 1.38,
      "outlines": {
       "sharedNonemptyGlyphs": 762,
@@ -6225,7 +6437,9 @@
        0.2686
       ],
       "xHeight": 0.4639,
-      "capHeight": 0.6387
+      "capHeight": 0.6387,
+      "inkXHeight": 0.4639,
+      "inkCapHeight": 0.6357
      },
      "replacementVertical": {
       "hhea": [
@@ -6243,7 +6457,9 @@
        0.326
       ],
       "xHeight": 0.496,
-      "capHeight": 0.66
+      "capHeight": 0.66,
+      "inkXHeight": 0.496,
+      "inkCapHeight": 0.652
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -6254,7 +6470,7 @@
       "capHeight"
      ],
      "xHeightRatio": 1.069,
-     "capHeightRatio": 1.033,
+     "capHeightRatio": 1.026,
      "ascentRatio": 1.38
     },
     {
@@ -6330,7 +6546,9 @@
        0.2686
       ],
       "xHeight": 0.4692,
-      "capHeight": 0.6387
+      "capHeight": 0.6387,
+      "inkXHeight": 0.4692,
+      "inkCapHeight": 0.6357
      },
      "replacementVertical": {
       "hhea": [
@@ -6348,7 +6566,9 @@
        0.326
       ],
       "xHeight": 0.486,
-      "capHeight": 0.66
+      "capHeight": 0.66,
+      "inkXHeight": 0.486,
+      "inkCapHeight": 0.656
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -6359,7 +6579,7 @@
       "capHeight"
      ],
      "xHeightRatio": 1.036,
-     "capHeightRatio": 1.033,
+     "capHeightRatio": 1.032,
      "ascentRatio": 1.38
     },
     {
@@ -6435,7 +6655,9 @@
        0.2686
       ],
       "xHeight": 0.4692,
-      "capHeight": 0.6387
+      "capHeight": 0.6387,
+      "inkXHeight": 0.4692,
+      "inkCapHeight": 0.6357
      },
      "replacementVertical": {
       "hhea": [
@@ -6453,7 +6675,9 @@
        0.326
       ],
       "xHeight": 0.496,
-      "capHeight": 0.66
+      "capHeight": 0.66,
+      "inkXHeight": 0.496,
+      "inkCapHeight": 0.652
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -6464,7 +6688,7 @@
       "capHeight"
      ],
      "xHeightRatio": 1.057,
-     "capHeightRatio": 1.033,
+     "capHeightRatio": 1.026,
      "ascentRatio": 1.38
     }
    ],
@@ -6479,7 +6703,7 @@
     "lineBreaksIdenticalFraction": 0.368,
     "verticalMetricsEqual": false,
     "xHeightRatio": 1.048,
-    "capHeightRatio": 1.033,
+    "capHeightRatio": 1.032,
     "ascentRatio": 1.38,
     "identicalOutlinesBeyondPlainRectangles": 0,
     "latinCodepointsMissing": 21
@@ -6565,7 +6789,9 @@
        0.2202
       ],
       "xHeight": null,
-      "capHeight": null
+      "capHeight": null,
+      "inkXHeight": 0.5313,
+      "inkCapHeight": 0.7183
      },
      "replacementVertical": {
       "hhea": [
@@ -6583,7 +6809,9 @@
        0.343
       ],
       "xHeight": 0.5,
-      "capHeight": 0.66
+      "capHeight": 0.66,
+      "inkXHeight": 0.5,
+      "inkCapHeight": 0.66
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -6593,8 +6821,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": null,
-     "capHeightRatio": null,
+     "xHeightRatio": 0.941,
+     "capHeightRatio": 0.919,
      "ascentRatio": 0.925,
      "outlines": {
       "sharedNonemptyGlyphs": 406,
@@ -6684,7 +6912,9 @@
        0.2202
       ],
       "xHeight": null,
-      "capHeight": null
+      "capHeight": null,
+      "inkXHeight": 0.5313,
+      "inkCapHeight": 0.7183
      },
      "replacementVertical": {
       "hhea": [
@@ -6702,7 +6932,9 @@
        0.343
       ],
       "xHeight": 0.5,
-      "capHeight": 0.66
+      "capHeight": 0.66,
+      "inkXHeight": 0.5,
+      "inkCapHeight": 0.66
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -6712,8 +6944,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": null,
-     "capHeightRatio": null,
+     "xHeightRatio": 0.941,
+     "capHeightRatio": 0.919,
      "ascentRatio": 0.925
     },
     {
@@ -6789,7 +7021,9 @@
        0.2202
       ],
       "xHeight": null,
-      "capHeight": null
+      "capHeight": null,
+      "inkXHeight": 0.5313,
+      "inkCapHeight": 0.7183
      },
      "replacementVertical": {
       "hhea": [
@@ -6807,7 +7041,9 @@
        0.343
       ],
       "xHeight": 0.5,
-      "capHeight": 0.66
+      "capHeight": 0.66,
+      "inkXHeight": 0.5,
+      "inkCapHeight": 0.66
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -6817,8 +7053,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": null,
-     "capHeightRatio": null,
+     "xHeightRatio": 0.941,
+     "capHeightRatio": 0.919,
      "ascentRatio": 0.925
     },
     {
@@ -6894,7 +7130,9 @@
        0.2202
       ],
       "xHeight": null,
-      "capHeight": null
+      "capHeight": null,
+      "inkXHeight": 0.5313,
+      "inkCapHeight": 0.7183
      },
      "replacementVertical": {
       "hhea": [
@@ -6912,7 +7150,9 @@
        0.343
       ],
       "xHeight": 0.5,
-      "capHeight": 0.66
+      "capHeight": 0.66,
+      "inkXHeight": 0.5,
+      "inkCapHeight": 0.66
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -6922,8 +7162,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": null,
-     "capHeightRatio": null,
+     "xHeightRatio": 0.941,
+     "capHeightRatio": 0.919,
      "ascentRatio": 0.925
     }
    ],
@@ -6937,8 +7177,8 @@
     "widthBarMet": false,
     "lineBreaksIdenticalFraction": 0.276,
     "verticalMetricsEqual": false,
-    "xHeightRatio": null,
-    "capHeightRatio": null,
+    "xHeightRatio": 0.941,
+    "capHeightRatio": 0.919,
     "ascentRatio": 0.925,
     "identicalOutlinesBeyondPlainRectangles": 0,
     "latinCodepointsMissing": 3
@@ -7024,7 +7264,9 @@
        0.2158
       ],
       "xHeight": null,
-      "capHeight": null
+      "capHeight": null,
+      "inkXHeight": 0.4575,
+      "inkCapHeight": 0.7222
      },
      "replacementVertical": {
       "hhea": [
@@ -7042,7 +7284,9 @@
        0.3906
       ],
       "xHeight": 0.4814,
-      "capHeight": 0.6929
+      "capHeight": 0.6929,
+      "inkXHeight": 0.4854,
+      "inkCapHeight": 0.6929
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -7052,8 +7296,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": null,
-     "capHeightRatio": null,
+     "xHeightRatio": 1.061,
+     "capHeightRatio": 0.959,
      "ascentRatio": 0.941,
      "outlines": {
       "sharedNonemptyGlyphs": 416,
@@ -7143,7 +7387,9 @@
        0.2153
       ],
       "xHeight": null,
-      "capHeight": null
+      "capHeight": null,
+      "inkXHeight": 0.457,
+      "inkCapHeight": 0.7222
      },
      "replacementVertical": {
       "hhea": [
@@ -7161,7 +7407,9 @@
        0.3906
       ],
       "xHeight": 0.4854,
-      "capHeight": 0.6929
+      "capHeight": 0.6929,
+      "inkXHeight": 0.4854,
+      "inkCapHeight": 0.6929
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -7171,8 +7419,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": null,
-     "capHeightRatio": null,
+     "xHeightRatio": 1.062,
+     "capHeightRatio": 0.959,
      "ascentRatio": 0.941
     },
     {
@@ -7248,7 +7496,9 @@
        0.2153
       ],
       "xHeight": null,
-      "capHeight": null
+      "capHeight": null,
+      "inkXHeight": 0.4712,
+      "inkCapHeight": 0.7222
      },
      "replacementVertical": {
       "hhea": [
@@ -7266,7 +7516,9 @@
        0.3906
       ],
       "xHeight": 0.4814,
-      "capHeight": 0.6929
+      "capHeight": 0.6929,
+      "inkXHeight": 0.4902,
+      "inkCapHeight": 0.6929
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -7276,8 +7528,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": null,
-     "capHeightRatio": null,
+     "xHeightRatio": 1.04,
+     "capHeightRatio": 0.959,
      "ascentRatio": 0.941
     },
     {
@@ -7353,7 +7605,9 @@
        0.2163
       ],
       "xHeight": null,
-      "capHeight": null
+      "capHeight": null,
+      "inkXHeight": 0.4829,
+      "inkCapHeight": 0.7222
      },
      "replacementVertical": {
       "hhea": [
@@ -7371,7 +7625,9 @@
        0.3906
       ],
       "xHeight": 0.4854,
-      "capHeight": 0.6929
+      "capHeight": 0.6929,
+      "inkXHeight": 0.4902,
+      "inkCapHeight": 0.6929
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -7381,8 +7637,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": null,
-     "capHeightRatio": null,
+     "xHeightRatio": 1.015,
+     "capHeightRatio": 0.959,
      "ascentRatio": 0.941
     }
    ],
@@ -7396,8 +7652,8 @@
     "widthBarMet": false,
     "lineBreaksIdenticalFraction": 0.156,
     "verticalMetricsEqual": false,
-    "xHeightRatio": null,
-    "capHeightRatio": null,
+    "xHeightRatio": 1.061,
+    "capHeightRatio": 0.959,
     "ascentRatio": 0.941,
     "identicalOutlinesBeyondPlainRectangles": 0,
     "latinCodepointsMissing": 3
@@ -7483,7 +7739,9 @@
        0.251
       ],
       "xHeight": 0.4902,
-      "capHeight": 0.6382
+      "capHeight": 0.6382,
+      "inkXHeight": 0.4902,
+      "inkCapHeight": 0.6382
      },
      "replacementVertical": {
       "hhea": [
@@ -7501,7 +7759,9 @@
        0.3003
       ],
       "xHeight": 0.5283,
-      "capHeight": 0.6587
+      "capHeight": 0.6587,
+      "inkXHeight": 0.5283,
+      "inkCapHeight": 0.6587
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -7611,7 +7871,9 @@
        0.251
       ],
       "xHeight": 0.4961,
-      "capHeight": 0.6382
+      "capHeight": 0.6382,
+      "inkXHeight": 0.4961,
+      "inkCapHeight": 0.6382
      },
      "replacementVertical": {
       "hhea": [
@@ -7629,7 +7891,9 @@
        0.3003
       ],
       "xHeight": 0.5283,
-      "capHeight": 0.6587
+      "capHeight": 0.6587,
+      "inkXHeight": 0.5283,
+      "inkCapHeight": 0.6587
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -7716,7 +7980,9 @@
        0.251
       ],
       "xHeight": 0.4902,
-      "capHeight": 0.6382
+      "capHeight": 0.6382,
+      "inkXHeight": 0.4902,
+      "inkCapHeight": 0.6382
      },
      "replacementVertical": {
       "hhea": [
@@ -7734,7 +8000,9 @@
        0.3003
       ],
       "xHeight": 0.5283,
-      "capHeight": 0.6587
+      "capHeight": 0.6587,
+      "inkXHeight": 0.5283,
+      "inkCapHeight": 0.6587
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -7821,7 +8089,9 @@
        0.251
       ],
       "xHeight": 0.4961,
-      "capHeight": 0.6382
+      "capHeight": 0.6382,
+      "inkXHeight": 0.4961,
+      "inkCapHeight": 0.6382
      },
      "replacementVertical": {
       "hhea": [
@@ -7839,7 +8109,9 @@
        0.3003
       ],
       "xHeight": 0.5283,
-      "capHeight": 0.6587
+      "capHeight": 0.6587,
+      "inkXHeight": 0.5283,
+      "inkCapHeight": 0.6587
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -7951,7 +8223,9 @@
        0.2686
       ],
       "xHeight": 0.4531,
-      "capHeight": 0.6865
+      "capHeight": 0.6865,
+      "inkXHeight": 0.4526,
+      "inkCapHeight": 0.6836
      },
      "replacementVertical": {
       "hhea": [
@@ -7969,7 +8243,9 @@
        0.286
       ],
       "xHeight": 0.5,
-      "capHeight": 0.7
+      "capHeight": 0.7,
+      "inkXHeight": 0.5,
+      "inkCapHeight": 0.7
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -7979,8 +8255,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": 1.104,
-     "capHeightRatio": 1.02,
+     "xHeightRatio": 1.105,
+     "capHeightRatio": 1.024,
      "ascentRatio": 1.383,
      "outlines": {
       "sharedNonemptyGlyphs": 449,
@@ -8079,7 +8355,9 @@
        0.2686
       ],
       "xHeight": 0.4561,
-      "capHeight": 0.6865
+      "capHeight": 0.6865,
+      "inkXHeight": 0.4551,
+      "inkCapHeight": 0.6836
      },
      "replacementVertical": {
       "hhea": [
@@ -8097,7 +8375,9 @@
        0.286
       ],
       "xHeight": 0.5,
-      "capHeight": 0.7
+      "capHeight": 0.7,
+      "inkXHeight": 0.5,
+      "inkCapHeight": 0.7
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -8107,8 +8387,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": 1.096,
-     "capHeightRatio": 1.02,
+     "xHeightRatio": 1.099,
+     "capHeightRatio": 1.024,
      "ascentRatio": 1.383
     },
     {
@@ -8184,7 +8464,9 @@
        0.2686
       ],
       "xHeight": 0.458,
-      "capHeight": 0.6865
+      "capHeight": 0.6865,
+      "inkXHeight": 0.4575,
+      "inkCapHeight": 0.6836
      },
      "replacementVertical": {
       "hhea": [
@@ -8202,7 +8484,9 @@
        0.286
       ],
       "xHeight": 0.507,
-      "capHeight": 0.7
+      "capHeight": 0.7,
+      "inkXHeight": 0.507,
+      "inkCapHeight": 0.7
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -8212,8 +8496,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": 1.107,
-     "capHeightRatio": 1.02,
+     "xHeightRatio": 1.108,
+     "capHeightRatio": 1.024,
      "ascentRatio": 1.383
     },
     {
@@ -8289,7 +8573,9 @@
        0.2686
       ],
       "xHeight": 0.4644,
-      "capHeight": 0.6865
+      "capHeight": 0.6865,
+      "inkXHeight": 0.4614,
+      "inkCapHeight": 0.6836
      },
      "replacementVertical": {
       "hhea": [
@@ -8307,7 +8593,9 @@
        0.286
       ],
       "xHeight": 0.509,
-      "capHeight": 0.7
+      "capHeight": 0.7,
+      "inkXHeight": 0.509,
+      "inkCapHeight": 0.7
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -8317,8 +8605,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": 1.096,
-     "capHeightRatio": 1.02,
+     "xHeightRatio": 1.103,
+     "capHeightRatio": 1.024,
      "ascentRatio": 1.383
     }
    ],
@@ -8332,8 +8620,8 @@
     "widthBarMet": false,
     "lineBreaksIdenticalFraction": 0.236,
     "verticalMetricsEqual": false,
-    "xHeightRatio": 1.104,
-    "capHeightRatio": 1.02,
+    "xHeightRatio": 1.105,
+    "capHeightRatio": 1.024,
     "ascentRatio": 1.383,
     "identicalOutlinesBeyondPlainRectangles": 0,
     "latinCodepointsMissing": 41
@@ -8419,7 +8707,9 @@
        0.2686
       ],
       "xHeight": 0.4639,
-      "capHeight": 0.6533
+      "capHeight": 0.6533,
+      "inkXHeight": 0.4639,
+      "inkCapHeight": 0.6533
      },
      "replacementVertical": {
       "hhea": [
@@ -8437,7 +8727,9 @@
        0.326
       ],
       "xHeight": 0.486,
-      "capHeight": 0.66
+      "capHeight": 0.66,
+      "inkXHeight": 0.486,
+      "inkCapHeight": 0.656
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -8448,7 +8740,7 @@
       "capHeight"
      ],
      "xHeightRatio": 1.048,
-     "capHeightRatio": 1.01,
+     "capHeightRatio": 1.004,
      "ascentRatio": 1.345,
      "outlines": {
       "sharedNonemptyGlyphs": 762,
@@ -8547,7 +8839,9 @@
        0.2686
       ],
       "xHeight": 0.4731,
-      "capHeight": 0.6533
+      "capHeight": 0.6533,
+      "inkXHeight": 0.4731,
+      "inkCapHeight": 0.6533
      },
      "replacementVertical": {
       "hhea": [
@@ -8565,7 +8859,9 @@
        0.326
       ],
       "xHeight": 0.496,
-      "capHeight": 0.66
+      "capHeight": 0.66,
+      "inkXHeight": 0.496,
+      "inkCapHeight": 0.652
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -8576,7 +8872,7 @@
       "capHeight"
      ],
      "xHeightRatio": 1.048,
-     "capHeightRatio": 1.01,
+     "capHeightRatio": 0.998,
      "ascentRatio": 1.345
     },
     {
@@ -8652,7 +8948,9 @@
        0.2686
       ],
       "xHeight": 0.4639,
-      "capHeight": 0.6533
+      "capHeight": 0.6533,
+      "inkXHeight": 0.4639,
+      "inkCapHeight": 0.6533
      },
      "replacementVertical": {
       "hhea": [
@@ -8670,7 +8968,9 @@
        0.326
       ],
       "xHeight": 0.486,
-      "capHeight": 0.66
+      "capHeight": 0.66,
+      "inkXHeight": 0.486,
+      "inkCapHeight": 0.656
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -8681,7 +8981,7 @@
       "capHeight"
      ],
      "xHeightRatio": 1.048,
-     "capHeightRatio": 1.01,
+     "capHeightRatio": 1.004,
      "ascentRatio": 1.345
     },
     {
@@ -8757,7 +9057,9 @@
        0.2686
       ],
       "xHeight": 0.4731,
-      "capHeight": 0.6533
+      "capHeight": 0.6533,
+      "inkXHeight": 0.4731,
+      "inkCapHeight": 0.6533
      },
      "replacementVertical": {
       "hhea": [
@@ -8775,7 +9077,9 @@
        0.326
       ],
       "xHeight": 0.496,
-      "capHeight": 0.66
+      "capHeight": 0.66,
+      "inkXHeight": 0.496,
+      "inkCapHeight": 0.652
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -8786,7 +9090,7 @@
       "capHeight"
      ],
      "xHeightRatio": 1.048,
-     "capHeightRatio": 1.01,
+     "capHeightRatio": 0.998,
      "ascentRatio": 1.345
     }
    ],
@@ -8801,7 +9105,7 @@
     "lineBreaksIdenticalFraction": 0.532,
     "verticalMetricsEqual": false,
     "xHeightRatio": 1.048,
-    "capHeightRatio": 1.01,
+    "capHeightRatio": 1.004,
     "ascentRatio": 1.345,
     "identicalOutlinesBeyondPlainRectangles": 0,
     "latinCodepointsMissing": 22
@@ -8887,7 +9191,9 @@
        0.3003
       ],
       "xHeight": 0.4229,
-      "capHeight": 0.5713
+      "capHeight": 0.5713,
+      "inkXHeight": 0.4229,
+      "inkCapHeight": 0.5713
      },
      "replacementVertical": {
       "hhea": [
@@ -8905,7 +9211,9 @@
        0.3003
       ],
       "xHeight": 0.5283,
-      "capHeight": 0.6587
+      "capHeight": 0.6587,
+      "inkXHeight": 0.5283,
+      "inkCapHeight": 0.6587
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -9011,7 +9319,9 @@
        0.3003
       ],
       "xHeight": 0.4434,
-      "capHeight": 0.5918
+      "capHeight": 0.5918,
+      "inkXHeight": 0.4434,
+      "inkCapHeight": 0.5923
      },
      "replacementVertical": {
       "hhea": [
@@ -9029,7 +9339,9 @@
        0.3003
       ],
       "xHeight": 0.5283,
-      "capHeight": 0.6587
+      "capHeight": 0.6587,
+      "inkXHeight": 0.5283,
+      "inkCapHeight": 0.6587
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -9038,7 +9350,7 @@
       "capHeight"
      ],
      "xHeightRatio": 1.191,
-     "capHeightRatio": 1.113,
+     "capHeightRatio": 1.112,
      "ascentRatio": 1
     },
     {
@@ -9114,7 +9426,9 @@
        0.3003
       ],
       "xHeight": 0.4229,
-      "capHeight": 0.5713
+      "capHeight": 0.5713,
+      "inkXHeight": 0.4229,
+      "inkCapHeight": 0.5718
      },
      "replacementVertical": {
       "hhea": [
@@ -9132,7 +9446,9 @@
        0.3003
       ],
       "xHeight": 0.5283,
-      "capHeight": 0.6587
+      "capHeight": 0.6587,
+      "inkXHeight": 0.5283,
+      "inkCapHeight": 0.6587
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -9141,7 +9457,7 @@
       "capHeight"
      ],
      "xHeightRatio": 1.249,
-     "capHeightRatio": 1.153,
+     "capHeightRatio": 1.152,
      "ascentRatio": 1
     },
     {
@@ -9217,7 +9533,9 @@
        0.3003
       ],
       "xHeight": 0.4434,
-      "capHeight": 0.5918
+      "capHeight": 0.5918,
+      "inkXHeight": 0.4434,
+      "inkCapHeight": 0.5923
      },
      "replacementVertical": {
       "hhea": [
@@ -9235,7 +9553,9 @@
        0.3003
       ],
       "xHeight": 0.5283,
-      "capHeight": 0.6587
+      "capHeight": 0.6587,
+      "inkXHeight": 0.5283,
+      "inkCapHeight": 0.6587
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -9244,7 +9564,7 @@
       "capHeight"
      ],
      "xHeightRatio": 1.191,
-     "capHeightRatio": 1.113,
+     "capHeightRatio": 1.112,
      "ascentRatio": 1
     }
    ],
@@ -9353,7 +9673,9 @@
        0.2173
       ],
       "xHeight": null,
-      "capHeight": null
+      "capHeight": null,
+      "inkXHeight": 0.4932,
+      "inkCapHeight": 0.6665
      },
      "replacementVertical": {
       "hhea": [
@@ -9371,7 +9693,9 @@
        0.249
       ],
       "xHeight": 0.506,
-      "capHeight": 0.7
+      "capHeight": 0.7,
+      "inkXHeight": 0.506,
+      "inkCapHeight": 0.7
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -9381,8 +9705,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": null,
-     "capHeightRatio": null,
+     "xHeightRatio": 1.026,
+     "capHeightRatio": 1.05,
      "ascentRatio": 1.091,
      "outlines": {
       "sharedNonemptyGlyphs": 376,
@@ -9481,7 +9805,9 @@
        0.2173
       ],
       "xHeight": null,
-      "capHeight": null
+      "capHeight": null,
+      "inkXHeight": 0.4946,
+      "inkCapHeight": 0.6665
      },
      "replacementVertical": {
       "hhea": [
@@ -9499,7 +9825,9 @@
        0.249
       ],
       "xHeight": 0.506,
-      "capHeight": 0.7
+      "capHeight": 0.7,
+      "inkXHeight": 0.506,
+      "inkCapHeight": 0.7
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -9509,8 +9837,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": null,
-     "capHeightRatio": null,
+     "xHeightRatio": 1.023,
+     "capHeightRatio": 1.05,
      "ascentRatio": 1.091
     }
    ],
@@ -9524,8 +9852,8 @@
     "widthBarMet": false,
     "lineBreaksIdenticalFraction": 0.388,
     "verticalMetricsEqual": false,
-    "xHeightRatio": null,
-    "capHeightRatio": null,
+    "xHeightRatio": 1.026,
+    "capHeightRatio": 1.05,
     "ascentRatio": 1.091,
     "identicalOutlinesBeyondPlainRectangles": 0,
     "latinCodepointsMissing": 19
@@ -9611,7 +9939,9 @@
        0.2173
       ],
       "xHeight": null,
-      "capHeight": null
+      "capHeight": null,
+      "inkXHeight": 0.4932,
+      "inkCapHeight": 0.6665
      },
      "replacementVertical": {
       "hhea": [
@@ -9629,7 +9959,9 @@
        0.249
       ],
       "xHeight": 0.506,
-      "capHeight": 0.7
+      "capHeight": 0.7,
+      "inkXHeight": 0.506,
+      "inkCapHeight": 0.7
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -9639,8 +9971,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": null,
-     "capHeightRatio": null,
+     "xHeightRatio": 1.026,
+     "capHeightRatio": 1.05,
      "ascentRatio": 1.091,
      "outlines": {
       "sharedNonemptyGlyphs": 381,
@@ -9739,7 +10071,9 @@
        0.2173
       ],
       "xHeight": null,
-      "capHeight": null
+      "capHeight": null,
+      "inkXHeight": 0.4966,
+      "inkCapHeight": 0.6665
      },
      "replacementVertical": {
       "hhea": [
@@ -9757,7 +10091,9 @@
        0.249
       ],
       "xHeight": 0.506,
-      "capHeight": 0.7
+      "capHeight": 0.7,
+      "inkXHeight": 0.506,
+      "inkCapHeight": 0.7
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -9767,8 +10103,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": null,
-     "capHeightRatio": null,
+     "xHeightRatio": 1.019,
+     "capHeightRatio": 1.05,
      "ascentRatio": 1.091
     }
    ],
@@ -9782,8 +10118,8 @@
     "widthBarMet": false,
     "lineBreaksIdenticalFraction": 0.54,
     "verticalMetricsEqual": false,
-    "xHeightRatio": null,
-    "capHeightRatio": null,
+    "xHeightRatio": 1.026,
+    "capHeightRatio": 1.05,
     "ascentRatio": 1.091,
     "identicalOutlinesBeyondPlainRectangles": 0,
     "latinCodepointsMissing": 19
@@ -9869,7 +10205,9 @@
        0.2632
       ],
       "xHeight": null,
-      "capHeight": null
+      "capHeight": null,
+      "inkXHeight": 0.3853,
+      "inkCapHeight": 0.6294
      },
      "replacementVertical": {
       "hhea": [
@@ -9887,7 +10225,9 @@
        0.39
       ],
       "xHeight": 0.4,
-      "capHeight": 0.65
+      "capHeight": 0.65,
+      "inkXHeight": 0.405,
+      "inkCapHeight": 0.653
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -9897,8 +10237,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": null,
-     "capHeightRatio": null,
+     "xHeightRatio": 1.051,
+     "capHeightRatio": 1.037,
      "ascentRatio": 1.168,
      "outlines": {
       "sharedNonemptyGlyphs": 572,
@@ -9987,7 +10327,9 @@
        0.2632
       ],
       "xHeight": null,
-      "capHeight": null
+      "capHeight": null,
+      "inkXHeight": 0.4009,
+      "inkCapHeight": 0.6396
      },
      "replacementVertical": {
       "hhea": [
@@ -10005,7 +10347,9 @@
        0.39
       ],
       "xHeight": 0.419,
-      "capHeight": 0.65
+      "capHeight": 0.65,
+      "inkXHeight": 0.425,
+      "inkCapHeight": 0.655
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -10015,8 +10359,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": null,
-     "capHeightRatio": null,
+     "xHeightRatio": 1.06,
+     "capHeightRatio": 1.024,
      "ascentRatio": 1.168
     },
     {
@@ -10092,7 +10436,9 @@
        0.2632
       ],
       "xHeight": null,
-      "capHeight": null
+      "capHeight": null,
+      "inkXHeight": 0.3979,
+      "inkCapHeight": 0.6392
      },
      "replacementVertical": {
       "hhea": [
@@ -10110,7 +10456,9 @@
        0.39
       ],
       "xHeight": 0.4,
-      "capHeight": 0.65
+      "capHeight": 0.65,
+      "inkXHeight": 0.414,
+      "inkCapHeight": 0.653
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -10120,8 +10468,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": null,
-     "capHeightRatio": null,
+     "xHeightRatio": 1.04,
+     "capHeightRatio": 1.022,
      "ascentRatio": 1.168
     }
    ],
@@ -10135,8 +10483,8 @@
     "widthBarMet": false,
     "lineBreaksIdenticalFraction": 0.016,
     "verticalMetricsEqual": false,
-    "xHeightRatio": null,
-    "capHeightRatio": null,
+    "xHeightRatio": 1.051,
+    "capHeightRatio": 1.037,
     "ascentRatio": 1.168,
     "identicalOutlinesBeyondPlainRectangles": 0,
     "latinCodepointsMissing": 2
@@ -10222,7 +10570,9 @@
        0.2192
       ],
       "xHeight": 0.4814,
-      "capHeight": 0.6929
+      "capHeight": 0.6929,
+      "inkXHeight": 0.4814,
+      "inkCapHeight": 0.6929
      },
      "replacementVertical": {
       "hhea": [
@@ -10240,7 +10590,9 @@
        0.3906
       ],
       "xHeight": 0.4814,
-      "capHeight": 0.6929
+      "capHeight": 0.6929,
+      "inkXHeight": 0.4854,
+      "inkCapHeight": 0.6929
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -10248,7 +10600,7 @@
       "typo",
       "win"
      ],
-     "xHeightRatio": 1,
+     "xHeightRatio": 1.008,
      "capHeightRatio": 1,
      "ascentRatio": 1.012,
      "outlines": {
@@ -10341,7 +10693,9 @@
        0.2192
       ],
       "xHeight": 0.4844,
-      "capHeight": 0.6929
+      "capHeight": 0.6929,
+      "inkXHeight": 0.4844,
+      "inkCapHeight": 0.6929
      },
      "replacementVertical": {
       "hhea": [
@@ -10359,7 +10713,9 @@
        0.3906
       ],
       "xHeight": 0.4854,
-      "capHeight": 0.6929
+      "capHeight": 0.6929,
+      "inkXHeight": 0.4854,
+      "inkCapHeight": 0.6929
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -10445,7 +10801,9 @@
        0.2192
       ],
       "xHeight": 0.4888,
-      "capHeight": 0.6929
+      "capHeight": 0.6929,
+      "inkXHeight": 0.4888,
+      "inkCapHeight": 0.6929
      },
      "replacementVertical": {
       "hhea": [
@@ -10463,7 +10821,9 @@
        0.3906
       ],
       "xHeight": 0.4814,
-      "capHeight": 0.6929
+      "capHeight": 0.6929,
+      "inkXHeight": 0.4902,
+      "inkCapHeight": 0.6929
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -10472,7 +10832,7 @@
       "win",
       "xHeight"
      ],
-     "xHeightRatio": 0.985,
+     "xHeightRatio": 1.003,
      "capHeightRatio": 1,
      "ascentRatio": 1.012
     },
@@ -10549,7 +10909,9 @@
        0.2192
       ],
       "xHeight": 0.4956,
-      "capHeight": 0.6929
+      "capHeight": 0.6929,
+      "inkXHeight": 0.4956,
+      "inkCapHeight": 0.6929
      },
      "replacementVertical": {
       "hhea": [
@@ -10567,7 +10929,9 @@
        0.3906
       ],
       "xHeight": 0.4854,
-      "capHeight": 0.6929
+      "capHeight": 0.6929,
+      "inkXHeight": 0.4902,
+      "inkCapHeight": 0.6929
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -10576,7 +10940,7 @@
       "win",
       "xHeight"
      ],
-     "xHeightRatio": 0.979,
+     "xHeightRatio": 0.989,
      "capHeightRatio": 1,
      "ascentRatio": 1.012
     }
@@ -10591,7 +10955,7 @@
     "widthBarMet": true,
     "lineBreaksIdenticalFraction": 1,
     "verticalMetricsEqual": false,
-    "xHeightRatio": 1,
+    "xHeightRatio": 1.008,
     "capHeightRatio": 1,
     "ascentRatio": 1.012,
     "identicalOutlinesBeyondPlainRectangles": 0,
@@ -10678,7 +11042,9 @@
        0.2305
       ],
       "xHeight": null,
-      "capHeight": null
+      "capHeight": null,
+      "inkXHeight": 0.4492,
+      "inkCapHeight": 0.6821
      },
      "replacementVertical": {
       "hhea": [
@@ -10696,7 +11062,9 @@
        0.326
       ],
       "xHeight": 0.486,
-      "capHeight": 0.66
+      "capHeight": 0.66,
+      "inkXHeight": 0.486,
+      "inkCapHeight": 0.656
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -10706,8 +11074,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": null,
-     "capHeightRatio": null,
+     "xHeightRatio": 1.082,
+     "capHeightRatio": 0.962,
      "ascentRatio": 1.076,
      "outlines": {
       "sharedNonemptyGlyphs": 291,
@@ -10793,7 +11161,9 @@
        0.2305
       ],
       "xHeight": null,
-      "capHeight": null
+      "capHeight": null,
+      "inkXHeight": 0.4609,
+      "inkCapHeight": 0.6821
      },
      "replacementVertical": {
       "hhea": [
@@ -10811,7 +11181,9 @@
        0.326
       ],
       "xHeight": 0.496,
-      "capHeight": 0.66
+      "capHeight": 0.66,
+      "inkXHeight": 0.496,
+      "inkCapHeight": 0.652
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -10821,8 +11193,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": null,
-     "capHeightRatio": null,
+     "xHeightRatio": 1.076,
+     "capHeightRatio": 0.956,
      "ascentRatio": 1.076
     },
     {
@@ -10898,7 +11270,9 @@
        0.2305
       ],
       "xHeight": null,
-      "capHeight": null
+      "capHeight": null,
+      "inkXHeight": 0.4492,
+      "inkCapHeight": 0.6821
      },
      "replacementVertical": {
       "hhea": [
@@ -10916,7 +11290,9 @@
        0.326
       ],
       "xHeight": 0.486,
-      "capHeight": 0.66
+      "capHeight": 0.66,
+      "inkXHeight": 0.486,
+      "inkCapHeight": 0.656
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -10926,8 +11302,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": null,
-     "capHeightRatio": null,
+     "xHeightRatio": 1.082,
+     "capHeightRatio": 0.962,
      "ascentRatio": 1.076
     },
     {
@@ -11003,7 +11379,9 @@
        0.2305
       ],
       "xHeight": null,
-      "capHeight": null
+      "capHeight": null,
+      "inkXHeight": 0.4541,
+      "inkCapHeight": 0.6821
      },
      "replacementVertical": {
       "hhea": [
@@ -11021,7 +11399,9 @@
        0.326
       ],
       "xHeight": 0.496,
-      "capHeight": 0.66
+      "capHeight": 0.66,
+      "inkXHeight": 0.496,
+      "inkCapHeight": 0.652
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -11031,8 +11411,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": null,
-     "capHeightRatio": null,
+     "xHeightRatio": 1.092,
+     "capHeightRatio": 0.956,
      "ascentRatio": 1.076
     }
    ],
@@ -11046,8 +11426,8 @@
     "widthBarMet": false,
     "lineBreaksIdenticalFraction": 0.036,
     "verticalMetricsEqual": false,
-    "xHeightRatio": null,
-    "capHeightRatio": null,
+    "xHeightRatio": 1.082,
+    "capHeightRatio": 0.962,
     "ascentRatio": 1.076,
     "identicalOutlinesBeyondPlainRectangles": 0,
     "latinCodepointsMissing": 0
@@ -11149,7 +11529,9 @@
        0.2109
       ],
       "xHeight": 0.6479,
-      "capHeight": 0.7905
+      "capHeight": 0.7905,
+      "inkXHeight": 0.6479,
+      "inkCapHeight": 0.7905
      },
      "replacementVertical": {
       "hhea": [
@@ -11167,7 +11549,9 @@
        0.3291
       ],
       "xHeight": 0.7324,
-      "capHeight": 0.8594
+      "capHeight": 0.8594,
+      "inkXHeight": 0.7329,
+      "inkCapHeight": 0.8594
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -11177,7 +11561,7 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": 1.13,
+     "xHeightRatio": 1.131,
      "capHeightRatio": 1.087,
      "ascentRatio": 1.166,
      "outlines": {
@@ -11205,7 +11589,7 @@
     "widthBarMet": false,
     "lineBreaksIdenticalFraction": 0.496,
     "verticalMetricsEqual": false,
-    "xHeightRatio": 1.13,
+    "xHeightRatio": 1.131,
     "capHeightRatio": 1.087,
     "ascentRatio": 1.166,
     "identicalOutlinesBeyondPlainRectangles": 0,
@@ -11292,7 +11676,9 @@
        0.3003
       ],
       "xHeight": 0.5283,
-      "capHeight": 0.6587
+      "capHeight": 0.6587,
+      "inkXHeight": 0.5283,
+      "inkCapHeight": 0.6587
      },
      "replacementVertical": {
       "hhea": [
@@ -11310,7 +11696,9 @@
        0.3003
       ],
       "xHeight": 0.5283,
-      "capHeight": 0.6587
+      "capHeight": 0.6587,
+      "inkXHeight": 0.5283,
+      "inkCapHeight": 0.6587
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -11406,7 +11794,9 @@
        0.3003
       ],
       "xHeight": 0.5283,
-      "capHeight": 0.6587
+      "capHeight": 0.6587,
+      "inkXHeight": 0.5283,
+      "inkCapHeight": 0.6587
      },
      "replacementVertical": {
       "hhea": [
@@ -11424,7 +11814,9 @@
        0.3003
       ],
       "xHeight": 0.5283,
-      "capHeight": 0.6587
+      "capHeight": 0.6587,
+      "inkXHeight": 0.5283,
+      "inkCapHeight": 0.6587
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -11507,7 +11899,9 @@
        0.3003
       ],
       "xHeight": 0.5283,
-      "capHeight": 0.6587
+      "capHeight": 0.6587,
+      "inkXHeight": 0.5283,
+      "inkCapHeight": 0.6587
      },
      "replacementVertical": {
       "hhea": [
@@ -11525,7 +11919,9 @@
        0.3003
       ],
       "xHeight": 0.5283,
-      "capHeight": 0.6587
+      "capHeight": 0.6587,
+      "inkXHeight": 0.5283,
+      "inkCapHeight": 0.6587
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -11608,7 +12004,9 @@
        0.3003
       ],
       "xHeight": 0.5283,
-      "capHeight": 0.6587
+      "capHeight": 0.6587,
+      "inkXHeight": 0.5283,
+      "inkCapHeight": 0.6587
      },
      "replacementVertical": {
       "hhea": [
@@ -11626,7 +12024,9 @@
        0.3003
       ],
       "xHeight": 0.5283,
-      "capHeight": 0.6587
+      "capHeight": 0.6587,
+      "inkXHeight": 0.5283,
+      "inkCapHeight": 0.6587
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -11734,7 +12134,9 @@
        0.2119
       ],
       "xHeight": 0.5283,
-      "capHeight": 0.688
+      "capHeight": 0.688,
+      "inkXHeight": 0.5283,
+      "inkCapHeight": 0.688
      },
      "replacementVertical": {
       "hhea": [
@@ -11752,7 +12154,9 @@
        0.3892
       ],
       "xHeight": 0.5283,
-      "capHeight": 0.688
+      "capHeight": 0.688,
+      "inkXHeight": 0.5283,
+      "inkCapHeight": 0.688
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -11848,7 +12252,9 @@
        0.2119
       ],
       "xHeight": 0.5283,
-      "capHeight": 0.688
+      "capHeight": 0.688,
+      "inkXHeight": 0.5283,
+      "inkCapHeight": 0.688
      },
      "replacementVertical": {
       "hhea": [
@@ -11866,7 +12272,9 @@
        0.3892
       ],
       "xHeight": 0.5283,
-      "capHeight": 0.688
+      "capHeight": 0.688,
+      "inkXHeight": 0.5283,
+      "inkCapHeight": 0.688
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -11950,7 +12358,9 @@
        0.2119
       ],
       "xHeight": 0.5283,
-      "capHeight": 0.688
+      "capHeight": 0.688,
+      "inkXHeight": 0.5283,
+      "inkCapHeight": 0.688
      },
      "replacementVertical": {
       "hhea": [
@@ -11968,7 +12378,9 @@
        0.3892
       ],
       "xHeight": 0.5283,
-      "capHeight": 0.688
+      "capHeight": 0.688,
+      "inkXHeight": 0.5283,
+      "inkCapHeight": 0.688
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -12052,7 +12464,9 @@
        0.2119
       ],
       "xHeight": 0.5283,
-      "capHeight": 0.688
+      "capHeight": 0.688,
+      "inkXHeight": 0.5283,
+      "inkCapHeight": 0.688
      },
      "replacementVertical": {
       "hhea": [
@@ -12070,7 +12484,9 @@
        0.3892
       ],
       "xHeight": 0.5283,
-      "capHeight": 0.688
+      "capHeight": 0.688,
+      "inkXHeight": 0.5283,
+      "inkCapHeight": 0.688
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -12179,7 +12595,9 @@
        0.2163
       ],
       "xHeight": 0.459,
-      "capHeight": 0.6548
+      "capHeight": 0.6548,
+      "inkXHeight": 0.459,
+      "inkCapHeight": 0.6548
      },
      "replacementVertical": {
       "hhea": [
@@ -12197,7 +12615,9 @@
        0.2163
       ],
       "xHeight": 0.459,
-      "capHeight": 0.6548
+      "capHeight": 0.6548,
+      "inkXHeight": 0.459,
+      "inkCapHeight": 0.6548
      },
      "verticalMetricsEqual": true,
      "verticalFieldsDiffering": [],
@@ -12290,7 +12710,9 @@
        0.2163
       ],
       "xHeight": 0.459,
-      "capHeight": 0.6548
+      "capHeight": 0.6548,
+      "inkXHeight": 0.459,
+      "inkCapHeight": 0.6548
      },
      "replacementVertical": {
       "hhea": [
@@ -12308,7 +12730,9 @@
        0.2163
       ],
       "xHeight": 0.459,
-      "capHeight": 0.6548
+      "capHeight": 0.6548,
+      "inkXHeight": 0.459,
+      "inkCapHeight": 0.6548
      },
      "verticalMetricsEqual": true,
      "verticalFieldsDiffering": [],
@@ -12389,7 +12813,9 @@
        0.2163
       ],
       "xHeight": 0.459,
-      "capHeight": 0.6548
+      "capHeight": 0.6548,
+      "inkXHeight": 0.459,
+      "inkCapHeight": 0.6548
      },
      "replacementVertical": {
       "hhea": [
@@ -12407,7 +12833,9 @@
        0.2163
       ],
       "xHeight": 0.459,
-      "capHeight": 0.6548
+      "capHeight": 0.6548,
+      "inkXHeight": 0.459,
+      "inkCapHeight": 0.6548
      },
      "verticalMetricsEqual": true,
      "verticalFieldsDiffering": [],
@@ -12488,7 +12916,9 @@
        0.2163
       ],
       "xHeight": 0.459,
-      "capHeight": 0.6548
+      "capHeight": 0.6548,
+      "inkXHeight": 0.459,
+      "inkCapHeight": 0.6548
      },
      "replacementVertical": {
       "hhea": [
@@ -12506,13 +12936,15 @@
        0.2163
       ],
       "xHeight": 0.4595,
-      "capHeight": 0.6548
+      "capHeight": 0.6548,
+      "inkXHeight": 0.459,
+      "inkCapHeight": 0.6548
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
       "xHeight"
      ],
-     "xHeightRatio": 1.001,
+     "xHeightRatio": 1,
      "capHeightRatio": 1,
      "ascentRatio": 1
     }
@@ -12614,7 +13046,9 @@
        0.2109
       ],
       "xHeight": null,
-      "capHeight": null
+      "capHeight": null,
+      "inkXHeight": 0.5303,
+      "inkCapHeight": 0.6265
      },
      "replacementVertical": {
       "hhea": [
@@ -12632,7 +13066,9 @@
        0.3003
       ],
       "xHeight": 0.5283,
-      "capHeight": 0.6587
+      "capHeight": 0.6587,
+      "inkXHeight": 0.5283,
+      "inkCapHeight": 0.6587
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -12642,8 +13078,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": null,
-     "capHeightRatio": null,
+     "xHeightRatio": 0.996,
+     "capHeightRatio": 1.051,
      "ascentRatio": 1.055,
      "outlines": {
       "sharedNonemptyGlyphs": 642,
@@ -12667,8 +13103,8 @@
     "widthBarMet": false,
     "lineBreaksIdenticalFraction": 1,
     "verticalMetricsEqual": false,
-    "xHeightRatio": null,
-    "capHeightRatio": null,
+    "xHeightRatio": 0.996,
+    "capHeightRatio": 1.051,
     "ascentRatio": 1.055,
     "identicalOutlinesBeyondPlainRectangles": 0,
     "latinCodepointsMissing": 0
@@ -12754,7 +13190,9 @@
        0.2109
       ],
       "xHeight": null,
-      "capHeight": null
+      "capHeight": null,
+      "inkXHeight": 0.5303,
+      "inkCapHeight": 0.7227
      },
      "replacementVertical": {
       "hhea": [
@@ -12772,7 +13210,9 @@
        0.343
       ],
       "xHeight": 0.5,
-      "capHeight": 0.66
+      "capHeight": 0.66,
+      "inkXHeight": 0.5,
+      "inkCapHeight": 0.66
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -12782,8 +13222,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": null,
-     "capHeightRatio": null,
+     "xHeightRatio": 0.943,
+     "capHeightRatio": 0.913,
      "ascentRatio": 0.962,
      "outlines": {
       "sharedNonemptyGlyphs": 236,
@@ -12869,7 +13309,9 @@
        0.2109
       ],
       "xHeight": null,
-      "capHeight": null
+      "capHeight": null,
+      "inkXHeight": 0.5303,
+      "inkCapHeight": 0.7227
      },
      "replacementVertical": {
       "hhea": [
@@ -12887,7 +13329,9 @@
        0.343
       ],
       "xHeight": 0.5,
-      "capHeight": 0.66
+      "capHeight": 0.66,
+      "inkXHeight": 0.5,
+      "inkCapHeight": 0.66
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -12897,8 +13341,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": null,
-     "capHeightRatio": null,
+     "xHeightRatio": 0.943,
+     "capHeightRatio": 0.913,
      "ascentRatio": 0.962
     }
    ],
@@ -12912,8 +13356,8 @@
     "widthBarMet": false,
     "lineBreaksIdenticalFraction": 0.5,
     "verticalMetricsEqual": false,
-    "xHeightRatio": null,
-    "capHeightRatio": null,
+    "xHeightRatio": 0.943,
+    "capHeightRatio": 0.913,
     "ascentRatio": 0.962,
     "identicalOutlinesBeyondPlainRectangles": 0,
     "latinCodepointsMissing": 0
@@ -12999,7 +13443,9 @@
        0.4399
       ],
       "xHeight": null,
-      "capHeight": null
+      "capHeight": null,
+      "inkXHeight": 0.5303,
+      "inkCapHeight": 0.7227
      },
      "replacementVertical": {
       "hhea": [
@@ -13017,7 +13463,9 @@
        0.343
       ],
       "xHeight": 0.5,
-      "capHeight": 0.66
+      "capHeight": 0.66,
+      "inkXHeight": 0.5,
+      "inkCapHeight": 0.66
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -13027,8 +13475,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": null,
-     "capHeightRatio": null,
+     "xHeightRatio": 0.943,
+     "capHeightRatio": 0.913,
      "ascentRatio": 0.848,
      "outlines": {
       "sharedNonemptyGlyphs": 516,
@@ -13065,8 +13513,8 @@
     "widthBarMet": false,
     "lineBreaksIdenticalFraction": 0.532,
     "verticalMetricsEqual": false,
-    "xHeightRatio": null,
-    "capHeightRatio": null,
+    "xHeightRatio": 0.943,
+    "capHeightRatio": 0.913,
     "ascentRatio": 0.848,
     "identicalOutlinesBeyondPlainRectangles": 0,
     "latinCodepointsMissing": 112
@@ -13152,7 +13600,9 @@
        0.21
       ],
       "xHeight": 0.5181,
-      "capHeight": 0.7158
+      "capHeight": 0.7158,
+      "inkXHeight": 0.5181,
+      "inkCapHeight": 0.7158
      },
      "replacementVertical": {
       "hhea": [
@@ -13170,7 +13620,9 @@
        0.3892
       ],
       "xHeight": 0.5283,
-      "capHeight": 0.688
+      "capHeight": 0.688,
+      "inkXHeight": 0.5283,
+      "inkCapHeight": 0.688
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -13294,7 +13746,9 @@
        0.2993
       ],
       "xHeight": 0.5186,
-      "capHeight": 0.7158
+      "capHeight": 0.7158,
+      "inkXHeight": 0.4678,
+      "inkCapHeight": 0.6899
      },
      "replacementVertical": {
       "hhea": [
@@ -13312,7 +13766,9 @@
        0.286
       ],
       "xHeight": 0.5,
-      "capHeight": 0.7
+      "capHeight": 0.7,
+      "inkXHeight": 0.5,
+      "inkCapHeight": 0.7
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -13322,8 +13778,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": 0.964,
-     "capHeightRatio": 0.978,
+     "xHeightRatio": 1.069,
+     "capHeightRatio": 1.015,
      "ascentRatio": 1.42,
      "outlines": {
       "sharedNonemptyGlyphs": 493,
@@ -13422,7 +13878,9 @@
        0.2993
       ],
       "xHeight": 0.5186,
-      "capHeight": 0.7158
+      "capHeight": 0.7158,
+      "inkXHeight": 0.4761,
+      "inkCapHeight": 0.689
      },
      "replacementVertical": {
       "hhea": [
@@ -13440,7 +13898,9 @@
        0.286
       ],
       "xHeight": 0.5,
-      "capHeight": 0.7
+      "capHeight": 0.7,
+      "inkXHeight": 0.5,
+      "inkCapHeight": 0.7
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -13450,8 +13910,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": 0.964,
-     "capHeightRatio": 0.978,
+     "xHeightRatio": 1.05,
+     "capHeightRatio": 1.016,
      "ascentRatio": 1.42
     },
     {
@@ -13527,7 +13987,9 @@
        0.2993
       ],
       "xHeight": 0.5186,
-      "capHeight": 0.7158
+      "capHeight": 0.7158,
+      "inkXHeight": 0.4727,
+      "inkCapHeight": 0.6899
      },
      "replacementVertical": {
       "hhea": [
@@ -13545,7 +14007,9 @@
        0.286
       ],
       "xHeight": 0.507,
-      "capHeight": 0.7
+      "capHeight": 0.7,
+      "inkXHeight": 0.507,
+      "inkCapHeight": 0.7
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -13555,8 +14019,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": 0.978,
-     "capHeightRatio": 0.978,
+     "xHeightRatio": 1.073,
+     "capHeightRatio": 1.015,
      "ascentRatio": 1.42
     },
     {
@@ -13632,7 +14096,9 @@
        0.2993
       ],
       "xHeight": 0.5186,
-      "capHeight": 0.7158
+      "capHeight": 0.7158,
+      "inkXHeight": 0.4766,
+      "inkCapHeight": 0.6895
      },
      "replacementVertical": {
       "hhea": [
@@ -13650,7 +14116,9 @@
        0.286
       ],
       "xHeight": 0.509,
-      "capHeight": 0.7
+      "capHeight": 0.7,
+      "inkXHeight": 0.509,
+      "inkCapHeight": 0.7
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -13660,8 +14128,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": 0.981,
-     "capHeightRatio": 0.978,
+     "xHeightRatio": 1.068,
+     "capHeightRatio": 1.015,
      "ascentRatio": 1.42
     }
    ],
@@ -13675,8 +14143,8 @@
     "widthBarMet": false,
     "lineBreaksIdenticalFraction": 0.18,
     "verticalMetricsEqual": false,
-    "xHeightRatio": 0.964,
-    "capHeightRatio": 0.978,
+    "xHeightRatio": 1.069,
+    "capHeightRatio": 1.015,
     "ascentRatio": 1.42,
     "identicalOutlinesBeyondPlainRectangles": 0,
     "latinCodepointsMissing": 57
@@ -13762,7 +14230,9 @@
        0.2285
       ],
       "xHeight": null,
-      "capHeight": null
+      "capHeight": null,
+      "inkXHeight": 0.4727,
+      "inkCapHeight": 0.6792
      },
      "replacementVertical": {
       "hhea": [
@@ -13780,7 +14250,9 @@
        0.376
       ],
       "xHeight": 0.528,
-      "capHeight": 0.698
+      "capHeight": 0.698,
+      "inkXHeight": 0.532,
+      "inkCapHeight": 0.698
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -13790,8 +14262,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": null,
-     "capHeightRatio": null,
+     "xHeightRatio": 1.125,
+     "capHeightRatio": 1.028,
      "ascentRatio": 0.989,
      "outlines": {
       "sharedNonemptyGlyphs": 236,
@@ -13879,7 +14351,9 @@
        0.2285
       ],
       "xHeight": null,
-      "capHeight": null
+      "capHeight": null,
+      "inkXHeight": 0.4727,
+      "inkCapHeight": 0.6792
      },
      "replacementVertical": {
       "hhea": [
@@ -13897,7 +14371,9 @@
        0.376
       ],
       "xHeight": 0.534,
-      "capHeight": 0.704
+      "capHeight": 0.704,
+      "inkXHeight": 0.538,
+      "inkCapHeight": 0.704
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -13907,8 +14383,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": null,
-     "capHeightRatio": null,
+     "xHeightRatio": 1.138,
+     "capHeightRatio": 1.037,
      "ascentRatio": 0.989
     },
     {
@@ -13984,7 +14460,9 @@
        0.2285
       ],
       "xHeight": null,
-      "capHeight": null
+      "capHeight": null,
+      "inkXHeight": 0.4727,
+      "inkCapHeight": 0.6792
      },
      "replacementVertical": {
       "hhea": [
@@ -14002,7 +14480,9 @@
        0.376
       ],
       "xHeight": 0.528,
-      "capHeight": 0.698
+      "capHeight": 0.698,
+      "inkXHeight": 0.533,
+      "inkCapHeight": 0.698
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -14012,8 +14492,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": null,
-     "capHeightRatio": null,
+     "xHeightRatio": 1.128,
+     "capHeightRatio": 1.028,
      "ascentRatio": 0.989
     },
     {
@@ -14089,7 +14569,9 @@
        0.2285
       ],
       "xHeight": null,
-      "capHeight": null
+      "capHeight": null,
+      "inkXHeight": 0.4731,
+      "inkCapHeight": 0.6792
      },
      "replacementVertical": {
       "hhea": [
@@ -14107,7 +14589,9 @@
        0.376
       ],
       "xHeight": 0.534,
-      "capHeight": 0.704
+      "capHeight": 0.704,
+      "inkXHeight": 0.542,
+      "inkCapHeight": 0.704
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -14117,8 +14601,8 @@
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": null,
-     "capHeightRatio": null,
+     "xHeightRatio": 1.146,
+     "capHeightRatio": 1.037,
      "ascentRatio": 0.989
     }
    ],
@@ -14132,8 +14616,8 @@
     "widthBarMet": false,
     "lineBreaksIdenticalFraction": 0.2,
     "verticalMetricsEqual": false,
-    "xHeightRatio": null,
-    "capHeightRatio": null,
+    "xHeightRatio": 1.125,
+    "capHeightRatio": 1.028,
     "ascentRatio": 0.989,
     "identicalOutlinesBeyondPlainRectangles": 0,
     "latinCodepointsMissing": 1
@@ -14235,7 +14719,9 @@
        0.251
       ],
       "xHeight": 0.5,
-      "capHeight": 0.7002
+      "capHeight": 0.7002,
+      "inkXHeight": 0.5,
+      "inkCapHeight": 0.7002
      },
      "replacementVertical": {
       "hhea": [
@@ -14253,7 +14739,9 @@
        0.305
       ],
       "xHeight": 0.501,
-      "capHeight": 0.7
+      "capHeight": 0.7,
+      "inkXHeight": 0.501,
+      "inkCapHeight": 0.7
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -14363,7 +14851,9 @@
        0.251
       ],
       "xHeight": 0.5,
-      "capHeight": 0.7002
+      "capHeight": 0.7002,
+      "inkXHeight": 0.5,
+      "inkCapHeight": 0.7002
      },
      "replacementVertical": {
       "hhea": [
@@ -14381,7 +14871,9 @@
        0.305
       ],
       "xHeight": 0.515,
-      "capHeight": 0.7
+      "capHeight": 0.7,
+      "inkXHeight": 0.515,
+      "inkCapHeight": 0.7
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -14468,7 +14960,9 @@
        0.251
       ],
       "xHeight": 0.5,
-      "capHeight": 0.7002
+      "capHeight": 0.7002,
+      "inkXHeight": 0.5,
+      "inkCapHeight": 0.7002
      },
      "replacementVertical": {
       "hhea": [
@@ -14486,7 +14980,9 @@
        0.305
       ],
       "xHeight": 0.501,
-      "capHeight": 0.7
+      "capHeight": 0.7,
+      "inkXHeight": 0.501,
+      "inkCapHeight": 0.7
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -14573,7 +15069,9 @@
        0.251
       ],
       "xHeight": 0.5,
-      "capHeight": 0.7002
+      "capHeight": 0.7002,
+      "inkXHeight": 0.5,
+      "inkCapHeight": 0.7002
      },
      "replacementVertical": {
       "hhea": [
@@ -14591,7 +15089,9 @@
        0.305
       ],
       "xHeight": 0.515,
-      "capHeight": 0.7
+      "capHeight": 0.7,
+      "inkXHeight": 0.515,
+      "inkCapHeight": 0.7
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -14703,7 +15203,9 @@
        0.251
       ],
       "xHeight": 0.5,
-      "capHeight": 0.7002
+      "capHeight": 0.7002,
+      "inkXHeight": 0.5,
+      "inkCapHeight": 0.7002
      },
      "replacementVertical": {
       "hhea": [
@@ -14721,7 +15223,9 @@
        0.305
       ],
       "xHeight": 0.492,
-      "capHeight": 0.7
+      "capHeight": 0.7,
+      "inkXHeight": 0.492,
+      "inkCapHeight": 0.7
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -14831,7 +15335,9 @@
        0.251
       ],
       "xHeight": 0.5,
-      "capHeight": 0.7002
+      "capHeight": 0.7002,
+      "inkXHeight": 0.5,
+      "inkCapHeight": 0.7002
      },
      "replacementVertical": {
       "hhea": [
@@ -14849,7 +15355,9 @@
        0.305
       ],
       "xHeight": 0.492,
-      "capHeight": 0.7
+      "capHeight": 0.7,
+      "inkXHeight": 0.492,
+      "inkCapHeight": 0.7
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -14961,7 +15469,9 @@
        0.251
       ],
       "xHeight": 0.5,
-      "capHeight": 0.7002
+      "capHeight": 0.7002,
+      "inkXHeight": 0.5,
+      "inkCapHeight": 0.7002
      },
      "replacementVertical": {
       "hhea": [
@@ -14979,7 +15489,9 @@
        0.305
       ],
       "xHeight": 0.515,
-      "capHeight": 0.7
+      "capHeight": 0.7,
+      "inkXHeight": 0.515,
+      "inkCapHeight": 0.7
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -15089,7 +15601,9 @@
        0.251
       ],
       "xHeight": 0.5,
-      "capHeight": 0.7002
+      "capHeight": 0.7002,
+      "inkXHeight": 0.5,
+      "inkCapHeight": 0.7002
      },
      "replacementVertical": {
       "hhea": [
@@ -15107,7 +15621,9 @@
        0.305
       ],
       "xHeight": 0.515,
-      "capHeight": 0.7
+      "capHeight": 0.7,
+      "inkXHeight": 0.515,
+      "inkCapHeight": 0.7
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -15219,7 +15735,9 @@
        0.251
       ],
       "xHeight": 0.5,
-      "capHeight": 0.7002
+      "capHeight": 0.7002,
+      "inkXHeight": 0.5,
+      "inkCapHeight": 0.7002
      },
      "replacementVertical": {
       "hhea": [
@@ -15237,7 +15755,9 @@
        0.305
       ],
       "xHeight": 0.501,
-      "capHeight": 0.7
+      "capHeight": 0.7,
+      "inkXHeight": 0.501,
+      "inkCapHeight": 0.7
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -15347,7 +15867,9 @@
        0.251
       ],
       "xHeight": 0.5,
-      "capHeight": 0.7002
+      "capHeight": 0.7002,
+      "inkXHeight": 0.5,
+      "inkCapHeight": 0.7002
      },
      "replacementVertical": {
       "hhea": [
@@ -15365,7 +15887,9 @@
        0.305
       ],
       "xHeight": 0.501,
-      "capHeight": 0.7
+      "capHeight": 0.7,
+      "inkXHeight": 0.501,
+      "inkCapHeight": 0.7
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -15493,7 +16017,9 @@
        0.273
       ],
       "xHeight": 0.486,
-      "capHeight": 0.66
+      "capHeight": 0.66,
+      "inkXHeight": 0.486,
+      "inkCapHeight": 0.656
      },
      "replacementVertical": {
       "hhea": [
@@ -15511,7 +16037,9 @@
        0.326
       ],
       "xHeight": 0.486,
-      "capHeight": 0.66
+      "capHeight": 0.66,
+      "inkXHeight": 0.486,
+      "inkCapHeight": 0.656
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -15606,7 +16134,9 @@
        0.273
       ],
       "xHeight": 0.496,
-      "capHeight": 0.66
+      "capHeight": 0.66,
+      "inkXHeight": 0.496,
+      "inkCapHeight": 0.652
      },
      "replacementVertical": {
       "hhea": [
@@ -15624,7 +16154,9 @@
        0.326
       ],
       "xHeight": 0.496,
-      "capHeight": 0.66
+      "capHeight": 0.66,
+      "inkXHeight": 0.496,
+      "inkCapHeight": 0.652
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -15709,7 +16241,9 @@
        0.273
       ],
       "xHeight": 0.486,
-      "capHeight": 0.66
+      "capHeight": 0.66,
+      "inkXHeight": 0.486,
+      "inkCapHeight": 0.656
      },
      "replacementVertical": {
       "hhea": [
@@ -15727,7 +16261,9 @@
        0.326
       ],
       "xHeight": 0.486,
-      "capHeight": 0.66
+      "capHeight": 0.66,
+      "inkXHeight": 0.486,
+      "inkCapHeight": 0.656
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -15812,7 +16348,9 @@
        0.273
       ],
       "xHeight": 0.496,
-      "capHeight": 0.66
+      "capHeight": 0.66,
+      "inkXHeight": 0.496,
+      "inkCapHeight": 0.652
      },
      "replacementVertical": {
       "hhea": [
@@ -15830,7 +16368,9 @@
        0.326
       ],
       "xHeight": 0.496,
-      "capHeight": 0.66
+      "capHeight": 0.66,
+      "inkXHeight": 0.496,
+      "inkCapHeight": 0.652
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -15940,7 +16480,9 @@
        0.2065
       ],
       "xHeight": 0.5454,
-      "capHeight": 0.7271
+      "capHeight": 0.7271,
+      "inkXHeight": 0.5454,
+      "inkCapHeight": 0.7271
      },
      "replacementVertical": {
       "hhea": [
@@ -15958,7 +16500,9 @@
        0.305
       ],
       "xHeight": 0.488,
-      "capHeight": 0.7
+      "capHeight": 0.7,
+      "inkXHeight": 0.488,
+      "inkCapHeight": 0.7
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -16068,7 +16612,9 @@
        0.2065
       ],
       "xHeight": 0.5483,
-      "capHeight": 0.7271
+      "capHeight": 0.7271,
+      "inkXHeight": 0.5483,
+      "inkCapHeight": 0.7271
      },
      "replacementVertical": {
       "hhea": [
@@ -16086,7 +16632,9 @@
        0.305
       ],
       "xHeight": 0.516,
-      "capHeight": 0.7
+      "capHeight": 0.7,
+      "inkXHeight": 0.516,
+      "inkCapHeight": 0.7
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -16198,7 +16746,9 @@
        0.2471
       ],
       "xHeight": 0.4526,
-      "capHeight": 0.5981
+      "capHeight": 0.5981,
+      "inkXHeight": 0.4526,
+      "inkCapHeight": 0.5981
      },
      "replacementVertical": {
       "hhea": [
@@ -16216,7 +16766,9 @@
        0.222
       ],
       "xHeight": 0.5,
-      "capHeight": 0.7
+      "capHeight": 0.7,
+      "inkXHeight": 0.5,
+      "inkCapHeight": 0.7
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -16342,7 +16894,9 @@
        0.2471
       ],
       "xHeight": 0.4526,
-      "capHeight": 0.5981
+      "capHeight": 0.5981,
+      "inkXHeight": 0.4526,
+      "inkCapHeight": 0.5981
      },
      "replacementVertical": {
       "hhea": [
@@ -16360,7 +16914,9 @@
        0.222
       ],
       "xHeight": 0.5,
-      "capHeight": 0.7
+      "capHeight": 0.7,
+      "inkXHeight": 0.5,
+      "inkCapHeight": 0.7
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -16461,7 +17017,9 @@
        0.2471
       ],
       "xHeight": 0.4526,
-      "capHeight": 0.5981
+      "capHeight": 0.5981,
+      "inkXHeight": 0.4526,
+      "inkCapHeight": 0.5981
      },
      "replacementVertical": {
       "hhea": [
@@ -16479,7 +17037,9 @@
        0.222
       ],
       "xHeight": 0.5,
-      "capHeight": 0.7
+      "capHeight": 0.7,
+      "inkXHeight": 0.5,
+      "inkCapHeight": 0.701
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -16490,7 +17050,7 @@
       "capHeight"
      ],
      "xHeightRatio": 1.105,
-     "capHeightRatio": 1.17,
+     "capHeightRatio": 1.172,
      "ascentRatio": 0.997
     }
    ],
@@ -16591,7 +17151,9 @@
        0.2163
       ],
       "xHeight": 0.4473,
-      "capHeight": 0.6621
+      "capHeight": 0.6621,
+      "inkXHeight": 0.4473,
+      "inkCapHeight": 0.6621
      },
      "replacementVertical": {
       "hhea": [
@@ -16609,7 +17171,9 @@
        0.2163
       ],
       "xHeight": 0.459,
-      "capHeight": 0.6548
+      "capHeight": 0.6548,
+      "inkXHeight": 0.459,
+      "inkCapHeight": 0.6548
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -16705,7 +17269,9 @@
        0.2163
       ],
       "xHeight": 0.4565,
-      "capHeight": 0.6621
+      "capHeight": 0.6621,
+      "inkXHeight": 0.4565,
+      "inkCapHeight": 0.6621
      },
      "replacementVertical": {
       "hhea": [
@@ -16723,7 +17289,9 @@
        0.2163
       ],
       "xHeight": 0.459,
-      "capHeight": 0.6548
+      "capHeight": 0.6548,
+      "inkXHeight": 0.459,
+      "inkCapHeight": 0.6548
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -16807,7 +17375,9 @@
        0.2163
       ],
       "xHeight": 0.4302,
-      "capHeight": 0.6621
+      "capHeight": 0.6621,
+      "inkXHeight": 0.4419,
+      "inkCapHeight": 0.6621
      },
      "replacementVertical": {
       "hhea": [
@@ -16825,14 +17395,16 @@
        0.2163
       ],
       "xHeight": 0.459,
-      "capHeight": 0.6548
+      "capHeight": 0.6548,
+      "inkXHeight": 0.459,
+      "inkCapHeight": 0.6548
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": 1.067,
+     "xHeightRatio": 1.039,
      "capHeightRatio": 0.989,
      "ascentRatio": 1
     },
@@ -16909,7 +17481,9 @@
        0.2163
       ],
       "xHeight": 0.439,
-      "capHeight": 0.6621
+      "capHeight": 0.6621,
+      "inkXHeight": 0.4526,
+      "inkCapHeight": 0.6621
      },
      "replacementVertical": {
       "hhea": [
@@ -16927,14 +17501,16 @@
        0.2163
       ],
       "xHeight": 0.4595,
-      "capHeight": 0.6548
+      "capHeight": 0.6548,
+      "inkXHeight": 0.459,
+      "inkCapHeight": 0.6548
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
       "xHeight",
       "capHeight"
      ],
-     "xHeightRatio": 1.047,
+     "xHeightRatio": 1.014,
      "capHeightRatio": 0.989,
      "ascentRatio": 1
     }
@@ -17036,7 +17612,9 @@
        0.2222
       ],
       "xHeight": 0.5229,
-      "capHeight": 0.7153
+      "capHeight": 0.7153,
+      "inkXHeight": 0.5229,
+      "inkCapHeight": 0.7153
      },
      "replacementVertical": {
       "hhea": [
@@ -17054,7 +17632,9 @@
        0.222
       ],
       "xHeight": 0.5,
-      "capHeight": 0.7
+      "capHeight": 0.7,
+      "inkXHeight": 0.5,
+      "inkCapHeight": 0.7
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -17164,7 +17744,9 @@
        0.2222
       ],
       "xHeight": 0.5229,
-      "capHeight": 0.7153
+      "capHeight": 0.7153,
+      "inkXHeight": 0.5229,
+      "inkCapHeight": 0.7153
      },
      "replacementVertical": {
       "hhea": [
@@ -17182,7 +17764,9 @@
        0.222
       ],
       "xHeight": 0.5,
-      "capHeight": 0.7
+      "capHeight": 0.7,
+      "inkXHeight": 0.5,
+      "inkCapHeight": 0.701
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -17193,7 +17777,7 @@
       "capHeight"
      ],
      "xHeightRatio": 0.956,
-     "capHeightRatio": 0.979,
+     "capHeightRatio": 0.98,
      "ascentRatio": 1.012
     },
     {
@@ -17269,7 +17853,9 @@
        0.2222
       ],
       "xHeight": 0.5229,
-      "capHeight": 0.7153
+      "capHeight": 0.7153,
+      "inkXHeight": 0.5229,
+      "inkCapHeight": 0.7153
      },
      "replacementVertical": {
       "hhea": [
@@ -17287,7 +17873,9 @@
        0.222
       ],
       "xHeight": 0.5,
-      "capHeight": 0.7
+      "capHeight": 0.7,
+      "inkXHeight": 0.5,
+      "inkCapHeight": 0.7
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -17374,7 +17962,9 @@
        0.2222
       ],
       "xHeight": 0.5229,
-      "capHeight": 0.7153
+      "capHeight": 0.7153,
+      "inkXHeight": 0.5229,
+      "inkCapHeight": 0.7153
      },
      "replacementVertical": {
       "hhea": [
@@ -17392,7 +17982,9 @@
        0.222
       ],
       "xHeight": 0.5,
-      "capHeight": 0.7
+      "capHeight": 0.7,
+      "inkXHeight": 0.5,
+      "inkCapHeight": 0.7
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -17504,7 +18096,9 @@
        0.21
       ],
       "xHeight": 0.5454,
-      "capHeight": 0.7271
+      "capHeight": 0.7271,
+      "inkXHeight": 0.5454,
+      "inkCapHeight": 0.7271
      },
      "replacementVertical": {
       "hhea": [
@@ -17522,7 +18116,9 @@
        0.453
       ],
       "xHeight": 0.525,
-      "capHeight": 0.7
+      "capHeight": 0.7,
+      "inkXHeight": 0.525,
+      "inkCapHeight": 0.7
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -17632,7 +18228,9 @@
        0.21
       ],
       "xHeight": 0.5483,
-      "capHeight": 0.7271
+      "capHeight": 0.7271,
+      "inkXHeight": 0.5483,
+      "inkCapHeight": 0.7271
      },
      "replacementVertical": {
       "hhea": [
@@ -17650,7 +18248,9 @@
        0.453
       ],
       "xHeight": 0.538,
-      "capHeight": 0.7
+      "capHeight": 0.7,
+      "inkXHeight": 0.538,
+      "inkCapHeight": 0.7
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -17737,7 +18337,9 @@
        0.21
       ],
       "xHeight": 0.5454,
-      "capHeight": 0.7271
+      "capHeight": 0.7271,
+      "inkXHeight": 0.5454,
+      "inkCapHeight": 0.7271
      },
      "replacementVertical": {
       "hhea": [
@@ -17755,7 +18357,9 @@
        0.453
       ],
       "xHeight": 0.525,
-      "capHeight": 0.7
+      "capHeight": 0.7,
+      "inkXHeight": 0.525,
+      "inkCapHeight": 0.7
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
@@ -17842,7 +18446,9 @@
        0.21
       ],
       "xHeight": 0.5483,
-      "capHeight": 0.7271
+      "capHeight": 0.7271,
+      "inkXHeight": 0.5483,
+      "inkCapHeight": 0.7271
      },
      "replacementVertical": {
       "hhea": [
@@ -17860,7 +18466,9 @@
        0.453
       ],
       "xHeight": 0.538,
-      "capHeight": 0.7
+      "capHeight": 0.7,
+      "inkXHeight": 0.538,
+      "inkCapHeight": 0.7
      },
      "verticalMetricsEqual": false,
      "verticalFieldsDiffering": [
