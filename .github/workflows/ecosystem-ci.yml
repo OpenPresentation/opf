@@ -12,7 +12,7 @@ concurrency:
 env:
   OPF_RENDER_REF: 2fbc0abf3c327b6e9e9525a52c8ea9e56e84646e
   OPF_EDITOR_REF: 313774a0cbf2bab8cced1a7225dfc95588bdc6e1
-  OPF_PPTX_REF: 875c944a53b8a18450eb59573fdef56470ae7d73
+  OPF_PPTX_REF: 7c10f168913cee9e97ff4de9b2690809b55ddc1e
 jobs:
   packages:
     runs-on: ubuntu-latest
