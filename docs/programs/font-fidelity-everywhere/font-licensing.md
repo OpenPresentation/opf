@@ -10,7 +10,7 @@ Availability: `windows` = Windows 10/11 default; `windows-optional` = a language
 
 Width delta = mean |replacement/real - 1| over 300 example-deck strings (signed mean in parentheses; maximum on any single string after the slash), fontkit shaping with default features, per style available on the measuring host. For non-Latin families the corpus is Latin text only. "n/m" = the real font was not on the measuring host. Aptos rows were measured against Aptos 2.01 (Aptos Serif from Microsoft's standalone Aptos Fonts download, the others from the Microsoft 365 cloud fonts). Metric rows need a mean below 0.1% and a maximum of at most 0.3% in all four styles. Alternates are tried in order when the replacement's font pack is not loaded and are always reported as visual; the last alternate is a face bundled with opf-render where one was chosen.
 
-157 families: 60 open, 97 proprietary-standard, 0 proprietary-nonstandard.
+164 families: 67 open, 97 proprietary-standard, 0 proprietary-nonstandard.
 
 | Family | License class | License | Availability | Preview replacement | Tier | Width delta | Alternates | OPF may embed |
 |---|---|---|---|---|---|---|---|---|
@@ -104,6 +104,7 @@ Width delta = mean |replacement/real - 1| over 300 example-deck strings (signed 
 | Noto Naskh Arabic | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
 | Noto Nastaliq Urdu | open | OFL-1.1 | macos | itself | — | — | — | explicit embed path only |
 | Noto Sans | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
+| Noto Sans Arabic | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
 | Noto Sans Armenian | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
 | Noto Sans Bengali | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
 | Noto Sans Devanagari | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
@@ -116,15 +117,21 @@ Width delta = mean |replacement/real - 1| over 300 example-deck strings (signed 
 | Noto Sans Kannada | open | OFL-1.1 | macos | itself | — | — | — | explicit embed path only |
 | Noto Sans Khmer | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
 | Noto Sans KR | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
+| Noto Sans Lao | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
 | Noto Sans Malayalam | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
 | Noto Sans Mongolian | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
+| Noto Sans Myanmar | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
 | Noto Sans Oriya | open | OFL-1.1 | macos | itself | — | — | — | explicit embed path only |
 | Noto Sans SC | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
+| Noto Sans Sinhala | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
+| Noto Sans Syriac | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
 | Noto Sans Tamil | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
 | Noto Sans TC | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
 | Noto Sans Telugu | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
+| Noto Sans Thaana | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
 | Noto Sans Thai | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
 | Noto Serif Hebrew | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
+| Noto Serif Tibetan | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
 | Nyala | proprietary-standard | proprietary (Microsoft) | windows-optional, office-cloud | Noto Sans Ethiopic | visual | n/m | — | never |
 | Open Sans | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
 | Palatino Linotype | proprietary-standard | proprietary (Linotype/Heidelberger, licensed to Microsoft) | windows, office-cloud | PT Serif | visual | 2.5% (+2.1%) / 9.1% | Caladea | never |
