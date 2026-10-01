@@ -5,6 +5,18 @@ const boolean = value => ['1','true','on'].includes(value) ? true : ['0','false'
 
 const themeFamilies = context => ['a:majorFont', 'a:minorFont'].map(key => context.fonts?.[key]?.['a:latin']?.typeface?.trim().toLowerCase()).filter(Boolean);
 
+// A run painted with a bare theme slot (a:schemeClr, no color transform) remembers the slot as the OPF color name: the
+// transient `_opfScheme` marker is read, and always removed, by restoreRunColors (run-colors.js) once the document's own
+// colour scheme can confirm the slot holds that colour.
+const OPF_SLOTS = {dk1: 'dark1', lt1: 'light1', dk2: 'dark2', lt2: 'light2', hlink: 'hyperlink', folHlink: 'followedHyperlink', accent1: 'accent1', accent2: 'accent2', accent3: 'accent3', accent4: 'accent4', accent5: 'accent5', accent6: 'accent6'};
+function nativeSchemeSlot(fill, context) {
+  const node = fill?.['a:schemeClr'];
+  if (!node || Array.isArray(node) || Object.keys(fill).length !== 1 || Object.keys(node).some(key => key !== 'val') || typeof node.val !== 'string') return undefined;
+  // Own keys only: a slot name from the package (`__proto__`, `constructor`) must never reach an inherited property.
+  const mapping = context?.mapping, slot = mapping && Object.hasOwn(mapping, node.val) ? mapping[node.val] : node.val;
+  return typeof slot === 'string' && Object.hasOwn(OPF_SLOTS, slot) ? OPF_SLOTS[slot] : undefined;
+}
+
 export function nativeRunStyle(properties, context, relationships, report, kind = 'table') {
   const result = {};
   for (const [native, opf] of [['b','bold'], ['i','italic']]) {
@@ -42,7 +54,11 @@ export function nativeRunStyle(properties, context, relationships, report, kind 
   }
   if (properties['a:solidFill']) {
     const color = readBackgroundColor(properties['a:solidFill'], context);
-    if (color) result.color = color.hex + (color.alpha < 1 ? Math.round(color.alpha * 255).toString(16).padStart(2, '0').toUpperCase() : '');
+    if (color) {
+      result.color = color.hex + (color.alpha < 1 ? Math.round(color.alpha * 255).toString(16).padStart(2, '0').toUpperCase() : '');
+      const slot = color.alpha === 1 ? nativeSchemeSlot(properties['a:solidFill'], context) : undefined;
+      if (slot) result._opfScheme = slot;
+    }
     else report(`unsupported-${kind}-text-color`, 'The native text color or its transforms could not be resolved.');
   } else if (properties['a:noFill']) {
     result.color = '#00000000';

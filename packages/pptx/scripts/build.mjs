@@ -18,6 +18,7 @@ await copyFile(new URL('src/quote-provenance.js', root), new URL('quote-provenan
 await copyFile(new URL('src/furniture-provenance.js', root), new URL('furniture-provenance.js', dist));
 await copyFile(new URL('src/document-provenance.js', root), new URL('document-provenance.js', dist));
 await copyFile(new URL('src/content-topology.js', root), new URL('content-topology.js', dist));
+await copyFile(new URL('src/run-colors.js', root), new URL('run-colors.js', dist));
 await copyFile(new URL('src/sections.js', root), new URL('sections.js', dist));
 await copyFile(new URL('src/furniture-fields.js', root), new URL('furniture-fields.js', dist));
 await copyFile(new URL('src/native-furniture.js', root), new URL('native-furniture.js', dist));

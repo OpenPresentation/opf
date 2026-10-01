@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {unzipSync, zipSync} from 'fflate';
 import {toPptx, fromPptx} from '../dist/index.js';
-import {contentTopology, rebuildContent, validateTopology, softWrappedLines, REGION_KEYS, MAX_GROUP_DEPTH} from '../dist/content-topology.js';
+import {contentTopology, rebuildContent, validateTopology, softWrappedLines, wrappedLines, joinWrappedText, REGION_KEYS, MAX_GROUP_DEPTH} from '../dist/content-topology.js';
 import {validatePresentation} from '@openpresentation/opf';
 
 // Spec-gap closure P1: a slide's content structure (nested groups, promoted
@@ -327,14 +327,15 @@ const roundTrip = async slide => {
   const single = await roundTrip({text: [{text: 'Short ', bold: true}, {text: 'line'}]});
   assert.equal(single.record.content.lines, undefined);
   assert.deepEqual(single.provenance, []);
-  // A hard break between lines is not a soft wrap: nothing is marked, the lines are not joined and the
-  // slide keeps its flat blocks with the existing diagnostic (no newline is invented or dropped).
+  // A hard break between lines (RR-09) is recorded as the whitespace it held, so the authored runs return exactly:
+  // the newline is neither invented nor dropped (see the hard line breaks block below for every form).
   const hard = await roundTrip({text: [{text: 'First paragraph', bold: true}, {text: `\nSecond ${long}`}]});
-  assert.equal(hard.record.content.lines, undefined);
-  assert.deepEqual(hard.provenance.map(issue => [issue.code, issue.path]), [['content-structure-changed', 'slides.0']]);
-  assert.equal(hard.slide.text, undefined);
-  assert.ok(hard.slide.blocks.length >= 3);
-  assert.deepEqual(styled(hard.slide.blocks[0].text), [{text: 'First paragraph', bold: true}]);
+  assert.ok(hard.record.content.wrap.lines >= 3);
+  assert.equal(hard.record.content.lines, undefined, "An importer before RR-09 sees no marker and keeps the flat blocks");
+  assert.equal(hard.record.content.wrap.gaps[0], '\n');
+  assert.deepEqual(hard.provenance, []);
+  assert.equal(hard.slide.blocks, undefined);
+  assert.deepEqual(styled(hard.slide.text), [{text: 'First paragraph', bold: true}, {text: `\nSecond ${long}`}]);
   // An edited deck: a deleted line changes the slide's shapes, so the stored structure is not applied
   // (and nothing is rejoined from the lines that remain).
   const lineName = /<p:sp>(?:(?!<\/p:sp>)[\s\S])*?name="Text 2"[\s\S]*?<\/p:sp>/;
@@ -368,7 +369,7 @@ const roundTrip = async slide => {
     const damaged = await read(modify(root.bytes, entries => text(entries, 'ppt/tags/opfSlide1.xml', xml => retag(xml, mutate))));
     assert.deepEqual(damaged.provenance.map(issue => [issue.code, issue.path]), [['invalid-document-provenance', 'slides.0']], name);
   }
-  assert.throws(() => validateTopology({form: 'blocks', blocks: [{t: 'leaf', k: 'list', lines: 2}]}), /wrapped line count/);
+  assert.throws(() => validateTopology({form: 'blocks', blocks: [{t: 'leaf', k: 'list', lines: 2}]}), /wrapped line record/);
   assert.throws(() => validateTopology({form: 'root', fields: [{field: 'items', lines: 2}]}), /root payload fields/);
   assert.equal(validateTopology({form: 'blocks', blocks: [{t: 'leaf', k: 'text', lines: 2, box: [0, 0, 1, 1]}]}).blocks[0].lines, 2);
 }
@@ -383,7 +384,28 @@ const roundTrip = async slide => {
   assert.equal(softWrappedLines(item('abc\ndef', [['abc'], ['def']])), undefined, 'A dropped newline is a hard break.');
   assert.equal(softWrappedLines(item('abc  def', [['abc '], ['def']])), undefined, 'Collapsed whitespace is not a soft wrap.');
   assert.equal(softWrappedLines(item('abc def', [['abc '], ['de']])), undefined, 'Dropped characters at the end.');
-  assert.equal(softWrappedLines(item('abc def', [['abc '], [], ['def']])), undefined, 'A blank line.');
+  assert.equal(softWrappedLines(item('abc def', [['abc '], [], ['def']])), 2, 'An empty line has no native shape and deletes nothing.');
+  // RR-09: a hard break is recorded as the whitespace it deleted, never as words.
+  assert.deepEqual(wrappedLines(item('abc\ndef', [['abc'], ['def']])), {lines: 2, gaps: ['\n']});
+  assert.deepEqual(wrappedLines(item('abc  def', [['abc '], ['def']])), {lines: 2, gaps: [' ']});
+  assert.deepEqual(wrappedLines(item('abc def', [['abc '], ['def']])), {lines: 2}, 'A pure soft wrap stores no gaps.');
+  assert.deepEqual(wrappedLines(item('a\r\n\r\nb', [['a'], [], ['b']])), {lines: 2, gaps: ['\r\n\r\n']}, 'A blank line has no native shape: its newlines are part of the gap.');
+  assert.deepEqual(wrappedLines(item('abc\ndef ghi', [['abc'], ['def '], ['ghi']])), {lines: 3, gaps: ['\n', '']});
+  assert.equal(wrappedLines(item('\nabc\ndef', [[], ['abc'], ['def']])), undefined, 'Leading whitespace outside the lines is not provable.');
+  assert.equal(wrappedLines(item('abc\ndef\n', [['abc'], ['def']])), undefined, 'Trailing whitespace outside the lines is not provable.');
+  assert.equal(wrappedLines(item('abc xx def', [['abc'], ['def']])), undefined, 'A dropped word is never a gap.');
+  assert.equal(wrappedLines(item('abc' + ' '.repeat(300) + 'def', [['abc'], ['def']])), undefined, 'A gap is bounded.');
+  assert.equal(wrappedLines(item('ab\ncd', [['a', 'c'], ['d']])), undefined, 'Fragments of one line must be contiguous.');
+  // A break that splits two differently styled runs stays with the run that held it; a break between three runs cannot be proven.
+  assert.deepEqual(wrappedLines(item([{text: 'A\n', bold: true}, {text: 'B'}], [['A'], ['B']])), {lines: 2, gaps: [['\n', 1]]});
+  assert.deepEqual(wrappedLines(item([{text: 'A', bold: true}, {text: '\nB'}], [['A'], ['B']])), {lines: 2, gaps: ['\n']});
+  assert.deepEqual(wrappedLines(item([{text: 'A', bold: true}, {text: '\n', italic: true}, {text: 'B'}], [['A'], ['B']])), undefined, 'A differently styled run inside the break is not provable.');
+  assert.deepEqual(wrappedLines(item([{text: 'A\n', bold: true}, {text: '\n', bold: true}, {text: 'B'}], [['A'], ['B']])), {lines: 2, gaps: [['\n\n', 2]]}, 'A run of the same style on either side is one run.');
+  // The join is exact for every gap form.
+  assert.equal(joinWrappedText(['abc', 'def', 'ghi'], ['\n', '']), 'abc\ndefghi');
+  assert.deepEqual(joinWrappedText([[{text: 'A', bold: true}], [{text: 'B'}]], ['\n']), [{text: 'A', bold: true}, {text: '\nB'}]);
+  assert.deepEqual(joinWrappedText([[{text: 'A', bold: true}], [{text: 'B'}]], [['\n', 1]]), [{text: 'A\n', bold: true}, {text: 'B'}]);
+  assert.deepEqual(joinWrappedText([[{text: 'A', bold: true}], [{text: 'B', bold: true}]], [['\n\n', 1]]), [{text: 'A\n\nB', bold: true}]);
   assert.equal(softWrappedLines({...item('abc def', [['abc '], ['def']]), field: 'quote'}), undefined);
   assert.equal(softWrappedLines(item([{text: 1}], [['1'], ['2']])), undefined);
   // Rejoin: runs a wrap cut in two merge at the seam; other runs stay.
@@ -395,6 +417,19 @@ const roundTrip = async slide => {
   assert.deepEqual(rebuildContent(leaf, [lines[1], lines[2], lines[0]], [at(10), at(20), at(0)]).fields.text.map(run => run.text), ['Hello ', 'bold world ', 'again and more']);
   assert.equal(rebuildContent({...leaf, lines: 2}, [{type: 'text', text: 'abc '}, {type: 'text', text: 'def'}], [at(0), at(10)]).fields.text, 'abc def');
   assert.deepEqual(rebuildContent({...leaf, lines: 2}, [{type: 'text', text: [{text: 'abc '}]}, {type: 'text', text: 'def'}], [at(0), at(10)]).fields.text, [{text: 'abc def'}]);
+  // RR-09: a hard break rejoins with its recorded separator; a split gap keeps its first characters with the previous run.
+  const hardLeaf = {form: 'root', field: 'text', box: [0, 0, 100, 100], wrap: {lines: 2, gaps: ['\n']}};
+  const pair = [{type: 'text', text: [{text: 'A', bold: true, fontSize: 12}]}, {type: 'text', text: [{text: 'B', fontSize: 12}]}];
+  assert.deepEqual(rebuildContent(hardLeaf, pair, [at(0), at(10)]).fields.text, [{text: 'A', bold: true, fontSize: 12}, {text: '\nB', fontSize: 12}]);
+  assert.deepEqual(rebuildContent({...hardLeaf, wrap: {lines: 2, gaps: [['\n', 1]]}}, pair, [at(0), at(10)]).fields.text, [{text: 'A\n', bold: true, fontSize: 12}, {text: 'B', fontSize: 12}]);
+  assert.equal(rebuildContent({...hardLeaf, wrap: {lines: 2, gaps: ['\r\n\r\n']}}, [{type: 'text', text: 'a'}, {type: 'text', text: 'b'}], [at(0), at(10)]).fields.text, 'a\r\n\r\nb');
+  assert.match(rebuildContent({...hardLeaf, wrap: {lines: 3, gaps: ['\n', '']}}, pair, [at(0), at(10)]).reason, /2 blocks lie in one stored content box/);
+  assert.equal(validateTopology(hardLeaf).wrap.gaps[0], '\n');
+  for (const bad of [{lines: 2, gaps: []}, {lines: 2, gaps: ['x']}, {lines: 2, gaps: [3]}, {lines: 2, gaps: [['\n', 2]]}, {lines: 2, gaps: [['\n', 0]]}, {lines: 1, gaps: []}, {lines: 2.5, gaps: ['\n']}, {gaps: ['\n']}, 'x', null]) {
+    assert.throws(() => validateTopology({...hardLeaf, wrap: bad}), /wrapped line record/, JSON.stringify(bad));
+  }
+  assert.throws(() => validateTopology({form: 'blocks', blocks: [{t: 'leaf', k: 'list', wrap: {lines: 2, gaps: ['\n']}}]}), /wrapped line record/);
+  assert.equal(validateTopology({form: 'root', fields: [{field: 'text', wrap: {lines: 2, gaps: ['\n']}}, {field: 'items'}]}).fields[0].wrap.lines, 2);
   // Not provable: a different count, an unmarked leaf, a list block, or a payload that is not text keeps the reason.
   assert.match(rebuildContent({...leaf, lines: 2}, lines, [at(0), at(10), at(20)]).reason, /3 blocks lie in one stored content box/);
   assert.match(rebuildContent({...leaf, lines: undefined}, lines, [at(0), at(10), at(20)]).reason, /3 blocks lie in one stored content box/);

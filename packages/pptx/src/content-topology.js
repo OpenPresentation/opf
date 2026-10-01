@@ -19,14 +19,26 @@
 //            | {form: 'blocks', blocks: Node[]}
 //            | {form: 'regions', regions: {[key]: Node}}   // key = promoted region key
 //   Node     = {t: 'group', id?, ext?, comp?, typed?, blocks: Node[]}
-//            | {t: 'leaf', k, id?, ext?, typed?, box?, lines?}   // box = [x, y, w, h] reference px, 1 decimal
+//            | {t: 'leaf', k, id?, ext?, typed?, bullets?, box?, lines?, wrap?}   // box = [x, y, w, h] reference px, 1 decimal
 //   typed = true when the authored block spelled out its `type`
+//   bullets = true when the authored list block used the `bullets` key (import names every list `items`), also under `type: 'text'`
 //   lines = N (>= 2) when a rich-text `text` payload exported as N native line
 //           shapes that are soft wraps of one paragraph (no hard break between
 //           them); import joins those N imported lines back into the one payload
+//   wrap  = {lines: N, gaps} instead of `lines` when any line break was a hard
+//           break (RR-09; an importer before RR-09 ignores `wrap` and keeps the
+//           flat blocks rather than join lines without their separators). The
+//           N native line shapes rebuild the authored runs exactly once joined
+//           with gaps, the N - 1 separators between them: '' for a soft wrap
+//           (nothing deleted), otherwise the whitespace the break held ("\n",
+//           "\r\n", "\n\n" for a blank line, trimmed spaces); [whitespace, k]
+//           when the first k characters end the previous line's last run (the
+//           rest start the next one)
 //
-// Native line shapes of rich text carry no names or tags, so the soft wraps are
-// recorded here as a count; a wrapped payload with any hard break is not marked.
+// Native line shapes of rich text carry no names or tags, so the lines are
+// recorded here as a count and the separators as whitespace only: never a word.
+// A payload whose runs cannot be shown to rebuild from the lines and separators
+// exactly is not marked, and import keeps the flat blocks and its diagnostic.
 //
 // Tags are untrusted input: every field is type-, count- and depth-checked
 // before use, and the rebuilt slide still has to validate with the document.
@@ -55,36 +67,151 @@ const kindOfField = field => field === 'items' || field === 'bullets' ? 'list' :
 const isGroup = block => object(block) && (block.type === 'group' || (block.type === undefined && Array.isArray(block.blocks)));
 const round1 = value => Math.round(value * 10) / 10;
 export const MAX_WRAPPED_LINES = 1000;
+// A break between two native lines holds only spaces, tabs and line endings: never words.
+export const MAX_GAP_LENGTH = 256;
+const GAP_CHARACTER = /^[ \t\r\n]$/;
+const GAP_TEXT = /^[ \t\r\n]*$/;
+
+const styleKey = run => JSON.stringify(Object.keys(run).filter(key => key !== 'text').sort().map(key => [key, run[key]]));
+const sameRunStyle = (a, b) => styleKey(a) === styleKey(b);
+// Adjacent runs that differ only in text are one run: a wrap or a break cut them apart, nothing else did.
+function normalizeRuns(runs) {
+  const merged = [];
+  for (const run of runs) {
+    if (!run.text) continue;
+    const last = merged.at(-1);
+    if (last && sameRunStyle(last, run)) last.text += run.text;
+    else merged.push({...run});
+  }
+  return merged;
+}
+const gapParts = gap => Array.isArray(gap) ? {text: gap[0], keep: gap[1]} : {text: gap ?? '', keep: 0};
 
 /**
- * The number of native line shapes a rich-text `text` item exported as, when
- * those lines are consecutive soft wraps of the authored runs: the line
- * fragments, concatenated in order, are exactly the concatenated run text, so
- * no line boundary stands for a hard break (a newline, a blank line, collapsed
- * or dropped characters). Undefined for a single line or when that cannot be
- * shown: nothing then marks the leaf and import keeps the separate blocks.
+ * The lines' text joined in order. `gaps[i]` is what separates line i from line
+ * i + 1: '' for a soft wrap, the whitespace a hard break held otherwise. A gap
+ * is a string (it starts the next line's first run) or [text, keep] (its first
+ * `keep` characters end the previous line's last run). Runs are never invented
+ * or dropped; at a seam the last run of one line and the first of the next
+ * merge when they differ only in text (a run the wrap cut in two), the same
+ * way a rejoined list does.
  */
-export function softWrappedLines(item) {
-  const lines = item?.text?.richLines;
-  if (item?.field !== 'text' || !Array.isArray(lines) || lines.length < 2 || lines.length > MAX_WRAPPED_LINES) return undefined;
-  const runs = Array.isArray(item.value) ? item.value : typeof item.value === 'string' ? [item.value] : null;
-  if (!runs) return undefined;
-  let source = '';
-  for (const run of runs) {
+export function joinWrappedText(parts, gaps = []) {
+  if (parts.every(part => typeof part === 'string')) return parts.reduce((text, part, index) => text + (index ? gapParts(gaps[index - 1]).text : '') + part, '');
+  const joined = [];
+  parts.forEach((part, index) => {
+    const runs = (typeof part === 'string' ? [{text: part}] : part).map(run => ({...run}));
+    if (index) {
+      const {text, keep} = gapParts(gaps[index - 1]);
+      const last = joined.at(-1);
+      if (last && keep) last.text += text.slice(0, keep);
+      if (text.length > keep && runs.length) runs[0].text = text.slice(keep) + runs[0].text;
+    }
+    runs.forEach((run, position) => {
+      const last = joined.at(-1);
+      if (position === 0 && last && sameRunStyle(last, run)) last.text += run.text;
+      else joined.push(run);
+    });
+  });
+  return joined;
+}
+
+/**
+ * Walk the native line fragments of `value` (a string or authored runs): the character range each non-empty line covers
+ * and the whitespace each break deleted. Undefined when the lines do not account for the source exactly (leading or
+ * trailing whitespace outside the lines, dropped or changed characters, fragments of one line not contiguous, a break
+ * that is not whitespace or is too long). `gaps` is the separator list that rebuilds the authored runs from the lines
+ * (plain strings, or split [text, keep] entries when a break straddles two styles) and is undefined when no form of it
+ * can be shown to; `breaks` are the plain whitespace strings. `indexes` are the positions in `lines` of the non-empty ones.
+ */
+function analyzeLines(value, lines) {
+  if (!Array.isArray(lines) || lines.length > MAX_WRAPPED_LINES) return undefined;
+  const authored = Array.isArray(value) ? value : typeof value === 'string' ? [value] : null;
+  if (!authored) return undefined;
+  const runs = [];
+  for (const run of authored) {
     const text = typeof run === 'string' ? run : object(run) ? run.text : undefined;
     if (typeof text !== 'string') return undefined;
-    source += text;
+    runs.push(typeof run === 'string' ? {text} : run);
   }
+  const source = runs.map(run => run.text).join('');
   let position = 0;
-  for (const line of lines) {
-    if (!Array.isArray(line?.fragments) || !line.fragments.length) return undefined;
-    for (const fragment of line.fragments) {
-      if (typeof fragment?.text !== 'string' || !source.startsWith(fragment.text, position)) return undefined;
-      position += fragment.text.length;
+  const spans = [], breaks = [], indexes = [];
+  for (const [lineIndex, line] of lines.entries()) {
+    if (!Array.isArray(line?.fragments)) return undefined;
+    if (!line.fragments.length) continue;
+    const span = {start: position, end: position};
+    for (const [index, fragment] of line.fragments.entries()) {
+      const text = fragment?.text;
+      if (typeof text !== 'string' || !text) return undefined;
+      let at = position;
+      // The first fragment of a line after the first may follow whitespace the break deleted.
+      if (index === 0 && spans.length) {
+        while (!source.startsWith(text, at)) {
+          if (at - position >= MAX_GAP_LENGTH || !GAP_CHARACTER.test(source[at] ?? '')) return undefined;
+          at += 1;
+        }
+        breaks.push(source.slice(position, at));
+      } else if (!source.startsWith(text, at)) return undefined;
+      if (index === 0) span.start = at;
+      position = at + text.length;
     }
+    span.end = position;
+    spans.push(span);
+    indexes.push(lineIndex);
   }
-  return position === source.length ? lines.length : undefined;
+  if (!spans.length || spans[0].start !== 0 || position !== source.length) return undefined;
+  // The offset at which each authored run starts.
+  const starts = [];
+  let offset = 0;
+  for (const run of runs) { starts.push(offset); offset += run.text.length; }
+  // The leading part of a break that the previous line's last run (and any run after it of the same style) holds.
+  const kept = breaks.map((text, index) => {
+    const from = spans[index].end, to = from + text.length;
+    const owner = starts.findLastIndex((start, run) => start < from && runs[run].text);
+    let keep = 0;
+    for (let run = owner; run >= 0 && run < runs.length && starts[run] < to; run += 1) {
+      if (run !== owner && runs[run].text && !sameRunStyle(runs[run], runs[owner])) break;
+      keep = Math.max(0, Math.min(text.length, starts[run] + runs[run].text.length - from));
+    }
+    return keep ? [text, keep] : text;
+  });
+  const pieces = spans.map(span => runs.flatMap((run, index) => {
+    const from = Math.max(span.start, starts[index]), to = Math.min(span.end, starts[index] + run.text.length);
+    return from < to ? [{...run, text: run.text.slice(from - starts[index], to - starts[index])}] : [];
+  }));
+  const signature = list => JSON.stringify(normalizeRuns(list).map(run => [styleKey(run), run.text]));
+  const authoredSignature = signature(runs);
+  // Plain strings (a break belongs to the next line's first run) when that already rebuilds the runs; the split form otherwise.
+  const gaps = [breaks, kept].find(candidate => signature(joinWrappedText(pieces, candidate)) === authoredSignature);
+  return {spans, breaks, gaps, indexes};
 }
+
+/**
+ * How a rich-text `text` item exported as native line shapes, when the authored
+ * runs can be rebuilt from those lines exactly: `{lines, gaps?}`. `lines` is
+ * the number of native line shapes (blank lines have none). Each line break
+ * either deleted no characters (a soft wrap: gap '') or deleted whitespace
+ * only (a hard break: a newline, a blank line, trimmed spaces); `gaps` lists
+ * the N - 1 separators when any is not '' (see joinWrappedText) and is absent
+ * for pure soft wraps. Only whitespace is ever stored, never a word. Undefined
+ * for a single line or when the runs cannot be proven to rebuild (leading or
+ * trailing whitespace outside the lines, dropped or changed characters, a gap
+ * that spans a differently styled run): nothing then marks the leaf and import
+ * keeps the separate blocks.
+ */
+export function wrappedLines(item) {
+  if (item?.field !== 'text' || !Array.isArray(item.text?.richLines) || item.text.richLines.length < 2) return undefined;
+  const analysis = analyzeLines(item.value, item.text.richLines);
+  if (!analysis?.gaps || analysis.spans.length < 2) return undefined;
+  return {lines: analysis.spans.length, ...(analysis.breaks.some(Boolean) ? {gaps: analysis.gaps} : {})};
+}
+
+/** The number of native line shapes when the lines are consecutive soft wraps only (no hard break between them). */
+export const softWrappedLines = item => {
+  const wrapped = wrappedLines(item);
+  return wrapped && !wrapped.gaps ? wrapped.lines : undefined;
+};
 
 function blockKind(block) {
   if (typeof block.type === 'string' && block.type !== 'group') return CONTENT_KINDS.includes(block.type) ? block.type : null;
@@ -107,8 +234,8 @@ export function contentTopology(slide, items, slideIndex, report = () => {}) {
   const boxes = new Map(), wrapped = new Map();
   for (const item of items ?? []) if (typeof item?.path === 'string' && object(item.box)) {
     boxes.set(item.path, item.box);
-    const lines = softWrappedLines(item);
-    if (lines) wrapped.set(item.path, lines);
+    const lines = wrappedLines(item);
+    if (lines) wrapped.set(item.path, wrapRecord(lines));
   }
   const base = `slides.${slideIndex}`;
   let nodes = 0;
@@ -144,7 +271,8 @@ export function contentTopology(slide, items, slideIndex, report = () => {}) {
     const leaf = identity(block, {t: 'leaf', k: kind}, path);
     const box = leafBox(path);
     if (box) leaf.box = box;
-    if (kind === 'text' && wrapped.has(`${path}.text`)) leaf.lines = wrapped.get(`${path}.text`);
+    if (block.bullets !== undefined && block.items === undefined && ['list', 'text'].includes(kind)) leaf.bullets = true;
+    if (kind === 'text' && wrapped.has(`${path}.text`)) Object.assign(leaf, wrapped.get(`${path}.text`));
     return leaf;
   };
   try {
@@ -160,7 +288,7 @@ export function contentTopology(slide, items, slideIndex, report = () => {}) {
     const fields = ROOT_PAYLOAD_FIELDS.filter(name => slide[name] !== undefined).map(field => {
       const box = boxes.get(`${base}.${field}`);
       const lines = field === 'text' ? wrapped.get(`${base}.text`) : undefined;
-      return box ? {field, box: [box.x, box.y, box.width, box.height].map(round1), ...(lines ? {lines} : {})} : {field};
+      return box ? {field, box: [box.x, box.y, box.width, box.height].map(round1), ...lines} : {field};
     });
     if (!fields.length) return undefined;
     if (fields.length === 1) return {form: 'root', ...fields[0]};
@@ -175,14 +303,96 @@ export function contentTopology(slide, items, slideIndex, report = () => {}) {
 class TopologyError extends Error {}
 
 // ---------------------------------------------------------------------------
+// Hard line breaks inside list items
+//
+// A list exports one native shape per line of every entry: `OPF list <path> line N`, the entry's text lines (the first
+// bulleted), then its description lines, numbered in that order. Import joins an entry's continuation lines without a
+// separator (a soft wrap deletes no character) and tells description lines from text lines by size, so a newline inside an
+// item was dropped and a blank line became an empty description. The slide record's `lists` stores, per list path, the
+// whitespace each hard break deleted, keyed by the number of the line that follows the break:
+//
+//   lists = [[path, [[line, gap], ...]], ...]    // gap as in `wrap`: whitespace, or [whitespace, keep]
+
+export const MAX_LIST_PATHS = 256;
+export const MAX_LIST_BREAKS = 20000;
+const LIST_PATH = /^slides\.\d+(?:\.[A-Za-z0-9_:+-]{1,64}){1,32}$/;
+
+/**
+ * The `lists` record of a slide from its composed geometry `items`, or undefined when no list item holds a hard break.
+ * `omit(path, reason)` names a list whose breaks could not be accounted for exactly (the characters of an item do not
+ * equal its native lines plus whitespace, leading or trailing whitespace outside the lines): import then joins that
+ * list's lines as before, and the export reports the omission.
+ */
+export function listLineBreaks(items, omit = () => {}) {
+  const lists = [];
+  for (const item of items ?? []) {
+    const entries = item?.text?.listEntries;
+    if ((item?.field !== 'items' && item?.field !== 'bullets') || !Array.isArray(entries) || typeof item.path !== 'string') continue;
+    const recorded = [];
+    let line = 0, failed = false;
+    for (const entry of entries) {
+      for (const [value, rich] of [[entry?.value, entry?.text?.richLines], [entry?.descriptionValue, entry?.description?.richLines]]) {
+        if (!Array.isArray(rich)) continue;
+        const first = line;
+        line += rich.length;
+        if (rich.filter(part => part?.fragments?.length).length < 2) continue;
+        const analysis = analyzeLines(value, rich);
+        if (!analysis) {
+          const source = (Array.isArray(value) ? value.map(run => typeof run === 'string' ? run : run?.text ?? '') : [typeof value === 'string' ? value : '']).join('');
+          if (/[\r\n]/.test(source)) failed = true;
+          continue;
+        }
+        const gaps = analysis.gaps ?? analysis.breaks;
+        gaps.forEach((gap, index) => { if (Array.isArray(gap) || gap) recorded.push([first + analysis.indexes[index + 1], gap]); });
+      }
+    }
+    if (failed) omit(item.path, 'a line break inside a list item could not be recorded exactly');
+    if (recorded.length) lists.push([item.path, recorded]);
+  }
+  const total = lists.reduce((sum, [, entries]) => sum + entries.length, 0);
+  return lists.length && lists.length <= MAX_LIST_PATHS && total <= MAX_LIST_BREAKS ? lists : undefined;
+}
+
+/** Throws when `value` is not a well-formed `lists` record (untrusted input). Returns it otherwise. */
+export function validateListBreaks(value) {
+  if (!Array.isArray(value) || !value.length || value.length > MAX_LIST_PATHS) throw Error('Invalid list breaks record.');
+  let total = 0;
+  const paths = new Set();
+  for (const entry of value) {
+    if (!Array.isArray(entry) || entry.length !== 2 || typeof entry[0] !== 'string' || !LIST_PATH.test(entry[0]) || paths.has(entry[0]) || !Array.isArray(entry[1]) || !entry[1].length) throw Error('Invalid list breaks entry.');
+    paths.add(entry[0]);
+    let previous = -1;
+    for (const item of entry[1]) {
+      if (!Array.isArray(item) || item.length !== 2 || !Number.isSafeInteger(item[0]) || item[0] <= previous || item[0] > MAX_LIST_BREAKS || !validGap(item[1]) || (item[1] === '')) throw Error('Invalid list break.');
+      previous = item[0];
+      if (++total > MAX_LIST_BREAKS) throw Error('Too many list breaks.');
+    }
+  }
+  return value;
+}
+
+// ---------------------------------------------------------------------------
 // Import: validation
 
 const validBox = value => value === undefined || (Array.isArray(value) && value.length === 4 && value.every(number => typeof number === 'number' && Number.isFinite(number) && Math.abs(number) < 1e7));
 const validId = value => value === undefined || (typeof value === 'string' && value.length <= MAX_ID_LENGTH);
 const validLines = value => value === undefined || (Number.isSafeInteger(value) && value >= 2 && value <= MAX_WRAPPED_LINES);
-const validField = value => object(value) && ROOT_PAYLOAD_FIELDS.includes(value.field) && validBox(value.box) && validLines(value.lines) && (value.lines === undefined || value.field === 'text');
+// gaps: one entry per line break, a whitespace string or [whitespace, characters kept by the previous line's last run].
+const validGap = gap => (typeof gap === 'string' && gap.length <= MAX_GAP_LENGTH && GAP_TEXT.test(gap))
+  || (Array.isArray(gap) && gap.length === 2 && typeof gap[0] === 'string' && gap[0].length <= MAX_GAP_LENGTH && GAP_TEXT.test(gap[0]) && Number.isSafeInteger(gap[1]) && gap[1] > 0 && gap[1] <= gap[0].length);
+const validGaps = (gaps, lines) => gaps === undefined || (lines !== undefined && Array.isArray(gaps) && gaps.length === lines - 1 && gaps.every(validGap));
+// `wrap` = {lines, gaps?} (RR-09) is the general record; `lines` alone (a count of pure soft wraps) is the form importers
+// before RR-09 read, and the only one written for pure soft wraps. A leaf with a hard break stores `wrap` alone, so an
+// older importer, which ignores the unknown key, keeps the flat blocks instead of joining lines without their separators.
+const validWrap = wrap => wrap === undefined || (object(wrap) && Number.isSafeInteger(wrap.lines) && validLines(wrap.lines) && validGaps(wrap.gaps, wrap.lines));
+const validWrapOf = value => validLines(value.lines) && validWrap(value.wrap) && ((value.lines === undefined && value.wrap === undefined) || value.k === 'text' || value.field === 'text');
+/** The wrapped-line record of a stored leaf: {lines, gaps?}, or undefined. */
+export const wrapOf = node => node.wrap ?? (node.lines === undefined ? undefined : {lines: node.lines});
+/** The leaf fields that record `wrapped` ({lines, gaps?} from wrappedLines). */
+const wrapRecord = wrapped => wrapped.gaps ? {wrap: wrapped} : {lines: wrapped.lines};
+const validField = value => object(value) && ROOT_PAYLOAD_FIELDS.includes(value.field) && validBox(value.box) && validWrapOf(value);
 /** The root payload leaves of a root-form record: [{field, box?}]. */
-export const rootFields = topology => topology.fields ?? [{field: topology.field, box: topology.box, lines: topology.lines}];
+export const rootFields = topology => topology.fields ?? [{field: topology.field, box: topology.box, lines: topology.lines, wrap: topology.wrap}];
 
 /** Throws when `value` is not a well-formed topology record. Returns it otherwise. */
 export function validateTopology(value) {
@@ -205,7 +415,8 @@ export function validateTopology(value) {
     if (!CONTENT_KINDS.includes(item.k)) throw Error('Unknown content kind.');
     if (item.comp !== undefined) throw Error('A content leaf has no composition.');
     if (!validBox(item.box)) throw Error('Invalid content box.');
-    if (!validLines(item.lines) || (item.lines !== undefined && item.k !== 'text')) throw Error('Invalid wrapped line count.');
+    if (item.bullets !== undefined && (item.bullets !== true || !['list', 'text'].includes(item.k))) throw Error('Invalid bullets flag.');
+    if (!validWrapOf(item)) throw Error('Invalid wrapped line record.');
   };
   switch (value.form) {
     case 'root': {
@@ -217,7 +428,7 @@ export function validateTopology(value) {
       }
       if (!ROOT_PAYLOAD_FIELDS.includes(value.field)) throw Error('Unknown root payload field.');
       if (!validBox(value.box)) throw Error('Invalid content box.');
-      if (!validLines(value.lines) || (value.lines !== undefined && value.field !== 'text')) throw Error('Invalid wrapped line count.');
+      if (!validWrapOf(value)) throw Error('Invalid wrapped line record.');
       return value;
     }
     case 'blocks':
@@ -248,25 +459,16 @@ const containsOrigin = (box, bounds) => bounds.x >= box[0] - BOX_TOLERANCE && bo
 const contains = (box, bounds) => containsOrigin(box, bounds)
   && bounds.x + bounds.width <= box[0] + box[2] + BOX_TOLERANCE && bounds.y + bounds.height <= box[1] + box[3] + BOX_TOLERANCE;
 
-const textRuns = value => typeof value === 'string' || (Array.isArray(value) && value.length > 0 && value.every(run => object(run) && typeof run.text === 'string'));
-const sameRunStyle = (a, b) => JSON.stringify({...a, text: ''}) === JSON.stringify({...b, text: ''});
-// The lines' text joined in order. Runs are never invented or dropped; at a seam the
-// last run of one line and the first of the next merge when they differ only in text
-// (a run the wrap cut in two), the same way a rejoined list does.
-function joinWrappedText(parts) {
-  if (parts.every(part => typeof part === 'string')) return parts.join('');
-  const joined = [];
-  for (const part of parts) {
-    const runs = typeof part === 'string' ? [{text: part}] : part;
-    runs.forEach((run, position) => {
-      const last = joined.at(-1);
-      if (position === 0 && last && sameRunStyle(last, run)) last.text += run.text;
-      else joined.push({...run});
-    });
-  }
-  return joined;
+// Rename an imported list payload's `items` to `bullets`, unless an item holds a description (only list items may).
+// `bullets` is valid beside type 'text' only, so an authored `type` comes back as 'text'.
+function bulletsKey(payload, typed) {
+  if (payload.items === undefined || payload.bullets !== undefined || !Array.isArray(payload.items)) return;
+  if (payload.items.some(item => object(item) && !Array.isArray(item) && item.description !== undefined)) return;
+  payload.bullets = payload.items;
+  delete payload.items;
+  if (typed) payload.type = 'text';
 }
-
+const textRuns = value => typeof value === 'string' || (Array.isArray(value) && value.length > 0 && value.every(run => object(run) && typeof run.text === 'string'));
 /**
  * Rebuild the authored content form from the imported flat `blocks` and their
  * native `bounds` (reference px, one entry per block, null when unknown).
@@ -316,9 +518,10 @@ export function rebuildContent(topology, blocks, bounds, placed) {
     // (the structure hash was checked before this rebuild), so exactly that many
     // text blocks in the leaf are its consecutive lines: they rejoin in reading
     // order, with no separator, because a soft wrap deletes no characters.
-    if (leaf.kind === 'text' && leaf.node.lines === leaf.matches.length && leaf.matches.every(index => blocks[index]?.type === 'text' && textRuns(blocks[index].text))) {
+    const wrap = wrapOf(leaf.node);
+    if (leaf.kind === 'text' && wrap?.lines === leaf.matches.length && leaf.matches.every(index => blocks[index]?.type === 'text' && textRuns(blocks[index].text))) {
       const ordered = leaf.matches.map((index, position) => ({index, y: bounds[index].y, position})).sort((a, b) => a.y - b.y || a.position - b.position).map(entry => entry.index);
-      leaf.payload = {...blocks[ordered[0]], text: joinWrappedText(ordered.map(index => blocks[index].text))};
+      leaf.payload = {...blocks[ordered[0]], text: joinWrappedText(ordered.map(index => blocks[index].text), wrap.gaps)};
       leaf.matches = [ordered[0]];
       continue;
     }
@@ -330,6 +533,8 @@ export function rebuildContent(topology, blocks, bounds, placed) {
     const payload = clone(leaf.payload ?? blocks[leaf.matches[0]]);
     // The imported block always names its type; the authored one may have left it implicit.
     if (!leaf.node.typed) delete payload.type;
+    // The imported block names every list `items`; a payload authored as `bullets` takes its key back (a bullet has no description).
+    if (leaf.node.bullets === true) bulletsKey(payload, leaf.node.typed);
     if (leaf.node.id !== undefined) { payload.id = leaf.node.id; ids.push(leaf.node.id); }
     if (leaf.node.ext !== undefined) payload.extensions = clone(leaf.node.ext);
     return payload;
@@ -371,7 +576,7 @@ export function rebuildContent(topology, blocks, bounds, placed) {
       // The slide `type` is restored separately; the imported block names any
       // list by `items`, so an authored `bullets` payload takes its key back.
       const {type: _type, ...rest} = payload;
-      if (leaf.field === 'bullets' && rest.items !== undefined && rest.bullets === undefined) { rest.bullets = rest.items; delete rest.items; }
+      if (leaf.field === 'bullets') bulletsKey(rest);
       Object.assign(fields, rest);
     }
     placed?.(paths);
