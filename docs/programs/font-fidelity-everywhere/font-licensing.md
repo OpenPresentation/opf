@@ -10,7 +10,7 @@ Availability: `windows` = Windows 10/11 default; `windows-optional` = a language
 
 Width delta = mean |replacement/real - 1| over 300 example-deck strings (signed mean in parentheses; maximum on any single string after the slash), fontkit shaping with default features, per style available on the measuring host. For non-Latin families the corpus is Latin text only. "n/m" = the real font was not on the measuring host. Aptos rows were measured against Aptos 2.01 (Aptos Serif from Microsoft's standalone Aptos Fonts download, the others from the Microsoft 365 cloud fonts). Metric rows need a mean below 0.1% and a maximum of at most 0.3% in all four styles. Alternates are tried in order when the replacement's font pack is not loaded and are always reported as visual; the last alternate is a face bundled with opf-render where one was chosen.
 
-161 families: 64 open, 97 proprietary-standard, 0 proprietary-nonstandard.
+168 families: 71 open, 97 proprietary-standard, 0 proprietary-nonstandard.
 
 | Family | License class | License | Availability | Preview replacement | Tier | Width delta | Alternates | OPF may embed |
 |---|---|---|---|---|---|---|---|---|
@@ -19,7 +19,7 @@ Width delta = mean |replacement/real - 1| over 300 example-deck strings (signed 
 | Aparajita | proprietary-standard | proprietary (Modular Infotech, licensed to Microsoft) | windows-optional, office-cloud | Noto Sans Devanagari | visual | n/m | — | never |
 | Aptos | proprietary-standard | proprietary (Microsoft) | office-cloud | Intos † | metric | 0.0% (+0.0%) / 0.0% | Roboto, Carlito | never |
 | Aptos Display | proprietary-standard | proprietary (Microsoft) | office-cloud | Intos Display | metric | 0.0% (+0.0%) / 0.0% | Carlito, Roboto | never |
-| Aptos Mono | proprietary-standard | proprietary (Microsoft) | office-cloud | Cousine | visual | n/m | Roboto Mono | never |
+| Aptos Mono | proprietary-standard | proprietary (Microsoft) | office-cloud | Cousine | visual | 0.0% (+0.0%) / 0.0% | Roboto Mono | never |
 | Aptos Narrow | proprietary-standard | proprietary (Microsoft) | office-cloud | Intos Narrow | metric | 0.0% (+0.0%) / 0.0% | Carlito | never |
 | Aptos Serif | proprietary-standard | proprietary (Microsoft) | office-cloud | Intos Serif | metric | 0.0% (+0.0%) / 0.0% | Tinos | never |
 | Arabic Typesetting | proprietary-standard | proprietary (Microsoft) | windows-optional, office-cloud | Noto Naskh Arabic | visual | 66.3% (+66.3%) / 74.3% | — | never |
@@ -80,9 +80,9 @@ Width delta = mean |replacement/real - 1| over 300 example-deck strings (signed 
 | Kartika | proprietary-standard | proprietary (Microsoft) | windows-optional, office-cloud | Noto Sans Malayalam | visual | n/m | — | never |
 | Khmer UI | proprietary-standard | proprietary (Microsoft) | windows-optional, office-cloud | Noto Sans Khmer | visual | n/m | — | never |
 | Latha | proprietary-standard | proprietary (Microsoft) | windows-optional, office-cloud | Noto Sans Tamil | visual | n/m | — | never |
-| Liberation Mono | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
-| Liberation Sans | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
-| Liberation Serif | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
+| Liberation Mono | open | OFL-1.1 | — | Cousine | metric | 0.0% (+0.0%) / 0.0% | — | explicit embed path only |
+| Liberation Sans | open | OFL-1.1 | — | Arimo | metric | 0.0% (+0.0%) / 0.0% | — | explicit embed path only |
+| Liberation Serif | open | OFL-1.1 | — | Tinos | metric | 0.0% (+0.0%) / 0.0% | — | explicit embed path only |
 | Libre Caslon Text | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
 | Lora | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
 | Lucida Console | proprietary-standard | proprietary (Bigelow & Holmes, licensed to Microsoft) | windows | Cousine | visual | 0.4% (-0.4%) / 0.4% | — | never |
@@ -106,6 +106,7 @@ Width delta = mean |replacement/real - 1| over 300 example-deck strings (signed 
 | Noto Naskh Arabic | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
 | Noto Nastaliq Urdu | open | OFL-1.1 | macos | itself | — | — | — | explicit embed path only |
 | Noto Sans | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
+| Noto Sans Arabic | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
 | Noto Sans Armenian | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
 | Noto Sans Bengali | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
 | Noto Sans Devanagari | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
@@ -118,16 +119,22 @@ Width delta = mean |replacement/real - 1| over 300 example-deck strings (signed 
 | Noto Sans Kannada | open | OFL-1.1 | macos | itself | — | — | — | explicit embed path only |
 | Noto Sans Khmer | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
 | Noto Sans KR | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
+| Noto Sans Lao | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
 | Noto Sans Malayalam | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
 | Noto Sans Math | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
 | Noto Sans Mongolian | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
+| Noto Sans Myanmar | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
 | Noto Sans Oriya | open | OFL-1.1 | macos | itself | — | — | — | explicit embed path only |
 | Noto Sans SC | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
+| Noto Sans Sinhala | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
+| Noto Sans Syriac | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
 | Noto Sans Tamil | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
 | Noto Sans TC | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
 | Noto Sans Telugu | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
+| Noto Sans Thaana | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
 | Noto Sans Thai | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
 | Noto Serif Hebrew | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
+| Noto Serif Tibetan | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
 | Nyala | proprietary-standard | proprietary (Microsoft) | windows-optional, office-cloud | Noto Sans Ethiopic | visual | n/m | — | never |
 | Open Sans | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
 | Palatino Linotype | proprietary-standard | proprietary (Linotype/Heidelberger, licensed to Microsoft) | windows, office-cloud | PT Serif | visual | 2.5% (+2.1%) / 9.1% | Caladea | never |
@@ -157,13 +164,13 @@ Width delta = mean |replacement/real - 1| over 300 example-deck strings (signed 
 | Skeena | proprietary-standard | proprietary (Microsoft) | office-cloud | Open Sans | visual | n/m | Carlito | never |
 | Skeena Display | proprietary-standard | proprietary (Microsoft) | office-cloud | Open Sans | visual | n/m | Carlito | never |
 | Source Sans 3 | open | OFL-1.1 | office-cloud | itself | — | — | — | explicit embed path only |
-| Source Sans Pro | open | OFL-1.1 | office-cloud | Source Sans 3 | visual | n/m | — | explicit embed path only |
+| Source Sans Pro | open | OFL-1.1 | office-cloud | Source Sans 3 | visual | 0.0% (-0.0%) / 0.4% | — | explicit embed path only |
 | STIX Two Math | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
 | Sylfaen | proprietary-standard | proprietary (Microsoft) | windows, office-cloud | Noto Sans | visual | 11.0% (+11.0%) / 15.9% | Noto Sans Georgian, Noto Sans Armenian | never |
-| Symbol | proprietary-standard | proprietary (Monotype, licensed to Microsoft) | windows, macos, office-cloud | none | — | — | — | never |
+| Symbol | proprietary-standard | proprietary (Monotype, licensed to Microsoft) | windows, macos, office-cloud | none: code table ([FF-45](special-families.md)) | — | — | Noto Sans, Noto Sans Math, Noto Sans Symbols 2, Noto Sans Symbols | never |
 | Tahoma | proprietary-standard | proprietary (Microsoft) | windows, macos, office-cloud | Red Hat Text | visual | 1.7% (-0.4%) / 6.3% | Open Sans, Arimo | never |
-| Tenorite | proprietary-standard | proprietary (Microsoft) | office-cloud | Figtree | visual | n/m | Roboto | never |
-| Tenorite Display | proprietary-standard | proprietary (Microsoft) | office-cloud | Figtree | visual | n/m | Roboto | never |
+| Tenorite | proprietary-standard | proprietary (Microsoft) | office-cloud | Figtree | visual | 4.2% (+4.2%) / 8.4% | Roboto | never |
+| Tenorite Display | proprietary-standard | proprietary (Microsoft) | office-cloud | Figtree | visual | 14.8% (+14.8%) / 19.8% | Roboto | never |
 | Times New Roman | proprietary-standard | proprietary (Monotype, licensed to Microsoft) | windows, macos, office-cloud | Tinos | metric | 0.0% (+0.0%) / 0.0% | Liberation Serif | never |
 | Tinos | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
 | Traditional Arabic | proprietary-standard | proprietary (Monotype, licensed to Microsoft) | windows-optional, office-cloud | Noto Naskh Arabic | visual | 15.7% (+15.7%) / 24.1% | — | never |
@@ -171,8 +178,8 @@ Width delta = mean |replacement/real - 1| over 300 example-deck strings (signed 
 | Tunga | proprietary-standard | proprietary (Microsoft) | windows-optional, office-cloud | Noto Sans Kannada | visual | n/m | — | never |
 | Verdana | proprietary-standard | proprietary (Microsoft) | windows, macos, office-cloud | Montserrat | visual | 3.7% (-2.8%) / 9.2% | Arimo | never |
 | Vrinda | proprietary-standard | proprietary (Microsoft) | windows-optional, office-cloud | Noto Sans Bengali | visual | n/m | — | never |
-| Webdings | proprietary-standard | proprietary (Microsoft) | windows, macos, office-cloud | none | — | — | — | never |
-| Wingdings | proprietary-standard | proprietary (Microsoft) | windows, macos, office-cloud | none | — | — | — | never |
+| Webdings | proprietary-standard | proprietary (Microsoft) | windows, macos, office-cloud | none: code table ([FF-45](special-families.md)) | — | — | Noto Sans Symbols 2, Noto Sans Symbols, Noto Sans Math, Noto Sans | never |
+| Wingdings | proprietary-standard | proprietary (Microsoft) | windows, macos, office-cloud | none: code table ([FF-45](special-families.md)) | — | — | Noto Sans Symbols 2, Noto Sans Symbols, Noto Sans Math, Noto Sans | never |
 | Work Sans | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
 | Yu Gothic | proprietary-standard | proprietary (JIYUKOBO, licensed to Microsoft) | windows, office-cloud | Noto Sans JP | visual | 0.9% (+0.3%) / 5.3% | — | never |
 
@@ -249,6 +256,8 @@ Owner policy, 2026-09-29: for a licensed font the user selects (for example Apto
 | Selawik 1.01 (OFL-1.1, Reserved Font Name "Selawik") | Segoe UI and its Light, Semilight, Semibold styles | **Rejected** | Regular 0.16% mean and 2.5% maximum; bold 0.20% and 2.1%; no italic faces, so the upright face is 2.65% off in italic; Semibold 1.75%; Light 0.31%. Advances of basic Latin are identical, the differences are missing kerning and only 349 code points. Lowercase is 4.8% shorter than Segoe UI and hhea ascent 8% smaller. Red Hat Display stays the visual replacement. |
 | Red Hat Display and Red Hat Text statics from `@expo-google-fonts` 0.4.1 (OFL-1.1, no Reserved Font Name) | Segoe UI, Segoe UI Light, Semibold, Semilight and Tahoma | **Accepted as the visual replacement, replacing the RedHatFont repository statics (FF-43)** | The repository statics (commit `6bb1048a`) are unusable in resvg: the Regular, Light and SemiBold italics (and Red Hat Text Italic) do not set the OS/2 italic bit (only the Bold Italic files do), Red Hat Display SemiBold declares weight 707 and Bold 799 (Red Hat Text Bold declares 700), and the italics are named e.g. "Red Hat Display Italic" with subfamily Regular, so a 600 request paints as Bold and the regular and bold italics paint as one face (per-face pixel probe). Trade-off: the shipped Red Hat Display Bold (Google Fonts 700 instance) is about 2.5% narrower than the RedHatFont Bold, so the Segoe UI Bold preview moves from +0.6% to -1.8% mean width (mean absolute 0.95% to 1.86%; regular widths identical). Red Hat has no Reserved Font Name, so the correctly labelled Google Fonts instances may be vendored as npm-derived statics. Now 300, 400, 600 and 700 with italics (Display) and 400, 700 with italics (Text). Width measurements are unchanged. |
 | Bitter (`@expo-google-fonts/bitter` 0.4.2, OFL-1.1, Reserved Font Name "Bitter Pro") | Rockwell | **Accepted as the visual replacement (FF-43)** | The OFL bars a MODIFIED font from carrying its Reserved Font Name in its family or file name. Upstream (solmatas/BitterPro, google/fonts `ofl/bitter`) publishes Bitter only as variable fonts, which resvg draws at one weight, so the instanced statics (family and files named "Bitter", no face carries "Bitter Pro") are vendored as npm-derived faces. opf-render's `test/font-licenses.mjs` implements this name-contains rule for instanced faces and still rejects an instanced face named Carlito, Raleway, Lora or Playfair Display. 400, 700 and italics; measured against Rockwell 1.65, mean 1.1% to 4.4%, max 8.5%, visual. |
+| Cousine for Aptos Mono (already bundled; OFL-1.1 per the pinned @expo-google-fonts package), with Roboto Mono as the alternate | Aptos Mono | **Kept, visual (RR-17, vetoable)** | Measured against Aptos Mono 2.01 (Microsoft's standalone Aptos Fonts download, read in place and not redistributed): Aptos Mono is a 1229/2048 em cell, the Courier New cell, so Cousine matches all 300 strings in all four styles at 0.0000% and wraps identically in all 250 wrap cases. The tier stays visual under rule 5 because the vertical metrics differ (hhea ascent 0.833 em against 0.939, x-height 0.528 em against 0.476; capitals match, 0.659 against 0.657). Source Code Pro (x-height 0.486, cap 0.660) and Red Hat Mono (0.488, 0.700) are closer in glyph size but are 0.016% off the cell, would add four lazy faces each and, for Source Code Pro, a Reserved Font Name ("Source") to manage; not adopted. |
+| Liberation Sans, Serif and Mono 2.1.5 (OFL-1.1, Reserved Font Name "Liberation", about 4.4 MB for twelve faces) | themselves, when a document names them | **Not bundled; aliased to Arimo, Tinos and Cousine, metric (RR-17, vetoable)** | Liberation 2 is built from the Croscore faces: 0.0000% mean and maximum in all four styles of each family against Arimo, Tinos and Cousine, hhea and glyph boxes equal (Liberation Serif and Mono share about 97% of their glyph outlines byte for byte with Tinos and Cousine; Sans differs in outline detail, not in boxes). A document that names a Liberation family previews with the Croscore twin, and the PPTX keeps the Liberation name. |
 | Noto Color Emoji (`@expo-google-fonts/noto-color-emoji` 0.4.6, OFL-1.1, no Reserved Font Name; COLRv1 and OT-SVG colour glyphs, 25.1 MB) | Segoe UI Emoji | **Accepted as the visual replacement (FF-45)** | The only openly licensed colour emoji family with an npm pin (Twemoji and OpenMoji are CC-BY, not allowed). Every emoji sequence shapes to one glyph of 1.2451 em against 1.3730 em in Segoe UI Emoji 1.33 (-9.3%, read in place); no Latin glyphs, so a Segoe UI Emoji run's words and digits take a text face. Chromium and Firefox draw COLRv1, Safari the SVG table; resvg draws neither, so PNG and PDF draw Noto Emoji (monochrome, OFL-1.1, 0.4.7), the alternate. Optional peer pack (pseudo-script Zsye), loaded only for decks that draw emoji. |
 | STIX Two Math (`@expo-google-fonts/stix-two-math` 0.4.0, OFL-1.1, Reserved Font Name "TM Math", not carried by the face) | Cambria Math | **Accepted as the visual replacement (FF-45)** | Serif math face with a MATH table and the math alphanumerics. Against Cambria Math 6.99 on a 31-string math corpus (fontkit, default features): mean 5.0%, max 18.2% (arrows), Latin text 0.9%; Noto Sans Math 8.3%; Caladea covers only the Latin half (71 of 144 corpus characters) and is 4.7% narrower on Latin, so STIX Two Math alone is the route and Caladea the last alternate for registries without the pack. One weight; no identical outline with Cambria Math (0 of 62 shared basic Latin glyphs). Optional peer pack (pseudo-script Zmth). |
 | Akasia | Aptos | **Dropped** | The repository is no longer available. Intos replaces it. The earlier [assessment](../../evidence/akasia-assessment/README.md) remains as history. |

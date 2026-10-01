@@ -93,6 +93,19 @@ opf import-data revenue.csv --as chart --category Quarter --series '["Revenue","
 
 Data can come from a file or stdin (`-`). JSON accepts arrays of records, row matrices, or `{columns, rows}`. `--path /slides/0/table` replaces or adds a table field inside an existing parent; use `/chart` for charts. With `--into` and no path, a new slide is appended. Other options include `--format csv|tsv|json`, `--delimiter`, `--no-header`, `--columns` (a JSON array), and `--title`. Preview on stdout by omitting an output destination. All file writes validate the complete document. CSV table strings are preserved; chart measures must be numeric. Data is embedded, not linked to the source file.
 
+## Fill a template
+
+A template is an OPF file with `"template": true` and variables (`{{id}}` tokens and `var:id` references, see [templates and variables](../../docs/templates-and-variables.md)). `opf fill` resolves them from data:
+
+```sh
+opf fill quarterly.opf.json --data globex.json --output globex.opf.json   # one JSON object, one deck
+opf fill quarterly.opf.json --data clients.csv --out-dir decks --name "qbr-{client}"   # one deck per row
+opf fill quarterly.opf.json --data clients.csv --combine --output all.opf.json        # one deck, a slide group per row
+opf fill quarterly.opf.json --examples --output preview.opf.json                      # fill from each variable's example
+```
+
+CSV and TSV headers match variable ids and cells coerce per kind (numbers, ISO dates, newline-separated lists); JSON also carries rich text, lists and image objects. A blank cell keeps the declared value. An unfilled required variable or a value of the wrong kind exits 1 before any file is written; `--partial` allows unfilled variables and keeps their declarations for a later pass. `opf validate` accepts a template and reports its unfilled variables.
+
 ## Discover format options
 
 ```sh
@@ -130,6 +143,17 @@ Bundle inlines every bundled catalog record the document references — includin
 ## Development checks
 
 `pnpm test:cli` runs command-level regression checks. `pnpm test:cli:packed` builds and packs the CLI, installs the tarball offline into an isolated global prefix, exercises the actual executable, and reruns the same checks against the installation. It does not change your global installation. Package builds bundle their current core dependency; rebuild after schema/catalog changes.
+
+## Audit design and accessibility
+
+```sh
+opf audit deck.opf.json
+opf audit deck.opf.json --json --fail-on warning
+opf audit deck.opf.json --rule text-contrast --rule missing-alt-text
+opf audit --list-rules
+```
+
+`opf audit` checks what a schema cannot: text contrast against the resolved background (WCAG 2.x AA, gradients and patterns included), overflow and minimum type size from the shared composition, missing alt text, slide titles, reading order, link text, fonts outside the scheme, placeholder text, low-resolution embedded images and more. Findings use lint's report shape with stable `audit/<rule>` ids, source ranges and suggested fixes; `--json` prints the report, otherwise one readable line per finding. It exits 0 when nothing is at or above `--fail-on` (default `error`), 1 otherwise and 2 for usage errors. It is read-only and fetches nothing. See [the audit guide](../../docs/audit.md).
 
 ## OPF lint
 

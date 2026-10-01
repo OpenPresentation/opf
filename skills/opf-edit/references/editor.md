@@ -1,6 +1,6 @@
 # Editor and transfer APIs
 
-These entrypoints are published in editor 0.8.0 and later. Use core 0.11.4, renderer 0.11.9, editor 0.10.6 and PPTX 0.11.8 on Node 24 for the coordinated workflow. Check installed package exports when using older releases; repository changes can precede publication.
+These entrypoints are published in editor 0.8.0 and later. Use core 0.11.4, renderer 0.11.9, editor 0.10.6 and PPTX 0.11.9 on Node 24 for the coordinated workflow. Check installed package exports when using older releases; repository changes can precede publication.
 
 ## Atomic patching
 
@@ -51,6 +51,10 @@ Copy scopes are presentation, slide, and selection; formats are pretty, compact,
 
 Slide copies retain design/catalog/asset context. Insertion namespaces inline catalog IDs and conflicting slide/asset IDs while preserving primary source design defaults. It does not merge root speaker/organization/narrative metadata. Use replace to retain the complete imported document. Conflicting external catalog sources require resolution or a separate presentation. Recompute the proposed import against the latest document before applying if the host can change during review.
 
+
+## Fill template panel
+
+For a template or any deck with content variables, `@openpresentation/opf-editor/templates` lists the variables with typed inputs (text, number, date, color, URL, list, image source), shows required and unfilled state and where each is used, and re-renders the preview as values change. Values stay in the panel until applied: applying fills the variables through the session as one validated, undoable replacement, so a template can be filled and restored by undo. Inserting a variable token into a text field is an ordinary session edit.
 
 ## Rich text ranges
 

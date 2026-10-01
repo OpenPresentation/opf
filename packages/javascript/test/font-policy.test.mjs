@@ -118,7 +118,15 @@ describe("font policy table", () => {
 
   test("the documented metric replacements", () => {
     const metric = rows.filter((row) => row.replacement?.compatibility === "metric").map((row) => `${row.family}->${row.replacement.family}`);
-    assert.deepEqual(metric.sort(), ["Arial->Arimo", "Aptos Display->Intos Display", "Aptos Narrow->Intos Narrow", "Aptos Serif->Intos Serif", "Aptos->Intos", "Calibri->Carlito", "Courier New->Cousine", "Georgia->Gelasio", "Times New Roman->Tinos"].sort());
+    assert.deepEqual(metric.sort(), ["Arial->Arimo", "Aptos Display->Intos Display", "Aptos Narrow->Intos Narrow", "Aptos Serif->Intos Serif", "Aptos->Intos", "Calibri->Carlito", "Courier New->Cousine", "Georgia->Gelasio", "Liberation Mono->Cousine", "Liberation Sans->Arimo", "Liberation Serif->Tinos", "Times New Roman->Tinos"].sort());
+    // RR-17: Liberation 2 is built from the Croscore faces, so its three families preview with Arimo, Tinos and Cousine (0.0000% in four styles against Liberation 2.1.5); opf-render does not ship the Liberation files.
+    for (const family of ["Liberation Sans", "Liberation Serif", "Liberation Mono"]) {
+      const row = fontPolicyFor(family);
+      assert.equal(row.licenseClass, "open", family);
+      assert.equal(row.replacement.measured.maxAbsWidthDelta, 0, family);
+      assert.equal(row.replacement.measured.styles, 4, family);
+      assert.equal(row.replacement.measured.reference, `${family} 2.1.5`, family);
+    }
     // Owner policy 2026-09-29: the Aptos family previews with Intos, which measures identical to Aptos 2.01.
     for (const family of ["Aptos", "Aptos Display", "Aptos Narrow", "Aptos Serif"]) {
       const row = fontPolicyFor(family);
