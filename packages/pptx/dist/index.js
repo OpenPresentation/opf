@@ -28,7 +28,8 @@ import {nativeBackgroundFill, nativeImageBackgroundFill, nativePatternPreset} fr
 import {importBackground} from './background-import.js';
 import {themeSlotColors, writeThemeColors, schemeColorValue, schemeBackgroundFill, schemeBackgroundValue, defaultTextSchemeValues, tableTextSchemeValue, solidColorXml, writeMasterBackground, inheritLayoutBackground, readThemeSlotColors, recoverColorScheme, recoverTheme, presentationThemePath} from './theme-colors.js';
 import {languageDiagnostics, observeLanguage, partScriptFonts, planScriptFonts, reconcileLanguage} from './script-fonts.js';
-import { webpToPng } from '#image-fallback';
+import { webpToPng, svgToPng, readLocalFile } from '#image-fallback';
+import { prepareSvg, svgDataUriBytes, svgRasterScale, svgBlipRelationship, attachSvgPictures } from './svg-image.js';
 import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './image-geometry.js';
 import { layoutTable, composeSlide, fitText, fitRichText, textWidthMeasurer, resolveCanvasDimensions, resolveFontFamilies, resolveTextStyle, textColorForFill, chartColorForFill } from "@openpresentation/opf/composition";
 import { colorContext, resolveColorRefValue, resolveExportColor, resolveVariableColors } from "./color-ref.js";
@@ -206,7 +207,7 @@ export async function toPptx(input, options = {}) {
   }
   const presentation = parseInput(input);
   assertValidBoundary(presentation);
-  options = {...options, textMeasurement: chosenFamilyMeasurement(options.textMeasurement)};
+  options = {...options, textMeasurement: chosenFamilyMeasurement(options.textMeasurement), svgRasters: new Map()};
 
   const context = resolvePresentationContext(presentation, {...options,textMeasurement:undefined});
   context.listMarkers = new Map();
@@ -214,6 +215,7 @@ export async function toPptx(input, options = {}) {
   context.tableHeaders = new Map();
   context.tableCells = new Map();
   context.imagePlacements = new Map();
+  context.svgPictures = new Map();
   context.pictureText = new Map();
   context.slideImages = new Map();
   context.watermarks = new Map();
@@ -833,7 +835,19 @@ function importPicture(entries, picture, slidePath, relationships, report) {
   const relId = picture["p:blipFill"]?.["a:blip"]?.["r:embed"];
   const relationship = relationships.get(relId);
   let bytes = relationship?.path ? entries[relationship.path] : null;
-  if (!bytes) {
+  // A picture PowerPoint stores as SVG carries the SVG beside its PNG fallback: the SVG is the image.
+  let svg = null;
+  const svgRelationship = relationships.get(svgBlipRelationship(picture["p:blipFill"]?.["a:blip"]));
+  if (svgRelationship && svgRelationship.targetMode !== "External" && entries[svgRelationship.path]) {
+    const prepared = prepareSvg(entries[svgRelationship.path]);
+    if (prepared.error) report({code: "invalid-svg-image", message: `A picture's SVG was not imported (${prepared.error.message}); its PNG fallback was imported instead (none: the picture has no image).`});
+    else {
+      svg = prepared.bytes;
+      if (prepared.removed.length) report({code: "svg-sanitized", message: `The SVG had ${prepared.removed.join(", ")} removed on import.`});
+    }
+  }
+  // PowerPoint can save an SVG picture with no PNG fallback at all (an a:blip with no r:embed): the SVG alone is the image.
+  if (!bytes && !svg) {
     return {
       kind: "unknown",
       bounds,
@@ -846,7 +860,7 @@ function importPicture(entries, picture, slidePath, relationships, report) {
   if (crop && ['l','r','t','b'].some(key => Number(crop[key] ?? 0) !== 0)) {
     report({code: 'unsupported-image-crop', message: 'Native picture crop is not represented by the imported OPF asset; the full image was retained.'});
   }
-  bytes = importImageOrientation(bytes, picture["p:spPr"]?.["a:xfrm"], report);
+  bytes = importImageOrientation(svg ?? bytes, picture["p:spPr"]?.["a:xfrm"], report);
 
   return {
     kind: "image",
@@ -856,7 +870,7 @@ function importPicture(entries, picture, slidePath, relationships, report) {
     payload: {
       type: "image",
       image: {
-        src: `data:${rasterMetadata(bytes)?.mediaType ?? mediaTypeForPath(relationship.path)};base64,${bytesToBase64(bytes)}`,
+        src: `data:${svg ? "image/svg+xml" : rasterMetadata(bytes)?.mediaType ?? mediaTypeForPath(relationship?.path)};base64,${bytesToBase64(bytes)}`,
         ...(alt ? { alt } : {}),
         ...(title && alt ? { title } : {})
       }
@@ -1501,7 +1515,8 @@ async function addSlide(pptx, presentation, opfSlide, slideIndex, context, optio
   }
   if (backgroundDefinition?.type === 'image') {
     const imagePath = `${backgroundPath}.image`;
-    const outcome = {};
+    // An SVG background is its PNG raster at the slide's size: a slide background picture fill carries no SVG.
+    const outcome = { box: { w: slideContext.dimensions.widthInches, h: slideContext.dimensions.heightInches }, cover: (backgroundDefinition.image?.fit ?? 'cover') !== 'contain' };
     const resolved = await resolveImage(backgroundDefinition.image, presentation, options, imagePath, outcome);
     if (resolved) {
       // PptxGenJS embeds the raster and its relationship; packaging replaces
@@ -1720,7 +1735,8 @@ async function addMeasuredList(slide,fit,context,path,bulletImage,presentation,s
     const part=`ppt/slides/slide${slideIndex+1}.xml`;
     if(context.bulletImages.has(part))picture=context.bulletImages.get(part);
     else{
-      const outcome={};
+      // A picture bullet (a:buBlip) can only reference a raster: an SVG icon is its PNG fallback.
+      const outcome={box:{w:.5,h:.5}};
       const resolved=await resolveImage(bulletImage.source,presentation,options,bulletImage.path,outcome);
       if(resolved){
         slide.addImage({...resolved,objectName:bulletImageName(),x:0,y:0,w:.1,h:.1,altText:''});
@@ -1791,13 +1807,15 @@ function addListPayload(slide, items, region, context) {
 }
 
 async function addImagePayload(slide, presentation, asset, region, path, context, options) {
-  const resolved = await resolveImage(asset, presentation, options, path);
+  const outcome = { box: region, cover: context.imageFill === 'crop' };
+  const resolved = await resolveImage(asset, presentation, options, path, outcome);
   if (!resolved) {
     addImagePlaceholder(slide, presentation, asset, region, path, context, options);
     return;
   }
   const objectName = `OPF image ${context.imagePlacements.size + 1}`;
   context.imagePlacements.set(objectName, { region, mode: context.imageFill, path });
+  if (outcome.svg) context.svgPictures.set(objectName, outcome.svg);
   context.pictureText.set(objectName, pictureText(assetAlt(asset, presentation), asset, presentation));
   slide.addImage({
     ...resolved,
@@ -1826,16 +1844,18 @@ async function addWatermark(slide, presentation, opfSlide, slideIndex, slideCont
     notExported('The watermark needs an image source (a string, or an object with src); no watermark was exported for this slide.');
     return;
   }
-  const outcome = {};
+  const {widthInches, heightInches} = slideContext.dimensions;
+  const box = watermarkBox(widthInches, heightInches);
+  const outcome = {box};
   const resolved = await resolveImage(asset, presentation, options, path, outcome);
   if (!resolved) {
     if (!outcome.reported) options.onDiagnostic?.({code: 'unresolved-asset', path, message: 'The watermark image needs an embedded raster, a declared asset or a host imageResolver; no watermark was exported for this slide.'});
     return;
   }
-  const {widthInches, heightInches} = slideContext.dimensions;
-  const box = watermarkBox(widthInches, heightInches);
   const opacity = watermarkOpacity(watermark);
   context.watermarks.set(`ppt/slides/slide${slideIndex + 1}.xml`, {slide: `slides.${slideIndex}`, box, opacity, path});
+  // Opacity is an a:alphaModFix on the blip, which PowerPoint applies to an SVG picture (native check 2026-10-01).
+  if (outcome.svg) context.svgPictures.set(`ppt/slides/slide${slideIndex + 1}.xml|${watermarkName()}`, outcome.svg);
   slide.addImage({...resolved, objectName: watermarkName(), ...box, altText: assetAlt(asset, presentation) ?? 'Watermark'});
 }
 
@@ -1845,7 +1865,7 @@ async function addWatermark(slide, presentation, opfSlide, slideIndex, slideCont
 // PptxGenJS embeds the bytes. An unresolved source draws the preview's "Image unavailable" panel in the logo box.
 async function addLogo(slide, presentation, logo, slideIndex, slideContext, context, options) {
   const region = {x: logo.box.x / 96, y: logo.box.y / 96, w: logo.box.width / 96, h: logo.box.height / 96};
-  const outcome = {};
+  const outcome = {box: region};
   const resolved = await resolveImage(logo.source, presentation, options, logo.path, outcome);
   if (!resolved) {
     if (!outcome.reported) options.onDiagnostic?.({code: 'unresolved-asset', path: logo.path, message: 'The logo needs an embedded raster, a declared asset or a host imageResolver; the logo panel shows "Image unavailable" instead.'});
@@ -1854,6 +1874,7 @@ async function addLogo(slide, presentation, logo, slideIndex, slideContext, cont
     return;
   }
   context.logos.set(`ppt/slides/slide${slideIndex + 1}.xml`, {slide: `slides.${slideIndex}`, box: region, path: logo.path, variant: logo.variant});
+  if (outcome.svg) context.svgPictures.set(`ppt/slides/slide${slideIndex + 1}.xml|${logoName()}`, outcome.svg);
   slide.addImage({...resolved, objectName: logoName(), ...region, altText: assetAlt(logo.source, presentation) ?? 'Logo'});
 }
 
@@ -1861,7 +1882,8 @@ async function addLogo(slide, presentation, logo, slideIndex, slideContext, cont
 // Crop/fit and treatments are written after PptxGenJS embeds the bytes.
 async function addSlideImage(slide, presentation, image, slideIndex, context, options) {
   const box = { x: image.box.x / 96, y: image.box.y / 96, w: image.box.width / 96, h: image.box.height / 96 };
-  const resolved = await resolveImage(image.value, presentation, options, image.sourcePath);
+  const outcome = { box, cover: image.fill === 'crop' };
+  const resolved = await resolveImage(image.value, presentation, options, image.sourcePath, outcome);
   if (!resolved) {
     addImagePlaceholder(slide, presentation, image.value, box, image.sourcePath, context, options);
     return;
@@ -1886,6 +1908,14 @@ async function addSlideImage(slide, presentation, image, slideIndex, context, op
   // FF-53: a root `image` with the slide image's source is the slide image (core `replacesContent`); the
   // manifest records that so an unchanged picture imports back as both design.slideImage and slide.image.
   context.slideImages.set(objectName, { slide: `slides.${slideIndex}`, box, fill: image.fill, path: image.sourcePath, treatment: { ...treatment, position: image.position }, effects, content: image.replacesContent === true });
+  // PowerPoint applies opacity (a:alphaModFix), grayscale (a:grayscl) and the border (a:ln) to an SVG picture (native check
+  // 2026-10-01). A duotone recolor and a non-rectangular mask are not confirmed on an SVG picture: with either the SVG stays its
+  // PNG raster, so the effect applies as in the preview.
+  if (outcome.svg) {
+    const treated = [effects.recolor?.type === 'duotone' && 'duotone recolor', effects.shape && effects.shape.preset !== 'rect' && 'shape'].filter(Boolean);
+    if (treated.length) options.onDiagnostic?.({ code: 'svg-image-rasterized', path: image.sourcePath, message: `An SVG slide image with ${treated.join(', ')} exports as its PNG raster, so the effect applies as in the preview; PowerPoint has not been confirmed to apply it to an SVG picture.` });
+    else context.svgPictures.set(objectName, outcome.svg);
+  }
   const slideImageAlt = image.alt ?? assetAlt(image.value, presentation);
   context.pictureText.set(objectName, pictureText(slideImageAlt, image.value, presentation));
   slide.addImage({ ...resolved, objectName, ...box, altText: slideImageAlt });
@@ -2609,22 +2639,75 @@ function histogramBins(values) {
   }
 }
 
-// Embedded bytes must be a raster the exporter can measure and PptxGenJS can embed (PNG, JPEG, GIF, WebP). An SVG, or
-// bytes that are no readable image, would otherwise fail deep inside packaging. Like an unresolved asset it is not
-// exported as a picture: the caller draws the preview's placeholder (or omits the picture) and one `unresolved-asset`
-// diagnostic names the cause; `strictAssets` keeps the `unsupported-image-dimensions` error. `outcome.reported` tells a
-// caller that the diagnostic was already emitted. Hosts that need SVG art supply a raster through `imageResolver`
-// (for example opf-render's `svgToPng`). Local paths are read by PptxGenJS and checked after embedding.
+// Embedded bytes must be a raster the exporter can measure and PptxGenJS can embed (PNG, JPEG, GIF, WebP), or an SVG,
+// which exports as a native SVG picture over a PNG fallback raster (see resolveSvgImage). Bytes that are no readable
+// image would otherwise fail deep inside packaging. Like an unresolved asset they are not exported as a picture: the
+// caller draws the preview's placeholder (or omits the picture) and one `unresolved-asset` diagnostic names the cause;
+// `strictAssets` keeps the `unsupported-image-dimensions` error. `outcome.reported` tells a caller that the diagnostic
+// was already emitted. `outcome.box` (inches, in) sizes an SVG's fallback raster; `outcome.svg` (out) carries the SVG to
+// attach to the picture the caller adds. Local paths are read by PptxGenJS and checked after embedding.
 async function resolveImage(asset, presentation, options, path, outcome = {}) {
   const resolved = await resolveImageSource(asset, presentation, options, path);
+  // A local SVG file is read here (PptxGenJS cannot size it); a raster path is read by PptxGenJS itself.
+  if (resolved?.path && /\.svg$/i.test(resolved.path)) {
+    let file;
+    try { file = await readLocalFile(resolved.path); }
+    catch (error) {
+      if (options.strictAssets) throw new OPFPptxError("invalid-svg-image", `The SVG file could not be read (${errorMessage(error)}).`, { path, reason: "svg-unreadable" });
+      options.onDiagnostic?.({ code: "unresolved-asset", path, reason: "svg-unreadable", message: `The SVG file could not be read (${errorMessage(error)}). The image exports as the unavailable-image placeholder.` });
+      outcome.reported = true;
+      return null;
+    }
+    return resolveSvgImage(file, options, path, outcome);
+  }
   if (!resolved?.data) return resolved;
   const bytes = dataUriBytes(resolved.data);
   if (bytes && rasterMetadata(bytes)) return resolved;
+  const svg = svgDataUriBytes(resolved.data);
+  if (svg) return resolveSvgImage(svg, options, path, outcome);
   const message = `The image is not a readable PNG, JPEG, GIF or WebP (${dataUriMediaType(resolved.data) ?? "unknown type"}); supply a raster through imageResolver (for example opf-render svgToPng).`;
   if (options.strictAssets) throw new OPFPptxError("unsupported-image-dimensions", `Image fitting requires readable PNG, JPEG, GIF or WebP dimensions. ${message}`, { path });
   options.onDiagnostic?.({ code: "unresolved-asset", path, reason: "unsupported-format", message });
   outcome.reported = true;
   return null;
+}
+
+// An SVG picture is PowerPoint 2016's native form: the SVG itself (sanitized, never executed or fetched) plus a PNG
+// fallback raster drawn from it at 192 dpi of the displayed size by options.svgRasterizer (default: opf-render's resvg,
+// deterministic, with its bundled fonts). The caller adds the PNG as the picture and attaches `outcome.svg` at packaging.
+// A malformed SVG, an SVG without an intrinsic size or without a rasterizer exports like any unreadable image.
+async function resolveSvgImage(source, options, path, outcome) {
+  const unresolved = (code, reason, message) => {
+    if (options.strictAssets) throw new OPFPptxError(code, message, { path, reason });
+    options.onDiagnostic?.({ code: "unresolved-asset", path, reason, message: `${message} The image exports as the unavailable-image placeholder.` });
+    outcome.reported = true;
+    return null;
+  };
+  if (source.error) return unresolved("invalid-svg-image", "svg-malformed", source.error);
+  const prepared = prepareSvg(source);
+  if (prepared.error) return unresolved("invalid-svg-image", prepared.error.reason, prepared.error.message);
+  if (prepared.removed.length) {
+    options.onDiagnostic?.({ code: "svg-sanitized", path, message: `The SVG had ${prepared.removed.join(", ")} removed before it was embedded: an exported SVG never runs code or refers to anything outside the file.` });
+  }
+  const scale = svgRasterScale(prepared, outcome.box, outcome.cover === true);
+  const width = Math.max(1, Math.round(prepared.width * scale)), height = Math.max(1, Math.round(prepared.height * scale));
+  const cacheKey = `${scale}|${prepared.text}`;
+  let png = options.svgRasters.get(cacheKey);
+  if (!png) {
+    try {
+      const rasterize = options.svgRasterizer ?? ((svg, hint) => svgToPng(svg, hint));
+      png = await rasterize(prepared.text, { width, height, scale, text: prepared.hasText });
+      if (!(png instanceof Uint8Array) || rasterMetadata(png)?.mediaType !== "image/png") throw Object.assign(new Error("The rasterizer did not return a PNG."), { code: "svg-render-failed" });
+    } catch (error) {
+      const reason = error?.code === "svg-rasterizer-unavailable" ? "svg-rasterizer-unavailable" : "svg-render-failed";
+      return unresolved(reason, reason, reason === "svg-rasterizer-unavailable"
+        ? "An SVG image needs a rasterizer for its PNG fallback: install the optional peer @openpresentation/opf-render, or pass options.svgRasterizer (or an imageResolver that returns a raster)."
+        : `The SVG image could not be rasterized for its PNG fallback (${errorMessage(error)}).`);
+    }
+    options.svgRasters.set(cacheKey, png);
+  }
+  outcome.svg = { bytes: prepared.bytes, width: prepared.width, height: prepared.height };
+  return { data: `data:image/png;base64,${bytesToBase64(png)}` };
 }
 
 function dataUriMediaType(uri) {
@@ -2952,10 +3035,14 @@ async function normalizePptxZip(raw, context) {
     const backgroundId = background && decodeText(bytes).match(/<p:bg>[\s\S]*?<a:blip\b[^>]*r:embed="([^"]+)"/)?.[1];
     if (backgroundId) imageSources.set(relationships.get(backgroundId)?.path, background.path);
   }
+  // SVG pictures: the media part, its relationship and the asvg:svgBlip extension beside the PNG fallback blip. Fitting then
+  // uses the SVG's own proportions (the fallback raster only approximates them at integer pixels).
+  const svgSizes = attachSvgPictures(entries, context.svgPictures);
   const imageMetadata = new Map();
   for (const [part, bytes] of Object.entries(entries)) {
     if (!part.startsWith('ppt/media/')) continue;
     let metadata = rasterMetadata(bytes);
+    if (metadata && svgSizes.has(part)) metadata = {...metadata, ...svgSizes.get(part)};
     if (metadata?.mediaType === 'image/webp' && context.imageFormat === 'compatible') {
       try {
         if (metadata.width * metadata.height > 40_000_000) throw new Error('Image dimensions exceed the 40 megapixel conversion limit.');

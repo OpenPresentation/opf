@@ -39,8 +39,20 @@ export interface MediaProvenanceDiagnostic { code: "media-provenance-omitted"; p
 export interface ChartDataUnplottableDiagnostic { code: "chart-data-unplottable"; path: string; message: string; reason: "data-not-inline" | "no-rows" | "no-columns" | "single-column-not-numeric" }
 /** Content with no PowerPoint export (an empty table, an unsupported payload) is replaced by a plain-language placeholder frame. */
 export interface ContentPlaceholderDiagnostic { code: "content-placeholder"; path: string; message: string; reason: "table-has-no-rows" | "unsupported-payload" }
-/** An image that has no embeddable raster. `reason: "unsupported-format"`: the embedded bytes are no readable PNG, JPEG, GIF or WebP (an SVG, for example); the preview's placeholder was exported instead (or no watermark, or the background colour). `strictAssets` throws `unsupported-image-dimensions` instead. */
-export interface UnresolvedAssetDiagnostic { code: "unresolved-asset"; path: string; message: string; reason?: "unsupported-format" }
+/**
+ * An image that cannot be exported as a picture: the preview's placeholder was exported instead (or no watermark, or the background colour).
+ * `reason: "unsupported-format"`: the embedded bytes are no readable PNG, JPEG, GIF, WebP or SVG. For an SVG (a native SVG picture over a PNG fallback):
+ * `"svg-malformed"` (not well-formed XML, or no `xmlns` SVG root), `"svg-no-size"` (no width and height and no viewBox), `"svg-too-large"` (over 8 MiB),
+ * `"svg-unsafe"` (a DOCTYPE with external or markup entities), `"svg-rasterizer-unavailable"` (no `options.svgRasterizer` and `@openpresentation/opf-render`
+ * is not installed; always the case in a browser build without `svgRasterizer`) `"svg-render-failed"` (the rasterizer threw or returned no PNG) or `"svg-unreadable"` (a local `.svg` path that could not be read).
+ * `strictAssets` throws `unsupported-image-dimensions` for an unreadable raster, `invalid-svg-image` for the SVG content reasons above (and `svg-unreadable`), `svg-rasterizer-unavailable` for a
+ * missing rasterizer and `svg-render-failed` for a failed one instead.
+ */
+export interface UnresolvedAssetDiagnostic { code: "unresolved-asset"; path: string; message: string; reason?: "unsupported-format" | "svg-malformed" | "svg-no-size" | "svg-too-large" | "svg-unsafe" | "svg-rasterizer-unavailable" | "svg-render-failed" | "svg-unreadable" }
+/** An SVG picture had scripts, `foreignObject`, event handlers, references outside the file, `@import` rules or a DOCTYPE; they were removed from the embedded SVG (on import too). Nothing in an SVG is run or fetched. */
+export interface SvgSanitizedDiagnostic { code: "svg-sanitized"; path: string; message: string }
+/** An SVG slide image with a duotone recolor or a non-rectangular shape exports as its PNG raster, not as a native SVG picture, so the effect applies as in the preview (PowerPoint applies opacity, grayscale and a border to an SVG picture, and those stay native). */
+export interface SvgImageRasterizedDiagnostic { code: "svg-image-rasterized"; path: string; message: string }
 export interface WatermarkNotExportedDiagnostic { code: "watermark-not-exported"; path: string; message: string }
 /**
  * The chart data was reshaped to export a native chart: a single value column was plotted against row numbers; a one-series construct
@@ -82,10 +94,18 @@ export interface ToPptxOptions {
   /** Match preview/pagination clearance around supplied vector text outlines; default 1. */
   textRasterPadding?: number;
   /** Layout diagnostics, `media-provenance-omitted` when video data cannot be stored, plus `unresolved-font-scheme` (once per reference path) when a font-scheme id matches no record and the default `aptos` scheme is used as the base. */
-  onDiagnostic?: (diagnostic: LayoutDiagnostic | FontSchemeDiagnostic | MediaProvenanceDiagnostic | ChartDataUnplottableDiagnostic | ChartDataAdaptedDiagnostic | ChartMapGeodataDiagnostic | ContentPlaceholderDiagnostic | UnresolvedAssetDiagnostic | WatermarkNotExportedDiagnostic) => void;
+  onDiagnostic?: (diagnostic: LayoutDiagnostic | FontSchemeDiagnostic | MediaProvenanceDiagnostic | ChartDataUnplottableDiagnostic | ChartDataAdaptedDiagnostic | ChartMapGeodataDiagnostic | ContentPlaceholderDiagnostic | UnresolvedAssetDiagnostic | WatermarkNotExportedDiagnostic | SvgSanitizedDiagnostic | SvgImageRasterizedDiagnostic) => void;
   baseDir?: string;
   compressionLevel?: number;
   imageResolver?: (src: string, context: ImageResolverContext) => ImageResolverResult | Promise<ImageResolverResult | null | undefined> | null | undefined;
+  /**
+   * Draws the PNG fallback of an SVG picture (the raster older viewers show; PowerPoint 2016 and Microsoft 365 draw the SVG itself). It receives the
+   * sanitized SVG text and the pixel size to draw (the SVG's own aspect, about 192 dpi of the displayed size) and returns PNG bytes with a transparent
+   * background. It must be deterministic for the export to be. Default in Node: opf-render's `svgToPng` (resvg with the bundled fonts), loaded only when an
+   * SVG is exported (optional peer `@openpresentation/opf-render`). Without it, and without opf-render, an SVG picture exports as the "Image unavailable"
+   * placeholder with an `unresolved-asset` diagnostic (`reason: "svg-rasterizer-unavailable"`); a browser build has no default.
+   */
+  svgRasterizer?: (svg: string, size: { width: number; height: number; scale: number; text: boolean }) => Uint8Array | Promise<Uint8Array>;
   seed?: number;
   strictAssets?: boolean;
   timestamp?: string;

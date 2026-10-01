@@ -1,4 +1,5 @@
 import {XMLParser} from 'fast-xml-parser';
+import {normalizeCrop, withoutSvgBlip} from './svg-image.js';
 import {attachTextTags, decodeTextTag} from './code-provenance.js';
 import {framedPictureTransform} from './image-geometry.js';
 
@@ -10,8 +11,9 @@ const EMUS_PER_INCH = 914400;
 const parser = new XMLParser({ignoreAttributes:false, attributeNamePrefix:'', parseTagValue:false, trimValues:false});
 const decoder = new TextDecoder('utf-8', {fatal:true}), encoder = new TextEncoder();
 const array = value => value === undefined ? [] : Array.isArray(value) ? value : [value];
+// Whitespace-only text between elements is not identity: the vendored writer indents, PowerPoint drops it on save.
 const canonical = value => JSON.stringify(value, (_key, item) => item && typeof item === 'object' && !Array.isArray(item)
-  ? Object.fromEntries(Object.keys(item).sort().map(key => [key, item[key]])) : item);
+  ? Object.fromEntries(Object.keys(item).sort().filter(key => !(key === '#text' && typeof item[key] === 'string' && !item[key].trim())).map(key => [key, item[key]])) : item);
 const POSITIONS = ['background', 'top', 'bottom', 'left', 'right'];
 
 export const slideImageName = slidePath => `OPF slide image ${slidePath}`;
@@ -35,8 +37,8 @@ function blipEffects(effects) {
 
 // Native blip fill without its package-local relationship id.
 function blipFillIdentity(blipFill) {
-  const {['a:blip']: blip, ...rest} = blipFill ?? {};
-  const {['r:embed']: _embed, ...blipRest} = blip ?? {};
+  const {['a:blip']: blip, ...rest} = normalizeCrop(blipFill) ?? {};
+  const {['r:embed']: _embed, ...blipRest} = withoutSvgBlip(blip) ?? {};
   return {...rest, 'a:blip': blipRest};
 }
 
@@ -132,7 +134,7 @@ export function importSlideImage(pictures, shapes, relationships, entries, slide
     if (manifest?.v !== 1 || manifest.slide !== `slides.${slideIndex}` || !['crop', 'fit'].includes(manifest.fill) || !validTreatment(manifest.treatment, manifest.position)) throw Error('Invalid slide image manifest.');
     if (manifest.content !== undefined && manifest.content !== true) throw Error('Invalid slide image content flag.');
     if (picture['p:nvPicPr']?.['p:cNvPr']?.name !== slideImageName(manifest.slide)) throw Error('Slide image identity changed.');
-    if (canonical(picture['p:spPr']) !== canonical(manifest.properties) || canonical(blipFillIdentity(picture['p:blipFill'])) !== canonical(manifest.blipFill)) throw Error('Slide image geometry or effects changed.');
+    if (canonical(picture['p:spPr']) !== canonical(manifest.properties) || canonical(blipFillIdentity(picture['p:blipFill'])) !== canonical(normalizeCrop(manifest.blipFill))) throw Error('Slide image geometry or effects changed.');
     const item = readPicture(picture);
     const src = item?.payload?.image?.src;
     if (typeof src !== 'string') throw Error('Slide image bytes are unavailable.');

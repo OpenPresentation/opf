@@ -31,3 +31,15 @@ export async function webpToPng(bytes) {
     if (objectUrl) URL.revokeObjectURL(objectUrl);
   }
 }
+
+// A browser has no deterministic SVG rasterizer here: pass options.svgRasterizer (for example one that draws the SVG
+// on a canvas) to export SVG pictures. Without it the SVG picture exports as the "Image unavailable" placeholder.
+export async function svgToPng() {
+  const unavailable = new Error('Browsers need options.svgRasterizer to export SVG pictures.');
+  unavailable.code = 'svg-rasterizer-unavailable';
+  throw unavailable;
+}
+
+export async function readLocalFile() {
+  throw new Error('A browser cannot read a local file: pass the SVG as a data URI or through imageResolver.');
+}

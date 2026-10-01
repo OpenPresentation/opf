@@ -1,4 +1,5 @@
 import {XMLParser} from 'fast-xml-parser';
+import {normalizeCrop, withoutSvgBlip} from './svg-image.js';
 import {decodeTextTag, encodeTextTag} from './code-provenance.js';
 import {pictureTransform} from './image-geometry.js';
 
@@ -25,8 +26,8 @@ export const LOGO_TAG = TAG;
 export const logoName = () => 'OPF logo';
 
 function blipFillIdentity(blipFill) {
-  const {['a:blip']: blip, ...rest} = blipFill ?? {};
-  const {['r:embed']: _embed, ...blipRest} = blip ?? {};
+  const {['a:blip']: blip, ...rest} = normalizeCrop(blipFill) ?? {};
+  const {['r:embed']: _embed, ...blipRest} = withoutSvgBlip(blip) ?? {};
   return {...rest, 'a:blip': blipRest};
 }
 
@@ -162,7 +163,7 @@ export function importLogo(pictures, relationships, entries, slideIndex, readPic
     const manifest = decodeTextTag(own[0].val);
     if (manifest?.v !== 1 || manifest.slide !== `slides.${slideIndex}` || typeof manifest.path !== 'string' || !LOGO_PATH.test(manifest.path) || typeof manifest.variant !== 'string' || manifest.variant.length > 32) throw Error('Invalid logo manifest.');
     if (picture['p:nvPicPr']?.['p:cNvPr']?.name !== logoName()) throw Error('Logo identity changed.');
-    if (canonical(picture['p:spPr']) !== canonical(manifest.properties) || canonical(blipFillIdentity(picture['p:blipFill'])) !== canonical(manifest.blipFill)) throw Error('Logo geometry changed.');
+    if (canonical(picture['p:spPr']) !== canonical(manifest.properties) || canonical(blipFillIdentity(picture['p:blipFill'])) !== canonical(normalizeCrop(manifest.blipFill))) throw Error('Logo geometry changed.');
     const image = readPicture(picture)?.payload?.image;
     consumed.add(index);
     return {consumed, ...(typeof image?.src === 'string' ? {fallback: {path: manifest.path, image: {src: image.src, ...(typeof image.alt === 'string' ? {alt: image.alt} : {})}}} : {})};

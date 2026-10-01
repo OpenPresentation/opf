@@ -421,9 +421,9 @@ const powerpointSave = bytes => {
   checked++;
 }
 
-// ---- An unresolvable logo (an SVG has no raster) draws the "Image unavailable" panel; the tagged panel is not content on import.
+// ---- An unresolvable logo (a malformed SVG: no xmlns) draws the "Image unavailable" panel; the tagged panel is not content on import.
 {
-  const svg = `data:image/svg+xml;base64,${Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10"/>').toString('base64')}`;
+  const svg = `data:image/svg+xml;base64,${Buffer.from('<svg width="10" height="10"/>').toString('base64')}`;
   const deck = {design: {logo: svg, background: light}, slides: [{title: 'Cover', layout: 'title'}, {title: 'Body', text: 'Copy.'}]};
   for (const provenance of ['full', false]) {
     const diagnostics = [];

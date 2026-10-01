@@ -200,9 +200,17 @@ for (const [label, [width, height]] of Object.entries(dimensions)) {
   checked++;
 }
 
-// An SVG watermark has no readable raster dimensions: it follows the same contract as every
-// other SVG image and throws instead of being dropped.
-await assert.rejects(exported({ design: { watermark: { src: 'data:image/svg+xml;base64,' + Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10"/>').toString('base64'), opacity: 0.1 } }, slides: [{ title: 'A' }] }), error => error.code === 'unsupported-image-dimensions' && error.details?.path === 'design.watermark');
-checked++;
+// An SVG watermark is a native SVG picture over its PNG fallback, translucent or not (PowerPoint applies a:alphaModFix to an
+// SVG picture). test/svg-image.mjs covers SVG pictures in depth.
+{
+  const svg = 'data:image/svg+xml;base64,' + Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10"><rect width="10" height="10" fill="#c00"/></svg>').toString('base64');
+  const opaque = await exported({ design: { watermark: { src: svg, opacity: 1 } }, slides: [{ title: 'A' }] });
+  assert.match(opaque.xml[0], /<asvg:svgBlip /, 'an opaque SVG watermark is a native SVG picture');
+  assert.deepEqual(opaque.diagnostics, []);
+  const faint = await exported({ design: { watermark: { src: svg, opacity: 0.1 } }, slides: [{ title: 'A' }] });
+  assert.match(faint.xml[0], /<a:blip r:embed="rId\d+"><a:alphaModFix amt="10000"\/><a:extLst><a:ext uri="\{96DAC541[^>]*><asvg:svgBlip /, 'a translucent SVG watermark: the effect, then the SVG extension, in the blip');
+  assert.deepEqual(faint.diagnostics, []);
+  checked++;
+}
 
 console.log(`Watermark export checks passed (${checked}).`);
