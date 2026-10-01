@@ -40,8 +40,12 @@ preview and export resolve one composition.
 
 Shared header/footer geometry (`furniture-flow-v2`) is published. PPTX exports
 editable slide shapes tagged `OPF_FURNITURE_V1` with provenance for controlled
-reimport. These are not native Office Header/Footer objects (`p:hf` / notes
-master). Native Header/Footer work remains [issue 87](https://github.com/OpenPresentation/opf/issues/87).
+reimport. Published PPTX (through 0.11.7) draws every part that way, not as native
+Office Header/Footer objects. opf-pptx main (RR-11, unreleased) writes the footer's
+first text, date and slide number as native `ftr`, `dt` and `sldNum` placeholders
+(with master/layout placeholders, `p:hf` flags and a notes-master flag) at the same
+geometry and reads them back with or without provenance; the rest stays tagged
+shapes. Native PowerPoint acceptance remains [issue 87](https://github.com/OpenPresentation/opf/issues/87).
 
 The [Windows native-picture checkpoint](evidence/windows-native-picture-20260921/README.md)
 and accepted [native B/C bundle](evidence/windows-native-edits-20260921/README.md)
