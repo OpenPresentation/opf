@@ -46,22 +46,31 @@
 // slides (or, for the font scheme, states) carrying them, and a pair counts as
 // covered when any slot holds the value. Deck-wide factors take one value.
 import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
 import {mkdir, readFile, writeFile} from 'node:fs/promises';
-import {createRequire} from 'node:module';
-import {BUNDLED_FONT_MANIFEST, prepareNodeFonts} from '../../opf-render/dist/fonts-node.js';
-import {createScriptTextMeasurement, designatedFamilies, detectScripts, fontPolicyFor} from '../../opf-render/dist/fonts.js';
-import {renderSvgDeck} from '../../opf-render/dist/index.js';
-import {checkPptxTypefaces, fromPptx, toPptx} from '../../opf-pptx/dist/index.js';
-import {createEditorSession} from '../../opf-editor/dist/index.js';
-import {catalogs} from '@openpresentation/opf/catalogs';
-import {resolveFontFamilies, resolveFontSchemeReference} from '@openpresentation/opf/composition';
-import {resolveScriptFonts, validatePresentation} from '@openpresentation/opf';
+import path from 'node:path';
+import {fileURLToPath, pathToFileURL} from 'node:url';
+
+// The engines come from sibling source checkouts by default (`pnpm test:fonts`). With OPF_MATRIX_ENGINES set to an
+// `engines-installed.mjs` (scripts/published-matrix/prepare-consumer.mjs), the same matrix runs against the published
+// packages installed from the npm registry in a standalone consumer project (RR-04, FF-10).
+const engines = await import(process.env.OPF_MATRIX_ENGINES ? pathToFileURL(path.resolve(process.env.OPF_MATRIX_ENGINES)).href : './published-matrix/engines-source.mjs');
+const {BUNDLED_FONT_MANIFEST, prepareNodeFonts, createScriptTextMeasurement, designatedFamilies, detectScripts, fontPolicyFor, renderSvgDeck, svgToPng, checkPptxTypefaces, fromPptx, toPptx, createEditorSession, catalogs, resolveFontFamilies, resolveFontSchemeReference, resolveScriptFonts, validatePresentation, strToU8, unzipSync, zipSync, XMLValidator} = engines;
 
 const started = Date.now();
 const MAX_SECONDS = 420;
-const require = createRequire(new URL('../../opf-pptx/package.json', import.meta.url));
-const {strToU8, unzipSync, zipSync} = require('fflate');
-const {XMLValidator} = require('fast-xml-parser');
+const sha256 = (value) => createHash('sha256').update(value).digest('hex');
+// Digests of every verified state (PPTX bytes, each slide's SVG, the PNG of two slides per pairwise deck) go to a digest
+// file so runs on different operating systems, locales and time zones can be compared byte for byte.
+const OUTPUT = process.env.OPF_MATRIX_OUT ? path.resolve(process.env.OPF_MATRIX_OUT) : fileURLToPath(new URL('../artifacts/font-switch-matrix/', import.meta.url));
+const WITH_PNG = !process.argv.includes('--no-png');
+const LOAD_SYSTEM_FONTS = process.env.OPF_MATRIX_SYSTEM_FONTS === '1';
+// --determinism: the bounded subset the FF-11 grid re-runs under every locale, time zone, clock and font environment:
+// every fourth pairwise deck plus the decks that add the remaining languages, the language and theme chains, CJK in a
+// Latin deck, the chart paths and the glyph-fallback cases. The full matrix keeps the other fixed switches and controls.
+const DETERMINISM = process.argv.includes('--determinism');
+const FULL = !DETERMINISM;
+const digests = {};
 const decoder = new TextDecoder();
 
 // ---------------------------------------------------------------------------
@@ -587,7 +596,7 @@ const CJK = ['Jpan', 'Hans', 'Hant', 'Kore'];
 const stateReports = [];
 const overlaps = (faces, drawn) => drawn.some((family) => faces.has(family));
 
-async function verifyState(label, presentation) {
+async function verifyState(label, presentation, {png = false} = {}) {
   const document = structuredClone(presentation);
   assert.equal(validatePresentation(document).valid, true, `${label}: valid OPF`);
   const fonts = chosenFonts(document);
@@ -652,6 +661,10 @@ async function verifyState(label, presentation) {
   assert.equal(validatePresentation(reimported).valid, true, `${label}: re-imported OPF validates`);
 
   stateReports.push({label, chosen: [...fonts.chosen].sort(compareNames), exported: check.fontsUsed, weightSelectors: check.fontsUsed.filter((family) => selectors.includes(family)), preview: drawn, scripts, substitutions: substitutions.map((entry) => `${entry.requested}>${entry.family}`)});
+  assert.equal(digests[label], undefined, `${label}: state labels are unique`);
+  digests[label] = {pptx: sha256(bytes), svg: sha256(svgs.join('\0')), slides: svgs.map((svg) => sha256(svg).slice(0, 16))};
+  // The pairwise decks also record a PNG of the first and last slide (resvg with the registry's own font files only unless asked for host fonts).
+  if (png && WITH_PNG) digests[label].png = await Promise.all([svgs[0], svgs.at(-1)].map(async (svg) => sha256(await svgToPng(svg, {fontFiles: registry.fontFiles, useBundledFonts: false, loadSystemFonts: LOAD_SYSTEM_FONTS}))));
   return {bytes: new Uint8Array(bytes), svgs, drawn, fonts, faces: [...chosenFaces].sort(compareNames).join('|')};
 }
 
@@ -659,10 +672,10 @@ async function verifyState(label, presentation) {
 // Switching: an editor session applies the switch, the deck is verified in each
 // state, and going back must reproduce the first state exactly.
 // ---------------------------------------------------------------------------
-async function runSwitch(name, deck, steps) {
+async function runSwitch(name, deck, steps, options = {}) {
   const editor = createEditorSession(deck, {rejectInvalid: true});
   const original = structuredClone(deck);
-  const first = await verifyState(`${name} A`, editor.document);
+  const first = await verifyState(`${name} A`, editor.document, options);
   let previous = first;
   const visited = [first];
   for (const [index, step] of steps.entries()) {
@@ -704,13 +717,26 @@ if (process.argv.includes('--plan')) process.exit(0);
 assert.ok(matrix.rows.length >= 50 && matrix.rows.length <= 80, `the covering array has ${matrix.rows.length} decks`);
 
 let switches = 0;
+let pairwiseDecks = 0;
+const determinismRows = new Set();
+if (DETERMINISM) {
+  for (let index = 0; index < matrix.rows.length; index += 4) determinismRows.add(index);
+  const covered = (factor) => new Set([...determinismRows].flatMap((index) => [matrix.rows[index][factor]].flat()));
+  for (const factor of ['language', 'fontScheme', 'layout', 'chart', 'image', 'background']) {
+    for (const level of FACTORS.find((entry) => entry.id === factor).levels) {
+      if (!covered(factor).has(level)) determinismRows.add(matrix.rows.findIndex((row) => [row[factor]].flat().includes(level)));
+    }
+  }
+}
 for (const [index, row] of matrix.rows.entries()) {
+  if (DETERMINISM && !determinismRows.has(index)) continue;
+  pairwiseDecks++;
   const name = `pairwise-${String(index + 1).padStart(2, '0')}`;
   const {deck, schemeA, schemeB} = buildDeck(name, row, index);
   await runSwitch(name, deck, [
     {label: `B (${schemeB})`, apply: setScheme('design.fontScheme', schemeB)},
     {label: 'A again', apply: setScheme('design.fontScheme', schemeA), returnsToStart: true}
-  ]);
+  ], {png: true});
   switches++;
 }
 
@@ -720,7 +746,7 @@ for (const [index, row] of matrix.rows.entries()) {
 const PROPORTIONAL = 'calibri';
 const MONO = 'consolas';
 // Every content type, proportional to monospace and back.
-for (const type of Object.keys(contentBlocks)) {
+for (const type of FULL ? Object.keys(contentBlocks) : []) {
   const text = TEXT.english;
   const deck = {name: `content ${type}`, language: 'english', design: {theme: 'minimal', fontScheme: PROPORTIONAL}, slides: [{id: type, title: text.title, notes: text.body, ...contentBlocks[type](text)}]};
   await runSwitch(`content-${type}`, deck, [
@@ -730,7 +756,7 @@ for (const type of Object.keys(contentBlocks)) {
   switches++;
 }
 // Content-type changes are block replacements (no conversion API exists): the fonts stay while the payload changes.
-for (const scheme of [PROPORTIONAL, MONO]) {
+for (const scheme of FULL ? [PROPORTIONAL, MONO] : []) {
   const text = TEXT.english;
   const slideFor = (type) => ({id: 'swap', title: text.title, notes: text.body, ...contentBlocks[type](text)});
   const order = Object.keys(contentBlocks);
@@ -741,7 +767,7 @@ for (const scheme of [PROPORTIONAL, MONO]) {
   switches++;
 }
 // Per-slide font override: the deck scheme and the slide's own scheme switch independently.
-{
+if (FULL) {
   const text = TEXT.english;
   const deck = {
     name: 'per-slide override', language: 'english', design: {theme: 'minimal', fontScheme: 'calibri'},
@@ -767,7 +793,7 @@ for (const scheme of [PROPORTIONAL, MONO]) {
   switches += 2;
 }
 // An object font scheme keeps its overrides while the catalog id switches.
-{
+if (FULL) {
   const text = TEXT.english;
   const deck = {
     name: 'scheme overrides', language: 'english', design: {theme: 'minimal', fontScheme: {id: 'calibri', heading: {family: 'Georgia'}, code: {family: 'Courier New'}}},
@@ -847,7 +873,8 @@ for (const chart of catalogs.chartTypes.filter((entry) => !entry.deprecation)) {
   const without = marks(renderSvgDeck(bare, measured)[0]);
   const native = withChart.text - without.text > 1;
   assert.equal(native, PREVIEW_NATIVE.includes(chart.id), `${chart.id}: the preview ${native ? 'now draws this chart natively: limitation resolved, add it to PREVIEW_NATIVE' : 'no longer draws it natively, though PREVIEW_NATIVE lists it'}`);
-  const exported = unzipSync(await toPptx(deck, measured));
+  const exportedBytes = await toPptx(deck, measured);
+  const exported = unzipSync(exportedBytes);
   const part = Object.keys(exported).find((name) => /^ppt\/charts\/chart\d+\.xml$/.test(name));
   assert.ok(part, `${chart.id}: the export carries a chart part`);
   const element = /<c:(\w+Chart)>/.exec(decoder.decode(exported[part]))?.[1];
@@ -861,6 +888,7 @@ for (const chart of catalogs.chartTypes.filter((entry) => !entry.deprecation)) {
     assert.ok(decoder.decode(exported['ppt/slides/slide1.xml']).includes('<mc:AlternateContent'), `${chart.id}: the chartEx frame is an AlternateContent with the classic chart as Fallback`);
   } else assert.equal(chartEx, undefined, `${chart.id}: no chartEx part (a classic type, or the map, which stays the clustered column)`);
   assert.deepEqual(checkPptxTypefaces(exported, {fonts: ['Calibri', 'Roboto Mono'], monospace: ['Roboto Mono']}).violations, [], `${chart.id}: chart parts name only the chosen fonts`);
+  digests[`chart:${chart.id}`] = {pptx: sha256(exportedBytes), svg: sha256(renderSvgDeck(deck, measured).join('\0'))};
   chartPaths.push({id: chart.id, nominal, exported: element, previewNative: native});
 }
 
@@ -868,7 +896,7 @@ for (const chart of catalogs.chartTypes.filter((entry) => !entry.deprecation)) {
 // Negative controls: the oracle above must catch a leaked font and a broken
 // package, including inside a nested chart workbook.
 // ---------------------------------------------------------------------------
-{
+if (FULL) {
   const text = TEXT.english;
   const deck = {name: 'controls', language: 'english', design: {theme: 'minimal', fontScheme: 'calibri'}, slides: [{id: 'a', title: text.title, notes: text.body, bullets: text.items}, {id: 'b', title: text.title, chart: {type: 'column', data: CHART_DATA}, text: text.body}]};
   const fonts = chosenFonts(deck);
@@ -1001,9 +1029,11 @@ for (const fallback of GLYPH_FALLBACK_CASES) {
 // ---------------------------------------------------------------------------
 const substitutionsSeen = Object.fromEntries([...substitutionLog].sort(([a], [b]) => compareNames(a, b)));
 const unusedExpectations = Object.keys(EXPECTED_SUBSTITUTIONS).filter((family) => !Object.keys(substitutionsSeen).some((key) => key.startsWith(`${family}>`)));
-assert.deepEqual(unusedExpectations, [], 'every pinned substitution is exercised');
+if (FULL) assert.deepEqual(unusedExpectations, [], 'every pinned substitution is exercised');
 const seconds = (Date.now() - started) / 1000;
 assert.ok(seconds < MAX_SECONDS, `the matrix took ${seconds} s; its CI budget is ${MAX_SECONDS} s`);
-await mkdir(new URL('../artifacts/font-switch-matrix/', import.meta.url), {recursive: true});
-await writeFile(new URL('../artifacts/font-switch-matrix/report.json', import.meta.url), `${JSON.stringify({seed: matrix.seed, decks: matrix.rows.length, factors: FACTORS, rows: matrix.rows, chainLanguages: CHAIN_LANGUAGES, pendingSchemes, chartPaths, previewApproximatedCharts: chartPaths.filter((path) => !path.previewNative).map((path) => path.id), exportFallbackCharts: Object.keys(EXPORT_FALLBACK), expectedFailures: EXPECTED_FAILURES.map(({id, reason, preview, measuredExport}) => ({id, reason, preview, measuredExport})), substitutions: substitutionsSeen, unusedExpectations, states: stateReports}, null, 1)}\n`);
-console.log(`Font switch matrix passed: ${matrix.rows.length} pairwise decks and ${switches - matrix.rows.length} fixed switches, ${stateReports.length} verified states, ${chartPaths.length} chart paths, ${Object.keys(substitutionsSeen).length} recorded substitutions, ${EXPECTED_FAILURES.length} named expected failures, ${seconds.toFixed(1)} s.`);
+await mkdir(OUTPUT, {recursive: true});
+await writeFile(path.join(OUTPUT, 'digests.json'), `${JSON.stringify({seed: matrix.seed, decks: matrix.rows.length, states: Object.keys(digests).length, digests}, null, 1)}
+`);
+await writeFile(path.join(OUTPUT, 'report.json'), `${JSON.stringify({seed: matrix.seed, decks: matrix.rows.length, factors: FACTORS, rows: matrix.rows, chainLanguages: CHAIN_LANGUAGES, pendingSchemes, chartPaths, previewApproximatedCharts: chartPaths.filter((path) => !path.previewNative).map((path) => path.id), exportFallbackCharts: Object.keys(EXPORT_FALLBACK), expectedFailures: EXPECTED_FAILURES.map(({id, reason, preview, measuredExport}) => ({id, reason, preview, measuredExport})), substitutions: substitutionsSeen, unusedExpectations, states: stateReports}, null, 1)}\n`);
+console.log(`Font switch matrix${DETERMINISM ? ' (determinism subset)' : ''} passed: ${pairwiseDecks} of ${matrix.rows.length} pairwise decks and ${switches - pairwiseDecks} fixed switches, ${stateReports.length} verified states, ${chartPaths.length} chart paths, ${Object.keys(substitutionsSeen).length} recorded substitutions, ${EXPECTED_FAILURES.length} named expected failures, ${seconds.toFixed(1)} s.`);

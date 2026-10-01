@@ -1,0 +1,4 @@
+{
+  "description": "Differences between operating systems that are explained rather than defects. Every entry needs a reason; an entry that matches nothing fails the comparison (compare.mjs).",
+  "entries": []
+}

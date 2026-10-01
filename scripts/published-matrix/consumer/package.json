@@ -1,0 +1,52 @@
+{
+  "name": "opf-published-consumer",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Standalone consumer of the published OPF packages (RR-04, FF-10). Versions here must equal release-plan.json; prepare-consumer.mjs checks.",
+  "engines": {
+    "node": "24.x"
+  },
+  "dependencies": {
+    "@expo-google-fonts/noto-naskh-arabic": "0.4.5",
+    "@expo-google-fonts/noto-nastaliq-urdu": "0.4.2",
+    "@expo-google-fonts/noto-sans-arabic": "0.4.3",
+    "@expo-google-fonts/noto-sans-armenian": "0.4.2",
+    "@expo-google-fonts/noto-sans-bengali": "0.4.4",
+    "@expo-google-fonts/noto-sans-devanagari": "0.4.1",
+    "@expo-google-fonts/noto-sans-ethiopic": "0.4.2",
+    "@expo-google-fonts/noto-sans-georgian": "0.4.3",
+    "@expo-google-fonts/noto-sans-gujarati": "0.4.2",
+    "@expo-google-fonts/noto-sans-gurmukhi": "0.4.1",
+    "@expo-google-fonts/noto-sans-hebrew": "0.4.1",
+    "@expo-google-fonts/noto-sans-jp": "0.4.3",
+    "@expo-google-fonts/noto-sans-kannada": "0.4.3",
+    "@expo-google-fonts/noto-sans-khmer": "0.4.3",
+    "@expo-google-fonts/noto-sans-kr": "0.4.3",
+    "@expo-google-fonts/noto-sans-lao": "0.4.2",
+    "@expo-google-fonts/noto-sans-malayalam": "0.4.2",
+    "@expo-google-fonts/noto-sans-mongolian": "0.4.1",
+    "@expo-google-fonts/noto-sans-myanmar": "0.4.2",
+    "@expo-google-fonts/noto-sans-oriya": "0.4.2",
+    "@expo-google-fonts/noto-sans-sc": "0.4.3",
+    "@expo-google-fonts/noto-sans-sinhala": "0.4.2",
+    "@expo-google-fonts/noto-sans-syriac": "0.4.2",
+    "@expo-google-fonts/noto-sans-tamil": "0.4.3",
+    "@expo-google-fonts/noto-sans-tc": "0.4.3",
+    "@expo-google-fonts/noto-sans-telugu": "0.4.2",
+    "@expo-google-fonts/noto-sans-thaana": "0.4.2",
+    "@expo-google-fonts/noto-sans-thai": "0.4.2",
+    "@expo-google-fonts/noto-serif-hebrew": "0.4.2",
+    "@expo-google-fonts/noto-serif-tibetan": "0.4.2",
+    "@openpresentation/opf": "0.11.4",
+    "@openpresentation/opf-editor": "0.10.6",
+    "@openpresentation/opf-pptx": "0.11.7",
+    "@openpresentation/opf-render": "0.11.9",
+    "fast-xml-parser": "5.11.2",
+    "fflate": "0.8.3"
+  },
+  "devDependencies": {
+    "@types/node": "24.13.6",
+    "typescript": "5.9.3"
+  }
+}
