@@ -7,12 +7,12 @@
 //   * every font family the preview draws is a loaded FontFace from the SVG itself, so no host font is involved;
 //   * the drawn families are the ones the chosen font scheme resolves to, and switching the scheme A -> B -> A re-renders:
 //     different SVG, different drawn families, different pixels, and A again reproduces A's pixels in the same browser;
-//   * a second browser launched without any host fonts (Linux: an empty fontconfig) draws the same pixels.
+//   * on Linux a second browser launched with host fonts reduced to one unrelated face draws the same pixels.
 // Pixel hashes are recorded for the evidence but never compared across operating systems: Chromium rasterizes text
 // differently on each (on macOS only the families and the re-render are asserted, as the FF-10 criteria say).
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
-import {mkdirSync, writeFileSync} from 'node:fs';
+import {copyFileSync, mkdirSync, writeFileSync} from 'node:fs';
 import {createRequire} from 'node:module';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
@@ -50,9 +50,13 @@ const SCHEMES = ['calibri', 'georgia', 'consolas'];
 const svgs = Object.fromEntries(SCHEMES.map((scheme) => [scheme, render(scheme)]));
 for (const scheme of SCHEMES) for (const svg of svgs[scheme]) assert.ok(/@font-face/.test(svg), `${scheme}: the preview embeds the faces it draws`);
 
-const emptyFontconfig = path.join(tmpdir(), `opf-empty-fontconfig-${process.pid}`);
-mkdirSync(emptyFontconfig, {recursive: true});
-writeFileSync(path.join(emptyFontconfig, 'fonts.conf'), '<?xml version="1.0"?><fontconfig></fontconfig>\n');
+// Linux without host fonts: a fontconfig whose only font is one face the previews never draw. A fontconfig with no font at all
+// breaks Chromium's web font decoding (every embedded face rejects with a NetworkError), so a single unrelated face is the
+// emptiest host that still lets the browser run.
+const hostFonts = path.join(tmpdir(), `opf-host-fonts-${process.pid}`);
+mkdirSync(path.join(hostFonts, 'fonts'), {recursive: true});
+copyFileSync(path.join(consumer, 'node_modules', '@expo-google-fonts', 'noto-sans', '400Regular', 'NotoSans_400Regular.ttf'), path.join(hostFonts, 'fonts', 'NotoSans-Regular.ttf'));
+writeFileSync(path.join(hostFonts, 'fonts.conf'), `<?xml version="1.0"?><fontconfig><dir>${path.join(hostFonts, 'fonts')}</dir><cachedir>${path.join(hostFonts, 'cache')}</cachedir></fontconfig>\n`);
 
 async function observe(browser, scheme, slide) {
   const page = await browser.newPage({viewport: {width: 1280, height: 720}});
@@ -110,8 +114,8 @@ async function pass(label, env) {
 
 const runs = [await pass('default host fonts', {})];
 if (process.platform === 'linux') {
-  // No host fonts at all: fontconfig knows no font, so anything not embedded could not be drawn.
-  const bare = await pass('no host fonts (empty fontconfig)', {FONTCONFIG_FILE: path.join(emptyFontconfig, 'fonts.conf'), FONTCONFIG_PATH: emptyFontconfig, XDG_DATA_DIRS: emptyFontconfig, XDG_DATA_HOME: emptyFontconfig});
+  // Host fonts reduced to one unrelated face: anything not embedded would draw with it or not at all.
+  const bare = await pass('minimal host fonts (fontconfig with one unrelated face)', {FONTCONFIG_FILE: path.join(hostFonts, 'fonts.conf'), FONTCONFIG_PATH: hostFonts, XDG_DATA_DIRS: hostFonts, XDG_DATA_HOME: hostFonts});
   for (const [key, state] of Object.entries(runs[0].states)) assert.equal(bare.states[key].png, state.png, `${key}: the same pixels with and without host fonts`);
   runs.push(bare);
 }
