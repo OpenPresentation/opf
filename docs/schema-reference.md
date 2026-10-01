@@ -237,7 +237,7 @@ _No named properties._
 | `fontScheme` | no | `oneOf:string / ref:FontScheme` | Font scheme for heading, body, accent, and code text. Accepts two forms: - String shorthand: 'design.fontScheme = "aptos"'. Bare id, HTTPS URL, or 'pkg:' reference resolved as the 'id' of a 'fontSchemes' catalog recor... |
 | `dimensions` | no | `oneOf:ref:DimensionPreset / ref:Dimensions` | Slide dimensions and aspect ratio. String shorthand such as 'widescreen' is equivalent to { preset: 'widescreen' }. |
 | `background` | no | `oneOf:ref:BackgroundShortcut / ref:Background` | Default slide background applied across the deck unless overridden on a slide. String shorthand accepts theme slots ('light1', 'light2', 'dark1', 'dark2') or hex colors; object forms support theme, solid, gradient, im... |
-| `logo` | no | `oneOf:ref:Asset / ref:LogoSet` | Deck logo assets used by layouts, covers, section dividers, headers, and footers. A string is the default logo source; object form provides light/dark, stacked, icon, and wordmark variants. When omitted, the renderer... |
+| `logo` | no | `oneOf:ref:Asset / ref:LogoSet` | Deck logo assets used by covers, section dividers, headers, footers and picture bullets. A string or Asset object is the default logo source; the LogoSet object form provides light/dark, stacked, icon, and wordmark va... |
 | `watermark` | no | `oneOf:const:false / ref:Asset / ref:Watermark` | Optional decorative watermark applied across slides. Use false to suppress an inherited watermark in slide-level design; a string is equivalent to { src: value }. |
 | `header` | no | `oneOf:const:false / ref:HeaderFooter` | Repeated header furniture rendered outside the main slide content. Use false to suppress an inherited header. |
 | `footer` | no | `oneOf:const:false / ref:HeaderFooter` | Repeated footer furniture rendered outside the main slide content. Use false to suppress an inherited footer. |
@@ -245,10 +245,10 @@ _No named properties._
 | `contentAlignment` | no | `enum:left \| center \| right` | Default horizontal alignment for body/content regions in resolved layouts. |
 | `contentBox` | no | `boolean` | Whether body/content regions are rendered inside a visible card or surface. |
 | `slideImage` | no | `oneOf:ref:Asset / object` | Optional slide-level image, separate from content images. It applies to a slide that sets its own design.slideImage, and to slides whose layout declares slideImage: true or whose root image is the same source as a dec... |
-| `contentDirection` | no | `enum:horizontal \| vertical` | Axis along which parallel body/content regions are arranged. |
-| `chartPrimary` | no | `enum:none \| top \| bottom \| left \| right` | For chart layouts, where the primary chart sits relative to supporting content. 'none' means chart regions have equal weight. |
+| `contentDirection` | no | `enum:horizontal \| vertical` | Axis along which parallel body content is arranged. Sets the root arrangement mode of blocks and root payloads when the slide's own composition.mode is not set: 'vertical' is column, 'horizontal' is row. Precedence: t... |
+| `chartPrimary` | no | `enum:none \| top \| bottom \| left \| right` | Where the primary chart sits relative to supporting content. Effective value: slide design, then deck design, then the layout record's contentTypeChartPrimary. When the slide has no promoted regions and no composition... |
 | `imageFill` | no | `enum:crop \| fit` | How picture placeholders fill their allocated region. |
-| `listBullet` | no | `enum:character \| image` | Default bullet rendering style for list layouts. |
+| `listBullet` | no | `enum:character \| image` | Marker style for items and bullets lists. 'character' (the default) draws the glyph marker. 'image' draws the deck's icon logo (a slide's design.logo, then design.logo, then the primary organization's logo; light vari... |
 
 
 ### Theme
@@ -319,7 +319,7 @@ _No named properties._
 | `languageFamily` | no | `enum:latin \| ea \| cs` | OOXML font-language family this scheme is intended for: 'latin' for Latin-script content, 'ea' for East Asian scripts, 'cs' for Complex Scripts. As the design font scheme, an 'ea' or 'cs' scheme also fills that script... |
 | `heading` | no | `ref:Font` | Abstract role: font used for slide titles and headings. Maps onto the OOXML major slot when serializing. |
 | `body` | no | `ref:Font` | Abstract role: font used for body copy. Maps onto the OOXML minor slot when serializing. |
-| `accent` | no | `ref:Font` | Abstract role: font used for accent text such as quotes or callouts. No direct OOXML slot. |
+| `accent` | no | `ref:Font` | Abstract role: font used for accent text. When set, the slide tag (eyebrow) and the quote body use this family instead of the body and heading families; nothing else changes. resolveFontFamilies() returns it as accent... |
 | `code` | no | `ref:Font` | Abstract role: monospaced font used for code blocks and inline code. No direct OOXML slot. Resolution: this override, then the resolved catalog record's 'code' (for example Consolas for the consolas scheme), then the... |
 
 
@@ -490,7 +490,7 @@ _No named properties._
 
 - Type: `object`
 - Required fields: none
-- Purpose: Deck logo variants surfaced by layouts, covers, section dividers, headers, and footers. Organization identity lives in organization; this object only controls visual rendering assets. Renderer convention: on dark backgrounds prefer the 'light' variant, on light backgrounds prefer the 'dark' variant, and in square/vertical slots prefer the stacked family when present.
+- Purpose: Deck logo variants surfaced by covers, section dividers, headers, footers and picture bullets. Organization identity lives in organization; this object only controls visual rendering assets. Engines select one variant per slot and background tone (resolveLogo in @openpresentation/opf): same-tone variants first, neutral ones next, the opposite tone last. Lockup on a dark background: light, default, stackedLight, stacked, wordmarkLight, wordmark, iconLight, icon, then dark, stackedDark, wordmar...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -537,10 +537,11 @@ _No named properties._
 
 - Type: `object`
 - Required fields: none
-- Purpose: One header/footer zone. Every configured field renders; fields in one zone stack top to bottom in the order image, text, organization, section, slide number, date. Put a date and a slide number in different zones to keep each on the zone's single line.
+- Purpose: One header/footer zone. Every configured field renders; fields in one zone stack top to bottom in the order logo, image, text, organization, socials, section, slide number, date. Put a date and a slide number in different zones to keep each on the zone's single line.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
+| `logo` | no | `boolean` | Whether to render the deck's icon logo in this zone: a slide's design.logo, then design.logo, then the primary organization's logo (LogoSet icon variants first, light ones on dark backgrounds). It is a generated image... |
 | `text` | no | `string` | Literal text rendered in this zone. |
 | `image` | no | `ref:Asset` | Generic image rendered in this zone, such as a logo, partner mark, certification badge, or icon. |
 | `slideNumber` | no | `boolean` | Whether to render the current slide number in this zone. PPTX export writes a native slide-number field when its value fits within one accepted text line; a value split across lines exports as static text with a diagn... |
