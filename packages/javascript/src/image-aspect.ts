@@ -3,6 +3,12 @@
  * `data:` URI (PNG, JPEG, GIF, WebP, SVG), or an `asset:<id>` reference to one in `assets`.
  * Any other source (a URL or file path) has no readable dimensions here and returns undefined;
  * hosts resolve those themselves.
+ *
+ * Only a bounded prefix of the payload is decoded (never the whole of a multi-megabyte logo): 64 KiB, which
+ * holds every PNG, GIF and WebP header and the root `<svg>` tag of any real SVG, then 1 MiB for a JPEG whose
+ * start-of-frame segment sits behind large EXIF or ICC data. A JPEG whose frame header is still not inside
+ * 1 MiB, or an SVG whose root tag is not inside 64 KiB, has no readable proportions (undefined, so a square
+ * box). Results are memoized per source string, so a deck's repeated header image is read once.
  */
 type Dimensions = {width: number; height: number};
 
@@ -13,13 +19,23 @@ function sourceOf(value: unknown): string | undefined {
   return isRecord(value) && typeof value.src === 'string' ? value.src : undefined;
 }
 
-function dataBytes(uri: string): {type: string; bytes: Uint8Array} | undefined {
+/** Bytes decoded for the first read, and for a JPEG whose frame header was not inside them. */
+const PREFIX_BYTES = 64 * 1024, JPEG_PREFIX_BYTES = 1024 * 1024;
+
+/** The media type and at most `limit` leading bytes of a data URI payload. */
+function dataBytes(uri: string, limit: number): {type: string; bytes: Uint8Array} | undefined {
   const match = /^data:([^;,]*)((?:;[^;,]*)*),/i.exec(uri);
   if (!match) return undefined;
-  const type = (match[1] ?? '').toLowerCase(), payload = uri.slice(match[0].length);
+  const type = (match[1] ?? '').toLowerCase(), start = match[0].length;
   try {
-    if (/;base64/i.test(match[2] ?? '')) return {type, bytes: Uint8Array.from(atob(payload.replace(/\s+/g, '')), char => char.charCodeAt(0))};
-    return {type, bytes: new TextEncoder().encode(decodeURIComponent(payload))};
+    if (/;base64/i.test(match[2] ?? '')) {
+      // Four base64 characters are three bytes; slice slightly more than needed so whitespace inside the prefix cannot starve it.
+      const chars = Math.ceil(limit / 3) * 4, text = uri.slice(start, start + chars + chars / 8).replace(/\s+/g, '').slice(0, chars);
+      return {type, bytes: Uint8Array.from(atob(text.slice(0, text.length - (text.length % 4))), char => char.charCodeAt(0))};
+    }
+    // Percent-encoded text: cut the prefix before a partial %XX escape so the decode cannot fail on the cut.
+    const prefix = uri.slice(start, start + limit).replace(/%[0-9a-f]?$/i, '');
+    return {type, bytes: new TextEncoder().encode(decodeURIComponent(prefix))};
   } catch { return undefined; }
 }
 
@@ -66,13 +82,32 @@ function svgDimensions(text: string): Dimensions | undefined {
   return undefined;
 }
 
+const cache = new Map<string, number | undefined>(), CACHE_ENTRIES = 64;
+
+function readAspect(source: string): number | undefined {
+  const first = dataBytes(source, PREFIX_BYTES);
+  if (!first) return undefined;
+  let dimensions: Dimensions | undefined;
+  if (first.type.startsWith('image/svg')) dimensions = svgDimensions(new TextDecoder().decode(first.bytes));
+  else {
+    dimensions = rasterDimensions(first.bytes);
+    // A JPEG with a large EXIF/ICC segment: read more, once. Other formats carry their size in the first bytes.
+    if (!dimensions && first.bytes.length >= 2 && first.bytes[0] === 0xff && first.bytes[1] === 0xd8) {
+      const more = dataBytes(source, JPEG_PREFIX_BYTES);
+      if (more) dimensions = rasterDimensions(more.bytes);
+    }
+  }
+  return dimensions && dimensions.width > 0 && dimensions.height > 0 ? dimensions.width / dimensions.height : undefined;
+}
+
 /** Width / height of an embedded image, following `asset:<id>` references through `assets`; undefined when unreadable. */
 export function intrinsicImageAspect(value: unknown, assets?: unknown): number | undefined {
   let source = sourceOf(value);
   for (let hop = 0; source?.startsWith('asset:') && hop < 8; hop++) source = sourceOf(isRecord(assets) ? assets[source.slice(6)] : undefined);
-  if (!source) return undefined;
-  const data = dataBytes(source);
-  if (!data) return undefined;
-  const dimensions = /^image\/svg/.test(data.type) ? svgDimensions(new TextDecoder().decode(data.bytes)) : rasterDimensions(data.bytes);
-  return dimensions && dimensions.width > 0 && dimensions.height > 0 ? dimensions.width / dimensions.height : undefined;
+  if (!source?.startsWith('data:')) return undefined;
+  if (cache.has(source)) return cache.get(source);
+  const aspect = readAspect(source);
+  if (cache.size >= CACHE_ENTRIES) cache.delete(cache.keys().next().value as string);
+  cache.set(source, aspect);
+  return aspect;
 }

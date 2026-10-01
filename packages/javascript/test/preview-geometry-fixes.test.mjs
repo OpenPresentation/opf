@@ -84,3 +84,49 @@ test('asset references resolve through the deck assets for the image proportions
   near(header.box.width, header.box.height * 3, 'a chain of references');
   near(footer.box.width, footer.box.height, 'a reference loop is unreadable');
 });
+
+// Only a bounded prefix of a data URI is decoded, and results are memoized per source.
+const furnitureAspect = image => { const part = layoutFurniture({}, {presentation: {design: {header: {right: {image}}}}}).parts[0]; return part.box.width / part.box.height; };
+const padded = (head, bytes) => Buffer.concat([Buffer.from(head), Buffer.alloc(bytes, 7)]);
+const pngBytes = (width, height, extra) => {
+  const head = Buffer.alloc(33);
+  Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0, 0, 0, 13, 0x49, 0x48, 0x44, 0x52]).copy(head);
+  head.writeUInt32BE(width, 16); head.writeUInt32BE(height, 20);
+  return padded(head, extra);
+};
+const jpegWithApp = (width, height, appBytes) => {
+  const segments = [];
+  for (let left = appBytes; left > 0; left -= 65000) { const size = Math.min(left, 65000); segments.push(Buffer.from([0xff, 0xe2, ...be16(size + 2)]), Buffer.alloc(size, 1)); }
+  return Buffer.concat([Buffer.from([0xff, 0xd8]), ...segments, Buffer.from([0xff, 0xc0, 0, 17, 8, ...be16(height), ...be16(width), 3, 1, 0x22, 0, 2, 0x11, 1, 3, 0x11, 1])]);
+};
+
+test('a 5 MB data URI is read from its prefix: fast, and the rest of the payload is never decoded', () => {
+  const big = `data:image/png;base64,${pngBytes(300, 100, 5 * 1024 * 1024).toString('base64')}`;
+  assert.ok(big.length > 6.5e6);
+  const started = performance.now();
+  near(furnitureAspect(big), 3, 'a 5 MB PNG');
+  assert.ok(performance.now() - started < 250, `a 5 MB PNG resolved in ${performance.now() - started} ms`);
+  // The tail is not even valid base64: only a prefix decode can succeed.
+  const prefixOnly = `data:image/png;base64,${pngBytes(200, 100, 100_000).toString('base64')}${'!'.repeat(1_000_000)}`;
+  near(furnitureAspect(prefixOnly), 2, 'only the prefix is decoded');
+  const gif = `data:image/gif;base64,${padded(Buffer.from([...Buffer.from('GIF89a'), ...le16(300), ...le16(100), 0, 0, 0]), 2_000_000).toString('base64')}`;
+  near(furnitureAspect(gif), 3, 'a large GIF');
+  // Repeats and a full cache keep answering the same.
+  for (let round = 0; round < 3; round++) for (let index = 1; index <= 80; index++) near(furnitureAspect(png(index * 10, 100)), index / 10, `repeat ${index}`);
+});
+
+test('a JPEG whose frame header is past the 64 KiB prefix is read from a larger bound; past 1 MiB it is a square', () => {
+  const as = bytes => `data:image/jpeg;base64,${bytes.toString('base64')}`;
+  near(furnitureAspect(as(jpegWithApp(300, 100, 1000))), 3, 'a header inside the prefix');
+  near(furnitureAspect(as(jpegWithApp(300, 100, 200_000))), 3, 'a header at about 200 KB (large ICC/EXIF)');
+  near(furnitureAspect(as(jpegWithApp(300, 100, 1_200_000))), 1, 'a header past 1 MiB is unreadable: a square');
+});
+
+test('percent-encoded and large SVG data URIs read only the root tag', () => {
+  const root = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 100">';
+  near(furnitureAspect(`data:image/svg+xml,${encodeURIComponent(`${root}<!--${'x'.repeat(1_000_000)}--></svg>`)}`), 3, 'percent-encoded, large body');
+  near(furnitureAspect(svg(`${root}<!--${'x'.repeat(2_000_000)}--></svg>`)), 3, 'base64, large body');
+  near(furnitureAspect(svg(`<!--${'x'.repeat(100_000)}-->${root}</svg>`)), 1, 'a root tag past the prefix is unreadable: a square');
+  // A multi-byte character cut by the prefix, or a cut escape, never throws.
+  near(furnitureAspect(`data:image/svg+xml,${encodeURIComponent(`${root}</svg>${'é'.repeat(100_000)}`)}`), 3, 'a cut percent escape');
+});
