@@ -8,6 +8,7 @@ import { renderSvg } from '@openpresentation/opf-render/svg';
 import * as renderFontCore from '@openpresentation/opf-render/fonts';
 import { resolveScriptFonts } from '@openpresentation/opf';
 import { installPptxExport } from './pptx-controls.js';
+import { createDesignControls } from '../src/design-controls.js';
 import { MAX_EXACT_SOURCE_LENGTH, createSourceMemory, findDuplicateKey, updateJsonSource } from '../src/exact-source.js';
 
 // fonts.json holds the faces the page starts with. A build that splits the eager faces (the gallery editor) adds base-fonts.json: the
@@ -63,6 +64,10 @@ const editor = createEditorSession({
 }, { rejectInvalid: true });
 const element = id => document.getElementById(id);
 let slideIndex = 0, selectedPath = 'slides.0.title', selectedValue, canvas, renderError, fontsFailure;
+// RR-06: every dimension switch, design option, content conversion, chart type and table style/merge is a control here. Each commits one
+// undoable session change, so the editor.subscribe(refresh) below redraws the preview (and loads fonts first) exactly as for an edit.
+const designControls = createDesignControls(element('design-controls'), {editor, getSlideIndex: () => slideIndex, getSelectedPath: () => selectedPath, sections: ['look', 'slide-image', 'header-footer', 'brand', 'layout-options', 'info']});
+const selectionControls = createDesignControls(element('selection-controls'), {editor, getSlideIndex: () => slideIndex, getSelectedPath: () => selectedPath, sections: ['selection', 'table'], onSelectPath: path => select(path)});
 function status(message) { element('status').textContent = message; }
 let activePanel = 'content';
 const thumbnailCache = new Map();
@@ -153,6 +158,7 @@ function select(path) {
   element('value-label').textContent = typeof selectedValue === 'string' ? 'Text content' : 'Content JSON';
   element('preview').querySelectorAll('g[data-opf-path]').forEach(node => node.classList.toggle('is-selected', node.getAttribute('data-opf-path') === path));
   element('value').value = typeof selectedValue === 'string' ? selectedValue : JSON.stringify(selectedValue, null, 2) ?? '';
+  designControls.refresh(); selectionControls.refresh();
 }
 function render() {
   fontRegistry.clearSubstitutions();
@@ -167,7 +173,9 @@ function render() {
   element('document-name').value = deck.name ?? 'Untitled presentation';
   element('notes').value = deck.slides[slideIndex].notes ?? '';
   element('undo').disabled = !editor.canUndo; element('redo').disabled = !editor.canRedo;
-  element('font').value = deck.design?.fontScheme ?? 'roboto';
+  // The accent font makes the font scheme an object ({id, accent}); the select shows its id.
+  const scheme = deck.design?.fontScheme;
+  element('font').value = (scheme && typeof scheme === 'object' ? scheme.id : scheme) ?? 'roboto';
   element('mode').value = deck.slides[slideIndex].composition?.mode ?? 'auto';
   const groupSelect = element('group');
   const previousGroup = groupSelect.value;
@@ -220,7 +228,7 @@ function refresh() {
   return fontGate.run(editor.document, {
     isCurrent: () => token === refreshToken,
     loading: () => { loaded = true; status('Loading fonts…'); if (!canvas) element('preview').textContent = 'Loading fonts…'; element('undo').disabled = !editor.canUndo; element('redo').disabled = !editor.canRedo; },
-    ready: () => { fontsFailure = undefined; if (loaded) thumbnailCache.clear(); renderSafely(); },
+    ready: () => { fontsFailure = undefined; if (loaded) { thumbnailCache.clear(); if (/Loading fonts/.test(element('status').textContent)) status('Ready to edit'); } renderSafely(); },
     failed: error => { fontsFailure = error; status(error.message); element('undo').disabled = !editor.canUndo; element('redo').disabled = !editor.canRedo; if (!canvas) element('preview').textContent = error.message; },
   });
 }
@@ -228,7 +236,8 @@ editor.subscribe(refresh);
 element('apply').onclick = () => act(() => editor.set(selectedPath, typeof selectedValue === 'string' ? element('value').value : JSON.parse(element('value').value)));
 element('undo').onclick = () => act(() => editor.undo());
 element('redo').onclick = () => act(() => editor.redo());
-element('font').onchange = () => act(() => editor.set('design.fontScheme', element('font').value));
+// Keep an object-form font scheme's overrides (the accent font) when only the base scheme changes.
+element('font').onchange = () => act(() => editor.set(editor.get('design.fontScheme') && typeof editor.get('design.fontScheme') === 'object' ? 'design.fontScheme.id' : 'design.fontScheme', element('font').value));
 element('insert-content').onclick = () => canvas?.openInsertMenu();
 element('arrange').onclick = () => {
   if (canvas?.setLayoutEditing(!canvas.layoutEditing)) {

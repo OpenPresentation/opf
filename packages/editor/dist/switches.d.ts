@@ -38,6 +38,8 @@ export interface DimensionSwitchOptions {
   index?: number;
   /** blocks: media source for the image and video kinds. */
   source?: string;
+  /** blocks: convert the block's own content to the new kind (text to list, quote, metric, code or timeline and back; chart and table) instead of replacing it. See block-convert. */
+  convert?: boolean;
   /** Session change metadata (switchDimension only). */
   meta?: Record<string, unknown>;
 }
@@ -59,6 +61,8 @@ export interface PreparedDimensionSwitch {
   changed: boolean;
   /** Slides whose own design hides a deck-level switch. */
   shadowed: number[];
+  /** blocks with `convert`: what the new kind cannot carry. */
+  loss?: string[];
 }
 
 export interface DimensionSwitchChange extends Omit<EditorChange, "document" | "patches"> {
@@ -69,9 +73,27 @@ export interface DimensionSwitchChange extends Omit<EditorChange, "document" | "
   slideIndex?: number;
   changed: boolean;
   shadowed: number[];
+  loss?: string[];
 }
 
 /** Compute and validate the patch for one dimension without changing any session. */
 export declare function prepareDimensionSwitch(document: unknown, dimension: SwitchDimension, value: DimensionSwitchValue, options?: DimensionSwitchOptions): PreparedDimensionSwitch;
 /** Apply one dimension switch to a session as a single undoable transaction. */
 export declare function switchDimension(editor: EditorSession, dimension: SwitchDimension, value: DimensionSwitchValue, options?: DimensionSwitchOptions): DimensionSwitchChange;
+
+export interface SwitchOption {
+  id: string;
+  label: string;
+  record?: Record<string, unknown>;
+}
+export interface CompatibleChartType extends SwitchOption {
+  /** True for the chart's present type, which is always listed. */
+  current: boolean;
+}
+/** Values a picker can offer for a catalog-backed dimension (document inline records, caller catalogs, then the bundled catalog, without duplicates); `blocks` lists the content kinds. */
+export declare function listSwitchOptions(document: unknown, dimension: SwitchDimension, options?: Pick<DimensionSwitchOptions, "catalogs" | "catalogSources">): SwitchOption[];
+/** Chart types the chart's inline data can use as it is (data-shape compatibility, not an engine-support claim). `path` or `slideIndex` picks the chart. */
+export declare function compatibleChartTypes(document: unknown, options?: Pick<DimensionSwitchOptions, "slideIndex" | "path" | "catalogs" | "catalogSources">): CompatibleChartType[];
+/** The value a dimension currently has: `{ value, scope }`, with the catalog id for catalog dimensions. */
+export declare function currentSwitchValue(document: unknown, dimension: SwitchDimension, options?: Pick<DimensionSwitchOptions, "slideIndex" | "path" | "owner" | "index">): { value: unknown; scope: "deck" | "slide" | "block" };
+export { blockConversionTargets } from "./block-convert.js";

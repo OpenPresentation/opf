@@ -55,6 +55,7 @@ Version 0.7.0 uses core 0.10.0 and renderer 0.8.0. Code source/metadata edits pr
 - Structured catalog controls that only commit known catalog IDs
 - JSON Patch state transitions with inverse patches for undo/redo
 - Optional DOM controls plus React and Svelte bindings in separate embeddable entry points
+- Dimension switches, safe block conversion, design-level options, table style and cell merge as headless APIs (`/switches`, `/block-convert`, `/design-options`, `/tables`) and one accessible DOM panel (`/design-controls`)
 
 ## Live browser canvas
 
@@ -211,21 +212,126 @@ const { patches, document } = prepareDimensionSwitch(editor.document, "themes", 
 | Dimension | Document patch | Notes |
 | --- | --- | --- |
 | `layouts` | `/slides/N/layout` | Needs `slideIndex`. Adds the blank payloads the layout declares, like the JSON editor's layout choice; existing content stays. |
-| `color-schemes`, `font-schemes` | `/design/colorScheme`, `/design/fontScheme` | Deck by default, one slide with `slideIndex`. An inline object value is replaced by the bare id. |
+| `color-schemes`, `font-schemes` | `/design/colorScheme`, `/design/fontScheme` | Deck by default, one slide with `slideIndex`. An inline object value is replaced by the bare id, except an accent font in a font scheme object, which stays (`{ id, accent }`). |
 | `themes` | `/design/theme` plus the theme's color scheme, font scheme, background and dimensions | Writes the whole bundle, as the gallery's theme snippet does, so fonts follow. `bundle: false` changes only the id. |
 | `languages`, `narratives`, `tones`, `audiences` | `/language`, `/narrative`, `/tone`, `/audience` | Catalog ids; `audiences` accepts an id or an array. |
 | `backgrounds` | `/design/background` | A background object or a shorthand string (theme slot such as `dark1`, or a hex color). |
 | `headers-footers` | `/design/header`, `/design/footer` | `{header?, footer?}`: an absent field stays, `null` removes it. |
 | `image-treatments` | `/design/slideImage`, `/design/imageFill` | `{slideImage?, imageFill?}`, same rule. |
 | `socials` | `/speaker/socials/<platform>` or the `organization` | `{platform, handle}` with `owner` and `index`; the owner must exist. |
-| `charts` | `<chart owner>/chart/type` | The slide's first chart, or the block named by `path`. The data is kept as it is and only the document schema is checked: the editor does not verify that the data suits the new type, so preview the result (map types, for example, expect their own data). |
-| `blocks` | replaces one block | `path` names a complete `blocks/N` block or a slide/region with one content field. The value is a block kind or a block object. |
+| `charts` | `<chart owner>/chart/type` | The slide's first chart, or the block named by `path`. The data is kept as it is and only the document schema is checked: switching does not verify that the data suits the new type (`compatibleChartTypes` lists the types the data can use; map types, for example, expect their own data). |
+| `blocks` | replaces one block, or with `convert: true` moves its content to the new kind | `path` names a complete `blocks/N` block or a slide/region with one content field. The value is a block kind or a block object. See *Content-type conversion*. |
 
 A deck-level design switch cannot reach a slide that carries its own value for that key. The result lists those slides in `shadowed`; `clearSlideOverrides: true` removes the overrides in the same transaction. `record` adds a gallery item's catalog record inline in the same transaction when neither the document nor the bundled catalog defines its id (a gallery-only layout or font scheme). Every switch is validated: an unknown catalog id, an invalid value or an invalid resulting document throws before anything changes, and switching to the current value commits nothing. The editor session emits the usual `patch`, `undo` and `redo` events with `meta.source: "dimension-switch"` and `meta.dimension`, so the canvas and any host preview recompose from the switched document. `resolveSlideFonts(document, slideIndex)` returns the heading, body and code families the preview measures and the export names.
 
-### Content-type conversion: replacement only (FF-16 decision)
+### Content-type conversion (RR-06)
 
-The editor does not convert one content type into another. `blocks` is block replacement only: the old payload is discarded (text is not turned into list items, a list into a chart, and so on) and the block keeps only its `id` and `extensions`. Author the replacement content explicitly, or insert and remove blocks. This release provides no conversion API.
+`blocks` replaces a block by default and discards its old payload. Pass `convert: true` (or call `convertBlock`) to move the block's own content into the new kind instead. A conversion keeps the text and never adds content: no value, label, date, number or sentence is invented, what a target kind cannot carry is reported in `loss` rather than dropped silently, and a pair with no meaningful mapping is refused.
+
+```js
+import { convertBlock, blockConversionTargets, prepareBlockConversion } from "@openpresentation/opf-editor/block-convert";
+
+blockConversionTargets(editor.document, "slides.2.blocks.0");
+// [{ kind: "list", label: "List", available: true, lossless: true, loss: [] }, { kind: "metric", available: false, reason: "The first line is longer than 24 characters, ..." }, ...]
+const change = convertBlock(editor, "slides.2.blocks.0", "list"); // one undoable step
+change.lossless; change.loss; // for example [] or ["text formatting", "list nesting levels"]
+switchDimension(editor, "blocks", "list", { path: "slides.2.blocks.0", convert: true }); // the same through the switch
+```
+
+| From | To | What happens |
+| --- | --- | --- |
+| text | list, timeline | One item (event) per line; blank lines are dropped and reported. Run formatting stays on list items; a timeline event is plain text. |
+| list | text, timeline | One line per item. Nesting levels are flattened and reported. |
+| text | quote | The text is the quote. A last line that starts with an em dash becomes the attribution. Formatting is flattened and reported. |
+| quote | text | The quote, then `— attribution`, then the source, one per line. Lossless. |
+| text | metric | The first line (at most 24 characters) is the value (a canonical number becomes a number), the second the label, the rest the description. Refused when the first line is longer. |
+| metric | text | `value unit`, label, description and delta, one per line. A trend is reported as lost. |
+| text, code | code, text | The text is the source; going back loses the language and filename, which are reported. |
+| timeline | text, list | `when: what` per event (an event without `when` is just its text). |
+| chart, table | table, chart | Inline data only. A chart's type is reported as lost. A table converts when it has a plain label for every column and numbers in every column after the first; styled, merged or rich cells and external data are refused. |
+
+Images, videos and groups have no conversion. Everything else is replacement. `blockPathForSelection(document, selectedPath)` maps a selection such as `slides.0.blocks.1.text` to its block for a host that offers the control on selection. Conversions are guarded by a `test` operation, so one built from a stale read cannot overwrite a concurrent edit.
+
+### Pickers: options, chart types and current values
+
+`listSwitchOptions(document, dimension, options)` lists what a catalog dimension offers (the document's inline records first, then caller-loaded ones, then the bundled catalog, without duplicates). `compatibleChartTypes(document, { slideIndex, path })` lists the chart types the chart's inline data can use as it is, by data shape: the first column labels the categories and each further column is a series (how the renderers read it), a type with N series needs exactly N value columns, and the single-series, distribution and geographic types are offered only where they fit. It is data-shape compatibility, not a claim that an engine draws the type. `currentSwitchValue(document, dimension, { slideIndex })` reads the value back as `{ value, scope }`.
+
+## Design options (RR-06)
+
+`@openpresentation/opf-editor/design-options` edits the design-level settings that used to need All properties. Each call is one validated patch and one undo step, at the deck or on one slide with `slideIndex`; `null` removes a value so it is inherited again. `prepare...` forms return the patch without touching a session.
+
+```js
+import { setDesignOption, setLogoVariant, setHeaderFooterZone, getDesignOption, designWarnings } from "@openpresentation/opf-editor/design-options";
+
+setDesignOption(editor, "titleAlignment", "center", { slideIndex: 2 });   // /slides/2/design/titleAlignment
+setDesignOption(editor, "watermark", { src: "asset:mark", opacity: 0.1 }); // merges into an existing watermark; false hides an inherited one
+setLogoVariant(editor, "light", "asset:logo-white");                       // default stays a bare source; more variants make a LogoSet
+setHeaderFooterZone(editor, "footer", "right", { slideNumber: true, logo: true });
+```
+
+| Option | Writes | Values |
+| --- | --- | --- |
+| `titleAlignment`, `contentAlignment` | `design.titleAlignment`, `design.contentAlignment` | `left`, `center`, `right` |
+| `contentDirection` | `design.contentDirection` | `horizontal`, `vertical` |
+| `chartPrimary` | `design.chartPrimary` | `none`, `top`, `bottom`, `left`, `right` |
+| `listBullet` | `design.listBullet` | `character`, `image` (picture bullets draw the logo) |
+| `contentBox` | `design.contentBox` | `true`, `false` |
+| `accentFont` | `design.fontScheme.accent.family` | a family name; the font scheme becomes its object form and collapses back to the bare id when the accent is cleared |
+| `logo` | `design.logo` | a source, an Asset object or a LogoSet; `setLogoVariant` edits one of the 12 variants |
+| `organizationLogo` | `organization.logo` (deck only; `index` picks an organization) | a source or Asset object |
+| `watermark` | `design.watermark` | `false`, a source, or `{ src, opacity }` (fields merge; a lone source stays a bare source) |
+| `slideImage` | `design.slideImage` | a source or `{ src, position, size, fill, shape, inset, ... }` (fields merge; `position` defaults to `background` because the object form requires it) |
+| header and footer zones | `design.header` / `design.footer` `.left/.center/.right` | `setHeaderFooterZone` merges `text`, `logo`, `slideNumber`, `image`, ... into one zone; a removed field, an emptied zone and an emptied header are all deleted rather than left as `{}`. A slide's own header or footer replaces the deck's whole one, so the first edit on a slide starts from a copy of the deck's (its other zones stay), and a slide emptied that way hides the furniture (`false`) instead of inheriting it again |
+
+A deck-scope change reports `shadowed` slides whose own design hides it (`clearSlideOverrides: true` removes those values in the same transaction). Results carry `warnings`: a header or footer zone with `logo: true`, or picture bullets, with no logo to draw (no slide, deck or primary-organization logo) is reported as `unresolved-logo` before export, as `designWarnings(document, slideIndex)` does for the current document. `DESIGN_OPTIONS` describes every option for a generic panel, and `getDesignOption` reads `{ value, scope, inherited }`.
+
+## Table style and cell merge (RR-06)
+
+`@openpresentation/opf-editor/tables` edits the styled-cell structure with one guarded patch per call (a `test` of the table, then a replace), so the canvas draws the styled and merged table and Undo restores it:
+
+```js
+import { setTableStyle, mergeTableCells, splitTableCell, setTableCellStyle, parseTableCellPath } from "@openpresentation/opf-editor/tables";
+
+setTableStyle(editor, "slides.4.blocks.1.table", "banded");                  // or { header: "accent", banding: true, borders: "horizontal" }
+mergeTableCells(editor, "slides.4.blocks.1.table", { section: "body", row: 1, column: 0 }, { colSpan: 3 });
+splitTableCell(editor, "slides.4.blocks.1.table", { section: "body", row: 1, column: 0 });
+setTableCellStyle(editor, "slides.4.blocks.1.table", [{ section: "header", column: 0 }], { fill: "accent", align: "center" });
+```
+
+Styles use scheme roles, so they follow the color scheme, and the renderers keep the text readable on any fill. A style sets the header fill (`theme`, `plain`, `accent`), banded rows and borders (`theme`, `none`, `horizontal`, `grid`); named presets are `theme`, `banded`, `grid`, `minimal` and `open`, and `theme` removes a previous style. A style owns only the fill and border fields of a cell: text color, alignment, padding, values and merges are kept. Merging never hides text: covered cells that hold text refuse with `merge-would-lose-content` unless you pass `join: true`, which joins the words into the anchor with a space and keeps run formatting. Other refusals are `merge-overlap` (the region crosses another merge), `invalid-table-span` (outside the table, or a header cell spanning into the body) and `table-cell-covered`. Splitting leaves the formerly covered cells as empty text. `parseTableCellPath` maps a canvas selection to a table and cell, and `describeTableCell` and `readTableStyle` read the current state.
+
+## Design controls panel (RR-06)
+
+`@openpresentation/opf-editor/design-controls` mounts the controls for everything above in one call. Each control commits one undoable change through the session, so a host that already subscribes to the session (the canvas does) redraws the preview, loads fonts first through its font gate, and the controls themselves follow Undo and Redo.
+
+```js
+import { createDesignControls } from "@openpresentation/opf-editor/design-controls";
+
+const controls = createDesignControls(designPanel, {
+  editor,
+  getSlideIndex: () => slideIndex,
+  getSelectedPath: () => selectedPath,
+  sections: ["look", "slide-image", "header-footer", "brand", "layout-options", "info"],
+});
+const selectionControls = createDesignControls(contentPanel, { editor, getSlideIndex, getSelectedPath, sections: ["selection", "table"], onSelectPath: select });
+controls.refresh(); // when the slide or the selection changes
+```
+
+Sections: `look` (theme, color scheme, font scheme, language, background, this slide's layout), `slide-image`, `header-footer`, `brand` (logo variants, organization logo, picture bullets, accent font, watermark), `layout-options` (alignment, direction, primary chart, content box), `info` (narrative, tone, audience, socials), `selection` (content type with a loss report, replacement, chart type) and `table` (style, merge, split, cell fill and alignment). The panel is native `details`, `fieldset`, `select`, checkbox and text controls with a label on each, so it works with the keyboard and with screen readers: groups open with Enter or Space, a select changes with the arrow keys, text fields commit on Enter or when you leave them, and results and refusals are announced in `role="status"` and `role="alert"` regions. A refused change (an invalid value, text a merge would hide) is explained, changes nothing, and puts the field back. "Applies to" switches the design controls between the whole presentation and the current slide, and a control shows when a slide value is "set on this slide" or "from the presentation". The panel offers only conversions that exist, shows what a conversion loses before you choose it, and lists why an unavailable one is unavailable.
+
+In React (or Svelte, or anything else) mount it into a ref and destroy it on unmount; it needs no framework runtime:
+
+```jsx
+useEffect(() => {
+  const controls = createDesignControls(ref.current, { editor, getSlideIndex: () => slide, getSelectedPath: () => selected });
+  return () => controls.destroy();
+}, [editor]);
+// call controls.refresh() (keep it in a ref) when slide or selected changes
+```
+
+The playground mounts both panels (the Design tab, and the selection area of the Content tab). One click on text still enters text editing; the panels follow the selection after Escape. The panel does not upload images: logo, watermark and slide-image sources take an asset reference (the field suggests the document's assets), a web address or a data address.
+
+Run `npm run test:design-controls-browser` (after `npm run build:playground`) for the real-browser check of every control, its keyboard operation and its undo.
 
 ### What a switch does not establish
 

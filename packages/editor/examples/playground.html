@@ -42,6 +42,7 @@
         <div class="apply-row"><span class="shortcut">⌘ / Ctrl ↵</span><button id="apply" class="primary">Apply edit</button></div>
         <p class="field-help">Click text to edit on the slide, or use this panel.</p>
         <details class="source-path"><summary>Source location</summary><p id="path"></p></details></div>
+        <div id="selection-controls"></div>
         <div class="inspector-section"><div class="section-heading"><h2>Slide notes</h2><span class="optional">Optional</span></div><label class="sr-only" for="notes">Speaker notes</label><textarea id="notes" rows="4" placeholder="What would you like to say?"></textarea><button id="apply-notes" class="quiet full-width">Save notes</button></div>
       </div>
       <div id="panel-design" class="inspector-panel" role="tabpanel" aria-labelledby="tab-design" hidden>
@@ -51,6 +52,7 @@
         <button id="paginate" class="secondary full-width"><svg class="icon"><use href="#i-split"/></svg>Split overflow into slides</button>
         <div id="group-controls" class="inspector-section" hidden><h2>Content group</h2><label for="group">Group</label><select id="group"></select><label for="group-mode">Arrangement</label><select id="group-mode"><option value="auto">Automatic</option><option value="row">Row</option><option value="column">Column</option><option value="grid">Grid</option></select></div>
         <div class="inspector-section"><div class="section-heading"><h2>Typography</h2><span class="optional">Presentation</span></div><label for="font">Font family</label><select id="font"><option value="roboto">Roboto</option><option value="calibri">Calibri → Carlito</option><option value="cambria">Cambria → Caladea</option><option value="arial">Arial → Arimo</option><option value="times-new-roman">Times New Roman → Tinos</option><option value="courier-new">Courier New → Cousine</option><option value="georgia">Georgia → Gelasio (approximate)</option><option value="aptos">Aptos (approximate)</option></select><p class="field-help">Open-source substitutes are used when the original font isn’t available.</p></div>
+        <div id="design-controls" class="inspector-section"><div class="section-heading"><h2>Design options</h2><span class="optional">Presentation or slide</span></div></div>
       </div>
       <div id="diagnostics-section" class="diagnostics-section" hidden><div class="section-heading"><h2>Review</h2><span id="diagnostic-count" class="review-count"></span></div><ul id="diagnostics" aria-label="Layout diagnostics"></ul></div>
       <div class="inspector-bottom"><svg class="icon"><use href="#i-check"/></svg><span>Changes stay in this session.<br>Save an OPF file to keep your work.</span></div>

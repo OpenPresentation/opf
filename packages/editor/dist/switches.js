@@ -13,7 +13,9 @@ import {
   validateOpfDocument,
 } from "./index.js";
 import { createContentBlock, prepareBlockReplace } from "./blocks.js";
+import { checkedDocument, designPatches, fail, same } from "./edit-helpers.js";
 import { populateLayoutPlaceholders } from "./layout-placeholders.js";
+import { blockConversionTargets, prepareBlockConversion } from "./block-convert.js";
 
 /** The 14 pptx.gallery dimensions (gallery-support.md), in the gallery's order. */
 export const SWITCH_DIMENSIONS = Object.freeze([
@@ -58,20 +60,6 @@ const DESIGN_KEYS = Object.freeze({
 });
 const REGION = /^(?:(?:top|middle|bottom)(?:\+(?:top|middle|bottom))*(?::(?:left|center|right)(?:\+(?:left|center|right))*)?|(?:left|center|right)(?:\+(?:left|center|right))*)$/;
 const BLOCK_KINDS = ["text", "list", "chart", "table", "metric", "quote", "code", "timeline", "group", "image", "video"];
-
-function fail(code, message, details) {
-  return new OPFEditorError(code, message, details);
-}
-
-function same(a, b) {
-  return JSON.stringify(canonical(a)) === JSON.stringify(canonical(b));
-}
-function canonical(value) {
-  if (Array.isArray(value)) return value.map(canonical);
-  if (value && typeof value === "object")
-    return Object.fromEntries(Object.keys(value).sort().map((key) => [key, canonical(value[key])]));
-  return value;
-}
 
 function recordList(source) {
   const records = Array.isArray(source) ? source : source?.records;
@@ -121,25 +109,6 @@ function slideAt(document, slideIndex, what = "this switch") {
 
 function rootPatch(document, field, value) {
   return same(document[field], value) ? [] : createValuePatch(document, [field], value);
-}
-
-// Set (value) or remove (null) design keys at deck or slide scope.
-function designPatches(document, base, entries) {
-  const design = getValueAtPath(document, base.length ? [...base, "design"] : ["design"]);
-  const at = (key) => opfPathToJsonPointer([...base, "design", key]);
-  const set = Object.entries(entries).filter(([, value]) => value !== undefined && value !== null);
-  if (!design || typeof design !== "object" || Array.isArray(design))
-    return set.length ? [{ op: "add", path: opfPathToJsonPointer([...base, "design"]), value: structuredClone(Object.fromEntries(set)) }] : [];
-  const patches = [];
-  for (const [key, value] of Object.entries(entries)) {
-    if (value === undefined) continue;
-    const present = Object.hasOwn(design, key);
-    if (value === null) {
-      if (present) patches.push({ op: "remove", path: at(key) });
-    } else if (!present) patches.push({ op: "add", path: at(key), value: structuredClone(value) });
-    else if (!same(design[key], value)) patches.push({ op: "replace", path: at(key), value: structuredClone(value) });
-  }
-  return patches;
 }
 
 // A deck-level switch does nothing for a slide that carries its own value for that key.
@@ -213,6 +182,7 @@ export function prepareDimensionSwitch(document, dimension, value, options = {})
   let scope = "deck";
   let shadowed = [];
   let slideIndex;
+  let conversionLoss;
 
   if (dimension === "layouts") {
     slideIndex = scopeIndex;
@@ -244,9 +214,17 @@ export function prepareDimensionSwitch(document, dimension, value, options = {})
     patches = [...catalogRecordPatches(document, dimension, options), ...(chart.type === value ? [] : createValuePatch(document, [...owner, "chart", "type"], value))];
   } else if (dimension === "blocks") {
     if (options.path === undefined) throw fail("missing-path", "Choose the block to replace with options.path.");
-    const block = blockValue(value, options);
-    const change = prepareBlockReplace(document, options.path, block);
-    patches = change.changed ? change.patches : [];
+    // convert: true moves the block's own text into the new kind (block-convert.js) instead of replacing it.
+    if (options.convert) {
+      if (typeof value !== "string") throw fail("invalid-switch-value", "Convert a block to a content kind name.", { value });
+      const conversion = prepareBlockConversion(document, options.path, value);
+      patches = conversion.changed ? conversion.patches : [];
+      conversionLoss = conversion.loss;
+    } else {
+      const block = blockValue(value, options);
+      const change = prepareBlockReplace(document, options.path, block);
+      patches = change.changed ? change.patches : [];
+    }
     const parts = splitOpfPath(options.path);
     if (parts[0] === "slides") slideIndex = Number(parts[1]);
     scope = "block";
@@ -276,6 +254,12 @@ export function prepareDimensionSwitch(document, dimension, value, options = {})
     } else if (dimension === "color-schemes" || dimension === "font-schemes") {
       requireCatalogId(document, dimension, value, options);
       entries = { [DESIGN_KEYS[dimension][0]]: value };
+      if (dimension === "font-schemes") {
+        // An accent font is its own choice, not part of the scheme being left: it stays (in the object form).
+        const scopeBase = scopeIndex !== undefined && document.slides?.[scopeIndex] ? ["slides", String(scopeIndex)] : [];
+        const own = getValueAtPath(document, [...scopeBase, "design", "fontScheme"]);
+        if (own && typeof own === "object" && own.accent !== undefined) entries.fontScheme = { id: value, accent: structuredClone(own.accent) };
+      }
       patches = catalogRecordPatches(document, dimension, options);
     } else {
       // A background is an object or a shorthand string (theme slot or hex color); the schema
@@ -309,12 +293,7 @@ export function prepareDimensionSwitch(document, dimension, value, options = {})
     }
   }
 
-  const next = patches.length ? applyJsonPatch(document, patches) : document;
-  if (patches.length) {
-    const validation = validateOpfDocument(next);
-    if (!validation.valid && before.valid)
-      throw fail("invalid-opf-edit", validation.errors[0]?.message ?? "This switch produces an invalid document.", { issues: validation.errors, patches });
-  }
+  const next = checkedDocument(document, patches, before);
   return {
     dimension,
     scope,
@@ -323,6 +302,7 @@ export function prepareDimensionSwitch(document, dimension, value, options = {})
     patches,
     changed: patches.length > 0,
     shadowed,
+    ...(conversionLoss ? { loss: conversionLoss } : {}),
   };
 }
 
@@ -342,3 +322,106 @@ export function switchDimension(editor, dimension, value, options = {}) {
   const change = editor.applyPatch(patches, { ...meta, source: meta?.source ?? "dimension-switch", dimension, scope: prepared.scope });
   return { ...change, ...summary };
 }
+
+// --- options for pickers and current values ---------------------------------------------------
+
+const labelOf = (record) => record.label ?? record.name ?? record.id;
+
+/**
+ * The values a picker can offer for a catalog-backed dimension, in document order: the document's
+ * inline records first (they override), then caller-loaded records, then the bundled catalog,
+ * without duplicates. `blocks` lists the content kinds. `charts` lists every chart type; use
+ * `compatibleChartTypes` to narrow it to the types the chart's data can use.
+ */
+export function listSwitchOptions(document, dimension, options = {}) {
+  if (dimension === "blocks") return BLOCK_KINDS.map((kind) => ({ id: kind, label: kind[0].toUpperCase() + kind.slice(1) }));
+  const kind = CATALOG_KIND[dimension];
+  if (!kind) return [];
+  const seen = new Set();
+  const out = [];
+  for (const source of [document?.catalogs?.[kind], options.catalogs?.[kind] ?? options.catalogSources?.[kind], bundledCatalogs[kind]])
+    for (const record of recordList(source)) {
+      if (seen.has(record.id)) continue;
+      seen.add(record.id);
+      out.push({ id: record.id, label: labelOf(record), record });
+    }
+  return out;
+}
+
+const SINGLE_SERIES_ONLY = new Set(["pieChart", "doughnutChart", "funnelChart", "treemapChart", "waterfallChart"]);
+const MULTI_SERIES_CAPABLE = new Set(["barChart", "lineChart", "areaChart", "radarChart"]);
+const DISTRIBUTION_ELEMENTS = new Set(["histogramChart", "boxWhiskerChart", "mapChart"]);
+
+function chartDataShape(chart) {
+  const data = chart?.data;
+  if (!data || !Array.isArray(data.columns) || !Array.isArray(data.rows)) return undefined;
+  // The renderers read the first column as the category label and every further column as a series.
+  return { series: Math.max(0, data.columns.length - 1), categories: data.rows.length };
+}
+
+/**
+ * Chart types the chart's inline data can use as it is, from the chartTypes catalog: simple,
+ * non-geographic, non-distribution types whose series count fits the data (the first column labels
+ * the categories and each further column is a series; a type with N series needs exactly N value
+ * columns; column, bar, line, area and radar take any number). Data that is read from
+ * an external source returns every simple type. This is data-shape compatibility, not a claim that
+ * an engine draws the type. `path` or `slideIndex` picks the chart (default: the slide's first).
+ * Each entry has `current: true` for the chart's present type, which is always listed.
+ */
+export function compatibleChartTypes(document, options = {}) {
+  const slideIndex = options.slideIndex ?? 0;
+  const owner = options.path ? splitOpfPath(options.path) : document.slides?.[slideIndex] ? findChartOwner(document, slideIndex) : undefined;
+  const chart = owner && getValueAtPath(document, [...owner, "chart"]);
+  if (!chart || typeof chart !== "object") return [];
+  const shape = chartDataShape(chart);
+  const result = [];
+  for (const option of listSwitchOptions(document, "charts", options)) {
+    const record = option.record;
+    const element = record.mappings?.openxml?.element;
+    const current = option.id === chart.type;
+    const simple = record.complexity === "simple" && record.mappings?.openxml?.composition !== "mixed" && !DISTRIBUTION_ELEMENTS.has(element);
+    const seriesOk =
+      !shape || !record.series || (record.series > 1 ? record.series === shape.series : shape.series === 1 || (MULTI_SERIES_CAPABLE.has(element) && !SINGLE_SERIES_ONLY.has(element)));
+    if (current || (simple && seriesOk)) result.push({ id: option.id, label: option.label, current, record });
+  }
+  return result;
+}
+
+/**
+ * The value a dimension currently has, for pickers: `{ value, scope }` where scope is "slide" when
+ * `slideIndex` names a slide whose own design sets it, else "deck". `value` is undefined when the
+ * dimension is unset. Catalog dimensions return the catalog id even when the document holds an
+ * inline object.
+ */
+export function currentSwitchValue(document, dimension, options = {}) {
+  const idOf = (reference) => (reference && typeof reference === "object" && !Array.isArray(reference) ? reference.id : reference);
+  const design = (key) => {
+    const slide = options.slideIndex !== undefined ? document.slides?.[options.slideIndex]?.design?.[key] : undefined;
+    if (slide !== undefined) return { value: slide, scope: "slide" };
+    return document.design?.[key] === undefined ? { scope: "deck" } : { value: document.design[key], scope: "deck" };
+  };
+  if (dimension === "layouts") return { value: document.slides?.[options.slideIndex]?.layout, scope: "slide" };
+  if (dimension === "charts") {
+    const owner = options.path ? splitOpfPath(options.path) : findChartOwner(document, options.slideIndex ?? 0);
+    return { value: owner ? getValueAtPath(document, [...owner, "chart", "type"]) : undefined, scope: "slide" };
+  }
+  if (dimension === "blocks") return { value: undefined, scope: "block" };
+  if (dimension === "socials") {
+    const host = document[options.owner ?? "speaker"];
+    const target = Array.isArray(host) ? host[options.index ?? 0] : host;
+    return { value: target?.socials, scope: "deck" };
+  }
+  if (ROOT_FIELD[dimension]) return { value: document[ROOT_FIELD[dimension]], scope: "deck" };
+  if (dimension === "color-schemes") return { ...design("colorScheme"), value: idOf(design("colorScheme").value) };
+  if (dimension === "font-schemes") return { ...design("fontScheme"), value: idOf(design("fontScheme").value) };
+  if (dimension === "themes") return { ...design("theme"), value: idOf(design("theme").value) };
+  if (dimension === "backgrounds") return design("background");
+  const keys = DESIGN_KEYS[dimension];
+  if (keys) {
+    const found = keys.map((key) => design(key));
+    return { value: Object.fromEntries(keys.map((key, index) => [key, found[index].value])), scope: found.some((entry) => entry.scope === "slide") ? "slide" : "deck" };
+  }
+  return { scope: "deck" };
+}
+
+export { blockConversionTargets };

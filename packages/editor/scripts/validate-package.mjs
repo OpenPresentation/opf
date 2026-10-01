@@ -33,6 +33,11 @@ assert.ok(pkg.exports?.["./svelte"], "Must expose optional Svelte bindings as a 
 assert.ok(pkg.exports?.["./switches"], "Must expose the FF-16 dimension switches as a separate entry point.");
 assert.equal(pkg.exports["./switches"].default, "./dist/switches.js");
 assert.equal(pkg.exports["./switches"].types, "./dist/switches.d.ts");
+for (const [entry, file] of [["./block-convert", "block-convert"], ["./design-options", "design-options"], ["./tables", "table-options"], ["./design-controls", "design-controls"]]) {
+  assert.ok(pkg.exports?.[entry], `Must expose ${entry} as a separate entry point (RR-06).`);
+  assert.equal(pkg.exports[entry].default, `./dist/${file}.js`);
+  assert.equal(pkg.exports[entry].types, `./dist/${file}.d.ts`);
+}
 
 for (const forbidden of forbiddenDependencyNames) {
   assert.ok(!deps[forbidden], `Forbidden critical-path dependency: ${forbidden}`);
