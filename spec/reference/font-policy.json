@@ -2224,6 +2224,19 @@
       ]
     },
     {
+      "family": "Noto Sans Arabic",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/notosansarabic/METADATA.pb",
+        "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-arabic"
+      ],
+      "note": "Shipped in the opf-render script pack (FF-19) and qualified against the script corpus (FF-44, docs/programs/font-fidelity-everywhere/script-corpora.md); it had no policy row until RR-17."
+    },
+    {
       "family": "Noto Sans Armenian",
       "licenseClass": "open",
       "license": "OFL-1.1",
@@ -2372,6 +2385,19 @@
       ]
     },
     {
+      "family": "Noto Sans Lao",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/notosanslao/METADATA.pb",
+        "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-lao"
+      ],
+      "note": "Shipped in the opf-render script pack (FF-19) and qualified against the script corpus (FF-44, docs/programs/font-fidelity-everywhere/script-corpora.md); it had no policy row until RR-17."
+    },
+    {
       "family": "Noto Sans Malayalam",
       "licenseClass": "open",
       "license": "OFL-1.1",
@@ -2395,6 +2421,19 @@
         "https://support.apple.com/en-us/122869"
       ],
       "note": "macOS Tahoe lists it only as a document-support font, so \"macos\" omitted."
+    },
+    {
+      "family": "Noto Sans Myanmar",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/notosansmyanmar/METADATA.pb",
+        "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-myanmar"
+      ],
+      "note": "Shipped in the opf-render script pack (FF-19) and qualified against the script corpus (FF-44, docs/programs/font-fidelity-everywhere/script-corpora.md); it had no policy row until RR-17."
     },
     {
       "family": "Noto Sans Oriya",
@@ -2422,6 +2461,32 @@
         "https://github.com/google/fonts/blob/main/ofl/notosanssc/METADATA.pb",
         "https://support.apple.com/en-us/122869"
       ]
+    },
+    {
+      "family": "Noto Sans Sinhala",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/notosanssinhala/METADATA.pb",
+        "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-sinhala"
+      ],
+      "note": "Shipped in the opf-render script pack (FF-19) and qualified against the script corpus (FF-44, docs/programs/font-fidelity-everywhere/script-corpora.md); it had no policy row until RR-17."
+    },
+    {
+      "family": "Noto Sans Syriac",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/notosanssyriac/METADATA.pb",
+        "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-syriac"
+      ],
+      "note": "Shipped in the opf-render script pack (FF-19) and qualified against the script corpus (FF-44, docs/programs/font-fidelity-everywhere/script-corpora.md); it had no policy row until RR-17."
     },
     {
       "family": "Noto Sans Tamil",
@@ -2460,6 +2525,19 @@
       ]
     },
     {
+      "family": "Noto Sans Thaana",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/notosansthaana/METADATA.pb",
+        "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-thaana"
+      ],
+      "note": "Shipped in the opf-render script pack (FF-19) and qualified against the script corpus (FF-44, docs/programs/font-fidelity-everywhere/script-corpora.md); it had no policy row until RR-17."
+    },
+    {
       "family": "Noto Sans Thai",
       "licenseClass": "open",
       "license": "OFL-1.1",
@@ -2482,6 +2560,19 @@
         "https://github.com/google/fonts/blob/main/ofl/notoserifhebrew/METADATA.pb",
         "https://www.npmjs.com/package/@expo-google-fonts/noto-serif-hebrew"
       ]
+    },
+    {
+      "family": "Noto Serif Tibetan",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/google/fonts/blob/main/ofl/notoseriftibetan/METADATA.pb",
+        "https://www.npmjs.com/package/@expo-google-fonts/noto-serif-tibetan"
+      ],
+      "note": "Shipped in the opf-render script pack (FF-19) and qualified against the script corpus (FF-44, docs/programs/font-fidelity-everywhere/script-corpora.md); it had no policy row until RR-17."
     },
     {
       "family": "Nyala",

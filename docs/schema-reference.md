@@ -27,7 +27,8 @@ This reference documents the author-facing shape of a complete `*.opf.json` pres
 | `duration` | no | `integer` | Target presentation duration, as an integer number of minutes. Used by AI to set pace and depth, and to compare against the resolved narrative's durationRange. |
 | `tags` | no | `array<string>` | Free-form labels used for categorization, search, and filtering. Lowercase kebab-case is recommended for consistency across a deck library. |
 | `design` | no | `ref:Design` | Optional design system covering theme, color scheme, font scheme, dimensions, background, logo, watermark, header, and footer applied to the deck. When omitted, engines use their default design configuration. |
-| `variables` | no | `ref:Variables` | Optional named color variables for values the deck uses in more than one place or wants to name for intent (e.g. a risk red, a brand highlight). Content color fields reference entries as 'var:<id>' strings. Variables... |
+| `variables` | no | `ref:Variables` | Optional named variables: deck colors referenced as 'var:<id>' (the original use), and typed content variables (text, number, date, image, url, list) referenced inline as '{{<id>}}' or whole as 'var:<id>'. Variables a... |
+| `template` | no | `boolean` | Marks this document as a template: an incomplete OPF file. A template declares variables (top-level 'variables') and references them from content, and may leave required variables unfilled; validation then reports the... |
 | `narrative` | no | `oneOf:string / ref:Narrative` | Structured storyline describing the deck's arc and beats. Resolves to the 'id' of a 'narratives' catalog record. Accepts two forms: - String shorthand for the common case: 'narrative = "classic-story"'. Accepts a bare... |
 | `slides` | yes | `array<ref:Slide>` | Ordered array of slides that make up the presentation. |
 | `references` | no | `array<ref:Reference>` | Sources that text runs cite with 'cite'. Ids are unique. A cited reference is listed in the footnote area of every slide that cites it, with a marker number assigned per deck in order of first use; a reference no run... |
@@ -391,18 +392,132 @@ _No named properties._
 
 - Type: `object`
 - Required fields: none
-- Purpose: Named color variables, keyed by stable kebab-case id. Content color fields reference entries as 'var:<id>' strings. Each value is a hex string shorthand or a Variable object.
+- Purpose: Named variables, keyed by stable kebab-case id. A variable is a typed, named value the deck declares once and uses in many places: a color ('var:<id>' in color fields, the original use), or content that fills a template (text, number, date, image, url, list). Content is referenced inline as '{{<id>}}' inside any string, or whole as 'var:<id>' in a field of the matching type; '\{{' writes a literal '{{'. A hex string is shorthand for a color variable. A variable with no 'value' is unfilled: ex...
 
 _No named properties._
 
 
 ### Variable
 
-- Type: `oneOf:ref:HexColor / object`
+- Type: `oneOf:ref:HexColor / ref:ColorVariable / ref:TextVariable / ref:NumberVariable / ref:DateVariable / ref:ImageVariable / ref:UrlVariable / ref:ListVariable`
 - Required fields: none
-- Purpose: A single named variable. A hex string is shorthand for { "type": "color", "value": value }.
+- Purpose: A single named variable: a hex string (shorthand for a color variable) or an object whose 'type' is color, text, number, date, image, url or list. 'value' is the current value and is optional: a variable with no value is unfilled, which a template allows and a normal deck does not. 'example' only illustrates the slot (fill forms, template previews) and never reaches output.
 
 _No named properties._
+
+
+### ColorVariable
+
+- Type: `object`
+- Required fields: `type`
+- Purpose: A named color. Content color fields reference it as 'var:<id>'. Colors resolve at render time through the ordinary color-reference path, so a color variable keeps working as before.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `type` | yes | `const:"color"` | Variable kind. One of color, text, number, date, image, url or list. |
+| `value` | no | `ref:HexColor` | Hex color this variable resolves to. |
+| `required` | no | `boolean` | Whether the variable must be filled. Defaults to true: a variable with no 'value' is unfilled, and an unfilled required variable is an error in a normal deck and expected in a template. Set false for an optional slot:... |
+| `label` | no | `string` | Optional short human label for forms and fill panels. |
+| `description` | no | `string` | Optional prose describing what the variable is for, surfaced by pickers, fill forms and agents. |
+| `example` | no | `ref:HexColor` | Illustrative color shown in fill forms and used when a template is previewed with examples. Never written to output. |
+
+
+### TextVariable
+
+- Type: `object`
+- Required fields: `type`
+- Purpose: Text content. Plain string or rich TextRun[]. Insert it inline as '{{<id>}}' inside any string (rich text is flattened to plain text there), or reference it whole as 'var:<id>' in a field that accepts string or TextRun[] (the rich runs are kept).
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `type` | yes | `const:"text"` | Variable kind. One of color, text, number, date, image, url or list. |
+| `value` | no | `oneOf:string / array<ref:TextRun>` | Text this variable resolves to: a plain string, or TextRun[] for rich text. |
+| `required` | no | `boolean` | Whether the variable must be filled. Defaults to true: a variable with no 'value' is unfilled, and an unfilled required variable is an error in a normal deck and expected in a template. Set false for an optional slot:... |
+| `label` | no | `string` | Optional short human label for forms and fill panels. |
+| `description` | no | `string` | Optional prose describing what the variable is for, surfaced by pickers, fill forms and agents. |
+| `example` | no | `oneOf:string / array<ref:TextRun>` | Illustrative text shown in fill forms and used when a template is previewed with examples. Never written to output. |
+
+
+### NumberVariable
+
+- Type: `object`
+- Required fields: `type`
+- Purpose: A number. '{{<id>}}' inserts it as text using 'format'; 'var:<id>' as a whole field supplies the number itself (chart values, font sizes).
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `type` | yes | `const:"number"` | Variable kind. One of color, text, number, date, image, url or list. |
+| `value` | no | `number` | Number this variable resolves to. |
+| `required` | no | `boolean` | Whether the variable must be filled. Defaults to true: a variable with no 'value' is unfilled, and an unfilled required variable is an error in a normal deck and expected in a template. Set false for an optional slot:... |
+| `label` | no | `string` | Optional short human label for forms and fill panels. |
+| `description` | no | `string` | Optional prose describing what the variable is for, surfaced by pickers, fill forms and agents. |
+| `example` | no | `number` | Illustrative number shown in fill forms and used when a template is previewed with examples. Never written to output. |
+| `format` | no | `string` | Display pattern used by '{{<id>}}'. A literal prefix, a numeric part of '#', '0', ',' and '.', and a literal suffix. '0' pads digits, '#' is optional, ',' groups thousands, digits after '.' fix the decimals ('0' requi... |
+
+
+### DateVariable
+
+- Type: `object`
+- Required fields: `type`
+- Purpose: A calendar date as an ISO YYYY-MM-DD string. No time zone and no clock are involved. '{{<id>}}' inserts it formatted with 'format'.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `type` | yes | `const:"date"` | Variable kind. One of color, text, number, date, image, url or list. |
+| `value` | no | `string` | ISO calendar date (YYYY-MM-DD) this variable resolves to. |
+| `required` | no | `boolean` | Whether the variable must be filled. Defaults to true: a variable with no 'value' is unfilled, and an unfilled required variable is an error in a normal deck and expected in a template. Set false for an optional slot:... |
+| `label` | no | `string` | Optional short human label for forms and fill panels. |
+| `description` | no | `string` | Optional prose describing what the variable is for, surfaced by pickers, fill forms and agents. |
+| `example` | no | `string` | Illustrative ISO date shown in fill forms and used when a template is previewed with examples. Never written to output. |
+| `format` | no | `string` | Date display pattern, the same LDML-style tokens as header/footer dateFormat: yyyy, yy, MMMM, MMM, MM, M, dd, d, EEEE, EEE and quoted literals. English names. Default 'MMMM d, yyyy'. |
+
+
+### ImageVariable
+
+- Type: `object`
+- Required fields: `type`
+- Purpose: An image source: any Asset (an 'asset:<id>' reference, HTTPS URL, data URI, relative or local path, or an object with src, alt and metadata). Reference it whole as 'var:<id>' in an image, asset or src field; '{{<id>}}' inserts the source string.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `type` | yes | `const:"image"` | Variable kind. One of color, text, number, date, image, url or list. |
+| `value` | no | `ref:Asset` | Image source this variable resolves to. |
+| `required` | no | `boolean` | Whether the variable must be filled. Defaults to true: a variable with no 'value' is unfilled, and an unfilled required variable is an error in a normal deck and expected in a template. Set false for an optional slot:... |
+| `label` | no | `string` | Optional short human label for forms and fill panels. |
+| `description` | no | `string` | Optional prose describing what the variable is for, surfaced by pickers, fill forms and agents. |
+| `example` | no | `ref:Asset` | Illustrative image source shown in fill forms and used when a template is previewed with examples. Never written to output. |
+
+
+### UrlVariable
+
+- Type: `object`
+- Required fields: `type`
+- Purpose: A link target (http, https, mailto or tel). Use it as '{{<id>}}' inside a link string or reference it whole as 'var:<id>' in a link field.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `type` | yes | `const:"url"` | Variable kind. One of color, text, number, date, image, url or list. |
+| `value` | no | `string` | Link target this variable resolves to. |
+| `required` | no | `boolean` | Whether the variable must be filled. Defaults to true: a variable with no 'value' is unfilled, and an unfilled required variable is an error in a normal deck and expected in a template. Set false for an optional slot:... |
+| `label` | no | `string` | Optional short human label for forms and fill panels. |
+| `description` | no | `string` | Optional prose describing what the variable is for, surfaced by pickers, fill forms and agents. |
+| `example` | no | `string` | Illustrative link shown in fill forms and used when a template is previewed with examples. Never written to output. |
+
+
+### ListVariable
+
+- Type: `object`
+- Required fields: `type`
+- Purpose: A list of strings, for bullets and list items. A whole-string array element 'var:<id>' splices every entry into the array in place; a whole field 'var:<id>' becomes the array; '{{<id>}}' joins the entries with ', ' (or the separator after a pipe: '{{<id>|; }}').
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `type` | yes | `const:"list"` | Variable kind. One of color, text, number, date, image, url or list. |
+| `value` | no | `array<string>` | Entries this variable resolves to. |
+| `required` | no | `boolean` | Whether the variable must be filled. Defaults to true: a variable with no 'value' is unfilled, and an unfilled required variable is an error in a normal deck and expected in a template. Set false for an optional slot:... |
+| `label` | no | `string` | Optional short human label for forms and fill panels. |
+| `description` | no | `string` | Optional prose describing what the variable is for, surfaced by pickers, fill forms and agents. |
+| `example` | no | `array<string>` | Illustrative entries shown in fill forms and used when a template is previewed with examples. Never written to output. |
 
 
 ### BackgroundShortcut
