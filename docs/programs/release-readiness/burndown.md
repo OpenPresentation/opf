@@ -18,7 +18,7 @@ columns below, and a status from the list.
 | RR-03 | Close the font-fidelity items in review (FF-07, FF-08, FF-22b, FF-27, FF-29, FF-30, FF-31, FF-37, FF-39, FF-58) | opf | none | in-progress | verdicts in [the RR-03 PR](https://github.com/OpenPresentation/opf/pulls?q=RR-03+in%3Atitle) and the font burndown rows |
 | RR-04 | Cross-platform: pairwise matrix (FF-09), matrix in CI on ubuntu/windows/macos (FF-10), export determinism independent of host (FF-11) | opf, opf-pptx | RR-03 | in-progress | FF-09 todo; FF-10 and FF-11 in-progress in the font burndown |
 | RR-05 | Native PowerPoint sample including CJK and RTL (FF-12) | opf, opf-pptx | RR-04 | todo | supervisor-run; see FF-12 |
-| RR-06 | Editor: switch every dimension with patch, undo and preview refresh (FF-16) and editable design-level options | opf-editor, opf | none | in-progress | FF-16 todo in the font burndown |
+| RR-06 | Editor: switch every dimension with patch, undo and preview refresh (FF-16) and editable design-level options | opf-editor, opf | none | in-progress | FF-16 done ([opf-editor#59](https://github.com/OpenPresentation/opf-editor/pull/59) `f4eaa56`); design options, table style/merge and the panel merged in #59; image upload, every background form and every header/footer part merged ([opf-editor#60](https://github.com/OpenPresentation/opf-editor/pull/60)); unreleased, so the item stays in-progress until an editor release ships both |
 | RR-07 | Preview polish: code language highlighting, metric trend, all 54 background pattern presets (preview and export agree) | opf-render, opf-pptx | none | in-progress | |
 | RR-08 | Import details: author arrays, run ColorRef (`var:`/scheme) colours, item descriptions, bullets form | opf-pptx | none | todo | |
 | RR-09 | Rich text with hard line breaks round-trips as one authored payload | opf-pptx | RR-01 | todo | wrapped-text rejoin is [opf-pptx#126](https://github.com/OpenPresentation/opf-pptx/pull/126) (RR-01); hard breaks are the remaining case |
@@ -32,12 +32,35 @@ columns below, and a status from the list.
 | RR-17 | Font long tail: FF-41, FF-42, FF-43, FF-44, FF-45, FF-46, FF-05, FF-13 | opf, opf-render, opf-pptx, opf-editor | RR-05 | in-progress | per-font status in the [font tracker](../font-fidelity-everywhere/font-tracker.md) part A (FF-41, FF-42, FF-43): in review ([opf#249](https://github.com/OpenPresentation/opf/pull/249), [opf-render#92](https://github.com/OpenPresentation/opf-render/pull/92), [opf-editor#61](https://github.com/OpenPresentation/opf-editor/pull/61), [pptx-gallery#80](https://github.com/Data-Advantage/pptx-gallery/pull/80)); FF-44 to FF-46, FF-05 and FF-13 are not in part A |
 | RR-18 | Issues and roadmap hygiene: file descoped issues, refresh roadmap issues #87 and #88 | opf, opf-pptx | none | in-progress | descoped issues (video, ChartDataSource) and roadmap comments listed in the progress log |
 | RR-19 | Housekeeping: stale worktrees, branches, scratch folders | all | none | in-progress | supervisor; never touches the user's checkouts |
-| RR-20 | Release-readiness note (FF-15), final lockstep release train, re-audit | opf and all | RR-01 to RR-19 | todo | |
+| RR-21 | Editor slide management: delete, duplicate, reorder (drag and keyboard), hide, sections, slide sorter and outline view | opf-editor, opf | none | in-progress | owner scope 2026-10-01 |
+| RR-22 | Editor autosave and restore (browser storage) and an unsaved-changes warning, adopted by the sites | opf-editor, pptx-gallery, openpresentation-site, pptx-dev | none | in-progress | owner scope 2026-10-01 |
+| RR-23 | Export from the editor and the sites: vector PDF, PNG and SVG downloads next to PPTX | opf-editor, opf-render, pptx-gallery, openpresentation-site, pptx-dev | RR-12 | in-progress | owner scope 2026-10-01 |
+| RR-24 | Chart and table data grid editor; table row and column insert, delete, move | opf-editor | none | in-progress | owner scope 2026-10-01 |
+| RR-25 | Editor: deck-wide find and replace, image crop and focal point, mobile layout | opf-editor, opf-render | none | in-progress | owner scope 2026-10-01 |
+| RR-26 | Core conversions module `@openpresentation/opf/convert` (list to table, timeline to table, metric set to table, list promote and demote, quote attribution parsing, image to slideImage or background, wrap in group or region, split and merge slides) with the editor as the transactional UI | opf, opf-editor | none | in-progress | owner scope 2026-10-01 |
+| RR-27 | CLI render, export and import: `opf render`, `opf export pdf\|png\|svg\|pptx`, `opf import deck.pptx` | opf (CLI), opf-render, opf-pptx | RR-12 | in-progress | owner scope 2026-10-01 |
+| RR-28 | Presenter, player and embeddable `<opf-deck>` web component (slideshow, speaker view with text notes, keyboard navigation, embedding); openpresentation.org example pages use it | opf-render, opf-editor, openpresentation-site | none | in-progress | owner scope 2026-10-01 |
+| RR-29 | `opf audit` design and accessibility checker (contrast, overflow, alt text, reading order, font usage) in the CLI and as an editor Review panel | opf (CLI), opf-editor | none | in-progress | owner scope 2026-10-01 |
+| RR-30 | Markdown and outline to and from OPF converter (core subpath and CLI) | opf | RR-26 | in-progress | owner scope 2026-10-01 |
+| RR-31 | OPF diff and merge, `opf format`, and one unified core JSON-patch module shared by the CLI and the editor | opf, opf-editor | none | in-progress | owner scope 2026-10-01 |
+| RR-32 | Templates and variables: a template is an incomplete OPF file; variables extend beyond colours to text, number, date and image or asset values, usable inside text and image fields; fill from data (`opf fill`, decks from data), an editor fill UI, validation of unfilled variables | opf, opf-editor, opf-render, opf-pptx | RR-31 | in-progress | owner scope 2026-10-01 |
+| RR-33 | Spec: numbered lists | opf, opf-render, opf-pptx, opf-editor | none | in-progress | owner scope 2026-10-01 |
+| RR-34 | Spec: footnotes, citations and captions | opf, opf-render, opf-pptx, opf-editor | none | in-progress | owner scope 2026-10-01 |
+| RR-35 | Spec: chart options (axis titles, legend position, data labels) | opf, opf-render, opf-pptx, opf-editor | none | in-progress | owner scope 2026-10-01 |
+| RR-20 | Release-readiness note (FF-15), final lockstep release train, re-audit | opf and all | RR-01 to RR-19, RR-21 to RR-35 | todo | |
 
-Descoped by owner decision 2026-10-01 (not RR items; each has a future-work
-issue, filed under RR-18): native PowerPoint video (`p:video`) and preview
-playback; chart data from external spreadsheets (`ChartDataSource`, a host
-`dataResolver` hook).
+Descoped, declined or deferred by owner decision 2026-10-01 (not RR items; the
+future-work ones have issues, filed under RR-18 and RR-00 scope 2): native
+PowerPoint video (`p:video`) and preview playback
+([opf-pptx#127](https://github.com/OpenPresentation/opf-pptx/issues/127));
+chart data from external spreadsheets (`ChartDataSource`, a host
+`dataResolver` hook; [opf#240](https://github.com/OpenPresentation/opf/issues/240));
+navigation and motion (transitions, builds and reveals, links between slides;
+[opf#250](https://github.com/OpenPresentation/opf/issues/250)); rich speaker
+notes, plain-text notes stay ([opf#251](https://github.com/OpenPresentation/opf/issues/251));
+the `world` region map chart, parked with an offline native map export as the
+future work ([opf-pptx#133](https://github.com/OpenPresentation/opf-pptx/issues/133)).
+Declined, no issue: a VS Code extension, and a language set per slide or per run.
 
 ## Acceptance criteria
 
@@ -121,6 +144,63 @@ items.
 **RR-19 Housekeeping.** No stale worktrees, merged branches or scratch folders
 remain from the program; user checkouts are never switched or cleaned by agents.
 
+**RR-21 Slide management.** The editor deletes, duplicates, reorders (drag and
+keyboard), hides and sections slides, and offers a slide sorter and an outline
+view; each action is one patch with exact undo and the preview refreshes.
+
+**RR-22 Autosave and restore.** The editor autosaves to browser storage,
+restores the last session and warns before unsaved changes are lost; the three
+sites adopt it without changing their look and without sending content anywhere.
+
+**RR-23 Downloads.** The editor and the sites download the deck as vector PDF,
+PNG and SVG next to PPTX, from the same rendering the preview uses.
+
+**RR-24 Data grid.** A grid edits chart data and tables; table rows and columns
+insert, delete and move as single undoable patches.
+
+**RR-25 Editor tools.** Deck-wide find and replace (with undo as one patch),
+image crop and focal point, and a usable mobile layout.
+
+**RR-26 Conversions.** `@openpresentation/opf/convert` converts list and table,
+timeline and table, metric set and table, promotes and demotes list levels,
+parses quote attribution, turns an image into a slide image or background,
+wraps content in a group or region and splits or merges slides. The functions
+are pure and deterministic, and the editor applies each as one transaction.
+
+**RR-27 CLI.** `opf render`, `opf export pdf|png|svg|pptx` and `opf import
+deck.pptx` run offline on the supported Node versions, with deterministic
+output and tests on ubuntu, windows and macos.
+
+**RR-28 Player.** An embeddable `<opf-deck>` web component plays a deck
+(slideshow, keyboard navigation, speaker view with plain-text notes) and the
+openpresentation.org example pages use it. No transitions or builds (deferred).
+
+**RR-29 Audit.** `opf audit` reports contrast, overflow, missing alt text,
+reading order and font usage with stable rule ids and exit codes, and the editor
+shows the same findings in a Review panel.
+
+**RR-30 Markdown.** A core subpath and CLI convert Markdown and outlines to and
+from OPF with a documented mapping and a round-trip test.
+
+**RR-31 Diff, format and patch.** `opf diff` and merge report and combine
+changes between two OPF files, `opf format` normalises a file, and one core
+JSON-patch module is used by both the CLI and the editor.
+
+**RR-32 Templates and variables.** A template is an incomplete OPF file.
+Variables cover text, number, date and image or asset values (not only
+colours) inside text and image fields. `opf fill` and decks from data fill a
+template, the editor offers a fill UI, and validation reports unfilled
+variables. The schema change is additive.
+
+**RR-33 Numbered lists.** The spec has numbered lists (style, start value,
+nesting) and preview, PPTX export (`a:buAutoNum`) and import agree.
+
+**RR-34 Footnotes, citations and captions.** The spec has footnotes, citations
+and captions; preview, export and import agree or report a specific diagnostic.
+
+**RR-35 Chart options.** Charts take axis titles, legend position and data
+labels; the preview and the native PPTX chart agree and re-import keeps them.
+
 **RR-20 Readiness note.** A release-readiness note for the owner (FF-15) lists
 what ships, what is descoped and the evidence; the final lockstep train is
 published and verified; the audits are re-run on the published packages and the
@@ -135,6 +215,8 @@ Append-only. One dated line per state change.
 - 2026-10-01: RR-01 progress: opf-pptx 0.11.8 and CLI 0.9.2 are merged and tagged ([opf-pptx#128](https://github.com/OpenPresentation/opf-pptx/pull/128) `875c944`, [opf#241](https://github.com/OpenPresentation/opf/pull/241) `73c7f15`) and publishing; the registry artifacts and provenance are not yet verified, so the item stays in-progress. [pptx-dev#26](https://github.com/Data-Advantage/pptx-dev/issues/26) is closed as superseded by pptx-dev#32 (the Node 24 decision is kept).
 - 2026-10-01: RR-19 progress: 466 stale scratchpad worktrees removed across the seven repositories, 422 remote branches of merged or closed PRs deleted, and C:c removed. The item stays in-progress until the supervisor confirms no stale worktrees, branches or scratch folders remain.
 - 2026-10-01: RR-03 in review ([opf#242](https://github.com/OpenPresentation/opf/pull/242)): FF-07, FF-22b, FF-29, FF-30, FF-31 and FF-39 are done; FF-08, FF-27, FF-37 and FF-58 stay in review. The two owner-facing questions are listed in the README under Open decisions.
+- 2026-10-01: RR-06 progress: [opf-editor#59](https://github.com/OpenPresentation/opf-editor/pull/59) (`f4eaa56`) is merged: FF-16 is done and the decision on content-type conversion is "in scope" (a conversion API, no longer replacement only); design-level options, table style and cell merge and the accessible controls panel are in. The follow-up [opf-editor#60](https://github.com/OpenPresentation/opf-editor/pull/60) (image upload, every background form including the 54 patterns, every header/footer part) is merged too. The item stays in-progress until an editor release ships both; radial gradients are not offered because the OPF schema has none.
 - 2026-10-01: RR-01 progress: opf-pptx 0.11.8 (`875c944`) and CLI 0.9.2 (`73c7f15`) are published and verified (gitHead equals the tag commit, SLSA provenance names the release workflow and tag, `npm audit signatures` clean). Node 20 is not restored for the CLI: `engines.node` stays `24.x` (owner Node 24 decision; pptx-dev#26 closed as superseded by pptx-dev#32). The release plan, compatibility matrix and docs follow in [opf#245](https://github.com/OpenPresentation/opf/pull/245); the three sites adopt the release in [openpresentation-site#59](https://github.com/Data-Advantage/openpresentation-site/pull/59), [pptx-gallery#79](https://github.com/Data-Advantage/pptx-gallery/pull/79) and [pptx-dev#67](https://github.com/Data-Advantage/pptx-dev/pull/67). opf-pptx 0.11.9 (RR-13 import signals) follows.
 - 2026-10-01: FF-58 closed by the owner decision that the `world` region map is parked for post-v1 ([opf-pptx#133](https://github.com/OpenPresentation/opf-pptx/issues/133)): works denominator 818. The open question is removed from the README; the `PPTX_GALLERY_READ_TOKEN` item (FF-37) stays open.
 - 2026-10-01: RR-17 part A (Latin font long tail: FF-41, FF-42, FF-43) in review: [opf#249](https://github.com/OpenPresentation/opf/pull/249), [opf-render#92](https://github.com/OpenPresentation/opf-render/pull/92), [opf-editor#61](https://github.com/OpenPresentation/opf-editor/pull/61), [pptx-gallery#80](https://github.com/Data-Advantage/pptx-gallery/pull/80). Per-family fixtures in every host, the qualification report and the tracker-derived acceptance (41 qualified, 36 documented-visual); decisions for Aptos Narrow, Serif, Mono and Liberation are recorded as vetoable in the font burndown. FF-46 native checks of the Latin families are the supervisor's.
+- 2026-10-01: Program scope 2 (owner approval, RR-00 scope 2 PR). Added RR-21 to RR-35 (editor slide management, autosave and restore, downloads, data grid, editor tools, conversions, CLI render/export/import, player and `<opf-deck>`, audit, Markdown, diff/format/patch, templates and variables, numbered lists, footnotes and captions, chart options), all in-progress. Owner declined a VS Code extension and a per-slide or per-run language (no issue). Owner deferred navigation and motion and rich speaker notes ([opf#250](https://github.com/OpenPresentation/opf/issues/250), [opf#251](https://github.com/OpenPresentation/opf/issues/251), out of v1). The `world` map chart is parked ([opf-pptx#133](https://github.com/OpenPresentation/opf-pptx/issues/133)): open decision 1 is settled and the in-scope gallery denominator is 818.
