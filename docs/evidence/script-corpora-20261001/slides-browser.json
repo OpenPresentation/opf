@@ -1,0 +1,1383 @@
+{
+  "node": "v26.4.0",
+  "browser": "154.0.4258.37",
+  "slides": 140,
+  "runs": 229,
+  "worst": 0.042374999999992724,
+  "rows": [
+    {
+      "id": "arab-joining",
+      "family": "Noto Naskh Arabic",
+      "accepted": 532.71,
+      "natural": 532.71875
+    },
+    {
+      "id": "arab-lam-alef",
+      "family": "Noto Naskh Arabic",
+      "accepted": 566.676,
+      "natural": 566.6875
+    },
+    {
+      "id": "arab-harakat",
+      "family": "Noto Naskh Arabic",
+      "accepted": 413.046,
+      "natural": 413.046875
+    },
+    {
+      "id": "arab-digits",
+      "family": "Noto Naskh Arabic",
+      "accepted": 516.942,
+      "natural": 516.984375
+    },
+    {
+      "id": "arab-bidi-latin",
+      "family": "Noto Naskh Arabic",
+      "accepted": 113.886,
+      "natural": 113.890625
+    },
+    {
+      "id": "arab-bidi-latin",
+      "family": "Intos Display",
+      "accepted": 77.625,
+      "natural": 77.640625
+    },
+    {
+      "id": "arab-bidi-latin",
+      "family": "Noto Naskh Arabic",
+      "accepted": 501.66,
+      "natural": 501.6875
+    },
+    {
+      "id": "arab-punctuation",
+      "family": "Noto Naskh Arabic",
+      "accepted": 706.914,
+      "natural": 706.921875
+    },
+    {
+      "id": "arab-fa-letters",
+      "family": "Noto Naskh Arabic",
+      "accepted": 700.218,
+      "natural": 700.234375
+    },
+    {
+      "id": "arab-fa-digits",
+      "family": "Noto Naskh Arabic",
+      "accepted": 419.634,
+      "natural": 419.671875
+    },
+    {
+      "id": "arab-ur-letters",
+      "family": "Noto Naskh Arabic",
+      "accepted": 610.902,
+      "natural": 610.90625
+    },
+    {
+      "id": "arab-ur-title",
+      "family": "Noto Naskh Arabic",
+      "accepted": 490.806,
+      "natural": 490.8125
+    },
+    {
+      "id": "arab-ps-letters",
+      "family": "Noto Sans Arabic",
+      "accepted": 654.21,
+      "natural": 654.21875
+    },
+    {
+      "id": "arab-pa-shahmukhi",
+      "family": "Noto Sans Arabic",
+      "accepted": 664.578,
+      "natural": 664.578125
+    },
+    {
+      "id": "hebr-words",
+      "family": "Noto Serif Hebrew",
+      "accepted": 616.14,
+      "natural": 616.140625
+    },
+    {
+      "id": "hebr-final-forms",
+      "family": "Noto Serif Hebrew",
+      "accepted": 569.268,
+      "natural": 569.28125
+    },
+    {
+      "id": "hebr-niqqud",
+      "family": "Noto Serif Hebrew",
+      "accepted": 428.868,
+      "natural": 428.875
+    },
+    {
+      "id": "hebr-geresh",
+      "family": "Noto Serif Hebrew",
+      "accepted": 611.118,
+      "natural": 611.125
+    },
+    {
+      "id": "hebr-maqaf",
+      "family": "Noto Serif Hebrew",
+      "accepted": 711.558,
+      "natural": 711.5625
+    },
+    {
+      "id": "hebr-bidi-latin",
+      "family": "Noto Serif Hebrew",
+      "accepted": 93.042,
+      "natural": 93.046875
+    },
+    {
+      "id": "hebr-bidi-latin",
+      "family": "Intos Display",
+      "accepted": 239.941,
+      "natural": 239.953125
+    },
+    {
+      "id": "hebr-bidi-latin",
+      "family": "Noto Serif Hebrew",
+      "accepted": 204.336,
+      "natural": 204.359375
+    },
+    {
+      "id": "deva-title",
+      "family": "Noto Sans Devanagari",
+      "accepted": 606.312,
+      "natural": 606.3125
+    },
+    {
+      "id": "deva-conjuncts",
+      "family": "Noto Sans Devanagari",
+      "accepted": 754.164,
+      "natural": 754.171875
+    },
+    {
+      "id": "deva-reph",
+      "family": "Noto Sans Devanagari",
+      "accepted": 476.442,
+      "natural": 476.453125
+    },
+    {
+      "id": "deva-matras",
+      "family": "Noto Sans Devanagari",
+      "accepted": 708.642,
+      "natural": 708.65625
+    },
+    {
+      "id": "deva-nukta",
+      "family": "Noto Sans Devanagari",
+      "accepted": 610.146,
+      "natural": 610.15625
+    },
+    {
+      "id": "deva-mr",
+      "family": "Noto Sans Devanagari",
+      "accepted": 477.738,
+      "natural": 477.75
+    },
+    {
+      "id": "deva-ne",
+      "family": "Noto Sans Devanagari",
+      "accepted": 622.08,
+      "natural": 622.09375
+    },
+    {
+      "id": "deva-digits",
+      "family": "Noto Sans Devanagari",
+      "accepted": 448.74,
+      "natural": 448.75
+    },
+    {
+      "id": "deva-mixed-latin",
+      "family": "Noto Sans Devanagari",
+      "accepted": 131.868,
+      "natural": 131.875
+    },
+    {
+      "id": "deva-mixed-latin",
+      "family": "Intos Display",
+      "accepted": 204.688,
+      "natural": 204.703125
+    },
+    {
+      "id": "deva-mixed-latin",
+      "family": "Noto Sans Devanagari",
+      "accepted": 99.738,
+      "natural": 99.75
+    },
+    {
+      "id": "deva-mixed-latin",
+      "family": "Intos Display",
+      "accepted": 97.559,
+      "natural": 97.5625
+    },
+    {
+      "id": "beng-title",
+      "family": "Noto Sans Bengali",
+      "accepted": 752.382,
+      "natural": 752.390625
+    },
+    {
+      "id": "beng-conjuncts",
+      "family": "Noto Sans Bengali",
+      "accepted": 501.444,
+      "natural": 501.453125
+    },
+    {
+      "id": "beng-reph",
+      "family": "Noto Sans Bengali",
+      "accepted": 335.016,
+      "natural": 335.03125
+    },
+    {
+      "id": "beng-vowels",
+      "family": "Noto Sans Bengali",
+      "accepted": 654.966,
+      "natural": 654.96875
+    },
+    {
+      "id": "beng-khanda-ta",
+      "family": "Noto Sans Bengali",
+      "accepted": 369.576,
+      "natural": 369.578125
+    },
+    {
+      "id": "beng-ctg",
+      "family": "Noto Sans Bengali",
+      "accepted": 621.54,
+      "natural": 621.546875
+    },
+    {
+      "id": "guru-title",
+      "family": "Noto Sans Gurmukhi",
+      "accepted": 713.394,
+      "natural": 713.40625
+    },
+    {
+      "id": "guru-marks",
+      "family": "Noto Sans Gurmukhi",
+      "accepted": 615.708,
+      "natural": 615.71875
+    },
+    {
+      "id": "guru-subjoined",
+      "family": "Noto Sans Gurmukhi",
+      "accepted": 321.192,
+      "natural": 321.203125
+    },
+    {
+      "id": "gujr-title",
+      "family": "Noto Sans Gujarati",
+      "accepted": 714.528,
+      "natural": 714.53125
+    },
+    {
+      "id": "gujr-conjuncts",
+      "family": "Noto Sans Gujarati",
+      "accepted": 509.166,
+      "natural": 509.171875
+    },
+    {
+      "id": "gujr-marks",
+      "family": "Noto Sans Gujarati",
+      "accepted": 538.92,
+      "natural": 538.921875
+    },
+    {
+      "id": "orya-title",
+      "family": "Noto Sans Oriya",
+      "accepted": 739.206,
+      "natural": 739.21875
+    },
+    {
+      "id": "orya-conjuncts",
+      "family": "Noto Sans Oriya",
+      "accepted": 403.92,
+      "natural": 403.921875
+    },
+    {
+      "id": "orya-nukta",
+      "family": "Noto Sans Oriya",
+      "accepted": 773.226,
+      "natural": 773.234375
+    },
+    {
+      "id": "taml-title",
+      "family": "Noto Sans Tamil",
+      "accepted": 891.972,
+      "natural": 891.984375
+    },
+    {
+      "id": "taml-title",
+      "family": "Noto Sans Tamil",
+      "accepted": 361.26,
+      "natural": 361.265625
+    },
+    {
+      "id": "taml-split-vowels",
+      "family": "Noto Sans Tamil",
+      "accepted": 818.856,
+      "natural": 818.859375
+    },
+    {
+      "id": "taml-ligatures",
+      "family": "Noto Sans Tamil",
+      "accepted": 589.842,
+      "natural": 589.84375
+    },
+    {
+      "id": "taml-pulli",
+      "family": "Noto Sans Tamil",
+      "accepted": 1016.28,
+      "natural": 1016.28125
+    },
+    {
+      "id": "taml-ukaram",
+      "family": "Noto Sans Tamil",
+      "accepted": 626.562,
+      "natural": 626.5625
+    },
+    {
+      "id": "telu-title",
+      "family": "Noto Sans Telugu",
+      "accepted": 731.97,
+      "natural": 731.984375
+    },
+    {
+      "id": "telu-conjuncts",
+      "family": "Noto Sans Telugu",
+      "accepted": 300.834,
+      "natural": 300.84375
+    },
+    {
+      "id": "telu-vowels",
+      "family": "Noto Sans Telugu",
+      "accepted": 557.874,
+      "natural": 557.875
+    },
+    {
+      "id": "telu-zwnj",
+      "family": "Noto Sans Telugu",
+      "accepted": 767.772,
+      "natural": 767.78125
+    },
+    {
+      "id": "knda-title",
+      "family": "Noto Sans Kannada",
+      "accepted": 841.428,
+      "natural": 841.4375
+    },
+    {
+      "id": "knda-conjuncts",
+      "family": "Noto Sans Kannada",
+      "accepted": 370.224,
+      "natural": 370.234375
+    },
+    {
+      "id": "knda-vowels",
+      "family": "Noto Sans Kannada",
+      "accepted": 751.41,
+      "natural": 751.421875
+    },
+    {
+      "id": "mlym-title",
+      "family": "Noto Sans Malayalam",
+      "accepted": 879.228,
+      "natural": 879.234375
+    },
+    {
+      "id": "mlym-title",
+      "family": "Noto Sans Malayalam",
+      "accepted": 406.728,
+      "natural": 406.734375
+    },
+    {
+      "id": "mlym-chillu",
+      "family": "Noto Sans Malayalam",
+      "accepted": 732.294,
+      "natural": 732.296875
+    },
+    {
+      "id": "mlym-conjuncts",
+      "family": "Noto Sans Malayalam",
+      "accepted": 764.964,
+      "natural": 764.96875
+    },
+    {
+      "id": "mlym-vowels",
+      "family": "Noto Sans Malayalam",
+      "accepted": 1097.604,
+      "natural": 1097.609375
+    },
+    {
+      "id": "sinh-title",
+      "family": "Noto Sans Sinhala",
+      "accepted": 1156.356,
+      "natural": 1156.359375
+    },
+    {
+      "id": "sinh-conjuncts",
+      "family": "Noto Sans Sinhala",
+      "accepted": 416.934,
+      "natural": 416.9375
+    },
+    {
+      "id": "sinh-vowels",
+      "family": "Noto Sans Sinhala",
+      "accepted": 975.888,
+      "natural": 975.890625
+    },
+    {
+      "id": "thai-title",
+      "family": "Noto Sans Thai",
+      "accepted": 645.84,
+      "natural": 645.84375
+    },
+    {
+      "id": "thai-tone-marks",
+      "family": "Noto Sans Thai",
+      "accepted": 492.642,
+      "natural": 492.65625
+    },
+    {
+      "id": "thai-sara-am",
+      "family": "Noto Sans Thai",
+      "accepted": 470.016,
+      "natural": 470.03125
+    },
+    {
+      "id": "thai-pali",
+      "family": "Noto Sans Thai",
+      "accepted": 442.098,
+      "natural": 442.109375
+    },
+    {
+      "id": "thai-no-spaces",
+      "family": "Noto Sans Thai",
+      "accepted": 1149.336,
+      "natural": 1149.34375
+    },
+    {
+      "id": "thai-no-spaces",
+      "family": "Noto Sans Thai",
+      "accepted": 140.454,
+      "natural": 140.46875
+    },
+    {
+      "id": "thai-digits",
+      "family": "Noto Sans Thai",
+      "accepted": 550.044,
+      "natural": 550.046875
+    },
+    {
+      "id": "thai-mixed-latin",
+      "family": "Noto Sans Thai",
+      "accepted": 188.298,
+      "natural": 188.3125
+    },
+    {
+      "id": "thai-mixed-latin",
+      "family": "Intos Display",
+      "accepted": 204.688,
+      "natural": 204.703125
+    },
+    {
+      "id": "thai-mixed-latin",
+      "family": "Noto Sans Thai",
+      "accepted": 108.864,
+      "natural": 108.875
+    },
+    {
+      "id": "thai-mixed-latin",
+      "family": "Intos Display",
+      "accepted": 97.559,
+      "natural": 97.5625
+    },
+    {
+      "id": "laoo-words",
+      "family": "Noto Sans Lao",
+      "accepted": 787.482,
+      "natural": 787.484375
+    },
+    {
+      "id": "laoo-marks",
+      "family": "Noto Sans Lao",
+      "accepted": 450.36,
+      "natural": 450.375
+    },
+    {
+      "id": "khmr-title",
+      "family": "Noto Sans Khmer",
+      "accepted": 543.942,
+      "natural": 543.953125
+    },
+    {
+      "id": "khmr-coeng",
+      "family": "Noto Sans Khmer",
+      "accepted": 516.456,
+      "natural": 516.46875
+    },
+    {
+      "id": "khmr-words",
+      "family": "Noto Sans Khmer",
+      "accepted": 489.132,
+      "natural": 489.140625
+    },
+    {
+      "id": "khmr-digits",
+      "family": "Noto Sans Khmer",
+      "accepted": 570.942,
+      "natural": 570.953125
+    },
+    {
+      "id": "mymr-words",
+      "family": "Noto Sans Myanmar",
+      "accepted": 1045.17,
+      "natural": 1009.484375
+    },
+    {
+      "id": "mymr-medials",
+      "family": "Noto Sans Myanmar",
+      "accepted": 748.656,
+      "natural": 753.953125
+    },
+    {
+      "id": "mymr-digits",
+      "family": "Noto Sans Myanmar",
+      "accepted": 540.81,
+      "natural": 540.8125
+    },
+    {
+      "id": "tibt-words",
+      "family": "Noto Serif Tibetan",
+      "accepted": 583.254,
+      "natural": 583.265625
+    },
+    {
+      "id": "tibt-stacks",
+      "family": "Noto Serif Tibetan",
+      "accepted": 497.34,
+      "natural": 497.34375
+    },
+    {
+      "id": "mong-words",
+      "family": "Noto Sans Mongolian",
+      "accepted": 409.536,
+      "natural": 409.546875
+    },
+    {
+      "id": "mong-names",
+      "family": "Noto Sans Mongolian",
+      "accepted": 646.65,
+      "natural": 646.65625
+    },
+    {
+      "id": "mong-latin",
+      "family": "Intos Display",
+      "accepted": 615.173,
+      "natural": 615.1875
+    },
+    {
+      "id": "ethi-title",
+      "family": "Noto Sans Ethiopic",
+      "accepted": 620.082,
+      "natural": 620.09375
+    },
+    {
+      "id": "ethi-words",
+      "family": "Noto Sans Ethiopic",
+      "accepted": 472.932,
+      "natural": 472.9375
+    },
+    {
+      "id": "ethi-punctuation",
+      "family": "Noto Sans Ethiopic",
+      "accepted": 715.986,
+      "natural": 716
+    },
+    {
+      "id": "armn-title",
+      "family": "Noto Sans Armenian",
+      "accepted": 937.008,
+      "natural": 937.015625
+    },
+    {
+      "id": "armn-ligature",
+      "family": "Noto Sans Armenian",
+      "accepted": 272.754,
+      "natural": 272.765625
+    },
+    {
+      "id": "armn-punctuation",
+      "family": "Noto Sans Armenian",
+      "accepted": 1032.75,
+      "natural": 1032.75
+    },
+    {
+      "id": "geor-title",
+      "family": "Noto Sans Georgian",
+      "accepted": 1034.64,
+      "natural": 1034.640625
+    },
+    {
+      "id": "geor-mtavruli",
+      "family": "Noto Sans Georgian",
+      "accepted": 768.528,
+      "natural": 768.53125
+    },
+    {
+      "id": "syrc-words",
+      "family": "Noto Sans Syriac",
+      "accepted": 526.014,
+      "natural": 526.015625
+    },
+    {
+      "id": "syrc-marks",
+      "family": "Noto Sans Syriac",
+      "accepted": 408.618,
+      "natural": 416.40625
+    },
+    {
+      "id": "thaa-words",
+      "family": "Noto Sans Thaana",
+      "accepted": 329.994,
+      "natural": 330
+    },
+    {
+      "id": "thaa-digits",
+      "family": "Noto Sans Thaana",
+      "accepted": 298.404,
+      "natural": 298.4375
+    },
+    {
+      "id": "jpan-sentence",
+      "family": "Noto Sans JP",
+      "accepted": 756,
+      "natural": 756
+    },
+    {
+      "id": "jpan-sentence",
+      "family": "Intos Display",
+      "accepted": 58.324,
+      "natural": 58.328125
+    },
+    {
+      "id": "jpan-sentence",
+      "family": "Noto Sans JP",
+      "accepted": 324,
+      "natural": 324
+    },
+    {
+      "id": "jpan-sentence",
+      "family": "Noto Sans JP",
+      "accepted": 108,
+      "natural": 108
+    },
+    {
+      "id": "jpan-prolonged",
+      "family": "Noto Sans JP",
+      "accepted": 378,
+      "natural": 378
+    },
+    {
+      "id": "jpan-prolonged",
+      "family": "Intos Display",
+      "accepted": 10.415,
+      "natural": 10.421875
+    },
+    {
+      "id": "jpan-prolonged",
+      "family": "Noto Sans JP",
+      "accepted": 215.46,
+      "natural": 215.46875
+    },
+    {
+      "id": "jpan-prolonged",
+      "family": "Intos Display",
+      "accepted": 10.415,
+      "natural": 10.421875
+    },
+    {
+      "id": "jpan-prolonged",
+      "family": "Noto Sans JP",
+      "accepted": 54,
+      "natural": 54
+    },
+    {
+      "id": "jpan-prolonged",
+      "family": "Intos Display",
+      "accepted": 10.415,
+      "natural": 10.421875
+    },
+    {
+      "id": "jpan-prolonged",
+      "family": "Noto Sans JP",
+      "accepted": 54,
+      "natural": 54
+    },
+    {
+      "id": "jpan-prolonged",
+      "family": "Intos Display",
+      "accepted": 10.415,
+      "natural": 10.421875
+    },
+    {
+      "id": "jpan-prolonged",
+      "family": "Noto Sans JP",
+      "accepted": 54,
+      "natural": 54
+    },
+    {
+      "id": "jpan-prolonged",
+      "family": "Intos Display",
+      "accepted": 10.415,
+      "natural": 10.421875
+    },
+    {
+      "id": "jpan-prolonged",
+      "family": "Noto Sans JP",
+      "accepted": 54,
+      "natural": 54
+    },
+    {
+      "id": "jpan-prolonged",
+      "family": "Intos Display",
+      "accepted": 10.415,
+      "natural": 10.421875
+    },
+    {
+      "id": "jpan-prolonged",
+      "family": "Noto Sans JP",
+      "accepted": 54,
+      "natural": 54
+    },
+    {
+      "id": "jpan-prolonged",
+      "family": "Intos Display",
+      "accepted": 10.415,
+      "natural": 10.421875
+    },
+    {
+      "id": "jpan-prolonged",
+      "family": "Noto Sans JP",
+      "accepted": 54,
+      "natural": 54
+    },
+    {
+      "id": "jpan-halfwidth",
+      "family": "Noto Sans JP",
+      "accepted": 108,
+      "natural": 108
+    },
+    {
+      "id": "jpan-halfwidth",
+      "family": "Intos Display",
+      "accepted": 10.415,
+      "natural": 10.421875
+    },
+    {
+      "id": "jpan-halfwidth",
+      "family": "Noto Sans JP",
+      "accepted": 108,
+      "natural": 108
+    },
+    {
+      "id": "jpan-halfwidth",
+      "family": "Intos Display",
+      "accepted": 10.415,
+      "natural": 10.421875
+    },
+    {
+      "id": "jpan-halfwidth",
+      "family": "Noto Sans JP",
+      "accepted": 135,
+      "natural": 135
+    },
+    {
+      "id": "jpan-punctuation",
+      "family": "Noto Sans JP",
+      "accepted": 972,
+      "natural": 972
+    },
+    {
+      "id": "jpan-combining-dakuten",
+      "family": "Noto Sans JP",
+      "accepted": 54,
+      "natural": 54
+    },
+    {
+      "id": "jpan-combining-dakuten",
+      "family": "Intos Display",
+      "accepted": 10.415,
+      "natural": 10.421875
+    },
+    {
+      "id": "jpan-combining-dakuten",
+      "family": "Noto Sans JP",
+      "accepted": 54,
+      "natural": 54
+    },
+    {
+      "id": "jpan-combining-dakuten",
+      "family": "Intos Display",
+      "accepted": 10.415,
+      "natural": 10.421875
+    },
+    {
+      "id": "jpan-combining-dakuten",
+      "family": "Noto Sans JP",
+      "accepted": 54,
+      "natural": 54
+    },
+    {
+      "id": "jpan-combining-dakuten",
+      "family": "Intos Display",
+      "accepted": 10.415,
+      "natural": 10.421875
+    },
+    {
+      "id": "jpan-combining-dakuten",
+      "family": "Noto Sans JP",
+      "accepted": 54,
+      "natural": 54
+    },
+    {
+      "id": "jpan-combining-dakuten",
+      "family": "Intos Display",
+      "accepted": 10.415,
+      "natural": 10.421875
+    },
+    {
+      "id": "jpan-combining-dakuten",
+      "family": "Noto Sans JP",
+      "accepted": 54,
+      "natural": 54
+    },
+    {
+      "id": "jpan-combining-dakuten",
+      "family": "Intos Display",
+      "accepted": 10.415,
+      "natural": 10.421875
+    },
+    {
+      "id": "jpan-combining-dakuten",
+      "family": "Noto Sans JP",
+      "accepted": 54,
+      "natural": 54
+    },
+    {
+      "id": "jpan-mixed-latin",
+      "family": "Intos Display",
+      "accepted": 204.688,
+      "natural": 204.703125
+    },
+    {
+      "id": "jpan-mixed-latin",
+      "family": "Noto Sans JP",
+      "accepted": 216,
+      "natural": 216
+    },
+    {
+      "id": "jpan-mixed-latin",
+      "family": "Intos Display",
+      "accepted": 118.389,
+      "natural": 118.390625
+    },
+    {
+      "id": "jpan-mixed-latin",
+      "family": "Noto Sans JP",
+      "accepted": 162,
+      "natural": 162
+    },
+    {
+      "id": "jpan-no-spaces",
+      "family": "Noto Sans JP",
+      "accepted": 1120.5,
+      "natural": 1120.5
+    },
+    {
+      "id": "jpan-no-spaces",
+      "family": "Noto Sans JP",
+      "accepted": 750.6,
+      "natural": 750.609375
+    },
+    {
+      "id": "hans-sentence",
+      "family": "Noto Sans SC",
+      "accepted": 972,
+      "natural": 972
+    },
+    {
+      "id": "hans-punctuation",
+      "family": "Noto Sans SC",
+      "accepted": 1026,
+      "natural": 1026
+    },
+    {
+      "id": "hans-mixed-latin",
+      "family": "Intos Display",
+      "accepted": 127.063,
+      "natural": 127.078125
+    },
+    {
+      "id": "hans-mixed-latin",
+      "family": "Noto Sans SC",
+      "accepted": 54,
+      "natural": 54
+    },
+    {
+      "id": "hans-mixed-latin",
+      "family": "Intos Display",
+      "accepted": 88.04,
+      "natural": 88.046875
+    },
+    {
+      "id": "hans-mixed-latin",
+      "family": "Noto Sans SC",
+      "accepted": 108,
+      "natural": 108
+    },
+    {
+      "id": "hans-mixed-latin",
+      "family": "Intos Display",
+      "accepted": 144.36,
+      "natural": 144.375
+    },
+    {
+      "id": "hans-no-spaces",
+      "family": "Noto Sans SC",
+      "accepted": 1134,
+      "natural": 1134
+    },
+    {
+      "id": "hans-no-spaces",
+      "family": "Noto Sans SC",
+      "accepted": 216,
+      "natural": 216
+    },
+    {
+      "id": "hant-sentence",
+      "family": "Noto Sans TC",
+      "accepted": 864,
+      "natural": 864
+    },
+    {
+      "id": "hant-punctuation",
+      "family": "Noto Sans TC",
+      "accepted": 1134,
+      "natural": 1134
+    },
+    {
+      "id": "hant-punctuation",
+      "family": "Noto Sans TC",
+      "accepted": 162,
+      "natural": 162
+    },
+    {
+      "id": "hant-bopomofo",
+      "family": "Noto Sans TC",
+      "accepted": 216,
+      "natural": 216
+    },
+    {
+      "id": "hant-bopomofo",
+      "family": "Intos Display",
+      "accepted": 10.415,
+      "natural": 10.421875
+    },
+    {
+      "id": "hant-bopomofo",
+      "family": "Noto Sans TC",
+      "accepted": 216,
+      "natural": 216
+    },
+    {
+      "id": "hant-bopomofo",
+      "family": "Intos Display",
+      "accepted": 116.227,
+      "natural": 116.234375
+    },
+    {
+      "id": "hant-bopomofo",
+      "family": "Noto Sans TC",
+      "accepted": 216,
+      "natural": 216
+    },
+    {
+      "id": "hant-mixed-latin",
+      "family": "Intos Display",
+      "accepted": 127.063,
+      "natural": 127.078125
+    },
+    {
+      "id": "hant-mixed-latin",
+      "family": "Noto Sans TC",
+      "accepted": 54,
+      "natural": 54
+    },
+    {
+      "id": "hant-mixed-latin",
+      "family": "Intos Display",
+      "accepted": 88.04,
+      "natural": 88.046875
+    },
+    {
+      "id": "hant-mixed-latin",
+      "family": "Noto Sans TC",
+      "accepted": 108,
+      "natural": 108
+    },
+    {
+      "id": "hant-mixed-latin",
+      "family": "Intos Display",
+      "accepted": 144.36,
+      "natural": 144.375
+    },
+    {
+      "id": "kore-sentence",
+      "family": "Noto Sans KR",
+      "accepted": 149.04,
+      "natural": 149.046875
+    },
+    {
+      "id": "kore-sentence",
+      "family": "Intos Display",
+      "accepted": 10.415,
+      "natural": 10.421875
+    },
+    {
+      "id": "kore-sentence",
+      "family": "Noto Sans KR",
+      "accepted": 99.36,
+      "natural": 99.375
+    },
+    {
+      "id": "kore-sentence",
+      "family": "Intos Display",
+      "accepted": 24.521,
+      "natural": 24.53125
+    },
+    {
+      "id": "kore-sentence",
+      "family": "Noto Sans KR",
+      "accepted": 149.04,
+      "natural": 149.046875
+    },
+    {
+      "id": "kore-sentence",
+      "family": "Intos Display",
+      "accepted": 10.415,
+      "natural": 10.421875
+    },
+    {
+      "id": "kore-sentence",
+      "family": "Noto Sans KR",
+      "accepted": 99.36,
+      "natural": 99.375
+    },
+    {
+      "id": "kore-sentence",
+      "family": "Intos Display",
+      "accepted": 10.415,
+      "natural": 10.421875
+    },
+    {
+      "id": "kore-sentence",
+      "family": "Noto Sans KR",
+      "accepted": 99.36,
+      "natural": 99.375
+    },
+    {
+      "id": "kore-sentence",
+      "family": "Intos Display",
+      "accepted": 68.739,
+      "natural": 68.75
+    },
+    {
+      "id": "kore-sentence",
+      "family": "Noto Sans KR",
+      "accepted": 149.04,
+      "natural": 149.046875
+    },
+    {
+      "id": "kore-sentence",
+      "family": "Intos Display",
+      "accepted": 10.415,
+      "natural": 10.421875
+    },
+    {
+      "id": "kore-sentence",
+      "family": "Noto Sans KR",
+      "accepted": 298.08,
+      "natural": 298.09375
+    },
+    {
+      "id": "kore-sentence",
+      "family": "Intos Display",
+      "accepted": 14.106,
+      "natural": 14.109375
+    },
+    {
+      "id": "kore-jamo",
+      "family": "Noto Sans KR",
+      "accepted": 99.36,
+      "natural": 99.375
+    },
+    {
+      "id": "kore-jamo",
+      "family": "Intos Display",
+      "accepted": 10.415,
+      "natural": 10.421875
+    },
+    {
+      "id": "kore-jamo",
+      "family": "Noto Sans KR",
+      "accepted": 99.36,
+      "natural": 99.375
+    },
+    {
+      "id": "kore-hanja",
+      "family": "Noto Sans KR",
+      "accepted": 216,
+      "natural": 216
+    },
+    {
+      "id": "kore-hanja",
+      "family": "Intos Display",
+      "accepted": 10.415,
+      "natural": 10.421875
+    },
+    {
+      "id": "kore-hanja",
+      "family": "Noto Sans KR",
+      "accepted": 198.72,
+      "natural": 198.734375
+    },
+    {
+      "id": "kore-hanja",
+      "family": "Intos Display",
+      "accepted": 28.608,
+      "natural": 28.609375
+    },
+    {
+      "id": "kore-hanja",
+      "family": "Noto Sans KR",
+      "accepted": 216,
+      "natural": 216
+    },
+    {
+      "id": "kore-hanja",
+      "family": "Intos Display",
+      "accepted": 18.193,
+      "natural": 18.203125
+    },
+    {
+      "id": "kore-mixed-latin",
+      "family": "Intos Display",
+      "accepted": 116.648,
+      "natural": 116.65625
+    },
+    {
+      "id": "kore-mixed-latin",
+      "family": "Noto Sans KR",
+      "accepted": 49.68,
+      "natural": 49.6875
+    },
+    {
+      "id": "kore-mixed-latin",
+      "family": "Intos Display",
+      "accepted": 88.04,
+      "natural": 88.046875
+    },
+    {
+      "id": "kore-mixed-latin",
+      "family": "Noto Sans KR",
+      "accepted": 149.04,
+      "natural": 149.046875
+    },
+    {
+      "id": "kore-mixed-latin",
+      "family": "Intos Display",
+      "accepted": 144.36,
+      "natural": 144.375
+    },
+    {
+      "id": "cyrl-ru",
+      "family": "Intos Display",
+      "accepted": 915.891,
+      "natural": 915.890625
+    },
+    {
+      "id": "cyrl-uk",
+      "family": "Intos Display",
+      "accepted": 557.613,
+      "natural": 557.625
+    },
+    {
+      "id": "cyrl-sr",
+      "family": "Intos Display",
+      "accepted": 572.801,
+      "natural": 572.8125
+    },
+    {
+      "id": "cyrl-mk",
+      "family": "Intos Display",
+      "accepted": 543.349,
+      "natural": 543.359375
+    },
+    {
+      "id": "cyrl-kk",
+      "family": "Intos Display",
+      "accepted": 616.359,
+      "natural": 616.359375
+    },
+    {
+      "id": "cyrl-tg",
+      "family": "Intos Display",
+      "accepted": 618.864,
+      "natural": 618.875
+    },
+    {
+      "id": "cyrl-mn",
+      "family": "Intos Display",
+      "accepted": 761.405,
+      "natural": 761.40625
+    },
+    {
+      "id": "cyrl-bg",
+      "family": "Intos Display",
+      "accepted": 668.25,
+      "natural": 668.25
+    },
+    {
+      "id": "cyrl-stress",
+      "family": "Intos Display",
+      "accepted": 368.719,
+      "natural": 368.71875
+    },
+    {
+      "id": "grek-title",
+      "family": "Intos Display",
+      "accepted": 802.433,
+      "natural": 802.4375
+    },
+    {
+      "id": "grek-tonos",
+      "family": "Intos Display",
+      "accepted": 393.398,
+      "natural": 393.40625
+    },
+    {
+      "id": "grek-sigma",
+      "family": "Intos Display",
+      "accepted": 826.954,
+      "natural": 826.96875
+    },
+    {
+      "id": "grek-polytonic",
+      "family": "Intos Display",
+      "accepted": 669.779,
+      "natural": 669.78125
+    },
+    {
+      "id": "latn-vi",
+      "family": "Intos Display",
+      "accepted": 986.476,
+      "natural": 986.484375
+    },
+    {
+      "id": "latn-yo",
+      "family": "Intos Display",
+      "accepted": 492.671,
+      "natural": 492.671875
+    },
+    {
+      "id": "latn-ig",
+      "family": "Intos Display",
+      "accepted": 428.889,
+      "natural": 428.890625
+    },
+    {
+      "id": "latn-ha-ff",
+      "family": "Intos Display",
+      "accepted": 733.271,
+      "natural": 733.28125
+    },
+    {
+      "id": "latn-tr-az",
+      "family": "Intos Display",
+      "accepted": 881.481,
+      "natural": 881.484375
+    },
+    {
+      "id": "latn-central-europe",
+      "family": "Intos Display",
+      "accepted": 1047.067,
+      "natural": 1047.078125
+    },
+    {
+      "id": "latn-central-europe",
+      "family": "Intos Display",
+      "accepted": 368.402,
+      "natural": 368.40625
+    },
+    {
+      "id": "latn-ro-sq",
+      "family": "Intos Display",
+      "accepted": 772.084,
+      "natural": 772.09375
+    },
+    {
+      "id": "latn-baltic",
+      "family": "Intos Display",
+      "accepted": 1154.435,
+      "natural": 1154.4375
+    },
+    {
+      "id": "latn-mi",
+      "family": "Intos Display",
+      "accepted": 593.077,
+      "natural": 593.078125
+    },
+    {
+      "id": "latn-uz-ber",
+      "family": "Intos Display",
+      "accepted": 776.435,
+      "natural": 776.4375
+    },
+    {
+      "id": "latn-kmr-so",
+      "family": "Intos Display",
+      "accepted": 1049.256,
+      "natural": 1049.265625
+    },
+    {
+      "id": "latn-kmr-so",
+      "family": "Intos Display",
+      "accepted": 418.157,
+      "natural": 418.171875
+    },
+    {
+      "id": "latn-western",
+      "family": "Intos Display",
+      "accepted": 939.357,
+      "natural": 939.359375
+    },
+    {
+      "id": "latn-western",
+      "family": "Intos Display",
+      "accepted": 900.123,
+      "natural": 900.125
+    },
+    {
+      "id": "latn-ligatures",
+      "family": "Intos Display",
+      "accepted": 738.492,
+      "natural": 738.5
+    },
+    {
+      "id": "latn-numerals",
+      "family": "Intos Display",
+      "accepted": 967.465,
+      "natural": 967.46875
+    }
+  ]
+}

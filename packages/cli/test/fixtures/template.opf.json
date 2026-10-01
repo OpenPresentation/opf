@@ -1,0 +1,20 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Quarterly review for {{client}}",
+  "template": true,
+  "variables": {
+    "client": { "type": "text", "label": "Client", "example": "Acme Corp" },
+    "revenue": { "type": "number", "format": "$#,##0.##", "example": 1250000 },
+    "kickoff": { "type": "date", "example": "2026-10-01" },
+    "wins": { "type": "list", "example": ["Faster onboarding", "Lower churn"] }
+  },
+  "slides": [
+    { "id": "cover", "title": "Quarterly review: {{client}}", "subtitle": "Kickoff {{kickoff}}" },
+    { "id": "wins", "title": "Wins", "bullets": ["Revenue {{revenue}}", "var:wins"] },
+    {
+      "id": "revenue",
+      "title": "Revenue",
+      "chart": { "type": "column", "data": { "columns": ["Quarter", "Revenue"], "rows": [["This quarter", "var:revenue"]] } }
+    }
+  ]
+}

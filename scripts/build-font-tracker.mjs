@@ -132,6 +132,70 @@ function bundledRecord(index, family, applies) {
   };
 }
 
+// ---- script corpus (FF-44) --------------------------------------------------------------------
+
+/**
+ * The committed script-corpus evidence (qualification of every bundled script face, and the installed originals measured in place) as
+ * per-family lookups. Both reports are written by opf-render's scripts/script-corpora.mjs and scripts/measure-script-references.mjs.
+ */
+function loadScriptCorpus(root, spec) {
+  const qualification = readJson(root, spec.qualification);
+  const references = readJson(root, spec.references);
+  const corpus = readJson(root, spec.corpus);
+  const faces = new Map();
+  for (const face of qualification.faces) {
+    if (face.italic) continue;
+    const entry = faces.get(face.family) ?? { family: face.family, weights: [], scripts: [], samples: 0, equal: 0, limited: 0, regular: null };
+    entry.weights.push(face.weight);
+    if (face.weight === 400) entry.regular = face;
+    for (const group of face.groups) {
+      if (!entry.scripts.includes(group.script)) entry.scripts.push(group.script);
+      for (const sample of group.samples) {
+        entry.samples += 1;
+        if (Math.abs(sample.widthDelta) <= 0.011) entry.equal += 1;
+        else entry.limited += 1;
+      }
+    }
+    faces.set(face.family, entry);
+  }
+  const originals = new Map();
+  for (const entry of references.families) originals.set(entry.family, [...(originals.get(entry.family) ?? []), entry]);
+  return { id: corpus.id, spec, faces, originals, notInstalled: new Set(references.notInstalled), measuredAt: references.measuredAt, samples: corpus.groups.reduce((sum, group) => sum + group.samples.length, 0), scripts: corpus.groups.length };
+}
+
+/** The record's corpus qualification: the face(s) it previews with, and (for a proprietary family) its installed original. */
+function scriptCorpusRecord(corpus, family, route, row) {
+  const names = [route.family, ...(row.alternates ?? [])].filter(Boolean);
+  const qualified = names.map((name) => corpus.faces.get(name)).filter(Boolean);
+  if (!qualified.length) return null;
+  const first = qualified[0];
+  const coverage = first.regular.coverage;
+  const own = coverage.scripts.length ? Math.min(...coverage.scripts.map((item) => item.bmpCovered / item.bmpAssigned)) : null;
+  const charset = coverage.charsets.find((item) => item.charset === OWN_CHARSETS[first.scripts[0]]);
+  const original = corpus.originals.get(family)?.flatMap((entry) =>
+    entry.styles.filter((style) => style.samples > 0).map((style) => ({
+      script: entry.script, weight: style.weight, file: style.file, version: style.version, samples: style.samples,
+      meanWidthDelta: style.meanSignedDelta, maxAbsWidthDelta: style.maxAbsDelta,
+      lineHeightEm: { original: lineHeight(style.lineMetrics), replacement: lineHeight(style.replacementLineMetrics) },
+    })),
+  );
+  return {
+    corpus: corpus.id,
+    face: first.family,
+    weights: first.weights.sort((a, b) => a - b),
+    scripts: first.scripts,
+    faceSamples: first.samples,
+    equalToHarfBuzz: first.equal,
+    recordedFontkitLimits: first.limited,
+    ownScriptBmpCoverage: own === null ? null : round(own, 3),
+    ...(charset ? { nationalCharset: { charset: charset.charset, covered: charset.covered, size: charset.size } } : {}),
+    lineHeightEm: lineHeight(first.regular.lineMetrics),
+    original: original?.length ? original : corpus.notInstalled.has(family) ? "not installed on the measuring host" : null,
+  };
+}
+const OWN_CHARSETS = { Jpan: "JIS X 0208", Hans: "GB 2312", Hant: "Big5 levels 1 and 2", Kore: "KS X 1001" };
+const lineHeight = (metrics) => (metrics ? round(metrics.hhea.ascent - metrics.hhea.descent + metrics.hhea.lineGap, 2) : null);
+
 // ---- policy routes ----------------------------------------------------------------------------
 
 function routeOf(row, decisions) {
@@ -228,6 +292,7 @@ export function buildTracker({ root = ROOT } = {}) {
   const hostEvidence = readJson(root, overrides.hostFixtureEvidence);
   const acceptRules = overrides.latinAcceptance;
   const decisions = policy.provisionalDecisions?.decisions ?? {};
+  const corpus = overrides.scriptCorpus ? loadScriptCorpus(root, overrides.scriptCorpus) : null;
   const index = bundleIndex(snapshot);
   const usage = parityUsage(parity);
   const policyNames = new Set(policy.families.map((row) => row.family));
@@ -368,6 +433,8 @@ export function buildTracker({ root = ROOT } = {}) {
     const mustHave = cls === "open" ? requiredWithRoles : rec.replacementStylesRequired ?? [];
     const stylesMissing = route.family && cls !== "special" ? mustHave.filter((style) => !availableStyles.includes(style)) : [];
 
+    const corpusRecord = corpus ? scriptCorpusRecord(corpus, family, route, row) : null;
+
     // Status.
     const lazyPending = target.yes && hostModel.lazyPendingPacks.includes(target.pack);
     const pending = overrides.pendingBundle[family] ?? null;
@@ -400,7 +467,7 @@ export function buildTracker({ root = ROOT } = {}) {
       statusReason = "metric tier; width bar met in four styles; line breaks not recorded; see hostVerification and the measurement details";
     } else if (cls === "proprietary-script") {
       status = "script-gap";
-      statusReason = "visual script route; native-script measurement and appearance outstanding";
+      statusReason = corpusRecord ? "visual script route: the script corpus (FF-44) qualifies coverage and shaping; native PowerPoint comparison and the recorded appearance gap remain" : "visual script route; native-script measurement and appearance outstanding";
     } else {
       status = "visual-gap";
       statusReason = "visual route; metric or appearance qualification outstanding";
@@ -503,6 +570,7 @@ export function buildTracker({ root = ROOT } = {}) {
     if (item.extra) evidenceKeys.push("scriptAuto", "scriptModel");
     if (verified?.evidence) evidenceKeys.push(...verified.evidence);
     if (paritySignals.valuesAffected > 0) evidenceKeys.push("parity");
+    if (corpusRecord) evidenceKeys.push("scriptCorpora", "scriptCorporaEvidence");
     const native = overrides.nativeVerification[family];
     if (native?.evidence) evidenceKeys.push(...native.evidence);
     const appearance = appearanceOf(overrides.appearance?.[family]);
@@ -546,6 +614,7 @@ export function buildTracker({ root = ROOT } = {}) {
       hostLoading,
       nativeVerification: native ? { status: native.status, note: native.note } : { status: "unverified", note: "No per-family native PowerPoint acceptance (phase 5)." },
       acceptance,
+      ...(corpusRecord ? { scriptCorpus: corpusRecord } : {}),
       ...(qualification ? { qualification } : {}),
       ...(appearance ? { appearance } : {}),
       paritySignals,
@@ -638,6 +707,27 @@ function widthCell(rec) {
   return `${pct(m.meanAbsWidthDelta)} / ${pct(m.maxAbsWidthDelta)}`;
 }
 
+function scriptCorpusSection(records) {
+  const withCorpus = records.filter((rec) => rec.scriptCorpus);
+  if (!withCorpus.length) return [];
+  const lines = ["", "## Script corpus (FF-44)", ""];
+  lines.push(
+    "Result of the script shaping corpora ([script-corpora.md](script-corpora.md)): each family's preview face run through the corpus samples of its script (coverage, fontkit against HarfBuzz, browser), and, for a proprietary family whose original is installed on the measuring host, the original read in place. A width delta is the replacement's advance over the original's, minus one, on the corpus samples of the family's script; line height is hhea ascent plus descent plus line gap in em. Not a native PowerPoint claim.",
+    "",
+    "| Family | Class | Preview face | Corpus scripts | Samples equal to HarfBuzz | Own-script coverage | Original: width delta mean / max, line height original / preview |",
+    "| --- | --- | --- | --- | --- | --- | --- |",
+  );
+  for (const rec of withCorpus.filter((item) => item.class === "proprietary-script" || item.class === "open").sort((a, b) => a.family.localeCompare(b.family, "en"))) {
+    const c = rec.scriptCorpus;
+    const original = Array.isArray(c.original)
+      ? c.original.filter((item, index, all) => all.findIndex((other) => other.script === item.script) === index).map((item) => `${item.script} ${item.meanWidthDelta >= 0 ? "+" : ""}${round(item.meanWidthDelta * 100, 1)}% / ${round(item.maxAbsWidthDelta * 100, 1)}% (${item.samples} samples), ${item.lineHeightEm.original} / ${item.lineHeightEm.replacement} em`).join("; ")
+      : c.original ?? (rec.class === "open" ? "-" : "not measured");
+    const coverage = c.nationalCharset ? `${pct(c.nationalCharset.covered / c.nationalCharset.size)} of ${c.nationalCharset.charset}` : c.ownScriptBmpCoverage === null ? "-" : pct(c.ownScriptBmpCoverage);
+    lines.push(`| ${cell(rec.family)} | ${rec.class} | ${cell(c.face)} | ${c.scripts.join(", ")} | ${c.equalToHarfBuzz} of ${c.faceSamples}${c.recordedFontkitLimits ? ` (${c.recordedFontkitLimits} recorded fontkit limits)` : ""} | ${coverage} | ${cell(original)} |`);
+  }
+  return lines;
+}
+
 export function renderMarkdown(tracker) {
   const { summary, records } = tracker;
   const lines = [];
@@ -673,6 +763,8 @@ export function renderMarkdown(tracker) {
   push("", "## Priority queue", "", `Priority: ${tracker.priorityFormula} The audited set is ${tracker.inputs.parity.values} gallery values (${tracker.inputs.parity.file.split("/").pop()}).`, "");
   push("| Rank | Family | Class | Phase | Status | Values | Score | Next action |", "| --- | --- | --- | --- | --- | --- | --- | --- |");
   for (const rec of [...records].sort(byRank).slice(0, 15)) push(`| ${rec.priority.rank} | ${cell(rec.family)} | ${rec.class} | ${rec.phase} | \`${rec.status}\` | ${rec.priority.valuesAffected} | ${rec.priority.score} | ${cell(rec.nextAction)} |`);
+
+  push(...scriptCorpusSection(records));
 
   push("", "## The owner's plan", "", `Owner input, ${tracker.ownerPlan.date}, adopted as the program order. Request: "${tracker.ownerPlan.request}"`, "", `> ${tracker.ownerPlan.summary}`, ">");
   for (const phase of tracker.ownerPlan.phases) push(`> ${phase.phase}. ${phase.text}`);
