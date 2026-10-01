@@ -96,8 +96,11 @@ for (const preset of ['pct5', 'ltHorz', 'openDmnd', 'wave', 'smGrid', 'zigZag'])
     assert.deepEqual(named.background, {type: 'pattern', pattern: {preset: 'pct5', foregroundColor: '#000000', backgroundColor: '#FFFFFF'}, ...(opacity === 1 ? {} : {opacity})});
     cases++;
   }
-  const mismatch = await roundTrip({design: {background: {type: 'pattern', pattern: {preset: 'pct5', foregroundColor: 'accent1', backgroundColor: '#FFFFFF'}}}, slides: [{}]});
-  assert.ok(!bg(mismatch.bytes).includes('schemeClr'), 'A name drawn as the default color and literal hex stay srgbClr');
+  const mismatch = await roundTrip({design: {background: {type: 'pattern', pattern: {preset: 'pct5', foregroundColor: 'var:undefined-variable', backgroundColor: '#FFFFFF'}}}, slides: [{}]});
+  assert.ok(!bg(mismatch.bytes).includes('schemeClr'), 'A reference drawn as the default color and literal hex stay srgbClr');
+  // A slot name is a ColorRef like any other: its colour, and a:schemeClr because the deck theme holds it.
+  const slot = await roundTrip({design: {background: {type: 'pattern', pattern: {preset: 'pct5', foregroundColor: 'accent1', backgroundColor: '#FFFFFF'}}}, slides: [{}]});
+  assert.match(bg(slot.bytes), /<a:fgClr><a:schemeClr val="accent1">/);
   const translucent = await roundTrip({design: {background: {type: 'pattern', pattern: {preset: 'pct5', foregroundColor: '#00000080', backgroundColor: 'light1'}}}, slides: [{}]});
   assert.match(bg(translucent.bytes), /<a:fgClr><a:srgbClr val="000000"><a:alpha val="50196"\/>/);
   assert.match(bg(translucent.bytes), /<a:bgClr><a:schemeClr val="bg1">/);

@@ -39,6 +39,8 @@ export interface MediaProvenanceDiagnostic { code: "media-provenance-omitted"; p
 export interface ChartDataUnplottableDiagnostic { code: "chart-data-unplottable"; path: string; message: string; reason: "data-not-inline" | "no-rows" | "no-columns" | "single-column-not-numeric" }
 /** Content with no PowerPoint export (an empty table, an unsupported payload) is replaced by a plain-language placeholder frame. */
 export interface ContentPlaceholderDiagnostic { code: "content-placeholder"; path: string; message: string; reason: "table-has-no-rows" | "unsupported-payload" }
+/** An image that has no embeddable raster. `reason: "unsupported-format"`: the embedded bytes are no readable PNG, JPEG, GIF or WebP (an SVG, for example); the preview's placeholder was exported instead (or no watermark, or the background colour). `strictAssets` throws `unsupported-image-dimensions` instead. */
+export interface UnresolvedAssetDiagnostic { code: "unresolved-asset"; path: string; message: string; reason?: "unsupported-format" }
 export interface WatermarkNotExportedDiagnostic { code: "watermark-not-exported"; path: string; message: string }
 /**
  * The chart data was reshaped to export a native chart: a single value column was plotted against row numbers; a one-series construct
@@ -76,7 +78,7 @@ export interface ToPptxOptions {
   /** Match preview/pagination clearance around supplied vector text outlines; default 1. */
   textRasterPadding?: number;
   /** Layout diagnostics, `media-provenance-omitted` when video data cannot be stored, plus `unresolved-font-scheme` (once per reference path) when a font-scheme id matches no record and the default `aptos` scheme is used as the base. */
-  onDiagnostic?: (diagnostic: LayoutDiagnostic | FontSchemeDiagnostic | MediaProvenanceDiagnostic | ChartDataUnplottableDiagnostic | ChartDataAdaptedDiagnostic | ChartMapGeodataDiagnostic | ContentPlaceholderDiagnostic | WatermarkNotExportedDiagnostic) => void;
+  onDiagnostic?: (diagnostic: LayoutDiagnostic | FontSchemeDiagnostic | MediaProvenanceDiagnostic | ChartDataUnplottableDiagnostic | ChartDataAdaptedDiagnostic | ChartMapGeodataDiagnostic | ContentPlaceholderDiagnostic | UnresolvedAssetDiagnostic | WatermarkNotExportedDiagnostic) => void;
   baseDir?: string;
   compressionLevel?: number;
   imageResolver?: (src: string, context: ImageResolverContext) => ImageResolverResult | Promise<ImageResolverResult | null | undefined> | null | undefined;
@@ -100,7 +102,7 @@ export interface ToPptxOptions {
   date?: string;
   /** Host-supplied catalog records, as in opf-render. Currently consulted for socialPlatforms (generated socials furniture). */
   catalogs?: Record<string, { records?: unknown[] } | unknown[]>;
-  /** Records for document `catalogs.<kind>.source` URLs, as in opf-render. Currently consulted for socialPlatforms. */
+  /** Records for document `catalogs.<kind>.source` URLs (a single source or each entry of an ordered search path), as in opf-render. Currently consulted for socialPlatforms. */
   catalogSources?: Record<string, { records?: unknown[] } | unknown[]>;
 }
 

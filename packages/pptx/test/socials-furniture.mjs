@@ -103,6 +103,24 @@ for (const [host, expected] of hosts) for (const deck of [sourced, {...sourced, 
   assert.equal(withoutHost.x, want === 'x.com/acme' || want === 'inline.test/acme' ? '@acme' : `https://${want}`, `without host catalogs (${want})`);
 }
 
+// `catalogs.socialPlatforms.source` may be an ordered search path (an array, schema-valid): each source's records are consulted in
+// order (host-supplied catalogSources, or the bundled snapshot for pptx.gallery / pkg:@openpresentation/opf sources), first match
+// wins, an unknown source contributes nothing, and the export does not throw. A single-string source behaves as before.
+{
+  const searchPath = sources => ({...source, catalogs: {socialPlatforms: {source: sources}}, slides: [{text: 'Body'}]});
+  const catalogSources = {'https://first.test/socials.json': {records: [record('x', 'https://first.test/{handle}')]}, 'https://second.test/socials.json': [record('x', 'https://second.test/{handle}'), record('custom-net', 'https://second.test/{handle}')]};
+  const exportedText = async (deck, host = {}) => slideXml(unzipSync(await toPptx(deck, host)));
+  assert.ok((await exportedText(searchPath(['https://first.test/socials.json', 'https://second.test/socials.json']), {catalogSources})).includes('<a:t>first.test/acme</a:t>'), 'first source wins');
+  assert.ok((await exportedText(searchPath(['https://missing.test/socials.json', 'https://second.test/socials.json']), {catalogSources})).includes('<a:t>second.test/acme</a:t>'), 'an unknown source is skipped, the next one answers');
+  assert.ok((await exportedText(searchPath(['https://missing.test/socials.json']), {catalogSources})).includes('<a:t>x.com/acme</a:t>'), 'no source answers: the bundled catalog');
+  assert.ok((await exportedText(searchPath(['https://www.pptx.gallery/social-platforms', 'https://second.test/socials.json']), {catalogSources})).includes('<a:t>x.com/acme</a:t>'), 'a bundled-snapshot source answers before later sources');
+  assert.ok((await exportedText(searchPath(['pkg:@openpresentation/opf/social-platforms']))).includes('<a:t>x.com/acme</a:t>'));
+  const arrayDeck = searchPath(['https://first.test/socials.json']);
+  const reimported = await fromPptx(await toPptx(arrayDeck, {catalogSources}), {catalogSources});
+  assert.equal(validatePresentation(reimported).valid, true);
+  assert.deepEqual(reimported.organization.socials, organization.socials, 'authored socials restored with a search path');
+}
+
 // Every platform key the Socials schema accepts re-imports; the provenance check uses the schema pattern itself.
 const keyPattern = new RegExp(schemas.presentation.$defs.Socials.propertyNames.pattern, 'u');
 assert.equal(keyPattern.test('my_site'), false, 'Underscored keys are not valid Socials keys.');

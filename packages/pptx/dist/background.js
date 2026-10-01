@@ -33,21 +33,23 @@ export const nativePatternPreset = preset => presetPatterns.has(preset) ? preset
 // The SVG preview paints the pattern background color and foreground marks,
 // defaulting to white and the slide text color. Other engine-defined presets
 // have no DrawingML equivalent; like the preview, only their background color remains.
-// `scheme(reference, hex)` names the theme color for an authored slot/role
-// reference whose drawn color the deck theme holds exactly (FF-24); pattern
-// colors then become a:schemeClr, keeping any background opacity as alpha.
-export function nativeBackgroundFill(background, {width, height}, fallback = 'FFFFFF', foreground = '000000', scheme = () => undefined) {
+// `resolve(reference)` turns a ColorRef (a `var:` variable, a colour-scheme slot or
+// role name) into a hex colour, as for table fills and run colours; literals pass
+// through. `scheme(reference, hex)` names the theme color for an authored slot/role
+// reference whose drawn color the deck theme holds exactly (FF-24); solid, gradient
+// and pattern colors then become a:schemeClr, keeping any background opacity as alpha.
+export function nativeBackgroundFill(background, {width, height}, fallback = 'FFFFFF', foreground = '000000', scheme = () => undefined, resolve = value => value) {
   if (typeof background === 'string' && /^#[\da-f]{3}(?:[\da-f]{3}(?:[\da-f]{2})?)?$/i.test(background)) background = {type: 'solid', color: background};
   if (!background || typeof background !== 'object') return null;
   const opacity = background.opacity ?? 1;
-  if (background.type === 'solid' || background.type === 'theme') return `<a:solidFill>${colorXml(background.type === 'theme' ? fallback : background.color, opacity, fallback)}</a:solidFill>`;
+  const paint = (value, base) => {
+    const hex = resolve(value), c = color(hex, base), themeValue = c.alpha === 1 ? scheme(value, c.hex) : undefined;
+    if (!themeValue) return colorXml(hex, opacity, base);
+    const alpha = Math.round(clamp(opacity) * 100000);
+    return `<a:schemeClr val="${themeValue}">${alpha === 100000 ? '' : `<a:alpha val="${alpha}"/>`}</a:schemeClr>`;
+  };
+  if (background.type === 'solid' || background.type === 'theme') return `<a:solidFill>${background.type === 'theme' ? colorXml(fallback, opacity, fallback) : paint(background.color, fallback)}</a:solidFill>`;
   if (background.type === 'pattern') {
-    const paint = (value, base) => {
-      const c = color(value, base), themeValue = c.alpha === 1 ? scheme(value, c.hex) : undefined;
-      if (!themeValue) return colorXml(value, opacity, base);
-      const alpha = Math.round(clamp(opacity) * 100000);
-      return `<a:schemeClr val="${themeValue}">${alpha === 100000 ? '' : `<a:alpha val="${alpha}"/>`}</a:schemeClr>`;
-    };
     const pattern = background.pattern ?? {}, back = paint(pattern.backgroundColor, 'FFFFFF');
     const preset = nativePatternPreset(pattern.preset);
     if (!preset) return `<a:solidFill>${back}</a:solidFill>`;
@@ -56,7 +58,7 @@ export function nativeBackgroundFill(background, {width, height}, fallback = 'FF
   if (background.type !== 'gradient') return null;
   const stops = background.gradient?.stops ?? [];
   if (!stops.length) return '<a:noFill/>';
-  if (stops.length === 1) return `<a:solidFill>${colorXml(stops[0].color, opacity, fallback)}</a:solidFill>`;
+  if (stops.length === 1) return `<a:solidFill>${paint(stops[0].color, fallback)}</a:solidFill>`;
   const radians = turn(background.gradient?.angle ?? 0) * Math.PI / 180;
   const c = Math.cos(radians), s = Math.sin(radians), span = Math.abs(c) + Math.abs(s);
   const angle = Math.round(turn(Math.atan2(s / height, c / width) * 180 / Math.PI) * 60000) % 21600000;
@@ -65,7 +67,7 @@ export function nativeBackgroundFill(background, {width, height}, fallback = 'FF
     // SVG clamps a descending stop to the preceding position.
     prior = Math.max(prior, stop.position);
     const position = Math.round(((prior - .5) / span + .5) * 100000);
-    return `<a:gs pos="${position}">${colorXml(stop.color, opacity, fallback)}</a:gs>`;
+    return `<a:gs pos="${position}">${paint(stop.color, fallback)}</a:gs>`;
   }).join('');
   return `<a:gradFill rotWithShape="0"><a:gsLst>${nativeStops}</a:gsLst><a:lin ang="${angle}" scaled="0"/></a:gradFill>`;
 }

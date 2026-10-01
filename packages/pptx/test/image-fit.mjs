@@ -66,5 +66,6 @@ for (const source of ['local','host-path','host-data']) {
 // Malformed headers cannot cause out-of-bounds reads or non-advancing scans.
 for(const data of [[],[0xff,0xd8,0xff,0xe0,0,0],[0xff,0xd8,0xff,0xff],[0xff,0xd8,0xff,0xe0,255,255]])assert.equal(rasterDimensions(new Uint8Array(data)),null);
 for(const [name] of fixtures){const bytes=await readFile(new URL(`fixtures/images/${name}`,import.meta.url));for(let n=0;n<Math.min(bytes.length,32);n++)assert.doesNotThrow(()=>rasterDimensions(bytes.subarray(0,n)));}
-await assert.rejects(()=>toPptx({slides:[{image:'data:image/png;base64,bm90LWEtcG5n'}]}),error=>error.code==='unsupported-image-dimensions'&&error.path==='slides.0.image');
+// Bytes that are no readable image: strictAssets keeps the error; otherwise the preview's placeholder and one diagnostic (test/svg-image-degrade.mjs).
+await assert.rejects(()=>toPptx({slides:[{image:'data:image/png;base64,bm90LWEtcG5n'}]},{strictAssets:true}),error=>error.code==='unsupported-image-dimensions'&&error.details?.path==='slides.0.image');
 console.log(`Image fitting passed: ${checked} SVG/native geometry cases, 9 raster fixtures, fit/crop, slide overrides, byte/alt preservation, host resolution and malformed headers.`);

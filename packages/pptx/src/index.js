@@ -27,7 +27,7 @@ import {languageDiagnostics, observeLanguage, partScriptFonts, planScriptFonts, 
 import { webpToPng } from '#image-fallback';
 import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './image-geometry.js';
 import { layoutTable, composeSlide, fitText, fitRichText, textWidthMeasurer, resolveCanvasDimensions, resolveFontFamilies, resolveTextStyle, textColorForFill, chartColorForFill } from "@openpresentation/opf/composition";
-import { colorContext, resolveExportColor, resolveVariableColors } from "./color-ref.js";
+import { colorContext, resolveColorRefValue, resolveExportColor, resolveVariableColors } from "./color-ref.js";
 import PptxGenJS from "../vendor/pptxgenjs/pptxgen.es.js";
 import { unzipSync, zipSync } from "fflate";
 import { XMLParser } from "fast-xml-parser";
@@ -209,6 +209,7 @@ export async function toPptx(input, options = {}) {
   context.tableHeaders = new Map();
   context.tableCells = new Map();
   context.imagePlacements = new Map();
+  context.pictureText = new Map();
   context.slideImages = new Map();
   context.watermarks = new Map();
   context.backgroundFills = new Map();
@@ -722,7 +723,10 @@ function importGraphicFrame(entries, frame, slidePath, relationships, importedTa
 function importPicture(entries, picture, slidePath, relationships, report) {
   const bounds = shapeBounds(picture["p:spPr"]?.["a:xfrm"]);
   const name = scalarText(picture["p:nvPicPr"]?.["p:cNvPr"]?.name).trim();
-  const alt = scalarText(picture["p:nvPicPr"]?.["p:cNvPr"]?.descr);
+  // PptxGenJS (and so exports before this fix) wrote `preencoded.<ext>` for a picture with no alt text; that is no authored description.
+  const authoredAlt = scalarText(picture["p:nvPicPr"]?.["p:cNvPr"]?.descr);
+  const alt = /^preencoded\.[a-z0-9]+$/i.test(authoredAlt.trim()) ? "" : authoredAlt;
+  const title = scalarText(picture["p:nvPicPr"]?.["p:cNvPr"]?.title);
   const relId = picture["p:blipFill"]?.["a:blip"]?.["r:embed"];
   const relationship = relationships.get(relId);
   let bytes = relationship?.path ? entries[relationship.path] : null;
@@ -749,7 +753,8 @@ function importPicture(entries, picture, slidePath, relationships, report) {
       type: "image",
       image: {
         src: `data:${rasterMetadata(bytes)?.mediaType ?? mediaTypeForPath(relationship.path)};base64,${bytesToBase64(bytes)}`,
-        ...(alt ? { alt } : {})
+        ...(alt ? { alt } : {}),
+        ...(title && alt ? { title } : {})
       }
     }
   };
@@ -1159,7 +1164,8 @@ function resolvePresentationContext(presentation, options) {
   const fontSchemeId = referenceId(design.fontScheme ?? theme?.fontScheme);
   const unresolvedFontScheme = fontSchemeId && !findById(normalizeRecords(presentation.catalogs?.fontSchemes), fontSchemeId) && !findById(defaultCatalog("fontSchemes"), fontSchemeId) ? fontSchemeId : null;
   const dimensions = resolveDimensions(design.dimensions ?? theme?.dimensions);
-  const background = resolveBackground(design.background ?? theme?.background, colorScheme);
+  const variables = resolveVariableColors(presentation.variables);
+  const background = resolveBackground(design.background ?? theme?.background, colorScheme, variables);
   const fonts = resolveFonts(fontScheme);
   for (const role of ["heading","body","code"]) fonts[role] = resolveTextStyle({fontFamily:fonts[role],fontWeight:role === "heading" ? 700 : 400},options.textMeasurement).fontFamily;
   const textColor = readableTextColor(background, colorScheme);
@@ -1185,7 +1191,7 @@ function resolvePresentationContext(presentation, options) {
       surface: normalizeHex(colorScheme.surface ?? (darkBackground ? colorScheme.dark2 : colorScheme.light2) ?? "#F8FAFC"),
       border: normalizeHex(colorScheme.accent5 ?? "#CBD5E1")
     },
-    variables: resolveVariableColors(presentation.variables)
+    variables
   };
 }
 
@@ -1314,14 +1320,15 @@ async function addSlide(pptx, presentation, opfSlide, slideIndex, context, optio
   const backgroundPath = `${opfSlide.design?.background !== undefined ? `slides.${slideIndex}.` : ''}design.background`;
   const backgroundFill = schemeBackgroundFill(backgroundDefinition, slideContext) ?? nativeBackgroundFill(backgroundDefinition, {
     width: slideContext.dimensions.widthInches, height: slideContext.dimensions.heightInches
-  }, slideContext.colors.background, slideContext.colors.text, (reference, hex) => schemeColorValue(reference, hex, slideContext));
+  }, slideContext.colors.background, slideContext.colors.text, (reference, hex) => schemeColorValue(reference, hex, slideContext), reference => resolveBackgroundColorRef(reference, slideContext.colorScheme, slideContext.variables));
   if (backgroundFill) context.backgroundFills.set(`ppt/slides/slide${slideIndex + 1}.xml`, backgroundFill);
   if (backgroundDefinition?.type === 'pattern' && !nativePatternPreset(backgroundDefinition.pattern?.preset)) {
     options.onDiagnostic?.({code: 'unsupported-pattern', path: `${backgroundPath}.pattern.preset`, message: `Pattern ${backgroundDefinition.pattern?.preset} has no DrawingML preset; only its background color was exported.`});
   }
   if (backgroundDefinition?.type === 'image') {
     const imagePath = `${backgroundPath}.image`;
-    const resolved = await resolveImage(backgroundDefinition.image, presentation, options, imagePath);
+    const outcome = {};
+    const resolved = await resolveImage(backgroundDefinition.image, presentation, options, imagePath, outcome);
     if (resolved) {
       // PptxGenJS embeds the raster and its relationship; packaging replaces
       // its stretched fill with the fitted native picture fill.
@@ -1330,7 +1337,7 @@ async function addSlide(pptx, presentation, opfSlide, slideIndex, context, optio
         fit: backgroundDefinition.image?.fit ?? 'cover', opacity: backgroundDefinition.opacity ?? 1, imageFill: slideContext.imageFill, path: imagePath,
         width: slideContext.dimensions.widthInches * 96, height: slideContext.dimensions.heightInches * 96, report: options.onDiagnostic
       } });
-    } else {
+    } else if (!outcome.reported) {
       options.onDiagnostic?.({code: 'unresolved-asset', path: imagePath, message: 'The background image needs an embedded raster, a declared asset or a host imageResolver; the slide background color was exported instead.'});
     }
   }
@@ -1592,6 +1599,7 @@ async function addImagePayload(slide, presentation, asset, region, path, context
   }
   const objectName = `OPF image ${context.imagePlacements.size + 1}`;
   context.imagePlacements.set(objectName, { region, mode: context.imageFill, path });
+  context.pictureText.set(objectName, pictureText(assetAlt(asset, presentation), asset, presentation));
   slide.addImage({
     ...resolved,
     objectName,
@@ -1619,9 +1627,10 @@ async function addWatermark(slide, presentation, opfSlide, slideIndex, slideCont
     notExported('The watermark needs an image source (a string, or an object with src); no watermark was exported for this slide.');
     return;
   }
-  const resolved = await resolveImage(asset, presentation, options, path);
+  const outcome = {};
+  const resolved = await resolveImage(asset, presentation, options, path, outcome);
   if (!resolved) {
-    options.onDiagnostic?.({code: 'unresolved-asset', path, message: 'The watermark image needs an embedded raster, a declared asset or a host imageResolver; no watermark was exported for this slide.'});
+    if (!outcome.reported) options.onDiagnostic?.({code: 'unresolved-asset', path, message: 'The watermark image needs an embedded raster, a declared asset or a host imageResolver; no watermark was exported for this slide.'});
     return;
   }
   const {widthInches, heightInches} = slideContext.dimensions;
@@ -1660,7 +1669,9 @@ async function addSlideImage(slide, presentation, image, slideIndex, context, op
   // FF-53: a root `image` with the slide image's source is the slide image (core `replacesContent`); the
   // manifest records that so an unchanged picture imports back as both design.slideImage and slide.image.
   context.slideImages.set(objectName, { slide: `slides.${slideIndex}`, box, fill: image.fill, path: image.sourcePath, treatment: { ...treatment, position: image.position }, effects, content: image.replacesContent === true });
-  slide.addImage({ ...resolved, objectName, ...box, altText: image.alt ?? assetAlt(image.value, presentation) });
+  const slideImageAlt = image.alt ?? assetAlt(image.value, presentation);
+  context.pictureText.set(objectName, pictureText(slideImageAlt, image.value, presentation));
+  slide.addImage({ ...resolved, objectName, ...box, altText: slideImageAlt });
   // The overlay scrim is a separate native shape directly above the picture.
   if (effects.overlay) {
     const overlay = effects.overlay.box;
@@ -2296,7 +2307,9 @@ function toPptxChartData(chart, chartexMode = 'auto') {
   let series = data.columns.slice(1).map((name, seriesIndex) => ({
     name: stringifyText(name),
     labels,
-    values: data.rows.map((row) => numericValue(row?.[seriesIndex + 1]))
+    // A cell that holds no number (null, an empty or non-numeric string, a boolean) is a gap, as in the preview and the single-column
+    // path above: it is neither plotted as a zero nor written into the cache as one.
+    values: data.rows.map((row) => parsedNumber(row?.[seriesIndex + 1]))
   }));
   const plotted = spec.family === 'circular' ? 1 : chartex ? chartex.series : Infinity;
   if (series.length > plotted) {
@@ -2340,7 +2353,42 @@ function histogramBins(values) {
   }
 }
 
-async function resolveImage(asset, presentation, options, path) {
+// Embedded bytes must be a raster the exporter can measure and PptxGenJS can embed (PNG, JPEG, GIF, WebP). An SVG, or
+// bytes that are no readable image, would otherwise fail deep inside packaging. Like an unresolved asset it is not
+// exported as a picture: the caller draws the preview's placeholder (or omits the picture) and one `unresolved-asset`
+// diagnostic names the cause; `strictAssets` keeps the `unsupported-image-dimensions` error. `outcome.reported` tells a
+// caller that the diagnostic was already emitted. Hosts that need SVG art supply a raster through `imageResolver`
+// (for example opf-render's `svgToPng`). Local paths are read by PptxGenJS and checked after embedding.
+async function resolveImage(asset, presentation, options, path, outcome = {}) {
+  const resolved = await resolveImageSource(asset, presentation, options, path);
+  if (!resolved?.data) return resolved;
+  const bytes = dataUriBytes(resolved.data);
+  if (bytes && rasterMetadata(bytes)) return resolved;
+  const message = `The image is not a readable PNG, JPEG, GIF or WebP (${dataUriMediaType(resolved.data) ?? "unknown type"}); supply a raster through imageResolver (for example opf-render svgToPng).`;
+  if (options.strictAssets) throw new OPFPptxError("unsupported-image-dimensions", `Image fitting requires readable PNG, JPEG, GIF or WebP dimensions. ${message}`, { path });
+  options.onDiagnostic?.({ code: "unresolved-asset", path, reason: "unsupported-format", message });
+  outcome.reported = true;
+  return null;
+}
+
+function dataUriMediaType(uri) {
+  return /^data:([^;,]+)/i.exec(uri)?.[1]?.toLowerCase();
+}
+
+// Only base64 data URIs carry bytes the exporter can read; any other encoding is not a readable raster.
+function dataUriBytes(uri) {
+  const match = /^data:[^,]*;base64,/i.exec(uri);
+  if (!match) return null;
+  try {
+    if (typeof Buffer !== "undefined") return new Uint8Array(Buffer.from(uri.slice(match[0].length), "base64"));
+    const binary = atob(uri.slice(match[0].length));
+    return Uint8Array.from(binary, char => char.charCodeAt(0));
+  } catch {
+    return null;
+  }
+}
+
+async function resolveImageSource(asset, presentation, options, path) {
   const assetObject = dereferenceAsset(asset, presentation, path);
   const src = typeof assetObject === "string" ? assetObject : assetObject?.src;
   if (!src) {
@@ -2411,6 +2459,24 @@ function dereferenceAsset(asset, presentation, path, seen = new Set()) {
   return asset;
 }
 
+// PptxGenJS writes its own stand-in (`preencoded.png`, or the local file path) as the picture's description when it is
+// given no alt text. The package writes only what the document authored: the alt text as `descr`, and a distinct asset
+// `title` as the native `title` attribute (a picture's tooltip and Alt Text title).
+function pictureText(alt, asset, presentation) {
+  const resolved = dereferenceAsset(asset, presentation, "asset-title");
+  const title = isPlainObject(resolved) && typeof resolved.title === "string" && resolved.title && resolved.title !== alt ? resolved.title : undefined;
+  return { alt: typeof alt === "string" && alt ? alt : undefined, title: alt ? title : undefined };
+}
+
+function writePictureText(picture, text) {
+  const escapes = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&apos;", "\r": "&#13;", "\n": "&#10;", "\t": "&#9;" };
+  const escape = value => value.replace(/[&<>"'\r\n\t]/g, char => escapes[char]);
+  return picture.replace(/<p:cNvPr\b([^>]*?)(\/?)>/, (tag, attributes, close) => {
+    attributes = attributes.replace(/\sdescr="[^"]*"/, "").replace(/\stitle="[^"]*"/, "");
+    return `<p:cNvPr${attributes}${text.alt ? ` descr="${escape(text.alt)}"` : ""}${text.title ? ` title="${escape(text.title)}"` : ""}${close}>`;
+  });
+}
+
 function assetAlt(asset, presentation) {
   const resolved = dereferenceAsset(asset, presentation, "asset-alt");
   if (resolved && typeof resolved === "object" && !Array.isArray(resolved)) {
@@ -2450,10 +2516,13 @@ const DEFAULT_SOURCE_PREFIX = "https://www.pptx.gallery/";
 // catalog for pptx.gallery/pkg sources), injected options.catalogs, and the
 // bundled catalog (the engine default source also resolves to it).
 function socialPlatformRecords(presentation, options) {
-  const kind = "socialPlatforms", source = presentation.catalogs?.[kind]?.source;
-  const bySource = typeof source === "string" ? options.catalogSources?.[source] : undefined;
-  const sourceRecords = bySource ? normalizeRecords(bySource)
-    : typeof source === "string" && (source.startsWith(DEFAULT_SOURCE_PREFIX) || source.startsWith("pkg:@openpresentation/opf/")) ? defaultCatalog(kind) : [];
+  const kind = "socialPlatforms", declared = presentation.catalogs?.[kind]?.source;
+  // `source` is one source or an ordered search path (an array): records of each source in order, first match wins.
+  const sourceRecords = (Array.isArray(declared) ? declared : [declared]).filter(source => typeof source === "string").flatMap(source => {
+    const bySource = options.catalogSources?.[source];
+    return bySource ? normalizeRecords(bySource)
+      : source.startsWith(DEFAULT_SOURCE_PREFIX) || source.startsWith("pkg:@openpresentation/opf/") ? defaultCatalog(kind) : [];
+  });
   return [...sourceRecords, ...normalizeRecords(options.catalogs?.[kind]), ...defaultCatalog(kind)];
 }
 
@@ -2481,19 +2550,26 @@ function resolveDimensions(value) {
   return { widthInches: width / 96, heightInches: height / 96 };
 }
 
-function resolveBackground(value, colorScheme) {
+// A solid color or pattern background color is a ColorRef (hex, `var:` variable, colour-scheme slot or role), resolved
+// as for table fills and run colours. Roles resolve through the colour scheme alone: the background cannot depend on itself.
+function resolveBackgroundColorRef(entry, colorScheme, variables = {}) {
+  return resolveColorRefValue(entry, {colorScheme, colors: {}, variables});
+}
+
+function resolveBackground(value, colorScheme, variables = {}) {
   const fallback = "FFFFFF";
+  const reference = entry => normalizeHex(resolveBackgroundColorRef(entry, colorScheme, variables) ?? entry, fallback);
   if (typeof value === "string") {
     if (value.startsWith("#")) return normalizeHex(value, fallback);
     return normalizeHex(colorScheme[value] ?? colorScheme.background ?? colorScheme.light1 ?? "#FFFFFF", fallback);
   }
   if (isPlainObject(value)) {
-    if (value.type === "solid" && value.color) return normalizeHex(value.color, fallback);
+    if (value.type === "solid" && value.color) return reference(value.color);
     if (value.type === "theme" && value.slot) {
       return normalizeHex(colorScheme[value.slot] ?? colorScheme.light1 ?? "#FFFFFF", fallback);
     }
     // Like the SVG preview, text contrast follows a pattern's background color.
-    if (value.type === "pattern") return normalizeHex(value.pattern?.backgroundColor ?? "#FFFFFF", fallback);
+    if (value.type === "pattern") return reference(value.pattern?.backgroundColor ?? "#FFFFFF");
     if (value.backgroundColor) return normalizeHex(value.backgroundColor, fallback);
   }
   return normalizeHex(colorScheme.background ?? colorScheme.light1 ?? "#FFFFFF", fallback);
@@ -2561,7 +2637,7 @@ async function normalizePptxZip(raw, context) {
       if(!chartPart)throw new OPFPptxError('packaging-failed','Generated chart relationship is missing.');
       const {heading,labelColor,spec}=context.chartHeadings.get(name);
       if(heading!==undefined)writeChartCategoryHeading(entries,chartPart,heading);
-      entries[chartPart]=encodeText(applyChartConstruct(decodeText(entries[chartPart]),spec));
+      entries[chartPart]=encodeText(omitEmptyNumberPoints(applyChartConstruct(decodeText(entries[chartPart]),spec)));
       // PptxGenJS hardcodes a black fallback in pie/doughnut label properties.
       // Normalize only our generated chart text styles; point/series fills stay intact.
       entries[chartPart]=encodeText(decodeText(entries[chartPart]).replace(/<c:txPr>[\s\S]*?<\/c:txPr>/g,properties=>properties.replace(/<a:solidFill>[\s\S]*?<\/a:solidFill>/g,()=>`<a:solidFill><a:srgbClr val="${labelColor}"/></a:solidFill>`)));
@@ -2818,6 +2894,8 @@ function normalizePartBytes(path, bytes, context, renameMaps, entries, imageMeta
       // exact bytes instead of fetching or resolving the source a second time.
       const relationships = parseRelationships(entries, path);
       xml = xml.replace(/<p:pic>([\s\S]*?)<\/p:pic>/g, picture => {
+        const text = context.pictureText.get(picture.match(/<p:cNvPr\b[^>]*\bname="([^"]+)"/)?.[1]);
+        if (text) picture = writePictureText(picture, text);
         const placement = context.imagePlacements.get(picture.match(/name="(OPF image \d+)"/)?.[1]);
         if (!placement) return picture;
         const id = picture.match(/<a:blip\b[^>]*r:embed="([^"]+)"/)?.[1];
@@ -2926,9 +3004,12 @@ function normalizeNestedZip(bytes, context) {
   const entries = unzipSync(bytes);
   const output = {};
   for (const path of Object.keys(entries).sort()) {
+    // A gap in the chart data is a blank workbook cell, not a numeric cell with an empty value.
     const entryBytes = path === "docProps/core.xml"
       ? encodeText(normalizeCoreProperties(decodeText(entries[path]), context.timestamp))
-      : entries[path];
+      : /^xl\/worksheets\/sheet\d+\.xml$/.test(path)
+        ? encodeText(decodeText(entries[path]).replace(/<c ((?:r|s)="[^"]*"(?: (?:r|s)="[^"]*")*)><v><\/v><\/c>/g, "<c $1/>"))
+        : entries[path];
     output[path] = [entryBytes, {
       level: context.compressionLevel,
       mtime: context.zipDate
@@ -3053,6 +3134,12 @@ function parsedNumber(value) {
   if (typeof value === "number" && Number.isFinite(value)) return value;
   const parsed = Number.parseFloat(String(value ?? "").replace(/[^0-9.-]/g, ""));
   return Number.isFinite(parsed) ? parsed : null;
+}
+
+// PptxGenJS writes a gap (null) as `<c:pt idx="n"><c:v></c:v></c:pt>`. A native gap is a numeric cache with no point at that
+// index (ptCount keeps the row count); an empty value is not a number, so drop those points, leaving the index unwritten.
+function omitEmptyNumberPoints(xml) {
+  return xml.replace(/<c:numCache>[\s\S]*?<\/c:numCache>/g, cache => cache.replace(/<c:pt idx="\d+"><c:v><\/c:v><\/c:pt>/g, ""));
 }
 
 function numericValue(value) {
