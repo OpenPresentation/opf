@@ -9,6 +9,8 @@
 // The core catalog names each kept chart type's construct in `mappings.openxml` (`element`, and `extension` for the Pareto line). The cx
 // layoutId of the series follows from that element, so an id and its part are tied through the catalog, not through a list in the audit.
 
+import {chartPartTextSizes} from './chart-text.mjs';
+
 /** The cx:series layoutId a catalog `mappings.openxml.element` stands for (the histogram is a clusteredColumn series with binning). */
 export const CX_LAYOUT_BY_ELEMENT = Object.freeze({treemapChart: 'treemap', histogramChart: 'clusteredColumn', boxWhiskerChart: 'boxWhisker', waterfallChart: 'waterfall', funnelChart: 'funnel', mapChart: 'regionMap'});
 /** The cx:series layoutId an `extension` stands for (an owned series). */
@@ -65,6 +67,8 @@ export function parseChartex(xml) {
     colors: uniq(series.flatMap(s => s.colors)),
     typefaces: uniq(txPr.flatMap(t => [...t.matchAll(/<a:latin typeface="([^"]*)"/g)].map(m => m[1]))),
     sizes: uniq(txPr.flatMap(t => [...t.matchAll(/<a:defRPr\b[^>]*\bsz="(\d+)"/g)].map(m => +m[1]))),
+    // The sizes per text role (axis, data labels, legend, title), in points (FF-62; chart-text.mjs).
+    roleSizes: chartPartTextSizes(text, true),
     textColors: uniq(txPr.flatMap(t => [...t.matchAll(/<a:srgbClr val="([0-9A-Fa-f]{6})"/g)].map(m => m[1].toUpperCase()))),
     quartileMethod: text.match(/<cx:statistics\b[^>]*quartileMethod="(\w+)"/)?.[1] ?? null,
     strings: uniq([...strDims.flatMap(d => d.values), ...series.map(s => s.name).filter(Boolean)]),
