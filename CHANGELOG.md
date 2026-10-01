@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- FF-59, FF-60 (program evidence, no package change): the parity audit re-run on the published packages (opf-render 0.11.8, opf-pptx 0.11.5, core 0.11.3): 738 of 850 perfect, 111 near, 1 mismatch, the same as the source run. `build-support-status.mjs` reads the new dated run by default; `support-status.json` regenerated (presence unchanged, 812 of 819).
 - FF-58 (program evidence and tooling, no package change): the closure audits re-run on the published packages (core 0.11.3, opf-render 0.11.6, opf-pptx 0.11.4, opf-editor 0.10.4, pptx-gallery `edb77b2`): 812 of 819 gallery configs `works` (from 431), every dimension 100% except the 7 chartex charts (FF-56). The parity harness follows face-level lazy loading (opf-render 0.11.5): `font-host.mjs` records the faces a document draws and `resolveDrawnFamily` resolves a family through them. Regenerated `support-status.json`, audit results and a dated parity run; FF-47 to FF-55 and FF-57 are done in the burndown.
 ## 0.11.3
 
