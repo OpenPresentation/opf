@@ -1,4 +1,5 @@
-// Report-only summary for the non-blocking platform residual workflow (opf-render#24, FF-21).
+// Summary for the platform residual workflow (opf-render#24, FF-21, RR-15). Bundled static faces are still reported
+// against the unchanged 0.1 px gate; the #24 variable-font rows use the 0.15 px gate (owner decision 2026-10-01).
 // Usage: node scripts/platform-residual-summary.mjs <out.md> <out.json> <report dir>...
 // Each report dir may hold issue24-probe.json, font-variants-browser.json,
 // font-preparation-browser.json and outcomes.json. Missing files are reported, never fatal.
@@ -10,6 +11,7 @@ if(!markdownPath||!jsonPath||!dirs.length)throw new Error('Usage: platform-resid
 const read=async file=>{try{return JSON.parse(await readFile(file,'utf8'));}catch{return undefined;}};
 const px=value=>value===undefined||Number.isNaN(value)?'n/a':value.toFixed(4);
 const signed=value=>value===undefined||Number.isNaN(value)?'n/a':(value>=0?'+':'')+value.toFixed(4);
+import {VARIABLE_FONT_METRIC_GATE_PX} from './variable-font-gate.mjs';
 const GATE=.1;
 
 const platforms=[];
@@ -28,9 +30,9 @@ for(const dir of dirs){
   });
 }
 
-const lines=['## Platform preview residual (report-only, opf-render#24)','',
-  'Non-blocking FF-21 measurement. The 0.1 px gate is shown for reference only; no gate, tolerance or golden is changed by this job.',''];
-lines.push('| Platform | Browser | Node | Suite outcomes | Bundled faces over 0.1 px | Bundled max abs residual (px) | #24 rows over 0.1 px | #24 max abs residual (px) |','|---|---|---|---|---:|---:|---:|---:|');
+const lines=['## Platform preview residual (opf-render#24)','',
+  `Bundled faces are measured against the unchanged 0.1 px reference gate. The #24 Source Serif 4 variable-font rows are gated at ${VARIABLE_FONT_METRIC_GATE_PX} px (owner decision 2026-10-01); no other gate, tolerance or golden is changed by this job.`,''];
+lines.push('| Platform | Browser | Node | Suite outcomes | Bundled faces over 0.1 px | Bundled max abs residual (px) | #24 rows over 0.15 px | #24 max abs residual (px) |','|---|---|---|---|---:|---:|---:|---:|');
 for(const item of platforms){
   const outcomes=Object.entries(item.outcomes).filter(([key])=>key!=='platform').map(([key,value])=>`${key}: ${value}`).join('<br>')||'n/a';
   lines.push(`| ${item.platform}${item.os?`<br>${item.os}`:''} | ${item.browser??'n/a'} | ${item.node??'n/a'} | ${outcomes} | ${item.bundled.overGate}/${item.bundled.rows} | ${px(item.bundled.maxAbsResidual)} | ${item.probe?`${item.probe.summary.overGate}/${item.probe.summary.rows}`:'n/a'} | ${px(item.probe?.summary.maxAbsResidual)} |`);
@@ -49,11 +51,11 @@ if(comparison.length){
   lines.push('','### #24 Source Serif 4 variable rows: live Chromium canvas advance vs archived Fontkit prediction (32 px)','',
     `| Instance | Prediction | ${names.map(name=>`${name} native | ${name} residual`).join(' | ')}${both?' | linux − macos':''} | Retained linux / macos |`,
     `|---|---:|${names.map(()=>'---:|---:').join('|')}|${both?'---:|':''}---|`);
-  const mark=value=>value===undefined?'n/a':`${signed(value)}${Math.abs(value)>=GATE?' ⚠':''}`;
+  const mark=value=>value===undefined?'n/a':`${signed(value)}${Math.abs(value)>=VARIABLE_FONT_METRIC_GATE_PX?' ⚠':''}`;
   for(const row of comparison){
     lines.push(`| ${path.basename(row.file,'.ttf').replace('SourceSerif4Variable-','')} ${row.id.replace('named:','')} | ${px(row.prediction)} | ${names.map(name=>`${px(row.native[name])} | ${mark(row.residual[name])}`).join(' | ')}${both?` | ${signed(row.linuxMinusMacos)}`:''} | ${px(row.retained?.linux)} / ${px(row.retained?.macos)} |`);
   }
-  lines.push('','⚠ marks a residual at or above the 0.1 px reference gate. Residuals are expected until #24 defines a supported geometry contract.');
+  lines.push('',`⚠ marks a residual at or above the ${VARIABLE_FONT_METRIC_GATE_PX} px variable-font gate. Residuals between 0.1 px and ${VARIABLE_FONT_METRIC_GATE_PX} px are the Linux/Windows versus macOS HVAR advance rounding difference and are accepted.`);
 }
 const over=platforms.flatMap(item=>item.bundled.rowsOverGate.map(row=>({platform:item.platform,...row})));
 if(over.length){
@@ -64,5 +66,5 @@ const markdown=lines.join('\n')+'\n';
 await mkdir(path.dirname(path.resolve(markdownPath)),{recursive:true});
 await mkdir(path.dirname(path.resolve(jsonPath)),{recursive:true});
 await writeFile(markdownPath,markdown);
-await writeFile(jsonPath,JSON.stringify({status:'report-only',issue:'OpenPresentation/opf-render#24',program:'font-fidelity-everywhere FF-21',gatePx:GATE,platforms:platforms.map(({probe,...item})=>({...item,probeSummary:probe?.summary})),comparison},null,2)+'\n');
+await writeFile(jsonPath,JSON.stringify({status:'report',issue:'OpenPresentation/opf-render#24',program:'font-fidelity-everywhere FF-21; Release readiness RR-15',gatePx:GATE,variableFontGatePx:VARIABLE_FONT_METRIC_GATE_PX,platforms:platforms.map(({probe,...item})=>({...item,probeSummary:probe?.summary})),comparison},null,2)+'\n');
 console.log(markdown);

@@ -1,7 +1,8 @@
 # Non-blocking platform residual report (font-fidelity-everywhere FF-21, tracking #24).
-# This workflow measures and reports only. Every job is continue-on-error, it is separate
-# from ci.yml, and it changes no gate, tolerance or golden. Residuals are expected until #24
-# defines a supported geometry contract.
+# This workflow measures and reports only. Every job is continue-on-error and it is separate
+# from ci.yml, which carries the blocking variable-font gate (npm run test:variable-font-gate:
+# 0.15 px, owner decision 2026-10-01, RR-15). The #24 probe step below uses that same 0.15 px
+# value so the macOS leg shows the margin; static-font residuals still use the 0.1 px reference.
 name: Platform residual (non-blocking)
 on:
   pull_request:

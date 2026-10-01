@@ -1,5 +1,7 @@
-// Report-only platform residual probe for opf-render#24 (program font-fidelity-everywhere, FF-21).
-// It measures, never gates: the 0.1px threshold is recorded for comparison and is not changed or enforced here.
+// Platform residual probe for opf-render#24 (programs font-fidelity-everywhere FF-21 and Release readiness RR-15).
+// It measures live Chromium against the archived Fontkit prediction for the five Source Serif 4 variable rows and
+// gates them: each row must be within VARIABLE_FONT_METRIC_GATE_PX (0.15 px, owner decision 2026-10-01, see
+// scripts/variable-font-gate.mjs). The report is written first; the process then exits non-zero on any failure.
 // Usage: node test/platform-residual-probe.mjs <archived font-formats fixture dir> [output.json]
 import {createHash} from 'node:crypto';
 import {mkdir,readFile,writeFile} from 'node:fs/promises';
@@ -7,8 +9,9 @@ import os from 'node:os';
 import path from 'node:path';
 import {create} from 'fontkit';
 import {chromium} from 'playwright';
+import {PREVIOUS_GATE_PX,VARIABLE_FONT_METRIC_GATE_PX as GATE} from '../scripts/variable-font-gate.mjs';
 
-const GATE=.1,TEXT='  office affine AVATAR  ',SIZE=32;
+const TEXT='  office affine AVATAR  ',SIZE=32;
 // The five TrueType rows that separate Linux and macOS Chromium in the retained evidence
 // (opf-render 9764ad8, docs/evidence/rejected-truetype-rounding-20260915). Values are px at 32px.
 const EVIDENCE='OpenPresentation/opf-render@9764ad8f9a7fd497ca2fcea190669cf74d2e2503:docs/evidence/rejected-truetype-rounding-20260915/rounding-probe.json.gz';
@@ -74,13 +77,22 @@ const measured=rows.map(row=>{
   };
 });
 const report={
-  status:'report-only',issue:'OpenPresentation/opf-render#24',program:'font-fidelity-everywhere FF-21',
+  status:'gate',issue:'OpenPresentation/opf-render#24',program:'font-fidelity-everywhere FF-21; Release readiness RR-15',
   platform,os:`${os.type()} ${os.release()} ${os.arch()}`,node:process.version,browser:browserVersion,
-  gatePx:GATE,text:TEXT,fontSizePx:SIZE,evidence:EVIDENCE,
-  scope:'Chromium canvas advance of the five retained #24 Source Serif 4 variable TrueType rows versus the archived renderer Fontkit prediction. Report-only; no product gate, golden or tolerance is changed.',
+  gatePx:GATE,previousGatePx:PREVIOUS_GATE_PX,text:TEXT,fontSizePx:SIZE,evidence:EVIDENCE,
+  scope:'Chromium canvas advance of the five retained #24 Source Serif 4 variable TrueType rows versus the archived renderer Fontkit prediction, gated at 0.15 px by owner decision 2026-10-01 for this variable-font metric check only. SVG text length must still agree with canvas within the unchanged 0.1 px. No static-font gate, golden or other tolerance is changed.',
   rows:measured,errors,requests,
-  summary:{rows:measured.length,overGate:measured.filter(row=>!row.withinGate).length,maxAbsResidual:Math.max(...measured.map(row=>Math.abs(row.residual)))},
+  summary:{rows:measured.length,overGate:measured.filter(row=>!row.withinGate).length,overPreviousGate:measured.filter(row=>!(Math.abs(row.residual)<PREVIOUS_GATE_PX)).length,maxAbsResidual:Math.max(...measured.map(row=>Math.abs(row.residual)))},
 };
 await mkdir(path.dirname(output),{recursive:true});
 await writeFile(output,JSON.stringify(report,null,2)+'\n');
 console.log(JSON.stringify({platform,browser:browserVersion,...report.summary},null,2));
+const failures=[
+  ...errors.map(message=>`page error: ${message}`),
+  ...requests.map(url=>`network request: ${url}`),
+  ...measured.filter(row=>!row.native.ink).map(row=>`${row.id}: no glyph ink was painted`),
+  ...measured.filter(row=>!row.withinGate).map(row=>`${row.id}: Chromium canvas ${row.native.canvasWidth} vs Fontkit ${row.prediction} differs by ${Math.abs(row.residual)} px (gate ${GATE})`),
+  // The SVG/canvas agreement check keeps the unchanged 0.1 px gate; only the Fontkit-vs-native metric is widened.
+  ...measured.filter(row=>!(Math.abs(row.native.svgWidth-row.native.canvasWidth)<PREVIOUS_GATE_PX)).map(row=>`${row.id}: SVG text length ${row.native.svgWidth} vs canvas ${row.native.canvasWidth}`),
+];
+if(failures.length){console.error(failures.join('\n'));process.exitCode=1;}
