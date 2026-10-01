@@ -34,6 +34,8 @@ export const STATUSES = [
   "script-gap",
   "baseline-needed",
   "metric-measured",
+  "documented-visual",
+  "qualified",
 ];
 const HOSTS = ["node", "browser", "editor", "galleryEditor", "galleryCards"];
 const FOUR = ["400", "400i", "700", "700i"];
@@ -44,6 +46,7 @@ const styleKey = (weight, italic) => `${weight}${italic ? "i" : ""}`;
 const styleOrder = (a, b) => Number.parseInt(a, 10) - Number.parseInt(b, 10) || a.length - b.length;
 const sortStyles = (styles) => [...new Set(styles)].sort(styleOrder);
 const round = (value, digits = 4) => Math.round(value * 10 ** digits) / 10 ** digits;
+const ratio = (value) => (value === null || value === undefined ? "n/a" : `${value}x`);
 const pct = (value) => (value === null || value === undefined ? "-" : `${round(value * 100, 2)}%`);
 
 // ---- render manifest snapshot -----------------------------------------------------------------
@@ -169,7 +172,9 @@ function parityUsage(parity) {
 }
 
 // Mirror of the host verification defaults, so priority can be computed before the record is assembled.
-function hostVerificationOf(family, host, target, cards, overrides) {
+function hostVerificationOf(family, host, target, cards, overrides, hostEvidence) {
+  // RR-17: per-family fixtures in a host (the evidence file assembled from the host tests) decide verified; the authored map covers the rest.
+  if (hostEvidence?.hosts?.[host]?.families?.[family]) return "verified";
   const set = overrides.hostVerification[family]?.[host];
   if (set) return set;
   if (host === "galleryCards") return cards ? "unverified" : "NA";
@@ -183,6 +188,18 @@ function expectedStatus(route, targetBundled) {
 }
 
 // ---- build ------------------------------------------------------------------------------------
+
+/** The appearance note: the authored description of both faces and its caveat; the measured figures are the record's `qualification`. */
+function appearanceOf(note) {
+  if (!note) return null;
+  return { description: `${note.original} ${note.replacement}`, ...(note.caveat ? { caveat: note.caveat } : {}) };
+}
+
+/** An accepted Latin family's next action is the native verification that remains; its authored action stays for every other family. */
+function derivedNextAction(acceptance, status, authored, rules) {
+  if (!acceptance.accepted || !rules.nextActions[status]) return authored;
+  return rules.nextActions[status];
+}
 
 function resolveEvidence(keys, dictionary) {
   const out = [];
@@ -206,6 +223,10 @@ export function buildTracker({ root = ROOT } = {}) {
   const galleryFonts = readJson(root, overrides.galleryFontsSnapshot);
   const galleryCardsByFamily = new Map(galleryFonts.families.map((entry) => [entry.family, entry]));
   const parity = readJson(root, overrides.paritySource);
+  const qualReport = readJson(root, overrides.qualificationReport);
+  const qualByFamily = new Map(qualReport.results.map((row) => [row.family, row]));
+  const hostEvidence = readJson(root, overrides.hostFixtureEvidence);
+  const acceptRules = overrides.latinAcceptance;
   const decisions = policy.provisionalDecisions?.decisions ?? {};
   const index = bundleIndex(snapshot);
   const usage = parityUsage(parity);
@@ -278,9 +299,9 @@ export function buildTracker({ root = ROOT } = {}) {
           date: overrides.measurementDates[family] ?? overrides.measurementDates.default,
           source: overrides.measurementSources[family]?.source ?? "docs/evidence/font-replacements-20260923/README.md",
           sourceNote: overrides.measurementSources[family]?.note ?? null,
-          verticalMetricsMatch: overrides.measurementDetails[family]?.verticalMetricsMatch ?? null,
+          verticalMetricsMatch: qualByFamily.get(family)?.summary?.verticalMetricsEqual ?? overrides.measurementDetails[family]?.verticalMetricsMatch ?? null,
           verticalMetricsNote: overrides.measurementDetails[family]?.note ?? null,
-          lineBreaksMatch: null,
+          lineBreaksMatch: qualByFamily.get(family)?.summary ? qualByFamily.get(family).summary.lineBreaksIdenticalFraction >= acceptRules.lineBreakFloor : null,
           widthBarMet,
         }
       : null;
@@ -385,8 +406,48 @@ export function buildTracker({ root = ROOT } = {}) {
       statusReason = "visual route; metric or appearance qualification outstanding";
     }
 
-    const phaseByStatus = { "loading-gap": 2, "style-gap": 2, "policy-gap": 1, "needs-special-path": 4, "visual-gap": 4, "script-gap": 4, "baseline-needed": 1, "metric-measured": 1 };
-    const phase = overrides.phaseOverrides[family]?.phase ?? phaseByStatus[status];
+    const accepted = overrides.acceptance[family];
+    if (accepted?.accepted && !(accepted.date && accepted.fixture && accepted.evidence?.length)) throw new Error(`acceptance for ${family} needs fixture, date and evidence`);
+    let acceptance = accepted
+      ? { fixture: accepted.fixture ?? "pending", accepted: accepted.accepted === true, date: accepted.date ?? null, evidence: resolveEvidence(accepted.evidence ?? [], overrides.evidence), note: accepted.note ?? "" }
+      : { fixture: "pending", accepted: false, date: null, evidence: [], note: "Own fixture and acceptance record required; grouped work does not transfer acceptance." };
+
+    // RR-17 (FF-41, FF-42, FF-43): the per-family acceptance for a Latin family is derived from two committed evidence files: the host
+    // fixtures (every one of node, browser, editor and gallery editor drew the family's route faces at the face's own advances) and the
+    // qualification report (widths per style, line breaks, vertical metrics, outlines, coverage against the real font). Nothing here is
+    // hand edited, and native PowerPoint verification stays a separate, unverified field (FF-46).
+    const qual = qualByFamily.get(family);
+    const fixtureHosts = acceptRules.hosts.filter((host) => hostEvidence.hosts?.[host]?.families?.[family]);
+    const latinOnly = rec.scripts.every((script) => script === "Latin");
+    const qualification = qual
+      ? { file: overrides.qualificationReport, date: qualReport.date, referenceAvailable: qual.referenceAvailable, ...(qual.referenceAvailable ? { stylesMeasured: qual.summary.stylesMeasured, meanAbsWidthDelta: qual.summary.meanAbsWidthDelta, maxAbsWidthDelta: qual.summary.maxAbsWidthDelta, widthBarMet: qual.summary.widthBarMet, lineBreaksIdenticalFraction: qual.summary.lineBreaksIdenticalFraction, verticalMetricsEqual: qual.summary.verticalMetricsEqual, xHeightRatio: qual.summary.xHeightRatio, capHeightRatio: qual.summary.capHeightRatio, ascentRatio: qual.summary.ascentRatio, identicalOutlinesBeyondPlainRectangles: qual.summary.identicalOutlinesBeyondPlainRectangles, latinCodepointsMissing: qual.summary.latinCodepointsMissing } : {}) }
+      : null;
+    let derivedClass = null;
+    if (!accepted && target.yes && route.family && latinOnly && cls !== "special" && fixtureHosts.length === acceptRules.hosts.length) {
+      if (cls === "open" && route.kind === "self") derivedClass = "real";
+      else if (qual?.referenceAvailable && route.tier === "metric" && qual.summary.widthBarMet && qual.summary.lineBreaksIdenticalFraction >= acceptRules.lineBreakFloor) derivedClass = "metric";
+      else if (qual?.referenceAvailable && route.tier === "visual") derivedClass = "visual";
+    }
+    if (derivedClass) {
+      const q = qualification;
+      const gaps = rec.explicitGaps.length ? ` Explicit style gaps (never synthesized): ${rec.explicitGaps.join(", ")}.` : "";
+      const note = derivedClass === "real"
+        ? `The open family draws as itself in every host.${gaps}`
+        : derivedClass === "metric"
+          ? `Metric route: width mean ${pct(q.meanAbsWidthDelta)} and maximum ${pct(q.maxAbsWidthDelta)} in ${q.stylesMeasured} styles, ${pct(q.lineBreaksIdenticalFraction)} of ${acceptRules.lineBreakCases} wrap cases break at the same words (floor ${pct(acceptRules.lineBreakFloor)}); vertical metrics ${q.verticalMetricsEqual ? "equal" : "differ (recorded; the baseline is placed from the font size, not the font's ascent)"}; x-height ${ratio(q.xHeightRatio)}, cap-height ${ratio(q.capHeightRatio)} of the original.${gaps}`
+          : `Documented look-alike (tier visual): width mean ${pct(q.meanAbsWidthDelta)} and maximum ${pct(q.maxAbsWidthDelta)} in ${q.stylesMeasured} measured styles, ${pct(q.lineBreaksIdenticalFraction)} of ${acceptRules.lineBreakCases} wrap cases break at the same words; vertical metrics ${q.verticalMetricsEqual ? "equal" : "differ"}; x-height ${ratio(q.xHeightRatio)}, cap-height ${ratio(q.capHeightRatio)} of the original; ${q.latinCodepointsMissing ?? "n/a"} Latin code points missing; ${q.identicalOutlinesBeyondPlainRectangles ?? "n/a"} identical outlines beyond plain rectangles. Reflow against the real font is expected.${gaps}`;
+      acceptance = { fixture: acceptRules.fixture, accepted: true, date: acceptRules.date, evidence: resolveEvidence(acceptRules.evidence, overrides.evidence), note: `${note} Native PowerPoint verification is separate (FF-46).` };
+    } else if (!accepted && acceptRules.reasons?.[family]) acceptance = { ...acceptance, note: acceptRules.reasons[family] };
+    else if (!accepted && fixtureHosts.length > 0 && fixtureHosts.length < acceptRules.hosts.length) acceptance = { ...acceptance, note: `Not accepted yet: the fixture passes in ${fixtureHosts.join(", ")} and is missing in ${acceptRules.hosts.filter((host) => !fixtureHosts.includes(host)).join(", ")} (the host's pinned renderer or editor predates the family's route).` };
+    else if (!accepted && qual && !qual.referenceAvailable && cls === "proprietary-latin") acceptance = { ...acceptance, note: "Not accepted: the real font is not available to measure (not installed on the measuring host); the fixture and qualification run when a reference is present." };
+    if (derivedClass) {
+      status = derivedClass === "visual" ? "documented-visual" : "qualified";
+      statusReason = derivedClass === "visual" ? "documented visual look-alike: fixtures in every host, widths, line breaks and vertical metrics measured against the real font" : derivedClass === "metric" ? "metric route qualified: fixtures in every host, four-style widths and line breaks within the bar" : "open family: fixtures in every host";
+    }
+
+    const phaseByStatus = { "loading-gap": 2, "style-gap": 2, "policy-gap": 1, "needs-special-path": 4, "visual-gap": 4, "script-gap": 4, "baseline-needed": 1, "metric-measured": 1, "documented-visual": 5, "qualified": 5 };
+    // An accepted Latin family has only native verification and the full parity rerun (owner phase 5) left.
+    const phase = derivedClass ? 5 : overrides.phaseOverrides[family]?.phase ?? phaseByStatus[status];
 
     // Parity.
     const used = usage.get(family);
@@ -414,8 +475,8 @@ export function buildTracker({ root = ROOT } = {}) {
     const severity = def.severity + driftBonus;
     // Only values that are not already real or pass count, and hosts with per-family verification discount the rest.
     const valuesOpen = paritySignals.valuesAffected - paritySignals.fontResolution.pass;
-    const applicable = HOSTS.filter((host) => hostVerificationOf(family, host, target, cards, overrides) !== "NA");
-    const verifiedHosts = applicable.filter((host) => hostVerificationOf(family, host, target, cards, overrides) === "verified").length;
+    const applicable = HOSTS.filter((host) => hostVerificationOf(family, host, target, cards, overrides, hostEvidence) !== "NA");
+    const verifiedHosts = applicable.filter((host) => hostVerificationOf(family, host, target, cards, overrides, hostEvidence) === "verified").length;
     const hostFactor = applicable.length ? Math.max(0.25, (applicable.length - verifiedHosts) / applicable.length) : 1;
     const score = round(severity * (valuesOpen * hostFactor + 1), 1);
 
@@ -434,7 +495,7 @@ export function buildTracker({ root = ROOT } = {}) {
           : cls === "special" ? "no route" : "no self-hosted card preview";
         continue;
       }
-      hostVerification[host] = verified?.[host] ?? (target.yes || pending ? "unverified" : "NA");
+      hostVerification[host] = hostEvidence.hosts?.[host]?.families?.[family] ? "verified" : verified?.[host] ?? (target.yes || pending ? "unverified" : "NA");
       hostLoading[host] = packModel ? packModel[host] : cls === "special" ? "no route" : pending ? `pending ${pending.prs.join(" and ")}: not in the pinned manifest` : "not bundled";
     }
 
@@ -444,12 +505,8 @@ export function buildTracker({ root = ROOT } = {}) {
     if (paritySignals.valuesAffected > 0) evidenceKeys.push("parity");
     const native = overrides.nativeVerification[family];
     if (native?.evidence) evidenceKeys.push(...native.evidence);
-    const accepted = overrides.acceptance[family];
-    if (accepted?.accepted && !(accepted.date && accepted.fixture && accepted.evidence?.length)) throw new Error(`acceptance for ${family} needs fixture, date and evidence`);
-    const acceptance = accepted
-      ? { fixture: accepted.fixture ?? "pending", accepted: accepted.accepted === true, date: accepted.date ?? null, evidence: resolveEvidence(accepted.evidence ?? [], overrides.evidence), note: accepted.note ?? "" }
-      : { fixture: "pending", accepted: false, date: null, evidence: [], note: "Own fixture and acceptance record required; grouped work does not transfer acceptance." };
-    const nextAction = item.extra ? item.extra.nextAction : overrides.families[family]?.nextAction;
+    const appearance = appearanceOf(overrides.appearance?.[family]);
+    const nextAction = derivedNextAction(acceptance, status, item.extra ? item.extra.nextAction : overrides.families[family]?.nextAction, acceptRules);
     if (!nextAction) throw new Error(`no nextAction for ${family}`);
     const candidates = overrides.candidates[family] ?? [];
 
@@ -489,6 +546,8 @@ export function buildTracker({ root = ROOT } = {}) {
       hostLoading,
       nativeVerification: native ? { status: native.status, note: native.note } : { status: "unverified", note: "No per-family native PowerPoint acceptance (phase 5)." },
       acceptance,
+      ...(qualification ? { qualification } : {}),
+      ...(appearance ? { appearance } : {}),
       paritySignals,
       phase,
       status,
@@ -520,6 +579,8 @@ export function buildTracker({ root = ROOT } = {}) {
       measurementReport: { file: overrides.measurementReport, corpus: report.corpus },
       renderManifest: { file: overrides.manifestSnapshot, ...snapshot.source, packages: snapshot.packages.length, faces: snapshot.packages.reduce((sum, pkg) => sum + pkg.faces.length, 0) },
       parity: { file: overrides.paritySource, generatedAt: parity.meta.generatedAt, heads: parity.meta.heads, values: parity.results.length },
+      qualification: { file: overrides.qualificationReport, corpusStrings: qualReport.corpus.strings, lineBreakCases: acceptRules.lineBreakCases },
+      hostFixtures: { file: overrides.hostFixtureEvidence, date: hostEvidence.date, hosts: Object.fromEntries(Object.entries(hostEvidence.hosts).map(([host, entry]) => [host, { repository: entry.source.repository, test: entry.source.test, commit: entry.source.commit, families: Object.keys(entry.families).length }])), lazyBudget: hostEvidence.lazyBudget },
       overrides: { file: FILES.overrides },
     },
     ownerPlan: overrides.ownerPlan,
@@ -590,7 +651,7 @@ export function renderMarkdown(tracker) {
     "",
     `As of ${tracker.asOf}. Machine-readable source: [font-tracker.json](font-tracker.json). Authored inputs: [font-tracker.overrides.json](font-tracker.overrides.json). Program tracker: [burndown.md](burndown.md) (FF-40 to FF-46). Policy table: [font-licensing.md](font-licensing.md).`,
     "",
-    "This is the per-font work list behind the owner's 2026-09-29 review. Each record holds the family's selected name, preview route and tier, the bundled face (package, version, hashes, styles), the styles it needs and lacks, scripts, per-style measurements, host and native verification, parity signals, phase, status, next action and evidence. Nothing here is a claim of per-family acceptance: every family still needs its own fixture and acceptance record.",
+    "This is the per-font work list behind the owner's 2026-09-29 review. Each record holds the family's selected name, preview route and tier, the bundled face (package, version, hashes, styles), the styles it needs and lacks, scripts, per-style measurements, host and native verification, parity signals, phase, status, next action and evidence. A family counts as accepted (status qualified or documented-visual) only when its own fixtures pass in every host and, for a proprietary family, its measurement against the real font is on record (RR-17); every other family still needs its own fixture and acceptance record, and no row claims native PowerPoint verification.",
     "",
     "## Summary",
     "",
@@ -644,6 +705,16 @@ export function renderMarkdown(tracker) {
       push("");
     }
   }
+
+  const described = records.filter((rec) => rec.appearance);
+  push("", "## Latin qualification and appearance (RR-17)", "", `Per family measured against the real font on the measuring host (${tracker.inputs.qualification.file.split("/").pop()}): width mean and maximum over ${tracker.inputs.qualification.corpusStrings} strings, the share of ${tracker.inputs.qualification.lineBreakCases} wrap cases (50 paragraphs at 5 box widths) that break at the same words, the glyph height ratios (replacement over original, from the painted x and H boxes), and the authored appearance note. ${described.length} families; families whose reference font is not available to the host are described but unmeasured. Status \`qualified\` and \`documented-visual\` need a passing fixture in every host (${tracker.inputs.hostFixtures.file.split("/").pop()}).`, "");
+  push("| Family | Route | Status | Widths (mean / max) | Line breaks | x / cap | Appearance |", "| --- | --- | --- | --- | --- | --- | --- |");
+  for (const rec of described) {
+    const q = rec.qualification;
+    const measured = q?.referenceAvailable;
+    push(`| ${cell(rec.family)} | ${cell(routeCell(rec))} | \`${rec.status}\` | ${measured ? `${pct(q.meanAbsWidthDelta)} / ${pct(q.maxAbsWidthDelta)}` : "unmeasured"} | ${measured ? pct(q.lineBreaksIdenticalFraction) : "-"} | ${measured ? `${ratio(q.xHeightRatio)} / ${ratio(q.capHeightRatio)}` : "-"} | ${cell(`${rec.appearance.description}${rec.appearance.caveat ? ` ${rec.appearance.caveat}` : ""}`)} |`);
+  }
+  push("");
 
   push(
     "## Method",

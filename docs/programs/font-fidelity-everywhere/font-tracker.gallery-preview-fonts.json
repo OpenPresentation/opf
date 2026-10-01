@@ -2,9 +2,9 @@
   "description": "Pinned snapshot of pptx.gallery's self-hosted preview webfonts (data/preview-fonts.json, contract opf-gallery-preview-fonts/v1), reduced to the fields the font tracker reads. These serve gallery cards, not the gallery editor (a vendored opf-editor bundle). Refresh with: node scripts/build-font-tracker.mjs --snapshot-gallery-fonts <pptx-gallery>/data/preview-fonts.json --commit <sha>.",
   "source": {
     "repository": "Data-Advantage/pptx-gallery",
-    "commit": "efb63ac36999b77f8d73e1e4e004041e79b0c291",
+    "commit": "d8f5ae62ce981c6456c609a18442b4293f4c52bb",
     "path": "data/preview-fonts.json",
-    "capturedAt": "2026-09-29",
+    "capturedAt": "2026-10-01",
     "contract": "opf-gallery-preview-fonts/v1"
   },
   "families": [
@@ -131,6 +131,30 @@
       "license": "OFL-1.1",
       "weights": [
         400,
+        700
+      ],
+      "faces": 1,
+      "coverageGaps": null
+    },
+    {
+      "family": "Intos",
+      "package": "@openpresentation/opf-render",
+      "version": "0.11.9",
+      "kind": "renderer",
+      "license": "OFL-1.1",
+      "weights": [
+        400
+      ],
+      "faces": 1,
+      "coverageGaps": null
+    },
+    {
+      "family": "Intos Display",
+      "package": "@openpresentation/opf-render",
+      "version": "0.11.9",
+      "kind": "renderer",
+      "license": "OFL-1.1",
+      "weights": [
         700
       ],
       "faces": 1,
