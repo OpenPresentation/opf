@@ -1,0 +1,32 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Quarterly review for {{client}}",
+  "template": true,
+  "design": { "theme": "classic", "colorScheme": "cool-horizon", "fontScheme": "roboto" },
+  "variables": {
+    "client": { "type": "text", "label": "Client", "description": "The customer this review is for.", "example": "Acme Corp" },
+    "headline": { "type": "text", "label": "Headline", "example": [{ "text": "Renewal is ", "bold": true }, "on track"] },
+    "revenue": { "type": "number", "label": "Quarterly revenue", "format": "$#,##0", "example": 1250000 },
+    "growth": { "type": "number", "format": "0.#%", "value": 0.124 },
+    "kickoff": { "type": "date", "label": "Kickoff date", "example": "2026-10-01" },
+    "wins": { "type": "list", "label": "Wins", "example": ["Faster onboarding", "Lower churn"] },
+    "logo": { "type": "image", "label": "Client logo", "required": false },
+    "site": { "type": "url", "label": "Client website", "required": false },
+    "risk": "#B42318"
+  },
+  "slides": [
+    { "id": "cover", "title": "Quarterly review: {{client}}", "subtitle": "Kickoff {{kickoff}}", "image": "var:logo" },
+    { "id": "headline", "title": "Where we stand", "text": "var:headline" },
+    {
+      "id": "wins",
+      "title": "Wins this quarter",
+      "bullets": ["Revenue {{revenue}}, up {{growth}}", "var:wins", [{ "text": "Watch: renewal timing", "color": "var:risk" }]]
+    },
+    {
+      "id": "revenue",
+      "title": "Revenue",
+      "chart": { "type": "column", "data": { "columns": ["Quarter", "Revenue"], "rows": [["Previous", 1100000], ["This quarter", "var:revenue"]] } }
+    },
+    { "id": "next", "title": "Next steps", "text": [{ "text": "Visit {{site}}", "link": "var:site" }] }
+  ]
+}
