@@ -218,6 +218,24 @@ assert.equal(mergeSlides({slides:[{text:'a'},{text:'b'}]},0).slides[0].blocks.le
 console.log('Installed conversions: pure converters, loss reports and refusals work offline.');
 `);
     const conversions=await run(process.execPath,['convert.mjs'],{cwd:projectDir});process.stdout.write(conversions.stdout);
+    assertTarIncludes(files,'package/dist/audit.js');assertTarIncludes(files,'package/dist/audit.d.ts');
+    await writeFile(path.join(projectDir,'audit.mjs'),`
+import assert from 'node:assert/strict';
+import {auditPresentation as rootAudit,auditRules as rootRules} from '@openpresentation/opf';
+import {auditPresentation,auditSource,auditRules} from '@openpresentation/opf/audit';
+globalThis.fetch=()=>{throw new Error('Offline audit must not fetch');};
+assert.equal(rootAudit,auditPresentation);assert.equal(rootRules,auditRules);
+const deck={name:'Packed audit',language:'en-US',design:{background:{type:'solid',color:'#FFFFFF'}},slides:[{title:'Quarterly results',text:[{text:'faint',color:'#CCCCCC'}]},{text:'No title',image:'https://example.com/a.png'}]};
+const report=auditPresentation(deck);
+assert.deepEqual(report.diagnostics.map(issue=>issue.ruleId),['audit/text-contrast','audit/missing-alt-text','audit/missing-slide-title']);
+assert.equal(report.checks.backgroundPixels,'not-read');
+const source=JSON.stringify(deck,null,1);
+const located=auditSource(source,{only:['missing-alt-text']}).diagnostics[0];
+assert.equal(source.slice(located.location.offset,located.location.offset+located.location.length),'"https://example.com/a.png"');
+assert.equal(auditSource('{"slides":[}').documentValid,false);
+console.log('Installed audit: root and subpath entrypoints, rule ids, source ranges and invalid input pass offline.');
+`);
+    const audit=await run(process.execPath,['audit.mjs'],{cwd:projectDir});process.stdout.write(audit.stdout);
   }
   for (const file of ['quote-layout.test.mjs','quote-composition.test.mjs','code-layout.test.mjs','code-composition.test.mjs']) {
     const source=(await readFile(path.join(packageRoot,'test',file),'utf8'))
