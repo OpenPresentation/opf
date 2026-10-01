@@ -34,6 +34,7 @@ Separate these outcomes:
 
 - **Schema errors:** fix the reported paths or the incompatible union/required fields, preserving user content. An error inside one alternative can be incidental; inspect the intended form and the final union error.
 - **Reference warnings:** confirm IDs, aliases, inline records, and source configuration. An unknown ID warning is not the same as an invalid document. No warnings does not prove every reference resolves; free-form layout IDs, for example, may pass without a warning.
+- **Template state:** `validatePresentation` of a document that declares content variables reports `template` and `unfilledVariables`. A template (`"template": true`) with unfilled variables is valid; a normal deck with one is an error. Variable warnings (`declared but never used`, undeclared `{{id}}` tokens) are advisory. Schema errors for a variable value use the source path, because the document is checked as the deck it resolves to.
 - **Layout diagnostics:** require composition/rendering with the resolved dimensions and fonts. Schema validation alone cannot detect unreadable charts or exact text overflow.
 - **Visual/export differences:** require actual preview and output inspection. Never report validation success as proof of pixel parity.
 
