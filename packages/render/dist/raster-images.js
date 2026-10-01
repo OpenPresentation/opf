@@ -1,10 +1,11 @@
 import {OPFRenderError} from './svg.js';
 
-// Resvg does not decode WebP or apply JPEG EXIF orientation. Replace only
-// affected embedded image hrefs in the private
+// Resvg does not decode WebP or apply JPEG EXIF orientation, and draws no text of an SVG used as an image (its nested
+// document has no fonts). Replace only affected embedded image hrefs in the private
 // rasterization copy; preserve SVG text, attributes, comments and source bytes.
-export async function prepareRasterImages(svg) {
-  if (!/webp|jpeg|&#/i.test(svg)) return svg;
+// `nestedSvg(text)` renders an SVG picture that draws text to PNG bytes with the caller's fonts.
+export async function prepareRasterImages(svg, {nestedSvg} = {}) {
+  if (!/webp|jpeg|svg\+xml|&#/i.test(svg)) return svg;
   const cache = new Map();
   let output = '', end = 0, imageIndex = 0;
   const tokens = /<!--[\s\S]*?-->|<!\[CDATA\[[\s\S]*?\]\]>|<(?:"[^"]*"|'[^']*'|[^'">])*>/g;
@@ -16,11 +17,11 @@ export async function prepareRasterImages(svg) {
       ?? /\sxlink:href\s*=\s*(["'])([\s\S]*?)\1/.exec(tag);
     if (!href) continue;
     const uri = xmlText(href[2]);
-    if (!/^data:image\/(?:webp|jpeg)(?:;|,)/i.test(uri)) continue;
+    if (!/^data:image\/(?:webp|jpeg|svg\+xml)(?:;|,)/i.test(uri)) continue;
     const trace = /\sdata-opf-path\s*=\s*(["'])([\s\S]*?)\1/.exec(tag);
     const path = trace ? xmlText(trace[2]) : `svg.images.${index}`;
     try {
-      if (!cache.has(uri)) cache.set(uri, prepareRasterImage(uri));
+      if (!cache.has(uri)) cache.set(uri, /^data:image\/svg\+xml/i.test(uri) ? prepareSvgImage(uri, nestedSvg) : prepareRasterImage(uri));
       const png = await cache.get(uri);
       if (png === null) continue;
       const replacement = href[0].slice(0, href[0].indexOf(href[1]) + 1) + png + href[1];
@@ -32,6 +33,18 @@ export async function prepareRasterImages(svg) {
     end = match.index + match[0].length;
   }
   return output + svg.slice(end);
+}
+
+// An SVG picture that draws text is rendered to PNG here (transparent, up to 4x its size) so its text uses the render's fonts;
+// one without text stays vector for resvg.
+async function prepareSvgImage(uri, nestedSvg) {
+  if (!nestedSvg) return null;
+  const comma = uri.indexOf(',');
+  const header = uri.slice(0, comma), data = uri.slice(comma + 1);
+  const text = /;base64$/i.test(header) ? Buffer.from(decodeURIComponent(data).replace(/\s/g, ''), 'base64').toString('utf8') : decodeURIComponent(data);
+  if (!/<(?:[A-Za-z_][\w.-]*:)?text[\s>/]/.test(text)) return null;
+  // A document resvg cannot read stays as it is: resvg then draws nothing for it, as for any broken picture.
+  try { return 'data:image/png;base64,' + Buffer.from(await nestedSvg(text)).toString('base64'); } catch { return null; }
 }
 
 async function prepareRasterImage(uri) {

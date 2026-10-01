@@ -985,8 +985,39 @@ function resolveImageSource(item, bound, options) {
     asset = {...normalizeAsset(bound.assets[id]),...overrides};
   }
   const source = options.imageResolver?.(asset.src, { asset, path: item.path }) ?? asset.src;
-  const drawable = typeof source === "string" && /^data:image\/(png|jpeg|gif|webp);base64,/i.test(source);
-  return { asset, source, drawable, missingReference };
+  // An SVG data URI (base64 or text, any encoding) is drawn as an image too, as a base64 URI: an SVG used as an image never
+  // runs scripts or loads anything outside itself, in a browser or in the PNG/PDF rasterizer.
+  const svg = typeof source === "string" ? svgImageSource(source) : null;
+  const drawable = svg !== null || (typeof source === "string" && /^data:image\/(png|jpeg|gif|webp);base64,/i.test(source));
+  return { asset, source: svg ?? source, drawable, missingReference };
+}
+
+const SVG_NAMESPACE = "http://www.w3.org/2000/svg";
+
+// The base64 data URI of a drawable SVG, else null. Drawable: a data URI whose type is image/svg+xml, whose root is an
+// <svg> in the SVG namespace with an intrinsic size (width and height, or a viewBox) - the same sizes core reads for
+// furniture images - so the export (opf-pptx writes it as a native SVG picture over a PNG fallback) and the preview agree.
+function svgImageSource(uri) {
+  const header = /^data:([^;,]*)((?:;[^;,]*)*),/i.exec(uri);
+  if (!header || !/^image\/svg\+xml$/i.test(header[1])) return null;
+  let bytes;
+  try {
+    const payload = uri.slice(header[0].length);
+    bytes = /;base64/i.test(header[2]) ? Uint8Array.from(atob(payload.replace(/\s+/g, "")), char => char.charCodeAt(0)) : new TextEncoder().encode(decodeURIComponent(payload));
+  } catch { return null; }
+  let text;
+  try { text = new TextDecoder("utf-8", { fatal: true }).decode(bytes.subarray(bytes[0] === 0xef && bytes[1] === 0xbb && bytes[2] === 0xbf ? 3 : 0)); } catch { return null; }
+  const root = /<svg\b((?:[^>"']|"[^"]*"|'[^']*')*)>/.exec(text.replace(/<!--[\s\S]*?-->|<\?[\s\S]*?\?>|<!DOCTYPE[^>[]*(?:\[[\s\S]*?\])?\s*>/gi, ""));
+  if (!root) return null;
+  const attribute = name => new RegExp(`\\s${name}\\s*=\\s*(?:"([^"]*)"|'([^']*)')`).exec(root[1])?.slice(1).find(value => value !== undefined);
+  if (attribute("xmlns") !== SVG_NAMESPACE) return null;
+  const length = value => { const match = value && /^\s*([0-9]*\.?[0-9]+)\s*(px|pt|pc|mm|cm|in|q)?\s*$/i.exec(value); return match ? Number(match[1]) : undefined; };
+  const box = attribute("viewBox")?.trim().split(/[\s,]+/).map(Number);
+  const view = box && box.length === 4 && box.every(Number.isFinite) && box[2] > 0 && box[3] > 0;
+  if (!((length(attribute("width")) && length(attribute("height"))) || view)) return null;
+  let binary = "";
+  for (let index = 0; index < bytes.length; index += 0x8000) binary += String.fromCharCode(...bytes.subarray(index, index + 0x8000));
+  return `data:image/svg+xml;base64,${btoa(binary)}`;
 }
 
 // The drawable data URI of a picture bullet, or undefined (after reporting unresolved-asset once) so the glyph marker stays.
@@ -1008,7 +1039,7 @@ function renderImage(item, box, bound, options) {
       ...traceAttrs(options, item.path), ...generatedAttrs(options) });
   }
   const reason=missingReference?'missing-reference':!asset.src?'missing-source':'unsupported-source';
-  const message=missingReference?`Image asset ${missingReference} is missing; supply the referenced asset or resolve it in the host.`:'Image requires an embedded raster data URI or a host imageResolver.';
+  const message=missingReference?`Image asset ${missingReference} is missing; supply the referenced asset or resolve it in the host.`:'Image requires an embedded raster or SVG data URI, or a host imageResolver.';
   if (options.strictAssets) throw new OPFRenderError("unresolved-asset", message, { path: item.path,reason });
   const fill = bound.design.colors.surface;
   const scale=Math.min(bound.design.dimensions.width,bound.design.dimensions.height)/720;

@@ -79,6 +79,8 @@ Unresolved images produce an `unresolved-asset` diagnostic through `onDiagnostic
 
 Header/footer images and watermarks fit their complete artwork within their allocated regions. `design.imageFill: "crop"` continues to crop content picture placeholders; background images retain their own fit policy.
 
+An `image/svg+xml` data URI (base64 or text) is drawn as an image wherever a raster is (content, header/footer, watermark, logo, slide image, background, picture bullet), with the raster's box and fit, when it is an `<svg>` in the SVG namespace with an intrinsic size (`width` and `height`, or a `viewBox`); anything else keeps the `Image unavailable` placeholder. opf-pptx exports the same picture as a native SVG picture over a PNG fallback. An SVG used as an image never runs script or loads anything outside its own document, in a browser or in PNG/PDF output; PNG and PDF output draw it with resvg, and its text uses the same bundled fonts.
+
 A slide-level image (`design.slideImage`, composed by core as `geometry.slideImage`) is drawn at the shared composition frame, beneath branding and content. `crop` (the slide image default) covers the frame from the center and `fit` centers the whole image, matching the coordinated PPTX `a:srcRect` export. With `trace: true`, `data-opf-slide-image` names the configuring design path and the `<image>` carries the asset's source path. Unresolved slide images use the ordinary placeholder and `unresolved-asset` diagnostic.
 
 Slide-image treatments render from core's normalized geometry in the native picture's paint order:
