@@ -86,7 +86,7 @@ export function nativeShapeParagraphs(xml, rootElement = 'p:sld') {
       }
       if (child['a:pPr'] !== undefined) {
         level = Number(child[':@']?.lvl ?? 0);
-        bullet = child['a:pPr'].some(node=>node['a:buChar'] !== undefined || node['a:buAutoNum'] !== undefined);
+        bullet = child['a:pPr'].some(node=>node['a:buChar'] !== undefined || node['a:buBlip'] !== undefined || node['a:buAutoNum'] !== undefined);
       }
     }
     return {text,maxFontSize,bullet,level,fields};

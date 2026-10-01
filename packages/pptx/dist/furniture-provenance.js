@@ -3,6 +3,7 @@ import {attachTextTags, decodeTextTag, encodeTextTag} from './code-provenance.js
 import {sourceLineParagraphs} from './text-provenance.js';
 import {DEFAULT_DATE_FORMAT, NATIVE_DATE_FIELDS, formatSlideNumber, parseDate} from './furniture-fields.js';
 import {schemas} from '@openpresentation/opf';
+import {LOGO_TAG} from './logo-provenance.js';
 
 const TAG = 'OPF_FURNITURE_V1';
 // A slide has one tag list; it also carries the document's OPF_SLIDE_V1 record.
@@ -93,16 +94,32 @@ export function furnitureManifest(presentation, slide, layout, slideIndex, stati
   if (!Object.keys(definitions).length) return null;
   const organizations = array(presentation.organization);
   const organization = organizations.find(item => item.role === 'primary') ?? organizations[0];
+  // Generated deck logos (logo: true) are listed beside the topology, never inside it: the part list and the field
+  // definitions are validated strictly by every released importer (0.11.6 and earlier reject an unknown field there),
+  // so they keep describing only what those importers know. `drawn` is false when no logo resolved at export.
+  const logos = [];
+  for (const kind of kinds) {
+    const source = (slide.design?.[kind] !== undefined ? slide.design : presentation.design)?.[kind];
+    for (const zone of zones) if (definitions[kind]?.value?.[zone] && source?.[zone]?.logo === true) {
+      logos.push({kind, zone, drawn: layout.parts.some(part => part.field === 'logo' && part.kind === kind && part.zone === zone)});
+    }
+  }
   return {v: 1, role: 'slide', group: String(slideIndex), definitions, ...(Object.keys(formats).length ? {formats} : {}),
     ...(layout.parts.some(part => part.field === 'organization' || part.field === 'socials') ? {organizationId: organization?.id} : {}),
-    parts: layout.parts.map((part, index) => ({kind: part.kind, zone: part.zone, field: part.field,
+    parts: layout.parts.flatMap((part, index) => part.field === 'logo' ? [] : [{kind: part.kind, zone: part.zone, field: part.field,
       type: part.type, count: part.type === 'image' ? 1 : part.fit.lines.length,
       ...(part.field === 'socials' ? {socials: socialLines(part)} : {}),
-      ...(staticDates.has(index) ? {staticDate: staticDates.get(index)} : {})}))};
+      ...(staticDates.has(index) ? {staticDate: staticDates.get(index)} : {})}]),
+    ...(logos.length ? {logos} : {})};
 }
 
-export function attachFurnitureTags(entries, records, manifests) {
+// The manifest index of a layout part: logo parts are not in the manifest, so later parts shift down.
+export const manifestPartIndex = (parts, index) => parts.slice(0, index).filter(part => part.field !== 'logo').length;
+
+export function attachFurnitureTags(entries, records, manifests, logoRecords = new Map()) {
   attachTextTags(entries, records, TAG, 'opfFurniture', 'furniture', {pictures: true});
+  // A generated logo picture carries the logo tag (never the furniture tag): see logo-provenance.js.
+  attachTextTags(entries, logoRecords, LOGO_TAG, 'opfFurnitureLogo', 'furniture logo', {pictures: true});
   const types = [];
   for (const [path, manifest] of manifests) {
     const part = `ppt/tags/opfFurnitureSlide${manifest.group}.xml`;
@@ -158,6 +175,16 @@ function validateManifest(manifest) {
       }
     }
   }
+  if (manifest.logos !== undefined) {
+    check(Array.isArray(manifest.logos) && manifest.logos.length <= 6, 'Invalid furniture logos.');
+    const seen = new Set();
+    for (const logo of manifest.logos) {
+      const slot = `${logo?.kind}.${logo?.zone}`;
+      check(object(logo) && kinds.includes(logo.kind) && zones.includes(logo.zone) && typeof logo.drawn === 'boolean' && Object.keys(logo).length === 3 &&
+        object(manifest.definitions[logo.kind]?.value?.[logo.zone]) && !seen.has(slot), 'Invalid furniture logo.');
+      seen.add(slot);
+    }
+  }
   if (manifest.formats !== undefined) {
     check(object(manifest.formats), 'Invalid furniture formats.');
     for (const [slot, format] of Object.entries(manifest.formats)) {
@@ -179,6 +206,17 @@ function validateManifest(manifest) {
   if (manifest.parts.some(part => part.field === 'organization' || part.field === 'socials')) check(typeof manifest.organizationId === 'string' && /^[a-zA-Z0-9_-]+$/.test(manifest.organizationId), 'Invalid organization identity.');
 }
 
+// The logo tags of a picture: any other OPF tag next to one is not an identity conflict for the furniture reader.
+function readLogoTags(container, relationships, entries) {
+  const found = [];
+  for (const link of array(container?.['p:tags'])) {
+    const rel = relationships.get(link['r:id']);
+    if (rel?.type !== REL || rel.targetMode === 'External' || !entries[rel.path]) continue;
+    found.push(...array(parser.parse(dec.decode(entries[rel.path]))['p:tagLst']?.['p:tag']).filter(tag => tag.name?.toUpperCase() === LOGO_TAG));
+  }
+  return found;
+}
+
 function readSlide(context, entries, slideIndex, slideCount, report, taggedText) {
   const {root, shapes, paragraphs, pictures, relationships, readPicture} = context;
   const candidates = {};
@@ -194,8 +232,16 @@ function readSlide(context, entries, slideIndex, slideCount, report, taggedText)
       } catch { invalidRecord = true; }
     }
   }
+  // Generated logo pictures: identity only, the bytes come from design.logo.
+  const logoPictures = [];
+  for (const [index, node] of pictures.entries()) try {
+    for (const tag of readLogoTags(node['p:nvPicPr']?.['p:nvPr']?.['p:custDataLst'], relationships, entries)) {
+      const data = decodeTextTag(tag.val);
+      if (data?.role === 'furniture') logoPictures.push({index, data});
+    }
+  } catch { invalidRecord = true; }
   const tags = readTags(root['p:cSld']?.['p:custDataLst'], relationships, entries);
-  if (!tags.tags.length && !records.length && !invalidRecord) return candidates;
+  if (!tags.tags.length && !records.length && !invalidRecord && !logoPictures.length) return candidates;
   let manifest;
   try {
     check(!tags.ambiguous && tags.tags.length === 1 && !invalidRecord, 'Missing or ambiguous furniture manifest/shape tags.');
@@ -215,6 +261,13 @@ function readSlide(context, entries, slideIndex, slideCount, report, taggedText)
         value[zone] = Object.fromEntries(Object.entries(definition.value[zone]).filter(([, flag]) => flag === false));
       }
       const candidate = {scope: definition.scope, value, text: [], pictures: [], organizations: [], socials: [], sections: []};
+      // logo: true returns as its flag; the generated picture is consumed, never content or an image field.
+      for (const logo of (manifest.logos ?? []).filter(item => item.kind === kind)) {
+        const found = logoPictures.filter(item => item.data.v === 1 && item.data.group === manifest.group && item.data.furniture === kind && item.data.zone === logo.zone);
+        check(found.length <= 1, 'Duplicated furniture logo.');
+        if (found.length) { candidate.pictures.push(found[0].index); value[logo.zone].logo = true; }
+        else if (!logo.drawn) value[logo.zone].logo = true;
+      }
       for (const [partIndex, part] of manifest.parts.entries()) {
         if (part.kind !== kind) continue;
         const group = records.filter(record => record.data.part === partIndex);

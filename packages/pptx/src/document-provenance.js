@@ -464,6 +464,49 @@ function bytesToBase64(bytes) {
 }
 
 const sameBytes = (a, b) => a.byteLength === b.byteLength && a.every((value, index) => value === b[index]);
+const mediaKey = bytes => `${bytes.byteLength}:${hashBytes(bytes)}`;
+
+// PowerPoint renames media parts (image-1-1.png becomes image1.png), renumbers relationships and merges identical
+// images when it saves, so a stored $opfMedia part path can name another picture or none. The record therefore also
+// carries `mediaHash` (a top-level key released importers ignore): the content key of every referenced part. On read a
+// reference whose part no longer has those bytes follows the bytes to wherever the package keeps them now.
+function mediaHashes(value, entries) {
+  const hashes = {};
+  const visit = item => {
+    if (Array.isArray(item)) return item.forEach(visit);
+    if (!object(item)) return;
+    if (typeof item.$opfMedia === 'string') { if (entries[item.$opfMedia]) hashes[item.$opfMedia] = mediaKey(entries[item.$opfMedia]); return; }
+    Object.values(item).forEach(visit);
+  };
+  visit(value);
+  return hashes;
+}
+
+function remapMedia(value, entries) {
+  const hashes = value.mediaHash;
+  if (!object(hashes)) return value;
+  let byKey;
+  const find = key => {
+    if (!byKey) {
+      byKey = new Map();
+      for (const [path, bytes] of Object.entries(entries)) if (/^ppt\/media\/[^/]+$/.test(path)) byKey.set(mediaKey(bytes), byKey.get(mediaKey(bytes)) ?? path);
+    }
+    return byKey.get(key);
+  };
+  const visit = item => {
+    if (Array.isArray(item)) return item.map(visit);
+    if (!object(item)) return item;
+    if (typeof item.$opfMedia === 'string') {
+      const key = hashes[item.$opfMedia];
+      if (typeof key !== 'string' || (entries[item.$opfMedia] && mediaKey(entries[item.$opfMedia]) === key)) return item;
+      const found = find(key);
+      return found ? {...item, $opfMedia: found} : item;
+    }
+    return Object.fromEntries(Object.entries(item).map(([name, child]) => [name, visit(child)]));
+  };
+  const {mediaHash, ...rest} = value;
+  return visit(rest);
+}
 
 // A data URI whose bytes are an exported media part becomes a reference to
 // that part (no duplication). Any other data: source (an undrawn logo, a
@@ -619,7 +662,8 @@ export function attachDocumentProvenance(entries, provenance) {
   if (paths.length !== provenance.slides.length) throw Error('Generated slide count differs from the document.');
   const prepared = storable(entries, provenance);
   const types = [];
-  const document = toStoredShape({...prepared.document, native: nativeDocument(entries, presentationRoot, rels)}, DOCUMENT_SUPPLEMENT);
+  const documentHashes = mediaHashes(prepared.document, entries);
+  const document = toStoredShape({...prepared.document, ...(Object.keys(documentHashes).length ? {mediaHash: documentHashes} : {}), native: nativeDocument(entries, presentationRoot, rels)}, DOCUMENT_SUPPLEMENT);
 
   // CT_Presentation: custDataLst follows photoAlbum and precedes kinsoku/defaultTextStyle/modifyVerifier/extLst.
   const documentPart = 'ppt/tags/opfDocument.xml';
@@ -634,7 +678,8 @@ export function attachDocumentProvenance(entries, provenance) {
   types.push(documentPart);
 
   for (const [index, path] of paths.entries()) {
-    const record = toStoredShape({...prepared.slides[index], native: nativeSlide(entries, path)}, SLIDE_SUPPLEMENT);
+    const slideHashes = mediaHashes(prepared.slides[index], entries);
+    const record = toStoredShape({...prepared.slides[index], ...(Object.keys(slideHashes).length ? {mediaHash: slideHashes} : {}), native: nativeSlide(entries, path)}, SLIDE_SUPPLEMENT);
     const tag = `<p:tag name="${SLIDE_TAG}" val="${encodeTextTag(record)}"/>`;
     let xml = dec.decode(entries[path]);
     const slideRels = relsPath(path);
@@ -769,7 +814,7 @@ export function restoreDocumentProvenance(imported, {entries, presentationRoot, 
   try {
     const found = readTag(entries, presentationRoot?.['p:custDataLst'], presentationRels, DOCUMENT_TAG);
     if (found.missing) { if (found.unreadable) invalid('Presentation customer data could not be read.'); }
-    else document = validateDocument(found.value);
+    else document = remapMedia(validateDocument(found.value), entries);
   } catch (error) { invalid(`${error.message}`); document = undefined; }
 
   const rejectedLayoutIds = new Set();
@@ -779,7 +824,7 @@ export function restoreDocumentProvenance(imported, {entries, presentationRoot, 
     try {
       const found = readTag(entries, root?.['p:cSld']?.['p:custDataLst'], rels, SLIDE_TAG);
       if (found.missing) return null;
-      return {record: validateSlide(found.value), native: nativeSlide(entries, path)};
+      return {record: remapMedia(validateSlide(found.value), entries), native: nativeSlide(entries, path)};
     } catch (error) {
       report({code: 'invalid-document-provenance', path: `slides.${index}`, message: `${error.message} This slide keeps the values observed in the PPTX.`});
       return null;

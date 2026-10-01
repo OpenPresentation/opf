@@ -191,7 +191,7 @@ With `structure: 'match'`, the layout id, composition and slide hints are alread
 
 - Keys that FF-24 theme recovery infers but the source never stated remain in the import. For example, a theme-only deck gains `design.colorScheme`.
 - FF-24's `theme-unverified` diagnostic is suppressed when the stored `design.theme` is restored, because the two would contradict each other.
-- `design.slideImage` is not stored in the document tag; `design.slideImage` and `design.watermark` are recovered from their own tagged native pictures while those are unchanged. `design.logo` and `extensions` are stored since spec-gap P1.
+- `design.slideImage` is not stored in the document tag; `design.slideImage` and `design.watermark` are recovered from their own tagged native pictures while those are unchanged. `design.logo` and `extensions` are stored since spec-gap P1. The drawn cover logo is a tagged native picture (`OPF_LOGO_V1`): it is consumed on import, `design.logo` returns from this tag, and the picture's own image is the fallback only when nothing restored a logo. Header/footer `logo: true` is listed in the furniture manifest's `logos` key, outside `parts` and `definitions`, which released importers validate strictly (spec-gap P2).
 - A native PowerPoint save/reopen of a tagged deck, and Document Inspector behaviour, are separate Office gates.
 
 ## Scope

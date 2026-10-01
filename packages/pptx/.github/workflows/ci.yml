@@ -21,7 +21,7 @@ jobs:
         # multiline step. Bash's Actions wrapper stops on the first failure.
         shell: bash
     env:
-      OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf-render/test/golden/opf-examples-png.furniture.sha256.json
+      OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf-render/test/golden/opf-examples-png.cover-centering.sha256.json
     strategy:
       fail-fast: false
       matrix:
@@ -37,7 +37,8 @@ jobs:
         with:
           repository: OpenPresentation/opf
           # Core main 1228351 (core 0.11.3 plus the recorded renderer 0.11.8 lazy font count and the FF-56 evidence, opf#222) plus opf#231 (lane scripts accept the root payload form that content topology restores, opf-pptx#122); the published core this release requires is ^0.11.3.
-          ref: 61316e6d29f3f9b284e48167a63e47600a96b7b7
+          # Core main f627e35 (core 0.11.3 plus opf#229 design fields, opf#230 cover alignment, opf#231 and opf#232 picture-bullet size and furniture alignment; the combined core that ships as 0.11.4). Lockstep: the PPTX floor moves to 0.11.4.
+          ref: f627e353826c6e9dbd5331abba0fd4aebd50d680
           path: opf
           fetch-depth: 0
           persist-credentials: false
@@ -45,15 +46,16 @@ jobs:
         with:
           repository: OpenPresentation/opf-render
           # opf-render 0.11.8 release commit (the tag draws in the primary colour, as opf-pptx writes it).
-          ref: 0ce9bb959247fbb706f670240e55fd7a09a2eedd
+          # opf-render main fa1949a (opf-render#83 and #85: draws the same logos, picture bullets and accent font on the combined core).
+          ref: fa1949a07a8a1ecdcc3940b0dae324bf8683df1c
           path: opf-render
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-editor
-          # opf-editor 0.10.5 release commit plus opf-editor#57 (code-browser accepts the root payload form that content topology restores, opf-pptx#122).
-          ref: 601470cf8513b54cb6a98a26524c1c61396a4ba7
+          # opf-editor main dea8a79 (0.10.5 plus #57: code-browser accepts the root payload form that content topology restores, opf-pptx#122).
+          ref: dea8a7957b322b1e0b837c6512b15af5073aa081
           path: opf-editor
           fetch-depth: 0
           persist-credentials: false
@@ -110,6 +112,8 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'Native font inventory controls failed' }
       - run: npm run validate
       - run: npm test
+      # A design-fields export still imports with the released importer without losing provenance (needs the registry).
+      - run: npm run test:published-import
       - run: npm run test:font-variants
       - run: npm run test:code
       - name: Verify Playwright image version

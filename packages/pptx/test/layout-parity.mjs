@@ -81,6 +81,29 @@ for (const align of ['left', 'center', 'right']) {
 }
 assert.equal(metricLines, 30);
 
+// A cover has no content region: tag, title and subtitle are one heading group, so a deck that aligns
+// title and content differently writes the same `algn` for all three (the "Compliance Readiness
+// Review" cover wrote a left title over a centered tag and subtitle). Only the slide's own
+// contentAlignment keeps them apart, and slides with body content keep the title/content split.
+const coverText = {tag: 'Compliance', title: 'Compliance Readiness Review', subtitle: 'Tandem BioSystems Compliance'};
+const coverDeck = {design: {fontScheme: 'roboto', titleAlignment: 'left', contentAlignment: 'center'}, slides: [
+  {layout: 'title-subtitle', ...coverText},
+  {layout: 'title-subtitle', ...coverText, design: {contentAlignment: 'right'}},
+  {...coverText, text: 'Body copy'},
+]};
+const coverExpected = [['l', 'l', 'l'], ['r', 'l', 'r'], ['ctr', 'l', 'ctr']];
+let coverChecks = 0;
+for (const options of [{}, {textMeasurement: fonts.textMeasurement}]) {
+  const native = await slideXml(coverDeck, options), preview = renderSvgDeck(coverDeck, options);
+  for (const [index, aligns] of coverExpected.entries()) for (const [position, field] of ['tag', 'title', 'subtitle'].entries()) {
+    const text = coverText[field];
+    assert.deepEqual(alignmentOf(native[index], text), [aligns[position]], `slide ${index} ${field}: native alignment`);
+    assert.equal(nativeAlign[previewAnchor(preview[index], text)], aligns[position], `slide ${index} ${field}: preview alignment`);
+    coverChecks++;
+  }
+}
+assert.equal(coverChecks, 18);
+
 // Media placeholders draw the same surface, play badge and caption as the preview.
 const media = {design: {fontScheme: 'roboto'}, slides: [{title: 'Media', video: {src: 'https://example.com/video.mp4', description: 'Walkthrough'}}]};
 const [mediaXml] = await slideXml(media), [mediaSvg] = renderSvgDeck(media);
@@ -97,4 +120,4 @@ for (const shape of [frame, badge]) assert.ok(mediaSvg.includes(`fill="#${shape.
 assert.deepEqual(alignmentOf(mediaXml, 'https://example.com/video.mp4'), ['ctr']);
 assert.ok(!mediaXml.includes('&quot;src&quot;'), 'Media export must not print the payload as JSON');
 
-console.log(`Layout parity passed: ${checked} heading/body alignments and ${metricLines} metric lines match the preview with estimated and measured text; media placeholders match the preview surface, badge and caption.`);
+console.log(`Layout parity passed: ${checked} heading/body alignments, ${coverChecks} cover heading alignments and ${metricLines} metric lines match the preview with estimated and measured text; media placeholders match the preview surface, badge and caption.`);
