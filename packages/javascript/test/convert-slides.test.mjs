@@ -3,6 +3,7 @@ import { describe, test } from "node:test";
 
 import { OPFConversionError, mergeSlides, splitSlide, splitSlideOnOverflow, unpaginate } from "../dist/convert.js";
 import { composeSlide } from "../dist/composition.js";
+import { paginatePresentation } from "../dist/pagination.js";
 import { validatePresentation } from "../dist/index.js";
 
 const refused = (action, pattern) =>
@@ -165,6 +166,22 @@ describe("split on overflow and un-paginate", () => {
     const apart = split.pages.map((page, index) => (index === 1 ? { ...page, slideIndex: page.slideIndex + 1 } : page));
     refused(() => unpaginate(split.presentation, apart), /next to each other/);
     refused(() => unpaginate(deck, []), /not split/);
+  });
+
+  test("un-paginate puts back several paginated slides of a whole presentation as one range", () => {
+    const three = { slides: [{ id: "p", title: "One", text: longText }, { id: "q", title: "Middle", text: "Short" }, { id: "r", title: "Two", text: longText }] };
+    const paginated = paginatePresentation(three);
+    assert.ok(paginated.presentation.slides.length > 4);
+    const back = unpaginate(paginated.presentation, paginated.pages);
+    assert.equal(back.range.start, 0);
+    assert.equal(back.range.deleteCount, paginated.presentation.slides.length);
+    assert.equal(back.slides.length, 3);
+    assert.deepEqual(back.presentation.slides.map((slide) => slide.id), ["p", "q", "r"]);
+    assert.deepEqual(back.presentation.slides.map((slide) => slide.text), [longText, "Short", longText]);
+    const only = unpaginate(paginated.presentation, paginated.pages, { sourceSlideIndex: 2 });
+    assert.equal(only.slides.length, 1);
+    assert.equal(only.slides[0].id, "r");
+    assert.equal(only.presentation.slides.length, paginated.presentation.slides.length - (only.range.deleteCount - 1));
   });
 
   test("a text-only continuation round trips exactly, including emoji", () => {

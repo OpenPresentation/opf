@@ -248,6 +248,7 @@ export function unpaginate(presentation: unknown, pages: readonly (PaginatedPage
   if (!todo.length) throw refuse("Those slides were not split by pagination, or only one page was kept.");
   let current = clone(presentation as Obj);
   let first = Number.POSITIVE_INFINITY;
+  let end = 0;
   let removed = 0;
   // Replace from the end so earlier indexes stay valid.
   for (const group of todo.sort((a, b) => b[0]!.slideIndex - a[0]!.slideIndex)) {
@@ -256,11 +257,13 @@ export function unpaginate(presentation: unknown, pages: readonly (PaginatedPage
     const rebuilt = rebuild(current, group);
     current = replaceSlides(current, indexes[0]!, indexes.length, [rebuilt]);
     first = Math.min(first, indexes[0]!);
+    end = Math.max(end, indexes[0]! + indexes.length);
     removed += indexes.length - 1;
   }
   assertValidOutput(current.slides, "slides");
-  const start = first;
-  return { presentation: current, slides: [current.slides[start]], range: { start, deleteCount: removed + 1 }, changed: true, ...report([]) };
+  // The old slides from the first page of the first split slide to the last page of the last one are replaced as one range.
+  const deleteCount = end - first;
+  return { presentation: current, slides: current.slides.slice(first, first + deleteCount - removed), range: { start: first, deleteCount }, changed: true, ...report([]) };
 }
 
 function rebuild(presentation: Obj, group: readonly (PaginatedPage & { sourceSlideIndex: number })[]): Obj {
