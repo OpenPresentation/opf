@@ -64,6 +64,15 @@ export interface ChartDataAdaptedDiagnostic { code: "chart-data-adapted"; path: 
 /** With `chartex: "native"`, a map chart (`world`) is exported as a chartex regionMap (`Requires="cx4"`) without cached geography: PowerPoint must fetch the region shapes from its online map service and shows "There was a problem getting the information for your map chart" with an empty chart until it does. */
 export interface ChartMapGeodataDiagnostic { code: "chart-map-geodata"; path: string; message: string }
 
+/** A template variable was unfilled and its `example` was used (template export only). */
+export interface VariableExampleUsedDiagnostic {
+  code: "variable-example-used";
+  /** JSON pointer of the variable's declaration. */
+  path: string;
+  message: string;
+  id: string;
+}
+
 export interface ToPptxOptions {
   /** Default compatible converts WebP to a static PNG. Preserve embeds original WebP bytes. */
   imageFormat?: "compatible" | "preserve";
@@ -90,11 +99,18 @@ export interface ToPptxOptions {
    * also written as PowerPoint's native section list whatever this option says.
    */
   provenance?: "full" | "references-only" | false;
+  /**
+   * Values for the deck's template variables, keyed by variable id (core `resolveVariables`). A deck that uses content
+   * variables, or is marked `template: true`, is resolved to a concrete deck first; the PPTX holds the resolved text.
+   * A template exports with each unfilled variable's example (diagnostic `variable-example-used`); a normal deck with an
+   * unfilled required variable throws `unfilled-variables`, and a value of the wrong kind throws `invalid-variables`.
+   */
+  variables?: Record<string, unknown>;
   textMeasurement?: TextMeasurement;
   /** Match preview/pagination clearance around supplied vector text outlines; default 1. */
   textRasterPadding?: number;
   /** Layout diagnostics, `media-provenance-omitted` when video data cannot be stored, plus `unresolved-font-scheme` (once per reference path) when a font-scheme id matches no record and the default `aptos` scheme is used as the base. */
-  onDiagnostic?: (diagnostic: LayoutDiagnostic | FontSchemeDiagnostic | MediaProvenanceDiagnostic | ChartDataUnplottableDiagnostic | ChartDataAdaptedDiagnostic | ChartMapGeodataDiagnostic | ContentPlaceholderDiagnostic | UnresolvedAssetDiagnostic | WatermarkNotExportedDiagnostic | SvgSanitizedDiagnostic | SvgImageRasterizedDiagnostic) => void;
+  onDiagnostic?: (diagnostic: LayoutDiagnostic | FontSchemeDiagnostic | MediaProvenanceDiagnostic | ChartDataUnplottableDiagnostic | ChartDataAdaptedDiagnostic | ChartMapGeodataDiagnostic | ContentPlaceholderDiagnostic | UnresolvedAssetDiagnostic | WatermarkNotExportedDiagnostic | SvgSanitizedDiagnostic | SvgImageRasterizedDiagnostic | VariableExampleUsedDiagnostic) => void;
   baseDir?: string;
   compressionLevel?: number;
   imageResolver?: (src: string, context: ImageResolverContext) => ImageResolverResult | Promise<ImageResolverResult | null | undefined> | null | undefined;

@@ -38,7 +38,7 @@ jobs:
           repository: OpenPresentation/opf
           # Core main 1228351 (core 0.11.3 plus the recorded renderer 0.11.8 lazy font count and the FF-56 evidence, opf#222) plus opf#231 (lane scripts accept the root payload form that content topology restores, opf-pptx#122); the published core this release requires is ^0.11.3.
           # Core main 07cd9d4 (published 0.11.4 plus the renderer 0.11.9 lazy font count opf#234 and the ecosystem repin opf#235; core 0.11.3 plus opf#229 design fields, opf#230 cover alignment, opf#231 and opf#232 picture-bullet size and furniture alignment; the combined core that ships as 0.11.4). Lockstep: the PPTX floor moves to 0.11.4.
-          ref: 07cd9d4fc400725293e4e697640662333a2eb356
+          ref: e44f37261f2a0c3bd4ac003254e0dc3e322982a0 # RR-32: core main with template variables (opf#256 merged)
           path: opf
           fetch-depth: 0
           persist-credentials: false

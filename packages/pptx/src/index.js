@@ -42,6 +42,9 @@ import {
   catalogs as bundledCatalogs,
   validatePresentation
 } from "@openpresentation/opf";
+// Optional core exports are read from the namespace so an older published core still loads;
+// resolveVariables ships with core RR-32.
+import * as opfCore from "@openpresentation/opf";
 
 export {checkPptxTypefaces, inventoryPptxTypefaces, packageFontsUsed, THEME_SCRIPT_SUPPLEMENTS} from './typeface-inventory.js';
 export {DEFAULT_SIGNAL_LIMITS, SIGNALS_VERSION, isMonospaceFamily} from './import-signals.js';
@@ -207,7 +210,7 @@ export async function toPptx(input, options = {}) {
   if (options.provenance !== undefined && !['full', 'references-only', false].includes(options.provenance)) {
     throw new OPFPptxError('invalid-provenance-option', "provenance must be 'full', 'references-only' or false.", {path: 'options.provenance'});
   }
-  const presentation = parseInput(input);
+  const presentation = resolveTemplateInput(parseInput(input), options);
   assertValidBoundary(presentation);
   options = {...options, textMeasurement: chosenFamilyMeasurement(options.textMeasurement), svgRasters: new Map()};
 
@@ -1357,6 +1360,30 @@ function parseInput(input) {
   }
 
   throw new OPFPptxError("invalid-input", "OPF input must be a parsed object, JSON string, or Uint8Array.");
+}
+
+// Template variables (core resolveVariables, RR-32): a deck that uses content variables, or a template, is resolved to a
+// concrete deck before export, so the PPTX holds exactly the text, numbers, dates and images the preview shows. A template
+// exports with each unfilled variable's example (reported as variable-example-used); a normal deck with an unfilled
+// required variable is refused. Decks without content variables are returned untouched. The package stores the resolved
+// deck, not the template form, so fromPptx returns the filled deck.
+function resolveTemplateInput(presentation, options) {
+  if (typeof opfCore.resolveVariables !== "function" || !isPlainObject(presentation)) return presentation;
+  const values = options.variables;
+  if (values !== undefined && !isPlainObject(values)) {
+    throw new OPFPptxError("invalid-variables", "The variables option must be an object keyed by variable id.", {path: "options.variables"});
+  }
+  const template = opfCore.isTemplate(presentation);
+  if (!template && !opfCore.hasContentVariables(presentation) && !(values && Object.keys(values).length)) return presentation;
+  const result = opfCore.resolveVariables(presentation, values ?? {}, {examples: template});
+  const errors = result.diagnostics.filter(entry => entry.severity === "error");
+  if (errors.length) {
+    throw new OPFPptxError(errors.some(entry => entry.code === "variable-unfilled") ? "unfilled-variables" : "invalid-variables", errors[0].message, {issues: errors, path: errors[0].path});
+  }
+  for (const entry of result.diagnostics) {
+    if (entry.code === "variable-example-used") options.onDiagnostic?.({code: "variable-example-used", path: entry.path, message: entry.message, id: entry.id});
+  }
+  return result.presentation;
 }
 
 function assertValidBoundary(presentation) {

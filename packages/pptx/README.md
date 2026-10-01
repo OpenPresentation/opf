@@ -218,6 +218,16 @@ Exports report `language-unresolved` when the document's language cannot be reso
 
 **Core without the resolver.** Core `@openpresentation/opf` 0.11.0 and earlier have no `resolveScriptFonts` (this release requires ^0.11.3, so this only applies to a forced older core). Export with it is byte-identical to the output before FF-07 (`lang="en-US"`, empty theme `ea`/`cs`, no `rtl`), and a document that names a language gets a `language-export-unavailable` diagnostic. A core with the resolver but without `paragraphDirection` marks no paragraph direction and reports `paragraph-direction-unavailable` for a right-to-left deck. Import then matches run tags against the installed catalog's `bcp47` and primary language. `npm run test:packed` exercises this path against the registry release. CI links core at a pinned commit that has the resolver.
 
+## Templates and variables (RR-32)
+
+A deck that declares content variables, or is marked `"template": true`, is resolved by core `resolveVariables` before it is exported, so the PPTX holds exactly the text, numbers, dates and images the preview shows. Pass the values as `variables`:
+
+```js
+const pptx = await toPptx(template, { variables: { client: 'Globex', revenue: 1250000 } });
+```
+
+A template exports with each unfilled variable's `example` and reports `variable-example-used` through `onDiagnostic`; a normal deck with an unfilled required variable throws `OPFPptxError` with code `unfilled-variables`, and a value of the wrong kind throws `invalid-variables`. A template plus values exports the same bytes as the equivalent hand-written deck (`test/template-variables.mjs`). The package stores the resolved deck, not the template form: `fromPptx` returns the filled deck. Decks without content variables are untouched. Needs the core release that ships `resolveVariables` (read from the namespace, so an older core still loads and ignores the option). See [templates and variables](https://github.com/OpenPresentation/opf/blob/main/docs/templates-and-variables.md).
+
 ## Runtime Policy
 
 The package runtime must stay local and deterministic:
