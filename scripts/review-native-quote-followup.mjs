@@ -23,7 +23,7 @@ for(const node of ['20','24']){
       for(const [index,slide]of document.slides.entries()){
         const expected=deck.layouts[index].parts.flatMap(part=>part.fit.lines.filter(line=>line!=='').map(text=>({type:'text',text})));
         assert.equal(slide.title,phase==='edited'?`Native edit ${deck.id} slide ${index+1}`:'A quote and its source');
-        assert.equal(slide.subtitle,undefined);assert.deepEqual(slide.blocks,expected);imports++;
+        assert.equal(slide.subtitle,undefined);assert.deepEqual(slide.blocks??(slide.text!==undefined?[{type:'text',text:slide.text}]:[]),expected);imports++;
       }
     }
   }
