@@ -480,6 +480,7 @@ function resolveDesign(presentation, slide, context, index) {
       border: colorFromScheme(colorScheme, "accent5", "#CBD5E1")
     },
     fonts: resolveFontFamilies(fontScheme),
+    darkBackground,
     diagnostics: fontSchemeDiagnostic ? [fontSchemeDiagnostic] : []
   };
 }
@@ -682,8 +683,9 @@ function bindSlide(presentation, slide, layout, index, context) {
     onFallback: note => reportGlyphFallback(context, note)
   });
   const textMeasurement = scriptFonts.textMeasurement ?? context.options.textMeasurement;
-  for (const role of ["heading","body","code"]) design.fonts[role] = resolveTextStyle({fontFamily:design.fonts[role],fontWeight:role === "heading" ? 700 : 400},textMeasurement).fontFamily;
-  const geometry = composeSlide(slide, { ...design.dimensions, layout, presentation, slideIndex: index, fonts: design.fonts, contentAlignment:design.contentAlignment, titleAlignment:design.titleAlignment, textRasterPadding:context.options.textRasterPadding, contentBox:design.contentBox, textMeasurement, date: context.options.date, socialPlatforms: socialPlatformRecords(context) });
+  // fontScheme.accent (the tag and quote text) exists only with a core that resolves it; it takes the same look-alike policy.
+  for (const role of ["heading","body","code","accent"]) if (design.fonts[role] !== undefined) design.fonts[role] =resolveTextStyle({fontFamily:design.fonts[role],fontWeight:role === "heading" ? 700 : 400},textMeasurement).fontFamily;
+  const geometry = composeSlide(slide, { ...design.dimensions, layout, presentation, slideIndex: index, fonts: design.fonts, contentAlignment:design.contentAlignment, titleAlignment:design.titleAlignment, textRasterPadding:context.options.textRasterPadding, contentBox:design.contentBox, darkBackground: design.darkBackground, textMeasurement, date: context.options.date, socialPlatforms: socialPlatformRecords(context) });
   return {
     scriptFonts,
     textMeasurement,
@@ -939,7 +941,8 @@ function renderTextPayload(item, box, bound, options) {
     // follow design.titleAlignment only (unset is left, as in core composition).
     align: item.alignment ?? (item.field === "title" ? bound.design.titleAlignment ?? "left" : bound.design.contentAlignment),
     fontSize: item.field === "title" ? 54 : item.field === "tag" ? 16 : 25,
-    fontFamily: item.field === "title" ? bound.design.fonts.heading : bound.design.fonts.body,
+    // fontScheme.accent draws the tag; core's textStyle (item.textStyle) already carries it, this is the fallback family.
+    fontFamily: item.field === "title" ? bound.design.fonts.heading : item.field === "tag" ? bound.design.fonts.accent ?? bound.design.fonts.body : bound.design.fonts.body,
     fontWeight: item.field === "title" ? 700 : 400,
     // The slide tag is the eyebrow label: it draws in the primary colour (scheme accent1), as the
     // PPTX export writes it, or in the text colour when the primary is under 4.5:1 against the
@@ -956,8 +959,11 @@ function renderList(item, box, bound, options) {
   const scale=Math.min(bound.design.dimensions.width,bound.design.dimensions.height)/720;
   const fit=item.text?.listEntries?item.text:fitList(item.value,box,25*scale,((bound.composition??bound.geometry.composition).minFontSize??16)*scale,{style:{fontFamily:bound.design.fonts.body,fontWeight:400,path:item.path},textMeasurement:options.textMeasurement});
   const children=[];
+  // design.listBullet=image: core attaches the icon logo as item.bulletImage. An icon that cannot be drawn keeps the glyph marker.
+  const bullet=item.bulletImage?resolveBulletImage(item.bulletImage,bound,options):undefined;
   for(const entry of fit.listEntries){
-    children.push(tag('text',{x:stableNumber(entry.marker.x),y:stableNumber(entry.marker.y),'font-family':fontStack(entry.marker.style.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(entry.marker.fontSize),fill:bound.design.colors.text,'aria-hidden':'true'},escapeText(entry.marker.text)));
+    if(bullet)children.push(tag('image',{x:stableNumber(entry.marker.x),y:stableNumber(entry.marker.y-entry.marker.fontSize),width:stableNumber(entry.marker.fontSize),height:stableNumber(entry.marker.fontSize),href:bullet,preserveAspectRatio:'xMidYMid meet','aria-hidden':'true',...(options.trace?{'data-opf-generated':'true'}:{})}));
+    else children.push(tag('text',{x:stableNumber(entry.marker.x),y:stableNumber(entry.marker.y),'font-family':fontStack(entry.marker.style.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(entry.marker.fontSize),fill:bound.design.colors.text,'aria-hidden':'true'},escapeText(entry.marker.text)));
     const config={path:entry.textPath,align:'left',fill:bound.design.colors.text,rich:Array.isArray(entry.value),options};
     children.push(renderRichLines(typeof entry.value==='string'?[entry.value]:entry.value,entry.text,entry.textBox,bound,config));
     if(entry.description)children.push(renderRichLines(typeof entry.descriptionValue==='string'?[entry.descriptionValue]:entry.descriptionValue,entry.description,entry.descriptionBox,bound,{...config,path:entry.descriptionPath,rich:Array.isArray(entry.descriptionValue),fill:bound.design.colors.mutedText}));
@@ -965,7 +971,8 @@ function renderList(item, box, bound, options) {
   return tag('g',{...traceAttrs(options,item.path),...(fit.overflow?{'data-opf-overflow':'true'}:{})},children.join('\n'));
 }
 
-function renderImage(item, box, bound, options) {
+// Follows asset: references and the host imageResolver to the drawable source of an image value.
+function resolveImageSource(item, bound, options) {
   let asset = normalizeAsset(item.value);
   const seen = new Set();
   let missingReference;
@@ -978,10 +985,27 @@ function renderImage(item, box, bound, options) {
     asset = {...normalizeAsset(bound.assets[id]),...overrides};
   }
   const source = options.imageResolver?.(asset.src, { asset, path: item.path }) ?? asset.src;
-  if (typeof source === "string" && /^data:image\/(png|jpeg|gif|webp);base64,/i.test(source)) {
+  const drawable = typeof source === "string" && /^data:image\/(png|jpeg|gif|webp);base64,/i.test(source);
+  return { asset, source, drawable, missingReference };
+}
+
+// The drawable data URI of a picture bullet, or undefined (after reporting unresolved-asset once) so the glyph marker stays.
+function resolveBulletImage(bulletImage, bound, options) {
+  const { drawable, source, asset, missingReference } = resolveImageSource({ value: bulletImage.source, path: bulletImage.path }, bound, options);
+  if (drawable) return source;
+  const reason=missingReference?'missing-reference':!asset.src?'missing-source':'unsupported-source';
+  const message=missingReference?`Bullet image asset ${missingReference} is missing; the preview draws the character bullet.`:'A picture bullet requires an embedded raster data URI or a host imageResolver; the preview draws the character bullet.';
+  if (options.strictAssets) throw new OPFRenderError("unresolved-asset", message, { path: bulletImage.path,reason });
+  reportDiagnostic({code:'unresolved-asset',path:bulletImage.path,message,reason,source:asset.src,assetId:missingReference,description:asset.alt??asset.title??'Bullet image',placeholder:'glyph'},options);
+  return undefined;
+}
+
+function renderImage(item, box, bound, options) {
+  const { asset, source, drawable, missingReference } = resolveImageSource(item, bound, options);
+  if (drawable) {
     return tag("image", { x: box.x, y: box.y, width: box.width, height: box.height,
-      href: source, preserveAspectRatio: (options.imageFit ?? (bound.design.imageFill === "crop" ? "cover" : "contain")) === "cover" ? "xMidYMid slice" : "xMidYMid meet", role: "img", "aria-label": asset.alt ?? "Image",
-      ...traceAttrs(options, item.path) });
+      href: source, preserveAspectRatio: options.imageAnchor === "left" ? "xMinYMid meet" : (options.imageFit ?? (bound.design.imageFill === "crop" ? "cover" : "contain")) === "cover" ? "xMidYMid slice" : "xMidYMid meet", role: "img", "aria-label": asset.alt ?? options.imageLabel ?? "Image",
+      ...traceAttrs(options, item.path), ...generatedAttrs(options) });
   }
   const reason=missingReference?'missing-reference':!asset.src?'missing-source':'unsupported-source';
   const message=missingReference?`Image asset ${missingReference} is missing; supply the referenced asset or resolve it in the host.`:'Image requires an embedded raster data URI or a host imageResolver.';
@@ -1026,7 +1050,7 @@ function renderImage(item, box, bound, options) {
     const size=Math.max(0,Math.min(inner.width,inner.height,24*scale)),icon=centeredBox(inner,size,size);
     children.push(tag('path',{d:`M ${icon.x} ${icon.y} L ${icon.x+size} ${icon.y+size} M ${icon.x+size} ${icon.y} L ${icon.x} ${icon.y+size}`,fill:'none',stroke:textColor,'stroke-width':Math.min(2*scale,size/8),'aria-hidden':'true'}));
   }
-  return tag("g", {...traceAttrs(options,item.path),'data-opf-asset-status':'unresolved',role:'img','aria-label':`Image unavailable: ${description}`},children.join("\n"));
+  return tag("g", {...traceAttrs(options,item.path),...generatedAttrs(options),'data-opf-asset-status':'unresolved',role:'img','aria-label':`Image unavailable: ${description}`},children.join("\n"));
 }
 
 function renderMedia(item, box, bound, options) {
@@ -1393,6 +1417,9 @@ function renderBranding(bound,presentation,width,height,options) {
   if(design.watermark){
     pieces.push(tag('g',{opacity:typeof design.watermark==='object'?design.watermark.opacity??.08:.08},renderImage({value:design.watermark,path:rootFor('watermark')},{x:width*.3,y:height*.3,width:width*.4,height:height*.4},bound,{...options,imageFit:'contain'})));
   }
+  // Cover and section slides: the deck logo core composed at the top-left of the free area, anchored left.
+  const logo=bound.geometry.logo;
+  if(logo)pieces.push(renderImage({value:logo.source,path:logo.path},logo.box,bound,{...options,imageAnchor:'left',imageLabel:'Logo',imageGenerated:true}));
   return pieces.join('');
 }
 
@@ -1724,6 +1751,11 @@ function trianglePath(x, y, width, height) {
 
 function traceAttrs(options, path) {
   return options.trace ? { "data-opf-path": path } : {};
+}
+
+// Generated pictures (the deck logo) are drawn from design fields, not authored content: editors skip them.
+function generatedAttrs(options) {
+  return options.trace && options.imageGenerated ? { "data-opf-generated": "true" } : {};
 }
 
 function stableNumber(value) {

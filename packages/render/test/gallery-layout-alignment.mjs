@@ -15,9 +15,16 @@ assert.equal(fixture.layouts.length, 57, 'the 50 partial and 7 gallery-only layo
 const anchors = {left: 'start', center: 'middle', right: 'end'};
 const attribute = (attrs, name) => new RegExp(`(?:^|\\s)${name}="([^"]*)"`).exec(attrs)?.[1];
 const tokens = text => text.split(/(?=<)/);
-const withoutLayout = document => {
-  const base = structuredClone(document);
+// The gallery also derives the layout hints core composes (contentDirection, chartPrimary, listBullet);
+// they move boxes by design, so the default keeps them and drops only what is alignment (and the layout itself).
+// A layout record's own composition.mode ranks above design.contentDirection (the gallery derives the hint from the
+// layout's direction), so a layout with a mode ignores the hint and the layout-less default must not apply it either.
+const LAYOUT_HINTS = ['contentDirection', 'chartPrimary', 'listBullet'];
+const withoutLayout = (document, layoutMode) => {
+  const base = structuredClone(document), design = document.slides[0].design ?? {};
   delete base.slides[0].layout; delete base.slides[0].design; delete base.slides[0].composition; delete base.catalogs;
+  const hints = Object.fromEntries(LAYOUT_HINTS.filter(key => design[key] !== undefined && !(key === 'contentDirection' && layoutMode)).map(key => [key, design[key]]));
+  if (Object.keys(hints).length) base.slides[0].design = hints;
   return base;
 };
 // The alignment the gallery design asks for, restated independently of core.
@@ -28,8 +35,9 @@ let traced = 0, layoutEffects = 0;
 for (const {id, document} of fixture.layouts) {
   const slide = document.slides[0];
   assert.equal(slide.layout, id);
-  const base = withoutLayout(document);
-  const bound = resolvePresentation(document).slides[0], baseBound = resolvePresentation(base).slides[0];
+  const bound = resolvePresentation(document).slides[0];
+  const base = withoutLayout(document, bound.layout?.composition?.mode);
+  const baseBound = resolvePresentation(base).slides[0];
   assert.equal(bound.layout?.id, id, `${id}: the preview resolves the layout`);
   assert.equal(bound.geometry.items.length, baseBound.geometry.items.length, `${id}: the layout adds or drops no composed item`);
 

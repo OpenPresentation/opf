@@ -36,6 +36,32 @@ for (const input of [deck, deckDesign]) {
 assert.equal(checked, 18);
 assert.equal(resolvePresentation(deck).slides[2].geometry.items[0].alignment, 'left', 'Titles never inherit contentAlignment');
 
+// A cover has no content region: its tag, title and subtitle are one heading group, so a deck that
+// aligns title and content differently draws all three at the title's alignment (the "Compliance
+// Readiness Review" cover drew a left title over a centered tag and subtitle). Only the slide's own
+// contentAlignment keeps them apart, and slides with body content keep the title/content split.
+const coverText = {tag: 'Compliance', title: 'Compliance Readiness Review', subtitle: 'Tandem BioSystems Compliance'};
+const coverDeck = {design: {fontScheme: 'roboto', titleAlignment: 'left', contentAlignment: 'center'}, slides: [
+  {layout: 'title-subtitle', ...coverText},
+  {layout: 'title-subtitle', ...coverText, design: {contentAlignment: 'right'}},
+  {...coverText, text: 'Body copy'},
+]};
+const coverAnchors = index => {
+  const svg = renderSvg(coverDeck, {slideIndex: index, trace: true});
+  return ['tag', 'title', 'subtitle'].map(field => {
+    const text = [...svg.matchAll(/<text\b([^>]*)>/g)].map(match => match[1]).find(attrs => attrs.includes(`data-opf-path="slides.${index}.${field}"`));
+    assert.ok(text, `slide ${index}: ${field} drawn`);
+    return attribute(text, 'text-anchor') ?? 'start';
+  });
+};
+const coverSlides = resolvePresentation(coverDeck).slides;
+assert.deepEqual(coverSlides[0].geometry.items.map(item => item.alignment), ['left', 'left', 'left']);
+assert.deepEqual(coverAnchors(0), ['start', 'start', 'start'], 'cover heading group shares the title alignment in the preview');
+assert.deepEqual(coverSlides[1].geometry.items.map(item => item.alignment), ['right', 'left', 'right']);
+assert.deepEqual(coverAnchors(1), ['end', 'start', 'end'], 'slide contentAlignment keeps an explicit split');
+assert.deepEqual(coverSlides[2].geometry.items.slice(0, 3).map(item => item.alignment), ['center', 'left', 'center']);
+assert.deepEqual(coverAnchors(2), ['middle', 'start', 'middle'], 'slides with body content keep contentAlignment for tag and subtitle');
+
 // Metric lines without tabs anchor at the accepted alignment edge, like the
 // native PPTX metric paragraphs; left metrics and tabbed lines keep their origins.
 let metricLines = 0, tabbedAligned = 0;
