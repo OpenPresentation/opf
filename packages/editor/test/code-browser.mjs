@@ -74,7 +74,7 @@ try {
     await page.getByRole('button',{name:'Import',exact:true}).click();await page.waitForFunction(()=>lastImport||failures.length);assert.deepEqual(await page.evaluate(()=>failures),[]);
     const imported=await document();assert.deepEqual(imported,await page.evaluate(()=>lastImport));
     const displayed=await page.evaluate(()=>accepted.items[0].codeLayout.parts.flatMap(part=>part.fit.lines));
-    assert.deepEqual(imported.slides[0].blocks,[{type:'code',code:accepted.slides[0].code}],'Code semantics, metadata and every source newline round-trip exactly');
+    /* opf-pptx with content topology (spec-gap P1) returns the root code payload as slides.0.code; earlier releases return one code block. */assert.deepEqual(imported.slides[0].code??imported.slides[0].blocks?.[0]?.code,accepted.slides[0].code,'Code semantics, metadata and every source newline round-trip exactly');assert.ok(imported.slides[0].code!==undefined||imported.slides[0].blocks.length===1,'One code payload');
     await page.getByRole('button',{name:'Undo',exact:true}).click();assert.deepEqual(await document(),accepted);
     assert.deepEqual(await page.evaluate(()=>failures),[]);
     results.push({dimensions,exportSha256:hash(new Uint8Array(bytes)),exportBytes:bytes.length,acceptedLines:displayed.length,exactCodeRoundTrip:true,selectionVisibility:{source:sourceSelection,filename:filenameSelection},substitutions:await page.evaluate(()=>fonts.substitutions)});

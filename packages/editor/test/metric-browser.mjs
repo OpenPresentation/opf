@@ -110,7 +110,7 @@ try {
     assert.deepEqual(await page.evaluate(()=>failures),[]);
     const bytes=await page.evaluate(()=>Array.from(lastExport));assert.ok(bytes.length>1000);
     await page.getByRole('button',{name:'Import',exact:true}).click();await page.waitForFunction(()=>lastImport||failures.length);
-    assert.deepEqual((await document()).slides[0].blocks,[{type:'metric',metric:accepted.slides[0].metric}]);
+    {const imported=await document();/* opf-pptx with content topology (spec-gap P1) returns the root metric payload as slides.0.metric; earlier releases return one metric block. */assert.deepEqual(imported.slides[0].metric??imported.slides[0].blocks?.[0]?.metric,accepted.slides[0].metric);assert.ok(imported.slides[0].metric!==undefined||imported.slides[0].blocks.length===1);}
     assert.ok((await page.evaluate(()=>diagnostics)).some(d=>d.code==='metric-import-reflow'));
     await page.getByRole('button',{name:'Undo',exact:true}).click();assert.deepEqual(await document(),accepted);
     assert.deepEqual(await page.evaluate(()=>failures),[]);

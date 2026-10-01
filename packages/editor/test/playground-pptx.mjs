@@ -203,7 +203,12 @@ try {
   // Both shapes are valid OPF text; the contract here is the exact visible text and
   // block order, so project each value to its concatenated run text.
   const visible=text=>Array.isArray(text)?text.map(run=>typeof run==='string'?run:run.text).join(''):text;
-  if(quoteImport.slides[0].blocks[0].type==='quote'){
+  const quoteSlide=quoteImport.slides[0];
+  if(quoteSlide.quote!==undefined){
+    // opf-pptx with content topology (spec-gap P1) returns the root quote payload as slides.0.quote.
+    const restored=quoteSlide.quote;
+    assert.deepEqual([visible(restored.text),restored.attribution,restored.source],['Edited quote body','Reviewer','Recorded interview']);
+  } else if(quoteSlide.blocks[0].type==='quote'){
     // opf-pptx 0.11.4 and later (FF-57) tag each native quote line, so an unchanged export
     // re-imports as the quote payload with its attribution and source kept apart.
     assert.equal(quoteImport.slides[0].blocks.length,1);
@@ -214,7 +219,7 @@ try {
     assert.deepEqual(quoteImport.slides[0].blocks.map(block=>visible(block.text)),['"Edited quote body"','Reviewer - Recorded interview']);
   }
   // The font scheme and pagination policy are not part of the quote provenance. Keep this boundary explicit in evidence.
-  assert.equal(quoteImport.slides[0].quote,undefined);
+  assert.ok(quoteSlide.quote===undefined||quoteSlide.blocks===undefined,'The quote is one payload: the root field or one block, never both');
   const quoteXml=await (await JSZip.loadAsync(quoteBytes)).file('ppt/slides/slide1.xml').async('string');
   assert.match(quoteXml,/Reviewer - Recorded interview/);
   assert.match(quoteXml,/sz="1800"/,'Native source text uses the accepted 24px/18pt size');
