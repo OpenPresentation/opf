@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import {test} from 'node:test';
 import {composeSlide, layoutFurniture, resolveLogo} from '../dist/composition.js';
 import {resolveLogo as rootResolveLogo} from '../dist/index.js';
+import {OPFPaginationError, paginatePresentation, paginateSlide} from '../dist/pagination.js';
 
 // Logos: resolveLogo precedence and variant chains, the cover logo box, furniture logo parts and
 // picture bullets (spec-gap closure A1 and A5). Decisions are recorded in docs/design-resolution.md.
@@ -228,4 +229,30 @@ test('listBullet image without a logo keeps the glyph and reports unresolved con
   // A slide without a list is silent; so is a resolvable logo.
   assert.deepEqual(composeSlide({title: 'Text', text: 'Body'}, {presentation: {design: {listBullet: 'image'}}}).diagnostics, []);
   assert.deepEqual(composeSlide(slide, {presentation: {design: {listBullet: 'image', logo: asset('deck')}}}).diagnostics, []);
+});
+
+test('pagination ignores the picture-bullet notice: it neither splits nor rejects a slide for it', () => {
+  const short = {title: 'List', items: ['One', 'Two']};
+  const noLogo = {design: {listBullet: 'image'}, slides: [short]};
+  // A fitting slide stays one page although composeSlide reports unresolved-content.
+  const single = paginateSlide(short, {presentation: noLogo, slideIndex: 0});
+  assert.equal(single.slides.length, 1);
+  assert.deepEqual(single.slides[0].items, short.items);
+  // An overflowing list still splits, and every page keeps the source design (the notice repeats per page, as a host would see it).
+  const long = {title: 'List', items: Array.from({length: 40}, (_, i) => `Item ${i + 1} with enough words to take some horizontal room on the slide`)};
+  const split = paginateSlide(long, {presentation: {design: {listBullet: 'image'}, slides: [long]}, slideIndex: 0, minFontSize: 28});
+  assert.ok(split.slides.length > 1);
+  assert.equal(split.slides.flatMap(page => page.items).length, 40);
+  for (const page of split.slides) assert.deepEqual(composeSlide(page, {presentation: noLogo}).diagnostics.map(d => d.code), ['unresolved-content']);
+  // With a logo the pages carry picture bullets and no diagnostic.
+  const withLogo = {design: {listBullet: 'image', logo: asset('deck')}, slides: [long]};
+  const pages = paginatePresentation(withLogo);
+  assert.ok(pages.presentation.slides.length > 1);
+  for (const [index, page] of pages.presentation.slides.entries()) {
+    const result = composeSlide(page, {presentation: withLogo, slideIndex: index});
+    assert.deepEqual(result.diagnostics, []);
+    assert.equal(byField(result, 'items').bulletImage.path, 'design.logo');
+  }
+  // Unresolved furniture (logo: true without a logo) still rejects pagination like any other unresolved repeated content.
+  assert.throws(() => paginateSlide(short, {presentation: {design: {footer: {left: {logo: true}}}, slides: [short]}, slideIndex: 0}), OPFPaginationError);
 });
