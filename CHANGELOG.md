@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- FF-61, FF-62 (program evidence and tooling, no package change): with pptx-gallery#78 (example logos for the 60 `itemimage` layouts) the published core 0.11.4 train measures 818 of 819 gallery configs `works` again (only `world` is not) and parity 739 perfect, 111 near, 0 mismatch, unchanged value by value; the parity harness compares `a:buBlip` picture bullets on their own (`parity/scripts/picture-bullets.mjs`, `pnpm check:audit-picture-bullets`). The `content-structure-changed` re-import diagnostics on wrapped rich text are fixed on opf-pptx main (opf-pptx#126) and wait for the next PPTX release.
+
 - FF-61, FF-62 and the spec-gap closure (program evidence and tooling, no package change): the audits re-run on the published core 0.11.4 train (opf-render 0.11.9, opf-pptx 0.11.7, opf-editor 0.10.6, pptx-gallery `9e8d59a`): 758 of 819 gallery configs `works` (818 before; the 60 `itemimage` layout examples set `listBullet: "image"` with no logo, which core 0.11.4 reports as `unresolved-content`, and a gallery example change restores 818), parity 739 perfect, 111 near, 0 mismatch of 850 (734 / 116 / 0 before; five chartex charts become perfect at the preview's 12 pt chart text). The harness reads a chart from the authored form opf-pptx 0.11.7 restores (`parity/scripts/restored-content.mjs`, `pnpm check:audit-restored`). FF-61 and FF-62 are done and the native PowerPoint evidence of FF-62 and the design-fields and round-trip closure is recorded in `docs/evidence/spec-gaps-native-20261001/`.
 
 ## 0.11.4

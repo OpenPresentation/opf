@@ -17,6 +17,7 @@ import {createFontHosts} from './font-host.mjs';
 import {chartexExpectations, chartIdFromLayouts, chartexDataMismatches, chartexPreviewMarks, chooseAlternateContent, parseChartex} from './chartex.mjs';
 import {chartPartTextSizes, chartTextSizeMismatches, previewTextSizes} from './chart-text.mjs';
 import {restoredCharts} from './restored-content.mjs';
+import {withoutBulletBlips, bulletBlipRids, isPreviewBullet} from './picture-bullets.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(here, '..');
@@ -120,7 +121,7 @@ function parseSvg(svg) {
       if (tag === 'rect' || tag === 'image') Object.assign(el, {x: +(a.x ?? 0), y: +(a.y ?? 0), w: +a.width, h: +a.height});
       if (tag === 'polyline') el.points = a.points ?? '';
       if (tag === 'circle') Object.assign(el, {cx: a.cx, cy: a.cy});
-      if (tag === 'image') { const href = a.href ?? a['xlink:href'] ?? ''; const b64 = href.match(/^data:[^;]+;base64,(.*)$/); el.hash = b64 ? sha(Buffer.from(b64[1], 'base64')) : href.slice(0, 40); el.mime = href.match(/^data:([^;]+)/)?.[1] ?? null; el.par = a.preserveAspectRatio ?? 'xMidYMid meet'; el.intrinsic = imageSize(href); }
+      if (tag === 'image') { if (isPreviewBullet(a, p)) el.bullet = true; const href = a.href ?? a['xlink:href'] ?? ''; const b64 = href.match(/^data:[^;]+;base64,(.*)$/); el.hash = b64 ? sha(Buffer.from(b64[1], 'base64')) : href.slice(0, 40); el.mime = href.match(/^data:([^;]+)/)?.[1] ?? null; el.par = a.preserveAspectRatio ?? 'xMidYMid meet'; el.intrinsic = imageSize(href); }
       out.elements.push(el);
     }
     if (!self && tag !== 'text' || (tag === 'text' && !self)) stack.push(node);
@@ -200,7 +201,8 @@ function parseSlide(xml, rels, files, theme, slidePart) {
     const tx = body.match(/<p:txBody>(.*?)<\/p:txBody>/s)?.[1] ?? (body.includes('<a:tbl>') ? body : null);
     if (tx) s.paragraphs = parseParagraphs(tx, theme);
     if (body.includes('<a:tbl>')) { s.table = true; s.cellFills = uniq([...body.matchAll(/<a:tcPr\b[^>]*>(.*?)<\/a:tcPr>/gs)].map(t => fillOf(t[1].replace(/<a:ln\w\b.*?<\/a:ln\w>/gs, ''), theme)?.rgb).filter(Boolean)); }
-    const blip = body.match(/<a:blip r:embed="([^"]+)"/)?.[1]; if (blip) { const target = rels[blip]; const part = resolveTarget(slidePart, target); s.image = {part, hash: files[part] ? sha(files[part]) : null, srcRect: attrs(body.match(/<a:srcRect\b([^>]*)\/>/)?.[1] ?? '')}; }
+    const bulletRids = bulletBlipRids(body); if (bulletRids.length) s.bulletImages = bulletRids.map(rid => { const part = rid && rels[rid] ? resolveTarget(slidePart, rels[rid]) : null; return part && files[part] ? sha(files[part]) : null; });
+    const blip = withoutBulletBlips(body).match(/<a:blip r:embed="([^"]+)"/)?.[1]; if (blip) { const target = rels[blip]; const part = resolveTarget(slidePart, target); s.image = {part, hash: files[part] ? sha(files[part]) : null, srcRect: attrs(body.match(/<a:srcRect\b([^>]*)\/>/)?.[1] ?? '')}; }
     const chartRid = body.match(/<c:chart\b[^>]*r:id="([^"]+)"/)?.[1];
     if (chartRid) { const part = resolveTarget(slidePart, rels[chartRid]); const cx = files[part] ? dec.decode(files[part]) : ''; s.chart = {part, ...chartSeriesColors(cx), typefaces: uniq([...cx.matchAll(/<a:latin typeface="([^"]*)"/g)].map(x => x[1])), sizes: uniq([...cx.matchAll(/<a:defRPr\b[^>]*\bsz="(\d+)"/g)].map(x => +x[1] / 100)), roleSizes: chartPartTextSizes(cx, false), strings: [...cx.matchAll(/<c:v>([^<]*)<\/c:v>/g)].map(x => unesc(x[1]))}; }
     const cxRid = body.match(/<cx:chart\b[^>]*r:id="([^"]+)"/)?.[1];
@@ -429,7 +431,7 @@ async function parity(doc) {
       // (1) geometry of non-text frames (charts, tables, pictures, cards)
       for (const s of G.px.filter(s => s.box && (s.chart || s.table || s.image || s.name.startsWith('OPF card')))) {
         const it = items.find(i => i.path === key) ?? ((key === siKey || key === wmKey || /^design\.(header|footer)\./.test(key)) && s.image ? {box: null} : null); if (!it) continue;
-        const pvImage = s.image ? G.pv.find(e => e.kind === 'image') : null;
+        const pvImage = s.image ? G.pv.find(e => e.kind === 'image' && !e.bullet) : null;
         let ref = s.name.startsWith('OPF card') ? it.frame : s.image ? (pvImage ?? it.box) : s.table ? (drawnTableBox(G.pv, key) ?? it.box) : it.box; if (!ref) continue;
         if (s.image && ref === pvImage && (pvImage.intrinsic || /^none/.test(pvImage.par))) { const p = placedImage(pvImage), x = Math.max(ref.x, p.x), y = Math.max(ref.y, p.y); ref = {x, y, w: Math.min(ref.x + ref.w, p.x + p.w) - x, h: Math.min(ref.y + ref.h, p.y + p.h) - y}; }
         const sbox = s.image ? visibleImage(s.box, s.image.srcRect) : s.box; const d = geomDelta(sbox, ref); maxDelta(d);
@@ -452,7 +454,11 @@ async function parity(doc) {
         if (onlyPv.length) add('fills', 'fail', `preview fill color(s) absent in PPTX${isTable ? ' [table]' : ''}`, key, `${onlyPv.join(',')} not in [${pxFills.join(',')}]`);
         if (onlyPx.length) add('fills', 'fail', `PPTX fill color(s) absent in preview${isTable ? ' [table]' : ''}`, key, `${onlyPx.join(',')} not in [${pvFills.join(',')}]`);
       }
-      const pvImgs = G.pv.filter(e => e.kind === 'image').map(e => e.hash), pxImgs = G.px.filter(s => s.image).map(s => s.image.hash);
+      const pvImgs = G.pv.filter(e => e.kind === 'image' && !e.bullet).map(e => e.hash), pxImgs = G.px.filter(s => s.image).map(s => s.image.hash);
+      // Picture bullets (a:buBlip) are compared on their own: one preview marker per bulleted paragraph, with the same bytes.
+      const pvBul = G.pv.filter(e => e.kind === 'image' && e.bullet).map(e => e.hash), pxBul = G.px.flatMap(s => s.bulletImages ?? []);
+      if (pvBul.length !== pxBul.length) add('fills', 'fail', `picture bullet count ${pvBul.length} preview vs ${pxBul.length} pptx`, key);
+      else if (pvBul.some(h => !pxBul.includes(h))) add('fills', 'near', 'picture bullet bytes differ (re-encoded in PPTX)', key);
       if (pvImgs.length !== pxImgs.length) add('fills', 'fail', `image count ${pvImgs.length} preview vs ${pxImgs.length} pptx`, key);
       else if (pvImgs.some(h => !pxImgs.includes(h))) add('fills', 'near', 'image bytes differ (re-encoded/cropped in PPTX)', key);
     }
