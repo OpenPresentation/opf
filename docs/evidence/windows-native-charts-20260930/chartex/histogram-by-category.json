@@ -1,0 +1,23 @@
+﻿{
+    "deck":  "C:\\Users\\micha\\AppData\\Local\\Temp\\claude\\C--Users-micha-Source-opf\\081435ee-8fcc-44e8-a260-5a25a42c8c20\\scratchpad\\ff56-native-20260930-200426\\decks\\histogram-by-category.pptx",
+    "opened":  true,
+    "error":  null,
+    "slides":  [
+                   {
+                       "index":  1,
+                       "shapes":  [
+                                      {
+                                          "name":  "OPF heading slides.0.title line 0",
+                                          "hasChart":  false,
+                                          "type":  1
+                                      },
+                                      {
+                                          "name":  "OPF chart 1",
+                                          "hasChart":  true,
+                                          "type":  3,
+                                          "chartType":  118
+                                      }
+                                  ]
+                   }
+               ]
+}
