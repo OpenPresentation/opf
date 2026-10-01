@@ -66,7 +66,7 @@ const element = id => document.getElementById(id);
 let slideIndex = 0, selectedPath = 'slides.0.title', selectedValue, canvas, renderError, fontsFailure;
 // RR-06: every dimension switch, design option, content conversion, chart type and table style/merge is a control here. Each commits one
 // undoable session change, so the editor.subscribe(refresh) below redraws the preview (and loads fonts first) exactly as for an edit.
-const designControls = createDesignControls(element('design-controls'), {editor, getSlideIndex: () => slideIndex, getSelectedPath: () => selectedPath, sections: ['look', 'slide-image', 'header-footer', 'brand', 'layout-options', 'info']});
+const designControls = createDesignControls(element('design-controls'), {editor, getSlideIndex: () => slideIndex, getSelectedPath: () => selectedPath, sections: ['look', 'background', 'slide-image', 'header-footer', 'brand', 'layout-options', 'info']});
 const selectionControls = createDesignControls(element('selection-controls'), {editor, getSlideIndex: () => slideIndex, getSelectedPath: () => selectedPath, sections: ['selection', 'table'], onSelectPath: path => select(path)});
 function status(message) { element('status').textContent = message; }
 let activePanel = 'content';

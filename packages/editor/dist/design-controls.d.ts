@@ -1,6 +1,6 @@
 import type { EditorSession } from "./index.js";
 
-export type DesignControlSection = "look" | "slide-image" | "header-footer" | "brand" | "layout-options" | "info" | "selection" | "table";
+export type DesignControlSection = "look" | "background" | "slide-image" | "header-footer" | "brand" | "layout-options" | "info" | "selection" | "table";
 /** Every section, in panel order. `selection` and `table` follow the host's current selection. */
 export declare const DESIGN_CONTROL_SECTIONS: readonly DesignControlSection[];
 
@@ -21,6 +21,13 @@ export interface DesignControlsOptions {
   onChange?: (change: unknown) => void;
   /** Called after a content conversion or replacement with the path to keep selected (the block, or the inline payload field), since the old selection path may no longer exist. */
   onSelectPath?: (path: string) => void;
+  /** Largest image the upload controls accept, in bytes (default 2 MiB). */
+  maxImageBytes?: number;
+  /**
+   * For hosts that store images themselves: receives the validated bytes of an uploaded image and returns its reference (a web address or an `asset:` id
+   * the host added). When set, nothing is added to the document's `assets`.
+   */
+  onAddAsset?: (image: { name: string; mediaType: string; bytes: Uint8Array; size: number; alt?: string; file: unknown }) => string | { src: string } | Promise<string | { src: string }>;
   /** Called with every status or error message the panel shows in its live regions. */
   onStatus?: (message: string, info: { error: boolean }) => void;
 }

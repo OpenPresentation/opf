@@ -156,14 +156,15 @@ try {
   await slide(0);
   await step('font-schemes', () => field(design, 'Font scheme').selectOption('georgia'), current => current.design.fontScheme === 'georgia', { preview: true });
   await step('languages', () => field(design, 'Language').selectOption('japanese'), current => current.language === 'japanese');
-  await step('backgrounds (theme slot)', () => field(design, 'Background').selectOption('dark1'), current => current.design.background === 'dark1', { preview: true });
-  await step('backgrounds (hex)', async () => { const input = field(design, 'Background color \(hex\)'); await input.fill('#1f2937'); await input.press('Enter'); }, current => current.design.background === '#1F2937', { preview: true });
+  const applyBackground = async fill => { await fill(); await design.getByRole('button', { name: 'Apply background' }).click(); };
+  await step('backgrounds (theme slot)', () => applyBackground(async () => { await field(design, 'Background type').selectOption('theme'); await field(design, 'Theme slot').selectOption('dark1'); }), current => current.design.background === 'dark1', { preview: true });
+  await step('backgrounds (hex)', () => applyBackground(async () => { await field(design, 'Background type').selectOption('solid'); await field(design, 'Color').fill('#1f2937'); }), current => current.design.background === '#1F2937', { preview: true });
   await step('layouts', () => field(design, 'Layout of this slide').selectOption('text-2x'), current => current.slides[0].layout === 'text-2x', { preview: true });
   await step('narratives', () => field(design, 'Narrative').selectOption('scqa'), current => current.narrative === 'scqa');
   await step('tones', () => field(design, 'Tone').selectOption('casual'), current => current.tone === 'casual');
   await step('audiences', () => field(design, 'Audience').selectOption(['executives', 'investors']), current => JSON.stringify(current.audience) === '["executives","investors"]');
   await step('socials', async () => { await field(design, 'Platform').selectOption('linkedin'); const input = field(design, 'Handle or address'); await input.fill('alice-chen'); await input.press('Enter'); }, current => current.speaker.socials?.linkedin === 'alice-chen');
-  await step('headers-footers', async () => { const input = field(design, 'Center text').first(); await input.fill('Confidential'); await input.press('Enter'); }, current => JSON.stringify(current.design.footer ?? current.design.header ?? {}).includes('Confidential'));
+  await step('headers-footers', async () => { const input = field(design, 'Text'); await input.fill('Confidential'); await input.press('Enter'); }, current => current.design.footer?.center?.text === 'Confidential');
   await step('image-treatments (slide image)', () => field(design, 'Position').selectOption('right'), current => current.design.slideImage?.position === 'right');
   await step('picture placeholder fill', () => field(design, 'Picture placeholders').selectOption('fit'), current => current.design.imageFill === 'fit');
 
@@ -174,15 +175,16 @@ try {
   await step('slide-scope title alignment', () => field(design, 'Title alignment').selectOption('center'), current => current.slides[1].design?.titleAlignment === 'center' && current.design.titleAlignment === undefined);
   // A slide's own footer replaces the deck's whole footer, so the first slide edit starts from a copy of it.
   await field(design, 'Applies to').selectOption('deck');
-  const footerCenter = design.getByLabel(label('Center text')).nth(1);
+  const footerCenter = field(design, 'Text');
   await footerCenter.fill('Confidential');
   await footerCenter.press('Enter');
   await waitDoc(current => current.design.footer?.center?.text === 'Confidential', 'deck footer for the slide-scope checks');
   await settle();
-  assert.equal(await design.getByLabel('Hide the footer').isVisible(), false, 'hiding is not offered at the deck while the footer shows');
+  assert.equal(await design.getByLabel('Hide it').isVisible(), false, 'hiding is not offered at the deck while the footer shows');
   await field(design, 'Applies to').selectOption('slide');
-  await step('slide-scope footer keeps the deck zones', () => design.getByLabel('Right: show the slide number').nth(1).check(), current => current.slides[1].design?.footer?.center?.text === 'Confidential' && current.slides[1].design.footer.right?.slideNumber === true && current.design.footer.right === undefined);
-  await step('hide the footer on one slide', () => design.getByLabel('Hide the footer').check(), current => current.slides[1].design?.footer === false && current.design.footer.center.text === 'Confidential');
+  await field(design, 'Zone').selectOption('right');
+  await step('slide-scope footer keeps the deck zones', () => design.getByLabel('Show the slide number').check(), current => current.slides[1].design?.footer?.center?.text === 'Confidential' && current.slides[1].design.footer.right?.slideNumber === true && current.design.footer.right === undefined);
+  await step('hide the footer on one slide', () => design.getByLabel('Hide it').check(), current => current.slides[1].design?.footer === false && current.design.footer.center.text === 'Confidential');
   await field(design, 'Applies to').selectOption('deck');
   await button('Undo').click();
   await waitDoc(current => current.design.footer === undefined, 'deck footer removed again');
@@ -223,11 +225,11 @@ try {
   await step('logo', async () => { const input = field(design, 'Logo source'); await input.fill('asset:logo'); await input.press('Enter'); }, current => current.design.logo === 'asset:logo');
   await step('logo variant', async () => { await field(design, 'Logo variant').selectOption('light'); const input = field(design, 'Logo source'); await input.fill('asset:mark'); await input.press('Enter'); }, current => current.design.logo?.light === 'asset:mark');
   await field(design, 'Logo variant').selectOption('default');
-  await step('organization logo', async () => { const input = field(design, 'Organization logo \(whole presentation\)'); await input.fill('asset:logo'); await input.press('Enter'); }, current => current.organization.logo === 'asset:logo');
+  await step('organization logo', async () => { const input = field(design, 'Organization logo (whole presentation) source'); await input.fill('asset:logo'); await input.press('Enter'); }, current => current.organization.logo === 'asset:logo');
   assert.equal(await field(design, 'Watermark opacity (0 to 1)').isDisabled(), true, 'the opacity waits for a watermark image');
-  await step('watermark', async () => { const input = field(design, 'Watermark image'); await input.fill('asset:mark'); await input.press('Enter'); }, current => current.design.watermark === 'asset:mark', { preview: true });
-  await field(design, 'Watermark image').fill('asset:mark');
-  await field(design, 'Watermark image').press('Enter');
+  await step('watermark', async () => { const input = field(design, 'Watermark source'); await input.fill('asset:mark'); await input.press('Enter'); }, current => current.design.watermark === 'asset:mark', { preview: true });
+  await field(design, 'Watermark source').fill('asset:mark');
+  await field(design, 'Watermark source').press('Enter');
   await waitDoc(current => current.design.watermark === 'asset:mark', 'watermark source');
   await step('watermark opacity', async () => { const opacity = field(design, 'Watermark opacity (0 to 1)'); await opacity.fill('0.3'); await opacity.press('Enter'); }, current => current.design.watermark?.opacity === 0.3);
   await button('Undo').click();
@@ -239,13 +241,17 @@ try {
   await page.locator('#design-controls .opf-dc-warnings').first().waitFor({ state: 'attached' });
   mark('picture bullets warn when no logo is set');
   // Header and footer zones, with the logo warning.
-  await step('footer logo zone', async () => { await design.getByLabel('Left: show the logo').first().check(); }, current => JSON.stringify(current.design.header ?? {}).includes('"logo":true') || JSON.stringify(current.design.footer ?? {}).includes('"logo":true'));
-  await step('footer slide number', async () => { await design.getByLabel('Right: show the slide number').nth(1).check(); }, current => current.design.footer?.right?.slideNumber === true);
+  await field(design, 'Edit').selectOption('header');
+  await field(design, 'Zone').selectOption('left');
+  await step('header logo zone', () => design.getByLabel('Show the logo').check(), current => current.design.header?.left?.logo === true);
+  await field(design, 'Edit').selectOption('footer');
+  await field(design, 'Zone').selectOption('right');
+  await step('footer slide number', () => design.getByLabel('Show the slide number').check(), current => current.design.footer?.right?.slideNumber === true);
 
   // Slide image fields appear once a position is set and write the same object.
   await field(design, 'Position').selectOption('left');
   await waitDoc(current => current.design.slideImage?.position === 'left', 'slide image position');
-  await step('slide image source', async () => { const input = field(design, 'Image source'); await input.fill('asset:photo'); await input.press('Enter'); }, current => current.design.slideImage?.src === 'asset:photo');
+  await step('slide image source', async () => { const input = field(design, 'Slide image source'); await input.fill('asset:photo'); await input.press('Enter'); }, current => current.design.slideImage?.src === 'asset:photo');
   await step('slide image size', async () => { const input = field(design, 'Size \(share of the slide, 0.1 to 0.9\)'); await input.fill('0.4'); await input.press('Enter'); }, current => current.design.slideImage?.size === 0.4);
   await step('slide image shape', () => field(design, 'Shape').selectOption('circle'), current => current.design.slideImage?.shape === 'circle');
   await step('slide image removed', () => field(design, 'Position').selectOption(''), current => current.design.slideImage === undefined);
@@ -253,8 +259,8 @@ try {
   {
     const before = await doc();
     const input = field(design, 'Watermark opacity \(0 to 1\)');
-    await field(design, 'Watermark image').fill('asset:mark');
-    await field(design, 'Watermark image').press('Enter');
+    await field(design, 'Watermark source').fill('asset:mark');
+    await field(design, 'Watermark source').press('Enter');
     await waitDoc(current => current.design.watermark === 'asset:mark', 'watermark for the opacity check');
     await input.fill('5');
     await input.press('Enter');

@@ -45,6 +45,7 @@ export interface DimensionSwitchOptions {
 }
 
 export type DimensionSwitchValue =
+  | null /* backgrounds: remove it */
   | string
   | string[]
   | { platform: string; handle: string }

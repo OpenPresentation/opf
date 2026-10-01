@@ -55,7 +55,7 @@ Version 0.7.0 uses core 0.10.0 and renderer 0.8.0. Code source/metadata edits pr
 - Structured catalog controls that only commit known catalog IDs
 - JSON Patch state transitions with inverse patches for undo/redo
 - Optional DOM controls plus React and Svelte bindings in separate embeddable entry points
-- Dimension switches, safe block conversion, design-level options, table style and cell merge as headless APIs (`/switches`, `/block-convert`, `/design-options`, `/tables`) and one accessible DOM panel (`/design-controls`)
+- Dimension switches, safe block conversion, design-level options, table style and cell merge as headless APIs (`/switches`, `/block-convert`, `/design-options`, `/tables`, `/assets`, `/backgrounds`) and one accessible DOM panel (`/design-controls`)
 
 ## Live browser canvas
 
@@ -281,9 +281,27 @@ setHeaderFooterZone(editor, "footer", "right", { slideNumber: true, logo: true }
 | `organizationLogo` | `organization.logo` (deck only; `index` picks an organization) | a source or Asset object |
 | `watermark` | `design.watermark` | `false`, a source, or `{ src, opacity }` (fields merge; a lone source stays a bare source) |
 | `slideImage` | `design.slideImage` | a source or `{ src, position, size, fill, shape, inset, ... }` (fields merge; `position` defaults to `background` because the object form requires it) |
-| header and footer zones | `design.header` / `design.footer` `.left/.center/.right` | `setHeaderFooterZone` merges `text`, `logo`, `slideNumber`, `image`, ... into one zone; a removed field, an emptied zone and an emptied header are all deleted rather than left as `{}`. A slide's own header or footer replaces the deck's whole one, so the first edit on a slide starts from a copy of the deck's (its other zones stay), and a slide emptied that way hides the furniture (`false`) instead of inheriting it again |
+| header and footer zones | `design.header` / `design.footer` `.left/.center/.right` | `setHeaderFooterZone` merges every part a zone can hold (`text`, `logo`, `image`, `slideNumber` and `slideNumberFormat` (must contain `{current}`), `date` (true, or a fixed date) and `dateFormat`, `organization`, `socials`, `section`; `ZONE_FIELDS`) into one zone, checking each value; a removed field, an emptied zone and an emptied header are all deleted rather than left as `{}`. A slide's own header or footer replaces the deck's whole one, so the first edit on a slide starts from a copy of the deck's (its other zones stay), and a slide emptied that way hides the furniture (`false`) instead of inheriting it again |
 
-A deck-scope change reports `shadowed` slides whose own design hides it (`clearSlideOverrides: true` removes those values in the same transaction). Results carry `warnings`: a header or footer zone with `logo: true`, or picture bullets, with no logo to draw (no slide, deck or primary-organization logo) is reported as `unresolved-logo` before export, as `designWarnings(document, slideIndex)` does for the current document. `DESIGN_OPTIONS` describes every option for a generic panel, and `getDesignOption` reads `{ value, scope, inherited }`.
+A deck-scope change reports `shadowed` slides whose own design hides it (`clearSlideOverrides: true` removes those values in the same transaction). Results carry `warnings`: a header or footer zone with `logo: true`, or picture bullets, with no logo to draw (no slide, deck or primary-organization logo) is reported as `unresolved-logo`, and a zone that shows the organization or its social profiles when there are none as `unresolved-content`, before export, as `designWarnings(document, slideIndex)` does for the current document. `DESIGN_OPTIONS` describes every option for a generic panel, and `getDesignOption` reads `{ value, scope, inherited }`.
+
+### Image uploads (RR-06)
+
+`@openpresentation/opf-editor/assets` turns a local file into an `assets` entry and uses it in the same undoable patch:
+
+```js
+import { applyImageUpload } from "@openpresentation/opf-editor/assets";
+import { prepareLogoVariant } from "@openpresentation/opf-editor/design-options";
+
+const change = await applyImageUpload(editor, file, (reference, document) => prepareLogoVariant(document, "light", reference), { alt: "Acme logo" });
+change.assetId; // "acme-logo": the document now has assets["acme-logo"] = { src: "data:image/png;base64,...", mediaType, title, alt } and design.logo.light = "asset:acme-logo"
+```
+
+`build(reference, document)` is any `prepare...` function of this package, so the same upload works for the logo (all 12 variants), organization logo, watermark, slide image, a background (`prepareBackground`) and a header/footer zone image. The file is checked before anything changes: PNG, JPEG, GIF, WebP or SVG by its bytes (a `.jpg` that is really a PNG, a text file, an empty file and an SVG with script are refused), and at most `maxBytes` (default 2 MiB, `DEFAULT_MAX_IMAGE_BYTES`) with a message that says what to do. A host that stores images elsewhere passes `onAddAsset({ name, mediaType, bytes, size, alt, file })` and returns the reference to use (a web address, or an `asset:` id it added); nothing is then added to `assets`. `setAssetAlt` edits an asset's alt text as one step.
+
+### Backgrounds (RR-06)
+
+`@openpresentation/opf-editor/backgrounds` covers every background form the schema has: a theme slot, a solid color, a linear gradient, an image (`cover`, `contain` or `tile`) and a pattern, each with an optional opacity. Colors are ColorRefs: hex, a scheme slot or role (`accent1`, `surface`, ...) or `var:<id>`. `normalizeBackground` validates with sentences a person can act on (at least two stops, positions 0 to 1, a color that is none of the above), `setBackground(editor, spec, { slideIndex })` is one undoable patch through the `backgrounds` switch, `null` removes the background so the theme's (or the deck's) shows again, and `readBackground` flattens the current one for a form. `PATTERN_PRESETS` is the 54 DrawingML presets (`PATTERN_GROUPS` groups them in five families); PPTX export writes them as native pattern fills and import returns the same name. Radial gradients are not part of the OPF schema (a gradient has an angle and stops), so there is no radial control.
 
 ## Table style and cell merge (RR-06)
 
@@ -317,7 +335,7 @@ const selectionControls = createDesignControls(contentPanel, { editor, getSlideI
 controls.refresh(); // when the slide or the selection changes
 ```
 
-Sections: `look` (theme, color scheme, font scheme, language, background, this slide's layout), `slide-image`, `header-footer`, `brand` (logo variants, organization logo, picture bullets, accent font, watermark), `layout-options` (alignment, direction, primary chart, content box), `info` (narrative, tone, audience, socials), `selection` (content type with a loss report, replacement, chart type) and `table` (style, merge, split, cell fill and alignment). The panel is native `details`, `fieldset`, `select`, checkbox and text controls with a label on each, so it works with the keyboard and with screen readers: groups open with Enter or Space, a select changes with the arrow keys, text fields commit on Enter or when you leave them, and results and refusals are announced in `role="status"` and `role="alert"` regions. A refused change (an invalid value, text a merge would hide) is explained, changes nothing, and puts the field back. "Applies to" switches the design controls between the whole presentation and the current slide, and a control shows when a slide value is "set on this slide" or "from the presentation". The panel offers only conversions that exist, shows what a conversion loses before you choose it, and lists why an unavailable one is unavailable.
+Sections: `look` (theme, color scheme, font scheme, language, this slide's layout), `background` (type, theme slot, solid color, gradient with its stops, image, any of the 54 patterns, opacity; a draft until Apply, with Remove), `slide-image`, `header-footer` (choose header or footer and a zone, then every part the zone supports: text, logo, image, organization, socials, section, slide number and format, current or fixed date and format, with a summary of the zones in use), `brand` (logo variants, organization logo, picture bullets, accent font, watermark), `layout-options` (alignment, direction, primary chart, content box), `info` (narrative, tone, audience, socials), `selection` (content type with a loss report, replacement, chart type) and `table` (style, merge, split, cell fill and alignment). The panel is native `details`, `fieldset`, `select`, checkbox and text controls with a label on each, so it works with the keyboard and with screen readers: groups open with Enter or Space, a select changes with the arrow keys, text fields commit on Enter or when you leave them, and results and refusals are announced in `role="status"` and `role="alert"` regions. A refused change (an invalid value, text a merge would hide) is explained, changes nothing, and puts the field back. "Applies to" switches the design controls between the whole presentation and the current slide, and a control shows when a slide value is "set on this slide" or "from the presentation". The panel offers only conversions that exist, shows what a conversion loses before you choose it, and lists why an unavailable one is unavailable.
 
 In React (or Svelte, or anything else) mount it into a ref and destroy it on unmount; it needs no framework runtime:
 
@@ -329,7 +347,7 @@ useEffect(() => {
 // call controls.refresh() (keep it in a ref) when slide or selected changes
 ```
 
-The playground mounts both panels (the Design tab, and the selection area of the Content tab). One click on text still enters text editing; the panels follow the selection after Escape. The panel does not upload images: logo, watermark and slide-image sources take an asset reference (the field suggests the document's assets), a web address or a data address.
+The playground mounts both panels (the Design tab, and the selection area of the Content tab). One click on text still enters text editing; the panels follow the selection after Escape. Every image field (logo variants, organization logo, watermark, slide image, background image and header/footer zone image) takes an asset reference (suggested from the document's assets), a web address or a data address, and has a file picker and an alt-text field: the chosen file is validated (PNG, JPEG, GIF, WebP or SVG, up to `maxImageBytes`, 2 MiB by default), added to `assets` and used in one undo step, or handed to your app through `onAddAsset`. Alt text is saved on the asset; typed before an upload it is used for that upload.
 
 Run `npm run test:design-controls-browser` (after `npm run build:playground`) for the real-browser check of every control, its keyboard operation and its undo.
 

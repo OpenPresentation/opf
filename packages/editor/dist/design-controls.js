@@ -6,13 +6,27 @@
 // document state: it reads the session, mirrors it into native form controls, and reports
 // problems in a live region. Importing this module does not need a DOM; mounting does.
 import { compatibleChartTypes, currentSwitchValue, listSwitchOptions, switchDimension } from "./switches.js";
+import { DEFAULT_MAX_IMAGE_BYTES, IMAGE_ACCEPT, applyImageUpload, assetIdOf, setAssetAlt } from "./assets.js";
+import {
+  COLOR_NAMES,
+  IMAGE_BACKGROUND_FITS,
+  PATTERN_GROUPS,
+  THEME_BACKGROUND_SLOTS,
+  prepareBackground,
+  readBackground,
+  setBackground,
+} from "./background-options.js";
 import { BLOCK_KIND_LABELS, blockConversionTargets, blockPathForSelection, readBlockContent } from "./block-convert.js";
 import {
+  DATE_FORMAT_TOKENS,
   HEADER_FOOTER_ZONES,
   LOGO_VARIANTS,
   designWarnings,
   getDesignOption,
   headerFooterState,
+  prepareHeaderFooterZone,
+  prepareLogoVariant,
+  prepareDesignOption,
   readHeaderFooterZone,
   readLogoVariants,
   setDesignOption,
@@ -22,10 +36,11 @@ import {
 import { describeTableCell, mergeTableCells, parseTableCellPath, readTableStyle, setTableCellStyle, setTableStyle, splitTableCell } from "./table-options.js";
 
 /** The sections a panel can show. `selection` and `table` follow the current selection; the rest follow the deck or the current slide. */
-export const DESIGN_CONTROL_SECTIONS = Object.freeze(["look", "slide-image", "header-footer", "brand", "layout-options", "info", "selection", "table"]);
+export const DESIGN_CONTROL_SECTIONS = Object.freeze(["look", "background", "slide-image", "header-footer", "brand", "layout-options", "info", "selection", "table"]);
 
 const SECTION_TITLES = {
   look: "Look and language",
+  background: "Background",
   "slide-image": "Slide image",
   "header-footer": "Header and footer",
   brand: "Logo, watermark and bullets",
@@ -49,12 +64,6 @@ const LOGO_VARIANT_LABELS = {
   wordmarkLight: "Wordmark, light",
   wordmarkDark: "Wordmark, dark",
 };
-const BACKGROUND_SLOTS = [
-  ["light1", "Light 1"],
-  ["light2", "Light 2"],
-  ["dark1", "Dark 1"],
-  ["dark2", "Dark 2"],
-];
 const CELL_FILLS = [
   ["", "No fill"],
   ["primary", "Primary"],
@@ -67,7 +76,6 @@ const CELL_FILLS = [
 const SHAPES = ["rectangle", "rounded", "circle", "hexagon"];
 const POSITIONS = ["background", "top", "bottom", "left", "right"];
 const BLOCK_REPLACEMENTS = ["text", "list", "chart", "table", "metric", "quote", "code", "timeline", "group"];
-const HEX = /^#[0-9a-fA-F]{6}$/;
 
 let instances = 0;
 
@@ -99,6 +107,10 @@ export function createDesignControls(container, options = {}) {
   let destroyed = false;
   // After a refused change the field the person typed in is reset too, even though it still has focus.
   let restoring = false;
+  // The background form is a draft until Apply; edits to it survive unrelated refreshes.
+  let backgroundDirty = false;
+  const maxImageBytes = options.maxImageBytes ?? DEFAULT_MAX_IMAGE_BYTES;
+  const sizeLabel = `${maxImageBytes >= 1024 * 1024 ? `${+(maxImageBytes / (1024 * 1024)).toFixed(1)} MB` : `${Math.round(maxImageBytes / 1024)} KB`}`;
 
   const h = (tag, attrs = {}, ...children) => {
     const node = doc.createElement(tag);
@@ -174,11 +186,21 @@ export function createDesignControls(container, options = {}) {
       wrap,
       select,
       setOptions(list) {
-        const next = JSON.stringify(list.map((entry) => [entry.value, entry.label, entry.disabled ?? false, entry.title ?? ""]));
+        const next = JSON.stringify(list.map((entry) => [entry.value, entry.label, entry.disabled ?? false, entry.title ?? "", entry.group ?? ""]));
         if (next === signature) return;
         signature = next;
         const entries = empty === undefined ? list : [{ value: "", label: empty }, ...list];
-        select.replaceChildren(...entries.map((entry) => h("option", { value: entry.value, disabled: entry.disabled || undefined, title: entry.title }, entry.label)));
+        const optionNode = (entry) => h("option", { value: entry.value, disabled: entry.disabled || undefined, title: entry.title }, entry.label);
+        const nodes = [];
+        for (const entry of entries) {
+          if (!entry.group) nodes.push(optionNode(entry));
+          else {
+            let groupNode = nodes.find((node) => node.tagName === "OPTGROUP" && node.label === entry.group);
+            if (!groupNode) nodes.push((groupNode = h("optgroup", { label: entry.group })));
+            groupNode.append(optionNode(entry));
+          }
+        }
+        select.replaceChildren(...nodes);
       },
       set(value, noteText = "") {
         note.textContent = noteText ? ` (${noteText})` : "";
@@ -246,6 +268,78 @@ export function createDesignControls(container, options = {}) {
 
   const button = (label, onClick, { quiet = false, title } = {}) => h("button", { type: "button", class: quiet ? "quiet" : "secondary", title, onclick: onClick }, label);
 
+  /**
+   * Source text, file upload and alt text for one image. `apply(ref | null)` commits a typed source (null removes it);
+   * `build(ref, document)` prepares the change an upload makes, after its asset patch, in the same undo step.
+   */
+  function imageCluster(name, label, { apply, build, help }) {
+    const source = textField(`${name}-source`, `${label} source`, {
+      list: true,
+      placeholder: "asset:photo or https://…",
+      help: help ?? "An asset reference, a web address or a data address. Press Enter to apply; clear the field to remove it.",
+      onCommit: (value) => {
+        const ref = value.trim();
+        run(() => apply(ref === "" ? null : ref), ref === "" ? `${label} removed.` : `${label} changed.`);
+      },
+    });
+    const fileId = nextId(`${name}-file`);
+    const input = h("input", { id: fileId, type: "file", accept: IMAGE_ACCEPT, "aria-describedby": `${fileId}-help` });
+    const fileWrap = h(
+      "div",
+      { class: "opf-dc-field" },
+      h("label", { for: fileId }, `Upload ${label.toLowerCase()} file`),
+      input,
+      h("p", { class: "opf-dc-help", id: `${fileId}-help` }, `PNG, JPEG, GIF, WebP or SVG, up to ${sizeLabel}. It is added to the presentation's assets (or handed to your app) and used here in one undoable step.`),
+    );
+    let lastRef = "";
+    let lastKey = "";
+    const alt = textField(`${name}-alt`, `${label} alt text`, {
+      help: "Describes the image for screen readers. Saved with the image's asset; typed before an upload, it is used for that upload. Press Enter to apply.",
+      onCommit: (value) => {
+        const id = assetIdOf(lastRef);
+        if (!id || editor.document.assets?.[id] === undefined) return;
+        run(() => setAssetAlt(editor, id, value), "Alt text saved.");
+      },
+    });
+    input.addEventListener("change", async () => {
+      const file = input.files?.[0];
+      input.value = "";
+      if (!file) return;
+      statusEl.textContent = `Adding ${file.name}…`;
+      errorEl.textContent = "";
+      try {
+        const change = await applyImageUpload(editor, file, build, { alt: alt.input.value, maxBytes: maxImageBytes, onAddAsset: options.onAddAsset });
+        const warnings = change.prepared?.warnings?.length ? ` ${change.prepared.warnings.map((warning) => warning.message).join(" ")}` : "";
+        say(`${label} set to ${file.name}${change.assetId ? `, added to assets as ${change.assetId}` : ""}.${warnings} Undo restores the previous state.`);
+        options.onChange?.(change);
+      } catch (error) {
+        complain(messageOf(error));
+        sync();
+      }
+    });
+    const wrap = h("div", { class: "opf-dc-cluster" }, source.wrap, fileWrap, alt.wrap);
+    return {
+      wrap,
+      source,
+      alt,
+      refreshAssets: () => source.setList(assetList()),
+      // `key` names what the image is for (variant, zone, slide, scope): alt text typed for one target is not offered to another.
+      set(ref, note = "", key = "") {
+        const targetChanged = (ref ?? "") !== lastRef || key !== lastKey;
+        lastKey = key;
+        lastRef = ref ?? "";
+        source.setList(assetList());
+        source.set(lastRef, note);
+        const id = assetIdOf(lastRef);
+        const entry = id ? editor.document.assets?.[id] : undefined;
+        // Alt text belongs to one image: another target (variant, zone, slide) never inherits what was typed for the last one.
+        alt.set(entry && typeof entry === "object" && typeof entry.alt === "string" ? entry.alt : "");
+        // The field keeps what is being typed, except when the image it describes has changed.
+        if (targetChanged) alt.input.value = entry && typeof entry === "object" && typeof entry.alt === "string" ? entry.alt : "";
+      },
+    };
+  }
+
   function group(section) {
     const body = h("div", { class: "opf-dc-body" });
     const details = h("details", { class: "opf-dc-group", "data-section": section, open: OPEN_BY_DEFAULT.has(section) || undefined }, h("summary", {}, SECTION_TITLES[section]), body);
@@ -254,10 +348,11 @@ export function createDesignControls(container, options = {}) {
 
   // --- scope --------------------------------------------------------------------------------------
 
+  const target = () => `${state.scope}:${state.scope === "slide" ? getSlide() : ""}`;
   const scopeIndex = () => (state.scope === "slide" ? getSlide() : undefined);
   const scoped = (extra = {}) => (state.scope === "slide" ? { slideIndex: getSlide(), ...extra } : extra);
   const sourceNote = (scope, inherited) => (state.scope === "slide" ? (scope === "slide" ? "set on this slide" : inherited ? "from the presentation" : "default") : "");
-  const scopeNeeded = sections.some((name) => ["look", "slide-image", "header-footer", "brand", "layout-options"].includes(name));
+  const scopeNeeded = sections.some((name) => ["look", "background", "slide-image", "header-footer", "brand", "layout-options"].includes(name));
   let scopeField;
   if (scopeNeeded) {
     scopeField = selectField("scope", "Applies to", {
@@ -304,33 +399,6 @@ export function createDesignControls(container, options = {}) {
     catalogField("font-scheme", "Font scheme", "font-schemes", { help: "Fonts the preview and export use. The preview shows an open look-alike where a font is not bundled." });
     catalogField("language", "Language", "languages", { perSlide: false, help: "Sets the language for the whole presentation, including its script fonts." });
 
-    const background = selectField("background", "Background", {
-      onChange: (value) => run(() => switchDimension(editor, "backgrounds", value, scoped()), "Background changed."),
-    });
-    background.setOptions(BACKGROUND_SLOTS.map(([value, label]) => ({ value, label })));
-    const backgroundColor = textField("background-color", "Background color (hex)", {
-      placeholder: "#RRGGBB",
-      help: "A six-digit hex color such as #1F2937. Press Enter to apply.",
-      onCommit: (value) => {
-        const trimmed = value.trim();
-        if (!HEX.test(trimmed)) return complain("Enter a six-digit hex color such as #1F2937.");
-        run(() => switchDimension(editor, "backgrounds", trimmed.toUpperCase(), scoped()), "Background color changed.");
-      },
-    });
-    body.append(background.wrap, backgroundColor.wrap);
-    syncs.push(() => {
-      const current = currentSwitchValue(editor.document, "backgrounds", scoped());
-      const value = current.value;
-      const note = sourceNote(current.scope, value !== undefined);
-      if (typeof value === "string" && HEX.test(value)) {
-        background.set("", note);
-        backgroundColor.set(value);
-      } else {
-        background.set(typeof value === "string" ? value : isCustomObject(value) ? "(custom)" : undefined, note);
-        backgroundColor.set("");
-      }
-    });
-
     const layout = selectField("layout", "Layout of this slide", {
       help: "Adds the blank placeholders the layout declares and keeps your content.",
       onChange: (value) => run(() => switchDimension(editor, "layouts", value, { slideIndex: getSlide(), ...catalogOptions() }), `Layout changed to ${layout.select.selectedOptions[0]?.textContent ?? value}.`),
@@ -339,6 +407,144 @@ export function createDesignControls(container, options = {}) {
     syncs.push(() => {
       layout.setOptions(listSwitchOptions(editor.document, "layouts", catalogOptions()).map((entry) => ({ value: entry.id, label: entry.label })));
       layout.set(currentSwitchValue(editor.document, "layouts", { slideIndex: getSlide() }).value);
+    });
+  }
+
+  // --- background ---------------------------------------------------------------------------------
+
+  if (built.background) {
+    const { body } = built.background;
+    const typeSelect = selectField("bg-type", "Background type", { help: "Choose a type and its settings, then Apply. Nothing changes until you apply." });
+    typeSelect.setOptions([
+      { value: "theme", label: "Theme color" },
+      { value: "solid", label: "Solid color" },
+      { value: "gradient", label: "Gradient" },
+      { value: "image", label: "Image" },
+      { value: "pattern", label: "Pattern" },
+    ]);
+    const panel = (type, title) => h("fieldset", { class: "opf-dc-fieldset", "data-bg-type": type }, h("legend", {}, title));
+    const themePanel = panel("theme", "Theme color");
+    const slot = selectField("bg-slot", "Theme slot", { help: "Follows the color scheme, so it changes with it." });
+    slot.setOptions(THEME_BACKGROUND_SLOTS.map((value) => ({ value, label: value.replace(/(\D+)(\d)/, (_, name, n) => `${titleCase(name)} ${n}`) })));
+    themePanel.append(slot.wrap);
+
+    const colorList = [...COLOR_NAMES];
+    const solidPanel = panel("solid", "Solid color");
+    const solidColor = textField("bg-color", "Color", { list: true, placeholder: "#1F2937 or accent1", help: "A hex color, a scheme color such as accent1 or surface, or var:<id>." });
+    solidColor.setList(colorList);
+    solidPanel.append(solidColor.wrap);
+
+    const gradientPanel = panel("gradient", "Linear gradient");
+    const angle = numberField("bg-angle", "Angle in degrees", { step: 1, help: "0 runs left to right, 90 top to bottom." });
+    const stopsBox = h("div", { class: "opf-dc-stops", role: "group", "aria-label": "Gradient stops" });
+    const stopRows = [];
+    const renderStops = () => {
+      stopsBox.replaceChildren(
+        ...stopRows.map((row, index) => {
+          for (const [field, text] of [[row.color, `Stop ${index + 1} color`], [row.position, `Stop ${index + 1} position (0 to 1)`]]) field.wrap.querySelector("label").firstChild.textContent = text;
+          const remove = h("button", { type: "button", class: "quiet", disabled: stopRows.length <= 2 || undefined, "aria-label": `Remove stop ${index + 1}`, onclick: () => { stopRows.splice(index, 1); backgroundDirty = true; renderStops(); } }, "Remove");
+          return h("div", { class: "opf-dc-stop" }, row.color.wrap, row.position.wrap, remove);
+        }),
+      );
+    };
+    const addStop = (color = "", position = "") => {
+      const row = { color: textField(`bg-stop-color`, "Stop color", { list: true, placeholder: "#1E40AF or accent1" }), position: numberField("bg-stop-position", "Stop position", { min: 0, max: 1, step: 0.05 }) };
+      row.color.setList(colorList);
+      row.color.input.value = color;
+      row.position.input.value = String(position);
+      stopRows.push(row);
+    };
+    const addStopButton = button("Add stop", () => {
+      addStop("", stopRows.length ? "1" : "0");
+      backgroundDirty = true;
+      renderStops();
+    });
+    gradientPanel.append(angle.wrap, stopsBox, addStopButton);
+
+    const imagePanel = panel("image", "Image");
+    const fit = selectField("bg-fit", "Fit", { help: "Cover fills the slide, contain shows the whole image, tile repeats it." });
+    fit.setOptions(IMAGE_BACKGROUND_FITS.map((value) => ({ value, label: titleCase(value) })));
+    const bgImage = imageCluster("bg-image", "Background image", {
+      apply: (ref) => (ref === null ? setBackground(editor, null, scoped()) : setBackground(editor, { type: "image", image: { src: ref, fit: fit.select.value || undefined }, ...(opacityValue() === undefined ? {} : { opacity: opacityValue() }) }, scoped())),
+      build: (ref, doc) => prepareBackground(doc, { type: "image", image: { src: ref, fit: fit.select.value || undefined }, ...(opacityValue() === undefined ? {} : { opacity: opacityValue() }) }, scoped()),
+      help: "An asset reference, a web address or a data address. Press Enter or choose a file to apply it with the settings here.",
+    });
+    imagePanel.append(bgImage.wrap, fit.wrap);
+
+    const patternPanel = panel("pattern", "Pattern");
+    const preset = selectField("bg-preset", "Pattern", { help: "The 54 PowerPoint presets. PPTX export writes them as native pattern fills." });
+    preset.setOptions(Object.entries(PATTERN_GROUPS).flatMap(([name, ids]) => ids.map((id) => ({ value: id, label: id, group: name }))));
+    const patternFg = textField("bg-pattern-fg", "Pattern color", { list: true, placeholder: "#000000 or text" });
+    patternFg.setList(colorList);
+    const patternBg = textField("bg-pattern-bg", "Behind the pattern", { list: true, placeholder: "#FFFFFF or background" });
+    patternBg.setList(colorList);
+    patternPanel.append(preset.wrap, patternFg.wrap, patternBg.wrap);
+
+    const opacity = numberField("bg-opacity", "Opacity (0 to 1, optional)", { min: 0, max: 1, step: 0.05 });
+    const opacityValue = () => (opacity.input.value === "" ? undefined : Number(opacity.input.value));
+    const panels = { theme: themePanel, solid: solidPanel, gradient: gradientPanel, image: imagePanel, pattern: patternPanel };
+
+    const draftSpec = () => {
+      const type = typeSelect.select.value;
+      const withOpacity = (value) => (opacityValue() === undefined ? value : { ...value, opacity: opacityValue() });
+      if (type === "theme") return slot.select.value;
+      if (type === "solid") return withOpacity({ type: "solid", color: solidColor.input.value.trim() });
+      if (type === "gradient")
+        return withOpacity({ type: "gradient", gradient: { ...(angle.input.value === "" ? {} : { angle: Number(angle.input.value) }), stops: stopRows.map((row) => ({ color: row.color.input.value.trim(), position: row.position.input.value })) } });
+      if (type === "image") return withOpacity({ type: "image", image: { src: bgImage.source.input.value.trim(), fit: fit.select.value } });
+      return withOpacity({ type: "pattern", pattern: { preset: preset.select.value, foregroundColor: patternFg.input.value.trim() || undefined, backgroundColor: patternBg.input.value.trim() || undefined } });
+    };
+    const showType = () => {
+      for (const [name, element] of Object.entries(panels)) element.hidden = name !== typeSelect.select.value;
+      opacity.wrap.hidden = typeSelect.select.value === "theme";
+    };
+    const apply = button("Apply background", () => run(() => setBackground(editor, draftSpec(), scoped()), "Background changed."));
+    const remove = button("Remove background", () => run(() => setBackground(editor, null, scoped()), state.scope === "slide" ? "Background removed; this slide uses the presentation's." : "Background removed; the theme's shows."), { quiet: true });
+    body.addEventListener("input", () => {
+      backgroundDirty = true;
+    });
+    typeSelect.select.addEventListener("change", () => {
+      backgroundDirty = true;
+      showType();
+    });
+    body.append(typeSelect.wrap, themePanel, solidPanel, gradientPanel, imagePanel, patternPanel, opacity.wrap, h("div", { class: "opf-dc-actions" }, apply, remove));
+
+    const load = () => {
+      const current = readBackground(editor.document, scoped());
+      const note = sourceNote(current.scope, current.type !== undefined);
+      typeSelect.set(current.type ?? "theme", note);
+      slot.set(current.type === "theme" ? current.slot : "light1");
+      solidColor.set(current.type === "solid" ? current.color : "");
+      angle.set(current.type === "gradient" && current.angle !== undefined ? String(current.angle) : "");
+      stopRows.length = 0;
+      if (current.type === "gradient" && current.stops?.length) for (const stop of current.stops) addStop(stop.color, stop.position);
+      else {
+        addStop("accent1", "0");
+        addStop("accent2", "1");
+      }
+      renderStops();
+      fit.set(current.type === "image" ? (current.fit ?? "cover") : "cover");
+      bgImage.set(current.type === "image" ? (current.src ?? "") : "", "", target());
+      preset.set(current.type === "pattern" ? current.preset : "pct5");
+      patternFg.set(current.type === "pattern" ? (current.foregroundColor ?? "") : "");
+      patternBg.set(current.type === "pattern" ? (current.backgroundColor ?? "") : "");
+      opacity.set(current.opacity === undefined ? "" : String(current.opacity));
+      showType();
+    };
+    let draftTarget = "";
+    syncs.push(() => {
+      // A draft belongs to the scope and slide it was started on; moving to another discards it.
+      const target = `${state.scope}:${state.scope === "slide" ? getSlide() : ""}`;
+      if (target !== draftTarget) {
+        draftTarget = target;
+        backgroundDirty = false;
+      }
+      // A draft being edited is kept; Undo, Redo and every other change reload it from the document.
+      if (backgroundDirty) {
+        bgImage.refreshAssets();
+        return;
+      }
+      load();
     });
   }
 
@@ -353,11 +559,9 @@ export function createDesignControls(container, options = {}) {
       onChange: (value) => (value === "" ? run(() => setDesignOption(editor, "slideImage", null, scoped()), "Slide image removed.") : image({ position: value }, `Slide image placed ${value}.`)),
     });
     position.setOptions(POSITIONS.map((value) => ({ value, label: titleCase(value) })));
-    const source = textField("image-source", "Image source", {
-      list: true,
-      placeholder: "asset:photo or https://…",
-      help: "An asset reference from this presentation, a web address or a data address. Press Enter to apply.",
-      onCommit: (value) => image({ src: value.trim() === "" ? null : value.trim() }, "Slide image source changed."),
+    const source = imageCluster("image", "Slide image", {
+      apply: (ref) => setDesignOption(editor, "slideImage", { src: ref }, scoped()),
+      build: (ref, doc) => prepareDesignOption(doc, "slideImage", { src: ref }, scoped()),
     });
     const fill = selectField("image-fill", "Fit", { empty: "Presentation default", onChange: (value) => image({ fill: value === "" ? null : value }, "Image fit changed.") });
     fill.setOptions([
@@ -389,8 +593,7 @@ export function createDesignControls(container, options = {}) {
       const object = value && typeof value === "object" && !Array.isArray(value) && value.position ? value : undefined;
       const note = sourceNote(option.scope, option.value !== undefined);
       position.set(object?.position ?? (value === undefined ? "" : "(source only)"), note);
-      source.setList(assetList());
-      source.set(stringOf(value));
+      source.set(stringOf(value), "", target());
       fill.set(object?.fill ?? "");
       shape.set(object?.shape && object.shape !== "rectangle" ? object.shape : "");
       size.set(object?.size === undefined ? "" : String(object.size));
@@ -405,44 +608,95 @@ export function createDesignControls(container, options = {}) {
 
   if (built["header-footer"]) {
     const { body } = built["header-footer"];
+    const pick = { which: "footer", zone: "center" };
+    const which = () => pick.which;
+    const zone = () => pick.zone;
+    const furniture = selectField("hf-which", "Edit", { help: "The header runs along the top of every slide, the footer along the bottom." });
+    furniture.setOptions([
+      { value: "header", label: "Header" },
+      { value: "footer", label: "Footer" },
+    ]);
+    furniture.set(pick.which);
+    const zoneSelect = selectField("hf-zone", "Zone", { help: "Each zone stacks its parts top to bottom: logo, image, text, organization, socials, section, slide number, date." });
+    zoneSelect.setOptions(HEADER_FOOTER_ZONES.map((value) => ({ value, label: titleCase(value) })));
+    zoneSelect.set(pick.zone);
+    furniture.select.addEventListener("change", () => {
+      pick.which = furniture.select.value;
+      sync();
+    });
+    zoneSelect.select.addEventListener("change", () => {
+      pick.zone = zoneSelect.select.value;
+      sync();
+    });
+    // Hiding is for a slide that would otherwise show the deck's furniture; at the deck, clear the zones instead.
+    const hide = checkField("hf-hide", "Hide it", {
+      help: "On a slide: shows nothing instead of the presentation's. Uncheck to inherit it again.",
+      onChange: (checked) => run(() => switchDimension(editor, "headers-footers", { [which()]: checked ? false : null }, scoped()), checked ? `${titleCase(which())} hidden on this slide.` : `${titleCase(which())} shown again.`),
+    });
+    const edit = (fields, done) => run(() => setHeaderFooterZone(editor, which(), zone(), fields, scoped()), done);
+    const where = () => `${titleCase(which())} ${zone()}`;
+    const text = textField("hf-text", "Text", { help: "Literal text. Clear it to remove.", onCommit: (value) => edit({ text: value }, `${where()} text changed.`) });
+    const logo = checkField("hf-logo", "Show the logo", { onChange: (checked) => edit({ logo: checked }, `${where()} logo ${checked ? "shown" : "removed"}.`) });
+    const image = imageCluster("hf-image", "Image", {
+      apply: (ref) => setHeaderFooterZone(editor, which(), zone(), { image: ref }, scoped()),
+      build: (ref, doc) => prepareHeaderFooterZone(doc, which(), zone(), { image: ref }, scoped()),
+      help: "A picture in this zone, such as a partner mark or badge. An asset reference, a web address or a data address. Press Enter to apply; clear the field to remove it.",
+    });
+    const number = checkField("hf-number", "Show the slide number", { onChange: (checked) => edit({ slideNumber: checked }, `${where()} slide number ${checked ? "shown" : "removed"}.`) });
+    const numberFormat = textField("hf-number-format", "Slide number format", {
+      placeholder: "Page {current} of {total}",
+      help: "Must contain {current}; {total} is the number of slides. Clear it for the plain number.",
+      onCommit: (value) => edit({ slideNumberFormat: value.trim() }, `${where()} slide number format changed.`),
+    });
+    const dateNow = checkField("hf-date-now", "Show the current date", {
+      help: "Needs the host to supply today's date when it renders or exports; otherwise the part is reported as unresolved.",
+      onChange: (checked) => edit({ date: checked }, `${where()} date ${checked ? "shown" : "removed"}.`),
+    });
+    const dateFixed = textField("hf-date-fixed", "Fixed date", {
+      placeholder: "2026-10-01",
+      help: "A fixed date written YYYY-MM-DD (formatted by the date format), or literal text when there is no date format. Replaces the current date.",
+      onCommit: (value) => edit({ date: value.trim() }, `${where()} date changed.`),
+    });
+    const dateFormat = textField("hf-date-format", "Date format", {
+      placeholder: "MMMM d, yyyy",
+      help: `Tokens: ${DATE_FORMAT_TOKENS.join(", ")}. Text in single quotes is literal. Clear it for the default (M/d/yyyy).`,
+      onCommit: (value) => edit({ dateFormat: value.trim() }, `${where()} date format changed.`),
+    });
+    const organization = checkField("hf-organization", "Show the organization name", { onChange: (checked) => edit({ organization: checked }, `${where()} organization ${checked ? "shown" : "removed"}.`) });
+    const socials = checkField("hf-socials", "Show the organization's social profiles", { onChange: (checked) => edit({ socials: checked }, `${where()} social profiles ${checked ? "shown" : "removed"}.`) });
+    const section = checkField("hf-section", "Show the section label", { onChange: (checked) => edit({ section: checked }, `${where()} section label ${checked ? "shown" : "removed"}.`) });
+    const summary = h("ul", { class: "opf-dc-summary", "aria-label": "Zones in use" });
     const warnings = h("ul", { class: "opf-dc-warnings", "aria-label": "Header and footer warnings" });
-    const parts = [];
-    for (const which of ["header", "footer"]) {
-      const fieldset = h("fieldset", { class: "opf-dc-fieldset" }, h("legend", {}, titleCase(which)));
-      // Hiding is for a slide that would otherwise show the deck's furniture; at the deck, clear the zones instead.
-      const hide = checkField(`${which}-hide`, `Hide the ${which} on this slide`, {
-        help: "On a slide: shows nothing instead of the presentation's. Uncheck to inherit it again.",
-        onChange: (checked) => run(() => switchDimension(editor, "headers-footers", { [which]: checked ? false : null }, scoped()), checked ? `${titleCase(which)} hidden on this slide.` : `${titleCase(which)} shown again.`),
-      });
-      fieldset.append(hide.wrap);
-      const zones = {};
-      for (const zone of HEADER_FOOTER_ZONES) {
-        const edit = (fields, done) => run(() => setHeaderFooterZone(editor, which, zone, fields, scoped()), done);
-        const text = textField(`${which}-${zone}-text`, `${titleCase(zone)} text`, { onCommit: (value) => edit({ text: value }, `${titleCase(which)} ${zone} text changed.`) });
-        const logo = checkField(`${which}-${zone}-logo`, `${titleCase(zone)}: show the logo`, { onChange: (checked) => edit({ logo: checked }, `${titleCase(which)} ${zone} logo ${checked ? "shown" : "removed"}.`) });
-        const number = checkField(`${which}-${zone}-number`, `${titleCase(zone)}: show the slide number`, { onChange: (checked) => edit({ slideNumber: checked }, `${titleCase(which)} ${zone} slide number ${checked ? "shown" : "removed"}.`) });
-        fieldset.append(text.wrap, logo.wrap, number.wrap);
-        zones[zone] = { text, logo, number };
-      }
-      parts.push({ which, hide, zones });
-      body.append(fieldset);
-    }
-    body.append(warnings);
+    const controls = [text, logo, image, number, numberFormat, dateNow, dateFixed, dateFormat, organization, socials, section];
+    body.append(furniture.wrap, hide.wrap, zoneSelect.wrap, summary, ...controls.map((control) => control.wrap), warnings);
+    const describe = (fields) =>
+      Object.entries(fields)
+        .map(([key, value]) => (typeof value === "boolean" ? key : `${key} ${typeof value === "string" ? `“${value}”` : ""}`.trim()))
+        .join(", ");
     syncs.push(() => {
-      for (const { which, hide, zones } of parts) {
-        const state = headerFooterState(editor.document, which, scoped());
-        const own = state.hidden ? false : state.own ? {} : undefined;
-        // Offered on a slide that inherits the deck's furniture or already hides it, never over zones the slide set itself; at the deck only to undo a hidden state.
-        hide.wrap.hidden = scopeIndex() === undefined ? !state.hidden : state.own && !state.hidden;
-        hide.set(state.hidden, state.inherited && !state.hidden ? "from the presentation" : "");
-        for (const zone of HEADER_FOOTER_ZONES) {
-          const fields = readHeaderFooterZone(editor.document, which, zone, scoped());
-          zones[zone].text.set(typeof fields.text === "string" ? fields.text : "");
-          zones[zone].logo.set(fields.logo === true);
-          zones[zone].number.set(fields.slideNumber === true);
-          for (const control of Object.values(zones[zone])) for (const input of control.wrap.querySelectorAll("input")) input.disabled = own === false;
-        }
-      }
+      const state = headerFooterState(editor.document, which(), scoped());
+      // Offered on a slide that inherits the deck's furniture or already hides it, never over zones the slide set itself; at the deck only to undo a hidden state.
+      hide.wrap.hidden = scopeIndex() === undefined ? !state.hidden : state.own && !state.hidden;
+      hide.set(state.hidden, state.inherited && !state.hidden ? "from the presentation" : "");
+      const fields = readHeaderFooterZone(editor.document, which(), zone(), scoped());
+      text.set(typeof fields.text === "string" ? fields.text : "");
+      logo.set(fields.logo === true);
+      image.set(stringOf(fields.image), "", `${target()}:${which()}:${zone()}`);
+      number.set(fields.slideNumber === true);
+      numberFormat.set(typeof fields.slideNumberFormat === "string" ? fields.slideNumberFormat : "");
+      dateNow.set(fields.date === true);
+      dateFixed.set(typeof fields.date === "string" ? fields.date : "");
+      dateFormat.set(typeof fields.dateFormat === "string" ? fields.dateFormat : "");
+      organization.set(fields.organization === true);
+      socials.set(fields.socials === true);
+      section.set(fields.section === true);
+      for (const control of controls) for (const input of control.wrap.querySelectorAll("input,select,button")) input.disabled = state.hidden;
+      summary.replaceChildren(
+        ...HEADER_FOOTER_ZONES.map((name) => {
+          const zoneFields = readHeaderFooterZone(editor.document, which(), name, scoped());
+          return h("li", {}, `${titleCase(name)}: ${Object.keys(zoneFields).length ? describe(zoneFields) : "empty"}`);
+        }),
+      );
       warnings.replaceChildren(...designWarnings(editor.document, getSlide()).filter((warning) => /^design\.(header|footer)/.test(warning.path)).map((warning) => h("li", {}, warning.message)));
     });
   }
@@ -454,24 +708,16 @@ export function createDesignControls(container, options = {}) {
     const variant = selectField("logo-variant", "Logo variant", { help: "Choose the variant to edit. Engines pick one by background: light on dark, dark on light, then the default." });
     variant.setOptions(LOGO_VARIANTS.map((value) => ({ value, label: LOGO_VARIANT_LABELS[value] })));
     variant.set("default");
-    const logoSource = textField("logo-source", "Logo source", {
-      list: true,
-      placeholder: "asset:logo or https://…",
-      help: "An asset reference, web address or data address for the selected variant. Press Enter to apply; clear the field to remove the variant.",
-      onCommit: (value) => {
-        const source = value.trim();
-        run(() => setLogoVariant(editor, variant.select.value, source === "" ? null : source, scoped()), source === "" ? "Logo variant removed." : "Logo changed.");
-      },
+    const logoSource = imageCluster("logo", "Logo", {
+      apply: (ref) => setLogoVariant(editor, variant.select.value, ref, scoped()),
+      build: (ref, doc) => prepareLogoVariant(doc, variant.select.value, ref, scoped()),
+      help: "An asset reference, a web address or a data address for the selected variant. Press Enter to apply; clear the field to remove the variant.",
     });
     variant.select.addEventListener("change", () => sync());
-    const orgLogo = textField("org-logo", "Organization logo (whole presentation)", {
-      list: true,
-      placeholder: "asset:logo or https://…",
+    const orgLogo = imageCluster("org-logo", "Organization logo (whole presentation)", {
+      apply: (ref) => setDesignOption(editor, "organizationLogo", ref),
+      build: (ref, doc) => prepareDesignOption(doc, "organizationLogo", ref),
       help: "The primary organization's logo is the fallback wherever the logo is drawn.",
-      onCommit: (value) => {
-        const source = value.trim();
-        run(() => setDesignOption(editor, "organizationLogo", source === "" ? null : source), source === "" ? "Organization logo removed." : "Organization logo changed.");
-      },
     });
     const bullet = selectField("list-bullet", "List bullets", {
       empty: "Default (character)",
@@ -487,11 +733,9 @@ export function createDesignControls(container, options = {}) {
       help: "The font for accent text such as tags. Press Enter to apply; clear the field to remove it.",
       onCommit: (value) => run(() => setDesignOption(editor, "accentFont", value.trim() === "" ? null : value.trim(), scoped()), value.trim() === "" ? "Accent font removed." : "Accent font changed."),
     });
-    const watermarkSource = textField("watermark-source", "Watermark image", {
-      list: true,
-      placeholder: "asset:mark or https://…",
-      help: "An asset reference, web address or data address. Press Enter to apply.",
-      onCommit: (value) => run(() => setDesignOption(editor, "watermark", value.trim() === "" ? null : { src: value.trim() }, scoped()), value.trim() === "" ? "Watermark removed." : "Watermark changed."),
+    const watermarkSource = imageCluster("watermark", "Watermark", {
+      apply: (ref) => setDesignOption(editor, "watermark", ref === null ? null : { src: ref }, scoped()),
+      build: (ref, doc) => prepareDesignOption(doc, "watermark", { src: ref }, scoped()),
     });
     const watermarkOpacity = numberField("watermark-opacity", "Watermark opacity (0 to 1)", {
       min: 0,
@@ -506,14 +750,11 @@ export function createDesignControls(container, options = {}) {
     const warningList = h("ul", { class: "opf-dc-warnings", "aria-label": "Logo warnings" });
     body.append(warningList);
     syncs.push(() => {
-      logoSource.setList(assetList());
-      orgLogo.setList(assetList());
-      watermarkSource.setList(assetList());
       const variants = readLogoVariants(editor.document, scoped());
-      logoSource.set(stringOf(variants[variant.select.value]));
+      logoSource.set(stringOf(variants[variant.select.value]), "", `${target()}:${variant.select.value}`);
       const organization = editor.document.organization;
       const owner = Array.isArray(organization) ? organization[0] : organization;
-      orgLogo.set(stringOf(owner?.logo));
+      orgLogo.set(stringOf(owner?.logo), "", "org");
       for (const input of orgLogo.wrap.querySelectorAll("input")) input.disabled = !owner;
       const bulletOption = getDesignOption(editor.document, "listBullet", scoped());
       bullet.set(bulletOption.value ?? "", sourceNote(bulletOption.scope, bulletOption.value !== undefined));
@@ -523,7 +764,7 @@ export function createDesignControls(container, options = {}) {
       const mark = watermark.value;
       // The opacity belongs to a watermark image; without one there is nothing to fade.
       for (const input of watermarkOpacity.wrap.querySelectorAll("input")) input.disabled = !(typeof mark === "string" || (mark && typeof mark === "object" && typeof mark.src === "string"));
-      watermarkSource.set(typeof mark === "string" ? mark : mark && typeof mark === "object" ? stringOf(mark) : "", sourceNote(watermark.scope, mark !== undefined));
+      watermarkSource.set(typeof mark === "string" ? mark : mark && typeof mark === "object" ? stringOf(mark) : "", sourceNote(watermark.scope, mark !== undefined), target());
       watermarkOpacity.set(mark && typeof mark === "object" && typeof mark.opacity === "number" ? String(mark.opacity) : "");
       const own = scopeIndex() === undefined ? editor.document.design?.watermark : editor.document.slides?.[scopeIndex()]?.design?.watermark;
       watermarkOff.set(own === false);
@@ -798,7 +1039,10 @@ export function createDesignControls(container, options = {}) {
 
   root.append(...sections.map((name) => built[name].details), statusEl, errorEl);
   container.append(root);
-  const unsubscribe = editor.subscribe(() => sync());
+  const unsubscribe = editor.subscribe(() => {
+    backgroundDirty = false;
+    sync();
+  });
   sync();
 
   return {

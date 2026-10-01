@@ -22,9 +22,24 @@ export const LOGO_VARIANTS = Object.freeze([
   "wordmarkDark",
 ]);
 export const HEADER_FOOTER_ZONES = Object.freeze(["left", "center", "right"]);
-// Flag fields of a header/footer zone: false is stored as "absent".
-const ZONE_FLAGS = ["logo", "slideNumber"];
-const ZONE_FIELDS = ["logo", "text", "image", "slideNumber", "slideNumberFormat", "date", "dateFormat", "organization", "socials", "section"];
+// Flag fields of a header/footer zone: false is stored as "absent" (so is a `date` of false).
+const ZONE_FLAGS = ["logo", "slideNumber", "organization", "socials", "section"];
+export const ZONE_FIELDS = Object.freeze(["logo", "text", "image", "slideNumber", "slideNumberFormat", "date", "dateFormat", "organization", "socials", "section"]);
+/** Date tokens a `dateFormat` understands (English names, independent of the host locale). */
+export const DATE_FORMAT_TOKENS = Object.freeze(["yyyy", "yy", "MMMM", "MMM", "MM", "M", "dd", "d", "EEEE", "EEE"]);
+const ISO_DATE = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/;
+
+// Friendly validation of one zone field before the schema sees it.
+function checkZoneField(key, value) {
+  const bad = (message) => fail("invalid-design-value", message, { field: key, value });
+  if (["logo", "slideNumber", "organization", "socials", "section"].includes(key) && typeof value !== "boolean") throw bad(`${key} is true or false.`);
+  if (key === "text" && typeof value !== "string") throw bad("Text is a string.");
+  if (key === "image" && typeof value !== "string" && !isObject(value)) throw bad("An image is a source, an asset reference or an asset object.");
+  if (key === "slideNumberFormat" && (typeof value !== "string" || !value.includes("{current}"))) throw bad("The slide number format must contain {current}, for example Page {current} of {total}.");
+  if (key === "date" && typeof value !== "boolean" && typeof value !== "string") throw bad("A date is true (the current date) or a fixed date.");
+  if (key === "dateFormat" && (typeof value !== "string" || !value.trim())) throw bad(`A date format uses tokens such as ${DATE_FORMAT_TOKENS.join(", ")}.`);
+}
+
 const SLIDE_IMAGE_POSITIONS = ["background", "top", "bottom", "left", "right"];
 
 const ENUMS = Object.freeze({
@@ -89,12 +104,21 @@ export function designWarnings(document, slideIndex = 0) {
   const slide = document.slides?.[slideIndex];
   const design = { ...document.design, ...slide?.design };
   const warnings = [];
-  if (hasResolvableLogo(document, slideIndex)) return warnings;
+  const hasLogo = hasResolvableLogo(document, slideIndex);
   for (const which of ["header", "footer"])
     for (const zone of HEADER_FOOTER_ZONES)
-      if (isObject(design[which]) && design[which][zone]?.logo === true)
+      if (!hasLogo && isObject(design[which]) && design[which][zone]?.logo === true)
         warnings.push({ code: "unresolved-logo", path: `design.${which}.${zone}.logo`, message: `The ${which} ${zone} zone shows the logo, but no logo is set. Add a logo or an organization logo.` });
-  if (design.listBullet === "image")
+  const organization = primaryOrganization(document);
+  for (const which of ["header", "footer"])
+    for (const zone of HEADER_FOOTER_ZONES) {
+      const item = isObject(design[which]) ? design[which][zone] : undefined;
+      if (item?.organization === true && !organization)
+        warnings.push({ code: "unresolved-content", path: `design.${which}.${zone}.organization`, message: `The ${which} ${zone} zone shows the organization, but the presentation has none.` });
+      if (item?.socials === true && !organization?.socials)
+        warnings.push({ code: "unresolved-content", path: `design.${which}.${zone}.socials`, message: `The ${which} ${zone} zone shows social profiles, but the organization has none.` });
+    }
+  if (!hasLogo && design.listBullet === "image")
     warnings.push({ code: "unresolved-logo", path: "design.listBullet", message: "Picture bullets use the logo, but no logo is set, so lists draw the character bullet. Add a logo or an organization logo." });
   return warnings;
 }
@@ -348,10 +372,15 @@ export function prepareHeaderFooterZone(document, which, zone, fields, options =
   const container = isObject(current) ? structuredClone(current) : {};
   const item = isObject(container[zone]) ? container[zone] : {};
   for (const [key, entry] of Object.entries(fields)) {
-    const removes = entry === null || entry === undefined || (ZONE_FLAGS.includes(key) && entry === false) || entry === "";
+    const removes = entry === null || entry === undefined || ((ZONE_FLAGS.includes(key) || key === "date") && entry === false) || entry === "";
     if (removes) delete item[key];
-    else item[key] = entry;
+    else {
+      checkZoneField(key, entry);
+      item[key] = entry;
+    }
   }
+  // A fixed date with a format must be an ISO date (the schema's rule); say so before the generic error.
+  if (typeof item.date === "string" && item.dateFormat && !ISO_DATE.test(item.date)) throw fail("invalid-design-value", "A fixed date with a date format must be written YYYY-MM-DD, for example 2026-10-01.", { field: "date", value: item.date });
   if (Object.keys(item).length) container[zone] = item;
   else delete container[zone];
   let next = Object.keys(container).length ? container : null;

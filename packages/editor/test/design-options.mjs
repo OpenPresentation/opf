@@ -329,6 +329,49 @@ for (const entry of cases) {
   assert.deepEqual(editor.get("slides.1.design.fontScheme"), { id: "tahoma", accent: { family: "Lora" } });
 }
 
+// Every header/footer part the schema has, per zone: validation, flags, date and format, warnings, export.
+{
+  const editor = session();
+  setHeaderFooterZone(editor, "footer", "left", { text: "Acme", logo: true, organization: true, socials: true, section: true });
+  setHeaderFooterZone(editor, "footer", "left", { image: "asset:photo" });
+  setHeaderFooterZone(editor, "footer", "right", { slideNumber: true, slideNumberFormat: "Page {current} of {total}", date: true, dateFormat: "MMMM d, yyyy" });
+  assert.deepEqual(editor.get("design.footer.left"), { text: "Acme", logo: true, organization: true, socials: true, section: true, image: "asset:photo" });
+  assert.deepEqual(editor.get("design.footer.right"), { slideNumber: true, slideNumberFormat: "Page {current} of {total}", date: true, dateFormat: "MMMM d, yyyy" });
+  // A fixed date replaces the current date; false removes a flag or the date.
+  setHeaderFooterZone(editor, "footer", "right", { date: "2026-10-01" });
+  assert.equal(editor.get("design.footer.right.date"), "2026-10-01");
+  setHeaderFooterZone(editor, "footer", "right", { date: false, dateFormat: null });
+  assert.deepEqual(editor.get("design.footer.right"), { slideNumber: true, slideNumberFormat: "Page {current} of {total}" });
+  setHeaderFooterZone(editor, "footer", "left", { organization: false, socials: false, section: false, image: null });
+  assert.deepEqual(editor.get("design.footer.left"), { text: "Acme", logo: true });
+  // Friendly validation before the schema.
+  const bad = (fields, pattern) => assert.throws(() => setHeaderFooterZone(editor, "footer", "center", fields), (error) => error.code === "invalid-design-value" && pattern.test(error.message), JSON.stringify(fields));
+  bad({ slideNumberFormat: "Page" }, /must contain {current}/);
+  bad({ logo: "yes" }, /logo is true or false/);
+  bad({ text: 4 }, /Text is a string/);
+  bad({ dateFormat: "  " }, /date format uses tokens/);
+  bad({ date: "Autumn", dateFormat: "yyyy" }, /written YYYY-MM-DD/);
+  assert.equal(editor.get("design.footer.center"), undefined);
+  // A fixed date that is not ISO is fine as literal text when there is no format; with a format it must be ISO.
+  setHeaderFooterZone(editor, "footer", "center", { date: "Autumn 2026" });
+  assert.equal(editor.get("design.footer.center.date"), "Autumn 2026");
+  assert.throws(() => setHeaderFooterZone(editor, "footer", "center", { dateFormat: "yyyy" }), (error) => /written YYYY-MM-DD/.test(error.message));
+  setHeaderFooterZone(editor, "footer", "center", { date: null });
+  // Warnings for parts with nothing to show.
+  const warned = setHeaderFooterZone(editor, "header", "right", { organization: true, socials: true });
+  assert.deepEqual(warned.warnings.map((warning) => warning.path).filter((path) => path.startsWith("design.header")), ["design.header.right.socials"], "the organization exists; its socials do not");
+  const none = createEditorSession({ slides: [{ title: "x", text: "y" }] });
+  const both = setHeaderFooterZone(none, "footer", "left", { organization: true, socials: true });
+  assert.deepEqual(both.warnings.map((warning) => warning.code), ["unresolved-content", "unresolved-content"]);
+  // Preview and export carry the parts.
+  const parts = createEditorSession({ ...deck(), organization: { id: "acme", name: "Acme Corp", socials: { linkedin: "acme" } } }, { rejectInvalid: true });
+  setHeaderFooterZone(parts, "footer", "left", { organization: true, text: "Confidential" });
+  setHeaderFooterZone(parts, "footer", "right", { slideNumber: true, slideNumberFormat: "Page {current} of {total}" });
+  const drawn = svg(parts.document, 1);
+  assert.ok(drawn.includes("Acme Corp") && drawn.includes("Confidential") && /Page 2 of 3/.test(drawn), "the zone parts draw");
+  assert.ok((await pptx.toPptx(structuredClone(parts.document), { strictAssets: true })).byteLength > 0);
+}
+
 // Undo and redo through a sequence keep every step separate.
 {
   const editor = session();

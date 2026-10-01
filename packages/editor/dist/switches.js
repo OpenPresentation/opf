@@ -264,7 +264,8 @@ export function prepareDimensionSwitch(document, dimension, value, options = {})
     } else {
       // A background is an object or a shorthand string (theme slot or hex color); the schema
       // validates the candidate document, so a string that is neither is rejected below.
-      const valid = dimension === "backgrounds" ? typeof value === "string" || (Boolean(value) && typeof value === "object" && !Array.isArray(value)) : Boolean(value) && typeof value === "object" && !Array.isArray(value);
+      // null removes the background so the theme's (or, on a slide, the deck's) shows again.
+      const valid = dimension === "backgrounds" ? value === null || typeof value === "string" || (Boolean(value) && typeof value === "object" && !Array.isArray(value)) : Boolean(value) && typeof value === "object" && !Array.isArray(value);
       if (!valid)
         throw fail("invalid-switch-value", `Switch ${dimension} to ${dimension === "backgrounds" ? "a background object or shorthand string" : "an object with " + DESIGN_KEYS[dimension].join(" and ")}.`, { value });
       if (dimension === "backgrounds") entries = { background: value };
