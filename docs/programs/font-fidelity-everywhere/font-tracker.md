@@ -4,7 +4,7 @@
 
 As of 2026-10-01. Machine-readable source: [font-tracker.json](font-tracker.json). Authored inputs: [font-tracker.overrides.json](font-tracker.overrides.json). Program tracker: [burndown.md](burndown.md) (FF-40 to FF-46). Policy table: [font-licensing.md](font-licensing.md).
 
-This is the per-font work list behind the owner's 2026-09-29 review. Each record holds the family's selected name, preview route and tier, the bundled face (package, version, hashes, styles), the styles it needs and lacks, scripts, per-style measurements, host and native verification, parity signals, phase, status, next action and evidence. Nothing here is a claim of per-family acceptance: every family still needs its own fixture and acceptance record.
+This is the per-font work list behind the owner's 2026-09-29 review. Each record holds the family's selected name, preview route and tier, the bundled face (package, version, hashes, styles), the styles it needs and lacks, scripts, per-style measurements, host and native verification, parity signals, phase, status, next action and evidence. A family counts as accepted (status qualified or documented-visual) only when its own fixtures pass in every host and, for a proprietary family, its measurement against the real font is on record (RR-17); every other family still needs its own fixture and acceptance record, and no row claims native PowerPoint verification.
 
 ## Summary
 
