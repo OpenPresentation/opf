@@ -19,8 +19,14 @@
 //            | {form: 'blocks', blocks: Node[]}
 //            | {form: 'regions', regions: {[key]: Node}}   // key = promoted region key
 //   Node     = {t: 'group', id?, ext?, comp?, typed?, blocks: Node[]}
-//            | {t: 'leaf', k, id?, ext?, typed?, box?}      // box = [x, y, w, h] reference px, 1 decimal
+//            | {t: 'leaf', k, id?, ext?, typed?, box?, lines?}   // box = [x, y, w, h] reference px, 1 decimal
 //   typed = true when the authored block spelled out its `type`
+//   lines = N (>= 2) when a rich-text `text` payload exported as N native line
+//           shapes that are soft wraps of one paragraph (no hard break between
+//           them); import joins those N imported lines back into the one payload
+//
+// Native line shapes of rich text carry no names or tags, so the soft wraps are
+// recorded here as a count; a wrapped payload with any hard break is not marked.
 //
 // Tags are untrusted input: every field is type-, count- and depth-checked
 // before use, and the rebuilt slide still has to validate with the document.
@@ -48,6 +54,37 @@ export const BOX_TOLERANCE = 3;
 const kindOfField = field => field === 'items' || field === 'bullets' ? 'list' : field;
 const isGroup = block => object(block) && (block.type === 'group' || (block.type === undefined && Array.isArray(block.blocks)));
 const round1 = value => Math.round(value * 10) / 10;
+export const MAX_WRAPPED_LINES = 1000;
+
+/**
+ * The number of native line shapes a rich-text `text` item exported as, when
+ * those lines are consecutive soft wraps of the authored runs: the line
+ * fragments, concatenated in order, are exactly the concatenated run text, so
+ * no line boundary stands for a hard break (a newline, a blank line, collapsed
+ * or dropped characters). Undefined for a single line or when that cannot be
+ * shown: nothing then marks the leaf and import keeps the separate blocks.
+ */
+export function softWrappedLines(item) {
+  const lines = item?.text?.richLines;
+  if (item?.field !== 'text' || !Array.isArray(lines) || lines.length < 2 || lines.length > MAX_WRAPPED_LINES) return undefined;
+  const runs = Array.isArray(item.value) ? item.value : typeof item.value === 'string' ? [item.value] : null;
+  if (!runs) return undefined;
+  let source = '';
+  for (const run of runs) {
+    const text = typeof run === 'string' ? run : object(run) ? run.text : undefined;
+    if (typeof text !== 'string') return undefined;
+    source += text;
+  }
+  let position = 0;
+  for (const line of lines) {
+    if (!Array.isArray(line?.fragments) || !line.fragments.length) return undefined;
+    for (const fragment of line.fragments) {
+      if (typeof fragment?.text !== 'string' || !source.startsWith(fragment.text, position)) return undefined;
+      position += fragment.text.length;
+    }
+  }
+  return position === source.length ? lines.length : undefined;
+}
 
 function blockKind(block) {
   if (typeof block.type === 'string' && block.type !== 'group') return CONTENT_KINDS.includes(block.type) ? block.type : null;
@@ -67,8 +104,12 @@ function blockKind(block) {
  */
 export function contentTopology(slide, items, slideIndex, report = () => {}) {
   if (!object(slide)) return undefined;
-  const boxes = new Map();
-  for (const item of items ?? []) if (typeof item?.path === 'string' && object(item.box)) boxes.set(item.path, item.box);
+  const boxes = new Map(), wrapped = new Map();
+  for (const item of items ?? []) if (typeof item?.path === 'string' && object(item.box)) {
+    boxes.set(item.path, item.box);
+    const lines = softWrappedLines(item);
+    if (lines) wrapped.set(item.path, lines);
+  }
   const base = `slides.${slideIndex}`;
   let nodes = 0;
   const fail = reason => { throw new TopologyError(reason); };
@@ -103,6 +144,7 @@ export function contentTopology(slide, items, slideIndex, report = () => {}) {
     const leaf = identity(block, {t: 'leaf', k: kind}, path);
     const box = leafBox(path);
     if (box) leaf.box = box;
+    if (kind === 'text' && wrapped.has(`${path}.text`)) leaf.lines = wrapped.get(`${path}.text`);
     return leaf;
   };
   try {
@@ -117,7 +159,8 @@ export function contentTopology(slide, items, slideIndex, report = () => {}) {
     // on one slide compose as one item each (`slides.N.<field>`).
     const fields = ROOT_PAYLOAD_FIELDS.filter(name => slide[name] !== undefined).map(field => {
       const box = boxes.get(`${base}.${field}`);
-      return box ? {field, box: [box.x, box.y, box.width, box.height].map(round1)} : {field};
+      const lines = field === 'text' ? wrapped.get(`${base}.text`) : undefined;
+      return box ? {field, box: [box.x, box.y, box.width, box.height].map(round1), ...(lines ? {lines} : {})} : {field};
     });
     if (!fields.length) return undefined;
     if (fields.length === 1) return {form: 'root', ...fields[0]};
@@ -136,9 +179,10 @@ class TopologyError extends Error {}
 
 const validBox = value => value === undefined || (Array.isArray(value) && value.length === 4 && value.every(number => typeof number === 'number' && Number.isFinite(number) && Math.abs(number) < 1e7));
 const validId = value => value === undefined || (typeof value === 'string' && value.length <= MAX_ID_LENGTH);
-const validField = value => object(value) && ROOT_PAYLOAD_FIELDS.includes(value.field) && validBox(value.box);
+const validLines = value => value === undefined || (Number.isSafeInteger(value) && value >= 2 && value <= MAX_WRAPPED_LINES);
+const validField = value => object(value) && ROOT_PAYLOAD_FIELDS.includes(value.field) && validBox(value.box) && validLines(value.lines) && (value.lines === undefined || value.field === 'text');
 /** The root payload leaves of a root-form record: [{field, box?}]. */
-export const rootFields = topology => topology.fields ?? [{field: topology.field, box: topology.box}];
+export const rootFields = topology => topology.fields ?? [{field: topology.field, box: topology.box, lines: topology.lines}];
 
 /** Throws when `value` is not a well-formed topology record. Returns it otherwise. */
 export function validateTopology(value) {
@@ -161,6 +205,7 @@ export function validateTopology(value) {
     if (!CONTENT_KINDS.includes(item.k)) throw Error('Unknown content kind.');
     if (item.comp !== undefined) throw Error('A content leaf has no composition.');
     if (!validBox(item.box)) throw Error('Invalid content box.');
+    if (!validLines(item.lines) || (item.lines !== undefined && item.k !== 'text')) throw Error('Invalid wrapped line count.');
   };
   switch (value.form) {
     case 'root': {
@@ -172,6 +217,7 @@ export function validateTopology(value) {
       }
       if (!ROOT_PAYLOAD_FIELDS.includes(value.field)) throw Error('Unknown root payload field.');
       if (!validBox(value.box)) throw Error('Invalid content box.');
+      if (!validLines(value.lines) || (value.lines !== undefined && value.field !== 'text')) throw Error('Invalid wrapped line count.');
       return value;
     }
     case 'blocks':
@@ -201,6 +247,25 @@ const containsOrigin = (box, bounds) => bounds.x >= box[0] - BOX_TOLERANCE && bo
   && bounds.x <= box[0] + box[2] + BOX_TOLERANCE && bounds.y <= box[1] + box[3] + BOX_TOLERANCE;
 const contains = (box, bounds) => containsOrigin(box, bounds)
   && bounds.x + bounds.width <= box[0] + box[2] + BOX_TOLERANCE && bounds.y + bounds.height <= box[1] + box[3] + BOX_TOLERANCE;
+
+const textRuns = value => typeof value === 'string' || (Array.isArray(value) && value.length > 0 && value.every(run => object(run) && typeof run.text === 'string'));
+const sameRunStyle = (a, b) => JSON.stringify({...a, text: ''}) === JSON.stringify({...b, text: ''});
+// The lines' text joined in order. Runs are never invented or dropped; at a seam the
+// last run of one line and the first of the next merge when they differ only in text
+// (a run the wrap cut in two), the same way a rejoined list does.
+function joinWrappedText(parts) {
+  if (parts.every(part => typeof part === 'string')) return parts.join('');
+  const joined = [];
+  for (const part of parts) {
+    const runs = typeof part === 'string' ? [{text: part}] : part;
+    runs.forEach((run, position) => {
+      const last = joined.at(-1);
+      if (position === 0 && last && sameRunStyle(last, run)) last.text += run.text;
+      else joined.push({...run});
+    });
+  }
+  return joined;
+}
 
 /**
  * Rebuild the authored content form from the imported flat `blocks` and their
@@ -241,6 +306,18 @@ export function rebuildContent(topology, blocks, bounds) {
       const merged = {...blocks[leaf.matches[0]], items: leaf.matches.flatMap(index => blocks[index].items)};
       leaf.matches = [leaf.matches[0]];
       leaf.payload = merged;
+      continue;
+    }
+    // Rich text that wrapped exports one native line shape per soft wrap and
+    // imports as one text block per line. The record counted those lines at
+    // export (see softWrappedLines) and the slide's shapes are unchanged since
+    // (the structure hash was checked before this rebuild), so exactly that many
+    // text blocks in the leaf are its consecutive lines: they rejoin in reading
+    // order, with no separator, because a soft wrap deletes no characters.
+    if (leaf.kind === 'text' && leaf.node.lines === leaf.matches.length && leaf.matches.every(index => blocks[index]?.type === 'text' && textRuns(blocks[index].text))) {
+      const ordered = leaf.matches.map((index, position) => ({index, y: bounds[index].y, position})).sort((a, b) => a.y - b.y || a.position - b.position).map(entry => entry.index);
+      leaf.payload = {...blocks[ordered[0]], text: joinWrappedText(ordered.map(index => blocks[index].text))};
+      leaf.matches = [ordered[0]];
       continue;
     }
     return {reason: `${leaf.matches.length} blocks lie in one stored content box`};

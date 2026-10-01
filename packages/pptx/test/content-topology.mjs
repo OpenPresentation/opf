@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {unzipSync, zipSync} from 'fflate';
 import {toPptx, fromPptx} from '../dist/index.js';
-import {contentTopology, rebuildContent, validateTopology, REGION_KEYS, MAX_GROUP_DEPTH} from '../dist/content-topology.js';
+import {contentTopology, rebuildContent, validateTopology, softWrappedLines, REGION_KEYS, MAX_GROUP_DEPTH} from '../dist/content-topology.js';
 import {validatePresentation} from '@openpresentation/opf';
 
 // Spec-gap closure P1: a slide's content structure (nested groups, promoted
@@ -280,4 +280,126 @@ const roundTrip = async slide => {
   assert.deepEqual(rebuildContent({form: 'root', field: 'text', box: [0, 0, 10, 10]}, [], []), {fields: {blocks: null}, ids: []});
 }
 
-console.log('Content topology passed: nested groups, every region family, block ids and extensions, group composition, root payloads with slide type, side-by-side lists, edited geometry, box mismatches, damaged records, duplicated slides, pasted slides, provenance modes and the record contract.');
+
+// Wrapped text: a rich-text `text` payload that wraps exports one native line shape per soft wrap
+// (no names, no tags) and imports as one text block per line. The record counts the lines, so the
+// authored payload returns: runs concatenated in order, the wrap not turned into a break.
+{
+  const long = 'The quick brown fox jumps over the lazy dog and keeps running across the wide open field until the sun sets behind the distant hills and everyone goes home, and then it sleeps.';
+  const runs = [{text: 'Bold start ', bold: true}, {text: long}, {text: ' Italic end.', italic: true}];
+  const styled = value => JSON.parse(JSON.stringify(value, (key, item) => ['fontSize', 'fontFamily', 'color'].includes(key) ? undefined : item));
+  // Rich-text root: several native lines, one authored payload, no diagnostic.
+  const root = await roundTrip({text: runs});
+  assert.deepEqual(root.provenance, []);
+  assert.ok(root.record.content.lines >= 2, 'The record counts the exported lines.');
+  assert.equal(root.record.content.form, 'root');
+  assert.equal(JSON.stringify(root.record.content).includes('quick'), false, 'Still no words in the record.');
+  assert.equal(root.slide.blocks, undefined);
+  assert.deepEqual(styled(root.slide.text), runs);
+  // The count is the number of native line shapes.
+  const shapes = [...dec.decode(unzipSync(root.bytes)['ppt/slides/slide1.xml']).matchAll(/<p:cNvPr id="\d+" name="Text \d+"/g)];
+  assert.equal(shapes.length, root.record.content.lines);
+  // A plain string root already returns whole through its tagged lines.
+  const plain = await roundTrip({text: long});
+  assert.deepEqual(plain.provenance, []);
+  assert.equal(plain.slide.text, long);
+  // A wrapped text inside a nested group and inside a promoted region, beside unwrapped siblings.
+  const group = await roundTrip({blocks: [{type: 'group', id: 'g', blocks: [{type: 'text', text: runs}, {type: 'text', text: 'Short'}]}, {type: 'text', text: 'Outer'}]});
+  assert.deepEqual(group.provenance, []);
+  assert.equal(group.record.content.blocks[0].blocks[0].lines >= 2, true);
+  assert.equal(group.record.content.blocks[0].blocks[1].lines, undefined);
+  assert.deepEqual(styled(group.slide.blocks[0].blocks[0].text), runs);
+  assert.deepEqual(group.slide.blocks[0].blocks.slice(1).map(block => block.text), ['Short']);
+  assert.equal(group.slide.blocks[0].id, 'g');
+  assert.equal(group.slide.blocks[1].text, 'Outer');
+  const region = await roundTrip({left: {text: runs}, right: {text: 'Right'}});
+  assert.deepEqual(region.provenance, []);
+  assert.ok(region.record.content.regions.left.lines >= 3);
+  assert.deepEqual(styled(region.slide.left.text), runs);
+  assert.equal(region.slide.right.text, 'Right');
+  assert.equal(region.slide.blocks, undefined);
+  // With an id and extensions: the leaf identity comes back with the rejoined payload.
+  const typed = await roundTrip({blocks: [{id: 'body', type: 'text', text: runs, extensions: {'x-a': 1}}, {type: 'text', text: 'Next'}]});
+  assert.deepEqual(typed.provenance, []);
+  assert.deepEqual([typed.slide.blocks[0].id, typed.slide.blocks[0].type, typed.slide.blocks[0].extensions], ['body', 'text', {'x-a': 1}]);
+  assert.deepEqual(styled(typed.slide.blocks[0].text), runs);
+  // Single-line rich text carries no count.
+  const single = await roundTrip({text: [{text: 'Short ', bold: true}, {text: 'line'}]});
+  assert.equal(single.record.content.lines, undefined);
+  assert.deepEqual(single.provenance, []);
+  // A hard break between lines is not a soft wrap: nothing is marked, the lines are not joined and the
+  // slide keeps its flat blocks with the existing diagnostic (no newline is invented or dropped).
+  const hard = await roundTrip({text: [{text: 'First paragraph', bold: true}, {text: `\nSecond ${long}`}]});
+  assert.equal(hard.record.content.lines, undefined);
+  assert.deepEqual(hard.provenance.map(issue => [issue.code, issue.path]), [['content-structure-changed', 'slides.0']]);
+  assert.equal(hard.slide.text, undefined);
+  assert.ok(hard.slide.blocks.length >= 3);
+  assert.deepEqual(styled(hard.slide.blocks[0].text), [{text: 'First paragraph', bold: true}]);
+  // An edited deck: a deleted line changes the slide's shapes, so the stored structure is not applied
+  // (and nothing is rejoined from the lines that remain).
+  const lineName = /<p:sp>(?:(?!<\/p:sp>)[\s\S])*?name="Text 2"[\s\S]*?<\/p:sp>/;
+  const deleted = modify(root.bytes, entries => text(entries, 'ppt/slides/slide1.xml', xml => { assert.match(xml, lineName); return xml.replace(lineName, ''); }));
+  const edited = await read(deleted);
+  assert.deepEqual(edited.provenance.map(issue => [issue.code, issue.path]), [['slide-reference-changed', 'slides.0.content']]);
+  assert.equal(edited.deck.slides[0].text, undefined);
+  assert.equal(edited.deck.slides[0].blocks.length, root.record.content.lines - 1);
+  // A record whose count no longer matches the lines reports and keeps the flat blocks.
+  for (const lines of [root.record.content.lines + 1, root.record.content.lines - 1].filter(count => count >= 2)) {
+    const mismatch = modify(root.bytes, entries => text(entries, 'ppt/tags/opfSlide1.xml', xml => retag(xml, value => { value.content.lines = lines; })));
+    const result = await read(mismatch);
+    assert.deepEqual(result.provenance.map(issue => [issue.code, issue.path]), [['content-structure-changed', 'slides.0']], `count ${lines}`);
+    assert.match(result.provenance[0].message, new RegExp(`${root.record.content.lines} blocks lie in one stored content box`));
+    assert.equal(result.deck.slides[0].text, undefined);
+    assert.equal(result.deck.slides[0].blocks.length, root.record.content.lines);
+  }
+  // Edited text keeps its place: the current native words return, joined in order.
+  const retyped = modify(root.bytes, entries => text(entries, 'ppt/slides/slide1.xml', xml => xml.replace('open field', 'closed field')));
+  const retypedResult = await read(retyped);
+  assert.deepEqual(retypedResult.provenance, []);
+  assert.equal(retypedResult.deck.slides[0].text.map(run => run.text).join('').includes('closed field'), true);
+  // Damaged counts reject the slide tag as a whole.
+  for (const [name, mutate] of Object.entries({
+    'one line': value => { value.content.lines = 1; },
+    'fraction': value => { value.content.lines = 2.5; },
+    'string': value => { value.content.lines = '2'; },
+    'huge': value => { value.content.lines = 100000; },
+    'not text': value => { value.content.field = 'items'; }
+  })) {
+    const damaged = await read(modify(root.bytes, entries => text(entries, 'ppt/tags/opfSlide1.xml', xml => retag(xml, mutate))));
+    assert.deepEqual(damaged.provenance.map(issue => [issue.code, issue.path]), [['invalid-document-provenance', 'slides.0']], name);
+  }
+  assert.throws(() => validateTopology({form: 'blocks', blocks: [{t: 'leaf', k: 'list', lines: 2}]}), /wrapped line count/);
+  assert.throws(() => validateTopology({form: 'root', fields: [{field: 'items', lines: 2}]}), /root payload fields/);
+  assert.equal(validateTopology({form: 'blocks', blocks: [{t: 'leaf', k: 'text', lines: 2, box: [0, 0, 1, 1]}]}).blocks[0].lines, 2);
+}
+
+// Unit contract of the soft-wrap count and the rejoin.
+{
+  const item = (value, lines) => ({field: 'text', value, text: {richLines: lines.map(parts => ({fragments: parts.map(part => ({text: part}))}))}});
+  const runs = [{text: 'Hello '}, {text: 'bold world ', bold: true}, {text: 'again'}];
+  assert.equal(softWrappedLines(item(runs, [['Hello ', 'bold '], ['world ', 'aga'], ['in']])), 3);
+  assert.equal(softWrappedLines(item('abc def', [['abc '], ['def']])), 2);
+  assert.equal(softWrappedLines(item('abc def', [['abc def']])), undefined, 'One line carries no count.');
+  assert.equal(softWrappedLines(item('abc\ndef', [['abc'], ['def']])), undefined, 'A dropped newline is a hard break.');
+  assert.equal(softWrappedLines(item('abc  def', [['abc '], ['def']])), undefined, 'Collapsed whitespace is not a soft wrap.');
+  assert.equal(softWrappedLines(item('abc def', [['abc '], ['de']])), undefined, 'Dropped characters at the end.');
+  assert.equal(softWrappedLines(item('abc def', [['abc '], [], ['def']])), undefined, 'A blank line.');
+  assert.equal(softWrappedLines({...item('abc def', [['abc '], ['def']]), field: 'quote'}), undefined);
+  assert.equal(softWrappedLines(item([{text: 1}], [['1'], ['2']])), undefined);
+  // Rejoin: runs a wrap cut in two merge at the seam; other runs stay.
+  const at = y => ({x: 0, y, width: 100, height: 10});
+  const leaf = {form: 'root', field: 'text', box: [0, 0, 100, 100], lines: 3};
+  const lines = [{type: 'text', text: [{text: 'Hello ', fontSize: 12}, {text: 'bold ', bold: true, fontSize: 12}]}, {type: 'text', text: [{text: 'world ', bold: true, fontSize: 12}, {text: 'again', fontSize: 12}]}, {type: 'text', text: [{text: ' and more', fontSize: 12}]}];
+  assert.deepEqual(rebuildContent(leaf, lines, [at(0), at(10), at(20)]).fields.text, [{text: 'Hello ', fontSize: 12}, {text: 'bold world ', bold: true, fontSize: 12}, {text: 'again and more', fontSize: 12}]);
+  // Reading order within the leaf is the top-to-bottom order of the lines, whatever order the blocks arrived in.
+  assert.deepEqual(rebuildContent(leaf, [lines[1], lines[2], lines[0]], [at(10), at(20), at(0)]).fields.text.map(run => run.text), ['Hello ', 'bold world ', 'again and more']);
+  assert.equal(rebuildContent({...leaf, lines: 2}, [{type: 'text', text: 'abc '}, {type: 'text', text: 'def'}], [at(0), at(10)]).fields.text, 'abc def');
+  assert.deepEqual(rebuildContent({...leaf, lines: 2}, [{type: 'text', text: [{text: 'abc '}]}, {type: 'text', text: 'def'}], [at(0), at(10)]).fields.text, [{text: 'abc def'}]);
+  // Not provable: a different count, an unmarked leaf, a list block, or a payload that is not text keeps the reason.
+  assert.match(rebuildContent({...leaf, lines: 2}, lines, [at(0), at(10), at(20)]).reason, /3 blocks lie in one stored content box/);
+  assert.match(rebuildContent({...leaf, lines: undefined}, lines, [at(0), at(10), at(20)]).reason, /3 blocks lie in one stored content box/);
+  assert.match(rebuildContent({...leaf, lines: 2}, [lines[0], {type: 'list', items: ['x']}], [at(0), at(10)]).reason, /2 blocks lie in one stored content box/);
+  assert.match(rebuildContent({...leaf, lines: 2}, [lines[0], {type: 'text', text: 5}], [at(0), at(10)]).reason, /2 blocks lie in one stored content box/);
+}
+
+console.log('Content topology passed: nested groups, every region family, block ids and extensions, group composition, root payloads with slide type, side-by-side lists, rich text that wraps over several native lines (root, group, region), edited geometry, box mismatches, damaged records, duplicated slides, pasted slides, provenance modes and the record contract.');
