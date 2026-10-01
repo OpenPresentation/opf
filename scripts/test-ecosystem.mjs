@@ -74,7 +74,8 @@ assert.equal(imported.slides.length,deck.slides.length);
 for(const [index,slide]of imported.slides.entries()) {
   const items=resolved.slides[index].geometry.items;
   const spatialOrder=items.filter(item=>item.field==='text').sort((a,b)=>a.box.y-b.box.y||a.box.x-b.box.x);
-  assert.deepEqual(slide.blocks?.map(block=>block.text)??[],spatialOrder.map(item=>item.value),'Native line groups reconstruct exact current body source in spatial order');
+  // opf-pptx with content topology (0.11.7) restores the authored root form (slides.N.text); older importers return text blocks.
+  assert.deepEqual(slide.blocks?.map(block=>block.text)??(typeof slide.text==='string'?slide.text.split('\n'):[]),spatialOrder.map(item=>item.value),'Native line groups reconstruct exact current body source in spatial order');
   for(const item of items.filter(item=>['title','subtitle','tag'].includes(item.field)))assert.equal(slide[item.field],item.value,'Native heading groups reconstruct exact current source');
 }
 const portrait={design:{dimensions:{widthInches:7.5,heightInches:40/3}},slides:[{title:'Portrait',text:'A custom physical canvas.'}]};
