@@ -21,7 +21,7 @@
     "tsup": "^8.5.1",
     "typescript": "~5.9.3",
     "@openpresentation/opf": "workspace:*",
-    "@openpresentation/opf-pptx": "0.11.8",
+    "@openpresentation/opf-pptx": "0.11.9",
     "@openpresentation/opf-render": "0.11.9"
   },
   "files": [
@@ -30,7 +30,7 @@
     "LICENSE"
   ],
   "peerDependencies": {
-    "@openpresentation/opf-pptx": "^0.11.8",
+    "@openpresentation/opf-pptx": "^0.11.9",
     "@openpresentation/opf-render": "^0.11.9"
   },
   "peerDependenciesMeta": {
