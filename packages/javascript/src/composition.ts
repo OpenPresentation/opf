@@ -1,4 +1,5 @@
 import {tableGrid,type TableCellStyle} from './table.js';
+import {intrinsicImageAspect} from './image-aspect.js';
 import {DEFAULT_FURNITURE_DATE_FORMAT,DEFAULT_SLIDE_NUMBER_FORMAT,formatFurnitureDate,formatSlideNumber,parseIsoDate,type FurnitureField} from './furniture-fields.js';
 export {DEFAULT_FURNITURE_DATE_FORMAT,DEFAULT_SLIDE_NUMBER_FORMAT,formatFurnitureDate,formatSlideNumber,type FurnitureField} from './furniture-fields.js';
 export {tableGrid,tableRowBoundaries,type TableCellStyle,type TableBorder,type TableGrid,type TableGridCell,type TableGridIssue} from './table.js';
@@ -667,15 +668,21 @@ export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {
         if(accepted.overflow)error(partPath,'Repeated text exceeds its zone at the selected readability floor; change the furniture or slide design.');
         y+=box.height;
       };
-      const imageBox=()=>({x,y,width:zoneWidth,height:Math.max(32*scale,Math.min(height*.05,72*scale))});
+      // An image or logo part is as wide as its own aspect ratio makes it at the band height (a square when
+      // the source's dimensions are not readable), capped at the zone, and aligns like the zone's text: left zone to
+      // its left edge, center zone centered, right zone to its right edge. Consumers fit the image inside this box.
+      const imageBox=(source:unknown)=>{
+        const imageHeight=Math.max(32*scale,Math.min(height*.05,72*scale)),imageWidth=Math.min(zoneWidth,imageHeight*(intrinsicImageAspect(source,record(options.presentation).assets)??1));
+        return {x:zone==='left'?x:zone==='center'?x+(zoneWidth-imageWidth)/2:x+zoneWidth-imageWidth,y,width:imageWidth,height:imageHeight};
+      };
       if(content.logo===true){
         // The deck's icon logo (slide design, deck design, then the primary organization), as a generated image part.
         const resolved=resolveLogo(options.presentation,slide,{slot:'icon',onDark:options.darkBackground,slideIndex:options.slideIndex});
-        if(resolved){const box=imageBox();zoneParts.push({type:'image',kind,zone,field:'logo',path:`${path}.logo`,sourcePath:resolved.path,generated:true,image:resolved.source,box,alignment:zone});y+=box.height;}
+        if(resolved){const box=imageBox(resolved.source);zoneParts.push({type:'image',kind,zone,field:'logo',path:`${path}.logo`,sourcePath:resolved.path,generated:true,image:resolved.source,box,alignment:zone});y+=box.height;}
         else error(`${path}.logo`,'Generated logo needs design.logo or a primary organization logo.','unresolved-content');
       }
       if(content.image!==undefined){
-        const box=imageBox();
+        const box=imageBox(content.image);
         zoneParts.push({type:'image',kind,zone,field:'image',path:`${path}.image`,sourcePath:`${path}.image`,generated:false,image:content.image,box,alignment:zone});y+=box.height;
       }
       add('text',content.text);
@@ -1552,12 +1559,22 @@ export interface ListEntryLayout {
   text:RichTextFit; description?:RichTextFit;
   textBox:LayoutBox; descriptionBox?:LayoutBox;
   marker:{text:string;x:number;y:number;fontSize:number;style:TextStyle;indent:number};
-  /**
-   * Picture bullet replacing the marker glyph: a square of side `marker.fontSize` whose bottom sits on
-   * the marker baseline (`marker.y`) and whose left edge is `marker.x`. Marker geometry is unchanged.
-   */
+  /** Picture bullet replacing the marker glyph; drawn in `bulletBox`. Marker geometry is unchanged. */
   bulletImage?:ListBulletImage;
+  /**
+   * Where the picture bullet draws: a square of side `marker.fontSize * PICTURE_BULLET_SCALE` whose
+   * bottom sits on the marker baseline (`marker.y`) and whose left edge is `marker.x`. Present with `bulletImage`.
+   */
+  bulletBox?:LayoutBox;
 }
+/**
+ * Side of a picture bullet as a fraction of the list font size. Desktop PowerPoint sizes an `a:buBlip` at
+ * `a:buSzPct 100000` (what opf-pptx writes) as a square about 0.65 times the run's font size, bottom on the
+ * text baseline and left at the bullet position, in every typeface: measured widths of 10, 15, 16, 20 and 31
+ * pixels at font sizes of 16, 24, 25, 32 and 48 pixels (0.625 to 0.646; heights run about a pixel more from
+ * anti-aliasing, so the true side is about 0.65). The export needs no size: PowerPoint sizes the bullet itself.
+ */
+export const PICTURE_BULLET_SCALE=0.65;
 export interface ListFit extends TextFit { listEntries:ListEntryLayout[]; height:number }
 export interface ListFitOptions extends RichTextOptions {
   /** Picture bullet for every entry (effective `design.listBullet: "image"` with a resolved icon logo). */
@@ -1592,9 +1609,9 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=2
         descriptionBox.height=description.height;lines.push(...description.lines);y+=description.height;
       }
       overflow ||= text.overflow||!!description?.overflow;
-      entries.push({index:item.index,level:item.level,value:item.value,descriptionValue:item.descriptionValue,textPath:item.textPath,descriptionPath:item.descriptionPath,text,textBox,description,descriptionBox,
-        marker:{text:['•','◦','▪'][item.level%3]!,x:box.x+offset,y:textBox.y+(text.richLines[0]?.baseline??fontSize),fontSize,style:resolveTextStyle(style,options.textMeasurement),indent},
-        ...(options.bulletImage?{bulletImage:options.bulletImage}:{})});
+      const marker={text:['•','◦','▪'][item.level%3]!,x:box.x+offset,y:textBox.y+(text.richLines[0]?.baseline??fontSize),fontSize,style:resolveTextStyle(style,options.textMeasurement),indent},side=fontSize*PICTURE_BULLET_SCALE;
+      entries.push({index:item.index,level:item.level,value:item.value,descriptionValue:item.descriptionValue,textPath:item.textPath,descriptionPath:item.descriptionPath,text,textBox,description,descriptionBox,marker,
+        ...(options.bulletImage?{bulletImage:options.bulletImage,bulletBox:{x:marker.x,y:marker.y-side,width:side,height:side}}:{})});
       if(item.index<source.length-1)y+=fontSize*.28;
     }
     const height=y-box.y;
