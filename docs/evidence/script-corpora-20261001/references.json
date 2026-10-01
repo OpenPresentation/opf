@@ -1,0 +1,3594 @@
+{
+  "measuredAt": "2026-10-01T17:59:41.144Z",
+  "host": {
+    "platform": "win32"
+  },
+  "method": "fontkit 2.0.4 shaping (the renderer's measurement) of every corpus sample of the family's script at 100 px in the installed original and in its designated open replacement; widthRatio = replacement / original; samples the original lacks glyphs for are skipped",
+  "families": [
+    {
+      "family": "Yu Gothic",
+      "script": "Jpan",
+      "replacement": "Noto Sans JP",
+      "policyCompatibility": "visual",
+      "styles": [
+        {
+          "weight": 400,
+          "file": "YuGothR.ttc",
+          "sha256": "cd24b5617c1e26572b0a7fe7e558f7121ca42c36f7b50e8d9216ac222a1c0a93",
+          "version": "Version 1.95",
+          "postscriptName": "YuGothic-Regular",
+          "lineMetrics": {
+            "unitsPerEm": 2048,
+            "hhea": {
+              "ascent": 0.88,
+              "descent": -0.222,
+              "lineGap": 0.5
+            },
+            "typo": {
+              "ascent": 0.88,
+              "descent": -0.12,
+              "lineGap": 0.5
+            },
+            "win": {
+              "ascent": 0.985,
+              "descent": 0.302
+            },
+            "useTypoMetrics": false,
+            "xHeight": 0.522,
+            "capHeight": 0.751
+          },
+          "replacementLineMetrics": {
+            "unitsPerEm": 1000,
+            "hhea": {
+              "ascent": 1.16,
+              "descent": -0.288,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 0.88,
+              "descent": -0.12,
+              "lineGap": 0
+            },
+            "win": {
+              "ascent": 1.16,
+              "descent": 0.288
+            },
+            "useTypoMetrics": false,
+            "xHeight": 0.543,
+            "capHeight": 0.733
+          },
+          "samples": 7,
+          "skipped": 0,
+          "meanSignedDelta": -0.0141,
+          "meanAbsDelta": 0.0149,
+          "maxAbsDelta": 0.0412,
+          "rows": [
+            {
+              "id": "jpan-sentence",
+              "original": 2305.22,
+              "replacement": 2311,
+              "widthRatio": 1.0025
+            },
+            {
+              "id": "jpan-prolonged",
+              "original": 1893.6,
+              "replacement": 1855.8,
+              "widthRatio": 0.98
+            },
+            {
+              "id": "jpan-halfwidth",
+              "original": 707.03,
+              "replacement": 694.8,
+              "widthRatio": 0.9827
+            },
+            {
+              "id": "jpan-punctuation",
+              "original": 1800,
+              "replacement": 1800,
+              "widthRatio": 1
+            },
+            {
+              "id": "jpan-combining-dakuten",
+              "original": 742.58,
+              "replacement": 712,
+              "widthRatio": 0.9588
+            },
+            {
+              "id": "jpan-mixed-latin",
+              "original": 1365.43,
+              "replacement": 1334,
+              "widthRatio": 0.977
+            },
+            {
+              "id": "jpan-no-spaces",
+              "original": 3463.96,
+              "replacement": 3465,
+              "widthRatio": 1.0003
+            }
+          ]
+        },
+        {
+          "weight": 700,
+          "file": "YuGothB.ttc",
+          "sha256": "d923a57f781f06198167da4f58287be7ac64a954a47aff4295e078a42b4b68b2",
+          "version": "Version 1.95",
+          "postscriptName": "YuGothic-Bold",
+          "lineMetrics": {
+            "unitsPerEm": 2048,
+            "hhea": {
+              "ascent": 0.88,
+              "descent": -0.222,
+              "lineGap": 0.5
+            },
+            "typo": {
+              "ascent": 0.88,
+              "descent": -0.12,
+              "lineGap": 0.5
+            },
+            "win": {
+              "ascent": 0.988,
+              "descent": 0.299
+            },
+            "useTypoMetrics": false,
+            "xHeight": 0.547,
+            "capHeight": 0.774
+          },
+          "replacementLineMetrics": {
+            "unitsPerEm": 1000,
+            "hhea": {
+              "ascent": 1.16,
+              "descent": -0.288,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 0.88,
+              "descent": -0.12,
+              "lineGap": 0
+            },
+            "win": {
+              "ascent": 1.16,
+              "descent": 0.288
+            },
+            "useTypoMetrics": false,
+            "xHeight": 0.543,
+            "capHeight": 0.733
+          },
+          "samples": 7,
+          "skipped": 0,
+          "meanSignedDelta": -0.0122,
+          "meanAbsDelta": 0.0135,
+          "maxAbsDelta": 0.0392,
+          "rows": [
+            {
+              "id": "jpan-sentence",
+              "original": 2308.64,
+              "replacement": 2318,
+              "widthRatio": 1.0041
+            },
+            {
+              "id": "jpan-prolonged",
+              "original": 1893.6,
+              "replacement": 1857.9,
+              "widthRatio": 0.9811
+            },
+            {
+              "id": "jpan-halfwidth",
+              "original": 707.03,
+              "replacement": 695.4,
+              "widthRatio": 0.9835
+            },
+            {
+              "id": "jpan-punctuation",
+              "original": 1800,
+              "replacement": 1800,
+              "widthRatio": 1
+            },
+            {
+              "id": "jpan-combining-dakuten",
+              "original": 742.58,
+              "replacement": 713.5,
+              "widthRatio": 0.9608
+            },
+            {
+              "id": "jpan-mixed-latin",
+              "original": 1386.47,
+              "replacement": 1365,
+              "widthRatio": 0.9845
+            },
+            {
+              "id": "jpan-no-spaces",
+              "original": 3463.96,
+              "replacement": 3465,
+              "widthRatio": 1.0003
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "family": "MS Gothic",
+      "script": "Jpan",
+      "replacement": "Noto Sans JP",
+      "policyCompatibility": "visual",
+      "styles": [
+        {
+          "weight": 400,
+          "file": "msgothic.ttc",
+          "sha256": "4bde3e6392b96910fb59094c6c1a4dbfae18fee78d0bf13dc30616837c4f95db",
+          "version": "Version 5.32",
+          "postscriptName": "MS-Gothic",
+          "lineMetrics": {
+            "unitsPerEm": 256,
+            "hhea": {
+              "ascent": 0.859,
+              "descent": -0.141,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 0.859,
+              "descent": -0.141,
+              "lineGap": 0
+            },
+            "win": {
+              "ascent": 0.859,
+              "descent": 0.141
+            },
+            "useTypoMetrics": false,
+            "xHeight": 0.449,
+            "capHeight": 0.68
+          },
+          "replacementLineMetrics": {
+            "unitsPerEm": 1000,
+            "hhea": {
+              "ascent": 1.16,
+              "descent": -0.288,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 0.88,
+              "descent": -0.12,
+              "lineGap": 0
+            },
+            "win": {
+              "ascent": 1.16,
+              "descent": 0.288
+            },
+            "useTypoMetrics": false,
+            "xHeight": 0.543,
+            "capHeight": 0.733
+          },
+          "samples": 7,
+          "skipped": 0,
+          "meanSignedDelta": -0.0497,
+          "meanAbsDelta": 0.0511,
+          "maxAbsDelta": 0.1624,
+          "rows": [
+            {
+              "id": "jpan-sentence",
+              "original": 2300,
+              "replacement": 2311,
+              "widthRatio": 1.0048
+            },
+            {
+              "id": "jpan-prolonged",
+              "original": 2050,
+              "replacement": 1855.8,
+              "widthRatio": 0.9053
+            },
+            {
+              "id": "jpan-halfwidth",
+              "original": 750,
+              "replacement": 694.8,
+              "widthRatio": 0.9264
+            },
+            {
+              "id": "jpan-punctuation",
+              "original": 1800,
+              "replacement": 1800,
+              "widthRatio": 1
+            },
+            {
+              "id": "jpan-combining-dakuten",
+              "original": 850,
+              "replacement": 712,
+              "widthRatio": 0.8376
+            },
+            {
+              "id": "jpan-mixed-latin",
+              "original": 1350,
+              "replacement": 1334,
+              "widthRatio": 0.9881
+            },
+            {
+              "id": "jpan-no-spaces",
+              "original": 3500,
+              "replacement": 3465,
+              "widthRatio": 0.99
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "family": "Microsoft YaHei",
+      "script": "Hans",
+      "replacement": "Noto Sans SC",
+      "policyCompatibility": "visual",
+      "styles": [
+        {
+          "weight": 400,
+          "file": "msyh.ttc",
+          "sha256": "d79c55e68b1131eea0cc1c47be4f572d964f28c682e143db2ad09c1e4cb07a3f",
+          "version": "Version 6.31",
+          "postscriptName": "MicrosoftYaHei",
+          "lineMetrics": {
+            "unitsPerEm": 2048,
+            "hhea": {
+              "ascent": 1.058,
+              "descent": -0.262,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 0.812,
+              "descent": -0.253,
+              "lineGap": 0.004
+            },
+            "win": {
+              "ascent": 1.058,
+              "descent": 0.262
+            },
+            "useTypoMetrics": false,
+            "xHeight": 0.54,
+            "capHeight": 0.756
+          },
+          "replacementLineMetrics": {
+            "unitsPerEm": 1000,
+            "hhea": {
+              "ascent": 1.16,
+              "descent": -0.288,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 0.88,
+              "descent": -0.12,
+              "lineGap": 0
+            },
+            "win": {
+              "ascent": 1.16,
+              "descent": 0.288
+            },
+            "useTypoMetrics": false,
+            "xHeight": 0.543,
+            "capHeight": 0.733
+          },
+          "samples": 4,
+          "skipped": 0,
+          "meanSignedDelta": -0.0128,
+          "meanAbsDelta": 0.0128,
+          "maxAbsDelta": 0.0512,
+          "rows": [
+            {
+              "id": "hans-sentence",
+              "original": 1800,
+              "replacement": 1800,
+              "widthRatio": 1
+            },
+            {
+              "id": "hans-punctuation",
+              "original": 1900,
+              "replacement": 1900,
+              "widthRatio": 1
+            },
+            {
+              "id": "hans-mixed-latin",
+              "original": 1055.66,
+              "replacement": 1001.6,
+              "widthRatio": 0.9488
+            },
+            {
+              "id": "hans-no-spaces",
+              "original": 2500,
+              "replacement": 2500,
+              "widthRatio": 1
+            }
+          ]
+        },
+        {
+          "weight": 700,
+          "file": "msyhbd.ttc",
+          "sha256": "4508821b3dffe01f0ef5e5326a3e60df705a44633858811f67b6982dce3f6ee6",
+          "version": "Version 6.31",
+          "postscriptName": "MicrosoftYaHei-Bold",
+          "lineMetrics": {
+            "unitsPerEm": 2048,
+            "hhea": {
+              "ascent": 1.058,
+              "descent": -0.262,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 0.812,
+              "descent": -0.253,
+              "lineGap": 0.004
+            },
+            "win": {
+              "ascent": 1.058,
+              "descent": 0.262
+            },
+            "useTypoMetrics": false,
+            "xHeight": 0.54,
+            "capHeight": 0.756
+          },
+          "replacementLineMetrics": {
+            "unitsPerEm": 1000,
+            "hhea": {
+              "ascent": 1.16,
+              "descent": -0.288,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 0.88,
+              "descent": -0.12,
+              "lineGap": 0
+            },
+            "win": {
+              "ascent": 1.16,
+              "descent": 0.288
+            },
+            "useTypoMetrics": false,
+            "xHeight": 0.543,
+            "capHeight": 0.733
+          },
+          "samples": 4,
+          "skipped": 0,
+          "meanSignedDelta": -0.0115,
+          "meanAbsDelta": 0.0115,
+          "maxAbsDelta": 0.0459,
+          "rows": [
+            {
+              "id": "hans-sentence",
+              "original": 1800,
+              "replacement": 1800,
+              "widthRatio": 1
+            },
+            {
+              "id": "hans-punctuation",
+              "original": 1900,
+              "replacement": 1900,
+              "widthRatio": 1
+            },
+            {
+              "id": "hans-mixed-latin",
+              "original": 1090.63,
+              "replacement": 1040.6,
+              "widthRatio": 0.9541
+            },
+            {
+              "id": "hans-no-spaces",
+              "original": 2500,
+              "replacement": 2500,
+              "widthRatio": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "family": "SimSun",
+      "script": "Hans",
+      "replacement": "Noto Sans SC",
+      "policyCompatibility": "visual",
+      "styles": [
+        {
+          "weight": 400,
+          "file": "simsun.ttc",
+          "sha256": "1526ac24375f51f6eb73bc2d3f8072dbe4a80a3a65217677c9d9a84f67dab2ab",
+          "version": "Version 5.24",
+          "postscriptName": "SimSun",
+          "lineMetrics": {
+            "unitsPerEm": 256,
+            "hhea": {
+              "ascent": 0.859,
+              "descent": -0.141,
+              "lineGap": 0.141
+            },
+            "typo": {
+              "ascent": 0.859,
+              "descent": -0.141,
+              "lineGap": 0.141
+            },
+            "win": {
+              "ascent": 0.859,
+              "descent": 0.141
+            },
+            "useTypoMetrics": false,
+            "xHeight": 0.453,
+            "capHeight": 0.684
+          },
+          "replacementLineMetrics": {
+            "unitsPerEm": 1000,
+            "hhea": {
+              "ascent": 1.16,
+              "descent": -0.288,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 0.88,
+              "descent": -0.12,
+              "lineGap": 0
+            },
+            "win": {
+              "ascent": 1.16,
+              "descent": 0.288
+            },
+            "useTypoMetrics": false,
+            "xHeight": 0.543,
+            "capHeight": 0.733
+          },
+          "samples": 4,
+          "skipped": 0,
+          "meanSignedDelta": -0.0115,
+          "meanAbsDelta": 0.0115,
+          "maxAbsDelta": 0.0461,
+          "rows": [
+            {
+              "id": "hans-sentence",
+              "original": 1800,
+              "replacement": 1800,
+              "widthRatio": 1
+            },
+            {
+              "id": "hans-punctuation",
+              "original": 1900,
+              "replacement": 1900,
+              "widthRatio": 1
+            },
+            {
+              "id": "hans-mixed-latin",
+              "original": 1050,
+              "replacement": 1001.6,
+              "widthRatio": 0.9539
+            },
+            {
+              "id": "hans-no-spaces",
+              "original": 2500,
+              "replacement": 2500,
+              "widthRatio": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "family": "Microsoft JhengHei",
+      "script": "Hant",
+      "replacement": "Noto Sans TC",
+      "policyCompatibility": "visual",
+      "styles": [
+        {
+          "weight": 400,
+          "file": "msjh.ttc",
+          "sha256": "1fd5fc7046e0eea753988ee06d1a5a731df68475614e2174fbba9b4800f392ac",
+          "version": "Version 6.15",
+          "postscriptName": "MicrosoftJhengHeiRegular",
+          "lineMetrics": {
+            "unitsPerEm": 2048,
+            "hhea": {
+              "ascent": 1.076,
+              "descent": -0.254,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 0.89,
+              "descent": -0.11,
+              "lineGap": 0
+            },
+            "win": {
+              "ascent": 1.076,
+              "descent": 0.254
+            },
+            "useTypoMetrics": false,
+            "xHeight": 0.54,
+            "capHeight": 0.756
+          },
+          "replacementLineMetrics": {
+            "unitsPerEm": 1000,
+            "hhea": {
+              "ascent": 1.16,
+              "descent": -0.288,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 0.88,
+              "descent": -0.12,
+              "lineGap": 0
+            },
+            "win": {
+              "ascent": 1.16,
+              "descent": 0.288
+            },
+            "useTypoMetrics": false,
+            "xHeight": 0.543,
+            "capHeight": 0.733
+          },
+          "samples": 4,
+          "skipped": 0,
+          "meanSignedDelta": -0.0333,
+          "meanAbsDelta": 0.0333,
+          "maxAbsDelta": 0.1061,
+          "rows": [
+            {
+              "id": "hant-sentence",
+              "original": 1600,
+              "replacement": 1600,
+              "widthRatio": 1
+            },
+            {
+              "id": "hant-punctuation",
+              "original": 2400,
+              "replacement": 2400,
+              "widthRatio": 1
+            },
+            {
+              "id": "hant-bopomofo",
+              "original": 1675,
+              "replacement": 1497.2,
+              "widthRatio": 0.8939
+            },
+            {
+              "id": "hant-mixed-latin",
+              "original": 1029.35,
+              "replacement": 1001.6,
+              "widthRatio": 0.973
+            }
+          ]
+        },
+        {
+          "weight": 700,
+          "file": "msjhbd.ttc",
+          "sha256": "7d55cd4801102131d991630cea74534dcf73a9fabf4a33e54fe05dfb4f5aa790",
+          "version": "Version 6.15",
+          "postscriptName": "MicrosoftJhengHeiBold",
+          "lineMetrics": {
+            "unitsPerEm": 2048,
+            "hhea": {
+              "ascent": 1.076,
+              "descent": -0.254,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 0.89,
+              "descent": -0.11,
+              "lineGap": 0
+            },
+            "win": {
+              "ascent": 1.076,
+              "descent": 0.254
+            },
+            "useTypoMetrics": false,
+            "xHeight": 0.54,
+            "capHeight": 0.756
+          },
+          "replacementLineMetrics": {
+            "unitsPerEm": 1000,
+            "hhea": {
+              "ascent": 1.16,
+              "descent": -0.288,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 0.88,
+              "descent": -0.12,
+              "lineGap": 0
+            },
+            "win": {
+              "ascent": 1.16,
+              "descent": 0.288
+            },
+            "useTypoMetrics": false,
+            "xHeight": 0.543,
+            "capHeight": 0.733
+          },
+          "samples": 4,
+          "skipped": 0,
+          "meanSignedDelta": -0.0281,
+          "meanAbsDelta": 0.0281,
+          "maxAbsDelta": 0.1056,
+          "rows": [
+            {
+              "id": "hant-sentence",
+              "original": 1600,
+              "replacement": 1600,
+              "widthRatio": 1
+            },
+            {
+              "id": "hant-punctuation",
+              "original": 2400,
+              "replacement": 2400,
+              "widthRatio": 1
+            },
+            {
+              "id": "hant-bopomofo",
+              "original": 1675,
+              "replacement": 1498.1,
+              "widthRatio": 0.8944
+            },
+            {
+              "id": "hant-mixed-latin",
+              "original": 1047.75,
+              "replacement": 1040.6,
+              "widthRatio": 0.9932
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "family": "Malgun Gothic",
+      "script": "Kore",
+      "replacement": "Noto Sans KR",
+      "policyCompatibility": "visual",
+      "styles": [
+        {
+          "weight": 400,
+          "file": "malgun.ttf",
+          "sha256": "7a183cf1c6c56b9609fcc16eda8b5229fbc11758a21e669ec00343239b02192f",
+          "version": "Version 6.69",
+          "postscriptName": "MalgunGothic",
+          "lineMetrics": {
+            "unitsPerEm": 2048,
+            "hhea": {
+              "ascent": 1.088,
+              "descent": -0.242,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 0.8,
+              "descent": -0.2,
+              "lineGap": 0
+            },
+            "win": {
+              "ascent": 1.088,
+              "descent": 0.242
+            },
+            "useTypoMetrics": false,
+            "xHeight": 0.513,
+            "capHeight": 0.718
+          },
+          "replacementLineMetrics": {
+            "unitsPerEm": 1000,
+            "hhea": {
+              "ascent": 1.16,
+              "descent": -0.288,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 0.88,
+              "descent": -0.12,
+              "lineGap": 0
+            },
+            "win": {
+              "ascent": 1.16,
+              "descent": 0.288
+            },
+            "useTypoMetrics": false,
+            "xHeight": 0.543,
+            "capHeight": 0.733
+          },
+          "samples": 4,
+          "skipped": 0,
+          "meanSignedDelta": -0.059,
+          "meanAbsDelta": 0.059,
+          "maxAbsDelta": 0.09,
+          "rows": [
+            {
+              "id": "kore-sentence",
+              "original": 2464.84,
+              "replacement": 2266.8,
+              "widthRatio": 0.9197
+            },
+            {
+              "id": "kore-jamo",
+              "original": 435.16,
+              "replacement": 396,
+              "widthRatio": 0.91
+            },
+            {
+              "id": "kore-hanja",
+              "original": 1331.25,
+              "replacement": 1291.6,
+              "widthRatio": 0.9702
+            },
+            {
+              "id": "kore-mixed-latin",
+              "original": 1103.42,
+              "replacement": 1064,
+              "widthRatio": 0.9643
+            }
+          ]
+        },
+        {
+          "weight": 700,
+          "file": "malgunbd.ttf",
+          "sha256": "e8cbc0b2afcc14fb45dfb6086d5102c0b23a96e7b6e708f3122acde1b86c9082",
+          "version": "Version 6.69",
+          "postscriptName": "MalgunGothicBold",
+          "lineMetrics": {
+            "unitsPerEm": 2048,
+            "hhea": {
+              "ascent": 1.088,
+              "descent": -0.242,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 0.8,
+              "descent": -0.2,
+              "lineGap": 0
+            },
+            "win": {
+              "ascent": 1.088,
+              "descent": 0.242
+            },
+            "useTypoMetrics": false,
+            "xHeight": 0.513,
+            "capHeight": 0.718
+          },
+          "replacementLineMetrics": {
+            "unitsPerEm": 1000,
+            "hhea": {
+              "ascent": 1.16,
+              "descent": -0.288,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 0.88,
+              "descent": -0.12,
+              "lineGap": 0
+            },
+            "win": {
+              "ascent": 1.16,
+              "descent": 0.288
+            },
+            "useTypoMetrics": false,
+            "xHeight": 0.543,
+            "capHeight": 0.733
+          },
+          "samples": 4,
+          "skipped": 0,
+          "meanSignedDelta": -0.0577,
+          "meanAbsDelta": 0.0577,
+          "maxAbsDelta": 0.09,
+          "rows": [
+            {
+              "id": "kore-sentence",
+              "original": 2479.2,
+              "replacement": 2283.2,
+              "widthRatio": 0.9209
+            },
+            {
+              "id": "kore-jamo",
+              "original": 435.16,
+              "replacement": 396,
+              "widthRatio": 0.91
+            },
+            {
+              "id": "kore-hanja",
+              "original": 1341.89,
+              "replacement": 1299.6,
+              "widthRatio": 0.9685
+            },
+            {
+              "id": "kore-mixed-latin",
+              "original": 1136.04,
+              "replacement": 1101.8,
+              "widthRatio": 0.9699
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "family": "Arabic Typesetting",
+      "script": "Arab",
+      "replacement": "Noto Naskh Arabic",
+      "policyCompatibility": "visual",
+      "styles": [
+        {
+          "weight": 400,
+          "file": "arabtype.ttf",
+          "sha256": "4ed03578cc142089843eb8d33a01a1533382bca42a9e4aa71d804305bb89a8da",
+          "version": "Version 6.85",
+          "postscriptName": "ArabicTypesetting",
+          "lineMetrics": {
+            "unitsPerEm": 2048,
+            "hhea": {
+              "ascent": 0.701,
+              "descent": -0.437,
+              "lineGap": 0.009
+            },
+            "typo": {
+              "ascent": 0.528,
+              "descent": -0.342,
+              "lineGap": 0
+            },
+            "win": {
+              "ascent": 0.701,
+              "descent": 0.439
+            },
+            "useTypoMetrics": false,
+            "xHeight": 0.5,
+            "capHeight": 0.7
+          },
+          "replacementLineMetrics": {
+            "unitsPerEm": 1000,
+            "hhea": {
+              "ascent": 1.069,
+              "descent": -0.634,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 1.069,
+              "descent": -0.634,
+              "lineGap": 0
+            },
+            "win": {
+              "ascent": 1.405,
+              "descent": 0.634
+            },
+            "useTypoMetrics": true,
+            "xHeight": 0,
+            "capHeight": 0
+          },
+          "samples": 12,
+          "skipped": 0,
+          "meanSignedDelta": 0.5598,
+          "meanAbsDelta": 0.5598,
+          "maxAbsDelta": 0.7449,
+          "rows": [
+            {
+              "id": "arab-joining",
+              "original": 585.89,
+              "replacement": 957.5,
+              "widthRatio": 1.6343
+            },
+            {
+              "id": "arab-lam-alef",
+              "original": 623.63,
+              "replacement": 1015.7,
+              "widthRatio": 1.6287
+            },
+            {
+              "id": "arab-harakat",
+              "original": 426.22,
+              "replacement": 743.7,
+              "widthRatio": 1.7449
+            },
+            {
+              "id": "arab-digits",
+              "original": 667.19,
+              "replacement": 901.2,
+              "widthRatio": 1.3507
+            },
+            {
+              "id": "arab-bidi-latin",
+              "original": 801.71,
+              "replacement": 1254.7,
+              "widthRatio": 1.565
+            },
+            {
+              "id": "arab-punctuation",
+              "original": 795.41,
+              "replacement": 1253.5,
+              "widthRatio": 1.5759
+            },
+            {
+              "id": "arab-fa-letters",
+              "original": 788.67,
+              "replacement": 1267.3,
+              "widthRatio": 1.6069
+            },
+            {
+              "id": "arab-fa-digits",
+              "original": 616.8,
+              "replacement": 719.6,
+              "widthRatio": 1.1667
+            },
+            {
+              "id": "arab-ur-letters",
+              "original": 693.99,
+              "replacement": 1097.9,
+              "widthRatio": 1.582
+            },
+            {
+              "id": "arab-ur-title",
+              "original": 527.34,
+              "replacement": 881.2,
+              "widthRatio": 1.671
+            },
+            {
+              "id": "arab-ps-letters",
+              "original": 653.03,
+              "replacement": 1013,
+              "widthRatio": 1.5512
+            },
+            {
+              "id": "arab-pa-shahmukhi",
+              "original": 647.95,
+              "replacement": 1062.6,
+              "widthRatio": 1.6399
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "family": "Traditional Arabic",
+      "script": "Arab",
+      "replacement": "Noto Naskh Arabic",
+      "policyCompatibility": "visual",
+      "styles": [
+        {
+          "weight": 400,
+          "file": "trado.ttf",
+          "sha256": "c696147f0269567f6afb23e9ac1269e4651c0cd7d48ac0e3698509262a1151c7",
+          "version": "Version 6.85",
+          "postscriptName": "TraditionalArabic",
+          "lineMetrics": {
+            "unitsPerEm": 2048,
+            "hhea": {
+              "ascent": 0.994,
+              "descent": -0.5,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 0.994,
+              "descent": -0.5,
+              "lineGap": 0
+            },
+            "win": {
+              "ascent": 0.994,
+              "descent": 0.5
+            },
+            "useTypoMetrics": false,
+            "xHeight": 0.459,
+            "capHeight": 0.694
+          },
+          "replacementLineMetrics": {
+            "unitsPerEm": 1000,
+            "hhea": {
+              "ascent": 1.069,
+              "descent": -0.634,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 1.069,
+              "descent": -0.634,
+              "lineGap": 0
+            },
+            "win": {
+              "ascent": 1.405,
+              "descent": 0.634
+            },
+            "useTypoMetrics": true,
+            "xHeight": 0,
+            "capHeight": 0
+          },
+          "samples": 9,
+          "skipped": 3,
+          "meanSignedDelta": 0.2769,
+          "meanAbsDelta": 0.2802,
+          "maxAbsDelta": 0.4115,
+          "rows": [
+            {
+              "id": "arab-joining",
+              "original": 693.6,
+              "replacement": 957.5,
+              "widthRatio": 1.3805
+            },
+            {
+              "id": "arab-lam-alef",
+              "original": 752.25,
+              "replacement": 1015.7,
+              "widthRatio": 1.3502
+            },
+            {
+              "id": "arab-harakat",
+              "original": 526.9,
+              "replacement": 743.7,
+              "widthRatio": 1.4115
+            },
+            {
+              "id": "arab-digits",
+              "original": 812.45,
+              "replacement": 901.2,
+              "widthRatio": 1.1092
+            },
+            {
+              "id": "arab-bidi-latin",
+              "original": 1049.95,
+              "replacement": 1254.7,
+              "widthRatio": 1.195
+            },
+            {
+              "id": "arab-punctuation",
+              "original": 998.49,
+              "replacement": 1253.5,
+              "widthRatio": 1.2554
+            },
+            {
+              "id": "arab-fa-letters",
+              "original": 904.64,
+              "replacement": 1267.3,
+              "widthRatio": 1.4009
+            },
+            {
+              "id": "arab-fa-digits",
+              "original": 730.62,
+              "replacement": 719.6,
+              "widthRatio": 0.9849
+            },
+            {
+              "id": "arab-ur-letters",
+              "skipped": "the original lacks glyphs for the sample"
+            },
+            {
+              "id": "arab-ur-title",
+              "original": 627.49,
+              "replacement": 881.2,
+              "widthRatio": 1.4043
+            },
+            {
+              "id": "arab-ps-letters",
+              "skipped": "the original lacks glyphs for the sample"
+            },
+            {
+              "id": "arab-pa-shahmukhi",
+              "skipped": "the original lacks glyphs for the sample"
+            }
+          ]
+        },
+        {
+          "weight": 700,
+          "file": "tradbdo.ttf",
+          "sha256": "d2c013b074196cedb8b7cfd2b1b0cf906c75171501b86e22a3f5c91e537e78a1",
+          "version": "Version 6.85",
+          "postscriptName": "TraditionalArabic-Bold",
+          "lineMetrics": {
+            "unitsPerEm": 2048,
+            "hhea": {
+              "ascent": 1.023,
+              "descent": -0.51,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 1.023,
+              "descent": -0.51,
+              "lineGap": 0
+            },
+            "win": {
+              "ascent": 1.023,
+              "descent": 0.51
+            },
+            "useTypoMetrics": false,
+            "xHeight": 0.471,
+            "capHeight": 0.7
+          },
+          "replacementLineMetrics": {
+            "unitsPerEm": 1000,
+            "hhea": {
+              "ascent": 1.069,
+              "descent": -0.634,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 1.069,
+              "descent": -0.634,
+              "lineGap": 0
+            },
+            "win": {
+              "ascent": 1.405,
+              "descent": 0.634
+            },
+            "useTypoMetrics": true,
+            "xHeight": 0,
+            "capHeight": 0
+          },
+          "samples": 9,
+          "skipped": 3,
+          "meanSignedDelta": 0.2603,
+          "meanAbsDelta": 0.27,
+          "maxAbsDelta": 0.3942,
+          "rows": [
+            {
+              "id": "arab-joining",
+              "original": 729.64,
+              "replacement": 986.5,
+              "widthRatio": 1.352
+            },
+            {
+              "id": "arab-lam-alef",
+              "original": 786.28,
+              "replacement": 1049.4,
+              "widthRatio": 1.3346
+            },
+            {
+              "id": "arab-harakat",
+              "original": 548.63,
+              "replacement": 764.9,
+              "widthRatio": 1.3942
+            },
+            {
+              "id": "arab-digits",
+              "original": 874.46,
+              "replacement": 957.3,
+              "widthRatio": 1.0947
+            },
+            {
+              "id": "arab-bidi-latin",
+              "original": 1088.38,
+              "replacement": 1296.6,
+              "widthRatio": 1.1913
+            },
+            {
+              "id": "arab-punctuation",
+              "original": 1035.69,
+              "replacement": 1309.1,
+              "widthRatio": 1.264
+            },
+            {
+              "id": "arab-fa-letters",
+              "original": 946.24,
+              "replacement": 1296.7,
+              "widthRatio": 1.3704
+            },
+            {
+              "id": "arab-fa-digits",
+              "original": 812.55,
+              "replacement": 777.1,
+              "widthRatio": 0.9564
+            },
+            {
+              "id": "arab-ur-letters",
+              "skipped": "the original lacks glyphs for the sample"
+            },
+            {
+              "id": "arab-ur-title",
+              "original": 656.05,
+              "replacement": 908.9,
+              "widthRatio": 1.3854
+            },
+            {
+              "id": "arab-ps-letters",
+              "skipped": "the original lacks glyphs for the sample"
+            },
+            {
+              "id": "arab-pa-shahmukhi",
+              "skipped": "the original lacks glyphs for the sample"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "family": "Sakkal Majalla",
+      "script": "Arab",
+      "replacement": "Noto Naskh Arabic",
+      "policyCompatibility": "visual",
+      "styles": [
+        {
+          "weight": 400,
+          "file": "majalla.ttf",
+          "sha256": "922fe2bf58cef1d78635c8765ede234607aa7b09c44127d702fb600c943caa12",
+          "version": "Version 7.00",
+          "postscriptName": "SakkalMajalla",
+          "lineMetrics": {
+            "unitsPerEm": 2048,
+            "hhea": {
+              "ascent": 0.884,
+              "descent": -0.513,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 0.681,
+              "descent": -0.319,
+              "lineGap": 0.348
+            },
+            "win": {
+              "ascent": 0.884,
+              "descent": 0.513
+            },
+            "useTypoMetrics": false,
+            "xHeight": 0.343,
+            "capHeight": 0.503
+          },
+          "replacementLineMetrics": {
+            "unitsPerEm": 1000,
+            "hhea": {
+              "ascent": 1.069,
+              "descent": -0.634,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 1.069,
+              "descent": -0.634,
+              "lineGap": 0
+            },
+            "win": {
+              "ascent": 1.405,
+              "descent": 0.634
+            },
+            "useTypoMetrics": true,
+            "xHeight": 0,
+            "capHeight": 0
+          },
+          "samples": 12,
+          "skipped": 0,
+          "meanSignedDelta": 0.2455,
+          "meanAbsDelta": 0.2455,
+          "maxAbsDelta": 0.363,
+          "rows": [
+            {
+              "id": "arab-joining",
+              "original": 776.61,
+              "replacement": 957.5,
+              "widthRatio": 1.2329
+            },
+            {
+              "id": "arab-lam-alef",
+              "original": 820.46,
+              "replacement": 1015.7,
+              "widthRatio": 1.238
+            },
+            {
+              "id": "arab-harakat",
+              "original": 570.46,
+              "replacement": 743.7,
+              "widthRatio": 1.3037
+            },
+            {
+              "id": "arab-digits",
+              "original": 818.55,
+              "replacement": 901.2,
+              "widthRatio": 1.101
+            },
+            {
+              "id": "arab-bidi-latin",
+              "original": 978.52,
+              "replacement": 1254.7,
+              "widthRatio": 1.2822
+            },
+            {
+              "id": "arab-punctuation",
+              "original": 1041.85,
+              "replacement": 1253.5,
+              "widthRatio": 1.2032
+            },
+            {
+              "id": "arab-fa-letters",
+              "original": 955.57,
+              "replacement": 1267.3,
+              "widthRatio": 1.3262
+            },
+            {
+              "id": "arab-fa-digits",
+              "original": 657.13,
+              "replacement": 719.6,
+              "widthRatio": 1.0951
+            },
+            {
+              "id": "arab-ur-letters",
+              "original": 880.18,
+              "replacement": 1097.9,
+              "widthRatio": 1.2474
+            },
+            {
+              "id": "arab-ur-title",
+              "original": 646.53,
+              "replacement": 881.2,
+              "widthRatio": 1.363
+            },
+            {
+              "id": "arab-ps-letters",
+              "original": 804.35,
+              "replacement": 1013,
+              "widthRatio": 1.2594
+            },
+            {
+              "id": "arab-pa-shahmukhi",
+              "original": 821.39,
+              "replacement": 1062.6,
+              "widthRatio": 1.2937
+            }
+          ]
+        },
+        {
+          "weight": 700,
+          "file": "majallab.ttf",
+          "sha256": "8fca2918fb86953dfdd76a2c3b4a80f2372f6a6be60de23d104e64e5fd410393",
+          "version": "Version 7.00",
+          "postscriptName": "SakkalMajalla-Bold",
+          "lineMetrics": {
+            "unitsPerEm": 2048,
+            "hhea": {
+              "ascent": 0.884,
+              "descent": -0.513,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 0.681,
+              "descent": -0.319,
+              "lineGap": 0.348
+            },
+            "win": {
+              "ascent": 0.884,
+              "descent": 0.513
+            },
+            "useTypoMetrics": false,
+            "xHeight": 0.341,
+            "capHeight": 0.503
+          },
+          "replacementLineMetrics": {
+            "unitsPerEm": 1000,
+            "hhea": {
+              "ascent": 1.069,
+              "descent": -0.634,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 1.069,
+              "descent": -0.634,
+              "lineGap": 0
+            },
+            "win": {
+              "ascent": 1.405,
+              "descent": 0.634
+            },
+            "useTypoMetrics": true,
+            "xHeight": 0,
+            "capHeight": 0
+          },
+          "samples": 12,
+          "skipped": 0,
+          "meanSignedDelta": 0.2586,
+          "meanAbsDelta": 0.2586,
+          "maxAbsDelta": 0.3754,
+          "rows": [
+            {
+              "id": "arab-joining",
+              "original": 810.06,
+              "replacement": 986.5,
+              "widthRatio": 1.2178
+            },
+            {
+              "id": "arab-lam-alef",
+              "original": 832.81,
+              "replacement": 1049.4,
+              "widthRatio": 1.2601
+            },
+            {
+              "id": "arab-harakat",
+              "original": 589.65,
+              "replacement": 764.9,
+              "widthRatio": 1.2972
+            },
+            {
+              "id": "arab-digits",
+              "original": 825.98,
+              "replacement": 957.3,
+              "widthRatio": 1.159
+            },
+            {
+              "id": "arab-bidi-latin",
+              "original": 993.36,
+              "replacement": 1296.6,
+              "widthRatio": 1.3053
+            },
+            {
+              "id": "arab-punctuation",
+              "original": 1083.4,
+              "replacement": 1309.1,
+              "widthRatio": 1.2083
+            },
+            {
+              "id": "arab-fa-letters",
+              "original": 994.78,
+              "replacement": 1296.7,
+              "widthRatio": 1.3035
+            },
+            {
+              "id": "arab-fa-digits",
+              "original": 647.17,
+              "replacement": 777.1,
+              "widthRatio": 1.2008
+            },
+            {
+              "id": "arab-ur-letters",
+              "original": 912.01,
+              "replacement": 1131.3,
+              "widthRatio": 1.2404
+            },
+            {
+              "id": "arab-ur-title",
+              "original": 660.84,
+              "replacement": 908.9,
+              "widthRatio": 1.3754
+            },
+            {
+              "id": "arab-ps-letters",
+              "original": 820.17,
+              "replacement": 1037.7,
+              "widthRatio": 1.2652
+            },
+            {
+              "id": "arab-pa-shahmukhi",
+              "original": 852.05,
+              "replacement": 1082.3,
+              "widthRatio": 1.2702
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "family": "Simplified Arabic",
+      "script": "Arab",
+      "replacement": "Noto Naskh Arabic",
+      "policyCompatibility": "visual (script alias rule, no policy row)",
+      "styles": [
+        {
+          "weight": 400,
+          "file": "simpo.ttf",
+          "sha256": "94120ddbf334ded84753a38064e4fdb31e62caee22cbb59cfbbdef93fb587abf",
+          "version": "Version 6.99",
+          "postscriptName": "SimplifiedArabic",
+          "lineMetrics": {
+            "unitsPerEm": 2048,
+            "hhea": {
+              "ascent": 1.18,
+              "descent": -0.478,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 1.18,
+              "descent": -0.478,
+              "lineGap": 0
+            },
+            "win": {
+              "ascent": 1.18,
+              "descent": 0.478
+            },
+            "useTypoMetrics": false,
+            "xHeight": 0.53,
+            "capHeight": 0.707
+          },
+          "replacementLineMetrics": {
+            "unitsPerEm": 1000,
+            "hhea": {
+              "ascent": 1.069,
+              "descent": -0.634,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 1.069,
+              "descent": -0.634,
+              "lineGap": 0
+            },
+            "win": {
+              "ascent": 1.405,
+              "descent": 0.634
+            },
+            "useTypoMetrics": true,
+            "xHeight": 0,
+            "capHeight": 0
+          },
+          "samples": 11,
+          "skipped": 1,
+          "meanSignedDelta": 0.0794,
+          "meanAbsDelta": 0.106,
+          "maxAbsDelta": 0.1463,
+          "rows": [
+            {
+              "id": "arab-joining",
+              "original": 850,
+              "replacement": 957.5,
+              "widthRatio": 1.1265
+            },
+            {
+              "id": "arab-lam-alef",
+              "original": 924.02,
+              "replacement": 1015.7,
+              "widthRatio": 1.0992
+            },
+            {
+              "id": "arab-harakat",
+              "original": 670.17,
+              "replacement": 743.7,
+              "widthRatio": 1.1097
+            },
+            {
+              "id": "arab-digits",
+              "skipped": "the original lacks glyphs for the sample"
+            },
+            {
+              "id": "arab-bidi-latin",
+              "original": 1228.37,
+              "replacement": 1254.7,
+              "widthRatio": 1.0214
+            },
+            {
+              "id": "arab-punctuation",
+              "original": 1147.95,
+              "replacement": 1253.5,
+              "widthRatio": 1.0919
+            },
+            {
+              "id": "arab-fa-letters",
+              "original": 1119.58,
+              "replacement": 1267.3,
+              "widthRatio": 1.1319
+            },
+            {
+              "id": "arab-fa-digits",
+              "original": 842.92,
+              "replacement": 719.6,
+              "widthRatio": 0.8537
+            },
+            {
+              "id": "arab-ur-letters",
+              "original": 983.5,
+              "replacement": 1097.9,
+              "widthRatio": 1.1163
+            },
+            {
+              "id": "arab-ur-title",
+              "original": 802.49,
+              "replacement": 881.2,
+              "widthRatio": 1.0981
+            },
+            {
+              "id": "arab-ps-letters",
+              "original": 903.08,
+              "replacement": 1013,
+              "widthRatio": 1.1217
+            },
+            {
+              "id": "arab-pa-shahmukhi",
+              "original": 963.77,
+              "replacement": 1062.6,
+              "widthRatio": 1.1025
+            }
+          ]
+        },
+        {
+          "weight": 700,
+          "file": "simpbdo.ttf",
+          "sha256": "7bd2b3c7035f9e512f8b01a282e8886e4fa89232c5d6652de1ee5fd250c799af",
+          "version": "Version 6.99",
+          "postscriptName": "SimplifiedArabic-Bold",
+          "lineMetrics": {
+            "unitsPerEm": 2048,
+            "hhea": {
+              "ascent": 1.18,
+              "descent": -0.483,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 1.18,
+              "descent": -0.483,
+              "lineGap": 0
+            },
+            "win": {
+              "ascent": 1.18,
+              "descent": 0.483
+            },
+            "useTypoMetrics": false,
+            "xHeight": 0.53,
+            "capHeight": 0.707
+          },
+          "replacementLineMetrics": {
+            "unitsPerEm": 1000,
+            "hhea": {
+              "ascent": 1.069,
+              "descent": -0.634,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 1.069,
+              "descent": -0.634,
+              "lineGap": 0
+            },
+            "win": {
+              "ascent": 1.405,
+              "descent": 0.634
+            },
+            "useTypoMetrics": true,
+            "xHeight": 0,
+            "capHeight": 0
+          },
+          "samples": 11,
+          "skipped": 1,
+          "meanSignedDelta": 0.0894,
+          "meanAbsDelta": 0.1133,
+          "maxAbsDelta": 0.1371,
+          "rows": [
+            {
+              "id": "arab-joining",
+              "original": 870.21,
+              "replacement": 986.5,
+              "widthRatio": 1.1336
+            },
+            {
+              "id": "arab-lam-alef",
+              "original": 957.42,
+              "replacement": 1049.4,
+              "widthRatio": 1.0961
+            },
+            {
+              "id": "arab-harakat",
+              "original": 672.66,
+              "replacement": 764.9,
+              "widthRatio": 1.1371
+            },
+            {
+              "id": "arab-digits",
+              "skipped": "the original lacks glyphs for the sample"
+            },
+            {
+              "id": "arab-bidi-latin",
+              "original": 1245.75,
+              "replacement": 1296.6,
+              "widthRatio": 1.0408
+            },
+            {
+              "id": "arab-punctuation",
+              "original": 1157.71,
+              "replacement": 1309.1,
+              "widthRatio": 1.1308
+            },
+            {
+              "id": "arab-fa-letters",
+              "original": 1147.51,
+              "replacement": 1296.7,
+              "widthRatio": 1.13
+            },
+            {
+              "id": "arab-fa-digits",
+              "original": 894.73,
+              "replacement": 777.1,
+              "widthRatio": 0.8685
+            },
+            {
+              "id": "arab-ur-letters",
+              "original": 1016.75,
+              "replacement": 1131.3,
+              "widthRatio": 1.1127
+            },
+            {
+              "id": "arab-ur-title",
+              "original": 803.22,
+              "replacement": 908.9,
+              "widthRatio": 1.1316
+            },
+            {
+              "id": "arab-ps-letters",
+              "original": 944.87,
+              "replacement": 1037.7,
+              "widthRatio": 1.0982
+            },
+            {
+              "id": "arab-pa-shahmukhi",
+              "original": 980.42,
+              "replacement": 1082.3,
+              "widthRatio": 1.1039
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "family": "Andalus",
+      "script": "Arab",
+      "replacement": "Noto Naskh Arabic",
+      "policyCompatibility": "visual (script alias rule, no policy row)",
+      "styles": [
+        {
+          "weight": 400,
+          "file": "andlso.ttf",
+          "sha256": "ee237d83793f2d207b708285707242b60fa75c9c8349a8e8ab19f852b6952d59",
+          "version": "Version 6.85",
+          "postscriptName": "Andalus",
+          "lineMetrics": {
+            "unitsPerEm": 2048,
+            "hhea": {
+              "ascent": 1.105,
+              "descent": -0.421,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 1.105,
+              "descent": -0.421,
+              "lineGap": 0
+            },
+            "win": {
+              "ascent": 1.105,
+              "descent": 0.421
+            },
+            "useTypoMetrics": false,
+            "xHeight": 0.51,
+            "capHeight": 0.712
+          },
+          "replacementLineMetrics": {
+            "unitsPerEm": 1000,
+            "hhea": {
+              "ascent": 1.069,
+              "descent": -0.634,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 1.069,
+              "descent": -0.634,
+              "lineGap": 0
+            },
+            "win": {
+              "ascent": 1.405,
+              "descent": 0.634
+            },
+            "useTypoMetrics": true,
+            "xHeight": 0,
+            "capHeight": 0
+          },
+          "samples": 8,
+          "skipped": 4,
+          "meanSignedDelta": 0.1646,
+          "meanAbsDelta": 0.1646,
+          "maxAbsDelta": 0.2234,
+          "rows": [
+            {
+              "id": "arab-joining",
+              "original": 795.07,
+              "replacement": 957.5,
+              "widthRatio": 1.2043
+            },
+            {
+              "id": "arab-lam-alef",
+              "original": 830.22,
+              "replacement": 1015.7,
+              "widthRatio": 1.2234
+            },
+            {
+              "id": "arab-harakat",
+              "original": 630.22,
+              "replacement": 743.7,
+              "widthRatio": 1.1801
+            },
+            {
+              "id": "arab-digits",
+              "skipped": "the original lacks glyphs for the sample"
+            },
+            {
+              "id": "arab-bidi-latin",
+              "original": 1175.54,
+              "replacement": 1254.7,
+              "widthRatio": 1.0673
+            },
+            {
+              "id": "arab-punctuation",
+              "original": 1093.46,
+              "replacement": 1253.5,
+              "widthRatio": 1.1464
+            },
+            {
+              "id": "arab-fa-letters",
+              "original": 1080.96,
+              "replacement": 1267.3,
+              "widthRatio": 1.1724
+            },
+            {
+              "id": "arab-fa-digits",
+              "original": 602.88,
+              "replacement": 719.6,
+              "widthRatio": 1.1936
+            },
+            {
+              "id": "arab-ur-letters",
+              "skipped": "the original lacks glyphs for the sample"
+            },
+            {
+              "id": "arab-ur-title",
+              "original": 780.57,
+              "replacement": 881.2,
+              "widthRatio": 1.1289
+            },
+            {
+              "id": "arab-ps-letters",
+              "skipped": "the original lacks glyphs for the sample"
+            },
+            {
+              "id": "arab-pa-shahmukhi",
+              "skipped": "the original lacks glyphs for the sample"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "family": "Urdu Typesetting",
+      "script": "Arab",
+      "replacement": "Noto Naskh Arabic",
+      "policyCompatibility": "visual (script alias rule, no policy row)",
+      "styles": [
+        {
+          "weight": 400,
+          "file": "UrdType.ttf",
+          "sha256": "9b513ddff9dc34b31cb8e93e48e5db9ff7ef0aad18abc1b4da2c0bd800cb7bde",
+          "version": "Version 6.86",
+          "postscriptName": "UrduTypesetting",
+          "lineMetrics": {
+            "unitsPerEm": 2048,
+            "hhea": {
+              "ascent": 1.37,
+              "descent": -0.333,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 0.714,
+              "descent": -0.285,
+              "lineGap": 0.071
+            },
+            "win": {
+              "ascent": 1.37,
+              "descent": 0.333
+            },
+            "useTypoMetrics": false,
+            "xHeight": 0.396,
+            "capHeight": 0.616
+          },
+          "replacementLineMetrics": {
+            "unitsPerEm": 1000,
+            "hhea": {
+              "ascent": 1.069,
+              "descent": -0.634,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 1.069,
+              "descent": -0.634,
+              "lineGap": 0
+            },
+            "win": {
+              "ascent": 1.405,
+              "descent": 0.634
+            },
+            "useTypoMetrics": true,
+            "xHeight": 0,
+            "capHeight": 0
+          },
+          "samples": 11,
+          "skipped": 1,
+          "meanSignedDelta": 0.5421,
+          "meanAbsDelta": 0.5421,
+          "maxAbsDelta": 0.7395,
+          "rows": [
+            {
+              "id": "arab-joining",
+              "original": 627.88,
+              "replacement": 957.5,
+              "widthRatio": 1.525
+            },
+            {
+              "id": "arab-lam-alef",
+              "original": 619.09,
+              "replacement": 1015.7,
+              "widthRatio": 1.6406
+            },
+            {
+              "id": "arab-harakat",
+              "original": 474.37,
+              "replacement": 743.7,
+              "widthRatio": 1.5678
+            },
+            {
+              "id": "arab-digits",
+              "original": 681.64,
+              "replacement": 901.2,
+              "widthRatio": 1.3221
+            },
+            {
+              "id": "arab-bidi-latin",
+              "original": 946.39,
+              "replacement": 1254.7,
+              "widthRatio": 1.3258
+            },
+            {
+              "id": "arab-punctuation",
+              "original": 773.14,
+              "replacement": 1253.5,
+              "widthRatio": 1.6213
+            },
+            {
+              "id": "arab-fa-letters",
+              "original": 767.92,
+              "replacement": 1267.3,
+              "widthRatio": 1.6503
+            },
+            {
+              "id": "arab-fa-digits",
+              "original": 581.88,
+              "replacement": 719.6,
+              "widthRatio": 1.2367
+            },
+            {
+              "id": "arab-ur-letters",
+              "original": 631.15,
+              "replacement": 1097.9,
+              "widthRatio": 1.7395
+            },
+            {
+              "id": "arab-ur-title",
+              "original": 543.02,
+              "replacement": 881.2,
+              "widthRatio": 1.6228
+            },
+            {
+              "id": "arab-ps-letters",
+              "skipped": "the original lacks glyphs for the sample"
+            },
+            {
+              "id": "arab-pa-shahmukhi",
+              "original": 621.14,
+              "replacement": 1062.6,
+              "widthRatio": 1.7107
+            }
+          ]
+        },
+        {
+          "weight": 700,
+          "file": "UrdTypeb.ttf",
+          "sha256": "681f35684afe5d945691d2c45d7f025e5b7e1a3e2f504ec298cd9b59be3b689d",
+          "version": "Version 6.86",
+          "postscriptName": "UrduTypesetting-Bold",
+          "lineMetrics": {
+            "unitsPerEm": 2048,
+            "hhea": {
+              "ascent": 1.429,
+              "descent": -0.398,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 0.714,
+              "descent": -0.285,
+              "lineGap": 0.071
+            },
+            "win": {
+              "ascent": 1.37,
+              "descent": 0.333
+            },
+            "useTypoMetrics": false,
+            "xHeight": 0.396,
+            "capHeight": 0.616
+          },
+          "replacementLineMetrics": {
+            "unitsPerEm": 1000,
+            "hhea": {
+              "ascent": 1.069,
+              "descent": -0.634,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 1.069,
+              "descent": -0.634,
+              "lineGap": 0
+            },
+            "win": {
+              "ascent": 1.405,
+              "descent": 0.634
+            },
+            "useTypoMetrics": true,
+            "xHeight": 0,
+            "capHeight": 0
+          },
+          "samples": 11,
+          "skipped": 1,
+          "meanSignedDelta": 0.5843,
+          "meanAbsDelta": 0.5843,
+          "maxAbsDelta": 0.796,
+          "rows": [
+            {
+              "id": "arab-joining",
+              "original": 634.77,
+              "replacement": 986.5,
+              "widthRatio": 1.5541
+            },
+            {
+              "id": "arab-lam-alef",
+              "original": 625,
+              "replacement": 1049.4,
+              "widthRatio": 1.679
+            },
+            {
+              "id": "arab-harakat",
+              "original": 474.56,
+              "replacement": 764.9,
+              "widthRatio": 1.6118
+            },
+            {
+              "id": "arab-digits",
+              "original": 678.81,
+              "replacement": 957.3,
+              "widthRatio": 1.4103
+            },
+            {
+              "id": "arab-bidi-latin",
+              "original": 924.51,
+              "replacement": 1296.6,
+              "widthRatio": 1.4025
+            },
+            {
+              "id": "arab-punctuation",
+              "original": 778.03,
+              "replacement": 1309.1,
+              "widthRatio": 1.6826
+            },
+            {
+              "id": "arab-fa-letters",
+              "original": 784.81,
+              "replacement": 1296.7,
+              "widthRatio": 1.6522
+            },
+            {
+              "id": "arab-fa-digits",
+              "original": 606.54,
+              "replacement": 777.1,
+              "widthRatio": 1.2812
+            },
+            {
+              "id": "arab-ur-letters",
+              "original": 629.88,
+              "replacement": 1131.3,
+              "widthRatio": 1.796
+            },
+            {
+              "id": "arab-ur-title",
+              "original": 551.95,
+              "replacement": 908.9,
+              "widthRatio": 1.6467
+            },
+            {
+              "id": "arab-ps-letters",
+              "skipped": "the original lacks glyphs for the sample"
+            },
+            {
+              "id": "arab-pa-shahmukhi",
+              "original": 632.47,
+              "replacement": 1082.3,
+              "widthRatio": 1.7112
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "family": "Aldhabi",
+      "script": "Arab",
+      "replacement": "Noto Naskh Arabic",
+      "policyCompatibility": "visual (script alias rule, no policy row)",
+      "styles": [
+        {
+          "weight": 400,
+          "file": "aldhabi.ttf",
+          "sha256": "8b4a94982ded64fe74b1c638938942be1fa9304f313af8af35c3e53df3124344",
+          "version": "Version 6.86",
+          "postscriptName": "Aldhabi",
+          "lineMetrics": {
+            "unitsPerEm": 4096,
+            "hhea": {
+              "ascent": 0.643,
+              "descent": -0.357,
+              "lineGap": 0.75
+            },
+            "typo": {
+              "ascent": 0.643,
+              "descent": -0.357,
+              "lineGap": 0.75
+            },
+            "win": {
+              "ascent": 1.213,
+              "descent": 0.537
+            },
+            "useTypoMetrics": true,
+            "xHeight": 0.263,
+            "capHeight": 0.387
+          },
+          "replacementLineMetrics": {
+            "unitsPerEm": 1000,
+            "hhea": {
+              "ascent": 1.069,
+              "descent": -0.634,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 1.069,
+              "descent": -0.634,
+              "lineGap": 0
+            },
+            "win": {
+              "ascent": 1.405,
+              "descent": 0.634
+            },
+            "useTypoMetrics": true,
+            "xHeight": 0,
+            "capHeight": 0
+          },
+          "samples": 11,
+          "skipped": 1,
+          "meanSignedDelta": 0.7637,
+          "meanAbsDelta": 0.7637,
+          "maxAbsDelta": 0.9832,
+          "rows": [
+            {
+              "id": "arab-joining",
+              "original": 591.5,
+              "replacement": 957.5,
+              "widthRatio": 1.6188
+            },
+            {
+              "id": "arab-lam-alef",
+              "original": 584.52,
+              "replacement": 1015.7,
+              "widthRatio": 1.7377
+            },
+            {
+              "id": "arab-harakat",
+              "original": 375,
+              "replacement": 743.7,
+              "widthRatio": 1.9832
+            },
+            {
+              "id": "arab-digits",
+              "original": 538.23,
+              "replacement": 901.2,
+              "widthRatio": 1.6744
+            },
+            {
+              "id": "arab-bidi-latin",
+              "original": 725.39,
+              "replacement": 1254.7,
+              "widthRatio": 1.7297
+            },
+            {
+              "id": "arab-punctuation",
+              "original": 723.51,
+              "replacement": 1253.5,
+              "widthRatio": 1.7325
+            },
+            {
+              "id": "arab-fa-letters",
+              "original": 737.55,
+              "replacement": 1267.3,
+              "widthRatio": 1.7183
+            },
+            {
+              "id": "arab-fa-digits",
+              "original": 423.24,
+              "replacement": 719.6,
+              "widthRatio": 1.7002
+            },
+            {
+              "id": "arab-ur-letters",
+              "original": 643.8,
+              "replacement": 1097.9,
+              "widthRatio": 1.7053
+            },
+            {
+              "id": "arab-ur-title",
+              "original": 452.54,
+              "replacement": 881.2,
+              "widthRatio": 1.9472
+            },
+            {
+              "id": "arab-ps-letters",
+              "skipped": "the original lacks glyphs for the sample"
+            },
+            {
+              "id": "arab-pa-shahmukhi",
+              "original": 573.19,
+              "replacement": 1062.6,
+              "widthRatio": 1.8538
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "family": "Nirmala UI",
+      "script": "Deva",
+      "replacement": "Noto Sans Devanagari",
+      "policyCompatibility": "visual",
+      "styles": [
+        {
+          "weight": 400,
+          "file": "Nirmala.ttc",
+          "sha256": "ad02cdfc06e144ac45f318e8e5a64cbe04c7479d4beb91d25f5a319a466b1767",
+          "version": "Version 1.46",
+          "postscriptName": "NirmalaUI",
+          "lineMetrics": {
+            "unitsPerEm": 2048,
+            "hhea": {
+              "ascent": 1.079,
+              "descent": -0.251,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 0.728,
+              "descent": -0.21,
+              "lineGap": 0.131
+            },
+            "win": {
+              "ascent": 1.079,
+              "descent": 0.251
+            },
+            "useTypoMetrics": false,
+            "xHeight": 0.5,
+            "capHeight": 0.7
+          },
+          "replacementLineMetrics": {
+            "unitsPerEm": 1000,
+            "hhea": {
+              "ascent": 0.896,
+              "descent": -0.408,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 0.896,
+              "descent": -0.408,
+              "lineGap": 0
+            },
+            "win": {
+              "ascent": 1.348,
+              "descent": 0.558
+            },
+            "useTypoMetrics": true,
+            "xHeight": 0.536,
+            "capHeight": 0.622
+          },
+          "samples": 9,
+          "skipped": 0,
+          "meanSignedDelta": -0.0617,
+          "meanAbsDelta": 0.0617,
+          "maxAbsDelta": 0.0922,
+          "rows": [
+            {
+              "id": "deva-title",
+              "original": 1094.58,
+              "replacement": 1031.1,
+              "widthRatio": 0.942
+            },
+            {
+              "id": "deva-conjuncts",
+              "original": 1352.39,
+              "replacement": 1280.8,
+              "widthRatio": 0.9471
+            },
+            {
+              "id": "deva-reph",
+              "original": 892.63,
+              "replacement": 816.9,
+              "widthRatio": 0.9152
+            },
+            {
+              "id": "deva-matras",
+              "original": 1353.37,
+              "replacement": 1228.6,
+              "widthRatio": 0.9078
+            },
+            {
+              "id": "deva-nukta",
+              "original": 1124.17,
+              "replacement": 1042.7,
+              "widthRatio": 0.9275
+            },
+            {
+              "id": "deva-mr",
+              "original": 888.92,
+              "replacement": 816.7,
+              "widthRatio": 0.9188
+            },
+            {
+              "id": "deva-ne",
+              "original": 1108.89,
+              "replacement": 1051.9,
+              "widthRatio": 0.9486
+            },
+            {
+              "id": "deva-digits",
+              "original": 806.79,
+              "replacement": 772.8,
+              "widthRatio": 0.9579
+            },
+            {
+              "id": "deva-mixed-latin",
+              "original": 1011.72,
+              "replacement": 991.2,
+              "widthRatio": 0.9797
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "family": "Angsana New",
+      "script": "Thai",
+      "replacement": "Noto Sans Thai",
+      "policyCompatibility": "visual",
+      "styles": [
+        {
+          "weight": 400,
+          "file": "angsana.ttc",
+          "sha256": "2aa45686653f0440d130f96c9520b32d1f40c328c1ac35efc47c0f9fe9bf1ec5",
+          "version": "Version 5.06",
+          "postscriptName": "AngsanaNew",
+          "lineMetrics": {
+            "unitsPerEm": 4096,
+            "hhea": {
+              "ascent": 0.923,
+              "descent": -0.239,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 0.923,
+              "descent": -0.239,
+              "lineGap": 0
+            },
+            "win": {
+              "ascent": 0.941,
+              "descent": 0.41
+            },
+            "useTypoMetrics": false,
+            "xHeight": 0.283,
+            "capHeight": 0.437
+          },
+          "replacementLineMetrics": {
+            "unitsPerEm": 1000,
+            "hhea": {
+              "ascent": 1.061,
+              "descent": -0.45,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 1.061,
+              "descent": -0.45,
+              "lineGap": 0
+            },
+            "win": {
+              "ascent": 1.061,
+              "descent": 0.45
+            },
+            "useTypoMetrics": true,
+            "xHeight": 0.556,
+            "capHeight": 0.714
+          },
+          "samples": 7,
+          "skipped": 0,
+          "meanSignedDelta": 0.424,
+          "meanAbsDelta": 0.424,
+          "maxAbsDelta": 0.5821,
+          "rows": [
+            {
+              "id": "thai-title",
+              "original": 806.93,
+              "replacement": 1130.7,
+              "widthRatio": 1.4012
+            },
+            {
+              "id": "thai-tone-marks",
+              "original": 597.09,
+              "replacement": 873.3,
+              "widthRatio": 1.4626
+            },
+            {
+              "id": "thai-sara-am",
+              "original": 581.42,
+              "replacement": 820.7,
+              "widthRatio": 1.4115
+            },
+            {
+              "id": "thai-pali",
+              "original": 567.53,
+              "replacement": 781.2,
+              "widthRatio": 1.3765
+            },
+            {
+              "id": "thai-no-spaces",
+              "original": 1583.15,
+              "replacement": 2251.2,
+              "widthRatio": 1.422
+            },
+            {
+              "id": "thai-digits",
+              "original": 757.74,
+              "replacement": 994,
+              "widthRatio": 1.3118
+            },
+            {
+              "id": "thai-mixed-latin",
+              "original": 713.48,
+              "replacement": 1128.8,
+              "widthRatio": 1.5821
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "family": "DilleniaUPC",
+      "script": "Thai",
+      "replacement": "Noto Sans Thai",
+      "policyCompatibility": "visual",
+      "styles": [
+        {
+          "weight": 400,
+          "file": "upcdl.ttf",
+          "sha256": "b2cd4d6d863303015403b042830d13571ed04466fc37fb2e62b4ce8b763b9331",
+          "version": "Version 5.05",
+          "postscriptName": "DilleniaUPC",
+          "lineMetrics": {
+            "unitsPerEm": 4096,
+            "hhea": {
+              "ascent": 0.471,
+              "descent": -0.129,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 0.877,
+              "descent": -0.253,
+              "lineGap": 0
+            },
+            "win": {
+              "ascent": 0.885,
+              "descent": 0.42
+            },
+            "useTypoMetrics": false,
+            "xHeight": 0.319,
+            "capHeight": 0.464
+          },
+          "replacementLineMetrics": {
+            "unitsPerEm": 1000,
+            "hhea": {
+              "ascent": 1.061,
+              "descent": -0.45,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 1.061,
+              "descent": -0.45,
+              "lineGap": 0
+            },
+            "win": {
+              "ascent": 1.061,
+              "descent": 0.45
+            },
+            "useTypoMetrics": true,
+            "xHeight": 0.556,
+            "capHeight": 0.714
+          },
+          "samples": 7,
+          "skipped": 0,
+          "meanSignedDelta": 0.5548,
+          "meanAbsDelta": 0.5548,
+          "maxAbsDelta": 0.6453,
+          "rows": [
+            {
+              "id": "thai-title",
+              "original": 712.28,
+              "replacement": 1130.7,
+              "widthRatio": 1.5874
+            },
+            {
+              "id": "thai-tone-marks",
+              "original": 580.42,
+              "replacement": 873.3,
+              "widthRatio": 1.5046
+            },
+            {
+              "id": "thai-sara-am",
+              "original": 522.53,
+              "replacement": 820.7,
+              "widthRatio": 1.5706
+            },
+            {
+              "id": "thai-pali",
+              "original": 508.81,
+              "replacement": 781.2,
+              "widthRatio": 1.5353
+            },
+            {
+              "id": "thai-no-spaces",
+              "original": 1414.11,
+              "replacement": 2251.2,
+              "widthRatio": 1.592
+            },
+            {
+              "id": "thai-digits",
+              "original": 686.4,
+              "replacement": 994,
+              "widthRatio": 1.4481
+            },
+            {
+              "id": "thai-mixed-latin",
+              "original": 686.08,
+              "replacement": 1128.8,
+              "widthRatio": 1.6453
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "family": "Leelawadee",
+      "script": "Thai",
+      "replacement": "Noto Sans Thai",
+      "policyCompatibility": "visual (script alias rule, no policy row)",
+      "styles": [
+        {
+          "weight": 400,
+          "file": "leelawad.ttf",
+          "sha256": "4bbcda89375cac003f4fea06ec83934716cad0c63061447cc173b7d5c363b5be",
+          "version": "Version 5.06",
+          "postscriptName": "Leelawadee",
+          "lineMetrics": {
+            "unitsPerEm": 2048,
+            "hhea": {
+              "ascent": 0.957,
+              "descent": -0.239,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 0.957,
+              "descent": -0.239,
+              "lineGap": 0.083
+            },
+            "win": {
+              "ascent": 0.957,
+              "descent": 0.239
+            },
+            "useTypoMetrics": false,
+            "xHeight": 0.5,
+            "capHeight": 0.7
+          },
+          "replacementLineMetrics": {
+            "unitsPerEm": 1000,
+            "hhea": {
+              "ascent": 1.061,
+              "descent": -0.45,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 1.061,
+              "descent": -0.45,
+              "lineGap": 0
+            },
+            "win": {
+              "ascent": 1.061,
+              "descent": 0.45
+            },
+            "useTypoMetrics": true,
+            "xHeight": 0.556,
+            "capHeight": 0.714
+          },
+          "samples": 7,
+          "skipped": 0,
+          "meanSignedDelta": 0.0277,
+          "meanAbsDelta": 0.0333,
+          "maxAbsDelta": 0.0538,
+          "rows": [
+            {
+              "id": "thai-title",
+              "original": 1078.13,
+              "replacement": 1130.7,
+              "widthRatio": 1.0488
+            },
+            {
+              "id": "thai-tone-marks",
+              "original": 858.2,
+              "replacement": 873.3,
+              "widthRatio": 1.0176
+            },
+            {
+              "id": "thai-sara-am",
+              "original": 805.22,
+              "replacement": 820.7,
+              "widthRatio": 1.0192
+            },
+            {
+              "id": "thai-pali",
+              "original": 758.54,
+              "replacement": 781.2,
+              "widthRatio": 1.0299
+            },
+            {
+              "id": "thai-no-spaces",
+              "original": 2155.57,
+              "replacement": 2251.2,
+              "widthRatio": 1.0444
+            },
+            {
+              "id": "thai-digits",
+              "original": 1014.01,
+              "replacement": 994,
+              "widthRatio": 0.9803
+            },
+            {
+              "id": "thai-mixed-latin",
+              "original": 1071.19,
+              "replacement": 1128.8,
+              "widthRatio": 1.0538
+            }
+          ]
+        },
+        {
+          "weight": 700,
+          "file": "leelawdb.ttf",
+          "sha256": "d24b407201bd5f95c7e18f8161e00e3371aa4a0c64e1f08cac7afe35e7d1a025",
+          "version": "Version 5.06",
+          "postscriptName": "Leelawadee-Bold",
+          "lineMetrics": {
+            "unitsPerEm": 2048,
+            "hhea": {
+              "ascent": 0.957,
+              "descent": -0.239,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 0.957,
+              "descent": -0.239,
+              "lineGap": 0.083
+            },
+            "win": {
+              "ascent": 0.957,
+              "descent": 0.239
+            },
+            "useTypoMetrics": false,
+            "xHeight": 0.5,
+            "capHeight": 0.7
+          },
+          "replacementLineMetrics": {
+            "unitsPerEm": 1000,
+            "hhea": {
+              "ascent": 1.061,
+              "descent": -0.45,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 1.061,
+              "descent": -0.45,
+              "lineGap": 0
+            },
+            "win": {
+              "ascent": 1.061,
+              "descent": 0.45
+            },
+            "useTypoMetrics": true,
+            "xHeight": 0.556,
+            "capHeight": 0.714
+          },
+          "samples": 7,
+          "skipped": 0,
+          "meanSignedDelta": -0.0435,
+          "meanAbsDelta": 0.0435,
+          "maxAbsDelta": 0.0789,
+          "rows": [
+            {
+              "id": "thai-title",
+              "original": 1246.09,
+              "replacement": 1196,
+              "widthRatio": 0.9598
+            },
+            {
+              "id": "thai-tone-marks",
+              "original": 946.63,
+              "replacement": 912.3,
+              "widthRatio": 0.9637
+            },
+            {
+              "id": "thai-sara-am",
+              "original": 925.73,
+              "replacement": 870.4,
+              "widthRatio": 0.9402
+            },
+            {
+              "id": "thai-pali",
+              "original": 852.44,
+              "replacement": 818.7,
+              "widthRatio": 0.9604
+            },
+            {
+              "id": "thai-no-spaces",
+              "original": 2496.63,
+              "replacement": 2388.5,
+              "widthRatio": 0.9567
+            },
+            {
+              "id": "thai-digits",
+              "original": 1105.81,
+              "replacement": 1018.6,
+              "widthRatio": 0.9211
+            },
+            {
+              "id": "thai-mixed-latin",
+              "original": 1172.31,
+              "replacement": 1165.2,
+              "widthRatio": 0.9939
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "family": "Cordia New",
+      "script": "Thai",
+      "replacement": "Noto Sans Thai",
+      "policyCompatibility": "visual (script alias rule, no policy row)",
+      "styles": [
+        {
+          "weight": 400,
+          "file": "cordia.ttc",
+          "sha256": "dc6caa7f3602807f5e989e6784e6376cd5d68aeb824a4c2432a0532c4a402546",
+          "version": "Version 5.06",
+          "postscriptName": "CordiaNew",
+          "lineMetrics": {
+            "unitsPerEm": 4096,
+            "hhea": {
+              "ascent": 0.893,
+              "descent": -0.254,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 0.893,
+              "descent": -0.254,
+              "lineGap": 0
+            },
+            "win": {
+              "ascent": 0.898,
+              "descent": 0.488
+            },
+            "useTypoMetrics": false,
+            "xHeight": 0.34,
+            "capHeight": 0.469
+          },
+          "replacementLineMetrics": {
+            "unitsPerEm": 1000,
+            "hhea": {
+              "ascent": 1.061,
+              "descent": -0.45,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 1.061,
+              "descent": -0.45,
+              "lineGap": 0
+            },
+            "win": {
+              "ascent": 1.061,
+              "descent": 0.45
+            },
+            "useTypoMetrics": true,
+            "xHeight": 0.556,
+            "capHeight": 0.714
+          },
+          "samples": 7,
+          "skipped": 0,
+          "meanSignedDelta": 0.3903,
+          "meanAbsDelta": 0.3903,
+          "maxAbsDelta": 0.4942,
+          "rows": [
+            {
+              "id": "thai-title",
+              "original": 809.79,
+              "replacement": 1130.7,
+              "widthRatio": 1.3963
+            },
+            {
+              "id": "thai-tone-marks",
+              "original": 616.63,
+              "replacement": 873.3,
+              "widthRatio": 1.4163
+            },
+            {
+              "id": "thai-sara-am",
+              "original": 595.19,
+              "replacement": 820.7,
+              "widthRatio": 1.3789
+            },
+            {
+              "id": "thai-pali",
+              "original": 566.21,
+              "replacement": 781.2,
+              "widthRatio": 1.3797
+            },
+            {
+              "id": "thai-no-spaces",
+              "original": 1624.39,
+              "replacement": 2251.2,
+              "widthRatio": 1.3859
+            },
+            {
+              "id": "thai-digits",
+              "original": 776.03,
+              "replacement": 994,
+              "widthRatio": 1.2809
+            },
+            {
+              "id": "thai-mixed-latin",
+              "original": 755.44,
+              "replacement": 1128.8,
+              "widthRatio": 1.4942
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "family": "Browallia New",
+      "script": "Thai",
+      "replacement": "Noto Sans Thai",
+      "policyCompatibility": "visual (script alias rule, no policy row)",
+      "styles": [
+        {
+          "weight": 400,
+          "file": "browalia.ttc",
+          "sha256": "0a8a88f66122f92bde4e128fb09d2cbad0709372e1887bca86c61fc845c8f846",
+          "version": "Version 5.05",
+          "postscriptName": "BrowalliaNew",
+          "lineMetrics": {
+            "unitsPerEm": 2048,
+            "hhea": {
+              "ascent": 0.84,
+              "descent": -0.289,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 0.84,
+              "descent": -0.289,
+              "lineGap": 0
+            },
+            "win": {
+              "ascent": 0.864,
+              "descent": 0.385
+            },
+            "useTypoMetrics": false,
+            "xHeight": 0.338,
+            "capHeight": 0.467
+          },
+          "replacementLineMetrics": {
+            "unitsPerEm": 1000,
+            "hhea": {
+              "ascent": 1.061,
+              "descent": -0.45,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 1.061,
+              "descent": -0.45,
+              "lineGap": 0
+            },
+            "win": {
+              "ascent": 1.061,
+              "descent": 0.45
+            },
+            "useTypoMetrics": true,
+            "xHeight": 0.556,
+            "capHeight": 0.714
+          },
+          "samples": 7,
+          "skipped": 0,
+          "meanSignedDelta": 0.3588,
+          "meanAbsDelta": 0.3588,
+          "maxAbsDelta": 0.4375,
+          "rows": [
+            {
+              "id": "thai-title",
+              "original": 819.58,
+              "replacement": 1130.7,
+              "widthRatio": 1.3796
+            },
+            {
+              "id": "thai-tone-marks",
+              "original": 656.49,
+              "replacement": 873.3,
+              "widthRatio": 1.3302
+            },
+            {
+              "id": "thai-sara-am",
+              "original": 603.17,
+              "replacement": 820.7,
+              "widthRatio": 1.3606
+            },
+            {
+              "id": "thai-pali",
+              "original": 576.03,
+              "replacement": 781.2,
+              "widthRatio": 1.3562
+            },
+            {
+              "id": "thai-no-spaces",
+              "original": 1661.57,
+              "replacement": 2251.2,
+              "widthRatio": 1.3549
+            },
+            {
+              "id": "thai-digits",
+              "original": 769.19,
+              "replacement": 994,
+              "widthRatio": 1.2923
+            },
+            {
+              "id": "thai-mixed-latin",
+              "original": 785.25,
+              "replacement": 1128.8,
+              "widthRatio": 1.4375
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "family": "Myanmar Text",
+      "script": "Mymr",
+      "replacement": "Noto Sans Myanmar",
+      "policyCompatibility": "visual (script alias rule, no policy row)",
+      "styles": [
+        {
+          "weight": 400,
+          "file": "mmrtext.ttf",
+          "sha256": "f9b362b1e0e09880cdf71852e3cc6dd6f7babb3fb6c12019f39af2135c6233cc",
+          "version": "Version 1.23",
+          "postscriptName": "MyanmarText",
+          "lineMetrics": {
+            "unitsPerEm": 2048,
+            "hhea": {
+              "ascent": 1.036,
+              "descent": -0.825,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 0.671,
+              "descent": -0.329,
+              "lineGap": 0.861
+            },
+            "win": {
+              "ascent": 1.036,
+              "descent": 0.825
+            },
+            "useTypoMetrics": false,
+            "xHeight": 0.501,
+            "capHeight": 0.7
+          },
+          "replacementLineMetrics": {
+            "unitsPerEm": 1000,
+            "hhea": {
+              "ascent": 1.324,
+              "descent": -0.86,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 1.324,
+              "descent": -0.86,
+              "lineGap": 0
+            },
+            "win": {
+              "ascent": 1.324,
+              "descent": 0.86
+            },
+            "useTypoMetrics": true,
+            "xHeight": 0.536,
+            "capHeight": 0.714
+          },
+          "samples": 3,
+          "skipped": 0,
+          "meanSignedDelta": 0.1154,
+          "meanAbsDelta": 0.1154,
+          "maxAbsDelta": 0.1558,
+          "rows": [
+            {
+              "id": "mymr-words",
+              "original": 1773.44,
+              "replacement": 1914.7,
+              "widthRatio": 1.0797
+            },
+            {
+              "id": "mymr-medials",
+              "original": 1225.15,
+              "replacement": 1360.8,
+              "widthRatio": 1.1107
+            },
+            {
+              "id": "mymr-digits",
+              "original": 828.96,
+              "replacement": 958.1,
+              "widthRatio": 1.1558
+            }
+          ]
+        },
+        {
+          "weight": 700,
+          "file": "mmrtextb.ttf",
+          "sha256": "a96d49aa45e2800f49734578e5f5c1eaeb142e60a1fe1a4cc4d885170be5dcfe",
+          "version": "Version 1.23",
+          "postscriptName": "MyanmarText-Bold",
+          "lineMetrics": {
+            "unitsPerEm": 2048,
+            "hhea": {
+              "ascent": 1.079,
+              "descent": -0.825,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 0.728,
+              "descent": -0.329,
+              "lineGap": 0.861
+            },
+            "win": {
+              "ascent": 1.079,
+              "descent": 0.825
+            },
+            "useTypoMetrics": false,
+            "xHeight": 0.5,
+            "capHeight": 0.7
+          },
+          "replacementLineMetrics": {
+            "unitsPerEm": 1000,
+            "hhea": {
+              "ascent": 1.324,
+              "descent": -0.86,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 1.324,
+              "descent": -0.86,
+              "lineGap": 0
+            },
+            "win": {
+              "ascent": 1.324,
+              "descent": 0.86
+            },
+            "useTypoMetrics": true,
+            "xHeight": 0.536,
+            "capHeight": 0.714
+          },
+          "samples": 3,
+          "skipped": 0,
+          "meanSignedDelta": 0.123,
+          "meanAbsDelta": 0.123,
+          "maxAbsDelta": 0.1725,
+          "rows": [
+            {
+              "id": "mymr-words",
+              "original": 1797.9,
+              "replacement": 1935.5,
+              "widthRatio": 1.0765
+            },
+            {
+              "id": "mymr-medials",
+              "original": 1237.84,
+              "replacement": 1386.4,
+              "widthRatio": 1.12
+            },
+            {
+              "id": "mymr-digits",
+              "original": 854.15,
+              "replacement": 1001.5,
+              "widthRatio": 1.1725
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "family": "Microsoft Himalaya",
+      "script": "Tibt",
+      "replacement": "Noto Serif Tibetan",
+      "policyCompatibility": "visual (script alias rule, no policy row)",
+      "styles": [
+        {
+          "weight": 400,
+          "file": "himalaya.ttf",
+          "sha256": "fdec3a7efacd57913d3c14111837908ccbabea5b0b44ec62527eb73acf743afb",
+          "version": "Version 5.23",
+          "postscriptName": "Microsoft Himalaya",
+          "lineMetrics": {
+            "unitsPerEm": 2048,
+            "hhea": {
+              "ascent": 0.592,
+              "descent": -0.408,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 0.592,
+              "descent": -0.408,
+              "lineGap": 0.085
+            },
+            "win": {
+              "ascent": 0.592,
+              "descent": 0.408
+            },
+            "useTypoMetrics": false,
+            "xHeight": 0.3,
+            "capHeight": 0.444
+          },
+          "replacementLineMetrics": {
+            "unitsPerEm": 1000,
+            "hhea": {
+              "ascent": 1.466,
+              "descent": -1.349,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 1.466,
+              "descent": -1.349,
+              "lineGap": 0
+            },
+            "win": {
+              "ascent": 1.466,
+              "descent": 1.349
+            },
+            "useTypoMetrics": true,
+            "xHeight": 0.678,
+            "capHeight": 0.714
+          },
+          "samples": 2,
+          "skipped": 0,
+          "meanSignedDelta": 0.5411,
+          "meanAbsDelta": 0.5411,
+          "maxAbsDelta": 0.5727,
+          "rows": [
+            {
+              "id": "tibt-words",
+              "original": 654.2,
+              "replacement": 987.5,
+              "widthRatio": 1.5095
+            },
+            {
+              "id": "tibt-stacks",
+              "original": 544.97,
+              "replacement": 857.1,
+              "widthRatio": 1.5727
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "family": "Mongolian Baiti",
+      "script": "Mong",
+      "replacement": "Noto Sans Mongolian",
+      "policyCompatibility": "visual (script alias rule, no policy row)",
+      "styles": [
+        {
+          "weight": 400,
+          "file": "monbaiti.ttf",
+          "sha256": "bf15e713f2ae14f85201ad31752054b0d88adb64634d9a1f5a7bc032f981ff89",
+          "version": "Version 5.54",
+          "postscriptName": "MongolianBaiti",
+          "lineMetrics": {
+            "unitsPerEm": 2048,
+            "hhea": {
+              "ascent": 0.844,
+              "descent": -0.219,
+              "lineGap": 0.09
+            },
+            "typo": {
+              "ascent": 0.844,
+              "descent": -0.219,
+              "lineGap": 0.09
+            },
+            "win": {
+              "ascent": 0.844,
+              "descent": 0.219
+            },
+            "useTypoMetrics": false,
+            "xHeight": 0.427,
+            "capHeight": 0.723
+          },
+          "replacementLineMetrics": {
+            "unitsPerEm": 1000,
+            "hhea": {
+              "ascent": 1.457,
+              "descent": -0.293,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 1.457,
+              "descent": -0.293,
+              "lineGap": 0
+            },
+            "win": {
+              "ascent": 1.642,
+              "descent": 0.388
+            },
+            "useTypoMetrics": true,
+            "xHeight": 0.5,
+            "capHeight": 0.7
+          },
+          "samples": 2,
+          "skipped": 0,
+          "meanSignedDelta": 0.7705,
+          "meanAbsDelta": 0.7705,
+          "maxAbsDelta": 0.7985,
+          "rows": [
+            {
+              "id": "mong-words",
+              "original": 435.21,
+              "replacement": 758.4,
+              "widthRatio": 1.7426
+            },
+            {
+              "id": "mong-names",
+              "original": 665.82,
+              "replacement": 1197.5,
+              "widthRatio": 1.7985
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "family": "MV Boli",
+      "script": "Thaa",
+      "replacement": "Noto Sans Thaana",
+      "policyCompatibility": "visual (script alias rule, no policy row)",
+      "styles": [
+        {
+          "weight": 400,
+          "file": "mvboli.ttf",
+          "sha256": "5dfd7a4c708caeefae42cdb9540946de042beeb8c069dfde0dbc14c2fa0705ae",
+          "version": "Version 6.85",
+          "postscriptName": "MVBoli",
+          "lineMetrics": {
+            "unitsPerEm": 2048,
+            "hhea": {
+              "ascent": 1.139,
+              "descent": -0.472,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 0.715,
+              "descent": -0.226,
+              "lineGap": 0.129
+            },
+            "win": {
+              "ascent": 1.139,
+              "descent": 0.472
+            },
+            "useTypoMetrics": false,
+            "xHeight": 0.403,
+            "capHeight": 0.715
+          },
+          "replacementLineMetrics": {
+            "unitsPerEm": 1000,
+            "hhea": {
+              "ascent": 1.069,
+              "descent": -0.424,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 1.069,
+              "descent": -0.424,
+              "lineGap": 0
+            },
+            "win": {
+              "ascent": 1.069,
+              "descent": 0.424
+            },
+            "useTypoMetrics": true,
+            "xHeight": 0.536,
+            "capHeight": 0.714
+          },
+          "samples": 2,
+          "skipped": 0,
+          "meanSignedDelta": -0.269,
+          "meanAbsDelta": 0.269,
+          "maxAbsDelta": 0.2737,
+          "rows": [
+            {
+              "id": "thaa-words",
+              "original": 793.6,
+              "replacement": 576.4,
+              "widthRatio": 0.7263
+            },
+            {
+              "id": "thaa-digits",
+              "original": 736.87,
+              "replacement": 542.1,
+              "widthRatio": 0.7357
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "family": "Sylfaen",
+      "script": "Armn",
+      "replacement": "Noto Sans",
+      "policyCompatibility": "visual",
+      "styles": [
+        {
+          "weight": 400,
+          "file": "sylfaen.ttf",
+          "sha256": "ac278d932d59558a76817e98051b1dae53867aa81ad83e5198b1b4c4b8066a08",
+          "version": "Version 5.08",
+          "postscriptName": "Sylfaen",
+          "lineMetrics": {
+            "unitsPerEm": 2048,
+            "hhea": {
+              "ascent": 0.737,
+              "descent": -0.281,
+              "lineGap": 0.298
+            },
+            "typo": {
+              "ascent": 0.737,
+              "descent": -0.281,
+              "lineGap": 0.298
+            },
+            "win": {
+              "ascent": 1.007,
+              "descent": 0.31
+            },
+            "useTypoMetrics": false,
+            "xHeight": 0.434,
+            "capHeight": 0.673
+          },
+          "replacementLineMetrics": {
+            "unitsPerEm": 1000,
+            "hhea": {
+              "ascent": 1.069,
+              "descent": -0.293,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 1.069,
+              "descent": -0.293,
+              "lineGap": 0
+            },
+            "win": {
+              "ascent": 1.124,
+              "descent": 0.395
+            },
+            "useTypoMetrics": true,
+            "xHeight": 0.536,
+            "capHeight": 0.714
+          },
+          "samples": 3,
+          "skipped": 0,
+          "meanSignedDelta": 0.029,
+          "meanAbsDelta": 0.1188,
+          "maxAbsDelta": 0.1359,
+          "rows": [
+            {
+              "id": "armn-title",
+              "original": 1532.71,
+              "replacement": 1664,
+              "widthRatio": 1.0857
+            },
+            {
+              "id": "armn-ligature",
+              "original": 436.87,
+              "replacement": 378,
+              "widthRatio": 0.8653
+            },
+            {
+              "id": "armn-punctuation",
+              "original": 1706.15,
+              "replacement": 1938,
+              "widthRatio": 1.1359
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "family": "Sylfaen",
+      "script": "Geor",
+      "replacement": "Noto Sans",
+      "policyCompatibility": "visual",
+      "styles": [
+        {
+          "weight": 400,
+          "file": "sylfaen.ttf",
+          "sha256": "ac278d932d59558a76817e98051b1dae53867aa81ad83e5198b1b4c4b8066a08",
+          "version": "Version 5.08",
+          "postscriptName": "Sylfaen",
+          "lineMetrics": {
+            "unitsPerEm": 2048,
+            "hhea": {
+              "ascent": 0.737,
+              "descent": -0.281,
+              "lineGap": 0.298
+            },
+            "typo": {
+              "ascent": 0.737,
+              "descent": -0.281,
+              "lineGap": 0.298
+            },
+            "win": {
+              "ascent": 1.007,
+              "descent": 0.31
+            },
+            "useTypoMetrics": false,
+            "xHeight": 0.434,
+            "capHeight": 0.673
+          },
+          "replacementLineMetrics": {
+            "unitsPerEm": 1000,
+            "hhea": {
+              "ascent": 1.069,
+              "descent": -0.293,
+              "lineGap": 0
+            },
+            "typo": {
+              "ascent": 1.069,
+              "descent": -0.293,
+              "lineGap": 0
+            },
+            "win": {
+              "ascent": 1.124,
+              "descent": 0.395
+            },
+            "useTypoMetrics": true,
+            "xHeight": 0.536,
+            "capHeight": 0.714
+          },
+          "samples": 1,
+          "skipped": 1,
+          "meanSignedDelta": 0.0165,
+          "meanAbsDelta": 0.0165,
+          "maxAbsDelta": 0.0165,
+          "rows": [
+            {
+              "id": "geor-title",
+              "original": 1611.47,
+              "replacement": 1638,
+              "widthRatio": 1.0165
+            },
+            {
+              "id": "geor-mtavruli",
+              "skipped": "the original lacks glyphs for the sample"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "notInstalled": [
+    "Meiryo",
+    "MS Mincho",
+    "SimHei",
+    "FangSong",
+    "MingLiU",
+    "PMingLiU",
+    "Batang",
+    "BatangChe",
+    "Gungsuh",
+    "GungsuhChe",
+    "David",
+    "Miriam",
+    "Gisha",
+    "Mangal",
+    "Aparajita",
+    "Shonar Bangla",
+    "Vrinda",
+    "Raavi",
+    "Shruti",
+    "Kalinga",
+    "Latha",
+    "Gautami",
+    "Tunga",
+    "Kartika",
+    "Iskoola Pota",
+    "DokChampa",
+    "DaunPenh",
+    "Khmer UI",
+    "MoolBoran",
+    "Estrangelo Edessa",
+    "Nyala"
+  ]
+}

@@ -1,0 +1,253 @@
+{
+  "method": "wrapText from @openpresentation/opf at 61 widths, 24 px, spaces removed; the face is the designated open replacement",
+  "rows": [
+    {
+      "id": "thai-title",
+      "script": "Thai",
+      "widths": 61,
+      "breaks": 22,
+      "insideIcuWord": 17,
+      "kinsokuViolations": 0
+    },
+    {
+      "id": "thai-tone-marks",
+      "script": "Thai",
+      "widths": 61,
+      "breaks": 7,
+      "insideIcuWord": 6,
+      "kinsokuViolations": 0
+    },
+    {
+      "id": "thai-sara-am",
+      "script": "Thai",
+      "widths": 61,
+      "breaks": 9,
+      "insideIcuWord": 4,
+      "kinsokuViolations": 0
+    },
+    {
+      "id": "thai-pali",
+      "script": "Thai",
+      "widths": 61,
+      "breaks": 7,
+      "insideIcuWord": 7,
+      "kinsokuViolations": 0
+    },
+    {
+      "id": "thai-no-spaces",
+      "script": "Thai",
+      "widths": 61,
+      "breaks": 84,
+      "insideIcuWord": 57,
+      "kinsokuViolations": 0
+    },
+    {
+      "id": "thai-digits",
+      "script": "Thai",
+      "widths": 61,
+      "breaks": 14,
+      "insideIcuWord": 14,
+      "kinsokuViolations": 0
+    },
+    {
+      "id": "thai-mixed-latin",
+      "script": "Thai",
+      "widths": 61,
+      "breaks": 17,
+      "insideIcuWord": 17,
+      "kinsokuViolations": 0
+    },
+    {
+      "id": "laoo-words",
+      "script": "Laoo",
+      "widths": 61,
+      "breaks": 32,
+      "insideIcuWord": 24,
+      "kinsokuViolations": 0
+    },
+    {
+      "id": "laoo-marks",
+      "script": "Laoo",
+      "widths": 61,
+      "breaks": 8,
+      "insideIcuWord": 4,
+      "kinsokuViolations": 0
+    },
+    {
+      "id": "khmr-title",
+      "script": "Khmr",
+      "widths": 61,
+      "breaks": 14,
+      "insideIcuWord": 7,
+      "kinsokuViolations": 0
+    },
+    {
+      "id": "khmr-coeng",
+      "script": "Khmr",
+      "widths": 61,
+      "breaks": 11,
+      "insideIcuWord": 9,
+      "kinsokuViolations": 0
+    },
+    {
+      "id": "khmr-words",
+      "script": "Khmr",
+      "widths": 61,
+      "breaks": 10,
+      "insideIcuWord": 8,
+      "kinsokuViolations": 0
+    },
+    {
+      "id": "khmr-digits",
+      "script": "Khmr",
+      "widths": 61,
+      "breaks": 14,
+      "insideIcuWord": 14,
+      "kinsokuViolations": 0
+    },
+    {
+      "id": "mymr-words",
+      "script": "Mymr",
+      "widths": 61,
+      "breaks": 60,
+      "insideIcuWord": 35,
+      "kinsokuViolations": 0
+    },
+    {
+      "id": "mymr-medials",
+      "script": "Mymr",
+      "widths": 61,
+      "breaks": 30,
+      "insideIcuWord": 18,
+      "kinsokuViolations": 0
+    },
+    {
+      "id": "mymr-digits",
+      "script": "Mymr",
+      "widths": 61,
+      "breaks": 13,
+      "insideIcuWord": 13,
+      "kinsokuViolations": 0
+    },
+    {
+      "id": "jpan-sentence",
+      "script": "Jpan",
+      "widths": 61,
+      "breaks": 88,
+      "insideIcuWord": 34,
+      "kinsokuViolations": 9
+    },
+    {
+      "id": "jpan-prolonged",
+      "script": "Jpan",
+      "widths": 61,
+      "breaks": 51,
+      "insideIcuWord": 18,
+      "kinsokuViolations": 0
+    },
+    {
+      "id": "jpan-halfwidth",
+      "script": "Jpan",
+      "widths": 61,
+      "breaks": 5,
+      "insideIcuWord": 0,
+      "kinsokuViolations": 0
+    },
+    {
+      "id": "jpan-punctuation",
+      "script": "Jpan",
+      "widths": 61,
+      "breaks": 54,
+      "insideIcuWord": 9,
+      "kinsokuViolations": 33
+    },
+    {
+      "id": "jpan-combining-dakuten",
+      "script": "Jpan",
+      "widths": 61,
+      "breaks": 3,
+      "insideIcuWord": 0,
+      "kinsokuViolations": 0
+    },
+    {
+      "id": "jpan-mixed-latin",
+      "script": "Jpan",
+      "widths": 61,
+      "breaks": 28,
+      "insideIcuWord": 12,
+      "kinsokuViolations": 0
+    },
+    {
+      "id": "jpan-no-spaces",
+      "script": "Jpan",
+      "widths": 61,
+      "breaks": 142,
+      "insideIcuWord": 58,
+      "kinsokuViolations": 12
+    },
+    {
+      "id": "hans-sentence",
+      "script": "Hans",
+      "widths": 61,
+      "breaks": 54,
+      "insideIcuWord": 15,
+      "kinsokuViolations": 3
+    },
+    {
+      "id": "hans-punctuation",
+      "script": "Hans",
+      "widths": 61,
+      "breaks": 63,
+      "insideIcuWord": 12,
+      "kinsokuViolations": 33
+    },
+    {
+      "id": "hans-mixed-latin",
+      "script": "Hans",
+      "widths": 61,
+      "breaks": 13,
+      "insideIcuWord": 7,
+      "kinsokuViolations": 0
+    },
+    {
+      "id": "hans-no-spaces",
+      "script": "Hans",
+      "widths": 61,
+      "breaks": 102,
+      "insideIcuWord": 30,
+      "kinsokuViolations": 15
+    },
+    {
+      "id": "hant-sentence",
+      "script": "Hant",
+      "widths": 61,
+      "breaks": 45,
+      "insideIcuWord": 15,
+      "kinsokuViolations": 6
+    },
+    {
+      "id": "hant-punctuation",
+      "script": "Hant",
+      "widths": 61,
+      "breaks": 90,
+      "insideIcuWord": 15,
+      "kinsokuViolations": 51
+    },
+    {
+      "id": "hant-bopomofo",
+      "script": "Hant",
+      "widths": 61,
+      "breaks": 35,
+      "insideIcuWord": 28,
+      "kinsokuViolations": 0
+    },
+    {
+      "id": "hant-mixed-latin",
+      "script": "Hant",
+      "widths": 61,
+      "breaks": 13,
+      "insideIcuWord": 7,
+      "kinsokuViolations": 0
+    }
+  ]
+}

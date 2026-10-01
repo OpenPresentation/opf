@@ -222,3 +222,17 @@ test('the package root exports the numbering helpers', () => {
   for (const name of ['formatListNumber', 'listNumbers', 'resolveNumbering', 'numberingAtLevel', 'sliceNumberedItems', 'NUMBERING_STYLES', 'NUMBERING_SUFFIXES', 'MAX_NUMBERING_VALUE', 'MAX_ROMAN_VALUE'])
     assert.notEqual(root[name], undefined, name);
 });
+
+test('the fixture is valid and lint suggests the numbering styles', async () => {
+  const {readFileSync} = await import('node:fs');
+  const {lintSource} = await import('../dist/lint.js');
+  const text = readFileSync(new URL('../../../docs/fixtures/numbered-lists.opf.json', import.meta.url), 'utf8');
+  assert.deepEqual(lintSource(text).counts, {error: 0, warning: 0, info: 0});
+  const fixture = JSON.parse(text);
+  const kinds = fixture.slides.flatMap(slide => [slide, ...(slide.blocks ?? []), slide.left, slide.right].filter(Boolean)).map(block => block.numbering).filter(value => value !== undefined);
+  assert.ok(kinds.some(value => Array.isArray(value)) && kinds.some(value => typeof value === 'string') && kinds.some(value => value?.start !== undefined), 'the fixture covers every spelling');
+  const report = lintSource(JSON.stringify({slides: [{items: ['a'], numbering: 'roman'}]}));
+  assert.equal(report.valid, false);
+  const suggested = report.diagnostics.flatMap(diagnostic => (diagnostic.suggestions ?? []).map(suggestion => suggestion.value));
+  assert.deepEqual(suggested, ['arabic', 'roman-upper', 'roman-lower', 'alpha-upper', 'alpha-lower']);
+});
