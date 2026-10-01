@@ -12,6 +12,10 @@ Preserve document fields unrelated to the requested change, including assets, ca
 
 Published CLI 0.9.0 (Node 24, bundled core 0.11.0) supports `opf edit deck.opf.json --patch changes.json --dry-run`, then `--output reviewed.opf.json` or `--in-place` to save. Patches use JSON Patch arrays with `add`, `remove`, `replace`, `move`, `copy`, and `test`. The complete result must validate before saving. With no output option the candidate goes to stdout. Use `--expect-sha256` with the digest from an earlier `opf validate` for a file revision guard. File edits have no persistent undo history; save a separate output or use version control when needed. Coordinate concurrent writers externally. Check `opf --version` and `opf --help`; an older installed CLI may not support these commands.
 
+## Compare, merge and format files
+
+Repository `main` (not in CLI 0.9.2 or core 0.11.4; check `opf --help`) adds `opf diff a.opf.json b.opf.json` (readable report; `--format patch` prints a JSON Patch from a to b, `--exit-code` exits 1 when they differ), `opf merge base ours theirs` (non-overlapping changes merge; conflicts list base, ours and theirs, exit 1 and write nothing unless `--prefer ours|theirs`; the merged file is validated) and `opf format deck.opf.json` (canonical key order and layout; `--check` for CI, `--in-place` to rewrite). Slides match by `id` first, so give them stable ids. Diff, merge and `opf edit` share the one RFC 6902 module `@openpresentation/opf/patch` (`applyPatch`, `invertPatch`, `pointerFromPath`); in code, use it instead of a private patch loop. Details: `docs/patch-diff-merge-format.md` in the core repository.
+
 ## Precise edits
 
 Resolve a stable slide ID to its current array index immediately before creating a patch. Use JSON Pointer for keys containing dots, slashes, or tildes (`~1` escapes `/`; `~0` escapes `~`). Use `test` operations or the host's revision check when edits were based on an earlier snapshot. Do not overwrite newer changes with a stale whole-document copy.

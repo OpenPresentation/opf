@@ -205,6 +205,23 @@ assert.equal(policy.valid,false);assert.equal(policy.schemaValid,true);assert.ok
 console.log('Installed lint: public entrypoints, exact ranges, loaded records, duplicate keys and contracts pass offline.');
 `);
     const lint=await run(process.execPath,['lint.mjs'],{cwd:projectDir});process.stdout.write(lint.stdout);
+    for(const entry of ['patch','diff','format'])assertTarIncludes(files,`package/dist/${entry}.js`);
+    await writeFile(path.join(projectDir,'patch-diff-format.mjs'),`
+import assert from 'node:assert/strict';
+import {applyPatch,invertPatch} from '@openpresentation/opf/patch';
+import {diffPresentations,mergePresentations} from '@openpresentation/opf/diff';
+import {formatPresentation} from '@openpresentation/opf/format';
+const a={name:'A',slides:[{id:'x',title:'X'},{id:'y',title:'Y'}]};
+const b={name:'B',slides:[{id:'y',title:'Y'},{id:'x',title:'X2'}]};
+const diff=diffPresentations(a,b);
+assert.deepEqual(applyPatch(a,diff.patch),b);
+assert.deepEqual(applyPatch(b,invertPatch(a,diff.patch)),a);
+assert.equal(mergePresentations(a,b,a).clean,true);
+assert.equal(mergePresentations(a,{...a,name:'1'},{...a,name:'2'}).conflicts.length,1);
+assert.equal(formatPresentation('{"slides":[],"name":"N"}'),'{\\n  "name": "N",\\n  "slides": []\\n}\\n');
+console.log('Installed patch, diff, merge and format entrypoints pass offline.');
+`);
+    const pdf=await run(process.execPath,['patch-diff-format.mjs'],{cwd:projectDir});process.stdout.write(pdf.stdout);
   }
   for (const file of ['quote-layout.test.mjs','quote-composition.test.mjs','code-layout.test.mjs','code-composition.test.mjs']) {
     const source=(await readFile(path.join(packageRoot,'test',file),'utf8'))
