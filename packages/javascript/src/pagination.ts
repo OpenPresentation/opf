@@ -88,7 +88,9 @@ function leafFor(path: string, field: string, value: any): Leaf {
 
 /** Explicit, lossless authoring transform. It never changes slide count during rendering. */
 export function paginateSlide(input: unknown, options: PaginationOptions = {}): PaginationResult {
-  assertValidPresentation({slides:[input]});
+  // RR-34: a slide that cites references validates only with the deck's references list.
+  const deckReferences = (options.presentation as {references?: unknown} | undefined)?.references;
+  assertValidPresentation({...(Array.isArray(deckReferences)?{references:deckReferences}:{}),slides:[input]});
   let source = clone(input) as Record<string, any>;
   const maxSlides = options.maxSlides ?? 100;
   if (!Number.isInteger(maxSlides) || maxSlides < 1 || maxSlides > 10000) throw new RangeError('maxSlides must be an integer between 1 and 10000.');
@@ -193,7 +195,9 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
     const issues = fit(geometry(slide,slides.length).diagnostics);
     if (issues.length) throw new OPFPaginationError('A continuation page does not fit at its final page number. No partial result was returned.',issues);
     assignPageIds(slide,slides.length);
-    assertValidPresentation({slides:[slide]});
+    // RR-34: a page that cites references validates only with the deck's references list.
+    const references = (options.presentation as {references?: unknown} | undefined)?.references;
+    assertValidPresentation({...(Array.isArray(references)?{references}:{}),slides:[slide]});
     slides.push(slide); pages.push({slideIndex:sourceIndex+slides.length-1,mappings,...(initial.furniture?{repeatedMappings:repeatedMappings(slides.length-1)}:{})});
     selected = new Map();
   };

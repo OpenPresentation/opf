@@ -35,6 +35,7 @@ Separate these outcomes:
 - **Schema errors:** fix the reported paths or the incompatible union/required fields, preserving user content. An error inside one alternative can be incidental; inspect the intended form and the final union error.
 - **Reference warnings:** confirm IDs, aliases, inline records, and source configuration. An unknown ID warning is not the same as an invalid document. No warnings does not prove every reference resolves; free-form layout IDs, for example, may pass without a warning.
 - **Layout diagnostics:** require composition/rendering with the resolved dimensions and fonts. Schema validation alone cannot detect unreadable charts or exact text overflow.
+- **Citations and captions:** `cite-unknown-reference`, `reference-id-duplicate`, `cite-unsupported-location` and `caption-unsupported-payload` are validation errors (`params.code`); an uncited reference is only the lint warning `opf/unused-reference`. A footnote area or caption that does not fit is a composition `text-overflow` at `references.N`, the run's path or the caption path.
 - **Visual/export differences:** require actual preview and output inspection. Never report validation success as proof of pixel parity.
 
 Inspect the narrow schema branch needed to answer the question. For full-file reviews, check references, structure, and preservation of assets/metadata as well as validity. Report the exact package version and what was checked when that distinction affects the conclusion.

@@ -107,6 +107,10 @@ export type { RichTextRun, RichTextFragment, RichTextLine, RichTextFit, RichText
 
 export {fitList} from './composition.js';
 export type {ListText,ListValue,ListEntryLayout,ListFit} from './composition.js';
+
+// RR-34: footnotes, citations and captions (annotations.ts; also on the composition entry).
+export {CAPTIONABLE_FIELDS,CAPTION_FONT_RATIO,CAPTION_MAX_RATIO,CITATION_MARKER_RAISE,CITATION_MARKER_SCALE,FOOTNOTE_MAX_RATIO,annotationText,captionSettings,citationMarkerText,collectCitations,layoutCaption,layoutFootnotes,referencesSlide,slideCitations,walkCitationRuns} from './annotations.js';
+export type {AnnotatedRun,AnnotationFitter,AnnotationLayoutOptions,Caption,CaptionAlignment,CaptionObject,CaptionPosition,CaptionSettings,CitationMarker,CitationNote,ComposedCaption,ComposedFootnoteEntry,ComposedFootnotes,DeckCitations,FootnoteLayoutOptions,Reference,ReferencesSlideOptions,RichText,SlideCitations} from './annotations.js';
 export {
   chartColorForFill,
   colorContrast,

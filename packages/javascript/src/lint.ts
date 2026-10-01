@@ -19,6 +19,7 @@ import {
 } from './validator.js';
 import type { JsonPrimitive, JsonSchema } from './json.js';
 import { validationDefinition } from './validation-definitions.js';
+import { unusedReferenceWarnings } from './annotation-validation.js';
 
 export type LintSeverity = 'error' | 'warning' | 'info';
 export interface LintLocation {
@@ -608,7 +609,12 @@ export function lintPresentation(
 ): LintReport {
 	optionsChecked(options);
 	const validation = validatePresentation(document),
-		diagnostics = validation.errors.map((issue) => schemaDiagnostic(issue));
+		// A semantic issue that names its code (RR-34: cite-unknown-reference, caption-unsupported-payload, ...) keeps it as the rule id.
+		diagnostics = validation.errors.map((issue) =>
+			typeof issue.params.code === 'string' && issue.keyword === 'opf'
+				? { ...schemaDiagnostic(issue), ruleId: `opf/${issue.params.code}` }
+				: schemaDiagnostic(issue),
+		);
 	const catalogs = catalogContext(document, options, diagnostics),
 		seen = new Set<string>();
 	const assetValues =
@@ -818,6 +824,19 @@ export function lintPresentation(
 			}
 		}
 	}
+	// RR-34: a reference no run cites is advisory; cite it or remove it.
+	for (const issue of unusedReferenceWarnings(document))
+		diagnostics.push({
+			ruleId: 'opf/unused-reference',
+			severity: 'warning',
+			scope: 'document',
+			path: issue.path,
+			message: issue.message,
+			help: "Cite the reference from a text, bullet or list item run ({ text, cite: id }) so it is listed in that slide's footnote area, or remove the entry. Nothing is drawn for an uncited reference.",
+			definition: schemas.presentation.$id + '#/$defs/Reference',
+			lookup: ['opf', 'schema', 'presentation', '/$defs/Reference'],
+			validation: issue,
+		});
 	return report(diagnostics, validation.valid, 'not-applicable');
 }
 
