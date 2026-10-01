@@ -7,7 +7,7 @@
 //   * every font family the preview draws is a loaded FontFace from the SVG itself, so no host font is involved;
 //   * the drawn families are the ones the chosen font scheme resolves to, and switching the scheme A -> B -> A re-renders:
 //     different SVG, different drawn families, different pixels, and A again reproduces A's pixels in the same browser;
-//   * on Linux a second browser launched with host fonts reduced to one unrelated face draws the same pixels.
+//   * on Linux a second browser launched with host fonts reduced to one unrelated face draws with the same embedded faces.
 // Pixel hashes are recorded for the evidence but never compared across operating systems: Chromium rasterizes text
 // differently on each (on macOS only the families and the re-render are asserted, as the FF-10 criteria say).
 import assert from 'node:assert/strict';
@@ -116,7 +116,13 @@ const runs = [await pass('default host fonts', {})];
 if (process.platform === 'linux') {
   // Host fonts reduced to one unrelated face: anything not embedded would draw with it or not at all.
   const bare = await pass('minimal host fonts (fontconfig with one unrelated face)', {FONTCONFIG_FILE: path.join(hostFonts, 'fonts.conf'), FONTCONFIG_PATH: hostFonts, XDG_DATA_DIRS: hostFonts, XDG_DATA_HOME: hostFonts});
-  for (const [key, state] of Object.entries(runs[0].states)) assert.equal(bare.states[key].png, state.png, `${key}: the same pixels with and without host fonts`);
+  // The same faces draw in both browsers. Pixels are recorded, not asserted: Chromium takes hinting and anti-aliasing from the host
+  // fontconfig, and this reduced one does not carry the distribution's rendering settings.
+  for (const [key, state] of Object.entries(runs[0].states)) {
+    assert.deepEqual(bare.states[key].drawn, state.drawn, `${key}: the same families draw with minimal host fonts`);
+    assert.deepEqual(bare.states[key].loaded, state.loaded, `${key}: the same embedded faces load with minimal host fonts`);
+    bare.states[key].pixelsEqualToDefaultHost = bare.states[key].png === state.png;
+  }
   runs.push(bare);
 }
 mkdirSync(outDir, {recursive: true});
