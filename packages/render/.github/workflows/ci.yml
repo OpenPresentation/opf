@@ -117,6 +117,7 @@ jobs:
       - run: npm run test:lazy-face-fallback-browser
       - run: npm run test:script-fonts-browser
       - run: npm run test:script-fonts-auto-browser
+      - run: npm run test:script-corpora-browser
       - run: npm run test:plain-whitespace-browser
       - id: rich-flow
         run: npm run test:rich-flow-browser
@@ -153,6 +154,8 @@ jobs:
             opf-render/artifacts/font-variants*.json
             opf-render/artifacts/variable-font-gate/**
             opf-render/artifacts/script-fonts-browser.json
+            opf-render/artifacts/script-corpora-browser.json
+            opf-render/artifacts/script-corpora-slides-browser.json
             opf-render/artifacts/script-fonts-auto/**
             opf/artifacts/plain-whitespace-workflow/**
             opf/artifacts/readability-browser/**

@@ -786,6 +786,12 @@ function renderResolvedSlide(resolved, slideIndex, options) {
     renderFurniture(bound, resolved.presentation, width, height, options, "footer")
   ].filter(Boolean);
   const children = [renderEmbeddedFonts(embeddedFontsFor(options.embeddedFonts, content)), ...content].filter(Boolean);
+  // FF-44: Chromium (123+) trims adjacent fullwidth punctuation by default (CSS text-spacing-trim: normal; a sequence such as
+  // 「」。 is up to 10 percent narrower), but measurement and PowerPoint advance every such character by its full width, so the browser
+  // would stretch the glyphs back to the pinned textLength. space-all keeps the drawn advances equal to the measured ones. Only slides
+  // that draw such punctuation carry it, so other output is unchanged.
+  const drawn = content.join("");
+  const trimsPunctuation = /[　-〿＀-￯]/.test(drawn) || (script?.scriptRole === "eastAsian" && /[‘-”]/.test(drawn));
 
   return tag(
     "svg",
@@ -798,6 +804,7 @@ function renderResolvedSlide(resolved, slideIndex, options) {
       height,
       lang,
       "xml:lang": lang,
+      style: trimsPunctuation ? "text-spacing-trim:space-all" : undefined,
       ...traceAttrs(options, bound.path)
     },
     `\n${children.join("\n")}\n`
