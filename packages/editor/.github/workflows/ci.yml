@@ -26,25 +26,26 @@ jobs:
           fetch-depth: 0
           path: opf-editor
       # The ecosystem is pinned to the versions this package depends on: opf main after #219 (the packed-ecosystem check there knows renderer 0.11.8), opf-render 0.11.8 (tag colour; extra lazy fonts, face-level lazy fonts and host render options; lazy script and preview faces, incl. Barlow, which test:playground exercises; chart label rotation) and opf-pptx 0.11.5.
+      # Release 0.10.6 pins the 0.11.4 train sources: opf#234 (design fields, picture bullets, 0.11.9 lazy face count), opf-render main fa1949a and opf-pptx main 9b9b0e4; repin each to its merge commit (opf-pptx to the merge of #124). The registry dependencies resolve once core 0.11.4, renderer 0.11.9 and PPTX 0.11.7 are published (npm ci and test:packed).
       # Verify registry dependencies before linking the pinned source graph.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf
-          ref: 3ae62f9a01102fd43a9fc301ef59fdbb1cd998c6 # opf main after #219 (records the 0.11.8 renderer lazy face count)
+          ref: 07cd9d4fc400725293e4e697640662333a2eb356 # core main (published 0.11.4 plus opf#234 renderer 0.11.9 lazy font count and opf#235 ecosystem repin)
           path: opf
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-render
-          ref: 0ce9bb959247fbb706f670240e55fd7a09a2eedd # opf-render-v0.11.8
+          ref: 2fbc0abf3c327b6e9e9525a52c8ea9e56e84646e # opf-render 0.11.9 release commit
           path: opf-render
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-pptx
-          ref: da6a8799d09401e65e8148becba7ef8f29f0500d # opf-pptx-v0.11.5
+          ref: a9bcbd75886bd1ac195b4206cefae83525b1fea4 # opf-pptx 0.11.7 release commit
           path: opf-pptx
           fetch-depth: 0
           persist-credentials: false

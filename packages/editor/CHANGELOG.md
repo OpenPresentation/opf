@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.10.6
+
+- Release 0.10.6 (patch: dependency floors and a test fix; no change to `src/`, no public export changed, the optional renderer peer stays ^0.11.0). The core floor moves from `@openpresentation/opf` ^0.11.3 to ^0.11.4 and the development renderer and PPTX move to ^0.11.9 and ^0.11.7. Core 0.11.4 composes the design fields (logos on covers and section slides, `contentDirection`, `chartPrimary`, picture bullets, header and footer logos, the accent font), aligns a cover's tag and subtitle with its title, and changes the picture-bullet and furniture-image geometry; the canvas, the renderer preview and the PPTX export only agree when all three resolve that core (the lockstep rule), so install the editor with `@openpresentation/opf` 0.11.4, opf-render 0.11.9 and opf-pptx 0.11.7. Everything since 0.10.5 (`git log cb1a526..main`): #57 (tests only: the playground export check accepts the root payload form opf-pptx returns with content topology).
+
 ## 0.10.5
 
 - Release 0.10.5 (patch: example only; no change to `src/`, no public export changed, core floor stays `@openpresentation/opf` ^0.11.3 and the optional renderer peer ^0.11.0). Everything since 0.10.4 (`git log 1529f26..main`): only #55 (FF-41): the playground example loads its base faces through the renderer's `extraLazyFonts` (entry below), which needs opf-render 0.11.7 or later; the development renderer moves to ^0.11.8 and PPTX to ^0.11.5. The gallery editor (`public/opf-editor`) is built from this example, so a gallery rebuild picks up the change; first-load bytes are unchanged (a default Roboto deck: 701,692 font bytes).
