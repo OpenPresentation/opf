@@ -1,0 +1,1227 @@
+{
+  "version": 1,
+  "id": "opf-script-corpora-v1",
+  "description": "Script-specific shaping corpora for the open script-replacement faces (RR-17, FF-44). One group per ISO 15924 script that the OPF language catalog, the font-scheme catalog and the renderer's script slots use. Each sample exercises one shaping behaviour (joining, ligatures, marks, conjuncts, vowel placement, stacking, tone marks, digits, punctuation, bidi, mixed Latin, text without spaces) and is run through every open face that serves its script.",
+  "provenance": "Original text written for OPF for this corpus, kept to short phrases, common words (days, months, numerals, language and country names, greetings) and the catalog's own font-scheme sample strings; no third-party prose is copied. Words are chosen to hit a shaping behaviour, not to carry meaning; the corpus does not claim editorial or translation quality. Public-domain proverbs and the catalog's own samples are marked in `source`.",
+  "license": "MIT (same as the repository)",
+  "groups": [
+    {
+      "script": "Arab",
+      "direction": "rtl",
+      "languages": [
+        "ar",
+        "fa",
+        "ur",
+        "ps",
+        "pa-Arab"
+      ],
+      "samples": [
+        {
+          "id": "arab-joining",
+          "lang": "ar",
+          "category": "joining",
+          "text": "مراجعة ربع سنوية للمبيعات"
+        },
+        {
+          "id": "arab-lam-alef",
+          "lang": "ar",
+          "category": "ligature",
+          "text": "الإنسان لا يعيش بالخبز وحده"
+        },
+        {
+          "id": "arab-harakat",
+          "lang": "ar",
+          "category": "marks",
+          "text": "مَرْحَبًا بِكُمْ فِي الْعَرْضِ"
+        },
+        {
+          "id": "arab-digits",
+          "lang": "ar",
+          "category": "digits",
+          "text": "الفصل ٢٠٢٦ — نمو ١٢٫٥٪"
+        },
+        {
+          "id": "arab-bidi-latin",
+          "lang": "ar",
+          "category": "bidi-mixed",
+          "text": "تقرير Q3 لعام 2026 (الإصدار 2.1)"
+        },
+        {
+          "id": "arab-punctuation",
+          "lang": "ar",
+          "category": "punctuation",
+          "text": "هل هذا صحيح؟ نعم، بالتأكيد؛ شكرًا."
+        },
+        {
+          "id": "arab-fa-letters",
+          "lang": "fa",
+          "category": "joining",
+          "text": "پژوهش چگونه گزارش ژرف می‌شود"
+        },
+        {
+          "id": "arab-fa-digits",
+          "lang": "fa",
+          "category": "digits",
+          "text": "۱۲۳۴۵۶۷۸۹۰ و ۱۴۰۵"
+        },
+        {
+          "id": "arab-ur-letters",
+          "lang": "ur",
+          "category": "joining",
+          "text": "ٹھنڈا پانی ڈھونڈنا بڑا مشکل ہے"
+        },
+        {
+          "id": "arab-ur-title",
+          "lang": "ur",
+          "category": "joining",
+          "text": "اردو زبان کی خوبصورتی"
+        },
+        {
+          "id": "arab-ps-letters",
+          "lang": "ps",
+          "category": "joining",
+          "text": "پښتو ژبه ځانګړې ډېره ښه ده"
+        },
+        {
+          "id": "arab-pa-shahmukhi",
+          "lang": "pa-Arab",
+          "category": "joining",
+          "text": "پنجابی زبان دی تریماہی جائزہ"
+        }
+      ]
+    },
+    {
+      "script": "Hebr",
+      "direction": "rtl",
+      "languages": [
+        "he"
+      ],
+      "samples": [
+        {
+          "id": "hebr-words",
+          "lang": "he",
+          "category": "joining",
+          "text": "סקירה רבעונית של המכירות"
+        },
+        {
+          "id": "hebr-final-forms",
+          "lang": "he",
+          "category": "joining",
+          "text": "ךםןףץ כמנפצ שלום לכולם"
+        },
+        {
+          "id": "hebr-niqqud",
+          "lang": "he",
+          "category": "marks",
+          "text": "שָׁלוֹם עוֹלָם בְּרֵאשִׁית"
+        },
+        {
+          "id": "hebr-geresh",
+          "lang": "he",
+          "category": "punctuation",
+          "text": "ג׳ירפה צ׳יפס מקל״ט רמב״ם"
+        },
+        {
+          "id": "hebr-maqaf",
+          "lang": "he",
+          "category": "punctuation",
+          "text": "בית־ספר, אחד־עשר, שנת תשפ״ו"
+        },
+        {
+          "id": "hebr-bidi-latin",
+          "lang": "he",
+          "category": "bidi-mixed",
+          "text": "דוח Q3 2026 – גרסה 2.1"
+        }
+      ]
+    },
+    {
+      "script": "Deva",
+      "direction": "ltr",
+      "languages": [
+        "hi",
+        "mr",
+        "ne"
+      ],
+      "samples": [
+        {
+          "id": "deva-title",
+          "lang": "hi",
+          "category": "vowel-placement",
+          "text": "हिन्दी भाषा में तिमाही समीक्षा"
+        },
+        {
+          "id": "deva-conjuncts",
+          "lang": "hi",
+          "category": "conjunct",
+          "text": "विज्ञान क्षत्रिय श्रीमान द्वार पुस्तक धर्म"
+        },
+        {
+          "id": "deva-reph",
+          "lang": "hi",
+          "category": "conjunct",
+          "text": "कार्य सूर्य वर्ष दर्शन कर्म"
+        },
+        {
+          "id": "deva-matras",
+          "lang": "hi",
+          "category": "vowel-placement",
+          "text": "कि की कु कू के कै को कौ कं कः कँ"
+        },
+        {
+          "id": "deva-nukta",
+          "lang": "hi",
+          "category": "marks",
+          "text": "ज़िंदगी फ़ाइल क़ानून माँ आँख"
+        },
+        {
+          "id": "deva-mr",
+          "lang": "mr",
+          "category": "joining",
+          "text": "मराठी भाषा ळ कोळसा"
+        },
+        {
+          "id": "deva-ne",
+          "lang": "ne",
+          "category": "joining",
+          "text": "नेपाली भाषा त्रैमासिक समीक्षा"
+        },
+        {
+          "id": "deva-digits",
+          "lang": "hi",
+          "category": "digits",
+          "text": "२०२६ में १२.५% वृद्धि"
+        },
+        {
+          "id": "deva-mixed-latin",
+          "lang": "hi",
+          "category": "mixed-latin",
+          "text": "रिपोर्ट Q3 2026 और OPF"
+        }
+      ]
+    },
+    {
+      "script": "Beng",
+      "direction": "ltr",
+      "languages": [
+        "bn",
+        "ctg"
+      ],
+      "samples": [
+        {
+          "id": "beng-title",
+          "lang": "bn",
+          "category": "vowel-placement",
+          "text": "বাংলা ভাষায় ত্রৈমাসিক পর্যালোচনা"
+        },
+        {
+          "id": "beng-conjuncts",
+          "lang": "bn",
+          "category": "conjunct",
+          "text": "ক্ষ জ্ঞ স্ত ন্দ ব্যবহার প্রশ্ন"
+        },
+        {
+          "id": "beng-reph",
+          "lang": "bn",
+          "category": "conjunct",
+          "text": "কর্ম ধর্ম সূর্য বর্ষা"
+        },
+        {
+          "id": "beng-vowels",
+          "lang": "bn",
+          "category": "vowel-placement",
+          "text": "কি কী কু কূ কৃ কে কৈ কো কৌ"
+        },
+        {
+          "id": "beng-khanda-ta",
+          "lang": "bn",
+          "category": "ligature",
+          "text": "উৎসব আকস্মিক"
+        },
+        {
+          "id": "beng-ctg",
+          "lang": "ctg",
+          "category": "joining",
+          "text": "এটি ভ্রিন্দা ফন্টে লেখা হয়েছে"
+        }
+      ]
+    },
+    {
+      "script": "Guru",
+      "direction": "ltr",
+      "languages": [
+        "pa-Guru"
+      ],
+      "samples": [
+        {
+          "id": "guru-title",
+          "lang": "pa",
+          "category": "vowel-placement",
+          "text": "ਪੰਜਾਬੀ ਭਾਸ਼ਾ ਵਿੱਚ ਤਿਮਾਹੀ ਸਮੀਖਿਆ"
+        },
+        {
+          "id": "guru-marks",
+          "lang": "pa",
+          "category": "marks",
+          "text": "ਸ਼ ਖ਼ ਗ਼ ਜ਼ ਫ਼ ਲ਼ ਅੱਖ ਕੁੱਤਾ ਹੈ ਹਨ"
+        },
+        {
+          "id": "guru-subjoined",
+          "lang": "pa",
+          "category": "conjunct",
+          "text": "ਪ੍ਰਸ਼ਨ ਸ੍ਰੀ ਦ੍ਰਿਸ਼ਟੀ"
+        }
+      ]
+    },
+    {
+      "script": "Gujr",
+      "direction": "ltr",
+      "languages": [
+        "gu"
+      ],
+      "samples": [
+        {
+          "id": "gujr-title",
+          "lang": "gu",
+          "category": "vowel-placement",
+          "text": "ગુજરાતી ભાષામાં ત્રિમાસિક સમીક્ષા"
+        },
+        {
+          "id": "gujr-conjuncts",
+          "lang": "gu",
+          "category": "conjunct",
+          "text": "જ્ઞાન ક્ષ શ્રી દ્વારા કાર્ય સૂર્ય"
+        },
+        {
+          "id": "gujr-marks",
+          "lang": "gu",
+          "category": "marks",
+          "text": "કિ કી કુ કૂ કે કૈ કો કૌ કં કઃ કઁ"
+        }
+      ]
+    },
+    {
+      "script": "Orya",
+      "direction": "ltr",
+      "languages": [
+        "or"
+      ],
+      "samples": [
+        {
+          "id": "orya-title",
+          "lang": "or",
+          "category": "vowel-placement",
+          "text": "ଓଡ଼ିଆ ଭାଷାରେ ତ୍ରୈମାସିକ ସମୀକ୍ଷା"
+        },
+        {
+          "id": "orya-conjuncts",
+          "lang": "or",
+          "category": "conjunct",
+          "text": "କ୍ଷ ଜ୍ଞ ଶ୍ରୀ ପ୍ରଶ୍ନ ବିଦ୍ୟା"
+        },
+        {
+          "id": "orya-nukta",
+          "lang": "or",
+          "category": "marks",
+          "text": "ଡ଼ ଢ଼ ୟ କି କୀ କୁ କୂ କେ କୈ କୋ କୌ"
+        }
+      ]
+    },
+    {
+      "script": "Taml",
+      "direction": "ltr",
+      "languages": [
+        "ta"
+      ],
+      "samples": [
+        {
+          "id": "taml-title",
+          "lang": "ta",
+          "category": "vowel-placement",
+          "text": "தமிழ் மொழியில் காலாண்டு மதிப்பாய்வு"
+        },
+        {
+          "id": "taml-split-vowels",
+          "lang": "ta",
+          "category": "vowel-placement",
+          "text": "கொ கோ கௌ கெ கே கை"
+        },
+        {
+          "id": "taml-ligatures",
+          "lang": "ta",
+          "category": "conjunct",
+          "text": "க்ஷ ஸ்ரீ ஜ ஷ ஸ ஹ"
+        },
+        {
+          "id": "taml-pulli",
+          "lang": "ta",
+          "category": "ligature",
+          "text": "க் ங் ச் ஞ் ட் ண் த் ந் ப் ம் தமிழ்நாடு"
+        },
+        {
+          "id": "taml-ukaram",
+          "lang": "ta",
+          "category": "ligature",
+          "text": "கு கூ ஙு ஙூ சு சூ டு டூ"
+        }
+      ]
+    },
+    {
+      "script": "Telu",
+      "direction": "ltr",
+      "languages": [
+        "te"
+      ],
+      "samples": [
+        {
+          "id": "telu-title",
+          "lang": "te",
+          "category": "vowel-placement",
+          "text": "తెలుగు భాషలో త్రైమాసిక సమీక్ష"
+        },
+        {
+          "id": "telu-conjuncts",
+          "lang": "te",
+          "category": "conjunct",
+          "text": "క్ష జ్ఞ స్త్ర క్త ప్ర శ్రీ"
+        },
+        {
+          "id": "telu-vowels",
+          "lang": "te",
+          "category": "vowel-placement",
+          "text": "కి కీ కు కూ కె కే కై కొ కో కౌ"
+        },
+        {
+          "id": "telu-zwnj",
+          "lang": "te",
+          "category": "marks",
+          "text": "ఇది గౌతమి ఫాంట్‌లో వ్రాయబడింది"
+        }
+      ]
+    },
+    {
+      "script": "Knda",
+      "direction": "ltr",
+      "languages": [
+        "kn"
+      ],
+      "samples": [
+        {
+          "id": "knda-title",
+          "lang": "kn",
+          "category": "vowel-placement",
+          "text": "ಕನ್ನಡ ಭಾಷೆಯಲ್ಲಿ ತ್ರೈಮಾಸಿಕ ವಿಮರ್ಶೆ"
+        },
+        {
+          "id": "knda-conjuncts",
+          "lang": "kn",
+          "category": "conjunct",
+          "text": "ಕ್ಷ ಜ್ಞ ಸ್ತ್ರ ಪ್ರ ಶ್ರೀ ಕ್ತ"
+        },
+        {
+          "id": "knda-vowels",
+          "lang": "kn",
+          "category": "vowel-placement",
+          "text": "ಕಿ ಕೀ ಕು ಕೂ ಕೆ ಕೇ ಕೈ ಕೊ ಕೋ ಕೌ"
+        }
+      ]
+    },
+    {
+      "script": "Mlym",
+      "direction": "ltr",
+      "languages": [
+        "ml"
+      ],
+      "samples": [
+        {
+          "id": "mlym-title",
+          "lang": "ml",
+          "category": "vowel-placement",
+          "text": "മലയാള ഭാഷയിൽ ത്രൈമാസ അവലോകനം"
+        },
+        {
+          "id": "mlym-chillu",
+          "lang": "ml",
+          "category": "ligature",
+          "text": "കൺ ഇൻ കൽ വാർ കൾ"
+        },
+        {
+          "id": "mlym-conjuncts",
+          "lang": "ml",
+          "category": "conjunct",
+          "text": "ക്ക ങ്ങ ന്ത ണ്ട ക്ഷ ശ്ശ സ്ത്ര"
+        },
+        {
+          "id": "mlym-vowels",
+          "lang": "ml",
+          "category": "vowel-placement",
+          "text": "കെ കേ കൈ കൊ കോ കൗ കു കൂ കൃ"
+        }
+      ]
+    },
+    {
+      "script": "Sinh",
+      "direction": "ltr",
+      "languages": [],
+      "samples": [
+        {
+          "id": "sinh-title",
+          "lang": "si",
+          "category": "vowel-placement",
+          "text": "සිංහල භාෂාවෙන් කාර්තුමය සමාලෝචනය"
+        },
+        {
+          "id": "sinh-conjuncts",
+          "lang": "si",
+          "category": "conjunct",
+          "text": "ක්‍ෂ ශ්‍රී ක්‍ර ද්‍ය ත්‍ර"
+        },
+        {
+          "id": "sinh-vowels",
+          "lang": "si",
+          "category": "vowel-placement",
+          "text": "කි කී කු කූ කෙ කේ කො කෝ කෞ"
+        }
+      ]
+    },
+    {
+      "script": "Thai",
+      "direction": "ltr",
+      "languages": [
+        "th"
+      ],
+      "samples": [
+        {
+          "id": "thai-title",
+          "lang": "th",
+          "category": "line-break",
+          "text": "รายงานสรุปผลประจำไตรมาส"
+        },
+        {
+          "id": "thai-tone-marks",
+          "lang": "th",
+          "category": "tone-marks",
+          "text": "ที่ นี่ ผู้ เก็บ น้ำ ป่า ก๊อก"
+        },
+        {
+          "id": "thai-sara-am",
+          "lang": "th",
+          "category": "vowel-placement",
+          "text": "สำนักงาน คำสั่ง น้ำใจ"
+        },
+        {
+          "id": "thai-pali",
+          "lang": "th",
+          "category": "stacking",
+          "text": "ปฏิบัติ ฐานะ สันติสุข"
+        },
+        {
+          "id": "thai-no-spaces",
+          "lang": "th",
+          "category": "line-break",
+          "text": "ภาษาไทยเป็นภาษาที่มีวรรณยุกต์และไม่มีช่องว่างระหว่างคำ"
+        },
+        {
+          "id": "thai-digits",
+          "lang": "th",
+          "category": "digits",
+          "text": "๑๒๓๔๕๖๗๘๙๐ และ 2569"
+        },
+        {
+          "id": "thai-mixed-latin",
+          "lang": "th",
+          "category": "mixed-latin",
+          "text": "รายงาน Q3 2026 ของ OPF"
+        }
+      ]
+    },
+    {
+      "script": "Laoo",
+      "direction": "ltr",
+      "languages": [],
+      "samples": [
+        {
+          "id": "laoo-words",
+          "lang": "lo",
+          "category": "line-break",
+          "text": "ພາສາລາວ ສະບາຍດີ ຂອບໃຈ ປະເທດລາວ"
+        },
+        {
+          "id": "laoo-marks",
+          "lang": "lo",
+          "category": "tone-marks",
+          "text": "ນ້ຳ ໂຮງຮຽນ ຫຍັງ ຫມາ"
+        }
+      ]
+    },
+    {
+      "script": "Khmr",
+      "direction": "ltr",
+      "languages": [
+        "km"
+      ],
+      "samples": [
+        {
+          "id": "khmr-title",
+          "lang": "km",
+          "category": "stacking",
+          "text": "ភាសាខ្មែរពិតជាស្រស់ស្អាត"
+        },
+        {
+          "id": "khmr-coeng",
+          "lang": "km",
+          "category": "stacking",
+          "text": "ក្រុម ស្រី ខ្ញុំ ប្រទេសកម្ពុជា"
+        },
+        {
+          "id": "khmr-words",
+          "lang": "km",
+          "category": "line-break",
+          "text": "សួស្តី អរគុណ ភាសាខ្មែរ"
+        },
+        {
+          "id": "khmr-digits",
+          "lang": "km",
+          "category": "digits",
+          "text": "១២៣៤៥៦៧៨៩០ ២០២៦"
+        }
+      ]
+    },
+    {
+      "script": "Mymr",
+      "direction": "ltr",
+      "languages": [],
+      "samples": [
+        {
+          "id": "mymr-words",
+          "lang": "my",
+          "category": "stacking",
+          "text": "မြန်မာဘာသာ မင်္ဂလာပါ ကျေးဇူးတင်ပါတယ်"
+        },
+        {
+          "id": "mymr-medials",
+          "lang": "my",
+          "category": "stacking",
+          "text": "ပြည်ထောင်စု မြန်မာနိုင်ငံ ကြောင်"
+        },
+        {
+          "id": "mymr-digits",
+          "lang": "my",
+          "category": "digits",
+          "text": "၀၁၂၃၄၅၆၇၈၉ ၂၀၂၆"
+        }
+      ]
+    },
+    {
+      "script": "Tibt",
+      "direction": "ltr",
+      "languages": [],
+      "samples": [
+        {
+          "id": "tibt-words",
+          "lang": "bo",
+          "category": "stacking",
+          "text": "བོད་སྐད། བཀྲ་ཤིས་བདེ་ལེགས།"
+        },
+        {
+          "id": "tibt-stacks",
+          "lang": "bo",
+          "category": "stacking",
+          "text": "རྒྱལ་པོ སྤྱི་ཚོགས གྲོང་ཁྱེར"
+        }
+      ]
+    },
+    {
+      "script": "Mong",
+      "direction": "ltr",
+      "languages": [
+        "mn"
+      ],
+      "samples": [
+        {
+          "id": "mong-words",
+          "lang": "mn",
+          "category": "joining",
+          "text": "ᠮᠣᠩᠭᠣᠯ ᠬᠡᠯᠡ ᠪᠢᠴᠢᠭ"
+        },
+        {
+          "id": "mong-names",
+          "lang": "mn",
+          "category": "joining",
+          "text": "ᠮᠣᠩᠭᠣᠯ ᠤᠯᠤᠰ ᠴᠢᠩᠭᠢᠰ ᠬᠠᠭᠠᠨ"
+        },
+        {
+          "id": "mong-latin",
+          "lang": "mn",
+          "category": "mixed-latin",
+          "text": "Font scheme preview 2026"
+        }
+      ]
+    },
+    {
+      "script": "Ethi",
+      "direction": "ltr",
+      "languages": [
+        "am"
+      ],
+      "samples": [
+        {
+          "id": "ethi-title",
+          "lang": "am",
+          "category": "syllabary",
+          "text": "አማርኛ ቋንቋ እጅግ ጥሩ ነው።"
+        },
+        {
+          "id": "ethi-words",
+          "lang": "am",
+          "category": "syllabary",
+          "text": "ሰላም ለዓለም ኢትዮጵያ"
+        },
+        {
+          "id": "ethi-punctuation",
+          "lang": "am",
+          "category": "punctuation",
+          "text": "አንድ፡ ሁለት፣ ሦስት። አራት፤ አምስት"
+        }
+      ]
+    },
+    {
+      "script": "Armn",
+      "direction": "ltr",
+      "languages": [
+        "hy"
+      ],
+      "samples": [
+        {
+          "id": "armn-title",
+          "lang": "hy",
+          "category": "case",
+          "text": "Հայերեն լեզու Երեւան Բարեւ Ձեզ"
+        },
+        {
+          "id": "armn-ligature",
+          "lang": "hy",
+          "category": "ligature",
+          "text": "և ﬓ ﬔ եւ"
+        },
+        {
+          "id": "armn-punctuation",
+          "lang": "hy",
+          "category": "punctuation",
+          "text": "Ինչպե՞ս եք։ Շնորհակալություն՝ շատ։"
+        }
+      ]
+    },
+    {
+      "script": "Geor",
+      "direction": "ltr",
+      "languages": [
+        "ka"
+      ],
+      "samples": [
+        {
+          "id": "geor-title",
+          "lang": "ka",
+          "category": "case",
+          "text": "ქართული ენა გამარჯობა მადლობა"
+        },
+        {
+          "id": "geor-mtavruli",
+          "lang": "ka",
+          "category": "case",
+          "text": "ᲥᲐᲠᲗᲣᲚᲘ ᲔᲜᲐ ᲒᲐᲛᲐᲠᲯᲝᲑᲐ"
+        }
+      ]
+    },
+    {
+      "script": "Syrc",
+      "direction": "rtl",
+      "languages": [],
+      "samples": [
+        {
+          "id": "syrc-words",
+          "lang": "syr",
+          "category": "joining",
+          "text": "ܠܫܢܐ ܣܘܪܝܝܐ ܫܠܡܐ"
+        },
+        {
+          "id": "syrc-marks",
+          "lang": "syr",
+          "category": "marks",
+          "text": "ܐܲܒܵܐ ܡܸܢ ܫܡܲܝܵܐ"
+        }
+      ]
+    },
+    {
+      "script": "Thaa",
+      "direction": "rtl",
+      "languages": [],
+      "samples": [
+        {
+          "id": "thaa-words",
+          "lang": "dv",
+          "category": "marks",
+          "text": "ދިވެހި ބަސް ދިވެހިރާއްޖެ"
+        },
+        {
+          "id": "thaa-digits",
+          "lang": "dv",
+          "category": "bidi-mixed",
+          "text": "ދިވެހި 2026 ރިޕޯޓު"
+        }
+      ]
+    },
+    {
+      "script": "Jpan",
+      "direction": "ltr",
+      "languages": [
+        "ja"
+      ],
+      "samples": [
+        {
+          "id": "jpan-sentence",
+          "lang": "ja",
+          "category": "mixed-script",
+          "text": "四半期レビュー：売上は前年比12％増加しました。"
+        },
+        {
+          "id": "jpan-prolonged",
+          "lang": "ja",
+          "category": "syllabary",
+          "text": "コンピューター サーバー ッ ャ ュ ョ ぁ ぃ"
+        },
+        {
+          "id": "jpan-halfwidth",
+          "lang": "ja",
+          "category": "syllabary",
+          "text": "ｶﾀｶﾅ ﾊﾝｶｸ ｱｲｳｴｵ"
+        },
+        {
+          "id": "jpan-punctuation",
+          "lang": "ja",
+          "category": "punctuation",
+          "text": "「括弧」、（かっこ）。『二重』…！？"
+        },
+        {
+          "id": "jpan-combining-dakuten",
+          "lang": "ja",
+          "category": "marks",
+          "text": "が が ぱ ぱ ガ ガ"
+        },
+        {
+          "id": "jpan-mixed-latin",
+          "lang": "ja",
+          "category": "mixed-latin",
+          "text": "Q3 2026 の概要と OPF の計画"
+        },
+        {
+          "id": "jpan-no-spaces",
+          "lang": "ja",
+          "category": "line-break",
+          "text": "日本語の文章はスペースなしで続きます。折り返しは文字の間で起こります。"
+        }
+      ]
+    },
+    {
+      "script": "Hans",
+      "direction": "ltr",
+      "languages": [
+        "zh-Hans"
+      ],
+      "samples": [
+        {
+          "id": "hans-sentence",
+          "lang": "zh-Hans",
+          "category": "mixed-script",
+          "text": "季度回顾：销售额同比增长百分之十二。"
+        },
+        {
+          "id": "hans-punctuation",
+          "lang": "zh-Hans",
+          "category": "punctuation",
+          "text": "，。！？；：“引号”（括号）《书名》、"
+        },
+        {
+          "id": "hans-mixed-latin",
+          "lang": "zh-Hans",
+          "category": "mixed-latin",
+          "text": "2026 年 Q3 报告 (OPF)"
+        },
+        {
+          "id": "hans-no-spaces",
+          "lang": "zh-Hans",
+          "category": "line-break",
+          "text": "中文文本没有空格，换行可以发生在任意两个汉字之间。"
+        }
+      ]
+    },
+    {
+      "script": "Hant",
+      "direction": "ltr",
+      "languages": [
+        "zh-Hant"
+      ],
+      "samples": [
+        {
+          "id": "hant-sentence",
+          "lang": "zh-Hant",
+          "category": "mixed-script",
+          "text": "季度回顧：銷售額年增百分之十二。"
+        },
+        {
+          "id": "hant-punctuation",
+          "lang": "zh-Hant",
+          "category": "punctuation",
+          "text": "，。！？；：「引號」『雙引號』（括號）《書名》、"
+        },
+        {
+          "id": "hant-bopomofo",
+          "lang": "zh-Hant",
+          "category": "syllabary",
+          "text": "ㄅㄆㄇㄈ ㄉㄊㄋㄌ ˊˇˋ˙ 注音符號"
+        },
+        {
+          "id": "hant-mixed-latin",
+          "lang": "zh-Hant",
+          "category": "mixed-latin",
+          "text": "2026 年 Q3 報告 (OPF)"
+        }
+      ]
+    },
+    {
+      "script": "Kore",
+      "direction": "ltr",
+      "languages": [
+        "ko"
+      ],
+      "samples": [
+        {
+          "id": "kore-sentence",
+          "lang": "ko",
+          "category": "syllabary",
+          "text": "분기별 검토: 매출이 전년 대비 12퍼센트 증가했습니다."
+        },
+        {
+          "id": "kore-jamo",
+          "lang": "ko",
+          "category": "marks",
+          "text": "한글 한글"
+        },
+        {
+          "id": "kore-hanja",
+          "lang": "ko",
+          "category": "mixed-script",
+          "text": "大韓民國 대한민국 (大韓民國)"
+        },
+        {
+          "id": "kore-mixed-latin",
+          "lang": "ko",
+          "category": "mixed-latin",
+          "text": "2026년 Q3 보고서 (OPF)"
+        }
+      ]
+    },
+    {
+      "script": "Cyrl",
+      "direction": "ltr",
+      "languages": [
+        "ru",
+        "uk",
+        "bg",
+        "mk",
+        "sr-Cyrl",
+        "kk",
+        "tg",
+        "mn"
+      ],
+      "samples": [
+        {
+          "id": "cyrl-ru",
+          "lang": "ru",
+          "category": "case",
+          "text": "Квартальный обзор продаж: рост 12%"
+        },
+        {
+          "id": "cyrl-uk",
+          "lang": "uk",
+          "category": "case",
+          "text": "Їжак ґанок єдність Київ"
+        },
+        {
+          "id": "cyrl-sr",
+          "lang": "sr-Cyrl",
+          "category": "case",
+          "text": "Ђ ј љ њ ћ џ Српски језик"
+        },
+        {
+          "id": "cyrl-mk",
+          "lang": "mk",
+          "category": "case",
+          "text": "Ѓ ќ ѕ Македонски јазик"
+        },
+        {
+          "id": "cyrl-kk",
+          "lang": "kk",
+          "category": "case",
+          "text": "Ә І Ң Ғ Ү Ұ Қ Ө Һ Қазақ тілі"
+        },
+        {
+          "id": "cyrl-tg",
+          "lang": "tg",
+          "category": "case",
+          "text": "Ӣ Ӯ Ғ Қ Ҳ Ҷ Забони тоҷикӣ"
+        },
+        {
+          "id": "cyrl-mn",
+          "lang": "mn",
+          "category": "case",
+          "text": "Ө Ү Монгол хэл Энэ маш сайхан"
+        },
+        {
+          "id": "cyrl-bg",
+          "lang": "bg",
+          "category": "case",
+          "text": "Българският език ъ ю я щ ж"
+        },
+        {
+          "id": "cyrl-stress",
+          "lang": "ru",
+          "category": "marks",
+          "text": "ро́за вода́ мо́ре"
+        }
+      ]
+    },
+    {
+      "script": "Grek",
+      "direction": "ltr",
+      "languages": [
+        "el"
+      ],
+      "samples": [
+        {
+          "id": "grek-title",
+          "lang": "el",
+          "category": "case",
+          "text": "Τριμηνιαία ανασκόπηση πωλήσεων"
+        },
+        {
+          "id": "grek-tonos",
+          "lang": "el",
+          "category": "marks",
+          "text": "ά έ ή ί ό ύ ώ ΐ ΰ ϊ ϋ"
+        },
+        {
+          "id": "grek-sigma",
+          "lang": "el",
+          "category": "case",
+          "text": "ΟΔΥΣΣΕΑΣ οδυσσέας ΣΟΦΟΣ σοφός"
+        },
+        {
+          "id": "grek-polytonic",
+          "lang": "grc",
+          "category": "marks",
+          "text": "ἄνθρωπος ῥῆμα ᾄδω ἐν ἀρχῇ"
+        }
+      ]
+    },
+    {
+      "script": "Latn",
+      "direction": "ltr",
+      "languages": [
+        "af",
+        "sq",
+        "ay",
+        "az",
+        "ber-Latn",
+        "bs-Latn",
+        "ca",
+        "ceb",
+        "hr",
+        "cs",
+        "da",
+        "nl",
+        "et",
+        "fil",
+        "fi",
+        "fr",
+        "ff",
+        "gl",
+        "de",
+        "ha",
+        "hu",
+        "ig",
+        "id",
+        "it",
+        "rw",
+        "kmr",
+        "lv",
+        "lt",
+        "mg",
+        "zsm",
+        "mi",
+        "no",
+        "om",
+        "pl",
+        "pt",
+        "ro",
+        "sr-Latn",
+        "sn",
+        "sk",
+        "sl",
+        "so",
+        "es",
+        "sw",
+        "sv",
+        "tl",
+        "tr",
+        "uz-Latn",
+        "vi-Latn",
+        "xh",
+        "yo",
+        "en",
+        "en-AU",
+        "en-CA",
+        "en-GB",
+        "en-IN",
+        "en-US",
+        "zu"
+      ],
+      "samples": [
+        {
+          "id": "latn-vi",
+          "lang": "vi",
+          "category": "marks",
+          "text": "Tiếng Việt: Ăn quả nhớ kẻ trồng cây ướp ượt"
+        },
+        {
+          "id": "latn-yo",
+          "lang": "yo",
+          "category": "marks",
+          "text": "Yorùbá ẹ̀ṣọ́ ọ̀rọ̀ ṣe àṣẹ"
+        },
+        {
+          "id": "latn-ig",
+          "lang": "ig",
+          "category": "marks",
+          "text": "Igbo ị ọ ụ ṅ Ịgbo ụlọ"
+        },
+        {
+          "id": "latn-ha-ff",
+          "lang": "ha",
+          "category": "marks",
+          "text": "Hausa ɓ ɗ ƙ ƴ Fulfulde ŋ ɲ Ɓ Ɗ Ƙ"
+        },
+        {
+          "id": "latn-tr-az",
+          "lang": "tr",
+          "category": "case",
+          "text": "Türkçe ığüşöç İĞÜŞÖÇ Azərbaycan ə Ə"
+        },
+        {
+          "id": "latn-central-europe",
+          "lang": "pl",
+          "category": "marks",
+          "text": "Polski ąćęłńóśźż Čeština ěščřžýáíé Magyar őű Slovenčina ľĺŕôä"
+        },
+        {
+          "id": "latn-ro-sq",
+          "lang": "ro",
+          "category": "marks",
+          "text": "Română ăâîșț Shqip ë ç Hrvatski đ"
+        },
+        {
+          "id": "latn-baltic",
+          "lang": "lv",
+          "category": "marks",
+          "text": "Latviešu āčēģīķļņšūž Lietuvių ąčęėįšųūž Eesti õäöü"
+        },
+        {
+          "id": "latn-mi",
+          "lang": "mi",
+          "category": "marks",
+          "text": "Māori ā ē ī ō ū Tēnā koutou"
+        },
+        {
+          "id": "latn-uz-ber",
+          "lang": "uz",
+          "category": "marks",
+          "text": "Oʻzbekcha gʻ oʻ Tamaziɣt ɣ ɛ ṭ ḍ ṣ ẓ"
+        },
+        {
+          "id": "latn-kmr-so",
+          "lang": "kmr",
+          "category": "marks",
+          "text": "Kurdî êîûçş Soomaali Afaan Oromoo Kiswahili isiXhosa chiShona"
+        },
+        {
+          "id": "latn-western",
+          "lang": "fr",
+          "category": "marks",
+          "text": "Français àâçéèêëîïôùûüÿœæ Español ñ¿¡ Português ãõ Deutsch äöüß Nordic åæø"
+        },
+        {
+          "id": "latn-ligatures",
+          "lang": "en",
+          "category": "ligature",
+          "text": "office affluent fi fl ffi ffl first flow"
+        },
+        {
+          "id": "latn-numerals",
+          "lang": "en",
+          "category": "digits",
+          "text": "0123456789 12.5% $1,234.00 €99 £5 ½ ¾"
+        }
+      ]
+    }
+  ],
+  "knownShapingLimits": [
+    {
+      "family": "Noto Sans Myanmar",
+      "samples": {
+        "mymr-words": 70,
+        "mymr-medials": 14
+      },
+      "reason": "fontkit 2.0.4 has no Myanmar shaper: it does not reorder the medial ra and the e vowel, does not build the kinzi glyph from nga + asat + virama and does not apply the ligature of the u and ii vowels, so the measured advance differs from HarfBuzz's by the width of the nga that the kinzi absorbs (about 3.5 percent of the words sample). No catalog language uses Myanmar; it is only the Myanmar Text script slot."
+    },
+    {
+      "family": "Noto Sans Syriac",
+      "samples": {
+        "syrc-marks": 16
+      },
+      "reason": "fontkit's Arabic-style shaper gives the first letter of a word (shin followed by a mark-bearing letter) its isolated form where HarfBuzz joins it, so the measured advance is about 1.6 percent narrower. Only the Estrangelo Edessa script slot uses Syriac."
+    },
+    {
+      "family": "Noto Nastaliq Urdu",
+      "samples": {
+        "arab-harakat": 10,
+        "arab-pa-shahmukhi": 12
+      },
+      "reason": "fontkit throws on the font's mark-to-base anchors (null anchor); the renderer measures again without mark positioning (abvm, blwm, mark, mkmk), which changes the advance of vowel-marked words by 1 percent. Noto Nastaliq Urdu is selected only by the Google Slides noto-nastaliq-urdu scheme and by explicit request."
+    }
+  ],
+  "rasterLimits": {
+    "description": "resvg-js 2.6.2 (and 2.7.0-alpha.2) draws these scripts with a different shaping than HarfBuzz, Chromium and fontkit: a spacing vowel sign or a space that follows a cluster loses its advance, so letters overlap and words run together. SVG shown in a browser is correct; PNG and the PDF the renderer builds from PNG are not.",
+    "scripts": [
+      "Deva",
+      "Beng",
+      "Guru",
+      "Gujr",
+      "Orya",
+      "Taml",
+      "Telu",
+      "Knda",
+      "Mlym",
+      "Sinh",
+      "Thai",
+      "Laoo",
+      "Khmr",
+      "Mymr"
+    ],
+    "languageDependent": {
+      "scripts": [
+        "Kore"
+      ],
+      "reason": "resvg does not read the SVG lang, so Korean text is shaped without the KOR language system lookups (about 1.5 percent narrower)."
+    }
+  }
+}

@@ -158,6 +158,8 @@ An original OPF font project is technically feasible: independently designed or 
 
 ## Verification and remaining work
 
+Script fonts (CJK, Arabic, Hebrew, Indic, Thai, Khmer, Myanmar and the rest) have their own shaping corpora and per-family qualification (FF-44, RR-17): see [script-corpora.md](programs/font-fidelity-everywhere/script-corpora.md). It records, per script, glyph coverage, fontkit against HarfBuzz and Chromium, the installed originals measured in place, and the known limits (fontkit has no Myanmar shaper; the PNG path of resvg-js mis-shapes the Indic scripts, Thai, Lao, Khmer and Myanmar).
+
 `pnpm test:fonts` checks that editor and SVG geometry match and that every native PPTX text box has the same coordinates and measured line breaks. With opf-pptx FF-31 (opf-pptx#63), export names the chosen family, not the preview substitute. It writes artifacts to `artifacts/fonts/`. A real-browser check of the same Roboto run measured 324.032 pixels versus the font engine's 324.170 pixels at 25 pixels, a difference of 0.138 pixels. These are measured tolerances, not a promise of pixel identity.
 
 PPTX records the chosen font family (FF-31); it never records a preview replacement and never embeds a proprietary font binary. PowerPoint still needs those fonts installed, through Office, the OS or Microsoft 365 cloud fonts, or it substitutes them. Line height remains the shared 1.22 multiplier, rather than a complete ascent/descent model. Rich-text font overrides, mixed-script fallback and bidi layout, specialized payload internals, and native font embedding remain active fidelity work. Passing a width provider does not remove those limits.

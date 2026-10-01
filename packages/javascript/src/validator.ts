@@ -10,6 +10,7 @@ import type { JsonSchema } from "./json.js";
 import { schemas, type SchemaName } from "./schemas.js";
 import { rememberValidationDefinition } from './validation-definitions.js';
 import type { Presentation } from "./types.js";
+import { VARIABLE_KINDS, hasContentVariables, instantiateForValidation, isTemplate, type VariableValues } from "./variables.js";
 
 export interface ValidationIssue {
   path: string;
@@ -26,6 +27,20 @@ export interface ValidationResult {
   warnings: ValidationIssue[];
   schemaName?: SchemaName;
   catalogKind?: CatalogKind;
+  /**
+   * Presentations only, when the document declares content variables or is a
+   * template: whether it was validated as a template, and which required
+   * variables have no value. A template reports them without failing.
+   */
+  template?: boolean;
+  unfilledVariables?: string[];
+}
+
+export interface ValidateOptions {
+  /** Validate as a template (true) or a normal deck (false), overriding the root `template` marker. */
+  template?: boolean;
+  /** Values to fill variables with before checking, keyed by variable id. */
+  values?: VariableValues;
 }
 
 export type SchemaOrKind = SchemaName | CatalogKind | JsonSchema;
@@ -836,19 +851,92 @@ function contentDepthIssues(value: unknown): ValidationIssue[] {
   return [];
 }
 
-export function validate(value: unknown, schemaOrKind: SchemaOrKind = "presentation"): ValidationResult {
+const variableTypeList = VARIABLE_KINDS.join(", ");
+
+function variableIssue(id: string, suffix: string, keyword: string, message: string, params: Record<string, unknown>): ErrorObject {
+  return {
+    instancePath: `/variables/${id.replaceAll("~", "~0").replaceAll("/", "~1")}${suffix}`,
+    schemaPath: "#/$defs/Variable/oneOf",
+    keyword,
+    params,
+    message,
+  } as ErrorObject;
+}
+
+// Variable is a oneOf of a hex string and seven typed objects, so Ajv would report every
+// branch. Replace its errors with those of the one branch the entry's own 'type' selects.
+function typedVariableErrors(errors: ErrorObject[], value: unknown): ErrorObject[] {
+  if (!isRecord(value) || !isRecord(value.variables)) return errors;
+  if (!errors.some((error) => error.instancePath.startsWith("/variables/"))) return errors;
+  const variables = value.variables;
+  const kept = errors.filter((error) => !error.instancePath.startsWith("/variables/"));
+  const schemaId = schemas.presentation.$id as string;
+  for (const [id, entry] of Object.entries(variables)) {
+    if (typeof entry === "string") {
+      if (!hexColorPattern.test(entry)) kept.push(variableIssue(id, "", "type", "must be a hex color string or a variable object", {}));
+      continue;
+    }
+    if (!isRecord(entry)) {
+      kept.push(variableIssue(id, "", "type", "must be a hex color string or a variable object", {}));
+      continue;
+    }
+    const kind = entry.type;
+    if (typeof kind !== "string" || !(VARIABLE_KINDS as readonly string[]).includes(kind)) {
+      kept.push(variableIssue(id, "/type", "enum", `must be one of: ${variableTypeList} (a hex string is shorthand for a color variable)`, { allowedValues: [...VARIABLE_KINDS] }));
+      continue;
+    }
+    const definition = `${kind.charAt(0).toUpperCase()}${kind.slice(1)}Variable`;
+    const check = getAjv().getSchema(`${schemaId}#/$defs/${definition}`);
+    if (!check || check(entry) === true) continue;
+    for (const error of check.errors ?? []) {
+      kept.push({ ...error, instancePath: `/variables/${id.replaceAll("~", "~0").replaceAll("/", "~1")}${error.instancePath}`, schemaPath: `#/$defs/${definition}${error.schemaPath.replace(/^#/, "")}` });
+    }
+  }
+  return kept;
+}
+
+export function validate(value: unknown, schemaOrKind: SchemaOrKind = "presentation", options: ValidateOptions = {}): ValidationResult {
   const resolved = resolveValidator(schemaOrKind);
   if (resolved.schemaName === "presentation") {
     const errors = contentDepthIssues(value);
     if (errors.length) return { valid: false, errors, warnings: [], schemaName: resolved.schemaName };
   }
-  const valid = resolved.validate(value) === true;
-  const errors = valid ? [] : (resolved.validate.errors ?? []).map(toIssue);
+  // A deck that declares content variables, or a template, is checked as the deck it
+  // resolves to: tokens and 'var:' references are replaced by their value, example or a
+  // type sample (the declarations stay), so paths match the source and a template is
+  // an incomplete OPF file rather than an invalid one.
+  const variableIssues: { errors: ValidationIssue[]; warnings: ValidationIssue[] } = { errors: [], warnings: [] };
+  let subject: unknown = value;
+  let template: boolean | undefined;
+  let unfilledVariables: string[] | undefined;
+  if (resolved.schemaName === "presentation" && isRecord(value) && (hasContentVariables(value) || options.values !== undefined || options.template !== undefined)) {
+    template = options.template ?? isTemplate(value);
+    const view = instantiateForValidation(value, options.values ?? {}, template);
+    subject = view.presentation;
+    unfilledVariables = view.unfilled;
+    for (const entry of view.diagnostics) {
+      if (entry.code === "variable-example-used" || entry.code === "variable-rich-flattened" || entry.code === "variable-unfilled") continue;
+      const issue = semanticIssue(entry.path, entry.message, { id: entry.id, code: entry.code });
+      (entry.severity === "error" ? variableIssues.errors : variableIssues.warnings).push(issue);
+    }
+    if (!template) {
+      const declared = isRecord(value.variables) ? value.variables : {};
+      for (const id of view.unfilled) {
+        // A value the schema already rejects is reported there, not as a missing value.
+        if (isRecord(declared[id]) && declared[id].value !== undefined) continue;
+        variableIssues.errors.push(semanticIssue(`/variables/${id}`, `required variable '${id}' has no value; give it a value, fill it before use, or mark the document as a template ("template": true)`, { id, code: "variable-unfilled" }));
+      }
+    }
+  }
+  const valid = resolved.validate(subject) === true;
+  const errors = valid ? [] : typedVariableErrors(resolved.validate.errors ?? [], subject).map(toIssue);
   const warnings: ValidationIssue[] = [];
 
   if (resolved.schemaName === "presentation") {
-    errors.push(...validatePresentationSemantics(value));
-    warnings.push(...presentationReferenceWarnings(value));
+    errors.push(...validatePresentationSemantics(subject));
+    errors.push(...variableIssues.errors);
+    warnings.push(...presentationReferenceWarnings(subject));
+    warnings.push(...variableIssues.warnings);
   } else if (resolved.schemaName === "language") {
     errors.push(...validateLanguageSemantics(value));
   }
@@ -863,23 +951,24 @@ export function validate(value: unknown, schemaOrKind: SchemaOrKind = "presentat
     warnings,
     schemaName: resolved.schemaName,
     catalogKind: resolved.catalogKind,
+    ...(template !== undefined ? { template, unfilledVariables } : {}),
   };
 }
 
-export function assertValid<T = unknown>(value: T, schemaOrKind: SchemaOrKind = "presentation"): T {
-  const result = validate(value, schemaOrKind);
+export function assertValid<T = unknown>(value: T, schemaOrKind: SchemaOrKind = "presentation", options: ValidateOptions = {}): T {
+  const result = validate(value, schemaOrKind, options);
   if (!result.valid) {
     throw new OPFValidationError(result);
   }
   return value;
 }
 
-export function validatePresentation(value: unknown): ValidationResult {
-  return validate(value, "presentation");
+export function validatePresentation(value: unknown, options: ValidateOptions = {}): ValidationResult {
+  return validate(value, "presentation", options);
 }
 
-export function assertValidPresentation(value: unknown): asserts value is Presentation {
-  assertValid(value, "presentation");
+export function assertValidPresentation(value: unknown, options: ValidateOptions = {}): asserts value is Presentation {
+  assertValid(value, "presentation", options);
 }
 
 export function validateCatalogRecord(kind: CatalogKind, value: unknown): ValidationResult {
