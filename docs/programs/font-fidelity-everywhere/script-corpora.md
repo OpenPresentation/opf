@@ -34,7 +34,7 @@ preview is drawn and measured. It does **not** qualify a family for native Power
 ## What each sample is held to
 
 1. **Coverage.** The face has a glyph for every letter of the sample's own script (BMP and beyond); Latin, digits and punctuation in mixed
-   samples must exist in some bundled face (the glyph-fallback chain, Noto Sans). Result: complete for all 63 faces (regular and bold of 31 families
+   samples must exist in some bundled face (the glyph-fallback chain, Noto Sans). Result: complete for all 63 faces (regular and bold of 29 families, Noto Sans Mongolian regular only
    plus Noto Sans' four styles).
 2. **Shaping, as the renderer measures it.** opf-render's own measurement (fontkit 2.0.4 with the Mongolian lookup guard, the mark-positioning
    retry and the OpenType language system of the sample's `lang`) shapes every sample in every face; none throws.
@@ -157,6 +157,7 @@ Reading the table:
 | Noto Sans Mongolian could not shape any text in fontkit (GSUB type 8 lookup) | fixed earlier (FF-44 groundwork, `skipUndecodableLookups`) | The corpus proves the three Mongolian samples equal HarfBuzz to 0.011 px and the Noto Sans Mongolian scheme draws; the tracker row was out of date |
 | Noto Sans Mongolian has no bold upstream | packaging | Documented and tested: a bold request draws the regular face (`visual`); no bold file exists to qualify |
 | **resvg-js 2.6.2 mis-shapes Indic scripts, Thai, Lao, Khmer, Myanmar and ignores `lang`** | PNG output (SVG in a browser and the vector PDF of RR-12 are right) | **Open**: recorded as a test that fails when resvg stops doing it; see [Raster limit](#raster-limit-resvg-js) |
+| **Core line breaking has no dictionary word breaking and no kinsoku**: it wraps at white space and, for a token wider than the line, at grapheme clusters | composition (`wrapText`), every host | **Open**, measured (`line-breaks.json`): 122 of 160 breaks in the Thai samples, 28 of 40 in Lao, 38 of 49 in Khmer and 66 of 103 in Myanmar fall inside an ICU dictionary word; 54 (Japanese), 51 (Simplified) and 57 (Traditional Chinese) lines over 61 widths start with closing punctuation or end with an opening bracket. PowerPoint breaks these scripts at word boundaries and applies East Asian line-break rules by default (`eaLnBrk`), but that is not natively verified: the exported decks bake the preview breaks, so a separate probe deck has PowerPoint wrap by itself ([Native check](#native-check)). Changing it moves geometry (a core release and lockstep floors), so it is a follow-up item, not part of this PR |
 | Serif originals (MS Mincho, SimSun, FangSong, MingLiU, PMingLiU, Batang, Gungsuh) preview in the sans face of their script | appearance | Documented visual gap; see [Decisions](#decisions-vetoable) |
 | The seven shipped script dependencies (Noto Sans Arabic, Lao, Myanmar, Sinhala, Syriac, Thaana and Noto Serif Tibetan) had no policy row | `spec/reference/font-policy.json` | **Fixed** (this PR): open rows, OFL-1.1 |
 
@@ -196,6 +197,7 @@ fix or a per-cluster positioning step in the rasterizer; neither is part of this
 - **Per-family acceptance** (`accepted: true`) is not claimed for any family: it needs the native comparison.
 - **Scripts no catalog language or font scheme selects** (N'Ko, Tifinagh and Vai, which the Ebrima policy row names) have no bundled face and no corpus: they draw with the
   design font (diagnosed `script-font-unavailable`). Recorded as descoped for this item.
+- **Core line breaking** for Thai, Lao, Khmer, Myanmar and CJK (above): a follow-up core change plus the native probe.
 - **Raster shaping** (above) and the **serif CJK look** (decision 5) are the open fidelity gaps.
 
 ## Native check
@@ -203,7 +205,7 @@ fix or a per-cluster positioning step in the rasterizer; neither is part of this
 The supervisor's decks are prepared outside the repository (`rr-17-native/scripts`, with a manifest of the expected typeface names in the file, the
 `a:ea` and `a:cs` slots, `lang`, `rtl`, the preview line widths and, where the original is installed, its widths). They check what the preview cannot:
 that PowerPoint resolves each named script family (or substitutes it), how it draws marks, conjuncts and mixed-script lines, that adjacent fullwidth
-punctuation is not compressed, and the Latin-deck slot routing. Results are recorded by the supervisor under `docs/evidence/`.
+punctuation is not compressed, the Latin-deck slot routing, and (a separate probe deck whose text box PowerPoint wraps itself) where PowerPoint breaks Thai, Khmer, Japanese and Chinese lines. Results are recorded by the supervisor under `docs/evidence/`.
 
 ## Reproduce
 

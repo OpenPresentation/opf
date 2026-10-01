@@ -11,6 +11,7 @@ resvg-js 2.6.2). No Office was opened and no font was copied: the Windows origin
 | `qualification.json` | `node scripts/script-corpora.mjs qualification.json` | per bundled face (63): line metrics, own-script and national-charset coverage, and per sample: coverage, the renderer's fontkit width, HarfBuzz width, glyph counts, shaping applied, zero-advance marks; plus the Latin design faces' corpus coverage (`latinFaces`) |
 | `browser.json` | `node test/script-corpora-browser.mjs browser.json` | the same samples set in Chromium with the pinned bytes: natural advance, deltas against HarfBuzz and the renderer, right-to-left order |
 | `raster.json` | `node test/script-corpora-raster.mjs raster.json` | resvg against a HarfBuzz outline reference for the regular-weight samples: ink width, ratio, mean pixel difference |
+| `line-breaks.json` | `node scripts/script-line-breaks.mjs line-breaks.json` | core `wrapText` on the Thai, Lao, Khmer, Myanmar, Japanese and Chinese samples at 61 widths: breaks inside an ICU word and kinsoku violations (information only) |
 | `references.json` | `node scripts/measure-script-references.mjs references.json` (Windows only) | the installed original script fonts (25 families) measured in place: width ratio of the replacement per sample, line metrics, file name, version and SHA-256; and the 31 families that are not installed |
 
 Reading the data: `widthDelta` in `qualification.json` is the renderer's width minus HarfBuzz's at 100 px (so 0.011 is 0.011 px); `ratio`
