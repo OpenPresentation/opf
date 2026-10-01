@@ -1674,8 +1674,12 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   const rasterPadding=(options.textRasterPadding??1)*scale;
   if(!Number.isFinite(rasterPadding)||rasterPadding<0)throw new RangeError('Text raster padding must be finite and nonnegative.');
   // One alignment resolution for placement, internal payload layouts and consumers.
+  // A cover (no body payload) has no content region, so its tag and subtitle belong to the heading group and
+  // follow titleAlignment; only a slide's own design.contentAlignment keeps them apart. Set once cover detection has run.
+  let coverGroup = false;
   const alignmentFor = (field: string): 'left' | 'center' | 'right' =>
-    (field === 'title' ? record(slide.design).titleAlignment ?? options.titleAlignment : record(slide.design).contentAlignment ?? options.contentAlignment) ?? 'left';
+    (field === 'title' || (coverGroup && (field === 'tag' || field === 'subtitle') && record(slide.design).contentAlignment === undefined)
+      ? record(slide.design).titleAlignment ?? options.titleAlignment : record(slide.design).contentAlignment ?? options.contentAlignment) ?? 'left';
   const styleFor = (field: string, path: string): TextStyle => resolveTextStyle({
     fontFamily: (field === "title" ? options.fonts?.heading : field === "code" ? options.fonts?.code : options.fonts?.body) ?? (field === "code" ? "monospace" : "sans-serif"),
     fontWeight: field === "title" ? 700 : 400, path,
@@ -1750,6 +1754,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   // A root image counts as body even when it is drawn as the slide image, so image slides keep the content origin.
   const hasBodyPayload = regions.some(key => !emptyHost(record(slide[key]))) || !emptyPayload(slide.blocks) || fields.some(field => !emptyPayload(slide[field]));
   const isCover = !hasBodyPayload && (headingOnlyLayout || (!layout.id && !layoutPlaceholders.some(placeholder => !headings.has(placeholder.type ?? ""))));
+  coverGroup = isCover;
   let y = headingTop;
   const headingItems: ComposedItem[] = [];
   for (const field of ["tag", "title", "subtitle"]) {
