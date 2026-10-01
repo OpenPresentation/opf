@@ -42,7 +42,7 @@ And they don't start from a blank canvas. [pptx.gallery](https://pptx.gallery) i
 
 ## Start in three steps
 
-1. **Install the coordinated published packages** on Node 24. See [the developer quickstart](docs/quickstart.md) for the current pin set: core 0.11.4, renderer 0.11.9, editor 0.10.6, PPTX 0.11.8 and CLI 0.9.2.
+1. **Install the coordinated published packages** on Node 24. See [the developer quickstart](docs/quickstart.md) for the current pin set: core 0.11.4, renderer 0.11.9, editor 0.10.6, PPTX 0.11.9 and CLI 0.9.2.
 2. **Author, lint, paginate, preview and export.** Copy [`docs/quickstart/developer-quickstart.opf.json`](./docs/quickstart/developer-quickstart.opf.json) and run the commands in that guide. `validatePresentation` / `opf validate` is local schema checking, not visual verification.
 3. **Know the limits.** The [compatibility matrix](docs/compatibility-matrix.md) lists shipped APIs versus renderer issue 24, native PowerPoint issue 87, and other deferred work. Browse presets at [pptx.gallery](https://pptx.gallery).
 
@@ -140,6 +140,8 @@ node packages/cli/dist/index.js edit deck.opf.json --patch changes.json --in-pla
 ```
 
 See [CSV and JSON data import](./docs/data-import.md) for editable tables and charts in the editor, CLI, and package API.
+
+See [Templates and variables](./docs/templates-and-variables.md) for fillable OPF templates: typed variables, `{{id}}` tokens, `opf fill` and `resolveVariables`.
 
 ## Layout
 

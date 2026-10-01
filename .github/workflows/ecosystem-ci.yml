@@ -10,9 +10,9 @@ concurrency:
   group: ecosystem-${{ github.ref }}
   cancel-in-progress: true
 env:
-  OPF_RENDER_REF: f392fa65077a6dc4da9d16bdab001bc1af17f20f
+  OPF_RENDER_REF: a499208765cf8ce8ca3c054b79cb93fc63a814bf
   OPF_EDITOR_REF: 313774a0cbf2bab8cced1a7225dfc95588bdc6e1
-  OPF_PPTX_REF: b679524e3d4e60aba1365dc8cfcfd60171304819
+  OPF_PPTX_REF: 1bc4f4012a6a36603d61da29fbdd1f754d930de7
 jobs:
   packages:
     runs-on: ubuntu-latest
