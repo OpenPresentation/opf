@@ -141,3 +141,5 @@ export type {
   FontReplacementMeasurement,
 } from './font-policy.js';
 export type {TextLineInk,TextPlacementLine,TextPlacement} from './composition.js';
+export { SYMBOL_FONT_ENCODINGS, SYMBOL_FONT_FAMILIES, symbolFontEncodingFor, isSymbolEncodedFamily, symbolCodeOf, symbolUnicodeFor, symbolCodeForUnicode, mapSymbolText } from './symbol-font-encodings.js';
+export type { SymbolFontEncoding, SymbolFontEncodingTable, SymbolFontCode, SymbolFontFamily, SymbolTextCharacter } from './symbol-font-encodings.js';

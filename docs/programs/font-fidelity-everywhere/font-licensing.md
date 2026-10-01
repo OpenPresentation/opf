@@ -156,7 +156,7 @@ Width delta = mean |replacement/real - 1| over 300 example-deck strings (signed 
 | Source Sans 3 | open | OFL-1.1 | office-cloud | itself | — | — | — | explicit embed path only |
 | Source Sans Pro | open | OFL-1.1 | office-cloud | Source Sans 3 | visual | n/m | — | explicit embed path only |
 | Sylfaen | proprietary-standard | proprietary (Microsoft) | windows, office-cloud | Noto Sans | visual | 11.0% (+11.0%) / 15.9% | Noto Sans Georgian, Noto Sans Armenian | never |
-| Symbol | proprietary-standard | proprietary (Monotype, licensed to Microsoft) | windows, macos, office-cloud | none | — | — | — | never |
+| Symbol | proprietary-standard | proprietary (Monotype, licensed to Microsoft) | windows, macos, office-cloud | none: code table ([FF-45](special-families.md)) | — | — | Noto Sans, Noto Sans Math, Noto Sans Symbols 2, Noto Sans Symbols | never |
 | Tahoma | proprietary-standard | proprietary (Microsoft) | windows, macos, office-cloud | Red Hat Text | visual | 1.7% (-0.4%) / 6.3% | Open Sans, Arimo | never |
 | Tenorite | proprietary-standard | proprietary (Microsoft) | office-cloud | Figtree | visual | n/m | Roboto | never |
 | Tenorite Display | proprietary-standard | proprietary (Microsoft) | office-cloud | Figtree | visual | n/m | Roboto | never |
@@ -167,8 +167,8 @@ Width delta = mean |replacement/real - 1| over 300 example-deck strings (signed 
 | Tunga | proprietary-standard | proprietary (Microsoft) | windows-optional, office-cloud | Noto Sans Kannada | visual | n/m | — | never |
 | Verdana | proprietary-standard | proprietary (Microsoft) | windows, macos, office-cloud | Montserrat | visual | 3.7% (-2.8%) / 9.2% | Arimo | never |
 | Vrinda | proprietary-standard | proprietary (Microsoft) | windows-optional, office-cloud | Noto Sans Bengali | visual | n/m | — | never |
-| Webdings | proprietary-standard | proprietary (Microsoft) | windows, macos, office-cloud | none | — | — | — | never |
-| Wingdings | proprietary-standard | proprietary (Microsoft) | windows, macos, office-cloud | none | — | — | — | never |
+| Webdings | proprietary-standard | proprietary (Microsoft) | windows, macos, office-cloud | none: code table ([FF-45](special-families.md)) | — | — | Noto Sans Symbols 2, Noto Sans Symbols, Noto Sans Math, Noto Sans | never |
+| Wingdings | proprietary-standard | proprietary (Microsoft) | windows, macos, office-cloud | none: code table ([FF-45](special-families.md)) | — | — | Noto Sans Symbols 2, Noto Sans Symbols, Noto Sans Math, Noto Sans | never |
 | Work Sans | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
 | Yu Gothic | proprietary-standard | proprietary (JIYUKOBO, licensed to Microsoft) | windows, office-cloud | Noto Sans JP | visual | 0.9% (+0.3%) / 5.3% | — | never |
 

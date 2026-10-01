@@ -3149,7 +3149,7 @@
         "https://learn.microsoft.com/en-us/typography/font-list/symbol",
         "https://support.apple.com/en-us/122869"
       ],
-      "note": "Symbol-encoded; renderers require character mapping (font-encoding-required). macOS lists a \"Symbol\" (version 13.0d2e2), which is Apple's own build, not the Microsoft/Monotype file; the glyph mapping may differ."
+      "note": "Symbol-encoded (FF-45): no text replacement; a renderer maps each code 0x20..0xFF through spec/reference/symbol-font-encodings.json (Adobe and Apple Symbol tables, verified against Windows Symbol 5.01: 189 of 224 codes have a Unicode equivalent) and previews the equivalent with the first loaded open face of Noto Sans (Greek letters, digits, punctuation), Noto Sans Math (operators, bracket pieces), Noto Sans Symbols 2 and Noto Sans Symbols, at the verified font's advance; the PPTX keeps the family and codes. macOS lists a \"Symbol\" (version 13.0d2e2), which is Apple's own build: 0x27, 0x6D, 0xE1, 0xF1 and 0xF0 (Apple logo) differ and are recorded per code."
     },
     {
       "family": "Tahoma",
@@ -3442,7 +3442,7 @@
         "https://learn.microsoft.com/en-us/typography/font-list/webdings",
         "https://support.apple.com/en-us/122869"
       ],
-      "note": "Symbol-encoded; renderers require character mapping (font-encoding-required). Symbol-encoded font. It is also on the macOS Tahoe list."
+      "note": "Symbol-encoded (FF-45): no text replacement; a renderer maps each code 0x20..0xFF through spec/reference/symbol-font-encodings.json (the Unicode 7.0 Webdings repertoire, L2/11-052R and L2/11-344, verified against Windows Webdings 5.01: 223 of 224 codes have a Unicode equivalent) and previews the equivalent with the first loaded open face of Noto Sans Symbols 2, Noto Sans Symbols, Noto Sans Math and Noto Sans, at the verified font's advance; the PPTX keeps the family and codes. It is also on the macOS Tahoe list."
     },
     {
       "family": "Wingdings",
@@ -3462,7 +3462,7 @@
         "https://learn.microsoft.com/en-us/typography/font-list/wingdings",
         "https://support.apple.com/en-us/122869"
       ],
-      "note": "Symbol-encoded; renderers require character mapping (font-encoding-required). Symbol-encoded font. It is also on the macOS Tahoe list (\"Wingdings Version 5.00x\")."
+      "note": "Symbol-encoded (FF-45): no text replacement; a renderer maps each code 0x20..0xFF through spec/reference/symbol-font-encodings.json (the Unicode 7.0 Wingdings repertoire, L2/11-052R and L2/11-344, verified against Windows Wingdings 5.01: 222 of 224 codes have a Unicode equivalent, 0xFF is the Windows logo; Wingdings 2 and 3 verified against 1.55 with 217 and 208) and previews the equivalent with the first loaded open face of Noto Sans Symbols 2, Noto Sans Symbols, Noto Sans Math and Noto Sans, at the verified font's advance; the PPTX keeps the family and codes. It is also on the macOS Tahoe list (\"Wingdings Version 5.00x\")."
     },
     {
       "family": "Work Sans",
