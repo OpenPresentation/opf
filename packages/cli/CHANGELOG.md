@@ -3,6 +3,7 @@
 ## Unreleased
 
 - RR-31: add `opf diff <a|-> <b|-> [--format text|json|patch] [--exit-code] [--threshold]`, `opf merge <base> <ours> <theirs> [--output|--in-place] [--prefer ours|theirs] [--report] [--force] [--dry-run]` and `opf format <file|->... [--check|--in-place|--output] [--indent] [--eol]`. `opf edit` (and `import-data`) now use core's shared RFC 6902 module (`@openpresentation/opf/patch`) instead of a private copy; the operations, pointer rules and exit codes are unchanged. Requires the core release that contains `/patch`, `/diff` and `/format`.
+- RR-29: `opf audit <file|-> [--json] [--rule <id>]... [--ignore <id>]... [--fail-on <error|warning|info|never>] [--severity <id>=<level>] [--threshold <name>=<n>] [--config <file>]`, `opf audit --list-rules` and `opf audit --explain <id>`: design and accessibility checks (contrast, overflow, type size, alt text, reading order, fonts, links, charts, placeholders) with stable rule ids, a human reporter and lint's JSON shape. Exit 0 for no finding at or above `--fail-on` (default `error`), 1 otherwise, 2 for usage or I/O errors. Read-only; fetches nothing. See [the audit guide](../../docs/audit.md).
 
 ## 0.9.2
 

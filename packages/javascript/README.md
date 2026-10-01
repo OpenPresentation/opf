@@ -69,6 +69,10 @@ import type { Presentation, Audience, Tone } from "@openpresentation/opf/types";
 
 The root entry exports every schema, catalog, and validation helper for convenience. Prefer the focused subpaths above when a package consumer only needs one surface, so the root bundle's full catalog/schema payload is not loaded unnecessarily.
 
+### Design and accessibility audit
+
+`@openpresentation/opf/audit` exports `auditPresentation(document, options)`, `auditSource(source, options)` and `auditRules`: contrast, overflow, type size, alt text, reading order, fonts, links, charts and more, with stable `audit/<rule>` ids in lint's report shape. Read-only and deterministic; see [the audit guide](../../docs/audit.md).
+
 ### Contextual lint (0.10.0)
 
 Version 0.10.0 adds `lintSource(source, options)` and `lintPresentation(document, options)` from `@openpresentation/opf/lint` and the root API. They report strict JSON syntax, duplicate keys, schema constraints, local catalog alternatives, asset registry errors, and explicit host contracts. Source diagnostics retain original UTF-16 ranges without rewriting the document. Options accept already loaded `catalogs` and `contracts`; no remote resources are fetched.
