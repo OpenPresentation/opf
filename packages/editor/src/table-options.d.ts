@@ -72,3 +72,9 @@ export declare function mergeTableCells(editor: EditorSession, tablePath: string
 export declare function splitTableCell(editor: EditorSession, tablePath: string, cell: TableCellAddress, meta?: Record<string, unknown>): TableChange;
 export declare function setTableCellStyle(editor: EditorSession, tablePath: string, cells: TableCellAddress | TableCellAddress[], style: Record<string, unknown> | null, meta?: Record<string, unknown>): TableChange;
 export declare function setTableStyle(editor: EditorSession, tablePath: string, preset: keyof typeof TABLE_STYLE_PRESETS | Partial<TableStyle>, meta?: Record<string, unknown>): TableChange;
+/** {@link readTableStyle} for a table object. */
+export declare function readTableStyleOfTable(table: unknown): (TableStyle | { header: "custom"; banding: "custom"; borders: "custom" }) & { preset: keyof typeof TABLE_STYLE_PRESETS | "custom" };
+/** Apply a table style to a table object in place (the structure operations use it to keep banding, header fill and borders correct). */
+export declare function applyTableStyleToTable(table: unknown, preset: keyof typeof TABLE_STYLE_PRESETS | Partial<TableStyle>): TableStyle;
+// Rows, columns, header row and cell values (RR-24).
+export * from "./table-structure.js";

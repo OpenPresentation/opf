@@ -325,16 +325,31 @@ function resolveStyle(preset) {
 export function prepareTableStyle(document, tablePath, preset) {
   const style = resolveStyle(preset);
   return transaction(document, tablePath, (table) => {
-    for (const { cell, style: wanted } of styleFor(table, style)) {
-      const line = lineOf(table, cell);
-      const raw = line[cell.column];
-      if (raw === null) continue;
-      const current = isStyled(raw) ? { ...(raw.style ?? {}) } : {};
-      for (const key of STYLE_KEYS) delete current[key];
-      line[cell.column] = withCell(raw, { style: { ...current, ...wanted } });
-    }
+    styleTable(table, style);
     return {};
   }, { action: "table-style", style });
+}
+
+function styleTable(table, style) {
+  for (const { cell, style: wanted } of styleFor(table, style)) {
+    const line = lineOf(table, cell);
+    const raw = line[cell.column];
+    if (raw === null) continue;
+    const current = isStyled(raw) ? { ...(raw.style ?? {}) } : {};
+    for (const key of STYLE_KEYS) delete current[key];
+    line[cell.column] = withCell(raw, { style: { ...current, ...wanted } });
+  }
+}
+
+/**
+ * Apply a table style (a preset name or `{ header, banding, borders }`) to a table object in place, with the same
+ * rules as {@link prepareTableStyle}. The table structure operations use it to keep a recognised style
+ * (banding, header fill, borders) correct after rows or columns are inserted, deleted, moved or sorted.
+ */
+export function applyTableStyleToTable(table, preset) {
+  const style = resolveStyle(preset);
+  styleTable(table, style);
+  return style;
 }
 
 /**
@@ -343,7 +358,11 @@ export function prepareTableStyle(document, tablePath, preset) {
  * `preset` is the named preset the style equals, or "custom".
  */
 export function readTableStyle(document, tablePath) {
-  const { table } = tableAt(document, tablePath);
+  return readTableStyleOfTable(tableAt(document, tablePath).table);
+}
+
+/** {@link readTableStyle} for a table object. */
+export function readTableStyleOfTable(table) {
   const matches = (style) =>
     styleFor(table, style).every(({ cell, style: wanted }) => {
       const raw = lineOf(table, cell)[cell.column];
@@ -360,6 +379,9 @@ export function readTableStyle(document, tablePath) {
         }
   return { header: "custom", banding: "custom", borders: "custom", preset: "custom" };
 }
+
+// Table structure (RR-24): insert, delete, move and sort rows and columns, the header row, cell values.
+export * from "./table-structure.js";
 
 // --- session forms ----------------------------------------------------------------------------
 

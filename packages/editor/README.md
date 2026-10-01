@@ -318,6 +318,23 @@ setTableCellStyle(editor, "slides.4.blocks.1.table", [{ section: "header", colum
 
 Styles use scheme roles, so they follow the color scheme, and the renderers keep the text readable on any fill. A style sets the header fill (`theme`, `plain`, `accent`), banded rows and borders (`theme`, `none`, `horizontal`, `grid`); named presets are `theme`, `banded`, `grid`, `minimal` and `open`, and `theme` removes a previous style. A style owns only the fill and border fields of a cell: text color, alignment, padding, values and merges are kept. Merging never hides text: covered cells that hold text refuse with `merge-would-lose-content` unless you pass `join: true`, which joins the words into the anchor with a space and keeps run formatting. Other refusals are `merge-overlap` (the region crosses another merge), `invalid-table-span` (outside the table, or a header cell spanning into the body) and `table-cell-covered`. Splitting leaves the formerly covered cells as empty text. `parseTableCellPath` maps a canvas selection to a table and cell, and `describeTableCell` and `readTableStyle` read the current state.
 
+## Data grid (RR-24)
+
+`@openpresentation/opf-editor/data-grid` mounts a spreadsheet-like grid for a chart's inline data (the first column is the categories, each further column a series; an empty cell is a gap, never 0) and for tables (rich and styled cells, merged cells drawn with their spans). Cells edit from the keyboard (arrows, Enter, F2, Tab), paste TSV or CSV from Excel and Sheets, copy out as TSV, and rows and columns insert, delete and move, sort (stable and typed) and, for charts, swap. Numbers are read in one stated number format, never guessed; text that is not a number is refused inline with the reason. Every edit is one undoable patch, so the preview redraws from the session events.
+
+```js
+import { createDataGrid } from "@openpresentation/opf-editor/data-grid";
+import { insertTableRows, deleteTableColumns, sortTableRows, setTableHeader } from "@openpresentation/opf-editor/tables";
+import { setChartCells, transposeChart, renameChartSeries } from "@openpresentation/opf-editor/chart-data";
+
+createDataGrid(container, { editor, getSelectedPath: () => selectedPath });
+insertTableRows(editor, "slides.4.blocks.1.table", 2);                        // merged cells grow, never split
+sortTableRows(editor, "slides.4.blocks.1.table", 1, { direction: "desc" });     // stable, typed, empty cells last
+setChartCells(editor, "slides.3.blocks.0.chart", [{ section: "body", row: 0, column: 1, text: "12,5" }], { decimal: "," });
+```
+
+The number rules, paste and copy format, merged-cell behaviour, sorting, keyboard and accessibility are in [docs/data-grid.md](docs/data-grid.md).
+
 ## Design controls panel (RR-06)
 
 `@openpresentation/opf-editor/design-controls` mounts the controls for everything above in one call. Each control commits one undoable change through the session, so a host that already subscribes to the session (the canvas does) redraws the preview, loads fonts first through its font gate, and the controls themselves follow Undo and Redo.
