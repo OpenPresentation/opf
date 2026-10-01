@@ -68,11 +68,13 @@ for(const record of generation.decks) {
   for(const [index,slide] of restored.slides.entries()) {
    if(sharedQuotes){
     const expectedLines=record.layouts[index].parts.flatMap(part=>part.fit.lines.filter(line=>line!==''));
-    assert.ok(slide.blocks.every(block=>block.type==='text'&&typeof block.text==='string'));
+    // opf-pptx 0.11.7 restores a root text payload as slide.text; earlier importers returned one text block.
+    const bodyBlocks=slide.blocks??(slide.text!==undefined?[{type:'text',text:slide.text}]:[]);
+    assert.ok(bodyBlocks.every(block=>block.type==='text'&&typeof block.text==='string'));
     const title=suffix==='-native-edited'?`Native edit ${record.id} slide ${index+1}`:document.slides[index].title;
     // The importer may classify the first quote line as a subtitle. Include it
     // in reading order without claiming reconstruction of the OPF quote shape.
-    const actualLines=[slide.title,slide.subtitle,...slide.blocks.map(block=>block.text)].filter(value=>value!==undefined);
+    const actualLines=[slide.title,slide.subtitle,...bodyBlocks.map(block=>block.text)].filter(value=>value!==undefined);
     assert.deepEqual(actualLines,[title,...expectedLines],'Every heading/body/footer line must survive in order, including repeated identical lines');
    }else assert.ok(JSON.stringify(slide).includes(generation.footer));
    if(suffix==='-native-edited')assert.ok(JSON.stringify(slide).includes(`Native edit ${record.id} slide ${index+1}`));

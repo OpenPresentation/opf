@@ -75,7 +75,7 @@ if (mode==='generate') {
     const bytes=await readFile(path.join(output,file));
     if (file!=='tabs.pptx') assert.equal(hash(bytes),native[file==='tabs-saved.pptx'?'savedSha256':'editedSha256']);
     const presentation=await fromPptx(bytes);assert.ok(validatePresentation(presentation).valid);
-    const observed=presentation.slides.map((slide,index)=>({expected:generation.cases[index].source+(file==='tabs-edited.pptx'?' edited':''),actual:slide.blocks?.map(block=>typeof block.text==='string'?block.text:JSON.stringify(block.text)).join('\n')}));
+    const observed=presentation.slides.map((slide,index)=>({expected:generation.cases[index].source+(file==='tabs-edited.pptx'?' edited':''),actual:(slide.blocks??(slide.text!==undefined?[{text:slide.text}]:[])).map(block=>typeof block.text==='string'?block.text:JSON.stringify(block.text)).join('\n')}));
     imports.push({file,sha256:hash(bytes),schemaValid:true,exactText:observed.every(item=>item.expected===item.actual),observed});
   }
   let maximumTabTargetErrorPoints=0,maximumTextWidthDifferencePoints=0;

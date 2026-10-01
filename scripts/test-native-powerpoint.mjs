@@ -115,7 +115,8 @@ if (mode === 'generate') {
     const document=await fromPptx(new Uint8Array(await readFile(path.join(output,name+'.pptx'))),{onDiagnostic:d=>diagnostics.push(d)});
     assert.equal(validatePresentation(document).valid,true);
     assert.equal(document.slides.length,3);
-    const tables=document.slides.flatMap(slide=>(slide.blocks??[]).filter(block=>block.table).map(block=>block.table));
+    // opf-pptx 0.11.7 restores a root table as slide.table; earlier importers returned a table block.
+    const tables=document.slides.flatMap(slide=>[slide,...(slide.blocks??[])].filter(block=>block.table).map(block=>block.table));
     assert.equal(tables.length,2,'Tables remain structured OPF tables after native save');
     assert.equal(tables[0].rows[0][0].rowSpan,2,'Vertical merge survives native save');
     assert.equal(tables[1].rows[0][0].rowSpan,2);
