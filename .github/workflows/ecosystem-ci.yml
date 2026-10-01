@@ -10,9 +10,9 @@ concurrency:
   group: ecosystem-${{ github.ref }}
   cancel-in-progress: true
 env:
-  OPF_RENDER_REF: ed46bcef4324fba61646ac6e2f821f4a7f4b3fcc
-  OPF_EDITOR_REF: cb1a52646cbccc4ca25171886992ff9c6dcd1a75
-  OPF_PPTX_REF: f8a0576e8be96b8b330a2a53fbcdf0634b90a331
+  OPF_RENDER_REF: fa1949a07a8a1ecdcc3940b0dae324bf8683df1c
+  OPF_EDITOR_REF: dea8a7957b322b1e0b837c6512b15af5073aa081
+  OPF_PPTX_REF: e6c03911fd3c14a72a770da1c7439abf934c65de
 jobs:
   packages:
     runs-on: ubuntu-latest
@@ -76,7 +76,7 @@ jobs:
       - name: Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks
         working-directory: opf
         env:
-          # The pinned renderer's own baseline (opf-render `codex/core-0114-preview-fixes`, which draws these fields and carries the picture-bullet size and furniture image alignment fixes; repin to its merge commit): core 0.11.4 combines the design fields with the cover
+          # The pinned renderer's own baseline (opf-render main fa1949a: opf-render#83 and #85, which draw these fields and carry the picture-bullet size and furniture image alignment fixes): core 0.11.4 combines the design fields with the cover
           # alignment change, 181 of 805 slides differ from the renderer 0.11.8 baseline. scripts/fixtures/README.md keeps the review record.
           OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf-render/test/golden/opf-examples-png.cover-centering.sha256.json
         run: pnpm test:packages

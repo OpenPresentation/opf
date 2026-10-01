@@ -207,7 +207,9 @@ async function exportAndCheck(name, date, hidden, source, wrapped = false) {
   // The importer represents plain body text as an ordered text block. Require
   // its exact value and no additional blocks; do not mistake that documented
   // representation change for byte loss within the authored body string.
-  assert.deepEqual(result.imported.slides.map(slide => slide.blocks),
+  // opf-pptx with content topology (0.11.7, opf-pptx#122) restores the authored root payload form
+  // (slides.N.text); older importers return one text block. Accept either, exactly.
+  assert.deepEqual(result.imported.slides.map(slide => slide.blocks ?? [{type: 'text', text: slide.text}]),
     source.slides.map(slide => [{type: 'text', text: slide.text}]));
   assert.deepEqual(result.imported.slides.map(slide => slide.title), source.slides.map(slide => slide.title));
   return latestExport;
