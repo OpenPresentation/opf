@@ -34,6 +34,7 @@
     "test:skills": "node scripts/test-skills.mjs",
     "test:cli": "pnpm --filter @openpresentation/cli test",
     "test:cli:packed": "pnpm --filter @openpresentation/cli test:packed",
+    "test:cli:packed:peers": "pnpm --filter @openpresentation/cli test:packed:peers",
     "test:data": "node --import ./scripts/register-local-opf.mjs scripts/test-data-ecosystem.mjs",
     "test:rich-text": "node --import ./scripts/register-local-opf.mjs scripts/test-rich-text-ecosystem.mjs",
     "test:agent-site": "node scripts/test-agent-site.mjs",

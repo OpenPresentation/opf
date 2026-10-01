@@ -4,6 +4,8 @@ import path from "node:path";
 import { createDataContent, OPFDataImportError, paginatePresentation, bundlePresentation, catalogEntries, schemaEntries, validatePresentation, lintSource, type LintOptions } from "@openpresentation/opf";
 import { applyPatch, lookup, tokens, PatchError } from "./patch.js";
 import {manageSkills, SkillsError, type SkillBundle} from './skills.js';
+import {runRenderCommand} from './render.js';
+import {runImportCommand} from './import.js';
 
 declare const CLI_VERSION: string;
 declare const OPF_VERSION: string;
@@ -21,6 +23,13 @@ const usage = `OPF — local presentation files for agents (Node 24)
            [--force] [--strict]
   opf paginate <input|-> <output|-> [--force] [--strict]
   opf bundle <input|-> <output|-> [--force] [--strict]
+  opf render <file|-> [--slides <1,3-5>] [--format <svg|png>] [--scale <0.1-8>] [--out <directory|file|->]
+           [--paginate] [--date <YYYY-MM-DD>] [--font-dir <directory>]... [--asset-dir <directory>] [--force] [--strict] [--json]
+  opf export <file|-> [--format <pptx|pdf|png|svg>] [--out <file|directory|.zip|->] [--slides <1,3-5>]
+           [--pdf-mode <vector|raster>] [--chartex <auto|native|fallback>] [--provenance <full|references-only|none>]
+           [--image-format <compatible|preserve>] [--scale <0.1-8>] [--svg-fonts <used|none>] [--paginate]
+           [--date <YYYY-MM-DD>] [--font-dir <directory>]... [--asset-dir <directory>] [--force] [--strict] [--json]
+  opf import <deck.pptx|-> [--out <file|->] [--signals <signals.json>] [--force] [--strict] [--json]
   opf schemas
   opf schema [name] [JSON-Pointer]
   opf catalogs
@@ -40,6 +49,11 @@ custom source are left untouched) so the file resolves every catalog reference
 offline. Remote media and data assets are not inlined.
 Lint adds source locations, contextual suggestions and explicit host contracts.
 Lint syntax/schema/policy errors exit 1; --strict also rejects warnings.
+Render, export and import write files through the optional peers @openpresentation/opf-render
+and @openpresentation/opf-pptx (install them next to the CLI; the error names the command to run).
+They lint the document first, print the lint report shape (diagnostics, counts) plus the written
+files with SHA-256 digests, never load system fonts and never fetch URLs; --strict writes nothing
+when there are warnings. Existing outputs require --force.
 
 Install all six bundled OPF agent skills in this project:
   npx @openpresentation/cli@latest skills install
@@ -128,6 +142,8 @@ async function main(argv: string[]) {
     const {positional,options}=parse(args,['agent','global','directory']);arity(positional,1);
     print(await manageSkills(positional[0],OPF_SKILLS,CLI_VERSION,{agent:options.agent as string|undefined,global:!!options.global,directory:options.directory as string|undefined}));return;
   }
+  if (command === 'render' || command === 'export') { await runRenderCommand(command, args, {cliVersion: CLI_VERSION, opfVersion: OPF_VERSION}); return; }
+  if (command === 'import') { await runImportCommand(args, {cliVersion: CLI_VERSION, opfVersion: OPF_VERSION}); return; }
   if (command === "create") {
     const { positional, options } = parse(args, ["title", "from", "force", "strict"]); arity(positional, 0, 1);
     if (options.from && options.title !== undefined) throw new CliError("Use --from or --title, not both.");

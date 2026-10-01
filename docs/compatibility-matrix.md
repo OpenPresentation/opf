@@ -337,7 +337,8 @@ site40) remain unmerged. In particular, site40 is not independently shipped.
 | General SVG diagrams / Mermaid | [diagrams plan](plans/diagrams-svg.md) | Embedded SVG ≠ native editable primitives |
 | Full visual editor / IME / bidi / repair loop | [developer adoption](plans/developer-adoption-20260915.md) | Schema support ≠ WYSIWYG coverage |
 
-CLI 0.9.2 does not render or export PPTX. Browser `svgToPng` / `svgToPdf` are
+CLI 0.9.2 does not render or export PPTX; the next CLI release adds `opf render`, `opf export` and `opf import`
+through the optional peers opf-render and opf-pptx ([CLI reference](cli.md)). Browser `svgToPng` / `svgToPdf` are
 not available; those are Node APIs.
 
 ## Predecessor notes

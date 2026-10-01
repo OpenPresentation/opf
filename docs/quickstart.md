@@ -43,7 +43,9 @@ npx --no-install opf validate deck.opf.json
 npx --no-install opf lint deck.opf.json
 ```
 
-The CLI bundles schema, catalogs and lint. It does **not** render slides.
+The CLI bundles schema, catalogs and lint. Validation and lint never render; `opf render`, `opf export` and
+`opf import` produce and read files through the optional peers `@openpresentation/opf-render` and
+`@openpresentation/opf-pptx` (see [the CLI reference](cli.md)).
 `opf --version` reports the CLI and bundled core. Successful validation is not
 visual verification.
 
