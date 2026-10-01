@@ -139,7 +139,7 @@ node packages/cli/dist/index.js validate deck.opf.json
 node packages/cli/dist/index.js edit deck.opf.json --patch changes.json --in-place
 ```
 
-See [CSV and JSON data import](./docs/data-import.md) for editable tables and charts in the editor, CLI, and package API.
+See [CSV and JSON data import](./docs/data-import.md) for editable tables and charts in the editor, CLI, and package API, and [content conversions](./docs/conversions.md) for the pure converters (`@openpresentation/opf/convert`) that change a block's kind, nest list items, restructure a slide and split or merge slides.
 
 ## Layout
 

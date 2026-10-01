@@ -205,6 +205,19 @@ assert.equal(policy.valid,false);assert.equal(policy.schemaValid,true);assert.ok
 console.log('Installed lint: public entrypoints, exact ranges, loaded records, duplicate keys and contracts pass offline.');
 `);
     const lint=await run(process.execPath,['lint.mjs'],{cwd:projectDir});process.stdout.write(lint.stdout);
+    assertTarIncludes(files,'package/dist/convert.js');assertTarIncludes(files,'package/dist/convert.d.ts');
+    await writeFile(path.join(projectDir,'convert.mjs'),`
+import assert from 'node:assert/strict';
+import {convertContent,contentConversionTargets,mergeSlides,OPFConversionError} from '@openpresentation/opf/convert';
+globalThis.fetch=()=>{throw new Error('Offline conversions must not fetch');};
+const converted=convertContent({items:['a',{text:'b',description:'bd'}]},'table');
+assert.deepEqual(converted.payload,{table:{rows:[['a',null],['b','bd']]}});assert.equal(converted.lossless,true);
+assert.deepEqual(contentConversionTargets({text:'a'}).map(target=>target.kind),['list','quote','metric','code','timeline','table']);
+assert.throws(()=>convertContent({image:'a.png'},'text'),OPFConversionError);
+assert.equal(mergeSlides({slides:[{text:'a'},{text:'b'}]},0).slides[0].blocks.length,2);
+console.log('Installed conversions: pure converters, loss reports and refusals work offline.');
+`);
+    const conversions=await run(process.execPath,['convert.mjs'],{cwd:projectDir});process.stdout.write(conversions.stdout);
   }
   for (const file of ['quote-layout.test.mjs','quote-composition.test.mjs','code-layout.test.mjs','code-composition.test.mjs']) {
     const source=(await readFile(path.join(packageRoot,'test',file),'utf8'))

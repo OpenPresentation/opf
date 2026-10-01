@@ -91,6 +91,10 @@
     "./lint": {
       "types": "./dist/lint.d.ts",
       "import": "./dist/lint.js"
+    },
+    "./convert": {
+      "types": "./dist/convert.d.ts",
+      "import": "./dist/convert.js"
     }
   },
   "files": [

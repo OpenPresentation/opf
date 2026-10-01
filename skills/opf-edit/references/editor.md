@@ -18,6 +18,10 @@ editor.applyPatch([
 
 The patch assumes `title` already exists; use `add` or `createValuePatch` for optional fields. A stable-ID `test` detects a moved/replaced target, not every concurrent content change; add an expected-value test or host revision check as needed. Never build pointer paths by joining unescaped user keys.
 
+## Content conversions
+
+Core's `@openpresentation/opf/convert` (RR-26, after the release that lists it) holds the pure converters: `convertContent(payload, kind)` and `contentConversionTargets(payload)` return the new payload, `lossless` and a `loss` list, or refuse with `OPFConversionError`. Show `loss` before applying and apply the result as one validated, undoable transaction (the editor's `convertBlock` does). The same module nests list items (`demoteListItems`, `promoteListItems`), groups and ungroups blocks, moves images between content and slide design, and splits or merges slides. See [content conversions](../../../docs/conversions.md).
+
 ## Canvas and optional properties
 
 ```js
