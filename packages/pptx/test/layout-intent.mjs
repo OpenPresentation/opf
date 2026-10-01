@@ -290,7 +290,10 @@ let cases = 0;
   cases++;
 }
 
-// Privacy: layout records never pull asset registry entries into the tags; references-only stores no source at all.
+// Privacy: layout records never pull asset registry entries into the slide
+// tags; references-only stores no source at all. In 'full' mode the document
+// tag stores the whole asset registry (spec-gap P1), the layout record itself
+// still carries none.
 {
   const privateUrl = 'https://intranet.example.com/private/preview.png';
   const withPreview = {...structuredClone(heroA), preview: {src: 'asset:private-preview'}};
@@ -298,13 +301,15 @@ let cases = 0;
   assert.equal(validatePresentation(deckP).valid, true);
   const parse = xml => [...xml.matchAll(/ val="([0-9A-F]+)"/g)].map(match => JSON.parse(Buffer.from(match[1], 'hex').toString('utf8')));
   const tagsOf = async provenance => { const entries = unzipSync(await toPptx(structuredClone(deckP), {provenance})); return Object.keys(entries).filter(path => /^ppt\/tags\/opf(Document|Slide)/.test(path)).map(path => dec.decode(entries[path])); };
-  for (const provenance of ['full', 'references-only']) {
-    const parts = await tagsOf(provenance);
-    assert.ok(parts.length > 0);
-    assert.ok(!parts.some(xml => JSON.stringify(parse(xml)).includes('intranet.example.com')), `${provenance}: no asset URL in provenance tags`);
-    assert.ok(!parts.some(xml => parse(xml).some(value => value.assets !== undefined)), `${provenance}: no assets stored for a layout record`);
-  }
-  const refs = await tagsOf('references-only');
+  const full = await tagsOf('full');
+  assert.ok(full.length > 0);
+  assert.ok(!full.filter(xml => xml.includes('OPF_SLIDE_V1')).some(xml => JSON.stringify(parse(xml)).includes('intranet.example.com')), 'full: no asset URL in slide tags');
+  assert.deepEqual(full.flatMap(parse).filter(value => value.assets !== undefined).map(value => Object.keys(value.assets)), [['private-preview']], 'full: the document tag stores the whole registry');
+  const refsOnly = await tagsOf('references-only');
+  assert.ok(refsOnly.length > 0);
+  assert.ok(!refsOnly.some(xml => JSON.stringify(parse(xml)).includes('intranet.example.com')), 'references-only: no asset URL in provenance tags');
+  assert.ok(!refsOnly.some(xml => parse(xml).some(value => value.assets !== undefined)), 'references-only: no assets stored');
+  const refs = refsOnly;
   assert.ok(refs.flatMap(parse).filter(value => value.slide !== undefined).every(value => value.layoutRecord === undefined), 'references-only stores no slide layout record that names a source.');
   cases++;
 }

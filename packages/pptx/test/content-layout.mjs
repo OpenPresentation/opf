@@ -29,9 +29,11 @@ for (const dimensions of [{widthInches: 1280 / 96, heightInches: 720 / 96}, {wid
   // through the master color map and exported theme before comparing with SVG.
   const themeXml = new TextDecoder().decode(entries['ppt/theme/theme1.xml']);
   const schemeHex = value => themeXml.match(new RegExp(`<a:${({tx1: 'dk1', bg1: 'lt1', tx2: 'dk2', bg2: 'lt2'})[value] ?? value}><a:srgbClr val="([0-9A-F]{6})"/>`))?.[1];
-  assert.deepEqual(imported.slides[2].blocks,[{type:'code',code:deck.slides[2].code}],'Code source and metadata survive export/import');
+  // Root payloads return as authored (content topology), not as blocks.
+  assert.deepEqual(imported.slides[2].code,deck.slides[2].code,'Code source and metadata survive export/import');
+  assert.equal(imported.slides[2].blocks,undefined);
   // FF-57: the unchanged export restores the quote payload, so attribution and source come back as their own fields.
-  assert.deepEqual(imported.slides[1].blocks,[{type:'quote',quote:deck.slides[1].quote}],'Quote text, attribution and source must survive export/import');
+  assert.deepEqual(imported.slides[1].quote,deck.slides[1].quote,'Quote text, attribution and source must survive export/import');
   for (let index = 0; index < deck.slides.length; index++) {
     const svg = parser.parse(svgSlides[index]);
     const native = parser.parse(new TextDecoder().decode(entries[`ppt/slides/slide${index + 1}.xml`]));

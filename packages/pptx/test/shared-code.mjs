@@ -36,7 +36,8 @@ for(const dimensions of [{width:1280,height:720},{width:540,height:960}]) for(co
   cases++;
   const diagnostics=[];
   const imported=await fromPptx(bytes,{onDiagnostic:issue=>diagnostics.push(issue)});
-  assert.deepEqual(imported.slides[0].blocks,[{type:'code',code}],'Source, metadata and hard/soft boundaries round-trip exactly');
+  assert.deepEqual(imported.slides[0].code,code,'Source, metadata and hard/soft boundaries round-trip exactly');
+  assert.equal(imported.slides[0].blocks,undefined,'the root code payload returns as authored');
   assert.deepEqual(diagnostics.map(issue=>issue.code),['code-import-reflow']);
 }
 for(const source of ['a\tb','  indentation  ','\t\t','a\t','\nfirst\n\nlast\n',' \t \tkeep  ']) {
@@ -62,5 +63,5 @@ for (const point of forbidden) for (const field of ['shorthand','source','filena
 }
 // XML character boundaries, not a glyph-coverage or shaping claim.
 const representable='\t\n\r\n\r <&>" \uD7FF\uE000\uFFFD\u{10000}\u{10FFFF}';
-assert.equal((await fromPptx(await toPptx({slides:[{code:representable}]}))).slides[0].blocks[0].code,representable);
+assert.equal((await fromPptx(await toPptx({slides:[{code:representable}]}))).slides[0].code,representable);
 console.log(`Shared code PPTX: ${cases} decks, ${lines} accepted native lines, ${tabs} tab stops, six whitespace imports, strict failures, ${invalidCases} XML-boundary rejections and valid character boundaries verified.`);

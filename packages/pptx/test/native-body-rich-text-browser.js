@@ -9,7 +9,8 @@ const output=document.querySelector('pre');
 let checks=0;
 const check=(condition,message)=>{if(!condition)throw new Error(message);checks++;};
 const plain=value=>Array.isArray(value)?value.map(run=>typeof run==='string'?run:run.text).join(''):value;
-const textBlocks=deck=>deck.slides[0].blocks?.filter(block=>block.type==='text').map(block=>block.text)??[];
+// The root text payload returns as the slide's own field (content topology); blocks keep theirs.
+const textBlocks=deck=>deck.slides[0].text!==undefined?[deck.slides[0].text]:deck.slides[0].blocks?.filter(block=>block.type==='text').map(block=>block.text)??[];
 const at=(value,text)=>{check(Array.isArray(value),'Current native body remains rich');const run=value.find(run=>run.text===text);check(!!run,'Native run retained: '+JSON.stringify(text));return run;};
 const part='ppt/slides/slide1.xml';
 const options={seed:934,timestamp:'2026-09-29T12:00:00Z',zipDate:'2026-09-29T12:00:00Z'};

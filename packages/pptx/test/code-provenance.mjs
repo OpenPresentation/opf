@@ -10,7 +10,8 @@ const original={source,filename:'Case.ts',language:'TypeScript'};
 const bytes=await toPptx(deck(original),{textMeasurement:fonts.textMeasurement});
 const modify=mutate=>{const entries=unzipSync(bytes);mutate(entries);return zipSync(entries);};
 const slide=(entries,mutate)=>entries['ppt/slides/slide1.xml']=enc.encode(mutate(dec.decode(entries['ppt/slides/slide1.xml'])));
-const importCode=async bytes=>(await fromPptx(bytes)).slides[0].blocks[0].code;
+// A root code payload returns as the slide's own field (content topology).
+const importCode=async bytes=>{const slide=(await fromPptx(bytes)).slides[0];return slide.code??slide.blocks?.[0]?.code;};
 assert.deepEqual(await importCode(bytes),original);
 for(const code of ['', '\t\t', 'é\t<&>\r\n\n', {source:'',filename:'',language:''}, {source:'x',filename:'only.ts'}, {source:'x',language:'ts'}]) {
   assert.deepEqual(await importCode(await toPptx(deck(code),{textMeasurement:fonts.textMeasurement})),code);
@@ -44,7 +45,7 @@ const corruptions={
 };
 for(const [name,mutate] of Object.entries(corruptions)) {
   const diagnostics=[],result=await fromPptx(modify(mutate),{onDiagnostic:issue=>diagnostics.push(issue)});
-  assert.ok(!result.slides[0].blocks.some(block=>block.type==='code'),name+' must not resurrect the old code');
+  assert.ok(result.slides[0].code===undefined&&!result.slides[0].blocks.some(block=>block.type==='code'),name+' must not resurrect the old code');
   assert.ok(diagnostics.some(issue=>issue.code==='invalid-code-provenance'),name+' must explain fallback');
 }
 const shorthand=await toPptx(deck('body'),{textMeasurement:fonts.textMeasurement}),entries=unzipSync(shorthand);

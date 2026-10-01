@@ -25,7 +25,7 @@ for(const [file,reference] of Object.entries(references)) {
   assert.equal(metadata.mediaType,'image/png');assert.equal(metadata.width,reference.width);assert.equal(metadata.height,reference.height);
   const rgba=await sharp(png).ensureAlpha().raw().toBuffer();
   assert.equal(createHash('sha256').update(rgba).digest('hex'),reference.rgbaSha256,file+': independent Pillow decoded-pixel reference');
-  const imported=await fromPptx(output),image=imported.slides[0].blocks.find(b=>b.image).image;
+  const imported=await fromPptx(output),image=(imported.slides[0].image ?? imported.slides[0].blocks?.find(b=>b.image)?.image);
   assert.equal(image.src,'data:image/png;base64,'+Buffer.from(png).toString('base64')); assert.equal(image.alt,file);
   assert.deepEqual(bytes,original,'Input bytes remain unchanged');
   if(source==='uri') assert.deepEqual(output,await toPptx(deck,options),'Compatible image export is deterministic');

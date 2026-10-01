@@ -73,7 +73,8 @@ for(const dimensions of [{widthInches:1280/96,heightInches:720/96},{widthInches:
   assert.deepEqual(document,source);assert.deepEqual(tagged,copy);
   // FF-57: the unchanged export restores the quote payload, and no body line is promoted into an absent heading role.
   for(const field of ['title','subtitle','tag'])assert.equal(restored[field],headings[field]);
-  assert.deepEqual(restored.blocks,[{type:'quote',quote:source.slides[0].quote}]);
+  // The root quote payload returns as the slide's own field (content topology).
+  assert.deepEqual(restored.quote,source.slides[0].quote);assert.equal(restored.blocks,undefined);
   // The same quote authored without OPF_QUOTE_V1 tags (as PowerPoint would) keeps the text-line fallback checked below.
   const untagged=unzipSync(tagged);
   slide(untagged,xml=>xml.replace(/<p:sp>[\s\S]*?<\/p:sp>/g,shape=>shape.includes('name="OPF quote ')?shape.replace(/<p:custDataLst>[\s\S]*?<\/p:custDataLst>/,''):shape));

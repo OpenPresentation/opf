@@ -64,7 +64,7 @@ const tagValue = xml => JSON.parse(Buffer.from(xml.match(/\bval="([^"]+)"/)[1], 
   const document = tagValue(documentXml);
   assert.deepEqual(document.design, source.design);
   assert.deepEqual(Object.keys(document.metadata).sort(), ['audience', 'duration', 'language', 'narrative', 'organization', 'purpose', 'speaker', 'tags', 'takeaway', 'tone', 'variables']);
-  assert.deepEqual(Object.keys(document.assets), ['acme-logo'], 'Only assets referenced by metadata are stored.');
+  assert.deepEqual(Object.keys(document.assets), ['acme-logo', 'unrelated'], 'The whole asset registry is stored (spec-gap P1).');
   assert.deepEqual(document.catalogs.layouts.records.map(record => record.id), ['hero-title'], 'Only referenced inline records are stored.');
   assert.equal(document.native.size.cx, '12192000');
   assert.deepEqual(Object.keys(document.native.colors), ['dk1', 'lt1', 'dk2', 'lt2', 'accent1', 'accent2', 'accent3', 'accent4', 'accent5', 'accent6', 'hlink', 'folHlink']);
@@ -84,7 +84,7 @@ const tagValue = xml => JSON.parse(Buffer.from(xml.match(/\bval="([^"]+)"/)[1], 
   assert.deepEqual(provenance, []);
   assert.deepEqual(deck.design, source.design);
   for (const key of ['organization', 'speaker', 'audience', 'purpose', 'language', 'tone', 'narrative', 'takeaway', 'duration', 'tags', 'variables']) assert.deepEqual(deck[key], source[key], key);
-  assert.deepEqual(deck.assets, {'acme-logo': source.assets['acme-logo']});
+  assert.deepEqual(deck.assets, source.assets, 'Unreferenced assets return as authored.');
   assert.deepEqual(deck.catalogs, {layouts: {records: [layoutRecord]}});
   assert.deepEqual(deck.slides.map(slide => [slide.id, slide.beat, slide.layout]), [['intro', 'problem', 'hero-title'], ['body', undefined, 'title-subtitle'], [undefined, undefined, 'title-subtitle']]);
   assert.deepEqual(deck.slides.map(slide => slide.design), [{titleAlignment: 'center', contentBox: false}, {background: {type: 'solid', color: '#102030'}}, undefined],
@@ -297,14 +297,24 @@ const tagValue = xml => JSON.parse(Buffer.from(xml.match(/\bval="([^"]+)"/)[1], 
   assert.equal(broken.deck.assets, undefined);
   assert.equal(broken.deck.slides[0].design.background.type, 'image', 'The observed native picture stays.');
   assert.match(dec.decode(unzipSync(await toPptx(broken.deck))['ppt/slides/slide1.xml']), /<p:bg><p:bgPr><a:blipFill/, 'Re-export is not a white slide.');
-  // An embedded source that is not an exported media part is never copied into a tag.
+  // An embedded source that is not an exported media part (an undrawn logo) is
+  // stored inline while its field stays under the per-field limit (spec-gap P1).
   const report = [];
   const unused = await toPptx({name: 'Logo', organization: {id: 'acme', name: 'Acme', logo: 'asset:logo'}, assets: {logo: pngUri}, tone: 'formal', slides: [{title: 'One'}]}, {onDiagnostic: issue => report.push(issue)});
-  assert.deepEqual(report.filter(issue => issue.code === 'document-provenance-omitted').map(issue => issue.path), ['assets.logo']);
+  assert.deepEqual(report.filter(issue => issue.code === 'document-provenance-omitted'), []);
+  assert.equal(unzipSync(unused)['ppt/media/image1.png'], undefined, 'An undrawn logo is no media part.');
   const logoImport = await read(unused);
-  assert.deepEqual(logoImport.deck.organization, {id: 'acme', name: 'Acme'}, 'The dangling logo reference is left out.');
-  assert.deepEqual(logoImport.provenance.map(issue => [issue.code, issue.path]), [['document-provenance-omitted', 'assets.logo'], ['unresolved-asset-reference', 'organization.logo']]);
+  assert.deepEqual(logoImport.provenance, []);
+  assert.deepEqual(logoImport.deck.organization, {id: 'acme', name: 'Acme', logo: 'asset:logo'});
+  assert.deepEqual(logoImport.deck.assets, {logo: pngUri}, 'The inline data: source returns byte for byte.');
   assert.equal(logoImport.deck.tone, 'formal');
+  // Over the limit, the field is omitted as before and the reference pruned.
+  const bigReport = [];
+  const big = await toPptx({name: 'Big logo', organization: {id: 'acme', name: 'Acme', logo: 'asset:logo'}, assets: {logo: `data:image/png;base64,${'A'.repeat(300 * 1024)}`}, tone: 'formal', slides: [{title: 'One'}]}, {onDiagnostic: issue => bigReport.push(issue)});
+  assert.deepEqual(bigReport.filter(issue => issue.code === 'document-provenance-omitted').map(issue => issue.path), ['assets.logo']);
+  const bigImport = await read(big);
+  assert.deepEqual(bigImport.deck.organization, {id: 'acme', name: 'Acme'}, 'The dangling logo reference is left out.');
+  assert.deepEqual(bigImport.provenance.map(issue => [issue.code, issue.path]), [['document-provenance-omitted', 'assets.logo'], ['unresolved-asset-reference', 'organization.logo']]);
 }
 
 // Size limits: oversized design and slide values are reported and recorded as

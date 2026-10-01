@@ -56,7 +56,8 @@ for (const local of [false, true]) {
   for (let index = 0; index < 2; index++) {
     for (const kind of ['header', 'footer']) assert.deepEqual(effective(deck, index, kind), definitions[kind]);
     assert.equal(deck.slides[index].section, source.slides[index].section);
-    assert.deepEqual(deck.slides[index].blocks, [{type: 'text', text: `Body ${index}`}]);
+    assert.equal(deck.slides[index].text, `Body ${index}`, 'The root text payload returns as authored (content topology).');
+    assert.equal(deck.slides[index].blocks, undefined);
   }
   assert.ok(!issues.some(issue => issue.code === 'invalid-furniture-provenance'));
   if (local) assert.equal(deck.design.header, undefined);
@@ -182,7 +183,11 @@ assert.ok(JSON.stringify(disagreed.deck.slides[1]).includes('Original organizati
 const sectionChanged = (await read(modify(metadataBytes, entries => xml(entries, content => content.replaceAll('First section', 'Current section'))))).deck;
 assert.equal(sectionChanged.slides[0].section, 'Current section');
 const sectionConflict = (await read(modify(metadataBytes, entries => xml(entries, content => content.replace('First section', 'Different section'))))).deck;
-assert.equal(sectionConflict.slides[0].section, undefined);
+// Disagreeing furniture lines restore no section themselves; PowerPoint's
+// native section list (src/sections.js), or without one the stored
+// OPF_SLIDE_V1 value, still names it, and the lines keep their text.
+assert.equal(sectionConflict.slides[0].section, 'First section');
+assert.equal((await read(modify(metadataBytes, entries => { xml(entries, content => content.replace('First section', 'Different section')); entries['ppt/presentation.xml'] = enc.encode(dec.decode(entries['ppt/presentation.xml']).replace(/<p:extLst>[\s\S]*<\/p:extLst>/, '')); }))).deck.slides[0].section, 'First section', 'Without the list, the stored value is the fallback.');
 for (const kind of ['header', 'footer']) assert.equal(effective(sectionConflict, 0, kind), undefined);
 for (const text of ['Different section', 'First section']) assert.ok(JSON.stringify(sectionConflict.slides[0]).includes(text));
 

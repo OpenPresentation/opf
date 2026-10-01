@@ -138,7 +138,8 @@ if(mode==='generate'){
           if(metric.trend)metric.trend='down';
         }
       }
-      assert.deepEqual(slide.blocks,[{type:'metric',metric}],filename+' slide '+(index+1));
+      // The root metric payload returns as the slide's own field (content topology); older packages carry it as one block.
+      assert.deepEqual(slide.metric??slide.blocks,slide.metric!==undefined?metric:[{type:'metric',metric}],filename+' slide '+(index+1));
     }
     assert.ok(diagnostics.every(issue=>issue.code==='metric-import-reflow'));
     imports.push({filename,sha256:hash(bytes),slides:result.slides.length,exactMetricFieldsSourceAndTypes:true,diagnostics});

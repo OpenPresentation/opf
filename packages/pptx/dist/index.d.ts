@@ -68,10 +68,14 @@ export interface ToPptxOptions {
   chartex?: "auto" | "native" | "fallback";
   /**
    * OPF_DOCUMENT_V1 / OPF_SLIDE_V1 customer-data tags that let fromPptx restore
-   * catalog references, layout ids and authoring metadata (docs/document-roundtrip.md).
+   * catalog references, layout ids, authoring metadata (`filename` and `extensions`
+   * included), `design.logo`, the asset registry, slide `section`/`extensions` and
+   * the slide content structure: nested groups, promoted regions, the root payload
+   * form, block ids and extensions, group composition (docs/document-roundtrip.md).
    * Tags are not shown in PowerPoint's UI. Default "full"; "references-only"
-   * stores catalog references without organization, speaker, free text, slide ids
-   * or assets; false writes no tags.
+   * stores catalog references without organization, speaker, free text, slide ids,
+   * assets or content structure; false writes no tags. Slide `section` labels are
+   * also written as PowerPoint's native section list whatever this option says.
    */
   provenance?: "full" | "references-only" | false;
   textMeasurement?: TextMeasurement;
@@ -107,7 +111,7 @@ export interface ToPptxOptions {
 }
 
 export interface FromPptxOptions {
-  /** Reports native details that import cannot preserve, including code provenance fallback/reflow and grouped text transforms. Table paths identify native frame and row/cell indexes (including headers). Stored catalog references that no longer match the package report `design-reference-changed` / `layout-reference-changed` at the reference path; a slide layout id that resolves to no inline or bundled record reports `unresolved-layout-reference` (docs/document-roundtrip.md). */
+  /** Reports native details that import cannot preserve, including code provenance fallback/reflow and grouped text transforms. Table paths identify native frame and row/cell indexes (including headers). Stored catalog references that no longer match the package report `design-reference-changed` / `layout-reference-changed` at the reference path; a slide layout id that resolves to no inline or bundled record reports `unresolved-layout-reference`; a slide whose imported blocks no longer fit the stored content structure reports `content-structure-changed` at `slides.N`, a block id repeated by a duplicated slide `duplicate-block-id`, and a footer section text that disagrees with PowerPoint's section list `section-reference-changed` (docs/document-roundtrip.md). */
   onDiagnostic?: (diagnostic: {code: string; path: string; message: string}) => void;
   fallbackName?: string;
   schema?: string;

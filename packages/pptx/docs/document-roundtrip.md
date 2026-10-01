@@ -34,14 +34,22 @@ Only values the document states are stored; engine defaults are not. A document 
 |---|---|---|---|
 | `design.theme`, `colorScheme`, `fontScheme`, `dimensions`, `background` | yes | yes, unless the value names an image, logo, file or URL | no tags at all |
 | deck composition defaults (`titleAlignment`, `contentAlignment`, `contentBox`, `contentDirection`, `chartPrimary`, `imageFill`, `listBullet`) | yes | yes | |
+| `design.logo` (deck and slide design; brand assets, spec-gap P1) | yes | no (a logo always names a source) | |
 | `narrative`, `tone`, `purpose`, `language`, `audience` | yes, any form | only as catalog ids (bundled or inline records) | |
-| `organization`, `speaker`, `takeaway`, `duration`, `tags`, `variables` | yes | no | |
-| slide `id` | yes | no | |
+| `organization`, `speaker`, `takeaway`, `duration`, `tags`, `variables`, `filename`, `extensions` | yes | no | |
+| slide `id`, `section`, `extensions` | yes | no | |
 | slide `beat`, `layout`, `type`, `composition`, slide design references and hints | yes | yes (design values without image/file/URL sources) | |
 | slide `layoutRecord`: the inline `catalogs.layouts` record for the slide's `layout` (FF-29) | yes | yes, unless it names an image, file or URL (its own `$schema` excepted) | |
-| `assets` entries referenced by stored values | yes | no | |
+| slide `content`: the content topology (groups, regions, root form, block ids and extensions, group composition, leaf boxes; below) | yes | no | |
+| the whole `assets` registry (referenced or not), one field per asset id | yes | no | |
 | inline `catalogs` records referenced by the document | yes | yes, referenced by stored values | |
 | native evidence (hashes and theme values, below) | yes | yes | |
+
+Slide `section` labels are additionally written as PowerPoint's native section list whatever the mode (below).
+
+### Compatibility with published importers (`supplement`)
+
+Importers up to 0.11.6 reject an `OPF_DOCUMENT_V1` whose `design` or `metadata` holds a key they do not know, and an `OPF_SLIDE_V1` whose `design` does; the whole tag is then dropped. Keys added since P1 (`design.logo`, `filename`, `extensions`; slide `design.logo`) are therefore written under a top-level `supplement` container (`{design: {...}, metadata: {...}}`) that those importers ignore, and merged back into the legacy sections on read; a legacy section that carries a supplement key rejects the tag. Slide `section`, `extensions` and `content` are top-level slide fields, which every reader ignores when unknown. `test/provenance-interop.mjs` (the `test:packed` lane) imports an export of this build with the published 0.11.6 package and requires its design references, metadata and layout intent to survive. Every new design or metadata key must join the supplement lists, never the legacy sections.
 
 The default stays `'full'` for now; the owner will decide whether it changes. The tags hold what the source document states, including personal metadata such as speaker names and email addresses. Hosts that share PPTX files outside the authoring context should consider `'references-only'` or `false`.
 
@@ -69,9 +77,9 @@ Conflicting asset IDs recover the affected video's native URL and caption with
 `media-asset-conflict`, rather than pointing it at another video's registry
 entry. These are package conversion checks; native Office parity is separate.
 
-A `data:` source is never copied into a tag. When its bytes are identical to an exported media part (for example an asset-backed or inline picture background), the tag stores `{"$opfMedia": "ppt/media/imageN.png", "prefix": "data:image/png;base64,"}`. Import rebuilds the `data:` URI from the current media part.
+A `data:` source whose bytes are identical to an exported media part (for example an asset-backed or inline picture background) is not duplicated: the tag stores `{"$opfMedia": "ppt/media/imageN.png", "prefix": "data:image/png;base64,"}` and import rebuilds the `data:` URI from the current media part.
 
-Any other `data:` source makes its field unstorable. Examples are a logo that is not drawn on any slide, or a WebP converted to PNG. `toPptx` then reports `document-provenance-omitted` at the field path, such as `assets.logo`. A design reference whose asset could not be stored is omitted too, so import never restores a bare `asset:` reference without its registry entry.
+Inline data rule (spec-gap P1, vetoable): any other `data:` source, one with no exported media part (a logo that is not drawn on any slide, a speaker photo, an unused asset, a WebP converted to PNG), is stored inline when its field stays under the 256 KiB limit. Otherwise the field is omitted and `toPptx` reports `document-provenance-omitted` at the field path, such as `assets.logo`, as before. A design reference whose asset could not be stored is omitted too, so import never restores a bare `asset:` reference without its registry entry. `references-only` stores no sources at all, so this rule never applies to it. The P2 logo picture (`OPF_LOGO_V1`) consumes a drawn `design.logo`, whose bytes then are a media part and take the `$opfMedia` form; `design.logo` itself always returns from this record.
 
 ### Size limits
 
@@ -97,14 +105,36 @@ Each stored reference records the native values it produced. Those values are re
 | slide `design.theme`/`colorScheme`/`fontScheme` | the set of typefaces and colors used on the slide | `design-reference-changed` |
 | deck composition defaults | every slide present and structurally unchanged | `design-reference-changed` at `design.<key>` |
 
-Authoring metadata, slide `id` and slide `beat` have no native counterpart and are restored from the stored value.
+Authoring metadata (`filename` and `extensions` included), `design.logo`, slide `id`, `beat` and `extensions` have no native counterpart and are restored from the stored value; `design.logo` after its media and asset references resolve.
 
 - The organization fields that current furniture shows (the name, and linked socials) win over the stored ones.
 - If slides disagree on the organization name, `metadata-reference-changed` is reported and the organization is not restored.
 - A metadata property whose `asset:` reference no longer resolves is left out, with `unresolved-asset-reference` at that path (for example `organization.logo`).
 - A design reference that needs an unavailable asset or media part is not restored, with `unresolved-asset-reference`.
-- When a duplicated slide carries a copied tag, its layout is restored and the repeated slide id is reported as `duplicate-slide-id`.
-- Inline catalog records and stored assets return only for ids that the restored document references.
+- When a duplicated slide carries a copied tag, its layout is restored and the repeated slide id is reported as `duplicate-slide-id`; a repeated block id as `duplicate-block-id` (the first occurrence keeps it; ids are unique across slides and blocks).
+- The whole stored `assets` registry returns, one restore group per asset id; an id the import already provides (a media asset read from a video placeholder) keeps its observed value. Inline catalog records return only for ids that the restored document references.
+
+### Content topology (spec-gap P1)
+
+PowerPoint has no counterpart for OPF's content structure. Import rebuilds flat `blocks` from the native shapes in reading order, which loses nested groups, promoted regions, the root payload form (and with it a valid `slide.type`), block ids and extensions, and group composition. In `full` mode each `OPF_SLIDE_V1` record therefore carries `content`:
+
+```
+Topology = {form: 'root', field, box?}                 // root payload on the slide (`text`, `items`, `chart` ...)
+         | {form: 'blocks', blocks: Node[]}
+         | {form: 'regions', regions: {[key]: Node}}   // key = promoted region key (`left`, `top:left`, ...)
+Node     = {t: 'group', id?, ext?, comp?, typed?, blocks: Node[]}
+         | {t: 'leaf', k, id?, ext?, typed?, box?}     // k = text|list|image|video|chart|table|code|metric|quote|timeline
+```
+
+Leaf boxes are `[x, y, w, h]` in reference pixels (one decimal) from the same `composeSlide` geometry the export draws; `typed` records that the authored block spelled out its `type`. A root shorthand with several payload fields (`{text, chart}`) composes one item per field and is stored as `{form: 'root', fields: [{field, box?}, ...]}`; each field returns as its own root property. A root `bullets` payload takes its key back on import (the importer names every list `items`). The record holds structure, ids, extensions, composition and boxes only, never words, images or payload values. Core precedence applies: regions win over blocks, blocks over a root payload. Ids are any schema string up to 256 characters (the empty string included); groups nested deeper than 3 levels, slides with more than 256 content nodes, or an id longer than 256 characters leave the slide's topology unstored (`document-provenance-omitted` at `slides.N.content`, recorded in the tag), and import rejects the same bounds.
+
+Import, while the slide's arrangement is unchanged (the same structure hash as `layout`/`type`/`composition`): each imported block (its native bounds in inches × 96) is matched to the smallest stored leaf whose box contains it within 3 px and whose kind is compatible (`text` and `list` are both text kinds); a block contained by no box (content that overflowed its box under `overflow: 'warn'`, whose lines still start inside it) matches the smallest compatible box that contains its origin. Exactly one block per leaf; a leaf with no block is dropped (empty payloads export nothing), an empty group with it. Several list blocks on one `list` leaf rejoin that list (native list lines interleave in reading order when another list sits beside them). A block that fits no leaf, or several non-list blocks on one leaf, abort the rebuild for that slide: it keeps its flat blocks and reports `content-structure-changed` at `slides.N`. On success the authored form returns: `slide.text = ...` (and the stored `type` with it, as one restore group `slides.N.content`), `slide['top:left'] = host`, nested groups with `composition`, `id`, `extensions`. A changed arrangement reports `slide-reference-changed` at `slides.N.content` and keeps the flat blocks. A damaged record (unknown form, kind or region key, bad box, too deep, too many nodes) rejects the slide tag as a whole (`invalid-document-provenance` at `slides.N`). Without the document tag, slide records still rebuild their content (a pasted slide keeps its groups).
+
+### Native sections (spec-gap P1)
+
+Slide `section` labels are PowerPoint's own sections. Export writes `p14:sectionLst` into `ppt/presentation.xml` (`p:extLst/p:ext uri="{521415D9-36F7-43E2-AB2F-B90AF26B5E84}"`, the last child of `p:presentation`, after the `p:custDataLst` the document tag adds before `p:defaultTextStyle`) whenever any slide has a non-blank `section`, whatever the `provenance` option. Each maximal run of consecutive slides with the same label is one `p14:section` listing its `p:sldId` ids; runs of slides without a label become a section named `Default Section`, PowerPoint's own default name (vetoable), so every slide is covered. Section ids are deterministic GUIDs (cyrb53 of the run index and name, formatted as a version-4 GUID). Decks without sections write no list and their presentation part is unchanged. A label is an XML attribute value: a character XML cannot carry (C0 controls other than tab/LF/CR, lone surrogates, U+FFFE/U+FFFF) fails the export with `invalid-text` at `slides.N.section`, exactly as a text run would; tab, LF and CR are written as spaces, since every XML reader normalizes them in an attribute, and labels are compared the same way on import, so a re-saved list never disagrees with the authored label (which returns from the stored tag).
+
+Import reads the list: a slide in a section named exactly `Default Section` has no `section`, any other name is the slide's `section` (so an authored section literally named `Default Section` does not return, vetoable). The list is native data and wins over the stored `OPF_SLIDE_V1.section` and over the section text a footer or header shows, with `section-reference-changed` at `slides.N.section` when a shown text disagrees (the furniture line keeps its text). One exception keeps the previous behaviour for edited footers: when the list still equals the stored value and the shown text differs, the footer line was edited and its text is kept. Without a list the stored value is the fallback for a slide whose furniture shows no section. A malformed list counts as none. Native PowerPoint confirmation (sections pane names and membership, save/reopen keeping the list) is a separate gate: `scratchpad/spec-gaps-native/sections.pptx`.
 
 ### Per-field fallback
 
@@ -161,7 +191,7 @@ With `structure: 'match'`, the layout id, composition and slide hints are alread
 
 - Keys that FF-24 theme recovery infers but the source never stated remain in the import. For example, a theme-only deck gains `design.colorScheme`.
 - FF-24's `theme-unverified` diagnostic is suppressed when the stored `design.theme` is restored, because the two would contradict each other.
-- `design.logo`, `design.slideImage` and `extensions` are not stored in the document tag. `design.slideImage` and `design.watermark` are recovered from their own tagged native pictures while those are unchanged.
+- `design.slideImage` is not stored in the document tag; `design.slideImage` and `design.watermark` are recovered from their own tagged native pictures while those are unchanged. `design.logo` and `extensions` are stored since spec-gap P1.
 - A native PowerPoint save/reopen of a tagged deck, and Document Inspector behaviour, are separate Office gates.
 
 ## Scope
@@ -172,7 +202,9 @@ With `structure: 'match'`, the layout id, composition and slide hints are alread
 - theme color, font, size, arrangement and background edits;
 - duplicated slides; stripped, damaged and invalid tags; per-field fallback;
 - shared furniture tag lists;
-- asset-backed backgrounds through media references, unresolved media and assets;
+- asset-backed backgrounds through media references, inline data sources, unresolved media and assets;
 - size limits and omitted-field records, provenance modes, and the per-slide contract.
+
+`test/content-topology.mjs` covers the content topology (nested groups, every region family, block ids and extensions, group composition, root payloads with slide type, side-by-side lists, edited geometry, box mismatches, damaged records, duplicated and pasted slides, modes) and `test/sections.mjs` the native section list (runs, Default Section, deterministic ids, schema order with the customer data, import from the list with and without tags, renamed and moved slides, the stored fallback, footer agreement and `section-reference-changed`). `test/export-corpus.mjs` and `npm run test:determinism` stay green; the corpus diff of this change touches tag parts, `presentation.xml` (sections, and the customer data of decks that previously stated nothing) and the customer-data lines of slides that previously carried no tag.
 
 `test/background-fills.mjs` checks that every FF-25 background returns authored, or observed when it is not stored. These are XML-level checks.

@@ -14,7 +14,8 @@ import {attachPlainTextTags,importPlainTextGroups} from './text-provenance.js';
 import {attachTimelineTags,timelineManifest,importTimelineGroups} from './timeline-provenance.js';
 import {attachQuoteTags,quoteManifest,importQuoteGroups} from './quote-provenance.js';
 import {attachFurnitureTags, furnitureManifest, importFurniture, staticDateFallback} from './furniture-provenance.js';
-import {applyDocumentProvenance, attachDocumentProvenance, documentProvenance, restoreDocumentProvenance} from './document-provenance.js';
+import {applyDocumentProvenance, attachDocumentProvenance, documentProvenance, recordContentTopology, restoreDocumentProvenance} from './document-provenance.js';
+import {INVALID_XML_CHARACTER, nativeSections, writeSectionList} from './sections.js';
 import {attachFurnitureFields, furniturePartFields, lineFields, nativeFieldType} from './furniture-fields.js';
 import {importImageOrientation} from './image-import.js';
 import {placeSlideImages, importSlideImage, slideImageName, slideImageOverlayName} from './slide-image-provenance.js';
@@ -246,6 +247,14 @@ export async function toPptx(input, options = {}) {
     report: diagnostic => options.onDiagnostic?.(diagnostic)
   });
   context.scriptFonts = planScriptFonts(presentation, options.onDiagnostic);
+  // Slide section labels become PowerPoint's native section list (src/sections.js).
+  // A label is an XML attribute: the characters text runs reject are rejected here too.
+  context.sections = presentation.slides.map((slide, index) => {
+    if (typeof slide.section !== 'string') return undefined;
+    const invalid = INVALID_XML_CHARACTER.exec(slide.section);
+    if (invalid) throw new OPFPptxError('invalid-text', `Text contains U+${invalid[0].codePointAt(0).toString(16).toUpperCase().padStart(4, '0')} at UTF-16 offset ${invalid.index}, which DrawingML XML cannot represent.`, {path: `slides.${index}.section`});
+    return slide.section;
+  });
   context.masterBackground = masterBackground(context);
   context.linkSentinels = linkSentinels(presentation);
   const pptx = new PptxGenJS();
@@ -327,6 +336,9 @@ export async function fromPptx(input, options = {}) {
     furnitureContexts[index].mediaRegistry = mediaRegistry;
     imported.slides.push(importSlide(entries, slidePaths[index], index, dimensions, options, furniture.slides[index], furnitureContexts[index]));
   }
+  // Native sections (PowerPoint's own section list, `Default Section` = none)
+  // are reconciled with the footer text and the stored value in restoreDocumentProvenance.
+  const slideSections = nativeSections(presentationRoot, slideIdsInOrder(presentationRoot, presentationRels, entries, slidePaths));
   // A watermark carried identically by every slide is the deck's design.watermark.
   const carried = imported.slides.map(slide => slide.design?.watermark);
   if (carried.length && carried[0] && carried.every(value => JSON.stringify(value) === JSON.stringify(carried[0]))) {
@@ -353,7 +365,8 @@ export async function fromPptx(input, options = {}) {
     const restored = restoreDocumentProvenance(imported, {entries, presentationRoot, presentationRels, organizationConflict: furniture.organizationConflict === true,
       // Host catalogs format stored socials exactly as export did (FF-34).
       socialPlatformRecords: catalogs => socialPlatformRecords({catalogs}, options),
-      slides: slidePaths.map((path, index) => ({path, root: furnitureContexts[index].root, relationships: furnitureContexts[index].relationships}))}, report);
+      nativeSections: slideSections,
+      slides: slidePaths.map((path, index) => ({path, root: furnitureContexts[index].root, relationships: furnitureContexts[index].relationships, contentBounds: furnitureContexts[index].contentBounds}))}, report);
     // The stored language wins while the runs still carry its tag (FF-07).
     restored.groups = reconcileLanguage(restored.groups, observedLanguage, report);
     imported = applyDocumentProvenance(imported, restored, validatePresentation, report);
@@ -474,6 +487,17 @@ function resolveSlidePaths(entries, presentationRoot, relationships) {
     .sort(compareSlidePaths);
 }
 
+// The `p:sldId` ids of the imported slides, aligned with `slidePaths`; empty
+// when the slides were listed from the package rather than `p:sldIdLst`.
+function slideIdsInOrder(presentationRoot, relationships, entries, slidePaths) {
+  const ids = [];
+  for (const slideId of asArray(presentationRoot["p:sldIdLst"]?.["p:sldId"])) {
+    const relationship = relationships.get(slideId?.["r:id"]);
+    if (relationship?.type.endsWith("/slide") && entries[relationship.path]) ids.push(String(slideId?.id ?? ""));
+  }
+  return ids.length === slidePaths.length ? ids : slidePaths.map(() => "");
+}
+
 function compareSlidePaths(left, right) {
   return slideNumber(left) - slideNumber(right) || (left < right ? -1 : left > right ? 1 : 0);
 }
@@ -559,10 +583,13 @@ function importSlide(entries, slidePath, slideIndex, presentationDimensions, opt
       item.text = current.map(paragraph => paragraph.text).join('\n');
     }
   }
-  const blocks = mergeAdjacentBulletShapes(items)
-    .map((item) => payloadFromSlideItem(item))
-    .filter(Boolean);
+  const content = mergeAdjacentBulletShapes(items)
+    .map((item) => ({payload: payloadFromSlideItem(item), bounds: item.visualBounds ?? item.bounds}))
+    .filter((entry) => entry.payload);
+  const blocks = content.map((entry) => entry.payload);
   if (blocks.length > 0) slide.blocks = blocks;
+  // Native bounds of each block in reference px, for content topology matching (document provenance).
+  nativeContext.contentBounds = content.map((entry) => entry.bounds ? {x: entry.bounds.x * 96, y: entry.bounds.y * 96, width: entry.bounds.w * 96, height: entry.bounds.h * 96} : null);
 
   const notes = readSlideNotes(entries, relationships);
   if (notes) slide.notes = notes;
@@ -720,6 +747,16 @@ function importGraphicFrame(entries, frame, slidePath, relationships, importedTa
   };
 }
 
+// The box a quarter-turned picture occupies on the slide: `a:xfrm` describes the
+// frame before rotation, so a 90 or 270 degree turn swaps its width and height
+// around the same centre. Content topology matching compares this visual box.
+function visualBounds(xfrm) {
+  const bounds = shapeBounds(xfrm);
+  const rotation = Number(xfrm?.rot ?? 0);
+  if (!bounds || !Number.isFinite(rotation) || ((rotation % 10800000) + 10800000) % 10800000 !== 5400000) return bounds;
+  return { x: bounds.x + bounds.w / 2 - bounds.h / 2, y: bounds.y + bounds.h / 2 - bounds.w / 2, w: bounds.h, h: bounds.w };
+}
+
 function importPicture(entries, picture, slidePath, relationships, report) {
   const bounds = shapeBounds(picture["p:spPr"]?.["a:xfrm"]);
   const name = scalarText(picture["p:nvPicPr"]?.["p:cNvPr"]?.name).trim();
@@ -748,6 +785,7 @@ function importPicture(entries, picture, slidePath, relationships, report) {
   return {
     kind: "image",
     bounds,
+    visualBounds: visualBounds(picture["p:spPr"]?.["a:xfrm"]),
     name,
     payload: {
       type: "image",
@@ -1375,6 +1413,8 @@ async function addSlide(pptx, presentation, opfSlide, slideIndex, context, optio
   const alignmentFor=item=>item.alignment??fieldAlignment(item.field);
   const geometry = composeSlide(opfSlide, { width: widthInches * 96, height: heightInches * 96, layout, presentation, slideIndex, fonts: slideContext.fonts, contentAlignment, titleAlignment, textRasterPadding:options.textRasterPadding, contentBox:opfSlide.design?.contentBox??presentation.design?.contentBox, textMeasurement: options.textMeasurement, date: options.date, socialPlatforms: socialPlatformRecords(presentation, options) });
   for (const diagnostic of geometry.diagnostics) options.onDiagnostic?.(diagnostic);
+  // The content topology (groups, regions, root form, block ids) with the leaf boxes this geometry draws.
+  recordContentTopology(context.documentProvenance, opfSlide, slideIndex, geometry.items);
   // The preview paints background, slide image (and its overlay), then design.watermark, then content.
   if (geometry.slideImage) await addSlideImage(slide, presentation, geometry.slideImage, slideIndex, slideContext, options);
   await addWatermark(slide, presentation, opfSlide, slideIndex, slideContext, context, options);
@@ -2686,6 +2726,11 @@ async function normalizePptxZip(raw, context) {
     throw new OPFPptxError('packaging-failed', `Chartex chart parts could not be attached: ${errorMessage(error)}`);
   }
   applyPitchFamilies(entries,context.fontPitch);
+  // Native PowerPoint sections (p14:sectionLst) from slide `section` labels, written whatever the provenance option.
+  if (context.sections.some(section => section !== undefined)) {
+    try { entries['ppt/presentation.xml'] = encodeText(writeSectionList(decodeText(entries['ppt/presentation.xml']), context.sections)); }
+    catch (error) { throw new OPFPptxError('packaging-failed', 'Section list could not be written.', {cause: errorMessage(error)}); }
+  }
   const imageSources = new Map();
   for (const [part, bytes] of Object.entries(entries)) {
     if (!/^ppt\/slides\/slide\d+\.xml$/.test(part)) continue;

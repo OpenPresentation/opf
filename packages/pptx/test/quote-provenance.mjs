@@ -29,7 +29,8 @@ const fixtures=[
 const exportSource=(source,options=OPTIONS)=>toPptx(source,options);
 const slideXml=entries=>decode(entries['ppt/slides/slide1.xml']);
 const importBytes=async bytes=>{const diagnostics=[],imported=await fromPptx(bytes,{onDiagnostic:d=>diagnostics.push(d)});return {imported,diagnostics};};
-const quoteBlocks=slide=>(slide.blocks??[]).filter(block=>block.type==='quote');
+// Content topology returns a root quote as the slide's own payload and blocks as authored (no implicit type).
+const quoteBlocks=slide=>slide.quote!==undefined?[{quote:slide.quote}]:(slide.blocks??[]).filter(block=>block.quote!==undefined);
 let cases=0;
 
 // 1. Exact round trip for every payload shape, at two canvases, with and without loaded fonts.
@@ -38,7 +39,8 @@ for(const measured of [false,true])for(const [width,height] of [[1280,720],[720,
  const bytes=await exportSource(source,measured?{...OPTIONS,...fontOptions}:OPTIONS),{imported,diagnostics}=await importBytes(bytes);
  assert.deepEqual(source,before,'export must not mutate its input');
  assert.equal(imported.slides[0].title,'Quote source');
- assert.deepEqual(imported.slides[0].blocks,[{type:'quote',quote}],JSON.stringify({measured,width,quote}));
+ assert.deepEqual(imported.slides[0].quote,quote,JSON.stringify({measured,width,quote}));
+ assert.equal(imported.slides[0].blocks,undefined);
  assert.ok(diagnostics.some(d=>d.code==='quote-import-reflow'));
  assert.ok(diagnostics.every(d=>reflow.has(d.code)),JSON.stringify(diagnostics));
  cases++;
@@ -47,7 +49,7 @@ for(const measured of [false,true])for(const [width,height] of [[1280,720],[720,
 // 2. Several quotes on one slide and on separate slides keep their order and identity.
 const many={slides:[{title:'Grid',blocks:fixtures.slice(0,5).map(quote=>({quote}))},{title:'Second',quote:fixtures[4]}]};
 const manyBytes=await exportSource(many),manyImported=await importBytes(manyBytes);
-assert.deepEqual(manyImported.imported.slides[0].blocks.filter(block=>block.type==='quote').map(block=>block.quote),fixtures.slice(0,5).map(quote=>quote));
+assert.deepEqual(quoteBlocks(manyImported.imported.slides[0]).map(block=>block.quote),fixtures.slice(0,5).map(quote=>quote));
 assert.deepEqual(quoteBlocks(manyImported.imported.slides[1]).map(block=>block.quote),[fixtures[4]]);
 assert.equal(manyImported.imported.slides[0].blocks.length,5,'no loose text blocks remain next to the quotes');
 
@@ -61,7 +63,7 @@ assert.equal(layoutImported.imported.slides[0].layout,'quote-1x');
 const twice=[await exportSource(many),await exportSource(many)];
 assert.equal(createHash('sha256').update(twice[0]).digest('hex'),createHash('sha256').update(twice[1]).digest('hex'));
 const again=await importBytes(await exportSource(manyImported.imported,OPTIONS));
-assert.deepEqual(again.imported.slides[0].blocks.filter(block=>block.type==='quote').map(block=>block.quote),fixtures.slice(0,5));
+assert.deepEqual(quoteBlocks(again.imported.slides[0]).map(block=>block.quote),fixtures.slice(0,5));
 
 // 5. The tags hold topology only: no quote word is stored in an OPF_QUOTE_V1 tag.
 const control={slides:[{title:'Tags',quote:{text:'Secret body words.',attribution:'Hidden attribution',source:'Hidden source'}}]};

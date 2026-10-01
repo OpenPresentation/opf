@@ -33,7 +33,7 @@ for(const dimensions of [{width:1280,height:720},{width:540,height:960}])for(con
     assert.equal(stops.length,line.segments.filter(s=>s.kind==='tab').length);
   }
   const diagnostics=[],imported=await fromPptx(bytes,{onDiagnostic:d=>diagnostics.push(d)});
-  assert.deepEqual(imported.slides[0].blocks,[{type:'metric',metric}]);assert.deepEqual(deck,before);
+  assert.deepEqual(imported.slides[0].metric,metric,'the root metric payload returns as authored');assert.equal(imported.slides[0].blocks,undefined);assert.deepEqual(deck,before);
   assert.ok(diagnostics.some(d=>d.code==='metric-import-reflow'));assert.ok(!diagnostics.some(d=>d.code==='invalid-metric-provenance'));cases++;
 }
 const strict={slides:[{composition:{overflow:'error',minFontSize:32},metric:{value:42,label:'Unabridged '.repeat(1000)}}]};

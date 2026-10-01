@@ -4,7 +4,8 @@ import {validatePresentation} from '@openpresentation/opf';
 import {tableValues} from './table-values.js';
 const out=document.querySelector('pre');let checks=0;
 const check=(ok,message)=>{if(!ok)throw Error(message);checks++;};
-const tableOf=deck=>tableValues(deck.slides[0].blocks.find(b=>b.table).table);
+// The root table payload returns as the slide's own field (content topology); blocks keep theirs.
+const tableOf=deck=>tableValues(deck.slides[0].table??deck.slides[0].blocks?.find(b=>b.table)?.table);
 try {
  const response=await fetch('./conditional.pptx');check(response.ok,'Native fixture loads');
  const diagnostics=[],deck=await fromPptx(new Uint8Array(await response.arrayBuffer()),{onDiagnostic:d=>diagnostics.push(d)});

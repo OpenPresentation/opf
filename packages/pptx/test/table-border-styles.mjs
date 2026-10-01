@@ -8,7 +8,7 @@ const rgb=color=>`<a:solidFill><a:srgbClr val="${color}"/></a:solidFill>`;
 const line=(color='123456',width=19050,dash='solid')=>`<a:ln w="${width}">${rgb(color)}<a:prstDash val="${dash}"/></a:ln>`;
 const edge=(name,body)=>`<a:${name}>${body}</a:${name}>`;
 const part=(name,borders)=>`<a:${name}><a:tcStyle><a:tcBdr>${borders}</a:tcBdr></a:tcStyle></a:${name}>`;
-const tableOf=deck=>deck.slides[0].blocks.find(block=>block.table).table;
+const tableOf=deck=>(deck.slides[0].table ?? deck.slides[0].blocks?.find(block=>block.table)?.table);
 const all=table=>[...(table.columns?[table.columns]:[]),...table.rows];
 const bases=new Map();
 async function fixture({definition='',properties='',rows=3,columns=3,direct=()=>'',theme,modify=xml=>xml}={}){

@@ -37,7 +37,7 @@ try {
    const defaultType = array(types.Default).find(item=>item['@_Extension']===mediaPath.split('.').at(-1));
    assert.equal((override??defaultType)['@_ContentType'],mime,`${filename} ${mode}: native content type`);
    const imported = await fromPptx(output);
-   const image = imported.slides[0].blocks.find(block=>block.image).image;
+   const image = (imported.slides[0].image ?? imported.slides[0].blocks?.find(block=>block.image)?.image);
    assert.equal(image.src,`data:${mime};base64,${Buffer.from(bytes).toString('base64')}`);
    assert.equal(image.alt,'Original image');
    if (mode === 'bytes') {
@@ -49,7 +49,7 @@ try {
      if (part.endsWith('.rels')) entries[part] = new TextEncoder().encode(text(data).replaceAll(mediaPath.slice(4),oldPath.slice(4)));
     }
     const legacy = await fromPptx(zipSync(entries));
-    assert.equal(legacy.slides[0].blocks.find(block=>block.image).image.src,image.src);
+    assert.equal((legacy.slides[0].image ?? legacy.slides[0].blocks?.find(block=>block.image)?.image).src,image.src);
    }
    checked++;
   }

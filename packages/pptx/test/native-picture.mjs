@@ -91,7 +91,8 @@ const media = Object.entries(entries).filter(([name]) => name.startsWith('ppt/me
 assert.equal(media.length, 1);
 assert.equal(sha(media[0][1]), sha(image));
 const diagnostics = [], imported = await fromPptx(bytes, {onDiagnostic: item => diagnostics.push(item)});
-const importedPictures = imported.slides[0].blocks.filter(block => block.image).map(block => block.image);
+// The root image payload returns as the slide's own field (content topology); blocks keep theirs.
+const importedPictures = imported.slides[0].image !== undefined ? [imported.slides[0].image] : (imported.slides[0].blocks ?? []).filter(block => block.image).map(block => block.image);
 assert.equal(importedPictures.length, 1);
 assert.equal(importedPictures[0].alt, source.slides[0].image.alt);
 assert.equal(sha(Buffer.from(importedPictures[0].src.split(',')[1], 'base64')), sha(image));

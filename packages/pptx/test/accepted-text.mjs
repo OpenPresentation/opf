@@ -51,7 +51,7 @@ for(const text of ['Full source\nSecond paragraph.', ['Exact spacing ',{text:'wi
   const imported=await fromPptx(bytes);
   // Boundary tags recover authored separators while current native text wins.
   for(const field of ['title','subtitle','tag'])assert.equal(imported.slides[0][field],deck.slides[0][field]);
-  if(typeof text==='string')assert.deepEqual(imported.slides[0].blocks,[{type:'text',text}]);
+  if(typeof text==='string'){assert.equal(imported.slides[0].text,text,'the root text payload returns as authored');assert.equal(imported.slides[0].blocks,undefined);}
   const nativeWords=shapes.map(nativeText).join(' ').match(/\S+/g);
   const collect=value=>typeof value==='string'?[value]:Array.isArray(value)?value.flatMap(collect):value&&typeof value==='object'?Object.entries(value).flatMap(([key,item])=>key==='text'||key==='title'||key==='subtitle'||key==='tag'||key==='blocks'?collect(item):[]):[];
   assert.deepEqual(collect(imported.slides[0]).join(' ').match(/\S+/g),nativeWords);

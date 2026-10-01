@@ -8,7 +8,7 @@ const {toPptx,fromPptx}=await import(process.env.OPF_TEST_PPTX_MODULE ?? '../dis
 import {rasterMetadata} from '../dist/image-geometry.js';
 import {importImageOrientation} from '../dist/image-import.js';
 const text=new TextDecoder(),encode=new TextEncoder();
-const sourceImage=doc=>doc.slides[0].blocks.find(block=>block.image).image;
+const sourceImage=doc=>(doc.slides[0].image ?? doc.slides[0].blocks?.find(block=>block.image)?.image);
 const imageBytes=doc=>Buffer.from(sourceImage(doc).src.split(',')[1],'base64');
 const raw=bytes=>sharp(bytes).autoOrient().ensureAlpha().raw().toBuffer({resolveWithObject:true});
 let cases=0;

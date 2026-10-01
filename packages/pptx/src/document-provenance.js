@@ -1,5 +1,6 @@
 import {XMLParser} from 'fast-xml-parser';
 import {decodeTextTag, encodeTextTag} from './code-provenance.js';
+import {contentTopology, rebuildContent, validateTopology} from './content-topology.js';
 // Namespace import: cores before FF-34 do not export resolveSocialProfile.
 import * as opfCore from '@openpresentation/opf';
 
@@ -28,6 +29,15 @@ import * as opfCore from '@openpresentation/opf';
 // kept on the slide as well as in the document's catalogs, so a slide keeps
 // its layout when OPF_DOCUMENT_V1 is missing or unreadable (for example a
 // slide pasted into another deck), and a pasted slide brings its own record.
+//
+// Spec-gap closure P1 adds, in `full` mode: the document `filename` and
+// `extensions`, the whole `assets` registry, `design.logo` (BRAND_ASSETS, also
+// per slide), the slide `section` and `extensions`, and the slide's content
+// topology (`content`, src/content-topology.js): nested groups, promoted
+// regions, the root payload form, block ids, block extensions and group
+// composition, with the reference-pixel box of every leaf. A `data:` source
+// that is not an exported media part is stored inline while its field stays
+// under the per-field limit.
 
 export const DOCUMENT_TAG = 'OPF_DOCUMENT_V1';
 export const SLIDE_TAG = 'OPF_SLIDE_V1';
@@ -63,13 +73,61 @@ function authoredSocials(stored, observed, records) {
 // native PowerPoint counterpart and round-trips from the stored value.
 export const DESIGN_REFERENCES = Object.freeze(['theme', 'colorScheme', 'fontScheme', 'dimensions', 'background']);
 export const COMPOSITION_HINTS = Object.freeze(['titleAlignment', 'contentAlignment', 'contentBox', 'contentDirection', 'chartPrimary', 'imageFill', 'listBullet']);
-export const METADATA = Object.freeze(['narrative', 'tone', 'audience', 'purpose', 'language', 'organization', 'speaker', 'takeaway', 'duration', 'tags', 'variables']);
+export const METADATA = Object.freeze(['narrative', 'tone', 'audience', 'purpose', 'language', 'organization', 'speaker', 'takeaway', 'duration', 'tags', 'variables', 'filename', 'extensions']);
+// Brand images have no native gate: they return from the stored value once
+// their media and asset references resolve. The P2 logo picture (`OPF_LOGO_V1`)
+// consumes the drawn logo; `design.logo` itself always returns from here.
+export const BRAND_ASSETS = Object.freeze(['logo']);
 const STYLE_REFERENCES = ['theme', 'colorScheme', 'fontScheme'];
 const SLIDE_STRUCTURE = ['layout', 'type', 'composition'];
+// Slide fields with no native counterpart, restored from the stored value.
+const SLIDE_METADATA = ['section', 'extensions'];
+const DESIGN_FIELDS = [...DESIGN_REFERENCES, ...COMPOSITION_HINTS, ...BRAND_ASSETS];
+const SLIDE_DESIGN_FIELDS = [...STYLE_REFERENCES, 'background', ...COMPOSITION_HINTS, ...BRAND_ASSETS];
+// Importers up to 0.11.6 reject a document tag whose `design` or `metadata`
+// holds a key they do not know (the whole tag is then dropped), and a slide tag
+// whose `design` does. Keys added since are written under `supplement`, a
+// top-level container those importers ignore, and merged back on read. Add
+// every new design or metadata key here, never to the legacy sections.
+const DOCUMENT_SUPPLEMENT = Object.freeze({design: BRAND_ASSETS, metadata: Object.freeze(['filename', 'extensions'])});
+const SLIDE_SUPPLEMENT = Object.freeze({design: BRAND_ASSETS});
+
+// Storage shape: move the supplement keys out of the legacy sections.
+function toStoredShape(record, spec) {
+  const result = {...record};
+  const supplement = {};
+  for (const [section, keys] of Object.entries(spec)) {
+    if (!object(result[section])) continue;
+    const kept = {}, moved = {};
+    for (const [key, value] of Object.entries(result[section])) (keys.includes(key) ? moved : kept)[key] = value;
+    if (Object.keys(moved).length) supplement[section] = moved;
+    if (Object.keys(kept).length) result[section] = kept; else delete result[section];
+  }
+  if (Object.keys(supplement).length) result.supplement = supplement;
+  return result;
+}
+
+// Read shape: validate the container and merge it back; a legacy section
+// must not carry a supplement key (an old importer would reject the tag).
+function fromStoredShape(value, spec) {
+  if (value.supplement === undefined) return value;
+  if (!object(value.supplement)) throw Error('Invalid supplement record.');
+  const result = {...value};
+  delete result.supplement;
+  for (const [section, fields] of Object.entries(value.supplement)) {
+    const keys = spec[section];
+    if (!keys || !object(fields)) throw Error(`Invalid supplement section ${section}.`);
+    for (const key of Object.keys(fields)) if (!keys.includes(key)) throw Error(`Unknown supplement field ${section}.${key}.`);
+    if (result[section] !== undefined && !object(result[section])) throw Error(`Invalid ${section} record.`);
+    result[section] = {...(result[section] ?? {}), ...fields};
+  }
+  return result;
+}
 
 // 53-bit non-cryptographic hash (cyrb53). Change detection only; tags are
 // writable by anyone who can edit the file, so no authenticity is claimed.
 const hash = text => hashUnits(text.length, index => text.charCodeAt(index));
+export const hashText = hash;
 const hashBytes = bytes => hashUnits(bytes.byteLength, index => bytes[index]);
 function hashUnits(length, unit) {
   let h1 = 0xdeadbeef, h2 = 0x41c6ce57;
@@ -333,7 +391,7 @@ const assetReferences = value => [...collectStrings(value)].filter(item => item.
 export function documentProvenance(presentation, {mode = 'full', isCatalogId = () => false, report = () => {}} = {}) {
   const referencesOnly = mode === 'references-only';
   const design = {}, metadata = {};
-  for (const key of [...DESIGN_REFERENCES, ...COMPOSITION_HINTS]) {
+  for (const key of DESIGN_FIELDS) {
     if (!own(presentation.design, key)) continue;
     if (referencesOnly && carriesSource(presentation.design[key])) continue;
     design[key] = clone(presentation.design[key]);
@@ -350,7 +408,7 @@ export function documentProvenance(presentation, {mode = 'full', isCatalogId = (
   }
   const slides = presentation.slides.map((slide, index) => {
     const record = {v: 1, slide: index};
-    for (const key of [...(referencesOnly ? [] : ['id']), 'beat', ...SLIDE_STRUCTURE]) if (own(slide, key)) record[key] = clone(slide[key]);
+    for (const key of [...(referencesOnly ? [] : ['id', ...SLIDE_METADATA]), 'beat', ...SLIDE_STRUCTURE]) if (own(slide, key)) record[key] = clone(slide[key]);
     const layoutRecord = typeof slide.layout === 'string' ? layoutRecords(presentation.catalogs).find(item => item?.id === slide.layout) : undefined;
     // The layout record is a catalog record. 'references-only' stores it only
     // when it names no image, file or URL; neither mode stores the assets it
@@ -358,25 +416,38 @@ export function documentProvenance(presentation, {mode = 'full', isCatalogId = (
     // A record's own $schema URL identifies its format and is not a source.
     if (layoutRecord && !(referencesOnly && carriesSource({...layoutRecord, $schema: undefined}))) record.layoutRecord = clone(layoutRecord);
     const slideDesign = {};
-    for (const key of [...STYLE_REFERENCES, 'background', ...COMPOSITION_HINTS]) {
+    for (const key of SLIDE_DESIGN_FIELDS) {
       if (!own(slide.design, key) || (referencesOnly && carriesSource(slide.design[key]))) continue;
       slideDesign[key] = clone(slide.design[key]);
     }
     if (Object.keys(slideDesign).length) record.design = slideDesign;
     return record;
   });
-  const stated = Object.keys(design).length || Object.keys(metadata).length || slides.some(record => Object.keys(record).length > 2);
-  if (!stated) return null;
   const document = {v: 1, slides: slides.length};
   if (Object.keys(design).length) document.design = design;
   if (Object.keys(metadata).length) document.metadata = metadata;
   const stored = [design, metadata, slides];
-  const assetIds = [...new Set(assetReferences([design, metadata, slides.map(({layoutRecord: _record, ...rest}) => rest)]))].filter(id => own(presentation.assets, id));
-  if (assetIds.length) document.assets = Object.fromEntries(assetIds.map(id => [id, clone(presentation.assets[id])]));
+  // 'full' stores the whole registry, so unreferenced assets return as authored;
+  // 'references-only' stores no assets at all.
+  if (!referencesOnly && object(presentation.assets) && Object.keys(presentation.assets).length) document.assets = clone(presentation.assets);
   const {catalogs, ...rest} = presentation;
   const catalogRecords = referencedCatalogs(catalogs, collectStrings(referencesOnly ? stored : rest));
   if (catalogRecords) document.catalogs = catalogRecords;
-  return {mode, document, slides, report};
+  // Slide content topology is added per slide by the exporter (recordContentTopology).
+  const stated = Object.keys(design).length || Object.keys(metadata).length || document.assets !== undefined || slides.some(record => Object.keys(record).length > 2);
+  return {mode, document, slides, report, stated: Boolean(stated)};
+}
+
+/**
+ * Record the content topology of slide `index` from its composed geometry
+ * items (`full` mode only). Structures the record cannot hold are reported as
+ * `document-provenance-omitted` at `slides.N.content`.
+ */
+export function recordContentTopology(provenance, slide, index, items) {
+  if (!provenance || provenance.mode !== 'full' || !provenance.slides[index]) return;
+  // An unstorable structure is reported with the other omissions (storable) and recorded in the tag.
+  const topology = contentTopology(slide, items, index, reason => { provenance.slides[index].omittedContent = reason; });
+  if (topology) provenance.slides[index].content = topology;
 }
 
 function base64ToBytes(value) {
@@ -394,9 +465,10 @@ function bytesToBase64(bytes) {
 
 const sameBytes = (a, b) => a.byteLength === b.byteLength && a.every((value, index) => value === b[index]);
 
-// Embedded data: sources are never copied into a tag. A data URI whose bytes
-// are an exported media part becomes a reference to that part; any other data
-// URI makes the value unstorable.
+// A data URI whose bytes are an exported media part becomes a reference to
+// that part (no duplication). Any other data: source (an undrawn logo, a
+// speaker photo, an unused asset) stays inline; the per-field size limit then
+// decides whether the field is stored.
 function mediaExternalizer(entries) {
   const media = new Map();
   for (const [path, bytes] of Object.entries(entries)) {
@@ -406,22 +478,20 @@ function mediaExternalizer(entries) {
   }
   const find = bytes => (media.get(`${bytes.byteLength}:${hashBytes(bytes)}`) ?? []).find(path => sameBytes(entries[path], bytes));
   return function externalize(value) {
-    let missing = false;
     const visit = item => {
       if (typeof item === 'string' && /^data:/i.test(item)) {
         const match = item.match(/^data:([\w.+-]+\/[\w.+-]+)?((?:;[^;,]*)*?)(;base64)?,([\s\S]*)$/i);
         let bytes = null;
         try { if (match) bytes = match[3] ? base64ToBytes(match[4]) : enc.encode(decodeURIComponent(match[4])); } catch { bytes = null; }
         const path = bytes && find(bytes);
-        if (!path) { missing = true; return item; }
+        if (!path) return item;
         return {$opfMedia: path, prefix: `data:${match[1] || 'application/octet-stream'};base64,`};
       }
       if (Array.isArray(item)) return item.map(visit);
       if (object(item)) return Object.fromEntries(Object.entries(item).map(([key, value]) => [key, visit(value)]));
       return item;
     };
-    const result = visit(value);
-    return {value: result, missing};
+    return {value: visit(value)};
   };
 }
 
@@ -449,8 +519,7 @@ function storable(entries, provenance) {
   const omit = (path, reason) => { omitted.push(path); report({code: 'document-provenance-omitted', path, message: `${path} is not stored in the PPTX because ${reason}; reimport keeps the values observed in the PPTX instead.`}); };
   const externalize = mediaExternalizer(entries);
   const prepare = (path, value, limit = MAX_FIELD_BYTES) => {
-    const {value: result, missing} = externalize(value);
-    if (missing) { omit(path, 'it embeds a data: source that is not one of the exported media parts'); return undefined; }
+    const {value: result} = externalize(value);
     if (sizeOf(result) > limit) { omit(path, `it is larger than ${limit / 1024} KiB`); return undefined; }
     return result;
   };
@@ -480,7 +549,8 @@ function storable(entries, provenance) {
   }
   const slides = provenance.slides.map((record, index) => {
     const result = {v: 1, slide: index};
-    for (const key of ['id', 'beat', ...SLIDE_STRUCTURE]) {
+    if (record.omittedContent) omit(`slides.${index}.content`, record.omittedContent);
+    for (const key of ['id', 'beat', ...SLIDE_STRUCTURE, ...SLIDE_METADATA, 'content']) {
       if (record[key] === undefined) continue;
       const value = prepare(`slides.${index}.${key}`, record[key]);
       if (value !== undefined) result[key] = value;
@@ -517,7 +587,7 @@ function storable(entries, provenance) {
   }
   for (const [index, record] of slides.entries()) {
     while (tagChars(record) > budget) {
-      const candidates = [...['id', 'beat', ...SLIDE_STRUCTURE, 'layoutRecord'].filter(key => record[key] !== undefined).map(key => ({key, size: sizeOf(record[key])})),
+      const candidates = [...['id', 'beat', ...SLIDE_STRUCTURE, ...SLIDE_METADATA, 'content', 'layoutRecord'].filter(key => record[key] !== undefined).map(key => ({key, size: sizeOf(record[key])})),
         ...Object.keys(record.design ?? {}).map(key => ({key, design: true, size: sizeOf(record.design[key])}))];
       if (!candidates.length) break;
       const largest = candidates.sort((a, b) => b.size - a.size)[0];
@@ -539,7 +609,9 @@ function storable(entries, provenance) {
  * `entries` maps part paths to bytes and is updated in place.
  */
 export function attachDocumentProvenance(entries, provenance) {
-  if (!provenance) return;
+  // A document that states nothing (no references, metadata, slide fields or
+  // content topology) gets no tags and its bytes are unchanged.
+  if (!provenance || !(provenance.stated || provenance.slides.some(record => record.content !== undefined))) return;
   const presentationXml = dec.decode(entries['ppt/presentation.xml']);
   const presentationRoot = parser.parse(presentationXml)['p:presentation'];
   const rels = relationships(entries, 'ppt/presentation.xml');
@@ -547,7 +619,7 @@ export function attachDocumentProvenance(entries, provenance) {
   if (paths.length !== provenance.slides.length) throw Error('Generated slide count differs from the document.');
   const prepared = storable(entries, provenance);
   const types = [];
-  const document = {...prepared.document, native: nativeDocument(entries, presentationRoot, rels)};
+  const document = toStoredShape({...prepared.document, native: nativeDocument(entries, presentationRoot, rels)}, DOCUMENT_SUPPLEMENT);
 
   // CT_Presentation: custDataLst follows photoAlbum and precedes kinsoku/defaultTextStyle/modifyVerifier/extLst.
   const documentPart = 'ppt/tags/opfDocument.xml';
@@ -562,7 +634,7 @@ export function attachDocumentProvenance(entries, provenance) {
   types.push(documentPart);
 
   for (const [index, path] of paths.entries()) {
-    const record = {...prepared.slides[index], native: nativeSlide(entries, path)};
+    const record = toStoredShape({...prepared.slides[index], native: nativeSlide(entries, path)}, SLIDE_SUPPLEMENT);
     const tag = `<p:tag name="${SLIDE_TAG}" val="${encodeTextTag(record)}"/>`;
     let xml = dec.decode(entries[path]);
     const slideRels = relsPath(path);
@@ -611,22 +683,31 @@ function validateOmitted(value) {
   if (value !== undefined && (!Array.isArray(value) || value.length > MAX_OMITTED || !value.every(path => typeof path === 'string' && /^[A-Za-z0-9_.:+-]{1,256}$/.test(path)))) throw Error('Invalid omitted field list.');
 }
 
-function validateDocument(value) {
-  if (!object(value) || value.v !== 1 || !Number.isSafeInteger(value.slides) || value.slides < 1) throw Error('Unsupported document provenance version.');
+function validateDocument(stored) {
+  if (!object(stored) || stored.v !== 1 || !Number.isSafeInteger(stored.slides) || stored.slides < 1) throw Error('Unsupported document provenance version.');
+  const value = fromStoredShape(stored, DOCUMENT_SUPPLEMENT);
   for (const key of ['design', 'metadata', 'catalogs', 'assets']) if (value[key] !== undefined && !object(value[key])) throw Error(`Invalid ${key} record.`);
+  for (const [section, keys] of Object.entries(DOCUMENT_SUPPLEMENT)) for (const key of keys) if (object(stored[section]) && stored[section][key] !== undefined) throw Error(`Supplement field ${section}.${key} stored in the legacy section.`);
   if (!object(value.native)) throw Error('Missing native evidence.');
-  for (const key of Object.keys(value.design ?? {})) if (![...DESIGN_REFERENCES, ...COMPOSITION_HINTS].includes(key)) throw Error(`Unknown design field ${key}.`);
+  for (const key of Object.keys(value.design ?? {})) if (!DESIGN_FIELDS.includes(key)) throw Error(`Unknown design field ${key}.`);
   for (const key of Object.keys(value.metadata ?? {})) if (!METADATA.includes(key)) throw Error(`Unknown metadata field ${key}.`);
+  if (value.metadata?.filename !== undefined && typeof value.metadata.filename !== 'string') throw Error('Invalid filename record.');
+  if (value.metadata?.extensions !== undefined && !object(value.metadata.extensions)) throw Error('Invalid extensions record.');
   validateOmitted(value.omitted);
   return value;
 }
 
-function validateSlide(value) {
-  if (!object(value) || value.v !== 1 || !Number.isSafeInteger(value.slide) || value.slide < 0) throw Error('Unsupported slide provenance version.');
-  if (!object(value.native) || typeof value.native.structure !== 'string' || typeof value.native.background !== 'string' || typeof value.native.style !== 'string') throw Error('Missing slide native evidence.');
-  if (value.design !== undefined && !object(value.design)) throw Error('Invalid slide design record.');
-  for (const key of Object.keys(value.design ?? {})) if (![...STYLE_REFERENCES, 'background', ...COMPOSITION_HINTS].includes(key)) throw Error(`Unknown slide design field ${key}.`);
+function validateSlide(stored) {
+  if (!object(stored) || stored.v !== 1 || !Number.isSafeInteger(stored.slide) || stored.slide < 0) throw Error('Unsupported slide provenance version.');
+  if (!object(stored.native) || typeof stored.native.structure !== 'string' || typeof stored.native.background !== 'string' || typeof stored.native.style !== 'string') throw Error('Missing slide native evidence.');
+  if (stored.design !== undefined && !object(stored.design)) throw Error('Invalid slide design record.');
+  for (const key of SLIDE_SUPPLEMENT.design) if (object(stored.design) && stored.design[key] !== undefined) throw Error(`Supplement field design.${key} stored in the legacy section.`);
+  const value = fromStoredShape(stored, SLIDE_SUPPLEMENT);
+  for (const key of Object.keys(value.design ?? {})) if (!SLIDE_DESIGN_FIELDS.includes(key)) throw Error(`Unknown slide design field ${key}.`);
   if (value.layoutRecord !== undefined && (!object(value.layoutRecord) || typeof value.layoutRecord.id !== 'string')) throw Error('Invalid slide layout record.');
+  if (value.section !== undefined && typeof value.section !== 'string') throw Error('Invalid slide section record.');
+  if (value.extensions !== undefined && !object(value.extensions)) throw Error('Invalid slide extensions record.');
+  if (value.content !== undefined) validateTopology(value.content);
   validateOmitted(value.omitted);
   return value;
 }
@@ -676,8 +757,13 @@ function pruneDangling(value, dangling, path, removed) {
  * is the contract for layout-structure recovery (FF-29): `record` is the
  * validated OPF_SLIDE_V1 value (layout, type, composition, design hints, ...),
  * `catalogRecord` the stored inline layouts record for `layout`, if any.
+ *
+ * `slides[i].contentBounds` are the native bounds (reference px) of the
+ * imported blocks of slide i, in block order, for content topology matching.
+ * `nativeSections` is the package's native section list as one name (or
+ * undefined) per slide, or null when the package has no list.
  */
-export function restoreDocumentProvenance(imported, {entries, presentationRoot, presentationRels, slides, organizationConflict = false, socialPlatformRecords}, report) {
+export function restoreDocumentProvenance(imported, {entries, presentationRoot, presentationRels, slides, organizationConflict = false, socialPlatformRecords, nativeSections = null}, report) {
   const invalid = message => report({code: 'invalid-document-provenance', path: '', message: `${message} Ordinary import keeps the values observed in the PPTX.`});
   let document;
   try {
@@ -701,14 +787,82 @@ export function restoreDocumentProvenance(imported, {entries, presentationRoot, 
   });
   const groups = [];
   const group = (field, ops) => groups.push({field, ops});
+  const set = (path, value) => ({path, value});
+  const remove = path => ({path, remove: true});
   const intent = layoutIntent(document ? layoutRecords(document.catalogs) : [], Boolean(document), slideRecords, entries, group, report, rejectedLayoutIds);
+
+  // Slide and block ids must stay unique across the document; a duplicated
+  // slide carries copies of both, and the first occurrence keeps them.
+  const seenIds = new Set();
+  // Content topology: while the slide's arrangement is unchanged, the imported
+  // flat blocks are matched to the stored leaves and the authored form returns
+  // (root payload, blocks with nested groups, or promoted regions). The slide
+  // `type` joins that group, since it is only valid with the authored form.
+  const restoreContent = (index, {record, native: observed}) => {
+    if (record.content === undefined) return false;
+    // The stored `type` belongs to the authored form: when that form is not restored, neither is the type.
+    const typeNote = record.type === undefined ? '' : ` The stored slide type ${JSON.stringify(record.type)} was not restored either.`;
+    if (record.native.structure !== observed.structure) {
+      report({code: 'slide-reference-changed', path: `slides.${index}.content`, message: `The slide's objects were moved, resized, added or removed since export, so the authored content structure of slides.${index} (groups, regions, block ids) was not restored; the imported slide keeps its flat blocks.`});
+      if (record.type !== undefined) report({code: 'slide-reference-changed', path: `slides.${index}.type`, message: `The slide's objects were moved, resized, added or removed since export, so slides.${index}.type ${JSON.stringify(record.type)} was not restored; the imported slide keeps its observed arrangement.`});
+      return false;
+    }
+    const result = rebuildContent(record.content, imported.slides[index]?.blocks ?? [], slides[index]?.contentBounds ?? []);
+    if (result.reason) {
+      report({code: 'content-structure-changed', path: `slides.${index}`, message: `The slide's content no longer matches its stored structure (${result.reason}), so the authored groups, regions and block ids of slides.${index} were not restored; the imported slide keeps its flat blocks.${typeNote}`});
+      return false;
+    }
+    const dedupe = (value, path) => {
+      if (Array.isArray(value)) { value.forEach((item, position) => dedupe(item, `${path}.${position}`)); return; }
+      if (!object(value)) return;
+      if (typeof value.id === 'string') {
+        if (seenIds.has(value.id)) { report({code: 'duplicate-block-id', path: `${path}.id`, message: `Block id '${value.id}' appears more than once (a duplicated slide); the first keeps it.`}); delete value.id; }
+        else seenIds.add(value.id);
+      }
+      if (Array.isArray(value.blocks)) dedupe(value.blocks, `${path}.blocks`);
+    };
+    const ops = [];
+    for (const [key, value] of Object.entries(result.fields)) {
+      if (value === null) { ops.push(remove(['slides', index, key])); continue; }
+      if (key === 'blocks') dedupe(value, `slides.${index}.blocks`); else if (record.content.form === 'regions') dedupe(value, `slides.${index}.${key}`);
+      ops.push(set(['slides', index, key], value));
+    }
+    if (record.type !== undefined) ops.push(set(['slides', index, 'type'], clone(record.type)));
+    group(`slides.${index}.content`, ops);
+    return true;
+  };
+
+  // Sections: three sources can name a slide's section. The native section
+  // list (PowerPoint's sections pane), the section text a footer shows, and the
+  // stored OPF_SLIDE_V1 value. The list is native data and wins, except when
+  // the list still equals the stored value and the footer text differs: then
+  // the footer was edited and its text is kept, as before. Without a list the
+  // stored value is the fallback for a slide whose footer shows none.
+  // Labels compare the way the native list stores them: tab, LF and CR are
+  // spaces in an XML attribute, and a blank label is no section.
+  const blank = value => typeof value !== 'string' || value.trim() === '';
+  const normalized = value => blank(value) ? '' : value.replace(/[\t\n\r]/g, ' ');
+  const sameSection = (a, b) => normalized(a) === normalized(b);
+  const reconcileSection = (index, stored) => {
+    const shown = imported.slides[index]?.section;
+    if (!nativeSections) {
+      if (stored !== undefined && shown === undefined) group(`slides.${index}.section`, [set(['slides', index, 'section'], clone(stored))]);
+      return;
+    }
+    const listed = nativeSections[index];
+    if (sameSection(shown, listed) || (stored !== undefined && sameSection(listed, stored) && shown !== undefined)) return;
+    if (shown !== undefined) report({code: 'section-reference-changed', path: `slides.${index}.section`, message: `The footer of slides.${index} shows section '${shown}' but PowerPoint's section list ${listed === undefined ? 'has the slide in no named section' : `names '${listed}'`}; the section list wins and the footer keeps its current text.`});
+    group(`slides.${index}.section`, [listed === undefined ? remove(['slides', index, 'section']) : set(['slides', index, 'section'], listed)]);
+  };
 
   // Without document provenance (a slide pasted into another deck, or a
   // missing or unreadable OPF_DOCUMENT_V1), each OPF_SLIDE_V1 still restores
-  // its layout intent; deck references, metadata and slide ids need the
-  // document record and are not restored.
+  // its layout intent and content topology, and the native section list
+  // applies; deck references, metadata, slide ids, stored sections and
+  // extensions need the document record and are not restored.
   if (!document) {
-    const layouts = imported.slides.map((_, index) => slideRecords[index] ? intent.slide(index, slideRecords[index]).entry : {structure: 'untagged'});
+    const layouts = imported.slides.map((_, index) => slideRecords[index] ? intent.slide(index, slideRecords[index], (restoreContent(index, slideRecords[index]), slideRecords[index].record.content !== undefined)).entry : {structure: 'untagged'});
+    if (nativeSections) imported.slides.forEach((_, index) => reconcileSection(index, undefined));
     return {groups, slides: layouts, finalize: doc => intent.finalize(doc)};
   }
 
@@ -732,8 +886,6 @@ export function restoreDocumentProvenance(imported, {entries, presentationRoot, 
     for (const path of removed) report({code: 'unresolved-asset-reference', path, message: `${path} refers to an asset the PPTX no longer provides and was left out of the restored ${field}.`});
     return pruned;
   };
-  const set = (path, value) => ({path, value});
-  const remove = path => ({path, remove: true});
 
   const notStored = path => report({code: 'document-provenance-omitted', path, message: `${path} was stated in the source document but not stored at export, so the imported document keeps the values observed in the PPTX.`});
   for (const path of array(document.omitted)) notStored(path);
@@ -762,26 +914,38 @@ export function restoreDocumentProvenance(imported, {entries, presentationRoot, 
     group(`design.${key}`, [set(['design', key], value)]);
   }
   const styleIntact = STYLE_REFERENCES.every(key => restoredStyle[key] !== false);
+  // Brand images have no native gate (the P2 logo picture is consumed separately).
+  for (const key of BRAND_ASSETS) {
+    if (storedDesign[key] === undefined) continue;
+    const value = restorable(`design.${key}`, storedDesign[key]);
+    if (value !== undefined) group(`design.${key}`, [set(['design', key], value)]);
+  }
 
   // Slide-level references.
   const layouts = [];
-  const seenIds = new Set();
   let allStructure = slideRecords.length === document.slides && slideRecords.every(Boolean);
   const backgroundInheritors = [];
   for (const [index, slide] of imported.slides.entries()) {
     const entry = slideRecords[index];
-    if (!entry) { layouts.push({structure: 'untagged'}); allStructure = false; continue; }
+    if (!entry) { layouts.push({structure: 'untagged'}); allStructure = false; reconcileSection(index, undefined); continue; }
     const {record, native: observed} = entry;
-    const {entry: layoutEntry, structureMatch} = intent.slide(index, entry);
-    if (!structureMatch) allStructure = false;
-    layouts.push(layoutEntry);
     const at = (...path) => ['slides', index, ...path];
     if (record.id !== undefined) {
       if (seenIds.has(record.id)) report({code: 'duplicate-slide-id', path: `slides.${index}.id`, message: `Slide id '${record.id}' appears on more than one slide (a duplicated slide); the first keeps it.`});
       else { seenIds.add(record.id); group(`slides.${index}.id`, [set(at('id'), clone(record.id))]); }
     }
+    const {entry: layoutEntry, structureMatch} = intent.slide(index, entry, (restoreContent(index, entry), entry.record.content !== undefined));
+    if (!structureMatch) allStructure = false;
+    layouts.push(layoutEntry);
     if (record.beat !== undefined) group(`slides.${index}.beat`, [set(at('beat'), clone(record.beat))]);
+    reconcileSection(index, record.section);
+    if (record.extensions !== undefined) group(`slides.${index}.extensions`, [set(at('extensions'), clone(record.extensions))]);
     const recordDesign = record.design ?? {};
+    for (const key of BRAND_ASSETS) {
+      if (recordDesign[key] === undefined) continue;
+      const value = restorable(`slides.${index}.design.${key}`, recordDesign[key]);
+      if (value !== undefined) group(`slides.${index}.design.${key}`, [set(at('design', key), value)]);
+    }
     const styleMatch = record.native.style === observed.style;
     for (const key of STYLE_REFERENCES) {
       if (recordDesign[key] === undefined) continue;
@@ -850,6 +1014,10 @@ export function restoreDocumentProvenance(imported, {entries, presentationRoot, 
     group(key, [set([key], value)]);
   }
 
+  // The whole stored asset registry returns; an id the import already provides
+  // (a media asset read from a video placeholder) keeps its observed value.
+  for (const [id, asset] of Object.entries(storedAssets)) if (!own(imported.assets, id)) group(`assets.${id}`, [set(['assets', id], clone(asset))]);
+
   // Assets and inline catalog records follow what the restored document references.
   const finalize = doc => {
     const needed = [...new Set(assetReferences(doc))].filter(id => !own(doc.assets, id) && Object.hasOwn(storedAssets, id));
@@ -914,7 +1082,8 @@ function layoutIntent(documentRecords, hasDocument, slideRecords, entries, group
   }
   const chosen = new Map([...resolved].filter(([, item]) => item.add).map(([id, item]) => [id, item.record]));
   const against = {document: 'the document', bundled: 'the built-in layout', slides: 'another slide'};
-  const slide = (index, {record}) => {
+  // `typeInContent`: the slide stores a content topology, so its `type` is restored with that group (or not at all).
+  const slide = (index, {record}, typeInContent = false) => {
     const {structureMatch, layout, own, problem, stated} = owns[index];
     const {native: _native, ...recordValue} = record;
     if (structureMatch && problem === 'mismatch') report({code: 'invalid-document-provenance', path: `slides.${index}.layoutRecord`, message: `The stored layout record '${stated?.id}' does not match slides.${index}.layout '${layout}', so it was not restored.`});
@@ -934,7 +1103,7 @@ function layoutIntent(documentRecords, hasDocument, slideRecords, entries, group
     const catalogRecord = target && target.source !== 'bundled' ? target.record : undefined;
     const at = (...path) => ['slides', index, ...path];
     for (const key of SLIDE_STRUCTURE) {
-      if (record[key] === undefined) continue;
+      if (record[key] === undefined || (key === 'type' && typeInContent)) continue;
       if (!structureMatch) report({code: key === 'layout' ? 'layout-reference-changed' : 'slide-reference-changed', path: `slides.${index}.${key}`,
         message: `The slide's objects were moved, resized, added or removed since export, so slides.${index}.${key} ${label(record[key])} was not restored; the imported slide keeps its observed arrangement.`});
       else if (key !== 'layout' || restoreLayout) group(`slides.${index}.${key}`, [{path: at(key), value: clone(record[key])}]);

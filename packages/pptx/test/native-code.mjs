@@ -82,7 +82,8 @@ if(mode==='generate') {
         if(typeof code==='string')code='NATIVE '+code;
         else {code.source='NATIVE '+code.source;if(code.filename)code.filename='Saved '+code.filename;}
       }
-      assert.deepEqual(slide.blocks,[{type:'code',code}],filename+' slide '+(index+1));
+      // The root code payload returns as the slide's own field (content topology); older packages carry it as one block.
+      assert.deepEqual(slide.code??slide.blocks,slide.code!==undefined?code:[{type:'code',code}],filename+' slide '+(index+1));
     }
     assert.ok(diagnostics.every(issue=>issue.code==='code-import-reflow'));
     imports.push({filename,sha256:hash(bytes),slides:result.slides.length,exactCodeAndMetadata:true,diagnostics});

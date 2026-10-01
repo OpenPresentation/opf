@@ -27,7 +27,7 @@ for(const dimensions of [{width:1280,height:720},{width:540,height:960}])for(con
   const body=shapes.find(s=>JSON.stringify(s['p:txBody']??{}).includes('Exact body text')),item=geometry.items.find(i=>i.field==='text'&&i.value==='Exact body text'),box=item.box,placed=item.text.placement.lines[0],position=body['p:spPr']['a:xfrm'];
   // Native text now uses one accepted line box; the card keeps its entire allocation.
   for(const [actual,expected]of [[position['a:off'].x,placed.x],[position['a:off'].y,placed.baseline-item.text.fontSize],[position['a:ext'].cx,box.width],[position['a:ext'].cy,placed.height]])assert.ok(Math.abs(Number(actual)/9525-expected)<.001);
-  const diagnostics=[],imported=await fromPptx(bytes,{onDiagnostic:d=>diagnostics.push(d)});assert.deepEqual(imported.slides[0].blocks.filter(b=>b.type==='metric'),[{type:'metric',metric}]);
+  const diagnostics=[],imported=await fromPptx(bytes,{onDiagnostic:d=>diagnostics.push(d)});assert.deepEqual(imported.slides[0].blocks.filter(b=>b.metric!==undefined),[{metric}],'the authored (untyped) metric block returns');
   assert.ok(!JSON.stringify(imported).includes('PowerPoint shape: OPF card'));
   assert.equal(diagnostics.filter(d=>d.code==='content-card-reflow').length,panels.length);
   assert.deepEqual(deck,before);cases++;

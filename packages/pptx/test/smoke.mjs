@@ -81,15 +81,15 @@ assert.equal(imported.description, deck.description);
 assert.equal(imported.slides.length, deck.slides.length);
 assert.equal(imported.slides[0].title, deck.slides[0].title);
 assert.equal(imported.slides[0].subtitle, deck.slides[0].subtitle);
-assert.deepEqual(imported.slides[0].blocks[0].items, [
+assert.deepEqual((imported.slides[0].items ?? imported.slides[0].blocks?.[0]?.items), [
   [{text:"Deterministic ZIP entries",fontSize:18.75,fontFamily:"Aptos",color:"#000000"}],
   {text:[{text:"Structured OPF validation errors",fontSize:18.75,fontFamily:"Aptos",color:"#000000"}],level:1},
   [{text:"No network or LibreOffice runtime dependency",fontSize:18.75,fontFamily:"Aptos",color:"#000000"}]
 ]);
 assert.equal(imported.slides[0].notes, "Smoke notes");
-assert.equal(imported.slides[1].blocks[0].chart.data.columns[1], "Revenue");
-assert.deepEqual(imported.slides[2].blocks[0].table.columns.map(cell => cell.value.map(run => run.text).join('')), ["Field", "Value"]);
-assert.ok(imported.slides[2].blocks[0].table.columns.every(cell => cell.value[0].bold === true && cell.value[0].color === '#FFFFFF'), 'Native header formatting is imported');
+assert.equal((imported.slides[1].chart ?? imported.slides[1].blocks?.[0]?.chart).data.columns[1], "Revenue");
+assert.deepEqual((imported.slides[2].table ?? imported.slides[2].blocks?.[0]?.table).columns.map(cell => cell.value.map(run => run.text).join('')), ["Field", "Value"]);
+assert.ok((imported.slides[2].table ?? imported.slides[2].blocks?.[0]?.table).columns.every(cell => cell.value[0].bold === true && cell.value[0].color === '#FFFFFF'), 'Native header formatting is imported');
 
 const roundTrip = await toPptx(imported);
 const roundTripEntries = unzipSync(roundTrip);

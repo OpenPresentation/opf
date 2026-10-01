@@ -141,9 +141,14 @@ for (const position of ['background', 'left', 'right', 'top', 'bottom']) {
   const { pictures, bytes, entries } = await exported(separate);
   assert.equal(pictures.length, 2);
   const imported = await fromPptx(bytes, { onDiagnostic: () => {} });
-  assert.equal(imported.slides[0].image, undefined, 'a separate content image is not restored as slide.image');
+  // The slide image tag never claims the content picture; the content topology
+  // (OPF_SLIDE_V1 `content`) returns it as the authored root `image` payload.
+  assert.deepEqual(imported.slides[0].image, { src: uri(tall), alt: 'Tall' }, 'a separate content image returns as the root image payload, not as the slide image');
   assert.equal(imported.slides[0].design.slideImage.position, 'right');
-  assert.ok(JSON.stringify(imported.slides[0].blocks).includes('"type":"image"'), 'the content image stays a content block');
+  assert.equal(imported.slides[0].blocks, undefined, 'the content image is the root payload, not a block');
+  const untagged = await fromPptx(await toPptx(separate, { imageFormat: 'preserve', strictAssets: true, provenance: false }), { onDiagnostic: () => {} });
+  assert.equal(untagged.slides[0].image, undefined, 'without provenance a separate content image is not restored as slide.image');
+  assert.ok(JSON.stringify(untagged.slides[0].blocks).includes('"type":"image"'), 'the content image stays a content block');
   // The content flag never rides on an edited picture: it stays an ordinary picture.
   const path = 'ppt/slides/slide1.xml';
   const edited = unzipSync(await toPptx({ design: { theme: 'classic' }, slides: [cases[0][1]], assets: separate.assets }, { imageFormat: 'preserve', strictAssets: true }));

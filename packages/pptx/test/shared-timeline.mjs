@@ -32,18 +32,18 @@ for(const measured of [false,true])for(const [width,height]of [[1280,720],[720,1
   for(const auto of ['a:normAutofit','a:spAutoFit'])assert.ok(!Object.hasOwn(shape['p:txBody']['a:bodyPr'],auto));
  }
  const diagnostics=[],imported=await fromPptx(bytes,{onDiagnostic:d=>diagnostics.push(d)});
- assert.deepEqual(imported.slides[0].blocks,[{type:'timeline',timeline}]);assert.equal(imported.slides[0].title,source.slides[0].title);assert.deepEqual(source,before);assert.ok(diagnostics.every(d=>['timeline-import-reflow','heading-import-reflow'].includes(d.code)));
+ assert.deepEqual(imported.slides[0].timeline,timeline,'the root timeline payload returns as authored');assert.equal(imported.slides[0].blocks,undefined);assert.equal(imported.slides[0].title,source.slides[0].title);assert.deepEqual(source,before);assert.ok(diagnostics.every(d=>['timeline-import-reflow','heading-import-reflow'].includes(d.code)));
  results.push({measured,width,height,fixture,parts:layout.parts.length,shapes:timed.length,arrangement:layout.arrangement,sha256:hash(bytes)});
  if(!measured&&width===1280&&fixture===0)control={entries,xml,timeline};
 }
 const rebuilt=async mutate=>{const entries=structuredClone(control.entries);await mutate(entries);const diagnostics=[];const imported=await fromPptx(zipSync(entries),{onDiagnostic:d=>diagnostics.push(d)});return {imported,diagnostics};};
 const editXml=(entries,change)=>entries['ppt/slides/slide1.xml']=encode(change(decode(entries['ppt/slides/slide1.xml'])));
 const changed=await rebuilt(entries=>editXml(entries,xml=>xml.replace('<a:t>Pilot</a:t>','<a:t>Edited milestone</a:t>')));
-assert.equal(changed.imported.slides[0].blocks[0].timeline[0].what,'Edited milestone');
+assert.equal(changed.imported.slides[0].timeline[0].what,'Edited milestone');
 const cleared=await rebuilt(entries=>editXml(entries,xml=>xml.replace('<a:t>Pilot</a:t>','<a:t></a:t>')));
-assert.equal(cleared.imported.slides[0].blocks[0].timeline[0].what,'');
+assert.equal(cleared.imported.slides[0].timeline[0].what,'');
 const reordered=await rebuilt(entries=>editXml(entries,xml=>{const shapes=[...xml.matchAll(/<p:sp>[^]*?<\/p:sp>/g)].map(match=>match[0]).reverse();return xml.replace(/<p:sp>[^]*?<\/p:sp>/g,()=>shapes.shift());}));
-assert.deepEqual(reordered.imported.slides[0].blocks,[{type:'timeline',timeline:control.timeline}]);
+assert.deepEqual(reordered.imported.slides[0].timeline,control.timeline);
 const fields=Object.entries(control.entries).filter(([name])=>name.startsWith('ppt/tags/')).flatMap(([,bytes])=>array(parser.parse(decode(bytes))['p:tagLst']?.['p:tag'])).filter(tag=>tag.name==='OPF_TIMELINE_V1').map(tag=>decodeTextTag(tag.val));
 assert.ok(!JSON.stringify(fields).includes('Pilot'));assert.ok(!JSON.stringify(fields).includes('First'));
 const failures=[];
@@ -56,18 +56,18 @@ for(const [name,change]of [
  ['marker-text',xml=>mutateNamed(xml,/name="OPF timeline 0 marker 0"/,shape=>shape.replace('</p:sp>','<p:txBody><a:bodyPr/><a:lstStyle/><a:p><a:r><a:rPr sz="1200"/><a:t>New native marker words</a:t></a:r></a:p></p:txBody></p:sp>'))],
  ['native-bullet',xml=>mutateNamed(xml,/name="OPF timeline 0 part 1 line 0"/,shape=>shape.replace('</a:pPr>','<a:buChar char="•"/></a:pPr>'))],
 ]){
- const result=await rebuilt(entries=>editXml(entries,change));assert.ok(result.diagnostics.some(d=>d.code==='invalid-timeline-provenance'),name);assert.ok(!result.imported.slides[0].blocks.some(block=>block.timeline),name);
+ const result=await rebuilt(entries=>editXml(entries,change));assert.ok(result.diagnostics.some(d=>d.code==='invalid-timeline-provenance'),name);assert.ok(result.imported.slides[0].timeline===undefined&&!result.imported.slides[0].blocks.some(block=>block.timeline),name);
  const text=JSON.stringify(result.imported);assert.ok(text.includes('Next'),name);if(name==='missing-field')assert.ok(!text.includes('Pilot'));if(name==='marker-text')assert.ok(text.includes('New native marker words'));
  failures.push({name,diagnostics:result.diagnostics});
 }
-const multiple={slides:[{blocks:[{timeline:control.timeline},{timeline:fixtures[1]}]}]};assert.deepEqual((await fromPptx(await toPptx(multiple))).slides[0].blocks,multiple.slides[0].blocks.map(block=>({type:'timeline',...block})));
+const multiple={slides:[{blocks:[{timeline:control.timeline},{timeline:fixtures[1]}]}]};assert.deepEqual((await fromPptx(await toPptx(multiple))).slides[0].blocks,multiple.slides[0].blocks,'untyped blocks return as authored');
 const dense={design:{fontScheme:'roboto'},slides:[{timeline:{events:Array.from({length:12},(_,index)=>({when:`Q${index+1}`,what:`Milestone ${index+1}`,description:'Keep every label inside its allocated space.'}))},composition:{minFontSize:32,overflow:'error'}}]};
 for(const options of [{},fontOptions]){
  await assert.rejects(toPptx(dense,options),error=>error.code==='layout-overflow'&&!(error instanceof TypeError));
  const warned=structuredClone(dense),diagnostics=[];warned.slides[0].composition.overflow='warn';
  const bytes=await toPptx(warned,{...options,onDiagnostic:diagnostic=>diagnostics.push(diagnostic)});
  assert.ok(diagnostics.some(diagnostic=>diagnostic.code==='text-overflow'));
- assert.deepEqual((await fromPptx(bytes)).slides[0].blocks,[{type:'timeline',timeline:dense.slides[0].timeline}]);
+ assert.deepEqual((await fromPptx(bytes)).slides[0].timeline,dense.slides[0].timeline);
 }
 if(process.argv[2]){await mkdir(path.dirname(path.resolve(process.argv[2])),{recursive:true});await writeFile(process.argv[2],JSON.stringify({node:process.version,verifierSha256:hash(await readFile(new URL(import.meta.url))),results,failures,overflowControls:{strict:2,warn:2},scope:'Editable XML structure and controlled native-text mutations only; no native Office execution. Current field values, array/object form and source boundaries survive complete tags. Damaged tags retain ordinary native text.'},null,2)+'\n');}
 console.log('16 timeline exports match accepted text boxes, fonts and source; current edits, clearing, reordering, six damaged-group controls multiple timelines and four strict/warn overflow controls pass.');

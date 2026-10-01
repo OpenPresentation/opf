@@ -4,7 +4,8 @@ import {validatePresentation} from '@openpresentation/opf';
 import {toPptx,fromPptx} from '../dist/index.js';
 
 const encoder=new TextEncoder(),decoder=new TextDecoder();
-const tableOf=deck=>deck.slides[0].blocks.find(block=>block.table).table;
+// A root table returns as the slide's own payload (content topology); blocks keep theirs.
+const tableOf=deck=>deck.slides[0].table??deck.slides[0].blocks.find(block=>block.table).table;
 const plain=cell=>{const value=cell?.value??cell;return Array.isArray(value)?value.map(run=>typeof run==='string'?run:run.text).join(''):value;};
 const all=table=>[...(table.columns?[table.columns]:[]),...table.rows];
 const table={columns:[{value:'Heading',colSpan:2},null,'C'],rows:[

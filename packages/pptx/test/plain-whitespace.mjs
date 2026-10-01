@@ -11,7 +11,7 @@ for(const options of [{},measured])for(const [width,height]of [[1280,720],[720,1
  const document={design:{fontScheme:'roboto',dimensions:{widthInches:width/96,heightInches:height/96}},slides:[{...headings,blocks:[{text}]}]},source=structuredClone(document);
  const bytes=await toPptx(document,options),actual=(await fromPptx(bytes)).slides[0];assert.deepEqual(document,source);
  for(const field of ['title','subtitle','tag'])assert.equal(actual[field],headings[field]);
- assert.deepEqual(actual.blocks,[{type:'text',text}]);
+ assert.deepEqual(actual.blocks,[{text}],'the authored block form returns (content topology: no implicit type added)');
  const entries=unzipSync(bytes),geometry=resolvePresentation(document,options).slides[0].geometry;
  const xml=dec.decode(entries['ppt/slides/slide1.xml']);
  for(const item of geometry.items)for(const [index,line]of item.text.sourceLines.entries()) {
@@ -29,11 +29,12 @@ const slide=(entries,fn)=>entries['ppt/slides/slide1.xml']=enc.encode(fn(dec.dec
 const tagFiles=entries=>Object.keys(entries).filter(p=>p.startsWith('ppt/tags/opfText'));
 const changeTag=(entries,fn)=>{const file=tagFiles(entries)[0],xml=dec.decode(entries[file]),hex=xml.match(/val="([^"]+)"/)[1],data=JSON.parse(Buffer.from(hex,'hex').toString());fn(data);entries[file]=enc.encode(xml.replace(hex,Buffer.from(JSON.stringify(data)).toString('hex').toUpperCase()));};
 const edited=await fromPptx(mutate(entries=>slide(entries,xml=>xml.replace('A  B','Native  edit'))));
-assert.equal(edited.slides[0].blocks[0].text,baseline.blocks[0].text.replace('A  B','Native  edit'));
+// The root text payload returns as the slide's own field (content topology).
+assert.equal(edited.slides[0].text,baseline.text.replace('A  B','Native  edit'));
 const reordered=await fromPptx(mutate(entries=>slide(entries,xml=>{const shapes=[...xml.matchAll(/<p:sp>[\s\S]*?<\/p:sp>/g)].map(m=>m[0]);return xml.replace(/<p:sp>[\s\S]*?<\/p:sp>/g,()=>shapes.pop());})));
 assert.deepEqual(reordered.slides[0],baseline);
 const cleared=await fromPptx(mutate(entries=>slide(entries,xml=>xml.replace(/<p:sp>[\s\S]*?<\/p:sp>/g,shape=>shape.includes('name="OPF text ')?shape.replace(/<a:t>[\s\S]*?<\/a:t>/g,'<a:t></a:t>'):shape))));
-assert.equal(cleared.slides[0].blocks[0].text,'\r\n\r\n\r');
+assert.equal(cleared.slides[0].text,'\r\n\r\n\r');
 for(const [name,fn]of Object.entries({
  missing:entries=>{delete entries[tagFiles(entries)[0]];},
  badCount:entries=>changeTag(entries,d=>d.count++),
@@ -48,7 +49,7 @@ for(const [name,fn]of Object.entries({
  const text=JSON.stringify(result);assert.ok(text.includes('ordinary words'),name);assert.ok(!text.includes('Old source must'),name);
 }
 const bodyOnly=(await fromPptx(await toPptx({design:{fontScheme:'roboto'},slides:[{text:'Body without a heading'}]},measured))).slides[0];
-assert.equal(bodyOnly.title,undefined);assert.deepEqual(bodyOnly.blocks,[{type:'text',text:'Body without a heading'}]);
+assert.equal(bodyOnly.title,undefined);assert.equal(bodyOnly.text,'Body without a heading','the root text payload returns as authored');assert.equal(bodyOnly.blocks,undefined);
 for(const character of ['\u0000','\u000b','\u000c','\ud800','\uffff']) {
  const invalid={slides:[{text:'Before'+character+'After'}]};
  await assert.rejects(()=>toPptx(invalid),e=>e.code==='invalid-text'&&e.path==='slides.0.text');

@@ -36,8 +36,8 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf
-          # Core main 1228351 (core 0.11.3 plus the recorded renderer 0.11.8 lazy font count and the FF-56 evidence, opf#222); the published core this release requires is ^0.11.3.
-          ref: 1228351f2690c00668c9d052f8b9689549058803
+          # Core main 1228351 (core 0.11.3 plus the recorded renderer 0.11.8 lazy font count and the FF-56 evidence, opf#222) plus opf#231 (lane scripts accept the root payload form that content topology restores, opf-pptx#122); the published core this release requires is ^0.11.3.
+          ref: 61316e6d29f3f9b284e48167a63e47600a96b7b7
           path: opf
           fetch-depth: 0
           persist-credentials: false
@@ -52,8 +52,8 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-editor
-          # opf-editor 0.10.5 release commit.
-          ref: cb1a52646cbccc4ca25171886992ff9c6dcd1a75
+          # opf-editor 0.10.5 release commit plus opf-editor#57 (code-browser accepts the root payload form that content topology restores, opf-pptx#122).
+          ref: 601470cf8513b54cb6a98a26524c1c61396a4ba7
           path: opf-editor
           fetch-depth: 0
           persist-credentials: false

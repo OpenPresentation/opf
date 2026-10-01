@@ -18,11 +18,11 @@ const fixtures = [
 const deck = { slides: fixtures.map(table => ({ table })) };
 const bytes = await toPptx(deck);
 const imported = await fromPptx(bytes);
-const tables = imported.slides.map(slide => slide.blocks.find(block => block.table).table);
+const tables = imported.slides.map(slide => (slide.table ?? slide.blocks?.find(block => block.table)?.table));
 assert.deepEqual(tables.map(plainTable), fixtures, 'Headers, headerless first rows and blank rows must survive native round-trip');
 assert.equal(validatePresentation(imported).valid, true);
 const again = await fromPptx(await toPptx(imported));
-assert.deepEqual(again.slides.map(slide => plainTable(slide.blocks.find(block => block.table).table)), fixtures);
+assert.deepEqual(again.slides.map(slide => plainTable((slide.table ?? slide.blocks?.find(block => block.table)?.table))), fixtures);
 
 const grouped = await fromPptx(await toPptx({ slides: [{
   composition: { mode: 'column' }, blocks: fixtures.slice(0, 3).map(table => ({ table })),
@@ -38,7 +38,7 @@ for (const [flag, hasHeaders] of [['1', true], ['true', true], ['0', false], ['f
   xml = xml.replace('<a:t>first</a:t>', '<a:t>Edited in PowerPoint</a:t>');
   entries['ppt/slides/slide1.xml'] = new TextEncoder().encode(xml);
   const result = await fromPptx(zipSync(entries));
-  const table = result.slides[0].blocks.find(block => block.table).table;
+  const table = (result.slides[0].table ?? result.slides[0].blocks?.find(block => block.table)?.table);
   const data = [['Edited in PowerPoint', 'data'], ['', ''], ['last', 'row']];
   assert.deepEqual(plainTable(table), hasHeaders ? { columns: ['Name', 'Value'], rows: data } : { rows: [['Name', 'Value'], ...data] });
 }

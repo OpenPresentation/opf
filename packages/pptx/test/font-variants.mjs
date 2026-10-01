@@ -46,7 +46,7 @@ for(const [bold,italic]of [[false,false],[true,false],[false,true],[true,true]])
 for(const bold of [false,true])assert.ok(seen.has(key('Roboto Mono',bold,false)));
 const imported=await fromPptx(bytes);
 assert.equal(imported.slides[0].title,'Heading');
-assert.deepEqual(imported.slides[4].blocks,[{type:'code',code:source.slides[4].code}]);
+assert.deepEqual(imported.slides[4].code,source.slides[4].code,'the root code payload returns as authored (content topology)');
 assert.ok(JSON.stringify(imported).includes('Weight 500 label'));
 // Providers without physical metadata keep the historical numeric-weight contract.
 const legacy={...options,textMeasurement:{...options.textMeasurement,resolveStyle(style){const resolved=options.textMeasurement.resolveStyle(style);delete resolved.fontFace;return resolved;}}};

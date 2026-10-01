@@ -13,7 +13,7 @@ const tx=(body='',attributes='')=>`<a:tcTxStyle ${attributes}>${body}</a:tcTxSty
 const rgb=value=>`<a:srgbClr val="${value}"/>`;
 const style=Object.entries(colors).map(([name,color])=>part(name,tx((name==='wholeTbl'?'<a:fontRef idx="minor"><a:srgbClr val="FFFFFF"/></a:fontRef>':'')+rgb(color),name==='band1H'?'i="on"':name==='band2H'?'i="off"':name==='firstRow'?'b="on"':''))).join('');
 const flags='firstRow="1" lastRow="1" firstCol="1" lastCol="1" bandRow="1" bandCol="1"';
-const tableOf=deck=>tableValues(deck.slides[0].blocks.find(b=>b.table).table);
+const tableOf=deck=>tableValues((deck.slides[0].table ?? deck.slides[0].blocks?.find(b=>b.table)?.table));
 const allRows=table=>table.columns?[table.columns,...table.rows]:table.rows;
 const run=cell=>Array.isArray(cell)?cell.find(r=>typeof r!=='string'):undefined;
 const text=cell=>Array.isArray(cell)?cell.map(r=>typeof r==='string'?r:r.text).join(''):cell;
@@ -83,7 +83,7 @@ assert.equal(run(placeholder.table.rows[0][0]).color,'#2468AC40');assert.equal(r
 const removeDirectCellStyle=entries=>{const p='ppt/slides/slide1.xml';entries[p]=encoder.encode(decoder.decode(entries[p]).replace(/<a:tcPr\b[^>]*>[\s\S]*?<\/a:tcPr>/g,'<a:tcPr/>'));};
 const decoration=await fixture({properties:'',definition:part('wholeTbl',tx(rgb('123456'))+'<a:tcStyle><a:fill><a:solidFill><a:srgbClr val="CCCCCC"/></a:solidFill></a:fill></a:tcStyle>'),modify:removeDirectCellStyle});
 assert.equal(run(decoration.table.rows[0][0]).color,'#123456');assert.deepEqual(decoration.diagnostics,[]);
-assert.equal(decoration.deck.slides[0].blocks.find(b=>b.table).table.rows[0][0].style.fill,'#CCCCCC');
+assert.equal((decoration.deck.slides[0].table ?? decoration.deck.slides[0].blocks?.find(b=>b.table)?.table).rows[0][0].style.fill,'#CCCCCC');
 const unresolved=await fixture({properties:'',definition:part('wholeTbl',tx('<a:schemeClr val="unknown"/>'))});assert.ok(unresolved.diagnostics.some(d=>d.code==='unsupported-table-text-color'));
 const inheritedPlaceholder=await fixture({properties:'firstRow="1"',definition:
  part('wholeTbl',tx('<a:fontRef idx="minor"><a:srgbClr val="13579B"/></a:fontRef>'+rgb('111111'),'b="on"'))+
@@ -107,7 +107,7 @@ if (process.env.OPF_TABLE_STYLE_FIXTURE) {
 }
 
 const conditionalFills=await fixture({definition:Object.entries(colors).map(([name,color])=>part(name,`<a:tcStyle><a:fill><a:solidFill>${rgb(color)}</a:solidFill></a:fill></a:tcStyle>`)).join(''),modify:removeDirectCellStyle});
-assert.deepEqual(allRows(conditionalFills.deck.slides[0].blocks.find(b=>b.table).table).map(row=>row.map(cell=>cell.style.fill)),[
+assert.deepEqual(allRows((conditionalFills.deck.slides[0].table ?? conditionalFills.deck.slides[0].blocks?.find(b=>b.table)?.table)).map(row=>row.map(cell=>cell.style.fill)),[
  ['#D0D0D0','#B0B0B0','#B0B0B0','#B0B0B0','#C0C0C0'],
  ['#707070','#404040','#505050','#404040','#606060'],
  ['#707070','#404040','#505050','#404040','#606060'],
@@ -120,7 +120,7 @@ const fillReference=await fixture({properties:'',definition:part('wholeTbl','<a:
  entries[path]=encoder.encode(decoder.decode(entries[path]).replace(/<a:fillStyleLst>[\s\S]*?<\/a:fillStyleLst>/,'<a:fillStyleLst><a:gradFill><a:gsLst/></a:gradFill><a:solidFill><a:schemeClr val="phClr"><a:alphaMod val="50000"/></a:schemeClr></a:solidFill><a:solidFill><a:srgbClr val="000000"/></a:solidFill></a:fillStyleLst>'));
 }});
 assert.deepEqual(fillReference.diagnostics,[]);
-assert.equal(fillReference.deck.slides[0].blocks.find(b=>b.table).table.rows[0][0].style.fill,'#2468AC40');
+assert.equal((fillReference.deck.slides[0].table ?? fillReference.deck.slides[0].blocks?.find(b=>b.table)?.table).rows[0][0].style.fill,'#2468AC40');
 const maskedFill=await fixture({properties:'',definition:part('wholeTbl','<a:tcStyle><a:fillRef idx="999"/></a:tcStyle>')});
 assert.deepEqual(maskedFill.diagnostics,[],'A direct fill masks an unresolved inherited fill reference');
 const missingFill=await fixture({properties:'',definition:part('wholeTbl','<a:tcStyle><a:fillRef idx="999"/></a:tcStyle>'),modify:removeDirectCellStyle});

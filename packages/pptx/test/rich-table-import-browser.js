@@ -11,7 +11,9 @@ try {
   [[{text:'Native rich text',bold:true,italic:true,color:'#2468AC',fontSize:18,fontFamily:'Georgia',link:'https://example.com'}],'Plain'],
   [['\nStart\n',{text:'\nEnd\n',bold:true}],[]]
  ]}}]};
- const bytes=await toPptx(source),deck=await fromPptx(bytes),table=tableValues(deck.slides[0].blocks.find(block=>block.table).table);
+ // The root table payload returns as the slide's own field (content topology).
+ const tableOf=deck=>deck.slides[0].table??deck.slides[0].blocks?.find(block=>block.table)?.table;
+ const bytes=await toPptx(source),deck=await fromPptx(bytes),table=tableValues(tableOf(deck));
  check(table.columns[0][0].bold===false,'Normal native header');
  check(table.columns[0][1].bold===true,'Bold native header');
  const run=table.rows[0][0][0];
@@ -20,11 +22,11 @@ try {
  check(text(table.rows[1][0])==='\nStart\n\nEnd\n','Blank paragraphs and whitespace');
  check(table.rows[1][1]==='','Empty native cell');
  const again=await fromPptx(await toPptx(deck));
- check(text(again.slides[0].blocks[0].table.rows[1][0])===text(table.rows[1][0]),'Repeated conversion');
+ check(text(tableOf(again).rows[1][0])===text(table.rows[1][0]),'Repeated conversion');
  const entries=unzipSync(bytes),path='ppt/slides/slide1.xml';
  entries[path]=new TextEncoder().encode(new TextDecoder().decode(entries[path]).replace(/<a:txBody>[\s\S]*?<\/a:txBody>/,'<a:txBody><a:bodyPr/><a:lstStyle/><a:p><a:r><a:t> A </a:t></a:r><a:fld><a:t>7</a:t></a:fld><a:br/><a:r><a:t> B </a:t></a:r></a:p><a:p/></a:txBody>'));
  const edited=await fromPptx(zipSync(entries));
- check(text(edited.slides[0].blocks[0].table.columns[0])===' A 7\n B \n','Native run/field/break order');
+ check(text(tableOf(edited).columns[0])===' A 7\n B \n','Native run/field/break order');
  const diagnostics=[];
  document.querySelector('main').innerHTML=renderSvg(deck,{trace:true,onDiagnostic:d=>diagnostics.push(d)});
  check(!diagnostics.some(d=>d.code==='text-overflow'),'Multiline table uses available space');

@@ -30,7 +30,8 @@ const read = async bytes => {
 };
 const modify = (bytes, mutate) => { const entries = unzipSync(bytes); mutate(entries); return zipSync(entries); };
 const text = (entries, path, mutate) => { entries[path] = enc.encode(mutate(dec.decode(entries[path]))); };
-const videos = doc => doc.slides.map(slide => (slide.blocks ?? []).filter(block => block.video !== undefined).map(block => block.video));
+// A root `video` returns as the slide's own payload (content topology); blocks keep theirs.
+const videos = doc => doc.slides.map(slide => [...(slide.video !== undefined ? [slide.video] : []), ...(slide.blocks ?? []).filter(block => block.video !== undefined).map(block => block.video)]);
 const junk = doc => doc.slides.flatMap(slide => slide.blocks ?? []).filter(block => /PowerPoint shape|OPF media/.test(block.text ?? ''));
 const blockTexts = doc => doc.slides.flatMap(slide => slide.blocks ?? []).map(block => block.text).filter(Boolean);
 const tagParts = entries => Object.keys(entries).filter(path => /^ppt\/tags\/opfMedia\d+\.xml$/.test(path));
