@@ -1,12 +1,12 @@
 {
- "generated": "2026-09-30T20:16:01.256Z",
+ "generated": "2026-10-01T04:28:40.520Z",
  "fontHost": "gallery",
  "heads": {
-  "pptx-gallery": "edb77b2",
+  "pptx-gallery": "9e8d59a",
   "opf": "2e838f5",
-  "opf-render": "b7e62ef",
-  "opf-pptx": "c08105f",
-  "opf-editor": "1529f26",
+  "opf-render": "0ce9bb9",
+  "opf-pptx": "e4c0c4b",
+  "opf-editor": "cb1a526",
   "node": "24.21.0"
  },
  "sharedExportGaps": [
@@ -52295,6 +52295,8 @@
    "measure": {
     "expected": {
      "element": "barChart",
+     "extension": null,
+     "chartex": null,
      "composition": "single",
      "kind": "bar",
      "barDir": "col",
@@ -52339,6 +52341,7 @@
       "ppt/charts/chart1.xml"
      ],
      "embeddedWorkbooks": 1,
+     "chartExParts": [],
      "elements": [
       "barChart"
      ],
@@ -52408,6 +52411,7 @@
     },
     "export": {
      "element": "barChart",
+     "chartEx": false,
      "construct": "barChart, barDir col, grouping clustered",
      "nativeConstruct": true,
      "adaptations": [],
@@ -52456,6 +52460,8 @@
    "measure": {
     "expected": {
      "element": "barChart",
+     "extension": null,
+     "chartex": null,
      "composition": "single",
      "kind": "bar",
      "barDir": "col",
@@ -52508,6 +52514,7 @@
       "ppt/charts/chart1.xml"
      ],
      "embeddedWorkbooks": 1,
+     "chartExParts": [],
      "elements": [
       "barChart"
      ],
@@ -52625,6 +52632,7 @@
     },
     "export": {
      "element": "barChart",
+     "chartEx": false,
      "construct": "barChart, barDir col, grouping stacked",
      "nativeConstruct": true,
      "adaptations": [],
@@ -52673,6 +52681,8 @@
    "measure": {
     "expected": {
      "element": "barChart",
+     "extension": null,
+     "chartex": null,
      "composition": "single",
      "kind": "bar",
      "barDir": "col",
@@ -52725,6 +52735,7 @@
       "ppt/charts/chart1.xml"
      ],
      "embeddedWorkbooks": 1,
+     "chartExParts": [],
      "elements": [
       "barChart"
      ],
@@ -52842,6 +52853,7 @@
     },
     "export": {
      "element": "barChart",
+     "chartEx": false,
      "construct": "barChart, barDir col, grouping percentStacked",
      "nativeConstruct": true,
      "adaptations": [],
@@ -52890,6 +52902,8 @@
    "measure": {
     "expected": {
      "element": "lineChart",
+     "extension": null,
+     "chartex": null,
      "composition": "single",
      "kind": "line",
      "grouping": "standard",
@@ -52935,6 +52949,7 @@
       "ppt/charts/chart1.xml"
      ],
      "embeddedWorkbooks": 1,
+     "chartExParts": [],
      "elements": [
       "lineChart"
      ],
@@ -53014,6 +53029,7 @@
     },
     "export": {
      "element": "lineChart",
+     "chartEx": false,
      "construct": "lineChart, grouping standard, no markers",
      "nativeConstruct": true,
      "adaptations": [],
@@ -53062,6 +53078,8 @@
    "measure": {
     "expected": {
      "element": "lineChart",
+     "extension": null,
+     "chartex": null,
      "composition": "single",
      "kind": "line",
      "grouping": "standard",
@@ -53107,6 +53125,7 @@
       "ppt/charts/chart1.xml"
      ],
      "embeddedWorkbooks": 1,
+     "chartExParts": [],
      "elements": [
       "lineChart"
      ],
@@ -53186,6 +53205,7 @@
     },
     "export": {
      "element": "lineChart",
+     "chartEx": false,
      "construct": "lineChart, grouping standard, markers",
      "nativeConstruct": true,
      "adaptations": [],
@@ -53234,6 +53254,8 @@
    "measure": {
     "expected": {
      "element": "lineChart",
+     "extension": null,
+     "chartex": null,
      "composition": "single",
      "kind": "line",
      "grouping": "stacked",
@@ -53287,6 +53309,7 @@
       "ppt/charts/chart1.xml"
      ],
      "embeddedWorkbooks": 1,
+     "chartExParts": [],
      "elements": [
       "lineChart"
      ],
@@ -53430,6 +53453,7 @@
     },
     "export": {
      "element": "lineChart",
+     "chartEx": false,
      "construct": "lineChart, grouping stacked, no markers",
      "nativeConstruct": true,
      "adaptations": [],
@@ -53478,6 +53502,8 @@
    "measure": {
     "expected": {
      "element": "lineChart",
+     "extension": null,
+     "chartex": null,
      "composition": "single",
      "kind": "line",
      "grouping": "stacked",
@@ -53531,6 +53557,7 @@
       "ppt/charts/chart1.xml"
      ],
      "embeddedWorkbooks": 1,
+     "chartExParts": [],
      "elements": [
       "lineChart"
      ],
@@ -53674,6 +53701,7 @@
     },
     "export": {
      "element": "lineChart",
+     "chartEx": false,
      "construct": "lineChart, grouping stacked, markers",
      "nativeConstruct": true,
      "adaptations": [],
@@ -53722,6 +53750,8 @@
    "measure": {
     "expected": {
      "element": "pieChart",
+     "extension": null,
+     "chartex": null,
      "composition": "single",
      "kind": "circular",
      "markers": false,
@@ -53764,6 +53794,7 @@
       "ppt/charts/chart1.xml"
      ],
      "embeddedWorkbooks": 1,
+     "chartExParts": [],
      "elements": [
       "pieChart"
      ],
@@ -53821,6 +53852,7 @@
     },
     "export": {
      "element": "pieChart",
+     "chartEx": false,
      "construct": "pieChart",
      "nativeConstruct": true,
      "adaptations": [],
@@ -53869,6 +53901,8 @@
    "measure": {
     "expected": {
      "element": "doughnutChart",
+     "extension": null,
+     "chartex": null,
      "composition": "single",
      "kind": "circular",
      "markers": false,
@@ -53911,6 +53945,7 @@
       "ppt/charts/chart1.xml"
      ],
      "embeddedWorkbooks": 1,
+     "chartExParts": [],
      "elements": [
       "doughnutChart"
      ],
@@ -53968,6 +54003,7 @@
     },
     "export": {
      "element": "doughnutChart",
+     "chartEx": false,
      "construct": "doughnutChart",
      "nativeConstruct": true,
      "adaptations": [],
@@ -54016,6 +54052,8 @@
    "measure": {
     "expected": {
      "element": "barChart",
+     "extension": null,
+     "chartex": null,
      "composition": "single",
      "kind": "bar",
      "barDir": "bar",
@@ -54060,6 +54098,7 @@
       "ppt/charts/chart1.xml"
      ],
      "embeddedWorkbooks": 1,
+     "chartExParts": [],
      "elements": [
       "barChart"
      ],
@@ -54125,6 +54164,7 @@
     },
     "export": {
      "element": "barChart",
+     "chartEx": false,
      "construct": "barChart, barDir bar, grouping clustered",
      "nativeConstruct": true,
      "adaptations": [],
@@ -54173,6 +54213,8 @@
    "measure": {
     "expected": {
      "element": "barChart",
+     "extension": null,
+     "chartex": null,
      "composition": "single",
      "kind": "bar",
      "barDir": "bar",
@@ -54225,6 +54267,7 @@
       "ppt/charts/chart1.xml"
      ],
      "embeddedWorkbooks": 1,
+     "chartExParts": [],
      "elements": [
       "barChart"
      ],
@@ -54330,6 +54373,7 @@
     },
     "export": {
      "element": "barChart",
+     "chartEx": false,
      "construct": "barChart, barDir bar, grouping stacked",
      "nativeConstruct": true,
      "adaptations": [],
@@ -54378,6 +54422,8 @@
    "measure": {
     "expected": {
      "element": "barChart",
+     "extension": null,
+     "chartex": null,
      "composition": "single",
      "kind": "bar",
      "barDir": "bar",
@@ -54430,6 +54476,7 @@
       "ppt/charts/chart1.xml"
      ],
      "embeddedWorkbooks": 1,
+     "chartExParts": [],
      "elements": [
       "barChart"
      ],
@@ -54535,6 +54582,7 @@
     },
     "export": {
      "element": "barChart",
+     "chartEx": false,
      "construct": "barChart, barDir bar, grouping percentStacked",
      "nativeConstruct": true,
      "adaptations": [],
@@ -54583,6 +54631,8 @@
    "measure": {
     "expected": {
      "element": "areaChart",
+     "extension": null,
+     "chartex": null,
      "composition": "single",
      "kind": "area",
      "grouping": "standard",
@@ -54626,6 +54676,7 @@
       "ppt/charts/chart1.xml"
      ],
      "embeddedWorkbooks": 1,
+     "chartExParts": [],
      "elements": [
       "areaChart"
      ],
@@ -54703,6 +54754,7 @@
     },
     "export": {
      "element": "areaChart",
+     "chartEx": false,
      "construct": "areaChart, grouping standard",
      "nativeConstruct": true,
      "adaptations": [],
@@ -54751,6 +54803,8 @@
    "measure": {
     "expected": {
      "element": "areaChart",
+     "extension": null,
+     "chartex": null,
      "composition": "single",
      "kind": "area",
      "grouping": "stacked",
@@ -54802,6 +54856,7 @@
       "ppt/charts/chart1.xml"
      ],
      "embeddedWorkbooks": 1,
+     "chartExParts": [],
      "elements": [
       "areaChart"
      ],
@@ -54943,6 +54998,7 @@
     },
     "export": {
      "element": "areaChart",
+     "chartEx": false,
      "construct": "areaChart, grouping stacked",
      "nativeConstruct": true,
      "adaptations": [],
@@ -54991,6 +55047,8 @@
    "measure": {
     "expected": {
      "element": "areaChart",
+     "extension": null,
+     "chartex": null,
      "composition": "single",
      "kind": "area",
      "grouping": "percentStacked",
@@ -55042,6 +55100,7 @@
       "ppt/charts/chart1.xml"
      ],
      "embeddedWorkbooks": 1,
+     "chartExParts": [],
      "elements": [
       "areaChart"
      ],
@@ -55183,6 +55242,7 @@
     },
     "export": {
      "element": "areaChart",
+     "chartEx": false,
      "construct": "areaChart, grouping percentStacked",
      "nativeConstruct": true,
      "adaptations": [],
@@ -55231,6 +55291,8 @@
    "measure": {
     "expected": {
      "element": "scatterChart",
+     "extension": null,
+     "chartex": null,
      "composition": "single",
      "kind": "scatter",
      "markers": false,
@@ -55274,6 +55336,7 @@
       "ppt/charts/chart1.xml"
      ],
      "embeddedWorkbooks": 1,
+     "chartExParts": [],
      "elements": [
       "scatterChart"
      ],
@@ -55345,6 +55408,7 @@
     },
     "export": {
      "element": "scatterChart",
+     "chartEx": false,
      "construct": "scatterChart, scatterStyle marker",
      "nativeConstruct": true,
      "adaptations": [],
@@ -55393,6 +55457,8 @@
    "measure": {
     "expected": {
      "element": "radarChart",
+     "extension": null,
+     "chartex": null,
      "composition": "single",
      "kind": "radar",
      "markers": false,
@@ -55438,6 +55504,7 @@
       "ppt/charts/chart1.xml"
      ],
      "embeddedWorkbooks": 1,
+     "chartExParts": [],
      "elements": [
       "radarChart"
      ],
@@ -55509,6 +55576,7 @@
     },
     "export": {
      "element": "radarChart",
+     "chartEx": false,
      "construct": "radarChart, radarStyle standard, no markers",
      "nativeConstruct": true,
      "adaptations": [],
@@ -55557,6 +55625,8 @@
    "measure": {
     "expected": {
      "element": "radarChart",
+     "extension": null,
+     "chartex": null,
      "composition": "single",
      "kind": "radar",
      "markers": true,
@@ -55602,6 +55672,7 @@
       "ppt/charts/chart1.xml"
      ],
      "embeddedWorkbooks": 1,
+     "chartExParts": [],
      "elements": [
       "radarChart"
      ],
@@ -55673,6 +55744,7 @@
     },
     "export": {
      "element": "radarChart",
+     "chartEx": false,
      "construct": "radarChart, radarStyle marker, markers",
      "nativeConstruct": true,
      "adaptations": [],
@@ -55721,6 +55793,8 @@
    "measure": {
     "expected": {
      "element": "radarChart",
+     "extension": null,
+     "chartex": null,
      "composition": "single",
      "kind": "radar",
      "markers": false,
@@ -55766,6 +55840,7 @@
       "ppt/charts/chart1.xml"
      ],
      "embeddedWorkbooks": 1,
+     "chartExParts": [],
      "elements": [
       "radarChart"
      ],
@@ -55837,6 +55912,7 @@
     },
     "export": {
      "element": "radarChart",
+     "chartEx": false,
      "construct": "radarChart, radarStyle filled, no markers",
      "nativeConstruct": true,
      "adaptations": [],
@@ -55885,6 +55961,15 @@
    "measure": {
     "expected": {
      "element": "treemapChart",
+     "extension": null,
+     "chartex": {
+      "id": "treemap",
+      "element": "treemapChart",
+      "extension": null,
+      "layouts": [
+       "treemap"
+      ]
+     },
      "composition": "extension",
      "kind": null,
      "markers": false,
@@ -55910,36 +55995,67 @@
      "legacy": false,
      "diagnostics": [],
      "marks": {
-      "kind": null,
-      "expected": null,
-      "actual": null,
-      "equal": true
+      "kind": "chartex:treemap",
+      "expected": [
+       [
+        "one tile per positive value",
+        6
+       ],
+       [
+        "tile areas are proportional to the values",
+        [
+         0.0648,
+         0.1303,
+         0.0782,
+         0.2548,
+         0.1978,
+         0.2741
+        ]
+       ]
+      ],
+      "actual": [
+       [
+        "one tile per positive value",
+        6
+       ],
+       [
+        "tile areas are proportional to the values",
+        [
+         0.0648,
+         0.1303,
+         0.0782,
+         0.2548,
+         0.1978,
+         0.2741
+        ]
+       ]
+      ],
+      "equal": true,
+      "failed": []
      }
     },
     "export": {
-     "adaptations": [
-      "chartex-fallback"
-     ],
-     "diagnostics": [
-      "chart-data-adapted"
-     ],
+     "adaptations": [],
+     "diagnostics": [],
      "chartParts": [
       "ppt/charts/chart1.xml"
      ],
      "embeddedWorkbooks": 1,
-     "elements": [
-      "barChart"
+     "chartExParts": [
+      "ppt/charts/chartEx1.xml"
      ],
-     "construct": {
-      "element": "barChart",
-      "barDir": "col",
-      "grouping": "clustered",
-      "radarStyle": null,
-      "scatterStyle": null,
-      "seriesSymbols": [
-       null
+     "chartex": {
+      "part": "ppt/charts/chartEx1.xml",
+      "layouts": [
+       "treemap"
       ],
-      "markers": false
+      "id": "treemap",
+      "fallbackParts": 1
+     },
+     "construct": {
+      "element": "treemapChart",
+      "extension": null,
+      "chartex": true
      },
      "series": 1,
      "data": [
@@ -55967,7 +56083,7 @@
     },
     "reimport": {
      "charts": 1,
-     "type": "column",
+     "type": "treemap",
      "dataMismatches": []
     }
    },
@@ -55979,40 +56095,66 @@
      "legacy": false,
      "noChartData": false,
      "marks": {
-      "kind": null,
-      "expected": null,
-      "actual": null,
-      "equal": true
+      "kind": "chartex:treemap",
+      "expected": [
+       [
+        "one tile per positive value",
+        6
+       ],
+       [
+        "tile areas are proportional to the values",
+        [
+         0.0648,
+         0.1303,
+         0.0782,
+         0.2548,
+         0.1978,
+         0.2741
+        ]
+       ]
+      ],
+      "actual": [
+       [
+        "one tile per positive value",
+        6
+       ],
+       [
+        "tile areas are proportional to the values",
+        [
+         0.0648,
+         0.1303,
+         0.0782,
+         0.2548,
+         0.1978,
+         0.2741
+        ]
+       ]
+      ],
+      "equal": true,
+      "failed": []
      },
      "legacyBars": null
     },
     "export": {
-     "element": "barChart",
-     "construct": "barChart, barDir col, grouping clustered",
-     "nativeConstruct": false,
-     "adaptations": [
-      "chartex-fallback"
-     ],
-     "diagnostics": [
-      "chart-data-adapted"
-     ],
+     "element": "treemapChart",
+     "chartEx": true,
+     "construct": "treemapChart",
+     "nativeConstruct": true,
+     "adaptations": [],
+     "diagnostics": [],
      "series": 1,
      "embeddedWorkbooks": 1,
      "dataMismatches": []
     },
     "reimport": {
-     "type": "column",
-     "sameId": false,
+     "type": "treemap",
+     "sameId": true,
      "dataMismatches": []
     }
    },
-   "classification": "partial",
-   "engineSummary": "preview treemap marks null; export barChart, barDir col, grouping clustered (chart-data-adapted: chartex-fallback); re-import column",
-   "reasons": [
-    "export writes barChart, barDir col, grouping clustered; core catalog mappings.openxml treemapChart",
-    "export reports chart-data-adapted (chartex-fallback)",
-    "re-import returns chart type \"column\", expected \"treemap\" (diagnostics: heading-import-reflow)"
-   ]
+   "classification": "works",
+   "engineSummary": "preview treemap marks [[\"one tile per positive value\",6],[\"tile areas are proportional to the values\",[0.0648,0.1303,0.0782,0.2548,0.1978,0.2741]]]; export treemapChart; re-import treemap",
+   "reasons": []
   },
   {
    "dimension": "charts",
@@ -56044,6 +56186,15 @@
    "measure": {
     "expected": {
      "element": "histogramChart",
+     "extension": null,
+     "chartex": {
+      "id": "histogram",
+      "element": "histogramChart",
+      "extension": null,
+      "layouts": [
+       "clusteredColumn"
+      ]
+     },
      "composition": "extension",
      "kind": null,
      "markers": false,
@@ -56064,71 +56215,143 @@
      "legacy": false,
      "diagnostics": [],
      "marks": {
-      "kind": null,
-      "expected": null,
-      "actual": null,
-      "equal": true
+      "kind": "chartex:histogram",
+      "expected": [
+       [
+        "one bar per bin (Scott)",
+        6
+       ],
+       [
+        "bar heights are proportional to the bin counts",
+        [
+         2,
+         9,
+         18,
+         19,
+         9,
+         3
+        ]
+       ]
+      ],
+      "actual": [
+       [
+        "one bar per bin (Scott)",
+        6
+       ],
+       [
+        "bar heights are proportional to the bin counts",
+        [
+         2,
+         9,
+         18,
+         19,
+         9,
+         3
+        ]
+       ]
+      ],
+      "equal": true,
+      "failed": []
      }
     },
     "export": {
-     "adaptations": [
-      "histogram-binned"
-     ],
-     "diagnostics": [
-      "chart-data-adapted"
-     ],
+     "adaptations": [],
+     "diagnostics": [],
      "chartParts": [
       "ppt/charts/chart1.xml"
      ],
      "embeddedWorkbooks": 1,
-     "elements": [
-      "barChart"
+     "chartExParts": [
+      "ppt/charts/chartEx1.xml"
      ],
-     "construct": {
-      "element": "barChart",
-      "barDir": "col",
-      "grouping": "clustered",
-      "radarStyle": null,
-      "scatterStyle": null,
-      "seriesSymbols": [
-       null
+     "chartex": {
+      "part": "ppt/charts/chartEx1.xml",
+      "layouts": [
+       "clusteredColumn"
       ],
-      "markers": false
+      "id": "histogram",
+      "fallbackParts": 1
+     },
+     "construct": {
+      "element": "histogramChart",
+      "extension": null,
+      "chartex": true
      },
      "series": 1,
      "data": [
       {
-       "name": "Frequency",
-       "categories": [
-        "29–37.7143",
-        "37.7143–46.4286",
-        "46.4286–55.1429",
-        "55.1429–63.8571",
-        "63.8571–72.5714",
-        "72.5714–81.2857",
-        "81.2857–90"
-       ],
+       "name": "Response time (ms)",
+       "categories": [],
        "values": [
-        2,
-        6,
-        12,
-        19,
-        12,
-        6,
-        3
+        29,
+        55,
+        63,
+        73,
+        46,
+        56,
+        69,
+        90,
+        53,
+        61,
+        70,
+        48,
+        58,
+        66,
+        83,
+        50,
+        63,
+        72,
+        45,
+        56,
+        63,
+        83,
+        53,
+        61,
+        69,
+        42,
+        58,
+        66,
+        79,
+        50,
+        58,
+        72,
+        44,
+        56,
+        63,
+        75,
+        52,
+        61,
+        69,
+        40,
+        53,
+        66,
+        77,
+        50,
+        58,
+        66,
+        41,
+        56,
+        63,
+        74,
+        47,
+        61,
+        69,
+        36,
+        53,
+        61,
+        76,
+        49,
+        58,
+        66
        ]
       }
      ],
-     "dataMismatches": [
-      "1 series in the chart, 0 in the data"
-     ]
+     "dataMismatches": []
     },
     "reimport": {
      "charts": 1,
-     "type": "column",
-     "dataMismatches": [
-      "7 rows, expected 60"
-     ]
+     "type": "histogram",
+     "dataMismatches": []
     }
    },
    "chart": {
@@ -56139,46 +56362,66 @@
      "legacy": false,
      "noChartData": false,
      "marks": {
-      "kind": null,
-      "expected": null,
-      "actual": null,
-      "equal": true
+      "kind": "chartex:histogram",
+      "expected": [
+       [
+        "one bar per bin (Scott)",
+        6
+       ],
+       [
+        "bar heights are proportional to the bin counts",
+        [
+         2,
+         9,
+         18,
+         19,
+         9,
+         3
+        ]
+       ]
+      ],
+      "actual": [
+       [
+        "one bar per bin (Scott)",
+        6
+       ],
+       [
+        "bar heights are proportional to the bin counts",
+        [
+         2,
+         9,
+         18,
+         19,
+         9,
+         3
+        ]
+       ]
+      ],
+      "equal": true,
+      "failed": []
      },
      "legacyBars": null
     },
     "export": {
-     "element": "barChart",
-     "construct": "barChart, barDir col, grouping clustered",
-     "nativeConstruct": false,
-     "adaptations": [
-      "histogram-binned"
-     ],
-     "diagnostics": [
-      "chart-data-adapted"
-     ],
+     "element": "histogramChart",
+     "chartEx": true,
+     "construct": "histogramChart",
+     "nativeConstruct": true,
+     "adaptations": [],
+     "diagnostics": [],
      "series": 1,
      "embeddedWorkbooks": 1,
-     "dataMismatches": [
-      "1 series in the chart, 0 in the data"
-     ]
+     "dataMismatches": []
     },
     "reimport": {
-     "type": "column",
-     "sameId": false,
-     "dataMismatches": [
-      "7 rows, expected 60"
-     ]
+     "type": "histogram",
+     "sameId": true,
+     "dataMismatches": []
     }
    },
-   "classification": "partial",
-   "engineSummary": "preview histogram marks null; export barChart, barDir col, grouping clustered (chart-data-adapted: histogram-binned); re-import column",
-   "reasons": [
-    "export writes barChart, barDir col, grouping clustered; core catalog mappings.openxml histogramChart",
-    "export reports chart-data-adapted (histogram-binned)",
-    "export chart cache: 1 series in the chart, 0 in the data",
-    "re-import returns chart type \"column\", expected \"histogram\" (diagnostics: heading-import-reflow)",
-    "re-import chart data: 7 rows, expected 60"
-   ]
+   "classification": "works",
+   "engineSummary": "preview histogram marks [[\"one bar per bin (Scott)\",6],[\"bar heights are proportional to the bin counts\",[2,9,18,19,9,3]]]; export histogramChart; re-import histogram",
+   "reasons": []
   },
   {
    "dimension": "charts",
@@ -56210,6 +56453,16 @@
    "measure": {
     "expected": {
      "element": "histogramChart",
+     "extension": "cx:paretoLine",
+     "chartex": {
+      "id": "pareto",
+      "element": "histogramChart",
+      "extension": "cx:paretoLine",
+      "layouts": [
+       "clusteredColumn",
+       "paretoLine"
+      ]
+     },
      "composition": "extension",
      "kind": null,
      "markers": false,
@@ -56235,38 +56488,104 @@
      "legacy": false,
      "diagnostics": [],
      "marks": {
-      "kind": null,
-      "expected": null,
-      "actual": null,
-      "equal": true
+      "kind": "chartex:pareto",
+      "expected": [
+       [
+        "one bar per category",
+        7
+       ],
+       [
+        "bar heights follow the sorted values",
+        [
+         52,
+         31,
+         24,
+         15,
+         9,
+         6,
+         4
+        ]
+       ],
+       [
+        "a cumulative line with one point per category",
+        7
+       ],
+       [
+        "the line is the cumulative share, ending at 100%",
+        [
+         0.369,
+         0.589,
+         0.759,
+         0.865,
+         0.929,
+         0.972,
+         1
+        ]
+       ]
+      ],
+      "actual": [
+       [
+        "one bar per category",
+        7
+       ],
+       [
+        "bar heights follow the sorted values",
+        [
+         52,
+         31,
+         24,
+         15,
+         9,
+         6,
+         4
+        ]
+       ],
+       [
+        "a cumulative line with one point per category",
+        7
+       ],
+       [
+        "the line is the cumulative share, ending at 100%",
+        [
+         0.369,
+         0.589,
+         0.759,
+         0.865,
+         0.929,
+         0.972,
+         1
+        ]
+       ]
+      ],
+      "equal": true,
+      "failed": []
      }
     },
     "export": {
-     "adaptations": [
-      "chartex-fallback"
-     ],
-     "diagnostics": [
-      "chart-data-adapted"
-     ],
+     "adaptations": [],
+     "diagnostics": [],
      "chartParts": [
       "ppt/charts/chart1.xml"
      ],
      "embeddedWorkbooks": 1,
-     "elements": [
-      "barChart"
+     "chartExParts": [
+      "ppt/charts/chartEx1.xml"
      ],
-     "construct": {
-      "element": "barChart",
-      "barDir": "col",
-      "grouping": "clustered",
-      "radarStyle": null,
-      "scatterStyle": null,
-      "seriesSymbols": [
-       null
+     "chartex": {
+      "part": "ppt/charts/chartEx1.xml",
+      "layouts": [
+       "clusteredColumn",
+       "paretoLine"
       ],
-      "markers": false
+      "id": "pareto",
+      "fallbackParts": 1
      },
-     "series": 1,
+     "construct": {
+      "element": "histogramChart",
+      "extension": "cx:paretoLine",
+      "chartex": true
+     },
+     "series": 2,
      "data": [
       {
        "name": "Defects",
@@ -56294,7 +56613,7 @@
     },
     "reimport": {
      "charts": 1,
-     "type": "column",
+     "type": "pareto",
      "dataMismatches": []
     }
    },
@@ -56306,40 +56625,100 @@
      "legacy": false,
      "noChartData": false,
      "marks": {
-      "kind": null,
-      "expected": null,
-      "actual": null,
-      "equal": true
+      "kind": "chartex:pareto",
+      "expected": [
+       [
+        "one bar per category",
+        7
+       ],
+       [
+        "bar heights follow the sorted values",
+        [
+         52,
+         31,
+         24,
+         15,
+         9,
+         6,
+         4
+        ]
+       ],
+       [
+        "a cumulative line with one point per category",
+        7
+       ],
+       [
+        "the line is the cumulative share, ending at 100%",
+        [
+         0.369,
+         0.589,
+         0.759,
+         0.865,
+         0.929,
+         0.972,
+         1
+        ]
+       ]
+      ],
+      "actual": [
+       [
+        "one bar per category",
+        7
+       ],
+       [
+        "bar heights follow the sorted values",
+        [
+         52,
+         31,
+         24,
+         15,
+         9,
+         6,
+         4
+        ]
+       ],
+       [
+        "a cumulative line with one point per category",
+        7
+       ],
+       [
+        "the line is the cumulative share, ending at 100%",
+        [
+         0.369,
+         0.589,
+         0.759,
+         0.865,
+         0.929,
+         0.972,
+         1
+        ]
+       ]
+      ],
+      "equal": true,
+      "failed": []
      },
      "legacyBars": null
     },
     "export": {
-     "element": "barChart",
-     "construct": "barChart, barDir col, grouping clustered",
-     "nativeConstruct": false,
-     "adaptations": [
-      "chartex-fallback"
-     ],
-     "diagnostics": [
-      "chart-data-adapted"
-     ],
-     "series": 1,
+     "element": "histogramChart",
+     "chartEx": true,
+     "construct": "histogramChart",
+     "nativeConstruct": true,
+     "adaptations": [],
+     "diagnostics": [],
+     "series": 2,
      "embeddedWorkbooks": 1,
      "dataMismatches": []
     },
     "reimport": {
-     "type": "column",
-     "sameId": false,
+     "type": "pareto",
+     "sameId": true,
      "dataMismatches": []
     }
    },
-   "classification": "partial",
-   "engineSummary": "preview pareto marks null; export barChart, barDir col, grouping clustered (chart-data-adapted: chartex-fallback); re-import column",
-   "reasons": [
-    "export writes barChart, barDir col, grouping clustered; core catalog mappings.openxml histogramChart",
-    "export reports chart-data-adapted (chartex-fallback)",
-    "re-import returns chart type \"column\", expected \"pareto\" (diagnostics: heading-import-reflow)"
-   ]
+   "classification": "works",
+   "engineSummary": "preview pareto marks [[\"one bar per category\",7],[\"bar heights follow the sorted values\",[52,31,24,15,9,6,4]],[\"a cumulative line with one point per category\",7],[\"the line is the cumulative share, ending at 100%\",[0.369,0.589,0.759,0.865,0.929,0.972,1]]]; export histogramChart; re-import pareto",
+   "reasons": []
   },
   {
    "dimension": "charts",
@@ -56371,6 +56750,15 @@
    "measure": {
     "expected": {
      "element": "mapChart",
+     "extension": null,
+     "chartex": {
+      "id": "world",
+      "element": "mapChart",
+      "extension": null,
+      "layouts": [
+       "regionMap"
+      ]
+     },
      "composition": "extension",
      "kind": null,
      "markers": false,
@@ -56396,10 +56784,21 @@
      "legacy": false,
      "diagnostics": [],
      "marks": {
-      "kind": null,
-      "expected": null,
-      "actual": null,
-      "equal": true
+      "kind": "chartex:world",
+      "expected": [
+       [
+        "one tile per region",
+        14
+       ]
+      ],
+      "actual": [
+       [
+        "one tile per region",
+        14
+       ]
+      ],
+      "equal": true,
+      "failed": []
      }
     },
     "export": {
@@ -56413,6 +56812,7 @@
       "ppt/charts/chart1.xml"
      ],
      "embeddedWorkbooks": 1,
+     "chartExParts": [],
      "elements": [
       "barChart"
      ],
@@ -56481,15 +56881,27 @@
      "legacy": false,
      "noChartData": false,
      "marks": {
-      "kind": null,
-      "expected": null,
-      "actual": null,
-      "equal": true
+      "kind": "chartex:world",
+      "expected": [
+       [
+        "one tile per region",
+        14
+       ]
+      ],
+      "actual": [
+       [
+        "one tile per region",
+        14
+       ]
+      ],
+      "equal": true,
+      "failed": []
      },
      "legacyBars": null
     },
     "export": {
      "element": "barChart",
+     "chartEx": false,
      "construct": "barChart, barDir col, grouping clustered",
      "nativeConstruct": false,
      "adaptations": [
@@ -56509,7 +56921,7 @@
     }
    },
    "classification": "partial",
-   "engineSummary": "preview world marks null; export barChart, barDir col, grouping clustered (chart-data-adapted: chartex-fallback); re-import column",
+   "engineSummary": "preview world marks [[\"one tile per region\",14]]; export barChart, barDir col, grouping clustered (chart-data-adapted: chartex-fallback); re-import column",
    "reasons": [
     "export writes barChart, barDir col, grouping clustered; core catalog mappings.openxml mapChart",
     "export reports chart-data-adapted (chartex-fallback)",
@@ -56546,6 +56958,15 @@
    "measure": {
     "expected": {
      "element": "boxWhiskerChart",
+     "extension": null,
+     "chartex": {
+      "id": "box-and-whisker",
+      "element": "boxWhiskerChart",
+      "extension": null,
+      "layouts": [
+       "boxWhisker"
+      ]
+     },
      "composition": "extension",
      "kind": null,
      "markers": false,
@@ -56571,36 +56992,53 @@
      "legacy": false,
      "diagnostics": [],
      "marks": {
-      "kind": null,
-      "expected": null,
-      "actual": null,
-      "equal": true
+      "kind": "chartex:box-and-whisker",
+      "expected": [
+       [
+        "one box per category",
+        4
+       ],
+       [
+        "one outlier mark per value outside the 1.5 IQR whiskers",
+        2
+       ]
+      ],
+      "actual": [
+       [
+        "one box per category",
+        4
+       ],
+       [
+        "one outlier mark per value outside the 1.5 IQR whiskers",
+        2
+       ]
+      ],
+      "equal": true,
+      "failed": []
      }
     },
     "export": {
-     "adaptations": [
-      "chartex-fallback"
-     ],
-     "diagnostics": [
-      "chart-data-adapted"
-     ],
+     "adaptations": [],
+     "diagnostics": [],
      "chartParts": [
       "ppt/charts/chart1.xml"
      ],
      "embeddedWorkbooks": 1,
-     "elements": [
-      "barChart"
+     "chartExParts": [
+      "ppt/charts/chartEx1.xml"
      ],
-     "construct": {
-      "element": "barChart",
-      "barDir": "col",
-      "grouping": "clustered",
-      "radarStyle": null,
-      "scatterStyle": null,
-      "seriesSymbols": [
-       null
+     "chartex": {
+      "part": "ppt/charts/chartEx1.xml",
+      "layouts": [
+       "boxWhisker"
       ],
-      "markers": false
+      "id": "box-and-whisker",
+      "fallbackParts": 1
+     },
+     "construct": {
+      "element": "boxWhiskerChart",
+      "extension": null,
+      "chartex": true
      },
      "series": 1,
      "data": [
@@ -56712,7 +57150,7 @@
     },
     "reimport": {
      "charts": 1,
-     "type": "column",
+     "type": "box-and-whisker",
      "dataMismatches": []
     }
    },
@@ -56724,40 +57162,52 @@
      "legacy": false,
      "noChartData": false,
      "marks": {
-      "kind": null,
-      "expected": null,
-      "actual": null,
-      "equal": true
+      "kind": "chartex:box-and-whisker",
+      "expected": [
+       [
+        "one box per category",
+        4
+       ],
+       [
+        "one outlier mark per value outside the 1.5 IQR whiskers",
+        2
+       ]
+      ],
+      "actual": [
+       [
+        "one box per category",
+        4
+       ],
+       [
+        "one outlier mark per value outside the 1.5 IQR whiskers",
+        2
+       ]
+      ],
+      "equal": true,
+      "failed": []
      },
      "legacyBars": null
     },
     "export": {
-     "element": "barChart",
-     "construct": "barChart, barDir col, grouping clustered",
-     "nativeConstruct": false,
-     "adaptations": [
-      "chartex-fallback"
-     ],
-     "diagnostics": [
-      "chart-data-adapted"
-     ],
+     "element": "boxWhiskerChart",
+     "chartEx": true,
+     "construct": "boxWhiskerChart",
+     "nativeConstruct": true,
+     "adaptations": [],
+     "diagnostics": [],
      "series": 1,
      "embeddedWorkbooks": 1,
      "dataMismatches": []
     },
     "reimport": {
-     "type": "column",
-     "sameId": false,
+     "type": "box-and-whisker",
+     "sameId": true,
      "dataMismatches": []
     }
    },
-   "classification": "partial",
-   "engineSummary": "preview box-and-whisker marks null; export barChart, barDir col, grouping clustered (chart-data-adapted: chartex-fallback); re-import column",
-   "reasons": [
-    "export writes barChart, barDir col, grouping clustered; core catalog mappings.openxml boxWhiskerChart",
-    "export reports chart-data-adapted (chartex-fallback)",
-    "re-import returns chart type \"column\", expected \"box-and-whisker\" (diagnostics: heading-import-reflow)"
-   ]
+   "classification": "works",
+   "engineSummary": "preview box-and-whisker marks [[\"one box per category\",4],[\"one outlier mark per value outside the 1.5 IQR whiskers\",2]]; export boxWhiskerChart; re-import box-and-whisker",
+   "reasons": []
   },
   {
    "dimension": "charts",
@@ -56789,6 +57239,15 @@
    "measure": {
     "expected": {
      "element": "waterfallChart",
+     "extension": null,
+     "chartex": {
+      "id": "waterfall",
+      "element": "waterfallChart",
+      "extension": null,
+      "layouts": [
+       "waterfall"
+      ]
+     },
      "composition": "extension",
      "kind": null,
      "markers": false,
@@ -56814,36 +57273,79 @@
      "legacy": false,
      "diagnostics": [],
      "marks": {
-      "kind": null,
-      "expected": null,
-      "actual": null,
-      "equal": true
+      "kind": "chartex:waterfall",
+      "expected": [
+       [
+        "one bar per value",
+        8
+       ],
+       [
+        "bar heights are proportional to the magnitudes",
+        [
+         88282,
+         59377,
+         30218,
+         31266,
+         33703,
+         91885,
+         31697,
+         67366
+        ]
+       ],
+       [
+        "each bar starts at the running total",
+        "running total"
+       ]
+      ],
+      "actual": [
+       [
+        "one bar per value",
+        8
+       ],
+       [
+        "bar heights are proportional to the magnitudes",
+        [
+         88282,
+         59377.37,
+         30218.2,
+         31266.42,
+         33702.65,
+         91885.32,
+         31697.47,
+         67365.68
+        ]
+       ],
+       [
+        "each bar starts at the running total",
+        "running total"
+       ]
+      ],
+      "equal": true,
+      "failed": []
      }
     },
     "export": {
-     "adaptations": [
-      "chartex-fallback"
-     ],
-     "diagnostics": [
-      "chart-data-adapted"
-     ],
+     "adaptations": [],
+     "diagnostics": [],
      "chartParts": [
       "ppt/charts/chart1.xml"
      ],
      "embeddedWorkbooks": 1,
-     "elements": [
-      "barChart"
+     "chartExParts": [
+      "ppt/charts/chartEx1.xml"
      ],
-     "construct": {
-      "element": "barChart",
-      "barDir": "col",
-      "grouping": "clustered",
-      "radarStyle": null,
-      "scatterStyle": null,
-      "seriesSymbols": [
-       null
+     "chartex": {
+      "part": "ppt/charts/chartEx1.xml",
+      "layouts": [
+       "waterfall"
       ],
-      "markers": false
+      "id": "waterfall",
+      "fallbackParts": 1
+     },
+     "construct": {
+      "element": "waterfallChart",
+      "extension": null,
+      "chartex": true
      },
      "series": 1,
      "data": [
@@ -56875,7 +57377,7 @@
     },
     "reimport": {
      "charts": 1,
-     "type": "column",
+     "type": "waterfall",
      "dataMismatches": []
     }
    },
@@ -56887,40 +57389,78 @@
      "legacy": false,
      "noChartData": false,
      "marks": {
-      "kind": null,
-      "expected": null,
-      "actual": null,
-      "equal": true
+      "kind": "chartex:waterfall",
+      "expected": [
+       [
+        "one bar per value",
+        8
+       ],
+       [
+        "bar heights are proportional to the magnitudes",
+        [
+         88282,
+         59377,
+         30218,
+         31266,
+         33703,
+         91885,
+         31697,
+         67366
+        ]
+       ],
+       [
+        "each bar starts at the running total",
+        "running total"
+       ]
+      ],
+      "actual": [
+       [
+        "one bar per value",
+        8
+       ],
+       [
+        "bar heights are proportional to the magnitudes",
+        [
+         88282,
+         59377.37,
+         30218.2,
+         31266.42,
+         33702.65,
+         91885.32,
+         31697.47,
+         67365.68
+        ]
+       ],
+       [
+        "each bar starts at the running total",
+        "running total"
+       ]
+      ],
+      "equal": true,
+      "failed": []
      },
      "legacyBars": null
     },
     "export": {
-     "element": "barChart",
-     "construct": "barChart, barDir col, grouping clustered",
-     "nativeConstruct": false,
-     "adaptations": [
-      "chartex-fallback"
-     ],
-     "diagnostics": [
-      "chart-data-adapted"
-     ],
+     "element": "waterfallChart",
+     "chartEx": true,
+     "construct": "waterfallChart",
+     "nativeConstruct": true,
+     "adaptations": [],
+     "diagnostics": [],
      "series": 1,
      "embeddedWorkbooks": 1,
      "dataMismatches": []
     },
     "reimport": {
-     "type": "column",
-     "sameId": false,
+     "type": "waterfall",
+     "sameId": true,
      "dataMismatches": []
     }
    },
-   "classification": "partial",
-   "engineSummary": "preview waterfall marks null; export barChart, barDir col, grouping clustered (chart-data-adapted: chartex-fallback); re-import column",
-   "reasons": [
-    "export writes barChart, barDir col, grouping clustered; core catalog mappings.openxml waterfallChart",
-    "export reports chart-data-adapted (chartex-fallback)",
-    "re-import returns chart type \"column\", expected \"waterfall\" (diagnostics: heading-import-reflow)"
-   ]
+   "classification": "works",
+   "engineSummary": "preview waterfall marks [[\"one bar per value\",8],[\"bar heights are proportional to the magnitudes\",[88282,59377.37,30218.2,31266.42,33702.65,91885.32,31697.47,67365.68]],[\"each bar starts at the running total\",\"running total\"]]; export waterfallChart; re-import waterfall",
+   "reasons": []
   },
   {
    "dimension": "charts",
@@ -56952,6 +57492,15 @@
    "measure": {
     "expected": {
      "element": "funnelChart",
+     "extension": null,
+     "chartex": {
+      "id": "funnel",
+      "element": "funnelChart",
+      "extension": null,
+      "layouts": [
+       "funnel"
+      ]
+     },
      "composition": "extension",
      "kind": null,
      "markers": false,
@@ -56977,36 +57526,79 @@
      "legacy": false,
      "diagnostics": [],
      "marks": {
-      "kind": null,
-      "expected": null,
-      "actual": null,
-      "equal": true
+      "kind": "chartex:funnel",
+      "expected": [
+       [
+        "one bar per stage",
+        5
+       ],
+       [
+        "bar widths are proportional to the values",
+        [
+         15726,
+         63852,
+         57749,
+         98652,
+         41133
+        ]
+       ],
+       [
+        "the bars share one centre line",
+        "one centre"
+       ]
+      ],
+      "actual": [
+       [
+        "one bar per stage",
+        5
+       ],
+       [
+        "bar widths are proportional to the values",
+        [
+         15726,
+         63851.91,
+         57748.9,
+         98651.84,
+         41132.94
+        ]
+       ],
+       [
+        "the bars share one centre line",
+        [
+         678.82,
+         678.82,
+         678.82,
+         678.82,
+         678.82
+        ]
+       ]
+      ],
+      "equal": true,
+      "failed": []
      }
     },
     "export": {
-     "adaptations": [
-      "chartex-fallback"
-     ],
-     "diagnostics": [
-      "chart-data-adapted"
-     ],
+     "adaptations": [],
+     "diagnostics": [],
      "chartParts": [
       "ppt/charts/chart1.xml"
      ],
      "embeddedWorkbooks": 1,
-     "elements": [
-      "barChart"
+     "chartExParts": [
+      "ppt/charts/chartEx1.xml"
      ],
-     "construct": {
-      "element": "barChart",
-      "barDir": "col",
-      "grouping": "clustered",
-      "radarStyle": null,
-      "scatterStyle": null,
-      "seriesSymbols": [
-       null
+     "chartex": {
+      "part": "ppt/charts/chartEx1.xml",
+      "layouts": [
+       "funnel"
       ],
-      "markers": false
+      "id": "funnel",
+      "fallbackParts": 1
+     },
+     "construct": {
+      "element": "funnelChart",
+      "extension": null,
+      "chartex": true
      },
      "series": 1,
      "data": [
@@ -57032,7 +57624,7 @@
     },
     "reimport": {
      "charts": 1,
-     "type": "column",
+     "type": "funnel",
      "dataMismatches": []
     }
    },
@@ -57044,40 +57636,78 @@
      "legacy": false,
      "noChartData": false,
      "marks": {
-      "kind": null,
-      "expected": null,
-      "actual": null,
-      "equal": true
+      "kind": "chartex:funnel",
+      "expected": [
+       [
+        "one bar per stage",
+        5
+       ],
+       [
+        "bar widths are proportional to the values",
+        [
+         15726,
+         63852,
+         57749,
+         98652,
+         41133
+        ]
+       ],
+       [
+        "the bars share one centre line",
+        "one centre"
+       ]
+      ],
+      "actual": [
+       [
+        "one bar per stage",
+        5
+       ],
+       [
+        "bar widths are proportional to the values",
+        [
+         15726,
+         63851.91,
+         57748.9,
+         98651.84,
+         41132.94
+        ]
+       ],
+       [
+        "the bars share one centre line",
+        [
+         678.82,
+         678.82,
+         678.82,
+         678.82,
+         678.82
+        ]
+       ]
+      ],
+      "equal": true,
+      "failed": []
      },
      "legacyBars": null
     },
     "export": {
-     "element": "barChart",
-     "construct": "barChart, barDir col, grouping clustered",
-     "nativeConstruct": false,
-     "adaptations": [
-      "chartex-fallback"
-     ],
-     "diagnostics": [
-      "chart-data-adapted"
-     ],
+     "element": "funnelChart",
+     "chartEx": true,
+     "construct": "funnelChart",
+     "nativeConstruct": true,
+     "adaptations": [],
+     "diagnostics": [],
      "series": 1,
      "embeddedWorkbooks": 1,
      "dataMismatches": []
     },
     "reimport": {
-     "type": "column",
-     "sameId": false,
+     "type": "funnel",
+     "sameId": true,
      "dataMismatches": []
     }
    },
-   "classification": "partial",
-   "engineSummary": "preview funnel marks null; export barChart, barDir col, grouping clustered (chart-data-adapted: chartex-fallback); re-import column",
-   "reasons": [
-    "export writes barChart, barDir col, grouping clustered; core catalog mappings.openxml funnelChart",
-    "export reports chart-data-adapted (chartex-fallback)",
-    "re-import returns chart type \"column\", expected \"funnel\" (diagnostics: heading-import-reflow)"
-   ]
+   "classification": "works",
+   "engineSummary": "preview funnel marks [[\"one bar per stage\",5],[\"bar widths are proportional to the values\",[15726,63851.91,57748.9,98651.84,41132.94]],[\"the bars share one centre line\",[678.82,678.82,678.82,678.82,678.82]]]; export funnelChart; re-import funnel",
+   "reasons": []
   }
  ]
 }
