@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.11.8
+
+- Release 0.11.8 (patch number; one fix since 0.11.7, `git log opf-pptx-v0.11.7..main` is #126; no API removed, no dependency range changed: the core floor stays `@openpresentation/opf` ^0.11.4, the optional renderer peer ^0.11.0 and the development renderer 0.11.9). Install it with core 0.11.4, renderer 0.11.9 and editor 0.10.6 as for 0.11.7. A deck exported by 0.11.8 whose rich text wraps over several native lines re-imports that text as one authored payload (the export records the line count as `lines` in the content record of `OPF_SLIDE_V1`, never carrying words); a deck exported by 0.11.7 or earlier has no count and imports as before, and old importers ignore the extra key. Description follows.
+
 - Fix (round trip): a rich-text `text` payload that wraps over several native lines now returns as the authored payload instead of `content-structure-changed`. Rich lines export as unnamed, untagged shapes, so each imported as its own text block and several blocks sat in the one stored content box, which kept the flat blocks (a root `text` array, or a wrapped text inside a group or promoted region). The content record now counts the lines (`lines` on a `text` leaf or the root `text` field, written only when every line boundary is a soft wrap, never for a hard break or blank line, and never carrying words) and import rejoins exactly that many text blocks of the leaf, top to bottom, into one payload: runs concatenated in order with no separator, the two runs at a seam merged when they differ only in text. The words and run styles are the current native ones. A count that does not match the imported blocks, a record without a count (decks exported before this change, hard breaks), or non-text blocks keep the previous behaviour and `content-structure-changed`; a deleted line still reports `slide-reference-changed`. A damaged `lines` value rejects the slide tag. The 14 colour-scheme and 4 image-treatment gallery values that reported it now restore their authored text. Tests in `test/content-topology.mjs`.
 
 ## 0.11.7
