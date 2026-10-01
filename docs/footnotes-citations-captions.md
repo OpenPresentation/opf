@@ -99,8 +99,9 @@ the caption path as `data-opf-path`.
   reference id, line boundaries), at core's geometry above the footer placeholders.
 - A caption is one text box per fitted line, named `OPF caption <path> line <n>`, tagged `OPF_CAPTION_V1`
   (payload path, the media shape's name, position, alignment, line boundaries), at core's band.
-- Provenance: `references` is stored in the document record (`metadata.references`, under the
-  `supplement` container older importers ignore). Import re-attaches captions from their tags to the media
+- Provenance: `references` is stored in the document record as a top-level key (like `author`: importers up to
+  0.11.9 drop a tag with an unknown `supplement` field but ignore an unknown top-level key) and read back into
+  `metadata.references`. Import re-attaches captions from their tags to the media
   shape they name, rebuilds the references list and each run's `cite`/`footnote` from the footnote tags and
   the superscript marker runs (the marker runs are removed from the imported text; an edited note keeps its
   new text), and restores uncited references from the document record. Without tags nothing is guessed: a
