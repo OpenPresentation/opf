@@ -17,10 +17,11 @@ The owner authorized agents to publish npm packages on 2026-09-29 ("yes, prepare
 
 ## Active programs
 
-Cross-repository work is tracked in `docs/programs/`. Before starting program work, read the program's `README.md` (goal, definition of done, invariants, resume protocol) and `burndown.md` (item IDs, acceptance criteria, status, progress log). Name branches `codex/ff-<nn>-<slug>` (for example `codex/ff-07-script-slots`), start PR titles with the item ID (`FF-07: `), and update the burndown row and progress log when an item changes state.
+Cross-repository work is tracked in `docs/programs/`. Before starting program work, read the program's `README.md` (goal, definition of done, invariants, resume protocol) and `burndown.md` (item IDs, acceptance criteria, status, progress log). Name branches `codex/ff-<nn>-<slug>` (for example `codex/ff-07-script-slots`), start PR titles with the item ID (`FF-07: `), and update the burndown row and progress log when an item changes state. Release readiness uses `codex/rr-<nn>-<slug>` branches and `RR-<nn>: ` PR titles.
 
 - [Font fidelity everywhere](docs/programs/font-fidelity-everywhere/README.md): every pptx.gallery dimension previews and exports with only the developer's chosen fonts, in PowerPoint and on every OS and runtime.
   Per-font status, priorities and next actions: [font tracker](docs/programs/font-fidelity-everywhere/font-tracker.md) (`pnpm check:font-tracker`; rebuild with `pnpm build:font-tracker`).
+- [Release readiness](docs/programs/release-readiness/README.md) (opened 2026-10-01): every package, the CLI and the three sites release-ready, with shipped features verified natively, gaps closed or descoped with issues, CI green and cross-platform, and a release-readiness note for the owner. Progress: `pnpm report:release`. It carries the open font-fidelity items; font fidelity above is in closure (its goal state is reached and its remaining items are tracked as RR items).
 
 ## Fonts
 
