@@ -55,10 +55,12 @@ async function observe(browser, scheme, slide) {
   const page = await browser.newPage({viewport: {width: 1280, height: 720}});
   await page.setContent(`<!doctype html><body style="margin:0;background:#fff">${svgs[scheme][slide]}</body>`);
   const state = await page.evaluate(async () => {
+    // Faces load lazily, when text first needs them: load every embedded face, then wait for the document's font set.
+    await Promise.all([...document.fonts].map((face) => face.load()));
     await document.fonts.ready;
     const loaded = [...document.fonts].filter((face) => face.status === 'loaded').map((face) => face.family.replace(/^["']|["']$/g, ''));
     const drawn = [...new Set([...document.querySelectorAll('svg text')].map((node) => getComputedStyle(node).fontFamily.split(',')[0].trim().replace(/^["']|["']$/g, '')))].sort();
-    return {loaded: [...new Set(loaded)].sort(), drawn, text: document.querySelectorAll('svg text').length};
+    return {loaded: [...new Set(loaded)].sort(), drawn, text: document.querySelectorAll('svg text').length, statuses: [...document.fonts].map((face) => `${face.family}:${face.status}`)};
   });
   const png = await page.screenshot({type: 'png'});
   await page.close();
@@ -79,7 +81,7 @@ async function pass(label, env) {
     // The preview draws the family its scheme resolves to, and only loaded embedded faces.
     for (const [key, state] of Object.entries(states)) {
       assert.ok(state.text > 0, `${label}: ${key} has text`);
-      for (const family of state.drawn) assert.ok(state.loaded.includes(family), `${label}: ${key} draws ${family}, which is not an embedded face (loaded: ${state.loaded})`);
+      for (const family of state.drawn) assert.ok(state.loaded.includes(family), `${label}: ${key} draws ${family}, which is not an embedded face (loaded: ${state.loaded}; all faces: ${state.statuses})`);
     }
     assert.ok(states['calibri#0'].drawn.includes('Carlito'), `${label}: Calibri previews with Carlito`);
     assert.ok(states['georgia#0'].drawn.includes('Gelasio'), `${label}: Georgia previews with Gelasio`);
