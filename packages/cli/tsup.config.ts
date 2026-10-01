@@ -2,6 +2,7 @@ import { defineConfig } from "tsup";
 import { readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
 import {fileURLToPath} from "node:url";
+import {createRequire} from "node:module";
 const manifest = JSON.parse(readFileSync(new URL("./package.json", import.meta.url), "utf8"));
 const core = JSON.parse(readFileSync(new URL("../javascript/package.json", import.meta.url), "utf8"));
 function skillFiles(directory:string,prefix=''):Record<string,string>{
@@ -12,6 +13,8 @@ function skillFiles(directory:string,prefix=''):Record<string,string>{
     return [[relative,readFileSync(file,'utf8').replaceAll('\r\n','\n')]];
   }));
 }
+// core's YAML reader (Markdown front matter) is CommonJS in Node and ships a pure ESM build for browsers: bundle that one.
+const yamlRoot=path.dirname(createRequire(new URL("../javascript/package.json",import.meta.url)).resolve("yaml/package.json"));
 const skillRoot=fileURLToPath(new URL('../../skills/',import.meta.url));
 const skills=Object.fromEntries(['opf-author','opf-layout','opf-presets','opf-edit','opf-export','opf-inspect'].map(name=>[name,skillFiles(path.join(skillRoot,name))]));
 
@@ -26,4 +29,5 @@ export default defineConfig({
   target: "node24",
   platform: "node",
   banner: { js: "#!/usr/bin/env node" },
+  esbuildOptions(options) { options.alias = { ...options.alias, yaml: path.join(yamlRoot, "browser/index.js") }; },
 });

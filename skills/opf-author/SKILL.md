@@ -22,6 +22,10 @@ When the project's CLI is installed, use `opf create deck.opf.json --title "Deci
 
 Use `opf import-data source.csv --as table` or `--as chart` to ingest local CSV/TSV/JSON into valid inline content. The package API is `createDataContent(input, options)` from `@openpresentation/opf/data`. Select category/series explicitly when needed. Preserve identifiers as strings in tables; do not invent values for missing chart measures. Import embeds a snapshot; it does not establish live source refresh. Check installed command/API availability.
 
+## Markdown and outlines
+
+When the source is Markdown, an outline or speaker notes, convert it deterministically with `opf from-md` (or `markdownToOpf` from `@openpresentation/opf/markdown`) instead of retyping it, and write a deck back as text with `opf to-md`. Read the [Markdown reference](references/markdown.md) for the dialect, the diagnostics and the rules; check `opf --help` for the commands first.
+
 ## Authoring decisions
 
 - Put visible copy in slide `title`, `subtitle`, `tag`, and content fields. Presentation `name`, `description`, `takeaway`, `audience`, `purpose`, `tone`, and `narrative` express identity or intent; they do not automatically create slide content.

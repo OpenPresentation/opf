@@ -4,6 +4,7 @@ import path from "node:path";
 import { createDataContent, OPFDataImportError, paginatePresentation, bundlePresentation, catalogEntries, schemaEntries, validatePresentation, lintSource, type LintOptions } from "@openpresentation/opf";
 import { applyPatch, lookup, tokens, PatchError } from "./patch.js";
 import {manageSkills, SkillsError, type SkillBundle} from './skills.js';
+import {markdownCommand, MARKDOWN_USAGE, MARKDOWN_HELP} from './markdown.js';
 
 declare const CLI_VERSION: string;
 declare const OPF_VERSION: string;
@@ -21,6 +22,7 @@ const usage = `OPF — local presentation files for agents (Node 24)
            [--force] [--strict]
   opf paginate <input|-> <output|-> [--force] [--strict]
   opf bundle <input|-> <output|-> [--force] [--strict]
+${MARKDOWN_USAGE}
   opf schemas
   opf schema [name] [JSON-Pointer]
   opf catalogs
@@ -40,6 +42,8 @@ custom source are left untouched) so the file resolves every catalog reference
 offline. Remote media and data assets are not inlined.
 Lint adds source locations, contextual suggestions and explicit host contracts.
 Lint syntax/schema/policy errors exit 1; --strict also rejects warnings.
+
+${MARKDOWN_HELP}
 
 Install all six bundled OPF agent skills in this project:
   npx @openpresentation/cli@latest skills install
@@ -124,6 +128,7 @@ async function main(argv: string[]) {
   if (argv.length === 1 && argv[0] === "--version") { print({ cli: CLI_VERSION, opf: OPF_VERSION }); return; }
   const [command, ...args] = argv;
   if (args.length === 1 && args[0] === "--help") { console.log(usage); return; }
+  if (command === 'from-md' || command === 'to-md') { await markdownCommand(command, args); return; }
   if (command === 'skills') {
     const {positional,options}=parse(args,['agent','global','directory']);arity(positional,1);
     print(await manageSkills(positional[0],OPF_SKILLS,CLI_VERSION,{agent:options.agent as string|undefined,global:!!options.global,directory:options.directory as string|undefined}));return;
