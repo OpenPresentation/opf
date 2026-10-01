@@ -45,11 +45,12 @@ preview is drawn and measured. It does **not** qualify a family for native Power
 4. **Browser.** Chromium (Edge 154) loads the same pinned bytes as `@font-face` and sets every sample at 100 px with its `lang`: the natural
    advance agrees with HarfBuzz and with the renderer within 0.1 px (maximum 0.056 px), and 104 right-to-left samples display right to left.
    CI runs this (`npm run test:script-corpora-browser`).
-5. **Raster.** resvg-js (the PNG path) draws each regular-weight sample next to a reference drawn from HarfBuzz glyph outlines: 88 agree
+5. **The real pipeline.** Every corpus sample is also a slide title rendered by the product (composition, script itemization, SVG with `textLength` pins): in Chromium the natural advance of each of the 229 pinned runs equals its accepted advance within 0.1 px (the three runs of the recorded fontkit limits are bounded), and 22 right-to-left title lines paint right to left (`test/script-corpora-slides-browser.mjs`).
+6. **Raster.** resvg-js (the PNG path) draws each regular-weight sample next to a reference drawn from HarfBuzz glyph outlines: 88 agree
    within 2 percent ink width; the scripts in [Raster limit](#raster-limit-resvg-js) do not.
-6. **Host loading.** For every script, a document in its language whose text is a corpus sample loads exactly the pinned package with
+7. **Host loading.** For every script, a document in its language whose text is a corpus sample loads exactly the pinned package with
    `scripts: 'auto'` (the editor's and the gallery host's selection), renders strictly, draws the designated family and rasterizes.
-7. **Catalog samples.** The 60 non-Latin `textSample` strings of the font-scheme catalog (what the gallery shows) are covered by the script faces.
+8. **Catalog samples.** The 60 non-Latin `textSample` strings of the font-scheme catalog (what the gallery shows) are covered by the script faces.
 
 ## Results per script
 
