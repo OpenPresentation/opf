@@ -98,6 +98,19 @@ try {
       assert.equal(Array.isArray(newer.slides[2].items) ? newer.slides[2].items.length : newer.slides[2].blocks?.[0]?.items?.length, 3, 'picture-bullet entries import as a list');
     }
   }
+  // RR-11: footer text, date and slide number are native placeholders that keep their furniture tags and the manifest's
+  // part list, so the published importer reads the same footer and no placeholder text becomes slide content.
+  {
+    const nativeFooter = {design: {fontScheme: 'arial', footer: {left: {date: true}, center: {text: 'Native footer'}, right: {slideNumber: true}}}, slides: [{title: 'A', text: 'Body'}, {title: 'B', text: 'Body'}]};
+    const exported = await toPptx(nativeFooter, {timestamp: '2026-01-01T00:00:00Z', seed: 1, date: '2026-09-10'});
+    assert.ok(/<p:ph type="ftr"/.test(dec.decode(unzipSync(exported)['ppt/slides/slide1.xml'])), 'the footer text is a native placeholder');
+    const reports = [];
+    const older = await published.fromPptx(exported, {onDiagnostic: issue => reports.push(issue)});
+    assert.deepEqual(reports.filter(issue => /^invalid-.*provenance$/.test(issue.code)), [], `published ${PUBLISHED} accepts native footer placeholders`);
+    assert.deepEqual(older.design.footer, nativeFooter.design.footer);
+    assert.ok(older.slides.every(slide => !JSON.stringify(slide).includes('Native footer')), 'placeholder text is not slide content');
+    assert.deepEqual((await fromPptx(exported)).design.footer, nativeFooter.design.footer);
+  }
   console.log(`Provenance interop passed: an export of this build imports with published opf-pptx ${PUBLISHED} (design references, metadata, layout intent kept; supplement ignored; design-fields export keeps its provenance) and fully with this build.`);
 } finally {
   await rm(consumer, {recursive: true, force: true});

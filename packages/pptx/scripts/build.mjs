@@ -20,6 +20,7 @@ await copyFile(new URL('src/document-provenance.js', root), new URL('document-pr
 await copyFile(new URL('src/content-topology.js', root), new URL('content-topology.js', dist));
 await copyFile(new URL('src/sections.js', root), new URL('sections.js', dist));
 await copyFile(new URL('src/furniture-fields.js', root), new URL('furniture-fields.js', dist));
+await copyFile(new URL('src/native-furniture.js', root), new URL('native-furniture.js', dist));
 await copyFile(new URL('src/chart-workbook.js', root), new URL('chart-workbook.js', dist));
 await copyFile(new URL('src/chart-types.js', root), new URL('chart-types.js', dist));
 await copyFile(new URL('src/chartex.js', root), new URL('chartex.js', dist));

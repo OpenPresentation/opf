@@ -17,6 +17,7 @@ import {attachFurnitureTags, furnitureManifest, importFurniture, manifestPartInd
 import {applyDocumentProvenance, attachDocumentProvenance, documentProvenance, recordContentTopology, restoreDocumentProvenance} from './document-provenance.js';
 import {INVALID_XML_CHARACTER, nativeSections, writeSectionList} from './sections.js';
 import {attachFurnitureFields, furniturePartFields, lineFields, nativeFieldType} from './furniture-fields.js';
+import {attachNativePlaceholders, defaultPlaceholderGeometry, nativeDateText, nativeFurnitureParts, writeNativeMasters} from './native-furniture.js';
 import {importImageOrientation} from './image-import.js';
 import {extractSignals, normalizeSignalOptions, themeFactsFor} from './import-signals.js';
 import {placeSlideImages, importSlideImage, slideImageName, slideImageOverlayName} from './slide-image-provenance.js';
@@ -232,6 +233,8 @@ export async function toPptx(input, options = {}) {
   context.furnitureLogoTags = new Map();
   context.furnitureFields = new Map();
   context.furnitureManifests = new Map();
+  context.nativeFurniture = new Map();
+  context.hostDate = options.date;
   context.codeTags = new Map();
   context.metricTags = new Map();
   context.chartHeadings = new Map();
@@ -327,11 +330,16 @@ export async function fromPptx(input, options = {}) {
   const design = {...themeDesign.design, ...(dimensions ? {dimensions} : {})};
   if (Object.keys(design).length) imported.design = design;
 
+  // Layouts and the master are read once however many slides inherit a placeholder from them (RR-11).
+  const cached = read => { const memo = new Map(); return path => { if (!memo.has(path)) memo.set(path, read(path)); return memo.get(path); }; };
+  const cachedRelationships = cached(path => parseRelationships(entries, path)), cachedPart = cached(path => parseOptionalXml(entries, path));
   const furnitureContexts = slidePaths.map((slidePath, index) => {
     const root = parseRequiredXml(entries, slidePath)['p:sld'];
     if (!root) throw new OPFPptxError('invalid-pptx', `PPTX slide is not a PresentationML slide: ${slidePath}.`, {path: slidePath});
     const tree = root['p:cSld']?.['p:spTree'], relationships = parseRelationships(entries, slidePath);
     return {root, relationships, shapes: nativeTextShapes(tree), pictures: nativePictures(tree),
+      // RR-11: native footer placeholders resolve their position through the layout and master.
+      path: slidePath, slideWidth: Number(presentationRoot['p:sldSz']?.cx), relationshipsOf: cachedRelationships, readPart: cachedPart,
       paragraphs: nativeShapeParagraphs(decodeText(entries[slidePath])),
       readPicture: picture => importPicture(entries, picture, slidePath, relationships,
         diagnostic => options.onDiagnostic?.({...diagnostic, path: `slides.${index}.design`}))};
@@ -1523,7 +1531,10 @@ async function addSlide(pptx, presentation, opfSlide, slideIndex, context, optio
   // Core composition resolves one alignment per composed item for every engine
   // (FF-29); the design fallback keeps cores published before item.alignment working.
   const alignmentFor=item=>item.alignment??fieldAlignment(item.field);
-  const geometry = composeSlide(opfSlide, { width: widthInches * 96, height: heightInches * 96, layout, presentation, slideIndex, fonts: slideContext.fonts, contentAlignment, titleAlignment, textRasterPadding:options.textRasterPadding, contentBox:opfSlide.design?.contentBox??presentation.design?.contentBox, darkBackground: isDarkHex(slideContext.colors.background), textMeasurement: options.textMeasurement, date: options.date, socialPlatforms: socialPlatformRecords(presentation, options) });
+  const composeOptions = { width: widthInches * 96, height: heightInches * 96, layout, presentation, slideIndex, fonts: slideContext.fonts, contentAlignment, titleAlignment, textRasterPadding:options.textRasterPadding, contentBox:opfSlide.design?.contentBox??presentation.design?.contentBox, darkBackground: isDarkHex(slideContext.colors.background), textMeasurement: options.textMeasurement, date: options.date, socialPlatforms: socialPlatformRecords(presentation, options) };
+  const geometry = composeSlide(opfSlide, composeOptions);
+  // The default footer band (date left, text center, number right): where a footer added natively lands (RR-11).
+  if (slideIndex === 0) context.defaultFooterOptions = composeOptions;
   for (const diagnostic of geometry.diagnostics) options.onDiagnostic?.(diagnostic);
   // The content topology (groups, regions, root form, block ids) with the leaf boxes this geometry draws.
   recordContentTopology(context.documentProvenance, opfSlide, slideIndex, geometry.items);
@@ -2116,6 +2127,16 @@ function addMeasuredPayloadText(slide, text, box, context, options, config) {
   }
 }
 
+// The default footer band core composes for a deck with no footer of its own: where a footer added natively lands.
+function defaultFooterParts(composeOptions) {
+  try {
+    const slide = {design: {footer: {left: {date: '2026-01-01'}, center: {text: 'Footer'}, right: {slideNumber: true}}}};
+    return (composeSlide(slide, composeOptions).furniture?.parts ?? []).filter(part => part.kind === 'footer' && part.type === 'text');
+  } catch {
+    return undefined;
+  }
+}
+
 async function addFurniture(slide,presentation,source,layout,context,options,slideIndex) {
   if(!layout){
     if(['header','footer'].some(kind=>(source.design?.[kind]??presentation.design?.[kind])))throw new OPFPptxError('missing-furniture-layout','Header/footer export requires coordinated core furniture geometry.',{path:`slides.${slideIndex}.design`});
@@ -2124,6 +2145,8 @@ async function addFurniture(slide,presentation,source,layout,context,options,sli
     return;
   }
   const staticDates = new Map();
+  // RR-11: the first footer text, date and slide number that fit one line are native placeholders (src/native-furniture.js).
+  const natives = nativeFurnitureParts(layout);
   for(const [index,part]of layout.parts.entries()){
     if(part.type==='image'){
       const region={x:part.box.x/96,y:part.box.y/96,w:part.box.width/96,h:part.box.height/96};
@@ -2151,9 +2174,10 @@ async function addFurniture(slide,presentation,source,layout,context,options,sli
         }
       }
       addMeasuredPayloadText(slide,part.text,part.box,context,options,{path:part.path,fit:part.fit,textStyle:part.style,align:part.alignment,diagnosticsHandled:true,color:context.mutedColor,keepEmpty:true,objectName:`OPF furniture ${slideIndex} part ${index}`,furniture:{group:String(slideIndex),part:manifestPartIndex(layout.parts,index)},liveFields,links:part.links});
+      if(natives.has(index))context.nativeFurniture.set(`OPF furniture ${slideIndex} part ${index} line 0`,natives.get(index));
     }
   }
-  const manifest = furnitureManifest(presentation, source, layout, slideIndex, staticDates);
+  const manifest = furnitureManifest(presentation, source, layout, slideIndex, staticDates, natives);
   if (manifest) context.furnitureManifests.set(`ppt/slides/slide${slideIndex + 1}.xml`, manifest);
 }
 
@@ -2838,6 +2862,26 @@ function isDarkHex(value) {
   return (red * 299 + green * 587 + blue * 114) / 1000 < 128;
 }
 
+// The master, layout and notes master half of the native header/footer (RR-11): placeholders and p:hf on the finished parts.
+function writeNativeFurnitureMasters(output, context) {
+  // A deck with no native footer part keeps the master and layout exactly as before.
+  if (!context.nativePlaceholders.used.size) return;
+  const size = /<p:sldSz\b[^>]*\bcx="(\d+)"[^>]*\bcy="(\d+)"/.exec(decodeText(output['ppt/presentation.xml'][0]));
+  const defaults = new Map((context.defaultFooterOptions ? defaultFooterParts(context.defaultFooterOptions) ?? [] : []).flatMap(part => {
+    const ph = {date: 'dt', text: 'ftr', slideNumber: 'sldNum'}[part.field];
+    const geometry = ph && defaultPlaceholderGeometry(part);
+    return geometry ? [[ph, geometry]] : [];
+  }));
+  const info = {used: context.nativePlaceholders.used, first: context.nativePlaceholders.first, names: new Set(context.nativeFurniture.keys()), defaults,
+    slideSize: {width: size ? Number(size[1]) : 12192000, height: size ? Number(size[2]) : 6858000}, dateText: nativeDateText(context.hostDate)};
+  const paths = Object.keys(output);
+  try {
+    writeNativeMasters(paths, path => output[path][0], (path, bytes) => { output[path] = [bytes, output[path][1]]; }, info);
+  } catch (error) {
+    throw new OPFPptxError('packaging-failed', 'Native header/footer placeholders could not be written.', {cause: errorMessage(error)});
+  }
+}
+
 async function normalizePptxZip(raw, context) {
   let entries;
   try {
@@ -2858,6 +2902,8 @@ async function normalizePptxZip(raw, context) {
   attachQuoteTags(entries,context.quoteTags);
   attachFurnitureFields(entries,context.furnitureFields);
   attachFurnitureTags(entries,context.furnitureTags,context.furnitureManifests,context.furnitureLogoTags);
+  // RR-11: the recorded footer shapes become PowerPoint's date, footer and slide-number placeholders.
+  context.nativePlaceholders = attachNativePlaceholders(entries,context.nativeFurniture);
   // The "Image unavailable" panel of an unresolved logo: identity only, so import does not read it as content.
   attachTextTags(entries,context.logoPlaceholderTags,LOGO_TAG,'opfLogoPlaceholder','logo placeholder');
   for(const [part,bytes]of Object.entries(entries)){
@@ -2967,6 +3013,7 @@ async function normalizePptxZip(raw, context) {
     }];
   }
 
+  writeNativeFurnitureMasters(output, context);
   finalizeFontsUsed(output);
   // Document references record evidence from the final normalized parts.
   if (context.documentProvenance) {

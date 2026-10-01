@@ -4,6 +4,7 @@ import {sourceLineParagraphs} from './text-provenance.js';
 import {DEFAULT_DATE_FORMAT, NATIVE_DATE_FIELDS, formatSlideNumber, parseDate} from './furniture-fields.js';
 import {schemas} from '@openpresentation/opf';
 import {LOGO_TAG} from './logo-provenance.js';
+import {NATIVE_PLACEHOLDERS, footerValue, isNativePlaceholderType, readNativePlaceholders} from './native-furniture.js';
 
 const TAG = 'OPF_FURNITURE_V1';
 // A slide has one tag list; it also carries the document's OPF_SLIDE_V1 record.
@@ -26,7 +27,9 @@ const socialLines = part => part.links.map(link => ({platform: link.platform,
   scheme: link.href && !/^[a-z][a-z0-9+.-]*:/i.test(link.text) ? 'https://' : ''}));
 const object = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 const key = part => `${part.kind}.${part.zone}.${part.field}`;
-const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+// Key order is not meaning: a value merged from native placeholders equals the same value read from a manifest.
+const canonical = value => JSON.stringify(value, (key, item) => object(item) ? Object.fromEntries(Object.entries(item).sort(([a], [b]) => a < b ? -1 : a > b ? 1 : 0)) : item);
+const same = (a, b) => canonical(a) === canonical(b);
 const check = (condition, message) => { if (!condition) throw Error(message); };
 
 // Change detection, not authentication: editable tags store no cached date words.
@@ -73,7 +76,7 @@ function unchangedStaticDate(marker, format, ordered, paragraphs) {
 // settings only. Current native shapes supply all words, image bytes and alt
 // text, even after edits; a recorded format is kept only while the current text
 // still matches it exactly.
-export function furnitureManifest(presentation, slide, layout, slideIndex, staticDates = new Map()) {
+export function furnitureManifest(presentation, slide, layout, slideIndex, staticDates = new Map(), natives = new Map()) {
   const definitions = {}, formats = {};
   for (const kind of kinds) {
     const local = slide.design?.[kind] !== undefined;
@@ -109,7 +112,9 @@ export function furnitureManifest(presentation, slide, layout, slideIndex, stati
     parts: layout.parts.flatMap((part, index) => part.field === 'logo' ? [] : [{kind: part.kind, zone: part.zone, field: part.field,
       type: part.type, count: part.type === 'image' ? 1 : part.fit.lines.length,
       ...(part.field === 'socials' ? {socials: socialLines(part)} : {}),
-      ...(staticDates.has(index) ? {staticDate: staticDates.get(index)} : {})}]),
+      ...(staticDates.has(index) ? {staticDate: staticDates.get(index)} : {}),
+      // RR-11: this part is a native PowerPoint placeholder (dt, ftr or sldNum); deleting it in PowerPoint's dialog is then intent.
+      ...(natives.has(index) ? {ph: natives.get(index)} : {})}]),
     ...(logos.length ? {logos} : {})};
 }
 
@@ -197,6 +202,9 @@ function validateManifest(manifest) {
   for (const part of manifest.parts) {
     check(object(part) && expected.get(key(part)) === part.type, 'Ambiguous furniture part.');
     check(Number.isSafeInteger(part.count) && part.count >= 1 && part.count <= 10000 && (part.type !== 'image' || part.count === 1), 'Invalid furniture line count.');
+    // RR-11: a footer part that is a native PowerPoint placeholder (dt, ftr, sldNum), unique per slide.
+    if (part.ph !== undefined) check(isNativePlaceholderType(part.ph) && part.kind === 'footer' && part.type === 'text' && part.count === 1 &&
+      NATIVE_PLACEHOLDERS[part.ph].field === part.field && manifest.parts.filter(other => other.ph === part.ph).length === 1, 'Invalid native placeholder part.');
     if (part.field === 'socials') check(Array.isArray(part.socials) && part.socials.length >= 1 && part.socials.length <= 100
       && part.socials.every(line => object(line) && platformId.test(line.platform) && schemes.includes(line.scheme))
       && new Set(part.socials.map(line => line.platform)).size === part.socials.length, 'Invalid social profile lines.');
@@ -257,6 +265,7 @@ function readSlide(context, entries, slideIndex, slideCount, report, taggedText)
     if (!definition) continue;
     try {
       const value = definition.value === false ? false : {};
+      let removedNative = false;
       if (value !== false) for (const zone of zones) if (definition.value[zone] !== undefined) {
         value[zone] = Object.fromEntries(Object.entries(definition.value[zone]).filter(([, flag]) => flag === false));
       }
@@ -271,6 +280,8 @@ function readSlide(context, entries, slideIndex, slideCount, report, taggedText)
       for (const [partIndex, part] of manifest.parts.entries()) {
         if (part.kind !== kind) continue;
         const group = records.filter(record => record.data.part === partIndex);
+        // A native placeholder PowerPoint's Header & Footer dialog removed is a deliberate removal, not damage.
+        if (part.ph !== undefined && group.length === 0) { removedNative = true; continue; }
         check(group.length === part.count, 'Incomplete or duplicated furniture part.');
         if (part.type === 'image') {
           const current = readPicture(pictures[group[0].index]);
@@ -304,6 +315,15 @@ function readSlide(context, entries, slideIndex, slideCount, report, taggedText)
         }
       }
       check(new Set(candidate.text).size === candidate.text.length && new Set(candidate.pictures).size === candidate.pictures.length, 'Repeated furniture shape identity.');
+      if (removedNative) {
+        // The slide no longer follows the deck's definition: it is its own override, and the other slides can still agree.
+        candidate.scope = 'local';
+        candidate.derived = true;
+        if (value !== false) {
+          for (const zone of Object.keys(value)) if (!Object.keys(value[zone]).length) delete value[zone];
+          if (!Object.keys(value).length) candidate.value = false;
+        }
+      }
       candidates[kind] = candidate;
     } catch (error) { report(slideIndex, `${kind}: ${error.message}`); }
   }
@@ -363,6 +383,28 @@ export function importFurniture(contexts, entries, onDiagnostic) {
       delete slide[kind]; report(index, `${kind}: ${owner ? 'Current social profile metadata disagrees across repeated fields.' : 'Social profiles need a repeated organization name to rebuild organization metadata.'}`);
     }
   }
+  // RR-11: PowerPoint's own date, footer and slide-number placeholders that no OPF tag claims (a deck authored in
+  // PowerPoint, a placeholder the Header & Footer dialog added, a tag-stripped export) are footer furniture.
+  contexts.forEach((context, index) => {
+    const slide = candidates[index];
+    const claimed = new Set([...taggedText[index], ...Object.values(slide).flatMap(candidate => candidate.text)]);
+    const fields = readNativePlaceholders(context, claimed, context.relationshipsOf, context.readPart);
+    if (!fields.length) return;
+    const existing = slide.footer, accepted = [];
+    for (const item of fields) {
+      const current = existing && existing.value !== false ? existing.value[item.zone]?.[item.field] : undefined;
+      if (current !== undefined && current !== false) report(index, `footer.${item.zone}.${item.field}: A native PowerPoint placeholder duplicates a furniture part already read; it stays ordinary current text.`);
+      else accepted.push(item);
+    }
+    if (!accepted.length) return;
+    const merged = footerValue(accepted), indexes = accepted.map(item => item.index);
+    if (!existing) slide.footer = {scope: 'native', value: merged, text: indexes, pictures: [], organizations: [], socials: [], sections: []};
+    else {
+      if (existing.value === false) existing.value = {};
+      for (const zone of Object.keys(merged)) existing.value[zone] = {...existing.value[zone], ...merged[zone]};
+      existing.text.push(...indexes);
+    }
+  });
   const result = {design: {}, slides: candidates.map((slide, index) => {
     const values = Object.values(slide), sections = values.flatMap(candidate => candidate.sections);
     return {design: Object.fromEntries(Object.entries(slide).map(([kind, candidate]) => [kind, candidate.value])),
@@ -380,6 +422,28 @@ export function importFurniture(contexts, entries, onDiagnostic) {
     if (inherited.length && candidates.every(slide => slide[kind]) && inherited.every(candidate => same(candidate.value, inherited[0].value))) {
       result.design[kind] = inherited[0].value;
       candidates.forEach((slide, index) => { if (slide[kind].scope === 'global') delete result.slides[index].design[kind]; });
+    } else if (!inherited.length && candidates.every(slide => slide[kind]?.derived && same(slide[kind].value, candidates[0][kind].value))) {
+      // Every slide's inherited definition lost the same native placeholder (the dialog's Apply to All): the deck's footer changed.
+      result.design[kind] = candidates[0][kind].value;
+      candidates.forEach((slide, index) => delete result.slides[index].design[kind]);
+    }
+  }
+  // A deck with no OPF footer provenance (PowerPoint's Header & Footer dialog, another tool): the footer most slides share is the
+  // deck's footer, a slide without one hides it, and any other slide keeps its own. One slide alone stays that slide's footer.
+  const nativeFooters = candidates.map(slide => slide.footer);
+  if (nativeFooters.some(Boolean) && nativeFooters.every(candidate => !candidate || candidate.scope === 'native')) {
+    const counts = new Map();
+    for (const candidate of nativeFooters) if (candidate && candidate.value !== false) {
+      const found = counts.get(canonical(candidate.value)) ?? {value: candidate.value, count: 0};
+      counts.set(canonical(candidate.value), {...found, count: found.count + 1});
+    }
+    const best = [...counts.entries()].sort((a, b) => b[1].count - a[1].count)[0];
+    if (best && (best[1].count >= 2 || contexts.length === 1)) {
+      result.design.footer = best[1].value;
+      nativeFooters.forEach((candidate, index) => {
+        if (!candidate) result.slides[index].design.footer = false;
+        else if (canonical(candidate.value) === best[0]) delete result.slides[index].design.footer;
+      });
     }
   }
   candidates.forEach((slide, index) => { if (Object.keys(slide).length) onDiagnostic?.({code: 'furniture-import-reflow', path: `slides.${index}.design`, message: 'Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture.'}); });
