@@ -86,12 +86,40 @@ items that cite it.
   RR-15). This is the only gate or tolerance change in the program, it is an
   owner decision, and the native 0.02 pt geometry tolerance is unchanged.
 
+## Owner decisions of 2026-10-01, scope 2
+
+Later the same day the owner approved a wider scope. Binding for the items that
+cite it; the owner can revise it.
+
+- **In scope (RR-21 to RR-35).** Editor slide management, autosave and restore,
+  vector PDF, PNG and SVG downloads, a data grid, deck-wide find and replace,
+  image crop and focal point, a mobile layout, the core conversions module, CLI
+  render/export/import, a player and `<opf-deck>` web component, `opf audit`,
+  Markdown and outline conversion, diff/merge/format and one JSON-patch module,
+  templates and variables (beyond colours: text, number, date, image or asset),
+  numbered lists, footnotes, citations and captions, and chart options. The
+  libraries stay deterministic: templates fill from data the caller supplies,
+  with no network or model calls.
+- **Declined (no issue).** A VS Code extension, and a language set per slide or
+  per run.
+- **Deferred with issues, out of v1.** Navigation and motion (transitions,
+  builds and reveals, links between slides,
+  [opf#250](https://github.com/OpenPresentation/opf/issues/250)) and rich
+  speaker notes ([opf#251](https://github.com/OpenPresentation/opf/issues/251);
+  plain-text notes stay).
+- **The `world` region map chart is parked** (out of v1, handled later;
+  [opf-pptx#133](https://github.com/OpenPresentation/opf-pptx/issues/133)). It
+  stays on the clustered column fallback with a `chart-data-adapted`
+  diagnostic, and the in-scope gallery denominator for the `works` goal is 818.
+  This settles open decision 1 below.
+
 ## Open decisions
 
 Questions only the owner can settle. Each is also recorded in the font burndown row it blocks (RR-03).
 
-1. **FF-58, the `world` map chart (the 819th gallery config).** Accept the limitation, which makes the denominator 818, or build an offline map export that draws without online geodata (a `cx:geoCache` with bundled public-domain geometry, a new item). PowerPoint draws a regionMap only with online geodata and a populated `cx:geoCache`; today the export keeps `world` on the clustered column fallback with a `chart-data-adapted` diagnostic. The acceptance so far is an agent decision (FF-56), not an owner decision. RR-20 repeats the question in the readiness note.
-2. **FF-37, the catalog drift check in CI.** The `catalog-snapshot` job compares `spec/catalogs` with the private pptx-gallery at the pinned commit only when the repository secret `PPTX_GALLERY_READ_TOKEN` exists. The owner has to add a read-only token to OpenPresentation/opf (agents cannot create secrets); until then the job only warns and the offline manifest hash check is the only enforcement. A local run on 2026-10-01 matched the pinned commit `2c7cc73`.
+Settled 2026-10-01 (owner): the `world` region map (FF-58) is parked for post-v1, tracked as [opf-pptx#133](https://github.com/OpenPresentation/opf-pptx/issues/133) (label `parked`). The works denominator is 818 and FF-58 is done. RR-20 does not ask the question again.
+
+1. **FF-37, the catalog drift check in CI.** The `catalog-snapshot` job compares `spec/catalogs` with the private pptx-gallery at the pinned commit only when the repository secret `PPTX_GALLERY_READ_TOKEN` exists. The owner has to add a read-only token to OpenPresentation/opf (agents cannot create secrets); until then the job only warns and the offline manifest hash check is the only enforcement. A local run on 2026-10-01 matched the pinned commit `2c7cc73`.
 
 ## Invariants
 
