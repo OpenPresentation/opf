@@ -201,6 +201,10 @@ Every reference resolves through the same chain, first match wins:
    validation warning — never an error — and an engine fallback
 ```
 
+`catalogs.<kind>.source` is one source or an ordered array of sources. An array is a search path: the engine consults the sources in order, the first record with the id wins, and the default catalog is appended implicitly at the end (so `[a, b]` behaves as `[a, b, default]`). Inline `records[]` still win over every source. Engines never fetch a source at run time: a source is resolved only from records the host supplies for it (for example the `catalogSources` option of `opf-render` and `opf-pptx`), or from the bundled snapshot when it is a `pptx.gallery` or `pkg:@openpresentation/opf/...` source; an unknown source contributes nothing and the lookup continues with the next entry. The validator treats any non-empty array like a string source: ids it cannot check against the bundled catalogs are not reported as unknown.
+
+> **Decision, 2026-09-30 (agent decision, vetoable).** The spec coverage audit found that `opf-render` threw `source.startsWith is not a function` for an array `source`, although the schema allows it. The array form is implemented as the search path the schema describes, with the resolution rules above, instead of being removed from the schema. The owner can veto this by narrowing `CatalogEntry.source` to a single string (a breaking change for documents that use the array form).
+
 pptx.gallery publishes the default catalog; the copy bundled in `spec/catalogs/` and the `@openpresentation/opf` package is a pinned snapshot of it, so resolution is deterministic offline. See [the default catalog](default-catalog.md) for the endpoints and the snapshot.
 
 When a reference is omitted entirely, engines fall back to their own defaults (see [`spec/reference/engine-defaults.json`](../spec/reference/engine-defaults.json) for a reference example — that file is engine configuration, not part of the document contract).

@@ -204,6 +204,12 @@ Content color fields (`TextRun.color`, styled table cell `style.fill` / `style.c
 
 The styled table cell and border color fields enforce the reference forms at the schema level (a typo like `"acent2"` is a schema error there — neither hex, a known name, nor a `var:` reference). Run colors stay open strings so imported decks keep validating: an unrecognized run color is a validation warning, and renderers fall back to the theme text color — the same warn-don't-error posture unknown catalog ids get. Unknown `var:` ids are warnings everywhere.
 
+### Background colors are ColorRefs
+
+The colors of a solid background (`SolidBackground.color`), of each gradient stop and of a pattern (`foregroundColor`, `backgroundColor`) take the same forms as the content fields above: a literal hex, a slot or role name, or a `var:<id>` reference. The schema keeps these fields as plain strings, so a reference validates; engines resolve it through `resolveColorRef()` against the effective color scheme and the deck `variables`, and a reference that resolves to nothing is drawn as the engine default (white for a background), as for any other unresolvable color. The default text color of the slide follows the resolved background. A PPTX export writes `a:schemeClr` where the deck theme holds the named slot or role exactly, and the resolved literal otherwise (FF-24 conventions).
+
+> **Decision, 2026-09-30 (agent decision, vetoable).** The spec coverage audit found that `SolidBackground.color` accepted `var:` and slot names (the field is a string) but both engines painted white, while [`content-item-design-overrides.md`](./content-item-design-overrides.md) already states that every color field must accept the ColorRef forms and never hex alone. Rather than tighten the schema (which would break documents that validate today), the engines resolve ColorRefs in backgrounds. The owner can veto this by restricting the three background color fields to `HexColor` in the schema and the engines to hex only.
+
 `@openpresentation/opf` exports `resolveColorRef()` with the shared slot, role, variable, and hex rules above so renderers and exporters do not drift. Pass the effective color scheme, optional resolved role colors, the deck `variables` map, and a theme-text `fallback` for unrecognized references.
 
 ## Script fonts and language
