@@ -6,7 +6,7 @@
    "opf": "e414bca31f12359a1940e1c7e053a3b5fbd43422",
    "opf-render": "2fbc0abf3c327b6e9e9525a52c8ea9e56e84646e",
    "opf-pptx": "a9bcbd75886bd1ac195b4206cefae83525b1fea4",
-   "pptx-gallery": "9e8d59ae6ced6a3490edd853ab681b1c550be9d3"
+   "pptx-gallery": "d8f5ae62ce981c6456c609a18442b4293f4c52bb"
   },
   "coreBundledLayouts": 100,
   "method": "gallery lib/opf-snippets.ts builders bundled with esbuild; @openpresentation/opf linked to local core dist; opf-render/opf-pptx from source; engine default text measurement for geometry and text; font availability against the gallery preview host model (parity/scripts/font-host.mjs); no Office/COM.",
@@ -58,13 +58,9 @@
   "layouts": {
    "total": 485,
    "counts": {
-    "works": 425,
-    "partial": 60
+    "works": 485
    },
-   "reasons": {
-    "preview diagnostics: unresolved-content": 60,
-    "export diagnostics: unresolved-content": 60
-   },
+   "reasons": {},
    "disagreements": 0,
    "withAssetsCounts": {}
   }
@@ -40425,10 +40421,8 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
-       "effect": "alias-equivalent",
+       "diagnostics": [],
+       "effect": true,
        "resolvedLayouts": [
         "list-1x-itemimage"
        ],
@@ -40438,12 +40432,10 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 17720,
+       "bytes": 18348,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
-       "differsFromBaseline": false,
+       "diagnostics": [],
+       "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
         "placementDiffers": false,
@@ -40488,18 +40480,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -40509,10 +40495,8 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
-     "effect": "alias-equivalent",
+     "diagnostics": [],
+     "effect": true,
      "resolvedLayouts": [
       "list-1x-itemimage"
      ],
@@ -40522,12 +40506,10 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 17720,
+     "bytes": 18348,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
-     "differsFromBaseline": false,
+     "diagnostics": [],
+     "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
       "placementDiffers": false,
@@ -40594,9 +40576,7 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "effect": true,
        "resolvedLayouts": [
         "list-1x-itemimage-slideimage"
@@ -40607,11 +40587,9 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 21265,
+       "bytes": 21852,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
@@ -40649,18 +40627,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -40670,9 +40642,7 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "effect": true,
      "resolvedLayouts": [
       "list-1x-itemimage-slideimage"
@@ -40683,11 +40653,9 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 21265,
+     "bytes": 21852,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
@@ -40748,9 +40716,7 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "effect": true,
        "resolvedLayouts": [
         "list-1x-itemimage-title-center"
@@ -40761,11 +40727,9 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 18044,
+       "bytes": 18665,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
@@ -40805,18 +40769,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -40826,9 +40784,7 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "effect": true,
      "resolvedLayouts": [
       "list-1x-itemimage-title-center"
@@ -40839,11 +40795,9 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 18044,
+     "bytes": 18665,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
@@ -40906,9 +40860,7 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "effect": true,
        "resolvedLayouts": [
         "list-1x-itemimage-title-center-slideimage"
@@ -40919,11 +40871,9 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 22354,
+       "bytes": 22943,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
@@ -40963,18 +40913,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -40984,9 +40928,7 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "effect": true,
      "resolvedLayouts": [
       "list-1x-itemimage-title-center-slideimage"
@@ -40997,11 +40939,9 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 22354,
+     "bytes": 22943,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
@@ -41063,10 +41003,8 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
-       "effect": "alias-equivalent",
+       "diagnostics": [],
+       "effect": true,
        "resolvedLayouts": [
         "list-1x-itemimage-vertical"
        ],
@@ -41076,12 +41014,10 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 17806,
+       "bytes": 18434,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
-       "differsFromBaseline": false,
+       "diagnostics": [],
+       "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
         "placementDiffers": false,
@@ -41126,18 +41062,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -41147,10 +41077,8 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
-     "effect": "alias-equivalent",
+     "diagnostics": [],
+     "effect": true,
      "resolvedLayouts": [
       "list-1x-itemimage-vertical"
      ],
@@ -41160,12 +41088,10 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 17806,
+     "bytes": 18434,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
-     "differsFromBaseline": false,
+     "diagnostics": [],
+     "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
       "placementDiffers": false,
@@ -41232,9 +41158,7 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "effect": true,
        "resolvedLayouts": [
         "list-1x-itemimage-vertical-slideimage"
@@ -41245,11 +41169,9 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 21346,
+       "bytes": 21933,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
@@ -41287,18 +41209,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -41308,9 +41224,7 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "effect": true,
      "resolvedLayouts": [
       "list-1x-itemimage-vertical-slideimage"
@@ -41321,11 +41235,9 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 21346,
+     "bytes": 21933,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
@@ -41386,9 +41298,7 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "effect": true,
        "resolvedLayouts": [
         "list-1x-itemimage-vertical-title-center"
@@ -41399,11 +41309,9 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 18153,
+       "bytes": 18775,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
@@ -41443,18 +41351,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -41464,9 +41366,7 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "effect": true,
      "resolvedLayouts": [
       "list-1x-itemimage-vertical-title-center"
@@ -41477,11 +41377,9 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 18153,
+     "bytes": 18775,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
@@ -41544,9 +41442,7 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "effect": true,
        "resolvedLayouts": [
         "list-1x-itemimage-vertical-title-center-slideimage"
@@ -41557,11 +41453,9 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 22460,
+       "bytes": 23050,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
@@ -41601,18 +41495,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -41622,9 +41510,7 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "effect": true,
      "resolvedLayouts": [
       "list-1x-itemimage-vertical-title-center-slideimage"
@@ -41635,11 +41521,9 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 22460,
+     "bytes": 23050,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
@@ -41702,10 +41586,8 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
-       "effect": "alias-equivalent",
+       "diagnostics": [],
+       "effect": true,
        "resolvedLayouts": [
         "list-1x-itemimage-vertical-title-left"
        ],
@@ -41715,12 +41597,10 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 18478,
+       "bytes": 19094,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
-       "differsFromBaseline": false,
+       "diagnostics": [],
+       "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
         "placementDiffers": false,
@@ -41767,18 +41647,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -41788,10 +41662,8 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
-     "effect": "alias-equivalent",
+     "diagnostics": [],
+     "effect": true,
      "resolvedLayouts": [
       "list-1x-itemimage-vertical-title-left"
      ],
@@ -41801,12 +41673,10 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 18478,
+     "bytes": 19094,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
-     "differsFromBaseline": false,
+     "diagnostics": [],
+     "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
       "placementDiffers": false,
@@ -41876,9 +41746,7 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "effect": true,
        "resolvedLayouts": [
         "list-1x-itemimage-vertical-title-left-slideimage"
@@ -41889,11 +41757,9 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 22448,
+       "bytes": 23038,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
@@ -41933,18 +41799,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -41954,9 +41814,7 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "effect": true,
      "resolvedLayouts": [
       "list-1x-itemimage-vertical-title-left-slideimage"
@@ -41967,11 +41825,9 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 22448,
+     "bytes": 23038,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
@@ -44952,10 +44808,8 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
-       "effect": "alias-equivalent",
+       "diagnostics": [],
+       "effect": true,
        "resolvedLayouts": [
         "list-2x-itemimage"
        ],
@@ -44965,12 +44819,10 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 17911,
+       "bytes": 18535,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
-       "differsFromBaseline": false,
+       "diagnostics": [],
+       "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
         "placementDiffers": false,
@@ -45015,18 +44867,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -45036,10 +44882,8 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
-     "effect": "alias-equivalent",
+     "diagnostics": [],
+     "effect": true,
      "resolvedLayouts": [
       "list-2x-itemimage"
      ],
@@ -45049,12 +44893,10 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 17911,
+     "bytes": 18535,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
-     "differsFromBaseline": false,
+     "diagnostics": [],
+     "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
       "placementDiffers": false,
@@ -45122,9 +44964,7 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "effect": true,
        "resolvedLayouts": [
         "list-2x-itemimage-slideimage"
@@ -45135,11 +44975,9 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 21462,
+       "bytes": 22046,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
@@ -45177,18 +45015,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -45198,9 +45030,7 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "effect": true,
      "resolvedLayouts": [
       "list-2x-itemimage-slideimage"
@@ -45211,11 +45041,9 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 21462,
+     "bytes": 22046,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
@@ -45277,9 +45105,7 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "effect": true,
        "resolvedLayouts": [
         "list-2x-itemimage-title-center"
@@ -45290,11 +45116,9 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 18229,
+       "bytes": 18851,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
@@ -45334,18 +45158,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -45355,9 +45173,7 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "effect": true,
      "resolvedLayouts": [
       "list-2x-itemimage-title-center"
@@ -45368,11 +45184,9 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 18229,
+     "bytes": 18851,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
@@ -45436,9 +45250,7 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "effect": true,
        "resolvedLayouts": [
         "list-2x-itemimage-title-center-slideimage"
@@ -45449,11 +45261,9 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 22534,
+       "bytes": 23128,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
@@ -45493,18 +45303,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -45514,9 +45318,7 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "effect": true,
      "resolvedLayouts": [
       "list-2x-itemimage-title-center-slideimage"
@@ -45527,11 +45329,9 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 22534,
+     "bytes": 23128,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
@@ -45594,9 +45394,7 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "effect": true,
        "resolvedLayouts": [
         "list-2x-itemimage-vertical"
@@ -45607,11 +45405,9 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 17660,
+       "bytes": 18276,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
@@ -45649,18 +45445,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -45670,9 +45460,7 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "effect": true,
      "resolvedLayouts": [
       "list-2x-itemimage-vertical"
@@ -45683,11 +45471,9 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 17660,
+     "bytes": 18276,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
@@ -45748,9 +45534,7 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "effect": true,
        "resolvedLayouts": [
         "list-2x-itemimage-vertical-slideimage"
@@ -45761,11 +45545,9 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 21538,
+       "bytes": 22122,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
@@ -45803,18 +45585,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -45824,9 +45600,7 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "effect": true,
      "resolvedLayouts": [
       "list-2x-itemimage-vertical-slideimage"
@@ -45837,11 +45611,9 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 21538,
+     "bytes": 22122,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
@@ -45903,9 +45675,7 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "effect": true,
        "resolvedLayouts": [
         "list-2x-itemimage-vertical-title-center"
@@ -45916,11 +45686,9 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 18332,
+       "bytes": 18957,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
@@ -45960,18 +45728,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -45981,9 +45743,7 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "effect": true,
      "resolvedLayouts": [
       "list-2x-itemimage-vertical-title-center"
@@ -45994,11 +45754,9 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 18332,
+     "bytes": 18957,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
@@ -46062,9 +45820,7 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "effect": true,
        "resolvedLayouts": [
         "list-2x-itemimage-vertical-title-center-slideimage"
@@ -46075,11 +45831,9 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 22643,
+       "bytes": 23235,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
@@ -46119,18 +45873,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -46140,9 +45888,7 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "effect": true,
      "resolvedLayouts": [
       "list-2x-itemimage-vertical-title-center-slideimage"
@@ -46153,11 +45899,9 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 22643,
+     "bytes": 23235,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
@@ -46221,9 +45965,7 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "effect": true,
        "resolvedLayouts": [
         "list-2x-itemimage-vertical-title-left"
@@ -46234,11 +45976,9 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 18315,
+       "bytes": 18938,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
@@ -46278,18 +46018,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -46299,9 +46033,7 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "effect": true,
      "resolvedLayouts": [
       "list-2x-itemimage-vertical-title-left"
@@ -46312,11 +46044,9 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 18315,
+     "bytes": 18938,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
@@ -46380,9 +46110,7 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "effect": true,
        "resolvedLayouts": [
         "list-2x-itemimage-vertical-title-left-slideimage"
@@ -46393,11 +46121,9 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 22629,
+       "bytes": 23223,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
@@ -46437,18 +46163,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -46458,9 +46178,7 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "effect": true,
      "resolvedLayouts": [
       "list-2x-itemimage-vertical-title-left-slideimage"
@@ -46471,11 +46189,9 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 22629,
+     "bytes": 23223,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
@@ -49445,9 +49161,7 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "effect": true,
        "resolvedLayouts": [
         "list-3x-itemimage"
@@ -49458,11 +49172,9 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 17661,
+       "bytes": 18292,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
@@ -49500,18 +49212,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -49521,9 +49227,7 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "effect": true,
      "resolvedLayouts": [
       "list-3x-itemimage"
@@ -49534,11 +49238,9 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 17661,
+     "bytes": 18292,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
@@ -49600,9 +49302,7 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "effect": true,
        "resolvedLayouts": [
         "list-3x-itemimage-slideimage"
@@ -49613,11 +49313,9 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 21556,
+       "bytes": 22144,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
@@ -49655,18 +49353,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -49676,9 +49368,7 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "effect": true,
      "resolvedLayouts": [
       "list-3x-itemimage-slideimage"
@@ -49689,11 +49379,9 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 21556,
+     "bytes": 22144,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
@@ -49756,9 +49444,7 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "effect": true,
        "resolvedLayouts": [
         "list-3x-itemimage-title-center"
@@ -49769,11 +49455,9 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 18339,
+       "bytes": 18961,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
@@ -49813,18 +49497,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -49834,9 +49512,7 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "effect": true,
      "resolvedLayouts": [
       "list-3x-itemimage-title-center"
@@ -49847,11 +49523,9 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 18339,
+     "bytes": 18961,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
@@ -49916,9 +49590,7 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "effect": true,
        "resolvedLayouts": [
         "list-3x-itemimage-title-center-slideimage"
@@ -49929,11 +49601,9 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 22628,
+       "bytes": 23220,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
@@ -49973,18 +49643,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -49994,9 +49658,7 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "effect": true,
      "resolvedLayouts": [
       "list-3x-itemimage-title-center-slideimage"
@@ -50007,11 +49669,9 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 22628,
+     "bytes": 23220,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
@@ -50075,9 +49735,7 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "effect": true,
        "resolvedLayouts": [
         "list-3x-itemimage-vertical"
@@ -50088,11 +49746,9 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 17742,
+       "bytes": 18367,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
@@ -50130,18 +49786,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -50151,9 +49801,7 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "effect": true,
      "resolvedLayouts": [
       "list-3x-itemimage-vertical"
@@ -50164,11 +49812,9 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 17742,
+     "bytes": 18367,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
@@ -50230,9 +49876,7 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "effect": true,
        "resolvedLayouts": [
         "list-3x-itemimage-vertical-slideimage"
@@ -50243,11 +49887,9 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 21637,
+       "bytes": 22220,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
@@ -50285,18 +49927,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -50306,9 +49942,7 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "effect": true,
      "resolvedLayouts": [
       "list-3x-itemimage-vertical-slideimage"
@@ -50319,11 +49953,9 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 21637,
+     "bytes": 22220,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
@@ -50386,9 +50018,7 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "effect": true,
        "resolvedLayouts": [
         "list-3x-itemimage-vertical-title-center"
@@ -50399,11 +50029,9 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 18442,
+       "bytes": 19065,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
@@ -50443,18 +50071,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -50464,9 +50086,7 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "effect": true,
      "resolvedLayouts": [
       "list-3x-itemimage-vertical-title-center"
@@ -50477,11 +50097,9 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 18442,
+     "bytes": 19065,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
@@ -50546,9 +50164,7 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "effect": true,
        "resolvedLayouts": [
         "list-3x-itemimage-vertical-title-center-slideimage"
@@ -50559,11 +50175,9 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 22740,
+       "bytes": 23333,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
@@ -50603,18 +50217,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -50624,9 +50232,7 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "effect": true,
      "resolvedLayouts": [
       "list-3x-itemimage-vertical-title-center-slideimage"
@@ -50637,11 +50243,9 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 22740,
+     "bytes": 23333,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
@@ -50706,9 +50310,7 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "effect": true,
        "resolvedLayouts": [
         "list-3x-itemimage-vertical-title-left"
@@ -50719,11 +50321,9 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 18428,
+       "bytes": 19051,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
@@ -50763,18 +50363,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -50784,9 +50378,7 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "effect": true,
      "resolvedLayouts": [
       "list-3x-itemimage-vertical-title-left"
@@ -50797,11 +50389,9 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 18428,
+     "bytes": 19051,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
@@ -50866,9 +50456,7 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "effect": true,
        "resolvedLayouts": [
         "list-3x-itemimage-vertical-title-left-slideimage"
@@ -50879,11 +50467,9 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 22725,
+       "bytes": 23319,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
@@ -50923,18 +50509,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -50944,9 +50524,7 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "effect": true,
      "resolvedLayouts": [
       "list-3x-itemimage-vertical-title-left-slideimage"
@@ -50957,11 +50535,9 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 22725,
+     "bytes": 23319,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
@@ -53952,10 +53528,8 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
-       "effect": "alias-equivalent",
+       "diagnostics": [],
+       "effect": true,
        "resolvedLayouts": [
         "list-4x-itemimage"
        ],
@@ -53965,12 +53539,10 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 18105,
+       "bytes": 18721,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
-       "differsFromBaseline": false,
+       "diagnostics": [],
+       "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
         "placementDiffers": false,
@@ -54015,18 +53587,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -54036,10 +53602,8 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
-     "effect": "alias-equivalent",
+     "diagnostics": [],
+     "effect": true,
      "resolvedLayouts": [
       "list-4x-itemimage"
      ],
@@ -54049,12 +53613,10 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 18105,
+     "bytes": 18721,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
-     "differsFromBaseline": false,
+     "diagnostics": [],
+     "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
       "placementDiffers": false,
@@ -54124,9 +53686,7 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "effect": true,
        "resolvedLayouts": [
         "list-4x-itemimage-slideimage"
@@ -54137,11 +53697,9 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 21653,
+       "bytes": 22240,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
@@ -54179,18 +53737,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -54200,9 +53752,7 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "effect": true,
      "resolvedLayouts": [
       "list-4x-itemimage-slideimage"
@@ -54213,11 +53763,9 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 21653,
+     "bytes": 22240,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
@@ -54281,9 +53829,7 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "effect": true,
        "resolvedLayouts": [
         "list-4x-itemimage-title-center"
@@ -54294,11 +53840,9 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 18424,
+       "bytes": 19040,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
@@ -54338,18 +53882,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -54359,9 +53897,7 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "effect": true,
      "resolvedLayouts": [
       "list-4x-itemimage-title-center"
@@ -54372,11 +53908,9 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 18424,
+     "bytes": 19040,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
@@ -54442,9 +53976,7 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "effect": true,
        "resolvedLayouts": [
         "list-4x-itemimage-title-center-slideimage"
@@ -54455,11 +53987,9 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 22749,
+       "bytes": 23338,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
@@ -54499,18 +54029,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -54520,9 +54044,7 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "effect": true,
      "resolvedLayouts": [
       "list-4x-itemimage-title-center-slideimage"
@@ -54533,11 +54055,9 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 22749,
+     "bytes": 23338,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
@@ -54602,9 +54122,7 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "effect": true,
        "resolvedLayouts": [
         "list-4x-itemimage-vertical"
@@ -54615,11 +54133,9 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 17860,
+       "bytes": 18476,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
@@ -54657,18 +54173,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -54678,9 +54188,7 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "effect": true,
      "resolvedLayouts": [
       "list-4x-itemimage-vertical"
@@ -54691,11 +54199,9 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 17860,
+     "bytes": 18476,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
@@ -54758,9 +54264,7 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "effect": true,
        "resolvedLayouts": [
         "list-4x-itemimage-vertical-slideimage"
@@ -54771,11 +54275,9 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 21742,
+       "bytes": 22323,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
@@ -54813,18 +54315,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -54834,9 +54330,7 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "effect": true,
      "resolvedLayouts": [
       "list-4x-itemimage-vertical-slideimage"
@@ -54847,11 +54341,9 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 21742,
+     "bytes": 22323,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
@@ -54915,9 +54407,7 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "effect": true,
        "resolvedLayouts": [
         "list-4x-itemimage-vertical-title-center"
@@ -54928,11 +54418,9 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 18533,
+       "bytes": 19156,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
@@ -54972,18 +54460,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -54993,9 +54475,7 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "effect": true,
      "resolvedLayouts": [
       "list-4x-itemimage-vertical-title-center"
@@ -55006,11 +54486,9 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 18533,
+     "bytes": 19156,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
@@ -55076,9 +54554,7 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "effect": true,
        "resolvedLayouts": [
         "list-4x-itemimage-vertical-title-center-slideimage"
@@ -55089,11 +54565,9 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 22847,
+       "bytes": 23440,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
@@ -55133,18 +54607,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -55154,9 +54622,7 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "effect": true,
      "resolvedLayouts": [
       "list-4x-itemimage-vertical-title-center-slideimage"
@@ -55167,11 +54633,9 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 22847,
+     "bytes": 23440,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
@@ -55237,9 +54701,7 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "effect": true,
        "resolvedLayouts": [
         "list-4x-itemimage-vertical-title-left"
@@ -55250,11 +54712,9 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 18519,
+       "bytes": 19138,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
@@ -55294,18 +54754,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -55315,9 +54769,7 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "effect": true,
      "resolvedLayouts": [
       "list-4x-itemimage-vertical-title-left"
@@ -55328,11 +54780,9 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 18519,
+     "bytes": 19138,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
@@ -55398,9 +54848,7 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "effect": true,
        "resolvedLayouts": [
         "list-4x-itemimage-vertical-title-left-slideimage"
@@ -55411,11 +54859,9 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 22832,
+       "bytes": 23420,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
@@ -55455,18 +54901,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -55476,9 +54916,7 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "effect": true,
      "resolvedLayouts": [
       "list-4x-itemimage-vertical-title-left-slideimage"
@@ -55489,11 +54927,9 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 22832,
+     "bytes": 23420,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
@@ -58505,10 +57941,8 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
-       "effect": "alias-equivalent",
+       "diagnostics": [],
+       "effect": true,
        "resolvedLayouts": [
         "list-5x-itemimage"
        ],
@@ -58518,12 +57952,10 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 18197,
+       "bytes": 18819,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
-       "differsFromBaseline": false,
+       "diagnostics": [],
+       "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
         "placementDiffers": false,
@@ -58568,18 +58000,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -58589,10 +58015,8 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
-     "effect": "alias-equivalent",
+     "diagnostics": [],
+     "effect": true,
      "resolvedLayouts": [
       "list-5x-itemimage"
      ],
@@ -58602,12 +58026,10 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 18197,
+     "bytes": 18819,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
-     "differsFromBaseline": false,
+     "diagnostics": [],
+     "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
       "placementDiffers": false,
@@ -58678,9 +58100,7 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "effect": true,
        "resolvedLayouts": [
         "list-5x-itemimage-slideimage"
@@ -58691,11 +58111,9 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 21745,
+       "bytes": 22330,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
@@ -58733,18 +58151,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -58754,9 +58166,7 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "effect": true,
      "resolvedLayouts": [
       "list-5x-itemimage-slideimage"
@@ -58767,11 +58177,9 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 21745,
+     "bytes": 22330,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
@@ -58836,9 +58244,7 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "effect": true,
        "resolvedLayouts": [
         "list-5x-itemimage-title-center"
@@ -58849,11 +58255,9 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 18533,
+       "bytes": 19146,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
@@ -58893,18 +58297,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -58914,9 +58312,7 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "effect": true,
      "resolvedLayouts": [
       "list-5x-itemimage-title-center"
@@ -58927,11 +58323,9 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 18533,
+     "bytes": 19146,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
@@ -58998,9 +58392,7 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "effect": true,
        "resolvedLayouts": [
         "list-5x-itemimage-title-center-slideimage"
@@ -59011,11 +58403,9 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 22823,
+       "bytes": 23412,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
@@ -59055,18 +58445,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -59076,9 +58460,7 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "effect": true,
      "resolvedLayouts": [
       "list-5x-itemimage-title-center-slideimage"
@@ -59089,11 +58471,9 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 22823,
+     "bytes": 23412,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
@@ -59159,9 +58539,7 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "effect": true,
        "resolvedLayouts": [
         "list-5x-itemimage-vertical"
@@ -59172,11 +58550,9 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 17810,
+       "bytes": 18436,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
@@ -59214,18 +58590,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -59235,9 +58605,7 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "effect": true,
      "resolvedLayouts": [
       "list-5x-itemimage-vertical"
@@ -59248,11 +58616,9 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 17810,
+     "bytes": 18436,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
@@ -59316,9 +58682,7 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "effect": true,
        "resolvedLayouts": [
         "list-5x-itemimage-vertical-slideimage"
@@ -59329,11 +58693,9 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 21701,
+       "bytes": 22288,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
@@ -59371,18 +58733,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -59392,9 +58748,7 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "effect": true,
      "resolvedLayouts": [
       "list-5x-itemimage-vertical-slideimage"
@@ -59405,11 +58759,9 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 21701,
+     "bytes": 22288,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
@@ -59474,9 +58826,7 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "effect": true,
        "resolvedLayouts": [
         "list-5x-itemimage-vertical-title-center"
@@ -59487,11 +58837,9 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 18496,
+       "bytes": 19114,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
@@ -59531,18 +58879,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -59552,9 +58894,7 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "effect": true,
      "resolvedLayouts": [
       "list-5x-itemimage-vertical-title-center"
@@ -59565,11 +58905,9 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 18496,
+     "bytes": 19114,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
@@ -59636,9 +58974,7 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "effect": true,
        "resolvedLayouts": [
         "list-5x-itemimage-vertical-title-center-slideimage"
@@ -59649,11 +58985,9 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 22353,
+       "bytes": 22943,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
@@ -59693,18 +59027,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -59714,9 +59042,7 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "effect": true,
      "resolvedLayouts": [
       "list-5x-itemimage-vertical-title-center-slideimage"
@@ -59727,11 +59053,9 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 22353,
+     "bytes": 22943,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
@@ -59798,9 +59122,7 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "effect": true,
        "resolvedLayouts": [
         "list-5x-itemimage-vertical-title-left"
@@ -59811,11 +59133,9 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 18481,
+       "bytes": 19097,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
@@ -59855,18 +59175,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -59876,9 +59190,7 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "effect": true,
      "resolvedLayouts": [
       "list-5x-itemimage-vertical-title-left"
@@ -59889,11 +59201,9 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 18481,
+     "bytes": 19097,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
@@ -59960,9 +59270,7 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "effect": true,
        "resolvedLayouts": [
         "list-5x-itemimage-vertical-title-left-slideimage"
@@ -59973,11 +59281,9 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 22340,
+       "bytes": 22930,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
@@ -60017,18 +59323,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -60038,9 +59338,7 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "effect": true,
      "resolvedLayouts": [
       "list-5x-itemimage-vertical-title-left-slideimage"
@@ -60051,11 +59349,9 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 22340,
+     "bytes": 22930,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
@@ -63386,10 +62682,8 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
-       "effect": "alias-equivalent",
+       "diagnostics": [],
+       "effect": true,
        "resolvedLayouts": [
         "list-6x-itemimage"
        ],
@@ -63399,12 +62693,10 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 18278,
+       "bytes": 18897,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
-       "differsFromBaseline": false,
+       "diagnostics": [],
+       "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
         "placementDiffers": false,
@@ -63449,18 +62741,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -63470,10 +62756,8 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
-     "effect": "alias-equivalent",
+     "diagnostics": [],
+     "effect": true,
      "resolvedLayouts": [
       "list-6x-itemimage"
      ],
@@ -63483,12 +62767,10 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 18278,
+     "bytes": 18897,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
-     "differsFromBaseline": false,
+     "diagnostics": [],
+     "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
       "placementDiffers": false,
@@ -63560,9 +62842,7 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "effect": true,
        "resolvedLayouts": [
         "list-6x-itemimage-slideimage"
@@ -63573,11 +62853,9 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 21824,
+       "bytes": 22408,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
@@ -63615,18 +62893,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -63636,9 +62908,7 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "effect": true,
      "resolvedLayouts": [
       "list-6x-itemimage-slideimage"
@@ -63649,11 +62919,9 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 21824,
+     "bytes": 22408,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
@@ -63719,9 +62987,7 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "effect": true,
        "resolvedLayouts": [
         "list-6x-itemimage-title-center"
@@ -63732,11 +62998,9 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 18593,
+       "bytes": 19211,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
@@ -63776,18 +63040,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -63797,9 +63055,7 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "effect": true,
      "resolvedLayouts": [
       "list-6x-itemimage-title-center"
@@ -63810,11 +63066,9 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 18593,
+     "bytes": 19211,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
@@ -63882,9 +63136,7 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "effect": true,
        "resolvedLayouts": [
         "list-6x-itemimage-title-center-slideimage"
@@ -63895,11 +63147,9 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 22906,
+       "bytes": 23496,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
@@ -63939,18 +63189,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -63960,9 +63204,7 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "effect": true,
      "resolvedLayouts": [
       "list-6x-itemimage-title-center-slideimage"
@@ -63973,11 +63215,9 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 22906,
+     "bytes": 23496,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
@@ -64044,9 +63284,7 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "effect": true,
        "resolvedLayouts": [
         "list-6x-itemimage-vertical"
@@ -64057,11 +63295,9 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 17864,
+       "bytes": 18489,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
@@ -64099,18 +63335,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -64120,9 +63350,7 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "effect": true,
      "resolvedLayouts": [
       "list-6x-itemimage-vertical"
@@ -64133,11 +63361,9 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 17864,
+     "bytes": 18489,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
@@ -64202,9 +63428,7 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "effect": true,
        "resolvedLayouts": [
         "list-6x-itemimage-vertical-slideimage"
@@ -64215,11 +63439,9 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 21755,
+       "bytes": 22340,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
@@ -64257,18 +63479,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -64278,9 +63494,7 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "effect": true,
      "resolvedLayouts": [
       "list-6x-itemimage-vertical-slideimage"
@@ -64291,11 +63505,9 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 21755,
+     "bytes": 22340,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
@@ -64361,9 +63573,7 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "effect": true,
        "resolvedLayouts": [
         "list-6x-itemimage-vertical-title-center"
@@ -64374,11 +63584,9 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 18528,
+       "bytes": 19158,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
@@ -64418,18 +63626,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -64439,9 +63641,7 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "effect": true,
      "resolvedLayouts": [
       "list-6x-itemimage-vertical-title-center"
@@ -64452,11 +63652,9 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 18528,
+     "bytes": 19158,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
@@ -64524,9 +63722,7 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "effect": true,
        "resolvedLayouts": [
         "list-6x-itemimage-vertical-title-center-slideimage"
@@ -64537,11 +63733,9 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 22413,
+       "bytes": 23006,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
@@ -64581,18 +63775,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -64602,9 +63790,7 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "effect": true,
      "resolvedLayouts": [
       "list-6x-itemimage-vertical-title-center-slideimage"
@@ -64615,11 +63801,9 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 22413,
+     "bytes": 23006,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
@@ -64687,9 +63871,7 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "effect": true,
        "resolvedLayouts": [
         "list-6x-itemimage-vertical-title-left"
@@ -64700,11 +63882,9 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 18513,
+       "bytes": 19140,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
@@ -64744,18 +63924,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -64765,9 +63939,7 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "effect": true,
      "resolvedLayouts": [
       "list-6x-itemimage-vertical-title-left"
@@ -64778,11 +63950,9 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 18513,
+     "bytes": 19140,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
@@ -64850,9 +64020,7 @@
       "render": {
        "pass": true,
        "error": null,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "effect": true,
        "resolvedLayouts": [
         "list-6x-itemimage-vertical-title-left-slideimage"
@@ -64863,11 +64031,9 @@
        "pass": true,
        "error": null,
        "opc": true,
-       "bytes": 22393,
+       "bytes": 22986,
        "slides": 1,
-       "diagnostics": [
-        "unresolved-content"
-       ],
+       "diagnostics": [],
        "differsFromBaseline": true,
        "hasPhf": true,
        "nativeDetail": {
@@ -64907,18 +64073,12 @@
        "other": 0
       }
      },
-     "class": "partial",
-     "reasons": [
-      "preview diagnostics: unresolved-content",
-      "export diagnostics: unresolved-content"
-     ]
+     "class": "works",
+     "reasons": []
     }
    },
-   "class": "partial",
-   "reasons": [
-    "preview diagnostics: unresolved-content",
-    "export diagnostics: unresolved-content"
-   ],
+   "class": "works",
+   "reasons": [],
    "checks": {
     "schema": {
      "pass": true,
@@ -64928,9 +64088,7 @@
     "render": {
      "pass": true,
      "error": null,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "effect": true,
      "resolvedLayouts": [
       "list-6x-itemimage-vertical-title-left-slideimage"
@@ -64941,11 +64099,9 @@
      "pass": true,
      "error": null,
      "opc": true,
-     "bytes": 22393,
+     "bytes": 22986,
      "slides": 1,
-     "diagnostics": [
-      "unresolved-content"
-     ],
+     "diagnostics": [],
      "differsFromBaseline": true,
      "hasPhf": true,
      "nativeDetail": {
