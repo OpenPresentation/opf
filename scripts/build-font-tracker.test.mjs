@@ -15,7 +15,7 @@ const policyNames = policy.families.map((row) => row.family);
 // A scratch copy of the inputs, outputs and script, so drift and error cases never touch the checkout.
 function scratchCopy() {
   const dir = mkdtempSync(path.join(tmpdir(), "font-tracker-"));
-  const files = [FILES.policy, FILES.overrides, FILES.json, FILES.markdown, overrides.manifestSnapshot, overrides.galleryFontsSnapshot, overrides.measurementReport, overrides.paritySource, "scripts/build-font-tracker.mjs"];
+  const files = [FILES.policy, FILES.overrides, FILES.json, FILES.markdown, overrides.manifestSnapshot, overrides.galleryFontsSnapshot, overrides.measurementReport, overrides.paritySource, overrides.qualificationReport, overrides.hostFixtureEvidence, "scripts/build-font-tracker.mjs"];
   for (const file of files) {
     mkdirSync(path.dirname(path.join(dir, file)), { recursive: true });
     cpSync(path.join(ROOT, file), path.join(dir, file));
@@ -117,11 +117,11 @@ test("records agree with the policy table and the pinned manifest", () => {
 
 // The parity run on the merged Intos mains (opf#175) passes all 704 Aptos and Aptos Display values, so the Aptos
 // family no longer leads the priority queue; the queue follows the values that are still not pass.
-test("the Aptos family is metric-measured with Intos bundled, and no longer leads the priority queue", () => {
+test("the Aptos family is qualified with Intos bundled and fixtures in every host, and no longer leads the priority queue", () => {
   const intosOf = { Aptos: "Intos", "Aptos Display": "Intos Display", "Aptos Narrow": "Intos Narrow", "Aptos Serif": "Intos Serif" };
   for (const [name, intos] of Object.entries(intosOf)) {
     const record = committed.records.find((item) => item.family === name);
-    assert.equal(record.status, "metric-measured", name);
+    assert.equal(record.status, "qualified", name);
     assert.equal(record.previewRoute.tier, "metric", name);
     assert.equal(record.previewRoute.family, intos, name);
     assert.equal(record.previewRoute.pendingBundle, null, name);
@@ -131,33 +131,40 @@ test("the Aptos family is metric-measured with Intos bundled, and no longer lead
     assert.equal(record.stylesMissing.length, 0, name);
     assert.equal(record.hostVerification.node, "verified", name);
     assert.equal(record.hostVerification.browser, "verified", name);
-    assert.equal(record.hostVerification.galleryEditor, "unverified", `${name}: the gallery editor waits for a release`);
-    assert.match(record.hostLoading.galleryEditor, /pending a gallery editor release/, name);
+    assert.equal(record.hostVerification.galleryEditor, "verified", `${name}: the gallery editor serves the Intos faces from its pinned manifest`);
+    assert.match(record.hostLoading.galleryEditor, /same-origin/, name);
     assert.match(record.hostLoading.browser, /lazy/, name);
     assert.equal(record.measurements.verticalMetricsMatch, true, name);
   }
-  // The editor playground test exercises the Aptos scheme only: Aptos and Aptos Display.
-  for (const name of ["Aptos", "Aptos Display", "Intos", "Intos Display"]) assert.equal(committed.records.find((item) => item.family === name).hostVerification.editor, "verified", name);
-  for (const name of ["Aptos Narrow", "Aptos Serif", "Intos Narrow", "Intos Serif"]) assert.equal(committed.records.find((item) => item.family === name).hostVerification.editor, "unverified", name);
+  // RR-17: the per-family editor fixture covers all four Aptos families and their Intos faces (Narrow and Serif included).
+  for (const name of ["Aptos", "Aptos Display", "Aptos Narrow", "Aptos Serif", ...INTOS]) assert.equal(committed.records.find((item) => item.family === name).hostVerification.editor, "verified", name);
   for (const name of ["Aptos", "Aptos Display"]) {
     const record = committed.records.find((item) => item.family === name);
     assert.equal(record.paritySignals.valuesAffected, 704, name);
     assert.equal(record.paritySignals.fontResolution.pass, 704, name);
     assert.equal(record.priority.valuesOpen, 0, name);
-    assert.equal(record.phase, 3, name);
+    assert.equal(record.phase, 5, `${name}: only native verification is left`);
     assert.ok(record.priority.rank > 100, `${name} passes every audited value, so it ranks low (rank ${record.priority.rank})`);
   }
   for (const name of INTOS) {
     const record = committed.records.find((item) => item.family === name);
     assert.equal(record.class, "open", name);
     assert.equal(record.bundled.yes, true, name);
-    assert.equal(record.status, "baseline-needed", name);
+    assert.equal(record.status, "qualified", name);
   }
-  assert.equal(committed.records.find((item) => item.family === "Aptos Mono").status, "visual-gap", "Aptos Mono has no measurement or candidate");
+  // Aptos Mono (RR-17): measured against Aptos Mono 2.01; Cousine matches every width and wrap, the vertical metrics differ, so the tier stays visual.
+  const mono = committed.records.find((item) => item.family === "Aptos Mono");
+  assert.equal(mono.status, "documented-visual");
+  assert.equal(mono.previewRoute.family, "Cousine");
+  assert.equal(mono.previewRoute.tier, "visual");
+  assert.equal(mono.measurements.meanAbsWidthDelta, 0);
+  assert.equal(mono.measurements.maxAbsWidthDelta, 0);
+  assert.equal(mono.qualification.lineBreaksIdenticalFraction, 1);
+  assert.equal(mono.qualification.verticalMetricsEqual, false);
   // The queue now follows values that are still not pass.
   const top = [...committed.records].sort((a, b) => a.priority.rank - b.priority.rank).slice(0, 10);
   for (const record of top) assert.ok(record.priority.valuesOpen > 0, `${record.family} leads the queue with open values`);
-  assert.equal(committed.inputs.parity.file.split("/").pop(), "parity-results-2026-09-30-gallery-font-host.json");
+  assert.equal(committed.inputs.parity.file.split("/").pop(), "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json");
 });
 
 test("a pendingBundle override for a family whose route face is bundled is stale and fails the build", () => {
@@ -256,7 +263,7 @@ test("priority counts only values that are not already pass, and discounts verif
   assert.equal(roboto.priority.valuesOpen, 0);
   assert.ok(roboto.priority.rank > 100, `Roboto Mono is already real and pass in every value, so it must not rank high (rank ${roboto.priority.rank})`);
   assert.equal(roboto.hostVerification.node, "verified");
-  assert.equal(roboto.priority.hostFactor, 0.5, "two of five hosts are verified");
+  assert.equal(roboto.priority.hostFactor, 0.25, "every applicable host has a per-family fixture since RR-17, so the factor sits at its floor");
   for (const record of committed.records) {
     assert.equal(record.priority.valuesOpen, record.paritySignals.valuesAffected - record.paritySignals.fontResolution.pass, record.family);
     assert.ok(record.priority.hostFactor >= 0.25 && record.priority.hostFactor <= 1, record.family);
@@ -275,11 +282,11 @@ test("gallery cards are recorded separately from the gallery editor, and Node na
     assert.equal(record.hostVerification.galleryCards === "NA", !hosted, `${record.family} galleryCards`);
     assert.match(record.hostLoading.galleryCards, hosted ? /self-hosted preview webfont/ : /no self-hosted card preview|no route/, record.family);
   }
-  // Raleway is not bundled by opf-render (variable-only upstream, resvg ignores the weight axis) while the gallery cards self-host it.
+  // Raleway is bundled since FF-43 (unmodified upstream statics): the editors draw it, and the gallery cards self-host their own copy, verified separately.
   const raleway = committed.records.find((record) => record.family === "Raleway");
-  assert.equal(raleway.bundled.yes, false, "Raleway is not bundled by opf-render");
-  assert.equal(raleway.hostVerification.galleryCards, "unverified", "but gallery cards self-host it");
-  assert.equal(raleway.hostVerification.galleryEditor, "NA");
+  assert.equal(raleway.bundled.yes, true);
+  assert.equal(raleway.hostVerification.galleryEditor, "verified");
+  assert.equal(raleway.hostVerification.galleryCards, "unverified", "gallery cards are a different host");
   // Node: the default prepareNodeFonts pack is base; office faces need pack: 'office'.
   const carlito = committed.records.find((record) => record.family === "Carlito");
   assert.match(carlito.hostLoading.node, /pack: 'office'/);
@@ -288,16 +295,23 @@ test("gallery cards are recorded separately from the gallery editor, and Node na
   assert.match(roboto.hostLoading.node, /default/);
 });
 
-test("metric routes are measured, not verified, until vertical metrics and line breaks are recorded", () => {
+test("metric routes are qualified only with four-style widths, line breaks and a fixture in every host", () => {
   assert.ok(!STATUSES.includes("metric-verified"));
   assert.ok(!STATUSES.includes("candidate-qualified-landing"), "the Intos policy is merged");
-  const measured = committed.records.filter((record) => record.status === "metric-measured").map((record) => record.family).sort();
-  assert.deepEqual(measured, ["Aptos", "Aptos Display", "Aptos Narrow", "Aptos Serif", "Arial", "Calibri", "Courier New", "Georgia", "Times New Roman"]);
-  for (const record of committed.records.filter((item) => item.status === "metric-measured")) {
-    assert.equal(record.measurements.lineBreaksMatch, null, record.family);
-    // Only the Aptos family has recorded vertical metrics (opf#166); the established routes do not.
-    assert.equal(record.measurements.verticalMetricsMatch, record.family.startsWith("Aptos") ? true : null, record.family);
+  const metric = committed.records.filter((record) => record.previewRoute.tier === "metric" && record.class === "proprietary-latin").map((record) => record.family).sort();
+  assert.deepEqual(metric, ["Aptos", "Aptos Display", "Aptos Narrow", "Aptos Serif", "Arial", "Calibri", "Courier New", "Georgia", "Times New Roman"]);
+  const floor = overrides.latinAcceptance.lineBreakFloor;
+  for (const record of committed.records.filter((item) => item.status === "qualified" && item.previewRoute.tier === "metric")) {
+    assert.equal(record.measurements.widthBarMet, true, record.family);
+    assert.equal(record.measurements.lineBreaksMatch, true, record.family);
+    assert.ok(record.qualification.lineBreaksIdenticalFraction >= floor, record.family);
+    assert.ok(record.qualification.stylesMeasured >= 4, `${record.family}: four styles`);
+    for (const host of overrides.latinAcceptance.hosts) assert.equal(record.hostVerification[host], "verified", `${record.family} ${host}`);
+    assert.notEqual(record.nativeVerification.status, "verified", `${record.family}: native verification is the supervisor's (FF-46)`);
   }
+  // Vertical metrics: only the Aptos family matches the real font's hhea, OS/2, x-height and cap-height; the established routes are recorded as differing.
+  for (const name of ["Aptos", "Aptos Display", "Aptos Narrow", "Aptos Serif"]) assert.equal(committed.records.find((record) => record.family === name).measurements.verticalMetricsMatch, true, name);
+  for (const name of ["Arial", "Calibri", "Georgia", "Courier New", "Times New Roman"]) assert.equal(committed.records.find((record) => record.family === name).measurements.verticalMetricsMatch, false, name);
 });
 
 test("a measurement source override reaches the record (Georgia comes from the opf#163 re-run)", () => {
@@ -319,8 +333,8 @@ test("per-family acceptance records come from overrides, with fixture, date and 
     assert.equal(arial.acceptance.accepted, true);
     assert.equal(arial.acceptance.date, "2026-10-01");
     assert.equal(arial.acceptance.evidence.length, 1);
-    const calibri = buildTracker({ root: dir }).tracker.records.find((record) => record.family === "Calibri");
-    assert.equal(calibri.acceptance.accepted, false, "acceptance never transfers to another family");
+    const grandview = buildTracker({ root: dir }).tracker.records.find((record) => record.family === "Grandview");
+    assert.equal(grandview.acceptance.accepted, false, "acceptance never transfers to another family");
 
     edited.acceptance.Arial.date = null;
     writeFileSync(file, JSON.stringify(edited));
@@ -332,4 +346,71 @@ test("per-family acceptance records come from overrides, with fixture, date and 
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
+});
+
+// RR-17: acceptance for a Latin family is derived from two committed evidence files, never by hand.
+test("a Latin family is accepted only with a fixture in every host and a measurement against the real font", () => {
+  const rules = overrides.latinAcceptance;
+  const hostEvidence = read(overrides.hostFixtureEvidence);
+  const qualification = read(overrides.qualificationReport);
+  const measured = new Map(qualification.results.map((row) => [row.family, row]));
+  for (const record of committed.records) {
+    const fixtureHosts = rules.hosts.filter((host) => hostEvidence.hosts[host].families[record.family]);
+    if (record.acceptance.accepted) {
+      assert.deepEqual(fixtureHosts, rules.hosts, `${record.family}: accepted without a fixture in every host`);
+      assert.ok(["qualified", "documented-visual"].includes(record.status), record.family);
+      assert.equal(record.acceptance.date, rules.date, record.family);
+      assert.ok(record.acceptance.evidence.length >= 2, record.family);
+      if (record.class === "proprietary-latin" || record.previewRoute.kind === "alias") {
+        assert.equal(measured.get(record.family)?.referenceAvailable, true, `${record.family}: accepted without a reference font`);
+        assert.equal(record.status, record.previewRoute.tier === "metric" ? "qualified" : "documented-visual", record.family);
+      }
+    } else {
+      assert.ok(!["qualified", "documented-visual"].includes(record.status), `${record.family} is not accepted`);
+    }
+  }
+  // Families whose real font is not available to the measuring host stay unaccepted, with the supervisor step in their next action.
+  for (const name of ["Didot", "Grandview", "Grandview Display", "Seaford", "Seaford Display", "Skeena", "Skeena Display"]) {
+    const record = committed.records.find((item) => item.family === name);
+    assert.equal(measured.get(name).referenceAvailable, false, name);
+    assert.equal(record.acceptance.accepted, false, name);
+    assert.equal(record.status, "visual-gap", name);
+    assert.match(record.nextAction, /Unmeasured/, name);
+  }
+  // Liberation: the gallery editor's pinned renderer predates the alias, so the third host is missing and the family is not accepted yet.
+  for (const name of ["Liberation Sans", "Liberation Serif", "Liberation Mono"]) {
+    const record = committed.records.find((item) => item.family === name);
+    assert.equal(record.previewRoute.tier, "metric", name);
+    assert.deepEqual(rules.hosts.filter((host) => hostEvidence.hosts[host].families[name]), ["node", "browser", "editor"], name);
+    assert.equal(record.acceptance.accepted, false, name);
+    assert.match(record.acceptance.note, /missing in galleryEditor/, name);
+  }
+});
+
+test("the host fixtures name the same Latin families in every host and the qualification covers every Latin route", () => {
+  const hostEvidence = read(overrides.hostFixtureEvidence);
+  const qualification = read(overrides.qualificationReport);
+  assert.equal(hostEvidence.schema, "opf-latin-host-fixtures/v1");
+  const node = Object.keys(hostEvidence.hosts.node.families).sort();
+  assert.equal(node.length, 87);
+  assert.deepEqual(Object.keys(hostEvidence.hosts.browser.families).sort(), node);
+  assert.deepEqual(Object.keys(hostEvidence.hosts.editor.families).sort(), node);
+  for (const family of Object.keys(hostEvidence.hosts.galleryEditor.families)) assert.ok(node.includes(family), family);
+  for (const [host, entry] of Object.entries(hostEvidence.hosts)) {
+    assert.match(entry.source.commit, /^[0-9a-f]{40}$/, host);
+    for (const family of Object.keys(entry.families)) assert.ok(committed.records.some((record) => record.family === family), `${host}: ${family} has a record`);
+  }
+  // Every proprietary Latin family has a qualification row, measured or marked unavailable.
+  const rows = new Set(qualification.results.map((row) => row.family));
+  for (const record of committed.records.filter((item) => item.class === "proprietary-latin")) assert.ok(rows.has(record.family), `${record.family} is in the qualification report`);
+  assert.equal(qualification.results.filter((row) => !row.referenceAvailable).length, 7);
+});
+
+test("the decisions of RR-17 are recorded: Aptos Narrow and Serif route to Intos, Aptos Mono keeps Cousine, Liberation aliases the Croscore faces", () => {
+  const route = (name) => committed.records.find((record) => record.family === name).previewRoute;
+  assert.deepEqual([route("Aptos Narrow").family, route("Aptos Narrow").tier], ["Intos Narrow", "metric"]);
+  assert.deepEqual([route("Aptos Serif").family, route("Aptos Serif").tier], ["Intos Serif", "metric"]);
+  assert.deepEqual([route("Aptos Mono").family, route("Aptos Mono").tier, route("Aptos Mono").alternates], ["Cousine", "visual", ["Roboto Mono"]]);
+  assert.deepEqual([route("Liberation Sans").family, route("Liberation Serif").family, route("Liberation Mono").family], ["Arimo", "Tinos", "Cousine"]);
+  for (const name of ["Liberation Sans", "Liberation Serif", "Liberation Mono"]) assert.equal(route(name).tier, "metric", name);
 });
