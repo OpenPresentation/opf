@@ -30,12 +30,12 @@ the versions below or established complete native compatibility.
 | `@openpresentation/cli` | 0.9.1 | Bundles core 0.11.3; registry metadata has no runtime `dependencies` |
 | `@openpresentation/opf-render` | 0.11.8 | `@openpresentation/opf@^0.11.3` |
 | `@openpresentation/opf-editor` | 0.10.5 | `@openpresentation/opf@^0.11.3`; optional peer `@openpresentation/opf-render@^0.11.0` |
-| `@openpresentation/opf-pptx` | 0.11.5 | `@openpresentation/opf@^0.11.3`; optional peer `@openpresentation/opf-render@^0.11.0` |
+| `@openpresentation/opf-pptx` | 0.11.6 | `@openpresentation/opf@^0.11.3`; optional peer `@openpresentation/opf-render@^0.11.0` |
 
 Install the complete pinned set. A caret range starting at 0.10.1 does not
 include 0.11.x; old consumers can install a second core and do not establish
 ColorRef preview/export support. The renderer, PPTX and editor floors move with
-core in lockstep (core 0.11.3 with renderer 0.11.8, PPTX 0.11.5 and editor 0.10.5), so
+core in lockstep (core 0.11.3 with renderer 0.11.8, PPTX 0.11.6 and editor 0.10.5), so
 preview and export resolve one composition.
 
 Shared header/footer geometry (`furniture-flow-v2`) is published. PPTX exports
@@ -340,6 +340,7 @@ not available; those are Node APIs.
 
 | Older set | Relationship |
 | --- | --- |
+| core 0.11.3, CLI 0.9.1, renderer 0.11.8, PPTX 0.11.5, editor 0.10.5 | Previous coordinated set (the slide tag draws in the scheme primary colour and PPTX writes it as `a:schemeClr accent1`; the playground loads its base faces through `extraLazyFonts`). PPTX 0.11.6 exports the treemap, histogram, pareto, box-and-whisker, waterfall and funnel charts as native chartex parts by default (`toPptx({chartex: 'auto'})`, confirmed in desktop PowerPoint; `world` stays a clustered column with `chart-data-adapted` because PowerPoint's map needs online geodata; pass `chartex: 'fallback'` for the previous output) and gives chartex text the deck's label colour and font. |
 | core 0.11.3, CLI 0.9.1, renderer 0.11.6, PPTX 0.11.4, editor 0.10.4 | Previous coordinated set (the 100-layout catalog and its geometry, category-axis label rotation, quote and slide-image re-import). Renderer 0.11.7 adds the `extraLazyFonts` registry option and `splitStartupFaces` (a browser host can start with Roboto Regular alone and load its other base faces on demand); renderer 0.11.8 draws the slide tag in the scheme primary colour; PPTX 0.11.5 writes the tag run as `a:schemeClr accent1` where the deck theme holds the primary (the colour is unchanged); editor 0.10.5 loads its playground base faces through `extraLazyFonts`. |
 | core 0.11.2, CLI 0.9.0, renderer 0.11.5, PPTX 0.11.3, editor 0.10.3 | Previous coordinated set (native classic and chartex chart previews, opt-in chartex export, face-level lazy fonts and the font gate's render options). Core 0.11.3 adds the pinned pptx.gallery default catalog and the 70 legacy gallery layout ids (layouts 30 to 100; 25 carry a `composition` or `contentBox` contract, which moves geometry, so renderer, PPTX and editor raise their core floor to `^0.11.3` together); renderer 0.11.6 rotates and skips dense category-axis labels; PPTX 0.11.4 re-imports quote and slide-image payloads and writes theme `a:ea`/`a:cs` only where a script font is selected; editor 0.10.4 is a floor bump; CLI 0.9.1 bundles core 0.11.3. |
 | core 0.11.2, CLI 0.9.0, renderer 0.11.1, PPTX 0.11.0, editor 0.10.0 | Previous coordinated set (lockstep floors, Intos and the open families, selected-name export). Renderer 0.11.2 adds script-face loading (`scripts: 'auto'`); PPTX 0.11.1 adds `design.watermark` export; editor 0.10.2 loads the fonts a document needs before every render (FF-41). Renderer 0.11.3 previews every kept classic chart type natively; PPTX 0.11.2 exports the native construct for each kept classic chart type (with `chart-data-adapted` diagnostics where data is adapted) and writes theme colour references for table and text colours. Renderer 0.11.4 previews the seven chartex chart types natively (the world map as a non-geographic tile grid), keeps the Latin Noto Sans replacement for script schemes under `scripts: 'auto'`, shapes Noto Sans Mongolian, and bundles Raleway and Playfair Display (94 lazy faces); PPTX 0.11.3 adds the opt-in `toPptx({chartex: 'native'})` export of the chartex chart types (the default output is unchanged) and always imports chartex charts. |
