@@ -4,6 +4,8 @@ import {separateLigatures} from './font-compatibility.js';
 const DEFAULT_DIMENSIONS = { width: 1280, height: 720 };
 const DEFAULT_RASTER_SCALE = 1;
 const DEFAULT_RASTER_BACKGROUND = "#FFFFFF";
+// RR-12: PDF output is vector (selectable text, vector drawing) unless a caller asks for the raster-backed compatibility mode.
+const DEFAULT_PDF_MODE = "vector";
 let bundledFontFilesCache=null;
 
 export async function svgToPng(svg, options = {}) {
@@ -16,6 +18,11 @@ export async function svgToPdf(svgs, options = {}) {
   if (!pdfInputs.length) {
     throw new OPFRenderError("empty-pdf", "svgToPdf requires at least one SVG slide.");
   }
+  const mode = options.mode ?? DEFAULT_PDF_MODE;
+  if (mode !== "vector" && mode !== "raster") {
+    throw new OPFRenderError("invalid-conversion-option", 'mode must be "vector" or "raster".', { option: "mode", value: mode });
+  }
+  if (mode === "vector") return vectorPdf(pdfInputs, options);
 
   const { PDFDocument } = await loadPdfLib();
   const pdf = await PDFDocument.create({ updateMetadata: false });
@@ -37,6 +44,38 @@ export async function svgToPdf(svgs, options = {}) {
   }
 
   return pdf.save({ addDefaultPage: false, useObjectStreams: false });
+}
+
+async function vectorPdf(inputs, options) {
+  if (options.loadSystemFonts === true) {
+    throw new OPFRenderError("pdf-system-fonts-unsupported", 'Vector PDF output embeds only the font files you supply: loadSystemFonts is not supported with mode "vector". Pass fontFiles/fontDirs, or use mode "raster".', { option: "loadSystemFonts" });
+  }
+  const scale = positiveNumber(options.rasterFallbackScale, "rasterFallbackScale", 2);
+  const fontFiles = [
+    ...(options.useBundledFonts === false ? [] : await bundledFontFiles()),
+    ...stringArray(options.fontFiles)
+  ];
+  const svgs = [];
+  for (const input of inputs) svgs.push(await prepareRasterImages(normalizeSvgInput(input)));
+  const {svgsToVectorPdf} = await import("./pdf-vector.js");
+  return svgsToVectorPdf(svgs, {
+    fontFiles,
+    fontDirs: stringArray(options.fontDirs),
+    defaultFontFamily: options.defaultFontFamily ?? "Roboto",
+    sansSerifFamily: options.sansSerifFamily ?? options.defaultFontFamily ?? "Roboto",
+    monospaceFamily: options.monospaceFamily ?? "Roboto Mono",
+    serifFamily: options.serifFamily,
+    background: options.background,
+    metadata: options.metadata,
+    tagged: options.tagged,
+    compress: options.compress,
+    strict: options.strict === true,
+    rasterFallbackScale: scale,
+    onDiagnostic: typeof options.onDiagnostic === "function" ? options.onDiagnostic : undefined,
+    producer: packageName,
+    ErrorClass: OPFRenderError,
+    rasterize: (svg, factor) => rasterizeSvg(svg, { ...options, scale: factor, background: "rgba(0, 0, 0, 0)" })
+  });
 }
 
 async function rasterizeSvg(svgInput, options) {

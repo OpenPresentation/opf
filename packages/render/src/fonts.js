@@ -51,7 +51,7 @@ function unavailableFontError(family, style, policy) {
 // A lookup that cannot be decoded is treated as one that applies nothing (no subtables), so the rest of the feature still runs: advances equal
 // a browser's for the face's Latin and Mongolian samples (test/mongolian-shaping.mjs). Applied only after shaping failed, once per font.
 const lookupsGuarded = new WeakSet();
-function skipUndecodableLookups(font) {
+export function skipUndecodableLookups(font) {
   if (lookupsGuarded.has(font)) return false;
   lookupsGuarded.add(font);
   let guarded = false;

@@ -4,7 +4,7 @@ import sharp from 'sharp';
 import {PDFDocument,PDFName,PDFRawStream,decodePDFRawStream} from 'pdf-lib';
 import {prepareRasterImages} from '../dist/raster-images.js';
 const {svgToPng,svgToPdf}=await import(process.env.OPF_TEST_RASTER_MODULE ?? '../dist/index.js');
-const options={useBundledFonts:false,background:'transparent'};
+const options={useBundledFonts:false,background:'transparent',mode:'raster'};
 const raw=async png=>sharp(png).ensureAlpha().raw().toBuffer();
 let cases=0,maxDifference=0;
 for(let orientation=1;orientation<=8;orientation++) {

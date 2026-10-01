@@ -7,7 +7,7 @@ import {renderSvg} from '../dist/index.js';
 import {prepareRasterImages} from '../dist/raster-images.js';
 const {svgToPng,svgToPdf}=await import(process.env.OPF_TEST_RASTER_MODULE ?? '../dist/index.js');
 const references=JSON.parse(await readFile(new URL('fixtures/webp/webp-references.json',import.meta.url),'utf8'));
-const options={useBundledFonts:false,background:'rgba(0,0,0,0)'};
+const options={useBundledFonts:false,background:'rgba(0,0,0,0)',mode:'raster'};
 const hash=value=>createHash('sha256').update(value).digest('hex');
 let cases=0;
 for(const [file,ref] of Object.entries(references)) {

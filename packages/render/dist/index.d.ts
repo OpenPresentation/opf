@@ -110,7 +110,93 @@ export interface SvgToPngOptions {
   monospaceFamily?: string;
 }
 
-export interface SvgToPdfOptions extends SvgToPngOptions {}
+/** A note, warning or (under `strict`) error from the vector PDF export. Every code starts with `pdf-`. */
+export type PdfDiagnostic = {
+  /** One per embedded font face: what was embedded, how, and under which embedding permissions. */
+  code: "pdf-font-embedded";
+  family: string; postscriptName: string; weight: number; italic: boolean;
+  /** Distinct glyphs kept, and the size of the embedded font program in bytes. */
+  glyphs: number; bytes: number;
+  /** `subset` unless the font forbids subsetting (OS/2 fsType bit 8), then `full`. */
+  embedding: "subset" | "full";
+  /** OS/2 fsType bits of the face. */
+  fsType: number;
+  /** `preview-and-print` when fsType allows only that. Fonts whose fsType forbids embedding are never embedded. */
+  embeddingRestriction?: "preview-and-print";
+  /** The face's own license description (name table), when it has one. */
+  license?: string;
+  /** The file name or `svg @font-face` the face came from. */
+  origin?: string;
+} | {
+  /** The first requested family has no embeddable face; the named face is used instead (like the PNG preview does). */
+  code: "pdf-font-substituted";
+  message: string; requestedFamily: string; resolvedFamily: string; weight: number; italic: boolean;
+} | {
+  /** A character the selected face lacks is drawn with another supplied face. */
+  code: "pdf-font-fallback";
+  message: string; fontFamily: string; fallbackFamily: string; codePoint: number;
+} | {
+  code: "pdf-font-embedding-restricted" | "pdf-font-unsupported-format" | "pdf-font-unreadable";
+  message: string; family?: string; origin?: string;
+} | {
+  /** An element with an effect that has no PDF equivalent (filter, mask, nested SVG picture); that element alone is drawn as an image. */
+  code: "pdf-raster-fallback";
+  message: string; path?: string; element: string; reason: string;
+} | {
+  /** No supplied font has the character: the font's missing-glyph box is drawn. */
+  code: "pdf-glyph-missing";
+  message: string; fontFamily: string; codePoint: number;
+} | {
+  /** An attribute with no PDF form here (`rotate`, `dominant-baseline`, `text-transform`, `paint-order`, `mix-blend-mode`, markers, ...). */
+  code: "pdf-unsupported-feature";
+  message: string; path?: string; element: string; attribute: string;
+} | {
+  /** Too much content (more than 50,000 elements on a page, `<use>` expansions included, or groups nested over 256 deep): the rest of the page is not drawn. */
+  code: "pdf-expansion-limit";
+  message: string; path?: string;
+} | {
+  code: "pdf-unsupported-element" | "pdf-unsupported-clip" | "pdf-unsupported-paint" | "pdf-unsupported-css" | "pdf-image-skipped" | "pdf-link-skipped";
+  message: string; path?: string; element?: string; kind?: string;
+};
+
+export interface PdfMetadata {
+  title?: string;
+  author?: string;
+  subject?: string;
+  keywords?: string | string[];
+  /** BCP 47 document language; default: the first SVG's `lang`. */
+  language?: string;
+  /** Default: the package name. */
+  creator?: string;
+  /** Omitted from the PDF unless supplied: the export never reads a clock. A date-time without a zone designator is read as UTC. */
+  creationDate?: Date | string;
+  modificationDate?: Date | string;
+}
+
+export interface SvgToPdfOptions extends SvgToPngOptions {
+  /**
+   * `"vector"` (default): shapes, gradients and patterns as PDF vector graphics, pictures as images, text as real text
+   * with embedded font subsets (selectable, searchable, correct copy and paste); the fonts are the bundled files and
+   * `fontFiles` / `fontDirs` you supply, never system fonts. `"raster"`: each slide an image, as before.
+   */
+  mode?: "vector" | "raster";
+  /** Vector mode paints the page this colour first (default white, as raster mode composites on white); `"none"` leaves it unpainted. */
+  background?: string;
+  /** Vector only. Family drawn for the generic `serif`; default `defaultFontFamily`. */
+  serifFamily?: string;
+  /** Vector only. Document title, author, language and dates. */
+  metadata?: PdfMetadata;
+  /** Vector only. Write the structure tree (reading order, headings, links, figures) and mark decoration as artifacts; default true. */
+  tagged?: boolean;
+  /** Vector only. `false` leaves streams uncompressed, for inspection; default true. */
+  compress?: boolean;
+  /** Vector only. Throw (`OPFRenderError`, the diagnostic's code) instead of rasterizing an element or skipping an unsupported feature. */
+  strict?: boolean;
+  /** Vector only. Pixel density of the rare element rasterized because it has no vector form; default 2. */
+  rasterFallbackScale?: number;
+  /** Vector only. Receives font embedding reports, substitutions, fallbacks and unsupported features. */
+  onDiagnostic?: (diagnostic: PdfDiagnostic) => void;
+}
 
 export interface ResolvedPresentation {
   presentation: unknown;

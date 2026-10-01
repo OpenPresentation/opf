@@ -3,3 +3,6 @@ fonts/**/*.ttf binary
 fonts/**/*.txt -text
 fonts/intos/NOTICE.md -text
 fonts/**/PROVENANCE.json text eol=lf
+
+# The frozen vector-PDF fixture is hashed through its exported PDF: keep its bytes the same on every checkout.
+test/fixtures/pdf/*.svg text eol=lf

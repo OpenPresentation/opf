@@ -16,7 +16,7 @@ Version 0.8.0 adds optional font-registry vector outlines and shared heading/sca
 
 Version 0.8.0 requires core 0.10.0 and renders accepted quote and code geometry without fitting it again. Code filename/language/body parts preserve source whitespace, literal tabs and metadata case and expose trace targets for editing. The [43 reviewed code raster changes](docs/evidence/shared-code/raster-review.json) retain the other 762 corpus hashes. Coordinated releases PPTX 0.8.0 and editor 0.7.0 add native source recovery and editing. Glyph containment and separation do not establish native pixel equivalence.
 
-Deterministic local renderer for Open Presentation Format documents. The shared SVG core implements validation, catalog resolution, placeholder binding and text layout. Node APIs additionally convert SVG to PNG and raster-backed PDF.
+Deterministic local renderer for Open Presentation Format documents. The shared SVG core implements validation, catalog resolution, placeholder binding and text layout. Node APIs additionally convert SVG to PNG and to PDF (vector with selectable text by default, or raster-backed).
 
 In version 0.8.0, `design.contentBox` uses core's shared padded geometry. The card renders at `item.frameBox`; its payload uses `item.box` and accepted internals. Card padding participates in composition scoring, strict overflow and pagination. This requires core 0.10.0.
 
@@ -104,7 +104,32 @@ const png = await svgToPng(svgs[0], rasterOptions);
 const pdf = await svgToPdf(svgs, rasterOptions);
 ```
 
-`svgToPng` returns PNG bytes for one SVG. `svgToPdf` accepts one SVG or an array of SVGs and returns PDF bytes with one slide per page. The SVG page `width`/`height` or `viewBox` determines the PDF page size; `scale` controls raster density only.
+`svgToPng` returns PNG bytes for one SVG. `svgToPdf` accepts one SVG or an array of SVGs and returns PDF bytes with one slide per page. The SVG page `width`/`height` or `viewBox` determines the PDF page size. **Units: one SVG pixel is one PDF point (1/72 inch), in both modes**, so a 1280 x 720 slide is a 1280 x 720 pt page (17.8 x 10 in, not the 13.33 x 7.5 in PowerPoint prints); a viewer or printer scales it to the paper; `scale` controls raster density only. `svgToPdf` has two modes: `"vector"` (the default, see below) and `"raster"` (each slide an image, the output of earlier releases): pass `{ mode: "raster" }` for the image-only compatibility output.
+
+### Vector PDF with selectable text
+
+`svgToPdf(svgs, { mode: "vector" })` converts the same SVG the preview draws, without a second layout pass: every line, position and width comes from the SVG.
+
+- Shapes, lines, polylines, paths and rounded rectangles are PDF paths; linear and radial gradients are PDF shadings and hatch/tile `<pattern>`s are tiling patterns; `clip-path`, stroke dashes, group `opacity` (a transparency-group form) and per-element opacity are native. Pictures are image XObjects (PNG with alpha as an SMask, unoriented JPEG passed through, WebP and oriented JPEG decoded as in raster mode; identical pictures are stored once).
+- Text is real text: TrueType subsets (the font program, a `ToUnicode` map and a `CIDToGIDMap`) of the same font files the PNG preview draws with, positioned glyph by glyph (kerning, ligatures, combining marks and mixed scripts as fontkit shapes them), with the SVG's `textLength` and `text-anchor`, underline and strike-through. The Unicode bidirectional algorithm orders right-to-left and mixed-direction lines. Text is selectable, searchable and copies as the authored text. The encoding is the one Chromium writes, so PDFium (Chrome, Edge), poppler and pdf.js read it back the way they read a Chrome-printed page: runs are drawn in visual order, right-to-left runs are marked `/ReversedChars`, and a glyph or cluster the glyph map cannot give (an Arabic ligature or mirrored bracket, a reordered Indic or Khmer syllable, a no-break space) carries its logical text as `/ActualText`, one span per glyph or cluster. A mark the font split off a letter (Arabic dots) is drawn as a filled outline, so no extractor sees an extra character. There is no hidden text layer and no outline-only text. Known reader limits, shared with Chrome's own PDFs: PDFium duplicates some Thai and Burmese marks, PDFium reorders the runs of a mixed-direction line, and pdf.js ignores `/ActualText` (it reports reordered Indic and Khmer clusters in drawing order).
+- Fonts: only the bundled pack (unless `useBundledFonts: false`), `fontFiles`, `fontDirs` and the SVG's own `@font-face` data are used; `loadSystemFonts: true` is rejected in vector mode because system fonts could be proprietary. A face whose OS/2 `fsType` forbids embedding is never embedded (a diagnostic says so); one that forbids subsetting is embedded whole. A requested family that has no face is drawn with the family the PNG preview draws (`defaultFontFamily`, `sansSerifFamily`, `monospaceFamily`, `serifFamily`) and reported.
+- Document metadata: `metadata: { title, author, subject, keywords, language, creator, creationDate }`. The language defaults to the first SVG's `lang`. No date is written unless you supply one, there is no random data, and the file identifier is a hash of the content, so identical input gives identical bytes on every machine.
+- Accessibility basics (not a conformance claim): the catalog carries `/Lang`, `/MarkInfo`, `/DisplayDocTitle` (with a title) and XMP metadata; with `tagged` (default) the structure tree lists, per slide in source order, headings (the `.title` placeholder), paragraphs, figures with their `aria-label` as `/Alt` and link elements bound to their link annotations, and decoration (backgrounds, rules, bullets) is marked as an artifact. Not done: PDF/UA or PDF/A claims, list and table structure, per-span languages; text inside a translucent group is not in the structure tree.
+- Links: `<a href>` with an http, https, mailto or tel target becomes a link annotation on each run of its text (other schemes are refused with a diagnostic).
+- Arbitrary SVG is accepted, not only the renderer's: CSS named colours, `hsl()`, `rgb()`, `style=` attributes, `<style>` rules with type, class and id selectors, percentage geometry, `<symbol>` through `<use>`, nested `<svg>`, `<switch>`, gradient and pattern fills on text, `clip-rule` are drawn; features that are not drawn (`rotate`, `dominant-baseline`, `baseline-shift`, `text-transform`, `font-variant`, `paint-order`, `mix-blend-mode`, `writing-mode`, markers, `spreadMethod` reflect/repeat, `textPath`, CSS combinators) are reported as `pdf-unsupported-feature`, `pdf-unsupported-paint` or `pdf-unsupported-css`, and a character no supplied font has is reported as `pdf-glyph-missing`; with `strict: true` each of these throws. Input is bounded: at most 50,000 elements per page (a `<use>` expansion counts every copy; `pdf-expansion-limit`), group nesting of 256, XML nesting of 1,000, and 40 megapixels per picture.
+- Effects with no PDF form (SVG `filter`, `mask`, nested SVG pictures) rasterize that one element, at `rasterFallbackScale` (default 2), and say so through `onDiagnostic` (`pdf-raster-fallback`, with the `data-opf-path` of the element). With `strict: true` the export throws instead. A vector export never turns a whole slide into an image silently.
+
+`onDiagnostic` also reports each embedded face (`pdf-font-embedded`: family, weight, glyph count, size, subset or full, `fsType`, license text), font substitution and per-character fallback. Output is byte-identical across runs and operating systems for the same SVG, font files and options.
+
+```js
+const pdf = await svgToPdf(svgs, {
+  fontFiles: fonts.fontFiles, useBundledFonts: false,
+  metadata: { title: "Quarterly review", author: "Finance", language: "en-GB" },
+  onDiagnostic: (d) => d.code === "pdf-raster-fallback" && console.warn(d.path, d.reason),
+});
+```
+
+The default changed from raster to vector in the release that added this section; callers that need the previous output pass `mode: "raster"`. Vector mode ignores `scale` and `dpi`. The page is painted white by default, as raster mode composites on white; `background: "none"` leaves it unpainted and any other colour paints that.
 
 ## Browser preview and fonts
 
@@ -254,9 +279,10 @@ Dependency policy:
 
 - `@openpresentation/opf` is the compatibility source for schemas, validation, and bundled catalogs.
 - `@resvg/resvg-js` is used only for local SVG rasterization in Node; it makes no network calls and does not require a browser.
-- `pdf-lib` assembles PDF bytes locally. Metadata timestamps are disabled so repeated PDF output is byte-stable for the same SVG input and options.
+- `pdf-lib` assembles raster-mode PDF bytes locally. Metadata timestamps are disabled so repeated PDF output is byte-stable for the same SVG input and options.
+- Vector PDF output is written by a small deterministic PDF writer in this package, with `pako` for Flate compression (pure JavaScript, so independent of the platform zlib build), `fontkit` for shaping and font metrics and `bidi-js` for the Unicode bidirectional algorithm. No hosted service, network call or system font is involved.
 - Bundled OFL Roboto and Roboto Mono TTF files provide the default deterministic font fallback.
-- `svgToPng` and `svgToPdf` disable system-font loading by default. Hosts that require branded fonts should pass explicit `fontFiles` or `fontDirs`; `loadSystemFonts: true` is an opt-in escape hatch and can make output environment-dependent.
+- `svgToPng` and `svgToPdf` disable system-font loading by default. Hosts that require branded fonts should pass explicit `fontFiles` or `fontDirs`; `loadSystemFonts: true` is an opt-in escape hatch for PNG and raster-mode PDF output and can make it environment-dependent. Vector-mode PDF rejects it (`pdf-system-fonts-unsupported`): it embeds only fonts you supply, so a system font can never be embedded by accident.
 
 Browser support boundary: `renderSvg`, `renderSvgDeck`, and `resolvePresentation` are browser-importable pure JavaScript APIs. `svgToPng` and `svgToPdf` are Node APIs in this package version because they depend on the Node build of resvg.
 
