@@ -41,7 +41,7 @@ export type RenderDiagnostic = LayoutDiagnostic | {
   scripts: string[];
   characters: string[];
 } | {
-  code: "unsupported-pattern" | "date-needs-value" | "language-preview-unavailable" | "language-preview-unresolved" | "paragraph-direction-unavailable";
+  code: "unsupported-pattern" | "variable-example-used" | "date-needs-value" | "language-preview-unavailable" | "language-preview-unresolved" | "paragraph-direction-unavailable";
   path: string;
   message: string;
 } | {
@@ -73,6 +73,14 @@ export interface RenderSvgOptions {
   imageResolver?: (src: string | undefined, context: { asset: unknown; path: string }) => string | null | undefined;
   onDiagnostic?: (diagnostic: RenderDiagnostic) => void;
   validate?: boolean;
+  /**
+   * Values for the deck's template variables, keyed by variable id (core `resolveVariables`). A deck that uses
+   * content variables, or is marked `template: true`, is resolved to a concrete deck first. A template previews with
+   * each unfilled variable's example (reported as `variable-example-used`); a normal deck with an unfilled required
+   * variable throws `unfilled-variables`. `false` draws the document as authored, with `{{id}}` tokens and
+   * `var:id` references visible and nothing resolved: the view an editor uses while the template itself is edited.
+   */
+  variables?: Record<string, unknown> | false;
   slideIndex?: number;
   /**
    * Today's calendar date (ISO YYYY-MM-DD) for `date: true` header/footer furniture. The renderer

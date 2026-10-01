@@ -227,6 +227,18 @@ Limits:
 
 These browser entrypoints are included in the published package. For coordinated development, the sibling OPF repository's `pnpm pack:ecosystem` prepares local npm tarballs. See the core repository's [live editor guide](https://github.com/OpenPresentation/opf/blob/main/docs/live-editor.md) for installation and the fidelity contract. Identical SVG geometry does not guarantee identical raster pixels across browser engines or PowerPoint.
 
+## Templates and variables (RR-32)
+
+A deck that declares content variables, or is marked `"template": true`, is resolved by core `resolveVariables` before it is composed, so the preview and the PPTX exporter agree. Pass the values as `variables`:
+
+```js
+import { renderSvgDeck } from '@openpresentation/opf-render';
+
+renderSvgDeck(template, { variables: { client: 'Globex', revenue: 1250000 } });
+```
+
+A template previews with each unfilled variable's `example` and reports `variable-example-used` through `onDiagnostic`; a variable with no example keeps its `{{id}}` text. A normal deck with an unfilled required variable throws `OPFRenderError` with code `unfilled-variables`, and a value of the wrong kind throws `invalid-variables`. `resolvePresentation(...).presentation` is the concrete deck. `variables: false` draws the document as authored, with tokens and `var:` references visible (the editor canvas's view of a template, so inline edits never overwrite a token). Decks without content variables are untouched. Needs the core release that ships `resolveVariables`; with an older core the option is ignored. See [templates and variables](https://github.com/OpenPresentation/opf/blob/main/docs/templates-and-variables.md).
+
 ## Runtime Policy
 
 The package runtime must stay local and deterministic:

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- RR-32: template variables. `renderSvg`, `renderSvgDeck` and `resolvePresentation` accept `variables` (values keyed by variable id) and resolve a deck that uses content variables, or is marked `template: true`, with core `resolveVariables` before composing, so a template plus values previews exactly like the hand-written deck (`test/template-variables.mjs` compares the SVG of four slides). A template previews with each unfilled variable's `example` (diagnostic `variable-example-used`); a normal deck with an unfilled required variable throws `OPFRenderError` `unfilled-variables`; a bad value throws `invalid-variables`. `variables: false` draws the document as authored, tokens visible (the template editing view). Decks without content variables are returned untouched, byte for byte. Needs the core release that ships `resolveVariables` (read from the namespace, so an older core still loads and ignores the option). No gate, golden or tolerance changes.
+
 - RR-15 (opf-render#24): the variable-font native advance gate (Fontkit prediction versus Chromium advance for the Source Serif 4 variable rows) is widened from 0.1 px to 0.15 px by owner decision (2026-10-01), and is now a blocking CI check (`npm run test:variable-font-gate`, constant in `scripts/variable-font-gate.mjs`). Measured: Source Serif Roman SmText Bold is 334.06213682353496 px with Fontkit against 334.193115234375 px in Linux Chromium (0.131 px); across all 356 retained rows the worst delta is 0.1346 px on Linux and 0.0024 px on macOS, and live Chromium 153 on Windows measures 0.1339 px at worst. The 0.1 px static-font reference-pixel gates and the 0.02 pt native gate are unchanged. No runtime code, font bytes or output change.
 
 ## 0.11.9
