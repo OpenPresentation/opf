@@ -141,3 +141,12 @@ export type {
   FontReplacementMeasurement,
 } from './font-policy.js';
 export type {TextLineInk,TextPlacementLine,TextPlacement} from './composition.js';
+
+export {
+  CODE_HIGHLIGHT_LANGUAGES, CODE_HIGHLIGHT_MAX_LENGTH, CODE_PANEL_BACKGROUND, CODE_PANEL_FOREGROUND, CODE_SYNTAX_MIN_CONTRAST,
+  codeLineRuns, codeSyntaxPalette, codeSyntaxPaletteForScheme, resolveCodeLanguage, tokenizeCode,
+} from './code-syntax.js';
+export type { CodeRun, CodeSyntaxPalette, CodeSyntaxPaletteOptions, CodeSyntaxPaletteTheme, CodeToken, CodeTokenKind } from './code-syntax.js';
+export { METRIC_TREND_MIN_CONTRAST, METRIC_TREND_SHAPES, metricTrendColor, metricTrendMark, metricTrendPoints } from './metric-trend.js';
+export type { MetricTrend, MetricTrendColorOptions, MetricTrendMark } from './metric-trend.js';
+export { PATTERN_PRESETS, PATTERN_PRESET_ALIASES, PATTERN_TILE_SIZE, patternBitmap, patternRuns, resolvePatternPreset } from './pattern-fills.js';
