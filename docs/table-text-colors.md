@@ -1,6 +1,6 @@
 # Inherited table text colors
 
-The published core 0.11.0 and later, renderer 0.9.0 and later, and PPTX 0.9.1 and later (current core 0.11.4, renderer 0.11.9, PPTX 0.11.8) use one core rule for inherited table text colors in SVG and editable PowerPoint cells. After resolving the cell fill, keep the inherited text color when its unrounded contrast is at least 4.5:1. Otherwise choose the higher-contrast black or white. This covers pale headers and dark body-cell fills without changing the source document.
+The published core 0.11.0 and later, renderer 0.9.0 and later, and PPTX 0.9.1 and later (current core 0.11.4, renderer 0.11.9, PPTX 0.11.9) use one core rule for inherited table text colors in SVG and editable PowerPoint cells. After resolving the cell fill, keep the inherited text color when its unrounded contrast is at least 4.5:1. Otherwise choose the higher-contrast black or white. This covers pale headers and dark body-cell fills without changing the source document.
 
 An explicit cell `style.color` or rich-text run `color` remains authoritative, including a deliberately low-contrast color. Translucent fills and unresolved colors keep the inherited preference: their actual backdrop must be known before assessing contrast. This rule does not alter fills, borders, fonts, layout or metadata.
 

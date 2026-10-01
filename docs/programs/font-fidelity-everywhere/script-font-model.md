@@ -377,8 +377,9 @@ The script pack is optional, and the shipped hosts load it per document rather t
 - Node uses `prepareNodeFonts({scripts: 'auto', presentation})` for the same selection. It differs in one case: the Latin Noto Sans is loaded as a glyph-fallback face and `auto`
   does not reload it as a designated replacement, so Sylfaen (replacement Noto Sans) with Latin text is `font-unavailable` in Node and works in the editor.
 - The parity harness models the editor (`gallery-support/parity/scripts/font-host.mjs`); see [the run](gallery-support/parity/PARITY-2026-09-30-gallery-font-host.md).
-  Loading a face is not qualifying it: the 61 gallery values whose scheme is a proprietary script font are `near` (a visual Noto replacement), and the pinned Noto Sans Mongolian face
-  loads but cannot shape any text in fontkit.
+  Loading a face is not qualifying it: the 61 gallery values whose scheme is a proprietary script font are `near` (a visual Noto replacement). The script corpora
+  (FF-44, [script-corpora.md](script-corpora.md)) qualify each pinned face's coverage and shaping; the pinned Noto Sans Mongolian face, which could not shape any text in fontkit when this
+  run was made, shapes since the undecodable-lookup guard (it equals HarfBuzz on the corpus).
 
 ## Licensing
 
