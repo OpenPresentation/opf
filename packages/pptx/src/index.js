@@ -2131,7 +2131,8 @@ function addMeasuredPayloadText(slide, text, box, context, options, config) {
 function defaultFooterParts(composeOptions) {
   try {
     const slide = {design: {footer: {left: {date: '2026-01-01'}, center: {text: 'Footer'}, right: {slideNumber: true}}}};
-    return (composeSlide(slide, composeOptions).furniture?.parts ?? []).filter(part => part.kind === 'footer' && part.type === 'text');
+    // Only the zone boxes and line height are used, and they do not depend on text widths: estimated measurement keeps the host's measurer (and its call count) out of this.
+    return (composeSlide(slide, {...composeOptions, textMeasurement: undefined}).furniture?.parts ?? []).filter(part => part.kind === 'footer' && part.type === 'text');
   } catch {
     return undefined;
   }
@@ -2863,9 +2864,8 @@ function isDarkHex(value) {
 }
 
 // The master, layout and notes master half of the native header/footer (RR-11): placeholders and p:hf on the finished parts.
+// Every deck gets them (flags off when no slide uses a type), so Insert > Header & Footer works on a deck with no footer too.
 function writeNativeFurnitureMasters(output, context) {
-  // A deck with no native footer part keeps the master and layout exactly as before.
-  if (!context.nativePlaceholders.used.size) return;
   const size = /<p:sldSz\b[^>]*\bcx="(\d+)"[^>]*\bcy="(\d+)"/.exec(decodeText(output['ppt/presentation.xml'][0]));
   const defaults = new Map((context.defaultFooterOptions ? defaultFooterParts(context.defaultFooterOptions) ?? [] : []).flatMap(part => {
     const ph = {date: 'dt', text: 'ftr', slideNumber: 'sldNum'}[part.field];
@@ -2876,7 +2876,9 @@ function writeNativeFurnitureMasters(output, context) {
     slideSize: {width: size ? Number(size[1]) : 12192000, height: size ? Number(size[2]) : 6858000}, dateText: nativeDateText(context.hostDate)};
   const paths = Object.keys(output);
   try {
-    writeNativeMasters(paths, path => output[path][0], (path, bytes) => { output[path] = [bytes, output[path][1]]; }, info);
+    // The placeholders carry the deck's language and direction like every other generated part (partScriptFonts is idempotent).
+    const written = (path, bytes) => { output[path] = [context.scriptFonts ? encodeText(partScriptFonts(path, decodeText(bytes), context.scriptFonts, 0)) : bytes, output[path][1]]; };
+    writeNativeMasters(paths, path => output[path][0], written, info);
   } catch (error) {
     throw new OPFPptxError('packaging-failed', 'Native header/footer placeholders could not be written.', {cause: errorMessage(error)});
   }

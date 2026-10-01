@@ -30,7 +30,7 @@ The footer manifest marks such a part with `ph` (`dt`, `ftr` or `sldNum`). A sli
 
 ## Master, layout, notes master, presentation
 
-* **Slide master and layout.** When any slide has a native footer part, the master gets Date (idx 2), Footer (idx 3) and
+* **Slide master and layout.** Every deck, with or without a footer, gets on the master Date (idx 2), Footer (idx 3) and
   Slide Number (idx 4) placeholders and the layout the three layout placeholders (idx 10, 11, 12) the slides point at.
   They sit where the first slide's native part of that type sits; a type no slide uses sits where core draws a default
   footer (date left, text center, number right, composed through `composeSlide`). Their text style (size, theme colour,
@@ -43,8 +43,15 @@ The footer manifest marks such a part with `ph` (`dt`, `ftr` or `sldNum`). A sli
 * **Presentation.** There is no deck-wide header/footer setting in `presentation.xml` other than
   `showSpecialPlsOnTitleSld` ("Don't show on title slide"). It only affects layouts typed as title layouts and the exporter
   writes one untyped layout, so it is not written. Hiding a footer on a cover stays the slide-level `design.footer: false`.
-* A deck without a native footer part is byte-identical to the previous export: no placeholders, the master and layout
-  unchanged (`<p:hf sldNum="0" hdr="0" ftr="0" dt="0"/>`).
+* A deck without a native footer part still gets the placeholders, at core's default footer band, with `p:hf sldNum="0" hdr="0"
+  ftr="0" dt="0"`: Insert > Header & Footer works on it, Apply to All creates the placeholders on every slide at the
+  master positions, and the import reads them back as the deck's footer. Its text style is the first header furniture run's,
+  or the master's own text style when the deck has no furniture at all (a footer added there is not muted). The placeholders
+  carry the deck's language (`lang`) like every other part.
+* Measured over the 126 bundled examples against the previous output: 43 decks gain the three parts' placeholders (only
+  `slideMaster1.xml`, `slideLayout1.xml` and `notesMaster1.xml` change, +3,043 bytes uncompressed per deck across the three), 58 decks with a footer
+  change only the `lang` attributes of the master and layout placeholders, 25 are byte-identical; no slide, tag, chart, theme
+  or relationship part changes.
 
 ## Import
 
@@ -90,8 +97,9 @@ The footer manifest marks such a part with `ph` (`dt`, `ftr` or `sldNum`). A sli
    the preview. The cost: PowerPoint's "Reset" on a slide moves the footer to the layout position.
 4. Shape names stay `OPF furniture N part K line 0` (harnesses and tags key on them) instead of PowerPoint's
    "Footer Placeholder 3".
-5. Master and layout placeholders exist only when the deck uses one (decks without footers stay byte-identical). Always
-   writing them would make Insert > Header & Footer work on footer-less decks and is a small follow-up.
+5. Master and layout placeholders exist in every deck (flags off when unused), so Insert > Header & Footer works on a deck with
+   no footer. This was first limited to decks that use one to keep other exports byte-identical; the byte-identity controls
+   were then updated deliberately (see the measurement above).
 6. `p:hf` flags mean "some slide uses it", not "every slide": a deck whose cover hides the footer still has the footer on
    for new slides.
 7. The notes master gets flags only; `showSpecialPlsOnTitleSld` is not written (one untyped layout).

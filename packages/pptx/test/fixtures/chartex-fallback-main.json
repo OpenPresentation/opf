@@ -2,7 +2,7 @@
   "source": {
     "repository": "OpenPresentation/opf-pptx",
     "commit": "6f6122cb7fb8cb89b17c1bea7981397a27ded8ed",
-    "note": "toPptx default output (chartex fallback) for chartex chart types; regenerate only with an owner decision to change the default export The world-category entry (ja-JP) was regenerated for FF-49: the theme cs slot, which the Japanese language does not use, is now empty instead of repeating the latin face; the chart parts are unchanged. Regenerated for FF-62 (chart text is the preview's 12 pt, not 9 pt or the PowerPoint default, in every classic chart part): only chart-part sz values changed; commit is the base the fixture was last regenerated on. Regenerated again for the spec-gap P1 round trip (codex/spec-gaps-roundtrip, on top of FF-62): the OPF_SLIDE_V1 tag now carries the content topology of a root chart payload, so the tag parts, their relationships, content types, presentation.xml customer data and the slide custDataLst lines changed; the chart parts, embedded workbooks, theme and diagnostics are byte-identical to the FF-62 entries (verified part by part against a build of main 90802f3 before regenerating)."
+    "note": "toPptx default output (chartex fallback) for chartex chart types; regenerate only with an owner decision to change the default export The world-category entry (ja-JP) was regenerated for FF-49: the theme cs slot, which the Japanese language does not use, is now empty instead of repeating the latin face; the chart parts are unchanged. Regenerated for FF-62 (chart text is the preview's 12 pt, not 9 pt or the PowerPoint default, in every classic chart part): only chart-part sz values changed; commit is the base the fixture was last regenerated on. Regenerated again for the spec-gap P1 round trip (codex/spec-gaps-roundtrip, on top of FF-62): the OPF_SLIDE_V1 tag now carries the content topology of a root chart payload, so the tag parts, their relationships, content types, presentation.xml customer data and the slide custDataLst lines changed; the chart parts, embedded workbooks, theme and diagnostics are byte-identical to the FF-62 entries (verified part by part against a build of main 90802f3 before regenerating). Regenerated again for RR-11 always-on header/footer placeholders (codex/rr-11-hf-always): a deck with no footer now carries the dt/ftr/sldNum placeholders and p:hf flags on its slide master, layout and notes master; only ppt/slideMasters/slideMaster1.xml, ppt/slideLayouts/slideLayout1.xml and ppt/notesMasters/notesMaster1.xml changed (verified part by part against the previous entries); slides, charts, workbooks, theme, tags and diagnostics are byte-identical."
   },
   "decks": {
     "treemap-category": {
@@ -564,65 +564,65 @@
   },
   "entries": {
     "treemap-category": {
-      "sha256": "b16056f0902161f7e5e6c78c681f4efaf05d4f58c35a24093eb18ee78757ceff",
-      "bytes": 23656,
+      "sha256": "960e958159f87da37ab53f81607ce2678a1ef30f2f462ec55936a71603443667",
+      "bytes": 24377,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback"
       ]
     },
     "histogram-single": {
-      "sha256": "0d240fa0f8f6b89e3f54ec133b0ac8e75ffeb4beb48263864f424e4bc6a8231d",
-      "bytes": 23668,
+      "sha256": "bbf8fd5c6e1e2a9cedb84aee0d58df9d217f8dc3f2f7554d177cc629698f1b3f",
+      "bytes": 24389,
       "diagnostics": [
         "chart-data-adapted/histogram-binned"
       ]
     },
     "histogram-category": {
-      "sha256": "0e7e16f5d0f0ed3de6728826ebcb9c4154376941c2b6bfe19ff37055c0658349",
-      "bytes": 23657,
+      "sha256": "b89c2fc174f4b11673ee83aa6ae8ac2e931f6c2db1bb504381716d1a2e4feb8d",
+      "bytes": 24378,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback"
       ]
     },
     "pareto-multi": {
-      "sha256": "43fa88d33458dc03a93a59c17933fa61de4bd2946615de4acb2424e169b49946",
-      "bytes": 23751,
+      "sha256": "725e5d9f011d79b73c00ffddeb0f1aab5abc96f2f2fde335400b3f889ea7a690",
+      "bytes": 24472,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback"
       ]
     },
     "box-multi": {
-      "sha256": "6f477c9079149836908cea1892088b1e575479993411dfa384df5313d22115d2",
-      "bytes": 23749,
+      "sha256": "d2e836190abb6f1586b91d626f70d0ae5f3b919d800c58883a3042aaee5ff292",
+      "bytes": 24470,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback"
       ]
     },
     "waterfall-single": {
-      "sha256": "07a1b5c28aab26b90e2d1a6807cf58f99179dc576730741540ed0d38b05046fa",
-      "bytes": 23708,
+      "sha256": "bdc42b7c4cf79fe30d14aac1388b5ef8a44b4034bd4684033024c61c4747f7e4",
+      "bytes": 24429,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback",
         "chart-data-adapted/row-numbers"
       ]
     },
     "funnel-category": {
-      "sha256": "385e8f375085a274f740148515826c9b710679e4d3cb127b1c32f876ed285c7f",
-      "bytes": 23658,
+      "sha256": "5d33ffd96aafd14a414d1791e490c7d4f19c346cd7b4d7dba0218a5a4a79c1b0",
+      "bytes": 24379,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback"
       ]
     },
     "world-category": {
-      "sha256": "b75f929dc9fca7f3db910de53e07d30a1afb5665fb75eac7023c1f361c843398",
-      "bytes": 24168,
+      "sha256": "a4832b0d13ce3619bc9a0a94d21450b71114417f8150cd72ed1ff82c9ee6b15b",
+      "bytes": 24888,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback"
       ]
     },
     "all-seven": {
-      "sha256": "4e817a557f89569c8b0e27ae433d6d17ac1d8a2e9524b641b6b5315b70df99b8",
-      "bytes": 109240,
+      "sha256": "406b737e84a532ff99db9808ceeb710f1ef23326a7bd5d2fe8f3a4b14878084e",
+      "bytes": 109961,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback",
         "chart-data-adapted/chartex-fallback",

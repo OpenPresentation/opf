@@ -175,15 +175,44 @@ for (const measured of [false, true]) {
   assert.deepEqual(placeholderShapes(text(entries, slidePath(1))).map(phType), ['sldNum']);
 }
 {
-  // A header-only deck, and a deck without furniture, keep their masters exactly as they were: no placeholders, flags off.
+  // Every deck carries the master and layout placeholders (flags off when no slide uses one), so Insert > Header & Footer
+  // works on a header-only deck and on a deck with no furniture at all; no slide gets a placeholder.
+  const defaults = {design: {fontScheme: 'roboto', footer: {left: {date: DATE}, center: {text: 'Footer'}, right: {slideNumber: true}}}, slides: [{title: 'A'}]};
+  for (const dimensions of [undefined, {widthInches: 10, heightInches: 7.5}, {widthInches: 7.5, heightInches: 13.333333333333334}])
   for (const design of [{fontScheme: 'roboto', header: {left: {text: 'Header only'}}}, {fontScheme: 'roboto'}]) {
-    const {entries} = await exportDeck({design, slides: [{title: 'A', text: 'Body', notes: 'Spoken'}]});
+    const sized = dimensions ? {...design, dimensions} : design;
+    const {entries} = await exportDeck({design: sized, slides: [{title: 'A', text: 'Body', notes: 'Spoken'}]});
     assert.deepEqual(placeholderShapes(text(entries, slidePath(1))), []);
-    assert.equal(shapesOf(text(entries, 'ppt/slideMasters/slideMaster1.xml')).length, 0);
-    assert.equal(shapesOf(text(entries, 'ppt/slideLayouts/slideLayout1.xml')).length, 0);
-    assert.match(text(entries, 'ppt/slideMasters/slideMaster1.xml'), /<p:hf sldNum="0" hdr="0" ftr="0" dt="0"\/>/);
-    assert.doesNotMatch(text(entries, 'ppt/notesMasters/notesMaster1.xml'), /<p:hf\b/);
+    const master = text(entries, 'ppt/slideMasters/slideMaster1.xml'), layout = text(entries, 'ppt/slideLayouts/slideLayout1.xml');
+    assert.deepEqual(shapesOf(master).map(phOf), ['type="dt" sz="half" idx="2"', 'type="ftr" sz="quarter" idx="3"', 'type="sldNum" sz="quarter" idx="4"']);
+    assert.deepEqual(shapesOf(layout).map(phOf), ['type="dt" sz="half" idx="10"', 'type="ftr" sz="quarter" idx="11"', 'type="sldNum" sz="quarter" idx="12"']);
+    assert.match(master, /<p:hf sldNum="0" hdr="0" ftr="0" dt="0"\/>/);
+    assert.match(layout, /<\/p:clrMapOvr><p:hf sldNum="0" hdr="0" ftr="0" dt="0"\/><\/p:sldLayout>/);
+    assert.match(text(entries, 'ppt/notesMasters/notesMaster1.xml'), /<p:clrMap [^>]*\/><p:hf hdr="0" ftr="0" dt="0"\/><p:notesStyle>/);
+    // Geometry is core's default footer band for this slide size: where a footer added natively lands.
+    const reference = resolvePresentation({design: {...defaults.design, ...(dimensions ? {dimensions} : {})}, slides: defaults.slides}).slides[0].geometry.furniture.parts;
+    for (const [at, part] of reference.entries()) {
+      const box = xfrmOf(shapesOf(master)[at]);
+      for (const [actual, expected] of [[box.x, part.box.x], [box.y, part.box.y], [box.cx, part.box.width], [box.cy, part.fit.lineHeight]]) assert.equal(actual, Math.round(expected * 9525));
+    }
+    // The header furniture, when there is one, supplies the default text style; with none the master's own text style applies.
+    assert.equal(/<a:solidFill>/.test(shapesOf(master)[0]), Boolean(design.header));
+    assert.equal(hash((await exportDeck({design: sized, slides: [{title: 'A', text: 'Body', notes: 'Spoken'}]})).bytes), hash((await exportDeck({design: sized, slides: [{title: 'A', text: 'Body', notes: 'Spoken'}]})).bytes));
   }
+  // The placeholders carry the deck's language like every other part: no stray en-US in the master or layout.
+  for (const language of ['en-GB', 'ja-JP']) for (const footer of [undefined, {left: {date: true}, right: {slideNumber: true}}]) {
+    const {entries} = await exportDeck({language, design: {fontScheme: 'roboto', ...(footer ? {footer} : {})}, slides: [{title: 'A', text: 'Body'}]});
+    const tags = new Set(['ppt/slideMasters/slideMaster1.xml', 'ppt/slideLayouts/slideLayout1.xml', 'ppt/slides/slide1.xml'].flatMap(path => [...text(entries, path).matchAll(/\blang="([^"]+)"/g)].map(match => match[1])));
+    assert.deepEqual([...tags], [language === 'ja-JP' ? 'ja-JP' : language], `${language} ${footer ? 'with' : 'without'} a footer`);
+  }
+  // The dialog on such a deck: placeholders it adds have no xfrm and inherit the master's, which names the zones.
+  const bare = await exportDeck({design: {fontScheme: 'roboto'}, slides: [{title: 'A', text: 'Body'}, {title: 'B', text: 'Body'}]});
+  const ph = (type, idx, sz, body) => '<p:sp><p:nvSpPr><p:cNvPr id="90" name="' + type + '"/><p:cNvSpPr><a:spLocks noGrp="1"/></p:cNvSpPr><p:nvPr><p:ph type="' + type + '" sz="' + sz + '" idx="' + idx + '"/></p:nvPr></p:nvSpPr><p:spPr/><p:txBody><a:bodyPr/><a:lstStyle/><a:p>' + body + '</a:p></p:txBody></p:sp>';
+  const added = mutate(bare.entries, Object.fromEntries([1, 2].map(index => [slidePath(index), xml => xml.replace('</p:spTree>',
+    ph('dt', 10, 'half', '<a:fld id="{00000000-0000-4000-8000-000000000001}" type="datetime1"><a:rPr lang="en-US"/><a:t>9/10/2026</a:t></a:fld>') +
+    ph('ftr', 11, 'quarter', '<a:r><a:rPr lang="en-US"/><a:t>Dialog footer</a:t></a:r>') +
+    ph('sldNum', 12, 'quarter', '<a:fld id="{00000000-0000-4000-8000-000000000002}" type="slidenum"><a:rPr lang="en-US"/><a:t>' + index + '</a:t></a:fld>') + '</p:spTree>')])));
+  assert.deepEqual((await read(added)).imported.design.footer, {left: {date: true}, center: {text: 'Dialog footer'}, right: {slideNumber: true}});
 }
 {
   // Footer parts that wrap in a narrow portrait deck are several lines each: shapes, never a native placeholder.
