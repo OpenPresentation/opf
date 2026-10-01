@@ -1,6 +1,7 @@
 // Node loader for exercising sibling repositories against this checkout.
 // Does not modify node_modules or package locks. Build OPF before using it.
-const dist = new URL('../packages/javascript/dist/', import.meta.url);
+// OPF_CORE_DIST (optional) names another built core `dist` directory, to compare two builds (docs/programs/release-readiness/rr-16-corpus-impact.mjs).
+const dist = process.env.OPF_CORE_DIST ? new URL(`file:///${process.env.OPF_CORE_DIST.replaceAll('\\', '/').replace(/^\/+/, '').replace(/\/?$/, '/')}`) : new URL('../packages/javascript/dist/', import.meta.url);
 export function resolve(specifier, context, nextResolve) {
   if (specifier === '@openpresentation/opf') return { url: new URL('index.js', dist).href, shortCircuit: true };
   if (specifier.startsWith('@openpresentation/opf/')) {

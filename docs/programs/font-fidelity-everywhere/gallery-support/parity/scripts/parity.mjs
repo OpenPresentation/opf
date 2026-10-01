@@ -45,7 +45,9 @@ const FONT_HOST = process.env.PARITY_FONT_HOST ?? 'gallery';
 const fontHosts = await createFontHosts({renderDir: RENDER, model: FONT_HOST});
 
 // ---------- tolerances ----------
-const TOL = {geomPt: 0.02, geomNearPt: 0.5, sizePt: 0.005, sizeNearPt: 0.5};
+// sizePt (RR-16, opf#213): composed font sizes sit on PowerPoint's 0.01 pt grid (core snapFontSizeDown), so the preview and the PPTX `sz` must be the same value.
+// The preview prints font-size in px to 0.001 and this script rounds the point value to 0.001, so 0.001 pt is the finest unambiguous check (it was 0.005 pt before RR-16).
+const TOL = {geomPt: 0.02, geomNearPt: 0.5, sizePt: 0.001, sizeNearPt: 0.5};
 const EMU_PT = 12700, PX_PT = 0.75;
 const r3 = n => Math.round(n * 1000) / 1000;
 const dec = new TextDecoder();
