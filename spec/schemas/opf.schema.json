@@ -532,7 +532,7 @@
         },
         "logo": {
           "$ref": "#/$defs/Asset",
-          "description": "Source for the organization's logo image. Accepts an HTTPS URL, data URI, relative path (resolved against the OPF file location), local path, or 'asset:<id>' reference. Common formats are SVG (preferred for vector logos), PNG (with transparency), or JPG. The primary organization's logo is used by default for cover-slide and footer branding; design.logo overrides the source.",
+          "description": "Source for the organization's logo image. Accepts an HTTPS URL, data URI, relative path (resolved against the OPF file location), local path, or 'asset:<id>' reference. Common formats are SVG (preferred for vector logos), PNG (with transparency), or JPG. The primary organization's logo (role 'primary', else the first organization) is the fallback source wherever the deck logo is drawn: a slide's design.logo, then design.logo, then this value. It is therefore drawn on cover and section slides and by header/footer zones with logo: true, exactly as design.logo would be (see design.logo and docs/design-resolution.md).",
           "examples": [
             "https://cdn.acme.com/logo.svg",
             "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9V3iWggAAAAASUVORK5CYII=",
@@ -595,7 +595,7 @@
         },
         "photo": {
           "$ref": "#/$defs/Asset",
-          "description": "Source for the speaker's headshot image. Accepts an HTTPS URL, data URI, relative path (resolved against the OPF file location), local path, or 'asset:<id>' reference. Common formats are JPG or PNG; SVG is not appropriate for photographic content. Used on cover and bio slides.",
+          "description": "Source for the speaker's headshot image. Accepts an HTTPS URL, data URI, relative path (resolved against the OPF file location), local path, or 'asset:<id>' reference. Common formats are JPG or PNG; SVG is not appropriate for photographic content. Authoring metadata for hosts and layouts (cover and bio slides built by a host): the reference renderer and exporter do not draw it, because no slide field or layout slot places a speaker; it round-trips through PPTX provenance.",
           "examples": [
             "https://cdn.acme.com/headshots/alice.jpg",
             "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAr/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFAEBAAAAAAAAAAAAAAAAAAAAAP/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AJ//2Q==",
@@ -855,7 +855,7 @@
             { "$ref": "#/$defs/Asset" },
             { "$ref": "#/$defs/LogoSet" }
           ],
-          "description": "Deck logo assets used by layouts, covers, section dividers, headers, and footers. A string is the default logo source; object form provides light/dark, stacked, icon, and wordmark variants. When omitted, the renderer falls back to the primary organization logo.",
+          "description": "Deck logo assets used by covers, section dividers, headers, footers and picture bullets. A string or Asset object is the default logo source; the LogoSet object form provides light/dark, stacked, icon, and wordmark variants (see LogoSet for the selection order). Source precedence: a slide's design.logo, then this value, then the primary organization's logo; absence inherits. Placement (reference engines, vetoable): on a cover or section slide (no body payload on a heading-only layout such as title, title-subtitle or section-divider, or no layout) the lockup variant is drawn at the top-left of the free area, inside the slide padding and below any header furniture, in a box 56 reference pixels tall and at most four times as wide; the tag/title/subtitle group then centers in the remaining span. Content slides never get an automatic logo. Header and footer zones draw the icon variant when they set logo: true, and design.listBullet 'image' draws it as the picture bullet. composeSlide returns the cover box as geometry.logo.",
           "examples": [
             "asset:acme-logo",
             { "default": "asset:acme-logo", "light": "asset:acme-logo-white", "icon": "asset:acme-icon" }
@@ -1008,12 +1008,12 @@
         "contentDirection": {
           "type": "string",
           "enum": ["horizontal", "vertical"],
-          "description": "Axis along which parallel body/content regions are arranged."
+          "description": "Axis along which parallel body content is arranged. Sets the root arrangement mode of blocks and root payloads when no composition.mode is set on the slide or on its layout record: 'vertical' is column, 'horizontal' is row. Precedence: composition.mode (the slide's own, else the layout record's geometry contract), then this value (slide design, then deck design), then the layout record's slideLayoutDirection, then automatic selection. A layout that carries a composition.mode keeps its grid or direction whatever this value says. Promoted regions (left, top:left, ...) keep their explicit geometry and nested groups keep their own composition."
         },
         "chartPrimary": {
           "type": "string",
           "enum": ["none", "top", "bottom", "left", "right"],
-          "description": "For chart layouts, where the primary chart sits relative to supporting content. 'none' means chart regions have equal weight."
+          "description": "Where the primary chart sits relative to supporting content. Effective value: slide design, then deck design, then the layout record's contentTypeChartPrimary. When the slide has no promoted regions and no composition.mode of its own, and its root nodes mix at least one chart with other content, the first chart becomes a primary track and the other nodes form one synthetic sub-grid: 'left'/'right' is a two-track row and 'top'/'bottom' a two-track column, weighted 3:2 in favor of the chart; explicit root columns and weights are ignored while it applies. 'none' (the default) keeps the ordinary automatic grid with equal weight."
         },
         "imageFill": {
           "type": "string",
@@ -1023,7 +1023,7 @@
         "listBullet": {
           "type": "string",
           "enum": ["character", "image"],
-          "description": "Default bullet rendering style for list layouts."
+          "description": "Marker style for items and bullets lists. 'character' (the default) draws the glyph marker. 'image' draws the deck's icon logo (a slide's design.logo, then design.logo, then the primary organization's logo; light variants on dark backgrounds) as a picture bullet: a square of the marker's font size whose bottom sits on the marker baseline, so list geometry does not change. Without a logo the glyph is drawn and the engine reports unresolved-content at this field."
         }
       }
     },
@@ -1280,7 +1280,7 @@
         },
         "accent": {
           "$ref": "#/$defs/Font",
-          "description": "Abstract role: font used for accent text such as quotes or callouts. No direct OOXML slot."
+          "description": "Abstract role: font used for accent text. When set, the slide tag (eyebrow) and the quote body use this family instead of the body and heading families; nothing else changes. resolveFontFamilies() returns it as accent only when the scheme defines it. No direct OOXML slot: PPTX export writes it on those runs, and the theme fonts stay major/minor."
         },
         "code": {
           "$ref": "#/$defs/Font",
@@ -1593,7 +1593,7 @@
     },
     "LogoSet": {
       "type": "object",
-      "description": "Deck logo variants surfaced by layouts, covers, section dividers, headers, and footers. Organization identity lives in organization; this object only controls visual rendering assets. Renderer convention: on dark backgrounds prefer the 'light' variant, on light backgrounds prefer the 'dark' variant, and in square/vertical slots prefer the stacked family when present.",
+      "description": "Deck logo variants surfaced by covers, section dividers, headers, footers and picture bullets. Organization identity lives in organization; this object only controls visual rendering assets. Engines select one variant per slot and background tone (resolveLogo in @openpresentation/opf): same-tone variants first, neutral ones next, the opposite tone last. Lockup on a dark background: light, default, stackedLight, stacked, wordmarkLight, wordmark, iconLight, icon, then dark, stackedDark, wordmarkDark, iconDark; on a light background: dark, default, stackedDark, stacked, wordmarkDark, wordmark, iconDark, icon, then light, stackedLight, wordmarkLight, iconLight. The icon slot (headers, footers, picture bullets) tries iconLight or iconDark for the tone, then icon, then the lockup chain; the stacked slot tries stackedLight or stackedDark, then stacked, then the lockup chain.",
       "additionalProperties": false,
       "properties": {
         "default": {
@@ -1684,8 +1684,12 @@
     },
     "HeaderFooterItem": {
       "type": "object",
-      "description": "One header/footer zone. Every configured field renders; fields in one zone stack top to bottom in the order image, text, organization, section, slide number, date. Put a date and a slide number in different zones to keep each on the zone's single line.",
+      "description": "One header/footer zone. Every configured field renders; fields in one zone stack top to bottom in the order logo, image, text, organization, socials, section, slide number, date. Put a date and a slide number in different zones to keep each on the zone's single line.",
       "properties": {
+        "logo": {
+          "type": "boolean",
+          "description": "Whether to render the deck's icon logo in this zone: a slide's design.logo, then design.logo, then the primary organization's logo (LogoSet icon variants first, light ones on dark backgrounds). It is a generated image part in the same box as image; without a logo the engine reports unresolved-content at this field. Use image for a literal picture that is not the deck logo."
+        },
         "text": {
           "type": "string",
           "description": "Literal text rendered in this zone.",

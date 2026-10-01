@@ -90,6 +90,8 @@ export {layoutTimeline} from './composition.js';
 export type {TimelineEvent,TimelineContent,TimelineTextPart,TimelineLayoutDiagnostic,TimelineLayout,TimelineLayoutOptions} from './composition.js';
 export type { FontSchemeDiagnostic, ResolvedFontScheme } from "./composition.js";
 export type { TextStyle, FontFamilies, TextMeasurement, MeasureTextWidth, Composition, LayoutBox, LayoutDiagnostic, TextFit, ComposedItem, ComposedSlideImage, SlideImageShape, ComposedGroup, ComposedFlow, CompositionTrack, CompositionPenalties, CompositionCandidate, CompositionDecision, CompositionExplanation, SlideComposition, ComposeSlideOptions } from "./composition.js";
+export { resolveLogo } from './composition.js';
+export type { LogoSlot, ResolvedLogo, ResolveLogoOptions, ComposedLogo, ListBulletImage, ListFitOptions } from './composition.js';
 
 export { paginatePresentation, paginateSlide, OPFPaginationError } from './pagination.js';
 export type { PresentationPaginationOptions, PresentationPaginationResult, PaginationOptions, PaginationResult, PaginatedPage, PaginationMapping } from './pagination.js';

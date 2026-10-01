@@ -117,13 +117,18 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
     return composeSlide(withReadability(slide,true), {...options,slideNumber:(options.slideNumber??sourceIndex+1)+pageIndex});
   };
   const initial = geometry(source);
+  // Only fit diagnostics (and anything from the repeated furniture) drive pagination. Design-level
+  // notices such as unresolved-content for listBullet: "image" without a logo, or an unsupported
+  // slide-image treatment, never clear by splitting content; hosts report them from their own
+  // composition and the pages keep the source design.
+  const fit = (diagnostics: LayoutDiagnostic[]) => diagnostics.filter(issue => issue.code === 'text-overflow' || issue.code === 'small-cell' || !!initial.furniture?.diagnostics.includes(issue));
   const repeatedMappings = (pageIndex: number): PaginationMapping[] => {
     if(!initial.furniture)return [];
     const paths = new Set(initial.items.filter(item=>headingFields.has(item.field)).map(item=>item.path));
     for (const part of initial.furniture?.parts??[]) { paths.add(part.path); if(part.sourcePath) paths.add(part.sourcePath); }
     return [...paths].map(sourcePath=>({sourcePath,outputPath:sourcePath.startsWith(`${sourceBase}.`)?`slides.${sourceIndex+pageIndex}${sourcePath.slice(sourceBase.length)}`:sourcePath}));
   };
-  if (!initial.diagnostics.length) return { slides:[source], pages:[{slideIndex:sourceIndex,mappings:initial.items.map(item=>({sourcePath:item.path,outputPath:item.path})),...(initial.furniture?{repeatedMappings:repeatedMappings(0)}:{})}] };
+  if (!fit(initial.diagnostics).length) return { slides:[source], pages:[{slideIndex:sourceIndex,mappings:initial.items.map(item=>({sourcePath:item.path,outputPath:item.path})),...(initial.furniture?{repeatedMappings:repeatedMappings(0)}:{})}] };
   const headerIssues = initial.diagnostics.filter(issue=>headingFields.has(issue.path.slice(sourceBase.length+1))||initial.furniture?.diagnostics.includes(issue));
   if (headerIssues.length) throw new OPFPaginationError('Repeated headings or header/footer content cannot fit or resolve. Change the repeated content or slide design before pagination.',headerIssues);
   const leaves = initial.items.filter(item=>!headingFields.has(item.field)).map(item=>leafFor(item.path,item.field,item.value));
@@ -180,12 +185,12 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
     if (pageIndex > 0) delete slide.notes;
     return {slide,mappings};
   };
-  const diagnosticsFor = (portions: Map<string,Portion>) => geometry(project(portions,slides.length).slide,slides.length).diagnostics;
+  const diagnosticsFor = (portions: Map<string,Portion>) => fit(geometry(project(portions,slides.length).slide,slides.length).diagnostics);
   const finish = () => {
     if (!selected.size) return;
     if (slides.length >= maxSlides) throw new OPFPaginationError(`Pagination needs more than ${maxSlides} slides. No partial result was returned.`);
     const {slide,mappings} = project(selected,slides.length);
-    const issues = geometry(slide,slides.length).diagnostics;
+    const issues = fit(geometry(slide,slides.length).diagnostics);
     if (issues.length) throw new OPFPaginationError('A continuation page does not fit at its final page number. No partial result was returned.',issues);
     assignPageIds(slide,slides.length);
     assertValidPresentation({slides:[slide]});

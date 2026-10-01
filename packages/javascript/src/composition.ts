@@ -23,7 +23,8 @@ export interface LayoutDiagnostic {
 /** Physical legacy-family selection supplied by a font provider, independently of its numeric weight. */
 export interface FontFaceSelection { family: string; bold: boolean; italic: boolean }
 export interface TextStyle { fontFamily: string; fontWeight: number; italic?: boolean; path?: string; fontFace?: FontFaceSelection }
-export interface FontFamilies { heading: string; body: string; code: string }
+/** Role families. `accent` is present only when the scheme defines an accent role; the slide tag and quote body use it. */
+export interface FontFamilies { heading: string; body: string; code: string; accent?: string }
 /** Documented monospace fallback for the code role when a resolved scheme defines no `code`. */
 const FALLBACK_CODE_FAMILY = "Roboto Mono";
 /** Shared last-resort font-scheme id when neither the slide, the deck nor the resolved theme names one.
@@ -63,14 +64,18 @@ export function resolveFontSchemeReference(reference: unknown, lookup: (id: stri
 /** Resolve role families from an already-merged font scheme (catalog record plus design overrides).
  * A scheme that names no heading or body family gets the DEFAULT_FONT_SCHEME families (Aptos Display, Aptos).
  * `code` comes from the scheme's `code` role, which catalog records such as consolas and courier-new
- * carry; otherwise it is Roboto Mono. Heading and body families are never reused for code. */
+ * carry; otherwise it is Roboto Mono. Heading and body families are never reused for code.
+ * `accent` is returned only when the scheme defines an `accent` role (a family string or Font object);
+ * the slide tag and the quote body use it in place of the body and heading families. */
 export function resolveFontFamilies(input: unknown): FontFamilies {
   const scheme = record(input);
   const family = (value: unknown) => typeof value === "string" ? value : record(value).family;
+  const accent = family(scheme.accent);
   return {
     heading: family(scheme.heading) ?? scheme.major ?? scheme.minor ?? DEFAULT_FONT_FAMILIES.heading,
     body: family(scheme.body) ?? scheme.minor ?? scheme.major ?? DEFAULT_FONT_FAMILIES.body,
     code: family(scheme.code) ?? FALLBACK_CODE_FAMILY,
+    ...(typeof accent === "string" && accent ? { accent } : {}),
   };
 }
 export interface TextMeasurement {
@@ -174,6 +179,11 @@ export interface ComposedItem {
   metricLayout?: MetricLayout;
   /** Complete timeline fields, markers and connector accepted by composition. */
   timelineLayout?: TimelineLayout;
+  /**
+   * Picture bullet for `items`/`bullets` payloads when the effective `design.listBullet` is `image`
+   * and the deck's icon logo resolves. Every entry marker in `text.listEntries` carries the same value.
+   */
+  bulletImage?: ListBulletImage;
   /** Effective container settings, including inherited readability constraints. */
   composition: Composition;
   /**
@@ -226,6 +236,18 @@ export interface SlideImageShape {
   adjust: Record<string, number>;
   path: string;
 }
+/** Which logo variant family a consumer asks for: the full lockup, a square mark, or a stacked lockup. */
+export type LogoSlot = 'lockup' | 'icon' | 'stacked';
+/** A logo asset chosen by resolveLogo, with its source value, OPF path, LogoSet variant key and the slot it serves. */
+export interface ResolvedLogo { source: unknown; path: string; variant: string; slot: LogoSlot }
+/**
+ * The deck logo drawn on a cover or section slide, at the top-left of the free area and above the
+ * centered heading group. Consumers fit the image inside `box` preserving its aspect ratio,
+ * anchored left and vertically centered; content slides never carry one.
+ */
+export interface ComposedLogo { box: LayoutBox; slot: 'lockup'; path: string; source: unknown; variant: string; anchor: 'left' }
+/** Picture bullet source for list markers: the deck's icon logo and the OPF path it was read from. */
+export interface ListBulletImage { source: unknown; path: string }
 export interface ComposedGroup { path: string; box: LayoutBox; contentBox: LayoutBox; composition: Composition }
 export interface CompositionTrack { offset: number; size: number }
 /** Resolved flow geometry, including empty reserved slots. Promoted regions are not flows. */
@@ -257,7 +279,8 @@ export interface CompositionCandidate {
 export interface CompositionDecision {
   path: string;
   mode: NonNullable<Composition['mode']> | 'regions';
-  reason: 'lowest-score' | 'configured-mode' | 'promoted-regions';
+  /** `chart-primary`: the root split a primary chart from a synthetic container of the other nodes (design.chartPrimary). */
+  reason: 'lowest-score' | 'configured-mode' | 'promoted-regions' | 'chart-primary';
   selectedColumns?: number;
   /** Only candidates actually evaluated by automatic selection, in tie-break order. */
   candidates: CompositionCandidate[];
@@ -287,11 +310,18 @@ export interface SlideComposition {
   furniture?: FurnitureLayout;
   /** Active slide-level image; absent when design.slideImage does not apply to this slide. */
   slideImage?: ComposedSlideImage;
+  /** Deck logo on a cover or section slide; absent on content slides and when no logo resolves. */
+  logo?: ComposedLogo;
   explanation?: CompositionExplanation;
 }
 export interface ComposeSlideOptions {
-  /** Context for inherited furniture, generated organization names and social profiles. */
-  presentation?: { design?: { header?: unknown; footer?: unknown; slideImage?: unknown; imageFill?: unknown }; organization?: unknown; slides?: unknown; catalogs?: unknown };
+  /** Context for inherited furniture, generated organization names, social profiles, logos and layout hints. */
+  presentation?: { design?: { header?: unknown; footer?: unknown; slideImage?: unknown; imageFill?: unknown; logo?: unknown; contentDirection?: unknown; chartPrimary?: unknown; listBullet?: unknown }; organization?: unknown; slides?: unknown; catalogs?: unknown };
+  /**
+   * Whether the slide background is dark, by the host's own luminance test. Selects the light logo
+   * variants (cover logo, furniture `logo: true`, picture bullets). Core never inspects colors.
+   */
+  darkBackground?: boolean;
   /**
    * Host-resolved social-platform records for generated `socials` furniture.
    * Inline `presentation.catalogs.socialPlatforms.records` take precedence. Hosts
@@ -437,10 +467,68 @@ function resolveSlideImage(slide: Record<string, any>, layout: Record<string, an
   return result;
 }
 
+/** LogoSet keys in preference order per slot and tone: same-tone variants first, neutral next, the opposite tone last. */
+const LOGO_LOCKUP_CHAINS = {
+  dark: ['light', 'default', 'stackedLight', 'stacked', 'wordmarkLight', 'wordmark', 'iconLight', 'icon', 'dark', 'stackedDark', 'wordmarkDark', 'iconDark'],
+  light: ['dark', 'default', 'stackedDark', 'stacked', 'wordmarkDark', 'wordmark', 'iconDark', 'icon', 'light', 'stackedLight', 'wordmarkLight', 'iconLight'],
+} as const;
+const LOGO_SET_KEYS = new Set<string>(LOGO_LOCKUP_CHAINS.dark);
+export interface ResolveLogoOptions {
+  /** Variant family to prefer; defaults to the full lockup. */
+  slot?: LogoSlot;
+  /** True on a dark background (host luminance test): light variants are preferred, dark ones come last. */
+  onDark?: boolean;
+  /** Index used in the `slides.N.design.logo` path of a slide-level logo; defaults to 0. */
+  slideIndex?: number;
+}
+/**
+ * Resolve the logo a slide should draw, the same way in every engine. Source precedence:
+ * `slides[i].design.logo`, then `design.logo`, then the primary organization's `logo` (`role: 'primary'`,
+ * else the first organization; `organization` may be an object or an array). Absence inherits; a source
+ * that yields no usable asset falls through to the next. A string or Asset object is the `default`
+ * variant. A LogoSet picks by slot and tone: `icon` tries iconLight/iconDark (tone), then icon, then the
+ * lockup chain; `stacked` tries stackedLight/stackedDark (tone), then stacked, then the lockup chain; the
+ * lockup chain prefers same-tone variants, then neutral ones, then the opposite tone. `path` is the OPF
+ * path of the chosen value (`design.logo`, `design.logo.light`, `organization.2.logo`,
+ * `slides.3.design.logo.icon`) and `variant` the LogoSet key or `default`. Returns null without a logo.
+ */
+export function resolveLogo(presentation: unknown, slide: unknown, options: ResolveLogoOptions = {}): ResolvedLogo | null {
+  const slot: LogoSlot = options.slot === 'icon' || options.slot === 'stacked' ? options.slot : 'lockup';
+  if (options.slot !== undefined && slot !== options.slot) throw new RangeError('Logo slot must be lockup, icon or stacked.');
+  const tone = options.onDark === true ? 'dark' : 'light';
+  const lockup = LOGO_LOCKUP_CHAINS[tone];
+  const chain = slot === 'icon' ? [tone === 'dark' ? 'iconLight' : 'iconDark', 'icon', ...lockup]
+    : slot === 'stacked' ? [tone === 'dark' ? 'stackedLight' : 'stackedDark', 'stacked', ...lockup] : lockup;
+  const usable = (value: unknown) => { const source = assetSource(value); return typeof source === 'string' && source.length > 0; };
+  const pick = (value: unknown, path: string): ResolvedLogo | null => {
+    if (value === undefined || value === null || value === false) return null;
+    if (typeof value === 'string' || (typeof value === 'object' && !Array.isArray(value) && 'src' in record(value))) {
+      return usable(value) ? { source: value, path, variant: 'default', slot } : null;
+    }
+    const set = record(value);
+    if (!Object.keys(set).some(key => LOGO_SET_KEYS.has(key))) return null;
+    for (const key of chain) {
+      const variant = set[key];
+      if (variant !== undefined && usable(variant)) return { source: variant, path: `${path}.${key}`, variant: key, slot };
+    }
+    return null;
+  };
+  const deck = record(presentation), slideIndex = Number.isSafeInteger(options.slideIndex) && options.slideIndex! >= 0 ? options.slideIndex! : 0;
+  const own = pick(record(record(slide).design).logo, `slides.${slideIndex}.design.logo`);
+  if (own) return own;
+  const shared = pick(record(deck.design).logo, 'design.logo');
+  if (shared) return shared;
+  const organizations: unknown[] = Array.isArray(deck.organization) ? deck.organization : [deck.organization];
+  const primaryIndex = organizations.findIndex(item => record(item).role === 'primary');
+  const index = primaryIndex >= 0 ? primaryIndex : organizations.findIndex(Boolean);
+  if (index < 0) return null;
+  return pick(record(organizations[index]).logo, Array.isArray(deck.organization) ? `organization.${index}.logo` : 'organization.logo');
+}
+
 export interface FurniturePartBase {
   kind: 'header' | 'footer';
   zone: 'left' | 'center' | 'right';
-  field: 'text' | 'image' | 'organization' | 'socials' | 'section' | 'slideNumber' | 'date';
+  field: 'text' | 'image' | 'logo' | 'organization' | 'socials' | 'section' | 'slideNumber' | 'date';
   /** Literal field or controlling flag, with the actual inherited/local path. */
   path: string;
   /** String/asset source, when different from a generated field's flag. */
@@ -579,8 +667,15 @@ export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {
         if(accepted.overflow)error(partPath,'Repeated text exceeds its zone at the selected readability floor; change the furniture or slide design.');
         y+=box.height;
       };
+      const imageBox=()=>({x,y,width:zoneWidth,height:Math.max(32*scale,Math.min(height*.05,72*scale))});
+      if(content.logo===true){
+        // The deck's icon logo (slide design, deck design, then the primary organization), as a generated image part.
+        const resolved=resolveLogo(options.presentation,slide,{slot:'icon',onDark:options.darkBackground,slideIndex:options.slideIndex});
+        if(resolved){const box=imageBox();zoneParts.push({type:'image',kind,zone,field:'logo',path:`${path}.logo`,sourcePath:resolved.path,generated:true,image:resolved.source,box,alignment:zone});y+=box.height;}
+        else error(`${path}.logo`,'Generated logo needs design.logo or a primary organization logo.','unresolved-content');
+      }
       if(content.image!==undefined){
-        const box={x,y,width:zoneWidth,height:Math.max(32*scale,Math.min(height*.05,72*scale))};
+        const box=imageBox();
         zoneParts.push({type:'image',kind,zone,field:'image',path:`${path}.image`,sourcePath:`${path}.image`,generated:false,image:content.image,box,alignment:zone});y+=box.height;
       }
       add('text',content.text);
@@ -743,7 +838,7 @@ export function layoutQuote(value: string | QuoteContent, box: LayoutBox, option
   const bodyPath = shorthand ? path : `${path}.text`;
   const body = add('body',`"${quote.text}"`,[source(bodyPath,quote.text,1)],
     {x:box.x+18,y:box.y+18,width:box.width-36,height:box.height-(footer?94:36)},
-    28,options.fonts?.heading??'sans-serif',600,bodyPath);
+    28,options.fonts?.accent??options.fonts?.heading??'sans-serif',600,bodyPath);
   const attribution = footer ? add('footer',footer,footerSources,
     {x:box.x+18,y:box.y+box.height-58,width:box.width-36,height:40},
     17,options.fonts?.body??'sans-serif',500,path) : undefined;
@@ -1457,11 +1552,20 @@ export interface ListEntryLayout {
   text:RichTextFit; description?:RichTextFit;
   textBox:LayoutBox; descriptionBox?:LayoutBox;
   marker:{text:string;x:number;y:number;fontSize:number;style:TextStyle;indent:number};
+  /**
+   * Picture bullet replacing the marker glyph: a square of side `marker.fontSize` whose bottom sits on
+   * the marker baseline (`marker.y`) and whose left edge is `marker.x`. Marker geometry is unchanged.
+   */
+  bulletImage?:ListBulletImage;
 }
 export interface ListFit extends TextFit { listEntries:ListEntryLayout[]; height:number }
+export interface ListFitOptions extends RichTextOptions {
+  /** Picture bullet for every entry (effective `design.listBullet: "image"` with a resolved icon logo). */
+  bulletImage?:ListBulletImage;
+}
 
 /** Shared hanging indents, mixed-run fitting and description spacing for list payloads. */
-export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=25,minFontSize=16,options:RichTextOptions={style:{fontFamily:'sans-serif',fontWeight:400}}):ListFit {
+export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=25,minFontSize=16,options:ListFitOptions={style:{fontFamily:'sans-serif',fontWeight:400}}):ListFit {
   if(!Array.isArray(input)||![box.width,box.height,requestedSize,minFontSize].every(value=>Number.isFinite(value)&&value>0))throw new RangeError('List content, dimensions and font sizes must be valid.');
   const source=input.map((value,index)=>{
     const object=typeof value==='object'&&!Array.isArray(value)?value as {text:ListText;description?:ListText;level?:number}:undefined;
@@ -1489,7 +1593,8 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=2
       }
       overflow ||= text.overflow||!!description?.overflow;
       entries.push({index:item.index,level:item.level,value:item.value,descriptionValue:item.descriptionValue,textPath:item.textPath,descriptionPath:item.descriptionPath,text,textBox,description,descriptionBox,
-        marker:{text:['•','◦','▪'][item.level%3]!,x:box.x+offset,y:textBox.y+(text.richLines[0]?.baseline??fontSize),fontSize,style:resolveTextStyle(style,options.textMeasurement),indent}});
+        marker:{text:['•','◦','▪'][item.level%3]!,x:box.x+offset,y:textBox.y+(text.richLines[0]?.baseline??fontSize),fontSize,style:resolveTextStyle(style,options.textMeasurement),indent},
+        ...(options.bulletImage?{bulletImage:options.bulletImage}:{})});
       if(item.index<source.length-1)y+=fontSize*.28;
     }
     const height=y-box.y;
@@ -1680,10 +1785,21 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   const alignmentFor = (field: string): 'left' | 'center' | 'right' =>
     (field === 'title' || (coverGroup && (field === 'tag' || field === 'subtitle') && record(slide.design).contentAlignment === undefined)
       ? record(slide.design).titleAlignment ?? options.titleAlignment : record(slide.design).contentAlignment ?? options.contentAlignment) ?? 'left';
+  // The tag (eyebrow) takes the accent family when the font scheme defines one; the quote body does the same in layoutQuote.
   const styleFor = (field: string, path: string): TextStyle => resolveTextStyle({
-    fontFamily: (field === "title" ? options.fonts?.heading : field === "code" ? options.fonts?.code : options.fonts?.body) ?? (field === "code" ? "monospace" : "sans-serif"),
+    fontFamily: (field === "title" ? options.fonts?.heading : field === "code" ? options.fonts?.code : field === "tag" ? options.fonts?.accent ?? options.fonts?.body : options.fonts?.body) ?? (field === "code" ? "monospace" : "sans-serif"),
     fontWeight: field === "title" ? 700 : 400, path,
   }, options.textMeasurement);
+  // Effective design hints: slide design, then deck design (per field).
+  const slideDesign = record(slide.design), deckDesign = record(record(options.presentation).design);
+  const designHint = (field: 'contentDirection' | 'chartPrimary' | 'listBullet'): { value: unknown; path: string } | undefined =>
+    slideDesign[field] !== undefined ? { value: slideDesign[field], path: `slides.${options.slideIndex ?? 0}.design.${field}` }
+    : deckDesign[field] !== undefined ? { value: deckDesign[field], path: `design.${field}` } : undefined;
+  const listBullet = designHint('listBullet');
+  const bulletImage: ListBulletImage | undefined = listBullet?.value === 'image' ? (() => {
+    const resolved = resolveLogo(options.presentation, slide, { slot: 'icon', onDark: options.darkBackground, slideIndex: options.slideIndex });
+    return resolved ? { source: resolved.source, path: resolved.path } : undefined;
+  })() : undefined;
   const widthFor = (field: string, path: string) => textWidthMeasurer(styleFor(field,path),options.textMeasurement);
   const fitPlacedText = (field:string,value:unknown,text:string,box:LayoutBox,size:number,minimum:number,path:string):TextFit|RichTextFit => {
     const style=styleFor(field,path),rich=field==='text'&&Array.isArray(value);
@@ -1725,7 +1841,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   };
   const fitContent = (field:string,value:unknown,text:string,box:LayoutBox,size:number,minimum:number,path:string) => field === 'text'
     ? fitPlacedText(field,value,text,box,size,minimum,path)
-    : (field==='items'||field==='bullets') ? fitList(value as ListValue[],box,size,minimum,{style:styleFor(field,path),textMeasurement:options.textMeasurement})
+    : (field==='items'||field==='bullets') ? fitList(value as ListValue[],box,size,minimum,{style:styleFor(field,path),textMeasurement:options.textMeasurement,...(bulletImage?{bulletImage}:{})})
     : fitText(text,box,size,minimum,widthFor(field,path));
   const path = `slides.${options.slideIndex ?? 0}`;
   const slideImageDiagnostics: LayoutDiagnostic[] = [];
@@ -1755,7 +1871,18 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   const hasBodyPayload = regions.some(key => !emptyHost(record(slide[key]))) || !emptyPayload(slide.blocks) || fields.some(field => !emptyPayload(slide[field]));
   const isCover = !hasBodyPayload && (headingOnlyLayout || (!layout.id && !layoutPlaceholders.some(placeholder => !headings.has(placeholder.type ?? ""))));
   coverGroup = isCover;
-  let y = headingTop;
+  // Cover and section slides draw the lockup logo at the top-left of the free area, below any header
+  // furniture; the heading group then centers in the remaining span. Content slides never get one.
+  let logo: ComposedLogo | undefined;
+  if (isCover) {
+    const resolved = resolveLogo(options.presentation, slide, { slot: 'lockup', onDark: options.darkBackground, slideIndex: options.slideIndex });
+    if (resolved) {
+      const logoHeight = 56 * scale;
+      const box = { x: round(area.left + padding), y: round(headingTop), width: round(Math.max(scale, Math.min(4 * logoHeight, area.right - area.left - 2 * padding))), height: round(logoHeight) };
+      logo = { box, slot: 'lockup', path: resolved.path, source: resolved.source, variant: resolved.variant, anchor: 'left' };
+    }
+  }
+  let y = logo ? logo.box.y + logo.box.height + gap : headingTop;
   const headingItems: ComposedItem[] = [];
   for (const field of ["tag", "title", "subtitle"]) {
     if (!slide[field]) continue;
@@ -1784,7 +1911,8 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     } else y += gap * 0.5;
   }
   const contentBox = { x: area.left + padding, y, width: area.right - area.left - padding * 2, height: Math.max(scale, bodyBottom - y) };
-  type Pending = { field: string; type: string; value: unknown; path: string; payload: Record<string, unknown>; children?: Pending[]; composition?: Composition; region?: [number[], number[]] };
+  // A synthetic container (chartPrimary) groups the non-primary nodes without an OPF path: it records no group, flow or decision.
+  type Pending = { field: string; type: string; value: unknown; path: string; payload: Record<string, unknown>; children?: Pending[]; composition?: Composition; region?: [number[], number[]]; synthetic?: boolean };
   const collect = (host: Record<string, any>, basePath: string, depth = 0, ancestors: unknown[] = []): Pending[] => {
     if (Array.isArray(host.blocks)) {
       if (depth >= MAX_COMPOSITION_DEPTH || ancestors.includes(host)) throw new RangeError(`Content groups must be acyclic and nest at most ${MAX_COMPOSITION_DEPTH} levels.`);
@@ -1874,7 +2002,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     const boxes = gridBoxes(node.children.length, area, cols, (own.gap ?? 1 / 30) * Math.min(box.width, box.height), own.weights ?? [], modeFor(own) === "column");
     return node.children.reduce((score, child, index) => score + scoreNode(child, boxes[index]!, own, penalties), 0);
   };
-  const arrange = (nodes: Pending[], area: LayoutBox, settings: Composition, reserved = 0, gapOverride?: number, containerPath = path): void => {
+  const arrange = (nodes: Pending[], area: LayoutBox, settings: Composition, reserved = 0, gapOverride?: number, containerPath = path, recorded = true): void => {
     const count = Math.max(nodes.length, reserved);
     if (!count) return;
     const mode = modeFor(settings), localGap = (settings.gap ?? 1 / 30) * Math.min(area.width, area.height);
@@ -1882,7 +2010,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     const actualGap = gapOverride ?? (settings === rootSettings ? gap : localGap);
     let cols = defaultColumns(count, area, settings);
     const hasRegions = nodes.some(node => node.region);
-    const candidates: CompositionCandidate[] | undefined = decisions ? [] : undefined;
+    const candidates: CompositionCandidate[] | undefined = decisions && recorded ? [] : undefined;
     if (mode === "auto" && !hasRegions) {
       let best = Infinity;
       for (let candidate = 1; candidate <= Math.min(count, settings.columns ?? 6); candidate++) {
@@ -1894,18 +2022,18 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
         if (score < best) { best = score; cols = candidate; }
       }
     }
-    decisions?.push({path:containerPath,mode:hasRegions?'regions':mode,
-      reason:hasRegions?'promoted-regions':mode==='auto'?'lowest-score':'configured-mode',
+    if (recorded) decisions?.push({path:containerPath,mode:hasRegions?'regions':mode,
+      reason:hasRegions?'promoted-regions':settings === rootSettings && chartPrimary ? 'chart-primary' : mode==='auto'?'lowest-score':'configured-mode',
       ...(hasRegions?{}:{selectedColumns:cols}),candidates:candidates ?? []});
     const grid = gridGeometry(count, area, cols, actualGap, settings.weights ?? [], mode === "column");
     const boxes = grid.boxes;
-    if (!nodes.some(node => node.region)) flows.push({path: containerPath, box: {...area}, composition: {...settings}, columns: grid.columns, rows: grid.rows, gap: grid.gap, itemCount: nodes.length, slotCount: count});
+    if (recorded && !hasRegions) flows.push({path: containerPath, box: {...area}, composition: {...settings}, columns: grid.columns, rows: grid.rows, gap: grid.gap, itemCount: nodes.length, slotCount: count});
     nodes.forEach((node, index) => {
       let box = node.region ? regionBox(node.region, area, actualGap) : boxes[index]!;
       if (node.children) {
         const own = inheritedSettings(settings, node.composition), inner = inset(box, own);
-        groups.push({ path: node.path, box, contentBox: inner, composition: own });
-        arrange(node.children, inner, own, 0, (own.gap ?? 1 / 30) * Math.min(box.width, box.height), node.path);
+        if (!node.synthetic) groups.push({ path: node.path, box, contentBox: inner, composition: own });
+        arrange(node.children, inner, own, 0, (own.gap ?? 1 / 30) * Math.min(box.width, box.height), node.path, !node.synthetic);
       } else {
         const frameBox = hasCards ? acceptedBox(box) : undefined;
         box = payloadBox(box);
@@ -1918,7 +2046,8 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
         const text = internal ? body?.fit : textValue !== undefined ? fitContent(node.field,node.value,textValue,box,25*scale,(settings.minFontSize??16)*scale,node.path) : undefined;
         items.push({ path: node.path, field: node.field, type: node.type, value: node.value, payload: node.payload, box:internal?acceptedBox(box):box,
           ...(frameBox ? {frameBox} : {}),
-          text, textStyle: body?.style ?? styleFor(node.field,node.path), composition: settings, alignment: alignmentFor(node.field), ...(quoteLayout?{quoteLayout}:{}), ...(codeLayout?{codeLayout}:{}), ...(metricLayout?{metricLayout}:{}), ...(timelineLayout?{timelineLayout}:{}) });
+          text, textStyle: body?.style ?? styleFor(node.field,node.path), composition: settings, alignment: alignmentFor(node.field), ...(quoteLayout?{quoteLayout}:{}), ...(codeLayout?{codeLayout}:{}), ...(metricLayout?{metricLayout}:{}), ...(timelineLayout?{timelineLayout}:{}),
+          ...(bulletImage && (node.field === 'items' || node.field === 'bullets') ? {bulletImage} : {}) });
         if (box.width < 100 * scale || box.height < 60 * scale) diagnostics.push({ code: "small-cell", path: node.path, message: "Content cell is too small for comfortable reading; use fewer blocks or a different composition." });
       }
     });
@@ -1926,8 +2055,34 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   const placeholders = Array.isArray(layout.placeholders) ? layout.placeholders.filter((p: any) => !headings.has(p.type)) : [];
   // The root image drawn as the slide image no longer needs its content slot.
   if (slideImage?.replacesContent) { const picture = placeholders.findIndex((p: any) => p.type === 'picture'); if (picture >= 0) placeholders.splice(picture, 1); }
-  const rootSettings: Composition = { ...composition, mode: composition.mode ?? (layout.slideLayoutDirection === "Vertical" ? "column" : layout.slideLayoutDirection === "Horizontal" ? "row" : "auto") };
-  arrange(pending, contentBox, rootSettings, composition.mode ? 0 : placeholders.length);
+  // Root arrangement mode: the explicit composition.mode (the slide's own, else the layout record's
+  // geometry contract), then design.contentDirection (slide, then deck), then the layout record's
+  // slideLayoutDirection, then auto. pptx.gallery derives contentDirection from slideLayoutDirection, so
+  // the hint ranks with that direction and never flattens a layout's own grid.
+  const ownMode = record(slide.composition).mode as Composition['mode'] | undefined;
+  const direction = designHint('contentDirection')?.value;
+  const directionMode: Composition['mode'] | undefined = direction === 'vertical' ? 'column' : direction === 'horizontal' ? 'row' : undefined;
+  const layoutDirectionMode: Composition['mode'] = layout.slideLayoutDirection === "Vertical" ? "column" : layout.slideLayoutDirection === "Horizontal" ? "row" : "auto";
+  // design.chartPrimary (slide, deck, then the layout's contentTypeChartPrimary) splits the root into a
+  // primary chart track and one synthetic container of the other nodes when the slide has no regions
+  // and no composition.mode of its own, and the root nodes mix at least one chart leaf with other nodes.
+  // Unlike contentDirection it is an author opt-in (no bundled layout derives it), so it overrides the
+  // layout record's composition, including its columns and weights.
+  const chartHint = designHint('chartPrimary')?.value ?? (typeof layout.contentTypeChartPrimary === 'string' ? layout.contentTypeChartPrimary.toLowerCase() : undefined);
+  const chartSide = chartHint === 'left' || chartHint === 'right' || chartHint === 'top' || chartHint === 'bottom' ? chartHint : undefined;
+  const chartIndex = pending.findIndex(node => !node.children && node.field === 'chart');
+  const chartPrimary = chartSide !== undefined && !ownMode && !regions.length && chartIndex >= 0 && pending.some(node => node.children || node.field !== 'chart') ? chartSide : undefined;
+  const rootSettings: Composition = chartPrimary
+    ? { ...composition, mode: chartPrimary === 'left' || chartPrimary === 'right' ? 'row' : 'column', columns: undefined, weights: chartPrimary === 'left' || chartPrimary === 'top' ? [3, 2] : [2, 3] }
+    : { ...composition, mode: composition.mode ?? directionMode ?? layoutDirectionMode };
+  if (chartPrimary) {
+    const primary = pending[chartIndex]!, rest = pending.filter((_, index) => index !== chartIndex);
+    const container: Pending = { field: 'blocks', type: 'group', value: rest.map(node => node.payload), path, payload: {}, children: rest, composition: {}, synthetic: true };
+    arrange(chartPrimary === 'left' || chartPrimary === 'top' ? [primary, container] : [container, primary], contentBox, rootSettings, 0);
+  } else arrange(pending, contentBox, rootSettings, composition.mode ? 0 : placeholders.length);
+  if (listBullet?.value === 'image' && !bulletImage && items.some(item => item.field === 'items' || item.field === 'bullets')) {
+    diagnostics.push({ code: 'unresolved-content', path: listBullet.path, message: 'Picture bullets (listBullet: image) need design.logo or a primary organization logo; the marker glyph is drawn instead.' });
+  }
 
   for (const item of items) {
     for (const key of ["x", "y", "width", "height"] as const) item.box[key] = round(item.box[key]);
@@ -1957,7 +2112,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   } : undefined;
   if (failures.length) throw new OPFCompositionError(failures, explanation);
   diagnostics.push(...slideImageDiagnostics);
-  return { width, height, contentBox, items, groups, flows, diagnostics, composition, ...(furniture?{furniture}:{}), ...(slideImage?{slideImage}:{}), ...(explanation?{explanation}:{}) };
+  return { width, height, contentBox, items, groups, flows, diagnostics, composition, ...(furniture?{furniture}:{}), ...(slideImage?{slideImage}:{}), ...(logo?{logo}:{}), ...(explanation?{explanation}:{}) };
 }
 
 /** Canonical physical slide size, converted to reference pixels at 96 pixels/inch. */

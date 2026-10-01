@@ -232,6 +232,84 @@ OOXML gives each theme font (major and minor) three script slots: `latin`, East 
 
 `@openpresentation/opf` exports `resolveScriptFonts(document, { app, slideIndex })`, which returns the heading and body slots, the OOXML `lang` (a curated `ooxmlLang` culture tag such as `ja-JP` or `ms-MY`, or an authored region tag), the canonical `bcp47` tag, `script`, `direction`/`rtl`, and the per-script supplemental theme font. Renderers and exporters should use it rather than re-deriving slots. The model, the OOXML mapping and the open questions are in [`programs/font-fidelity-everywhere/script-font-model.md`](./programs/font-fidelity-everywhere/script-font-model.md). opf-render and opf-pptx implement it (FF-07, FF-19, FF-49).
 
+## Brand assets and layout hints
+
+The 2026-09-30 spec coverage audit found that `design.logo`, `organization.logo`, `speaker.photo`, `design.contentDirection`, `design.chartPrimary`, `design.listBullet` and `fontScheme.accent` validated, edited and round-tripped but changed nothing in any engine. This section states what they do now. Every rule below is implemented once, in `composeSlide()` and `resolveLogo()` of `@openpresentation/opf`, and consumed by the renderer and the exporter; the decisions marked **(vetoable)** are agent decisions the owner can overturn.
+
+### Logo source and variant selection
+
+`resolveLogo(presentation, slide, { slot, onDark, slideIndex })` returns `{ source, path, variant, slot }` or `null`:
+
+```
+  source        1. slides[i].design.logo
+                2. design.logo
+                3. the primary organization's logo   role "primary", else the first
+                                                    organization; object or array
+  variant       a string or Asset object is the "default" variant
+                a LogoSet picks by slot and tone (below)
+  path          design.logo, design.logo.light, organization.2.logo,
+                slides.3.design.logo.icon, ...
+```
+
+Absence inherits (there is no `false` for logos); a level that yields no usable asset falls through to the next. A LogoSet is searched in this order, same-tone variants first, neutral ones next, the opposite tone last:
+
+| Slot | On a dark background (`onDark: true`) | On a light background |
+| --- | --- | --- |
+| `lockup` | light, default, stackedLight, stacked, wordmarkLight, wordmark, iconLight, icon, then dark, stackedDark, wordmarkDark, iconDark | dark, default, stackedDark, stacked, wordmarkDark, wordmark, iconDark, icon, then light, stackedLight, wordmarkLight, iconLight |
+| `icon` | iconLight, icon, then the dark lockup chain | iconDark, icon, then the light lockup chain |
+| `stacked` | stackedLight, stacked, then the dark lockup chain | stackedDark, stacked, then the light lockup chain |
+
+Hosts pass their own background luminance test as `composeSlide(..., { darkBackground })`; core never inspects colors.
+
+### Where the logo is drawn (vetoable)
+
+1. **Cover and section slides.** A slide with no body payload on a heading-only layout (`title`, `title-subtitle`, `section-divider`, any layout whose placeholders are all headings, or no layout: the same rule that centers covers) draws the `lockup` logo at the top-left of the free area, inside the slide padding and below any header furniture. `composeSlide` returns it as `geometry.logo` (`{ box, slot: 'lockup', path, source, variant, anchor: 'left' }`): `x = area.left + padding`, `y` at the image-safe heading top, `height = 56` reference pixels at a 720-pixel short edge, `width = min(4 * height, free width)`. Headings start one gap below the box and the cover-centering rule centers the tag/title/subtitle group in the remaining span; the logo itself does not move. Consumers fit the image inside the box preserving its aspect ratio, anchored left and vertically centered (SVG `preserveAspectRatio="xMinYMid meet"`; PPTX computes the fitted size from the raster dimensions and places it at `box.x`). Nothing is drawn when no logo resolves. **Content slides never get an automatic logo** (vetoable: it would move every content area).
+2. **Headers and footers.** `HeaderFooterItem.logo: true` generates an image furniture part with `field: 'logo'`, `generated: true`, `image: resolved.source`, `path: <zone>.logo` and `sourcePath: resolved.path`, from the `icon` slot, in the same box as a zone `image`. Fields in a zone stack in the order logo, image, text, organization, socials, section, slide number, date. Without a logo the engine reports `unresolved-content` at `<zone>.logo` ("Generated logo needs design.logo or a primary organization logo.").
+3. **Picture bullets.** See `listBullet` below.
+4. `organization.logo` is therefore drawn wherever the deck logo is: it is the fallback source, never a separate placement.
+
+> **Decision, 2026-09-30 (agent decision, vetoable).** 84 of the 126 bundled example decks carry a `design.logo` or an `organization.logo`, so 81 cover slides gain a logo and their heading group moves down. The placement (top-left, 56 px, lockup) and the content-slide exclusion are the reference-engine defaults; a layout-driven logo slot is a separate design.
+
+### `speaker.photo` is authoring metadata (vetoable)
+
+No reference engine draws a speaker photo: the schema has no speaker slot on any slide and no slide-to-speaker link, and a speaker block on covers would be a separate design. The field stays authoring metadata for hosts and layouts, and it round-trips through PPTX provenance.
+
+### `contentDirection`
+
+The effective value is `slides[i].design.contentDirection`, then `design.contentDirection`. It sets the root arrangement mode: `vertical` is `column`, `horizontal` is `row`. Precedence for the root mode:
+
+```
+  1. composition.mode                            explicit: the slide's own, else the
+                                                 layout record's geometry contract
+  2. design.contentDirection                     slide design, then deck design
+  3. the layout record's slideLayoutDirection    existing hint
+  4. auto
+```
+
+Promoted regions (`left`, `top:left`, ...) keep their explicit geometry: `contentDirection` does not reinterpret them. Nested groups keep their own `composition`. The decision record keeps `reason: 'configured-mode'`. Reserved placeholder slots still count when only the hint sets the mode, as they do for `slideLayoutDirection`.
+
+> **Decision, 2026-09-30 (agent decision, vetoable).** A layout record's `composition.mode` ranks above the design hint. pptx.gallery derives `design.contentDirection` from every layout's own `slideLayoutDirection`, so a hint that overrode the layout's `composition.mode` would flatten the layout's own grid by construction: `chart-2x` (`slideLayoutDirection: Horizontal`, `mode: grid, columns: 2`) would compose its four blocks as one row under the `horizontal` it derives for itself, and the renderer's gallery-layout fixtures (57 layouts whose preview must differ from the default only in alignment) fail. The hint therefore ranks with `slideLayoutDirection`, above it, and acts where no composition contract exists: slides without a layout and the bundled layouts without `composition.mode` (62 of 100). Under this rule no bundled example slide changes geometry for `contentDirection` (101 decks set it; all of their blocks slides use layouts that carry a mode). The alternative, ranking the hint above the layout mode, would change 125 single-payload example slides and break the gallery's own layouts.
+
+### `chartPrimary`
+
+The effective value is `slides[i].design.chartPrimary`, then `design.chartPrimary`, then the layout record's `contentTypeChartPrimary` (`Top`, `Bottom`, `Left`, `Right` lower-cased; `None` is `none`). It applies to the root arrangement only when the slide has no promoted regions, no `composition.mode` of its own, and its root nodes contain at least one chart leaf and at least one node that is not a chart. The **first chart node is primary** and the other root nodes form one synthetic sub-grid:
+
+- `left` / `right`: the root is a two-track row with weights `[3, 2]` (chart first for `left`, last for `right`); the rest arrange in `auto` mode inside their track.
+- `top` / `bottom`: a two-track column with weights `[3, 2]` (chart first for `top`).
+- `none`, or any other value: no change, the existing automatic grid with equal weight.
+
+The synthetic container has no OPF path, so it records no `groups`, `flows` or explanation entry; the root decision has `reason: 'chart-primary'` and `selectedColumns` 2 (row) or 1 (column). Explicit root `columns` and `weights`, from the slide or the layout record, are ignored while it applies, and reserved placeholder slots are not applied. A chart inside a nested group, a chart-only root, or a single root `chart` payload leaves the arrangement unchanged.
+
+> **Decision, 2026-09-30 (agent decision, vetoable).** Unlike `contentDirection`, `chartPrimary` overrides the layout record's `composition.mode`, `columns` and `weights` (only the slide's own `composition.mode` blocks it). It is an author opt-in: every bundled layout's `contentTypeChartPrimary` is `None`, so nothing derives it, while every bundled chart layout that mixes a chart with text carries a `composition.mode` (`chart-2x` grid, `data-visualization` row `[2, 1]`, ...). Ranking the layout mode above the hint would make the field inert on every bundled chart layout. 40 example slides (10 per side) change under this rule.
+
+### `listBullet` (vetoable)
+
+`character` (the default) draws the current glyph marker. `image` draws the deck's icon logo (`resolveLogo(..., { slot: 'icon', onDark })`) as a picture bullet: every `items`/`bullets` item in `composeSlide` and every `listEntries[]` entry of its fit carry `bulletImage: { source, path }`. Marker geometry is unchanged: the image is a square of side `marker.fontSize` whose bottom sits on the marker baseline (`marker.y`) with its left edge at `marker.x`. When `image` is set and no logo resolves, the glyph stays and the slide reports one `unresolved-content` diagnostic at `slides.N.design.listBullet` or `design.listBullet`, only when the slide has a list. The renderer draws an `<image>` per marker; the exporter writes native picture bullets (`a:buBlip`).
+
+### `fontScheme.accent`
+
+`resolveFontFamilies()` returns `accent` only when the effective scheme defines an `accent` role (a family string or a `Font` object). The slide `tag` (eyebrow) and the quote body use `fonts.accent ?? <current family>` (body for the tag, heading for the quote body); nothing else changes. The renderer loads and embeds it, the exporter writes it on those runs (`a:latin`) while the theme fonts stay major/minor, and import keeps restoring `design.fontScheme` from provenance. None of the bundled examples sets an accent font.
+
 ## What is *not* part of this chain
 
 Beyond the color references above, content payloads carry no design controls in v1 — `position`, `fontSize` overrides at payload level, and the like were deliberately kept out while the content model stabilizes (see [`content-item-design-overrides.md`](./content-item-design-overrides.md); styled table cells and rich-text runs carry the only per-content styling, and their color fields take the reference forms above). The design system, plus layout hints (`titleAlignment`, `contentBox`, `chartPrimary`, ...) and dynamic composition, is the styling surface of an OPF document.
