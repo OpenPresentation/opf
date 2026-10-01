@@ -62,6 +62,24 @@ jobs:
           node artifacts/published-matrix/consumer/dist/consumer.js | tee artifacts/published-matrix/out/consumer.json
       - name: Pairwise font-switch matrix
         run: node scripts/test-font-switch-ecosystem.mjs
+      - name: Cache the Playwright browser
+        id: playwright-cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            ~/.cache/ms-playwright
+            ~/Library/Caches/ms-playwright
+            ~/AppData/Local/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('scripts/published-matrix/consumer/package-lock.json') }}
+      - name: Install headless Chromium (Playwright version pinned by the consumer lockfile)
+        run: |
+          if [ "$RUNNER_OS" = "Linux" ]; then
+            node artifacts/published-matrix/consumer/node_modules/playwright/cli.js install --with-deps chromium
+          else
+            node artifacts/published-matrix/consumer/node_modules/playwright/cli.js install chromium
+          fi
+      - name: Headless-browser preview re-render (embedded faces, scheme switch, no host fonts)
+        run: node scripts/published-matrix/browser-check.mjs
       - name: Determinism grid (time zone, locale, clock, host fonts)
         run: node scripts/published-matrix/determinism.mjs --concurrency 2
       - name: Collect the evidence
@@ -78,6 +96,7 @@ jobs:
             artifacts/published-matrix/out/consumer.json
             artifacts/published-matrix/out/installed.json
             artifacts/published-matrix/out/determinism.json
+            artifacts/published-matrix/out/browser.json
             artifacts/published-matrix/out/report.json
           retention-days: 14
           if-no-files-found: warn
