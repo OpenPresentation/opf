@@ -121,9 +121,9 @@ function layoutProperties(spec, series, hasCategories) {
 // the style's tx1 grey on a dark theme), so every axis, data label set and
 // legend carries the deck's label colour and font explicitly, like the classic
 // chart path writes into every c:txPr.
-function textProperties(labelColor, font) {
+function textProperties(labelColor, font, size) {
   const face = escapeXml(font);
-  return `<cx:txPr><a:bodyPr/><a:lstStyle/><a:p><a:pPr><a:defRPr sz="900">${solidFill(labelColor)}<a:latin typeface="${face}"/><a:ea typeface="${face}"/><a:cs typeface="${face}"/></a:defRPr></a:pPr><a:endParaRPr lang="en-US"/></a:p></cx:txPr>`;
+  return `<cx:txPr><a:bodyPr/><a:lstStyle/><a:p><a:pPr><a:defRPr sz="${size}">${solidFill(labelColor)}<a:latin typeface="${face}"/><a:ea typeface="${face}"/><a:cs typeface="${face}"/></a:defRPr></a:pPr><a:endParaRPr lang="en-US"/></a:p></cx:txPr>`;
 }
 
 function dataLabels(spec, text) {
@@ -159,7 +159,7 @@ function axes(spec, gridColor, text) {
  * layout is PptxGenJS's: Sheet1, headings in row 1, categories in column A and
  * one series per following column.
  */
-export function chartexPartXml({spec, series, hasCategories, number, workbookRelId, fill, labelColor, gridColor, font, palette}) {
+export function chartexPartXml({spec, series, hasCategories, number, workbookRelId, fill, labelColor, gridColor, font, palette, textSize}) {
   const rows = series[0].labels.length;
   const range = (letter) => `Sheet1!$${letter}$2:$${letter}$${rows + 1}`;
   const categories = hasCategories
@@ -169,7 +169,7 @@ export function chartexPartXml({spec, series, hasCategories, number, workbookRel
     const points = entry.values.map((value, row) => value === null || !Number.isFinite(value) ? '' : `<cx:pt idx="${row}">${numberText(value)}</cx:pt>`).join('');
     return `<cx:data id="${index}">${categories}<cx:numDim type="${spec.dimension}"><cx:f>${range(columnLetters(index + 2))}</cx:f><cx:lvl ptCount="${rows}" formatCode="General">${points}</cx:lvl></cx:numDim></cx:data>`;
   }).join('');
-  const text = textProperties(labelColor, font);
+  const text = textProperties(labelColor, font, textSize);
   const plotted = series.map((entry, index) => {
     const color = palette[index % palette.length];
     const letter = columnLetters(index + 2);
@@ -214,7 +214,7 @@ const STYLE_ENTRIES = [
   'dataPointMarkerLayout', 'dataPointWireframe', 'dataTable', 'downBar', 'dropLine', 'errorBar', 'floor', 'gridlineMajor', 'gridlineMinor', 'hiLoLine',
   'leaderLine', 'legend', 'plotArea', 'plotArea3D', 'seriesAxis', 'seriesLine', 'title', 'trendline', 'trendlineLabel', 'upBar', 'valueAxis', 'wall',
 ];
-export function chartStyleXml({labelColor = '000000', gridColor = '000000', font = 'Aptos'} = {}) {
+export function chartStyleXml({labelColor = '000000', gridColor = '000000', font = 'Aptos', textSize} = {}) {
   // Text and chrome colours are the deck's label and border colours (what the classic chart path writes), not the
   // theme's tx1: PowerPoint applies the style part to chartex labels that carry no cx:txPr of their own.
   const textColor = `<a:srgbClr val="${labelColor}"/>`;
@@ -226,9 +226,9 @@ export function chartStyleXml({labelColor = '000000', gridColor = '000000', font
     switch (name) {
       case 'dataPointMarkerLayout': return '<cs:dataPointMarkerLayout symbol="circle" size="5"/>';
       case 'axisTitle': return entry(name, {fontColor: textColor, size: '1000'});
-      case 'categoryAxis': case 'valueAxis': case 'seriesAxis': return entry(name, {fontColor: textColor, spPr: faintLine, size: '900'});
-      case 'chartArea': return entry(name, {mods: 'allowNoFillOverride allowNoLineOverride', spPr: `<a:solidFill><a:schemeClr val="bg1"/></a:solidFill>${faintLine}`, size: '1000'});
-      case 'dataLabel': case 'dataLabelCallout': case 'dataTable': case 'legend': case 'trendlineLabel': return entry(name, {fontColor: textColor, size: '900'});
+      case 'categoryAxis': case 'valueAxis': case 'seriesAxis': return entry(name, {fontColor: textColor, spPr: faintLine, size: textSize});
+      case 'chartArea': return entry(name, {mods: 'allowNoFillOverride allowNoLineOverride', spPr: `<a:solidFill><a:schemeClr val="bg1"/></a:solidFill>${faintLine}`, size: textSize});
+      case 'dataLabel': case 'dataLabelCallout': case 'dataTable': case 'legend': case 'trendlineLabel': return entry(name, {fontColor: textColor, size: textSize});
       case 'dataPoint': case 'dataPoint3D': case 'dataPointWireframe': case 'upBar': case 'floor': case 'wall':
         return entry(name, {fillIdx: '1', fillColor: '<cs:styleClr val="auto"/>', spPr: '<a:solidFill><a:schemeClr val="phClr"/></a:solidFill>'});
       case 'dataPointLine': case 'dataPointMarker': case 'trendline': case 'seriesLine': case 'hiLoLine': case 'dropLine': case 'leaderLine': case 'errorBar':
@@ -294,7 +294,7 @@ export function attachChartexParts(entries, chartex, parseRelationships) {
       const base = `ppt/charts/chartEx${number}.xml`;
       entries[base] = encoder.encode(chartexPartXml({...chart, number, workbookRelId: 'rId1'}));
       entries[`ppt/charts/_rels/chartEx${number}.xml.rels`] = encoder.encode(chartexRelationshipsXml({workbookTarget: workbook.target, number}));
-      entries[`ppt/charts/style${number}.xml`] = encoder.encode(chartStyleXml({labelColor: chart.labelColor, gridColor: chart.gridColor, font: chart.font}));
+      entries[`ppt/charts/style${number}.xml`] = encoder.encode(chartStyleXml({labelColor: chart.labelColor, gridColor: chart.gridColor, font: chart.font, textSize: chart.textSize}));
       entries[`ppt/charts/colors${number}.xml`] = encoder.encode(chartColorStyleXml());
       overrides.push(`<Override PartName="/${base}" ContentType="${CHARTEX_CONTENT_TYPES.chart}"/>`,
         `<Override PartName="/ppt/charts/style${number}.xml" ContentType="${CHARTEX_CONTENT_TYPES.style}"/>`,

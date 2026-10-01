@@ -1679,6 +1679,21 @@ async function addSlideImage(slide, presentation, image, slideIndex, context, op
   }
 }
 
+// FF-62: chart text is one size. The preview draws every chart label (axis, legend, data label) at
+// max(14, composition.minFontSize ?? 16) px scaled by the slide's shorter side over 720 px (renderer charts.js, `fontPx`),
+// the readability floor: 12 pt on a 13.33 x 7.5 in slide. The export writes that size, in hundredths of a point (DrawingML `sz`).
+function chartTextSize(context) {
+  const scale = Math.min(context.dimensions.widthInches, context.dimensions.heightInches) * 96 / 720;
+  return Math.round(Math.max(14, context.composition?.minFontSize ?? 16) * scale * 75);
+}
+
+// Every c:txPr of a generated classic chart carries the chart text size: PptxGenJS writes no size on the legend (PowerPoint's
+// 18 pt default) and hardcodes 18 pt on pie and doughnut data labels. Only the size changes; faces and colours stay as written.
+function applyChartTextSize(xml, size) {
+  return xml.replace(/<c:txPr>[\s\S]*?<\/c:txPr>/g, properties => properties.replace(/<a:defRPr\b([^>]*?)(\/?)>/g, (match, attributes, close) =>
+    `<a:defRPr${/\bsz="[^"]*"/.test(attributes) ? attributes.replace(/\bsz="[^"]*"/, `sz="${size}"`) : `${attributes} sz="${size}"`}${close}>`));
+}
+
 function addChartPayload(slide, chart, region, context, options = {}, path = "chart") {
   const chartData = toPptxChartData(chart, context.chartexMode);
   if (!chartData.series) {
@@ -1697,14 +1712,15 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   const fill = {color:normalizeHex(panelFill),transparency};
   const objectName = `OPF chart ${context.chartHeadings.size + 1}`;
   const circular = chartData.type === 'pie' || chartData.type === 'doughnut';
-  context.chartHeadings.set(objectName,{heading:chartData.type === 'scatter' ? undefined : chartData.heading ?? chart.data.columns[0],labelColor,spec:chartData.spec});
+  const textSize = chartTextSize(context);
+  context.chartHeadings.set(objectName,{heading:chartData.type === 'scatter' ? undefined : chartData.heading ?? chart.data.columns[0],labelColor,spec:chartData.spec,textSize});
   context.chartFonts.set(objectName,{heading:context.fonts.heading,body:context.fonts.body});
   const palette = CHART_COLORS.map(color=>normalizeHex(chartColorForFill(panelFill,`#${color}`)));
   if (chartData.chartex) {
     // The native chartex part is added when the package is normalized (attachChartexParts); the classic chart below becomes its fallback.
     // PptxGenJS rewrites the series it is given (labels become nested levels), so the chartex part keeps its own copy.
     const series = chartData.series.map((entry) => ({name: entry.name, labels: [...entry.labels], values: [...entry.values]}));
-    context.chartex.set(objectName, {spec: chartData.chartex, series, hasCategories: chartData.hasCategories, fill, labelColor, gridColor: context.colors.border, font: context.fonts.body, palette});
+    context.chartex.set(objectName, {spec: chartData.chartex, series, hasCategories: chartData.hasCategories, fill, labelColor, gridColor: context.colors.border, font: context.fonts.body, palette, textSize});
     if (chartData.chartex.layoutId === 'regionMap') {
       options.onDiagnostic?.({code: "chart-map-geodata", path, message: `The '${stringifyText(chart.type)}' chart is exported as a native PowerPoint map (chartex regionMap) without cached geography (no cx:geoCache; provider data is never fabricated): PowerPoint must fetch the region shapes from its online map service when the deck is opened, and until it does it shows "There was a problem getting the information for your map chart" and draws nothing. The clustered column fallback shows the same values in readers without chartex support.`});
     }
@@ -1723,14 +1739,16 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     // Paint alpha once in the chart area, rather than stacking two alpha fills.
     plotArea: {fill:{color:null}},
     catAxisLabelFontFace: context.fonts.body,
-    catAxisLabelFontSize: 9,
+    catAxisLabelFontSize: textSize / 100,
     catAxisLabelColor: labelColor,
     valAxisLabelFontFace: context.fonts.body,
-    valAxisLabelFontSize: 9,
+    valAxisLabelFontSize: textSize / 100,
     valAxisLabelColor: labelColor,
     legendColor: labelColor,
     legendFontFace: context.fonts.body,
+    legendFontSize: textSize / 100,
     dataLabelColor: labelColor,
+    dataLabelFontSize: textSize / 100,
     showValue: false,
     valGridLine: { color: context.colors.border, transparency: 30, size: 1 },
     barDir: chartData.barDir,
@@ -2635,12 +2653,13 @@ async function normalizePptxZip(raw, context) {
       if(!context.chartHeadings.has(name))continue;
       const id=frame.match(/<c:chart\b[^>]*\br:id="([^"]+)"/)?.[1],chartPart=relationships.get(id)?.path;
       if(!chartPart)throw new OPFPptxError('packaging-failed','Generated chart relationship is missing.');
-      const {heading,labelColor,spec}=context.chartHeadings.get(name);
+      const {heading,labelColor,spec,textSize}=context.chartHeadings.get(name);
       if(heading!==undefined)writeChartCategoryHeading(entries,chartPart,heading);
       entries[chartPart]=encodeText(omitEmptyNumberPoints(applyChartConstruct(decodeText(entries[chartPart]),spec)));
       // PptxGenJS hardcodes a black fallback in pie/doughnut label properties.
       // Normalize only our generated chart text styles; point/series fills stay intact.
       entries[chartPart]=encodeText(decodeText(entries[chartPart]).replace(/<c:txPr>[\s\S]*?<\/c:txPr>/g,properties=>properties.replace(/<a:solidFill>[\s\S]*?<\/a:solidFill>/g,()=>`<a:solidFill><a:srgbClr val="${labelColor}"/></a:solidFill>`)));
+      entries[chartPart]=encodeText(applyChartTextSize(decodeText(entries[chartPart]),textSize));
     }
   }
   applyChartFonts(entries,context.chartFonts,parseRelationships);

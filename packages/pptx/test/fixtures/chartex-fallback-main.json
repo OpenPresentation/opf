@@ -2,7 +2,7 @@
   "source": {
     "repository": "OpenPresentation/opf-pptx",
     "commit": "6f6122cb7fb8cb89b17c1bea7981397a27ded8ed",
-    "note": "toPptx default output (chartex fallback) for chartex chart types; regenerate only with an owner decision to change the default export The world-category entry (ja-JP) was regenerated for FF-49: the theme cs slot, which the Japanese language does not use, is now empty instead of repeating the latin face; the chart parts are unchanged."
+    "note": "toPptx default output (chartex fallback) for chartex chart types; regenerate only with an owner decision to change the default export The world-category entry (ja-JP) was regenerated for FF-49: the theme cs slot, which the Japanese language does not use, is now empty instead of repeating the latin face; the chart parts are unchanged. Regenerated for FF-62 (chart text is the preview's 12 pt, not 9 pt or the PowerPoint default, in every classic chart part): only chart-part sz values changed; commit is the base the fixture was last regenerated on."
   },
   "decks": {
     "treemap-category": {
@@ -564,42 +564,42 @@
   },
   "entries": {
     "treemap-category": {
-      "sha256": "44784f36b89270b5d6198f238515e082e254c15466adfd2293f2841a37cd67b4",
-      "bytes": 22562,
+      "sha256": "b42a1c1c490400aab92cb826216d64232b3033f1d8f37f096c4723c81371cc15",
+      "bytes": 22560,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback"
       ]
     },
     "histogram-single": {
-      "sha256": "a8f3aa3fc6bcc4bf6e4d0399477cebb4aaccc399390dea327d1c209e539f7248",
-      "bytes": 22576,
+      "sha256": "f759cc9216abdb17192bdf4783b357a8beffcf0ffefdf3b59a24b4c79d27ffd5",
+      "bytes": 22573,
       "diagnostics": [
         "chart-data-adapted/histogram-binned"
       ]
     },
     "histogram-category": {
-      "sha256": "c1be89a2ac0c8ed0e5dae6eae61c80199a11e458f9e56eaaff765e166eea549d",
-      "bytes": 22564,
+      "sha256": "99a497a98f1dcd3753367a26e7fb13ba18c9c814c6f3ca11734048c3cd0b0e72",
+      "bytes": 22562,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback"
       ]
     },
     "pareto-multi": {
-      "sha256": "f6c5bebe94fa66ad03f5ea56a66ddeffa005d5eb1ccfb77b01b8e7dc2e7a3d9b",
-      "bytes": 22658,
-      "diagnostics": [
-        "chart-data-adapted/chartex-fallback"
-      ]
-    },
-    "box-multi": {
-      "sha256": "a85ab730de0509c364faf4dac7cf2ff26bccc69b64994f6a7b44e216c1369358",
+      "sha256": "f4a43886273f0ccc0686e5ef74de4d062724d98dac2ac2a3736ec5caff33a1e6",
       "bytes": 22656,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback"
       ]
     },
+    "box-multi": {
+      "sha256": "33770447df1f03997c99233d148d575dac76dd85f6870755b3c260c46d975d6f",
+      "bytes": 22654,
+      "diagnostics": [
+        "chart-data-adapted/chartex-fallback"
+      ]
+    },
     "waterfall-single": {
-      "sha256": "cd568176657fd37c9d38a2ab504b5a5a5d4cc718578ae98f623846dd254c7192",
+      "sha256": "e1cd38a9d486aa38e435f10526c58a05a6114124fdc501c9fe656dfaabcdb289",
       "bytes": 22612,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback",
@@ -607,22 +607,22 @@
       ]
     },
     "funnel-category": {
-      "sha256": "76902054da35fdf83cffe96b47e03580c5e8a6cc88cb4f0d64aaad77c381785e",
-      "bytes": 22562,
+      "sha256": "a2955853a1f4499e9c8104b02975f7462858a72768a234dbc7c27bc1ab500341",
+      "bytes": 22560,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback"
       ]
     },
     "world-category": {
-      "sha256": "f8eab91536a1e56b644d825b8a18f995c8984a2c3457a697f2258630da508ef6",
-      "bytes": 24076,
+      "sha256": "8d20f9d8c062755e3fe4cbcca0e53840e1b973b00a3579ff25ab27eeb9606d4b",
+      "bytes": 24073,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback"
       ]
     },
     "all-seven": {
-      "sha256": "d8692efbac1ebce93db4fb78b78b3810c5de7eca9be767ec561d624def0e0a22",
-      "bytes": 104355,
+      "sha256": "c9f564dff06e3171e980c74a234e5ff5bcb3e1c9b248bf1197d70eac8f8cc6d4",
+      "bytes": 104337,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback",
         "chart-data-adapted/chartex-fallback",

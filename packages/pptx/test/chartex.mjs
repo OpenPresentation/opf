@@ -186,8 +186,8 @@ for (const id of chartexIds) {
     assert.deepEqual(pointFills, [], `${id}: series colour only`);
   }
   const face = classic.match(/<a:latin typeface="([^"]+)"/)[1];
-  // Every text element (chart space, each axis, data labels, legend) carries the same explicit label colour and font.
-  const textProperties = `<cx:txPr><a:bodyPr/><a:lstStyle/><a:p><a:pPr><a:defRPr sz="900"><a:solidFill><a:srgbClr val="${labelColor}"/></a:solidFill><a:latin typeface="${face}"/><a:ea typeface="${face}"/><a:cs typeface="${face}"/></a:defRPr></a:pPr><a:endParaRPr lang="en-US"/></a:p></cx:txPr>`;
+  // Every text element (chart space, each axis, data labels, legend) carries the same explicit label colour, font and size (FF-62: the preview's 12 pt on the default slide).
+  const textProperties = `<cx:txPr><a:bodyPr/><a:lstStyle/><a:p><a:pPr><a:defRPr sz="1200"><a:solidFill><a:srgbClr val="${labelColor}"/></a:solidFill><a:latin typeface="${face}"/><a:ea typeface="${face}"/><a:cs typeface="${face}"/></a:defRPr></a:pPr><a:endParaRPr lang="en-US"/></a:p></cx:txPr>`;
   const textBlocks = [...cx.matchAll(/<cx:txPr>[\s\S]*?<\/cx:txPr>/g)].map((match) => match[0]);
   assert.ok(textBlocks.every((block) => block === textProperties), `${id}: every cx:txPr is the deck's label colour and font`);
   assert.equal(textBlocks.length, 1 + want.axes + (want.dataLabels ? 1 : 0) + (id === 'box-and-whisker' ? 1 : 0), `${id}: txPr on the chart space, each axis, data labels and legend`);
