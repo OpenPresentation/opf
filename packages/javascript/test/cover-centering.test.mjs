@@ -110,9 +110,15 @@ test('explicit heading alignment survives centering', () => {
   const slide = {title: 'Aligned cover', subtitle: 'Aligned subtitle'};
   const result = composeSlide(slide, {layout: titleSubtitle, titleAlignment: 'center', contentAlignment: 'right', textMeasurement: measurement});
   assert.equal(byField(result, 'title').alignment, 'center');
-  assert.equal(byField(result, 'subtitle').alignment, 'right');
+  // The cover has no content region, so the subtitle joins the title's alignment rather than the host contentAlignment.
+  assert.equal(byField(result, 'subtitle').alignment, 'center');
   assert.equal(byField(result, 'title').text.placement.alignment, 'center');
-  assert.equal(byField(result, 'subtitle').text.placement.alignment, 'right');
+  assert.equal(byField(result, 'subtitle').text.placement.alignment, 'center');
+  // A slide that sets its own contentAlignment keeps the explicit split.
+  const split = composeSlide({...slide, design: {titleAlignment: 'center', contentAlignment: 'right'}}, {layout: titleSubtitle, textMeasurement: measurement});
+  assert.equal(byField(split, 'title').alignment, 'center');
+  assert.equal(byField(split, 'subtitle').alignment, 'right');
+  assert.equal(byField(split, 'subtitle').text.placement.alignment, 'right');
   const plain = composeSlide(slide, {layout: titleSubtitle, textMeasurement: measurement});
   assert.equal(byField(plain, 'title').alignment, 'left');
   // Alignment moves ink inside the box, never the vertical position.

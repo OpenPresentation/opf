@@ -1,0 +1,5049 @@
+{
+ "meta": {
+  "generatedBy": "dimension-audit/parity/scripts/parity.mjs",
+  "generatedAt": "2026-10-01T05:32:30.153Z",
+  "node": "v24.21.0",
+  "prefix": "ff62b",
+  "heads": {
+   "opf": "f3262cda73c5c329eddd6fb25d184ae6c28ce7cb",
+   "opf-render": "56f744a94fce84b418c99b7e6b718a8cb67c161e",
+   "opf-pptx": "71bd94e878632bd7c97dfba06eb62d3c65270d91",
+   "pptx-gallery": "9e8d59ae6ced6a3490edd853ab681b1c550be9d3"
+  },
+  "fontHost": "gallery",
+  "tolerances": {
+   "geomPt": 0.02,
+   "geomNearPt": 0.5,
+   "sizePt": 0.005,
+   "sizeNearPt": 0.5
+  },
+  "previewMode": "engine default measurement (no host registry) for geometry/text; font resolution: the gallery host model (font-host.mjs): the browser registry of the office pack's eager faces with visual substitution and fallbackFamily Roboto, then the editor's font gate (ensureLazyFonts and ensureScripts for the value's own document), and the strict measured render must not throw",
+  "exportMode": "toPptx default options (no registry)",
+  "cropCheck": {
+   "pictures": 0,
+   "measured": 0,
+   "unmeasured": 0
+  },
+  "fontResolution": {
+   "definition": "owner decision 2026-09-29: look-alike replacements are intended; the PPTX names the selected family. pass = real face or FF-31 metric-compatible replacement + PPTX names selected family; near = FF-31 visual-only route + PPTX names selected family; fail = no policy route, unrouted preview face, or PPTX writes a replacement name. Old definition kept per value under results[].legacy.",
+   "policy": {
+    "version": 1,
+    "families": 157
+   }
+  }
+ },
+ "results": [
+  {
+   "dimension": "charts",
+   "id": "column",
+   "variant": "published",
+   "class": "near",
+   "legacy": {
+    "class": "near",
+    "checks": {
+     "fontResolution": "pass"
+    },
+    "fontResolutionReasons": []
+   },
+   "checks": {
+    "geometry": "pass",
+    "text": "near",
+    "fills": "pass",
+    "zOrder": "pass",
+    "slideSize": "pass",
+    "typefaces": "pass",
+    "reimport": "pass",
+    "fontResolution": "pass",
+    "theme": "pass",
+    "mapping": "pass"
+   },
+   "stats": {
+    "textLines": 21,
+    "textLinesMatched": 2,
+    "runs": 2,
+    "shapesMapped": 3,
+    "shapesUnmapped": 0,
+    "srgbLiteral": 0,
+    "schemeClr": 2,
+    "geomMaxDeltaPt": 0
+   },
+   "fontResolution": {
+    "Aptos Display": {
+     "status": "metric-substitute",
+     "resolved": "Intos Display",
+     "verdict": "pass",
+     "tier": "metric",
+     "route": "replacement",
+     "policyTier": "metric",
+     "licenseClass": "proprietary-standard",
+     "pptx": {
+      "named": true,
+      "slotsUsed": [
+       "latin"
+      ],
+      "replacementNames": []
+     }
+    },
+    "Aptos": {
+     "status": "metric-substitute",
+     "resolved": "Intos",
+     "verdict": "pass",
+     "tier": "metric",
+     "route": "replacement",
+     "policyTier": "metric",
+     "licenseClass": "proprietary-standard",
+     "pptx": {
+      "named": true,
+      "slotsUsed": [
+       "latin"
+      ],
+      "replacementNames": []
+     }
+    },
+    "Roboto Mono": {
+     "status": "real",
+     "resolved": "Roboto Mono",
+     "verdict": "pass",
+     "tier": "real",
+     "route": "real",
+     "policyTier": "open",
+     "licenseClass": "open",
+     "pptx": {
+      "named": null,
+      "slotsUsed": [],
+      "replacementNames": []
+     }
+    }
+   },
+   "fontHost": {
+    "model": "gallery",
+    "render": {
+     "ok": true
+    },
+    "selection": {
+     "detected": [],
+     "scripts": [],
+     "unavailable": [],
+     "packages": []
+    }
+   },
+   "typefaces": {
+    "distinct": [
+     "Aptos",
+     "Aptos Display",
+     "",
+     "+mn-lt",
+     "+mn-ea",
+     "+mn-cs",
+     "+mj-lt",
+     "+mj-ea",
+     "+mj-cs"
+    ],
+    "foreign": [],
+    "scriptSupplements": 54,
+    "scriptSupplementFaces": [
+     "游ゴシック Light",
+     "맑은 고딕",
+     "等线 Light",
+     "新細明體",
+     "Times New Roman",
+     "Angsana New",
+     "Nyala",
+     "Vrinda",
+     "Shruti",
+     "MoolBoran",
+     "Tunga",
+     "Raavi",
+     "Euphemia",
+     "Plantagenet Cherokee",
+     "Microsoft Yi Baiti",
+     "Microsoft Himalaya",
+     "MV Boli",
+     "Mangal",
+     "Gautami",
+     "Latha",
+     "Estrangelo Edessa",
+     "Kalinga",
+     "Kartika",
+     "DokChampa",
+     "Iskoola Pota",
+     "Mongolian Baiti",
+     "Microsoft Uighur",
+     "Sylfaen",
+     "Arial",
+     "Leelawadee UI",
+     "Microsoft JhengHei",
+     "Javanese Text",
+     "Segoe UI",
+     "Myanmar Text",
+     "Ebrima",
+     "Nirmala UI",
+     "Phagspa",
+     "Microsoft Tai Le",
+     "Microsoft New Tai Lue",
+     "游ゴシック",
+     "等线",
+     "Cordia New",
+     "DaunPenh"
+    ],
+    "emptySlots": 8,
+    "appFonts": [
+     "Fonts Used",
+     "Theme",
+     "Slide Titles",
+     "Aptos",
+     "Aptos Display",
+     "Office Theme",
+     "Slide 1"
+    ]
+   },
+   "previewDiagnostics": [],
+   "exportDiagnostics": [],
+   "reimportDiagnostics": [
+    "heading-import-reflow"
+   ],
+   "diffs": [
+    {
+     "check": "text",
+     "status": "near",
+     "reason": "chart label wrapped/split in preview (native chart lays out its own labels)",
+     "count": 1,
+     "where": [
+      "slides.0.chart"
+     ],
+     "samples": [
+      "0"
+     ]
+    },
+    {
+     "check": "text",
+     "status": "near",
+     "reason": "chart axis text: preview [12] vs chart [9]",
+     "count": 1,
+     "where": [
+      "slides.0.chart"
+     ],
+     "samples": []
+    }
+   ]
+  },
+  {
+   "dimension": "charts",
+   "id": "stacked-column-3x",
+   "variant": "published",
+   "class": "near",
+   "legacy": {
+    "class": "near",
+    "checks": {
+     "fontResolution": "pass"
+    },
+    "fontResolutionReasons": []
+   },
+   "checks": {
+    "geometry": "pass",
+    "text": "near",
+    "fills": "pass",
+    "zOrder": "pass",
+    "slideSize": "pass",
+    "typefaces": "pass",
+    "reimport": "pass",
+    "fontResolution": "pass",
+    "theme": "pass",
+    "mapping": "pass"
+   },
+   "stats": {
+    "textLines": 19,
+    "textLinesMatched": 2,
+    "runs": 2,
+    "shapesMapped": 3,
+    "shapesUnmapped": 0,
+    "srgbLiteral": 0,
+    "schemeClr": 2,
+    "geomMaxDeltaPt": 0
+   },
+   "fontResolution": {
+    "Aptos Display": {
+     "status": "metric-substitute",
+     "resolved": "Intos Display",
+     "verdict": "pass",
+     "tier": "metric",
+     "route": "replacement",
+     "policyTier": "metric",
+     "licenseClass": "proprietary-standard",
+     "pptx": {
+      "named": true,
+      "slotsUsed": [
+       "latin"
+      ],
+      "replacementNames": []
+     }
+    },
+    "Aptos": {
+     "status": "metric-substitute",
+     "resolved": "Intos",
+     "verdict": "pass",
+     "tier": "metric",
+     "route": "replacement",
+     "policyTier": "metric",
+     "licenseClass": "proprietary-standard",
+     "pptx": {
+      "named": true,
+      "slotsUsed": [
+       "latin"
+      ],
+      "replacementNames": []
+     }
+    },
+    "Roboto Mono": {
+     "status": "real",
+     "resolved": "Roboto Mono",
+     "verdict": "pass",
+     "tier": "real",
+     "route": "real",
+     "policyTier": "open",
+     "licenseClass": "open",
+     "pptx": {
+      "named": null,
+      "slotsUsed": [],
+      "replacementNames": []
+     }
+    }
+   },
+   "fontHost": {
+    "model": "gallery",
+    "render": {
+     "ok": true
+    },
+    "selection": {
+     "detected": [],
+     "scripts": [],
+     "unavailable": [],
+     "packages": []
+    }
+   },
+   "typefaces": {
+    "distinct": [
+     "Aptos",
+     "Aptos Display",
+     "",
+     "+mn-lt",
+     "+mn-ea",
+     "+mn-cs",
+     "+mj-lt",
+     "+mj-ea",
+     "+mj-cs"
+    ],
+    "foreign": [],
+    "scriptSupplements": 54,
+    "scriptSupplementFaces": [
+     "游ゴシック Light",
+     "맑은 고딕",
+     "等线 Light",
+     "新細明體",
+     "Times New Roman",
+     "Angsana New",
+     "Nyala",
+     "Vrinda",
+     "Shruti",
+     "MoolBoran",
+     "Tunga",
+     "Raavi",
+     "Euphemia",
+     "Plantagenet Cherokee",
+     "Microsoft Yi Baiti",
+     "Microsoft Himalaya",
+     "MV Boli",
+     "Mangal",
+     "Gautami",
+     "Latha",
+     "Estrangelo Edessa",
+     "Kalinga",
+     "Kartika",
+     "DokChampa",
+     "Iskoola Pota",
+     "Mongolian Baiti",
+     "Microsoft Uighur",
+     "Sylfaen",
+     "Arial",
+     "Leelawadee UI",
+     "Microsoft JhengHei",
+     "Javanese Text",
+     "Segoe UI",
+     "Myanmar Text",
+     "Ebrima",
+     "Nirmala UI",
+     "Phagspa",
+     "Microsoft Tai Le",
+     "Microsoft New Tai Lue",
+     "游ゴシック",
+     "等线",
+     "Cordia New",
+     "DaunPenh"
+    ],
+    "emptySlots": 8,
+    "appFonts": [
+     "Fonts Used",
+     "Theme",
+     "Slide Titles",
+     "Aptos",
+     "Aptos Display",
+     "Office Theme",
+     "Slide 1"
+    ]
+   },
+   "previewDiagnostics": [],
+   "exportDiagnostics": [],
+   "reimportDiagnostics": [
+    "heading-import-reflow"
+   ],
+   "diffs": [
+    {
+     "check": "text",
+     "status": "near",
+     "reason": "chart label wrapped/split in preview (native chart lays out its own labels)",
+     "count": 1,
+     "where": [
+      "slides.0.chart"
+     ],
+     "samples": [
+      "0"
+     ]
+    },
+    {
+     "check": "text",
+     "status": "near",
+     "reason": "chart axis text: preview [12] vs chart [9]",
+     "count": 1,
+     "where": [
+      "slides.0.chart"
+     ],
+     "samples": []
+    },
+    {
+     "check": "text",
+     "status": "near",
+     "reason": "chart legend text: preview [12] vs chart [no explicit size]",
+     "count": 1,
+     "where": [
+      "slides.0.chart"
+     ],
+     "samples": []
+    }
+   ]
+  },
+  {
+   "dimension": "charts",
+   "id": "100pct-stacked-column-3x",
+   "variant": "published",
+   "class": "near",
+   "legacy": {
+    "class": "near",
+    "checks": {
+     "fontResolution": "pass"
+    },
+    "fontResolutionReasons": []
+   },
+   "checks": {
+    "geometry": "pass",
+    "text": "near",
+    "fills": "pass",
+    "zOrder": "pass",
+    "slideSize": "pass",
+    "typefaces": "pass",
+    "reimport": "pass",
+    "fontResolution": "pass",
+    "theme": "pass",
+    "mapping": "pass"
+   },
+   "stats": {
+    "textLines": 24,
+    "textLinesMatched": 2,
+    "runs": 2,
+    "shapesMapped": 3,
+    "shapesUnmapped": 0,
+    "srgbLiteral": 0,
+    "schemeClr": 2,
+    "geomMaxDeltaPt": 0
+   },
+   "fontResolution": {
+    "Aptos Display": {
+     "status": "metric-substitute",
+     "resolved": "Intos Display",
+     "verdict": "pass",
+     "tier": "metric",
+     "route": "replacement",
+     "policyTier": "metric",
+     "licenseClass": "proprietary-standard",
+     "pptx": {
+      "named": true,
+      "slotsUsed": [
+       "latin"
+      ],
+      "replacementNames": []
+     }
+    },
+    "Aptos": {
+     "status": "metric-substitute",
+     "resolved": "Intos",
+     "verdict": "pass",
+     "tier": "metric",
+     "route": "replacement",
+     "policyTier": "metric",
+     "licenseClass": "proprietary-standard",
+     "pptx": {
+      "named": true,
+      "slotsUsed": [
+       "latin"
+      ],
+      "replacementNames": []
+     }
+    },
+    "Roboto Mono": {
+     "status": "real",
+     "resolved": "Roboto Mono",
+     "verdict": "pass",
+     "tier": "real",
+     "route": "real",
+     "policyTier": "open",
+     "licenseClass": "open",
+     "pptx": {
+      "named": null,
+      "slotsUsed": [],
+      "replacementNames": []
+     }
+    }
+   },
+   "fontHost": {
+    "model": "gallery",
+    "render": {
+     "ok": true
+    },
+    "selection": {
+     "detected": [],
+     "scripts": [],
+     "unavailable": [],
+     "packages": []
+    }
+   },
+   "typefaces": {
+    "distinct": [
+     "Aptos",
+     "Aptos Display",
+     "",
+     "+mn-lt",
+     "+mn-ea",
+     "+mn-cs",
+     "+mj-lt",
+     "+mj-ea",
+     "+mj-cs"
+    ],
+    "foreign": [],
+    "scriptSupplements": 54,
+    "scriptSupplementFaces": [
+     "游ゴシック Light",
+     "맑은 고딕",
+     "等线 Light",
+     "新細明體",
+     "Times New Roman",
+     "Angsana New",
+     "Nyala",
+     "Vrinda",
+     "Shruti",
+     "MoolBoran",
+     "Tunga",
+     "Raavi",
+     "Euphemia",
+     "Plantagenet Cherokee",
+     "Microsoft Yi Baiti",
+     "Microsoft Himalaya",
+     "MV Boli",
+     "Mangal",
+     "Gautami",
+     "Latha",
+     "Estrangelo Edessa",
+     "Kalinga",
+     "Kartika",
+     "DokChampa",
+     "Iskoola Pota",
+     "Mongolian Baiti",
+     "Microsoft Uighur",
+     "Sylfaen",
+     "Arial",
+     "Leelawadee UI",
+     "Microsoft JhengHei",
+     "Javanese Text",
+     "Segoe UI",
+     "Myanmar Text",
+     "Ebrima",
+     "Nirmala UI",
+     "Phagspa",
+     "Microsoft Tai Le",
+     "Microsoft New Tai Lue",
+     "游ゴシック",
+     "等线",
+     "Cordia New",
+     "DaunPenh"
+    ],
+    "emptySlots": 8,
+    "appFonts": [
+     "Fonts Used",
+     "Theme",
+     "Slide Titles",
+     "Aptos",
+     "Aptos Display",
+     "Office Theme",
+     "Slide 1"
+    ]
+   },
+   "previewDiagnostics": [],
+   "exportDiagnostics": [],
+   "reimportDiagnostics": [
+    "heading-import-reflow"
+   ],
+   "diffs": [
+    {
+     "check": "text",
+     "status": "near",
+     "reason": "chart axis text: preview [12] vs chart [9]",
+     "count": 1,
+     "where": [
+      "slides.0.chart"
+     ],
+     "samples": []
+    },
+    {
+     "check": "text",
+     "status": "near",
+     "reason": "chart legend text: preview [12] vs chart [no explicit size]",
+     "count": 1,
+     "where": [
+      "slides.0.chart"
+     ],
+     "samples": []
+    }
+   ]
+  },
+  {
+   "dimension": "charts",
+   "id": "line",
+   "variant": "published",
+   "class": "near",
+   "legacy": {
+    "class": "near",
+    "checks": {
+     "fontResolution": "pass"
+    },
+    "fontResolutionReasons": []
+   },
+   "checks": {
+    "geometry": "pass",
+    "text": "near",
+    "fills": "pass",
+    "zOrder": "pass",
+    "slideSize": "pass",
+    "typefaces": "pass",
+    "reimport": "pass",
+    "fontResolution": "pass",
+    "theme": "pass",
+    "mapping": "pass"
+   },
+   "stats": {
+    "textLines": 24,
+    "textLinesMatched": 2,
+    "runs": 2,
+    "shapesMapped": 3,
+    "shapesUnmapped": 0,
+    "srgbLiteral": 0,
+    "schemeClr": 2,
+    "geomMaxDeltaPt": 0
+   },
+   "fontResolution": {
+    "Aptos Display": {
+     "status": "metric-substitute",
+     "resolved": "Intos Display",
+     "verdict": "pass",
+     "tier": "metric",
+     "route": "replacement",
+     "policyTier": "metric",
+     "licenseClass": "proprietary-standard",
+     "pptx": {
+      "named": true,
+      "slotsUsed": [
+       "latin"
+      ],
+      "replacementNames": []
+     }
+    },
+    "Aptos": {
+     "status": "metric-substitute",
+     "resolved": "Intos",
+     "verdict": "pass",
+     "tier": "metric",
+     "route": "replacement",
+     "policyTier": "metric",
+     "licenseClass": "proprietary-standard",
+     "pptx": {
+      "named": true,
+      "slotsUsed": [
+       "latin"
+      ],
+      "replacementNames": []
+     }
+    },
+    "Roboto Mono": {
+     "status": "real",
+     "resolved": "Roboto Mono",
+     "verdict": "pass",
+     "tier": "real",
+     "route": "real",
+     "policyTier": "open",
+     "licenseClass": "open",
+     "pptx": {
+      "named": null,
+      "slotsUsed": [],
+      "replacementNames": []
+     }
+    }
+   },
+   "fontHost": {
+    "model": "gallery",
+    "render": {
+     "ok": true
+    },
+    "selection": {
+     "detected": [],
+     "scripts": [],
+     "unavailable": [],
+     "packages": []
+    }
+   },
+   "typefaces": {
+    "distinct": [
+     "Aptos",
+     "Aptos Display",
+     "",
+     "+mn-lt",
+     "+mn-ea",
+     "+mn-cs",
+     "+mj-lt",
+     "+mj-ea",
+     "+mj-cs"
+    ],
+    "foreign": [],
+    "scriptSupplements": 54,
+    "scriptSupplementFaces": [
+     "游ゴシック Light",
+     "맑은 고딕",
+     "等线 Light",
+     "新細明體",
+     "Times New Roman",
+     "Angsana New",
+     "Nyala",
+     "Vrinda",
+     "Shruti",
+     "MoolBoran",
+     "Tunga",
+     "Raavi",
+     "Euphemia",
+     "Plantagenet Cherokee",
+     "Microsoft Yi Baiti",
+     "Microsoft Himalaya",
+     "MV Boli",
+     "Mangal",
+     "Gautami",
+     "Latha",
+     "Estrangelo Edessa",
+     "Kalinga",
+     "Kartika",
+     "DokChampa",
+     "Iskoola Pota",
+     "Mongolian Baiti",
+     "Microsoft Uighur",
+     "Sylfaen",
+     "Arial",
+     "Leelawadee UI",
+     "Microsoft JhengHei",
+     "Javanese Text",
+     "Segoe UI",
+     "Myanmar Text",
+     "Ebrima",
+     "Nirmala UI",
+     "Phagspa",
+     "Microsoft Tai Le",
+     "Microsoft New Tai Lue",
+     "游ゴシック",
+     "等线",
+     "Cordia New",
+     "DaunPenh"
+    ],
+    "emptySlots": 8,
+    "appFonts": [
+     "Fonts Used",
+     "Theme",
+     "Slide Titles",
+     "Aptos",
+     "Aptos Display",
+     "Office Theme",
+     "Slide 1"
+    ]
+   },
+   "previewDiagnostics": [],
+   "exportDiagnostics": [],
+   "reimportDiagnostics": [
+    "heading-import-reflow"
+   ],
+   "diffs": [
+    {
+     "check": "text",
+     "status": "near",
+     "reason": "chart label wrapped/split in preview (native chart lays out its own labels)",
+     "count": 1,
+     "where": [
+      "slides.0.chart"
+     ],
+     "samples": [
+      "0"
+     ]
+    },
+    {
+     "check": "text",
+     "status": "near",
+     "reason": "chart axis text: preview [12] vs chart [9]",
+     "count": 1,
+     "where": [
+      "slides.0.chart"
+     ],
+     "samples": []
+    }
+   ]
+  },
+  {
+   "dimension": "charts",
+   "id": "line-with-markers",
+   "variant": "published",
+   "class": "near",
+   "legacy": {
+    "class": "near",
+    "checks": {
+     "fontResolution": "pass"
+    },
+    "fontResolutionReasons": []
+   },
+   "checks": {
+    "geometry": "pass",
+    "text": "near",
+    "fills": "pass",
+    "zOrder": "pass",
+    "slideSize": "pass",
+    "typefaces": "pass",
+    "reimport": "pass",
+    "fontResolution": "pass",
+    "theme": "pass",
+    "mapping": "pass"
+   },
+   "stats": {
+    "textLines": 21,
+    "textLinesMatched": 2,
+    "runs": 2,
+    "shapesMapped": 3,
+    "shapesUnmapped": 0,
+    "srgbLiteral": 0,
+    "schemeClr": 2,
+    "geomMaxDeltaPt": 0
+   },
+   "fontResolution": {
+    "Aptos Display": {
+     "status": "metric-substitute",
+     "resolved": "Intos Display",
+     "verdict": "pass",
+     "tier": "metric",
+     "route": "replacement",
+     "policyTier": "metric",
+     "licenseClass": "proprietary-standard",
+     "pptx": {
+      "named": true,
+      "slotsUsed": [
+       "latin"
+      ],
+      "replacementNames": []
+     }
+    },
+    "Aptos": {
+     "status": "metric-substitute",
+     "resolved": "Intos",
+     "verdict": "pass",
+     "tier": "metric",
+     "route": "replacement",
+     "policyTier": "metric",
+     "licenseClass": "proprietary-standard",
+     "pptx": {
+      "named": true,
+      "slotsUsed": [
+       "latin"
+      ],
+      "replacementNames": []
+     }
+    },
+    "Roboto Mono": {
+     "status": "real",
+     "resolved": "Roboto Mono",
+     "verdict": "pass",
+     "tier": "real",
+     "route": "real",
+     "policyTier": "open",
+     "licenseClass": "open",
+     "pptx": {
+      "named": null,
+      "slotsUsed": [],
+      "replacementNames": []
+     }
+    }
+   },
+   "fontHost": {
+    "model": "gallery",
+    "render": {
+     "ok": true
+    },
+    "selection": {
+     "detected": [],
+     "scripts": [],
+     "unavailable": [],
+     "packages": []
+    }
+   },
+   "typefaces": {
+    "distinct": [
+     "Aptos",
+     "Aptos Display",
+     "",
+     "+mn-lt",
+     "+mn-ea",
+     "+mn-cs",
+     "+mj-lt",
+     "+mj-ea",
+     "+mj-cs"
+    ],
+    "foreign": [],
+    "scriptSupplements": 54,
+    "scriptSupplementFaces": [
+     "游ゴシック Light",
+     "맑은 고딕",
+     "等线 Light",
+     "新細明體",
+     "Times New Roman",
+     "Angsana New",
+     "Nyala",
+     "Vrinda",
+     "Shruti",
+     "MoolBoran",
+     "Tunga",
+     "Raavi",
+     "Euphemia",
+     "Plantagenet Cherokee",
+     "Microsoft Yi Baiti",
+     "Microsoft Himalaya",
+     "MV Boli",
+     "Mangal",
+     "Gautami",
+     "Latha",
+     "Estrangelo Edessa",
+     "Kalinga",
+     "Kartika",
+     "DokChampa",
+     "Iskoola Pota",
+     "Mongolian Baiti",
+     "Microsoft Uighur",
+     "Sylfaen",
+     "Arial",
+     "Leelawadee UI",
+     "Microsoft JhengHei",
+     "Javanese Text",
+     "Segoe UI",
+     "Myanmar Text",
+     "Ebrima",
+     "Nirmala UI",
+     "Phagspa",
+     "Microsoft Tai Le",
+     "Microsoft New Tai Lue",
+     "游ゴシック",
+     "等线",
+     "Cordia New",
+     "DaunPenh"
+    ],
+    "emptySlots": 8,
+    "appFonts": [
+     "Fonts Used",
+     "Theme",
+     "Slide Titles",
+     "Aptos",
+     "Aptos Display",
+     "Office Theme",
+     "Slide 1"
+    ]
+   },
+   "previewDiagnostics": [],
+   "exportDiagnostics": [],
+   "reimportDiagnostics": [
+    "heading-import-reflow"
+   ],
+   "diffs": [
+    {
+     "check": "text",
+     "status": "near",
+     "reason": "chart label wrapped/split in preview (native chart lays out its own labels)",
+     "count": 1,
+     "where": [
+      "slides.0.chart"
+     ],
+     "samples": [
+      "0"
+     ]
+    },
+    {
+     "check": "text",
+     "status": "near",
+     "reason": "chart axis text: preview [12] vs chart [9]",
+     "count": 1,
+     "where": [
+      "slides.0.chart"
+     ],
+     "samples": []
+    }
+   ]
+  },
+  {
+   "dimension": "charts",
+   "id": "stacked-line-3x",
+   "variant": "published",
+   "class": "near",
+   "legacy": {
+    "class": "near",
+    "checks": {
+     "fontResolution": "pass"
+    },
+    "fontResolutionReasons": []
+   },
+   "checks": {
+    "geometry": "pass",
+    "text": "near",
+    "fills": "pass",
+    "zOrder": "pass",
+    "slideSize": "pass",
+    "typefaces": "pass",
+    "reimport": "pass",
+    "fontResolution": "pass",
+    "theme": "pass",
+    "mapping": "pass"
+   },
+   "stats": {
+    "textLines": 23,
+    "textLinesMatched": 2,
+    "runs": 2,
+    "shapesMapped": 3,
+    "shapesUnmapped": 0,
+    "srgbLiteral": 0,
+    "schemeClr": 2,
+    "geomMaxDeltaPt": 0
+   },
+   "fontResolution": {
+    "Aptos Display": {
+     "status": "metric-substitute",
+     "resolved": "Intos Display",
+     "verdict": "pass",
+     "tier": "metric",
+     "route": "replacement",
+     "policyTier": "metric",
+     "licenseClass": "proprietary-standard",
+     "pptx": {
+      "named": true,
+      "slotsUsed": [
+       "latin"
+      ],
+      "replacementNames": []
+     }
+    },
+    "Aptos": {
+     "status": "metric-substitute",
+     "resolved": "Intos",
+     "verdict": "pass",
+     "tier": "metric",
+     "route": "replacement",
+     "policyTier": "metric",
+     "licenseClass": "proprietary-standard",
+     "pptx": {
+      "named": true,
+      "slotsUsed": [
+       "latin"
+      ],
+      "replacementNames": []
+     }
+    },
+    "Roboto Mono": {
+     "status": "real",
+     "resolved": "Roboto Mono",
+     "verdict": "pass",
+     "tier": "real",
+     "route": "real",
+     "policyTier": "open",
+     "licenseClass": "open",
+     "pptx": {
+      "named": null,
+      "slotsUsed": [],
+      "replacementNames": []
+     }
+    }
+   },
+   "fontHost": {
+    "model": "gallery",
+    "render": {
+     "ok": true
+    },
+    "selection": {
+     "detected": [],
+     "scripts": [],
+     "unavailable": [],
+     "packages": []
+    }
+   },
+   "typefaces": {
+    "distinct": [
+     "Aptos",
+     "Aptos Display",
+     "",
+     "+mn-lt",
+     "+mn-ea",
+     "+mn-cs",
+     "+mj-lt",
+     "+mj-ea",
+     "+mj-cs"
+    ],
+    "foreign": [],
+    "scriptSupplements": 54,
+    "scriptSupplementFaces": [
+     "游ゴシック Light",
+     "맑은 고딕",
+     "等线 Light",
+     "新細明體",
+     "Times New Roman",
+     "Angsana New",
+     "Nyala",
+     "Vrinda",
+     "Shruti",
+     "MoolBoran",
+     "Tunga",
+     "Raavi",
+     "Euphemia",
+     "Plantagenet Cherokee",
+     "Microsoft Yi Baiti",
+     "Microsoft Himalaya",
+     "MV Boli",
+     "Mangal",
+     "Gautami",
+     "Latha",
+     "Estrangelo Edessa",
+     "Kalinga",
+     "Kartika",
+     "DokChampa",
+     "Iskoola Pota",
+     "Mongolian Baiti",
+     "Microsoft Uighur",
+     "Sylfaen",
+     "Arial",
+     "Leelawadee UI",
+     "Microsoft JhengHei",
+     "Javanese Text",
+     "Segoe UI",
+     "Myanmar Text",
+     "Ebrima",
+     "Nirmala UI",
+     "Phagspa",
+     "Microsoft Tai Le",
+     "Microsoft New Tai Lue",
+     "游ゴシック",
+     "等线",
+     "Cordia New",
+     "DaunPenh"
+    ],
+    "emptySlots": 8,
+    "appFonts": [
+     "Fonts Used",
+     "Theme",
+     "Slide Titles",
+     "Aptos",
+     "Aptos Display",
+     "Office Theme",
+     "Slide 1"
+    ]
+   },
+   "previewDiagnostics": [],
+   "exportDiagnostics": [],
+   "reimportDiagnostics": [
+    "heading-import-reflow"
+   ],
+   "diffs": [
+    {
+     "check": "text",
+     "status": "near",
+     "reason": "chart label wrapped/split in preview (native chart lays out its own labels)",
+     "count": 1,
+     "where": [
+      "slides.0.chart"
+     ],
+     "samples": [
+      "0"
+     ]
+    },
+    {
+     "check": "text",
+     "status": "near",
+     "reason": "chart axis text: preview [12] vs chart [9]",
+     "count": 1,
+     "where": [
+      "slides.0.chart"
+     ],
+     "samples": []
+    },
+    {
+     "check": "text",
+     "status": "near",
+     "reason": "chart legend text: preview [12] vs chart [no explicit size]",
+     "count": 1,
+     "where": [
+      "slides.0.chart"
+     ],
+     "samples": []
+    }
+   ]
+  },
+  {
+   "dimension": "charts",
+   "id": "stacked-line-with-markers-3x",
+   "variant": "published",
+   "class": "near",
+   "legacy": {
+    "class": "near",
+    "checks": {
+     "fontResolution": "pass"
+    },
+    "fontResolutionReasons": []
+   },
+   "checks": {
+    "geometry": "pass",
+    "text": "near",
+    "fills": "pass",
+    "zOrder": "pass",
+    "slideSize": "pass",
+    "typefaces": "pass",
+    "reimport": "pass",
+    "fontResolution": "pass",
+    "theme": "pass",
+    "mapping": "pass"
+   },
+   "stats": {
+    "textLines": 24,
+    "textLinesMatched": 2,
+    "runs": 2,
+    "shapesMapped": 3,
+    "shapesUnmapped": 0,
+    "srgbLiteral": 0,
+    "schemeClr": 2,
+    "geomMaxDeltaPt": 0
+   },
+   "fontResolution": {
+    "Aptos Display": {
+     "status": "metric-substitute",
+     "resolved": "Intos Display",
+     "verdict": "pass",
+     "tier": "metric",
+     "route": "replacement",
+     "policyTier": "metric",
+     "licenseClass": "proprietary-standard",
+     "pptx": {
+      "named": true,
+      "slotsUsed": [
+       "latin"
+      ],
+      "replacementNames": []
+     }
+    },
+    "Aptos": {
+     "status": "metric-substitute",
+     "resolved": "Intos",
+     "verdict": "pass",
+     "tier": "metric",
+     "route": "replacement",
+     "policyTier": "metric",
+     "licenseClass": "proprietary-standard",
+     "pptx": {
+      "named": true,
+      "slotsUsed": [
+       "latin"
+      ],
+      "replacementNames": []
+     }
+    },
+    "Roboto Mono": {
+     "status": "real",
+     "resolved": "Roboto Mono",
+     "verdict": "pass",
+     "tier": "real",
+     "route": "real",
+     "policyTier": "open",
+     "licenseClass": "open",
+     "pptx": {
+      "named": null,
+      "slotsUsed": [],
+      "replacementNames": []
+     }
+    }
+   },
+   "fontHost": {
+    "model": "gallery",
+    "render": {
+     "ok": true
+    },
+    "selection": {
+     "detected": [],
+     "scripts": [],
+     "unavailable": [],
+     "packages": []
+    }
+   },
+   "typefaces": {
+    "distinct": [
+     "Aptos",
+     "Aptos Display",
+     "",
+     "+mn-lt",
+     "+mn-ea",
+     "+mn-cs",
+     "+mj-lt",
+     "+mj-ea",
+     "+mj-cs"
+    ],
+    "foreign": [],
+    "scriptSupplements": 54,
+    "scriptSupplementFaces": [
+     "游ゴシック Light",
+     "맑은 고딕",
+     "等线 Light",
+     "新細明體",
+     "Times New Roman",
+     "Angsana New",
+     "Nyala",
+     "Vrinda",
+     "Shruti",
+     "MoolBoran",
+     "Tunga",
+     "Raavi",
+     "Euphemia",
+     "Plantagenet Cherokee",
+     "Microsoft Yi Baiti",
+     "Microsoft Himalaya",
+     "MV Boli",
+     "Mangal",
+     "Gautami",
+     "Latha",
+     "Estrangelo Edessa",
+     "Kalinga",
+     "Kartika",
+     "DokChampa",
+     "Iskoola Pota",
+     "Mongolian Baiti",
+     "Microsoft Uighur",
+     "Sylfaen",
+     "Arial",
+     "Leelawadee UI",
+     "Microsoft JhengHei",
+     "Javanese Text",
+     "Segoe UI",
+     "Myanmar Text",
+     "Ebrima",
+     "Nirmala UI",
+     "Phagspa",
+     "Microsoft Tai Le",
+     "Microsoft New Tai Lue",
+     "游ゴシック",
+     "等线",
+     "Cordia New",
+     "DaunPenh"
+    ],
+    "emptySlots": 8,
+    "appFonts": [
+     "Fonts Used",
+     "Theme",
+     "Slide Titles",
+     "Aptos",
+     "Aptos Display",
+     "Office Theme",
+     "Slide 1"
+    ]
+   },
+   "previewDiagnostics": [],
+   "exportDiagnostics": [],
+   "reimportDiagnostics": [
+    "heading-import-reflow"
+   ],
+   "diffs": [
+    {
+     "check": "text",
+     "status": "near",
+     "reason": "chart label wrapped/split in preview (native chart lays out its own labels)",
+     "count": 1,
+     "where": [
+      "slides.0.chart"
+     ],
+     "samples": [
+      "0"
+     ]
+    },
+    {
+     "check": "text",
+     "status": "near",
+     "reason": "chart axis text: preview [12] vs chart [9]",
+     "count": 1,
+     "where": [
+      "slides.0.chart"
+     ],
+     "samples": []
+    },
+    {
+     "check": "text",
+     "status": "near",
+     "reason": "chart legend text: preview [12] vs chart [no explicit size]",
+     "count": 1,
+     "where": [
+      "slides.0.chart"
+     ],
+     "samples": []
+    }
+   ]
+  },
+  {
+   "dimension": "charts",
+   "id": "pie",
+   "variant": "published",
+   "class": "near",
+   "legacy": {
+    "class": "near",
+    "checks": {
+     "fontResolution": "pass"
+    },
+    "fontResolutionReasons": []
+   },
+   "checks": {
+    "geometry": "pass",
+    "text": "near",
+    "fills": "pass",
+    "zOrder": "pass",
+    "slideSize": "pass",
+    "typefaces": "pass",
+    "reimport": "pass",
+    "fontResolution": "pass",
+    "theme": "pass",
+    "mapping": "pass"
+   },
+   "stats": {
+    "textLines": 4,
+    "textLinesMatched": 2,
+    "runs": 2,
+    "shapesMapped": 3,
+    "shapesUnmapped": 0,
+    "srgbLiteral": 0,
+    "schemeClr": 2,
+    "geomMaxDeltaPt": 0
+   },
+   "fontResolution": {
+    "Aptos Display": {
+     "status": "metric-substitute",
+     "resolved": "Intos Display",
+     "verdict": "pass",
+     "tier": "metric",
+     "route": "replacement",
+     "policyTier": "metric",
+     "licenseClass": "proprietary-standard",
+     "pptx": {
+      "named": true,
+      "slotsUsed": [
+       "latin"
+      ],
+      "replacementNames": []
+     }
+    },
+    "Aptos": {
+     "status": "metric-substitute",
+     "resolved": "Intos",
+     "verdict": "pass",
+     "tier": "metric",
+     "route": "replacement",
+     "policyTier": "metric",
+     "licenseClass": "proprietary-standard",
+     "pptx": {
+      "named": true,
+      "slotsUsed": [
+       "latin"
+      ],
+      "replacementNames": []
+     }
+    },
+    "Roboto Mono": {
+     "status": "real",
+     "resolved": "Roboto Mono",
+     "verdict": "pass",
+     "tier": "real",
+     "route": "real",
+     "policyTier": "open",
+     "licenseClass": "open",
+     "pptx": {
+      "named": null,
+      "slotsUsed": [],
+      "replacementNames": []
+     }
+    }
+   },
+   "fontHost": {
+    "model": "gallery",
+    "render": {
+     "ok": true
+    },
+    "selection": {
+     "detected": [],
+     "scripts": [],
+     "unavailable": [],
+     "packages": []
+    }
+   },
+   "typefaces": {
+    "distinct": [
+     "Aptos",
+     "Aptos Display",
+     "",
+     "+mn-lt",
+     "+mn-ea",
+     "+mn-cs",
+     "+mj-lt",
+     "+mj-ea",
+     "+mj-cs"
+    ],
+    "foreign": [],
+    "scriptSupplements": 54,
+    "scriptSupplementFaces": [
+     "游ゴシック Light",
+     "맑은 고딕",
+     "等线 Light",
+     "新細明體",
+     "Times New Roman",
+     "Angsana New",
+     "Nyala",
+     "Vrinda",
+     "Shruti",
+     "MoolBoran",
+     "Tunga",
+     "Raavi",
+     "Euphemia",
+     "Plantagenet Cherokee",
+     "Microsoft Yi Baiti",
+     "Microsoft Himalaya",
+     "MV Boli",
+     "Mangal",
+     "Gautami",
+     "Latha",
+     "Estrangelo Edessa",
+     "Kalinga",
+     "Kartika",
+     "DokChampa",
+     "Iskoola Pota",
+     "Mongolian Baiti",
+     "Microsoft Uighur",
+     "Sylfaen",
+     "Arial",
+     "Leelawadee UI",
+     "Microsoft JhengHei",
+     "Javanese Text",
+     "Segoe UI",
+     "Myanmar Text",
+     "Ebrima",
+     "Nirmala UI",
+     "Phagspa",
+     "Microsoft Tai Le",
+     "Microsoft New Tai Lue",
+     "游ゴシック",
+     "等线",
+     "Cordia New",
+     "DaunPenh"
+    ],
+    "emptySlots": 8,
+    "appFonts": [
+     "Fonts Used",
+     "Theme",
+     "Slide Titles",
+     "Aptos",
+     "Aptos Display",
+     "Office Theme",
+     "Slide 1"
+    ]
+   },
+   "previewDiagnostics": [],
+   "exportDiagnostics": [],
+   "reimportDiagnostics": [
+    "heading-import-reflow"
+   ],
+   "diffs": [
+    {
+     "check": "text",
+     "status": "near",
+     "reason": "chart legend text: preview [12] vs chart [no explicit size]",
+     "count": 1,
+     "where": [
+      "slides.0.chart"
+     ],
+     "samples": []
+    }
+   ]
+  },
+  {
+   "dimension": "charts",
+   "id": "doughnut",
+   "variant": "published",
+   "class": "near",
+   "legacy": {
+    "class": "near",
+    "checks": {
+     "fontResolution": "pass"
+    },
+    "fontResolutionReasons": []
+   },
+   "checks": {
+    "geometry": "pass",
+    "text": "near",
+    "fills": "pass",
+    "zOrder": "pass",
+    "slideSize": "pass",
+    "typefaces": "pass",
+    "reimport": "pass",
+    "fontResolution": "pass",
+    "theme": "pass",
+    "mapping": "pass"
+   },
+   "stats": {
+    "textLines": 4,
+    "textLinesMatched": 2,
+    "runs": 2,
+    "shapesMapped": 3,
+    "shapesUnmapped": 0,
+    "srgbLiteral": 0,
+    "schemeClr": 2,
+    "geomMaxDeltaPt": 0
+   },
+   "fontResolution": {
+    "Aptos Display": {
+     "status": "metric-substitute",
+     "resolved": "Intos Display",
+     "verdict": "pass",
+     "tier": "metric",
+     "route": "replacement",
+     "policyTier": "metric",
+     "licenseClass": "proprietary-standard",
+     "pptx": {
+      "named": true,
+      "slotsUsed": [
+       "latin"
+      ],
+      "replacementNames": []
+     }
+    },
+    "Aptos": {
+     "status": "metric-substitute",
+     "resolved": "Intos",
+     "verdict": "pass",
+     "tier": "metric",
+     "route": "replacement",
+     "policyTier": "metric",
+     "licenseClass": "proprietary-standard",
+     "pptx": {
+      "named": true,
+      "slotsUsed": [
+       "latin"
+      ],
+      "replacementNames": []
+     }
+    },
+    "Roboto Mono": {
+     "status": "real",
+     "resolved": "Roboto Mono",
+     "verdict": "pass",
+     "tier": "real",
+     "route": "real",
+     "policyTier": "open",
+     "licenseClass": "open",
+     "pptx": {
+      "named": null,
+      "slotsUsed": [],
+      "replacementNames": []
+     }
+    }
+   },
+   "fontHost": {
+    "model": "gallery",
+    "render": {
+     "ok": true
+    },
+    "selection": {
+     "detected": [],
+     "scripts": [],
+     "unavailable": [],
+     "packages": []
+    }
+   },
+   "typefaces": {
+    "distinct": [
+     "Aptos",
+     "Aptos Display",
+     "",
+     "+mn-lt",
+     "+mn-ea",
+     "+mn-cs",
+     "+mj-lt",
+     "+mj-ea",
+     "+mj-cs"
+    ],
+    "foreign": [],
+    "scriptSupplements": 54,
+    "scriptSupplementFaces": [
+     "游ゴシック Light",
+     "맑은 고딕",
+     "等线 Light",
+     "新細明體",
+     "Times New Roman",
+     "Angsana New",
+     "Nyala",
+     "Vrinda",
+     "Shruti",
+     "MoolBoran",
+     "Tunga",
+     "Raavi",
+     "Euphemia",
+     "Plantagenet Cherokee",
+     "Microsoft Yi Baiti",
+     "Microsoft Himalaya",
+     "MV Boli",
+     "Mangal",
+     "Gautami",
+     "Latha",
+     "Estrangelo Edessa",
+     "Kalinga",
+     "Kartika",
+     "DokChampa",
+     "Iskoola Pota",
+     "Mongolian Baiti",
+     "Microsoft Uighur",
+     "Sylfaen",
+     "Arial",
+     "Leelawadee UI",
+     "Microsoft JhengHei",
+     "Javanese Text",
+     "Segoe UI",
+     "Myanmar Text",
+     "Ebrima",
+     "Nirmala UI",
+     "Phagspa",
+     "Microsoft Tai Le",
+     "Microsoft New Tai Lue",
+     "游ゴシック",
+     "等线",
+     "Cordia New",
+     "DaunPenh"
+    ],
+    "emptySlots": 8,
+    "appFonts": [
+     "Fonts Used",
+     "Theme",
+     "Slide Titles",
+     "Aptos",
+     "Aptos Display",
+     "Office Theme",
+     "Slide 1"
+    ]
+   },
+   "previewDiagnostics": [],
+   "exportDiagnostics": [],
+   "reimportDiagnostics": [
+    "heading-import-reflow"
+   ],
+   "diffs": [
+    {
+     "check": "text",
+     "status": "near",
+     "reason": "chart legend text: preview [12] vs chart [no explicit size]",
+     "count": 1,
+     "where": [
+      "slides.0.chart"
+     ],
+     "samples": []
+    }
+   ]
+  },
+  {
+   "dimension": "charts",
+   "id": "bar",
+   "variant": "published",
+   "class": "near",
+   "legacy": {
+    "class": "near",
+    "checks": {
+     "fontResolution": "pass"
+    },
+    "fontResolutionReasons": []
+   },
+   "checks": {
+    "geometry": "pass",
+    "text": "near",
+    "fills": "pass",
+    "zOrder": "pass",
+    "slideSize": "pass",
+    "typefaces": "pass",
+    "reimport": "pass",
+    "fontResolution": "pass",
+    "theme": "pass",
+    "mapping": "pass"
+   },
+   "stats": {
+    "textLines": 16,
+    "textLinesMatched": 2,
+    "runs": 2,
+    "shapesMapped": 3,
+    "shapesUnmapped": 0,
+    "srgbLiteral": 0,
+    "schemeClr": 2,
+    "geomMaxDeltaPt": 0
+   },
+   "fontResolution": {
+    "Aptos Display": {
+     "status": "metric-substitute",
+     "resolved": "Intos Display",
+     "verdict": "pass",
+     "tier": "metric",
+     "route": "replacement",
+     "policyTier": "metric",
+     "licenseClass": "proprietary-standard",
+     "pptx": {
+      "named": true,
+      "slotsUsed": [
+       "latin"
+      ],
+      "replacementNames": []
+     }
+    },
+    "Aptos": {
+     "status": "metric-substitute",
+     "resolved": "Intos",
+     "verdict": "pass",
+     "tier": "metric",
+     "route": "replacement",
+     "policyTier": "metric",
+     "licenseClass": "proprietary-standard",
+     "pptx": {
+      "named": true,
+      "slotsUsed": [
+       "latin"
+      ],
+      "replacementNames": []
+     }
+    },
+    "Roboto Mono": {
+     "status": "real",
+     "resolved": "Roboto Mono",
+     "verdict": "pass",
+     "tier": "real",
+     "route": "real",
+     "policyTier": "open",
+     "licenseClass": "open",
+     "pptx": {
+      "named": null,
+      "slotsUsed": [],
+      "replacementNames": []
+     }
+    }
+   },
+   "fontHost": {
+    "model": "gallery",
+    "render": {
+     "ok": true
+    },
+    "selection": {
+     "detected": [],
+     "scripts": [],
+     "unavailable": [],
+     "packages": []
+    }
+   },
+   "typefaces": {
+    "distinct": [
+     "Aptos",
+     "Aptos Display",
+     "",
+     "+mn-lt",
+     "+mn-ea",
+     "+mn-cs",
+     "+mj-lt",
+     "+mj-ea",
+     "+mj-cs"
+    ],
+    "foreign": [],
+    "scriptSupplements": 54,
+    "scriptSupplementFaces": [
+     "游ゴシック Light",
+     "맑은 고딕",
+     "等线 Light",
+     "新細明體",
+     "Times New Roman",
+     "Angsana New",
+     "Nyala",
+     "Vrinda",
+     "Shruti",
+     "MoolBoran",
+     "Tunga",
+     "Raavi",
+     "Euphemia",
+     "Plantagenet Cherokee",
+     "Microsoft Yi Baiti",
+     "Microsoft Himalaya",
+     "MV Boli",
+     "Mangal",
+     "Gautami",
+     "Latha",
+     "Estrangelo Edessa",
+     "Kalinga",
+     "Kartika",
+     "DokChampa",
+     "Iskoola Pota",
+     "Mongolian Baiti",
+     "Microsoft Uighur",
+     "Sylfaen",
+     "Arial",
+     "Leelawadee UI",
+     "Microsoft JhengHei",
+     "Javanese Text",
+     "Segoe UI",
+     "Myanmar Text",
+     "Ebrima",
+     "Nirmala UI",
+     "Phagspa",
+     "Microsoft Tai Le",
+     "Microsoft New Tai Lue",
+     "游ゴシック",
+     "等线",
+     "Cordia New",
+     "DaunPenh"
+    ],
+    "emptySlots": 8,
+    "appFonts": [
+     "Fonts Used",
+     "Theme",
+     "Slide Titles",
+     "Aptos",
+     "Aptos Display",
+     "Office Theme",
+     "Slide 1"
+    ]
+   },
+   "previewDiagnostics": [],
+   "exportDiagnostics": [],
+   "reimportDiagnostics": [
+    "heading-import-reflow"
+   ],
+   "diffs": [
+    {
+     "check": "text",
+     "status": "near",
+     "reason": "chart label wrapped/split in preview (native chart lays out its own labels)",
+     "count": 1,
+     "where": [
+      "slides.0.chart"
+     ],
+     "samples": [
+      "0"
+     ]
+    },
+    {
+     "check": "text",
+     "status": "near",
+     "reason": "chart axis text: preview [12] vs chart [9]",
+     "count": 1,
+     "where": [
+      "slides.0.chart"
+     ],
+     "samples": []
+    }
+   ]
+  },
+  {
+   "dimension": "charts",
+   "id": "stacked-bar-3x",
+   "variant": "published",
+   "class": "near",
+   "legacy": {
+    "class": "near",
+    "checks": {
+     "fontResolution": "pass"
+    },
+    "fontResolutionReasons": []
+   },
+   "checks": {
+    "geometry": "pass",
+    "text": "near",
+    "fills": "pass",
+    "zOrder": "pass",
+    "slideSize": "pass",
+    "typefaces": "pass",
+    "reimport": "pass",
+    "fontResolution": "pass",
+    "theme": "pass",
+    "mapping": "pass"
+   },
+   "stats": {
+    "textLines": 17,
+    "textLinesMatched": 2,
+    "runs": 2,
+    "shapesMapped": 3,
+    "shapesUnmapped": 0,
+    "srgbLiteral": 0,
+    "schemeClr": 2,
+    "geomMaxDeltaPt": 0
+   },
+   "fontResolution": {
+    "Aptos Display": {
+     "status": "metric-substitute",
+     "resolved": "Intos Display",
+     "verdict": "pass",
+     "tier": "metric",
+     "route": "replacement",
+     "policyTier": "metric",
+     "licenseClass": "proprietary-standard",
+     "pptx": {
+      "named": true,
+      "slotsUsed": [
+       "latin"
+      ],
+      "replacementNames": []
+     }
+    },
+    "Aptos": {
+     "status": "metric-substitute",
+     "resolved": "Intos",
+     "verdict": "pass",
+     "tier": "metric",
+     "route": "replacement",
+     "policyTier": "metric",
+     "licenseClass": "proprietary-standard",
+     "pptx": {
+      "named": true,
+      "slotsUsed": [
+       "latin"
+      ],
+      "replacementNames": []
+     }
+    },
+    "Roboto Mono": {
+     "status": "real",
+     "resolved": "Roboto Mono",
+     "verdict": "pass",
+     "tier": "real",
+     "route": "real",
+     "policyTier": "open",
+     "licenseClass": "open",
+     "pptx": {
+      "named": null,
+      "slotsUsed": [],
+      "replacementNames": []
+     }
+    }
+   },
+   "fontHost": {
+    "model": "gallery",
+    "render": {
+     "ok": true
+    },
+    "selection": {
+     "detected": [],
+     "scripts": [],
+     "unavailable": [],
+     "packages": []
+    }
+   },
+   "typefaces": {
+    "distinct": [
+     "Aptos",
+     "Aptos Display",
+     "",
+     "+mn-lt",
+     "+mn-ea",
+     "+mn-cs",
+     "+mj-lt",
+     "+mj-ea",
+     "+mj-cs"
+    ],
+    "foreign": [],
+    "scriptSupplements": 54,
+    "scriptSupplementFaces": [
+     "游ゴシック Light",
+     "맑은 고딕",
+     "等线 Light",
+     "新細明體",
+     "Times New Roman",
+     "Angsana New",
+     "Nyala",
+     "Vrinda",
+     "Shruti",
+     "MoolBoran",
+     "Tunga",
+     "Raavi",
+     "Euphemia",
+     "Plantagenet Cherokee",
+     "Microsoft Yi Baiti",
+     "Microsoft Himalaya",
+     "MV Boli",
+     "Mangal",
+     "Gautami",
+     "Latha",
+     "Estrangelo Edessa",
+     "Kalinga",
+     "Kartika",
+     "DokChampa",
+     "Iskoola Pota",
+     "Mongolian Baiti",
+     "Microsoft Uighur",
+     "Sylfaen",
+     "Arial",
+     "Leelawadee UI",
+     "Microsoft JhengHei",
+     "Javanese Text",
+     "Segoe UI",
+     "Myanmar Text",
+     "Ebrima",
+     "Nirmala UI",
+     "Phagspa",
+     "Microsoft Tai Le",
+     "Microsoft New Tai Lue",
+     "游ゴシック",
+     "等线",
+     "Cordia New",
+     "DaunPenh"
+    ],
+    "emptySlots": 8,
+    "appFonts": [
+     "Fonts Used",
+     "Theme",
+     "Slide Titles",
+     "Aptos",
+     "Aptos Display",
+     "Office Theme",
+     "Slide 1"
+    ]
+   },
+   "previewDiagnostics": [],
+   "exportDiagnostics": [],
+   "reimportDiagnostics": [
+    "heading-import-reflow"
+   ],
+   "diffs": [
+    {
+     "check": "text",
+     "status": "near",
+     "reason": "chart label wrapped/split in preview (native chart lays out its own labels)",
+     "count": 1,
+     "where": [
+      "slides.0.chart"
+     ],
+     "samples": [
+      "0"
+     ]
+    },
+    {
+     "check": "text",
+     "status": "near",
+     "reason": "chart axis text: preview [12] vs chart [9]",
+     "count": 1,
+     "where": [
+      "slides.0.chart"
+     ],
+     "samples": []
+    },
+    {
+     "check": "text",
+     "status": "near",
+     "reason": "chart legend text: preview [12] vs chart [no explicit size]",
+     "count": 1,
+     "where": [
+      "slides.0.chart"
+     ],
+     "samples": []
+    }
+   ]
+  },
+  {
+   "dimension": "charts",
+   "id": "100pct-stacked-bar-3x",
+   "variant": "published",
+   "class": "near",
+   "legacy": {
+    "class": "near",
+    "checks": {
+     "fontResolution": "pass"
+    },
+    "fontResolutionReasons": []
+   },
+   "checks": {
+    "geometry": "pass",
+    "text": "near",
+    "fills": "pass",
+    "zOrder": "pass",
+    "slideSize": "pass",
+    "typefaces": "pass",
+    "reimport": "pass",
+    "fontResolution": "pass",
+    "theme": "pass",
+    "mapping": "pass"
+   },
+   "stats": {
+    "textLines": 22,
+    "textLinesMatched": 2,
+    "runs": 2,
+    "shapesMapped": 3,
+    "shapesUnmapped": 0,
+    "srgbLiteral": 0,
+    "schemeClr": 2,
+    "geomMaxDeltaPt": 0
+   },
+   "fontResolution": {
+    "Aptos Display": {
+     "status": "metric-substitute",
+     "resolved": "Intos Display",
+     "verdict": "pass",
+     "tier": "metric",
+     "route": "replacement",
+     "policyTier": "metric",
+     "licenseClass": "proprietary-standard",
+     "pptx": {
+      "named": true,
+      "slotsUsed": [
+       "latin"
+      ],
+      "replacementNames": []
+     }
+    },
+    "Aptos": {
+     "status": "metric-substitute",
+     "resolved": "Intos",
+     "verdict": "pass",
+     "tier": "metric",
+     "route": "replacement",
+     "policyTier": "metric",
+     "licenseClass": "proprietary-standard",
+     "pptx": {
+      "named": true,
+      "slotsUsed": [
+       "latin"
+      ],
+      "replacementNames": []
+     }
+    },
+    "Roboto Mono": {
+     "status": "real",
+     "resolved": "Roboto Mono",
+     "verdict": "pass",
+     "tier": "real",
+     "route": "real",
+     "policyTier": "open",
+     "licenseClass": "open",
+     "pptx": {
+      "named": null,
+      "slotsUsed": [],
+      "replacementNames": []
+     }
+    }
+   },
+   "fontHost": {
+    "model": "gallery",
+    "render": {
+     "ok": true
+    },
+    "selection": {
+     "detected": [],
+     "scripts": [],
+     "unavailable": [],
+     "packages": []
+    }
+   },
+   "typefaces": {
+    "distinct": [
+     "Aptos",
+     "Aptos Display",
+     "",
+     "+mn-lt",
+     "+mn-ea",
+     "+mn-cs",
+     "+mj-lt",
+     "+mj-ea",
+     "+mj-cs"
+    ],
+    "foreign": [],
+    "scriptSupplements": 54,
+    "scriptSupplementFaces": [
+     "游ゴシック Light",
+     "맑은 고딕",
+     "等线 Light",
+     "新細明體",
+     "Times New Roman",
+     "Angsana New",
+     "Nyala",
+     "Vrinda",
+     "Shruti",
+     "MoolBoran",
+     "Tunga",
+     "Raavi",
+     "Euphemia",
+     "Plantagenet Cherokee",
+     "Microsoft Yi Baiti",
+     "Microsoft Himalaya",
+     "MV Boli",
+     "Mangal",
+     "Gautami",
+     "Latha",
+     "Estrangelo Edessa",
+     "Kalinga",
+     "Kartika",
+     "DokChampa",
+     "Iskoola Pota",
+     "Mongolian Baiti",
+     "Microsoft Uighur",
+     "Sylfaen",
+     "Arial",
+     "Leelawadee UI",
+     "Microsoft JhengHei",
+     "Javanese Text",
+     "Segoe UI",
+     "Myanmar Text",
+     "Ebrima",
+     "Nirmala UI",
+     "Phagspa",
+     "Microsoft Tai Le",
+     "Microsoft New Tai Lue",
+     "游ゴシック",
+     "等线",
+     "Cordia New",
+     "DaunPenh"
+    ],
+    "emptySlots": 8,
+    "appFonts": [
+     "Fonts Used",
+     "Theme",
+     "Slide Titles",
+     "Aptos",
+     "Aptos Display",
+     "Office Theme",
+     "Slide 1"
+    ]
+   },
+   "previewDiagnostics": [],
+   "exportDiagnostics": [],
+   "reimportDiagnostics": [
+    "heading-import-reflow"
+   ],
+   "diffs": [
+    {
+     "check": "text",
+     "status": "near",
+     "reason": "chart axis text: preview [12] vs chart [9]",
+     "count": 1,
+     "where": [
+      "slides.0.chart"
+     ],
+     "samples": []
+    },
+    {
+     "check": "text",
+     "status": "near",
+     "reason": "chart legend text: preview [12] vs chart [no explicit size]",
+     "count": 1,
+     "where": [
+      "slides.0.chart"
+     ],
+     "samples": []
+    }
+   ]
+  },
+  {
+   "dimension": "charts",
+   "id": "area",
+   "variant": "published",
+   "class": "near",
+   "legacy": {
+    "class": "near",
+    "checks": {
+     "fontResolution": "pass"
+    },
+    "fontResolutionReasons": []
+   },
+   "checks": {
+    "geometry": "pass",
+    "text": "near",
+    "fills": "pass",
+    "zOrder": "pass",
+    "slideSize": "pass",
+    "typefaces": "pass",
+    "reimport": "pass",
+    "fontResolution": "pass",
+    "theme": "pass",
+    "mapping": "pass"
+   },
+   "stats": {
+    "textLines": 25,
+    "textLinesMatched": 2,
+    "runs": 2,
+    "shapesMapped": 3,
+    "shapesUnmapped": 0,
+    "srgbLiteral": 0,
+    "schemeClr": 2,
+    "geomMaxDeltaPt": 0
+   },
+   "fontResolution": {
+    "Aptos Display": {
+     "status": "metric-substitute",
+     "resolved": "Intos Display",
+     "verdict": "pass",
+     "tier": "metric",
+     "route": "replacement",
+     "policyTier": "metric",
+     "licenseClass": "proprietary-standard",
+     "pptx": {
+      "named": true,
+      "slotsUsed": [
+       "latin"
+      ],
+      "replacementNames": []
+     }
+    },
+    "Aptos": {
+     "status": "metric-substitute",
+     "resolved": "Intos",
+     "verdict": "pass",
+     "tier": "metric",
+     "route": "replacement",
+     "policyTier": "metric",
+     "licenseClass": "proprietary-standard",
+     "pptx": {
+      "named": true,
+      "slotsUsed": [
+       "latin"
+      ],
+      "replacementNames": []
+     }
+    },
+    "Roboto Mono": {
+     "status": "real",
+     "resolved": "Roboto Mono",
+     "verdict": "pass",
+     "tier": "real",
+     "route": "real",
+     "policyTier": "open",
+     "licenseClass": "open",
+     "pptx": {
+      "named": null,
+      "slotsUsed": [],
+      "replacementNames": []
+     }
+    }
+   },
+   "fontHost": {
+    "model": "gallery",
+    "render": {
+     "ok": true
+    },
+    "selection": {
+     "detected": [],
+     "scripts": [],
+     "unavailable": [],
+     "packages": []
+    }
+   },
+   "typefaces": {
+    "distinct": [
+     "Aptos",
+     "Aptos Display",
+     "",
+     "+mn-lt",
+     "+mn-ea",
+     "+mn-cs",
+     "+mj-lt",
+     "+mj-ea",
+     "+mj-cs"
+    ],
+    "foreign": [],
+    "scriptSupplements": 54,
+    "scriptSupplementFaces": [
+     "游ゴシック Light",
+     "맑은 고딕",
+     "等线 Light",
+     "新細明體",
+     "Times New Roman",
+     "Angsana New",
+     "Nyala",
+     "Vrinda",
+     "Shruti",
+     "MoolBoran",
+     "Tunga",
+     "Raavi",
+     "Euphemia",
+     "Plantagenet Cherokee",
+     "Microsoft Yi Baiti",
+     "Microsoft Himalaya",
+     "MV Boli",
+     "Mangal",
+     "Gautami",
+     "Latha",
+     "Estrangelo Edessa",
+     "Kalinga",
+     "Kartika",
+     "DokChampa",
+     "Iskoola Pota",
+     "Mongolian Baiti",
+     "Microsoft Uighur",
+     "Sylfaen",
+     "Arial",
+     "Leelawadee UI",
+     "Microsoft JhengHei",
+     "Javanese Text",
+     "Segoe UI",
+     "Myanmar Text",
+     "Ebrima",
+     "Nirmala UI",
+     "Phagspa",
+     "Microsoft Tai Le",
+     "Microsoft New Tai Lue",
+     "游ゴシック",
+     "等线",
+     "Cordia New",
+     "DaunPenh"
+    ],
+    "emptySlots": 8,
+    "appFonts": [
+     "Fonts Used",
+     "Theme",
+     "Slide Titles",
+     "Aptos",
+     "Aptos Display",
+     "Office Theme",
+     "Slide 1"
+    ]
+   },
+   "previewDiagnostics": [],
+   "exportDiagnostics": [],
+   "reimportDiagnostics": [
+    "heading-import-reflow"
+   ],
+   "diffs": [
+    {
+     "check": "text",
+     "status": "near",
+     "reason": "chart label wrapped/split in preview (native chart lays out its own labels)",
+     "count": 1,
+     "where": [
+      "slides.0.chart"
+     ],
+     "samples": [
+      "0"
+     ]
+    },
+    {
+     "check": "text",
+     "status": "near",
+     "reason": "chart axis text: preview [12] vs chart [9]",
+     "count": 1,
+     "where": [
+      "slides.0.chart"
+     ],
+     "samples": []
+    }
+   ]
+  },
+  {
+   "dimension": "charts",
+   "id": "stacked-area-3x",
+   "variant": "published",
+   "class": "near",
+   "legacy": {
+    "class": "near",
+    "checks": {
+     "fontResolution": "pass"
+    },
+    "fontResolutionReasons": []
+   },
+   "checks": {
+    "geometry": "pass",
+    "text": "near",
+    "fills": "pass",
+    "zOrder": "pass",
+    "slideSize": "pass",
+    "typefaces": "pass",
+    "reimport": "pass",
+    "fontResolution": "pass",
+    "theme": "pass",
+    "mapping": "pass"
+   },
+   "stats": {
+    "textLines": 24,
+    "textLinesMatched": 2,
+    "runs": 2,
+    "shapesMapped": 3,
+    "shapesUnmapped": 0,
+    "srgbLiteral": 0,
+    "schemeClr": 2,
+    "geomMaxDeltaPt": 0
+   },
+   "fontResolution": {
+    "Aptos Display": {
+     "status": "metric-substitute",
+     "resolved": "Intos Display",
+     "verdict": "pass",
+     "tier": "metric",
+     "route": "replacement",
+     "policyTier": "metric",
+     "licenseClass": "proprietary-standard",
+     "pptx": {
+      "named": true,
+      "slotsUsed": [
+       "latin"
+      ],
+      "replacementNames": []
+     }
+    },
+    "Aptos": {
+     "status": "metric-substitute",
+     "resolved": "Intos",
+     "verdict": "pass",
+     "tier": "metric",
+     "route": "replacement",
+     "policyTier": "metric",
+     "licenseClass": "proprietary-standard",
+     "pptx": {
+      "named": true,
+      "slotsUsed": [
+       "latin"
+      ],
+      "replacementNames": []
+     }
+    },
+    "Roboto Mono": {
+     "status": "real",
+     "resolved": "Roboto Mono",
+     "verdict": "pass",
+     "tier": "real",
+     "route": "real",
+     "policyTier": "open",
+     "licenseClass": "open",
+     "pptx": {
+      "named": null,
+      "slotsUsed": [],
+      "replacementNames": []
+     }
+    }
+   },
+   "fontHost": {
+    "model": "gallery",
+    "render": {
+     "ok": true
+    },
+    "selection": {
+     "detected": [],
+     "scripts": [],
+     "unavailable": [],
+     "packages": []
+    }
+   },
+   "typefaces": {
+    "distinct": [
+     "Aptos",
+     "Aptos Display",
+     "",
+     "+mn-lt",
+     "+mn-ea",
+     "+mn-cs",
+     "+mj-lt",
+     "+mj-ea",
+     "+mj-cs"
+    ],
+    "foreign": [],
+    "scriptSupplements": 54,
+    "scriptSupplementFaces": [
+     "游ゴシック Light",
+     "맑은 고딕",
+     "等线 Light",
+     "新細明體",
+     "Times New Roman",
+     "Angsana New",
+     "Nyala",
+     "Vrinda",
+     "Shruti",
+     "MoolBoran",
+     "Tunga",
+     "Raavi",
+     "Euphemia",
+     "Plantagenet Cherokee",
+     "Microsoft Yi Baiti",
+     "Microsoft Himalaya",
+     "MV Boli",
+     "Mangal",
+     "Gautami",
+     "Latha",
+     "Estrangelo Edessa",
+     "Kalinga",
+     "Kartika",
+     "DokChampa",
+     "Iskoola Pota",
+     "Mongolian Baiti",
+     "Microsoft Uighur",
+     "Sylfaen",
+     "Arial",
+     "Leelawadee UI",
+     "Microsoft JhengHei",
+     "Javanese Text",
+     "Segoe UI",
+     "Myanmar Text",
+     "Ebrima",
+     "Nirmala UI",
+     "Phagspa",
+     "Microsoft Tai Le",
+     "Microsoft New Tai Lue",
+     "游ゴシック",
+     "等线",
+     "Cordia New",
+     "DaunPenh"
+    ],
+    "emptySlots": 8,
+    "appFonts": [
+     "Fonts Used",
+     "Theme",
+     "Slide Titles",
+     "Aptos",
+     "Aptos Display",
+     "Office Theme",
+     "Slide 1"
+    ]
+   },
+   "previewDiagnostics": [],
+   "exportDiagnostics": [],
+   "reimportDiagnostics": [
+    "heading-import-reflow"
+   ],
+   "diffs": [
+    {
+     "check": "text",
+     "status": "near",
+     "reason": "chart label wrapped/split in preview (native chart lays out its own labels)",
+     "count": 1,
+     "where": [
+      "slides.0.chart"
+     ],
+     "samples": [
+      "0"
+     ]
+    },
+    {
+     "check": "text",
+     "status": "near",
+     "reason": "chart axis text: preview [12] vs chart [9]",
+     "count": 1,
+     "where": [
+      "slides.0.chart"
+     ],
+     "samples": []
+    },
+    {
+     "check": "text",
+     "status": "near",
+     "reason": "chart legend text: preview [12] vs chart [no explicit size]",
+     "count": 1,
+     "where": [
+      "slides.0.chart"
+     ],
+     "samples": []
+    }
+   ]
+  },
+  {
+   "dimension": "charts",
+   "id": "100pct-stacked-area-3x",
+   "variant": "published",
+   "class": "near",
+   "legacy": {
+    "class": "near",
+    "checks": {
+     "fontResolution": "pass"
+    },
+    "fontResolutionReasons": []
+   },
+   "checks": {
+    "geometry": "pass",
+    "text": "near",
+    "fills": "pass",
+    "zOrder": "pass",
+    "slideSize": "pass",
+    "typefaces": "pass",
+    "reimport": "pass",
+    "fontResolution": "pass",
+    "theme": "pass",
+    "mapping": "pass"
+   },
+   "stats": {
+    "textLines": 28,
+    "textLinesMatched": 2,
+    "runs": 2,
+    "shapesMapped": 3,
+    "shapesUnmapped": 0,
+    "srgbLiteral": 0,
+    "schemeClr": 2,
+    "geomMaxDeltaPt": 0
+   },
+   "fontResolution": {
+    "Aptos Display": {
+     "status": "metric-substitute",
+     "resolved": "Intos Display",
+     "verdict": "pass",
+     "tier": "metric",
+     "route": "replacement",
+     "policyTier": "metric",
+     "licenseClass": "proprietary-standard",
+     "pptx": {
+      "named": true,
+      "slotsUsed": [
+       "latin"
+      ],
+      "replacementNames": []
+     }
+    },
+    "Aptos": {
+     "status": "metric-substitute",
+     "resolved": "Intos",
+     "verdict": "pass",
+     "tier": "metric",
+     "route": "replacement",
+     "policyTier": "metric",
+     "licenseClass": "proprietary-standard",
+     "pptx": {
+      "named": true,
+      "slotsUsed": [
+       "latin"
+      ],
+      "replacementNames": []
+     }
+    },
+    "Roboto Mono": {
+     "status": "real",
+     "resolved": "Roboto Mono",
+     "verdict": "pass",
+     "tier": "real",
+     "route": "real",
+     "policyTier": "open",
+     "licenseClass": "open",
+     "pptx": {
+      "named": null,
+      "slotsUsed": [],
+      "replacementNames": []
+     }
+    }
+   },
+   "fontHost": {
+    "model": "gallery",
+    "render": {
+     "ok": true
+    },
+    "selection": {
+     "detected": [],
+     "scripts": [],
+     "unavailable": [],
+     "packages": []
+    }
+   },
+   "typefaces": {
+    "distinct": [
+     "Aptos",
+     "Aptos Display",
+     "",
+     "+mn-lt",
+     "+mn-ea",
+     "+mn-cs",
+     "+mj-lt",
+     "+mj-ea",
+     "+mj-cs"
+    ],
+    "foreign": [],
+    "scriptSupplements": 54,
+    "scriptSupplementFaces": [
+     "游ゴシック Light",
+     "맑은 고딕",
+     "等线 Light",
+     "新細明體",
+     "Times New Roman",
+     "Angsana New",
+     "Nyala",
+     "Vrinda",
+     "Shruti",
+     "MoolBoran",
+     "Tunga",
+     "Raavi",
+     "Euphemia",
+     "Plantagenet Cherokee",
+     "Microsoft Yi Baiti",
+     "Microsoft Himalaya",
+     "MV Boli",
+     "Mangal",
+     "Gautami",
+     "Latha",
+     "Estrangelo Edessa",
+     "Kalinga",
+     "Kartika",
+     "DokChampa",
+     "Iskoola Pota",
+     "Mongolian Baiti",
+     "Microsoft Uighur",
+     "Sylfaen",
+     "Arial",
+     "Leelawadee UI",
+     "Microsoft JhengHei",
+     "Javanese Text",
+     "Segoe UI",
+     "Myanmar Text",
+     "Ebrima",
+     "Nirmala UI",
+     "Phagspa",
+     "Microsoft Tai Le",
+     "Microsoft New Tai Lue",
+     "游ゴシック",
+     "等线",
+     "Cordia New",
+     "DaunPenh"
+    ],
+    "emptySlots": 8,
+    "appFonts": [
+     "Fonts Used",
+     "Theme",
+     "Slide Titles",
+     "Aptos",
+     "Aptos Display",
+     "Office Theme",
+     "Slide 1"
+    ]
+   },
+   "previewDiagnostics": [],
+   "exportDiagnostics": [],
+   "reimportDiagnostics": [
+    "heading-import-reflow"
+   ],
+   "diffs": [
+    {
+     "check": "text",
+     "status": "near",
+     "reason": "chart axis text: preview [12] vs chart [9]",
+     "count": 1,
+     "where": [
+      "slides.0.chart"
+     ],
+     "samples": []
+    },
+    {
+     "check": "text",
+     "status": "near",
+     "reason": "chart legend text: preview [12] vs chart [no explicit size]",
+     "count": 1,
+     "where": [
+      "slides.0.chart"
+     ],
+     "samples": []
+    }
+   ]
+  },
+  {
+   "dimension": "charts",
+   "id": "scatter",
+   "variant": "published",
+   "class": "near",
+   "legacy": {
+    "class": "near",
+    "checks": {
+     "fontResolution": "pass"
+    },
+    "fontResolutionReasons": []
+   },
+   "checks": {
+    "geometry": "pass",
+    "text": "near",
+    "fills": "pass",
+    "zOrder": "pass",
+    "slideSize": "pass",
+    "typefaces": "pass",
+    "reimport": "pass",
+    "fontResolution": "pass",
+    "theme": "pass",
+    "mapping": "pass"
+   },
+   "stats": {
+    "textLines": 20,
+    "textLinesMatched": 2,
+    "runs": 2,
+    "shapesMapped": 3,
+    "shapesUnmapped": 0,
+    "srgbLiteral": 0,
+    "schemeClr": 2,
+    "geomMaxDeltaPt": 0
+   },
+   "fontResolution": {
+    "Aptos Display": {
+     "status": "metric-substitute",
+     "resolved": "Intos Display",
+     "verdict": "pass",
+     "tier": "metric",
+     "route": "replacement",
+     "policyTier": "metric",
+     "licenseClass": "proprietary-standard",
+     "pptx": {
+      "named": true,
+      "slotsUsed": [
+       "latin"
+      ],
+      "replacementNames": []
+     }
+    },
+    "Aptos": {
+     "status": "metric-substitute",
+     "resolved": "Intos",
+     "verdict": "pass",
+     "tier": "metric",
+     "route": "replacement",
+     "policyTier": "metric",
+     "licenseClass": "proprietary-standard",
+     "pptx": {
+      "named": true,
+      "slotsUsed": [
+       "latin"
+      ],
+      "replacementNames": []
+     }
+    },
+    "Roboto Mono": {
+     "status": "real",
+     "resolved": "Roboto Mono",
+     "verdict": "pass",
+     "tier": "real",
+     "route": "real",
+     "policyTier": "open",
+     "licenseClass": "open",
+     "pptx": {
+      "named": null,
+      "slotsUsed": [],
+      "replacementNames": []
+     }
+    }
+   },
+   "fontHost": {
+    "model": "gallery",
+    "render": {
+     "ok": true
+    },
+    "selection": {
+     "detected": [],
+     "scripts": [],
+     "unavailable": [],
+     "packages": []
+    }
+   },
+   "typefaces": {
+    "distinct": [
+     "Aptos",
+     "Aptos Display",
+     "",
+     "+mn-lt",
+     "+mn-ea",
+     "+mn-cs",
+     "+mj-lt",
+     "+mj-ea",
+     "+mj-cs"
+    ],
+    "foreign": [],
+    "scriptSupplements": 54,
+    "scriptSupplementFaces": [
+     "游ゴシック Light",
+     "맑은 고딕",
+     "等线 Light",
+     "新細明體",
+     "Times New Roman",
+     "Angsana New",
+     "Nyala",
+     "Vrinda",
+     "Shruti",
+     "MoolBoran",
+     "Tunga",
+     "Raavi",
+     "Euphemia",
+     "Plantagenet Cherokee",
+     "Microsoft Yi Baiti",
+     "Microsoft Himalaya",
+     "MV Boli",
+     "Mangal",
+     "Gautami",
+     "Latha",
+     "Estrangelo Edessa",
+     "Kalinga",
+     "Kartika",
+     "DokChampa",
+     "Iskoola Pota",
+     "Mongolian Baiti",
+     "Microsoft Uighur",
+     "Sylfaen",
+     "Arial",
+     "Leelawadee UI",
+     "Microsoft JhengHei",
+     "Javanese Text",
+     "Segoe UI",
+     "Myanmar Text",
+     "Ebrima",
+     "Nirmala UI",
+     "Phagspa",
+     "Microsoft Tai Le",
+     "Microsoft New Tai Lue",
+     "游ゴシック",
+     "等线",
+     "Cordia New",
+     "DaunPenh"
+    ],
+    "emptySlots": 8,
+    "appFonts": [
+     "Fonts Used",
+     "Theme",
+     "Slide Titles",
+     "Aptos",
+     "Aptos Display",
+     "Office Theme",
+     "Slide 1"
+    ]
+   },
+   "previewDiagnostics": [],
+   "exportDiagnostics": [],
+   "reimportDiagnostics": [
+    "heading-import-reflow"
+   ],
+   "diffs": [
+    {
+     "check": "text",
+     "status": "near",
+     "reason": "chart label wrapped/split in preview (native chart lays out its own labels)",
+     "count": 1,
+     "where": [
+      "slides.0.chart"
+     ],
+     "samples": [
+      "0 | 0"
+     ]
+    },
+    {
+     "check": "text",
+     "status": "near",
+     "reason": "chart axis text: preview [12] vs chart [9]",
+     "count": 1,
+     "where": [
+      "slides.0.chart"
+     ],
+     "samples": []
+    }
+   ]
+  },
+  {
+   "dimension": "charts",
+   "id": "radar",
+   "variant": "published",
+   "class": "near",
+   "legacy": {
+    "class": "near",
+    "checks": {
+     "fontResolution": "pass"
+    },
+    "fontResolutionReasons": []
+   },
+   "checks": {
+    "geometry": "pass",
+    "text": "near",
+    "fills": "pass",
+    "zOrder": "pass",
+    "slideSize": "pass",
+    "typefaces": "pass",
+    "reimport": "pass",
+    "fontResolution": "pass",
+    "theme": "pass",
+    "mapping": "pass"
+   },
+   "stats": {
+    "textLines": 16,
+    "textLinesMatched": 2,
+    "runs": 2,
+    "shapesMapped": 3,
+    "shapesUnmapped": 0,
+    "srgbLiteral": 0,
+    "schemeClr": 2,
+    "geomMaxDeltaPt": 0
+   },
+   "fontResolution": {
+    "Aptos Display": {
+     "status": "metric-substitute",
+     "resolved": "Intos Display",
+     "verdict": "pass",
+     "tier": "metric",
+     "route": "replacement",
+     "policyTier": "metric",
+     "licenseClass": "proprietary-standard",
+     "pptx": {
+      "named": true,
+      "slotsUsed": [
+       "latin"
+      ],
+      "replacementNames": []
+     }
+    },
+    "Aptos": {
+     "status": "metric-substitute",
+     "resolved": "Intos",
+     "verdict": "pass",
+     "tier": "metric",
+     "route": "replacement",
+     "policyTier": "metric",
+     "licenseClass": "proprietary-standard",
+     "pptx": {
+      "named": true,
+      "slotsUsed": [
+       "latin"
+      ],
+      "replacementNames": []
+     }
+    },
+    "Roboto Mono": {
+     "status": "real",
+     "resolved": "Roboto Mono",
+     "verdict": "pass",
+     "tier": "real",
+     "route": "real",
+     "policyTier": "open",
+     "licenseClass": "open",
+     "pptx": {
+      "named": null,
+      "slotsUsed": [],
+      "replacementNames": []
+     }
+    }
+   },
+   "fontHost": {
+    "model": "gallery",
+    "render": {
+     "ok": true
+    },
+    "selection": {
+     "detected": [],
+     "scripts": [],
+     "unavailable": [],
+     "packages": []
+    }
+   },
+   "typefaces": {
+    "distinct": [
+     "Aptos",
+     "Aptos Display",
+     "",
+     "+mn-lt",
+     "+mn-ea",
+     "+mn-cs",
+     "+mj-lt",
+     "+mj-ea",
+     "+mj-cs"
+    ],
+    "foreign": [],
+    "scriptSupplements": 54,
+    "scriptSupplementFaces": [
+     "游ゴシック Light",
+     "맑은 고딕",
+     "等线 Light",
+     "新細明體",
+     "Times New Roman",
+     "Angsana New",
+     "Nyala",
+     "Vrinda",
+     "Shruti",
+     "MoolBoran",
+     "Tunga",
+     "Raavi",
+     "Euphemia",
+     "Plantagenet Cherokee",
+     "Microsoft Yi Baiti",
+     "Microsoft Himalaya",
+     "MV Boli",
+     "Mangal",
+     "Gautami",
+     "Latha",
+     "Estrangelo Edessa",
+     "Kalinga",
+     "Kartika",
+     "DokChampa",
+     "Iskoola Pota",
+     "Mongolian Baiti",
+     "Microsoft Uighur",
+     "Sylfaen",
+     "Arial",
+     "Leelawadee UI",
+     "Microsoft JhengHei",
+     "Javanese Text",
+     "Segoe UI",
+     "Myanmar Text",
+     "Ebrima",
+     "Nirmala UI",
+     "Phagspa",
+     "Microsoft Tai Le",
+     "Microsoft New Tai Lue",
+     "游ゴシック",
+     "等线",
+     "Cordia New",
+     "DaunPenh"
+    ],
+    "emptySlots": 8,
+    "appFonts": [
+     "Fonts Used",
+     "Theme",
+     "Slide Titles",
+     "Aptos",
+     "Aptos Display",
+     "Office Theme",
+     "Slide 1"
+    ]
+   },
+   "previewDiagnostics": [],
+   "exportDiagnostics": [],
+   "reimportDiagnostics": [
+    "heading-import-reflow"
+   ],
+   "diffs": [
+    {
+     "check": "text",
+     "status": "near",
+     "reason": "chart label wrapped/split in preview (native chart lays out its own labels)",
+     "count": 1,
+     "where": [
+      "slides.0.chart"
+     ],
+     "samples": [
+      "0"
+     ]
+    },
+    {
+     "check": "text",
+     "status": "near",
+     "reason": "chart axis text: preview [12] vs chart [9]",
+     "count": 1,
+     "where": [
+      "slides.0.chart"
+     ],
+     "samples": []
+    }
+   ]
+  },
+  {
+   "dimension": "charts",
+   "id": "radar-with-markers",
+   "variant": "published",
+   "class": "near",
+   "legacy": {
+    "class": "near",
+    "checks": {
+     "fontResolution": "pass"
+    },
+    "fontResolutionReasons": []
+   },
+   "checks": {
+    "geometry": "pass",
+    "text": "near",
+    "fills": "pass",
+    "zOrder": "pass",
+    "slideSize": "pass",
+    "typefaces": "pass",
+    "reimport": "pass",
+    "fontResolution": "pass",
+    "theme": "pass",
+    "mapping": "pass"
+   },
+   "stats": {
+    "textLines": 19,
+    "textLinesMatched": 2,
+    "runs": 2,
+    "shapesMapped": 3,
+    "shapesUnmapped": 0,
+    "srgbLiteral": 0,
+    "schemeClr": 2,
+    "geomMaxDeltaPt": 0
+   },
+   "fontResolution": {
+    "Aptos Display": {
+     "status": "metric-substitute",
+     "resolved": "Intos Display",
+     "verdict": "pass",
+     "tier": "metric",
+     "route": "replacement",
+     "policyTier": "metric",
+     "licenseClass": "proprietary-standard",
+     "pptx": {
+      "named": true,
+      "slotsUsed": [
+       "latin"
+      ],
+      "replacementNames": []
+     }
+    },
+    "Aptos": {
+     "status": "metric-substitute",
+     "resolved": "Intos",
+     "verdict": "pass",
+     "tier": "metric",
+     "route": "replacement",
+     "policyTier": "metric",
+     "licenseClass": "proprietary-standard",
+     "pptx": {
+      "named": true,
+      "slotsUsed": [
+       "latin"
+      ],
+      "replacementNames": []
+     }
+    },
+    "Roboto Mono": {
+     "status": "real",
+     "resolved": "Roboto Mono",
+     "verdict": "pass",
+     "tier": "real",
+     "route": "real",
+     "policyTier": "open",
+     "licenseClass": "open",
+     "pptx": {
+      "named": null,
+      "slotsUsed": [],
+      "replacementNames": []
+     }
+    }
+   },
+   "fontHost": {
+    "model": "gallery",
+    "render": {
+     "ok": true
+    },
+    "selection": {
+     "detected": [],
+     "scripts": [],
+     "unavailable": [],
+     "packages": []
+    }
+   },
+   "typefaces": {
+    "distinct": [
+     "Aptos",
+     "Aptos Display",
+     "",
+     "+mn-lt",
+     "+mn-ea",
+     "+mn-cs",
+     "+mj-lt",
+     "+mj-ea",
+     "+mj-cs"
+    ],
+    "foreign": [],
+    "scriptSupplements": 54,
+    "scriptSupplementFaces": [
+     "游ゴシック Light",
+     "맑은 고딕",
+     "等线 Light",
+     "新細明體",
+     "Times New Roman",
+     "Angsana New",
+     "Nyala",
+     "Vrinda",
+     "Shruti",
+     "MoolBoran",
+     "Tunga",
+     "Raavi",
+     "Euphemia",
+     "Plantagenet Cherokee",
+     "Microsoft Yi Baiti",
+     "Microsoft Himalaya",
+     "MV Boli",
+     "Mangal",
+     "Gautami",
+     "Latha",
+     "Estrangelo Edessa",
+     "Kalinga",
+     "Kartika",
+     "DokChampa",
+     "Iskoola Pota",
+     "Mongolian Baiti",
+     "Microsoft Uighur",
+     "Sylfaen",
+     "Arial",
+     "Leelawadee UI",
+     "Microsoft JhengHei",
+     "Javanese Text",
+     "Segoe UI",
+     "Myanmar Text",
+     "Ebrima",
+     "Nirmala UI",
+     "Phagspa",
+     "Microsoft Tai Le",
+     "Microsoft New Tai Lue",
+     "游ゴシック",
+     "等线",
+     "Cordia New",
+     "DaunPenh"
+    ],
+    "emptySlots": 8,
+    "appFonts": [
+     "Fonts Used",
+     "Theme",
+     "Slide Titles",
+     "Aptos",
+     "Aptos Display",
+     "Office Theme",
+     "Slide 1"
+    ]
+   },
+   "previewDiagnostics": [],
+   "exportDiagnostics": [],
+   "reimportDiagnostics": [
+    "heading-import-reflow"
+   ],
+   "diffs": [
+    {
+     "check": "text",
+     "status": "near",
+     "reason": "chart label wrapped/split in preview (native chart lays out its own labels)",
+     "count": 1,
+     "where": [
+      "slides.0.chart"
+     ],
+     "samples": [
+      "0"
+     ]
+    },
+    {
+     "check": "text",
+     "status": "near",
+     "reason": "chart axis text: preview [12] vs chart [9]",
+     "count": 1,
+     "where": [
+      "slides.0.chart"
+     ],
+     "samples": []
+    }
+   ]
+  },
+  {
+   "dimension": "charts",
+   "id": "filled-radar",
+   "variant": "published",
+   "class": "near",
+   "legacy": {
+    "class": "near",
+    "checks": {
+     "fontResolution": "pass"
+    },
+    "fontResolutionReasons": []
+   },
+   "checks": {
+    "geometry": "pass",
+    "text": "near",
+    "fills": "pass",
+    "zOrder": "pass",
+    "slideSize": "pass",
+    "typefaces": "pass",
+    "reimport": "pass",
+    "fontResolution": "pass",
+    "theme": "pass",
+    "mapping": "pass"
+   },
+   "stats": {
+    "textLines": 17,
+    "textLinesMatched": 2,
+    "runs": 2,
+    "shapesMapped": 3,
+    "shapesUnmapped": 0,
+    "srgbLiteral": 0,
+    "schemeClr": 2,
+    "geomMaxDeltaPt": 0
+   },
+   "fontResolution": {
+    "Aptos Display": {
+     "status": "metric-substitute",
+     "resolved": "Intos Display",
+     "verdict": "pass",
+     "tier": "metric",
+     "route": "replacement",
+     "policyTier": "metric",
+     "licenseClass": "proprietary-standard",
+     "pptx": {
+      "named": true,
+      "slotsUsed": [
+       "latin"
+      ],
+      "replacementNames": []
+     }
+    },
+    "Aptos": {
+     "status": "metric-substitute",
+     "resolved": "Intos",
+     "verdict": "pass",
+     "tier": "metric",
+     "route": "replacement",
+     "policyTier": "metric",
+     "licenseClass": "proprietary-standard",
+     "pptx": {
+      "named": true,
+      "slotsUsed": [
+       "latin"
+      ],
+      "replacementNames": []
+     }
+    },
+    "Roboto Mono": {
+     "status": "real",
+     "resolved": "Roboto Mono",
+     "verdict": "pass",
+     "tier": "real",
+     "route": "real",
+     "policyTier": "open",
+     "licenseClass": "open",
+     "pptx": {
+      "named": null,
+      "slotsUsed": [],
+      "replacementNames": []
+     }
+    }
+   },
+   "fontHost": {
+    "model": "gallery",
+    "render": {
+     "ok": true
+    },
+    "selection": {
+     "detected": [],
+     "scripts": [],
+     "unavailable": [],
+     "packages": []
+    }
+   },
+   "typefaces": {
+    "distinct": [
+     "Aptos",
+     "Aptos Display",
+     "",
+     "+mn-lt",
+     "+mn-ea",
+     "+mn-cs",
+     "+mj-lt",
+     "+mj-ea",
+     "+mj-cs"
+    ],
+    "foreign": [],
+    "scriptSupplements": 54,
+    "scriptSupplementFaces": [
+     "游ゴシック Light",
+     "맑은 고딕",
+     "等线 Light",
+     "新細明體",
+     "Times New Roman",
+     "Angsana New",
+     "Nyala",
+     "Vrinda",
+     "Shruti",
+     "MoolBoran",
+     "Tunga",
+     "Raavi",
+     "Euphemia",
+     "Plantagenet Cherokee",
+     "Microsoft Yi Baiti",
+     "Microsoft Himalaya",
+     "MV Boli",
+     "Mangal",
+     "Gautami",
+     "Latha",
+     "Estrangelo Edessa",
+     "Kalinga",
+     "Kartika",
+     "DokChampa",
+     "Iskoola Pota",
+     "Mongolian Baiti",
+     "Microsoft Uighur",
+     "Sylfaen",
+     "Arial",
+     "Leelawadee UI",
+     "Microsoft JhengHei",
+     "Javanese Text",
+     "Segoe UI",
+     "Myanmar Text",
+     "Ebrima",
+     "Nirmala UI",
+     "Phagspa",
+     "Microsoft Tai Le",
+     "Microsoft New Tai Lue",
+     "游ゴシック",
+     "等线",
+     "Cordia New",
+     "DaunPenh"
+    ],
+    "emptySlots": 8,
+    "appFonts": [
+     "Fonts Used",
+     "Theme",
+     "Slide Titles",
+     "Aptos",
+     "Aptos Display",
+     "Office Theme",
+     "Slide 1"
+    ]
+   },
+   "previewDiagnostics": [],
+   "exportDiagnostics": [],
+   "reimportDiagnostics": [
+    "heading-import-reflow"
+   ],
+   "diffs": [
+    {
+     "check": "text",
+     "status": "near",
+     "reason": "chart label wrapped/split in preview (native chart lays out its own labels)",
+     "count": 1,
+     "where": [
+      "slides.0.chart"
+     ],
+     "samples": [
+      "0"
+     ]
+    },
+    {
+     "check": "text",
+     "status": "near",
+     "reason": "chart axis text: preview [12] vs chart [9]",
+     "count": 1,
+     "where": [
+      "slides.0.chart"
+     ],
+     "samples": []
+    }
+   ]
+  },
+  {
+   "dimension": "charts",
+   "id": "treemap",
+   "variant": "published",
+   "class": "near",
+   "legacy": {
+    "class": "near",
+    "checks": {
+     "fontResolution": "pass"
+    },
+    "fontResolutionReasons": []
+   },
+   "checks": {
+    "geometry": "pass",
+    "text": "near",
+    "fills": "pass",
+    "zOrder": "pass",
+    "slideSize": "pass",
+    "typefaces": "pass",
+    "reimport": "pass",
+    "fontResolution": "pass",
+    "theme": "pass",
+    "mapping": "pass"
+   },
+   "stats": {
+    "textLines": 8,
+    "textLinesMatched": 2,
+    "runs": 2,
+    "shapesMapped": 3,
+    "shapesUnmapped": 0,
+    "srgbLiteral": 0,
+    "schemeClr": 2,
+    "geomMaxDeltaPt": 0
+   },
+   "fontResolution": {
+    "Aptos Display": {
+     "status": "metric-substitute",
+     "resolved": "Intos Display",
+     "verdict": "pass",
+     "tier": "metric",
+     "route": "replacement",
+     "policyTier": "metric",
+     "licenseClass": "proprietary-standard",
+     "pptx": {
+      "named": true,
+      "slotsUsed": [
+       "latin"
+      ],
+      "replacementNames": []
+     }
+    },
+    "Aptos": {
+     "status": "metric-substitute",
+     "resolved": "Intos",
+     "verdict": "pass",
+     "tier": "metric",
+     "route": "replacement",
+     "policyTier": "metric",
+     "licenseClass": "proprietary-standard",
+     "pptx": {
+      "named": true,
+      "slotsUsed": [
+       "latin"
+      ],
+      "replacementNames": []
+     }
+    },
+    "Roboto Mono": {
+     "status": "real",
+     "resolved": "Roboto Mono",
+     "verdict": "pass",
+     "tier": "real",
+     "route": "real",
+     "policyTier": "open",
+     "licenseClass": "open",
+     "pptx": {
+      "named": null,
+      "slotsUsed": [],
+      "replacementNames": []
+     }
+    }
+   },
+   "fontHost": {
+    "model": "gallery",
+    "render": {
+     "ok": true
+    },
+    "selection": {
+     "detected": [],
+     "scripts": [],
+     "unavailable": [],
+     "packages": []
+    }
+   },
+   "typefaces": {
+    "distinct": [
+     "Aptos",
+     "Aptos Display",
+     "",
+     "+mn-lt",
+     "+mn-ea",
+     "+mn-cs",
+     "+mj-lt",
+     "+mj-ea",
+     "+mj-cs"
+    ],
+    "foreign": [],
+    "scriptSupplements": 54,
+    "scriptSupplementFaces": [
+     "游ゴシック Light",
+     "맑은 고딕",
+     "等线 Light",
+     "新細明體",
+     "Times New Roman",
+     "Angsana New",
+     "Nyala",
+     "Vrinda",
+     "Shruti",
+     "MoolBoran",
+     "Tunga",
+     "Raavi",
+     "Euphemia",
+     "Plantagenet Cherokee",
+     "Microsoft Yi Baiti",
+     "Microsoft Himalaya",
+     "MV Boli",
+     "Mangal",
+     "Gautami",
+     "Latha",
+     "Estrangelo Edessa",
+     "Kalinga",
+     "Kartika",
+     "DokChampa",
+     "Iskoola Pota",
+     "Mongolian Baiti",
+     "Microsoft Uighur",
+     "Sylfaen",
+     "Arial",
+     "Leelawadee UI",
+     "Microsoft JhengHei",
+     "Javanese Text",
+     "Segoe UI",
+     "Myanmar Text",
+     "Ebrima",
+     "Nirmala UI",
+     "Phagspa",
+     "Microsoft Tai Le",
+     "Microsoft New Tai Lue",
+     "游ゴシック",
+     "等线",
+     "Cordia New",
+     "DaunPenh"
+    ],
+    "emptySlots": 8,
+    "appFonts": [
+     "Fonts Used",
+     "Theme",
+     "Slide Titles",
+     "Aptos",
+     "Aptos Display",
+     "Office Theme",
+     "Slide 1"
+    ]
+   },
+   "previewDiagnostics": [],
+   "exportDiagnostics": [],
+   "reimportDiagnostics": [
+    "heading-import-reflow"
+   ],
+   "diffs": [
+    {
+     "check": "text",
+     "status": "near",
+     "reason": "chart dataLabels text: preview [12] vs chart [9]",
+     "count": 1,
+     "where": [
+      "slides.0.chart"
+     ],
+     "samples": []
+    }
+   ]
+  },
+  {
+   "dimension": "charts",
+   "id": "histogram",
+   "variant": "published",
+   "class": "near",
+   "legacy": {
+    "class": "near",
+    "checks": {
+     "fontResolution": "pass"
+    },
+    "fontResolutionReasons": []
+   },
+   "checks": {
+    "geometry": "pass",
+    "text": "near",
+    "fills": "pass",
+    "zOrder": "pass",
+    "slideSize": "pass",
+    "typefaces": "pass",
+    "reimport": "pass",
+    "fontResolution": "pass",
+    "theme": "pass",
+    "mapping": "pass"
+   },
+   "stats": {
+    "textLines": 19,
+    "textLinesMatched": 2,
+    "runs": 2,
+    "shapesMapped": 3,
+    "shapesUnmapped": 0,
+    "srgbLiteral": 0,
+    "schemeClr": 2,
+    "geomMaxDeltaPt": 0
+   },
+   "fontResolution": {
+    "Aptos Display": {
+     "status": "metric-substitute",
+     "resolved": "Intos Display",
+     "verdict": "pass",
+     "tier": "metric",
+     "route": "replacement",
+     "policyTier": "metric",
+     "licenseClass": "proprietary-standard",
+     "pptx": {
+      "named": true,
+      "slotsUsed": [
+       "latin"
+      ],
+      "replacementNames": []
+     }
+    },
+    "Aptos": {
+     "status": "metric-substitute",
+     "resolved": "Intos",
+     "verdict": "pass",
+     "tier": "metric",
+     "route": "replacement",
+     "policyTier": "metric",
+     "licenseClass": "proprietary-standard",
+     "pptx": {
+      "named": true,
+      "slotsUsed": [
+       "latin"
+      ],
+      "replacementNames": []
+     }
+    },
+    "Roboto Mono": {
+     "status": "real",
+     "resolved": "Roboto Mono",
+     "verdict": "pass",
+     "tier": "real",
+     "route": "real",
+     "policyTier": "open",
+     "licenseClass": "open",
+     "pptx": {
+      "named": null,
+      "slotsUsed": [],
+      "replacementNames": []
+     }
+    }
+   },
+   "fontHost": {
+    "model": "gallery",
+    "render": {
+     "ok": true
+    },
+    "selection": {
+     "detected": [],
+     "scripts": [],
+     "unavailable": [],
+     "packages": []
+    }
+   },
+   "typefaces": {
+    "distinct": [
+     "Aptos",
+     "Aptos Display",
+     "",
+     "+mn-lt",
+     "+mn-ea",
+     "+mn-cs",
+     "+mj-lt",
+     "+mj-ea",
+     "+mj-cs"
+    ],
+    "foreign": [],
+    "scriptSupplements": 54,
+    "scriptSupplementFaces": [
+     "游ゴシック Light",
+     "맑은 고딕",
+     "等线 Light",
+     "新細明體",
+     "Times New Roman",
+     "Angsana New",
+     "Nyala",
+     "Vrinda",
+     "Shruti",
+     "MoolBoran",
+     "Tunga",
+     "Raavi",
+     "Euphemia",
+     "Plantagenet Cherokee",
+     "Microsoft Yi Baiti",
+     "Microsoft Himalaya",
+     "MV Boli",
+     "Mangal",
+     "Gautami",
+     "Latha",
+     "Estrangelo Edessa",
+     "Kalinga",
+     "Kartika",
+     "DokChampa",
+     "Iskoola Pota",
+     "Mongolian Baiti",
+     "Microsoft Uighur",
+     "Sylfaen",
+     "Arial",
+     "Leelawadee UI",
+     "Microsoft JhengHei",
+     "Javanese Text",
+     "Segoe UI",
+     "Myanmar Text",
+     "Ebrima",
+     "Nirmala UI",
+     "Phagspa",
+     "Microsoft Tai Le",
+     "Microsoft New Tai Lue",
+     "游ゴシック",
+     "等线",
+     "Cordia New",
+     "DaunPenh"
+    ],
+    "emptySlots": 8,
+    "appFonts": [
+     "Fonts Used",
+     "Theme",
+     "Slide Titles",
+     "Aptos",
+     "Aptos Display",
+     "Office Theme",
+     "Slide 1"
+    ]
+   },
+   "previewDiagnostics": [],
+   "exportDiagnostics": [],
+   "reimportDiagnostics": [
+    "heading-import-reflow"
+   ],
+   "diffs": [
+    {
+     "check": "text",
+     "status": "near",
+     "reason": "chart axis text: preview [12] vs chart [9]",
+     "count": 1,
+     "where": [
+      "slides.0.chart"
+     ],
+     "samples": []
+    }
+   ]
+  },
+  {
+   "dimension": "charts",
+   "id": "pareto",
+   "variant": "published",
+   "class": "near",
+   "legacy": {
+    "class": "near",
+    "checks": {
+     "fontResolution": "pass"
+    },
+    "fontResolutionReasons": []
+   },
+   "checks": {
+    "geometry": "pass",
+    "text": "near",
+    "fills": "pass",
+    "zOrder": "pass",
+    "slideSize": "pass",
+    "typefaces": "pass",
+    "reimport": "pass",
+    "fontResolution": "pass",
+    "theme": "pass",
+    "mapping": "pass"
+   },
+   "stats": {
+    "textLines": 27,
+    "textLinesMatched": 2,
+    "runs": 2,
+    "shapesMapped": 3,
+    "shapesUnmapped": 0,
+    "srgbLiteral": 0,
+    "schemeClr": 2,
+    "geomMaxDeltaPt": 0
+   },
+   "fontResolution": {
+    "Aptos Display": {
+     "status": "metric-substitute",
+     "resolved": "Intos Display",
+     "verdict": "pass",
+     "tier": "metric",
+     "route": "replacement",
+     "policyTier": "metric",
+     "licenseClass": "proprietary-standard",
+     "pptx": {
+      "named": true,
+      "slotsUsed": [
+       "latin"
+      ],
+      "replacementNames": []
+     }
+    },
+    "Aptos": {
+     "status": "metric-substitute",
+     "resolved": "Intos",
+     "verdict": "pass",
+     "tier": "metric",
+     "route": "replacement",
+     "policyTier": "metric",
+     "licenseClass": "proprietary-standard",
+     "pptx": {
+      "named": true,
+      "slotsUsed": [
+       "latin"
+      ],
+      "replacementNames": []
+     }
+    },
+    "Roboto Mono": {
+     "status": "real",
+     "resolved": "Roboto Mono",
+     "verdict": "pass",
+     "tier": "real",
+     "route": "real",
+     "policyTier": "open",
+     "licenseClass": "open",
+     "pptx": {
+      "named": null,
+      "slotsUsed": [],
+      "replacementNames": []
+     }
+    }
+   },
+   "fontHost": {
+    "model": "gallery",
+    "render": {
+     "ok": true
+    },
+    "selection": {
+     "detected": [],
+     "scripts": [],
+     "unavailable": [],
+     "packages": []
+    }
+   },
+   "typefaces": {
+    "distinct": [
+     "Aptos",
+     "Aptos Display",
+     "",
+     "+mn-lt",
+     "+mn-ea",
+     "+mn-cs",
+     "+mj-lt",
+     "+mj-ea",
+     "+mj-cs"
+    ],
+    "foreign": [],
+    "scriptSupplements": 54,
+    "scriptSupplementFaces": [
+     "游ゴシック Light",
+     "맑은 고딕",
+     "等线 Light",
+     "新細明體",
+     "Times New Roman",
+     "Angsana New",
+     "Nyala",
+     "Vrinda",
+     "Shruti",
+     "MoolBoran",
+     "Tunga",
+     "Raavi",
+     "Euphemia",
+     "Plantagenet Cherokee",
+     "Microsoft Yi Baiti",
+     "Microsoft Himalaya",
+     "MV Boli",
+     "Mangal",
+     "Gautami",
+     "Latha",
+     "Estrangelo Edessa",
+     "Kalinga",
+     "Kartika",
+     "DokChampa",
+     "Iskoola Pota",
+     "Mongolian Baiti",
+     "Microsoft Uighur",
+     "Sylfaen",
+     "Arial",
+     "Leelawadee UI",
+     "Microsoft JhengHei",
+     "Javanese Text",
+     "Segoe UI",
+     "Myanmar Text",
+     "Ebrima",
+     "Nirmala UI",
+     "Phagspa",
+     "Microsoft Tai Le",
+     "Microsoft New Tai Lue",
+     "游ゴシック",
+     "等线",
+     "Cordia New",
+     "DaunPenh"
+    ],
+    "emptySlots": 8,
+    "appFonts": [
+     "Fonts Used",
+     "Theme",
+     "Slide Titles",
+     "Aptos",
+     "Aptos Display",
+     "Office Theme",
+     "Slide 1"
+    ]
+   },
+   "previewDiagnostics": [],
+   "exportDiagnostics": [],
+   "reimportDiagnostics": [
+    "heading-import-reflow"
+   ],
+   "diffs": [
+    {
+     "check": "text",
+     "status": "near",
+     "reason": "chart axis text: preview [12] vs chart [9]",
+     "count": 1,
+     "where": [
+      "slides.0.chart"
+     ],
+     "samples": []
+    }
+   ]
+  },
+  {
+   "dimension": "charts",
+   "id": "world",
+   "variant": "published",
+   "class": "near",
+   "legacy": {
+    "class": "near",
+    "checks": {
+     "fontResolution": "pass"
+    },
+    "fontResolutionReasons": []
+   },
+   "checks": {
+    "geometry": "pass",
+    "text": "near",
+    "fills": "pass",
+    "zOrder": "pass",
+    "slideSize": "pass",
+    "typefaces": "pass",
+    "reimport": "near",
+    "fontResolution": "pass",
+    "theme": "pass",
+    "mapping": "pass"
+   },
+   "stats": {
+    "textLines": 30,
+    "textLinesMatched": 2,
+    "runs": 2,
+    "shapesMapped": 3,
+    "shapesUnmapped": 0,
+    "srgbLiteral": 0,
+    "schemeClr": 2,
+    "geomMaxDeltaPt": 0
+   },
+   "fontResolution": {
+    "Aptos Display": {
+     "status": "metric-substitute",
+     "resolved": "Intos Display",
+     "verdict": "pass",
+     "tier": "metric",
+     "route": "replacement",
+     "policyTier": "metric",
+     "licenseClass": "proprietary-standard",
+     "pptx": {
+      "named": true,
+      "slotsUsed": [
+       "latin"
+      ],
+      "replacementNames": []
+     }
+    },
+    "Aptos": {
+     "status": "metric-substitute",
+     "resolved": "Intos",
+     "verdict": "pass",
+     "tier": "metric",
+     "route": "replacement",
+     "policyTier": "metric",
+     "licenseClass": "proprietary-standard",
+     "pptx": {
+      "named": true,
+      "slotsUsed": [
+       "latin"
+      ],
+      "replacementNames": []
+     }
+    },
+    "Roboto Mono": {
+     "status": "real",
+     "resolved": "Roboto Mono",
+     "verdict": "pass",
+     "tier": "real",
+     "route": "real",
+     "policyTier": "open",
+     "licenseClass": "open",
+     "pptx": {
+      "named": null,
+      "slotsUsed": [],
+      "replacementNames": []
+     }
+    }
+   },
+   "fontHost": {
+    "model": "gallery",
+    "render": {
+     "ok": true
+    },
+    "selection": {
+     "detected": [],
+     "scripts": [],
+     "unavailable": [],
+     "packages": []
+    }
+   },
+   "typefaces": {
+    "distinct": [
+     "Aptos",
+     "Aptos Display",
+     "",
+     "+mn-lt",
+     "+mn-ea",
+     "+mn-cs",
+     "+mj-lt",
+     "+mj-ea",
+     "+mj-cs"
+    ],
+    "foreign": [],
+    "scriptSupplements": 54,
+    "scriptSupplementFaces": [
+     "游ゴシック Light",
+     "맑은 고딕",
+     "等线 Light",
+     "新細明體",
+     "Times New Roman",
+     "Angsana New",
+     "Nyala",
+     "Vrinda",
+     "Shruti",
+     "MoolBoran",
+     "Tunga",
+     "Raavi",
+     "Euphemia",
+     "Plantagenet Cherokee",
+     "Microsoft Yi Baiti",
+     "Microsoft Himalaya",
+     "MV Boli",
+     "Mangal",
+     "Gautami",
+     "Latha",
+     "Estrangelo Edessa",
+     "Kalinga",
+     "Kartika",
+     "DokChampa",
+     "Iskoola Pota",
+     "Mongolian Baiti",
+     "Microsoft Uighur",
+     "Sylfaen",
+     "Arial",
+     "Leelawadee UI",
+     "Microsoft JhengHei",
+     "Javanese Text",
+     "Segoe UI",
+     "Myanmar Text",
+     "Ebrima",
+     "Nirmala UI",
+     "Phagspa",
+     "Microsoft Tai Le",
+     "Microsoft New Tai Lue",
+     "游ゴシック",
+     "等线",
+     "Cordia New",
+     "DaunPenh"
+    ],
+    "emptySlots": 8,
+    "appFonts": [
+     "Fonts Used",
+     "Theme",
+     "Slide Titles",
+     "Aptos",
+     "Aptos Display",
+     "Office Theme",
+     "Slide 1"
+    ]
+   },
+   "previewDiagnostics": [],
+   "exportDiagnostics": [
+    "chart-data-adapted"
+   ],
+   "reimportDiagnostics": [
+    "heading-import-reflow"
+   ],
+   "diffs": [
+    {
+     "check": "text",
+     "status": "near",
+     "reason": "chart axis text: preview [12] vs chart [9]",
+     "count": 1,
+     "where": [
+      "slides.0.chart"
+     ],
+     "samples": []
+    },
+    {
+     "check": "reimport",
+     "status": "near",
+     "reason": "slides.0 chart re-imports as column, expected world (chart-data-adapted reported)",
+     "count": 1,
+     "where": [],
+     "samples": []
+    }
+   ]
+  },
+  {
+   "dimension": "charts",
+   "id": "box-and-whisker",
+   "variant": "published",
+   "class": "near",
+   "legacy": {
+    "class": "near",
+    "checks": {
+     "fontResolution": "pass"
+    },
+    "fontResolutionReasons": []
+   },
+   "checks": {
+    "geometry": "pass",
+    "text": "near",
+    "fills": "pass",
+    "zOrder": "pass",
+    "slideSize": "pass",
+    "typefaces": "pass",
+    "reimport": "pass",
+    "fontResolution": "pass",
+    "theme": "pass",
+    "mapping": "pass"
+   },
+   "stats": {
+    "textLines": 17,
+    "textLinesMatched": 2,
+    "runs": 2,
+    "shapesMapped": 3,
+    "shapesUnmapped": 0,
+    "srgbLiteral": 0,
+    "schemeClr": 2,
+    "geomMaxDeltaPt": 0
+   },
+   "fontResolution": {
+    "Aptos Display": {
+     "status": "metric-substitute",
+     "resolved": "Intos Display",
+     "verdict": "pass",
+     "tier": "metric",
+     "route": "replacement",
+     "policyTier": "metric",
+     "licenseClass": "proprietary-standard",
+     "pptx": {
+      "named": true,
+      "slotsUsed": [
+       "latin"
+      ],
+      "replacementNames": []
+     }
+    },
+    "Aptos": {
+     "status": "metric-substitute",
+     "resolved": "Intos",
+     "verdict": "pass",
+     "tier": "metric",
+     "route": "replacement",
+     "policyTier": "metric",
+     "licenseClass": "proprietary-standard",
+     "pptx": {
+      "named": true,
+      "slotsUsed": [
+       "latin"
+      ],
+      "replacementNames": []
+     }
+    },
+    "Roboto Mono": {
+     "status": "real",
+     "resolved": "Roboto Mono",
+     "verdict": "pass",
+     "tier": "real",
+     "route": "real",
+     "policyTier": "open",
+     "licenseClass": "open",
+     "pptx": {
+      "named": null,
+      "slotsUsed": [],
+      "replacementNames": []
+     }
+    }
+   },
+   "fontHost": {
+    "model": "gallery",
+    "render": {
+     "ok": true
+    },
+    "selection": {
+     "detected": [],
+     "scripts": [],
+     "unavailable": [],
+     "packages": []
+    }
+   },
+   "typefaces": {
+    "distinct": [
+     "Aptos",
+     "Aptos Display",
+     "",
+     "+mn-lt",
+     "+mn-ea",
+     "+mn-cs",
+     "+mj-lt",
+     "+mj-ea",
+     "+mj-cs"
+    ],
+    "foreign": [],
+    "scriptSupplements": 54,
+    "scriptSupplementFaces": [
+     "游ゴシック Light",
+     "맑은 고딕",
+     "等线 Light",
+     "新細明體",
+     "Times New Roman",
+     "Angsana New",
+     "Nyala",
+     "Vrinda",
+     "Shruti",
+     "MoolBoran",
+     "Tunga",
+     "Raavi",
+     "Euphemia",
+     "Plantagenet Cherokee",
+     "Microsoft Yi Baiti",
+     "Microsoft Himalaya",
+     "MV Boli",
+     "Mangal",
+     "Gautami",
+     "Latha",
+     "Estrangelo Edessa",
+     "Kalinga",
+     "Kartika",
+     "DokChampa",
+     "Iskoola Pota",
+     "Mongolian Baiti",
+     "Microsoft Uighur",
+     "Sylfaen",
+     "Arial",
+     "Leelawadee UI",
+     "Microsoft JhengHei",
+     "Javanese Text",
+     "Segoe UI",
+     "Myanmar Text",
+     "Ebrima",
+     "Nirmala UI",
+     "Phagspa",
+     "Microsoft Tai Le",
+     "Microsoft New Tai Lue",
+     "游ゴシック",
+     "等线",
+     "Cordia New",
+     "DaunPenh"
+    ],
+    "emptySlots": 8,
+    "appFonts": [
+     "Fonts Used",
+     "Theme",
+     "Slide Titles",
+     "Aptos",
+     "Aptos Display",
+     "Office Theme",
+     "Slide 1"
+    ]
+   },
+   "previewDiagnostics": [],
+   "exportDiagnostics": [],
+   "reimportDiagnostics": [
+    "heading-import-reflow"
+   ],
+   "diffs": [
+    {
+     "check": "text",
+     "status": "near",
+     "reason": "chart axis text: preview [12] vs chart [9]",
+     "count": 1,
+     "where": [
+      "slides.0.chart"
+     ],
+     "samples": []
+    }
+   ]
+  },
+  {
+   "dimension": "charts",
+   "id": "waterfall",
+   "variant": "published",
+   "class": "near",
+   "legacy": {
+    "class": "near",
+    "checks": {
+     "fontResolution": "pass"
+    },
+    "fontResolutionReasons": []
+   },
+   "checks": {
+    "geometry": "pass",
+    "text": "near",
+    "fills": "pass",
+    "zOrder": "pass",
+    "slideSize": "pass",
+    "typefaces": "pass",
+    "reimport": "pass",
+    "fontResolution": "pass",
+    "theme": "pass",
+    "mapping": "pass"
+   },
+   "stats": {
+    "textLines": 21,
+    "textLinesMatched": 2,
+    "runs": 2,
+    "shapesMapped": 3,
+    "shapesUnmapped": 0,
+    "srgbLiteral": 0,
+    "schemeClr": 2,
+    "geomMaxDeltaPt": 0
+   },
+   "fontResolution": {
+    "Aptos Display": {
+     "status": "metric-substitute",
+     "resolved": "Intos Display",
+     "verdict": "pass",
+     "tier": "metric",
+     "route": "replacement",
+     "policyTier": "metric",
+     "licenseClass": "proprietary-standard",
+     "pptx": {
+      "named": true,
+      "slotsUsed": [
+       "latin"
+      ],
+      "replacementNames": []
+     }
+    },
+    "Aptos": {
+     "status": "metric-substitute",
+     "resolved": "Intos",
+     "verdict": "pass",
+     "tier": "metric",
+     "route": "replacement",
+     "policyTier": "metric",
+     "licenseClass": "proprietary-standard",
+     "pptx": {
+      "named": true,
+      "slotsUsed": [
+       "latin"
+      ],
+      "replacementNames": []
+     }
+    },
+    "Roboto Mono": {
+     "status": "real",
+     "resolved": "Roboto Mono",
+     "verdict": "pass",
+     "tier": "real",
+     "route": "real",
+     "policyTier": "open",
+     "licenseClass": "open",
+     "pptx": {
+      "named": null,
+      "slotsUsed": [],
+      "replacementNames": []
+     }
+    }
+   },
+   "fontHost": {
+    "model": "gallery",
+    "render": {
+     "ok": true
+    },
+    "selection": {
+     "detected": [],
+     "scripts": [],
+     "unavailable": [],
+     "packages": []
+    }
+   },
+   "typefaces": {
+    "distinct": [
+     "Aptos",
+     "Aptos Display",
+     "",
+     "+mn-lt",
+     "+mn-ea",
+     "+mn-cs",
+     "+mj-lt",
+     "+mj-ea",
+     "+mj-cs"
+    ],
+    "foreign": [],
+    "scriptSupplements": 54,
+    "scriptSupplementFaces": [
+     "游ゴシック Light",
+     "맑은 고딕",
+     "等线 Light",
+     "新細明體",
+     "Times New Roman",
+     "Angsana New",
+     "Nyala",
+     "Vrinda",
+     "Shruti",
+     "MoolBoran",
+     "Tunga",
+     "Raavi",
+     "Euphemia",
+     "Plantagenet Cherokee",
+     "Microsoft Yi Baiti",
+     "Microsoft Himalaya",
+     "MV Boli",
+     "Mangal",
+     "Gautami",
+     "Latha",
+     "Estrangelo Edessa",
+     "Kalinga",
+     "Kartika",
+     "DokChampa",
+     "Iskoola Pota",
+     "Mongolian Baiti",
+     "Microsoft Uighur",
+     "Sylfaen",
+     "Arial",
+     "Leelawadee UI",
+     "Microsoft JhengHei",
+     "Javanese Text",
+     "Segoe UI",
+     "Myanmar Text",
+     "Ebrima",
+     "Nirmala UI",
+     "Phagspa",
+     "Microsoft Tai Le",
+     "Microsoft New Tai Lue",
+     "游ゴシック",
+     "等线",
+     "Cordia New",
+     "DaunPenh"
+    ],
+    "emptySlots": 8,
+    "appFonts": [
+     "Fonts Used",
+     "Theme",
+     "Slide Titles",
+     "Aptos",
+     "Aptos Display",
+     "Office Theme",
+     "Slide 1"
+    ]
+   },
+   "previewDiagnostics": [],
+   "exportDiagnostics": [],
+   "reimportDiagnostics": [
+    "heading-import-reflow"
+   ],
+   "diffs": [
+    {
+     "check": "text",
+     "status": "near",
+     "reason": "chart label wrapped/split in preview (native chart lays out its own labels)",
+     "count": 1,
+     "where": [
+      "slides.0.chart"
+     ],
+     "samples": [
+      "0"
+     ]
+    },
+    {
+     "check": "text",
+     "status": "near",
+     "reason": "chart axis text: preview [12] vs chart [9]",
+     "count": 1,
+     "where": [
+      "slides.0.chart"
+     ],
+     "samples": []
+    }
+   ]
+  },
+  {
+   "dimension": "charts",
+   "id": "funnel",
+   "variant": "published",
+   "class": "near",
+   "legacy": {
+    "class": "near",
+    "checks": {
+     "fontResolution": "pass"
+    },
+    "fontResolutionReasons": []
+   },
+   "checks": {
+    "geometry": "pass",
+    "text": "near",
+    "fills": "pass",
+    "zOrder": "pass",
+    "slideSize": "pass",
+    "typefaces": "pass",
+    "reimport": "pass",
+    "fontResolution": "pass",
+    "theme": "pass",
+    "mapping": "pass"
+   },
+   "stats": {
+    "textLines": 12,
+    "textLinesMatched": 2,
+    "runs": 2,
+    "shapesMapped": 3,
+    "shapesUnmapped": 0,
+    "srgbLiteral": 0,
+    "schemeClr": 2,
+    "geomMaxDeltaPt": 0
+   },
+   "fontResolution": {
+    "Aptos Display": {
+     "status": "metric-substitute",
+     "resolved": "Intos Display",
+     "verdict": "pass",
+     "tier": "metric",
+     "route": "replacement",
+     "policyTier": "metric",
+     "licenseClass": "proprietary-standard",
+     "pptx": {
+      "named": true,
+      "slotsUsed": [
+       "latin"
+      ],
+      "replacementNames": []
+     }
+    },
+    "Aptos": {
+     "status": "metric-substitute",
+     "resolved": "Intos",
+     "verdict": "pass",
+     "tier": "metric",
+     "route": "replacement",
+     "policyTier": "metric",
+     "licenseClass": "proprietary-standard",
+     "pptx": {
+      "named": true,
+      "slotsUsed": [
+       "latin"
+      ],
+      "replacementNames": []
+     }
+    },
+    "Roboto Mono": {
+     "status": "real",
+     "resolved": "Roboto Mono",
+     "verdict": "pass",
+     "tier": "real",
+     "route": "real",
+     "policyTier": "open",
+     "licenseClass": "open",
+     "pptx": {
+      "named": null,
+      "slotsUsed": [],
+      "replacementNames": []
+     }
+    }
+   },
+   "fontHost": {
+    "model": "gallery",
+    "render": {
+     "ok": true
+    },
+    "selection": {
+     "detected": [],
+     "scripts": [],
+     "unavailable": [],
+     "packages": []
+    }
+   },
+   "typefaces": {
+    "distinct": [
+     "Aptos",
+     "Aptos Display",
+     "",
+     "+mn-lt",
+     "+mn-ea",
+     "+mn-cs",
+     "+mj-lt",
+     "+mj-ea",
+     "+mj-cs"
+    ],
+    "foreign": [],
+    "scriptSupplements": 54,
+    "scriptSupplementFaces": [
+     "游ゴシック Light",
+     "맑은 고딕",
+     "等线 Light",
+     "新細明體",
+     "Times New Roman",
+     "Angsana New",
+     "Nyala",
+     "Vrinda",
+     "Shruti",
+     "MoolBoran",
+     "Tunga",
+     "Raavi",
+     "Euphemia",
+     "Plantagenet Cherokee",
+     "Microsoft Yi Baiti",
+     "Microsoft Himalaya",
+     "MV Boli",
+     "Mangal",
+     "Gautami",
+     "Latha",
+     "Estrangelo Edessa",
+     "Kalinga",
+     "Kartika",
+     "DokChampa",
+     "Iskoola Pota",
+     "Mongolian Baiti",
+     "Microsoft Uighur",
+     "Sylfaen",
+     "Arial",
+     "Leelawadee UI",
+     "Microsoft JhengHei",
+     "Javanese Text",
+     "Segoe UI",
+     "Myanmar Text",
+     "Ebrima",
+     "Nirmala UI",
+     "Phagspa",
+     "Microsoft Tai Le",
+     "Microsoft New Tai Lue",
+     "游ゴシック",
+     "等线",
+     "Cordia New",
+     "DaunPenh"
+    ],
+    "emptySlots": 8,
+    "appFonts": [
+     "Fonts Used",
+     "Theme",
+     "Slide Titles",
+     "Aptos",
+     "Aptos Display",
+     "Office Theme",
+     "Slide 1"
+    ]
+   },
+   "previewDiagnostics": [],
+   "exportDiagnostics": [],
+   "reimportDiagnostics": [
+    "heading-import-reflow"
+   ],
+   "diffs": [
+    {
+     "check": "text",
+     "status": "near",
+     "reason": "chart axis text: preview [12] vs chart [9]",
+     "count": 1,
+     "where": [
+      "slides.0.chart"
+     ],
+     "samples": []
+    },
+    {
+     "check": "text",
+     "status": "near",
+     "reason": "chart dataLabels text: preview [12] vs chart [9]",
+     "count": 1,
+     "where": [
+      "slides.0.chart"
+     ],
+     "samples": []
+    }
+   ]
+  }
+ ]
+}
