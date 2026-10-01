@@ -290,7 +290,7 @@ FF-12 and every native gate is not claimed. Per-item state is in
   2026-09-29 (see [release-process.md](../../release-process.md)); site and
   gallery deploys still follow their own repositories' rules.
 - Native PowerPoint `p:hf` stays deferred; headers and footers are OPF
-  furniture.
+  furniture. Superseded by the owner decision of 2026-10-01: native header/footer is wanted and is tracked as RR-11 in [release readiness](../release-readiness/README.md).
 - No public support or progress status on pptx.gallery: no badges, legends,
   panels, API fields or llms.txt lines about measured, pending or parity
   status (owner decision 2026-09-30). The measurement stays internal to
