@@ -509,6 +509,19 @@ describe("round trips", () => {
     assert.ok(exact > 600, `${exact} slides keep their keys`);
   });
 
+  test("a template round trips: placeholders and var: fields are ordinary text, template and variables are front matter", () => {
+    const template = JSON.parse(readFileSync(path.resolve(markdownExamples, "../../docs/fixtures/template-quarterly-review.opf.json"), "utf8"));
+    const { markdown, report } = opfToMarkdown(template);
+    assert.match(markdown, /^---\n(?:.*\n)*?template: true\n/);
+    assert.match(markdown, /\{\{client\}\}/);
+    const back = convert(markdown);
+    assert.deepEqual(back.diagnostics.filter((d) => d.severity === "error"), []);
+    assert.equal(back.document.template, true);
+    assert.deepEqual(back.document.variables, template.variables);
+    assert.deepEqual(facts(back.document), facts(template));
+    assert.equal(report.lossless, true);
+  });
+
   test("conversion is deterministic and offline", () => {
     const original = globalThis.fetch;
     globalThis.fetch = () => {
