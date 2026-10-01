@@ -119,8 +119,12 @@ const pdf = await svgToPdf(svgs, options);
 const pptx = await toPptx(presentation, options);
 ```
 
-`renderSvg` / `renderSvgDeck` are the local preview. PNG and PDF rasterize that
-SVG; **PDF is raster-backed** in this release (not selectable vector text).
+`renderSvg` / `renderSvgDeck` are the local preview. PNG rasterizes that SVG.
+PDF (renderer releases after 0.11.9) converts the same SVG to **vector paths with
+selectable, searchable text** in embedded font subsets, with no second layout pass;
+pass `{ mode: 'raster' }` for the image-per-slide output that renderers up to 0.11.9
+always wrote. Supply the same font files as for PNG (`fontFiles`); vector PDF never
+uses system fonts.
 `toPptx` is the supported editable PowerPoint export from OPF. Shared
 headers/footers in that file are tagged slide shapes (`OPF_FURNITURE_V1`), not
 native Office Header/Footer objects (`p:hf` / notes master). Opening the file
@@ -144,7 +148,7 @@ node scripts/test-developer-quickstart.mjs
 
 That script creates an empty temp project, installs the published versions from
 the npm registry, copies this example, and asserts validate, lint, offline
-fonts, furniture composition, pagination, undo, SVG, PNG, raster PDF and PPTX.
+fonts, furniture composition, pagination, undo, SVG, PNG, PDF and PPTX.
 It fails if any package is a `file:` or workspace link.
 
 ## What this does not cover
@@ -158,4 +162,4 @@ It fails if any package is a `file:` or workspace link.
   links, and Header & footer playground example are already live on
   production; the issue stays open)
 - Archived font-shaping prototypes (not in the published runtime)
-- Selectable vector PDF, general SVG diagrams, and Mermaid
+- PDF/UA or PDF/A conformance, general SVG diagrams, and Mermaid
