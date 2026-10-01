@@ -279,16 +279,16 @@ No reference engine draws a speaker photo: the schema has no speaker slot on any
 The effective value is `slides[i].design.contentDirection`, then `design.contentDirection`. It sets the root arrangement mode: `vertical` is `column`, `horizontal` is `row`. Precedence for the root mode:
 
 ```
-  1. the slide's own composition.mode            explicit
+  1. composition.mode                            explicit: the slide's own, else the
+                                                 layout record's geometry contract
   2. design.contentDirection                     slide design, then deck design
-  3. the layout record's composition.mode        the layout's geometry default
-  4. the layout record's slideLayoutDirection    existing hint
-  5. auto
+  3. the layout record's slideLayoutDirection    existing hint
+  4. auto
 ```
 
 Promoted regions (`left`, `top:left`, ...) keep their explicit geometry: `contentDirection` does not reinterpret them. Nested groups keep their own `composition`. The decision record keeps `reason: 'configured-mode'`. Reserved placeholder slots still count when only the hint sets the mode, as they do for `slideLayoutDirection`.
 
-> **Decision, 2026-09-30 (agent decision, vetoable).** The design hint ranks above the layout record's `composition.mode` (step 2 before step 3), the way a deck's `titleAlignment` or `contentBox` wins over a layout record's `slideTitleAlignment` or `contentBox`, and because pptx.gallery derives `design.contentDirection` from the layout's `slideLayoutDirection`: the deck value is the author's override of that direction. The cost is that a grid layout flattens under a deck-wide direction: a multi-block slide on a `grid` layout becomes one row under `horizontal` or one column under `vertical`. No bundled example has that shape: the 125 example slides that change (66 under `horizontal`, 59 under `vertical`) all carry a single root payload on a two-column grid layout, and that payload now fills the content area instead of half of it. The alternative is to rank the layout record's `composition.mode` as explicit (step 3 before step 2); it would leave those 125 slides unchanged, but `chartPrimary` would then never apply to the bundled chart layouts, which all carry a `composition.mode`.
+> **Decision, 2026-09-30 (agent decision, vetoable).** A layout record's `composition.mode` ranks above the design hint. pptx.gallery derives `design.contentDirection` from every layout's own `slideLayoutDirection`, so a hint that overrode the layout's `composition.mode` would flatten the layout's own grid by construction: `chart-2x` (`slideLayoutDirection: Horizontal`, `mode: grid, columns: 2`) would compose its four blocks as one row under the `horizontal` it derives for itself, and the renderer's gallery-layout fixtures (57 layouts whose preview must differ from the default only in alignment) fail. The hint therefore ranks with `slideLayoutDirection`, above it, and acts where no composition contract exists: slides without a layout and the bundled layouts without `composition.mode` (62 of 100). Under this rule no bundled example slide changes geometry for `contentDirection` (101 decks set it; all of their blocks slides use layouts that carry a mode). The alternative, ranking the hint above the layout mode, would change 125 single-payload example slides and break the gallery's own layouts.
 
 ### `chartPrimary`
 
@@ -299,6 +299,8 @@ The effective value is `slides[i].design.chartPrimary`, then `design.chartPrimar
 - `none`, or any other value: no change, the existing automatic grid with equal weight.
 
 The synthetic container has no OPF path, so it records no `groups`, `flows` or explanation entry; the root decision has `reason: 'chart-primary'` and `selectedColumns` 2 (row) or 1 (column). Explicit root `columns` and `weights`, from the slide or the layout record, are ignored while it applies, and reserved placeholder slots are not applied. A chart inside a nested group, a chart-only root, or a single root `chart` payload leaves the arrangement unchanged.
+
+> **Decision, 2026-09-30 (agent decision, vetoable).** Unlike `contentDirection`, `chartPrimary` overrides the layout record's `composition.mode`, `columns` and `weights` (only the slide's own `composition.mode` blocks it). It is an author opt-in: every bundled layout's `contentTypeChartPrimary` is `None`, so nothing derives it, while every bundled chart layout that mixes a chart with text carries a `composition.mode` (`chart-2x` grid, `data-visualization` row `[2, 1]`, ...). Ranking the layout mode above the hint would make the field inert on every bundled chart layout. 40 example slides (10 per side) change under this rule.
 
 ### `listBullet` (vetoable)
 

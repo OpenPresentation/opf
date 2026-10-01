@@ -33,20 +33,28 @@ test('contentDirection sets the root mode for blocks and root payloads, slide de
   assert.deepEqual(boxes(single), boxes(composeSlide({title: 'Text', text: 'Body'})));
 });
 
-test('contentDirection precedence: slide composition.mode wins; the hint beats the layout mode and direction', () => {
+test('contentDirection precedence: an explicit composition.mode (slide or layout record) wins; the hint beats the layout direction', () => {
   const slide = {title: 'Blocks', blocks};
   const vertical = {design: {contentDirection: 'vertical'}};
   // An explicit slide composition.mode is authoritative.
   const explicit = composeSlide({...slide, composition: {mode: 'row'}}, {presentation: vertical, explain: true});
   assert.ok(isRow(explicit));
   assert.deepEqual(boxes(explicit), boxes(composeSlide({...slide, composition: {mode: 'row'}})));
-  // The layout's composition.mode and slideLayoutDirection are defaults below the design hint.
+  // So is the layout record's composition.mode: pptx.gallery derives contentDirection from the layout's
+  // own slideLayoutDirection, and the hint must never flatten the layout's grid (chart-2x stays 2x2).
   const rowLayout = {id: 'row-layout', slideLayoutDirection: 'Horizontal', composition: {mode: 'row', gap: 0.06}, placeholders: [{type: 'title'}, {type: 'text'}, {type: 'text'}]};
-  assert.ok(isRow(composeSlide(slide, {layout: rowLayout})));
-  const overridden = composeSlide(slide, {layout: rowLayout, presentation: vertical, explain: true});
-  assert.ok(isColumn(overridden));
-  assert.equal(rootDecision(overridden).mode, 'column');
-  assert.equal(overridden.composition.gap, 0.06, 'other layout composition fields still apply');
+  const kept = composeSlide(slide, {layout: rowLayout, presentation: vertical, explain: true});
+  assert.ok(isRow(kept));
+  assert.deepEqual(boxes(kept), boxes(composeSlide(slide, {layout: rowLayout})));
+  assert.equal(kept.composition.gap, 0.06);
+  const gridLayout = {id: 'chart-2x', composition: {mode: 'grid', columns: 2}, placeholders: [{type: 'title'}, {type: 'chart'}, {type: 'text'}, {type: 'chart'}, {type: 'text'}]};
+  const four = {title: 'Grid', blocks: [chart, {text: 'a'}, chart, {text: 'b'}]};
+  for (const hint of ['horizontal', 'vertical']) {
+    const result = composeSlide({...four, design: {contentDirection: hint}}, {layout: gridLayout, explain: true});
+    assert.deepEqual(boxes(result), boxes(composeSlide(four, {layout: gridLayout})), `${hint} keeps the 2x2 grid`);
+    assert.equal(rootDecision(result).mode, 'grid');
+  }
+  // The layout's slideLayoutDirection is only a hint below the design value.
   const directionLayout = {id: 'direction-layout', slideLayoutDirection: 'Horizontal', placeholders: [{type: 'title'}, {type: 'text'}]};
   assert.ok(isRow(composeSlide(slide, {layout: directionLayout})));
   assert.ok(isColumn(composeSlide(slide, {layout: directionLayout, presentation: vertical})));

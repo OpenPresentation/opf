@@ -1008,7 +1008,7 @@
         "contentDirection": {
           "type": "string",
           "enum": ["horizontal", "vertical"],
-          "description": "Axis along which parallel body content is arranged. Sets the root arrangement mode of blocks and root payloads when the slide's own composition.mode is not set: 'vertical' is column, 'horizontal' is row. Precedence: the slide's composition.mode, then this value (slide design, then deck design), then the layout record's composition.mode and slideLayoutDirection, then automatic selection. Promoted regions (left, top:left, ...) keep their explicit geometry and nested groups keep their own composition."
+          "description": "Axis along which parallel body content is arranged. Sets the root arrangement mode of blocks and root payloads when no composition.mode is set on the slide or on its layout record: 'vertical' is column, 'horizontal' is row. Precedence: composition.mode (the slide's own, else the layout record's geometry contract), then this value (slide design, then deck design), then the layout record's slideLayoutDirection, then automatic selection. A layout that carries a composition.mode keeps its grid or direction whatever this value says. Promoted regions (left, top:left, ...) keep their explicit geometry and nested groups keep their own composition."
         },
         "chartPrimary": {
           "type": "string",

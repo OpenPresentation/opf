@@ -2050,22 +2050,26 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   const placeholders = Array.isArray(layout.placeholders) ? layout.placeholders.filter((p: any) => !headings.has(p.type)) : [];
   // The root image drawn as the slide image no longer needs its content slot.
   if (slideImage?.replacesContent) { const picture = placeholders.findIndex((p: any) => p.type === 'picture'); if (picture >= 0) placeholders.splice(picture, 1); }
-  // Root arrangement mode: the slide's own composition.mode, then design.contentDirection (slide, then
-  // deck), then the layout record's composition.mode, then its slideLayoutDirection, then auto.
+  // Root arrangement mode: the explicit composition.mode (the slide's own, else the layout record's
+  // geometry contract), then design.contentDirection (slide, then deck), then the layout record's
+  // slideLayoutDirection, then auto. pptx.gallery derives contentDirection from slideLayoutDirection, so
+  // the hint ranks with that direction and never flattens a layout's own grid.
   const ownMode = record(slide.composition).mode as Composition['mode'] | undefined;
   const direction = designHint('contentDirection')?.value;
   const directionMode: Composition['mode'] | undefined = direction === 'vertical' ? 'column' : direction === 'horizontal' ? 'row' : undefined;
-  const layoutMode: Composition['mode'] = composition.mode ?? (layout.slideLayoutDirection === "Vertical" ? "column" : layout.slideLayoutDirection === "Horizontal" ? "row" : "auto");
+  const layoutDirectionMode: Composition['mode'] = layout.slideLayoutDirection === "Vertical" ? "column" : layout.slideLayoutDirection === "Horizontal" ? "row" : "auto";
   // design.chartPrimary (slide, deck, then the layout's contentTypeChartPrimary) splits the root into a
   // primary chart track and one synthetic container of the other nodes when the slide has no regions
   // and no composition.mode of its own, and the root nodes mix at least one chart leaf with other nodes.
+  // Unlike contentDirection it is an author opt-in (no bundled layout derives it), so it overrides the
+  // layout record's composition, including its columns and weights.
   const chartHint = designHint('chartPrimary')?.value ?? (typeof layout.contentTypeChartPrimary === 'string' ? layout.contentTypeChartPrimary.toLowerCase() : undefined);
   const chartSide = chartHint === 'left' || chartHint === 'right' || chartHint === 'top' || chartHint === 'bottom' ? chartHint : undefined;
   const chartIndex = pending.findIndex(node => !node.children && node.field === 'chart');
   const chartPrimary = chartSide !== undefined && !ownMode && !regions.length && chartIndex >= 0 && pending.some(node => node.children || node.field !== 'chart') ? chartSide : undefined;
   const rootSettings: Composition = chartPrimary
     ? { ...composition, mode: chartPrimary === 'left' || chartPrimary === 'right' ? 'row' : 'column', columns: undefined, weights: chartPrimary === 'left' || chartPrimary === 'top' ? [3, 2] : [2, 3] }
-    : { ...composition, mode: ownMode ?? directionMode ?? layoutMode };
+    : { ...composition, mode: composition.mode ?? directionMode ?? layoutDirectionMode };
   if (chartPrimary) {
     const primary = pending[chartIndex]!, rest = pending.filter((_, index) => index !== chartIndex);
     const container: Pending = { field: 'blocks', type: 'group', value: rest.map(node => node.payload), path, payload: {}, children: rest, composition: {}, synthetic: true };
