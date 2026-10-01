@@ -160,6 +160,10 @@ The editor's `editor.paginateSlide(index)` is one validated transaction with und
 opf paginate input.opf.json output.opf.json
 ```
 
+## Right-to-left decks
+
+When the presentation `language` is written right to left (Arabic, Hebrew, Syriac, Thaana and the other right-to-left scripts) or the host passes `direction: 'rtl'`, `composeSlide` mirrors the composition and reports each paragraph's direction; `SlideComposition.direction` is `'rtl'`. The first column and the `left` region are drawn at the right, banded slide images, cover logos and header/footer zones swap sides, lists put their markers at the right, tables run right to left, and `TextFit.directions` gives the direction of the paragraph each line belongs to. Alignment is logical: the authored `left` is the start edge, drawn at the right edge of a right-to-left paragraph (`physicalAlignment`). A left-to-right deck composes exactly as before. The rules and the PPTX mapping are in [Layout direction](programs/font-fidelity-everywhere/script-font-model.md#layout-direction-rr-05).
+
 ## Fidelity boundary
 
 The shared engine provides identical body and heading geometry to SVG and editable PPTX export. Text measurements default to deterministic estimates. For actual font advances, use the shared provider described in [measured fonts](font-fidelity.md). Complex scripts, fallback fonts, PowerPoint text rendering, rich text, charts, tables, and images still need visual verification. Dynamic composition is not a guarantee of pixel-identical PowerPoint output. List density includes rich runs, descriptions and nesting via `fitList`, with the same hanging indents used in preview and export. Only text-like payloads currently receive content-density estimates; small-cell diagnostics also cover non-text content.
