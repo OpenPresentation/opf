@@ -849,6 +849,30 @@ if (FULL) {
   await runSwitch('language', languages, steps);
   switches += 2;
 }
+// WebP assets: the Node exporter converts WebP to PNG with sharp (a pinned, prebuilt libvips per platform), the one export
+// step that runs native code outside the JavaScript engines. Lossless and lossy (with alpha) images, as a slide image and a
+// background, must export to the same bytes on every host (FF-11: the WebP conversion variance, pinned by identical digests).
+{
+  const text = TEXT.english;
+  const WEBP = {
+    lossless: 'data:image/webp;base64,UklGRjIAAABXRUJQVlA4TCUAAAAvF8ADELkyRPQ/dhHR/wCRtk0d3L/jwcNRGMAJnACSVEUGqP8EAA==',
+    lossy: 'data:image/webp;base64,UklGRp4AAABXRUJQVlA4WAoAAAAQAAAAFwAADwAAQUxQSBMAAAABD/DA/4iIIBBI8qecZ4KI/gfNAFZQOCBkAAAAEAQAnQEqGAAQAD5tHJlJpCEjIZgAgA2JbACdMoRwN5KAYSXYx1oBBKAA/vxrUKVS2qQbglwzjt7P/8c40cw1IJbf09+NWgDC/HNyUUsy37tyvdjLnjqb+8YRfwSdSTL+IAAAAA=='
+  };
+  const imageLayout = layoutMembers('image')[0];
+  const deck = {
+    name: 'webp images', language: 'english', design: {theme: 'minimal', fontScheme: 'calibri', background: {type: 'image', image: {src: 'asset:lossy', fit: 'cover'}}},
+    assets: {lossless: {src: WEBP.lossless, alt: 'Lossless WebP'}, lossy: {src: WEBP.lossy, alt: 'Lossy WebP with alpha'}},
+    slides: [layoutSlide('webp-1', imageLayout, text), {...layoutSlide('webp-2', imageLayout, text), blocks: [{image: 'asset:lossy'}]}, {id: 'webp-3', title: text.title, bullets: text.items}]
+  };
+  deck.slides[0].blocks = [{image: 'asset:lossless'}];
+  await runSwitch('webp-images', deck, [
+    {label: 'georgia', apply: setScheme('design.fontScheme', 'georgia')},
+    {label: 'calibri again', apply: setScheme('design.fontScheme', 'calibri'), returnsToStart: true}
+  ]);
+  switches++;
+  const media = Object.keys(unzipSync(await toPptx(deck, engineOptions(deck)))).filter((name) => name.startsWith('ppt/media/') && !name.endsWith('/'));
+  assert.ok(media.length >= 2 && media.every((name) => /\.png$/.test(name)), `WebP assets export as PNG media: ${media}`);
+}
 
 // ---------------------------------------------------------------------------
 // Chart export and preview paths. Every non-deprecated chart type is exported and
