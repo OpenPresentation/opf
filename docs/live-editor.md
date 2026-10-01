@@ -6,10 +6,10 @@ The published canvas covers the interactions below; complete PowerPoint feature 
 
 ## Install the published packages
 
-Use Node 24 with core 0.11.3, renderer 0.11.8, editor 0.10.5 and PPTX 0.11.5:
+Use Node 24 with core 0.11.3, renderer 0.11.8, editor 0.10.5 and PPTX 0.11.6:
 
 ```sh
-npm install --save-exact @openpresentation/opf@0.11.3 @openpresentation/opf-render@0.11.8 @openpresentation/opf-editor@0.10.5 @openpresentation/opf-pptx@0.11.5
+npm install --save-exact @openpresentation/opf@0.11.3 @openpresentation/opf-render@0.11.8 @openpresentation/opf-editor@0.10.5 @openpresentation/opf-pptx@0.11.6
 ```
 
 No paid service or provider account is required. The six agent skills install with `npx @openpresentation/cli@0.9.1 skills install`. See the [quickstart](quickstart.md) for an installed-package workflow and the [compatibility matrix](compatibility-matrix.md) for separately scoped browser and native evidence.

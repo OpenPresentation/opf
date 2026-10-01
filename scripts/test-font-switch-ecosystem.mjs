@@ -830,7 +830,10 @@ for (const scheme of [PROPORTIONAL, MONO]) {
 // Renderer 0.11.3 previews every kept classic chart type natively and 0.11.4 the seven chartex types, so every non-deprecated type draws its own
 // construct (axes, legend, arcs or tiles). An older pinned renderer approximates the rest by a plain row of bars.
 const PREVIEW_NATIVE = catalogs.chartTypes.filter((entry) => !entry.deprecation).map((entry) => entry.id);
-// Types whose PPTX is not the element the catalog names (chartex families export as a bar chart).
+// Types whose classic chart part (the Fallback of a chartex construct, or the whole export of `world`) is not the element the catalog names:
+// opf-pptx 0.11.6 exports the six confirmed chartex types as a native chartEx part with the clustered column as Fallback (chartex: 'auto').
+// FF-56: `world` stays the clustered column (PowerPoint's map needs online geodata) and has no chartEx part.
+const CHARTEX_NATIVE = {'box-and-whisker': 'boxWhisker', funnel: 'funnel', histogram: 'clusteredColumn', pareto: 'clusteredColumn', treemap: 'treemap', waterfall: 'waterfall'};
 const EXPORT_FALLBACK = {'box-and-whisker': 'barChart', funnel: 'barChart', histogram: 'barChart', pareto: 'barChart', treemap: 'barChart', waterfall: 'barChart', world: 'barChart'};
 const marks = (svg) => ({text: (svg.match(/<text\b/g) ?? []).length, shapes: (svg.match(/<(?:path|rect|circle|line|polygon|polyline)\b/g) ?? []).length});
 const chartPaths = [];
@@ -851,6 +854,12 @@ for (const chart of catalogs.chartTypes.filter((entry) => !entry.deprecation)) {
   const nominal = chart.mappings.openxml.element;
   assert.equal(element, EXPORT_FALLBACK[chart.id] ?? nominal, `${chart.id}: exported as ${element}${EXPORT_FALLBACK[chart.id] || element === nominal ? '' : '; limitation resolved: delete its EXPORT_FALLBACK entry'}`);
   if (EXPORT_FALLBACK[chart.id]) assert.notEqual(element, nominal, `${chart.id}: limitation resolved, delete its EXPORT_FALLBACK entry`);
+  const chartEx = Object.keys(exported).find((name) => /^ppt\/charts\/chartEx\d+\.xml$/.test(name));
+  if (CHARTEX_NATIVE[chart.id]) {
+    assert.ok(chartEx, `${chart.id}: the default export carries a native chartEx part`);
+    assert.ok(decoder.decode(exported[chartEx]).includes(`<cx:series layoutId="${CHARTEX_NATIVE[chart.id]}"`), `${chart.id}: the chartEx series is the ${CHARTEX_NATIVE[chart.id]} construct`);
+    assert.ok(decoder.decode(exported['ppt/slides/slide1.xml']).includes('<mc:AlternateContent'), `${chart.id}: the chartEx frame is an AlternateContent with the classic chart as Fallback`);
+  } else assert.equal(chartEx, undefined, `${chart.id}: no chartEx part (a classic type, or the map, which stays the clustered column)`);
   assert.deepEqual(checkPptxTypefaces(exported, {fonts: ['Calibri', 'Roboto Mono'], monospace: ['Roboto Mono']}).violations, [], `${chart.id}: chart parts name only the chosen fonts`);
   chartPaths.push({id: chart.id, nominal, exported: element, previewNative: native});
 }
@@ -975,7 +984,12 @@ for (const fallback of GLYPH_FALLBACK_CASES) {
   const exported = unzipSync(bytes);
   assert.ok(Object.keys(exported).some((name) => /^ppt\/charts\/chart\d+\.xml$/.test(name)), `${id}: a chart part is exported`);
   assert.ok(decoder.decode(exported['ppt/slides/slide1.xml']).includes('graphicFrame'), `${id}: the slide has a graphic frame`);
-  assert.deepEqual(exportDiagnostics.map((diagnostic) => [diagnostic.code, diagnostic.adaptation, diagnostic.path]), [['chart-data-adapted', 'histogram-binned', 'slides.0.chart']], `${id}: the binning is reported`);
+  // chartex 'auto' (opf-pptx 0.11.6): PowerPoint bins natively, so the export adapts nothing. The fallback mode still bins and says so.
+  assert.deepEqual(exportDiagnostics.map((diagnostic) => [diagnostic.code, diagnostic.adaptation, diagnostic.path]), [], `${id}: the native histogram reports no adaptation`);
+  assert.ok(Object.keys(exported).some((name) => /^ppt\/charts\/chartEx\d+\.xml$/.test(name)), `${id}: the histogram is a native chartEx part`);
+  const fallbackDiagnostics = [];
+  await toPptx(deck, {...engineOptions(deck), chartex: 'fallback', onDiagnostic: (diagnostic) => fallbackDiagnostics.push(diagnostic)});
+  assert.deepEqual(fallbackDiagnostics.map((diagnostic) => [diagnostic.code, diagnostic.adaptation, diagnostic.path]), [['chart-data-adapted', 'histogram-binned', 'slides.0.chart']], `${id}: the fallback mode reports the binning`);
   assert.deepEqual(packageProblems(exported), [], `${id}: package structure, nested workbook included`);
   const fonts = chosenFonts(deck);
   assert.deepEqual(checkPptxTypefaces(bytes, {fonts: fonts.chosen, monospace: fonts.monospace}).violations, [], `${id}: the chart and its workbook name only the chosen fonts`);
