@@ -56,7 +56,7 @@ Code strings that [XML 1.0 cannot represent](https://www.w3.org/TR/xml/#charsets
 - Compatibility target: `@openpresentation/opf`
 - Public API: `renderSvg(opf, opts)`, `renderSvgDeck(opf, opts)`, `resolvePresentation(opf, opts)`, `svgToPng(svg, opts)`, and `svgToPdf(svgs, opts)`
 
-`renderSvg` renders a single slide selected by `opts.slideIndex` (default `0`). `renderSvgDeck` returns one SVG string per slide. Both validate OPF at the boundary via `@openpresentation/opf`, resolve inline and bundled catalogs locally, and emit byte-stable SVG for the same input.
+`renderSvg` renders a single slide selected by `opts.slideIndex` (default `0`). `renderSvgDeck` returns one SVG string per slide. Both validate OPF at the boundary via `@openpresentation/opf`, resolve inline and bundled catalogs locally, and emit byte-stable SVG for the same input. A catalog `source` may be one string or an ordered array (first match wins, the bundled default is appended); the renderer never fetches, so non-bundled sources resolve only from `catalogSources`. Slide background colours (solid, gradient stops, pattern colours) accept the same colour references as text and table colours: a hex value, a `var:` variable, or a colour scheme slot or role such as `accent2` or `primary`.
 
 ```js
 import { renderSvgDeck } from "@openpresentation/opf-render";

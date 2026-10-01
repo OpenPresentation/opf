@@ -228,8 +228,14 @@ function defaultCatalogFor(kind) {
   return Array.isArray(bundledCatalogs[kind]) ? bundledCatalogs[kind] : [];
 }
 
+// CatalogEntry.source is one source or an ordered search path (first match wins; the
+// default catalog is appended by the callers). An array concatenates each source's
+// records in order, so the findById chain keeps the first match. Non-string entries are
+// ignored. Nothing is fetched: a source resolves from options.catalogSources or, for the
+// bundled default prefixes, from the bundled snapshot.
 function sourceRecordsFor(kind, source, options) {
-  if (!source) return [];
+  if (Array.isArray(source)) return source.flatMap((entry) => sourceRecordsFor(kind, entry, options));
+  if (typeof source !== "string" || !source) return [];
   const bySource = options.catalogSources?.[source];
   if (bySource) return normalizeSourceRecords(bySource);
   if (source.startsWith(DEFAULT_SOURCE_PREFIX) || source.startsWith("pkg:@openpresentation/opf/")) {
@@ -341,6 +347,12 @@ function normalizeColor(value, fallback) {
 
 /** Resolve content ColorRef via core; keep authored #RRGGBB / #RRGGBBAA casing. */
 function resolveColorRef(value, bound, fallback) {
+  return resolveColorRefIn(value, bound.design, fallback);
+}
+
+// `design` supplies colorScheme, colors (roles) and variables; resolveDesign passes a
+// partial one for the background, before the text-dependent roles exist.
+function resolveColorRefIn(value, design, fallback) {
   if (value == null || value === "") return fallback;
   if (typeof value !== "string") return fallback;
   const trimmed = value.trim();
@@ -348,9 +360,9 @@ function resolveColorRef(value, bound, fallback) {
   // Packed-browser editor checks keep toolbar hex like #2563eb as authored.
   if (/^#[0-9a-fA-F]{6}([0-9a-fA-F]{2})?$/.test(trimmed)) return trimmed;
   if (/^#[0-9a-fA-F]{3}$/.test(trimmed)) return normalizeColor(trimmed, fallback);
-  const colors = bound.design.colors ?? {};
+  const colors = design.colors ?? {};
   return resolveCoreColorRef(trimmed, {
-    colorScheme: bound.design.colorScheme ?? {},
+    colorScheme: design.colorScheme ?? {},
     roles: {
       primary: colors.primary,
       secondary: colors.secondary,
@@ -360,18 +372,30 @@ function resolveColorRef(value, bound, fallback) {
       text: colors.text,
       textSecondary: colors.mutedText
     },
-    variables: bound.design.variables,
+    variables: design.variables,
     fallback
   });
 }
 
-function resolveBackground(background, colorScheme) {
+// Background fills: a literal hex keeps normalizeColor's behaviour (uppercase, alpha kept);
+// anything else is a ColorRef (var:id, scheme slot or role) resolved like table fills and run
+// colours, falling back exactly as an unparseable literal did.
+// Roles resolve through the colour scheme only: background, surface and text are derived from the
+// background itself (the contrast text), so a reference must not see them.
+function resolveBackgroundColor(value, design, fallback) {
+  const literal = normalizeColor(value, null);
+  if (literal) return literal;
+  const { primary, secondary, accent } = design.colors ?? {};
+  return resolveColorRefIn(value, { colorScheme: design.colorScheme, colors: { primary, secondary, accent }, variables: design.variables }, fallback);
+}
+
+function resolveBackground(background, colorScheme, design) {
   if (!background) return colorFromScheme(colorScheme, "light1", "#FFFFFF");
   if (typeof background === "string") return colorFromScheme(colorScheme, background, "#FFFFFF");
   if (background.type === "theme") return colorFromScheme(colorScheme, background.slot, "#FFFFFF");
-  if (background.type === "solid") return normalizeColor(background.color, "#FFFFFF");
+  if (background.type === "solid") return resolveBackgroundColor(background.color, design, "#FFFFFF");
   if (background.type === "gradient") return null;
-  if (background.type === "pattern") return normalizeColor(background.pattern?.backgroundColor, "#FFFFFF");
+  if (background.type === "pattern") return resolveBackgroundColor(background.pattern?.backgroundColor, design, "#FFFFFF");
   return colorFromScheme(colorScheme, "light1", "#FFFFFF");
 }
 
@@ -411,7 +435,12 @@ function resolveDesign(presentation, slide, context, index) {
   );
   const dimensions = resolveDimensions(slideDesign.dimensions ?? deckDesign.dimensions ?? theme.dimensions);
   const backgroundDefinition = slideDesign.background ?? deckDesign.background ?? theme.background;
-  const backgroundColor = resolveBackground(backgroundDefinition, colorScheme);
+  const primary = normalizeColor(colorScheme.primary, null) ?? colorFromScheme(colorScheme, "accent1", "#2563EB");
+  const secondary = normalizeColor(colorScheme.secondary, null) ?? colorFromScheme(colorScheme, "accent2", "#0F766E");
+  const accent = normalizeColor(colorScheme.accent, null) ?? colorFromScheme(colorScheme, "accent3", "#F59E0B");
+  const variables = presentation.variables ?? {};
+  // background/surface/text roles depend on the background itself, so a background reference sees only the scheme and the three accent roles.
+  const backgroundColor = resolveBackground(backgroundDefinition, colorScheme, { colorScheme, colors: { primary, secondary, accent }, variables });
   const darkBackground = colorLuminance(backgroundColor ?? "#FFFFFF") < 0.179;
   const textColor = colorFromScheme(colorScheme, darkBackground ? "light1" : "dark1", darkBackground ? "#FFFFFF" : "#111827");
 
@@ -422,7 +451,7 @@ function resolveDesign(presentation, slide, context, index) {
     colorScheme,
     fontScheme,
     dimensions,
-    variables: presentation.variables ?? {},
+    variables,
     background: backgroundDefinition,
     backgroundColor,
     colors: {
@@ -430,9 +459,9 @@ function resolveDesign(presentation, slide, context, index) {
       surface: colorFromScheme(colorScheme, darkBackground ? "dark2" : "light2", darkBackground ? "#1E293B" : "#F8FAFC"),
       text: textColor,
       mutedText: colorFromScheme(colorScheme, darkBackground ? "light2" : "dark2", darkBackground ? "#E2E8F0" : "#334155"),
-      primary: normalizeColor(colorScheme.primary, null) ?? colorFromScheme(colorScheme, "accent1", "#2563EB"),
-      secondary: normalizeColor(colorScheme.secondary, null) ?? colorFromScheme(colorScheme, "accent2", "#0F766E"),
-      accent: normalizeColor(colorScheme.accent, null) ?? colorFromScheme(colorScheme, "accent3", "#F59E0B"),
+      primary,
+      secondary,
+      accent,
       border: colorFromScheme(colorScheme, "accent5", "#CBD5E1")
     },
     fonts: resolveFontFamilies(fontScheme),
@@ -737,7 +766,7 @@ function renderBackground(bound, width, height, options) {
     const dx=Math.cos(angle)*50,dy=Math.sin(angle)*50;
     const stopTags = stops.map((stop, index) => tag("stop", {
       offset: stableNumber((stop.position ?? index / Math.max(1, stops.length - 1)) * 100) + "%",
-      "stop-color": normalizeColor(stop.color, bound.design.colors.background)
+      "stop-color": resolveBackgroundColor(stop.color, bound.design, bound.design.colors.background)
     }));
     return [
       tag("defs", traceAttrs(options, `${bound.path}.design.background`), tag("linearGradient", {
@@ -768,13 +797,13 @@ function renderBackground(bound, width, height, options) {
     return tag('g',{opacity:background.opacity??1},renderImage(imageItem,{x:0,y:0,width,height},bound,{...options,imageFit:background.image.fit??'cover'}));
   }
   if(isPlainObject(background) && background.type==='pattern'){
-    const pattern=background.pattern??{},id=`opf-s${bound.index+1}-pattern`,color=normalizeColor(pattern.foregroundColor,bound.design.colors.text),preset=pattern.preset;
+    const pattern=background.pattern??{},id=`opf-s${bound.index+1}-pattern`,color=resolveBackgroundColor(pattern.foregroundColor,bound.design,bound.design.colors.text),preset=pattern.preset;
     // 8px cells approximating DrawingML presets. diagStripe is the engine id that
     // PPTX export writes as wdUpDiag, so both draw the same rising stripe.
     const stroke=(d,width=1)=>tag('path',{d,fill:'none',stroke:color,'stroke-width':width});
     const mark=preset==='ltHorz'?tag('path',{d:'M0 4H8',stroke:color,'stroke-width':1}):preset==='diagStripe'||preset==='wdUpDiag'?tag('path',{d:'M-2 2L2 -2M0 8L8 0M6 10L10 6',stroke:color,'stroke-width':2}):preset==='pct5'?tag('circle',{cx:2,cy:2,r:.8,fill:color}):preset==='openDmnd'?stroke('M0 4L4 0L8 4L4 8Z'):preset==='wave'?stroke('M0 4C2 1 2 1 4 4S6 7 8 4'):'';
     if(!mark)reportDiagnostic({code:'unsupported-pattern',path:`${bound.path}.design.background.pattern.preset`,message:`Pattern ${preset} is not implemented by the SVG preview.`},options);
-    return tag('g',{opacity:background.opacity??1},tag('rect',{width,height,fill:normalizeColor(pattern.backgroundColor,'#FFFFFF')})+tag('defs',{},tag('pattern',{id,width:8,height:8,patternUnits:'userSpaceOnUse'},mark))+tag('rect',{width,height,fill:`url(#${id})`}));
+    return tag('g',{opacity:background.opacity??1},tag('rect',{width,height,fill:bound.design.backgroundColor??'#FFFFFF'})+tag('defs',{},tag('pattern',{id,width:8,height:8,patternUnits:'userSpaceOnUse'},mark))+tag('rect',{width,height,fill:`url(#${id})`}));
   }
   return tag("rect", {
     x: 0,

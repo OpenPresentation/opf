@@ -81,6 +81,11 @@ export interface RenderSvgOptions {
   date?: string;
   trace?: boolean;
   catalogs?: Record<string, { records?: unknown[] } | unknown[]>;
+  /**
+   * Records for catalog sources the host has already fetched, keyed by the source string a document's
+   * `catalogs.<kind>.source` names (a single source or an ordered array; first match wins, the bundled
+   * default catalog is appended). The renderer never fetches a source itself.
+   */
   catalogSources?: Record<string, { records?: unknown[] } | unknown[]>;
 }
 
