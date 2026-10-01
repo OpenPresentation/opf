@@ -198,10 +198,10 @@ try {
 
   // import: PPTX back to OPF; text survives the round trip. Reflow notes are warnings the library reports for
   // wrapped native text, so the round trip itself is not run under --strict.
-  const here = await realpath(temp);
+  const same = async (actual, expected) => assert.equal(await realpath(path.dirname(actual)) + path.sep + path.basename(actual), await realpath(path.dirname(expected)) + path.sep + path.basename(expected)); // 8.3 and symlinked temp folders
   const imported = run(['import', 'deck.pptx', '--out', 'back.opf.json']).report;
   assert.equal(imported.ok, true); assert.equal(imported.written, true); assert.equal(imported.valid, true);
-  assert.equal(imported.output, path.join(here, 'back.opf.json'));
+  await same(imported.output, path.join(temp, 'back.opf.json'));
   assert.equal(imported.sha256, sha(await read('back.opf.json')));
   assert.equal(imported.input.sha256, sha(await read('deck.pptx')));
   const back = JSON.parse(await read('back.opf.json'));
@@ -211,7 +211,7 @@ try {
   run(['import', 'deck.pptx', '--out', 'back.opf.json'], {status: 1});
   assert.equal(run(['import', 'deck.pptx', '--out', 'back.opf.json', '--force']).report.sha256, imported.sha256, 'deterministic import');
   await mkdir(path.join(temp, 'cwd'));
-  assert.equal(run(['import', '../deck.pptx'], {cwd: path.join(temp, 'cwd')}).report.output, path.join(here, 'cwd', 'deck.opf.json'), 'default output is <name>.opf.json in the working directory');
+  await same(run(['import', '../deck.pptx'], {cwd: path.join(temp, 'cwd')}).report.output, path.join(temp, 'cwd', 'deck.opf.json')); // default output is <name>.opf.json in the working directory
   const stdoutDoc = run(['import', 'deck.pptx', '--out', '-']);
   assert.equal(JSON.parse(stdoutDoc.raw).slides.length, 3); assert.equal(stdoutDoc.stderrJson.written, true);
   run(['import', '-', '--out', 'stdin.opf.json'], {input: await read('deck.pptx')});
