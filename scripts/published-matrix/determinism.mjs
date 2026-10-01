@@ -18,6 +18,7 @@ import {existsSync, mkdirSync, readFileSync, realpathSync, rmSync, writeFileSync
 import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {fileURLToPath, pathToFileURL} from 'node:url';
+import {diffDigests} from './digests.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const core = path.resolve(here, '..', '..');
@@ -58,6 +59,33 @@ function sandboxFlags(childOut) {
   return ['--permission', ...reads.map((base) => `--allow-fs-read=${base}`), `--allow-fs-write=${childOut}`, '--allow-addons'];
 }
 
+// Decoy host fonts: bundled faces re-labelled (same-length family names patched in the name table) as the families a preview
+// draws with, so a host font that shadowed a bundled face would change the PNG. The matrix proves the decoys draw differently
+// when they are the only faces.
+const decoys = path.join(scratch, 'decoy-fonts');
+mkdirSync(decoys, {recursive: true});
+const faces = path.join(consumer, 'node_modules', '@expo-google-fonts');
+for (const [file, from, to] of [
+  ['cousine/400Regular/Cousine_400Regular.ttf', 'Cousine', 'Carlito'],
+  ['cousine/700Bold/Cousine_700Bold.ttf', 'Cousine', 'Carlito'],
+  ['cousine/400Regular/Cousine_400Regular.ttf', 'Cousine', 'Gelasio'],
+  ['arimo/400Regular/Arimo_400Regular.ttf', 'Arimo', 'Tinos'],
+  ['arimo/400Regular/Arimo_400Regular.ttf', 'Arimo', 'Intos']
+]) {
+  const bytes = Buffer.from(readFileSync(path.join(faces, file)));
+  assert.equal(from.length, to.length, 'decoy names keep the name table offsets');
+  const utf16 = (text) => Buffer.from(text, 'utf16le').swap16();
+  let patched = 0;
+  for (const [a, b] of [[Buffer.from(from, 'latin1'), Buffer.from(to, 'latin1')], [utf16(from), utf16(to)]]) {
+    for (let at = bytes.indexOf(a); at !== -1; at = bytes.indexOf(a, at + a.length)) {
+      b.copy(bytes, at);
+      patched++;
+    }
+  }
+  assert.ok(patched > 0, `${file} carries the family name ${from}`);
+  writeFileSync(path.join(decoys, `${to}-${path.basename(file)}`), bytes);
+}
+
 const scenarios = [{id: 'baseline', tz: 'UTC', locale: 'C'}];
 for (const [index, tz] of TIMEZONES.entries()) {
   for (const locale of [LOCALES[index], LOCALES[(index + 1) % LOCALES.length]]) scenarios.push({id: `env ${tz} ${locale.split('.')[0]}`, tz, locale, clock: nextClock(), audit: true});
@@ -65,6 +93,7 @@ for (const [index, tz] of TIMEZONES.entries()) {
 for (const [index, stress] of STRESS.entries()) scenarios.push({id: `stress ${stress}`, tz: TIMEZONES[(index + 2) % TIMEZONES.length], locale: LOCALES[(index + 3) % LOCALES.length], stress, clock: nextClock(), audit: true});
 scenarios.push({id: 'no host fonts (sandbox)', tz: 'Pacific/Chatham', locale: 'tr_TR.UTF-8', clock: nextClock(), audit: true, sandbox: true});
 scenarios.push({id: 'no host fonts (sandbox, ar)', tz: 'Asia/Kolkata', locale: 'ar_SA.UTF-8', stress: 'ar-EG-u-nu-arab', clock: nextClock(), audit: true, sandbox: true});
+scenarios.push({id: 'host fonts named like the bundled faces', tz: 'Asia/Kolkata', locale: 'ja_JP.UTF-8', clock: nextClock(), audit: true, systemFonts: true, decoys: true});
 scenarios.push({id: 'host fonts visible to resvg', tz: 'America/Los_Angeles', locale: 'de_DE.UTF-8', clock: nextClock(), audit: true, systemFonts: true, pngInformational: true});
 
 function runChild(scenario) {
@@ -77,7 +106,8 @@ function runChild(scenario) {
     OPF_MATRIX_ENGINES: engines,
     OPF_MATRIX_OUT: childOut,
     OPF_DET: JSON.stringify({clock: scenario.clock, stress: scenario.stress, audit: scenario.audit, sandbox: scenario.sandbox, fontDirectories}),
-    ...(scenario.systemFonts ? {OPF_MATRIX_SYSTEM_FONTS: '1'} : {})
+    ...(scenario.systemFonts ? {OPF_MATRIX_SYSTEM_FONTS: '1'} : {}),
+    ...(scenario.decoys ? {OPF_MATRIX_FONT_DIRS: decoys} : {})
   };
   if (scenario.locale) Object.assign(env, {LANG: scenario.locale, LC_ALL: scenario.locale, LANGUAGE: scenario.locale.split('.')[0].split('_')[0]});
   const flags = scenario.sandbox ? sandboxFlags(childOut) : [];
@@ -120,19 +150,8 @@ for (const result of results) {
     failures.push(`${scenario.id}: exit ${result.status}\n${result.stderr}`);
     continue;
   }
-  const differing = [];
-  for (const label of new Set([...states, ...Object.keys(result.digests.digests)])) {
-    const a = baseline.digests.digests[label];
-    const b = result.digests.digests[label];
-    if (!a || !b) {
-      differing.push(`${label}: missing in ${a ? scenario.id : 'baseline'}`);
-      continue;
-    }
-    for (const field of ['pptx', 'svg', 'slides', 'png']) {
-      if (JSON.stringify(a[field]) === JSON.stringify(b[field])) continue;
-      (scenario.pngInformational && field === 'png' ? informational : differing).push(`${label}.${field}`);
-    }
-  }
+  const {differing, informational: pngOnly} = diffDigests(baseline.digests.digests, result.digests.digests, {ignore: scenario.pngInformational ? ['png'] : []});
+  informational.push(...pngOnly);
   if (differing.length) failures.push(`${scenario.id}: ${differing.length} digests differ from the baseline, for example ${differing.slice(0, 6).join(', ')}`);
   if (scenario.sandbox && JSON.stringify(result.probe?.sandbox) !== JSON.stringify({fontDirectoriesDenied: true, childProcessDenied: true, permission: true})) failures.push(`${scenario.id}: the sandbox must deny font directories and subprocesses: ${JSON.stringify(result.probe?.sandbox)}`);
   if (result.audit) {

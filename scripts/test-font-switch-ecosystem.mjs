@@ -64,6 +64,8 @@ const sha256 = (value) => createHash('sha256').update(value).digest('hex');
 // file so runs on different operating systems, locales and time zones can be compared byte for byte.
 const OUTPUT = process.env.OPF_MATRIX_OUT ? path.resolve(process.env.OPF_MATRIX_OUT) : fileURLToPath(new URL('../artifacts/font-switch-matrix/', import.meta.url));
 const WITH_PNG = !process.argv.includes('--no-png');
+// Host font directories handed to the rasterizer (resvg), to prove a host face named like a bundled one does not shadow it.
+const HOST_FONT_DIRS = (process.env.OPF_MATRIX_FONT_DIRS ?? '').split(path.delimiter).filter(Boolean);
 const LOAD_SYSTEM_FONTS = process.env.OPF_MATRIX_SYSTEM_FONTS === '1';
 // --determinism: the bounded subset the FF-11 grid re-runs under every locale, time zone, clock and font environment:
 // every fourth pairwise deck plus the decks that add the remaining languages, the language and theme chains, CJK in a
@@ -664,7 +666,7 @@ async function verifyState(label, presentation, {png = false} = {}) {
   assert.equal(digests[label], undefined, `${label}: state labels are unique`);
   digests[label] = {pptx: sha256(bytes), svg: sha256(svgs.join('\0')), slides: svgs.map((svg) => sha256(svg).slice(0, 16))};
   // The pairwise decks also record a PNG of the first and last slide (resvg with the registry's own font files only unless asked for host fonts).
-  if (png && WITH_PNG) digests[label].png = await Promise.all([svgs[0], svgs.at(-1)].map(async (svg) => sha256(await svgToPng(svg, {fontFiles: registry.fontFiles, useBundledFonts: false, loadSystemFonts: LOAD_SYSTEM_FONTS}))));
+  if (png && WITH_PNG) digests[label].png = await Promise.all([svgs[0], svgs.at(-1)].map(async (svg) => sha256(await svgToPng(svg, {fontFiles: registry.fontFiles, useBundledFonts: false, loadSystemFonts: LOAD_SYSTEM_FONTS, fontDirs: HOST_FONT_DIRS}))));
   return {bytes: new Uint8Array(bytes), svgs, drawn, fonts, faces: [...chosenFaces].sort(compareNames).join('|')};
 }
 
@@ -1030,6 +1032,15 @@ for (const fallback of GLYPH_FALLBACK_CASES) {
 const substitutionsSeen = Object.fromEntries([...substitutionLog].sort(([a], [b]) => compareNames(a, b)));
 const unusedExpectations = Object.keys(EXPECTED_SUBSTITUTIONS).filter((family) => !Object.keys(substitutionsSeen).some((key) => key.startsWith(`${family}>`)));
 if (FULL) assert.deepEqual(unusedExpectations, [], 'every pinned substitution is exercised');
+// Decoy host faces named like bundled families must be effective (they draw differently when they are the only faces) and
+// must not shadow the bundled faces (the PNG digests above equal the baseline run's, which the determinism grid asserts).
+if (HOST_FONT_DIRS.length) {
+  const deck = {name: 'decoy', language: 'english', design: {theme: 'minimal', fontScheme: 'calibri'}, slides: [{id: 'a', title: TEXT.english.title, text: TEXT.english.body}]};
+  const [svg] = renderSvgDeck(deck, engineOptions(deck));
+  const decoyOnly = sha256(await svgToPng(svg, {useBundledFonts: false, fontDirs: HOST_FONT_DIRS}));
+  const bundledOnly = sha256(await svgToPng(svg, {fontFiles: registry.fontFiles, useBundledFonts: false}));
+  assert.notEqual(decoyOnly, bundledOnly, 'the decoy host faces draw differently when they are the only faces');
+}
 const seconds = (Date.now() - started) / 1000;
 assert.ok(seconds < MAX_SECONDS, `the matrix took ${seconds} s; its CI budget is ${MAX_SECONDS} s`);
 await mkdir(OUTPUT, {recursive: true});
