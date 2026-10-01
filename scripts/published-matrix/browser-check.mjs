@@ -39,9 +39,12 @@ const deckFor = (scheme) => ({
     {id: 'b', layout: 'code-1x', title: TEXT.title, code: {source: TEXT.code, language: 'ts'}, text: TEXT.body}
   ]
 });
+// Only the faces the three schemes draw with are embedded (the registry holds 33, 12 MB of base64 per slide).
+const embedded = registry.selectEmbeddedFonts((face) => ['Carlito', 'Gelasio', 'Cousine'].includes(face.family));
+assert.ok(embedded.length >= 6, 'the registry holds the faces the schemes draw with');
 function render(scheme) {
   const deck = deckFor(scheme);
-  return renderSvgDeck(deck, {...options, textMeasurement: createScriptTextMeasurement(registry.textMeasurement, resolveScriptFonts(deck))});
+  return renderSvgDeck(deck, {...options, embeddedFonts: embedded, textMeasurement: createScriptTextMeasurement(registry.textMeasurement, resolveScriptFonts(deck))});
 }
 const SCHEMES = ['calibri', 'georgia', 'consolas'];
 const svgs = Object.fromEntries(SCHEMES.map((scheme) => [scheme, render(scheme)]));
@@ -55,11 +58,11 @@ async function observe(browser, scheme, slide) {
   const page = await browser.newPage({viewport: {width: 1280, height: 720}});
   await page.setContent(`<!doctype html><body style="margin:0;background:#fff">${svgs[scheme][slide]}</body>`);
   const state = await page.evaluate(async () => {
-    // Faces load lazily, when text first needs them: load every embedded face, then wait for the document's font set.
-    await Promise.all([...document.fonts].map((face) => face.load()));
+    // Faces load lazily, when text first needs them: load the faces of every family the text draws in, then wait for the font set.
+    const drawn = [...new Set([...document.querySelectorAll('svg text')].map((node) => getComputedStyle(node).fontFamily.split(',')[0].trim().replace(/^["']|["']$/g, '')))].sort();
+    for (const family of drawn) for (const weight of [400, 700]) await document.fonts.load(`${weight} 16px "${family}"`);
     await document.fonts.ready;
     const loaded = [...document.fonts].filter((face) => face.status === 'loaded').map((face) => face.family.replace(/^["']|["']$/g, ''));
-    const drawn = [...new Set([...document.querySelectorAll('svg text')].map((node) => getComputedStyle(node).fontFamily.split(',')[0].trim().replace(/^["']|["']$/g, '')))].sort();
     return {loaded: [...new Set(loaded)].sort(), drawn, text: document.querySelectorAll('svg text').length, statuses: [...document.fonts].map((face) => `${face.family}:${face.status}`)};
   });
   const png = await page.screenshot({type: 'png'});
