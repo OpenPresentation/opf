@@ -19,7 +19,7 @@ Width delta = mean |replacement/real - 1| over 300 example-deck strings (signed 
 | Aparajita | proprietary-standard | proprietary (Modular Infotech, licensed to Microsoft) | windows-optional, office-cloud | Noto Sans Devanagari | visual | n/m | — | never |
 | Aptos | proprietary-standard | proprietary (Microsoft) | office-cloud | Intos † | metric | 0.0% (+0.0%) / 0.0% | Roboto, Carlito | never |
 | Aptos Display | proprietary-standard | proprietary (Microsoft) | office-cloud | Intos Display | metric | 0.0% (+0.0%) / 0.0% | Carlito, Roboto | never |
-| Aptos Mono | proprietary-standard | proprietary (Microsoft) | office-cloud | Cousine | visual | n/m | Roboto Mono | never |
+| Aptos Mono | proprietary-standard | proprietary (Microsoft) | office-cloud | Cousine | visual | 0.0% (+0.0%) / 0.0% | Roboto Mono | never |
 | Aptos Narrow | proprietary-standard | proprietary (Microsoft) | office-cloud | Intos Narrow | metric | 0.0% (+0.0%) / 0.0% | Carlito | never |
 | Aptos Serif | proprietary-standard | proprietary (Microsoft) | office-cloud | Intos Serif | metric | 0.0% (+0.0%) / 0.0% | Tinos | never |
 | Arabic Typesetting | proprietary-standard | proprietary (Microsoft) | windows-optional, office-cloud | Noto Naskh Arabic | visual | 66.3% (+66.3%) / 74.3% | — | never |
@@ -80,9 +80,9 @@ Width delta = mean |replacement/real - 1| over 300 example-deck strings (signed 
 | Kartika | proprietary-standard | proprietary (Microsoft) | windows-optional, office-cloud | Noto Sans Malayalam | visual | n/m | — | never |
 | Khmer UI | proprietary-standard | proprietary (Microsoft) | windows-optional, office-cloud | Noto Sans Khmer | visual | n/m | — | never |
 | Latha | proprietary-standard | proprietary (Microsoft) | windows-optional, office-cloud | Noto Sans Tamil | visual | n/m | — | never |
-| Liberation Mono | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
-| Liberation Sans | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
-| Liberation Serif | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
+| Liberation Mono | open | OFL-1.1 | — | Cousine | metric | 0.0% (+0.0%) / 0.0% | — | explicit embed path only |
+| Liberation Sans | open | OFL-1.1 | — | Arimo | metric | 0.0% (+0.0%) / 0.0% | — | explicit embed path only |
+| Liberation Serif | open | OFL-1.1 | — | Tinos | metric | 0.0% (+0.0%) / 0.0% | — | explicit embed path only |
 | Libre Caslon Text | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
 | Lora | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
 | Lucida Console | proprietary-standard | proprietary (Bigelow & Holmes, licensed to Microsoft) | windows | Cousine | visual | 0.4% (-0.4%) / 0.4% | — | never |
@@ -161,12 +161,12 @@ Width delta = mean |replacement/real - 1| over 300 example-deck strings (signed 
 | Skeena | proprietary-standard | proprietary (Microsoft) | office-cloud | Open Sans | visual | n/m | Carlito | never |
 | Skeena Display | proprietary-standard | proprietary (Microsoft) | office-cloud | Open Sans | visual | n/m | Carlito | never |
 | Source Sans 3 | open | OFL-1.1 | office-cloud | itself | — | — | — | explicit embed path only |
-| Source Sans Pro | open | OFL-1.1 | office-cloud | Source Sans 3 | visual | n/m | — | explicit embed path only |
+| Source Sans Pro | open | OFL-1.1 | office-cloud | Source Sans 3 | visual | 0.0% (-0.0%) / 0.4% | — | explicit embed path only |
 | Sylfaen | proprietary-standard | proprietary (Microsoft) | windows, office-cloud | Noto Sans | visual | 11.0% (+11.0%) / 15.9% | Noto Sans Georgian, Noto Sans Armenian | never |
 | Symbol | proprietary-standard | proprietary (Monotype, licensed to Microsoft) | windows, macos, office-cloud | none | — | — | — | never |
 | Tahoma | proprietary-standard | proprietary (Microsoft) | windows, macos, office-cloud | Red Hat Text | visual | 1.7% (-0.4%) / 6.3% | Open Sans, Arimo | never |
-| Tenorite | proprietary-standard | proprietary (Microsoft) | office-cloud | Figtree | visual | n/m | Roboto | never |
-| Tenorite Display | proprietary-standard | proprietary (Microsoft) | office-cloud | Figtree | visual | n/m | Roboto | never |
+| Tenorite | proprietary-standard | proprietary (Microsoft) | office-cloud | Figtree | visual | 4.2% (+4.2%) / 8.4% | Roboto | never |
+| Tenorite Display | proprietary-standard | proprietary (Microsoft) | office-cloud | Figtree | visual | 14.8% (+14.8%) / 19.8% | Roboto | never |
 | Times New Roman | proprietary-standard | proprietary (Monotype, licensed to Microsoft) | windows, macos, office-cloud | Tinos | metric | 0.0% (+0.0%) / 0.0% | Liberation Serif | never |
 | Tinos | open | OFL-1.1 | — | itself | — | — | — | explicit embed path only |
 | Traditional Arabic | proprietary-standard | proprietary (Monotype, licensed to Microsoft) | windows-optional, office-cloud | Noto Naskh Arabic | visual | 15.7% (+15.7%) / 24.1% | — | never |
@@ -252,6 +252,8 @@ Owner policy, 2026-09-29: for a licensed font the user selects (for example Apto
 | Selawik 1.01 (OFL-1.1, Reserved Font Name "Selawik") | Segoe UI and its Light, Semilight, Semibold styles | **Rejected** | Regular 0.16% mean and 2.5% maximum; bold 0.20% and 2.1%; no italic faces, so the upright face is 2.65% off in italic; Semibold 1.75%; Light 0.31%. Advances of basic Latin are identical, the differences are missing kerning and only 349 code points. Lowercase is 4.8% shorter than Segoe UI and hhea ascent 8% smaller. Red Hat Display stays the visual replacement. |
 | Red Hat Display and Red Hat Text statics from `@expo-google-fonts` 0.4.1 (OFL-1.1, no Reserved Font Name) | Segoe UI, Segoe UI Light, Semibold, Semilight and Tahoma | **Accepted as the visual replacement, replacing the RedHatFont repository statics (FF-43)** | The repository statics (commit `6bb1048a`) are unusable in resvg: the Regular, Light and SemiBold italics (and Red Hat Text Italic) do not set the OS/2 italic bit (only the Bold Italic files do), Red Hat Display SemiBold declares weight 707 and Bold 799 (Red Hat Text Bold declares 700), and the italics are named e.g. "Red Hat Display Italic" with subfamily Regular, so a 600 request paints as Bold and the regular and bold italics paint as one face (per-face pixel probe). Trade-off: the shipped Red Hat Display Bold (Google Fonts 700 instance) is about 2.5% narrower than the RedHatFont Bold, so the Segoe UI Bold preview moves from +0.6% to -1.8% mean width (mean absolute 0.95% to 1.86%; regular widths identical). Red Hat has no Reserved Font Name, so the correctly labelled Google Fonts instances may be vendored as npm-derived statics. Now 300, 400, 600 and 700 with italics (Display) and 400, 700 with italics (Text). Width measurements are unchanged. |
 | Bitter (`@expo-google-fonts/bitter` 0.4.2, OFL-1.1, Reserved Font Name "Bitter Pro") | Rockwell | **Accepted as the visual replacement (FF-43)** | The OFL bars a MODIFIED font from carrying its Reserved Font Name in its family or file name. Upstream (solmatas/BitterPro, google/fonts `ofl/bitter`) publishes Bitter only as variable fonts, which resvg draws at one weight, so the instanced statics (family and files named "Bitter", no face carries "Bitter Pro") are vendored as npm-derived faces. opf-render's `test/font-licenses.mjs` implements this name-contains rule for instanced faces and still rejects an instanced face named Carlito, Raleway, Lora or Playfair Display. 400, 700 and italics; measured against Rockwell 1.65, mean 1.1% to 4.4%, max 8.5%, visual. |
+| Cousine for Aptos Mono (already bundled; OFL-1.1 per the pinned @expo-google-fonts package), with Roboto Mono as the alternate | Aptos Mono | **Kept, visual (RR-17, vetoable)** | Measured against Aptos Mono 2.01 (Microsoft's standalone Aptos Fonts download, read in place and not redistributed): Aptos Mono is a 1229/2048 em cell, the Courier New cell, so Cousine matches all 300 strings in all four styles at 0.0000% and wraps identically in all 250 wrap cases. The tier stays visual under rule 5 because the vertical metrics differ (hhea ascent 0.833 em against 0.939, x-height 0.528 em against 0.476; capitals match, 0.659 against 0.657). Source Code Pro (x-height 0.486, cap 0.660) and Red Hat Mono (0.488, 0.700) are closer in glyph size but are 0.016% off the cell, would add four lazy faces each and, for Source Code Pro, a Reserved Font Name ("Source") to manage; not adopted. |
+| Liberation Sans, Serif and Mono 2.1.5 (OFL-1.1, Reserved Font Name "Liberation", about 4.4 MB for twelve faces) | themselves, when a document names them | **Not bundled; aliased to Arimo, Tinos and Cousine, metric (RR-17, vetoable)** | Liberation 2 is built from the Croscore faces: 0.0000% mean and maximum in all four styles of each family against Arimo, Tinos and Cousine, hhea and glyph boxes equal (Liberation Serif and Mono share about 97% of their glyph outlines byte for byte with Tinos and Cousine; Sans differs in outline detail, not in boxes). A document that names a Liberation family previews with the Croscore twin, and the PPTX keeps the Liberation name. |
 | Akasia | Aptos | **Dropped** | The repository is no longer available. Intos replaces it. The earlier [assessment](../../evidence/akasia-assessment/README.md) remains as history. |
 
 Measurements and the method are in [the evidence folder](../../evidence/font-replacements-20260923/README.md).

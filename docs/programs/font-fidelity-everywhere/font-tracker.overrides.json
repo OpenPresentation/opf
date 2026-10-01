@@ -1,7 +1,7 @@
 {
   "$comment": "Authored input for scripts/build-font-tracker.mjs. Derived fields (policy, bundle, measurements, parity) are never written here; this file holds owner-plan text, reconciled next actions, evidence keys, classes, scripts, style rules and in-flight candidates. Regenerate with: node scripts/build-font-tracker.mjs",
   "asOf": "2026-10-01",
-  "paritySource": "docs/programs/font-fidelity-everywhere/gallery-support/parity/parity-results-2026-09-30-gallery-font-host.json",
+  "paritySource": "docs/programs/font-fidelity-everywhere/gallery-support/parity/parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
   "manifestSnapshot": "docs/programs/font-fidelity-everywhere/font-tracker.render-manifest.json",
   "measurementReport": "docs/evidence/font-replacements-20260923/report.json",
   "ownerPlan": {
@@ -92,6 +92,14 @@
     "metric-measured": {
       "severity": 0.5,
       "meaning": "A metric-tier route measured against the real font in four styles on the source path (width bar met). Vertical metrics and line breaks are not yet recorded, and per-host and native verification remain, so it is not verified."
+    },
+    "documented-visual": {
+      "severity": 0.5,
+      "meaning": "RR-17: a bundled visual look-alike with its own fixture in every host (node, browser, editor, gallery editor) and its measured gaps against the real font recorded (widths per style, line breaks, vertical metrics, outlines, coverage). Reflow against the real font is expected and documented; native PowerPoint verification (FF-46) remains."
+    },
+    "qualified": {
+      "severity": 0.1,
+      "meaning": "RR-17: an open family that draws as itself, or a metric route whose four-style widths and line breaks are within the bar, with its own fixture in every host (node, browser, editor, gallery editor). Native PowerPoint verification (FF-46) remains."
     }
   },
   "hostLoading": {
@@ -113,7 +121,7 @@
         "node": "only when pack: 'office' is requested (loadOfficeFontRegistry adds the open pack unless includeOpenFonts is false)",
         "browser": "lazy: the browser loader fetches hash-verified vendored faces on demand (opf-render#54)",
         "editor": "lazy: the playground loads them on demand (opf-editor#42)",
-        "galleryEditor": "pending a gallery editor release that includes opf-editor#42 (ref bump); not loaded today"
+        "galleryEditor": "lazy: the font gate loads them on demand from the page's fonts/ directory (opf-editor 0.10.1, pptx-gallery#59: hash-pinned public/opf-editor/lazy-fonts.json, same-origin)"
       },
       "scripts": {
         "node": "only when the scripts option is passed ('auto' or a script list; opf-render#55)",
@@ -125,7 +133,7 @@
         "node": "default in the office pack: prepareNodeFonts pack 'office' (opf-render#54); not in the default 'base' pack",
         "browser": "lazy: the browser loader fetches hash-verified vendored faces on demand (opf-render#54)",
         "editor": "lazy: the playground loads them on demand (opf-editor#42)",
-        "galleryEditor": "pending a gallery editor release that includes opf-editor#42 (ref bump); not loaded today"
+        "galleryEditor": "lazy: the font gate loads them on demand from the page's fonts/ directory (opf-editor 0.10.1, pptx-gallery#59: hash-pinned public/opf-editor/lazy-fonts.json, same-origin)"
       }
     },
     "lazyPendingPacks": [],
@@ -767,7 +775,7 @@
       "evidence": [
         "scriptCorpora"
       ],
-      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
+      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
     },
     "Noto Nastaliq Urdu": {
       "node": "verified",
@@ -775,7 +783,7 @@
       "evidence": [
         "scriptCorpora"
       ],
-      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
+      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
     },
     "Noto Sans": {
       "node": "verified",
@@ -783,7 +791,7 @@
       "evidence": [
         "scriptCorpora"
       ],
-      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
+      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
     },
     "Noto Sans Arabic": {
       "node": "verified",
@@ -791,7 +799,7 @@
       "evidence": [
         "scriptCorpora"
       ],
-      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
+      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
     },
     "Noto Sans Armenian": {
       "node": "verified",
@@ -799,7 +807,7 @@
       "evidence": [
         "scriptCorpora"
       ],
-      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
+      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
     },
     "Noto Sans Bengali": {
       "node": "verified",
@@ -807,7 +815,7 @@
       "evidence": [
         "scriptCorpora"
       ],
-      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
+      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
     },
     "Noto Sans Devanagari": {
       "node": "verified",
@@ -815,7 +823,7 @@
       "evidence": [
         "scriptCorpora"
       ],
-      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
+      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
     },
     "Noto Sans Ethiopic": {
       "node": "verified",
@@ -823,7 +831,7 @@
       "evidence": [
         "scriptCorpora"
       ],
-      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
+      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
     },
     "Noto Sans Georgian": {
       "node": "verified",
@@ -831,7 +839,7 @@
       "evidence": [
         "scriptCorpora"
       ],
-      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
+      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
     },
     "Noto Sans Gujarati": {
       "node": "verified",
@@ -839,7 +847,7 @@
       "evidence": [
         "scriptCorpora"
       ],
-      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
+      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
     },
     "Noto Sans Gurmukhi": {
       "node": "verified",
@@ -847,7 +855,7 @@
       "evidence": [
         "scriptCorpora"
       ],
-      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
+      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
     },
     "Noto Sans Hebrew": {
       "node": "verified",
@@ -855,7 +863,7 @@
       "evidence": [
         "scriptCorpora"
       ],
-      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
+      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
     },
     "Noto Sans JP": {
       "node": "verified",
@@ -863,7 +871,7 @@
       "evidence": [
         "scriptCorpora"
       ],
-      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
+      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
     },
     "Noto Sans Kannada": {
       "node": "verified",
@@ -871,7 +879,7 @@
       "evidence": [
         "scriptCorpora"
       ],
-      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
+      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
     },
     "Noto Sans Khmer": {
       "node": "verified",
@@ -879,7 +887,7 @@
       "evidence": [
         "scriptCorpora"
       ],
-      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
+      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
     },
     "Noto Sans KR": {
       "node": "verified",
@@ -887,7 +895,7 @@
       "evidence": [
         "scriptCorpora"
       ],
-      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
+      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
     },
     "Noto Sans Lao": {
       "node": "verified",
@@ -895,7 +903,7 @@
       "evidence": [
         "scriptCorpora"
       ],
-      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
+      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
     },
     "Noto Sans Malayalam": {
       "node": "verified",
@@ -903,7 +911,7 @@
       "evidence": [
         "scriptCorpora"
       ],
-      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
+      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
     },
     "Noto Sans Mongolian": {
       "node": "verified",
@@ -911,7 +919,7 @@
       "evidence": [
         "scriptCorpora"
       ],
-      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
+      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
     },
     "Noto Sans Myanmar": {
       "node": "verified",
@@ -919,7 +927,7 @@
       "evidence": [
         "scriptCorpora"
       ],
-      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
+      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
     },
     "Noto Sans Oriya": {
       "node": "verified",
@@ -927,7 +935,7 @@
       "evidence": [
         "scriptCorpora"
       ],
-      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
+      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
     },
     "Noto Sans SC": {
       "node": "verified",
@@ -935,7 +943,7 @@
       "evidence": [
         "scriptCorpora"
       ],
-      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
+      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
     },
     "Noto Sans Sinhala": {
       "node": "verified",
@@ -943,7 +951,7 @@
       "evidence": [
         "scriptCorpora"
       ],
-      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
+      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
     },
     "Noto Sans Syriac": {
       "node": "verified",
@@ -951,7 +959,7 @@
       "evidence": [
         "scriptCorpora"
       ],
-      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
+      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
     },
     "Noto Sans Tamil": {
       "node": "verified",
@@ -959,7 +967,7 @@
       "evidence": [
         "scriptCorpora"
       ],
-      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
+      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
     },
     "Noto Sans TC": {
       "node": "verified",
@@ -967,7 +975,7 @@
       "evidence": [
         "scriptCorpora"
       ],
-      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
+      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
     },
     "Noto Sans Telugu": {
       "node": "verified",
@@ -975,7 +983,7 @@
       "evidence": [
         "scriptCorpora"
       ],
-      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
+      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
     },
     "Noto Sans Thaana": {
       "node": "verified",
@@ -983,7 +991,7 @@
       "evidence": [
         "scriptCorpora"
       ],
-      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
+      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
     },
     "Noto Sans Thai": {
       "node": "verified",
@@ -991,7 +999,7 @@
       "evidence": [
         "scriptCorpora"
       ],
-      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
+      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
     },
     "Noto Serif Hebrew": {
       "node": "verified",
@@ -999,7 +1007,7 @@
       "evidence": [
         "scriptCorpora"
       ],
-      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
+      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
     },
     "Noto Serif Tibetan": {
       "node": "verified",
@@ -1007,7 +1015,7 @@
       "evidence": [
         "scriptCorpora"
       ],
-      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
+      "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
     }
   },
   "nativeVerification": {
@@ -1194,7 +1202,7 @@
       ]
     },
     "Didot": {
-      "nextAction": "Measure the specific Apple Didot reference (unmeasured) and resolve the Playfair Display renderer limitation.",
+      "nextAction": "Unmeasured: Didot is Apple-only (macOS), so no reference can be installed on the Windows measuring host (the fixture already passes in every host). It can be qualified only on a Mac with the same qualification script, or stay documented as an unmeasured look-alike of Playfair Display; vetoable.",
       "evidence": [
         "measurement"
       ]
@@ -1229,14 +1237,14 @@
       ]
     },
     "Grandview": {
-      "nextAction": "Barlow is bundled (FF-43: 400, 700 and italics, google/fonts statics byte-identical at a pinned commit). Grandview is not installed on the measuring host, so it is still unmeasured: obtain a separate reference measurement before any width or appearance claim.",
+      "nextAction": "Unmeasured: Grandview is a Microsoft 365 cloud font that is not cached on the measuring host, so there is no reference to qualify against (the fixture already passes in every host). Supervisor step: open this family's slide of the RR-17 native check decks in desktop PowerPoint once, so Office caches the font, then run node scripts/qualify-latin-fonts.mjs and pnpm build:font-tracker; no font file is copied.",
       "evidence": [
         "measurement",
         "ff43Measure"
       ]
     },
     "Grandview Display": {
-      "nextAction": "Barlow is bundled (FF-43). Grandview Display is not installed on the measuring host, so it is still unmeasured: obtain a separate reference measurement before any width or appearance claim.",
+      "nextAction": "Unmeasured: Grandview Display is a Microsoft 365 cloud font that is not cached on the measuring host, so there is no reference to qualify against (the fixture already passes in every host). Supervisor step: open this family's slide of the RR-17 native check decks in desktop PowerPoint once, so Office caches the font, then run node scripts/qualify-latin-fonts.mjs and pnpm build:font-tracker; no font file is copied.",
       "evidence": [
         "measurement",
         "ff43Measure"
@@ -1290,14 +1298,14 @@
       ]
     },
     "Seaford": {
-      "nextAction": "Obtain a separate reference for Seaford (unmeasured) and qualify all required styles on Source Sans 3.",
+      "nextAction": "Unmeasured: Seaford is a Microsoft 365 cloud font that is not cached on the measuring host, so there is no reference to qualify against (the fixture already passes in every host). Supervisor step: open this family's slide of the RR-17 native check decks in desktop PowerPoint once, so Office caches the font, then run node scripts/qualify-latin-fonts.mjs and pnpm build:font-tracker; no font file is copied.",
       "evidence": [
         "openPack",
         "measurement"
       ]
     },
     "Seaford Display": {
-      "nextAction": "Obtain a separate reference for Seaford Display (unmeasured) and qualify all required styles on Source Sans 3.",
+      "nextAction": "Unmeasured: Seaford Display is a Microsoft 365 cloud font that is not cached on the measuring host, so there is no reference to qualify against (the fixture already passes in every host). Supervisor step: open this family's slide of the RR-17 native check decks in desktop PowerPoint once, so Office caches the font, then run node scripts/qualify-latin-fonts.mjs and pnpm build:font-tracker; no font file is copied.",
       "evidence": [
         "openPack",
         "measurement"
@@ -1339,14 +1347,14 @@
       ]
     },
     "Skeena": {
-      "nextAction": "Obtain a distinct reference for Skeena (unmeasured) and qualify styles and metrics on Open Sans.",
+      "nextAction": "Unmeasured: Skeena is a Microsoft 365 cloud font that is not cached on the measuring host, so there is no reference to qualify against (the fixture already passes in every host). Supervisor step: open this family's slide of the RR-17 native check decks in desktop PowerPoint once, so Office caches the font, then run node scripts/qualify-latin-fonts.mjs and pnpm build:font-tracker; no font file is copied.",
       "evidence": [
         "openPack",
         "measurement"
       ]
     },
     "Skeena Display": {
-      "nextAction": "Obtain a distinct reference for Skeena Display (unmeasured) and qualify styles and metrics on Open Sans.",
+      "nextAction": "Unmeasured: Skeena Display is a Microsoft 365 cloud font that is not cached on the measuring host, so there is no reference to qualify against (the fixture already passes in every host). Supervisor step: open this family's slide of the RR-17 native check decks in desktop PowerPoint once, so Office caches the font, then run node scripts/qualify-latin-fonts.mjs and pnpm build:font-tracker; no font file is copied.",
       "evidence": [
         "openPack",
         "measurement"
@@ -1437,7 +1445,7 @@
       ]
     },
     "Angsana New": {
-      "nextAction": "Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Sans Thai (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 14 of 14 face-samples; the same samples agree in Chromium within 0.1 px. Installed original read in place: width delta +42.4% mean, 58.2% max over 7 samples; line height 1.16 (original) against 1.51 em (preview face). No open face of the script is this narrow (Noto Serif Thai was measured wider still): previews draw 42 percent longer lines than PowerPoint, a recorded visual gap. PNG output of this script is mis-shaped by resvg-js (SVG is correct); recorded as a raster limit.",
+      "nextAction": "Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Sans Thai (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 14 of 14 face-samples; the same samples agree in Chromium within 0.1 px. Installed original read in place: width delta +42.4% mean, 58.2% max over 7 samples; line height 1.16 (original) against 1.51 em (preview face). No open face of the script is this narrow (Noto Serif Thai was measured wider still): previews draw 42 percent longer lines than PowerPoint, a recorded visual gap. PNG output of this script is mis-shaped by resvg-js (SVG is correct); recorded as a raster limit (fixed by opf-render#97 once merged).",
       "evidence": [
         "scriptAuto",
         "scriptModel",
@@ -1445,7 +1453,7 @@
       ]
     },
     "DilleniaUPC": {
-      "nextAction": "Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Sans Thai (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 14 of 14 face-samples; the same samples agree in Chromium within 0.1 px. Installed original read in place: width delta +55.5% mean, 64.5% max over 7 samples; line height 0.6 (original) against 1.51 em (preview face). No open face of the script is this narrow (Noto Serif Thai was measured wider still): previews draw 55 percent longer lines than PowerPoint, a recorded visual gap. PNG output of this script is mis-shaped by resvg-js (SVG is correct); recorded as a raster limit.",
+      "nextAction": "Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Sans Thai (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 14 of 14 face-samples; the same samples agree in Chromium within 0.1 px. Installed original read in place: width delta +55.5% mean, 64.5% max over 7 samples; line height 0.6 (original) against 1.51 em (preview face). No open face of the script is this narrow (Noto Serif Thai was measured wider still): previews draw 55 percent longer lines than PowerPoint, a recorded visual gap. PNG output of this script is mis-shaped by resvg-js (SVG is correct); recorded as a raster limit (fixed by opf-render#97 once merged).",
       "evidence": [
         "scriptAuto",
         "scriptModel",
@@ -1453,7 +1461,7 @@
       ]
     },
     "Aparajita": {
-      "nextAction": "Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Sans Devanagari (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 18 of 18 face-samples; the same samples agree in Chromium within 0.1 px. The original is not installed on the measuring host (windows-optional), so its widths are unmeasured. PNG output of this script is mis-shaped by resvg-js (SVG is correct); recorded as a raster limit.",
+      "nextAction": "Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Sans Devanagari (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 18 of 18 face-samples; the same samples agree in Chromium within 0.1 px. The original is not installed on the measuring host (windows-optional), so its widths are unmeasured. PNG output of this script is mis-shaped by resvg-js (SVG is correct); recorded as a raster limit (fixed by opf-render#97 once merged).",
       "evidence": [
         "scriptAuto",
         "scriptModel",
@@ -1461,7 +1469,7 @@
       ]
     },
     "Mangal": {
-      "nextAction": "Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Sans Devanagari (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 18 of 18 face-samples; the same samples agree in Chromium within 0.1 px. The original is not installed on the measuring host (windows-optional), so its widths are unmeasured. PNG output of this script is mis-shaped by resvg-js (SVG is correct); recorded as a raster limit.",
+      "nextAction": "Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Sans Devanagari (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 18 of 18 face-samples; the same samples agree in Chromium within 0.1 px. The original is not installed on the measuring host (windows-optional), so its widths are unmeasured. PNG output of this script is mis-shaped by resvg-js (SVG is correct); recorded as a raster limit (fixed by opf-render#97 once merged).",
       "evidence": [
         "scriptAuto",
         "scriptModel",
@@ -1469,7 +1477,7 @@
       ]
     },
     "Nirmala UI": {
-      "nextAction": "Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Sans Devanagari (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 18 of 18 face-samples; the same samples agree in Chromium within 0.1 px. Installed original read in place: width delta -6.2% mean, 9.2% max over 9 samples; line height 1.33 (original) against 1.3 em (preview face). PNG output of this script is mis-shaped by resvg-js (SVG is correct); recorded as a raster limit. Its other Indic scripts (Bengali, Gujarati, Gurmukhi, Kannada, Malayalam, Odia, Tamil, Telugu, Sinhala) route to their own Noto faces, each qualified above.",
+      "nextAction": "Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Sans Devanagari (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 18 of 18 face-samples; the same samples agree in Chromium within 0.1 px. Installed original read in place: width delta -6.2% mean, 9.2% max over 9 samples; line height 1.33 (original) against 1.3 em (preview face). PNG output of this script is mis-shaped by resvg-js (SVG is correct); recorded as a raster limit (fixed by opf-render#97 once merged). Its other Indic scripts (Bengali, Gujarati, Gurmukhi, Kannada, Malayalam, Odia, Tamil, Telugu, Sinhala) route to their own Noto faces, each qualified above.",
       "evidence": [
         "scriptAuto",
         "scriptModel",
@@ -1477,7 +1485,7 @@
       ]
     },
     "Shonar Bangla": {
-      "nextAction": "Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Sans Bengali (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 12 of 12 face-samples; the same samples agree in Chromium within 0.1 px. The original is not installed on the measuring host (windows-optional), so its widths are unmeasured. PNG output of this script is mis-shaped by resvg-js (SVG is correct); recorded as a raster limit.",
+      "nextAction": "Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Sans Bengali (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 12 of 12 face-samples; the same samples agree in Chromium within 0.1 px. The original is not installed on the measuring host (windows-optional), so its widths are unmeasured. PNG output of this script is mis-shaped by resvg-js (SVG is correct); recorded as a raster limit (fixed by opf-render#97 once merged).",
       "evidence": [
         "scriptAuto",
         "scriptModel",
@@ -1485,7 +1493,7 @@
       ]
     },
     "Vrinda": {
-      "nextAction": "Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Sans Bengali (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 12 of 12 face-samples; the same samples agree in Chromium within 0.1 px. The original is not installed on the measuring host (windows-optional), so its widths are unmeasured. PNG output of this script is mis-shaped by resvg-js (SVG is correct); recorded as a raster limit.",
+      "nextAction": "Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Sans Bengali (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 12 of 12 face-samples; the same samples agree in Chromium within 0.1 px. The original is not installed on the measuring host (windows-optional), so its widths are unmeasured. PNG output of this script is mis-shaped by resvg-js (SVG is correct); recorded as a raster limit (fixed by opf-render#97 once merged).",
       "evidence": [
         "scriptAuto",
         "scriptModel",
@@ -1493,7 +1501,7 @@
       ]
     },
     "Shruti": {
-      "nextAction": "Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Sans Gujarati (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 6 of 6 face-samples; the same samples agree in Chromium within 0.1 px. The original is not installed on the measuring host (windows-optional), so its widths are unmeasured. PNG output of this script is mis-shaped by resvg-js (SVG is correct); recorded as a raster limit.",
+      "nextAction": "Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Sans Gujarati (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 6 of 6 face-samples; the same samples agree in Chromium within 0.1 px. The original is not installed on the measuring host (windows-optional), so its widths are unmeasured. PNG output of this script is mis-shaped by resvg-js (SVG is correct); recorded as a raster limit (fixed by opf-render#97 once merged).",
       "evidence": [
         "scriptAuto",
         "scriptModel",
@@ -1501,7 +1509,7 @@
       ]
     },
     "Raavi": {
-      "nextAction": "Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Sans Gurmukhi (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 6 of 6 face-samples; the same samples agree in Chromium within 0.1 px. The original is not installed on the measuring host (windows-optional), so its widths are unmeasured. PNG output of this script is mis-shaped by resvg-js (SVG is correct); recorded as a raster limit.",
+      "nextAction": "Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Sans Gurmukhi (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 6 of 6 face-samples; the same samples agree in Chromium within 0.1 px. The original is not installed on the measuring host (windows-optional), so its widths are unmeasured. PNG output of this script is mis-shaped by resvg-js (SVG is correct); recorded as a raster limit (fixed by opf-render#97 once merged).",
       "evidence": [
         "scriptAuto",
         "scriptModel",
@@ -1509,7 +1517,7 @@
       ]
     },
     "Kalinga": {
-      "nextAction": "Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Sans Oriya (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 6 of 6 face-samples; the same samples agree in Chromium within 0.1 px. The original is not installed on the measuring host (windows-optional), so its widths are unmeasured. PNG output of this script is mis-shaped by resvg-js (SVG is correct); recorded as a raster limit.",
+      "nextAction": "Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Sans Oriya (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 6 of 6 face-samples; the same samples agree in Chromium within 0.1 px. The original is not installed on the measuring host (windows-optional), so its widths are unmeasured. PNG output of this script is mis-shaped by resvg-js (SVG is correct); recorded as a raster limit (fixed by opf-render#97 once merged).",
       "evidence": [
         "scriptAuto",
         "scriptModel",
@@ -1517,7 +1525,7 @@
       ]
     },
     "Latha": {
-      "nextAction": "Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Sans Tamil (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 10 of 10 face-samples; the same samples agree in Chromium within 0.1 px. The original is not installed on the measuring host (windows-optional), so its widths are unmeasured. PNG output of this script is mis-shaped by resvg-js (SVG is correct); recorded as a raster limit.",
+      "nextAction": "Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Sans Tamil (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 10 of 10 face-samples; the same samples agree in Chromium within 0.1 px. The original is not installed on the measuring host (windows-optional), so its widths are unmeasured. PNG output of this script is mis-shaped by resvg-js (SVG is correct); recorded as a raster limit (fixed by opf-render#97 once merged).",
       "evidence": [
         "scriptAuto",
         "scriptModel",
@@ -1525,7 +1533,7 @@
       ]
     },
     "Gautami": {
-      "nextAction": "Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Sans Telugu (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 8 of 8 face-samples; the same samples agree in Chromium within 0.1 px. The original is not installed on the measuring host (windows-optional), so its widths are unmeasured. PNG output of this script is mis-shaped by resvg-js (SVG is correct); recorded as a raster limit.",
+      "nextAction": "Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Sans Telugu (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 8 of 8 face-samples; the same samples agree in Chromium within 0.1 px. The original is not installed on the measuring host (windows-optional), so its widths are unmeasured. PNG output of this script is mis-shaped by resvg-js (SVG is correct); recorded as a raster limit (fixed by opf-render#97 once merged).",
       "evidence": [
         "scriptAuto",
         "scriptModel",
@@ -1533,7 +1541,7 @@
       ]
     },
     "Tunga": {
-      "nextAction": "Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Sans Kannada (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 6 of 6 face-samples; the same samples agree in Chromium within 0.1 px. The original is not installed on the measuring host (windows-optional), so its widths are unmeasured. PNG output of this script is mis-shaped by resvg-js (SVG is correct); recorded as a raster limit.",
+      "nextAction": "Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Sans Kannada (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 6 of 6 face-samples; the same samples agree in Chromium within 0.1 px. The original is not installed on the measuring host (windows-optional), so its widths are unmeasured. PNG output of this script is mis-shaped by resvg-js (SVG is correct); recorded as a raster limit (fixed by opf-render#97 once merged).",
       "evidence": [
         "scriptAuto",
         "scriptModel",
@@ -1541,7 +1549,7 @@
       ]
     },
     "Kartika": {
-      "nextAction": "Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Sans Malayalam (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 8 of 8 face-samples; the same samples agree in Chromium within 0.1 px. The original is not installed on the measuring host (windows-optional), so its widths are unmeasured. PNG output of this script is mis-shaped by resvg-js (SVG is correct); recorded as a raster limit.",
+      "nextAction": "Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Sans Malayalam (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 8 of 8 face-samples; the same samples agree in Chromium within 0.1 px. The original is not installed on the measuring host (windows-optional), so its widths are unmeasured. PNG output of this script is mis-shaped by resvg-js (SVG is correct); recorded as a raster limit (fixed by opf-render#97 once merged).",
       "evidence": [
         "scriptAuto",
         "scriptModel",
@@ -1549,7 +1557,7 @@
       ]
     },
     "DaunPenh": {
-      "nextAction": "Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Sans Khmer (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 8 of 8 face-samples; the same samples agree in Chromium within 0.1 px. The original is not installed on the measuring host (windows-optional), so its widths are unmeasured. PNG output of this script is mis-shaped by resvg-js (SVG is correct); recorded as a raster limit.",
+      "nextAction": "Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Sans Khmer (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 8 of 8 face-samples; the same samples agree in Chromium within 0.1 px. The original is not installed on the measuring host (windows-optional), so its widths are unmeasured. PNG output of this script is mis-shaped by resvg-js (SVG is correct); recorded as a raster limit (fixed by opf-render#97 once merged).",
       "evidence": [
         "scriptAuto",
         "scriptModel",
@@ -1557,7 +1565,7 @@
       ]
     },
     "Khmer UI": {
-      "nextAction": "Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Sans Khmer (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 8 of 8 face-samples; the same samples agree in Chromium within 0.1 px. The original is not installed on the measuring host (windows-optional), so its widths are unmeasured. PNG output of this script is mis-shaped by resvg-js (SVG is correct); recorded as a raster limit.",
+      "nextAction": "Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Sans Khmer (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 8 of 8 face-samples; the same samples agree in Chromium within 0.1 px. The original is not installed on the measuring host (windows-optional), so its widths are unmeasured. PNG output of this script is mis-shaped by resvg-js (SVG is correct); recorded as a raster limit (fixed by opf-render#97 once merged).",
       "evidence": [
         "scriptAuto",
         "scriptModel",
@@ -1910,21 +1918,21 @@
       ]
     },
     "Liberation Mono": {
-      "nextAction": "Verify permitted release licenses, bundle required styles, and independently qualify its Courier New metric role (currently the alternate to Cousine).",
+      "nextAction": "RR-17: Liberation Mono previews with Cousine (metric alias, 0.0000% against Liberation 2.1.5 in four styles). The fixture passes in the node, browser and editor hosts; the gallery editor accepts it once pptx.gallery pins an opf-render release that carries the alias (the first release with opf-render#92). No Liberation files are bundled (Reserved Font Name, about 4.4 MB).",
       "evidence": [
         "guards",
         "measurement"
       ]
     },
     "Liberation Sans": {
-      "nextAction": "Verify permitted release licenses, bundle required styles, and independently qualify its Arial metric role (currently the alternate to Arimo).",
+      "nextAction": "RR-17: Liberation Sans previews with Arimo (metric alias, 0.0000% against Liberation 2.1.5 in four styles). The fixture passes in the node, browser and editor hosts; the gallery editor accepts it once pptx.gallery pins an opf-render release that carries the alias (the first release with opf-render#92). No Liberation files are bundled (Reserved Font Name, about 4.4 MB).",
       "evidence": [
         "guards",
         "measurement"
       ]
     },
     "Liberation Serif": {
-      "nextAction": "Verify permitted release licenses, bundle required styles, and independently qualify its Times New Roman metric role (currently the alternate to Tinos).",
+      "nextAction": "RR-17: Liberation Serif previews with Tinos (metric alias, 0.0000% against Liberation 2.1.5 in four styles). The fixture passes in the node, browser and editor hosts; the gallery editor accepts it once pptx.gallery pins an opf-render release that carries the alias (the first release with opf-render#92). No Liberation files are bundled (Reserved Font Name, about 4.4 MB).",
       "evidence": [
         "guards",
         "measurement"
@@ -2007,77 +2015,77 @@
       ]
     },
     "Noto Sans Bengali": {
-      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (100.0% of the BMP script), measured advances equal HarfBuzz's on 12 of 12 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. PNG output of this script is mis-shaped by resvg-js (SVG is correct): raster limit.",
+      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (100.0% of the BMP script), measured advances equal HarfBuzz's on 12 of 12 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. PNG output of this script is mis-shaped by resvg-js (SVG is correct): raster limit, fixed by opf-render#97 once merged.",
       "evidence": [
         "scriptAuto",
         "scriptModel"
       ]
     },
     "Noto Sans Devanagari": {
-      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (100.0% of the BMP script), measured advances equal HarfBuzz's on 18 of 18 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. PNG output of this script is mis-shaped by resvg-js (SVG is correct): raster limit.",
+      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (100.0% of the BMP script), measured advances equal HarfBuzz's on 18 of 18 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. PNG output of this script is mis-shaped by resvg-js (SVG is correct): raster limit, fixed by opf-render#97 once merged.",
       "evidence": [
         "scriptAuto",
         "scriptModel"
       ]
     },
     "Noto Sans Gujarati": {
-      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (100.0% of the BMP script), measured advances equal HarfBuzz's on 6 of 6 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. PNG output of this script is mis-shaped by resvg-js (SVG is correct): raster limit.",
+      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (100.0% of the BMP script), measured advances equal HarfBuzz's on 6 of 6 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. PNG output of this script is mis-shaped by resvg-js (SVG is correct): raster limit, fixed by opf-render#97 once merged.",
       "evidence": [
         "scriptAuto",
         "scriptModel"
       ]
     },
     "Noto Sans Gurmukhi": {
-      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (100.0% of the BMP script), measured advances equal HarfBuzz's on 6 of 6 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. PNG output of this script is mis-shaped by resvg-js (SVG is correct): raster limit.",
+      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (100.0% of the BMP script), measured advances equal HarfBuzz's on 6 of 6 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. PNG output of this script is mis-shaped by resvg-js (SVG is correct): raster limit, fixed by opf-render#97 once merged.",
       "evidence": [
         "scriptAuto",
         "scriptModel"
       ]
     },
     "Noto Sans Kannada": {
-      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (98.9% of the BMP script), measured advances equal HarfBuzz's on 6 of 6 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. PNG output of this script is mis-shaped by resvg-js (SVG is correct): raster limit.",
+      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (98.9% of the BMP script), measured advances equal HarfBuzz's on 6 of 6 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. PNG output of this script is mis-shaped by resvg-js (SVG is correct): raster limit, fixed by opf-render#97 once merged.",
       "evidence": [
         "scriptAuto",
         "scriptModel"
       ]
     },
     "Noto Sans Malayalam": {
-      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (100.0% of the BMP script), measured advances equal HarfBuzz's on 8 of 8 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. PNG output of this script is mis-shaped by resvg-js (SVG is correct): raster limit.",
+      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (100.0% of the BMP script), measured advances equal HarfBuzz's on 8 of 8 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. PNG output of this script is mis-shaped by resvg-js (SVG is correct): raster limit, fixed by opf-render#97 once merged.",
       "evidence": [
         "scriptAuto",
         "scriptModel"
       ]
     },
     "Noto Sans Oriya": {
-      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (100.0% of the BMP script), measured advances equal HarfBuzz's on 6 of 6 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. PNG output of this script is mis-shaped by resvg-js (SVG is correct): raster limit.",
+      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (100.0% of the BMP script), measured advances equal HarfBuzz's on 6 of 6 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. PNG output of this script is mis-shaped by resvg-js (SVG is correct): raster limit, fixed by opf-render#97 once merged.",
       "evidence": [
         "scriptAuto",
         "scriptModel"
       ]
     },
     "Noto Sans Tamil": {
-      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (100.0% of the BMP script), measured advances equal HarfBuzz's on 10 of 10 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. PNG output of this script is mis-shaped by resvg-js (SVG is correct): raster limit.",
+      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (100.0% of the BMP script), measured advances equal HarfBuzz's on 10 of 10 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. PNG output of this script is mis-shaped by resvg-js (SVG is correct): raster limit, fixed by opf-render#97 once merged.",
       "evidence": [
         "scriptAuto",
         "scriptModel"
       ]
     },
     "Noto Sans Telugu": {
-      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (99.0% of the BMP script), measured advances equal HarfBuzz's on 8 of 8 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. PNG output of this script is mis-shaped by resvg-js (SVG is correct): raster limit.",
+      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (99.0% of the BMP script), measured advances equal HarfBuzz's on 8 of 8 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. PNG output of this script is mis-shaped by resvg-js (SVG is correct): raster limit, fixed by opf-render#97 once merged.",
       "evidence": [
         "scriptAuto",
         "scriptModel"
       ]
     },
     "Noto Sans Thai": {
-      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (100.0% of the BMP script), measured advances equal HarfBuzz's on 14 of 14 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. PNG output of this script is mis-shaped by resvg-js (SVG is correct): raster limit.",
+      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (100.0% of the BMP script), measured advances equal HarfBuzz's on 14 of 14 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. PNG output of this script is mis-shaped by resvg-js (SVG is correct): raster limit, fixed by opf-render#97 once merged.",
       "evidence": [
         "scriptAuto",
         "scriptModel"
       ]
     },
     "Noto Sans Khmer": {
-      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (100.0% of the BMP script), measured advances equal HarfBuzz's on 8 of 8 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. PNG output of this script is mis-shaped by resvg-js (SVG is correct): raster limit.",
+      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (100.0% of the BMP script), measured advances equal HarfBuzz's on 8 of 8 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. PNG output of this script is mis-shaped by resvg-js (SVG is correct): raster limit, fixed by opf-render#97 once merged.",
       "evidence": [
         "scriptAuto",
         "scriptModel"
@@ -2177,21 +2185,21 @@
       ]
     },
     "Noto Sans Sinhala": {
-      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (100.0% of the BMP script), measured advances equal HarfBuzz's on 6 of 6 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. PNG output of this script is mis-shaped by resvg-js (SVG is correct): raster limit.",
+      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (100.0% of the BMP script), measured advances equal HarfBuzz's on 6 of 6 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. PNG output of this script is mis-shaped by resvg-js (SVG is correct): raster limit, fixed by opf-render#97 once merged.",
       "evidence": [
         "scriptAuto",
         "scriptModel"
       ]
     },
     "Noto Sans Lao": {
-      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (100.0% of the BMP script), measured advances equal HarfBuzz's on 4 of 4 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. PNG output of this script is mis-shaped by resvg-js (SVG is correct): raster limit.",
+      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (100.0% of the BMP script), measured advances equal HarfBuzz's on 4 of 4 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. PNG output of this script is mis-shaped by resvg-js (SVG is correct): raster limit, fixed by opf-render#97 once merged.",
       "evidence": [
         "scriptAuto",
         "scriptModel"
       ]
     },
     "Noto Sans Myanmar": {
-      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (100.0% of the BMP script), measured advances equal HarfBuzz's on 2 of 6 face-samples (4 recorded fontkit limits), Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. PNG output of this script is mis-shaped by resvg-js (SVG is correct): raster limit. fontkit has no Myanmar shaper (kinzi, medial ra): Myanmar words measure up to 3.5 percent wider than HarfBuzz; recorded limit.",
+      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (100.0% of the BMP script), measured advances equal HarfBuzz's on 2 of 6 face-samples (4 recorded fontkit limits), Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. PNG output of this script is mis-shaped by resvg-js (SVG is correct): raster limit, fixed by opf-render#97 once merged. fontkit has no Myanmar shaper (kinzi, medial ra): Myanmar words measure up to 3.5 percent wider than HarfBuzz; recorded limit.",
       "evidence": [
         "scriptAuto",
         "scriptModel"
@@ -2666,6 +2674,34 @@
         "url": "https://github.com/OpenPresentation/opf/pull/178"
       }
     ],
+    "latinHostFixtures": [
+      {
+        "label": "RR-17 per-family host fixtures (node, browser, editor, gallery editor)",
+        "url": "docs/evidence/font-replacements-20260923/latin-host-fixtures-20261001.json"
+      },
+      {
+        "label": "opf-render#92 (Node and browser fixtures, weight-named roles, single-style italics)",
+        "url": "https://github.com/OpenPresentation/opf-render/pull/92"
+      },
+      {
+        "label": "opf-editor#61 (editor font gate fixture)",
+        "url": "https://github.com/OpenPresentation/opf-editor/pull/61"
+      },
+      {
+        "label": "pptx-gallery#80 (gallery editor lazy font check)",
+        "url": "https://github.com/Data-Advantage/pptx-gallery/pull/80"
+      }
+    ],
+    "latinQualification": [
+      {
+        "label": "RR-17 Latin qualification report (widths, line breaks, vertical metrics, outlines, coverage)",
+        "url": "docs/evidence/font-replacements-20260923/latin-qualification-20261001.json"
+      },
+      {
+        "label": "opf#249 (qualification tool, Liberation aliases, new measurements)",
+        "url": "https://github.com/OpenPresentation/opf/pull/249"
+      }
+    ],
     "scriptCorpora": {
       "label": "Script corpora and per-family qualification (FF-44)",
       "url": "docs/programs/font-fidelity-everywhere/script-corpora.md"
@@ -2792,6 +2828,270 @@
     "Aptos Serif": {
       "verticalMetricsMatch": true,
       "note": "hhea, OS/2 typo and win, x-height and cap-height equal in all 16 styles; painted x-height and cap-height boxes agree (opf#166). Line breaks are not recorded."
+    }
+  },
+  "qualificationReport": "docs/evidence/font-replacements-20260923/latin-qualification-20261001.json",
+  "hostFixtureEvidence": "docs/evidence/font-replacements-20260923/latin-host-fixtures-20261001.json",
+  "latinAcceptance": {
+    "date": "2026-10-01",
+    "fixture": "Per-family host fixtures in node and browser (opf-render test/latin-family-hosts.mjs, latin-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-latin-families.mjs) and the gallery editor manifest (pptx-gallery tests/editor-latin-families.test.ts), plus the per-family qualification against the real font (scripts/qualify-latin-fonts.mjs).",
+    "hosts": [
+      "node",
+      "browser",
+      "editor",
+      "galleryEditor"
+    ],
+    "lineBreakFloor": 0.995,
+    "lineBreakCases": 250,
+    "evidence": [
+      "latinHostFixtures",
+      "latinQualification"
+    ],
+    "nextActions": {
+      "qualified": "Native verification (FF-46): confirm the selected name in the saved file and the drawn behaviour of this family's slide in the RR-17 native check decks (rr-17-native/latin).",
+      "documented-visual": "Native verification (FF-46): confirm the selected name in the saved file and the line-break and width effect of this look-alike on this family's slide in the RR-17 native check decks (rr-17-native/latin). The measured gaps are in the acceptance note."
+    },
+    "reasons": {}
+  },
+  "appearance": {
+    "Aptos": {
+      "original": "Aptos: a contemporary neo-grotesque sans.",
+      "replacement": "Intos: OFL sans derived from Inter, built to Aptos advances and vertical metrics; original outlines (0 identical glyphs)."
+    },
+    "Aptos Display": {
+      "original": "Aptos Display: the optical-size display cut of Aptos.",
+      "replacement": "Intos Display: the matching Inter-derived display cut."
+    },
+    "Aptos Narrow": {
+      "original": "Aptos Narrow: the condensed width of Aptos.",
+      "replacement": "Intos Narrow: the matching Inter-derived condensed cut."
+    },
+    "Aptos Serif": {
+      "original": "Aptos Serif: a sturdy contemporary text serif.",
+      "replacement": "Intos Serif: Gelasio-derived serif built to Aptos Serif advances."
+    },
+    "Aptos Mono": {
+      "original": "Aptos Mono: a neutral grotesque monospace on a 1229/2048 em cell.",
+      "replacement": "Cousine: a sans monospace on the same cell (Courier New metrics); its letterforms are Liberation Mono's.",
+      "caveat": "Cousine has the larger x-height (0.528 em against 0.476) and a smaller hhea ascent (0.833 against 0.939); capitals match (0.659 against 0.657). Source Code Pro (x-height 0.486, cap 0.660) and Red Hat Mono (0.488, 0.700) are closer in glyph size but 0.016% off the cell and add bytes: not adopted, vetoable."
+    },
+    "Arial": {
+      "original": "Arial: neo-grotesque sans.",
+      "replacement": "Arimo: Arial-metric sans from the Croscore set; letterforms are Arimo's own, near Arial's in texture."
+    },
+    "Calibri": {
+      "original": "Calibri: soft humanist sans with rounded stroke ends.",
+      "replacement": "Carlito: Lato-derived humanist sans cut to Calibri advances."
+    },
+    "Courier New": {
+      "original": "Courier New: light slab-serif typewriter monospace.",
+      "replacement": "Cousine: sans monospace on Courier New advances.",
+      "caveat": "The preview looks sans where Courier New is slab-serif; widths and wraps are the same."
+    },
+    "Times New Roman": {
+      "original": "Times New Roman: classic Times-style serif.",
+      "replacement": "Tinos: Times-metric serif from the Croscore set."
+    },
+    "Georgia": {
+      "original": "Georgia: wide screen serif with old-style figures.",
+      "replacement": "Gelasio: Georgia-metric serif; ligatures (liga, clig) are switched off so widths match."
+    },
+    "Liberation Sans": {
+      "original": "Liberation Sans 2.1.5: Arial-metric sans.",
+      "replacement": "Arimo: the Croscore face Liberation 2 is built from; glyph boxes are identical."
+    },
+    "Liberation Serif": {
+      "original": "Liberation Serif 2.1.5: Times-metric serif.",
+      "replacement": "Tinos: the Croscore face Liberation 2 is built from; most glyph outlines are byte-identical."
+    },
+    "Liberation Mono": {
+      "original": "Liberation Mono 2.1.5: Courier-metric sans monospace.",
+      "replacement": "Cousine: the Croscore face Liberation 2 is built from; most glyph outlines are byte-identical."
+    },
+    "Arial Black": {
+      "original": "Arial Black: very heavy neo-grotesque.",
+      "replacement": "Montserrat 900: a heavy geometric sans with rounder letterforms.",
+      "caveat": "There is no 900 italic: italic runs draw Montserrat Bold Italic. A regular run draws the 900 face since the weight-named role fix; a bold run draws Montserrat Bold, which is lighter than the 900."
+    },
+    "Arial Narrow": {
+      "original": "Arial Narrow: condensed neo-grotesque.",
+      "replacement": "Archivo Narrow: a condensed grotesque with similar texture."
+    },
+    "Baskerville Old Face": {
+      "original": "Baskerville Old Face: refined transitional serif.",
+      "replacement": "Libre Caslon Text: a Caslon-style text serif with a heavier colour.",
+      "caveat": "Wider than the original by about 19% and with larger glyphs: a poor look-alike. A closer open candidate is the improvement to look for (vetoable)."
+    },
+    "Bodoni MT": {
+      "original": "Bodoni MT: Didone with extreme thick-thin contrast.",
+      "replacement": "Playfair Display: a high-contrast transitional display serif with less extreme contrast.",
+      "caveat": "Narrower than the original by about 15% on average with smaller capitals (0.87x): expect different wrapping."
+    },
+    "Book Antiqua": {
+      "original": "Book Antiqua: Palatino-style old-style serif.",
+      "replacement": "PT Serif: a transitional serif with humanist details."
+    },
+    "Bookman Old Style": {
+      "original": "Bookman Old Style: wide old-style serif with sturdy serifs.",
+      "replacement": "Libre Caslon Text: a Caslon-style text serif."
+    },
+    "Calibri Light": {
+      "original": "Calibri Light: the light weight of Calibri.",
+      "replacement": "Carlito Regular: the bundled Carlito has no Light face, so the preview is heavier."
+    },
+    "Cambria": {
+      "original": "Cambria: sturdy transitional text serif.",
+      "replacement": "Caladea: the Cambria-style serif of the Croscore set; not metric (about 3% narrower on average)."
+    },
+    "Candara": {
+      "original": "Candara: humanist sans with flared terminals.",
+      "replacement": "Source Sans 3: a humanist sans with plainer terminals."
+    },
+    "Century Gothic": {
+      "original": "Century Gothic: geometric sans (Avant Garde style) with a large x-height.",
+      "replacement": "Work Sans: a grotesque-influenced geometric sans with smaller glyphs (x-height 0.94x)."
+    },
+    "Century Schoolbook": {
+      "original": "Century Schoolbook: wide, sturdy modern serif.",
+      "replacement": "Gelasio: a Georgia-metric serif."
+    },
+    "Consolas": {
+      "original": "Consolas: humanist monospace on a narrower cell (about 0.55 em).",
+      "replacement": "Cousine: a sans monospace on a 0.60 em cell.",
+      "caveat": "Cousine is 9.15% wider per character than Consolas, so lines of code break earlier in the preview."
+    },
+    "Constantia": {
+      "original": "Constantia: old-style text serif with low contrast.",
+      "replacement": "PT Serif: a transitional serif."
+    },
+    "Corbel": {
+      "original": "Corbel: soft humanist sans.",
+      "replacement": "Source Sans 3: a humanist sans."
+    },
+    "Didot": {
+      "original": "Didot: Didone high-contrast serif (Apple version, no reference on this host).",
+      "replacement": "Playfair Display: a high-contrast transitional display serif.",
+      "caveat": "Unmeasured: the Apple Didot reference is not available to the measuring host."
+    },
+    "Franklin Gothic Book": {
+      "original": "Franklin Gothic Book: American grotesque.",
+      "replacement": "Barlow: a slightly condensed grotesque with a similar American feel."
+    },
+    "Franklin Gothic Medium": {
+      "original": "Franklin Gothic Medium: the medium weight of Franklin Gothic.",
+      "replacement": "Barlow: only Regular and Bold are vendored (no Medium face), so the weight is approximate."
+    },
+    "Garamond": {
+      "original": "Garamond: Monotype old-style serif with a small x-height.",
+      "replacement": "EB Garamond: a Garamond revival; its italics are wider than the Monotype italic.",
+      "caveat": "The real Garamond has no bold italic; PowerPoint synthesizes it."
+    },
+    "Gill Sans MT": {
+      "original": "Gill Sans MT: humanist sans with calligraphic proportions.",
+      "replacement": "Source Sans 3: a humanist sans.",
+      "caveat": "Individual strings differ by up to 15% either way (mean absolute 5%): wrapping differs."
+    },
+    "Grandview": {
+      "original": "Grandview: Microsoft 365 cloud sans (no reference on this host).",
+      "replacement": "Barlow: a slightly condensed grotesque.",
+      "caveat": "Unmeasured: Grandview is not cached on this host."
+    },
+    "Grandview Display": {
+      "original": "Grandview Display: the display cut (no reference on this host).",
+      "replacement": "Barlow: a slightly condensed grotesque.",
+      "caveat": "Unmeasured."
+    },
+    "Impact": {
+      "original": "Impact: heavy condensed grotesque.",
+      "replacement": "Anton: a heavy condensed display sans.",
+      "caveat": "Neither has an italic: the preview draws the upright face and PowerPoint synthesizes the slant."
+    },
+    "Lucida Console": {
+      "original": "Lucida Console: humanist monospace.",
+      "replacement": "Cousine: a sans monospace."
+    },
+    "Lucida Sans": {
+      "original": "Lucida Sans: wide humanist sans.",
+      "replacement": "Work Sans: a geometric sans with smaller glyphs (x-height 0.94x)."
+    },
+    "Lucida Sans Unicode": {
+      "original": "Lucida Sans Unicode: the wide humanist sans with broad coverage.",
+      "replacement": "Work Sans: a geometric sans with smaller glyphs (x-height 0.94x)."
+    },
+    "Microsoft Sans Serif": {
+      "original": "Microsoft Sans Serif: the Arial-like UI sans.",
+      "replacement": "Arimo: Arial-metric sans."
+    },
+    "Palatino Linotype": {
+      "original": "Palatino Linotype: old-style serif with calligraphic stroke.",
+      "replacement": "PT Serif: a transitional serif."
+    },
+    "Rockwell": {
+      "original": "Rockwell: geometric slab serif.",
+      "replacement": "Bitter: a contemporary slab serif for text."
+    },
+    "Seaford": {
+      "original": "Seaford: Microsoft 365 cloud sans (no reference on this host).",
+      "replacement": "Source Sans 3: a humanist sans.",
+      "caveat": "Unmeasured."
+    },
+    "Seaford Display": {
+      "original": "Seaford Display: the display cut (no reference on this host).",
+      "replacement": "Source Sans 3: a humanist sans.",
+      "caveat": "Unmeasured."
+    },
+    "Segoe UI": {
+      "original": "Segoe UI: humanist UI sans.",
+      "replacement": "Red Hat Display: a geometric humanist sans."
+    },
+    "Segoe UI Light": {
+      "original": "Segoe UI Light: the light weight.",
+      "replacement": "Red Hat Display 300."
+    },
+    "Segoe UI Semibold": {
+      "original": "Segoe UI Semibold: the semibold weight.",
+      "replacement": "Red Hat Display 600, which a regular run draws since the weight-named role fix."
+    },
+    "Segoe UI Semilight": {
+      "original": "Segoe UI Semilight: weight 350.",
+      "replacement": "Red Hat Display 400: there is no 350 face."
+    },
+    "Skeena": {
+      "original": "Skeena: Microsoft 365 cloud sans (no reference on this host).",
+      "replacement": "Open Sans: a humanist sans.",
+      "caveat": "Unmeasured."
+    },
+    "Skeena Display": {
+      "original": "Skeena Display: the display cut (no reference on this host).",
+      "replacement": "Open Sans: a humanist sans.",
+      "caveat": "Unmeasured."
+    },
+    "Tahoma": {
+      "original": "Tahoma: narrow humanist UI sans.",
+      "replacement": "Red Hat Text: a humanist sans.",
+      "caveat": "Smaller lowercase (x-height 0.90x)."
+    },
+    "Tenorite": {
+      "original": "Tenorite: a wide humanist sans designed for legibility.",
+      "replacement": "Figtree: a friendly geometric sans.",
+      "caveat": "About 4% wider than the original on regular; only the regular style is cached on this host."
+    },
+    "Tenorite Display": {
+      "original": "Tenorite Display: the tighter display cut.",
+      "replacement": "Figtree: a friendly geometric sans; the Tenorite Display widths are tighter, so the preview is much wider.",
+      "caveat": "About 15% wider than the original on average: expect different wrapping."
+    },
+    "Trebuchet MS": {
+      "original": "Trebuchet MS: humanist sans with distinctive italics.",
+      "replacement": "Figtree: a friendly geometric sans."
+    },
+    "Verdana": {
+      "original": "Verdana: very wide humanist screen sans.",
+      "replacement": "Montserrat: a wide geometric sans, about 3% narrower than Verdana on average."
+    },
+    "Source Sans Pro": {
+      "original": "Source Sans Pro 2.045: Adobe's humanist sans (the predecessor name).",
+      "replacement": "Source Sans 3: the renamed family; regular and bold match within 0.15%, italics within 0.41%."
     }
   },
   "scriptCorpus": {
