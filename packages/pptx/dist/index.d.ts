@@ -119,6 +119,12 @@ export interface FromPptxOptions {
   catalogs?: Record<string, { records?: unknown[] } | unknown[]>;
   /** The export's records for document `catalogs.<kind>.source` URLs (as in ToPptxOptions). Currently used for socialPlatforms. */
   catalogSources?: Record<string, { records?: unknown[] } | unknown[]>;
+  /**
+   * Opt in to raw per-shape signals (see PptxSignals). `true` uses the default limits; an object lowers or raises them.
+   * With it, `fromPptx` resolves to `{document, signals}`; without it (the default, also `false`/`null`) it resolves
+   * to the OPF document exactly as before. The document is the same either way.
+   */
+  signals?: boolean | PptxSignalOptions | null;
 }
 
 export declare class OPFPptxError extends Error {
@@ -131,7 +137,263 @@ export declare class OPFPptxError extends Error {
 
 export declare function toPptx(input: unknown, options?: ToPptxOptions): Promise<Uint8Array>;
 
-export declare function fromPptx(input: Uint8Array | ArrayBuffer, options?: FromPptxOptions): Promise<Record<string, unknown>>;
+export declare function fromPptx(input: Uint8Array | ArrayBuffer, options?: Omit<FromPptxOptions, "signals"> & { signals?: false | null }): Promise<Record<string, unknown>>;
+export declare function fromPptx(input: Uint8Array | ArrayBuffer, options: Omit<FromPptxOptions, "signals"> & { signals: true | PptxSignalOptions }): Promise<PptxImportWithSignals>;
+export declare function fromPptx(input: Uint8Array | ArrayBuffer, options?: FromPptxOptions): Promise<Record<string, unknown> | PptxImportWithSignals>;
+
+// ---------------------------------------------------------------------------
+// Import signals: `fromPptx(bytes, {signals: true})`.
+//
+// Raw, deterministic facts about every shape of a deck, for hosts that classify or restructure imported
+// decks (a model, a rules engine, a person). Nothing here is inferred from meaning: it is read from the package
+// with PowerPoint's inheritance applied (shape, layout, master, presentation defaults, theme). It is plain
+// JSON and bounded by PptxSignalOptions. Omitted fields mean "not stated"; defaults are omitted too
+// (`bold`, `italic`, `monospace` absent = false, `weight` absent = 400, `level` absent = 0, `align` absent = "left",
+// `bullet` absent = none).
+
+/** Bounds on the signals. Each is an integer from 1 up to the cap in parentheses; the defaults are DEFAULT_SIGNAL_LIMITS. */
+export interface PptxSignalOptions {
+  /** Slides reported (5000). The document always has every slide. Default 300. */
+  maxSlides?: number;
+  /** Shapes reported per slide, groups and their members each counting one (5000). Default 300. */
+  maxShapesPerSlide?: number;
+  /** Shapes reported over the whole deck (100000). Default 5000. */
+  maxTotalShapes?: number;
+  /** Paragraphs reported per shape (5000). Default 200. */
+  maxParagraphsPerShape?: number;
+  /** Characters of text reported per shape (200000). Default 8000. */
+  maxTextCharsPerShape?: number;
+  /** Characters of shape and table text reported over the whole deck (5000000). Default 400000. */
+  maxTextCharsTotal?: number;
+  /** Table cells reported per table (10000). Default 400. */
+  maxTableCells?: number;
+  /** Characters reported per table cell (5000). Default 200. */
+  maxTableCellChars?: number;
+  /** Group nesting levels walked (32). Default 12. */
+  maxGroupDepth?: number;
+}
+export declare const DEFAULT_SIGNAL_LIMITS: Readonly<Required<PptxSignalOptions>>;
+/** The `version` of the PptxSignals format; it changes only when a field is removed or its meaning changes. */
+export declare const SIGNALS_VERSION: 1;
+/** True for a family known to be fixed-width: the list the `monospace` flag uses. */
+export declare function isMonospaceFamily(family: string | undefined): boolean;
+
+export interface PptxImportWithSignals {
+  /** The same OPF document `fromPptx` returns without the option. */
+  document: Record<string, unknown>;
+  signals: PptxSignals;
+}
+
+export interface PptxSignals {
+  version: 1;
+  deck: {
+    slideCount: number;
+    /** Slide size in EMU and in reference px (96 per inch, 9525 EMU per px). */
+    dimensions?: {widthEmu: number; heightEmu: number; widthPx: number; heightPx: number};
+    referencePxPerInch: 96;
+    theme: {
+      colorSchemeName?: string;
+      fontSchemeName?: string;
+      majorFont?: string;
+      minorFont?: string;
+      /** The twelve theme slots (dark1, light1, dark2, light2, accent1-6, hyperlink, followedHyperlink) as #RRGGBB. */
+      colors: Record<string, string>;
+    };
+    /** Whether the deck carries OPF provenance tags (an OPF export): structure then also round-trips exactly. */
+    provenance: {opf: boolean; opfTaggedSlides: number};
+  };
+  /** The limits in force, so a consumer knows what a missing shape or truncated text means. */
+  limits: Required<PptxSignalOptions>;
+  slides: PptxSlideSignals[];
+  /** Present when a bound dropped content: `slides` = slides not reported, `text` = the deck-wide text budget ran out. */
+  truncated?: {slides?: number; text?: true};
+}
+
+export interface PptxSlideSignals {
+  /** Slide position, the same index as `document.slides`. */
+  index: number;
+  /** Package part, for example "ppt/slides/slide1.xml". */
+  part: string;
+  name?: string;
+  hidden?: true;
+  layout: {part: string | null; name: string | null; type?: string};
+  /** `theme` is the master's theme name. */
+  master: {part: string | null; name: string | null; theme: string | null};
+  /** "match" / "changed" for a slide that carries an OPF slide tag, "untagged" otherwise. */
+  provenance: "match" | "changed" | "untagged";
+  /** Every shape in z-order (document order, back to front), groups followed by their members. */
+  shapes: PptxShapeSignal[];
+  stats: {shapes: number; text: number; pictures: number; tables: number; charts: number; groups: number};
+  /** Counts of what a bound dropped on this slide: shapes, depth (group members below maxGroupDepth), paragraphs, text, table. */
+  truncated?: Partial<Record<"shapes" | "depth" | "paragraphs" | "text" | "table", number>>;
+}
+
+export type PptxShapeKind = "text" | "shape" | "placeholder" | "picture" | "media" | "table" | "chart" | "smartart" | "ole" | "group" | "connector" | "line" | "unknown";
+
+export interface PptxBox {
+  /** Reference px (96 per inch), two decimals, in slide coordinates (group transforms applied). */
+  px: {x: number; y: number; w: number; h: number};
+  /** The same box in EMU, rounded. */
+  emu: {x: number; y: number; w: number; h: number};
+  /** "own" the shape's xfrm; "layout" / "master" an inherited placeholder box. */
+  source: "own" | "layout" | "master";
+  /** True when an enclosing group is rotated or flipped: the box ignores that rotation. */
+  approximate?: true;
+}
+
+export interface PptxColor {
+  /** #RRGGBB after theme and colour-map resolution (luminance and alpha modifiers applied). Absent when it cannot be resolved. */
+  color?: string;
+  /** The theme slot the colour was named by (for example "accent1", "tx1"). */
+  colorRef?: string;
+  /** Opacity below 1. */
+  alpha?: number;
+}
+
+export interface PptxRunSignal extends PptxColor {
+  text: string;
+  /** Effective Latin family; theme font tokens resolved. */
+  font?: string;
+  /** Points. */
+  size?: number;
+  bold?: true;
+  italic?: true;
+  /** CSS weight: 700 for bold, or the weight a family name states ("Segoe UI Semibold" = 600). Absent for 400. */
+  weight?: number;
+  underline?: true;
+  strike?: true;
+  baseline?: "superscript" | "subscript";
+  caps?: "all" | "small";
+  /** True when the font is a known fixed-width family. */
+  monospace?: true;
+  /** External hyperlink target. */
+  link?: string;
+  /** A hyperlink with a PowerPoint action rather than a URL. */
+  linkAction?: string;
+  /** Field type (slidenum, datetime1, ...); `text` is its cached value. */
+  field?: string;
+  /** A soft line break; `text` is a newline. */
+  lineBreak?: true;
+}
+
+export interface PptxParagraphSignal {
+  text: string;
+  /** Indent level, 0-8; absent = 0. */
+  level?: number;
+  /** Absent = left. */
+  align?: "center" | "right" | "justify" | "distributed";
+  /** Effective bullet (inherited from the list style when the paragraph states none); absent = none. */
+  bullet?: {kind: "char"; char?: string} | {kind: "number"; scheme: string; startAt?: number} | {kind: "picture"};
+  marginLeftPx?: number;
+  indentPx?: number;
+  lineSpacingPct?: number;
+  lineSpacingPt?: number;
+  spaceBeforePt?: number;
+  spaceBeforePct?: number;
+  spaceAfterPt?: number;
+  spaceAfterPct?: number;
+  /** Adjacent runs with the same effective style are merged. */
+  runs: PptxRunSignal[];
+  /** True when a bound cut `text` and `runs`. */
+  truncated?: true;
+}
+
+export interface PptxTextSignal {
+  paragraphs: PptxParagraphSignal[];
+  /** Paragraph count before any bound. */
+  paragraphCount: number;
+  /** Characters before any bound. */
+  chars: number;
+  maxFontSize?: number;
+  dominantFont?: string;
+  dominantSize?: number;
+  /** Share (0-1) of non-space characters set in monospace families; absent when none are. */
+  monospaceShare?: number;
+  bulletedParagraphs?: number;
+  anchor?: "top" | "middle" | "bottom";
+  autofit?: "shrink" | "resize" | "none";
+  wrap?: "none";
+  vertical?: string;
+  columns?: number;
+}
+
+export interface PptxFillSignal extends PptxColor {
+  /** "style" is a theme fill style reference (`styleIndex`) with the shape's colour. */
+  kind: "none" | "solid" | "gradient" | "picture" | "pattern" | "group" | "style";
+  source?: "placeholder" | "style";
+  styleIndex?: number;
+  stops?: Array<PptxColor & {position: number}>;
+  angle?: number;
+  pattern?: string;
+}
+
+export interface PptxOutlineSignal extends PptxColor {
+  kind: "none" | "solid" | "gradient" | "pattern" | "inherited" | "style";
+  source?: "placeholder" | "style";
+  styleIndex?: number;
+  widthPt?: number;
+  dash?: string;
+  headArrow?: string;
+  tailArrow?: string;
+}
+
+/** Where a shape went in the OPF document `fromPptx` returned. */
+export interface PptxOpfLink {
+  /**
+   * "block" fed a block (`path`, `blockType`); "title", "subtitle" and "tag" fed that slide field. Other roles name a shape the
+   * importer consumed without a block of its own: "furniture" (footer, date, number, section), "slide-image", "watermark", "logo",
+   * and the members of an OPF-tagged group ("code", "metric", "quote", "timeline", "media", "card-frame").
+   */
+  role: string;
+  /** Path in the document, for example "slides.2.blocks.1", "slides.0.title", or "slides.1.left" after a tagged round trip. */
+  path?: string;
+  blockType?: string;
+}
+
+export interface PptxShapeSignal {
+  /** "s" plus the z-order index; stable under lower limits. */
+  id: string;
+  /** 0 = back. */
+  zOrder: number;
+  /** The shape's `id` in the slide XML. */
+  nativeId?: number;
+  name: string;
+  kind: PptxShapeKind;
+  /** The id of the enclosing group, or null. */
+  parent: string | null;
+  /** Group nesting depth, 0 at the slide. */
+  depth: number;
+  /** Member ids, for a group. */
+  children?: string[];
+  /** Alt text and title. */
+  alt?: string;
+  title?: string;
+  hidden?: true;
+  /** The shape carries OPF tags (an OPF export, edited or not). */
+  opfTagged?: true;
+  /** Placeholder type ("title", "body", "obj", "sldNum", ...), idx and size. */
+  placeholder?: {type: string; idx?: number; size?: string; orientation?: string};
+  /** Null when no box is stated or inherited. The frame before rotation. */
+  box: PptxBox | null;
+  /** Degrees clockwise. */
+  rotation?: number;
+  flipH?: true;
+  flipV?: true;
+  geometry?: string;
+  fill?: PptxFillSignal;
+  outline?: PptxOutlineSignal;
+  text?: PptxTextSignal;
+  picture?: {part?: string; mediaType?: string; bytes?: number; naturalPx?: {w: number; h: number}; /** Percent cropped per side. */ crop?: {l: number; t: number; r: number; b: number}; tiled?: true; unresolved?: true};
+  mediaKind?: "video" | "audio";
+  table?: {rows: number; columns: number; columnWidthsPx?: number[]; firstRow: boolean; firstColumn: boolean; bandedRows: boolean; merged?: true; cells: string[][]; truncated?: true};
+  chart?: {extended: boolean; part?: string; chartTypes?: string[]; seriesCount?: number; pointCount?: number; barDirection?: string; grouping?: string; title?: string; unreadable?: true};
+  graphicType?: string;
+  /** The link to the imported OPF; null when the importer made nothing of this shape (a connector, a member of an unsupported frame). */
+  opf: PptxOpfLink | null;
+  /** Set when this shape's XML could not be read; the rest of the deck is unaffected. */
+  unreadable?: string;
+}
+
 
 export interface TypefaceEntry {
   /** Part path; parts of nested packages use "outer.xlsx!/inner/part.xml". */

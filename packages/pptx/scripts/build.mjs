@@ -36,6 +36,7 @@ for (const name of ['image-fallback-node.js', 'image-fallback-browser.js']) {
 await copyFile(new URL('src/background.js', root), new URL('background.js', dist));
 await copyFile(new URL('src/background-import.js', root), new URL('background-import.js', dist));
 await copyFile(new URL('src/image-import.js', root), new URL('image-import.js', dist));
+await copyFile(new URL('src/import-signals.js', root), new URL('import-signals.js', dist));
 
 await copyFile(new URL('src/table-import.js', root), new URL('table-import.js', dist));
 for (const name of ['native-text-style.js', 'body-text-import.js', 'font-weights.js']) await copyFile(new URL(`src/${name}`, root), new URL(name, dist));

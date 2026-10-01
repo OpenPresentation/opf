@@ -18,6 +18,7 @@ import {applyDocumentProvenance, attachDocumentProvenance, documentProvenance, r
 import {INVALID_XML_CHARACTER, nativeSections, writeSectionList} from './sections.js';
 import {attachFurnitureFields, furniturePartFields, lineFields, nativeFieldType} from './furniture-fields.js';
 import {importImageOrientation} from './image-import.js';
+import {extractSignals, normalizeSignalOptions, themeFactsFor} from './import-signals.js';
 import {placeSlideImages, importSlideImage, slideImageName, slideImageOverlayName} from './slide-image-provenance.js';
 import {dedupeMedia} from './media-dedupe.js';
 import {placeWatermarks, importWatermark, watermarkName, watermarkBox, watermarkOpacity} from './watermark-provenance.js';
@@ -39,6 +40,7 @@ import {
 } from "@openpresentation/opf";
 
 export {checkPptxTypefaces, inventoryPptxTypefaces, packageFontsUsed, THEME_SCRIPT_SUPPLEMENTS} from './typeface-inventory.js';
+export {DEFAULT_SIGNAL_LIMITS, SIGNALS_VERSION, isMonospaceFamily} from './import-signals.js';
 
 export const packageName = "@openpresentation/opf-pptx";
 
@@ -289,6 +291,8 @@ export async function toPptx(input, options = {}) {
 }
 
 export async function fromPptx(input, options = {}) {
+  // Opt-in raw shape signals (import-signals.js). Validated first so a bad option fails before any work.
+  const signalLimits = normalizeSignalOptions(options.signals, (code, message, details) => new OPFPptxError(code, message, details));
   const entries = readPptxZip(input);
   const presentationDoc = parseRequiredXml(entries, "ppt/presentation.xml");
   const presentationRoot = presentationDoc["p:presentation"];
@@ -366,6 +370,7 @@ export async function fromPptx(input, options = {}) {
   // Layout-structure recovery (FF-29) reads the stored OPF_SLIDE_V1 record from
   // here instead of writing a second slide tag.
   let slideProvenance = slidePaths.map(() => ({structure: "untagged"}));
+  let restoredGroups = [];
   try {
     const restored = restoreDocumentProvenance(imported, {entries, presentationRoot, presentationRels, organizationConflict: furniture.organizationConflict === true,
       // Host catalogs format stored socials exactly as export did (FF-34).
@@ -376,6 +381,7 @@ export async function fromPptx(input, options = {}) {
     restored.groups = reconcileLanguage(restored.groups, observedLanguage, report);
     imported = applyDocumentProvenance(imported, restored, validatePresentation, report);
     slideProvenance = restored.slides;
+    restoredGroups = restored.groups;
   } catch (error) {
     report({code: "invalid-document-provenance", path: "", message: `${errorMessage(error)} Ordinary import keeps the values observed in the PPTX.`});
   }
@@ -392,7 +398,14 @@ export async function fromPptx(input, options = {}) {
     });
   }
 
-  return imported;
+  if (!signalLimits) return imported;
+  // Where document provenance rebuilt the authored structure, flat block indexes map to their rebuilt paths.
+  const contentPaths = slidePaths.map(() => null);
+  for (const group of restoredGroups) if (group.applied && group.contentPaths?.paths) contentPaths[group.contentPaths.slide] = group.contentPaths.paths;
+  const archive = {part: (path, parser) => parseRequiredXml(entries, path, parser), relationships: path => parseRelationships(entries, path), bytes: path => entries[path]};
+  const signals = extractSignals({archive, presentationRoot, slidePaths, themeFacts: themeFactsFor(slidePaths[0], archive), limits: signalLimits,
+    recorded: furnitureContexts.map(context => context.signalSources), slideProvenance, contentPaths});
+  return {document: imported, signals};
 }
 
 // A consumed logo picture (OPF_LOGO_V1) never becomes content. Its own image restores the logo only when nothing else
@@ -617,11 +630,14 @@ function importSlide(entries, slidePath, slideIndex, presentationDimensions, opt
     }
   }
   const content = mergeAdjacentBulletShapes(mergeOpfListShapes(items))
-    .map((item) => ({payload: payloadFromSlideItem(item), bounds: item.visualBounds ?? item.bounds}))
+    .map((item) => ({payload: payloadFromSlideItem(item), bounds: item.visualBounds ?? item.bounds, sources: item.sources ?? []}))
     .filter((entry) => entry.payload);
   const blocks = content.map((entry) => entry.payload);
   if (blocks.length > 0) slide.blocks = blocks;
   // Native bounds of each block in reference px, for content topology matching (document provenance).
+  // Which native shapes fed each field and block (import signals); never part of the document.
+  nativeContext.signalSources = {tag: tagItem?.sources ?? [], title: titleItem?.sources ?? [], subtitle: subtitleItem?.sources ?? [],
+    blocks: content.map(entry => ({sources: entry.sources, type: entry.payload.type})), roles: nativeContext.signalRoles ?? new Map()};
   nativeContext.contentBounds = content.map((entry) => entry.bounds ? {x: entry.bounds.x * 96, y: entry.bounds.y * 96, width: entry.bounds.w * 96, height: entry.bounds.h * 96} : null);
 
   const notes = readSlideNotes(entries, relationships);
@@ -638,6 +654,11 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   const shapes = nativeContext.shapes;
   if (tree?.['p:grpSp']) options.onDiagnostic?.({code:'grouped-text-reflow',path:`slides.${slideIndex}`,message:'Grouped native text and pictures are retained, but group transforms and unsupported group members are not reconstructed; review the reflowed OPF.'});
   const paragraphs = nativeContext.paragraphs;
+  // Native shape keys (indexes in nativeTextShapes / nativePictures / frame order) for import signals.
+  const shapeKeys = new Map(shapes.map((shape, index) => [shape, `sp:${index}`]));
+  const sourcesOf = group => group.flatMap(shape => shapeKeys.has(shape) ? [shapeKeys.get(shape)] : []);
+  const roles = new Map();
+  nativeContext.signalRoles = roles;
   const readBody = nativeBodyReader(slidePath, {
     part: (path, parser) => parseRequiredXml(entries, path, parser), relationships: path => parseRelationships(entries, path), bytes: path => entries[path]
   }, relationships, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.${diagnostic.path}`}));
@@ -655,23 +676,26 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
     if(item){
       const bounds=group.shapes.map(shape=>shapeBounds(shape['p:spPr']?.['a:xfrm'])).filter(Boolean);
       if(bounds.length){const x=Math.min(...bounds.map(b=>b.x)),y=Math.min(...bounds.map(b=>b.y));item.bounds={x,y,w:Math.max(...bounds.map(b=>b.x+b.w))-x,h:Math.max(...bounds.map(b=>b.y+b.h))-y};}
-      items.push({...item,heading:group.field,sourceText:!group.field});
+      items.push({...item,heading:group.field,sourceText:!group.field,sources:sourcesOf(group.shapes)});
     }
   }
   for(const group of timelines.items){
     const bounds=group.shapes.map(shape=>shapeBounds(shape['p:spPr']?.['a:xfrm'])).filter(Boolean);
     let union;for(const bound of bounds){if(!union)union={...bound};else{const x=Math.min(union.x,bound.x),y=Math.min(union.y,bound.y);union={x,y,w:Math.max(union.x+union.w,bound.x+bound.w)-x,h:Math.max(union.y+union.h,bound.y+bound.h)-y};}}
-    items.push({kind:'timeline',sourceText:true,bounds:union,payload:group.payload});
+    items.push({kind:'timeline',sourceText:true,bounds:union,payload:group.payload,sources:sourcesOf(group.shapes)});
   }
   for(const group of quotes.items){
     const bounds=group.shapes.map(shape=>shapeBounds(shape['p:spPr']?.['a:xfrm'])).filter(Boolean);
     let union;for(const bound of bounds){if(!union)union={...bound};else{const x=Math.min(union.x,bound.x),y=Math.min(union.y,bound.y);union={x,y,w:Math.max(union.x+union.w,bound.x+bound.w)-x,h:Math.max(union.y+union.h,bound.y+bound.h)-y};}}
-    items.push({kind:'quote',bounds:union,payload:group.payload});
+    items.push({kind:'quote',bounds:union,payload:group.payload,sources:sourcesOf(group.shapes)});
   }
-  for (const item of code.items) items.push({kind:'code',bounds:shapeBounds(item.shape['p:spPr']?.['a:xfrm']),payload:item.payload});
-  for (const item of metric.items) items.push({kind:'metric',bounds:shapeBounds(item.shape['p:spPr']?.['a:xfrm']),payload:item.payload});
-  for (const item of media.items) items.push({kind:'media',sourceText:item.payload.type==='text',bounds:shapeBounds(item.shape['p:spPr']?.['a:xfrm']),payload:item.payload});
+  for (const item of code.items) items.push({kind:'code',bounds:shapeBounds(item.shape['p:spPr']?.['a:xfrm']),payload:item.payload,sources:sourcesOf([item.shape])});
+  for (const item of metric.items) items.push({kind:'metric',bounds:shapeBounds(item.shape['p:spPr']?.['a:xfrm']),payload:item.payload,sources:sourcesOf([item.shape])});
+  for (const item of media.items) items.push({kind:'media',sourceText:item.payload.type==='text',bounds:shapeBounds(item.shape['p:spPr']?.['a:xfrm']),payload:item.payload,sources:sourcesOf([item.shape])});
   for (const [index,shape] of shapes.entries()) {
+    const role = furniture.text.has(index) ? 'furniture' : nativeContext.slideImageShapes?.has(index) ? 'slide-image' : nativeContext.logoPlaceholderShapes?.has(index) ? 'logo' : cards.has(shape) ? 'card-frame'
+      : code.consumed.has(shape) ? 'code' : metric.consumed.has(shape) ? 'metric' : media.consumed.has(shape) ? 'media' : timelines.consumed.has(shape) ? 'timeline' : quotes.consumed.has(shape) ? 'quote' : undefined;
+    if (role) roles.set(shapeKeys.get(shape), role);
     if (furniture.text.has(index) || nativeContext.slideImageShapes?.has(index) || nativeContext.logoPlaceholderShapes?.has(index)) continue;
     if (code.consumed.has(shape)||metric.consumed.has(shape)||cards.has(shape)||media.consumed.has(shape)||headings.consumed.has(shape)||plainText.consumed.has(shape)||timelines.consumed.has(shape)||quotes.consumed.has(shape)) continue;
     const ordinaryBody = Object.hasOwn(shape, 'p:txBody') && !shape['p:nvSpPr']?.['p:nvPr']?.['p:custDataLst']?.['p:tags'];
@@ -680,7 +704,7 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
     // A damaged/edited furniture group falls back to current native text,
     // including cleared text boxes, without inventing a title or shape label.
     if (item && (furniture.taggedText.has(index) || media.captionShapes.has(shape))) item.sourceText = true;
-    if (item) items.push(item);
+    if (item) items.push({...item, sources: [`sp:${index}`]});
   }
 
   const frames = asArray(tree?.["p:graphicFrame"]);
@@ -690,23 +714,24 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
     }, relationships, (frame, cell, code, message) => options.onDiagnostic?.({code, message, path: `slides.${slideIndex}.tables.${frame}${cell ? '.' + cell : ''}`}), dimensions) : [];
   for (const [index, frame] of frames.entries()) {
     const item = importGraphicFrame(entries, frame, slidePath, relationships, tables[index]);
-    if (item) items.push(item);
+    if (item) items.push({...item, sources: [`frame:${index}`]});
   }
   // A chartex chart is an mc:AlternateContent: the choice frame references the cx:chartSpace part; the fallback is a classic chart frame
   // (this exporter) or a text shape (PowerPoint). The choice is read first and the fallback only when it names no OPF chart type.
-  for (const alternate of asArray(tree?.["mc:AlternateContent"])) {
+  for (const [alternateIndex, alternate] of asArray(tree?.["mc:AlternateContent"]).entries()) {
     const choice = asArray(alternate?.["mc:Choice"]).map((node) => node?.["p:graphicFrame"]).find(Boolean);
     const fallback = asArray(alternate?.["mc:Fallback"]).map((node) => node?.["p:graphicFrame"]).find(Boolean);
     const chosen = choice ? importGraphicFrame(entries, choice, slidePath, relationships) : null;
     const item = chosen?.payload?.type === "chart" ? chosen : fallback ? importGraphicFrame(entries, fallback, slidePath, relationships) : chosen;
-    if (item && item.kind !== "unknown") items.push(item);
+    if (item && item.kind !== "unknown") items.push({...item, sources: [`alt:${alternateIndex}`]});
   }
 
   for (const [index, picture] of nativeContext.pictures.entries()) {
-    if (furniture.pictures.has(index) || nativeContext.slideImagePictures?.has(index) || nativeContext.watermarkPictures?.has(index) || nativeContext.logoPictures?.has(index)) continue;
+    const pictureRole = furniture.pictures.has(index) ? 'furniture' : nativeContext.slideImagePictures?.has(index) ? 'slide-image' : nativeContext.watermarkPictures?.has(index) ? 'watermark' : nativeContext.logoPictures?.has(index) ? 'logo' : undefined;
+    if (pictureRole) { roles.set(`pic:${index}`, pictureRole); continue; }
     const report = diagnostic => options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}.pictures.${index}`});
     const item = importPicture(entries, picture, slidePath, relationships, report);
-    if (item) items.push(item);
+    if (item) items.push({...item, sources: [`pic:${index}`]});
   }
 
   return items;
@@ -953,7 +978,7 @@ function mergeOpfListShapes(items) {
       consumed.add(item);
     }
     const first = entries[0].item;
-    merged.set(first, {...first, paragraphs, text: paragraphs.map(paragraph => paragraph.text).join('\n'), bounds, visualBounds: undefined});
+    merged.set(first, {...first, paragraphs, text: paragraphs.map(paragraph => paragraph.text).join('\n'), bounds, visualBounds: undefined, sources: entries.flatMap(({item}) => item.sources ?? [])});
   }
   return items.flatMap(item => merged.has(item) ? [merged.get(item)] : consumed.has(item) ? [] : [item]);
 }
@@ -971,6 +996,7 @@ function mergeAdjacentBulletShapes(items) {
       &&item.bounds.y-(previous.bounds.y+previous.bounds.h)<.3){
       previous.paragraphs.push(...item.paragraphs);
       previous.text+='\n'+item.text;
+      previous.sources=[...(previous.sources??[]),...(item.sources??[])];
       previous.bounds.h=item.bounds.y+item.bounds.h-previous.bounds.y;
     }else result.push({...item,paragraphs:item.paragraphs?[...item.paragraphs]:undefined,bounds:item.bounds?{...item.bounds}:undefined});
   }

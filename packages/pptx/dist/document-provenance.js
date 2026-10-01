@@ -831,7 +831,7 @@ export function restoreDocumentProvenance(imported, {entries, presentationRoot, 
     }
   });
   const groups = [];
-  const group = (field, ops) => groups.push({field, ops});
+  const group = (field, ops, contentPaths) => groups.push({field, ops, ...(contentPaths ? {contentPaths} : {})});
   const set = (path, value) => ({path, value});
   const remove = path => ({path, remove: true});
   const intent = layoutIntent(document ? layoutRecords(document.catalogs) : [], Boolean(document), slideRecords, entries, group, report, rejectedLayoutIds);
@@ -852,7 +852,8 @@ export function restoreDocumentProvenance(imported, {entries, presentationRoot, 
       if (record.type !== undefined) report({code: 'slide-reference-changed', path: `slides.${index}.type`, message: `The slide's objects were moved, resized, added or removed since export, so slides.${index}.type ${JSON.stringify(record.type)} was not restored; the imported slide keeps its observed arrangement.`});
       return false;
     }
-    const result = rebuildContent(record.content, imported.slides[index]?.blocks ?? [], slides[index]?.contentBounds ?? []);
+    let placedPaths;
+    const result = rebuildContent(record.content, imported.slides[index]?.blocks ?? [], slides[index]?.contentBounds ?? [], paths => { placedPaths = paths; });
     if (result.reason) {
       report({code: 'content-structure-changed', path: `slides.${index}`, message: `The slide's content no longer matches its stored structure (${result.reason}), so the authored groups, regions and block ids of slides.${index} were not restored; the imported slide keeps its flat blocks.${typeNote}`});
       return false;
@@ -873,7 +874,7 @@ export function restoreDocumentProvenance(imported, {entries, presentationRoot, 
       ops.push(set(['slides', index, key], value));
     }
     if (record.type !== undefined) ops.push(set(['slides', index, 'type'], clone(record.type)));
-    group(`slides.${index}.content`, ops);
+    group(`slides.${index}.content`, ops, {slide: index, paths: placedPaths});
     return true;
   };
 
@@ -1199,10 +1200,10 @@ export function applyDocumentProvenance(imported, {groups, finalize}, validate, 
     return tidy(doc);
   };
   const all = finalize(build(groups));
-  if (validate(all).valid) return all;
+  if (validate(all).valid) { for (const item of groups) item.applied = true; return all; }
   const accepted = [];
   for (const item of groups) {
-    if (validate(build([...accepted, item])).valid) accepted.push(item);
+    if (validate(build([...accepted, item])).valid) { accepted.push(item); item.applied = true; }
     else report({code: 'invalid-document-provenance', path: item.field, message: `The stored ${item.field} does not form a valid document with the imported content, so it was not restored; the imported document keeps the values observed in the PPTX.`});
   }
   const result = finalize(build(accepted));

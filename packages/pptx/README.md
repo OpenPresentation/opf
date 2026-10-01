@@ -32,7 +32,7 @@ Version 0.8.0 requires core 0.10.0 and uses renderer 0.8.0 for coordinated previ
 - Compatibility target: `@openpresentation/opf`
 - Renderer relationship: may use `@openpresentation/opf-render` for chart rasterization and visual verification
 - Public export API: `toPptx(opf, opts)`
-- Public import API: `fromPptx(buffer, opts)`
+- Public import API: `fromPptx(buffer, opts)` (`opts.signals` adds raw per-shape signals; see [Import signals](#import-signals))
 
 The export path validates OPF with `@openpresentation/opf`, maps slide titles and common content payloads to editable PowerPoint objects through `pptxgenjs`, then normalizes the generated ZIP for stable entry ordering, fixed timestamps, and reproducible bytes.
 
@@ -134,7 +134,38 @@ The first importer is mechanical and schema-compatible:
 - The slide's content structure is part of `OPF_SLIDE_V1` too (`full` mode): nested `group` blocks, promoted regions (`left`, `top:left`, ...), a root payload (`text`, `items`, `chart`, ...) versus `blocks`, block `id`s and `extensions`, group `composition`, with the reference-pixel box of every leaf from the same composition the export drew. Import matches the native shapes to those boxes and rebuilds the authored form while the slide's arrangement is unchanged, so `slide.type` validates again; a slide whose blocks no longer fit the stored boxes keeps its flat blocks and reports `content-structure-changed` at `slides.N`; a duplicated slide reports `duplicate-block-id` and drops the repeated id. The document tag also stores `filename`, root `extensions`, slide `section` and `extensions`, `design.logo` (deck and slide) and the whole `assets` registry; a `data:` source that is not an exported picture is stored inline up to 256 KiB, so an organization logo or speaker photo given as a data URI round-trips.
 - Slide `section` labels are written as PowerPoint's native section list (`p14:sectionLst` in `ppt/presentation.xml`, whatever the `provenance` option): one section per run of consecutive slides with the same label, runs without a label as `Default Section`, with deterministic ids. Import reads the list back (`Default Section` means no section); it wins over the stored value and over the section text a footer shows (`section-reference-changed` at `slides.N.section`), except that an edited footer line keeps its text while the list still equals the stored value. The native PowerPoint check of the sections pane and save/reopen is a separate gate (`scratchpad/spec-gaps-native/`).
 
-There is no AI classification pass in the OSS runtime. Hosts can run optional cleanup or semantic remapping after `fromPptx` returns.
+There is no AI classification pass in the OSS runtime. Hosts can run optional cleanup or semantic remapping after `fromPptx` returns. A host that wants to rebuild structure (code, metrics, quotes, timelines, regions) in a deck that did not come from OPF can ask for the raw shape facts such a step needs; see [Import signals](#import-signals).
+
+## Import signals
+
+A deck exported by this package carries OPF provenance tags, so its structure returns exactly. A deck from anywhere else does not: a code panel is a text box with a monospace font, a metric is a large number over a small label, a quote is italic text over an attribution, and `fromPptx` imports each as plain text, because telling them apart takes judgement. That judgement is not made here. `fromPptx` only reports what is in the package, so a host can run its own classifier (a model, a rules engine, a person) over it. The runtime policy is unchanged: no network, no models, no clock, no randomness, nothing fabricated.
+
+```js
+import { fromPptx } from "@openpresentation/opf-pptx";
+
+// Default: the OPF document, exactly as before.
+const document = await fromPptx(bytes);
+
+// Opt in: the same document, and a signals value beside it.
+const { document: same, signals } = await fromPptx(bytes, { signals: true });
+// or with limits: fromPptx(bytes, { signals: { maxSlides: 100, maxShapesPerSlide: 150 } })
+```
+
+Without `signals` (or with `false`) the return value and the document are byte for byte what they were; with it the document is identical and the result is `{document, signals}`. Invalid limits throw `OPFPptxError` with code `invalid-signals-option` before any work. `signals` is plain JSON (`JSON.stringify` and back loses nothing), the same bytes in always give the same signals, and the types are `PptxSignals` in `index.d.ts`.
+
+**What it reports.** `signals.deck` has the slide size (EMU and reference px, 96 per inch), the theme (colour and font scheme names, major and minor font, the twelve colour slots) and whether the deck carries OPF tags. `signals.slides[i]` has the part, layout (`name`, `type`, part), master (part, name, theme name), whether the slide is hidden, whether it carries an OPF slide tag, and `shapes`: every shape in z-order (document order, back to front; `zOrder` 0 is the back), each with:
+
+- `kind`: `text`, `shape` (an autoshape with no text), `placeholder` (an empty placeholder), `picture`, `media` (video or audio), `table`, `chart`, `smartart`, `ole`, `group`, `connector`, `line` or `unknown` (with `graphicType`). `placeholder` carries `type`, `idx` and `size`.
+- `box`: `px` (reference px) and `emu`, in slide coordinates with group transforms (offset and scale) applied, so a shape inside a scaled group has its real position. A placeholder with no box of its own gets the layout's, then the master's (`box.source`). `rotation`, `flipH` and `flipV` describe the shape; its box is the frame before rotation, and `box.approximate` marks a box inside a rotated or flipped group.
+- `parent`, `children` and `depth` give the group nesting; `id` is `s` plus the z-order index.
+- `text`: paragraphs with `level`, `align`, the effective `bullet` (inherited from the list style when the paragraph states none), indents and spacing, and runs with `font`, `size`, `bold`, `italic`, `weight`, `underline`, `strike`, `baseline`, `caps`, `color` (`#RRGGBB`) with its theme `colorRef`, `monospace`, `link`, `field` and `lineBreak`. Values are the effective ones PowerPoint draws: the run, its paragraph, the shape's list style, the layout and master placeholder, the master text styles, the presentation defaults and the theme (font tokens such as `+mj-lt` and scheme colours are resolved). A value no part of that chain states is omitted, and defaults are omitted (`bold`, `italic`, `monospace` absent means false, `weight` absent 400, `level` absent 0, `align` absent left). `monospace` is true for a known fixed-width family (Consolas, Courier New, Menlo, JetBrains Mono, ...); `text.monospaceShare`, `dominantFont`, `dominantSize`, `maxFontSize`, `anchor` and `autofit` summarise the shape.
+- `fill`, `outline` (kind, colour, width, dash, arrowheads) and `geometry` (`rect`, `roundRect`, `ellipse`, ...). Fills and lines that only name a theme style are reported as `kind: "style"` with the style index and colour.
+- `picture` (part, media type, bytes, natural size, crop), `table` (rows, columns, widths, header flags, cell text), `chart` (chart types, series and point counts, title).
+- `opf`: where the importer put the shape in the document it returned. `{role: "block", path: "slides.2.blocks.1", blockType: "text"}`, `{role: "title", path: "slides.0.title"}`, or `null` when the importer made nothing of it (a connector, a table inside a group). For an OPF export the path follows the rebuilt structure (`slides.0.blocks.0.blocks.1`, `slides.1.left`, `slides.2.text`). A shape the importer consumed without a block of its own has a `role` only (`furniture`, `logo`, `watermark`, `slide-image`, or the member of a tagged group). A group links where all its members do. Several shapes can link to one block (the lines of a list, the parts of a quote).
+
+**Bounds.** The output is bounded by `signals` limits, reported in `signals.limits` (defaults, with the largest value each accepts): `maxSlides` 300 (5000), `maxShapesPerSlide` 300 (5000), `maxTotalShapes` 5000 (100000), `maxParagraphsPerShape` 200 (5000), `maxTextCharsPerShape` 8000 (200000), `maxTextCharsTotal` 400000 (5000000), `maxTableCells` 400 (10000), `maxTableCellChars` 200 (5000), `maxGroupDepth` 12 (32). What a bound drops is counted: `signals.truncated` (slides not reported, text budget exhausted), `slide.truncated` (shapes, depth, paragraphs, text, table) and `paragraph.truncated`. `text.chars` and `text.paragraphCount` are the true counts. Images are never embedded, only described, so the size follows the text: about 0.7 KB of JSON per shape.
+
+**Not claims.** Signals are facts, not conclusions: a `monospace` run is not a code block, and `opf: null` is not an error. They are read from the package, not rendered: the effective values follow the OOXML inheritance rules, not PowerPoint's layout engine (text wrapping and autofit are not computed, a group's rotation is not applied to its members' boxes, and an unresolvable colour or font is left out). They describe the upload, which can be hostile: the text is the deck's text, and a host that passes it on to a model should treat it as untrusted data, never as instructions.
 
 ## Chartex charts (FF-22b)
 
