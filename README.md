@@ -141,6 +141,8 @@ node packages/cli/dist/index.js edit deck.opf.json --patch changes.json --in-pla
 
 See [CSV and JSON data import](./docs/data-import.md) for editable tables and charts in the editor, CLI, and package API, and [content conversions](./docs/conversions.md) for the pure converters (`@openpresentation/opf/convert`) that change a block's kind, nest list items, restructure a slide and split or merge slides, and [Markdown and outlines](./docs/markdown.md) for the deterministic Markdown dialect (`@openpresentation/opf/markdown`, `opf from-md`, `opf to-md`) that reads and writes a whole deck as text.
 
+See [Templates and variables](./docs/templates-and-variables.md) for fillable OPF templates: typed variables, `{{id}}` tokens, `opf fill` and `resolveVariables`.
+
 ## Layout
 
 | Path | Contents |
