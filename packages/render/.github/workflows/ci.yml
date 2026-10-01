@@ -37,11 +37,11 @@ jobs:
       # Release 0.11.8 pins core core main 3ae62f9 (records the 0.11.8 lazy font count, opf#219), opf-pptx main b5ed201 and opf-editor main 159c08b.
       # FF-43 pins core PR opf#178 (font policy measured values for the vendored Source Sans 3 rows, the measurement tools and the tracker); merged as 72d337bf5778cc7d9048d236debc10ba0d37fb4c.
       # Release 0.11.9 pins core main 07cd9d4 (design fields and preview fixes opf#229 to #232, the 0.11.9 lazy font count opf#234 and the ecosystem repin opf#235), opf-pptx main e6c0391 (after opf-pptx#124) and opf-editor main dea8a79.
-      # RR-32 pins core PR opf#256 (core main 07cd9d4 plus the template variables, resolveVariables); repin to its merge commit once merged.
+      # RR-32 pins core PR opf#256 (template variables, resolveVariables) and RR-16 pins core PR opf#247 (composed font sizes on PowerPoint's 0.01 pt grid; 316 golden slides move, selected through OPF_GOLDEN_BASELINE). Both are unmerged, so the pin is the throwaway branch codex/rr-16-combined-rr-32-b (8c2bfd9: opf#247 commit 448c47f merged with the opf#256 commit render main pins, ba727c7; it carries no other core change, so the font policy snapshot stays valid). Repin to the core merge commit once both merge (never leave it on an unmerged head).
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf
-          ref: ba727c7619866bcc0759fdac9b2f6242aae2efa3
+          ref: 8c2bfd942fa856ad95953f728b5928fdd3d4cda0
           path: opf
           fetch-depth: 0
           persist-credentials: false
