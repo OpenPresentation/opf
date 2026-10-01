@@ -72,26 +72,43 @@ export function nativeShapeParagraphs(xml, rootElement = 'p:sld') {
   const root = children(reader.parse(xml),rootElement)[0];
   const tree = children(children(root,'p:cSld')[0],'p:spTree')[0];
   return orderedShapes(tree).map(shape=>children(children(shape,'p:txBody')[0],'a:p').map(paragraph=>{
-    let text = '', maxFontSize = 0, bullet = false, level = 0;
+    let text = '', maxFontSize = 0, bullet = false, level = 0, math = null;
     const fields = [];
-    for (const child of paragraph) {
-      if (child['a:br'] !== undefined) text += '\n';
-      if (child['a:fld'] !== undefined) fields.push({type: String(child[':@']?.type ?? ''), text: children(child['a:fld'],'a:t').map(plainText).join('')});
-      for (const key of ['a:r','a:fld']) if (child[key] !== undefined) {
-        text += children(child[key],'a:t').map(plainText).join('');
-        for (const run of child[key]) {
+    const readRuns = runs => {
+      let value = '';
+      for (const key of ['a:r','a:fld']) if (runs[key] !== undefined) {
+        value += children(runs[key],'a:t').map(plainText).join('');
+        for (const run of runs[key]) {
           const size = Number(run[':@']?.sz);
           if (run['a:rPr'] !== undefined && Number.isFinite(size)) maxFontSize = Math.max(maxFontSize,size/100);
         }
+      }
+      return value;
+    };
+    for (const child of paragraph) {
+      if (child['a:br'] !== undefined) text += '\n';
+      if (child['a:fld'] !== undefined) fields.push({type: String(child[':@']?.type ?? ''), text: children(child['a:fld'],'a:t').map(plainText).join('')});
+      text += readRuns(child);
+      if (child['mc:AlternateContent'] !== undefined) {
+        // FF-45: an a14:m math zone (an OMML equation, m:oMathPara) has no OPF model. Its mc:Fallback runs (the text PowerPoint
+        // writes for older readers) are kept as plain text; without them the equation's m:t text is kept in order. The paragraph
+        // records the zones so the importer diagnoses the lost equation layout instead of dropping the paragraph silently.
+        const zones = children(child['mc:AlternateContent'],'mc:Choice').flatMap(choice=>children(choice,'a14:m'));
+        const fallback = children(child['mc:AlternateContent'],'mc:Fallback').flatMap(nodes=>nodes.map(readRuns)).join('');
+        const linear = zones.map(mathText).join('');
+        if (zones.length) math = {zones: (math?.zones ?? 0) + zones.length, text: (math?.text ?? '') + linear};
+        text += fallback || linear;
       }
       if (child['a:pPr'] !== undefined) {
         level = Number(child[':@']?.lvl ?? 0);
         bullet = child['a:pPr'].some(node=>node['a:buChar'] !== undefined || node['a:buBlip'] !== undefined || node['a:buAutoNum'] !== undefined);
       }
     }
-    return {text,maxFontSize,bullet,level,fields};
+    return {text,maxFontSize,bullet,level,fields,...(math ? {math} : {})};
   }));
 }
+/** The m:t text of an OMML tree in document order (its linear reading, without the equation's layout). */
+export const mathText = nodes => array(nodes).flatMap(node=>Object.entries(node).flatMap(([key,value])=>key === ':@' || key === '#text' ? [] : key === 'm:t' ? [plainText(value)] : mathText(value))).join('');
 
 function sourceFor(value, role, generated) {
   if (generated) return 'code';

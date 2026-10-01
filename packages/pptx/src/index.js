@@ -686,6 +686,12 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   const shapes = nativeContext.shapes;
   if (tree?.['p:grpSp']) options.onDiagnostic?.({code:'grouped-text-reflow',path:`slides.${slideIndex}`,message:'Grouped native text and pictures are retained, but group transforms and unsupported group members are not reconstructed; review the reflowed OPF.'});
   const paragraphs = nativeContext.paragraphs;
+  // FF-45: OMML equations (a14:m math zones) have no OPF model. Their fallback text is imported as plain text; the equation
+  // layout (fractions, radicals, limits, matrices) is lost, and that loss is diagnosed per shape instead of passing silently.
+  paragraphs.forEach((list, index) => {
+    const zones = list.reduce((count, paragraph) => count + (paragraph.math?.zones ?? 0), 0);
+    if (zones) options.onDiagnostic?.({code: 'math-equation-flattened', path: `slides.${slideIndex}`, message: `Native shape ${index} holds ${zones} OMML equation${zones === 1 ? '' : 's'} (a14:m); OPF has no equation model, so its fallback text is imported as plain text and the equation layout is not represented.`});
+  });
   // Native shape keys (indexes in nativeTextShapes / nativePictures / frame order) for import signals.
   const shapeKeys = new Map(shapes.map((shape, index) => [shape, `sp:${index}`]));
   const sourcesOf = group => group.flatMap(shape => shapeKeys.has(shape) ? [shapeKeys.get(shape)] : []);
@@ -903,9 +909,15 @@ function importPicture(entries, picture, slidePath, relationships, report) {
 function readParagraphs(txBody) {
   return asArray(txBody?.["a:p"])
     .map((paragraph) => {
+      // FF-45: an a14:m math zone (OMML equation) inside mc:AlternateContent has no OPF model; its mc:Fallback runs are read as
+      // text (or, without them, the equation's m:t text), and `math` records the zones so the importer can diagnose the loss.
+      const alternates = asArray(paragraph?.["mc:AlternateContent"]);
+      const zones = alternates.flatMap(alternate => asArray(alternate?.["mc:Choice"])).filter(choice => choice?.["a14:m"] !== undefined);
+      const fallbackRuns = alternates.flatMap(alternate => asArray(alternate?.["mc:Fallback"])).flatMap(fallback => [...asArray(fallback?.["a:r"]), ...asArray(fallback?.["a:fld"])]);
       const runs = [
         ...asArray(paragraph?.["a:r"]),
-        ...asArray(paragraph?.["a:fld"])
+        ...asArray(paragraph?.["a:fld"]),
+        ...fallbackRuns
       ];
       const texts = [];
       const sizes = [];
@@ -915,13 +927,22 @@ function readParagraphs(txBody) {
         const size = Number(run?.["a:rPr"]?.sz);
         if (Number.isFinite(size)) sizes.push(size / 100);
       }
+      const linear = zones.map(choice => keyedMathText(choice["a14:m"])).join("");
+      if (zones.length && !fallbackRuns.some(run => scalarText(run?.["a:t"]))) texts.push(linear);
       return {
         text: texts.join(""),
         bullet: asArray(paragraph?.["a:pPr"]).some(props => props?.["a:buChar"] !== undefined || props?.["a:buBlip"] !== undefined || props?.["a:buAutoNum"] !== undefined),
         level: Number(asArray(paragraph?.["a:pPr"])[0]?.lvl ?? 0),
-        maxFontSize: sizes.length > 0 ? Math.max(...sizes) : 0
+        maxFontSize: sizes.length > 0 ? Math.max(...sizes) : 0,
+        ...(zones.length ? {math: {zones: zones.length, text: linear}} : {})
       };
     });
+}
+/** The m:t text of a keyed OMML tree (an a14:m zone) in document order: the equation's linear reading without its layout. */
+function keyedMathText(node) {
+  if (Array.isArray(node)) return node.map(keyedMathText).join("");
+  if (!node || typeof node !== "object") return "";
+  return Object.entries(node).map(([key, value]) => key === "m:t" ? asArray(value).map(scalarText).join("") : keyedMathText(value)).join("");
 }
 
 function shapePlaceholderType(shape) {
