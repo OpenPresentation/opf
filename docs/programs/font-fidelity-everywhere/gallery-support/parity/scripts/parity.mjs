@@ -14,6 +14,7 @@ import {classifyChosenFamilies, hostRenderOutcome, hostRenderReason, resolveFami
 import {runElements, logicalRunCount} from './pptx-runs.mjs';
 import {drawnTableBox} from './table-box.mjs';
 import {createFontHosts} from './font-host.mjs';
+import {chartexExpectations, chartIdFromLayouts, chartexDataMismatches, chartexPreviewMarks, chooseAlternateContent, parseChartex} from './chartex.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(here, '..');
@@ -27,6 +28,9 @@ const {toPptx, fromPptx} = await imp(path.join(PPTX, 'dist/index.js'));
 // Core's default text measurement: the same estimate both engines use here (no host registry).
 const {measureText, fontPolicyFor, FONT_POLICY} = await imp(path.join(CORE, 'packages/javascript/dist/index.js'));
 const {unzipSync} = createRequire(path.join(PPTX, 'package.json'))('fflate');
+// FF-56: the chartex constructs the catalog records, and the layoutIds of their cx:series (chartex.mjs).
+const {catalogs: CORE_CATALOGS} = await imp(path.join(CORE, 'packages/javascript/dist/index.js'));
+const CX_EXPECT = chartexExpectations(CORE_CATALOGS.chartTypes);
 // A published package is not a git checkout: its npm gitHead names the commit it was built from.
 const head = d => { try { return execFileSync('git', ['-C', d, 'rev-parse', 'HEAD'], {encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore']}).trim(); } catch { try { return JSON.parse(fs.readFileSync(path.join(d, 'package.json'), 'utf8')).gitHead ?? null; } catch { return null; } } };
 
@@ -112,6 +116,8 @@ function parseSvg(svg) {
     else if (['rect', 'circle', 'ellipse', 'path', 'polygon', 'line', 'image', 'polyline'].includes(tag)) {
       const el = {kind: tag === 'image' ? 'image' : 'shape', tag, path: p, fill: a.fill ?? null, stroke: a.stroke ?? null};
       if (tag === 'rect' || tag === 'image') Object.assign(el, {x: +(a.x ?? 0), y: +(a.y ?? 0), w: +a.width, h: +a.height});
+      if (tag === 'polyline') el.points = a.points ?? '';
+      if (tag === 'circle') Object.assign(el, {cx: a.cx, cy: a.cy});
       if (tag === 'image') { const href = a.href ?? a['xlink:href'] ?? ''; const b64 = href.match(/^data:[^;]+;base64,(.*)$/); el.hash = b64 ? sha(Buffer.from(b64[1], 'base64')) : href.slice(0, 40); el.mime = href.match(/^data:([^;]+)/)?.[1] ?? null; el.par = a.preserveAspectRatio ?? 'xMidYMid meet'; el.intrinsic = imageSize(href); }
       out.elements.push(el);
     }
@@ -180,7 +186,8 @@ function resolveTarget(sourcePart, target) {
 }
 function parseSlide(xml, rels, files, theme, slidePart) {
   const bg = xml.match(/<p:bg>(.*?)<\/p:bg>/s)?.[1]; const shapes = [];
-  const tree = xml.match(/<p:spTree>(.*)<\/p:spTree>/s)?.[1] ?? '';
+  // FF-56: an mc:AlternateContent is read as its Choice (a chartex frame; the Fallback is the classic clustered column an older consumer draws).
+  const tree = chooseAlternateContent(xml.match(/<p:spTree>(.*)<\/p:spTree>/s)?.[1] ?? '');
   let order = 0;
   for (const m of tree.matchAll(/<p:(sp|pic|graphicFrame|cxnSp)>(.*?)<\/p:\1>/gs)) {
     const [, kind, body] = m; const nv = body.match(/<p:cNvPr\b([^>]*)/)?.[1] ?? ''; const na = attrs(nv);
@@ -194,6 +201,8 @@ function parseSlide(xml, rels, files, theme, slidePart) {
     const blip = body.match(/<a:blip r:embed="([^"]+)"/)?.[1]; if (blip) { const target = rels[blip]; const part = resolveTarget(slidePart, target); s.image = {part, hash: files[part] ? sha(files[part]) : null, srcRect: attrs(body.match(/<a:srcRect\b([^>]*)\/>/)?.[1] ?? '')}; }
     const chartRid = body.match(/<c:chart\b[^>]*r:id="([^"]+)"/)?.[1];
     if (chartRid) { const part = resolveTarget(slidePart, rels[chartRid]); const cx = files[part] ? dec.decode(files[part]) : ''; s.chart = {part, ...chartSeriesColors(cx), typefaces: uniq([...cx.matchAll(/<a:latin typeface="([^"]*)"/g)].map(x => x[1])), sizes: uniq([...cx.matchAll(/<a:defRPr\b[^>]*\bsz="(\d+)"/g)].map(x => +x[1] / 100)), strings: [...cx.matchAll(/<c:v>([^<]*)<\/c:v>/g)].map(x => unesc(x[1]))}; }
+    const cxRid = body.match(/<cx:chart\b[^>]*r:id="([^"]+)"/)?.[1];
+    if (cxRid) { const part = resolveTarget(slidePart, rels[cxRid]); const cx = files[part] ? parseChartex(dec.decode(files[part])) : null; if (cx) s.chart = {part, chartex: true, layouts: cx.layouts, cx, colors: cx.colors, strokeSeries: false, typefaces: cx.typefaces, sizes: cx.sizes.map(x => x / 100), strings: cx.strings}; }
     shapes.push(s);
   }
   return {bg: bg ? fillOf(bg, theme) ?? {kind: 'ref'} : null, shapes};
@@ -341,17 +350,33 @@ async function parity(doc) {
       if (isChart) {
         const ch = G.px.find(s => s.chart).chart; const strs = new Set(ch.strings.map(normText));
         const allStr = [...strs].join(''); const wrapped = pvLines.filter(l => !strs.has(normText(l.text)) && allStr.includes(normText(l.text))); if (wrapped.length) add('text', 'near', 'chart label wrapped/split in preview (native chart lays out its own labels)', key, wrapped.map(m => m.text).slice(0, 4).join(' | '));
-        const missing = pvLines.filter(l => !wrapped.includes(l)).filter(l => !strs.has(normText(l.text)) && !/^[-\d.,%$€£\s]+$/.test(l.text) && !pxParas.some(p => normText(p.text) === normText(l.text)));
+        // A histogram's bin range labels are laid out by the consumer from the value cache (the chartex part has no category cache for them).
+        const generatedBin = l => ch.chartex && ch.layouts.includes('clusteredColumn') && /^[\[(]\s*-?[\d.]+,\s*-?[\d.]+\s*[\])]$/.test(l.text.trim());
+        const missing = pvLines.filter(l => !wrapped.includes(l)).filter(l => !strs.has(normText(l.text)) && !/^[-\d.,%$€£\s]+$/.test(l.text) && !generatedBin(l) && !pxParas.some(p => normText(p.text) === normText(l.text)));
         if (missing.length) add('text', 'fail', `chart preview text not in native chart cache`, key, missing.map(m => m.text).slice(0, 4).join(' | '));
         const pvFams = uniq(pvLines.flatMap(l => l.runs.map(r => r.family))); const chFams = ch.typefaces;
         if (!chFams.length) add('text', 'fail', 'native chart has no explicit typeface (inherits theme/Office default)', key);
         else for (const f of pvFams) if (!chFams.includes(f)) add('text', 'fail', `chart font ${f} (preview) not in chart XML [${chFams.join('|')}]`, key);
         const pvSizes = uniq(pvLines.flatMap(l => l.runs.map(r => r.sizePt))); if (ch.sizes.length && pvSizes.some(s => !ch.sizes.some(c => Math.abs(c - s) <= TOL.sizePt))) add('text', 'near', `chart text sizes preview [${pvSizes}] vs chart [${ch.sizes}]`, key);
         // A line-kind series is compared on its stroke (the series polylines and paths, traced to data.columns; axes, rings and gridlines are not series), every other series on its fills.
-        const pvColors = ch.strokeSeries
+        const pvColors = ch.chartex
+          // A chartex construct paints fills and strokes (the Pareto line, the box lines): the series colours are any colour the chart's marks use.
+          ? uniq(G.pv.filter(e => e.kind === 'shape' && /\.chart\./.test(e.path ?? '')).flatMap(e => [e.fill, e.stroke]).filter(v => v && v !== 'none').map(hex))
+          : ch.strokeSeries
           ? uniq(G.pv.filter(e => e.kind === 'shape' && (e.tag === 'polyline' || e.tag === 'path') && e.fill === 'none' && e.stroke && /\.data\.columns\./.test(e.path ?? '')).map(e => hex(e.stroke)))
           : uniq(G.pv.filter(e => e.kind === 'shape' && e.tag !== 'line' && e.fill && e.fill !== 'none').map(e => hex(e.fill)));
         const extra = ch.colors.filter(c => !pvColors.includes(c)); if (extra.length) add('fills', 'fail', `chart series colors not in preview (${extra.length})`, key);
+        if (ch.chartex) {
+          // FF-56: the part against the catalog and the data, and real mark checks of the preview (treemap tiles, histogram bins, Pareto bars and line, box and outliers, waterfall and funnel bars).
+          const chartDoc = doc.slides?.[si]?.chart ?? (doc.slides?.[si]?.blocks ?? []).find(b => b.type === 'chart')?.chart; const want = chartDoc?.type, id = chartIdFromLayouts(CX_EXPECT, ch.layouts), rows = chartDoc?.data?.rows ?? [];
+          if (!want || !CX_EXPECT.has(want)) add('mapping', 'fail', `chartex part on a slide whose chart is ${want ?? 'absent'}`, key);
+          else if (id !== want) add('mapping', 'fail', `chartex layoutIds ${ch.layouts.join('+')} are not the catalog's ${want}`, key);
+          else {
+            for (const x of chartexDataMismatches(want, CX_EXPECT.get(want), ch.cx, rows)) add('text', 'fail', `chartex cache: ${x}`, key);
+            const marks = G.pv.filter(e => e.kind === 'shape' && /\.chart\./.test(e.path ?? '')).map(e => ({tag: e.tag, 'data-opf-path': e.path, x: e.x, y: e.y, width: e.w, height: e.h, points: e.points, cx: e.cx, cy: e.cy}));
+            for (const c of chartexPreviewMarks(want, rows, marks).checks.filter(c => !c.ok)) add('geometry', 'fail', `chartex preview marks: ${c.name}`, key, `${JSON.stringify(c.actual)} vs ${JSON.stringify(c.expected)}`);
+          }
+        }
       } else {
         const used = new Set();
         for (const l of pvLines) {
@@ -475,6 +500,14 @@ async function parity(doc) {
     for (const [k, get] of Object.entries(ids)) { const a = get(doc), b = get(rt); if (a === undefined || a === 'undefined') continue; if (a !== b) { const diag = idiag.find(x => x.path?.includes(k.split('.').pop())); add('reimport', diag ? 'near' : 'fail', `${k} not preserved${diag ? ' (diagnostic ' + diag.code + ')' : ' (no diagnostic)'}`); } }
     doc.slides.forEach((s, i) => { const a = s.layout, b = rt.slides?.[i]?.layout; if (a && a !== b) { const diag = idiag.find(x => x.path?.startsWith(`slides.${i}`) && /layout/i.test(x.code + x.path)); add('reimport', diag ? 'near' : 'fail', `slide layout id not preserved${diag ? ' (diagnostic ' + diag.code + ')' : ' (no diagnostic)'}`, `slides.${i}`); } });
     if ((rt.slides?.length ?? 0) !== doc.slides.length) add('reimport', 'fail', `slide count ${doc.slides.length} -> ${rt.slides?.length}`);
+    // FF-56: a chart comes back as the same chart id with the same data rows (the chartex part is read back through its layoutIds).
+    doc.slides.forEach((sl, i) => {
+      // The data columns as audit B compares them: every column, except the point-label column of a scatter (the XY chart keeps X and Y).
+      const normRows = (rows, type) => (rows ?? []).map(r => (Array.isArray(r) ? r : [r]).slice(type === 'scatter' ? 1 : 0).map(v => typeof v === 'number' ? v : (v !== '' && v !== null && Number.isFinite(Number(v)) ? Number(v) : String(v))));
+      const a = sl.chart; if (!a?.type || !a.data?.rows) return; const b = (rt.slides?.[i]?.blocks ?? []).find(x => x.type === 'chart')?.chart; const adapted = ediag.includes('chart-data-adapted');
+      if (b?.type !== a.type) add('reimport', adapted ? 'near' : 'fail', `slides.${i} chart re-imports as ${b?.type ?? 'nothing'}, expected ${a.type}${adapted ? ' (chart-data-adapted reported)' : ''}`);
+      else if (JSON.stringify(normRows(b.data?.rows, a.type)) !== JSON.stringify(normRows(a.data.rows, a.type))) add('reimport', adapted ? 'near' : 'fail', `slides.${i} chart data rows differ after re-import${adapted ? ' (chart-data-adapted reported)' : ''}`);
+    });
   }
   // classify
   const CHECKS = ['geometry', 'text', 'fills', 'zOrder', 'slideSize', 'typefaces', 'reimport', 'fontResolution', 'theme', 'mapping'];
