@@ -77,8 +77,20 @@ cannot show it.
 | `Math.random` | Vendored PptxGenJS uses it for ids and one chart-colour fallback. `toPptx` replaces it with a seeded generator (`options.seed`) for the duration of the call. | Pinned. Three concurrent exports in one process match sequential output (tested). The replacement is process global while an export runs, so other code using `Math.random` during an export sees it. |
 | Compression | fflate deflate is pure JavaScript at a fixed level; versions are locked by `package-lock.json`. | Pinned; identical across platforms for the same version (verify with manifests). |
 
+## Cross-OS evidence (RR-04)
+
+Core's "Published packages matrix" workflow
+([opf#243](https://github.com/OpenPresentation/opf/pull/243), evidence in core
+`docs/evidence/rr-04-cross-platform-20261001`) installs the published opf-pptx 0.11.8 with core
+0.11.4, opf-render 0.11.9 and opf-editor 0.10.6 from the npm registry and exports a 61-deck pairwise
+matrix (274 states and 26 chart paths, WebP assets included) on ubuntu x64, windows x64 and macos
+arm64 under Node 24.21.0 (ICU 78.3, tz data 2026c). All 300 PPTX, SVG and PNG digest entries are
+identical on the three systems, so the WebP conversion (sharp's prebuilt libvips per platform) and
+fflate output agree across them. On each OS, 17 child processes (time zones, locales, simulated
+clocks, hostile default locales, a no-font `--permission` sandbox, host and decoy fonts for the
+rasterizer) match the baseline. No nondeterminism was found.
+
 ## Not established here
 
-Only Windows was run locally. Linux and macOS, the CI matrix, other Node 24.x
-builds, the packed tarball and the browser build were not run for this page. Cross-OS
-byte identity needs the manifests from each OS to be compared.
+Other Node 24.x builds and ICU versions, other CPU architectures (linux-arm64, win32-arm64, macos-x64),
+musl, the browser build and native PowerPoint. The checks above are for the Node exporter.
