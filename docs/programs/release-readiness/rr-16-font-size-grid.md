@@ -49,6 +49,17 @@ Where sizes come from, and how each follows the rule:
 
 The 15 are the one discrete effect: the metric layout search scores its candidate sizes by total font reduction, and a sub-pixel change in a trial's fit can pick the neighbouring candidate (for example the value at 41.387 px and the label at the 17.653 px floor instead of 39.19 px and 19.848 px). Both fit; neither overflows.
 
+### Preview versus export on every slide size
+
+The gallery values are all 16:9, but the example corpus also has 4:3, 16:10, Letter and A4 decks, where the scale is not a whole number. `rr-16-export-sizes.mjs` renders and exports each example deck that exports (99 decks, 566 slides) and compares, per slide, the font sizes the preview draws with the `sz` the PPTX writes:
+
+| core | preview font sizes off the 0.01 pt grid | slides whose PPTX names a size the preview does not draw |
+|---|---|---|
+| base `c64b3a9` | 3585 | 39 (for example `sz` 1563 against a drawn 1562) |
+| with the snap (`448c47f`, opf-pptx `b679524`) | **0** | **2** |
+
+The 2 are `technical/chart-data-sources` slides 2 and 3, whose chart reads an `asset:` source with no inline rows: the export writes a "Chart" placeholder text box at 11 pt that the preview does not draw as text. It is the same before the change and not a font-size grid question.
+
 ### Renderer raster golden
 
 [opf-render#91](https://github.com/OpenPresentation/opf-render/pull/91): on Windows, Node 26.4.0, scale 0.25, `systemFonts: false`, the previous baseline first reproduced byte-for-byte against the base core, then **316 of 805** slide hashes changed against the core with the snap and 489 did not (the source digest is unchanged). The 316 are inside the 318 changed SVGs; the other 2 change by less than a pixel at that scale. The baseline is regenerated as a whole file, but only those 316 entries differ.
