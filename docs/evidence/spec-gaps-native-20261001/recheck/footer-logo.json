@@ -1,0 +1,191 @@
+{
+  "deck": "footer-logo.pptx",
+  "slides": [
+    {
+      "index": 1,
+      "shapes": [
+        {
+          "name": "OPF heading slides.0.title line 0",
+          "type": 1,
+          "alt": "",
+          "l": 43.2,
+          "t": 49.5,
+          "w": 873.6,
+          "h": 49.4,
+          "text": "Footer and header logos",
+          "font": "Arial Black",
+          "bulletType": 0
+        },
+        {
+          "name": "OPF text slides.0.text line 0",
+          "type": 1,
+          "alt": "",
+          "l": 43.5,
+          "t": 117,
+          "w": 873.6,
+          "h": 22.9,
+          "text": "The icon variant (square mark) appears b",
+          "font": "Arial",
+          "bulletType": 0
+        },
+        {
+          "name": "OPF image 1",
+          "type": 13,
+          "alt": "",
+          "l": 865.8,
+          "t": 13.5,
+          "w": 27,
+          "h": 27
+        },
+        {
+          "name": "OPF image 2",
+          "type": 13,
+          "alt": "",
+          "l": 67.2,
+          "t": 491.4,
+          "w": 27,
+          "h": 27
+        },
+        {
+          "name": "OPF furniture 0 part 2 line 0",
+          "type": 1,
+          "alt": "",
+          "l": 642.3,
+          "t": 491.4,
+          "w": 249.6,
+          "h": 14.6,
+          "text": "1",
+          "font": "Arial",
+          "bulletType": 0
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "shapes": [
+        {
+          "name": "OPF heading slides.1.title line 0",
+          "type": 1,
+          "alt": "",
+          "l": 43.2,
+          "t": 49.5,
+          "w": 873.6,
+          "h": 49.4,
+          "text": "Dark slide",
+          "font": "Arial Black",
+          "bulletType": 0
+        },
+        {
+          "name": "OPF text slides.1.text line 0",
+          "type": 1,
+          "alt": "",
+          "l": 43.2,
+          "t": 116.9,
+          "w": 873.6,
+          "h": 22.9,
+          "text": "On a dark background the light icon is u",
+          "font": "Arial",
+          "bulletType": 0
+        },
+        {
+          "name": "OPF image 3",
+          "type": 13,
+          "alt": "",
+          "l": 865.8,
+          "t": 13.5,
+          "w": 27,
+          "h": 27
+        },
+        {
+          "name": "OPF image 4",
+          "type": 13,
+          "alt": "",
+          "l": 67.2,
+          "t": 491.4,
+          "w": 27,
+          "h": 27
+        },
+        {
+          "name": "OPF furniture 1 part 2 line 0",
+          "type": 1,
+          "alt": "",
+          "l": 642.3,
+          "t": 491.4,
+          "w": 249.6,
+          "h": 14.6,
+          "text": "2",
+          "font": "Arial",
+          "bulletType": 0
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "shapes": [
+        {
+          "name": "OPF logo",
+          "type": 13,
+          "alt": "Logo",
+          "l": 43.2,
+          "t": 49.5,
+          "w": 168,
+          "h": 42
+        },
+        {
+          "name": "OPF heading slides.2.title line 0",
+          "type": 1,
+          "alt": "",
+          "l": 43.2,
+          "t": 255,
+          "w": 873.6,
+          "h": 49.4,
+          "text": "Cover",
+          "font": "Arial Black",
+          "bulletType": 0
+        },
+        {
+          "name": "OPF heading slides.2.subtitle line 0",
+          "type": 1,
+          "alt": "",
+          "l": 43.5,
+          "t": 313.5,
+          "w": 873.6,
+          "h": 22.9,
+          "text": "The cover still gets its lockup logo too",
+          "font": "Arial",
+          "bulletType": 0
+        },
+        {
+          "name": "OPF image 5",
+          "type": 13,
+          "alt": "",
+          "l": 865.8,
+          "t": 13.5,
+          "w": 27,
+          "h": 27
+        },
+        {
+          "name": "OPF image 6",
+          "type": 13,
+          "alt": "",
+          "l": 67.2,
+          "t": 491.4,
+          "w": 27,
+          "h": 27
+        },
+        {
+          "name": "OPF furniture 2 part 2 line 0",
+          "type": 1,
+          "alt": "",
+          "l": 642.2,
+          "t": 491.4,
+          "w": 249.6,
+          "h": 14.6,
+          "text": "3",
+          "font": "Arial",
+          "bulletType": 0
+        }
+      ]
+    }
+  ]
+}
