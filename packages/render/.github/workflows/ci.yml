@@ -37,10 +37,11 @@ jobs:
       # Release 0.11.8 pins core core main 3ae62f9 (records the 0.11.8 lazy font count, opf#219), opf-pptx main b5ed201 and opf-editor main 159c08b.
       # FF-43 pins core PR opf#178 (font policy measured values for the vendored Source Sans 3 rows, the measurement tools and the tracker); merged as 72d337bf5778cc7d9048d236debc10ba0d37fb4c.
       # Spec-gap closure A (R1) pins core PR opf#229 (codex/spec-gaps-design-fields, merged with the cover alignment change opf#230) at 0bcd3f6: logos, picture bullets, accent font, contentDirection, chartPrimary and cover heading alignment; move to the merged core commit before release. opf-pptx and opf-editor follow core ecosystem-ci (f8a0576, cb1a526). Lockstep: the renderer floor moves to the next core release.
+      # Preview fixes pin core PR codex/core-0114-preview-fixes at dbcfe1c (picture-bullet box ListEntryLayout.bulletBox, furniture image alignment); repin to the merged core commit before release.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf
-          ref: 0bcd3f6e638df6faaddd20adc92152c4664ad263
+          ref: dbcfe1c301631df30b99e97caf036a5fc8ed51f8
           path: opf
           fetch-depth: 0
           persist-credentials: false

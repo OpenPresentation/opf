@@ -131,6 +131,13 @@ let checked = 0;
   assert.deepEqual(furniture.map(group => attr(group, 'data-opf-furniture-source')).sort(), ['design.logo.icon', 'design.logo.icon']);
   assert.ok(images(svg).every(image => attr(image, 'href') === icon), 'furniture uses the icon variant');
   assert.equal(images(svg).length, 2);
+  // Furniture images align like the zone text: the left zone's logo starts at the zone's left edge, the right zone's ends at its right edge.
+  const parts = resolvePresentation(deck).slides[0].geometry.furniture.parts.filter(part => part.type === 'image');
+  const drawn = images(svg).map(image => ['x', 'y', 'width', 'height'].map(name => Number(attr(image, name))));
+  const near = (a, b) => Math.abs(a - b) < 0.002;
+  const left = parts.find(part => part.zone === 'left'), right = parts.find(part => part.zone === 'right');
+  assert.ok(near(left.box.x, 1280 * 0.07) && near(right.box.x + right.box.width, 1280 * 0.93), 'logo parts sit on their zone edges');
+  for (const part of parts) assert.ok(drawn.some(box => box.every((value, index) => near(value, [part.box.x, part.box.y, part.box.width, part.box.height][index]))), `${part.zone} logo drawn in its part box`);
   assert.ok(svg.includes('Confidential'));
   // No logo to resolve: the generated logo is reported at its furniture path and nothing is drawn.
   const missing = { design: { footer: { left: { logo: true } } }, slides: [{ title: 'Content', text: 'Body copy.' }] };
@@ -155,7 +162,9 @@ let checked = 0;
   list.text.listEntries.forEach((entry, index) => {
     const marker = markers[index];
     assert.equal(Number(attr(marker, 'width')), Number(attr(marker, 'height')));
-    assert.equal(Number(attr(marker, 'width')), Number(Number(entry.marker.fontSize).toFixed(3)));
+    // PowerPoint draws a:buBlip at buSzPct 100000 as a square about 0.65 of the font size (core's bulletBox).
+    assert.equal(Number(attr(marker, 'width')), Number((entry.marker.fontSize * 0.65).toFixed(3)), 'PowerPoint picture-bullet size');
+    assert.equal(Number(attr(marker, 'width')), Number(entry.bulletBox.width.toFixed(3)));
     assert.equal(Number(attr(marker, 'x')), Number(Number(entry.marker.x).toFixed(3)));
     assert.equal(Number(attr(marker, 'y')) + Number(attr(marker, 'height')), Number((entry.marker.y).toFixed(3)), 'bottom on the marker baseline');
     assert.equal(attr(marker, 'preserveAspectRatio'), 'xMidYMid meet');
