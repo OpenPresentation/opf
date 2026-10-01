@@ -8,6 +8,7 @@ import {fileURLToPath, pathToFileURL} from 'node:url';
 import {createRequire} from 'node:module';
 import {createFontHosts, FONT_HOST_MODELS} from '../../parity/scripts/font-host.mjs';
 import {classifyChosenFamilies, firstFamily, hostRenderOutcome, slotsByFamily, svgTextRuns} from '../../parity/scripts/font-availability.mjs';
+import {chartexExpectations, chartIdFromLayouts, chartexPreviewMarks, chartexDataMismatches, parseChartex} from '../../parity/scripts/chartex.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const SRC = path.resolve(here, '../../../sources');
@@ -31,6 +32,8 @@ const nativeNames = Object.fromEntries([...nativeNamesSrc.matchAll(/^\s*"([^"]+)
 
 const recs = kind => Array.isArray(C[kind]) ? C[kind] : (C.catalogs?.[kind] ?? []);
 const byId = (kind, id) => recs(kind).find(r => r.id === id) ?? null;
+// FF-56: the chartex constructs the catalog records (mappings.openxml element and extension) and the cx layoutIds that follow from them.
+const CX_EXPECT = chartexExpectations(recs('chartTypes'));
 const bundledFamilies = new Set(BUNDLED_FONT_MANIFEST.packages.flatMap(p => p.faces.map(f => f.family)));
 const basePackFamilies = new Set(BUNDLED_FONT_MANIFEST.packages.filter(p => p.pack === 'base').flatMap(p => p.faces.map(f => f.family)));
 
@@ -291,7 +294,7 @@ function chartExpected(record, chart) {
   const style = ox.radarStyle;
   const markers = ox.marker === true || style === 'marker';
   const grouping = ox.grouping ?? (['bar', 'line', 'area'].includes(kind) ? 'standard' : undefined);
-  return {element: ox.element ?? null, composition: ox.composition ?? null, kind, barDir: ox.barDir, grouping, markers, radarStyle: style, scatterStyle: ox.scatterStyle, rows: rows.length, series: series.length, seriesColumns: series};
+  return {element: ox.element ?? null, extension: ox.extension ?? null, chartex: record ? CX_EXPECT.get(record.id) ?? null : null, composition: ox.composition ?? null, kind, barDir: ox.barDir, grouping, markers, radarStyle: style, scatterStyle: ox.scatterStyle, rows: rows.length, series: series.length, seriesColumns: series};
 }
 
 function chartPreviewProbe(doc, chart, exp) {
@@ -329,6 +332,12 @@ function chartPreviewProbe(doc, chart, exp) {
     expected = {series: exp.series, markers: exp.markers ? n * exp.series : 0};
     actual = {series: marks.filter(m => m.tag === 'path' && colsRe.test(pathOf(m))).length, markers: marks.filter(m => m.tag === 'circle' && rowsRe.test(pathOf(m))).length};
   }
+  if (exp.chartex) {
+    // FF-56: real mark checks for a chartex preview (treemap tiles, histogram bins, Pareto bars and line, box and outliers, waterfall and funnel bars).
+    const cm = chartexPreviewMarks(chart.type, rows, marks);
+    out.marks = {kind: `chartex:${chart.type}`, expected: cm.checks.map(c => [c.name, c.expected]), actual: cm.checks.map(c => [c.name, c.actual]), equal: cm.ok, failed: cm.checks.filter(c => !c.ok).map(c => c.name)};
+    return out;
+  }
   out.marks = {kind: k, expected, actual, equal: JSON.stringify(expected) === JSON.stringify(actual)};
   return out;
 }
@@ -339,6 +348,21 @@ async function chartExportProbe(doc, bytes, exp, chart) {
   const zip = unzipSync(bytes);
   const chartParts = relTargets(zip, 'ppt/slides/slide1.xml', 'chart');
   const out = {adaptations: diagnostics.filter(d => d.code === 'chart-data-adapted').map(d => d.adaptation), diagnostics: [...new Set(diagnostics.map(d => d.code))], chartParts, embeddedWorkbooks: Object.keys(zip).filter(n => /^ppt\/embeddings\/.+\.xlsx$/i.test(n)).length};
+  // FF-56: a chartex construct is an mc:AlternateContent whose Choice references a cx:chartSpace (relationship type chartEx) and whose Fallback is a
+  // classic clustered column. A consumer that understands chartex (PowerPoint 2016+, fromPptx) uses the Choice, so it is the part that is read.
+  const chartExParts = relTargets(zip, 'ppt/slides/slide1.xml', 'chartEx');
+  out.chartExParts = chartExParts;
+  if (exp.chartex && chartExParts.length === 1 && zip[chartExParts[0]]) {
+    const part = parseChartex(dec.decode(zip[chartExParts[0]]));
+    const id = chartIdFromLayouts(CX_EXPECT, part.layouts);
+    const matches = id === chart.type;
+    out.chartex = {part: chartExParts[0], layouts: part.layouts, id, fallbackParts: chartParts.length};
+    out.construct = {element: matches ? exp.chartex.element : (id ? CX_EXPECT.get(id).element : `chartex ${part.layouts.join('+')}`), extension: matches ? exp.chartex.extension : null, chartex: true};
+    out.series = part.series.length;
+    out.data = [{name: part.series[0]?.name ?? null, categories: part.categories, values: part.values}];
+    out.dataMismatches = chartexDataMismatches(chart.type, exp.chartex, part, chart.data.rows);
+    return out;
+  }
   if (chartParts.length !== 1 || !zip[chartParts[0]]) return out;
   const xml = dec.decode(zip[chartParts[0]]);
   const elements = CHART_ELEMENTS.filter(e => xml.includes(`<c:${e}>`));

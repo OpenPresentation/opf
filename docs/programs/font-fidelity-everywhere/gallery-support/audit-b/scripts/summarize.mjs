@@ -219,11 +219,11 @@ function classify(r) {
     const want = describe({...exp, markers: exp.markers});
     const got = ex?.construct ? describe(ex.construct) : 'no chart part';
     const c = ex?.construct;
-    const constructOk = !!c && c.element === exp.element && (exp.barDir === undefined || c.barDir === exp.barDir) && (exp.grouping === undefined || c.grouping === exp.grouping) && (exp.radarStyle === undefined || c.radarStyle === exp.radarStyle) && (exp.scatterStyle === undefined || c.scatterStyle === exp.scatterStyle) && (!['lineChart', 'radarChart'].includes(exp.element) || c.markers === exp.markers);
+    const constructOk = !!c && c.element === exp.element && (!exp.extension || c.extension === exp.extension) && (exp.barDir === undefined || c.barDir === exp.barDir) && (exp.grouping === undefined || c.grouping === exp.grouping) && (exp.radarStyle === undefined || c.radarStyle === exp.radarStyle) && (exp.scatterStyle === undefined || c.scatterStyle === exp.scatterStyle) && (!['lineChart', 'radarChart'].includes(exp.element) || c.markers === exp.markers);
     base.chart = {
       catalogElement: exp.element, catalogComposition: exp.composition,
       preview: pv ? {construct: pv.ok && !pv.legacy ? pv.chartAttr : null, legacy: pv.legacy ?? null, noChartData: pv.noChartData ?? null, marks: pv.marks ?? null, legacyBars: pv.legacyBars ?? null} : null,
-      export: ex ? {element: c?.element ?? null, construct: got, nativeConstruct: constructOk, adaptations: ex.adaptations, diagnostics: ex.diagnostics, series: ex.series ?? null, embeddedWorkbooks: ex.embeddedWorkbooks, dataMismatches: ex.dataMismatches ?? null} : null,
+      export: ex ? {element: c?.element ?? null, chartEx: !!ex.chartex, construct: got, nativeConstruct: constructOk, adaptations: ex.adaptations, diagnostics: ex.diagnostics, series: ex.series ?? null, embeddedWorkbooks: ex.embeddedWorkbooks, dataMismatches: ex.dataMismatches ?? null} : null,
       reimport: ri ? {type: ri.type, sameId: ri.type === id, dataMismatches: ri.dataMismatches ?? null} : null,
     };
     engine = `preview ${pv?.ok ? (pv.legacy ? 'legacy single-series sketch' : `${pv.chartAttr} marks ${JSON.stringify(pv.marks?.actual)}`) : pv?.error ?? 'none'}; export ${got}${ex?.adaptations?.length ? ` (chart-data-adapted: ${list(ex.adaptations)})` : ''}; re-import ${ri?.type ?? 'none'}`;
@@ -235,7 +235,7 @@ function classify(r) {
       else {
         if (pv.chartAttr !== id) reasons.push(`preview draws ${pv.chartAttr}, expected ${id}`);
         if (pv.noChartData) reasons.push('preview shows "No chart data"');
-        if (pv.marks && !pv.marks.equal) reasons.push(`preview marks ${JSON.stringify(pv.marks.actual)} do not match the data (${JSON.stringify(pv.marks.expected)})`);
+        if (pv.marks && !pv.marks.equal) reasons.push(pv.marks.failed ? `preview marks fail ${pv.marks.failed.join('; ')}: ${JSON.stringify(pv.marks.actual)} vs the data ${JSON.stringify(pv.marks.expected)}` : `preview marks ${JSON.stringify(pv.marks.actual)} do not match the data (${JSON.stringify(pv.marks.expected)})`);
       }
     }
     if (ex) {
