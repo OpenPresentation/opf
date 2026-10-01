@@ -20,7 +20,7 @@ The browser preview supports imported column, bar, line, area, pie, and donut ch
 
 ## CLI
 
-Use the published [CLI 0.9.1](../packages/cli/README.md) on Node 24:
+Use the published [CLI 0.9.2](../packages/cli/README.md) on Node 24:
 
 ```sh
 opf import-data revenue.csv --as table --output table.opf.json
@@ -52,7 +52,7 @@ The functions also accept already-parsed JSON and are re-exported by `@openprese
 
 This is an embedded data snapshot, not a live file link. OPF's existing `ChartDataSource` can declare a source reference, but source loading/refresh is a separate host responsibility. Tables use inline `columns`/`rows`; there is no new unsupported `table.src` field. Re-import after a source changes.
 
-These APIs are published in core 0.11.0 and re-exported by editor 0.8.0; CLI 0.9.1 includes `import-data`. Use the coordinated Node 24 train with core 0.11.4, renderer 0.11.9, editor 0.10.6 and PPTX 0.11.7 for preview/export. Exact pins and compatibility boundaries are in the [compatibility matrix](compatibility-matrix.md) and [release plan](../release-plan.json).
+These APIs are published in core 0.11.0 and re-exported by editor 0.8.0; CLI 0.9.2 includes `import-data`. Use the coordinated Node 24 train with core 0.11.4, renderer 0.11.9, editor 0.10.6 and PPTX 0.11.8 for preview/export. Exact pins and compatibility boundaries are in the [compatibility matrix](compatibility-matrix.md) and [release plan](../release-plan.json).
 
 ## Verification
 
