@@ -88,6 +88,10 @@
       "types": "./dist/font-policy.d.ts",
       "import": "./dist/font-policy.js"
     },
+    "./symbol-font-encodings": {
+      "types": "./dist/symbol-font-encodings.d.ts",
+      "import": "./dist/symbol-font-encodings.js"
+    },
     "./lint": {
       "types": "./dist/lint.d.ts",
       "import": "./dist/lint.js"

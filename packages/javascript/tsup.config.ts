@@ -5,6 +5,7 @@ export default defineConfig({
     lint: "src/lint.ts",
     audit: "src/audit.ts",
     "font-policy": "src/font-policy.ts",
+    "symbol-font-encodings": "src/symbol-font-encodings.ts",
     data: "src/data.ts",
     pagination: "src/pagination.ts",
     composition: "src/composition.ts",
