@@ -13,7 +13,7 @@ columns below, and a status from the list.
 
 | ID | Item | Repos | Depends | Status | Evidence |
 | --- | --- | --- | --- | --- | --- |
-| RR-01 | Release opf-pptx 0.11.8 (wrapped rich-text rejoin, [opf-pptx#126](https://github.com/OpenPresentation/opf-pptx/pull/126)) and CLI 0.9.2 on core 0.11.4; CLI Node 20 compatibility ([pptx-dev#26](https://github.com/Data-Advantage/pptx-dev/issues/26)) | opf-pptx, opf (CLI), pptx-dev | none | in-progress | opf-pptx#126 merged; release and CLI 0.9.2 pending |
+| RR-01 | Release opf-pptx 0.11.8 (wrapped rich-text rejoin, [opf-pptx#126](https://github.com/OpenPresentation/opf-pptx/pull/126)) and CLI 0.9.2 on core 0.11.4; the Node 20 question ([pptx-dev#26](https://github.com/Data-Advantage/pptx-dev/issues/26), closed as superseded: Node 24 only) | opf-pptx, opf (CLI), pptx-dev | none | in-progress | opf-pptx 0.11.8 and CLI 0.9.2 published and verified; opf-pptx 0.11.9 (RR-13 signals) release and the site bumps pending |
 | RR-02 | pptx.dev CI green and stable on ubuntu and windows | pptx-dev | none | in-progress | master green on core 0.11.4 train ([pptx-dev#64](https://github.com/Data-Advantage/pptx-dev/pull/64), run 36876765039); the two PR runs before it failed and are preserved; stability over repeated runs not yet shown; the open Windows readiness and source-preservation boxes of [opf#88](https://github.com/OpenPresentation/opf/issues/88) are the reference list |
 | RR-03 | Close the font-fidelity items in review (FF-07, FF-08, FF-22b, FF-27, FF-29, FF-30, FF-31, FF-37, FF-39, FF-58) | opf | none | in-progress | verdicts in [the RR-03 PR](https://github.com/OpenPresentation/opf/pulls?q=RR-03+in%3Atitle) and the font burndown rows |
 | RR-04 | Cross-platform: pairwise matrix (FF-09), matrix in CI on ubuntu/windows/macos (FF-10), export determinism independent of host (FF-11) | opf, opf-pptx | RR-03 | in-progress | FF-09 todo; FF-10 and FF-11 in-progress in the font burndown |
@@ -43,9 +43,10 @@ playback; chart data from external spreadsheets (`ChartDataSource`, a host
 
 **RR-01 Release.** opf-pptx 0.11.8 (carrying #126) and the CLI 0.9.2 are
 published from merged `main` through the trusted-publishing workflows on core
-0.11.4, with registry artifact and provenance verified. The CLI installs and
-runs on Node 20 as well as the current Node (pptx-dev#26). The sites adopt the
-versions.
+0.11.4, with registry artifact and provenance verified. The CLI keeps
+`engines.node` `24.x` (owner Node 24 decision; pptx-dev#26 is closed as
+superseded by pptx-dev#32, and it concerned pptx-dev's own `@pptx/cli`). The
+sites adopt the versions.
 
 **RR-02 pptx.dev CI.** `master` is green on ubuntu and windows over repeated
 runs, with no assertion relaxed and the original failures preserved. The open
@@ -134,3 +135,5 @@ Append-only. One dated line per state change.
 - 2026-10-01: RR-01 progress: opf-pptx 0.11.8 and CLI 0.9.2 are merged and tagged ([opf-pptx#128](https://github.com/OpenPresentation/opf-pptx/pull/128) `875c944`, [opf#241](https://github.com/OpenPresentation/opf/pull/241) `73c7f15`) and publishing; the registry artifacts and provenance are not yet verified, so the item stays in-progress. [pptx-dev#26](https://github.com/Data-Advantage/pptx-dev/issues/26) is closed as superseded by pptx-dev#32 (the Node 24 decision is kept).
 - 2026-10-01: RR-19 progress: 466 stale scratchpad worktrees removed across the seven repositories, 422 remote branches of merged or closed PRs deleted, and C:c removed. The item stays in-progress until the supervisor confirms no stale worktrees, branches or scratch folders remain.
 - 2026-10-01: RR-03 in review ([opf#242](https://github.com/OpenPresentation/opf/pull/242)): FF-07, FF-22b, FF-29, FF-30, FF-31 and FF-39 are done; FF-08, FF-27, FF-37 and FF-58 stay in review. The two owner-facing questions are listed in the README under Open decisions.
+- 2026-10-01: RR-01 progress: opf-pptx 0.11.8 (`875c944`) and CLI 0.9.2 (`73c7f15`) are published and verified (gitHead equals the tag commit, SLSA provenance names the release workflow and tag, `npm audit signatures` clean). Node 20 is not restored for the CLI: `engines.node` stays `24.x` (owner Node 24 decision; pptx-dev#26 closed as superseded by pptx-dev#32). The release plan, compatibility matrix and docs follow in [opf#245](https://github.com/OpenPresentation/opf/pull/245); the three sites adopt the release in [openpresentation-site#59](https://github.com/Data-Advantage/openpresentation-site/pull/59), [pptx-gallery#79](https://github.com/Data-Advantage/pptx-gallery/pull/79) and [pptx-dev#67](https://github.com/Data-Advantage/pptx-dev/pull/67). opf-pptx 0.11.9 (RR-13 import signals) follows.
+- 2026-10-01: FF-58 closed by the owner decision that the `world` region map is parked for post-v1 ([opf-pptx#133](https://github.com/OpenPresentation/opf-pptx/issues/133)): works denominator 818. The open question is removed from the README; the `PPTX_GALLERY_READ_TOKEN` item (FF-37) stays open.
