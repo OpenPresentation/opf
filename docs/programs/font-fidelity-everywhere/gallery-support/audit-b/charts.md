@@ -1,6 +1,6 @@
 # Charts: 26 values
 
-Classification: **works** 19, **partial** 7
+Classification: **works** 25, **partial** 1
 
 Schema-valid 26/26. Catalog id resolves in core 26/26.
 
@@ -8,14 +8,9 @@ Schema-valid 26/26. Catalog id resolves in core 26/26.
 
 | count | reason |
 |---|---|
-| 7 | export reports chart-data-adapted (..) |
-| 2 | export writes barChart, barDir col, grouping clustered; core catalog mappings.openxml histogramChart |
-| 1 | export writes barChart, barDir col, grouping clustered; core catalog mappings.openxml treemapChart |
-| 1 | re-import returns chart type "column", expected "treemap" (..) |
-| 1 | export chart cache: .. |
-| 1 | re-import returns chart type "column", expected "histogram" (..) |
-| 1 | re-import chart data: .. |
-| 1 | re-import returns chart type "column", expected "pareto" (..) |
+| 1 | export writes barChart, barDir col, grouping clustered; core catalog mappings.openxml mapChart |
+| 1 | export reports chart-data-adapted (..) |
+| 1 | re-import returns chart type "column", expected "world" (..) |
 
 | id | valid | catalog | engine effect | reasons | class |
 |---|---|---|---|---|---|
@@ -38,10 +33,10 @@ Schema-valid 26/26. Catalog id resolves in core 26/26.
 | radar | true | true | preview radar marks {"series":1,"markers":0}; export radarChart, radarStyle standard, no markers; re-import radar |  | works |
 | radar-with-markers | true | true | preview radar-with-markers marks {"series":1,"markers":8}; export radarChart, radarStyle marker, markers; re-import radar-with-markers |  | works |
 | filled-radar | true | true | preview filled-radar marks {"series":1,"markers":0}; export radarChart, radarStyle filled, no markers; re-import filled-radar |  | works |
-| treemap | true | true | preview treemap marks null; export barChart, barDir col, grouping clustered (chart-data-adapted: chartex-fallback); re-import column | export writes barChart, barDir col, grouping clustered; core catalog mappings.openxml treemapChart; export reports chart-data-adapted (chartex-fallback); re-import returns chart type "column", expected "treemap" (diagnostics: heading-import-reflow) | partial |
-| histogram | true | true | preview histogram marks null; export barChart, barDir col, grouping clustered (chart-data-adapted: histogram-binned); re-import column | export writes barChart, barDir col, grouping clustered; core catalog mappings.openxml histogramChart; export reports chart-data-adapted (histogram-binned); export chart cache: 1 series in the chart, 0 in the data; re-import returns chart type "column", expected "histogram" (diagnostics: heading-import-reflow); re-import chart data: 7 rows, expected 60 | partial |
-| pareto | true | true | preview pareto marks null; export barChart, barDir col, grouping clustered (chart-data-adapted: chartex-fallback); re-import column | export writes barChart, barDir col, grouping clustered; core catalog mappings.openxml histogramChart; export reports chart-data-adapted (chartex-fallback); re-import returns chart type "column", expected "pareto" (diagnostics: heading-import-reflow) | partial |
-| world | true | true | preview world marks null; export barChart, barDir col, grouping clustered (chart-data-adapted: chartex-fallback); re-import column | export writes barChart, barDir col, grouping clustered; core catalog mappings.openxml mapChart; export reports chart-data-adapted (chartex-fallback); re-import returns chart type "column", expected "world" (diagnostics: heading-import-reflow) | partial |
-| box-and-whisker | true | true | preview box-and-whisker marks null; export barChart, barDir col, grouping clustered (chart-data-adapted: chartex-fallback); re-import column | export writes barChart, barDir col, grouping clustered; core catalog mappings.openxml boxWhiskerChart; export reports chart-data-adapted (chartex-fallback); re-import returns chart type "column", expected "box-and-whisker" (diagnostics: heading-import-reflow) | partial |
-| waterfall | true | true | preview waterfall marks null; export barChart, barDir col, grouping clustered (chart-data-adapted: chartex-fallback); re-import column | export writes barChart, barDir col, grouping clustered; core catalog mappings.openxml waterfallChart; export reports chart-data-adapted (chartex-fallback); re-import returns chart type "column", expected "waterfall" (diagnostics: heading-import-reflow) | partial |
-| funnel | true | true | preview funnel marks null; export barChart, barDir col, grouping clustered (chart-data-adapted: chartex-fallback); re-import column | export writes barChart, barDir col, grouping clustered; core catalog mappings.openxml funnelChart; export reports chart-data-adapted (chartex-fallback); re-import returns chart type "column", expected "funnel" (diagnostics: heading-import-reflow) | partial |
+| treemap | true | true | preview treemap marks [["one tile per positive value",6],["tile areas are proportional to the values",[0.0648,0.1303,0.0782,0.2548,0.1978,0.2741]]]; export treemapChart; re-import treemap |  | works |
+| histogram | true | true | preview histogram marks [["one bar per bin (Scott)",6],["bar heights are proportional to the bin counts",[2,9,18,19,9,3]]]; export histogramChart; re-import histogram |  | works |
+| pareto | true | true | preview pareto marks [["one bar per category",7],["bar heights follow the sorted values",[52,31,24,15,9,6,4]],["a cumulative line with one point per category",7],["the line is the cumulative share, ending at 100%",[0.369,0.589,0.759,0.865,0.929,0.972,1]]]; export histogramChart; re-import pareto |  | works |
+| world | true | true | preview world marks [["one tile per region",14]]; export barChart, barDir col, grouping clustered (chart-data-adapted: chartex-fallback); re-import column | export writes barChart, barDir col, grouping clustered; core catalog mappings.openxml mapChart; export reports chart-data-adapted (chartex-fallback); re-import returns chart type "column", expected "world" (diagnostics: heading-import-reflow) | partial |
+| box-and-whisker | true | true | preview box-and-whisker marks [["one box per category",4],["one outlier mark per value outside the 1.5 IQR whiskers",2]]; export boxWhiskerChart; re-import box-and-whisker |  | works |
+| waterfall | true | true | preview waterfall marks [["one bar per value",8],["bar heights are proportional to the magnitudes",[88282,59377.37,30218.2,31266.42,33702.65,91885.32,31697.47,67365.68]],["each bar starts at the running total","running total"]]; export waterfallChart; re-import waterfall |  | works |
+| funnel | true | true | preview funnel marks [["one bar per stage",5],["bar widths are proportional to the values",[15726,63851.91,57748.9,98651.84,41132.94]],["the bars share one centre line",[678.82,678.82,678.82,678.82,678.82]]]; export funnelChart; re-import funnel |  | works |
