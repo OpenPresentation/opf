@@ -203,6 +203,7 @@ Each is vetoable; the alternative says what changing it would cost.
 
 ## Limits
 
+- A variable's own `value` is taken literally: a token inside a value (`{{other}}`) is not expanded, so variables do not refer to each other.
 - Variables are not computed: no arithmetic, conditionals or loops. A deck that needs them generates its data upstream.
 - A variable cannot change structure beyond splicing a list into an array and omitting an optional field. Which slides exist is the author's choice (or `opf fill`'s per-record decks).
 - Variables that point at relative image paths depend on where the filled file is saved.
