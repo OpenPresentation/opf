@@ -23,8 +23,8 @@ test('percent tints grow monotonically from 5% to 90% and pct50 is a one-pixel c
   const tints=['pct5','pct10','pct20','pct25','pct30','pct40','pct50','pct60','pct70','pct75','pct80','pct90'].map(density);
   for(let index=1;index<tints.length;index++)assert.ok(tints[index]>tints[index-1],`tint ${index}`);
   assert.deepEqual(patternBitmap('pct50').map(row=>row.toString(2).padStart(8,'0')),['10101010','01010101','10101010','01010101','10101010','01010101','10101010','01010101']);
-  // Each tint contains the lighter one: dither thresholds, not unrelated pixel sets.
-  for(const [lighter,darker] of [['pct10','pct20'],['pct25','pct50'],['pct50','pct75'],['pct75','pct90']])assert.deepEqual(patternBitmap(lighter).map((row,y)=>row&~patternBitmap(darker)[y]),Array(8).fill(0),`${lighter} within ${darker}`);
+  // Measured from desktop PowerPoint (Office 365, Windows, 2026-10-01): pixels set per tile.
+  assert.deepEqual(['pct5','pct10','pct20','pct25','pct30','pct40','pct50','pct60','pct70','pct75','pct80','pct90'].map(density),[2,4,8,16,24,30,32,40,48,56,60,62]);
 });
 
 test('line, dark and wide presets differ by thickness; grids and checks by scale',()=>{
@@ -43,6 +43,14 @@ test('no two presets share a tile except the documented GDI+ twin (cross and lgG
     if(seen.has(key))assert.deepEqual([seen.get(key),preset],['cross','lgGrid']);
     seen.set(key,preset);
   }
+});
+
+test('tiles are the ones measured from desktop PowerPoint, anchored at the slide top-left',()=>{
+  const ascii=preset=>patternBitmap(preset).map(row=>row.toString(2).padStart(8,'0').replace(/0/g,'.').replace(/1/g,'#')).join('/');
+  assert.equal(ascii('pct5'),'#......./......../......../......../....#.../......../......../........');
+  assert.equal(ascii('wdUpDiag'),'#.....##/.....###/....###./...###../..###.../.###..../###...../##.....#');
+  assert.equal(ascii('narVert'),'.#.#.#.#/.#.#.#.#/.#.#.#.#/.#.#.#.#/.#.#.#.#/.#.#.#.#/.#.#.#.#/.#.#.#.#');
+  assert.equal(ascii('zigZag'),'#......#/.#....#./..#..#../...##.../#......#/.#....#./..#..#../...##...');
 });
 
 test('the legacy diagStripe id draws and exports as wdUpDiag; unknown ids have no bitmap',()=>{
