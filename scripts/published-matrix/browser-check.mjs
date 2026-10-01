@@ -40,7 +40,7 @@ const deckFor = (scheme) => ({
   ]
 });
 // Only the faces the three schemes draw with are embedded (the registry holds 33, 12 MB of base64 per slide).
-const embedded = registry.selectEmbeddedFonts((face) => ['Carlito', 'Gelasio', 'Cousine'].includes(face.family));
+const embedded = registry.selectEmbeddedFonts((face) => ['Carlito', 'Gelasio', 'Cousine', 'Roboto Mono'].includes(face.family));
 assert.ok(embedded.length >= 6, 'the registry holds the faces the schemes draw with');
 function render(scheme) {
   const deck = deckFor(scheme);
