@@ -76,9 +76,10 @@ jobs:
       - name: Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks
         working-directory: opf
         env:
-          # The pinned renderer's own cover-centering baseline: it carries the chart and font changes of renderer 0.11.3 to 0.11.6 (140 of 805
-          # slides differ from this repository's older fixture copy, which stays as the record of the cover-centering review).
-          OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf-render/test/golden/opf-examples-png.cover-centering.sha256.json
+          # This repository's design-fields candidate: the pinned renderer 0.11.8 against this core (246 of 805 slides differ from the
+          # renderer's own cover-centering baseline; see scripts/fixtures/README.md). The renderer PR that consumes this core moves its
+          # own baseline, after which this selection returns to the pinned renderer's file.
+          OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf/scripts/fixtures/opf-examples-png.design-fields.sha256.json
         run: pnpm test:packages
       - name: Verify installed type failure propagation
         working-directory: opf
