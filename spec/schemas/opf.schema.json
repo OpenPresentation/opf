@@ -1450,7 +1450,7 @@
         },
         "color": {
           "type": "string",
-          "description": "Fixed solid fill color, usually a hex string. Use { type: 'theme', slot: ... } for PowerPoint's four theme-controlled background choices.",
+          "description": "Fixed solid fill color: a hex string, a color-scheme slot or role name, or a var:<id> variable reference (a ColorRef, resolved against the effective color scheme and the deck variables). Use { type: 'theme', slot: ... } for PowerPoint's four theme-controlled background choices.",
           "examples": ["#FFFFFF", "#0F172A", "#F8FAFC"]
         },
         "opacity": {
@@ -1489,7 +1489,7 @@
                 "properties": {
                   "color": {
                     "type": "string",
-                    "description": "Stop color as a hex string.",
+                    "description": "Stop color: a hex string, a color-scheme slot or role name, or a var:<id> variable reference (a ColorRef).",
                     "examples": ["#1E40AF", "#22D3EE"]
                   },
                   "position": {
@@ -1573,12 +1573,12 @@
             },
             "foregroundColor": {
               "type": "string",
-              "description": "Foreground color for the pattern, usually a hex string.",
+              "description": "Foreground color for the pattern: a hex string, a color-scheme slot or role name, or a var:<id> variable reference (a ColorRef).",
               "examples": ["#0F172A"]
             },
             "backgroundColor": {
               "type": "string",
-              "description": "Background color behind the pattern, usually a hex string.",
+              "description": "Background color behind the pattern: a hex string, a color-scheme slot or role name, or a var:<id> variable reference (a ColorRef).",
               "examples": ["#FFFFFF"]
             }
           }

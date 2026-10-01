@@ -443,7 +443,7 @@ _No named properties._
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `type` | yes | `const:"solid"` | Fixed solid background fill. |
-| `color` | yes | `string` | Fixed solid fill color, usually a hex string. Use { type: 'theme', slot: ... } for PowerPoint's four theme-controlled background choices. |
+| `color` | yes | `string` | Fixed solid fill color: a hex string, a color-scheme slot or role name, or a var:<id> variable reference (a ColorRef, resolved against the effective color scheme and the deck variables). Use { type: 'theme', slot: ...... |
 | `opacity` | no | `number` | Background opacity from 0 (fully transparent) to 1 (fully opaque). |
 
 
