@@ -148,7 +148,7 @@ checks are:
 | Check | Passes when |
 | --- | --- |
 | geometry | Text-line anchors and baselines are within 0.02 pt; chart, picture and card frames equal the composed box within 0.02 pt; a table frame equals the preview's drawn table, the union of its cell rectangles, within 0.02 pt (since 2026-09-29; see "Table frames and the drawn table" below); a picture's crop places the image content where the preview does, within 0.02 pt at the visible edges. Deltas up to 0.5 pt are near; a non-finite delta fails. |
-| text | Same line text and run segmentation. Per run: the same family in the script slot the text uses (`latin`/`ea`/`cs`), size within 0.005 pt, bold, italic and resolved colour. Also the same paragraph alignment and list markers. Native charts: preview labels are in the chart caches, and the chart XML names the preview font. |
+| text | Same line text and run segmentation. Per run: the same family in the script slot the text uses (`latin`/`ea`/`cs`), size within 0.005 pt, bold, italic and resolved colour. Also the same paragraph alignment and list markers. Native charts: preview labels are in the chart caches, the chart XML names the preview font, and each text role the preview draws (axis, data labels, legend, title) has the same size in the chart part's same role (FF-62; not "any size in the part"). |
 | fills | Same background kind and colour; per element group, the same solid fill colours and the same images (sha256); chart series colours appear in the preview. |
 | zOrder | The order of mapped element groups in `spTree` matches the SVG paint order, and the slide count matches. |
 | slideSize | `p:sldSz` equals the SVG viewBox within 0.02 pt. |

@@ -15,6 +15,7 @@ import {runElements, logicalRunCount} from './pptx-runs.mjs';
 import {drawnTableBox} from './table-box.mjs';
 import {createFontHosts} from './font-host.mjs';
 import {chartexExpectations, chartIdFromLayouts, chartexDataMismatches, chartexPreviewMarks, chooseAlternateContent, parseChartex} from './chartex.mjs';
+import {chartPartTextSizes, chartTextSizeMismatches, previewTextSizes} from './chart-text.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(here, '..');
@@ -200,9 +201,9 @@ function parseSlide(xml, rels, files, theme, slidePart) {
     if (body.includes('<a:tbl>')) { s.table = true; s.cellFills = uniq([...body.matchAll(/<a:tcPr\b[^>]*>(.*?)<\/a:tcPr>/gs)].map(t => fillOf(t[1].replace(/<a:ln\w\b.*?<\/a:ln\w>/gs, ''), theme)?.rgb).filter(Boolean)); }
     const blip = body.match(/<a:blip r:embed="([^"]+)"/)?.[1]; if (blip) { const target = rels[blip]; const part = resolveTarget(slidePart, target); s.image = {part, hash: files[part] ? sha(files[part]) : null, srcRect: attrs(body.match(/<a:srcRect\b([^>]*)\/>/)?.[1] ?? '')}; }
     const chartRid = body.match(/<c:chart\b[^>]*r:id="([^"]+)"/)?.[1];
-    if (chartRid) { const part = resolveTarget(slidePart, rels[chartRid]); const cx = files[part] ? dec.decode(files[part]) : ''; s.chart = {part, ...chartSeriesColors(cx), typefaces: uniq([...cx.matchAll(/<a:latin typeface="([^"]*)"/g)].map(x => x[1])), sizes: uniq([...cx.matchAll(/<a:defRPr\b[^>]*\bsz="(\d+)"/g)].map(x => +x[1] / 100)), strings: [...cx.matchAll(/<c:v>([^<]*)<\/c:v>/g)].map(x => unesc(x[1]))}; }
+    if (chartRid) { const part = resolveTarget(slidePart, rels[chartRid]); const cx = files[part] ? dec.decode(files[part]) : ''; s.chart = {part, ...chartSeriesColors(cx), typefaces: uniq([...cx.matchAll(/<a:latin typeface="([^"]*)"/g)].map(x => x[1])), sizes: uniq([...cx.matchAll(/<a:defRPr\b[^>]*\bsz="(\d+)"/g)].map(x => +x[1] / 100)), roleSizes: chartPartTextSizes(cx, false), strings: [...cx.matchAll(/<c:v>([^<]*)<\/c:v>/g)].map(x => unesc(x[1]))}; }
     const cxRid = body.match(/<cx:chart\b[^>]*r:id="([^"]+)"/)?.[1];
-    if (cxRid) { const part = resolveTarget(slidePart, rels[cxRid]); const cx = files[part] ? parseChartex(dec.decode(files[part])) : null; if (cx) s.chart = {part, chartex: true, layouts: cx.layouts, cx, colors: cx.colors, strokeSeries: false, typefaces: cx.typefaces, sizes: cx.sizes.map(x => x / 100), strings: cx.strings}; }
+    if (cxRid) { const part = resolveTarget(slidePart, rels[cxRid]); const cx = files[part] ? parseChartex(dec.decode(files[part])) : null; if (cx) s.chart = {part, chartex: true, layouts: cx.layouts, cx, colors: cx.colors, strokeSeries: false, typefaces: cx.typefaces, sizes: cx.sizes.map(x => x / 100), roleSizes: cx.roleSizes, strings: cx.strings}; }
     shapes.push(s);
   }
   return {bg: bg ? fillOf(bg, theme) ?? {kind: 'ref'} : null, shapes};
@@ -357,7 +358,11 @@ async function parity(doc) {
         const pvFams = uniq(pvLines.flatMap(l => l.runs.map(r => r.family))); const chFams = ch.typefaces;
         if (!chFams.length) add('text', 'fail', 'native chart has no explicit typeface (inherits theme/Office default)', key);
         else for (const f of pvFams) if (!chFams.includes(f)) add('text', 'fail', `chart font ${f} (preview) not in chart XML [${chFams.join('|')}]`, key);
-        const pvSizes = uniq(pvLines.flatMap(l => l.runs.map(r => r.sizePt))); if (ch.sizes.length && pvSizes.some(s => !ch.sizes.some(c => Math.abs(c - s) <= TOL.sizePt))) add('text', 'near', `chart text sizes preview [${pvSizes}] vs chart [${ch.sizes}]`, key);
+        // FF-62: the size per text role (axis, data labels, legend, title), not "any size in the part": the preview line's role comes from its trace path and the chart's catalog element.
+        const chartDoc = doc.slides?.[si]?.chart ?? (doc.slides?.[si]?.blocks ?? []).find(b => b.type === 'chart')?.chart;
+        const chartElement = CORE_CATALOGS.chartTypes.find(t => t.id === chartDoc?.type)?.mappings?.openxml?.element;
+        const pvRoleSizes = previewTextSizes(pvLines.map(l => ({path: l.path, sizes: l.runs.map(r => r.sizePt)})), chartElement);
+        for (const message of chartTextSizeMismatches(pvRoleSizes, ch.roleSizes, TOL.sizePt)) add('text', 'near', message, key);
         // A line-kind series is compared on its stroke (the series polylines and paths, traced to data.columns; axes, rings and gridlines are not series), every other series on its fills.
         const pvColors = ch.chartex
           // A chartex construct paints fills and strokes (the Pareto line, the box lines): the series colours are any colour the chart's marks use.
@@ -368,7 +373,7 @@ async function parity(doc) {
         const extra = ch.colors.filter(c => !pvColors.includes(c)); if (extra.length) add('fills', 'fail', `chart series colors not in preview (${extra.length})`, key);
         if (ch.chartex) {
           // FF-56: the part against the catalog and the data, and real mark checks of the preview (treemap tiles, histogram bins, Pareto bars and line, box and outliers, waterfall and funnel bars).
-          const chartDoc = doc.slides?.[si]?.chart ?? (doc.slides?.[si]?.blocks ?? []).find(b => b.type === 'chart')?.chart; const want = chartDoc?.type, id = chartIdFromLayouts(CX_EXPECT, ch.layouts), rows = chartDoc?.data?.rows ?? [];
+          const want = chartDoc?.type, id = chartIdFromLayouts(CX_EXPECT, ch.layouts), rows = chartDoc?.data?.rows ?? [];
           if (!want || !CX_EXPECT.has(want)) add('mapping', 'fail', `chartex part on a slide whose chart is ${want ?? 'absent'}`, key);
           else if (id !== want) add('mapping', 'fail', `chartex layoutIds ${ch.layouts.join('+')} are not the catalog's ${want}`, key);
           else {
