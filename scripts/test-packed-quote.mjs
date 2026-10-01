@@ -27,7 +27,8 @@ assert.equal(imported.slides.length,1);
 // color). Compare the exact visible characters and block order, not the run formatting.
 const visible=text=>Array.isArray(text)?text.map(run=>typeof run==='string'?run:run.text).join(''):text;
 // FF-57: an unchanged export restores the quote payload (opf-pptx with OPF_QUOTE_V1 tags); an earlier opf-pptx returns its two native text lines.
-const blocks=imported.slides[0].blocks;
+// opf-pptx with content topology (spec-gap P1) returns the root quote payload as slides.0.quote; earlier releases return blocks.
+const blocks=imported.slides[0].quote!==undefined?[{type:'quote',quote:imported.slides[0].quote}]:imported.slides[0].blocks;
 if(blocks.length===1&&blocks[0].type==='quote')assert.deepEqual(blocks[0].quote,accepted.slides[0].quote);
 else assert.deepEqual(blocks.map(block=>visible(block.text)),['"Retain the selected source."','Reviewer - Recorded interview']);
 console.log('Packed quote editor passed: accepted one-page policy, source preservation, actual fonts, SVG/PPTX, undo/redo and editable native text reimport. An unchanged quote re-imports as its quote payload (FF-57); earlier opf-pptx releases return native text lines.');
