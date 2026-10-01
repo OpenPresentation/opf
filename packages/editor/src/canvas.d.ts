@@ -42,6 +42,7 @@ export interface CanvasEditorOptions {
   slideIndex?: number;
   /** Show keyboard-accessible dividers for resizing composition tracks. */
   layoutEditing?: boolean;
+  /** Render options. The canvas draws the document as authored (`variables: false`: a template's `{{tokens}}` stay visible, so inline edits never overwrite them); pass `variables` to draw resolved values instead. */
   renderOptions?: RenderSvgOptions;
   /**
    * A font gate (`createFontGate(registry)`). With one, the canvas never renders a document whose faces are still

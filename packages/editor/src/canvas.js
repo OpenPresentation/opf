@@ -69,7 +69,9 @@ export function createCanvasEditor(container, options = {}) {
   // loads them first and shows "Loading fonts…" meanwhile; without a gate every document renders at once, as before.
   const fonts = options.fonts;
   let slideIndex = options.slideIndex ?? 0,
-    renderOptions = options.renderOptions ?? {},
+    // RR-32: the canvas edits the document as authored, so a template's {{tokens}} stay visible and an inline edit never
+    // overwrites one with its resolved text. The Fill template panel previews the resolved deck. Pass `variables` to override.
+    renderOptions = { variables: false, ...(options.renderOptions ?? {}) },
     showToken = 0,
     fontsShown = false,
     active = null,
@@ -998,7 +1000,7 @@ export function createCanvasEditor(container, options = {}) {
     setRenderOptions(next) {
       if (!commit()) return false;
       richToolbar.hide();
-      renderOptions = next;
+      renderOptions = { variables: false, ...next };
       renderFor();
       return true;
     },

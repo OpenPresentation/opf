@@ -31,14 +31,14 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf
-          ref: 07cd9d4fc400725293e4e697640662333a2eb356 # core main (published 0.11.4 plus opf#234 renderer 0.11.9 lazy font count and opf#235 ecosystem repin)
+          ref: e44f37261f2a0c3bd4ac003254e0dc3e322982a0 # RR-32: core main with template variables (opf#256 merged)
           path: opf
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-render
-          ref: 2fbc0abf3c327b6e9e9525a52c8ea9e56e84646e # opf-render 0.11.9 release commit
+          ref: 2d5c5684f4378291ef54f9b8595480bae95dec1f # RR-32: opf-render main with the variables option (#96 merged)
           path: opf-render
           fetch-depth: 0
           persist-credentials: false
