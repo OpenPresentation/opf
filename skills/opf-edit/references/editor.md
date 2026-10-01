@@ -20,7 +20,7 @@ The patch assumes `title` already exists; use `add` or `createValuePatch` for op
 
 ## Content conversions
 
-Core's `@openpresentation/opf/convert` (RR-26, after the release that lists it) holds the pure converters: `convertContent(payload, kind)` and `contentConversionTargets(payload)` return the new payload, `lossless` and a `loss` list, or refuse with `OPFConversionError`. Show `loss` before applying and apply the result as one validated, undoable transaction (the editor's `convertBlock` does). The same module nests list items (`demoteListItems`, `promoteListItems`), groups and ungroups blocks, moves images between content and slide design, and splits or merges slides. See [content conversions](../../../docs/conversions.md).
+Core's `@openpresentation/opf/convert` (RR-26, after the release that lists it) holds the pure converters: `convertContent(payload, kind)` and `contentConversionTargets(payload)` return the new payload, `lossless` and a `loss` list, or refuse with `OPFConversionError`. Show `loss` before applying and apply the result as one validated, undoable transaction (the editor's `convertBlock` does). The same module nests list items (`demoteListItems`, `promoteListItems`), groups and ungroups blocks, moves images between content and slide design, and splits or merges slides. See docs/conversions.md in the OpenPresentation/opf repository for every pair and its loss report.
 
 ## Canvas and optional properties
 
