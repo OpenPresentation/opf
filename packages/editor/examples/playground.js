@@ -160,6 +160,16 @@ function select(path) {
   element('value').value = typeof selectedValue === 'string' ? selectedValue : JSON.stringify(selectedValue, null, 2) ?? '';
   designControls.refresh(); selectionControls.refresh();
 }
+// Review text for one font resolution the registry recorded. A change inside one family is a style fallback (the weight or italic asked
+// for is not held, so the nearest face of the same family is drawn), not a replacement font: name the styles, never "Roboto → Roboto".
+function describeFontChange(change) {
+  const sameFamily = (change.sourceFamily ?? change.requestedFamily).toLowerCase() === change.resolvedFamily.toLowerCase();
+  if (!sameFamily) return `${change.requestedFamily} → ${change.resolvedFamily} · ${change.compatibility === 'metric' ? 'Metric substitute' : 'Approximate substitute; wrapping may change'} (${change.resolvedWeight}).`;
+  const drawn = `${change.resolvedFamily} ${change.resolvedWeight}${change.italic ? ' italic' : ''}`;
+  return change.requestedWeight === change.resolvedWeight
+    ? `${change.requestedFamily}: the ${change.italic ? 'italic' : 'upright'} face asked for is not available, so ${drawn} is drawn; wrapping may change.`
+    : `${change.requestedFamily} ${change.requestedWeight}: that weight is not available, so ${drawn} is drawn; wrapping may change.`;
+}
 function render() {
   fontRegistry.clearSubstitutions();
   renderError = undefined;
@@ -207,7 +217,7 @@ function render() {
   });
   else canvas.setSlide(slideIndex);
   diagnostics.push(...geometry.diagnostics);
-  diagnostics.push(...fontRegistry.substitutions.filter((change,index,all)=>all.findIndex(other=>other.requestedFamily===change.requestedFamily && other.requestedWeight===change.requestedWeight && other.italic===change.italic)===index).map(change=>({path:change.path ?? 'design.fontScheme',message:`${change.requestedFamily} → ${change.resolvedFamily} · ${change.compatibility === 'metric' ? 'Metric substitute' : 'Approximate substitute; wrapping may change'} (${change.resolvedWeight}).`})));
+  diagnostics.push(...fontRegistry.substitutions.filter((change,index,all)=>all.findIndex(other=>other.requestedFamily===change.requestedFamily && other.requestedWeight===change.requestedWeight && other.italic===change.italic)===index).map(change=>({path:change.path ?? 'design.fontScheme',message:describeFontChange(change)})));
   element('diagnostics').replaceChildren(...diagnostics.map(issue => { const item = document.createElement('li'); item.textContent = issue.message; item.title = issue.path; return item; }));
   element('diagnostics-section').hidden = diagnostics.length === 0;
   element('diagnostic-count').textContent = diagnostics.length;

@@ -78,6 +78,19 @@ try {
   assert.ok(first.length > 0 && first.every(name => /^Roboto(-|Mono-)/.test(name)), `the Roboto deck fetches only Roboto faces: ${first}`);
   assert.ok(!first.some(name => /Arimo|Tinos|Cousine|Carlito|Caladea|Gelasio/.test(name)), 'no Office face is fetched for a Roboto deck');
   assert.ok(firstLoad < 1_500_000, `first load font bytes: ${firstLoad}`);
+  // RR-18: the status bar leaves "Loading fonts…" once the faces are in (RR-06 fixed that on main), and the Review panel never reports a font as its own substitute
+  // (a weight the registry does not hold is described as that weight, e.g. "Roboto 800: that weight is not available ...").
+  await page.waitForFunction(() => !/Loading fonts/.test(document.querySelector('#status').textContent), undefined, { timeout: 60000 });
+  const review = await page.evaluate(() => [...document.querySelectorAll('#diagnostics li')].map(item => item.textContent));
+  for (const line of review) assert.ok(!/^(.+?) → \1 ·/.test(line), `Review reports a font as its own substitute: ${line}`);
+  // RR-18: at phone width the editor reflows instead of scrolling sideways.
+  const phone = await browser.newPage({ viewport: { width: 375, height: 812 } });
+  phone.on('pageerror', error => errors.push(error.message));
+  await phone.goto(`${base}/index.html`);
+  await phone.locator('#preview svg').waitFor({ timeout: 60000 });
+  const phoneWidths = await phone.evaluate(() => ({ scroll: document.documentElement.scrollWidth, client: document.documentElement.clientWidth }));
+  assert.ok(phoneWidths.scroll <= phoneWidths.client, `the editor scrolls sideways at 375px: ${JSON.stringify(phoneWidths)}`);
+  await phone.close();
   const choose = value => page.evaluate(value => { const select = document.querySelector('#font'); select.value = value; select.dispatchEvent(new Event('change', { bubbles: true })); }, value);
   const before = baseFiles().length;
   await choose('calibri');
