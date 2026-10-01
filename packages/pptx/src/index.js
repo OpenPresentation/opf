@@ -1214,7 +1214,23 @@ function nativeColor(reference, hex, context, fallback) {
 
 // FF-59: the slide tag is the eyebrow label. It is written in the deck primary color, the scheme accent1 slot the
 // preview draws it from: a:schemeClr accent1 where the deck theme holds that exact color, the literal otherwise.
+// FF-61: unless that primary is under 4.5:1 (WCAG 2.x) against the slide background, in which case the tag takes the
+// slide text color, the value the title and body text get (the scheme text slot where the theme holds it). opf-render
+// applies the same rule with the same arithmetic (test/tag-colour.mjs in both repositories pins the same color pairs).
+const TAG_MIN_CONTRAST = 4.5;
+function relativeLuminance(hex) {
+  const [red, green, blue] = [0, 2, 4].map(offset => {
+    const value = Number.parseInt(normalizeHex(hex).slice(offset, offset + 2), 16) / 255;
+    return value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4;
+  });
+  return red * 0.2126 + green * 0.7152 + blue * 0.0722;
+}
+function contrastRatio(first, second) {
+  const a = relativeLuminance(first), b = relativeLuminance(second);
+  return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+}
 function tagColor(context) {
+  if (contrastRatio(context.colors.accent, context.colors.background) < TAG_MIN_CONTRAST) return context.textColor;
   return nativeColor('primary', context.colors.accent, context);
 }
 
