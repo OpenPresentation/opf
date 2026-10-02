@@ -12,7 +12,13 @@
   "completed": 399,
   "firstStartUtc": "2026-10-02T20:32:15.6031869Z",
   "lastStartUtc": "2026-10-02T20:45:29.4130858Z",
-  "slidesRead": 933
+  "slidesRead": 933,
+  "colorsRerun": {
+   "decks": 33,
+   "completed": 33,
+   "firstStartUtc": "2026-10-02T21:23:57.8041261Z",
+   "lastStartUtc": "2026-10-02T21:24:51.8519459Z"
+  }
  },
  "packages": {
   "@openpresentation/opf": "0.12.0",
@@ -29,6 +35,7 @@
   "fonts",
   "themeSlots",
   "presentationFonts",
+  "themeColors",
   "shapeCount",
   "geometry",
   "background",
@@ -39,8 +46,9 @@
   "notes",
   "tags"
  ],
+ "colorsRun": "native-colors",
  "notMeasured": [
-  "themeColors: the reader returned the ThemeColorScheme object from a scriptblock, so PowerShell enumerated the COM collection (DISP_E_UNKNOWNNAME) and no slot was read in this run; the check is reported as not measured (null), not as a pass. The reader is fixed for the next run (each slot read through the full path)."
+  "themeColors: measured and gated for the 33 design decks (colour schemes, themes, backgrounds, image treatments) from a second read-only run of those decks with the fixed reader (native-colors); not measured for the other 366 decks, whose only run used the first reader, which returned the ThemeColorScheme object from a scriptblock so PowerShell enumerated the COM collection (DISP_E_UNKNOWNNAME) and read no slot. A deck without a read is null, not a pass."
  ],
  "geometryTolerancePt": 0.05,
  "summary": {

@@ -292,7 +292,7 @@
         "vietnamese-quoc-ngu"
       ],
       "link": "RR-17",
-      "next": "The FF-05 class: PowerPoint lists Arial in Presentation.Fonts for a Vietnamese deck whose runs and theme slots name only Aptos, because the exported theme carries the Office script supplement <a:font script=\"Viet\" typeface=\"Arial\"/> (minor; Times New Roman in major) and the runs are vi-VN. The text draws in Aptos (native PNG). Fix in opf-pptx: drop or follow the chosen family in the Viet supplement (as for the ea slot in FF-05), then re-run the deck natively."
+      "next": "FF-05 class (RR-17): the exported theme keeps the Office Viet supplement (major Times New Roman, minor Arial), so PowerPoint lists Arial for the vi-VN runs although they draw in Aptos. Fix in opf-pptx: the supplemental entry for the deck language's own script names the family the deck uses for it, in majorFont and minorFont; Viet (and Uigh) takes the theme a:latin family, as the non-Latin entries already take a:cs or a:ea. Then re-run the deck natively."
     }
   },
   "defaultNext": {

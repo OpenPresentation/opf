@@ -1,0 +1,519 @@
+{
+ "schema": "rr-42-script-supplements/1",
+ "note": "Per language deck of the RR-42 run: the theme supplemental script entry for the deck own script (OOXML script code; Viet for vi, Uigh for ug), the families the theme slots choose, and the names PowerPoint lists in Presentation.Fonts.",
+ "decks": [
+  {
+   "deck": "languages-03-amharic",
+   "language": "amharic",
+   "bcp47": "am",
+   "script": "Ethi",
+   "ownSupplementScript": "Ethi",
+   "ownSupplement": {
+    "major": "Nyala",
+    "minor": "Nyala"
+   },
+   "chosen": [
+    "Nyala"
+   ],
+   "presentationFonts": [
+    "Nyala"
+   ],
+   "leaked": []
+  },
+  {
+   "deck": "languages-04-arabic",
+   "language": "arabic",
+   "bcp47": "ar",
+   "script": "Arab",
+   "ownSupplementScript": "Arab",
+   "ownSupplement": {
+    "major": "Arabic Typesetting",
+    "minor": "Arabic Typesetting"
+   },
+   "chosen": [
+    "Arabic Typesetting"
+   ],
+   "presentationFonts": [
+    "Arabic Typesetting"
+   ],
+   "leaked": []
+  },
+  {
+   "deck": "languages-05-armenian",
+   "language": "armenian",
+   "bcp47": "hy",
+   "script": "Armn",
+   "ownSupplementScript": "Armn",
+   "ownSupplement": {
+    "major": "Sylfaen",
+    "minor": "Sylfaen"
+   },
+   "chosen": [
+    "Sylfaen"
+   ],
+   "presentationFonts": [
+    "Sylfaen"
+   ],
+   "leaked": []
+  },
+  {
+   "deck": "languages-08-bengali",
+   "language": "bengali",
+   "bcp47": "bn",
+   "script": "Beng",
+   "ownSupplementScript": "Beng",
+   "ownSupplement": {
+    "major": "Shonar Bangla",
+    "minor": "Shonar Bangla"
+   },
+   "chosen": [
+    "Shonar Bangla"
+   ],
+   "presentationFonts": [
+    "Shonar Bangla"
+   ],
+   "leaked": []
+  },
+  {
+   "deck": "languages-14-chinese-simplified",
+   "language": "chinese-simplified",
+   "bcp47": "zh-Hans",
+   "script": "Hans",
+   "ownSupplementScript": "Hans",
+   "ownSupplement": {
+    "major": "Microsoft YaHei",
+    "minor": "Microsoft YaHei"
+   },
+   "chosen": [
+    "Microsoft YaHei"
+   ],
+   "presentationFonts": [
+    "Microsoft YaHei"
+   ],
+   "leaked": []
+  },
+  {
+   "deck": "languages-15-chinese-traditional",
+   "language": "chinese-traditional",
+   "bcp47": "zh-Hant",
+   "script": "Hant",
+   "ownSupplementScript": "Hant",
+   "ownSupplement": {
+    "major": "Microsoft JhengHei",
+    "minor": "Microsoft JhengHei"
+   },
+   "chosen": [
+    "Microsoft JhengHei"
+   ],
+   "presentationFonts": [
+    "Microsoft JhengHei"
+   ],
+   "leaked": []
+  },
+  {
+   "deck": "languages-16-chittagonian",
+   "language": "chittagonian",
+   "bcp47": "ctg",
+   "script": "Beng",
+   "ownSupplementScript": "Beng",
+   "ownSupplement": {
+    "major": "Vrinda",
+    "minor": "Vrinda"
+   },
+   "chosen": [
+    "Vrinda"
+   ],
+   "presentationFonts": [
+    "Vrinda"
+   ],
+   "leaked": []
+  },
+  {
+   "deck": "languages-33-georgian",
+   "language": "georgian",
+   "bcp47": "ka",
+   "script": "Geor",
+   "ownSupplementScript": "Geor",
+   "ownSupplement": {
+    "major": "Sylfaen",
+    "minor": "Sylfaen"
+   },
+   "chosen": [
+    "Sylfaen"
+   ],
+   "presentationFonts": [
+    "Sylfaen"
+   ],
+   "leaked": []
+  },
+  {
+   "deck": "languages-36-gujarati",
+   "language": "gujarati",
+   "bcp47": "gu",
+   "script": "Gujr",
+   "ownSupplementScript": "Gujr",
+   "ownSupplement": {
+    "major": "Shruti",
+    "minor": "Shruti"
+   },
+   "chosen": [
+    "Shruti"
+   ],
+   "presentationFonts": [
+    "Shruti"
+   ],
+   "leaked": []
+  },
+  {
+   "deck": "languages-38-hebrew",
+   "language": "hebrew",
+   "bcp47": "he",
+   "script": "Hebr",
+   "ownSupplementScript": "Hebr",
+   "ownSupplement": {
+    "major": "David",
+    "minor": "David"
+   },
+   "chosen": [
+    "David"
+   ],
+   "presentationFonts": [
+    "David"
+   ],
+   "leaked": []
+  },
+  {
+   "deck": "languages-39-hindi",
+   "language": "hindi",
+   "bcp47": "hi",
+   "script": "Deva",
+   "ownSupplementScript": "Deva",
+   "ownSupplement": {
+    "major": "Mangal",
+    "minor": "Mangal"
+   },
+   "chosen": [
+    "Mangal"
+   ],
+   "presentationFonts": [
+    "Mangal"
+   ],
+   "leaked": []
+  },
+  {
+   "deck": "languages-44-japanese",
+   "language": "japanese",
+   "bcp47": "ja",
+   "script": "Jpan",
+   "ownSupplementScript": "Jpan",
+   "ownSupplement": {
+    "major": "Meiryo",
+    "minor": "Meiryo"
+   },
+   "chosen": [
+    "Meiryo"
+   ],
+   "presentationFonts": [
+    "Meiryo"
+   ],
+   "leaked": []
+  },
+  {
+   "deck": "languages-45-kannada",
+   "language": "kannada",
+   "bcp47": "kn",
+   "script": "Knda",
+   "ownSupplementScript": "Knda",
+   "ownSupplement": {
+    "major": "Tunga",
+    "minor": "Tunga"
+   },
+   "chosen": [
+    "Tunga"
+   ],
+   "presentationFonts": [
+    "Tunga"
+   ],
+   "leaked": []
+  },
+  {
+   "deck": "languages-47-khmer",
+   "language": "khmer",
+   "bcp47": "km",
+   "script": "Khmr",
+   "ownSupplementScript": "Khmr",
+   "ownSupplement": {
+    "major": "DaunPenh",
+    "minor": "DaunPenh"
+   },
+   "chosen": [
+    "DaunPenh"
+   ],
+   "presentationFonts": [
+    "DaunPenh"
+   ],
+   "leaked": []
+  },
+  {
+   "deck": "languages-49-korean",
+   "language": "korean",
+   "bcp47": "ko",
+   "script": "Kore",
+   "ownSupplementScript": "Hang",
+   "ownSupplement": {
+    "major": "Malgun Gothic",
+    "minor": "Malgun Gothic"
+   },
+   "chosen": [
+    "Malgun Gothic"
+   ],
+   "presentationFonts": [
+    "Malgun Gothic"
+   ],
+   "leaked": []
+  },
+  {
+   "deck": "languages-56-malayalam",
+   "language": "malayalam",
+   "bcp47": "ml",
+   "script": "Mlym",
+   "ownSupplementScript": "Mlym",
+   "ownSupplement": {
+    "major": "Kartika",
+    "minor": "Kartika"
+   },
+   "chosen": [
+    "Kartika"
+   ],
+   "presentationFonts": [
+    "Kartika"
+   ],
+   "leaked": []
+  },
+  {
+   "deck": "languages-58-marathi",
+   "language": "marathi",
+   "bcp47": "mr",
+   "script": "Deva",
+   "ownSupplementScript": "Deva",
+   "ownSupplement": {
+    "major": "Mangal",
+    "minor": "Mangal"
+   },
+   "chosen": [
+    "Mangal"
+   ],
+   "presentationFonts": [
+    "Mangal"
+   ],
+   "leaked": []
+  },
+  {
+   "deck": "languages-60-nepali",
+   "language": "nepali",
+   "bcp47": "ne",
+   "script": "Deva",
+   "ownSupplementScript": "Deva",
+   "ownSupplement": {
+    "major": "Mangal",
+    "minor": "Mangal"
+   },
+   "chosen": [
+    "Mangal"
+   ],
+   "presentationFonts": [
+    "Mangal"
+   ],
+   "leaked": []
+  },
+  {
+   "deck": "languages-62-odia",
+   "language": "odia",
+   "bcp47": "or",
+   "script": "Orya",
+   "ownSupplementScript": "Orya",
+   "ownSupplement": {
+    "major": "Kalinga",
+    "minor": "Kalinga"
+   },
+   "chosen": [
+    "Kalinga"
+   ],
+   "presentationFonts": [
+    "Kalinga"
+   ],
+   "leaked": []
+  },
+  {
+   "deck": "languages-64-pashto",
+   "language": "pashto",
+   "bcp47": "ps",
+   "script": "Arab",
+   "ownSupplementScript": "Arab",
+   "ownSupplement": {
+    "major": "Arial Black",
+    "minor": "Arial"
+   },
+   "chosen": [
+    "Arial Black",
+    "Arial"
+   ],
+   "presentationFonts": [
+    "Arial Black",
+    "Arial"
+   ],
+   "leaked": []
+  },
+  {
+   "deck": "languages-65-persian",
+   "language": "persian",
+   "bcp47": "fa",
+   "script": "Arab",
+   "ownSupplementScript": "Arab",
+   "ownSupplement": {
+    "major": "Arabic Typesetting",
+    "minor": "Arabic Typesetting"
+   },
+   "chosen": [
+    "Arabic Typesetting"
+   ],
+   "presentationFonts": [
+    "Arabic Typesetting"
+   ],
+   "leaked": []
+  },
+  {
+   "deck": "languages-68-punjabi-gurmukhi",
+   "language": "punjabi-gurmukhi",
+   "bcp47": "pa-Guru",
+   "script": "Guru",
+   "ownSupplementScript": "Guru",
+   "ownSupplement": {
+    "major": "Raavi",
+    "minor": "Raavi"
+   },
+   "chosen": [
+    "Raavi"
+   ],
+   "presentationFonts": [
+    "Raavi"
+   ],
+   "leaked": []
+  },
+  {
+   "deck": "languages-69-punjabi-shahmukhi",
+   "language": "punjabi-shahmukhi",
+   "bcp47": "pa-Arab",
+   "script": "Arab",
+   "ownSupplementScript": "Arab",
+   "ownSupplement": {
+    "major": "Arial Black",
+    "minor": "Arial"
+   },
+   "chosen": [
+    "Arial Black",
+    "Arial"
+   ],
+   "presentationFonts": [
+    "Arial Black",
+    "Arial"
+   ],
+   "leaked": []
+  },
+  {
+   "deck": "languages-83-tamil",
+   "language": "tamil",
+   "bcp47": "ta",
+   "script": "Taml",
+   "ownSupplementScript": "Taml",
+   "ownSupplement": {
+    "major": "Latha",
+    "minor": "Latha"
+   },
+   "chosen": [
+    "Latha"
+   ],
+   "presentationFonts": [
+    "Latha"
+   ],
+   "leaked": []
+  },
+  {
+   "deck": "languages-84-telugu",
+   "language": "telugu",
+   "bcp47": "te",
+   "script": "Telu",
+   "ownSupplementScript": "Telu",
+   "ownSupplement": {
+    "major": "Gautami",
+    "minor": "Gautami"
+   },
+   "chosen": [
+    "Gautami"
+   ],
+   "presentationFonts": [
+    "Gautami"
+   ],
+   "leaked": []
+  },
+  {
+   "deck": "languages-85-thai",
+   "language": "thai",
+   "bcp47": "th",
+   "script": "Thai",
+   "ownSupplementScript": "Thai",
+   "ownSupplement": {
+    "major": "Angsana New",
+    "minor": "Angsana New"
+   },
+   "chosen": [
+    "Angsana New"
+   ],
+   "presentationFonts": [
+    "Angsana New"
+   ],
+   "leaked": []
+  },
+  {
+   "deck": "languages-88-urdu",
+   "language": "urdu",
+   "bcp47": "ur",
+   "script": "Arab",
+   "ownSupplementScript": "Arab",
+   "ownSupplement": {
+    "major": "Arabic Typesetting",
+    "minor": "Arabic Typesetting"
+   },
+   "chosen": [
+    "Arabic Typesetting"
+   ],
+   "presentationFonts": [
+    "Arabic Typesetting"
+   ],
+   "leaked": []
+  },
+  {
+   "deck": "languages-90-vietnamese-quoc-ngu",
+   "language": "vietnamese-quoc-ngu",
+   "bcp47": "vi-Latn",
+   "script": "Latn",
+   "ownSupplementScript": "Viet",
+   "ownSupplement": {
+    "major": "Times New Roman",
+    "minor": "Arial"
+   },
+   "chosen": [
+    "Aptos Display",
+    "Aptos"
+   ],
+   "presentationFonts": [
+    "Aptos Display",
+    "Arial",
+    "Aptos"
+   ],
+   "leaked": [
+    "Arial"
+   ]
+  }
+ ]
+}
