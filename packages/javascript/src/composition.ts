@@ -3,10 +3,12 @@ import {intrinsicImageAspect} from './image-aspect.js';
 import {paragraphDirection,paragraphDirectionAt,physicalAlignment,type PhysicalAlignment,type TextDirection} from './direction.js';
 import {resolveSlideDirection} from './script-fonts.js';
 export {paragraphDirection,paragraphDirectionAt,physicalAlignment,type PhysicalAlignment,type TextDirection} from './direction.js';
+import {visualReadingOrder} from './reading-order.js';
+export {visualReadingOrder,type ReadingBox} from './reading-order.js';
 import {DEFAULT_FURNITURE_DATE_FORMAT,DEFAULT_SLIDE_NUMBER_FORMAT,formatFurnitureDate,formatSlideNumber,parseIsoDate,type FurnitureField} from './furniture-fields.js';
 export {DEFAULT_FURNITURE_DATE_FORMAT,DEFAULT_SLIDE_NUMBER_FORMAT,formatFurnitureDate,formatSlideNumber,type FurnitureField} from './furniture-fields.js';
 export {tableGrid,tableRowBoundaries,type TableCellStyle,type TableBorder,type TableGrid,type TableGridCell,type TableGridIssue} from './table.js';
-export {colorContrast, textColorForFill, chartColorForFill} from './color.js';
+export {colorContrast, textColorForFill, chartColorForFill, chartPaletteForFill, CHART_SERIES_MIN_LIGHTNESS_STEP, CHART_SERIES_MIN_DIFFERENCE} from './color.js';
 /** Portable layout geometry. No fonts, DOM, renderer, or network dependencies. */
 export interface Composition {
   mode?: "auto" | "grid" | "row" | "column";
@@ -2008,8 +2010,13 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     return fields.filter(field => host[field] !== undefined).map(field => ({ field, type: host.type ?? kind(field), value: host[field], path: `${basePath}.${field}`, payload: { type: host.type ?? kind(field), [field]: host[field] } }));
   };
   // Valid documents choose exactly one of regions, blocks, or root payloads.
+  // Promoted regions are composed in visual reading order (rows top to bottom, then along the row), not in key order,
+  // so the composed item order, the SVG draw order, the PPTX shape order and the accessibility reading order agree.
+  // The order comes from the logical region cells before any mirroring, so a right-to-left deck (which draws `left`
+  // at the right and reads from the right) keeps the same logical order.
+  const regionsInReadingOrder = visualReadingOrder(regions.map(key => ({ key, box: regionBox(regionParts(key)!, contentBox, gap) }))).map(entry => entry.key);
   const pending: Pending[] = regions.length
-    ? regions.flatMap(key => collect(record(slide[key]), `${path}.${key}`).map(item => ({ ...item, region: regionParts(key) })))
+    ? regionsInReadingOrder.flatMap(key => collect(record(slide[key]), `${path}.${key}`).map(item => ({ ...item, region: regionParts(key) })))
     : Array.isArray(slide.blocks) ? slide.blocks.flatMap((block: unknown, index: number) => collect(record(block), `${path}.blocks.${index}`))
     : collect(slideImage?.replacesContent ? { ...slide, image: undefined } : slide, path);
   const groups: ComposedGroup[] = [], flows: ComposedFlow[] = [];
