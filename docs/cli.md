@@ -3,7 +3,7 @@
 The CLI (`@openpresentation/cli`, binary `opf`, Node 24) validates, lints, edits, paginates and bundles documents (see
 [its README](../packages/cli/README.md)). Three commands produce and read files: `opf render`, `opf export` and
 `opf import`. They are in the CLI after RR-27 of the [release readiness program](programs/release-readiness/README.md)
-and ship with the first CLI release after 0.9.2.
+and ship in CLI 0.10.0, the first CLI release after 0.9.2.
 
 All three are deterministic and local: no network, no model, no telemetry, no system fonts. The same document, options
 and installed package versions give the same bytes on every operating system.
