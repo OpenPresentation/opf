@@ -34,6 +34,8 @@ import { webpToPng, svgToPng, readLocalFile } from '#image-fallback';
 import { prepareSvg, svgDataUriBytes, svgRasterScale, svgBlipRelationship, attachSvgPictures } from './svg-image.js';
 import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './image-geometry.js';
 import { layoutTable, composeSlide, fitText, fitRichText, textWidthMeasurer, resolveCanvasDimensions, resolveFontFamilies, resolveTextStyle, textColorForFill, chartColorForFill } from "@openpresentation/opf/composition";
+// chartPaletteForFill ships with core RR-29 (opf#270); an older published core still loads and clamps each colour on its own.
+import * as opfComposition from "@openpresentation/opf/composition";
 import { colorContext, resolveColorRefValue, resolveExportColor, resolveVariableColors } from "./color-ref.js";
 import PptxGenJS from "../vendor/pptxgenjs/pptxgen.es.js";
 import { unzipSync, zipSync } from "fflate";
@@ -2047,7 +2049,8 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   const textSize = chartTextSize(context);
   context.chartHeadings.set(objectName,{heading:chartData.type === 'scatter' ? undefined : chartData.heading ?? chart.data.columns[0],labelColor,spec:chartData.spec,textSize});
   context.chartFonts.set(objectName,{heading:context.fonts.heading,body:context.fonts.body});
-  const palette = CHART_COLORS.map(color=>normalizeHex(chartColorForFill(panelFill,`#${color}`)));
+  const preferredPalette = CHART_COLORS.map(color=>`#${color}`);
+  const palette = (typeof opfComposition.chartPaletteForFill === "function" ? opfComposition.chartPaletteForFill(panelFill, preferredPalette) : preferredPalette.map(color=>chartColorForFill(panelFill,color))).map(color=>normalizeHex(color));
   if (chartData.chartex) {
     // The native chartex part is added when the package is normalized (attachChartexParts); the classic chart below becomes its fallback.
     // PptxGenJS rewrites the series it is given (labels become nested levels), so the chartex part keeps its own copy.

@@ -38,8 +38,8 @@ jobs:
           repository: OpenPresentation/opf
           # Core main 1228351 (core 0.11.3 plus the recorded renderer 0.11.8 lazy font count and the FF-56 evidence, opf#222) plus opf#231 (lane scripts accept the root payload form that content topology restores, opf-pptx#122); the published core this release requires is ^0.11.3.
           # Core main 07cd9d4 (published 0.11.4 plus the renderer 0.11.9 lazy font count opf#234 and the ecosystem repin opf#235; core 0.11.3 plus opf#229 design fields, opf#230 cover alignment, opf#231 and opf#232 picture-bullet size and furniture alignment; the combined core that ships as 0.11.4). Lockstep: the PPTX floor moves to 0.11.4.
-          # RR-16: core PR opf#247 head (core main e44f372, with template variables, plus composed font sizes on PowerPoint's 0.01 pt grid; the chart text size follows it). Repin to core main once opf#247 merges (never leave it on an unmerged head).
-          ref: fbf260fa658832fd1ff75ba78a9420cf13cb7d35
+          # RR-16 (opf#247) and RR-29 (opf#270) merged: core main 395e4c1 carries both (composed font sizes on the 0.01 pt grid, promoted regions in reading order, chartPaletteForFill).
+          ref: 395e4c11aee82e3a3ebac1a70e2e112ec7e5143c
           path: opf
           fetch-depth: 0
           persist-credentials: false
