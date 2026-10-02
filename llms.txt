@@ -13,6 +13,7 @@ Authoring rule of thumb: a presentation is `{ "name": "...", "slides": [...] }` 
 - [Design resolution](https://github.com/OpenPresentation/opf/blob/main/docs/design-resolution.md): design precedence algorithm with worked examples
 - [Catalog schema reference](https://github.com/OpenPresentation/opf/blob/main/docs/catalog-schema-reference.md): every field of every catalog record schema
 - [Examples guide](https://github.com/OpenPresentation/opf/blob/main/docs/examples.md): map of the 125 example decks
+- [Markdown and outlines](https://github.com/OpenPresentation/opf/blob/main/docs/markdown.md): the deterministic Markdown dialect for decks (`@openpresentation/opf/markdown`, `opf from-md`, `opf to-md`)
 - [Release process](https://github.com/OpenPresentation/opf/blob/main/docs/release-process.md): maintainer runbook for npm releases, trusted publishing, verification, and GitHub release notes
 
 ## Spec

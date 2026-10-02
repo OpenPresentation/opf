@@ -2,6 +2,8 @@ import {tableGrid,type TableCellStyle} from './table.js';
 import {intrinsicImageAspect} from './image-aspect.js';
 import {visualReadingOrder} from './reading-order.js';
 export {visualReadingOrder,type ReadingBox} from './reading-order.js';
+import {listNumbers,type ListNumber,type NumberingInput} from './numbering.js';
+export {NUMBERING_STYLES,NUMBERING_SUFFIXES,MAX_NUMBERING_VALUE,MAX_ROMAN_VALUE,MAX_NUMBERING_LEVELS,formatListNumber,listNumbers,resolveNumbering,numberingAtLevel,numberingStyleDraws,sliceNumberedItems,type Numbering,type NumberingInput,type NumberingStyleName,type NumberingSuffix,type ResolvedNumbering,type ListNumber} from './numbering.js';
 import {DEFAULT_FURNITURE_DATE_FORMAT,DEFAULT_SLIDE_NUMBER_FORMAT,formatFurnitureDate,formatSlideNumber,parseIsoDate,type FurnitureField} from './furniture-fields.js';
 export {DEFAULT_FURNITURE_DATE_FORMAT,DEFAULT_SLIDE_NUMBER_FORMAT,formatFurnitureDate,formatSlideNumber,type FurnitureField} from './furniture-fields.js';
 export {tableGrid,tableRowBoundaries,type TableCellStyle,type TableBorder,type TableGrid,type TableGridCell,type TableGridIssue} from './table.js';
@@ -19,7 +21,7 @@ export interface Composition {
 export const MAX_COMPOSITION_DEPTH = 32;
 export interface LayoutBox { x: number; y: number; width: number; height: number }
 export interface LayoutDiagnostic {
-  code: "text-overflow" | "small-cell" | "unresolved-content" | "unsupported-image-treatment";
+  code: "text-overflow" | "small-cell" | "unresolved-content" | "unsupported-image-treatment" | "numbering-adapted";
   path: string;
   message: string;
 }
@@ -1574,13 +1576,18 @@ function richTextLayouter(input: readonly (string | RichTextRun)[], box: LayoutB
 }
 
 export type ListText = string | readonly (string | RichTextRun)[];
-export type ListValue = ListText | {text:ListText; description?:ListText; level?:number};
+export type ListValue = ListText | {text:ListText; description?:ListText; level?:number; start?:number};
 export interface ListEntryLayout {
   index:number; level:number; textPath?:string; descriptionPath?:string;
   value:ListText; descriptionValue?:ListText;
   text:RichTextFit; description?:RichTextFit;
   textBox:LayoutBox; descriptionBox?:LayoutBox;
-  marker:{text:string;x:number;y:number;fontSize:number;style:TextStyle;indent:number};
+  /**
+   * The entry marker: the bullet glyph, or for a numbered list (`numbering`) the formatted number such as `iv.`.
+   * A numbered marker also carries `number` and its measured `width`; its `style` is the list style with the weight and
+   * slant of the entry's first run, as PowerPoint draws an auto-number in the first run's character formatting.
+   */
+  marker:{text:string;x:number;y:number;fontSize:number;style:TextStyle;indent:number;number?:ListNumber;width?:number};
   /** Picture bullet replacing the marker glyph; drawn in `bulletBox`. Marker geometry is unchanged. */
   bulletImage?:ListBulletImage;
   /**
@@ -1599,6 +1606,11 @@ export interface ListEntryLayout {
 export const PICTURE_BULLET_SCALE=0.65;
 export interface ListFit extends TextFit { listEntries:ListEntryLayout[]; height:number }
 export interface ListFitOptions extends RichTextOptions {
+  /**
+   * Number the entries instead of bulleting them (the payload's `numbering` field). The hanging indent becomes the larger of
+   * 1.1 em and the widest marker plus 0.3 em, so wide markers never touch their text; unnumbered lists are unchanged.
+   */
+  numbering?:NumberingInput;
   /** Picture bullet for every entry (effective `design.listBullet: "image"` with a resolved icon logo). */
   bulletImage?:ListBulletImage;
 }
@@ -1615,10 +1627,20 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=2
     const base=options.style.path?`${options.style.path}.${index}`:undefined;
     return {index,level,value:text,descriptionValue:description,textPath:base?base+(object?'.text':''):undefined,descriptionPath:base?base+'.description':undefined,runs:runs(text),descriptionRuns:description===undefined?undefined:runs(description)};
   });
+  const numbers=options.numbering===undefined?undefined:listNumbers(input,options.numbering);
+  // A native auto-number takes the weight and slant of the paragraph's first run.
+  const markerStyleFor=(item:typeof source[number]):TextStyle=>{
+    const first=item.runs.map(run=>typeof run==='string'?{text:run} as RichTextRun:run).find(run=>run.text);
+    return {...options.style,path:item.textPath,fontWeight:first?.bold===undefined?options.style.fontWeight:first.bold?700:400,italic:first?.italic??options.style.italic};
+  };
   const layout=(fontSize:number):ListFit=>{
     let y=box.y,overflow=false;const entries:ListEntryLayout[]=[],lines:string[]=[];
+    // One hanging indent for the whole list: 1.1 em, or for numbers the widest marker plus 0.3 em.
+    const markerStyles=numbers?source.map(item=>resolveTextStyle(markerStyleFor(item),options.textMeasurement)):[];
+    const markerWidths=numbers?numbers.map((number,index)=>textWidthMeasurer(markerStyles[index]!,options.textMeasurement)(number.text,fontSize)):[];
+    const hanging=numbers?Math.max(fontSize*1.1,Math.max(0,...markerWidths)+fontSize*.3):fontSize*1.1;
     for(const item of source){
-      const indent=fontSize*1.1,offset=Math.min(box.width,item.level*indent),x=box.x+offset+indent,width=Math.max(1,box.x+box.width-x);
+      const indent=hanging,offset=Math.min(box.width,item.level*indent),x=box.x+offset+indent,width=Math.max(1,box.x+box.width-x);
       if(offset+indent>=box.width)overflow=true;
       const textBox={x,y,width,height:box.height};
       const style={...options.style,path:item.textPath};
@@ -1631,9 +1653,10 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=2
         descriptionBox.height=description.height;lines.push(...description.lines);y+=description.height;
       }
       overflow ||= text.overflow||!!description?.overflow;
-      const marker={text:['•','◦','▪'][item.level%3]!,x:box.x+offset,y:textBox.y+(text.richLines[0]?.baseline??fontSize),fontSize,style:resolveTextStyle(style,options.textMeasurement),indent},side=fontSize*PICTURE_BULLET_SCALE;
+      const number=numbers?.[item.index];
+      const marker={text:number?number.text:['•','◦','▪'][item.level%3]!,x:box.x+offset,y:textBox.y+(text.richLines[0]?.baseline??fontSize),fontSize,style:number?markerStyles[item.index]!:resolveTextStyle(style,options.textMeasurement),indent,...(number?{number,width:markerWidths[item.index]!}:{})},side=fontSize*PICTURE_BULLET_SCALE;
       entries.push({index:item.index,level:item.level,value:item.value,descriptionValue:item.descriptionValue,textPath:item.textPath,descriptionPath:item.descriptionPath,text,textBox,description,descriptionBox,marker,
-        ...(options.bulletImage?{bulletImage:options.bulletImage,bulletBox:{x:marker.x,y:marker.y-side,width:side,height:side}}:{})});
+        ...(options.bulletImage&&!number?{bulletImage:options.bulletImage,bulletBox:{x:marker.x,y:marker.y-side,width:side,height:side}}:{})});
       if(item.index<source.length-1)y+=fontSize*.28;
     }
     const height=y-box.y;
@@ -1878,9 +1901,10 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     }
     throw new Error('Text placement did not evaluate its bounded floor trial.');
   };
-  const fitContent = (field:string,value:unknown,text:string,box:LayoutBox,size:number,minimum:number,path:string) => field === 'text'
+  // A numbered list (`numbering` on the payload) draws numbers, never the picture bullet.
+  const fitContent = (field:string,value:unknown,text:string,box:LayoutBox,size:number,minimum:number,path:string,numbering?:unknown) => field === 'text'
     ? fitPlacedText(field,value,text,box,size,minimum,path)
-    : (field==='items'||field==='bullets') ? fitList(value as ListValue[],box,size,minimum,{style:styleFor(field,path),textMeasurement:options.textMeasurement,...(bulletImage?{bulletImage}:{})})
+    : (field==='items'||field==='bullets') ? fitList(value as ListValue[],box,size,minimum,{style:styleFor(field,path),textMeasurement:options.textMeasurement,...(numbering!==undefined?{numbering:numbering as NumberingInput}:bulletImage?{bulletImage}:{})})
     : fitText(text,box,size,minimum,widthFor(field,path));
   const path = `slides.${options.slideIndex ?? 0}`;
   const slideImageDiagnostics: LayoutDiagnostic[] = [];
@@ -1960,7 +1984,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
       return [{ field: "blocks", type: "group", value: host.blocks, path: basePath, payload: host, composition: settings,
         children: host.blocks.flatMap((block: unknown, index: number) => collect(record(block), `${basePath}.blocks.${index}`, depth + 1, [...ancestors, host])) }];
     }
-    return fields.filter(field => host[field] !== undefined).map(field => ({ field, type: host.type ?? kind(field), value: host[field], path: `${basePath}.${field}`, payload: { type: host.type ?? kind(field), [field]: host[field] } }));
+    return fields.filter(field => host[field] !== undefined).map(field => ({ field, type: host.type ?? kind(field), value: host[field], path: `${basePath}.${field}`, payload: { type: host.type ?? kind(field), [field]: host[field], ...(host.numbering !== undefined && (field === 'items' || field === 'bullets') ? { numbering: host.numbering } : {}) } }));
   };
   // Valid documents choose exactly one of regions, blocks, or root payloads.
   // Promoted regions are composed in visual reading order (rows top to bottom, then along the row), not in key order,
@@ -2016,7 +2040,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
       score += reduction + (internal.overflow ? 1000 : 0);
       if (penalties) { penalties.fontReduction += reduction; penalties.textOverflow += internal.overflow ? 1000 : 0; }
     } else if (text) {
-      const fit = fitContent(node.field,node.value,text,box,25*scale,snapFontSizeUp((settings.minFontSize??16)*scale),node.path);
+      const fit = fitContent(node.field,node.value,text,box,25*scale,snapFontSizeUp((settings.minFontSize??16)*scale),node.path,node.payload.numbering);
       const reduction = Math.max(0,snapFontSizeDown(25 * scale) - fit.fontSize) / scale;
       score += reduction + (fit.overflow ? 1000 : 0);
       if (penalties) { penalties.fontReduction += reduction; penalties.textOverflow += fit.overflow ? 1000 : 0; }
@@ -2087,11 +2111,11 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
         const metricLayout = node.field === 'metric' ? measureMetric(node,box,settings) : undefined;
         const timelineLayout = node.field === 'timeline' ? measureTimeline(node,box,settings) : undefined;
         const internal = quoteLayout ?? codeLayout ?? metricLayout ?? timelineLayout, body = internal?.parts.find(part=>part.role==='body'||part.role==='value');
-        const text = internal ? body?.fit : textValue !== undefined ? fitContent(node.field,node.value,textValue,box,25*scale,snapFontSizeUp((settings.minFontSize??16)*scale),node.path) : undefined;
+        const text = internal ? body?.fit : textValue !== undefined ? fitContent(node.field,node.value,textValue,box,25*scale,snapFontSizeUp((settings.minFontSize??16)*scale),node.path,node.payload.numbering) : undefined;
         items.push({ path: node.path, field: node.field, type: node.type, value: node.value, payload: node.payload, box:internal?acceptedBox(box):box,
           ...(frameBox ? {frameBox} : {}),
           text, textStyle: body?.style ?? styleFor(node.field,node.path), composition: settings, alignment: alignmentFor(node.field), ...(quoteLayout?{quoteLayout}:{}), ...(codeLayout?{codeLayout}:{}), ...(metricLayout?{metricLayout}:{}), ...(timelineLayout?{timelineLayout}:{}),
-          ...(bulletImage && (node.field === 'items' || node.field === 'bullets') ? {bulletImage} : {}) });
+          ...(bulletImage && node.payload.numbering === undefined && (node.field === 'items' || node.field === 'bullets') ? {bulletImage} : {}) });
         if (box.width < 100 * scale || box.height < 60 * scale) diagnostics.push({ code: "small-cell", path: node.path, message: "Content cell is too small for comfortable reading; use fewer blocks or a different composition." });
       }
     });
@@ -2124,10 +2148,12 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     const container: Pending = { field: 'blocks', type: 'group', value: rest.map(node => node.payload), path, payload: {}, children: rest, composition: {}, synthetic: true };
     arrange(chartPrimary === 'left' || chartPrimary === 'top' ? [primary, container] : [container, primary], contentBox, rootSettings, 0);
   } else arrange(pending, contentBox, rootSettings, composition.mode ? 0 : placeholders.length);
-  if (listBullet?.value === 'image' && !bulletImage && items.some(item => item.field === 'items' || item.field === 'bullets')) {
+  if (listBullet?.value === 'image' && !bulletImage && items.some(item => (item.field === 'items' || item.field === 'bullets') && item.payload.numbering === undefined)) {
     diagnostics.push({ code: 'unresolved-content', path: listBullet.path, message: 'Picture bullets (listBullet: image) need design.logo or a primary organization logo; the marker glyph is drawn instead.' });
   }
 
+  // Notices that never fail a strict composition: the drawn number is still the one PowerPoint draws.
+  const numberingDiagnostics: LayoutDiagnostic[] = [];
   for (const item of items) {
     for (const key of ["x", "y", "width", "height"] as const) item.box[key] = round(item.box[key]);
     if (item.field === "table" && tableOverflows(item.value,item.box,scale,item.composition,options,item.path)) diagnostics.push({ code: "text-overflow", path: item.path, message: "Table cells do not fit; use fewer rows, fewer columns, or split the table across slides." });
@@ -2136,6 +2162,9 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     else if (item.metricLayout) diagnostics.push(...item.metricLayout.diagnostics);
     else if (item.timelineLayout) diagnostics.push(...item.timelineLayout.diagnostics);
     else if (item.text?.overflow) diagnostics.push({ code: "text-overflow", path: item.path, message: "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide." });
+    for (const entry of (item.text as ListFit | undefined)?.listEntries ?? []) {
+      if (entry.marker.number?.adapted) numberingDiagnostics.push({ code: "numbering-adapted", path: entry.textPath ?? item.path, message: `Roman numerals stop at 3999; this entry is numbered ${entry.marker.number.value} in arabic, as PowerPoint draws it.` });
+    }
   }
   for (const group of groups) for (const box of [group.box, group.contentBox]) for (const key of ["x", "y", "width", "height"] as const) box[key] = round(box[key]);
   const strictPaths = new Set(items.filter(item => item.composition.overflow === "error").map(item => item.path));
@@ -2155,7 +2184,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     unmeasuredPayloads:items.filter(item=>!headings.has(item.field)&&!item.quoteLayout&&!item.codeLayout&&!item.metricLayout&&!item.timelineLayout&&!['text','items','bullets','table'].includes(item.field)).map(item=>item.path),
   } : undefined;
   if (failures.length) throw new OPFCompositionError(failures, explanation);
-  diagnostics.push(...slideImageDiagnostics);
+  diagnostics.push(...slideImageDiagnostics, ...numberingDiagnostics);
   return { width, height, contentBox, items, groups, flows, diagnostics, composition, ...(furniture?{furniture}:{}), ...(slideImage?{slideImage}:{}), ...(logo?{logo}:{}), ...(explanation?{explanation}:{}) };
 }
 
