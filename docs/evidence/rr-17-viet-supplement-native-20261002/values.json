@@ -1,0 +1,93 @@
+{
+ "schema": "rr-42-native-values/1",
+ "item": "RR-17 (FF-05 class), re-run of an RR-42 failure",
+ "date": "2026-10-02",
+ "run": {
+  "host": "Windows, desktop PowerPoint through COM (read-only open, no window, closed without saving); supervisor-run",
+  "powerpoint": {
+   "version": "16.0",
+   "build": "20430"
+  },
+  "decks": 2,
+  "completed": 2,
+  "startedUtc": [
+   "2026-10-02T22:06:48.9786211Z",
+   "2026-10-02T22:06:50.9010016Z"
+  ]
+ },
+ "packages": {
+  "@openpresentation/opf": "0.12.0",
+  "@openpresentation/opf-render": "0.12.0",
+  "@openpresentation/opf-pptx": "branch codex/rr-17-viet-supplement 7f51edcfe5 (opf-pptx#154)"
+ },
+ "export": {
+  "repository": "OpenPresentation/opf-pptx",
+  "branch": "codex/rr-17-viet-supplement",
+  "commit": "7f51edcfe5e3246d76bd193003f7aed2b824c227",
+  "pullRequest": "https://github.com/OpenPresentation/opf-pptx/pull/154",
+  "identicalAt": [
+   "29ac0a7abccbb6f5f86f7db09ab80690efef5198"
+  ]
+ },
+ "gallery": {
+  "repository": "Data-Advantage/pptx-gallery",
+  "commit": "34e6656854216c0fdbfd79fddcc55686cd6df7c7"
+ },
+ "gated": [
+  "opened",
+  "complete",
+  "fonts",
+  "themeSlots",
+  "presentationFonts",
+  "themeColors",
+  "shapeCount",
+  "geometry",
+  "background",
+  "pictures",
+  "placeholders",
+  "fields",
+  "charts",
+  "notes",
+  "tags"
+ ],
+ "geometryTolerancePt": 0.05,
+ "summary": {
+  "decks": 2,
+  "decksNotRun": 0,
+  "values": 2,
+  "valuesPass": 2,
+  "valuesFail": 0,
+  "byType": {
+   "languages": {
+    "values": 2,
+    "pass": 2,
+    "fail": 0,
+    "checks": {}
+   }
+  }
+ },
+ "values": [
+  {
+   "type": "languages",
+   "id": "english-us",
+   "deck": "viet-fix-01-english-us",
+   "slides": [
+    1
+   ],
+   "source": "gallery snippet",
+   "pass": true,
+   "failingChecks": []
+  },
+  {
+   "type": "languages",
+   "id": "vietnamese-quoc-ngu",
+   "deck": "viet-fix-02-vietnamese-quoc-ngu",
+   "slides": [
+    1
+   ],
+   "source": "gallery snippet",
+   "pass": true,
+   "failingChecks": []
+  }
+ ]
+}

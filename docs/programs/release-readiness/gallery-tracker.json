@@ -100,6 +100,10 @@
         {
           "file": "docs/evidence/rr-42-native-20261002/values.json",
           "values": 881
+        },
+        {
+          "file": "docs/evidence/rr-17-viet-supplement-native-20261002/values.json",
+          "values": 2
         }
       ]
     },
@@ -109,7 +113,7 @@
     },
     "overrides": {
       "file": "docs/programs/release-readiness/gallery-tracker.overrides.json",
-      "rules": 11
+      "rules": 10
     }
   },
   "statusDefinitions": {
@@ -282,17 +286,6 @@
       "link": "https://github.com/OpenPresentation/opf/issues/250",
       "descoped": true,
       "next": "Navigation and motion are deferred out of v1 by the owner (2026-10-01)."
-    },
-    "native-viet-supplement": {
-      "gap": "native-mismatch",
-      "types": [
-        "languages"
-      ],
-      "ids": [
-        "vietnamese-quoc-ngu"
-      ],
-      "link": "RR-17",
-      "next": "FF-05 class (RR-17): the exported theme keeps the Office Viet supplement (major Times New Roman, minor Arial), so PowerPoint lists Arial for the vi-VN runs although they draw in Aptos. Fix in opf-pptx: the supplemental entry for the deck language's own script names the family the deck uses for it, in majorFont and minorFont; Viet (and Uigh) takes the theme a:latin family, as the non-Latin entries already take a:cs or a:ea. Then re-run the deck natively."
     }
   },
   "defaultNext": {
@@ -327,7 +320,7 @@
     "addressed": 1101,
     "unaddressed": 0,
     "byStatus": {
-      "done": 380,
+      "done": 381,
       "deprecated": 50,
       "descoped": 453,
       "works-unverified": 0,
@@ -338,7 +331,7 @@
       "missing-spec": 0,
       "missing-editor": 0,
       "parity-mismatch": 0,
-      "native-mismatch": 1,
+      "native-mismatch": 0,
       "missing-export": 0,
       "missing-preview": 0,
       "broken": 0
@@ -375,10 +368,9 @@
       "languages": {
         "records": 93,
         "byStatus": {
-          "done": 65,
+          "done": 66,
           "parity-near": 2,
-          "font-gap": 25,
-          "native-mismatch": 1
+          "font-gap": 25
         },
         "addressed": 93,
         "unaddressed": 0
@@ -1124,7 +1116,7 @@
     {"type":"languages","id":"english-ca","name":"English (Canada)","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
     {"type":"languages","id":"english-gb","name":"English (United Kingdom)","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
     {"type":"languages","id":"english-in","name":"English (India)","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
-    {"type":"languages","id":"english-us","name":"English (United States)","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
+    {"type":"languages","id":"english-us","name":"English (United States)","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-17-viet-supplement-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
     {"type":"languages","id":"estonian","name":"Estonian","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
     {"type":"languages","id":"filipino","name":"Filipino","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
     {"type":"languages","id":"finnish","name":"Finnish","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
@@ -1188,7 +1180,7 @@
     {"type":"languages","id":"ukrainian","name":"Ukrainian","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
     {"type":"languages","id":"urdu","name":"Urdu","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"near","editor":"switch","gallery":"shown","native":"verified","fonts":"gap"},"pipeline":"works","fonts":["Arabic Typesetting: script-gap","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[{"code":"font-gap","detail":"Arabic Typesetting script-gap","rule":"font-tracker-gaps","link":"RR-17","addressed":true,"linkStatus":"in-progress"},{"code":"parity-near","detail":"fontResolution near (fontResolution: visual-only replacement (no metric-compatible open font for Arabic Typesetting): Arabic Typesetting -> Noto Naskh Arabic)","rule":"font-routes-near","link":"RR-17","addressed":true,"linkStatus":"in-progress"}],"status":"font-gap","addressed":true},
     {"type":"languages","id":"uzbek-latin","name":"Uzbek (Latin)","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
-    {"type":"languages","id":"vietnamese-quoc-ngu","name":"Vietnamese (Quốc Ngữ)","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"failed","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[{"code":"native-mismatch","detail":"presentationFonts: {\"extras\":[\"Arial\"]}","rule":"native-viet-supplement","link":"RR-17","addressed":true,"linkStatus":"in-progress"}],"status":"native-mismatch","addressed":true},
+    {"type":"languages","id":"vietnamese-quoc-ngu","name":"Vietnamese (Quốc Ngữ)","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-17-viet-supplement-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
     {"type":"languages","id":"xhosa","name":"Xhosa","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
     {"type":"languages","id":"yoruba","name":"Yoruba","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
     {"type":"languages","id":"zulu","name":"Zulu","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
