@@ -61,6 +61,8 @@ Version 0.7.0 uses core 0.10.0 and renderer 0.8.0. Code source/metadata edits pr
 
 The new `@openpresentation/opf-editor/canvas` entry provides a framework-independent SVG canvas with inline text/table-cell editing, live validated drafts, undo/redo, cancellation, and structured property forms for charts, lists, metrics, quotes, code, timelines and images. Mount it in a DOM container:
 
+Chart options (RR-35): `@openpresentation/opf-editor/chart-options` edits a chart's `axisTitles`, `legend` and `dataLabels` as one undoable patch (`setChartOptions(editor, chartPath, { legend: "bottom", dataLabels: { position: "inside-end" } })`), and `@openpresentation/opf-editor/chart-options-panel` mounts the control panel (`createChartOptionsPanel(host, { editor, getSelectedPath })`). The panel offers only what the chart type can show.
+
 ```js
 import { createCanvasEditor } from '@openpresentation/opf-editor/canvas';
 

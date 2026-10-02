@@ -1,5 +1,6 @@
 import {installDataControls} from './data-controls.js';
 import {installReviewControls} from './review-controls.js';
+import {installChartControls} from './chart-controls.js';
 import {createSchemaInspector} from '../src/schema-inspector.js';
 import {installTemplateControls} from './template-controls.js';
 import {installFindControls} from './find-controls.js';
@@ -444,3 +445,4 @@ installTemplateControls({editor,getCanvas:()=>canvas,getSlideIndex:()=>slideInde
 const openPropertiesAt = pointer => { element('open-properties').click(); propertiesInspector?.navigate(pointer); };
 review = installReviewControls({editor,getSlideIndex:()=>slideIndex,goTo:(index,path)=>{slideIndex=index;selectedPath=path;refresh();},openProperties:openPropertiesAt,focusContentField:()=>{pendingContentFocus=true;refresh();},status,measurementFor:(deck,index)=>layoutFor(deck,index).textMeasurement});
 review?.refresh();
+installChartControls({editor,getSelectedPath:()=>selectedPath,status});
