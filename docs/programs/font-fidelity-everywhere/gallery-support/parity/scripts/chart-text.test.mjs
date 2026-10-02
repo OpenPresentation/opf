@@ -65,3 +65,15 @@ test('only roles the preview draws and the part has are compared; the part names
   assert.deepEqual(chartTextSizeMismatches({axis: [12], dataLabels: [], legend: [], title: []}, chartPartTextSizes(CLASSIC(1201, 1200), false), 0.005), ['chart axis text: preview [12] vs chart [12.01]'], 'no loosening: 0.01 pt is a mismatch');
   assert.deepEqual(chartTextSizeMismatches({axis: [12.5], dataLabels: [], legend: [], title: []}, chartPartTextSizes(CLASSIC(1250, 1250), false), 0.005), [], 'a fractional size equal to the hundredth');
 });
+
+import {isComputedTickLabel} from './chart-text.mjs';
+test('computed value-axis ticks are classified apart from authored chart strings (RR-44)', () => {
+  assert.equal(isComputedTickLabel('0', 'slides.0.chart'), true);
+  assert.equal(isComputedTickLabel('1,000', 'slides.0.chart'), true);
+  assert.equal(isComputedTickLabel('20%', 'slides.0.chart'), true);
+  assert.equal(isComputedTickLabel('Q1', 'slides.0.chart'), false);
+  assert.equal(isComputedTickLabel('0', 'slides.0.chart.data.rows.0.0'), false);
+  assert.equal(isComputedTickLabel('2024', 'slides.0.chart.data.rows.1.0'), false);
+  assert.equal(isComputedTickLabel('Revenue', 'slides.0.chart.data.columns.1'), false);
+  assert.equal(isComputedTickLabel('', 'slides.0.chart'), false);
+});
