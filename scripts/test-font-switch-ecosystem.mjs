@@ -943,7 +943,7 @@ if (FULL) {
   const audit = (edit) => {
     const entries = {...original};
     edit(entries);
-    return {check: checkPptxTypefaces(zipSync(entries), {fonts: fonts.chosen, monospace: fonts.monospace}), problems: packageProblems(entries)};
+    return {check: checkPptxTypefaces(zipSync(entries), {fonts: [...fonts.chosen, ...fonts.contentEastAsian], monospace: fonts.monospace}), problems: packageProblems(entries)};
   };
   const edited = (entries, part, pattern, replacement) => {
     const before = decoder.decode(entries[part]);
@@ -1014,7 +1014,7 @@ for (const failure of EXPECTED_FAILURES) {
   await expectLimitation(failure.id, 'the measured export', () => toPptx(failure.deck, measured), failure.measuredExport);
   const fonts = chosenFonts(failure.deck);
   const bytes = await toPptx(failure.deck);
-  const check = checkPptxTypefaces(bytes, {fonts: fonts.chosen, monospace: fonts.monospace});
+  const check = checkPptxTypefaces(bytes, {fonts: [...fonts.chosen, ...fonts.contentEastAsian], monospace: fonts.monospace});
   assert.deepEqual(check.violations, [], `${failure.id}: an unmeasured export still names only the chosen fonts`);
 }
 // Formerly named expected failures, now positive: the preview falls back per character to a bundled face that has the
@@ -1038,7 +1038,7 @@ for (const fallback of GLYPH_FALLBACK_CASES) {
   assert.deepEqual(renderSvgDeck(deck, measured), svgs, `${fallback.id}: deterministic`);
   const exportBytes = await toPptx(deck, measured);
   const fonts = chosenFonts(deck);
-  assert.deepEqual(checkPptxTypefaces(exportBytes, {fonts: fonts.chosen, monospace: fonts.monospace}).violations, [], `${fallback.id}: the measured export names only the chosen fonts`);
+  assert.deepEqual(checkPptxTypefaces(exportBytes, {fonts: [...fonts.chosen, ...fonts.contentEastAsian], monospace: fonts.monospace}).violations, [], `${fallback.id}: the measured export names only the chosen fonts`);
 }
 // A one-column histogram used to lose its chart silently: no chart part, no graphic frame and no diagnostic.
 {
@@ -1059,7 +1059,7 @@ for (const fallback of GLYPH_FALLBACK_CASES) {
   assert.deepEqual(fallbackDiagnostics.map((diagnostic) => [diagnostic.code, diagnostic.adaptation, diagnostic.path]), [['chart-data-adapted', 'histogram-binned', 'slides.0.chart']], `${id}: the fallback mode reports the binning`);
   assert.deepEqual(packageProblems(exported), [], `${id}: package structure, nested workbook included`);
   const fonts = chosenFonts(deck);
-  assert.deepEqual(checkPptxTypefaces(bytes, {fonts: fonts.chosen, monospace: fonts.monospace}).violations, [], `${id}: the chart and its workbook name only the chosen fonts`);
+  assert.deepEqual(checkPptxTypefaces(bytes, {fonts: [...fonts.chosen, ...fonts.contentEastAsian], monospace: fonts.monospace}).violations, [], `${id}: the chart and its workbook name only the chosen fonts`);
   assert.equal((await fromPptx(bytes)).slides.length, 1, `${id}: re-imports`);
 }
 
