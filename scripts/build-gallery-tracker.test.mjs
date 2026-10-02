@@ -36,7 +36,7 @@ function writeFiles(dir, files) {
 function scratchCopy(mutateOverrides = (o) => o) {
   const dir = mkdtempSync(path.join(tmpdir(), "gallery-tracker-"));
   const { evidence, catalogs, ...files } = overrides.inputs;
-  for (const file of [...Object.values(files), FILES.snapshots, FILES.json, FILES.markdown]) {
+  for (const file of [...Object.values(files).flat(), FILES.snapshots, FILES.json, FILES.markdown]) {
     mkdirSync(path.dirname(path.join(dir, file)), { recursive: true });
     cpSync(path.join(ROOT, file), path.join(dir, file));
   }
@@ -101,7 +101,7 @@ test("columns use their documented values and unknown where nothing measured", (
     parity: ["perfect", "near", "mismatch", "unmeasured", "n/a"],
     editor: ["switch", "none", "n/a"],
     gallery: ["shown", "shown-no-preview", "json-only", "not-shown", "not-shown-deprecated", "coming", "n/a"],
-    native: ["exercised", "unverified", "n/a"],
+    native: ["verified", "failed", "exercised", "unverified", "n/a"],
   };
   for (const r of committed.records) for (const [column, values] of Object.entries(allowed)) assert.ok(values.includes(r.columns[column]), `${r.type}/${r.id}: ${column} ${r.columns[column]}`);
   for (const r of committed.records.filter((x) => x.columns.compose === "unknown")) assert.ok(r.gaps.some((g) => g.code === "unknown"), `${r.type}/${r.id}: unknown column without an unknown gap`);
@@ -199,7 +199,7 @@ test("a stale tracker, an unused rule and an unknown RR link fail the build", ()
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
-  dir = scratchCopy((o) => ({ ...o, rules: o.rules.map((r) => (r.link === "RR-42" ? { ...r, link: "RR-98" } : r)) }));
+  dir = scratchCopy((o) => ({ ...o, rules: o.rules.map((r) => (r.link === "RR-17" ? { ...r, link: "RR-98" } : r)) }));
   try {
     assert.throws(() => checkTracker({ root: dir }), /unknown burndown item RR-98/);
   } finally {

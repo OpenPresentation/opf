@@ -23,7 +23,9 @@ const render = await imp(`${SRC}/audit-B-opf-render/dist/index.js`);
 const {prepareNodeFonts, BUNDLED_FONT_MANIFEST} = await imp(`${SRC}/audit-B-opf-render/dist/fonts-node.js`);
 const {FONT_COMPATIBILITY} = await imp(`${SRC}/audit-B-opf-render/dist/fonts.js`).catch(() => ({}));
 const {toPptx, fromPptx} = await imp(`${SRC}/audit-B-opf-pptx/dist/index.js`);
-const {fontPolicyFor, resolveScriptFonts} = await imp(`${core}/index.js`);
+const {fontPolicyFor, resolveScriptFonts, resolveCanvasDimensions} = await imp(`${core}/index.js`);
+// RR-43: the slide-size presets of the schema (DimensionPreset), measured like a catalog kind.
+const DIMENSION_PRESETS = JSON.parse(await readFile(`${core}/spec/schemas/opf.schema.json`, "utf8")).$defs.DimensionPreset.enum;
 const req = createRequire(`${SRC}/audit-B-opf-pptx/package.json`);
 const {unzipSync} = req('fflate');
 
@@ -434,6 +436,9 @@ for (const s of snippets) {
   if (dim === 'tones') { cat.kind = 'tones'; cat.value = doc.tone; cat.record = byId('tones', doc.tone); }
   if (dim === 'charts') { cat.kind = 'chartTypes'; cat.value = doc.slides?.[0]?.chart?.type; cat.record = byId('chartTypes', cat.value); }
   if (dim === 'socials') { cat.kind = 'socialPlatforms'; cat.value = s.id; cat.record = byId('socialPlatforms', s.id); }
+  // RR-43 (2026-10-02): purposes (document metadata, like tones) and the slide-size presets (design.dimensions).
+  if (dim === 'purposes') { cat.kind = 'purposes'; cat.value = doc.purpose; cat.record = byId('purposes', doc.purpose); }
+  if (dim === 'slide-sizes') { cat.kind = 'dimensionPresets'; cat.value = design.dimensions; cat.record = DIMENSION_PRESETS.includes(design.dimensions) ? {id: design.dimensions} : null; }
   r.catalogResolves = !!cat.record; r.catalog = {...cat, record: cat.record ? {id: cat.record.id, ...(cat.kind === 'fontSchemes' ? {major: cat.record.major, minor: cat.record.minor, languageFamily: cat.record.languageFamily, type: cat.record.type} : {})} : null,
     fontSchemeRecord: cat.fontSchemeRecord ? {id: cat.fontSchemeRecord.id, major: cat.fontSchemeRecord.major, minor: cat.fontSchemeRecord.minor, languageFamily: cat.fontSchemeRecord.languageFamily} : cat.fontSchemeRecord, googleFontSchemeRecord: cat.googleFontSchemeRecord ? cat.googleFontSchemeRecord.id : cat.googleFontSchemeRecord};
 
@@ -550,7 +555,7 @@ for (const s of snippets) {
     m.reimportTheme = rd?.design?.theme ?? null; m.reimportDimensions = rd?.design?.dimensions ?? null;
   }
   // consumption diff: remove the dimension field and compare preview SVG + PPTX parts
-  const stripKeys = {narratives: ['narrative'], audiences: ['audience'], tones: ['tone'], languages: ['language', 'catalogs.languages'], socials: ['organization', 'speaker', 'catalogs.socialPlatforms']}[dim];
+  const stripKeys = {narratives: ['narrative'], audiences: ['audience'], tones: ['tone'], purposes: ['purpose'], 'slide-sizes': ['design.dimensions'], languages: ['language', 'catalogs.languages'], socials: ['organization', 'speaker', 'catalogs.socialPlatforms']}[dim];
   if (stripKeys) {
     const ctrl = strip(doc, stripKeys);
     const pc = doRender(ctrl, 'none'); const ec = await doExport(ctrl, 'none');
@@ -559,6 +564,17 @@ for (const s of snippets) {
     if (dim === 'narratives') m.reimportValue = rd?.narrative ?? null;
     if (dim === 'tones') m.reimportValue = rd?.tone ?? null;
     if (dim === 'audiences') m.reimportValue = rd?.audience ?? null;
+    if (dim === 'purposes') m.reimportValue = rd?.purpose ?? null;
+    if (dim === 'slide-sizes') {
+      // The size the preset resolves to, the size the preview draws, the PPTX p:sldSz and the size the re-imported dimensions resolve to.
+      const px = resolveCanvasDimensions(design.dimensions);
+      m.slideSize = {preset: design.dimensions, expectedPx: px, expectedEmu: {cx: Math.round(px.width / 96 * 914400), cy: Math.round(px.height / 96 * 914400)}};
+      const root = pv.none.ok ? (pv.none.svgs[0].match(/<svg\b[^>]*>/) ?? [""])[0] : "", attr = k => root.match(new RegExp(`\\b${k}="([\\d.]+)"`))?.[1];
+      m.slideSize.previewPx = attr("width") && attr("height") ? {width: Number(attr("width")), height: Number(attr("height"))} : null;
+      if (ex.ok) { const p = dec.decode(unzipSync(ex.bytes)['ppt/presentation.xml']).match(/<p:sldSz\b[^>]*?cx="(\d+)"[^>]*?cy="(\d+)"/); m.slideSize.exportEmu = p ? {cx: Number(p[1]), cy: Number(p[2])} : null; }
+      m.reimportValue = rd?.design?.dimensions ?? null;
+      m.slideSize.reimportPx = rd?.design?.dimensions != null ? resolveCanvasDimensions(rd.design.dimensions) : null;
+    }
   }
   if (dim === 'languages') {
     const lang = byId('languages', doc.language);

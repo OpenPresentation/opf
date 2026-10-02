@@ -194,15 +194,26 @@ function classify(r) {
     if (m.previewVsExportFontDiff && !m.previewVsExportFontDiff.agree) reasons.push(`preview fonts ${m.previewVsExportFontDiff.previewHeading}/${m.previewVsExportFontDiff.previewBody} vs export ${m.previewVsExportFontDiff.exportMajor}/${m.previewVsExportFontDiff.exportMinor}`);
     if (m.reimportTheme !== r.catalog.value) reasons.push(reimportReason(r, 'theme', m.reimportTheme, r.catalog.value));
     cls = hardFail || !bgOk || !fontsOk || !colorsAgree(m) ? 'broken' : reasons.length ? 'partial' : 'works';
-  } else if (d === 'narratives' || d === 'tones' || d === 'audiences') {
+  } else if (d === 'narratives' || d === 'tones' || d === 'audiences' || d === 'purposes') {
     const c = m.consumption ?? {};
     const inert = c.previewIdentical && c.exportIdentical?.equal;
     engine = inert ? 'no effect on preview or export (byte-identical when removed)' : `removing the field changes preview=${c.previewIdentical === false}, export parts: ${list(c.exportIdentical?.diffParts)}`;
     if (!r.catalogResolves) reasons.push(`gallery id not in core ${d} catalog${r.validatorWarnings.length ? ' (validator warns)' : ' (no validator warning)'}`);
     if (d === 'audiences' && r.catalog.narrativeResolves === false) reasons.push('snippet narrative (recommendedNarratives[0]) not in core catalog');
-    const want = d === 'narratives' ? r.snippet?.narrative : d === 'tones' ? r.snippet?.tone : r.snippet?.audience;
+    const want = d === 'narratives' ? r.snippet?.narrative : d === 'tones' ? r.snippet?.tone : d === 'purposes' ? r.snippet?.purpose : r.snippet?.audience;
     if (JSON.stringify(m.reimportValue ?? null) !== JSON.stringify(want ?? null)) reasons.push(reimportReason(r, d.slice(0, -1), m.reimportValue, want));
     cls = hardFail ? 'broken' : !r.catalogResolves ? 'gallery-only' : inert ? 'authoring-metadata' : reasons.length ? 'partial' : 'works';
+  } else if (d === 'slide-sizes') {
+    // RR-43 (2026-10-02): a slide-size preset works when the preview draws the size the preset resolves to, the PPTX p:sldSz is that size
+    // (EMU, rounded) and the re-imported dimensions resolve to the same size.
+    const z = m.slideSize ?? {}, e = z.expectedPx, x = z.exportEmu, pvx = z.previewPx, ri = z.reimportPx;
+    const near = (a, b) => a != null && b != null && Math.abs(a - b) <= 1;
+    engine = `preset ${z.preset}: expected ${e?.width}x${e?.height} px (${z.expectedEmu?.cx}x${z.expectedEmu?.cy} EMU); preview ${pvx?.width}x${pvx?.height}; export ${x?.cx}x${x?.cy}; re-import ${JSON.stringify(m.reimportValue)}`;
+    if (!r.catalogResolves) reasons.push('preset not in the schema DimensionPreset enum');
+    if (!pvx || Math.abs(pvx.width - e.width) > 0.5 || Math.abs(pvx.height - e.height) > 0.5) reasons.push(`preview draws ${pvx?.width}x${pvx?.height} px, expected ${e?.width}x${e?.height}`);
+    if (!x || !near(x.cx, z.expectedEmu.cx) || !near(x.cy, z.expectedEmu.cy)) reasons.push(`export p:sldSz ${x?.cx}x${x?.cy} EMU, expected ${z.expectedEmu?.cx}x${z.expectedEmu?.cy}`);
+    if (!ri || Math.abs(ri.width - e.width) > 0.5 || Math.abs(ri.height - e.height) > 0.5) reasons.push(reimportReason(r, 'dimensions', m.reimportValue, z.preset));
+    cls = hardFail ? 'broken' : !r.catalogResolves ? 'gallery-only' : reasons.length ? 'partial' : 'works';
   } else if (d === 'socials') {
     const c = m.consumption ?? {};
     const inert = c.previewIdentical && c.exportIdentical?.equal;
@@ -279,7 +290,7 @@ function sharedExportGaps(rows) {
 const results = raw.map(classify);
 await writeFile(`${B}/results.json`, JSON.stringify({generated: new Date().toISOString(), fontHost: FONT_HOST, heads: JSON.parse(await readFile(`${B}/out/heads.json`, 'utf8').catch(() => '{}')), sharedExportGaps: sharedExportGaps(raw), results}, null, 1));
 
-const dims = [['color-schemes', 'Color schemes'], ['font-schemes', 'Font schemes (89 upstream)'], ['font-schemes-legacy', 'Font schemes (gallery legacy)'], ['languages', 'Languages'], ['themes', 'Themes'], ['narratives', 'Narratives'], ['audiences', 'Audiences'], ['tones', 'Tones'], ['socials', 'Socials'], ['charts', 'Charts']];
+const dims = [['color-schemes', 'Color schemes'], ['font-schemes', 'Font schemes (89 upstream)'], ['font-schemes-legacy', 'Font schemes (gallery legacy)'], ['languages', 'Languages'], ['themes', 'Themes'], ['narratives', 'Narratives'], ['audiences', 'Audiences'], ['tones', 'Tones'], ['purposes', 'Purposes'], ['slide-sizes', 'Slide sizes'], ['socials', 'Socials'], ['charts', 'Charts']];
 const esc = s => String(s ?? '').replace(/\|/g, '\\|');
 for (const [d, title] of dims) {
   const rows = results.filter(r => r.dimension === d);
