@@ -3,6 +3,7 @@
 // same command on ubuntu, windows and macos shows whether the perfect/near/mismatch classes depend on the operating system.
 //
 //   node scripts/published-matrix/installed-parity.mjs prepare   [--work <dir>]   install the packages, lay out the harness
+//                                                                (default work directory: OPF_PARITY_WORK, else installed-parity under RUNNER_TEMP or the temporary directory)
 //   node scripts/published-matrix/installed-parity.mjs snippets  [--work <dir>]   the 850 gallery value documents
 //   node scripts/published-matrix/installed-parity.mjs parity    [--work <dir>]   parity.mjs + summarize.mjs (PARITY_FONT_HOST=gallery)
 //   node scripts/published-matrix/installed-parity.mjs all        [--work <dir>]
@@ -17,6 +18,7 @@ import {spawnSync} from 'node:child_process';
 import {appendFile, cp, mkdir, readdir, readFile, rm, symlink, writeFile} from 'node:fs/promises';
 import {existsSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
+import os from 'node:os';
 import path from 'node:path';
 import {fileURLToPath, pathToFileURL} from 'node:url';
 
@@ -31,7 +33,8 @@ const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
 const argv = process.argv.slice(2);
 const command = argv[0] ?? 'all';
 const optionAt = argv.indexOf('--work');
-const work = path.resolve(optionAt >= 0 ? argv[optionAt + 1] : path.join(root, 'artifacts', 'installed-parity'));
+// Outside any git checkout: inside one, the harness would record that repository's HEAD as the head of each package (prepare checks it).
+const work = path.resolve(optionAt >= 0 ? argv[optionAt + 1] : (process.env.OPF_PARITY_WORK ?? path.join(process.env.RUNNER_TEMP ?? os.tmpdir(), 'installed-parity')));
 const consumer = path.join(work, 'consumer');
 const sources = path.join(work, 'sources');
 const audit = path.join(work, 'dimension-audit', 'parity');
@@ -70,6 +73,8 @@ async function prepare() {
   console.log('Installed set:', JSON.stringify(versions));
   await rm(work, {recursive: true, force: true});
   await mkdir(consumer, {recursive: true});
+  const inside = spawnSync('git', ['-C', work, 'rev-parse', '--show-toplevel'], {encoding: 'utf8'});
+  assert.notEqual(inside.status, 0, `the work directory ${work} is inside the git checkout ${inside.stdout.trim()}: parity.mjs would record that HEAD as the head of every package; use --work or OPF_PARITY_WORK outside any checkout`);
   const peers = JSON.parse(capture(npm, ['view', `@openpresentation/opf-render@${versions['@openpresentation/opf-render']}`, 'peerDependencies', '--json'], root) || '{}');
   const dependencies = {...versions, ...peers, esbuild: ESBUILD};
   await writeFile(path.join(consumer, 'package.json'), JSON.stringify({name: 'opf-installed-parity', private: true, type: 'module', dependencies}, null, 2));

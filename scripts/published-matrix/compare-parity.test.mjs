@@ -4,8 +4,8 @@ import {compareParity, keyOf, leaves} from './compare-parity.mjs';
 
 const result = (id, cls, size = 12) => ({dimension: 'layouts', variant: 'published', id, class: cls, checks: {geometry: 'pass', text: cls === 'perfect' ? 'pass' : 'near'}, stats: {runs: 3}, diffs: [], size});
 const host = (results, overrides = {}) => ({
-  results: {meta: {generatedAt: String(Math.random()), node: 'v24.21.0', heads: {opf: 'a'}, fontHost: 'gallery'}, results},
-  installed: {packages: {'@openpresentation/opf': {version: '0.12.0', gitHead: 'a'}}, dependencies: {fflate: '0.8.2', ...overrides}}
+  results: {meta: {generatedAt: String(Math.random()), node: 'v24.21.0', heads: {opf: 'a', 'opf-render': 'b', 'opf-pptx': 'c'}, fontHost: 'gallery'}, results},
+  installed: {packages: {'@openpresentation/opf': {version: '0.12.0', gitHead: 'a'}, '@openpresentation/opf-render': {version: '0.12.0', gitHead: 'b'}, '@openpresentation/opf-pptx': {version: '0.12.1', gitHead: 'c'}}, dependencies: {fflate: '0.8.2', ...overrides}}
 });
 
 test('leaves lists every leaf with its path', () => {
@@ -35,4 +35,12 @@ test('platform builds of dependencies are listed but do not decide the compariso
   const summary = compareParity({ubuntu: host(rows, {'@img/sharp-linux-x64': '1.0.0'}), macos: host(rows, {'@img/sharp-darwin-arm64': '1.0.0'})});
   assert.equal(summary.differences.length, 0);
   assert.equal(summary.installedDifferences.length, 2);
+});
+
+test('a recorded head that is not the installed gitHead is a difference', () => {
+  const rows = [result('a', 'perfect')];
+  const wrong = host(rows);
+  wrong.results.meta.heads.opf = 'repository-head';
+  const summary = compareParity({ubuntu: host(rows), macos: wrong});
+  assert.ok(summary.differences.some((difference) => difference.field === 'meta.heads.opf is not the installed gitHead'));
 });

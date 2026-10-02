@@ -58,10 +58,24 @@ export function compareParity(hosts) {
     const results = hosts[name].results.results;
     const tally = (list) => Object.fromEntries(['perfect', 'near', 'mismatch'].map((cls) => [cls, list.filter((result) => result.class === cls).length]));
     const checks = {};
-    for (const result of results) for (const [check, outcome] of Object.entries(result.checks ?? {})) (checks[check] ??= {})[outcome] = (checks[check][outcome] ?? 0) + 1;
+    for (const result of results) {
+      for (const [check, outcome] of Object.entries(result.checks ?? {})) {
+        checks[check] ??= {};
+        checks[check][outcome] = (checks[check][outcome] ?? 0) + 1;
+      }
+    }
     const dimensions = {};
     for (const dimension of new Set(results.map((result) => result.dimension))) dimensions[dimension] = {values: results.filter((result) => result.dimension === dimension).length, ...tally(results.filter((result) => result.dimension === dimension))};
     counts[name] = {values: results.length, ...tally(results), checks, dimensions};
+  }
+
+  // The heads the harness recorded must be the registry commits of the installed packages (not, say, the HEAD of the repository the work directory sits in).
+  for (const name of names) {
+    for (const [head, pkg] of [['opf', '@openpresentation/opf'], ['opf-render', '@openpresentation/opf-render'], ['opf-pptx', '@openpresentation/opf-pptx']]) {
+      const recorded = hosts[name].results.meta.heads?.[head] ?? null;
+      const installed = hosts[name].installed.packages?.[pkg]?.gitHead ?? null;
+      if (recorded !== installed) differences.push({scope: name, field: `meta.heads.${head} is not the installed gitHead`, values: {recorded, installed}});
+    }
   }
 
   // The installed set: the four packages must be the same versions at the same commits; transitive dependencies are listed when they differ

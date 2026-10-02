@@ -60,6 +60,8 @@ jobs:
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: ${{ env.NODE_VERSION }}
+      # The work directory is installed-parity under RUNNER_TEMP, outside the checkout, so the harness reads the registry
+      # gitHead of each package and not the HEAD of this repository.
       - name: Install the published packages and lay out the harness
         run: node scripts/published-matrix/installed-parity.mjs prepare
       - name: Gallery value documents (committed snapshot of the gallery's own builders)
@@ -71,9 +73,9 @@ jobs:
         with:
           name: installed-parity-${{ matrix.os }}
           path: |
-            artifacts/installed-parity/out/parity-results.json
-            artifacts/installed-parity/out/PARITY.md
-            artifacts/installed-parity/out/installed.json
+            ${{ runner.temp }}/installed-parity/out/parity-results.json
+            ${{ runner.temp }}/installed-parity/out/PARITY.md
+            ${{ runner.temp }}/installed-parity/out/installed.json
           retention-days: 14
           if-no-files-found: warn
 
