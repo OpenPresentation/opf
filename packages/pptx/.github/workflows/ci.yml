@@ -39,7 +39,7 @@ jobs:
           # Core main 1228351 (core 0.11.3 plus the recorded renderer 0.11.8 lazy font count and the FF-56 evidence, opf#222) plus opf#231 (lane scripts accept the root payload form that content topology restores, opf-pptx#122); the published core this release requires is ^0.11.3.
           # Core main 07cd9d4 (published 0.11.4 plus the renderer 0.11.9 lazy font count opf#234 and the ecosystem repin opf#235; core 0.11.3 plus opf#229 design fields, opf#230 cover alignment, opf#231 and opf#232 picture-bullet size and furniture alignment; the combined core that ships as 0.11.4). Lockstep: the PPTX floor moves to 0.11.4.
           # RR-16 (opf#247) and RR-29 (opf#270) merged: core main 395e4c1 carries both (composed font sizes on the 0.01 pt grid, promoted regions in reading order, chartPaletteForFill).
-          ref: 395e4c11aee82e3a3ebac1a70e2e112ec7e5143c
+          ref: c6a7b3840de9f9bdf66a4a38f07951764a953c57
           path: opf
           fetch-depth: 0
           persist-credentials: false
@@ -48,7 +48,8 @@ jobs:
           repository: OpenPresentation/opf-render
           # opf-render 0.11.8 release commit (the tag draws in the primary colour, as opf-pptx writes it).
           # opf-render 0.11.9 release commit 2fbc0ab (opf-render#83 and #85: draws the same logos, picture bullets and accent font on the combined core).
-          ref: 2fbc0abf3c327b6e9e9525a52c8ea9e56e84646e
+          # RR-33: opf-render 0.11.9 plus the numbered-list marker commit of opf-render#99 (a pre-#88 renderer: render main draws SVG pictures, which test/svg-image-degrade.mjs here does not expect yet; a separate change fixes that). Repin to the render merge commit once #99 merges.
+          ref: 275fd21f6b179c117083356222421421a7ab5d54
           path: opf-render
           fetch-depth: 0
           persist-credentials: false

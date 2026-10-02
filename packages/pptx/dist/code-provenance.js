@@ -1,4 +1,5 @@
 import { XMLParser } from 'fast-xml-parser';
+import { withDisplayedNumbers } from './numbered-list.js';
 
 // Native shape tags are standard PresentationML customer data. Uppercase hex
 // protects case-sensitive source from PowerPoint's case-insensitive Tags API.
@@ -72,7 +73,7 @@ export function nativeShapeParagraphs(xml, rootElement = 'p:sld') {
   const root = children(reader.parse(xml),rootElement)[0];
   const tree = children(children(root,'p:cSld')[0],'p:spTree')[0];
   return orderedShapes(tree).map(shape=>children(children(shape,'p:txBody')[0],'a:p').map(paragraph=>{
-    let text = '', maxFontSize = 0, bullet = false, level = 0, math = null;
+    let text = '', maxFontSize = 0, bullet = false, level = 0, math = null, autoNum;
     const fields = [];
     const readRuns = runs => {
       let value = '';
@@ -102,10 +103,13 @@ export function nativeShapeParagraphs(xml, rootElement = 'p:sld') {
       if (child['a:pPr'] !== undefined) {
         level = Number(child[':@']?.lvl ?? 0);
         bullet = child['a:pPr'].some(node=>node['a:buChar'] !== undefined || node['a:buBlip'] !== undefined || node['a:buAutoNum'] !== undefined);
+        // RR-33: a native auto-number; the last bullet element of the paragraph properties wins.
+        const numbering = child['a:pPr'].findLast(node=>node['a:buAutoNum'] !== undefined || node['a:buNone'] !== undefined || node['a:buChar'] !== undefined || node['a:buBlip'] !== undefined);
+        autoNum = numbering?.['a:buAutoNum'] !== undefined ? {type: numbering[':@']?.type, startAt: numbering[':@']?.startAt} : undefined;
       }
     }
-    return {text,maxFontSize,bullet,level,fields,...(math ? {math} : {})};
-  }));
+    return {text,maxFontSize,bullet,level,fields,...(math ? {math} : {}),...(autoNum ? {autoNum} : {})};
+  })).map(withDisplayedNumbers);
 }
 /** The m:t text of an OMML tree in document order (its linear reading, without the equation's layout). */
 export const mathText = nodes => array(nodes).flatMap(node=>Object.entries(node).flatMap(([key,value])=>key === ':@' || key === '#text' ? [] : key === 'm:t' ? [plainText(value)] : mathText(value))).join('');
