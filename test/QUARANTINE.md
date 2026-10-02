@@ -24,7 +24,7 @@ rule that keeps such a test visible without letting it block unrelated work, and
 | File | Purpose |
 |---|---|
 | `test/quarantine.json` | The list. `{ "schema": 1, "entries": [] }` when nothing is quarantined. |
-| `test/browser-suites.json` | The browser suites: setup commands and tests with stable ids. CI runs them through `quarantine.mjs run-suite`; the measurement runs the same list. |
+| `test/browser-suites.json` | The browser suites: setup commands and tests with stable ids (a suite with `continueOnFailure` runs every test and fails at the end). CI runs them through `quarantine.mjs run-suite`; the measurement runs the same list. |
 | `scripts/quarantine.mjs` | `check`, `run-suite <suite>`, `run-deferred`. Plain Node, no dependencies. |
 | `scripts/flake-repeat.mjs` | The measurement. Runs each suite N times and writes a pass rate per test. |
 | `scripts/quarantine.test.mjs` | Unit tests of the rule and both scripts (`node --test`). |

@@ -53,7 +53,7 @@ function scratch() {
   writeFileSync(path.join(root, 'test/pass.mjs'), 'console.log("pass")');
   writeFileSync(path.join(root, 'test/fail.mjs'), 'console.error("boom"); process.exit(3)');
   writeFileSync(path.join(root, 'test/flip.mjs'), 'import fs from "node:fs"; const n=fs.existsSync("flip.count")?+fs.readFileSync("flip.count","utf8"):0; fs.writeFileSync("flip.count",String(n+1)); process.exit(n%2?0:1)');
-  writeFileSync(path.join(root, 'test/browser-suites.json'), JSON.stringify({ schema: 1, suites: { s: { tests: [{ id: 'pass', command: 'node test/pass.mjs' }, { id: 'fail', command: 'node test/fail.mjs' }, { id: 'last', command: 'node test/pass.mjs' }] }, f: { tests: [{ id: 'flip', command: 'node test/flip.mjs' }] } } }));
+  writeFileSync(path.join(root, 'test/browser-suites.json'), JSON.stringify({ schema: 1, suites: { s: { tests: [{ id: 'pass', command: 'node test/pass.mjs' }, { id: 'fail', command: 'node test/fail.mjs' }, { id: 'last', command: 'node test/pass.mjs' }] }, f: { tests: [{ id: 'flip', command: 'node test/flip.mjs' }] }, c: { continueOnFailure: true, tests: [{ id: 'cfail', command: 'node test/fail.mjs' }, { id: 'clast', command: 'node test/pass.mjs' }] } } }));
   return root;
 }
 const write = (root, entries) => writeFileSync(path.join(root, 'test/quarantine.json'), JSON.stringify({ schema: 1, entries }));
@@ -89,6 +89,13 @@ test('a quarantined failing test is deferred, the suite passes and the deferred 
   const report = JSON.parse(readFileSync(path.join(root, 'artifacts/quarantine/report.json'), 'utf8'));
   assert.equal(report.failed, 1);
   assert.equal(report.tests[0].issue, 'https://github.com/OpenPresentation/opf/issues/1');
+});
+test('a continueOnFailure suite runs every test and then fails with the first failure', () => {
+  const root = scratch();
+  write(root, []);
+  const run = cli(root, 'quarantine.mjs', 'run-suite', 'c', '--today', '2026-10-02');
+  assert.equal(run.status, 3);
+  assert.match(run.stdout, /> clast/);
 });
 test('an expired entry is not honoured: its test is a gate again', () => {
   const root = scratch();

@@ -162,6 +162,7 @@ export async function runSuite(name, state) {
   }
   const honoured = new Set(state.active);
   const deferred = [];
+  let failure = 0;
   for (const test of definition.tests) {
     if (honoured.has(test.id)) {
       console.log(`\n> ${test.id}: quarantined, deferred to the non-blocking step`);
@@ -171,14 +172,18 @@ export async function runSuite(name, state) {
     }
     console.log(`\n> ${test.id}: ${test.command}`);
     const { code } = await runArgv(splitCommand(test.command));
-    if (code !== 0) return code || 1;
+    if (code !== 0) {
+      // By default a failure stops the suite, like `a && b`. A suite with "continueOnFailure" runs the rest and fails at the end.
+      if (!definition.continueOnFailure) return code || 1;
+      failure ||= code || 1;
+    }
   }
   if (deferred.length) {
     mkdirSync(quarantineDirectory(), { recursive: true });
     const earlier = existsSync(deferredFile()) ? JSON.parse(readFileSync(deferredFile(), 'utf8')) : [];
     writeFileSync(deferredFile(), `${JSON.stringify([...earlier, ...deferred], null, 2)}\n`);
   }
-  return 0;
+  return failure;
 }
 
 export async function runDeferred(state) {
