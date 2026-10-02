@@ -2909,20 +2909,7 @@
     }
   },
   "acceptance": {},
-  "pendingBundle": {
-    "Cambria Math": {
-      "prs": [
-        "opf-render#95"
-      ],
-      "note": "STIX Two Math and Noto Sans Math join the opf-render manifest as the optional math pack (pseudo-script Zmth) in the FF-45 render PR; the tracker snapshot is refreshed after it merges."
-    },
-    "Segoe UI Emoji": {
-      "prs": [
-        "opf-render#95"
-      ],
-      "note": "Noto Color Emoji and Noto Emoji join the opf-render manifest as the optional emoji pack (pseudo-script Zsye) in the FF-45 render PR; the tracker snapshot is refreshed after it merges."
-    }
-  },
+  "pendingBundle": {},
   "measurementDetails": {
     "Aptos": {
       "verticalMetricsMatch": true,
