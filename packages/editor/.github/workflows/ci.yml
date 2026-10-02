@@ -31,21 +31,21 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf
-          ref: d3823512500d199eb45340bbc450eda6ac028750 # core main (RR-16, RR-17, RR-26 convert, RR-29 audit, RR-31 patch, RR-32 template variables)
+          ref: da45b2e29812efbf67829f2fe987ef76858990f7 # core main (0.12.0 release commit 5e1dda7, tag opf-v0.12.0, plus the renderer 0.12.0 lazy font count, opf#282)
           path: opf
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-render
-          ref: 34cdfee7aa9e772998abb6aaf181b497fc606aa3 # opf-render main (RR-17 #92, RR-23 export-browser, RR-32 variables option)
+          ref: 3b300a3d1d34ecca4e323c74bed64cbe554d6bce # opf-render 0.12.0 release commit (tag opf-render-v0.12.0)
           path: opf-render
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-pptx
-          ref: 405259cfa2e6c198ba7256f03d3d235c0358df60 # opf-pptx main (RR-33, RR-34, RR-35, RR-36)
+          ref: 1f509129723e2fb09f5cf5d040fa0b6a12ca774a # opf-pptx 0.12.0 release commit (tag opf-pptx-v0.12.0)
           path: opf-pptx
           fetch-depth: 0
           persist-credentials: false
