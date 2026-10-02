@@ -2,7 +2,7 @@
   "source": {
     "repository": "OpenPresentation/opf-pptx",
     "commit": "6f6122cb7fb8cb89b17c1bea7981397a27ded8ed",
-    "note": "toPptx default output (chartex fallback) for chartex chart types; regenerate only with an owner decision to change the default export The world-category entry (ja-JP) was regenerated for FF-49: the theme cs slot, which the Japanese language does not use, is now empty instead of repeating the latin face; the chart parts are unchanged. Regenerated for FF-62 (chart text is the preview's 12 pt, not 9 pt or the PowerPoint default, in every classic chart part): only chart-part sz values changed; commit is the base the fixture was last regenerated on. Regenerated again for the spec-gap P1 round trip (codex/spec-gaps-roundtrip, on top of FF-62): the OPF_SLIDE_V1 tag now carries the content topology of a root chart payload, so the tag parts, their relationships, content types, presentation.xml customer data and the slide custDataLst lines changed; the chart parts, embedded workbooks, theme and diagnostics are byte-identical to the FF-62 entries (verified part by part against a build of main 90802f3 before regenerating). Regenerated again for RR-11 always-on header/footer placeholders (codex/rr-11-hf-always): a deck with no footer now carries the dt/ftr/sldNum placeholders and p:hf flags on its slide master, layout and notes master; only ppt/slideMasters/slideMaster1.xml, ppt/slideLayouts/slideLayout1.xml and ppt/notesMasters/notesMaster1.xml changed (verified part by part against the previous entries); slides, charts, workbooks, theme, tags and diagnostics are byte-identical. Regenerated again for RR-29 (chartPaletteForFill, opf#270): the exported series colours come from the shared palette function, so the srgbClr values in the chart parts changed (the default light card now writes a darker fourth, fifth and later series colours where the old per-colour clamp left them within a few lightness points of their neighbours); only ppt/charts/chart*.xml differ, and with srgbClr values masked those parts are identical, verified part by part against the previous entries; slides, workbooks, theme, tags and diagnostics are byte-identical."
+    "note": "toPptx default output (chartex fallback) for chartex chart types; regenerate only with an owner decision to change the default export The world-category entry (ja-JP) was regenerated for FF-49: the theme cs slot, which the Japanese language does not use, is now empty instead of repeating the latin face; the chart parts are unchanged. Regenerated for FF-62 (chart text is the preview's 12 pt, not 9 pt or the PowerPoint default, in every classic chart part): only chart-part sz values changed; commit is the base the fixture was last regenerated on. Regenerated again for the spec-gap P1 round trip (codex/spec-gaps-roundtrip, on top of FF-62): the OPF_SLIDE_V1 tag now carries the content topology of a root chart payload, so the tag parts, their relationships, content types, presentation.xml customer data and the slide custDataLst lines changed; the chart parts, embedded workbooks, theme and diagnostics are byte-identical to the FF-62 entries (verified part by part against a build of main 90802f3 before regenerating). Regenerated again for RR-11 always-on header/footer placeholders (codex/rr-11-hf-always): a deck with no footer now carries the dt/ftr/sldNum placeholders and p:hf flags on its slide master, layout and notes master; only ppt/slideMasters/slideMaster1.xml, ppt/slideLayouts/slideLayout1.xml and ppt/notesMasters/notesMaster1.xml changed (verified part by part against the previous entries); slides, charts, workbooks, theme, tags and diagnostics are byte-identical. Regenerated again for RR-29 (chartPaletteForFill, opf#270): the exported series colours come from the shared palette function, so the srgbClr values in the chart parts changed (the default light card now writes a darker fourth, fifth and later series colours where the old per-colour clamp left them within a few lightness points of their neighbours); only ppt/charts/chart*.xml differ, and with srgbClr values masked those parts are identical, verified part by part against the previous entries; slides, workbooks, theme, tags and diagnostics are byte-identical. Regenerated again for RR-36 (codex/rr-36-single-series-colour, owner-approved 2026-10-01): a single-series bar chart no longer writes a c:dPt per point, so the single-series clustered-column fallback chart parts lose their c:dPt elements; verified part by part against a build of main 4ed11db (after RR-29) with the CI-pinned core 395e4c1 (which reproduces the previous entries exactly): pareto-multi and box-multi are byte-identical, and every other deck differs only in ppt/charts/chartN.xml, which is byte-identical once the c:dPt elements are removed. Entries are toPptx(deck, {chartex: 'fallback'}) output, as test/chartex.mjs checks."
   },
   "decks": {
     "treemap-category": {
@@ -564,22 +564,22 @@
   },
   "entries": {
     "treemap-category": {
-      "sha256": "2baf65f45b0dff1a1a4984ddff3b1d03cdc4c7e9b1cea7d3d5d867b36246afaa",
-      "bytes": 24378,
+      "sha256": "2634e27c8d11cedb687ee75b2b6dc6cfebe5b2da348a5dc772d85ca41f988487",
+      "bytes": 24295,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback"
       ]
     },
     "histogram-single": {
-      "sha256": "79cc1caf1d6cc7549445211516a6c40e77ba18f515e647281a5ed7f1d86349a9",
-      "bytes": 24389,
+      "sha256": "ba98dd2ff302261cfaab9beafcffa06570b000aef021397c192d0d8aa88417c6",
+      "bytes": 24308,
       "diagnostics": [
         "chart-data-adapted/histogram-binned"
       ]
     },
     "histogram-category": {
-      "sha256": "9baa655a13506f04570a57b6c3ca964afc93c2b6a32f236f5ebfe14a3e6c00b8",
-      "bytes": 24379,
+      "sha256": "441048ade3770480c0a3de33dcc443a6411d4c284d5ed139cf6638508e3843d3",
+      "bytes": 24296,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback"
       ]
@@ -599,30 +599,30 @@
       ]
     },
     "waterfall-single": {
-      "sha256": "aef3f7bb3c107b8172e1e61b1cc83ac9c35d54400b3dda16fcf0dc727a0d6ec4",
-      "bytes": 24430,
+      "sha256": "ed5b9e9f9c274a8b313ca8d88070027be75a4c009da27156c43d8eaac3918d0e",
+      "bytes": 24322,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback",
         "chart-data-adapted/row-numbers"
       ]
     },
     "funnel-category": {
-      "sha256": "39ea610cffc4fe23a2523238386f0b3aafa268544bcc1bf5e3acc277a3fc6035",
-      "bytes": 24380,
+      "sha256": "86dfd976d001918cb700b0a1b1eba4b746352984dd157de2cc13c6c5eb14a3cd",
+      "bytes": 24297,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback"
       ]
     },
     "world-category": {
-      "sha256": "54e2d4d8d9841298640b736d3f2de0d01397bd1f41e14315dae7559a64fcc86e",
-      "bytes": 24888,
+      "sha256": "18f4f66ef7264d1bd4291ccf498ae07f7645fe03f530578c40a69a9fec6bf6a4",
+      "bytes": 24835,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback"
       ]
     },
     "all-seven": {
-      "sha256": "e256bbe5f7fd47a3b58afc2ffa94ca23e9fa2728dde82e97167d350e33d696dc",
-      "bytes": 109970,
+      "sha256": "0d75f6ff6ecbb76952d98d86a2f058bbbf75c5ca31551a535adbcfc13bfb3c97",
+      "bytes": 109223,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback",
         "chart-data-adapted/chartex-fallback",

@@ -1,4 +1,4 @@
-// Default-mode (chartex: 'fallback') byte fixture: SHA-256 of toPptx output for chartex decks, generated from main.
+// chartex: 'fallback' byte fixture (the toPptx default is now 'auto'; test/chartex.mjs compares this mode): SHA-256 of toPptx output for chartex decks, generated from main.
 import {createHash} from 'node:crypto';
 import {writeFileSync} from 'node:fs';
 import {execSync} from 'node:child_process';
@@ -20,7 +20,7 @@ const decks = {
 const entries = {};
 for (const [name, deck] of Object.entries(decks)) {
   const diagnostics = [];
-  const bytes = await toPptx(deck, {onDiagnostic: (d) => diagnostics.push(`${d.code}${d.adaptation ? `/${d.adaptation}` : ''}`)});
+  const bytes = await toPptx(deck, {chartex: 'fallback', onDiagnostic: (d) => diagnostics.push(`${d.code}${d.adaptation ? `/${d.adaptation}` : ''}`)});
   entries[name] = {sha256: createHash('sha256').update(bytes).digest('hex'), bytes: bytes.length, diagnostics};
 }
 const source = execSync('git rev-parse HEAD', {cwd: new URL('..', import.meta.url)}).toString().trim();
