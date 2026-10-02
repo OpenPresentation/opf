@@ -1,7 +1,7 @@
 {
   "name": "@openpresentation/cli",
   "version": "0.9.2",
-  "description": "Local OPF CLI for agents: create, validate, edit, paginate, and inspect presentation JSON.",
+  "description": "Local OPF CLI for agents: create, validate, lint, edit, paginate, render, export to PPTX/PDF, import PPTX, and inspect presentation JSON.",
   "license": "MIT",
   "type": "module",
   "bin": {
@@ -11,21 +11,36 @@
     "build": "pnpm --filter @openpresentation/opf build && tsup",
     "typecheck": "pnpm --filter @openpresentation/opf build && node ../../scripts/typecheck.mjs --noEmit",
     "clean": "rm -rf dist",
-    "test": "pnpm build && node ../../scripts/run-node-tests.mjs && node test/cli.mjs",
+    "test": "pnpm build && node ../../scripts/run-node-tests.mjs && node test/cli.mjs && node test/files.mjs",
     "test:packed": "node test/packed.mjs",
+    "test:packed:peers": "node test/packed-files.mjs",
     "prepack": "pnpm build"
   },
   "devDependencies": {
     "@types/node": "^24.13.4",
     "tsup": "^8.5.1",
     "typescript": "~5.9.3",
-    "@openpresentation/opf": "workspace:*"
+    "@openpresentation/opf": "workspace:*",
+    "@openpresentation/opf-pptx": "0.11.9",
+    "@openpresentation/opf-render": "0.11.9"
   },
   "files": [
     "dist",
     "README.md",
     "LICENSE"
   ],
+  "peerDependencies": {
+    "@openpresentation/opf-pptx": "^0.11.9",
+    "@openpresentation/opf-render": "^0.11.9"
+  },
+  "peerDependenciesMeta": {
+    "@openpresentation/opf-pptx": {
+      "optional": true
+    },
+    "@openpresentation/opf-render": {
+      "optional": true
+    }
+  },
   "engines": {
     "node": "24.x"
   },
