@@ -56,7 +56,7 @@
     "test:layout-contracts:registry": "node scripts/test-layout-contract-registry.mjs",
     "test:developer-quickstart": "node scripts/test-developer-quickstart.mjs",
     "check:audit-placement": "node --test docs/programs/font-fidelity-everywhere/gallery-support/audit-a/scripts/placement.test.mjs",
-    "check:audit-chartex": "node --test docs/programs/font-fidelity-everywhere/gallery-support/parity/scripts/chartex.test.mjs docs/programs/font-fidelity-everywhere/gallery-support/parity/scripts/chart-text.test.mjs",
+    "check:audit-chartex": "node --test docs/programs/font-fidelity-everywhere/gallery-support/parity/scripts/chartex.test.mjs docs/programs/font-fidelity-everywhere/gallery-support/parity/scripts/chart-text.test.mjs docs/programs/font-fidelity-everywhere/gallery-support/parity/scripts/chart-colors.test.mjs",
     "check:audit-restored": "node --test docs/programs/font-fidelity-everywhere/gallery-support/parity/scripts/restored-content.test.mjs",
     "check:audit-picture-bullets": "node --test docs/programs/font-fidelity-everywhere/gallery-support/parity/scripts/picture-bullets.test.mjs"
   },
