@@ -2268,3 +2268,5 @@ export function resolveCanvasDimensions(input: unknown): { width: number; height
   if (![width, height].every(n => Number.isFinite(n) && n > 0)) throw new RangeError('Canvas dimensions must be finite and positive.');
   return { width, height };
 }
+export {chartOptionSupport,chartOptionTarget,resolveChartOptions,formatChartLabelNumber,formatChartLabelPercent,chartLabelText,DEFAULT_CHART_LABEL_SEPARATOR} from './chart-options.js';
+export type {ChartOptionKind,ChartOptionTarget,ChartOptionSupport,ChartOptionDiagnostic,ChartLegendPosition,ChartLabelContent,ChartLabelPosition,ResolvedChartDataLabels,ResolvedChartOptions} from './chart-options.js';

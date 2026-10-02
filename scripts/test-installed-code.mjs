@@ -69,7 +69,8 @@ for(const item of manifest.artifacts) {
     for(const file of (await readdir(path.join(installed,directory),{recursive:true})).filter(file=>/\.(?:js|mjs|cjs)$/.test(file)).sort()) {
       const actual=await realpath(path.join(installed,directory,file));assert.ok(within(installed,actual));
       const digest=hash(await readFile(actual));
-      assert.equal(digest,hash(await readFile(path.join(expectedDirectory,directory,file))),registry?'Installed runtime differs from registry archive':'Installed runtime differs from the staged package');
+      const expectedFile=path.join(expectedDirectory,directory,file),expectedDigest=hash(await readFile(expectedFile));
+      assert.equal(digest,expectedDigest,`${registry?'Installed runtime differs from registry archive':'Installed runtime differs from the staged package'}: ${item.name}/${directory}/${file.split(path.sep).join('/')} (installed ${digest}, expected ${expectedDigest}; ${actual} against ${expectedFile})`);
       runtime[item.name+'/'+directory+'/'+file.split(path.sep).join('/')]=digest;
     }
   }
